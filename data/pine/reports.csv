@@ -1,0 +1,3 @@
+pscis_layer,ecocat_url,consultant,year,n_crossings,report_id
+assessment,http://a100.gov.bc.ca/pub/acat/public/advancedSearch.do?keywords=[PSCIS71]&searchKeyType=searchAll&sortColumn=title,GUPPY,2006,268,NA
+assessment,http://a100.gov.bc.ca/pub/acat/public/advancedSearch.do?keywords=[PSCIS71]&searchKeyType=searchAll&sortColumn=title,GUPPY,2007,39,NA

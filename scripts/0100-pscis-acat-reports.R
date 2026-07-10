@@ -33,7 +33,9 @@ sf::sf_use_s2(FALSE)
 `%||%` <- function(a, b) if (is.null(a)) b else a
 
 # ---- params -----------------------------------------------------------------
-wsg_target <- if (exists("wsg_target")) wsg_target else "PCEA"
+# watershed group code: env var WSG_TARGET, else pre-set `wsg_target`, else PCEA
+wsg_target <- if (nzchar(Sys.getenv("WSG_TARGET"))) Sys.getenv("WSG_TARGET") else
+              if (exists("wsg_target")) wsg_target else "PCEA"
 wsg_lower  <- tolower(wsg_target)
 out_dir    <- file.path("data/planning", wsg_lower)
 dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
@@ -44,7 +46,6 @@ dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
 conn <- DBI::dbConnect(RPostgres::Postgres(),
                        host = "localhost", port = 63333,
                        dbname = "bcfishpass", user = "newgraph")
-on.exit(DBI::dbDisconnect(conn), add = TRUE)
 
 pscis_layers <- c(
   assessment   = "whse_fish.pscis_assessment_svw",
@@ -137,6 +138,8 @@ if (!is.null(crossings)) readr::write_csv(crossings, file.path(out_dir, "crossin
 gpkg <- file.path(out_dir, paste0("pscis_", wsg_lower, ".gpkg"))
 iwalk(layers, ~ sf::st_write(st_transform(.x, 4326), gpkg, layer = .y,
                              delete_layer = TRUE, quiet = TRUE))
+
+DBI::dbDisconnect(conn)
 
 message("\n== ", wsg_target, " summary ==")
 message("reports (distinct ecocat_url rows): ", nrow(reports))
