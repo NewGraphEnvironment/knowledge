@@ -1,0 +1,11 @@
+stream_crossing_id,guppy_id,stream_name,barrier,road_name,lon,lat,followup_priority,source
+6953,2006.048,Silver Sands Creek,PASSABLE,Hwy 97,-122.558597,55.510785,high (Guppy P1),"Guppy 2006 inventory (EcoCat 11786), Table 8"
+6971,2006.072,Pine River oxbow,BARRIER,Hwy 97,-122.301026,55.610956,high (Guppy P1),"Guppy 2006 inventory (EcoCat 11786), Table 8"
+6980,2006.084,Sukunka River trib,BARRIER,CNR Track,-121.574381,54.896143,high (Guppy P1),"Guppy 2006 inventory (EcoCat 11786), Table 8"
+7008,2006.161,Sukunka River trib,BARRIER,200 Road km 70.4,-121.775697,55.041486,high (Guppy P1),"Guppy 2006 inventory (EcoCat 11786), Table 8"
+7089,2006.291,Sukunka River trib,BARRIER,200 Road km 46.5,-121.816161,55.160486,high (Guppy P1),"Guppy 2006 inventory (EcoCat 11786), Table 8"
+7201,2006.494,Bissette Creek,BARRIER,CNR Track,-121.727573,55.643038,high (Guppy P1),"Guppy 2006 inventory (EcoCat 11786), Table 8"
+7202,2006.495,Wildmare Creek,BARRIER,Wildmare Road,-121.698379,55.665242,high (Guppy P1),"Guppy 2006 inventory (EcoCat 11786), Table 8"
+7203,2006.496,Wildmare Creek,BARRIER,Wildmare Road,-121.699276,55.66553,high (Guppy P1),"Guppy 2006 inventory (EcoCat 11786), Table 8"
+7207,2006.501,Windrem Creek,BARRIER,CNR Track,-121.626567,55.695633,high (Guppy P1),"Guppy 2006 inventory (EcoCat 11786), Table 8"
+7237,2006.546,Rocky Creek trib,BARRIER,Rocky Creek FSR km 16.1,-121.867644,55.240841,high (Guppy P1),"Guppy 2006 inventory (EcoCat 11786), Table 8"
