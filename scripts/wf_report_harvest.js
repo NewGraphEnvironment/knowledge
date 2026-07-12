@@ -2,7 +2,7 @@ export const meta = {
   name: 'report-harvest',
   description: 'Region-agnostic EcoCat report harvest for watershed groups: geo-filtered GNIS supplement + FISS-linked reports, resolve+download+verify, manifest by study-area extent',
   phases: [
-    { title: 'GNIS supplement', detail: 'EcoCat search on region-unique stream names, geo-filtered to the target region' },
+    { title: 'EcoCat search', detail: 'region-unique GNIS stream names + thematic keywords (fish passage <WSG>, hab confirmation), geo-filtered' },
     { title: 'Acquire', detail: 'resolve viewReport -> direct PDF -> download -> verify (batched)' },
     { title: 'Manifest', detail: 'flatten + coverage' },
   ],
@@ -24,29 +24,32 @@ const ACQ_SCHEMA = { type:'object', additionalProperties:false,
 
 const chunk = (a,n) => { const o=[]; for(let i=0;i<a.length;i+=n) o.push(a.slice(i,i+n)); return o }
 
-// ---- Phase 1: GNIS supplement (GEO-FILTERED) --------------------------------
-phase('GNIS supplement')
-const names = A.gnis_names || []
-const gnis = names.length ? await agent(
-  `Search BC EcoCat for reports about these streams, then GEO-FILTER the results.
+// ---- Phase 1: EcoCat search (GNIS stream-names + thematic keywords, GEO-FILTERED)
+phase('EcoCat search')
+// two search types: exact GNIS stream names + thematic keyword phrases (fish passage <WSG>,
+// habitat confirmation <name>, <WSG> inventory ...). Both hit the same advancedSearch endpoint.
+const searchTerms = [...(A.gnis_names || []), ...(A.keyword_queries || [])]
+const gnis = searchTerms.length ? await agent(
+  `Search BC EcoCat for reports using these search terms, then GEO-FILTER the results.
 Region context: ${A.region_hint}
-Streams: ${names.join('; ')}
+Search terms (a mix of exact stream names AND thematic phrases like "fish passage <watershed>",
+"habitat confirmation <name>", "<watershed> fish passage inventory"): ${searchTerms.map(t => '"'+t+'"').join('; ')}
 
-For each stream name, fetch (URL-encode the name, spaces -> +):
-  http://a100.gov.bc.ca/pub/acat/public/advancedSearch.do?keywords=<name>&searchKeyType=searchAll&sortColumn=title
+For each term, fetch (URL-encode; spaces -> +):
+  http://a100.gov.bc.ca/pub/acat/public/advancedSearch.do?keywords=<term>&searchKeyType=searchAll&sortColumn=title
 Capture each result's numeric reportId and title.
 
-CRITICAL geo-filter: EcoCat keyword search matches same-named streams ALL OVER BC. INCLUDE a hit ONLY if
-its title/context clearly places it in the region above (the named watershed group, its watershed code, or
-the Fraser/Prince George/Robson Valley area). EXCLUDE same-named streams elsewhere (Vancouver Island,
+CRITICAL geo-filter: EcoCat keyword search matches same-named streams / generic terms ALL OVER BC.
+INCLUDE a hit ONLY if its title/context clearly places it in the region above (the named watershed group,
+its watershed code, or the stated area). EXCLUDE same-named features elsewhere (Vancouver Island,
 Kootenays, Skeena, etc.). When unsure, exclude. Return the deduped, geo-filtered union with {id, title}.`,
-  { schema: GNIS_SCHEMA, phase:'GNIS supplement', label:'gnis:geo-filtered' }) : { reports: [] }
+  { schema: GNIS_SCHEMA, phase:'EcoCat search', label:'ecocat:names+keywords' }) : { reports: [] }
 
 const known = new Set(Object.keys(A.reports))
 const gnisNew = [...new Set((gnis?.reports||[])
   .filter(r => /^[0-9]+$/.test(String(r.id)) && !known.has(String(r.id)) && REGION_RE.test(r.title||''))  // regex backstop
   .map(r => String(r.id)))]
-log(`GNIS: ${(gnis?.reports||[]).length} geo-filtered hits from the agent; ${gnisNew.length} new after region-regex backstop + dedup vs ${known.size} FISS reports`)
+log(`EcoCat search: ${(gnis?.reports||[]).length} geo-filtered hits (${searchTerms.length} terms); ${gnisNew.length} new after region-regex backstop + dedup vs ${known.size} FISS reports`)
 
 // ---- Phase 2: Acquire -------------------------------------------------------
 phase('Acquire')
