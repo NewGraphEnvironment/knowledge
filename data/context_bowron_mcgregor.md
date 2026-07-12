@@ -16,7 +16,21 @@ McGregor River east of Prince George (Robson Valley / Rocky Mountain foothills).
 - **Legacy Data – BCCC Bowron** (26 / 25 barriers), and
 - a **Bowron & Quesnel Watershed Connectivity Restoration Plan** (6 crossings) — i.e., restoration *planning* has already been scoped here.
 
-**Key result for both:** **zero habitat confirmations, designs, or remediations on record** — like Pine, essentially all first-touch. Many Bowron/McGregor "barriers" are **natural** (high-gradient step-pool reaches, cascades) rather than culverts — e.g., Kruger Creek barriers are mostly natural morphology with one 1.0 m culvert. Consultants active: **DWB Forestry, Davis Environmental, Cascadia Biological, EDI, AGRA, Guppy**; permit-driven forestry work (Canfor, West Fraser, TFL 30).
+The core McGregor fish-passage literature (found via **straight EcoCat keyword search**, NOT FISS-links
+or stream-names — see method note) is now in Zotero `mcgregor - MCGR`:
+- **Analysis and Priority Identification for Existing Fish Passage Data, McGregor Watershed** (Masse
+  Environmental, 2017, EcoCat 52620) — the **planning / priority-ID exercise**.
+- **Phase 1 inventories** (DWB — Canfor TFL 30 2009 / excl-TFL30 2010 / Phase 1-to-3 2010; EcoCat
+  24085/24141/24178) and **Phase 2 & 3 inventories** (Triton — TFL 30 24184 / TSA 24 24181, 2011).
+- **Herrick Road Culvert Replacement Designs** (DWB, 2011, 24816) and the **Pre-Code Culvert
+  Assessment Pilot** for Carp + McGregor (MoE / Mackinnon, 2007, 51883).
+
+**Follow-up status (corrected):** McGregor has **9 habitat confirmations on record** — a government
+Phase-2 follow-up after the planning exercise (an earlier count bug showed 0). Bowron has **0**
+confirmations/designs/remediations (genuinely first-touch). Many Bowron/McGregor "barriers" are
+**natural** (high-gradient step-pool, cascades) rather than culverts — e.g. Kruger Creek is mostly
+natural morphology with one 1.0 m culvert. Consultants active: **DWB, Triton, Masse, Cascadia, Davis,
+EDI, Guppy**; permit-driven forestry work (Canfor, West Fraser, TFL 30 / TSA 24).
 
 ## Fisheries context
 
