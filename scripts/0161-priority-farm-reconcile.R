@@ -1,119 +1,132 @@
 # scripts/04_planning/0161-priority-farm-reconcile.R
 # ---------------------------------------------------------------------------
-# Reconcile priority-table rows farmed from inventory PDFs (by the
-# wf_farm_priority workflow) to PSCIS crossings, then write a per-group
-# priority CSV for field use.
+# Reconcile priority rows farmed from report PDFs (wf_farm_priority output) to
+# PSCIS crossings, and stamp the TRUE watershed_group_code per row.
 #
-# WHY / DESIGN NOTES:
-#   - Inventory/planning reports carry their OWN crossing ids (e.g. "103",
-#     "BOWRON_2008_44", "TT1124"). PSCIS stores that id verbatim in
-#     external_crossing_reference (same pattern as Guppy 2006.NNN). So the join
-#     is EXACT, no spatial snap — mirrors 0140/0160.
-#   - Some reports (Masse 52620) also print the PSCIS stream_crossing_id
-#     directly -> prefer that when present.
-#   - Join ladder per farmed row, first hit wins:
-#       1. farmed pscis_crossing_id      == PSCIS stream_crossing_id
-#       2. farmed report_crossing_id     == PSCIS external_crossing_reference
-#       3. farmed report_crossing_id     == PSCIS stream_crossing_id  (report used PSCIS ids)
-#     reconcile_method records which matched (or "unmatched").
+# WHY UNIFIED (not per-group):
+#   A single report can span several watershed groups (e.g. Hooft 2015 "Fish
+#   Passage Assessments, Willow/Tabor/Bowron, 787 locations" = report 50797),
+#   but the harvest tags a report with ONE extent. Reconciling only against the
+#   tag-group's crossings loses every crossing that belongs to a sibling group
+#   (Hooft's 5 Willow + 5 Tabor priority sites vanished). So we reconcile each
+#   farmed row against the UNION of all watershed groups' crossings and assign
+#   watershed_group_code from the crossing it actually matches.
 #
-# INPUT:  FARM_JSON (env) -> the wf_farm_priority task output (.output json)
-#         data/planning/<wsg>/crossings.csv  (from 0100)
-# OUTPUT: data/planning/<wsg>/priority_farmed.csv  (one per group present)
+# JOIN LADDER per row (first hit wins), against the union of crossings:
+#   1. printed pscis_crossing_id  == stream_crossing_id      (globally unique)
+#   2. report_crossing_id         == external_crossing_reference
+#        - if the harvest-tag group holds that ref, prefer it (tie-break)
+#        - else if exactly one group holds it, take it
+#        - else first, flagged *-ambig
+#   3. normalized ref (BOWRON-NN <-> BOWRON_2008_NN)
+#   watershed_group_code = matched crossing's group; unmatched keeps harvest tag.
+#
+# INPUT:  FARM_JSON = comma-separated wf_farm_priority output file(s) OR the
+#         workflow journal.jsonl file(s) (per-agent {type:result} lines) —
+#         journals survive after task .output files are cleaned up.
+#         data/planning/<wsg>/crossings.csv for every group (from 0100)
+# OUTPUT: data/planning/priority_farmed_all.csv  (one combined table, all farmed
+#         columns incl. notes, + watershed_group_code, pscis_*, coord fields)
 # ---------------------------------------------------------------------------
 suppressMessages({library(jsonlite); library(dplyr); library(stringr); library(purrr); library(readr); library(tidyr)})
 `%||%` <- function(a,b) if (is.null(a)) b else a
 
-# FARM_JSON may be a single path or a comma-separated list (to combine >1 farming run).
 farm_json <- Sys.getenv("FARM_JSON")
 stopifnot("FARM_JSON must point at wf_farm_priority output(s)" = nzchar(farm_json))
-files <- trimws(strsplit(farm_json, ",")[[1]])
-files <- files[file.exists(files)]
+files <- trimws(strsplit(farm_json, ",")[[1]]); files <- files[file.exists(files)]
 stopifnot("no FARM_JSON files found" = length(files) > 0)
 
-extracts <- unlist(lapply(files, function(f) {
-  j <- fromJSON(f, simplifyVector = FALSE)
-  j$result$extracts %||% j$extracts
-}), recursive = FALSE)
-stopifnot("no extracts found in FARM_JSON" = !is.null(extracts) && length(extracts) > 0)
-message("combined ", length(files), " farming run(s) -> ", length(extracts), " report extracts")
+load_extracts <- function(f) {
+  if (grepl("journal", f) || grepl("[.]jsonl$", f)) {
+    # ndjson workflow journal: keep per-agent results that carry a `rows` array
+    lines <- readLines(f, warn = FALSE)
+    ex <- list()
+    for (l in lines) {
+      x <- tryCatch(fromJSON(l, simplifyVector = FALSE), error = function(e) NULL)
+      if (!is.null(x) && identical(x$type, "result") && !is.null(x$result$rows)) ex[[length(ex)+1]] <- x$result
+    }
+    ex
+  } else { j <- fromJSON(f, simplifyVector = FALSE); j$result$extracts %||% j$extracts }
+}
+extracts <- unlist(lapply(files, load_extracts), recursive = FALSE)
+# dedup identical report extracts (cache replays) by (code, report_id)
+seen <- character(0)
+extracts <- Filter(function(e) { k <- paste(e$code, e$report_id); if (k %in% seen) FALSE else { seen[[length(seen)+1]] <<- k; TRUE } }, extracts)
+stopifnot("no extracts found" = length(extracts) > 0)
 
-norm <- function(x) str_trim(tolower(ifelse(is.null(x) || is.na(x), "", as.character(x))))
-
-# flatten farmed rows -> long df
+# ---- flatten farmed rows (keep every field incl. notes) ---------------------
 rows <- map_dfr(extracts, function(e) {
   if (is.null(e$rows) || !length(e$rows)) return(NULL)
   map_dfr(e$rows, function(r) tibble(
-    code               = e$code %||% NA_character_,
-    report_id          = e$report_id %||% NA_character_,
-    table_source       = e$table_source %||% NA_character_,
-    report_crossing_id = r$report_crossing_id %||% "",
-    pscis_crossing_id  = r$pscis_crossing_id %||% "",
-    stream_name        = r$stream_name %||% "",
-    priority           = r$priority %||% "",
-    barrier            = r$barrier %||% "",
-    fish_barrier_score = r$fish_barrier_score %||% "",
-    habitat_value      = r$habitat_value %||% "",
-    coords             = r$coords %||% "",
-    upstream_fish      = r$upstream_fish %||% "",
-    recommendation     = r$recommendation %||% "",
-    notes              = r$notes %||% ""
-  ))
+    code = e$code %||% NA, report_id = e$report_id %||% NA, table_source = e$table_source %||% NA,
+    report_crossing_id = r$report_crossing_id %||% "", pscis_crossing_id = r$pscis_crossing_id %||% "",
+    stream_name = r$stream_name %||% "", priority = r$priority %||% "", barrier = r$barrier %||% "",
+    fish_barrier_score = r$fish_barrier_score %||% "", habitat_value = r$habitat_value %||% "",
+    coords = r$coords %||% "", upstream_fish = r$upstream_fish %||% "",
+    recommendation = r$recommendation %||% "", notes = r$notes %||% ""))
 })
-message("farmed rows: ", nrow(rows), " across ", length(unique(rows$code)), " groups")
+message("farmed rows: ", nrow(rows), " from ", length(extracts), " report extracts")
 
-# normalized id key: alpha-prefix + LAST number run, e.g. "BOWRON - 44" -> "bowron_44",
-# "BOWRON_2008_44" -> "bowron_44". NA when no alpha-prefix (bare numbers) so we never
-# false-match a report's crossing "16" to PSCIS BOWRON_2008_16 (different surveys).
-norm_key <- function(x) {
-  x   <- as.character(x)
+# ---- union of all crossings, keyed for lookup -------------------------------
+norm_key <- function(x) { x <- as.character(x)
   pre <- str_to_lower(str_extract(x, "^[A-Za-z]+"))
   num <- vapply(str_extract_all(x, "[0-9]+"), function(v) if (length(v)) v[length(v)] else NA_character_, character(1))
-  ifelse(is.na(pre) | is.na(num), NA_character_, paste0(pre, "_", num))
+  ifelse(is.na(pre) | is.na(num), NA_character_, paste0(pre, "_", num)) }
+
+# restrict the union to the Fraser-project groups (exclude Peace pcea/pine/para etc.)
+FRASER <- c("BOWR","MCGR","COTR","WILL","UFRA","TABR","FRAN","LCHL","NECR")
+cross_files <- list.files("data/planning", pattern="^crossings.csv$", recursive=TRUE, full.names=TRUE)
+cross_files <- cross_files[toupper(basename(dirname(cross_files))) %in% FRASER]
+allx <- map_dfr(cross_files, function(cf) {
+  wsg <- toupper(basename(dirname(cf)))
+  read_csv(cf, show_col_types=FALSE) %>%
+    transmute(wsg = wsg, scid = as.character(stream_crossing_id), ext = as.character(external_crossing_reference),
+              nk = norm_key(external_crossing_reference),
+              barrier = current_barrier_result_code, habitat = habitat_value_code,
+              lon, lat, has_confirmation, has_design, has_remediation)
+})
+by_ext  <- split(allx, allx$ext)
+by_scid <- split(allx, allx$scid)
+by_nk   <- split(allx[!is.na(allx$nk),], allx$nk[!is.na(allx$nk)])
+message("union crossings: ", nrow(allx), " across ", n_distinct(allx$wsg), " groups")
+
+# pick one crossing record from a candidate set.
+#  - harvest-tag group holds the ref  -> use it (stays put; the common, safe case)
+#  - exactly one group holds it        -> move there (unambiguous, e.g. Hooft's Willow sites)
+#  - several groups hold it, none the tag group -> DON'T match. These are almost all
+#    recon reach-sequence numbers (1,2,3..) colliding with small integer crossing refs
+#    in big groups; moving them there is spurious. Leave the row in its harvest group, unmatched.
+choose <- function(cand, code, method) {
+  if (is.null(cand) || !nrow(cand)) return(NULL)
+  if (!is.na(code) && code %in% cand$wsg) return(cbind(cand[cand$wsg==code,][1,], method=method))
+  if (length(unique(cand$wsg)) == 1) return(cbind(cand[1,], method=method))
+  NULL
+}
+recon_row <- function(code, rid, pid, ts) {
+  # habitat/reach inventories number sites 1,2,3.. (report-local sequence) — those are
+  # NOT crossing ids; matching them to external_crossing_reference is spurious. Skip:
+  # keep the harvest group, place from the row's own report coords downstream.
+  if (grepl("habitat-inventory", ts %||% "", ignore.case = TRUE)) return(NULL)
+  if (nzchar(pid)) { h <- choose(by_scid[[pid]], code, "pscis-id"); if (!is.null(h)) return(h) }
+  if (nzchar(rid)) {
+    h <- choose(by_ext[[rid]], code, "external-ref"); if (!is.null(h)) return(h)
+    nk <- norm_key(rid); if (!is.na(nk)) { h <- choose(by_nk[[nk]], code, "normalized-ref"); if (!is.null(h)) return(h) }
+  }
+  NULL
 }
 
-recon_one <- function(df_group, wsg) {
-  cf <- file.path("data","planning", tolower(wsg), "crossings.csv")
-  if (!file.exists(cf)) { message("  ! no crossings.csv for ", wsg); return(df_group %>% mutate(reconcile_method="no-crossings-file")) }
-  cx <- read_csv(cf, show_col_types = FALSE) %>%
-    mutate(scid = as.character(stream_crossing_id), ext = as.character(external_crossing_reference), nk = norm_key(external_crossing_reference))
-  by_ext  <- cx %>% distinct(ext,  .keep_all = TRUE)
-  by_scid <- cx %>% distinct(scid, .keep_all = TRUE)
-  by_nk   <- cx %>% filter(!is.na(nk)) %>% distinct(nk, .keep_all = TRUE)
-  pull <- function(key, tbl, keycol) {
-    m <- tbl[match(key, tbl[[keycol]]), c("stream_crossing_id","current_barrier_result_code","habitat_value_code","lon","lat","has_confirmation","has_design","has_remediation")]
-    as_tibble(m)
-  }
-  out <- df_group %>% rowwise() %>% mutate(
-    .m1 = list(if (nzchar(pscis_crossing_id))  pull(pscis_crossing_id,  by_scid, "scid") else pull(NA,by_scid,"scid")),
-    .m2 = list(pull(report_crossing_id, by_ext,  "ext")),
-    .mn = list(pull(norm_key(report_crossing_id), by_nk, "nk")),
-    .m3 = list(pull(report_crossing_id, by_scid, "scid"))
-  ) %>% ungroup()
-  pick <- function(m1,m2,mn,m3) {
-    if (!is.na(m1$stream_crossing_id)) return(c(list(method="pscis-id"),          as.list(m1)))
-    if (!is.na(m2$stream_crossing_id)) return(c(list(method="external-ref"),      as.list(m2)))
-    if (!is.na(mn$stream_crossing_id)) return(c(list(method="normalized-ref"),    as.list(mn)))
-    if (!is.na(m3$stream_crossing_id)) return(c(list(method="report-id-as-pscis"),as.list(m3)))
-    list(method="unmatched", stream_crossing_id=NA, current_barrier_result_code=NA, habitat_value_code=NA, lon=NA, lat=NA, has_confirmation=NA, has_design=NA, has_remediation=NA)
-  }
-  picked <- pmap(list(out$.m1, out$.m2, out$.mn, out$.m3), pick)
-  out %>% mutate(
-    reconcile_method       = map_chr(picked, "method"),
-    pscis_stream_crossing_id = map_chr(picked, ~as.character(.x$stream_crossing_id)),
-    pscis_barrier_result   = map_chr(picked, ~as.character(.x$current_barrier_result_code)),
-    pscis_habitat_value    = map_chr(picked, ~as.character(.x$habitat_value_code)),
-    pscis_lon              = map_chr(picked, ~as.character(.x$lon)),
-    pscis_lat              = map_chr(picked, ~as.character(.x$lat)),
-    pscis_has_confirmation = map_chr(picked, ~as.character(.x$has_confirmation))
-  ) %>% select(-.m1,-.m2,-.mn,-.m3)
-}
+picked <- pmap(list(rows$code, rows$report_crossing_id, rows$pscis_crossing_id, rows$table_source), recon_row)
+get <- function(col) map_chr(picked, ~ if (is.null(.x)) NA_character_ else as.character(.x[[col]]))
+out <- rows %>% mutate(
+  reconcile_method       = map_chr(picked, ~ if (is.null(.x)) "unmatched" else .x$method),
+  watershed_group_code   = coalesce(get("wsg"), code),
+  pscis_stream_crossing_id = get("scid"), pscis_barrier_result = get("barrier"),
+  pscis_habitat_value    = get("habitat"), pscis_lon = get("lon"), pscis_lat = get("lat"),
+  pscis_has_confirmation = get("has_confirmation")
+)
 
-for (wsg in unique(rows$code)) {
-  g <- recon_one(filter(rows, code == wsg), wsg)
-  outf <- file.path("data","planning", tolower(wsg), "priority_farmed.csv")
-  write_csv(g, outf)
-  tab <- g %>% count(reconcile_method) %>% arrange(desc(n))
-  message(sprintf("\n== %s -> %s (%d rows) ==", wsg, outf, nrow(g)))
-  print(as.data.frame(tab), row.names = FALSE)
-}
+out_f <- file.path("data","planning","priority_farmed_all.csv")
+write_csv(out, out_f)
+message("\n== wrote ", out_f, " (", nrow(out), " rows) ==")
+message("by watershed_group_code:"); print(as.data.frame(count(out, watershed_group_code, sort=TRUE)), row.names=FALSE)
+message("reconcile methods:"); print(as.data.frame(count(out, reconcile_method, sort=TRUE)), row.names=FALSE)
