@@ -8,9 +8,12 @@ export const meta = {
   ],
 }
 
-// args: { reports:{reportId:extent}, gnis_names:[...], region_hint:"...", region_regex:"...", harvest_dir:"..." }
+// args: { reports:[ids] | {reportId:extent}, region_code:"COTR", gnis_names:[...], keyword_queries:[...], region_hint:"...", region_regex:"...", harvest_dir:"..." }
 const A = typeof args === 'string' ? JSON.parse(args) : (args || {})
 const HARVEST = A.harvest_dir
+const REGION = A.region_code || 'fraser'
+// reports may be an array of ids (each tagged REGION) or a {id:extent} map
+const REPORTS = Array.isArray(A.reports) ? Object.fromEntries(A.reports.map(id => [String(id), REGION])) : (A.reports || {})
 const REGION_RE = new RegExp(A.region_regex || '.', 'i')
 
 const GNIS_SCHEMA = { type:'object', additionalProperties:false,
@@ -45,7 +48,7 @@ its watershed code, or the stated area). EXCLUDE same-named features elsewhere (
 Kootenays, Skeena, etc.). When unsure, exclude. Return the deduped, geo-filtered union with {id, title}.`,
   { schema: GNIS_SCHEMA, phase:'EcoCat search', label:'ecocat:names+keywords' }) : { reports: [] }
 
-const known = new Set(Object.keys(A.reports))
+const known = new Set(Object.keys(REPORTS))
 const gnisNew = [...new Set((gnis?.reports||[])
   .filter(r => /^[0-9]+$/.test(String(r.id)) && !known.has(String(r.id)) && REGION_RE.test(r.title||''))  // regex backstop
   .map(r => String(r.id)))]
@@ -54,8 +57,8 @@ log(`EcoCat search: ${(gnis?.reports||[]).length} geo-filtered hits (${searchTer
 // ---- Phase 2: Acquire -------------------------------------------------------
 phase('Acquire')
 const all = [
-  ...Object.entries(A.reports).map(([id,extent]) => ({ id:String(id), extent })),
-  ...gnisNew.map(id => ({ id, extent:'fraser' })),   // GNIS-discovered -> region-level extent
+  ...Object.entries(REPORTS).map(([id,extent]) => ({ id:String(id), extent })),
+  ...gnisNew.map(id => ({ id, extent:REGION })),   // GNIS-discovered -> region-level extent
 ]
 const batches = chunk(all, 12)
 log(`acquiring ${all.length} reports in ${batches.length} batches`)
