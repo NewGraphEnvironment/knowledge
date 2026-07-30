@@ -156,12 +156,24 @@ def existing_report_ids(coll_key):
     return ids - empty
 
 
-def attach(parent_key, url, fname):
-    """Create an attachment item under parent and upload the file (4-step S3)."""
-    data = fetch(url)
+def attach(parent_key, url, fname, exempt_size=False):
+    """Create an attachment item under parent and upload the file (4-step S3).
+
+    Never raises: EcoCat serves the occasional dead document link (404) and a
+    single bad file must not abort a batch of hundreds of reports.
+
+    `exempt_size` bypasses MAX_MB — used for the MAIN report, which must always
+    be attached. The size guard exists to keep scanned appendix/map bulk out of
+    the shared library, not to drop the report itself (52364's report is 32 MB,
+    and capping it left the item with no attachment at all).
+    """
+    try:
+        data = fetch(url)
+    except Exception as e:
+        return f"fetch-fail({getattr(e, 'code', type(e).__name__)})"
     if len(data) < 512:
         return "tiny/failed"
-    if len(data) > MAX_MB * 1048576:
+    if not exempt_size and len(data) > MAX_MB * 1048576:
         return f"skip-{len(data)//1048576}MB"
     ctype = ("application/pdf" if fname.lower().endswith(".pdf") else "application/octet-stream")
     st, bd = api("POST", f"{BASE}/items",
@@ -217,8 +229,10 @@ def file_report(code, rid, coll, all_docs=False):
     except Exception:
         return f"{code} {rid}: create-fail {st} {bd[:100]}"
     res = []
-    for u in chosen:
-        res.append(attach(key, u, urllib.parse.unquote(u.rsplit("/", 1)[-1])[:120]))
+    for i, u in enumerate(chosen):
+        # chosen[0] is the main report when a PDF was picked -> never size-capped
+        main_pdf = (i == 0 and u.lower().endswith(".pdf"))
+        res.append(attach(key, u, urllib.parse.unquote(u.rsplit("/", 1)[-1])[:120], exempt_size=main_pdf))
     ok = sum(1 for r in res if r in ("uploaded", "exists"))
     return (f"{code} {rid}: {key} | {ok}/{len(chosen)} attached, {len(skipped)} skipped "
             f"[{','.join(sorted(set(res))) or '-'}] | {title[:46]}")
@@ -281,6 +295,9 @@ if __name__ == "__main__":
         if a.dry_run:
             print("   ", ",".join(todo)); continue
         for rid in todo:
-            print("  " + file_report(code, rid, coll, a.all_docs), flush=True)
+            try:
+                print("  " + file_report(code, rid, coll, a.all_docs), flush=True)
+            except Exception as e:                      # never abort the batch
+                print(f"  {code} {rid}: ERROR {type(e).__name__} {e}", flush=True)
             grand += 1
     print(f"\nfiled {grand} report(s)")
