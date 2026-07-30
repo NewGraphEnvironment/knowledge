@@ -76,6 +76,27 @@ out <- tibble(
   tags = map_chr(res, "tags")
 )
 
+# ---- resolve legacy Zotero-key origins ------------------------------------
+# Not every document is named EXTENT__reportId.pdf: an earlier store build
+# downloaded PDFs from Zotero by ATTACHMENT KEY (e.g. T4S54PZH.pdf). Those carry
+# no reportId in the filename, so without this join they look un-farmed even when
+# they were farmed under their EXTENT__id twin — which is exactly how the first
+# run mislabelled the Masse/Triton McGregor reports as "never farmed".
+# data/planning/zotero_key_map.csv maps file -> reportId via attachment->parent
+# (blank reportId = a genuine non-EcoCat reference, not a duplicate).
+kmf <- file.path("data", "planning", "zotero_key_map.csv")
+if (file.exists(kmf)) {
+  km <- read_csv(kmf, show_col_types = FALSE) %>%
+    filter(!is.na(report_id) & report_id != "") %>%
+    transmute(file, mapped_id = as.character(report_id))
+  out <- out %>% left_join(km, by = "file") %>%
+    mutate(report_id = coalesce(report_id, mapped_id),
+           origin_kind = if_else(is.na(mapped_id), "harvest", "zotero-key")) %>%
+    select(-mapped_id)
+} else {
+  out <- out %>% mutate(origin_kind = "harvest")
+}
+
 # ---- join the farm outcome so "table-dense but never farmed" is visible ----
 pf <- file.path("data", "planning", "priority_farmed_all.csv")
 if (file.exists(pf)) {
@@ -96,6 +117,19 @@ message("tag frequency:")
 tagfreq <- out$tags %>% str_split(";") %>% unlist() %>% discard(~ .x == "") %>% table() %>% sort(decreasing = TRUE)
 print(tagfreq)
 message("\ntable-dense (>=5 captions) but NEVER farmed — the 53762 class:")
-cand <- out %>% filter(n_table_captions >= 5, !farmed) %>% select(watershed_group_code, report_id, n_table_captions, tags)
+cand <- out %>% filter(n_table_captions >= 5, !farmed, !is.na(report_id)) %>%
+  select(watershed_group_code, report_id, origin_kind, n_table_captions, tags)
 print(as.data.frame(head(cand, 25)), row.names = FALSE)
-message("\n(", nrow(cand), " such documents)")
+message("(", nrow(cand), " documents with a known reportId; ",
+        sum(out$n_table_captions >= 5 & !out$farmed & is.na(out$report_id)),
+        " more are dense+unfarmed but have no reportId — non-EcoCat references)")
+
+# ---- duplication: same report ingested under both naming schemes -----------
+dup <- out %>% filter(!is.na(report_id)) %>% count(report_id, name = "n_copies") %>% filter(n_copies > 1)
+message("\nDUPLICATES — same EcoCat report ingested more than once: ", nrow(dup), " report(s), ",
+        sum(dup$n_copies) - nrow(dup), " redundant document(s)")
+if (nrow(dup)) {
+  d <- out %>% filter(report_id %in% dup$report_id) %>%
+    arrange(report_id) %>% select(report_id, file, origin_kind, watershed_group_code)
+  print(as.data.frame(head(d, 20)), row.names = FALSE)
+}
