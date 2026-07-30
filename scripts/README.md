@@ -16,6 +16,7 @@ This file is the run order and the wiring.
 0110  GNIS name-collision QA (before any name search)
 wf_report_harvest.js / wf_bowr_mcgr_harvest.js   harvest reports  -> <extent>__<reportId>.pdf
 0152  dedup-ingest the harvested PDFs into a ragnar store
+0153  file the reports to Zotero (ALL documents)  <- do not skip; see below
 wf_farm_priority.js                          farm priority/crossing tables out of the PDFs
 0161  reconcile farmed rows -> PSCIS, stamp watershed_group_code
 0162  spatialize -> rag_priorities.gpkg
@@ -59,6 +60,18 @@ A report is reachable from more than one place; using only one axis misses repor
 - Ingests a harvest dir into an existing ragnar store, deduped by EcoCat reportId
 - `STORE=fraser HARVEST_DIR=/path/to/harvest`
 - Needs Ollama up (`nomic-embed-text`)
+
+## 0153-reports-to-zotero.py
+- Files each harvested report into its watershed-group Zotero collection, **with every document
+  EcoCat serves for it attached** — main report + appendices + map sheets + data files
+- `python3 0153-reports-to-zotero.py --from-store data/rag/fraser.duckdb` (or `--reports COTR:137,157`)
+- Idempotent: reports already in the collection are skipped; Zotero dedups files by md5
+- **Never skip this step.** The rag store holds only extracted text and the harvest dir is in `/tmp`;
+  Zotero is what `0151` rebuilds from. A group harvested + ingested but not filed silently vanishes
+  on the next rebuild or on another machine. (Learned the hard way — COTR/FRAN/LCHL/NECR were
+  ingested in July 2026 and had to be re-downloaded from EcoCat to be filed.)
+- Reads the store's `EXTENT__reportId.pdf` origins, so reportIds are recoverable even after the
+  harvest dir is reaped
 
 ## 0150 / 0151 / 0155 — rag store build + query
 - `0150` builds from local PDFs; **`0151` builds from Zotero** (portable/reproducible — prefer it)
@@ -106,3 +119,10 @@ A report is reachable from more than one place; using only one axis misses repor
   same high/moderate wording as fish-passage priorities. Filter by `table_source`.
 - **Recon reports number reaches 1,2,3…** — those are not crossing ids; don't reconcile them.
 - **Don't harvest NGE's own reports from EcoCat** — they're stale; sync from the repo instead.
+- **An EcoCat report is usually SEVERAL documents** — 3 to 19 observed (report `163` has 19): main
+  report, appendices, 1:20k map sheets, and `.xls`/`.zip` data files. The harvest workflows take only
+  the **first** PDF, so the rag store holds one document's text per report; `0153` files all of them
+  to Zotero. Two consequences: (a) the first PDF is not always the main report — report `52264`'s is
+  `Appendix1`; (b) the FPCI form spreadsheets carrying per-site *no fish captured* comments (see
+  [#199](https://github.com/NewGraphEnvironment/fish_passage_template_reporting/issues/199)) and the
+  inventory map sheets are **not** in the rag. Widening the harvest to all documents is open work.
