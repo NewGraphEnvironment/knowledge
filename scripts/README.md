@@ -21,6 +21,10 @@ wf_farm_priority.js                          farm priority/crossing tables out o
 0161  reconcile farmed rows -> PSCIS, stamp watershed_group_code
 0162  spatialize -> rag_priorities.gpkg
 0155  query the rag store
+
+0154  content-tag the corpus (any time after 0152)
+0156  dedup the store        (before publishing/syncing it)
+0157  push/pull stores to s3://fresh-bc/rag/ with log.json
 ```
 
 ## Report discovery — four axes
@@ -72,6 +76,41 @@ A report is reachable from more than one place; using only one axis misses repor
   ingested in July 2026 and had to be re-downloaded from EcoCat to be filed.)
 - Reads the store's `EXTENT__reportId.pdf` origins, so reportIds are recoverable even after the
   harvest dir is reaped
+
+## 0154-corpus-tag.R
+- Content-tags every document in the store from **table captions, headings and opening text** —
+  not the title — and writes `data/planning/corpus_tags.csv`
+  (`report_id, watershed_group_code, tags, n_table_captions, farmed, n_priority_rows`)
+- Regex over stored text, no LLM pass; runs in seconds
+- Answers "what do we actually have?" without farming. Farming is expensive (~4M subagent tokens per
+  ~120 reports) and most reports yield no priority rows, so tag first and farm deliberately
+- Joins the farm outcome, which is what surfaces **table-dense reports that were never farmed** —
+  the class of miss that a title-keyword triage produces (EcoCat `53762` ranks 28 salmon streams by
+  10 sensitivity indices and was skipped as "narrative")
+- Uses `data/planning/zotero_key_map.csv` to resolve legacy Zotero-attachment-key origins to
+  reportIds; without it those documents look un-farmed even when they were farmed
+
+## 0156-rag-dedup.R
+- Removes duplicate documents before a store is published or synced. The same report can enter under
+  two names — `EXTENT__<reportId>.pdf` (harvest) and `<ATTACHMENT_KEY>.pdf` (a `0151` Zotero build) —
+  and a duplicated report gets **two chances at every retrieval**, biasing search
+- Keeps the harvest-named copy (it carries the watershed group)
+- Two store internals it has to work around, both recorded in the script: `embeddings` has an **HNSW
+  index** so a connection must `INSTALL/LOAD vss` before `DELETE`, and **`chunks` is a VIEW** so
+  deletes must target `documents` + `embeddings`
+
+## 0157-rag-sync.R
+- Push/pull ragnar stores to `s3://fresh-bc/rag/` with a `log.json` provenance manifest
+- `RAG_SYNC=push STORES=fraser Rscript scripts/04_planning/0157-rag-sync.R` — opt-in, never a build
+  side effect. `pull` verifies md5 against the log before trusting a file
+- The log records document/chunk counts, **embedding model + size**, per-group coverage,
+  `docs_without_group`, bytes, md5, and the `head_sha` that produced it. A store built with a
+  different embedding model is not comparable, so a machine that silently rebuilds instead of pulling
+  gets an artifact that looks fine and answers differently
+- Writing needs no prefix provisioning (S3 prefixes are key namespaces). **Field read access needs a
+  read-only IAM key scoped to `rag/*`** — rtj#194. The `rag/` prefix stays **private permanently**:
+  these stores accumulate unpublished reports, client work, at-risk-species and
+  culturally-important-site locations, and FN data-sovereignty-relevant content
 
 ## 0150 / 0151 / 0155 — rag store build + query
 - `0150` builds from local PDFs; **`0151` builds from Zotero** (portable/reproducible — prefer it)
