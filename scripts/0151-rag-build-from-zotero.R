@@ -11,14 +11,62 @@
 #
 # INPUT:  STORE_NAME (env; default "peace"), COLLECTIONS (env; comma-sep Zotero
 #         group-4733734 collection keys; default = the Peace set),
-#         ~/.zotero-api-key
+#         Zotero API key — see CREDENTIAL below.
 # OUTPUT: data/rag/<STORE_NAME>.duckdb  (PDFs cached under data/rag/_pdfs/<name>/)
 # Requires: ragnar, DBI, jsonlite, curl; Ollama running with nomic-embed-text.
+#
+# CREDENTIAL: 1Password is the vault (NewGraphEnvironment/cyclops#9) — the old
+#   plaintext ~/.zotero-api-key is gone, do NOT reintroduce it. Resolution order:
+#     1. ZOTERO_API_KEY env var — the headless path. Set it from a 1Password
+#        service account (export OP_SERVICE_ACCOUNT_TOKEN, then
+#        ZOTERO_API_KEY=$(op read "op://newgraph/Zotero API Key/credential"))
+#        so unattended/cron runs never block on an approval prompt.
+#     2. `op read` — the interactive path. Prompts for Touch ID / desktop approval
+#        ONCE per run (the key is read a single time, not per request). Without a
+#        service account token `op` has no persistent CLI session, so an
+#        unapproved prompt just times out and the run fails.
+#   The key is never passed on a command line (visible in `ps aux`) — it goes into
+#   a chmod-600 curl config file that is removed on exit.
 # ---------------------------------------------------------------------------
 suppressMessages({library(ragnar); library(DBI); library(jsonlite)})
 `%||%` <- function(a, b) if (is.null(a) || length(a) == 0) b else a
 
-key   <- trimws(readLines("~/.zotero-api-key", warn = FALSE)[1])
+# ---- credential -------------------------------------------------------------
+op_ref <- Sys.getenv("ZOTERO_OP_REF", "op://newgraph/Zotero API Key/credential")
+key <- trimws(Sys.getenv("ZOTERO_API_KEY"))
+if (!nzchar(key)) {
+  if (!nzchar(Sys.which("op")))
+    stop("No ZOTERO_API_KEY and no `op` on PATH. Set ZOTERO_API_KEY, or install the ",
+         "1Password CLI. See NewGraphEnvironment/cyclops#9.", call. = FALSE)
+  message("Reading Zotero key from 1Password (", op_ref, ") — APPROVE THE PROMPT NOW ",
+          "(op's approval window is short and it fails with 'authorization timeout').")
+  out <- suppressWarnings(
+    system2("op", c("read", shQuote(op_ref)), stdout = TRUE, stderr = TRUE))
+  st  <- attr(out, "status") %||% 0
+  # op writes errors to the captured stream; keep them for the failure message
+  if (!identical(st, 0)) op_err <- paste(out, collapse = " ") else op_err <- ""
+  key <- if (identical(st, 0)) trimws(paste(out, collapse = "")) else ""
+}
+if (!nzchar(key))
+  stop("Could not resolve the Zotero API key.",
+       if (nzchar(Sys.getenv("ZOTERO_API_KEY"))) "" else
+         paste0("\n  op said: ", if (exists("op_err") && nzchar(op_err)) op_err else "(no output)"),
+       "\n  'authorization timeout' means the 1Password prompt was not approved in time.",
+       "\n  For unattended runs export OP_SERVICE_ACCOUNT_TOKEN (no prompt), or set",
+       "\n  ZOTERO_API_KEY directly. See NewGraphEnvironment/cyclops#9.",
+       call. = FALSE)
+
+# curl reads the auth header from this file so the key never lands in the process
+# table; 600 perms are set before the secret is written, and it is removed on exit.
+curl_cfg <- file.path(tempdir(), paste0(".zotero-curl-", Sys.getpid()))
+file.create(curl_cfg)
+Sys.chmod(curl_cfg, "600")
+writeLines(sprintf('header = "Zotero-API-Key: %s"', key), curl_cfg)
+# NOTE: on.exit() does NOT fire at a script's top level (verified — neither on a
+# clean exit nor on stop()), so it would silently leave the secret on disk.
+# reg.finalizer(onexit = TRUE) does fire in both cases.
+reg.finalizer(environment(), function(e) unlink(curl_cfg, force = TRUE), onexit = TRUE)
+
 group <- "4733734"
 store_name <- Sys.getenv("STORE_NAME", "peace")
 # pine - PINE, peace arm - PCEA, parsnip arm - PARA, mackenzie (regional-extent items)
@@ -28,7 +76,7 @@ dir.create(dl_dir, recursive = TRUE, showWarnings = FALSE)
 
 api <- function(path, query = "") {
   url <- sprintf("https://api.zotero.org/groups/%s/%s%s", group, path, query)
-  txt <- system2("curl", c("-s", "-H", shQuote(paste0("Zotero-API-Key: ", key)), shQuote(url)), stdout = TRUE)
+  txt <- system2("curl", c("-s", "--config", shQuote(curl_cfg), shQuote(url)), stdout = TRUE)
   jsonlite::fromJSON(paste(txt, collapse = ""), simplifyVector = FALSE)
 }
 
@@ -54,7 +102,7 @@ message("PDF attachments found across ", length(colls), " collections: ", length
 for (a in att) {
   dest <- file.path(dl_dir, paste0(a$key, ".pdf"))
   if (!file.exists(dest) || file.info(dest)$size < 1000) {
-    system2("curl", c("-sL", "-H", shQuote(paste0("Zotero-API-Key: ", key)),
+    system2("curl", c("-sL", "--config", shQuote(curl_cfg),
                       shQuote(sprintf("https://api.zotero.org/groups/%s/items/%s/file", group, a$key)),
                       "-o", shQuote(dest)))
   }
