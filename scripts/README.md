@@ -25,6 +25,11 @@ wf_farm_priority.js                          farm priority/crossing tables out o
 0154  content-tag the corpus (any time after 0152)
 0156  dedup the store        (before publishing/syncing it)
 0157  push/pull stores to s3://fresh-bc/rag/ with log.json
+
+--- FISS .xls track (independent of the report/PDF flow above; opt-in) ---
+0200  enumerate the data-only .xls submissions per group   WSG_TARGET=PINE
+0210  fetch them            FISS_FETCH=TRUE   <- deliberate; pulls dozens-to-hundreds
+0220  parse -> normalize -> flag No-Fish-Captured -> GPKG + CSV clipped to the group
 ```
 
 ## Report discovery — four axes
@@ -136,6 +141,33 @@ A report is reachable from more than one place; using only one axis misses repor
 - `priority_rank` 1=high 2=moderate 3=low 4=ruled-out, NULL=no priority stated
 - `coord_source` records provenance: `pscis` (surveyed) > `report-utm` (transcribed) >
   `stream-snap` / `stream-snap-parent` (approximate — placed on the named FWA stream)
+
+## 0200 / 0210 / 0220 — FISS `.xls` → No-Fish-Captured layer
+
+A separate track from the report/PDF flow: the FISS layers link to **data-only `.xls` submissions**
+(fish-collection permit data), not narrative reports. Those carry site-level effort and survey
+comments — including the negative results ("electrofished 1200 m, caught nothing") that no standard
+product gives you, and that should stop a crossing being prioritized on a reach already sampled
+fishless.
+
+- `0200` — `acat_report_url` on `fiss_fish_obsrvtn_pnt_sp` is a `viewReport.do?reportId=N` **page**,
+  not a file; the `.xls` are attachments on it. Scrapes them into a per-group manifest.
+- `0210` — **opt-in** (`FISS_FETCH=TRUE`). ~40% of legacy `.xls` fail readxl/libxls with
+  *unsupported encryption*; a LibreOffice `--convert-to xlsx` fallback recovers them (PINE: 44 ok +
+  33 converted = 77/77).
+- `0220` — column set is **passed config** (`wanted_cols`), not hardcoded. Header is auto-detected by
+  anchoring on the `REFERENCE NUMBER` label row, because row 1 of the provincial template is a title
+  banner (`fpr::fpr_import_hab_con()` assumes a row-1 header and yields `x, x_2, …` here).
+  NFC is taken from the sheet's own `No Fish Caught` value (`nfc_source = "submitted"`); a real zero
+  count with recorded effort is `"derived"`. Blank counts are **not** treated as zero.
+
+PINE: 77 submissions → 1,610 site records → 411 clipped to PINE, 142 NFC (128 submitted, 14 derived).
+
+**Note:** these three still connect on the bcfishpass tunnel (`:63333`). Per *Data sources* below the
+layers they need (`fiss_fish_obsrvtn_pnt_sp`, `fwa_watershed_groups_poly`) are on the local `fwapg`
+at 5432, so they could likely drop the tunnel dependency — untested, so not changed.
+
+<br>
 
 ## 0140 / 0160 — Guppy-specific (Peace)
 - `0140` farms the Guppy 2006 Table 8 priority list; `0160` enriches it with bcfishpass metrics
