@@ -53,7 +53,11 @@ fiss_layer <- "whse_fish.fiss_fish_obsrvtn_pnt_sp"
 conn <- DBI::dbConnect(RPostgres::Postgres(),
                        host = "localhost", port = 63333,
                        dbname = "bcfishpass", user = "newgraph")
-on.exit(DBI::dbDisconnect(conn), add = TRUE)
+# on.exit() does NOT fire at a script's top level (see CLAUDE.md) — it would leave
+# this connection open. reg.finalizer(onexit = TRUE) fires on both a clean exit and stop().
+reg.finalizer(environment(),
+              function(e) try(DBI::dbDisconnect(conn), silent = TRUE),
+              onexit = TRUE)
 
 # ---- distinct report pages linked from the FISS layer, clipped to the WSG ----
 sch <- strsplit(fiss_layer, "\\.")[[1]][1]
