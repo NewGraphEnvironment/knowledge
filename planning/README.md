@@ -1,0 +1,28 @@
+# Planning
+
+Tracks planning-with-files (PWF) artifacts for structured task execution.
+
+## Structure
+
+  planning/
+    active/           <- Current work-in-progress PWF files
+      task_plan.md
+      findings.md
+      progress.md
+    archive/          <- Completed issues
+      YYYY-MM-issue-N-slug/
+
+The two `2026-07-issue-198-*` archives were copied from
+`fish_passage_template_reporting`, where this pipeline was built; their issue and PR numbers
+refer to that repo.
+
+## Workflow
+
+See `feature-workflow.md` convention in CLAUDE.md for the full sequence:
+issue -> /planning-init <N> -> tests -> code-check -> atomic commits -> /planning-archive.
+
+## Skills
+
+- `/planning-init <N>` -- start issue N (branch + PWF baseline derived from issue body)
+- `/planning-update` -- sync checkboxes mid-session
+- `/planning-archive` -- archive completed work, create fresh active/

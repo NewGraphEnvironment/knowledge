@@ -1,0 +1,11 @@
+# Raw FISS .xls downloads: regenerable from data/<wsg>/fiss_xls_manifest.csv via scripts/0210
+data/*/fiss_xls/
+# Harvested report PDFs go to Zotero (scripts/0153), never to git
+**/*.pdf
+# Ragnar stores live in s3://fresh-bc/rag/ via cred::crd_store_push(); local copies are caches
+data/rag/
+*.duckdb
+*.bak
+.DS_Store
+.Rproj.user
+.Rhistory
