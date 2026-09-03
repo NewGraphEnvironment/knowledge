@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Document id="root_doc">
+<Schema name="priority_farmed" id="priority_farmed">
+	<SimpleField name="code" type="string"></SimpleField>
+	<SimpleField name="report_id" type="float"></SimpleField>
+	<SimpleField name="report_crossing_id" type="string"></SimpleField>
+	<SimpleField name="pscis_stream_crossing_id" type="float"></SimpleField>
+	<SimpleField name="stream_name" type="string"></SimpleField>
+	<SimpleField name="priority" type="int"></SimpleField>
+	<SimpleField name="barrier" type="string"></SimpleField>
+	<SimpleField name="fish_barrier_score" type="int"></SimpleField>
+	<SimpleField name="habitat_value" type="string"></SimpleField>
+	<SimpleField name="upstream_fish" type="string"></SimpleField>
+	<SimpleField name="recommendation" type="string"></SimpleField>
+	<SimpleField name="reconcile_method" type="string"></SimpleField>
+	<SimpleField name="table_source" type="string"></SimpleField>
+	<SimpleField name="coord_source" type="string"></SimpleField>
+	<SimpleField name=".row" type="int"></SimpleField>
+</Schema>
+<Folder><name>priority_farmed</name>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">UFRA</SimpleData>
+		<SimpleData name="report_id">19689</SimpleData>
+		<SimpleData name="report_crossing_id">2</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">4931</SimpleData>
+		<SimpleData name="stream_name">Unnamed Stream (Watershed Code: None Assigned)</SimpleData>
+		<SimpleData name="barrier">non-fish bearing</SimpleData>
+		<SimpleData name="habitat_value">S6 stream; no fish habitat; poor rearing habitat, no spawning or over-wintering habitat</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">32</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-119.308454,52.892872</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">UFRA</SimpleData>
+		<SimpleData name="report_id">19689</SimpleData>
+		<SimpleData name="report_crossing_id">1</SimpleData>
+		<SimpleData name="stream_name">Unnamed Stream (Watershed Code: None Assigned)</SimpleData>
+		<SimpleData name="barrier">non-fish bearing</SimpleData>
+		<SimpleData name="habitat_value">S6 stream; no fish habitat (no deep pools, no passage, no spawning or over-wintering habitat)</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">31</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-120.01757272153,53.1729029618763</coordinates></Point>
+  </Placemark>
+</Folder>
+</Document></kml>

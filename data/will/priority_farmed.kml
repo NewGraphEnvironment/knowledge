@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Document id="root_doc">
+<Schema name="priority_farmed" id="priority_farmed">
+	<SimpleField name="code" type="string"></SimpleField>
+	<SimpleField name="report_id" type="float"></SimpleField>
+	<SimpleField name="report_crossing_id" type="string"></SimpleField>
+	<SimpleField name="pscis_stream_crossing_id" type="float"></SimpleField>
+	<SimpleField name="stream_name" type="string"></SimpleField>
+	<SimpleField name="priority" type="int"></SimpleField>
+	<SimpleField name="barrier" type="string"></SimpleField>
+	<SimpleField name="fish_barrier_score" type="int"></SimpleField>
+	<SimpleField name="habitat_value" type="string"></SimpleField>
+	<SimpleField name="upstream_fish" type="string"></SimpleField>
+	<SimpleField name="recommendation" type="string"></SimpleField>
+	<SimpleField name="reconcile_method" type="string"></SimpleField>
+	<SimpleField name="table_source" type="string"></SimpleField>
+	<SimpleField name="coord_source" type="string"></SimpleField>
+	<SimpleField name=".row" type="int"></SimpleField>
+</Schema>
+<Folder><name>priority_farmed</name>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">WILL</SimpleData>
+		<SimpleData name="report_id">51980</SimpleData>
+		<SimpleData name="report_crossing_id">6</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">126189</SimpleData>
+		<SimpleData name="stream_name">Alces Creek</SimpleData>
+		<SimpleData name="barrier">7.5 m high x 30 m long cobble and boulder cascade (barrier to fish)</SimpleData>
+		<SimpleData name="habitat_value">Pools and moderate cover, but limited by steep gradient</SimpleData>
+		<SimpleData name="upstream_fish">Fish-bearing in lower half (RB/Rainbow trout captured); non-fish-bearing above cascade</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">107</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.825514,53.402856</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">WILL</SimpleData>
+		<SimpleData name="report_id">51980</SimpleData>
+		<SimpleData name="report_crossing_id">2</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">126216</SimpleData>
+		<SimpleData name="stream_name">unnamed trib to the Willow River (ILP 438)</SimpleData>
+		<SimpleData name="barrier">9 m high x 30 m long cascade and 1.2 m high waterfall; no visible channel in reach 1</SimpleData>
+		<SimpleData name="habitat_value">Habitat limited by extreme gradient, low flows, lack of pools, insufficient cover</SimpleData>
+		<SimpleData name="upstream_fish">Non-fish-bearing (terminal reach; not sampled)</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">113</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.01757,53.640139</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">WILL</SimpleData>
+		<SimpleData name="report_id">51980</SimpleData>
+		<SimpleData name="report_crossing_id">8</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">126193</SimpleData>
+		<SimpleData name="stream_name">Opitsah Creek</SimpleData>
+		<SimpleData name="barrier">6 m x 30 m cascade, 3 m x 10 m cascade, 1.5 m debris jam within reach; plus 1.7 m falls in reach 1 (site 25)</SimpleData>
+		<SimpleData name="habitat_value">Low value habitat, limited by extreme gradient, lack of pools, insufficient flows</SimpleData>
+		<SimpleData name="upstream_fish">Non-fish-bearing (NFC / no fish captured, 467 sec electrofishing)</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">115</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.793,53.375482</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">WILL</SimpleData>
+		<SimpleData name="report_id">51980</SimpleData>
+		<SimpleData name="report_crossing_id">7</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">126192</SimpleData>
+		<SimpleData name="stream_name">unnamed trib to the Willow River (ILP 196)</SimpleData>
+		<SimpleData name="barrier">No definite barrier identified</SimpleData>
+		<SimpleData name="upstream_fish">Fish use inferred (NFC in 298 sec electrofishing; no barrier, directly tributary to Willow River; fish can likely access portion of reach 1 during high flows)</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">116</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.832406,53.390132</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">WILL</SimpleData>
+		<SimpleData name="report_id">52101</SimpleData>
+		<SimpleData name="report_crossing_id">2</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">126216</SimpleData>
+		<SimpleData name="stream_name">Unnamed Creek</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">131</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.01757,53.640139</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">WILL</SimpleData>
+		<SimpleData name="report_id">52101</SimpleData>
+		<SimpleData name="report_crossing_id">6</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">126189</SimpleData>
+		<SimpleData name="stream_name">Unnamed Creek</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">135</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.825514,53.402856</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">WILL</SimpleData>
+		<SimpleData name="report_id">52101</SimpleData>
+		<SimpleData name="report_crossing_id">7</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">126192</SimpleData>
+		<SimpleData name="stream_name">Unnamed Creek</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">136</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.832406,53.390132</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">WILL</SimpleData>
+		<SimpleData name="report_id">52101</SimpleData>
+		<SimpleData name="report_crossing_id">8</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">126193</SimpleData>
+		<SimpleData name="stream_name">Unnamed Creek</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">137</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.793,53.375482</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">WILL</SimpleData>
+		<SimpleData name="report_id">52101</SimpleData>
+		<SimpleData name="report_crossing_id">9</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">126260</SimpleData>
+		<SimpleData name="stream_name">Unnamed Creek</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">138</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.894158,53.414164</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">WILL</SimpleData>
+		<SimpleData name="report_id">52101</SimpleData>
+		<SimpleData name="report_crossing_id">10</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">126077</SimpleData>
+		<SimpleData name="stream_name">Unnamed Creek</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">139</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.926872,53.449268</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">WILL</SimpleData>
+		<SimpleData name="report_id">52101</SimpleData>
+		<SimpleData name="report_crossing_id">12</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">126105</SimpleData>
+		<SimpleData name="stream_name">Unnamed Creek</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">141</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.239839,53.728865</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">WILL</SimpleData>
+		<SimpleData name="report_id">59227</SimpleData>
+		<SimpleData name="report_crossing_id">37</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">126057</SimpleData>
+		<SimpleData name="stream_name">AH6</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-assessment</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">176</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.160327,54.111013</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">WILL</SimpleData>
+		<SimpleData name="report_id">59227</SimpleData>
+		<SimpleData name="report_crossing_id">41</SimpleData>
+		<SimpleData name="stream_name">AH3</SimpleData>
+		<SimpleData name="barrier">13m high and 34m long cascade barrier (located at site UTM)</SimpleData>
+		<SimpleData name="upstream_fish">no (no perennial habitat upstream; sampled by Carmanah in R5 in 1998 with no fish capture)</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-assessment</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">172</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.032286270393,53.2759032552363</coordinates></Point>
+  </Placemark>
+</Folder>
+</Document></kml>

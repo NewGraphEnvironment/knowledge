@@ -1,0 +1,507 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Document id="root_doc">
+<Schema name="priority_farmed" id="priority_farmed">
+	<SimpleField name="code" type="string"></SimpleField>
+	<SimpleField name="report_id" type="float"></SimpleField>
+	<SimpleField name="report_crossing_id" type="string"></SimpleField>
+	<SimpleField name="pscis_stream_crossing_id" type="float"></SimpleField>
+	<SimpleField name="stream_name" type="string"></SimpleField>
+	<SimpleField name="priority" type="string"></SimpleField>
+	<SimpleField name="barrier" type="string"></SimpleField>
+	<SimpleField name="fish_barrier_score" type="float"></SimpleField>
+	<SimpleField name="habitat_value" type="string"></SimpleField>
+	<SimpleField name="upstream_fish" type="string"></SimpleField>
+	<SimpleField name="recommendation" type="string"></SimpleField>
+	<SimpleField name="reconcile_method" type="string"></SimpleField>
+	<SimpleField name="table_source" type="string"></SimpleField>
+	<SimpleField name="coord_source" type="string"></SimpleField>
+	<SimpleField name=".row" type="int"></SimpleField>
+</Schema>
+<Folder><name>priority_farmed</name>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">NECR</SimpleData>
+		<SimpleData name="report_id">10629</SimpleData>
+		<SimpleData name="report_crossing_id">27</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6340</SimpleData>
+		<SimpleData name="stream_name">Tributary #17</SimpleData>
+		<SimpleData name="habitat_value">NVIS (no defined channel)</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">46</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.706774,53.899322</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">NECR</SimpleData>
+		<SimpleData name="report_id">10629</SimpleData>
+		<SimpleData name="report_crossing_id">25</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6338</SimpleData>
+		<SimpleData name="stream_name">Tributary #17</SimpleData>
+		<SimpleData name="habitat_value">NVIS (no defined channel)</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">56</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.704464,53.903517</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">NECR</SimpleData>
+		<SimpleData name="report_id">10629</SimpleData>
+		<SimpleData name="report_crossing_id">22</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6335</SimpleData>
+		<SimpleData name="stream_name">Tributary #17</SimpleData>
+		<SimpleData name="habitat_value">NVIS (no defined channel)</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">58</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.771455,53.919249</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">NECR</SimpleData>
+		<SimpleData name="report_id">10629</SimpleData>
+		<SimpleData name="report_crossing_id">23</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6336</SimpleData>
+		<SimpleData name="stream_name">Tributary #17</SimpleData>
+		<SimpleData name="habitat_value">NVIS (no defined channel)</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">59</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.727649,53.931205</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">NECR</SimpleData>
+		<SimpleData name="report_id">10629</SimpleData>
+		<SimpleData name="report_crossing_id">22</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6335</SimpleData>
+		<SimpleData name="stream_name">Khai Creek</SimpleData>
+		<SimpleData name="habitat_value">S4 (fish bearing)</SimpleData>
+		<SimpleData name="upstream_fish">no fish</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">64</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.771455,53.919249</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">NECR</SimpleData>
+		<SimpleData name="report_id">10629</SimpleData>
+		<SimpleData name="report_crossing_id">23</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6336</SimpleData>
+		<SimpleData name="stream_name">Khai Creek</SimpleData>
+		<SimpleData name="barrier">Possible obstruction downstream (to be verified)</SimpleData>
+		<SimpleData name="habitat_value">S4 (fish bearing)</SimpleData>
+		<SimpleData name="upstream_fish">no fish</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">65</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.727649,53.931205</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">NECR</SimpleData>
+		<SimpleData name="report_id">10629</SimpleData>
+		<SimpleData name="report_crossing_id">24</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6337</SimpleData>
+		<SimpleData name="stream_name">Khai Creek</SimpleData>
+		<SimpleData name="barrier">Cascade / fish obstruction (fall); series of falls 0.33-1.0 m</SimpleData>
+		<SimpleData name="habitat_value">S4 (fish bearing)</SimpleData>
+		<SimpleData name="upstream_fish">no fish</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">66</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.700928,53.910525</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">NECR</SimpleData>
+		<SimpleData name="report_id">10629</SimpleData>
+		<SimpleData name="report_crossing_id">25</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6338</SimpleData>
+		<SimpleData name="stream_name">Khai Creek</SimpleData>
+		<SimpleData name="habitat_value">S4 (fish bearing)</SimpleData>
+		<SimpleData name="upstream_fish">no fish</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">67</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.704464,53.903517</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">NECR</SimpleData>
+		<SimpleData name="report_id">10629</SimpleData>
+		<SimpleData name="report_crossing_id">26</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6339</SimpleData>
+		<SimpleData name="stream_name">Khai Creek</SimpleData>
+		<SimpleData name="habitat_value">NVIS (no defined channel)</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">68</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.707923,53.899126</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">NECR</SimpleData>
+		<SimpleData name="report_id">10629</SimpleData>
+		<SimpleData name="report_crossing_id">39</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6350</SimpleData>
+		<SimpleData name="stream_name">Khai Creek</SimpleData>
+		<SimpleData name="habitat_value">NVIS (no defined channel)</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">87</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.677822,53.815662</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">NECR</SimpleData>
+		<SimpleData name="report_id">10629</SimpleData>
+		<SimpleData name="report_crossing_id">5</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6354</SimpleData>
+		<SimpleData name="stream_name">Naltesby Lake Tributary (East)</SimpleData>
+		<SimpleData name="habitat_value">S3 (fish bearing)</SimpleData>
+		<SimpleData name="upstream_fish">RB</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">91</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.439992,54.18973</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">NECR</SimpleData>
+		<SimpleData name="report_id">10629</SimpleData>
+		<SimpleData name="report_crossing_id">39</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6350</SimpleData>
+		<SimpleData name="stream_name">Naltesby Lake Tributary (East)</SimpleData>
+		<SimpleData name="habitat_value">S4 (fish bearing)</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">104</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.677822,53.815662</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">NECR</SimpleData>
+		<SimpleData name="report_id">10629</SimpleData>
+		<SimpleData name="report_crossing_id">23</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6336</SimpleData>
+		<SimpleData name="stream_name">Naltesby Lake Tributary (East)</SimpleData>
+		<SimpleData name="barrier">Beaver dam holding water for lake (FSZ)</SimpleData>
+		<SimpleData name="habitat_value">W (wetland / recently flooded marsh)</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">105</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.727649,53.931205</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">NECR</SimpleData>
+		<SimpleData name="report_id">10629</SimpleData>
+		<SimpleData name="report_crossing_id">25</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6338</SimpleData>
+		<SimpleData name="stream_name">Naltesby Lake Tributary (East)</SimpleData>
+		<SimpleData name="habitat_value">S3 (fish bearing)</SimpleData>
+		<SimpleData name="upstream_fish">no fish</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">106</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.704464,53.903517</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">NECR</SimpleData>
+		<SimpleData name="report_id">10629</SimpleData>
+		<SimpleData name="report_crossing_id">26</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6339</SimpleData>
+		<SimpleData name="stream_name">Naltesby Lake Tributary (East)</SimpleData>
+		<SimpleData name="habitat_value">S3 (fish bearing)</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">107</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.707923,53.899126</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">NECR</SimpleData>
+		<SimpleData name="report_id">10629</SimpleData>
+		<SimpleData name="report_crossing_id">27</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6340</SimpleData>
+		<SimpleData name="stream_name">Naltesby Lake Tributary (East)</SimpleData>
+		<SimpleData name="habitat_value">S3 (fish bearing)</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">108</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.706774,53.899322</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">NECR</SimpleData>
+		<SimpleData name="report_id">10629</SimpleData>
+		<SimpleData name="report_crossing_id">28</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6341</SimpleData>
+		<SimpleData name="stream_name">Naltesby Lake Tributary (East)</SimpleData>
+		<SimpleData name="habitat_value">S3 (fish bearing)</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">109</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.717688,53.872612</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">NECR</SimpleData>
+		<SimpleData name="report_id">10629</SimpleData>
+		<SimpleData name="report_crossing_id">29</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6342</SimpleData>
+		<SimpleData name="stream_name">Naltesby Lake Tributary (East)</SimpleData>
+		<SimpleData name="habitat_value">S4 (fish bearing)</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">110</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.718277,53.869547</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">NECR</SimpleData>
+		<SimpleData name="report_id">226</SimpleData>
+		<SimpleData name="report_crossing_id">2</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">7424</SimpleData>
+		<SimpleData name="stream_name">Unnamed Lake #3 (in-lake sampling)</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">181</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.49358,54.140828</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">NECR</SimpleData>
+		<SimpleData name="report_id">226</SimpleData>
+		<SimpleData name="report_crossing_id">24</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6337</SimpleData>
+		<SimpleData name="stream_name">Unnamed Stream ILP 30056 (inlet)</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">191</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.700928,53.910525</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">NECR</SimpleData>
+		<SimpleData name="report_id">24373</SimpleData>
+		<SimpleData name="report_crossing_id">22</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6335</SimpleData>
+		<SimpleData name="stream_name">Unnamed</SimpleData>
+		<SimpleData name="priority">low</SimpleData>
+		<SimpleData name="barrier">Partial</SimpleData>
+		<SimpleData name="fish_barrier_score">35</SimpleData>
+		<SimpleData name="habitat_value">L</SimpleData>
+		<SimpleData name="upstream_fish">RB - Assumed (fish presence required to be known)</SimpleData>
+		<SimpleData name="recommendation">no-fix</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">priority-summary</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">218</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.771455,53.919249</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">NECR</SimpleData>
+		<SimpleData name="report_id">24373</SimpleData>
+		<SimpleData name="report_crossing_id">23</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6336</SimpleData>
+		<SimpleData name="stream_name">Smith Creek</SimpleData>
+		<SimpleData name="priority">moderate</SimpleData>
+		<SimpleData name="barrier">??? (undetermined)</SimpleData>
+		<SimpleData name="fish_barrier_score">36</SimpleData>
+		<SimpleData name="habitat_value">H</SimpleData>
+		<SimpleData name="upstream_fish">RB (fish present above and below)</SimpleData>
+		<SimpleData name="recommendation">reassess</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">priority-summary</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">219</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.727649,53.931205</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">NECR</SimpleData>
+		<SimpleData name="report_id">24373</SimpleData>
+		<SimpleData name="report_crossing_id">24</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6337</SimpleData>
+		<SimpleData name="stream_name">Unnamed</SimpleData>
+		<SimpleData name="priority">high</SimpleData>
+		<SimpleData name="barrier">Full</SimpleData>
+		<SimpleData name="fish_barrier_score">50</SimpleData>
+		<SimpleData name="habitat_value">H</SimpleData>
+		<SimpleData name="upstream_fish">RB - Assumed (fish presence required to be known)</SimpleData>
+		<SimpleData name="recommendation">replace</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">priority-summary</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">220</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.700928,53.910525</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">NECR</SimpleData>
+		<SimpleData name="report_id">24373</SimpleData>
+		<SimpleData name="report_crossing_id">25</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6338</SimpleData>
+		<SimpleData name="stream_name">Fifteen Mile Creek</SimpleData>
+		<SimpleData name="priority">no-fix</SimpleData>
+		<SimpleData name="barrier">No</SimpleData>
+		<SimpleData name="fish_barrier_score">0</SimpleData>
+		<SimpleData name="upstream_fish">RB (fish present above and below)</SimpleData>
+		<SimpleData name="recommendation">no-fix</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">priority-summary</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">221</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.704464,53.903517</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">NECR</SimpleData>
+		<SimpleData name="report_id">24373</SimpleData>
+		<SimpleData name="report_crossing_id">26</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6339</SimpleData>
+		<SimpleData name="stream_name">Unnamed</SimpleData>
+		<SimpleData name="priority">moderate</SimpleData>
+		<SimpleData name="barrier">Full</SimpleData>
+		<SimpleData name="fish_barrier_score">29</SimpleData>
+		<SimpleData name="habitat_value">L</SimpleData>
+		<SimpleData name="upstream_fish">RB - Assumed (fish presence required to be known)</SimpleData>
+		<SimpleData name="recommendation">replace</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">priority-summary</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">222</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.707923,53.899126</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">NECR</SimpleData>
+		<SimpleData name="report_id">24373</SimpleData>
+		<SimpleData name="report_crossing_id">27</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6340</SimpleData>
+		<SimpleData name="stream_name">Unnamed</SimpleData>
+		<SimpleData name="priority">moderate</SimpleData>
+		<SimpleData name="barrier">Partial</SimpleData>
+		<SimpleData name="fish_barrier_score">30</SimpleData>
+		<SimpleData name="habitat_value">L</SimpleData>
+		<SimpleData name="upstream_fish">RB - Assumed (fish presence required to be known)</SimpleData>
+		<SimpleData name="recommendation">replace</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">priority-summary</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">223</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.706774,53.899322</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">NECR</SimpleData>
+		<SimpleData name="report_id">24373</SimpleData>
+		<SimpleData name="report_crossing_id">28</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6341</SimpleData>
+		<SimpleData name="stream_name">Unnamed</SimpleData>
+		<SimpleData name="priority">moderate</SimpleData>
+		<SimpleData name="barrier">Partial</SimpleData>
+		<SimpleData name="fish_barrier_score">39</SimpleData>
+		<SimpleData name="habitat_value">L</SimpleData>
+		<SimpleData name="upstream_fish">RB - Assumed (fish presence required to be known)</SimpleData>
+		<SimpleData name="recommendation">replace</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">priority-summary</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">224</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.717688,53.872612</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">NECR</SimpleData>
+		<SimpleData name="report_id">24373</SimpleData>
+		<SimpleData name="report_crossing_id">29</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6342</SimpleData>
+		<SimpleData name="stream_name">Unnamed</SimpleData>
+		<SimpleData name="priority">no-fix</SimpleData>
+		<SimpleData name="barrier">No</SimpleData>
+		<SimpleData name="fish_barrier_score">0</SimpleData>
+		<SimpleData name="upstream_fish">RB - Assumed (fish presence required to be known)</SimpleData>
+		<SimpleData name="recommendation">no-fix</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">priority-summary</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">225</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.718277,53.869547</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">NECR</SimpleData>
+		<SimpleData name="report_id">24373</SimpleData>
+		<SimpleData name="report_crossing_id">39</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6350</SimpleData>
+		<SimpleData name="stream_name">Unnamed</SimpleData>
+		<SimpleData name="priority">no-fix</SimpleData>
+		<SimpleData name="barrier">No</SimpleData>
+		<SimpleData name="fish_barrier_score">0</SimpleData>
+		<SimpleData name="upstream_fish">RB - Assumed (fish presence required to be known)</SimpleData>
+		<SimpleData name="recommendation">no-fix</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">priority-summary</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">235</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.677822,53.815662</coordinates></Point>
+  </Placemark>
+</Folder>
+</Document></kml>

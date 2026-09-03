@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Document id="root_doc">
+<Schema name="priority_pine" id="priority_pine">
+	<SimpleField name="stream_crossing_id" type="float"></SimpleField>
+	<SimpleField name="guppy_id" type="string"></SimpleField>
+	<SimpleField name="stream_name" type="string"></SimpleField>
+	<SimpleField name="barrier" type="string"></SimpleField>
+	<SimpleField name="road_name" type="string"></SimpleField>
+	<SimpleField name="structure_type" type="string"></SimpleField>
+	<SimpleField name="lon" type="float"></SimpleField>
+	<SimpleField name="lat" type="float"></SimpleField>
+	<SimpleField name="pscis_matched" type="int"></SimpleField>
+	<SimpleField name="coord_source" type="string"></SimpleField>
+	<SimpleField name="followup_priority" type="string"></SimpleField>
+	<SimpleField name="bt_hab_km" type="float"></SimpleField>
+	<SimpleField name="grayling_modelled" type="int"></SimpleField>
+	<SimpleField name="has_confirmation" type="int"></SimpleField>
+	<SimpleField name="has_design" type="int"></SimpleField>
+	<SimpleField name="has_remediation" type="int"></SimpleField>
+	<SimpleField name="aggregated_crossings_id" type="string"></SimpleField>
+	<SimpleField name="guppy_notes" type="string"></SimpleField>
+</Schema>
+<Folder><name>priority_pine</name>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_pine">
+		<SimpleData name="guppy_id">2006.071</SimpleData>
+		<SimpleData name="stream_name">Pine River oxbow</SimpleData>
+		<SimpleData name="road_name">Hwy 97</SimpleData>
+		<SimpleData name="structure_type">None</SimpleData>
+		<SimpleData name="lon">-122.305664</SimpleData>
+		<SimpleData name="lat">55.606309</SimpleData>
+		<SimpleData name="pscis_matched">0</SimpleData>
+		<SimpleData name="coord_source">Guppy detail sheet (UTM 10N)</SimpleData>
+		<SimpleData name="followup_priority">high (Guppy P1)</SimpleData>
+		<SimpleData name="grayling_modelled">0</SimpleData>
+		<SimpleData name="has_confirmation">0</SimpleData>
+		<SimpleData name="has_design">0</SimpleData>
+		<SimpleData name="has_remediation">0</SimpleData>
+		<SimpleData name="guppy_notes">2006.071 Pine River oxbow Hwy 97 MoT S1 None No structure River oxbow cut off by highway fill. Deep, wide fill - Consider reconnecting oxbow inlet to river by oxbow major project to excavate. Old natural channel horizontal drilling to install tiers of culverts at 0% connection to river at UTM 543878 6162821. gradient for mid- to high water connectivity. A bridge or open-bottom arch would also work, but would have less control of the volume of water entering the oxbow and likely would cost much more.</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.305664,55.606309</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_pine">
+		<SimpleData name="stream_crossing_id">6953</SimpleData>
+		<SimpleData name="guppy_id">2006.048</SimpleData>
+		<SimpleData name="stream_name">Silver Sands Creek</SimpleData>
+		<SimpleData name="barrier">PASSABLE</SimpleData>
+		<SimpleData name="road_name">Hwy 97</SimpleData>
+		<SimpleData name="structure_type">EPA</SimpleData>
+		<SimpleData name="lon">-122.558597</SimpleData>
+		<SimpleData name="lat">55.510785</SimpleData>
+		<SimpleData name="pscis_matched">1</SimpleData>
+		<SimpleData name="coord_source">PSCIS</SimpleData>
+		<SimpleData name="followup_priority">high (Guppy P1)</SimpleData>
+		<SimpleData name="bt_hab_km">7.07</SimpleData>
+		<SimpleData name="grayling_modelled">0</SimpleData>
+		<SimpleData name="has_confirmation">0</SimpleData>
+		<SimpleData name="has_design">0</SimpleData>
+		<SimpleData name="has_remediation">0</SimpleData>
+		<SimpleData name="aggregated_crossings_id">6953</SimpleData>
+		<SimpleData name="guppy_notes">2006.048 Silver Sands Hwy 97 MoT S2 EPA Outlet drop; Retrofitted with downstream weirs (partial barriers) Install a 16 m bridge, with 10+ m wide channel. Creek culvert width; and baffles (outlet baffle is partial barrier). Fish Reconstruct channel from downstream end of Culvert Length seen in pool below upper weir. Upper end of wieirs to well above culvert to remove barriers culvert filled with cobbles between baffles due to formed by weirs (see diagram). Stream too large bedload movement; lower end not filled with for anything except a bridge. See below further cobbles -- needs larger boulders to provide surface discussion and the stream profile. structure to replace that of the buried baffles. BT MW known.</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.558597,55.510785</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_pine">
+		<SimpleData name="stream_crossing_id">6971</SimpleData>
+		<SimpleData name="guppy_id">2006.072</SimpleData>
+		<SimpleData name="stream_name">Pine River oxbow</SimpleData>
+		<SimpleData name="barrier">BARRIER</SimpleData>
+		<SimpleData name="road_name">Hwy 97</SimpleData>
+		<SimpleData name="structure_type">RC</SimpleData>
+		<SimpleData name="lon">-122.301026</SimpleData>
+		<SimpleData name="lat">55.610956</SimpleData>
+		<SimpleData name="pscis_matched">1</SimpleData>
+		<SimpleData name="coord_source">PSCIS</SimpleData>
+		<SimpleData name="followup_priority">high (Guppy P1)</SimpleData>
+		<SimpleData name="bt_hab_km">274.48</SimpleData>
+		<SimpleData name="grayling_modelled">0</SimpleData>
+		<SimpleData name="has_confirmation">0</SimpleData>
+		<SimpleData name="has_design">0</SimpleData>
+		<SimpleData name="has_remediation">0</SimpleData>
+		<SimpleData name="aggregated_crossings_id">6971</SimpleData>
+		<SimpleData name="guppy_notes">2006.072 Pine River oxbow Hwy 97 MoT S1 RC Outlet drop, River oxbow cut off by highway fill. Deep, wide fill - Install 30 m bridge with 20+ m wide channel, in oxbow culvert length; major project to excavate. Old natural channel conjunction with providing water flow from the inlet beaver lodge connection to river at 543878 6162821. Culvert end of the oxbow (site 2006.071). A bridge is covers inlet. plugged. Two similar oxbows are present 10-12 km needed to ensure upstream fish passage into the further east along Highway 97 -- they have similar oxbow during high water flows. Install a 0.5 m high opportunities for reconnection with the Pine River. rock weir about 2 metres back from the crossing structure inlet without impeding fish passage, to discourage beaver dam construction right at the inlet. Extend the surface of the new stream channel to the top of the weir, resulting in a shallow pool above the upstream end of the new channel. 17</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.301026,55.610956</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_pine">
+		<SimpleData name="stream_crossing_id">6980</SimpleData>
+		<SimpleData name="guppy_id">2006.084</SimpleData>
+		<SimpleData name="stream_name">Sukunka River trib</SimpleData>
+		<SimpleData name="barrier">BARRIER</SimpleData>
+		<SimpleData name="road_name">CNR Track</SimpleData>
+		<SimpleData name="structure_type">RC</SimpleData>
+		<SimpleData name="lon">-121.574381</SimpleData>
+		<SimpleData name="lat">54.896143</SimpleData>
+		<SimpleData name="pscis_matched">1</SimpleData>
+		<SimpleData name="coord_source">PSCIS</SimpleData>
+		<SimpleData name="followup_priority">high (Guppy P1)</SimpleData>
+		<SimpleData name="bt_hab_km">0.01</SimpleData>
+		<SimpleData name="grayling_modelled">0</SimpleData>
+		<SimpleData name="has_confirmation">0</SimpleData>
+		<SimpleData name="has_design">0</SimpleData>
+		<SimpleData name="has_remediation">0</SimpleData>
+		<SimpleData name="aggregated_crossings_id">6980</SimpleData>
+		<SimpleData name="guppy_notes">2006.084 Sukunka River CNR CNR S3 RC Culvert width; Fish (about 30 cm) (BT?) in plunge pool Install (1) 16 m bridge with 4+ m channel width or trib. Track outlet drop; (2) 6+ m wide x 30 m long open-bottom arch. culvert slope</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.574381,54.896143</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_pine">
+		<SimpleData name="stream_crossing_id">7008</SimpleData>
+		<SimpleData name="guppy_id">2006.161</SimpleData>
+		<SimpleData name="stream_name">Sukunka River trib</SimpleData>
+		<SimpleData name="barrier">BARRIER</SimpleData>
+		<SimpleData name="road_name">200 Road km 70.4</SimpleData>
+		<SimpleData name="structure_type">RC</SimpleData>
+		<SimpleData name="lon">-121.775697</SimpleData>
+		<SimpleData name="lat">55.041486</SimpleData>
+		<SimpleData name="pscis_matched">1</SimpleData>
+		<SimpleData name="coord_source">PSCIS</SimpleData>
+		<SimpleData name="followup_priority">high (Guppy P1)</SimpleData>
+		<SimpleData name="bt_hab_km">0</SimpleData>
+		<SimpleData name="grayling_modelled">0</SimpleData>
+		<SimpleData name="has_confirmation">0</SimpleData>
+		<SimpleData name="has_design">0</SimpleData>
+		<SimpleData name="has_remediation">0</SimpleData>
+		<SimpleData name="aggregated_crossings_id">7008</SimpleData>
+		<SimpleData name="guppy_notes">2006.161 Sukunka River 200 MoF P3 RC Culvert width; Road fill failing near outlet. Culvert failing, needs Determine fish use. If there is fish use, install 18 m trib. Road km culvert slope; IMMEDIATE replacement -- top held up by interior bridge with 6+ m channel width. Remove upstream 70.4 outlet drop vertical braces (jacks). Sukunka River 30 m debris jam. Too much bedload and debris downstream, no barriers. Debris jam upstream. movement and streep gradient for an open-bottom Good connectivity with Sukunka River. arch.</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.775697,55.041486</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_pine">
+		<SimpleData name="stream_crossing_id">7089</SimpleData>
+		<SimpleData name="guppy_id">2006.291</SimpleData>
+		<SimpleData name="stream_name">Sukunka River trib</SimpleData>
+		<SimpleData name="barrier">BARRIER</SimpleData>
+		<SimpleData name="road_name">200 Road km 46.5</SimpleData>
+		<SimpleData name="structure_type">RC</SimpleData>
+		<SimpleData name="lon">-121.816161</SimpleData>
+		<SimpleData name="lat">55.160486</SimpleData>
+		<SimpleData name="pscis_matched">1</SimpleData>
+		<SimpleData name="coord_source">PSCIS</SimpleData>
+		<SimpleData name="followup_priority">high (Guppy P1)</SimpleData>
+		<SimpleData name="bt_hab_km">0.52</SimpleData>
+		<SimpleData name="grayling_modelled">0</SimpleData>
+		<SimpleData name="has_confirmation">0</SimpleData>
+		<SimpleData name="has_design">0</SimpleData>
+		<SimpleData name="has_remediation">0</SimpleData>
+		<SimpleData name="aggregated_crossings_id">7089</SimpleData>
+		<SimpleData name="guppy_notes">2006.291 Sukunka River 200 MoF S3 RC Culvert width; Shallow road fill; culvert with hole in top from Determine fish use. If there is fish use, install (1) trib. Road km outlet drop grader. Fish in plunge pool (dead sculpin and live 10 m bridge with 5+ m channel width or (2) 6+ m 46.5 minnows - probably NSC). Connectivity confirmed - wide x 16 m long open-bottom arch. The road fill is side channel of Sukunka immediately downstream. very shallow, construct the new channel so that the Previous 2 sites are the same stream. Spring (RB) surface is at the level of the plunge pool surface to spawning potential. accommodate the crossing structure. Slope the channel upstream from the crossing structure at &lt; 5% gradient.</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.816161,55.160486</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_pine">
+		<SimpleData name="stream_crossing_id">7201</SimpleData>
+		<SimpleData name="guppy_id">2006.494</SimpleData>
+		<SimpleData name="stream_name">Bissette Creek</SimpleData>
+		<SimpleData name="barrier">BARRIER</SimpleData>
+		<SimpleData name="road_name">CNR Track</SimpleData>
+		<SimpleData name="structure_type">RC</SimpleData>
+		<SimpleData name="lon">-121.727573</SimpleData>
+		<SimpleData name="lat">55.643038</SimpleData>
+		<SimpleData name="pscis_matched">1</SimpleData>
+		<SimpleData name="coord_source">PSCIS</SimpleData>
+		<SimpleData name="followup_priority">high (Guppy P1)</SimpleData>
+		<SimpleData name="bt_hab_km">19.73</SimpleData>
+		<SimpleData name="grayling_modelled">0</SimpleData>
+		<SimpleData name="has_confirmation">0</SimpleData>
+		<SimpleData name="has_design">0</SimpleData>
+		<SimpleData name="has_remediation">0</SimpleData>
+		<SimpleData name="aggregated_crossings_id">7201</SimpleData>
+		<SimpleData name="guppy_notes">2006.494 Bissette Creek CNR CNR S3 RC Culvert width; Stream dry except plunge pool. RB MW GR Install 14 m bridge with 7+ m wide channel. Install Track culvert slope; known. armoured weir at upper edge of plunge pool, with outlet drop the upper edge of the weir level with the residual pool depth, to provide scouring action during high water to partly maintain pool as habitat.</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.727573,55.643038</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_pine">
+		<SimpleData name="stream_crossing_id">7202</SimpleData>
+		<SimpleData name="guppy_id">2006.495</SimpleData>
+		<SimpleData name="stream_name">Wildmare Creek</SimpleData>
+		<SimpleData name="barrier">BARRIER</SimpleData>
+		<SimpleData name="road_name">Wildmare Road</SimpleData>
+		<SimpleData name="structure_type">RC</SimpleData>
+		<SimpleData name="lon">-121.698379</SimpleData>
+		<SimpleData name="lat">55.665242</SimpleData>
+		<SimpleData name="pscis_matched">1</SimpleData>
+		<SimpleData name="coord_source">PSCIS</SimpleData>
+		<SimpleData name="followup_priority">high (Guppy P1)</SimpleData>
+		<SimpleData name="bt_hab_km">0.06</SimpleData>
+		<SimpleData name="grayling_modelled">0</SimpleData>
+		<SimpleData name="has_confirmation">0</SimpleData>
+		<SimpleData name="has_design">0</SimpleData>
+		<SimpleData name="has_remediation">0</SimpleData>
+		<SimpleData name="aggregated_crossings_id">7202</SimpleData>
+		<SimpleData name="guppy_notes">2006.495 Wildmare Creek Wildmare MoT S2 RC Culvert width; One culvert has been retrofitted with baffles. Install 16 m bridge with 8+ m wide channel. Road culvert slope; Retrofitted downstream boulder weir is barrier. Remove weir and vehicle parts, and reconstruct outlet drop Vehicle parts in plunge pool. BT RB GR MW channel. Cost lower than normal for MoT road known. because it is a side road, not a highway.</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.698379,55.665242</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_pine">
+		<SimpleData name="stream_crossing_id">7203</SimpleData>
+		<SimpleData name="guppy_id">2006.496</SimpleData>
+		<SimpleData name="stream_name">Wildmare Creek</SimpleData>
+		<SimpleData name="barrier">BARRIER</SimpleData>
+		<SimpleData name="road_name">Wildmare Road</SimpleData>
+		<SimpleData name="structure_type">RC</SimpleData>
+		<SimpleData name="lon">-121.699276</SimpleData>
+		<SimpleData name="lat">55.66553</SimpleData>
+		<SimpleData name="pscis_matched">1</SimpleData>
+		<SimpleData name="coord_source">PSCIS</SimpleData>
+		<SimpleData name="followup_priority">high (Guppy P1)</SimpleData>
+		<SimpleData name="bt_hab_km">16.34</SimpleData>
+		<SimpleData name="grayling_modelled">0</SimpleData>
+		<SimpleData name="has_confirmation">0</SimpleData>
+		<SimpleData name="has_design">0</SimpleData>
+		<SimpleData name="has_remediation">0</SimpleData>
+		<SimpleData name="aggregated_crossings_id">7203</SimpleData>
+		<SimpleData name="guppy_notes">2006.496 Wildmare Creek Wildmare CNR S2 RC Culvert width; Also a higher overflow culvert (1.2 m). Inlets of Install 16 m bridge with 8+ m wide channel. Road outlet drop both lower culverts 20% blocked with debris. Both lower culverts with diameter reduced 20% by crushing. Fill height about 4 m. BT RB GR MW known.</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.699276,55.66553</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_pine">
+		<SimpleData name="stream_crossing_id">7206</SimpleData>
+		<SimpleData name="guppy_id">2006.500</SimpleData>
+		<SimpleData name="stream_name">Windrem Creek</SimpleData>
+		<SimpleData name="barrier">BARRIER</SimpleData>
+		<SimpleData name="road_name">Chetwynd village street</SimpleData>
+		<SimpleData name="structure_type">RC</SimpleData>
+		<SimpleData name="lon">-121.620743</SimpleData>
+		<SimpleData name="lat">55.694741</SimpleData>
+		<SimpleData name="pscis_matched">1</SimpleData>
+		<SimpleData name="coord_source">PSCIS</SimpleData>
+		<SimpleData name="followup_priority">high (Guppy P1)</SimpleData>
+		<SimpleData name="bt_hab_km">0.4</SimpleData>
+		<SimpleData name="grayling_modelled">0</SimpleData>
+		<SimpleData name="has_confirmation">0</SimpleData>
+		<SimpleData name="has_design">0</SimpleData>
+		<SimpleData name="has_remediation">0</SimpleData>
+		<SimpleData name="aggregated_crossings_id">7206</SimpleData>
+		<SimpleData name="guppy_notes">2006.500 Windrem Creek Chetwyn MoT S3 RC Culvert width; One culvert partly crushed. BT known. Install (1) 16 m bridge with 5+ m wide channel or 16 d village culvert length (2) 10+ m wide x 46 m long open-bottom arch. street Bridge cost lower than normal for MoT because this is a City street, not a main highway.</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.620743,55.694741</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_pine">
+		<SimpleData name="stream_crossing_id">7207</SimpleData>
+		<SimpleData name="guppy_id">2006.501</SimpleData>
+		<SimpleData name="stream_name">Windrem Creek</SimpleData>
+		<SimpleData name="barrier">BARRIER</SimpleData>
+		<SimpleData name="road_name">CNR Track</SimpleData>
+		<SimpleData name="structure_type">RC</SimpleData>
+		<SimpleData name="lon">-121.626567</SimpleData>
+		<SimpleData name="lat">55.695633</SimpleData>
+		<SimpleData name="pscis_matched">1</SimpleData>
+		<SimpleData name="coord_source">PSCIS</SimpleData>
+		<SimpleData name="followup_priority">high (Guppy P1)</SimpleData>
+		<SimpleData name="bt_hab_km">0.49</SimpleData>
+		<SimpleData name="grayling_modelled">0</SimpleData>
+		<SimpleData name="has_confirmation">0</SimpleData>
+		<SimpleData name="has_design">0</SimpleData>
+		<SimpleData name="has_remediation">0</SimpleData>
+		<SimpleData name="aggregated_crossings_id">7207</SimpleData>
+		<SimpleData name="guppy_notes">2006.501 Windrem Creek CNR CNR S3 RC Culvert width; Also two more 1.2 m culverts, for a total of 4 Install (1) 16 m bridge with 5+ m wide channel or Track culvert length; culverts. First Nations man was celebrating the (2) 8+ m wide x 32 m long open-bottom arch. Refer outlet drop start of winter (first night on which snow remained project to First Nations. on the ground) with a small fire and meditation at culvert inlet. Stream nearly dry. BT known.</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.626567,55.695633</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_pine">
+		<SimpleData name="stream_crossing_id">7237</SimpleData>
+		<SimpleData name="guppy_id">2006.546</SimpleData>
+		<SimpleData name="stream_name">Rocky Creek trib</SimpleData>
+		<SimpleData name="barrier">BARRIER</SimpleData>
+		<SimpleData name="road_name">Rocky Creek FSR km 16.1</SimpleData>
+		<SimpleData name="structure_type">RC</SimpleData>
+		<SimpleData name="lon">-121.867644</SimpleData>
+		<SimpleData name="lat">55.240841</SimpleData>
+		<SimpleData name="pscis_matched">1</SimpleData>
+		<SimpleData name="coord_source">PSCIS</SimpleData>
+		<SimpleData name="followup_priority">high (Guppy P1)</SimpleData>
+		<SimpleData name="bt_hab_km">1.15</SimpleData>
+		<SimpleData name="grayling_modelled">0</SimpleData>
+		<SimpleData name="has_confirmation">0</SimpleData>
+		<SimpleData name="has_design">0</SimpleData>
+		<SimpleData name="has_remediation">0</SimpleData>
+		<SimpleData name="aggregated_crossings_id">7237</SimpleData>
+		<SimpleData name="guppy_notes">2006.546 Rocky Creek trib Rocky MoF S3 RC Culvert width; BT known. Install 12 m bridge with 5+ m wide channel or 8+ m Creek culvert slope; wide x 20 m long open-bottom arch. FSR km outlet drop 16.1</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.867644,55.240841</coordinates></Point>
+  </Placemark>
+</Folder>
+</Document></kml>

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Document id="root_doc">
+<Schema name="priority_farmed" id="priority_farmed">
+	<SimpleField name="code" type="string"></SimpleField>
+	<SimpleField name="report_id" type="float"></SimpleField>
+	<SimpleField name="report_crossing_id" type="string"></SimpleField>
+	<SimpleField name="pscis_stream_crossing_id" type="int"></SimpleField>
+	<SimpleField name="stream_name" type="string"></SimpleField>
+	<SimpleField name="priority" type="string"></SimpleField>
+	<SimpleField name="barrier" type="string"></SimpleField>
+	<SimpleField name="fish_barrier_score" type="int"></SimpleField>
+	<SimpleField name="habitat_value" type="string"></SimpleField>
+	<SimpleField name="upstream_fish" type="string"></SimpleField>
+	<SimpleField name="recommendation" type="string"></SimpleField>
+	<SimpleField name="reconcile_method" type="string"></SimpleField>
+	<SimpleField name="table_source" type="string"></SimpleField>
+	<SimpleField name="coord_source" type="string"></SimpleField>
+	<SimpleField name=".row" type="int"></SimpleField>
+</Schema>
+<Folder><name>priority_farmed</name>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">LCHL</SimpleData>
+		<SimpleData name="report_id">15355</SimpleData>
+		<SimpleData name="report_crossing_id">2A</SimpleData>
+		<SimpleData name="stream_name">Tachintelachick Creek</SimpleData>
+		<SimpleData name="barrier">None</SimpleData>
+		<SimpleData name="habitat_value">good (important habitat)</SimpleData>
+		<SimpleData name="upstream_fish">Yes - RB observed upstream (3) and downstream (5)</SimpleData>
+		<SimpleData name="recommendation">debris removal from CMP inlets to restore flow; monitor beaver dam; install beaver stops on CMP ends</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">crossing-priority (FPCI Form A/B per-site assessment; Form B FPCI Summary tables for scored sites 1,3,5)</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">65</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-123.196223827723,53.8583531557636</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">LCHL</SimpleData>
+		<SimpleData name="report_id">15355</SimpleData>
+		<SimpleData name="report_crossing_id">2B</SimpleData>
+		<SimpleData name="stream_name">Tachintelachick Creek</SimpleData>
+		<SimpleData name="barrier">Partial Soft Barrier</SimpleData>
+		<SimpleData name="habitat_value">good (important habitat)</SimpleData>
+		<SimpleData name="upstream_fish">Yes - RB observed upstream (5), downstream (8) and within CMPs</SimpleData>
+		<SimpleData name="recommendation">immediate debris removal from CMP inlets to restore flow; monitor upstream beaver dam; consider beaver control / beaver guards</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">crossing-priority (FPCI Form A/B per-site assessment; Form B FPCI Summary tables for scored sites 1,3,5)</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">66</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-123.196223827723,53.8583531557636</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">LCHL</SimpleData>
+		<SimpleData name="report_id">15355</SimpleData>
+		<SimpleData name="report_crossing_id">3</SimpleData>
+		<SimpleData name="stream_name">Tachintelachick Creek</SimpleData>
+		<SimpleData name="priority">high</SimpleData>
+		<SimpleData name="barrier">Partial</SimpleData>
+		<SimpleData name="habitat_value">good (important habitat)</SimpleData>
+		<SimpleData name="upstream_fish">Yes - RB observed upstream (3) and downstream (2)</SimpleData>
+		<SimpleData name="recommendation">replace CMPs with pipe arch (2590x1880mm) or bridge; or build downstream weir to backflood CMPs</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">crossing-priority (FPCI Form A/B per-site assessment; Form B FPCI Summary tables for scored sites 1,3,5)</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">67</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-123.146745738794,53.8615607127862</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">LCHL</SimpleData>
+		<SimpleData name="report_id">15355</SimpleData>
+		<SimpleData name="report_crossing_id">4</SimpleData>
+		<SimpleData name="stream_name">Tachintelachick Creek</SimpleData>
+		<SimpleData name="priority">no-fix</SimpleData>
+		<SimpleData name="barrier">None</SimpleData>
+		<SimpleData name="habitat_value">good (important habitat)</SimpleData>
+		<SimpleData name="upstream_fish">Yes - RB observed upstream (2) and downstream (5, one ~20cm)</SimpleData>
+		<SimpleData name="recommendation">no maintenance required - CMPs provide upstream/downstream passage for all life stages at current conditions</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">crossing-priority (FPCI Form A/B per-site assessment; Form B FPCI Summary tables for scored sites 1,3,5)</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">68</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-123.196223827723,53.8583531557636</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">LCHL</SimpleData>
+		<SimpleData name="report_id">15355</SimpleData>
+		<SimpleData name="report_crossing_id">5</SimpleData>
+		<SimpleData name="stream_name">Tachintelachick Creek</SimpleData>
+		<SimpleData name="priority">high</SimpleData>
+		<SimpleData name="barrier">Partial</SimpleData>
+		<SimpleData name="habitat_value">good (important habitat)</SimpleData>
+		<SimpleData name="upstream_fish">Yes - RB observed just above inlet; downstream electrofishing caught 6 RB (7-15cm)</SimpleData>
+		<SimpleData name="recommendation">replace CMP with pipe arch (2130x1400mm) or bridge</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">crossing-priority (FPCI Form A/B per-site assessment; Form B FPCI Summary tables for scored sites 1,3,5)</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">69</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-123.11883890658,53.8543561391868</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">LCHL</SimpleData>
+		<SimpleData name="report_id">15355</SimpleData>
+		<SimpleData name="report_crossing_id">6</SimpleData>
+		<SimpleData name="stream_name">Tachintelachick Creek</SimpleData>
+		<SimpleData name="upstream_fish">Yes - adult RB (&gt;30cm, one 32cm hatchery adipose-clipped), juvenile RB, burbot (~15cm) and thousands of cyprinid fry salvaged/observed; salvaged fish released upstream in Berman Lake</SimpleData>
+		<SimpleData name="recommendation">none specified; noted as good candidate for a fish compensation project if downstream construction harms fish habitat</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">crossing-priority (FPCI Form A/B per-site assessment; Form B FPCI Summary tables for scored sites 1,3,5)</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">70</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-123.313229621379,53.8576733827639</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">LCHL</SimpleData>
+		<SimpleData name="report_id">226</SimpleData>
+		<SimpleData name="report_crossing_id">30054</SimpleData>
+		<SimpleData name="stream_name">Unnamed Lake #3</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">93</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-123.505090170597,53.571977479687</coordinates></Point>
+  </Placemark>
+</Folder>
+</Document></kml>

@@ -1,0 +1,1486 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Document id="root_doc">
+<Schema name="priority_farmed" id="priority_farmed">
+	<SimpleField name="code" type="string"></SimpleField>
+	<SimpleField name="report_id" type="float"></SimpleField>
+	<SimpleField name="report_crossing_id" type="string"></SimpleField>
+	<SimpleField name="pscis_stream_crossing_id" type="float"></SimpleField>
+	<SimpleField name="stream_name" type="string"></SimpleField>
+	<SimpleField name="priority" type="string"></SimpleField>
+	<SimpleField name="barrier" type="string"></SimpleField>
+	<SimpleField name="fish_barrier_score" type="int"></SimpleField>
+	<SimpleField name="habitat_value" type="string"></SimpleField>
+	<SimpleField name="upstream_fish" type="string"></SimpleField>
+	<SimpleField name="recommendation" type="string"></SimpleField>
+	<SimpleField name="reconcile_method" type="string"></SimpleField>
+	<SimpleField name="table_source" type="string"></SimpleField>
+	<SimpleField name="coord_source" type="string"></SimpleField>
+	<SimpleField name=".row" type="int"></SimpleField>
+</Schema>
+<Folder><name>priority_farmed</name>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">137</SimpleData>
+		<SimpleData name="report_crossing_id">43</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">7453</SimpleData>
+		<SimpleData name="stream_name">Camper Creek</SimpleData>
+		<SimpleData name="habitat_value">NVC</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">43</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.825424,53.548714</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">52094</SimpleData>
+		<SimpleData name="report_crossing_id">43</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">7453</SimpleData>
+		<SimpleData name="stream_name">Unnamed trib (ILP 1909)</SimpleData>
+		<SimpleData name="habitat_value">non-fish bearing (RMA S6)</SimpleData>
+		<SimpleData name="upstream_fish">NS</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">678</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.825424,53.548714</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">53654</SimpleData>
+		<SimpleData name="report_crossing_id">43</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">7453</SimpleData>
+		<SimpleData name="habitat_value">important</SimpleData>
+		<SimpleData name="upstream_fish">fish-bearing (S3); two unassessed tributaries immediately upstream may be S3 or S4</SimpleData>
+		<SimpleData name="recommendation">Tracked machine can probably walk across on road fill over culvert inlet, else lowbed around; skid not suitable (open-bottom structure required, embedded culvert not suitable)</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">1081</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.825424,53.548714</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">18276</SimpleData>
+		<SimpleData name="report_crossing_id">351</SimpleData>
+		<SimpleData name="stream_name">Sovereign Creek</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">469</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.072427353641,52.9784428925845</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">18276</SimpleData>
+		<SimpleData name="report_crossing_id">350</SimpleData>
+		<SimpleData name="stream_name">Sovereign Creek</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">470</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.072427353641,52.9784428925845</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">18276</SimpleData>
+		<SimpleData name="report_crossing_id">327</SimpleData>
+		<SimpleData name="stream_name">Sovereign Creek</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">471</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.072427353641,52.9784428925845</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">18276</SimpleData>
+		<SimpleData name="report_crossing_id">331</SimpleData>
+		<SimpleData name="stream_name">Sovereign Creek</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">472</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.072427353641,52.9784428925845</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">18276</SimpleData>
+		<SimpleData name="report_crossing_id">329</SimpleData>
+		<SimpleData name="stream_name">Sovereign Creek</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">473</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.072427353641,52.9784428925845</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">18276</SimpleData>
+		<SimpleData name="report_crossing_id">325</SimpleData>
+		<SimpleData name="stream_name">Sovereign Creek</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">474</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.072427353641,52.9784428925845</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">18276</SimpleData>
+		<SimpleData name="report_crossing_id">346</SimpleData>
+		<SimpleData name="stream_name">Sovereign Creek</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">475</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.072427353641,52.9784428925845</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">18276</SimpleData>
+		<SimpleData name="report_crossing_id">298</SimpleData>
+		<SimpleData name="stream_name">Unnamed</SimpleData>
+		<SimpleData name="barrier">0.7C</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">476</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.052755876676,52.9857762786637</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">18276</SimpleData>
+		<SimpleData name="report_crossing_id">315</SimpleData>
+		<SimpleData name="stream_name">Unnamed</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">477</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.947166049236,52.9828384190892</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">18276</SimpleData>
+		<SimpleData name="report_crossing_id">319</SimpleData>
+		<SimpleData name="stream_name">Unnamed</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">478</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.889336372646,52.9818627201143</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">18276</SimpleData>
+		<SimpleData name="report_crossing_id">338</SimpleData>
+		<SimpleData name="stream_name">Unnamed</SimpleData>
+		<SimpleData name="barrier">1.0CV</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">479</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.870809340094,52.9823264720538</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">18276</SimpleData>
+		<SimpleData name="report_crossing_id">340</SimpleData>
+		<SimpleData name="stream_name">Unnamed</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">480</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.86798247537,52.9822006985031</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">18276</SimpleData>
+		<SimpleData name="report_crossing_id">353</SimpleData>
+		<SimpleData name="stream_name">Unnamed</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">481</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.860219948786,52.9771820570153</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">18276</SimpleData>
+		<SimpleData name="report_crossing_id">334</SimpleData>
+		<SimpleData name="stream_name">Unnamed</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">482</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.830435604015,52.9886426441307</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">18276</SimpleData>
+		<SimpleData name="report_crossing_id">333</SimpleData>
+		<SimpleData name="stream_name">Unnamed</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">483</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.830435604015,52.9886426441307</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">18276</SimpleData>
+		<SimpleData name="report_crossing_id">347</SimpleData>
+		<SimpleData name="stream_name">Unnamed</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">484</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.830435604015,52.9886426441307</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">18276</SimpleData>
+		<SimpleData name="report_crossing_id">348</SimpleData>
+		<SimpleData name="stream_name">Unnamed</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">485</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.830435604015,52.9886426441307</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">18276</SimpleData>
+		<SimpleData name="report_crossing_id">342</SimpleData>
+		<SimpleData name="stream_name">Unnamed</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">486</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.829064707224,52.99746627725</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">18276</SimpleData>
+		<SimpleData name="report_crossing_id">344</SimpleData>
+		<SimpleData name="stream_name">Unnamed</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">487</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.840820782164,53.0063916052378</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">18276</SimpleData>
+		<SimpleData name="report_crossing_id">341</SimpleData>
+		<SimpleData name="stream_name">Lake Creek</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">489</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.044051344084,52.9880259749374</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">18276</SimpleData>
+		<SimpleData name="report_crossing_id">343</SimpleData>
+		<SimpleData name="stream_name">Lake Creek</SimpleData>
+		<SimpleData name="barrier">1.0CV</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">490</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.044051344084,52.9880259749374</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">18276</SimpleData>
+		<SimpleData name="report_crossing_id">352</SimpleData>
+		<SimpleData name="stream_name">Lake Creek</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">491</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.044051344084,52.9880259749374</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">18276</SimpleData>
+		<SimpleData name="report_crossing_id">300</SimpleData>
+		<SimpleData name="stream_name">Chipp Creek</SimpleData>
+		<SimpleData name="barrier">1.0F</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">492</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.989757044885,52.974982260302</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">18276</SimpleData>
+		<SimpleData name="report_crossing_id">318</SimpleData>
+		<SimpleData name="stream_name">Chipp Creek</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">493</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.989757044885,52.974982260302</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">18276</SimpleData>
+		<SimpleData name="report_crossing_id">328</SimpleData>
+		<SimpleData name="stream_name">Chipp Creek</SimpleData>
+		<SimpleData name="barrier">1.5BD</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">494</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.989757044885,52.974982260302</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">18276</SimpleData>
+		<SimpleData name="report_crossing_id">332</SimpleData>
+		<SimpleData name="stream_name">Chipp Creek</SimpleData>
+		<SimpleData name="barrier">1.0BD</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">495</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.989757044885,52.974982260302</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">18276</SimpleData>
+		<SimpleData name="report_crossing_id">302</SimpleData>
+		<SimpleData name="stream_name">Unnamed</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">496</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.976971169062,52.9589158908293</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">18276</SimpleData>
+		<SimpleData name="report_crossing_id">330</SimpleData>
+		<SimpleData name="stream_name">Unnamed</SimpleData>
+		<SimpleData name="barrier">1.0BD, 1.0BD, CV</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">497</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.938113531175,52.9395344108421</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">18276</SimpleData>
+		<SimpleData name="report_crossing_id">320</SimpleData>
+		<SimpleData name="stream_name">Unnamed</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">498</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.976173573836,52.9788125965578</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">18276</SimpleData>
+		<SimpleData name="report_crossing_id">322</SimpleData>
+		<SimpleData name="stream_name">Unnamed</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">499</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.976173573836,52.9788125965578</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">18276</SimpleData>
+		<SimpleData name="report_crossing_id">326</SimpleData>
+		<SimpleData name="stream_name">Unnamed</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">500</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.976173573836,52.9788125965578</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">18276</SimpleData>
+		<SimpleData name="report_crossing_id">324</SimpleData>
+		<SimpleData name="stream_name">Unnamed</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">501</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.965016617324,52.9670201618944</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">18276</SimpleData>
+		<SimpleData name="report_crossing_id">311</SimpleData>
+		<SimpleData name="stream_name">Atis Creek</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">502</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.908418494727,52.9841790604479</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">18276</SimpleData>
+		<SimpleData name="report_crossing_id">312</SimpleData>
+		<SimpleData name="stream_name">Atis Creek</SimpleData>
+		<SimpleData name="barrier">1.7BD</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">503</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.908418494727,52.9841790604479</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">18276</SimpleData>
+		<SimpleData name="report_crossing_id">314</SimpleData>
+		<SimpleData name="stream_name">Atis Creek</SimpleData>
+		<SimpleData name="barrier">1.0BD, 1.3BD</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">504</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.908418494727,52.9841790604479</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">18276</SimpleData>
+		<SimpleData name="report_crossing_id">310</SimpleData>
+		<SimpleData name="stream_name">Unnamed</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">505</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.89598615481,52.9646639979548</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">18276</SimpleData>
+		<SimpleData name="report_crossing_id">316</SimpleData>
+		<SimpleData name="stream_name">Unnamed</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">506</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.829104241581,52.9712159569072</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">18276</SimpleData>
+		<SimpleData name="report_crossing_id">354</SimpleData>
+		<SimpleData name="stream_name">Unnamed</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">507</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.886521620197,52.9511357245445</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">18276</SimpleData>
+		<SimpleData name="report_crossing_id">355</SimpleData>
+		<SimpleData name="stream_name">Unnamed</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">508</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.885469769314,52.9573109607355</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">18276</SimpleData>
+		<SimpleData name="report_crossing_id">356</SimpleData>
+		<SimpleData name="stream_name">Unnamed</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">509</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.886598427626,52.9527816081226</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">18276</SimpleData>
+		<SimpleData name="report_crossing_id">317</SimpleData>
+		<SimpleData name="stream_name">Eskridge Creek</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">510</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.904695102019,52.9841538047127</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">18276</SimpleData>
+		<SimpleData name="report_crossing_id">297</SimpleData>
+		<SimpleData name="stream_name">Eskridge Creek</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">511</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.904695102019,52.9841538047127</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">18276</SimpleData>
+		<SimpleData name="report_crossing_id">299</SimpleData>
+		<SimpleData name="stream_name">Eskridge Creek</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">512</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.904695102019,52.9841538047127</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">18276</SimpleData>
+		<SimpleData name="report_crossing_id">306</SimpleData>
+		<SimpleData name="stream_name">Eskridge Creek</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">513</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.904695102019,52.9841538047127</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">18276</SimpleData>
+		<SimpleData name="report_crossing_id">308</SimpleData>
+		<SimpleData name="stream_name">Eskridge Creek</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">514</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.904695102019,52.9841538047127</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">18276</SimpleData>
+		<SimpleData name="report_crossing_id">303</SimpleData>
+		<SimpleData name="stream_name">Unnamed</SimpleData>
+		<SimpleData name="barrier">1.0CV</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">515</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.921970870972,53.0028488387735</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">18276</SimpleData>
+		<SimpleData name="report_crossing_id">301</SimpleData>
+		<SimpleData name="stream_name">Unnamed</SimpleData>
+		<SimpleData name="barrier">1.4F, 0.9F</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">516</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.912037136703,53.0209718170903</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">18276</SimpleData>
+		<SimpleData name="report_crossing_id">339</SimpleData>
+		<SimpleData name="stream_name">Unnamed</SimpleData>
+		<SimpleData name="barrier">1.0X</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">517</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.855765805853,52.9743973300601</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">18276</SimpleData>
+		<SimpleData name="report_crossing_id">357</SimpleData>
+		<SimpleData name="stream_name">Unnamed</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">518</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.845262923508,52.9644697235272</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">18276</SimpleData>
+		<SimpleData name="report_crossing_id">336</SimpleData>
+		<SimpleData name="stream_name">Unnamed</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">519</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.845262923508,52.9644697235272</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">18276</SimpleData>
+		<SimpleData name="report_crossing_id">359</SimpleData>
+		<SimpleData name="stream_name">Unnamed</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">520</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.845262923508,52.9644697235272</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">18276</SimpleData>
+		<SimpleData name="report_crossing_id">358</SimpleData>
+		<SimpleData name="stream_name">Unnamed</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">521</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.838598040225,52.9670388532813</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">18276</SimpleData>
+		<SimpleData name="report_crossing_id">337</SimpleData>
+		<SimpleData name="stream_name">Unnamed</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">522</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.838598040225,52.9670388532813</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">18276</SimpleData>
+		<SimpleData name="report_crossing_id">349</SimpleData>
+		<SimpleData name="stream_name">Unnamed</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">523</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.830777785425,53.0002430490207</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">18276</SimpleData>
+		<SimpleData name="report_crossing_id">360</SimpleData>
+		<SimpleData name="stream_name">Unnamed</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">524</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.830777785425,53.0002430490207</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">18276</SimpleData>
+		<SimpleData name="report_crossing_id">361</SimpleData>
+		<SimpleData name="stream_name">Unnamed</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">525</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.830777785425,53.0002430490207</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">18276</SimpleData>
+		<SimpleData name="report_crossing_id">362</SimpleData>
+		<SimpleData name="stream_name">Unnamed</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">526</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.825200284048,53.0053393111459</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">31019</SimpleData>
+		<SimpleData name="report_crossing_id">00586COTR</SimpleData>
+		<SimpleData name="stream_name">Ahbau Lake</SimpleData>
+		<SimpleData name="upstream_fish">Fish-bearing: RB (Rainbow Trout) 26; NSC (Northern Pikeminnow) 3; LSU (Largescale Sucker) 2; CSU 2; RSC (Redside Shiner) 4; SU (Sucker) 2 (all by gill net; minnow traps 0)</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">588</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.119957321869,53.215391939163</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">31019</SimpleData>
+		<SimpleData name="report_crossing_id">1</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">589</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.120407439364,53.2336257416711</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">31019</SimpleData>
+		<SimpleData name="report_crossing_id">2</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">590</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.114348870506,53.2389834934352</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">31019</SimpleData>
+		<SimpleData name="report_crossing_id">3</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">591</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.113964289869,53.2445450536991</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">31019</SimpleData>
+		<SimpleData name="report_crossing_id">4</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">592</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.109246331583,53.2617334949586</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">31019</SimpleData>
+		<SimpleData name="report_crossing_id">5</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">593</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.105722284742,53.2696806574838</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">31019</SimpleData>
+		<SimpleData name="report_crossing_id">6</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">594</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.105406862776,53.2776068768564</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">31019</SimpleData>
+		<SimpleData name="report_crossing_id">7</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">595</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.101509496273,53.2860904584998</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">31019</SimpleData>
+		<SimpleData name="report_crossing_id">8</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">596</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.104503040848,53.2993182528997</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">31019</SimpleData>
+		<SimpleData name="report_crossing_id">9</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">597</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.096970546801,53.3028661691912</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">31019</SimpleData>
+		<SimpleData name="report_crossing_id">10</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">598</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.076358921637,53.2962630123836</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">31019</SimpleData>
+		<SimpleData name="report_crossing_id">11</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">599</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.078033988156,53.294424173711</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">31019</SimpleData>
+		<SimpleData name="report_crossing_id">12</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">600</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.078666585858,53.2908243460457</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">31019</SimpleData>
+		<SimpleData name="report_crossing_id">16</SimpleData>
+		<SimpleData name="stream_name">Margaret Creek</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">604</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.095278378855,53.2444586399508</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">31019</SimpleData>
+		<SimpleData name="report_crossing_id">18</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">606</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.095612246203,53.2371528063629</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">31019</SimpleData>
+		<SimpleData name="report_crossing_id">20</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">608</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.113596516869,53.2289817118685</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">32532</SimpleData>
+		<SimpleData name="report_crossing_id">Reach 3 (Sovereign Lakes / Unnamed #7) - Sites 1-4</SimpleData>
+		<SimpleData name="stream_name">Sovereign Lakes (Unnamed Lake #7) [lake, gaz. stream name FRASER RIVER]</SimpleData>
+		<SimpleData name="priority">habitat-inventory</SimpleData>
+		<SimpleData name="habitat_value">Lake: surface area 32.0 ha, max depth 12.9 m, mean depth 4.8 m; wetland area 9.2 ha; spawning hab. present? 0 (none noted)</SimpleData>
+		<SimpleData name="upstream_fish">Fish present (fish-bearing) - fish captured in lake</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">609</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.844589782547,52.9266062406854</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">32532</SimpleData>
+		<SimpleData name="report_crossing_id">Reach 2 (Outlet) - Site 5, NID 70500</SimpleData>
+		<SimpleData name="stream_name">Unnamed outlet creek (Local Name OUTLET; gaz. stream name FRASER RIVER)</SimpleData>
+		<SimpleData name="priority">habitat-inventory</SimpleData>
+		<SimpleData name="barrier">Woody debris jam near lake (NID 00701) - 'MAY BE BARRIER TO FISH PASSAGE' (verbatim); feature note 'may be barrier to fish passage even at high [flows]'</SimpleData>
+		<SimpleData name="habitat_value">Spawning habitat: few pockets of spawning gravels. Lake-influenced section ends at woody debris accumulation; at 85 m loses channel morphology, turns into beaver swamp/wetland.</SimpleData>
+		<SimpleData name="upstream_fish">NFC - No Fish Caught (Site 5, minnow traps MT7 &amp; MT8, Total # 0). Comment: 'no electrofishing - rain' (limited sampling)</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">610</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.844589303897,52.9266242161104</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">32532</SimpleData>
+		<SimpleData name="report_crossing_id">Reach 1 (Inlet) - Site 6, NID 70600, ILP 93A.091 15</SimpleData>
+		<SimpleData name="stream_name">Unnamed inlet creek (Local Name INLET; gaz. stream name FRASER RIVER)</SimpleData>
+		<SimpleData name="priority">habitat-inventory</SimpleData>
+		<SimpleData name="barrier">Small cascade caused by SWD (small woody debris) accumulation at 90 m into site (NID 00702, R1 F6)</SimpleData>
+		<SimpleData name="habitat_value">Spawning habitat: good spawning substrate. Rearing habitat: good rearing cover provided by functional LWD.</SimpleData>
+		<SimpleData name="upstream_fish">Not sampled for fish (Fish Crd? unchecked; no fish form for this reach)</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">611</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.85345831927,52.9253975862812</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">32532</SimpleData>
+		<SimpleData name="report_crossing_id">Reach 4 (Inlet) - Site 7, NID 70700, ILP 93A.091 16</SimpleData>
+		<SimpleData name="stream_name">Unnamed inlet creek (Local Name INLET; gaz. stream name FRASER RIVER)</SimpleData>
+		<SimpleData name="priority">habitat-inventory</SimpleData>
+		<SimpleData name="habitat_value">Spawning habitat: more gravels suitable for spawning in first part of 100 m site. Rearing habitat: good rearing cover in form of SWD and LWD.</SimpleData>
+		<SimpleData name="upstream_fish">NFC - No Fish Caught (Site 7, minnow traps MT9 &amp; MT10, Total # 0). Comment: 'no electrofishing - rain' (limited sampling)</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">612</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.855648484328,52.9326017323641</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">51903</SimpleData>
+		<SimpleData name="report_crossing_id">01033COTR</SimpleData>
+		<SimpleData name="stream_name">Unnamed lake (labelled Whittier Cr. on figure; drains to/near Herkyelthtie Lake)</SimpleData>
+		<SimpleData name="habitat_value">Marginal rearing habitat for juvenile/adult fish; abundant littoral (50-99%); no salmonid spawning habitat observed; anoxic hypolimnion below ~7 m; winter-kill concern</SimpleData>
+		<SimpleData name="upstream_fish">No fish captured (NFC)</SimpleData>
+		<SimpleData name="recommendation">No restoration or rehabilitation opportunities identified (lack of fish)</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">620</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.872993890444,53.1188564836118</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">51903</SimpleData>
+		<SimpleData name="report_crossing_id">Site 146 (Reach 9.0)</SimpleData>
+		<SimpleData name="stream_name">Herkyelthtie Creek (inlet stream)</SimpleData>
+		<SimpleData name="habitat_value">Extremely limited rearing potential; poor habitat quality; no spawning habitat; riffle-pool, mostly fines with patches of angular cobble</SimpleData>
+		<SimpleData name="upstream_fish">No fish sampling conducted (no fish captured)</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">621</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.867530477877,53.117124592922</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">51903</SimpleData>
+		<SimpleData name="report_crossing_id">Site 145 (Reach 7.2)</SimpleData>
+		<SimpleData name="stream_name">Herkyelthtie Creek</SimpleData>
+		<SimpleData name="habitat_value">No potential fish habitat</SimpleData>
+		<SimpleData name="upstream_fish">No fish sampling (no visible channel)</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">622</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.867312111551,53.1201087829797</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">51903</SimpleData>
+		<SimpleData name="report_crossing_id">Site 66 (Reach 7.2)</SimpleData>
+		<SimpleData name="stream_name">Herkyelthtie Creek</SimpleData>
+		<SimpleData name="habitat_value">No potential fish habitat</SimpleData>
+		<SimpleData name="upstream_fish">No fish sampling (no visible channel)</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">623</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.861754130156,53.1199316634986</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">51903</SimpleData>
+		<SimpleData name="report_crossing_id">Site 143 (Reach 1.0, ILP 3030)</SimpleData>
+		<SimpleData name="stream_name">Mapped tributary ILP 3030 (dry gully)</SimpleData>
+		<SimpleData name="habitat_value">No potential fish habitat</SimpleData>
+		<SimpleData name="upstream_fish">No fish sampling (no visible channel)</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">624</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.878129643935,53.1203630566459</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">51903</SimpleData>
+		<SimpleData name="report_crossing_id">Site 144 (Reach 1.0, ILP 3029)</SimpleData>
+		<SimpleData name="stream_name">Mapped tributary ILP 3029 (dry gully)</SimpleData>
+		<SimpleData name="habitat_value">No potential fish habitat</SimpleData>
+		<SimpleData name="upstream_fish">No fish sampling (no visible channel)</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">625</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.8695749319,53.1228889620921</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">62268</SimpleData>
+		<SimpleData name="report_crossing_id">1</SimpleData>
+		<SimpleData name="stream_name">AH14</SimpleData>
+		<SimpleData name="barrier">isolated above a couple of falls and 25% cascade through the gully; entire watershed NFB above barriers</SimpleData>
+		<SimpleData name="upstream_fish">no - no perennial fish habitat u/s; watershed NFB above barriers</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-assessment</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">1210</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.091641716272,53.2364394214786</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">62268</SimpleData>
+		<SimpleData name="report_crossing_id">AH13</SimpleData>
+		<SimpleData name="stream_name">AH13</SimpleData>
+		<SimpleData name="upstream_fish">no - flows to confirmed NFB stream</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-assessment</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">1211</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.092924976595,53.2267676133975</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">62268</SimpleData>
+		<SimpleData name="report_crossing_id">2</SimpleData>
+		<SimpleData name="stream_name">AH15</SimpleData>
+		<SimpleData name="upstream_fish">no - not a stream, no fish habitat</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-assessment</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">1212</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.09207594602,53.2244149137508</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">62268</SimpleData>
+		<SimpleData name="report_crossing_id">3</SimpleData>
+		<SimpleData name="stream_name">AH1</SimpleData>
+		<SimpleData name="upstream_fish">no - no watercourse found</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-assessment</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">1213</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.09148543758,53.2240058904862</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">62268</SimpleData>
+		<SimpleData name="report_crossing_id">4</SimpleData>
+		<SimpleData name="stream_name">AH12</SimpleData>
+		<SimpleData name="upstream_fish">no - not a stream, no fish habitat</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-assessment</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">1214</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.090972296921,53.2234805920226</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">62268</SimpleData>
+		<SimpleData name="report_crossing_id">5</SimpleData>
+		<SimpleData name="stream_name">AH11</SimpleData>
+		<SimpleData name="habitat_value">IM</SimpleData>
+		<SimpleData name="upstream_fish">yes - RB (rainbow trout) present; confirmed fish-bearing</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-assessment</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">1215</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.083739235953,53.2205935380407</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">62268</SimpleData>
+		<SimpleData name="report_crossing_id">6</SimpleData>
+		<SimpleData name="stream_name">AH10</SimpleData>
+		<SimpleData name="upstream_fish">no - no watercourse found</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-assessment</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">1216</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.086040175153,53.2194515707103</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">62268</SimpleData>
+		<SimpleData name="report_crossing_id">7</SimpleData>
+		<SimpleData name="stream_name">AH8</SimpleData>
+		<SimpleData name="upstream_fish">no - not a stream, no fish habitat</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-assessment</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">1217</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.08431161549,53.2162290779253</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">62268</SimpleData>
+		<SimpleData name="report_crossing_id">8</SimpleData>
+		<SimpleData name="stream_name">AH9</SimpleData>
+		<SimpleData name="upstream_fish">no - not a stream, no fish habitat</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-assessment</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">1218</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.084093890528,53.2152026101787</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">62268</SimpleData>
+		<SimpleData name="report_crossing_id">9</SimpleData>
+		<SimpleData name="stream_name">AH16</SimpleData>
+		<SimpleData name="barrier">25m long underground channel barrier located 20m d/s of the proposed crossing</SimpleData>
+		<SimpleData name="upstream_fish">no - inaccessible to fish due to underground channel barrier d/s; no perennial fish habitat</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-assessment</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">1219</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.08345769573,53.2141369663921</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">7400</SimpleData>
+		<SimpleData name="report_crossing_id">1</SimpleData>
+		<SimpleData name="stream_name">Coldspring Creek</SimpleData>
+		<SimpleData name="upstream_fish">no</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">1220</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.089245760232,53.0257330983972</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">7400</SimpleData>
+		<SimpleData name="report_crossing_id">2</SimpleData>
+		<SimpleData name="stream_name">Ramos Creek</SimpleData>
+		<SimpleData name="upstream_fish">no</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">1221</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.981461625042,53.0389279146603</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">7400</SimpleData>
+		<SimpleData name="report_crossing_id">3</SimpleData>
+		<SimpleData name="stream_name">Pinegrove Creek</SimpleData>
+		<SimpleData name="upstream_fish">yes (RB, BT)</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">1222</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.945802811731,53.0638785030427</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">7400</SimpleData>
+		<SimpleData name="report_crossing_id">4</SimpleData>
+		<SimpleData name="stream_name">Beaver Pass Creek</SimpleData>
+		<SimpleData name="upstream_fish">none captured; fish activity visually observed upstream of culvert</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">1223</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.869634488576,53.0678000235857</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">7400</SimpleData>
+		<SimpleData name="report_crossing_id">5</SimpleData>
+		<SimpleData name="stream_name">Heyde Creek</SimpleData>
+		<SimpleData name="upstream_fish">no</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">1224</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.838502796597,53.0682823141204</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">7400</SimpleData>
+		<SimpleData name="report_crossing_id">6</SimpleData>
+		<SimpleData name="stream_name">Timon Creek</SimpleData>
+		<SimpleData name="upstream_fish">yes (BT, CH)</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">1225</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.809207924726,53.063830430641</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">7400</SimpleData>
+		<SimpleData name="report_crossing_id">7</SimpleData>
+		<SimpleData name="stream_name">Jawbone Creek</SimpleData>
+		<SimpleData name="upstream_fish">yes (BT)</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">1226</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.757361927177,53.0607470964668</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">7400</SimpleData>
+		<SimpleData name="report_crossing_id">8</SimpleData>
+		<SimpleData name="stream_name">Unnamed Creek</SimpleData>
+		<SimpleData name="upstream_fish">no</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">1227</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.945939926984,53.0729323939026</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">7400</SimpleData>
+		<SimpleData name="report_crossing_id">9</SimpleData>
+		<SimpleData name="stream_name">Forty Thieves Creek</SimpleData>
+		<SimpleData name="upstream_fish">no</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">1228</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.788436900745,53.0669200209434</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">7400</SimpleData>
+		<SimpleData name="report_crossing_id">10</SimpleData>
+		<SimpleData name="stream_name">Chisholm Creek</SimpleData>
+		<SimpleData name="upstream_fish">no</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">1229</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.70553487684,53.0498020703241</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">7400</SimpleData>
+		<SimpleData name="report_crossing_id">11</SimpleData>
+		<SimpleData name="stream_name">Pinegrove Creek</SimpleData>
+		<SimpleData name="upstream_fish">no (adult BT visually observed at 11D downstream)</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">1230</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.945802811731,53.0638785030427</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">COTR</SimpleData>
+		<SimpleData name="report_id">7400</SimpleData>
+		<SimpleData name="report_crossing_id">12</SimpleData>
+		<SimpleData name="stream_name">Chisholm Creek</SimpleData>
+		<SimpleData name="upstream_fish">yes (RB fry)</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">1231</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-121.70553487684,53.0498020703241</coordinates></Point>
+  </Placemark>
+</Folder>
+</Document></kml>

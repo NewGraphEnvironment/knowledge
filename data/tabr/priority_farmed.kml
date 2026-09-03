@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Document id="root_doc">
+<Schema name="priority_farmed" id="priority_farmed">
+	<SimpleField name="code" type="string"></SimpleField>
+	<SimpleField name="report_id" type="float"></SimpleField>
+	<SimpleField name="report_crossing_id" type="string"></SimpleField>
+	<SimpleField name="pscis_stream_crossing_id" type="float"></SimpleField>
+	<SimpleField name="stream_name" type="string"></SimpleField>
+	<SimpleField name="priority" type="int"></SimpleField>
+	<SimpleField name="barrier" type="int"></SimpleField>
+	<SimpleField name="fish_barrier_score" type="int"></SimpleField>
+	<SimpleField name="habitat_value" type="string"></SimpleField>
+	<SimpleField name="upstream_fish" type="string"></SimpleField>
+	<SimpleField name="recommendation" type="int"></SimpleField>
+	<SimpleField name="reconcile_method" type="string"></SimpleField>
+	<SimpleField name="table_source" type="string"></SimpleField>
+	<SimpleField name="coord_source" type="string"></SimpleField>
+	<SimpleField name=".row" type="int"></SimpleField>
+</Schema>
+<Folder><name>priority_farmed</name>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">TABR</SimpleData>
+		<SimpleData name="report_id">10630</SimpleData>
+		<SimpleData name="report_crossing_id">118</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">196118</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">21</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.656794,53.851381</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">TABR</SimpleData>
+		<SimpleData name="report_id">10630</SimpleData>
+		<SimpleData name="report_crossing_id">120</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">196053</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">22</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.57517,53.961575</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">TABR</SimpleData>
+		<SimpleData name="report_id">10630</SimpleData>
+		<SimpleData name="report_crossing_id">760</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">196281</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">57</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.593039,53.57183</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">TABR</SimpleData>
+		<SimpleData name="report_id">10630</SimpleData>
+		<SimpleData name="report_crossing_id">9933</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">196079</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">75</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.546689,54.011552</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">TABR</SimpleData>
+		<SimpleData name="report_id">10630</SimpleData>
+		<SimpleData name="report_crossing_id">9934</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">196129</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">76</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.518427,53.63406</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">TABR</SimpleData>
+		<SimpleData name="report_id">10630</SimpleData>
+		<SimpleData name="report_crossing_id">526</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">196290</SimpleData>
+		<SimpleData name="stream_name">Stone Creek Watershed</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">92</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.66447,53.605921</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">TABR</SimpleData>
+		<SimpleData name="report_id">10630</SimpleData>
+		<SimpleData name="report_crossing_id">39</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">7450</SimpleData>
+		<SimpleData name="stream_name">Stone Creek Watershed</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">94</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.499049,53.620397</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">TABR</SimpleData>
+		<SimpleData name="report_id">10630</SimpleData>
+		<SimpleData name="report_crossing_id">36</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">7447</SimpleData>
+		<SimpleData name="stream_name">Stone Creek Watershed</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">97</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.514954,53.634382</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">TABR</SimpleData>
+		<SimpleData name="report_id">17682</SimpleData>
+		<SimpleData name="report_crossing_id">100-543000</SimpleData>
+		<SimpleData name="stream_name">Stone Creek</SimpleData>
+		<SimpleData name="habitat_value">IMPORTANT (rated per Fish-Stream Crossing Guidebook; good rearing habitat, likely important migration corridor to upstream spawning habitat, good over-wintering habitat)</SimpleData>
+		<SimpleData name="upstream_fish">yes - 4 minnow traps installed upstream of the highway crossing overnight; juvenile rainbow trout (RB) caught in minnow traps upstream</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">110</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.6636728528,53.6339628315187</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">TABR</SimpleData>
+		<SimpleData name="report_id">17682</SimpleData>
+		<SimpleData name="report_crossing_id">100-543300</SimpleData>
+		<SimpleData name="stream_name">Unnamed (mapped tributary to Fraser River)</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">112</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.663650123081,53.6406232535893</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">TABR</SimpleData>
+		<SimpleData name="report_id">17682</SimpleData>
+		<SimpleData name="report_crossing_id">flumes</SimpleData>
+		<SimpleData name="habitat_value">low / not fish habitat</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">113</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-122.664892230342,53.6442131489786</coordinates></Point>
+  </Placemark>
+</Folder>
+</Document></kml>

@@ -1,0 +1,1749 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Document id="root_doc">
+<Schema name="priority_farmed" id="priority_farmed">
+	<SimpleField name="code" type="string"></SimpleField>
+	<SimpleField name="report_id" type="float"></SimpleField>
+	<SimpleField name="report_crossing_id" type="string"></SimpleField>
+	<SimpleField name="pscis_stream_crossing_id" type="float"></SimpleField>
+	<SimpleField name="stream_name" type="string"></SimpleField>
+	<SimpleField name="priority" type="string"></SimpleField>
+	<SimpleField name="barrier" type="string"></SimpleField>
+	<SimpleField name="fish_barrier_score" type="float"></SimpleField>
+	<SimpleField name="habitat_value" type="string"></SimpleField>
+	<SimpleField name="upstream_fish" type="string"></SimpleField>
+	<SimpleField name="recommendation" type="string"></SimpleField>
+	<SimpleField name="reconcile_method" type="string"></SimpleField>
+	<SimpleField name="table_source" type="string"></SimpleField>
+	<SimpleField name="coord_source" type="string"></SimpleField>
+	<SimpleField name=".row" type="int"></SimpleField>
+</Schema>
+<Folder><name>priority_farmed</name>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">10218</SimpleData>
+		<SimpleData name="report_crossing_id">6</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">7428</SimpleData>
+		<SimpleData name="stream_name">Unnamed</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">47</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-125.088634,53.908801</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">10218</SimpleData>
+		<SimpleData name="report_crossing_id">7</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">7429</SimpleData>
+		<SimpleData name="stream_name">Unnamed</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">48</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.914815,53.910185</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">10218</SimpleData>
+		<SimpleData name="report_crossing_id">15</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6331</SimpleData>
+		<SimpleData name="stream_name">Unnamed</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">52</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.874801,54.274005</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">10218</SimpleData>
+		<SimpleData name="report_crossing_id">38</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6349</SimpleData>
+		<SimpleData name="stream_name">Unnamed</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">58</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-125.270732,53.923007</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">13641</SimpleData>
+		<SimpleData name="report_crossing_id">7</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">7429</SimpleData>
+		<SimpleData name="stream_name">480-559900</SimpleData>
+		<SimpleData name="habitat_value">MG</SimpleData>
+		<SimpleData name="upstream_fish">NFC (RB)</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">180</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.914815,53.910185</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">13641</SimpleData>
+		<SimpleData name="report_crossing_id">18</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6332</SimpleData>
+		<SimpleData name="stream_name">41006</SimpleData>
+		<SimpleData name="upstream_fish">NS</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">192</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.884884,53.993042</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">13641</SimpleData>
+		<SimpleData name="report_crossing_id">19</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6333</SimpleData>
+		<SimpleData name="stream_name">41006</SimpleData>
+		<SimpleData name="upstream_fish">NS</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">193</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.917617,53.911574</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">13974</SimpleData>
+		<SimpleData name="report_crossing_id">15</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6331</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">425</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.874801,54.274005</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">13974</SimpleData>
+		<SimpleData name="report_crossing_id">6</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">7428</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">432</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-125.088634,53.908801</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">13974</SimpleData>
+		<SimpleData name="report_crossing_id">7</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">7429</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">433</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.914815,53.910185</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">13974</SimpleData>
+		<SimpleData name="report_crossing_id">18</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6332</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">442</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.884884,53.993042</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">13974</SimpleData>
+		<SimpleData name="report_crossing_id">38</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6349</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">501</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-125.270732,53.923007</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">13974</SimpleData>
+		<SimpleData name="report_crossing_id">19</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6333</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">511</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.917617,53.911574</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">13974</SimpleData>
+		<SimpleData name="report_crossing_id">18</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6332</SimpleData>
+		<SimpleData name="upstream_fish">fish captured at site: LKC (116 mm)</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">536</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.884884,53.993042</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">19417</SimpleData>
+		<SimpleData name="report_crossing_id">6</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">7428</SimpleData>
+		<SimpleData name="stream_name">Stellako River</SimpleData>
+		<SimpleData name="barrier">One set of falls on the river; however this does not pose a barrier to fishes</SimpleData>
+		<SimpleData name="habitat_value">Spawning 1 / Rearing 1 (1=excellent/extensive, 5=nil/very marginal)</SimpleData>
+		<SimpleData name="recommendation">Needs much more detailed inventory, run size evaluation and mapping (Recommendation 1)</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">673</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-125.088634,53.908801</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">19417</SimpleData>
+		<SimpleData name="report_crossing_id">7</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">7429</SimpleData>
+		<SimpleData name="stream_name">Peace Creek</SimpleData>
+		<SimpleData name="barrier">Small falls where fast water occurs; a large chain of beaver dams had extended for half a mile (plus a second chain)</SimpleData>
+		<SimpleData name="habitat_value">Spawning 3 / Rearing 4 (1=excellent/extensive, 5=nil/very marginal)</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">674</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.914815,53.910185</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">19417</SimpleData>
+		<SimpleData name="report_crossing_id">15</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6331</SimpleData>
+		<SimpleData name="stream_name">Nithi River</SimpleData>
+		<SimpleData name="barrier">Nithi has cut new channels around the immense blockages; steep boulder canyon 2-3 miles below Borel</SimpleData>
+		<SimpleData name="habitat_value">Spawning 1 / Rearing 1 (1=excellent/extensive, 5=nil/very marginal)</SimpleData>
+		<SimpleData name="recommendation">Needs much more detailed inventory; install fry traps; tagging studies of upper Nithi (Recommendations 1, 2, 4)</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">682</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.874801,54.274005</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">19417</SimpleData>
+		<SimpleData name="report_crossing_id">18</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6332</SimpleData>
+		<SimpleData name="stream_name">Octopus Creek</SimpleData>
+		<SimpleData name="barrier">Beaver dams at mouth and ~1.5 miles above lake; very steep bedrock canyon 3/4 mile from Francois Lake with chutes and drops up to 6 feet, free of loose rock, would be impassable; access absolutely nil (lower: active beaver dams; upper: falls and beaver dams)</SimpleData>
+		<SimpleData name="habitat_value">Spawning 5 / Rearing 5 (1=excellent/extensive, 5=nil/very marginal)</SimpleData>
+		<SimpleData name="recommendation">Not worth considering or examining further for fish production (per report conclusion)</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">685</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.884884,53.993042</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">19417</SimpleData>
+		<SimpleData name="report_crossing_id">19</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6333</SimpleData>
+		<SimpleData name="stream_name">Unnamed Creek (Lot 1640)</SimpleData>
+		<SimpleData name="barrier">Beaver dams present but not in barrier-like quantity; potential blockages over overgrown sections cleared during clearance work</SimpleData>
+		<SimpleData name="habitat_value">Spawning 3 / Rearing 3 (1=excellent/extensive, 5=nil/very marginal)</SimpleData>
+		<SimpleData name="upstream_fish">No fry seen; this spring spawning took place in fields and ditches</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">686</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.917617,53.911574</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">20417</SimpleData>
+		<SimpleData name="report_crossing_id">38</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6349</SimpleData>
+		<SimpleData name="barrier">70 m long 15% gradient section; step and seepage obstructions</SimpleData>
+		<SimpleData name="habitat_value">fish bearing (lower 30 m)</SimpleData>
+		<SimpleData name="upstream_fish">DV (lower 30 m only)</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">696</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-125.270732,53.923007</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">20417</SimpleData>
+		<SimpleData name="report_crossing_id">15</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6331</SimpleData>
+		<SimpleData name="barrier">drains into abandoned side-channel of Gates Creek; NCD section</SimpleData>
+		<SimpleData name="habitat_value">non-fish bearing</SimpleData>
+		<SimpleData name="upstream_fish">none captured</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">714</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.874801,54.274005</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">20417</SimpleData>
+		<SimpleData name="report_crossing_id">19</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6333</SimpleData>
+		<SimpleData name="barrier">ephemeral/dry</SimpleData>
+		<SimpleData name="habitat_value">non-fish bearing</SimpleData>
+		<SimpleData name="upstream_fish">none captured</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">717</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.917617,53.911574</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">20417</SimpleData>
+		<SimpleData name="report_crossing_id">38</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6349</SimpleData>
+		<SimpleData name="barrier">70 m long 15% gradient section; steps/seepage</SimpleData>
+		<SimpleData name="habitat_value">non-fish bearing (upstream)</SimpleData>
+		<SimpleData name="upstream_fish">none upstream (DV in lower 30 m)</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">727</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-125.270732,53.923007</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">23111</SimpleData>
+		<SimpleData name="report_crossing_id">6</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">7428</SimpleData>
+		<SimpleData name="stream_name">BAB-1 BAB1-G-R1; WSC 56001</SimpleData>
+		<SimpleData name="habitat_value">NA (Rip class S6)</SimpleData>
+		<SimpleData name="upstream_fish">no - confirmed non-fish bearing</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">783</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-125.088634,53.908801</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">23111</SimpleData>
+		<SimpleData name="report_crossing_id">7</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">7429</SimpleData>
+		<SimpleData name="stream_name">BAB-1 BAB1-B-R2; WSC 480-280900-59517</SimpleData>
+		<SimpleData name="habitat_value">NA (Rip class S6)</SimpleData>
+		<SimpleData name="upstream_fish">no - confirmed non-fish bearing</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">784</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.914815,53.910185</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">23111</SimpleData>
+		<SimpleData name="report_crossing_id">15</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6331</SimpleData>
+		<SimpleData name="stream_name">SFU2008-DK4; WSC 460-496100-59500</SimpleData>
+		<SimpleData name="habitat_value">MG (Rip class S3)</SimpleData>
+		<SimpleData name="upstream_fish">yes - DV (Dolly Varden)</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">792</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.874801,54.274005</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">23111</SimpleData>
+		<SimpleData name="report_crossing_id">18</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6332</SimpleData>
+		<SimpleData name="stream_name">WSC 67003</SimpleData>
+		<SimpleData name="habitat_value">MG (Rip class S3/S4)</SimpleData>
+		<SimpleData name="upstream_fish">yes - DV (Dolly Varden) and RB</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">795</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.884884,53.993042</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">23111</SimpleData>
+		<SimpleData name="report_crossing_id">19</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6333</SimpleData>
+		<SimpleData name="stream_name">WSC 67004</SimpleData>
+		<SimpleData name="habitat_value">NA (Rip class NCD)</SimpleData>
+		<SimpleData name="upstream_fish">no - not a stream</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">796</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.917617,53.911574</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">29525</SimpleData>
+		<SimpleData name="report_crossing_id">6</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">7428</SimpleData>
+		<SimpleData name="stream_name">Endako Tributaries</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">883</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-125.088634,53.908801</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">29525</SimpleData>
+		<SimpleData name="report_crossing_id">7</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">7429</SimpleData>
+		<SimpleData name="stream_name">Cheskwa C.</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">884</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.914815,53.910185</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">29525</SimpleData>
+		<SimpleData name="report_crossing_id">15</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6331</SimpleData>
+		<SimpleData name="stream_name">Cheskwa C.</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">892</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.874801,54.274005</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">29525</SimpleData>
+		<SimpleData name="report_crossing_id">18</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6332</SimpleData>
+		<SimpleData name="stream_name">Cheskwa C.</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">895</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.884884,53.993042</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">29525</SimpleData>
+		<SimpleData name="report_crossing_id">19</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6333</SimpleData>
+		<SimpleData name="stream_name">Shovel C.</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">896</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.917617,53.911574</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">29525</SimpleData>
+		<SimpleData name="report_crossing_id">38</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6349</SimpleData>
+		<SimpleData name="stream_name">Shovel C.</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">915</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-125.270732,53.923007</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">3239</SimpleData>
+		<SimpleData name="report_crossing_id">6</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">7428</SimpleData>
+		<SimpleData name="stream_name">Unnamed Creek (ILP # 01019)</SimpleData>
+		<SimpleData name="habitat_value">No fish habitat noted; no channel could be identified in this reach; low downstream-impact potential</SimpleData>
+		<SimpleData name="recommendation">Recommended Reach Classification: No stream identified</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">1275</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-125.088634,53.908801</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">3366</SimpleData>
+		<SimpleData name="report_crossing_id">6</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">7428</SimpleData>
+		<SimpleData name="stream_name">Kew C.</SimpleData>
+		<SimpleData name="barrier">Falls 5.1m, verified in field (Y) - impassable to all fish species; end of reach 3, 2.2km u/s from Babine Lake</SimpleData>
+		<SimpleData name="upstream_fish">inferred fish-bearing (follow-up)</SimpleData>
+		<SimpleData name="recommendation">follow-up sampling required</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">1328</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-125.088634,53.908801</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">3366</SimpleData>
+		<SimpleData name="report_crossing_id">7</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">7429</SimpleData>
+		<SimpleData name="stream_name">Kew C.</SimpleData>
+		<SimpleData name="upstream_fish">non-fish-bearing</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">1329</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.914815,53.910185</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">3366</SimpleData>
+		<SimpleData name="report_crossing_id">15</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6331</SimpleData>
+		<SimpleData name="upstream_fish">non-fish-bearing (NVC)</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">1337</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.874801,54.274005</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">3366</SimpleData>
+		<SimpleData name="report_crossing_id">18</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6332</SimpleData>
+		<SimpleData name="stream_name">Pierre C.</SimpleData>
+		<SimpleData name="barrier">Canyon 50m high x 700m long, verified in field (Y) - falls and steep gradients in canyon likely limit fish passage; start of reach 3, 1.5km u/s from Babine Lake</SimpleData>
+		<SimpleData name="upstream_fish">fish-bearing (confirmed)</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">1340</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.884884,53.993042</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">3366</SimpleData>
+		<SimpleData name="report_crossing_id">19</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6333</SimpleData>
+		<SimpleData name="stream_name">Pierre C.</SimpleData>
+		<SimpleData name="barrier">Falls 10m, verified in field (Y) - impassable to all fish species; end of reach 3, 3.0km u/s from Babine Lake</SimpleData>
+		<SimpleData name="upstream_fish">fish-bearing (confirmed)</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">1341</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.917617,53.911574</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">3366</SimpleData>
+		<SimpleData name="report_crossing_id">38</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6349</SimpleData>
+		<SimpleData name="upstream_fish">non-fish-bearing</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">1359</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-125.270732,53.923007</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">3455</SimpleData>
+		<SimpleData name="report_crossing_id">6</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">7428</SimpleData>
+		<SimpleData name="stream_name">Unnamed</SimpleData>
+		<SimpleData name="barrier">non-fish bearing</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">1498</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-125.088634,53.908801</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">3455</SimpleData>
+		<SimpleData name="report_crossing_id">7</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">7429</SimpleData>
+		<SimpleData name="stream_name">Unnamed</SimpleData>
+		<SimpleData name="barrier">non-fish bearing</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">1499</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.914815,53.910185</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">3455</SimpleData>
+		<SimpleData name="report_crossing_id">15</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6331</SimpleData>
+		<SimpleData name="stream_name">Unnamed</SimpleData>
+		<SimpleData name="barrier">non-fish bearing</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">1505</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.874801,54.274005</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">3455</SimpleData>
+		<SimpleData name="report_crossing_id">19</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6333</SimpleData>
+		<SimpleData name="stream_name">Unnamed</SimpleData>
+		<SimpleData name="barrier">non-fish bearing</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">1508</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.917617,53.911574</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">3455</SimpleData>
+		<SimpleData name="report_crossing_id">38</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6349</SimpleData>
+		<SimpleData name="stream_name">Unnamed</SimpleData>
+		<SimpleData name="barrier">non-fish bearing</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">1518</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-125.270732,53.923007</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">3455</SimpleData>
+		<SimpleData name="report_crossing_id">18</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6332</SimpleData>
+		<SimpleData name="stream_name">Unnamed</SimpleData>
+		<SimpleData name="barrier">unclassified - follow-up sampling required</SimpleData>
+		<SimpleData name="recommendation">follow-up sampling required (spring; method MT)</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">1534</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.884884,53.993042</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">3456</SimpleData>
+		<SimpleData name="report_crossing_id">6</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">7428</SimpleData>
+		<SimpleData name="stream_name">Unnamed Creek</SimpleData>
+		<SimpleData name="priority">non-fish-bearing</SimpleData>
+		<SimpleData name="barrier">no visible channel (NVC) (Table 9)</SimpleData>
+		<SimpleData name="habitat_value">no visible channel</SimpleData>
+		<SimpleData name="upstream_fish">NVC (no visible channel)</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">1547</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-125.088634,53.908801</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">3456</SimpleData>
+		<SimpleData name="report_crossing_id">7</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">7429</SimpleData>
+		<SimpleData name="stream_name">Unnamed Creek</SimpleData>
+		<SimpleData name="priority">non-fish-bearing</SimpleData>
+		<SimpleData name="barrier">no visible channel (NVC) (Table 9)</SimpleData>
+		<SimpleData name="habitat_value">no visible channel</SimpleData>
+		<SimpleData name="upstream_fish">NVC (no visible channel)</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">1548</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.914815,53.910185</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">3456</SimpleData>
+		<SimpleData name="report_crossing_id">15</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6331</SimpleData>
+		<SimpleData name="stream_name">Unnamed Creek</SimpleData>
+		<SimpleData name="priority">non-fish-bearing</SimpleData>
+		<SimpleData name="barrier">wetland; no defined channel (Table 9)</SimpleData>
+		<SimpleData name="habitat_value">no visible channel</SimpleData>
+		<SimpleData name="upstream_fish">NVC (no visible channel)</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">1556</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.874801,54.274005</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">3456</SimpleData>
+		<SimpleData name="report_crossing_id">18</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6332</SimpleData>
+		<SimpleData name="stream_name">Unnamed Creek</SimpleData>
+		<SimpleData name="priority">non-fish-bearing</SimpleData>
+		<SimpleData name="barrier">Cascade, 20 m; 40% gradient cascade over 50 m about 50 m upstream of Larkin Creek (Table 9)</SimpleData>
+		<SimpleData name="habitat_value">nil (no fish habitat; intermittent)</SimpleData>
+		<SimpleData name="upstream_fish">no fish habitat</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">1559</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.884884,53.993042</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">3456</SimpleData>
+		<SimpleData name="report_crossing_id">19</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6333</SimpleData>
+		<SimpleData name="stream_name">Unnamed Creek</SimpleData>
+		<SimpleData name="priority">fish-bearing</SimpleData>
+		<SimpleData name="habitat_value">spawning G, rearing G, overwinter M</SimpleData>
+		<SimpleData name="upstream_fish">DV (2 Dolly Varden captured)</SimpleData>
+		<SimpleData name="recommendation">classified fish-bearing (Table 13)</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">1560</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.917617,53.911574</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">515</SimpleData>
+		<SimpleData name="report_crossing_id">6</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">7428</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">1591</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-125.088634,53.908801</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">515</SimpleData>
+		<SimpleData name="report_crossing_id">7</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">7429</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">1592</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.914815,53.910185</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">515</SimpleData>
+		<SimpleData name="report_crossing_id">15</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6331</SimpleData>
+		<SimpleData name="stream_name">Allin C.</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">1600</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.874801,54.274005</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">515</SimpleData>
+		<SimpleData name="report_crossing_id">18</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6332</SimpleData>
+		<SimpleData name="stream_name">Allin C.</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">1603</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.884884,53.993042</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">515</SimpleData>
+		<SimpleData name="report_crossing_id">19</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6333</SimpleData>
+		<SimpleData name="stream_name">Allin C.</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">1604</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.917617,53.911574</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">515</SimpleData>
+		<SimpleData name="report_crossing_id">38</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6349</SimpleData>
+		<SimpleData name="recommendation">follow-up sampling required</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">1623</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-125.270732,53.923007</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">53546</SimpleData>
+		<SimpleData name="report_crossing_id">6</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">7428</SimpleData>
+		<SimpleData name="stream_name">Unnamed</SimpleData>
+		<SimpleData name="barrier">No barriers to fish passage observed in the 400 m section surveyed</SimpleData>
+		<SimpleData name="upstream_fish">Dolly Varden captured in connected ILP 70023 (Site 8, SKR 2002)</SimpleData>
+		<SimpleData name="recommendation">Manage as fish-bearing by default; resampling of upper portion recommended</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">1874</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-125.088634,53.908801</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">53546</SimpleData>
+		<SimpleData name="report_crossing_id">7</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">7429</SimpleData>
+		<SimpleData name="stream_name">Unnamed</SimpleData>
+		<SimpleData name="habitat_value">Limited rearing; no overwintering (no deep pools); no spawning substrate (except possibly lower 50 m)</SimpleData>
+		<SimpleData name="upstream_fish">No fish captured during initial sampling or re-sampling</SimpleData>
+		<SimpleData name="recommendation">Follow-up sampling required; fish presence considered unlikely</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">1875</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.914815,53.910185</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">53922</SimpleData>
+		<SimpleData name="report_crossing_id">6</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">7428</SimpleData>
+		<SimpleData name="stream_name">ILP 1027</SimpleData>
+		<SimpleData name="priority">moderate</SimpleData>
+		<SimpleData name="barrier">Partial barrier to fish (culvert); may limit the migration of fry</SimpleData>
+		<SimpleData name="habitat_value">S3</SimpleData>
+		<SimpleData name="recommendation">An outlet water control structure may provide enough backflooding to facilitate fry passage</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">2013</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-125.088634,53.908801</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">53922</SimpleData>
+		<SimpleData name="report_crossing_id">7</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">7429</SimpleData>
+		<SimpleData name="stream_name">ILP 1033</SimpleData>
+		<SimpleData name="habitat_value">NVC</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">2014</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.914815,53.910185</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">53922</SimpleData>
+		<SimpleData name="report_crossing_id">15</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6331</SimpleData>
+		<SimpleData name="stream_name">ILP 1004</SimpleData>
+		<SimpleData name="barrier">Gradient (23.3%) prevents fish access to this reach</SimpleData>
+		<SimpleData name="habitat_value">S6</SimpleData>
+		<SimpleData name="upstream_fish">No perennial fish habitat</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">2022</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.874801,54.274005</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">53922</SimpleData>
+		<SimpleData name="report_crossing_id">18</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6332</SimpleData>
+		<SimpleData name="stream_name">ILP 1046</SimpleData>
+		<SimpleData name="priority">low</SimpleData>
+		<SimpleData name="barrier">Full barrier to fish (culvert); culvert perched 60 cm</SimpleData>
+		<SimpleData name="habitat_value">S4*</SimpleData>
+		<SimpleData name="recommendation">Confirm fish bearing status of Reach</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">2025</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.884884,53.993042</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">53922</SimpleData>
+		<SimpleData name="report_crossing_id">19</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6333</SimpleData>
+		<SimpleData name="stream_name">ILP 1046</SimpleData>
+		<SimpleData name="habitat_value">FSZ</SimpleData>
+		<SimpleData name="recommendation">Follow-up sampling recommended</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">2026</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.917617,53.911574</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">53922</SimpleData>
+		<SimpleData name="report_crossing_id">38</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6349</SimpleData>
+		<SimpleData name="stream_name">ILP 1070</SimpleData>
+		<SimpleData name="barrier">Channel has no connectivity to fish habitat</SimpleData>
+		<SimpleData name="habitat_value">S6</SimpleData>
+		<SimpleData name="upstream_fish">No perennial habitat; channel becomes discontinuous (seepage)</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">2045</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-125.270732,53.923007</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">54003</SimpleData>
+		<SimpleData name="report_crossing_id">38</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6349</SimpleData>
+		<SimpleData name="barrier">fish-bearing lower 30 m; 15% gradient section + steps limit fish to lower 30 m</SimpleData>
+		<SimpleData name="habitat_value">S4/S6</SimpleData>
+		<SimpleData name="upstream_fish">1 DV captured lower 10 m (near mainstem alias Hay Meadow Creek ILP 20800); none u/s</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">2129</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-125.270732,53.923007</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">54003</SimpleData>
+		<SimpleData name="report_crossing_id">15</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6331</SimpleData>
+		<SimpleData name="barrier">non-fish bearing (above 50 m NCD section = barrier)</SimpleData>
+		<SimpleData name="habitat_value">S6</SimpleData>
+		<SimpleData name="upstream_fish">none captured</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">2147</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.874801,54.274005</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">54003</SimpleData>
+		<SimpleData name="report_crossing_id">19</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6333</SimpleData>
+		<SimpleData name="barrier">non-fish bearing (ephemeral; channel disappears 250 m u/s of Gates Creek confluence; 10% gradient + 0.3-0.4 m steps lower 70 m)</SimpleData>
+		<SimpleData name="habitat_value">S6</SimpleData>
+		<SimpleData name="upstream_fish">none captured</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">2150</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.917617,53.911574</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">54003</SimpleData>
+		<SimpleData name="report_crossing_id">38</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6349</SimpleData>
+		<SimpleData name="barrier">non-fish bearing upper section (above 70 m long 15% gradient section + steps/seepage)</SimpleData>
+		<SimpleData name="habitat_value">S4/S6</SimpleData>
+		<SimpleData name="upstream_fish">1 DV lower 10 m only; none u/s</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">2160</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-125.270732,53.923007</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">54003</SimpleData>
+		<SimpleData name="report_crossing_id">18</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6332</SimpleData>
+		<SimpleData name="barrier">suspected fish bearing, not conclusively classified (failed culvert replaced with bridge; no barriers d/s to fish-bearing lake 1129FRAN)</SimpleData>
+		<SimpleData name="habitat_value">S3</SimpleData>
+		<SimpleData name="upstream_fish">none captured (2203s + 674s EF); RB not captured but suspected present</SimpleData>
+		<SimpleData name="recommendation">re-sampling not recommended at this time</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">2217</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.884884,53.993042</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">8246</SimpleData>
+		<SimpleData name="report_crossing_id">6</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">7428</SimpleData>
+		<SimpleData name="stream_name">FUHhA</SimpleData>
+		<SimpleData name="barrier">Lack of habitat</SimpleData>
+		<SimpleData name="habitat_value">N</SimpleData>
+		<SimpleData name="upstream_fish">N</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">2322</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-125.088634,53.908801</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">8246</SimpleData>
+		<SimpleData name="report_crossing_id">7</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">7429</SimpleData>
+		<SimpleData name="stream_name">FUHhB</SimpleData>
+		<SimpleData name="barrier">Lack of channel</SimpleData>
+		<SimpleData name="habitat_value">N</SimpleData>
+		<SimpleData name="upstream_fish">N</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">2323</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.914815,53.910185</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">8246</SimpleData>
+		<SimpleData name="report_crossing_id">15</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6331</SimpleData>
+		<SimpleData name="stream_name">FUH3</SimpleData>
+		<SimpleData name="barrier">Lack of channel</SimpleData>
+		<SimpleData name="habitat_value">N</SimpleData>
+		<SimpleData name="upstream_fish">N</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">2331</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.874801,54.274005</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">8246</SimpleData>
+		<SimpleData name="report_crossing_id">18</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6332</SimpleData>
+		<SimpleData name="stream_name">FUH5</SimpleData>
+		<SimpleData name="barrier">80m long X 16m high cascade</SimpleData>
+		<SimpleData name="habitat_value">N</SimpleData>
+		<SimpleData name="upstream_fish">N</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">2334</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.884884,53.993042</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">8246</SimpleData>
+		<SimpleData name="report_crossing_id">19</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6333</SimpleData>
+		<SimpleData name="stream_name">FUH5</SimpleData>
+		<SimpleData name="barrier">80m long X 16m high cascade</SimpleData>
+		<SimpleData name="habitat_value">L</SimpleData>
+		<SimpleData name="upstream_fish">N</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">2335</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.917617,53.911574</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">8246</SimpleData>
+		<SimpleData name="report_crossing_id">38</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6349</SimpleData>
+		<SimpleData name="stream_name">PT1</SimpleData>
+		<SimpleData name="barrier">Lack of connectivity</SimpleData>
+		<SimpleData name="habitat_value">L</SimpleData>
+		<SimpleData name="upstream_fish">N</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">2354</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-125.270732,53.923007</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">8247</SimpleData>
+		<SimpleData name="report_crossing_id">6</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">7428</SimpleData>
+		<SimpleData name="stream_name">Shovel (25783)</SimpleData>
+		<SimpleData name="barrier">No channel</SimpleData>
+		<SimpleData name="upstream_fish">N - NS</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">2387</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-125.088634,53.908801</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">8247</SimpleData>
+		<SimpleData name="report_crossing_id">7</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">7429</SimpleData>
+		<SimpleData name="stream_name">Palling (FND1)</SimpleData>
+		<SimpleData name="habitat_value">M</SimpleData>
+		<SimpleData name="upstream_fish">Suspected presence - NFC (RB)</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">2388</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.914815,53.910185</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">8247</SimpleData>
+		<SimpleData name="report_crossing_id">15</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6331</SimpleData>
+		<SimpleData name="stream_name">Ootsanee</SimpleData>
+		<SimpleData name="barrier">No channel</SimpleData>
+		<SimpleData name="upstream_fish">N - NS</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">2396</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.874801,54.274005</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">8247</SimpleData>
+		<SimpleData name="report_crossing_id">18</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6332</SimpleData>
+		<SimpleData name="stream_name">Ootsanee</SimpleData>
+		<SimpleData name="barrier">1m high organic falls (20m u/s of mouth, impedes access)</SimpleData>
+		<SimpleData name="habitat_value">M</SimpleData>
+		<SimpleData name="upstream_fish">N - species code 'LKC/RB' (unclear)</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">2399</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.884884,53.993042</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">8247</SimpleData>
+		<SimpleData name="report_crossing_id">19</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6333</SimpleData>
+		<SimpleData name="stream_name">Ootsanee</SimpleData>
+		<SimpleData name="barrier">No channel</SimpleData>
+		<SimpleData name="upstream_fish">N - NS</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">2400</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.917617,53.911574</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">8247</SimpleData>
+		<SimpleData name="report_crossing_id">38</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6349</SimpleData>
+		<SimpleData name="stream_name">Lower Tildesley (TI55C3)</SimpleData>
+		<SimpleData name="barrier">No channel</SimpleData>
+		<SimpleData name="upstream_fish">N - NS</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">2419</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-125.270732,53.923007</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">9311</SimpleData>
+		<SimpleData name="report_crossing_id">38</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6349</SimpleData>
+		<SimpleData name="stream_name">ILP 606</SimpleData>
+		<SimpleData name="barrier">fish bearing</SimpleData>
+		<SimpleData name="habitat_value">poor spawning, good rearing, moderate overwintering habitat</SimpleData>
+		<SimpleData name="upstream_fish">DV</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">2468</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-125.270732,53.923007</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">9311</SimpleData>
+		<SimpleData name="report_crossing_id">6</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">7428</SimpleData>
+		<SimpleData name="stream_name">ILP 712</SimpleData>
+		<SimpleData name="barrier">non-fish bearing; barrier to fish passage (Table 5 type NVC - no visible channel)</SimpleData>
+		<SimpleData name="habitat_value">no fish habitat</SimpleData>
+		<SimpleData name="upstream_fish">none captured (non-fish bearing)</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">2469</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-125.088634,53.908801</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">9311</SimpleData>
+		<SimpleData name="report_crossing_id">7</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">7429</SimpleData>
+		<SimpleData name="stream_name">ILP 704</SimpleData>
+		<SimpleData name="barrier">non-fish bearing; barrier to fish passage (Table 5 type NVC - no visible channel)</SimpleData>
+		<SimpleData name="habitat_value">no fish habitat</SimpleData>
+		<SimpleData name="upstream_fish">none captured (non-fish bearing)</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">2470</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.914815,53.910185</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">9311</SimpleData>
+		<SimpleData name="report_crossing_id">15</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6331</SimpleData>
+		<SimpleData name="stream_name">ILP 751</SimpleData>
+		<SimpleData name="barrier">follow-up sampling required (fish-bearing status undetermined; some seepage sections may be barriers)</SimpleData>
+		<SimpleData name="habitat_value">abundant instream vegetation; braided channel</SimpleData>
+		<SimpleData name="upstream_fish">dry at time of survey - not sampled</SimpleData>
+		<SimpleData name="recommendation">resample in spring high flows; method EF</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">2483</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.874801,54.274005</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">9311</SimpleData>
+		<SimpleData name="report_crossing_id">18</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6332</SimpleData>
+		<SimpleData name="stream_name">ILP 584</SimpleData>
+		<SimpleData name="barrier">follow-up sampling required (likely impassable to fish even at high flows)</SimpleData>
+		<SimpleData name="habitat_value">very limited fish habitat</SimpleData>
+		<SimpleData name="upstream_fish">dry at time of survey - not sampled</SimpleData>
+		<SimpleData name="recommendation">resample in spring high flows; method EF</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">2485</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.884884,53.993042</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">9311</SimpleData>
+		<SimpleData name="report_crossing_id">19</SimpleData>
+		<SimpleData name="pscis_stream_crossing_id">6333</SimpleData>
+		<SimpleData name="stream_name">ILP 689</SimpleData>
+		<SimpleData name="barrier">follow-up sampling required (fish-bearing status undetermined)</SimpleData>
+		<SimpleData name="habitat_value">no spawning habitat, poor-moderate rearing, moderate overwintering; channel choked with rotting vegetation within a wetland</SimpleData>
+		<SimpleData name="upstream_fish">CC (chub captured during 707 s of electroshocking Sept 28 2000)</SimpleData>
+		<SimpleData name="recommendation">resample in spring; method EF</SimpleData>
+		<SimpleData name="reconcile_method">external-ref</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">pscis</SimpleData>
+		<SimpleData name=".row">2486</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-124.917617,53.911574</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">29525</SimpleData>
+		<SimpleData name="report_crossing_id">8</SimpleData>
+		<SimpleData name="stream_name">Cheskwa C.</SimpleData>
+		<SimpleData name="upstream_fish">RB captured u/s</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">885</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-125.198553960361,54.1160695699261</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">29525</SimpleData>
+		<SimpleData name="report_crossing_id">27</SimpleData>
+		<SimpleData name="stream_name">Shovel C.</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">904</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-125.231259254381,54.1642823057729</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">29525</SimpleData>
+		<SimpleData name="report_crossing_id">46</SimpleData>
+		<SimpleData name="stream_name">Endako Tributaries</SimpleData>
+		<SimpleData name="barrier">Culvert, 0.4 m (verified in field)</SimpleData>
+		<SimpleData name="upstream_fish">assumed (habitat present, potentially accessible)</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">923</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-125.38633490618,54.1465819851234</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">29525</SimpleData>
+		<SimpleData name="report_crossing_id">63</SimpleData>
+		<SimpleData name="stream_name">Sheraton C.</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">940</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-125.473683748289,54.1930241172831</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">29525</SimpleData>
+		<SimpleData name="report_crossing_id">67</SimpleData>
+		<SimpleData name="stream_name">Sheraton C.</SimpleData>
+		<SimpleData name="upstream_fish">none above 2 m falls at end of reach 6.2</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">944</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-125.491086949604,54.2277094335534</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">29525</SimpleData>
+		<SimpleData name="report_crossing_id">69</SimpleData>
+		<SimpleData name="stream_name">Sheraton C.</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">946</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-125.522073340136,54.2378799592905</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">29525</SimpleData>
+		<SimpleData name="report_crossing_id">74</SimpleData>
+		<SimpleData name="stream_name">Sheraton C.</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">951</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-125.519909836019,54.2406582904666</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">29525</SimpleData>
+		<SimpleData name="report_crossing_id">75</SimpleData>
+		<SimpleData name="stream_name">Endako Tributaries</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">952</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-125.591877142806,54.1923537889025</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">29525</SimpleData>
+		<SimpleData name="report_crossing_id">76</SimpleData>
+		<SimpleData name="stream_name">Endako Tributaries</SimpleData>
+		<SimpleData name="barrier">Falls, 50 m (verified in field)</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">953</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-125.498307820068,54.1963635478488</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">29525</SimpleData>
+		<SimpleData name="report_crossing_id">77</SimpleData>
+		<SimpleData name="stream_name">Endako Tributaries</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">954</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-125.502025459658,54.2025705870091</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">29525</SimpleData>
+		<SimpleData name="report_crossing_id">82</SimpleData>
+		<SimpleData name="stream_name">Endako Tributaries</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">959</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-125.520695059846,54.1916085437469</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">29525</SimpleData>
+		<SimpleData name="report_crossing_id">85</SimpleData>
+		<SimpleData name="stream_name">Hawse C. (alias)</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">962</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-125.581586881717,54.1957485261503</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">29525</SimpleData>
+		<SimpleData name="report_crossing_id">90</SimpleData>
+		<SimpleData name="stream_name">Endako Tributaries</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">967</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-125.593033561138,54.1204582501009</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">29525</SimpleData>
+		<SimpleData name="report_crossing_id">91</SimpleData>
+		<SimpleData name="stream_name">Endako Tributaries</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">968</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-125.588437946594,54.2094378224753</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">29525</SimpleData>
+		<SimpleData name="report_crossing_id">92</SimpleData>
+		<SimpleData name="stream_name">Endako Tributaries</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">969</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-125.586495417962,54.2249791584255</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">29525</SimpleData>
+		<SimpleData name="report_crossing_id">93</SimpleData>
+		<SimpleData name="stream_name">Endako Tributaries</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">970</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-125.615532819338,54.2110280713921</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">29525</SimpleData>
+		<SimpleData name="report_crossing_id">94</SimpleData>
+		<SimpleData name="stream_name">Endako Tributaries</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">971</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-125.618639875198,54.2101963472858</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">3378</SimpleData>
+		<SimpleData name="report_crossing_id">01882FRAN</SimpleData>
+		<SimpleData name="stream_name">Unnamed lake 01882FRAN (Mallard Lake); Watershed Code 180-374000-95200-12500-8160</SimpleData>
+		<SimpleData name="habitat_value">Abundant spawning and rearing habitat in lake inflow and outflow streams; important habitat for adult rainbow trout</SimpleData>
+		<SimpleData name="upstream_fish">yes - RB (rainbow trout) present in lake</SimpleData>
+		<SimpleData name="recommendation">No restoration and rehabilitation opportunities recommended</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">1463</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-125.269029870371,53.9368387407439</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">7489</SimpleData>
+		<SimpleData name="report_crossing_id">00309FRAN</SimpleData>
+		<SimpleData name="stream_name">Unnamed Lake 00309FRAN</SimpleData>
+		<SimpleData name="upstream_fish">NSC (northern pikeminnow, Ptychocheilus oregonensis) and RSC (redside shiner, Richardsonius balteatus) present in lake</SimpleData>
+		<SimpleData name="recommendation">No rehabilitation opportunities; 'no practical possibilities for establishing a sport fish resource or for increasing habitat for the current coarse fish population'</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">2313</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-125.593844537428,54.1929227744557</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">7489</SimpleData>
+		<SimpleData name="report_crossing_id">48</SimpleData>
+		<SimpleData name="stream_name">Unnamed inlet to Lake 00309FRAN (ILP 136)</SimpleData>
+		<SimpleData name="upstream_fish">no fish sampled (no fish collection form; stream did not contain water / no visible channel)</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">2314</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-125.600199685494,54.1847481367515</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">7489</SimpleData>
+		<SimpleData name="report_crossing_id">47</SimpleData>
+		<SimpleData name="stream_name">Unnamed inlet to Lake 00309FRAN (ILP 138)</SimpleData>
+		<SimpleData name="upstream_fish">no fish sampled (no fish collection form; no visible channel / no water)</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">2315</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-125.594257614737,54.1889940014006</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">7489</SimpleData>
+		<SimpleData name="report_crossing_id">46</SimpleData>
+		<SimpleData name="stream_name">Unnamed inlet to Lake 00309FRAN (ILP 140)</SimpleData>
+		<SimpleData name="upstream_fish">no fish sampled (no fish collection form; intermittent flow, no significant fish habitat)</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">2316</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-125.584608964046,54.180300916566</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">8247</SimpleData>
+		<SimpleData name="report_crossing_id">65</SimpleData>
+		<SimpleData name="stream_name">Four Mile (11005)</SimpleData>
+		<SimpleData name="barrier">70m long dewatering, lack of habitat</SimpleData>
+		<SimpleData name="upstream_fish">N - NFC</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">2446</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-125.838129936953,54.4329638346777</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#priority_farmed">
+		<SimpleData name="code">FRAN</SimpleData>
+		<SimpleData name="report_id">8247</SimpleData>
+		<SimpleData name="report_crossing_id">67</SimpleData>
+		<SimpleData name="stream_name">Four Mile (11006)</SimpleData>
+		<SimpleData name="barrier">5m high and 15m long cascade</SimpleData>
+		<SimpleData name="upstream_fish">N - NFC</SimpleData>
+		<SimpleData name="reconcile_method">unmatched</SimpleData>
+		<SimpleData name="table_source">habitat-inventory</SimpleData>
+		<SimpleData name="coord_source">report-utm</SimpleData>
+		<SimpleData name=".row">2448</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-125.829001723078,54.4309753400173</coordinates></Point>
+  </Placemark>
+</Folder>
+</Document></kml>
