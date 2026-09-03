@@ -1,4 +1,4 @@
-# scripts/04_planning/0150-rag-build.R
+# scripts/0150-rag-build.R
 # ---------------------------------------------------------------------------
 # Build a ragnar (DuckDB) store over the harvested watershed-group report PDFs so
 # their *results sections* are queryable ("what does Guppy recommend for Wildmare?").

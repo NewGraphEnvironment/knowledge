@@ -1,8 +1,8 @@
-# scripts/04_planning/0154-corpus-tag.R
+# scripts/0154-corpus-tag.R
 # ---------------------------------------------------------------------------
 # Content-tag the harvested report corpus so themes are findable without farming.
 #
-# WHY (see #205):
+# WHY (see NewGraphEnvironment/fish_passage_template_reporting#205):
 #   The only decision we make per report is a binary farm/skip, taken on a
 #   TITLE-keyword regex in the triage step. That is invisible (nothing records
 #   what a report contains or why it was skipped) and judges by title rather
@@ -18,13 +18,13 @@
 #   opening text, and writes a diffable manifest. Cheap: regex over stored text,
 #   no LLM pass.
 #
-# OUTPUT: data/planning/corpus_tags.csv — one row per document:
+# OUTPUT: data/corpus_tags.csv — one row per document:
 #   report_id, watershed_group_code, tags, n_table_captions, farmed, n_priority_rows
 #   `farmed`/`n_priority_rows` come from priority_farmed_all.csv, so the manifest
 #   also answers "which table-dense reports were never farmed?" (the 53762 class).
 #
 # INPUT: data/rag/<STORE>.duckdb (STORE env, default fraser)
-#        data/planning/priority_farmed_all.csv (optional, for the farmed flag)
+#        data/priority_farmed_all.csv (optional, for the farmed flag)
 # ---------------------------------------------------------------------------
 suppressMessages({library(DBI); library(dplyr); library(stringr); library(readr); library(purrr)})
 
@@ -82,7 +82,7 @@ out <- tibble(
 # no reportId in the filename, so without this join they look un-farmed even when
 # they were farmed under their EXTENT__id twin — which is exactly how the first
 # run mislabelled the Masse/Triton McGregor reports as "never farmed".
-# data/planning/zotero_key_map.csv maps file -> reportId via attachment->parent
+# data/zotero_key_map.csv maps file -> reportId via attachment->parent
 # (blank reportId = a genuine non-EcoCat reference, not a duplicate).
 kmf <- file.path("data", "planning", "zotero_key_map.csv")
 if (file.exists(kmf)) {
@@ -112,7 +112,7 @@ if (file.exists(pf)) {
 out <- out %>% arrange(desc(n_table_captions))
 write_csv(out, file.path("data", "planning", "corpus_tags.csv"))
 
-message("tagged ", nrow(out), " documents -> data/planning/corpus_tags.csv\n")
+message("tagged ", nrow(out), " documents -> data/corpus_tags.csv\n")
 message("tag frequency:")
 tagfreq <- out$tags %>% str_split(";") %>% unlist() %>% discard(~ .x == "") %>% table() %>% sort(decreasing = TRUE)
 print(tagfreq)

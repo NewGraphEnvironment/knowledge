@@ -1,4 +1,4 @@
-# scripts/04_planning/0110-gnis-collision-check.R
+# scripts/0110-gnis-collision-check.R
 # ---------------------------------------------------------------------------
 # QA gate BEFORE sweeping reports by GNIS stream name: GNIS names repeat across BC
 # (e.g. "Boulder Creek" is in 12 watershed groups). A name search will drag in
@@ -9,13 +9,13 @@
 # Precedent: the "Clearwater" collision (Marjorie/Clearwater LAKE = Cariboo, not the
 # PCEA "Trib to Clearwater Creek" near Mackenzie).
 #
-# INPUT:  data/planning/<wsg>/gnis_seed.csv (from the PSCIS pull), live DB :63333
-# OUTPUT: data/planning/<wsg>/gnis_seed_ambiguity.csv (name, n_wsg, wsgs, pine_only)
+# INPUT:  data/<wsg>/gnis_seed.csv (from the PSCIS pull), live DB :63333
+# OUTPUT: data/<wsg>/gnis_seed_ambiguity.csv (name, n_wsg, wsgs, pine_only)
 # ---------------------------------------------------------------------------
 suppressMessages({library(DBI); library(RPostgres); library(dplyr)})
 
 wsg  <- toupper(if (nzchar(Sys.getenv("WSG_TARGET"))) Sys.getenv("WSG_TARGET") else "PINE")
-seed_csv <- file.path("data/planning", tolower(wsg), "gnis_seed.csv")
+seed_csv <- file.path("data", tolower(wsg), "gnis_seed.csv")
 conn <- DBI::dbConnect(RPostgres::Postgres(), host="localhost", port=63333, dbname="bcfishpass", user="newgraph")
 
 # a table carrying BOTH gnis_name and watershed_group_code (prefer bcfishpass.streams)
@@ -35,7 +35,7 @@ amb <- DBI::dbGetQuery(conn, sprintf(
           string_agg(DISTINCT watershed_group_code, ',' ORDER BY watershed_group_code) AS wsgs
    FROM %s WHERE gnis_name IN (%s) GROUP BY gnis_name ORDER BY n_wsg DESC, gnis_name", tbl, inlist)) |>
   mutate(wsg_only = wsgs == wsg)
-readr::write_csv(amb, file.path("data/planning", tolower(wsg), "gnis_seed_ambiguity.csv"))
+readr::write_csv(amb, file.path("data", tolower(wsg), "gnis_seed_ambiguity.csv"))
 
 message(wsg, ": ", sum(amb$n_wsg==1), " unique names (safe), ",
         sum(amb$n_wsg>1), " ambiguous (verify location), ",

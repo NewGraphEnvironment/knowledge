@@ -1,6 +1,6 @@
-# scripts/04_planning/0200-fiss-xls-enumerate.R
+# scripts/0200-fiss-xls-enumerate.R
 # ---------------------------------------------------------------------------
-# FISS .xls harvest — STEP 1 of 3 (enumerate). Issue #199.
+# FISS .xls harvest — STEP 1 of 3 (enumerate). Issue NewGraphEnvironment/fish_passage_template_reporting#199.
 #
 # Per watershed group, build a manifest of the data-only `.xls`/`.xlsx` fish
 # data submissions that the FISS layers link to (NOT the narrative PDFs). These
@@ -21,7 +21,7 @@
 #     provincial layer is sometimes wrong for the point. Treat as leads to verify.
 #
 # INPUT:  WSG_TARGET env var (else `wsg_target`, else PINE). Live DB via tunnel :63333.
-# OUTPUT: data/planning/<wsg>/fiss_xls_manifest.csv
+# OUTPUT: data/<wsg>/fiss_xls_manifest.csv
 #           report_id, report_url, xls_url, file_name
 #
 # NEXT:   0210-fiss-xls-fetch.R (opt-in download), then 0220-fiss-xls-parse-nfc.R.
@@ -44,7 +44,7 @@ sf::sf_use_s2(FALSE)
 wsg_target <- if (nzchar(Sys.getenv("WSG_TARGET"))) Sys.getenv("WSG_TARGET") else
               if (exists("wsg_target")) wsg_target else "PINE"
 wsg_lower  <- tolower(wsg_target)
-out_dir    <- file.path("data/planning", wsg_lower)
+out_dir    <- file.path("data", wsg_lower)
 dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
 
 fiss_layer <- "whse_fish.fiss_fish_obsrvtn_pnt_sp"

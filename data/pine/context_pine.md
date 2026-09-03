@@ -75,7 +75,7 @@ conversation.
 - **Hatfield 1:20,000 Reconnaissance Inventories** (TFL 48 / Canfor / CFI) — reach-level fish-bearing
   status incl. **non-fish-bearing** determinations.
 - **Callazon / Sukunka / Martin Creek** watershed-restoration reports (G3, AGRA, EDI).
-- Query any of it: `WSG_TARGET=peace QUERY="..." Rscript scripts/04_planning/0155-rag-query.R`.
+- Query any of it: `WSG_TARGET=peace QUERY="..." Rscript scripts/0155-rag-query.R`.
 
 ## Field-prep takeaways
 

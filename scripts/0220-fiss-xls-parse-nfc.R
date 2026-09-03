@@ -1,6 +1,6 @@
-# scripts/04_planning/0220-fiss-xls-parse-nfc.R
+# scripts/0220-fiss-xls-parse-nfc.R
 # ---------------------------------------------------------------------------
-# FISS .xls harvest — STEP 3 of 3 (parse -> normalize -> NFC -> spatial). Issue #199.
+# FISS .xls harvest — STEP 3 of 3 (parse -> normalize -> NFC -> spatial). Issue NewGraphEnvironment/fish_passage_template_reporting#199.
 #
 # Parse each fetched Fish Data Submission spreadsheet, farm the wanted columns,
 # normalize the drift across template editions, flag No-Fish-Captured (NFC) sites,
@@ -25,13 +25,13 @@
 #     an effort threshold. Effort + comments ride along as ATTRIBUTES so the planner
 #     weighs credibility ("electrofished 1200 m, nothing" vs "brief dipnet").
 #
-# INPUT:  data/planning/<wsg>/fiss_xls_fetch_log.csv (from 0210; uses parse_path).
-# OUTPUT: data/planning/<wsg>/fiss_sites_<wsg>.gpkg      (spatial deliverable, clipped
+# INPUT:  data/<wsg>/fiss_xls_fetch_log.csv (from 0210; uses parse_path).
+# OUTPUT: data/<wsg>/fiss_sites_<wsg>.gpkg      (spatial deliverable, clipped
 #           to the WSG, placeable sites only; carries the nfc flag)
-#         data/planning/<wsg>/fiss_sites_<wsg>.csv       (mirrors the .gpkg — clipped)
-#         data/planning/<wsg>/fiss_sites_<wsg>_all.csv   (EVERY parsed site, unclipped,
+#         data/<wsg>/fiss_sites_<wsg>.csv       (mirrors the .gpkg — clipped)
+#         data/<wsg>/fiss_sites_<wsg>_all.csv   (EVERY parsed site, unclipped,
 #           incl. sites with missing/malformed UTM — no record dropped)
-#         data/planning/<wsg>/fiss_step2_fishcoll_<wsg>.csv (effort/fish detail, long)
+#         data/<wsg>/fiss_step2_fishcoll_<wsg>.csv (effort/fish detail, long)
 #
 # OPEN QUESTIONS (grain — revisit with Al):
 #   - Site key is (report_id, reference_number): reference_number is unique only
@@ -53,7 +53,7 @@ sf::sf_use_s2(FALSE)
 wsg_target <- if (nzchar(Sys.getenv("WSG_TARGET"))) Sys.getenv("WSG_TARGET") else
               if (exists("wsg_target")) wsg_target else "PINE"
 wsg_lower  <- tolower(wsg_target)
-out_dir    <- file.path("data/planning", wsg_lower)
+out_dir    <- file.path("data", wsg_lower)
 log_path   <- file.path(out_dir, "fiss_xls_fetch_log.csv")
 
 # ---- PASSED column list (edit here) -----------------------------------------

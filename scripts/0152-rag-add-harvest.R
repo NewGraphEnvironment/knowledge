@@ -1,4 +1,4 @@
-# scripts/04_planning/0152-rag-add-harvest.R
+# scripts/0152-rag-add-harvest.R
 # ---------------------------------------------------------------------------
 # Add harvested EcoCat report PDFs (named "<EXTENT>__<reportId>.pdf" by the
 # wf_*_report_harvest workflows) into an existing ragnar store, deduped by

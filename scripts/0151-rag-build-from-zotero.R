@@ -1,4 +1,4 @@
-# scripts/04_planning/0151-rag-build-from-zotero.R
+# scripts/0151-rag-build-from-zotero.R
 # ---------------------------------------------------------------------------
 # PORTABLE ragnar build: pull the report PDFs FRESH from the Zotero group library
 # (cloud-synced, canonical) and build the store — so data/rag/<name>.duckdb is

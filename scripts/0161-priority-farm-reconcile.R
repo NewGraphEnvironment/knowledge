@@ -1,4 +1,4 @@
-# scripts/04_planning/0161-priority-farm-reconcile.R
+# scripts/0161-priority-farm-reconcile.R
 # ---------------------------------------------------------------------------
 # Reconcile priority rows farmed from report PDFs (wf_farm_priority output) to
 # PSCIS crossings, and stamp the TRUE watershed_group_code per row.
@@ -24,8 +24,8 @@
 # INPUT:  FARM_JSON = comma-separated wf_farm_priority output file(s) OR the
 #         workflow journal.jsonl file(s) (per-agent {type:result} lines) —
 #         journals survive after task .output files are cleaned up.
-#         data/planning/<wsg>/crossings.csv for every group (from 0100)
-# OUTPUT: data/planning/priority_farmed_all.csv  (one combined table, all farmed
+#         data/<wsg>/crossings.csv for every group (from 0100)
+# OUTPUT: data/priority_farmed_all.csv  (one combined table, all farmed
 #         columns incl. notes, + watershed_group_code, pscis_*, coord fields)
 # ---------------------------------------------------------------------------
 suppressMessages({library(jsonlite); library(dplyr); library(stringr); library(purrr); library(readr); library(tidyr)})
@@ -75,7 +75,7 @@ norm_key <- function(x) { x <- as.character(x)
 
 # restrict the union to the Fraser-project groups (exclude Peace pcea/pine/para etc.)
 FRASER <- c("BOWR","MCGR","COTR","WILL","UFRA","TABR","FRAN","LCHL","NECR")
-cross_files <- list.files("data/planning", pattern="^crossings.csv$", recursive=TRUE, full.names=TRUE)
+cross_files <- list.files("data", pattern="^crossings.csv$", recursive=TRUE, full.names=TRUE)
 cross_files <- cross_files[toupper(basename(dirname(cross_files))) %in% FRASER]
 allx <- map_dfr(cross_files, function(cf) {
   wsg <- toupper(basename(dirname(cf)))

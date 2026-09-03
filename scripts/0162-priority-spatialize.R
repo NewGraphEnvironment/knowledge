@@ -1,7 +1,7 @@
-# scripts/04_planning/0162-priority-spatialize.R
+# scripts/0162-priority-spatialize.R
 # ---------------------------------------------------------------------------
 # Spatialize the reconciled priority table (0161 -> priority_farmed_all.csv)
-# into ONE field layer: data/planning/rag_priorities.gpkg, layer `rag_priorities`.
+# into ONE field layer: data/rag_priorities.gpkg, layer `rag_priorities`.
 #
 # WHY ONE LAYER + watershed_group_code (not 9 layers):
 #   0161 now stamps the TRUE watershed_group_code per row (multi-WSG reports like
@@ -20,8 +20,8 @@
 # All farmed columns (incl. notes) travel into the gpkg so it is self-sufficient
 # in the field.
 #
-# INPUT:  data/planning/priority_farmed_all.csv (0161), live DB :63333 for polys
-# OUTPUT: data/planning/rag_priorities.gpkg (layer rag_priorities) + .kml
+# INPUT:  data/priority_farmed_all.csv (0161), live DB :63333 for polys
+# OUTPUT: data/rag_priorities.gpkg (layer rag_priorities) + .kml
 # ---------------------------------------------------------------------------
 suppressMessages({library(sf); library(dplyr); library(stringr); library(readr); library(purrr); library(DBI); library(RPostgres)})
 sf_use_s2(FALSE)

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-scripts/04_planning/0153-reports-to-zotero.py
+scripts/0153-reports-to-zotero.py
 ---------------------------------------------------------------------------
 File harvested EcoCat reports into their watershed-group Zotero collection,
 with ALL of the report's documents attached.
@@ -16,7 +16,7 @@ WHY ALL DOCUMENTS (not just the first PDF):
   An EcoCat report is usually several documents: main report + appendices +
   maps + data files (3-19 seen; report 163 has 19). The harvest grabs only the
   first PDF, so appendices/maps/XLS were being dropped -- including the FPCI
-  form spreadsheets that carry per-site "no fish captured" comments (see #199)
+  form spreadsheets that carry per-site "no fish captured" comments (see NewGraphEnvironment/fish_passage_template_reporting#199)
   and the 1:20k inventory map sheets. This files every document EcoCat serves
   for the report, so the record is complete even where the rag only has one
   document's text.
@@ -53,7 +53,7 @@ API = open(os.path.expanduser("~/.zotero-api-key")).read().strip()
 # sheets + data files). Attaching everything is several GB across a corpus this size
 # and the scanned appendix parts (23-43 MB each) dominate that, so by default we take:
 #   * ALL data files  (.xls/.xlsx/.zip/.csv/.doc/.docx) -- small, and the highest-value
-#     material: FPCI form spreadsheets carry per-site "no fish captured" comments (#199),
+#     material: FPCI form spreadsheets carry per-site "no fish captured" comments (NewGraphEnvironment/fish_passage_template_reporting#199),
 #     .zip are shapefiles
 #   * the MAIN report PDF only -- prefer a filename saying report/final, else the first
 #     non-appendix PDF; appendix/attachment/map/plate PDFs are skipped

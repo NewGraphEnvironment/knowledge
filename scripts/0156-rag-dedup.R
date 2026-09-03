@@ -1,4 +1,4 @@
-# scripts/04_planning/0156-rag-dedup.R
+# scripts/0156-rag-dedup.R
 # ---------------------------------------------------------------------------
 # Remove duplicate documents from a ragnar store before it is published/synced.
 #
@@ -10,7 +10,7 @@
 #   304 documents but only 283 unique. Duplicates are not harmless: a duplicated
 #   report gets two chances at every retrieval, quietly biasing search toward
 #   whichever reports happen to be doubled (the McGregor inventories among them).
-#   Fix before syncing to S3 (#207) so the M1 does not pull the skew.
+#   Fix before syncing to S3 (NewGraphEnvironment/fish_passage_template_reporting#207) so the M1 does not pull the skew.
 #
 # WHICH COPY WINS: the EXTENT__<reportId> one — it carries the watershed group,
 #   which is what 0154 attribution and the farm join depend on.
@@ -21,7 +21,7 @@
 #   delete, so we compact by copying the database into a fresh file.
 #
 # INPUT   STORE (env, default fraser) -> data/rag/<STORE>.duckdb
-#         data/planning/zotero_key_map.csv (maps legacy key filenames -> reportId)
+#         data/zotero_key_map.csv (maps legacy key filenames -> reportId)
 # OUTPUT  the store, deduped + reindexed + compacted. Backup written alongside.
 # ---------------------------------------------------------------------------
 suppressMessages({library(DBI); library(ragnar); library(dplyr); library(stringr); library(readr)})

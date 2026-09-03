@@ -1,8 +1,8 @@
-# scripts/04_planning/0160-priority-enrich.R
+# scripts/0160-priority-enrich.R
 # ---------------------------------------------------------------------------
 # Enrich the Pine priority table (Guppy Table 8, from 0140) and export for the field:
 #   - Guppy's per-site NoPass issue + recommendation text (farmed from the PDF)
-#   - bcfishpass bull-trout habitat km (grayling is NOT modelled -> see #192)
+#   - bcfishpass bull-trout habitat km (grayling is NOT modelled -> see NewGraphEnvironment/fish_passage_template_reporting#192)
 #   - XREF: confirmations / designs / remediations already done on the same crossing
 #           (queried live by stream_crossing_id)
 #   - GPKG + KML for QGIS / Mergin field navigation
@@ -16,15 +16,15 @@
 # them: habitat km and the confirmation/design/remediation xref are left NA/FALSE.
 # Only query the DB for the rows that actually have an id.
 #
-# INPUT:  data/planning/pine/priority_guppy_p1.csv, PDF_PATH (Guppy inventory), DB :63333
-# OUTPUT: data/planning/pine/priority_pine_enriched.csv + .gpkg + .kml
+# INPUT:  data/pine/priority_guppy_p1.csv, PDF_PATH (Guppy inventory), DB :63333
+# OUTPUT: data/pine/priority_pine_enriched.csv + .gpkg + .kml
 # ---------------------------------------------------------------------------
 suppressMessages({library(DBI); library(RPostgres); library(sf); library(dplyr); library(stringr)})
 sf::sf_use_s2(FALSE)
 
 # read guppy_id AS CHARACTER — type-guessing makes it a double and "2006.500" -> "2006.5",
 # which silently breaks the notes join and corrupts the id in the outputs.
-pri <- readr::read_csv("data/planning/pine/priority_guppy_p1.csv", show_col_types = FALSE,
+pri <- readr::read_csv("data/pine/priority_guppy_p1.csv", show_col_types = FALSE,
                        col_types = readr::cols(guppy_id = readr::col_character()))
 
 # ---- Guppy Table 8 per-site notes (issue + recommendation) ------------------
@@ -78,7 +78,7 @@ out <- pri |>
   mutate(
     # NA (not 0) where bcfishpass has no row — an un-entered site is "unknown", not "no habitat"
     bt_hab_km        = round(bt_spawningrearing_belowupstrbarriers_km, 2),
-    grayling_modelled = FALSE,                        # bcfishpass has no grayling model (#192)
+    grayling_modelled = FALSE,                        # bcfishpass has no grayling model (NewGraphEnvironment/fish_passage_template_reporting#192)
     has_confirmation = stream_crossing_id %in% conf,
     has_design       = stream_crossing_id %in% des,
     has_remediation  = stream_crossing_id %in% rem
@@ -89,12 +89,12 @@ out <- pri |>
          has_confirmation, has_design, has_remediation, aggregated_crossings_id, guppy_notes) |>
   arrange(!is.na(stream_crossing_id), stream_crossing_id, guppy_id)
 
-readr::write_csv(out, "data/planning/pine/priority_pine_enriched.csv")
+readr::write_csv(out, "data/pine/priority_pine_enriched.csv")
 
 # ---- spatial exports for field nav ------------------------------------------
 sfpts <- st_as_sf(out, coords = c("lon", "lat"), crs = 4326, remove = FALSE)
-st_write(sfpts, "data/planning/pine/priority_pine.gpkg", "priority_guppy_p1", delete_dsn = TRUE, quiet = TRUE)
-st_write(sfpts, "data/planning/pine/priority_pine.kml", delete_dsn = TRUE, quiet = TRUE)
+st_write(sfpts, "data/pine/priority_pine.gpkg", "priority_guppy_p1", delete_dsn = TRUE, quiet = TRUE)
+st_write(sfpts, "data/pine/priority_pine.kml", delete_dsn = TRUE, quiet = TRUE)
 
 message(nrow(out), " priority sites enriched. confirmations/designs/remediations on any: ",
         sum(out$has_confirmation | out$has_design | out$has_remediation))

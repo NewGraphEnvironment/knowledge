@@ -1,5 +1,5 @@
-# scripts/04_planning/0155-rag-query.R — query the watershed-group ragnar store.
-# Usage: WSG_TARGET=pine QUERY="..." Rscript scripts/04_planning/0155-rag-query.R
+# scripts/0155-rag-query.R — query the watershed-group ragnar store.
+# Usage: WSG_TARGET=pine QUERY="..." Rscript scripts/0155-rag-query.R
 suppressMessages({library(ragnar); library(DBI)})
 wsg   <- tolower(if (nzchar(Sys.getenv("WSG_TARGET"))) Sys.getenv("WSG_TARGET") else "pine")
 query <- Sys.getenv("QUERY", "recommended remediation for fish passage barrier")

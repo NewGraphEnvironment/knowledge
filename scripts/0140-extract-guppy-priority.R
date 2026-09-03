@@ -1,4 +1,4 @@
-# scripts/04_planning/0140-extract-guppy-priority.R
+# scripts/0140-extract-guppy-priority.R
 # ---------------------------------------------------------------------------
 # Farm the priority table out of an inventory PDF and reconcile the report's own
 # crossing IDs back to PSCIS. Worked example: Guppy's "Peace River Stream Crossing
@@ -27,8 +27,8 @@
 #     Ridge) — the MURR ones are NOT ours until we pull that group.
 #
 # INPUT:  PDF_PATH (env; the Guppy inventory PDF, from Zotero/EcoCat 11786)
-#         data/planning/<wsg>/crossings.csv (from 0100)
-# OUTPUT: data/planning/<wsg>/priority_guppy_p1.csv
+#         data/<wsg>/crossings.csv (from 0100)
+# OUTPUT: data/<wsg>/priority_guppy_p1.csv
 #         columns `pscis_matched` + `coord_source` say whether PSCIS knows the site
 #         and where the coordinates came from.
 # ---------------------------------------------------------------------------
@@ -127,7 +127,7 @@ p1 <- p1_sf |>
 # external_crossing_reference a double, and as.character() then drops the trailing
 # zero ("2006.500" -> "2006.5"), so the join silently misses. 32 of 307 PINE refs
 # round-trip wrong this way — it is not an edge case.
-cr <- readr::read_csv(file.path("data/planning", wsg_low, "crossings.csv"), show_col_types = FALSE,
+cr <- readr::read_csv(file.path("data", wsg_low, "crossings.csv"), show_col_types = FALSE,
                       col_types = readr::cols(external_crossing_reference = readr::col_character()))
 
 pri <- p1 |>
@@ -155,7 +155,7 @@ pri <- p1 |>
          followup_priority, source) |>
   arrange(!is.na(stream_crossing_id), stream_crossing_id, guppy_id)
 
-readr::write_csv(pri, file.path("data/planning", wsg_low, "priority_guppy_p1.csv"))
+readr::write_csv(pri, file.path("data", wsg_low, "priority_guppy_p1.csv"))
 message(nrow(pri), " priority sites written for ", wsg,
         " (", sum(!pri$pscis_matched), " have NO PSCIS record — report coords only)")
 print(as.data.frame(pri[, c("stream_crossing_id","guppy_id","stream_name","structure_type",

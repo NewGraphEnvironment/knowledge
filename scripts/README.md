@@ -53,7 +53,7 @@ A report is reachable from more than one place; using only one axis misses repor
 ## 0100-pscis-acat-reports.R
 - Pulls the 4 PSCIS SVW layers (assessment / habitat confirmation / design proposal / remediation),
   spatially clipped to a watershed group (the raw layers carry no `watershed_group_code`)
-- Emits `data/planning/<wsg>/crossings.csv` (+ `reports.csv`, `pscis_<wsg>.gpkg`)
+- Emits `data/<wsg>/crossings.csv` (+ `reports.csv`, `pscis_<wsg>.gpkg`)
 - `crossings.csv` is the reconciliation target for 0161 — `external_crossing_reference` is the key
 
 ## 0110-gnis-collision-check.R
@@ -84,7 +84,7 @@ A report is reachable from more than one place; using only one axis misses repor
 
 ## 0154-corpus-tag.R
 - Content-tags every document in the store from **table captions, headings and opening text** —
-  not the title — and writes `data/planning/corpus_tags.csv`
+  not the title — and writes `data/corpus_tags.csv`
   (`report_id, watershed_group_code, tags, n_table_captions, farmed, n_priority_rows`)
 - Regex over stored text, no LLM pass; runs in seconds
 - Answers "what do we actually have?" without farming. Farming is expensive (~4M subagent tokens per
@@ -92,7 +92,7 @@ A report is reachable from more than one place; using only one axis misses repor
 - Joins the farm outcome, which is what surfaces **table-dense reports that were never farmed** —
   the class of miss that a title-keyword triage produces (EcoCat `53762` ranks 28 salmon streams by
   10 sensitivity indices and was skipped as "narrative")
-- Uses `data/planning/zotero_key_map.csv` to resolve legacy Zotero-attachment-key origins to
+- Uses `data/zotero_key_map.csv` to resolve legacy Zotero-attachment-key origins to
   reportIds; without it those documents look un-farmed even when they were farmed
 
 ## 0156-rag-dedup.R
@@ -106,7 +106,7 @@ A report is reachable from more than one place; using only one axis misses repor
 
 ## 0157-rag-sync.R
 - Push/pull ragnar stores to `s3://fresh-bc/rag/` with a `log.json` provenance manifest
-- `RAG_SYNC=push STORES=fraser Rscript scripts/04_planning/0157-rag-sync.R` — opt-in, never a build
+- `RAG_SYNC=push STORES=fraser Rscript scripts/0157-rag-sync.R` — opt-in, never a build
   side effect. `pull` verifies md5 against the log before trusting a file
 - The log records document/chunk counts, **embedding model + size**, per-group coverage,
   `docs_without_group`, bytes, md5, and the `head_sha` that produced it. A store built with a
@@ -131,10 +131,10 @@ A report is reachable from more than one place; using only one axis misses repor
 - Reconciles farmed rows against the **union of all groups' crossings** and stamps the true
   `watershed_group_code` — a report tagged to one group often covers several
 - `FARM_JSON=` accepts task `.output` files **or** workflow `journal.jsonl` (journals outlive outputs)
-- Emits `data/planning/priority_farmed_all.csv`
+- Emits `data/priority_farmed_all.csv`
 
 ## 0162-priority-spatialize.R
-- Writes `data/planning/rag_priorities.gpkg` (gitignored — a deliverable, not source):
+- Writes `data/rag_priorities.gpkg` (gitignored — a deliverable, not source):
   - `rag_priorities` — report-flagged **fish-passage crossing** standouts only
   - `rag_sites_all` — every placed site; filter by `table_source` for deactivation / riparian /
     habitat priorities
@@ -195,5 +195,5 @@ at 5432, so they could likely drop the tunnel dependency — untested, so not ch
   the **first** PDF, so the rag store holds one document's text per report; `0153` files all of them
   to Zotero. Two consequences: (a) the first PDF is not always the main report — report `52264`'s is
   `Appendix1`; (b) the FPCI form spreadsheets carrying per-site *no fish captured* comments (see
-  [#199](https://github.com/NewGraphEnvironment/fish_passage_template_reporting/issues/199)) and the
+  [NewGraphEnvironment/fish_passage_template_reporting#199](https://github.com/NewGraphEnvironment/fish_passage_template_reporting/issues/199)) and the
   inventory map sheets are **not** in the rag. Widening the harvest to all documents is open work.

@@ -1,6 +1,6 @@
-# scripts/04_planning/0210-fiss-xls-fetch.R
+# scripts/0210-fiss-xls-fetch.R
 # ---------------------------------------------------------------------------
-# FISS .xls harvest — STEP 2 of 3 (fetch). Issue #199.
+# FISS .xls harvest — STEP 2 of 3 (fetch). Issue NewGraphEnvironment/fish_passage_template_reporting#199.
 #
 # Download the .xls/.xlsx submissions listed in the manifest from 0200. This is
 # a DELIBERATE, OPT-IN step — it can pull dozens-to-hundreds of files per WSG, so
@@ -12,14 +12,14 @@
 #     with "Unsupported encryption scheme". LibreOffice opens them fine, so we
 #     convert those to .xlsx headless (`soffice --convert-to xlsx`) as a fallback.
 #     The parse step (0220) prefers the converted .xlsx when present.
-#   - Raw downloads live under data/planning/<wsg>/fiss_xls/ and are gitignored
+#   - Raw downloads live under data/<wsg>/fiss_xls/ and are gitignored
 #     (bulky, reproducible from the manifest) — see .gitignore entry.
 #
-# INPUT:  data/planning/<wsg>/fiss_xls_manifest.csv (from 0200).
+# INPUT:  data/<wsg>/fiss_xls_manifest.csv (from 0200).
 # ENABLE: set env FISS_FETCH=TRUE (else the script reports the count and stops).
-# OUTPUT: data/planning/<wsg>/fiss_xls/<report_id>__<file_name>   (raw)
-#         data/planning/<wsg>/fiss_xls/converted/<...>.xlsx        (encrypted -> xlsx)
-#         data/planning/<wsg>/fiss_xls_fetch_log.csv               (status per file)
+# OUTPUT: data/<wsg>/fiss_xls/<report_id>__<file_name>   (raw)
+#         data/<wsg>/fiss_xls/converted/<...>.xlsx        (encrypted -> xlsx)
+#         data/<wsg>/fiss_xls_fetch_log.csv               (status per file)
 #
 # NEXT:   0220-fiss-xls-parse-nfc.R
 # ---------------------------------------------------------------------------
@@ -32,7 +32,7 @@ suppressMessages({
 wsg_target <- if (nzchar(Sys.getenv("WSG_TARGET"))) Sys.getenv("WSG_TARGET") else
               if (exists("wsg_target")) wsg_target else "PINE"
 wsg_lower  <- tolower(wsg_target)
-out_dir    <- file.path("data/planning", wsg_lower)
+out_dir    <- file.path("data", wsg_lower)
 raw_dir    <- file.path(out_dir, "fiss_xls")
 conv_dir   <- file.path(raw_dir, "converted")
 manifest_path <- file.path(out_dir, "fiss_xls_manifest.csv")
@@ -52,7 +52,7 @@ if (!identical(toupper(Sys.getenv("FISS_FETCH")), "TRUE")) {
   message(sprintf(
     "OPT-IN STEP. Manifest lists %d .xls files across %d report pages for %s.\n%s",
     nrow(manifest), dplyr::n_distinct(manifest$report_id), wsg_target,
-    "Re-run with FISS_FETCH=TRUE to download (e.g. `FISS_FETCH=TRUE Rscript scripts/04_planning/0210-fiss-xls-fetch.R`)."))
+    "Re-run with FISS_FETCH=TRUE to download (e.g. `FISS_FETCH=TRUE Rscript scripts/0210-fiss-xls-fetch.R`)."))
   quit(save = "no", status = 0)
 }
 

@@ -1,4 +1,4 @@
-# scripts/04_planning/0100-pscis-acat-reports.R
+# scripts/0100-pscis-acat-reports.R
 # ---------------------------------------------------------------------------
 # Fieldwork-prep step 1: pull PSCIS (+ ACAT) records for a watershed group and
 # build (a) a `crossings` table and (b) a deduped `reports` table keyed on
@@ -17,7 +17,7 @@
 #     wrong for the crossing. Treat the harvested list as leads to verify, not gospel.
 #
 # INPUT:  wsg_target (watershed group code). Live bcfishpass DB via SSH tunnel :63333.
-# OUTPUT: data/planning/<wsg>/crossings.csv, reports.csv, pscis_<wsg>.gpkg
+# OUTPUT: data/<wsg>/crossings.csv, reports.csv, pscis_<wsg>.gpkg
 #
 # OPEN QUESTIONS:
 #   - Do we want ALL assessments or only barriers/potential-barriers in `crossings`?
@@ -37,7 +37,7 @@ sf::sf_use_s2(FALSE)
 wsg_target <- if (nzchar(Sys.getenv("WSG_TARGET"))) Sys.getenv("WSG_TARGET") else
               if (exists("wsg_target")) wsg_target else "PCEA"
 wsg_lower  <- tolower(wsg_target)
-out_dir    <- file.path("data/planning", wsg_lower)
+out_dir    <- file.path("data", wsg_lower)
 dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
 
 # ---- connection -------------------------------------------------------------

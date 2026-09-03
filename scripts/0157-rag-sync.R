@@ -1,11 +1,11 @@
-# scripts/04_planning/0157-rag-sync.R
+# scripts/0157-rag-sync.R
 # ---------------------------------------------------------------------------
 # Push/pull ragnar stores to s3://fresh-bc/rag/ with a log.json provenance
-# manifest. First implementation of the RAG half of #207.
+# manifest. First implementation of the RAG half of NewGraphEnvironment/fish_passage_template_reporting#207.
 #
 # WHY:
 #   Stores are gitignored, local-only, and slow to rebuild. The M1 needs them in
-#   the field (#208) and must PULL a built store rather than rebuild one — a
+#   the field (NewGraphEnvironment/fish_passage_template_reporting#208) and must PULL a built store rather than rebuild one — a
 #   store built against a different embedding model is not comparable, so a
 #   silent local rebuild produces an artifact that looks fine and answers
 #   differently. The log is what makes the artifact trustworthy rather than
@@ -27,8 +27,8 @@
 #   objects; the existing geobuild creds (AWS_PROFILE=airvine) can PUT today.
 #
 # OPT-IN by design (same pattern as FISS_FETCH): never syncs as a build side effect.
-#   RAG_SYNC=push STORES=fraser Rscript scripts/04_planning/0157-rag-sync.R
-#   RAG_SYNC=pull STORES=fraser,peace Rscript scripts/04_planning/0157-rag-sync.R
+#   RAG_SYNC=push STORES=fraser Rscript scripts/0157-rag-sync.R
+#   RAG_SYNC=pull STORES=fraser,peace Rscript scripts/0157-rag-sync.R
 #   DRY_RUN=1 to print the plan only.
 # ---------------------------------------------------------------------------
 suppressMessages({library(DBI); library(jsonlite); library(glue)})
@@ -88,9 +88,9 @@ if (mode == "push") {
     date_completed = format(as.POSIXct(Sys.time(), tz = "UTC"), "%Y-%m-%dT%H:%M:%SZ"),
     repo = "NewGraphEnvironment/fish_passage_template_reporting",
     branch = branch, head_sha = head_sha,
-    generating_script = "scripts/04_planning/0157-rag-sync.R",
-    built_by = c("scripts/04_planning/0152-rag-add-harvest.R",
-                 "scripts/04_planning/0151-rag-build-from-zotero.R"),
+    generating_script = "scripts/0157-rag-sync.R",
+    built_by = c("scripts/0152-rag-add-harvest.R",
+                 "scripts/0151-rag-build-from-zotero.R"),
     chunking = "ragnar defaults (ragnar_store_ingest)",
     stores = entries
   )
