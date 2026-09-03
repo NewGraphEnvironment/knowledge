@@ -30,7 +30,10 @@ suppressMessages({library(DBI); library(dplyr); library(stringr); library(readr)
 
 store_name <- if (nzchar(Sys.getenv("STORE"))) Sys.getenv("STORE") else "fraser"
 store_path <- file.path("data", "rag", paste0(store_name, ".duckdb"))
-stopifnot("store not found" = file.exists(store_path))
+# The store comes from s3://fresh-bc/rag/ (cred); pull it once rather than rebuilding:
+#   Rscript -e 'cred::crd_store_connect("<store>", dir = "data/rag")'
+if (!file.exists(store_path)) stop("Store not found locally: ", store_path,
+  "\n  Pull it with cred::crd_store_connect(\"", store_name, "\", dir = \"data/rag\") -- do not rebuild.")
 
 con <- dbConnect(duckdb::duckdb(), store_path, read_only = TRUE)
 docs <- dbGetQuery(con, "SELECT origin, text FROM documents")
@@ -84,7 +87,7 @@ out <- tibble(
 # run mislabelled the Masse/Triton McGregor reports as "never farmed".
 # data/zotero_key_map.csv maps file -> reportId via attachment->parent
 # (blank reportId = a genuine non-EcoCat reference, not a duplicate).
-kmf <- file.path("data", "planning", "zotero_key_map.csv")
+kmf <- file.path("data", "zotero_key_map.csv")
 if (file.exists(kmf)) {
   km <- read_csv(kmf, show_col_types = FALSE) %>%
     filter(!is.na(report_id) & report_id != "") %>%
@@ -98,7 +101,7 @@ if (file.exists(kmf)) {
 }
 
 # ---- join the farm outcome so "table-dense but never farmed" is visible ----
-pf <- file.path("data", "planning", "priority_farmed_all.csv")
+pf <- file.path("data", "priority_farmed_all.csv")
 if (file.exists(pf)) {
   farmed <- read_csv(pf, show_col_types = FALSE) %>%
     mutate(report_id = as.character(report_id)) %>%
@@ -110,7 +113,7 @@ if (file.exists(pf)) {
 }
 
 out <- out %>% arrange(desc(n_table_captions))
-write_csv(out, file.path("data", "planning", "corpus_tags.csv"))
+write_csv(out, file.path("data", "corpus_tags.csv"))
 
 message("tagged ", nrow(out), " documents -> data/corpus_tags.csv\n")
 message("tag frequency:")

@@ -27,7 +27,7 @@ suppressMessages({library(sf); library(dplyr); library(stringr); library(readr);
 sf_use_s2(FALSE)
 FRASER <- c("BOWR","MCGR","COTR","WILL","UFRA","TABR","FRAN","LCHL","NECR")
 
-f <- file.path("data","planning","priority_farmed_all.csv")
+f <- file.path("data", "priority_farmed_all.csv")
 stopifnot("run 0161 first" = file.exists(f))
 d <- read_csv(f, show_col_types = FALSE) %>% mutate(.row = row_number())
 num <- function(x) suppressWarnings(as.numeric(x))
@@ -169,12 +169,12 @@ if (!is.null(conn)) {
   g <- g[inside, ]
 } else message("(no DB — skipping union clip)")
 
-gpkg <- file.path("data","planning","rag_priorities.gpkg")
+gpkg <- file.path("data", "rag_priorities.gpkg")
 # standouts = report-flagged (rank 1-2) AND in the fish-passage crossing domain
 stand <- g[!is.na(g$priority_rank) & g$priority_rank <= 2 & is_crossing_domain(g$table_source), ]
 st_write(stand, gpkg, layer = "rag_priorities", delete_dsn = TRUE, quiet = TRUE)
 st_write(g,     gpkg, layer = "rag_sites_all",  delete_layer = TRUE, quiet = TRUE)  # everything placed
-st_write(stand, file.path("data","planning","rag_priorities.kml"), delete_dsn = TRUE, quiet = TRUE)
+st_write(stand, file.path("data", "rag_priorities.kml"), delete_dsn = TRUE, quiet = TRUE)
 
 message(sprintf("\n== rag_priorities (STANDOUTS): %d points | rag_sites_all: %d | unplaced rows: %d ==",
                 nrow(stand), nrow(g), n_unplaced))

@@ -20,11 +20,11 @@ wf_report_harvest.js / wf_bowr_mcgr_harvest.js   harvest reports  -> <extent>__<
 wf_farm_priority.js                          farm priority/crossing tables out of the PDFs
 0161  reconcile farmed rows -> PSCIS, stamp watershed_group_code
 0162  spatialize -> rag_priorities.gpkg
-0155  query the rag store
+0150  query the rag store            ACTION=query STORE=fraser QUERY="..."
 
 0154  content-tag the corpus (any time after 0152)
-0156  dedup the store        (before publishing/syncing it)
-0157  push/pull stores to s3://fresh-bc/rag/ with log.json
+0156  dedup the store        (before pushing it)
+0150  push the store         ACTION=push STORE=fraser CONFIRM=TRUE  <- after ANY local write
 
 --- FISS .xls track (independent of the report/PDF flow above; opt-in) ---
 0200  enumerate the data-only .xls submissions per group   WSG_TARGET=PINE
@@ -61,6 +61,8 @@ A report is reachable from more than one place; using only one axis misses repor
 - Run BEFORE any name-based report search; "Boulder Creek" is in 12 groups
 
 ## wf_report_harvest.js / wf_bowr_mcgr_harvest.js
+- `wf_peace_report_harvest.js` is the region-specific ancestor of `wf_report_harvest.js`, kept for the
+  record; `wf_keyword_backfill.js` re-harvests by keyword for groups whose first pass ran thin
 - Multi-agent harvest: geo-filtered EcoCat search + batched resolve/download/verify
 - `wf_report_harvest.js` takes one group; `wf_bowr_mcgr_harvest.js` takes several at once
 - Writes `<EXTENT>__<reportId>.pdf` into a harvest dir
@@ -76,7 +78,7 @@ A report is reachable from more than one place; using only one axis misses repor
 - `python3 0153-reports-to-zotero.py --from-store data/rag/fraser.duckdb` (or `--reports COTR:137,157`)
 - Idempotent: reports already in the collection are skipped; Zotero dedups files by md5
 - **Never skip this step.** The rag store holds only extracted text and the harvest dir is in `/tmp`;
-  Zotero is what `0151` rebuilds from. A group harvested + ingested but not filed silently vanishes
+  Zotero is what a store rebuild (`0150-store.R`) reads. A group harvested + ingested but not filed silently vanishes
   on the next rebuild or on another machine. (Learned the hard way — COTR/FRAN/LCHL/NECR were
   ingested in July 2026 and had to be re-downloaded from EcoCat to be filed.)
 - Reads the store's `EXTENT__reportId.pdf` origins, so reportIds are recoverable even after the
@@ -97,30 +99,30 @@ A report is reachable from more than one place; using only one axis misses repor
 
 ## 0156-rag-dedup.R
 - Removes duplicate documents before a store is published or synced. The same report can enter under
-  two names — `EXTENT__<reportId>.pdf` (harvest) and `<ATTACHMENT_KEY>.pdf` (a `0151` Zotero build) —
+  two names — `EXTENT__<reportId>.pdf` (harvest) and `<ATTACHMENT_KEY>.pdf` (a Zotero build) —
   and a duplicated report gets **two chances at every retrieval**, biasing search
 - Keeps the harvest-named copy (it carries the watershed group)
 - Two store internals it has to work around, both recorded in the script: `embeddings` has an **HNSW
   index** so a connection must `INSTALL/LOAD vss` before `DELETE`, and **`chunks` is a VIEW** so
   deletes must target `documents` + `embeddings`
 
-## 0157-rag-sync.R
-- Push/pull ragnar stores to `s3://fresh-bc/rag/` with a `log.json` provenance manifest
-- `RAG_SYNC=push STORES=fraser Rscript scripts/0157-rag-sync.R` — opt-in, never a build
-  side effect. `pull` verifies md5 against the log before trusting a file
-- The log records document/chunk counts, **embedding model + size**, per-group coverage,
-  `docs_without_group`, bytes, md5, and the `head_sha` that produced it. A store built with a
-  different embedding model is not comparable, so a machine that silently rebuilds instead of pulling
-  gets an artifact that looks fine and answers differently
-- Writing needs no prefix provisioning (S3 prefixes are key namespaces). **Field read access needs a
-  read-only IAM key scoped to `rag/*`** — rtj#194. The `rag/` prefix stays **private permanently**:
-  these stores accumulate unpublished reports, client work, at-risk-species and
-  culturally-important-site locations, and FN data-sovereignty-relevant content
-
-## 0150 / 0151 / 0155 — rag store build + query
-- `0150` builds from local PDFs; **`0151` builds from Zotero** (portable/reproducible — prefer it)
-- `0155` queries: `WSG_TARGET=fraser QUERY="..." TOPK=5 Rscript 0155-rag-query.R`
+## 0150-store.R — build / query / push through `cred`
+- The ragnar stores live in `s3://fresh-bc/rag/` with a `log.json` provenance manifest;
+  `.Rprofile` points `cred` at it. Pull: `Rscript -e 'cred::crd_store_connect("fraser", dir = "data/rag")'`
+  (md5-verified against the manifest). Push: `ACTION=push STORE=fraser CONFIRM=TRUE Rscript scripts/0150-store.R`
+- **Push after every local write** (`0152` ingest, `0156` dedup, a rebuild). The next verified
+  connect replaces a local file whose md5 no longer matches the manifest with the bucket copy —
+  an unpushed ingest is simply gone
+- `ACTION=build STORE=<name> COLLECTIONS="<zotero collection>[,...]"` builds a **citation-key-named**
+  store from the local `~/Zotero` (no API key). That naming carries no watershed group and no
+  reportId; it needs `data/zotero_key_map.csv` to join the farm. Group-scoped work goes through the
+  harvest (`wf_report_harvest.js` → `0152`), which names documents `<EXTENT>__<reportId>.pdf`
+- The manifest records document/chunk counts, **embedding model + size**, bytes, md5 and the
+  `head_sha` that produced it. A store built with a different embedding model is not comparable, so
+  pull rather than rebuild. The `rag/` prefix stays **private permanently**: these stores accumulate
+  unpublished reports, at-risk-species and culturally-important-site locations
 - Semantic search is weak on proper nouns — for a specific creek name, grep the PDFs
+- Replaced `0150`/`0151` (build), `0155` (query) and `0157` (sync) in September 2026; `cred` 0.3.0
 
 ## wf_farm_priority.js
 - One agent per report PDF; lifts priority / crossing / habitat-reach tables into structured rows
@@ -134,7 +136,7 @@ A report is reachable from more than one place; using only one axis misses repor
 - Emits `data/priority_farmed_all.csv`
 
 ## 0162-priority-spatialize.R
-- Writes `data/rag_priorities.gpkg` (gitignored — a deliverable, not source):
+- Writes `data/rag_priorities.gpkg` (tracked — a small deliverable):
   - `rag_priorities` — report-flagged **fish-passage crossing** standouts only
   - `rag_sites_all` — every placed site; filter by `table_source` for deactivation / riparian /
     habitat priorities

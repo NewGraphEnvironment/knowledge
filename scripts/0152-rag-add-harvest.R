@@ -9,10 +9,10 @@
 #     can be reached from >1 watershed group (study areas overlap) or already be
 #     in the store under a different extent (e.g. BOWR__214 vs WILL__214) or via
 #     a Zotero-key rebuild. reportId is the stable identity -> dedup on it.
-#   - Zotero-key-named docs (0151 rebuild) can't be mapped to a reportId from the
+#   - Zotero-key-named docs (0150-store.R build) can't be mapped to a reportId from the
 #     filename, so a report present ONLY under a Zotero key may slip through as a
 #     near-dup. Accepted: retrieval is unharmed; the canonical fix is to refile
-#     to Zotero + rebuild via 0151. Flagged, not solved here.
+#     to Zotero + rebuild via 0150-store.R. Flagged, not solved here.
 #   - ragnar stores the extracted text IN the store; origin is just provenance,
 #     so ingesting from a scratchpad harvest dir is fine (matches UFRA/WILL/TABR).
 #
@@ -27,7 +27,10 @@ store_name  <- if (nzchar(Sys.getenv("STORE"))) Sys.getenv("STORE") else "fraser
 harvest_dir <- Sys.getenv("HARVEST_DIR")
 stopifnot("HARVEST_DIR must be set" = nzchar(harvest_dir), dir.exists(harvest_dir))
 store_path  <- file.path("data", "rag", paste0(store_name, ".duckdb"))
-stopifnot("store must exist" = file.exists(store_path))
+# The store comes from s3://fresh-bc/rag/ (cred); pull it once rather than rebuilding:
+#   Rscript -e 'cred::crd_store_connect("<store>", dir = "data/rag")'
+if (!file.exists(store_path)) stop("Store not found locally: ", store_path,
+  "\n  Pull it with cred::crd_store_connect(\"", store_name, "\", dir = \"data/rag\") -- do not rebuild.")
 
 rid_of <- function(x) str_remove(str_extract(basename(x), "__[0-9]+[.]pdf$") , "^__") |> str_remove("[.]pdf$")
 
@@ -64,3 +67,6 @@ n_chunks<- dbGetQuery(store@con, "SELECT count(*) n FROM embeddings")$n
 DBI::dbDisconnect(store@con)
 
 message(sprintf("\n== %s.duckdb == docs %d -> %d (+%d) | chunks %d", store_name, n_before, n_after, n_after - n_before, n_chunks))
+
+message("Ingested locally only. Push before anything opens this store with VERIFY=TRUE:\n",
+        "  ACTION=push STORE=", store_name, " CONFIRM=TRUE Rscript scripts/0150-store.R")

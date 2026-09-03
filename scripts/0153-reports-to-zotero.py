@@ -8,7 +8,7 @@ with ALL of the report's documents attached.
 WHY THIS EXISTS (pipeline step, not a one-off):
   The rag store holds extracted TEXT; the PDFs live in an ephemeral harvest dir.
   Zotero is the durable, synced, canonical home for the corpus and is what
-  0151-rag-build-from-zotero.R rebuilds from. A group that is harvested and
+  0150-store.R (ACTION=build) rebuilds from. A group that is harvested and
   ingested but never filed cannot be rebuilt -- it silently disappears on the
   next rebuild or on another machine. Run this after 0152 (ingest), always.
 
@@ -28,7 +28,7 @@ dedups attachments by md5, so re-runs are cheap.
 INPUT   REPORTS=COTR:48,FRAN:80,...  -- or --  --from-store data/rag/fraser.duckdb
         (--from-store reads `EXTENT__reportId.pdf` origins straight out of a
          ragnar store, which is how we recover ids after a harvest dir is gone)
-        ZOTERO API key at ~/.zotero-api-key ; group 4733734
+        ZOTERO API key: ZOTERO_API_KEY env or ~/.config/newgraph/zotero-api-key ; group 4733734
 OUTPUT  items + attachments in Zotero; a per-report status line; nothing local.
 ---------------------------------------------------------------------------
 """
@@ -46,7 +46,10 @@ COLLECTIONS = {
     "NECR": "977GE58E",
 }
 DOC_RE = re.compile(r'/pub/acat/documents/r\d+/[^"\']+?\.(?:pdf|zip|xls|xlsx|doc|docx|csv|txt)', re.I)
-API = open(os.path.expanduser("~/.zotero-api-key")).read().strip()
+# Same resolution as the R scripts: env, then the materialized file (see CLAUDE.md).
+API = os.environ.get("ZOTERO_API_KEY") or open(os.path.expanduser("~/.config/newgraph/zotero-api-key")).read().strip()
+if not API:
+    sys.exit("Zotero API key is empty: set ZOTERO_API_KEY or re-materialize ~/.config/newgraph/zotero-api-key")
 
 # ---- document selection policy -------------------------------------------
 # An EcoCat report is 3-19 documents (main report + appendices + scanned 1:20k map

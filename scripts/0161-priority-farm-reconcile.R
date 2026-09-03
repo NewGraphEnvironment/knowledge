@@ -125,7 +125,7 @@ out <- rows %>% mutate(
   pscis_has_confirmation = get("has_confirmation")
 )
 
-out_f <- file.path("data","planning","priority_farmed_all.csv")
+out_f <- file.path("data", "priority_farmed_all.csv")
 write_csv(out, out_f)
 message("\n== wrote ", out_f, " (", nrow(out), " rows) ==")
 message("by watershed_group_code:"); print(as.data.frame(count(out, watershed_group_code, sort=TRUE)), row.names=FALSE)

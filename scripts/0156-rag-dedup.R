@@ -5,7 +5,7 @@
 # WHY:
 #   A store can be fed by two paths that name the same report differently:
 #     * the harvest  -> EXTENT__<reportId>.pdf   (carries watershed-group attribution)
-#     * a Zotero build (0151) -> <ATTACHMENT_KEY>.pdf  (no group, no reportId)
+#     * a Zotero build (0150-store.R ACTION=build) -> <ATTACHMENT_KEY>.pdf  (no group, no reportId)
 #   fraser.duckdb ended up with 21 EcoCat reports ingested under BOTH schemes —
 #   304 documents but only 283 unique. Duplicates are not harmless: a duplicated
 #   report gets two chances at every retrieval, quietly biasing search toward
@@ -28,7 +28,10 @@ suppressMessages({library(DBI); library(ragnar); library(dplyr); library(stringr
 
 store_name <- if (nzchar(Sys.getenv("STORE"))) Sys.getenv("STORE") else "fraser"
 path <- file.path("data", "rag", paste0(store_name, ".duckdb"))
-stopifnot("store not found" = file.exists(path))
+# The store comes from s3://fresh-bc/rag/ (cred); pull it rather than rebuilding:
+#   Rscript -e 'cred::crd_store_connect("<store>", dir = "data/rag")'
+if (!file.exists(path)) stop("Store not found locally: ", path,
+  "\n  Pull it with cred::crd_store_connect(\"", store_name, "\", dir = \"data/rag\") -- do not rebuild.")
 dry <- nzchar(Sys.getenv("DRY_RUN"))
 
 # ---- work out reportId per document ----------------------------------------
@@ -42,7 +45,7 @@ d$rid  <- ifelse(str_detect(d$base, "__[0-9]+\\.pdf$"),
                  str_replace(d$base, "^[A-Za-z]+__([0-9]+)\\.pdf$", "\\1"), NA_character_)
 d$harvest <- str_detect(d$base, "__")
 
-kmf <- file.path("data", "planning", "zotero_key_map.csv")
+kmf <- file.path("data", "zotero_key_map.csv")
 if (file.exists(kmf)) {
   km <- read_csv(kmf, show_col_types = FALSE) %>% filter(!is.na(report_id) & report_id != "")
   i <- match(d$base, km$file)
@@ -106,6 +109,9 @@ DBI::dbDisconnect(con, shutdown = TRUE)
 #   * any plain connection must `INSTALL vss; LOAD vss;` first or the HNSW index on
 #     `embeddings` blocks modification entirely.
 # The space saving does not justify more effort; correctness is what matters for a
-# synced artifact. If the file size ever does matter, rebuild from Zotero (0151).
+# synced artifact. If the file size ever does matter, rebuild from Zotero (ACTION=build in 0150-store.R).
 message(sprintf("store is %.0f MB (not compacted — see note in this script)", file.size(path) / 1048576))
 message("done. backup retained at ", backup)
+
+message("Deduped locally only. Push before anything opens this store with VERIFY=TRUE:\n",
+        "  ACTION=push STORE=", store_name, " CONFIRM=TRUE Rscript scripts/0150-store.R")
