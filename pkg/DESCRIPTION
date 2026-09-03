@@ -1,0 +1,28 @@
+Package: knowledge
+Title: Watershed-Group Fisheries Background
+Version: 0.1.0
+Authors@R: c(
+    person("Allan", "Irvine", , "al@newgraphenvironment.com", role = c("aut", "cre")),
+    person("New Graph Environment Ltd.", role = "cph"))
+Description: Functions for assembling fisheries background per watershed group:
+    pulling provincial PSCIS crossing layers clipped to a group, deriving the
+    past-report and crossing tables from them, and checking GNIS stream names
+    for cross-group collisions before searching by name.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.3
+Imports:
+    chk,
+    DBI,
+    dplyr,
+    lubridate,
+    rlang,
+    sf,
+    stringr,
+    tibble
+Suggests:
+    duckdb,
+    RPostgres,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3

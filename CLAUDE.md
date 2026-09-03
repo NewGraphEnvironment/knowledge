@@ -65,6 +65,14 @@ Recon reports number reaches 1, 2, 3; those are not crossing ids.
 
 They are the stale submitted versions. They reach Zotero from the report repos.
 
+### Zotero access is local, except for filing
+
+Store builds read `~/Zotero/zotero.sqlite` read-only, so they need a synced Zotero data directory
+and no key. `0153` writes to the group library through the Web API and resolves its key from
+`ZOTERO_API_KEY`, then `~/.config/newgraph/zotero-api-key` (0600, materialized per machine from
+1Password — see cyclops #9/#10). It exits on an empty file, because a truncated write there
+otherwise reads as a JSON parse error three calls later.
+
 ### Database access
 
 `0100`, `0110`, `0160`, `0162`, `0200`, `0220` connect on the bcfishpass tunnel (`localhost:63333`,

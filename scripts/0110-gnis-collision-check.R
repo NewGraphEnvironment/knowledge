@@ -3,16 +3,16 @@
 # QA gate BEFORE sweeping reports by GNIS stream name: GNIS names repeat across BC
 # (e.g. "Boulder Creek" is in 12 watershed groups). A name search will drag in
 # reports about a same-named stream in the wrong watershed. This flags which of a
-# watershed group's stream names are PINE-unique (safe to name-search) vs ambiguous
+# watershed group's stream names are group-unique (safe to name-search) vs ambiguous
 # (must add a geographic qualifier + verify each hit's coordinates fall in-WSG).
 #
 # Precedent: the "Clearwater" collision (Marjorie/Clearwater LAKE = Cariboo, not the
 # PCEA "Trib to Clearwater Creek" near Mackenzie).
 #
 # INPUT:  data/<wsg>/gnis_seed.csv (from the PSCIS pull), live DB :63333
-# OUTPUT: data/<wsg>/gnis_seed_ambiguity.csv (name, n_wsg, wsgs, pine_only)
+# OUTPUT: data/<wsg>/gnis_seed_ambiguity.csv (name, n_wsg, wsgs, wsg_only)
 # ---------------------------------------------------------------------------
-suppressMessages({library(DBI); library(RPostgres); library(dplyr)})
+suppressMessages({library(DBI); library(RPostgres)})
 
 wsg  <- toupper(if (nzchar(Sys.getenv("WSG_TARGET"))) Sys.getenv("WSG_TARGET") else "PINE")
 seed_csv <- file.path("data", tolower(wsg), "gnis_seed.csv")
@@ -27,17 +27,12 @@ tbls <- DBI::dbGetQuery(conn, "
 tbl <- if (any(tbls$table_schema=="bcfishpass" & tbls$table_name=="streams")) "bcfishpass.streams" else
        paste(tbls$table_schema[1], tbls$table_name[1], sep=".")
 
+pkgload::load_all("pkg", quiet = TRUE)
 seed <- readr::read_csv(seed_csv, show_col_types=FALSE)$gnis_base
-seed <- seed[grepl("River|Creek|Lake", seed)]
-inlist <- paste(DBI::dbQuoteString(conn, seed), collapse=",")
-amb <- DBI::dbGetQuery(conn, sprintf(
-  "SELECT gnis_name, count(DISTINCT watershed_group_code) AS n_wsg,
-          string_agg(DISTINCT watershed_group_code, ',' ORDER BY watershed_group_code) AS wsgs
-   FROM %s WHERE gnis_name IN (%s) GROUP BY gnis_name ORDER BY n_wsg DESC, gnis_name", tbl, inlist)) |>
-  mutate(wsg_only = wsgs == wsg)
+amb  <- knw_gnis_collisions(conn, seed, wsg, table = tbl)
 readr::write_csv(amb, file.path("data", tolower(wsg), "gnis_seed_ambiguity.csv"))
 
 message(wsg, ": ", sum(amb$n_wsg==1), " unique names (safe), ",
         sum(amb$n_wsg>1), " ambiguous (verify location), ",
-        length(setdiff(seed, amb$gnis_name)), " not in FWA (manual).")
+        length(attr(amb, "not_found")), " not in FWA (manual).")
 DBI::dbDisconnect(conn)
