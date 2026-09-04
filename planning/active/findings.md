@@ -298,3 +298,138 @@ unreachable to it — including `parsnip`, which holds 28 items, more than `pars
 
 **Created:** `upper peace - UPCE`, key `WKUMAXBK`, parent `5USQ8DRG` (`mackenzie`), to the
 `<name> - <CODE>` convention. Verified by re-reading it back from the API.
+
+---
+
+# Phase 2 — cold-path store pull (2026-09-04)
+
+## The criterion is met
+
+`data/rag/peace.duckdb` moved aside to force the branch, then
+`ACTION=query STORE=peace QUERY="..." Rscript scripts/0150-store.R`:
+
+```
+Downloaded peace (117 docs, 13632 chunks, embedded with nomic-embed-text).
+```
+
+**27 seconds**, 21:27:37 → 21:28:04 UTC. Integrity verified three ways rather than trusting the
+message:
+
+```
+pulled   970dc5caa87d3681728099fc93375d23
+aside    970dc5caa87d3681728099fc93375d23
+manifest 970dc5caa87d3681728099fc93375d23
+```
+
+So the M1 **pulls and md5-verifies rather than rebuilding** — acceptance criterion 2 of #4. A
+rebuild would have taken minutes through Ollama and produced different bytes. The aside copy was
+then removed as redundant.
+
+Worth stating plainly: this could not have been observed without forcing it. All three local
+stores match the manifest, so `0150-store.R:87` sets `verify <- FALSE` and the connect is a warm
+no-op on every ordinary run. The cold path is the one every new machine takes and the only one
+that was untested.
+
+## But `crd_search` is broken — `0150 ACTION=query` cannot complete
+
+The pull succeeded and the search immediately failed:
+
+```
+Error in withCallingHandlers(...) : 'list' object cannot be coerced to type 'double'
+Calls: crd_search -> .crd_retrieval_score
+```
+
+Reproduced in three lines, and the cause is not what the traceback first suggests:
+
+```r
+s   <- cred::crd_store_connect("peace", dir = "data/rag", verify = FALSE)
+res <- ragnar::ragnar_retrieve(s, "fish passage culvert barrier", top_k = 3)
+# cols: origin, doc_id, chunk_id, start, end, cosine_distance, bm25, context, text
+#   chunk_id         class=list  is.list=TRUE
+#   cosine_distance  class=list  is.list=TRUE
+#   bm25             class=list  is.list=TRUE
+```
+
+There is **no `metric_value` column at all**, so `cred:::.crd_retrieval_score` (`cred/R/store.R:286`)
+falls past its first branch to the `cand` loop, and line 303 calls `as.numeric()` on a **list**
+column. `suppressWarnings()` around it does not help — coercing a list is an *error*, not a
+warning. `chunk_id` is a list column too, so `as.integer(res$chunk_id)` at `store.R:389` would
+throw the same way if execution reached it.
+
+ragnar 0.3.0 / cred 0.3.0, both current. The fix is small (flatten before coercion) but it lives
+in **cred**, a separate public package, so it is surfaced rather than patched here.
+
+**Scope of the damage:** `crd_search` is the only casualty. The pipeline's data path does not use
+it — `0152` ingest, `0154` tag, `0156` dedup, the farm, `0161` and `0162` all avoid it. So this
+does not block #4; it breaks the documented "0150 query the rag store" step in the run order.
+
+---
+
+# Phase 3 — 0100 for UPCE: the group has no PSCIS data at all (2026-09-04)
+
+`WSG_TARGET=UPCE Rscript scripts/0100-pscis-acat-reports.R` completed in 3 seconds, exit 0:
+
+```
+== UPCE summary ==
+reports (distinct ecocat_url rows): 0
+crossings (assessments): 0
+```
+
+## Verified before being believed
+
+A probe returning nothing is usually a broken probe, so this was checked against a positive
+control rather than reported from the zero:
+
+| group | PSCIS assessments |
+|---|---|
+| PINE | 307 |
+| BOWR | 152 |
+| PCEA | 22 |
+| PARA | 15 |
+| **UPCE** | **0** |
+
+The probe works. All four PSCIS layers are empty for UPCE:
+
+```
+pscis_assessment_svw             0
+pscis_habitat_confirmation_svw   0
+pscis_design_proposal_svw        0
+pscis_remediation_svw            0
+```
+
+**No fish-passage field assessment has ever been done in Upper Peace.**
+
+## But the group is not data-poor — it is the richest on the FISS axis
+
+| group | FISS observations | with `acat_report_url` | distinct reports |
+|---|---|---|---|
+| **UPCE** | **18,383** | **17,200** | **52** |
+| PINE | 1,727 | 530 | 78 |
+| PCEA | 826 | 277 | 16 |
+
+And `bcfishpass.crossings` holds **3,328 modelled crossings** in UPCE. The crossings exist in the
+model; they have simply never been assessed.
+
+So the harvest is viable — 52 reports on the FISS axis alone, which `scripts/README.md:38-41`
+calls the biggest source, before the GNIS, keyword and `[PSCISnn]` axes are tried.
+
+## The structural finding
+
+**The pipeline assumes the group has prior PSCIS assessments, and nothing says so.**
+
+`0161` reconciles every farmed row against `data/<wsg>/crossings.csv`, which `0100` builds from
+`pscis_assessment_svw`. With zero assessments that file is **never written at all** — `0100`
+emitted only a 61-byte header-only `reports.csv` and no `crossings.csv`, no `pscis_upce.gpkg`,
+and still exited 0. Downstream, `0161` would find no crossings file for the group and every
+farmed row would stay `unmatched`, silently, on top of the B3 hardcoded-list problem.
+
+Consequences for the field layer: `coord_source` can only ever be `report-utm` or
+`stream-snap`/`stream-snap-parent` for UPCE — never `pscis`, which is the only surveyed value.
+
+The obvious candidate anchor is `bcfishpass.crossings` (3,328 rows, carrying
+`watershed_group_code` directly). That would let an unassessed group reconcile against modelled
+crossing locations instead of surveyed ones — but it is a design change to `0161`, not a fix,
+and the provenance distinction between surveyed and modelled must survive into `coord_source`.
+
+This is the class of defect #4 exists to surface: invisible on every group harvested so far,
+because all twelve had prior PSCIS assessments.

@@ -1,8 +1,10 @@
 # Task: Validate the fieldwork-prep pipeline end-to-end on an unharvested group (UPCE) from the M1 (#4)
 
-## Status: Phase 1 complete 2026-09-04 — preflight passed, B1 and B2 groundwork done
+## Status: Phases 1-2 complete 2026-09-04
 
-Phase 1 (preflight) is done and B1 is fixed. Next up is Phase 2, the cold-path store pull.
+Preflight passed and B1 is fixed. The cold-path store pull is proven (27s, md5-verified
+three ways). Open: `crd_search` is broken in cred 0.3.0 (list columns) so `0150 ACTION=query`
+cannot complete — surfaced, not worked around. Next: Phase 3, `0100` for UPCE.
 
 ## Problem
 
@@ -42,11 +44,11 @@ invisible everywhere else. If nothing breaks, the docs are proven — also a rea
 
 ## Phase 2 — Cold-path store pull (the sync claim, currently untestable)
 
-- [ ] Move `data/rag/peace.duckdb` aside (md5 `970dc5caa87d3681728099fc93375d23`).
-- [ ] `ACTION=query STORE=peace VERIFY=TRUE Rscript scripts/0150-store.R`.
-- [ ] Assert it **downloaded**: pulled md5 == manifest md5 == the moved-aside copy,
+- [x] Move `data/rag/peace.duckdb` aside (md5 `970dc5caa87d3681728099fc93375d23`).
+- [x] `ACTION=query STORE=peace VERIFY=TRUE Rscript scripts/0150-store.R`.
+- [x] Assert it **downloaded**: pulled md5 == manifest md5 == the moved-aside copy,
       byte-identical, and no embedding pass ran. Then restore/remove the aside copy.
-- [ ] Record why the cold path had to be forced — see findings.md "the warm path proves nothing".
+- [x] Record why the cold path had to be forced — see findings.md "the warm path proves nothing".
 
 ## Phase 3 — 0100 + 0110 for UPCE (first real outputs)
 
