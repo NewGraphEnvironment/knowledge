@@ -1,10 +1,25 @@
 # Task: Validate the fieldwork-prep pipeline end-to-end on an unharvested group (UPCE) from the M1 (#4)
 
-## Status: Phases 1-2 complete 2026-09-04
+## Status: PARKED 2026-09-04 after Phase 3 — findings banked, run not completed
 
-Preflight passed and B1 is fixed. The cold-path store pull is proven (27s, md5-verified
-three ways). Open: `crd_search` is broken in cred 0.3.0 (list columns) so `0150 ACTION=query`
-cannot complete — surfaced, not worked around. Next: Phase 3, `0100` for UPCE.
+Phases 1-3 are done and their findings are the deliverable. Phases 4-8 (harvest, ingest, Zotero
+filing, farm, reconcile, spatialize) are **not started** and are parked deliberately.
+
+**Why parked here.** Phase 3 found UPCE has zero rows in all four PSCIS layers, and its 18,383
+FISS observations are mainstem Peace / reservoir sampling around the dams — the wrong scale for
+crossing work. So the remaining half of the run is the expensive, open-ended part (a report
+harvest plus an LLM farm) on a subject whose reports are unlikely to be relevant. The cheap half
+already produced the corrections the issue names as its primary deliverable.
+
+**Banked:** B1 fixed; the per-report approval wall diagnosed and fixed; the cold-path store pull
+proven (27s, md5-verified three ways); a cred bug filed as NewGraphEnvironment/cred#27; Zotero
+collection-convention drift recorded; the `upper peace - UPCE` collection created; and the
+structural finding that the pipeline assumes prior PSCIS assessment and never says so.
+
+**Open, if resumed:** B2-B6 remain unfixed. Pick a group with PSCIS assessments before resuming,
+or take the modelled-crossings anchor route (`bcfishpass.crossings`, 3,328 rows in UPCE).
+
+Work moved to the FISS/NFC track (`0200`/`0210`/`0220`) for COTR, UNTH and LNTH.
 
 ## Problem
 

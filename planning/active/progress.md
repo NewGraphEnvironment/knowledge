@@ -52,3 +52,22 @@ not part of this issue. They predate this branch and were left in place.
   overlap — unresolved, flagged before any Parsnip run.
 - Commits: this phase.
 - Next: Phase 2 — force the cold-path store pull by moving `data/rag/peace.duckdb` aside.
+
+## Session 2026-09-04 (cont.) — parked after Phase 3
+
+- Phase 2 proved the cold-path store pull; Phase 3 found UPCE has no PSCIS data in any of the
+  four layers, confirmed against a positive control.
+- Filed the cred search bug as NewGraphEnvironment/cred#27 (list columns vs `as.numeric`), and
+  the cross-machine permission sync as NewGraphEnvironment/rtj#272.
+- **Parked #4 here by decision.** The remaining phases are the expensive half (report harvest +
+  LLM farm) on a subject whose data is mainstem dam sampling — wrong scale for crossing work.
+  The cheap half already produced the corrections the issue calls its primary deliverable.
+- Corrected a number I had reported: 17,200 was FISS observation *points* with an
+  `acat_report_url`, not files. `0200` enumerates distinct reportIds — UPCE has 52. PINE's 78
+  reports yielded 77 `.xls`. The "20,000 files" risk was off by ~300x; the *relevance* concern
+  was the sound one.
+- Established that **report count, not observation count, is the cost and relevance metric**:
+  UPCE 18,383 obs / 52 reports vs LNTH 5,920 / 58. Mainstem density inflates observations only.
+- Next work: FISS/NFC track for COTR (45 reports), UNTH (40), LNTH (58). Sequencing agreed in
+  principle: run the three groups, graduate the parser into `pkg/` once it has run on multiple
+  regions, write the skill last.
