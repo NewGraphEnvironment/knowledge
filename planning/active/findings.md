@@ -213,3 +213,88 @@ verified whether `agent()` inside a Workflow script accepts a model override the
 |-------|------------|
 | `psql: fe_sendauth: no password supplied` on `localhost:5432` while `nc` reported the port open | The fresh-db credentials are in `~/.Renviron`, which only R reads. Connect through R, or export explicitly. An open port is not a usable connection. |
 | `Error: invalid integer value "NA" for connection option "port"` from `Rscript` at the repo root | B1 — the project `.Renviron` shadows `~/.Renviron`, so `PGPORT` was empty. Diagnosed by running the same command from `~`, where it returns `5432`. |
+
+---
+
+# Phase 1 — preflight results (2026-09-04)
+
+## B1 fixed
+
+`.Renviron` at the repo root held exactly one line, `CRED_STORE_SOURCE=s3://fresh-bc/rag/` —
+byte-identical in effect to `.Rprofile:3`. Backed up, then removed. Asserted afterwards from the
+repo root rather than assumed:
+
+```
+PGHOST/PGPORT/PGUSER/PGDATABASE/PGPASSWORD   SET
+PG_{HOST,PORT,USER,DB,PASS}_SHARE            SET
+AWS_ACCESS_KEY_ID / AWS_SECRET_ACCESS_KEY    SET
+GITHUB_PAT                                   SET
+cred.store_source                            s3://fresh-bc/rag/   (via .Rprofile option)
+```
+
+`ZOTERO_API_KEY` and `MAX_MB` remain empty — both expected: 0153 falls back to the key file, and
+`MAX_MB` defaults to 25.
+
+## Preflight assertions — all pass
+
+| check | result |
+|---|---|
+| `pdftotext` | `/opt/homebrew/bin/pdftotext`, poppler 26.04.0 |
+| `python3` / `aws` / `ollama` / `Rscript` | all present |
+| `soffice` | **on PATH** at `/opt/homebrew/bin/soffice` — this **corrects** the earlier note that macOS keeps it inside the app bundle and off PATH. Homebrew put it there. `SOFFICE_BIN` is not needed on this machine. |
+| ollama model | `nomic-embed-text` present |
+| fresh-db `:5432` from repo root | OK |
+| bcfishpass tunnel `:63333` from repo root | OK |
+| **UPCE exists** | `UPCE` / **Upper Peace River** / **5,820 km²**, identical from both databases |
+| Zotero key file | present, 0600, non-empty |
+| Zotero group `4733734` | reachable, HTTP 200 |
+
+## The click-per-report problem — diagnosed and fixed
+
+The user's top constraint was not being asked to approve every report download. Cause found in
+the code rather than guessed:
+
+- **`wf_report_harvest.js:69,72` runs two `curl` calls per report** inside each harvest subagent.
+  `curl` was not in the allowlist, so that is **two approval prompts per report** across
+  dozens-to-hundreds of reports. This is the time sink.
+- **`0153-reports-to-zotero.py` is not affected** — it uses Python `urllib` inside a single
+  process (`0153:103,191,202`), so filing every report is **one** prompt total.
+- Also unallowed: `python3`, `aws s3 cp` (store pull/push), `pdftotext`, `ollama` — one prompt
+  per invocation each, not per item.
+
+Fixed in `.claude/settings.local.json` (machine-local; gitignored via `~/.gitignore:28`).
+Deliberately **not** tracked in git: a tracked settings file auto-applies on pull, which makes it
+a privilege-escalation path via commit. Cross-machine sync is filed as
+NewGraphEnvironment/rtj#272, which also raises that the same concern applies to the existing
+`soul/settings/defaults.json` + `/claude-settings-init` mechanism.
+
+## B2 groundwork — and a collection layer that has drifted
+
+Paging mattered. A default `/collections` request returns **100**; the group actually has
+**253**. Reading only the first page would have been the "paged API default reads as absence"
+trap — the conclusion "UPCE is absent" was re-derived across all pages before anything was
+written, and again immediately before the create.
+
+Checked for pre-existing Peace-region collections under any name before creating (carp, crooked,
+parsnip, halfway, beatton, moberly, kiskatinaw, graham, finlay, omineca, nation, williston).
+Nothing covered Upper Peace, so the create is not a duplicate.
+
+**Two naming conventions coexist under `Fisheries / regions / mackenzie`:**
+
+| collection | key | items | follows `<name> - <CODE>`? |
+|---|---|---|---|
+| `pine - PINE` | B5XW948R | 69 | yes |
+| `pine - PINE` … `peace arm - PCEA` | 9QAJJJQW | 16 | yes |
+| `parsnip arm - PARA` | 9TP5AFIG | 11 | yes |
+| `nation - NATR` | PZZRTUEA | 5 | yes |
+| `parsnip` | 7UFY2AG3 | **28** | **no code** |
+| `carp` | K3EY3KED | 0 | **no code**, empty |
+| `crooked` | X5XMBBZU | 0 | **no code**, empty |
+
+`0153` resolves a collection by watershed-group code, so the three code-less collections are
+unreachable to it — including `parsnip`, which holds 28 items, more than `parsnip arm - PARA`'s
+11. Whether those two overlap is unresolved and worth a look before any Parsnip run. `carp` and
+`crooked` appear to be placeholders created and never filled.
+
+**Created:** `upper peace - UPCE`, key `WKUMAXBK`, parent `5USQ8DRG` (`mackenzie`), to the
+`<name> - <CODE>` convention. Verified by re-reading it back from the API.

@@ -29,3 +29,26 @@
 
 `review-round{1,2,3}.md` here are code-check records from the repo-seeding work (`d29809f`),
 not part of this issue. They predate this branch and were left in place.
+
+## Session 2026-09-04 — Phase 1 complete
+
+- **B1 fixed.** Removed the redundant repo-root `.Renviron` (backed up first); asserted from the
+  repo root that every `PG_*`, `AWS_*` and `GITHUB_PAT` is visible again and
+  `cred.store_source` still resolves via `.Rprofile`.
+- Preflight all green: binaries, both databases from the repo root, Zotero group reachable.
+  **UPCE confirmed** as Upper Peace River, 5,820 km², identical from both databases.
+- Corrected an earlier finding: `soffice` **is** on PATH here (Homebrew), so `SOFFICE_BIN` is
+  not needed on this machine.
+- Diagnosed the click-per-report problem the user raised: `wf_report_harvest.js:69,72` issues
+  two `curl` calls per report inside subagents, and `curl` was unallowed. Fixed in
+  `.claude/settings.local.json` (machine-local by decision — a tracked allowlist auto-applies on
+  pull and is a commit-borne escalation path). Cross-machine sync filed as
+  NewGraphEnvironment/rtj#272.
+- B2 groundwork: paged all 253 Zotero collections (a default page returns 100 — the absence
+  trap), searched for pre-existing Peace-region collections under any name, found none covering
+  Upper Peace, and created `upper peace - UPCE` (`WKUMAXBK`) under `mackenzie`.
+- Found the Zotero collection layer has drifted: `parsnip` (28 items), `carp` (0) and `crooked`
+  (0) carry no group code, so `0153` cannot reach them. `parsnip` vs `parsnip arm - PARA` may
+  overlap — unresolved, flagged before any Parsnip run.
+- Commits: this phase.
+- Next: Phase 2 — force the cold-path store pull by moving `data/rag/peace.duckdb` aside.

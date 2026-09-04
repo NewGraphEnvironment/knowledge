@@ -1,12 +1,8 @@
 # Task: Validate the fieldwork-prep pipeline end-to-end on an unharvested group (UPCE) from the M1 (#4)
 
-## Status: PARKED 2026-09-03 — planned, not started
+## Status: Phase 1 complete 2026-09-04 — preflight passed, B1 and B2 groundwork done
 
-Planning is complete and this baseline is committed. **No phase has run.** Work stopped to
-reserve weekly token budget for other tasks. Nothing has been fixed — B1 included — so the next
-session starts at Phase 1.
-
-**To resume:** `git checkout 4-validate-fieldwork-prep-pipeline-upce`, read this file, start Phase 1.
+Phase 1 (preflight) is done and B1 is fixed. Next up is Phase 2, the cold-path store pull.
 
 ## Problem
 
@@ -35,14 +31,14 @@ invisible everywhere else. If nothing breaks, the docs are proven — also a rea
 
 ## Phase 1 — Preflight: prove the machine, record every gap
 
-- [ ] Resolve B1: remove the redundant project `.Renviron` (its one variable is already set by
+- [x] Resolve B1: remove the redundant project `.Renviron` (its one variable is already set by
       `.Rprofile:3`), or fold the needed vars in. Then assert from repo root that `PG_*_SHARE`,
       `PG*`, `AWS_ACCESS_KEY_ID` and `getOption("cred.store_source")` are visible to R.
-- [ ] Assert binaries: `pdftotext`, `ollama` serving `nomic-embed-text`, `python3`, `aws`.
-- [ ] Assert both DBs from **repo root** (not `~`), and that `UPCE` exists in
+- [x] Assert binaries: `pdftotext`, `ollama` serving `nomic-embed-text`, `python3`, `aws`.
+- [x] Assert both DBs from **repo root** (not `~`), and that `UPCE` exists in
       `whse_basemapping.fwa_watershed_groups_poly`.
-- [ ] Assert Zotero: `~/.config/newgraph/zotero-api-key` non-empty, group `4733734` reachable.
-- [ ] Every gap into `findings.md`. This phase's output *is* deliverable content.
+- [x] Assert Zotero: `~/.config/newgraph/zotero-api-key` non-empty, group `4733734` reachable.
+- [x] Every gap into `findings.md`. This phase's output *is* deliverable content.
 
 ## Phase 2 — Cold-path store pull (the sync claim, currently untestable)
 
