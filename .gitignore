@@ -9,3 +9,5 @@ data/rag/
 .DS_Store
 .Rproj.user
 .Rhistory
+# FISS run-log debris: retries and aborted attempts (scripts/logs/fiss/README.md)
+scripts/logs/fiss/runs/
