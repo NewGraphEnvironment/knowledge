@@ -71,3 +71,19 @@ not part of this issue. They predate this branch and were left in place.
 - Next work: FISS/NFC track for COTR (45 reports), UNTH (40), LNTH (58). Sequencing agreed in
   principle: run the three groups, graduate the parser into `pkg/` once it has run on multiple
   regions, write the skill last.
+
+## Session 2026-09-04 (end) — compact-prep
+
+- Filed NewGraphEnvironment/knowledge#5 for the FISS/NFC track, scoped to **COTR, UNTH, LNTH and
+  UPCE**. UPCE was added after the report-track objection was found not to apply: that objection
+  was to an expensive LLM farm over mainstem-monitoring reports, and the NFC track is
+  deterministic and cheap. UPCE has the stronger claim to the result — 3,328 modelled crossings
+  and zero PSCIS assessments — so evidence of where fish were and were not found is the only
+  prioritisation signal available there. Its EcoCat reports stay parked.
+- Committed `data/upce/reports.csv`: the header-only file `0100` produced. It is the evidence for
+  the Phase 3 structural finding — `0100` writes `reports.csv`, no `crossings.csv`, no gpkg, and
+  still exits 0 when a group has no PSCIS assessments.
+- Appended a row to `soul/conventions/code-check.md` under "The probe is broken before the world
+  is": a per-project config file can shadow the user-level one entirely (the B1 `.Renviron`
+  case). Pushed to soul, so it reaches every repo at its next `/claude-md-init`.
+- `#4` remains parked after Phase 3. `#5` is the next work and has not been planning-init'd.
