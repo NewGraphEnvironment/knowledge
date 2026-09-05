@@ -1,0 +1,20 @@
+check,expected,actual,pass,note
+manifest_urls_vs_fetch_log_urls,56,56,TRUE,
+reports_n_xls_vs_manifest_urls,56,56,TRUE,
+report_pages_fetch_failed,0,0,TRUE,
+report_pages_http_4xx,NA,0,TRUE,
+fetch_failed,0,0,TRUE,
+fetch_http_4xx,NA,1,TRUE,58486=http_404
+fetch_unreadable,NA,0,TRUE,
+enumerate_db_source,tunnel,tunnel,TRUE,
+fetch_parseable_vs_parse_log_workbooks,55,55,TRUE,
+parse_log_rows_vs_3_per_workbook,165,165,TRUE,
+workbooks_with_no_step,NA,2,TRUE,16853_8__KA07-37264data_1252609727977_c2f75bf9265550a24ed3aa16cc30a865f4b241c111663bec2955948c346ae3d7.xls; 50478_33__AttachmentARegion3-Sec2.2SamplingLocationsFINAL_1465427041237_5426374845.xlsx
+workbooks_unopenable_since_fetch,0,0,TRUE,
+utm_zone_non_numeric,NA,0,TRUE,
+sites_all_rows_vs_distinct_site_keys,1429,1429,TRUE,
+placed_rows_vs_geometry_rows,1421,1421,TRUE,
+with_coords_placed_clipped,NA,1426 / 1421 / 619,TRUE,
+outside_group_fixable_by_zone_shift,NA,0,TRUE,
+nfc_na_no_step2,NA,36,TRUE,
+clip_polygon_source,tunnel|local_fwapg,tunnel,TRUE,
