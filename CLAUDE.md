@@ -32,6 +32,23 @@ No client or project identifiers in commit messages, issue titles, code or fixtu
 watershed group is an argument. Context that needs them goes in this file, `comms/` and
 `planning/`, which never leave the private repo.
 
+## Working conventions
+
+### Surface upstream defects; do not work around them
+
+When a dependency or an external API misbehaves, surface it and ask rather than coding around it.
+
+**Why:** a workaround hides the defect from whoever could fix it properly, and Al often has
+upstream context or a simple fix the session lacks. This repo depends on several first-party NGE
+packages (`cred`, `fresh`, `link`), so an upstream bug is usually *ours* — a local patch is
+strictly worse than an issue. *"dont' do workarounds for things like zotero api problems. surface
+and ask as there may be simple solution"* (airvine, 2026-09-03).
+
+**How to apply:** reproduce it minimally, file an issue in the owning repo with the repro and the
+exact lines, then report and carry on if it is not blocking. Applied 2026-09-04 to a
+`crd_search()` failure that broke `0150 ACTION=query`: filed NewGraphEnvironment/cred#27 and
+continued, since the pipeline's data path does not use search.
+
 ## Working notes
 
 ### Ragnar stores live in S3 through `cred`; a local ingest must be pushed
@@ -75,10 +92,25 @@ otherwise reads as a JSON parse error three calls later.
 
 ### Database access
 
-`0100`, `0110`, `0160`, `0162`, `0200`, `0220` connect on the bcfishpass tunnel (`localhost:63333`,
-`PG_*_SHARE` from `~/.Renviron`). The tunnel command in `~/.Renviron` ends in `sleep 10`; re-run
-it with a longer hold before anything more than one query. `0162` can also use a local `fwapg` on
-5432. On m1 the agent shell is headless — nothing interactive works there (Zotero desktop, `op`).
+`0100`, `0110`, `0160`, `0162`, `0200`, `0220` connect on the bcfishpass tunnel. They **hardcode**
+`host="localhost", port=63333, dbname="bcfishpass", user="newgraph"` and pass **no password** —
+verified 2026-09-04: no script reads `PG_*_SHARE`, so setting those variables changes nothing.
+Authentication therefore comes from the ambient libpq environment (`PGPASSWORD`, or a `~/.pgpass`
+if one exists — there is none on m1), which means an empty `PGPASSWORD` breaks all six.
+
+The tunnel command in `~/.Renviron` ends in `sleep 10`; re-run it with a longer hold before
+anything more than one query. `0162` can also use a local `fwapg` on 5432, and hardcodes
+`postgres/postgres` for it.
+
+**Run R from the repo root, and never add a project-level `.Renviron` here.** R loads a
+project `.Renviron` *instead of* `~/.Renviron`, not in addition to it, so one silently empties
+every `PG_*`, `AWS_*` and `GITHUB_PAT`. The symptom accuses the database
+(`invalid integer value "NA" for connection option "port"`). One removed on 2026-09-04 held a
+single line already set by `.Rprofile`; the positive control is running the same command from
+`~`. `cred.store_source` belongs in `.Rprofile`, which is why it is there.
+
+On m1 the agent shell is headless — nothing interactive works there (Zotero desktop, `op`) — but
+Zotero's Web API needs no desktop, so `0153` is unaffected.
 
 <!-- BEGIN SOUL CONVENTIONS — DO NOT EDIT BELOW THIS LINE -->
 
