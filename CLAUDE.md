@@ -113,7 +113,7 @@ The machines are always online and Claude sessions drive them. Distinguishing "u
 
 - **Unattended by default:** background loops with server-state prechecks, scheduled probes where recovery detection matters, teed logs committed per the log-tracking convention.
 - **Survive the laptop lifecycle:** `caffeinate -i` for long runs — and know its limit: it does not survive lid close. A killed wrapper can orphan child processes that keep working; check `pgrep` before declaring a run dead, and record enough state (PWF, committed logs) that any interruption is resumable.
-- **Gates are phone-answerable:** steps that genuinely need the user (QGIS desktop verification, push approvals, content decisions) are explicit checkpoints answerable from a phone — never assumed co-presence, never blocking questions mid-run.
+- **Gates are phone-answerable:** steps that genuinely need the user (QGIS desktop verification, a push into an artifact a human is testing on, content decisions — not a git push to a feature branch, which `karpathy.md` §8 puts inside an approved plan) are explicit checkpoints answerable from a phone — never assumed co-presence, never blocking questions mid-run.
 - **Every interruption is a resume point:** commit state before long waits; a session death, sleep, or shutdown should cost a re-run at most, never lost context.
 
 
@@ -123,6 +123,34 @@ Tool-level traps in bash, sed, git and `gh`. These load everywhere because they
 are about the shell the agent runs commands in, not about `.sh` files in the repo.
 The general mechanisms — a guard that fails toward pass, a fixture that cannot
 reach the failure mode — live in `code-check.md`; this file is the quirks.
+
+### `git diff a..b` compares TIPS; a change on `a` shows up as the branch's
+
+Two-dot is the difference between two commits. Three-dot (`a...b`) is the difference from
+their **merge base** — what the branch actually did, and what GitHub shows in a PR.
+
+So anything that landed on the base since the branch forked appears **inverted** in a
+two-dot diff: a file `main` *deleted* reads as a file the branch *added*.
+
+Measured 2026-09-04 in rtj. A branch touched four files. `git diff --stat main..branch`
+listed five, the extra being a one-line addition to a CSV. `main` had removed that line in a
+merged PR; the branch had never touched the file at all:
+
+```
+two-dot   : CLAUDE.md docs/… env/prod/main.tf progress.md manifest.csv
+three-dot : CLAUDE.md docs/… env/prod/main.tf progress.md
+```
+
+It cost a wrong merge-order rationale written into a PR description ("merge #279 first,
+both touch this file"), caught by the PR reviewer reading the diff GitHub renders. The
+failure is quiet because the two-dot output is *correct* — it answers a question nobody
+asked.
+
+- Use `a...b` for "what does this branch change", which is nearly always the question.
+- `git log a..b` is the opposite convention and two-dot is right there — it lists commits
+  reachable from `b` and not `a`. The asymmetry between `log` and `diff` is the trap.
+- Confirm against the branch's own commits when it matters:
+  `git log --oneline a...b -- <path>` shows *which* side touched a file.
 
 ### git pathspec excludes: use the long form
 - `:!path` is short-form magic, and git keeps parsing magic characters after the
@@ -999,7 +1027,13 @@ else. And running a generator is not committing what it generated: a build in a 
 dir leaves the repo's artifact stale while the author truthfully reports having
 verified it.
 
-One worktree per session (`-b <new-branch>`, chained with `&&`). Assert the branch
+One worktree per session (`-b <new-branch>`, chained with `&&`). **The tag and release
+step needs a worktree too.** Every example here is an edit, so a reader who follows the
+rule still runs `git checkout main && git tag` in the shared checkout — which was on
+another session's branch with 281 lines of its uncommitted work when it happened
+(soul#141, 2026-09-01; nothing broke, by luck). Release from a throwaway tree detached
+at `origin/main`, push `HEAD:main` and the tag from there, and leave the shared
+checkout's `main` alone; `gh-pr-merge` step 5 carries the form. Assert the branch
 before any commit or flip. Stage by path. Generate from the committed tree, never the
 checkout — a mid-edit source is internally inconsistent, which is worse than stale.
 Verify the artifact after a push, not the push output.
@@ -1096,6 +1130,7 @@ every widening broke and every narrowing held.
 | 2026-08-27 | rtj#221 | **Do not build an exact-match edit from a formatted display** — `sed 's/^/  /'` padded the read; the replace matched nothing; two failed rounds before `repr()` showed two spaces where the display implied four |
 | 2026-09-01 | flooded#52 | **A claim flagged as under-evidenced gets repaired by widening, and widening is what breaks** — six review rounds, 36 findings; every fix added a quantifier over a ragged dataset×resolution×lineage grid; terminated by reproducing the old behaviour to the digit and measuring every row |
 | 2026-09-03 | rtj#243 | **A defect rate is a claim about the population filter first, and the subject second** — a photo-reference audit reported 142 of 290 references (49%) dangling on the server, which flipped a design conclusion and was one command from being written into another repo's issue as fact. The filter for the *reference* side was right; the filter for the *server* side required the path to contain a `photos/` directory, so every image stored elsewhere was invisible and counted as missing. Re-run on all image extensions, case-insensitive: **6 of 290, 2%** — and those six reconciled exactly to an already-filed issue about bare filenames. A 49% failure rate in a shipped project was the tell, and the reconciliation that catches it is cheap: **count both sides of a ratio with independently-justified filters, and re-run the denominator's filter one notch looser before believing a rate**. Sibling of the positive control above — here the control is a *second, more lenient* population, not a known-good item |
+| 2026-09-04 | rtj#282/#283/#284 | **And the filter can be right while the *predicate* is wrong** — the refinement of the row above, met three times in one session on one number. A photo manifest reported 142 of 290 present; the count then moved to 35, to 11, to **0 genuinely lost**, and no step was an arithmetic error. First the resolver named three directories photos were known to live in and the project also had a fourth. Then the denominator included **form-template placeholders** — six dummy filenames on a worked-example record, which is why three different projects reported *exactly six* missing, a tell sitting in my own summary table unexamined. Then the predicate itself: `exists in the project directory` was standing in for *is this photo safe*, while photos are **deliberately moved off** to control project size — so the check penalised the housekeeping it should encourage, on the gate that precedes destroying a generation. **Ask what the predicate is a proxy for before trusting the rate**, and when several independent subjects report an identical count, that equality is the finding. Each correction came from workflow knowledge no amount of re-measuring would have supplied — so when a rate survives one correction, ask who else knows what the number means |
 | 2026-09-05 | rfp#268/#271 | **When you cannot list, read the PRODUCER — "unlistable" is not "unknowable"** — a bucket answered `403 AccessDenied` to a list (correct for a `s3:GetObject`-only policy), so the artifact was reported as unconfirmable and a shipped feature was documented as blocked on it, with a follow-up issue filed saying so. The job that writes the object recorded the exact key in its own source; one `HEAD` on it returned **200, 66,635,819 bytes, staged the previous day**. The reasoning was "guessing a key is the construct-the-sibling-path antipattern" — true of a key *derived from a pattern*, and the opposite of true for one *read from the code that writes it*, which is that rule's own remedy. **Before concluding an artifact's presence is unknowable, grep the producer for the path it writes**; and treat a self-filed "blocked on X" as a claim to check rather than a conclusion, since nothing downstream will ever re-test it |
 | 2026-09-04 | rfp | **An error naming its own remedy, mapped onto a remembered failure instead of read** — a memory note said `op read` "times out on authorization"; the actual error was `couldn't connect to the 1Password desktop app… update to the latest version and restart the app`, and the app was running with `--just-updated --should-restart`. Not a timeout, not an authorization problem, and the fix was in the text. Cost: the *preferred* documented route was abandoned for the last-rank fallback, the user was escalated to, and then the credential's **name** was doubted — it had been right all along. Two tells, both cheap: the error prescribed an action nobody took, and the remembered failure mode had a different **shape** (a hang) than the one observed (an immediate error). **Read the error's own words before matching it to a prior**, and when a convention ranks routes, confirm the preferred route's prerequisite is genuinely absent rather than merely erroring once |
 | 2026-09-03 | drift#48 | **A sibling guard that passes is only a control if it was pinned before the event** — two frozen cache-key goldens, one red and one green, and the green one was read as evidence that the shared inputs were fine. It was not: it had been **re-pinned after** the environment moved, so it could only ever agree. Recomputing its *contemporaneous* predecessor showed that value had moved too, which flipped the diagnosis from "one key's inputs changed" to "the hash function changed under all of them" and changed the fix entirely. The filed issue had reasoned from the green tick and named the wrong cause. **Before treating a passing sibling as a control, date its pin against the event** — a guard re-pinned afterwards is a photograph of the new world, not a witness to the old one. Same family as the vendored-witness rule below, arriving through a re-pin rather than a stale copy |
@@ -1662,6 +1697,15 @@ For non-trivial issue-driven work, follow this checklist. Each step exists for a
 6. **Atomic commits** — each commit bundles code change + checkbox flip in `task_plan.md`. The diff and the progress live in the same commit; `git log -- planning/` tells the full story.
 7. **`/planning-archive` when complete** — moves PWF to `archive/YYYY-MM-issue-N-slug/`, creates a fresh `active/`. Then `/gh-pr-push` opens the PR; `/gh-pr-merge` handles the release bookkeeping.
 
+## Where the checkpoints are not
+
+Step 1's plan approval is the authorization for every step after it. Run steps 2–7
+through to the **open PR** without stopping to report between phases — the merge in
+step 7 is outside the mandate unless the instruction includes it; put the decisions that
+genuinely change what gets built at the plan gate, batched, with a recommendation
+first; report once when the PR is open. The rule, its boundary (before a plan
+exists, a question wants an answer) and its exceptions are `karpathy.md` §8.
+
 ## When to Skip
 
 For one-line typo fixes, version-bump-only PRs, or trivial documentation edits, the full workflow is overhead. Use judgment. The threshold is roughly: **multi-step issue, multi-file change, or anything that requires scoping** → use the workflow.
@@ -1984,6 +2028,18 @@ code instead of a plan.
 found" for an agent that was alive and later replied. Check the output file's
 mtime before claiming progress, and say what you checked.
 
+**And never record a review as "Clean" on the strength of an idle notification.**
+From the parent's side an idle ping is indistinguishable from an agent that had
+nothing to say, so a lost review reads as a pass — a whole `/code-check` pass was once
+reported as finding nothing while three reviews were stranded, one of which had found
+a data-loss bug (measured 2026-08-25; the numbers are in `planning.md`, "Spawn review
+agents UNNAMED"). Passing `name` turns a spawn into a persistent teammate that idles
+instead of completing; pass it only for a collaborator you will keep messaging, and
+shut it down when done. The rule that survives either spawn shape:
+the reviewer **writes its findings to a file and reports only the path**, and a
+missing or empty file means the round produced nothing and is re-run — never
+"Clean". `planning.md` carries the mechanics; `code-check/SKILL.md` applies them.
+
 ### Verify claims, in both directions
 
 Subagent output is evidence, not verdict. Both failure modes are real:
@@ -2276,6 +2332,160 @@ was reported as absence twice. Use `gh api -X GET search/code -f q="org:NewGraph
 and note it indexes **default branches only**, so a file on a feature branch is invisible to it
 and needs `gh api repos/<owner>/<repo>/contents/<path>?ref=<branch>`.
 
+## 8. Decisions Up Front, Then Run
+
+**Ask at the plan gate. After approval, run to the PR. Before a plan exists, a question wants an answer.**
+
+The first three subsections are one rule on one axis — *when* to come back to the
+user — and they are only correct as a set; each was learned separately in a different
+repo and re-derived, usually by getting one of them wrong first. The rest are
+handover rules that belong beside them because they decide what the user is handed
+when you do come back.
+
+### After plan approval, run every phase to the PR
+
+Plan approval is the authorization for every mechanical step after it. Run every
+phase, commit atomically per phase, archive the PWF, push, open the PR, and report
+**once**, at the end. Do not stop between phases to report progress: the decisions
+that needed the user were taken at the gate, and a check-in that only reports
+spends attention already committed. Under **Always Away** the cautious answer is the
+wrong one — the work stalls on a question the user answered by approving the plan.
+
+The instruction arrives as one short message covering many commits, reviews and
+repos: *"Go all phases to PR"* (airvine, flooded#49, 2026-08-31; flooded#47 and
+floodplains#33, 2026-09-01; trap, 2026-09-01; soul#169, 2026-09-04). One of those
+runs carried four phases, a plan review, four code-check rounds, two issue-body
+reconciliations and two cross-repo PRs with no further input. The merge is a separate
+instruction: on soul#188 the user typed `/gh-pr-merge` once the PR was open, and asked
+directly (2026-09-05) confirmed that *"to PR"* ends there.
+
+Two things are inside the mandate; these are not:
+
+- **Correcting the plan is inside it.** A review that disproves an approved design
+  decision gets fixed mid-run and reported in the summary; that is the run working,
+  not a reason to stop — unless the correction is itself a fork of the kind below (a
+  key, an identifier, a schema), which goes back to the user. Blockers that cannot be resolved are filed as issues and
+  named in the final report rather than held open.
+- **Our own repos are inside it.** Filing issues, opening PRs and editing bodies in
+  NGE repos is normal work; one run produced a follow-up issue and two cross-repo PRs
+  without asking, and that was right.
+- **Outward-facing actions are not** — see "Never post outside our own repos" below.
+  Neither is anything a convention names as its own gate: **the merge** — *to the PR*
+  ends at the open PR; `/gh-pr-merge` runs when the user invokes it or the instruction
+  says so (airvine, 2026-09-05; `gh-pr-push/SKILL.md`, "Ask user before merging") — a change to the machine
+  (`newgraph.md`, "State the plan before changing the machine"), or a push into an
+  artifact a human is testing on (`code-check.md`). A push to the feature branch is
+  inside the mandate.
+
+### Before a plan exists, a question wants an answer
+
+The same terseness that means "go" after approval means "answer me" before it. A
+turn that ends in a question mark, with no approved plan, gets an answer and a
+one-line offer of the work — not the first commit toward it. Twice in one day
+(floodplains, 2026-09-02) a question was read as approval and editing started — once
+after *"why not fix before publish?"*, and once after a gap had been explained, stopped
+with *"do not take on 70. i want to understand"*. When the ask is to understand something, keep it short and concrete; a
+worked example beats a taxonomy. *"small answers here"*, *"keep it short"* (airvine).
+
+This is the boundary condition on the rule above, which is why they are one section:
+a standing mandate to run autonomously, stated alone, is exactly what reads every
+terse message as "go". **The mandate starts at plan approval.**
+
+### What still interrupts, and where it goes
+
+A decision that permanently shapes stored data — a key, an identifier, a schema
+choice, a deprecation shim versus a hard rename — is the user's, and it goes to the
+**plan gate**, batched, as two or three concrete options with the recommended one
+first and the consequence stated. Two such forks put at one gate (flooded#47) were
+both load-bearing and neither was derivable from the issue: the rename would also
+have broken a production driver in another repo, which only the sweep surfaced.
+Asked at the gate a fork costs one round-trip and buys the whole run; discovered
+mid-execution it costs a stall with nobody there to answer it. Found mid-run, it is
+still not the agent's to decide: ask it the same way — options, recommendation first,
+phone-answerable — commit, and continue on the phases that do not depend on it while
+the answer is outstanding (`planning.md`, "When Something Keeps Failing" — escalating
+is not stopping).
+
+During plan-mode exploration, keep a list of "this changes what I build" forks and
+ask them together before `ExitPlanMode`. Questions are welcome; status updates are
+not. Mechanism — whether to spawn reviewers, which regex, how to build a fixture — is
+never a question (§6, "Spawning is your call"), and anything with a conventional
+default is not one either: pick it, say so, move on.
+
+### Never post outside our own repos without approval
+
+Never post to a venue outside NGE's own repositories without the user's explicit
+approval for that specific post — upstream GitHub issues and PR comments, mailing
+lists, forums, third-party trackers. **Drafting is welcome and expected**: write the
+comment, show it, wait. It is the sending that needs the word. *"Never post things
+upstream without my explicit approval"* (airvine, 2026-09-02, after an offer to draft
+comments on two of a vendor's upstream issues).
+
+**Why:** an upstream comment is published under the organisation's name to a venue we
+do not control, is indexed immediately, and cannot be unpublished. It is a
+communications act, not an engineering one, and the judgement about tone, timing and
+what we are willing to say in public is the user's.
+
+- Our own repos are unaffected; filing and editing issues there is the standing
+  disposition and needs no asking.
+- **Reading upstream is unrestricted and worth doing.** Checking issue state before
+  filing ours has caught a wrong citation in our own roxygen and found an upstream
+  issue already proposing the feature we were about to request.
+- Offer the draft in the reply, not as a fait accompli, and say plainly that nothing
+  has been posted when the work obviously produced something postable.
+
+### Hand the user bare commands
+
+When the user must run a command themselves — an interactive login, a
+sudo-needs-TTY operation, anything the Bash tool is blocked from running — give the
+**bare command**, in a fenced block, ready to paste. Never prefix it with `!`.
+*"Give me the cmd without the ! - that never works btw"* (airvine, 2026-08-21);
+*"stop giving me the ! at the start. that doesn't work. i need the raw cmd"* (`cd`, 2026-08).
+
+**Why, twice over.** Default session guidance proposes the `!` prefix as a way to run
+a command in-session, so this recurs in every repo unless written down. On this
+operator's terminals it either does not run at all, or — where it does — **it ran from
+`$HOME` rather than the session's working directory** (one measurement, 2026-09-02): a
+handed-over `! mkdir -p pursuits/x && cp … pursuits/x/` created `~/pursuits/x` and the
+file had to be found and moved. Absolute paths are right whichever directory it
+resolves against. So:
+
+- Emit the command plain. Applies to fenced blocks and inline commands alike.
+- **Absolute paths** in any handed-over command that touches files
+  (`~/Projects/repo/<repo>/…`), whichever form the user ends up running it in.
+- Keep it paste-safe: prefer `grep`/`awk` over a nested `python3 -c "…"` inside a
+  single-quoted remote command, so the quoting survives the trip.
+
+**A file under `~/Downloads` is unreadable by the agent process, and no retry helps.**
+`Read`, `cp` and `pdftotext` on `~/Downloads/*` all fail with `Operation not permitted`
+(measured 2026-09-02). It is macOS folder protection (TCC) on the process, not a
+Claude Code permission mode, so `/permissions` does not change it; Desktop and
+Documents behave the same. Do not retry variants — ask for **one** copy into the repo,
+with absolute source and destination paths, then continue from the copy. (Granting
+the terminal app Full Disk Access removes it on one machine; the fallback stays for
+the next machine.)
+
+### Surface upstream defects; do not work around them
+
+When a dependency or an external API misbehaves, surface it and ask rather than
+coding around it. *"dont' do workarounds for things like zotero api problems. surface
+and ask as there may be simple solution"* (airvine, 2026-09-03).
+
+**Why:** a workaround hides the defect from whoever could fix it properly, and the user
+often has upstream context or a simple fix the session lacks. Most of the dependencies
+in question are **first-party** — an upstream bug is usually ours — so a local patch
+is strictly worse than an issue: it leaves the bug in place for every other consumer
+while making this repo look fine. Same instinct as `newgraph.md`'s "install missing
+packages, don't workaround", applied to a *broken* dependency rather than a *missing*
+one.
+
+**How to apply:** reproduce it minimally, file an issue in the owning repo with the
+repro and the exact lines, report it, and carry on if it is not blocking. The rule is
+*do not hide it*, not *do not continue*: the day it was recorded, a search function
+failed on a list column and broke a documented pipeline step; the local guard would
+have taken minutes and hidden a bug affecting every consumer, so it was filed with a
+three-line repro and the pipeline continued, since its data path did not use search.
+
 **These guidelines are working if:** fewer unnecessary changes in diffs, fewer rewrites due to overcomplication, and clarifying questions come before implementation rather than after mistakes.
 
 
@@ -2566,38 +2776,11 @@ issue bodies.
 
 Rules learned from real project sessions. These apply across all repos.
 
-- **Install missing packages, don't workaround** — if a package is needed, ask the user to install it (e.g. `pak::pak("pkg")`). Don't write degraded fallback code to avoid the dependency.
+- **Install missing packages, don't workaround** — if a package is needed, ask the user to install it (e.g. `pak::pak("pkg")`). Don't write degraded fallback code to avoid the dependency. The same instinct for a *broken* dependency is `karpathy.md` §8, "Surface upstream defects; do not work around them".
+- **Hand the user bare commands, never `!`-prefixed** — moved to `karpathy.md` §8 on 2026-09-05 so it reaches public repos too; this file is internal and public repos never received it here.
 - **Never hardcode extractable data** — if coordinates, station names, or metadata can be pulled from an API or database at runtime, do that. Don't hardcode values that have a programmatic source.
 - **Close issues via commits, not `gh issue close`** — see Closing Issues above.
 - **Cite primary sources** — see references conventions.
-
-### No `!` prefix on commands the user runs
-
-When asking the user to run a shell command themselves, give the **bare command**.
-Never prefix it with `!`.
-
-*"Give me the cmd without the ! - that never works btw"* (airvine, 2026-08-21)
-
-**Why:** default session guidance suggests the `!`-prefix convention — run a command
-in-session so its output lands in the conversation. It does not work in this
-environment, so suggesting it costs a round-trip and makes the user strip it by hand
-every time. The guidance actively re-proposes it, which is why this has to be written
-down rather than remembered.
-
-**How to apply:**
-
-- Emit the command plain, in a fenced block, ready to paste.
-- Applies wherever the user must run something themselves — interactive logins
-  (`gcloud auth login`), sudo-needs-TTY operations, and anything the Bash tool is
-  blocked from running (outbound `ssh` has been refused by the auto-mode classifier
-  in some sessions).
-- Keep them paste-safe: prefer `grep`/`awk` over a nested `python3 -c "..."` inside a
-  single-quoted remote command, so the quoting survives the trip.
-
-Promoted out of `rtj/CLAUDE.md` 2026-09-03, where it had been sitting since a memory
-audit put it there. It is a **user-level** preference, not an rtj one, so a repo-local
-home meant every other repo re-proposed `!` and got corrected again — the same
-forgetting the audit exists to stop, one level up from memory.
 
 ### State the plan before changing the machine
 
@@ -2633,6 +2816,23 @@ trying to get around the block. `/permissions` does not clear it — the check
 sits above permission rules; a new session does. Cheapest avoidance: `grep` for
 the key you need instead of reading a whole dotfile. If a secret does surface,
 say so immediately — it is now in the transcript and in any backup made.
+
+**A context compaction does not clear it. Only a genuine restart does.** "A new
+session" is ambiguous from inside a session whose context has just been replaced,
+which looks a lot like starting fresh. Measured 2026-08-26/28 in `cd`: a `gh secret
+set` was refused (correctly), the conversation was compacted, and `gh issue edit`
+and `gh pr merge` were still refused afterwards; the operator restarted the session
+and both succeeded on the first attempt, unchanged.
+
+**The diagnostic is the read/write asymmetry.** In that window every read kept
+working — `gh pr view`, `gh issue list`, `gh run list`, all `git` reads, even a `Write`
+to `/tmp` — while every outward-facing write was refused: `gh secret set`, `gh issue
+comment`, `gh issue edit`, `gh pr merge`. The earlier observation above saw a dotfile
+`Write` refused too, so the exact scope is not settled from two data points. The
+cheap signal is narrower and holds in both: **if reads succeed and outward-facing
+writes are refused, suspect the clamp before suspecting a per-command permission
+rule.** That turns "these two `gh` commands need an allowlist entry" into "the
+session is clamped, restart it" — a diagnosis the agent can reach on its own.
 
 ## Naming Conventions
 
@@ -2768,7 +2968,7 @@ Skip planning for single-file edits, quick fixes, or tasks with obvious next ste
    - `progress.md` — Session log with timestamps and commit refs
 3. **Plan-review with the Plan agent — concurrently, not as a gate** — Once `task_plan.md` is scaffolded, spawn the Plan subagent (`Agent({subagent_type: "Plan", prompt: "..."}`) and ask it to critically review the task_plan against the issue body + actual codebase. Categorize findings as Blocker / Gap / Ordering / Assumption / Scope / Acceptance. The agent reads files fresh — it catches what you miss when you've been thinking about the design too long. Real example: caught 21 issues including hardcoded literals across 4 files not listed in the plan, untested DB column mismatches, and a baseline-cache-shadow that would have produced a 6-second no-op run.
 
-   **Do not wait for it.** Spawn, then start the lowest-risk phase. Background agents have repeatedly returned late — in one case after the entire issue had shipped — so treating the review as a precondition stalls the work for as long as the agent takes (see `karpathy.md` §6). Fold findings in whenever they land: pre-baseline they edit the plan; mid-implementation they become follow-up commits. A review that arrives after the code is written is not wasted — the reviewer reads real code instead of a plan, which is how one late review still contributed three fixes that no earlier reading had found. If you genuinely cannot proceed without the result, run it with `run_in_background: false` so the blocking is explicit.
+   **Do not wait for it.** Spawn, then start the lowest-risk phase. Background agents have repeatedly returned late — in one case after the entire issue had shipped — so treating the review as a precondition stalls the work for as long as the agent takes (see `karpathy.md` §6). Fold findings in whenever they land: pre-baseline they edit the plan; mid-implementation they become follow-up commits — unless the finding is a stored-data fork of the kind `karpathy.md` §8 reserves for the user. A review that arrives after the code is written is not wasted — the reviewer reads real code instead of a plan, which is how one late review still contributed three fixes that no earlier reading had found. If you genuinely cannot proceed without the result, run it with `run_in_background: false` so the blocking is explicit.
 
    Verify before acting, in both directions. Findings have been confidently wrong (a "BLOCKER" disproved by a 30-second probe) and confidently right about things nobody suspected. Reproduce the claim first.
 
@@ -2803,6 +3003,16 @@ Skip planning for single-file edits, quick fixes, or tasks with obvious next ste
    Asking for a file the agent cannot produce costs a round-trip, and — worse — sets you up to read an absent file as an absent review. Check the agent type's tools before writing the instruction.
 
    **Review the fixes, not just the code.** The second pass is where the value concentrates, because a fix written under a wrong assumption reproduces the same defect. Measured on gq#52: pass 1 found 13 defects, pass 2 found 7 more — including a blocker sitting *inside the fix* for pass 1's blocker, the same class twice (`lty`, then `fill_alpha`) because completeness was reasoned about rather than computed. Pass 3, scoped narrowly to the file edited most, found no new instances; **convergence is the signal to stop, not a fixed number of rounds.**
+
+   Convergence is measured, not felt — a quiet round and an exhausted reviewer look
+   identical. The rule that terminated trap#28 (five rounds; each of the first four
+   found its best defect *inside the previous round's fix*) was to **enumerate the
+   candidate set mechanically and show nothing sits above its source of truth**: parse
+   the files and walk every `cli_abort`/`warning`/`stop` rather than recalling them, so
+   "all of them are pinned" is a count. `code-check.md` states it under "A guard's
+   scope, escape hatches, and remedies" — terminate by enumeration, not by a reviewer
+   saying you have converged. `/code-check` treats three rounds as the floor and keeps
+   going while a round finds a defect inside the previous fix.
 
    Ask for the **mechanism**, not more instances. Pass 3's best finding was that an invariant was enforced by two lists happening to agree — which is what had produced instances two and three.
 
