@@ -32,23 +32,6 @@ No client or project identifiers in commit messages, issue titles, code or fixtu
 watershed group is an argument. Context that needs them goes in this file, `comms/` and
 `planning/`, which never leave the private repo.
 
-## Working conventions
-
-### Surface upstream defects; do not work around them
-
-When a dependency or an external API misbehaves, surface it and ask rather than coding around it.
-
-**Why:** a workaround hides the defect from whoever could fix it properly, and Al often has
-upstream context or a simple fix the session lacks. This repo depends on several first-party NGE
-packages (`cred`, `fresh`, `link`), so an upstream bug is usually *ours* — a local patch is
-strictly worse than an issue. *"dont' do workarounds for things like zotero api problems. surface
-and ask as there may be simple solution"* (airvine, 2026-09-03).
-
-**How to apply:** reproduce it minimally, file an issue in the owning repo with the repro and the
-exact lines, then report and carry on if it is not blocking. Applied 2026-09-04 to a
-`crd_search()` failure that broke `0150 ACTION=query`: filed NewGraphEnvironment/cred#27 and
-continued, since the pipeline's data path does not use search.
-
 ## Working notes
 
 ### Ragnar stores live in S3 through `cred`; a local ingest must be pushed
