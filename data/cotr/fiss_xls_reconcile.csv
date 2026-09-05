@@ -1,0 +1,20 @@
+check,expected,actual,pass,note
+manifest_urls_vs_fetch_log_urls,30,30,TRUE,
+reports_n_xls_vs_manifest_urls,30,30,TRUE,
+report_pages_fetch_failed,0,0,TRUE,
+report_pages_http_4xx,NA,3,TRUE,275=http_403; 51982=http_403; 52222=http_403
+fetch_failed,0,0,TRUE,
+fetch_http_4xx,NA,0,TRUE,
+fetch_unreadable,NA,0,TRUE,
+enumerate_db_source,tunnel,tunnel,TRUE,
+fetch_parseable_vs_parse_log_workbooks,30,30,TRUE,
+parse_log_rows_vs_3_per_workbook,90,90,TRUE,
+workbooks_with_no_step,NA,1,TRUE,157_1__RMA_1058307641964_f401c59b759d4f4fab73a6ba8cd99869.xls
+workbooks_unopenable_since_fetch,0,0,TRUE,
+utm_zone_non_numeric,NA,0,TRUE,
+sites_all_rows_vs_distinct_site_keys,736,736,TRUE,
+placed_rows_vs_geometry_rows,735,735,TRUE,
+with_coords_placed_clipped,NA,736 / 735 / 154,TRUE,
+outside_group_fixable_by_zone_shift,NA,0,TRUE,
+nfc_na_no_step2,NA,104,TRUE,
+clip_polygon_source,tunnel|local_fwapg,tunnel,TRUE,

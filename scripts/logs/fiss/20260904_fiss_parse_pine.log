@@ -1,0 +1,349 @@
+=== PARSE-ONLY REGRESSION CONTROL 2026-09-05T05:50:55Z WSG=PINE host=m1 (existing local downloads; no 0200/0210)
+Spherical geometry (s2) switched off
+PINE: 77 parseable workbooks
+There were 50 or more warnings (use warnings() to see the first 50)
+There were 50 or more warnings (use warnings() to see the first 50)
+parsed rows — step1:1638  step2:6115  step4:106
+  5 workbook(s) yielded no step at all:
+    16005__FavelsReachSummary_1237835185628_dfc91c21e6926e0da94b430e9821eae843a17431cebb2ad4588551fae174d528.xls  [no_sheet_match]
+    16005__FavelsSiteSummary_1237835216304_dfc91c21e6926e0da94b430e9821eae843a17431cebb2ad4588551fae174d528.xls  [no_sheet_match]
+    50254__FJ15-169231_2015_tissuesamplingdata_1460666780378_0663682303.xlsx  [no_sheet_match]
+    57269__FishTissue_FJ17-284520_1568065762666_8064255465.xls  [no_sheet_match]
+    57272__FishTissueResults2018_1568068271513_8064255465.xls  [no_sheet_match]
+  1 site(s) had out-of-range UTM and were not placed.
+  placed sites per UTM zone: zone 10=1512, zone 11=96
+  clipped to PINE: 411 of 1608 placed sites fall inside the group; 0 of the 1197 outside would fall inside with the zone shifted by one.
+Wrote data/pine/fiss_sites_pine.csv + .gpkg (411 sites; 142 NFC)
+Done PINE: 1610 sites total, 155 flagged NFC (141 submitted, 14 derived); nfc is NA on 91 (no Step 2 record).
+   check                                  expected           actual           
+1  manifest_urls_vs_fetch_log_rows        77                 77               
+2  fetch_parseable_vs_parse_log_workbooks 77                 77               
+3  parse_log_rows_vs_3_per_workbook       231                231              
+4  workbooks_with_no_step                 <NA>               5                
+5  workbooks_unopenable_since_fetch       0                  0                
+6  utm_zone_non_numeric                   <NA>               0                
+7  sites_all_rows_vs_distinct_site_keys   1610               1610             
+8  placed_rows_vs_geometry_rows           1608               1608             
+9  with_coords_placed_clipped             <NA>               1609 / 1608 / 411
+10 outside_group_fixable_by_zone_shift    <NA>               0                
+11 nfc_na_no_step2                        <NA>               91               
+12 clip_polygon_source                    tunnel|local_fwapg tunnel           
+   pass
+1  TRUE
+2  TRUE
+3  TRUE
+4  TRUE
+5  TRUE
+6  TRUE
+7  TRUE
+8  TRUE
+9  TRUE
+10 TRUE
+11 TRUE
+12 TRUE
+   note                                                                                                                                                                                                                                                                                                                                                                                                                      
+1  fetch log predates the xls_url column; count only                                                                                                                                                                                                                                                                                                                                                                         
+2                                                                                                                                                                                                                                                                                                                                                                                                                            
+3                                                                                                                                                                                                                                                                                                                                                                                                                            
+4  16005__FavelsReachSummary_1237835185628_dfc91c21e6926e0da94b430e9821eae843a17431cebb2ad4588551fae174d528.xls; 16005__FavelsSiteSummary_1237835216304_dfc91c21e6926e0da94b430e9821eae843a17431cebb2ad4588551fae174d528.xls; 50254__FJ15-169231_2015_tissuesamplingdata_1460666780378_0663682303.xlsx; 57269__FishTissue_FJ17-284520_1568065762666_8064255465.xls; 57272__FishTissueResults2018_1568068271513_8064255465.xls
+5                                                                                                                                                                                                                                                                                                                                                                                                                            
+6                                                                                                                                                                                                                                                                                                                                                                                                                            
+7                                                                                                                                                                                                                                                                                                                                                                                                                            
+8                                                                                                                                                                                                                                                                                                                                                                                                                            
+9                                                                                                                                                                                                                                                                                                                                                                                                                            
+10                                                                                                                                                                                                                                                                                                                                                                                                                           
+11                                                                                                                                                                                                                                                                                                                                                                                                                           
+12                                                                                                                                                                                                                                                                                                                                                                                                                           
+Reconciliation passed: 12 checks.
+=== 0220 RE-RUN END exit=0 2026-09-05T05:51:11Z
+=== 0220 RE-RUN 2026-09-05T05:52:50Z after zone_num fix ("11U" zone strings now parse)
+Spherical geometry (s2) switched off
+PINE: 77 parseable workbooks
+There were 50 or more warnings (use warnings() to see the first 50)
+There were 50 or more warnings (use warnings() to see the first 50)
+parsed rows — step1:1638  step2:6115  step4:106
+  5 workbook(s) yielded no step at all:
+    16005__FavelsReachSummary_1237835185628_dfc91c21e6926e0da94b430e9821eae843a17431cebb2ad4588551fae174d528.xls  [no_sheet_match]
+    16005__FavelsSiteSummary_1237835216304_dfc91c21e6926e0da94b430e9821eae843a17431cebb2ad4588551fae174d528.xls  [no_sheet_match]
+    50254__FJ15-169231_2015_tissuesamplingdata_1460666780378_0663682303.xlsx  [no_sheet_match]
+    57269__FishTissue_FJ17-284520_1568065762666_8064255465.xls  [no_sheet_match]
+    57272__FishTissueResults2018_1568068271513_8064255465.xls  [no_sheet_match]
+  1 site(s) had out-of-range UTM and were not placed.
+  placed sites per UTM zone: zone 10=1512, zone 11=96
+  clipped to PINE: 411 of 1608 placed sites fall inside the group; 0 of the 1197 outside would fall inside with the zone shifted by one.
+Wrote data/pine/fiss_sites_pine.csv + .gpkg (411 sites; 142 NFC)
+Done PINE: 1610 sites total, 155 flagged NFC (141 submitted, 14 derived); nfc is NA on 91 (no Step 2 record).
+   check                                  expected           actual           
+1  manifest_urls_vs_fetch_log_rows        77                 77               
+2  fetch_parseable_vs_parse_log_workbooks 77                 77               
+3  parse_log_rows_vs_3_per_workbook       231                231              
+4  workbooks_with_no_step                 <NA>               5                
+5  workbooks_unopenable_since_fetch       0                  0                
+6  utm_zone_non_numeric                   <NA>               0                
+7  sites_all_rows_vs_distinct_site_keys   1610               1610             
+8  placed_rows_vs_geometry_rows           1608               1608             
+9  with_coords_placed_clipped             <NA>               1609 / 1608 / 411
+10 outside_group_fixable_by_zone_shift    <NA>               0                
+11 nfc_na_no_step2                        <NA>               91               
+12 clip_polygon_source                    tunnel|local_fwapg tunnel           
+   pass
+1  TRUE
+2  TRUE
+3  TRUE
+4  TRUE
+5  TRUE
+6  TRUE
+7  TRUE
+8  TRUE
+9  TRUE
+10 TRUE
+11 TRUE
+12 TRUE
+   note                                                                                                                                                                                                                                                                                                                                                                                                                      
+1  fetch log predates the xls_url column; count only                                                                                                                                                                                                                                                                                                                                                                         
+2                                                                                                                                                                                                                                                                                                                                                                                                                            
+3                                                                                                                                                                                                                                                                                                                                                                                                                            
+4  16005__FavelsReachSummary_1237835185628_dfc91c21e6926e0da94b430e9821eae843a17431cebb2ad4588551fae174d528.xls; 16005__FavelsSiteSummary_1237835216304_dfc91c21e6926e0da94b430e9821eae843a17431cebb2ad4588551fae174d528.xls; 50254__FJ15-169231_2015_tissuesamplingdata_1460666780378_0663682303.xlsx; 57269__FishTissue_FJ17-284520_1568065762666_8064255465.xls; 57272__FishTissueResults2018_1568068271513_8064255465.xls
+5                                                                                                                                                                                                                                                                                                                                                                                                                            
+6                                                                                                                                                                                                                                                                                                                                                                                                                            
+7                                                                                                                                                                                                                                                                                                                                                                                                                            
+8                                                                                                                                                                                                                                                                                                                                                                                                                            
+9                                                                                                                                                                                                                                                                                                                                                                                                                            
+10                                                                                                                                                                                                                                                                                                                                                                                                                           
+11                                                                                                                                                                                                                                                                                                                                                                                                                           
+12                                                                                                                                                                                                                                                                                                                                                                                                                           
+Reconciliation passed: 12 checks.
+=== 0220 RE-RUN END exit=0 2026-09-05T05:53:06Z
+=== 0200 RE-RUN 2026-09-05T05:58:09Z to produce PINE's fiss_xls_reports.csv (the 2026-07 run predates it); manifest compared against the tracked one
+Spherical geometry (s2) switched off
+NULL
+PINE: 78 distinct FISS report pages
+  ! reportId=41478: HTTP 403
+  ! reportId=54744: HTTP 403
+Wrote data/pine/fiss_xls_reports.csv: 78 pages — http_403=2, no_xls=7, ok=69
+Wrote data/pine/fiss_xls_manifest.csv: 77 .xls links across 69 report pages
+=== 0220 RE-RUN 2026-09-05T05:58:17Z after the round-2 review fixes (stage A now reads fiss_xls_reports.csv)
+Spherical geometry (s2) switched off
+PINE: 77 parseable workbooks
+There were 50 or more warnings (use warnings() to see the first 50)
+There were 50 or more warnings (use warnings() to see the first 50)
+parsed rows — step1:1638  step2:6115  step4:106
+  5 workbook(s) yielded no step at all:
+    16005__FavelsReachSummary_1237835185628_dfc91c21e6926e0da94b430e9821eae843a17431cebb2ad4588551fae174d528.xls  [no_sheet_match]
+    16005__FavelsSiteSummary_1237835216304_dfc91c21e6926e0da94b430e9821eae843a17431cebb2ad4588551fae174d528.xls  [no_sheet_match]
+    50254__FJ15-169231_2015_tissuesamplingdata_1460666780378_0663682303.xlsx  [no_sheet_match]
+    57269__FishTissue_FJ17-284520_1568065762666_8064255465.xls  [no_sheet_match]
+    57272__FishTissueResults2018_1568068271513_8064255465.xls  [no_sheet_match]
+  1 site(s) had out-of-range UTM and were not placed.
+  placed sites per UTM zone: zone 10=1512, zone 11=96
+  clipped to PINE: 411 of 1608 placed sites fall inside the group; 0 of the 1197 outside would fall inside with the zone shifted by one.
+Wrote data/pine/fiss_sites_pine.csv + .gpkg (411 sites; 142 NFC)
+Done PINE: 1610 sites total, 155 flagged NFC (141 submitted, 14 derived); nfc is NA on 91 (no Step 2 record).
+   check                                  expected           actual           
+1  manifest_urls_vs_fetch_log_rows        77                 77               
+2  reports_n_xls_vs_manifest_urls         77                 77               
+3  report_pages_fetch_failed              0                  0                
+4  report_pages_http_4xx                  <NA>               2                
+5  fetch_parseable_vs_parse_log_workbooks 77                 77               
+6  parse_log_rows_vs_3_per_workbook       231                231              
+7  workbooks_with_no_step                 <NA>               5                
+8  workbooks_unopenable_since_fetch       0                  0                
+9  utm_zone_non_numeric                   <NA>               0                
+10 sites_all_rows_vs_distinct_site_keys   1610               1610             
+11 placed_rows_vs_geometry_rows           1608               1608             
+12 with_coords_placed_clipped             <NA>               1609 / 1608 / 411
+13 outside_group_fixable_by_zone_shift    <NA>               0                
+14 nfc_na_no_step2                        <NA>               91               
+15 clip_polygon_source                    tunnel|local_fwapg tunnel           
+   pass
+1  TRUE
+2  TRUE
+3  TRUE
+4  TRUE
+5  TRUE
+6  TRUE
+7  TRUE
+8  TRUE
+9  TRUE
+10 TRUE
+11 TRUE
+12 TRUE
+13 TRUE
+14 TRUE
+15 TRUE
+   note                                                                                                                                                                                                                                                                                                                                                                                                                      
+1  fetch log predates the xls_url column; count only                                                                                                                                                                                                                                                                                                                                                                         
+2                                                                                                                                                                                                                                                                                                                                                                                                                            
+3                                                                                                                                                                                                                                                                                                                                                                                                                            
+4  41478=http_403; 54744=http_403                                                                                                                                                                                                                                                                                                                                                                                            
+5                                                                                                                                                                                                                                                                                                                                                                                                                            
+6                                                                                                                                                                                                                                                                                                                                                                                                                            
+7  16005__FavelsReachSummary_1237835185628_dfc91c21e6926e0da94b430e9821eae843a17431cebb2ad4588551fae174d528.xls; 16005__FavelsSiteSummary_1237835216304_dfc91c21e6926e0da94b430e9821eae843a17431cebb2ad4588551fae174d528.xls; 50254__FJ15-169231_2015_tissuesamplingdata_1460666780378_0663682303.xlsx; 57269__FishTissue_FJ17-284520_1568065762666_8064255465.xls; 57272__FishTissueResults2018_1568068271513_8064255465.xls
+8                                                                                                                                                                                                                                                                                                                                                                                                                            
+9                                                                                                                                                                                                                                                                                                                                                                                                                            
+10                                                                                                                                                                                                                                                                                                                                                                                                                           
+11                                                                                                                                                                                                                                                                                                                                                                                                                           
+12                                                                                                                                                                                                                                                                                                                                                                                                                           
+13                                                                                                                                                                                                                                                                                                                                                                                                                           
+14                                                                                                                                                                                                                                                                                                                                                                                                                           
+15                                                                                                                                                                                                                                                                                                                                                                                                                           
+Reconciliation passed: 15 checks.
+=== 0220 RE-RUN END 2026-09-05T05:58:33Z
+=== 0220 RE-RUN 2026-09-05T06:08:23Z after the round-3 review fix (fetch-status rows in stage A)
+Spherical geometry (s2) switched off
+PINE: 77 parseable workbooks
+There were 50 or more warnings (use warnings() to see the first 50)
+There were 50 or more warnings (use warnings() to see the first 50)
+parsed rows — step1:1638  step2:6115  step4:106
+  5 workbook(s) yielded no step at all:
+    16005__FavelsReachSummary_1237835185628_dfc91c21e6926e0da94b430e9821eae843a17431cebb2ad4588551fae174d528.xls  [no_sheet_match]
+    16005__FavelsSiteSummary_1237835216304_dfc91c21e6926e0da94b430e9821eae843a17431cebb2ad4588551fae174d528.xls  [no_sheet_match]
+    50254__FJ15-169231_2015_tissuesamplingdata_1460666780378_0663682303.xlsx  [no_sheet_match]
+    57269__FishTissue_FJ17-284520_1568065762666_8064255465.xls  [no_sheet_match]
+    57272__FishTissueResults2018_1568068271513_8064255465.xls  [no_sheet_match]
+  1 site(s) had out-of-range UTM and were not placed.
+  placed sites per UTM zone: zone 10=1512, zone 11=96
+  clipped to PINE: 411 of 1608 placed sites fall inside the group; 0 of the 1197 outside would fall inside with the zone shifted by one.
+Wrote data/pine/fiss_sites_pine.csv + .gpkg (411 sites; 142 NFC)
+Done PINE: 1610 sites total, 155 flagged NFC (141 submitted, 14 derived); nfc is NA on 91 (no Step 2 record).
+   check                                  expected           actual           
+1  manifest_urls_vs_fetch_log_rows        77                 77               
+2  reports_n_xls_vs_manifest_urls         77                 77               
+3  report_pages_fetch_failed              0                  0                
+4  report_pages_http_4xx                  <NA>               2                
+5  fetch_failed                           0                  0                
+6  fetch_http_4xx                         <NA>               0                
+7  fetch_unreadable                       <NA>               0                
+8  enumerate_db_source                    tunnel             tunnel           
+9  fetch_parseable_vs_parse_log_workbooks 77                 77               
+10 parse_log_rows_vs_3_per_workbook       231                231              
+11 workbooks_with_no_step                 <NA>               5                
+12 workbooks_unopenable_since_fetch       0                  0                
+13 utm_zone_non_numeric                   <NA>               0                
+14 sites_all_rows_vs_distinct_site_keys   1610               1610             
+15 placed_rows_vs_geometry_rows           1608               1608             
+16 with_coords_placed_clipped             <NA>               1609 / 1608 / 411
+17 outside_group_fixable_by_zone_shift    <NA>               0                
+18 nfc_na_no_step2                        <NA>               91               
+19 clip_polygon_source                    tunnel|local_fwapg tunnel           
+   pass
+1  TRUE
+2  TRUE
+3  TRUE
+4  TRUE
+5  TRUE
+6  TRUE
+7  TRUE
+8  TRUE
+9  TRUE
+10 TRUE
+11 TRUE
+12 TRUE
+13 TRUE
+14 TRUE
+15 TRUE
+16 TRUE
+17 TRUE
+18 TRUE
+19 TRUE
+   note                                                                                                                                                                                                                                                                                                                                                                                                                      
+1  fetch log predates the xls_url column; count only                                                                                                                                                                                                                                                                                                                                                                         
+2                                                                                                                                                                                                                                                                                                                                                                                                                            
+3                                                                                                                                                                                                                                                                                                                                                                                                                            
+4  41478=http_403; 54744=http_403                                                                                                                                                                                                                                                                                                                                                                                            
+5                                                                                                                                                                                                                                                                                                                                                                                                                            
+6                                                                                                                                                                                                                                                                                                                                                                                                                            
+7                                                                                                                                                                                                                                                                                                                                                                                                                            
+8                                                                                                                                                                                                                                                                                                                                                                                                                            
+9                                                                                                                                                                                                                                                                                                                                                                                                                            
+10                                                                                                                                                                                                                                                                                                                                                                                                                           
+11 16005__FavelsReachSummary_1237835185628_dfc91c21e6926e0da94b430e9821eae843a17431cebb2ad4588551fae174d528.xls; 16005__FavelsSiteSummary_1237835216304_dfc91c21e6926e0da94b430e9821eae843a17431cebb2ad4588551fae174d528.xls; 50254__FJ15-169231_2015_tissuesamplingdata_1460666780378_0663682303.xlsx; 57269__FishTissue_FJ17-284520_1568065762666_8064255465.xls; 57272__FishTissueResults2018_1568068271513_8064255465.xls
+12                                                                                                                                                                                                                                                                                                                                                                                                                           
+13                                                                                                                                                                                                                                                                                                                                                                                                                           
+14                                                                                                                                                                                                                                                                                                                                                                                                                           
+15                                                                                                                                                                                                                                                                                                                                                                                                                           
+16                                                                                                                                                                                                                                                                                                                                                                                                                           
+17                                                                                                                                                                                                                                                                                                                                                                                                                           
+18                                                                                                                                                                                                                                                                                                                                                                                                                           
+19                                                                                                                                                                                                                                                                                                                                                                                                                           
+Reconciliation passed: 19 checks.
+=== 0220 RE-RUN END 2026-09-05T06:08:39Z
+=== 0220 RE-RUN 2026-09-05T06:13:03Z final code
+Spherical geometry (s2) switched off
+PINE: 77 parseable workbooks
+There were 50 or more warnings (use warnings() to see the first 50)
+There were 50 or more warnings (use warnings() to see the first 50)
+parsed rows — step1:1638  step2:6115  step4:106
+  5 workbook(s) yielded no step at all:
+    16005__FavelsReachSummary_1237835185628_dfc91c21e6926e0da94b430e9821eae843a17431cebb2ad4588551fae174d528.xls  [no_sheet_match]
+    16005__FavelsSiteSummary_1237835216304_dfc91c21e6926e0da94b430e9821eae843a17431cebb2ad4588551fae174d528.xls  [no_sheet_match]
+    50254__FJ15-169231_2015_tissuesamplingdata_1460666780378_0663682303.xlsx  [no_sheet_match]
+    57269__FishTissue_FJ17-284520_1568065762666_8064255465.xls  [no_sheet_match]
+    57272__FishTissueResults2018_1568068271513_8064255465.xls  [no_sheet_match]
+  1 site(s) had out-of-range UTM and were not placed.
+  placed sites per UTM zone: zone 10=1512, zone 11=96
+  clipped to PINE: 411 of 1608 placed sites fall inside the group; 0 of the 1197 outside would fall inside with the zone shifted by one.
+Wrote data/pine/fiss_sites_pine.csv + .gpkg (411 sites; 142 NFC)
+Done PINE: 1610 sites total, 155 flagged NFC (141 submitted, 14 derived); nfc is NA on 91 (no Step 2 record).
+   check                                  expected           actual           
+1  manifest_urls_vs_fetch_log_rows        77                 77               
+2  reports_n_xls_vs_manifest_urls         77                 77               
+3  report_pages_fetch_failed              0                  0                
+4  report_pages_http_4xx                  <NA>               2                
+5  fetch_failed                           0                  0                
+6  fetch_http_4xx                         <NA>               0                
+7  fetch_unreadable                       <NA>               0                
+8  enumerate_db_source                    tunnel             tunnel           
+9  fetch_parseable_vs_parse_log_workbooks 77                 77               
+10 parse_log_rows_vs_3_per_workbook       231                231              
+11 workbooks_with_no_step                 <NA>               5                
+12 workbooks_unopenable_since_fetch       0                  0                
+13 utm_zone_non_numeric                   <NA>               0                
+14 sites_all_rows_vs_distinct_site_keys   1610               1610             
+15 placed_rows_vs_geometry_rows           1608               1608             
+16 with_coords_placed_clipped             <NA>               1609 / 1608 / 411
+17 outside_group_fixable_by_zone_shift    <NA>               0                
+18 nfc_na_no_step2                        <NA>               91               
+19 clip_polygon_source                    tunnel|local_fwapg tunnel           
+   pass
+1  TRUE
+2  TRUE
+3  TRUE
+4  TRUE
+5  TRUE
+6  TRUE
+7  TRUE
+8  TRUE
+9  TRUE
+10 TRUE
+11 TRUE
+12 TRUE
+13 TRUE
+14 TRUE
+15 TRUE
+16 TRUE
+17 TRUE
+18 TRUE
+19 TRUE
+   note                                                                                                                                                                                                                                                                                                                                                                                                                      
+1  fetch log predates the xls_url column; count only                                                                                                                                                                                                                                                                                                                                                                         
+2                                                                                                                                                                                                                                                                                                                                                                                                                            
+3                                                                                                                                                                                                                                                                                                                                                                                                                            
+4  41478=http_403; 54744=http_403                                                                                                                                                                                                                                                                                                                                                                                            
+5                                                                                                                                                                                                                                                                                                                                                                                                                            
+6                                                                                                                                                                                                                                                                                                                                                                                                                            
+7                                                                                                                                                                                                                                                                                                                                                                                                                            
+8                                                                                                                                                                                                                                                                                                                                                                                                                            
+9                                                                                                                                                                                                                                                                                                                                                                                                                            
+10                                                                                                                                                                                                                                                                                                                                                                                                                           
+11 16005__FavelsReachSummary_1237835185628_dfc91c21e6926e0da94b430e9821eae843a17431cebb2ad4588551fae174d528.xls; 16005__FavelsSiteSummary_1237835216304_dfc91c21e6926e0da94b430e9821eae843a17431cebb2ad4588551fae174d528.xls; 50254__FJ15-169231_2015_tissuesamplingdata_1460666780378_0663682303.xlsx; 57269__FishTissue_FJ17-284520_1568065762666_8064255465.xls; 57272__FishTissueResults2018_1568068271513_8064255465.xls
+12                                                                                                                                                                                                                                                                                                                                                                                                                           
+13                                                                                                                                                                                                                                                                                                                                                                                                                           
+14                                                                                                                                                                                                                                                                                                                                                                                                                           
+15                                                                                                                                                                                                                                                                                                                                                                                                                           
+16                                                                                                                                                                                                                                                                                                                                                                                                                           
+17                                                                                                                                                                                                                                                                                                                                                                                                                           
+18                                                                                                                                                                                                                                                                                                                                                                                                                           
+19                                                                                                                                                                                                                                                                                                                                                                                                                           
+Reconciliation passed: 19 checks.
+=== 0220 RE-RUN END 2026-09-05T06:13:18Z
