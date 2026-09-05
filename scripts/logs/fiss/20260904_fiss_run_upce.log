@@ -1,0 +1,386 @@
+=== RUN START 2026-09-05T05:46:49Z WSG=UPCE host=m1
+=== 0200
+Spherical geometry (s2) switched off
+NULL
+UPCE: 53 distinct FISS report pages
+  ! reportId=50269: HTTP 403
+Wrote data/upce/fiss_xls_reports.csv: 53 pages — http_403=1, no_xls=7, ok=45
+Wrote data/upce/fiss_xls_manifest.csv: 48 .xls links across 45 report pages
+=== 0210
+Fetching 48 files for UPCE ...
+Status counts:
+# A tibble: 2 × 2
+  status        n
+  <chr>     <int>
+1 converted    21
+2 ok           27
+Wrote data/upce/fiss_xls_fetch_log.csv
+=== 0220
+Spherical geometry (s2) switched off
+UPCE: 48 parseable workbooks
+There were 45 warnings (use warnings() to see them)
+There were 44 warnings (use warnings() to see them)
+parsed rows — step1:7509  step2:27416  step4:171
+  3 workbook(s) yielded no step at all:
+    16595_2__int_fish_sub_PWFWCP-GethingCr-2005_1248108910816_7d62542d6a9e6ded9da628a4fdd3f6d0c73402cbef992ec60b68e25837ae420a.xls  [no_sheet_match]
+    16597_3__PWFWCP-Dinosaurres-2005_1248110061462_7d62542d6a9e6ded9da628a4fdd3f6d0c73402cbef992ec60b68e25837ae420a.xls  [no_sheet_match]
+    50296_30__SculpinTissueMetals_1461709027387_1708479777.xls  [no_sheet_match]
+  placed sites per UTM zone: zone 10=6796, zone 11=211
+  clipped to UPCE: 4921 of 7007 placed sites fall inside the group; 0 of the 2086 outside would fall inside with the zone shifted by one.
+Wrote data/upce/fiss_sites_upce.csv + .gpkg (4921 sites; 228 NFC)
+Done UPCE: 7023 sites total, 356 flagged NFC (334 submitted, 22 derived); nfc is NA on 507 (no Step 2 record).
+   check                                  expected           actual pass
+1  manifest_urls_vs_fetch_log_rows        48                 48     TRUE
+2  fetch_parseable_vs_parse_log_workbooks 48                 48     TRUE
+3  parse_log_rows_vs_3_per_workbook       144                144    TRUE
+4  workbooks_with_no_step                 <NA>               3      TRUE
+5  workbooks_unopenable_since_fetch       0                  0      TRUE
+6  utm_zone_non_numeric                   0                  0      TRUE
+7  sites_all_rows_vs_distinct_site_keys   7023               7023   TRUE
+8  placed_le_with_coords                  <= 7007            7007   TRUE
+9  clipped_le_placed                      <= 7007            4921   TRUE
+10 outside_group_fixable_by_zone_shift    <NA>               0      TRUE
+11 nfc_na_no_step2                        <NA>               507    TRUE
+12 clip_polygon_source                    tunnel|local_fwapg tunnel TRUE
+   note                                                                                                                                                                                                                                                                                                           
+1                                                                                                                                                                                                                                                                                                                 
+2                                                                                                                                                                                                                                                                                                                 
+3                                                                                                                                                                                                                                                                                                                 
+4  16595_2__int_fish_sub_PWFWCP-GethingCr-2005_1248108910816_7d62542d6a9e6ded9da628a4fdd3f6d0c73402cbef992ec60b68e25837ae420a.xls; 16597_3__PWFWCP-Dinosaurres-2005_1248110061462_7d62542d6a9e6ded9da628a4fdd3f6d0c73402cbef992ec60b68e25837ae420a.xls; 50296_30__SculpinTissueMetals_1461709027387_1708479777.xls
+5                                                                                                                                                                                                                                                                                                                 
+6                                                                                                                                                                                                                                                                                                                 
+7                                                                                                                                                                                                                                                                                                                 
+8                                                                                                                                                                                                                                                                                                                 
+9                                                                                                                                                                                                                                                                                                                 
+10                                                                                                                                                                                                                                                                                                                
+11                                                                                                                                                                                                                                                                                                                
+12                                                                                                                                                                                                                                                                                                                
+Reconciliation passed: 12 checks.
+=== ALL STEPS DONE 2026-09-05T05:49:49Z
+=== RUN END exit=0 2026-09-05T05:49:49Z
+=== 0220 RE-RUN 2026-09-05T05:51:40Z after the round-1 review fixes (reconcile split into stage A/B; typed zero-row steps)
+Spherical geometry (s2) switched off
+UPCE: 48 parseable workbooks
+There were 45 warnings (use warnings() to see them)
+There were 44 warnings (use warnings() to see them)
+parsed rows — step1:7509  step2:27416  step4:171
+  3 workbook(s) yielded no step at all:
+    16595_2__int_fish_sub_PWFWCP-GethingCr-2005_1248108910816_7d62542d6a9e6ded9da628a4fdd3f6d0c73402cbef992ec60b68e25837ae420a.xls  [no_sheet_match]
+    16597_3__PWFWCP-Dinosaurres-2005_1248110061462_7d62542d6a9e6ded9da628a4fdd3f6d0c73402cbef992ec60b68e25837ae420a.xls  [no_sheet_match]
+    50296_30__SculpinTissueMetals_1461709027387_1708479777.xls  [no_sheet_match]
+  placed sites per UTM zone: zone 10=6796, zone 11=211
+  clipped to UPCE: 4921 of 7007 placed sites fall inside the group; 0 of the 2086 outside would fall inside with the zone shifted by one.
+Wrote data/upce/fiss_sites_upce.csv + .gpkg (4921 sites; 228 NFC)
+Done UPCE: 7023 sites total, 356 flagged NFC (334 submitted, 22 derived); nfc is NA on 507 (no Step 2 record).
+   check                                  expected           actual            
+1  manifest_urls_vs_fetch_log_urls        48                 48                
+2  fetch_parseable_vs_parse_log_workbooks 48                 48                
+3  parse_log_rows_vs_3_per_workbook       144                144               
+4  workbooks_with_no_step                 <NA>               3                 
+5  workbooks_unopenable_since_fetch       0                  0                 
+6  utm_zone_non_numeric                   <NA>               0                 
+7  sites_all_rows_vs_distinct_site_keys   7023               7023              
+8  placed_rows_vs_geometry_rows           7007               7007              
+9  with_coords_placed_clipped             <NA>               7007 / 7007 / 4921
+10 outside_group_fixable_by_zone_shift    <NA>               0                 
+11 nfc_na_no_step2                        <NA>               507               
+12 clip_polygon_source                    tunnel|local_fwapg tunnel            
+   pass
+1  TRUE
+2  TRUE
+3  TRUE
+4  TRUE
+5  TRUE
+6  TRUE
+7  TRUE
+8  TRUE
+9  TRUE
+10 TRUE
+11 TRUE
+12 TRUE
+   note                                                                                                                                                                                                                                                                                                           
+1                                                                                                                                                                                                                                                                                                                 
+2                                                                                                                                                                                                                                                                                                                 
+3                                                                                                                                                                                                                                                                                                                 
+4  16595_2__int_fish_sub_PWFWCP-GethingCr-2005_1248108910816_7d62542d6a9e6ded9da628a4fdd3f6d0c73402cbef992ec60b68e25837ae420a.xls; 16597_3__PWFWCP-Dinosaurres-2005_1248110061462_7d62542d6a9e6ded9da628a4fdd3f6d0c73402cbef992ec60b68e25837ae420a.xls; 50296_30__SculpinTissueMetals_1461709027387_1708479777.xls
+5                                                                                                                                                                                                                                                                                                                 
+6                                                                                                                                                                                                                                                                                                                 
+7                                                                                                                                                                                                                                                                                                                 
+8                                                                                                                                                                                                                                                                                                                 
+9                                                                                                                                                                                                                                                                                                                 
+10                                                                                                                                                                                                                                                                                                                
+11                                                                                                                                                                                                                                                                                                                
+12                                                                                                                                                                                                                                                                                                                
+Reconciliation passed: 12 checks.
+=== 0220 RE-RUN END exit=0 2026-09-05T05:51:52Z
+=== 0220 RE-RUN 2026-09-05T05:53:34Z after zone_num fix ("11U" zone strings now parse)
+Spherical geometry (s2) switched off
+UPCE: 48 parseable workbooks
+There were 45 warnings (use warnings() to see them)
+There were 44 warnings (use warnings() to see them)
+parsed rows — step1:7509  step2:27416  step4:171
+  3 workbook(s) yielded no step at all:
+    16595_2__int_fish_sub_PWFWCP-GethingCr-2005_1248108910816_7d62542d6a9e6ded9da628a4fdd3f6d0c73402cbef992ec60b68e25837ae420a.xls  [no_sheet_match]
+    16597_3__PWFWCP-Dinosaurres-2005_1248110061462_7d62542d6a9e6ded9da628a4fdd3f6d0c73402cbef992ec60b68e25837ae420a.xls  [no_sheet_match]
+    50296_30__SculpinTissueMetals_1461709027387_1708479777.xls  [no_sheet_match]
+  placed sites per UTM zone: zone 10=6796, zone 11=211
+  clipped to UPCE: 4921 of 7007 placed sites fall inside the group; 0 of the 2086 outside would fall inside with the zone shifted by one.
+Wrote data/upce/fiss_sites_upce.csv + .gpkg (4921 sites; 228 NFC)
+Done UPCE: 7023 sites total, 356 flagged NFC (334 submitted, 22 derived); nfc is NA on 507 (no Step 2 record).
+   check                                  expected           actual            
+1  manifest_urls_vs_fetch_log_urls        48                 48                
+2  fetch_parseable_vs_parse_log_workbooks 48                 48                
+3  parse_log_rows_vs_3_per_workbook       144                144               
+4  workbooks_with_no_step                 <NA>               3                 
+5  workbooks_unopenable_since_fetch       0                  0                 
+6  utm_zone_non_numeric                   <NA>               0                 
+7  sites_all_rows_vs_distinct_site_keys   7023               7023              
+8  placed_rows_vs_geometry_rows           7007               7007              
+9  with_coords_placed_clipped             <NA>               7007 / 7007 / 4921
+10 outside_group_fixable_by_zone_shift    <NA>               0                 
+11 nfc_na_no_step2                        <NA>               507               
+12 clip_polygon_source                    tunnel|local_fwapg tunnel            
+   pass
+1  TRUE
+2  TRUE
+3  TRUE
+4  TRUE
+5  TRUE
+6  TRUE
+7  TRUE
+8  TRUE
+9  TRUE
+10 TRUE
+11 TRUE
+12 TRUE
+   note                                                                                                                                                                                                                                                                                                           
+1                                                                                                                                                                                                                                                                                                                 
+2                                                                                                                                                                                                                                                                                                                 
+3                                                                                                                                                                                                                                                                                                                 
+4  16595_2__int_fish_sub_PWFWCP-GethingCr-2005_1248108910816_7d62542d6a9e6ded9da628a4fdd3f6d0c73402cbef992ec60b68e25837ae420a.xls; 16597_3__PWFWCP-Dinosaurres-2005_1248110061462_7d62542d6a9e6ded9da628a4fdd3f6d0c73402cbef992ec60b68e25837ae420a.xls; 50296_30__SculpinTissueMetals_1461709027387_1708479777.xls
+5                                                                                                                                                                                                                                                                                                                 
+6                                                                                                                                                                                                                                                                                                                 
+7                                                                                                                                                                                                                                                                                                                 
+8                                                                                                                                                                                                                                                                                                                 
+9                                                                                                                                                                                                                                                                                                                 
+10                                                                                                                                                                                                                                                                                                                
+11                                                                                                                                                                                                                                                                                                                
+12                                                                                                                                                                                                                                                                                                                
+Reconciliation passed: 12 checks.
+=== 0220 RE-RUN END exit=0 2026-09-05T05:53:46Z
+=== 0220 RE-RUN 2026-09-05T05:59:02Z after the round-2 review fixes (stage A now reads fiss_xls_reports.csv)
+Spherical geometry (s2) switched off
+UPCE: 48 parseable workbooks
+There were 45 warnings (use warnings() to see them)
+There were 44 warnings (use warnings() to see them)
+parsed rows — step1:7509  step2:27416  step4:171
+  3 workbook(s) yielded no step at all:
+    16595_2__int_fish_sub_PWFWCP-GethingCr-2005_1248108910816_7d62542d6a9e6ded9da628a4fdd3f6d0c73402cbef992ec60b68e25837ae420a.xls  [no_sheet_match]
+    16597_3__PWFWCP-Dinosaurres-2005_1248110061462_7d62542d6a9e6ded9da628a4fdd3f6d0c73402cbef992ec60b68e25837ae420a.xls  [no_sheet_match]
+    50296_30__SculpinTissueMetals_1461709027387_1708479777.xls  [no_sheet_match]
+  placed sites per UTM zone: zone 10=6796, zone 11=211
+  clipped to UPCE: 4921 of 7007 placed sites fall inside the group; 0 of the 2086 outside would fall inside with the zone shifted by one.
+Wrote data/upce/fiss_sites_upce.csv + .gpkg (4921 sites; 228 NFC)
+Done UPCE: 7023 sites total, 356 flagged NFC (334 submitted, 22 derived); nfc is NA on 507 (no Step 2 record).
+   check                                  expected           actual            
+1  manifest_urls_vs_fetch_log_urls        48                 48                
+2  reports_n_xls_vs_manifest_urls         48                 48                
+3  report_pages_fetch_failed              0                  0                 
+4  report_pages_http_4xx                  <NA>               1                 
+5  fetch_parseable_vs_parse_log_workbooks 48                 48                
+6  parse_log_rows_vs_3_per_workbook       144                144               
+7  workbooks_with_no_step                 <NA>               3                 
+8  workbooks_unopenable_since_fetch       0                  0                 
+9  utm_zone_non_numeric                   <NA>               0                 
+10 sites_all_rows_vs_distinct_site_keys   7023               7023              
+11 placed_rows_vs_geometry_rows           7007               7007              
+12 with_coords_placed_clipped             <NA>               7007 / 7007 / 4921
+13 outside_group_fixable_by_zone_shift    <NA>               0                 
+14 nfc_na_no_step2                        <NA>               507               
+15 clip_polygon_source                    tunnel|local_fwapg tunnel            
+   pass
+1  TRUE
+2  TRUE
+3  TRUE
+4  TRUE
+5  TRUE
+6  TRUE
+7  TRUE
+8  TRUE
+9  TRUE
+10 TRUE
+11 TRUE
+12 TRUE
+13 TRUE
+14 TRUE
+15 TRUE
+   note                                                                                                                                                                                                                                                                                                           
+1                                                                                                                                                                                                                                                                                                                 
+2                                                                                                                                                                                                                                                                                                                 
+3                                                                                                                                                                                                                                                                                                                 
+4  50269=http_403                                                                                                                                                                                                                                                                                                 
+5                                                                                                                                                                                                                                                                                                                 
+6                                                                                                                                                                                                                                                                                                                 
+7  16595_2__int_fish_sub_PWFWCP-GethingCr-2005_1248108910816_7d62542d6a9e6ded9da628a4fdd3f6d0c73402cbef992ec60b68e25837ae420a.xls; 16597_3__PWFWCP-Dinosaurres-2005_1248110061462_7d62542d6a9e6ded9da628a4fdd3f6d0c73402cbef992ec60b68e25837ae420a.xls; 50296_30__SculpinTissueMetals_1461709027387_1708479777.xls
+8                                                                                                                                                                                                                                                                                                                 
+9                                                                                                                                                                                                                                                                                                                 
+10                                                                                                                                                                                                                                                                                                                
+11                                                                                                                                                                                                                                                                                                                
+12                                                                                                                                                                                                                                                                                                                
+13                                                                                                                                                                                                                                                                                                                
+14                                                                                                                                                                                                                                                                                                                
+15                                                                                                                                                                                                                                                                                                                
+Reconciliation passed: 15 checks.
+=== 0220 RE-RUN END 2026-09-05T05:59:14Z
+=== 0220 RE-RUN 2026-09-05T06:09:04Z after the round-3 review fix (fetch-status rows in stage A)
+Spherical geometry (s2) switched off
+UPCE: 48 parseable workbooks
+There were 45 warnings (use warnings() to see them)
+There were 44 warnings (use warnings() to see them)
+parsed rows — step1:7509  step2:27416  step4:171
+  3 workbook(s) yielded no step at all:
+    16595_2__int_fish_sub_PWFWCP-GethingCr-2005_1248108910816_7d62542d6a9e6ded9da628a4fdd3f6d0c73402cbef992ec60b68e25837ae420a.xls  [no_sheet_match]
+    16597_3__PWFWCP-Dinosaurres-2005_1248110061462_7d62542d6a9e6ded9da628a4fdd3f6d0c73402cbef992ec60b68e25837ae420a.xls  [no_sheet_match]
+    50296_30__SculpinTissueMetals_1461709027387_1708479777.xls  [no_sheet_match]
+  placed sites per UTM zone: zone 10=6796, zone 11=211
+  clipped to UPCE: 4921 of 7007 placed sites fall inside the group; 0 of the 2086 outside would fall inside with the zone shifted by one.
+Wrote data/upce/fiss_sites_upce.csv + .gpkg (4921 sites; 228 NFC)
+Done UPCE: 7023 sites total, 356 flagged NFC (334 submitted, 22 derived); nfc is NA on 507 (no Step 2 record).
+   check                                  expected           actual            
+1  manifest_urls_vs_fetch_log_urls        48                 48                
+2  reports_n_xls_vs_manifest_urls         48                 48                
+3  report_pages_fetch_failed              0                  0                 
+4  report_pages_http_4xx                  <NA>               1                 
+5  fetch_failed                           0                  0                 
+6  fetch_http_4xx                         <NA>               0                 
+7  fetch_unreadable                       <NA>               0                 
+8  enumerate_db_source                    tunnel             tunnel            
+9  fetch_parseable_vs_parse_log_workbooks 48                 48                
+10 parse_log_rows_vs_3_per_workbook       144                144               
+11 workbooks_with_no_step                 <NA>               3                 
+12 workbooks_unopenable_since_fetch       0                  0                 
+13 utm_zone_non_numeric                   <NA>               0                 
+14 sites_all_rows_vs_distinct_site_keys   7023               7023              
+15 placed_rows_vs_geometry_rows           7007               7007              
+16 with_coords_placed_clipped             <NA>               7007 / 7007 / 4921
+17 outside_group_fixable_by_zone_shift    <NA>               0                 
+18 nfc_na_no_step2                        <NA>               507               
+19 clip_polygon_source                    tunnel|local_fwapg tunnel            
+   pass
+1  TRUE
+2  TRUE
+3  TRUE
+4  TRUE
+5  TRUE
+6  TRUE
+7  TRUE
+8  TRUE
+9  TRUE
+10 TRUE
+11 TRUE
+12 TRUE
+13 TRUE
+14 TRUE
+15 TRUE
+16 TRUE
+17 TRUE
+18 TRUE
+19 TRUE
+   note                                                                                                                                                                                                                                                                                                           
+1                                                                                                                                                                                                                                                                                                                 
+2                                                                                                                                                                                                                                                                                                                 
+3                                                                                                                                                                                                                                                                                                                 
+4  50269=http_403                                                                                                                                                                                                                                                                                                 
+5                                                                                                                                                                                                                                                                                                                 
+6                                                                                                                                                                                                                                                                                                                 
+7                                                                                                                                                                                                                                                                                                                 
+8                                                                                                                                                                                                                                                                                                                 
+9                                                                                                                                                                                                                                                                                                                 
+10                                                                                                                                                                                                                                                                                                                
+11 16595_2__int_fish_sub_PWFWCP-GethingCr-2005_1248108910816_7d62542d6a9e6ded9da628a4fdd3f6d0c73402cbef992ec60b68e25837ae420a.xls; 16597_3__PWFWCP-Dinosaurres-2005_1248110061462_7d62542d6a9e6ded9da628a4fdd3f6d0c73402cbef992ec60b68e25837ae420a.xls; 50296_30__SculpinTissueMetals_1461709027387_1708479777.xls
+12                                                                                                                                                                                                                                                                                                                
+13                                                                                                                                                                                                                                                                                                                
+14                                                                                                                                                                                                                                                                                                                
+15                                                                                                                                                                                                                                                                                                                
+16                                                                                                                                                                                                                                                                                                                
+17                                                                                                                                                                                                                                                                                                                
+18                                                                                                                                                                                                                                                                                                                
+19                                                                                                                                                                                                                                                                                                                
+Reconciliation passed: 19 checks.
+=== 0220 RE-RUN END 2026-09-05T06:09:17Z
+=== 0220 RE-RUN 2026-09-05T06:13:48Z final code
+Spherical geometry (s2) switched off
+UPCE: 48 parseable workbooks
+There were 45 warnings (use warnings() to see them)
+There were 44 warnings (use warnings() to see them)
+parsed rows — step1:7509  step2:27416  step4:171
+  3 workbook(s) yielded no step at all:
+    16595_2__int_fish_sub_PWFWCP-GethingCr-2005_1248108910816_7d62542d6a9e6ded9da628a4fdd3f6d0c73402cbef992ec60b68e25837ae420a.xls  [no_sheet_match]
+    16597_3__PWFWCP-Dinosaurres-2005_1248110061462_7d62542d6a9e6ded9da628a4fdd3f6d0c73402cbef992ec60b68e25837ae420a.xls  [no_sheet_match]
+    50296_30__SculpinTissueMetals_1461709027387_1708479777.xls  [no_sheet_match]
+  placed sites per UTM zone: zone 10=6796, zone 11=211
+  clipped to UPCE: 4921 of 7007 placed sites fall inside the group; 0 of the 2086 outside would fall inside with the zone shifted by one.
+Wrote data/upce/fiss_sites_upce.csv + .gpkg (4921 sites; 228 NFC)
+Done UPCE: 7023 sites total, 356 flagged NFC (334 submitted, 22 derived); nfc is NA on 507 (no Step 2 record).
+   check                                  expected           actual            
+1  manifest_urls_vs_fetch_log_urls        48                 48                
+2  reports_n_xls_vs_manifest_urls         48                 48                
+3  report_pages_fetch_failed              0                  0                 
+4  report_pages_http_4xx                  <NA>               1                 
+5  fetch_failed                           0                  0                 
+6  fetch_http_4xx                         <NA>               0                 
+7  fetch_unreadable                       <NA>               0                 
+8  enumerate_db_source                    tunnel             tunnel            
+9  fetch_parseable_vs_parse_log_workbooks 48                 48                
+10 parse_log_rows_vs_3_per_workbook       144                144               
+11 workbooks_with_no_step                 <NA>               3                 
+12 workbooks_unopenable_since_fetch       0                  0                 
+13 utm_zone_non_numeric                   <NA>               0                 
+14 sites_all_rows_vs_distinct_site_keys   7023               7023              
+15 placed_rows_vs_geometry_rows           7007               7007              
+16 with_coords_placed_clipped             <NA>               7007 / 7007 / 4921
+17 outside_group_fixable_by_zone_shift    <NA>               0                 
+18 nfc_na_no_step2                        <NA>               507               
+19 clip_polygon_source                    tunnel|local_fwapg tunnel            
+   pass
+1  TRUE
+2  TRUE
+3  TRUE
+4  TRUE
+5  TRUE
+6  TRUE
+7  TRUE
+8  TRUE
+9  TRUE
+10 TRUE
+11 TRUE
+12 TRUE
+13 TRUE
+14 TRUE
+15 TRUE
+16 TRUE
+17 TRUE
+18 TRUE
+19 TRUE
+   note                                                                                                                                                                                                                                                                                                           
+1                                                                                                                                                                                                                                                                                                                 
+2                                                                                                                                                                                                                                                                                                                 
+3                                                                                                                                                                                                                                                                                                                 
+4  50269=http_403                                                                                                                                                                                                                                                                                                 
+5                                                                                                                                                                                                                                                                                                                 
+6                                                                                                                                                                                                                                                                                                                 
+7                                                                                                                                                                                                                                                                                                                 
+8                                                                                                                                                                                                                                                                                                                 
+9                                                                                                                                                                                                                                                                                                                 
+10                                                                                                                                                                                                                                                                                                                
+11 16595_2__int_fish_sub_PWFWCP-GethingCr-2005_1248108910816_7d62542d6a9e6ded9da628a4fdd3f6d0c73402cbef992ec60b68e25837ae420a.xls; 16597_3__PWFWCP-Dinosaurres-2005_1248110061462_7d62542d6a9e6ded9da628a4fdd3f6d0c73402cbef992ec60b68e25837ae420a.xls; 50296_30__SculpinTissueMetals_1461709027387_1708479777.xls
+12                                                                                                                                                                                                                                                                                                                
+13                                                                                                                                                                                                                                                                                                                
+14                                                                                                                                                                                                                                                                                                                
+15                                                                                                                                                                                                                                                                                                                
+16                                                                                                                                                                                                                                                                                                                
+17                                                                                                                                                                                                                                                                                                                
+18                                                                                                                                                                                                                                                                                                                
+19                                                                                                                                                                                                                                                                                                                
+Reconciliation passed: 19 checks.
+=== 0220 RE-RUN END 2026-09-05T06:14:00Z
