@@ -27,9 +27,9 @@ wf_farm_priority.js                          farm priority/crossing tables out o
 0150  push the store         ACTION=push STORE=fraser CONFIRM=TRUE  <- after ANY local write
 
 --- FISS .xls track (independent of the report/PDF flow above; opt-in) ---
-0200  enumerate the data-only .xls submissions per group   WSG_TARGET=PINE
+0200  enumerate the data-only .xls submissions per group   WSG_TARGET=COTR  (required, no default)
 0210  fetch them            FISS_FETCH=TRUE   <- deliberate; pulls dozens-to-hundreds
-0220  parse -> normalize -> flag No-Fish-Captured -> GPKG + CSV clipped to the group
+0220  parse -> normalize -> flag No-Fish-Captured -> GPKG + CSV clipped to the group; reconcile gate
 ```
 
 ## Report discovery — four axes
@@ -150,24 +150,65 @@ A separate track from the report/PDF flow: the FISS layers link to **data-only `
 (fish-collection permit data), not narrative reports. Those carry site-level effort and survey
 comments — including the negative results ("electrofished 1200 m, caught nothing") that no standard
 product gives you, and that should stop a crossing being prioritized on a reach already sampled
-fishless.
+fishless. Run on five groups (PINE, COTR, UNTH, LNTH, UPCE; #5).
+
+**Prerequisites**
+
+- `WSG_TARGET=<code>` is **required** on all three (or `wsg_target` in an interactive session).
+  There is no default: an unset variable used to run PINE silently and overwrite its outputs.
+- LibreOffice: `soffice` on PATH (Homebrew puts it at `/opt/homebrew/bin/soffice`), or
+  `SOFFICE_BIN=/path/to/soffice`. ~40% of legacy `.xls` fail readxl/libxls with *unsupported
+  encryption*; `0210` converts those to `.xlsx` headless. Run groups **sequentially** — parallel
+  headless conversions contend for one LibreOffice profile lock.
+- Database: `0200` and `0220` try the bcfishpass tunnel (`:63333`) first and fall back to the local
+  `fwapg` (`:5432`) only when the tunnel is **down** (connection refused); an authentication error
+  stops instead of degrading. The tunnel is primary because its FISS snapshot is a superset —
+  measured 2026-09-04, 5 report ids across COTR/UNTH/UPCE exist only there. `0220` needs only the
+  group polygon, identical on both, so its fallback is harmless; `0200`'s is loud and recorded
+  (`db_source` in `fiss_xls_reports.csv`).
+- R: `curl` (page fetch with explicit HTTP status), `readxl`, `janitor`, `rvest`, `xml2`, `sf`, `RPostgres`.
+
+**What each step writes to `data/<wsg>/`**
 
 - `0200` — `acat_report_url` on `fiss_fish_obsrvtn_pnt_sp` is a `viewReport.do?reportId=N` **page**,
-  not a file; the `.xls` are attachments on it. Scrapes them into a per-group manifest.
-- `0210` — **opt-in** (`FISS_FETCH=TRUE`). ~40% of legacy `.xls` fail readxl/libxls with
-  *unsupported encryption*; a LibreOffice `--convert-to xlsx` fallback recovers them (PINE: 44 ok +
-  33 converted = 77/77).
+  not a file; the `.xls` are attachments on it. Writes `fiss_xls_manifest.csv` (one row per
+  attachment) and `fiss_xls_reports.csv` (one row per page: `page_status` ok / no_xls / http_403 …,
+  `n_xls`, `db_source`). ACAT returns **403** for restricted reports (COTR 3 of 47, UPCE 1, PINE 2);
+  that is recorded, not retried. A transport failure, 5xx, 408 or 429 is retried once and then
+  **stops the run** and removes the manifest, so it can never be silently short.
+- `0210` — **opt-in** (`FISS_FETCH=TRUE`). `fiss_xls_fetch_log.csv` carries `idx` + `xls_url` so it
+  joins the manifest by key (`file_name` collides across attachments), one row per manifest URL,
+  `status` ok / converted / unreadable / download_failed. Two dead links (HTTP 404 on ACAT's side)
+  are the only failures across ~230 files.
 - `0220` — column set is **passed config** (`wanted_cols`), not hardcoded. Header is auto-detected by
-  anchoring on the `REFERENCE NUMBER` label row, because row 1 of the provincial template is a title
-  banner (`fpr::fpr_import_hab_con()` assumes a row-1 header and yields `x, x_2, …` here).
-  NFC is taken from the sheet's own `No Fish Caught` value (`nfc_source = "submitted"`); a real zero
-  count with recorded effort is `"derived"`. Blank counts are **not** treated as zero.
+  anchoring on the `REFERENCE NUMBER` label row (rows 26, 31 or 17 across the 2009–2022 editions),
+  because row 1 of the provincial template is a title banner. UTM zone is parsed as its leading
+  digits (`"11U"` is common on North Thompson submissions and used to drop the site). NFC is taken
+  from the sheet's own `No Fish Caught` value (`nfc_source = "submitted"`); a real zero count with
+  recorded effort is `"derived"`. Blank counts are **not** treated as zero. **`nfc = NA` means the
+  site has no Step 2 record at all** (a location with no fish-collection rows), not FALSE.
+  Writes `fiss_xls_parse_log.csv` (one row per workbook × step, with a `status` naming why a step
+  yielded nothing: no_sheet_match for tissue-data and summary workbooks, no_header, no_rows …,
+  plus `header_row` and the edition `banner`), then the site tables, then `fiss_xls_reconcile.csv`.
+  The reconciliation is a **gate**: manifest ↔ reports ↔ fetch log ↔ parse log are checked before
+  any site table is written and site counts after; any failed check exits non-zero.
 
-PINE: 77 submissions → 1,610 site records → 411 clipped to PINE, 142 NFC (128 submitted, 14 derived).
+**Results (inside-group layer; 2026-09-04/05)**
 
-**Note:** these three still connect on the bcfishpass tunnel (`:63333`). Per *Data sources* below the
-layers they need (`fiss_fish_obsrvtn_pnt_sp`, `fwa_watershed_groups_poly`) are on the local `fwapg`
-at 5432, so they could likely drop the tunnel dependency — untested, so not changed.
+| | PINE | COTR | UNTH | LNTH | UPCE |
+|---|---|---|---|---|---|
+| report pages / with `.xls` | 78 / 69 | 47 / 30 | 42 / 37 | 58 / 54 | 53 / 45 |
+| `.xls` fetched | 77 | 30 | 38 (1 dead) | 56 (1 dead) | 48 |
+| workbooks yielding a step | 72 | 29 | 34 | 52 | 45 |
+| sites parsed (`_all`) | 1,610 | 736 | 996 | 1,429 | 7,023 |
+| inside the group | 411 | 154 | 531 | 619 | 4,921 |
+| NFC inside (submitted / derived) | 142 (128 / 14) | 62 (62 / 0) | 136 | 136 | 228 (218 / 10) |
+| `nfc` NA inside | 31 | 31 | 0 | 12 | 383 |
+
+UNTH and LNTH share 10 submissions (both clip the same workbooks). UPCE's inside-group layer is
+76% mainstem-named (Peace, Moberly, Dinosaur); 97 of its 228 NFC sites are on tributaries.
+Sites outside the linked group are expected — a submission spans groups — and are kept in
+`fiss_sites_<wsg>_all.csv`. Run logs: `scripts/logs/fiss/`.
 
 <br>
 

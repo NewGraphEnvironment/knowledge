@@ -92,7 +92,8 @@ otherwise reads as a JSON parse error three calls later.
 
 ### Database access
 
-`0100`, `0110`, `0160`, `0162`, `0200`, `0220` connect on the bcfishpass tunnel. They **hardcode**
+`0100`, `0110`, `0160`, `0162` connect on the bcfishpass tunnel (`0200`/`0220` try it first and
+fall back to the local `fwapg` only when it is down — `scripts/README.md`). They **hardcode**
 `host="localhost", port=63333, dbname="bcfishpass", user="newgraph"` and pass **no password** —
 verified 2026-09-04: no script reads `PG_*_SHARE`, so setting those variables changes nothing.
 Authentication therefore comes from the ambient libpq environment (`PGPASSWORD`, or a `~/.pgpass`

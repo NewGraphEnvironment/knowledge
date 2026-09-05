@@ -160,3 +160,177 @@ Relates to NewGraphEnvironment/fish_passage_template_reporting#198
 
 | Error | Resolution |
 |-------|------------|
+
+## Phase 1 — preflight, tunnel decision, guards (2026-09-04)
+
+**Preflight.** From repo root: `soffice` at `/opt/homebrew/bin/soffice`; all packages present;
+`PGPASSWORD` visible to R; both DBs reachable; COTR, UNTH, LNTH, UPCE, PINE all present in
+`fwa_watershed_groups_poly` on both.
+
+**Tunnel decision — the tunnel is the superset, so it stays primary.** Same distinct-report-id
+query on both databases:
+
+| group | tunnel (bcfishpass) | local fwapg | only on tunnel |
+|---|---|---|---|
+| COTR | 47 | 45 | 275, 52094 |
+| UNTH | 42 | 40 | 23, 34 |
+| LNTH | 58 | 58 | — |
+| UPCE | 53 | 52 | 17119 |
+| PINE | 78 | 78 | — |
+
+Nothing is local-only. The issue's counts (45/40/58/52) were taken from the local copy. So the
+plan's rule (local ⊇ remote → switch) did not hold: `0200` and `0220` now try the tunnel first
+and fall back to the local `fwapg` with a message; `0200` records `db_source` in
+`fiss_xls_reports.csv` so a short manifest is explainable, and `0220`'s fallback is harmless
+because the WSG polygon is the same FWA layer on both. `0220` no longer `stop()`s for a missing
+tunnel — only when both are down.
+
+**`WSG_TARGET` hazard resolved.** All three scripts `stop()` when it is unset, naming the
+variable and the run form; the interactive `wsg_target` branch survives. Tested: all three stop.
+
+**Guards added.**
+- `0200` → `fiss_xls_reports.csv` (`page_status` ok / no_xls / fetch_failed, `n_xls`,
+  `db_source`); a failed page is retried once, then the script stops.
+- `0210` → fetch log carries `idx` and `xls_url` and asserts one row per manifest URL.
+  `options(timeout = 120)` so one wedged download cannot pin an unattended run.
+- `0220` → `fiss_xls_parse_log.csv`, one row per workbook × step, `status` in {ok,
+  sheets_error, no_sheet_match, read_error, empty_sheet, no_header, no_rows} with
+  `sheet_matched`, `n_sheet_hits`, `header_row`, `banner`, `rows_raw`, `rows_after_filter`;
+  `fiss_xls_reconcile.csv` with 12 checks and a `stop()` if any fails.
+- `0220` easting window 150–850 km (was 280–720, one zone's width); placed sites per zone and
+  the count of outside-group sites a ±1 zone shift would put inside are reported.
+
+**PINE regression control (parse only, existing downloads): unchanged.** 411 clipped / 142 NFC /
+128 submitted / 14 derived, CSVs byte-identical (`git diff` shows only the gpkg binary
+re-serialised, reverted). Over all 1,610 sites: 155 NFC (141 submitted, 14 derived), `nfc` NA on
+91 (no Step 2 record; 31 of those inside PINE). The parse log names the 5 no-step workbooks
+(`no_sheet_match`). PINE already places 96 sites in zone 11 and 1,197 of 1,608 placed sites fall
+outside PINE — submissions span groups, which is why the clip exists. 0 outside sites become
+inside with a zone shift. Step 4 is rarely usable: 7 ok / 56 no_rows / 9 no_header of 77.
+
+**Template editions (banner of the matched sheet).** "Fish Data Submission Spreadsheet Template
+-V 2.0, April 27, 2012" (76 sheet-reads), the same 2012 edition spelled "V. 2.0" (42), and
+"April 11, 2018" (7); 24 workbooks carry the step name as the banner instead. Header row at 26
+(24 workbooks) or 31 (48). That is the evidence the `pkg/` follow-up needs.
+
+**Guards proven to fire.** Manifest row removed → exit 1,
+`manifest_urls_vs_fetch_log_rows`. Fetch-log `parse_path` pointed at a missing file → exit 1,
+`workbooks_unopenable_since_fetch` (a check the plan lacked: the fetch log said readable, so an
+unopenable file is a change on disk, not a legitimate no-step workbook). Clean run → 12 checks
+pass, exit 0.
+
+## Phase 2 — COTR end to end (2026-09-04/05)
+
+**First run tripped the new `0200` guard, correctly, then taught it something.** 3 of 47 report
+pages "failed" twice; the wrapper still exited 0 (the `RUN END` line is the only honest one —
+the `ALL STEPS DONE` marker is what the check reads). Probed with `curl -L`: all three return
+**HTTP 403 Forbidden** after the http→https redirect (ids 275, 51982, 52222), controls return
+200. ACAT hides restricted reports. That is deterministic, so `0200` now fetches with `curl`
+directly, records `http_<code>` as the page status without retrying, and stops only on
+transport failures or 5xx. The attempt log is kept in `scripts/logs/fiss/runs/`. Report 275 is
+also one of the two COTR ids the local `fwapg` snapshot lacks.
+
+**Second run: clean, 12 checks pass.** `scripts/logs/fiss/20260904_fiss_run_cotr.log`.
+
+| | |
+|---|---|
+| report pages | 47: ok 30, no `.xls` 14, http_403 3 |
+| `.xls` fetched | 30 (18 readxl-ok, 12 converted by LibreOffice, 0 failed, 0 unreadable) |
+| workbooks yielding a step | 29 of 30; `157_1__RMA_…xls` matches no step (no_sheet_match) |
+| sites parsed (`_all`) | 736 |
+| placed | 734 (zone 10 = 723, zone 11 = 11); 1 out-of-range |
+| inside COTR | 154 of 734; 0 of the 580 outside would move inside with a ±1 zone shift |
+| NFC inside COTR | 62 of 154, all `submitted`, 0 `derived`; `nfc` NA on 31 (no Step 2) |
+| NFC over all 736 | 396 |
+| header row (Step 1) | 26 on 7 workbooks, 31 on 22 |
+| editions (banner) | April 2012 (two spellings), April 2016, April 2018, Jan 2020, Jan 2022 (two spellings) |
+| Step 4 | 13 ok, 13 no_rows, 3 no_header, 1 no_sheet_match |
+
+Undocumented prerequisites surfaced by this run: none beyond Phase 1's. The `curl` R package is
+now a dependency of `0200` (it was already installed as a dependency of `xml2`).
+
+## Phase 3 — UNTH, LNTH, UPCE (2026-09-05)
+
+All three ran `0200` → `0210` → `0220` end to end in one sequential batch (parallel headless
+LibreOffice conversions contend for one profile lock), then `0220` was re-run on every group
+after the round-1 review fixes and again after the zone fix below, so every output on disk comes
+from the final code. Logs: `scripts/logs/fiss/20260904_fiss_run_<wsg>.log`, PINE's parse-only
+control in `20260904_fiss_parse_pine.log`.
+
+**A real dropped-site path, found by the new count and fixed.** UNTH and LNTH submissions write
+the zone as `"11U"` (the latitude band letter) on 116 sites each; `as.numeric()` made those NA
+and they were never placed. `zone_num()` now keeps the leading digits. Effect on the inside-group
+layers: UNTH 513 → **531** sites (136 NFC), LNTH 522 → **619** (136 NFC), COTR +1 placed, PINE
+and UPCE unchanged. The `utm_zone_non_numeric` row now counts values with no digits at all (0
+everywhere).
+
+**Two `download_failed` are dead links on ACAT's side.** `r58437/FishSalvageNorthThompson
+Tributary;2019;…xls` (UNTH) and `r58486/PermitReturnFishSalvageYatesCreek2018;…xls` (LNTH)
+return HTTP 404 both with the href verbatim from the report page and with the semicolons
+percent-encoded. Nothing to fix; the fetch log records them.
+
+**Per-group results (inside-group layer unless stated).**
+
+| | PINE | COTR | UNTH | LNTH | UPCE |
+|---|---|---|---|---|---|
+| report pages | 78 | 47 (3 http_403) | 42 | 58 | 53 (1 http_403) |
+| pages with `.xls` | 77 | 30 | 37 | 54 | 45 |
+| `.xls` fetched (ok / converted / failed) | 44 / 33 / 0 | 18 / 12 / 0 | 23 / 14 / 1 | 35 / 20 / 1 | 27 / 21 / 0 |
+| workbooks yielding a step | 72 of 77 | 29 of 30 | 34 of 37 | 52 of 55 | 45 of 48 |
+| sites parsed (`_all`) | 1,610 | 736 | 996 | 1,429 | 7,023 |
+| placed (zone 9 / 10 / 11) | 0 / 1,512 / 96 | 0 / 724 / 11 | 0 / 279 / 708 | 5 / 760 / 656 | 0 / 6,796 / 211 |
+| inside the group | 411 | 154 | 531 | 619 | 4,921 |
+| NFC inside (submitted / derived) | 142 (128 / 14) | 62 (62 / 0) | 136 | 136 | 228 (218 / 10) |
+| `nfc` NA inside (no Step 2) | 31 | 31 | 0 | 12 | 383 |
+| outside sites fixable by ±1 zone | 0 | 0 | 0 | 0 | 0 |
+| Step 1 header row (26 / 31 / 17) | 24 / 48 / 0 | 7 / 22 / 0 | 10 / 24 / 0 | 16 / 34 / 2 | 23 / 22 / 0 |
+| editions (banner year) | 2012, 16, 18, 19, 20 | 2012, 16, 18, 20, 22 | 2012, 16, 19, 20 | 2012, 16, 18, 19, 20 | 2012, 16, 18, 19 |
+
+- **UNTH/LNTH share 10 report ids** (of 37 and 54 with `.xls`): the same submissions are fetched
+  and parsed in both groups and contribute sites to each after the clip. Correct by design; the
+  per-group "pages" figures double count those 10.
+- **Multi-zone path exercised for the first time.** UNTH places more sites in zone 11 than 10;
+  LNTH straddles evenly. 0 outside-group sites would come inside with a zone shift, so the
+  widened easting window and the recorded zones are consistent with each other.
+- **UPCE mainstem skew, measured by name.** Of 4,921 sites inside UPCE, 3,726 (76%) carry a
+  mainstem name (Peace River 3,663, Moberly River 693, Dinosaur Lake 31 …). Of the 228 NFC
+  sites, 131 (57%) are mainstem-named — Peace River 130, Moberly River 68 — leaving ~97 NFC
+  sites on tributaries (Portage, Coalbed, Benson, Gething creeks …), which is the signal
+  crossing work can use. No site has both names blank, so the distance fallback was not needed.
+  UPCE is the only group whose `nfc` NA count (383) exceeds its NFC count: reservoir sampling
+  submissions often carry Step 1 locations with no Step 2 record.
+- **LNTH has 2 workbooks with the header at row 17**, a layout none of the other 197 workbooks
+  use (probably the 2009-era variant the script header mentions); the anchor found it.
+- **Step 4 is rarely usable anywhere**: ok on 4–13 workbooks per group; most are `no_rows`.
+- Datum recorded, not fixed: everything is placed as WGS84 (`326xx`); pre-2010 NAD27 submissions
+  would shift ~200 m, which matters only at group edges.
+
+Undocumented prerequisites surfaced: the `"11U"` zone convention (now handled); nothing else
+beyond Phase 1's list.
+
+## Phase 4 — docs and follow-ups (2026-09-05)
+
+- `scripts/README.md`: FISS section rewritten over the proven runs (prerequisites, the three
+  output files per step, the reconcile gate, `nfc = NA` semantics, the five-group results table);
+  run-order example no longer says `PINE`. `CLAUDE.md` Database access: `0200`/`0220` now
+  described as tunnel-first with a down-only fallback.
+- Code-check round 2 (5 fragile findings, all fixed): tunnel fallback only on
+  connection-refused text, stop otherwise; 408/429 retried then `fetch_failed`; manifest
+  unlinked on the `fetch_failed` stop; stage A reads `fiss_xls_reports.csv` (`sum(n_xls)` vs
+  manifest URLs, `fetch_failed == 0`, missing file fails); no-placeable branch unlinks a stale
+  gpkg; `convert_xlsx()` unlinks a stale conversion first.
+- PINE's `0200` re-run to produce its reports file: 78 pages = 69 ok / 7 no_xls / 2 http_403,
+  `sum(n_xls) = 77`; the manifest differs from the July one only in the report-page scheme
+  (http → https), attachment links identical.
+- Follow-ups filed with the measured evidence: #7 (graduate the parser into `pkg/`), #8 (the skill).
+- Code-check rounds 3 and 4: `0210` recorded a permanent 404 and a transient outage as the
+  same `download_failed`, and stage A never counted either (LNTH and UNTH each passed with one
+  workbook missing). Round 4 measured why the first fix failed: with `quiet = TRUE`,
+  `download.file(method = "libcurl")` raises a length-mismatch *warning* before the error that
+  carries the HTTP status, so a text classifier never sees the 404. Fix taken: `0210` fetches
+  with `curl::curl_fetch_disk()` and reads the status explicitly, as `0200` does; 4xx other than
+  408/429 → `http_<code>` (recorded, run continues), anything else retried then `fetch_failed`
+  and the script stops. Stage A now has `fetch_failed` (failing), `fetch_http_4xx`,
+  `fetch_unreadable` and `enumerate_db_source` (informational). Both North Thompson dead links
+  now read `http_404` with their report id in the note. Four review rounds, 13 findings, all
+  fixed; the last round found one instance of one class and its fix measured clean.
