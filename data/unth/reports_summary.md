@@ -78,3 +78,12 @@ scan), the five permit returns with no PDF, and the two unscanned images (54400,
 
 Full manifest with fetch status: `data/unth/reports_fetch.csv`; every keyword hit and its
 verdict: `data/unth/reports_search_hits.csv`.
+
+## Spatial version
+
+`data/thompson/report_sites.geojson` (WGS84) carries one point per finding in this summary —
+36 sites across LNTH, UNTH and four in neighbouring groups — with `watershed_group` stamped
+from the FWA polygons, and `category`, `status`, `priority`, `fpci_score`, `habitat_gain_m`,
+`species`, `year_found`, `year_fixed`, `report_id` and `location_quality` as attributes.
+`report_sites.qml` beside it styles `category` on load. Built by
+`scripts/0106-reports-sites-geojson.R` from `data/thompson/report_sites.csv`.

@@ -41,4 +41,23 @@ defaults, reuse recorded).
 `data/<wsg>/reports_{resolved,search_hits,fetch}.csv`; `data/thompson/report_notes/`;
 `review-round1.md` here.
 
+## Follow-on: the spatial summary (2026-09-08)
+
+`scripts/0106-reports-sites-geojson.R` turns the reading into `data/thompson/report_sites.geojson`
+(WGS84, 36 findings) plus a generated QML, from a hand-curated `report_sites.csv`. Groups from
+FWA, not from the reports: LNTH 17, UNTH 15, and four that the reports implied were North
+Thompson but are not — George Creek in ADMS, the Cindy Lake outlet culvert in CLWR (1.2 km from
+a LNTH point, so genuinely near the divide), and two Maury Lake sites in MAHD. Location quality
+is recorded per site: 25 exact UTM, 7 exact DMS, 4 approximate.
+
+**Wrong turn kept.** The first version placed stream-referenced sites with the end vertex of the
+merged `fwa_named_streams` line, and said in a comment that this had been checked to be the
+mouth. It had not. Measured against `fwa_stream_networks_sp`, Fennell Creek's merged line ends
+at its *source*: its start point sits on the Barrière River at `downstream_route_measure = 0`.
+Pleasant Creek and Dora Creek were 5.9 km and 5.0 km out, and the Fennell log jam was measured
+12 km from the wrong end. Rewritten to read the route measures, which also gives a real
+"N km upstream" interpolation. A second encoding point fell out of the same query: the FWA name
+is `Barrière River` with an accent, the same class as the ISO-8859-1 defect the code-check found
+in `0105`.
+
 Closed by: PR for branch `11-quick-read-of-the-north-thompson-fish-pa`
