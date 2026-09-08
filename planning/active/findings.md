@@ -156,3 +156,13 @@ report, and the group summaries are written from those notes.
   culverts removed 2004; Raft River Sites 13/15 replaced 2007; Louis Creek Crown crossings are
   bridges; TFL 18 Mann Creek Priority 1 list) and leaves the 2018–2025 PSCIS campaigns without
   any narrative. Summaries: `data/lnth/reports_summary.md`, `data/unth/reports_summary.md`.
+- Code-check round 1 on `0105` (10 findings, all fixed; `pkg` and `0100` clean): EcoCat serves
+  ISO-8859-1 so titles are now `iconv`'d before the accent-aware regex sees them; a search page
+  must carry its own "N Report(s) Found" count and the parsed hits must match it, or the run
+  stops (a maintenance page can no longer read as "no hits"); a header-only `reports.csv` no
+  longer crashes before the keyword search; the region regex and the 16 queries are keyed on
+  the group in the script (other groups must supply theirs); reuse of a PDF on disk is recorded
+  (`fetch = reused`, a `.url` sidecar pins which document it came from) and hand-OCR'd text is
+  `text_source = existing_text` rather than passing as reproducible; untagged search hits
+  earn no crossings; HTML entities decoded; the direct-link path no longer stamps the
+  catalogue name as a title.

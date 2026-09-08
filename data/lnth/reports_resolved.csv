@@ -11,7 +11,7 @@ assessment;confirmation,[PSCIS4500],2,pscis,NA,NA,no_hits
 design,[PSCIS4521],1,pscis,NA,NA,no_hits
 remediation,[PSCIS4522],1,pscis,NA,NA,no_hits
 assessment,[PSCIS4740],95,pscis,NA,NA,no_hits
-assessment,[PSCIS5],15,pscis,24097,"Fish Passage Culvert Inspection (FPCI) Various Sites on TFL 18 in the Lower North Thompson (LNT), Mahood (M) &amp; Clearwater (CW) Watersheds FIA# 4972001 [PSCIS5]",tag_in_title
+assessment,[PSCIS5],15,pscis,24097,"Fish Passage Culvert Inspection (FPCI) Various Sites on TFL 18 in the Lower North Thompson (LNT), Mahood (M) & Clearwater (CW) Watersheds FIA# 4972001 [PSCIS5]",tag_in_title
 assessment,[PSCIS6300],2,pscis,NA,NA,no_hits
 assessment,[PSCIS6301],1,pscis,NA,NA,no_hits
 assessment,[PSCIS73],2,pscis,NA,NA,no_hits
@@ -28,14 +28,14 @@ NA,NA,NA,ecocat_search,58812,"Forestry Stream Classification, trib to Upper Nort
 NA,NA,NA,ecocat_search,369,Freshwater Biology of Thompson River Steelhead (Salmo gairdneri) as Determined by Radio Telemetry,keyword
 NA,NA,NA,ecocat_search,54400,North Thompson River Watershed Fisheries Inventory 1974,keyword
 NA,NA,NA,ecocat_search,64523,"North Thompson, EES-045; Culvert Remediation (AHRF), Fish Inventory - 2023; KA23-791286",keyword
-NA,NA,NA,ecocat_search,25657,Removal &amp; Restoration of Fennell Creek Barrier to Fish Passage - Kamloops Forest District / Southern Interior Forest Region FIA# 4350004,keyword
-NA,NA,NA,ecocat_search,16531,2005 Fish Sampling &amp; Habitat Compensation Assessment For Clearwater Mile 59.0 Scientific Fish Collection Permit KA05-14235 North Thompson River,keyword
-NA,NA,NA,ecocat_search,17242,2008 Fish Sampling &amp; Habitat Compensation Assessment Mile 59.0 Clearwater Subdivision: Five Year Final Report for New Back Channel,keyword
+NA,NA,NA,ecocat_search,25657,Removal & Restoration of Fennell Creek Barrier to Fish Passage - Kamloops Forest District / Southern Interior Forest Region FIA# 4350004,keyword
+NA,NA,NA,ecocat_search,16531,2005 Fish Sampling & Habitat Compensation Assessment For Clearwater Mile 59.0 Scientific Fish Collection Permit KA05-14235 North Thompson River,keyword
+NA,NA,NA,ecocat_search,17242,2008 Fish Sampling & Habitat Compensation Assessment Mile 59.0 Clearwater Subdivision: Five Year Final Report for New Back Channel,keyword
 NA,NA,NA,ecocat_search,64643,"Box Culvert Removals on Unnamed Tributary to North Thompson River, Fish Salvage - 2025; KA25-982328",keyword
 NA,NA,NA,ecocat_search,42636,Fish Collection Permit KA12-83024 Unnamed Stream in the North Thompson watershed,keyword
 NA,NA,NA,ecocat_search,64642,"North Thompson Forest Service Road Phase 1 Deactivation, Fish Salvage - 2025; KA25-982325",keyword
-NA,NA,NA,ecocat_search,16391,Scientific Fish Collection Permit KA04-4128 2004 Fish Sampling &amp; Habitat Compensation Assessment For Clearwater Mile 59.0,keyword
-NA,NA,NA,ecocat_search,16850,2007 Fish Sampling &amp; Habitat Compensation Assessment Mile 59.0 Clearwater Subdivision,keyword
+NA,NA,NA,ecocat_search,16391,Scientific Fish Collection Permit KA04-4128 2004 Fish Sampling & Habitat Compensation Assessment For Clearwater Mile 59.0,keyword
+NA,NA,NA,ecocat_search,16850,2007 Fish Sampling & Habitat Compensation Assessment Mile 59.0 Clearwater Subdivision,keyword
 NA,NA,NA,ecocat_search,53746,Callazon and Clearwater Creek Pre-Impact Reconnaissance,keyword
 NA,NA,NA,ecocat_search,24436,"Fish Passage Culvert Inspection (FPCI) Tributaries to the Raft River, Hole in the Wall FSR FIA# 4596003",keyword
 NA,NA,NA,ecocat_search,11346,Fish Collection summaries for selected stream classifications within the Thompson and Okanagan Regions - Fish Collection Permit No 34770-20,keyword
@@ -46,6 +46,6 @@ NA,NA,NA,ecocat_search,12295,"Stream Classification of selected streams in the S
 NA,NA,NA,ecocat_search,12300,"Stream classification for selected streams in the Thompson, and North Thompson Watersheds Fish Collection Permit KA07-33115",keyword
 NA,NA,NA,ecocat_search,64532,"Thompson-Shuswap Area, Fish Salvage - 2023; KA23-813616; AM1KA23-813616",keyword
 NA,NA,NA,ecocat_search,64562,"Thompson-Shuswap, Fish Salvage - 2024; KA24-849021",keyword
-NA,NA,NA,ecocat_search,25682,Fish Passage Restoration Projects Sites 13 &amp; 15 Culvert Replacements - Raft River Southern Interior Forest Region FIA# 4736002,keyword
+NA,NA,NA,ecocat_search,25682,Fish Passage Restoration Projects Sites 13 & 15 Culvert Replacements - Raft River Southern Interior Forest Region FIA# 4736002,keyword
 NA,NA,NA,ecocat_search,35970,"Fish Collection Permit KA12-81455 Craster Creek, Cookson Creek, Wolff Creek, Bradley Creek, Newport Creek and unnamed tributaries to Shuswap and South Thompson watersheds",keyword
 NA,NA,NA,ecocat_search,59209,North Thompson River Fish Habitat Compensation Monitoring; 2020; KA20_609039,keyword

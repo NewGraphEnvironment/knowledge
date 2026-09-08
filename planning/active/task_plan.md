@@ -53,11 +53,11 @@ permission prompts.
 ## Phase 5 — Close out
 - [x] `scripts/README.md`: one paragraph on `0105` as the quick path (links → resolve →
       fetch → read) and the `habconf_ecocat_url` gotcha; run-order line for `0105`.
-- [ ] Commit per phase; `/planning-archive`; `/gh-pr-push`.
+- [x] Commit per phase; `/planning-archive`; `/gh-pr-push`.
 
 ## Validation
-- [ ] Every one of the 24 PSCIS tags resolves or is named as unresolved
-- [ ] Every report id has a PDF on disk with text, or is named
-- [ ] Summaries cite only ids in `reports_fetch.csv`
-- [ ] `/code-check` on the script commits
+- [x] Every one of the 24 PSCIS tags resolves or is named as unresolved (3 resolve, 21 named `no_hits`)
+- [x] Every report id has a PDF on disk with text, or is named (`reports_fetch.csv` status)
+- [x] Summaries cite only ids in `reports_fetch.csv`
+- [x] `/code-check` on the script commits (one round, 10 findings fixed)
 

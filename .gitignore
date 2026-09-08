@@ -13,3 +13,4 @@ data/rag/
 scripts/logs/fiss/runs/
 # Fetched report PDFs + extracted text: reproducible from data/<wsg>/reports_fetch.csv via scripts/0105
 data/*/reports_pdf/
+data/*/reports_pdf/*.url

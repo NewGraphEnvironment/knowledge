@@ -57,3 +57,16 @@ Fetching 32 reports for LNTH ...
 3 ok                 18
   reports with no readable PDF (recorded, not fatal): 58437 [no_pdf_document], 58812 [no_pdf_document], 369 [no_text], 54400 [no_text], 64523 [no_pdf_document], 42636 [no_pdf_document], 64642 [no_pdf_document], 20573 [no_text], 12295 [no_pdf_document], 12300 [no_pdf_document], 64532 [no_pdf_document], 64562 [no_text], 35970 [no_pdf_document], 59209 [no_pdf_document]
 Done LNTH: 32 reports, 18 with text (3 from PSCIS links, 29 from keyword search). -> data/lnth/reports_pdf
+=== 0105 RE-RUN 2026-09-08T22:30:51Z after code-check round 1 (encoding, page-count marker, typed empties, defaults keyed on group, reuse recorded)
+LNTH: 21 distinct PSCIS links (0 with a report id, 21 [PSCIS] searches)
+  resolved to 3 report ids across 21 links; 18 link(s) unresolved: [PSCIS217] no_hits, [PSCIS218] no_hits, [PSCIS250] no_hits, [PSCIS293] no_hits, [PSCIS3400] no_hits, [PSCIS3740] no_hits, [PSCIS3940] no_hits, [PSCIS4500] no_hits, [PSCIS4521] no_hits, [PSCIS4522] no_hits, [PSCIS4740] no_hits, [PSCIS6300] no_hits, [PSCIS6301] no_hits, [PSCIS73] no_hits, [PSCIS77] no_hits, [PSCIS81] no_hits, [PSCIS82] no_hits, [PSCIS86] no_hits
+  keyword search: 313 hits over 16 queries; 29 in region and new, 251 off region, 11 already resolved
+Fetching 32 reports for LNTH ...
+# A tibble: 3 × 2
+  status              n
+  <chr>           <int>
+1 no_pdf_document    10
+2 no_text             4
+3 ok                 18
+  reports with no readable PDF (recorded, not fatal): 58437 [no_pdf_document], 58812 [no_pdf_document], 369 [no_text], 54400 [no_text], 64523 [no_pdf_document], 42636 [no_pdf_document], 64642 [no_pdf_document], 20573 [no_text], 12295 [no_pdf_document], 12300 [no_pdf_document], 64532 [no_pdf_document], 64562 [no_text], 35970 [no_pdf_document], 59209 [no_pdf_document]
+Done LNTH: 32 reports, 18 with text (3 from PSCIS links, 29 from keyword search). -> data/lnth/reports_pdf
