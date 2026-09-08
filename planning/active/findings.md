@@ -106,3 +106,29 @@ report, and the group summaries are written from those notes.
 
 | Error | Resolution |
 |-------|------------|
+
+## Phase 1–2 — links resolved, and what does not resolve (2026-09-08)
+
+- `knw_pscis_reports()` now takes any column ending in `ecocat_url`; the red-then-green test
+  uses a confirmation layer named `habconf_ecocat_url`. `0100` no longer defaults to PCEA and
+  falls back to the local `fwapg` when the tunnel is down (it was down; both runs used the
+  local copy, `db_source` printed).
+- `0100` LNTH: 25 report rows (all four layers, confirmations included now), UNTH: 9.
+- **Every one of the 24 distinct links is an `advancedSearch.do?keywords=[PSCISnn]` search**;
+  none is a report id. The bracket encoding is fine (`%5BPSCIS5%5D` → 24097). **Only 3 tags
+  resolve** ([PSCIS5] → 24097 Trumbley 2008 FPCI on TFL 18; [PSCIS8] → 24103 Adams Lake FPCI;
+  [PSCIS40] → 24146 Louis Creek 2009). The other 21 return no EcoCat hit at all.
+- Who is behind the unresolved tags, by crossings: Fisheries and Oceans 2021–22 ([PSCIS4740],
+  152 crossings across both groups), Braumandl 2018–2020 ([PSCIS3400/3740/3940], 82, assessments
+  **and** the LNTH habitat confirmations), untagged 2010 ([PSCIS77], 43), Cornice 2025
+  ([PSCIS6300/6301], 18), Canadian Wildlife Federation 2019–2023 ([PSCIS4500/4521/4522]:
+  assessment, confirmation, design, remediation), Integrated ProAction 2007 remediations,
+  Snowy River 2005–06, Secwepemc Fisheries Commission 2003, MoTI 2024. **The largest and most
+  recent PSCIS campaigns in the North Thompson have no EcoCat report behind their tag.** The
+  data is in PSCIS; the narrative, if one exists, is not catalogued under the tag.
+- Keyword search (7 thematic queries): 61 hits, 19–20 in region per group after the title
+  filter, 24 off region (Pennask, Trepanier, Vancouver Island …). One false positive caught
+  by hand and now excluded by rule: "Clearwater Lake 00332PCEA" is in the Peace Arm.
+- Fetch: 22 (LNTH) / 20 (UNTH) reports, 17 / 15 with text. Five have no PDF document (fish
+  salvage permit returns carry `.xls`/`.zip` only: 58437, 58812, 42636, 64523, 64642); three
+  are scanned with no text layer (369 steelhead telemetry, 54400 the 1974 inventory, 4825).

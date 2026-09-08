@@ -1,0 +1,44 @@
+=== RUN START 2026-09-08T22:08:42Z WSG=UNTH host=m1
+=== 0100
+Spherical geometry (s2) switched off
+bcfishpass tunnel :63333 is down (connection to server at "localhost" (::1), port 63333 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+connection to server at "localhost" (127.0.0.1), port 63333 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+) — using local fwapg :5432.
+Pulling PSCIS layers for UNTH ...
+  assessment   83 rows
+  remediation  2 rows
+
+== UNTH summary ==
+reports (distinct ecocat_url rows): 9
+crossings (assessments): 83
+db source: local_fwapg
+outputs -> data/unth
+=== 0105
+UNTH: 8 distinct PSCIS links (0 with a report id, 8 [PSCIS] searches)
+  resolved to 0 report ids across 8 links; 8 link(s) unresolved: [PSCIS254] no_hits, [PSCIS4740] no_hits, [PSCIS5981] no_hits, [PSCIS6300] no_hits, [PSCIS6301] no_hits, [PSCIS73] no_hits, [PSCIS86] no_hits, [PSCIS88] no_hits
+  keyword search: 61 hits over 7 queries; 20 in region and new, 24 off region, 0 already resolved
+Fetching 20 reports for UNTH ...
+# A tibble: 2 × 2
+  status              n
+  <chr>           <int>
+1 no_pdf_document     5
+2 ok                 15
+  reports with no readable PDF (recorded, not fatal): 58437 [no_pdf_document], 58812 [no_pdf_document], 64523 [no_pdf_document], 42636 [no_pdf_document], 64642 [no_pdf_document]
+Done UNTH: 20 reports, 15 with text (0 from PSCIS links, 20 from keyword search). -> data/unth/reports_pdf
+=== ALL STEPS DONE 2026-09-08T22:09:22Z
+=== RUN END exit=0 2026-09-08T22:09:22Z
+=== 0105 RE-RUN 2026-09-08T22:12:20Z with consultant-name queries added and the other-group exclusion
+UNTH: 8 distinct PSCIS links (0 with a report id, 8 [PSCIS] searches)
+  resolved to 0 report ids across 8 links; 8 link(s) unresolved: [PSCIS254] no_hits, [PSCIS4740] no_hits, [PSCIS5981] no_hits, [PSCIS6300] no_hits, [PSCIS6301] no_hits, [PSCIS73] no_hits, [PSCIS86] no_hits, [PSCIS88] no_hits
+  keyword search: 313 hits over 16 queries; 31 in region and new, 251 off region, 0 already resolved
+Fetching 31 reports for UNTH ...
+# A tibble: 3 × 2
+  status              n
+  <chr>           <int>
+1 no_pdf_document    10
+2 no_text             5
+3 ok                 16
+  reports with no readable PDF (recorded, not fatal): 58437 [no_pdf_document], 58812 [no_pdf_document], 369 [no_text], 54400 [no_text], 64523 [no_pdf_document], 42636 [no_pdf_document], 64642 [no_pdf_document], 20573 [no_text], 12295 [no_pdf_document], 12300 [no_pdf_document], 64532 [no_pdf_document], 64562 [no_text], 25682 [no_text], 35970 [no_pdf_document], 59209 [no_pdf_document]
+Done UNTH: 31 reports, 16 with text (0 from PSCIS links, 31 from keyword search). -> data/unth/reports_pdf

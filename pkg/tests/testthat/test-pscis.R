@@ -45,3 +45,14 @@ test_that("crossings refuses non-point assessment geometry rather than exploding
 test_that("crossings is NULL without an assessment layer", {
   expect_null(knw_pscis_crossings(list(design = data.frame(stream_crossing_id = 1L)), "PINE"))
 })
+
+test_that("reports reads the habitat-confirmation layer's habconf_ecocat_url column", {
+  url <- "https://a100.gov.bc.ca/pub/acat/public/advancedSearch.do?keywords=[PSCIS3940]"
+  l <- list(confirmation = data.frame(stream_crossing_id = c(1L, 2L), habconf_ecocat_url = url,
+                                      consultant_name = "C", assessment_date = as.Date("2018-07-01")))
+  r <- knw_pscis_reports(l)
+  expect_equal(nrow(r), 1L)
+  expect_equal(r$ecocat_url, url)
+  expect_equal(r$n_crossings, 2L)
+  expect_true(is.na(r$report_id))
+})

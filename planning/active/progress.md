@@ -6,3 +6,6 @@
 - Created branch `11-quick-read-of-the-north-thompson-fish-pa` off main
 - Scaffolded PWF baseline from issue #11 with approved phases
 - Next: Phase 1
+- Phases 1–3 done: pkg column fix (red→green test), 0100 hardened, 0105 written and run for
+  LNTH and UNTH (32 distinct reports, 17 with text; 21 of 24 PSCIS tags have no EcoCat
+  report). Logs in `scripts/logs/reports/`.

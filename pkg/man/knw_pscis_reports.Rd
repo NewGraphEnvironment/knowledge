@@ -17,7 +17,9 @@ A \code{tibble} with \code{pscis_layer}, \code{ecocat_url}, \code{consultant}, \
 \description{
 One row per distinct (\code{pscis_layer}, \code{ecocat_url}, consultant, year), with
 the number of crossings each report covers and the EcoCat \code{report_id}
-parsed from the URL. Layers without an \code{ecocat_url} column are skipped.
+parsed from the URL. The link column is \code{ecocat_url} on three layers and
+\code{habconf_ecocat_url} on the habitat-confirmation layer; any column ending in
+\code{ecocat_url} is used. Layers without one are skipped.
 The stored URL is sometimes wrong for the crossing, so treat the result as
 leads to verify rather than an inventory.
 }
