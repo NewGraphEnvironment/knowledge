@@ -11,3 +11,5 @@ data/rag/
 .Rhistory
 # FISS run-log debris: retries and aborted attempts (scripts/logs/fiss/README.md)
 scripts/logs/fiss/runs/
+# Fetched report PDFs + extracted text: reproducible from data/<wsg>/reports_fetch.csv via scripts/0105
+data/*/reports_pdf/

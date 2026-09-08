@@ -132,3 +132,27 @@ report, and the group summaries are written from those notes.
 - Fetch: 22 (LNTH) / 20 (UNTH) reports, 17 / 15 with text. Five have no PDF document (fish
   salvage permit returns carry `.xls`/`.zip` only: 58437, 58812, 42636, 64523, 64642); three
   are scanned with no text layer (369 steelhead telemetry, 54400 the 1974 inventory, 4825).
+- Consultant-name queries (Snowy River, Secwepemc Fisheries Commission, Integrated ProAction,
+  Trumbley, Braumandl, CWF, Cornice) added 10 in-region reports the thematic queries missed;
+  Braumandl returns nothing in region — the 2018–2020 assessments and confirmations behind 82
+  LNTH crossings have no EcoCat presence at all. Final: 32 distinct reports, 17 with text.
+- OCR: `ocrmypdf` fails on this machine (`Leptonica Error in pixRead: image file not found: PNG`
+  — the tesseract build cannot read PNG); `pdftoppm -tiff` + `tesseract` directly works. Used it
+  on 25682 (the Raft River culvert-replacement completion abstract, 2 pages, now readable).
+  The 1974 inventory (54400) and the 1980s steelhead telemetry (369) are left unscanned.
+
+## Phase 4 — reading (2026-09-08)
+
+- Three unnamed reader subagents wrote 17 notes; 25682 read and written in-session after OCR.
+  One reader saved two notes under swapped ids (24146 Louis Creek ↔ 24174 fish presence
+  mapping); caught by comparing the EcoCat titles with the fetched text, files swapped back.
+- Region checks by FWA point-in-polygon on `fwapg`: Raft River Sites 13/15 (24436, 25682) are
+  **UNTH**, not LNTH; George Creek (25672) is **ADMS** (Adams), off region; Fennell Creek is LNTH.
+- Off-region or unusable after reading: 24103 (Adams Lake), 25672 (Adams), 53746 (a Clearwater
+  Creek in the Peace region — name collision), 23788 (Thompson Brook, Kelowna), 11346 (illegible
+  handwritten collection forms).
+- The substantive finding for planning: the readable corpus is 2003–2011 FIA-era work plus a
+  2025 deactivation report; it documents what was found and fixed before PSCIS (Fennell Creek box
+  culverts removed 2004; Raft River Sites 13/15 replaced 2007; Louis Creek Crown crossings are
+  bridges; TFL 18 Mann Creek Priority 1 list) and leaves the 2018–2025 PSCIS campaigns without
+  any narrative. Summaries: `data/lnth/reports_summary.md`, `data/unth/reports_summary.md`.

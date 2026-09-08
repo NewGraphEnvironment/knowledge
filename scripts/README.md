@@ -12,7 +12,8 @@ This file is the run order and the wiring.
 ## Run order
 
 ```
-0100  PSCIS pull per watershed group          WSG_TARGET=COTR
+0100  PSCIS pull per watershed group          WSG_TARGET=COTR  (required; tunnel, else local fwapg)
+0105  quick path: resolve the PSCIS links, EcoCat keyword search, fetch PDFs + text locally (no Zotero, no store)
 0110  GNIS name-collision QA (before any name search)
 wf_report_harvest.js / wf_bowr_mcgr_harvest.js   harvest reports  -> <extent>__<reportId>.pdf
 0152  dedup-ingest the harvested PDFs into a ragnar store
@@ -55,6 +56,29 @@ A report is reachable from more than one place; using only one axis misses repor
   spatially clipped to a watershed group (the raw layers carry no `watershed_group_code`)
 - Emits `data/<wsg>/crossings.csv` (+ `reports.csv`, `pscis_<wsg>.gpkg`)
 - `crossings.csv` is the reconciliation target for 0161 — `external_crossing_reference` is the key
+
+## 0105-reports-resolve-fetch.R — the quick path (no Zotero, no store, no farm)
+
+For a group that has never been harvested and a question that only needs the reports *read*:
+`WSG_TARGET=<code> Rscript scripts/0105-reports-resolve-fetch.R` after `0100`. It resolves each
+`advancedSearch.do?keywords=[PSCISnn]` link through the EcoCat search page (keeping hits whose
+title carries the tag), runs thematic **and consultant-name** keyword searches geo-filtered by a
+title regex (`REGION_REGEX`, `EXCLUDE_REGEX`, `KEYWORD_QUERIES` are env-overridable; every hit
+and its verdict lands in `reports_search_hits.csv`), fetches the main PDF per report by `0153`'s
+rule with the HTTP status read from `curl`, and extracts text beside it (`data/<wsg>/reports_pdf/`,
+gitignored). `reports_fetch.csv` is the manifest; reading is then a per-report note plus a
+per-group `reports_summary.md`.
+
+Two things the North Thompson run (#11) taught:
+
+- **The habitat-confirmation layer names its link `habconf_ecocat_url`**, not `ecocat_url`.
+  `knw_pscis_reports()` now takes any column ending in `ecocat_url`; before that every
+  confirmation was silently skipped.
+- **Most `[PSCISnn]` tags have no EcoCat report.** 21 of 24 North Thompson tags — including the
+  largest and most recent campaigns (DFO 2021–22, Braumandl 2018–20, CWF 2019–23, Cornice 2025) —
+  return no hit. The tag is a PSCIS project id, not a promise of a catalogued narrative. The
+  consultant-name searches are what recover the FIA-era reports. `ocrmypdf` fails on m1
+  (tesseract cannot read PNG); `pdftoppm -tiff` + `tesseract` works for the scanned abstracts.
 
 ## 0110-gnis-collision-check.R
 - Counts how many watershed groups province-wide share each stream name

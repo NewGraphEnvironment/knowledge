@@ -40,18 +40,18 @@ permission prompts.
       `is_pdf` or named.
 
 ## Phase 4 — Read and summarise
-- [ ] Three or four unnamed reader subagents, ~6 reports each, given the `.txt` paths and a
+- [x] Three or four unnamed reader subagents, ~6 reports each, given the `.txt` paths and a
       fixed note template (who / when / where — streams and crossing ids named / what was
       done — assessments, habitat confirmations, designs, remediations / findings /
       recommendations / anything about fish presence or barriers). Each writes
       `data/thompson/report_notes/<id>.md`. No subagent spawns subagents.
-- [ ] Write `data/<wsg>/reports_summary.md` per group from the notes: a general account of
+- [x] Write `data/<wsg>/reports_summary.md` per group from the notes: a general account of
       what people said, by theme and by sub-basin, citing each report by EcoCat id and year,
       with the link table at the end. Note reports that turned out to be off-region or not
       about fish passage.
 
 ## Phase 5 — Close out
-- [ ] `scripts/README.md`: one paragraph on `0105` as the quick path (links → resolve →
+- [x] `scripts/README.md`: one paragraph on `0105` as the quick path (links → resolve →
       fetch → read) and the `habconf_ecocat_url` gotcha; run-order line for `0105`.
 - [ ] Commit per phase; `/planning-archive`; `/gh-pr-push`.
 

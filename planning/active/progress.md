@@ -9,3 +9,5 @@
 - Phases 1–3 done: pkg column fix (red→green test), 0100 hardened, 0105 written and run for
   LNTH and UNTH (32 distinct reports, 17 with text; 21 of 24 PSCIS tags have no EcoCat
   report). Logs in `scripts/logs/reports/`.
+- Phase 4–5: 18 report notes, two group summaries, README section. One code-check round on the
+  script commit running; then archive and PR.
