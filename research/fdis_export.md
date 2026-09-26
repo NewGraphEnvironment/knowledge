@@ -47,7 +47,7 @@ which is **one electrofishing pass**. A **site visit** is the first three parts.
 ## Known defects (flagged in the build, never silently dropped)
 
 Every no-data encoding is declared once, at the top of `scripts/0230` (measured field by field
-in /code-check round 3, `planning/archive/…/review-round3.md`):
+in /code-check round 3, `planning/archive/2026-09-issue-18-fdis-evidence/review-round3.md`):
 
 | field | no-data encodings found | handling |
 |---|---|---|

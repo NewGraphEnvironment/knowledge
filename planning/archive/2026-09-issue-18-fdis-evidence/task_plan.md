@@ -75,8 +75,8 @@ A plan review (Plan agent), each finding reproduced before acting, changed the b
 
 ## Validation
 
-- [ ] Reconcile log passes (fish in = fish out + flagged; every pass accounted for)
-- [ ] QGIS spot-check of 10 random passes
-- [ ] `/code-check` clean on each commit
-- [ ] PWF checkboxes match landed work
-- [ ] `/planning-archive` on completion
+- [x] Reconcile log passes (fish in = fish out + flagged; every pass accounted for)
+- [ ] QGIS spot-check of 10 random passes. *Not done in QGIS: replaced by a name check (FDIS gazetted name = FWA GNIS name at 94.6% of 7,894 sites; 10-site sample read) and the 50k-code check. A visual pass is still worth doing on `fdis_sites.gpkg`.*
+- [x] `/code-check`: four rounds over the branch (not per commit); ended by enumeration
+- [x] PWF checkboxes match landed work
+- [x] `/planning-archive` on completion
