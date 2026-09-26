@@ -109,6 +109,26 @@ single line already set by `.Rprofile`; the positive control is running the same
 On m1 the agent shell is headless — nothing interactive works there (Zotero desktop, `op`) — but
 Zotero's Web API needs no desktop, so `0153` is unaffected.
 
+#### The "local `fwapg`" on 5432 holds far more than fwapg
+
+Measured 2026-09-25 with the tunnel refusing connections, that database answered every
+question a session had: `whse_basemapping` (FWA streams, lakes, wetlands), **`bcfishobs`**
+(FISS species observations matched to `blue_line_key` + measure), **`whse_fish`** (all four
+PSCIS SVW layers), `fresh` (province-wide streams + modelled crossings), and a
+**per-watershed-group bcfishpass schema for 20+ groups** — `tabr`, `cotr` via `working_cotr`,
+`bowr`, `fran`, `lchl`, `mcgr`, `necr`, `pine`, `pcea`, `will`, `ufra` and more, each with
+`streams`, `streams_access`, `streams_habitat_*` and `barriers`. Nothing announces this; it
+was found by listing `information_schema`. So the tunnel being down is not a reason to stop —
+try 5432 (`postgres/postgres`) and enumerate the schemas before concluding anything is absent.
+
+**Do not aggregate `fresh.streams_habitat_*`.** In that snapshot it holds one full copy of
+every segment **per watershed group** — 22 rows per `id_segment` — so summing `length_metre`
+across the join reported 224 km of Chinook spawning on a 102 km creek. `fresh.streams` is 1:1
+and fine; the per-group schemas (`tabr.streams_habitat_ch`, `working_cotr.streams_habitat`,
+which is long by `species_code`) are 1:1 and correct. Use those. Whether production carries
+the same duplication is unresolved — see NewGraphEnvironment/fresh#218 before publishing
+a number that depends on it.
+
 <!-- BEGIN SOUL CONVENTIONS — DO NOT EDIT BELOW THIS LINE -->
 
 
