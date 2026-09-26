@@ -1,0 +1,52 @@
+# Findings — Parse FISS life stage and individual-fish lengths into a per-site species x size-class evidence table (#18)
+
+## Issue context
+
+**If we do it:** a per-site evidence table with measured channel width and gradient, sampling effort, true absences, and fish size by species. It is the empirical input for CH/BT habitat-threshold calibration in link, and it gives BT a life stage we can check (0 of 11,524 provincial BT observation records carry one). **If we never do:** spawning and rearing evidence can't be separated for BT, and calibration uses presence-only points with no absences.
+
+## Problem
+
+`0220` parses the Fish Data Submission workbooks' Step 1 (Ref & Loc), Step 2 (Fish Coll.) and Step 4 (Stream Site Data). Two things it leaves behind:
+
+- **Step 2 life stage** (per species per sampling event) is present in the sheet but not in `wanted_cols`, so `fiss_step2_fishcoll_<wsg>.csv` has none.
+- **Step 3 (Individual Fish Data)** isn't parsed at all: fork/total length, weight, per-fish life stage.
+
+The Step 2 life stage is the submitter's own call. It's coarse (fry/parr/juvenile/adult), and how carefully it was made varies by submitter. Length and weight give an actual size distribution per species per site, which is a better basis for splitting life stages consistently across submissions than trusting each label.
+
+In the local `whse_fish.fiss_fish_obsrvtn_pnt_sp` (checked 2026-09-25), `life_stage` is populated for 0 of 11,524 BT records and 3,529 of 9,152 CH records.
+
+## We already hold a province-wide FDIS export (found 2026-09-26)
+
+Now at **`s3://fresh-bc/fdis/`** (private prefix; 99 MB, with a README and `MANIFEST.md5`), moved byte-identical from `Dropbox/New Graph/fiss/` on m4. Supplied by the Province for the 2021–22 channel-width / fish-density work. No use terms were attached; the purpose was advancing knowledge of fish–habitat relationships.
+
+- `2020-11-16/`: `visits.csv` (62,892 visits: UTM, method, pass, fishing time, area length and width), `details.csv` (326,389 individual fish: length, weight, age, sex, maturity), `counts.csv` (114,217 species × age counts with min/max length), `habitat.csv` (26,565 sites: gradient, up to 7 channel widths, wetted widths, bed material, temperature). Joined on `KEY`.
+- `2022-03-22-ef-export/`: six `Details*.csv` files of individual fish from electrofishing, with coordinates and watershed code.
+- The 2020 export is **electrofishing only**, and only passes with a recorded fished-area length (`queries/Details.sql`). Other methods (minnow traps, angling, seine) and passes without an area are not in it, so the `.xls` track and the public layers still fill those gaps.
+- `queries/*.sql` (the extraction queries) and `fiss-database-structure/` (the FDIS data model).
+
+Individual fish with a length, 2020 export alone: **BT 15,257 of 15,309** (8,821 with weight, 9,741 with maturity code), **CH 4,769 of 4,910**, DV 8,848. The 2022 files add BT ~15k and CH ~5.5k; overlap with the 2020 export is not yet checked.
+
+This is the main source. None of it (individual lengths, maturity, per-visit effort, measured site widths and gradient) is in the public FISS layers. The `.xls` track becomes a supplement for submissions made after the export dates.
+
+## Scope: only what the province does not already serve
+
+The point is to get more than government sources give us. Before building, list what is already published at fish or event level: BC Data Catalogue FISS layers (`fiss_fish_obsrvtn_pnt_sp`, `fiss_stream_sample_sites_sp`), the Fisheries Inventory Data Queries tool, and any FDIS exports. For each, record which fields it carries (life stage, length, weight, effort, measured width and gradient, zero catches). Build only the gap, and state that gap in the output table's README. If a field is already served in usable form, join to that source instead of re-parsing it.
+
+## Proposed Solution
+
+0. Build the evidence table from `s3://fresh-bc/fdis/` first; dedupe the 2022 files against the 2020 export on `KEY`.
+1. Add the Step 2 life-stage column(s) to `wanted_cols` in `0220`, keeping the submitter's label as-is.
+2. Parse Step 3: species, fork/total length, weight, life stage, age if present, keyed to `site_key` and the Step 2 sampling event.
+3. **Derive our own life stage from size.** Use the length (and length-weight) distributions per species, and by region where the sample supports it, to set size-class breaks. Keep the breaks in one CSV with their basis (distribution modes and/or cited values from knowledge#19), not in code. Report where the derived class and the submitter's label disagree; that disagreement rate tells us how far to trust the Step 2 labels at sites with no Step 3 data.
+4. Emit a cross-group evidence table in `data/`: one row per site × species × size class, carrying `avg_channel_width_m`, `average_gradient_percent`, effort (EF seconds/length), count, the source of the class (derived from lengths or submitter label), and the NFC flag. Add `blue_line_key` / `downstream_route_measure` from the existing spatial step so link can join it to segments.
+5. Run it on the groups already fetched (COTR, UNTH, LNTH, UPCE, PINE), then widen.
+
+The table is a snapshot link reads as input; the calibration itself happens in link.
+
+Relates to NewGraphEnvironment/link#284, NewGraphEnvironment/link#283
+
+
+## Errors Encountered
+
+| Error | Resolution |
+|-------|------------|
