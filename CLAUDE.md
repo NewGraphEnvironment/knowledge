@@ -73,6 +73,15 @@ and no key. `0153` writes to the group library through the Web API and resolves 
 1Password — see cyclops #9/#10). It exits on an empty file, because a truncated write there
 otherwise reads as a JSON parse error three calls later.
 
+### The FDIS electrofishing export is ours, private, and richer than the public layers
+
+`s3://fresh-bc/fdis/` holds province-wide FDIS extracts the Province supplied for the 2021–22
+channel-width work (moved from Dropbox on 2026-09-26; `MANIFEST.md5`). It is electrofishing only.
+The 2022 `Details*` files contain every 2020 fish row, and exact duplicate rows are distinct fish.
+`counts` is the abundance table; `details` is a length subsample. `scripts/0230`–`0240` build
+from it, and `research/fdis_export.md` is the reference. The FWA "field measurement" channel
+widths are these same sites, so never score the width model against them.
+
 ### Database access
 
 `0100`, `0110`, `0160`, `0162` connect on the bcfishpass tunnel (`0200`/`0220` try it first and
