@@ -58,7 +58,8 @@ in /code-check round 3, `planning/archive/…/review-round3.md`):
 | `MINIMUM/MAXIMUM_LENGTH` | 0 | NA |
 | `GRADIENT*` | 990 etc.; 0.00 on blank forms | > 100 NA; 0 kept only when the row has a width |
 | `CHANNELWIDTH*`, `WETTEDWIDTH*` | 9999, 0 | ≥ 500 or 0 → NA |
-| `SPECIES_CODE` | `NFC`, `ZZZ` (no fish caught); `SP` (unidentified fish); `ANODON` (mussel) | zero catch; blocks an absence claim; not fish |
+| `SPECIES_CODE` | 115 codes, each classified in `data/fdis_species_codes.csv` (names from `whse_fish.species_cd`): `NFC`/`ZZZ` no fish caught; `ANODON` mussel and `CRA` crayfish not fish; `SP`, `AF` block both absences, `SA`/`AO` block CH, `TR` (trout fry < 70 mm) blocks char; `SLV` counts as char | an unclassified code stops the run |
+| `NUMBER_CAUGHT` = 0 on a species row | 21 rows | not a catch unless fish were measured |
 | `NEW_WATERSHED_CODE` | mainstem-only codes (`230-000000-…`) | not used as a placement check |
 
 Undecided: 644 habitat rows have one gradient slot at 0 and the other above 0. The data can't
@@ -104,7 +105,7 @@ Site-visit counts, measured site gradient, against the thresholds link runs now:
 | group × class | sites | with gradient | above rear max | above spawn max | below rear cw min |
 |---|---:|---:|---:|---:|---:|
 | CH present (any size) | 1,377 | 151 | 23 % (> 5.49) | 28 % (> 4.49) | 14 % |
-| char present (any size) | 7,042 | 2,080 | 11 % (> 10.49) | 34 % (> 5.49) | 9 % |
+| char present (any size) | 7,043 | 2,080 | 11 % (> 10.49) | 34 % (> 5.49) | 9 % |
 | char spawner evidence | 348 | 260 | 16 % | **42 %** | 5 % |
 
 - **CH is rearing-only here.** EF caught 2 CH ≥ 150 mm in the whole export.

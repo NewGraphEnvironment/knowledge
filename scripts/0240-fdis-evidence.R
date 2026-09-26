@@ -38,8 +38,12 @@ fish  <- readRDS(file.path(build, "fish.rds"))
 breaks <- read_csv("data/fdis_size_breaks.csv", col_types = "cccccc") |>
   mutate(length_min_mm = as.numeric(length_min_mm), length_max_mm = as.numeric(length_max_mm))
 
-char_codes <- c("BT", "DV", "BT/DV", "DV/BT", "DVxBT")
-group_of <- function(sp) case_when(sp %in% char_codes ~ "char", sp == "CH" ~ "CH", TRUE ~ NA_character_)
+species_codes <- read_csv("data/fdis_species_codes.csv", col_types = cols(.default = "c"), na = "")
+char_codes <- species_codes$code[species_codes$species_group == "char"]
+group_of <- function(sp) {
+  g <- species_codes$species_group[match(sp, species_codes$code)]
+  if_else(is.na(g) | g == "", NA_character_, g)
+}
 
 # thresholds in force (fresh parameters_habitat_thresholds.csv, bcfishpass values)
 thresholds <- tribble(
@@ -102,7 +106,7 @@ unmeasured <- catch |>
   transmute(site_visit, species_code, species_group, size_class = "unmeasured",
             # counted fish with no length, plus measured rows whose length is missing
             n = pmax(n_caught - n_measured, 0) + coalesce(n_nolength, 0L)) |>
-  filter(n > 0)
+  filter(is.na(n) | n > 0)   # NA = a sentinel count: presence with unknown abundance
 evidence <- bind_rows(by_class, unmeasured, spawners) |>
   left_join(catch |> select(site_visit, species_code, n_caught, n_measured, min_length_mm,
                             max_length_mm, flag_counts_lt_measured),
@@ -140,7 +144,8 @@ site_out <- sites |>
          gradient_pct, gradient2_pct, channel_width_m, wetted_width_m, n_cw_measures, bed_dominant,
          water_temp_c, fwa_gradient_pct, stream_order, edge_type, modelled_channel_width_m,
          channel_width_source, cw_comparable, mad_m3s,
-         catch_status, n_caught_all, species_caught, unidentified_fish, present_CH, present_char,
+         catch_status, n_caught_all, flag_count_unknown, species_caught, blocks_absence_of,
+         present_CH, present_char,
          n_ch, n_bt, n_dv, n_char_other, n_char,
          starts_with("flag_"), habitat_conflict, grad_sentinel, cw_sentinel, has_habitat,
          ws50_checked)
@@ -174,10 +179,12 @@ present <- bind_rows(
     pivot_longer(c(CH, char), names_to = "species_group", values_to = "present") |>
     filter(present) |> transmute(site_visit, species_group, size_class = "present_any_size")
 )
-# absence needs a known catch: not where an unidentified fish could have been the species
+# absence needs a known catch: not where a general or unidentified code could have been the
+# species (data/fdis_species_codes.csv, blocks_absence_of)
 absent <- usable |>
-  filter(!unidentified_fish) |>
-  transmute(site_visit, CH = !present_CH, char = !present_char) |>
+  transmute(site_visit,
+            CH   = !present_CH   & !grepl("CH", blocks_absence_of),
+            char = !present_char & !grepl("char", blocks_absence_of)) |>
   pivot_longer(c(CH, char), names_to = "species_group", values_to = "absent") |>
   filter(absent) |> transmute(site_visit, species_group, size_class = "absent")
 q <- function(v, p) if (sum(!is.na(v)) >= 5) unname(quantile(v, p, na.rm = TRUE)) else NA_real_

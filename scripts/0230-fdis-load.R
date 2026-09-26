@@ -48,9 +48,11 @@ snap_flag_m <- 100   # farther snaps are flagged, not dropped
 # ---- no-data encodings: ONE table (measured field by field in research/fdis_export.md) ----
 # Every "is this a real value" decision reads from here, so a sibling sentinel is added once.
 sentinel_min     <- 9999                # counts, fishing time, fished length/width use 9999, 9999.9, 99999
-zero_catch_codes <- c("NFC", "ZZZ")     # "No Fish Caught" (FISS/FDIS; BC Lakes pre-1996)
-nonfish_codes    <- c("ANODON")         # floater mussel
-unid_codes       <- c("SP")             # "Fish Unidentified Species": a catch that cannot rule a species out
+# species codes: every code in the export is classified in data/fdis_species_codes.csv
+# (names from whse_fish.species_cd); an unclassified code stops the run below
+species_codes    <- read_csv("data/fdis_species_codes.csv", col_types = cols(.default = "c"), na = "")
+zero_catch_codes <- species_codes$code[species_codes$catch_class == "zero_catch"]
+nonfish_codes    <- species_codes$code[species_codes$catch_class == "not_fish"]
 temp_valid       <- c(-1, 35)           # deg C
 easting_valid    <- c(1e5, 9e5)         # UTM, BC
 northing_valid   <- c(5.2e6, 6.8e6)
@@ -212,7 +214,9 @@ catch <- full_join(
     # A sentinel count with nothing measured is a catch of unknown size: NA, never 0.
     n_caught = if_else(is.na(n_counted) & flag_count_sentinel & n_measured == 0, NA_real_,
                        pmax(coalesce(n_counted, 0), n_measured))
-  )
+  ) |>
+  # a species row recorded with 0 caught and nothing measured is not a catch
+  filter(is.na(n_caught) | n_caught > 0)
 
 # NFC is recorded per pass; a later depletion pass with no fish is not a conflict, so
 # a conflict is NFC and fish recorded against the SAME pass.
@@ -225,8 +229,12 @@ nfc <- bind_rows(counts |> filter(species_code %in% zero_catch_codes) |> distinc
   group_by(site_visit) |>
   summarise(any_nfc = TRUE, flag_nfc_conflict = any(conflict), .groups = "drop")
 site_catch <- catch |> group_by(site_visit) |>
-  summarise(any_catch = TRUE, n_caught_all = sum(n_caught, na.rm = TRUE),
-            unidentified_fish = any(species_code %in% unid_codes),
+  summarise(any_catch = TRUE,
+            # unknown when every catch count at the site is a sentinel; never read as 0
+            n_caught_all = if (all(is.na(n_caught))) NA_real_ else sum(n_caught, na.rm = TRUE),
+            flag_count_unknown = any(is.na(n_caught)),
+            blocks_absence_of = paste(sort(unique(unlist(strsplit(
+              species_codes$blocks_absence_of[match(species_code, species_codes$code)], ";")))), collapse = ";"),
             n_species = n_distinct(species_code),
             species_caught = paste(sort(unique(species_code)), collapse = ";"), .groups = "drop")
 sites <- sites |>
@@ -235,8 +243,9 @@ sites <- sites |>
   mutate(
     any_nfc = coalesce(any_nfc, FALSE),
     flag_nfc_conflict = coalesce(flag_nfc_conflict, FALSE),
-    n_caught_all = coalesce(n_caught_all, 0),
-    unidentified_fish = coalesce(unidentified_fish, FALSE),
+    n_caught_all = if_else(is.na(any_catch), 0, n_caught_all),
+    flag_count_unknown = coalesce(flag_count_unknown, FALSE),
+    blocks_absence_of = coalesce(blocks_absence_of, ""),
     catch_status = case_when(
       coalesce(any_catch, FALSE) ~ "fish",   # presence, not a count: a sentinel count is still a catch
       any_nfc          ~ "zero",
@@ -275,10 +284,10 @@ placed <- DBI::dbGetQuery(conn, sprintf("
 stopifnot(!anyDuplicated(placed$site_visit))
 
 # placement check: the 50k watershed code FDIS recorded -> the 20k blue_line_keys it maps to
-# a code naming only a mainstem (every digit after the first 9 zero) cannot place a site on
-# a tributary, so it is not a check
+# a 50k code is a 3-digit basin then seven 6-digit levels; a code with every level zero names
+# only a mainstem and cannot place a site on a tributary, so it is not a check
 ws50 <- fish |> filter(!is.na(watershed_code_50k), nchar(watershed_code_50k) == 45,
-                       substr(watershed_code_50k, 10, 45) != strrep("0", 36)) |>
+                       substr(watershed_code_50k, 4, 45) != strrep("0", 42)) |>
   distinct(site_visit, watershed_code_50k)
 xref <- DBI::dbGetQuery(conn, "SELECT DISTINCT watershed_code_50k, blue_line_key_20k
                                  FROM whse_basemapping.fwa_streams_20k_50k
@@ -322,15 +331,21 @@ add("sites_with_habitat", sum(sites$has_habitat)); add("sites_habitat_conflict",
 add("sites_junk_date", sum(sites$flag_junk_date)); add("sites_no_area", sum(sites$flag_no_area))
 add("fish_rows_in", nrow(fish_raw)); add("fish_rows_out", nrow(fish))
 add("fish_nfc_rows", sum(fish$is_nfc)); add("fish_without_visit", sum(fish$flag_no_visit)); add("fish_no_length", sum(fish$flag_no_length))
-add("sites_effort_sentinel", sum(sites$flag_effort_sentinel)); add("sites_unidentified_fish", sum(sites$unidentified_fish))
+add("sites_effort_sentinel", sum(sites$flag_effort_sentinel))
+add("sites_blocking_ch_absence", sum(grepl("CH", sites$blocks_absence_of)))
+add("sites_blocking_char_absence", sum(grepl("char", sites$blocks_absence_of)))
 add("catch_pairs_count_unknown", sum(is.na(catch$n_caught)))
 add("counts_fish_total", n_counts_fish); add("counts_sentinel_rows", sum(counts$flag_count_sentinel))
 add("catch_pairs_counts_lt_measured", sum(catch$flag_counts_lt_measured))
 print(rec, n = Inf)
 
+unclassified <- setdiff(unique(c(counts$species_code, fish$species_code)), species_codes$code)
+if (length(unclassified)) stop("species codes missing from data/fdis_species_codes.csv: ",
+                               paste(unclassified, collapse = ", "))
 if (nrow(fish_raw) != nrow(fish)) stop("fish rows lost")
 if (sum(sites$n_pass) != nrow(visits)) stop("site roll-up lost passes")
 if (sum(catch$n_measured) != sum(!fish$is_nfc & !fish$species_code %in% nonfish_codes)) stop("measured fish lost in the catch roll-up")
+# rows dropped as "0 caught, nothing measured" carry n_counted 0, so the sum is unchanged
 if (!isTRUE(all.equal(sum(catch$n_counted, na.rm = TRUE), n_counts_fish))) stop("counted fish lost in the catch roll-up")
 if (sum(sites$catch_status == "fish") + sum(sites$catch_status == "zero") +
     sum(sites$catch_status == "unknown") != nrow(sites)) stop("catch status does not partition sites")
