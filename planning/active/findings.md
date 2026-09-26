@@ -58,3 +58,25 @@ Relates to NewGraphEnvironment/link#284, NewGraphEnvironment/link#283
 - Public `fiss_stream_sample_sites_sp` (68,842 sites) already has measured width/gradient; FDIS adds fish size, maturity and effort at the same pass.
 - The maturity code table was not exported; RISC meanings inferred. Length type (fork/total) unknown per fish.
 - Full write-up: `research/fdis_export.md`.
+
+## Plan review (Plan agent, 2026-09-26): reproduced before acting
+
+- CH in EF details: 5,728 fish, median 60 mm, 90th percentile 82 mm, 2 fish ≥ 150 mm, 0 SP/ST. CH gives **rearing evidence only**.
+- `counts` holds 41,916 CH, 36,446 of them in pass × species pairs with no detail rows. Abundance comes from counts.
+- 26,584 `NFC` rows in counts: zero catch is explicit.
+- BT maturity: blank 5,616, IM 4,971, U 2,919, MT 1,224, M 588, SP 54, ST 9. SP/ST total 63.
+- Char codes: BT 15,381, DV 8,886, BT/DV 427, DV/BT 77, DVxBT 8.
+
+## Phase 2–3 run (log `scripts/logs/fdis/20260926_fdis_load.log`)
+
+- 53,018 site visits; 52,030 with UTM; 51,455 placed within 500 m; 5,326 snapped > 100 m (flagged).
+- Catch status: 30,130 fish, 22,308 zero (NFC only), 580 unknown. 157 same-pass NFC conflicts.
+- Placement check: FDIS gazetted name = FWA GNIS name on 94.6% of the 7,894 sites carrying both. The 50k-code xref flags 2,701 of 16,986 checkable sites (median snap 36 m vs 8 m for matches).
+- **The FWA "field measurement" channel width is these same sites.** On 12,688 sites with source `FIELD_MEASURMENT`, 69% equal our measured width exactly. Measured-vs-modelled can only be compared where the source is `MODELLED`: 3,820 sites, log correlation 0.54, median ratio 0.98, p10–p90 ratio 0.44–2.58. So the modelled width is off by more than 2× at about one site in five. That is relevant to fresh#29 and to any channel-width threshold.
+
+## Errors Encountered
+
+| Error | Resolution |
+|-------|------------|
+| Inline `Rscript -e '…sub(…"\\1"…)'` returned 1 site | Probes moved to scratch `.R` files; the script's `site_of()` was unaffected |
+| Site-level NFC "conflict" counted a depletion pass 2 with no fish (1,506) | Conflict defined at pass level (157) |

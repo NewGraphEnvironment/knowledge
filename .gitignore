@@ -11,3 +11,5 @@ data/rag/
 .Rhistory
 # FISS run-log debris: retries and aborted attempts (scripts/logs/fiss/README.md)
 scripts/logs/fiss/runs/
+# FDIS export cache: source of truth is s3://fresh-bc/fdis/ (scripts/0230 syncs it)
+data/fdis/

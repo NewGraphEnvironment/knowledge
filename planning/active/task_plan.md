@@ -30,15 +30,28 @@ What exploration established (2026-09-26):
 - [x] Write `research/fdis_export.md`: provenance, contents, units, known defects (area blanks, UTM blanks, junk dates), and the gap statement.
 
 ## Phase 2: Load and QA (`scripts/0230-fdis-load.R`)
-- [ ] Sync `s3://fresh-bc/fdis/` into an ignored local cache `data/fdis/` in one `aws s3 sync` call. Add it to `.gitignore`.
-- [ ] Build a pass table: visits ⋈ habitat, with mean measured channel width, wetted width and gradient; effort (fishing time, area); and date.
-- [ ] Build a fish table from 2022 `Details*`, deduped, keyed to the pass.
-- [ ] QA flags, never silent drops: no UTM, junk date, no area, zero-length fish. Write a reconcile log that `stop()`s when row counts don't add up (same pattern as `0220`).
+- [x] Sync `s3://fresh-bc/fdis/` into an ignored local cache `data/fdis/` in one `aws s3 sync` call. Add it to `.gitignore`.
+- [x] Build a pass table: visits ⋈ habitat, with mean measured channel width, wetted width and gradient; effort (fishing time, area); and date.
+- [x] Build a fish table from 2022 `Details*`, deduped, keyed to the pass.
+- [x] QA flags, never silent drops: no UTM, junk date, no area, zero-length fish. Write a reconcile log that `stop()`s when row counts don't add up (same pattern as `0220`).
+
+## Revisions after plan review (2026-09-26)
+
+A plan review (Plan agent), each finding reproduced before acting, changed the build:
+- The grain is the site visit, not the pass: depletion passes repeat the same population.
+- Abundance comes from `counts`; `details` is a length subsample (87% of counted CH have no measured fish).
+- Zero catch is explicit (`NFC` in `counts`), not inferred. A conflict means NFC and fish on the same pass.
+- No fish-row dedupe: exact duplicates are distinct fish (the fish sequence number wasn't exported).
+- Habitat joins at site level. GRADIENT11/12 are primary; 21/22 are kept separate.
+- Placement uses province-wide FWA tables, not `fresh.streams` (98 groups locally), and is checked against the 50k watershed code.
+- CH has no adults in EF data, so CH gives rearing evidence only. BT spawning evidence needs month plus maturity, not length alone.
+- The maturity check compares SP/ST with IM only (MT median length is 135 mm).
+- BT/DV: codes are kept as recorded, plus a combined char column.
 
 ## Phase 3: Place on the network (`0230`, continued)
-- [ ] Index each pass location with `fwa_indexpoint` on 5432, falling back to the tunnel. Return `blue_line_key`, `downstream_route_measure`, snap distance and `watershed_group_code`.
-- [ ] Join the snapped segment's modelled `gradient`, `channel_width` and `channel_width_source` from `fresh.streams`, so measured and modelled values sit side by side.
-- [ ] Flag snaps beyond a distance threshold (reported, not dropped).
+- [x] Index each pass location with `fwa_indexpoint` on 5432, falling back to the tunnel. Return `blue_line_key`, `downstream_route_measure`, snap distance and `watershed_group_code`.
+- [x] Join the snapped segment's modelled `gradient`, `channel_width` and `channel_width_source` from `fresh.streams`, so measured and modelled values sit side by side.
+- [x] Flag snaps beyond a distance threshold (reported, not dropped).
 
 ## Phase 4: Size classes for CH and BT (`scripts/0240-fdis-size-classes.R`)
 - [ ] Plot length distributions per species by region (major drainage) and by month of capture. Emergence timing shifts fry sizes, so month matters.
