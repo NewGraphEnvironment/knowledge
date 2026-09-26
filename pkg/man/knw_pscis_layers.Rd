@@ -11,7 +11,8 @@ A named \code{character} vector of \code{schema.table} names.
 }
 \description{
 The four PSCIS "spatial view" layers, named by the phase of work each records.
-Each carries an \code{ecocat_url} pointing at the report that documents the work.
+Each carries a link to the report that documents the work (\code{ecocat_url}, or
+\code{habconf_ecocat_url} on the habitat-confirmation layer).
 }
 \examples{
 knw_pscis_layers()

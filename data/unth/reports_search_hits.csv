@@ -1,0 +1,314 @@
+query,report_id,title,in_region,excluded,already,nge_own,verdict
+fish passage north thompson,24174,"2008/2009 Fish Presence/Absence Mapping, Kamloops TSA FIA# 4896007",TRUE,FALSE,FALSE,FALSE,keep
+fish passage north thompson,24520,2010 Fish Passage Culvert Inspection (FPCI) Fish Presence/Absence Mapping Progress Report (Phases 1 through 3) FIA# 9023003,FALSE,FALSE,FALSE,FALSE,off_region
+fish passage north thompson,24379,Assessment of Non-Natural Coho Barriers in the North Thompson Watershed FIA# 4205014,TRUE,FALSE,FALSE,FALSE,keep
+fish passage north thompson,24281,"Fish Collection Permit KA11-73175 Unnamed tributary to Cindy Lake, Unnamed tributary to Efdee Lake, Unnamed tributary to North Thompson River",TRUE,FALSE,FALSE,FALSE,keep
+fish passage north thompson,24097,"Fish Passage Culvert Inspection (FPCI) Various Sites on TFL 18 in the Lower North Thompson (LNT), Mahood (M) & Clearwater (CW) Watersheds FIA# 4972001 [PSCIS5]",TRUE,FALSE,FALSE,FALSE,keep
+fish passage north thompson,61948,Fish Salvage Unnamed 2022; KA22-737683,FALSE,FALSE,FALSE,FALSE,off_region
+fish passage north thompson,58437,Fish Salvage Unnamed Tributary to North Thompson River - 2019 - KA19-521376,TRUE,FALSE,FALSE,FALSE,keep
+fish passage north thompson,58812,"Forestry Stream Classification, trib to Upper North Thompson at Avola; KA18-337876; 2018",TRUE,FALSE,FALSE,FALSE,keep
+fish passage north thompson,369,Freshwater Biology of Thompson River Steelhead (Salmo gairdneri) as Determined by Radio Telemetry,TRUE,FALSE,FALSE,FALSE,keep
+fish passage north thompson,21368,"Haggard Creek Culvert Replacement: Baseline Fish Sampling Results, 1998 and 1999",FALSE,FALSE,FALSE,FALSE,off_region
+fish passage north thompson,29423,McArthur Slough Fish Sampling and Information - 2001,FALSE,FALSE,FALSE,FALSE,off_region
+fish passage north thompson,54400,North Thompson River Watershed Fisheries Inventory 1974,TRUE,FALSE,FALSE,FALSE,keep
+fish passage north thompson,64523,"North Thompson, EES-045; Culvert Remediation (AHRF), Fish Inventory - 2023; KA23-791286",TRUE,FALSE,FALSE,FALSE,keep
+fish passage north thompson,15219,A Reconnaissance Survey Of Azure Lake 00265MURT,FALSE,FALSE,FALSE,FALSE,off_region
+fish passage north thompson,15488,A Reconnaissance Survey Of Lost Lake (Lake 999) 01240LNTH,FALSE,FALSE,FALSE,FALSE,off_region
+fish passage north thompson,25657,Removal & Restoration of Fennell Creek Barrier to Fish Passage - Kamloops Forest District / Southern Interior Forest Region FIA# 4350004,TRUE,FALSE,FALSE,FALSE,keep
+fish passage thompson,24174,"2008/2009 Fish Presence/Absence Mapping, Kamloops TSA FIA# 4896007",TRUE,FALSE,FALSE,FALSE,keep
+fish passage thompson,24520,2010 Fish Passage Culvert Inspection (FPCI) Fish Presence/Absence Mapping Progress Report (Phases 1 through 3) FIA# 9023003,FALSE,FALSE,FALSE,FALSE,off_region
+fish passage thompson,24379,Assessment of Non-Natural Coho Barriers in the North Thompson Watershed FIA# 4205014,TRUE,FALSE,FALSE,FALSE,keep
+fish passage thompson,24281,"Fish Collection Permit KA11-73175 Unnamed tributary to Cindy Lake, Unnamed tributary to Efdee Lake, Unnamed tributary to North Thompson River",TRUE,FALSE,FALSE,FALSE,keep
+fish passage thompson,24097,"Fish Passage Culvert Inspection (FPCI) Various Sites on TFL 18 in the Lower North Thompson (LNT), Mahood (M) & Clearwater (CW) Watersheds FIA# 4972001 [PSCIS5]",TRUE,FALSE,FALSE,FALSE,keep
+fish passage thompson,24425,"Fish Passage Culvert Inspection Nehalliston, Demers and Eakin Watersheds FIA# 4594004",FALSE,FALSE,FALSE,FALSE,off_region
+fish passage thompson,24462,"Fish Passage Culvert Inspections at Selected Crossings In Pennask Creek and Trepanier Creek Watersheds, FIA# 4832002",FALSE,FALSE,FALSE,FALSE,off_region
+fish passage thompson,61948,Fish Salvage Unnamed 2022; KA22-737683,FALSE,FALSE,FALSE,FALSE,off_region
+fish passage thompson,58437,Fish Salvage Unnamed Tributary to North Thompson River - 2019 - KA19-521376,TRUE,FALSE,FALSE,FALSE,keep
+fish passage thompson,58812,"Forestry Stream Classification, trib to Upper North Thompson at Avola; KA18-337876; 2018",TRUE,FALSE,FALSE,FALSE,keep
+fish passage thompson,369,Freshwater Biology of Thompson River Steelhead (Salmo gairdneri) as Determined by Radio Telemetry,TRUE,FALSE,FALSE,FALSE,keep
+fish passage thompson,32002,Habitat Conservation Fund Project Progress Report Bonaparte River Fish Passage,FALSE,FALSE,FALSE,FALSE,off_region
+fish passage thompson,21368,"Haggard Creek Culvert Replacement: Baseline Fish Sampling Results, 1998 and 1999",FALSE,FALSE,FALSE,FALSE,off_region
+fish passage thompson,29423,McArthur Slough Fish Sampling and Information - 2001,FALSE,FALSE,FALSE,FALSE,off_region
+fish passage thompson,54400,North Thompson River Watershed Fisheries Inventory 1974,TRUE,FALSE,FALSE,FALSE,keep
+fish passage thompson,64523,"North Thompson, EES-045; Culvert Remediation (AHRF), Fish Inventory - 2023; KA23-791286",TRUE,FALSE,FALSE,FALSE,keep
+fish passage thompson,15219,A Reconnaissance Survey Of Azure Lake 00265MURT,FALSE,FALSE,FALSE,FALSE,off_region
+fish passage thompson,15488,A Reconnaissance Survey Of Lost Lake (Lake 999) 01240LNTH,FALSE,FALSE,FALSE,FALSE,off_region
+fish passage thompson,25657,Removal & Restoration of Fennell Creek Barrier to Fish Passage - Kamloops Forest District / Southern Interior Forest Region FIA# 4350004,TRUE,FALSE,FALSE,FALSE,keep
+culvert north thompson,16531,2005 Fish Sampling & Habitat Compensation Assessment For Clearwater Mile 59.0 Scientific Fish Collection Permit KA05-14235 North Thompson River,TRUE,FALSE,FALSE,FALSE,keep
+culvert north thompson,17242,2008 Fish Sampling & Habitat Compensation Assessment Mile 59.0 Clearwater Subdivision: Five Year Final Report for New Back Channel,TRUE,FALSE,FALSE,FALSE,keep
+culvert north thompson,24174,"2008/2009 Fish Presence/Absence Mapping, Kamloops TSA FIA# 4896007",TRUE,FALSE,FALSE,FALSE,keep
+culvert north thompson,24520,2010 Fish Passage Culvert Inspection (FPCI) Fish Presence/Absence Mapping Progress Report (Phases 1 through 3) FIA# 9023003,FALSE,FALSE,FALSE,FALSE,off_region
+culvert north thompson,64643,"Box Culvert Removals on Unnamed Tributary to North Thompson River, Fish Salvage - 2025; KA25-982328",TRUE,FALSE,FALSE,FALSE,keep
+culvert north thompson,42636,Fish Collection Permit KA12-83024 Unnamed Stream in the North Thompson watershed,TRUE,FALSE,FALSE,FALSE,keep
+culvert north thompson,24097,"Fish Passage Culvert Inspection (FPCI) Various Sites on TFL 18 in the Lower North Thompson (LNT), Mahood (M) & Clearwater (CW) Watersheds FIA# 4972001 [PSCIS5]",TRUE,FALSE,FALSE,FALSE,keep
+culvert north thompson,61948,Fish Salvage Unnamed 2022; KA22-737683,FALSE,FALSE,FALSE,FALSE,off_region
+culvert north thompson,58437,Fish Salvage Unnamed Tributary to North Thompson River - 2019 - KA19-521376,TRUE,FALSE,FALSE,FALSE,keep
+culvert north thompson,21368,"Haggard Creek Culvert Replacement: Baseline Fish Sampling Results, 1998 and 1999",FALSE,FALSE,FALSE,FALSE,off_region
+culvert north thompson,4084,Harmon Lake Stock Assessment 2000 01097LNIC,FALSE,FALSE,FALSE,FALSE,off_region
+culvert north thompson,29423,McArthur Slough Fish Sampling and Information - 2001,FALSE,FALSE,FALSE,FALSE,off_region
+culvert north thompson,64642,"North Thompson Forest Service Road Phase 1 Deactivation, Fish Salvage - 2025; KA25-982325",TRUE,FALSE,FALSE,FALSE,keep
+culvert north thompson,64523,"North Thompson, EES-045; Culvert Remediation (AHRF), Fish Inventory - 2023; KA23-791286",TRUE,FALSE,FALSE,FALSE,keep
+culvert north thompson,15366,A Reconnaissance Survey Of Goodwin Lake 01362MAHD,FALSE,FALSE,FALSE,FALSE,off_region
+culvert north thompson,15406,A Reconnaissance Survey Of John Lake (Lake 1638) 1994 01411MAHD,FALSE,FALSE,FALSE,FALSE,off_region
+culvert north thompson,15400,"A Reconnaissance Survey Of Thuya Lake (Island Lake, Lake 1742) 1992 00762LNTH",FALSE,FALSE,FALSE,FALSE,off_region
+culvert north thompson,25657,Removal & Restoration of Fennell Creek Barrier to Fish Passage - Kamloops Forest District / Southern Interior Forest Region FIA# 4350004,TRUE,FALSE,FALSE,FALSE,keep
+culvert north thompson,16391,Scientific Fish Collection Permit KA04-4128 2004 Fish Sampling & Habitat Compensation Assessment For Clearwater Mile 59.0,TRUE,FALSE,FALSE,FALSE,keep
+PSCIS north thompson,24097,"Fish Passage Culvert Inspection (FPCI) Various Sites on TFL 18 in the Lower North Thompson (LNT), Mahood (M) & Clearwater (CW) Watersheds FIA# 4972001 [PSCIS5]",TRUE,FALSE,FALSE,FALSE,keep
+fish passage clearwater,16850,2007 Fish Sampling & Habitat Compensation Assessment Mile 59.0 Clearwater Subdivision,TRUE,FALSE,FALSE,FALSE,keep
+fish passage clearwater,53746,Callazon and Clearwater Creek Pre-Impact Reconnaissance,TRUE,FALSE,FALSE,FALSE,keep
+fish passage clearwater,24436,"Fish Passage Culvert Inspection (FPCI) Tributaries to the Raft River, Hole in the Wall FSR FIA# 4596003",TRUE,FALSE,FALSE,FALSE,keep
+fish passage clearwater,24097,"Fish Passage Culvert Inspection (FPCI) Various Sites on TFL 18 in the Lower North Thompson (LNT), Mahood (M) & Clearwater (CW) Watersheds FIA# 4972001 [PSCIS5]",TRUE,FALSE,FALSE,FALSE,keep
+fish passage clearwater,15219,A Reconnaissance Survey Of Azure Lake 00265MURT,FALSE,FALSE,FALSE,FALSE,off_region
+fish passage clearwater,4825,A Reconnaissance Survey of Clearwater Lake 00332PCEA,TRUE,TRUE,FALSE,FALSE,excluded_other_group
+fish passage culvert inspection FPCI north thompson,24174,"2008/2009 Fish Presence/Absence Mapping, Kamloops TSA FIA# 4896007",TRUE,FALSE,FALSE,FALSE,keep
+fish passage culvert inspection FPCI north thompson,24520,2010 Fish Passage Culvert Inspection (FPCI) Fish Presence/Absence Mapping Progress Report (Phases 1 through 3) FIA# 9023003,FALSE,FALSE,FALSE,FALSE,off_region
+fish passage culvert inspection FPCI north thompson,24097,"Fish Passage Culvert Inspection (FPCI) Various Sites on TFL 18 in the Lower North Thompson (LNT), Mahood (M) & Clearwater (CW) Watersheds FIA# 4972001 [PSCIS5]",TRUE,FALSE,FALSE,FALSE,keep
+FPCI kamloops,24174,"2008/2009 Fish Presence/Absence Mapping, Kamloops TSA FIA# 4896007",TRUE,FALSE,FALSE,FALSE,keep
+FPCI kamloops,24520,2010 Fish Passage Culvert Inspection (FPCI) Fish Presence/Absence Mapping Progress Report (Phases 1 through 3) FIA# 9023003,FALSE,FALSE,FALSE,FALSE,off_region
+FPCI kamloops,35590,Designs for Four Sites in the Headwaters Forest District FIA# 9099001,FALSE,FALSE,FALSE,FALSE,off_region
+FPCI kamloops,24103,Fish Passage Culvert Inspection (FPCI) Various Sites in the Adams Lake Watershed within the Kamloops and Headwaters Forest Districts FIA# 5041001 [PSCIS8],TRUE,FALSE,FALSE,FALSE,keep
+FPCI kamloops,24097,"Fish Passage Culvert Inspection (FPCI) Various Sites on TFL 18 in the Lower North Thompson (LNT), Mahood (M) & Clearwater (CW) Watersheds FIA# 4972001 [PSCIS5]",TRUE,FALSE,FALSE,FALSE,keep
+FPCI kamloops,24425,"Fish Passage Culvert Inspection Nehalliston, Demers and Eakin Watersheds FIA# 4594004",FALSE,FALSE,FALSE,FALSE,off_region
+FPCI kamloops,25681,"Fish Passage Restoration Project Chuwhels 1/4/5, Cherry Creek Watershed, and Southern Interior Region FIA# 4734005",FALSE,FALSE,FALSE,FALSE,off_region
+FPCI kamloops,25679,"Fish Passage Restoration Project [Jamieson-Bonaparte, Bonaparte River, and Southern Interior Region] FIA# 4734003",FALSE,FALSE,FALSE,FALSE,off_region
+FPCI kamloops,25836,"Fish Passage Restoration Project [Meadow Lake tributary, Southern Interior Forest Region] FIA# 4894005",FALSE,FALSE,FALSE,FALSE,off_region
+FPCI kamloops,25683,Fish Passage Restoration Project on Niskonlith Creek (S3) at 17 km on the Eileen Lake FSR FIA# 4742006,FALSE,FALSE,FALSE,FALSE,off_region
+FPCI kamloops,25814,Fish Passage Restoration Projects Culvert Replacements - Jamieson Creek TFL #35 - Southern Interior Forest Region FIA# 4811006,FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,24440,"2007/2008 Fish Passage Culvert Inspections (FPCI) BC Timber Sales, Okanagan TSA 22 Mugford Creek Unit, Pennask Unit FIA# 4770004",FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,24441,"2007/2008 Fish Passage Culvert Inspections (FPCI) Tolko Industries Ltd., Okanagan TSA 22 Duteau Plateau Unit, Trinity Creek Unit, Lees Lake Unit, Kingfisher/Mabel Lake Unit and Sugar Lake Unit FIA# 4778004",FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,24174,"2008/2009 Fish Presence/Absence Mapping, Kamloops TSA FIA# 4896007",TRUE,FALSE,FALSE,FALSE,keep
+Snowy River Resources,18070,Compendium of Fish Passage Works Completed by Snowy River Resources Ltd. 2001-02,FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,26276,Culvert Replacement at Site 5 25km Fish Road FIA# 9142001,FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,26342,Culvert Replacement at Site K3 on a Tributary to Kelly River FIA# 9146002,FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,26281,"Culvert Replacement at Site RW2 Rock Creek, Arrow Boundary Forest District FIA# 9146001",FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,26279,Culvert Replacement to Restore Fish Passage at BaldyCreek 15 on TFL 59 FIA# 9142005,FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,26278,Culvert Replacement to Restore Fish Passage at Site Trib to Solco 1 on TFL 59 FIA# 9142004,FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,26277,Culvert Replacment of Site 6 on Solco Creek FIA# 9142002,FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,35590,Designs for Four Sites in the Headwaters Forest District FIA# 9099001,FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,9760,Fish Collection Form for an unnamed tributary to Baldy Creek,FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,9758,Fish Collection Form for Blue Springs Creek and unnamed tributaries,FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,9841,Fish Collection Form for Fish Sampling at Galois Creek,FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,9845,Fish Collection Form for Fish Sampling of Knudson Creek,FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,9844,Fish Collection Form for Fish Sampling of Moody Creek,FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,9850,Fish Collection Form for Fish Sampling of Reach 1 of Weird Creek,FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,9804,Fish Collection Form for Mike Creek,FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,9773,Fish Collection Form for Saunier Creek and associated unnamed tributaries,FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,9807,Fish Collection Form for Strutell Creek and associated tributaries,FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,9771,Fish Collection Form for Winnifred Creek and associated unnamed tributaries,FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,9823,Fish Collection Form for a sample site on Cool Creek,FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,9858,Fish Collection Form for an unnamed tributary stream to Wilkinson Creek,FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,9826,Fish Collection Form for an unnamed tributary to Burns Creek,FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,9739,Fish Collection Form for an unnamed tributary to Coteay Creek,FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,9751,Fish Collection Form for an unnamed tributary to Ellen Lake,FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,9745,Fish Collection Form for an unnamed tributary to Mohr Creek,FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,9821,Fish Collection Form for an unnamed tributary to Pooley Creek,FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,9752,Fish Collection Form for an unnamed tributary to the Nicola River,FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,9825,Fish Collection Form for an unnamed tributary to the West Kettle River,FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,9860,Fish Collection Form for fish sampling of an unnamed tributary associated with Siwash Creek,FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,9855,Fish Collection Form for fish sampling of an unnamed tributary stream associated with Young Creek,FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,9848,Fish Collection Form for fish sampling undertaken on two sites on Bull Creek and one unnamed tributary.,FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,9780,Fish Collection Form for four unnamed tributaries to the Kettle River,FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,9750,Fish Collection Form for one site on Bolingbroke Creek,FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,9856,Fish Collection Form for one site on Simem Creek and one site on an associated unnamed tributary,FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,9748,Fish Collection Form for one site sampled on Reach 1 of Leech Creek,FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,9824,Fish Collection Form for one unnamed tributary to Clover Creek,FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,9749,Fish Collection Form for one unnamed tributary to Trepanier Creek,FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,9755,Fish Collection Form for sample sites on Olalla Creek and one unnamed tributary stream,FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,9754,Fish Collection Form for three sites on Heckman Creek and one unnamed tributary,FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,9822,Fish Collection Form for three unnamed tributaries to Red Creek,FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,9852,Fish Collection Form for three unnamed tributary streams to the Kelly River,FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,9849,Fish Collection Form for two unnamed tributaries associated with Damfino Creek.,FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,9757,Fish Collection Form for two unnamed tributaries to McIntyre Creek,FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,9759,Fish Collection Form for two unnamed tributaries to the Shuswap River,FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,9805,Fish Collection Form for two unnamed tributaries to the West Kettle River,FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,16848,"Fish Collection Permit KA06-23112 Stumplake Creek, Unnamed lake #1142, Belcache Lake Creek, Charcoal Creek, Blowhole Creek and numerous unnamed streams",FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,17255,Fish Collection Permit KAPE07-33102 Niskonlith Creek Bonaparte River and numerous unnamed streams,FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,11346,Fish Collection summaries for selected stream classifications within the Thompson and Okanagan Regions - Fish Collection Permit No 34770-20,TRUE,FALSE,FALSE,FALSE,keep
+Snowy River Resources,63576,Fish Inventory and Stream Classification Kettle Operating Area,FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,63569,Fish Inventory and Stream Classification Tributaries to lnonoaklin Creek (CP 35),FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,63568,"Fish Inventory and Stream Classification Tributary 1 to Eagle Creek (CP 16, Block 3)",FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,63567,"Fish Inventory and Stream Classification Yellow Creek (CP 25, Block 14)",FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,24437,"Fish Passage Culvert Inspection (FPCI) George Creek, Bear Creek and two tributaries to Tsikwustum Creek FIA# 4598007",FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,24436,"Fish Passage Culvert Inspection (FPCI) Tributaries to the Raft River, Hole in the Wall FSR FIA# 4596003",TRUE,FALSE,FALSE,FALSE,keep
+Snowy River Resources,25974,Fish Passage Culvert Inspection (FPCI) Tributary to Kwikoit Creek (Scotch Creek Watershed) FIA# 4772002,FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,24097,"Fish Passage Culvert Inspection (FPCI) Various Sites on TFL 18 in the Lower North Thompson (LNT), Mahood (M) & Clearwater (CW) Watersheds FIA# 4972001 [PSCIS5]",TRUE,FALSE,FALSE,FALSE,keep
+Snowy River Resources,10409,"Fish Passage Culvert Inspection (FPCI), Tolko Okanagan TSA 22 and TFL 49 - SOTFL494668004 & SOTSA4634004: Collection Permit No. PE06-22695 FIA# 4634004 4668004",FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,35604,Fish Passage Remediation 36.25 km Esperon Creek FSR FIA# 4778006,FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,26080,Fish Passage Restoration Projects Charcoal Creek Forest Service Road 29 km Southern Interior Region Forest Region FIA# 5048006,FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,25672,Fish Passage Restoration above the George Creek crossing on the Vavenby/Adams FSR FIA# 4598014,TRUE,FALSE,FALSE,FALSE,keep
+Snowy River Resources,17069,"Fish Permit KA-CB-PE06-20663 Trout Creek, Mission Creek",FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,21379,Fish Presence & Absence in Mile High Lakes and Outlet 00456KETL,FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,51149,Fish Sampling Summary that includes Winnifred Creek,FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,9753,Fish collection Form for Teepee Creek and associated unnamed tributaries,FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,51097,Fish presence/absence in Mile High Lakes and the outlet to Mile High Lakes (tributary to Goathide Creek),FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,20573,"Inventory and Habitat Assessment of Thompson Brook, Kelowna, BC",TRUE,FALSE,FALSE,FALSE,keep
+Snowy River Resources,13430,"An Inventory of Non-natural Barriers to Fish Passage in the Okanagan, Boundary and Similkameen - Phase 1 Overview Report",FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,51262,KLO Creek (Canyon) Sampling 2000,FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,23788,"Letter: Inventory and Habitat Assessment of Thompson Creek (Thompson Brook Creek), Kelowna, BC",TRUE,FALSE,FALSE,FALSE,keep
+Snowy River Resources,25663,"McNulty Creek Fish Passage Restoration, McNulty Creek Watershed, Southern Interior Forest Region FIA# 4474002",FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,134,"Reconnaissance (1:20,000) Fish and Fish Habitat Inventory for Silver Hills Watershed (128-835500)",FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,35559,"Sampling conducted by Snowy River: Big Goat, Tolman, Birk, Clematis, Mclean, Goatskin, TeePee, Pennask, Twelve & Fourteen Mile, Wildhorse, Blind Valley, East Ingram, Dinsmore, Belgo, Sutherland, Copper, Bitler, Whipsaw, Burrell, Winnifred, Almond, Damfino, Ireland, Knappen, June, Vaseux, McIntyre, Hedley, Winters, Ellis, KLO, Trapping, Solco, Pooley, Hydraulic, Jack, Currie, Cherry, Nicoll, Severide, St. Annes, Whitefoot, Iltcoola, Steven, Inkaneep, Crile, Sugar & Taurus Lakes, Nicola River",FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,60091,Status and Management of Wild Turkey in Okanagan Region 8 (Draft),FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,10376,Stream Classification Report for Kettle River Watershed Streams: Collection Permit No. SUKAPE0515029,FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,10355,Stream Classification for selected streams in the Okanagan Region Fish: Collection Permit No. PE046386/V1KAPE042202,FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,12295,"Stream Classification of selected streams in the South Thompson, Okanagan and Kettle Watersheds Fish Collection Permit PE07-33112",TRUE,FALSE,FALSE,FALSE,keep
+Snowy River Resources,12300,"Stream classification for selected streams in the Thompson, and North Thompson Watersheds Fish Collection Permit KA07-33115",TRUE,FALSE,FALSE,FALSE,keep
+Snowy River Resources,25662,"Thuya Creek Fish Passage Restoration, Thuya Creek Watershed Southern Interior Forest Region FIA# 4446004",FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,51183,Walk-in Lake Access Management Report Culper (Cluper) Lake,FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,21768,"Walk-in Lake Access Management Report Culper, Derickson, Derenzy, Hidden, Lees, Loch Drinkie, Loch Lost, Rouse, Two John Lakes 1 and 2, Unnamed Lake 4479 (near Ellen lake) Wilson lake",FALSE,FALSE,FALSE,FALSE,off_region
+Snowy River Resources,51141,Walk-in Lake Access Management Report Two John Lakes 1 and 2,FALSE,FALSE,FALSE,FALSE,off_region
+Secwepemc Fisheries Commission,24379,Assessment of Non-Natural Coho Barriers in the North Thompson Watershed FIA# 4205014,TRUE,FALSE,FALSE,FALSE,keep
+Secwepemc Fisheries Commission,58805,Fish Salvage Lanes Creek; 2019; PE19-519375,FALSE,FALSE,FALSE,FALSE,off_region
+Secwepemc Fisheries Commission,39516,Habitat Complexing (Pool Creation) in Bessette Creek - Phase II (11.SHU.04),FALSE,FALSE,FALSE,FALSE,off_region
+Secwepemc Fisheries Commission,35798,Lower Creighton Creek Restoration Project,FALSE,FALSE,FALSE,FALSE,off_region
+Secwepemc Fisheries Commission,25657,Removal & Restoration of Fennell Creek Barrier to Fish Passage - Kamloops Forest District / Southern Interior Forest Region FIA# 4350004,TRUE,FALSE,FALSE,FALSE,keep
+Secwepemc Fisheries Commission,64532,"Thompson-Shuswap Area, Fish Salvage - 2023; KA23-813616; AM1KA23-813616",TRUE,FALSE,FALSE,FALSE,keep
+Secwepemc Fisheries Commission,64562,"Thompson-Shuswap, Fish Salvage - 2024; KA24-849021",TRUE,FALSE,FALSE,FALSE,keep
+Integrated ProAction,25677,"Fish Passage Restoration Project 8.5 km Double Lake Unnammed Creek Channel Restoration, Southern Interior Region FIA# 4674001",FALSE,FALSE,FALSE,FALSE,off_region
+Integrated ProAction,25814,Fish Passage Restoration Projects Culvert Replacements - Jamieson Creek TFL #35 - Southern Interior Forest Region FIA# 4811006,FALSE,FALSE,FALSE,FALSE,off_region
+Integrated ProAction,25808,Fish Passage Restoration Projects Site 11 Culvert Replacement - TFL #18 Southern Interior Forest Region FIA# 4807002,FALSE,FALSE,FALSE,FALSE,off_region
+Integrated ProAction,25682,Fish Passage Restoration Projects Sites 13 & 15 Culvert Replacements - Raft River Southern Interior Forest Region FIA# 4736002,TRUE,FALSE,FALSE,FALSE,keep
+Trumbley,2290,"1:5,000 Fish Stream Classification with a Phase V-VI Reconnaissance 1:20,000 Fish and Fish Habitat Inventory Deliverable on the Osborne FSR, Alces FSR and Various TSLs in the Fort St. John Forest District",FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,24174,"2008/2009 Fish Presence/Absence Mapping, Kamloops TSA FIA# 4896007",TRUE,FALSE,FALSE,FALSE,keep
+Trumbley,24520,2010 Fish Passage Culvert Inspection (FPCI) Fish Presence/Absence Mapping Progress Report (Phases 1 through 3) FIA# 9023003,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,51854,83 Mile Road Culvert Removal Salvage - 2016; WL16-232056,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,60052,Bessette Creek Riparian Restoration Planning COA-F22-F-3520,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,8344,Bessette Creek Watershed Fisheries Habitat Assessment Procedure,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,23904,CoalgoatlBruer/Gunner Creek Watershed Fisheries Habitat Assessment Procedure 1996,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,54056,Cooke Creek Bypass 3 Monitoring - 2017; PE17-276604,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,23833,Duteau Creek Fisheries Assessment 1995,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,15152,East Canoe Creek (WSC 128-9232800-33500) and Canoe Creek (WSC 128-961700) Post Construction Monitoring Report,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,25971,Eberts Creek Structure Replacement (36.5km Adams West FSR) FIA# 5041002,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,26082,Environmental Monitoring of the installation a bridge structure at <0.1km on a spur at 1.9km on Friendly Lake Road (FSR) FIA# 5050001,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,26072,Environmental Monitoring of the installation of a 2.13m span arch at 64km on the 1900 Road (Windy Mountain Forest Service Road) FIA# 4941003,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,19361,Fish Collection Permit CB09-58395 Kicking Horse River Tributary Fish Salvage,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,16861,"Fish Collection Permit KA07-38658 Unnamed trib to Hummamilt Lake, Unnamed trib of Scotch Creek, and Unnamed trib to Blueberry Creek",FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,17240,"Fish Collection Permit KA08-44546 Canoe Creek, East Canoe Creek and White Creek",FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,17243,"Fish Collection Permit KA08-46345 Mann Creek, Brookfield Creek and numerous unnamed streams",FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,17244,Fish Collection Permit KA08-47572 Unnamed tributaries located along Friendly Lake FSR,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,17246,"Fish Collection Permit KA08-48255 White Creek, Tappen Creek, Syphon Creek",FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,17248,Fish Collection Permit KA08-48609 Unnamed Tributary to Kitty Anne Lake,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,17249,Fish Collection Permit KA08-48610 Unnamed tributary to Meadow Lake 00286LNTH,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,18946,"Fish Collection Permit KA08-49258 Tributaries to Ratchford Creek, Myoff Creek and the Perry River",FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,20548,Fish Collection Permit KA10-64424 Unnamed tributaries to the Eagle River,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,22216,Fish Collection Permit KA10-64486 unnamed tributaries to the Rock Creek watershed and Tsikwustum (Rock) Lake,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,22218,Fish Collection Permit KA10-65480 Unnamed tributary streams to 3 Valley Gap Lake,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,24313,Fish Collection Permit KA11-73039 Unnamed streams in the Cummings Creek area,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,24281,"Fish Collection Permit KA11-73175 Unnamed tributary to Cindy Lake, Unnamed tributary to Efdee Lake, Unnamed tributary to North Thompson River",TRUE,FALSE,FALSE,FALSE,keep
+Trumbley,36033,Fish Collection Permit KA12-79900 Gordon Creek and Unnamed Lake,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,35979,"Fish Collection Permit KA12-80788 Star Creek, unnamed tributaries to the Salmon River and to the Kettle River",FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,35970,"Fish Collection Permit KA12-81455 Craster Creek, Cookson Creek, Wolff Creek, Bradley Creek, Newport Creek and unnamed tributaries to Shuswap and South Thompson watersheds",TRUE,FALSE,FALSE,FALSE,keep
+Trumbley,35926,Fish Collection Permit KA12-81458 Outlet Creek and Tributaries,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,35830,Fish Collection Permit KA12-81483 Tributaries to Rendell Creek,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,35939,Fish Collection Permit KA12-82013 Forge Creek and Axe Creek and unnamed tribs to the Shuswap River,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,35945,Fish Collection Permit KA12-83045 Ratnip Creek,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,24882,"Fish Collection Permit KAPE11-74864 Goodwin Creek and Sylvia Creek and Unnamed tributaries to Pinaus Lake, Noisy Creek, McAchaney Creek and the Nicola River",FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,17228,"Fish Collection Permit PE08-47416 Blanc Creek and Bisson Creek and unnamed tributaries to Barton Lake, Boulea Lake, North Trout Creek, and Winnifred Creek",FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,17233,Fish Collection Permit PE08-48698 Crescent Creek and Trout Creek,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,19087,"Fish Collection Permit PE09-54931 Canoe Creek, East Canoe Creek and White Creek",FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,19088,"Fish Collection Permit PE09-54933 Trinity Creek, Crescent Creek and Unnamed Tributaries to Trinity Creek",FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,18633,Fish Collection Permit PE09-56365 North Lambly Creek and an unnamed stream,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,18630,"Fish Collection Permit PE09-56872 Alocin Creek, Unnamed tributaries to Alocin Creek and Eileen Lake and Bouleau Creek",FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,18631,Fish Collection Permit PE09-58048 Unnamed Tributary to Windy Lake,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,20478,Fish Collection Permit PE10-63675 of unnamed tribs to Monashee Creek,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,24214,Fish Collection Permit PE11-71792 Equesis Creek,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,23691,Fish Collection Permit PE11-72561 Harris Creek,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,24262,Fish Collection Permit PE11-73076 Latewhos Creek and unnamed streams in Region 8,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,24263,"Fish Collection Permit PE11-73492 Rat Trap Creek, Vance Creek, Star Creek and 5 unnamed streams",FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,50452,Fish Collection Permit PE15-176992 Unnamed tributary to Harris Creek,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,24091,Fish Passage Culvert Inspection (FPCI) Inonoaklin Creek FIA# 4936006 [PSCIS4],FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,24100,Fish Passage Culvert Inspection (FPCI) Selected Sites in the Shorts Creek Watershed SOTFL49 FIA# 5038004 [PSCIS6],FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,24175,Fish Passage Culvert Inspection (FPCI) Selected Sites in the Shorts Creek Watershed SOTFL49 FIA# 5048004,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,24109,Fish Passage Culvert Inspection (FPCI) Selected Sites within Revelstoke TSA 27 FIA# 5056001 [PSCIS16],FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,24145,Fish Passage Culvert Inspection (FPCI) Tiskwustum Lake and Creek Tributaries FIA# 9025002 [PSCIS39],FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,24103,Fish Passage Culvert Inspection (FPCI) Various Sites in the Adams Lake Watershed within the Kamloops and Headwaters Forest Districts FIA# 5041001 [PSCIS8],TRUE,FALSE,FALSE,FALSE,keep
+Trumbley,24097,"Fish Passage Culvert Inspection (FPCI) Various Sites on TFL 18 in the Lower North Thompson (LNT), Mahood (M) & Clearwater (CW) Watersheds FIA# 4972001 [PSCIS5]",TRUE,FALSE,FALSE,FALSE,keep
+Trumbley,10409,"Fish Passage Culvert Inspection (FPCI), Tolko Okanagan TSA 22 and TFL 49 - SOTFL494668004 & SOTSA4634004: Collection Permit No. PE06-22695 FIA# 4634004 4668004",FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,24154,Fish Passage Culvert Inspection on Watersheds within TSA 22 FIA# 9153004 [PSCIS47],FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,24170,"Fish Passage Culvert Inspection on Watersheds within TSA 22, Crazy Creek, James Lake, Yard Creek FIA# 8165001 and 8165004 [PSCIS62]",FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,26273,Fish Passage Major Culvert replacement Bear FSR 47.75km FIA# 9055006,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,14180,Fish Presence/Absence Surveys - Railroad Creek Tributaries,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,20536,Fish Salvage and Environmental Monitoring of a Bridge Structure at 23km Along the Aberdeen Main Forest Service Road Fish Collection Permit PE10-64966,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,15155,Fish Stream Classification CP 110 (Unnamed Tributary to Kwikoit Creek) CP 119 1 (Tributary to Scotch Creek) CP 976 (Tributary to East Fork Scotch Creek),FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,15156,Fish Stream Classification CP 126-1 (Tributary to Gelling Creek),FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,15158,Fish Stream Classification of Oyama Creek Tributary,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,29298,Fish Stream Identification Bergsa Creek CB11-73511,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,35048,Fish Stream Identification and Classification of Two Tributaries of the Seymour River by Smoky House Creek,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,22773,Fish-stream Identification (FSID) 2009 Unnamed Tributary to Trinity Creek (WSC 128-835500-25700-44600),FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,18632,"Fish-stream Identification (FSID) 2009 Tributaries 1, 3, 4 & 5 to Isintok Lake and Tributary 2 to Bull Creek (CP 349) Fish Collection Permit PE09-54990",FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,8187,Glanzier Creek Watershed Fisheries Habitat Assessment Procedure,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,8469,Grano/ Hellroarer Watersheds Fisheries Habitat Assessment Procedure,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,24810,Habitat Gained Survey of the outlet tributary of Beaver Lake FIA# 9161001,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,51858,Horsefly River Salvage Site 62-035A - 2016; WL16-235730,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,8273,Interior Watershed Assessment for the Inonoaklin and Eagle Creek Watersheds,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,44504,"Kokanee Spawning Enumeration 1994 Okanagan, Kalamalka, Skaha and Wood Lakes Tributaries",FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,13498,"Kokanee Spawning Enumeration 1996 Okanagan, Kalamalka, Skaha and Wood Lakes Tributaries 00078OKAN",FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,15165,Memo to File: British Columbia Stream Restoration Project Review Report for Beaverdell Creek,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,52831,Morris Creek and tribs stream classif - 2016; PE16-230932,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,15548,Okanagan Lake Creel Census 1994 00078OKAN,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,51838,Park Mountain FSR Culvert Salvage - 2016; PE16-236055,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,8486,Pentiction/ Ellis Creek Watershed Fisheries Habitat Assessment Procedure,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,9049,Peterson Creek Watershed Fisheries Habitat Assessment Procedure,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,10395,Reconnaissance (1:20 000) Fish and Fish Habitat Inventory Of The Duteau Creek Watershed WSC: 128-835500-54100-49500 Collection Permit No. PE06-25296,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,52288,Reconnaissance (1:20 000) Fish and Fish Habitat Inventory of Various tributaries to the Chilcotin and Clusko Rivers WSCs: 150-292200 to 150-605900,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,126,"Reconnaissance (1:20,000 Fish and Fish Habitat Inventory and 1:5000 Stream Classification) of Monashee Creek Watershed",FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,10378,"Reconnaissance (1:20,000) Fish and Fish Habitat Inventory Of Duteau Creek Watershed WSC: 128-835500-54100-49500-0000-000-000-000-000-000-000-000 Phase I-III Pre-Field Project Planning Report",FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,44618,"Reconnaissance (1:20,000) Fish and Fish Habitat Inventory Of Salmon River Watershed, Volume 2 WSC: 128-994100",FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,120,"Reconnaissance (1:20,000) Fish and Fish Habitat Inventory of Bruer/Gunnar Creek Watershed",FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,131,"Reconnaissance (1:20,000) Fish and Fish Habitat Inventory of Bruer/Gunnar Creek Watershed: Follow-up Sampling Summary Report",FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,119,"Reconnaissance (1:20,000) Fish and Fish Habitat Inventory of Salmon River Watershed, Volume 1.",FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,313,"Reconnaissance 1:20,000 Fish and Fish Habitat Inventory of Nazko River Study Area WSC: 170-324300-82590-0000-000-000-000-000-000 To 170-324300-90000-0000-000-000-000-000-000",FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,1105,"Reconnaissance 1:20,000 Fish and Fish Habitat Inventory of The Inonoaklin / Eagle Watershed",FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,33113,"Riverside Forest Products, Lumby Division Stream Classification: 44.5 km on Homes/ Ferry Roads R07 604 Cutting Permit 330",FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,33115,"Riverside Forest Products, Lumby Division Stream Classification: Homes/ Ferry Roads LV2015",FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,9006,Salmon River Integrated Watershed Restoration Plan,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,35180,"Sampling of the Tranquille River, Watching Creek and Peterson Creek",FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,9901,Scientific Collection Permit Data for B.X. Creek at Vernon,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,9884,Scientific Collection Permit Data for a Fish Salvage undertaken on Middle Vernon Creek,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,14257,Scientific Collection Permit Summary Report Form - Various Okanagan Creeks,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,52837,Sleepy Hollow K1643 Monitoring Salvage - 2016; PE16-238863,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,10375,Stream Classification of Oyama Creek Tributaries: Collection Permit No. PE05-14438,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,8740,Tranquille Watching Creek Watershed Fisheries Habitat Assessment Procedure 1999,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,33298,Trumbley Environmental Consulting Limited Duteau Creek Tributary FSID November 00 Edition,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,35203,Trumbley Environmental Consulting Limited Vernon Forest District 2001 Fish Stream Identification Study,FALSE,FALSE,FALSE,FALSE,off_region
+Trumbley,15153,White Creek (WSC 128-961700) from Highway 1 to Broderick Frontage Road Post Construction Monitoring Report,FALSE,FALSE,FALSE,FALSE,off_region
+Braumandl,364,2002/2003 Seton and Anderson Lakes Kokanee Assessment - Feasibility Study and Study Design,FALSE,FALSE,FALSE,FALSE,off_region
+Braumandl,7219,Ecosystem Representation in the East Kootenay Conservation Program Study Area (FIA # 4281007 and 4214004,FALSE,FALSE,FALSE,FALSE,off_region
+Braumandl,34718,"Fish Collection Permit Number: 01-30-0660 & 01-30-0042 Murray Creek, Liza Creek, Mud Creek, Freiberg Creek",FALSE,FALSE,FALSE,FALSE,off_region
+Braumandl,34716,"Fish Collection Summary Report Permit No. 00-30-0528 Cadwallader Creek, Taylor Creek",FALSE,FALSE,FALSE,FALSE,off_region
+Braumandl,12,Seton and Anderson Lakes Kokanee and Char Assessment,FALSE,FALSE,FALSE,FALSE,off_region
+Braumandl,57466,Tobacco Plains Ecological Restoration - UKE-F19-W-2717,FALSE,FALSE,FALSE,FALSE,off_region
+Canadian Wildlife Federation,64526,"2023 Fish Passage Assessment and Habitat Confirmation of Select Crossings in the Lower Nicola Watershed Group, Inventory - 2023; KA23-806654",FALSE,FALSE,FALSE,FALSE,off_region
+Canadian Wildlife Federation,64671,"CWF Horsefly Barrier Assessments, Inventory - 2024; WL24-876934",FALSE,FALSE,FALSE,FALSE,off_region
+Canadian Wildlife Federation,61025,"Cross Creek Babine Lake Road Culvert Replacement Project. New Structure Number 10405. Environmental Monitoring Final Report. October, 2021; SM21-630076",FALSE,FALSE,FALSE,FALSE,off_region
+Canadian Wildlife Federation,61163,Elk River Watershed - Fish Passage Restoration Initiative COL-F22-F-3561,FALSE,FALSE,FALSE,FALSE,off_region
+Canadian Wildlife Federation,62930,"Elk River Watershed Westslope Cutthroat Trout Passage and Habitat Investigations, 2023; CB23-805948",FALSE,FALSE,FALSE,FALSE,off_region
+Canadian Wildlife Federation,51826,Kootenay Lake Action Plan 2016,FALSE,FALSE,FALSE,FALSE,off_region
+Canadian Wildlife Federation,50800,Salmon River Estuary Acquisition Final Report FWCP Project No. 14.L.CBR.01,FALSE,FALSE,FALSE,FALSE,off_region
+Canadian Wildlife Federation,64812,"Stone Creek Juvenile Fish Presence Survey, Inventory - 2021; PG21-921295",FALSE,FALSE,FALSE,FALSE,off_region
+Canadian Wildlife Federation,62525,Tributary to Lizard Creek Crossing Upgrade; CB23-814641,FALSE,FALSE,FALSE,FALSE,off_region
+Canadian Wildlife Federation,61596,Upper Elk River and Flathead River Fish Passage Restoration Planning; CB20-611971,FALSE,FALSE,FALSE,FALSE,off_region
+Canadian Wildlife Federation,65152,Wetland Conservation in Peace Country Project No: PEA-F26-W-4273,FALSE,FALSE,FALSE,FALSE,off_region
+Cornice Environmental,51603,Battle Creek Diversion Upgrade Salvage - 2016; KA16-237634,FALSE,FALSE,FALSE,FALSE,off_region
+Cornice Environmental,64583,"Bonaparte River, Fish Salvage - 2024; PE24-879065 XHAB 437 2024",FALSE,FALSE,FALSE,FALSE,off_region
+Cornice Environmental,50192,Bridge Deck Replacement Fraser River-2015; PG15-175421.,FALSE,FALSE,FALSE,FALSE,off_region
+Cornice Environmental,62554,Camp Creek tributary fish and fish habitat assessment; PG23-810506,FALSE,FALSE,FALSE,FALSE,off_region
+Cornice Environmental,52374,Coffin Creek Fish Passage Restoration,FALSE,FALSE,FALSE,FALSE,off_region
+Cornice Environmental,60449,Crab Apple Creek Fish Habitat Compensation Monitoring 2022; SU22-742263,FALSE,FALSE,FALSE,FALSE,off_region
+Cornice Environmental,62631,Crab Apple Creek Fish Habitat Compensation Monitoring 2023; SU23-813885,FALSE,FALSE,FALSE,FALSE,off_region
+Cornice Environmental,59344,Crab Apple Creek Fish Habitat Compensation Monitoring; 2021; SU21-625244,FALSE,FALSE,FALSE,FALSE,off_region
+Cornice Environmental,63616,"Crab Apple Creek, Fish Habitat Compensation Monitoring - 2025; SU25-973444; XR 464 2025",FALSE,FALSE,FALSE,FALSE,off_region
+Cornice Environmental,63794,"Crab Apple Creek, Fish Habitat Compensation Monitoring -2024; SU24-859830 XHAB 297 2024",FALSE,FALSE,FALSE,FALSE,off_region
+Cornice Environmental,57072,"Emergency Salvage during Pine Pass Flooding for CN Rail, 2016",FALSE,FALSE,FALSE,FALSE,off_region
+Cornice Environmental,56968,Fish Salvage Cache Creek - 2017; KA17-279883,FALSE,FALSE,FALSE,FALSE,off_region
+Cornice Environmental,50157,Fish Salvage Camp Creek for Bridge Maintenance-2015; PG15-175422.,FALSE,FALSE,FALSE,FALSE,off_region
+Cornice Environmental,58965,Fish Salvage Monte Creek; 2016; KA16-244645,FALSE,FALSE,FALSE,FALSE,off_region
+Cornice Environmental,56982,Fish Salvage Unnamed Tributary to Albreda River - 2017; KA17-280262,FALSE,FALSE,FALSE,FALSE,off_region
+Cornice Environmental,60903,Fish Salvage_Pollywog Creek Culvert Replacement_2022_SU22-777594_XHAB-230-2022,FALSE,FALSE,FALSE,FALSE,off_region
+Cornice Environmental,59517,Hunter Creek Derailment Fish Salvage; 2020; SU20-611922,FALSE,FALSE,FALSE,FALSE,off_region
+Cornice Environmental,59345,Hunter Creek Post Derailment Monitoring; 2021; SU21-625084,FALSE,FALSE,FALSE,FALSE,off_region
+Cornice Environmental,64588,"Lyon Creek, Fish Salvage - 2024; KA24-885016; XHAB 510-2024",FALSE,FALSE,FALSE,FALSE,off_region
+Cornice Environmental,59209,North Thompson River Fish Habitat Compensation Monitoring; 2020; KA20_609039,TRUE,FALSE,FALSE,FALSE,keep
+Cornice Environmental,62696,Paradise Lake Creek (alias) Fish and Fish Habitat Assessment; KA23-81501,FALSE,FALSE,FALSE,FALSE,off_region
+Cornice Environmental,62088,Sitlika Creek Fish Passage Restoration Fish Salvage PG21-625012,FALSE,FALSE,FALSE,FALSE,off_region
+Cornice Environmental,62537,Vernon Creek Fish Salvage 2023 PE23-806109,FALSE,FALSE,FALSE,FALSE,off_region

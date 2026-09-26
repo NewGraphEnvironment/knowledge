@@ -16,7 +16,10 @@
 #   - GOTCHA (skeena extract-pg.R): the ecocat_url stored in PSCIS is sometimes
 #     wrong for the crossing. Treat the harvested list as leads to verify, not gospel.
 #
-# INPUT:  wsg_target (watershed group code). Live bcfishpass DB via SSH tunnel :63333.
+# INPUT:  WSG_TARGET (required; no default — an unset variable used to run PCEA silently).
+#         bcfishpass via the SSH tunnel :63333 first, falling back to the local fwapg :5432
+#         only when the tunnel is DOWN (connection refused); the local copy carries all four
+#         PSCIS SVW layers and the FWA group polygons.
 # OUTPUT: data/<wsg>/crossings.csv, reports.csv, pscis_<wsg>.gpkg
 # The pull and the two table builders live in pkg/R/pscis.R (knw_pscis_*).
 #
@@ -30,19 +33,31 @@ suppressMessages({ library(DBI); library(RPostgres); library(sf) })
 sf::sf_use_s2(FALSE)
 
 # ---- params -----------------------------------------------------------------
-# watershed group code: env var WSG_TARGET, else pre-set `wsg_target`, else PCEA
+# watershed group code: env var WSG_TARGET, else pre-set `wsg_target`; never a default
 wsg_target <- if (nzchar(Sys.getenv("WSG_TARGET"))) Sys.getenv("WSG_TARGET") else
-              if (exists("wsg_target")) wsg_target else "PCEA"
+              if (exists("wsg_target")) wsg_target else
+              stop("WSG_TARGET is not set. Run as `WSG_TARGET=<code> Rscript scripts/0100-pscis-acat-reports.R` ",
+                   "or set `wsg_target` in the session. There is no default group.", call. = FALSE)
 wsg_lower  <- tolower(wsg_target)
 out_dir    <- file.path("data", wsg_lower)
 dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
 
-# ---- connection -------------------------------------------------------------
-# Direct DBI to the tunnel (proven). fpr::fpr_db_conn() is the ~/.Renviron-based
-# equivalent used elsewhere in the template.
-conn <- DBI::dbConnect(RPostgres::Postgres(),
-                       host = "localhost", port = 63333,
-                       dbname = "bcfishpass", user = "newgraph")
+# ---- connection: tunnel first, local fwapg when the tunnel is down ------------
+# Same rule as 0200: only "connection refused" falls back. A tunnel that is up and
+# refuses the credential (empty PGPASSWORD) stays loud.
+tunnel_err <- NULL
+conn <- tryCatch(DBI::dbConnect(RPostgres::Postgres(), host = "localhost", port = 63333,
+                                dbname = "bcfishpass", user = "newgraph"),
+                 error = function(e) { tunnel_err <<- conditionMessage(e); NULL })
+db_source <- "tunnel"
+if (is.null(conn)) {
+  if (!grepl("connection refused|could not connect|timed out", tunnel_err, ignore.case = TRUE))
+    stop("bcfishpass tunnel :63333 answered but the connection failed — not falling back:\n  ", tunnel_err, call. = FALSE)
+  conn <- DBI::dbConnect(RPostgres::Postgres(), host = "localhost", port = 5432,
+                         dbname = "fwapg", user = "postgres", password = "postgres")
+  db_source <- "local_fwapg"
+  message("bcfishpass tunnel :63333 is down (", tunnel_err, ") — using local fwapg :5432.")
+}
 
 # ---- pull + derive, through the package -------------------------------------
 # knw_pscis_pull() intersects each PSCIS layer with the FWA watershed-group
@@ -67,4 +82,5 @@ DBI::dbDisconnect(conn)
 message("\n== ", wsg_target, " summary ==")
 message("reports (distinct ecocat_url rows): ", nrow(reports))
 message("crossings (assessments): ", ifelse(is.null(crossings), 0, nrow(crossings)))
+message("db source: ", db_source)
 message("outputs -> ", out_dir)

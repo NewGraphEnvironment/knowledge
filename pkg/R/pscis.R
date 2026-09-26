@@ -1,7 +1,8 @@
 #' Provincial PSCIS layers, by phase
 #'
 #' The four PSCIS "spatial view" layers, named by the phase of work each records.
-#' Each carries an `ecocat_url` pointing at the report that documents the work.
+#' Each carries a link to the report that documents the work (`ecocat_url`, or
+#' `habconf_ecocat_url` on the habitat-confirmation layer).
 #'
 #' @return A named `character` vector of `schema.table` names.
 #' @export
@@ -62,7 +63,9 @@ knw_pscis_pull <- function(conn, wsg_code, layers = knw_pscis_layers()) {
 #'
 #' One row per distinct (`pscis_layer`, `ecocat_url`, consultant, year), with
 #' the number of crossings each report covers and the EcoCat `report_id`
-#' parsed from the URL. Layers without an `ecocat_url` column are skipped.
+#' parsed from the URL. The link column is `ecocat_url` on three layers and
+#' `habconf_ecocat_url` on the habitat-confirmation layer; any column ending in
+#' `ecocat_url` is used. Layers without one are skipped.
 #' The stored URL is sometimes wrong for the crossing, so treat the result as
 #' leads to verify rather than an inventory.
 #'
@@ -84,12 +87,13 @@ knw_pscis_reports <- function(layers) {
   rows <- lapply(names(layers), function(nm) {
     df <- layers[[nm]]
     if (inherits(df, "sf")) df <- sf::st_drop_geometry(df)
-    if (!"ecocat_url" %in% names(df)) return(NULL)
+    url_col <- .first_col(df, "ecocat_url$")
+    if (is.na(url_col)) return(NULL)
     date_col <- .first_col(df, "_date$")
     cons_col <- .first_col(df, "consultant")
     tibble::tibble(
       pscis_layer = nm,
-      ecocat_url  = as.character(df$ecocat_url),
+      ecocat_url  = as.character(df[[url_col]]),
       consultant  = if (!is.na(cons_col)) as.character(df[[cons_col]]) else NA_character_,
       year        = if (!is.na(date_col)) lubridate::year(as.Date(df[[date_col]])) else NA_integer_,
       stream_crossing_id = if ("stream_crossing_id" %in% names(df)) df$stream_crossing_id else NA_integer_
