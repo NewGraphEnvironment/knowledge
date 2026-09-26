@@ -84,9 +84,9 @@ Site-visit counts, measured site gradient, against the thresholds link runs now:
 
 | group × class | sites | with gradient | above rear max | above spawn max | below rear cw min |
 |---|---:|---:|---:|---:|---:|
-| CH present (any size) | 1,373 | 143 | 22 % (> 5.49) | 27 % (> 4.49) | 12 % |
-| char present (any size) | 7,042 | 2,073 | 11 % (> 10.49) | 34 % (> 5.49) | 9 % |
-| char spawner evidence | 348 | 258 | 16 % | **42 %** | 5 % |
+| CH present (any size) | 1,373 | 147 | 21 % (> 5.49) | 26 % (> 4.49) | 12 % |
+| char present (any size) | 7,042 | 2,081 | 11 % (> 10.49) | 34 % (> 5.49) | 9 % |
+| char spawner evidence | 348 | 260 | 16 % | **42 %** | 5 % |
 
 - **CH is rearing-only here.** EF caught 2 CH ≥ 150 mm in the whole export.
 - **Size is not maturity for char.** A third of SP/ST-coded char are 80–200 mm, so a length break alone cannot separate spawners; spawner evidence uses maturity plus month.

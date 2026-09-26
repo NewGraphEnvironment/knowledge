@@ -64,7 +64,7 @@ classify <- function(grp, len) {
   out <- rep(NA_character_, length(len)); hits <- integer(length(len))
   for (i in seq_len(nrow(breaks))) {
     b <- breaks[i, ]
-    hit <- grp == b$species_group & !is.na(len) & len >= b$length_min_mm & len < b$length_max_mm
+    hit <- grp == b$species_group & !is.na(len) & len > 0 & len >= b$length_min_mm & len < b$length_max_mm
     out[hit] <- b$size_class; hits <- hits + hit
   }
   # the breaks must tile each group: every measured fish in exactly one class

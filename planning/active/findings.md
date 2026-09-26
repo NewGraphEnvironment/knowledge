@@ -70,7 +70,7 @@ Relates to NewGraphEnvironment/link#284, NewGraphEnvironment/link#283
 ## Phase 2–3 run (log `scripts/logs/fdis/20260926_fdis_load.log`)
 
 - 53,018 site visits; 52,030 with UTM; 51,455 placed within 500 m; 5,326 snapped > 100 m (flagged).
-- Catch status: 30,130 fish, 22,308 zero (NFC only), 580 unknown. 157 same-pass NFC conflicts.
+- Catch status: 30,049 fish, 22,389 zero (NFC only), 580 unknown. 65 same-pass NFC conflicts (after code-check round 1 removed 139 NFC rows from the fish table; before: 30,130 / 22,308 / 157).
 - Placement check: FDIS gazetted name = FWA GNIS name on 94.6% of the 7,894 sites carrying both. The 50k-code xref flags 2,701 of 16,986 checkable sites (median snap 36 m vs 8 m for matches).
 - **The FWA "field measurement" channel width is these same sites.** On 12,688 sites with source `FIELD_MEASURMENT`, 69% equal our measured width exactly. Measured-vs-modelled can only be compared where the source is `MODELLED`: 3,820 sites, log correlation 0.54, median ratio 0.98, p10–p90 ratio 0.44–2.58. So the modelled width is off by more than 2× at about one site in five. That is relevant to fresh#29 and to any channel-width threshold.
 
@@ -79,15 +79,24 @@ Relates to NewGraphEnvironment/link#284, NewGraphEnvironment/link#283
 | Error | Resolution |
 |-------|------------|
 | Inline `Rscript -e '…sub(…"\\1"…)'` returned 1 site | Probes moved to scratch `.R` files; the script's `site_of()` was unaffected |
-| Site-level NFC "conflict" counted a depletion pass 2 with no fish (1,506) | Conflict defined at pass level (157) |
+| Site-level NFC "conflict" counted a depletion pass 2 with no fish (1,506) | Conflict defined at pass level (157, then 65 after the NFC-row fix) |
 
 ## Phase 4–5 run (log `scripts/logs/fdis/20260926_fdis_evidence.log`)
 
 - Char (BT + DV + hybrid codes) length: age-0 mode 40–80 mm (Jul–Sep), parr 80–200, then a long tail to 900 mm. Spring and fall medians of 372–486 mm are migrating adults.
 - Maturity check, char: IM is 55.7% fry, 42.9% juvenile, 1.3% subadult, 0.1% adult. SP/ST (n = 92 classed) is 32.6% juvenile (80–200 mm), 39.1% subadult, 28.3% adult. So 67% of SP/ST are ≥ 200 mm, and a third of spawning-coded char are under 200 mm: dwarf residents or DV.
-- CH: 4,765 measured, 99% < 120 mm, 17 ≥ 120 mm. 87% of counted CH (37,189) have no length. Rearing evidence only.
+- CH: 4,765 measured with a visit record (5,587 in the whole fish table), 99% < 120 mm, 17 ≥ 120 mm. 87% of counted CH (37,189) have no length. Rearing evidence only.
 - Site-level shares vs current thresholds (measured site gradient):
-  - CH present, any size: 1,373 sites (143 with measured gradient). 22% above rear gradient max 5.49 %; 12% below rear cw min 1.5 m.
-  - Char present: 7,042 sites (2,073 with gradient). 11% above rear max 10.49 %.
-  - Char spawner evidence (SP/ST, or M in Aug–Oct): 348 sites (258 with gradient). **42% above spawn max 5.49 %**, median 4.5 %, q90 13 %.
+  - CH present, any size: 1,373 sites (147 with measured gradient). 21% above rear gradient max 5.49 %; 12% below rear cw min 1.5 m.
+  - Char present: 7,042 sites (2,081 with gradient). 11% above rear max 10.49 %.
+  - Char spawner evidence (SP/ST, or M in Aug–Oct): 348 sites (260 with gradient). **42% above spawn max 5.49 %**, median 4.5 %, q90 13 %.
 - Caveat for every number above: site gradient is a point measure over a short reach, while model thresholds apply to a segment's average gradient. The FDIS gradient units and method codes aren't exported.
+
+## /code-check round 1 (planning/active/review-round1.md)
+
+| Error | Resolution |
+|-------|------------|
+| 139 `NFC` rows in the 2022 fish table were counted as fish: 81 sites marked "fish", conflicts inflated | `is_nfc` flag; excluded from catch, used as NFC evidence |
+| `mean_ok()` dropped recorded 0 % gradients (937 readings; 390 sites NA, 620 biased high) | Gradient means keep 0 |
+| 6 CH with length 0 were classed as fry | Class test requires length > 0 |
+| Size-break note "17 of 4,765" read as the whole table (5,587) | Population stated: fish with a visit record |

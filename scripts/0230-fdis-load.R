@@ -67,7 +67,10 @@ rd <- function(f) read_csv(f, col_types = cols(.default = col_character()),
                            trim_ws = TRUE, progress = FALSE)
 num <- function(x) suppressWarnings(as.numeric(x))
 site_of <- function(key) sub("^([^_]+_[^_]+_[^_]+)_.*$", "\\1", key)
-mean_ok <- function(v, hi) { v <- v[!is.na(v) & v > 0 & v < hi]; if (length(v)) mean(v) else NA_real_ }
+mean_ok <- function(v, hi, lo_incl = FALSE) {
+  v <- v[!is.na(v) & (if (lo_incl) v >= 0 else v > 0) & v < hi]
+  if (length(v)) mean(v) else NA_real_
+}
 med <- function(v) if (all(is.na(v))) NA_real_ else stats::median(v, na.rm = TRUE)
 
 # ---- passes -> site visits -------------------------------------------------
@@ -120,8 +123,8 @@ hab_rows <- habitat |>
     site_visit = site_of(KEY),
     grad_sentinel = apply(pick(all_of(c(g1, g2))), 1, \(v) any(v > 100, na.rm = TRUE)),
     cw_sentinel   = apply(pick(all_of(cwc)), 1, \(v) any(v >= 500, na.rm = TRUE)),
-    gradient_pct  = apply(pick(all_of(g1)), 1, mean_ok, hi = 100.0001),
-    gradient2_pct = apply(pick(all_of(g2)), 1, mean_ok, hi = 100.0001),
+    gradient_pct  = apply(pick(all_of(g1)), 1, mean_ok, hi = 100.0001, lo_incl = TRUE),  # 0 % is a real reading
+    gradient2_pct = apply(pick(all_of(g2)), 1, mean_ok, hi = 100.0001, lo_incl = TRUE),
     channel_width_m = apply(pick(all_of(cwc)), 1, mean_ok, hi = 500),
     wetted_width_m  = apply(pick(all_of(wwc)), 1, mean_ok, hi = 500),
     n_cw_measures   = apply(pick(all_of(cwc)), 1, \(v) sum(!is.na(v) & v > 0 & v < 500)),
@@ -160,6 +163,8 @@ fish <- fish_raw |>
     sex_code = SEX_CODE, maturity_code = MATURITY_CODE,
     watershed_code_50k = gsub("-", "", NEW_WATERSHED_CODE), source_file,
     flag_no_length = is.na(length_mm) | length_mm <= 0,
+    # the fish table also carries "no fish caught" records (139); they are not fish
+    is_nfc = species_code == "NFC",
     flag_no_visit  = !KEY %in% passes$KEY
   )
 
@@ -171,7 +176,7 @@ catch <- full_join(
               min_length_mm = suppressWarnings(min(min_length_mm, na.rm = TRUE)),
               max_length_mm = suppressWarnings(max(max_length_mm, na.rm = TRUE)),
               .groups = "drop"),
-  fish |> count(site_visit, species_code, name = "n_measured"),
+  fish |> filter(!is_nfc) |> count(site_visit, species_code, name = "n_measured"),
   by = c("site_visit", "species_code")
 ) |>
   mutate(
@@ -185,8 +190,10 @@ catch <- full_join(
 
 # NFC is recorded per pass; a later depletion pass with no fish is not a conflict, so
 # a conflict is NFC and fish recorded against the SAME pass.
-fish_keys <- unique(c(counts$KEY[counts$species_code != "NFC"], fish$KEY))
-nfc <- counts |> filter(species_code == "NFC") |> distinct(KEY, site_visit) |>
+fish_keys <- unique(c(counts$KEY[counts$species_code != "NFC"], fish$KEY[!fish$is_nfc]))
+nfc <- bind_rows(counts |> filter(species_code == "NFC") |> distinct(KEY, site_visit),
+                 fish |> filter(is_nfc) |> distinct(KEY, site_visit)) |>
+  distinct(KEY, site_visit) |>
   mutate(conflict = KEY %in% fish_keys) |>
   group_by(site_visit) |>
   summarise(any_nfc = TRUE, flag_nfc_conflict = any(conflict), .groups = "drop")
@@ -281,14 +288,14 @@ add("sites_nfc_conflict", sum(sites$flag_nfc_conflict))
 add("sites_with_habitat", sum(sites$has_habitat)); add("sites_habitat_conflict", sum(sites$habitat_conflict))
 add("sites_junk_date", sum(sites$flag_junk_date)); add("sites_no_area", sum(sites$flag_no_area))
 add("fish_rows_in", nrow(fish_raw)); add("fish_rows_out", nrow(fish))
-add("fish_without_visit", sum(fish$flag_no_visit)); add("fish_no_length", sum(fish$flag_no_length))
+add("fish_nfc_rows", sum(fish$is_nfc)); add("fish_without_visit", sum(fish$flag_no_visit)); add("fish_no_length", sum(fish$flag_no_length))
 add("counts_fish_total", n_counts_fish); add("counts_sentinel_rows", sum(counts$flag_count_sentinel))
 add("catch_pairs_counts_lt_measured", sum(catch$flag_counts_lt_measured))
 print(rec, n = Inf)
 
 if (nrow(fish_raw) != nrow(fish)) stop("fish rows lost")
 if (sum(sites$n_pass) != nrow(visits)) stop("site roll-up lost passes")
-if (sum(catch$n_measured) != nrow(fish)) stop("measured fish lost in the catch roll-up")
+if (sum(catch$n_measured) != sum(!fish$is_nfc)) stop("measured fish lost in the catch roll-up")
 if (!isTRUE(all.equal(sum(catch$n_counted, na.rm = TRUE), n_counts_fish))) stop("counted fish lost in the catch roll-up")
 if (sum(sites$catch_status == "fish") + sum(sites$catch_status == "zero") +
     sum(sites$catch_status == "unknown") != nrow(sites)) stop("catch status does not partition sites")
