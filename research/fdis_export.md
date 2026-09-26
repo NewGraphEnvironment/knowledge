@@ -46,6 +46,25 @@ which is **one electrofishing pass**. A **site visit** is the first three parts.
 
 ## Known defects (flagged in the build, never silently dropped)
 
+Every no-data encoding is declared once, at the top of `scripts/0230` (measured field by field
+in /code-check round 3, `planning/archive/…/review-round3.md`):
+
+| field | no-data encodings found | handling |
+|---|---|---|
+| `NUMBER_CAUGHT` | 9999 (23 rows), 99999 (48) | count NA; the catch still counts as presence |
+| `FISHING_TIME`, `FISHING_AREA_LENGTH/WIDTH` | 9999, 9999.9 | NA, `flag_effort_sentinel` (91 sites) |
+| `UTM_EASTING/NORTHING` | 0, out-of-BC values (14 eastings < 100,000; 32 northings < 5.2 M) | `flag_no_utm`, not placed |
+| `WATER_TEMPERATURE` | values to 556 | NA outside −1 to 35 °C |
+| `MINIMUM/MAXIMUM_LENGTH` | 0 | NA |
+| `GRADIENT*` | 990 etc.; 0.00 on blank forms | > 100 NA; 0 kept only when the row has a width |
+| `CHANNELWIDTH*`, `WETTEDWIDTH*` | 9999, 0 | ≥ 500 or 0 → NA |
+| `SPECIES_CODE` | `NFC`, `ZZZ` (no fish caught); `SP` (unidentified fish); `ANODON` (mussel) | zero catch; blocks an absence claim; not fish |
+| `NEW_WATERSHED_CODE` | mainstem-only codes (`230-000000-…`) | not used as a placement check |
+
+Undecided: 644 habitat rows have one gradient slot at 0 and the other above 0. The data can't
+say whether that 0 is a reading or an unfilled slot; it is kept as a reading.
+
+
 - 4,770 visits have no fished-area length, although the saved `Visit.sql` filters on it. The
   export was not produced exactly by that query, or the query changed.
 - 1,084 visits have no UTM.
@@ -84,8 +103,8 @@ Site-visit counts, measured site gradient, against the thresholds link runs now:
 
 | group × class | sites | with gradient | above rear max | above spawn max | below rear cw min |
 |---|---:|---:|---:|---:|---:|
-| CH present (any size) | 1,373 | 147 | 21 % (> 5.49) | 26 % (> 4.49) | 12 % |
-| char present (any size) | 7,042 | 2,081 | 11 % (> 10.49) | 34 % (> 5.49) | 9 % |
+| CH present (any size) | 1,377 | 151 | 23 % (> 5.49) | 28 % (> 4.49) | 14 % |
+| char present (any size) | 7,042 | 2,080 | 11 % (> 10.49) | 34 % (> 5.49) | 9 % |
 | char spawner evidence | 348 | 260 | 16 % | **42 %** | 5 % |
 
 - **CH is rearing-only here.** EF caught 2 CH ≥ 150 mm in the whole export.

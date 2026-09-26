@@ -69,9 +69,9 @@ Relates to NewGraphEnvironment/link#284, NewGraphEnvironment/link#283
 
 ## Phase 2–3 run (log `scripts/logs/fdis/20260926_fdis_load.log`)
 
-- 53,018 site visits; 52,030 with UTM; 51,455 placed within 500 m; 5,326 snapped > 100 m (flagged).
-- Catch status: 30,049 fish, 22,389 zero (NFC only), 580 unknown. 65 same-pass NFC conflicts (after code-check round 1 removed 139 NFC rows from the fish table; before: 30,130 / 22,308 / 157).
-- Placement check: FDIS gazetted name = FWA GNIS name on 94.6% of the 7,894 sites carrying both. The 50k-code xref flags 2,701 of 16,986 checkable sites (median snap 36 m vs 8 m for matches).
+- 53,018 site visits; 51,981 with valid UTM; 51,450 placed within 500 m; 5,322 snapped > 100 m (flagged). (Final figures, after code-check round 3.)
+- Catch status (final): 30,087 fish, 22,390 zero, 541 unknown. Earlier: 30,049 / 22,389 / 580. 65 same-pass NFC conflicts (after code-check round 1 removed 139 NFC rows from the fish table; before: 30,130 / 22,308 / 157).
+- Placement check: FDIS gazetted name = FWA GNIS name on 94.6% of the 7,894 sites carrying both. The 50k-code xref (final, tributary-level codes only) flags 866 of 9,148 checkable sites; before round 3 it flagged 2,701 of 16,986 checkable sites (median snap 36 m vs 8 m for matches).
 - **The FWA "field measurement" channel width is these same sites.** On 12,688 sites with source `FIELD_MEASURMENT`, 69% equal our measured width exactly. Measured-vs-modelled can only be compared where the source is `MODELLED`: 3,820 sites, log correlation 0.54, median ratio 0.98, p10–p90 ratio 0.44–2.58. So the modelled width is off by more than 2× at about one site in five. That is relevant to fresh#29 and to any channel-width threshold.
 
 ## Errors Encountered
@@ -87,8 +87,8 @@ Relates to NewGraphEnvironment/link#284, NewGraphEnvironment/link#283
 - Maturity check, char: IM is 55.7% fry, 42.9% juvenile, 1.3% subadult, 0.1% adult. SP/ST (n = 92 classed) is 32.6% juvenile (80–200 mm), 39.1% subadult, 28.3% adult. So 67% of SP/ST are ≥ 200 mm, and a third of spawning-coded char are under 200 mm: dwarf residents or DV.
 - CH: 4,765 measured with a visit record (5,587 in the whole fish table), 99% < 120 mm, 18 ≥ 120 mm. 87% of counted CH (37,189) have no length. Rearing evidence only.
 - Site-level shares vs current thresholds (measured site gradient):
-  - CH present, any size: 1,373 sites (147 with measured gradient). 21% above rear gradient max 5.49 %; 12% below rear cw min 1.5 m.
-  - Char present: 7,042 sites (2,081 with gradient). 11% above rear max 10.49 %.
+  - CH present, any size (final): 1,377 sites (151 with measured gradient). 23% above rear gradient max 5.49 %; 14% below rear cw min 1.5 m.
+  - Char present: 7,042 sites (2,080 with gradient). 11% above rear max 10.49 %.
   - Char spawner evidence (SP/ST, or M in Aug–Oct): 348 sites (260 with gradient). **42% above spawn max 5.49 %**, median 4.5 %, q90 13 %.
 - Caveat for every number above: site gradient is a point measure over a short reach, while model thresholds apply to a segment's average gradient. The FDIS gradient units and method codes aren't exported.
 
@@ -107,3 +107,7 @@ Relates to NewGraphEnvironment/link#284, NewGraphEnvironment/link#283
 |-------|------------|
 | Inside the round-1 fix: keeping 0 % gradients admitted 28 blank-form habitat rows (all widths 0 or empty), 27 site visits | Zero gradient kept only when the row has some width > 0 |
 | CH older_juvenile basis said 17 / 3; the class boundary gives 18 ≥ 120 mm and 4 ≥ 145 mm | Corrected (my histogram bins were misread) |
+
+## /code-check round 3: enumeration (planning/active/review-round3.md)
+
+Mechanism: each field has its own no-data encoding, and each validity test was written inline from the first sentinel seen for that field. A caught sentinel became NA, and `coalesce(…, 0)` then turned "count unknown" into "none caught". The reviewer enumerated every raw field 0230/0240 read, and found nine leaks (F1–F9): 9999 counts; `ZZZ`; effort sentinels; easting 0; water temperature to 556; `SP` asserting absence; 99999 counts → 0; min/max length 0; mainstem-only 50k codes. Fixed by one declared no-data table at the top of 0230, with presence carried apart from counts. The enumeration covered the whole candidate set, so it ends the loop.

@@ -45,7 +45,17 @@ cache  <- "data/fdis"
 build  <- file.path(cache, "build")
 snap_tol_m  <- 500   # fwa_indexpoint search radius
 snap_flag_m <- 100   # farther snaps are flagged, not dropped
-count_sentinel <- 99999
+# ---- no-data encodings: ONE table (measured field by field in research/fdis_export.md) ----
+# Every "is this a real value" decision reads from here, so a sibling sentinel is added once.
+sentinel_min     <- 9999                # counts, fishing time, fished length/width use 9999, 9999.9, 99999
+zero_catch_codes <- c("NFC", "ZZZ")     # "No Fish Caught" (FISS/FDIS; BC Lakes pre-1996)
+nonfish_codes    <- c("ANODON")         # floater mussel
+unid_codes       <- c("SP")             # "Fish Unidentified Species": a catch that cannot rule a species out
+temp_valid       <- c(-1, 35)           # deg C
+easting_valid    <- c(1e5, 9e5)         # UTM, BC
+northing_valid   <- c(5.2e6, 6.8e6)
+nodata <- function(x, lo = -Inf, hi = Inf) ifelse(!is.na(x) & (x < lo | x > hi), NA_real_, x)
+is_sentinel <- function(x) !is.na(x) & x >= sentinel_min
 
 # ---- sync + verify ---------------------------------------------------------
 if (!file.exists(file.path(cache, "MANIFEST.md5"))) {
@@ -82,9 +92,12 @@ passes <- visits |>
     KEY, site_visit = site_of(KEY), data_set = DATA_SET,
     utm_zone = as.integer(UTM_ZONE), utm_easting = num(UTM_EASTING), utm_northing = num(UTM_NORTHING),
     date = suppressWarnings(as.Date(IN_DATE)),
-    fishing_time_s = num(FISHING_TIME),
-    area_m2 = num(FISHING_AREA_LENGTH) * num(FISHING_AREA_WIDTH),
-    fished_length_m = num(FISHING_AREA_LENGTH),
+    flag_effort_sentinel = is_sentinel(num(FISHING_TIME)) | is_sentinel(num(FISHING_AREA_LENGTH)) |
+                           is_sentinel(num(FISHING_AREA_WIDTH)),
+    fishing_time_s = nodata(num(FISHING_TIME), hi = sentinel_min - 1e-9),
+    area_m2 = nodata(num(FISHING_AREA_LENGTH), hi = sentinel_min - 1e-9) *
+              nodata(num(FISHING_AREA_WIDTH), hi = sentinel_min - 1e-9),
+    fished_length_m = nodata(num(FISHING_AREA_LENGTH), hi = sentinel_min - 1e-9),
     agency = NAME
   )
 
@@ -100,13 +113,16 @@ sites <- passes |>
     area_m2 = if (all(is.na(area_m2))) NA_real_ else sum(area_m2, na.rm = TRUE),
     fished_length_m = suppressWarnings(max(fished_length_m, na.rm = TRUE)),
     agency = first(agency),
+    flag_effort_sentinel = any(flag_effort_sentinel),
     .groups = "drop"
   ) |>
   mutate(
     fished_length_m = ifelse(is.finite(fished_length_m), fished_length_m, NA_real_),
     date = if_else(is.finite(date), date, as.Date(NA)),
     year = as.integer(format(date, "%Y")), month = as.integer(format(date, "%m")),
-    flag_no_utm    = is.na(utm_zone) | is.na(utm_easting) | is.na(utm_northing) | !utm_zone %in% 7:11,
+    flag_no_utm    = is.na(utm_zone) | is.na(utm_easting) | is.na(utm_northing) | !utm_zone %in% 7:11 |
+                     utm_easting < easting_valid[1] | utm_easting > easting_valid[2] |
+                     utm_northing < northing_valid[1] | utm_northing > northing_valid[2],
     flag_junk_date = is.na(year) | year < 1950 | year > 2022,
     flag_no_area   = is.na(area_m2) | area_m2 <= 0,
     flag_no_effort = is.na(fishing_time_s) | fishing_time_s <= 0
@@ -134,7 +150,7 @@ hab_rows <- habitat |>
     channel_width_m = apply(pick(all_of(cwc)), 1, mean_ok, hi = 500),
     wetted_width_m  = apply(pick(all_of(wwc)), 1, mean_ok, hi = 500),
     n_cw_measures   = apply(pick(all_of(cwc)), 1, \(v) sum(!is.na(v) & v > 0 & v < 500)),
-    water_temp_c = num(WATER_TEMPERATURE)
+    water_temp_c = nodata(num(WATER_TEMPERATURE), lo = temp_valid[1], hi = temp_valid[2])
   )
 hab_site <- hab_rows |>
   group_by(site_visit) |>
@@ -156,8 +172,10 @@ sites <- sites |>
 # ---- catch: counts (abundance) + details (measured fish) --------------------
 counts <- rd(file.path(cache, "2020-11-16/counts.csv")) |>
   transmute(KEY, site_visit = site_of(KEY), species_code = SPECIES_CODE,
-            n = num(NUMBER_CAUGHT), min_length_mm = num(MINIMUM_LENGTH), max_length_mm = num(MAXIMUM_LENGTH)) |>
-  mutate(flag_count_sentinel = !is.na(n) & n >= count_sentinel,
+            n = num(NUMBER_CAUGHT),
+            min_length_mm = nodata(num(MINIMUM_LENGTH), lo = 1e-9),   # 0 = not recorded
+            max_length_mm = nodata(num(MAXIMUM_LENGTH), lo = 1e-9)) |>
+  mutate(flag_count_sentinel = is_sentinel(n),
          n = if_else(flag_count_sentinel, NA_real_, n))
 
 fish_files <- list.files(file.path(cache, "2022-03-22-ef-export"), pattern = "\\.csv$", full.names = TRUE)
@@ -170,19 +188,19 @@ fish <- fish_raw |>
     watershed_code_50k = gsub("-", "", NEW_WATERSHED_CODE), source_file,
     flag_no_length = is.na(length_mm) | length_mm <= 0,
     # the fish table also carries "no fish caught" records (139); they are not fish
-    is_nfc = species_code == "NFC",
+    is_nfc = species_code %in% zero_catch_codes,
     flag_no_visit  = !KEY %in% passes$KEY
   )
 
 catch <- full_join(
-  counts |> filter(species_code != "NFC") |>
+  counts |> filter(!species_code %in% c(zero_catch_codes, nonfish_codes)) |>
     group_by(site_visit, species_code) |>
     summarise(n_counted = if (all(is.na(n))) NA_real_ else sum(n, na.rm = TRUE),
               flag_count_sentinel = any(flag_count_sentinel),
               min_length_mm = suppressWarnings(min(min_length_mm, na.rm = TRUE)),
               max_length_mm = suppressWarnings(max(max_length_mm, na.rm = TRUE)),
               .groups = "drop"),
-  fish |> filter(!is_nfc) |> count(site_visit, species_code, name = "n_measured"),
+  fish |> filter(!is_nfc, !species_code %in% nonfish_codes) |> count(site_visit, species_code, name = "n_measured"),
   by = c("site_visit", "species_code")
 ) |>
   mutate(
@@ -190,21 +208,26 @@ catch <- full_join(
     across(c(min_length_mm, max_length_mm), ~ ifelse(is.finite(.x), .x, NA_real_)),
     flag_count_sentinel = coalesce(flag_count_sentinel, FALSE),
     flag_counts_lt_measured = !is.na(n_counted) & n_counted < n_measured,
-    # abundance: the counted total; where counts are missing or short, the measured fish
-    n_caught = pmax(coalesce(n_counted, 0), n_measured)
+    # abundance: the counted total; where counts are missing or short, the measured fish.
+    # A sentinel count with nothing measured is a catch of unknown size: NA, never 0.
+    n_caught = if_else(is.na(n_counted) & flag_count_sentinel & n_measured == 0, NA_real_,
+                       pmax(coalesce(n_counted, 0), n_measured))
   )
 
 # NFC is recorded per pass; a later depletion pass with no fish is not a conflict, so
 # a conflict is NFC and fish recorded against the SAME pass.
-fish_keys <- unique(c(counts$KEY[counts$species_code != "NFC"], fish$KEY[!fish$is_nfc]))
-nfc <- bind_rows(counts |> filter(species_code == "NFC") |> distinct(KEY, site_visit),
+fish_keys <- unique(c(counts$KEY[!counts$species_code %in% c(zero_catch_codes, nonfish_codes)],
+                      fish$KEY[!fish$is_nfc & !fish$species_code %in% nonfish_codes]))
+nfc <- bind_rows(counts |> filter(species_code %in% zero_catch_codes) |> distinct(KEY, site_visit),
                  fish |> filter(is_nfc) |> distinct(KEY, site_visit)) |>
   distinct(KEY, site_visit) |>
   mutate(conflict = KEY %in% fish_keys) |>
   group_by(site_visit) |>
   summarise(any_nfc = TRUE, flag_nfc_conflict = any(conflict), .groups = "drop")
 site_catch <- catch |> group_by(site_visit) |>
-  summarise(n_caught_all = sum(n_caught), n_species = n_distinct(species_code),
+  summarise(any_catch = TRUE, n_caught_all = sum(n_caught, na.rm = TRUE),
+            unidentified_fish = any(species_code %in% unid_codes),
+            n_species = n_distinct(species_code),
             species_caught = paste(sort(unique(species_code)), collapse = ";"), .groups = "drop")
 sites <- sites |>
   left_join(nfc, by = "site_visit") |>
@@ -213,8 +236,9 @@ sites <- sites |>
     any_nfc = coalesce(any_nfc, FALSE),
     flag_nfc_conflict = coalesce(flag_nfc_conflict, FALSE),
     n_caught_all = coalesce(n_caught_all, 0),
+    unidentified_fish = coalesce(unidentified_fish, FALSE),
     catch_status = case_when(
-      n_caught_all > 0 ~ "fish",
+      coalesce(any_catch, FALSE) ~ "fish",   # presence, not a count: a sentinel count is still a catch
       any_nfc          ~ "zero",
       TRUE             ~ "unknown")
   )
@@ -251,7 +275,10 @@ placed <- DBI::dbGetQuery(conn, sprintf("
 stopifnot(!anyDuplicated(placed$site_visit))
 
 # placement check: the 50k watershed code FDIS recorded -> the 20k blue_line_keys it maps to
-ws50 <- fish |> filter(!is.na(watershed_code_50k), nchar(watershed_code_50k) == 45) |>
+# a code naming only a mainstem (every digit after the first 9 zero) cannot place a site on
+# a tributary, so it is not a check
+ws50 <- fish |> filter(!is.na(watershed_code_50k), nchar(watershed_code_50k) == 45,
+                       substr(watershed_code_50k, 10, 45) != strrep("0", 36)) |>
   distinct(site_visit, watershed_code_50k)
 xref <- DBI::dbGetQuery(conn, "SELECT DISTINCT watershed_code_50k, blue_line_key_20k
                                  FROM whse_basemapping.fwa_streams_20k_50k
@@ -279,7 +306,7 @@ sites <- sites |>
   select(-fwa_gradient)
 
 # ---- reconcile -------------------------------------------------------------
-n_counts_fish <- sum(counts$n[counts$species_code != "NFC"], na.rm = TRUE)
+n_counts_fish <- sum(counts$n[!counts$species_code %in% c(zero_catch_codes, nonfish_codes)], na.rm = TRUE)
 rec <- tibble(check = character(), n = numeric())
 add <- function(check, n) rec <<- bind_rows(rec, tibble(check = check, n = as.numeric(n)))
 add("passes", nrow(passes)); add("site_visits", nrow(sites))
@@ -295,13 +322,15 @@ add("sites_with_habitat", sum(sites$has_habitat)); add("sites_habitat_conflict",
 add("sites_junk_date", sum(sites$flag_junk_date)); add("sites_no_area", sum(sites$flag_no_area))
 add("fish_rows_in", nrow(fish_raw)); add("fish_rows_out", nrow(fish))
 add("fish_nfc_rows", sum(fish$is_nfc)); add("fish_without_visit", sum(fish$flag_no_visit)); add("fish_no_length", sum(fish$flag_no_length))
+add("sites_effort_sentinel", sum(sites$flag_effort_sentinel)); add("sites_unidentified_fish", sum(sites$unidentified_fish))
+add("catch_pairs_count_unknown", sum(is.na(catch$n_caught)))
 add("counts_fish_total", n_counts_fish); add("counts_sentinel_rows", sum(counts$flag_count_sentinel))
 add("catch_pairs_counts_lt_measured", sum(catch$flag_counts_lt_measured))
 print(rec, n = Inf)
 
 if (nrow(fish_raw) != nrow(fish)) stop("fish rows lost")
 if (sum(sites$n_pass) != nrow(visits)) stop("site roll-up lost passes")
-if (sum(catch$n_measured) != sum(!fish$is_nfc)) stop("measured fish lost in the catch roll-up")
+if (sum(catch$n_measured) != sum(!fish$is_nfc & !fish$species_code %in% nonfish_codes)) stop("measured fish lost in the catch roll-up")
 if (!isTRUE(all.equal(sum(catch$n_counted, na.rm = TRUE), n_counts_fish))) stop("counted fish lost in the catch roll-up")
 if (sum(sites$catch_status == "fish") + sum(sites$catch_status == "zero") +
     sum(sites$catch_status == "unknown") != nrow(sites)) stop("catch status does not partition sites")

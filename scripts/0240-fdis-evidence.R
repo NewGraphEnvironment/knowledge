@@ -117,12 +117,22 @@ focal <- catch |>
                          species_code == "DV" ~ "n_dv",
                          species_code %in% char_codes ~ "n_char_other", TRUE ~ NA_character_)) |>
   filter(!is.na(col)) |>
-  group_by(site_visit, col) |> summarise(n = sum(n_caught), .groups = "drop") |>
+  # NA = caught but the count was a sentinel; presence is carried separately below
+  group_by(site_visit, col) |>
+  summarise(n = if (all(is.na(n_caught))) NA_real_ else sum(n_caught, na.rm = TRUE), .groups = "drop") |>
   pivot_wider(names_from = col, values_from = n, values_fill = 0)
+presence <- catch |>
+  mutate(species_group = group_of(species_code)) |>
+  filter(!is.na(species_group)) |>
+  distinct(site_visit, species_group) |>
+  mutate(v = TRUE) |>
+  pivot_wider(names_from = species_group, values_from = v, names_prefix = "present_", values_fill = FALSE)
 site_out <- sites |>
   left_join(focal, by = "site_visit") |>
-  mutate(across(any_of(c("n_ch", "n_bt", "n_dv", "n_char_other")), ~ coalesce(.x, 0)),
+  left_join(presence, by = "site_visit") |>
+  mutate(across(any_of(c("n_ch", "n_bt", "n_dv", "n_char_other")), ~ if_else(is.na(.x) & site_visit %in% focal$site_visit, .x, coalesce(.x, 0))),
          n_char = n_bt + n_dv + n_char_other,
+         across(c(present_CH, present_char), ~ coalesce(.x, FALSE)),
          cw_comparable = channel_width_source == "MODELLED" & !is.na(channel_width_m)) |>
   select(site_visit, watershed_group_code, fwa_basin, blue_line_key, downstream_route_measure,
          linear_feature_id, distance_to_stream, gnis_name, utm_zone, utm_easting, utm_northing,
@@ -130,7 +140,8 @@ site_out <- sites |>
          gradient_pct, gradient2_pct, channel_width_m, wetted_width_m, n_cw_measures, bed_dominant,
          water_temp_c, fwa_gradient_pct, stream_order, edge_type, modelled_channel_width_m,
          channel_width_source, cw_comparable, mad_m3s,
-         catch_status, n_caught_all, species_caught, n_ch, n_bt, n_dv, n_char_other, n_char,
+         catch_status, n_caught_all, species_caught, unidentified_fish, present_CH, present_char,
+         n_ch, n_bt, n_dv, n_char_other, n_char,
          starts_with("flag_"), habitat_conflict, grad_sentinel, cw_sentinel, has_habitat,
          ws50_checked)
 # the site table (~17 MB) and its points are too large to churn in git: they go to
@@ -159,12 +170,14 @@ usable <- site_out |> filter(!flag_not_placed, !flag_junk_date, catch_status != 
 present <- bind_rows(
   evidence |> filter(size_class != "unmeasured") |> distinct(site_visit, species_group, size_class),
   # 87% of counted CH carry no length, so presence at any size is its own row
-  usable |> transmute(site_visit, CH = n_ch > 0, char = n_char > 0) |>
+  usable |> transmute(site_visit, CH = present_CH, char = present_char) |>
     pivot_longer(c(CH, char), names_to = "species_group", values_to = "present") |>
     filter(present) |> transmute(site_visit, species_group, size_class = "present_any_size")
 )
+# absence needs a known catch: not where an unidentified fish could have been the species
 absent <- usable |>
-  transmute(site_visit, CH = n_ch == 0, char = n_char == 0) |>
+  filter(!unidentified_fish) |>
+  transmute(site_visit, CH = !present_CH, char = !present_char) |>
   pivot_longer(c(CH, char), names_to = "species_group", values_to = "absent") |>
   filter(absent) |> transmute(site_visit, species_group, size_class = "absent")
 q <- function(v, p) if (sum(!is.na(v)) >= 5) unname(quantile(v, p, na.rm = TRUE)) else NA_real_
