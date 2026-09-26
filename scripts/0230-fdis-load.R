@@ -123,8 +123,14 @@ hab_rows <- habitat |>
     site_visit = site_of(KEY),
     grad_sentinel = apply(pick(all_of(c(g1, g2))), 1, \(v) any(v > 100, na.rm = TRUE)),
     cw_sentinel   = apply(pick(all_of(cwc)), 1, \(v) any(v >= 500, na.rm = TRUE)),
-    gradient_pct  = apply(pick(all_of(g1)), 1, mean_ok, hi = 100.0001, lo_incl = TRUE),  # 0 % is a real reading
-    gradient2_pct = apply(pick(all_of(g2)), 1, mean_ok, hi = 100.0001, lo_incl = TRUE),
+    # 0 % is a real reading, except on blank-form rows where every width is also 0 or empty
+    form_blank    = apply(pick(all_of(c(cwc, wwc))), 1, \(v) !any(v > 0, na.rm = TRUE)),
+    gradient_pct  = if_else(form_blank,
+                            apply(pick(all_of(g1)), 1, mean_ok, hi = 100.0001),
+                            apply(pick(all_of(g1)), 1, mean_ok, hi = 100.0001, lo_incl = TRUE)),
+    gradient2_pct = if_else(form_blank,
+                            apply(pick(all_of(g2)), 1, mean_ok, hi = 100.0001),
+                            apply(pick(all_of(g2)), 1, mean_ok, hi = 100.0001, lo_incl = TRUE)),
     channel_width_m = apply(pick(all_of(cwc)), 1, mean_ok, hi = 500),
     wetted_width_m  = apply(pick(all_of(wwc)), 1, mean_ok, hi = 500),
     n_cw_measures   = apply(pick(all_of(cwc)), 1, \(v) sum(!is.na(v) & v > 0 & v < 500)),

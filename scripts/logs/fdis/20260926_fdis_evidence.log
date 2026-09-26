@@ -11,12 +11,12 @@
 # A tibble: 12 × 17
    species_group size_class       sites sites_measured_gradient gradient_q10
    <chr>         <chr>            <int>                   <int>        <dbl>
- 1 CH            absent           49499                   20145         1   
+ 1 CH            absent           49499                   20123         1   
  2 CH            fry                322                     106         0.62
  3 CH            older_juvenile       5                       2        NA   
  4 CH            parr               238                      84         0.5 
  5 CH            present_any_size  1373                     147         0.5 
- 6 char          absent           43830                   18211         1   
+ 6 char          absent           43830                   18189         1   
  7 char          adult              870                      68         1.18
  8 char          fry               1760                     977         1   
  9 char          juvenile          2747                    1624         1.25
@@ -25,12 +25,12 @@
 12 char          subadult          1101                     339         1.25
    gradient_q50 gradient_q90 share_above_rear_gradient_…¹ share_above_spawn_gr…²
           <dbl>        <dbl>                        <dbl>                  <dbl>
- 1         4.5         16                            0.43                   0.5 
+ 1         4.5         16                            0.43                   0.51
  2         2.5          7.53                         0.22                   0.27
  3        NA           NA                            0                      0   
  4         2.5          7.54                         0.2                    0.25
  5         2.5          7.73                         0.21                   0.26
- 6         4.5         16.5                          0.22                   0.43
+ 6         4.5         16.5                          0.23                   0.44
  7         3.25        10.5                          0.12                   0.32
  8         3.5         10                            0.08                   0.31
  9         4           11                            0.12                   0.35

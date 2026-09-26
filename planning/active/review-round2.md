@@ -1,0 +1,16 @@
+# Review round 2: FDIS load and evidence (fixes in ea99ee2 first, then the branch)
+
+## Findings
+
+- **[bug, low]** data/fdis_size_breaks.csv:8 (CH,older_juvenile basis): the quoted counts disagree with the class boundary they justify. The class is `len >= 120` (0240:67). From fish.rds, CH with a visit record and a positive length: 4,765 (this matches), but **18** have length >= 120, not 17, and **4** have length >= 145, not 3 (145, 147, 195, 200). The file's "3" is the `> 145` count, and 17 does not match either `>= 120` (18) or `> 120` (14). Probe: `f |> filter(species_code=="CH", !flag_no_visit, length_mm >= 120)`. This is a quoted figure in a tracked deliverable, so it should be corrected to 18 and 4, or the comparison should be restated. "EF caught 2 CH ≥ 150 mm" in research/fdis_export.md:91 is correct.
+
+- **[fragile, low]** scripts/0230-fdis-load.R:126-127: `lo_incl = TRUE` also keeps the 0 on blank-form habitat rows. 28 habitat rows have `GRADIENT11/12 = 0.00` and every gradient and width field 0 or NA. On those same rows `mean_ok` treats a width of 0 as missing but a gradient of 0 as a reading. They reach 27 site visits: 24 now carry `gradient_pct = 0`, where they previously had NA, and 19 of them have no channel width. Of the 27, 11 are fish sites and 16 are zero-catch, so all enter `usable` and add 0 % gradients to the summary. The effect on the published quantiles is small because there are only 24 sites, but the discriminator is cheap: take a 0 as a reading only when some width or wetted width on the row is > 0. The other 511 zero-gradient rows look genuine: they sit beside positive widths, and the nonzero partner reading has a median of 1 %.
+
+### The round-1 fixes: checked and found correct
+- `is_nfc` has no NA values: `species_code` is never NA across 341,607 rows, so `filter(!is_nfc)`, `fish$KEY[!fish$is_nfc]` and the `sum(!fish$is_nfc)` guard are safe on the current data.
+- The NFC rows (139) stay out of `ff`, because `group_of("NFC")` is NA. So they reach neither `by_class`, `spawners` nor `n_nolength`/`unmeasured`. `catch` contains no NFC pairs, so `species_caught`, `n_caught_all`, `focal`, `present` and `absent` are clean.
+- The NFC rows still reach the 50k watershed-code check. That is correct, because a site's recorded code is valid whatever the species.
+- The NFC rows are counted in `fish_no_length` (137 of the 5,429). That is a reconcile-log label only, and the count is quoted nowhere else.
+- lo_incl and the sentinels: none of the 6 gradient-sentinel rows pairs a sentinel with a 0, and there are no negative gradients. None of the 4 `grad_sentinel` sites now has `gradient_pct == 0`.
+- Tiling guard: a group missing from the breaks gives hits = 0, and a malformed break gives NA. Both stop the run. Length 0 and NA now fall to `unmeasured` through `n_nolength`, and `n_measured` counts those rows, so `unmeasured = counted - measured_with_length` holds.
+- These research and README figures reproduce: CH counted 41,916, 87 % without a length, 3,820 comparable width sites, log correlation 0.54, and the p10-p90 ratio (modelled/measured) 0.44-2.58. The summary table rows in research/fdis_export.md:87-89 match data/fdis_summary_ch_bt.csv.

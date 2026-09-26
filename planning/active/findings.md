@@ -85,7 +85,7 @@ Relates to NewGraphEnvironment/link#284, NewGraphEnvironment/link#283
 
 - Char (BT + DV + hybrid codes) length: age-0 mode 40–80 mm (Jul–Sep), parr 80–200, then a long tail to 900 mm. Spring and fall medians of 372–486 mm are migrating adults.
 - Maturity check, char: IM is 55.7% fry, 42.9% juvenile, 1.3% subadult, 0.1% adult. SP/ST (n = 92 classed) is 32.6% juvenile (80–200 mm), 39.1% subadult, 28.3% adult. So 67% of SP/ST are ≥ 200 mm, and a third of spawning-coded char are under 200 mm: dwarf residents or DV.
-- CH: 4,765 measured with a visit record (5,587 in the whole fish table), 99% < 120 mm, 17 ≥ 120 mm. 87% of counted CH (37,189) have no length. Rearing evidence only.
+- CH: 4,765 measured with a visit record (5,587 in the whole fish table), 99% < 120 mm, 18 ≥ 120 mm. 87% of counted CH (37,189) have no length. Rearing evidence only.
 - Site-level shares vs current thresholds (measured site gradient):
   - CH present, any size: 1,373 sites (147 with measured gradient). 21% above rear gradient max 5.49 %; 12% below rear cw min 1.5 m.
   - Char present: 7,042 sites (2,081 with gradient). 11% above rear max 10.49 %.
@@ -100,3 +100,10 @@ Relates to NewGraphEnvironment/link#284, NewGraphEnvironment/link#283
 | `mean_ok()` dropped recorded 0 % gradients (937 readings; 390 sites NA, 620 biased high) | Gradient means keep 0 |
 | 6 CH with length 0 were classed as fry | Class test requires length > 0 |
 | Size-break note "17 of 4,765" read as the whole table (5,587) | Population stated: fish with a visit record |
+
+## /code-check round 2 (planning/active/review-round2.md)
+
+| Error | Resolution |
+|-------|------------|
+| Inside the round-1 fix: keeping 0 % gradients admitted 28 blank-form habitat rows (all widths 0 or empty), 27 site visits | Zero gradient kept only when the row has some width > 0 |
+| CH older_juvenile basis said 17 / 3; the class boundary gives 18 ≥ 120 mm and 4 ≥ 145 mm | Corrected (my histogram bins were misread) |
