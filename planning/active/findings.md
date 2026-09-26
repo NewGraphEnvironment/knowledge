@@ -80,3 +80,14 @@ Relates to NewGraphEnvironment/link#284, NewGraphEnvironment/link#283
 |-------|------------|
 | Inline `Rscript -e '…sub(…"\\1"…)'` returned 1 site | Probes moved to scratch `.R` files; the script's `site_of()` was unaffected |
 | Site-level NFC "conflict" counted a depletion pass 2 with no fish (1,506) | Conflict defined at pass level (157) |
+
+## Phase 4–5 run (log `scripts/logs/fdis/20260926_fdis_evidence.log`)
+
+- Char (BT + DV + hybrid codes) length: age-0 mode 40–80 mm (Jul–Sep), parr 80–200, then a long tail to 900 mm. Spring and fall medians of 372–486 mm are migrating adults.
+- Maturity check, char: IM is 55.7% fry, 42.9% juvenile, 1.3% subadult, 0.1% adult. SP/ST (n = 92 classed) is 32.6% juvenile (80–200 mm), 39.1% subadult, 28.3% adult. So 67% of SP/ST are ≥ 200 mm, and a third of spawning-coded char are under 200 mm: dwarf residents or DV.
+- CH: 4,765 measured, 99% < 120 mm, 17 ≥ 120 mm. 87% of counted CH (37,189) have no length. Rearing evidence only.
+- Site-level shares vs current thresholds (measured site gradient):
+  - CH present, any size: 1,373 sites (143 with measured gradient). 22% above rear gradient max 5.49 %; 12% below rear cw min 1.5 m.
+  - Char present: 7,042 sites (2,073 with gradient). 11% above rear max 10.49 %.
+  - Char spawner evidence (SP/ST, or M in Aug–Oct): 348 sites (258 with gradient). **42% above spawn max 5.49 %**, median 4.5 %, q90 13 %.
+- Caveat for every number above: site gradient is a point measure over a short reach, while model thresholds apply to a segment's average gradient. The FDIS gradient units and method codes aren't exported.

@@ -1,0 +1,69 @@
+# A tibble: 7 × 4
+  maturity size_class     n share
+  <chr>    <chr>      <int> <dbl>
+1 IM       adult          9 0.001
+2 IM       fry         3836 0.557
+3 IM       juvenile    2953 0.429
+4 IM       subadult      93 0.013
+5 SP/ST    adult         26 0.283
+6 SP/ST    juvenile      30 0.326
+7 SP/ST    subadult      36 0.391
+# A tibble: 12 × 17
+   species_group size_class       sites sites_measured_gradient gradient_q10
+   <chr>         <chr>            <int>                   <int>        <dbl>
+ 1 CH            absent           49499                   19794         1   
+ 2 CH            fry                322                     104         1   
+ 3 CH            older_juvenile       5                       1        NA   
+ 4 CH            parr               238                      82         0.75
+ 5 CH            present_any_size  1373                     143         1   
+ 6 char          absent           43830                   17864         1   
+ 7 char          adult              870                      67         1.25
+ 8 char          fry               1760                     975         1   
+ 9 char          juvenile          2747                    1618         1.25
+10 char          present_any_size  7042                    2073         1   
+11 char          spawner_evidence   348                     258         1.5 
+12 char          subadult          1101                     336         1.25
+   gradient_q50 gradient_q90 share_above_rear_gradient_…¹ share_above_spawn_gr…²
+          <dbl>        <dbl>                        <dbl>                  <dbl>
+ 1         4.5         16.2                          0.43                   0.52
+ 2         2.5          7.54                         0.22                   0.28
+ 3        NA           NA                            0                      0   
+ 4         2.5          7.54                         0.21                   0.26
+ 5         2.5          7.91                         0.22                   0.27
+ 6         4.5         17                            0.23                   0.44
+ 7         3.5         10.5                          0.12                   0.33
+ 8         3.5         10                            0.08                   0.31
+ 9         4           11                            0.12                   0.36
+10         3.5         10.8                          0.11                   0.34
+11         4.5         13                            0.16                   0.42
+12         4.12        14.5                          0.17                   0.4 
+   sites_measured_cw cw_q10 cw_q50 cw_q90 share_below_rear_cw_min
+               <int>  <dbl>  <dbl>  <dbl>                   <dbl>
+ 1             20033   0.83   2.53   11.4                    0.3 
+ 2               106   1.52  10.9    99.8                    0.09
+ 3                 2  NA     NA      NA                      1   
+ 4                84   1.83  11.1   104.                     0.07
+ 5               147   1.3    9.07   60.8                    0.12
+ 6             18106   0.81   2.33   10.2                    0.32
+ 7                68   4.55  11.2    42.4                    0.03
+ 8               975   1.55   6.48   23.6                    0.09
+ 9              1621   1.67   6.45   22.9                    0.07
+10              2074   1.57   6.31   23.1                    0.09
+11               256   2.38   9.57   21.2                    0.05
+12               338   3.49   9.12   30.1                    0.01
+   share_below_spawn_cw_min fwa_gradient_q50 fwa_gradient_q90
+                      <dbl>            <dbl>            <dbl>
+ 1                     0.65             3.06            17.5 
+ 2                     0.24             0.84             6.4 
+ 3                     1                2.34             2.63
+ 4                     0.24             1.03             8.96
+ 5                     0.29             0.16             4.67
+ 6                     0.44             3.15            17.7 
+ 7                     0.03             0.03             4.44
+ 8                     0.17             3.25            17.3 
+ 9                     0.14             3.47            17.4 
+10                     0.16             2.07            12.4 
+11                     0.07             4.8             22.4 
+12                     0.02             0.5             10.3 
+# ℹ abbreviated names: ¹​share_above_rear_gradient_max, ²​share_above_spawn_gradient_max
+fdis_sites: 53018 rows | fdis_evidence: 11847 rows | focal measured fish: 30507

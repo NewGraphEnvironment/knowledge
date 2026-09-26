@@ -2,7 +2,7 @@
 
 **Verified:** 2026-09-26 · **Issues:** #18 (built from), NewGraphEnvironment/link#284 (consumer) ·
 **Produced by:** direct reads of `s3://fresh-bc/fdis/` and the public BCGW layers (WFS
-`DescribeFeatureType`, local `whse_fish`) · **Status:** source audit complete; evidence table in `scripts/0230`–`0240`.
+`DescribeFeatureType`, local `whse_fish`) · **Status:** evidence built (`scripts/0230`, `scripts/0240`); first calibration read below.
 
 ## Provenance
 
@@ -77,3 +77,18 @@ Not checked: the Fisheries Inventory Data Queries web tool, which is interactive
 Electrofishing only. Minnow traps, angling, seines, snorkel and gill nets are absent, which biases
 against large-river and lake use. Adult CH in mainstems will be under-represented relative to
 their true spawning habitat.
+
+## What the evidence says so far (2026-09-26, `scripts/0240`)
+
+Site-visit counts, measured site gradient, against the thresholds link runs now:
+
+| group × class | sites | with gradient | above rear max | above spawn max | below rear cw min |
+|---|---:|---:|---:|---:|---:|
+| CH present (any size) | 1,373 | 143 | 22 % (> 5.49) | 27 % (> 4.49) | 12 % |
+| char present (any size) | 7,042 | 2,073 | 11 % (> 10.49) | 34 % (> 5.49) | 9 % |
+| char spawner evidence | 348 | 258 | 16 % | **42 %** | 5 % |
+
+- **CH is rearing-only here.** EF caught 2 CH ≥ 150 mm in the whole export.
+- **Size is not maturity for char.** A third of SP/ST-coded char are 80–200 mm, so a length break alone cannot separate spawners; spawner evidence uses maturity plus month.
+- **Measured vs modelled width** is comparable at only 3,820 sites, where the FWA width is `MODELLED`. FWA's `FIELD_MEASURMENT` widths are these same FISS sites (69 % identical). There the log correlation is 0.54 and the p10–p90 ratio 0.44–2.58.
+- **Site gradient is a point measure**; model thresholds apply to a segment's average. Before any of these shares move a threshold, link#284 has to compare against the segment gradient the model actually uses.

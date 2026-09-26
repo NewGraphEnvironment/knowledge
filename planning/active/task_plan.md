@@ -54,15 +54,15 @@ A plan review (Plan agent), each finding reproduced before acting, changed the b
 - [x] Flag snaps beyond a distance threshold (reported, not dropped).
 
 ## Phase 4: Size classes for CH and BT (`scripts/0240-fdis-size-classes.R`)
-- [ ] Plot length distributions per species by region (major drainage) and by month of capture. Emergence timing shifts fry sizes, so month matters.
-- [ ] Set class breaks (fry / parr-juvenile / sub-adult / adult) in `data/fdis_size_breaks.csv`, with a `basis` column: distribution mode, maturity-code check, or citation (to be filled from knowledge#19).
-- [ ] Check the adult break against maturity codes (M/MT/SP vs IM). Report the agreement rate.
+- [x] Plot length distributions per species by region (major drainage) and by month of capture. Emergence timing shifts fry sizes, so month matters. *Tabulated by month and maturity (log); breaks are province-wide, and `fwa_basin` is carried for regional splits later.*
+- [x] Set class breaks (fry / parr-juvenile / sub-adult / adult) in `data/fdis_size_breaks.csv`, with a `basis` column: distribution mode, maturity-code check, or citation (to be filled from knowledge#19).
+- [x] Check the adult break against maturity codes (M/MT/SP vs IM). Report the agreement rate.
 
 ## Phase 5: Evidence table (`0240`, continued)
-- [ ] Write `data/fdis_evidence.csv`: one row per pass × species × size class, with count, measured cw/gradient, modelled cw/gradient, effort, `blue_line_key`/`drm`, WSG, date, the class basis, and QA flags.
-- [ ] Emit zero-catch rows as a species-absent row per pass, from passes with effort and no fish.
-- [ ] Write `data/fdis_evidence.gpkg` (points) for QGIS spot checks.
-- [ ] Summary for link#284: CH and BT measured gradient and width at fry/juvenile vs adult captures, against the current thresholds (spawn/rear gradient max, cw min).
+- [x] Write `data/fdis_evidence.csv`: one row per pass × species × size class, with count, measured cw/gradient, modelled cw/gradient, effort, `blue_line_key`/`drm`, WSG, date, the class basis, and QA flags.
+- [x] Emit zero-catch rows as a species-absent row per pass, from passes with effort and no fish. *Landed at site level: `catch_status` plus per-species counts in the site table; absence is asserted only where the catch is known.*
+- [x] Write `data/fdis_evidence.gpkg` (points) for QGIS spot checks. *Landed as `fdis_sites.{csv,gpkg}` in `s3://fresh-bc/fdis/derived/` (17 MB each, too big for git); `data/fdis_evidence.csv` is tracked.*
+- [x] Summary for link#284: CH and BT measured gradient and width at fry/juvenile vs adult captures, against the current thresholds (spawn/rear gradient max, cw min).
 
 ## Phase 6: Docs
 - [ ] `scripts/README.md`: an FDIS track section and its run order.

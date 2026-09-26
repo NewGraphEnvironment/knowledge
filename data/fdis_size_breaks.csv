@@ -1,0 +1,8 @@
+species_group,size_class,length_min_mm,length_max_mm,life_stage_use,basis
+char,fry,0,80,rearing,"Age-0 mode 40-80 mm in Jul-Sep FDIS EF catches (median Aug 96 mm, q25 55 mm; 3,106 BT in 40-60 mm); IM median 69 mm"
+char,juvenile,80,200,rearing,"Second mode 80-200 mm (age-1+ parr); IM q90 146 mm, MT median 135 mm"
+char,subadult,200,350,rearing or resident spawning,"M median 200 mm and SP q10 188 mm: small-bodied residents mature here; fluvial/adfluvial fish are still sub-adult"
+char,adult,350,Inf,migratory adult,"Upper mode 350-800 mm; May/Oct/Nov medians 372-486 mm match spawning migrations; not used alone as spawning evidence"
+CH,fry,0,70,rearing,"Age-0 median 38-65 mm Apr-Sep in FDIS EF catches"
+CH,parr,70,120,rearing,"Late-summer age-0 and stream-type age-1; 99% of measured CH are under 120 mm"
+CH,older_juvenile,120,Inf,rearing,"Rare in EF (17 of 4,765 measured CH >= 120 mm, 3 >= 145 mm); no adult CH in the export, so no spawning class"
