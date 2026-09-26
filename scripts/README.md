@@ -30,6 +30,11 @@ wf_farm_priority.js                          farm priority/crossing tables out o
 0200  enumerate the data-only .xls submissions per group   WSG_TARGET=COTR  (required, no default)
 0210  fetch them            FISS_FETCH=TRUE   <- deliberate; pulls dozens-to-hundreds
 0220  parse -> normalize -> flag No-Fish-Captured -> GPKG + CSV clipped to the group; reconcile gate
+
+--- FDIS electrofishing export (province-wide, not per group) ---
+0230  sync s3://fresh-bc/fdis/, QA, roll passes to site visits, place on FWA   (local fwapg :5432)
+0240  size classes + CH / char evidence + summary vs thresholds -> data/fdis_*.csv
+      then: aws s3 sync data/fdis/derived/ s3://fresh-bc/fdis/derived/
 ```
 
 ## Report discovery — four axes
@@ -143,6 +148,24 @@ A report is reachable from more than one place; using only one axis misses repor
 - `priority_rank` 1=high 2=moderate 3=low 4=ruled-out, NULL=no priority stated
 - `coord_source` records provenance: `pscis` (surveyed) > `report-utm` (transcribed) >
   `stream-snap` / `stream-snap-parent` (approximate — placed on the named FWA stream)
+
+## 0230 / 0240 — FDIS electrofishing export → size-class evidence
+
+Province-wide, from the FDIS export the Province supplied (`s3://fresh-bc/fdis/`, private;
+`research/fdis_export.md` documents it). Electrofishing only. Individual fish lengths, weights
+and maturity, per-pass effort, measured channel width and gradient, and explicit zero catch
+(`NFC`): none of it is in the public FISS layers.
+
+- **Grain is the site visit**, not the pass: depletion passes repeat one population.
+- **Abundance comes from `counts`**; `details` is a length subsample (87% of counted CH have no length).
+- **Placement:** `fwa_indexpoint` (500 m radius), checked against FDIS's own 50k watershed code
+  and gazetted name. Snaps over 100 m and code mismatches are flagged, not dropped.
+- **CH gives rearing evidence only**; EF caught no adult CH. Char spawner evidence is maturity
+  (SP/ST, or M in Aug–Oct), not length.
+- Outputs: `data/fdis_evidence.csv`, `data/fdis_summary_ch_bt.csv`, `data/fdis_size_breaks.csv`,
+  `data/fdis_maturity_check.csv` (tracked), and `fdis_sites.{csv,gpkg}` (17 MB each), which go to
+  `s3://fresh-bc/fdis/derived/`.
+- Logs: `scripts/logs/fdis/`.
 
 ## 0200 / 0210 / 0220 — FISS `.xls` → No-Fish-Captured layer
 

@@ -65,11 +65,11 @@ A plan review (Plan agent), each finding reproduced before acting, changed the b
 - [x] Summary for link#284: CH and BT measured gradient and width at fry/juvenile vs adult captures, against the current thresholds (spawn/rear gradient max, cw min).
 
 ## Phase 6: Docs
-- [ ] `scripts/README.md`: an FDIS track section and its run order.
-- [ ] CLAUDE.md working note: the FDIS export lives at `s3://fresh-bc/fdis/`, EF-only, 2022 ⊇ 2020.
-- [ ] Update the knowledge#18 body: FDIS built; the `.xls` Step 2/3 parse split to a follow-up issue.
+- [x] `scripts/README.md`: an FDIS track section and its run order.
+- [x] CLAUDE.md working note: the FDIS export lives at `s3://fresh-bc/fdis/`, EF-only, 2022 ⊇ 2020.
+- [x] Update the knowledge#18 body: FDIS built; the `.xls` Step 2/3 parse split to a follow-up issue.
 
-## Out of scope (follow-up issue)
+## Out of scope (follow-up issue: #21)
 - `0220` Step 2 life stage and Step 3 individual-fish parse. These cover submissions made after 2020 and non-EF methods. Split out so this PR ships the bulk of the evidence.
 
 
