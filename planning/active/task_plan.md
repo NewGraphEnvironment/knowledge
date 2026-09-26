@@ -24,10 +24,10 @@ What exploration established (2026-09-26):
 
 
 ## Phase 1: Source audit and gap statement
-- [ ] Record what the public layers carry vs FDIS, field by field: `fiss_fish_obsrvtn_pnt_sp`, `fiss_stream_sample_sites_sp`, `bcfishobs.observations`, FIDQ. Cover life stage, length, weight, maturity, effort, measured width and gradient, and zero catch.
-- [ ] Confirm the join structure: the 2022 export as a superset of 2020 `details`; fish-row dedupe rule; `habitat`/`visits` key coverage.
-- [ ] Decode units and codes from `fiss-database-structure/`: gradient (%), widths (m), length (mm, fork vs total), and the maturity and sex code lookups.
-- [ ] Write `research/fdis_export.md`: provenance, contents, units, known defects (area blanks, UTM blanks, junk dates), and the gap statement.
+- [x] Record what the public layers carry vs FDIS, field by field: `fiss_fish_obsrvtn_pnt_sp`, `fiss_stream_sample_sites_sp`, `bcfishobs.observations`, FIDQ. Cover life stage, length, weight, maturity, effort, measured width and gradient, and zero catch.
+- [x] Confirm the join structure: the 2022 export as a superset of 2020 `details`; fish-row dedupe rule; `habitat`/`visits` key coverage.
+- [x] Decode units and codes from `fiss-database-structure/`: gradient (%), widths (m), length (mm, fork vs total), and the maturity and sex code lookups.
+- [x] Write `research/fdis_export.md`: provenance, contents, units, known defects (area blanks, UTM blanks, junk dates), and the gap statement.
 
 ## Phase 2: Load and QA (`scripts/0230-fdis-load.R`)
 - [ ] Sync `s3://fresh-bc/fdis/` into an ignored local cache `data/fdis/` in one `aws s3 sync` call. Add it to `.gitignore`.

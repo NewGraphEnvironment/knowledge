@@ -50,3 +50,11 @@ Relates to NewGraphEnvironment/link#284, NewGraphEnvironment/link#283
 
 | Error | Resolution |
 |-------|------------|
+
+## Phase 1 source audit (2026-09-26)
+
+- 2022 `Details*` ⊇ 2020 `details` as a multiset on (KEY, species, length): 0 missing, +15,219 rows.
+- 53,018 site visits; 5,748 have 2–8 passes. Evidence grain = site visit, effort summed.
+- Public `fiss_stream_sample_sites_sp` (68,842 sites) already has measured width/gradient; FDIS adds fish size, maturity and effort at the same pass.
+- The maturity code table was not exported; RISC meanings inferred. Length type (fork/total) unknown per fish.
+- Full write-up: `research/fdis_export.md`.
