@@ -43,9 +43,9 @@ Reports use it only to draw a Gantt chart.
       add 0260 to `scripts/README.md` run order + section
 
 ## Phase 3: Wiring
-- [ ] File a template issue (fish_passage_template_reporting): Gantt chunk reads from
+- [x] File a template issue (fish_passage_template_reporting#238; the Gantt chunk lives in report repos' `0200-background.Rmd`, not the template): Gantt chunk reads from
       `knowledge/data/life_history_timing.csv`; note the vocabulary/code mapping
-- [ ] CLAUDE.md `data/` root list gains `life_history_timing.csv`
+- [x] CLAUDE.md `data/` root list gains `life_history_timing.csv`
 
 ## Validation
 

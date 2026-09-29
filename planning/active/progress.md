@@ -11,4 +11,5 @@
 - Phase 2: `0260` seeds 38 rows from the template's 41 (6 split pairs merged, 1 repeat dropped, 1 half window, 27 citations); invariants shown to fire on two mutations
 - Code-check: 3 rounds, 13 findings, all fixed; ended on an enumeration across both callers (`findings.md`)
 - Commits: 02c21ff (Phase 1)
-- Next: Phase 3 (template issue, CLAUDE.md), archive, PR
+- Commits: fed33d4 (Phase 2)
+- Phase 3: filed fish_passage_template_reporting#238 (Gantt chunk is in report repos, not the template; crossing windows need splitting for drawing); CLAUDE.md data tier line
