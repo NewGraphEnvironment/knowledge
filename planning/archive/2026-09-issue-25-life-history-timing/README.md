@@ -39,4 +39,4 @@ What we learned:
 `scripts/logs/timing/20260928_*` — template commit 49f90154 read, and the rows merged, dropped and
 re-cited.
 
-Closed by: PR (this branch, `25-life-history-timing-table-per-watershed`)
+Closed by: PR #26
