@@ -19,6 +19,7 @@
 #     FIELD_MEASUREMENT widths are these same FISS sites.
 #
 # INPUT:  data/fdis/build/{sites,catch,fish}.rds (from 0230), data/fdis_size_breaks.csv
+#         Size classing is knw_size_class() from pkg/ (shared with 0250).
 # OUTPUT: data/fdis/derived/fdis_sites.{csv,gpkg}  one row per site visit: placement, measured
 #                                        and modelled habitat, effort, catch status, focal
 #                                        counts (ignored; pushed to s3://fresh-bc/fdis/derived/)
@@ -30,6 +31,7 @@
 # RUN:    Rscript scripts/0240-fdis-evidence.R   (after 0230, from the repo root)
 # ---------------------------------------------------------------------------
 suppressMessages({ library(dplyr); library(readr); library(tidyr); library(DBI); library(RPostgres) })
+pkgload::load_all("pkg", quiet = TRUE)
 
 build <- "data/fdis/build"
 sites <- readRDS(file.path(build, "sites.rds"))
@@ -64,22 +66,13 @@ DBI::dbDisconnect(conn)
 sites <- sites |> left_join(basin, by = "linear_feature_id")
 
 # ---- measured fish -> size class --------------------------------------------
-classify <- function(grp, len) {
-  out <- rep(NA_character_, length(len)); hits <- integer(length(len))
-  for (i in seq_len(nrow(breaks))) {
-    b <- breaks[i, ]
-    hit <- grp == b$species_group & !is.na(len) & len > 0 & len >= b$length_min_mm & len < b$length_max_mm
-    out[hit] <- b$size_class; hits <- hits + hit
-  }
-  # the breaks must tile each group: every measured fish in exactly one class
-  if (any(hits[!is.na(len) & len > 0] != 1)) stop("size breaks overlap or leave gaps")
-  out
-}
+# knw_size_class() (pkg/R/size_class.R): half-open classes, and an error if the breaks
+# leave a measured fish in zero or several classes
 ff <- fish |>
   mutate(species_group = group_of(species_code)) |>
   filter(!is.na(species_group)) |>
   left_join(sites |> select(site_visit, month), by = "site_visit") |>
-  mutate(size_class = classify(species_group, length_mm),
+  mutate(size_class = knw_size_class(species_group, length_mm, breaks),
          spawner = species_group == "char" &
            (maturity_code %in% c("SP", "ST") | (maturity_code == "M" & month %in% 8:10)))
 

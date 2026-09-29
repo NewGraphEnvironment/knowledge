@@ -24,11 +24,11 @@
 - [x] Reconcile row: Step 3 rows whose `site_key` has no Step 1 site (unplaceable, counted by name)
 
 ## Phase 3: Graduate the size classifier to pkg
-- [ ] `knw_size_class(species_group, length_mm, breaks)` in `pkg/R/size_class.R`, same semantics
+- [x] `knw_size_class(species_group, length_mm, breaks)` in `pkg/R/size_class.R`, same semantics
       as 0240 `classify()` (half-open intervals, stop on overlap/gap); runnable `@examples`
-- [ ] Tests: boundary values (80 → juvenile), 0/NA/negative length → NA, overlapping breaks
+- [x] Tests: boundary values (80 → juvenile), 0/NA/negative length → NA, overlapping breaks
       error, gap error; restore-the-bug check on the boundary
-- [ ] 0240 calls `knw_size_class()`; re-run 0240 and byte-compare `fdis_evidence.csv`,
+- [x] 0240 calls `knw_size_class()`; re-run 0240 and byte-compare `fdis_evidence.csv`,
       `fdis_maturity_check.csv`, `fdis_summary_ch_bt.csv` against HEAD (must be identical)
 
 ## Phase 4: FISS evidence (new `scripts/0250-fiss-evidence.R`)

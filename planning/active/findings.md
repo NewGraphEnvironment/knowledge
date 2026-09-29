@@ -108,3 +108,9 @@ NFC codes, and counting mixed sites as no-fish.
 
 Step 3 raw fish: COTR 352, LNTH 1,406, PINE 28,642, UNTH 1,539, UPCE 171,319. Name keys dropped
 from the per-fish file (on the site table already): UPCE 16 -> 8.2 MB.
+
+## Phase 3 — classifier graduated
+
+`knw_size_class()` (pkg/R/size_class.R) replaces 0240's inline `classify()`. `data/fdis_evidence.csv`,
+`fdis_maturity_check.csv` and `fdis_summary_ch_bt.csv` re-run byte-identical to HEAD. Restoring
+`len <= max` makes "a fish on a break takes the upper class" fail.
