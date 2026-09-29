@@ -18,14 +18,14 @@ Reports use it only to draw a Gantt chart.
    get note "no source in template; to confirm with knowledge holders".
 
 ## Phase 1: Reader in pkg (tests first)
-- [ ] `pkg/tests/testthat/test-timing.R`: filters by wsg and species (vector or NULL = all); refuses an
+- [x] `pkg/tests/testthat/test-timing.R`: filters by wsg and species (vector or NULL = all); refuses an
       unknown `life_stage`, a malformed `MM-DD`, an impossible date (`02-30`), missing columns; accepts
       `start > end` (crosses 1 Jan) and an NA end; zero-row filter returns the typed empty frame
-- [ ] `pkg/R/timing.R`: `knw_timing_read(path, wsg_code = NULL, species_code = NULL)` — reads CSV as
+- [x] `pkg/R/timing.R`: `knw_timing_read(path, wsg_code = NULL, species_code = NULL)` — reads CSV as
       character, validates schema + vocabulary + `MM-DD` (checked against a leap year so `02-29` is
       legal), filters, returns a tibble. Style follows `knw_size_class()` (`chk`, `stop(call. = FALSE)`);
       vocabulary exported as `knw_timing_stages()`, like `knw_pscis_layers()`
-- [ ] roxygen + runnable `@examples` (tempfile CSV), `devtools::document()`; DESCRIPTION Description
+- [x] roxygen + runnable `@examples` (tempfile CSV), `devtools::document()`; DESCRIPTION Description
       line mentions the timing table; add `readr`/`utils` only if needed (prefer `utils::read.csv`)
 
 ## Phase 2: Seed script + table
