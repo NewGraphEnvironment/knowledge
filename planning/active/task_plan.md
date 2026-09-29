@@ -32,37 +32,37 @@
       `fdis_maturity_check.csv`, `fdis_summary_ch_bt.csv` against HEAD (must be identical)
 
 ## Phase 4: FISS evidence (new `scripts/0250-fiss-evidence.R`)
-- [ ] Read every `data/*/fiss_step3_fish_*.csv` + `fiss_sites_*_all.csv` + Step 2 csv (cross-group;
+- [x] Read every `data/*/fiss_step3_fish_*.csv` + `fiss_sites_*_all.csv` + Step 2 csv (cross-group;
       a report spans groups, so dedupe `site_key` across groups first)
-- [ ] Species label → code via `fdis_species_codes.csv` (code, then name, case-insensitive);
+- [x] Species label → code via `fdis_species_codes.csv` (code, then name, case-insensitive);
       unmatched labels reported by count, never silently dropped
-- [ ] Maturity text → FDIS codes (immature→IM, mature→M, maturing→MT, spawning→SP, spent→ST,
+- [x] Maturity text → FDIS codes (immature→IM, mature→M, maturing→MT, spawning→SP, spent→ST,
       undetermined/unknown→NA); same spawner rule as 0240 (SP/ST any date, M Aug–Oct)
-- [ ] Class with `knw_size_class()` + `data/fdis_size_breaks.csv`
-- [ ] Unmeasured rows: Step 2 `total_number` minus Step 3 fish for the same event × species
+- [x] Class with `knw_size_class()` + `data/fdis_size_breaks.csv`
+- [x] Unmeasured rows: Step 2 `total_number` minus Step 3 fish for the same event × species
       (floored at 0), as in 0240
-- [ ] Place sites with 0230's `fwa_indexpoint` query (local fwapg :5432, 500 m); measured
+- [x] Place sites with 0230's `fwa_indexpoint` query (local fwapg :5432, 500 m); measured
       gradient / channel width from Step 4 (`average_gradient_percent`, `avg_channel_width_m`)
-- [ ] Dedupe vs FDIS: multiset match on survey date + UTM (within 50 m, same zone) + species +
+- [x] Dedupe vs FDIS: multiset match on survey date + UTM (within 50 m, same zone) + species +
       length; matched fish flagged `in_fdis = TRUE` and excluded from the FISS rows; match rate
       per report written to findings
-- [ ] Emit rows in the `fdis_evidence.csv` shape + `source` + `method` (see decision below)
-- [ ] Reconcile gate: Step 3 fish in = classed + unmeasured + no-length + dropped-with-reason
+- [x] Emit rows in the `fdis_evidence.csv` shape + `source` + `method` (see decision below)
+- [x] Reconcile gate: Step 3 fish in = classed + unmeasured + no-length + dropped-with-reason
 
 ## Phase 5: Submitter label vs length class
-- [ ] Map `stage_norm` to comparable classes per group (fry↔fry; parr/juvenile↔parr/juvenile/
+- [x] Map `stage_norm` to comparable classes per group (fry↔fry; parr/juvenile↔parr/juvenile/
       older_juvenile for CH, fry/juvenile for char; adult↔adult/subadult for char) — written as a
       small table in the script, not inferred
-- [ ] Fish level: Step 3 fish joined to its Step 2 event × species row where that row is the only
+- [x] Fish level: Step 3 fish joined to its Step 2 event × species row where that row is the only
       staged row (ambiguous joins counted, not guessed)
-- [ ] Row level: Step 2 staged rows whose min/max length both class to one size class
-- [ ] Write `data/fiss_stage_vs_class.csv` (species group × stage × class, n, share) and the
+- [x] Row level: Step 2 staged rows whose min/max length both class to one size class
+- [x] Write `data/fiss_stage_vs_class.csv` (species group × stage × class, n, share) and the
       disagreement rate into findings
 
 ## Phase 6: Docs
-- [ ] `scripts/README.md` (0220 now reads Step 3 + stage; 0250 run order and outputs);
+- [x] `scripts/README.md` (0220 now reads Step 3 + stage; 0250 run order and outputs);
       0220 header; `research/fdis_export.md` pointer to the FISS supplement
-- [ ] Log: `scripts/logs/fiss/` campaign run logs + README
+- [x] Log: `scripts/logs/fiss/` campaign run logs + README
 
 ## Decision (taken at the plan gate)
 

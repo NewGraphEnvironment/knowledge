@@ -114,3 +114,89 @@ from the per-fish file (on the site table already): UPCE 16 -> 8.2 MB.
 `knw_size_class()` (pkg/R/size_class.R) replaces 0240's inline `classify()`. `data/fdis_evidence.csv`,
 `fdis_maturity_check.csv` and `fdis_summary_ch_bt.csv` re-run byte-identical to HEAD. Restoring
 `len <= max` makes "a fish on a break takes the upper class" fail.
+
+## Phase 4 — FISS evidence (0250, 2026-09-28)
+
+Decision taken at the gate: `data/fiss_evidence.csv` in the fdis shape plus `source` and `method`;
+0240 now writes `source = "fdis"`, `method = "electrofishing"` (its other columns unchanged,
+compared as text against main).
+
+**Dedupe against FDIS is most of the story.** 175,414 Step 3 fish after taking one group per
+report; 100,297 dropped as already in FDIS (2,952 sites). Share of a report's electrofished fish
+matched by date + zone + 50 m + species + length, each FDIS fish matched once, 68 reports: 45 >= 90 %,
+7 at 50-90 %, 2 at 10-50 %, 1 under 10 %, 13 none. The export was built from these submissions.
+(Figures after code-check round 2; see below.)
+
+Radius sensitivity (EF fish, 5 groups): matched sites 2,796 at 50 m, 2,796 at 100 m, 2,805 at
+250 m, 2,816 at 500 m, 2,838 at 2 km; the additions are mostly sites where < 50 % of fish match.
+50 m kept.
+
+Unmatched reports checked (not a dedupe miss): 52771, 50262, 49145, 49133 are Peace boat-EF index
+sites with FDIS visits within 100 m in other years (median gap 1-5 years) and none on the same
+day, so those years are absent from FDIS. 59204 (2020) has no same-day FDIS. 52187 (2016) has
+same-day FDIS within 100 m but only 45 % of fish match at any radius.
+
+What is new: 1,283 focal fish classed, evidence at 1,154 sites. CH 45 (all minnow trap, fry 24 / parr 21).
+char 1,238: boat EF 1,005, EF 150, angling 29, snorkel 15, trap net 11, dip net 8, gill net 8,
+rotary screw 7, minnow trap 5; adult 548, subadult 479, juvenile 116, fry 95. Years 2006-2020;
+**none after 2020** in these five groups, so the post-export gap the issue named is not closed by
+this harvest. Spawner evidence: 5 fish. Unmeasured counted fish: 3,721.
+
+Species labels unmapped to the code table: WSC 783, Trout Perch 100, PMC 29, YSU 16, Lamprey 4,
+LSC/MU/unidentified 1-2 each. None is a focal species.
+
+## Phase 5 — submitter life stage vs length class
+
+`data/fiss_stage_vs_class.csv`. Disagreement with the written stage-to-class table:
+
+| level | group | n | disagree |
+|---|---|---|---|
+| fish | CH | 62 | 58.1 % |
+| fish | char | 579 | 8.6 % |
+| Step 2 row | CH | 38 | 76.3 % |
+| Step 2 row | char | 522 | 12.1 % |
+
+CH disagreement is one cell: submitters call age-0 CH under 70 mm "juvenile" (21 fish, 28 rows),
+where the breaks call it fry. That is a vocabulary difference, not a length error, and the table
+was not tuned to absorb it. The char cells are "juvenile" on 200-350 mm fish (17 fish, 50 rows:
+resident or fluvial sub-adults) and "adult" on 80-200 mm fish (23 fish).
+
+NGE authorship could not be separated: the harvest records no submitter (none of the 77
+evidence reports appears in any `reports.csv`). `label_eq_length_rule` marks labels the template's
+length rule reproduces; it is descriptive only, since a real field call of "adult" on a 300 mm
+char matches it too.
+
+## Code-check on 0250, round 1 (fixed)
+
+- `n_measured` / `n_caught` did not mean what they mean in FDIS, and a Step 3 fish with no length
+  was counted twice as unmeasured (52771:502, BT: catch 4 written as 5). Now mirrors 0230:
+  `n_measured` = every Step 3 row for the key, `n_caught = pmax(counted, measured)`.
+- The reconcile compared quantities with themselves. Replaced by two gates whose sides come from
+  different paths, each shown to fire with the old defect restored: classed + unmeasured == n_caught
+  per key; fish in buckets == owner-group fish counted from `step3_all` without the owner table (the
+  first version still went through `owner` and did not fire, so it was rebuilt).
+- Four reports have fish but no Step 1 sheet (808 fish) and were dropped by the owner join; the
+  owner now comes from all three tables and those fish land in `no_step1_site`.
+- One FDIS fish could be matched at several FISS sites (the same survey submitted twice): now
+  allocated once per FDIS length cell, for the overlap figures.
+- Step 3 fish with no method (1,143): inherit the site's single Step 2 method; at an
+  FDIS-matched site a blank-method fish is dropped with the electrofished ones.
+- Accepted: one length match drops every electrofished fish at the site, including 35 focal fish
+  at sites where under half the fish matched. FDIS `details` is a length subsample of the catch,
+  so a low share is expected for the same survey; keeping those fish would risk double counting.
+
+## Code-check on 0250, round 2 (fixed) and the enumeration that ended it
+
+Both defects were inside round 1's fixes:
+- The allocation also decided *which sites are FDIS surveys*, so when one survey sat in two reports
+  (19729 and 19867) the second site got a zero allocation and its fish came back as new evidence:
+  34 sites, 13 char fish already in FDIS. The round-1 note above had said evidence was unaffected;
+  it was wrong. FDIS status now comes from the raw join; the allocation only feeds the overlap file.
+- Site-level method inheritance left 50296:7 BT as 2 blank-method fish beside an angling count of 2,
+  written as 4. Inheritance is now per site x species first (308 fish inherit, 824 stay blank),
+  gated by `site_species_step3_fish_blank_beside_named_method`, proven to fire with site-only
+  inheritance. Blank-method Step 2 rows beside named ones (19089:1) are separate count rows and add up.
+- `n_caught_na_where_fish_measured` could not fire and was removed; the per-key sum is relabelled as
+  what it is, a regression guard on the unmeasured formula.
+
+Loop ended by enumerating every set decision and grouping key (`review-enumeration-0250.md`).

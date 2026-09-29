@@ -112,3 +112,13 @@ Site-visit counts, measured site gradient, against the thresholds link runs now:
 - **Size is not maturity for char.** A third of SP/ST-coded char are 80–200 mm, so a length break alone cannot separate spawners; spawner evidence uses maturity plus month.
 - **Measured vs modelled width** is comparable at only 3,820 sites, where the FWA width is `MODELLED`. FWA's `FIELD_MEASURMENT` widths are these same FISS sites (69 % identical). There the log correlation is 0.54 and the p10–p90 ratio 0.44–2.58.
 - **Site gradient is a point measure**; model thresholds apply to a segment's average. Before any of these shares move a threshold, link#284 has to compare against the segment gradient the model actually uses.
+
+## Supplement: Fish Data Submission workbooks (#21)
+
+`scripts/0250` adds Step 3 individual fish from the submission workbooks 0220 parses, in the
+`fdis_evidence.csv` shape (`data/fiss_evidence.csv`, `source = "fiss_xls"`). Across the five
+groups harvested so far, most electrofished workbook fish are already in this export (45 of 68
+reports match ≥ 90 % by date, place, species and length), which is how the export was built. What
+the workbooks add is other years at resurveyed index sites (Peace boat EF 2012–2016) and other
+methods (angling, gill net, minnow trap, snorkel). No workbook in those five groups postdates 2020,
+so the post-export gap is not closed by them yet.

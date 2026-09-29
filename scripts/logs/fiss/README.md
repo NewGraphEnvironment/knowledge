@@ -11,6 +11,10 @@ Filename: `yyyymmdd_fiss_run_<wsg>.log` — date, the workload (`fiss_run`), the
 day carries several runs of a group, a sequence segment follows the date
 (`yyyymmdd_02_fiss_run_<wsg>.log`).
 
+A run of `0220` alone is `yyyymmdd_fiss_parse_<wsg>.log`. A run of `scripts/0250` (Step 3 fish into
+size-class evidence, all groups at once, deduped against FDIS) is `yyyymmdd_fiss_evidence.log`,
+with no group segment.
+
 `runs/` is gitignored debris: retries, aborted attempts, and runs kept only to show a guard firing.
 
 Naming: `yyyymmdd_noun_verb-detail_target.ext` from 2026-09-04, the directory's first day. No

@@ -24,7 +24,8 @@
 #                                        and modelled habitat, effort, catch status, focal
 #                                        counts (ignored; pushed to s3://fresh-bc/fdis/derived/)
 #         data/fdis_evidence.csv         site visit x focal species x size class (measured
-#                                        fish), plus counted-but-unmeasured and spawner rows
+#                                        fish), plus counted-but-unmeasured and spawner rows;
+#                                        `source`/`method` match data/fiss_evidence.csv (0250)
 #         data/fdis_summary_ch_bt.csv    site-level distributions of measured gradient and
 #                                        width by species x class, against current thresholds
 #         data/fdis_maturity_check.csv   size class x maturity code agreement
@@ -160,7 +161,9 @@ evidence <- evidence |>
                                downstream_route_measure, month, year, gradient_pct,
                                channel_width_m, fwa_gradient_pct, modelled_channel_width_m,
                                channel_width_source, flag_far_snap, flag_ws50_mismatch),
-            by = "site_visit")
+            by = "site_visit") |>
+  # the same shape as data/fiss_evidence.csv (0250), so the two bind by row
+  mutate(source = "fdis", method = "electrofishing")
 write_csv(evidence, "data/fdis_evidence.csv", na = "")
 
 # ---- summary for link#284: one value per site, not per fish ------------------
