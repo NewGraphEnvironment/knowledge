@@ -8,13 +8,17 @@ fetch_http_4xx,NA,0,TRUE,
 fetch_unreadable,NA,0,TRUE,
 enumerate_db_source,tunnel,tunnel,TRUE,
 fetch_parseable_vs_parse_log_workbooks,48,48,TRUE,
-parse_log_rows_vs_3_per_workbook,144,144,TRUE,
-workbooks_with_no_step,NA,3,TRUE,16595_2__int_fish_sub_PWFWCP-GethingCr-2005_1248108910816_7d62542d6a9e6ded9da628a4fdd3f6d0c73402cbef992ec60b68e25837ae420a.xls; 16597_3__PWFWCP-Dinosaurres-2005_1248110061462_7d62542d6a9e6ded9da628a4fdd3f6d0c73402cbef992ec60b68e25837ae420a.xls; 50296_30__SculpinTissueMetals_1461709027387_1708479777.xls
+parse_log_rows_vs_steps_per_workbook,192,192,TRUE,
+fish_layout_sheets_read_as_step3,0,0,TRUE,
+workbooks_with_no_step,NA,2,TRUE,16595_2__int_fish_sub_PWFWCP-GethingCr-2005_1248108910816_7d62542d6a9e6ded9da628a4fdd3f6d0c73402cbef992ec60b68e25837ae420a.xls; 50296_30__SculpinTissueMetals_1461709027387_1708479777.xls
 workbooks_unopenable_since_fetch,0,0,TRUE,
 utm_zone_non_numeric,NA,0,TRUE,
+step3_fish_without_step1_site,NA,461,TRUE,16597; 48996
 sites_all_rows_vs_distinct_site_keys,7023,7023,TRUE,
 placed_rows_vs_geometry_rows,7007,7007,TRUE,
 with_coords_placed_clipped,NA,7007 / 7007 / 4921,TRUE,
 outside_group_fixable_by_zone_shift,NA,0,TRUE,
 nfc_na_no_step2,NA,507,TRUE,
-clip_polygon_source,tunnel|local_fwapg,tunnel,TRUE,
+nfc_conflict_sites,NA,64,TRUE,a no-fish record beside a catch at the same site; not flagged nfc
+nfc_sites_listing_a_species,NA,0,TRUE,explicit zero counts; nfc_conflict sites are not flagged nfc
+clip_polygon_source,tunnel|local_fwapg,local_fwapg,TRUE,

@@ -7,21 +7,21 @@
 #18 built the evidence from the FDIS export instead (`scripts/0230`–`0240`), and left this as the supplement.
 
 ## Phase 1: Normalize Step 2 across editions and read life stage (0220)
-- [ ] `variant_map`: `species_code`→`species`, `method`→`sampling_method`,
+- [x] `variant_map`: `species_code`→`species`, `method`→`sampling_method`,
       `haul_or_pass`/`haul_number_pass_number`→`haul_pass`, `ef_length_m`/`length_m` left as is
-- [ ] Add `stage`, `haul_pass`, `min_length_mm`, `max_length_mm` to `wanted_cols$step2_fish_coll`;
+- [x] Add `stage`, `haul_pass`, `min_length_mm`, `max_length_mm` to `wanted_cols$step2_fish_coll`;
       `stage` kept verbatim (issue: submitter's label as-is), plus a lower-cased `stage_norm`
-- [ ] NFC: also match the code `NFC` (exact, case-insensitive), not only "no fish"
-- [ ] Re-run 0220 for all 5 groups; record per-group NFC / species_list before→after in findings;
+- [x] NFC: also match the code `NFC` (exact, case-insensitive), not only "no fish"
+- [x] Re-run 0220 for all 5 groups; record per-group NFC / species_list before→after in findings;
       reconcile gate must still pass. Commit regenerated per-group outputs.
 
 ## Phase 2: Parse Step 3 per fish (0220)
-- [ ] `step3_indiv_fish` in `match_sheet()` (`step.?3|indiv`) and `wanted_cols`
+- [x] `step3_indiv_fish` in `match_sheet()` (`step.?3|indiv`) and `wanted_cols`
       (species, length_mm, weight_g, sex, maturity, age, sampling_method, method_number,
       haul_pass, comments); gather with `gather_step()`; parse log goes to 4 rows per workbook
       (update the `parse_log_rows_vs_3_per_workbook` check)
-- [ ] Write `data/<wsg>/fiss_step3_fish_<wsg>.csv` (long, raw, keyed by `site_key`)
-- [ ] Reconcile row: Step 3 rows whose `site_key` has no Step 1 site (unplaceable, counted by name)
+- [x] Write `data/<wsg>/fiss_step3_fish_<wsg>.csv` (long, raw, keyed by `site_key`)
+- [x] Reconcile row: Step 3 rows whose `site_key` has no Step 1 site (unplaceable, counted by name)
 
 ## Phase 3: Graduate the size classifier to pkg
 - [ ] `knw_size_class(species_group, length_mm, breaks)` in `pkg/R/size_class.R`, same semantics

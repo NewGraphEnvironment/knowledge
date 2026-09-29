@@ -1,0 +1,1540 @@
+report_id,site_key,reference_number,species,length_mm,weight_g,sex,maturity,age,comments,sampling_method,method_number,haul_pass
+16389,16389:2,2,BT,82,,,IM,,No scale or genetic structures taken,,,
+16389,16389:5,5,BT,39,,,IM,,,,,
+16389,16389:5,5,BT,125,,,IM,,,,,
+16389,16389:5,5,BT,NA,,,IM,,,,,
+16389,16389:6,6,BT,51,,,IM,,,,,
+16389,16389:9,9,BT,43,,,IM,,,,,
+16389,16389:9,9,BT,83,,,IM,,,,,
+16389,16389:9,9,BT,NA,,,IM,,,,,
+16389,16389:9,9,BT,NA,,,IM,,,,,
+16389,16389:10,10,BT,80,,,IM,,,,,
+16389,16389:10,10,BT,85,,,IM,,,,,
+16389,16389:11,11,BT,400,,,MT,,Visually observed,,,
+16389,16389:14,14,BT,80,,,IM,,,,,
+16389,16389:14,14,BT,100,,,IM,,,,,
+16389,16389:14,14,BT,NA,,,IM,,,,,
+16389,16389:15,15,BT,70,,,IM,,,,,
+16389,16389:20,20,CC,89,,,IM,,Fished Aug 26/04,,,
+16389,16389:20,20,CC,91,,,IM,,,,,
+16389,16389:20,20,CC,104,,,IM,,,,,
+16389,16389:21,21,RB,48,1.7,,IM,,Fished Aug 26/04,,,
+16389,16389:21,21,RB,44,1.2,,IM,,Fished Aug 26/04,,,
+16389,16389:21,21,RB,97,14.9,,IM,,Fished Aug 26/04,,,
+16389,16389:21,21,RB,131,36.399999999999999,,IM,,Fished Aug 26/04,,,
+16389,16389:21,21,RB,91,1.3400000000000001,,IM,,Fished Aug 26/04,,,
+16389,16389:21,21,RB,114,25.5,,IM,,Fished Aug 26/04,,,
+16389,16389:21,21,RB,106,16.800000000000001,,IM,,Fished Aug 26/04,,,
+16389,16389:21,21,RB,39,,,IM,,Fished Aug 26/04,,,
+16389,16389:21,21,RB,34,,,IM,,Fished Aug 26/04,,,
+16389,16389:22,22,RB,89,7.9000000000000004,,IM,,,,,
+16389,16389:23,23,RB,50,,,IM,,Visually observed,,,
+16389,16389:23,23,RB,100,,,IM,,Visually observed,,,
+16389,16389:23,23,RB,60,,,IM,,Visually observed,,,
+16389,16389:24,24,RB,76,7.0999999999999996,,IM,,Fished Aug 25/05,,,
+16389,16389:24,24,RB,75,6.0999999999999996,,IM,,Fished Aug 25/05,,,
+16389,16389:24,24,RB,64,3.7999999999999998,,IM,,Fished Aug 25/05,,,
+16389,16389:24,24,RB,29,0.40000000000000002,,IM,,Fished Aug 25/05,,,
+16389,16389:24,24,RB,63,4.4000000000000004,,IM,,Fished Aug 25/05,,,
+16389,16389:24,24,RB,48,1.2,,IM,,,,,
+16389,16389:24,24,RB,110,19.699999999999999,,IM,,,,,
+16389,16389:25,25,RB,200,,,A,,,,,
+16389,16389:25,25,RB,150,,,J,,,,,
+16389,16389:25,25,RB,300,,,A,,,,,
+16389,16389:25,25,RB,150,,,A,,,,,
+16389,16389:25,25,RB,250,,,A,,,,,
+16389,16389:25,25,RB,NA,,,IM,,,,,
+16389,16389:25,25,RB,NA,,,IM,,,,,
+16389,16389:25,25,RB,NA,,,IM,,,,,
+16389,16389:25,25,RB,NA,,,IM,,,,,
+16389,16389:25,25,RB,NA,,,IM,,,,,
+16389,16389:25,25,RB,NA,,,IM,,,,,
+16389,16389:25,25,RB,NA,,,IM,,,,,
+16389,16389:25,25,RB,NA,,,IM,,,,,
+16389,16389:25,25,RB,NA,,,IM,,,,,
+16389,16389:25,25,RB,NA,,,IM,,,,,
+16389,16389:25,25,RB,NA,,,IM,,,,,
+16389,16389:25,25,RB,NA,,,IM,,,,,
+16389,16389:25,25,RB,NA,,,IM,,,,,
+16389,16389:25,25,RB,NA,,,IM,,,,,
+16389,16389:25,25,RB,NA,,,IM,,,,,
+16389,16389:26,26,RB,60,,,IM,,Visually observed,,,
+16389,16389:27,27,RB,116,16.699999999999999,,IM,,,,,
+16389,16389:27,27,RB,96,10.699999999999999,,IM,,,,,
+16389,16389:27,27,RB,NA,,,IM,,,,,
+16389,16389:27,27,RB,NA,,,IM,,,,,
+16389,16389:27,27,RB,NA,,,IM,,,,,
+16389,16389:28,28,RB,200,,,IM,,,,,
+16389,16389:28,28,RB,300,,,IM,,,,,
+16389,16389:28,28,RB,NA,,,IM,,,,,
+16389,16389:28,28,RB,NA,,,IM,,,,,
+16389,16389:28,28,RB,NA,,,IM,,,,,
+16389,16389:28,28,RB,NA,,,IM,,,,,
+16842,16842:1,1,Redside Shiner,65,,undetermined,mature,,,minnow trapping,1,1
+16842,16842:1,1,Prickly Sculpin,75,,undetermined,mature,,,minnow trapping,1,1
+16842,16842:1,1,Prickly Sculpin,77,,undetermined,mature,,,minnow trapping,2,1
+16842,16842:1,1,Coho Salmon,41,,undetermined,Immature,,,minnow trapping,3,1
+16842,16842:1,1,Coho Salmon,41,,undetermined,immature,,,minnow trapping,3,1
+16842,16842:1,1,Coho Salmon,37,,undetermined,immature,,,minnow trapping,3,1
+16842,16842:1,1,Coho Salmon,39,,undetermined,immature,,,minnow trapping,3,1
+16842,16842:1,1,Prickly Sculpin,70,,undetermined,mature,,,minnow trapping,4,1
+16842,16842:1,1,Prickly Sculpin,62,,undetermined,mature,,,minnow trapping,5,1
+16842,16842:1,1,Coho Salmon,54,,undetermined,immature,,,minnow trapping,5,1
+16842,16842:1,1,Coho Salmon,42,,undetermined,immature,,,minnow trapping,5,1
+16842,16842:1,1,Coho Salmon,54,,undetermined,immature,,,minnow trapping,5,1
+16842,16842:1,1,Coho Salmon,54,,undetermined,immature,,,minnow trapping,5,1
+16842,16842:1,1,Coho Salmon,41,,undetermined,immature,,,minnow trapping,6,1
+16842,16842:1,1,Coho Salmon,43,,undetermined,immature,,,minnow trapping,6,1
+16842,16842:1,1,Coho Salmon,39,,undetermined,immature,,,minnow trapping,6,1
+16842,16842:1,1,Coho Salmon,42,,undetermined,immature,,,minnow trapping,6,1
+16842,16842:1,1,Coho Salmon,40,,undetermined,immature,,,minnow trapping,6,1
+16842,16842:1,1,Coho Salmon,40,,undetermined,immature,,,minnow trapping,6,1
+16842,16842:1,1,Coho Salmon,41,,undetermined,immature,,,minnow trapping,6,1
+16842,16842:1,1,Coho Salmon,42,,undetermined,immature,,,minnow trapping,6,1
+16842,16842:1,1,Coho Salmon,50,,undetermined,immature,,,minnow trapping,6,1
+16842,16842:1,1,Coho Salmon,52,,undetermined,immature,,,minnow trapping,6,1
+16842,16842:1,1,Coho Salmon,45,,undetermined,immature,,,minnow trapping,6,1
+16842,16842:1,1,Coho Salmon,51,,undetermined,immature,,,minnow trapping,6,1
+16842,16842:1,1,Coho Salmon,48,,undetermined,immature,,,minnow trapping,6,1
+16842,16842:1,1,Coho Salmon,51,,undetermined,immature,,,minnow trapping,6,1
+16842,16842:1,1,Coho Salmon,49,,undetermined,immature,,,minnow trapping,6,1
+16842,16842:1,1,Coho Salmon,55,,undetermined,immature,,,minnow trapping,6,1
+16842,16842:1,1,Coho Salmon,47,,undetermined,immature,,,minnow trapping,6,1
+16842,16842:1,1,Coho Salmon,50,,undetermined,immature,,,minnow trapping,6,1
+16842,16842:1,1,Coho Salmon,45,,undetermined,immature,,,minnow trapping,6,1
+16842,16842:1,1,Coho Salmon,47,,undetermined,immature,,,minnow trapping,6,1
+16842,16842:1,1,Redside Shiner,85,,undetermined,mature,,,minnow trapping,7,1
+16842,16842:1,1,Redside Shiner,74,,undetermined,mature,,,minnow trapping,7,1
+16842,16842:1,1,Redside Shiner,97,,undetermined,mature,,,minnow trapping,7,1
+16842,16842:1,1,Prickly Sculpin,85,,undetermined,mature,,,minnow trapping,7,1
+16842,16842:1,1,Coho Salmon,63,,undetermined,immature,,,minnow trapping,9,1
+16842,16842:1,1,Coho Salmon,68,,undetermined,immature,,,minnow trapping,9,1
+16842,16842:1,1,Coho Salmon,42,,undetermined,immature,,,minnow trapping,9,1
+16842,16842:1,1,Coho Salmon,50,,undetermined,immature,,,minnow trapping,9,1
+16842,16842:1,1,Coho Salmon,48,,undetermined,immature,,,minnow trapping,9,1
+16842,16842:1,1,Coho Salmon,47,,undetermined,immature,,,minnow trapping,9,1
+16842,16842:1,1,Coho Salmon,47,,undetermined,immature,,,minnow trapping,9,1
+16842,16842:1,1,Coho Salmon,40,,undetermined,immature,,,minnow trapping,10,1
+16842,16842:1,1,Prickly Sculpin,43,,undetermined,mature,,,minnow trapping,10,1
+16842,16842:1,1,Coho Salmon,45,,undetermined,immature,,,minnow trapping,13,1
+16842,16842:1,1,Prickly Sculpin,68,,undetermined,mature,,,minnow trapping,16,1
+16842,16842:1,1,Redside Shiner,70,,undetermined,mature,,,minnow trapping,18,1
+16842,16842:1,1,Coho Salmon,44,,undetermined,immature,,,minnow trapping,19,1
+16842,16842:1,1,Prickly Sculpin,69,,undetermined,mature,,,minnow trapping,20,1
+16842,16842:1,1,Coho Salmon,41,,undetermined,immature,,,minnow trapping,21,1
+16842,16842:1,1,Coho Salmon,42,,undetermined,immature,,,minnow trapping,21,1
+16842,16842:1,1,Coho Salmon,56,,undetermined,immature,,,minnow trapping,21,1
+16842,16842:1,1,Coho Salmon,46,,undetermined,immature,,,minnow trapping,21,1
+16842,16842:1,1,Coho Salmon,40,,undetermined,immature,,,minnow trapping,21,1
+16842,16842:1,1,Coho Salmon,60,,undetermined,immature,,,minnow trapping,21,1
+16842,16842:1,1,Coho Salmon,48,,undetermined,immature,,,minnow trapping,21,1
+16842,16842:1,1,Coho Salmon,59,,undetermined,immature,,,minnow trapping,21,1
+16842,16842:1,1,Coho Salmon,52,,undetermined,immature,,,minnow trapping,21,1
+16842,16842:1,1,Coho Salmon,42,,undetermined,immature,,,minnow trapping,21,1
+16842,16842:1,1,Coho Salmon,56,,undetermined,immature,,,minnow trapping,21,1
+16842,16842:1,1,Prickly Sculpin,69,,undetermined,mature,,,minnow trapping,21,1
+16842,16842:1,1,Coho Salmon,49,,undetermined,immature,,,minnow trapping,22,1
+16842,16842:1,1,Coho Salmon,50,,undetermined,immature,,,minnow trapping,22,1
+16842,16842:1,1,Coho Salmon,64,,undetermined,immature,,,minnow trapping,23,1
+16842,16842:1,1,Coho Salmon,71,,undetermined,immature,,,minnow trapping,23,1
+16842,16842:1,1,Prickly Sculpin,71,,undetermined,mature,,,minnow trapping,23,1
+16842,16842:1,1,Prickly Sculpin,72,,undetermined,mature,,,minnow trapping,23,1
+16842,16842:1,1,Prickly Sculpin,70,,undetermined,mature,,,minnow trapping,23,1
+16842,16842:2,2,Redside Shiner,75,,undetermined,mature,,,minnow trapping,3,1
+16842,16842:2,2,Coho Salmon,61,,undetermined,immature,,,minnow trapping,4,1
+16842,16842:2,2,Coho Salmon,54,,undetermined,immature,,,minnow trapping,4,1
+16842,16842:2,2,Coho Salmon,51,,undetermined,immature,,,minnow trapping,4,1
+16842,16842:2,2,Coho Salmon,69,,undetermined,immature,,,minnow trapping,4,1
+16842,16842:2,2,Coho Salmon,65,,undetermined,immature,,,minnow trapping,4,1
+16842,16842:2,2,Coho Salmon,50,,undetermined,immature,,,minnow trapping,5,1
+16842,16842:2,2,Coho Salmon,51,,undetermined,immature,,,minnow trapping,5,1
+16842,16842:2,2,Coho Salmon,69,,undetermined,immature,,,minnow trapping,5,1
+16842,16842:2,2,Coho Salmon,66,,undetermined,immature,,,minnow trapping,5,1
+16842,16842:2,2,Coho Salmon,65,,undetermined,immature,,,minnow trapping,5,1
+16842,16842:2,2,Coho Salmon,72,,undetermined,immature,,,minnow trapping,5,1
+16842,16842:2,2,Coho Salmon,68,,undetermined,immature,,,minnow trapping,5,1
+16842,16842:2,2,Coho Salmon,57,,undetermined,immature,,,minnow trapping,5,1
+16842,16842:2,2,Coho Salmon,95,,undetermined,immature,,,minnow trapping,5,1
+16842,16842:2,2,Coho Salmon,62,,undetermined,immature,,,minnow trapping,5,1
+16842,16842:2,2,Coho Salmon,54,,undetermined,immature,,,minnow trapping,5,1
+16842,16842:2,2,Coho Salmon,53,,undetermined,immature,,,minnow trapping,5,1
+16842,16842:2,2,Coho Salmon,63,,undetermined,immature,,,minnow trapping,5,1
+16842,16842:2,2,Coho Salmon,63,,undetermined,immature,,,minnow trapping,5,1
+16842,16842:2,2,Coho Salmon,100,,undetermined,immature,,,minnow trapping,5,1
+16842,16842:2,2,Coho Salmon,61,,undetermined,immature,,,minnow trapping,6,1
+16842,16842:2,2,Coho Salmon,65,,undetermined,immature,,,minnow trapping,6,1
+16842,16842:2,2,Redside Shiner,101,,undetermined,mature,,,minnow trapping,7,1
+16842,16842:2,2,Redside Shiner,92,,undetermined,mature,,,minnow trapping,7,1
+16842,16842:2,2,Redside Shiner,83,,undetermined,mature,,,minnow trapping,7,1
+16842,16842:2,2,Redside Shiner,83,,undetermined,mature,,,minnow trapping,7,1
+16842,16842:2,2,Redside Shiner,105,,undetermined,mature,,,minnow trapping,7,1
+16842,16842:2,2,Redside Shiner,92,,undetermined,mature,,,minnow trapping,7,1
+16842,16842:2,2,Redside Shiner,82,,undetermined,mature,,,minnow trapping,7,1
+16842,16842:2,2,Redside Shiner,42,,undetermined,mature,,,minnow trapping,7,1
+16842,16842:2,2,Redside Shiner,40,,undetermined,mature,,,minnow trapping,7,1
+16842,16842:2,2,Redside Shiner,40,,undetermined,mature,,,minnow trapping,7,1
+16842,16842:2,2,Coho Salmon,70,,undetermined,mature,,,minnow trapping,8,1
+16842,16842:2,2,Coho Salmon,67,,undetermined,mature,,,minnow trapping,8,1
+16842,16842:2,2,Coho Salmon,70,,undetermined,mature,,,minnow trapping,8,1
+16842,16842:2,2,Coho Salmon,67,,undetermined,mature,,,minnow trapping,8,1
+16842,16842:2,2,Coho Salmon,57,,undetermined,mature,,,minnow trapping,8,1
+16842,16842:2,2,Coho Salmon,66,,undetermined,mature,,,minnow trapping,8,1
+16842,16842:2,2,Redside Shiner,91,,undetermined,mature,,,minnow trapping,8,1
+16842,16842:2,2,Redside Shiner,90,,undetermined,mature,,,minnow trapping,8,1
+16842,16842:2,2,Redside Shiner,60,,undetermined,mature,,,minnow trapping,8,1
+16842,16842:2,2,Redside Shiner,70,,undetermined,mature,,,minnow trapping,8,1
+16842,16842:2,2,Rainbow Trout,105,,undetermined,immature,,,minnow trapping,8,1
+16842,16842:2,2,Coho Salmon,54,,undetermined,immature,,,minnow trapping,9,1
+16842,16842:2,2,Coho Salmon,52,,undetermined,immature,,,minnow trapping,9,1
+16842,16842:2,2,Coho Salmon,55,,undetermined,immature,,,minnow trapping,9,1
+16842,16842:2,2,Coho Salmon,55,,undetermined,immature,,,minnow trapping,9,1
+16842,16842:2,2,Coho Salmon,69,,undetermined,immature,,,minnow trapping,9,1
+16842,16842:2,2,Coho Salmon,62,,undetermined,immature,,,minnow trapping,9,1
+16842,16842:2,2,Coho Salmon,59,,undetermined,immature,,,minnow trapping,9,1
+16842,16842:2,2,Coho Salmon,59,,undetermined,immature,,,minnow trapping,9,1
+16842,16842:2,2,Coho Salmon,64,,undetermined,immature,,,minnow trapping,9,1
+16842,16842:2,2,Coho Salmon,60,,undetermined,immature,,,minnow trapping,10,1
+16842,16842:2,2,Coho Salmon,75,,undetermined,immature,,,minnow trapping,10,1
+16842,16842:2,2,Coho Salmon,84,,undetermined,immature,,,minnow trapping,10,1
+16842,16842:2,2,Coho Salmon,59,,undetermined,immature,,,minnow trapping,10,1
+16842,16842:2,2,Coho Salmon,55,,undetermined,immature,,,minnow trapping,10,1
+16842,16842:2,2,Coho Salmon,61,,undetermined,immature,,,minnow trapping,10,1
+16842,16842:2,2,Coho Salmon,61,,undetermined,immature,,,minnow trapping,10,1
+16842,16842:2,2,Coho Salmon,69,,undetermined,immature,,,minnow trapping,10,1
+16842,16842:2,2,Coho Salmon,71,,undetermined,immature,,,minnow trapping,10,1
+16842,16842:2,2,Coho Salmon,77,,undetermined,immature,,,minnow trapping,10,1
+16842,16842:2,2,Coho Salmon,53,,undetermined,immature,,,minnow trapping,10,1
+16842,16842:2,2,Coho Salmon,56,,undetermined,immature,,,minnow trapping,10,1
+16842,16842:2,2,Coho Salmon,53,,undetermined,immature,,,minnow trapping,10,1
+16842,16842:2,2,Coho Salmon,53,,undetermined,immature,,,minnow trapping,10,1
+16842,16842:2,2,Coho Salmon,52,,undetermined,immature,,,minnow trapping,10,1
+16842,16842:2,2,Coho Salmon,69,,undetermined,immature,,,minnow trapping,10,1
+16842,16842:2,2,Coho Salmon,57,,undetermined,immature,,,minnow trapping,10,1
+16842,16842:2,2,Coho Salmon,52,,undetermined,immature,,,minnow trapping,10,1
+16842,16842:2,2,Coho Salmon,62,,undetermined,immature,,,minnow trapping,10,1
+16842,16842:2,2,Coho Salmon,53,,undetermined,immature,,,minnow trapping,10,1
+16842,16842:2,2,Coho Salmon,53,,undetermined,immature,,,minnow trapping,10,1
+16842,16842:2,2,Coho Salmon,55,,undetermined,immature,,,minnow trapping,10,1
+16842,16842:2,2,Coho Salmon,43,,undetermined,immature,,,minnow trapping,10,1
+16842,16842:2,2,Coho Salmon,59,,undetermined,immature,,,minnow trapping,10,1
+16842,16842:2,2,Coho Salmon,53,,undetermined,immature,,,minnow trapping,10,1
+16842,16842:2,2,Coho Salmon,54,,undetermined,immature,,,minnow trapping,10,1
+16842,16842:2,2,Prickly Sculpin,91,,undetermined,mature,,,minnow trapping,10,1
+16842,16842:2,2,Coho Salmon,53,,undetermined,immature,,,minnow trapping,11,1
+16842,16842:2,2,Coho Salmon,50,,undetermined,immature,,,minnow trapping,11,1
+16842,16842:2,2,Coho Salmon,64,,undetermined,immature,,,minnow trapping,11,1
+16842,16842:2,2,Coho Salmon,64,,undetermined,immature,,,minnow trapping,11,1
+16842,16842:2,2,Coho Salmon,49,,undetermined,immature,,,minnow trapping,11,1
+16842,16842:2,2,Coho Salmon,55,,undetermined,immature,,,minnow trapping,11,1
+16842,16842:2,2,Coho Salmon,63,,undetermined,immature,,,minnow trapping,11,1
+16842,16842:2,2,Coho Salmon,65,,undetermined,immature,,,minnow trapping,11,1
+16842,16842:2,2,Coho Salmon,49,,undetermined,immature,,,minnow trapping,11,1
+16842,16842:2,2,Coho Salmon,50,,undetermined,immature,,,minnow trapping,11,1
+16842,16842:2,2,Coho Salmon,61,,undetermined,immature,,,minnow trapping,11,1
+16842,16842:2,2,Coho Salmon,68,,undetermined,immature,,,minnow trapping,11,1
+16842,16842:2,2,Coho Salmon,65,,undetermined,immature,,,minnow trapping,11,1
+16842,16842:2,2,Coho Salmon,59,,undetermined,immature,,,minnow trapping,11,1
+16842,16842:2,2,Coho Salmon,48,,undetermined,immature,,,minnow trapping,11,1
+16842,16842:2,2,Coho Salmon,52,,undetermined,immature,,,minnow trapping,11,1
+16842,16842:2,2,Coho Salmon,81,,undetermined,immature,,,minnow trapping,11,1
+16842,16842:2,2,Coho Salmon,64,,undetermined,immature,,,minnow trapping,11,1
+16842,16842:2,2,Coho Salmon,52,,undetermined,immature,,,minnow trapping,11,1
+16842,16842:2,2,Coho Salmon,62,,undetermined,immature,,,minnow trapping,11,1
+16842,16842:2,2,Coho Salmon,53,,undetermined,immature,,,minnow trapping,11,1
+16842,16842:2,2,Coho Salmon,64,,undetermined,immature,,,minnow trapping,11,1
+16842,16842:2,2,Coho Salmon,66,,undetermined,immature,,,minnow trapping,11,1
+16842,16842:2,2,Coho Salmon,55,,undetermined,immature,,,minnow trapping,11,1
+16842,16842:2,2,Coho Salmon,50,,undetermined,immature,,,minnow trapping,11,1
+16842,16842:2,2,Coho Salmon,51,,undetermined,immature,,,minnow trapping,11,1
+16842,16842:2,2,Redside Shiner,86,,undetermined,mature,,,minnow trapping,11,1
+16842,16842:2,2,Redside Shiner,96,,undetermined,mature,,,minnow trapping,11,1
+16842,16842:2,2,Redside Shiner,76,,undetermined,mature,,,minnow trapping,11,1
+16842,16842:2,2,Redside Shiner,82,,undetermined,mature,,,minnow trapping,11,1
+16842,16842:2,2,Redside Shiner,76,,undetermined,mature,,,minnow trapping,11,1
+16842,16842:2,2,Redside Shiner,64,,undetermined,mature,,,minnow trapping,11,1
+16842,16842:2,2,Redside Shiner,98,,undetermined,mature,,,minnow trapping,11,1
+16842,16842:2,2,Redside Shiner,73,,undetermined,mature,,,minnow trapping,11,1
+16842,16842:2,2,Redside Shiner,77,,undetermined,mature,,,minnow trapping,11,1
+16842,16842:2,2,Redside Shiner,82,,undetermined,mature,,,minnow trapping,11,1
+16842,16842:2,2,Redside Shiner,80,,undetermined,mature,,,minnow trapping,11,1
+16842,16842:2,2,Redside Shiner,90,,undetermined,mature,,,minnow trapping,11,1
+16842,16842:2,2,Redside Shiner,75,,undetermined,mature,,,minnow trapping,11,1
+16842,16842:2,2,Redside Shiner,86,,undetermined,mature,,,minnow trapping,11,1
+16842,16842:2,2,Redside Shiner,60,,undetermined,mature,,,minnow trapping,11,1
+16842,16842:2,2,Redside Shiner,71,,undetermined,mature,,,minnow trapping,11,1
+16842,16842:2,2,Redside Shiner,88,,undetermined,mature,,,minnow trapping,11,1
+16845,16845:1,1,NFC,,,,,,,,,
+16845,16845:2,2,BT,100,,,immature,,,,,
+16845,16845:2,2,BT,100,,,immature,,,,,
+16845,16845:3,3,CH,65,2.5,,immature,,,,,
+16845,16845:3,3,CH,70,4.9000000000000004,,immature,,,,,
+16845,16845:3,3,CH,85,5,,immature,,,,,
+16845,16845:3,3,CH,85,5.5999999999999996,,immature,,,,,
+16845,16845:4,4,SC,95,10,,maturing,,,,,
+16845,16845:5,5,CH,60,,,immature,,,,,
+16845,16845:6,6,SC,90,,,maturing,,,,,
+16845,16845:6,6,SC,100,,,maturing,,,,,
+16845,16845:7,7,BT,41,1.1000000000000001,,immature,,,,,
+16845,16845:7,7,BT,88,6.5,,immature,,,,,
+16845,16845:7,7,BT,85,7.0999999999999996,,immature,,,,,
+16845,16845:7,7,BT,89,9,,immature,,,,,
+16845,16845:7,7,BT,96,11.6,,immature,,,,,
+16845,16845:8,8,CH,67,4.4000000000000004,,immature,,,,,
+16845,16845:8,8,CH,69,5.4000000000000004,,immature,,,,,
+16845,16845:8,8,CH,71,6.0999999999999996,,immature,,,,,
+16845,16845:9,9,SC,72,5.0999999999999996,,maturing,,,,,
+16845,16845:9,9,SC,121,17.600000000000001,,maturing,,,,,
+16845,16845:10,10,UN,100,,,maturing,,,,,
+16845,16845:10,10,UN,150,,,maturing,,,,,
+16845,16845:10,10,UN,100,,,maturing,,,,,
+16845,16845:11,11,BT,84,6.0999999999999996,,immature,,,,,
+16845,16845:11,11,BT,87,7.5,,immature,,,,,
+16845,16845:12,12,SC,110,11.4,,maturing,,,,,
+16845,16845:12,12,SC,104,12.4,,maturing,,,,,
+16845,16845:13,13,CH,65,3.2000000000000002,,immature,,,,,
+16845,16845:13,13,CH,95,10.800000000000001,,immature,,,,,
+16845,16845:13,13,CH,94,12.1,,immature,,,,,
+16845,16845:14,14,SC,100,,,maturing,,,,,
+16845,16845:14,14,SC,100,,,maturing,,,,,
+16845,16845:15,15,CH,100,,,immature,,,,,
+16845,16845:15,15,CH,100,,,immature,,,,,
+16845,16845:16,16,UN,50,,,immature,,,,,
+16845,16845:16,16,UN,200,,,immature,,,,,
+16845,16845:17,17,BT,285,250,,immature,,,,,
+16845,16845:17,17,BT,400,550,M,immature,,tag 23,,,
+16845,16845:17,17,BT,470,880,M,maturing,,tag 25,,,
+16845,16845:17,17,BT,470,1060,U,immature,,tag 1,,,
+16845,16845:17,17,BT,450,1060,M,maturing,,tag 22,,,
+16845,16845:17,17,BT,492,1110,U,immature,,tag 29,,,
+16845,16845:17,17,BT,540,1350,F,maturing,,tag 26,,,
+16845,16845:17,17,BT,550,1380,M,maturing,,tag 24,,,
+16845,16845:17,17,BT,100,,,immature,,,,,
+16845,16845:17,17,BT,200,,,immature,,,,,
+16845,16845:17,17,BT,100,,,immature,,,,,
+16845,16845:17,17,BT,250,,,immature,,,,,
+16845,16845:17,17,BT,300,,,immature,,,,,
+16845,16845:17,17,BT,200,,,immature,,,,,
+16845,16845:17,17,BT,150,,,immature,,,,,
+16845,16845:17,17,BT,100,,,immature,,,,,
+16845,16845:17,17,BT,150,,,immature,,,,,
+16845,16845:17,17,BT,700,,,immature,,,,,
+16845,16845:17,17,BT,150,,,immature,,,,,
+16845,16845:17,17,BT,150,,,immature,,,,,
+16845,16845:17,17,BT,500,,,immature,,,,,
+16845,16845:17,17,BT,600,,,immature,,,,,
+16845,16845:17,17,BT,250,,,immature,,,,,
+16845,16845:17,17,BT,200,,,immature,,,,,
+16845,16845:17,17,BT,na,,,immature,,,,,
+16845,16845:17,17,BT,300,,,immature,,,,,
+16845,16845:17,17,BT,700,,,immature,,,,,
+16845,16845:17,17,BT,100,,,immature,,,,,
+16845,16845:17,17,BT,150,,,immature,,,,,
+16845,16845:17,17,BT,200,,,immature,,,,,
+16845,16845:17,17,BT,150,,,immature,,,,,
+16845,16845:17,17,BT,250,,,immature,,,,,
+16845,16845:17,17,BT,200,,,immature,,,,,
+16845,16845:17,17,BT,200,,,immature,,,,,
+16845,16845:17,17,BT,200,,,immature,,,,,
+16845,16845:17,17,BT,250,,,immature,,,,,
+16845,16845:17,17,BT,300,,,immature,,,,,
+16845,16845:17,17,BT,220,,,immature,,,,,
+16845,16845:17,17,BT,150,,,immature,,,,,
+16845,16845:17,17,BT,150,,,immature,,,,,
+16845,16845:17,17,BT,120,,,immature,,,,,
+16845,16845:17,17,BT,500,,,maturing,,,,,
+16845,16845:17,17,BT,300,,,maturing,,,,,
+16845,16845:17,17,BT,700,,,maturing,,,,,
+16845,16845:17,17,BT,200,,,immature,,,,,
+16845,16845:17,17,BT,300,,,immature,,,,,
+16845,16845:17,17,BT,200,,,immature,,,,,
+16845,16845:17,17,BT,250,,,immature,,,,,
+16845,16845:17,17,BT,200,,,immature,,,,,
+16845,16845:17,17,BT,250,,,immature,,,,,
+16845,16845:18,18,BT,49,1.2,,immature,,,,,
+16845,16845:18,18,BT,43,1.3,,immature,,,,,
+16845,16845:18,18,BT,50,1.6000000000000001,,immature,,,,,
+16845,16845:18,18,BT,49,1.8999999999999999,,immature,,,,,
+16845,16845:18,18,BT,55,2.1000000000000001,,immature,,,,,
+16845,16845:18,18,BT,52,2.5,,immature,,,,,
+16845,16845:18,18,BT,61,3.1000000000000001,,immature,,,,,
+16845,16845:18,18,BT,80,,,immature,,,,,
+16845,16845:19,19,BT,45,1.3999999999999999,,immature,,,,,
+16845,16845:19,19,BT,46,1.3999999999999999,,immature,,,,,
+16845,16845:19,19,BT,92,4.5,,immature,,,,,
+16845,16845:19,19,BT,142,26.199999999999999,,maturing,,,,,
+16845,16845:19,19,BT,100,,,immature,,,,,
+16845,16845:20,20,BT,44,1.1000000000000001,,immature,,,,,
+16845,16845:20,20,BT,46,1.3999999999999999,,immature,,,,,
+16845,16845:20,20,BT,45,,,immature,,,,,
+16845,16845:20,20,BT,100,,,immature,,,,,
+16845,16845:20,20,BT,100,,,immature,,,,,
+16845,16845:21,21,BT,500,1400,U,maturing,,,,,
+16845,16845:21,21,BT,540,2130,U,maturing,,tag #30,,,
+16845,16845:21,21,BT,500,880,M,maturing,,tag #21,,,
+16845,16845:21,21,BT,100,,,immature,,,,,
+16845,16845:21,21,BT,200,,,immature,,,,,
+16845,16845:21,21,BT,250,,,immature,,,,,
+16845,16845:21,21,BT,150,,,immature,,,,,
+16845,16845:21,21,BT,200,,,immature,,,,,
+16845,16845:21,21,BT,500,,,maturing,,tag #31,,,
+16845,16845:21,21,BT,260,,M,immature,,,,,
+16845,16845:21,21,BT,200,,,immature,,,,,
+16845,16845:21,21,BT,250,,,immature,,,,,
+16845,16845:21,21,BT,250,,,immature,,,,,
+16845,16845:21,21,BT,200,,,immature,,,,,
+16845,16845:21,21,BT,200,,,immature,,,,,
+16845,16845:21,21,BT,150,,,immature,,,,,
+16845,16845:21,21,BT,250,,,immature,,,,,
+16845,16845:21,21,BT,200,,,immature,,,,,
+16845,16845:21,21,BT,200,,,immature,,,,,
+16845,16845:21,21,BT,UN,,,mature,,tagged adult,,,
+16845,16845:22,22,BT,80,7.2000000000000002,,immature,,,,,
+16845,16845:22,22,BT,80,,,immature,,,,,
+16845,16845:22,22,BT,180,,,immature,,,,,
+16845,16845:22,22,BT,50,,,immature,,,,,
+16845,16845:22,22,BT,50,,,immature,,,,,
+16845,16845:22,22,BT,50,,,immature,,,,,
+16845,16845:22,22,BT,50,,,immature,,,,,
+16845,16845:22,22,BT,50,,,immature,,,,,
+16845,16845:23,23,BT,45,1,,immature,,,,,
+16845,16845:23,23,BT,35,1.1000000000000001,,immature,,,,,
+16845,16845:23,23,BT,50,1.8,,immature,,,,,
+16845,16845:23,23,BT,50,2,,immature,,,,,
+16845,16845:23,23,BT,135,2.9500000000000002,,immature,,,,,
+16845,16845:23,23,BT,145,35,,immature,,,,,
+16845,16845:23,23,BT,155,46.399999999999999,,immature,,,,,
+16845,16845:23,23,BT,163,52.200000000000003,,immature,,,,,
+16845,16845:23,23,BT,75,6.2999999999999998,,immature,,,,,
+16845,16845:23,23,BT,90,9.3000000000000007,,immature,,,,,
+16845,16845:23,23,BT,135,22.600000000000001,,immature,,,,,
+16845,16845:23,23,BT,200,,,immature,,,,,
+16845,16845:23,23,BT,80,,,immature,,,,,
+16845,16845:23,23,BT,50,,,immature,,,,,
+16845,16845:23,23,BT,50,,,immature,,,,,
+16845,16845:23,23,BT,80,,,immature,,,,,
+16845,16845:24,24,BT,550,2670,U,maturing,,tag #48,,,
+16845,16845:24,24,BT,800,4570,U,mature,,tag #46,,,
+16845,16845:24,24,BT,455,1000,U,maturing,,Caught in the North Thompson River - tag #2,,,
+16845,16845:24,24,BT,120,,,immature,,,,,
+16845,16845:24,24,BT,150,,,immature,,,,,
+16845,16845:24,24,BT,120,,,immature,,,,,
+16845,16845:24,24,BT,300,,,maturing,,,,,
+16845,16845:25,25,BT,50,,,immature,,,,,
+16845,16845:25,25,BT,100,,,immature,,,,,
+16845,16845:25,25,BT,100,,,immature,,,,,
+16845,16845:25,25,BT,50,,,immature,,,,,
+16845,16845:25,25,BT,100,,,immature,,,,,
+16845,16845:26,26,MW,113,15.1,,immature,,,,,
+16845,16845:27,27,BT,105,11.800000000000001,,immature,,,,,
+16845,16845:27,27,BT,48,1.3999999999999999,,immature,,,,,
+16845,16845:28,28,BT,50,,,immature,,,,,
+16845,16845:28,28,BT,50,,,immature,,,,,
+16845,16845:28,28,BT,100,,,immature,,,,,
+16845,16845:28,28,BT,250,,,maturing,,,,,
+16845,16845:29,29,BT,54,2.2000000000000002,,immature,,,,,
+16845,16845:29,29,BT,44,1.3,,immature,,,,,
+16845,16845:30,30,CH,86,10.5,,immature,,,,,
+16845,16845:31,31,BT,150,,,immature,,,,,
+16845,16845:31,31,BT,500,1200,U,maturing,,tag #47,,,
+16845,16845:31,31,BT,550,,,maturing,,,,,
+16845,16845:31,31,BT,250,,,immature,,,,,
+16845,16845:31,31,BT,300,,,maturing,,,,,
+16845,16845:31,31,BT,100,,,immature,,,,,
+16845,16845:31,31,BT,120,,,immature,,,,,
+16845,16845:31,31,BT,150,,,immature,,,,,
+16845,16845:31,31,BT,470,1000,M,maturing,,tag #49,,,
+16845,16845:32,32,BT,40,,,immature,,,,,
+16845,16845:32,32,BT,100,,,immature,,,,,
+16845,16845:32,32,BT,100,,,immature,,,,,
+16845,16845:32,32,BT,100,,,immature,,,,,
+16845,16845:32,32,BT,200,,,maturing,,,,,
+16845,16845:32,32,BT,200,,,maturing,,,,,
+16845,16845:32,32,BT,200,,,maturing,,,,,
+16845,16845:32,32,BT,200,,,maturing,,,,,
+16845,16845:32,32,BT,200,,,maturing,,,,,
+16845,16845:32,32,BT,200,,,maturing,,,,,
+16845,16845:33,33,BT,176,64.299999999999997,,maturing,,,,,
+16845,16845:33,33,BT,168,49.399999999999999,,maturing,,,,,
+16845,16845:33,33,BT,101,10.800000000000001,,immature,,,,,
+16845,16845:33,33,BT,145,38.799999999999997,,immature,,,,,
+16845,16845:33,33,BT,161,44.100000000000001,,immature,,,,,
+16845,16845:33,33,BT,148,32,,immature,,,,,
+16845,16845:34,34,BT,151,33.200000000000003,,immature,,,,,
+16845,16845:35,35,BT,60,,,immature,,,,,
+16845,16845:36,36,BT,200,62,,maturing,,,,,
+16845,16845:36,36,BT,280,111,,maturing,,,,,
+16845,16845:36,36,BT,125,14.800000000000001,,immature,,,,,
+16845,16845:37,37,BT,200,,,maturing,,,,,
+16845,16845:37,37,BT,100,,,immature,,,,,
+16845,16845:37,37,BT,100,,,immature,,,,,
+16845,16845:37,37,BT,70,,,immature,,,,,
+16845,16845:37,37,BT,150,,,immature,,,,,
+16845,16845:37,37,BT,70,,,immature,,,,,
+16845,16845:37,37,BT,100,,,immature,,,,,
+16845,16845:37,37,BT,180,,,immature,,,,,
+16845,16845:38,38,BT,125,,,immature,,missing fish data card,,,
+16845,16845:38,38,BT,145,,,immature,,missing fish data card,,,
+16845,16845:38,38,BT,161,,,immature,,missing fish data card,,,
+16845,16845:38,38,BT,na,,,immature,,missing fish data card,,,
+16845,16845:39,39,BT,70,,,immature,,missing fish data card,,,
+16845,16845:39,39,BT,180,,,immature,,missing fish data card,,,
+16845,16845:39,39,BT,100,,,immature,,missing fish data card,,,
+16845,16845:39,39,BT,200,,,maturing,,missing fish data card,,,
+16845,16845:39,39,BT,na,,,,,missing fish data card,,,
+16845,16845:39,39,BT,na,,,,,missing fish data card,,,
+16845,16845:39,39,BT,na,,,,,missing fish data card,,,
+16845,16845:39,39,BT,na,,,,,missing fish data card,,,
+16845,16845:39,39,BT,na,,,,,missing fish data card,,,
+16845,16845:39,39,BT,na,,,,,missing fish data card,,,
+16845,16845:39,39,BT,na,,,,,missing fish data card,,,
+16845,16845:39,39,BT,na,,,,,missing fish data card,,,
+16848,16848:7,7,RB,,,,,,,,,
+16848,16848:7,7,RB,,,,,,,,,
+16848,16848:8,8,RB,,,,,,,,,
+16848,16848:8,8,RB,,,,,,,,,
+16848,16848:15,15,RB,,,,,,,,,
+16848,16848:16,16,RB,,,,,,,,,
+16848,16848:24,24,SP,,,,,,,,,
+16848,16848:33,33,RB,,,,,,,,,
+16848,16848:36,36,RB,,,,,,,,,
+16848,16848:41,41,RB,,,,,,,,,
+16848,16848:44,44,RB,,,,,,,,,
+17242,17242:1,1,CO,41,,,immature,,,MT,1,
+17242,17242:1,1,CO,42,,,immature,,,MT,1,
+17242,17242:1,1,CO,42,,,immature,,,MT,1,
+17242,17242:1,1,CO,43,,,immature,,,MT,1,
+17242,17242:1,1,CO,43,,,immature,,,MT,1,
+17242,17242:1,1,CO,43,,,immature,,,MT,1,
+17242,17242:1,1,CO,43,,,immature,,,MT,1,
+17242,17242:1,1,CO,44,,,immature,,,MT,1,
+17242,17242:1,1,CO,44,,,immature,,,MT,1,
+17242,17242:1,1,CO,44,,,immature,,,MT,1,
+17242,17242:1,1,CO,44,,,immature,,,MT,1,
+17242,17242:1,1,CO,44,,,immature,,,MT,1,
+17242,17242:1,1,CO,45,,,immature,,,MT,1,
+17242,17242:1,1,CO,45,,,immature,,,MT,1,
+17242,17242:1,1,CO,45,,,immature,,,MT,1,
+17242,17242:1,1,CO,45,,,immature,,,MT,1,
+17242,17242:1,1,CO,45,,,immature,,,MT,1,
+17242,17242:1,1,CO,45,,,immature,,,MT,1,
+17242,17242:1,1,CO,45,,,immature,,,MT,1,
+17242,17242:1,1,CO,45,,,immature,,,MT,1,
+17242,17242:1,1,CO,46,,,immature,,,MT,1,
+17242,17242:1,1,CO,46,,,immature,,,MT,1,
+17242,17242:1,1,CO,46,,,immature,,,MT,1,
+17242,17242:1,1,CO,46,,,immature,,,MT,1,
+17242,17242:1,1,CO,46,,,immature,,,MT,1,
+17242,17242:1,1,CO,46,,,immature,,,MT,1,
+17242,17242:1,1,CO,46,,,immature,,,MT,1,
+17242,17242:1,1,CO,47,,,immature,,,MT,1,
+17242,17242:1,1,CO,47,,,immature,,,MT,1,
+17242,17242:1,1,CO,48,,,immature,,,MT,1,
+17242,17242:1,1,CO,48,,,immature,,,MT,1,
+17242,17242:1,1,CO,48,,,immature,,,MT,1,
+17242,17242:1,1,CO,48,,,immature,,,MT,1,
+17242,17242:1,1,CO,49,,,immature,,,MT,1,
+17242,17242:1,1,CO,49,,,immature,,,MT,1,
+17242,17242:1,1,CO,49,,,immature,,,MT,1,
+17242,17242:1,1,CO,49,,,immature,,,MT,1,
+17242,17242:1,1,CO,49,,,immature,,,MT,1,
+17242,17242:1,1,CO,49,,,immature,,,MT,1,
+17242,17242:1,1,CO,49,,,immature,,,MT,1,
+17242,17242:1,1,CO,50,,,immature,,,MT,1,
+17242,17242:1,1,CO,50,,,immature,,,MT,1,
+17242,17242:1,1,CO,50,,,immature,,,MT,1,
+17242,17242:1,1,CO,51,,,immature,,,MT,1,
+17242,17242:1,1,CO,51,,,immature,,,MT,1,
+17242,17242:1,1,CO,51,,,immature,,,MT,1,
+17242,17242:1,1,CO,51,,,immature,,,MT,1,
+17242,17242:1,1,CO,51,,,immature,,,MT,1,
+17242,17242:1,1,CO,51,,,immature,,,MT,1,
+17242,17242:1,1,CO,51,,,immature,,,MT,1,
+17242,17242:1,1,CO,51,,,immature,,,MT,1,
+17242,17242:1,1,CO,51,,,immature,,,MT,1,
+17242,17242:1,1,CO,51,,,immature,,,MT,1,
+17242,17242:1,1,CO,52,,,immature,,,MT,1,
+17242,17242:1,1,CO,52,,,immature,,,MT,1,
+17242,17242:1,1,CO,52,,,immature,,,MT,1,
+17242,17242:1,1,CO,52,,,immature,,,MT,1,
+17242,17242:1,1,CO,52,,,immature,,,MT,1,
+17242,17242:1,1,CO,52,,,immature,,,MT,1,
+17242,17242:1,1,CO,52,,,immature,,,MT,1,
+17242,17242:1,1,CO,52,,,immature,,,MT,1,
+17242,17242:1,1,CO,53,,,immature,,,MT,1,
+17242,17242:1,1,CO,53,,,immature,,,MT,1,
+17242,17242:1,1,CO,53,,,immature,,,MT,1,
+17242,17242:1,1,CO,53,,,immature,,,MT,1,
+17242,17242:1,1,CO,54,,,immature,,,MT,1,
+17242,17242:1,1,CO,54,,,immature,,,MT,1,
+17242,17242:1,1,CO,54,,,immature,,,MT,1,
+17242,17242:1,1,CO,54,,,immature,,,MT,1,
+17242,17242:1,1,CO,54,,,immature,,,MT,1,
+17242,17242:1,1,CO,54,,,immature,,,MT,1,
+17242,17242:1,1,CO,54,,,immature,,,MT,1,
+17242,17242:1,1,CO,55,,,immature,,,MT,1,
+17242,17242:1,1,CO,55,,,immature,,,MT,1,
+17242,17242:1,1,CO,55,,,immature,,,MT,1,
+17242,17242:1,1,CO,55,,,immature,,,MT,1,
+17242,17242:1,1,CO,55,,,immature,,,MT,1,
+17242,17242:1,1,CO,55,,,immature,,,MT,1,
+17242,17242:1,1,CO,55,,,immature,,,MT,1,
+17242,17242:1,1,CO,55,,,immature,,,MT,1,
+17242,17242:1,1,CO,56,,,immature,,,MT,1,
+17242,17242:1,1,CO,57,,,immature,,,MT,1,
+17242,17242:1,1,CO,57,,,immature,,,MT,1,
+17242,17242:1,1,CO,58,,,immature,,,MT,1,
+17242,17242:1,1,CO,58,,,immature,,,MT,1,
+17242,17242:1,1,CO,60,,,immature,,,MT,1,
+17242,17242:1,1,CO,60,,,immature,,,MT,1,
+17242,17242:1,1,CO,61,,,immature,,,MT,1,
+17242,17242:1,1,CO,61,,,immature,,,MT,1,
+17242,17242:1,1,CO,62,,,immature,,,MT,1,
+17242,17242:1,1,CO,62,,,immature,,,MT,1,
+17242,17242:1,1,CH,62,,,immature,,,MT,1,
+17242,17242:1,1,CH,63,,,immature,,,MT,1,
+17242,17242:1,1,CH,64,,,immature,,,MT,1,
+17242,17242:1,1,CH,65,,,immature,,,MT,1,
+17242,17242:1,1,CH,65,,,immature,,,MT,1,
+17242,17242:1,1,CH,73,,,immature,,,MT,1,
+17242,17242:1,1,CH,79,,,immature,,,MT,1,
+17242,17242:1,1,CH,87,,,immature,,,MT,1,
+17242,17242:1,1,RSC,88,,,immature,,,MT,1,
+17242,17242:1,1,RSC,101,,,immature,,,MT,1,
+17242,17242:1,1,CO,53,,,immature,,,MT,1,
+17242,17242:1,1,CO,45,,,immature,,,MT,1,
+17242,17242:1,1,CO,44,,,immature,,,MT,1,
+17242,17242:1,1,CO,42,,,immature,,,MT,1,
+17242,17242:1,1,CO,50,,,immature,,,MT,1,
+17242,17242:1,1,BT/DV,60,,,immature,,,MT,1,
+17242,17242:1,1,CBA,81,,,immature,,,MT,1,
+17242,17242:1,1,CBA,78,,,immature,,,MT,1,
+17242,17242:1,1,CBA,101,,,immature,,,MT,1,
+17242,17242:1,1,CBA,78,,,immature,,,MT,1,
+17242,17242:1,1,CBA,74,,,immature,,,MT,1,
+17242,17242:2,2,CO,39,,,immature,,,MT,1,
+17242,17242:2,2,CO,40,,,immature,,,MT,1,
+17242,17242:2,2,CO,40,,,immature,,,MT,1,
+17242,17242:2,2,CO,40,,,immature,,,MT,1,
+17242,17242:2,2,CO,40,,,immature,,,MT,1,
+17242,17242:2,2,CO,41,,,immature,,,MT,1,
+17242,17242:2,2,CO,41,,,immature,,,MT,1,
+17242,17242:2,2,CO,41,,,immature,,,MT,1,
+17242,17242:2,2,CO,41,,,immature,,,MT,1,
+17242,17242:2,2,CO,41,,,immature,,,MT,1,
+17242,17242:2,2,CO,41,,,immature,,,MT,1,
+17242,17242:2,2,CO,41,,,immature,,,MT,1,
+17242,17242:2,2,CO,41,,,immature,,,MT,1,
+17242,17242:2,2,CO,41,,,immature,,,MT,1,
+17242,17242:2,2,CO,41,,,immature,,,MT,1,
+17242,17242:2,2,CO,41,,,immature,,,MT,1,
+17242,17242:2,2,CO,41,,,immature,,,MT,1,
+17242,17242:2,2,CO,42,,,immature,,,MT,1,
+17242,17242:2,2,CO,42,,,immature,,,MT,1,
+17242,17242:2,2,CO,42,,,immature,,,MT,1,
+17242,17242:2,2,CO,42,,,immature,,,MT,1,
+17242,17242:2,2,CO,42,,,immature,,,MT,1,
+17242,17242:2,2,CO,42,,,immature,,,MT,1,
+17242,17242:2,2,CO,42,,,immature,,,MT,1,
+17242,17242:2,2,CO,42,,,immature,,,MT,1,
+17242,17242:2,2,CO,42,,,immature,,,MT,1,
+17242,17242:2,2,CO,42,,,immature,,,MT,1,
+17242,17242:2,2,CO,43,,,immature,,,MT,1,
+17242,17242:2,2,CO,43,,,immature,,,MT,1,
+17242,17242:2,2,CO,43,,,immature,,,MT,1,
+17242,17242:2,2,CO,43,,,immature,,,MT,1,
+17242,17242:2,2,CO,43,,,immature,,,MT,1,
+17242,17242:2,2,CO,43,,,immature,,,MT,1,
+17242,17242:2,2,CO,43,,,immature,,,MT,1,
+17242,17242:2,2,CO,43,,,immature,,,MT,1,
+17242,17242:2,2,CO,43,,,immature,,,MT,1,
+17242,17242:2,2,CO,43,,,immature,,,MT,1,
+17242,17242:2,2,CO,43,,,immature,,,MT,1,
+17242,17242:2,2,CO,43,,,immature,,,MT,1,
+17242,17242:2,2,CO,43,,,immature,,,MT,1,
+17242,17242:2,2,CO,43,,,immature,,,MT,1,
+17242,17242:2,2,CO,43,,,immature,,,MT,1,
+17242,17242:2,2,CO,43,,,immature,,,MT,1,
+17242,17242:2,2,CO,43,,,immature,,,MT,1,
+17242,17242:2,2,CO,43,,,immature,,,MT,1,
+17242,17242:2,2,CO,44,,,immature,,,MT,1,
+17242,17242:2,2,CO,44,,,immature,,,MT,1,
+17242,17242:2,2,CO,44,,,immature,,,MT,1,
+17242,17242:2,2,CO,44,,,immature,,,MT,1,
+17242,17242:2,2,CO,44,,,immature,,,MT,1,
+17242,17242:2,2,CO,44,,,immature,,,MT,1,
+17242,17242:2,2,CO,44,,,immature,,,MT,1,
+17242,17242:2,2,CO,44,,,immature,,,MT,1,
+17242,17242:2,2,CO,44,,,immature,,,MT,1,
+17242,17242:2,2,CO,44,,,immature,,,MT,1,
+17242,17242:2,2,CO,44,,,immature,,,MT,1,
+17242,17242:2,2,CO,44,,,immature,,,MT,1,
+17242,17242:2,2,CO,44,,,immature,,,MT,1,
+17242,17242:2,2,CO,45,,,immature,,,MT,1,
+17242,17242:2,2,CO,45,,,immature,,,MT,1,
+17242,17242:2,2,CO,45,,,immature,,,MT,1,
+17242,17242:2,2,CO,45,,,immature,,,MT,1,
+17242,17242:2,2,CO,45,,,immature,,,MT,1,
+17242,17242:2,2,CO,45,,,immature,,,MT,1,
+17242,17242:2,2,CO,46,,,immature,,,MT,1,
+17242,17242:2,2,CO,46,,,immature,,,MT,1,
+17242,17242:2,2,CO,46,,,immature,,,MT,1,
+17242,17242:2,2,CO,46,,,immature,,,MT,1,
+17242,17242:2,2,CO,47,,,immature,,,MT,1,
+17242,17242:2,2,CO,47,,,immature,,,MT,1,
+17242,17242:2,2,CO,47,,,immature,,,MT,1,
+17242,17242:2,2,CO,48,,,immature,,,MT,1,
+17242,17242:2,2,CO,48,,,immature,,,MT,1,
+17242,17242:2,2,CO,48,,,immature,,,MT,1,
+17242,17242:2,2,CO,48,,,immature,,,MT,1,
+17242,17242:2,2,CO,48,,,immature,,,MT,1,
+17242,17242:2,2,CO,49,,,immature,,,MT,1,
+17242,17242:2,2,CO,49,,,immature,,,MT,1,
+17242,17242:2,2,CO,49,,,immature,,,MT,1,
+17242,17242:2,2,CO,49,,,immature,,,MT,1,
+17242,17242:2,2,CO,49,,,immature,,,MT,1,
+17242,17242:2,2,CO,49,,,immature,,,MT,1,
+17242,17242:2,2,CO,49,,,immature,,,MT,1,
+17242,17242:2,2,CO,50,,,immature,,,MT,1,
+17242,17242:2,2,CO,50,,,immature,,,MT,1,
+17242,17242:2,2,CO,50,,,immature,,,MT,1,
+17242,17242:2,2,CO,50,,,immature,,,MT,1,
+17242,17242:2,2,CO,50,,,immature,,,MT,1,
+17242,17242:2,2,CO,50,,,immature,,,MT,1,
+17242,17242:2,2,CO,51,,,immature,,,MT,1,
+17242,17242:2,2,CO,51,,,immature,,,MT,1,
+17242,17242:2,2,CO,51,,,immature,,,MT,1,
+17242,17242:2,2,CO,51,,,immature,,,MT,1,
+17242,17242:2,2,CO,51,,,immature,,,MT,1,
+17242,17242:2,2,CO,51,,,immature,,,MT,1,
+17242,17242:2,2,CO,51,,,immature,,,MT,1,
+17242,17242:2,2,CO,51,,,immature,,,MT,1,
+17242,17242:2,2,CO,51,,,immature,,,MT,1,
+17242,17242:2,2,CO,51,,,immature,,,MT,1,
+17242,17242:2,2,CO,51,,,immature,,,MT,1,
+17242,17242:2,2,CO,51,,,immature,,,MT,1,
+17242,17242:2,2,CO,51,,,immature,,,MT,1,
+17242,17242:2,2,CO,52,,,immature,,,MT,1,
+17242,17242:2,2,CO,52,,,immature,,,MT,1,
+17242,17242:2,2,CO,52,,,immature,,,MT,1,
+17242,17242:2,2,CO,52,,,immature,,,MT,1,
+17242,17242:2,2,CO,52,,,immature,,,MT,1,
+17242,17242:2,2,CO,52,,,immature,,,MT,1,
+17242,17242:2,2,CO,52,,,immature,,,MT,1,
+17242,17242:2,2,CO,52,,,immature,,,MT,1,
+17242,17242:2,2,CO,52,,,immature,,,MT,1,
+17242,17242:2,2,CO,53,,,immature,,,MT,1,
+17242,17242:2,2,CO,53,,,immature,,,MT,1,
+17242,17242:2,2,CO,53,,,immature,,,MT,1,
+17242,17242:2,2,CO,53,,,immature,,,MT,1,
+17242,17242:2,2,CO,53,,,immature,,,MT,1,
+17242,17242:2,2,CO,54,,,immature,,,MT,1,
+17242,17242:2,2,CO,54,,,immature,,,MT,1,
+17242,17242:2,2,CO,54,,,immature,,,MT,1,
+17242,17242:2,2,CO,54,,,immature,,,MT,1,
+17242,17242:2,2,CO,54,,,immature,,,MT,1,
+17242,17242:2,2,CO,54,,,immature,,,MT,1,
+17242,17242:2,2,CO,54,,,immature,,,MT,1,
+17242,17242:2,2,CO,54,,,immature,,,MT,1,
+17242,17242:2,2,CO,54,,,immature,,,MT,1,
+17242,17242:2,2,CO,54,,,immature,,,MT,1,
+17242,17242:2,2,CO,54,,,immature,,,MT,1,
+17242,17242:2,2,CO,54,,,immature,,,MT,1,
+17242,17242:2,2,CO,54,,,immature,,,MT,1,
+17242,17242:2,2,CO,54,,,immature,,,MT,1,
+17242,17242:2,2,CO,54,,,immature,,,MT,1,
+17242,17242:2,2,CO,54,,,immature,,,MT,1,
+17242,17242:2,2,CO,55,,,immature,,,MT,1,
+17242,17242:2,2,CO,55,,,immature,,,MT,1,
+17242,17242:2,2,CO,55,,,immature,,,MT,1,
+17242,17242:2,2,CO,56,,,immature,,,MT,1,
+17242,17242:2,2,CO,56,,,immature,,,MT,1,
+17242,17242:2,2,CO,56,,,immature,,,MT,1,
+17242,17242:2,2,CO,56,,,immature,,,MT,1,
+17242,17242:2,2,CO,56,,,immature,,,MT,1,
+17242,17242:2,2,CO,56,,,immature,,,MT,1,
+17242,17242:2,2,CO,57,,,immature,,,MT,1,
+17242,17242:2,2,CO,57,,,immature,,,MT,1,
+17242,17242:2,2,CO,58,,,immature,,,MT,1,
+17242,17242:2,2,CO,58,,,immature,,,MT,1,
+17242,17242:2,2,CO,58,,,immature,,,MT,1,
+17242,17242:2,2,CO,58,,,immature,,,MT,1,
+17242,17242:2,2,CO,59,,,immature,,,MT,1,
+17242,17242:2,2,CO,59,,,immature,,,MT,1,
+17242,17242:2,2,CO,59,,,immature,,,MT,1,
+17242,17242:2,2,CO,59,,,immature,,,MT,1,
+17242,17242:2,2,CO,59,,,immature,,,MT,1,
+17242,17242:2,2,CO,59,,,immature,,,MT,1,
+17242,17242:2,2,CO,59,,,immature,,,MT,1,
+17242,17242:2,2,CO,59,,,immature,,,MT,1,
+17242,17242:2,2,CO,59,,,immature,,,MT,1,
+17242,17242:2,2,CO,59,,,immature,,,MT,1,
+17242,17242:2,2,CO,59,,,immature,,,MT,1,
+17242,17242:2,2,CO,59,,,immature,,,MT,1,
+17242,17242:2,2,CO,60,,,immature,,,MT,1,
+17242,17242:2,2,CO,60,,,immature,,,MT,1,
+17242,17242:2,2,CO,60,,,immature,,,MT,1,
+17242,17242:2,2,CO,60,,,immature,,,MT,1,
+17242,17242:2,2,CO,60,,,immature,,,MT,1,
+17242,17242:2,2,CO,60,,,immature,,,MT,1,
+17242,17242:2,2,CO,61,,,immature,,,MT,1,
+17242,17242:2,2,CO,61,,,immature,,,MT,1,
+17242,17242:2,2,CO,61,,,immature,,,MT,1,
+17242,17242:2,2,CO,61,,,immature,,,MT,1,
+17242,17242:2,2,CO,61,,,immature,,,MT,1,
+17242,17242:2,2,CO,62,,,immature,,,MT,1,
+17242,17242:2,2,CO,62,,,immature,,,MT,1,
+17242,17242:2,2,CO,62,,,immature,,,MT,1,
+17242,17242:2,2,CO,62,,,immature,,,MT,1,
+17242,17242:2,2,CO,62,,,immature,,,MT,1,
+17242,17242:2,2,CO,62,,,immature,,,MT,1,
+17242,17242:2,2,CO,62,,,immature,,,MT,1,
+17242,17242:2,2,CO,63,,,immature,,,MT,1,
+17242,17242:2,2,CO,63,,,immature,,,MT,1,
+17242,17242:2,2,CO,63,,,immature,,,MT,1,
+17242,17242:2,2,CO,63,,,immature,,,MT,1,
+17242,17242:2,2,CO,64,,,immature,,,MT,1,
+17242,17242:2,2,CO,64,,,immature,,,MT,1,
+17242,17242:2,2,CO,64,,,immature,,,MT,1,
+17242,17242:2,2,CO,64,,,immature,,,MT,1,
+17242,17242:2,2,CO,65,,,immature,,,MT,1,
+17242,17242:2,2,CO,67,,,immature,,,MT,1,
+17242,17242:2,2,CO,69,,,immature,,,MT,1,
+17242,17242:2,2,CO,69,,,immature,,,MT,1,
+17242,17242:2,2,CO,69,,,immature,,,MT,1,
+17242,17242:2,2,CO,70,,,immature,,,MT,1,
+17242,17242:2,2,CO,71,,,immature,,,MT,1,
+17242,17242:2,2,CO,72,,,immature,,,MT,1,
+17242,17242:2,2,CO,72,,,immature,,,MT,1,
+17242,17242:2,2,CO,74,,,immature,,,MT,1,
+17242,17242:2,2,CO,74,,,immature,,,MT,1,
+17242,17242:2,2,CO,77,,,immature,,,MT,1,
+17242,17242:2,2,CH,59,,,immature,,,MT,1,
+17242,17242:2,2,CH,64,,,immature,,,MT,1,
+17242,17242:2,2,CH,65,,,immature,,,MT,1,
+17242,17242:2,2,CH,65,,,immature,,,MT,1,
+17242,17242:2,2,CH,65,,,immature,,,MT,1,
+17242,17242:2,2,CH,66,,,immature,,,MT,1,
+17242,17242:2,2,CH,66,,,immature,,,MT,1,
+17242,17242:2,2,CH,67,,,immature,,,MT,1,
+17242,17242:2,2,CH,69,,,immature,,,MT,1,
+17242,17242:2,2,CH,69,,,immature,,,MT,1,
+17242,17242:2,2,CH,70,,,immature,,,MT,1,
+17242,17242:2,2,CH,70,,,immature,,,MT,1,
+17242,17242:2,2,CH,70,,,immature,,,MT,1,
+17242,17242:2,2,CH,71,,,immature,,,MT,1,
+17242,17242:2,2,CH,72,,,immature,,,MT,1,
+17242,17242:2,2,CH,72,,,immature,,,MT,1,
+17242,17242:2,2,CH,73,,,immature,,,MT,1,
+17242,17242:2,2,CH,74,,,immature,,,MT,1,
+17242,17242:2,2,CH,74,,,immature,,,MT,1,
+17242,17242:2,2,CH,74,,,immature,,,MT,1,
+17242,17242:2,2,CH,75,,,immature,,,MT,1,
+17242,17242:2,2,CH,75,,,immature,,,MT,1,
+17242,17242:2,2,CH,76,,,immature,,,MT,1,
+17242,17242:2,2,CH,77,,,immature,,,MT,1,
+17242,17242:2,2,CH,78,,,immature,,,MT,1,
+17242,17242:2,2,CH,78,,,immature,,,MT,1,
+17242,17242:2,2,CH,82,,,immature,,,MT,1,
+17242,17242:2,2,CH,85,,,immature,,,MT,1,
+17242,17242:2,2,RSC,60,,,immature,,,MT,1,
+17242,17242:2,2,RSC,64,,,immature,,,MT,1,
+17242,17242:2,2,RSC,65,,,immature,,,MT,1,
+17242,17242:2,2,RSC,65,,,immature,,,MT,1,
+17242,17242:2,2,RSC,67,,,immature,,,MT,1,
+17242,17242:2,2,RSC,67,,,immature,,,MT,1,
+17242,17242:2,2,RSC,68,,,immature,,,MT,1,
+17242,17242:2,2,RSC,68,,,immature,,,MT,1,
+17242,17242:2,2,RSC,69,,,immature,,,MT,1,
+17242,17242:2,2,RSC,69,,,immature,,,MT,1,
+17242,17242:2,2,RSC,70,,,immature,,,MT,1,
+17242,17242:2,2,RSC,70,,,immature,,,MT,1,
+17242,17242:2,2,RSC,70,,,immature,,,MT,1,
+17242,17242:2,2,RSC,71,,,immature,,,MT,1,
+17242,17242:2,2,RSC,74,,,immature,,,MT,1,
+17242,17242:2,2,RSC,74,,,immature,,,MT,1,
+17242,17242:2,2,RSC,74,,,immature,,,MT,1,
+17242,17242:2,2,RSC,74,,,immature,,,MT,1,
+17242,17242:2,2,RSC,75,,,immature,,,MT,1,
+17242,17242:2,2,RSC,76,,,immature,,,MT,1,
+17242,17242:2,2,RSC,76,,,immature,,,MT,1,
+17242,17242:2,2,RSC,77,,,immature,,,MT,1,
+17242,17242:2,2,RSC,79,,,immature,,,MT,1,
+17242,17242:2,2,RSC,79,,,immature,,,MT,1,
+17242,17242:2,2,RSC,79,,,immature,,,MT,1,
+17242,17242:2,2,RSC,79,,,immature,,,MT,1,
+17242,17242:2,2,RSC,80,,,immature,,,MT,1,
+17242,17242:2,2,RSC,84,,,immature,,,MT,1,
+17242,17242:2,2,RSC,84,,,immature,,,MT,1,
+17242,17242:2,2,RSC,84,,,immature,,,MT,1,
+17242,17242:2,2,RSC,84,,,immature,,,MT,1,
+17242,17242:2,2,RSC,84,,,immature,,,MT,1,
+17242,17242:2,2,RSC,85,,,immature,,,MT,1,
+17242,17242:2,2,RSC,85,,,immature,,,MT,1,
+17242,17242:2,2,RSC,85,,,immature,,,MT,1,
+17242,17242:2,2,RSC,86,,,immature,,,MT,1,
+17242,17242:2,2,RSC,86,,,immature,,,MT,1,
+17242,17242:2,2,RSC,87,,,immature,,,MT,1,
+17242,17242:2,2,RSC,90,,,immature,,,MT,1,
+17242,17242:2,2,RSC,90,,,immature,,,MT,1,
+17242,17242:2,2,RSC,93,,,immature,,,MT,1,
+17242,17242:2,2,RSC,94,,,immature,,,MT,1,
+17242,17242:2,2,RSC,94,,,immature,,,MT,1,
+17242,17242:2,2,RSC,94,,,immature,,,MT,1,
+17242,17242:2,2,RSC,94,,,immature,,,MT,1,
+17242,17242:2,2,RSC,95,,,immature,,,MT,1,
+17242,17242:2,2,RSC,95,,,immature,,,MT,1,
+17242,17242:2,2,RSC,95,,,immature,,,MT,1,
+17242,17242:2,2,RSC,95,,,immature,,,MT,1,
+17242,17242:2,2,RSC,95,,,immature,,,MT,1,
+17242,17242:2,2,RSC,96,,,immature,,,MT,1,
+17242,17242:2,2,RSC,96,,,immature,,,MT,1,
+17242,17242:2,2,RSC,96,,,immature,,,MT,1,
+17242,17242:2,2,RSC,96,,,immature,,,MT,1,
+17242,17242:2,2,RSC,97,,,immature,,,MT,1,
+17242,17242:2,2,RSC,97,,,immature,,,MT,1,
+17242,17242:2,2,RSC,97,,,immature,,,MT,1,
+17242,17242:2,2,RSC,98,,,immature,,,MT,1,
+17242,17242:2,2,RSC,98,,,immature,,,MT,1,
+17242,17242:2,2,RSC,98,,,immature,,,MT,1,
+17242,17242:2,2,RSC,98,,,immature,,,MT,1,
+17242,17242:2,2,RSC,98,,,immature,,,MT,1,
+17242,17242:2,2,RSC,98,,,immature,,,MT,1,
+17242,17242:2,2,RSC,98,,,immature,,,MT,1,
+17242,17242:2,2,RSC,99,,,immature,,,MT,1,
+17242,17242:2,2,RSC,99,,,immature,,,MT,1,
+17242,17242:2,2,RSC,100,,,immature,,,MT,1,
+17242,17242:2,2,RSC,100,,,immature,,,MT,1,
+17242,17242:2,2,RSC,100,,,immature,,,MT,1,
+17242,17242:2,2,RSC,101,,,immature,,,MT,1,
+17242,17242:2,2,RSC,101,,,immature,,,MT,1,
+17242,17242:2,2,RSC,101,,,immature,,,MT,1,
+17242,17242:2,2,RSC,102,,,immature,,,MT,1,
+17242,17242:2,2,RSC,103,,,immature,,,MT,1,
+17242,17242:2,2,RSC,103,,,immature,,,MT,1,
+17242,17242:2,2,RSC,104,,,immature,,,MT,1,
+17242,17242:2,2,RSC,107,,,immature,,,MT,1,
+17242,17242:2,2,RSC,110,,,immature,,,MT,1,
+17242,17242:2,2,RSC,110,,,immature,,,MT,1,
+17242,17242:2,2,RSC,110,,,immature,,,MT,1,
+17242,17242:2,2,RSC,110,,,immature,,,MT,1,
+17242,17242:2,2,RSC,112,,,immature,,,MT,1,
+17242,17242:2,2,RSC,113,,,immature,,,MT,1,
+17242,17242:2,2,RSC,113,,,immature,,,MT,1,
+17242,17242:2,2,RSC,114,,,immature,,,MT,1,
+17242,17242:2,2,RSC,114,,,immature,,,MT,1,
+17242,17242:2,2,RSC,115,,,immature,,,MT,1,
+17242,17242:2,2,RSC,116,,,immature,,,MT,1,
+17242,17242:2,2,RSC,119,,,immature,,,MT,1,
+17242,17242:2,2,RSC,131,,,immature,,,MT,1,
+17242,17242:2,2,CBA,64,,,immature,,,MT,1,
+17242,17242:2,2,CBA,26,,,immature,,,MT,1,
+17242,17242:2,2,CBA,86,,,immature,,,MT,1,
+17242,17242:2,2,CBA,84,,,immature,,,MT,1,
+17242,17242:2,2,CBA,70,,,immature,,,MT,1,
+17242,17242:2,2,CBA,90,,,immature,,,MT,1,
+17242,17242:2,2,CBA,109,,,immature,,,MT,1,
+17242,17242:2,2,CBA,70,,,immature,,,MT,1,
+20538,20538:1,1,NFC,,,,,,,EF,1,1
+20538,20538:2,2,NFC,,,,,,,EF,1,1
+20538,20538:3,3,RB,,,,,,3 visually observed,EF,1,1
+20538,20538:3,3,RB,,,,,,,EF,1,1
+20538,20538:3,3,RB,,,,,,,EF,1,1
+20538,20538:3,3,RB,,,,,,,EF,1,1
+20538,20538:3,3,RB,,,,,,,EF,1,1
+20538,20538:4,4,NFC,,,,,,,EF,1,1
+20538,20538:5,5,NFC,,,,,,1 visually observed,EF,1,1
+20539,20539:1,1,BT,47,1,U,immature,,,MT,1,
+20539,20539:1,1,BT,96,10,U,immature,,,EF,1,
+20539,20539:1,1,BT,99,9,U,immature,,,EF,1,
+20539,20539:1,1,BT,90,9,U,immature,,,EF,1,
+20539,20539:1,1,BT,92,9,U,immature,,,EF,1,
+20539,20539:1,1,BT,150,39,U,immature,,,EF,1,
+20539,20539:1,1,BT,84,6,U,immature,,,EF,1,
+20539,20539:1,1,BT,146,31,U,immature,,,EF,1,
+20539,20539:1,1,BT,96,8,U,immature,,,EF,1,
+20539,20539:1,1,BT,50,1,U,immature,,,EF,1,
+20539,20539:1,1,BT,41,1,U,immature,,,EF,1,
+20539,20539:1,1,BT,104,12,U,immature,,,EF,1,
+20539,20539:2,2,CRH,75,5,U,immature,,,EF,1,
+20539,20539:2,2,CRH,83,6,U,immature,,,EF,1,
+20539,20539:2,2,CRH,72,4,U,immature,,,EF,1,
+20539,20539:2,2,CO,53,1,U,immature,,,EF,1,
+20539,20539:2,2,CO,55,1,U,immature,,,EF,1,
+20539,20539:2,2,CO,48,1,U,immature,,,EF,1,
+20539,20539:2,2,CO,49,1,U,immature,,,EF,1,
+20539,20539:2,2,CO,68,3,U,immature,,,EF,1,
+42744,42744:1,1,,,,,,,,visual observation above water,,
+56982,56982:1,1,Coho Salmon,82,,,Immature,,,electrofishing,1,1
+56982,56982:1,1,Coho Salmon,91,,,Immature,,,electrofishing,1,1
+56982,56982:1,1,Coho Salmon,58,,,Immature,,,electrofishing,1,1
+56982,56982:1,1,Coho Salmon,55,,,Immature,,,electrofishing,1,1
+56982,56982:1,1,Coho Salmon,59,,,Immature,,,electrofishing,1,1
+56982,56982:1,1,Coho Salmon,58,,,Immature,,,electrofishing,1,1
+56982,56982:1,1,Coho Salmon,53,,,Immature,,,electrofishing,1,1
+56982,56982:1,1,Coho Salmon,57,,,Immature,,,electrofishing,1,1
+56982,56982:1,1,Coho Salmon,61,,,Immature,,,electrofishing,1,1
+56982,56982:1,1,Coho Salmon,58,,,Immature,,,electrofishing,1,1
+56982,56982:1,1,Coho Salmon,56,,,Immature,,,electrofishing,1,1
+56982,56982:1,1,Coho Salmon,52,,,Immature,,,electrofishing,1,1
+56982,56982:1,1,Coho Salmon,47,,,Immature,,,electrofishing,1,1
+56982,56982:1,1,Coho Salmon,58,,,Immature,,,electrofishing,1,1
+56982,56982:1,1,Coho Salmon,61,,,Immature,,,electrofishing,1,1
+56982,56982:1,1,Coho Salmon,60,,,Immature,,,electrofishing,1,1
+56982,56982:1,1,Coho Salmon,62,,,Immature,,,electrofishing,1,1
+56982,56982:1,1,Coho Salmon,50,,,Immature,,,electrofishing,1,1
+56982,56982:1,1,Coho Salmon,55,,,Immature,,,electrofishing,1,1
+56982,56982:1,1,Coho Salmon,53,,,Immature,,,electrofishing,1,1
+56982,56982:1,1,Coho Salmon,52,,,Immature,,,electrofishing,1,1
+56982,56982:1,1,Coho Salmon,64,,,Immature,,,electrofishing,1,1
+56982,56982:1,1,Bull Trout,128,,,Immature,,,electrofishing,1,1
+56982,56982:1,1,Coho Salmon,56,,,Immature,,,electrofishing,1,2
+56982,56982:1,1,Coho Salmon,55,,,Immature,,,electrofishing,1,2
+56982,56982:1,1,Coho Salmon,56,,,Immature,,,electrofishing,1,2
+56982,56982:1,1,Coho Salmon,55,,,Immature,,,electrofishing,1,2
+56982,56982:1,1,Coho Salmon,52,,,Immature,,,electrofishing,1,2
+56982,56982:1,1,Coho Salmon,50,,,Immature,,,electrofishing,1,2
+56982,56982:1,1,Coho Salmon,45,,,Immature,,,electrofishing,1,2
+56982,56982:1,1,Coho Salmon,58,,,Immature,,,electrofishing,1,2
+56982,56982:1,1,Coho Salmon,58,,,Immature,,,electrofishing,1,3
+56982,56982:1,1,Coho Salmon,53,,,Immature,,,electrofishing,1,3
+59204,59204:1,1,Bull Trout,107,11.35,undetermined,Immature,,,electrofishing,1,1
+59204,59204:1,1,Bull Trout,111,11.25,undetermined,Immature,,,electrofishing,1,1
+59204,59204:1,1,Bull Trout,108,11.81,undetermined,Immature,,,electrofishing,1,1
+59204,59204:1,1,Bull Trout,104,11.4,undetermined,Immature,,,electrofishing,1,1
+59204,59204:1,1,Bull Trout,33,0.7,undetermined,Immature,,,electrofishing,1,1
+59204,59204:1,1,Bull Trout,36,1.46,undetermined,Immature,,,electrofishing,1,1
+59204,59204:1,1,Bull Trout,440,,undetermined,Spawning,,,electrofishing,1,1
+59204,59204:1,1,Bull Trout,510,,undetermined,Spawning,,,electrofishing,1,2
+59204,59204:1,1,Bull Trout,106,11.51,undetermined,Immature,,,electrofishing,1,2
+59204,59204:1,1,Bull Trout,158,43.5,undetermined,Immature,,,electrofishing,1,2
+59204,59204:1,1,Bull Trout,110,14.4,undetermined,Immature,,,electrofishing,1,2
+59204,59204:1,1,Bull Trout,106,12.1,undetermined,Immature,,,electrofishing,1,2
+59204,59204:1,1,Bull Trout,45,0.8,undetermined,Immature,,,electrofishing,1,2
+59204,59204:1,1,Bull Trout,115,15.76,undetermined,Immature,,,electrofishing,1,3
+59204,59204:1,1,Bull Trout,113,14,undetermined,Immature,,,electrofishing,1,3
+59204,59204:2,2,Bull Trout,103,9.6,undetermined,Immature,,,electrofishing,1,1
+59204,59204:2,2,Bull Trout,136,29,undetermined,Immature,,,electrofishing,1,1
+59204,59204:2,2,Bull Trout,155,40.4,undetermined,Immature,,,electrofishing,1,1
+59204,59204:2,2,Bull Trout,122,16.8,undetermined,Immature,,,electrofishing,1,1
+59204,59204:2,2,Bull Trout,106,11.6,undetermined,Immature,,,electrofishing,1,1
+59204,59204:2,2,Bull Trout,170,58.1,undetermined,Immature,,,electrofishing,1,1
+59204,59204:2,2,Bull Trout,145,34.299999999999997,undetermined,Immature,,,electrofishing,1,2
+59204,59204:2,2,Bull Trout,112,13.6,undetermined,Immature,,,electrofishing,1,2
+59204,59204:2,2,Bull Trout,94,14.4,undetermined,Immature,,,electrofishing,1,2
+59204,59204:2,2,Bull Trout,108,12.3,undetermined,Immature,,,electrofishing,1,2
+59204,59204:2,2,Bull Trout,115,17.5,undetermined,Immature,,,electrofishing,1,3
+59204,59204:2,2,Bull Trout,142,31.4,undetermined,Immature,,,electrofishing,1,3
+59204,59204:3,3,Bull Trout,126,21.68,undetermined,Immature,,,electrofishing,1,1
+59204,59204:3,3,Bull Trout,80,5.2,undetermined,Immature,,,electrofishing,1,1
+59204,59204:3,3,Bull Trout,111,15.12,undetermined,Immature,,,electrofishing,1,1
+59204,59204:3,3,Bull Trout,82,4.8600000000000003,undetermined,Immature,,,electrofishing,1,1
+59204,59204:3,3,Bull Trout,90,8.31,undetermined,Immature,,,electrofishing,1,1
+59204,59204:3,3,Bull Trout,110,12.54,undetermined,Immature,,,electrofishing,1,1
+59204,59204:3,3,Bull Trout,88,6.64,undetermined,Immature,,,electrofishing,1,1
+59204,59204:3,3,Bull Trout,73,4.76,undetermined,Immature,,,electrofishing,1,1
+59204,59204:3,3,Bull Trout,43,1.1000000000000001,undetermined,Immature,,,electrofishing,1,1
+59204,59204:3,3,Bull Trout,46,1.2,undetermined,Immature,,,electrofishing,1,1
+59204,59204:3,3,Bull Trout,90,6.49,undetermined,Immature,,,electrofishing,1,1
+59204,59204:3,3,Bull Trout,44,1.2,undetermined,Immature,,,electrofishing,1,1
+59204,59204:3,3,Bull Trout,46,2.4300000000000002,undetermined,Immature,,,electrofishing,1,1
+59204,59204:3,3,Bull Trout,49,1.0900000000000001,undetermined,Immature,,,electrofishing,1,1
+59204,59204:3,3,Bull Trout,48,1.26,undetermined,Immature,,,electrofishing,1,1
+59204,59204:3,3,Bull Trout,47,1.7,undetermined,Immature,,,electrofishing,1,2
+59204,59204:3,3,Bull Trout,92,8.1,undetermined,Immature,,,electrofishing,1,2
+59204,59204:3,3,Bull Trout,46,1.2,undetermined,Immature,,,electrofishing,1,2
+59204,59204:3,3,Bull Trout,50,1.4,undetermined,Immature,,,electrofishing,1,2
+59204,59204:3,3,Bull Trout,42,1.1000000000000001,undetermined,Immature,,,electrofishing,1,2
+59204,59204:3,3,Bull Trout,49,1.5,undetermined,Immature,,,electrofishing,1,3
+59204,59204:3,3,Bull Trout,82,7,undetermined,Immature,,,electrofishing,1,3
+59204,59204:4,4,Bull Trout,125,20.9,undetermined,Immature,,,electrofishing,1,1
+59204,59204:4,4,Bull Trout,112,16.100000000000001,undetermined,Immature,,,electrofishing,1,1
+59204,59204:4,4,Bull Trout,93,7.21,undetermined,Immature,,,electrofishing,1,1
+59204,59204:4,4,Bull Trout,50,1.36,undetermined,Immature,,,electrofishing,1,1
+59204,59204:4,4,Bull Trout,42,0.93,undetermined,Immature,,,electrofishing,1,1
+59204,59204:4,4,Bull Trout,54,1.5,undetermined,Immature,,,electrofishing,1,1
+59204,59204:4,4,Bull Trout,68,2.9,undetermined,Immature,,,electrofishing,1,1
+59204,59204:4,4,Bull Trout,50,1.3,undetermined,Immature,,,electrofishing,1,1
+59204,59204:4,4,Bull Trout,50,1.3,undetermined,Immature,,,electrofishing,1,1
+59204,59204:4,4,Bull Trout,45,0.9,undetermined,Immature,,,electrofishing,1,1
+59204,59204:4,4,Bull Trout,144,21.8,undetermined,Immature,,,electrofishing,1,2
+59204,59204:4,4,Bull Trout,53,1.4,undetermined,Immature,,,electrofishing,1,2
+59204,59204:4,4,Bull Trout,122,17.3,undetermined,Immature,,,electrofishing,1,2
+59204,59204:4,4,Bull Trout,52,1.2,undetermined,Immature,,,electrofishing,1,3
+59204,59204:5,5,Bull Trout,73,1.5,undetermined,Immature,,,electrofishing,1,1
+59204,59204:5,5,Bull Trout,102,4.0999999999999996,undetermined,Immature,,,electrofishing,1,1
+59204,59204:5,5,Bull Trout,83,5.5,undetermined,Immature,,,electrofishing,1,2
+59204,59204:5,5,Bull Trout,44,1.5,undetermined,Immature,,,electrofishing,1,2
+59204,59204:5,5,Bull Trout,167,44.5,undetermined,Immature,,,electrofishing,1,3
+59204,59204:5,5,Bull Trout,46,0.83,undetermined,Immature,,,electrofishing,1,3
+59204,59204:6,6,Bull Trout,88,6.5,undetermined,Immature,,,electrofishing,1,1
+59204,59204:6,6,Bull Trout,46,0.8,undetermined,Immature,,,electrofishing,1,1
+59204,59204:6,6,Bull Trout,42,0.77,undetermined,Immature,,,electrofishing,1,1
+59204,59204:6,6,Bull Trout,53,1.8,undetermined,Immature,,,electrofishing,1,1
+59204,59204:6,6,Bull Trout,50,1.2,undetermined,Immature,,,electrofishing,1,1
+59204,59204:6,6,Bull Trout,47,1,undetermined,Immature,,,electrofishing,1,1
+59204,59204:6,6,Bull Trout,42,0.9,undetermined,Immature,,,electrofishing,1,1
+59204,59204:6,6,Bull Trout,45,1,undetermined,Immature,,,electrofishing,1,1
+59204,59204:6,6,Bull Trout,48,1,undetermined,Immature,,,electrofishing,1,1
+59204,59204:6,6,Bull Trout,46,1.73,undetermined,Immature,,,electrofishing,1,2
+59204,59204:6,6,Bull Trout,93,8.52,undetermined,Immature,,,electrofishing,1,2
+59204,59204:6,6,Bull Trout,114,16.2,undetermined,Immature,,,electrofishing,1,3
+59204,59204:7,7,Bull Trout,81,6.84,undetermined,Immature,,,electrofishing,1,1
+59204,59204:7,7,Bull Trout,42,0.92,undetermined,Immature,,,electrofishing,1,1
+59204,59204:7,7,Bull Trout,104,12.07,undetermined,Immature,,,electrofishing,1,1
+59204,59204:7,7,Bull Trout,64,6.48,undetermined,Immature,,,electrofishing,1,1
+59204,59204:7,7,Bull Trout,43,0.98,undetermined,Immature,,,electrofishing,1,1
+59204,59204:7,7,Bull Trout,545,,undetermined,Spawning,,,electrofishing,1,2
+59204,59204:7,7,Bull Trout,73,3.99,undetermined,Immature,,,electrofishing,1,2
+59204,59204:7,7,Bull Trout,41,1.08,undetermined,Immature,,,electrofishing,1,2
+59204,59204:7,7,Bull Trout,40,0.74,undetermined,Immature,,,electrofishing,1,2
+59204,59204:7,7,Bull Trout,107,10.74,undetermined,Immature,,,electrofishing,1,3
+59204,59204:7,7,Bull Trout,109,11.21,undetermined,Immature,,,electrofishing,1,3
+59204,59204:8,8,Bull Trout,123,17.8,undetermined,Immature,,,electrofishing,1,1
+59204,59204:8,8,Bull Trout,44,0.8,undetermined,Immature,,,electrofishing,1,1
+59204,59204:8,8,Bull Trout,117,15.1,undetermined,Immature,,,electrofishing,1,2
+59204,59204:8,8,Bull Trout,46,0.97,undetermined,Immature,,,electrofishing,1,3
+59204,59204:9,9,Bull Trout,118,16.36,undetermined,Immature,,,electrofishing,1,1
+59204,59204:9,9,Bull Trout,188,63.96,undetermined,Immature,,,electrofishing,1,1
+59204,59204:9,9,Bull Trout,132,22.47,undetermined,Immature,,,electrofishing,1,1
+59204,59204:9,9,Bull Trout,156,38.76,undetermined,Immature,,,electrofishing,1,1
+59204,59204:9,9,Bull Trout,46,0.96,undetermined,Immature,,,electrofishing,1,1
+59204,59204:9,9,Bull Trout,56,1.6,undetermined,Immature,,,electrofishing,1,1
+59204,59204:9,9,Bull Trout,49,1.03,undetermined,Immature,,,electrofishing,1,1
+59204,59204:9,9,Bull Trout,46,1.24,undetermined,Immature,,,electrofishing,1,1
+59204,59204:9,9,Bull Trout,53,1.21,undetermined,Immature,,,electrofishing,1,1
+59204,59204:9,9,Bull Trout,48,0.98,undetermined,Immature,,,electrofishing,1,1
+59204,59204:9,9,Bull Trout,50,1.24,undetermined,Immature,,,electrofishing,1,1
+59204,59204:9,9,Bull Trout,44,1.19,undetermined,Immature,,,electrofishing,1,1
+59204,59204:9,9,Bull Trout,57,2.0499999999999998,undetermined,Immature,,,electrofishing,1,1
+59204,59204:9,9,Bull Trout,43,1.83,undetermined,Immature,,,electrofishing,1,1
+59204,59204:9,9,Bull Trout,49,1.36,undetermined,Immature,,,electrofishing,1,1
+59204,59204:9,9,Bull Trout,45,0.98,undetermined,Immature,,,electrofishing,1,1
+59204,59204:9,9,Bull Trout,49,1.54,undetermined,Immature,,,electrofishing,1,1
+59204,59204:9,9,Bull Trout,43,0.7,undetermined,Immature,,,electrofishing,1,1
+59204,59204:9,9,Bull Trout,48,1,undetermined,Immature,,,electrofishing,1,1
+59204,59204:9,9,Bull Trout,47,1.69,undetermined,Immature,,,electrofishing,1,1
+59204,59204:9,9,Bull Trout,40,0.63,undetermined,Immature,,,electrofishing,1,1
+59204,59204:9,9,Bull Trout,49,1.21,undetermined,Immature,,,electrofishing,1,1
+59204,59204:9,9,Bull Trout,51,1.48,undetermined,Immature,,,electrofishing,1,2
+59204,59204:9,9,Bull Trout,51,1.1599999999999999,undetermined,Immature,,,electrofishing,1,2
+59204,59204:9,9,Bull Trout,49,1.17,undetermined,Immature,,,electrofishing,1,2
+59204,59204:9,9,Bull Trout,43,0.74,undetermined,Immature,,,electrofishing,1,2
+59204,59204:9,9,Bull Trout,49,1.0900000000000001,undetermined,Immature,,,electrofishing,1,2
+59204,59204:9,9,Bull Trout,52,1.42,undetermined,Immature,,,electrofishing,1,2
+59204,59204:9,9,Bull Trout,51,1.53,undetermined,Immature,,,electrofishing,1,2
+59204,59204:9,9,Bull Trout,114,14.52,undetermined,Immature,,,electrofishing,1,3
+59204,59204:9,9,Bull Trout,53,1.89,undetermined,Immature,,,electrofishing,1,3
+59204,59204:9,9,Bull Trout,52,1.58,undetermined,Immature,,,electrofishing,1,3
+59204,59204:9,9,Bull Trout,49,1.5,undetermined,Immature,,,electrofishing,1,3
+59204,59204:9,9,Bull Trout,48,1.01,undetermined,Immature,,,electrofishing,1,3
+59204,59204:10,10,Bull Trout,49,1.23,undetermined,Immature,,,electrofishing,1,1
+59204,59204:10,10,Bull Trout,53,1.26,undetermined,Immature,,,electrofishing,1,1
+59204,59204:10,10,Bull Trout,48,1.17,undetermined,Immature,,,electrofishing,1,1
+59204,59204:10,10,Bull Trout,54,1.4,undetermined,Immature,,,electrofishing,1,1
+59204,59204:10,10,Bull Trout,53,1.26,undetermined,Immature,,,electrofishing,1,1
+59204,59204:10,10,Bull Trout,50,1.04,undetermined,Immature,,,electrofishing,1,1
+59204,59204:10,10,Bull Trout,50,1.52,undetermined,Immature,,,electrofishing,1,2
+59204,59204:10,10,Bull Trout,55,1.32,undetermined,Immature,,,electrofishing,1,2
+59204,59204:10,10,Bull Trout,52,1.3,undetermined,Immature,,,electrofishing,1,2
+59204,59204:10,10,Bull Trout,38,0.94,undetermined,Immature,,,electrofishing,1,3
+59204,59204:13,13,torrent sculpin,44,1,undetermined,Mature,,,electrofishing,1,1
+59204,59204:13,13,Coho Salmon,64,3,undetermined,Immature,,,electrofishing,1,2
+59204,59204:13,13,torrent sculpin,83,7,undetermined,Mature,,,electrofishing,1,3
+59204,59204:14,14,Coho Salmon,79,6,undetermined,Immature,,,electrofishing,1,1
+59204,59204:14,14,Coho Salmon,83,6,undetermined,Immature,,,electrofishing,1,1
+59204,59204:14,14,Coho Salmon,70,4,undetermined,Immature,,,electrofishing,1,1
+59204,59204:14,14,Coho Salmon,97,13,undetermined,Immature,,,electrofishing,1,1
+59204,59204:14,14,Coho Salmon,52,2,undetermined,Immature,,,electrofishing,1,1
+59204,59204:14,14,Coho Salmon,71,5,undetermined,Immature,,,electrofishing,1,1
+59204,59204:14,14,Coho Salmon,82,6,undetermined,Immature,,,electrofishing,1,1
+59204,59204:14,14,Coho Salmon,112,17,undetermined,Immature,,,electrofishing,1,1
+59204,59204:14,14,Coho Salmon,60,4,undetermined,Immature,,,electrofishing,1,1
+59204,59204:14,14,Coho Salmon,88,9,undetermined,Immature,,,electrofishing,1,1
+59204,59204:14,14,Coho Salmon,89,10,undetermined,Immature,,,electrofishing,1,1
+59204,59204:14,14,Coho Salmon,45,1,undetermined,Immature,,,electrofishing,1,1
+59204,59204:14,14,torrent sculpin,44,1.5,undetermined,Mature,,,electrofishing,1,1
+59204,59204:14,14,torrent sculpin,48,2,undetermined,Mature,,,electrofishing,1,1
+59204,59204:14,14,torrent sculpin,69,4,undetermined,Mature,,,electrofishing,1,1
+59204,59204:14,14,torrent sculpin,90,8,undetermined,Mature,,,electrofishing,1,1
+59204,59204:14,14,Coho Salmon,68,4,undetermined,Immature,,,electrofishing,1,2
+59204,59204:14,14,Coho Salmon,72,4,undetermined,Immature,,,electrofishing,1,2
+59204,59204:14,14,Coho Salmon,94,9.5,undetermined,Immature,,,electrofishing,1,2
+59204,59204:14,14,Coho Salmon,100,12,undetermined,Immature,,,electrofishing,1,2
+59204,59204:14,14,Coho Salmon,74,5,undetermined,Immature,,,electrofishing,1,2
+59204,59204:14,14,Coho Salmon,82,7,undetermined,Immature,,,electrofishing,1,2
+59204,59204:14,14,Coho Salmon,59,2,undetermined,Immature,,,electrofishing,1,2
+59204,59204:14,14,Coho Salmon,54,3,undetermined,Immature,,,electrofishing,1,2
+59204,59204:14,14,Coho Salmon,28,1,undetermined,Immature,,,electrofishing,1,2
+59204,59204:14,14,Coho Salmon,53,2,undetermined,Immature,,,electrofishing,1,2
+59204,59204:14,14,Coho Salmon,55,2,undetermined,Immature,,,electrofishing,1,2
+59204,59204:14,14,torrent sculpin,92,10,undetermined,Mature,,,electrofishing,1,2
+59204,59204:14,14,torrent sculpin,36,1,undetermined,Mature,,,electrofishing,1,2
+59204,59204:14,14,Coho Salmon,62,4,undetermined,Immature,,,electrofishing,1,3
+59204,59204:14,14,Coho Salmon,54,2,undetermined,Immature,,,electrofishing,1,3
+59204,59204:14,14,Coho Salmon,104,15,undetermined,Immature,,,electrofishing,1,3
+59204,59204:14,14,Coho Salmon,49,1,undetermined,Immature,,,electrofishing,1,3
+59204,59204:14,14,Coho Salmon,50,2,undetermined,Immature,,,electrofishing,1,3
+59204,59204:14,14,torrent sculpin,45,2,undetermined,Mature,,,electrofishing,1,3
+59204,59204:14,14,torrent sculpin,63,3,undetermined,Mature,,,electrofishing,1,3
+59204,59204:14,14,torrent sculpin,59,3,undetermined,Mature,,,electrofishing,1,3
+59204,59204:15,15,Coho Salmon,73,6,undetermined,Immature,,,electrofishing,1,1
+59204,59204:15,15,Coho Salmon,90,9,undetermined,Immature,,,electrofishing,1,1
+59204,59204:15,15,Coho Salmon,77,5,undetermined,Immature,,,electrofishing,1,1
+59204,59204:15,15,Coho Salmon,67,4,undetermined,Immature,,,electrofishing,1,1
+59204,59204:15,15,Coho Salmon,98,13,undetermined,Immature,,,electrofishing,1,1
+59204,59204:15,15,Coho Salmon,50,2,undetermined,Immature,,,electrofishing,1,1
+59204,59204:15,15,Coho Salmon,96,10,undetermined,Immature,,,electrofishing,1,1
+59204,59204:15,15,Coho Salmon,49,1,undetermined,Immature,,,electrofishing,1,1
+59204,59204:15,15,Coho Salmon,76,5,undetermined,Immature,,,electrofishing,1,1
+59204,59204:15,15,Coho Salmon,56,3,undetermined,Immature,,,electrofishing,1,1
+59204,59204:15,15,Coho Salmon,73,5,undetermined,Immature,,,electrofishing,1,1
+59204,59204:15,15,Coho Salmon,71,4,undetermined,Immature,,,electrofishing,1,1
+59204,59204:15,15,Coho Salmon,54,2,undetermined,Immature,,,electrofishing,1,1
+59204,59204:15,15,Coho Salmon,79,7,undetermined,Immature,,,electrofishing,1,1
+59204,59204:15,15,Coho Salmon,56,2,undetermined,Immature,,,electrofishing,1,1
+59204,59204:15,15,Coho Salmon,48,1,undetermined,Immature,,,electrofishing,1,1
+59204,59204:15,15,Coho Salmon,51,2,undetermined,Immature,,,electrofishing,1,1
+59204,59204:15,15,Coho Salmon,52,1,undetermined,Immature,,,electrofishing,1,1
+59204,59204:15,15,Coho Salmon,81,6,undetermined,Immature,,,electrofishing,1,1
+59204,59204:15,15,Coho Salmon,57,2,undetermined,Immature,,,electrofishing,1,1
+59204,59204:15,15,Coho Salmon,48,2,undetermined,Immature,,,electrofishing,1,1
+59204,59204:15,15,Coho Salmon,54,2,undetermined,Immature,,,electrofishing,1,1
+59204,59204:15,15,torrent sculpin,114,20,undetermined,Mature,,,electrofishing,1,1
+59204,59204:15,15,torrent sculpin,44,1,undetermined,Mature,,,electrofishing,1,1
+59204,59204:15,15,torrent sculpin,46,2,undetermined,Mature,,,electrofishing,1,1
+59204,59204:15,15,torrent sculpin,45,1,undetermined,Mature,,,electrofishing,1,1
+59204,59204:15,15,torrent sculpin,46,1,undetermined,Mature,,,electrofishing,1,1
+59204,59204:15,15,torrent sculpin,68,4,undetermined,Mature,,,electrofishing,1,1
+59204,59204:15,15,Coho Salmon,105,13,undetermined,Immature,,,electrofishing,1,2
+59204,59204:15,15,Coho Salmon,98,11,undetermined,Immature,,,electrofishing,1,2
+59204,59204:15,15,Coho Salmon,85,7,undetermined,Immature,,,electrofishing,1,2
+59204,59204:15,15,Coho Salmon,85,7,undetermined,Immature,,,electrofishing,1,2
+59204,59204:15,15,Coho Salmon,77,6,undetermined,Immature,,,electrofishing,1,2
+59204,59204:15,15,Coho Salmon,58,2,undetermined,Immature,,,electrofishing,1,2
+59204,59204:15,15,Coho Salmon,70,5,undetermined,Immature,,,electrofishing,1,2
+59204,59204:15,15,Coho Salmon,95,11,undetermined,Immature,,,electrofishing,1,2
+59204,59204:15,15,Coho Salmon,97,11,undetermined,Immature,,,electrofishing,1,2
+59204,59204:15,15,Coho Salmon,54,2,undetermined,Immature,,,electrofishing,1,2
+59204,59204:15,15,Coho Salmon,64,3,undetermined,Immature,,,electrofishing,1,2
+59204,59204:15,15,Coho Salmon,59,3,undetermined,Immature,,,electrofishing,1,2
+59204,59204:15,15,Coho Salmon,53,2,undetermined,Immature,,,electrofishing,1,2
+59204,59204:15,15,torrent sculpin,42,1,undetermined,Mature,,,electrofishing,1,2
+59204,59204:15,15,torrent sculpin,45,1,undetermined,Mature,,,electrofishing,1,2
+59204,59204:15,15,torrent sculpin,88,8,undetermined,Mature,,,electrofishing,1,2
+59204,59204:15,15,Coho Salmon,60,4,undetermined,Immature,,,electrofishing,1,3
+59204,59204:15,15,Coho Salmon,75,5,undetermined,Immature,,,electrofishing,1,3
+59204,59204:15,15,Coho Salmon,73,5,undetermined,Immature,,,electrofishing,1,3
+59204,59204:15,15,Coho Salmon,76,6,undetermined,Immature,,,electrofishing,1,3
+59204,59204:15,15,Coho Salmon,79,6,undetermined,Immature,,,electrofishing,1,3
+59204,59204:15,15,Coho Salmon,55,3,undetermined,Immature,,,electrofishing,1,3
+59204,59204:15,15,Coho Salmon,56,2,undetermined,Immature,,,electrofishing,1,3
+59204,59204:15,15,Coho Salmon,52,2,undetermined,Immature,,,electrofishing,1,3
+59204,59204:15,15,Coho Salmon,69,4,undetermined,Immature,,,electrofishing,1,3
+59204,59204:15,15,Coho Salmon,73,5,undetermined,Immature,,,electrofishing,1,3
+59204,59204:15,15,Coho Salmon,51,2,undetermined,Immature,,,electrofishing,1,3
+59204,59204:15,15,torrent sculpin,64,3,undetermined,Mature,,,electrofishing,1,3
+59204,59204:15,15,torrent sculpin,61,3,undetermined,Mature,,,electrofishing,1,3
+59204,59204:15,15,torrent sculpin,74,4,undetermined,Mature,,,electrofishing,1,3
+59204,59204:15,15,torrent sculpin,70,4,undetermined,Mature,,,electrofishing,1,3
+59204,59204:16,16,Coho Salmon,58,3,undetermined,Immature,,,electrofishing,1,1
+59204,59204:16,16,Coho Salmon,73,4,undetermined,Immature,,,electrofishing,1,1
+59204,59204:16,16,Coho Salmon,71,4,undetermined,Immature,,,electrofishing,1,1
+59204,59204:16,16,torrent sculpin,43,1,undetermined,Mature,,,electrofishing,1,1
+59204,59204:16,16,Coho Salmon,71,3.5,undetermined,Immature,,,electrofishing,1,1
+59204,59204:16,16,Coho Salmon,66,4,undetermined,Immature,,,electrofishing,1,1
+59204,59204:16,16,Coho Salmon,88,7,undetermined,Immature,,,electrofishing,1,1
+59204,59204:16,16,Coho Salmon,62,3,undetermined,Immature,,,electrofishing,1,1
+59204,59204:16,16,Coho Salmon,67,4,undetermined,Immature,,,electrofishing,1,1
+59204,59204:16,16,Coho Salmon,78,5,undetermined,Immature,,,electrofishing,1,1
+59204,59204:16,16,Coho Salmon,67,4,undetermined,Immature,,,electrofishing,1,1
+59204,59204:16,16,Coho Salmon,68,4,undetermined,Immature,,,electrofishing,1,1
+59204,59204:16,16,Coho Salmon,78,5,undetermined,Immature,,,electrofishing,1,1
+59204,59204:16,16,Coho Salmon,74,4,undetermined,Immature,,,electrofishing,1,1
+59204,59204:16,16,Coho Salmon,73,3,undetermined,Immature,,,electrofishing,1,1
+59204,59204:16,16,Coho Salmon,58,3,undetermined,Immature,,,electrofishing,1,1
+59204,59204:16,16,Coho Salmon,61,2,undetermined,Immature,,,electrofishing,1,1
+59204,59204:16,16,Coho Salmon,96,9,undetermined,Immature,,,electrofishing,1,1
+59204,59204:16,16,Coho Salmon,69,4,undetermined,Immature,,,electrofishing,1,1
+59204,59204:16,16,Coho Salmon,70,4,undetermined,Immature,,,electrofishing,1,1
+59204,59204:16,16,Coho Salmon,73,4,undetermined,Immature,,,electrofishing,1,1
+59204,59204:16,16,Coho Salmon,54,3,undetermined,Immature,,,electrofishing,1,1
+59204,59204:16,16,Longnose Dace,55,2,undetermined,Mature,,,electrofishing,1,1
+59204,59204:16,16,Coho Salmon,98,13,undetermined,Immature,,,electrofishing,1,1
+59204,59204:16,16,Coho Salmon,87,7,undetermined,Immature,,,electrofishing,1,1
+59204,59204:16,16,Coho Salmon,81,7,undetermined,Immature,,,electrofishing,1,1
+59204,59204:16,16,Coho Salmon,91,8,undetermined,Immature,,,electrofishing,1,1
+59204,59204:16,16,Coho Salmon,75,5,undetermined,Immature,,,electrofishing,1,1
+59204,59204:16,16,Coho Salmon,72,4,undetermined,Immature,,,electrofishing,1,1
+59204,59204:16,16,Coho Salmon,68,4,undetermined,Immature,,,electrofishing,1,1
+59204,59204:16,16,Coho Salmon,53,1,undetermined,Immature,,,electrofishing,1,1
+59204,59204:16,16,Coho Salmon,52,2,undetermined,Immature,,,electrofishing,1,1
+59204,59204:16,16,Coho Salmon,60,2,undetermined,Immature,,,electrofishing,1,1
+59204,59204:16,16,Coho Salmon,70,4,undetermined,Immature,,,electrofishing,1,1
+59204,59204:16,16,Coho Salmon,59,2,undetermined,Immature,,,electrofishing,1,1
+59204,59204:16,16,Coho Salmon,88,7,undetermined,Immature,,,electrofishing,1,1
+59204,59204:16,16,Coho Salmon,82,6,undetermined,Immature,,,electrofishing,1,1
+59204,59204:16,16,Coho Salmon,66,3,undetermined,Immature,,,electrofishing,1,1
+59204,59204:16,16,Coho Salmon,53,2,undetermined,Immature,,,electrofishing,1,1
+59204,59204:16,16,Coho Salmon,67,67,undetermined,Immature,,,electrofishing,1,1
+59204,59204:16,16,Coho Salmon,56,56,undetermined,Immature,,,electrofishing,1,1
+59204,59204:16,16,Coho Salmon,57,57,undetermined,Immature,,,electrofishing,1,1
+59204,59204:16,16,Coho Salmon,63,63,undetermined,Immature,,,electrofishing,1,1
+59204,59204:16,16,Coho Salmon,73,5,undetermined,Immature,,,electrofishing,1,2
+59204,59204:16,16,Coho Salmon,89,9,undetermined,Immature,,,electrofishing,1,2
+59204,59204:16,16,Coho Salmon,70,4,undetermined,Immature,,,electrofishing,1,2
+59204,59204:16,16,Coho Salmon,50,0.5,undetermined,Immature,,,electrofishing,1,2
+59204,59204:16,16,Coho Salmon,53,2,undetermined,Immature,,,electrofishing,1,2
+59204,59204:16,16,Coho Salmon,68,4,undetermined,Immature,,,electrofishing,1,2
+59204,59204:16,16,Coho Salmon,66,4,undetermined,Immature,,,electrofishing,1,2
+59204,59204:16,16,Coho Salmon,50,2,undetermined,Immature,,,electrofishing,1,2
+59204,59204:16,16,Coho Salmon,65,3,undetermined,Immature,,,electrofishing,1,2
+59204,59204:16,16,Coho Salmon,69,4,undetermined,Immature,,,electrofishing,1,2
+59204,59204:16,16,Coho Salmon,64,3,undetermined,Immature,,,electrofishing,1,2
+59204,59204:16,16,Coho Salmon,78,6,undetermined,Immature,,,electrofishing,1,2
+59204,59204:16,16,Coho Salmon,58,3,undetermined,Immature,,,electrofishing,1,2
+59204,59204:16,16,Coho Salmon,53,2,undetermined,Immature,,,electrofishing,1,2
+59204,59204:16,16,Coho Salmon,62,2,undetermined,Immature,,,electrofishing,1,2
+59204,59204:16,16,Coho Salmon,89,8,undetermined,Immature,,,electrofishing,1,2
+59204,59204:16,16,Coho Salmon,60,3,undetermined,Immature,,,electrofishing,1,2
+59204,59204:16,16,Coho Salmon,63,3,undetermined,Immature,,,electrofishing,1,2
+59204,59204:16,16,Coho Salmon,61,2,undetermined,Immature,,,electrofishing,1,2
+59204,59204:16,16,Coho Salmon,58,2,undetermined,Immature,,,electrofishing,1,2
+59204,59204:16,16,Coho Salmon,56,2,undetermined,Immature,,,electrofishing,1,2
+59204,59204:16,16,Coho Salmon,43,0.5,undetermined,Immature,,,electrofishing,1,2
+59204,59204:16,16,torrent sculpin,50,2,undetermined,Mature,,,electrofishing,1,2
+59204,59204:16,16,torrent sculpin,45,1,undetermined,Mature,,,electrofishing,1,2
+59204,59204:16,16,Mountain Whitefish,80,5,undetermined,Mature,,,electrofishing,1,3
+59204,59204:16,16,Coho Salmon,58,2,undetermined,Immature,,,electrofishing,1,3
+59204,59204:16,16,Coho Salmon,57,2,undetermined,Immature,,,electrofishing,1,3
+59204,59204:16,16,Coho Salmon,54,3,undetermined,Immature,,,electrofishing,1,3
+59204,59204:16,16,Coho Salmon,72,4,undetermined,Immature,,,electrofishing,1,3
+59204,59204:16,16,Coho Salmon,85,9,undetermined,Immature,,,electrofishing,1,3
+59204,59204:16,16,Coho Salmon,85,7,undetermined,Immature,,,electrofishing,1,3
+59204,59204:16,16,Coho Salmon,82,7,undetermined,Immature,,,electrofishing,1,3
+59204,59204:16,16,Coho Salmon,61,3,undetermined,Immature,,,electrofishing,1,3
+59204,59204:16,16,Coho Salmon,56,3,undetermined,Immature,,,electrofishing,1,3
+59204,59204:17,17,Coho Salmon,66,3,undetermined,Immature,,,electrofishing,1,1
+59204,59204:17,17,torrent sculpin,75,5,undetermined,Mature,,,electrofishing,1,1
+59204,59204:17,17,torrent sculpin,77,5,undetermined,Mature,,,electrofishing,1,1
+59204,59204:17,17,torrent sculpin,67,3,undetermined,Mature,,,electrofishing,1,1
+59204,59204:17,17,torrent sculpin,83,8,undetermined,Mature,,,electrofishing,1,1
+59204,59204:17,17,torrent sculpin,48,1,undetermined,Mature,,,electrofishing,1,1
+59204,59204:17,17,Coho Salmon,52,0.5,undetermined,Immature,,,electrofishing,1,1
+59204,59204:17,17,Coho Salmon,51,0.5,undetermined,Immature,,,electrofishing,1,1
+59204,59204:17,17,torrent sculpin,76,4,undetermined,Mature,,,electrofishing,1,2
+59204,59204:17,17,Coho Salmon,59,3,undetermined,Immature,,,electrofishing,1,2
+59204,59204:17,17,Coho Salmon,63,3,undetermined,Immature,,,electrofishing,1,2
+59204,59204:17,17,torrent sculpin,66,4,undetermined,Mature,,,electrofishing,1,2
+59204,59204:17,17,torrent sculpin,75,5,undetermined,Mature,,,electrofishing,1,2
+59204,59204:17,17,torrent sculpin,92,9,undetermined,Mature,,,electrofishing,1,2
+59204,59204:17,17,Coho Salmon,55,2,undetermined,Immature,,,electrofishing,1,3
+59204,59204:17,17,torrent sculpin,85,7,undetermined,Mature,,,electrofishing,1,3
+59204,59204:17,17,torrent sculpin,102,13,undetermined,Mature,,,electrofishing,1,3
+59204,59204:17,17,torrent sculpin,70,4,undetermined,Mature,,,electrofishing,1,3
+59204,59204:17,17,torrent sculpin,80,7,undetermined,Mature,,,electrofishing,1,3
+59204,59204:17,17,torrent sculpin,54,2,undetermined,Mature,,,electrofishing,1,3
+59204,59204:17,17,torrent sculpin,66,4,undetermined,Mature,,,electrofishing,1,3
+59204,59204:17,17,torrent sculpin,47,0.5,undetermined,Mature,,,electrofishing,1,3
+59204,59204:18,18,rainbow trout,42,1,undetermined,Immature,,,electrofishing,1,1
+59204,59204:18,18,rainbow trout,35,0.5,undetermined,Immature,,,electrofishing,1,1
+59204,59204:18,18,rainbow trout,79,7,undetermined,Immature,,,electrofishing,1,1
+59204,59204:18,18,rainbow trout,84,9,undetermined,Immature,,,electrofishing,1,1
+59204,59204:18,18,rainbow trout,44,1,undetermined,Immature,,,electrofishing,1,1
+59204,59204:18,18,rainbow trout,51,2,undetermined,Immature,,,electrofishing,1,1
+59204,59204:18,18,rainbow trout,119,23,undetermined,Immature,,,electrofishing,1,1
+59204,59204:18,18,rainbow trout,138,37,undetermined,Immature,,,electrofishing,1,1
+59204,59204:18,18,rainbow trout,188,69,undetermined,Mature,,,electrofishing,1,1
+59204,59204:18,18,rainbow trout,93,9,undetermined,Immature,,,electrofishing,1,1
+59204,59204:18,18,rainbow trout,108,15,undetermined,Immature,,,electrofishing,1,1
+59204,59204:18,18,rainbow trout,101,10,undetermined,Immature,,,electrofishing,1,1
+59204,59204:18,18,rainbow trout,79,6,undetermined,Immature,,,electrofishing,1,1
+59204,59204:18,18,rainbow trout,84,9,undetermined,Immature,,,electrofishing,1,1
+59204,59204:18,18,rainbow trout,74,6,undetermined,Immature,,,electrofishing,1,1
+59204,59204:18,18,rainbow trout,76,6,undetermined,Immature,,,electrofishing,1,1
+59204,59204:18,18,rainbow trout,82,7,undetermined,Immature,,,electrofishing,1,1
+59204,59204:18,18,rainbow trout,80,6,undetermined,Immature,,,electrofishing,1,1
+59204,59204:18,18,rainbow trout,75,6,undetermined,Immature,,,electrofishing,1,1
+59204,59204:18,18,rainbow trout,87,8,undetermined,Immature,,,electrofishing,1,1
+59204,59204:18,18,rainbow trout,78,6,undetermined,Immature,,,electrofishing,1,1
+59204,59204:18,18,rainbow trout,77,6,undetermined,Immature,,,electrofishing,1,1
+59204,59204:18,18,Bull Trout,103,10,undetermined,Immature,,,electrofishing,1,1
+59204,59204:18,18,rainbow trout,80,8,undetermined,Immature,,,electrofishing,1,1
+59204,59204:18,18,Coho Salmon,73,4,undetermined,Immature,,,electrofishing,1,1
+59204,59204:18,18,Coho Salmon,84,6,undetermined,Immature,,,electrofishing,1,1
+59204,59204:18,18,rainbow trout,47,2,undetermined,Immature,,,electrofishing,1,1
+59204,59204:18,18,rainbow trout,50,1,undetermined,Immature,,,electrofishing,1,1
+59204,59204:18,18,rainbow trout,49,1,undetermined,Immature,,,electrofishing,1,1
+59204,59204:18,18,rainbow trout,49,2,undetermined,Immature,,,electrofishing,1,1
+59204,59204:18,18,rainbow trout,43,0.5,undetermined,Immature,,,electrofishing,1,1
+59204,59204:18,18,rainbow trout,47,2,undetermined,Immature,,,electrofishing,1,1
+59204,59204:18,18,rainbow trout,43,0.5,undetermined,Immature,,,electrofishing,1,1
+59204,59204:18,18,rainbow trout,34,0.5,undetermined,Immature,,,electrofishing,1,1
+59204,59204:18,18,rainbow trout,35,0.5,undetermined,Immature,,,electrofishing,1,1
+59204,59204:18,18,rainbow trout,38,0.5,undetermined,Immature,,,electrofishing,1,1
+59204,59204:18,18,rainbow trout,44,2,undetermined,Immature,,,electrofishing,1,2
+59204,59204:18,18,rainbow trout,121,24,undetermined,Immature,,,electrofishing,1,2
+59204,59204:18,18,rainbow trout,40,0.5,undetermined,Immature,,,electrofishing,1,2
+59204,59204:18,18,rainbow trout,44,1.5,undetermined,Immature,,,electrofishing,1,2
+59204,59204:18,18,rainbow trout,75,6,undetermined,Immature,,,electrofishing,1,2
+59204,59204:18,18,rainbow trout,41,2,undetermined,Immature,,,electrofishing,1,2
+59204,59204:18,18,rainbow trout,50,3,undetermined,Immature,,,electrofishing,1,2
+59204,59204:18,18,rainbow trout,38,0.5,undetermined,Immature,,,electrofishing,1,2
+59204,59204:18,18,rainbow trout,126,27,undetermined,Immature,,,electrofishing,1,2
+59204,59204:18,18,rainbow trout,50,2,undetermined,Immature,,,electrofishing,1,2
+59204,59204:18,18,rainbow trout,46,2,undetermined,Immature,,,electrofishing,1,2
+59204,59204:18,18,rainbow trout,87,7,undetermined,Immature,,,electrofishing,1,2
+59204,59204:18,18,rainbow trout,84,7,undetermined,Immature,,,electrofishing,1,2
+59204,59204:18,18,rainbow trout,45,2,undetermined,Immature,,,electrofishing,1,2
+59204,59204:18,18,rainbow trout,38,0.5,undetermined,Immature,,,electrofishing,1,2
+59204,59204:18,18,rainbow trout,40,0.5,undetermined,Immature,,,electrofishing,1,2
+59204,59204:18,18,rainbow trout,43,0.5,undetermined,Immature,,,electrofishing,1,2
+59204,59204:18,18,rainbow trout,44,1,undetermined,Immature,,,electrofishing,1,2
+59204,59204:18,18,rainbow trout,47,1,undetermined,Immature,,,electrofishing,1,2
+59204,59204:18,18,rainbow trout,87,8,undetermined,Immature,,,electrofishing,1,2
+59204,59204:18,18,rainbow trout,37,0.5,undetermined,Immature,,,electrofishing,1,2
+59204,59204:18,18,rainbow trout,49,1,undetermined,Immature,,,electrofishing,1,2
+59204,59204:18,18,rainbow trout,123,25,undetermined,Immature,,,electrofishing,1,2
+59204,59204:18,18,rainbow trout,182,78,undetermined,Mature,,,electrofishing,1,3
+59204,59204:18,18,rainbow trout,51,2,undetermined,Immature,,,electrofishing,1,3
+59204,59204:18,18,rainbow trout,34,0.5,undetermined,Immature,,,electrofishing,1,3
+59204,59204:18,18,rainbow trout,45,1,undetermined,Immature,,,electrofishing,1,3
+59204,59204:18,18,rainbow trout,39,1,undetermined,Immature,,,electrofishing,1,3
+59204,59204:18,18,rainbow trout,88,10,undetermined,Immature,,,electrofishing,1,3
+59204,59204:18,18,rainbow trout,31,0.5,undetermined,Immature,,,electrofishing,1,3
+59204,59204:18,18,rainbow trout,40,1,undetermined,Immature,,,electrofishing,1,3
+59204,59204:18,18,rainbow trout,84,8,undetermined,Immature,,,electrofishing,1,3
+59204,59204:18,18,rainbow trout,32,0.5,undetermined,Immature,,,electrofishing,1,3
+59204,59204:18,18,rainbow trout,39,0.5,undetermined,Immature,,,electrofishing,1,3
+59204,59204:18,18,rainbow trout,43,0.5,undetermined,Immature,,,electrofishing,1,3
+59204,59204:18,18,rainbow trout,34,0.5,undetermined,Immature,,,electrofishing,1,3
+59204,59204:18,18,rainbow trout,36,0.5,undetermined,Immature,,,electrofishing,1,3
+59204,59204:18,18,rainbow trout,37,0.5,undetermined,Immature,,,electrofishing,1,3
+59204,59204:18,18,rainbow trout,39,0.5,undetermined,Immature,,,electrofishing,1,3
+59204,59204:18,18,rainbow trout,34,0.5,undetermined,Immature,,,electrofishing,1,3
+59204,59204:19,19,rainbow trout,71,4,undetermined,Immature,,,electrofishing,1,1
+59204,59204:19,19,rainbow trout,48,0.5,undetermined,Immature,,,electrofishing,1,1
+59204,59204:19,19,rainbow trout,92,11,undetermined,Immature,,,electrofishing,1,1
+59204,59204:19,19,rainbow trout,107,13,undetermined,Immature,,,electrofishing,1,1
+59204,59204:19,19,rainbow trout,95,11,undetermined,Immature,,,electrofishing,1,1
+59204,59204:19,19,rainbow trout,96,9,undetermined,Immature,,,electrofishing,1,1
+59204,59204:19,19,rainbow trout,43,1,undetermined,Immature,,,electrofishing,1,1
+59204,59204:19,19,rainbow trout,42,1,undetermined,Immature,,,electrofishing,1,1
+59204,59204:19,19,rainbow trout,79,7,undetermined,Immature,,,electrofishing,1,1
+59204,59204:19,19,rainbow trout,94,9,undetermined,Immature,,,electrofishing,1,1
+59204,59204:19,19,rainbow trout,89,7,undetermined,Immature,,,electrofishing,1,1
+59204,59204:19,19,rainbow trout,71,6,undetermined,Immature,,,electrofishing,1,1
+59204,59204:19,19,rainbow trout,81,7,undetermined,Immature,,,electrofishing,1,1
+59204,59204:19,19,rainbow trout,77,5,undetermined,Immature,,,electrofishing,1,1
+59204,59204:19,19,rainbow trout,129,27,undetermined,Immature,,,electrofishing,1,1
+59204,59204:19,19,rainbow trout,70,5,undetermined,Immature,,,electrofishing,1,1
+59204,59204:19,19,rainbow trout,68,4,undetermined,Immature,,,electrofishing,1,1
+59204,59204:19,19,rainbow trout,43,1,undetermined,Immature,,,electrofishing,1,1
+59204,59204:19,19,rainbow trout,49,2,undetermined,Immature,,,electrofishing,1,1
+59204,59204:19,19,rainbow trout,39,0.5,undetermined,Immature,,,electrofishing,1,1
+59204,59204:19,19,rainbow trout,131,30,undetermined,Immature,,,electrofishing,1,1
+59204,59204:19,19,rainbow trout,119,17,undetermined,Immature,,,electrofishing,1,1
+59204,59204:19,19,rainbow trout,89,10,undetermined,Immature,,,electrofishing,1,1
+59204,59204:19,19,rainbow trout,32,0.5,undetermined,Immature,,,electrofishing,1,1
+59204,59204:19,19,rainbow trout,38,1,undetermined,Immature,,,electrofishing,1,1
+59204,59204:19,19,rainbow trout,75,6,undetermined,Immature,,,electrofishing,1,1
+59204,59204:19,19,rainbow trout,133,28,undetermined,Immature,,,electrofishing,1,1
+59204,59204:19,19,rainbow trout,103,12,undetermined,Immature,,,electrofishing,1,1
+59204,59204:19,19,rainbow trout,86,8,undetermined,Immature,,,electrofishing,1,1
+59204,59204:19,19,rainbow trout,73,5,undetermined,Immature,,,electrofishing,1,1
+59204,59204:19,19,rainbow trout,42,0.5,undetermined,Immature,,,electrofishing,1,1
+59204,59204:19,19,rainbow trout,91,8,undetermined,Immature,,,electrofishing,1,1
+59204,59204:19,19,rainbow trout,89,10,undetermined,Immature,,,electrofishing,1,1
+59204,59204:19,19,rainbow trout,84,7,undetermined,Immature,,,electrofishing,1,1
+59204,59204:19,19,rainbow trout,37,0.5,undetermined,Immature,,,electrofishing,1,1
+59204,59204:19,19,rainbow trout,35,0.5,undetermined,Immature,,,electrofishing,1,1
+59204,59204:19,19,rainbow trout,167,65,undetermined,Mature,,,electrofishing,1,2
+59204,59204:19,19,rainbow trout,124,23,undetermined,Immature,,,electrofishing,1,2
+59204,59204:19,19,rainbow trout,123,21,undetermined,Immature,,,electrofishing,1,2
+59204,59204:19,19,rainbow trout,118,22,undetermined,Immature,,,electrofishing,1,2
+59204,59204:19,19,rainbow trout,80,8,undetermined,Immature,,,electrofishing,1,2
+59204,59204:19,19,rainbow trout,93,9,undetermined,Immature,,,electrofishing,1,2
+59204,59204:19,19,rainbow trout,91,8,undetermined,Immature,,,electrofishing,1,2
+59204,59204:19,19,rainbow trout,41,0.5,undetermined,Immature,,,electrofishing,1,2
+59204,59204:19,19,rainbow trout,115,17,undetermined,Immature,,,electrofishing,1,2
+59204,59204:19,19,rainbow trout,44,1.5,undetermined,Immature,,,electrofishing,1,2
+59204,59204:19,19,rainbow trout,49,2,undetermined,Immature,,,electrofishing,1,2
+59204,59204:19,19,rainbow trout,49,2,undetermined,Immature,,,electrofishing,1,2
+59204,59204:19,19,rainbow trout,83,7,undetermined,Immature,,,electrofishing,1,2
+59204,59204:19,19,rainbow trout,77,6,undetermined,Immature,,,electrofishing,1,2
+59204,59204:19,19,rainbow trout,62,4,undetermined,Immature,,,electrofishing,1,2
+59204,59204:19,19,rainbow trout,50,0.5,undetermined,Immature,,,electrofishing,1,2
+59204,59204:19,19,rainbow trout,44,0.5,undetermined,Immature,,,electrofishing,1,2
+59204,59204:19,19,rainbow trout,37,1,undetermined,Immature,,,electrofishing,1,2
+59204,59204:19,19,rainbow trout,41,1,undetermined,Immature,,,electrofishing,1,2
+59204,59204:19,19,rainbow trout,49,2,undetermined,Immature,,,electrofishing,1,2
+59204,59204:19,19,rainbow trout,126,22,undetermined,Immature,,,electrofishing,1,2
+59204,59204:19,19,rainbow trout,83,8,undetermined,Immature,,,electrofishing,1,3
+59204,59204:19,19,rainbow trout,114,20,undetermined,Immature,,,electrofishing,1,3
+59204,59204:19,19,rainbow trout,92,9,undetermined,Immature,,,electrofishing,1,3
+59204,59204:19,19,rainbow trout,85,7,undetermined,Immature,,,electrofishing,1,3
+59204,59204:19,19,rainbow trout,47,1,undetermined,Immature,,,electrofishing,1,3
+59204,59204:19,19,rainbow trout,35,0.5,undetermined,Immature,,,electrofishing,1,3
+59204,59204:19,19,rainbow trout,61,4,undetermined,Immature,,,electrofishing,1,3
+59204,59204:19,19,rainbow trout,44,2,undetermined,Immature,,,electrofishing,1,3
+59204,59204:19,19,rainbow trout,35,0.5,undetermined,Immature,,,electrofishing,1,3
+59204,59204:19,19,rainbow trout,40,0.5,undetermined,Immature,,,electrofishing,1,3
+59204,59204:19,19,rainbow trout,70,4,undetermined,Immature,,,electrofishing,1,3
+59204,59204:19,19,rainbow trout,48,1,undetermined,Immature,,,electrofishing,1,3
+59204,59204:19,19,rainbow trout,46,1,undetermined,Immature,,,electrofishing,1,3
+59204,59204:19,19,rainbow trout,39,0.5,undetermined,Immature,,,electrofishing,1,3
+59204,59204:19,19,rainbow trout,34,0.5,undetermined,Immature,,,electrofishing,1,3
+59204,59204:19,19,rainbow trout,43,1,undetermined,Immature,,,electrofishing,1,3
+59204,59204:19,19,rainbow trout,53,2,undetermined,Immature,,,electrofishing,1,3
+59204,59204:20,20,rainbow trout,137,28,,,,,electrofishing,1,1
+59204,59204:20,20,rainbow trout,129,28,,,,,electrofishing,1,1
+59204,59204:20,20,rainbow trout,120,22,,,,,electrofishing,1,1
+59204,59204:20,20,rainbow trout,112,18,,,,,electrofishing,1,1
+59204,59204:20,20,rainbow trout,137,32,,,,,electrofishing,1,1
+59204,59204:20,20,rainbow trout,45,2,,,,,electrofishing,1,1
+59204,59204:20,20,rainbow trout,95,11,,,,,electrofishing,1,1
+59204,59204:20,20,rainbow trout,87,9,,,,,electrofishing,1,1
+59204,59204:20,20,rainbow trout,97,11,,,,,electrofishing,1,1
+59204,59204:20,20,rainbow trout,89,9,,,,,electrofishing,1,1
+59204,59204:20,20,rainbow trout,113,18,,,,,electrofishing,1,1
+59204,59204:20,20,rainbow trout,46,1,,,,,electrofishing,1,1
+59204,59204:20,20,rainbow trout,43,0.5,,,,,electrofishing,1,1
+59204,59204:20,20,rainbow trout,45,1,,,,,electrofishing,1,1
+59204,59204:20,20,rainbow trout,47,2,,,,,electrofishing,1,1
+59204,59204:20,20,rainbow trout,48,2,,,,,electrofishing,1,1
+59204,59204:20,20,rainbow trout,42,1,,,,,electrofishing,1,1
+59204,59204:20,20,rainbow trout,70,5,,,,,electrofishing,1,1
+59204,59204:20,20,rainbow trout,36,0.5,,,,,electrofishing,1,1
+59204,59204:20,20,rainbow trout,38,1,,,,,electrofishing,1,1
+59204,59204:20,20,rainbow trout,51,2,,,,,electrofishing,1,1
+59204,59204:20,20,rainbow trout,35,0.5,,,,,electrofishing,1,1
+59204,59204:20,20,rainbow trout,32,0.5,,,,,electrofishing,1,1
+59204,59204:20,20,rainbow trout,33,0.5,,,,,electrofishing,1,1
+59204,59204:20,20,rainbow trout,49,2,,,,,electrofishing,1,1
+59204,59204:20,20,rainbow trout,39,1,,,,,electrofishing,1,1
+59204,59204:20,20,rainbow trout,36,0.5,,,,,electrofishing,1,1
+59204,59204:20,20,rainbow trout,39,0.5,,,,,electrofishing,1,1
+59204,59204:20,20,rainbow trout,45,2,,,,,electrofishing,1,2
+59204,59204:20,20,rainbow trout,49,1,,,,,electrofishing,1,2
+59204,59204:20,20,rainbow trout,41,0.5,,,,,electrofishing,1,2
+59204,59204:20,20,rainbow trout,47,1,,,,,electrofishing,1,2
+59204,59204:20,20,rainbow trout,46,1,,,,,electrofishing,1,2
+59204,59204:20,20,rainbow trout,44,1,,,,,electrofishing,1,2
+59204,59204:20,20,rainbow trout,119,19,,,,,electrofishing,1,2
+59204,59204:20,20,rainbow trout,169,61,,,,,electrofishing,1,2
+59204,59204:20,20,rainbow trout,33,0.5,,,,,electrofishing,1,2
+59204,59204:20,20,rainbow trout,107,14,,,,,electrofishing,1,2
+59204,59204:20,20,rainbow trout,81,8,,,,,electrofishing,1,2
+59204,59204:20,20,rainbow trout,31,0.5,,,,,electrofishing,1,2
+59204,59204:20,20,rainbow trout,40,1,,,,,electrofishing,1,2
+59204,59204:20,20,rainbow trout,99,12,,,,,electrofishing,1,3
+59204,59204:20,20,rainbow trout,41,0.5,,,,,electrofishing,1,3
+59204,59204:20,20,rainbow trout,37,1,,,,,electrofishing,1,3
+59204,59204:20,20,rainbow trout,46,1,,,,,electrofishing,1,3
+59204,59204:20,20,rainbow trout,38,1,,,,,electrofishing,1,3
+59204,59204:20,20,rainbow trout,38,1,,,,,electrofishing,1,3
+59204,59204:20,20,rainbow trout,34,0.5,,,,,electrofishing,1,3
+59204,59204:20,20,rainbow trout,45,1,,,,,electrofishing,1,3
+59204,59204:21,21,rainbow trout,92,11,,,,,electrofishing,1,1
+59204,59204:23,23,rainbow trout,115,,,,,One rainbow trout juvenile was captured upstream of a potential barrier to fish passage (+20% for 100 m).,electrofishing,1,1
+59204,59204:26,26,Redside Shiner,95,,,,,Redside shiner was caught upstream of the potential barrier to fish passage.,electrofishing,1,1
+59204,59204:26,26,Redside Shiner,100,,,,,Redside shiner was caught upstream of the potential barrier to fish passage.,electrofishing,1,1

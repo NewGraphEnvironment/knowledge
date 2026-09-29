@@ -70,3 +70,41 @@ therefore carries a stage that is a length class under a different break set, no
 Its agreement with our classes measures break-set overlap, not submitter judgement. The
 disagreement table flags staged rows whose label equals that rule's output, so they can be read
 apart.
+
+## Phase 1 — edition variants and the NFC roll-up: before -> after (2026-09-28, local fwapg clip)
+
+Mapped: Step 2/3 `species_code`/`method`/haul variants, and Step 1 `date_yyyy_mm_day` (found
+while planning 0250: 23 of 45 UPCE workbooks had no survey date). Zero-catch codes come from
+`fdis_species_codes.csv` (`catch_class == zero_catch`: NFC, ZZZ). `NFP` (24 rows) is not in the
+table and carries `total_number = 1`, so it is not treated as zero catch.
+
+Round 1 of code-check found the site roll-up flagged a site NFC whenever **any** record said no
+fish, even beside a catch; older editions record NFC per trap or pass, so the variant fix grew
+that from ~213 to 292 sites. Fixed: `nfc` now requires no record at the site to have caught
+anything; `nfc_conflict` keeps the mixed sites visible; `species_caught` drops explicit zero
+counts (LNTH 23268 writes a trap-net "RB, 0" for an empty trap); a reconcile gate asserts no NFC
+site names a species caught. The gate fired on its first run (those two LNTH sites), which is
+how the derived branch's missing `!any_caught` was found.
+
+Round 2 found the new gate compared the predicate with itself (removed; `nfc_sites_listing_a_species`
+is a visible count instead) and the per-fish fallback only ran when no Step 3 sheet existed (now
+whenever the Step 3 sheet yields no rows, gated by `fish_layout_sheets_read_as_step3`, proven to fire).
+The loop ended by enumeration (`review-enumeration-0220.md`).
+
+Per-fish sheets filed under a Step 2 name (UNTH 16389, LNTH 16393, "Fish collection") are routed
+to Step 3 (`fish_layout` in the parse log). Their rows used to create location-less sites, which
+is why UNTH and LNTH lose sites.
+
+| group | sites | NFC sites | nfc_conflict | empty species_list | undated sites |
+|---|---|---|---|---|---|
+| COTR | 736 -> 736 | 396 -> 394 | 7 | 583 -> 527 | 93 -> 29 |
+| LNTH | 1429 -> 1427 | 241 -> 207 | 122 | 1032 -> 698 | 499 -> 30 |
+| PINE | 1610 -> 1610 | 155 -> 209 | 18 | 429 -> 300 | 249 -> 1 |
+| UNTH | 996 -> 989 | 185 -> 181 | 86 | 802 -> 632 | 259 -> 0 |
+| UPCE | 7023 -> 7023 | 356 -> 419 | 64 | 4797 -> 926 | 4476 -> 8 |
+
+Net NFC 1,333 -> 1,410. The published layers were wrong in both directions: missing old-edition
+NFC codes, and counting mixed sites as no-fish.
+
+Step 3 raw fish: COTR 352, LNTH 1,406, PINE 28,642, UNTH 1,539, UPCE 171,319. Name keys dropped
+from the per-fish file (on the site table already): UPCE 16 -> 8.2 MB.

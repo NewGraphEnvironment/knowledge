@@ -9,7 +9,8 @@
 # WHY / DESIGN NOTES:
 #   - The .xls is the provincial "Fish Data Submission Spreadsheet Template"
 #     (V2.0, editions 2012/2016/2018/2020; a 2009-era variant differs). Sheets we
-#     use: Step 1 (Ref & Loc), Step 2 (Fish Coll. Data), Step 4 (Stream Site Data).
+#     use: Step 1 (Ref & Loc), Step 2 (Fish Coll. Data), Step 3 (Individual Fish Data),
+#     Step 4 (Stream Site Data). Step 3 is written raw here; 0250 turns it into evidence.
 #   - HEADER IS NOT ROW 1. Title / instruction / section-header rows sit above the
 #     real field labels. Robust anchor: the label row's first non-empty cell is
 #     exactly "REFERENCE NUMBER". (fpr::fpr_import_hab_con is built for NGE's own
@@ -41,7 +42,9 @@
 #         data/<wsg>/fiss_sites_<wsg>.csv       (mirrors the .gpkg — clipped)
 #         data/<wsg>/fiss_sites_<wsg>_all.csv   (EVERY parsed site, unclipped,
 #           incl. sites with missing/malformed UTM — no record dropped)
-#         data/<wsg>/fiss_step2_fishcoll_<wsg>.csv (effort/fish detail, long)
+#         data/<wsg>/fiss_step2_fishcoll_<wsg>.csv (effort/fish detail, long; carries the
+#           submitter's life stage as `stage`, and `stage_norm`)
+#         data/<wsg>/fiss_step3_fish_<wsg>.csv  (individual fish, long, raw; issue #21)
 #
 # OPEN QUESTIONS (grain — revisit with Al):
 #   - Site key is (report_id, reference_number): reference_number is unique only
@@ -82,8 +85,13 @@ wanted_cols <- list(
     "ef_seconds", "ef_length_m", "ef_width_m",
     "soak_time", "date_in", "date_out", "time_in", "time_out",
     "length_m", "width_m",
-    "temperature_c", "conductivity_m_s_cm", "turbidity",
-    "species", "total_number", "comments"),
+    "temperature_c", "conductivity_m_s_cm", "turbidity", "haul_pass",
+    "species", "stage", "total_number", "min_length_mm", "max_length_mm", "comments"),
+  # Step 3 is one row per fish. It carries no date or coordinates: those come from the
+  # Step 1 site through site_key, and the sampling event from method_number + haul_pass.
+  step3_indiv_fish = c(
+    "sampling_method", "method_number", "haul_pass",
+    "species", "length_mm", "weight_g", "sex", "maturity", "age", "comments"),
   step4_site_data = c(
     "utm_zone", "utm_easting", "utm_northing",
     "channel_width_m", "channel_width_m_2", "channel_width_m_3", "channel_width_m_4",
@@ -95,20 +103,30 @@ wanted_cols <- list(
 )
 
 # name variants across template editions -> canonical
+# Editions before 2016 write species as a code under `species_code` and the method under
+# `method`; 2016+ writes a common name under `species` and `sampling_method`. Without the
+# first two, 82 of 232 Step 2 sheets (5 groups, 2026-09-28) parsed with no species at all.
 variant_map <- c(
-  gazetted_names         = "gazetted_name",
-  alias_local_name       = "local_name",
-  waterbody_id_identifier = "waterbody_id"
+  gazetted_names          = "gazetted_name",
+  alias_local_name        = "local_name",
+  waterbody_id_identifier = "waterbody_id",
+  species_code            = "species",
+  method                  = "sampling_method",
+  haul_or_pass            = "haul_pass",
+  haul_number_pass_number = "haul_pass",
+  # Step 1 date in the pre-2016 editions: 23 of 45 UPCE workbooks, which parsed undated
+  date_yyyy_mm_day        = "survey_date"
 )
 
 # ---- sheet + header helpers -------------------------------------------------
 # which sheet in this workbook is the requested step? (names drift; spaces/parens)
+step_pat <- c(
+  step1_ref_loc    = "step.?1|ref.*loc|location",
+  step2_fish_coll  = "step.?2|fish.?coll|collection.?form",
+  step3_indiv_fish = "step.?3|indiv",
+  step4_site_data  = "step.?4|stream.?site|site.?data|site.?card|site.?coll")
 match_sheet <- function(sheets, step) {
-  pat <- switch(step,
-    step1_ref_loc   = "step.?1|ref.*loc|location",
-    step2_fish_coll = "step.?2|fish.?coll|collection.?form",
-    step4_site_data = "step.?4|stream.?site|site.?data|site.?card|site.?coll")
-  hit <- sheets[str_detect(tolower(sheets), pat)]
+  hit <- sheets[str_detect(tolower(sheets), step_pat[[step]])]
   if (length(hit)) hit[1] else NA_character_
 }
 
@@ -208,7 +226,11 @@ if (!nrow(flog)) stop("No parseable workbooks in ", log_path,
 #   empty_sheet     the matched sheet has no rows
 #   no_header       no "REFERENCE NUMBER" label row within the first 40 rows
 #   no_rows         header found, but no row survived the key/payload filters
+#   fish_layout     a Step 2 sheet whose columns are per-fish (length_mm, no total_number);
+#                   its rows are read as Step 3 instead
 #   ok              rows parsed
+# a sheet laid out one row per fish, whatever it is named
+is_fish_layout <- function(nm) "length_mm" %in% nm && !"total_number" %in% nm
 parse_step <- function(path, report_id, step) {
   lg <- tibble(report_id = as.character(report_id), path = path, step = step,
                status = NA_character_, sheet_matched = NA_character_, n_sheet_hits = 0L,
@@ -218,16 +240,24 @@ parse_step <- function(path, report_id, step) {
   sheets <- tryCatch(excel_sheets(path), error = function(e) NULL)
   if (is.null(sheets)) return(done("sheets_error"))
   sh <- match_sheet(sheets, step)
-  lg$n_sheet_hits <- sum(str_detect(tolower(sheets), switch(step,
-    step1_ref_loc   = "step.?1|ref.*loc|location",
-    step2_fish_coll = "step.?2|fish.?coll|collection.?form",
-    step4_site_data = "step.?4|stream.?site|site.?data|site.?card|site.?coll")))
+  lg$n_sheet_hits <- sum(str_detect(tolower(sheets), step_pat[[step]]))
+  rs <- if (is.na(sh)) NULL else tryCatch(read_step(path, sh), error = function(e) NULL)
+  # per-fish rows filed under a Step 2 name (UNTH 16389, LNTH 16393: "Fish collection") are
+  # Step 3. Fall back to that sheet whenever the Step 3 sheet gives no rows, not only when
+  # there is none: the template ships an empty Step 3 beside whatever was filled in.
+  if (step == "step3_indiv_fish" && (is.null(rs) || rs$status != "ok" || !nrow(rs$data))) {
+    alt <- match_sheet(sheets, "step2_fish_coll")
+    if (!is.na(alt)) {
+      r <- tryCatch(read_step(path, alt), error = function(e) NULL)
+      if (!is.null(r) && r$status == "ok" && is_fish_layout(names(r$data))) { sh <- alt; rs <- r }
+    }
+  }
   if (is.na(sh)) return(done("no_sheet_match"))
   lg$sheet_matched <- sh
-  rs <- tryCatch(read_step(path, sh), error = function(e) NULL)
   if (is.null(rs)) return(done("read_error"))
   lg$header_row <- rs$header_row; lg$banner <- rs$banner; lg$rows_raw <- rs$rows_raw
   if (rs$status != "ok") return(done(rs$status))
+  if (step == "step2_fish_coll" && is_fish_layout(names(rs$data))) return(done("fish_layout"))
   if (!nrow(rs$data)) return(done("no_rows"))
   df <- select_wanted(rs$data, step) %>%
     mutate(report_id = as.character(report_id),
@@ -254,11 +284,14 @@ gather_step <- function(step) {
 
 step1 <- gather_step("step1_ref_loc")
 step2 <- gather_step("step2_fish_coll")
+step3 <- gather_step("step3_indiv_fish")
 step4 <- gather_step("step4_site_data")
-parse_log <- bind_rows(attr(step1, "parse_log"), attr(step2, "parse_log"), attr(step4, "parse_log"))
+n_steps <- length(step_pat)
+parse_log <- bind_rows(attr(step1, "parse_log"), attr(step2, "parse_log"),
+                       attr(step3, "parse_log"), attr(step4, "parse_log"))
 readr::write_csv(parse_log, file.path(out_dir, "fiss_xls_parse_log.csv"))
-message(sprintf("parsed rows — step1:%d  step2:%d  step4:%d",
-                nrow(step1), nrow(step2), nrow(step4)))
+message(sprintf("parsed rows — step1:%d  step2:%d  step3:%d  step4:%d",
+                nrow(step1), nrow(step2), nrow(step3), nrow(step4)))
 # workbooks that contributed nothing at all, by name — legitimately so for tissue data
 # and reach summaries, but they must be visible, not vanish (PINE: 5 of 77 did).
 wb_status <- parse_log %>% group_by(report_id, path) %>%
@@ -313,12 +346,17 @@ reconcile_a <- bind_rows(
   if (!is.null(reports))
     chk("enumerate_db_source", "tunnel", paste(unique(reports$db_source), collapse = "|"), pass = TRUE),
   chk("fetch_parseable_vs_parse_log_workbooks", nrow(flog), n_parse_wb),
-  chk("parse_log_rows_vs_3_per_workbook", 3L * n_parse_wb, nrow(parse_log)),
+  chk("parse_log_rows_vs_steps_per_workbook", n_steps * n_parse_wb, nrow(parse_log)),
+  # a per-fish sheet Step 2 set aside must have been read by Step 3, or its fish are in neither
+  chk("fish_layout_sheets_read_as_step3", sum(parse_log$status == "fish_layout"),
+      nrow(inner_join(parse_log %>% filter(status == "fish_layout") %>% select(path, sheet_matched),
+                      parse_log %>% filter(step == "step3_indiv_fish", status == "ok") %>% select(path, sheet_matched),
+                      by = c("path", "sheet_matched")))),
   chk("workbooks_with_no_step", NA, nrow(wb_no_step), pass = TRUE,
       note = paste(basename(wb_no_step$path), collapse = "; ")),
   # the fetch log said readxl could open it; if 0220 cannot list its sheets the file
   # changed underneath us (deleted, truncated, re-encrypted) — that is a failure
-  chk("workbooks_unopenable_since_fetch", 0L, sum(parse_log$status == "sheets_error") %/% 3L,
+  chk("workbooks_unopenable_since_fetch", 0L, sum(parse_log$status == "sheets_error") %/% n_steps,
       note = paste(unique(basename(parse_log$path[parse_log$status == "sheets_error"])), collapse = "; "))
 )
 if (!all(reconcile_a$pass)) {
@@ -334,13 +372,24 @@ if (n_zone_nonnum) message(sprintf("  %d utm_zone value(s) carry no digits and w
   n_zone_nonnum, paste(unique(zone_raw[!is.na(zone_raw) & is.na(zone_num(zone_raw))]), collapse = ", ")))
 
 # ---- Step 2 effort + NFC roll-up to site ------------------------------------
+# zero-catch codes from the provincial code table (NFC, ZZZ), not a literal here
+zero_catch_codes <- readr::read_csv("data/fdis_species_codes.csv", col_types = readr::cols(.default = "c"),
+                                    na = "") %>% filter(catch_class == "zero_catch") %>% pull(code)
+stopifnot("no zero_catch codes in data/fdis_species_codes.csv" = length(zero_catch_codes) > 0)
 step2_site <- step2 %>%
   mutate(
     total_number = num(total_number),
     ef_seconds   = num(ef_seconds),
     ef_length_m  = num(ef_length_m),
     soak_time    = num(soak_time),
-    is_no_fish   = str_detect(tolower(coalesce(species, "")), "no fish")
+    # "No Fish Caught" (2016+ picklist) or the code NFC (earlier editions)
+    is_no_fish   = str_detect(tolower(coalesce(species, "")), "no fish") |
+                   toupper(trimws(coalesce(species, ""))) %in% zero_catch_codes,
+    # a record that caught something: a species that is not a no-fish entry, unless its
+    # count is an explicit 0, or any positive count
+    caught       = !is_no_fish & ((nzchar(trimws(coalesce(species, ""))) &
+                                   (is.na(total_number) | total_number > 0)) |
+                                  coalesce(total_number, 0) > 0)
   ) %>%
   group_by(site_key) %>%
   summarise(
@@ -353,17 +402,24 @@ step2_site <- step2 %>%
     fish_counted   = any(!is.na(total_number)),  # was a count actually entered?
     species_list   = paste(sort(unique(na.omit(species[!is_no_fish]))), collapse = "; "),
     any_no_fish    = any(is_no_fish, na.rm = TRUE),
+    any_caught     = any(caught, na.rm = TRUE),
+    # species_list names every species entered; species_caught drops the explicit zeros
+    # (LNTH 23268 records a trap-net "RB, 0" for an empty trap)
+    species_caught = paste(sort(unique(na.omit(species[caught]))), collapse = "; "),
     effort_recorded = any(!is.na(ef_seconds) | !is.na(soak_time) | !is.na(ef_length_m)),
     comments_fish  = paste(unique(na.omit(as.character(comments))), collapse = " | "),
     .groups = "drop"
   ) %>%
   mutate(
     max_soak_time = ifelse(is.infinite(max_soak_time), NA_real_, max_soak_time),
-    # NFC = submitter said "No Fish Caught", OR a real zero count with effort recorded.
+    # NFC = submitter said "No Fish Caught" and no record at the site caught anything, OR a
+    # real zero count with effort recorded. Editions record NFC per trap or pass, so one
+    # empty trap beside a full one is not a no-fish site: nfc_conflict keeps that visible.
     # The derived branch REQUIRES fish_counted so all-blank count columns (nothing
     # recorded) are NOT mistaken for a genuine zero catch.
-    nfc = any_no_fish | (fish_counted & total_fish == 0 & effort_recorded),
-    nfc_source = ifelse(any_no_fish, "submitted", ifelse(nfc, "derived", NA_character_))
+    nfc_conflict = any_no_fish & any_caught,
+    nfc = !any_caught & (any_no_fish | (fish_counted & total_fish == 0 & effort_recorded)),
+    nfc_source = ifelse(nfc & any_no_fish, "submitted", ifelse(nfc, "derived", NA_character_))
   )
 
 # ---- Step 1 location (one row per site) -------------------------------------
@@ -415,8 +471,16 @@ sites$comments <- with(sites, trimws(paste(
   ifelse(!is.na(comments_site) & comments_site != "", paste0("[site] ", comments_site), "")
 )))
 
-# step-2 fish/effort detail (long, all submissions) — written raw for traceability
+# step-2 fish/effort detail (long, all submissions) — written raw for traceability. `stage`
+# is the submitter's life-stage label as entered; stage_norm only folds case and spacing.
+step2 <- step2 %>% mutate(stage_norm = na_if(tolower(str_squish(as.character(stage))), ""))
 readr::write_csv(step2, file.path(out_dir, paste0("fiss_step2_fishcoll_", wsg_lower, ".csv")))
+# step-3 individual fish (long, raw); joined to its site and event downstream (0250). The
+# name keys repeat per fish and are on the site table already: dropping them took UPCE's
+# 171k fish from 16 to 8 MB.
+readr::write_csv(select(step3, -any_of(c("gazetted_name", "local_name", "waterbody_id",
+                                          "reach_number", "site_number"))),
+                 file.path(out_dir, paste0("fiss_step3_fish_", wsg_lower, ".csv")), na = "")
 # full record — EVERY parsed site incl. those with missing/malformed UTM (which the
 # clipped deliverable below cannot place). Nothing is dropped here.
 readr::write_csv(sites, file.path(out_dir, paste0("fiss_sites_", wsg_lower, "_all.csv")))
@@ -527,12 +591,22 @@ site_keys <- unique(c(step1$site_key, step2$site_key, step4$site_key))
 reconcile <- bind_rows(
   reconcile_a,
   chk("utm_zone_non_numeric", NA, n_zone_nonnum, pass = TRUE),
+  # Step 3 fish whose site_key has no Step 1 row carry no date or location, so 0250 cannot
+  # place or date them; counted here so the loss is visible where it starts
+  chk("step3_fish_without_step1_site", NA, sum(!step3$site_key %in% step1$site_key), pass = TRUE,
+      note = paste(unique(step3$report_id[!step3$site_key %in% step1$site_key]), collapse = "; ")),
   chk("sites_all_rows_vs_distinct_site_keys", length(site_keys), nrow(sites)),
   # the per-zone st_as_sf/rbind must neither drop nor duplicate a row
   chk("placed_rows_vs_geometry_rows", n_placed, n_geom),
   chk("with_coords_placed_clipped", NA, sprintf("%d / %d / %d", n_withcoord, n_placed, n_clipped), pass = TRUE),
   chk("outside_group_fixable_by_zone_shift", NA, n_outside_zone_swap, pass = TRUE),
   chk("nfc_na_no_step2", NA, sum(is.na(sites$nfc)), pass = TRUE),
+  chk("nfc_conflict_sites", NA, sum(sites$nfc_conflict, na.rm = TRUE), pass = TRUE,
+      note = "a no-fish record beside a catch at the same site; not flagged nfc"),
+  # visible, not a gate: explicit zero counts ("RB, 0") legitimately name a species at a
+  # no-fish site. A gate on species_caught would restate the nfc predicate and never fire.
+  chk("nfc_sites_listing_a_species", NA, sum(sites$nfc %in% TRUE & nzchar(coalesce(sites$species_list, ""))),
+      pass = TRUE, note = "explicit zero counts; nfc_conflict sites are not flagged nfc"),
   chk("clip_polygon_source", "tunnel|local_fwapg", db_source, pass = TRUE)
 )
 readr::write_csv(reconcile, file.path(out_dir, "fiss_xls_reconcile.csv"))

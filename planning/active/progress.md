@@ -6,3 +6,5 @@
 - Created branch `21-fiss-xls-parse-step-2-life-stage-and-step` off main
 - Scaffolded PWF baseline from issue #21 with approved phases
 - Next: start Phase 1
+- Prior-art check in fish_passage_template_reporting + org: producers only, nothing to reuse (findings)
+- Phases 1-2: 0220 reads edition variants, Step 2 stage, Step 3 per fish; re-run on 5 groups, reconcile passes (logs `scripts/logs/fiss/20260928_*`)
