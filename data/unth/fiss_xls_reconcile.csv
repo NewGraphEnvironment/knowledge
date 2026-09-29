@@ -8,13 +8,17 @@ fetch_http_4xx,NA,1,TRUE,58437=http_404
 fetch_unreadable,NA,0,TRUE,
 enumerate_db_source,tunnel,tunnel,TRUE,
 fetch_parseable_vs_parse_log_workbooks,37,37,TRUE,
-parse_log_rows_vs_3_per_workbook,111,111,TRUE,
-workbooks_with_no_step,NA,2,TRUE,16845_3__KA06-26498_1252605057910_c2f75bf9265550a24ed3aa16cc30a865f4b241c111663bec2955948c346ae3d7.xls; 50478_24__AttachmentARegion3-Sec2.2SamplingLocationsFINAL_1465427041237_5426374845.xlsx
+parse_log_rows_vs_steps_per_workbook,148,148,TRUE,
+fish_layout_sheets_read_as_step3,1,1,TRUE,
+workbooks_with_no_step,NA,1,TRUE,50478_24__AttachmentARegion3-Sec2.2SamplingLocationsFINAL_1465427041237_5426374845.xlsx
 workbooks_unopenable_since_fetch,0,0,TRUE,
 utm_zone_non_numeric,NA,0,TRUE,
-sites_all_rows_vs_distinct_site_keys,996,996,TRUE,
+step3_fish_without_step1_site,NA,296,TRUE,16389; 16845
+sites_all_rows_vs_distinct_site_keys,989,989,TRUE,
 placed_rows_vs_geometry_rows,987,987,TRUE,
 with_coords_placed_clipped,NA,989 / 987 / 531,TRUE,
 outside_group_fixable_by_zone_shift,NA,0,TRUE,
 nfc_na_no_step2,NA,23,TRUE,
-clip_polygon_source,tunnel|local_fwapg,tunnel,TRUE,
+nfc_conflict_sites,NA,86,TRUE,a no-fish record beside a catch at the same site; not flagged nfc
+nfc_sites_listing_a_species,NA,0,TRUE,explicit zero counts; nfc_conflict sites are not flagged nfc
+clip_polygon_source,tunnel|local_fwapg,local_fwapg,TRUE,

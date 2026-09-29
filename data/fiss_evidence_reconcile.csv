@@ -1,0 +1,14 @@
+check,expected,actual,pass,note
+step3_fish_in_buckets_vs_owner_groups,175414,175414,TRUE,
+unmeasured_formula_classed_plus_unmeasured_eq_n_caught,0,0,TRUE,
+site_species_step3_fish_blank_beside_named_method,0,0,TRUE,
+step3_method_inherited_from_step2,,308,TRUE,
+step3_method_blank,,824,TRUE,
+reports_parsed_differently_across_groups,0,0,TRUE,
+buckets,,classed=1283; focal_no_length=3; in_fdis=100297; no_step1_site=851; not_focal=72610; species_unmapped=370,TRUE,
+species_labels_unmapped,,11,TRUE,WSC=783; Trout Perch=100; PMC=29; YSU=16; SC=9; Lamprey=4; LNS=1; LSC=1; MU=1; Unidentified Species=1; unidentified species=1
+sites_undated,,32,TRUE,
+evidence_sites_unplaced,,16,TRUE,placeable sites fwa_indexpoint found no stream for within 500 m
+evidence_sites_not_placeable,,1,TRUE,
+fdis_overlap_sites,,2952,TRUE,
+stage_fish_groups_ambiguous,,39,TRUE,site x species x method with more than one staged Step 2 row; its fish are not compared

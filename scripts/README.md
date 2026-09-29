@@ -30,11 +30,15 @@ wf_farm_priority.js                          farm priority/crossing tables out o
 0200  enumerate the data-only .xls submissions per group   WSG_TARGET=COTR  (required, no default)
 0210  fetch them            FISS_FETCH=TRUE   <- deliberate; pulls dozens-to-hundreds
 0220  parse -> normalize -> flag No-Fish-Captured -> GPKG + CSV clipped to the group; reconcile gate
+      (also writes Step 2 life stage and Step 3 individual fish, raw, per group)
 
 --- FDIS electrofishing export (province-wide, not per group) ---
 0230  sync s3://fresh-bc/fdis/, QA, roll passes to site visits, place on FWA   (local fwapg :5432)
 0240  size classes + CH / char evidence + summary vs thresholds -> data/fdis_*.csv
       then: aws s3 sync data/fdis/derived/ s3://fresh-bc/fdis/derived/
+
+--- FISS individual fish -> size-class evidence (after 0220 on each group, and 0230) ---
+0250  Step 3 fish + Step 2 counts, deduped against FDIS -> data/fiss_evidence.csv (local fwapg :5432)
 ```
 
 ## Report discovery — four axes
@@ -207,12 +211,19 @@ fishless. Run on five groups (PINE, COTR, UNTH, LNTH, UPCE; #5).
   anchoring on the `REFERENCE NUMBER` label row (rows 26, 31 or 17 across the 2009–2022 editions),
   because row 1 of the provincial template is a title banner. UTM zone is parsed as its leading
   digits (`"11U"` is common on North Thompson submissions and used to drop the site). NFC is taken
-  from the sheet's own `No Fish Caught` value (`nfc_source = "submitted"`); a real zero count with
-  recorded effort is `"derived"`. Blank counts are **not** treated as zero. **`nfc = NA` means the
+  from the sheet's own `No Fish Caught` value, or a zero-catch code from `data/fdis_species_codes.csv`
+  (`NFC`, `ZZZ`) in the editions that record codes (`nfc_source = "submitted"`); a real zero count
+  with recorded effort is `"derived"`. Blank counts are **not** treated as zero. Either way a site
+  is NFC only if **no record there caught anything**: editions before 2016 record NFC per trap or
+  pass, and a site with one empty trap beside a full one is `nfc_conflict`, not NFC. **`nfc = NA` means the
   site has no Step 2 record at all** (a location with no fish-collection rows), not FALSE.
   Writes `fiss_xls_parse_log.csv` (one row per workbook × step, with a `status` naming why a step
   yielded nothing: no_sheet_match for tissue-data and summary workbooks, no_header, no_rows …,
   plus `header_row` and the edition `banner`), then the site tables, then `fiss_xls_reconcile.csv`.
+  Template editions name columns differently (`species_code`/`species`, `method`/`sampling_method`,
+  `haul_or_pass`/`haul_number_pass_number`, `date_yyyy_mm_day`/`survey_date`); `variant_map` folds
+  them to one name. Step 3 (Individual Fish Data) is written raw to `fiss_step3_fish_<wsg>.csv`, and
+  a per-fish sheet filed under a Step 2 name is read as Step 3 (`fish_layout` in the parse log).
   The reconciliation is a **gate**: manifest ↔ reports ↔ fetch log ↔ parse log are checked before
   any site table is written and site counts after; any failed check exits non-zero.
 
@@ -228,10 +239,35 @@ fishless. Run on five groups (PINE, COTR, UNTH, LNTH, UPCE; #5).
 | NFC inside (submitted / derived) | 142 (128 / 14) | 62 (62 / 0) | 136 | 136 | 228 (218 / 10) |
 | `nfc` NA inside | 31 | 31 | 0 | 12 | 383 |
 
+Re-run 2026-09-28 (#21) after the edition-variant and NFC roll-up fixes, inside-group NFC:
+PINE 142 → 146, COTR 62 → 67, UNTH 136 → 106, LNTH 136 → 90, UPCE 228 → 251. The falls are mixed
+sites (a no-fish trap beside a catch) that the old roll-up flagged; the rises are pre-2016 `NFC`
+codes it never read. Derived NFC fell (PINE 14 → 2) because a species entered with no count is now
+presence, not a zero.
+
 UNTH and LNTH share 10 submissions (both clip the same workbooks). UPCE's inside-group layer is
 76% mainstem-named (Peace, Moberly, Dinosaur); 97 of its 228 NFC sites are on tributaries.
 Sites outside the linked group are expected — a submission spans groups — and are kept in
 `fiss_sites_<wsg>_all.csv`. Run logs: `scripts/logs/fiss/`.
+
+## 0250 — FISS individual fish → size-class evidence
+
+Supplements `0240` (#21). The FDIS export stops at 2020/2022 and at electrofishing; submission
+workbooks carry every method.
+
+- **Grain:** site (`site_key`) × species × size class × **method**. Rows match
+  `data/fdis_evidence.csv` column for column, with `source` and `method` on both, so the two bind.
+- **One group per report:** a report parsed under several groups is taken from the first.
+- **Dedupe against FDIS:** no shared key exists. A FISS site is the same survey as an FDIS site visit
+  when date and UTM zone agree, the sites are within 50 m, and at least one fish matches on species
+  and length (a multiset match: repeated FDIS rows are distinct fish). Only the **electrofishing**
+  rows at such a site are dropped. 45 of 68 reports with electrofished fish match ≥ 90 %, 13 match
+  none; the radius is not sensitive (50 m → 2 km adds ~1.5 % of matched sites, mostly weak).
+- **Life stage vs length:** `data/fiss_stage_vs_class.csv` compares the Step 2 label with the length
+  class per fish and per Step 2 row.
+- Outputs: `data/fiss_evidence.csv`, `data/fiss_fdis_overlap.csv`, `data/fiss_stage_vs_class.csv`,
+  `data/fiss_evidence_reconcile.csv` (a gate: every Step 3 fish lands in one bucket).
+- Logs: `scripts/logs/fiss/`.
 
 <br>
 
