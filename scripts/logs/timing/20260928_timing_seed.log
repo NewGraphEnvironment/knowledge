@@ -1,0 +1,62 @@
+source:   /Users/airvine/Projects/repo/fish_passage_template_reporting/data/inputs_raw/fish_species_life_history_gantt.csv 
+commit:   49f90154e5a876a1ab7e3091dbc3745bdb7192e7 
+modified: no 
+
+source rows: 41 
+
+citations with no dated window to attach to (not carried):
+ row wsg_code                             cite Species life_stage
+   8     MORR gottesfeld_rabnett2007SkeenaFish Chinook    Rearing
+
+citation taken from the other area's column:
+ row wsg_code species_code    life_stage                       cite_other
+   7     BULK           CH fry_migration gottesfeld_rabnett2007SkeenaFish
+
+repeated windows dropped:
+ row wsg_code species_code life_stage start   end
+  32     BULK           BT incubation 09-01 04-30
+merged split window: BULK CH incubation 08-01 .. 03-31 
+merged split window: MORR CH incubation 09-01 .. 04-15 
+merged split window: MORR CO incubation 10-15 .. 07-07 
+merged split window: MORR ST overwintering 07-01 .. 03-21 
+merged split window: MORR SK incubation 09-01 .. 05-21 
+merged split window: MORR BT incubation 08-23 .. 04-30 
+
+invariants: day sets equal for 37 keys; no day covered twice; 1 half window(s) unchanged; 27 citation(s) carried
+
+wrote data/life_history_timing.csv : 38 rows
+
+rows per group x species:
+    
+     BULK MORR
+  CH    5    5
+  CO    2    5
+  ST    1    5
+  SK    1    3
+  BT    3    3
+  CT    0    4
+  PL    0    1
+
+unsourced rows:
+ wsg_code species_code life_stage start   end
+     BULK           CH incubation 08-01 03-31
+     BULK           CO   spawning 09-15 11-15
+     BULK           ST   spawning 04-15 06-15
+     BULK           SK   spawning 08-01 09-15
+     BULK           BT  migration 07-15 09-01
+     BULK           BT   spawning 09-01 10-15
+     BULK           BT incubation 09-01 04-30
+     MORR           CH incubation 09-01 04-15
+     MORR           CO incubation 10-15 07-07
+     MORR           BT incubation 08-23 04-30
+     MORR           CT  migration 05-01 06-01
+
+windows crossing 1 January:
+ wsg_code species_code    life_stage start   end
+     BULK           CH    incubation 08-01 03-31
+     BULK           BT    incubation 09-01 04-30
+     MORR           CH    incubation 09-01 04-15
+     MORR           CO    incubation 10-15 07-07
+     MORR           ST overwintering 07-01 03-21
+     MORR           SK    incubation 09-01 05-21
+     MORR           BT    incubation 08-23 04-30

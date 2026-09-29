@@ -53,3 +53,52 @@ What the source actually contains (read directly):
 
 | Error | Resolution |
 |-------|------------|
+
+## Reader checks, enumerated by the rows each one sees (code-check round 2 -> 3)
+
+Round 2 found the split-at-1-January check scoped to complete rows only, inside round 1's fix of
+the same check. The mechanism is **row scope**: each check runs over a subset, and a subset chosen
+for one check (overlap needs both ends) was reused for another (split does not). Every check in
+`knw_timing_read()` and the subset it sees:
+
+| check | rows seen | right scope? |
+|---|---|---|
+| column names | header | yes |
+| trim, blank -> NA | every cell | yes |
+| no wsg_code / species_code | all rows | yes |
+| life_stage in vocabulary (NA refused) | all rows | yes |
+| MM-DD, real date | every non-NA start/end | yes |
+| neither start nor end | all rows | yes |
+| start == end | rows with both | yes (needs both) |
+| overlapping windows | rows with both | yes: a half window covers no defined days |
+| split at 1 January | all rows (fixed round 2) | yes |
+| filter code absent | requested codes vs all rows | yes |
+
+Accepted: a half window beside a full one for the same key is not checked for overlap, because
+its extent is unknown.
+
+## Round 3 -> enumeration across both callers (terminal)
+
+Round 3 named the mechanism: every check decides "absent" or "the case" with its own local
+predicate, and the seed never normalized, so the reader's blank rule (round 2) did not reach it.
+Fixes: the seed now applies the reader's blank rule once after `read.csv` (trim `[\h\v]`, "" -> NA);
+the reader's overlap check counts a half window's known day; the whole-year exclusion is the same
+in both callers; an empty filter is refused.
+
+Every predicate in `scripts/0260-timing-seed.R` (grep of `is.na|%in%|duplicated|nzchar|stop|==|ifelse`),
+all of which now read normalized cells:
+
+| predicate | rows | notes |
+|---|---|---|
+| species / stage / citation_3..6 / downstream-displacement stopifnots | all source rows | loud |
+| `dated`, `other_dated` | all area-rows | normalized, so whitespace is undated |
+| citation destination (`dest`) and `lost` log | all area-rows, **before any drop** | replaces the post-drop `before_cite` |
+| `across` | dated rows | same condition as `dest`'s cross-area branch |
+| year / MM-DD / backwards | dated rows | loud |
+| repeat drop | dated rows | carries cite **and note** |
+| split merge | all rows per key, whole-year excluded from both halves | as the reader |
+| invariants | day sets (full), half windows (identity), citations (token `%in%`, not substring) | plus round-trip through `knw_timing_read()`, which applies every reader check in the table above to the output |
+
+The three cases round 3 measured were re-run on a mutated template copy: whitespace citation ->
+unsourced with the "to confirm" note; one-area citation beside a cited dated area -> logged as not
+carried; note on the dropped repeat -> carried. Real-data output unchanged byte for byte.

@@ -29,17 +29,17 @@ Reports use it only to draw a Gantt chart.
       line mentions the timing table; add `readr`/`utils` only if needed (prefer `utils::read.csv`)
 
 ## Phase 2: Seed script + table
-- [ ] `scripts/0260-timing-seed.R`: header block (why/design, input, output); reads the template CSV
+- [x] `scripts/0260-timing-seed.R`: header block (why/design, input, output); reads the template CSV
       from the sibling checkout (`TEMPLATE_DIR`, default `~/Projects/repo/fish_passage_template_reporting`,
       stops if absent) and logs its commit SHA
-- [ ] Reshape: pivot areas → `wsg_code`; species names → codes; stages → vocab; strip year to `MM-DD`,
+- [x] Reshape: pivot areas → `wsg_code`; species names → codes; stages → vocab; strip year to `MM-DD`,
       1901 end → crossing window; merge a `..12-31` + `01-01..` pair within wsg×species×stage into one
       `start > end` row; drop exact duplicates and all-NA windows; attach sources and notes
-- [ ] **Invariant check in the script**: per wsg×species×stage, the set of covered days-of-year before
+- [x] **Invariant check in the script**: per wsg×species×stage, the set of covered days-of-year before
       and after reshaping is identical (catches a lost, doubled or mis-merged window); plus every
       non-empty citation cell in a dated row lands in some `source`
-- [ ] Write `data/life_history_timing.csv`; round-trip it through `knw_timing_read()`
-- [ ] Commit the run log under `scripts/logs/` (evidence: source SHA, row counts, invariant result);
+- [x] Write `data/life_history_timing.csv`; round-trip it through `knw_timing_read()`
+- [x] Commit the run log under `scripts/logs/` (evidence: source SHA, row counts, invariant result);
       add 0260 to `scripts/README.md` run order + section
 
 ## Phase 3: Wiring
