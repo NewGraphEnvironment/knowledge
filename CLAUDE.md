@@ -82,6 +82,17 @@ The 2022 `Details*` files contain every 2020 fish row, and exact duplicate rows 
 from it, and `research/fdis_export.md` is the reference. The FWA "field measurement" channel
 widths are these same sites, so never score the width model against them.
 
+### FISS submission workbooks: editions drift, and most EF fish are already in FDIS
+
+Template editions before 2016 name columns differently (`species_code`, `method`,
+`haul_or_pass`, `date_yyyy_mm_day`). Any new column `0220` reads needs checking against every
+edition's header, or it silently comes back NA on the old ones. A site is no-fish only if no
+Step 2 record under its reference number caught anything: one trap with fish makes it a fish
+site. `NFC` and "No Fish Caught" are the no-fish entries (confirmed with Al, 2026-09-28). The
+FDIS export was built from these submissions, so `0250` dedupes against it before counting
+anything as new. The harvest records no submitter, so NGE-authored workbooks cannot be picked
+out. `research/fdis_export.md` has the overlap figures.
+
 ### Database access
 
 `0100`, `0110`, `0160`, `0162` connect on the bcfishpass tunnel (`0200`/`0220` try it first and
