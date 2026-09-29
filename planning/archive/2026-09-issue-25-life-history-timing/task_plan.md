@@ -49,7 +49,7 @@ Reports use it only to draw a Gantt chart.
 
 ## Validation
 
-- [ ] Tests pass; restore one validator and see its test go red
-- [ ] `/code-check` clean on each commit
-- [ ] PWF checkboxes match landed work
-- [ ] `/planning-archive` on completion
+- [x] Tests pass; restore one validator and see its test go red
+- [x] `/code-check` clean on each commit
+- [x] PWF checkboxes match landed work
+- [x] `/planning-archive` on completion
