@@ -23,7 +23,8 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   scripts are fixed forward as they are touched.
 - `data/<wsg>/` — per-group snapshots (csv/md) and small spatial deliverables (gpkg/kml). Tracked.
 - `data/` root — cross-group tier: `corpus_tags.csv`, `priority_farmed_all.csv`,
-  `zotero_key_map.csv`, `rag_priorities.{gpkg,kml}`.
+  `zotero_key_map.csv`, `rag_priorities.{gpkg,kml}`, `life_history_timing.csv` (seeded by `0260`,
+  then hand-edited; read with `knw_timing_read()`).
 - `data/rag/` — ignored local cache of the ragnar stores. Source of truth is `s3://fresh-bc/rag/`.
 
 ## One discipline

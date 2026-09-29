@@ -6,7 +6,7 @@
 \alias{knowledge-package}
 \title{knowledge: Watershed-Group Fisheries Background}
 \description{
-Functions for assembling fisheries background per watershed group: pulling provincial PSCIS crossing layers clipped to a group, deriving the past-report and crossing tables from them, and checking GNIS stream names for cross-group collisions before searching by name.
+Functions for assembling fisheries background per watershed group: pulling provincial PSCIS crossing layers clipped to a group, deriving the past-report and crossing tables from them, and checking GNIS stream names for cross-group collisions before searching by name, and reading the life-history timing table by group and species.
 }
 \author{
 \strong{Maintainer}: Allan Irvine \email{al@newgraphenvironment.com}

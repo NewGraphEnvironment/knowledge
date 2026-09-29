@@ -39,6 +39,9 @@ wf_farm_priority.js                          farm priority/crossing tables out o
 
 --- FISS individual fish -> size-class evidence (after 0220 on each group, and 0230) ---
 0250  Step 3 fish + Step 2 counts, deduped against FDIS -> data/fiss_evidence.csv (local fwapg :5432)
+
+--- Life-history timing (independent; re-run only when the template's Gantt CSV changes) ---
+0260  reshape the template's Gantt CSV -> data/life_history_timing.csv   (read with knw_timing_read())
 ```
 
 ## Report discovery — four axes
@@ -268,6 +271,25 @@ workbooks carry every method.
 - Outputs: `data/fiss_evidence.csv`, `data/fiss_fdis_overlap.csv`, `data/fiss_stage_vs_class.csv`,
   `data/fiss_evidence_reconcile.csv` (a gate: every Step 3 fish lands in one bucket).
 - Logs: `scripts/logs/fiss/`.
+
+<br>
+
+## 0260 — life-history timing table
+
+Seeds `data/life_history_timing.csv` from `fish_passage_template_reporting`'s
+`data/inputs_raw/fish_species_life_history_gantt.csv` (#25). Reads the sibling checkout
+(`TEMPLATE_DIR`); the log records its commit SHA.
+
+- **Grain:** `wsg_code` × `species_code` × `life_stage` × window. `start`/`end` are `MM-DD`;
+  `start > end` crosses 1 January. Stages are `knw_timing_stages()`.
+- **Citations** are positional in the template (`citation_1` Bulkley, `citation_2` Morice).
+  `source` holds Better BibTeX citation keys, `"; "`-separated.
+- **Split windows** (`..12-31` + `01-01..`) are merged into one row, and 1901 end dates become
+  `start > end`. Invariants: day coverage per key unchanged, no day covered twice, half windows and
+  citations carried. `knw_timing_read()` refuses overlapping or split windows, so a hand edit
+  cannot reintroduce them.
+- The table is meant to be edited and challenged. Once edited by hand, do not re-run `0260` over it.
+- Logs: `scripts/logs/timing/`.
 
 <br>
 

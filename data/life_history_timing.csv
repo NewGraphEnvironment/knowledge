@@ -1,0 +1,39 @@
+"wsg_code","species_code","life_stage","start","end","source","note"
+"BULK","CH","migration","05-01","08-01","gottesfeld_rabnett2007SkeenaFish","see Shepher 1979 for peak spawning"
+"BULK","CH","spawning","08-01","09-15","gottesfeld_rabnett2007SkeenaFish",
+"BULK","CH","incubation","08-01","03-31",,"no source in template; to confirm with knowledge holders"
+"BULK","CH","emergence","04-15","07-07","gottesfeld_rabnett2007SkeenaFish",
+"BULK","CH","fry_migration","07-15","09-07","gottesfeld_rabnett2007SkeenaFish","citation listed under the other area in the template"
+"BULK","CO","migration","08-15",,"officeofthewetsuweten2013Wetsuwet","end missing in template"
+"BULK","CO","spawning","09-15","11-15",,"no source in template; to confirm with knowledge holders"
+"BULK","ST","spawning","04-15","06-15",,"no source in template; to confirm with knowledge holders"
+"BULK","SK","spawning","08-01","09-15",,"no source in template; to confirm with knowledge holders"
+"BULK","BT","migration","07-15","09-01",,"no source in template; to confirm with knowledge holders"
+"BULK","BT","spawning","09-01","10-15",,"no source in template; to confirm with knowledge holders"
+"BULK","BT","incubation","09-01","04-30",,"no source in template; to confirm with knowledge holders"
+"MORR","CH","migration","05-01","09-30","bustard_schell2002ConservingMorice","see Shepher 1979 for peak spawning"
+"MORR","CH","spawning","09-01","10-07","bustard_schell2002ConservingMorice",
+"MORR","CH","incubation","09-01","04-15",,"no source in template; to confirm with knowledge holders"
+"MORR","CH","emergence","03-15","04-15","bustard_schell2002ConservingMorice",
+"MORR","CH","outmigration","04-15","07-15","gottesfeld_rabnett2007SkeenaFish",
+"MORR","CO","migration","07-15","09-07","bustard_schell2002ConservingMorice",
+"MORR","CO","spawning","10-15","11-30","bustard_schell2002ConservingMorice",
+"MORR","CO","incubation","10-15","07-07",,"no source in template; to confirm with knowledge holders"
+"MORR","CO","emergence","05-15","07-07","gottesfeld_rabnett2007SkeenaFish",
+"MORR","CO","outmigration","04-21","07-31","bustard_schell2002ConservingMorice",
+"MORR","ST","migration","07-01","09-15","bustard_schell2002ConservingMorice",
+"MORR","ST","spawning","05-15","06-15","bustard_schell2002ConservingMorice",
+"MORR","ST","incubation","05-15","08-31","bustard_schell2002ConservingMorice",
+"MORR","ST","emergence","08-01","08-31","bustard_schell2002ConservingMorice",
+"MORR","ST","overwintering","07-01","03-21","bustard_schell2002ConservingMorice",
+"MORR","SK","migration","06-15","08-31","bustard_schell2002ConservingMorice",
+"MORR","SK","spawning","09-01","09-30","bustard_schell2002ConservingMorice",
+"MORR","SK","incubation","09-01","05-21","gottesfeld_rabnett2007SkeenaFish",
+"MORR","BT","migration","06-01","09-01","bustard_schell2002ConservingMorice",
+"MORR","BT","spawning","08-23","09-15","bustard_schell2002ConservingMorice",
+"MORR","BT","incubation","08-23","04-30",,"no source in template; to confirm with knowledge holders"
+"MORR","CT","migration","05-01","06-01",,"no source in template; to confirm with knowledge holders"
+"MORR","CT","spawning","06-01","06-30","bustard_schell2002ConservingMorice",
+"MORR","CT","incubation","06-30","08-07","bustard_schell2002ConservingMorice",
+"MORR","CT","emergence","07-01","08-07","bustard_schell2002ConservingMorice",
+"MORR","PL","spawning","06-30","07-31","bustard_schell2002ConservingMorice",
