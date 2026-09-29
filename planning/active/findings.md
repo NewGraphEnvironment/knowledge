@@ -54,3 +54,19 @@ Relates to #18, NewGraphEnvironment/link#284
 
 | Error | Resolution |
 |-------|------------|
+
+## Prior art check (user asked, 2026-09-28)
+
+Searched `fish_passage_template_reporting` (all remote branches) and the org
+(`gh search/code "Individual Fish Data"`). Every hit is a **producer**: `0220_fish_data_tidy.R`
+and `fds_prep_for_submission.R` in the template and ~12 report repos write NGE's own catch into
+Step 2 / Step 3 of the submission template. None parses another submitter's Step 3, and none
+builds size-class evidence. Nothing to reuse or duplicate.
+
+One consequence for Phase 5: the template assigns Step 2 `stage` **from length**, one rule for
+every salmonid (`0220_fish_data_tidy.R` on template main):
+fry <= 65, parr 65-110, juvenile 110-140, adult > 140 mm. An NGE-authored workbook in the harvest
+therefore carries a stage that is a length class under a different break set, not a field call.
+Its agreement with our classes measures break-set overlap, not submitter judgement. The
+disagreement table flags staged rows whose label equals that rule's output, so they can be read
+apart.
