@@ -52,6 +52,22 @@ citation key. That is a different identity from the harvest's `<EXTENT>__<report
 `data/zotero_key_map.csv` to join the farm. `peace.duckdb` is key-named and never deduped; the
 manifest entry says so.
 
+### Read `zotero.sqlite` from a guarded copy while Zotero runs
+
+Zotero holds the file in exclusive locking mode, so a normal read-only connection blocks and an
+`immutable=1` read taken during a sync can fail with "database disk image is malformed" or see
+half a transaction (hit on every member right after `0270`'s own writes started a sync). In
+exclusive mode SQLite does not bump the header change counter per commit, so that is no guard.
+`0270`'s `db()` and `0280`'s `snapshot()` copy the file and keep the copy only when mtime and
+size are unchanged across the copy and no journal is open. `0150` and `cred` still read
+immutable: build only once Zotero has finished syncing. Citation keys are not unique across
+libraries (the same key names different papers in the personal and group libraries), so
+resolve a key inside the group (`groups.groupID = 4733734`), never across the whole database.
+
+`cred` 0.3.0's `crd_search()` fails on every store under ragnar 0.3.0 (`cosine_distance` is a
+list column), so `0150 ACTION=query` is broken until cred is fixed; `ragnar::ragnar_retrieve()`
+works directly. Draft issue in the #19 archive's `cred-issue-draft.md`.
+
 ### An EcoCat report is several documents
 
 3 to 19 per report. The harvest workflows take only the first PDF, so the store holds one
