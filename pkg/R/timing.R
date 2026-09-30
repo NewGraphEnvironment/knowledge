@@ -53,8 +53,7 @@ knw_timing_read <- function(path, wsg_code = NULL, species_code = NULL) {
     stop("an empty filter matches nothing; pass NULL for all", call. = FALSE)
   }
   cols <- c("wsg_code", "species_code", "life_stage", "start", "end", "source", "note")
-  x <- utils::read.csv(path, colClasses = "character", na.strings = "", check.names = FALSE,
-                       fileEncoding = "UTF-8-BOM")
+  x <- .knw_read_csv(path)
   chk::check_names(x, cols)
   x <- x[cols]
   x[] <- lapply(x, function(v) {

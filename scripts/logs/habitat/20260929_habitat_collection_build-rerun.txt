@@ -1,0 +1,77 @@
+Wed Sep 30 01:04:16 UTC 2026
+collection habitat_modelling (U9ZCZ6RN) under TRXPJHQE: exists
+  ResPetrosky1987IdahoHabitatEvaluationOffSiteMitigationRecordpdf: RJ7RM4CR | member, pdf present
+  TopicModel2PartialBBNHabitatIntrinsicPotential: U6LEDW6P | member, no-pdf: none local
+  beechie_imaki2014Predictingnatural: DK4QW9B7 | member, pdf present
+  bidlack_etal2014IdentifyingSuitable: UXI3ARYT | member, no-pdf: none local
+  bjornn_reiser1991HabitatRequirements: YDHYE9V9 | member, pdf present
+  buckwalter_kirsch2012Fishinventory: XNC5A95B | member, pdf present
+  buddendorf_etal2019Integrationjuvenile: YJP7YLLD | member, pdf present
+  busch_etal2011LandscapeLevelModel: CUVWXS9Q | member, pdf present
+  cooney_holzer2006AppendixInterior: S3IPNXIN | member, pdf present
+  cooper2017EstimationPotential: EPBDEU5K | member, pdf present
+  davies_etal2007ModelingStream: GFZDPM4J | member, no-pdf: none local
+  holzerInteriorColumbia: DGALA8B5 | member, no-pdf: none local
+  johnson_etal2017ScienceAdvancements: 7LVQTXQY | member, pdf present
+  kirsch_etal2014Fishinventory: 5LJMT4AX | member, pdf present
+  kuparinen_etal2012Increasingbiological: XT8HKKYW | member, pdf present
+  levy_slaney1993reviewhabitat: NTCDJ37E | member, pdf present
+  lewis2007LiteratureReview: BID734MC | member, pdf present
+  macisaac2010SalmonidsHydrologic: 9EMY6W2D | member, pdf present
+  malcolm_etal2019Developmentlargescale: 6T3K9ZBY | member, pdf present
+  meehan1982APA_DOC_no_670pdf: 7N96YPPA | member, pdf present
+  neuman_newcombe1977MinimumAcceptable: I44TTT4S | member, pdf present
+  pike2010Compendiumforest: A9MAQ3ZL | member, pdf present
+  porter_etal2008DevelopingFish: QCHYDXGV | member, pdf present
+  porter_etal2010PredictiveModels: FENLQMJC | member, pdf present
+  rivot_etal2008HierarchicalBayesian: VIR8K4QM | member, pdf present
+  rosenfeld_etal2000Habitatfactors: F9F4TH2I | member, pdf present
+  schuett-hames_pleus1996MonitoringRecommendations: JUNBXVZ8 | member, pdf present
+  sheer_etal2009DevelopmentManagement: MWMTV4UZ | member, pdf present
+  sheer_steel2006LostWatersheds: FAIC7HTL | member, pdf present
+  sloat_etal2017Streamnetwork: K7B7B8RF | member, pdf exists
+  thorley_etal2021ChannelWidth: JXHRU58C | member, no-pdf: none local
+  wang_etal2012ClimateWNAHigh: 3XFEFP3L | member, pdf present
+  woll2015Landscapescalemapping: XIGKHSTT | member, pdf present
+  woll_etal2017SalmonEcological: YN95Z6EU | member, pdf present
+  wyatt2002Estimatingriverine: HJV5JMGM | member, pdf present
+  agrawal_etalPREDICTINGPOTENTIAL: 7BIC5WW2 | member, pdf present
+  b_c_ministryofwaterlandandresourcestewardship2023ManagementPlan: 5U2CD244 | member, pdf present
+  beamer_etal2013JUVENILECHINOOK: TTV53WE3 | member, pdf present
+  fishpassagetechnicalworkinggroup2014FishPassage: RHKW5Y3X | member, no-pdf: none local
+  ford_etal1995LiteratureReviews: BYBWUKUG | member, pdf present
+  hagen_etal2015Criticalhabitats: NCS2F8F8 | member, pdf present
+  hagen_etal2020CriticalSpawning: UZZPLENC | member, pdf present
+  hagen_sary2023BullTrout: P6DL9KL8 | member, pdf present
+  hagen_weber2019Limitingfactorsa: YC3EQ8T8 | member, pdf present
+  norris_mount2016Fishpassage: TK4PDDE2 | member, pdf present
+  partridge_platts1978Rearingchinook: J96QDTH9 | member, pdf present
+  porter_etal2000PredictiveModels: C6T4RPBK | member, pdf present
+  porter_etal2014SkeenaSalmon: NTWAU974 | member, pdf present
+  raleigh_etal1986HabitatSuitablility: Z53XIYCM | member, pdf present
+  roberge_etal2002LifeHistory: B3TYJ9I9 | member, pdf present
+  bustard_schell2002ConservingMorice: RNR726EF | member, pdf present
+  gottesfeld_rabnett2007SkeenaFish: ZVQW88AW | member, pdf present
+  officeofthewetsuweten_etal2013Moricefish: KM3ANHWF | member, pdf present
+  richter_kolmes2005MaximumTemperaturea: 4ICU2XDB | member, pdf present
+  hasnain_etalKeyEcological: AENMCUT2 | member, pdf present
+  eaton_scheller1996Effectsclimate: 6VBSPJQN | member, pdf present
+  macpherson_etal2024Prioritizingbull: BWLF53YE | member, pdf present
+  retzer1989SpawningRearing: GQ6E4QAZ | member, pdf present
+  cope_morris2001WigwamRiver: BD7UVYCW | member, pdf present
+  hagenj_spendlowi_2019BullTrout: K87GPBBP | member, pdf present
+  dangelo_muhlfeld2011FactorsInfluencing: JEKVL99X | member, no-pdf: none local
+  muhlfeld_etal2012ASSESSINGIMPACTS: ZBHC36HB | member, no-pdf: none local
+  hagen_etalPrecautionaryManagement: ABIVBUBS | member, pdf present
+  cosewic2012COSEWICassessment: XZX6FAE7 | member, no-pdf: none local
+  bilski_etal2022EffectsInChannel: FN8NWKGV | member, pdf present
+  decker_hagenDISTRIBUTIONABUNDANCE: LD9SD9A4 | member, pdf present
+  levy_nicklin2018ChinookSockeye: AFM6VEG9 | member, pdf present
+  cosewic2018COSEWICAssessment: ULD94GDP | member, no-pdf: none local
+  finnegan_etal2005Controlschannel: XM35MVB6 | member, no-pdf: none local
+  thorley_irvine2021ChannelWidtha: K6NXJRMR | member, no-pdf: none local
+  thorley_etal2021ChannelWidthc: JEUEPK29 | member, no-pdf: none local
+  hill_etal2024Spatialstream: QYU2YFFZ | member, no-pdf: none local
+  hill_etal2025Spatialstream: F4Y3AQZH | member, no-pdf: none local
+
+73 members | member 73 | no-pdf 15 | pdf 58

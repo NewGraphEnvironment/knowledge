@@ -42,6 +42,11 @@ wf_farm_priority.js                          farm priority/crossing tables out o
 
 --- Life-history timing (independent; re-run only when the template's Gantt CSV changes) ---
 0260  reshape the template's Gantt CSV -> data/life_history_timing.csv   (read with knw_timing_read())
+
+--- Habitat literature (independent of the watershed-group flow) ---
+0270  build the group's Fisheries/habitat_modelling collection   --dry-run first, then live
+0150  ACTION=build STORE=habitat_modelling COLLECTIONS="U9ZCZ6RN,chinook,bull_trout,..."  then ACTION=push
+0280  verify data/literature_evidence.csv against its PDFs (gate; read with knw_literature_read())
 ```
 
 ## Report discovery — four axes
@@ -125,6 +130,10 @@ A report is reachable from more than one place; using only one axis misses repor
 - **Push after every local write** (`0152` ingest, `0156` dedup, a rebuild). The next verified
   connect replaces a local file whose md5 no longer matches the manifest with the bucket copy —
   an unpushed ingest is simply gone
+- `COLLECTIONS` takes names or 8-character Zotero collection keys and resolves them **inside the NGE group
+  library only** (`GROUP_ID=` for another group), skipping trashed collections. A name that occurs twice in
+  the group (`hydrology`, `salmon`) is refused and its keys are printed; pass a key. A name that exists only
+  in a personal library no longer resolves (it used to, and a name in both was refused).
 - `ACTION=build STORE=<name> COLLECTIONS="<zotero collection>[,...]"` builds a **citation-key-named**
   store from the local `~/Zotero` (no API key). That naming carries no watershed group and no
   reportId; it needs `data/zotero_key_map.csv` to join the farm. Group-scoped work goes through the
@@ -290,6 +299,35 @@ Seeds `data/life_history_timing.csv` from `fish_passage_template_reporting`'s
   cannot reintroduce them.
 - The table is meant to be edited and challenged. Once edited by hand, do not re-run `0260` over it.
 - Logs: `scripts/logs/timing/`.
+
+<br>
+
+## 0270 / 0280 — habitat literature: collection, store, evidence table
+
+The cited basis for CH and BT habitat thresholds (#19). Not per watershed group.
+
+- `0270` builds the group library's `Fisheries/habitat_modelling` collection (`U9ZCZ6RN`). It takes a curated
+  key list (`data/habitat_modelling_members.csv`) and adds works no library held
+  (`data/habitat_modelling_additions.csv`: CrossRef by DOI, or grey-literature metadata, with a PDF URL or a
+  standalone group attachment). A member whose group copy lacks a PDF gets one uploaded from any local
+  library, with three limits:
+  - only from an item with the same title, because citation keys are not unique across libraries;
+  - linked files from the old Windows machine (`D:\...\storage\...`) are rebased onto Zotero's
+    `baseAttachmentPath`;
+  - a PDF counts only when the server has its md5.
+
+  Live state is read from the Web API. The local database is read from a **checked copy**, because Zotero
+  locks the live file and an `immutable` read during a sync sees half-written pages. Re-runs are no-ops.
+- The store is built from that collection plus the species, temperature, hydrology and Wedzin Kwa collections,
+  by `0150`. Wait for Zotero to sync `0270`'s writes, and check that the files are on disk, before building.
+- `data/literature_evidence.csv` has one row per value a source gives: species, stage, form, variable, the
+  model parameter it bears on, bound, value, unit, kind, region, key, page, verbatim quote, `quote_source`,
+  scale and cited source. `kind = none` records a search that found nothing. Gradient is in percent.
+- `0280` is the gate. Every key must name one live item in the group library with a PDF on disk. Every quote
+  must be found in that PDF: normalized text, the numbers of a table cell on one page, or an OCR of a scan,
+  cached in `data/rag/ocr/`. Every timing-table source must resolve, and every CH/BT × parameter cell in its
+  `COVERAGE` list must have a row. `EVIDENCE=` and `LOG=` check a draft without touching the committed log.
+- Logs: `scripts/logs/habitat/`.
 
 <br>
 
