@@ -314,3 +314,52 @@ under `/tmp`. Its work directory is now inside the gitignored OCR cache and is r
 **The corrected timing source (`officeofthewetsuweten2013WetsuwetenTitle`) was not a collection member.**
 `0270` added it; the collection now has 88 items. The pushed store has the other 87: no evidence row cites this
 item, so no rebuild was run for it.
+
+## Code-check round 2 on Phase 4: the mechanism, the rewrite, and the enumeration that ended the loop
+
+Round 2 built 13 more fabrications and all passed the round-1 gate. It named the mechanism: every check asked
+whether a **lossy version of the claim** occurred somewhere in a **lossy version of the page**. Each round-1 fix
+closed one instance and left the lossiness itself in place, so the class returned one step over each time. The
+committed data held throughout: re-run under a strict comparison, no row changed status. Only row 15 had passed
+without its claim actually being matched.
+
+**The rewrite.** Quote and page are compared as token sequences:
+- numbers as written, words, and every other character as its own token;
+- matching is contiguous;
+- the value is read from the quote's own fragments;
+- there is no fuzzy tier.
+
+Table rows use the `-layout` text with adjacent tokens (a hop of 0) across at most 3 lines.
+
+**Data changes it forced (all genuine rows):**
+- Row 15 is quoted in layout order, `≥0 None None None BF < 3.7 m`.
+- Row 54 skips the OCR's "ina" with an ellipsis.
+- Row 183 moved to OCR ("late-August"; the text layer fuses "lateAugust").
+- Rows 131 and 132 exposed a too-eager sign rule ("3.3° –13.3°" is a range).
+- Row 176 exposed a too-strict day rule ("first week of September … September 10").
+
+**Proof.** The committed table has 190 rows, exit 0: 140 text, 24 table, 12 OCR, 14 `none`. Red:
+- round 2's 13 fabrications, plus T3, a fabricated row in layout order;
+- round 1's 8 fabrications;
+- the 4 whole-table mutations (a changed quote, an unknown key, a coverage gap, a value absent from its quote).
+
+With a table hop of 12, fabrication T1 still passed by collecting "High"s from later rows. With a hop of 0, all
+24 real table rows still pass.
+
+**Enumeration.** Every place the gate treats two different strings as the same, what remains there, and why it
+cannot pass a false claim:
+
+| Place | What is still equated | Why no false pass |
+|---|---|---|
+| `clean()` | curly and straight quotes; primes; every dash and the minus sign → "-"; soft hyphens and zero-width characters dropped; the no-break space family → space; ligatures ff/fi/fl/ffi/ffl spelled out; º and ˚ → °; lower case | Typography only. No digit, operator (`<`, `>`, `≥`, `≤`, `%`, `°`) or word is created, merged or removed. NFKC is gone, so "½", "³" and "◦" stay distinct characters. The dash unification makes "3 — 12" and "3-12" the same, which is the same range reading. |
+| `TOKEN` | runs of whitespace, including line breaks | Only separators. A number is one token as written: "1.5", "1. 5", "13,2" and "20,653" all differ. |
+| joined variant | "habi-\ntat" = "habitat" | Between two **letters** only; digits are never joined. |
+| `occurs()` | none: exact contiguous token equality | Plus both edges guarded: a quote may not stop inside a number or a "-", "." or "," continuation of one. |
+| fragments | text between an ellipsis or `[insert]` | Each fragment is at least 3 tokens, in order, and starts within 200 tokens of the previous one. The committed rows need fewer than 150. |
+| `table_pages()` | line breaks between adjacent tokens (at most 3 lines) | Tokens are adjacent in the layout; no token may be skipped (hop 0). |
+| `quote_numbers()` | a number after a non-numeric "-" may be read with either sign | The only sign loss. A range after a unit symbol ("3.3° –13.3°") cannot be told from a negative. No committed row has a negative value. |
+| `quote_numbers()` | a number word, or one fused with "order" ("fourthorder") | Whole tokens only: "none", "often" and "network" no longer count. |
+| `SCALE` | percent ×100 (from a proportion), mm ×10 (from cm), m ×1000 and km ×0.001, m/s ×0.01 | Set per unit. Temperature, discharge, area and order are ×1, so "148 °C" no longer passes as 14.8. |
+| `timing_in_quote()` | a month's full name, or its three-letter form except may/mar/jun | Whole words. A stated day binds when every mention of the month carries one, and the start month must be named before the end month. |
+
+Nothing else in the gate compares text. That ends the loop by enumeration rather than by a quiet round.
