@@ -178,6 +178,15 @@ def attach(parent_key, url, fname, exempt_size=False):
         return "tiny/failed"
     if not exempt_size and len(data) > MAX_MB * 1048576:
         return f"skip-{len(data)//1048576}MB"
+    return upload(parent_key, data, fname)
+
+
+def upload(parent_key, data, fname):
+    """Create an imported-file attachment under parent and upload `data` (4-step S3).
+
+    Shared with 0270, which uploads PDFs from the local Zotero storage rather than
+    from a URL. Returns a status string and never raises on an HTTP failure.
+    """
     ctype = ("application/pdf" if fname.lower().endswith(".pdf") else "application/octet-stream")
     st, bd = api("POST", f"{BASE}/items",
                  data=[{"itemType": "attachment", "parentItem": parent_key, "linkMode": "imported_file",

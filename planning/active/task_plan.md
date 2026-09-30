@@ -87,19 +87,23 @@ collection itself.
   1 and the duplicate `hydrology`/`salmon`. Duplicates within the group library are still refused by name.
 
 ## Phase 2: Zotero collection (group library)
-- [ ] `scripts/0270-habitat-collection-build.py`: the Web API pattern from `0153` (key file, group 4733734). It is
+- [x] `scripts/0270-habitat-collection-build.py`: the Web API pattern from `0153` (key file, group 4733734). It is
   idempotent and has a `--dry-run` that writes nothing. It:
   - creates `Fisheries/habitat_modelling` if absent;
   - adds the curated items by group item key: the personal collection's 35 group copies, link's keys that have
     group copies, and the listed topical items;
   - uploads the local PDF to each member whose group copy has none (skip where present; Zotero dedups by md5).
-- [ ] Re-parent the relevant standalone group PDFs (Decision 4) and add those items to the collection.
-- [ ] Add the 7 gap references: CrossRef metadata where there is a DOI, the OA PDF (checked with `file`), and no
+- [x] Re-parent the relevant standalone group PDFs (Decision 4) and add those items to the collection. *(Revised: the
+  named ones were keyed items already and were added as members. The 3 relevant true standalones got a new parent
+  plus a PDF copy, and the standalone was left in place; see findings.md and review-plan.md G2.)*
+- [x] Add the 7 gap references: CrossRef metadata where there is a DOI, the OA PDF (checked with `file`), and no
   hand-set citation keys. Relaunch Zotero so BBT assigns keys, and wait for sync. Anything unobtainable is listed in
   `findings.md`, not worked around.
-- [ ] Log to `scripts/logs/habitat/`: members by source, PDFs uploaded, re-parented items, gap items and their keys.
+- [x] Log to `scripts/logs/habitat/`: members by source, PDFs uploaded, re-parented items, gap items and their keys.
 
 ## Phase 3: Store
+- [ ] *(From plan review, Ord1)* After sync, check a copy of the local DB: collection member count = 87, and every
+  member with a server PDF has its file on disk.
 - [ ] `ACTION=build STORE=habitat_modelling COLLECTIONS="habitat_modelling,chinook,bull_trout,species,temperature,wedzin_kwa_chinook,X29BX4U8,W4425VK5,545K8HP4"`.
   Record the key count and the members with no PDF.
 - [ ] Spot-query it (a gradient, a width, a temperature and a timing question) and confirm the hits come from the
@@ -107,6 +111,7 @@ collection itself.
 - [ ] `ACTION=push CONFIRM=TRUE`, then a verified connect confirms the md5 matches the manifest.
 
 ## Phase 4: Evidence table
+- [ ] *(From plan review, Ord4)* Write `scripts/0280-literature-verify.R` first, then port rows against it.
 - [ ] Port link's `literature.md` §0–§2 into `data/literature_evidence.csv`, keeping quotes verbatim. Its "none
   found" findings become `kind = none` rows.
 - [ ] Add the template CSV's CH rows where the key resolves and they are not already covered.
@@ -120,6 +125,7 @@ collection itself.
   - BT resident/fluvial/adfluvial and CH stream-/ocean-type.
 
   Read-only agents, 2–3 at once split by variable group, may locate candidates. Every row passes the gate below.
+- [ ] *(From plan review, Ord2)* Final rebuild and push of the store after gap-fill, so every evidence key is in it.
 - [ ] Timing rows for CH and BT per stage; fill unsourced `life_history_timing.csv` rows per Decision 5.
 - [ ] `scripts/0280-literature-verify.R`, a gate:
   - every row reads through `knw_literature_read()`;
