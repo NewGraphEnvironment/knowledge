@@ -140,13 +140,13 @@ collection itself.
 ## Phase 5: Wiring
 - [x] `scripts/README.md`: run order plus a `0270`/`0280` section and the `0150` scoping note. `CLAUDE.md` data
   tier: add `literature_evidence.csv` and the `habitat_modelling` store.
-- [ ] Comment on link#284 pointing to the table as an input, with what it adds beyond `literature.md`.
+- [x] Comment on link#284 pointing to the table as an input, with what it adds beyond `literature.md`.
 
 ## Validation
 - [x] Tests pass; restore one validator and see its test go red
 - [x] `0280` gate green; a mutated quote goes red
-- [ ] `/code-check` clean on each commit
-- [ ] PWF checkboxes match landed work
-- [ ] `/planning-archive` with `Measurement` (rows by variable and kind, verified/unverifiable counts, store docs
+- [x] `/code-check` clean on each commit
+- [x] PWF checkboxes match landed work
+- [x] `/planning-archive` with `Measurement` (rows by variable and kind, verified/unverifiable counts, store docs
   and chunks, PDFs uploaded) and `Evidence` (`scripts/logs/habitat/`)
 
