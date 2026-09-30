@@ -198,3 +198,26 @@ retried.
 
 `0150`'s likely failure during a sync is the loud "malformed" error. The README says to build only after
 `0270`'s writes have synced and the files are on disk. No other script in the repo reads the database.
+
+## Phase 3: the store (2026-09-29/30)
+
+**Pre-build check.** Once Zotero had synced, a checked copy of the local DB showed 87 collection members: 72 with
+the PDF on disk, 0 with a PDF attachment whose file was missing, and 15 with no PDF.
+
+**Build.** `0150 ACTION=build STORE=habitat_modelling` read U9ZCZ6RN plus `chinook`, `bull_trout`, `W4425VK5`,
+`temperature`, `wedzin_kwa_chinook`, `X29BX4U8`, `545K8HP4` and `species`. It found 205 keys and ingested 202 PDFs,
+giving 202 documents and 33,746 chunks with `nomic-embed-text`, in about 40 minutes on m1.
+`cred::crd_zot_src_lookup()` dropped three keys because the attachment it chose was not on disk:
+`nagel_etal2014LandscapeScale`, `opperman_etal2010EcologicallyFunctional` and `rapp_abbe2003FrameworkDelineating`.
+That is plan-review G1, measured. **All 202 ingested PDFs came from the group library** (each origin's attachment
+key was mapped back to its library), so no other library's paper entered the store.
+
+**Push.** The store is in `s3://fresh-bc/rag/habitat_modelling.duckdb` (437 MB), with manifest md5 `039363d0…` at
+head `4bf3c69`. A verified connect matched the manifest and replaced nothing.
+
+**Querying is broken upstream.** `0150 ACTION=query` fails on *every* store, not only this one:
+`crd_search -> .crd_retrieval_score: 'list' object cannot be coerced to type 'double'`. ragnar 0.3.0 returns
+`cosine_distance` as a list column. The spot-check therefore called `ragnar::ragnar_retrieve()` directly as a
+probe, and the hits came from the expected sources (Busch, Rebellato, Montgomery, Dunham & Chandler, Richter &
+Kolmes, McPhail & Baxter, O'Brien). The fix is not worked around here; it is a second cred issue draft in
+`cred-issue-draft.md`.

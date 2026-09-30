@@ -102,13 +102,13 @@ collection itself.
 - [x] Log to `scripts/logs/habitat/`: members by source, PDFs uploaded, re-parented items, gap items and their keys.
 
 ## Phase 3: Store
-- [ ] *(From plan review, Ord1)* After sync, check a copy of the local DB: collection member count = 87, and every
+- [x] *(From plan review, Ord1)* After sync, check a copy of the local DB: collection member count = 87, and every
   member with a server PDF has its file on disk.
-- [ ] `ACTION=build STORE=habitat_modelling COLLECTIONS="habitat_modelling,chinook,bull_trout,species,temperature,wedzin_kwa_chinook,X29BX4U8,W4425VK5,545K8HP4"`.
+- [x] `ACTION=build STORE=habitat_modelling COLLECTIONS="habitat_modelling,chinook,bull_trout,species,temperature,wedzin_kwa_chinook,X29BX4U8,W4425VK5,545K8HP4"`.
   Record the key count and the members with no PDF.
-- [ ] Spot-query it (a gradient, a width, a temperature and a timing question) and confirm the hits come from the
+- [x] Spot-query it (a gradient, a width, a temperature and a timing question) and confirm the hits come from the
   expected keys.
-- [ ] `ACTION=push CONFIRM=TRUE`, then a verified connect confirms the md5 matches the manifest.
+- [x] `ACTION=push CONFIRM=TRUE`, then a verified connect confirms the md5 matches the manifest.
 
 ## Phase 4: Evidence table
 - [ ] *(From plan review, Ord4)* Write `scripts/0280-literature-verify.R` first, then port rows against it.

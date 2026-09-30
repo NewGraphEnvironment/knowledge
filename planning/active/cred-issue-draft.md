@@ -41,3 +41,32 @@ Also: the lookup opens the live `zotero.sqlite` with `immutable=1`. Zotero keeps
 mode and writes to it during every sync, so an immutable read taken mid-sync can raise "database disk image is
 malformed", or see a half-applied transaction. A copy checked for unchanged mtime and size, with no open journal,
 is consistent.
+
+---
+
+# Second draft issue for NewGraphEnvironment/cred (PUBLIC)
+
+**Title:** `crd_search()` fails on every store with ragnar 0.3.0: `cosine_distance` is a list column
+
+**If we do it:** `crd_search()` (and so every script that queries a store) works again. **If we never do:** no
+store can be queried through cred. Callers fall back to calling `ragnar::ragnar_retrieve()` directly and lose
+cred's scoring.
+
+## Problem
+
+With cred 0.3.0 and ragnar 0.3.0, `crd_search(store, "any query")` stops with:
+
+```
+Error: 'list' object cannot be coerced to type 'double'
+Calls: crd_search -> .crd_retrieval_score
+```
+
+`ragnar_retrieve()` now returns `cosine_distance` as a **list** column (one value per merged chunk).
+`.crd_retrieval_score()` calls `as.numeric(res[[m]])` on it inside `suppressWarnings()`, which errors on a list.
+It fails on stores built long before this (reproduced on two stores), so the cause is the ragnar version, not
+the store.
+
+## Proposed Solution
+
+Reduce a list-valued metric per row, e.g. `vapply(v, function(x) min(unlist(x)), numeric(1))`, keeping the
+best (smallest) distance of the merged chunks. Add a test with a list-column fixture.
