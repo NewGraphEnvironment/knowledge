@@ -221,3 +221,96 @@ head `4bf3c69`. A verified connect matched the manifest and replaced nothing.
 probe, and the hits came from the expected sources (Busch, Rebellato, Montgomery, Dunham & Chandler, Richter &
 Kolmes, McPhail & Baxter, O'Brien). The fix is not worked around here; it is a second cred issue draft in
 `cred-issue-draft.md`.
+
+## Phase 4: the evidence table (2026-09-30)
+
+`data/literature_evidence.csv` has 186 rows: 108 CH and 78 BT, from 47 sources. Three drafting agents wrote the
+rows, split by variable group, and each self-checked against the gate. The merge was checked again with the gate
+and by reading rows; two duplicate CH bridge rows were dropped.
+- **Gate:** 139 `verified_text`, 24 `verified_table`, 8 `verified_ocr`, 1 `verified_ocr_fuzzy` (OCR reads
+  "spawned ina few"; checked by hand) and 14 `none_row`.
+- **Coverage:** 24 of 24 CH/BT × parameter cells have a row.
+- **Timing sources:** all 3 resolve.
+- **Store:** all 47 evidence keys are in the pushed store.
+- **Mutation proof:** a changed quote, an unknown key and a deleted coverage row each turned the gate red.
+
+**What the table establishes that was not recorded before:**
+- **CH spawning MAD 0.46 m³/s has no source.** Rebellato cites five works for it; none gives a discharge threshold
+  (both scans were read through OCR). Rearing MAD 0.28 traces to Agrawal, through Sheer 2009 p. 13.
+- **The template's CH spawning 3 % is not in any source it cites.** Kirsch 2004 is not in the library, and Busch
+  and Cooney & Holzer give 4–7 % and 5 %. The rearing 5 % attributed to Porter 2008 and Woll 2017 is in neither.
+  Woll 2015 does rate juvenile CH "No potential" above 5 %, so "Woll 2017" may be a mis-citation of it.
+- **The rearing bridge (10 km, 5 %)** has a documented origin only as Rebellato's rearing criterion 4, a design
+  choice with no literature. There is nothing for BT.
+- **Roberge's CH juvenile "0.5 m" bankfull width is a transcription error.** Porter et al. 2000 Table 2 gives
+  20.2 m; the row is kept with a "do not use" note.
+- **First reach-scale BT spawning gradients:**
+  - O'Brien 1999 (Duncan, adfluvial), 1.3–4 % at reaches with confirmed redds;
+  - Bustard & Schell 2002 (Morice), 1–4 % in reaches over 7 m wide;
+  - Cope & Morris 2001 (Wigwam), 0.6–1.0 %.
+
+  BT rearing in the Morice spans 1–14.5 % (mean 3.2 %).
+- **Page corrections to link's review:** Cooney & Holzer's 5 % exclusion is on C-8, not C-7; Hagen 2015's 2 m
+  sentence on p. 23, not 22; Hagen 2020's footnote 9 on p. 31, not 30; Trotter's last-fish values on p. 10, not 9.
+
+**Timing table (Decision 5).**
+- **No new sources.** None of the six unsourced CH/BT windows (BULK/MORR incubation, BULK BT migration and
+  spawning) is supported *exactly* by any source, so no `source` was filled. The pieces that are supported, mostly
+  start dates, are timing rows in the evidence table.
+- **One key corrected.** The BULK CO migration row cited `officeofthewetsuweten2013Wetsuwet`, a truncation of
+  `officeofthewetsuweten2013WetsuwetenTitle`. The full key resolves in the group, and p. 24 reads "Coho and
+  steelhead migrate into the Bulkley watershed in early to mid-August", checked by hand. The dates are unchanged.
+
+**Gate defect found by a drafter.** `find_quote()` used `substring(all_text, at)`, whose default `last` is
+1,000,000, so a quote past that character was never found. Fixed and proved on Gottesfeld & Rabnett 2007 (1.19 M
+normalized characters): a p. 435 sentence fails under the old gate and verifies under the new one. That is the
+only truncating call in the gate.
+
+**Process note.** `0280` was edited while one drafter's gate run was in flight. The run died with a syntax error
+on a line that does not exist (the `karpathy.md` §5 tell). The drafter re-ran from a frozen copy, and later
+edits waited until no run was active. `ocrmypdf` also needs a writable `TMPDIR` in a sandboxed shell, so the gate
+now passes R's `tempdir()`.
+
+## Code-check round 1 on Phase 4: the gate passed fabricated rows
+
+The reviewer changed 8 real rows into fabrications and the gate passed all 8. It also read all 172 cited rows
+against their quotes by hand and found no value that contradicts its quote, so the data was sound and the gate
+was not. What was wrong, and what changed:
+
+| Hole | Fix |
+|---|---|
+| A quote that is only an ellipsis or a `[insert]` had no fragments. `0 == 0` passed, and the page came back `-Inf`, not `NA`. | Every fragment must be at least 12 normalized characters. A quote with none fails as `quote_fragment_too_short`. |
+| A fragment after an ellipsis could match anywhere later in the document. | Each fragment must start within 2,000 characters of the previous one. |
+| A quote ending "13" matched the source's "13.2". | A number at a fragment's edge may not continue into digits: a lookahead, and a lookbehind in which a dot blocks only as a decimal point. |
+| The `joined` variant fused "2-\n4 %" into "24%". | Line-end hyphens are joined only between letters. |
+| A `table` quote passed when all its numbers sat anywhere on one page. Small numbers are on almost every page. | Table rows are matched against `pdftotext -layout`, which keeps a table row on one line. Their tokens (numbers and words) must occur in order, each within 80 characters of the last, and the quote needs 3+ tokens including a number and a word. |
+| Fuzzy OCR at 10 % let a digit or an order word change. | A fuzzy hit must still contain every number and number word of the quote exactly. |
+| Values were never compared with the quote. | New `value_not_in_quote`: every value must occur in its quote, as a number, a power-of-ten rescaling of one (proportion/percent, cm/mm, km/m), or a number word. Timing months must be named. |
+| Only the first matching page was logged. | `pdf_pages` lists every page where the quote matches. |
+
+**The stricter gate rejected 7 genuine rows.** All were quotes stitched across pages or garbled by the text layer.
+- O'Brien's two BT ranges were split into five per-reach rows (1.3, 1.9, 4, 2.4 and 4.9 %).
+- Cope & Morris's rearing range was split into its two sites.
+- Selong and Schell were moved to OCR with the full sentence, because the text layer renders "13.2°C" as
+  "13.28C" and fuses "midOctober".
+- Rieman & McIntyre's "fourthorder" now matches: number words are found inside fused words.
+- Norris & Mount failed on my own lookbehind bug (see the table).
+
+The in-order table check then rejected Rebellato's Table 1 rows. Their quotes stitched the species name to
+citation lines several layout lines away. Each is now the CH row as laid out on the page,
+`Chinook 0-3 0.46-322.5 4 0-5 0.28-100 1.5`, with the cited works moved to `cited_source`.
+
+**Result.** 190 rows, gate green:
+- 141 text, 24 table, 10 OCR, 1 fuzzy OCR, 14 `none`.
+
+Mutation proof on the hardened gate:
+- a changed quote, an unknown key, a coverage gap and a value absent from its quote each turn it red;
+- of the reviewer's 8 fabrications, 7 now fail. The 8th ("2 mm < Substrate < 16 mm" on Woll p. 84) says the
+  same thing as the page's "16 mm > Substrate > 2 mm", so passing it is correct.
+
+**OCR in a sandboxed shell.** `ocrmypdf` failed here even with `TMPDIR` set to R's `tempdir()`, because that is
+under `/tmp`. Its work directory is now inside the gitignored OCR cache and is removed afterwards.
+
+**The corrected timing source (`officeofthewetsuweten2013WetsuwetenTitle`) was not a collection member.**
+`0270` added it; the collection now has 88 items. The pushed store has the other 87: no evidence row cites this
+item, so no rebuild was run for it.

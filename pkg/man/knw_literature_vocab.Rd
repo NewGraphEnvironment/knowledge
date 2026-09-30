@@ -20,6 +20,11 @@ interchangeable. \code{kind} says what sort of number a row is: a parameter
 someone chose, a habitat-suitability breakpoint, the largest value observed,
 a statistic of where fish were found, a preference, expert opinion, a
 qualitative statement, or \code{none}, a search that found nothing.
+\code{quote_source} says how a quote can be checked against its PDF: running
+\code{text}, a \code{table} cell (checked by its numbers), or \code{ocr} of a scan with no
+text layer. \code{scale} is the grain a value was measured at: a redd or
+microhabitat \code{site}, a surveyed \code{reach}, a model \code{segment}, or a \code{network}
+summary; a site value is not a reach cutoff.
 }
 \examples{
 knw_literature_vocab()$variable

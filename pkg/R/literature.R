@@ -10,6 +10,11 @@
 #' someone chose, a habitat-suitability breakpoint, the largest value observed,
 #' a statistic of where fish were found, a preference, expert opinion, a
 #' qualitative statement, or `none`, a search that found nothing.
+#' `quote_source` says how a quote can be checked against its PDF: running
+#' `text`, a `table` cell (checked by its numbers), or `ocr` of a scan with no
+#' text layer. `scale` is the grain a value was measured at: a redd or
+#' microhabitat `site`, a surveyed `reach`, a model `segment`, or a `network`
+#' summary; a site value is not a reach cutoff.
 #'
 #' @return A named `list` of `character` vectors, one per controlled column.
 #' @export
@@ -26,7 +31,9 @@ knw_literature_vocab <- function() {
     bound = c("min", "max", "range", "optimum"),
     unit = c("percent", "m bankfull", "m wetted", "m", "order", "m3/s", "ha", "km", "degC",
              "mm", "m/s", "MM-DD"),
-    kind = c("param", "hsi", "max_obs", "dist", "pref", "expert", "qual", "none")
+    kind = c("param", "hsi", "max_obs", "dist", "pref", "expert", "qual", "none"),
+    quote_source = c("text", "table", "ocr"),
+    scale = c("site", "reach", "segment", "network")
   )
 }
 
@@ -37,7 +44,15 @@ knw_literature_vocab <- function() {
 #' (`parameter`, e.g. `spawn_gradient_max`), bound, value, unit, kind, region,
 #' citation key, page and a verbatim quote. `value_min` and `value_max` are
 #' numbers written as text, or `MM-DD` for `timing`, where a range with
-#' `value_min > value_max` crosses 1 January.
+#' `value_min > value_max` crosses 1 January. Gradient is in percent, as sources
+#' write it; a model that stores gradient as a proportion divides by 100.
+#' `cited_source` names the original study when the quote is a secondary
+#' citation of it.
+#'
+#' The unit must fit the variable (percent for gradient, a width unit for
+#' channel width, and so on) and a bound must sit on its value: `min` on
+#' `value_min`, `max` on `value_max`, `range` on both. A text quote is at least
+#' 20 characters, so that a check against the PDF can tell it apart from noise.
 #'
 #' A row of kind `none` records a search that found no value: it carries a
 #' `note` saying what was searched and no value, key or quote. Every other row
@@ -51,7 +66,7 @@ knw_literature_vocab <- function() {
 #' @param species_code `character` species codes to keep, or `NULL` for all.
 #' @param variable `character` variables to keep (see [knw_literature_vocab()]),
 #'   or `NULL` for all.
-#' @return A `tibble` with the fifteen columns, all `character`.
+#' @return A `tibble` with the eighteen columns, all `character`.
 #' @export
 #' @examples
 #' path <- tempfile(fileext = ".csv")
@@ -60,7 +75,8 @@ knw_literature_vocab <- function() {
 #'   variable = "channel_width", parameter = "spawn_channel_width_min", bound = "min",
 #'   value_min = "2", value_max = NA, unit = "m wetted", kind = "expert",
 #'   region = "Parsnip, BC", citation_key = "key_a", page = "22",
-#'   quote = "No streams of <2 m wetted width were surveyed", note = NA
+#'   quote = "No streams of <2 m wetted width were surveyed", quote_source = "text",
+#'   scale = "reach", cited_source = NA, note = NA
 #' ), path, row.names = FALSE, na = "")
 #' knw_literature_read(path, species_code = "BT", variable = "channel_width")
 knw_literature_read <- function(path, species_code = NULL, variable = NULL) {
@@ -73,7 +89,7 @@ knw_literature_read <- function(path, species_code = NULL, variable = NULL) {
   }
   cols <- c("species_code", "life_stage", "life_history_form", "variable", "parameter",
             "bound", "value_min", "value_max", "unit", "kind", "region", "citation_key",
-            "page", "quote", "note")
+            "page", "quote", "quote_source", "scale", "cited_source", "note")
   x <- .knw_read_csv(path)
   chk::check_names(x, cols)
   x <- x[cols]
@@ -128,9 +144,18 @@ knw_literature_read <- function(path, species_code = NULL, variable = NULL) {
     stop("a 'none' row needs a note saying what was searched", first(none & is.na(x$note)),
          call. = FALSE)
   }
-  for (col in c("citation_key", "quote")) {
+  for (col in c("citation_key", "quote", "quote_source")) {
     miss <- !none & is.na(x[[col]])
     if (any(miss)) stop(col, " is blank on a cited row", first(miss), call. = FALSE)
+  }
+  if (any(none & !is.na(x$quote_source))) {
+    stop("a 'none' row has no quote, so no quote_source", first(none & !is.na(x$quote_source)),
+         call. = FALSE)
+  }
+  short <- !none & x$quote_source %in% "text" & nchar(x$quote) < 20
+  if (any(short)) {
+    stop("a text quote needs at least 20 characters to be checked against its PDF: ",
+         x$quote[short][1], first(short), call. = FALSE)
   }
   no_unit <- has_value & is.na(x$unit)
   if (any(no_unit)) stop("a value needs a unit", first(no_unit), call. = FALSE)
@@ -148,6 +173,23 @@ knw_literature_read <- function(path, species_code = NULL, variable = NULL) {
   if (any(unit_bad)) {
     stop("unit MM-DD belongs to timing rows only", first(unit_bad), call. = FALSE)
   }
+
+  fits <- list(gradient = "percent", channel_width = c("m bankfull", "m wetted", "m"),
+               stream_order = "order", discharge = "m3/s", lake_area = "ha", wetland_area = "ha",
+               bridge_distance = c("km", "m"), temperature = "degC", substrate = "mm", depth = "m",
+               velocity = "m/s", timing = "MM-DD")
+  misfit <- !is.na(x$unit) & !mapply(function(v, u) u %in% fits[[v]], x$variable, x$unit)
+  if (any(misfit)) {
+    stop("unit ", x$unit[misfit][1], " does not fit variable ", x$variable[misfit][1],
+         first(misfit), call. = FALSE)
+  }
+  need <- list(min = "value_min", max = "value_max")
+  for (b in names(need)) {
+    off <- x$bound %in% b & is.na(x[[need[[b]]]])
+    if (any(off)) stop("bound ", b, " needs ", need[[b]], first(off), call. = FALSE)
+  }
+  off <- x$bound %in% "range" & (is.na(x$value_min) | is.na(x$value_max))
+  if (any(off)) stop("bound range needs both value_min and value_max", first(off), call. = FALSE)
 
   num <- lapply(c("value_min", "value_max"), function(col) {
     v <- x[[col]]

@@ -15,7 +15,7 @@ knw_literature_read(path, species_code = NULL, variable = NULL)
 or \code{NULL} for all.}
 }
 \value{
-A \code{tibble} with the fifteen columns, all \code{character}.
+A \code{tibble} with the eighteen columns, all \code{character}.
 }
 \description{
 One row per value a source gives for a habitat variable: species, life
@@ -23,9 +23,17 @@ stage, life-history form, variable, the model parameter it bears on
 (\code{parameter}, e.g. \code{spawn_gradient_max}), bound, value, unit, kind, region,
 citation key, page and a verbatim quote. \code{value_min} and \code{value_max} are
 numbers written as text, or \code{MM-DD} for \code{timing}, where a range with
-\code{value_min > value_max} crosses 1 January.
+\code{value_min > value_max} crosses 1 January. Gradient is in percent, as sources
+write it; a model that stores gradient as a proportion divides by 100.
+\code{cited_source} names the original study when the quote is a secondary
+citation of it.
 }
 \details{
+The unit must fit the variable (percent for gradient, a width unit for
+channel width, and so on) and a bound must sit on its value: \code{min} on
+\code{value_min}, \code{max} on \code{value_max}, \code{range} on both. A text quote is at least
+20 characters, so that a check against the PDF can tell it apart from noise.
+
 A row of kind \code{none} records a search that found no value: it carries a
 \code{note} saying what was searched and no value, key or quote. Every other row
 needs a \code{citation_key} and a \code{quote}. A row with a value needs a \code{unit}.
@@ -41,7 +49,8 @@ utils::write.csv(data.frame(
   variable = "channel_width", parameter = "spawn_channel_width_min", bound = "min",
   value_min = "2", value_max = NA, unit = "m wetted", kind = "expert",
   region = "Parsnip, BC", citation_key = "key_a", page = "22",
-  quote = "No streams of <2 m wetted width were surveyed", note = NA
+  quote = "No streams of <2 m wetted width were surveyed", quote_source = "text",
+  scale = "reach", cited_source = NA, note = NA
 ), path, row.names = FALSE, na = "")
 knw_literature_read(path, species_code = "BT", variable = "channel_width")
 }

@@ -24,7 +24,10 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
 - `data/<wsg>/` — per-group snapshots (csv/md) and small spatial deliverables (gpkg/kml). Tracked.
 - `data/` root — cross-group tier: `corpus_tags.csv`, `priority_farmed_all.csv`,
   `zotero_key_map.csv`, `rag_priorities.{gpkg,kml}`, `life_history_timing.csv` (seeded by `0260`,
-  then hand-edited; read with `knw_timing_read()`).
+  then hand-edited; read with `knw_timing_read()`), `literature_evidence.csv` (cited habitat-threshold
+  values with verbatim quotes, read with `knw_literature_read()`, gated by `0280`), and
+  `habitat_modelling_{members,additions}.csv` (what `0270` puts in the group's `Fisheries/habitat_modelling`
+  collection, which with the species collections feeds the `habitat_modelling` store).
 - `data/rag/` — ignored local cache of the ragnar stores. Source of truth is `s3://fresh-bc/rag/`.
 
 ## One discipline

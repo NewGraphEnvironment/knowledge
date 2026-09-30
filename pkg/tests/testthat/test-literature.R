@@ -14,8 +14,11 @@ literature_fixture <- function() {
     region            = c("Interior Columbia", "Puget Sound", "Parsnip, BC", "Morice, BC", NA),
     citation_key      = c("key_a", "key_b", "key_c", "key_d", NA),
     page              = c("C-7", NA, "22", "14", NA),
-    quote             = c("gradients above 5% were also excluded", "steeper than 6.5%",
+    quote             = c("gradients above 5% were also excluded", "channels steeper than 6.5% did not have",
                           "less than 2 m wetted width", "spawn from late August", NA),
+    quote_source      = c("text", "text", "text", "table", NA),
+    scale             = c("reach", NA, "reach", NA, NA),
+    cited_source      = c(NA, NA, NA, NA, NA),
     note              = c(NA, NA, NA, NA, "no source starts spawning habitat above 0 %")
   )
 }
@@ -59,7 +62,8 @@ test_that("a missing column is refused", {
 
 test_that("each controlled column refuses a value outside its vocabulary", {
   cases <- list(life_stage = "Spawning", life_history_form = "anadromous",
-                variable = "slope", bound = "upper", kind = "HSI", unit = "feet")
+                variable = "slope", bound = "upper", kind = "HSI", unit = "feet",
+                quote_source = "memory", scale = "planet")
   for (col in names(cases)) {
     x <- literature_fixture()
     x[[col]][1] <- cases[[col]]
@@ -129,7 +133,8 @@ test_that("whitespace-only cells read as NA, and a BOM does not break the header
 
 test_that("the vocabularies are exported and the stages extend the timing stages", {
   v <- knw_literature_vocab()
-  expect_true(all(c("life_stage", "life_history_form", "variable", "bound", "unit", "kind") %in% names(v)))
+  expect_true(all(c("life_stage", "life_history_form", "variable", "bound", "unit", "kind",
+                    "quote_source", "scale") %in% names(v)))
   expect_true(all(knw_timing_stages() %in% v$life_stage))
   expect_true("access" %in% v$life_stage)
 })
@@ -159,4 +164,35 @@ test_that("non-ASCII UTF-8 in a quote is read intact", {
   x$quote[1] <- "gradients ≥ 5 % at 12 °C"
   out <- knw_literature_read(write_literature(x))
   expect_equal(out$quote[1], "gradients ≥ 5 % at 12 °C")
+})
+
+test_that("a unit that does not fit the variable is refused", {
+  x <- literature_fixture()
+  x$unit[1] <- "m"
+  expect_error(knw_literature_read(write_literature(x)), "unit m.*gradient")
+})
+
+test_that("a bound must sit on the value it bounds", {
+  x <- literature_fixture()
+  x$value_min[1] <- "5"
+  x$value_max[1] <- NA
+  expect_error(knw_literature_read(write_literature(x)), "bound max.*value_max")
+  x <- literature_fixture()
+  x$value_max[4] <- NA
+  expect_error(knw_literature_read(write_literature(x)), "bound range.*both")
+})
+
+test_that("a cited row says where its quote came from, and a 'none' row does not", {
+  x <- literature_fixture()
+  x$quote_source[2] <- NA
+  expect_error(knw_literature_read(write_literature(x)), "quote_source")
+  x <- literature_fixture()
+  x$quote_source[5] <- "text"
+  expect_error(knw_literature_read(write_literature(x)), "none.*quote_source")
+})
+
+test_that("a text quote shorter than 20 characters is refused as unverifiable", {
+  x <- literature_fixture()
+  x$quote[2] <- "under 6.5%"
+  expect_error(knw_literature_read(write_literature(x)), "quote.*20 characters")
 })

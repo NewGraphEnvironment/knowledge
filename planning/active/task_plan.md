@@ -111,11 +111,11 @@ collection itself.
 - [x] `ACTION=push CONFIRM=TRUE`, then a verified connect confirms the md5 matches the manifest.
 
 ## Phase 4: Evidence table
-- [ ] *(From plan review, Ord4)* Write `scripts/0280-literature-verify.R` first, then port rows against it.
-- [ ] Port link's `literature.md` §0–§2 into `data/literature_evidence.csv`, keeping quotes verbatim. Its "none
+- [x] *(From plan review, Ord4)* Write `scripts/0280-literature-verify.R` first, then port rows against it.
+- [x] Port link's `literature.md` §0–§2 into `data/literature_evidence.csv`, keeping quotes verbatim. Its "none
   found" findings become `kind = none` rows.
-- [ ] Add the template CSV's CH rows where the key resolves and they are not already covered.
-- [ ] Gap-fill, searching the group library first (store query plus full text), with one row per parameter at
+- [x] Add the template CSV's CH rows where the key resolves and they are not already covered.
+- [x] Gap-fill, searching the group library first (store query plus full text), with one row per parameter at
   minimum (a value or a `none` row saying what was searched):
   - discharge (MAD);
   - lake/wetland size;
@@ -125,9 +125,10 @@ collection itself.
   - BT resident/fluvial/adfluvial and CH stream-/ocean-type.
 
   Read-only agents, 2–3 at once split by variable group, may locate candidates. Every row passes the gate below.
-- [ ] *(From plan review, Ord2)* Final rebuild and push of the store after gap-fill, so every evidence key is in it.
-- [ ] Timing rows for CH and BT per stage; fill unsourced `life_history_timing.csv` rows per Decision 5.
-- [ ] `scripts/0280-literature-verify.R`, a gate:
+- [x] *(From plan review, Ord2)* Final rebuild and push of the store after gap-fill, so every evidence key is in it.
+  *(Not needed: all 47 evidence keys are already in the pushed store, checked by mapping store origins to keys.)*
+- [x] Timing rows for CH and BT per stage; fill unsourced `life_history_timing.csv` rows per Decision 5.
+- [x] `scripts/0280-literature-verify.R`, a gate:
   - every row reads through `knw_literature_read()`;
   - every key resolves in Zotero;
   - every quote is found (whitespace- and hyphenation-normalized) in the PDF text via `crd_zot_src_lookup()` +
@@ -137,13 +138,13 @@ collection itself.
   `scripts/logs/habitat/`. Test the gate by mutating one quote and watching it go red.
 
 ## Phase 5: Wiring
-- [ ] `scripts/README.md`: run order plus a `0270`/`0280` section and the `0150` scoping note. `CLAUDE.md` data
+- [x] `scripts/README.md`: run order plus a `0270`/`0280` section and the `0150` scoping note. `CLAUDE.md` data
   tier: add `literature_evidence.csv` and the `habitat_modelling` store.
 - [ ] Comment on link#284 pointing to the table as an input, with what it adds beyond `literature.md`.
 
 ## Validation
-- [ ] Tests pass; restore one validator and see its test go red
-- [ ] `0280` gate green; a mutated quote goes red
+- [x] Tests pass; restore one validator and see its test go red
+- [x] `0280` gate green; a mutated quote goes red
 - [ ] `/code-check` clean on each commit
 - [ ] PWF checkboxes match landed work
 - [ ] `/planning-archive` with `Measurement` (rows by variable and kind, verified/unverifiable counts, store docs
