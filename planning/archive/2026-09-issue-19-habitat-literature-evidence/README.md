@@ -65,7 +65,7 @@ What was learned about the machinery:
   - Phase 1 (2 rounds): a UTF-8 truncation bug in both readers, and a line-number claim fixed inside its own fix.
   - Phase 2 (2 rounds): 5 latent `0270` issues, then a snapshot guard that was blind under exclusive locking.
     The fix was proved by a raced copy.
-- **Subagent spend:** 12 in total. 1 plan review, 8 code-check rounds and 3 evidence drafters.
+- **Subagent spend:** 10 in total: 1 plan review, 6 code-check rounds (2 per phase) and 3 evidence drafters.
 
 ## Evidence
 
