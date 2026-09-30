@@ -69,20 +69,20 @@ collection itself.
    - `region`, `citation_key`, `page`, `quote`, `note`.
 
 ## Phase 1: Issue body, reader (tests first), store-script scoping
-- [ ] Edit #19's body:
+- [x] Edit #19's body:
   - link#284's `literature.md` is the primary seed;
   - the collection is `Fisheries/habitat_modelling`;
   - the group-library inventory above;
   - the decisions.
-- [ ] `pkg/tests/testthat/test-literature.R`:
+- [x] `pkg/tests/testthat/test-literature.R`:
   - filters by species and variable;
   - refuses: an off-vocabulary variable, stage, form or kind; a non-numeric value on a non-timing row; a bad
     `MM-DD` on a timing row; `value_min > value_max`; missing columns; a blank quote or key (except `kind = none`);
   - a zero-row filter returns a typed empty frame.
-- [ ] `pkg/R/literature.R`: `knw_literature_read(path, species_code = NULL, variable = NULL)` plus the vocabulary
+- [x] `pkg/R/literature.R`: `knw_literature_read(path, species_code = NULL, variable = NULL)` plus the vocabulary
   functions. Same style as `knw_timing_read()`. Roxygen with a runnable `@examples`, `document()`, and the
   DESCRIPTION line.
-- [ ] `scripts/0150-store.R`: scope `collection_keys()` to the group library (`groups.groupID = 4733734`), and
+- [x] `scripts/0150-store.R`: scope `collection_keys()` to the group library (`groups.groupID = 4733734`), and
   accept an 8-character collection key as well as a name. This resolves the `habitat_modelling` clash with library
   1 and the duplicate `hydrology`/`salmon`. Duplicates within the group library are still refused by name.
 
@@ -100,7 +100,7 @@ collection itself.
 - [ ] Log to `scripts/logs/habitat/`: members by source, PDFs uploaded, re-parented items, gap items and their keys.
 
 ## Phase 3: Store
-- [ ] `ACTION=build STORE=habitat_modelling COLLECTIONS="habitat_modelling,chinook,bull_trout,species,temperature,wedzin_kwa_chinook,X29BX4U8,JI7EBZNF,W4425VK5,545K8HP4"`.
+- [ ] `ACTION=build STORE=habitat_modelling COLLECTIONS="habitat_modelling,chinook,bull_trout,species,temperature,wedzin_kwa_chinook,X29BX4U8,W4425VK5,545K8HP4"`.
   Record the key count and the members with no PDF.
 - [ ] Spot-query it (a gradient, a width, a temperature and a timing question) and confirm the hits come from the
   expected keys.

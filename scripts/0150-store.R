@@ -5,6 +5,8 @@
 # Zotero Web API), 0155 (query) and 0157 (push/pull with log.json).
 #
 #   ACTION=build STORE=peace COLLECTIONS="pine - PINE,peace arm - PCEA"  Rscript scripts/0150-store.R
+#   (COLLECTIONS takes names or 8-character Zotero keys, resolved in the NGE group
+#    library only; GROUP_ID= for another group. An ambiguous name is refused.)
 #   ACTION=query STORE=fraser QUERY="beaver dam culvert" TOPK=5           Rscript scripts/0150-store.R
 #   (query opens an existing local store unverified; VERIFY=TRUE re-checks it
 #    against the manifest and REPLACES it if the md5 differs. Set AWS_PROFILE
@@ -35,39 +37,53 @@ stopifnot("STORE=<name> is required" = nzchar(store))
 store_path <- file.path("data", "rag", paste0(store, ".duckdb"))
 dir.create(dirname(store_path), recursive = TRUE, showWarnings = FALSE)
 
-# Citation keys of every item with a PDF attachment in the named collections,
-# from the local Zotero database. Same join cred uses for one collection.
-collection_keys <- function(collections, zotero_dir = "~/Zotero") {
+# Citation keys of every item with a PDF attachment in the given collections,
+# from the local Zotero database. Collections are resolved inside ONE library
+# (the NGE group by default; GROUP_ID= to change it), by name or by their
+# 8-character Zotero key. The same name appears in several libraries (a personal
+# `habitat_modelling` beside the group's) and more than once in one library
+# (`hydrology`, `salmon`), and IN (...) on the name would silently union them;
+# an ambiguous name is refused and its keys are printed, so pass a key instead.
+# Collections in the Zotero trash are not candidates.
+collection_keys <- function(collections, zotero_dir = "~/Zotero",
+                            group_id = Sys.getenv("GROUP_ID", "4733734")) {
   db <- file.path(path.expand(zotero_dir), "zotero.sqlite")
   stopifnot("zotero.sqlite not found; sync Zotero on this machine" = file.exists(db))
   con <- DBI::dbConnect(RSQLite::SQLite(), paste0("file:", db, "?mode=ro&immutable=1"))
   on.exit(DBI::dbDisconnect(con), add = TRUE)
+  lib <- DBI::dbGetQuery(con, "SELECT libraryID FROM groups WHERE groupID = ?",
+                         params = list(as.integer(group_id)))$libraryID
+  if (length(lib) != 1) stop("Zotero group ", group_id, " is not in this Zotero database")
+  colls <- DBI::dbGetQuery(con, "
+    SELECT c.collectionID, c.key, c.collectionName, p.collectionName AS parent
+    FROM collections c LEFT JOIN collections p ON p.collectionID = c.parentCollectionID
+    LEFT JOIN deletedCollections dc ON dc.collectionID = c.collectionID
+    WHERE c.libraryID = ? AND dc.collectionID IS NULL", params = list(lib))
+  ids <- vapply(collections, function(x) {
+    hit <- colls[colls$collectionName == x | colls$key == x, ]
+    if (nrow(hit) == 0) stop("No collection named or keyed '", x, "' in group ", group_id)
+    if (nrow(hit) > 1) stop("Collection '", x, "' is ambiguous in group ", group_id, ": ",
+      paste(sprintf("%s (key %s, in %s)", hit$collectionName, hit$key,
+                    ifelse(is.na(hit$parent), "top level", hit$parent)), collapse = "; "),
+      "\n  Pass the key instead of the name.")
+    hit$collectionID
+  }, numeric(1))
   sql <- sprintf("
-    SELECT DISTINCT c.collectionName AS collection, idv.value AS citation_key
-    FROM collections c
-    JOIN collectionItems ci ON ci.collectionID = c.collectionID
+    SELECT DISTINCT ci.collectionID, idv.value AS citation_key
+    FROM collectionItems ci
     JOIN items           i  ON i.itemID        = ci.itemID
     JOIN itemData        id ON id.itemID       = i.itemID
     JOIN itemDataValues idv ON id.valueID      = idv.valueID
     JOIN fields          f  ON id.fieldID      = f.fieldID
     JOIN itemAttachments ia ON ia.parentItemID = i.itemID
     LEFT JOIN deletedItems dd ON dd.itemID = i.itemID
+    LEFT JOIN deletedItems da ON da.itemID = ia.itemID
     WHERE f.fieldName = 'citationKey'
       AND ia.contentType = 'application/pdf'
-      AND dd.itemID IS NULL
-      AND c.collectionName IN (%s)",
-    paste(sprintf("'%s'", gsub("'", "''", collections)), collapse = ", "))
-  # Zotero allows the same collection name in several libraries (and several
-  # times in one); IN (...) would silently union them. Refuse the ambiguity.
-  dup <- DBI::dbGetQuery(con, sprintf(
-    "SELECT collectionName, count(*) AS n, group_concat(libraryID) AS libraries
-     FROM collections WHERE collectionName IN (%s) GROUP BY collectionName HAVING count(*) > 1",
-    paste(sprintf("'%s'", gsub("'", "''", collections)), collapse = ", ")))
-  if (nrow(dup)) stop("Collection name is not unique in this Zotero database: ",
-    paste(sprintf("%s (x%d, libraries %s)", dup$collectionName, dup$n, dup$libraries), collapse = "; "),
-    "\n  Rename the collection in Zotero or pass citation keys.")
+      AND dd.itemID IS NULL AND da.itemID IS NULL
+      AND ci.collectionID IN (%s)", paste(ids, collapse = ", "))
   res <- DBI::dbGetQuery(con, sql)
-  missing <- setdiff(collections, unique(res$collection))
+  missing <- collections[!ids %in% res$collectionID]
   if (length(missing)) stop("No keyed PDF items in collection(s): ", paste(missing, collapse = ", "))
   message(sprintf("%d keys across %d collections", length(unique(res$citation_key)), length(collections)))
   unique(res$citation_key)

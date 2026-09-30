@@ -191,3 +191,11 @@ test_that("a no-break space counts as blank", {
   utils::write.csv(x, p, row.names = FALSE, na = "", fileEncoding = "UTF-8")
   expect_error(knw_timing_read(p), "no wsg_code or species_code")
 })
+
+test_that("a file that is not UTF-8 is refused, not read as a truncated table", {
+  p <- write_fixture()
+  lines <- readLines(p)
+  lines[3] <- sub("key_b", "key_b \xb0", lines[3], useBytes = TRUE)
+  writeLines(lines, p, useBytes = TRUE)
+  expect_error(knw_timing_read(p), "not valid UTF-8")
+})

@@ -7,8 +7,9 @@ Authors@R: c(
 Description: Functions for assembling fisheries background per watershed group:
     pulling provincial PSCIS crossing layers clipped to a group, deriving the
     past-report and crossing tables from them, and checking GNIS stream names
-    for cross-group collisions before searching by name, and reading the
-    life-history timing table by group and species.
+    for cross-group collisions before searching by name, reading the
+    life-history timing table by group and species, and reading the cited
+    literature evidence for habitat variables by species.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
