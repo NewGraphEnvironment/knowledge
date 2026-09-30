@@ -9,6 +9,15 @@ The table is the record; this file keeps the conclusions someone would otherwise
 statement below has a gated row (a verbatim quote found in the cited PDF) or a `none` row saying what was
 searched.
 
+## What these thresholds are
+
+The channel-width and gradient thresholds in bcfishpass's `example_newgraph` parameters are ours.
+They are the ones the province uses, and they are set on the inclusive side on purpose: they exist
+to describe opportunities and navigate to sites for review across many watersheds, not to draw the
+edge of habitat. This work tunes them against literature, observations, logic and statistics, and
+that tuning is ongoing. A value with no literature source is not wrong for that reason; it has to
+be judged by how well it screens.
+
 ## Where the modelled values come from
 
 Most CH values in bcfishpass and link trace to one document, Rebellato et al. 2024 (Canadian Wildlife Federation),
@@ -17,11 +26,11 @@ Table 1 (p. 6). Tracing each value back through it:
 | Parameter (CH) | Model value | What the sources support |
 |---|---|---|
 | `spawn_gradient_max` | 0.0449 | Rebellato gives 0–3 %, citing Busch 2013 and Cooney & Holzer 2006. Neither says 3 %: Busch scores 4–7 % at 0.05 and 0 above 7 %, and Cooney & Holzer exclude > 5 % (C-8) and rate > 7 % None (Table C-1). Montgomery 1999 puts the Chinook zone at < 1 %. |
-| `spawn_channel_width_min` | 4 m | Uncited in Rebellato. It matches Woll 2017 Table 16, "Channel size < 4m" = Not Suitable. Cooney & Holzer give BF < 3.7 m = None. |
+| `spawn_channel_width_min` | 4 m | Uncited in Rebellato. There, modelled channel width (Thorley et al. 2021, our model) is "a surrogate for discharge" wherever modelled MAD was unavailable, i.e. outside the Fraser and the Bulkley: a screening device, not a habitat limit. The field measurements that bound it are Woll 2017 Table 16, "Channel size < 4m" = Not Suitable, and Cooney & Holzer, BF < 3.7 m = None. |
 | `spawn_mad_min` | 0.46 m³/s | **No source.** Rebellato cites five works; none of them gives a discharge threshold. Bjornn & Reiser and Neuman & Newcombe were read through OCR. |
 | `rear_gradient_max` | 0.0549 | Rebellato gives 0–5 %, citing Woll 2017 and Porter 2008. **Neither states 5 %.** Woll 2015 (Mat-Su) rates juvenile CH "No potential" above 5 %. Beamer 2013 found no non-natal juveniles above 6.5 %. |
 | `rear_mad_min` | 0.28 m³/s | Agrawal et al. 2005, through Sheer et al. 2009 p. 13. |
-| `rear_channel_width_min` | 1.5 m | **No source.** Uncited in Rebellato. |
+| `rear_channel_width_min` | 1.5 m | **No source.** Uncited in Rebellato; like the spawning width, it is a discharge surrogate there. |
 | `cluster_bridge_*` | 10 km, 5 % | Rebellato p. 7, rearing criterion 4, for CH, coho and steelhead: a design rule with no literature behind it. **Nothing for BT.** |
 | `rear_lake_ha_min`, `rear_wetland_ha_min` | — | No source for CH or BT. Rebellato's ≥ 200 ha lake rule is for sockeye; its wetland rule is for coho. |
 
