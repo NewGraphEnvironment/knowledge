@@ -46,7 +46,8 @@ wf_farm_priority.js                          farm priority/crossing tables out o
 --- Habitat literature (independent of the watershed-group flow) ---
 0270  build the group's Fisheries/habitat_modelling collection   --dry-run first, then live
 0150  ACTION=build STORE=habitat_modelling COLLECTIONS="U9ZCZ6RN,chinook,bull_trout,..."  then ACTION=push
-0280  verify data/literature_evidence.csv against its PDFs (gate; read with knw_literature_read())
+0280  verify data/literature_evidence.csv and data/ip_model_registry.csv against their PDFs, and the
+      model_id link between them (gate; read with knw_literature_read() / knw_ip_read())
 ```
 
 ## Report discovery — four axes
@@ -322,11 +323,18 @@ The cited basis for CH and BT habitat thresholds (#19). Not per watershed group.
   by `0150`. Wait for Zotero to sync `0270`'s writes, and check that the files are on disk, before building.
 - `data/literature_evidence.csv` has one row per value a source gives: species, stage, form, variable, the
   model parameter it bears on, bound, value, unit, kind, region, key, page, verbatim quote, `quote_source`,
-  scale and cited source. `kind = none` records a search that found nothing. Gradient is in percent.
+  scale, cited source and `model_id`. `kind = none` records a search that found nothing. Gradient is in percent.
+- `data/ip_model_registry.csv` has one row per intrinsic-potential model × species × stage. It records how the
+  model sizes streams (`flow_metric`, `flow_source`, `flow_inputs`, `flow_surrogate`), its valley-confinement
+  variable, and its validation; its flow claim and any validation claimed are each quoted. It holds no
+  threshold values: a model's thresholds are the evidence rows carrying its `model_id`.
 - `0280` is the gate. Every key must name one live item in the group library with a PDF on disk. Every quote
   must be found in that PDF: normalized text, the numbers of a table cell on one page, or an OCR of a scan,
-  cached in `data/rag/ocr/`. Every timing-table source must resolve, and every CH/BT × parameter cell in its
-  `COVERAGE` list must have a row. `EVIDENCE=` and `LOG=` check a draft without touching the committed log.
+  cached in `data/rag/ocr/`. Registry quotes (flow and validation) are checked the same way. The `model_id`
+  link must hold both ways on model × species × stage × life-history form: no tagged evidence row without a registry row, and no
+  registry row without a tagged evidence row. Every timing-table source must resolve, and every species ×
+  parameter cell in its `COVERAGE` list must have a row. `EVIDENCE=`, `REGISTRY=` and `LOG=` check drafts
+  without touching the committed logs.
 - Logs: `scripts/logs/habitat/`.
 
 <br>

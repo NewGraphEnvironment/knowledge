@@ -133,18 +133,18 @@ What exploration found (2026-10-01, m1):
 
   Each drafter writes a CSV into `planning/active/`, and I merge them. Every row must pass the gate; none is
   hand-waved.
-- [ ] Gate green. Commit the dated `*_literature_verify.csv` log.
+- [x] Gate green. Commit the dated `*_literature_verify.csv` log.
 
 ## Phase 4: Flow finding and docs
-- [ ] New `research/ip_models.md`. It holds:
+- [x] New `research/ip_models.md`. It holds:
   - per-model flow metric and source (from the registry);
   - whether any model needed gauged or modelled discharge, or got by on drainage area, precipitation or
     width;
   - validation outcomes;
   - species with no IP model (RB, WCT, GR), with what was searched;
   - the implication for link#286 (Skeena, Nass, Stikine and coast have no modelled MAD).
-- [ ] An index row in `research/README.md`. A short pointer from `research/habitat_literature.md`.
-- [ ] `CLAUDE.md` data-root bullet for `ip_model_registry.csv`. `scripts/README.md`: the 0280 line (:49)
+- [x] An index row in `research/README.md`. A short pointer from `research/habitat_literature.md`.
+- [x] `CLAUDE.md` data-root bullet for `ip_model_registry.csv`. `scripts/README.md`: the 0280 line (:49)
   and the "CH/BT × parameter" wording (:326-329). `research/habitat_literature.md`: the title and the
   header line (review G13).
 - [ ] A cross-repo pointer comment on link#286 linking the research file.

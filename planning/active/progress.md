@@ -80,3 +80,12 @@
     - notes checked mechanically against `validation` and form (clean);
     - every registry text shared across species checked for species-specific claims (only Woll's, now
       true of each row).
+- Phase 3 committed as 1084630. `R CMD check` 0/0/1 (the NOTE is the clock).
+- Phase 4:
+  - docs written: `research/ip_models.md`, index row, `habitat_literature.md` pointer, `CLAUDE.md`,
+    `scripts/README.md`;
+  - fact-checked by one reviewer against the CSVs, 0280, findings and PDFs (`review-p4-round1.md`):
+    14 errors, all fixed. Overstated claims ("every claim quoted", "holds no numbers", "only in reference
+    lists"), a coho barrier filed under rearing, CH width minima omitted, RB wrongly listed as having no
+    model, and the cw/mad comparison regions;
+  - one round only, for a prose-only commit; reported in the PR.
