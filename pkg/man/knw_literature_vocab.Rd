@@ -17,7 +17,8 @@ fluvial and adfluvial bull trout; \code{migratory} is for a source that says
 "migratory" without separating fluvial from adfluvial. US units (\code{cfs},
 \code{mi2}, \code{ft}) are kept as the source wrote them. Width units say
 which width a source measured, because bankfull and wetted width are not
-interchangeable. \code{kind} says what sort of number a row is: a parameter
+interchangeable. \code{parameter} is the habitat-model parameter a row bears on,
+one of the model's own names, or blank. \code{kind} says what sort of number a row is: a parameter
 someone chose, a habitat-suitability breakpoint, the largest value observed,
 a statistic of where fish were found, a preference, expert opinion, a
 qualitative statement, or \code{none}, a search that found nothing.

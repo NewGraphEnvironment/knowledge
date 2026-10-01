@@ -88,6 +88,39 @@ an `access` registry row.
 - copied 1, created 3, collection now 92 members (77 with PDF);
 - every new item synced with a BBT key and a PDF on disk within about 2 minutes, with no Zotero restart.
 
+## Phase 3: drafting and merge
+
+Three drafters, briefed by `drafter-brief.md`, each produced a family's rows and gated them on a merged copy
+with a frozen gate. Their notes, with the flow finding per model, are `draft-{ow,ca,nb}-notes.md`. Their CSVs
+were merged into `data/` by the scratch `merge_drafts.py` and then deleted.
+
+Corrections made at merge, each checked against the PDF:
+- **Bjorkstedt 2005's fall-Chinook spawning curves are its own.** The CH spawning rows (the 50 m3/s
+  discharge breakpoint and a valley `qual` row) moved from `agrawal2005` to a new `bjorkstedt2005`, with
+  its own registry row. Evidence p. 89: "identical to that used for coho salmon and steelhead (Burnett et al.,
+  2003; Agrawal et al., 2005), except that we used habitat suitability curves designed to capture the
+  characteristics of areas in which fall-run Chinook salmon typically spawn". Its flow quote is on p. 32.
+- **`busch_nwfsc` and `bartz2006` exist only in Sheer's secondary account**, which names bankfull width but
+  not how it was obtained. The drafter had inferred `modelled`. A new `flow_source` value, `unstated`,
+  records what the source says instead of a guess.
+- **Three CO/ST coverage cells had no rows.** CO lake, ST lake and ST wetland got `none` rows after a grep
+  of all 13 model texts: every lake-size rule is sockeye's, and the one wetland rule (Rebellato p. 7) is
+  coho's with no size.
+
+Kept as the drafters chose (judgement, recorded):
+- **Gradient curve end as access.** Burnett's 7 %/10 % and Agrawal's 7/8/12 % are both rearing-curve ends
+  and `access_gradient_max`. Agrawal (PDF p. 13) says the curve's top "defines the range of accessible
+  habitat".
+- **Woll 2015 and 2017 are two models:** different basins, variables and stages.
+- **Porter 2008 is registered** with its CART capacity rules as `hsi` rows. Its `dist` rows 42-44 are
+  untagged, and new `hsi` rows restate them.
+- **Rebellato SK rearing has `flow_metric = none`.** Its only rule is the ≥200 ha lake.
+
+Vocabulary gaps met, not widened, and recorded in the notes:
+- `lake_area` takes ha only, so Woll's km2 lake rules are `qual` rows.
+- There is no stream-order flow metric, so Woll 2017 rearing is `none`.
+- Turbidity, glacial influence, floodplain width and obstacle height have no variable.
+
 ## Machine notes
 
 - `pgrep -l Zotero` misses the process (it is named `zotero`), so use `pgrep -il zotero`.

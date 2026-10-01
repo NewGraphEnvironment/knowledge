@@ -7,7 +7,8 @@
 #' "migratory" without separating fluvial from adfluvial. US units (`cfs`,
 #' `mi2`, `ft`) are kept as the source wrote them. Width units say
 #' which width a source measured, because bankfull and wetted width are not
-#' interchangeable. `kind` says what sort of number a row is: a parameter
+#' interchangeable. `parameter` is the habitat-model parameter a row bears on,
+#' one of the model's own names, or blank. `kind` says what sort of number a row is: a parameter
 #' someone chose, a habitat-suitability breakpoint, the largest value observed,
 #' a statistic of where fish were found, a preference, expert opinion, a
 #' qualitative statement, or `none`, a search that found nothing.
@@ -29,6 +30,10 @@ knw_literature_vocab <- function() {
     variable = c("gradient", "channel_width", "stream_order", "discharge", "lake_area",
                  "wetland_area", "bridge_distance", "temperature", "substrate", "depth",
                  "velocity", "timing", "valley_width_index", "drainage_area"),
+    parameter = c("spawn_gradient_max", "spawn_gradient_min", "spawn_channel_width_min",
+                  "spawn_mad_min", "rear_gradient_max", "rear_channel_width_min", "rear_mad_min",
+                  "rear_mad_max", "rear_lake_ha_min", "rear_wetland_ha_min", "access_gradient_max",
+                  "cluster_bridge_gradient", "cluster_bridge_distance"),
     bound = c("min", "max", "range", "optimum"),
     unit = c("percent", "m bankfull", "m wetted", "m", "order", "m3/s", "ha", "km", "degC",
              "mm", "m/s", "MM-DD", "ratio", "km2", "cfs", "mi2", "ft"),

@@ -142,6 +142,13 @@ test_that("separators alone are no input: blank on read, so a 'none' flow stays 
   expect_true(is.na(out$flow_inputs[4]))
 })
 
+test_that("a flow source a secondary account does not state is 'unstated', with no inputs", {
+  x <- ip_fixture()
+  x$flow_source[1] <- "unstated"
+  x$flow_inputs[1] <- NA
+  expect_equal(knw_ip_read(write_ip(x))$flow_source[1], "unstated")
+})
+
 test_that("a surrogate differs from the metric it stands in for", {
   x <- ip_fixture()
   x$flow_surrogate[1] <- "mean_annual_flow"

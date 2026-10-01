@@ -45,3 +45,38 @@
   - Store rebuilt (14:36–15:06 UTC, about 30 min, 8 workers): 207 documents, 35,130 chunks.
   - Spot queries return Lindley and Burnett first for their topics.
   - Pushed, and md5 `2f8fd201390b0f64b074a84b313d84e4` matched by a verified connect.
+- Phase 3:
+  - Three drafters (ow, ca, nb), each on a frozen gate copy; merged by `merge_drafts.py`. Corrected at merge:
+    - `bjorkstedt2005` split out;
+    - `unstated` added as a `flow_source`;
+    - three CO/ST `none` rows written.
+  - `COVERAGE` now CH, BT, CO, ST.
+  - Gate: 481 evidence rows, 81 registry rows, 117 quotes, links green both ways, coverage 48 of 48.
+- Phase 3 `/code-check`, three rounds (`review-p3-round{1a,1b,2,3}.md`), all meaning audits of every in-scope
+  row against the PDF:
+  - **Round 1** (two reviewers in parallel): 12 findings, all fixed.
+    - Rebellato's "not validated" was read off the lateral-habitat sentence (my seed-row error).
+    - Porter's cross-validation was pruning, not validation.
+    - Two superseded Cooney ratings were tagged.
+    - Boughton's summer flow sat under the MAD parameters.
+    - `busch_nwfsc` form was too narrow.
+    - Stale notes, and two false search claims in `none` notes.
+    - Plus 26 interior breakpoints that carried `bound` as if they were limits.
+  - **Round 2:** 6 findings, 3 of them inside round-1 fixes, all fixed.
+    - Stale form clauses; the Bjorkstedt claim fixed in one row but not its siblings; the bound fix wrong in
+      both directions (E404 lost a real zero-edge, and 11 more interior breaks were missed).
+    - One invented parameter. `parameter` is now a controlled vocabulary in the reader, test first.
+    - Cooney's redd ANOVA is calibration (it set the final classes).
+    - Woll 2017 compared its maps with fish records.
+  - **Round 3:** 4 findings inside round-2 fixes, all fixed.
+    - Woll 2017's shared validation text claimed aerial surveys and false positives for species that have
+      none; its pink note contradicted its `none`.
+    - Ruled: Woll stays `fish_observations`, "not fully independent".
+    - Busch 2011 and BLM independence caveats added.
+  - **Ended by enumeration:**
+    - every tagged min/max row checked by keyword against its note (3 flagged, all genuine zero-edges);
+    - every registry row's validation tabulated against the rule (independent fish records = validated;
+      the data that set the classes = calibration);
+    - notes checked mechanically against `validation` and form (clean);
+    - every registry text shared across species checked for species-specific claims (only Woll's, now
+      true of each row).

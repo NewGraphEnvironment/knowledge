@@ -19,8 +19,9 @@ shares with \code{\link[=knw_literature_vocab]{knw_literature_vocab()}}.
 mean annual flow, summer low flow, channel width (bankfull or wetted; say
 which in \code{note}), drainage area, precipitation, or \code{none}: the variable the
 model's thresholds are written on. \code{flow_source} says how the model obtained
-it: \code{gauged} (measured at gauges and assigned to reaches), \code{modelled}, or
-\code{field} (measured on the ground). \code{flow_inputs} names what a modelled value
+it: \code{gauged} (measured at gauges and assigned to reaches), \code{modelled},
+\code{field} (measured on the ground), or \code{unstated}, when the only source is a
+secondary account that names the metric but not how it was obtained. \code{flow_inputs} names what a modelled value
 was built from, as a \verb{;}-separated list: \code{gauge} records, \code{drainage_area},
 \code{precipitation}, a \code{hydrologic_model}, or \code{field_measurement}s of the
 variable (field widths regressed on drainage area and precipitation are

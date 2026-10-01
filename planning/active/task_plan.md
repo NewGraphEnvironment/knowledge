@@ -114,7 +114,7 @@ What exploration found (2026-10-01, m1):
   matched by a verified connect. The same 3 keys as #19 were dropped by cred's lookup.)*
 
 ## Phase 3: Registry and threshold rows
-- [ ] Draft `data/ip_model_registry.csv`, one row per model × species × life stage, with these columns:
+- [x] Draft `data/ip_model_registry.csv`, one row per model × species × life stage, with these columns:
   - `model_id`, `model`, `region`, `species_code`, `life_stage`, `life_history_form`;
   - `flow_metric` (`mean_annual_flow`, `summer_low_flow`, `bankfull_width`, `drainage_area`,
     `precipitation`, `none`), `flow_source` (`gauged`, `modelled`, `surrogate`, `field`);
@@ -122,11 +122,11 @@ What exploration found (2026-10-01, m1):
   - `validation` (`none`, `fish_observations`, `redd_surveys`, `density`), `validation_result`,
     `validation_page`, `validation_quote`;
   - `citation_key`, `page`, `quote`, `quote_source` (the quote supports the flow claim), `note`.
-- [ ] Threshold and curve-breakpoint rows in `data/literature_evidence.csv`, tagged by `model_id`, for every
+- [x] Threshold and curve-breakpoint rows in `data/literature_evidence.csv`, tagged by `model_id`, for every
   species each registry model covers. CO and ST get their own `none` rows wherever the coverage gate
   needs one.
-- [ ] `COVERAGE$species` becomes `CH, BT, CO, ST` (moved here from Phase 1).
-- [ ] Drafting is split across 3 drafter subagents by model family:
+- [x] `COVERAGE$species` becomes `CH, BT, CO, ST` (moved here from Phase 1).
+- [x] Drafting is split across 3 drafter subagents by model family:
   - Oregon/Washington: Burnett/CLAMS, Busch, BLM/ODFW, Sheer appendices;
   - California: Agrawal/Bjorkstedt, Lindley, Boughton;
   - Interior/Alaska/BC: Cooney & Holzer, Woll, Bidlack, Rebellato.

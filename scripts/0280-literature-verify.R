@@ -56,7 +56,7 @@ evidence_path <- Sys.getenv("EVIDENCE", "data/literature_evidence.csv")
 registry_path <- Sys.getenv("REGISTRY", "data/ip_model_registry.csv")
 ocr_dir <- file.path("data", "rag", "ocr")
 COVERAGE <- list(
-  species = c("CH", "BT"),
+  species = c("CH", "BT", "CO", "ST"),
   parameter = c("spawn_gradient_max", "spawn_gradient_min", "spawn_channel_width_min",
                 "spawn_mad_min", "rear_gradient_max", "rear_channel_width_min", "rear_mad_min",
                 "rear_lake_ha_min", "rear_wetland_ha_min", "access_gradient_max",

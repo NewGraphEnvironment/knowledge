@@ -63,6 +63,7 @@ test_that("a missing column is refused", {
 
 test_that("each controlled column refuses a value outside its vocabulary", {
   cases <- list(life_stage = "Spawning", life_history_form = "anadromous",
+                parameter = "rear_gradient_min",
                 variable = "slope", bound = "upper", kind = "HSI", unit = "feet",
                 quote_source = "memory", scale = "planet")
   for (col in names(cases)) {
