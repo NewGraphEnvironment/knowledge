@@ -38,3 +38,10 @@
     - `.ip_check` has exactly one assignment to `x`, and it is returned.
   - Mutation proofs: 8 guards, all exit 1. The original 5, plus ×1000 MAD, a registry form mismatch, and
     the exponent probe.
+- Phase 1 committed dc999c7.
+- Phase 2:
+  - 0270 dry run, then live: Burnett 2007 copied from library 6; Bjorkstedt 2005, Lindley 2006 and
+    Boughton & Goslin 2006 created from the web. All four synced with keys and PDFs within about 2 min.
+  - Store rebuilt (14:36–15:06 UTC, about 30 min, 8 workers): 207 documents, 35,130 chunks.
+  - Spot queries return Lindley and Burnett first for their topics.
+  - Pushed, and md5 `2f8fd201390b0f64b074a84b313d84e4` matched by a verified connect.

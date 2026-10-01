@@ -63,6 +63,31 @@ an `access` registry row.
   (C-3): results were "Compared … against specific measures of relative abundance of spawning adults". Redd
   counts were used to set minimum widths, which is calibration, not validation (C-6).
 
+## Phase 2: candidates (Sheer 2009 Table A1, pp. 33-34, plus post-2009 work)
+
+| Model / work | Status before | Action | Group key after |
+|---|---|---|---|
+| Burnett 2007 (CLAMS, CO/ST) | library 6 only | copied by `0270` members | `burnett_etal2007DISTRIBUTIONSALMONHABITAT` (Q5393JVX) |
+| Burnett 2003 (CLAMS protected areas) | none | **skipped**: conference chapter, no PDF found on treesearch or the web; Burnett 2007 is the same model | - |
+| Agrawal 2005 (SWFSC-379) | group, PDF | already a member | `agrawal_etalPREDICTINGPOTENTIAL` |
+| Bjorkstedt 2005 (SWFSC-382) | none | web (SWFSC storage; repository.library.noaa.gov returns 403 to curl) | `bjorkstedt_etal2005analysishistorical` (JGWC6RCK) |
+| Lindley 2006 (Central Valley ST) | none | web, DOI 10.15447/sfews.2006v4iss1art3, PDF from CDFW | `lindley_etal2006HistoricalPopulation` (WUJDKFCC) |
+| Boughton & Goslin 2006 (SWFSC-391) | none | web (SWFSC storage) | `boughton_goslin2006Potentialsteelhead` (XPR8CJ7K) |
+| Cooney & Holzer 2006 (ICTRT) | group, PDF | member | `cooney_holzer2006AppendixInterior` |
+| Busch 2011 / "2013" | group, PDF | member; library 6's 2013 item is the same DOI (review B3) | `busch_etal2011LandscapeLevelModel` |
+| Woll 2015, 2017 (Mat-Su) | group, PDF | members | as before |
+| Bidlack 2014 (Copper River CH) | group, links only, no PDF in any library | **skipped**: no local PDF; not chased | - |
+| Holzer (ICTRT web page) | group, HTML snapshot | **skipped**: Cooney & Holzer appendix C carries the method | - |
+| BLM 2008 WOPR, ODFW coastal coho, NOAA Lower Columbia/Willamette/Puget Sound IP | no standalone document | covered through Sheer 2009 appendices C-E (`cited_source`) | - |
+| ODFW IP methods (`ODFW_841_3_ipmethods_v2.doc`) | none | **skipped**: a .doc, and 0270 accepts PDFs only; it documents the Burnett method | - |
+| NOAA NWFSC-128 (Myers 2015, Puget Sound ST populations) | none | **skipped**: IP used at basin scale for population delineation (80 km2 basin size), not reach thresholds | - |
+| NetMap (Benda 2007), Zimmerman & Reeves 2000, Mills 2008 | none | **skipped**: a tool, a life-history paper, a thesis-level IP-like model (review S1) | - |
+| Agency layers (ODFW, WDFW, NOAA NWFSC, CDFW) | - | **not documents**: PSMFC's StreamNet holds the ICTRT layer (sddt.psmfc.org dataset 24, method = Cooney & Holzer); the ODFW layer is Burnett's model; CDFW and NOAA SWFSC layers are Agrawal's | - |
+
+`0270` live (log `scripts/logs/habitat/20261001_habitat_collection_build.txt`):
+- copied 1, created 3, collection now 92 members (77 with PDF);
+- every new item synced with a BBT key and a PDF on disk within about 2 minutes, with no Zotero restart.
+
 ## Machine notes
 
 - `pgrep -l Zotero` misses the process (it is named `zotero`), so use `pgrep -il zotero`.

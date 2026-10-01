@@ -97,20 +97,21 @@ What exploration found (2026-10-01, m1):
   schema is exercised before bulk drafting.
 
 ## Phase 2: Collect into `Fisheries/habitat_modelling`
-- [ ] Precheck: Zotero running and synced, API key file, Ollama with `nomic-embed-text`.
-- [ ] Candidate list in `findings.md`: Sheer Table A1, the appendix C–E model lists, post-2009 work (Woll,
+- [x] Precheck: Zotero running and synced, API key file, Ollama with `nomic-embed-text`.
+- [x] Candidate list in `findings.md`: Sheer Table A1, the appendix C–E model lists, post-2009 work (Woll,
   Bidlack, Sloat, Rebellato) and the agency layers. Each candidate records its library status: group,
   dormant (#13) or absent.
-- [ ] `data/habitat_modelling_members.csv`: add the library-6 key (Burnett 2007) and any dormant-library
+- [x] `data/habitat_modelling_members.csv`: add the library-6 key (Burnett 2007) and any dormant-library
   hits. Holzer and Bidlack need a PDF only through an additions row whose metadata matches the group item
   exactly; the dry-run must say `exists` (review G9).
-- [ ] `data/habitat_modelling_additions.csv`: add the web finds with a `why`, using a DOI where there is
+- [x] `data/habitat_modelling_additions.csv`: add the web finds with a `why`, using a DOI where there is
   one. Paywalled works are noted and skipped, not chased.
-- [ ] `0270 --dry-run`, then live. Wait for the sync and confirm each new item has a key and a PDF on a
+- [x] `0270 --dry-run`, then live. Wait for the sync and confirm each new item has a key and a PDF on a
   checked copy.
-- [ ] Rebuild the `habitat_modelling` store (0150 `ACTION=build OVERWRITE=TRUE`, with the collection list
+- [x] Rebuild the `habitat_modelling` store (0150 `ACTION=build OVERWRITE=TRUE`, with the collection list
   from the #19 archive's `task_plan.md:107`). Push it with `CONFIRM=TRUE` and confirm with a verified
-  connect. Commit the log in `scripts/logs/habitat/`.
+  connect. Commit the log in `scripts/logs/habitat/`. *(207 documents, 35,130 chunks, md5 `2f8fd201…`,
+  matched by a verified connect. The same 3 keys as #19 were dropped by cred's lookup.)*
 
 ## Phase 3: Registry and threshold rows
 - [ ] Draft `data/ip_model_registry.csv`, one row per model × species × life stage, with these columns:
