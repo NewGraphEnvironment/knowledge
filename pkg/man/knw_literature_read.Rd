@@ -15,7 +15,7 @@ knw_literature_read(path, species_code = NULL, variable = NULL)
 or \code{NULL} for all.}
 }
 \value{
-A \code{tibble} with the eighteen columns, all \code{character}.
+A \code{tibble} with the nineteen columns, all \code{character}.
 }
 \description{
 One row per value a source gives for a habitat variable: species, life
@@ -26,7 +26,9 @@ numbers written as text, or \code{MM-DD} for \code{timing}, where a range with
 \code{value_min > value_max} crosses 1 January. Gradient is in percent, as sources
 write it; a model that stores gradient as a proportion divides by 100.
 \code{cited_source} names the original study when the quote is a secondary
-citation of it.
+citation of it. \code{model_id} links a row to the intrinsic-potential model it
+states a threshold of, as described in the registry read by \code{\link[=knw_ip_read]{knw_ip_read()}};
+it is blank for a row that is not a model's parameter.
 }
 \details{
 The unit must fit the variable (percent for gradient, a width unit for
@@ -50,7 +52,7 @@ utils::write.csv(data.frame(
   value_min = "2", value_max = NA, unit = "m wetted", kind = "expert",
   region = "Parsnip, BC", citation_key = "key_a", page = "22",
   quote = "No streams of <2 m wetted width were surveyed", quote_source = "text",
-  scale = "reach", cited_source = NA, note = NA
+  scale = "reach", cited_source = NA, note = NA, model_id = NA
 ), path, row.names = FALSE, na = "")
 knw_literature_read(path, species_code = "BT", variable = "channel_width")
 }

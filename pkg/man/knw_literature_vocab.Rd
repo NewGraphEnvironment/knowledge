@@ -14,7 +14,8 @@ The values each controlled column of a table read by \code{\link[=knw_literature
 may take. \code{life_stage} is \code{\link[=knw_timing_stages]{knw_timing_stages()}} plus \code{access}.
 \code{life_history_form} separates stream- and ocean-type Chinook and resident,
 fluvial and adfluvial bull trout; \code{migratory} is for a source that says
-"migratory" without separating fluvial from adfluvial. Width units say
+"migratory" without separating fluvial from adfluvial. US units (\code{cfs},
+\code{mi2}, \code{ft}) are kept as the source wrote them. Width units say
 which width a source measured, because bankfull and wetted width are not
 interchangeable. \code{kind} says what sort of number a row is: a parameter
 someone chose, a habitat-suitability breakpoint, the largest value observed,

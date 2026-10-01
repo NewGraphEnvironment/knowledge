@@ -4,7 +4,8 @@
 #' may take. `life_stage` is [knw_timing_stages()] plus `access`.
 #' `life_history_form` separates stream- and ocean-type Chinook and resident,
 #' fluvial and adfluvial bull trout; `migratory` is for a source that says
-#' "migratory" without separating fluvial from adfluvial. Width units say
+#' "migratory" without separating fluvial from adfluvial. US units (`cfs`,
+#' `mi2`, `ft`) are kept as the source wrote them. Width units say
 #' which width a source measured, because bankfull and wetted width are not
 #' interchangeable. `kind` says what sort of number a row is: a parameter
 #' someone chose, a habitat-suitability breakpoint, the largest value observed,
@@ -27,10 +28,10 @@ knw_literature_vocab <- function() {
                           "migratory"),
     variable = c("gradient", "channel_width", "stream_order", "discharge", "lake_area",
                  "wetland_area", "bridge_distance", "temperature", "substrate", "depth",
-                 "velocity", "timing"),
+                 "velocity", "timing", "valley_width_index", "drainage_area"),
     bound = c("min", "max", "range", "optimum"),
     unit = c("percent", "m bankfull", "m wetted", "m", "order", "m3/s", "ha", "km", "degC",
-             "mm", "m/s", "MM-DD"),
+             "mm", "m/s", "MM-DD", "ratio", "km2", "cfs", "mi2", "ft"),
     kind = c("param", "hsi", "max_obs", "dist", "pref", "expert", "qual", "none"),
     quote_source = c("text", "table", "ocr"),
     scale = c("site", "reach", "segment", "network")
@@ -47,7 +48,9 @@ knw_literature_vocab <- function() {
 #' `value_min > value_max` crosses 1 January. Gradient is in percent, as sources
 #' write it; a model that stores gradient as a proportion divides by 100.
 #' `cited_source` names the original study when the quote is a secondary
-#' citation of it.
+#' citation of it. `model_id` links a row to the intrinsic-potential model it
+#' states a threshold of, as described in the registry read by [knw_ip_read()];
+#' it is blank for a row that is not a model's parameter.
 #'
 #' The unit must fit the variable (percent for gradient, a width unit for
 #' channel width, and so on) and a bound must sit on its value: `min` on
@@ -66,7 +69,7 @@ knw_literature_vocab <- function() {
 #' @param species_code `character` species codes to keep, or `NULL` for all.
 #' @param variable `character` variables to keep (see [knw_literature_vocab()]),
 #'   or `NULL` for all.
-#' @return A `tibble` with the eighteen columns, all `character`.
+#' @return A `tibble` with the nineteen columns, all `character`.
 #' @export
 #' @examples
 #' path <- tempfile(fileext = ".csv")
@@ -76,7 +79,7 @@ knw_literature_vocab <- function() {
 #'   value_min = "2", value_max = NA, unit = "m wetted", kind = "expert",
 #'   region = "Parsnip, BC", citation_key = "key_a", page = "22",
 #'   quote = "No streams of <2 m wetted width were surveyed", quote_source = "text",
-#'   scale = "reach", cited_source = NA, note = NA
+#'   scale = "reach", cited_source = NA, note = NA, model_id = NA
 #' ), path, row.names = FALSE, na = "")
 #' knw_literature_read(path, species_code = "BT", variable = "channel_width")
 knw_literature_read <- function(path, species_code = NULL, variable = NULL) {
@@ -89,15 +92,10 @@ knw_literature_read <- function(path, species_code = NULL, variable = NULL) {
   }
   cols <- c("species_code", "life_stage", "life_history_form", "variable", "parameter",
             "bound", "value_min", "value_max", "unit", "kind", "region", "citation_key",
-            "page", "quote", "quote_source", "scale", "cited_source", "note")
+            "page", "quote", "quote_source", "scale", "cited_source", "note", "model_id")
   x <- .knw_read_csv(path)
   chk::check_names(x, cols)
-  x <- x[cols]
-  x[] <- lapply(x, function(v) {
-    v <- trimws(v, whitespace = "[\\h\\v]")
-    v[!is.na(v) & !nzchar(v)] <- NA
-    v
-  })
+  x <- .knw_blank_to_na(x[cols])
   .literature_check(x)
 
   for (arg in c("species_code", "variable")) {
@@ -148,6 +146,15 @@ knw_literature_read <- function(path, species_code = NULL, variable = NULL) {
     miss <- !none & is.na(x[[col]])
     if (any(miss)) stop(col, " is blank on a cited row", first(miss), call. = FALSE)
   }
+  if (any(none & !is.na(x$model_id))) {
+    stop("a 'none' row belongs to no model, so no model_id", first(none & !is.na(x$model_id)),
+         call. = FALSE)
+  }
+  bad_id <- !is.na(x$model_id) & !grepl(.knw_model_id_pattern, x$model_id)
+  if (any(bad_id)) {
+    stop("model_id must be a lower-case identifier: ", x$model_id[bad_id][1], first(bad_id),
+         call. = FALSE)
+  }
   if (any(none & !is.na(x$quote_source))) {
     stop("a 'none' row has no quote, so no quote_source", first(none & !is.na(x$quote_source)),
          call. = FALSE)
@@ -174,10 +181,11 @@ knw_literature_read <- function(path, species_code = NULL, variable = NULL) {
     stop("unit MM-DD belongs to timing rows only", first(unit_bad), call. = FALSE)
   }
 
-  fits <- list(gradient = "percent", channel_width = c("m bankfull", "m wetted", "m"),
-               stream_order = "order", discharge = "m3/s", lake_area = "ha", wetland_area = "ha",
+  fits <- list(gradient = "percent", channel_width = c("m bankfull", "m wetted", "m", "ft"),
+               stream_order = "order", discharge = c("m3/s", "cfs"), lake_area = "ha", wetland_area = "ha",
                bridge_distance = c("km", "m"), temperature = "degC", substrate = "mm", depth = "m",
-               velocity = "m/s", timing = "MM-DD")
+               velocity = "m/s", timing = "MM-DD", valley_width_index = "ratio",
+               drainage_area = c("km2", "mi2"))
   misfit <- !is.na(x$unit) & !mapply(function(v, u) u %in% fits[[v]], x$variable, x$unit)
   if (any(misfit)) {
     stop("unit ", x$unit[misfit][1], " does not fit variable ", x$variable[misfit][1],

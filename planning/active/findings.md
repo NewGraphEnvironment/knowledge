@@ -33,7 +33,46 @@ Modelled MAD covers 104 of 246 watershed groups (the Fraser, Columbia and Peace)
 Relates to #19, #13, #28, NewGraphEnvironment/link#286
 
 
+## Plan review (2026-10-01)
+
+`review-plan.md`. Every finding was checked before acting on it:
+- **B3 confirmed.** `shallinbusch_etal2013…` (library 6) carries the same DOI as the group's
+  `busch_etal2011LandscapeLevelModel`.
+- **B1 and B2 were already avoided** in the working tree before the review landed.
+- **G2, G3, G4, G8 and G11 changed the schema or the code** (see `task_plan.md`).
+
+## Tagging rule for `model_id` (review G7)
+
+Tag a row only when it states a value or variable the model itself uses: `param`, `hsi`, `expert`, or a
+`qual` row naming one of the model's variables. Do not tag:
+- data summaries (`dist`, `max_obs`), for example Cooney & Holzer's density distribution (row 18);
+- literature the model cites but did not adopt, for example WDFW's 16 % in Rebellato (row 8).
+
+The join is on `model_id` × species × life stage, ignoring life-history form. An access threshold needs
+an `access` registry row.
+
+## Seed models: how they size streams (verified quotes)
+
+- **Rebellato 2024 p. 5.** "Modelled discharge was available for watersheds in the Fraser Basin … Modelled
+  channel width was used for the remainder of the study area as a surrogate for discharge". Not validated
+  (p. 14).
+- **Cooney & Holzer 2006 C-7.** "Stream width is predominantly a function of stream discharge, which can
+  be estimated from a combination of drainage area and precipitation". Their widths come from a regression
+  of field widths on upstream drainage area and accumulated mean annual precipitation: wetted width for CH,
+  bankfull for ST. That is the same construction as our width model (Thorley et al. 2021). Validation
+  (C-3): results were "Compared … against specific measures of relative abundance of spawning adults". Redd
+  counts were used to set minimum widths, which is calibration, not validation (C-6).
+
+## Machine notes
+
+- `pgrep -l Zotero` misses the process (it is named `zotero`), so use `pgrep -il zotero`.
+- About 35 `zotero-mcp` processes are running on m1, left over from earlier sessions. Not touched.
+- A zeroed `zotero.sqlite-journal` sits beside the database between transactions (persistent journal).
+  0280's snapshot rule (a zeroed header means no open transaction) handles it; a bare "journal exists"
+  check refuses every copy.
+
 ## Errors Encountered
 
 | Error | Resolution |
 |-------|------------|
+| Scratch `keytext.py`: "no consistent snapshot" on every try | Zotero keeps a zeroed persistent journal; test the header bytes, as 0280 does, not the file's existence |

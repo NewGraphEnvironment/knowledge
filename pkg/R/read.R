@@ -16,3 +16,17 @@
   utils::read.csv(text = txt, colClasses = "character", na.strings = "", check.names = FALSE,
                   encoding = "UTF-8")
 }
+
+# Trim every cell (horizontal and vertical whitespace, so a stray non-breaking
+# space or line break does not survive) and read an empty one as NA.
+.knw_blank_to_na <- function(x) {
+  x[] <- lapply(x, function(v) {
+    v <- trimws(v, whitespace = "[\\h\\v]")
+    v[!is.na(v) & !nzchar(v)] <- NA
+    v
+  })
+  x
+}
+
+# A model_id: lower-case letters, digits and underscores, starting with a letter.
+.knw_model_id_pattern <- "^[a-z][a-z0-9_]*$"
