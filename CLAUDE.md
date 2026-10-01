@@ -117,6 +117,21 @@ FDIS export was built from these submissions, so `0250` dedupes against it befor
 anything as new. The harvest records no submitter, so NGE-authored workbooks cannot be picked
 out. `research/fdis_export.md` has the overlap figures.
 
+### Drafting evidence or registry rows: the gate checks words, not meaning
+
+`0280` proves a quote is verbatim in its PDF and a value sits in its quote. It cannot see a row that says
+the wrong thing around a true quote. On #29, every quote verified and a full row-by-row audit against the
+PDFs still found 22 errors of meaning over three rounds, several of them inside earlier fixes. Audit
+meaning per row, not a sample. Settled conventions:
+- `validation` is a comparison with fish records the model was not fitted to; one that set the model's
+  classes is calibration (`none`).
+- An interior curve breakpoint (a non-zero score, a curve switch) has a blank `bound`; `min`/`max` is a
+  limit or a zero-suitability edge.
+- A source that names a stream-size variable but not how it was obtained is `flow_source = unstated`.
+
+The #29 archive holds the drafter brief and the two helper scripts (`scratch_keytext.py` extracts a
+group-library key's PDF text; `scratch_merge_drafts.py` merges family drafts onto the committed tables).
+
 ### Database access
 
 `0100`, `0110`, `0160`, `0162` connect on the bcfishpass tunnel (`0200`/`0220` try it first and
