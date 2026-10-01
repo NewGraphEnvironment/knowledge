@@ -1,6 +1,6 @@
 Package: knowledge
 Title: Watershed-Group Fisheries Background
-Version: 0.1.0
+Version: 0.2.0
 Authors@R: c(
     person("Allan", "Irvine", , "al@newgraphenvironment.com", role = c("aut", "cre")),
     person("New Graph Environment Ltd.", role = "cph"))
@@ -9,7 +9,8 @@ Description: Functions for assembling fisheries background per watershed group:
     past-report and crossing tables from them, and checking GNIS stream names
     for cross-group collisions before searching by name, reading the
     life-history timing table by group and species, and reading the cited
-    literature evidence for habitat variables by species.
+    literature evidence for habitat variables by species, and reading the
+    registry of intrinsic-potential habitat models that evidence links to.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

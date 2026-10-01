@@ -25,7 +25,11 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
 - `data/` root — cross-group tier: `corpus_tags.csv`, `priority_farmed_all.csv`,
   `zotero_key_map.csv`, `rag_priorities.{gpkg,kml}`, `life_history_timing.csv` (seeded by `0260`,
   then hand-edited; read with `knw_timing_read()`), `literature_evidence.csv` (cited habitat-threshold
-  values with verbatim quotes, read with `knw_literature_read()`, gated by `0280`), and
+  values with verbatim quotes, read with `knw_literature_read()`, gated by `0280`; a row stating an
+  intrinsic-potential model's threshold carries that model's `model_id`), `ip_model_registry.csv` (one row
+  per IP model × species × stage: how it sizes streams, its confinement variable, its validation, with its
+  flow claim and any validation claimed each quoted; read with `knw_ip_read()`, gated and link-checked by
+  `0280`), and
   `habitat_modelling_{members,additions}.csv` (what `0270` puts in the group's `Fisheries/habitat_modelling`
   collection, which with the species collections feeds the `habitat_modelling` store).
 - `data/rag/` — ignored local cache of the ragnar stores. Source of truth is `s3://fresh-bc/rag/`.

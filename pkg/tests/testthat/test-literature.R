@@ -19,7 +19,8 @@ literature_fixture <- function() {
     quote_source      = c("text", "text", "text", "table", NA),
     scale             = c("reach", NA, "reach", NA, NA),
     cited_source      = c(NA, NA, NA, NA, NA),
-    note              = c(NA, NA, NA, NA, "no source starts spawning habitat above 0 %")
+    note              = c(NA, NA, NA, NA, "no source starts spawning habitat above 0 %"),
+    model_id          = c("cooney_holzer2006", NA, NA, NA, NA)
   )
 }
 
@@ -62,6 +63,7 @@ test_that("a missing column is refused", {
 
 test_that("each controlled column refuses a value outside its vocabulary", {
   cases <- list(life_stage = "Spawning", life_history_form = "anadromous",
+                parameter = "rear_gradient_min",
                 variable = "slope", bound = "upper", kind = "HSI", unit = "feet",
                 quote_source = "memory", scale = "planet")
   for (col in names(cases)) {
@@ -195,4 +197,39 @@ test_that("a text quote shorter than 20 characters is refused as unverifiable", 
   x <- literature_fixture()
   x$quote[2] <- "under 6.5%"
   expect_error(knw_literature_read(write_literature(x)), "quote.*20 characters")
+})
+
+test_that("model_id is a lower-case identifier, and a 'none' row has none", {
+  x <- literature_fixture()
+  x$model_id[1] <- "Cooney & Holzer"
+  expect_error(knw_literature_read(write_literature(x)), "model_id.*Cooney & Holzer")
+  x <- literature_fixture()
+  x$model_id[5] <- "cooney_holzer2006"
+  expect_error(knw_literature_read(write_literature(x)), "none.*model_id")
+})
+
+test_that("valley width index and drainage area read with their own units", {
+  x <- literature_fixture()
+  x$variable[2] <- "valley_width_index"
+  x$unit[2] <- "ratio"
+  x$variable[1] <- "drainage_area"
+  x$unit[1] <- "km2"
+  out <- knw_literature_read(write_literature(x))
+  expect_equal(out$unit[1:2], c("km2", "ratio"))
+  x$unit[2] <- "percent"
+  expect_error(knw_literature_read(write_literature(x)), "unit percent.*valley_width_index")
+  x$unit[2] <- "ratio"
+  x$unit[1] <- "ha"
+  expect_error(knw_literature_read(write_literature(x)), "unit ha.*drainage_area")
+})
+
+test_that("US units are read as the source wrote them", {
+  x <- literature_fixture()
+  x$variable[1] <- "discharge"
+  x$unit[1] <- "cfs"
+  x$variable[2] <- "drainage_area"
+  x$unit[2] <- "mi2"
+  x$unit[3] <- "ft"
+  out <- knw_literature_read(write_literature(x))
+  expect_equal(out$unit[1:3], c("cfs", "mi2", "ft"))
 })

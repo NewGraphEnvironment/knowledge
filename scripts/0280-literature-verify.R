@@ -4,7 +4,8 @@
 # the PDF it cites, in the NGE group library.
 #
 #   Rscript scripts/0280-literature-verify.R          (from the repo root)
-#   EVIDENCE=<csv> LOG=<csv> to check a draft table without touching the committed log
+#   EVIDENCE=<csv> REGISTRY=<csv> LOG=<csv> to check draft tables without touching
+#   the committed logs (the registry log is LOG with "_ip_registry" before ".csv")
 #
 # WHY: the table is hand-built, much of it ported from another review, and a
 # quote that is not in its source is worse than no quote. A row passes only when:
@@ -27,27 +28,42 @@
 # and that every species x model parameter in COVERAGE has at least one row
 # (a value, or a `none` row saying what was searched).
 #
-# INPUT   data/literature_evidence.csv, data/life_history_timing.csv,
+# The intrinsic-potential model registry (data/ip_model_registry.csv, read with
+# knw_ip_read()) is gated the same way: each row's flow quote, and its validation
+# quote when it claims one, must be in the cited PDF. The registry holds no
+# numbers; a model's thresholds are evidence rows carrying its model_id. So the
+# link is checked both ways, on model_id x species x life stage x life-history
+# form (blank matching blank): every tagged
+# evidence row names a registry row, and every registry row has at least one
+# tagged evidence row (a model whose thresholds were never written is not
+# registered, it is unread).
+#
+# INPUT   data/literature_evidence.csv, data/ip_model_registry.csv,
+#         data/life_history_timing.csv,
 #         ~/Zotero/zotero.sqlite (a checked copy; Zotero locks the live file)
 # OUTPUT  scripts/logs/habitat/<yyyymmdd>_literature_verify.csv, one row per
-#         evidence row (status, PDF file, every PDF page the quote matches); a
-#         summary on stdout.
+#         evidence row (status, PDF file, every PDF page the quote matches), and
+#         <yyyymmdd>_literature_verify_ip_registry.csv, one row per registry quote;
+#         a summary on stdout.
 #         OCR text is cached in data/rag/ocr/ (gitignored), keyed by PDF md5.
-#         Exits non-zero when any row, timing source or coverage cell fails.
+#         Exits non-zero when any row, registry quote, model link, timing source or
+#         coverage cell fails.
 # ---------------------------------------------------------------------------
 pkgload::load_all("pkg", quiet = TRUE)   # the source tree, not an installed copy
 
 group_id <- Sys.getenv("GROUP_ID", "4733734")
 evidence_path <- Sys.getenv("EVIDENCE", "data/literature_evidence.csv")
+registry_path <- Sys.getenv("REGISTRY", "data/ip_model_registry.csv")
 ocr_dir <- file.path("data", "rag", "ocr")
 COVERAGE <- list(
-  species = c("CH", "BT"),
+  species = c("CH", "BT", "CO", "ST"),
   parameter = c("spawn_gradient_max", "spawn_gradient_min", "spawn_channel_width_min",
                 "spawn_mad_min", "rear_gradient_max", "rear_channel_width_min", "rear_mad_min",
                 "rear_lake_ha_min", "rear_wetland_ha_min", "access_gradient_max",
                 "cluster_bridge_gradient", "cluster_bridge_distance"))
 
 ev <- knw_literature_read(evidence_path)
+reg <- knw_ip_read(registry_path)
 
 # --- Zotero: a whole copy of the database -----------------------------------
 # Keep a copy only when nothing wrote to the live file meanwhile: mtime and size are
@@ -181,14 +197,20 @@ ocr_text <- function(file) {
     # ocrmypdf and tesseract work in TMPDIR. Use a directory inside the (gitignored) OCR
     # cache: R's tempdir() is under /tmp, which tesseract could not read in a sandboxed
     # shell, and the OCR failed there.
-    work <- file.path(ocr_dir, "work")
+    # A directory per run, so two runs OCR-ing at once do not delete each other's files.
+    work <- tempfile("work_", tmpdir = ocr_dir)
     dir.create(work, showWarnings = FALSE)
     on.exit(unlink(work, recursive = TRUE), add = TRUE)
     tmp_pdf <- file.path(work, "out.pdf")
-    rc <- system2("ocrmypdf", c("-q", "--force-ocr", "--sidecar", shQuote(side), shQuote(file),
+    # The sidecar is written in the work dir and renamed into the cache only once
+    # complete, so a killed or concurrent run never leaves a truncated cache entry.
+    tmp_side <- file.path(work, "sidecar.txt")
+    rc <- system2("ocrmypdf", c("-q", "--force-ocr", "--sidecar", shQuote(tmp_side), shQuote(file),
                                 shQuote(tmp_pdf)), stdout = FALSE, stderr = FALSE,
                   env = paste0("TMPDIR=", shQuote(normalizePath(work))))
-    if (rc != 0 || !file.exists(side)) stop("ocrmypdf failed on ", file)
+    if (rc != 0 || !file.exists(tmp_side) || !file.rename(tmp_side, side)) {
+      stop("ocrmypdf failed on ", file)
+    }
   }
   paste(readLines(side, encoding = "UTF-8", warn = FALSE), collapse = "\n")
 }
@@ -279,12 +301,17 @@ table_pages <- function(quote, pages) {
 NUMBER_WORDS <- c(one = 1, two = 2, three = 3, four = 4, five = 5, six = 6, seven = 7, eight = 8,
                   nine = 9, ten = 10, first = 1, second = 2, third = 3, fourth = 4, fifth = 5,
                   sixth = 6, seventh = 7, eighth = 8, ninth = 9, tenth = 10)
-SCALE <- list(percent = c(1, 100), mm = c(1, 10), km = c(1, 1e-3), m = c(1, 1e3), "m/s" = c(1, 0.01))
+# A unit with no entry here is read at scale 1: a new unit fails closed rather than inheriting a
+# rescale from its spelling (a "^m" fallback once gave m3/s and wetted widths a x1000).
+SCALE <- list(percent = c(1, 100), mm = c(1, 10), km = c(1, 1e-3), m = c(1, 1e3), "m/s" = c(1, 0.01),
+              "m3/s" = 1, "m bankfull" = 1, "m wetted" = 1, mi2 = 1)
 MONTHS <- c("january", "february", "march", "april", "may", "june", "july", "august",
             "september", "october", "november", "december")
 
 quote_numbers <- function(quote) {
   q <- gsub("\\[[^]]*\\]", " ", clean(quote))
+  # a unit's exponent is not a stated value: "50 km2" states 50, not 2; "0.5 m3/s" states 0.5, not 3
+  q <- gsub("(?<![[:alpha:]])(km|mi|cm|mm|m|ft)[23](?![0-9])", "\\1", q, perl = TRUE)
   tok <- tokens(q)
   out <- numeric(0)
   for (i in seq_along(tok)) {
@@ -312,7 +339,7 @@ value_in_quote <- function(r) {
   if (!length(vals)) return(TRUE)
   if (r$variable == "timing") return(timing_in_quote(r))
   have <- quote_numbers(r$quote)
-  sc <- if (!is.null(SCALE[[r$unit]])) SCALE[[r$unit]] else if (grepl("^m", r$unit)) c(1, 1e3) else 1
+  sc <- if (!is.null(SCALE[[r$unit]])) SCALE[[r$unit]] else 1
   ok_set <- unique(c(outer(have, sc)))
   all(vapply(as.numeric(vals), function(v) any(abs(ok_set - v) < 1e-9 * max(1, abs(v))), TRUE))
 }
@@ -367,11 +394,55 @@ check_row <- function(r) {
 res <- lapply(seq_len(nrow(ev)), function(i) check_row(ev[i, ]))
 out <- data.frame(
   data_row = seq_len(nrow(ev)), species_code = ev$species_code, parameter = ev$parameter,
-  variable = ev$variable, citation_key = ev$citation_key, quote_source = ev$quote_source,
+  variable = ev$variable, citation_key = ev$citation_key, model_id = ev$model_id,
+  quote_source = ev$quote_source,
   status = vapply(res, `[[`, "", "status"),
   pdf_file = vapply(res, function(x) as.character(x$file), ""),
   pdf_pages = vapply(res, function(x) as.character(x$pages), ""))
-pass <- out$status %in% c("none_row", "verified_text", "verified_table", "verified_ocr")
+PASS <- c("none_row", "verified_text", "verified_table", "verified_ocr")
+pass <- out$status %in% PASS
+
+# --- the IP model registry ----------------------------------------------------
+# A registry quote is checked as a cited evidence row with no value: same key
+# resolution, same matcher, same statuses.
+quote_row <- function(key, quote, quote_source) {
+  list(kind = "registry", citation_key = key, quote = quote, quote_source = quote_source,
+       variable = NA, value_min = NA, value_max = NA)
+}
+reg_checks <- rbind(
+  data.frame(data_row = seq_len(nrow(reg)), quote_of = rep("flow", nrow(reg)), key = reg$citation_key,
+             quote = reg$quote, quote_source = reg$quote_source),
+  data.frame(data_row = seq_len(nrow(reg)), quote_of = rep("validation", nrow(reg)),
+             key = ifelse(is.na(reg$validation_citation_key), reg$citation_key,
+                          reg$validation_citation_key),
+             quote = reg$validation_quote, quote_source = reg$validation_quote_source)
+)
+reg_checks <- reg_checks[!is.na(reg_checks$quote), ]
+reg_res <- lapply(seq_len(nrow(reg_checks)), function(i) {
+  with(reg_checks[i, ], check_row(quote_row(key, quote, quote_source)))
+})
+reg_out <- data.frame(
+  data_row = reg_checks$data_row, model_id = reg$model_id[reg_checks$data_row],
+  species_code = reg$species_code[reg_checks$data_row],
+  life_stage = reg$life_stage[reg_checks$data_row], quote_of = reg_checks$quote_of,
+  citation_key = reg_checks$key, quote_source = reg_checks$quote_source,
+  status = vapply(reg_res, `[[`, "", "status"),
+  pdf_file = vapply(reg_res, function(x) as.character(x$file), ""),
+  pdf_pages = vapply(reg_res, function(x) as.character(x$pages), ""))
+reg_out <- reg_out[order(reg_out$data_row, reg_out$quote_of), ]
+reg_pass <- reg_out$status %in% PASS
+
+# The link, both ways, on model_id x species x life stage x life-history form: the form is
+# part of a registry row's identity (knw_ip_read()), so a row for one form is not satisfied
+# by evidence for another. A blank form matches only a blank form.
+link_key <- function(x) {
+  paste(x$model_id, x$species_code, x$life_stage, ifelse(is.na(x$life_history_form), "-",
+                                                          x$life_history_form), sep = " / ")
+}
+ev_links <- unique(link_key(ev[!is.na(ev$model_id), ]))
+reg_links <- unique(link_key(reg))
+unregistered <- setdiff(ev_links, reg_links)   # evidence naming no registry row
+unread <- setdiff(reg_links, ev_links)         # registry rows with no thresholds
 
 # --- timing sources and coverage ---------------------------------------------
 timing <- knw_timing_read("data/life_history_timing.csv")
@@ -386,14 +457,25 @@ log_csv <- Sys.getenv("LOG", file.path("scripts", "logs", "habitat",
                                       paste0(format(Sys.Date(), "%Y%m%d"), "_literature_verify.csv")))
 dir.create(dirname(log_csv), recursive = TRUE, showWarnings = FALSE)
 utils::write.csv(out, log_csv, row.names = FALSE, na = "")
+reg_log <- file.path(dirname(log_csv), sub("(\\.csv)?$", "_ip_registry.csv", basename(log_csv)))
+utils::write.csv(reg_out, reg_log, row.names = FALSE, na = "")
 
 cat(sprintf("%d rows | %s\n", nrow(out),
             paste(names(table(out$status)), table(out$status), sep = " ", collapse = " | ")))
 if (any(!pass)) print(out[!pass, c("data_row", "citation_key", "quote_source", "status", "pdf_file")],
                       row.names = FALSE)
+cat(sprintf("registry: %d rows, %d quotes | %s\n", nrow(reg), nrow(reg_out),
+            paste(names(table(reg_out$status)), table(reg_out$status), sep = " ", collapse = " | ")))
+if (any(!reg_pass)) print(reg_out[!reg_pass, c("data_row", "model_id", "quote_of", "status", "pdf_file")],
+                          row.names = FALSE)
+cat(sprintf("model links: %d evidence rows name no registry row, %d registry rows have no evidence row\n",
+            length(unregistered), length(unread)))
+for (u in unregistered) cat("  unregistered:", u, "\n")
+for (u in unread) cat("  unread:", u, "\n")
 cat(sprintf("timing sources: %d keys, %d unresolved in the group%s\n", length(t_keys), length(t_bad),
             if (length(t_bad)) paste0(": ", paste(t_bad, collapse = ", ")) else ""))
 cat(sprintf("coverage: %d of %d species x parameter cells have a row\n", sum(cov$rows > 0), nrow(cov)))
 if (any(cov$rows == 0)) print(cov[cov$rows == 0, c("species_code", "parameter")], row.names = FALSE)
-cat("wrote", log_csv, "\n")
-if (any(!pass) || length(t_bad) || any(cov$rows == 0)) quit(status = 1)
+cat("wrote", log_csv, "and", reg_log, "\n")
+if (any(!pass) || any(!reg_pass) || length(unregistered) || length(unread) || length(t_bad) ||
+    any(cov$rows == 0)) quit(status = 1)

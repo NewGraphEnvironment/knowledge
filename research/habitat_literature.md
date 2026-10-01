@@ -5,6 +5,9 @@
 (log `scripts/logs/habitat/*_literature_verify.csv`); sources in the group library's `Fisheries/habitat_modelling`
 collection (`scripts/0270`) and the `habitat_modelling` store.
 
+The intrinsic-potential models behind several of these sources (Rebellato, Cooney & Holzer, Busch, Agrawal, Woll),
+and how each sized streams, are in `ip_models.md` (#29). Their threshold rows here carry a `model_id`.
+
 The table is the record; this file keeps the conclusions someone would otherwise re-derive from it. Every
 statement below has a gated row (a verbatim quote found in the cited PDF) or a `none` row saying what was
 searched.
