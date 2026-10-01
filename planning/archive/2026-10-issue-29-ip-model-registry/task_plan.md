@@ -147,23 +147,23 @@ What exploration found (2026-10-01, m1):
 - [x] `CLAUDE.md` data-root bullet for `ip_model_registry.csv`. `scripts/README.md`: the 0280 line (:49)
   and the "CH/BT × parameter" wording (:326-329). `research/habitat_literature.md`: the title and the
   header line (review G13).
-- [ ] A cross-repo pointer comment on link#286 linking the research file.
+- [ ] A cross-repo pointer comment on link#286 linking the research file. *(Posted after the PR opens, so it can link it.)*
 
 ## Phase 5: Close
-- [ ] `/planning-archive`, with the README carrying Measurement and Evidence sections.
+- [x] `/planning-archive`, with the README carrying Measurement and Evidence sections.
 - [ ] `/gh-pr-push`, re-reading origin/main first.
 
 ## Validation
 
-- [ ] `devtools::test("pkg")` passes; `R CMD check` is clean on `pkg`.
-- [ ] `Rscript scripts/0280-literature-verify.R` exits 0, with coverage of 48/48 cells (4 species × 12
+- [x] `devtools::test("pkg")` passes; `R CMD check` is clean on `pkg`.
+- [x] `Rscript scripts/0280-literature-verify.R` exits 0, with coverage of 48/48 cells (4 species × 12
   parameters) and the model links green both ways.
-- [ ] Every Sheer Table A1 model has registry rows, or a line in findings saying why not (no PDF,
+- [x] Every Sheer Table A1 model has registry rows, or a line in findings saying why not (no PDF,
   paywalled, not a threshold-defining document) (review AC1).
-- [ ] `/code-check` clean on each commit.
-- [ ] The store manifest md5 matches after the push.
-- [ ] PWF checkboxes match landed work.
-- [ ] `/planning-archive` on completion
+- [x] `/code-check` clean on each commit.
+- [x] The store manifest md5 matches after the push.
+- [x] PWF checkboxes match landed work.
+- [x] `/planning-archive` on completion
 
 ## Subagent budget
 
