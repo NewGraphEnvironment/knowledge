@@ -109,6 +109,9 @@ The 2022 `Details*` files contain every 2020 fish row, and exact duplicate rows 
 `counts` is the abundance table; `details` is a length subsample. `scripts/0230`–`0240` build
 from it, and `research/fdis_export.md` is the reference. The FWA "field measurement" channel
 widths are these same sites, so never score the width model against them.
+About 2.8 % of site visits are one survey loaded under two or three collection ids (same UTM,
+date, area and catch; #35). They are not yet deduplicated, so a per-visit count treats them as
+separate visits until #35 lands.
 
 ### FISS submission workbooks: editions drift, and most EF fish are already in FDIS
 
@@ -166,8 +169,10 @@ every `PG_*`, `AWS_*` and `GITHUB_PAT`. The symptom accuses the database
 single line already set by `.Rprofile`; the positive control is running the same command from
 `~`. `cred.store_source` belongs in `.Rprofile`, which is why it is there.
 
-On m1 the agent shell is headless — nothing interactive works there (Zotero desktop, `op`) — but
-Zotero's Web API needs no desktop, so `0153` is unaffected.
+On m1 the agent shell cannot drive anything interactive (`op`). Zotero desktop was running there on
+2026-10-02, though, and items `0270` created through the Web API synced and got Better BibTeX keys
+without a restart, so `0270` → `0150` build → `0280` ran end to end on m1. The Web API needs no
+desktop either way, so `0153` is unaffected.
 
 <!-- BEGIN SOUL CONVENTIONS — DO NOT EDIT BELOW THIS LINE -->
 
