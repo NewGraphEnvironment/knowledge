@@ -1,0 +1,373 @@
+BT rearing use curve, knowledge#28. Visits in 0290's table: 17606.
+On stream, canal or river-polygon edges: 16729. With a fished area of 10-10000 m2: 14463 (BT on 1997).
+all / bt_caught: 13161 visits in 53 WSGs modelled; 1302 visits in 5 WSGs with one outcome only left out
+all / any_fish_caught: 14461 visits in 57 WSGs modelled; 2 visits in 1 WSGs with one outcome only left out
+all / bt_caught_given_fish: 8085 visits in 52 WSGs modelled; 772 visits in 6 WSGs with one outcome only left out
+calibration / bt_caught: 9510 visits in 45 WSGs modelled; 1302 visits in 5 WSGs with one outcome only left out
+calibration / any_fish_caught: 10810 visits in 49 WSGs modelled; 2 visits in 1 WSGs with one outcome only left out
+calibration / bt_caught_given_fish: 5661 visits in 44 WSGs modelled; 772 visits in 6 WSGs with one outcome only left out
+held_out / bt_caught: 3651 visits in 8 WSGs modelled; 0 visits in 0 WSGs with one outcome only left out
+held_out / any_fish_caught: 3651 visits in 8 WSGs modelled; 0 visits in 0 WSGs with one outcome only left out
+held_out / bt_caught_given_fish: 2424 visits in 8 WSGs modelled; 0 visits in 0 WSGs with one outcome only left out
+
+## weights (also data/bt_rear_use_curve.csv)
+        role             response               class n_visits n_detect
+         all            bt_caught            core 0-2     5024      791
+         all            bt_caught            core 2-5     2600      564
+         all            bt_caught            core 5-8     1364      213
+         all            bt_caught        core 8-10.49      547       76
+         all            bt_caught not rearing <=10.49     3244      190
+         all            bt_caught         10.49-12.49      607       63
+         all            bt_caught         12.49-13.49      203       18
+         all            bt_caught         13.49-14.49      157        7
+         all            bt_caught              >14.49      717       75
+         all      any_fish_caught            core 0-2     5024     4223
+         all      any_fish_caught            core 2-5     2600     1848
+         all      any_fish_caught            core 5-8     1364      833
+         all      any_fish_caught        core 8-10.49      547      292
+         all      any_fish_caught not rearing <=10.49     3244     1059
+         all      any_fish_caught         10.49-12.49      607      236
+         all      any_fish_caught         12.49-13.49      203       74
+         all      any_fish_caught         13.49-14.49      157       44
+         all      any_fish_caught              >14.49      717      248
+         all bt_caught_given_fish            core 0-2     4223      791
+         all bt_caught_given_fish            core 2-5     1848      564
+         all bt_caught_given_fish            core 5-8      833      213
+         all bt_caught_given_fish        core 8-10.49      292       76
+         all bt_caught_given_fish not rearing <=10.49     1059      190
+         all bt_caught_given_fish         10.49-12.49      236       63
+         all bt_caught_given_fish         12.49-13.49       74       18
+         all bt_caught_given_fish         13.49-14.49       44        7
+         all bt_caught_given_fish              >14.49      248       75
+ calibration            bt_caught            core 0-2     3717      393
+ calibration            bt_caught            core 2-5     1777      354
+ calibration            bt_caught            core 5-8      970      137
+ calibration            bt_caught        core 8-10.49      398       60
+ calibration            bt_caught not rearing <=10.49     2608      110
+ calibration            bt_caught         10.49-12.49      492       51
+ calibration            bt_caught         12.49-13.49      164       12
+ calibration            bt_caught         13.49-14.49      134        4
+ calibration            bt_caught              >14.49      552       49
+ calibration      any_fish_caught            core 0-2     3717     3104
+ calibration      any_fish_caught            core 2-5     1777     1226
+ calibration      any_fish_caught            core 5-8      970      578
+ calibration      any_fish_caught        core 8-10.49      398      221
+ calibration      any_fish_caught not rearing <=10.49     2608      829
+ calibration      any_fish_caught         10.49-12.49      492      189
+ calibration      any_fish_caught         12.49-13.49      164       61
+ calibration      any_fish_caught         13.49-14.49      134       39
+ calibration      any_fish_caught              >14.49      552      186
+ calibration bt_caught_given_fish            core 0-2     3104      393
+ calibration bt_caught_given_fish            core 2-5     1226      354
+ calibration bt_caught_given_fish            core 5-8      578      137
+ calibration bt_caught_given_fish        core 8-10.49      221       60
+ calibration bt_caught_given_fish not rearing <=10.49      829      110
+ calibration bt_caught_given_fish         10.49-12.49      189       51
+ calibration bt_caught_given_fish         12.49-13.49       61       12
+ calibration bt_caught_given_fish         13.49-14.49       39        4
+ calibration bt_caught_given_fish              >14.49      186       49
+    held_out            bt_caught            core 0-2     1307      398
+    held_out            bt_caught            core 2-5      823      210
+    held_out            bt_caught            core 5-8      394       76
+    held_out            bt_caught        core 8-10.49      149       16
+    held_out            bt_caught not rearing <=10.49      636       80
+    held_out            bt_caught         10.49-12.49      115       12
+    held_out            bt_caught         12.49-13.49       39        6
+    held_out            bt_caught         13.49-14.49       23        3
+    held_out            bt_caught              >14.49      165       26
+    held_out      any_fish_caught            core 0-2     1307     1119
+    held_out      any_fish_caught            core 2-5      823      622
+    held_out      any_fish_caught            core 5-8      394      255
+    held_out      any_fish_caught        core 8-10.49      149       71
+    held_out      any_fish_caught not rearing <=10.49      636      230
+    held_out      any_fish_caught         10.49-12.49      115       47
+    held_out      any_fish_caught         12.49-13.49       39       13
+    held_out      any_fish_caught         13.49-14.49       23        5
+    held_out      any_fish_caught              >14.49      165       62
+    held_out bt_caught_given_fish            core 0-2     1119      398
+    held_out bt_caught_given_fish            core 2-5      622      210
+    held_out bt_caught_given_fish            core 5-8      255       76
+    held_out bt_caught_given_fish        core 8-10.49       71       16
+    held_out bt_caught_given_fish not rearing <=10.49      230       80
+    held_out bt_caught_given_fish         10.49-12.49       47       12
+    held_out bt_caught_given_fish         12.49-13.49       13        6
+    held_out bt_caught_given_fish         13.49-14.49        5        3
+    held_out bt_caught_given_fish              >14.49       62       26
+ raw_rate weight weight_lo weight_hi n_boot_ok        power
+    0.157  0.923     0.809     1.028       200           ok
+    0.217  1.247     1.094     1.403       200           ok
+    0.156  0.894     0.728     1.137       200           ok
+    0.139  0.739     0.538     0.972       200           ok
+    0.059  0.498     0.398     0.614       200           ok
+    0.104  0.641     0.463     0.830       200           ok
+    0.089  0.500     0.254     0.752       200           ok
+    0.045  0.272     0.065     0.512       200 underpowered
+    0.105  0.557     0.350     0.744       200           ok
+    0.841  1.164     1.127     1.214       200           ok
+    0.711  0.937     0.858     1.009       200           ok
+    0.611  0.686     0.610     0.753       200           ok
+    0.534  0.574     0.473     0.644       200           ok
+    0.326  0.362     0.322     0.410       200           ok
+    0.389  0.384     0.321     0.439       200           ok
+    0.365  0.342     0.257     0.422       200           ok
+    0.280  0.242     0.164     0.360       200           ok
+    0.346  0.292     0.248     0.327       200           ok
+    0.187  0.794     0.694     0.918       199           ok
+    0.305  1.309     1.084     1.460       199           ok
+    0.256  1.177     0.928     1.442       199           ok
+    0.260  1.163     0.854     1.578       199           ok
+    0.179  1.066     0.816     1.351       199           ok
+    0.267  1.272     0.861     1.772       199           ok
+    0.243  1.271     0.634     2.026       199           ok
+    0.159  0.881     0.274     1.789       199 underpowered
+    0.302  1.199     0.810     1.787       199           ok
+    0.106  0.776     0.625     0.936       200           ok
+    0.199  1.406     1.149     1.660       200           ok
+    0.141  1.006     0.796     1.287       200           ok
+    0.151  0.972     0.708     1.318       200           ok
+    0.042  0.413     0.321     0.559       200           ok
+    0.104  0.745     0.516     0.971       200           ok
+    0.073  0.471     0.194     0.771       200           ok
+    0.030  0.191     0.044     0.467       200 underpowered
+    0.089  0.628     0.398     0.908       200           ok
+    0.835  1.161     1.111     1.212       200           ok
+    0.690  0.920     0.835     1.018       200           ok
+    0.596  0.681     0.601     0.759       200           ok
+    0.555  0.636     0.535     0.765       200           ok
+    0.318  0.341     0.294     0.388       200           ok
+    0.384  0.379     0.299     0.442       200           ok
+    0.372  0.354     0.257     0.461       200           ok
+    0.291  0.253     0.166     0.358       200           ok
+    0.337  0.279     0.224     0.325       200           ok
+    0.127  0.619     0.518     0.726       200           ok
+    0.289  1.518     1.312     1.724       200           ok
+    0.237  1.459     1.174     1.792       200           ok
+    0.271  1.399     0.917     1.938       200           ok
+    0.133  1.002     0.757     1.311       200           ok
+    0.270  1.547     1.036     2.145       200           ok
+    0.197  1.215     0.499     2.357       200           ok
+    0.103  0.665     0.153     1.785       200 underpowered
+    0.263  1.810     1.191     2.839       200           ok
+    0.305  1.122     0.881     1.337       200           ok
+    0.255  1.048     0.727     1.350       200           ok
+    0.193  0.721     0.469     1.230       200           ok
+    0.107  0.397     0.185     0.810       200           ok
+    0.126  0.712     0.415     1.026       200           ok
+    0.104  0.416     0.185     0.756       200           ok
+    0.154  0.560     0.095     1.196       200 underpowered
+    0.130  0.615     0.000     1.321       200 underpowered
+    0.158  0.495     0.248     0.929       200           ok
+    0.856  1.166     1.079     1.269       200           ok
+    0.756  0.975     0.863     1.061       200           ok
+    0.647  0.709     0.618     0.878       200           ok
+    0.477  0.449     0.316     0.604       200           ok
+    0.362  0.455     0.372     0.521       200           ok
+    0.409  0.396     0.274     0.565       200           ok
+    0.333  0.296     0.154     0.518       200           ok
+    0.217  0.164     0.039     0.351       200 underpowered
+    0.376  0.327     0.233     0.437       200           ok
+    0.356  1.029     0.837     1.253       200           ok
+    0.338  1.044     0.687     1.338       200           ok
+    0.298  0.839     0.487     1.289       200           ok
+    0.225  0.738     0.379     1.359       200           ok
+    0.348  1.147     0.719     1.768       200           ok
+    0.255  0.787     0.290     1.488       200           ok
+    0.462  1.463     0.326     3.120       200 underpowered
+    0.600  2.195     0.000    61.179       198 underpowered
+    0.419  0.768     0.376     1.451       200           ok
+
+Elevation, held out (calibration shape, held-out intercepts): log-lik -1754.2 without, -1836.5 with; gain -82.4 (needs > 2)
+
+## elevation-third rate ratios, U, all WSGs (low = 1)
+ term rate_ratio
+  mid      1.273
+ high      1.010
+
+## class weights with the elevation third in the model, U, all WSGs
+               class weight
+            core 0-2  0.938
+            core 2-5  1.215
+            core 5-8  0.904
+        core 8-10.49  0.742
+ not rearing <=10.49  0.494
+         10.49-12.49  0.645
+         12.49-13.49  0.505
+         13.49-14.49  0.281
+              >14.49  0.556
+
+## visits by class and elevation third (all)
+               class  low  mid high
+            core 0-2 2727 1284 1013
+            core 2-5  621 1003  976
+            core 5-8  278  418  668
+        core 8-10.49  118  146  283
+ not rearing <=10.49  678 1111 1455
+         10.49-12.49   94  151  362
+         12.49-13.49   45   44  114
+         13.49-14.49   20   30  107
+              >14.49  111  189  417
+
+## U weights under each sensitivity (columns); `base` is the reported model
+               class  base logit_odds_ratio time_effort no_river_polygons
+            core 0-2 0.923            0.889       0.923             0.929
+            core 2-5 1.247            1.305       1.219             1.202
+            core 5-8 0.894            0.895       0.944             0.881
+        core 8-10.49 0.739            0.733       0.801             0.766
+ not rearing <=10.49 0.498            0.474       0.526             0.476
+         10.49-12.49 0.641            0.599       0.735             0.618
+         12.49-13.49 0.500            0.462       0.553             0.488
+         13.49-14.49 0.272            0.250       0.294             0.264
+              >14.49 0.557            0.505       0.569             0.541
+ pooled_wsgs_only fds_only fdis_only width_subset width_subset_with_width
+            0.918    0.923     0.917        0.924                   0.813
+            1.257    1.362     1.154        1.245                   1.346
+            0.888    0.713     1.010        0.892                   1.011
+            0.756    0.845     0.724        0.737                   0.857
+            0.507    0.668     0.517        0.593                   0.794
+            0.649    0.600     0.605        0.728                   0.879
+            0.487    0.907     0.443        0.497                   0.638
+            0.239    0.499     0.307        0.398                   0.494
+            0.567    1.117     0.497        0.549                   0.687
+ mad_subset mad_subset_with_mad with_month
+      0.966               0.772      0.938
+      1.253               1.391      1.224
+      0.777               1.020      0.890
+      0.564               0.814      0.734
+      0.363               0.733      0.520
+      0.502               0.894      0.639
+      0.339               0.639      0.519
+      0.150               0.300      0.287
+      0.508               0.942      0.559
+
+## null shares of channel-size variables (population)
+     n segment_width_null measured_width_null mad_null
+ 14463              0.127               0.571    0.253
+log(segment width) coefficient in U: 0.229 (se 0.028)
+
+## visits by segment class (rows) and the class the measured site gradient gives (columns)
+               class core 0-2 core 2-5 core 5-8 core 8-10.49
+            core 0-2      721      311       44            8
+            core 2-5      317      594      157           35
+            core 5-8       63      280      188           62
+        core 8-10.49        7       71       90           57
+ not rearing <=10.49        0        0        0            0
+         10.49-12.49        0        1        0            0
+         12.49-13.49        0        0        0            0
+         13.49-14.49        0        0        0            0
+              >14.49        0        0        0            0
+ not rearing <=10.49 10.49-12.49 12.49-13.49 13.49-14.49 >14.49
+                   0           6           7           2     15
+                   0          12           2           1     18
+                   0          27          11           3     25
+                   0          25          10          14     25
+                1813          69          39          17     81
+                 211          56          24          18     51
+                  71          14           9           6     28
+                  34           8           9          11     28
+                 113          49          15          22    231
+
+## raw rates by measured-site class
+            site_cls n_visits  bt fish bt_rate bt_given_fish
+            core 0-2     1108 136  671   0.123         0.203
+            core 2-5     1257 250  823   0.199         0.304
+            core 5-8      479 101  267   0.211         0.378
+        core 8-10.49      162  17   55   0.105         0.309
+ not rearing <=10.49     2242 166  573   0.074         0.290
+         10.49-12.49      266  29   91   0.109         0.319
+         12.49-13.49      126  11   37   0.087         0.297
+         13.49-14.49       94   5   28   0.053         0.179
+              >14.49      502  33  112   0.066         0.295
+
+Segmentation (in-sample pilots, 1698 visits): class agrees on 98.1 %
+
+## class on fresh_default (rows) vs score284_default (columns), in-sample pilots
+               class core 0-2 core 2-5 core 5-8 core 8-10.49
+            core 0-2      445        0        0            0
+            core 2-5        0      269        0            0
+            core 5-8        0        0      176            0
+        core 8-10.49        0        0        1           99
+ not rearing <=10.49        0        0        0            1
+         10.49-12.49        0        0        0            0
+         12.49-13.49        0        1        0            0
+         13.49-14.49        0        0        0            0
+              >14.49        0        0        0            0
+ not rearing <=10.49 10.49-12.49 12.49-13.49 13.49-14.49 >14.49
+                   0           0           0           0      0
+                   3           0           0           0      0
+                   0           0           0           0      0
+                   2           0           0           0      1
+                 341           0           0           0      1
+                   3         126           0           2      1
+                   0           7          34           1      0
+                   0           0           2          24      1
+                   0           2           1           2    152
+
+## held-out raw rates by link#284 step-5 class
+ step5_class n_visits  bt fish bt_rate bt_given_fish
+ band_0p1249       85   8   34   0.094         0.235
+ band_0p1349       34   8   19   0.235         0.421
+ band_0p1449       20   2   10   0.100         0.200
+        core     2673 700 2067   0.262         0.339
+     outside      839 109  294   0.130         0.371
+
+## core rearing visits by role and elevation third (raw)
+        role elev_class n_visits bt_rate fish_rate
+ calibration        low     2802   0.101     0.863
+ calibration        mid     2033   0.169     0.750
+ calibration       high     2027   0.156     0.585
+    held_out        low      942   0.401     0.869
+    held_out        mid      818   0.275     0.764
+    held_out       high      913   0.106     0.682
+
+## raw BT rate by access code, steep (> 10.49 %) vs not [circular: code 2 is built from these catches]
+ steep access_bt n_visits bt_rate
+ FALSE         1     8888   0.034
+ FALSE         2     3891   0.393
+  TRUE         1     1534   0.034
+  TRUE         2      150   0.740
+
+## share of visits on access_bt = 2 (BT observed upstream), by class [circular]
+                 cls n_visits share_code2 bt_rate_code1 bt_rate_code2
+            core 0-2     5024       0.504         0.016         0.296
+            core 2-5     2600       0.313         0.038         0.609
+            core 5-8     1364       0.203         0.048         0.581
+        core 8-10.49      547       0.124         0.067         0.647
+ not rearing <=10.49     3244       0.061         0.037         0.386
+         10.49-12.49      607       0.084         0.050         0.686
+         12.49-13.49      203       0.099         0.033         0.600
+         13.49-14.49      157       0.051         0.020         0.500
+              >14.49      717       0.099         0.023         0.845
+
+## measured BT by size class and class (fish)
+                 cls adult  fry juvenile subadult measured share_fry_juvenile
+            core 0-2   511 1649      866      169     3195              0.787
+            core 2-5    29  722     1201      132     2084              0.923
+            core 5-8    12  274      744       50     1080              0.943
+        core 8-10.49     2   85      246       14      347              0.954
+ not rearing <=10.49     9  265      322       25      621              0.945
+         10.49-12.49     8   61      172        8      249              0.936
+         12.49-13.49     2   11       40        4       57              0.895
+         13.49-14.49     0    6        8        2       16              0.875
+              >14.49     1   62      194       37      294              0.871
+
+## BT visits with fry or juveniles, by class
+                 cls visits_with_bt visits_measured share_with_fry_or_juvenile
+            core 0-2            791             489                      0.734
+            core 2-5            564             363                      0.961
+            core 5-8            213             160                      0.944
+        core 8-10.49             76              57                      0.965
+ not rearing <=10.49            190             162                      0.920
+         10.49-12.49             63              53                      1.000
+         12.49-13.49             18              13                      0.923
+         13.49-14.49              7               5                      0.800
+              >14.49             75              58                      0.931
+ visits_spawner_evidence
+                      23
+                      34
+                      22
+                       7
+                      14
+                       9
+                       1
+                       0
+                       9
