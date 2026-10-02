@@ -49,6 +49,7 @@ wf_farm_priority.js                          farm priority/crossing tables out o
 0291  effort-corrected use curve, three responses (BT caught, any fish, BT given fish)
       -> data/bt_rear_use_curve.csv (+ log; ~10 min, socket workers)
 0292  candidate weight per gradient class -> data/habitat_weight_bt_rear.csv
+0293  BT spawner evidence by gradient class (maturity-coded Aug-Oct visits, size split) -> data/bt_spawn_evidence.csv (+ log; ~10 min)
       then: aws s3 cp data/fdis/derived/bt_use_visits.csv s3://fresh-bc/fdis/derived/
 
 --- Habitat literature (independent of the watershed-group flow) ---

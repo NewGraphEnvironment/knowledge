@@ -79,27 +79,27 @@ Track 3's layer is on m4 (user, 2026-10-02): pull it last, never block on it. On
   numbers and pages enumerated against the cited page.
 
 ## Phase 3: Williston critical spawning segments (Track 3, last, never blocking)
-- [ ] When m4 is reachable: copy `bt_critical_habitat.gpkg` to a private `s3://fresh-bc/` prefix with
+- [ ] *(Deferred, pending m4: carried by #33's Track 3.)* When m4 is reachable: copy `bt_critical_habitat.gpkg` to a private `s3://fresh-bc/` prefix with
   an md5, and list its layers and fields.
-- [ ] `scripts/0294-bt-critical-spawn-segments.R`: place the critical spawning and juvenile segments
+- [ ] *(Deferred, pending m4.)* `scripts/0294-bt-critical-spawn-segments.R`: place the critical spawning and juvenile segments
   on link segments (fresh_default; Williston WSGs). Report, length-weighted:
   - segment gradient and width distributions;
   - the share link flags `spawning` / `rearing`;
   - the share above `spawn_gradient_max` and below `spawn_channel_width_min`.
-- [ ] If m4 is not reachable by Phase 4, record Track 3 as pending in the #33 body and the research
-  file, and ship without it.
+- [x] If m4 is not reachable by Phase 4, record Track 3 as pending in the #33 body and the research
+  file, and ship without it. *(m4 timed out on ssh four times on 2026-10-02 while Tailscale showed it active. Recorded as pending in the #33 body and `research/bt_spawning.md`.)*
 
 ## Phase 4: Write-up and handoff
-- [ ] `research/bt_spawning.md`:
+- [x] `research/bt_spawning.md`:
   - what the evidence supports for BT spawning gradient and width;
   - the transit-test result;
   - what electrofishing cannot say;
   - dead ends.
 
   Provenance line, README index row, CLAUDE.md Layout and the scripts/README run order.
-- [ ] Draft the link follow-on issue: spawning thresholds and the spawning-connection rule, scored the
+- [x] Draft the link follow-on issue: spawning thresholds and the spawning-connection rule, scored the
   link#284 way, with aggregates only (link is public). Kept in `planning/active/`, not filed.
-- [ ] Revise the #33 body with the answer.
+- [x] Revise the #33 body with the answer.
 
 ## Validation
 

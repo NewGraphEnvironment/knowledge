@@ -224,3 +224,21 @@ Round 2:
 - Round 2 enumerated all 32 Phase 1 numbers and claims against the log and CSV (30 matched; the 2 mismatches are fixed above, and the claims they carried were removed rather than re-sourced).
 - It audited all 21 rows field by field against their pages (5 note or region fixes, applied).
 - After the fixes, the 0280 gate passes on 510 rows.
+
+### Corrections to the Phase 2 notes above (Phase 4 review rounds 1–2, `review-p4-round*.md`)
+
+The Phase 2 section is kept as written. These lines supersede parts of it:
+- "the rule declines to set ranges (p. 63931)" → the rule says it is unable to define a conclusive upper and lower range of conditions for specific PCEs, given their complexity (p. 63931). It still states water temperatures of 2–15 °C for one PCE (p. 63932).
+- "The only US gradient statement … no number exists anywhere searched" → observed BC spawning gradients exist: 0.6–4 % from reach studies, in rows 80–82, 85 and 188 (`habitat_literature.md`). No source gives a maximum or a minimum. Montana sources (rows 73, 78) and the 2010 rule describe "low-gradient" reaches, and the rule also describes resident streams as smaller and steeper.
+- "Resident and small migratory spawners use smaller, steeper streams" → that holds for residents (row 506). Hagen & Spendlow 2019 (row 500) describe smaller *populations* of large-bodied spawners in shorter, steeper tributaries.
+
+### Code-check, Phase 4 (rounds 1–2 and the enumeration)
+
+| round | findings | fixed | inside a previous fix? |
+|---|---|---|---|
+| 1 | 9 (1 major: "the literature gives no number") | 9 | — |
+| 2 | 6 (1 new inside a fix: Hagen p. 9 "not on where adults spawn"; 3 left standing; 2 minor) | 6 | **yes** |
+
+**Mechanism:** a summary written from the most recent rows and not the whole table. The #19 rows that give observed gradients were outside the rows this issue added.
+
+**Ended by enumeration.** Every occurrence of the claim family was grepped in the research file, the link draft, the #33 body, `research/README.md`, the CSV notes and findings, using: `no number|only US|only gradient statement|declines to set|2 m wetted sections|qualitative low-gradient|passage, not|dominat|small migratory|Partly supported`. After the fixes, the only hits are this correction record and the dead-ends entries that quote a withdrawn claim.

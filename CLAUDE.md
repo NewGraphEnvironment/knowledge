@@ -32,6 +32,7 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   `0280`),
   `bt_rear_use_curve.csv` and `habitat_weight_bt_rear.csv` (BT rearing use by gradient class from FDIS
   visits on link's segments, and the candidate weight per class; `0290`-`0292`, `research/habitat_weights.md`),
+  `bt_spawn_evidence.csv` (BT spawner-evidence rates by gradient class; `0293`, `research/bt_spawning.md`),
   and
   `habitat_modelling_{members,additions}.csv` (what `0270` puts in the group's `Fisheries/habitat_modelling`
   collection, which with the species collections feeds the `habitat_modelling` store).
