@@ -13,6 +13,33 @@
 
 Track 3's layer is on m4 (user, 2026-10-02): pull it last, never block on it. Only aggregates leave this repo (WLRS data_secure).
 
+## Revisions after plan review (2026-10-02, `review-plan.md`; adopted inside the mandate)
+- **Response.**
+  - Restricted to Aug–Oct visits where at least one BT carries a maturity code (B2).
+  - Nuisance terms: month (A2) and log(n coded BT), on top of log(area), data_set, era and WSG. Agency is a sensitivity.
+  - August and Sep–Oct are reported separately (A1).
+- **Evidence kinds.** Every response is split by fish size: adult ≥ 350 mm, or smaller (B1). Strongest-kind order: SP/ST > M Sep–Oct > M Aug > M other months > adult size only (G6). M outside Aug–Oct is a migrant class.
+- **U** is refitted on the spawning ladder; nothing is reused from 0291 (G1).
+- **Transit test** becomes a descriptive table for large spawners only (B1, B3):
+  - an access-independent patch definition (≥ 200 m of segments ≤ 0.0549, width ≥ 2 m, spawn edge types);
+  - upstream network search through fwapg;
+  - censoring reported;
+  - no inference.
+- **Labels and checks.**
+  - Output is labelled evidence rates, never weights (S1).
+  - Plus: a measured-site-gradient sensitivity (S2), width by source (A5), an assert that 0240's spawner rows are reproduced (A4), and the input md5 logged (A6).
+- **Phase 2:**
+  - read the newly filed PDFs;
+  - add Pearce 2019 and Montana FWP redd counts to the search;
+  - report US evidence by region;
+  - order: file → sync → read → build → rows → gate (G2–G4, O2).
+- **Phase 3:**
+  - layer provenance stated (A8);
+  - ignored path (A9);
+  - USFWS GIS and state layers recorded as pending (G5).
+- **Acceptance.** Every number traces to a log line (AC1). A power table per cell (AC3). The "passing through vs spawning in place" question is answered as underpowered unless the large-fish counts say otherwise (AC2).
+- **A7** (`fiss_evidence.csv` gradient as a fraction) is filed as its own issue.
+
 ## Phase 1: Spawner evidence on link segments (Track 1)
 - [ ] `scripts/0293-bt-spawn-evidence.R`. Analysis spec fixed in the header before the first fit:
   - Join per-fish maturity (`fish.rds`) and visit month (`fdis_sites`) to 0290's visit table.
