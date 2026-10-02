@@ -1,0 +1,209 @@
+BT spawner evidence, knowledge#33. Visit table md5 b32e526204b01a60dfe5ecf6f0b5e04d.
+Repeated surveys (#35): 411 of 14463 visits are a second copy of another visit.
+
+## BT fish by kind (pooled per visit)
+            kind    n
+           M Aug  191
+       M Sep-Oct  110
+  M other months   27
+           SP/ST   12
+ adult size only  356
+            none 7283
+
+## visits by strongest kind
+            kind    n
+           M Aug   63
+       M Sep-Oct   49
+  M other months   25
+           SP/ST    7
+ adult size only   79
+            none 1140
+Spawner flag reproduces 0240's spawner rows on 119 visits.
+BT visits: 1997. Aug-Oct with >= 1 maturity-coded BT (the S population): 560.
+
+## coding: share of BT visits with any maturity-coded BT, by class
+     cls bt_visits coded share
+     0-2       820   219 0.267
+     2-4       452   179 0.396
+  4-5.49       219    99 0.452
+  5.49-8       219    96 0.438
+ 8-10.49       124    54 0.435
+  >10.49       163    65 0.399
+bt_caught: 13161 visits in 53 WSGs modelled; 1302 visits in 5 WSGs with one outcome only left out
+spawner_given_bt_coded_augoct: 485 visits in 23 WSGs modelled; 75 visits in 16 WSGs with one outcome only left out
+large_spawner_given_bt_coded_augoct: 371 visits in 13 WSGs modelled; 189 visits in 26 WSGs with one outcome only left out
+small_spawner_given_bt_coded_augoct: 483 visits in 22 WSGs modelled; 77 visits in 17 WSGs with one outcome only left out
+spawner_given_bt_coded_sepoct: 189 visits in 16 WSGs modelled; 46 visits in 14 WSGs with one outcome only left out
+
+## evidence rates and rate ratios (also data/bt_spawn_evidence.csv)
+                            response   class n_visits n_detect raw_rate
+                           bt_caught     0-2     5681      820    0.144
+                           bt_caught     2-4     2664      452    0.170
+                           bt_caught  4-5.49     1430      219    0.153
+                           bt_caught  5.49-8     1856      219    0.118
+                           bt_caught 8-10.49     1148      124    0.108
+                           bt_caught  >10.49     1684      163    0.097
+       spawner_given_bt_coded_augoct     0-2      178       26    0.146
+       spawner_given_bt_coded_augoct     2-4      133       25    0.188
+       spawner_given_bt_coded_augoct  4-5.49       77       14    0.182
+       spawner_given_bt_coded_augoct  5.49-8       75       22    0.293
+       spawner_given_bt_coded_augoct 8-10.49       43       13    0.302
+       spawner_given_bt_coded_augoct  >10.49       54       19    0.352
+ large_spawner_given_bt_coded_augoct     0-2      178        8    0.045
+ large_spawner_given_bt_coded_augoct     2-4      133        9    0.068
+ large_spawner_given_bt_coded_augoct  4-5.49       77        6    0.078
+ large_spawner_given_bt_coded_augoct  5.49-8       75        5    0.067
+ large_spawner_given_bt_coded_augoct 8-10.49       43        3    0.070
+ large_spawner_given_bt_coded_augoct  >10.49       54        3    0.056
+ small_spawner_given_bt_coded_augoct     0-2      178       18    0.101
+ small_spawner_given_bt_coded_augoct     2-4      133       19    0.143
+ small_spawner_given_bt_coded_augoct  4-5.49       77       11    0.143
+ small_spawner_given_bt_coded_augoct  5.49-8       75       17    0.227
+ small_spawner_given_bt_coded_augoct 8-10.49       43       11    0.256
+ small_spawner_given_bt_coded_augoct  >10.49       54       17    0.315
+       spawner_given_bt_coded_sepoct     0-2       68       12    0.176
+       spawner_given_bt_coded_sepoct     2-4       67       17    0.254
+       spawner_given_bt_coded_sepoct  4-5.49       33        5    0.152
+       spawner_given_bt_coded_sepoct  5.49-8       27        8    0.296
+       spawner_given_bt_coded_sepoct 8-10.49       17        4    0.235
+       spawner_given_bt_coded_sepoct  >10.49       23        7    0.304
+ rate_ratio rr_lo rr_hi n_boot_ok        power
+      0.902 0.796 1.007       200           ok
+      1.168 1.000 1.314       200           ok
+      1.044 0.873 1.240       200           ok
+      0.804 0.649 1.031       200           ok
+      0.746 0.582 0.954       200           ok
+      0.593 0.459 0.758       200           ok
+      1.098 0.583 1.680       188           ok
+      1.038 0.270 1.468       184           ok
+      0.745 0.000 1.284       186           ok
+      1.215 0.318 2.985       184           ok
+      0.943 0.183 3.625       185           ok
+      1.142 0.318 2.897       185           ok
+      0.943 0.371 1.794       199 underpowered
+      1.034 0.451 1.725       198 underpowered
+      1.072 0.264 2.075       199 underpowered
+      0.430 0.000 1.305       198 underpowered
+      0.502 0.000 1.838       199 underpowered
+      0.437 0.000 1.697       199 underpowered
+      1.033 0.000 1.798       193           ok
+      1.086 0.450 1.688       187           ok
+      0.801 0.000 1.484       191           ok
+      1.426 0.534 3.166       188           ok
+      1.218 0.226 4.447       189           ok
+      1.421 0.000 3.584       189           ok
+      0.830 0.000 2.570       185           ok
+      1.527 0.000 2.158       156           ok
+      0.348 0.000 1.196       177 underpowered
+      1.379 0.000   Inf       169 underpowered
+      0.158 0.000 4.386       179 underpowered
+      0.669 0.000 3.867       170 underpowered
+
+## S rate ratios under each sensitivity, point estimates only (top two agencies by evidence visits removed: Timberland Consultants Ltd.; Kokanee Forests Consulting Ltd.)
+   class  base without_top_two_agencies august_only no_river_polygons
+     0-2 1.098                    1.167       1.538             1.325
+     2-4 1.038                    1.004       0.338             0.972
+  4-5.49 0.745                    0.578       0.707             0.602
+  5.49-8 1.215                    0.959       0.807             1.130
+ 8-10.49 0.943                    0.923       1.274             0.678
+  >10.49 1.142                    1.872       1.412             0.821
+ no_wsg_term wsg_term_only coding_and_month_only first_copy_only_35
+       0.872         1.120                 0.834              1.079
+       1.160         0.999                 1.179              1.000
+       1.006         0.763                 1.053              0.841
+       1.796         1.178                 2.118              1.197
+       1.847         1.031                 2.275              0.957
+       3.073         1.283                 3.721              1.215
+ site_gradient_class
+               1.330
+               0.802
+               0.876
+               1.899
+               0.945
+               1.379
+
+## raw S in the modelled S population (WSGs with both outcomes)
+     cls n_visits n_detect raw_rate
+     0-2      149       26    0.174
+     2-4      116       25    0.216
+  4-5.49       75       14    0.187
+  5.49-8       62       20    0.323
+ 8-10.49       38       13    0.342
+  >10.49       45       19    0.422
+
+## evidence visits by agency (top five)
+                                           agency  n
+                      Timberland Consultants Ltd. 20
+                  Kokanee Forests Consulting Ltd. 18
+ Triton Environmental Consultants (Prince George) 12
+                Ingersol Mountain Enterprise Ltd. 10
+                                 Beak Consultants  7
+
+## S raw rates by segment channel width class and width source
+ segment_cw_source width n_visits n_detect raw_rate
+  FIELD_MEASURMENT    <2       41        7    0.171
+  FIELD_MEASURMENT   2-5       74       10    0.135
+  FIELD_MEASURMENT  5-10      106       37    0.349
+  FIELD_MEASURMENT   >10      193       36    0.187
+   FWA_RIVERS_POLY   >10       27        3    0.111
+          MODELLED    <2       17        3    0.176
+          MODELLED   2-5       47        9    0.191
+          MODELLED  5-10       23        8    0.348
+          MODELLED   >10       10        2    0.200
+              <NA>  <NA>       22        4    0.182
+
+## spawner-evidence visits in narrow (< 2 m) and steep (> 5.49 %) segments, by size and kind
+ narrow steep  size month_kind  n
+  FALSE FALSE large        Aug 11
+  FALSE FALSE large    Sep-Oct 12
+  FALSE FALSE small        Aug 19
+  FALSE FALSE small    Sep-Oct 20
+  FALSE  TRUE large        Aug  5
+  FALSE  TRUE large    Sep-Oct  4
+  FALSE  TRUE small        Aug 27
+  FALSE  TRUE small    Sep-Oct 11
+   TRUE FALSE small        Aug  1
+   TRUE FALSE small    Sep-Oct  2
+   TRUE  TRUE large    Sep-Oct  2
+   TRUE  TRUE small        Aug  3
+   TRUE  TRUE small    Sep-Oct  2
+
+Large-spawner visits on segments > 0.0549: 11.
+
+## large spawners on steep segments: patches upstream (>= 200 m at <= 0.0549, width >= 2 m, stream edges); same-blue-line distance within 10 km, NA = censored. Descriptive only.
+ site_visit watershed_group_code     cls segment_gradient first_copy
+  10741_2_1                 KOTL  >10.49           0.1106       TRUE
+ 154852_1_1                 UFRA  >10.49           0.1566       TRUE
+ 38707_76_1                 CLRH  5.49-8           0.0608       TRUE
+ 46390_12_1                 UARL  5.49-8           0.0618       TRUE
+  46513_1_1                 UARL 8-10.49           0.0996       TRUE
+ 46561_76_1                 BBAR  5.49-8           0.0553       TRUE
+  62984_1_1                 LARL 8-10.49           0.0934       TRUE
+ 76685_76_1                 BBAR  5.49-8           0.0553      FALSE
+ 77518_34_1                 COTR 8-10.49           0.1023       TRUE
+ 77530_66_1                 COTR  5.49-8           0.0706       TRUE
+ 78891_70_1                 PARS  >10.49           0.1097       TRUE
+ patches_upstream same_blue_line_m censored
+                0               NA     TRUE
+                0               NA     TRUE
+                2               NA     TRUE
+                2              989    FALSE
+                5             5394    FALSE
+                2             1993    FALSE
+                2             4298    FALSE
+                2             1993    FALSE
+                0               NA     TRUE
+                1              780    FALSE
+                0               NA     TRUE
+
+## FISS workbook char spawner-evidence rows (site gradient_pct is a fraction, #34; fwa_gradient_pct is percent)
+ site_visit species_code n watershed_group_code month year gradient_pct
+   19729:97           BT 1                 UPCE     8 2009           NA
+   49150:10           BT 1                 MURR     8 2012           NA
+    59204:1           BT 2                 LNTH     9 2020        0.015
+    59204:7           BT 1                 LNTH     9 2020        0.025
+ fwa_gradient_pct         method
+             0.90             TN
+             1.32        angling
+             0.56 electrofishing
+             3.84 electrofishing
