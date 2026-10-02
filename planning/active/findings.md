@@ -127,8 +127,11 @@ Current ledger (`scripts/logs/habitat/20261002_bt_use_build_ledger.csv`, numbers
 
 - **Store search.** `ragnar_retrieve()` on `habitat_modelling` returned eight queries' worth of chunks: BT occurrence or abundance by gradient, elevation and temperature; HSI curves; effort and false absence. The sources that carry a curve, not a cutoff, are Isaak 2015 (Table 4 logistic occupancy), Dunham & Chandler 2001 (logistic, juvenile occurrence at 100 m sites) and Porter 2008 (Thompson, FDIS CPUE and CART). MacPherson 2024, Rieman & McIntyre 1993 and Hagen's Skeena strategy give no gradient or elevation use relation; Rieman & McIntyre's elevation-growth sentence is a secondary citation of Mullan et al. 1992 and was not used.
 - **A PDF glyph trap.** Isaak 2015 Table 4 prints −0.166 for BT slope, but pdftotext drops every minus sign in the table, so MinTemp reads +0.632. The sign was read from a 150 dpi render of PDF page 6. The row records the magnitude, which is what the gate can verify, and its note carries the sign.
-- **Vocabulary not changed.** No source states an elevation threshold or curve for BT: elevation enters only as a temperature proxy (Dunham & Chandler p. 30). So `elevation` was not added to `knw_literature_vocab()`, and the proxy statement is a `temperature` row. No coefficient kind was added either; the coefficient row is `qual` with a table quote.
-- **Rows added** (data rows 482–486), gate `scripts/logs/habitat/20261002_literature_verify.csv`, all verified. Printed page against matched PDF page: Isaak 2545/6, Dunham & Chandler 15/18 and 30/33, Porter 66/68.
+- **Vocabulary.** First pass: no elevation value found, so `elevation` was not added (superseded). Round 1 of the Phase 3 review found Porter 2008's watershed-scale BT model fits mean elevation (Table 3.5, +0.002 per m on the logit scale), so `elevation` is now in `knw_literature_vocab()` with units m or ft, plus a test. The test was shown to fail when `percent` is allowed. No coefficient kind was added: coefficient rows are `qual` with a table quote, and the coefficient is in the note.
+- **Rows added** (data rows 482–489), gate `scripts/logs/habitat/20261002_literature_verify.csv`, all 489 rows pass. Printed page against matched PDF page:
+  - Isaak 2545/6 and S1-1/15;
+  - Dunham & Chandler 15/18 and 30/33;
+  - Porter 66/68, 37/39 and 51/53.
 
 Meaning audit, row by row:
 
@@ -136,9 +139,12 @@ Meaning audit, row by row:
 |---|---|---|
 | 482 Isaak 2545 | BT occupancy falls with habitat-average slope, −0.166 per % on the logit scale | Table 4 BT block, Slope line. The quote's magnitude is right; the sign comes from the render and is stated in the note. Network scale (whole cold-water habitat, mean slope 7.96 %), so it is not a reach weight. `parameter = rear_gradient_max` follows the convention of row 98 (the same source's qual statement). |
 | 483 Dunham & Chandler 15 | no habitat feature other than temperature, gradient included, explained juvenile occurrence | p. 12 lists gradient among the candidates, and p. 15 says none but temperature were likely. Site scale (100 m), Washington. A null, so qual with no value. |
-| 484 Dunham & Chandler 30 | summer maximum temperature follows elevation, but the relation varies by place | Quote verbatim, p. 30. Note figure 94 % is on p. 15 ("explaining 94% of the variance"). `variable = temperature`, no parameter: it bears on no link parameter. |
-| 485 Porter 66 | juvenile BT occur across the whole FDIS gradient range | Same paragraph as row 103 (CPUE highest in steeper streams). Data source is FDIS, which is what 0290/0291 use, so it is flagged as not independent. |
-| 486 none | no graded reach- or segment-scale use curve for BT by gradient or elevation in the store | The note lists the sources searched; the claim is bounded to the store and those full texts. |
+| 484 Dunham & Chandler 30 | summer maximum temperature follows elevation, but the relation varies by place | Quote verbatim, p. 30. The 94 % sentence runs across pp. 15–16; the model is preliminary and fitted to 2000 streams only (round 1 fix). `variable = temperature`, no parameter. |
+| 485 Porter 66 | juvenile BT occur across the whole FDIS gradient range | Same paragraph as row 103. Porter's Interior 2007–08 FDIS extract overlaps the province-wide export 0290/0291 use, so it is not independent; it is not the same data (round 1 fix). |
+| 486 none | no graded reach- or segment-scale **occupancy** curve (presence against absence) by gradient or elevation | Restated after round 1, which found two errors in the first wording: a use-only reach-slope distribution (Isaak App. S1) and a watershed-scale elevation effect (Porter Table 3.5) both exist. The note now names what exists instead. |
+| 487 Isaak S1-1 | juvenile BT (< 150 mm, 1,102 sites) cumulative share by reach slope: about 0.63 at 6 %, 0.84 at 9 %, 0.95 at 12 % | Figure read from my own render after the reviewer's reading; the numbers are approximate readings, stated as such. Use only, so no selection. |
+| 488 Porter 37 | BT occurrence rises with mean watershed elevation (+0.002 per m, logit) | Table 3.5 layout text keeps the signs (Chinook −0.004, coho −0.003, BT +0.002). Network (watershed) scale; detections of any stage. |
+| 489 Porter 51 | macroreach BT model keeps sinuosity and bankfull width; gradient and elevation were candidates and not kept | Table 3.15 BT block, Table 3.13 candidates p. 50. Segment scale. |
 - **Gaps (not in the group library).** None was acquired: none is an open-access PDF that turned up in a quick look, and none would change the position, since each is a site- or patch-scale occurrence study already summarised by Dunham & Chandler 2001.
   - Watson & Hillman 1997, the BT occurrence models cited by Trotter 2000 and Dunham & Chandler 2001;
   - Rieman & Chandler 1999, the regional BT–temperature database;
@@ -165,3 +171,26 @@ Meaning audit, row by row:
   - placement restated independently in R over all 17,606 kept visits: **17,606 match, 0 mismatch**;
   - presence restated independently over every kept visit (2,039 distinct code combinations): **17,606 agree**;
   - kept absences carrying a presence or blocking code: **0 of 14,987**.
+
+### Code-check, Phase 3 (rounds 1–2 and the enumeration)
+
+| round | findings | fixed | inside a previous fix? |
+|---|---|---|---|
+| 1 | 4 | 4 | — |
+| 2 | 3 | 3 | **yes** |
+
+Round 1 (`review-p3-round1.md`):
+- row 486's "none" claim missed Isaak App. S1 Fig. 1 and Porter's elevation term;
+- row 484's page;
+- row 485's "same FDIS data".
+
+Round 2 (`review-p3-round2.md`), all in the round-1 rewrites or new rows:
+- row 488 listed three of the six covariates;
+- rows 486 and 489 called Porter's macroreach result a gradient "null". Table 3.13's AIC values for gradient models are not consistent with nested fits, so it is "a candidate, not selected";
+- row 485 gave the extract a date (2007–08) the source does not state.
+
+Fixing round 2, I also had p. 15 for the 254-site figure; it is printed p. 16.
+
+**Mechanism.** Notes were written from memory of a read, not from the page. Numbers, page numbers and covariate lists were carried in prose and never re-opened.
+
+**Ended by enumeration.** Every checkable claim in the notes of rows 482–489 (29 claims: numbers, page numbers, labels, covariates) was matched by regex against the PDF page it names, through pdftotext `-layout`. 28 match. The 29th, the figure label "Bull Trout < 150 mm (1102 sites)", is drawn in the image, has no text layer, and was confirmed on a 100 dpi render, as were Isaak's minus sign and the curve readings. The gate passes on all 489 rows.
