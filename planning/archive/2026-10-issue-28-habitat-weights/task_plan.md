@@ -92,8 +92,8 @@ A second number argues the other way: about a quarter of the first band (101 of 
 
 ## Validation
 
-- [ ] `devtools::test("pkg")` passes (literature vocab test)
-- [ ] `0280` gate clean
-- [ ] `/code-check` clean on each commit
-- [ ] PWF checkboxes match landed work
-- [ ] `/planning-archive` on completion, then `/gh-pr-push`
+- [x] `devtools::test("pkg")` passes (literature vocab test)
+- [x] `0280` gate clean
+- [x] `/code-check` clean on each commit
+- [x] PWF checkboxes match landed work
+- [x] `/planning-archive` on completion, then `/gh-pr-push`
