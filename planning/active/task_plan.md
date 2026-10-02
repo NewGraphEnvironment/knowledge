@@ -31,25 +31,39 @@ A second number argues the other way: about a quarter of the first band (101 of 
 
 
 ## Phase 1: Visit table on link's segmentation
-- [ ] `scripts/0290-bt-use-build.R`. Read `data/fdis/derived/fdis_sites.csv` and place each visit on a link segment: `blue_line_key` with `downstream_route_measure` in [drm, urm), from `fresh_default.streams` ∪ `score284_default.streams`. Use local fwapg :5432, connecting the way 0230 does.
-- [ ] Per visit, record:
+- [x] `scripts/0290-bt-use-build.R`. Read `data/fdis/derived/fdis_sites.csv` and place each visit on a link segment: `blue_line_key` with `downstream_route_measure` in [drm, urm), from `fresh_default.streams` ∪ `score284_default.streams`. Use local fwapg :5432, connecting the way 0230 does.
+- [x] Per visit, record:
   - segment `gradient` and `channel_width` (with its source);
   - `access_bt`, plus BT `spawning`/`rearing` under default;
   - elevation at the point (the FWA geometry's Z);
   - the WSG's rearing-elevation third, computed from segment midpoints over that WSG's BT rearing;
   - measured gradient and width;
   - effort and catch status.
-- [ ] BT presence is `n_bt` + `n_dv` where `lnk_species_pooling()` pools, and `n_bt` alone elsewhere.
-- [ ] Absence only where `catch_status` is known and `blocks_absence_of` does not include char.
-- [ ] Drop `flag_effort_sentinel`, `flag_not_placed`, `flag_far_snap` and `flag_junk_date`, and count each drop in a ledger.
-- [ ] Analysis population: visits on `access_bt` segments in WSGs where link marks BT present. Tag each visit held-out (the 8 step-5 WSGs) or calibration.
-- [ ] Outputs:
+- [x] BT presence is `n_bt` + `n_dv` where `lnk_species_pooling()` pools, and `n_bt` alone elsewhere.
+- [x] Absence only where `catch_status` is known and `blocks_absence_of` does not include char.
+- [x] Drop `flag_effort_sentinel`, `flag_not_placed`, `flag_far_snap` and `flag_junk_date`, and count each drop in a ledger.
+- [x] Analysis population: visits on `access_bt` segments in WSGs where link marks BT present. Tag each visit held-out (the 8 step-5 WSGs) or calibration.
+- [x] Outputs:
   - per-visit table to `data/fdis/derived/bt_use_visits.csv` (ignored, private; synced to `s3://fresh-bc/fdis/derived/`);
   - ledger to `scripts/logs/habitat/<date>_bt_use_build_ledger.csv`.
+
+- [x] Revised after the plan review (`review-plan.md`, disposition in findings.md):
+  - only the 8 held-out WSGs read from score284_default;
+  - placement takes the segment starting at the site (within −1 to +5 m), else the segment containing it;
+  - ambiguous char codes block a BT absence;
+  - ws50 mismatches dropped;
+  - step-5 class and score284 gradient carried for the comparisons;
+  - link version and tracker md5 in the ledger.
 
 ## Phase 2: Effort-corrected use curve
 - [ ] `scripts/0291-bt-use-curve.R`, pure R from the visit table.
 - [ ] Raw detection per gradient band, then a binomial GLM: present ~ band + elevation third + log(area_m2). Same with log(fishing_time) as a check.
+  - *Revised (plan review G1/G4/G5/G7):* three responses, each cloglog with offset log(area), plus data_set, era and WSG:
+    - BT caught;
+    - any fish caught;
+    - BT given fish.
+
+    Classes are on link's ladder, with "accessible, not rearing ≤ 10.49 %" as its own class. Intervals come from a stream-cluster bootstrap. The spec is fixed in 0291's header before the first fit.
 - [ ] Predicted detection per band at median effort, relative to the core bands (≤ 10.49 %), with intervals.
 - [ ] Driver checks, each reported with and without:
   - band × elevation;
@@ -60,11 +74,11 @@ A second number argues the other way: about a quarter of the first band (101 of 
 - [ ] Output: `data/bt_rear_use_curve.csv` (aggregates only: band × elevation class, visits, detections, raw rate, adjusted ratio, interval). Log the fits to `scripts/logs/habitat/`.
 
 ## Phase 3: Literature use curves
-- [ ] Search the `habitat_modelling` store with `ragnar::ragnar_retrieve()` directly (cred `crd_search` is broken). Look for BT occurrence or abundance curves by gradient, elevation and temperature: Dunham & Chandler 2001, Isaak 2015, Rieman et al., Porter 2008 HSI, Watson & Hillman 1997, and anything else the store holds.
-- [ ] Add verified rows to `data/literature_evidence.csv` (`hsi`/`dist`/`qual`/`none`).
-- [ ] Add `elevation` to the `variable` vocabulary in `pkg/R/literature.R`, with a test, if a source states one.
-- [ ] Run the `0280` gate, then audit meaning row by row (CLAUDE.md, "the gate checks words, not meaning").
-- [ ] List sources the store lacks as gaps. Do not acquire beyond quick open-access PDFs filed via `0270`'s additions.
+- [x] Search the `habitat_modelling` store with `ragnar::ragnar_retrieve()` directly (cred `crd_search` is broken). Look for BT occurrence or abundance curves by gradient, elevation and temperature: Dunham & Chandler 2001, Isaak 2015, Rieman et al., Porter 2008 HSI, Watson & Hillman 1997, and anything else the store holds.
+- [x] Add verified rows to `data/literature_evidence.csv` (`hsi`/`dist`/`qual`/`none`).
+- [x] ~~Add `elevation` to the `variable` vocabulary~~: not needed. No source states an elevation value, and elevation appears only as a temperature proxy (findings.md, Phase 3).
+- [x] Run the `0280` gate, then audit meaning row by row (CLAUDE.md, "the gate checks words, not meaning").
+- [x] List sources the store lacks as gaps. Do not acquire beyond quick open-access PDFs filed via `0270`'s additions.
 
 ## Phase 4: Position and candidate weight
 - [ ] `research/habitat_weights.md` with the provenance line:
