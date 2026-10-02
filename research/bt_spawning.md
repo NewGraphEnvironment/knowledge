@@ -57,7 +57,7 @@ Not tested, and what can be described is mixed:
   review found no upstream separation between spawner and non-spawner visits, but the same review judged
   that test design invalid (B3), so it is not a negative result either.
 
-The counts are far too small for a test (`review-plan.md`, B1 and B3), so this stays descriptive.
+The counts are far too small for a test (`planning/archive/2026-10-issue-33-bt-spawning-evidence/review-plan.md`, B1 and B3), so this stays descriptive.
 
 ## Each question, and what answers it
 

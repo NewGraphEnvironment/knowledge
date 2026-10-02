@@ -5,7 +5,7 @@
 #
 # ANALYSIS SPEC, fixed before the first fit. The raw class rates were seen beforehand, in the
 # #28 side table and in the plan review's prototype, so this spec is not blind to them
-# (planning/archive/.../review-plan.md for #33):
+# (planning/archive/2026-10-issue-33-bt-spawning-evidence/review-plan.md):
 #   - POPULATION: 0290's visits on stream, canal and river-polygon edges, fished area 10-10,000 m2
 #     (0291's filter). The visit table is read as it stands (md5 logged), never rebuilt here.
 #   - FISH: per-fish maturity (data/fdis/build/fish.rds) and visit month, BT codes pooled per
