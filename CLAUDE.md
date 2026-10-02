@@ -135,6 +135,16 @@ meaning per row, not a sample. Settled conventions:
 The #29 archive holds the drafter brief and the two helper scripts (`scratch_keytext.py` extracts a
 group-library key's PDF text; `scratch_merge_drafts.py` merges family drafts onto the committed tables).
 
+### Reading use against link's segments: `access_bt = 2` is circular
+
+link codes a segment `access_bt = 2` when a BT observation sits upstream. Those observations are mostly
+FDIS records, the same visits an FDIS use analysis counts. A visit that caught BT therefore tends to
+put its own segment in code 2: on steep segments, 68 % of BT-caught visits against 2.6 % of the rest.
+Keep code 2 in the population, but never use it as a covariate, a stratum, or evidence about where BT
+live. #28 used it as evidence once, after the plan review had flagged it (archive
+`2026-10-issue-28-habitat-weights`). link segments also overlap by up to ~1.4 mm at breaks, so a
+point join needs a deterministic tiebreak (`0290`).
+
 ### Database access
 
 `0100`, `0110`, `0160`, `0162` connect on the bcfishpass tunnel (`0200`/`0220` try it first and
