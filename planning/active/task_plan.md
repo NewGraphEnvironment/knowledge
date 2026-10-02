@@ -74,7 +74,7 @@ Track 3's layer is on m4 (user, 2026-10-02): pull it last, never block on it. On
   - Fraley & Shepard 1989, the USFWS 2015 recovery plan and the 2010 critical habitat rule;
   - PDFs for COSEWIC 2012, D'Angelo & Muhlfeld 2011, Muhlfeld 2012.
   - A paywalled item with no access is noted, not chased.
-- [ ] Rebuild and push the `habitat_modelling` store with the new documents (`0150` build, then push).
+- [x] Rebuild and push the `habitat_modelling` store with the new documents (`0150` build, then push). *(210 documents, 37,145 chunks, md5 `728c4782…`. The local md5 and the S3 size match the manifest. The same 3 keys as #19/#29 have no PDF on disk.)*
 - [x] Add rows to `data/literature_evidence.csv`. 0280 gate; a meaning audit per row; every note's
   numbers and pages enumerated against the cited page.
 
@@ -103,8 +103,8 @@ Track 3's layer is on m4 (user, 2026-10-02): pull it last, never block on it. On
 
 ## Validation
 
-- [ ] `devtools::test("pkg")` passes
-- [ ] 0280 gate clean
-- [ ] `/code-check` on each commit, each loop ended by enumeration when a round finds a defect inside a fix
-- [ ] PWF checkboxes match landed work
+- [x] `devtools::test("pkg")` passes
+- [x] 0280 gate clean
+- [x] `/code-check` on each commit, each loop ended by enumeration when a round finds a defect inside a fix
+- [x] PWF checkboxes match landed work
 - [ ] `/planning-archive`, then `/gh-pr-push`
