@@ -194,3 +194,109 @@ Fixing round 2, I also had p. 15 for the 254-site figure; it is printed p. 16.
 **Mechanism.** Notes were written from memory of a read, not from the page. Numbers, page numbers and covariate lists were carried in prose and never re-opened.
 
 **Ended by enumeration.** Every checkable claim in the notes of rows 482–489 (29 claims: numbers, page numbers, labels, covariates) was matched by regex against the PDF page it names, through pdftotext `-layout`. 28 match. The 29th, the figure label "Bull Trout < 150 mm (1102 sites)", is drawn in the image, has no text layer, and was confirmed on a 100 dpi render, as were Isaak's minus sign and the curve readings. The gate passes on all 489 rows.
+
+## Phase 2 — the effort-corrected use curve (2026-10-02, `scripts/0291-bt-use-curve.R`)
+
+All figures below are from `data/bt_rear_use_curve.csv` and `scripts/logs/habitat/20261002_bt_use_curve.txt`.
+
+**Population.**
+- Of 0290's 17,606 visits, 16,729 sit on stream, canal or river-polygon edges.
+- 14,463 of those have a fished area of 10–10,000 m², and 1,997 caught BT.
+- Fits use the WSGs where the response has both outcomes: 53 for BT caught (13,161 visits), 57 for any fish and 52 for BT given fish.
+
+**Run history, kept as evidence.**
+- Run 1 used the pre-review design and was stopped unread.
+- Run 2 used the visit table round 2 corrected and was stopped unread.
+- Run 3 was the forked bootstrap. It segfaulted in `glm.fit` under the Accelerate BLAS, and the guard stopped it. The task reported exit 0 only because of a trailing `echo`.
+- Run 4 died in a sensitivity check: a one-data-set subset cannot carry a `data_set` term. Now a one-level nuisance term is dropped.
+- Run 5 finished, but F and C did not converge (coefficients near 1e14) and every bootstrap interval was 0 to Inf.
+  - Cause: the offset(log area) assumption. With log(area) free, its coefficient is 0.07 (F) to 0.19 (U, C), not 1.
+  - Spec Change 1 in 0291's header: area becomes a covariate, the WSG filter needs both outcomes, and a non-converged fit gives NA.
+  - The change was made from the convergence failure. The weights it produced had not been read, because they were 0/NaN.
+- Run 6 is the reported one. Run 7 is its reproducibility check (below).
+
+### Weights, all WSGs (1 = count-weighted core; 95 % stream-bootstrap interval)
+
+| class | visits | BT caught (U) | any fish (F) | BT given fish (C) |
+|---|---:|---|---|---|
+| core 0–2 | 5,024 | 0.92 (0.81–1.03) | 1.16 | 0.79 (0.69–0.92) |
+| core 2–5 | 2,600 | 1.25 (1.09–1.40) | 0.94 | 1.31 (1.08–1.46) |
+| core 5–8 | 1,364 | 0.89 (0.73–1.14) | 0.69 | 1.18 (0.93–1.44) |
+| core 8–10.49 | 547 | 0.74 (0.54–0.97) | 0.57 | 1.16 (0.85–1.58) |
+| not rearing ≤ 10.49 | 3,244 | 0.50 (0.40–0.61) | 0.36 | 1.07 (0.82–1.35) |
+| 10.49–12.49 | 607 | 0.64 (0.46–0.83) | 0.38 | 1.27 (0.86–1.77) |
+| 12.49–13.49 | 203 | 0.50 (0.25–0.75) | 0.34 | 1.27 (0.63–2.03) |
+| 13.49–14.49 | 157 | 0.27 (0.07–0.51), underpowered | 0.24 | 0.88 (0.27–1.79), underpowered |
+| > 14.49 | 717 | 0.56 (0.35–0.74) | 0.29 | 1.20 (0.81–1.79) |
+
+### What it says
+
+1. **Use falls with gradient. The fall sits in where fish and BT are present, not in BT's share among fish.** *(Wording revised after review round 1; see the dead ends.)*
+   - Given that a visit caught any fish, BT turn up as often on steep accessible stream as on core rearing: C is about 1 or above in every class off the core, and every one of those intervals includes 1 (0.82–1.35 not rearing; 0.86–1.77, 0.63–2.03, 0.27–1.79, 0.81–1.79 steep).
+   - What falls is whether a visit catches fish at all (F): 1.16 on low-gradient core, 0.57 at 8–10.49 %, 0.24–0.38 beyond.
+   - A fishless steep visit is consistent with being above an upper fish limit, or on a fishless stream. The analysis does not locate that limit.
+   - C ≈ 1 does not prove equal quality: a BT-only visit is a fish visit, so C can hold up as other species drop out.
+2. **The steep classes hold mostly small BT, with some spawner evidence.**
+   - 87–94 % of measured BT there are fry or juveniles: 249 fish at 10.49–12.49 %, 294 above 14.49 %.
+   - 80–100 % of BT visits with measured fish there include fry or juveniles: 80 % is the 5 such visits at 13.49–14.49 %.
+   - Low-gradient core holds the large adults (511 of 3,195 measured fish at 0–2 %).
+   - Spawner evidence per BT visit is higher on steep stream: 9 of 63 at 10.49–12.49 % and 9 of 75 above 14.49 %, against 23 of 791 at 0–2 % (round 1 caught a raw-count comparison).
+3. **A single elevation term does not earn a place, but elevation is not irrelevant.**
+   - Held-out log-likelihood is −1,754.2 without the elevation third and −1,836.5 with it, worse by 82.4 against the bar of +2.
+   - The cause is a sign flip between groups. On held-out core, BT per visit falls by elevation third: 0.40, 0.28, 0.11, on 942, 818 and 913 visits. Calibration core rises: 0.10, 0.17, 0.16.
+   - So in the step-5 WSGs the taper is per-visit detection, matching step 5. It is not sampling density, which a first draft claimed from the all-WSG average (mid 1.27, high 1.01).
+   - It is regional, which is why temperature belongs with link#21's GSDD work.
+4. **Channel size explains part of the steep decline.**
+   - log(segment width) has coefficient +0.229 (SE 0.028) in U, so larger streams have more BT.
+   - Adding width moves the steep U weights from 0.73, 0.50 and 0.40 to 0.88, 0.64 and 0.49 (width subset).
+   - Adding MAD moves them further on the MAD subset: 0.50 → 0.89, 0.34 → 0.64, 0.15 → 0.30 and 0.51 → 0.94 (lifts of 0.15–0.43).
+   - The null shares: segment width 12.7 %, measured width 57.1 %, MAD 25.3 %.
+5. **Data sets agree on the first steep step.**
+   - FDS-only U weights for the steep classes are 0.60, 0.91, 0.50 and 1.12; FDIS-only are 0.61, 0.44, 0.31 and 0.50.
+   - They agree at 10.49–12.49 %. The steeper FDS classes rest on few detections, two of them under the power rule.
+6. **Held out vs calibration.**
+   - Held-out U: 0.42 at 10.49–12.49 % and 0.50 above 14.49 %, against calibration 0.75 and 0.63.
+   - Held-out C: 0.79 and 0.77, against calibration 1.55 and 1.81. The intervals overlap.
+   - Held-out step-5 classes are too sparse to read: 85, 34 and 20 visits in the three bands.
+7. **Robust to the effort measure and the link.** The time-effort, logit, no-river-polygon, pooled-WSGs-only and with-month sensitivities move no steep U weight by more than about 0.1.
+8. **Segmentation barely matters.** In-sample pilots, fresh_default against score284: class agrees for 98.1 % of 1,698 visits.
+9. **The access code is circular, so it is not evidence.** A fix after round 1 quoted the code-1 rate (0.034 on steep and non-steep) and the code-2 share (30 % → 9 %) as evidence that the decline sits in where BT live. Round 2 showed code 2 is built largely from these visits' own catches: on steep segments it holds 68.1 % of BT-caught visits and 2.6 % of the rest. Withdrawn wherever it was used; the log block stays, labelled circular.
+   - Detection on `access_bt = 1` segments is 0.016–0.067 across classes; on code 2 (BT observed upstream) it is 0.30–0.85.
+   - The code-2 share falls from 0.50 at core 0–2 to 0.05–0.10 in the steep classes.
+   - Code 2 is defined from observations, so it is not a covariate, but it is the same mechanism as F: whether BT live up there at all.
+
+### Code-check, Phases 2 and 4, round 1 (`review-p24-round1.md`)
+
+The code was found correct: class_weight, the C subset, the bootstrap, held-out alignment, and PAVA against a brute force on 2,000 random cases. Ten write-up findings, all fixed:
+
+| # | finding | fix |
+|---|---|---|
+| 1 | elevation "sampling density" claim contradicted by held-out per-visit rates | rewritten; per-role elevation table added to 0291's log |
+| 2 | spawner evidence compared as raw counts | per-BT-visit rates; Q4 answer softened |
+| 3 | "FDS shows no steep decline" unsupported | rewritten: FDS and FDIS agree at the first step |
+| 4 | MAD lift stated as 0.3–0.4 | stated as 0.15–0.43 |
+| 5 | "58 WSGs for any fish" | 57; 52 for C |
+| 6 | C ≈ 1 read as equal quality; "usually above the fish limit" asserted; access-code mix unquantified | caveat added; inference marked; access block added to the log |
+| 7 | coverage "58 WSGs" | 63 modelled by link, 53 in the U fit |
+| 8 | link draft "stops jumping" true only under option B; "about half" | reworded |
+| 9 | the weight CSV's `sources` named a private issue | public-safe text, regenerated |
+| 10 | task_plan Phase 2 output wording | corrected |
+
+### Code-check, Phases 2 and 4, round 2 (`review-p24-round2.md`), and the enumeration that ended it
+
+Round 2 enumerated about 55 numbers across the research file, findings, the link draft and the #28 body against the curve CSV, the weight CSV, the 0291 log and the 0290 ledger: **all match**. It found five defects in round 1's fixes, so the inside-a-fix pattern recurred.
+
+1. **Bug, circular evidence.** The access-code split was used as evidence that the decline is where BT live. Code 2 is built largely from these visits' own catches: on steep segments it holds 68.1 % of BT-caught visits and 2.6 % of the rest (my probe reproduced both). Withdrawn in all five places, and kept as a dead end. 0291's log blocks are labelled circular.
+2. **Bug.** The link draft called an upper-fish-limit model "the real driver". Restated as "suggested by the any-fish decline; not located here".
+3. **Fragile.** The link draft's cutoff sentence described option B only. Rewritten per option.
+4. **Fragile.** The #28 body still said "quality-weighted" and "stops jumping". Fixed.
+5. **Fragile.** The #28 Problem section still said "less sampled". Annotated with the per-visit result.
+
+**Mechanism, the same one as rounds 1–2 of Phase 1: a quantity defined from the response was read as evidence about it.** Plan review G2 had named code 2 as circular, and a fix reached for it anyway because it was the variable at hand for "quantify the access mix".
+
+**Enumeration.** Every place in the four documents where access, fish-limit, quality or sampling claims appear was listed with one grep: `known upstream|0.034|30 % → 9 %|real driver|quality-weighted|less sampled|fish limit|upper limit`.
+- After the fixes, the only `known upstream` / `0.034` hit is the dead-end entry that records the withdrawal.
+- Every fish-limit mention says the limit is not located here.
+- `findings.md` lines quoting the original issue (the Issue context) are the issue as filed, left as written.
+
+Round 2's number enumeration plus this claim enumeration ends the loop.

@@ -43,6 +43,14 @@ wf_farm_priority.js                          farm priority/crossing tables out o
 --- Life-history timing (independent; re-run only when the template's Gantt CSV changes) ---
 0260  reshape the template's Gantt CSV -> data/life_history_timing.csv   (read with knw_timing_read())
 
+--- BT rearing use curve and candidate weight (after 0240; needs link >= 0.55.0 and local fwapg :5432) ---
+0290  place FDIS site visits on link's segments (fresh_default + score284_default), pooled BT presence,
+      elevation third, step-5 class -> data/fdis/derived/bt_use_visits.csv (+ ledger)
+0291  effort-corrected use curve, three responses (BT caught, any fish, BT given fish)
+      -> data/bt_rear_use_curve.csv (+ log; ~10 min, socket workers)
+0292  candidate weight per gradient class -> data/habitat_weight_bt_rear.csv
+      then: aws s3 cp data/fdis/derived/bt_use_visits.csv s3://fresh-bc/fdis/derived/
+
 --- Habitat literature (independent of the watershed-group flow) ---
 0270  build the group's Fisheries/habitat_modelling collection   --dry-run first, then live
 0150  ACTION=build STORE=habitat_modelling COLLECTIONS="U9ZCZ6RN,chinook,bull_trout,..."  then ACTION=push

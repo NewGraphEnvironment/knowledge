@@ -29,7 +29,10 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   intrinsic-potential model's threshold carries that model's `model_id`), `ip_model_registry.csv` (one row
   per IP model × species × stage: how it sizes streams, its confinement variable, its validation, with its
   flow claim and any validation claimed each quoted; read with `knw_ip_read()`, gated and link-checked by
-  `0280`), and
+  `0280`),
+  `bt_rear_use_curve.csv` and `habitat_weight_bt_rear.csv` (BT rearing use by gradient class from FDIS
+  visits on link's segments, and the candidate weight per class; `0290`-`0292`, `research/habitat_weights.md`),
+  and
   `habitat_modelling_{members,additions}.csv` (what `0270` puts in the group's `Fisheries/habitat_modelling`
   collection, which with the species collections feeds the `habitat_modelling` store).
 - `data/rag/` — ignored local cache of the ragnar stores. Source of truth is `s3://fresh-bc/rag/`.

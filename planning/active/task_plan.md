@@ -56,22 +56,22 @@ A second number argues the other way: about a quarter of the first band (101 of 
   - link version and tracker md5 in the ledger.
 
 ## Phase 2: Effort-corrected use curve
-- [ ] `scripts/0291-bt-use-curve.R`, pure R from the visit table.
-- [ ] Raw detection per gradient band, then a binomial GLM: present ~ band + elevation third + log(area_m2). Same with log(fishing_time) as a check.
+- [x] `scripts/0291-bt-use-curve.R`, pure R from the visit table.
+- [x] Raw detection per gradient band, then a binomial GLM: present ~ band + elevation third + log(area_m2). Same with log(fishing_time) as a check.
   - *Revised (plan review G1/G4/G5/G7):* three responses, each cloglog with offset log(area), plus data_set, era and WSG:
     - BT caught;
     - any fish caught;
     - BT given fish.
 
     Classes are on link's ladder, with "accessible, not rearing ≤ 10.49 %" as its own class. Intervals come from a stream-cluster bootstrap. The spec is fixed in 0291's header before the first fit.
-- [ ] Predicted detection per band at median effort, relative to the core bands (≤ 10.49 %), with intervals.
-- [ ] Driver checks, each reported with and without:
+- [x] Predicted detection per band at median effort, relative to the core bands (≤ 10.49 %), with intervals.
+- [x] Driver checks, each reported with and without:
   - band × elevation;
   - channel width and MAD where non-null, with their null share;
   - site-measured vs segment gradient.
-- [ ] Q4: size-class mix by band, joining `data/fdis_evidence.csv` on `site_visit`. Fry and juvenile against subadult and adult in steep bands.
-- [ ] Hold-out: fit on calibration WSGs, then predict held-out detections by band and compare to observed. Set the curve beside link's `taper.csv` and `elevation_adjusted.csv`, stating that the two share data.
-- [ ] Output: `data/bt_rear_use_curve.csv` (aggregates only: band × elevation class, visits, detections, raw rate, adjusted ratio, interval). Log the fits to `scripts/logs/habitat/`.
+- [x] Q4: size-class mix by band, joining `data/fdis_evidence.csv` on `site_visit`. Fry and juvenile against subadult and adult in steep bands.
+- [x] Hold-out: fit on calibration WSGs, then predict held-out detections by band and compare to observed. Set the curve beside link's `taper.csv` and `elevation_adjusted.csv`, stating that the two share data.
+- [x] Output: `data/bt_rear_use_curve.csv` (aggregates only: role × response × class, visits, detections, raw rate, weight, interval, power). Elevation results are in the log, not the CSV. Log the fits to `scripts/logs/habitat/`.
 
 ## Phase 3: Literature use curves
 - [x] Search the `habitat_modelling` store with `ragnar::ragnar_retrieve()` directly (cred `crd_search` is broken). Look for BT occurrence or abundance curves by gradient, elevation and temperature: Dunham & Chandler 2001, Isaak 2015, Rieman et al., Porter 2008 HSI, Watson & Hillman 1997, and anything else the store holds.
@@ -81,14 +81,14 @@ A second number argues the other way: about a quarter of the first band (101 of 
 - [x] List sources the store lacks as gaps. Do not acquire beyond quick open-access PDFs filed via `0270`'s additions.
 
 ## Phase 4: Position and candidate weight
-- [ ] `research/habitat_weights.md` with the provenance line:
+- [x] `research/habitat_weights.md` with the provenance line:
   - answers to Q1–Q5;
   - a per-driver position table: gradient, elevation/temperature, channel size, effort, access/bridge (the 101 km of non-steep band-1 stream). Each is in the weight, handled elsewhere (with where), or bias to correct;
   - the dead ends.
-- [ ] `data/habitat_weight_bt_rear.csv`: the candidate band table (gradient_min, gradient_max, weight, basis, n_visits, n_present, sources). Aggregates only, so it can leave this repo.
-- [ ] Index row in `research/README.md`. Mention the new data files in CLAUDE.md's Layout.
-- [ ] Draft the link issue (use-weighted km beside cutoff km, weights as bundle data) into `planning/active/link-issue-draft.md`.
-- [ ] Revise the #28 body if findings change its spec, e.g. the bcfishobs stage claim or the #23 dependency.
+- [x] `data/habitat_weight_bt_rear.csv`: the candidate band table (gradient_min, gradient_max, weight, basis, n_visits, n_present, sources). Aggregates only, so it can leave this repo.
+- [x] Index row in `research/README.md`. Mention the new data files in CLAUDE.md's Layout.
+- [x] Draft the link issue (use-weighted km beside cutoff km, weights as bundle data) into `planning/active/link-issue-draft.md`.
+- [x] Revise the #28 body if findings change its spec, e.g. the bcfishobs stage claim or the #23 dependency.
 
 ## Validation
 

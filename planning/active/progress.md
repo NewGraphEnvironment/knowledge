@@ -12,3 +12,9 @@
 - Plan review (`review-plan.md`) and code-check rounds 1–2 (`review-p1-round*.md`) folded into 0290. Round 2 found a defect inside round 1's placement fix, so the loop was ended by enumerating placement and presence/absence over every kept visit (findings.md).
 - Phase 3: five literature rows added; the 0280 gate passes on all 486 rows. `elevation` was not added to the vocabulary.
 - First two 0291 runs were stopped unread: one on the pre-review design, one on the visit table round 2 corrected.
+- Phase 2: 0291 reported on run 6 after the spec Change 1 (log area as a covariate). Run 7 reproduced the curve CSV and the log byte for byte.
+- Phase 4:
+  - `scripts/0292` writes the candidate weight table;
+  - `research/habitat_weights.md`, the README row, CLAUDE.md's Layout and the scripts/README run order;
+  - the link issue drafted in `link-issue-draft.md` (not filed);
+  - #28's body edited with the answer.
