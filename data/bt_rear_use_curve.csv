@@ -1,0 +1,82 @@
+role,response,class,n_visits,n_detect,raw_rate,weight,weight_lo,weight_hi,n_boot_ok,power
+all,bt_caught,core 0-2,5024,791,0.157,0.923,0.809,1.028,200,ok
+all,bt_caught,core 2-5,2600,564,0.217,1.247,1.094,1.403,200,ok
+all,bt_caught,core 5-8,1364,213,0.156,0.894,0.728,1.137,200,ok
+all,bt_caught,core 8-10.49,547,76,0.139,0.739,0.538,0.972,200,ok
+all,bt_caught,not rearing <=10.49,3244,190,0.059,0.498,0.398,0.614,200,ok
+all,bt_caught,10.49-12.49,607,63,0.104,0.641,0.463,0.83,200,ok
+all,bt_caught,12.49-13.49,203,18,0.089,0.5,0.254,0.752,200,ok
+all,bt_caught,13.49-14.49,157,7,0.045,0.272,0.065,0.512,200,underpowered
+all,bt_caught,>14.49,717,75,0.105,0.557,0.35,0.744,200,ok
+all,any_fish_caught,core 0-2,5024,4223,0.841,1.164,1.127,1.214,200,ok
+all,any_fish_caught,core 2-5,2600,1848,0.711,0.937,0.858,1.009,200,ok
+all,any_fish_caught,core 5-8,1364,833,0.611,0.686,0.61,0.753,200,ok
+all,any_fish_caught,core 8-10.49,547,292,0.534,0.574,0.473,0.644,200,ok
+all,any_fish_caught,not rearing <=10.49,3244,1059,0.326,0.362,0.322,0.41,200,ok
+all,any_fish_caught,10.49-12.49,607,236,0.389,0.384,0.321,0.439,200,ok
+all,any_fish_caught,12.49-13.49,203,74,0.365,0.342,0.257,0.422,200,ok
+all,any_fish_caught,13.49-14.49,157,44,0.28,0.242,0.164,0.36,200,ok
+all,any_fish_caught,>14.49,717,248,0.346,0.292,0.248,0.327,200,ok
+all,bt_caught_given_fish,core 0-2,4223,791,0.187,0.794,0.694,0.918,199,ok
+all,bt_caught_given_fish,core 2-5,1848,564,0.305,1.309,1.084,1.46,199,ok
+all,bt_caught_given_fish,core 5-8,833,213,0.256,1.177,0.928,1.442,199,ok
+all,bt_caught_given_fish,core 8-10.49,292,76,0.26,1.163,0.854,1.578,199,ok
+all,bt_caught_given_fish,not rearing <=10.49,1059,190,0.179,1.066,0.816,1.351,199,ok
+all,bt_caught_given_fish,10.49-12.49,236,63,0.267,1.272,0.861,1.772,199,ok
+all,bt_caught_given_fish,12.49-13.49,74,18,0.243,1.271,0.634,2.026,199,ok
+all,bt_caught_given_fish,13.49-14.49,44,7,0.159,0.881,0.274,1.789,199,underpowered
+all,bt_caught_given_fish,>14.49,248,75,0.302,1.199,0.81,1.787,199,ok
+calibration,bt_caught,core 0-2,3717,393,0.106,0.776,0.625,0.936,200,ok
+calibration,bt_caught,core 2-5,1777,354,0.199,1.406,1.149,1.66,200,ok
+calibration,bt_caught,core 5-8,970,137,0.141,1.006,0.796,1.287,200,ok
+calibration,bt_caught,core 8-10.49,398,60,0.151,0.972,0.708,1.318,200,ok
+calibration,bt_caught,not rearing <=10.49,2608,110,0.042,0.413,0.321,0.559,200,ok
+calibration,bt_caught,10.49-12.49,492,51,0.104,0.745,0.516,0.971,200,ok
+calibration,bt_caught,12.49-13.49,164,12,0.073,0.471,0.194,0.771,200,ok
+calibration,bt_caught,13.49-14.49,134,4,0.03,0.191,0.044,0.467,200,underpowered
+calibration,bt_caught,>14.49,552,49,0.089,0.628,0.398,0.908,200,ok
+calibration,any_fish_caught,core 0-2,3717,3104,0.835,1.161,1.111,1.212,200,ok
+calibration,any_fish_caught,core 2-5,1777,1226,0.69,0.92,0.835,1.018,200,ok
+calibration,any_fish_caught,core 5-8,970,578,0.596,0.681,0.601,0.759,200,ok
+calibration,any_fish_caught,core 8-10.49,398,221,0.555,0.636,0.535,0.765,200,ok
+calibration,any_fish_caught,not rearing <=10.49,2608,829,0.318,0.341,0.294,0.388,200,ok
+calibration,any_fish_caught,10.49-12.49,492,189,0.384,0.379,0.299,0.442,200,ok
+calibration,any_fish_caught,12.49-13.49,164,61,0.372,0.354,0.257,0.461,200,ok
+calibration,any_fish_caught,13.49-14.49,134,39,0.291,0.253,0.166,0.358,200,ok
+calibration,any_fish_caught,>14.49,552,186,0.337,0.279,0.224,0.325,200,ok
+calibration,bt_caught_given_fish,core 0-2,3104,393,0.127,0.619,0.518,0.726,200,ok
+calibration,bt_caught_given_fish,core 2-5,1226,354,0.289,1.518,1.312,1.724,200,ok
+calibration,bt_caught_given_fish,core 5-8,578,137,0.237,1.459,1.174,1.792,200,ok
+calibration,bt_caught_given_fish,core 8-10.49,221,60,0.271,1.399,0.917,1.938,200,ok
+calibration,bt_caught_given_fish,not rearing <=10.49,829,110,0.133,1.002,0.757,1.311,200,ok
+calibration,bt_caught_given_fish,10.49-12.49,189,51,0.27,1.547,1.036,2.145,200,ok
+calibration,bt_caught_given_fish,12.49-13.49,61,12,0.197,1.215,0.499,2.357,200,ok
+calibration,bt_caught_given_fish,13.49-14.49,39,4,0.103,0.665,0.153,1.785,200,underpowered
+calibration,bt_caught_given_fish,>14.49,186,49,0.263,1.81,1.191,2.839,200,ok
+held_out,bt_caught,core 0-2,1307,398,0.305,1.122,0.881,1.337,200,ok
+held_out,bt_caught,core 2-5,823,210,0.255,1.048,0.727,1.35,200,ok
+held_out,bt_caught,core 5-8,394,76,0.193,0.721,0.469,1.23,200,ok
+held_out,bt_caught,core 8-10.49,149,16,0.107,0.397,0.185,0.81,200,ok
+held_out,bt_caught,not rearing <=10.49,636,80,0.126,0.712,0.415,1.026,200,ok
+held_out,bt_caught,10.49-12.49,115,12,0.104,0.416,0.185,0.756,200,ok
+held_out,bt_caught,12.49-13.49,39,6,0.154,0.56,0.095,1.196,200,underpowered
+held_out,bt_caught,13.49-14.49,23,3,0.13,0.615,0,1.321,200,underpowered
+held_out,bt_caught,>14.49,165,26,0.158,0.495,0.248,0.929,200,ok
+held_out,any_fish_caught,core 0-2,1307,1119,0.856,1.166,1.079,1.269,200,ok
+held_out,any_fish_caught,core 2-5,823,622,0.756,0.975,0.863,1.061,200,ok
+held_out,any_fish_caught,core 5-8,394,255,0.647,0.709,0.618,0.878,200,ok
+held_out,any_fish_caught,core 8-10.49,149,71,0.477,0.449,0.316,0.604,200,ok
+held_out,any_fish_caught,not rearing <=10.49,636,230,0.362,0.455,0.372,0.521,200,ok
+held_out,any_fish_caught,10.49-12.49,115,47,0.409,0.396,0.274,0.565,200,ok
+held_out,any_fish_caught,12.49-13.49,39,13,0.333,0.296,0.154,0.518,200,ok
+held_out,any_fish_caught,13.49-14.49,23,5,0.217,0.164,0.039,0.351,200,underpowered
+held_out,any_fish_caught,>14.49,165,62,0.376,0.327,0.233,0.437,200,ok
+held_out,bt_caught_given_fish,core 0-2,1119,398,0.356,1.029,0.837,1.253,200,ok
+held_out,bt_caught_given_fish,core 2-5,622,210,0.338,1.044,0.687,1.338,200,ok
+held_out,bt_caught_given_fish,core 5-8,255,76,0.298,0.839,0.487,1.289,200,ok
+held_out,bt_caught_given_fish,core 8-10.49,71,16,0.225,0.738,0.379,1.359,200,ok
+held_out,bt_caught_given_fish,not rearing <=10.49,230,80,0.348,1.147,0.719,1.768,200,ok
+held_out,bt_caught_given_fish,10.49-12.49,47,12,0.255,0.787,0.29,1.488,200,ok
+held_out,bt_caught_given_fish,12.49-13.49,13,6,0.462,1.463,0.326,3.12,200,underpowered
+held_out,bt_caught_given_fish,13.49-14.49,5,3,0.6,2.195,0,61.179,198,underpowered
+held_out,bt_caught_given_fish,>14.49,62,26,0.419,0.768,0.376,1.451,200,ok

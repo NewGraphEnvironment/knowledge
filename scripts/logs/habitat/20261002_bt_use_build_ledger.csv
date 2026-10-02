@@ -1,0 +1,21 @@
+kind,step,n,note
+in,visits_in,53018,
+drop,not_placed,1568,
+drop,far_snap,5322,
+drop,ws50_mismatch,1122,
+drop,junk_date,23,
+drop,effort_sentinel_or_none,1422,
+drop,catch_unknown,420,
+drop,wsg_not_in_link,19691,
+drop,bt_absent_from_wsg,254,
+info,link_version,0,0.55.0
+info,species_pooling_md5,0,31ca5df552fdef1160b271dd7cb04ee6
+drop,bt_absence_blocked,361,
+info,multi_match_fresh_default_55wsg,37,max overlap 0.0014 m
+info,multi_match_score284_default_8wsg,11,max overlap 0.0007 m
+info,multi_match_score284_default_4wsg,0,max overlap 0.0000 m
+drop,no_link_segment,885,
+info,segment_starts_in_window,10768,segment starts within -1 to +5 m of the site; the rest take the segment containing it
+info,bt_present_on_access_bt_0,28,BT caught on a segment link models as blocked
+drop,not_bt_accessible,4344,
+kept,visits_kept,17606,

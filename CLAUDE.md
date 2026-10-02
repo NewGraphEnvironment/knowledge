@@ -29,7 +29,10 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   intrinsic-potential model's threshold carries that model's `model_id`), `ip_model_registry.csv` (one row
   per IP model × species × stage: how it sizes streams, its confinement variable, its validation, with its
   flow claim and any validation claimed each quoted; read with `knw_ip_read()`, gated and link-checked by
-  `0280`), and
+  `0280`),
+  `bt_rear_use_curve.csv` and `habitat_weight_bt_rear.csv` (BT rearing use by gradient class from FDIS
+  visits on link's segments, and the candidate weight per class; `0290`-`0292`, `research/habitat_weights.md`),
+  and
   `habitat_modelling_{members,additions}.csv` (what `0270` puts in the group's `Fisheries/habitat_modelling`
   collection, which with the species collections feeds the `habitat_modelling` store).
 - `data/rag/` — ignored local cache of the ragnar stores. Source of truth is `s3://fresh-bc/rag/`.
@@ -131,6 +134,16 @@ meaning per row, not a sample. Settled conventions:
 
 The #29 archive holds the drafter brief and the two helper scripts (`scratch_keytext.py` extracts a
 group-library key's PDF text; `scratch_merge_drafts.py` merges family drafts onto the committed tables).
+
+### Reading use against link's segments: `access_bt = 2` is circular
+
+link codes a segment `access_bt = 2` when a BT observation sits upstream. Those observations are mostly
+FDIS records, the same visits an FDIS use analysis counts. A visit that caught BT therefore tends to
+put its own segment in code 2: on steep segments, 68 % of BT-caught visits against 2.6 % of the rest.
+Keep code 2 in the population, but never use it as a covariate, a stratum, or evidence about where BT
+live. #28 used it as evidence once, after the plan review had flagged it (archive
+`2026-10-issue-28-habitat-weights`). link segments also overlap by up to ~1.4 mm at breaks, so a
+point join needs a deterministic tiebreak (`0290`).
 
 ### Database access
 

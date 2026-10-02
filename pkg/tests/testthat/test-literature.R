@@ -223,6 +223,17 @@ test_that("valley width index and drainage area read with their own units", {
   expect_error(knw_literature_read(write_literature(x)), "unit ha.*drainage_area")
 })
 
+test_that("elevation reads in metres or feet and refuses other units", {
+  x <- literature_fixture()
+  x$variable[2] <- "elevation"
+  x$unit[2] <- "m"
+  expect_equal(knw_literature_read(write_literature(x))$variable[2], "elevation")
+  x$unit[2] <- "ft"
+  expect_equal(knw_literature_read(write_literature(x))$unit[2], "ft")
+  x$unit[2] <- "percent"
+  expect_error(knw_literature_read(write_literature(x)), "unit percent.*elevation")
+})
+
 test_that("US units are read as the source wrote them", {
   x <- literature_fixture()
   x$variable[1] <- "discharge"

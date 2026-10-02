@@ -1,3 +1,9 @@
+# knowledge 0.2.1
+
+* `knw_literature_vocab()` adds `elevation` to the `variable` vocabulary, in
+  `m` or `ft`, so a source that fits an elevation term (a watershed-scale
+  occurrence coefficient, say) can be recorded. Other units are refused.
+
 # knowledge 0.2.0
 
 * `knw_ip_read()` and `knw_ip_vocab()` read and validate the intrinsic-potential

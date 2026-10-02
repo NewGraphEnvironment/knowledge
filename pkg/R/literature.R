@@ -29,7 +29,7 @@ knw_literature_vocab <- function() {
                           "migratory"),
     variable = c("gradient", "channel_width", "stream_order", "discharge", "lake_area",
                  "wetland_area", "bridge_distance", "temperature", "substrate", "depth",
-                 "velocity", "timing", "valley_width_index", "drainage_area"),
+                 "velocity", "timing", "valley_width_index", "drainage_area", "elevation"),
     parameter = c("spawn_gradient_max", "spawn_gradient_min", "spawn_channel_width_min",
                   "spawn_mad_min", "rear_gradient_max", "rear_channel_width_min", "rear_mad_min",
                   "rear_mad_max", "rear_lake_ha_min", "rear_wetland_ha_min", "access_gradient_max",
@@ -190,7 +190,7 @@ knw_literature_read <- function(path, species_code = NULL, variable = NULL) {
                stream_order = "order", discharge = c("m3/s", "cfs"), lake_area = "ha", wetland_area = "ha",
                bridge_distance = c("km", "m"), temperature = "degC", substrate = "mm", depth = "m",
                velocity = "m/s", timing = "MM-DD", valley_width_index = "ratio",
-               drainage_area = c("km2", "mi2"))
+               drainage_area = c("km2", "mi2"), elevation = c("m", "ft"))
   misfit <- !is.na(x$unit) & !mapply(function(v, u) u %in% fits[[v]], x$variable, x$unit)
   if (any(misfit)) {
     stop("unit ", x$unit[misfit][1], " does not fit variable ", x$variable[misfit][1],
