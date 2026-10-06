@@ -35,18 +35,18 @@
 - [x] `0280` passes; commit its log.
 
 ## Phase 3: Sources and the `temperature` store
-- [ ] `0270`: a `--collection` argument (default `habitat_modelling`) from which the tag and the default
+- [x] `0270`: a `--collection` argument (default `habitat_modelling`) from which the tag and the default
       members/additions paths derive, and an optional member `pdf` (URL or repo path) for an item no local
       library holds a PDF of; default dry run identical to main (checked before any upload).
-- [ ] `data/temperature_members.csv`: the keyed members of the collection, the memos, Thorley 2021/2022,
+- [x] `data/temperature_members.csv`: the keyed members of the collection, the memos, Thorley 2021/2022,
       Cope 2020, Bear 2005/2007, Hasnain et al., Brett 1971, the WCT recovery documents, McMahon 2007,
       NorWeST, and every source a temperature row cites.
-- [ ] Memo PDFs printed from the rendered analytic appendices (`/analyses/fish-passage-22b/`,
+- [x] Memo PDFs printed from the rendered analytic appendices (`/analyses/fish-passage-22b/`,
       `/analyses/skeena-stream-temp-25/`; the `/f/` links in Zotero now serve an empty page).
-- [ ] Bear 2005/2007: paywalled or ResearchGate only; flagged to the user, recorded as a gap.
-- [ ] `0270 --collection temperature` dry run prints `exists` for `SW2RXUJC`; live run; both memos end
+- [x] Bear 2005/2007: paywalled or ResearchGate only; flagged to the user, recorded as a gap.
+- [x] `0270 --collection temperature` dry run prints `exists` for `SW2RXUJC`; live run; both memos end
       `pdf present`; wait for Zotero sync and keys.
-- [ ] `0150 ACTION=build STORE=temperature COLLECTIONS=SW2RXUJC`, then push; log the build and push.
+- [x] `0150 ACTION=build STORE=temperature COLLECTIONS=SW2RXUJC`, then push; log the build and push.
 - [ ] Rebuild and push `habitat_modelling` (its inputs include `temperature` and the memos).
 
 ## Phase 4: Rows for BT, WCT, CH, CO, ST

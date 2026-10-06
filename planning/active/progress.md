@@ -13,3 +13,12 @@
   air; round 2 found the planning counts stale after that fix and a metric accepted on value-less rows.
   Ended by enumeration: 36 variable × kind × metric cases against the documented rule, 0 disagree; every
   count in findings/progress re-derived from the table. Plan review filed in `review-plan.md`.
+- Phase 3: `0270 --collection` and member `pdf`; default dry run byte-identical to main; temperature dry
+  run found `SW2RXUJC`; live run 29 added, both memo PDFs uploaded (log
+  `20261006_temperature_collection_build.txt`). The memo `/f/` links now serve an empty page; the PDFs were
+  printed from `/analyses/fish-passage-22b/` and `/analyses/skeena-stream-temp-25/` (headless Chrome) into
+  the gitignored `data/rag/pdf/`. Bear 2005/2007: no open copy (Unpaywall and Semantic Scholar: closed; 2005
+  report only on ResearchGate). `temperature` store build started (37 keyed PDFs).
+- Phase 4 started: `none` rows may carry `bound`; 0280 THERMAL grid (5 species × 10 cells; 12/50 met
+  before drafting). Two drafters (tc: WCT, BT; ps: CH, CO, ST) on `drafter-brief.md`.
+- `temperature` store: 37 documents, 7,377 chunks; pushed, manifest now holds six stores; a verified connect to a fresh dir downloads and checks it (`20261006_temperature_store_{build,push}.txt`). `habitat_modelling` rebuild started.

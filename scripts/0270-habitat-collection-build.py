@@ -2,9 +2,10 @@
 """
 scripts/0270-habitat-collection-build.py
 ---------------------------------------------------------------------------
-Build the group library's Fisheries/habitat_modelling collection from a curated
-key list, so the habitat_modelling ragnar store (0150 ACTION=build) can be
-rebuilt from the group library alone, on any machine synced to it.
+Build a group-library collection under Fisheries (habitat_modelling by default,
+--collection for another) from a curated key list, so the ragnar store of the same
+name (0150 ACTION=build) can be rebuilt from the group library alone, on any
+machine synced to it.
 
 WHY: the habitat-modelling literature (where the bcfishpass thresholds come
 from) sat in a PERSONAL collection. Every item there has a group-library copy,
@@ -29,8 +30,13 @@ item, which gets a parent of its own. The standalone is left untouched: making
 it a child would drop it from its collections (a child cannot be a member), and
 the upload of the same bytes is deduplicated by md5.
 
-INPUT   data/habitat_modelling_members.csv   (citation_key, source)
-        data/habitat_modelling_additions.csv (metadata or DOI, pdf, why)
+A member row may name a `pdf` (a URL, or a path relative to the repo root) for an
+item that has no PDF anywhere in the local libraries, such as a web page printed to
+PDF. It is read only when the group item has no stored PDF, so a re-run on a
+machine without the file is a no-op once the upload has landed.
+
+INPUT   data/<collection>_members.csv   (citation_key, source, optional pdf)
+        data/<collection>_additions.csv (metadata or DOI, pdf, why), if it exists
         ~/Zotero/zotero.sqlite, via a checked copy (key -> item, local PDF paths)
         ZOTERO API key as in 0153; group 4733734
 OUTPUT  Zotero writes only; one status line per member and a summary.
@@ -44,7 +50,7 @@ _spec = importlib.util.spec_from_file_location("z0153", os.path.join(HERE, "0153
 z = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(z)          # 0153 has a __main__ guard; this only defines helpers
 
-GROUP_LIB_NAME = "habitat_modelling"
+COLLECTION = "habitat_modelling"     # the collection name and the tag on created items; --collection
 PARENT = "TRXPJHQE"                  # Fisheries, group library
 ZDIR = os.path.expanduser("~/Zotero")
 # Fields the Web API must not receive on a copy: identity, sync state, and the
@@ -170,7 +176,7 @@ def item_json(con, item_id, coll):
     """Web API JSON for a copy of a local item, from its fields and creators."""
     itype = con.execute("SELECT t.typeName FROM items i JOIN itemTypes t ON t.itemTypeID = i.itemTypeID "
                         "WHERE i.itemID = ?", (item_id,)).fetchone()[0]
-    out = {"itemType": itype, "collections": [coll], "tags": [{"tag": "habitat_modelling"}]}
+    out = {"itemType": itype, "collections": [coll], "tags": [{"tag": COLLECTION}]}
     for name, value in con.execute("""
             SELECT f.fieldName, v.value FROM itemData id JOIN fields f ON f.fieldID = id.fieldID
             JOIN itemDataValues v ON v.valueID = id.valueID WHERE id.itemID = ?""", (item_id,)):
@@ -200,12 +206,12 @@ def get_json(url):
 
 def find_collection(dry):
     for c in get_json(f"{z.BASE}/collections/{PARENT}/collections?limit=100"):
-        if c["data"]["name"] == GROUP_LIB_NAME:
+        if c["data"]["name"] == COLLECTION:
             return c["key"], "exists"
     if dry:
         return None, "would create"
     st, bd = z.api("POST", f"{z.BASE}/collections",
-                   data=[{"name": GROUP_LIB_NAME, "parentCollection": PARENT}],
+                   data=[{"name": COLLECTION, "parentCollection": PARENT}],
                    headers={"Content-Type": "application/json", "Zotero-Write-Token": z.tok()})
     try:
         return json.loads(bd)["successful"]["0"]["key"], "created"
@@ -338,7 +344,8 @@ def addition_item(row):
 
 
 def addition_pdf(row):
-    """(filename, bytes) for an additions row, or None. A URL must return a real PDF."""
+    """(filename, bytes) for an additions or member row, or None. A URL must return a real
+    PDF; a path that is not a URL or `zotero:` key is read relative to the repo root."""
     src = row["pdf"]
     if src.startswith("zotero:"):
         akey = src[len("zotero:"):]
@@ -348,6 +355,12 @@ def addition_pdf(row):
             return None
         with open(os.path.join(d, files[0]), "rb") as f:
             return files[0], f.read()
+    if not re.match(r"https?://", src):
+        p = os.path.join(HERE, "..", src)
+        if not os.path.isfile(p):
+            return None
+        with open(p, "rb") as f:
+            return os.path.basename(p), f.read()
     data = z.fetch(src, timeout=180)
     if not data.startswith(b"%PDF"):
         raise ValueError(f"not a PDF: {src}")
@@ -356,7 +369,7 @@ def addition_pdf(row):
 
 def do_addition(row, coll, dry):
     item = addition_item(row)
-    item.update({"collections": [coll], "tags": [{"tag": "habitat_modelling"}]})
+    item.update({"collections": [coll], "tags": [{"tag": COLLECTION}]})
     steps = []
     gkey = group_copy(item)
     if gkey:
@@ -376,23 +389,32 @@ def do_addition(row, coll, dry):
 
 
 def main():
+    global COLLECTION
     p = argparse.ArgumentParser()
-    p.add_argument("--members", default=os.path.join(HERE, "..", "data", "habitat_modelling_members.csv"))
-    p.add_argument("--additions", default=os.path.join(HERE, "..", "data", "habitat_modelling_additions.csv"))
+    p.add_argument("--collection", default=COLLECTION)
+    p.add_argument("--members", help="default data/<collection>_members.csv")
+    p.add_argument("--additions", help="default data/<collection>_additions.csv, when it exists")
     p.add_argument("--dry-run", action="store_true")
     a = p.parse_args()
+    COLLECTION = a.collection
+    data_dir = os.path.join(HERE, "..", "data")
+    if not a.members:
+        a.members = os.path.join(data_dir, f"{COLLECTION}_members.csv")
+    if not a.additions:
+        default = os.path.join(data_dir, f"{COLLECTION}_additions.csv")
+        a.additions = default if os.path.exists(default) else None
     dry = a.dry_run
     con = db()
     group_lib = con.execute("SELECT libraryID FROM groups WHERE groupID = ?", (int(z.GROUP),)).fetchone()[0]
     coll, how = find_collection(dry)
-    print(f"collection {GROUP_LIB_NAME} ({coll or '-'}) under {PARENT}: {how}", flush=True)
+    print(f"collection {COLLECTION} ({coll or '-'}) under {PARENT}: {how}", flush=True)
 
     tally = {}
     members = list(csv.DictReader(open(a.members, newline="", encoding="utf-8")))
     for m in members:
         key = m["citation_key"].strip()
         try:
-            steps, status = do_member(con, key, group_lib, coll, dry)
+            steps, status = do_member(con, key, group_lib, coll, dry, (m.get("pdf") or "").strip())
         except Exception as e:                      # one member must not abort the batch
             steps, status = [f"ERROR {type(e).__name__}"], f"ERROR {type(e).__name__}: {e}"
         print(f"  {key}: {status}", flush=True)
@@ -419,8 +441,9 @@ def main():
         sys.exit(f"problems: {', '.join(bad)}")
 
 
-def do_member(con, key, group_lib, coll, dry):
-    """Bring one member into the collection. -> (steps, printed status)."""
+def do_member(con, key, group_lib, coll, dry, pdf=""):
+    """Bring one member into the collection; `pdf` is the row's own PDF source, used
+    when no local library holds one. -> (steps, printed status)."""
     hits = local_items(con, key)
     group = [h for h in hits if h[0] == group_lib]
     steps, gkey = [], None
@@ -449,8 +472,9 @@ def do_member(con, key, group_lib, coll, dry):
                     steps.append(f"COPY-FAIL {st} {bd[:160]!r}")
         if gkey:
             want = title_of(con, group[0][1]) if group else title_of(con, hits[0][1])
-            steps += ensure(gkey, coll, dry, lambda: local_pdf(
-                con, [h[1] for h in hits if same_work(title_of(con, h[1]), want)]))
+            local = lambda: local_pdf(con, [h[1] for h in hits if same_work(title_of(con, h[1]), want)])
+            find = (lambda: local() or addition_pdf({"pdf": pdf})) if pdf else local
+            steps += ensure(gkey, coll, dry, find, required=bool(pdf))
         status = f"{gkey or '-'} | " + ", ".join(steps)
     return steps, status
 
