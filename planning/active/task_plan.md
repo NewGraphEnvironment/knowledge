@@ -64,18 +64,18 @@
 - [x] `0280` gate green; a meaning audit of every new row, two rounds at least; commit the gate log.
 
 ## Phase 5: `research/thermal_requirements.md` and docs
-- [ ] What is known per species and stage, what has no source (the `none` cells), and which values
+- [x] What is known per species and stage, what has no source (the `none` cells), and which values
       link#21, template#214 and wet#40 should use; header per `planning.md`.
-- [ ] `research/README.md` row; `research/stream_temperature.md` evidence and Zotero bullets revised;
+- [x] `research/README.md` row; `research/stream_temperature.md` evidence and Zotero bullets revised;
       `CLAUDE.md` data line and drafting conventions (metric, air, base in note); `scripts/README.md`
       (evidence columns, grid, `0270 --collection`, the store).
-- [ ] `pkg/NEWS.md` and `DESCRIPTION` version (a required column is a breaking change).
-- [ ] Issue #38 body edited to what landed (air variable, window metrics, `mwat`/`7dec`, qualitative rows
+- [x] `pkg/NEWS.md` and `DESCRIPTION` version (a required column is a breaking change).
+- [x] Issue #38 body edited to what landed (air variable, window metrics, `mwat`/`7dec`, qualitative rows
       blank, the overwintering cell, Bear gap).
 
 ## Validation
-- [ ] Tests pass
-- [ ] `/code-check` clean on each commit
-- [ ] PWF checkboxes match landed work
+- [x] Tests pass
+- [x] `/code-check` clean on each commit
+- [x] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion, then `/gh-pr-push`
 

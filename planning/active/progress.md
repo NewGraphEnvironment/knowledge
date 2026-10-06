@@ -33,3 +33,4 @@
   sentences; value-only cells recomputed. Code: code-check round 2 found the grid relied on qual rows having
   no value; the reader now refuses one; the four invariants `meets()` relies on are all enforced.
   Gate: 674 rows, thermal 50/50, coverage 48/48.
+- `temperature` store rebuilt with Hagen & Weber 2019: 38 documents, 7,892 chunks; pushed, verified connect. Phase 5: research/thermal_requirements.md (revised after audit round 2's Task 3), research index, stream_temperature.md bullets, CLAUDE.md, scripts/README.md; issue #38 body edited to what landed.

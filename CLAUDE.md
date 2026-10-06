@@ -26,7 +26,8 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   `zotero_key_map.csv`, `rag_priorities.{gpkg,kml}`, `life_history_timing.csv` (seeded by `0260`,
   then hand-edited; read with `knw_timing_read()`), `literature_evidence.csv` (cited habitat-threshold
   values with verbatim quotes, read with `knw_literature_read()`, gated by `0280`; a row stating an
-  intrinsic-potential model's threshold carries that model's `model_id`), `ip_model_registry.csv` (one row
+  intrinsic-potential model's threshold carries that model's `model_id`; a temperature, air-temperature or
+  degree-day value names its `metric`), `ip_model_registry.csv` (one row
   per IP model × species × stage: how it sizes streams, its confinement variable, its validation, with its
   flow claim and any validation claimed each quoted; read with `knw_ip_read()`, gated and link-checked by
   `0280`),
@@ -35,7 +36,9 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   `bt_spawn_evidence.csv` (BT spawner-evidence rates by gradient class; `0293`, `research/bt_spawning.md`),
   and
   `habitat_modelling_{members,additions}.csv` (what `0270` puts in the group's `Fisheries/habitat_modelling`
-  collection, which with the species collections feeds the `habitat_modelling` store).
+  collection, which with the species collections feeds the `habitat_modelling` store), and
+  `temperature_members.csv` (what `0270 --collection temperature` puts in `Fisheries/temperature`, the sole
+  input of the `temperature` store).
 - `data/rag/` — ignored local cache of the ragnar stores. Source of truth is `s3://fresh-bc/rag/`.
 
 ## One discipline
@@ -135,6 +138,10 @@ meaning per row, not a sample. Settled conventions:
 - An interior curve breakpoint (a non-zero score, a curve switch) has a blank `bound`; `min`/`max` is a
   limit or a zero-suitability edge.
 - A source that names a stream-size variable but not how it was obtained is `flow_source = unstated`.
+- A temperature value whose source does not name the statistic is `metric = unstated`; never infer one. An
+  air temperature, including a model's air proxy for water, is `air_temperature`. A degree-day row's note
+  gives its base temperature. `species_code` is the species measured: Colorado River cutthroat (Coleman &
+  Fausch 2007, the `gsdd` growing season) is `CRCT`, not `WCT` (#38).
 
 The #29 archive holds the drafter brief and the two helper scripts (`scratch_keytext.py` extracts a
 group-library key's PDF text; `scratch_merge_drafts.py` merges family drafts onto the committed tables).

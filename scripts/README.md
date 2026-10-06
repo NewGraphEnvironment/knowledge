@@ -54,7 +54,9 @@ wf_farm_priority.js                          farm priority/crossing tables out o
 
 --- Habitat literature (independent of the watershed-group flow) ---
 0270  build the group's Fisheries/habitat_modelling collection   --dry-run first, then live
+      (--collection temperature: Fisheries/temperature, from data/temperature_members.csv)
 0150  ACTION=build STORE=habitat_modelling COLLECTIONS="U9ZCZ6RN,chinook,bull_trout,..."  then ACTION=push
+0150  ACTION=build STORE=temperature COLLECTIONS=SW2RXUJC                                  then ACTION=push
 0280  verify data/literature_evidence.csv and data/ip_model_registry.csv against their PDFs, and the
       model_id link between them (gate; read with knw_literature_read() / knw_ip_read())
 ```
@@ -319,8 +321,11 @@ The cited basis for CH and BT habitat thresholds (#19). Not per watershed group.
 - `0270` builds the group library's `Fisheries/habitat_modelling` collection (`U9ZCZ6RN`). It takes a curated
   key list (`data/habitat_modelling_members.csv`) and adds works no library held
   (`data/habitat_modelling_additions.csv`: CrossRef by DOI, or grey-literature metadata, with a PDF URL or a
-  standalone group attachment). A member whose group copy lacks a PDF gets one uploaded from any local
-  library, with three limits:
+  standalone group attachment). `--collection <name>` builds another collection under Fisheries the same
+  way, from `data/<name>_members.csv` (and `_additions.csv` if present); `Fisheries/temperature`
+  (`SW2RXUJC`, #38) is built that way. A member row may give a `pdf` (a URL, or a path from the repo root)
+  for an item no local library holds a PDF of, such as an analytic appendix printed from the web.
+  A member whose group copy lacks a PDF gets one uploaded from any local library, with three limits:
   - only from an item with the same title, because citation keys are not unique across libraries;
   - linked files from the old Windows machine (`D:\...\storage\...`) are rebased onto Zotero's
     `baseAttachmentPath`;
@@ -330,9 +335,12 @@ The cited basis for CH and BT habitat thresholds (#19). Not per watershed group.
   locks the live file and an `immutable` read during a sync sees half-written pages. Re-runs are no-ops.
 - The store is built from that collection plus the species, temperature, hydrology and Wedzin Kwa collections,
   by `0150`. Wait for Zotero to sync `0270`'s writes, and check that the files are on disk, before building.
+  The `temperature` store is built from `Fisheries/temperature` alone (`COLLECTIONS=SW2RXUJC`).
 - `data/literature_evidence.csv` has one row per value a source gives: species, stage, form, variable, the
-  model parameter it bears on, bound, value, unit, kind, region, key, page, verbatim quote, `quote_source`,
-  scale, cited source and `model_id`. `kind = none` records a search that found nothing. Gradient is in percent.
+  model parameter it bears on, bound, value, unit, `metric`, kind, region, key, page, verbatim quote,
+  `quote_source`, scale, cited source and `model_id`. `kind = none` records a search that found nothing.
+  Gradient is in percent. `metric` says which statistic a `temperature` or `air_temperature` value is, or the
+  window of a `degree_days` total (whose note gives the base temperature).
 - `data/ip_model_registry.csv` has one row per intrinsic-potential model × species × stage. It records how the
   model sizes streams (`flow_metric`, `flow_source`, `flow_inputs`, `flow_surrogate`), its valley-confinement
   variable, and its validation; its flow claim and any validation claimed are each quoted. It holds no
@@ -342,7 +350,10 @@ The cited basis for CH and BT habitat thresholds (#19). Not per watershed group.
   cached in `data/rag/ocr/`. Registry quotes (flow and validation) are checked the same way. The `model_id`
   link must hold both ways on model × species × stage × life-history form: no tagged evidence row without a registry row, and no
   registry row without a tagged evidence row. Every timing-table source must resolve, and every species ×
-  parameter cell in its `COVERAGE` list must have a row. `EVIDENCE=`, `REGISTRY=` and `LOG=` check drafts
+  parameter cell in its `COVERAGE` list must have a row, and every species × cell of its `THERMAL` grid
+  (water-temperature upper and lower limits for spawning, incubation and rearing; degree-days to hatch, to
+  emergence, and over the growing season for rearing and overwintering) must be met by a value, or by a
+  `none` row naming the bound or window searched. `EVIDENCE=`, `REGISTRY=` and `LOG=` check drafts
   without touching the committed logs.
 - Logs: `scripts/logs/habitat/`.
 
