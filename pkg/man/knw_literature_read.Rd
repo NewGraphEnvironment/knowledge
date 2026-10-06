@@ -15,12 +15,12 @@ knw_literature_read(path, species_code = NULL, variable = NULL)
 or \code{NULL} for all.}
 }
 \value{
-A \code{tibble} with the nineteen columns, all \code{character}.
+A \code{tibble} with the twenty columns, all \code{character}.
 }
 \description{
 One row per value a source gives for a habitat variable: species, life
 stage, life-history form, variable, the model parameter it bears on
-(\code{parameter}, e.g. \code{spawn_gradient_max}), bound, value, unit, kind, region,
+(\code{parameter}, e.g. \code{spawn_gradient_max}), bound, value, unit, metric, kind, region,
 citation key, page and a verbatim quote. \code{value_min} and \code{value_max} are
 numbers written as text, or \code{MM-DD} for \code{timing}, where a range with
 \code{value_min > value_max} crosses 1 January. Gradient is in percent, as sources
@@ -35,6 +35,10 @@ The unit must fit the variable (percent for gradient, a width unit for
 channel width, and so on) and a bound must sit on its value: \code{min} on
 \code{value_min}, \code{max} on \code{value_max}, \code{range} on both. A text quote is at least
 20 characters, so that a check against the PDF can tell it apart from noise.
+A \code{temperature}, \code{air_temperature} or \code{degree_days} value needs a \code{metric}
+that fits its variable, and a \code{none} row may name the metric it searched
+for; every other row leaves \code{metric} blank. A cited
+\code{degree_days} row needs a \code{note}, which gives the base temperature.
 
 A row of kind \code{none} records a search that found no value: it carries a
 \code{note} saying what was searched and no value, key or quote. Every other row
@@ -49,7 +53,7 @@ path <- tempfile(fileext = ".csv")
 utils::write.csv(data.frame(
   species_code = "BT", life_stage = "spawning", life_history_form = "migratory",
   variable = "channel_width", parameter = "spawn_channel_width_min", bound = "min",
-  value_min = "2", value_max = NA, unit = "m wetted", kind = "expert",
+  value_min = "2", value_max = NA, unit = "m wetted", metric = NA, kind = "expert",
   region = "Parsnip, BC", citation_key = "key_a", page = "22",
   quote = "No streams of <2 m wetted width were surveyed", quote_source = "text",
   scale = "reach", cited_source = NA, note = NA, model_id = NA

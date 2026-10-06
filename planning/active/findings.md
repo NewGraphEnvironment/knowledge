@@ -55,3 +55,25 @@ Relates to #19, #20, #36, NewGraphEnvironment/logic#4
 
 | Error | Resolution |
 |-------|------------|
+
+## Phase 1–2: metric assignments (2026-10-06)
+
+- `0280` needed no change: a unit without a `SCALE` entry reads at scale 1, which is right for `degC` and
+  `degC-day`; the registry link is keyed on model_id × species × stage × form, not variable, so moving
+  rows to `air_temperature` leaves every link intact (gate: 0 unlinked either way).
+- Two statistics in the sources were not in the issue's list and were added: `mwat` (Eaton & Scheller
+  1996, maximum weekly mean, FTDMS) and `7dec` (Iacarella et al. 2024: the 7-day equivalent constant,
+  "the median value between 7DADM and MWAT", the BC exceedance threshold of 24 °C).
+- Checked against the PDF text where the note did not settle it: Richter & Kolmes Table 1 is 7-DAM then
+  weekly mean (text: "propose 7-DAM temperatures ... and also weekly mean temperature criteria"); the
+  Olson & Foster spawning range is daily average ("spawning temperature ranges in daily average
+  temperatures (DAT)"); Raleigh's juvenile HSI variable V2 is "Maximum temperature during warmest
+  periods" (→ `daily_max`, noted on the row); Dunham & Chandler Figure 4 is maximum daily temperature;
+  Cooney & Holzer's WMAT is a weekly mean.
+- 14 rows moved to `air_temperature`: Agrawal LMAT (3), Sheer on Spence/Agrawal (1), Bjorkstedt (2),
+  Lindley (2), Boughton & Goslin (4: two August means, two annual means), and the two qualitative Sheer
+  rows on Weiss (242, 245; Sheer p. 8: "30-year air temperature mean"; found by code-check round 1).
+  Busch rows 220/226 stay `temperature`: Sheer does not state Busch's medium.
+- 21 water rows are `unstated`: the source gives a range or threshold without a statistic.
+- 7 qualitative rows carry no value and no metric (5 `temperature`, 2 `air_temperature`); a cited row
+  with no value is refused a metric, a `none` row may name the one it searched for.

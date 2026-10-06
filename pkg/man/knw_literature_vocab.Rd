@@ -28,6 +28,19 @@ text layer. \code{scale} is the grain a value was measured at: a redd or
 microhabitat \code{site}, a surveyed \code{reach}, a model \code{segment}, or a \code{network}
 summary; a site value is not a reach cutoff.
 }
+\details{
+\code{metric} says which statistic a \code{temperature} or \code{air_temperature} value is
+(a daily maximum, \code{mwmt} the maximum weekly maximum, \verb{7dadm} the 7-day
+average of daily maxima, \code{mwat} the maximum weekly mean, \verb{7dec} the 7-day
+equivalent constant midway between 7DADM and MWAT, a weekly, monthly,
+August, summer or annual mean, a \code{constant} laboratory exposure), and over
+which window a \code{degree_days} value accumulates (\code{growing_season} as \code{gsdd}
+defines it after Coleman and Fausch 2007, \code{to_hatch} or \code{to_emergence} from
+fertilization, or \code{annual}).
+\code{unstated} is for a source that gives a value without saying. Air
+temperature is its own variable because models use it as a proxy for water
+temperature, and the two are not interchangeable.
+}
 \examples{
 knw_literature_vocab()$variable
 }

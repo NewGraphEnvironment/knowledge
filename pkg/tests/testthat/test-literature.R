@@ -10,6 +10,7 @@ literature_fixture <- function() {
     value_min         = c(NA, NA, "2", "08-23", NA),
     value_max         = c("5", "6.5", NA, "10-15", NA),
     unit              = c("percent", "percent", "m wetted", "MM-DD", NA),
+    metric            = c(NA, NA, NA, NA, NA),
     kind              = c("expert", "max_obs", "expert", "dist", "none"),
     region            = c("Interior Columbia", "Puget Sound", "Parsnip, BC", "Morice, BC", NA),
     citation_key      = c("key_a", "key_b", "key_c", "key_d", NA),
@@ -64,7 +65,7 @@ test_that("a missing column is refused", {
 test_that("each controlled column refuses a value outside its vocabulary", {
   cases <- list(life_stage = "Spawning", life_history_form = "anadromous",
                 parameter = "rear_gradient_min",
-                variable = "slope", bound = "upper", kind = "HSI", unit = "feet",
+                variable = "slope", bound = "upper", kind = "HSI", unit = "feet", metric = "MWMT",
                 quote_source = "memory", scale = "planet")
   for (col in names(cases)) {
     x <- literature_fixture()
@@ -135,8 +136,8 @@ test_that("whitespace-only cells read as NA, and a BOM does not break the header
 
 test_that("the vocabularies are exported and the stages extend the timing stages", {
   v <- knw_literature_vocab()
-  expect_true(all(c("life_stage", "life_history_form", "variable", "bound", "unit", "kind",
-                    "quote_source", "scale") %in% names(v)))
+  expect_true(all(c("life_stage", "life_history_form", "variable", "bound", "unit", "metric",
+                    "kind", "quote_source", "scale") %in% names(v)))
   expect_true(all(knw_timing_stages() %in% v$life_stage))
   expect_true("access" %in% v$life_stage)
 })
@@ -243,4 +244,103 @@ test_that("US units are read as the source wrote them", {
   x$unit[3] <- "ft"
   out <- knw_literature_read(write_literature(x))
   expect_equal(out$unit[1:3], c("cfs", "mi2", "ft"))
+})
+
+test_that("a temperature or degree-day value says which metric it is", {
+  x <- literature_fixture()
+  x$variable[1] <- "temperature"
+  x$unit[1] <- "degC"
+  x$metric[1] <- "mwmt"
+  x$variable[2] <- "degree_days"
+  x$unit[2] <- "degC-day"
+  x$value_max[2] <- "600"
+  x$metric[2] <- "to_emergence"
+  x$note[2] <- "base 0 C, from fertilization"
+  x$variable[3] <- "air_temperature"
+  x$unit[3] <- "degC"
+  x$metric[3] <- "august_mean"
+  out <- knw_literature_read(write_literature(x))
+  expect_equal(out$metric[1:3], c("mwmt", "to_emergence", "august_mean"))
+  expect_true(all(is.na(out$metric[4:5])))
+  y <- x
+  y$metric[1] <- NA
+  expect_error(knw_literature_read(write_literature(y)), "temperature value needs a metric.*data row 1")
+  y <- x
+  y$metric[2] <- NA
+  expect_error(knw_literature_read(write_literature(y)), "degree_days value needs a metric")
+  y <- x
+  y$metric[1] <- "weekly max"
+  expect_error(knw_literature_read(write_literature(y)), "metric.*weekly max")
+})
+
+test_that("a qualitative temperature row may leave its metric blank", {
+  x <- literature_fixture()
+  x$variable[2] <- "temperature"
+  x$value_max[2] <- NA
+  x$bound[2] <- NA
+  x$unit[2] <- NA
+  x$kind[2] <- "qual"
+  expect_true(is.na(knw_literature_read(write_literature(x))$metric[2]))
+  x$metric[2] <- "7dadm"
+  expect_error(knw_literature_read(write_literature(x)), "metric 7dadm on a row with no value.*data row 2")
+})
+
+test_that("a 'none' row may name the metric it searched for, which must fit its variable", {
+  x <- literature_fixture()
+  x$variable[5] <- "degree_days"
+  x$metric[5] <- "to_emergence"
+  expect_equal(knw_literature_read(write_literature(x))$metric[5], "to_emergence")
+  x$metric[5] <- "mwmt"
+  expect_error(knw_literature_read(write_literature(x)), "metric mwmt does not fit variable degree_days")
+})
+
+test_that("a metric sits only on the variable it describes", {
+  x <- literature_fixture()
+  x$metric[1] <- "daily_max"
+  expect_error(knw_literature_read(write_literature(x)), "metric daily_max.*gradient.*data row 1")
+  x <- literature_fixture()
+  x$variable[1] <- "temperature"
+  x$unit[1] <- "degC"
+  x$metric[1] <- "growing_season"
+  expect_error(knw_literature_read(write_literature(x)), "metric growing_season.*temperature")
+  x$variable[1] <- "degree_days"
+  x$unit[1] <- "degC-day"
+  x$metric[1] <- "7dadm"
+  expect_error(knw_literature_read(write_literature(x)), "metric 7dadm.*degree_days")
+  x$metric[1] <- "unstated"
+  x$note[1] <- "base not stated"
+  expect_equal(knw_literature_read(write_literature(x))$metric[1], "unstated")
+})
+
+test_that("degree-days read in degC-day and temperatures in degC, and not the other way", {
+  x <- literature_fixture()
+  x$variable[1] <- "degree_days"
+  x$metric[1] <- "growing_season"
+  x$unit[1] <- "degC"
+  expect_error(knw_literature_read(write_literature(x)), "unit degC.*degree_days")
+  x$variable[1] <- "air_temperature"
+  x$metric[1] <- "august_mean"
+  x$unit[1] <- "degC-day"
+  expect_error(knw_literature_read(write_literature(x)), "unit degC-day.*air_temperature")
+  x$variable[1] <- "temperature"
+  expect_error(knw_literature_read(write_literature(x)), "unit degC-day.*temperature")
+})
+
+test_that("a cited degree-day row says its base temperature in the note", {
+  x <- literature_fixture()
+  x$variable[1] <- "degree_days"
+  x$unit[1] <- "degC-day"
+  x$value_max[1] <- "900"
+  x$metric[1] <- "growing_season"
+  expect_error(knw_literature_read(write_literature(x)), "degree_days row needs a note.*data row 1")
+  x$note[1] <- "Coleman & Fausch growing season, base 0 C"
+  expect_equal(knw_literature_read(write_literature(x))$metric[1], "growing_season")
+})
+
+test_that("the metric vocabulary holds the temperature metrics and the degree-day windows", {
+  m <- knw_literature_vocab()$metric
+  expect_true(all(c("daily_max", "mwmt", "7dadm", "mwat", "7dec", "august_mean", "constant", "unstated",
+                    "growing_season", "to_hatch", "to_emergence", "annual") %in% m))
+  expect_false(anyDuplicated(m) > 0)
+  expect_true(all(c("degree_days", "air_temperature") %in% knw_literature_vocab()$variable))
 })
