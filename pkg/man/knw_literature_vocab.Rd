@@ -21,6 +21,8 @@ interchangeable. \code{parameter} is the habitat-model parameter a row bears on,
 one of the model's own names, or blank. \code{kind} says what sort of number a row is: a parameter
 someone chose, a habitat-suitability breakpoint, the largest value observed,
 a statistic of where fish were found, a preference, expert opinion, a
+laboratory or hatchery measurement (\code{lab}: a lethal limit, CTmax, survival
+or growth at held temperatures, or a development time in degree-days), a
 qualitative statement, or \code{none}, a search that found nothing.
 \code{quote_source} says how a quote can be checked against its PDF: running
 \code{text}, a \code{table} cell (checked by its numbers), or \code{ocr} of a scan with no

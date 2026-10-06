@@ -40,8 +40,10 @@ that fits its variable, and a \code{none} row may name the metric it searched
 for; every other row leaves \code{metric} blank. A cited
 \code{degree_days} row needs a \code{note}, which gives the base temperature.
 
-A row of kind \code{none} records a search that found no value: it carries a
-\code{note} saying what was searched and no value, key or quote. Every other row
+A \code{qual} row is a statement with no value. A row of kind \code{none} records a search that found no value: it carries a
+\code{note} saying what was searched and no value, key or quote. Its \code{bound}
+and \code{metric}, when given, name what was searched for (an upper limit, a
+degree-day total to emergence). Every other row
 needs a \code{citation_key} and a \code{quote}. A row with a value needs a \code{unit}.
 
 The table is validated before filtering, so a bad row anywhere in the file is

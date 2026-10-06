@@ -1,3 +1,24 @@
+# knowledge 0.3.0
+
+* `knw_literature_read()` requires a `metric` column, after `unit`: which
+  statistic a temperature value is (daily maximum, MWMT, 7DADM, MWAT, 7DEC, a
+  weekly, monthly, August, summer or annual mean, a constant laboratory
+  exposure, or `unstated`), or which window a degree-day total accumulates over
+  (`growing_season`, `to_hatch`, `to_emergence`, `annual`). A table without the
+  column is refused. A temperature-family value needs a metric that fits its
+  variable; a `none` row may name the one it searched for; every other row
+  leaves it blank.
+* New evidence variables `degree_days` (`degC-day`) and `air_temperature`
+  (`degC`). Air temperature is its own variable because intrinsic-potential
+  models use it as a proxy for water temperature. A cited `degree_days` row
+  needs a `note` giving its base temperature.
+* A `none` row may carry `bound`, naming the limit that was searched for.
+* New `kind` `lab`: a laboratory or hatchery measurement (a lethal limit,
+  CTmax, survival or growth at held temperatures, a development time in
+  degree-days), which is not expert opinion.
+* A `qual` row is refused a value: it is a statement, and a value on it would
+  be counted as evidence it is not.
+
 # knowledge 0.2.1
 
 * `knw_literature_vocab()` adds `elevation` to the `variable` vocabulary, in

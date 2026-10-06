@@ -343,4 +343,27 @@ test_that("the metric vocabulary holds the temperature metrics and the degree-da
                     "growing_season", "to_hatch", "to_emergence", "annual") %in% m))
   expect_false(anyDuplicated(m) > 0)
   expect_true(all(c("degree_days", "air_temperature") %in% knw_literature_vocab()$variable))
+  expect_true("lab" %in% knw_literature_vocab()$kind)
+})
+
+test_that("a 'none' row may name the bound it searched for, and still carries no value", {
+  x <- literature_fixture()
+  x$variable[5] <- "temperature"
+  x$bound[5] <- "max"
+  expect_equal(knw_literature_read(write_literature(x))$bound[5], "max")
+  x$bound[5] <- "range"
+  expect_equal(knw_literature_read(write_literature(x))$bound[5], "range")
+  x$value_max[5] <- "20"
+  x$unit[5] <- "degC"
+  expect_error(knw_literature_read(write_literature(x)), "none.*value")
+})
+
+test_that("a 'qual' row carries no value", {
+  x <- literature_fixture()
+  x$kind[1] <- "qual"
+  expect_error(knw_literature_read(write_literature(x)), "'qual' row carries no value.*data row 1")
+  x$value_max[1] <- NA
+  x$bound[1] <- NA
+  x$unit[1] <- NA
+  expect_equal(knw_literature_read(write_literature(x))$kind[1], "qual")
 })

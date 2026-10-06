@@ -11,6 +11,8 @@
 #' one of the model's own names, or blank. `kind` says what sort of number a row is: a parameter
 #' someone chose, a habitat-suitability breakpoint, the largest value observed,
 #' a statistic of where fish were found, a preference, expert opinion, a
+#' laboratory or hatchery measurement (`lab`: a lethal limit, CTmax, survival
+#' or growth at held temperatures, or a development time in degree-days), a
 #' qualitative statement, or `none`, a search that found nothing.
 #' `quote_source` says how a quote can be checked against its PDF: running
 #' `text`, a `table` cell (checked by its numbers), or `ocr` of a scan with no
@@ -51,7 +53,7 @@ knw_literature_vocab <- function() {
     unit = c("percent", "m bankfull", "m wetted", "m", "order", "m3/s", "ha", "km", "degC",
              "mm", "m/s", "MM-DD", "ratio", "km2", "cfs", "mi2", "ft", "degC-day"),
     metric = unique(unlist(.knw_metric_fits(), use.names = FALSE)),
-    kind = c("param", "hsi", "max_obs", "dist", "pref", "expert", "qual", "none"),
+    kind = c("param", "hsi", "max_obs", "dist", "pref", "expert", "lab", "qual", "none"),
     quote_source = c("text", "table", "ocr"),
     scale = c("site", "reach", "segment", "network")
   )
@@ -89,8 +91,10 @@ knw_literature_vocab <- function() {
 #' for; every other row leaves `metric` blank. A cited
 #' `degree_days` row needs a `note`, which gives the base temperature.
 #'
-#' A row of kind `none` records a search that found no value: it carries a
-#' `note` saying what was searched and no value, key or quote. Every other row
+#' A `qual` row is a statement with no value. A row of kind `none` records a search that found no value: it carries a
+#' `note` saying what was searched and no value, key or quote. Its `bound`
+#' and `metric`, when given, name what was searched for (an upper limit, a
+#' degree-day total to emergence). Every other row
 #' needs a `citation_key` and a `quote`. A row with a value needs a `unit`.
 #'
 #' The table is validated before filtering, so a bad row anywhere in the file is
@@ -166,6 +170,9 @@ knw_literature_read <- function(path, species_code = NULL, variable = NULL) {
     stop("a 'none' row carries no value or unit", first(none & (has_value | !is.na(x$unit))),
          call. = FALSE)
   }
+  # A qualitative row is a statement with no value; 0280's thermal grid counts on it.
+  qual_value <- x$kind == "qual" & has_value
+  if (any(qual_value)) stop("a 'qual' row carries no value", first(qual_value), call. = FALSE)
   cited <- !is.na(x$citation_key) | !is.na(x$quote)
   if (any(none & cited)) {
     stop("a 'none' row carries no citation_key or quote", first(none & cited), call. = FALSE)
@@ -254,10 +261,10 @@ knw_literature_read <- function(path, species_code = NULL, variable = NULL) {
   }
   need <- list(min = "value_min", max = "value_max")
   for (b in names(need)) {
-    off <- x$bound %in% b & is.na(x[[need[[b]]]])
+    off <- !none & x$bound %in% b & is.na(x[[need[[b]]]])
     if (any(off)) stop("bound ", b, " needs ", need[[b]], first(off), call. = FALSE)
   }
-  off <- x$bound %in% "range" & (is.na(x$value_min) | is.na(x$value_max))
+  off <- !none & x$bound %in% "range" & (is.na(x$value_min) | is.na(x$value_max))
   if (any(off)) stop("bound range needs both value_min and value_max", first(off), call. = FALSE)
 
   num <- lapply(c("value_min", "value_max"), function(col) {

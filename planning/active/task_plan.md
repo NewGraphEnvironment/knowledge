@@ -47,21 +47,21 @@
 - [x] `0270 --collection temperature` dry run prints `exists` for `SW2RXUJC`; live run; both memos end
       `pdf present`; wait for Zotero sync and keys.
 - [x] `0150 ACTION=build STORE=temperature COLLECTIONS=SW2RXUJC`, then push; log the build and push.
-- [ ] Rebuild and push `habitat_modelling` (its inputs include `temperature` and the memos).
+- [x] Rebuild and push `habitat_modelling` (its inputs include `temperature` and the memos).
 
 ## Phase 4: Rows for BT, WCT, CH, CO, ST
-- [ ] `literature.R`: a `none` row may carry `bound` (the bound searched) and `metric`; tests.
-- [ ] `0280`: a temperature grid, species × cell, in the exit condition and printed. A cell is met by a
+- [x] `literature.R`: a `none` row may carry `bound` (the bound searched) and `metric`; tests.
+- [x] `0280`: a temperature grid, species × cell, in the exit condition and printed. A cell is met by a
       valued row of that variable and stage whose bound reaches it (`max` or `range` for an upper limit,
       `min` or `range` for a lower; `optimum` does not count), or a `none` row with that bound. Cells:
       `temperature` upper and lower for spawning, incubation, rearing; `degree_days` `to_hatch` or
       `to_emergence` for incubation/emergence; `degree_days` `growing_season` for rearing (first-summer
       growth) and overwintering (overwinter size). `air_temperature` never meets a cell. `metric` added to
       the gate log.
-- [ ] Draft rows from the `temperature` store (`ragnar::ragnar_retrieve()`) and the PDFs. `species_code`
+- [x] Draft rows from the `temperature` store (`ragnar::ragnar_retrieve()`) and the PDFs. `species_code`
       is the species studied (Colorado River cutthroat values are not WCT rows). `none` notes name what was
       searched. Append only; never re-sort.
-- [ ] `0280` gate green; a meaning audit of every new row, two rounds at least; commit the gate log.
+- [x] `0280` gate green; a meaning audit of every new row, two rounds at least; commit the gate log.
 
 ## Phase 5: `research/thermal_requirements.md` and docs
 - [ ] What is known per species and stage, what has no source (the `none` cells), and which values

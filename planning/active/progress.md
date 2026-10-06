@@ -22,3 +22,14 @@
 - Phase 4 started: `none` rows may carry `bound`; 0280 THERMAL grid (5 species × 10 cells; 12/50 met
   before drafting). Two drafters (tc: WCT, BT; ps: CH, CO, ST) on `drafter-brief.md`.
 - `temperature` store: 37 documents, 7,377 chunks; pushed, manifest now holds six stores; a verified connect to a fresh dir downloads and checks it (`20261006_temperature_store_{build,push}.txt`). `habitat_modelling` rebuild started.
+- `habitat_modelling` rebuilt (220 documents) and pushed; verified connect.
+- Phase 4: drafters wrote 163 rows (tc 49 after the parent dropped Sauter's BT "cessation"; ps 114).
+  Meaning audit round 1: tc 6 findings, ps 13 findings over 22 rows plus one missed value; all applied
+  (one adult pre-spawn row dropped, the Hicks 9.9 C incubation row added). Round 2 re-checked every fix
+  and swept all rows for the four classes: one defect inside a round-1 fix (Sauter Table 4 is observed
+  temperatures, so `dist`, not `expert`), DAT that Sauter calls assumed now `unstated`, more `lab`, the
+  Hagen & Weber stress onset filed to match Lusardi's, Hagen & Weber 2019 added to the collection.
+  Ended by enumeration: every same-source, same-page group with mixed kind or metric is mixed by its own
+  sentences; value-only cells recomputed. Code: code-check round 2 found the grid relied on qual rows having
+  no value; the reader now refuses one; the four invariants `meets()` relies on are all enforced.
+  Gate: 674 rows, thermal 50/50, coverage 48/48.
