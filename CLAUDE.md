@@ -147,6 +147,10 @@ meaning per row, not a sample. Settled conventions:
   coded alike unless the note says why, and the source decides, not a sibling row: #38's round-2 audit found
   a round-1 fix that had recoded Sauter Table 4 from a neighbouring row when the paper calls it observed
   temperatures (`dist`).
+- Append new rows; never insert. `research/` files cite evidence by data row, and data row N is file line
+  N + 1 (#36's plan named file lines and called them data rows). A statement that bears on two variables is
+  two rows sharing one quote, each noting the other. Copy a sibling's fields only after checking them: #36
+  copied a wrong `region` from a sibling and fixed all three rows that share the sentence.
 
 The #29 archive holds the drafter brief and the two helper scripts (`scratch_keytext.py` extracts a
 group-library key's PDF text; `scratch_merge_drafts.py` merges family drafts onto the committed tables).
