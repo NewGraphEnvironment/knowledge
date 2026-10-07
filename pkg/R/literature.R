@@ -11,12 +11,26 @@
 #' one of the model's own names, or blank. `kind` says what sort of number a row is: a parameter
 #' someone chose, a habitat-suitability breakpoint, the largest value observed,
 #' a statistic of where fish were found, a preference, expert opinion, a
+#' laboratory or hatchery measurement (`lab`: a lethal limit, CTmax, survival
+#' or growth at held temperatures, or a development time in degree-days), a
 #' qualitative statement, or `none`, a search that found nothing.
 #' `quote_source` says how a quote can be checked against its PDF: running
 #' `text`, a `table` cell (checked by its numbers), or `ocr` of a scan with no
 #' text layer. `scale` is the grain a value was measured at: a redd or
 #' microhabitat `site`, a surveyed `reach`, a model `segment`, or a `network`
 #' summary; a site value is not a reach cutoff.
+#'
+#' `metric` says which statistic a `temperature` or `air_temperature` value is
+#' (a daily maximum, `mwmt` the maximum weekly maximum, `7dadm` the 7-day
+#' average of daily maxima, `mwat` the maximum weekly mean, `7dec` the 7-day
+#' equivalent constant midway between 7DADM and MWAT, a weekly, monthly,
+#' August, summer or annual mean, a `constant` laboratory exposure), and over
+#' which window a `degree_days` value accumulates (`growing_season` as `gsdd`
+#' defines it after Coleman and Fausch 2007, `to_hatch` or `to_emergence` from
+#' fertilization, or `annual`).
+#' `unstated` is for a source that gives a value without saying. Air
+#' temperature is its own variable because models use it as a proxy for water
+#' temperature, and the two are not interchangeable.
 #'
 #' @return A named `list` of `character` vectors, one per controlled column.
 #' @export
@@ -29,25 +43,36 @@ knw_literature_vocab <- function() {
                           "migratory"),
     variable = c("gradient", "channel_width", "stream_order", "discharge", "lake_area",
                  "wetland_area", "bridge_distance", "temperature", "substrate", "depth",
-                 "velocity", "timing", "valley_width_index", "drainage_area", "elevation"),
+                 "velocity", "timing", "valley_width_index", "drainage_area", "elevation",
+                 "air_temperature", "degree_days"),
     parameter = c("spawn_gradient_max", "spawn_gradient_min", "spawn_channel_width_min",
                   "spawn_mad_min", "rear_gradient_max", "rear_channel_width_min", "rear_mad_min",
                   "rear_mad_max", "rear_lake_ha_min", "rear_wetland_ha_min", "access_gradient_max",
                   "cluster_bridge_gradient", "cluster_bridge_distance"),
     bound = c("min", "max", "range", "optimum"),
     unit = c("percent", "m bankfull", "m wetted", "m", "order", "m3/s", "ha", "km", "degC",
-             "mm", "m/s", "MM-DD", "ratio", "km2", "cfs", "mi2", "ft"),
-    kind = c("param", "hsi", "max_obs", "dist", "pref", "expert", "qual", "none"),
+             "mm", "m/s", "MM-DD", "ratio", "km2", "cfs", "mi2", "ft", "degC-day"),
+    metric = unique(unlist(.knw_metric_fits(), use.names = FALSE)),
+    kind = c("param", "hsi", "max_obs", "dist", "pref", "expert", "lab", "qual", "none"),
     quote_source = c("text", "table", "ocr"),
     scale = c("site", "reach", "segment", "network")
   )
+}
+
+# Which metrics each variable takes: a statistic of temperature, or the window a
+# degree-day total accumulates over. Variables not named here carry no metric.
+.knw_metric_fits <- function() {
+  temp <- c("daily_max", "daily_mean", "mwmt", "7dadm", "mwat", "7dec", "weekly_mean",
+            "monthly_mean", "august_mean", "summer_mean", "annual_mean", "constant", "unstated")
+  list(temperature = temp, air_temperature = temp,
+       degree_days = c("growing_season", "to_hatch", "to_emergence", "annual", "unstated"))
 }
 
 #' Read the literature evidence table, filtered by species and variable
 #'
 #' One row per value a source gives for a habitat variable: species, life
 #' stage, life-history form, variable, the model parameter it bears on
-#' (`parameter`, e.g. `spawn_gradient_max`), bound, value, unit, kind, region,
+#' (`parameter`, e.g. `spawn_gradient_max`), bound, value, unit, metric, kind, region,
 #' citation key, page and a verbatim quote. `value_min` and `value_max` are
 #' numbers written as text, or `MM-DD` for `timing`, where a range with
 #' `value_min > value_max` crosses 1 January. Gradient is in percent, as sources
@@ -61,9 +86,15 @@ knw_literature_vocab <- function() {
 #' channel width, and so on) and a bound must sit on its value: `min` on
 #' `value_min`, `max` on `value_max`, `range` on both. A text quote is at least
 #' 20 characters, so that a check against the PDF can tell it apart from noise.
+#' A `temperature`, `air_temperature` or `degree_days` value needs a `metric`
+#' that fits its variable, and a `none` row may name the metric it searched
+#' for; every other row leaves `metric` blank. A cited
+#' `degree_days` row needs a `note`, which gives the base temperature.
 #'
-#' A row of kind `none` records a search that found no value: it carries a
-#' `note` saying what was searched and no value, key or quote. Every other row
+#' A `qual` row is a statement with no value. A row of kind `none` records a search that found no value: it carries a
+#' `note` saying what was searched and no value, key or quote. Its `bound`
+#' and `metric`, when given, name what was searched for (an upper limit, a
+#' degree-day total to emergence). Every other row
 #' needs a `citation_key` and a `quote`. A row with a value needs a `unit`.
 #'
 #' The table is validated before filtering, so a bad row anywhere in the file is
@@ -74,14 +105,14 @@ knw_literature_vocab <- function() {
 #' @param species_code `character` species codes to keep, or `NULL` for all.
 #' @param variable `character` variables to keep (see [knw_literature_vocab()]),
 #'   or `NULL` for all.
-#' @return A `tibble` with the nineteen columns, all `character`.
+#' @return A `tibble` with the twenty columns, all `character`.
 #' @export
 #' @examples
 #' path <- tempfile(fileext = ".csv")
 #' utils::write.csv(data.frame(
 #'   species_code = "BT", life_stage = "spawning", life_history_form = "migratory",
 #'   variable = "channel_width", parameter = "spawn_channel_width_min", bound = "min",
-#'   value_min = "2", value_max = NA, unit = "m wetted", kind = "expert",
+#'   value_min = "2", value_max = NA, unit = "m wetted", metric = NA, kind = "expert",
 #'   region = "Parsnip, BC", citation_key = "key_a", page = "22",
 #'   quote = "No streams of <2 m wetted width were surveyed", quote_source = "text",
 #'   scale = "reach", cited_source = NA, note = NA, model_id = NA
@@ -96,7 +127,7 @@ knw_literature_read <- function(path, species_code = NULL, variable = NULL) {
     stop("an empty filter matches nothing; pass NULL for all", call. = FALSE)
   }
   cols <- c("species_code", "life_stage", "life_history_form", "variable", "parameter",
-            "bound", "value_min", "value_max", "unit", "kind", "region", "citation_key",
+            "bound", "value_min", "value_max", "unit", "metric", "kind", "region", "citation_key",
             "page", "quote", "quote_source", "scale", "cited_source", "note", "model_id")
   x <- .knw_read_csv(path)
   chk::check_names(x, cols)
@@ -139,6 +170,9 @@ knw_literature_read <- function(path, species_code = NULL, variable = NULL) {
     stop("a 'none' row carries no value or unit", first(none & (has_value | !is.na(x$unit))),
          call. = FALSE)
   }
+  # A qualitative row is a statement with no value; 0280's thermal grid counts on it.
+  qual_value <- x$kind == "qual" & has_value
+  if (any(qual_value)) stop("a 'qual' row carries no value", first(qual_value), call. = FALSE)
   cited <- !is.na(x$citation_key) | !is.na(x$quote)
   if (any(none & cited)) {
     stop("a 'none' row carries no citation_key or quote", first(none & cited), call. = FALSE)
@@ -190,18 +224,47 @@ knw_literature_read <- function(path, species_code = NULL, variable = NULL) {
                stream_order = "order", discharge = c("m3/s", "cfs"), lake_area = "ha", wetland_area = "ha",
                bridge_distance = c("km", "m"), temperature = "degC", substrate = "mm", depth = "m",
                velocity = "m/s", timing = "MM-DD", valley_width_index = "ratio",
-               drainage_area = c("km2", "mi2"), elevation = c("m", "ft"))
+               drainage_area = c("km2", "mi2"), elevation = c("m", "ft"),
+               air_temperature = "degC", degree_days = "degC-day")
   misfit <- !is.na(x$unit) & !mapply(function(v, u) u %in% fits[[v]], x$variable, x$unit)
   if (any(misfit)) {
     stop("unit ", x$unit[misfit][1], " does not fit variable ", x$variable[misfit][1],
          first(misfit), call. = FALSE)
   }
+  mfits <- .knw_metric_fits()
+  stray <- !is.na(x$metric) & !x$variable %in% names(mfits)
+  if (any(stray)) {
+    stop("metric ", x$metric[stray][1], " on variable ", x$variable[stray][1], ": only ",
+         paste(names(mfits), collapse = ", "), " rows carry a metric", first(stray), call. = FALSE)
+  }
+  misfit <- !is.na(x$metric) & !stray &
+    !mapply(function(v, m) m %in% mfits[[v]], x$variable, x$metric)
+  if (any(misfit)) {
+    stop("metric ", x$metric[misfit][1], " does not fit variable ", x$variable[misfit][1],
+         first(misfit), call. = FALSE)
+  }
+  # A metric describes a value, or for a `none` row the statistic that was searched for.
+  idle <- !none & !has_value & !is.na(x$metric)
+  if (any(idle)) {
+    stop("metric ", x$metric[idle][1], " on a row with no value: only a value or a 'none' row ",
+         "carries a metric", first(idle), call. = FALSE)
+  }
+  bare <- has_value & x$variable %in% names(mfits) & is.na(x$metric)
+  if (any(bare)) {
+    stop("a ", x$variable[bare][1], " value needs a metric (unstated if the source does not say)",
+         first(bare), call. = FALSE)
+  }
+  # Degree-day totals at base 0 and base 5 are not comparable, and the base has no column.
+  dd_bare <- !none & x$variable == "degree_days" & is.na(x$note)
+  if (any(dd_bare)) {
+    stop("a degree_days row needs a note giving the base temperature", first(dd_bare), call. = FALSE)
+  }
   need <- list(min = "value_min", max = "value_max")
   for (b in names(need)) {
-    off <- x$bound %in% b & is.na(x[[need[[b]]]])
+    off <- !none & x$bound %in% b & is.na(x[[need[[b]]]])
     if (any(off)) stop("bound ", b, " needs ", need[[b]], first(off), call. = FALSE)
   }
-  off <- x$bound %in% "range" & (is.na(x$value_min) | is.na(x$value_max))
+  off <- !none & x$bound %in% "range" & (is.na(x$value_min) | is.na(x$value_max))
   if (any(off)) stop("bound range needs both value_min and value_max", first(off), call. = FALSE)
 
   num <- lapply(c("value_min", "value_max"), function(col) {

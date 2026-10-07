@@ -26,7 +26,8 @@
 #   - every value is stated by the quote itself (see value_in_quote()).
 # It also checks that the timing table's `source` keys resolve in the group,
 # and that every species x model parameter in COVERAGE has at least one row
-# (a value, or a `none` row saying what was searched).
+# (a value, or a `none` row saying what was searched). THERMAL is the same check
+# for temperature limits and degree-day totals, by species x cell (see below).
 #
 # The intrinsic-potential model registry (data/ip_model_registry.csv, read with
 # knw_ip_read()) is gated the same way: each row's flow quote, and its validation
@@ -46,8 +47,8 @@
 #         <yyyymmdd>_literature_verify_ip_registry.csv, one row per registry quote;
 #         a summary on stdout.
 #         OCR text is cached in data/rag/ocr/ (gitignored), keyed by PDF md5.
-#         Exits non-zero when any row, registry quote, model link, timing source or
-#         coverage cell fails.
+#         Exits non-zero when any row, registry quote, model link, timing source,
+#         coverage cell or thermal cell fails.
 # ---------------------------------------------------------------------------
 pkgload::load_all("pkg", quiet = TRUE)   # the source tree, not an installed copy
 
@@ -61,6 +62,22 @@ COVERAGE <- list(
                 "spawn_mad_min", "rear_gradient_max", "rear_channel_width_min", "rear_mad_min",
                 "rear_lake_ha_min", "rear_wetland_ha_min", "access_gradient_max",
                 "cluster_bridge_gradient", "cluster_bridge_distance"))
+
+# A cell is a water-temperature limit or a degree-day total for one life stage. A valued
+# row meets an upper cell with bound max or range and a lower cell with min or range;
+# an optimum is not a limit. A degree-day cell is met by a valued row whose window is
+# one the cell names. A `none` row meets a cell by the same bound (or window): the
+# search was made and found nothing. air_temperature never meets a cell, and neither
+# does a qualitative row, which has no value.
+THERMAL <- list(
+  species = c("BT", "WCT", "CH", "CO", "ST"),
+  cells = data.frame(
+    variable = c(rep("temperature", 6), rep("degree_days", 4)),
+    life_stage = c("spawning", "spawning", "incubation", "incubation", "rearing", "rearing",
+                   "incubation", "emergence", "rearing", "overwintering"),
+    side = c("upper", "lower", "upper", "lower", "upper", "lower", NA, NA, NA, NA),
+    window = c(rep(NA, 6), "to_hatch", "to_emergence", "growing_season", "growing_season"),
+    stringsAsFactors = FALSE))
 
 ev <- knw_literature_read(evidence_path)
 reg <- knw_ip_read(registry_path)
@@ -394,7 +411,7 @@ check_row <- function(r) {
 res <- lapply(seq_len(nrow(ev)), function(i) check_row(ev[i, ]))
 out <- data.frame(
   data_row = seq_len(nrow(ev)), species_code = ev$species_code, parameter = ev$parameter,
-  variable = ev$variable, citation_key = ev$citation_key, model_id = ev$model_id,
+  variable = ev$variable, metric = ev$metric, citation_key = ev$citation_key, model_id = ev$model_id,
   quote_source = ev$quote_source,
   status = vapply(res, `[[`, "", "status"),
   pdf_file = vapply(res, function(x) as.character(x$file), ""),
@@ -453,6 +470,18 @@ cov <- expand.grid(species_code = COVERAGE$species, parameter = COVERAGE$paramet
 cov$rows <- mapply(function(s, p) sum(ev$species_code == s & ev$parameter %in% p),
                    cov$species_code, cov$parameter)
 
+valued <- !is.na(ev$value_min) | !is.na(ev$value_max)
+meets <- function(sp, cell) {
+  hit <- ev$species_code == sp & ev$variable == cell$variable & ev$life_stage == cell$life_stage &
+    (valued | ev$kind == "none")
+  if (cell$variable == "degree_days") return(sum(hit & ev$metric %in% cell$window))
+  b <- if (cell$side == "upper") "max" else "min"
+  sum(hit & ev$bound %in% c(b, "range"))
+}
+thermal <- merge(data.frame(species_code = THERMAL$species), THERMAL$cells, by = NULL)
+thermal$rows <- vapply(seq_len(nrow(thermal)), function(i) meets(thermal$species_code[i], thermal[i, ]),
+                       integer(1))
+
 log_csv <- Sys.getenv("LOG", file.path("scripts", "logs", "habitat",
                                       paste0(format(Sys.Date(), "%Y%m%d"), "_literature_verify.csv")))
 dir.create(dirname(log_csv), recursive = TRUE, showWarnings = FALSE)
@@ -476,6 +505,11 @@ cat(sprintf("timing sources: %d keys, %d unresolved in the group%s\n", length(t_
             if (length(t_bad)) paste0(": ", paste(t_bad, collapse = ", ")) else ""))
 cat(sprintf("coverage: %d of %d species x parameter cells have a row\n", sum(cov$rows > 0), nrow(cov)))
 if (any(cov$rows == 0)) print(cov[cov$rows == 0, c("species_code", "parameter")], row.names = FALSE)
+cat(sprintf("thermal: %d of %d species x cells have a row\n", sum(thermal$rows > 0), nrow(thermal)))
+if (any(thermal$rows == 0)) {
+  print(thermal[thermal$rows == 0, c("species_code", "variable", "life_stage", "side", "window")],
+        row.names = FALSE)
+}
 cat("wrote", log_csv, "and", reg_log, "\n")
 if (any(!pass) || any(!reg_pass) || length(unregistered) || length(unread) || length(t_bad) ||
-    any(cov$rows == 0)) quit(status = 1)
+    any(cov$rows == 0) || any(thermal$rows == 0)) quit(status = 1)

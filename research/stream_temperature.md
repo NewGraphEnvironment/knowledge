@@ -1,11 +1,11 @@
 # Stream temperature: what the network models do, and what NGE holds
 
-**Verified:** 2026-10-06 (model repos read 2026-10-03) · **Issues:** NewGraphEnvironment/logic#4 (roadmap);
+**Verified:** 2026-10-06 (model repos read 2026-10-03; evidence and Zotero bullets revised for #38) · **Issues:** NewGraphEnvironment/logic#4 (roadmap);
 NewGraphEnvironment/wet#36, NewGraphEnvironment/link#21, NewGraphEnvironment/fish_passage_template_reporting#214,
 #20 · **Produced by:** reading `fish-passage-22` `526d02c`, `fish-passage-22b` `1464c9d` and
 `skeena-stream-temp-25` `c128f14` (the NGE fork), the rendered memos
-([hill_etal2024Spatialstream](https://www.poissonconsulting.ca/f/1295467017),
-[hill_etal2025Spatialstream](https://www.poissonconsulting.ca/f/1130667589)), and a read-only copy of the
+([hill_etal2024Spatialstream](https://www.poissonconsulting.ca/analyses/fish-passage-22b/),
+[hill_etal2025Spatialstream](https://www.poissonconsulting.ca/analyses/skeena-stream-temp-25/)), and a read-only copy of the
 group library.
 
 Where the work is going is logic#4. This file is the technical state that roadmap rests on.
@@ -117,12 +117,15 @@ distance script, and logger-cleaning literals.
   - FDIS and FISS spot temperatures are parsed in this repo (`water_temp_c`, `temperature_c`) and not used.
   - There are logger series from the Upper Bulkley, the Nechako (Gilbert et al. 2022) and Weigert Creek.
     Weigert Creek recorded 693.5 °C-days, against a WCT requirement of 570–600 thermal units (template#214).
-- **Evidence.** `data/literature_evidence.csv` has 56 temperature rows (CH, BT, CO, ST). It has no
-  GSDD or thermal-unit rows and nothing for WCT. Those thresholds are in issue text only (template#214,
-  `fish_passage_elk_2022_reporting#55`).
-- **Zotero.** Both memos are in the group library (`QYU2YFFZ`, `F4Y3AQZH`) as URL stubs with **no PDF**.
-  So they are listed in `habitat_modelling_members.csv` but no store has read them. `Fisheries/temperature`
-  holds 22 items.
+- **Evidence.** `data/literature_evidence.csv` holds the cited thermal requirements for BT, WCT, CH, CO and
+  ST by life stage, each value with its `metric`, plus degree-day rows (#38). What they say, and what has no
+  source, is `thermal_requirements.md`. The template#214 and `fish_passage_elk_2022_reporting#55` thresholds
+  are rows now: WCT emergence at 575–600 thermal units (Thorley et al. 2022), and the 800–900 degree-day
+  recruitment threshold, which is Colorado River cutthroat (Coleman & Fausch 2007a).
+- **Zotero.** Both memos (`QYU2YFFZ`, `F4Y3AQZH`) have PDFs since #38. They were printed from the rendered
+  analytic appendices (`/analyses/fish-passage-22b/`, `/analyses/skeena-stream-temp-25/`), because the
+  `/f/` links the items carried now serve an empty page; the items' URLs point at the appendices since #38. `Fisheries/temperature` holds 47 items and feeds the
+  `temperature` store.
 - **External layers named but not obtained:** the Weller et al. thermalscape (August mean), PCIC Raven
   channel-scale temperature (wet#9), and the DFO CSAS 2025/013 layers (#20).
 - **link.** No code uses temperature. link#21 (GSDD and upper limits as IP variables) waits on a

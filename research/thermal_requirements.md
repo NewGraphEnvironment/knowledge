@@ -1,0 +1,133 @@
+# Thermal requirements by species and life stage
+
+**Verified:** 2026-10-06 · **Issues:** #38 (this); background in `stream_temperature.md`; for
+NewGraphEnvironment/link#21, NewGraphEnvironment/wet#40 and NewGraphEnvironment/fish_passage_template_reporting#214 ·
+**Produced by:** rows of `data/literature_evidence.csv` with `variable` `temperature`, `air_temperature` or
+`degree_days` (rows 511 onward are #38's), gated by `scripts/0280-literature-verify.R` (log
+`scripts/logs/habitat/20261006_literature_verify.csv`); sources in the group's `Fisheries/temperature`
+collection (`data/temperature_members.csv`, 45 members, 38 with a PDF) and the `temperature` store.
+
+**Status:** every species × cell of the gate's thermal grid has a value or a `none` row. The degree-day
+cells are mostly `none`. No source read gives a growing-season degree-day requirement for a BC species. The
+sources read are the collection's members with a PDF; Bear et al. 2005 and 2007 and McMahon et al. 2007 have
+none.
+
+## How to read the rows
+
+```r
+pkgload::load_all("pkg")
+x <- knw_literature_read("data/literature_evidence.csv",
+                         species_code = c("BT", "WCT", "CH", "CO", "ST", "CRCT"),
+                         variable = c("temperature", "degree_days"))
+```
+
+A temperature value is only comparable with a prediction of the same statistic, so read `metric` before
+`value_*`:
+- a daily maximum or mean, MWMT, 7DADM, MWAT, 7DEC or weekly, August or summer mean is a statistic of a stream
+  record;
+- `constant` is a laboratory exposure at a held temperature (a UILT, a growth optimum);
+- `unstated` means the source gives a number without the statistic.
+
+A degree-day row's `metric` names the window: `growing_season` (Coleman & Fausch 2007a, the window
+`gsdd::gsdd()` computes), `to_hatch` or `to_emergence` (from fertilization). Its note gives the base
+temperature.
+
+`kind` separates what a number is: `param` (a value a model or standard sets, such as the Iacarella and
+Isaak thresholds), `expert` (a criterion or recommendation), `lab` (a laboratory or hatchery measurement:
+a lethal limit, CTmax, survival at a held temperature, a development time in degree-days), `dist` and
+`max_obs` (where fish were found), `pref` (a preference or optimum). Air-temperature rows (the IP models'
+proxies: Agrawal, Lindley, Boughton & Goslin, Weiss) are a separate variable and never stand in for a water
+limit.
+
+## Degree-days
+
+| species | window | value | source | note |
+|---|---|---|---|---|
+| WCT | to_emergence | 575–600 | Thorley et al. 2022 p. 30 (Kootenay Trout Hatchery, pers. comm.) | hatchery-reared; base and start not stated |
+| BT | to_hatch | 350 CTU | McPhail & Baxter 1996 p. 9 (Gould 1987) | base not stated |
+| CH | to_hatch | 900–1,000 TU | Raleigh et al. 1986 p. 4 (Seymour 1956) | base 0 °C |
+| CRCT | to_emergence | 570–600 | Coleman & Fausch 2007a p. 1234, citing the 2007 laboratory study | Colorado River cutthroat |
+| CRCT | growing_season | < 800 unsuitable; 800–900 recruitment "in some years"; 900–1,200 best | Coleman & Fausch 2007a p. 1231 | field, greenback and Colorado River cutthroat |
+| CRCT | growing_season | > 900 for consistent recruitment | Coleman & Fausch 2007 p. 652 | laboratory regimes of 666, 763, 974 |
+
+**No source read** (the members with a PDF) gives degree-days to emergence for BT, CH, CO or ST, to hatch
+for WCT, CO or ST, or a growing-season requirement (first-summer growth or overwinter size) for any BC
+species. Several give days to hatch or emerge at a stated temperature (Bjornn & Reiser 1991 p. 106–107, Roberge et al. 2002
+p. 64, McPhail & Baxter 1996 p. 9). Their products were not computed: the table holds what a source prints.
+The `none` rows say what was searched.
+
+The WCT documents borrow the cutthroat growing-season values. Thorley et al. 2022 reads age-0 fish under
+30 mm as poor overwinter survival, citing Coleman & Fausch. The Hill et al. 2024 and 2025 memos compute GSDD
+with Coleman & Fausch's start and end rules and call it "a useful predictor of age-0 rainbow and westslope
+cutthroat trout size at the beginning of winter". Neither states a WCT threshold. So any WCT GSDD threshold is
+a transfer from Colorado's native cutthroat (greenback and Colorado River cutthroat, filed as `CRCT` because
+greenback has no code), and should be labelled one.
+
+## Temperature limits
+
+The thermal grid asks, per species, for an upper and a lower water-temperature limit for spawning,
+incubation and rearing. A `range` fills both. Every cell has at least one value, except CO rearing lower.
+That cell's one value, Bjornn & Reiser's 1.7 °C lower lethal, OCRs as "17" on the scan and cannot be quoted.
+
+Values a BC model would most likely use:
+
+| species | stage | value | metric | source |
+|---|---|---|---|---|
+| CH, CO | rearing | 24 °C | `7dec` | Iacarella et al. 2024 (BC anadromous streams; lab IT-Dmax) |
+| CH, CO, ST | spawning, incubation | 13 °C / 10 °C | `7dadm` / `weekly_mean` | Richter & Kolmes 2005 Table 1 (upper optimal criteria) |
+| CH, CO, ST | rearing | 16 °C / 15 °C | `7dadm` / `weekly_mean` | Richter & Kolmes 2005 Table 1 |
+| BT | rearing | 11 °C | `mwat` | Hagen & Weber 2019 p. 25 (BC threshold, Parkinson et al. 2012) |
+| BT | rearing | 11 °C | `august_mean` | Isaak et al. 2015 (cold-water habitat) |
+| BT | rearing | 20.9 °C | `constant` | Selong et al. 2001 (UILT, age-0) |
+| BT | spawning | 9–10 °C at onset as temperatures fall | `unstated` | rows 149, 492, 508 (row 546 gives 9 °C onset without saying falling) |
+| WCT | rearing | 19.6 °C | `constant` | Cleator et al. 2009 p. 4 (UILT, Bear et al. 2007) |
+| WCT | spawning, incubation | 6–10 °C | `unstated` | DFO 2019 Table 2 (critical habitat) |
+| WCT | rearing | 4–15 °C | `unstated` | DFO 2019 Table 2 |
+
+Conventions a reader needs:
+- **A stage-less BT limit is under `rearing`.** Rieman & McIntyre's 15 °C, Hagen & Weber's 15–16 °C and
+  11 °C MWAT, O'Connor's 11 and 13 °C, and the USFWS 2010 2–15 °C critical-habitat range name no stage. They
+  are filed as summer stream limits, and each note says no stage is named.
+- **A span stored as a single limit holds its lower end**, for recommendations (Hicks's 14–17 °C 7-DAM for
+  juvenile coho rearing; a 13.5–14.5 °C single daily maximum) and measured onsets (Burck's 23.8–25.5 °C; Hagen
+  & Weber's 15–16 °C distribution limit) alike. The note gives the span.
+- **Richter & Kolmes Table 1 holds for CH, CO and ST.** It has no species column. pp. 38–39 discuss each
+  criterion for each species.
+
+## Left out, and why
+
+- **Bear et al. 2005 and 2007** (WCT thermal tolerance) have no PDF in the library. The 2007 paper is closed
+  access; the 2005 report is on ResearchGate only. Bear et al. 2007 reaches the table as secondary citations: the
+  19.6 °C UILT through Cleator et al. 2009 (p. 4), and "survival declines sharply at temperatures above 19ºC"
+  through Thorley et al. 2021 (p. 1). Bear et al. 2005 reaches no row, and is the likeliest unread source of WCT
+  degree-days.
+- **Hasnain et al.** (key thermal metrics for Canadian fishes) says every estimate comes from adults, so its
+  lethal and growth values are not rearing values. Its cutthroat values are species-level, not westslope.
+- **OCR-garbled Bjornn & Reiser 1991 cells:** coho spawning 4.4–9.4 and incubation 4.4–13.3 °C, steelhead
+  spawning 3.9–9.4 °C, coho lower lethal 1.7 °C, and Chinook upper lethal 26.2 °C. The coho spawning span is
+  in the table through Richter & Kolmes p. 33.
+- **Values with no stage:** McCullough's distribution limits, and Chinook, coho and steelhead lethal limits in
+  Richter & Kolmes pp. 28–36 and Roberge et al. 2002 p. 65. **Resident rainbow trout** values are not steelhead.
+- Draft notes with every source read: `planning/archive/2026-10-issue-38-*/draft-{tc,ps}-notes.md`.
+
+## What the consumers should use
+
+- **wet#40 (GSDD at stations).** `gsdd::gsdd()` computes the Coleman & Fausch window, which is the
+  `growing_season` metric here. The only thresholds to compare against are cutthroat ones: 800, 900 and
+  900–1,200 degree-days. Report GSDD for every species, but threshold only cutthroat, and label those values
+  as Colorado cutthroat (greenback and Colorado River cutthroat; filed as `CRCT`).
+- **template#214 (Weigert Creek, 693.5 °C-days).** That total runs "across the logger deployment", which is
+  neither the growing season nor the time from spawning. Compute GSDD on the Coleman & Fausch window before
+  comparing it with 800. Compare degree-days from WCT spawning (5 °C daily mean and 7 °C daily maximum, Cope et
+  al. 2016 via Thorley 2022 p. 30) with the 575–600 to emergence. The source does not say when the hatchery
+  count starts; counting from spawning onset is the nearest field equivalent. Cite Thorley et al. 2022 for WCT
+  emergence, and Coleman & Fausch only for the cutthroat transfer.
+- **link#21 (temperature as an IP variable).** Match the metric to the per-segment product. The Hill models
+  predict weekly means, so `weekly_mean` and `mwat` rows apply directly. A `7dadm`, `7dec` or `daily_max` limit
+  needs a daily maximum the models do not produce. For the upper limit of BT rearing, 11 °C MWAT (BC) and 11 °C
+  August mean (Isaak) are the BC and regional criteria. For CH, CO and ST with Hill predictions, the Richter &
+  Kolmes Table 1 weekly means apply (15 °C rearing, 10 °C spawning and incubation), and Cooney & Holzer's 22 °C
+  weekly mean for CH and ST. Iacarella's 24 °C 7DEC needs a 7DEC product (Iacarella's own BC model): the 7DEC
+  is "the median value between 7DADM and MWAT", so a weekly mean compared with it under-calls exceedance.
+  There is no degree-day threshold to gate segments on for any BC species. A GSDD layer can rank segments, but a cutoff
+  would come from cutthroat in Colorado.
