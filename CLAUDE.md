@@ -27,7 +27,7 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   then hand-edited; read with `knw_timing_read()`), `literature_evidence.csv` (cited habitat-threshold
   values with verbatim quotes, read with `knw_literature_read()`, gated by `0280`; a row stating an
   intrinsic-potential model's threshold carries that model's `model_id`; a temperature, air-temperature or
-  degree-day value names its `metric`), `ip_model_registry.csv` (one row
+  degree-day value names its `metric`; a `groundwater` row is a statement with no value), `ip_model_registry.csv` (one row
   per IP model × species × stage: how it sizes streams, its confinement variable, its validation, with its
   flow claim and any validation claimed each quoted; read with `knw_ip_read()`, gated and link-checked by
   `0280`),

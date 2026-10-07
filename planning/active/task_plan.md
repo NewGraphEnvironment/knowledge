@@ -57,9 +57,9 @@ The package moves from 0.3.0 to 0.3.1, with a NEWS entry in the same commit, as 
 - [x] `Rscript scripts/0280-literature-verify.R`: all new quotes verify, no new failures; commit its log as the run's evidence
 
 ## Phase 3: Docs
-- [ ] `research/bt_spawning.md:69`: replace "has no groundwater variable (#36)" with where the groundwater rows now are; refresh the header's Verified line
-- [ ] CLAUDE.md `literature_evidence.csv` description: note that `groundwater` is qualitative only (one clause, if it fits the existing sentence)
-- [ ] Edit issue #36's body only if the work moves from what it says: no edit, since the issue already offered the no-unit option
+- [x] `research/bt_spawning.md:69`: replace "has no groundwater variable (#36)" with where the groundwater rows now are; refresh the header's Verified line
+- [x] CLAUDE.md `literature_evidence.csv` description: note that `groundwater` is qualitative only (one clause, if it fits the existing sentence)
+- [x] Edit issue #36's body only if the work moves from what it says: no edit, since the issue already offered the no-unit option
 
 ## Validation
 

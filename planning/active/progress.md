@@ -14,3 +14,4 @@
 - Code-check rounds 1 and 2: Clean (`review-round1.md`, `review-round2.md`). The second agent covered round 3's scope too (docs and the roxygen claim for every kind).
 - Phase 2: 12 groundwater rows appended (data rows 675-686). Meaning audit by an independent agent: 4 errors, 3 candidates, 3 firm-ups. Round 2 on the fixes found 2 errors inside them. The loop ended by enumerating every cross-reference claim (`findings.md`). Gate: 686 rows, 1-674 unchanged; log `scripts/logs/habitat/20261007_literature_verify*.csv`.
 - Agents for this task: 5 (plan review, code-check x2, meaning audit x2). The second meaning audit found the two errors inside fixes.
+- Phase 3: `research/bt_spawning.md` (header, row range, line 69), `scripts/README.md` columns paragraph, CLAUDE.md clause. Issue body needs no edit.

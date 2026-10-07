@@ -1,9 +1,10 @@
 # BT spawning: what the evidence says about gradient and channel size
 
-**Verified:** 2026-10-02 · **Issues:** #33 (this); follows #28 (`habitat_weights.md`); spawned #34, #35, #36 ·
+**Verified:** 2026-10-02; groundwater rows 2026-10-07 (#36) · **Issues:** #33 (this); follows #28 (`habitat_weights.md`); spawned #34, #35, #36 ·
 **Produced by:**
 - `scripts/0293-bt-spawn-evidence.R`: `data/bt_spawn_evidence.csv`, log `scripts/logs/habitat/20261002_bt_spawn_evidence.txt`;
-- literature rows 490–510 of `data/literature_evidence.csv`, gate `scripts/logs/habitat/20261002_literature_verify.csv`.
+- literature rows 490–510 of `data/literature_evidence.csv`, gate `scripts/logs/habitat/20261002_literature_verify.csv`;
+- groundwater rows 675–686 (#36), gate `scripts/logs/habitat/20261007_literature_verify.csv`.
 
 **Status:** Tracks 1 and 2 done. Track 3 (the Williston critical spawning segments) is pending: the layer
 is on m4, which was unreachable. Nothing is proposed for link yet.
@@ -66,7 +67,7 @@ The counts are far too small for a test (`planning/archive/2026-10-issue-33-bt-s
 | Does BT spawning use fall past `spawn_gradient_max`? | redd locations on FWA (Track 3); not electrofishing | **pending**: the Williston critical spawning segments are on m4 |
 | Is 2 m the right width floor? | redd locations; Hagen et al. 2020 p. 49 (redds of large migratory BT in sections as small as 2 m wetted, same lead author as the 2015 2 m row) | 2 m is the smallest stream with migratory redds in one author group's experience (rows 86, 496, not independent), and such streams held a small share of redds. Morice spawning sites were all in reaches wider than 7 m (row 189). Fish records show small mature BT below 2 m |
 | Resident vs migratory spawning | size and maturity at the visit | resident-sized mature fish turn up on steep, small streams; migratory spawning is underpowered here |
-| What drives site choice | literature | cold water, groundwater upwelling and alluvial (unconfined) reaches, in the Metolius report, Hagen & Sary 2023, the 2015 recovery plan and the 2010 rule. The evidence vocabulary has no groundwater variable (#36), so some of these statements are not recorded |
+| What drives site choice | literature | cold water, groundwater upwelling and alluvial (unconfined) reaches, in the Metolius report, Hagen & Sary 2023, the 2015 recovery plan and the 2010 rule. Since #36 these are `groundwater` rows (data rows 675–686, qualitative: no source read so far gives an upwelling measure). Spawning sites at springs and spring-influenced reaches (Metolius), groundwater infiltration in larger streams (Hagen & Weber 2019), hyporheic flow and groundwater influence in site selection (2010 rule). Two incubation rows report higher egg-to-alevin survival in groundwater or upwelling areas; they probably rest on one study (Baxter's thesis and paper), and the rows' notes say so. A third (Pratt 1992) says groundwater may offset fine sediment |
 
 ## What a Track 3 result needs to be read correctly
 
