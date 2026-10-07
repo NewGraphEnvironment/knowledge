@@ -4,8 +4,8 @@
 NewGraphEnvironment/wet#36, NewGraphEnvironment/link#21, NewGraphEnvironment/fish_passage_template_reporting#214,
 #20 · **Produced by:** reading `fish-passage-22` `526d02c`, `fish-passage-22b` `1464c9d` and
 `skeena-stream-temp-25` `c128f14` (the NGE fork), the rendered memos
-([hill_etal2024Spatialstream](https://www.poissonconsulting.ca/f/1295467017),
-[hill_etal2025Spatialstream](https://www.poissonconsulting.ca/f/1130667589)), and a read-only copy of the
+([hill_etal2024Spatialstream](https://www.poissonconsulting.ca/analyses/fish-passage-22b/),
+[hill_etal2025Spatialstream](https://www.poissonconsulting.ca/analyses/skeena-stream-temp-25/)), and a read-only copy of the
 group library.
 
 Where the work is going is logic#4. This file is the technical state that roadmap rests on.
@@ -124,7 +124,7 @@ distance script, and logger-cleaning literals.
   recruitment threshold, which is Colorado River cutthroat (Coleman & Fausch 2007a).
 - **Zotero.** Both memos (`QYU2YFFZ`, `F4Y3AQZH`) have PDFs since #38. They were printed from the rendered
   analytic appendices (`/analyses/fish-passage-22b/`, `/analyses/skeena-stream-temp-25/`), because the
-  `/f/` links the items carry now serve an empty page. `Fisheries/temperature` holds 47 items and feeds the
+  `/f/` links the items carried now serve an empty page; the items' URLs point at the appendices since #38. `Fisheries/temperature` holds 47 items and feeds the
   `temperature` store.
 - **External layers named but not obtained:** the Weller et al. thermalscape (August mean), PCIC Raven
   channel-scale temperature (wet#9), and the DFO CSAS 2025/013 layers (#20).
