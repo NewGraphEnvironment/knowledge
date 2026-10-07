@@ -142,6 +142,11 @@ meaning per row, not a sample. Settled conventions:
   air temperature, including a model's air proxy for water, is `air_temperature`. A degree-day row's note
   gives its base temperature. `species_code` is the species measured: Colorado River cutthroat (Coleman &
   Fausch 2007, the `gsdd` growing season) is `CRCT`, not `WCT` (#38).
+- `kind = lab` is a laboratory or hatchery measurement (UILT, CTmax, survival at a held temperature,
+  development in thermal units); `expert` is a recommendation or criterion. Rows from one table or page are
+  coded alike unless the note says why, and the source decides, not a sibling row: #38's round-2 audit found
+  a round-1 fix that had recoded Sauter Table 4 from a neighbouring row when the paper calls it observed
+  temperatures (`dist`).
 
 The #29 archive holds the drafter brief and the two helper scripts (`scratch_keytext.py` extracts a
 group-library key's PDF text; `scratch_merge_drafts.py` merges family drafts onto the committed tables).
