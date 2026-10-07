@@ -32,6 +32,10 @@
 #' temperature is its own variable because models use it as a proxy for water
 #' temperature, and the two are not interchangeable.
 #'
+#' `groundwater` covers upwelling, hyporheic exchange and springs. It takes no
+#' unit, so a groundwater row carries no value: no source read so far gives an
+#' upwelling measure (a vertical hydraulic gradient, say).
+#'
 #' @return A named `list` of `character` vectors, one per controlled column.
 #' @export
 #' @examples
@@ -44,7 +48,7 @@ knw_literature_vocab <- function() {
     variable = c("gradient", "channel_width", "stream_order", "discharge", "lake_area",
                  "wetland_area", "bridge_distance", "temperature", "substrate", "depth",
                  "velocity", "timing", "valley_width_index", "drainage_area", "elevation",
-                 "air_temperature", "degree_days"),
+                 "air_temperature", "degree_days", "groundwater"),
     parameter = c("spawn_gradient_max", "spawn_gradient_min", "spawn_channel_width_min",
                   "spawn_mad_min", "rear_gradient_max", "rear_channel_width_min", "rear_mad_min",
                   "rear_mad_max", "rear_lake_ha_min", "rear_wetland_ha_min", "access_gradient_max",
@@ -225,7 +229,9 @@ knw_literature_read <- function(path, species_code = NULL, variable = NULL) {
                bridge_distance = c("km", "m"), temperature = "degC", substrate = "mm", depth = "m",
                velocity = "m/s", timing = "MM-DD", valley_width_index = "ratio",
                drainage_area = c("km2", "mi2"), elevation = c("m", "ft"),
-               air_temperature = "degC", degree_days = "degC-day")
+               air_temperature = "degC", degree_days = "degC-day",
+               # Qualitative until a source gives an upwelling measure: no unit fits, so no value can.
+               groundwater = character(0))
   misfit <- !is.na(x$unit) & !mapply(function(v, u) u %in% fits[[v]], x$variable, x$unit)
   if (any(misfit)) {
     stop("unit ", x$unit[misfit][1], " does not fit variable ", x$variable[misfit][1],

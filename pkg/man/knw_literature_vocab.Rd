@@ -42,6 +42,10 @@ fertilization, or \code{annual}).
 \code{unstated} is for a source that gives a value without saying. Air
 temperature is its own variable because models use it as a proxy for water
 temperature, and the two are not interchangeable.
+
+\code{groundwater} covers upwelling, hyporheic exchange and springs. It takes no
+unit, so a groundwater row carries no value: no source read so far gives an
+upwelling measure (a vertical hydraulic gradient, say).
 }
 \examples{
 knw_literature_vocab()$variable

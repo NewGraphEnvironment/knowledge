@@ -340,7 +340,8 @@ The cited basis for CH and BT habitat thresholds (#19). Not per watershed group.
   model parameter it bears on, bound, value, unit, `metric`, kind, region, key, page, verbatim quote,
   `quote_source`, scale, cited source and `model_id`. `kind = none` records a search that found nothing.
   Gradient is in percent. `metric` says which statistic a `temperature` or `air_temperature` value is, or the
-  window of a `degree_days` total (whose note gives the base temperature).
+  window of a `degree_days` total (whose note gives the base temperature). `groundwater` (upwelling,
+  hyporheic exchange, springs) takes no unit, so its rows are statements with no value.
 - `data/ip_model_registry.csv` has one row per intrinsic-potential model × species × stage. It records how the
   model sizes streams (`flow_metric`, `flow_source`, `flow_inputs`, `flow_surrogate`), its valley-confinement
   variable, and its validation; its flow claim and any validation claimed are each quoted. It holds no

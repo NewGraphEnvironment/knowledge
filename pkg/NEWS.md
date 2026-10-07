@@ -1,3 +1,9 @@
+# knowledge 0.3.1
+
+* New evidence variable `groundwater`: upwelling, hyporheic exchange and
+  springs. It takes no unit, so a `groundwater` row is a statement with no
+  value, until a source gives an upwelling measure.
+
 # knowledge 0.3.0
 
 * `knw_literature_read()` requires a `metric` column, after `unit`: which
