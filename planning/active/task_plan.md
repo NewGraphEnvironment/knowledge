@@ -42,11 +42,11 @@ per-row meaning audit (CLAUDE.md, "the gate checks words, not meaning").
 The package moves from 0.3.0 to 0.3.1, with a NEWS entry in the same commit, as #38 did.
 
 ## Phase 1: Vocabulary and test
-- [ ] Failing tests in `pkg/tests/testthat/test-literature.R`: `groundwater` is in `knw_literature_vocab()$variable`; a `groundwater` `qual` row reads; a `groundwater` row with any unit is refused ("does not fit variable groundwater"); a `groundwater` value with no unit is still refused ("a value needs a unit")
-- [ ] Add `groundwater` to `variable`, and `groundwater = character(0)` to `fits` in `.literature_check()`, with a comment that it is qualitative until a source gives a flux
-- [ ] Roxygen: one sentence in `knw_literature_vocab()` docs (groundwater, upwelling, hyporheic exchange and springs; qualitative only); `devtools::document()`
-- [ ] NEWS 0.3.1 entry + DESCRIPTION bump; `devtools::test()` and `devtools::check()` clean
-- [ ] Prove the unit guard fires: drop the `fits` entry in a copy of the code, and the "any unit refused" test goes red
+- [x] Failing tests in `pkg/tests/testthat/test-literature.R`: `groundwater` is in `knw_literature_vocab()$variable`; a `groundwater` `qual` row reads; a `groundwater` row with any unit is refused ("does not fit variable groundwater") and a `groundwater` value with a unit is refused too. (A value with no unit is the generic rule, already tested; dropped here.)
+- [x] Add `groundwater` to `variable`, and `groundwater = character(0)` to `fits` in `.literature_check()`, with a comment that it is qualitative until a source gives an upwelling measure (plan review G1: a vertical hydraulic gradient would be the likely number, not a flux)
+- [x] Roxygen: one sentence in `knw_literature_vocab()` docs (groundwater, upwelling, hyporheic exchange and springs; qualitative only); `devtools::document()`
+- [x] NEWS 0.3.1 entry + DESCRIPTION bump; `devtools::test()` and `devtools::check()` clean
+- [x] Prove the unit guard fires: give `groundwater` a unit (`"m/s"`) in a copy of the code, and both unit assertions go red. (Plan review B1: *dropping* the entry would not go red, because a variable absent from `fits` already refuses every unit; `character(0)` states the intent.)
 
 ## Phase 2: Evidence rows
 - [ ] Pull page text with the #29 `scratch_keytext.py` (copied to the scratchpad) for `hagen_weber2019Limitingfactorsa`, `u_s_fishandwildlifeservice2015Recoveryplan`, `u_s_fishandwildlifeservice2010Endangeredthreatened`, `trotter2000Headwaterfishes`; take verbatim quotes for the four left-out statements

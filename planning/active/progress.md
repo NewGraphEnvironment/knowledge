@@ -6,3 +6,9 @@
 - Created branch `36-evidence-vocabulary-has-no-groundwater` off main
 - Scaffolded PWF baseline from issue #36 with approved phases
 - Next: start Phase 1
+
+## Session 2026-10-07 (cont.)
+
+- Phase 1: `groundwater` in the vocabulary, qualitative only (`fits$groundwater = character(0)`); test; roxygen; NEWS + 0.3.1. Mutation (`groundwater = "m/s"`) turns both unit assertions red. `devtools::check()` 0/0/0.
+- Plan review (Plan agent) → `review-plan.md`. Applied: the mutation wording (B1), "upwelling measure" not "flux" (G1), independence notes (G2), the two Metolius statements (G5), appending rows (O1), data-row numbering (A1). Not applied: G4 (a parameter guard on groundwater rows); none carries one, and the acceptance check covers it.
+- Code-check rounds 1 and 2: Clean (`review-round1.md`, `review-round2.md`). The second agent covered round 3's scope too (docs and the roxygen claim for every kind).

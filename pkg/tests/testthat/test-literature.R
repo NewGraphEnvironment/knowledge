@@ -367,3 +367,18 @@ test_that("a 'qual' row carries no value", {
   x$unit[1] <- NA
   expect_equal(knw_literature_read(write_literature(x))$kind[1], "qual")
 })
+
+test_that("groundwater is a qualitative variable: a statement reads, any unit is refused", {
+  expect_true("groundwater" %in% knw_literature_vocab()$variable)
+  x <- literature_fixture()
+  x[1, c("variable", "parameter", "bound", "value_max", "unit", "model_id")] <- NA
+  x$variable[1] <- "groundwater"
+  x$kind[1] <- "qual"
+  expect_equal(knw_literature_read(write_literature(x), variable = "groundwater")$kind, "qual")
+  # No source has given an upwelling flux, so no unit fits, and so no value can be recorded.
+  x$unit[1] <- "m/s"
+  expect_error(knw_literature_read(write_literature(x)), "unit m/s does not fit variable groundwater")
+  x$kind[1] <- "dist"
+  x$value_max[1] <- "0.5"
+  expect_error(knw_literature_read(write_literature(x)), "unit m/s does not fit variable groundwater")
+})
