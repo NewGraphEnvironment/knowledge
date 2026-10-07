@@ -63,7 +63,7 @@ The package moves from 0.3.0 to 0.3.1, with a NEWS entry in the same commit, as 
 
 ## Validation
 
-- [ ] Tests pass
-- [ ] `/code-check` clean on each commit
-- [ ] PWF checkboxes match landed work
-- [ ] `/planning-archive` on completion
+- [x] Tests pass
+- [x] `/code-check` clean on each commit (Phase 1: two rounds Clean; Phase 2: two meaning-audit rounds plus enumeration; Phase 3 is prose only, no subagent round)
+- [x] PWF checkboxes match landed work
+- [x] `/planning-archive` on completion
