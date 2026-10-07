@@ -49,17 +49,17 @@ The package moves from 0.3.0 to 0.3.1, with a NEWS entry in the same commit, as 
 - [x] Prove the unit guard fires: give `groundwater` a unit (`"m/s"`) in a copy of the code, and both unit assertions go red. (Plan review B1: *dropping* the entry would not go red, because a variable absent from `fits` already refuses every unit; `character(0)` states the intent.)
 
 ## Phase 2: Evidence rows
-- [ ] Pull page text with the #29 `scratch_keytext.py` (copied to the scratchpad) for `hagen_weber2019Limitingfactorsa`, `u_s_fishandwildlifeservice2015Recoveryplan`, `u_s_fishandwildlifeservice2010Endangeredthreatened`, `trotter2000Headwaterfishes`; take verbatim quotes for the four left-out statements
-- [ ] Add the four new `groundwater` `qual` rows (2 spawning, 2 incubation), with `cited_source`, `scale` and `note`
-- [ ] Add `groundwater` siblings for data rows 494, 502/503 (one sibling for the sentence), 504, 506, and 95 if its context (p. 9) is about spawning or rearing sites rather than distribution alone; same quote, stage and region as the original
-- [ ] Notes on 494, 504 and 506: drop "(the vocabulary has no groundwater variable)"; 504's note also gets the 2010 rule's parallel sentence
-- [ ] Meaning audit for every new or changed row against its PDF page, one line per row, in `findings.md`
-- [ ] `Rscript scripts/0280-literature-verify.R`: all new quotes verify, no new failures; commit its log as the run's evidence
+- [x] Pull page text with the #29 `scratch_keytext.py` (copied to the scratchpad) for `hagen_weber2019Limitingfactorsa`, `u_s_fishandwildlifeservice2015Recoveryplan`, `u_s_fishandwildlifeservice2010Endangeredthreatened`, `trotter2000Headwaterfishes`; take verbatim quotes for the four left-out statements
+- [x] Add the four new `groundwater` `qual` rows (2 spawning, 2 incubation), with `cited_source`, `scale` and `note`. Landed: five from the #33 list plus the 2010 rule's Fraley and Shepard sentence, two Metolius rows (plan review G5) and Pratt 1992 (meaning audit), all appended as data rows 675-686
+- [x] Add `groundwater` siblings for data rows 493, 501/502 (one sibling), 503 and 505 (the plan's numbers were file lines). Trotter 2000 (data row 94) got none: it is about distribution, not spawning sites
+- [x] Notes on 493 and 503: drop "(the vocabulary has no groundwater variable)". The 2010 rule's parallel sentence is in 677's note
+- [x] Meaning audit for every new or changed row against its PDF page, one line per row, in `findings.md`
+- [x] `Rscript scripts/0280-literature-verify.R`: all new quotes verify, no new failures; commit its log as the run's evidence
 
 ## Phase 3: Docs
 - [ ] `research/bt_spawning.md:69`: replace "has no groundwater variable (#36)" with where the groundwater rows now are; refresh the header's Verified line
 - [ ] CLAUDE.md `literature_evidence.csv` description: note that `groundwater` is qualitative only (one clause, if it fits the existing sentence)
-- [ ] Edit issue #36's body only if the work moves from what it says (e.g. no flux unit)
+- [ ] Edit issue #36's body only if the work moves from what it says: no edit, since the issue already offered the no-unit option
 
 ## Validation
 
