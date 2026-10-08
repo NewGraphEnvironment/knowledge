@@ -40,7 +40,12 @@
 #' interchangeable, so of the two only `instream_flow` takes a `metric`, the
 #' statistic the flow is held to (an `instantaneous` flow, a daily, monthly or
 #' seasonal mean, a monthly median, a `7day_low` average). A need written as a
-#' fraction of MAD is in `percent MAD`, which fits no other variable. A flow need
+#' fraction of MAD is in `percent MAD`, which fits no other variable. A need
+#' written as a point in a flow distribution is a `percentile` (the 90th
+#' percentile is a high flow) or a `percent exceedance` (Q95, the flow exceeded
+#' 95 % of the time, is a low one); the two run in opposite directions, so the
+#' unit says which the source used, and the metric which flows were ranked. A
+#' `7day_low` row gives its return period (7Q2, 7Q10) in the note. A flow need
 #' is no model's stream-size filter, so it carries no `parameter` or `model_id`,
 #' and the `*_mad_*` parameters belong to `discharge` rows alone.
 #'
@@ -73,7 +78,7 @@ knw_literature_vocab <- function() {
     bound = c("min", "max", "range", "optimum"),
     unit = c("percent", "m bankfull", "m wetted", "m", "order", "m3/s", "ha", "km", "degC",
              "mm", "m/s", "MM-DD", "ratio", "km2", "cfs", "mi2", "ft", "degC-day", "percent MAD",
-             "cm", "cm/s", "ft/s"),
+             "cm", "cm/s", "ft/s", "percentile", "percent exceedance"),
     metric = unique(unlist(.knw_metric_fits(), use.names = FALSE)),
     kind = c("param", "hsi", "max_obs", "dist", "pref", "expert", "lab", "qual", "none"),
     quote_source = c("text", "table", "ocr"),
@@ -265,7 +270,7 @@ knw_literature_read <- function(path, species_code = NULL, variable = NULL) {
                timing = "MM-DD", valley_width_index = "ratio",
                drainage_area = c("km2", "mi2"), elevation = c("m", "ft"),
                air_temperature = "degC", degree_days = "degC-day",
-               instream_flow = c("m3/s", "cfs", "percent MAD"),
+               instream_flow = c("m3/s", "cfs", "percent MAD", "percentile", "percent exceedance"),
                # Qualitative until a source gives an upwelling measure: no unit fits, so no value can.
                groundwater = character(0))
   misfit <- !is.na(x$unit) & !mapply(function(v, u) u %in% fits[[v]], x$variable, x$unit)
@@ -300,6 +305,11 @@ knw_literature_read <- function(path, species_code = NULL, variable = NULL) {
   dd_bare <- !none & x$variable == "degree_days" & is.na(x$note)
   if (any(dd_bare)) {
     stop("a degree_days row needs a note giving the base temperature", first(dd_bare), call. = FALSE)
+  }
+  # A 7-day low flow at a 2-year and at a 10-year return period are different flows.
+  low7_bare <- !none & x$metric %in% "7day_low" & is.na(x$note)
+  if (any(low7_bare)) {
+    stop("a 7day_low row needs a note giving its return period", first(low7_bare), call. = FALSE)
   }
   need <- list(min = "value_min", max = "value_max")
   for (b in names(need)) {

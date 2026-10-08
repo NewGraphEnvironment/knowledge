@@ -484,3 +484,23 @@ test_that("depth and velocity read in the unit the source wrote, and bankfull de
   x$unit[3] <- "cm/s"
   expect_error(knw_literature_read(write_literature(x)), "unit cm/s does not fit variable depth")
 })
+
+test_that("a flow need may be a percentile or a percent exceedance, and a 7-day low names its return period", {
+  x <- literature_fixture()
+  x$variable[1] <- "instream_flow"
+  x$parameter[1] <- NA
+  x$model_id[1] <- NA
+  x$metric[1] <- "daily_mean"
+  x$unit[1] <- "percentile"
+  expect_equal(knw_literature_read(write_literature(x))$unit[1], "percentile")
+  x$unit[1] <- "percent exceedance"
+  expect_equal(knw_literature_read(write_literature(x))$unit[1], "percent exceedance")
+  y <- literature_fixture()
+  y$unit[1] <- "percentile"
+  expect_error(knw_literature_read(write_literature(y)), "unit percentile does not fit variable gradient")
+  x$unit[1] <- "m3/s"
+  x$metric[1] <- "7day_low"
+  expect_error(knw_literature_read(write_literature(x)), "7day_low row needs a note.*data row 1")
+  x$note[1] <- "7Q10"
+  expect_equal(knw_literature_read(write_literature(x))$metric[1], "7day_low")
+})

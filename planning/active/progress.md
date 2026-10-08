@@ -35,3 +35,31 @@
 | 2 | 0 (2 notes) | 2 notes | 0 | n |
 | 3 | 1 fragile (+3 notes) | 1 (+1 note) | 1 note | y (plan-review unit fix) |
 | enumeration | 4 rescaled rows of 686, all documented | — | — | terminal |
+- Phase 2 (in flight): `data/flow_members.csv` (26 keys) and `data/flow_additions.csv` (9 works: Hatfield
+  2003, Hatfield 2002, Ptolemy & Lewis 2002, Lewis 2004, DFO 2013, Hubert 1985, Tennant 1976, Beecher &
+  Caldwell 2022, USFWS 2007 Clear Creek). `0270 --collection flow` built `Fisheries/flow` (`FWTJDD8Z`):
+  26 added, 9 created, all keyed by BBT within 3 minutes. The amec 2015 instream-flow appendix had a PDF
+  in another local library and was uploaded; Raleigh 1984 has none. Five items opened in Chrome for Al
+  (Hatfield & Bruce 2000, Bradford & Heinonen 2008, McMahon 1983 coho HSI on DTIC, now under maintenance,
+  Hickman & Raleigh 1982 and Raleigh 1984 on HathiTrust); notification sent.
+- Phase 3: FLOW grid in 0280 (60 cells; baseline 2/60), `meets_flow()` enumerated over 180 synthetic row
+  shapes, `percent MAD` scale. Vocabulary checkpoint on Hatfield 2003, Ptolemy & Lewis, DFO 2013, Hatfield
+  2002 and Tennant: thresholds come as monthly percentiles of mean daily flow, Q95, percent MAD, and
+  instantaneous flow, so `percentile` and `percent exceedance` were added (opposite conventions, so two
+  units). Hatfield 2003's fish-bearing threshold names no species, which is review G2.
+- Phases 2–3 code-check (rounds in `review-p3-round{1,2,3}.md`):
+
+| Round | Findings | Fixed | Accepted | Inside previous fix? |
+|---|---|---|---|---|
+| 1 | 0 (3 notes) | 1 note (0270 docstring) | 2 notes (exit 1 until filled; ×100 scale) | — |
+| 2 | 1 fragile (manifest SHA) + notes | amec note; re-push after commit | corporate-author BibTeX split | n |
+| 3 | 2 fragile (README habitat_modelling claim; m ×1000 for every variable) | both: README narrowed; 0280 scopes m/km rescale to bridge_distance | — | n |
+
+  Round 3 enumerated every README/roxygen/docstring claim about units, metrics, the grid and the collection
+  against the code (all hold after the fixes). The rescale scope ends by the earlier enumeration (no row
+  outside bridge distance relies on m/km) and a re-run: 686 of 686 committed rows verify.
+- Hubert 1985's govinfo PDF is digitally signed, so ocrmypdf refused it; 0280 now passes
+  `--invalidate-digital-signatures` (only the throwaway copy is altered). Its OCR named the second author
+  Helzner (Rhonda S.), not "Helzer" as the additions had it: CSV and Zotero item corrected.
+- Al chose group codes for species-less standards (`FISH`, `SALMON`, `SALMONIDS`; fill no cell). Row 121
+  (Gottesfeld) recoded `SALMON`. Drafter brief written; two drafters (`ps`, `tc`) spawned.

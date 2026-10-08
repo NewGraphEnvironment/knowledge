@@ -52,9 +52,9 @@ The evidence table's discharge rows are annual IP-model MAD thresholds plus one 
 - [x] `0280` passes on the migrated table; commit its log.
 
 ## Phase 2: Sources, the `flow` collection and store
-- [ ] `data/flow_members.csv`: the eight keys from the issue, plus the grayling, flow and HSI items in the
+- [x] `data/flow_members.csv`: the eight keys from the issue, plus the grayling, flow and HSI items in the
       group (raleigh 1984, stewart 2007, cutting 2018, hagen 2015 and others found by the search).
-- [ ] `data/flow_additions.csv`, holding only items whose PDF is reachable now (review O1): Hatfield et al. 2003, Ptolemy & Lewis 2002, DFO 2013 flow framework
+- [x] `data/flow_additions.csv`, holding only items whose PDF is reachable now (review O1): Hatfield et al. 2003, Ptolemy & Lewis 2002, DFO 2013 flow framework
       (CSAS SAR 2013/017), Hubert et al. 1985, McMahon 1983, Hickman & Raleigh 1982, Hatfield & Bruce 2000,
       Bradford & Heinonen 2008, Tennant 1976, and one Washington Ecology and one Central Valley WUA report.
       Government and open-access items get a PDF URL; each URL is checked for a `%PDF` body before it goes in.
@@ -63,28 +63,31 @@ The evidence table's discharge rows are annual IP-model MAD thresholds plus one 
       into `data/<repo path>`. Work continues on everything else while that is outstanding. An item never
       obtained is recorded as a gap, as Bear 2005/2007 was in #38. When the copies land: add their rows, re-run
       `0270`, rebuild and re-push the store, re-extract text.
-- [ ] `Fisheries/flow` is not a `habitat_modelling` input, so that store is not rebuilt (review G7).
-- [ ] `0270 --collection flow --dry-run`, then a live run; wait for Zotero sync and BBT keys.
-- [ ] `0150 ACTION=build STORE=flow COLLECTIONS=<key>`, then `ACTION=push`. Log both under
+- [x] `Fisheries/flow` is not a `habitat_modelling` input, so that store is not rebuilt (review G7).
+- [x] `0270 --collection flow --dry-run`, then a live run; wait for Zotero sync and BBT keys.
+- [x] `0150 ACTION=build STORE=flow COLLECTIONS=<key>`, then `ACTION=push`. Log both under
       `scripts/logs/habitat/`.
 
 ## Phase 3: The FLOW grid in `0280`
-- [ ] `FLOW` list next to `THERMAL`, with species CH, CO, SK, BT, GR, WCT, ST. Cells: an `instream_flow`
+- [x] `FLOW` list next to `THERMAL`, with species CH, CO, SK, BT, GR, WCT, ST. Cells: an `instream_flow`
       need for spawning, incubation, rearing, overwintering and migration, met by `min`, `range` or `optimum`
       (review G1); `depth` lower for spawning and migration (`min` or `range`; not `m bankfull`); `velocity`
       upper for spawning and rearing (`max` or `range`). SK has no instream-flow rearing or overwintering cell
       and no velocity rearing cell, because it rears in lakes (review A5). That makes 7 × 9 − 3 = 60 cells.
       A `none` row meets a cell by the same bound. The grid is printed and joins the exit condition.
-- [ ] `SCALE` gains `percent MAD = c(1, 100)`, as `percent` has (review G9).
-- [ ] Record the grid baseline before drafting. A frozen-copy negative run (one `none` row removed → exit
-      1), and an enumeration of `meets()` over variable × valued/none/qual × bound (review AC1).
-- [ ] Header comment and the `scripts/README.md` gate description updated.
-- [ ] Vocabulary checkpoint after reading Hatfield 2003, Ptolemy & Lewis 2002 and DFO 2013: add the flow
+- [x] `SCALE` gains `percent MAD = c(1, 100)`, as `percent` has (review G9).
+- [x] Record the grid baseline before drafting (2 of 60: CH migration flow need, BT spawning velocity), and
+      enumerate `meets_flow()` over variable × kind × bound × unit (review AC1).
+- [ ] Once the grid is full, a frozen-copy negative run: one `none` row removed → exit 1.
+- [x] Header comment and the `scripts/README.md` gate description updated.
+- [x] Vocabulary checkpoint after reading Hatfield 2003, Ptolemy & Lewis 2002 and DFO 2013: add the flow
       metrics they use before the brief is written; a `7day_low` row gives its return period in the note
-      (review G4).
+      (review G4). Added units `percentile` and `percent exceedance` (Hatfield 2003's monthly percentiles
+      of mean daily flows; Ptolemy & Lewis's Q95), and the `7day_low` note rule.
 
 ## Phase 4: Draft rows, then the gate and the meaning audit
-- [ ] Ask Al how a standard that names no species is coded (review G2), with options and a recommendation.
+- [x] Ask Al how a standard that names no species is coded (review G2): group codes `FISH`, `SALMON`,
+      `SALMONIDS`, filling no cell (2026-10-07); row 121 recoded `SALMON`.
 - [ ] Drafter brief in `planning/active/` (adapted from the #38 brief; this session's copies of the #29
       `scratch_keytext.py`/`scratch_merge_drafts.py`) and text extraction of every
       collection PDF. Two drafters (unnamed; `general-purpose`; told not to spawn): salmon and steelhead (CH, CO,

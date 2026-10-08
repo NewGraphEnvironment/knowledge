@@ -51,7 +51,12 @@ stage's window in \code{\link[=knw_timing_read]{knw_timing_read()}} places in th
 interchangeable, so of the two only \code{instream_flow} takes a \code{metric}, the
 statistic the flow is held to (an \code{instantaneous} flow, a daily, monthly or
 seasonal mean, a monthly median, a \verb{7day_low} average). A need written as a
-fraction of MAD is in \verb{percent MAD}, which fits no other variable. A flow need
+fraction of MAD is in \verb{percent MAD}, which fits no other variable. A need
+written as a point in a flow distribution is a \code{percentile} (the 90th
+percentile is a high flow) or a \verb{percent exceedance} (Q95, the flow exceeded
+95 \% of the time, is a low one); the two run in opposite directions, so the
+unit says which the source used, and the metric which flows were ranked. A
+\verb{7day_low} row gives its return period (7Q2, 7Q10) in the note. A flow need
 is no model's stream-size filter, so it carries no \code{parameter} or \code{model_id},
 and the \verb{*_mad_*} parameters belong to \code{discharge} rows alone.
 
