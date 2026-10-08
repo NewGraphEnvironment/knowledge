@@ -1,3 +1,21 @@
+# knowledge 0.4.0
+
+* New evidence variable `instream_flow`: a flow need, the water a life stage
+  needs while it is in the stream, kept apart from `discharge`, which is stream
+  size (usually the MAD an intrinsic-potential model filters on). It takes
+  `m3/s`, `cfs`, `percent MAD`, a `percentile` or a `percent exceedance`, and a
+  `metric` naming the flow statistic it is held to (`instantaneous`,
+  `daily_mean`, `7day_low`, `monthly_mean`, `monthly_median`, `unstated`). It
+  carries no `parameter` or `model_id`, and the `*_mad_*` parameters now sit on
+  `discharge` rows only. A `7day_low` row needs a note giving its return period.
+* `depth` and `velocity` read in the unit the source wrote: `cm` and `ft` for
+  depth, `cm/s` and `ft/s` for velocity, as well as `m` and `m/s`. A channel's
+  bankfull depth is stream size and reads as `m bankfull`.
+* Rows that changed variable or unit, so a filter on the old values returns
+  fewer rows: data row 121 (a migration low flow, now `instream_flow` and coded
+  `SALMON`), rows 250, 257 and 264 (bankfull depths, now `m bankfull`), and
+  rows 497 and 498 (redd velocities, now `cm/s` as quoted).
+
 # knowledge 0.3.1
 
 * New evidence variable `groundwater`: upwelling, hyporheic exchange and

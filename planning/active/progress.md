@@ -110,3 +110,25 @@
   (from #33, recoded to cm/s in Phase 1); notes 876 and 886 now cite them. 33 of the 34 mixed groups were
   explained by their own sentences; the 34th (AMEC p. 57 metric) is resolved by the `unstated` fix.
   Applied by `scratch_apply_audit2.py`; gate 1014 rows, 0 failing, flow 60/60.
+- Meaning audit round 3 (`audit-round3.md`): every one of the 44 rows round 2 changed, read against its page:
+  0 errors, 0 inside round-2 fixes, so the audit ends by enumeration (rounds: 58/325, 24/77, 0/44). It
+  settled 825/837: on the Ash River chart (one stream) the 30–200 % standard resolves to a single 45 %, while
+  summer steelhead passage stays "50-100%", so that span is not stream-size-set and stays `range`. Its two
+  wording suggestions applied. Gate: 1014 rows, flow 60/60.
+- Phase 5: `research/flow_requirements.md` written. Its numbers were derived from the table, and two draft claims
+  were wrong (Tennant's "good" class is 20/40 %, not 30/50 %; the depth "minima" mixed criteria, HSI edges and
+  observed redd depths, e.g. row 777's 4.0–8.1 m dam-outfall spawning). `research/README.md` row and a
+  back-link from `modelled_discharge.md`; `CLAUDE.md` data line and drafting conventions; NEWS 0.4.0.
+- Phase 5 code-check (`review-p5-round{1,2}.md`): the 0280 guard and the `seasonal_mean` removal clean. Round 1:
+  4 research-file claims contradicted by the table (row 858 is a recommendation, not a WUA peak; "means with no
+  bound" were in fact written for BT; "depth covered for every species" vs BT/WCT passage `none`; ST passage
+  50–100 % left out) and 7 lesser. Round 2 found one inside a round-1 fix: narrowing Table 5 to rows 819–825 kept
+  825, an ST row, under "The generic floor (fills no cell)", with 810–817 (ST) beside it. Ended by enumeration:
+  a script resolved every row number the file cites (464 references) and checked each against its section's
+  species or group; 0 misplaced (one false hit, "350 and 600 cfs").
+
+| Round | Findings | Fixed | Inside previous fix? |
+|---|---|---|---|
+| 1 | 4 contradicted + 7 lesser (prose) | 11 | — |
+| 2 | 1 bug + 5 fragile | 6 | y (825 kept under the generic floor) |
+| enumeration | 464 row references vs section | 0 misplaced | terminal |

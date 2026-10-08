@@ -40,7 +40,8 @@ The evidence table's discharge rows are annual IP-model MAD thresholds plus one 
       value with no `metric` refused; a `discharge` row with a metric still refused.
 - [x] `knw_literature_vocab()`: variable `instream_flow`; unit `percent MAD`; `.knw_metric_fits()` gains
       `instream_flow = c("instantaneous", "daily_mean", "7day_low", "monthly_mean", "monthly_median",
-      "seasonal_mean", "annual_mean", "unstated")`. Roxygen explains stream size vs flow need. A fraction
+      "seasonal_mean", "annual_mean", "unstated")` (as planned; `annual_mean` was dropped in review and
+      `seasonal_mean` after audit round 1). Roxygen explains stream size vs flow need. A fraction
       of MAD is `percent MAD`, and its metric is the statistic the flow is held to.
 - [x] `fits` in `.literature_check()` updated; `devtools::document()`; `devtools::test()` green.
 - [x] Audit all 45 `discharge` rows. Move the flow needs (Gottesfeld CH migration; any other one found) to
@@ -101,23 +102,23 @@ The evidence table's discharge rows are annual IP-model MAD thresholds plus one 
       names WCT or steelhead (review A1).
 - [x] Merge the drafts and run `0280`: 0 failing quotes, coverage, thermal and flow grids full. Commit the
       log.
-- [ ] Meaning audit of **every** new row, two rounds at least, ending by enumeration (each same-source,
+- [x] Meaning audit of **every** new row, two rounds at least, ending by enumeration (each same-source,
       same-page group with mixed kind, bound or metric is explained by its own sentences).
 
 ## Phase 5: Write-up and docs
-- [ ] `research/flow_requirements.md`: what is cited by species × stage, what has no source (the `none`
+- [x] `research/flow_requirements.md`: what is cited by species × stage, what has no source (the `none`
       cells), and how a row joins #42's monthly flows (which metric matches which flow statistic), with the
       timing table's gaps (no rearing rows, no GR, `CT` vs `WCT`; review G6) and a cross-reference to the
       Boughton & Goslin over-summer envelope (review A4). Header per `planning.md`.
-- [ ] `research/README.md` row; the `CLAUDE.md` data line and drafting conventions (stream size vs flow
+- [x] `research/README.md` row; the `CLAUDE.md` data line and drafting conventions (stream size vs flow
       need, `percent MAD`, metric); `scripts/README.md` (0270 `--collection flow`, the store, the grid).
-- [ ] `pkg/NEWS.md` and `DESCRIPTION` 0.3.1 → 0.4.0. NEWS names the new variable, units and metrics, and the
+- [x] `pkg/NEWS.md` and `DESCRIPTION` 0.3.1 → 0.4.0. NEWS names the new variable, units and metrics, and the
       rows that changed variable or unit: row 121 to `instream_flow`, rows 250/257/264 to `m bankfull`
       (review S3).
 - [ ] Issue #44 body edited to what landed: vocabulary chosen, sources obtained and gaps.
 
 ## Validation
-- [ ] Tests pass
-- [ ] `/code-check` clean on each commit
-- [ ] PWF checkboxes match landed work
+- [x] Tests pass
+- [x] `/code-check` clean on each commit
+- [x] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion, then `/gh-pr-push`

@@ -92,6 +92,8 @@ with the gauge's area. The table compares the PNWNAmet run with WSC monthly mean
   1992 gauge 0.46 vs model 4.32.
 - Gottesfeld & Rabnett 2007 (evidence data row 121) give 1 m³/s as the flow below which salmon migration is
   often blocked in the upper Bulkley. Below that line, the model overstates the flow that matters.
+- The cited flow needs by species and stage (#44) are in `flow_requirements.md`, with how each kind of row compares
+  with these monthly flows.
 - Upper Bulkley Chinook (`life_history_timing.csv`, `BULK`) spawn 08-01 to 09-15, which is the annual flow
   minimum. Monthly flow against life stage is computable from this source. Its dry years should not be
   trusted without a gauge.

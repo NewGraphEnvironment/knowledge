@@ -322,6 +322,8 @@ table_pages <- function(quote, pages) {
       at <- i
       ok <- TRUE
       for (t in q[-1]) {
+        # Past the last token there is nothing to match, and (at + 1):n would count down.
+        if (at >= length(s$tok)) { ok <- FALSE; break }
         win <- (at + 1):min(length(s$tok), at + 1 + TABLE_HOP)
         j <- win[s$tok[win] == t & s$page[win] == s$page[i]]
         if (!length(j)) { ok <- FALSE; break }
@@ -337,9 +339,10 @@ table_pages <- function(quote, pages) {
 # own fragments (a [bracketed insert] is the editor's, not the source's), as whole
 # tokens; a number after a "-" that does not follow a number may be read with either
 # sign; number words must be whole words. The only rescalings are the ones a unit
-# can carry: percent (and percent MAD) from a proportion (x100), mm from cm (x10), and m and km
-# for a bridge distance (x1000; applied to no other variable, see value_in_quote()). Depth and velocity are kept in the unit the source wrote
-# (knw_literature_vocab()), so cm/s has no rescale to m/s.
+# can carry: percent (and percent MAD) from a proportion (x100), mm from cm (x10), and m and
+# km for a bridge distance (x1000; applied to no other variable, see value_in_quote()). Depth
+# and velocity are kept in the unit the source wrote (knw_literature_vocab()), so cm/s has no
+# rescale to m/s.
 NUMBER_WORDS <- c(one = 1, two = 2, three = 3, four = 4, five = 5, six = 6, seven = 7, eight = 8,
                   nine = 9, ten = 10, first = 1, second = 2, third = 3, fourth = 4, fifth = 5,
                   sixth = 6, seventh = 7, eighth = 8, ninth = 9, tenth = 10)

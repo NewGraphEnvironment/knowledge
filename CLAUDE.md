@@ -27,7 +27,9 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   then hand-edited; read with `knw_timing_read()`), `literature_evidence.csv` (cited habitat-threshold
   values with verbatim quotes, read with `knw_literature_read()`, gated by `0280`; a row stating an
   intrinsic-potential model's threshold carries that model's `model_id`; a temperature, air-temperature or
-  degree-day value names its `metric`; a `groundwater` row is a statement with no value), `ip_model_registry.csv` (one row
+  degree-day value names its `metric`; a `groundwater` row is a statement with no value; `discharge` is stream
+  size and `instream_flow` a flow need: a valued one names its `metric`, and none carries a model parameter),
+  `ip_model_registry.csv` (one row
   per IP model × species × stage: how it sizes streams, its confinement variable, its validation, with its
   flow claim and any validation claimed each quoted; read with `knw_ip_read()`, gated and link-checked by
   `0280`),
@@ -38,7 +40,8 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   `habitat_modelling_{members,additions}.csv` (what `0270` puts in the group's `Fisheries/habitat_modelling`
   collection, which with the species collections feeds the `habitat_modelling` store), and
   `temperature_members.csv` (what `0270 --collection temperature` puts in `Fisheries/temperature`, the sole
-  input of the `temperature` store).
+  input of the `temperature` store), and `flow_{members,additions}.csv` (what `0270 --collection flow` puts in
+  `Fisheries/flow`, the sole input of the `flow` store; #44, `research/flow_requirements.md`).
 - `data/rag/` — ignored local cache of the ragnar stores. Source of truth is `s3://fresh-bc/rag/`.
 
 ## One discipline
@@ -142,6 +145,13 @@ meaning per row, not a sample. Settled conventions:
   air temperature, including a model's air proxy for water, is `air_temperature`. A degree-day row's note
   gives its base temperature. `species_code` is the species measured: Colorado River cutthroat (Coleman &
   Fausch 2007, the `gsdd` growing season) is `CRCT`, not `WCT` (#38).
+- A flow need is `instream_flow`; a MAD that sizes a stream is `discharge` (#44). A need's `metric` is the flow
+  statistic it is held to (`unstated` if the source does not say), and its unit is as written: `percent MAD`,
+  a `percentile` (90th is high) or a `percent exceedance` (Q95 is low); never convert. Depth and velocity are
+  what a fish meets at a site, in the unit the source wrote; a bankfull depth is `m bankfull`. An optimum
+  (a WUA peak, Tennant's optimum range) is `bound = optimum`, never `range`. A standard that names no species
+  is coded for the scope it states, `FISH`, `SALMON` or `SALMONIDS` (Al, 2026-10-07), one row per statement and
+  stage, not one per species, and fills no grid cell.
 - `kind = lab` is a laboratory or hatchery measurement (UILT, CTmax, survival at a held temperature,
   development in thermal units); `expert` is a recommendation or criterion. Rows from one table or page are
   coded alike unless the note says why, and the source decides, not a sibling row: #38's round-2 audit found
