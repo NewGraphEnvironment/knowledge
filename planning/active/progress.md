@@ -98,3 +98,15 @@
   and `max` rows) are legal; GR fry 0.8 m/s in three rows (one primary, two multi-study syntheses);
   year-round FISH standards (DFO 30 %, Hatfield 2003 lowest month) stay `rearing` with notes saying so, a
   vocabulary gap for the research file, not a cell (FISH fills none).
+- Meaning audit round 2 (`audit-round2.md`): 24 errors in the 77 rows round 1 touched, several inside round-1
+  fixes. Two came from round 1's own wording rather than the page: the Tennant note cited recommendation
+  "item 4" where the page says item 1, and the USFWS 2007 depth notes turned "deepest redd in our study
+  sites" into "deepest redd in the HSC sample". AMEC's summer and spawning IFN went back to `unstated`
+  ("minimum monthly flows" does not say mean); the winter rows keep `monthly_mean` (p. 56 and p. 83 say mean).
+  The 30–200 % MAD rows now have a blank bound: a program reading `min` would take 30 %, which is the
+  minimum only for the largest streams. Raleigh's ≥50 % "excellent" (760) is `optimum`, matching Ford's
+  identical scheme; nine Raleigh category-two regions named. One round-2 claim was wrong and was probed:
+  the audit said no Hagen & Weber BT spawning velocity row exists, but data rows 497 and 498 are those rows
+  (from #33, recoded to cm/s in Phase 1); notes 876 and 886 now cite them. 33 of the 34 mixed groups were
+  explained by their own sentences; the 34th (AMEC p. 57 metric) is resolved by the `unstated` fix.
+  Applied by `scratch_apply_audit2.py`; gate 1014 rows, 0 failing, flow 60/60.
