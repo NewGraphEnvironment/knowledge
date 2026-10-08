@@ -149,7 +149,9 @@ A value another document attributes to one of these is a secondary citation (`ci
   - `daily_mean` (for a percentile of daily flows, say which month in `note`)
   - `7day_low` (the `note` must give the return period, e.g. 7Q10)
   - `monthly_mean`, `monthly_median`
-  - `seasonal_mean` (Tennant's Oct–Mar and Apr–Sep)
+  - ~~`seasonal_mean` (Tennant's Oct–Mar and Apr–Sep)~~ **Wrong (audit round 1):** Tennant asks for
+    *instantaneous* flows (p. 10, item 4); his seasons say when a level applies, not the statistic. The 12
+    Tennant rows are `instantaneous`, and `seasonal_mean` left the vocabulary.
   - `unstated` whenever the source does not say. Never infer one.
 
   `depth` and `velocity` take no metric. A `qual` row takes none either.

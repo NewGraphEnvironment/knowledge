@@ -38,8 +38,8 @@
 #' need: the water a life stage needs while it is in the stream, which the
 #' stage's window in [knw_timing_read()] places in the year. The two are not
 #' interchangeable, so of the two only `instream_flow` takes a `metric`, the
-#' statistic the flow is held to (an `instantaneous` flow, a daily, monthly or
-#' seasonal mean, a monthly median, a `7day_low` average). A need written as a
+#' statistic the flow is held to (an `instantaneous` flow, a daily or monthly
+#' mean, a monthly median, a `7day_low` average). A need written as a
 #' fraction of MAD is in `percent MAD`, which fits no other variable. A need
 #' written as a point in a flow distribution is a `percentile` (the 90th
 #' percentile is a high flow) or a `percent exceedance` (Q95, the flow exceeded
@@ -95,7 +95,7 @@ knw_literature_vocab <- function() {
   list(temperature = temp, air_temperature = temp,
        degree_days = c("growing_season", "to_hatch", "to_emergence", "annual", "unstated"),
        instream_flow = c("instantaneous", "daily_mean", "7day_low", "monthly_mean", "monthly_median",
-                         "seasonal_mean", "unstated"))
+                         "unstated"))
 }
 
 #' Read the literature evidence table, filtered by species and variable

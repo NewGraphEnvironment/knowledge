@@ -80,3 +80,21 @@
 - Mistake, recorded: a `git stash`/`pop` was used to test the old 0280 while the `ps` drafter shared the tree;
   both steps succeeded and nothing was lost, but for about a second the tree held HEAD's versions. Compare
   with `git show HEAD:<path>` instead (code-check-shell.md, "A destructive setup and its undo...").
+- Meaning audit round 1 (`audit-ps-round1.md`, `audit-tc-round1.md`): ps 37 of 191 rows with errors, tc 21 of
+  134. Largest single cause was the brief: it prescribed `seasonal_mean` for Tennant, who asks for
+  *instantaneous* flows (p. 10, item 4; checked), so 12 Tennant rows and 2 Neuman & Newcombe rows carried it
+  (now `instantaneous` / `unstated`; `seasonal_mean` left the vocabulary). Others: the 30–200 % MAD
+  standard coded `range` (it is one stream-size-dependent minimum; now `min` with both ends kept); notes that
+  took a method from a neighbouring sentence; AMEC IFN `metric` stated on p. 30 (monthly), not read; a
+  secondary source's species/region taken untraced (WCT fry velocity was Cascade cutthroat → `CT`);
+  class edges coded as limits (Ford's "excellent >55 %" → `optimum`). Deleted 803 (Tennant duplicate), 819
+  (misattributed passage depth), 883 (open redd-depth span), 915 (an observed flow, not a need), 993 (a
+  kokanee-defined IFN on an RB line). Appended 8 twins that each family had left to the other: 7 RB of the
+  USFWS 2007 steelhead/rainbow curves, 1 ST of Beecher Fig. 9b's optimum. Coho `none` notes now cite the
+  Ash River general list (names no species; not coded, per the auditor's option b). Applied by
+  `scratch_apply_audit1.py` (edits keyed to committed rows, cross-references filled with final numbers).
+  Gate: 1014 rows, 0 failing, flow 60/60; 243 tests pass.
+- Accepted, not changed: both curve conventions (ps one `range` row per zero-edge pair, tc separate `min`
+  and `max` rows) are legal; GR fry 0.8 m/s in three rows (one primary, two multi-study syntheses);
+  year-round FISH standards (DFO 30 %, Hatfield 2003 lowest month) stay `rearing` with notes saying so, a
+  vocabulary gap for the research file, not a cell (FISH fills none).

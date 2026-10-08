@@ -49,8 +49,8 @@ model applies, sometimes a summer flow used the same way. \code{instream_flow} i
 need: the water a life stage needs while it is in the stream, which the
 stage's window in \code{\link[=knw_timing_read]{knw_timing_read()}} places in the year. The two are not
 interchangeable, so of the two only \code{instream_flow} takes a \code{metric}, the
-statistic the flow is held to (an \code{instantaneous} flow, a daily, monthly or
-seasonal mean, a monthly median, a \verb{7day_low} average). A need written as a
+statistic the flow is held to (an \code{instantaneous} flow, a daily or monthly
+mean, a monthly median, a \verb{7day_low} average). A need written as a
 fraction of MAD is in \verb{percent MAD}, which fits no other variable. A need
 written as a point in a flow distribution is a \code{percentile} (the 90th
 percentile is a high flow) or a \verb{percent exceedance} (Q95, the flow exceeded
