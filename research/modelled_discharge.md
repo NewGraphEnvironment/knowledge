@@ -133,5 +133,15 @@ curl -s "$B/hydromosaic/outlets/8015011/timeseries/2098588/data"      # PNWNAmet
 curl -s "https://api.weather.gc.ca/collections/hydrometric-monthly-mean/items?STATION_NUMBER=08EE003&limit=2000&f=json"
 ```
 
+**Bulk download (the way to pull many outlets):**
+- `POST $B/hydromosaic/bulk-downloads` with JSON
+  `{"subids": [...], "model": "PNWNAmet", "scenario": "historical", "variable": "streamflow", "format": "netcdf"}`.
+  The `format` field is required.
+- It returns one netCDF (outlet × time). 1,000 outlets took 29 s and came to 159 MB (2026-10-07).
+- All the subids in one request must come from one of PCIC's data files, or the request returns 422. The
+  first digit of the subid looks like the region; that is not confirmed.
+- `GET $B/hydromosaic/outlets` lists 68,716 outlets. That is more than the ~48,000 river segments in
+  `chyp`, so the list includes lakes.
+
 The CSV has a short `Attribute, Value` header, then `Time, streamflow (m**3 s**-1)`. Monthly means were the
 mean of daily values per calendar month, from 1952 on.
