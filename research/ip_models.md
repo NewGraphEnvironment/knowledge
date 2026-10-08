@@ -79,6 +79,9 @@ Nass, Stikine or coast. The literature says three things about that gap:
   measurement, not a literature question. Compare `cw` and `mad` classification where both exist (the
   Fraser, Columbia and Peace groups) before building MAD elsewhere.
 
+How fwapg builds that MAD from PCIC's gridded runoff, and PCIC's routed channel-scale alternative, is
+`modelled_discharge.md`.
+
 ## Validation
 
 The registry codes a model as validated only when its output was compared with fish records that did not set

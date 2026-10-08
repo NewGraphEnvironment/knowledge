@@ -13,3 +13,7 @@ data/rag/
 scripts/logs/fiss/runs/
 # FDIS export cache: source of truth is s3://fresh-bc/fdis/ (scripts/0230 syncs it)
 data/fdis/
+
+# Local cache of public EcoCat/ACAT report PDFs (with .url and pdftotext .txt sidecars) per watershed group.
+# Re-fetchable from the report id (a100.gov.bc.ca/pub/acat/documents/r<id>/); no script reads it.
+data/*/reports_pdf/
