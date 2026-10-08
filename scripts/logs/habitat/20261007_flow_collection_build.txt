@@ -1,0 +1,38 @@
+collection flow (FWTJDD8Z) under TRXPJHQE: created
+  raleigh_etal1986HabitatSuitablility: Z53XIYCM | added, pdf present
+  bjornn_reiser1991HabitatRequirements: YDHYE9V9 | added, pdf present
+  warkentin_etal2022Lowsummer: T4V2VX25 | added, pdf present
+  eclipsegeomaticsltd_2016Upperbulkley: KPU9SDYX | added, pdf present
+  macisaac2010SalmonidsHydrologic: 9EMY6W2D | added, pdf present
+  northwesthydraulicconsultantsltd_hamiltonr_1993FinalReport: U3QD8EWE | added, pdf present
+  woelfle-erskine_etal2017Abiotichabitat: P9NCX36T | added, pdf present
+  amecenvironment&infrastructure2015Appendix5126D: RIGKT9KA | added, pdf uploaded
+  raleigh_etal1984Habitatsuitability: 3VBWEZZV | added, no-pdf: none local
+  gottesfeld_rabnett2007SkeenaFish: ZVQW88AW | added, pdf present
+  neuman_newcombe1977MinimumAcceptable: I44TTT4S | added, pdf present
+  roberge_etal2002LifeHistory: B3TYJ9I9 | added, pdf present
+  ford_etal1995LiteratureReviews: BYBWUKUG | added, pdf present
+  levy_slaney1993reviewhabitat: NTCDJ37E | added, pdf present
+  keeley_slaney1996QuantitativeMeasures: 2DFMCG9L | added, pdf present
+  mcphail_baxter1996reviewbull: SUENJEU8 | added, pdf present
+  hagen_weber2019Limitingfactorsa: YC3EQ8T8 | added, pdf present
+  hagen_etal2020CriticalSpawning: UZZPLENC | added, pdf present
+  hagen_etal2015Criticalhabitats: NCS2F8F8 | added, pdf present
+  stewart_etal2007Fishlife: 5TIJUF5Q | added, pdf present
+  stuart_chislett1979AspectsLife: 6JK88BUF | added, pdf present
+  bottoms_etal2023Criticalhabitats: KAEUK5BX | added, pdf present
+  hagen_stamford2023ParsnipArctic: SJHULH4N | added, pdf present
+  cutting_etal2018Linkingbeaver: NBPJF7IJ | added, pdf present
+  WESTSLOPECUTTHROATTROUTOncorhynchusclarkilewisi2004: SP3TQYKX | added, pdf present
+  canada_departmentoffisheriesandoceans2019Recoverystrategy: U3X4767Q | added, pdf present
+  + Development of instream flow thresholds as guidelines for re: SZ528KCB | created, member, pdf exists
+  + British Columbia instream flow standards for fish, phase 1: : Z74UBXFE | created, member, pdf exists
+  + Rationale for multiple British Columbia instream flow standa: RV8UJX8S | created, member, pdf exists
+  + Assessment methods for aquatic habitat and instream flow cha: ZIG69G49 | created, member, pdf exists
+  + Framework for assessing the ecological flow requirements to : 3ZXZ6ZKI | created, member, pdf exists
+  + Habitat suitability index models and instream flow suitabili: PDABPCUG | created, member, pdf uploaded
+  + 10.1577/1548-8446(1976)001<0006:IFRFFW>2.0.CO;2: SFZ89IUV | created, member, pdf exists
+  + Instream flow study guidelines: technical and habitat suitab: ZZJI73B2 | created, member, pdf exists
+  + Flow-habitat relationships for spring-run Chinook salmon and: D9S9HBPP | created, member, pdf exists
+
+26 members, 9 additions | added 26 | created 9 | member 9 | no-pdf 1 | pdf 34
