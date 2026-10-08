@@ -78,7 +78,7 @@ The evidence table's discharge rows are annual IP-model MAD thresholds plus one 
 - [x] `SCALE` gains `percent MAD = c(1, 100)`, as `percent` has (review G9).
 - [x] Record the grid baseline before drafting (2 of 60: CH migration flow need, BT spawning velocity), and
       enumerate `meets_flow()` over variable × kind × bound × unit (review AC1).
-- [ ] Once the grid is full, a frozen-copy negative run: one `none` row removed → exit 1.
+- [x] Once the grid is full, a frozen-copy negative run: one `none` row removed → exit 1.
 - [x] Header comment and the `scripts/README.md` gate description updated.
 - [x] Vocabulary checkpoint after reading Hatfield 2003, Ptolemy & Lewis 2002 and DFO 2013: add the flow
       metrics they use before the brief is written; a `7day_low` row gives its return period in the note
@@ -88,18 +88,18 @@ The evidence table's discharge rows are annual IP-model MAD thresholds plus one 
 ## Phase 4: Draft rows, then the gate and the meaning audit
 - [x] Ask Al how a standard that names no species is coded (review G2): group codes `FISH`, `SALMON`,
       `SALMONIDS`, filling no cell (2026-10-07); row 121 recoded `SALMON`.
-- [ ] Drafter brief in `planning/active/` (adapted from the #38 brief; this session's copies of the #29
+- [x] Drafter brief in `planning/active/` (adapted from the #38 brief; this session's copies of the #29
       `scratch_keytext.py`/`scratch_merge_drafts.py`) and text extraction of every
       collection PDF. Two drafters (unnamed; `general-purpose`; told not to spawn): salmon and steelhead (CH, CO,
       SK, ST) and trout, char and grayling (BT, GR, WCT, plus RB). Each writes `draft-<tag>-evidence.csv` and
       `-notes.md`.
-- [ ] Conventions the brief carries: append only. A PHABSIM optimum is `bound = optimum`. An HSI breakpoint
+- [x] Conventions the brief carries: append only. A PHABSIM optimum is `bound = optimum`. An HSI breakpoint
       that is not an edge has a blank `bound`. A regression on MAD with no tabulated value is a `qual` row
       with the equation in the note. A BC or Tennant standard is `expert`. Months a source names go in the
       note. A `none` row names what was searched. An optimum span (Tennant's 60–100 %, a WUA band) is
       `optimum`, never `range`. Hickman & Raleigh 1982 is `CT` and Raleigh 1984 is `RB` unless the text
       names WCT or steelhead (review A1).
-- [ ] Merge the drafts and run `0280`: 0 failing quotes, coverage, thermal and flow grids full. Commit the
+- [x] Merge the drafts and run `0280`: 0 failing quotes, coverage, thermal and flow grids full. Commit the
       log.
 - [ ] Meaning audit of **every** new row, two rounds at least, ending by enumeration (each same-source,
       same-page group with mixed kind, bound or metric is explained by its own sentences).

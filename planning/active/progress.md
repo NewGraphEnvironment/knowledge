@@ -63,3 +63,20 @@
   Helzner (Rhonda S.), not "Helzer" as the additions had it: CSV and Zotero item corrected.
 - Al chose group codes for species-less standards (`FISH`, `SALMON`, `SALMONIDS`; fill no cell). Row 121
   (Gottesfeld) recoded `SALMON`. Drafter brief written; two drafters (`ps`, `tc`) spawned.
+- Drafts: `ps` 191 rows (CH, CO, SK, ST; FISH 29, SALMONIDS 14, SALMON 4; one CM row, Sautner's chum
+  passage depth that Raleigh adopts for chinook), `tc` 134 rows (BT, GR, WCT; 14 CT, 41 RB). Merged (ps
+  then tc) as data rows 687–1011; prefix byte-identical to the committed table. Gate: 1011 rows, 0 failing,
+  coverage 48/48, thermal 50/50, flow 60/60 (from 2/60). Negative run on a frozen 0280: one WCT spawning
+  flow `none` row removed → `flow: 59 of 60`, exit 1. The `tc` drafter found 0280's `table_pages()`
+  crashing (`NA/NaN argument`) when a table quote's first token is the last token of the text (AMEC 2015
+  ends "Page 1"): `(at + 1):n` counts down past the end. Guarded; old code errors and new returns no match
+  on the same input. Drafters had quoted around it, so no row depends on the fix.
+- Drafters' doubts, for the audit: ps rows 819 (Ptolemy & Lewis "summer Chinook at 30 cm" passage depth may be
+  a misattributed spawning depth), 783 (Roberge YOY steelhead <0.15 m/s may be carried from chinook), 831 (the
+  only CH migration flow need is Hatfield 2002's worked example), year-round FISH standards coded `rearing`;
+  tc draft rows 6 (McPhail & Baxter 10 cm redd depth as a min), 15 (Ford "preferred" depth as optimum),
+  17–18 (Ford vs McPhail & Baxter disagree on juvenile BT velocity), 55 and 63 (WCT velocities with weak
+  attribution).
+- Mistake, recorded: a `git stash`/`pop` was used to test the old 0280 while the `ps` drafter shared the tree;
+  both steps succeeded and nothing was lost, but for about a second the tree held HEAD's versions. Compare
+  with `git show HEAD:<path>` instead (code-check-shell.md, "A destructive setup and its undo...").
