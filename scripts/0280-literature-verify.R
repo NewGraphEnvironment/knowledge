@@ -314,13 +314,14 @@ table_pages <- function(quote, pages) {
 # tokens; a number after a "-" that does not follow a number may be read with either
 # sign; number words must be whole words. The only rescalings are the ones a unit
 # can carry: percent from a proportion (x100), mm from cm (x10), m and km for the
-# bridge distance (x1000), m/s from cm/s (x0.01).
+# bridge distance (x1000). Depth and velocity are kept in the unit the source wrote
+# (knw_literature_vocab()), so cm/s has no rescale to m/s.
 NUMBER_WORDS <- c(one = 1, two = 2, three = 3, four = 4, five = 5, six = 6, seven = 7, eight = 8,
                   nine = 9, ten = 10, first = 1, second = 2, third = 3, fourth = 4, fifth = 5,
                   sixth = 6, seventh = 7, eighth = 8, ninth = 9, tenth = 10)
 # A unit with no entry here is read at scale 1: a new unit fails closed rather than inheriting a
 # rescale from its spelling (a "^m" fallback once gave m3/s and wetted widths a x1000).
-SCALE <- list(percent = c(1, 100), mm = c(1, 10), km = c(1, 1e-3), m = c(1, 1e3), "m/s" = c(1, 0.01),
+SCALE <- list(percent = c(1, 100), mm = c(1, 10), km = c(1, 1e-3), m = c(1, 1e3), "m/s" = 1,
               "m3/s" = 1, "m bankfull" = 1, "m wetted" = 1, mi2 = 1)
 MONTHS <- c("january", "february", "march", "april", "may", "june", "july", "august",
             "september", "october", "november", "december")

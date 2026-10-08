@@ -119,7 +119,7 @@
 118,"CH","rear_mad_min","discharge",,"rebellato_etal2024Effectsrail","rebellato2024","table","verified_table","BC_report_formatted_final.pdf","6"
 119,"CH","rear_mad_max","discharge",,"rebellato_etal2024Effectsrail","rebellato2024","table","verified_table","BC_report_formatted_final.pdf","6"
 120,"CH","rear_mad_min","discharge",,"sheer_etal2009DevelopmentManagement","agrawal2005","text","verified_text","sheer_et_al_2009_development_and_management_of_fish_intrinsic_potential_data_and_methodologies_-.pdf","20"
-121,"CH",,"discharge",,"gottesfeld_rabnett2007SkeenaFish",,"text","verified_text","gottesfeld_rabnett_2007_skeena_fish_populations_and_their_habitat.pdf","24"
+121,"CH",,"instream_flow","unstated","gottesfeld_rabnett2007SkeenaFish",,"text","verified_text","gottesfeld_rabnett_2007_skeena_fish_populations_and_their_habitat.pdf","24"
 122,"BT",,"discharge",,"isaak_etal2015coldwaterclimate",,"text","verified_text","rmrs_2015_isaak_d001.pdf","3"
 123,"BT","spawn_mad_min","discharge",,,,,"none_row",,
 124,"BT","rear_mad_min","discharge",,,,,"none_row",,

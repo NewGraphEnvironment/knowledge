@@ -382,3 +382,105 @@ test_that("groundwater is a qualitative variable: a statement reads, any unit is
   x$value_max[1] <- "0.5"
   expect_error(knw_literature_read(write_literature(x)), "unit m/s does not fit variable groundwater")
 })
+
+test_that("an instream flow need reads in m3/s, cfs or percent MAD, and says its metric", {
+  x <- literature_fixture()
+  x$variable[1] <- "instream_flow"
+  x$parameter[1] <- NA
+  x$model_id[1] <- NA
+  x$bound[1] <- "min"
+  x$value_min[1] <- "20"
+  x$value_max[1] <- NA
+  x$unit[1] <- "percent MAD"
+  x$metric[1] <- "monthly_median"
+  x$variable[2] <- "instream_flow"
+  x$parameter[2] <- NA
+  x$unit[2] <- "cfs"
+  x$metric[2] <- "unstated"
+  out <- knw_literature_read(write_literature(x))
+  expect_equal(out$unit[1:2], c("percent MAD", "cfs"))
+  expect_equal(out$metric[1:2], c("monthly_median", "unstated"))
+  y <- x
+  y$metric[1] <- NA
+  expect_error(knw_literature_read(write_literature(y)), "instream_flow value needs a metric.*data row 1")
+  y <- x
+  y$metric[1] <- "mwmt"
+  expect_error(knw_literature_read(write_literature(y)), "metric mwmt does not fit variable instream_flow")
+  y <- x
+  y$unit[1] <- "percent"
+  expect_error(knw_literature_read(write_literature(y)), "unit percent does not fit variable instream_flow")
+})
+
+test_that("percent MAD fits only a flow need, and a stream-size discharge row takes no metric", {
+  x <- literature_fixture()
+  x$variable[1] <- "discharge"
+  x$parameter[1] <- "spawn_mad_min"
+  x$unit[1] <- "percent MAD"
+  expect_error(knw_literature_read(write_literature(x)), "unit percent MAD does not fit variable discharge")
+  x$unit[1] <- "m3/s"
+  expect_equal(knw_literature_read(write_literature(x))$unit[1], "m3/s")
+  x$metric[1] <- "annual_mean"
+  expect_error(knw_literature_read(write_literature(x)), "metric annual_mean on variable discharge")
+  x <- literature_fixture()
+  x$unit[1] <- "percent MAD"
+  expect_error(knw_literature_read(write_literature(x)), "unit percent MAD does not fit variable gradient")
+})
+
+test_that("a flow need carries no model parameter, and a MAD parameter sits on discharge only", {
+  x <- literature_fixture()
+  x$variable[1] <- "instream_flow"
+  x$unit[1] <- "m3/s"
+  x$metric[1] <- "unstated"
+  x$model_id[1] <- NA
+  expect_error(knw_literature_read(write_literature(x)), "instream_flow row is a flow need.*data row 1")
+  x$parameter[1] <- NA
+  x$model_id[1] <- "cooney_holzer2006"
+  expect_error(knw_literature_read(write_literature(x)), "parameter and model_id stay blank.*data row 1")
+  x$model_id[1] <- NA
+  expect_equal(knw_literature_read(write_literature(x))$variable[1], "instream_flow")
+  y <- literature_fixture()
+  y$parameter[3] <- "rear_mad_min"
+  expect_error(knw_literature_read(write_literature(y)), "rear_mad_min belongs to discharge rows, not channel_width")
+})
+
+test_that("an instream_flow 'none' row may name its bound and metric; a qualitative one takes no metric", {
+  x <- literature_fixture()
+  x$variable[5] <- "instream_flow"
+  x$parameter[5] <- NA
+  x$bound[5] <- "min"
+  x$metric[5] <- "monthly_mean"
+  out <- knw_literature_read(write_literature(x))
+  expect_equal(c(out$bound[5], out$metric[5]), c("min", "monthly_mean"))
+  y <- literature_fixture()
+  y$variable[2] <- "instream_flow"
+  y$parameter[2] <- NA
+  y$value_max[2] <- NA
+  y$bound[2] <- NA
+  y$unit[2] <- NA
+  y$kind[2] <- "qual"
+  expect_true(is.na(knw_literature_read(write_literature(y))$metric[2]))
+  y$metric[2] <- "7day_low"
+  expect_error(knw_literature_read(write_literature(y)), "metric 7day_low on a row with no value.*data row 2")
+  x$metric[5] <- "annual_mean"
+  expect_error(knw_literature_read(write_literature(x)), "metric annual_mean does not fit variable instream_flow")
+})
+
+test_that("depth and velocity read in the unit the source wrote, and bankfull depth is its own unit", {
+  x <- literature_fixture()
+  x$variable[3] <- "depth"
+  x$parameter[3] <- NA
+  for (u in c("m", "cm", "ft", "m bankfull")) {
+    x$unit[3] <- u
+    expect_equal(knw_literature_read(write_literature(x))$unit[3], u)
+  }
+  x$variable[3] <- "velocity"
+  for (u in c("m/s", "cm/s", "ft/s")) {
+    x$unit[3] <- u
+    expect_equal(knw_literature_read(write_literature(x))$unit[3], u)
+  }
+  x$unit[3] <- "cm"
+  expect_error(knw_literature_read(write_literature(x)), "unit cm does not fit variable velocity")
+  x$variable[3] <- "depth"
+  x$unit[3] <- "cm/s"
+  expect_error(knw_literature_read(write_literature(x)), "unit cm/s does not fit variable depth")
+})

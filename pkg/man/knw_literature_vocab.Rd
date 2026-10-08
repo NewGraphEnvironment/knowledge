@@ -15,7 +15,7 @@ may take. \code{life_stage} is \code{\link[=knw_timing_stages]{knw_timing_stages
 \code{life_history_form} separates stream- and ocean-type Chinook and resident,
 fluvial and adfluvial bull trout; \code{migratory} is for a source that says
 "migratory" without separating fluvial from adfluvial. US units (\code{cfs},
-\code{mi2}, \code{ft}) are kept as the source wrote them. Width units say
+\code{mi2}, \code{ft}, \code{ft/s}) are kept as the source wrote them. Width units say
 which width a source measured, because bankfull and wetted width are not
 interchangeable. \code{parameter} is the habitat-model parameter a row bears on,
 one of the model's own names, or blank. \code{kind} says what sort of number a row is: a parameter
@@ -42,6 +42,23 @@ fertilization, or \code{annual}).
 \code{unstated} is for a source that gives a value without saying. Air
 temperature is its own variable because models use it as a proxy for water
 temperature, and the two are not interchangeable.
+
+\code{discharge} is stream size: a flow statistic used to say how big a channel
+is, usually its mean annual discharge (MAD), the filter an intrinsic-potential
+model applies, sometimes a summer flow used the same way. \code{instream_flow} is a flow
+need: the water a life stage needs while it is in the stream, which the
+stage's window in \code{\link[=knw_timing_read]{knw_timing_read()}} places in the year. The two are not
+interchangeable, so of the two only \code{instream_flow} takes a \code{metric}, the
+statistic the flow is held to (an \code{instantaneous} flow, a daily, monthly or
+seasonal mean, a monthly median, a \verb{7day_low} average). A need written as a
+fraction of MAD is in \verb{percent MAD}, which fits no other variable. A flow need
+is no model's stream-size filter, so it carries no \code{parameter} or \code{model_id},
+and the \verb{*_mad_*} parameters belong to \code{discharge} rows alone.
+
+\code{depth} and \code{velocity} are what a fish meets at a site (a redd, a passage
+riffle, a rearing position), in the unit the source wrote (\code{cm}, \code{ft},
+\code{cm/s}, \code{ft/s} as well as \code{m} and \code{m/s}). A channel's bankfull depth is stream
+size, and is written in \verb{m bankfull}.
 
 \code{groundwater} covers upwelling, hyporheic exchange and springs. It takes no
 unit, so a groundwater row carries no value: no source read so far gives an

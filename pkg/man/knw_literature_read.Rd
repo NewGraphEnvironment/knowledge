@@ -35,7 +35,7 @@ The unit must fit the variable (percent for gradient, a width unit for
 channel width, and so on) and a bound must sit on its value: \code{min} on
 \code{value_min}, \code{max} on \code{value_max}, \code{range} on both. A text quote is at least
 20 characters, so that a check against the PDF can tell it apart from noise.
-A \code{temperature}, \code{air_temperature} or \code{degree_days} value needs a \code{metric}
+A \code{temperature}, \code{air_temperature}, \code{degree_days} or \code{instream_flow} value needs a \code{metric}
 that fits its variable, and a \code{none} row may name the metric it searched
 for; every other row leaves \code{metric} blank. A cited
 \code{degree_days} row needs a \code{note}, which gives the base temperature.
