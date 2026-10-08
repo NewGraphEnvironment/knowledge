@@ -59,10 +59,11 @@ The evidence table's discharge rows are annual IP-model MAD thresholds plus one 
       (CSAS SAR 2013/017), Hubert et al. 1985, McMahon 1983, Hickman & Raleigh 1982, Hatfield & Bruce 2000,
       Bradford & Heinonen 2008, Tennant 1976, and one Washington Ecology and one Central Valley WUA report.
       Government and open-access items get a PDF URL; each URL is checked for a `%PDF` body before it goes in.
-- [ ] Paywalled or ResearchGate-only items, plus the amec 2015 and raleigh 1984 PDFs: open them in Chrome,
+- [x] Paywalled or ResearchGate-only items, plus the amec 2015 and raleigh 1984 PDFs: open them in Chrome,
       then send Al one phone-answerable checkpoint: a list, and a single `cp` command from `~/Downloads`
       into `data/<repo path>`. Work continues on everything else while that is outstanding. An item never
-      obtained is recorded as a gap, as Bear 2005/2007 was in #38. When the copies land: add their rows, re-run
+      obtained is recorded as a gap, as Bear 2005/2007 was in #38. (Done 2026-10-07: five items opened in Chrome and
+      Al notified; copies not yet in the repo, so they are listed as gaps in `research/flow_requirements.md`.) When the copies land: add their rows, re-run
       `0270`, rebuild and re-push the store, re-extract text.
 - [x] `Fisheries/flow` is not a `habitat_modelling` input, so that store is not rebuilt (review G7).
 - [x] `0270 --collection flow --dry-run`, then a live run; wait for Zotero sync and BBT keys.
@@ -115,7 +116,7 @@ The evidence table's discharge rows are annual IP-model MAD thresholds plus one 
 - [x] `pkg/NEWS.md` and `DESCRIPTION` 0.3.1 → 0.4.0. NEWS names the new variable, units and metrics, and the
       rows that changed variable or unit: row 121 to `instream_flow`, rows 250/257/264 to `m bankfull`
       (review S3).
-- [ ] Issue #44 body edited to what landed: vocabulary chosen, sources obtained and gaps.
+- [x] Issue #44 body edited to what landed: vocabulary chosen, sources obtained and gaps.
 
 ## Validation
 - [x] Tests pass
