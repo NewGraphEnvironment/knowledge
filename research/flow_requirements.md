@@ -4,14 +4,14 @@
 companion to `thermal_requirements.md` (#38) · **Produced by:** rows of `data/literature_evidence.csv` with
 `variable` `instream_flow`, `depth` or `velocity` (data rows 687–1014 are #44's; 121, 250, 257, 264, 407, 497
 and 498 are from earlier issues, and #44 recoded all but 407), gated by `scripts/0280-literature-verify.R` (log `scripts/logs/habitat/20261007_literature_verify.csv`).
-The sources are the group's `Fisheries/flow` collection (`FWTJDD8Z`; `data/flow_{members,additions}.csv`, 35
-items, 34 with a PDF) and the `flow` store.
+The sources are the group's `Fisheries/flow` collection (`FWTJDD8Z`; `data/flow_{members,additions}.csv`, 40
+items, all with a PDF since 2026-10-09) and the `flow` store.
 
 **Status:** every species × cell of the gate's flow grid (CH, CO, SK, ST, BT, GR, WCT; 60 cells) has a value or a
 `none` row. Cited flow needs exist for CH and ST, and thinly for BT. CO and SK have only a September low flow
 from the upper Bulkley. GR and WCT have none in any source read. Spawning depth and spawning and rearing velocity have
 values for every species (SK has no rearing-velocity cell); passage depth is `none` for BT and WCT.
-Five sources could not be obtained (below).
+Six sources reached the collection after the rows were drafted and are not yet read for rows (below).
 
 ## How to read the rows
 
@@ -117,15 +117,22 @@ coho rows but names no species, so it is cited in the coho `none` notes, not cod
 
 ## Not obtained, left out, and why
 
-- **No PDF (cited only where another document reports them):**
-  - Hatfield & Bruce 2000 (the PHABSIM regressions of optimum flow on MAD);
-  - Bradford & Heinonen 2008 (small-stream low flows);
-  - McMahon 1983 (coho HSI);
-  - Hickman & Raleigh 1982 (cutthroat HSI);
-  - Raleigh et al. 1984 (rainbow trout HSI).
-
-  These were opened in a browser for download on 2026-10-07. Hatfield & Bruce is the likeliest to add species
-  optima, and the cutthroat HSI the likeliest to fill a WCT cell.
+- **PDFs in the collection since 2026-10-09, not yet drafted:** the rows above were written without them, and
+  any value they give appears here only where another document reports it.
+  - Hatfield & Bruce 2000 (`hatfield_bruce2000PredictingSalmonid`): the PHABSIM regressions of optimum flow on MAD,
+    the likeliest to add species optima;
+  - Bradford & Heinonen 2008 (`bradford_heinonen2008LowFlows`): small-stream low flows;
+  - McMahon 1983 (`mcmahon1983Habitatsuitability`): coho HSI, a scan, which may fill coho flow or depth cells;
+  - Raleigh et al. 1984 (`raleigh_etal1984Habitatsuitability`): rainbow trout HSI, a scan (already a member; only
+    its PDF is new);
+  - Hickman & Raleigh 1982 (`hickman_raleigh1982Habitatsuitability`): cutthroat HSI (FWS/OBS-82/10.5), from the
+    Internet Archive (`doi-report_i-499782-105`); generic cutthroat, so `CT`, and a WCT cell only where it names
+    westslope;
+  - Braithwaite 2011 (`braithwaite2011effectstream`): cutthroat depth and velocity preference in the Strawberry
+    River, Utah. The fish are Bear Lake (Bonneville) cutthroat, *O. clarkii utah*, not westslope, so its rows
+    would not fill a WCT cell.
+- **Scans:** the store holds no text for the McMahon coho scan, and only a garbled layer for Raleigh 1984 and
+  Hickman & Raleigh, so a store search will not find their values; rows from them go through `0280`'s OCR path.
 - **Out of scope, not written:**
   - smolt (downstream) migration flows: `migration` is adult upstream passage;
   - adult holding;

@@ -1,0 +1,82 @@
+40 keys across 1 collections
+Ingesting 40 PDF(s) into data/rag/flow.duckdb
+Launching 8 parallel workers.
+ℹ ingested: /Users/airvine/Zotero/storage/KUGT5HMG/bjornn_reiser_1991_habitat_requirements_of_salmonids_in_streams.pdf
+Ingesting ■■                                 2% | ETA:  3m
+ℹ ingested: /Users/airvine/Zotero/storage/YJZLRJ5I/PEA_F23_F_3652_Appendix_1_1706805993310_705DB12CA1.pdf
+Ingesting ■■                                 2% | ETA:  3mThe PDF <_io.BytesIO object at 0x168319710> contains a metadata field indicating that it should not allow text extraction. Ignoring this field and proceeding. Use the check_extractable if you want to raise an error in this case
+ℹ ingested: /Users/airvine/Zotero/storage/FEWRH4T6/ubfishaqtlcav6allreport.pdf
+Ingesting ■■                                 2% | ETA:  3mIngesting ■■■                                8% | ETA:  3m
+ℹ ingested: /Users/airvine/Zotero/storage/JR7UUK2D/2004_“westslope”_cutthroat_trout_oncorhynchus_clarki_lewisi.pdf
+Ingesting ■■■                                8% | ETA:  3mIngesting ■■■■                              10% | ETA:  3m
+ℹ ingested: /Users/airvine/Zotero/storage/T3KBBEF3/ford_et_al_1995_literature_reviews_of_the_life_history,_habitat_requirements_and.pdf
+Ingesting ■■■■                              10% | ETA:  3mℹ ingested: /Users/airvine/Zotero/storage/3VC6P762/Low_Flows_Instream_Flow_Needs_and_Fish_Ecology_in_.pdf
+Ingesting ■■■■                              10% | ETA:  3mℹ ingested: /Users/airvine/Zotero/storage/39PJ6KEB/348881.pdf
+Ingesting ■■■■                              10% | ETA:  3mIngesting ■■■■■■                            18% | ETA:  2m
+ℹ ingested: /Users/airvine/Zotero/storage/T6K5U9YQ/cutting_et_al_2018_linking_beaver_dam_affected_flow_dynamics_to_upstream_passage_of_arctic_grayling.pdf
+Ingesting ■■■■■■                            18% | ETA:  2mIngesting ■■■■■■■                           20% | ETA:  2m
+ℹ ingested: /Users/airvine/Zotero/storage/2B4BUGEA/The Effect of Stream Restoration on Preferred Cutthroat Trout Hab.pdf
+Ingesting ■■■■■■■                           20% | ETA:  2mIngesting ■■■■■■■■                          22% | ETA:  3m
+ℹ ingested: /Users/airvine/Zotero/storage/V6CSVK29/hagen_et_al_2020_critical_spawning_habitats_and_abundance_of_bull_trout_in_the_williston.pdf
+Ingesting ■■■■■■■■                          22% | ETA:  3mIngesting ■■■■■■■■■                         25% | ETA:  3m
+ℹ ingested: /Users/airvine/Zotero/storage/PPI57A9V/0411007.pdf
+Ingesting ■■■■■■■■■                         25% | ETA:  3mIngesting ■■■■■■■■■                         28% | ETA:  4m
+ℹ ingested: /Users/airvine/Zotero/storage/GCIRGQI7/hatfield2000.pdf
+Ingesting ■■■■■■■■■                         28% | ETA:  4mIngesting ■■■■■■■■■■                        30% | ETA:  3m
+ℹ ingested: /Users/airvine/Zotero/storage/ESH24A9J/Hagen et al. - 2015 - Critical habitats for bull trout and arctic grayli.pdf
+Ingesting ■■■■■■■■■■                        30% | ETA:  3mIngesting ■■■■■■■■■■■                       32% | ETA:  4m
+ℹ ingested: /Users/airvine/Zotero/storage/49CJN2M4/hagen_stamford_2023_parsnip_arctic_grayling_abundance_and_critical_habitats_2018-2022_final_report.pdf
+Ingesting ■■■■■■■■■■■                       32% | ETA:  4mIngesting ■■■■■■■■■■■                       35% | ETA:  4m
+ℹ ingested: /Users/airvine/Zotero/storage/AHN734FV/GOVPUB-I49-PURL-LPS101450.pdf
+Ingesting ■■■■■■■■■■■                       35% | ETA:  4mIngesting ■■■■■■■■■■■■                      38% | ETA:  4m
+ℹ ingested: /Users/airvine/Zotero/storage/GAWCYSY5/keeley_slaney_1996_quantitative_measures_of_rearing_and_spawning_habitat_characteristics_for.pdf
+Ingesting ■■■■■■■■■■■■                      38% | ETA:  4mIngesting ■■■■■■■■■■■■■                     40% | ETA:  5m
+ℹ ingested: /Users/airvine/Zotero/storage/UH6QQSEM/doi-report_i-499782-105.pdf
+Ingesting ■■■■■■■■■■■■■                     40% | ETA:  5mIngesting ■■■■■■■■■■■■■■                    42% | ETA:  5m
+ℹ ingested: /Users/airvine/Zotero/storage/9WJMUK4F/canada_department_of_fisheries_and_oceans_2019_recovery_strategy_and_action_plan_for_the_westslope_cutthroat_trout.pdf
+Ingesting ■■■■■■■■■■■■■■                    42% | ETA:  5mIngesting ■■■■■■■■■■■■■■■                   45% | ETA:  5m
+ℹ ingested: /Users/airvine/Zotero/storage/I3VVCE5F/phase1_bc_instreamflow_standards_fish.pdf
+Ingesting ■■■■■■■■■■■■■■■                   45% | ETA:  5mIngesting ■■■■■■■■■■■■■■■                   48% | ETA:  4m
+ℹ ingested: /Users/airvine/Zotero/storage/JD85T6BT/Habitat_Suitability_Index_Models_Coho_Salmon.pdf
+Ingesting ■■■■■■■■■■■■■■■                   48% | ETA:  4mIngesting ■■■■■■■■■■■■■■■■                  50% | ETA:  4m
+ℹ ingested: /Users/airvine/Zotero/storage/SURDQLER/levy_and_slaney_1993-a_review_of_habitat.pdf
+Ingesting ■■■■■■■■■■■■■■■■                  50% | ETA:  4mIngesting ■■■■■■■■■■■■■■■■■                 52% | ETA:  4m
+ℹ ingested: /Users/airvine/Zotero/storage/S89CA359/neuman_newcombe_1977_minimum_acceptable_stream_flows_in_british_columbia_-_a_review.pdf
+Ingesting ■■■■■■■■■■■■■■■■■                 52% | ETA:  4mIngesting ■■■■■■■■■■■■■■■■■                 55% | ETA:  4m
+ℹ ingested: /Users/airvine/Zotero/storage/E225SSFG/macisaac_2010_salmonids_and_the_hydrologic_and_geomorphic_features_of_their_spawning_streams.pdf
+Ingesting ■■■■■■■■■■■■■■■■■                 55% | ETA:  4mℹ ingested: /Users/airvine/Zotero/storage/HMEBMJVB/phase2_instreamflow_thresholds_guidelines.pdf
+Ingesting ■■■■■■■■■■■■■■■■■                 55% | ETA:  4mIngesting ■■■■■■■■■■■■■■■■■■■               60% | ETA:  3m
+ℹ ingested: /Users/airvine/Zotero/storage/H4AUSEV7/App67_RevBT_LifeHist.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■               60% | ETA:  3mIngesting ■■■■■■■■■■■■■■■■■■■■              62% | ETA:  3m
+ℹ ingested: /Users/airvine/Zotero/storage/JQPBUZAS/hagen_and_weber_limiting_factors_en.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■              62% | ETA:  3mIngesting ■■■■■■■■■■■■■■■■■■■■■             65% | ETA:  3m
+ℹ ingested: /Users/airvine/Zotero/storage/QZSCBE5G/Instreamflowstandards_1275074130922_78cea088131303970ff0b3ff48ffbcf79ded1493229dd7763a6ba073499a3e22.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■             65% | ETA:  3mIngesting ■■■■■■■■■■■■■■■■■■■■■             68% | ETA:  3m
+ℹ ingested: /Users/airvine/Zotero/storage/6DE27MSE/amec_environment_&_infrastructure_2015_appendix_5.1.2.6d_-_instream_flow_study.pdf.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■             68% | ETA:  3mIngesting ■■■■■■■■■■■■■■■■■■■■■■            70% | ETA:  3m
+ℹ ingested: /Users/airvine/Zotero/storage/IVHSBBCB/assessment_methods_instreamflow_in_bc.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■            70% | ETA:  3mIngesting ■■■■■■■■■■■■■■■■■■■■■■■           72% | ETA:  2m
+ℹ ingested: /Users/airvine/Zotero/storage/XDKIU3UA/stuart_chislett_1979_grayling_sukunka.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■           72% | ETA:  2mℹ ingested: /Users/airvine/Zotero/storage/A4P4JX5M/Tennant-Method-Flow-Regimens.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■           72% | ETA:  2mIngesting ■■■■■■■■■■■■■■■■■■■■■■■■          78% | ETA:  2m
+ℹ ingested: /Users/airvine/Zotero/storage/58DJJ36B/Scan_27-EC-53762_1519864729073_9864440115.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■          78% | ETA:  2mIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■         80% | ETA:  2m
+ℹ ingested: /Users/airvine/Zotero/storage/DHMB3NJT/raleigh_et_al_1986_habitat_suitablility_index_models_and_instream_flow_suitability_curves_-_chinook.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■         80% | ETA:  2mIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■■        82% | ETA:  2m
+ℹ ingested: /Users/airvine/Zotero/storage/I8I5E2BQ/warkentin_et_al_2022_low_summer_river_flows_associated_with_low_productivity_of_chinook_salmon_in_a.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■        82% | ETA:  2mIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■       85% | ETA:  1m
+ℹ ingested: /Users/airvine/Zotero/storage/XBN57ND4/p16021coll3_240.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■       85% | ETA:  1mIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■       88% | ETA:  1m
+ℹ ingested: /Users/airvine/Zotero/storage/GJXWIECX/stewart_et_al_2007_fish_life_history_and_habitat_use_in_the_northwest_territories_-_arctic_grayling.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■       88% | ETA:  1mIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■      90% | ETA:  1m
+ℹ ingested: /Users/airvine/Zotero/storage/FV7AR5ZA/woelfle-erskine_et_al_2017_abiotic_habitat_thresholds_for_salmonid_over-summer_survival_in_intermittent.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■      90% | ETA:  1mIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     92% | ETA: 42s
+ℹ ingested: /Users/airvine/Zotero/storage/JKXXFHUS/usfws2007_clear_creek_spawning.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     92% | ETA: 42sIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     95% | ETA: 28s
+ℹ ingested: /Users/airvine/Zotero/storage/C3643Y4I/roberge_et_al_2002_life_history_characteristics_of_freshwater_fishes_occurring_in_british_columbia.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     95% | ETA: 28sIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    98% | ETA: 16s
+ℹ ingested: /Users/airvine/Zotero/storage/IQ89I7BK/gottesfeld_rabnett_2007_skeena_fish_populations_and_their_habitat.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    98% | ETA: 16sIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  100% | ETA:  0s
+Store built: data/rag/flow.duckdb | docs: 40 | chunks: 8971 | model: nomic-embed-text
+Built data/rag/flow.duckdb. It is not in the bucket until ACTION=push.
+exit 0

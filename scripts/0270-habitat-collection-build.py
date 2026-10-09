@@ -335,8 +335,10 @@ def addition_item(row):
     """Web API JSON for an additions row (CrossRef when it has a DOI)."""
     if row["DOI"]:
         return crossref_item(row["DOI"])
+    # university and thesisType are a thesis's fields where a report has institution and reportType;
+    # an additions file without those columns simply never sets them.
     item = {k: row[k] for k in ("itemType", "title", "date", "institution", "reportNumber", "reportType",
-                                "place", "url") if row.get(k)}
+                                "university", "thesisType", "place", "url") if row.get(k)}
     item["creators"] = []
     for c in filter(None, (x.strip() for x in row["creators"].split(";"))):
         last, _, first = c.partition(",")
