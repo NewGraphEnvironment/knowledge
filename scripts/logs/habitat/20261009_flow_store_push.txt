@@ -1,7 +1,7 @@
 [dry run] would upload data/rag/flow.duckdb -> s3://fresh-bc/rag/flow.duckdb
 [dry run] merged manifest would hold: fraser, vca_refs, peace, pine, habitat_modelling, temperature, flow
 {
-  "date_updated": "2026-10-09T14:47:27Z",
+  "date_updated": "2026-10-09T15:07:31Z",
   "manifest_note": "Provenance is per store. Push must merge into this file, never replace it.",
   "chunking": "ragnar defaults (ragnar_store_ingest)",
   "generating_script": "cred::crd_store_push()",
@@ -117,21 +117,21 @@
       "date_completed": "2026-10-06T23:53:43Z"
     },
     "flow": {
-      "documents": 39,
-      "chunks": 8786,
+      "documents": 40,
+      "chunks": 8971,
       "embedding_size": 768,
       "embedding_model": "nomic-embed-text",
       "store_name": "store_001",
-      "bytes": 121909248,
-      "md5": "62958a3b65a4173a20580e4600041a13",
+      "bytes": 125054976,
+      "md5": "d4463b104ccf5427abbb7763247d1907",
       "repo": "NewGraphEnvironment/knowledge",
       "branch": "44-flow-needs-by-species-and-life-stage-lit",
-      "head_sha": "7694eca141d5f580b4c8fc576798231aa2f9e787",
+      "head_sha": "1fad955b421b5967b79c0c285ab404541275c648",
       "built_by": "cred::crd_store_push()",
-      "date_completed": "2026-10-09T14:47:27Z"
+      "date_completed": "2026-10-09T15:07:31Z"
     }
   }
 } 
-Uploading flow.duckdb (116 MB)
+Uploading flow.duckdb (119 MB)
 Manifest updated — now holds: fraser, vca_refs, peace, pine, habitat_modelling, temperature, flow
 exit 0
