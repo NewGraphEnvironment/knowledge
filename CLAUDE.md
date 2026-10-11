@@ -163,6 +163,11 @@ meaning per row, not a sample. Settled conventions:
   inside earlier fixes merged two near-identical statements into one parenthesis (a text's edges and a figure's,
   a review's row and the original's). Read the original, not a review that restates it, wherever both are held:
   Ford et al. 1995 misstated five values its originals print differently.
+- When a report and its paper publish one study, read each figure's data (its point count against the stated design,
+  its coefficients) before saying which values the two share. #40 applied the report's methods sentence ("only the
+  third experiment is reported") to every result, and four audit rounds each found an error inside the previous fix
+  until an enumeration of every note sentence ended it. A growth optimum the source measured at held temperatures
+  is `kind = lab`; one a source states or reviews is `pref`.
 - Append new rows; never insert. `research/` files cite evidence by data row, and data row N is file line
   N + 1 (#36's plan named file lines and called them data rows). A statement that bears on two variables is
   two rows sharing one quote, each noting the other. Copy a sibling's fields only after checking them: #36
