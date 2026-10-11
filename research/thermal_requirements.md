@@ -34,8 +34,9 @@ temperature.
 
 `kind` separates what a number is: `param` (a value a model or standard sets, such as the Iacarella and
 Isaak thresholds), `expert` (a criterion or recommendation), `lab` (a laboratory or hatchery measurement:
-a lethal limit, CTmax, survival or growth at a held temperature, including a growth optimum, a development time
-in degree-days), `dist` and `max_obs` (where fish were found), `pref` (a temperature fish select or prefer). Air-temperature rows (the IP models'
+a lethal limit, CTmax, survival or growth at a held temperature, including a growth optimum the source itself
+measured, a development time in degree-days), `dist` and `max_obs` (where fish were found), `pref` (a preference,
+or an optimum a source states or reviews). Air-temperature rows (the IP models'
 proxies: Agrawal, Lindley, Boughton & Goslin, Weiss) are a separate variable and never stand in for a water
 limit.
 
@@ -109,8 +110,9 @@ Conventions a reader needs:
   (and Hickman & Raleigh is in the library to read directly); the 12–16 °C over which the report expects the two
   species to compete equally, and the paper's "exceeded 22°C for even short periods" (competition, not a limit);
   survival percentages at single test temperatures; and the hybrid hatching failure. The report and the paper
-  publish the same fitted curves (identical coefficients), so their 60-d UUILTs and optima are one estimate twice;
-  their 7-d UUILTs differ by method. Rainbow trout values from both are coded `RB`, never `ST`.
+  publish the same fitted growth and survival curves (identical coefficients), so the survival-curve UUILTs
+  (19.6, 24.3 °C) and the optima are one estimate twice; the report's LD50-regression UUILTs (19.7, 24.2 °C) pool
+  all its experiments and are its own, and the two 7-d UUILTs differ in method and data. Rainbow trout values from both are coded `RB`, never `ST`.
 - **Hasnain et al.** (key thermal metrics for Canadian fishes) says every estimate comes from adults, so its
   lethal and growth values are not rearing values. Its cutthroat values are species-level, not westslope.
 - **OCR-garbled Bjornn & Reiser 1991 cells:** coho spawning 4.4–9.4 and incubation 4.4–13.3 °C, steelhead

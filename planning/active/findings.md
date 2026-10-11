@@ -55,25 +55,31 @@ when it already holds a file with that md5, and still links the new attachment i
 followed read both as `pdf present`, and Zotero synced both files into local storage (`QNK6GJDJ`,
 `H7XFPUPT`), so both landed.
 
-## The 2005 report and the 2007 paper are one set of estimates
+## The 2005 report and the 2007 paper share their fitted curves
 
-The report (January 2005) analyses the third WCT and the second RB experiment (p. 9). The paper's survival and
-growth curves carry the report's coefficients exactly (WCT growth `-4.1727 + 0.9496 T - 0.0348 T²`, WCT survival
-midpoint 19.6253; 2007 Figs. 1 and 4, report Figs. 1, 2 and 5), so the 60-d UUILTs and optima are the same
-estimates published twice. Only some survival percentages are pooled in the paper (RB at 24 °C: 72.8%, between the
-report's two experiments). The 7-d UUILTs differ by method: the paper reads the day-7 LT50 off LT50-over-time
-curves; the report predicts it from an exponential regression of LD50 on temperature, with LD50 set to 120 d where
-survival never fell below 50% (p. 10), so its RB 31.1 °C is an extrapolation above the 28 °C top test temperature.
-The report's abstract gives the RB UUILT a 95% CI of 20.3–24.2 °C, while its p. 12 gives 22.9–25.4 °C.
+The report's growth curves and 60-d survival curves use the third WCT and the second RB experiment (p. 9); its
+LD50 regressions pool all three WCT and both RB experiments (Figs. 6 and 8, pp. 28 and 30). The paper's survival
+and growth curves carry the report's coefficients exactly (WCT growth `-4.1727 + 0.9496 T - 0.0348 T²`, WCT
+survival midpoint 19.6253; 2007 Figs. 1 and 4, report Figs. 1, 2 and 5; the 2007 OCR misreads the RB survival
+coefficients as 24.3622 and -0.6033, where the printed figure reads 24.3522 and -0.5033). So the survival-curve
+UUILTs (19.6, 24.3 °C) and the growth optima are one estimate published twice. The LD50-regression UUILTs (19.7,
+24.2 °C), which the report's abstract headlines, appear only in the report. The 7-d UUILTs differ in method and in
+data: the paper takes the day-7 point of its LT50-over-time plot (Fig. 2, p. 1116); the report predicts 7 d from
+its pooled LD50 regression, with LD50 set to 120 d where survival never fell below 50% (p. 10), so its RB 31.1 °C is
+an extrapolation above the 28 °C top test temperature. Only some survival percentages are pooled in the paper (RB
+at 24 °C: 72.8%, between the report's two experiments). The report's abstract gives the RB UUILT a 95% CI of
+20.3–24.2 °C, while its p. 12 gives 22.9–25.4 °C.
 
-## Growth optima are `lab`
+## Measured growth optima are `lab`; stated or reviewed optima are `pref`
 
 `pkg/R/literature.R` defines `lab` as "a lethal limit, CTmax, survival or growth at held temperatures, or a
-development time in degree-days", and #38's laboratory optima (Richter & Kolmes coho, data rows 589, 591) are
-`lab`. Round 1 recoded the Bear optima `pref` on the research file's gloss "`pref` (a preference or optimum)" and
-on Selong's BT growth peak (data row 154, `pref`). Round 2 found the package definition. The Bear optima, optimal
-ranges and niches are `lab`; Selong's row is recoded `lab` with a note; the research file's gloss now says `pref` is a
-temperature fish select.
+development time in degree-days". Round 1 coded the Bear optima `pref`, after the research file's gloss "`pref` (a
+preference or optimum)" and Selong's BT growth peak (data row 154). Round 2 recoded them `lab` and narrowed the
+`pref` gloss to "a temperature fish select". Code-check round 1 and meaning round 3 then showed that the narrower
+gloss contradicts the table: #38 coded its stated or reviewed optima `pref` (data rows 140, 150, 152, 600, 619, 625,
+645, 647; 647 is Lusardi's review of laboratory coho growth), and its `lab` optima (data rows 589, 591, 614) are
+survival optima, not growth optima. Settled: an optimum the source itself measured at held temperatures (Bear,
+Selong) is `lab`; an optimum a source states or reviews is `pref`. The research gloss says so, and #38's rows stand.
 
 ## Errors Encountered
 
@@ -86,9 +92,9 @@ temperature fish select.
 ## Audit closed by enumeration
 
 Every same-source, same-page group of Bear rows with mixed `kind` or `metric` (after round 2):
-- 2005 p. 17 (data rows 1096–1101): one sentence of field association (Sloat 2001; `dist`), with "average daily"
-  over an unstated period (`unstated`) and "maximum daily" (`daily_max`) per clause; then one sentence of
-  recommendation (`expert`), "maximum average daily" (`daily_mean`) and "maximum daily" (`daily_max`). Each
+- 2005 p. 17 (data rows 1096–1101): one sentence of field association (Sloat 2001; `dist`), with "average
+  daily" (`unstated`: the page does not say each day's mean or a period mean) and "maximum daily" (`daily_max`)
+  per clause; then one sentence of recommendation (`expert`), "maximum average daily" (`daily_mean`) and "maximum daily" (`daily_max`). Each
   difference is its own clause's wording.
 - 2007 p. 1119 (data rows 1079, 1081, 1102): the fundamental niche (derived from a held-temperature growth optimum;
   `lab`, `constant`) and the Discussion criterion citing field studies (`expert`, `unstated`): separate sentences.

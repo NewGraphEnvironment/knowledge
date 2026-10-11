@@ -30,3 +30,5 @@
   1,102 rows, 0 failing, thermal 50/50.
 - `habitat_modelling` store rebuilt (220 → 222 docs, 38,653 chunks; the same three keys without an attachment as
   #38), pushed, md5 verified on connect.
+- Meaning round 3 and code-check round 1 (`audit-round3.md`): 6 + 1 findings (one shared), five inside round-2
+  work, all fixed. Gate: 1,102 rows, 0 failing, thermal 50/50.
