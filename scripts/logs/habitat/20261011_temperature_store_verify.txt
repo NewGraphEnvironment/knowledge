@@ -1,0 +1,8 @@
+Using local data/rag/temperature.duckdb (md5 matches manifest; 40 docs, 8013 chunks).
+[1] "Thermal_Requirements_of_Westslope_Cutthroat_Trout.pdf"
+[2] "Thermal_Requirements_of_Westslope_Cutthroat_Trout.pdf"
+[3] "Thermal_Requirements_of_Westslope_Cutthroat_Trout.pdf"
+[4] "Thermal_Requirements_of_Westslope_Cutthroat_Trout.pdf"
+[5] "Thermal_Requirements_of_Westslope_Cutthroat_Trout.pdf"
+[6] "Thermal_Requirements_of_Westslope_Cutthroat_Trout.pdf"
+[7] "Thermal_Requirements_of_Westslope_Cutthroat_Trout.pdf"

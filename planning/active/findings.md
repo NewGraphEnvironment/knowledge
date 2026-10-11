@@ -47,3 +47,10 @@ Relates to #38
 
 | Error | Resolution |
 |-------|------------|
+
+## The upload answered `exists`
+
+`0270`'s live run printed `pdf exists`, not `pdf uploaded`, for both Bear items. The Web API answers `exists`
+when it already holds a file with that md5, and still links the new attachment item. The dry re-run that
+followed read both as `pdf present`, and Zotero synced both files into local storage (`QNK6GJDJ`,
+`H7XFPUPT`), so both landed.

@@ -44,9 +44,9 @@ The 2005 and 2007 values differ (19.7 vs 19.6 °C UUILT, and possibly the CIs). 
 own source's words, and each note names the other's value. A reader of `meets()` takes either.
 
 ## Phase 1: Get the PDFs into Zotero and the temperature store
-- [ ] `data/temperature_members.csv`: on `bear_etal2007ComparativeThermal`, set `pdf` to the naturefilm URL; on `bear_etal2005ThermalRequirements`, set `pdf` to `data/rag/pdf/Thermal_Requirements_of_Westslope_Cutthroat_Trout.pdf`. Update both `source` texts
-- [ ] `0270 --collection temperature --dry-run`, then the live run; log to `scripts/logs/habitat/2026101x_temperature_*`
-- [ ] Confirm both uploads in the Web API (`has_pdf`), and once Zotero syncs, in a guarded copy of `zotero.sqlite`
+- [x] `data/temperature_members.csv`: on `bear_etal2007ComparativeThermal`, set `pdf` to the naturefilm URL; on `bear_etal2005ThermalRequirements`, set `pdf` to `data/rag/pdf/Thermal_Requirements_of_Westslope_Cutthroat_Trout.pdf`. Update both `source` texts
+- [x] `0270 --collection temperature --dry-run`, then the live run; log to `scripts/logs/habitat/2026101x_temperature_*`
+- [x] Confirm both uploads in the Web API (`has_pdf`), and once Zotero syncs, in a guarded copy of `zotero.sqlite`
 - [ ] Rebuild the `temperature` store (`OVERWRITE=TRUE`) and push it (`CONFIRM=TRUE`); verify on a fresh connect. Rebuild `habitat_modelling` too if the new items fall in its input collections
 
 ## Phase 2: Draft rows under the #38 brief
