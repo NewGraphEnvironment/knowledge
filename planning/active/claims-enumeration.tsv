@@ -1,0 +1,129 @@
+data_row	source	page	claim	verdict
+154	selong_etalEffec	1026	Age-0, satiation ration; 95% CI 10.9-15.4 C.	
+154	selong_etalEffec	1026	Ultimate upper incipient lethal temperature 20.9 C.	
+154	selong_etalEffec	1026	Kind lab: the source's own growth measurement at held temperatures, which pkg/R/literature.R puts under lab (recoded in #40, which codes Bear et al.'s measured optima the same way); an optimum a source states or reviews stays pref.	
+521	cleator_etal2009	4	Upper incipient lethal temperature (a held-temperature laboratory exposure).	
+521	cleator_etal2009	4	The page names no life stage;	
+521	cleator_etal2009	4	Bear et al. 2007 tested juveniles (60-d UUILT 19.6 C, p. 1115, data row 1071), so the stage is rearing.	
+521	cleator_etal2009	4	Hasnain et al. list 19.7 C under 'Cutthroat Trout' citing Bear et al. 2005.	
+522	thorley_etal2021	1	Introduction; names no life stage and no statistic.	
+522	thorley_etal2021	1	Same study as the 19.6 C UILT in Cleator et al. 2009.	
+522	thorley_etal2021	1	Bear et al. 2007 tested juveniles (data row 1071): mean survival fell to 35.7% at 20 C over 60 days (p. 1115).	
+531			Searched the #38 temperature collection (44 items; the members with a PDF: Bear et al. 2005 and 2007 had none until #40, and McMahon et al. 2007 has none) with grep and the temperature store, including canada_departmentoffisheriesandoceans2019Recoverystrategy, cleator_etal2009InformationRelevant, WESTSLOPECUTTHROATTROUTOncorhynchusclarkilewisi2004, thorley_etal2021UpperFording, thorley_etal2022UpperFording, cope2020UpperFording, hasnain_etalKeyEcological, roberge_etal2002LifeHistory, sauter_etal2001Issuepaper, hill_etal2024Spatialstream and hill_etal2025Spatialstream; no WCT degree-days from fertilization to hatch (the documents give incubation as 6-7 weeks, or 3-7 weeks). #40 then read Bear et al. 2005 (report) and 2007 (paper): 60-day growth and survival of juveniles at held temperatures, with no degree-days.	
+532			Searched the #38 temperature collection (44 items; the members with a PDF: Bear et al. 2005 and 2007 had none until #40, and McMahon et al. 2007 has none) with grep and the temperature store, including canada_departmentoffisheriesandoceans2019Recoverystrategy, cleator_etal2009InformationRelevant, WESTSLOPECUTTHROATTROUTOncorhynchusclarkilewisi2004, thorley_etal2021UpperFording, thorley_etal2022UpperFording, cope2020UpperFording, hasnain_etalKeyEcological, roberge_etal2002LifeHistory, sauter_etal2001Issuepaper, hill_etal2024Spatialstream and hill_etal2025Spatialstream; no WCT growing-season degree-day value for first-summer growth (the Hill memos compute GSDD after Coleman and Fausch 2007 but state no WCT requirement). #40 then read Bear et al. 2005 (report) and 2007 (paper): 60-day growth and survival of juveniles at held temperatures, with no degree-days.	
+533			Searched the #38 temperature collection (44 items; the members with a PDF: Bear et al. 2005 and 2007 had none until #40, and McMahon et al. 2007 has none) with grep and the temperature store, including canada_departmentoffisheriesandoceans2019Recoverystrategy, cleator_etal2009InformationRelevant, WESTSLOPECUTTHROATTROUTOncorhynchusclarkilewisi2004, thorley_etal2021UpperFording, thorley_etal2022UpperFording, cope2020UpperFording, hasnain_etalKeyEcological, roberge_etal2002LifeHistory, sauter_etal2001Issuepaper, hill_etal2024Spatialstream and hill_etal2025Spatialstream; no WCT growing-season degree-days needed to reach a size that survives winter (Thorley et al. 2022 applies the Colorado River cutthroat findings of Coleman and Fausch 2007a, 2007b qualitatively). #40 then read Bear et al. 2005 (report) and 2007 (paper): 60-day growth and survival of juveniles at held temperatures, with no degree-days.	
+553			Searched the #38 temperature collection (44 items; the members with a PDF: Bear et al. 2005 and 2007 had none until #40, and McMahon et al. 2007 has none) with grep and the temperature store, including mcphail_baxter1996reviewbull, rieman_mcintyre1993Demographichabitat, selong_etalEffectTemperature, u_s_fishandwildlifeservice2010Endangeredthreatened, u_s_fishandwildlifeservice2015Recoveryplan, sauter_etal2001Issuepaper, dunham_chandler2001Modelspredict, bustard_schell2002ConservingMorice, oconnor_etal2025Investigatingthermal, the Metolius report and roberge_etal2002LifeHistory, plus hagen_weber2019Limitingfactorsa; no BT degree-days from fertilization to emergence (the documents give days: about 220 or 223 days after deposition, or more than 200 days).	
+553			Bear et al. 2005 and 2007 (#40) concern WCT and rainbow trout and give no degree-days.	
+554			Searched the #38 temperature collection (44 items; the members with a PDF: Bear et al. 2005 and 2007 had none until #40, and McMahon et al. 2007 has none) with grep and the temperature store, including mcphail_baxter1996reviewbull, rieman_mcintyre1993Demographichabitat, selong_etalEffectTemperature, u_s_fishandwildlifeservice2010Endangeredthreatened, u_s_fishandwildlifeservice2015Recoveryplan, sauter_etal2001Issuepaper, dunham_chandler2001Modelspredict, bustard_schell2002ConservingMorice, oconnor_etal2025Investigatingthermal, the Metolius report and roberge_etal2002LifeHistory, plus hagen_weber2019Limitingfactorsa; no BT growing-season degree-day value for first-summer growth.	
+554			Bear et al. 2005 and 2007 (#40) concern WCT and rainbow trout and give no degree-days.	
+555			Searched the #38 temperature collection (44 items; the members with a PDF: Bear et al. 2005 and 2007 had none until #40, and McMahon et al. 2007 has none) with grep and the temperature store, including mcphail_baxter1996reviewbull, rieman_mcintyre1993Demographichabitat, selong_etalEffectTemperature, u_s_fishandwildlifeservice2010Endangeredthreatened, u_s_fishandwildlifeservice2015Recoveryplan, sauter_etal2001Issuepaper, dunham_chandler2001Modelspredict, bustard_schell2002ConservingMorice, oconnor_etal2025Investigatingthermal, the Metolius report and roberge_etal2002LifeHistory, plus hagen_weber2019Limitingfactorsa; no BT growing-season degree-days needed to reach a size that survives winter.	
+555			Bear et al. 2005 and 2007 (#40) concern WCT and rainbow trout and give no degree-days.	
+1071	bear_etal2007Com	1115	60-d ultimate upper incipient lethal temperature (LT50 at day 60); 95% CI 19.1-19.9 C.	
+1071	bear_etal2007Com	1115	Juveniles (mean sizes across experiments 102-126 mm TL for WCT, 110-152 mm TL for RB; p. 1115); 60-d acclimated chronic exposure, acclimated at 14 C and ramped 1 C/day to a held test temperature, satiation ration (p. 1114).	
+1071	bear_etal2007Com	1115	Shares its quote with the RB row (24.3 C, data row 1072).	
+1071	bear_etal2007Com	1115	The 2005 report gives 19.7 C by its LD50 regression and 19.6 C by its survival curve (p. 12, data rows 1082, 1083).	
+1071	bear_etal2007Com	1115	The same estimate as the 2005 report's survival-curve value: the paper's survival and growth curves carry the report's coefficients (Figs. 1 and 4, pp. 1116 and 1118), so the two are not independent.	
+1071	bear_etal2007Com	1115	Cleator et al. 2009 (data row 521) and Thorley et al. 2021 (data row 522) cite this paper.	
+1072	bear_etal2007Com	1115	Rainbow trout 60-d ultimate upper incipient lethal temperature; 95% CI 24.0-24.7 C.	
+1072	bear_etal2007Com	1115	Juveniles (mean sizes across experiments 102-126 mm TL for WCT, 110-152 mm TL for RB; p. 1115); 60-d acclimated chronic exposure, acclimated at 14 C and ramped 1 C/day to a held test temperature, satiation ration (p. 1114).	
+1072	bear_etal2007Com	1115	Shares its quote with the WCT row (19.6 C, data row 1071).	
+1072	bear_etal2007Com	1115	The 2005 report gives 24.2 C by its LD50 regression and 24.3 C by its survival curve (p. 12, data rows 1085, 1084).	
+1072	bear_etal2007Com	1115	The same estimate as the 2005 report's survival-curve value: the paper's survival and growth curves carry the report's coefficients (Figs. 1 and 4, pp. 1116 and 1118), so the two are not independent.	
+1073	bear_etal2007Com	1117	7-d UUILT: the LT50 at day 7, one of the time points in Fig. 2 (method p. 1115; figure p. 1116), for comparison with 7-d tests elsewhere.	
+1073	bear_etal2007Com	1117	The 60-d UUILT is 19.6 C (p. 1115, data row 1071); p. 1118 puts it 4.5 C below the 7-d value.	
+1073	bear_etal2007Com	1117	The 2005 report gives 24.7 C by a different method (p. 16, data row 1086).	
+1074	bear_etal2007Com	1118	Rainbow trout 7-d UUILT: the LT50 at day 7, one of the time points in Fig. 2 (method p. 1115; figure p. 1116).	
+1074	bear_etal2007Com	1118	The 60-d UUILT is 24.3 C (p. 1115, data row 1072), 1.7 C lower (p. 1118).	
+1074	bear_etal2007Com	1118	The 2005 report gives 31.1 C by a different method (p. 16, data row 1087).	
+1075	bear_etal2007Com	1117	The page calls 20 C the species' upper lethal limit, as temperatures approached which fish became lethargic and ceased feeding.	
+1075	bear_etal2007Com	1117	The fitted 60-d UUILT is 19.6 C (p. 1115, data row 1071).	
+1075	bear_etal2007Com	1117	Shares its quote with the RB row (24 C, data row 1076).	
+1076	bear_etal2007Com	1117	The page calls 24 C rainbow trout's upper lethal limit, as temperatures approached which fish became lethargic and ceased feeding.	
+1076	bear_etal2007Com	1117	The fitted 60-d UUILT is 24.3 C (p. 1115, data row 1072).	
+1076	bear_etal2007Com	1117	Shares its quote with the WCT row (20 C, data row 1075).	
+1077	bear_etal2007Com	1117	Peak of 60-d relative growth at satiation, from a regression over 8-20 C (growth was assessed at 8-24 C, p. 1115, but no WCT survived 24 C long enough to measure growth, p. 1117).	
+1077	bear_etal2007Com	1117	Juveniles (mean sizes across experiments 102-126 mm TL for WCT, 110-152 mm TL for RB; p. 1115); 60-d acclimated chronic exposure, acclimated at 14 C and ramped 1 C/day to a held test temperature, satiation ration (p. 1114).	
+1077	bear_etal2007Com	1117	Shares its quote with the RB row (13.1 C, data row 1078).	
+1077	bear_etal2007Com	1117	The 2005 report gives the same 13.6 C (p. 11, data row 1088).	
+1078	bear_etal2007Com	1117	Rainbow trout peak of 60-d relative growth at satiation.	
+1078	bear_etal2007Com	1117	Shares its quote with the WCT row (13.6 C, data row 1077). p. 1118: much lower than the 17.2 C of Hokanson et al. 1977; the paper suggests their smaller fish (30 mm TL) or strain differences.	
+1078	bear_etal2007Com	1117	The 2005 report gives the same 13.1 C (p. 11, data row 1091).	
+1079	bear_etal2007Com	1119	Rainbow trout fundamental thermal niche, defined on p. 1118 (Christie and Regier 1988) as 3 C below to 1 C above the 13.1 C optimum; derived, not measured separately.	
+1079	bear_etal2007Com	1119	Shares its quote with the WCT niche (data row 1102).	
+1079	bear_etal2007Com	1119	The 2005 report gives the same niche (p. 15, data row 1095).	
+1080	bear_etal2007Com	1113	Abstract: maximum daily temperatures near 13-15 C would ensure suitable thermal habitat for WCT populations.	
+1080	bear_etal2007Com	1113	Stated as 13-15 C; the lower end is stored.	
+1080	bear_etal2007Com	1113	The Discussion (p. 1119, data row 1081) restates it as maximum temperatures near an upper limit of 13-15 C, citing field studies.	
+1081	bear_etal2007Com	1119	Discussion: field investigations, which the laboratory results corroborate, indicate that maximum temperatures near an upper limit of 13-15 C would delineate suitable habitat for long-term persistence.	
+1081	bear_etal2007Com	1119	Names no statistic (the abstract's version, p. 1113, data row 1080, says maximum daily).	
+1081	bear_etal2007Com	1119	Stated as 13-15 C; the lower end is stored.	
+1082	bear_etal2005The	12	60-d UUILT by exponential regression of LD50 (days) on temperature, pooling all three WCT experiments (Fig. 6, p. 28); 95% CI 19.1-20.3 C; the value the abstract (p. 2) headlines.	
+1082	bear_etal2005The	12	Juveniles; 60-d acclimated chronic exposure, ramped 1 C/day from 14 C to a held test temperature, satiation ration (p. 8).	
+1082	bear_etal2005The	12	The report's growth curves and 60-d survival curve use the third WCT and the second RB experiment (p. 9); its LD50 regressions pool all three WCT and both RB experiments (Figs. 6 and 8, pp. 28 and 30).	
+1082	bear_etal2005The	12	The 2007 paper's survival and growth curves carry this report's coefficients (2007 Figs. 1 and 4, pp. 1116 and 1118; report Figs. 1, 2 and 5), so the survival-curve UUILTs (19.6 and 24.3 C) and the growth optima are the same estimates published twice; the LD50-regression UUILTs (19.7 and 24.2 C) are the report's alone.	
+1082	bear_etal2005The	12	The same page gives 19.6 C by the survival curve (data row 1083); the 2007 paper reports 19.6 C, CI 19.1-19.9 (p. 1115, data row 1071).	
+1083	bear_etal2005The	12	Temperature at which 50% survived 60 days, by sigmoid regression of survival on temperature; 95% CI 19.1-19.9 C.	
+1083	bear_etal2005The	12	The report says both methods gave a similar UUILT (the other gives 19.7 C, same page, data row 1082).	
+1083	bear_etal2005The	12	Juveniles; 60-d acclimated chronic exposure, ramped 1 C/day from 14 C to a held test temperature, satiation ration (p. 8).	
+1083	bear_etal2005The	12	The report's growth curves and 60-d survival curve use the third WCT and the second RB experiment (p. 9); its LD50 regressions pool all three WCT and both RB experiments (Figs. 6 and 8, pp. 28 and 30).	
+1083	bear_etal2005The	12	The 2007 paper's survival and growth curves carry this report's coefficients (2007 Figs. 1 and 4, pp. 1116 and 1118; report Figs. 1, 2 and 5), so the survival-curve UUILTs (19.6 and 24.3 C) and the growth optima are the same estimates published twice; the LD50-regression UUILTs (19.7 and 24.2 C) are the report's alone.	
+1084	bear_etal2005The	12	Rainbow trout: temperature at which 50% survived 60 days, by the survival curve; 95% CI 24.0-24.7 C.	
+1084	bear_etal2005The	12	The same page gives 24.2 C by LD50 regression (data row 1085); the 2007 paper reports 24.3 C (p. 1115, data row 1072).	
+1084	bear_etal2005The	12	Juveniles; 60-d acclimated chronic exposure, ramped 1 C/day from 14 C to a held test temperature, satiation ration (p. 8).	
+1084	bear_etal2005The	12	The report's growth curves and 60-d survival curve use the third WCT and the second RB experiment (p. 9); its LD50 regressions pool all three WCT and both RB experiments (Figs. 6 and 8, pp. 28 and 30).	
+1084	bear_etal2005The	12	The 2007 paper's survival and growth curves carry this report's coefficients (2007 Figs. 1 and 4, pp. 1116 and 1118; report Figs. 1, 2 and 5), so the survival-curve UUILTs (19.6 and 24.3 C) and the growth optima are the same estimates published twice; the LD50-regression UUILTs (19.7 and 24.2 C) are the report's alone.	
+1085	bear_etal2005The	12	Rainbow trout 60-d UUILT by exponential regression of LD50, pooling both RB experiments (Fig. 8, p. 30); 95% CI 22.9-25.4 C here, while the abstract (p. 2) prints 24.2 C with a 95% CI of 20.3-24.2 C.	
+1085	bear_etal2005The	12	Juveniles; 60-d acclimated chronic exposure, ramped 1 C/day from 14 C to a held test temperature, satiation ration (p. 8).	
+1085	bear_etal2005The	12	The report's growth curves and 60-d survival curve use the third WCT and the second RB experiment (p. 9); its LD50 regressions pool all three WCT and both RB experiments (Figs. 6 and 8, pp. 28 and 30).	
+1085	bear_etal2005The	12	The 2007 paper's survival and growth curves carry this report's coefficients (2007 Figs. 1 and 4, pp. 1116 and 1118; report Figs. 1, 2 and 5), so the survival-curve UUILTs (19.6 and 24.3 C) and the growth optima are the same estimates published twice; the LD50-regression UUILTs (19.7 and 24.2 C) are the report's alone.	
+1085	bear_etal2005The	12	The same page gives 24.3 C by the survival curve (data row 1084); the 2007 paper reports 24.3 C (p. 1115, data row 1072).	
+1086	bear_etal2005The	16	7-d UUILT predicted from the exponential regression of LD50 (days) on temperature, in which LD50 was set to 120 d at 18 and 20 C (p. 10), pooling all three WCT experiments (Fig. 6, p. 28); for comparison with 7-d tests elsewhere.	
+1086	bear_etal2005The	16	The 60-d UUILT is 19.7 C (p. 12, data row 1082).	
+1086	bear_etal2005The	16	The 2007 paper gives 24.1 C, its day-7 LT50 (p. 1117, data row 1073).	
+1087	bear_etal2005The	16	Rainbow trout 7-d UUILT predicted from the exponential LD50 regression over both RB experiments (Fig. 8, p. 30;	
+1087	bear_etal2005The	16	LD50 set to 120 d at 22 and 24 C, p. 10), so an extrapolation above the 28 C highest test temperature; the report calls it far greater than the UUILT previously reported for rainbow trout (26.2 C and 25.6 C, same page).	
+1087	bear_etal2005The	16	The 2007 paper gives 26.0 C, its day-7 LT50 (p. 1118, data row 1074).	
+1088	bear_etal2005The	11	Peak of 60-d relative growth of age-1 juveniles at satiation (quadratic regression over 8-20 C).	
+1088	bear_etal2005The	11	Juveniles; 60-d acclimated chronic exposure, ramped 1 C/day from 14 C to a held test temperature, satiation ration (p. 8).	
+1088	bear_etal2005The	11	The report's growth curves and 60-d survival curve use the third WCT and the second RB experiment (p. 9); its LD50 regressions pool all three WCT and both RB experiments (Figs. 6 and 8, pp. 28 and 30).	
+1088	bear_etal2005The	11	The 2007 paper's survival and growth curves carry this report's coefficients (2007 Figs. 1 and 4, pp. 1116 and 1118; report Figs. 1, 2 and 5), so the survival-curve UUILTs (19.6 and 24.3 C) and the growth optima are the same estimates published twice; the LD50-regression UUILTs (19.7 and 24.2 C) are the report's alone.	
+1088	bear_etal2005The	11	Shares its quote with the optimal growth range row (10.3-17.0 C, data row 1089).	
+1088	bear_etal2005The	11	The 2007 paper gives the same 13.6 C (p. 1117, data row 1077).	
+1089	bear_etal2005The	11	Optimal growth range: the span around the 13.6 C peak between the lower and upper 95% confidence intervals of the growth regression (defined p. 10).	
+1089	bear_etal2005The	11	Shares its quote with the 13.6 C optimum row (data row 1088).	
+1090	bear_etal2005The	11	Zero-growth edges: where the quadratic growth regression crosses the x-axis (same page), predicted rather than tested (growth was tested at 8-20 C).	
+1090	bear_etal2005The	11	Limits for growth, not survival.	
+1091	bear_etal2005The	11	Rainbow trout peak of 60-d relative growth at satiation.	
+1091	bear_etal2005The	11	Juveniles; 60-d acclimated chronic exposure, ramped 1 C/day from 14 C to a held test temperature, satiation ration (p. 8).	
+1091	bear_etal2005The	11	The report's growth curves and 60-d survival curve use the third WCT and the second RB experiment (p. 9); its LD50 regressions pool all three WCT and both RB experiments (Figs. 6 and 8, pp. 28 and 30).	
+1091	bear_etal2005The	11	The 2007 paper's survival and growth curves carry this report's coefficients (2007 Figs. 1 and 4, pp. 1116 and 1118; report Figs. 1, 2 and 5), so the survival-curve UUILTs (19.6 and 24.3 C) and the growth optima are the same estimates published twice; the LD50-regression UUILTs (19.7 and 24.2 C) are the report's alone.	
+1091	bear_etal2005The	11	Shares its quote with the optimal growth range row (6.8-18.2 C, data row 1092).	
+1091	bear_etal2005The	11	The 2007 paper gives the same 13.1 C (p. 1117, data row 1078).	
+1092	bear_etal2005The	11	Rainbow trout optimal growth range: the 95% confidence intervals of the growth regression around the 13.1 C peak (defined p. 10).	
+1092	bear_etal2005The	11	Shares its quote with the 13.1 C optimum row (data row 1091).	
+1093	bear_etal2005The	11	Rainbow trout zero-growth edges, where the quadratic growth regression crosses the x-axis; predicted, not tested.	
+1093	bear_etal2005The	11	Limits for growth, not survival.	
+1094	bear_etal2005The	14	Fundamental niche (Christie and Regier 1988: -3 to +1 C of the 13.6 C optimum growth temperature), derived from the growth optimum.	
+1094	bear_etal2005The	14	The 2007 paper gives the same niche (p. 1119, data row 1102).	
+1095	bear_etal2005The	15	Rainbow trout fundamental niche, derived from the 13.1 C growth optimum by the Christie and Regier definition given on p. 14 (-3 to +1 C).	
+1095	bear_etal2005The	15	The 2007 paper gives the same niche (p. 1119, data row 1079).	
+1096	bear_etal2005The	17	Field association.	
+1096	bear_etal2005The	17	The page does not say whether 'average daily' is each day's mean or a mean of daily means over a period, so metric unstated.	
+1096	bear_etal2005The	17	Shares its quote with the maximum daily row (16 C, data row 1097).	
+1097	bear_etal2005The	17	Field association.	
+1097	bear_etal2005The	17	Shares its quote with the average daily row (12 C, data row 1096).	
+1098	bear_etal2005The	17	Rainbow trout field association.	
+1098	bear_etal2005The	17	The page does not say whether 'average daily' is each day's mean or a mean of daily means over a period, so metric unstated.	
+1098	bear_etal2005The	17	The clause carries no citation or place; the sentence cites Sloat 2001 for the cutthroat clause before it.	
+1098	bear_etal2005The	17	Shares its quote with the maximum daily row (18 C, data row 1099).	
+1099	bear_etal2005The	17	Rainbow trout field association; no citation or place on this clause (see data row 1098).	
+1099	bear_etal2005The	17	Shares its quote with the average daily row (13 C, data row 1098).	
+1100	bear_etal2005The	17	Water-quality recommendation: maximum average daily temperatures below 16 C would be adequate for maximum growth.	
+1100	bear_etal2005The	17	Shares its quote with the 20 C survival recommendation (data row 1101).	
+1101	bear_etal2005The	17	Water-quality recommendation: maximum daily stream temperatures below 20 C would be adequate to maintain survival.	
+1101	bear_etal2005The	17	Shares its quote with the 16 C growth recommendation (data row 1100).	
+1102	bear_etal2007Com	1119	Fundamental thermal niche, defined on p. 1118 (Christie and Regier 1988) as 3 C below to 1 C above the optimum growth temperature; derived from the 13.6 C optimum, not measured separately.	
+1102	bear_etal2007Com	1119	The sentence names the species on p. 1118.	
+1102	bear_etal2007Com	1119	The OCR reads the printed en dash as a doubled dash.	
+1102	bear_etal2007Com	1119	Shares its quote with the RB niche (data row 1079).	
+1102	bear_etal2007Com	1119	The 2005 report gives the same niche (p. 14, data row 1094).	
