@@ -27,7 +27,8 @@
 # It also checks that the timing table's `source` keys resolve in the group,
 # and that every species x model parameter in COVERAGE has at least one row
 # (a value, or a `none` row saying what was searched). THERMAL is the same check
-# for temperature limits and degree-day totals, by species x cell (see below).
+# for temperature limits and degree-day totals, by species x cell (see below), and
+# FLOW for flow needs and the depth and velocity a fish meets.
 #
 # The intrinsic-potential model registry (data/ip_model_registry.csv, read with
 # knw_ip_read()) is gated the same way: each row's flow quote, and its validation
@@ -48,7 +49,7 @@
 #         a summary on stdout.
 #         OCR text is cached in data/rag/ocr/ (gitignored), keyed by PDF md5.
 #         Exits non-zero when any row, registry quote, model link, timing source,
-#         coverage cell or thermal cell fails.
+#         coverage cell, thermal cell or flow cell fails.
 # ---------------------------------------------------------------------------
 pkgload::load_all("pkg", quiet = TRUE)   # the source tree, not an installed copy
 
@@ -78,6 +79,26 @@ THERMAL <- list(
     side = c("upper", "lower", "upper", "lower", "upper", "lower", NA, NA, NA, NA),
     window = c(rep(NA, 6), "to_hatch", "to_emergence", "growing_season", "growing_season"),
     stringsAsFactors = FALSE))
+
+# A flow cell is a flow need, or the depth or velocity a fish meets, for one life stage.
+# An instream_flow need is met by a valued row with bound min, range or optimum: a
+# minimum flow, a span, or an optimum (a PHABSIM peak, a percent of MAD) all answer
+# "how much water does this stage need". Depth is a lower limit (min or range) and
+# velocity an upper one (max or range); a bankfull depth is stream size and never meets
+# a cell. A `none` row meets a cell by the same bound. SK rears in lakes, so it has no
+# flow-need cell for rearing or overwintering and no rearing velocity cell.
+FLOW <- list(
+  species = c("CH", "CO", "SK", "BT", "GR", "WCT", "ST"),
+  cells = data.frame(
+    variable = c(rep("instream_flow", 5), "depth", "depth", "velocity", "velocity"),
+    life_stage = c("spawning", "incubation", "rearing", "overwintering", "migration",
+                   "spawning", "migration", "spawning", "rearing"),
+    side = c(rep("need", 5), "lower", "lower", "upper", "upper"),
+    stringsAsFactors = FALSE),
+  skip = data.frame(species_code = "SK", variable = c("instream_flow", "instream_flow", "velocity"),
+                    life_stage = c("rearing", "overwintering", "rearing"), stringsAsFactors = FALSE),
+  bounds = list(need = c("min", "range", "optimum"), lower = c("min", "range"),
+                upper = c("max", "range")))
 
 ev <- knw_literature_read(evidence_path)
 reg <- knw_ip_read(registry_path)
@@ -222,8 +243,11 @@ ocr_text <- function(file) {
     # The sidecar is written in the work dir and renamed into the cache only once
     # complete, so a killed or concurrent run never leaves a truncated cache entry.
     tmp_side <- file.path(work, "sidecar.txt")
-    rc <- system2("ocrmypdf", c("-q", "--force-ocr", "--sidecar", shQuote(tmp_side), shQuote(file),
-                                shQuote(tmp_pdf)), stdout = FALSE, stderr = FALSE,
+    # A signed PDF (govinfo signs its scans) is refused unless told the signature may be
+    # invalidated; only the throwaway OCR copy in `work` is altered, never the stored PDF.
+    rc <- system2("ocrmypdf", c("-q", "--force-ocr", "--invalidate-digital-signatures", "--sidecar",
+                                shQuote(tmp_side), shQuote(file), shQuote(tmp_pdf)),
+                  stdout = FALSE, stderr = FALSE,
                   env = paste0("TMPDIR=", shQuote(normalizePath(work))))
     if (rc != 0 || !file.exists(tmp_side) || !file.rename(tmp_side, side)) {
       stop("ocrmypdf failed on ", file)
@@ -298,6 +322,8 @@ table_pages <- function(quote, pages) {
       at <- i
       ok <- TRUE
       for (t in q[-1]) {
+        # Past the last token there is nothing to match, and (at + 1):n would count down.
+        if (at >= length(s$tok)) { ok <- FALSE; break }
         win <- (at + 1):min(length(s$tok), at + 1 + TABLE_HOP)
         j <- win[s$tok[win] == t & s$page[win] == s$page[i]]
         if (!length(j)) { ok <- FALSE; break }
@@ -313,15 +339,17 @@ table_pages <- function(quote, pages) {
 # own fragments (a [bracketed insert] is the editor's, not the source's), as whole
 # tokens; a number after a "-" that does not follow a number may be read with either
 # sign; number words must be whole words. The only rescalings are the ones a unit
-# can carry: percent from a proportion (x100), mm from cm (x10), m and km for the
-# bridge distance (x1000), m/s from cm/s (x0.01).
+# can carry: percent (and percent MAD) from a proportion (x100), mm from cm (x10), and m and
+# km for a bridge distance (x1000; applied to no other variable, see value_in_quote()). Depth
+# and velocity are kept in the unit the source wrote (knw_literature_vocab()), so cm/s has no
+# rescale to m/s.
 NUMBER_WORDS <- c(one = 1, two = 2, three = 3, four = 4, five = 5, six = 6, seven = 7, eight = 8,
                   nine = 9, ten = 10, first = 1, second = 2, third = 3, fourth = 4, fifth = 5,
                   sixth = 6, seventh = 7, eighth = 8, ninth = 9, tenth = 10)
 # A unit with no entry here is read at scale 1: a new unit fails closed rather than inheriting a
 # rescale from its spelling (a "^m" fallback once gave m3/s and wetted widths a x1000).
-SCALE <- list(percent = c(1, 100), mm = c(1, 10), km = c(1, 1e-3), m = c(1, 1e3), "m/s" = c(1, 0.01),
-              "m3/s" = 1, "m bankfull" = 1, "m wetted" = 1, mi2 = 1)
+SCALE <- list(percent = c(1, 100), "percent MAD" = c(1, 100), mm = c(1, 10), km = c(1, 1e-3),
+              m = c(1, 1e3), "m/s" = 1, "m3/s" = 1, "m bankfull" = 1, "m wetted" = 1, mi2 = 1)
 MONTHS <- c("january", "february", "march", "april", "may", "june", "july", "august",
             "september", "october", "november", "december")
 
@@ -356,7 +384,10 @@ value_in_quote <- function(r) {
   if (!length(vals)) return(TRUE)
   if (r$variable == "timing") return(timing_in_quote(r))
   have <- quote_numbers(r$quote)
-  sc <- if (!is.null(SCALE[[r$unit]])) SCALE[[r$unit]] else 1
+  # m and km rescale each other for a bridge distance only; any other value in m is read as
+  # written, so a depth or width cannot verify at 1000x a number in its quote.
+  sc <- if (!is.null(SCALE[[r$unit]]) && (!r$unit %in% c("m", "km") || r$variable == "bridge_distance"))
+    SCALE[[r$unit]] else 1
   ok_set <- unique(c(outer(have, sc)))
   all(vapply(as.numeric(vals), function(v) any(abs(ok_set - v) < 1e-9 * max(1, abs(v))), TRUE))
 }
@@ -481,6 +512,16 @@ meets <- function(sp, cell) {
 thermal <- merge(data.frame(species_code = THERMAL$species), THERMAL$cells, by = NULL)
 thermal$rows <- vapply(seq_len(nrow(thermal)), function(i) meets(thermal$species_code[i], thermal[i, ]),
                        integer(1))
+meets_flow <- function(sp, cell) {
+  hit <- ev$species_code == sp & ev$variable == cell$variable & ev$life_stage == cell$life_stage &
+    (valued | ev$kind == "none") & !ev$unit %in% "m bankfull"
+  sum(hit & ev$bound %in% FLOW$bounds[[cell$side]])
+}
+flow <- merge(data.frame(species_code = FLOW$species), FLOW$cells, by = NULL)
+skip_key <- function(d) paste(d$species_code, d$variable, d$life_stage)
+flow <- flow[!skip_key(flow) %in% skip_key(FLOW$skip), ]
+flow$rows <- vapply(seq_len(nrow(flow)), function(i) meets_flow(flow$species_code[i], flow[i, ]),
+                    integer(1))
 
 log_csv <- Sys.getenv("LOG", file.path("scripts", "logs", "habitat",
                                       paste0(format(Sys.Date(), "%Y%m%d"), "_literature_verify.csv")))
@@ -510,6 +551,10 @@ if (any(thermal$rows == 0)) {
   print(thermal[thermal$rows == 0, c("species_code", "variable", "life_stage", "side", "window")],
         row.names = FALSE)
 }
+cat(sprintf("flow: %d of %d species x cells have a row\n", sum(flow$rows > 0), nrow(flow)))
+if (any(flow$rows == 0)) {
+  print(flow[flow$rows == 0, c("species_code", "variable", "life_stage", "side")], row.names = FALSE)
+}
 cat("wrote", log_csv, "and", reg_log, "\n")
 if (any(!pass) || any(!reg_pass) || length(unregistered) || length(unread) || length(t_bad) ||
-    any(cov$rows == 0) || any(thermal$rows == 0)) quit(status = 1)
+    any(cov$rows == 0) || any(thermal$rows == 0) || any(flow$rows == 0)) quit(status = 1)

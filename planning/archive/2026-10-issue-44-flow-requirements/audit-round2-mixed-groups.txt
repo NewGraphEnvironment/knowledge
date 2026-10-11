@@ -1,0 +1,163 @@
+== WESTSLOPECUTTHROATTROUTOncorhynchusclarkilewisi2004 p.5: mixed ['unit']
+  [926] WCT spawning depth bound=range 0.2-0.40 m metric= kind=dist
+  [927] WCT spawning velocity bound=range 0.25-1.05 m/s metric= kind=dist
+== amecenvironment&infrastructure2015Appendix5126D p.57: mixed ['kind', 'metric']
+  [982] RB spawning instream_flow bound=optimum 0.784-0.784 m3/s metric=unstated kind=hsi
+  [983] RB spawning instream_flow bound=min 0.545- m3/s metric=monthly_mean kind=expert
+  [984] RB spawning instream_flow bound=optimum 1.180-1.180 m3/s metric=unstated kind=hsi
+  [985] RB spawning instream_flow bound=min 0.735- m3/s metric=monthly_mean kind=expert
+  [986] RB rearing instream_flow bound=optimum 0.268-0.268 m3/s metric=unstated kind=hsi
+  [987] RB rearing instream_flow bound=min 0.130- m3/s metric=monthly_mean kind=expert
+  [988] RB rearing instream_flow bound=optimum 0.455-0.455 m3/s metric=unstated kind=hsi
+  [989] RB overwintering instream_flow bound=min 0.115- m3/s metric=monthly_mean kind=expert
+  [990] RB overwintering instream_flow bound=min 0.175- m3/s metric=monthly_mean kind=expert
+== bjornn_reiser1991HabitatRequirements p.84: mixed ['unit']
+  [687] CH migration depth bound=min 0.24- m metric= kind=expert
+  [688] CH migration depth bound=min 0.24- m metric= kind=expert
+  [689] CH migration depth bound=min 0.24- m metric= kind=expert
+  [690] CH migration velocity bound=max -2.44 m/s metric= kind=expert
+  [691] CH migration velocity bound=max -2.44 m/s metric= kind=expert
+  [692] CO migration depth bound=min 0.18- m metric= kind=expert
+  [693] CO migration velocity bound=max -2.44 m/s metric= kind=expert
+  [694] SK migration velocity bound=max -2.13 m/s metric= kind=expert
+  [695] ST migration velocity bound=max -2.44 m/s metric= kind=expert
+== bjornn_reiser1991HabitatRequirements p.89: mixed ['unit']
+  [706] SALMONIDS spawning depth bound=min 18- cm metric= kind=expert
+  [707] SALMONIDS spawning velocity bound=range 0.3-3.0 m/s metric= kind=expert
+== bjornn_reiser1991HabitatRequirements p.94: mixed ['unit']
+  [703] CH spawning depth bound=min 0.45- m metric= kind=dist
+  [704] CH spawning depth bound=range 0.46-1.20 m metric= kind=dist
+  [705] CH spawning velocity bound=range 15-100 cm/s metric= kind=dist
+== bjornn_reiser1991HabitatRequirements p.95: mixed ['unit']
+  [696] CH spawning velocity bound=range 30-91 cm/s metric= kind=expert
+  [697] CH spawning velocity bound=range 30-91 cm/s metric= kind=expert
+  [698] CH spawning depth bound=min 30- cm metric= kind=expert
+  [699] CH spawning velocity bound=range 32-109 cm/s metric= kind=expert
+  [700] CO spawning velocity bound=range 30-91 cm/s metric= kind=expert
+  [701] SK spawning velocity bound=range 21-101 cm/s metric= kind=expert
+  [702] ST spawning velocity bound=range 40-91 cm/s metric= kind=expert
+== canada_departmentoffisheriesandoceans2019Recoverystrategy p.17: mixed ['unit']
+  [929] WCT spawning depth bound=range 0.10-0.75 m metric= kind=expert
+  [930] WCT spawning velocity bound=range 0.25-0.8 m/s metric= kind=expert
+  [931] WCT rearing velocity bound=range 0.01-0.4 m/s metric= kind=expert
+  [932] WCT rearing velocity bound=range 0.01-0.8 m/s metric= kind=expert
+== ford_etal1995LiteratureReviews p.47: mixed ['kind']
+  [958] RB rearing velocity bound=max -30 cm/s metric= kind=dist
+  [959] RB rearing velocity bound=optimum -8 cm/s metric= kind=pref
+== ford_etal1995LiteratureReviews p.52: mixed ['kind', 'unit']
+  [954] RB spawning velocity bound=optimum 30-90 cm/s metric= kind=expert
+  [955] RB spawning depth bound=optimum 0.15-2.5 m metric= kind=expert
+  [956] RB spawning velocity bound=range 50-90 cm/s metric= kind=dist
+  [957] RB spawning velocity bound=max -150 cm/s metric= kind=dist
+== ford_etal1995LiteratureReviews p.77: mixed ['unit']
+  [933] WCT spawning depth bound=range 17-20 cm metric= kind=dist
+  [934] WCT spawning velocity bound=range 30-36.7 cm/s metric= kind=dist
+== ford_etal1995LiteratureReviews p.78: mixed ['kind', 'unit']
+  [940] CT spawning depth bound=range 6-40 cm metric= kind=dist
+  [941] CT spawning velocity bound=max -91 cm/s metric= kind=dist
+  [942] CT spawning velocity bound=range 11-90 cm/s metric= kind=dist
+  [943] CT spawning velocity bound=optimum 30-60 cm/s metric= kind=expert
+== hagen_weber2019Limitingfactorsa p.19: mixed ['kind']
+  [878] BT rearing velocity bound=optimum -15 cm/s metric= kind=pref
+  [879] BT rearing velocity bound=max -30 cm/s metric= kind=expert
+  [880] BT rearing velocity bound=optimum 5-35 cm/s metric= kind=pref
+== hatfield_etal2002BritishColumbia p.41: mixed ['kind', 'metric', 'unit']
+  [819] FISH rearing instream_flow bound=min 20- percent MAD metric=unstated kind=expert
+  [820] FISH overwintering instream_flow bound=min 20- percent MAD metric=unstated kind=expert
+  [821] FISH incubation instream_flow bound=min 20- percent MAD metric=unstated kind=expert
+  [822] FISH migration instream_flow bound=min 30-200 percent MAD metric=unstated kind=expert
+  [823] FISH spawning instream_flow bound=min 30-200 percent MAD metric=unstated kind=expert
+  [824] FISH spawning instream_flow bound= -  metric= kind=qual
+  [825] ST migration instream_flow bound=range 50-100 percent MAD metric=unstated kind=expert
+== hubert_etal1985Habitatsuitability p.17: mixed ['unit']
+  [913] GR spawning velocity bound=range 1.1-4.8 ft/s metric= kind=dist
+  [914] GR spawning depth bound=range 0.5-3.0 ft metric= kind=dist
+== hubert_etal1985Habitatsuitability p.18: mixed ['unit']
+  [915] GR spawning depth bound=min 0.4- ft metric= kind=hsi
+  [916] GR spawning depth bound=optimum 1.0- ft metric= kind=hsi
+  [917] GR spawning velocity bound=min 0.5- ft/s metric= kind=hsi
+  [918] GR spawning velocity bound=optimum 1.0-3.0 ft/s metric= kind=hsi
+  [919] GR spawning velocity bound=max -4.0 ft/s metric= kind=hsi
+== keeley_slaney1996QuantitativeMeasures p.10: mixed ['unit']
+  [867] SALMONIDS spawning depth bound=min 10- cm metric= kind=expert
+  [868] SALMONIDS spawning velocity bound=min 10- cm/s metric= kind=expert
+== levy_slaney1993reviewhabitat p.12: mixed ['unit']
+  [720] CH spawning depth bound=min 24- cm metric= kind=expert
+  [721] CH spawning depth bound=min 24- cm metric= kind=expert
+  [722] CO spawning depth bound=min 18- cm metric= kind=expert
+  [723] SK spawning depth bound=min 15- cm metric= kind=expert
+  [724] ST spawning depth bound=min 24- cm metric= kind=expert
+  [938] CT spawning depth bound=min 6- cm metric= kind=expert
+  [939] CT spawning velocity bound=range 11-72 cm/s metric= kind=expert
+  [952] RB spawning depth bound=min 18- cm metric= kind=expert
+  [953] RB spawning velocity bound=range 48-91 cm/s metric= kind=expert
+== mcphail_baxter1996reviewbull p.6: mixed ['unit']
+  [881] BT spawning depth bound= 56.5-56.5 cm metric= kind=dist
+  [882] BT spawning velocity bound= 0.35-0.35 m/s metric= kind=dist
+  [883] BT spawning depth bound= 30.5-30.5 cm metric= kind=dist
+== neuman_newcombe1977MinimumAcceptable p.6: mixed ['kind', 'metric', 'unit']
+  [787] CO rearing velocity bound=optimum 0.7- ft/s metric= kind=pref
+  [788] FISH overwintering instream_flow bound=min 15- percent MAD metric=unstated kind=expert
+  [789] FISH rearing instream_flow bound=min 30- percent MAD metric=unstated kind=expert
+== ptolemy_lewis2002Rationalemultiple p.22: mixed ['unit']
+  [812] ST rearing instream_flow bound=optimum 4.0- m3/s metric=unstated kind=hsi
+  [813] ST rearing instream_flow bound=optimum 9.0- m3/s metric=unstated kind=hsi
+  [814] ST rearing instream_flow bound=optimum 48- percent MAD metric=unstated kind=hsi
+  [815] ST rearing instream_flow bound=optimum 0.19- m3/s metric=unstated kind=hsi
+  [816] ST rearing instream_flow bound=optimum 1.06- m3/s metric=unstated kind=hsi
+  [817] ST rearing instream_flow bound=optimum 128- percent MAD metric=unstated kind=hsi
+== ptolemy_lewis2002Rationalemultiple p.30: mixed ['kind', 'metric', 'unit']
+  [807] SALMONIDS spawning instream_flow bound=min 30-200 percent MAD metric=unstated kind=expert
+  [808] SALMONIDS migration instream_flow bound=min 30-200 percent MAD metric=unstated kind=expert
+  [809] SALMONIDS spawning instream_flow bound= -  metric= kind=qual
+  [818] SALMONIDS migration depth bound=min 24- cm metric= kind=expert
+== raleigh_etal1986HabitatSuitablility p.10: mixed ['kind']
+  [756] CH rearing velocity bound=optimum -50 cm/s metric= kind=dist
+  [757] CH rearing velocity bound=optimum 0.0-40 cm/s metric= kind=pref
+== raleigh_etal1986HabitatSuitablility p.34: mixed ['unit']
+  [729] CH spawning velocity bound=range 12.2-131.1 cm/s metric= kind=hsi
+  [730] CH spawning velocity bound=optimum 45.7-73.2 cm/s metric= kind=hsi
+  [731] CH spawning depth bound=min 15.2- cm metric= kind=hsi
+  [732] CH spawning depth bound=optimum 30.5- cm metric= kind=hsi
+== raleigh_etal1986HabitatSuitablility p.40: mixed ['unit']
+  [737] CH spawning velocity bound=range 21.3-137.2 cm/s metric= kind=hsi
+  [738] CH spawning depth bound=min 9.1- cm metric= kind=hsi
+== raleigh_etal1986HabitatSuitablility p.41: mixed ['unit']
+  [739] CH spawning velocity bound=range 0.5-4.0 ft/s metric= kind=hsi
+  [740] CH spawning depth bound=min 12.2- cm metric= kind=hsi
+== raleigh_etal1986HabitatSuitablility p.42: mixed ['unit']
+  [741] CH spawning velocity bound=range 9.1-137.2 cm/s metric= kind=hsi
+  [742] CH spawning depth bound=min 15.2- cm metric= kind=hsi
+== raleigh_etal1986HabitatSuitablility p.43: mixed ['unit']
+  [743] CH spawning velocity bound=range 9.1-155.4 cm/s metric= kind=hsi
+  [744] CH spawning depth bound=min 15.2- cm metric= kind=hsi
+== raleigh_etal1986HabitatSuitablility p.7: mixed ['kind', 'unit']
+  [751] CH spawning velocity bound=range 0.2-1.15 m/s metric= kind=expert
+  [752] CH spawning velocity bound=optimum 0.30-0.9 m/s metric= kind=expert
+  [753] CH spawning velocity bound=range 0.45-0.76 m/s metric= kind=dist
+  [754] CH spawning velocity bound=range 0.35-1.15 m/s metric= kind=dist
+  [755] SALMON spawning depth bound=min 0.2- m metric= kind=dist
+== roberge_etal2002LifeHistory p.67: mixed ['unit']
+  [781] ST spawning velocity bound=range 0.6-0.8 m/s metric= kind=dist
+  [782] ST spawning depth bound=range 0.2-1.5 m metric= kind=dist
+== roberge_etal2002LifeHistory p.80: mixed ['kind', 'unit']
+  [886] BT spawning depth bound=range 30-60 cm metric= kind=dist
+  [887] BT spawning velocity bound=max -0.7 m/s metric= kind=expert
+  [888] BT rearing velocity bound=optimum 0.1-0.28 m/s metric= kind=pref
+== stewart_etal2007Fishlife p.14: mixed ['unit']
+  [903] GR spawning velocity bound=max -150 cm/s metric= kind=dist
+  [904] GR spawning depth bound=max -1.0 m metric= kind=dist
+  [905] GR spawning depth bound=range 0.15-0.45 m metric= kind=dist
+  [906] GR spawning velocity bound=range 17-43 cm/s metric= kind=dist
+== stewart_etal2007Fishlife p.17: mixed ['kind']
+  [908] GR rearing velocity bound=max -80 cm/s metric= kind=dist
+  [909] GR rearing velocity bound=optimum 0-25 cm/s metric= kind=pref
+  [910] GR rearing velocity bound=range 15-25 cm/s metric= kind=dist
+== u_s_fishandwildlifeservice2007Flowhabitatrelationships p.59: mixed ['kind']
+  [858] CH spawning instream_flow bound=min 600- cfs metric=unstated kind=expert
+  [861] ST spawning instream_flow bound=optimum 200- cfs metric=unstated kind=hsi
+  [1013] RB spawning instream_flow bound=optimum 200- cfs metric=unstated kind=hsi
+== warkentin_etal2022Lowsummer p.8: mixed ['unit']
+  [863] CH rearing instream_flow bound=min 36- percent MAD metric=monthly_mean kind=param
+  [864] CH rearing instream_flow bound=min 17.2- m3/s metric=monthly_mean kind=param
+groups with mixed kind/metric/unit: 34

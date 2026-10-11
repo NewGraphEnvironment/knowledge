@@ -5,7 +5,7 @@
 #' `life_history_form` separates stream- and ocean-type Chinook and resident,
 #' fluvial and adfluvial bull trout; `migratory` is for a source that says
 #' "migratory" without separating fluvial from adfluvial. US units (`cfs`,
-#' `mi2`, `ft`) are kept as the source wrote them. Width units say
+#' `mi2`, `ft`, `ft/s`) are kept as the source wrote them. Width units say
 #' which width a source measured, because bankfull and wetted width are not
 #' interchangeable. `parameter` is the habitat-model parameter a row bears on,
 #' one of the model's own names, or blank. `kind` says what sort of number a row is: a parameter
@@ -32,6 +32,28 @@
 #' temperature is its own variable because models use it as a proxy for water
 #' temperature, and the two are not interchangeable.
 #'
+#' `discharge` is stream size: a flow statistic used to say how big a channel
+#' is, usually its mean annual discharge (MAD), the filter an intrinsic-potential
+#' model applies, sometimes a summer flow used the same way. `instream_flow` is a flow
+#' need: the water a life stage needs while it is in the stream, which the
+#' stage's window in [knw_timing_read()] places in the year. The two are not
+#' interchangeable, so of the two only `instream_flow` takes a `metric`, the
+#' statistic the flow is held to (an `instantaneous` flow, a daily or monthly
+#' mean, a monthly median, a `7day_low` average). A need written as a
+#' fraction of MAD is in `percent MAD`, which fits no other variable. A need
+#' written as a point in a flow distribution is a `percentile` (the 90th
+#' percentile is a high flow) or a `percent exceedance` (Q95, the flow exceeded
+#' 95 % of the time, is a low one); the two run in opposite directions, so the
+#' unit says which the source used, and the metric which flows were ranked. A
+#' `7day_low` row gives its return period (7Q2, 7Q10) in the note. A flow need
+#' is no model's stream-size filter, so it carries no `parameter` or `model_id`,
+#' and the `*_mad_*` parameters belong to `discharge` rows alone.
+#'
+#' `depth` and `velocity` are what a fish meets at a site (a redd, a passage
+#' riffle, a rearing position), in the unit the source wrote (`cm`, `ft`,
+#' `cm/s`, `ft/s` as well as `m` and `m/s`). A channel's bankfull depth is stream
+#' size, and is written in `m bankfull`.
+#'
 #' `groundwater` covers upwelling, hyporheic exchange and springs. It takes no
 #' unit, so a groundwater row carries no value: no source read so far gives an
 #' upwelling measure (a vertical hydraulic gradient, say).
@@ -48,14 +70,15 @@ knw_literature_vocab <- function() {
     variable = c("gradient", "channel_width", "stream_order", "discharge", "lake_area",
                  "wetland_area", "bridge_distance", "temperature", "substrate", "depth",
                  "velocity", "timing", "valley_width_index", "drainage_area", "elevation",
-                 "air_temperature", "degree_days", "groundwater"),
+                 "air_temperature", "degree_days", "groundwater", "instream_flow"),
     parameter = c("spawn_gradient_max", "spawn_gradient_min", "spawn_channel_width_min",
                   "spawn_mad_min", "rear_gradient_max", "rear_channel_width_min", "rear_mad_min",
                   "rear_mad_max", "rear_lake_ha_min", "rear_wetland_ha_min", "access_gradient_max",
                   "cluster_bridge_gradient", "cluster_bridge_distance"),
     bound = c("min", "max", "range", "optimum"),
     unit = c("percent", "m bankfull", "m wetted", "m", "order", "m3/s", "ha", "km", "degC",
-             "mm", "m/s", "MM-DD", "ratio", "km2", "cfs", "mi2", "ft", "degC-day"),
+             "mm", "m/s", "MM-DD", "ratio", "km2", "cfs", "mi2", "ft", "degC-day", "percent MAD",
+             "cm", "cm/s", "ft/s", "percentile", "percent exceedance"),
     metric = unique(unlist(.knw_metric_fits(), use.names = FALSE)),
     kind = c("param", "hsi", "max_obs", "dist", "pref", "expert", "lab", "qual", "none"),
     quote_source = c("text", "table", "ocr"),
@@ -63,13 +86,16 @@ knw_literature_vocab <- function() {
   )
 }
 
-# Which metrics each variable takes: a statistic of temperature, or the window a
-# degree-day total accumulates over. Variables not named here carry no metric.
+# Which metrics each variable takes: a statistic of temperature, the window a
+# degree-day total accumulates over, or the statistic a flow need is held to.
+# Variables not named here carry no metric.
 .knw_metric_fits <- function() {
   temp <- c("daily_max", "daily_mean", "mwmt", "7dadm", "mwat", "7dec", "weekly_mean",
             "monthly_mean", "august_mean", "summer_mean", "annual_mean", "constant", "unstated")
   list(temperature = temp, air_temperature = temp,
-       degree_days = c("growing_season", "to_hatch", "to_emergence", "annual", "unstated"))
+       degree_days = c("growing_season", "to_hatch", "to_emergence", "annual", "unstated"),
+       instream_flow = c("instantaneous", "daily_mean", "7day_low", "monthly_mean", "monthly_median",
+                         "unstated"))
 }
 
 #' Read the literature evidence table, filtered by species and variable
@@ -90,7 +116,7 @@ knw_literature_vocab <- function() {
 #' channel width, and so on) and a bound must sit on its value: `min` on
 #' `value_min`, `max` on `value_max`, `range` on both. A text quote is at least
 #' 20 characters, so that a check against the PDF can tell it apart from noise.
-#' A `temperature`, `air_temperature` or `degree_days` value needs a `metric`
+#' A `temperature`, `air_temperature`, `degree_days` or `instream_flow` value needs a `metric`
 #' that fits its variable, and a `none` row may name the metric it searched
 #' for; every other row leaves `metric` blank. A cited
 #' `degree_days` row needs a `note`, which gives the base temperature.
@@ -224,12 +250,27 @@ knw_literature_read <- function(path, species_code = NULL, variable = NULL) {
     stop("unit MM-DD belongs to timing rows only", first(unit_bad), call. = FALSE)
   }
 
+  # A flow need is no model's filter; a MAD parameter sizes a stream, so it sits on discharge only.
+  flow <- x$variable == "instream_flow"
+  modelled <- flow & (!is.na(x$parameter) | !is.na(x$model_id))
+  if (any(modelled)) {
+    stop("an instream_flow row is a flow need, not a model parameter: parameter and model_id ",
+         "stay blank", first(modelled), call. = FALSE)
+  }
+  mad_off <- grepl("_mad_", x$parameter) & x$variable != "discharge"
+  if (any(mad_off)) {
+    stop("parameter ", x$parameter[mad_off][1], " belongs to discharge rows, not ",
+         x$variable[mad_off][1], first(mad_off), call. = FALSE)
+  }
+
   fits <- list(gradient = "percent", channel_width = c("m bankfull", "m wetted", "m", "ft"),
                stream_order = "order", discharge = c("m3/s", "cfs"), lake_area = "ha", wetland_area = "ha",
-               bridge_distance = c("km", "m"), temperature = "degC", substrate = "mm", depth = "m",
-               velocity = "m/s", timing = "MM-DD", valley_width_index = "ratio",
+               bridge_distance = c("km", "m"), temperature = "degC", substrate = "mm",
+               depth = c("m", "cm", "ft", "m bankfull"), velocity = c("m/s", "cm/s", "ft/s"),
+               timing = "MM-DD", valley_width_index = "ratio",
                drainage_area = c("km2", "mi2"), elevation = c("m", "ft"),
                air_temperature = "degC", degree_days = "degC-day",
+               instream_flow = c("m3/s", "cfs", "percent MAD", "percentile", "percent exceedance"),
                # Qualitative until a source gives an upwelling measure: no unit fits, so no value can.
                groundwater = character(0))
   misfit <- !is.na(x$unit) & !mapply(function(v, u) u %in% fits[[v]], x$variable, x$unit)
@@ -264,6 +305,11 @@ knw_literature_read <- function(path, species_code = NULL, variable = NULL) {
   dd_bare <- !none & x$variable == "degree_days" & is.na(x$note)
   if (any(dd_bare)) {
     stop("a degree_days row needs a note giving the base temperature", first(dd_bare), call. = FALSE)
+  }
+  # A 7-day low flow at a 2-year and at a 10-year return period are different flows.
+  low7_bare <- !none & x$metric %in% "7day_low" & is.na(x$note)
+  if (any(low7_bare)) {
+    stop("a 7day_low row needs a note giving its return period", first(low7_bare), call. = FALSE)
   }
   need <- list(min = "value_min", max = "value_max")
   for (b in names(need)) {

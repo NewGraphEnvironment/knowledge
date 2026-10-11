@@ -55,8 +55,10 @@ wf_farm_priority.js                          farm priority/crossing tables out o
 --- Habitat literature (independent of the watershed-group flow) ---
 0270  build the group's Fisheries/habitat_modelling collection   --dry-run first, then live
       (--collection temperature: Fisheries/temperature, from data/temperature_members.csv)
+      (--collection flow: Fisheries/flow, from data/flow_members.csv and data/flow_additions.csv)
 0150  ACTION=build STORE=habitat_modelling COLLECTIONS="U9ZCZ6RN,chinook,bull_trout,..."  then ACTION=push
 0150  ACTION=build STORE=temperature COLLECTIONS=SW2RXUJC                                  then ACTION=push
+0150  ACTION=build STORE=flow COLLECTIONS=FWTJDD8Z                                         then ACTION=push
 0280  verify data/literature_evidence.csv and data/ip_model_registry.csv against their PDFs, and the
       model_id link between them (gate; read with knw_literature_read() / knw_ip_read())
 ```
@@ -323,7 +325,9 @@ The cited basis for CH and BT habitat thresholds (#19). Not per watershed group.
   (`data/habitat_modelling_additions.csv`: CrossRef by DOI, or grey-literature metadata, with a PDF URL or a
   standalone group attachment). `--collection <name>` builds another collection under Fisheries the same
   way, from `data/<name>_members.csv` (and `_additions.csv` if present); `Fisheries/temperature`
-  (`SW2RXUJC`, #38) is built that way. A member row may give a `pdf` (a URL, or a path from the repo root)
+  (`SW2RXUJC`, #38) and `Fisheries/flow` (`FWTJDD8Z`, #44) are built that way. An additions `pdf` may also
+  be a path from the repo root, for a PDF only a browser can fetch; such copies sit in the ignored
+  `data/rag/pdf/flow/`. A member row may give a `pdf` (a URL, or a path from the repo root)
   for an item no local library holds a PDF of, such as an analytic appendix printed from the web.
   A member whose group copy lacks a PDF gets one uploaded from any local library, with three limits:
   - only from an item with the same title, because citation keys are not unique across libraries;
@@ -335,12 +339,18 @@ The cited basis for CH and BT habitat thresholds (#19). Not per watershed group.
   locks the live file and an `immutable` read during a sync sees half-written pages. Re-runs are no-ops.
 - The store is built from that collection plus the species, temperature, hydrology and Wedzin Kwa collections,
   by `0150`. Wait for Zotero to sync `0270`'s writes, and check that the files are on disk, before building.
-  The `temperature` store is built from `Fisheries/temperature` alone (`COLLECTIONS=SW2RXUJC`).
+  The `temperature` store is built from `Fisheries/temperature` alone (`COLLECTIONS=SW2RXUJC`), and the `flow`
+  store from `Fisheries/flow` alone (`COLLECTIONS=FWTJDD8Z`). `Fisheries/flow` does not feed `habitat_modelling`
+  (the temperature collection does).
 - `data/literature_evidence.csv` has one row per value a source gives: species, stage, form, variable, the
   model parameter it bears on, bound, value, unit, `metric`, kind, region, key, page, verbatim quote,
   `quote_source`, scale, cited source and `model_id`. `kind = none` records a search that found nothing.
   Gradient is in percent. `metric` says which statistic a `temperature` or `air_temperature` value is, or the
-  window of a `degree_days` total (whose note gives the base temperature). `groundwater` (upwelling,
+  window of a `degree_days` total (whose note gives the base temperature), or the flow statistic an
+  `instream_flow` need is held to. `discharge` is stream size (usually MAD, the filter an IP model applies);
+  `instream_flow` is a flow need, in m3/s, cfs, `percent MAD`, a `percentile` or a `percent exceedance`, and
+  carries no model parameter. Depth and velocity are what a fish meets at a site, in the unit the source wrote
+  (`m`, `cm`, `ft`; `m/s`, `cm/s`, `ft/s`); a bankfull depth is `m bankfull`. `groundwater` (upwelling,
   hyporheic exchange, springs) takes no unit, so its rows are statements with no value.
 - `data/ip_model_registry.csv` has one row per intrinsic-potential model × species × stage. It records how the
   model sizes streams (`flow_metric`, `flow_source`, `flow_inputs`, `flow_surrogate`), its valley-confinement
@@ -354,7 +364,11 @@ The cited basis for CH and BT habitat thresholds (#19). Not per watershed group.
   parameter cell in its `COVERAGE` list must have a row, and every species × cell of its `THERMAL` grid
   (water-temperature upper and lower limits for spawning, incubation and rearing; degree-days to hatch, to
   emergence, and over the growing season for rearing and overwintering) must be met by a value, or by a
-  `none` row naming the bound or window searched. `EVIDENCE=`, `REGISTRY=` and `LOG=` check drafts
+  `none` row naming the bound or window searched. So must every species × cell of its `FLOW` grid (CH, CO, SK,
+  BT, GR, WCT, ST): a flow need for spawning, incubation, rearing, overwintering and migration, met by a
+  minimum, a span or an optimum; depth lower limits for spawning and migration (never a bankfull depth); and
+  velocity upper limits for spawning and rearing. SK has no rearing or overwintering flow cell and no rearing
+  velocity cell, because it rears in lakes. `EVIDENCE=`, `REGISTRY=` and `LOG=` check drafts
   without touching the committed logs.
 - Logs: `scripts/logs/habitat/`.
 

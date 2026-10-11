@@ -25,7 +25,8 @@ write after Zotero syncs, so it cannot make a re-run idempotent.
 A second input adds works the group library does not hold at all
 (data/habitat_modelling_additions.csv). A row with a DOI takes its metadata from
 CrossRef; a grey-literature row carries it. `pdf` is a URL (the body must start
-with %PDF) or `zotero:<attachment key>`, a standalone group PDF with no parent
+with %PDF), a path from the repo root (a PDF only a browser could fetch, kept in the
+ignored data/rag/pdf/), or `zotero:<attachment key>`, a standalone group PDF with no parent
 item, which gets a parent of its own. The standalone is left untouched: making
 it a child would drop it from its collections (a child cannot be a member), and
 the upload of the same bytes is deduplicated by md5.
@@ -334,8 +335,10 @@ def addition_item(row):
     """Web API JSON for an additions row (CrossRef when it has a DOI)."""
     if row["DOI"]:
         return crossref_item(row["DOI"])
+    # university and thesisType are a thesis's fields where a report has institution and reportType;
+    # an additions file without those columns simply never sets them.
     item = {k: row[k] for k in ("itemType", "title", "date", "institution", "reportNumber", "reportType",
-                                "place", "url") if row.get(k)}
+                                "university", "thesisType", "place", "url") if row.get(k)}
     item["creators"] = []
     for c in filter(None, (x.strip() for x in row["creators"].split(";"))):
         last, _, first = c.partition(",")
