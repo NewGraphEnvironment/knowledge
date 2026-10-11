@@ -112,7 +112,7 @@ Conventions a reader needs:
   survival percentages at single test temperatures; and the hybrid hatching failure. The report and the paper
   publish the same fitted growth and survival curves (identical coefficients), so the survival-curve UUILTs
   (19.6, 24.3 °C) and the optima are one estimate twice; the report's LD50-regression UUILTs (19.7, 24.2 °C) pool
-  all its experiments and are its own, and the two 7-d UUILTs differ in method and data. Rainbow trout values from both are coded `RB`, never `ST`.
+  all its experiments and are its own, and the two 7-d UUILTs differ in method. Rainbow trout values from both are coded `RB`, never `ST`.
 - **Hasnain et al.** (key thermal metrics for Canadian fishes) says every estimate comes from adults, so its
   lethal and growth values are not rearing values. Its cutthroat values are species-level, not westslope.
 - **OCR-garbled Bjornn & Reiser 1991 cells:** coho spawning 4.4–9.4 and incubation 4.4–13.3 °C, steelhead

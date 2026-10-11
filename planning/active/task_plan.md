@@ -69,5 +69,5 @@ own source's words, and each note names the other's value. A reader of `meets()`
 
 - [x] Tests pass (`0280` gate)
 - [x] `/code-check` clean (each commit, or once over the branch with `/code-check branch`)
-- [ ] PWF checkboxes match landed work
+- [x] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion
