@@ -47,7 +47,7 @@ own source's words, and each note names the other's value. A reader of `meets()`
 - [x] `data/temperature_members.csv`: on `bear_etal2007ComparativeThermal`, set `pdf` to the naturefilm URL; on `bear_etal2005ThermalRequirements`, set `pdf` to `data/rag/pdf/Thermal_Requirements_of_Westslope_Cutthroat_Trout.pdf`. Update both `source` texts
 - [x] `0270 --collection temperature --dry-run`, then the live run; log to `scripts/logs/habitat/2026101x_temperature_*`
 - [x] Confirm both uploads in the Web API (`has_pdf`), and once Zotero syncs, in a guarded copy of `zotero.sqlite`
-- [ ] Rebuild the `temperature` store (`OVERWRITE=TRUE`) and push it (`CONFIRM=TRUE`); verify on a fresh connect. Rebuild `habitat_modelling` too if the new items fall in its input collections
+- [x] Rebuild the `temperature` store (`OVERWRITE=TRUE`) and push it (`CONFIRM=TRUE`); verify on a fresh connect. Rebuild `habitat_modelling` too if the new items fall in its input collections
 
 ## Phase 2: Draft rows under the #38 brief
 - [x] Re-read `planning/archive/2026-10-issue-38-thermal-requirements/drafter-brief.md` and the CLAUDE.md drafting conventions. Check every convention against the source (#44's lesson)
@@ -58,8 +58,8 @@ own source's words, and each note names the other's value. A reader of `meets()`
 
 ## Phase 3: Meaning audit and gate
 - [x] Audit every new or changed row against the PDF: meaning, stage, kind, metric, bound, unit. Use an Explore/Plan-type reader for a blind second pass; write the findings to `planning/active/audit-*.md`
-- [ ] Fix, then audit the fixes. End by enumeration (each same-page group with mixed kind or metric is mixed by its own sentences)
-- [ ] `Rscript scripts/0280-literature-verify.R`: 0 failing quotes, thermal grid 50/50; log `scripts/logs/habitat/2026101x_literature_verify*`
+- [x] Fix, then audit the fixes. End by enumeration (each same-page group with mixed kind or metric is mixed by its own sentences)
+- [x] `Rscript scripts/0280-literature-verify.R`: 0 failing quotes, thermal grid 50/50; log `scripts/logs/habitat/2026101x_literature_verify*`
 
 ## Phase 4: Write-up
 - [x] Revise `research/thermal_requirements.md`: the WCT table rows (primary citation), the "Left out" Bear bullet, the degree-day paragraph and the consumer guidance; update the provenance line

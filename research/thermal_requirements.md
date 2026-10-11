@@ -34,8 +34,8 @@ temperature.
 
 `kind` separates what a number is: `param` (a value a model or standard sets, such as the Iacarella and
 Isaak thresholds), `expert` (a criterion or recommendation), `lab` (a laboratory or hatchery measurement:
-a lethal limit, CTmax, survival at a held temperature, a development time in degree-days), `dist` and
-`max_obs` (where fish were found), `pref` (a preference or optimum). Air-temperature rows (the IP models'
+a lethal limit, CTmax, survival or growth at a held temperature, including a growth optimum, a development time
+in degree-days), `dist` and `max_obs` (where fish were found), `pref` (a temperature fish select or prefer). Air-temperature rows (the IP models'
 proxies: Agrawal, Lindley, Boughton & Goslin, Weiss) are a separate variable and never stand in for a water
 limit.
 
@@ -84,7 +84,7 @@ Values a BC model would most likely use:
 | BT | rearing | 11 °C | `august_mean` | Isaak et al. 2015 (cold-water habitat) |
 | BT | rearing | 20.9 °C | `constant` | Selong et al. 2001 (UILT, age-0) |
 | BT | spawning | 9–10 °C at onset as temperatures fall | `unstated` | rows 149, 492, 508 (row 546 gives 9 °C onset without saying falling) |
-| WCT | rearing | 19.6 °C | `constant` | Bear et al. 2007 p. 1115 (60-d UUILT, juveniles; 19.7 °C by the 2005 report's LD50 regression) |
+| WCT | rearing | 19.6 °C | `constant` | Bear et al. 2007 p. 1115 (60-d UUILT, juveniles; the 2005 report's survival curve gives the same, its LD50 regression 19.7 °C) |
 | WCT | rearing | 13.6 °C optimum | `constant` | Bear et al. 2007 p. 1117, 2005 p. 11 (peak growth, satiation ration) |
 | WCT | rearing | 13–15 °C | `daily_max` | Bear et al. 2007 p. 1113 (suitable habitat; the lower end is stored) |
 | WCT | rearing | 16 °C / 20 °C | `daily_mean` / `daily_max` | Bear et al. 2005 p. 17 (maximum growth / survival) |
@@ -103,14 +103,14 @@ Conventions a reader needs:
 
 ## Left out, and why
 
-- **From Bear et al. 2005 and 2007** (#40): the WCT fundamental niche on p. 1119 of the paper, which cannot be
-  quoted (the page opens on the value, the text layer prints the degree sign as '8', and the OCR doubles the
-  dash; the 2005 report's p. 14 gives the same 10.6–14.6 °C and has a row); values Bear cites from other studies
-  (rainbow trout: Hokanson et al. 1977's 17.2 °C optimum and 25.6 °C 7-d UUILT, Kaya 1978's 26.2 °C; cutthroat
-  scope for activity: Dwyer & Kramer 1975, Hickman & Raleigh 1982); the
-  12–16 °C over which the report expects the two species to compete equally, and the paper's "exceeded 22°C for
-  even short periods" (competition, not a limit); survival percentages at single test temperatures; and the
-  hybrid hatching failure. Rainbow trout values from both are coded `RB`, never `ST`.
+- **From Bear et al. 2005 and 2007** (#40): rainbow trout values Bear cites from other studies only for comparison
+  (Hokanson et al. 1977's 17.2 °C optimum and 25.6 °C 7-d UUILT, Kaya 1978's 26.2 °C); cutthroat scope-for-activity
+  values (Dwyer & Kramer 1975, 15 °C; Hickman & Raleigh 1982, 12–15 °C), which are species-level like Hasnain's
+  (and Hickman & Raleigh is in the library to read directly); the 12–16 °C over which the report expects the two
+  species to compete equally, and the paper's "exceeded 22°C for even short periods" (competition, not a limit);
+  survival percentages at single test temperatures; and the hybrid hatching failure. The report and the paper
+  publish the same fitted curves (identical coefficients), so their 60-d UUILTs and optima are one estimate twice;
+  their 7-d UUILTs differ by method. Rainbow trout values from both are coded `RB`, never `ST`.
 - **Hasnain et al.** (key thermal metrics for Canadian fishes) says every estimate comes from adults, so its
   lethal and growth values are not rearing values. Its cutthroat values are species-level, not westslope.
 - **OCR-garbled Bjornn & Reiser 1991 cells:** coho spawning 4.4–9.4 and incubation 4.4–13.3 °C, steelhead
@@ -141,7 +141,8 @@ Conventions a reader needs:
   is "the median value between 7DADM and MWAT", so a weekly mean compared with it under-calls exceedance.
   For WCT rearing, Bear et al. 2005 recommends a maximum daily mean below 16 °C for growth (a weekly mean below
   16 °C does not show that every daily mean was), and both daily-maximum criteria (13–15 °C, 20 °C) need a daily
-  maximum; the 19.6 °C 60-d UUILT is a held-temperature limit, and the paper notes fish survive brief daily
-  excursions above a constant-temperature lethal limit.
+  maximum; the 19.6 °C 60-d UUILT is a held-temperature limit. The paper (p. 1118, citing other studies) notes that fish
+  allowed to recover at lower temperatures each day can survive brief exposure above such a limit, and lists the
+  untested fluctuating regime as a limitation of its own study.
   There is no degree-day threshold to gate segments on for any BC species. A GSDD layer can rank segments, but a cutoff
   would come from cutthroat in Colorado.

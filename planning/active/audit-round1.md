@@ -7,7 +7,7 @@ session transcript.
 | # | finding | disposition |
 |---|---|---|
 | 1 | "then had none" implies McMahon et al. 2007 now has a PDF; BT none notes lack the #40 sentence | fixed |
-| 2 | WCT 2007 niche verifies on the text layer (`10.6–14.68C`) | probed: see findings.md |
+| 2 | WCT 2007 niche verifies on the text layer (`10.6–14.68C`) | disproved for the text layer (`14.68` is one token); round 2 showed an OCR quote verifies, and the row is in |
 | 3 | 2007 WCT/RB pairs from one sentence use different fragments and do not note each other | fixed: shared quote where the gate accepts it, else notes cross-reference |
 | 4 | 2005 p. 17 pairs say "shares its sentence" but quote differently | fixed: one quote per pair |
 | 5 | "rounded upper lethal limit" is an inference; UUILT is on p. 1115 | fixed |
@@ -18,5 +18,5 @@ session transcript.
 | 10 | abstract row does not point at the Discussion row | fixed |
 | 11 | region "Montana (field)" unsupported for the RB clause; Sloat 2001 is the Madison River basin | fixed |
 | 12 | same programme reported twice; 2005 uses one WCT and one RB experiment, 2007 pools all | noted on the paired rows |
-| 13 | RB values Bear cites from Hokanson 1977 and Kaya 1978; CT scope-for-activity values | left out (secondary, outside #40); listed in research "Left out" |
-| 14 | Selong row 155 codes a growth optimum `pref`; Bear optima are `lab` | the research file defines `pref` as "a preference or optimum", so Bear optima recoded `pref` to match |
+| 13 | RB values Bear cites from Hokanson 1977 and Kaya 1978; CT scope-for-activity values | left out: comparison values for RB, and species-level cutthroat values (Hickman & Raleigh is in the library); listed in research "Left out" |
+| 14 | Selong row 155 codes a growth optimum `pref`; Bear optima are `lab` | round 1 recoded the Bear optima `pref`; round 2 reverted that: `pkg/R/literature.R` puts growth at held temperatures under `lab`, so Selong is recoded `lab` instead |

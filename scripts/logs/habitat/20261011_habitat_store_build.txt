@@ -1,0 +1,489 @@
+2026-10-11T18:44:25Z
+225 keys across 9 collections
+Ingesting 222 PDF(s) into data/rag/habitat_modelling.duckdb
+Launching 8 parallel workers.
+ℹ ingested: /Users/airvine/Zotero/storage/HYSNCHBC/distribution,_life_history,_abundance,_harvest,_habitat,_and_limiting_factors.pdf
+Ingesting ■                                  0% | ETA: 49m
+ℹ ingested: /Users/airvine/Zotero/storage/QPRTSFIP/Maxan_Watershed_Stream_Habitat_Restoration_Works_1998_99.pdf
+Ingesting ■                                  0% | ETA: 49mIngesting ■                                  1% | ETA: 48m
+ℹ ingested: /Users/airvine/Zotero/storage/JR7UUK2D/2004_“westslope”_cutthroat_trout_oncorhynchus_clarki_lewisi.pdf
+Ingesting ■                                  1% | ETA: 48mIngesting ■                                  1% | ETA: 46m
+ℹ ingested: /Users/airvine/Zotero/storage/RRKAD3VF/Agrawal et al. - PREDICTING THE POTENTIAL FOR HISTORICAL COHO, CHIN.pdf
+Ingesting ■                                  1% | ETA: 46mIngesting ■■                                 2% | ETA: 40m
+ℹ ingested: /Users/airvine/Zotero/storage/PE2LAN28/allendorf_and_hard_2009-human-induced_evolut.pdf
+Ingesting ■■                                 2% | ETA: 40mIngesting ■■                                 2% | ETA: 35m
+ℹ ingested: /Users/airvine/Zotero/storage/WCBEEM5F/araki_et_al._2008-fitness_of_hatchery‐.pdf
+Ingesting ■■                                 2% | ETA: 35mℹ ingested: /Users/airvine/Zotero/storage/AZAZIS76/rocky_creek_bull_tro.pdf
+Ingesting ■■                                 2% | ETA: 35mIngesting ■■                                 3% | ETA: 27m
+ℹ ingested: /Users/airvine/Zotero/storage/QNK6GJDJ/cttxrbt temp TAFS.pdf
+Ingesting ■■                                 3% | ETA: 27mIngesting ■■                                 4% | ETA: 28m
+ℹ ingested: /Users/airvine/Zotero/storage/EAIRTG7W/Aristizabal_et_al_2024.pdf
+Ingesting ■■                                 4% | ETA: 28mℹ ingested: /Users/airvine/Zotero/storage/H7XFPUPT/Thermal_Requirements_of_Westslope_Cutthroat_Trout.pdf
+Ingesting ■■                                 4% | ETA: 28mIngesting ■■                                 5% | ETA: 27m
+ℹ ingested: /Users/airvine/Zotero/storage/S6VURKKS/beechie_et_al._2005-a_classification_of.pdf
+Ingesting ■■                                 5% | ETA: 27mIngesting ■■                                 5% | ETA: 26m
+ℹ ingested: /Users/airvine/Zotero/storage/BL4BUBN2/berkeley_et_al._2004-fisheries_sustainabi.pdf
+Ingesting ■■                                 5% | ETA: 26mIngesting ■■■                                5% | ETA: 31m
+ℹ ingested: /Users/airvine/Zotero/storage/HKIGJGUK/beechie_imaki_2014_predicting_natural_channel_patterns_based_on_landscape_and_geomorphic_controls.pdf
+Ingesting ■■■                                5% | ETA: 31mIngesting ■■■                                6% | ETA: 31m
+ℹ ingested: /Users/airvine/Zotero/storage/D8SUD33G/Beamer et al. - FRESHWATER HABITAT REARING PREFERENCES FOR STREAM .pdf
+Ingesting ■■■                                6% | ETA: 31mℹ ingested: /Users/airvine/Zotero/storage/U8G996EB/Beechie_et_al_2021_Chehalis.pdf
+Ingesting ■■■                                6% | ETA: 31mIngesting ■■■                                7% | ETA: 27m
+ℹ ingested: /Users/airvine/Zotero/storage/KUGT5HMG/bjornn_reiser_1991_habitat_requirements_of_salmonids_in_streams.pdf
+Ingesting ■■■                                7% | ETA: 27mIngesting ■■■                                7% | ETA: 26m
+ℹ ingested: /Users/airvine/Zotero/storage/83HV9ERP/beamer_et_al_2013_juvenile_chinook_salmon_rearing_in_small_non-natal_streams_draining_into_the.pdf
+Ingesting ■■■                                7% | ETA: 26mℹ ingested: /Users/airvine/Zotero/storage/E7EHR4U6/bellido-leiva_et_al_2021_modeling_the_effect_of_habitat_availability_and_quality_on_endangered.pdf
+Ingesting ■■■                                7% | ETA: 26mIngesting ■■■                                8% | ETA: 24m
+ℹ ingested: /Users/airvine/Zotero/storage/BIRQARSC/bigler_et_al._1996-a_review_of_size_tre.pdf
+Ingesting ■■■                                8% | ETA: 24mIngesting ■■■■                               9% | ETA: 23m
+ℹ ingested: /Users/airvine/Zotero/storage/B6DIT3MZ/2023 - Management Plan for Bull Trout (Salvelinus conflue.pdf
+Ingesting ■■■■                               9% | ETA: 23mIngesting ■■■■                               9% | ETA: 23m
+ℹ ingested: /Users/airvine/Zotero/storage/ANG5ZQ7D/NOAA-TM-NMFS-SWFSC-391.pdf
+Ingesting ■■■■                               9% | ETA: 23mIngesting ■■■■                               9% | ETA: 23m
+ℹ ingested: /Users/airvine/Zotero/storage/3Y6CSY9E/bilski_et_al_2022_effects_of_in-channel_structure_on_chinook_salmon_spawning_habitat_and_embryo.pdf
+Ingesting ■■■■                               9% | ETA: 23mIngesting ■■■■                              10% | ETA: 22m
+ℹ ingested: /Users/airvine/Zotero/storage/VN9VNPUT/Brett - 1971 - Energetic Responses of Salmon to Temperature. A St.pdf
+Ingesting ■■■■                              10% | ETA: 22mIngesting ■■■■                              10% | ETA: 22m
+ℹ ingested: /Users/airvine/Zotero/storage/6RTZFCUJ/bradford_taylor_2023_diversity_in_freshwater_life_history_in_spring_and_summer_chinook_salmon_from.pdf
+Ingesting ■■■■                              10% | ETA: 22mℹ ingested: /Users/airvine/Zotero/storage/YNVSVLYD/res-petrosky1987_idaho_habitat_evaluation_for_off-site_mitigation_record.pdf.pdf
+Ingesting ■■■■                              10% | ETA: 22mIngesting ■■■■                              11% | ETA: 22m
+ℹ ingested: /Users/airvine/Zotero/storage/DQ933NVX/Burnett et al. - 2007 - DISTRIBUTION OF SALMON-HABITAT POTENTIAL RELATIVE .pdf
+Ingesting ■■■■                              11% | ETA: 22mIngesting ■■■■■                             12% | ETA: 21m
+ℹ ingested: /Users/airvine/Zotero/storage/96AXJY7C/busch_et_al_2011_landscape-level_model_to_predict_spawning_habitat_for_lower_columbia_river_fall.pdf
+Ingesting ■■■■■                             12% | ETA: 21mIngesting ■■■■■                             12% | ETA: 21m
+ℹ ingested: /Users/airvine/Zotero/storage/R5FECHUC/Fish_Population_Monitoring_in_Foxy_and_Buck_Creeks_September_1987.pdf
+Ingesting ■■■■■                             12% | ETA: 21mIngesting ■■■■■                             13% | ETA: 21m
+ℹ ingested: /Users/airvine/Zotero/storage/8D59ED96/Assessment_of_Benthic_Invertebrate_and_Juvenile_Fish_Populations_in_Foxy_and_Buck_Creeks__September_1984.pdf
+Ingesting ■■■■■                             13% | ETA: 21mIngesting ■■■■■                             13% | ETA: 21m
+ℹ ingested: /Users/airvine/Zotero/storage/4JE7FSM5/Environmental_Studies_on_the_Morice-Nanika_Watershed_Interim_Report__1975_.pdf
+Ingesting ■■■■■                             13% | ETA: 21mIngesting ■■■■■                             14% | ETA: 22m
+The PDF <_io.BytesIO object at 0x164b54720> contains a metadata field indicating that it should not allow text extraction. Ignoring this field and proceeding. Use the check_extractable if you want to raise an error in this case
+ℹ ingested: /Users/airvine/Zotero/storage/MDM2R2T3/carr-harris_et_al._2015-juvenile_salmon_usag.pdf
+Ingesting ■■■■■                             14% | ETA: 22mIngesting ■■■■■                             14% | ETA: 21m
+ℹ ingested: /Users/airvine/Zotero/storage/J7R4IL2R/A_Life_History_Model_for_Assessing_Alternative_Management_Policies_for_Depressed_Chinook_Salmon.pdf
+Ingesting ■■■■■                             14% | ETA: 21mIngesting ■■■■■                             14% | ETA: 21m
+ℹ ingested: /Users/airvine/Zotero/storage/I5I4NVBL/carr‐harris_et_al._2018-phenological_diversi.pdf
+Ingesting ■■■■■                             14% | ETA: 21mℹ ingested: /Users/airvine/Zotero/storage/ZHRNUFGC/Buddendorf et al. - 2019 - Integration of juvenile habitat quality and river .pdf
+Ingesting ■■■■■                             14% | ETA: 21mIngesting ■■■■■■                            15% | ETA: 20m
+ℹ ingested: /Users/airvine/Zotero/storage/XEHLWNEZ/cederholm_et_al._1999-pacific_salmon_carca.pdf
+Ingesting ■■■■■■                            15% | ETA: 20mIngesting ■■■■■■                            16% | ETA: 20m
+ℹ ingested: /Users/airvine/Zotero/storage/9R74HB5D/cayan_etal2001.pdf
+Ingesting ■■■■■■                            16% | ETA: 20mℹ ingested: /Users/airvine/Zotero/storage/RQKMCR5C/chalifour_et_al_2019_habitat_use_by_juvenile_salmon,_other_migratory_fish,_and_resident_fish_species.pdf
+Ingesting ■■■■■■                            16% | ETA: 20mIngesting ■■■■■■                            17% | ETA: 20m
+ℹ ingested: /Users/airvine/Zotero/storage/DJ9LTLTW/chasco_et_al._2017-competing_tradeoffs.pdf
+Ingesting ■■■■■■                            17% | ETA: 20mIngesting ■■■■■■                            17% | ETA: 20m
+ℹ ingested: /Users/airvine/Zotero/storage/JZKU8DVJ/chalifour_et_al_2021_chinook_salmon_exhibit_long-term_rearing_and_early_marine_growth_in_the_fraser.pdf
+Ingesting ■■■■■■                            17% | ETA: 20mIngesting ■■■■■■                            18% | ETA: 19m
+ℹ ingested: /Users/airvine/Zotero/storage/ZSHZUGLH/chezik_et_al_2014_fish_growth_and_degree-days_i_-_selecting_a_base_temperature_for_a.pdf
+Ingesting ■■■■■■                            18% | ETA: 19mIngesting ■■■■■■                            18% | ETA: 19m
+ℹ ingested: /Users/airvine/Zotero/storage/KFGV3I2W/chilcote_et_al._2011-reduced_recruitment.pdf
+Ingesting ■■■■■■                            18% | ETA: 19mIngesting ■■■■■■■                           18% | ETA: 20m
+ℹ ingested: /Users/airvine/Zotero/storage/ZLU8R3KR/christie_et_al._2014-on_the_reproductive.pdf
+Ingesting ■■■■■■■                           18% | ETA: 20mℹ ingested: /Users/airvine/Zotero/storage/PU3WN8XY/cleator_et_al_2009_information_relevant_to_a_recovery_potential_assessment_of_pure_native.pdf
+Ingesting ■■■■■■■                           18% | ETA: 20mIngesting ■■■■■■■                           19% | ETA: 20m
+ℹ ingested: /Users/airvine/Zotero/storage/LERIGKBU/coleman_fausch_2007_cold_summer_temperature_regimes_cause_a_recruitment_bottleneck_in_age‐0.pdf
+Ingesting ■■■■■■■                           19% | ETA: 20mIngesting ■■■■■■■                           20% | ETA: 20m
+ℹ ingested: /Users/airvine/Zotero/storage/VLM2M7IU/coleman_fausch_2007_cold_summer_temperature_limits_recruitment_of_age‐0_cutthroat_trout_in.pdf
+Ingesting ■■■■■■■                           20% | ETA: 20mIngesting ■■■■■■■                           20% | ETA: 20m
+ℹ ingested: /Users/airvine/Zotero/storage/QFWAZN7I/connors_et_al._2020-climate_and_competit.pdf
+Ingesting ■■■■■■■                           20% | ETA: 20mIngesting ■■■■■■■                           21% | ETA: 20m
+ℹ ingested: /Users/airvine/Zotero/storage/WEHQB6VT/Conover_Munch_2002_fisheries_yields.pdf
+Ingesting ■■■■■■■                           21% | ETA: 20mIngesting ■■■■■■■                           21% | ETA: 20m
+ℹ ingested: /Users/airvine/Zotero/storage/9WJMUK4F/canada_department_of_fisheries_and_oceans_2019_recovery_strategy_and_action_plan_for_the_westslope_cutthroat_trout.pdf
+Ingesting ■■■■■■■                           21% | ETA: 20mIngesting ■■■■■■■                           22% | ETA: 20m
+ℹ ingested: /Users/airvine/Zotero/storage/2FTXMV9X/cooney_holzer_2006_appendix_c_-_interior_columbia_basin_stream_type_chinook_salmon_and_steelhead.pdf
+Ingesting ■■■■■■■                           22% | ETA: 20mIngesting ■■■■■■■■                          22% | ETA: 19m
+ℹ ingested: /Users/airvine/Zotero/storage/2RG6PPBM/buckwalter_kirsch_2012_fish_inventory_and_anadromous_cataloging_in_the_upper_koyukuk_river_and.pdf
+Ingesting ■■■■■■■■                          22% | ETA: 19mIngesting ■■■■■■■■                          23% | ETA: 21m
+ℹ ingested: /Users/airvine/Zotero/storage/V3U4KPXZ/Cooper - AN ESTIMATION OF POTENTIAL SALMONID HABITAT CAPACI.pdf
+Ingesting ■■■■■■■■                          23% | ETA: 21mIngesting ■■■■■■■■                          23% | ETA: 21m
+ℹ ingested: /Users/airvine/Zotero/storage/CMD88QLJ/darimont_et_al._2009-human_predators_outp.pdf
+Ingesting ■■■■■■■■                          23% | ETA: 21mIngesting ■■■■■■■■                          23% | ETA: 21m
+ℹ ingested: /Users/airvine/Zotero/storage/HXQTCFBT/10.3354_meps12021.pdf
+Ingesting ■■■■■■■■                          23% | ETA: 21mIngesting ■■■■■■■■                          24% | ETA: 20m
+ℹ ingested: /Users/airvine/Zotero/storage/AMK8TKI9/david_et_al_2024_juvenile_pacific_salmonid_habitat_use_in_two_puget_sound_lowland_rivers.pdf
+Ingesting ■■■■■■■■                          24% | ETA: 20mIngesting ■■■■■■■■                          24% | ETA: 21m
+ℹ ingested: /Users/airvine/Zotero/storage/Y82SMA8H/cunningham_et_al._2018-signals_of_large_sca.pdf
+Ingesting ■■■■■■■■                          24% | ETA: 21mIngesting ■■■■■■■■                          25% | ETA: 22m
+ℹ ingested: /Users/airvine/Zotero/storage/ASSAK65D/cope_morris_2001_wigwam_river_juvenile_bull_trout_and_fish_habitat_monitoring_program_-_2000_data.pdf
+Ingesting ■■■■■■■■                          25% | ETA: 22mIngesting ■■■■■■■■■                         25% | ETA: 22m
+ℹ ingested: /Users/airvine/Zotero/storage/AG67BQWG/decker_hagen_the_distribution_and_abundance_of_juvenile_chinook_salmon_abundance_in_the.pdf
+Ingesting ■■■■■■■■■                         25% | ETA: 22mIngesting ■■■■■■■■■                         26% | ETA: 22m
+ℹ ingested: /Users/airvine/Zotero/storage/AR3EUPPU/bradford_et_al_2021_migration_and_distribution_of_juvenile_chinook_salmon_in_the_nechako_river,.pdf
+Ingesting ■■■■■■■■■                         26% | ETA: 22mIngesting ■■■■■■■■■                         26% | ETA: 22m
+ℹ ingested: /Users/airvine/Zotero/storage/72R34DQB/eaton_scheller1996.pdf
+Ingesting ■■■■■■■■■                         26% | ETA: 22mIngesting ■■■■■■■■■                         27% | ETA: 22m
+ℹ ingested: /Users/airvine/Zotero/storage/4ZSJWFQM/fp_cmer_01_103.pdf
+Ingesting ■■■■■■■■■                         27% | ETA: 22mIngesting ■■■■■■■■■                         27% | ETA: 22m
+ℹ ingested: /Users/airvine/Zotero/storage/LD9YANAN/DFO_Area_4_Annual_Report_1973.pdf
+Ingesting ■■■■■■■■■                         27% | ETA: 22mIngesting ■■■■■■■■■                         27% | ETA: 22m
+ℹ ingested: /Users/airvine/Zotero/storage/WBGNP2EZ/cope_2020_upper_fording_river_westslope_cutthroat_trout_population_monitoring_project_-.pdf
+Ingesting ■■■■■■■■■                         27% | ETA: 22mIngesting ■■■■■■■■■                         28% | ETA: 22m
+ℹ ingested: /Users/airvine/Zotero/storage/M2RPI3B4/Review_of_Escapement_Indicator_Streams_for_the_North_and_Central_Coast_Salmon_Monitoring_Program.pdf
+Ingesting ■■■■■■■■■                         28% | ETA: 22mℹ ingested: /Users/airvine/Zotero/storage/T3KBBEF3/ford_et_al_1995_literature_reviews_of_the_life_history,_habitat_requirements_and.pdf
+Ingesting ■■■■■■■■■                         28% | ETA: 22mIngesting ■■■■■■■■■■                        29% | ETA: 21m
+ℹ ingested: /Users/airvine/Zotero/storage/QDMCDW8E/Toward_a_Fish_habitat_Decision_on_the_Kemano_Completion_Project__A_Discussion_Paper.pdf
+Ingesting ■■■■■■■■■■                        29% | ETA: 21mℹ ingested: /Users/airvine/Zotero/storage/BYJDT5KW/Geist_etal_2002_hyporheic_zone.pdf
+Ingesting ■■■■■■■■■■                        29% | ETA: 21mIngesting ■■■■■■■■■■                        30% | ETA: 21m
+ℹ ingested: /Users/airvine/Zotero/storage/CDSVRG7N/Fogel_et_al_2022.pdf
+Ingesting ■■■■■■■■■■                        30% | ETA: 21mIngesting ■■■■■■■■■■                        30% | ETA: 21m
+ℹ ingested: /Users/airvine/Zotero/storage/ZVHBMXB5/Frankham_2005_genetics_extinction.pdf
+Ingesting ■■■■■■■■■■                        30% | ETA: 21mIngesting ■■■■■■■■■■                        31% | ETA: 21m
+The PDF <_io.BytesIO object at 0x169da2390> contains a metadata field indicating that it should not allow text extraction. Ignoring this field and proceeding. Use the check_extractable if you want to raise an error in this case
+ℹ ingested: /Users/airvine/Zotero/storage/S3M7ESPC/gilbert_et_al_2022_sub-hourly_water_temperature_data_collected_across_the_nechako_watershed,.pdf
+Ingesting ■■■■■■■■■■                        31% | ETA: 21mIngesting ■■■■■■■■■■                        31% | ETA: 21m
+ℹ ingested: /Users/airvine/Zotero/storage/KXDGTBTA/bulltroutguide.pdf
+Ingesting ■■■■■■■■■■                        31% | ETA: 21mIngesting ■■■■■■■■■■                        32% | ETA: 21m
+ℹ ingested: /Users/airvine/Zotero/storage/78LLNSMQ/Skeena_River_Chinook_Baseline_Sampling_2009.pdf
+Ingesting ■■■■■■■■■■                        32% | ETA: 21mIngesting ■■■■■■■■■■■                       32% | ETA: 20m
+ℹ ingested: /Users/airvine/Zotero/storage/K54BJ5V6/fisheries_and_oceans_canada_2005_canada's_policy_for_conservation_of_wild_pacific_salmon.pdf
+Ingesting ■■■■■■■■■■■                       32% | ETA: 20mIngesting ■■■■■■■■■■■                       32% | ETA: 21m
+ℹ ingested: /Users/airvine/Zotero/storage/QWEBSP4I/NOAA-TM-NMFS-SWFSC-382.pdf
+Ingesting ■■■■■■■■■■■                       32% | ETA: 21mIngesting ■■■■■■■■■■■                       33% | ETA: 21m
+ℹ ingested: /Users/airvine/Zotero/storage/NC5QSXCI/fwa_user_guide.pdf
+Ingesting ■■■■■■■■■■■                       33% | ETA: 21mIngesting ■■■■■■■■■■■                       33% | ETA: 21m
+ℹ ingested: /Users/airvine/Zotero/storage/D3EVGKV6/Gregersen - Juvenile Chinook Use of Non-natal Tributaries in t.pdf
+Ingesting ■■■■■■■■■■■                       33% | ETA: 21mIngesting ■■■■■■■■■■■                       34% | ETA: 21m
+ℹ ingested: /Users/airvine/Zotero/storage/T9T66BMG/Upper_Bulkley_River_and_Toboggan_Creek_Overwintering_Study_2000-2001.pdf
+Ingesting ■■■■■■■■■■■                       34% | ETA: 21mIngesting ■■■■■■■■■■■                       34% | ETA: 21m
+ℹ ingested: /Users/airvine/Zotero/storage/HP2PWVUQ/bustard_schell_2002_conserving_morice_watershed_fish_populations_and_their_habitat.pdf
+Ingesting ■■■■■■■■■■■                       34% | ETA: 21mIngesting ■■■■■■■■■■■                       35% | ETA: 21m
+ℹ ingested: /Users/airvine/Zotero/storage/V6CSVK29/hagen_et_al_2020_critical_spawning_habitats_and_abundance_of_bull_trout_in_the_williston.pdf
+Ingesting ■■■■■■■■■■■                       35% | ETA: 21mIngesting ■■■■■■■■■■■■                      35% | ETA: 21m
+ℹ ingested: /Users/airvine/Zotero/storage/ESH24A9J/Hagen et al. - 2015 - Critical habitats for bull trout and arctic grayli.pdf
+Ingesting ■■■■■■■■■■■■                      35% | ETA: 21mIngesting ■■■■■■■■■■■■                      36% | ETA: 20m
+ℹ ingested: /Users/airvine/Zotero/storage/4CPVMLBZ/hagen_and_sary_2023-bull_trout_habitat_i.pdf
+Ingesting ■■■■■■■■■■■■                      36% | ETA: 20mIngesting ■■■■■■■■■■■■                      36% | ETA: 20m
+ℹ ingested: /Users/airvine/Zotero/storage/W6LD4RRG/hall_et_al._2007-predicting_river_flo.pdf
+Ingesting ■■■■■■■■■■■■                      36% | ETA: 20mIngesting ■■■■■■■■■■■■                      36% | ETA: 20m
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+ℹ ingested: /Users/airvine/Zotero/storage/8U8PFG7S/hagen_et_al_a_precautionary_management_strategy_for_trout_and_char_in_streams_of_the_skeena.pdf
+Ingesting ■■■■■■■■■■■■                      36% | ETA: 20mIngesting ■■■■■■■■■■■■                      37% | ETA: 20m
+ℹ ingested: /Users/airvine/Zotero/storage/BCF7RZT9/PINE__56963.pdf
+Ingesting ■■■■■■■■■■■■                      37% | ETA: 20mCould not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+ℹ ingested: /Users/airvine/Zotero/storage/QEYKQ6V5/hilborn_et_al._2003-biocomplexity_and_fi.pdf
+Ingesting ■■■■■■■■■■■■                      37% | ETA: 20mCould not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Ingesting ■■■■■■■■■■■■                      38% | ETA: 20m
+ℹ ingested: /Users/airvine/Zotero/storage/JXD9K6KJ/poisson_fish-passage-22b.pdf
+Ingesting ■■■■■■■■■■■■                      38% | ETA: 20mCould not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Ingesting ■■■■■■■■■■■■                      38% | ETA: 19m
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+ℹ ingested: /Users/airvine/Zotero/storage/LR2RPPTP/hard_et_al._2008-evolutionary_consequ.pdf
+Ingesting ■■■■■■■■■■■■                      38% | ETA: 19mIngesting ■■■■■■■■■■■■■                     39% | ETA: 19m
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+ℹ ingested: /Users/airvine/Zotero/storage/QGP4DA98/hasnain_et_al_key_ecological_temperature_metrics_for_canadian_freshwater_fishes.pdf
+Ingesting ■■■■■■■■■■■■■                     39% | ETA: 19mIngesting ■■■■■■■■■■■■■                     39% | ETA: 19m
+ℹ ingested: /Users/airvine/Zotero/storage/EZSJEH5B/poisson_skeena-stream-temp-25.pdf
+Ingesting ■■■■■■■■■■■■■                     39% | ETA: 19mℹ ingested: /Users/airvine/Zotero/storage/SDQ3D9XR/Iacarella and Weller - 2024 - Predicting favourable streams for anadromous salmo.pdf
+Ingesting ■■■■■■■■■■■■■                     39% | ETA: 19mIngesting ■■■■■■■■■■■■■                     40% | ETA: 19m
+ℹ ingested: /Users/airvine/Zotero/storage/5BBRI7JG/rmrs_2015_isaak_d001.pdf
+Ingesting ■■■■■■■■■■■■■                     40% | ETA: 19mIngesting ■■■■■■■■■■■■■                     41% | ETA: 19m
+ℹ ingested: /Users/airvine/Zotero/storage/I6HJU2U9/kang_etal2016.pdf
+Ingesting ■■■■■■■■■■■■■                     41% | ETA: 19mIngesting ■■■■■■■■■■■■■                     41% | ETA: 19m
+ℹ ingested: /Users/airvine/Zotero/storage/2MYBKAEB/Isaak et al. - 2017 - The NorWeST Summer Stream Temperature Model and Sc.pdf
+Ingesting ■■■■■■■■■■■■■                     41% | ETA: 19mℹ ingested: /Users/airvine/Zotero/storage/2BWUEY8C/iacarella_et_al_2024-projecting_exceedanc.pdf
+Ingesting ■■■■■■■■■■■■■                     41% | ETA: 19mIngesting ■■■■■■■■■■■■■■                    42% | ETA: 19m
+ℹ ingested: /Users/airvine/Zotero/storage/6K38RIEW/katz_et_al_2017_floodplain_farm_fields_provide_novel_rearing_habitat_for_chinook_salmon.pdf
+Ingesting ■■■■■■■■■■■■■■                    42% | ETA: 19mIngesting ■■■■■■■■■■■■■■                    42% | ETA: 18m
+ℹ ingested: /Users/airvine/Zotero/storage/JP5EUIR9/johnson_et_al_2017_science_advancements_key_to_increasing_management_value_of_life_stage.pdf
+Ingesting ■■■■■■■■■■■■■■                    42% | ETA: 18mIngesting ■■■■■■■■■■■■■■                    43% | ETA: 18m
+ℹ ingested: /Users/airvine/Zotero/storage/XX7CDJB3/Harris - 2011 - Yinka dinii ha ba ten, the ways of the people of the earth a social-ecological framework for sustai.pdf
+Ingesting ■■■■■■■■■■■■■■                    43% | ETA: 18mIngesting ■■■■■■■■■■■■■■                    43% | ETA: 18m
+ℹ ingested: /Users/airvine/Zotero/storage/GAWCYSY5/keeley_slaney_1996_quantitative_measures_of_rearing_and_spawning_habitat_characteristics_for.pdf
+Ingesting ■■■■■■■■■■■■■■                    43% | ETA: 18mIngesting ■■■■■■■■■■■■■■                    44% | ETA: 18m
+ℹ ingested: /Users/airvine/Zotero/storage/JQPBUZAS/hagen_and_weber_limiting_factors_en.pdf
+Ingesting ■■■■■■■■■■■■■■                    44% | ETA: 18mIngesting ■■■■■■■■■■■■■■                    44% | ETA: 18m
+ℹ ingested: /Users/airvine/Zotero/storage/IWZGYUP7/keefer_peery_2008_a_literature_review_relevant_to_the_juvenile_fall_chinook_salmon_habitat_use,.pdf
+Ingesting ■■■■■■■■■■■■■■                    44% | ETA: 18mIngesting ■■■■■■■■■■■■■■                    45% | ETA: 18m
+ℹ ingested: /Users/airvine/Zotero/storage/I8DV96F4/knowles_etal2006.pdf
+Ingesting ■■■■■■■■■■■■■■                    45% | ETA: 18mIngesting ■■■■■■■■■■■■■■■                   45% | ETA: 18m
+ℹ ingested: /Users/airvine/Zotero/storage/BTWZNAEF/koehler_et_al_2006_diet_and_bioenergetics_of_lake-rearing_juvenile_chinook_salmon_in_lake.pdf
+Ingesting ■■■■■■■■■■■■■■■                   45% | ETA: 18mℹ ingested: /Users/airvine/Zotero/storage/PZM2UKF6/kondolf_wolman_1993_the_sizes_of_salmonid_spawning_gravels.pdf
+Ingesting ■■■■■■■■■■■■■■■                   45% | ETA: 18mIngesting ■■■■■■■■■■■■■■■                   46% | ETA: 17m
+ℹ ingested: /Users/airvine/Zotero/storage/XXK3PP36/kouki_etal2023.pdf
+Ingesting ■■■■■■■■■■■■■■■                   46% | ETA: 17mIngesting ■■■■■■■■■■■■■■■                   46% | ETA: 17m
+ℹ ingested: /Users/airvine/Zotero/storage/T4LIG238/Concepts_and_Approaches_to_WSP_Benchmarks_and_Managing_Mixed-Stock_Fisheries.pdf
+Ingesting ■■■■■■■■■■■■■■■                   46% | ETA: 17mIngesting ■■■■■■■■■■■■■■■                   47% | ETA: 17m
+ℹ ingested: /Users/airvine/Zotero/storage/S35QF3WZ/Kubo - 2021 - Snoqualmie River Juvenile Chinook with Extended Fr.pdf
+Ingesting ■■■■■■■■■■■■■■■                   47% | ETA: 17mIngesting ■■■■■■■■■■■■■■■                   47% | ETA: 17m
+ℹ ingested: /Users/airvine/Zotero/storage/7DH9UZPM/Kuparinen_Merila_2007_fisheries_evolution.pdf
+Ingesting ■■■■■■■■■■■■■■■                   47% | ETA: 17mIngesting ■■■■■■■■■■■■■■■                   48% | ETA: 17m
+ℹ ingested: /Users/airvine/Zotero/storage/DJEDBKZF/kuparinen_et_al_2012_increasing_biological_realism_of_fisheries_stock_assessment_-_towards.pdf
+Ingesting ■■■■■■■■■■■■■■■                   48% | ETA: 17mIngesting ■■■■■■■■■■■■■■■                   48% | ETA: 17m
+ℹ ingested: /Users/airvine/Zotero/storage/MFLSBMLI/kirsch_et_al_2014_fish_inventory_and_anadromous_cataloging_in_the_susitna_river,_matanuska_river,.pdf
+Ingesting ■■■■■■■■■■■■■■■                   48% | ETA: 17mIngesting ■■■■■■■■■■■■■■■■                  49% | ETA: 16m
+ℹ ingested: /Users/airvine/Zotero/storage/SURDQLER/levy_and_slaney_1993-a_review_of_habitat.pdf
+Ingesting ■■■■■■■■■■■■■■■■                  49% | ETA: 16mIngesting ■■■■■■■■■■■■■■■■                  49% | ETA: 17m
+ℹ ingested: /Users/airvine/Zotero/storage/EBH7SSCC/Levy and Nicklin - A report prepared by the Upper Fraser Fisheries Co.pdf
+Ingesting ■■■■■■■■■■■■■■■■                  49% | ETA: 17mIngesting ■■■■■■■■■■■■■■■■                  50% | ETA: 16m
+The PDF <_io.BytesIO object at 0x153b331a0> contains a metadata field indicating that it should not allow text extraction. Ignoring this field and proceeding. Use the check_extractable if you want to raise an error in this case
+ℹ ingested: /Users/airvine/Zotero/storage/LPHW4H7L/lewis_et_al._2015-changes_in_size_and.pdf
+Ingesting ■■■■■■■■■■■■■■■■                  50% | ETA: 16mIngesting ■■■■■■■■■■■■■■■■                  50% | ETA: 16m
+The PDF <_io.BytesIO object at 0x317409350> contains a metadata field indicating that it should not allow text extraction. Ignoring this field and proceeding. Use the check_extractable if you want to raise an error in this case
+ℹ ingested: /Users/airvine/Zotero/storage/TQXEBRML/litzow_et_al._2018-non-stationary_clima.pdf
+Ingesting ■■■■■■■■■■■■■■■■                  50% | ETA: 16mIngesting ■■■■■■■■■■■■■■■■                  50% | ETA: 16m
+ℹ ingested: /Users/airvine/Zotero/storage/CKSCTGKS/Summary_of_The_Moricetown_Falls_Steelhead_Release_Project__1992.pdf
+Ingesting ■■■■■■■■■■■■■■■■                  50% | ETA: 16mIngesting ■■■■■■■■■■■■■■■■                  51% | ETA: 16m
+ℹ ingested: /Users/airvine/Zotero/storage/BNUTP2W8/lusardi_et_al_2020_oversummer_growth_and_survival_of_juvenile_coho_salmon_(_ioncorhynchus.pdf
+Ingesting ■■■■■■■■■■■■■■■■                  51% | ETA: 16mIngesting ■■■■■■■■■■■■■■■■                  51% | ETA: 17m
+ℹ ingested: /Users/airvine/Zotero/storage/29GGHHZK/Lewis - Literature Review of Habitat Productivity Models f.pdf
+Ingesting ■■■■■■■■■■■■■■■■                  51% | ETA: 17mIngesting ■■■■■■■■■■■■■■■■■                 52% | ETA: 17m
+ℹ ingested: /Users/airvine/Zotero/storage/E225SSFG/macisaac_2010_salmonids_and_the_hydrologic_and_geomorphic_features_of_their_spawning_streams.pdf
+Ingesting ■■■■■■■■■■■■■■■■■                 52% | ETA: 17mIngesting ■■■■■■■■■■■■■■■■■                 52% | ETA: 16m
+ℹ ingested: /Users/airvine/Zotero/storage/5J6W8GS8/lewis_literature_review_of.pdf
+Ingesting ■■■■■■■■■■■■■■■■■                 52% | ETA: 16mIngesting ■■■■■■■■■■■■■■■■■                 53% | ETA: 17m
+ℹ ingested: /Users/airvine/Zotero/storage/GK6ZWSHV/FileHandler.ashxDocumentID=33035.pdf
+Ingesting ■■■■■■■■■■■■■■■■■                 53% | ETA: 17mIngesting ■■■■■■■■■■■■■■■■■                 53% | ETA: 16m
+ℹ ingested: /Users/airvine/Zotero/storage/NU9WTTE5/Mackas_etal_2007_zooplankton.pdf
+Ingesting ■■■■■■■■■■■■■■■■■                 53% | ETA: 16mIngesting ■■■■■■■■■■■■■■■■■                 54% | ETA: 16m
+ℹ ingested: /Users/airvine/Zotero/storage/6Q6F6FDG/Malcolm_etal_2004_hyporheic.pdf
+Ingesting ■■■■■■■■■■■■■■■■■                 54% | ETA: 16mIngesting ■■■■■■■■■■■■■■■■■                 54% | ETA: 16m
+ℹ ingested: /Users/airvine/Zotero/storage/Z97ETIAH/maslin_mckinnev_1998_intermittent_streams_as_rearing_habitat_for_sacramento_river_chinook_salmon.pdf
+Ingesting ■■■■■■■■■■■■■■■■■                 54% | ETA: 16mIngesting ■■■■■■■■■■■■■■■■■                 55% | ETA: 16m
+ℹ ingested: /Users/airvine/Zotero/storage/MSNWFI5G/Malcolm et al. - 2019 - Development of a large-scale juvenile density mode.pdf
+Ingesting ■■■■■■■■■■■■■■■■■                 55% | ETA: 16mIngesting ■■■■■■■■■■■■■■■■■                 55% | ETA: 16m
+ℹ ingested: /Users/airvine/Zotero/storage/X2LCNIWM/mcphail_carveth_1993_field_key_to_the_freshwater_fishes_of_british_columbia.pdf
+Ingesting ■■■■■■■■■■■■■■■■■                 55% | ETA: 16mℹ ingested: /Users/airvine/Zotero/storage/PGPUMM56/macpherson_et_al_2024-prioritizing_bull_tr.pdf
+Ingesting ■■■■■■■■■■■■■■■■■                 55% | ETA: 16mℹ ingested: /Users/airvine/Zotero/storage/RAGCMYNG/Prospects_for_the_1948_Salmon_Catch_on_the_Skeena_River.pdf
+Ingesting ■■■■■■■■■■■■■■■■■                 55% | ETA: 16mIngesting ■■■■■■■■■■■■■■■■■■                56% | ETA: 15m
+ℹ ingested: /Users/airvine/Zotero/storage/VNEHCXY8/mitchell_and_cunjak_2007-stream_flow_salmon.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■                56% | ETA: 15mIngesting ■■■■■■■■■■■■■■■■■■                57% | ETA: 15m
+ℹ ingested: /Users/airvine/Zotero/storage/HKTCPDVJ/PEA_F22_F_3388_1664380292568_8FCE11DCCD.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■                57% | ETA: 15mIngesting ■■■■■■■■■■■■■■■■■■                57% | ETA: 15m
+ℹ ingested: /Users/airvine/Zotero/storage/H4AUSEV7/App67_RevBT_LifeHist.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■                57% | ETA: 15mℹ ingested: /Users/airvine/Zotero/storage/QBH3QW8X/ctpaper.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■                57% | ETA: 15mIngesting ■■■■■■■■■■■■■■■■■■                58% | ETA: 14m
+ℹ ingested: /Users/airvine/Zotero/storage/W2U6VHID/Assessing_estuaries_as_stopover_habitats_for_juvenile_Pacific_salmon.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■                58% | ETA: 14mIngesting ■■■■■■■■■■■■■■■■■■■               59% | ETA: 14m
+ℹ ingested: /Users/airvine/Zotero/storage/G9IRM42Z/mote_etal2005.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■               59% | ETA: 14mIngesting ■■■■■■■■■■■■■■■■■■■               59% | ETA: 14m
+ℹ ingested: /Users/airvine/Zotero/storage/WGGHDF69/Moore_etal_2005_riparian_microclimate.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■               59% | ETA: 14mIngesting ■■■■■■■■■■■■■■■■■■■               59% | ETA: 14m
+ℹ ingested: /Users/airvine/Zotero/storage/795S46XY/Katopodis and Gervais - Fish swimming performance database and analyses.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■               59% | ETA: 14mℹ ingested: /Users/airvine/Zotero/storage/S89CA359/neuman_newcombe_1977_minimum_acceptable_stream_flows_in_british_columbia_-_a_review.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■               59% | ETA: 14mIngesting ■■■■■■■■■■■■■■■■■■■               60% | ETA: 14m
+ℹ ingested: /Users/airvine/Zotero/storage/RF8T96WK/Skeena_River_Estuary_Synthesis_Report.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■               60% | ETA: 14mIngesting ■■■■■■■■■■■■■■■■■■■               61% | ETA: 13m
+ℹ ingested: /Users/airvine/Zotero/storage/DEV98ZWA/mote_etal2018.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■               61% | ETA: 13mℹ ingested: /Users/airvine/Zotero/storage/HP8PAHM8/Nickelson_etal_1992_juvenile_coho.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■               61% | ETA: 13mIngesting ■■■■■■■■■■■■■■■■■■■■              62% | ETA: 13m
+ℹ ingested: /Users/airvine/Zotero/storage/86UTHAUJ/meehan_1982_apa_doc_no._670.pdf.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■              62% | ETA: 13mIngesting ■■■■■■■■■■■■■■■■■■■■              62% | ETA: 13m
+ℹ ingested: /Users/airvine/Zotero/storage/MRPUF7JW/norris_mount_2016_fish_passage_gis_analysis_version_2.2_–_methodology_and_output_data.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■              62% | ETA: 13mIngesting ■■■■■■■■■■■■■■■■■■■■              63% | ETA: 13m
+ℹ ingested: /Users/airvine/Zotero/storage/G6HTX538/clim-jcli-d-16-0189.1.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■              63% | ETA: 13mIngesting ■■■■■■■■■■■■■■■■■■■■              63% | ETA: 13m
+ℹ ingested: /Users/airvine/Zotero/storage/35LF4EM9/ohlberger_et_al._2016-population_coherence.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■              63% | ETA: 13mIngesting ■■■■■■■■■■■■■■■■■■■■              64% | ETA: 13m
+ℹ ingested: /Users/airvine/Zotero/storage/595X8N4N/o’connor_et_al_2025-investigating_therma.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■              64% | ETA: 13mIngesting ■■■■■■■■■■■■■■■■■■■■              64% | ETA: 13m
+ℹ ingested: /Users/airvine/Zotero/storage/MWVM4AAK/office_of_the_wet'suwet'en_et_al._2013-morice_fish_and_aqua.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■              64% | ETA: 13mIngesting ■■■■■■■■■■■■■■■■■■■■              64% | ETA: 13m
+ℹ ingested: /Users/airvine/Zotero/storage/F7Y3V6HX/1988-1989_Toboggan_Creek_Hatchery_Annual_Report.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■              64% | ETA: 13mℹ ingested: /Users/airvine/Zotero/storage/VFUKEE7X/obrian_1999_bulltrout.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■              64% | ETA: 13mIngesting ■■■■■■■■■■■■■■■■■■■■■             65% | ETA: 12m
+ℹ ingested: /Users/airvine/Zotero/storage/U3S8JU8T/Naish_etal_2007_hatcheries.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■             65% | ETA: 12mIngesting ■■■■■■■■■■■■■■■■■■■■■             66% | ETA: 12m
+ℹ ingested: /Users/airvine/Zotero/storage/WKCWDDSF/Partridge and Platts - 1978 - Rearing of chinook salmon in tributaries of the So.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■             66% | ETA: 12mIngesting ■■■■■■■■■■■■■■■■■■■■■             66% | ETA: 12m
+ℹ ingested: /Users/airvine/Zotero/storage/9FAFD28T/office_of_the_wet'suwet'en_2013_wet’suwet’en_title_and_rights_regarding_canada_department_of_fisheries_&_oceans.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■             66% | ETA: 12mIngesting ■■■■■■■■■■■■■■■■■■■■■             67% | ETA: 12m
+ℹ ingested: /Users/airvine/Zotero/storage/75GQ6DVS/Skeena_Fish_Populations_and_their_Habitat.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■             67% | ETA: 12mIngesting ■■■■■■■■■■■■■■■■■■■■■             67% | ETA: 11m
+ℹ ingested: /Users/airvine/Zotero/storage/IQ89I7BK/gottesfeld_rabnett_2007_skeena_fish_populations_and_their_habitat.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■             67% | ETA: 11mIngesting ■■■■■■■■■■■■■■■■■■■■■             68% | ETA: 11m
+ℹ ingested: /Users/airvine/Zotero/storage/2KLCLSEA/peterman_and_dorner_2012-a_widespread_decreas.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■             68% | ETA: 11mℹ ingested: /Users/airvine/Zotero/storage/6N5KTSRK/The_Unusual_Nature_of_Recent_Snowpack_Declines_in_.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■             68% | ETA: 11mIngesting ■■■■■■■■■■■■■■■■■■■■■■            68% | ETA: 11m
+ℹ ingested: /Users/airvine/Zotero/storage/SKDHJJFE/oke_et_al._2020-recent_declines_in_s.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■            68% | ETA: 11mIngesting ■■■■■■■■■■■■■■■■■■■■■■            69% | ETA: 11m
+ℹ ingested: /Users/airvine/Zotero/storage/QMY6FLX6/porter_et_al_2000_predictive_models_of_fish_species_distribution_in_the_blackwater_drainage,.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■            69% | ETA: 11mIngesting ■■■■■■■■■■■■■■■■■■■■■■            69% | ETA: 10m
+ℹ ingested: /Users/airvine/Zotero/storage/X5JAB47F/Phillis et al. - 2018 - Endangered winter-run Chinook salmon rely on diver.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■            69% | ETA: 10mℹ ingested: /Users/airvine/Zotero/storage/X34H5XBB/ecohealth_watersheds.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■            69% | ETA: 10mIngesting ■■■■■■■■■■■■■■■■■■■■■■            70% | ETA: 10m
+ℹ ingested: /Users/airvine/Zotero/storage/A6L62ZM9/Morice-Nanika_Sockeye_Recovery_Plan__Backgrounder.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■            70% | ETA: 10mℹ ingested: /Users/airvine/Zotero/storage/RGFJIYCB/ohlberger_et_al._2018-demographic_changes.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■            70% | ETA: 10mIngesting ■■■■■■■■■■■■■■■■■■■■■■            71% | ETA: 10m
+ℹ ingested: /Users/airvine/Zotero/storage/UFWBXRJF/Pollock_etal_2014_beaver_dams.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■            71% | ETA: 10mIngesting ■■■■■■■■■■■■■■■■■■■■■■            72% | ETA: 10m
+ℹ ingested: /Users/airvine/Zotero/storage/8TBUU4P8/porter_et_al_2010_predictive_models_of_fish_species_distribution_in_the_blackwater_drainage,.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■            72% | ETA: 10mIngesting ■■■■■■■■■■■■■■■■■■■■■■■           72% | ETA:  9m
+ℹ ingested: /Users/airvine/Zotero/storage/7MIDATR9/Pike - 2010 - Compendium of forest hydrology and geomorphology i.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■           72% | ETA:  9mIngesting ■■■■■■■■■■■■■■■■■■■■■■■           73% | ETA:  9m
+ℹ ingested: /Users/airvine/Zotero/storage/WWN7VXP8/BC_report_formatted_final.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■           73% | ETA:  9mIngesting ■■■■■■■■■■■■■■■■■■■■■■■           73% | ETA:  9m
+ℹ ingested: /Users/airvine/Zotero/storage/GZSJ78D2/FSP_Y081231.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■           73% | ETA:  9mIngesting ■■■■■■■■■■■■■■■■■■■■■■■           73% | ETA:  9m
+ℹ ingested: /Users/airvine/Zotero/storage/B2CG8AE7/psf_habitat_report_cards_2021.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■           73% | ETA:  9mIngesting ■■■■■■■■■■■■■■■■■■■■■■■           74% | ETA:  9m
+ℹ ingested: /Users/airvine/Zotero/storage/RTU4TMRG/richter_kolmes2005.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■           74% | ETA:  9mℹ ingested: /Users/airvine/Zotero/storage/84RSVVEU/Water_Quality_in_the_Toboggan_Creek_Watershed_1996-1998__are_Land_Use_Activities_Affecting_Water_Quality_and_Salmonid_Health_.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■           74% | ETA:  9mIngesting ■■■■■■■■■■■■■■■■■■■■■■■           75% | ETA:  8m
+ℹ ingested: /Users/airvine/Zotero/storage/KRY35LK2/retzer_spawning_and_rearing.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■           75% | ETA:  8mIngesting ■■■■■■■■■■■■■■■■■■■■■■■■          75% | ETA:  8m
+ℹ ingested: /Users/airvine/Zotero/storage/DHMB3NJT/raleigh_et_al_1986_habitat_suitablility_index_models_and_instream_flow_suitability_curves_-_chinook.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■          75% | ETA:  8mIngesting ■■■■■■■■■■■■■■■■■■■■■■■■          76% | ETA:  8m
+ℹ ingested: /Users/airvine/Zotero/storage/HM57BC44/Richter_Kolmes_2005_temp_limits.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■          76% | ETA:  8mIngesting ■■■■■■■■■■■■■■■■■■■■■■■■          76% | ETA:  8m
+ℹ ingested: /Users/airvine/Zotero/storage/IE773V63/The_State_of_Pacific_Salmon_in_British_Columbia.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■          76% | ETA:  8mIngesting ■■■■■■■■■■■■■■■■■■■■■■■■          77% | ETA:  8m
+ℹ ingested: /Users/airvine/Zotero/storage/VQ6272FS/Nutrients_and_algae_in_the_Upper_Bulkley_River_watershed_1997-2000_pdf_report.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■          77% | ETA:  8mIngesting ■■■■■■■■■■■■■■■■■■■■■■■■          77% | ETA:  8m
+ℹ ingested: /Users/airvine/Zotero/storage/68SGT47B/rivot_et_al_2008_hierarchical_bayesian_modelling_with_habitat_and_time_covariates_for_estimating.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■          77% | ETA:  8mIngesting ■■■■■■■■■■■■■■■■■■■■■■■■          77% | ETA:  8m
+ℹ ingested: /Users/airvine/Zotero/storage/VXSD95DA/rosenfeld_2008.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■          77% | ETA:  8mℹ ingested: /Users/airvine/Zotero/storage/EP3EXP7M/rosenfeld_et_al_2000_habitat_factors_affecting_the_abundance_and_distribution_of_juvenile_cutthroat.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■          77% | ETA:  8mℹ ingested: /Users/airvine/Zotero/storage/68MTMXT2/ryman_et_al._1995-protection_of_intras.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■          77% | ETA:  8mIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■         79% | ETA:  7m
+ℹ ingested: /Users/airvine/Zotero/storage/GXFVUDWZ/int_gtr302.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■         79% | ETA:  7mIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■         79% | ETA:  7m
+ℹ ingested: /Users/airvine/Zotero/storage/VZKYLWNQ/Hydrographical_Studies_Associated_with_Salmon_in_the_Nanika_and_Morice_Rivers.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■         79% | ETA:  7mIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■         80% | ETA:  7m
+ℹ ingested: /Users/airvine/Zotero/storage/E4FYLINR/Ruggerone_etal_2003_pink_sockeye.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■         80% | ETA:  7mIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■         80% | ETA:  7m
+ℹ ingested: /Users/airvine/Zotero/storage/S58HQVYE/ruggerone_and_connors_2015-productivity_and_lif.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■         80% | ETA:  7mIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■         81% | ETA:  6m
+ℹ ingested: /Users/airvine/Zotero/storage/REYIHAME/Schindler_etal_2010_portfolio_effect.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■         81% | ETA:  6mℹ ingested: /Users/airvine/Zotero/storage/JSSK9B8F/ruggerone_et_al._2010-magnitude_and_trends.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■         81% | ETA:  6mIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■         82% | ETA:  6m
+ℹ ingested: /Users/airvine/Zotero/storage/G6VF2X94/EPA_2001_r10-water-quality-temperature-issue-paper1-2001.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■         82% | ETA:  6mIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■■        82% | ETA:  6m
+ℹ ingested: /Users/airvine/Zotero/storage/SARDYRTZ/sawyer_et_al._2023-state-dependent_estu.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■        82% | ETA:  6mℹ ingested: /Users/airvine/Zotero/storage/6ZUC5LL6/A_Brief_Overview_of_Fish__Fisheries_and_Aquatic_Habitat_Resources_in_the_Morice_TSA.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■        82% | ETA:  6mIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■■        83% | ETA:  6m
+ℹ ingested: /Users/airvine/Zotero/storage/WF6H9H5T/selong_et_al_effect_of_temperature_on_growth_and_survival_of_bull_trout,_with_application_of.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■        83% | ETA:  6mIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■■        83% | ETA:  5m
+ℹ ingested: /Users/airvine/Zotero/storage/GGUVFCT2/schuett-hames_pleus_1996_monitoring_recommendations_for_salmonid_spawning_habitat_availability.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■        83% | ETA:  5mIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■■        84% | ETA:  5m
+ℹ ingested: /Users/airvine/Zotero/storage/3NM3VKQA/Sheer and Steel - 2006 - Lost Watersheds Barriers, Aquatic Habitat Connect.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■        84% | ETA:  5mIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■■        84% | ETA:  5m
+ℹ ingested: /Users/airvine/Zotero/storage/LBG2ISN7/Reconnaissance__1_20_000__FFHI_of_the_Lower_Buck_Creek_Sub-basin_downstream_of_Klo_Creek.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■        84% | ETA:  5mIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■■        85% | ETA:  5m
+ℹ ingested: /Users/airvine/Zotero/storage/N8V5LYHG/A_Review_of_Stock_Assessment_Information_For_Skeena_River_Chinook.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■        85% | ETA:  5mℹ ingested: /Users/airvine/Zotero/storage/XKFEEFEX/sharpe_et_al._2019-estuary_habitat_asso.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■        85% | ETA:  5mIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■       86% | ETA:  5m
+ℹ ingested: /Users/airvine/Zotero/storage/26TFZBB4/shrimpton_et_al_2014_freshwater_movement_patterns_by_juvenile_pacific_salmon_ioncorhynchus-i.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■       86% | ETA:  5mIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■       86% | ETA:  5m
+ℹ ingested: /Users/airvine/Zotero/storage/GSID2JNR/Sloat et al. - 2017 - Stream network geomorphology mediates predicted vu.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■       86% | ETA:  5mIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■       86% | ETA:  4m
+ℹ ingested: /Users/airvine/Zotero/storage/FRTIGM77/sheer_et_al_2009_development_and_management_of_fish_intrinsic_potential_data_and_methodologies_-.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■       86% | ETA:  4mIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■       87% | ETA:  4m
+ℹ ingested: /Users/airvine/Zotero/storage/9XE9464F/springer_and_van_vliet_2014-climate_change_pink.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■       87% | ETA:  4mIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■       87% | ETA:  4m
+ℹ ingested: /Users/airvine/Zotero/storage/2U4NUJWA/Upper_Skeena_Chinook_Stocks__Evaluation_of_the_Bear-Sustut__Morice__and_lower_Babine_stocks.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■       87% | ETA:  4mIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■       88% | ETA:  4m
+ℹ ingested: /Users/airvine/Zotero/storage/VMQABMKZ/1980_Morice_River_Coded_Wire_Tagging__CWT__Program.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■       88% | ETA:  4mIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■       88% | ETA:  4m
+ℹ ingested: /Users/airvine/Zotero/storage/6L4KVSAK/Sommer_etal_2001_floodplain_rearing.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■       88% | ETA:  4mIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■      89% | ETA:  4m
+ℹ ingested: /Users/airvine/Zotero/storage/J8GAR7T7/JournalofClimate2005Stewart.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■      89% | ETA:  4mIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■      89% | ETA:  3m
+ℹ ingested: /Users/airvine/Zotero/storage/X55LEL5M/Biophysical_Reconnaissance_of_the_Morice_River_System__1978-1980.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■      89% | ETA:  3mIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■      90% | ETA:  3m
+ℹ ingested: /Users/airvine/Zotero/storage/WISRRBL2/swales_levings_1989_role_of_off-channel_ponds_in_the_life_cycle_of_coho_salmon_(_oncorhynchus.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■      90% | ETA:  3mIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■      90% | ETA:  3m
+ℹ ingested: /Users/airvine/Zotero/storage/NV5NNAZE/Thomas_etal_2017_harbour_seals.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■      90% | ETA:  3mIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■      91% | ETA:  3m
+ℹ ingested: /Users/airvine/Zotero/storage/MYABAICN/thorley_et_al_2021_upper_fording_river_westslope_cutthroat_trout_population_monitoring_2020.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■      91% | ETA:  3mIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■      91% | ETA:  3m
+The PDF <_io.BytesIO object at 0x30cdbd620> contains a metadata field indicating that it should not allow text extraction. Ignoring this field and proceeding. Use the check_extractable if you want to raise an error in this case
+ℹ ingested: /Users/airvine/Zotero/storage/Q2A4W7AA/trombulak_and_frissell_2000-review_of_ecological.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■      91% | ETA:  3mIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■      91% | ETA:  3m
+ℹ ingested: /Users/airvine/Zotero/storage/C3643Y4I/roberge_et_al_2002_life_history_characteristics_of_freshwater_fishes_occurring_in_british_columbia.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■      91% | ETA:  3mℹ ingested: /Users/airvine/Zotero/storage/SKFPH72Z/thorley_et_al_2022_upper_fording_river_westslope_cutthroat-ntrout_population_monitoring_2021.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■      91% | ETA:  3mℹ ingested: /Users/airvine/Zotero/storage/7YHCCJCR/Water_Temperature__River_Discharge__and_Adult_Sockeye_Salmon_Migration_Observations_in_the_Babine_Watershed__1946-2014.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■      91% | ETA:  3mIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     93% | ETA:  2m
+ℹ ingested: /Users/airvine/Zotero/storage/TFRAXH9J/TFW_ISAG1_00_001 Headwater Fishes and Their Uppermost Habitats A Review as Background for S.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     93% | ETA:  2mIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     93% | ETA:  2m
+ℹ ingested: /Users/airvine/Zotero/storage/NTHEBN5A/wang_et_al_2012_climatewna—high-resolution_spatial_climate_data_for_western_north_america.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     93% | ETA:  2mIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     94% | ETA:  2m
+ℹ ingested: /Users/airvine/Zotero/storage/X5NAPWGU/The_Selective_Action_of_Gillnets_on_Sockeye__Oncorhynchus_nerka__and_Pink_Salmon__O.gorbuscha__Stocks_of_the_Skeena_River_System__British_Columbia.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     94% | ETA:  2mIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     94% | ETA:  2m
+ℹ ingested: /Users/airvine/Zotero/storage/LT37WJMG/Canada_s_Policy_for_Conservation_of_Wild_Pacific_Salmon__Stream__Lake__and_Estuarine_Habitat_Indicators.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     94% | ETA:  2mℹ ingested: /Users/airvine/Zotero/storage/5E2CNI8F/waples_et_al._2008-evolutionary_history.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     94% | ETA:  2mIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    95% | ETA:  2m
+ℹ ingested: /Users/airvine/Zotero/storage/4S9FTIBG/WDFW_2009_Ch7.5_LWD.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    95% | ETA:  2mIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    95% | ETA:  1m
+ℹ ingested: /Users/airvine/Zotero/storage/JDTETD43/Tucker_etal_2012_coastal_migration.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    95% | ETA:  1mIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    96% | ETA:  1m
+ℹ ingested: /Users/airvine/Zotero/storage/NNGMHESM/Weller et al. - 2024 - Stream thermalscape scenarios for British Columbia.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    96% | ETA:  1mIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    96% | ETA:  1m
+ℹ ingested: /Users/airvine/Zotero/storage/R53L5I8H/Managing_Biodiversity_in_Pacific_Salmon__the_Evolution_of_the_Skeena_River_Sockeye_Salmon_Fishery_in_British_Columbia.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    96% | ETA:  1mIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    97% | ETA:  1m
+ℹ ingested: /Users/airvine/Zotero/storage/VSW8UA44/Applicability_of_Prewhitening_to_Eliminate_the_Inf.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    97% | ETA:  1mIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    97% | ETA:  1m
+ℹ ingested: /Users/airvine/Zotero/storage/FK53J3YQ/woll_2015_landscape-scale_mapping_of_pacific_salmon_and_their_freshwater_habitats_in_the.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    97% | ETA:  1mℹ ingested: /Users/airvine/Zotero/storage/K7V7WSP3/wyatt_2002_estimating_riverine_fish_population_size_from_single-_and_multiple-pass_removal.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    97% | ETA:  1mIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    98% | ETA: 36s
+ℹ ingested: /Users/airvine/Zotero/storage/VUS7ECVM/woll_et_al_2017_salmon_ecological_systems.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    98% | ETA: 36sIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   99% | ETA: 27s
+ℹ ingested: /Users/airvine/Zotero/storage/NB6MMGNT/Final_Bull_Trout_Recovery_Plan_092915-corrected.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   99% | ETA: 27sIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   99% | ETA: 18s
+ℹ ingested: /Users/airvine/Zotero/storage/Z67F9UMU/Report_of_the_Skeena_Independent_Science_Review_Panel.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   99% | ETA: 18sℹ ingested: /Users/airvine/Zotero/storage/PSU3FD72/2010-25028.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   99% | ETA: 18sIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  100% | ETA:  0s
+Store built: data/rag/habitat_modelling.duckdb | docs: 222 | chunks: 38653 | model: nomic-embed-text
+Built data/rag/habitat_modelling.duckdb. It is not in the bucket until ACTION=push.
+Warning messages:
+1: In crd_zot_src_lookup(citation_keys, zotero_dir = zotero_dir) :
+  Attachment file not found on disk for: nagel_etal2014LandscapeScale, opperman_etal2010EcologicallyFunctional, rapp_abbe2003FrameworkDelineating
+2: In crd_zot_src_lookup(citation_keys, zotero_dir = zotero_dir) :
+  No attachment found in Zotero for: rapp_abbe2003FrameworkDelineating, nagel_etal2014LandscapeScale, opperman_etal2010EcologicallyFunctional
+EXIT 0

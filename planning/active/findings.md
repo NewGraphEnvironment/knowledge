@@ -55,25 +55,41 @@ when it already holds a file with that md5, and still links the new attachment i
 followed read both as `pdf present`, and Zotero synced both files into local storage (`QNK6GJDJ`,
 `H7XFPUPT`), so both landed.
 
-## The 2005 report and the 2007 paper are one programme
+## The 2005 report and the 2007 paper are one set of estimates
 
-The report (January 2005) analyses only the third WCT experiment and the second RB experiment (p. 9). The
-paper pools three WCT and two RB experiments (p. 1115). The 60-d values agree within 0.1 °C (WCT 19.7 vs 19.6;
-RB 24.2 vs 24.3), but the 7-d UUILTs differ (WCT 24.7 vs 24.1, RB 31.1 vs 26.0). Both are kept, and each
-note names the other, so an aggregation does not count them as two studies. The report's abstract gives the RB
-UUILT a 95% CI of 20.3–24.2 °C, and its p. 12 gives 22.9–25.4 °C.
+The report (January 2005) analyses the third WCT and the second RB experiment (p. 9). The paper's survival and
+growth curves carry the report's coefficients exactly (WCT growth `-4.1727 + 0.9496 T - 0.0348 T²`, WCT survival
+midpoint 19.6253; 2007 Figs. 1 and 4, report Figs. 1, 2 and 5), so the 60-d UUILTs and optima are the same
+estimates published twice. Only some survival percentages are pooled in the paper (RB at 24 °C: 72.8%, between the
+report's two experiments). The 7-d UUILTs differ by method: the paper reads the day-7 LT50 off LT50-over-time
+curves; the report predicts it from an exponential regression of LD50 on temperature, with LD50 set to 120 d where
+survival never fell below 50% (p. 10), so its RB 31.1 °C is an extrapolation above the 28 °C top test temperature.
+The report's abstract gives the RB UUILT a 95% CI of 20.3–24.2 °C, while its p. 12 gives 22.9–25.4 °C.
 
-## Growth optima are `pref`
+## Growth optima are `lab`
 
-`research/thermal_requirements.md` defines `pref` as "a preference or optimum", and Selong et al.'s BT growth
-peak (data row 154) is `pref`. The round-1 reader argued for `lab`, from CLAUDE.md's description of `lab`
-("a laboratory or hatchery measurement"). The research file is the reader-facing convention, so the Bear
-optima, optimal ranges and niches are `pref`. The zero-growth edges are `range` with kind `lab`, because they
-are limits.
+`pkg/R/literature.R` defines `lab` as "a lethal limit, CTmax, survival or growth at held temperatures, or a
+development time in degree-days", and #38's laboratory optima (Richter & Kolmes coho, data rows 589, 591) are
+`lab`. Round 1 recoded the Bear optima `pref` on the research file's gloss "`pref` (a preference or optimum)" and
+on Selong's BT growth peak (data row 154, `pref`). Round 2 found the package definition. The Bear optima, optimal
+ranges and niches are `lab`; Selong's row is recoded `lab` with a note; the research file's gloss now says `pref` is a
+temperature fish select.
 
 ## Errors Encountered
 
 | Error | Resolution |
 |-------|------------|
-| 2007 WCT niche `10.6–14.6`: OCR `10.6—-14.6°C` fails the gate | Left out; 2005 p. 14 carries it |
-| Round-1 claim that the text layer verifies it: `a text quote needs at least 20 characters` | p. 1119 opens on the value and `14.68C` ends it, so nothing longer is quotable; claim disproved |
+| 2007 WCT niche: OCR quote `10.6—-14.6°C; rainbow trout: 10.1` was `quote_not_found` | It stopped inside the range `10.1-14.1`; the gate refuses that. Extending the quote past the range verifies (round 2) |
+| Round-1 suggestion of a text-layer quote `10.6–14.6`: `a text quote needs at least 20 characters` | Text layer prints `14.68C`, one token, so no text quote can hold 14.6; the OCR quote is the route |
+| Dropping the niche row was first written up as "fails the gate" | Wrong reason; the row is in (appended last, data row 1102) |
+
+## Audit closed by enumeration
+
+Every same-source, same-page group of Bear rows with mixed `kind` or `metric` (after round 2):
+- 2005 p. 17 (data rows 1096–1101): one sentence of field association (Sloat 2001; `dist`), with "average daily"
+  over an unstated period (`unstated`) and "maximum daily" (`daily_max`) per clause; then one sentence of
+  recommendation (`expert`), "maximum average daily" (`daily_mean`) and "maximum daily" (`daily_max`). Each
+  difference is its own clause's wording.
+- 2007 p. 1119 (data rows 1079, 1081, 1102): the fundamental niche (derived from a held-temperature growth optimum;
+  `lab`, `constant`) and the Discussion criterion citing field studies (`expert`, `unstated`): separate sentences.
+Every other page group (2005 pp. 11, 12, 14, 15, 16; 2007 pp. 1113, 1115, 1117, 1118) is uniform.
