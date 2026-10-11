@@ -1,16 +1,16 @@
 # Thermal requirements by species and life stage
 
-**Verified:** 2026-10-06 · **Issues:** #38 (this); background in `stream_temperature.md`; for
+**Verified:** 2026-10-11 · **Issues:** #38 (this), #40 (Bear et al. 2005 and 2007); background in `stream_temperature.md`; for
 NewGraphEnvironment/link#21, NewGraphEnvironment/wet#40 and NewGraphEnvironment/fish_passage_template_reporting#214 ·
 **Produced by:** rows of `data/literature_evidence.csv` with `variable` `temperature`, `air_temperature` or
-`degree_days` (rows 511 onward are #38's), gated by `scripts/0280-literature-verify.R` (log
-`scripts/logs/habitat/20261006_literature_verify.csv`); sources in the group's `Fisheries/temperature`
-collection (`data/temperature_members.csv`, 45 members, 38 with a PDF) and the `temperature` store.
+`degree_days` (rows 511 onward are #38's, rows 1071 onward #40's), gated by `scripts/0280-literature-verify.R` (log
+`scripts/logs/habitat/20261011_literature_verify.csv`); sources in the group's `Fisheries/temperature`
+collection (`data/temperature_members.csv`, 45 members, 40 with a PDF) and the `temperature` store.
 
 **Status:** every species × cell of the gate's thermal grid has a value or a `none` row. The degree-day
 cells are mostly `none`. No source read gives a growing-season degree-day requirement for a BC species. The
-sources read are the collection's members with a PDF; Bear et al. 2005 and 2007 and McMahon et al. 2007 have
-none.
+sources read are the collection's members with a PDF; McMahon et al. 2007 has none. Bear et al. 2005 and 2007
+were read in #40 and give no degree-days.
 
 ## How to read the rows
 
@@ -56,6 +56,10 @@ species. Several give days to hatch or emerge at a stated temperature (Bjornn & 
 p. 64, McPhail & Baxter 1996 p. 9). Their products were not computed: the table holds what a source prints.
 The `none` rows say what was searched.
 
+Bear et al. 2005 and 2007, the likeliest unread source of WCT degree-days after #38, measured 60-day growth
+and survival of juveniles held at constant temperatures. Neither gives degree-days, so the WCT to-hatch and
+growing-season cells stay `none`.
+
 The WCT documents borrow the cutthroat growing-season values. Thorley et al. 2022 reads age-0 fish under
 30 mm as poor overwinter survival, citing Coleman & Fausch. The Hill et al. 2024 and 2025 memos compute GSDD
 with Coleman & Fausch's start and end rules and call it "a useful predictor of age-0 rainbow and westslope
@@ -80,7 +84,10 @@ Values a BC model would most likely use:
 | BT | rearing | 11 °C | `august_mean` | Isaak et al. 2015 (cold-water habitat) |
 | BT | rearing | 20.9 °C | `constant` | Selong et al. 2001 (UILT, age-0) |
 | BT | spawning | 9–10 °C at onset as temperatures fall | `unstated` | rows 149, 492, 508 (row 546 gives 9 °C onset without saying falling) |
-| WCT | rearing | 19.6 °C | `constant` | Cleator et al. 2009 p. 4 (UILT, Bear et al. 2007) |
+| WCT | rearing | 19.6 °C | `constant` | Bear et al. 2007 p. 1115 (60-d UUILT, juveniles; 19.7 °C by the 2005 report's LD50 regression) |
+| WCT | rearing | 13.6 °C optimum | `constant` | Bear et al. 2007 p. 1117, 2005 p. 11 (peak growth, satiation ration) |
+| WCT | rearing | 13–15 °C | `daily_max` | Bear et al. 2007 p. 1113 (suitable habitat; the lower end is stored) |
+| WCT | rearing | 16 °C / 20 °C | `daily_mean` / `daily_max` | Bear et al. 2005 p. 17 (maximum growth / survival) |
 | WCT | spawning, incubation | 6–10 °C | `unstated` | DFO 2019 Table 2 (critical habitat) |
 | WCT | rearing | 4–15 °C | `unstated` | DFO 2019 Table 2 |
 
@@ -96,18 +103,21 @@ Conventions a reader needs:
 
 ## Left out, and why
 
-- **Bear et al. 2005 and 2007** (WCT thermal tolerance) have no PDF in the library. The 2007 paper is closed
-  access; the 2005 report is on ResearchGate only. Bear et al. 2007 reaches the table as secondary citations: the
-  19.6 °C UILT through Cleator et al. 2009 (p. 4), and "survival declines sharply at temperatures above 19ºC"
-  through Thorley et al. 2021 (p. 1). Bear et al. 2005 reaches no row, and is the likeliest unread source of WCT
-  degree-days.
+- **From Bear et al. 2005 and 2007** (#40): the WCT fundamental niche on p. 1119 of the paper, which cannot be
+  quoted (the page opens on the value, the text layer prints the degree sign as '8', and the OCR doubles the
+  dash; the 2005 report's p. 14 gives the same 10.6–14.6 °C and has a row); values Bear cites from other studies
+  (rainbow trout: Hokanson et al. 1977's 17.2 °C optimum and 25.6 °C 7-d UUILT, Kaya 1978's 26.2 °C; cutthroat
+  scope for activity: Dwyer & Kramer 1975, Hickman & Raleigh 1982); the
+  12–16 °C over which the report expects the two species to compete equally, and the paper's "exceeded 22°C for
+  even short periods" (competition, not a limit); survival percentages at single test temperatures; and the
+  hybrid hatching failure. Rainbow trout values from both are coded `RB`, never `ST`.
 - **Hasnain et al.** (key thermal metrics for Canadian fishes) says every estimate comes from adults, so its
   lethal and growth values are not rearing values. Its cutthroat values are species-level, not westslope.
 - **OCR-garbled Bjornn & Reiser 1991 cells:** coho spawning 4.4–9.4 and incubation 4.4–13.3 °C, steelhead
   spawning 3.9–9.4 °C, coho lower lethal 1.7 °C, and Chinook upper lethal 26.2 °C. The coho spawning span is
   in the table through Richter & Kolmes p. 33.
 - **Values with no stage:** McCullough's distribution limits, and Chinook, coho and steelhead lethal limits in
-  Richter & Kolmes pp. 28–36 and Roberge et al. 2002 p. 65. **Resident rainbow trout** values are not steelhead.
+  Richter & Kolmes pp. 28–36 and Roberge et al. 2002 p. 65. **Resident rainbow trout** values are not steelhead (Bear et al.'s are filed as `RB`).
 - Draft notes with every source read: `planning/archive/2026-10-issue-38-*/draft-{tc,ps}-notes.md`.
 
 ## What the consumers should use
@@ -129,5 +139,9 @@ Conventions a reader needs:
   Kolmes Table 1 weekly means apply (15 °C rearing, 10 °C spawning and incubation), and Cooney & Holzer's 22 °C
   weekly mean for CH and ST. Iacarella's 24 °C 7DEC needs a 7DEC product (Iacarella's own BC model): the 7DEC
   is "the median value between 7DADM and MWAT", so a weekly mean compared with it under-calls exceedance.
+  For WCT rearing, Bear et al. 2005 recommends a maximum daily mean below 16 °C for growth (a weekly mean below
+  16 °C does not show that every daily mean was), and both daily-maximum criteria (13–15 °C, 20 °C) need a daily
+  maximum; the 19.6 °C 60-d UUILT is a held-temperature limit, and the paper notes fish survive brief daily
+  excursions above a constant-temperature lethal limit.
   There is no degree-day threshold to gate segments on for any BC species. A GSDD layer can rank segments, but a cutoff
   would come from cutthroat in Colorado.

@@ -50,20 +50,20 @@ own source's words, and each note names the other's value. A reader of `meets()`
 - [ ] Rebuild the `temperature` store (`OVERWRITE=TRUE`) and push it (`CONFIRM=TRUE`); verify on a fresh connect. Rebuild `habitat_modelling` too if the new items fall in its input collections
 
 ## Phase 2: Draft rows under the #38 brief
-- [ ] Re-read `planning/archive/2026-10-issue-38-thermal-requirements/drafter-brief.md` and the CLAUDE.md drafting conventions. Check every convention against the source (#44's lesson)
-- [ ] Draft from Bear 2007: WCT and RB 60-d UUILT (`lab`, rearing), 7-d UUILT, growth optimum (`bound = optimum`), the tested range in the note, and the 13–15 °C max-daily recommendation (`expert`, `metric` as written). Read the tested life stage and acclimation from Methods
-- [ ] Draft from the 2005 report on the same pattern (UUILT 19.7, optimum 13.6 with its optimal growth range, RB values). Note the differences from 2007 row by row. Any statement 2007 lacks gets its own row; the hybrid hatching failure gets none (no value, no grid cell)
-- [ ] Append the rows (never insert). Revise the WCT degree-day `none` notes in rows 531–533 (and any other note saying "Bear … have none") to name what was read. Replace a `none` row only if a value fills it
-- [ ] Add a cross-reference to the primary row in the notes of the Cleator and Thorley secondaries (rows 521–522)
+- [x] Re-read `planning/archive/2026-10-issue-38-thermal-requirements/drafter-brief.md` and the CLAUDE.md drafting conventions. Check every convention against the source (#44's lesson)
+- [x] Draft from Bear 2007: WCT and RB 60-d UUILT (`lab`, rearing), 7-d UUILT, growth optimum (`bound = optimum`), the tested range in the note, and the 13–15 °C max-daily recommendation (`expert`, `metric` as written). Read the tested life stage and acclimation from Methods
+- [x] Draft from the 2005 report on the same pattern (UUILT 19.7, optimum 13.6 with its optimal growth range, RB values). Note the differences from 2007 row by row. Any statement 2007 lacks gets its own row; the hybrid hatching failure gets none (no value, no grid cell)
+- [x] Append the rows (never insert). Revise the WCT degree-day `none` notes in rows 531–533 (and any other note saying "Bear … have none") to name what was read. Replace a `none` row only if a value fills it
+- [x] Add a cross-reference to the primary row in the notes of the Cleator and Thorley secondaries (rows 521–522)
 
 ## Phase 3: Meaning audit and gate
-- [ ] Audit every new or changed row against the PDF: meaning, stage, kind, metric, bound, unit. Use an Explore/Plan-type reader for a blind second pass; write the findings to `planning/active/audit-*.md`
+- [x] Audit every new or changed row against the PDF: meaning, stage, kind, metric, bound, unit. Use an Explore/Plan-type reader for a blind second pass; write the findings to `planning/active/audit-*.md`
 - [ ] Fix, then audit the fixes. End by enumeration (each same-page group with mixed kind or metric is mixed by its own sentences)
 - [ ] `Rscript scripts/0280-literature-verify.R`: 0 failing quotes, thermal grid 50/50; log `scripts/logs/habitat/2026101x_literature_verify*`
 
 ## Phase 4: Write-up
-- [ ] Revise `research/thermal_requirements.md`: the WCT table rows (primary citation), the "Left out" Bear bullet, the degree-day paragraph and the consumer guidance; update the provenance line
-- [ ] Grep CLAUDE.md and `research/` for any other "Bear … no PDF" sentence and fix it
+- [x] Revise `research/thermal_requirements.md`: the WCT table rows (primary citation), the "Left out" Bear bullet, the degree-day paragraph and the consumer guidance; update the provenance line
+- [x] Grep CLAUDE.md and `research/` for any other "Bear … no PDF" sentence and fix it
 
 ## Validation
 

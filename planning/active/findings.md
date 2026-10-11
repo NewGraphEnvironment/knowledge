@@ -54,3 +54,26 @@ Relates to #38
 when it already holds a file with that md5, and still links the new attachment item. The dry re-run that
 followed read both as `pdf present`, and Zotero synced both files into local storage (`QNK6GJDJ`,
 `H7XFPUPT`), so both landed.
+
+## The 2005 report and the 2007 paper are one programme
+
+The report (January 2005) analyses only the third WCT experiment and the second RB experiment (p. 9). The
+paper pools three WCT and two RB experiments (p. 1115). The 60-d values agree within 0.1 °C (WCT 19.7 vs 19.6;
+RB 24.2 vs 24.3), but the 7-d UUILTs differ (WCT 24.7 vs 24.1, RB 31.1 vs 26.0). Both are kept, and each
+note names the other, so an aggregation does not count them as two studies. The report's abstract gives the RB
+UUILT a 95% CI of 20.3–24.2 °C, and its p. 12 gives 22.9–25.4 °C.
+
+## Growth optima are `pref`
+
+`research/thermal_requirements.md` defines `pref` as "a preference or optimum", and Selong et al.'s BT growth
+peak (data row 154) is `pref`. The round-1 reader argued for `lab`, from CLAUDE.md's description of `lab`
+("a laboratory or hatchery measurement"). The research file is the reader-facing convention, so the Bear
+optima, optimal ranges and niches are `pref`. The zero-growth edges are `range` with kind `lab`, because they
+are limits.
+
+## Errors Encountered
+
+| Error | Resolution |
+|-------|------------|
+| 2007 WCT niche `10.6–14.6`: OCR `10.6—-14.6°C` fails the gate | Left out; 2005 p. 14 carries it |
+| Round-1 claim that the text layer verifies it: `a text quote needs at least 20 characters` | p. 1119 opens on the value and `14.68C` ends it, so nothing longer is quotable; claim disproved |
