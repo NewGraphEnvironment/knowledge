@@ -69,4 +69,27 @@ What was learned:
   each audit (`scratch_apply_audit{1,2}.py`). `draft-*-evidence.csv` are the drafters' output before the audit
   fixes, and the table supersedes them.
 
+## After the PR opened (2026-10-08 to 10-11)
+
+Al downloaded five of the paywalled or archive-only PDFs by hand. A code review found the sixth, Hickman & Raleigh
+1982, on the Internet Archive.
+- **Filing:** `0270` filed them, after gaining a thesis's `university` and `thesisType` fields. `Fisheries/flow` is
+  now 40 items, all with a PDF; the store holds 40 documents.
+- **Drafting:** one drafter wrote 56 rows (data rows 1015–1070):
+  - Raleigh et al. 1984: 18;
+  - Braithwaite 2011: 14;
+  - Hatfield & Bruce 2000: 12, all `qual` with the regression coefficients;
+  - Bradford & Heinonen 2008: 6;
+  - McMahon 1983: 4;
+  - Hickman & Raleigh 1982: 2.
+- **The verdict did not change.** No late row fills a cell that held only a `none` row: coho flow, grayling and
+  westslope cutthroat flow, and bull trout and westslope passage depth.
+- **Ford et al. 1995 corrected.** Reading the originals showed Ford misstating five values. Those rows are now
+  `qual`, and seven more notes say where Ford and the original agree or differ.
+- **Audit:** 5 errors in 56 rows plus 12 second-hand changes, then 6 errors in 17, then 1 in 7. All seven errors
+  inside fixes came from one cause: a note merging two nearly identical statements into one parenthesis. Row
+  954's last fix was checked against the OCR'd page, which ended the audit.
+- **Files:** `late/` holds the brief, the draft, the three audits and the apply scripts.
+- **Gate:** `scripts/logs/habitat/20261009_literature_verify*`, 1070 rows, flow 60 of 60.
+
 Closed by: PR (see `gh pr list --search 44`)

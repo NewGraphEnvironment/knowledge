@@ -1,9 +1,10 @@
 # Flow needs by species and life stage
 
-**Verified:** 2026-10-07 · **Issues:** #44 (this); flows to compare against in `modelled_discharge.md` (#42);
+**Verified:** 2026-10-09 · **Issues:** #44 (this); flows to compare against in `modelled_discharge.md` (#42);
 companion to `thermal_requirements.md` (#38) · **Produced by:** rows of `data/literature_evidence.csv` with
-`variable` `instream_flow`, `depth` or `velocity` (data rows 687–1014 are #44's; 121, 250, 257, 264, 407, 497
-and 498 are from earlier issues, and #44 recoded all but 407), gated by `scripts/0280-literature-verify.R` (log `scripts/logs/habitat/20261007_literature_verify.csv`).
+`variable` `instream_flow`, `depth` or `velocity` (data rows 687–1070 are #44's, 1015–1070 from six sources read
+after the first draft; 121, 250, 257, 264, 407, 497 and 498 are from earlier issues, and #44 recoded all but 407),
+gated by `scripts/0280-literature-verify.R` (log `scripts/logs/habitat/20261009_literature_verify.csv`).
 The sources are the group's `Fisheries/flow` collection (`FWTJDD8Z`; `data/flow_{members,additions}.csv`, 40
 items, all with a PDF since 2026-10-09) and the `flow` store.
 
@@ -11,7 +12,8 @@ items, all with a PDF since 2026-10-09) and the `flow` store.
 `none` row. Cited flow needs exist for CH and ST, and thinly for BT. CO and SK have only a September low flow
 from the upper Bulkley. GR and WCT have none in any source read. Spawning depth and spawning and rearing velocity have
 values for every species (SK has no rearing-velocity cell); passage depth is `none` for BT and WCT.
-Six sources reached the collection after the rows were drafted and are not yet read for rows (below).
+Six sources that reached the collection late were read too (rows 1015–1070, below); none fills a cell that had
+only a `none` row.
 
 ## How to read the rows
 
@@ -33,8 +35,8 @@ Six sources reached the collection after the rows were drafted and are not yet r
   `unstated`. DFO 2013 states its 30 % MAD as an instantaneous flow.
 - **`bound`:**
   - `min` is a minimum flow.
-  - `optimum` is a PHABSIM or WUA peak, Tennant's optimum range, the best class of a three-class scheme (Ford's and
-    Raleigh's base flow "excellent" class), or a flow the source calls optimal or near-optimal.
+  - `optimum` is a PHABSIM or WUA peak, Tennant's optimum range, the best class of a three-class scheme (Raleigh et
+    al.'s base flow "excellent" class, 760, 1039, 1041), or a flow the source calls optimal or near-optimal.
   - `range` is a span between two limits.
   - The 30–200 % MAD standard has **no bound**: it is one minimum per stream, about 200 % of MAD in the smallest
     streams falling to 30 % in the largest. A program reading `min` would take 30 %, which is right only for big
@@ -86,7 +88,7 @@ Six sources reached the collection after the rows were drafted and are not yet r
 |---|---|---|---|
 | CH | Ptolemy's standards on the Nechako (rows 832–835: 22 % spawning, 20 % incubation, rearing and overwintering) and Hatfield's 5.8 m3/s worked example (828–831); Warkentin et al. 2022, Nicola: mean August rearing flow below 10.6 m3/s (36 % MAD) drops productivity below replacement (862–864); Clear Creek, California: a WUA peak at 650 cfs (857) and the authors' recommended ≥600 cfs for September–December (858) | 15 rows: criteria ≥24–30 cm (Bjornn & Reiser, Levy & Slaney), HSI zero edges at 9–15 cm (Raleigh) and 0.35–1.55 ft (Beecher, 762, 763, 766), Clear Creek's 0.8–7.0 ft HSC (849), observed redd depths / 0.24 m passage | 18 / 17 rows |
 | ST | Ptolemy's summer steelhead passage, 50–100 % MAD (825, and 837 on the Ash); Ash and Cheakamus charts (836–846: 20 % rearing, incubation and overwintering; 34–45 % spawning and passage); PHABSIM optima from Ptolemy & Lewis (810–817: 12–128 % MAD, or 0.19–9.0 m3/s at named sites), which they contrast with the 20 % standard, and Hatfield's Salmon River run (827, 5.5 m3/s); Clear Creek, California: WUA peaks at 350 and 600 cfs (859, 860) and a recommended 200 cfs judged near the optimum (861) | 4 rows: ≥24 cm criterion, HSI edges at 0.4–0.65 ft, observed 0.2–1.5 m (782) / 0.18 m | 4 / 4 rows |
-| CO | upper Bulkley average September flow below 1 m3/s impairs adults reaching spawning areas (865); otherwise **none** | 2 rows: ≥18 cm criterion, Beecher's 0.15 ft zero edge / 0.18 m | 2 / 4 rows |
+| CO | upper Bulkley average September flow below 1 m3/s impairs adults reaching spawning areas (865); otherwise **none**: the coho HSI (McMahon 1983) ties rearing capacity to streamflow without a value (1036) | 3 rows: ≥18 cm criterion, Beecher's 0.15 ft zero edge, McMahon's ≥15 cm at preferred redds (1034) / 0.18 m | 2 / 4 rows; McMahon's preferred redd velocity 21–70 cm/s (1033) is an optimum and fills no limit cell |
 | SK | as CO for migration (866); spawning and incubation **none** | 2 rows: ≥15 cm criterion, 0.15 ft zero edge / 0.18 m | 2 rows / no cell (lake rearing) |
 | BT | Nechako chart only: adult passage 40–80 % MAD (901); "rearing (adult and juvenile)" 55 % MAD, which is Ptolemy's *adult* rearing standard (902) | 4 rows (redd means 24–58 cm, 876; spawning-area depth 30–60 cm, 886; Ford's 0.15–0.84 m, 889; Beecher's 0.15 ft zero edge, 894) / **none** | 5 rows, ≤65 cm/s typical / 6 rows, fry ≤30 cm/s |
 | GR | **none** in any source | Hubert et al. 1985 HSI and Stewart et al. 2007 / Hubert's passage curve: 0.3 ft zero edge (924), 0.4 ft minimum suitable (923) | 6 / 5 rows |
@@ -115,22 +117,39 @@ coho rows but names no species, so it is cited in the coho `none` notes, not cod
   as `CT` where this table writes `WCT`. It covers only BULK and MORR. Until it grows, a stage's months come from
   the source's own note or from the timing rows that exist.
 
-## Not obtained, left out, and why
+## The six late sources (rows 1015–1070)
 
-- **PDFs in the collection since 2026-10-09, not yet drafted:** the rows above were written without them, and
-  any value they give appears here only where another document reports it.
-  - Hatfield & Bruce 2000 (`hatfield_bruce2000PredictingSalmonid`): the PHABSIM regressions of optimum flow on MAD,
-    the likeliest to add species optima;
-  - Bradford & Heinonen 2008 (`bradford_heinonen2008LowFlows`): small-stream low flows;
-  - McMahon 1983 (`mcmahon1983Habitatsuitability`): coho HSI, a scan, which may fill coho flow or depth cells;
-  - Raleigh et al. 1984 (`raleigh_etal1984Habitatsuitability`): rainbow trout HSI, a scan (already a member; only
-    its PDF is new);
-  - Hickman & Raleigh 1982 (`hickman_raleigh1982Habitatsuitability`): cutthroat HSI (FWS/OBS-82/10.5), from the
-    Internet Archive (`doi-report_i-499782-105`); generic cutthroat, so `CT`, and a WCT cell only where it names
-    westslope;
-  - Braithwaite 2011 (`braithwaite2011effectstream`): cutthroat depth and velocity preference in the Strawberry
-    River, Utah. The fish are Bear Lake (Bonneville) cutthroat, *O. clarkii utah*, not westslope, so its rows
-    would not fill a WCT cell.
+Read after the PR opened, with the same rules and two audit rounds:
+- **Hatfield & Bruce 2000 (1015–1026).** Optimum flow (the WUA peak) regressed on MAD, pooled from western North
+  American PHABSIM studies, for chinook, rainbow, steelhead and salmonids pooled, by stage. The paper prints
+  equations only, so these are `qual` rows with the coefficients in the note. To use one, evaluate it at a
+  segment's MAD. Brown trout and adults are left out. These are the regressions Ptolemy & Lewis and Hatfield 2002
+  apply in rows 810–817 and 827.
+- **Bradford & Heinonen 2008 (1027–1032).** A historic-flow method that recommends the median (Q50) monthly flow
+  (1027). The authors read summer flow-reduction experiments as showing harm below about 10 % MAD (1028), which
+  is a reading of experiments, not a standard. Four `qual` rows cover winter incubation and overwintering.
+- **McMahon 1983, coho HSI (1033–1036).** Preferred redd sites at 21–70 cm/s and ≥15 cm. Winter fry seek water
+  <15 cm/s. Rearing capacity rises with streamflow, but no value is given, so the coho flow cells stay `none`.
+- **Raleigh et al. 1984, rainbow HSI (1039–1056).** Base flow ≥50 % of average annual flow is excellent and
+  25–50 % fair. Spawning velocity is optimal at 30–70 cm/s and unsuitable below 10 or above 90 cm/s. Spawning,
+  fry and juvenile SI curves. Steelhead winter velocities from Carnation Creek.
+- **Hickman & Raleigh 1982, cutthroat HSI (1037, 1038).** Spawning velocities 11–92 cm/s and a 15 cm site depth.
+  Its optimum (30–60 cm/s, p. 6) is unreadable in the scan, so it is quoted only through Ford (943).
+- **Braithwaite 2011 (1057–1070).** Bear Lake (Bonneville) cutthroat in the Strawberry River, Utah: redd depth and
+  velocity, and juvenile velocity, as central-50 % and central-95 % spans of use, by year. Coded `CT`.
+
+**Reading the originals corrected a review.** Ford et al. 1995 had restated five of these values wrongly:
+- a suitable span called optimal (954);
+- a depth span the original never prints (955);
+- cutthroat velocities given as rainbow (960);
+- a 55 % "excellent" base flow that the original prints as ≥50 % (961, 963).
+
+Those five rows are now `qual` statements that point at the original's rows. Seven more notes say where Ford and
+the original agree or differ (936, 942, 943, 958, 959, 962, 964). A secondary source's number is not the
+original's number until someone reads both.
+
+## Left out, and why
+
 - **Scans:** the store holds no text for the McMahon coho scan, and only a garbled layer for Raleigh 1984 and
   Hickman & Raleigh, so a store search will not find their values; rows from them go through `0280`'s OCR path.
 - **Out of scope, not written:**
@@ -155,6 +174,17 @@ previous round changed, against its page:
 - **Round 1:** 58 errors in 325 rows. The largest single cause was the drafter brief's own Tennant metric.
 - **Round 2:** 24 errors in the 77 rows round 1 touched, several inside round 1's fixes.
 - **Round 3:** 0 errors in the 44 rows round 2 changed, so the audit stopped there.
+
+The 56 late rows (1015–1070) went through their own audit, which also read the review rows that cite the same
+originals:
+- **Round 1:** 5 errors in the 56 rows, plus 12 changes to second-hand rows (five Ford rows made `qual`).
+- **Round 2:** 6 errors in the 17 rows round 1 changed, all inside its fixes.
+- **Round 3:** 1 error in the 7 rows round 2 changed (row 954 again). Its fix was checked against the page, which
+  ended the audit.
+
+Every late error inside a fix had one cause: a note merged two nearly identical statements into one parenthesis.
+In one, the text's edges were given to a plotted curve. In another, a review's row was cited as if it were the
+original's.
 
 Same-page groups with mixed kind, metric or unit were enumerated, 34 of them. Each is explained by its own
 sentences or was fixed. Measurements and the full chain are in the #44 planning archive.
