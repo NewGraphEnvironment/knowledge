@@ -157,6 +157,12 @@ meaning per row, not a sample. Settled conventions:
   coded alike unless the note says why, and the source decides, not a sibling row: #38's round-2 audit found
   a round-1 fix that had recoded Sauter Table 4 from a neighbouring row when the paper calls it observed
   temperatures (`dist`).
+- A convention a drafter brief sets is a claim about a source, so check it against the source like a row: #44's
+  brief coded Tennant's flows `seasonal_mean` and 14 rows inherited it, though Tennant asks for instantaneous
+  flows. And a note gives each statement its own page and sentence: all seven errors that #44's audits found
+  inside earlier fixes merged two near-identical statements into one parenthesis (a text's edges and a figure's,
+  a review's row and the original's). Read the original, not a review that restates it, wherever both are held:
+  Ford et al. 1995 misstated five values its originals print differently.
 - Append new rows; never insert. `research/` files cite evidence by data row, and data row N is file line
   N + 1 (#36's plan named file lines and called them data rows). A statement that bears on two variables is
   two rows sharing one quote, each noting the other. Copy a sibling's fields only after checking them: #36

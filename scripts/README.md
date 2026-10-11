@@ -59,6 +59,7 @@ wf_farm_priority.js                          farm priority/crossing tables out o
 0150  ACTION=build STORE=habitat_modelling COLLECTIONS="U9ZCZ6RN,chinook,bull_trout,..."  then ACTION=push
 0150  ACTION=build STORE=temperature COLLECTIONS=SW2RXUJC                                  then ACTION=push
 0150  ACTION=build STORE=flow COLLECTIONS=FWTJDD8Z                                         then ACTION=push
+      (a rebuild over an existing local store needs OVERWRITE=TRUE; ACTION=push needs CONFIRM=TRUE to upload)
 0280  verify data/literature_evidence.csv and data/ip_model_registry.csv against their PDFs, and the
       model_id link between them (gate; read with knw_literature_read() / knw_ip_read())
 ```
