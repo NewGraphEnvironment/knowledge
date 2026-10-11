@@ -4,7 +4,7 @@
 companion to `thermal_requirements.md` (#38) · **Produced by:** rows of `data/literature_evidence.csv` with
 `variable` `instream_flow`, `depth` or `velocity` (data rows 687–1070 are #44's, 1015–1070 from six sources read
 after the first draft; 121, 250, 257, 264, 407, 497 and 498 are from earlier issues, and #44 recoded all but 407),
-gated by `scripts/0280-literature-verify.R` (log `scripts/logs/habitat/20261009_literature_verify.csv`).
+gated by `scripts/0280-literature-verify.R` (log `scripts/logs/habitat/20261011_literature_verify.csv`).
 The sources are the group's `Fisheries/flow` collection (`FWTJDD8Z`; `data/flow_{members,additions}.csv`, 40
 items, all with a PDF since 2026-10-09) and the `flow` store.
 
@@ -127,14 +127,16 @@ Read after the PR opened, with the same rules and two audit rounds:
   apply in rows 810–817 and 827.
 - **Bradford & Heinonen 2008 (1027–1032).** A historic-flow method that recommends the median (Q50) monthly flow
   (1027). The authors read summer flow-reduction experiments as showing harm below about 10 % MAD (1028), which
-  is a reading of experiments, not a standard. Four `qual` rows cover winter incubation and overwintering.
+  is a reading of experiments, not a standard. Four `qual` rows: the goals of a summer rearing flow (1029),
+  winter incubation (1030, 1031) and overwintering (1032).
 - **McMahon 1983, coho HSI (1033–1036).** Preferred redd sites at 21–70 cm/s and ≥15 cm. Winter fry seek water
   <15 cm/s. Rearing capacity rises with streamflow, but no value is given, so the coho flow cells stay `none`.
 - **Raleigh et al. 1984, rainbow HSI (1039–1056).** Base flow ≥50 % of average annual flow is excellent and
   25–50 % fair. Spawning velocity is optimal at 30–70 cm/s and unsuitable below 10 or above 90 cm/s. Spawning,
   fry and juvenile SI curves. Steelhead winter velocities from Carnation Creek.
 - **Hickman & Raleigh 1982, cutthroat HSI (1037, 1038).** Spawning velocities 11–92 cm/s and a 15 cm site depth.
-  Its optimum (30–60 cm/s, p. 6) is unreadable in the scan, so it is quoted only through Ford (943).
+  Its optimum (30–60 cm/s, pp. 5–6) is legible on the rendered page but missing from the scan's OCR, so it is
+  quoted only through Ford (943).
 - **Braithwaite 2011 (1057–1070).** Bear Lake (Bonneville) cutthroat in the Strawberry River, Utah: redd depth and
   velocity, and juvenile velocity, as central-50 % and central-95 % spans of use, by year. Coded `CT`.
 

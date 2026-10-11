@@ -90,6 +90,6 @@ Al downloaded five of the paywalled or archive-only PDFs by hand. A code review 
   inside fixes came from one cause: a note merging two nearly identical statements into one parenthesis. Row
   954's last fix was checked against the OCR'd page, which ended the audit.
 - **Files:** `late/` holds the brief, the draft, the three audits and the apply scripts.
-- **Gate:** `scripts/logs/habitat/20261009_literature_verify*`, 1070 rows, flow 60 of 60.
+- **Gate:** `scripts/logs/habitat/20261011_literature_verify*`, 1070 rows, flow 60 of 60.
 
 Closed by: PR (see `gh pr list --search 44`)
