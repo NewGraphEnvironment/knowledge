@@ -9,14 +9,20 @@ LAB_RB = "Laboratory (Fish Lake strain rainbow trout, Montana)"
 OCR = "The text layer renders the degree sign as '8', so the quote is checked against OCR."
 M7 = ("Juveniles (mean sizes across experiments 102-126 mm TL for WCT, 110-152 mm TL for RB; p. 1115); 60-d acclimated chronic exposure, acclimated at 14 C "
       "and ramped 1 C/day to a held test temperature, satiation ration (p. 1114).")
-M5 = ("Juveniles; 60-d acclimated chronic exposure, ramped 1 C/day from 14 C to a held test temperature, satiation "
-      "ration (p. 8). The report's growth curves and 60-d survival curve use the third WCT and the second RB experiment "
-      "(p. 9); its LD50 regressions pool all three WCT and both RB experiments (Figs. 6 and 8, pp. 28 and 30). The 2007 "
-      "paper's survival and growth curves carry this report's coefficients (2007 Figs. 1 and 4, pp. 1116 and 1118; "
-      "report Figs. 1, 2 and 5), so the survival-curve UUILTs (19.6 and 24.3 C) and the growth optima are the same "
-      "estimates published twice; the LD50-regression UUILTs (19.7 and 24.2 C) are the report's alone.")
-TWICE7 = ("The same estimate as the 2005 report's survival-curve value: the paper's survival and growth curves carry "
-          "the report's coefficients (Figs. 1 and 4, pp. 1116 and 1118), so the two are not independent.")
+M5G = ("Juveniles; 60-d acclimated chronic exposure, ramped 1 C/day from 14 C to a held test temperature (p. 8). "
+       "The growth curves use only the third WCT and the second RB experiment, fed above satiation (p. 9; Figs. 1 and 2); "
+       "the 2007 paper's growth curves carry the same coefficients (2007 Fig. 4, p. 1118), so the optima are one estimate "
+       "published twice.")
+M5S = ("Juveniles; 60-d acclimated chronic exposure, ramped 1 C/day from 14 C to a held test temperature (p. 8). "
+       "The survival data pool all three WCT and both RB experiments: p. 11 reports 16 WCT test temperatures where each "
+       "experiment had 12 (p. 8), and the LD50 figures name every experiment (Figs. 6 and 8, pp. 28 and 30). The earlier "
+       "experiments had a fixed ration below satiation at some temperatures (p. 9). The 60-d survival curve (Fig. 5) carries "
+       "the same coefficients as the 2007 paper's (2007 Fig. 1, p. 1116), so the survival-curve UUILTs (19.6 and 24.3 C) are "
+       "one estimate published twice; the LD50-regression UUILTs (19.7 and 24.2 C) are the report's alone.")
+TWICE7 = ("The same estimate as the 2005 report's survival-curve value: the paper's survival curve carries the "
+          "report's coefficients (Fig. 1, p. 1116), so the two are not independent. The paper describes satiation rations "
+          "(p. 1114); the report says the earlier experiments pooled into these survival data had a fixed ration below "
+          "satiation at some temperatures (p. 9).")
 
 Q_UUILT7 = ("The predicted UUILT for westslope cutthroat trout (19.6°C; 95% confidence interval [CI] = 19.1- 19.9°C) "
             "was 4.7°C lower than that for rainbow trout (24.3")
@@ -94,21 +100,21 @@ row("u5w", "WCT", "max", "", "19.7", "constant", "lab", LAB_WCT, K5, 12,
     "The ultimate upper incipient lethal temperature, derived from plotting LD50 for each temperature followed by "
     "exponential regression analysis, was 19.7", "text",
     "60-d UUILT by exponential regression of LD50 (days) on temperature, pooling all three WCT experiments (Fig. 6, "
-    "p. 28); 95% CI 19.1-20.3 C; the value the abstract (p. 2) headlines. " + M5 +
+    "p. 28); 95% CI 19.1-20.3 C; the value the abstract (p. 2) headlines. " + M5S +
     " The same page gives 19.6 C by the survival curve (data row {s5w}); the 2007 paper reports 19.6 C, CI 19.1-19.9 "
     "(p. 1115, data row {u7w}).")
 row("s5w", "WCT", "max", "", "19.6", "constant", "lab", LAB_WCT, K5, 12,
     "as predicted by regression analysis of the survival vs. temperature curve, was 19.6", "text",
     "Temperature at which 50% survived 60 days, by sigmoid regression of survival on temperature; 95% CI 19.1-19.9 C. "
-    "The report says both methods gave a similar UUILT (the other gives 19.7 C, same page, data row {u5w}). " + M5)
+    "The report says both methods gave a similar UUILT (the other gives 19.7 C, same page, data row {u5w}). " + M5S)
 row("s5r", "RB", "max", "", "24.3", "constant", "lab", LAB_RB, K5, 12,
     "as predicted by regression analysis of the survival vs. temperature curve, was 24.3", "text",
     "Rainbow trout: temperature at which 50% survived 60 days, by the survival curve; 95% CI 24.0-24.7 C. The same page "
-    "gives 24.2 C by LD50 regression (data row {u5r}); the 2007 paper reports 24.3 C (p. 1115, data row {u7r}). " + M5)
+    "gives 24.2 C by LD50 regression (data row {u5r}); the 2007 paper reports 24.3 C (p. 1115, data row {u7r}). " + M5S)
 row("u5r", "RB", "max", "", "24.2", "constant", "lab", LAB_RB, K5, 12,
     "followed by exponential regression analysis, was 24.2", "text",
     "Rainbow trout 60-d UUILT by exponential regression of LD50, pooling both RB experiments (Fig. 8, p. 30); 95% CI 22.9-25.4 C here, while the abstract (p. 2) "
-    "prints 24.2 C with a 95% CI of 20.3-24.2 C. " + M5 + " The same page gives 24.3 C by the survival curve "
+    "prints 24.2 C with a 95% CI of 20.3-24.2 C. " + M5S + " The same page gives 24.3 C by the survival curve "
     "(data row {s5r}); the 2007 paper reports 24.3 C (p. 1115, data row {u7r}).")
 row("d5w", "WCT", "max", "", "24.7", "constant", "lab", LAB_WCT, K5, 16,
     "The predicted UUILT at seven days for westslope cutthroat trout from exponential regression in this study was 24.7", "text",
@@ -123,7 +129,7 @@ row("d5r", "RB", "max", "", "31.1", "constant", "lab", LAB_RB, K5, 16,
     "previously reported for rainbow trout (26.2 C and 25.6 C, same page). The 2007 paper gives 26.0 C, its day-7 "
     "LT50 (p. 1118, data row {d7r}).")
 row("o5w", "WCT", "optimum", "13.6", "13.6", "constant", "lab", LAB_WCT, K5, 11, Q_OPT5W, "text",
-    "Peak of 60-d relative growth of age-1 juveniles at satiation (quadratic regression over 8-20 C). " + M5 +
+    "Peak of 60-d relative growth of age-1 juveniles at satiation (quadratic regression over 8-20 C). " + M5G +
     " Shares its quote with the optimal growth range row (10.3-17.0 C, data row {g5w}). The 2007 paper gives the same "
     "13.6 C (p. 1117, data row {o7w}).")
 row("g5w", "WCT", "optimum", "10.3", "17.0", "constant", "lab", LAB_WCT, K5, 11, Q_OPT5W, "text",
@@ -134,7 +140,7 @@ row("z5w", "WCT", "range", "5.5", "21.8", "constant", "lab", LAB_WCT, K5, 11,
     "Zero-growth edges: where the quadratic growth regression crosses the x-axis (same page), predicted rather than "
     "tested (growth was tested at 8-20 C). Limits for growth, not survival.")
 row("o5r", "RB", "optimum", "13.1", "13.1", "constant", "lab", LAB_RB, K5, 11, Q_OPT5R, "text",
-    "Rainbow trout peak of 60-d relative growth at satiation. " + M5 + " Shares its quote with the optimal growth range "
+    "Rainbow trout peak of 60-d relative growth at satiation. " + M5G + " Shares its quote with the optimal growth range "
     "row (6.8-18.2 C, data row {g5r}). The 2007 paper gives the same 13.1 C (p. 1117, data row {o7r}).")
 row("g5r", "RB", "optimum", "6.8", "18.2", "constant", "lab", LAB_RB, K5, 11, Q_OPT5R, "text",
     "Rainbow trout optimal growth range: the 95% confidence intervals of the growth regression around the 13.1 C peak "

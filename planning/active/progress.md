@@ -32,3 +32,6 @@
   #38), pushed, md5 verified on connect.
 - Meaning round 3 and code-check round 1 (`audit-round3.md`): 6 + 1 findings (one shared), five inside round-2
   work, all fixed. Gate: 1,102 rows, 0 failing, thermal 50/50.
+- Code-check round 2 with the 128-claim enumeration: 10 wrong claims, one shared sentence, fixed by splitting the
+  2005 method note into growth and survival versions. Gate 1,102 rows, 0 failing, thermal 50/50. Review loop ended on
+  the enumeration.

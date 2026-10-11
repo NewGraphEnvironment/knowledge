@@ -57,18 +57,20 @@ followed read both as `pdf present`, and Zotero synced both files into local sto
 
 ## The 2005 report and the 2007 paper share their fitted curves
 
-The report's growth curves and 60-d survival curves use the third WCT and the second RB experiment (p. 9); its
-LD50 regressions pool all three WCT and both RB experiments (Figs. 6 and 8, pp. 28 and 30). The paper's survival
-and growth curves carry the report's coefficients exactly (WCT growth `-4.1727 + 0.9496 T - 0.0348 T²`, WCT
-survival midpoint 19.6253; 2007 Figs. 1 and 4, report Figs. 1, 2 and 5; the 2007 OCR misreads the RB survival
-coefficients as 24.3622 and -0.6033, where the printed figure reads 24.3522 and -0.5033). So the survival-curve
-UUILTs (19.6, 24.3 °C) and the growth optima are one estimate published twice. The LD50-regression UUILTs (19.7,
-24.2 °C), which the report's abstract headlines, appear only in the report. The 7-d UUILTs differ in method and in
-data: the paper takes the day-7 point of its LT50-over-time plot (Fig. 2, p. 1116); the report predicts 7 d from
-its pooled LD50 regression, with LD50 set to 120 d where survival never fell below 50% (p. 10), so its RB 31.1 °C is
-an extrapolation above the 28 °C top test temperature. Only some survival percentages are pooled in the paper (RB
-at 24 °C: 72.8%, between the report's two experiments). The report's abstract gives the RB UUILT a 95% CI of
-20.3–24.2 °C, while its p. 12 gives 22.9–25.4 °C.
+The report's growth curves use only the third WCT and the second RB experiment, fed above satiation (p. 9; Figs. 1
+and 2, pp. 23–24). Its survival data pool every experiment: p. 11 reports survival at 16 WCT test temperatures where
+each experiment had 12 (p. 8), and the LD50 figures name all three WCT and both RB experiments (Figs. 6 and 8, pp. 28
+and 30). The earlier experiments had a fixed ration below satiation at some temperatures (p. 9), while the 2007 paper
+describes satiation rations (p. 1114). The paper's survival and growth curves carry the report's coefficients
+exactly (WCT growth `-4.1727 + 0.9496 T - 0.0348 T²`, WCT survival midpoint 19.6253; 2007 Figs. 1 and 4, report
+Figs. 1, 2 and 5; the 2007 OCR misreads the RB survival coefficients as 24.3622 and -0.6033, where the printed figure
+reads 24.3522 and -0.5033). So the survival-curve UUILTs (19.6, 24.3 °C) and the growth optima are one estimate
+published twice. The LD50-regression UUILTs (19.7, 24.2 °C), which the report's abstract headlines, appear only in
+the report. The 7-d UUILTs differ in method: the paper takes the day-7 point of its LT50-over-time plot (Fig. 2,
+p. 1116); the report predicts 7 d from its LD50 regression, with LD50 set to 120 d where survival never fell below
+50% (p. 10), so its RB 31.1 °C is an extrapolation above the 28 °C top test temperature. Survival percentages match
+across the two as pooled means (WCT at 20 °C: 36% in the report, p. 11, and 35.7% in the paper, p. 1115). The
+report's abstract gives the RB UUILT a 95% CI of 20.3–24.2 °C, while its p. 12 gives 22.9–25.4 °C.
 
 ## Measured growth optima are `lab`; stated or reviewed optima are `pref`
 
