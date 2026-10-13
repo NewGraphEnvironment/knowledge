@@ -31,20 +31,20 @@ Harig & Fausch 2002 and Roberts et al. 2013 (cutthroat translocation thermal cri
 work (Mochnacz).
 
 ## Phase 1: `fish_length` variable
-- [ ] `pkg/R/literature.R`:
+- [x] `pkg/R/literature.R`:
   - add `fish_length` to `variable`;
   - add `fish_length = "mm"` to the unit fits;
   - add `fish_length = c("fork_length", "total_length", "unstated")` to `.knw_metric_fits()`, so a valued row
     must name its length type;
   - write a roxygen paragraph saying what it is: a body length a source ties to survival or recruitment, not a
     habitat dimension.
-- [ ] `pkg/tests/testthat/test-literature.R`:
+- [x] `pkg/tests/testthat/test-literature.R`:
   - a valued `fish_length` row needs a metric;
   - `degC` does not fit it;
   - `fork_length` does not fit `temperature`;
   - the metric vocabulary includes the length types.
   Restore-the-bug check on each new guard.
-- [ ] `devtools::document()`, then tests pass. Run `0280` against the unchanged table: still passes, 50/50.
+- [x] `devtools::document()`, then tests pass. Run `0280` against the unchanged table: still passes, 50/50.
 
 ## Phase 2: Search outside the collection
 - [ ] Two background `general-purpose` searchers, unnamed, told to spawn no subagents and write nothing but their
