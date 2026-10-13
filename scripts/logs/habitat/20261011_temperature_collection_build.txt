@@ -1,0 +1,48 @@
+collection temperature (SW2RXUJC) under TRXPJHQE: exists
+  coleman_fausch2007ColdSummer: 7JEFD442 | member, pdf present
+  coleman_fausch2007ColdSummera: CN479Y9A | member, pdf present
+  chezik_etal2014Fishgrowth: ZKAL7WYT | member, pdf present
+  lusardi_etal2020Oversummergrowth: N5FT3PID | member, pdf present
+  martins_etal2022SpatialEcology: HXFEGCQG | member, pdf present
+  gilbert_etal2022Subhourlywater: DWXVMAPE | member, pdf present
+  iacarella_weller2024Predictingfavourable: 4CERRSPS | member, pdf present
+  weller_etal2024Streamthermalscape: N4G8E2FS | member, pdf present
+  piotrowski_napiorkowski2019Simplemodifications: M2AMUQGL | member, no-pdf: none local
+  pacificclimateimpactsconsortiumGriddedHydrologic: K3ZZNX4B | member, no-pdf: none local
+  oconnor_etal2025Investigatingthermal: 29LJZB3T | member, pdf present
+  munozsabater2019ERA5Landhourly: 7CGM7AKH | member, no-pdf: none local
+  irvine2025NewGraphEnvironmentwatertempbc: BU8377PN | member, no-pdf: none local
+  iacarella_etal2024Projectingexceedance: 99K75CL7 | member, pdf present
+  hill_etal2025Spatialstream: F4Y3AQZH | member, pdf present
+  hill_etal2024Spatialstream: QYU2YFFZ | member, pdf present
+  thorley_etal2022UpperFording: 84VRXIII | member, pdf present
+  thorley_etal2021UpperFording: JW46KUYH | member, pdf present
+  cope2020UpperFording: PZCW7XZT | member, pdf present
+  bear_etal2007ComparativeThermal: P9KAE65R | member, pdf exists
+  bear_etal2005ThermalRequirements: HFZES7WC | member, pdf exists
+  hasnain_etalKeyEcological: AENMCUT2 | member, pdf present
+  brett1971EnergeticResponses: 9L2YJ3MB | member, pdf present
+  canada_departmentoffisheriesandoceans2019Recoverystrategy: U3X4767Q | member, pdf present
+  cleator_etal2009InformationRelevant: AKMM3ZVT | member, pdf present
+  WESTSLOPECUTTHROATTROUTOncorhynchusclarkilewisi2004: SP3TQYKX | member, pdf present
+  mcmahon_etal2007TemperatureCompetition: 7QBNVED3 | member, no-pdf: none local
+  isaak_etal2017NorWeSTSummer: LQUDWBT7 | member, pdf present
+  richter_kolmes2005MaximumTemperature: 87KUWYF3 | member, pdf present
+  bjornn_reiser1991HabitatRequirements: YDHYE9V9 | member, pdf present
+  raleigh_etal1986HabitatSuitablility: Z53XIYCM | member, pdf present
+  roberge_etal2002LifeHistory: B3TYJ9I9 | member, pdf present
+  eaton_scheller1996Effectsclimate: 6VBSPJQN | member, pdf present
+  mcphail_baxter1996reviewbull: SUENJEU8 | member, pdf present
+  rieman_mcintyre1993Demographichabitat: W72N3HAG | member, pdf present
+  selong_etalEffectTemperature: 6TEE58SF | member, pdf present
+  isaak_etal2015coldwaterclimate: X9HPSBV4 | member, pdf present
+  dunham_chandler2001Modelspredict: V9QT2NM2 | member, pdf present
+  sauter_etal2001Issuepaper: EGQQ35IH | member, pdf present
+  bustard_schell2002ConservingMorice: RNR726EF | member, pdf present
+  DistributionlifehistoryabundanceharvesthabitatlimitingfactorsbulltroutMetoliusRiverLakeBillyChinookOregon198394: BHHDYTJI | member, pdf present
+  u_s_fishandwildlifeservice2010Endangeredthreatened: 294UBXMS | member, pdf present
+  u_s_fishandwildlifeservice2015Recoveryplan: X5XQUDTX | member, pdf present
+  cooney_holzer2006AppendixInterior: S3IPNXIN | member, pdf present
+  hagen_weber2019Limitingfactorsa: YC3EQ8T8 | member, pdf present
+
+45 members, 0 additions | member 45 | no-pdf 5 | pdf 40
