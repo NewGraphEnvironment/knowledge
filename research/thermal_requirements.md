@@ -1,6 +1,6 @@
 # Thermal requirements by species and life stage
 
-**Verified:** 2026-10-11 · **Issues:** #38 (this), #40 (Bear et al. 2005 and 2007); background in `stream_temperature.md`; for
+**Verified:** 2026-10-11 · **Issues:** #38 (this), #40 (Bear et al. 2005 and 2007), #47 (open: growing-season thresholds beyond this collection); background in `stream_temperature.md`; for
 NewGraphEnvironment/link#21, NewGraphEnvironment/wet#40 and NewGraphEnvironment/fish_passage_template_reporting#214 ·
 **Produced by:** rows of `data/literature_evidence.csv` with `variable` `temperature`, `air_temperature` or
 `degree_days` (rows 511 onward are #38's, rows 1071 onward #40's), gated by `scripts/0280-literature-verify.R` (log
