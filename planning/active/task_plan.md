@@ -47,7 +47,7 @@ work (Mochnacz).
 - [x] `devtools::document()`, then tests pass. Run `0280` against the unchanged table: still passes, 50/50.
 
 ## Phase 2: Search outside the collection
-- [ ] Two background `general-purpose` searchers, unnamed, told to spawn no subagents and write nothing but their
+- [x] Two background `general-purpose` searchers, unnamed, told to spawn no subagents and write nothing but their
   file. One takes trout and char (WCT, BT, RB, other cutthroat); the other takes Pacific salmon and steelhead (CO,
   CH, ST). Each writes `planning/active/search-<tag>.md` listing per candidate:
   - citation and DOI;
@@ -58,9 +58,9 @@ work (Mochnacz).
   Methods: web search, forward citations of Coleman & Fausch 2007a/b (Semantic Scholar API, Scholar "cited by"),
   and back-chasing from the reference lists of Hill et al. 2024/2025, Thorley et al. 2021/2022 and the Teck SME
   reports. Run BC, AB, MT and PNW sources first. No Zotero writes.
-- [ ] While they run: back-chase Thorley 2021/2022 and Hill 2024/2025 references myself from the extracted text
+- [x] While they run: back-chase Thorley 2021/2022 and Hill 2024/2025 references myself from the extracted text
   (`#38 archive scratch_keytext.py`).
-- [ ] Merge into one candidate list in `findings.md` with a search log of queries, sources and date. The `none`
+- [x] Merge into one candidate list in `findings.md` with a search log of queries, sources and date. The `none`
   notes will cite that log.
   - **Keep** a candidate that states a degree-day or fish-size threshold, or a quantitative size–survival or
     GSDD–recruitment relation, for age-0 or first-winter freshwater salmonids.
@@ -68,7 +68,7 @@ work (Mochnacz).
   - Aim for about 15 items or fewer, and record why each dropped one was dropped.
 
 ## Phase 3: PDFs into Zotero and the store
-- [ ] Rows in `data/temperature_members.csv`: `pdf` is the direct URL where one exists.
+- [x] Rows in `data/temperature_members.csv`: `pdf` is the direct URL where one exists.
 - [ ] Browser-only hits: open them all in Chrome tabs in one handoff. Al saves each into `data/rag/pdf/`
   (`~/Downloads` is unreadable to the agent), and its row's `pdf` is set to that path. Paywalled with no copy is
   recorded in `findings.md` and not added.
