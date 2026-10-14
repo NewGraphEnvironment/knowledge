@@ -14,3 +14,4 @@
 - Phase 5: round 1, two Plan auditors (tc, ps+none notes): 14 findings, all in notes or cited_source, each reproduced before its fix (`audit-{tc,ps}-round1.md`, commit 432e3ab). Round 2 on the fixed notes is running, with a sentence-by-sentence enumeration.
 - Phase 6: `research/thermal_requirements.md` gains a First-winter size section and the BT and ST degree-day rows; status, WCT paragraph and consumer guidance revised; README row; CLAUDE.md names `fish_length`, the additions file and a size-row drafting rule (432e3ab).
 - Phase 3: temperature store rebuild started in the background.
+- Phase 5: round 2 found defects inside round-1 fixes (1112, pointer wording, log path) plus two drafter sentences (1115, 1122); fixed; ended by the sentence enumeration (`audit-round2.md`). `0280` passes: 1136 rows, thermal 50/50.

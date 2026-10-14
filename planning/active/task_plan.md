@@ -91,10 +91,10 @@ work (Mochnacz).
   literature has none.
 
 ## Phase 5: Meaning audit and gate
-- [ ] Audit every new or changed row against its PDF with a blind `Plan`/`Explore` reader (canary first). Findings
+- [x] Audit every new or changed row against its PDF with a blind `Plan`/`Explore` reader (canary first). Findings
   go to `planning/active/audit-*.md`.
-- [ ] Fix, then audit the fixes. End by enumeration: every note sentence checked against its page.
-- [ ] `0280`: 0 failing quotes, thermal 50/50. Log `scripts/logs/habitat/20261013_literature_verify*`.
+- [x] Fix, then audit the fixes. End by enumeration: every note sentence checked against its page.
+- [x] `0280`: 0 failing quotes, thermal 50/50. Log `scripts/logs/habitat/20261013_literature_verify*`.
 
 ## Phase 6: Write-up
 - [x] `research/thermal_requirements.md`: add the new rows to the degree-day table and a size table. Revise the
