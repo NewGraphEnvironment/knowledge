@@ -65,6 +65,11 @@ riffle, a rearing position), in the unit the source wrote (\code{cm}, \code{ft},
 \code{cm/s}, \code{ft/s} as well as \code{m} and \code{m/s}). A channel's bankfull depth is stream
 size, and is written in \verb{m bankfull}.
 
+\code{fish_length} is a body length a source ties to survival or recruitment (an
+age-0 fish's size at the onset of its first winter, say), not a habitat
+dimension. It reads in \code{mm}, and its \code{metric} says which length the source
+measured: \code{fork_length}, \code{total_length}, or \code{unstated}.
+
 \code{groundwater} covers upwelling, hyporheic exchange and springs. It takes no
 unit, so a groundwater row carries no value: no source read so far gives an
 upwelling measure (a vertical hydraulic gradient, say).

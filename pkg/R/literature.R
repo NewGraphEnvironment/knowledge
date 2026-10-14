@@ -54,6 +54,11 @@
 #' `cm/s`, `ft/s` as well as `m` and `m/s`). A channel's bankfull depth is stream
 #' size, and is written in `m bankfull`.
 #'
+#' `fish_length` is a body length a source ties to survival or recruitment (an
+#' age-0 fish's size at the onset of its first winter, say), not a habitat
+#' dimension. It reads in `mm`, and its `metric` says which length the source
+#' measured: `fork_length`, `total_length`, or `unstated`.
+#'
 #' `groundwater` covers upwelling, hyporheic exchange and springs. It takes no
 #' unit, so a groundwater row carries no value: no source read so far gives an
 #' upwelling measure (a vertical hydraulic gradient, say).
@@ -70,7 +75,7 @@ knw_literature_vocab <- function() {
     variable = c("gradient", "channel_width", "stream_order", "discharge", "lake_area",
                  "wetland_area", "bridge_distance", "temperature", "substrate", "depth",
                  "velocity", "timing", "valley_width_index", "drainage_area", "elevation",
-                 "air_temperature", "degree_days", "groundwater", "instream_flow"),
+                 "air_temperature", "degree_days", "groundwater", "instream_flow", "fish_length"),
     parameter = c("spawn_gradient_max", "spawn_gradient_min", "spawn_channel_width_min",
                   "spawn_mad_min", "rear_gradient_max", "rear_channel_width_min", "rear_mad_min",
                   "rear_mad_max", "rear_lake_ha_min", "rear_wetland_ha_min", "access_gradient_max",
@@ -87,7 +92,8 @@ knw_literature_vocab <- function() {
 }
 
 # Which metrics each variable takes: a statistic of temperature, the window a
-# degree-day total accumulates over, or the statistic a flow need is held to.
+# degree-day total accumulates over, the statistic a flow need is held to, or
+# which body length a fish length is.
 # Variables not named here carry no metric.
 .knw_metric_fits <- function() {
   temp <- c("daily_max", "daily_mean", "mwmt", "7dadm", "mwat", "7dec", "weekly_mean",
@@ -95,7 +101,8 @@ knw_literature_vocab <- function() {
   list(temperature = temp, air_temperature = temp,
        degree_days = c("growing_season", "to_hatch", "to_emergence", "annual", "unstated"),
        instream_flow = c("instantaneous", "daily_mean", "7day_low", "monthly_mean", "monthly_median",
-                         "unstated"))
+                         "unstated"),
+       fish_length = c("fork_length", "total_length", "unstated"))
 }
 
 #' Read the literature evidence table, filtered by species and variable
@@ -116,7 +123,7 @@ knw_literature_vocab <- function() {
 #' channel width, and so on) and a bound must sit on its value: `min` on
 #' `value_min`, `max` on `value_max`, `range` on both. A text quote is at least
 #' 20 characters, so that a check against the PDF can tell it apart from noise.
-#' A `temperature`, `air_temperature`, `degree_days` or `instream_flow` value needs a `metric`
+#' A `temperature`, `air_temperature`, `degree_days`, `instream_flow` or `fish_length` value needs a `metric`
 #' that fits its variable, and a `none` row may name the metric it searched
 #' for; every other row leaves `metric` blank. A cited
 #' `degree_days` row needs a `note`, which gives the base temperature.
@@ -271,6 +278,7 @@ knw_literature_read <- function(path, species_code = NULL, variable = NULL) {
                drainage_area = c("km2", "mi2"), elevation = c("m", "ft"),
                air_temperature = "degC", degree_days = "degC-day",
                instream_flow = c("m3/s", "cfs", "percent MAD", "percentile", "percent exceedance"),
+               fish_length = "mm",
                # Qualitative until a source gives an upwelling measure: no unit fits, so no value can.
                groundwater = character(0))
   misfit <- !is.na(x$unit) & !mapply(function(v, u) u %in% fits[[v]], x$variable, x$unit)

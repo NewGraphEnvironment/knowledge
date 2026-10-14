@@ -1,0 +1,163 @@
+2026-10-14T00:22:21Z
+49 keys across 1 collections
+Ingesting 49 PDF(s) into data/rag/temperature.duckdb
+Launching 8 parallel workers.
+Installed 48 packages in 862ms
+Installed 48 packages in 839ms
+Installed 48 packages in 873ms
+Installed Installed 48 packages 48 packagesin 1.05s 
+in 867ms
+Installed 48 packages in 781ms
+Installed 48 packages in 813msInstalled 48 packages in 924ms
+
+ℹ ingested: /Users/airvine/Zotero/storage/HYSNCHBC/distribution,_life_history,_abundance,_harvest,_habitat,_and_limiting_factors.pdf
+Ingesting ■■                                 2% | ETA:  1h
+ℹ ingested: /Users/airvine/Zotero/storage/KUGT5HMG/bjornn_reiser_1991_habitat_requirements_of_salmonids_in_streams.pdf
+Ingesting ■■                                 2% | ETA:  1hℹ ingested: /Users/airvine/Zotero/storage/QNK6GJDJ/cttxrbt temp TAFS.pdf
+Ingesting ■■                                 2% | ETA:  1hIngesting ■■■                                6% | ETA: 21m
+ℹ ingested: /Users/airvine/Zotero/storage/JR7UUK2D/2004_“westslope”_cutthroat_trout_oncorhynchus_clarki_lewisi.pdf
+Ingesting ■■■                                6% | ETA: 21mℹ ingested: /Users/airvine/Zotero/storage/ZSHZUGLH/chezik_et_al_2014_fish_growth_and_degree-days_i_-_selecting_a_base_temperature_for_a.pdf
+Ingesting ■■■                                6% | ETA: 21mIngesting ■■■■                              10% | ETA: 13m
+ℹ ingested: /Users/airvine/Zotero/storage/VN9VNPUT/Brett - 1971 - Energetic Responses of Salmon to Temperature. A St.pdf
+Ingesting ■■■■                              10% | ETA: 13mℹ ingested: /Users/airvine/Zotero/storage/H7XFPUPT/Thermal_Requirements_of_Westslope_Cutthroat_Trout.pdf
+Ingesting ■■■■                              10% | ETA: 13mIngesting ■■■■■                             14% | ETA:  9m
+ℹ ingested: /Users/airvine/Zotero/storage/PU3WN8XY/cleator_et_al_2009_information_relevant_to_a_recovery_potential_assessment_of_pure_native.pdf
+Ingesting ■■■■■                             14% | ETA:  9mIngesting ■■■■■■                            16% | ETA:  8m
+ℹ ingested: /Users/airvine/Zotero/storage/LERIGKBU/coleman_fausch_2007_cold_summer_temperature_regimes_cause_a_recruitment_bottleneck_in_age‐0.pdf
+Ingesting ■■■■■■                            16% | ETA:  8mℹ ingested: /Users/airvine/Zotero/storage/2FTXMV9X/cooney_holzer_2006_appendix_c_-_interior_columbia_basin_stream_type_chinook_salmon_and_steelhead.pdf
+Ingesting ■■■■■■                            16% | ETA:  8mIngesting ■■■■■■■                           20% | ETA:  6m
+ℹ ingested: /Users/airvine/Zotero/storage/VLM2M7IU/coleman_fausch_2007_cold_summer_temperature_limits_recruitment_of_age‐0_cutthroat_trout_in.pdf
+Ingesting ■■■■■■■                           20% | ETA:  6mIngesting ■■■■■■■■                          22% | ETA:  6m
+ℹ ingested: /Users/airvine/Zotero/storage/S3M7ESPC/gilbert_et_al_2022_sub-hourly_water_temperature_data_collected_across_the_nechako_watershed,.pdf
+Ingesting ■■■■■■■■                          22% | ETA:  6mIngesting ■■■■■■■■                          24% | ETA:  6m
+ℹ ingested: /Users/airvine/Zotero/storage/72R34DQB/eaton_scheller1996.pdf
+Ingesting ■■■■■■■■                          24% | ETA:  6mℹ ingested: /Users/airvine/Zotero/storage/Y5ANYHNM/ebersole_et_al_2006_juvenile_coho_salmon_growth_and_survival_across_stream_network_seasonal_habitats.pdf
+Ingesting ■■■■■■■■                          24% | ETA:  6mIngesting ■■■■■■■■■■                        29% | ETA:  5m
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+ℹ ingested: /Users/airvine/Zotero/storage/4ZSJWFQM/fp_cmer_01_103.pdf
+Ingesting ■■■■■■■■■■                        29% | ETA:  5mIngesting ■■■■■■■■■■                        31% | ETA:  4m
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+ℹ ingested: /Users/airvine/Zotero/storage/CEQZZTNC/34863.pdf
+Ingesting ■■■■■■■■■■                        31% | ETA:  4mIngesting ■■■■■■■■■■■                       33% | ETA:  4m
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+ℹ ingested: /Users/airvine/Zotero/storage/JXD9K6KJ/poisson_fish-passage-22b.pdf
+Ingesting ■■■■■■■■■■■                       33% | ETA:  4mCould not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+Could not get FontBBox from font descriptor because None cannot be parsed as 4 floats
+ℹ ingested: /Users/airvine/Zotero/storage/EZSJEH5B/poisson_skeena-stream-temp-25.pdf
+Ingesting ■■■■■■■■■■■                       33% | ETA:  4mIngesting ■■■■■■■■■■■■                      37% | ETA:  4m
+ℹ ingested: /Users/airvine/Zotero/storage/QGP4DA98/hasnain_et_al_key_ecological_temperature_metrics_for_canadian_freshwater_fishes.pdf
+Ingesting ■■■■■■■■■■■■                      37% | ETA:  4mIngesting ■■■■■■■■■■■■■                     39% | ETA:  4m
+ℹ ingested: /Users/airvine/Zotero/storage/WBGNP2EZ/cope_2020_upper_fording_river_westslope_cutthroat_trout_population_monitoring_project_-.pdf
+Ingesting ■■■■■■■■■■■■■                     39% | ETA:  4mIngesting ■■■■■■■■■■■■■                     41% | ETA:  4m
+ℹ ingested: /Users/airvine/Zotero/storage/9WJMUK4F/canada_department_of_fisheries_and_oceans_2019_recovery_strategy_and_action_plan_for_the_westslope_cutthroat_trout.pdf
+Ingesting ■■■■■■■■■■■■■                     41% | ETA:  4mℹ ingested: /Users/airvine/Zotero/storage/2BWUEY8C/iacarella_et_al_2024-projecting_exceedanc.pdf
+Ingesting ■■■■■■■■■■■■■                     41% | ETA:  4mIngesting ■■■■■■■■■■■■■■                    45% | ETA:  4m
+ℹ ingested: /Users/airvine/Zotero/storage/SDQ3D9XR/Iacarella and Weller - 2024 - Predicting favourable streams for anadromous salmo.pdf
+Ingesting ■■■■■■■■■■■■■■                    45% | ETA:  4mIngesting ■■■■■■■■■■■■■■■                   47% | ETA:  3m
+ℹ ingested: /Users/airvine/Zotero/storage/5BBRI7JG/rmrs_2015_isaak_d001.pdf
+Ingesting ■■■■■■■■■■■■■■■                   47% | ETA:  3mIngesting ■■■■■■■■■■■■■■■■                  49% | ETA:  3m
+ℹ ingested: /Users/airvine/Zotero/storage/MUWZ6RT7/Water,-Air-Temp-and-Ice-Harmer-Creek-Evaluation-of-Cause-SME-Report.pdf
+Ingesting ■■■■■■■■■■■■■■■■                  49% | ETA:  3mIngesting ■■■■■■■■■■■■■■■■                  51% | ETA:  3m
+ℹ ingested: /Users/airvine/Zotero/storage/BNUTP2W8/lusardi_et_al_2020_oversummer_growth_and_survival_of_juvenile_coho_salmon_(_ioncorhynchus.pdf
+Ingesting ■■■■■■■■■■■■■■■■                  51% | ETA:  3mIngesting ■■■■■■■■■■■■■■■■■                 53% | ETA:  3m
+ℹ ingested: /Users/airvine/Zotero/storage/2MYBKAEB/Isaak et al. - 2017 - The NorWeST Summer Stream Temperature Model and Sc.pdf
+Ingesting ■■■■■■■■■■■■■■■■■                 53% | ETA:  3mIngesting ■■■■■■■■■■■■■■■■■■                55% | ETA:  3m
+ℹ ingested: /Users/airvine/Zotero/storage/VBAV3JEA/Fs94-223-eng.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■                55% | ETA:  3mIngesting ■■■■■■■■■■■■■■■■■■                57% | ETA:  3m
+ℹ ingested: /Users/airvine/Zotero/storage/JQPBUZAS/hagen_and_weber_limiting_factors_en.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■                57% | ETA:  3mIngesting ■■■■■■■■■■■■■■■■■■■               59% | ETA:  3m
+ℹ ingested: /Users/airvine/Zotero/storage/H4AUSEV7/App67_RevBT_LifeHist.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■               59% | ETA:  3mℹ ingested: /Users/airvine/Zotero/storage/HKTCPDVJ/PEA_F22_F_3388_1664380292568_8FCE11DCCD.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■               59% | ETA:  3mIngesting ■■■■■■■■■■■■■■■■■■■■              63% | ETA:  2m
+ℹ ingested: /Users/airvine/Zotero/storage/HP2PWVUQ/bustard_schell_2002_conserving_morice_watershed_fish_populations_and_their_habitat.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■              63% | ETA:  2mIngesting ■■■■■■■■■■■■■■■■■■■■■             65% | ETA:  2m
+ℹ ingested: /Users/airvine/Zotero/storage/68C5QYCR/quinn_peterson_1996_the_influence_of_habitat_complexity_and_fish_size_on_over-winter_survival_and.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■             65% | ETA:  2mIngesting ■■■■■■■■■■■■■■■■■■■■■             67% | ETA:  2m
+ℹ ingested: /Users/airvine/Zotero/storage/B4QHJUMZ/Riley_1998_1511468294346_1458207751.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■             67% | ETA:  2mIngesting ■■■■■■■■■■■■■■■■■■■■■■            69% | ETA:  2m
+ℹ ingested: /Users/airvine/Zotero/storage/595X8N4N/o’connor_et_al_2025-investigating_therma.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■            69% | ETA:  2mIngesting ■■■■■■■■■■■■■■■■■■■■■■            71% | ETA:  2m
+ℹ ingested: /Users/airvine/Zotero/storage/HM57BC44/Richter_Kolmes_2005_temp_limits.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■            71% | ETA:  2mℹ ingested: /Users/airvine/Zotero/storage/WF6H9H5T/selong_et_al_effect_of_temperature_on_growth_and_survival_of_bull_trout,_with_application_of.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■            71% | ETA:  2mIngesting ■■■■■■■■■■■■■■■■■■■■■■■■          76% | ETA:  1m
+ℹ ingested: /Users/airvine/Zotero/storage/GXFVUDWZ/int_gtr302.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■          76% | ETA:  1mℹ ingested: /Users/airvine/Zotero/storage/DHMB3NJT/raleigh_et_al_1986_habitat_suitablility_index_models_and_instream_flow_suitability_curves_-_chinook.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■          76% | ETA:  1mIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■         80% | ETA:  1m
+ℹ ingested: /Users/airvine/Zotero/storage/G6VF2X94/EPA_2001_r10-water-quality-temperature-issue-paper1-2001.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■         80% | ETA:  1mIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■         82% | ETA:  1m
+ℹ ingested: /Users/airvine/Zotero/storage/WWH4ZQP7/Energetic-Status-Harmer-Creek-Evaluation-of-Cause-SME-Report.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■         82% | ETA:  1mIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■■        84% | ETA:  1m
+ℹ ingested: /Users/airvine/Zotero/storage/MYABAICN/thorley_et_al_2021_upper_fording_river_westslope_cutthroat_trout_population_monitoring_2020.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■        84% | ETA:  1mℹ ingested: /Users/airvine/Zotero/storage/SKFPH72Z/thorley_et_al_2022_upper_fording_river_westslope_cutthroat-ntrout_population_monitoring_2021.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■        84% | ETA:  1mIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■       88% | ETA: 42s
+ℹ ingested: /Users/airvine/Zotero/storage/BDXIPQX7/download.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■       88% | ETA: 42sIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■      90% | ETA: 35s
+ℹ ingested: /Users/airvine/Zotero/storage/NNGMHESM/Weller et al. - 2024 - Stream thermalscape scenarios for British Columbia.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■      90% | ETA: 35sIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     92% | ETA: 28s
+ℹ ingested: /Users/airvine/Zotero/storage/KEC6QJ78/Fs41-31-105-eng.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     92% | ETA: 28sIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     94% | ETA: 22s
+ℹ ingested: /Users/airvine/Zotero/storage/NB6MMGNT/Final_Bull_Trout_Recovery_Plan_092915-corrected.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     94% | ETA: 22sIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    96% | ETA: 16s
+ℹ ingested: /Users/airvine/Zotero/storage/C3643Y4I/roberge_et_al_2002_life_history_characteristics_of_freshwater_fishes_occurring_in_british_columbia.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    96% | ETA: 16sIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    98% | ETA:  8s
+ℹ ingested: /Users/airvine/Zotero/storage/PSU3FD72/2010-25028.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    98% | ETA:  8sIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  100% | ETA:  0s
+Store built: data/rag/temperature.duckdb | docs: 49 | chunks: 11024 | model: nomic-embed-text
+Built data/rag/temperature.duckdb. It is not in the bucket until ACTION=push.

@@ -337,12 +337,43 @@ test_that("a cited degree-day row says its base temperature in the note", {
   expect_equal(knw_literature_read(write_literature(x))$metric[1], "growing_season")
 })
 
+test_that("a fish length reads in mm and names which length it is", {
+  x <- literature_fixture()
+  x$species_code[1] <- "WCT"
+  x$life_stage[1] <- "overwintering"
+  x$variable[1] <- "fish_length"
+  x$parameter[1] <- NA
+  x$model_id[1] <- NA
+  x$bound[1] <- "min"
+  x$value_min[1] <- "30"
+  x$value_max[1] <- NA
+  x$unit[1] <- "mm"
+  x$metric[1] <- "fork_length"
+  out <- knw_literature_read(write_literature(x), variable = "fish_length")
+  expect_equal(out$metric, "fork_length")
+  y <- x
+  y$metric[1] <- NA
+  expect_error(knw_literature_read(write_literature(y)), "fish_length value needs a metric.*data row 1")
+  y <- x
+  y$unit[1] <- "degC"
+  expect_error(knw_literature_read(write_literature(y)), "unit degC does not fit variable fish_length")
+  y <- x
+  y$metric[1] <- "growing_season"
+  expect_error(knw_literature_read(write_literature(y)), "metric growing_season does not fit variable fish_length")
+  y <- x
+  y$variable[1] <- "temperature"
+  y$unit[1] <- "degC"
+  expect_error(knw_literature_read(write_literature(y)), "metric fork_length does not fit variable temperature")
+})
+
 test_that("the metric vocabulary holds the temperature metrics and the degree-day windows", {
   m <- knw_literature_vocab()$metric
   expect_true(all(c("daily_max", "mwmt", "7dadm", "mwat", "7dec", "august_mean", "constant", "unstated",
                     "growing_season", "to_hatch", "to_emergence", "annual") %in% m))
   expect_false(anyDuplicated(m) > 0)
   expect_true(all(c("degree_days", "air_temperature") %in% knw_literature_vocab()$variable))
+  expect_true(all(c("fork_length", "total_length") %in% m))
+  expect_true("fish_length" %in% knw_literature_vocab()$variable)
   expect_true("lab" %in% knw_literature_vocab()$kind)
 })
 

@@ -1,0 +1,3 @@
+2026-10-14T00:30:43Z
+Using local data/rag/temperature.duckdb (md5 matches manifest; 49 docs, 11024 chunks).
+[1] "Water,-Air-Temp-and-Ice-Harmer-Creek-Evaluation-of-Cause-SME-Report.pdf"
