@@ -78,15 +78,15 @@ work (Mochnacz).
   connect. Rebuild `habitat_modelling` only if new items land in its input collections.
 
 ## Phase 4: Draft rows
-- [ ] Re-read the #38 drafter brief and the CLAUDE.md drafting conventions. Check each convention against the
+- [x] Re-read the #38 drafter brief and the CLAUDE.md drafting conventions. Check each convention against the
   sources (#44's lesson).
   - Species is what was measured: RB rows for rainbow; ST only where the source says steelhead or anadromous; a
     new cutthroat subspecies gets its own code, never WCT.
   - Degree-day notes give the base temperature and the window. A GSDD computed on another window is `annual` or
     `unstated`, not `growing_season`.
-- [ ] Draft rows from each new PDF, plus Thorley 2022's 30 mm statement as `fish_length`. Draft myself if there
+- [x] Draft rows from each new PDF, plus Thorley 2022's 30 mm statement as `fish_length`. Draft myself if there
   are 20 rows or fewer; otherwise use the #38 two-family drafter split.
-- [ ] Append, never insert. A value that fills a growing-season cell replaces that cell's `none` row. Every
+- [x] Append, never insert. A value that fills a growing-season cell replaces that cell's `none` row. Every
   remaining `none` row's note is revised to name the wider search (the `findings.md` log) and never to claim the
   literature has none.
 
