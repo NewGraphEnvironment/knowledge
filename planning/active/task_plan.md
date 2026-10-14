@@ -105,7 +105,7 @@ work (Mochnacz).
 
 ## Validation
 
-- [ ] pkg tests pass; `0280` passes
-- [ ] `/code-check branch` clean (pkg code, tests, members csv)
-- [ ] PWF checkboxes match landed work
-- [ ] `/planning-archive` on completion, then `/gh-pr-push`
+- [x] pkg tests pass; `0280` passes
+- [x] `/code-check branch` clean (pkg code, tests, members csv)
+- [x] PWF checkboxes match landed work
+- [x] `/planning-archive` on completion, then `/gh-pr-push`
