@@ -97,10 +97,10 @@ work (Mochnacz).
 - [ ] `0280`: 0 failing quotes, thermal 50/50. Log `scripts/logs/habitat/20261013_literature_verify*`.
 
 ## Phase 6: Write-up
-- [ ] `research/thermal_requirements.md`: add the new rows to the degree-day table and a size table. Revise the
+- [x] `research/thermal_requirements.md`: add the new rows to the degree-day table and a size table. Revise the
   "no BC species" paragraph and the consumer guidance for wet#40, link#21 and template#214 to say what threshold
   each can now apply, and with what transfer caveat. Update the provenance line.
-- [ ] `CLAUDE.md` above the marker: name `fish_length` in the `literature_evidence.csv` description, and add a
+- [x] `CLAUDE.md` above the marker: name `fish_length` in the `literature_evidence.csv` description, and add a
   drafting-convention line on length type and stage.
 
 ## Validation
