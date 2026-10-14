@@ -15,3 +15,4 @@
 - Phase 6: `research/thermal_requirements.md` gains a First-winter size section and the BT and ST degree-day rows; status, WCT paragraph and consumer guidance revised; README row; CLAUDE.md names `fish_length`, the additions file and a size-row drafting rule (432e3ab).
 - Phase 3: temperature store rebuild started in the background.
 - Phase 5: round 2 found defects inside round-1 fixes (1112, pointer wording, log path) plus two drafter sentences (1115, 1122); fixed; ended by the sentence enumeration (`audit-round2.md`). `0280` passes: 1136 rows, thermal 50/50.
+- Phase 3: store rebuilt (49 docs, 11,024 chunks; was 40), pushed, and a fresh `crd_store_connect()` matches the manifest and retrieves the Teck reports (logs `20261013_temperature_store_{build,push,verify}.txt`). `habitat_modelling` not rebuilt: no new item is in its input collections. Code-check round 1 clean; fixed its doc note (roxygen names `fish_length` among metric-bearing variables).

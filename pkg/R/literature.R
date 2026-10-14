@@ -123,7 +123,7 @@ knw_literature_vocab <- function() {
 #' channel width, and so on) and a bound must sit on its value: `min` on
 #' `value_min`, `max` on `value_max`, `range` on both. A text quote is at least
 #' 20 characters, so that a check against the PDF can tell it apart from noise.
-#' A `temperature`, `air_temperature`, `degree_days` or `instream_flow` value needs a `metric`
+#' A `temperature`, `air_temperature`, `degree_days`, `instream_flow` or `fish_length` value needs a `metric`
 #' that fits its variable, and a `none` row may name the metric it searched
 #' for; every other row leaves `metric` blank. A cited
 #' `degree_days` row needs a `note`, which gives the base temperature.

@@ -72,9 +72,9 @@ work (Mochnacz).
 - [ ] Browser-only hits: open them all in Chrome tabs in one handoff. Al saves each into `data/rag/pdf/`
   (`~/Downloads` is unreadable to the agent), and its row's `pdf` is set to that path. Paywalled with no copy is
   recorded in `findings.md` and not added.
-- [ ] `0270 --collection temperature --dry-run`, then live. Log to `scripts/logs/habitat/20261013_temperature_*`.
+- [x] `0270 --collection temperature --dry-run`, then live. Log to `scripts/logs/habitat/20261013_temperature_*`.
   Confirm `has_pdf` through the Web API, then in a guarded `zotero.sqlite` copy after sync.
-- [ ] Rebuild the `temperature` store (`OVERWRITE=TRUE`), push it (`CONFIRM=TRUE`), and verify on a fresh
+- [x] Rebuild the `temperature` store (`OVERWRITE=TRUE`), push it (`CONFIRM=TRUE`), and verify on a fresh
   connect. Rebuild `habitat_modelling` only if new items land in its input collections.
 
 ## Phase 4: Draft rows
