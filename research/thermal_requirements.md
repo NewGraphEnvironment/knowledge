@@ -106,7 +106,7 @@ Scrivener 1989 eq. 18, p. 70; Hartman & Scrivener 1990 Fig. 72, p. 88; data rows
 asymptotic function of size" (data row 1124). Counter-evidence: Ebersole et al. 2009 found fall length
 "relatively uninformative" (data row 1133); Quinn & Peterson 1996 found the size effect in one winter of two
 (data rows 1135–1136); Coleman & Fausch's own laboratory size dependence held only in the colder regimes (data
-row 1105). No source found gives a size threshold for BT, CH or ST.
+row 1105). No source found gives a size threshold for BT, CH or ST. Seven paywalled candidates, among them the rainbow trout 90 and 100 mm cutoffs and the Chinook work, are #48.
 
 ## Temperature limits
 
