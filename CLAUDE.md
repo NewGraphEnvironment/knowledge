@@ -27,7 +27,7 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   then hand-edited; read with `knw_timing_read()`), `literature_evidence.csv` (cited habitat-threshold
   values with verbatim quotes, read with `knw_literature_read()`, gated by `0280`; a row stating an
   intrinsic-potential model's threshold carries that model's `model_id`; a temperature, air-temperature or
-  degree-day value names its `metric`; a `groundwater` row is a statement with no value; `discharge` is stream
+  degree-day value names its `metric`; a `fish_length` row is a body length tied to first-winter survival, in `mm`, whose `metric` names the length type (#47); a `groundwater` row is a statement with no value; `discharge` is stream
   size and `instream_flow` a flow need: a valued one names its `metric`, and none carries a model parameter),
   `ip_model_registry.csv` (one row
   per IP model × species × stage: how it sizes streams, its confinement variable, its validation, with its
@@ -39,7 +39,7 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   and
   `habitat_modelling_{members,additions}.csv` (what `0270` puts in the group's `Fisheries/habitat_modelling`
   collection, which with the species collections feeds the `habitat_modelling` store), and
-  `temperature_members.csv` (what `0270 --collection temperature` puts in `Fisheries/temperature`, the sole
+  `temperature_{members,additions}.csv` (what `0270 --collection temperature` puts in `Fisheries/temperature`, the sole
   input of the `temperature` store), and `flow_{members,additions}.csv` (what `0270 --collection flow` puts in
   `Fisheries/flow`, the sole input of the `flow` store; #44, `research/flow_requirements.md`).
 - `data/rag/` — ignored local cache of the ragnar stores. Source of truth is `s3://fresh-bc/rag/`.
@@ -168,6 +168,12 @@ meaning per row, not a sample. Settled conventions:
   third experiment is reported") to every result, and four audit rounds each found an error inside the previous fix
   until an enumeration of every note sentence ended it. A growth optimum the source measured at held temperatures
   is `kind = lab`; one a source states or reviews is `pref`.
+- A first-winter size threshold is a `fish_length` row with the length type the source measured (`total_length`,
+  `fork_length`, or `unstated`); a conversion the source prints (30–35 mm TL as 28–33 mm FL) is a second row. A
+  relation with no threshold (survival on fall length, length on GSDD) is a `qual` row with the equation in the note,
+  never solved for a value the source does not print. `growing_season` is only Coleman & Fausch's window; a
+  degree-day sum on any other window the vocabulary lacks (Holtby's February–March thermal summation) is `unstated`
+  with the window in the note (#47).
 - Append new rows; never insert. `research/` files cite evidence by data row, and data row N is file line
   N + 1 (#36's plan named file lines and called them data rows). A statement that bears on two variables is
   two rows sharing one quote, each noting the other. Copy a sibling's fields only after checking them: #36
