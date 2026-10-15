@@ -19,12 +19,12 @@ Bradford et al. 2001. Smith & Griffith 1994 and Connolly & Petersen 2003 have no
   stripped); `pdf = none` marks an abstract-only addition, which is not a missing PDF. Blank stays a failure.
 
 ## Phase 2: Zotero and the store
-- [ ] `data/temperature_additions.csv`: the four abstract-only DOIs (`pdf` none); Zabel & Achord 2004, Manhard et
+- [x] `data/temperature_additions.csv`: the four abstract-only DOIs (`pdf` none); Zabel & Achord 2004, Manhard et
   al. 2018 (USFWS TR 2018-33) and Hartman, Scrivener & McMahon 1987 (Forestry Chronicle) with their saved PDFs.
   Not added: USGS OFR 2021-1085 (catchable-size hatchery rainbow trout, off topic); Lusardi et al. 2020 is already
   a member.
-- [ ] `0270 --collection temperature --dry-run`, then live; log under `scripts/logs/habitat/`.
-- [ ] Rebuild and push the `temperature` store once Zotero has synced; verify on a fresh connect.
+- [x] `0270 --collection temperature --dry-run`, then live; log under `scripts/logs/habitat/`.
+- [x] Rebuild and push the `temperature` store once Zotero has synced; verify on a fresh connect.
 
 ## Phase 3: Rows
 - [ ] Draft (about nine rows): Holtby 1988, Meyer & Griffith 1997, Brakensiek & Hankin 2007, Bradford et al. 2001
