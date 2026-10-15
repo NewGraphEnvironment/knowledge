@@ -64,7 +64,7 @@ Until now the only MAD we had was fwapg's annual table. It covers the Fraser, Pe
 
 ## Validation
 - [x] Both scripts run clean from the repo root, and the ledger partitions the input
-- [ ] `/code-check branch` clean
+- [x] `/code-check branch` clean: 4 reviewer rounds and a terminating self-enumeration (`review-round*.md`); code clean in every round, all findings in the prose
 - [ ] PWF checkboxes match landed work
 - [ ] `/planning-archive`, then `/gh-pr-push`
 

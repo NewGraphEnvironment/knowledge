@@ -30,3 +30,9 @@
   around them not; fixes wrote new unchecked framing). Enumerated 126 sentences: 5 fail + 1 fragile, two of
   them inside earlier fixes. Fixed by stating numbers with no comparative framing; the #52 body also still
   had round 1's reversed direction phrase, fixed
+- /code-check round 4 (spawned 23:18Z, delivered ~23:26Z): enumerated ~150 sentences, 14 failing, all framing
+  around correct numbers. The write-up was rewritten in one piece under a rule (every figure names its
+  population; comparatives only within one population or stated as different); README row, #52 Result
+  section and #42 scope note rewritten to match; two 0295 header claims fixed. Round 5 is the session's own
+  enumeration (review-round5-self.md): 102 claim lines, each against its source; one more correction (702,
+  not 703). Five reviewer spawns on this task, the plan review included: at the bound

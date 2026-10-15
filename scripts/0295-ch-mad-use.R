@@ -11,14 +11,15 @@
 #     it), with a fished area of 10 to 10,000 m2. Raw rates are reported on the same visits the
 #     model uses (WSGs with both outcomes), and on all population visits beside them.
 #   - MAD CLASSES (m3/s, [lo, hi)): <0.1, 0.1-0.28, 0.28-0.5, 0.5-1, 1-3, 3-10, 10-30, 30-100,
-#     >=100. These are literature and model breaks (link's CH rear_mad_min 0.28 and rear_mad_max
-#     100, Woll 2015's 0.5, #52's 0.5 and 10), not breaks chosen from the data as #52 suggested,
-#     so no break follows a look at the detections. wet's two sources agree on the class less
+#     >=100. The breaks at 0.28, 0.5, 10 and 100 are sourced (link's CH rear_mad_min 0.28 and
+#     rear_mad_max 100, Woll 2015's 0.5, #52's 0.5 and 10); 0.1, 1, 3 and 30 fill the steps between
+#     them and have no source. None was chosen from the data as #52 suggested, so no break follows a
+#     look at the detections. wet's two sources agree on the class less
 #     often between 0.1 and 1 m3/s than above it (logged); a merged 0.1-0.5 class is a sensitivity.
 #     Juvenile EF data cannot test spawning bounds, so link's spawn_mad_min is not compared.
 #   - RESPONSES (as 0291): U = CH caught; F = any fish caught; C = CH caught among visits that
-#     caught any fish. Half the visits are under 0.1 m3/s, where FDS surveys look for the upper
-#     fish limit, so U alone would read fishless headwaters as CH avoiding small streams.
+#     caught any fish. About half the analysed visits are under 0.1 m3/s and most of those caught
+#     no fish at all, so U alone would read fishless headwaters as CH avoiding small streams.
 #   - MODEL: binomial, cloglog link, class + log(area) + data_set + era (to 1994, 1995-2004,
 #     2005 on) + WSG. WSGs where the response never or always occurs are left out and counted.
 #     A fit that does not converge in 100 iterations gives NA.
