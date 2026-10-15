@@ -463,7 +463,7 @@ definition and report the spread beside it.** If the spread is material against 
 being made, the definition is a blocker, so schedule it first. A share is invariant to a
 filter only when the filter is uncorrelated with the thing being measured.
 
-*13 lines of evidence for this rule are in `conventions/agent-operations.md`.*
+*20 lines of evidence for this rule are in `conventions/agent-operations.md`.*
 
 ### Presence is not provenance
 
@@ -493,7 +493,7 @@ check is almost always to read the thing the prose describes.
   keeps finding them, list every quantified or inherited claim with a measured verdict
   (`code-check.md`, "A guard's scope, escape hatches, and remedies").
 
-*67 lines of evidence for this rule are in `conventions/agent-operations.md`.*
+*80 lines of evidence for this rule are in `conventions/agent-operations.md`.*
 
 ### "It can only be answered by testing" is a claim with an author
 
@@ -586,7 +586,7 @@ rewordings. A full 100 rows means the list was cut: narrow the words.
 gh search issues --include-prs --repo NewGraphEnvironment/<peer> --state open --limit 100 <artifact words>
 ```
 
-*6 lines of evidence for this rule are in `conventions/agent-operations.md`.*
+*12 lines of evidence for this rule are in `conventions/agent-operations.md`.*
 
 ## 4. Decisions Up Front, Then Run
 
@@ -739,6 +739,23 @@ The machines are always online and Claude sessions drive them. Distinguishing "u
 - **Survive the laptop lifecycle:** `caffeinate -i` for long runs — and know its limit: it does not survive lid close. A killed wrapper can orphan child processes that keep working; check `pgrep` before declaring a run dead, and record enough state (PWF, committed logs) that any interruption is resumable.
 - **Gates are phone-answerable:** steps that genuinely need the user (QGIS desktop verification, a push into an artifact a human is testing on, content decisions — not a git push to a feature branch, which `agent-operations.md` §4 puts inside an approved plan) are explicit checkpoints answerable from a phone — never assumed co-presence, never blocking questions mid-run.
 - **Every interruption is a resume point:** commit state before long waits; a session death, sleep, or shutdown should cost a re-run at most, never lost context.
+
+# Code Check — Python
+Traps in Python: the interpreter, pytest, the HTTP stack under pystac, and MkDocs.
+
+*Index only: each rule's heading and first sentence. The full text is `~/Projects/repo/soul/conventions/code-check-python.md`; read it before writing or reviewing code in its area. `/code-check` loads it in full.*
+
+### A script named after a stdlib module shadows that module when run by path
+Name a script so it cannot collide with the standard library (`enum_sites.py`, not `enum.py`): run by path, its directory is first on `sys.path`, so every `import enum` in the process, `re`'s included, gets the script.
+
+### Proxy variables do not take a pystac test offline: block at the socket
+To make Python tests network-proof, patch the socket layer to refuse every non-loopback lookup and connection, in `pytest_configure`, and clear the proxy variables with `NO_PROXY=*`.
+
+### A conftest guard covers only the invocations that load it
+Put a session-wide guard in the repository's root `conftest.py`, and pin it by behaviour in a child process: pytest loads a conftest only for the paths it is given and their parents, so a guard in `tests/conftest.py` is absent from `pytest src/...`.
+
+### `mkdocs build --strict -q` passes a dead link
+Run `mkdocs build --strict` without `-q`, and set all seven `validation:` keys to `warn` in `mkdocs.yml`: `-q` raises the log level past WARNING, strict counts only the warnings it sees, and so it counts nothing.
 
 # Code Check — R
 Traps in R: the language and base/utils behaviour, package internals (`R CMD build`, `.Rbuildignore`, roxygen, lintr, `data-raw/`, testthat, pak), and the DBI/duckdb/arrow data layer.
@@ -1072,6 +1089,9 @@ Sum the bytes as doubles (`sum(as.numeric(raw[i + 1:4]) * 256^(0:3))`) to read a
 ### ajv honours keywords beside a `$ref`; Python's jsonschema ignores them
 Keep every `$ref` alone in a draft-07 schema tested with jsonvalidate and read by pystac.
 
+### `load_all()` runs every `.R` file at the top of a package's `data/` as a data script
+Keep helper and ad hoc scripts out of `data/`, which pkgload treats as package data, so `load_all()` sources any `data/*.R` it finds there.
+
 # Code Check — Shell
 Tool-level traps in bash, sed, git and `gh`, and in the host toolchain those commands depend on.
 
@@ -1166,6 +1186,9 @@ Verify an upload by comparing each object's ETag with its file, and for a multip
 
 ### A verification command can be shadowed by a shell function or alias
 - The shell is initialized from the user's profile, so `diff`, `grep`, `ls`, `cat` and friends may resolve to a wrapper rather than the binary you assume.
+
+### `pwd` keeps typed case; key on `env pwd -P`
+Key on `env pwd -P`.
 
 ### psql does not interpolate `:'var'` inside a dollar-quoted string, and `\quit N` exits 0
 Two traps in the same file type, both of which read perfectly and fail at run time.
@@ -1543,6 +1566,9 @@ Take a segment's top from the next segment's `downstream_route_measure`, and com
 
 ### FWA main flow is not edge type 1000 alone
 Select main flow with `edge_type IN (1000, 1050, 1200, 1250, 1450)`, and test what the layer is for rather than that it is non-empty: 1000 is single-line stream only, so a filter built on it draws no large river.
+
+### terra: `focal(na.rm = TRUE)` drops NA cells from the vote, so where you fill NA around a filter changes its output
+Fill NA with the value you mean (`ifel(is.na(x), 0L, x)`) **before** a `focal()` majority or min/max filter, not after it, whenever those cells should count.
 
 # Code Check Conventions
 Structured checklist for reviewing diffs before commit.
@@ -3007,7 +3033,7 @@ repeating itself.
 
 When a failure does generalize, it graduates to the convention that owns its
 class: the `code-check*.md` family for a bug class in a diff — `code-check.md` for a
-mechanism, `-shell`, `-r`, `-spatial` or `-infra` for a tool quirk — `ci-monitoring.md` for CI
+mechanism, `-shell`, `-r`, `-python`, `-spatial` or `-infra` for a tool quirk — `ci-monitoring.md` for CI
 behaviour, the domain convention otherwise.
 
 ## Skills
@@ -3017,6 +3043,23 @@ behaviour, the domain convention otherwise.
 | `/planning-init` | First time in a repo — creates directory structure |
 | `/planning-update` | Mid-session — sync checkboxes and progress |
 | `/planning-archive` | Issue complete — archive and create fresh active/ |
+
+# Python Conventions
+How New Graph Environment repos declare and run Python, the sibling of `r-packages.md`.
+
+*Index only: each rule's heading and first sentence. The full text is `~/Projects/repo/soul/conventions/python.md`; read it before writing or reviewing code in its area.*
+
+### Declare dependencies in `pyproject.toml` and commit `uv.lock`
+A repo whose Python is a package, or whose scripts import a shared module of the repo's own, declares its dependencies in `pyproject.toml`, commits the `uv.lock` that `uv lock` writes, runs through `uv run`, and adds no `environment.yml`.
+
+### A loose script carries its dependencies inline
+A standalone script that imports no module of the repo's own declares its third-party imports in PEP 723 inline metadata and runs with `uv run --script`; one that imports only the standard library needs none.
+
+### Two exceptions, each named in the repo's `CLAUDE.md`
+Conda stays where a conda-forge binary that has no wheel is load-bearing, and PyQGIS scripts declare nothing, because QGIS's own interpreter runs them.
+
+### Never `conda run -n` an environment the repo does not declare
+A script that runs `conda run -n <env>` against an environment declared in no file of its own repo cannot run from a fresh clone, so declare the dependencies here instead.
 
 
 # Reference Management Conventions
