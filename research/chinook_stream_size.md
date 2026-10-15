@@ -99,8 +99,10 @@ Visits under 0.5 m³/s, excluding side channels and ambiguous placements. The ra
 
 The CH caught in small streams close to a large river are caught at a higher rate than in any MAD class below
 30 m³/s. Beyond 500 m, small streams have the rate of the < 0.1 m³/s class. Of the 32 WSGs with CH in small
-streams near or far, 11 have both, 8 only near and 13 only far. Coastal small streams draining straight to the
-sea (`none`) carry CH more often than inland small streams far from a large river.
+streams near or far, 11 have both, 8 only near and 13 only far. Small streams whose path reaches the sea without
+meeting a ≥ 10 m³/s segment (`none`) carry CH more often than inland small streams far from a large river.
+Across all analysed groups (not only the 438 visits in modelled ones), 1,243 small-stream visits end `none`:
+558 drain straight to the sea (9 CH), and 685 pass through smaller lines first (2 CH).
 
 ### Sensitivities (U, relative rates)
 
@@ -133,13 +135,14 @@ sea (`none`) carry CH more often than inland small streams far from a large rive
 link's `default` CH rearing bounds come from Rebellato et al. 2024 (evidence data rows 118–119): MAD 0.28 to
 100 m³/s. Woll 2015 (Mat-Su, data row 412) set no potential below 0.5 m³/s. Against these:
 
-- **A floor between 0.28 and 0.5 m³/s is too sharp a line.** CH are caught at 0.1–0.28 m³/s at nearly the rate
-  of 0.28–0.5 (relative 0.47 against 0.61; raw 3.2 % against 3.3 %), and about half of the detections under
-  0.5 m³/s are within 500 m of a large river (82 of 153; 31 of 57 at 0.1–0.28). Away from a large river,
-  small streams carry CH at the < 0.1 m³/s rate (0.8 %).
+- **A floor between 0.28 and 0.5 m³/s is too sharp a line.** CH are caught at 0.1–0.28 m³/s, at a lower rate
+  than at 0.28–0.5 (relative 0.47 against 0.61; with regulated reaches out, 0.46 against 0.72). Among small
+  streams, excluding side channels and ambiguous placements, about half of the detections that have a large
+  river downstream lie within 500 m of it (52 of 107). Away from a large river, small streams carry CH at the
+  < 0.1 m³/s rate (0.8 %).
 - **The rule this suggests** is: MAD ≥ 0.5 m³/s, or MAD < 0.5 m³/s within about 500 m of a ≥ 10 m³/s river. It
-  would fit these records better than either single floor. It is evidence for link#331's predicate, not a
-  change made here.
+  describes the pattern in these records better than a single floor does, but no rule was fitted or scored
+  against a floor here. It is evidence for link#331's predicate, not a change made here.
 - **A rearing maximum of 100 m³/s gets no support.** CH are caught on 27.5 % of unregulated visits above
   100 m³/s. Electrofishing samples only river margins, so this says the margins are used, not that the channel
   is.

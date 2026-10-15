@@ -22,3 +22,7 @@
   The regulated column was a visit share labelled as a detection share; 0295 now writes both
   (`regulated_detect_share`, `regulated_visit_share`), re-run with the same seed, relative rates unchanged.
   Four wording and number fixes; #52 body "a third to a seventh" corrected to "a seventh to three-fifths"
+- /code-check round 2 (spawned 23:05Z, delivered ~23:11Z): code clean; round-1 fixes hold; 5 wording findings,
+  none inside a round-1 fix. Fixed: the 0.1-0.28 floor bullet rested on regulated side channels and mixed
+  bases (now the clean 52 of 107, plus the regulated-out rates), an unmeasured "fits better" claim, the `none`
+  class's meaning (558 direct, 685 via smaller lines; checked), the README row for 30-100, two stale comments

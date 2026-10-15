@@ -29,8 +29,8 @@
 #     class (11 detections) blew up in some resamples and dragged the other classes' lower bounds
 #     to 0; a fixed reference has no such dependence.
 #   - INTERVALS: 200 bootstrap resamples of streams (blue_line_key), seed fixed and resamples
-#     drawn before the parallel fits. One stream (the Nechako, one 2010 survey) holds about a third
-#     of all detections, so each class also reports the share of its detections from its largest
+#     drawn before the parallel fits. One stream (the Nechako, one 2010 survey) holds 432 of the
+#     978 analysed detections (44 %), so each class also reports the share of its detections from its largest
 #     project (data set, agency, year, stream), and the shares of its detections and of its visits
 #     on regulated reaches.
 #   - POWER: `ok` at >= 30 visits and >= 10 detections in the class, else `underpowered`.

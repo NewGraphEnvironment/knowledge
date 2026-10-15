@@ -22,7 +22,7 @@
 #     as wet::wet_db_load() loaded it into local fwapg; `pick` marks wet's default source per
 #     segment, both sources' values are kept, and the picked counts are checked against the
 #     manifest this was written for. A segment with no picked flow (B2: side channels and
-#     connectors with no watershed lut row, where CH are caught at four times the overall rate)
+#     connectors with no watershed lut row, where CH are caught at about six times the overall rate)
 #     is NOT dropped: it takes the picked flow of the nearest primary-flow segment on its main
 #     line (watershed_key) or its own line, and `flow_from` says which (`own`, `parent`). Such a
 #     segment often has no watershed code either; it takes that segment's codes too.
