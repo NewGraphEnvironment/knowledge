@@ -41,4 +41,4 @@ Bradford et al. 2001. Smith & Griffith 1994 and Connolly & Petersen 2003 have no
 - [x] Tests pass
 - [x] `/code-check branch` clean
 - [x] PWF checkboxes match landed work
-- [ ] `/planning-archive` on completion
+- [x] `/planning-archive` on completion
