@@ -32,3 +32,10 @@ trout survived better at warmer temperatures with rocky cover). No held PDF prin
 
 | Error | Resolution |
 |-------|------------|
+| 0280 `abstract_but_pdf_held` on six items with no attachment | NA parent ids of standalone PDFs; `%in%` (above) |
+
+## 0280: every key carried NA PDFs (found 2026-10-15)
+`resolve()` matched PDFs with `group_pdfs$itemID == ids`. A standalone PDF has no parent, so its `itemID` is NA,
+and `==` returned NA for each of the group's 229 standalone PDFs, which `[` turned into NA entries in every key's
+file list. `sort(files)` dropped them, so PDF rows never showed it; the first abstract rows, which test
+`length(files)`, all failed `abstract_but_pdf_held` on items with no attachment. Fixed with `%in%`.

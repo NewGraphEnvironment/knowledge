@@ -172,10 +172,12 @@ resolve <- function(key, abstract = FALSE) {
   ids <- group_items$itemID[group_items$citation_key == key]
   if (length(ids) == 0) return(list(status = "key_not_in_group"))
   if (length(ids) > 1) return(list(status = "key_ambiguous_in_group"))
-  files <- group_pdfs$file[group_pdfs$itemID == ids]
+  # %in%, not ==: a standalone PDF has no parent (itemID NA), and == would put an NA in every
+  # key's list (sort() used to drop it, so PDF rows never showed it).
+  files <- group_pdfs$file[group_pdfs$itemID %in% ids]
   if (abstract) {
     if (length(files)) return(list(status = "abstract_but_pdf_held"))
-    a <- group_abstracts$abstract[group_abstracts$itemID == ids]
+    a <- group_abstracts$abstract[group_abstracts$itemID %in% ids]
     if (length(a) != 1 || !nzchar(trimws(a))) return(list(status = "no_abstract_in_group"))
     return(list(status = "ok", abstract = a))
   }
