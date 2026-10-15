@@ -31,7 +31,8 @@
 #   - INTERVALS: 200 bootstrap resamples of streams (blue_line_key), seed fixed and resamples
 #     drawn before the parallel fits. One stream (the Nechako, one 2010 survey) holds about a third
 #     of all detections, so each class also reports the share of its detections from its largest
-#     project (data set, agency, year, stream) and its share of visits on regulated reaches.
+#     project (data set, agency, year, stream), and the shares of its detections and of its visits
+#     on regulated reaches.
 #   - POWER: `ok` at >= 30 visits and >= 10 detections in the class, else `underpowered`.
 #   - DISTANCE, visits with picked MAD < 0.5, not on a side channel and not ambiguously placed
 #     (0294): to the first primary-flow segment with picked MAD >= 10, classes <= 500 m, > 500 m,
@@ -192,7 +193,8 @@ describe <- function(d, resp, prefix) {
     summarise(n_visits = n(), n_detect = sum(.data[[resp]]),
               top_project_share = if (n_detect > 0) {
                 max(tapply(.data[[resp]], project, sum)) / n_detect } else NA_real_,
-              regulated_share = if (n() > 0) mean(regulated) else NA_real_,
+              regulated_visit_share = if (n() > 0) mean(regulated) else NA_real_,
+              regulated_detect_share = if (n_detect > 0) sum(.data[[resp]] * regulated) / n_detect else NA_real_,
               .groups = "drop") |>
     mutate(raw_rate = ifelse(n_visits > 0, n_detect / n_visits, NA_real_)) |>
     rename_with(~ paste0(prefix, .x), -cls)
@@ -324,13 +326,14 @@ res$xc <- xc |> transmute(analysis = paste0("presence_mix_", source), response =
 use <- bind_rows(res) |>
   mutate(class = as.character(cls),
          across(any_of(c("raw_rate", "all_raw_rate", "rel_rate", "rel_lo", "rel_hi",
-                         "top_project_share", "regulated_share")), ~ round(.x, 3))) |>
+                         "top_project_share", "regulated_visit_share", "regulated_detect_share")), ~ round(.x, 3))) |>
   select(analysis, response, class, n_visits, n_detect, raw_rate, rel_rate,
-         any_of(c("rel_lo", "rel_hi", "n_boot_ok")), power, top_project_share, regulated_share,
+         any_of(c("rel_lo", "rel_hi", "n_boot_ok")), power, top_project_share, regulated_detect_share,
+         regulated_visit_share,
          all_n_visits, all_n_detect, all_raw_rate)
 write_csv(use, path_out, na = "")
 block("all analyses (also data/ch_mad_use.csv)", use |> select(analysis, response, class, n_visits, n_detect,
                                                               raw_rate, rel_rate, any_of(c("rel_lo", "rel_hi")),
-                                                              power, top_project_share, regulated_share))
+                                                              power, top_project_share, regulated_detect_share))
 writeLines(log_lines, path_log)
 cat(log_lines, sep = "\n")

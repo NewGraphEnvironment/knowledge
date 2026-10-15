@@ -18,3 +18,7 @@
 - research/chinook_stream_size.md written and its numbers re-checked against ch_mad_use.csv (four
   corrections: sensitivity range, WSG count, parent-flow rate, the 0.1-0.28 comparison); README row;
   #52 body gained a Result section, #42's scope note points at it
+- /code-check branch round 1 (spawned 22:54Z, delivered ~23:03Z): code clean; 5 write-up findings, all real.
+  The regulated column was a visit share labelled as a detection share; 0295 now writes both
+  (`regulated_detect_share`, `regulated_visit_share`), re-run with the same seed, relative rates unchanged.
+  Four wording and number fixes; #52 body "a third to a seventh" corrected to "a seventh to three-fifths"

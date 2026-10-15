@@ -21,8 +21,8 @@ question needs timing, which only BULK and MORR have.
 
 ## Short answer
 
-1. **Below 0.5 m³/s, CH are caught at a third to a seventh of the average rate**, after effort, data set,
-   era and watershed group:
+1. **Below 0.5 m³/s, CH are caught at a seventh to three-fifths of the average rate**, after effort, data
+   set, era and watershed group:
    - under 0.1 m³/s: 0.14 times the average;
    - 0.1–0.28 m³/s: 0.47 times;
    - 0.28–0.5 m³/s: 0.61 times;
@@ -30,7 +30,8 @@ question needs timing, which only BULK and MORR have.
 
    The same shape holds among visits that caught any fish, so it is not fishless headwaters driving it.
 2. **On small streams, CH sit next to large rivers.**
-   - Within 500 m downstream of a ≥ 10 m³/s segment, 14.5 % of visits caught CH, against 0.8 % further away.
+   - Where a ≥ 10 m³/s segment lies within 500 m downstream of the visit, 14.5 % of visits caught CH,
+     against 0.8 % further away.
    - That is a rate ratio of **26.7** (bootstrap 15.0–58.3).
    - 52 of the 107 small-stream detections with a large river downstream were within 500 m.
    - #52's "< 0.5 m³/s within 500 m of a 10 m³/s stream" is real, and it is most of the small-stream signal.
@@ -68,19 +69,20 @@ corrected for effort.
 
 Columns: CH caught (U), relative rate after effort, data set, era and WSG (1 = average class; 95 % stream
 bootstrap), the same for CH among visits that caught any fish (C), and the regulated and largest-project
-shares of the class's detections.
+shares of the class's detections. Regulated visits are a smaller share (0.1–0.28: 1.5 % of visits but 28 % of
+detections: side channels with their own small flow in CHES (14) and NECR (2); 30–100: 66 %; ≥ 100: 81 %).
 
 | MAD (m³/s) | visits | CH | raw | U rel (95 %) | C rel | regulated | top project |
 |---|---:|---:|---:|---|---:|---:|---:|
 | < 0.1 | 7,840 | 70 | 0.9 % | 0.14 (0.05–0.26) | 0.26 | 0 % | 17 % |
-| 0.1–0.28 | 1,791 | 57 | 3.2 % | 0.47 (0.20–0.70) | 0.41 | 2 % | 16 % |
+| 0.1–0.28 | 1,791 | 57 | 3.2 % | 0.47 (0.20–0.70) | 0.41 | 28 % | 16 % |
 | 0.28–0.5 | 797 | 26 | 3.3 % | 0.61 (0.27–1.04) | 0.48 | 0 % | 15 % |
-| 0.5–1 | 885 | 61 | 6.9 % | 1.52 (0.69–2.33) | 1.03 | 0 % | 18 % |
-| 1–3 | 1,048 | 50 | 4.8 % | 1.40 (0.80–2.06) | 0.91 | 2 % | 6 % |
-| 3–10 | 1,171 | 72 | 6.1 % | 2.40 (1.38–3.80) | 1.52 | 1 % | 7 % |
-| 10–30 | 857 | 40 | 4.7 % | 2.16 (0.84–4.60) | 1.32 | 12 % | 13 % |
-| 30–100 | 452 | 71 | 15.7 % | 7.76 (2.01–15.6) | 4.16 | 66 % | 51 % |
-| ≥ 100 | 785 | 531 | 67.6 % | 2.81 (1.53–5.77) | 1.83 | 81 % | 81 % |
+| 0.5–1 | 885 | 61 | 6.9 % | 1.52 (0.69–2.33) | 1.03 | 2 % | 18 % |
+| 1–3 | 1,048 | 50 | 4.8 % | 1.40 (0.80–2.06) | 0.91 | 4 % | 6 % |
+| 3–10 | 1,171 | 72 | 6.1 % | 2.40 (1.38–3.80) | 1.52 | 0 % | 7 % |
+| 10–30 | 857 | 40 | 4.7 % | 2.16 (0.84–4.60) | 1.32 | 8 % | 13 % |
+| 30–100 | 452 | 71 | 15.7 % | 7.76 (2.01–15.6) | 4.16 | 83 % | 51 % |
+| ≥ 100 | 785 | 531 | 67.6 % | 2.81 (1.53–5.77) | 1.83 | 92 % | 81 % |
 
 Any fish caught (F) rises steadily with MAD, from 0.42 times the average under 0.1 m³/s to 3.0 at ≥ 100. The CH
 contrast within fish-bearing visits (C) is flatter than U, but it keeps the step at 0.5 m³/s.
@@ -106,10 +108,10 @@ sea (`none`) carry CH more often than inland small streams far from a large rive
   CHES and NECR out, parent-flow visits out, duplicates kept, gradient as a covariate, season as a covariate,
   natural-barrier filtering (with or without USER_DEFINITE), routed flow alone, and fwapg's old MAD. Under
   0.5 m³/s the rate stays at 0.08–0.74 of the average; from 0.5 m³/s it is above 1, except 1–3 m³/s
-  with barriers filtered (0.84).
+  with barriers filtered (0.84) and ≥ 100 m³/s on fwapg's old MAD (0, from 9 visits).
 - **The source moves the step.** On wet's balance alone, 0.28–0.5 m³/s reads 0.29 and 0.5–1 m³/s reads 0.54.
   On routed flow they read 0.55 and 1.46. The two sources agree on the class for only 53–67 % of visits
-  between 0.1 and 1 m³/s, against 90–99 % elsewhere. So the step lies somewhere between 0.5 and 3 m³/s, and
+  between 0.1 and 1 m³/s, against 75–99 % elsewhere. So the step lies somewhere between 0.5 and 3 m³/s, and
   where exactly depends on the flow model. Small-stream flow is where both models are weakest
   (`modelled_discharge.md`).
 - **Regulated reaches out**, the top classes are:
