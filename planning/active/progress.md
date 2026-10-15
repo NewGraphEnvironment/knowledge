@@ -13,3 +13,8 @@
 - 0295 reworked per review (three responses, leave-outs, fixed reference for distance); 2- and 6-worker runs
   byte-identical
 - Next: research/chinook_stream_size.md, issue bodies, code-check branch, archive, PR
+- Restore-the-bug on 0294 (mutated copy): blocked-absence drop off -> ledger 389 -> 0; dedupe key without
+  area -> flagged 568 -> 688; kept 21,862 -> 22,051
+- research/chinook_stream_size.md written and its numbers re-checked against ch_mad_use.csv (four
+  corrections: sensitivity range, WSG count, parent-flow rate, the 0.1-0.28 comparison); README row;
+  #52 body gained a Result section, #42's scope note points at it

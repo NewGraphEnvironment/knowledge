@@ -50,7 +50,7 @@ Until now the only MAD we had was fwapg's annual table. It covers the Fraser, Pe
 - [x] Output `data/ch_mad_use.csv` and `scripts/logs/habitat/20261015_ch_mad_use.txt`.
 
 ## Phase 3: Write-up
-- [ ] `research/chinook_stream_size.md` with the provenance line. It covers:
+- [x] `research/chinook_stream_size.md` with the provenance line. It covers:
   - the rate by MAD class;
   - the small-stream-near-big-river result;
   - per-WSG spread;
@@ -58,9 +58,9 @@ Until now the only MAD we had was fwapg's annual table. It covers the Fraser, Pe
   - limits: juveniles only, big rivers under-sampled, modelled flow;
   - what it means against link's rearing 0.28 / 100 and Woll's 0.5 (not spawn_mad_min: juvenile data, S1).
     This is stated as evidence for link#331 and the CH threshold rows, not as a change.
-- [ ] Add a `research/README.md` row and the `scripts/README.md` run order (0294, 0295). In CLAUDE.md, list
+- [x] Add a `research/README.md` row and the `scripts/README.md` run order (0294, 0295). In CLAUDE.md, list
   `ch_mad_use.csv` in the `data/` root description.
-- [ ] Edit the #52 body to link the research file and the result, and point #42's scope note at it.
+- [x] Edit the #52 body to link the research file and the result, and point #42's scope note at it.
 
 ## Validation
 - [x] Both scripts run clean from the repo root, and the ledger partitions the input
