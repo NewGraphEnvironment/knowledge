@@ -1,11 +1,70 @@
-# Modelled discharge in BC: fwapg's MAD and PCIC's channel-scale flows
+# Modelled discharge in BC: wet's published flow per FWA segment, and what it is built from
 
-**Verified:** 2026-10-07 · **Issues:** #42, NewGraphEnvironment/fwapg#5 · **Produced by:** a reading of `fwapg/extras/discharge`
-(fwapg `fbcb0a3`) and of PCIC's public repos (`chyp`, `hydromosaic-db`, `hydromosaic-service`), and an API
-probe whose commands are at the end of this file.
+**Verified:** 2026-10-15 for the first section; 2026-10-07 for the rest · **Issues:** #42,
+NewGraphEnvironment/fwapg#5, NewGraphEnvironment/fwapg#6, NewGraphEnvironment/link#331 · **Produced by:** a reading of
+wet at `647767d` (v0.4.7: `NEWS.md`, the `monthly-flow` and `segment-discharge` articles,
+`research/station_flow_departure.md`, `data-raw/station_vignette_data.R`) and of the published manifest
+(`discharge/fwa/v1`, built 2026-10-15T02:06:57Z from wet `acb820f`); before that, `fwapg/extras/discharge`
+(fwapg `fbcb0a3`), PCIC's public repos (`chyp`, `hydromosaic-db`, `hydromosaic-service`) and an API probe whose
+commands are at the end of this file.
 
-Two modelled-flow sources reach our work. Both start from PCIC's VIC-GL runoff. They differ in how runoff
-becomes flow on a stream, and in whether that stream is the FWA.
+## Use this: wet's published flow per FWA segment
+
+wet publishes mean monthly and annual flow for every FWA segment at `s3://fresh-bc/discharge/fwa/v1/`. The
+bucket allows reads but no listing, so start from `manifest.json` (`wet_catalog()`); 67 parquet parts,
+Hive-partitioned by `scenario`, `forcing` and `source`. `segment_monthly` holds
+`linear_feature_id, month, runoff_mm, q_m3s, coverage, source, period, pick`: month 0 is the annual mean,
+1–12 the calendar months. Read it with `wet_segment_monthly()`, or load it to Postgres as
+`discharge.fwa_v1_segment_monthly` with `wet_db_load()`.
+
+**Two sources, each kept where it exists:**
+- `pcic_routed`, 1951–2012: PCIC's VIC-GL runoff routed by Raven on PCIC's own network (the hydromosaic
+  section below), placed on FWA segments by NewGraphEnvironment/fwapg#6. Month 0 is the plain mean of the 12
+  months.
+- `wet_balance`, 1981–2010: wet's open water balance, province-wide, Liard included. Annual flow is climr
+  precipitation less CGIAR evapotranspiration (floored by Fu–Budyko, adjusted by hydrologic zone), fitted at
+  315 HYDAT gauges. Its months are shares of the annual volume, modelled from monthly climate, elevation,
+  location and two ERA5-Land snow terms (wet#16, wet#77).
+
+**`pick` is the default, chosen once per segment on annual flow.** Routed PCIC, unless its annual flow is
+under 0.2 of the balance's on a segment that lies on its own watershed's line; otherwise whichever exists.
+Routed on 3,152,838 segments, the balance on 1,380,005 (all of the Liard, and most of the Nechako Reservoir
+groups, where PCIC's outlets are unplaced: NewGraphEnvironment/fwapg#24), neither on 374,598, almost all of
+them segments with no row in `fwa_streams_watersheds_lut` (369,217).
+
+**How good it is, at wet's calibration gauges:**
+- Annual, at the 290 of 315 gauges routed flow reaches: mean absolute error 24.1 % for routed, 27.6 % for
+  the balance scored held out (medians 13.0 and 18.0 %), 22.9 % for `pick`. The balance is weakest on small
+  basins, at headwaters, at lake outlets and in the dry interior (hydrologic zones 15, 17, 23, 24).
+- Monthly, the two fail differently. The balance reads high in April and May (median 7–11 %), within ±5 % in
+  the other months, and flattens the freshet: at Buck Creek (08EE013) its highest month is under half the
+  gauge's. Where routed flow does not reach, mostly the Liard, it reads low in winter. Routed PCIC, at 279
+  gauges, reads about 20 % low in March–April and 19 % high in July–August, a late-melt shape wet attributes
+  to PCIC's model (wet#67).
+
+**Flow in a life-stage window.** `wet_flow_window()` gives a window's mean from the monthly values, each day
+taking its month's mean (`basis = "monthly"`). wet's monthly-flow article does this for the upper Bulkley
+Chinook windows, read from this repo's `life_history_timing.csv` (BULK rows at a pinned commit), at 08EE013
+and 08EE003. Against the gauges' daily records the approximation is within 5 % except in fry migration
+(Jul 15 – Sep 7), up to 27 % off, because the second half of July runs well below July's mean; even there
+both sources miss by more. A 7-day minimum per segment needs daily flow, which neither source publishes yet
+(wet#70; the routed side is NewGraphEnvironment/fwapg#25).
+
+**These are normal-year flows.** Both sources are 30-year climatologies, so no single dry year is in them,
+and the Houston check below (the model 2–3× high in drought Septembers) is a property of PCIC's year-by-year
+series, not of the published means. How far a dry year falls below normal comes from gauges: wet's station
+path (`wet_station_daily()`, `wet_window_stats(stats = c("mean", "min7"))`, departures through cd). At
+08EE013 and 08EE003 the Chinook spawning window (1 Aug – 15 Sep) was 58–82 % below its 1981–2010 mean in
+every year 2023–2026, and the 7-day minima 51–88 % below (wet's `research/station_flow_departure.md`).
+Monthly bias by region and season is wet#6.
+
+**Habitat models do not read it yet.** link and fresh read fwapg's older annual table (next section).
+Moving them to `discharge.fwa_v1_segment_monthly` is NewGraphEnvironment/link#331.
+
+## Where the flows come from
+
+Two older modelled-flow products sit under this. Both start from PCIC's VIC-GL runoff. They differ in how
+runoff becomes flow on a stream, and in whether that stream is the FWA.
 
 **What the .nc files hold.** The format is the same; the arrays are not.
 - **Gridded VIC-GL** (`allwsbc.*.RUNOFF.nc`, `BASEFLOW.nc`): time × lat × lon, 1/16° cells (~28 km² at 54° N).
@@ -99,7 +158,8 @@ with the gauge's area. The table compares the PNWNAmet run with WSC monthly mean
   trusted without a gauge.
 
 One segment against one gauge, on monthly means only. Daily timing, water temperature and the CMIP6 runs
-were not checked.
+were not checked. wet has since scored routed flow at 279 gauges and the balance at 315 (first section), so
+this check now stands only for what it says about dry years.
 
 ## Terms
 
@@ -115,11 +175,10 @@ were not checked.
 
 ## Using either one with FWA-based habitat
 
-- **fwapg:** already on the FWA. A monthly version is a change to `discharge.sh`, limited to the Fraser,
-  Peace and Columbia.
-- **PCIC hydromosaic:** wider coverage, routed, with temperature. It needs a spatial crosswalk from `subid`
-  to FWA `linear_feature_id`, because the networks share no keys, and it resolves about 5× finer than
-  VIC-GL's 25 km² cells, so small streams sit inside one sub-basin.
+As of 2026-10-15 the crosswalk this section called for is built: NewGraphEnvironment/fwapg#6 placed the
+hydromosaic outlets on FWA segments, and NewGraphEnvironment/fwapg PR #22 publishes the result to fresh-bc and
+loads it in `load.sh`. wet republishes it beside its own balance (first section). The fwapg annual table is
+unchanged and is still what link and fresh read until NewGraphEnvironment/link#331.
 
 ## Probe recipe
 
