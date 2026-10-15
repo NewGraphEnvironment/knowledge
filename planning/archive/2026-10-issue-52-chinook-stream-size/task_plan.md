@@ -65,8 +65,8 @@ Until now the only MAD we had was fwapg's annual table. It covers the Fraser, Pe
 ## Validation
 - [x] Both scripts run clean from the repo root, and the ledger partitions the input
 - [x] `/code-check branch` clean: 4 reviewer rounds and a terminating self-enumeration (`review-round*.md`); code clean in every round, all findings in the prose
-- [ ] PWF checkboxes match landed work
-- [ ] `/planning-archive`, then `/gh-pr-push`
+- [x] PWF checkboxes match landed work
+- [x] `/planning-archive`, then `/gh-pr-push`
 
 ## Verification
 - Ledger: the drops and the kept rows partition the 53,018 input rows; 1,186 CH visits are kept, and the
