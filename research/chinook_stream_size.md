@@ -34,7 +34,8 @@ question needs timing, which only BULK and MORR have.
      against 0.8 % further away.
    - That is a rate ratio of **26.7** (bootstrap 15.0–58.3).
    - 52 of the 107 small-stream detections with a large river downstream were within 500 m.
-   - #52's "< 0.5 m³/s within 500 m of a 10 m³/s stream" is real, and it is most of the small-stream signal.
+   - #52's "< 0.5 m³/s within 500 m of a 10 m³/s stream" is real: it holds 52 of the 107 small-stream detections
+     that have a large river downstream (49 %).
 3. **Above 30 m³/s the data cannot speak to stream size.**
    - The classes are dominated by regulated rivers.
    - One 2010 FDS survey on the Nechako, below Kenney Dam, is 432 of the 978 analysed detections.
@@ -69,8 +70,9 @@ corrected for effort.
 
 Columns: CH caught (U), relative rate after effort, data set, era and WSG (1 = average class; 95 % stream
 bootstrap), the same for CH among visits that caught any fish (C), and the regulated and largest-project
-shares of the class's detections. Regulated visits are a smaller share (0.1–0.28: 1.5 % of visits but 28 % of
-detections: side channels with their own small flow in CHES (14) and NECR (2); 30–100: 66 %; ≥ 100: 81 %).
+shares of the class's detections. As a share of the class's visits, regulated reaches are 1.5 % at 0.1–0.28,
+12.3 % at 10–30, 66 % at 30–100 and 81 % at ≥ 100 (`regulated_visit_share`). The 28 % of detections at
+0.1–0.28 are side channels with their own small flow in CHES (14) and NECR (2).
 
 | MAD (m³/s) | visits | CH | raw | U rel (95 %) | C rel | regulated | top project |
 |---|---:|---:|---:|---|---:|---:|---:|
@@ -128,7 +130,8 @@ Across all analysed groups (not only the 438 visits in modelled ones), 1,243 sma
   gives 24.0.
 - **Cross-check.** 4,384 bcfishobs CH records are not FDIS. Their life stage is almost all unrecorded, and they
   include other methods and adults. 13 % of them sit under 0.5 m³/s, against 16 % of FDIS CH visits. They are
-  spread over 1–100 m³/s much more evenly than FDIS, whose ≥ 100 m³/s share (54 %) is the Nechako survey.
+  spread over 1–100 m³/s much more evenly than FDIS. FDIS has 54 % of its CH visits at ≥ 100 m³/s, and the Nechako
+  survey is 432 of that class's 531 detections.
 
 ## What it means for link's CH bounds
 
@@ -140,9 +143,9 @@ link's `default` CH rearing bounds come from Rebellato et al. 2024 (evidence dat
   streams, excluding side channels and ambiguous placements, about half of the detections that have a large
   river downstream lie within 500 m of it (52 of 107). Away from a large river, small streams carry CH at the
   < 0.1 m³/s rate (0.8 %).
-- **The rule this suggests** is: MAD ≥ 0.5 m³/s, or MAD < 0.5 m³/s within about 500 m of a ≥ 10 m³/s river. It
-  describes the pattern in these records better than a single floor does, but no rule was fitted or scored
-  against a floor here. It is evidence for link#331's predicate, not a change made here.
+- **The rule this suggests** is: MAD ≥ 0.5 m³/s, or MAD < 0.5 m³/s within about 500 m of a ≥ 10 m³/s river. It is a
+  description of the pattern; no rule was fitted, or scored against a single floor. It is evidence for
+  link#331's predicate, not a change made here.
 - **A rearing maximum of 100 m³/s gets no support.** CH are caught on 27.5 % of unregulated visits above
   100 m³/s. Electrofishing samples only river margins, so this says the margins are used, not that the channel
   is.
