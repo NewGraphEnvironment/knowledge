@@ -62,3 +62,69 @@ collection temperature (SW2RXUJC) under TRXPJHQE: exists
   + Estimating freshwater productivity, overwinter survival, and: 8ZUWZ46T | created, member, pdf exists
 
 46 members, 15 additions | created 7 | exists 8 | member 61 | no-pdf 9 | pdf 52
+
+# re-run 2026-10-15T16:41:29Z: inline-tag fix to plain(), stored abstracts brought to it
+collection temperature (SW2RXUJC) under TRXPJHQE: exists
+  coleman_fausch2007ColdSummer: 7JEFD442 | member, pdf present
+  coleman_fausch2007ColdSummera: CN479Y9A | member, pdf present
+  chezik_etal2014Fishgrowth: ZKAL7WYT | member, pdf present
+  lusardi_etal2020Oversummergrowth: N5FT3PID | member, pdf present
+  martins_etal2022SpatialEcology: HXFEGCQG | member, pdf present
+  gilbert_etal2022Subhourlywater: DWXVMAPE | member, pdf present
+  iacarella_weller2024Predictingfavourable: 4CERRSPS | member, pdf present
+  weller_etal2024Streamthermalscape: N4G8E2FS | member, pdf present
+  piotrowski_napiorkowski2019Simplemodifications: M2AMUQGL | member, no-pdf: none local
+  pacificclimateimpactsconsortiumGriddedHydrologic: K3ZZNX4B | member, no-pdf: none local
+  oconnor_etal2025Investigatingthermal: 29LJZB3T | member, pdf present
+  munozsabater2019ERA5Landhourly: 7CGM7AKH | member, no-pdf: none local
+  irvine2025NewGraphEnvironmentwatertempbc: BU8377PN | member, no-pdf: none local
+  iacarella_etal2024Projectingexceedance: 99K75CL7 | member, pdf present
+  hill_etal2025Spatialstream: F4Y3AQZH | member, pdf present
+  hill_etal2024Spatialstream: QYU2YFFZ | member, pdf present
+  thorley_etal2022UpperFording: 84VRXIII | member, pdf present
+  thorley_etal2021UpperFording: JW46KUYH | member, pdf present
+  cope2020UpperFording: PZCW7XZT | member, pdf present
+  bear_etal2007ComparativeThermal: P9KAE65R | member, pdf present
+  bear_etal2005ThermalRequirements: HFZES7WC | member, pdf present
+  hasnain_etalKeyEcological: AENMCUT2 | member, pdf present
+  brett1971EnergeticResponses: 9L2YJ3MB | member, pdf present
+  canada_departmentoffisheriesandoceans2019Recoverystrategy: U3X4767Q | member, pdf present
+  cleator_etal2009InformationRelevant: AKMM3ZVT | member, pdf present
+  WESTSLOPECUTTHROATTROUTOncorhynchusclarkilewisi2004: SP3TQYKX | member, pdf present
+  mcmahon_etal2007TemperatureCompetition: 7QBNVED3 | member, no-pdf: none local
+  isaak_etal2017NorWeSTSummer: LQUDWBT7 | member, pdf present
+  richter_kolmes2005MaximumTemperature: 87KUWYF3 | member, pdf present
+  bjornn_reiser1991HabitatRequirements: YDHYE9V9 | member, pdf present
+  raleigh_etal1986HabitatSuitablility: Z53XIYCM | member, pdf present
+  roberge_etal2002LifeHistory: B3TYJ9I9 | member, pdf present
+  eaton_scheller1996Effectsclimate: 6VBSPJQN | member, pdf present
+  mcphail_baxter1996reviewbull: SUENJEU8 | member, pdf present
+  rieman_mcintyre1993Demographichabitat: W72N3HAG | member, pdf present
+  selong_etalEffectTemperature: 6TEE58SF | member, pdf present
+  isaak_etal2015coldwaterclimate: X9HPSBV4 | member, pdf present
+  dunham_chandler2001Modelspredict: V9QT2NM2 | member, pdf present
+  sauter_etal2001Issuepaper: EGQQ35IH | member, pdf present
+  bustard_schell2002ConservingMorice: RNR726EF | member, pdf present
+  DistributionlifehistoryabundanceharvesthabitatlimitingfactorsbulltroutMetoliusRiverLakeBillyChinookOregon198394: BHHDYTJI | member, pdf present
+  u_s_fishandwildlifeservice2010Endangeredthreatened: 294UBXMS | member, pdf present
+  u_s_fishandwildlifeservice2015Recoveryplan: X5XQUDTX | member, pdf present
+  cooney_holzer2006AppendixInterior: S3IPNXIN | member, pdf present
+  hagen_weber2019Limitingfactorsa: YC3EQ8T8 | member, pdf present
+  quinn_peterson1996influencehabitat: KFI4XAHQ | member, pdf present
+  + Subject Matter Expert Report: Energetic Status at the Onset : MNI96PW8 | exists, member, pdf present
+  + Subject Matter Expert Report: Water Temperature and Ice. Eva: A4SNCJSD | exists, member, pdf present
+  + Thermal ecology of bull trout (Salvelinus confluentus) and p: B6DMA7X3 | exists, member, pdf present
+  + Observed and simulated effects of climatic variability, clea: D5KFRFN5 | exists, member, pdf present
+  + Impacts of forestry practices on a coastal stream ecosystem,: JVANGHCJ | exists, member, pdf present
+  + Habitat-based assessment of steelhead production and escapem: SR87NNIG | exists, member, pdf present
+  + 10.1577/T05-144.1: N74ZAXFD | exists, member, pdf present
+  + 10.1577/T08-047.1: F9HJM64P | exists, member, pdf present
+  + 10.1139/f88-060: UEG4KUPQ | exists, member, no-pdf: abstract only
+  + 10.1139/z97-007: FQ97NEHI | exists, member, no-pdf: abstract only
+  + 10.1577/T06-211.1: JQ7AXPKG | exists, member, no-pdf: abstract only
+  + 10.1139/z01-165: T678S7X5 | exists, member, no-pdf: abstract only, abstract set
+  + 10.1890/02-0719: B365BWWH | exists, member, pdf present
+  + 10.5558/tfc63159-3: 87BDWWBH | exists, member, pdf present
+  + Estimating freshwater productivity, overwinter survival, and: 8ZUWZ46T | exists, member, pdf present
+
+46 members, 15 additions | abstract 1 | exists 15 | member 61 | no-pdf 9 | pdf 52

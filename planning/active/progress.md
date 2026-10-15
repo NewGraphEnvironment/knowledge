@@ -19,3 +19,10 @@
   (both inside round-2 fixes); ended by enumerating every note sentence. 0280: 0 failing, 6 `verified_abstract`,
   thermal 50/50 (log `20261015_literature_verify.csv`).
 - Phase 4: research size section and the CLAUDE.md abstract convention.
+- Code check, branch mode, three rounds (`review-round{1,2,3}.md`): round 1, three fragile spots fixed (PDF held
+  read from disk, abstract status read from CrossRef, registry inheriting `abstract`) and one accepted (no DOI
+  check); round 2, plain CrossRef titles no longer matching markup titles (duplicate risk), fixed; round 3, a
+  defect inside round 1's fix (a file-less stub counted as a PDF) and unit exponents split by `plain()`, both
+  fixed, Bradford's stored abstract repaired by a 0270 re-run. Ended by round 3's enumeration of the one
+  mechanism (one fact derived twice): nine facts, all agree after the fixes. Tests 104/0; 0280 passes.
+- #48 body reconciled (decided, as built, what remains).

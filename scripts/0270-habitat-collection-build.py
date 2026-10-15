@@ -323,9 +323,15 @@ def ensure(gkey, coll, dry, find_pdf, required=False):
     return steps
 
 
+INLINE = r"</?(?:jats:)?(?:sup|sub|i|b|italic|bold|sc|scp|u|em|strong)\b[^>]*>"
+
+
 def plain(x):
-    """CrossRef markup as plain text: tags dropped, entities decoded, whitespace collapsed."""
-    return re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", x or ""))).strip()
+    """CrossRef markup as plain text: inline tags (italic, super- and subscript) dropped
+    without a gap, so "m<sup>2</sup>" stays "m2" and a gate never reads its exponent as a
+    value; other tags become a space; entities decoded; whitespace collapsed."""
+    x = re.sub(INLINE, "", x or "")
+    return re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", x))).strip()
 
 
 def crossref_abstract(m):
@@ -411,11 +417,26 @@ def do_addition(row, coll, dry):
         # unless the item carries its abstract.
         steps += ensure(gkey, coll, dry, lambda: None)
         if steps[-1].startswith("no-pdf"):
-            # The group item's own abstract: an item that already existed was never given
-            # CrossRef's, and 0280 reads the group item. (A dry run before create has only CrossRef's.)
-            held = get_json(f"{z.BASE}/items/{gkey}")["data"].get("abstractNote") if gkey else item.get("abstractNote")
-            steps[-1] = "no-pdf: abstract only" if (held or "").strip() else "ABSTRACT-MISSING: pdf none and the item has no abstract"
-
+            i = len(steps) - 1
+            # 0280 reads the group item's own abstract, and an item that already existed was
+            # never given CrossRef's; a stored abstract also outlives a fix to plain(). So bring
+            # the group item to CrossRef's current form. (gkey is set: a dry run returns before
+            # create.)
+            held = get_json(f"{z.BASE}/items/{gkey}")["data"]
+            have, want = held.get("abstractNote") or "", item.get("abstractNote") or ""
+            if want and have != want:
+                if dry:
+                    steps.append("would set abstract")
+                    have = want
+                else:
+                    st, bd = z.api("PATCH", f"{z.BASE}/items/{gkey}", data={"abstractNote": want},
+                                   headers={"Content-Type": "application/json",
+                                            "If-Unmodified-Since-Version": str(held["version"])})
+                    steps.append("abstract set" if st == 204 else f"ABSTRACT-FAIL {st} {bd[:160]!r}")
+                    if st == 204:
+                        have = want
+            steps[i] = ("no-pdf: abstract only" if have.strip()
+                        else "ABSTRACT-MISSING: pdf none and the item has no abstract")
     else:
         steps += ensure(gkey, coll, dry, lambda: addition_pdf(row), required=True)
     return steps, f"{gkey} | " + ", ".join(steps)

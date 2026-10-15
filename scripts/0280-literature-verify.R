@@ -153,7 +153,7 @@ group_items <- DBI::dbGetQuery(con, "
   WHERE f.fieldName = 'citationKey' AND i.libraryID = ? AND d.itemID IS NULL",
   params = list(lib))
 group_pdfs <- DBI::dbGetQuery(con, "
-  SELECT ia.parentItemID AS itemID, a.key AS att_key, ia.path
+  SELECT ia.parentItemID AS itemID, a.key AS att_key, ia.path, ia.storageHash
   FROM itemAttachments ia JOIN items a ON a.itemID = ia.itemID
   LEFT JOIN deletedItems d ON d.itemID = a.itemID
   WHERE a.libraryID = ? AND d.itemID IS NULL AND ia.contentType = 'application/pdf'
@@ -161,8 +161,9 @@ group_pdfs <- DBI::dbGetQuery(con, "
 group_pdfs$file <- file.path(path.expand("~/Zotero/storage"), group_pdfs$att_key,
                              sub("^storage:", "", group_pdfs$path))
 # An item whose PDF is in the group but not yet downloaded here still has a PDF: an abstract
-# row for it must be re-quoted from the paper, whatever this machine holds.
-pdf_items <- unique(group_pdfs$itemID[!is.na(group_pdfs$itemID)])
+# row for it must be re-quoted from the paper, whatever this machine holds. A stored file has
+# a hash; a row without one is a stub left by a failed upload (0270's has_pdf() rule, md5).
+pdf_items <- unique(group_pdfs$itemID[!is.na(group_pdfs$itemID) & !is.na(group_pdfs$storageHash)])
 group_pdfs <- group_pdfs[file.exists(group_pdfs$file), ]
 group_abstracts <- DBI::dbGetQuery(con, "
   SELECT id.itemID, idv.value AS abstract

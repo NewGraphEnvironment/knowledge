@@ -35,10 +35,10 @@ Bradford et al. 2001. Smith & Griffith 1994 and Connolly & Petersen 2003 have no
 ## Phase 4: Write-up
 - [x] `research/thermal_requirements.md`: the size section names the new rows and says which are abstract-only.
 - [x] `CLAUDE.md` above the marker: the `abstract` quote source convention.
-- [ ] #48 body reconciled.
+- [x] #48 body reconciled.
 
 ## Validation
-- [ ] Tests pass
-- [ ] `/code-check branch` clean
-- [ ] PWF checkboxes match landed work
+- [x] Tests pass
+- [x] `/code-check branch` clean
+- [x] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion
