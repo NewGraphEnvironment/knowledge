@@ -8,14 +8,14 @@ CrossRef carries an abstract for four of the six: Holtby 1988, Meyer & Griffith 
 Bradford et al. 2001. Smith & Griffith 1994 and Connolly & Petersen 2003 have none.
 
 ## Phase 1: `abstract` quote source
-- [ ] `pkg/R/literature.R`: `quote_source` gains `abstract` (a quote from the publisher's abstract, held as the
+- [x] `pkg/R/literature.R`: `quote_source` gains `abstract` (a quote from the publisher's abstract, held as the
   Zotero item's abstract because no PDF is); an abstract quote is running text (20-character floor) and carries
   no `page`. Roxygen says what it is and that it is a fallback.
-- [ ] Tests: vocabulary has it; a short abstract quote fails; an abstract row with a page fails; restore-the-bug.
-- [ ] `scripts/0280-literature-verify.R`: an `abstract` row resolves its key in the group, reads the item's
+- [x] Tests: vocabulary has it; a short abstract quote fails; an abstract row with a page fails; restore-the-bug.
+- [x] `scripts/0280-literature-verify.R`: an `abstract` row resolves its key in the group, reads the item's
   `abstractNote`, and matches with the same token matcher (`verified_abstract`). It fails when the item has no
   abstract, and when the item has a PDF (quote the PDF then).
-- [ ] `scripts/0270-habitat-collection-build.py`: a DOI addition carries CrossRef's deposited abstract (JATS tags
+- [x] `scripts/0270-habitat-collection-build.py`: a DOI addition carries CrossRef's deposited abstract (JATS tags
   stripped); `pdf = none` marks an abstract-only addition, which is not a missing PDF. Blank stays a failure.
 
 ## Phase 2: Zotero and the store

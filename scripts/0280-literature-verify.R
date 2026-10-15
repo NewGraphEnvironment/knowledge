@@ -23,6 +23,11 @@
 #               within a few lines of one page (reading order emits tables by column);
 #       ocr   - as `text`, against an OCR of the PDF (a scan with no text layer).
 #               There is no fuzzy tier: a garbled word is quoted around with "...".
+#       abstract - as `text`, against the item's abstract (Zotero's abstractNote,
+#               which 0270 takes from CrossRef), for a work whose PDF cannot be had.
+#               The key resolves as above but needs no PDF; an item that HAS a PDF
+#               fails (`abstract_but_pdf_held`), so a row is re-quoted from the paper
+#               once the paper arrives.
 #   - every value is stated by the quote itself (see value_in_quote()).
 # It also checks that the timing table's `source` keys resolve in the group,
 # and that every species x model parameter in COVERAGE has at least one row
@@ -156,13 +161,24 @@ group_pdfs <- DBI::dbGetQuery(con, "
 group_pdfs$file <- file.path(path.expand("~/Zotero/storage"), group_pdfs$att_key,
                              sub("^storage:", "", group_pdfs$path))
 group_pdfs <- group_pdfs[file.exists(group_pdfs$file), ]
+group_abstracts <- DBI::dbGetQuery(con, "
+  SELECT id.itemID, idv.value AS abstract
+  FROM itemData id JOIN itemDataValues idv ON idv.valueID = id.valueID
+  JOIN fields f ON f.fieldID = id.fieldID JOIN items i ON i.itemID = id.itemID
+  WHERE f.fieldName = 'abstractNote' AND i.libraryID = ?", params = list(lib))
 DBI::dbDisconnect(con)
 
-resolve <- function(key) {
+resolve <- function(key, abstract = FALSE) {
   ids <- group_items$itemID[group_items$citation_key == key]
   if (length(ids) == 0) return(list(status = "key_not_in_group"))
   if (length(ids) > 1) return(list(status = "key_ambiguous_in_group"))
   files <- group_pdfs$file[group_pdfs$itemID == ids]
+  if (abstract) {
+    if (length(files)) return(list(status = "abstract_but_pdf_held"))
+    a <- group_abstracts$abstract[group_abstracts$itemID == ids]
+    if (length(a) != 1 || !nzchar(trimws(a))) return(list(status = "no_abstract_in_group"))
+    return(list(status = "ok", abstract = a))
+  }
   if (length(files) == 0) return(list(status = "no_pdf_in_group"))
   list(status = "ok", files = sort(files))
 }
@@ -208,25 +224,30 @@ pdf_pages <- local({
     raw <- if (ocr) ocr_text(file) else
       paste(system2("pdftotext", c("-q", "-enc", "UTF-8", if (layout) "-layout", shQuote(file), "-"),
                     stdout = TRUE, stderr = FALSE), collapse = "\n")
-    Encoding(raw) <- "UTF-8"
-    pages <- strsplit(clean(raw), "\f", fixed = TRUE)[[1]]
-    stream <- function(pages) {
-      tok <- page <- line <- vector("list", length(pages))
-      for (i in seq_along(pages)) {
-        lines <- strsplit(pages[i], "\n", fixed = TRUE)[[1]]
-        lt <- lapply(lines, tokens)
-        tok[[i]] <- as.character(unlist(lt))   # NULL would delete the element
-        page[[i]] <- rep(i, length(tok[[i]]))
-        line[[i]] <- rep(seq_along(lt), lengths(lt))
-      }
-      list(tok = unlist(tok), page = unlist(page), line = unlist(line))
-    }
-    joined <- gsub("([[:alpha:]])-[ \t]*\n[ \t]*([[:alpha:]])", "\\1\\2", pages, perl = TRUE)
-    out <- list(joined = stream(joined), kept = stream(pages))
-    cache[[id]] <- out
-    out
+    cache[[id]] <- text_pages(raw)
+    cache[[id]]
   }
 })
+
+# Text as token streams, one per page ("\f" between pages): pdf_pages() for a PDF, and
+# an abstract as a single page.
+text_pages <- function(raw) {
+  Encoding(raw) <- "UTF-8"
+  pages <- strsplit(clean(raw), "\f", fixed = TRUE)[[1]]
+  stream <- function(pages) {
+    tok <- page <- line <- vector("list", length(pages))
+    for (i in seq_along(pages)) {
+      lines <- strsplit(pages[i], "\n", fixed = TRUE)[[1]]
+      lt <- lapply(lines, tokens)
+      tok[[i]] <- as.character(unlist(lt))   # NULL would delete the element
+      page[[i]] <- rep(i, length(tok[[i]]))
+      line[[i]] <- rep(seq_along(lt), lengths(lt))
+    }
+    list(tok = unlist(tok), page = unlist(page), line = unlist(line))
+  }
+  joined <- gsub("([[:alpha:]])-[ \t]*\n[ \t]*([[:alpha:]])", "\\1\\2", pages, perl = TRUE)
+  list(joined = stream(joined), kept = stream(pages))
+}
 
 ocr_text <- function(file) {
   dir.create(ocr_dir, recursive = TRUE, showWarnings = FALSE)
@@ -424,11 +445,17 @@ timing_in_quote <- function(r) {
 check_row <- function(r) {
   fail <- function(status, file = NA) list(status = status, file = file, pages = NA)
   if (r$kind == "none") return(fail("none_row"))
-  res <- resolve(r$citation_key)
+  res <- resolve(r$citation_key, abstract = r$quote_source == "abstract")
   if (res$status != "ok") return(fail(res$status))
   frags <- if (r$quote_source != "table") fragments(r$quote)
   if (r$quote_source != "table" && is.null(frags)) return(fail("quote_fragment_too_short"))
   if (!value_in_quote(r)) return(fail("value_not_in_quote"))
+  if (r$quote_source == "abstract") {
+    if (length(find_quote(frags, text_pages(res$abstract)))) {
+      return(list(status = "verified_abstract", file = "abstract", pages = NA))
+    }
+    return(fail("quote_not_found", "abstract"))
+  }
   for (f in res$files) {
     pages <- pdf_pages(f, ocr = r$quote_source == "ocr", layout = r$quote_source == "table")
     pg <- if (r$quote_source == "table") table_pages(r$quote, pages) else find_quote(frags, pages)
@@ -447,7 +474,7 @@ out <- data.frame(
   status = vapply(res, `[[`, "", "status"),
   pdf_file = vapply(res, function(x) as.character(x$file), ""),
   pdf_pages = vapply(res, function(x) as.character(x$pages), ""))
-PASS <- c("none_row", "verified_text", "verified_table", "verified_ocr")
+PASS <- c("none_row", "verified_text", "verified_table", "verified_ocr", "verified_abstract")
 pass <- out$status %in% PASS
 
 # --- the IP model registry ----------------------------------------------------
