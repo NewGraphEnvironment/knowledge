@@ -50,3 +50,12 @@ existed, so the title change cannot re-match an older item and duplicate it.
   nothing checks it. Low likelihood given the no-hand-abstracts rule, but the gate's trust rests on
   it. A cheap discriminator: require the item to carry a DOI (the CrossRef route is the only one
   0270 fills), or record the abstract's provenance.
+
+## Triage (2026-10-15)
+- 0280 PDF-held check after the file.exists filter: fixed (`pdf_items` taken before the filter); shown to fire by
+  pointing an abstract row at a key with a PDF (`abstract_but_pdf_held`).
+- 0270 abstract status from CrossRef for an existing item: fixed (reads the group item's abstractNote).
+- ip.R registry inheriting `abstract`: fixed (registry vocabulary drops it; test, and the test fails with the
+  line removed).
+- Any abstractNote accepted, no DOI check: accepted tradeoff. Abstracts reach items only from CrossRef (0270, or
+  the DOI magic wand), and CLAUDE.md forbids typing one.

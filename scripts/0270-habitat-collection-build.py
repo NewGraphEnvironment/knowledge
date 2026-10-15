@@ -407,8 +407,11 @@ def do_addition(row, coll, dry):
         # unless the item carries its abstract.
         steps += ensure(gkey, coll, dry, lambda: None)
         if steps[-1].startswith("no-pdf"):
-            steps[-1] = ("no-pdf: abstract only" if item.get("abstractNote")
-                         else "ABSTRACT-MISSING: pdf none and CrossRef has no abstract")
+            # The group item's own abstract: an item that already existed was never given
+            # CrossRef's, and 0280 reads the group item. (A dry run before create has only CrossRef's.)
+            held = get_json(f"{z.BASE}/items/{gkey}")["data"].get("abstractNote") if gkey else item.get("abstractNote")
+            steps[-1] = "no-pdf: abstract only" if (held or "").strip() else "ABSTRACT-MISSING: pdf none and the item has no abstract"
+
     else:
         steps += ensure(gkey, coll, dry, lambda: addition_pdf(row), required=True)
     return steps, f"{gkey} | " + ", ".join(steps)

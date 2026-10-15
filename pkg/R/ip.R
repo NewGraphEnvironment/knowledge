@@ -2,7 +2,8 @@
 #'
 #' The values each controlled column of a registry read by [knw_ip_read()] may
 #' take, beyond the `life_stage`, `life_history_form` and `quote_source` it
-#' shares with [knw_literature_vocab()].
+#' shares with [knw_literature_vocab()]. A registry quote comes from the paper,
+#' with its page, so the evidence table's `abstract` fallback is not one of them.
 #'
 #' `flow_metric` is the variable a model uses to say how big a stream is:
 #' mean annual flow, summer low flow, channel width (bankfull or wetted; say
@@ -119,6 +120,7 @@ knw_ip_read <- function(path, species_code = NULL) {
     if (anyNA(x[[col]])) stop(col, " is blank", first(is.na(x[[col]])), call. = FALSE)
   }
   lit <- knw_literature_vocab()
+  lit$quote_source <- setdiff(lit$quote_source, "abstract")   # a registry quote carries a page
   ip <- knw_ip_vocab()
   vocab <- c(ip[c("flow_metric", "flow_source", "valley_confinement", "validation")],
              lit["life_stage"], lit["life_history_form"],

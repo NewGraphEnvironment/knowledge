@@ -160,6 +160,9 @@ group_pdfs <- DBI::dbGetQuery(con, "
     AND ia.linkMode IN (0, 1) AND ia.path LIKE 'storage:%'", params = list(lib))
 group_pdfs$file <- file.path(path.expand("~/Zotero/storage"), group_pdfs$att_key,
                              sub("^storage:", "", group_pdfs$path))
+# An item whose PDF is in the group but not yet downloaded here still has a PDF: an abstract
+# row for it must be re-quoted from the paper, whatever this machine holds.
+pdf_items <- unique(group_pdfs$itemID[!is.na(group_pdfs$itemID)])
 group_pdfs <- group_pdfs[file.exists(group_pdfs$file), ]
 group_abstracts <- DBI::dbGetQuery(con, "
   SELECT id.itemID, idv.value AS abstract
@@ -176,7 +179,7 @@ resolve <- function(key, abstract = FALSE) {
   # key's list (sort() used to drop it, so PDF rows never showed it).
   files <- group_pdfs$file[group_pdfs$itemID %in% ids]
   if (abstract) {
-    if (length(files)) return(list(status = "abstract_but_pdf_held"))
+    if (ids %in% pdf_items) return(list(status = "abstract_but_pdf_held"))
     a <- group_abstracts$abstract[group_abstracts$itemID %in% ids]
     if (length(a) != 1 || !nzchar(trimws(a))) return(list(status = "no_abstract_in_group"))
     return(list(status = "ok", abstract = a))

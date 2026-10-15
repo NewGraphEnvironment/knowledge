@@ -12,7 +12,8 @@ A named \code{list} of \code{character} vectors, one per controlled column.
 \description{
 The values each controlled column of a registry read by \code{\link[=knw_ip_read]{knw_ip_read()}} may
 take, beyond the \code{life_stage}, \code{life_history_form} and \code{quote_source} it
-shares with \code{\link[=knw_literature_vocab]{knw_literature_vocab()}}.
+shares with \code{\link[=knw_literature_vocab]{knw_literature_vocab()}}. A registry quote comes from the paper,
+with its page, so the evidence table's \code{abstract} fallback is not one of them.
 }
 \details{
 \code{flow_metric} is the variable a model uses to say how big a stream is:

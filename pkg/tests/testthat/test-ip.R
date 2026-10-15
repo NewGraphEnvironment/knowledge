@@ -70,12 +70,15 @@ test_that("each controlled column refuses a value outside its vocabulary", {
   cases <- list(flow_metric = "MAD", flow_source = "surrogate", flow_surrogate = "none",
                 valley_confinement = "VWI",
                 validation = "redds", life_stage = "Rearing", life_history_form = "anadromous",
-                quote_source = "memory")
+                quote_source = "memory", validation_quote_source = "abstract")
   for (col in names(cases)) {
     x <- ip_fixture()
     x[[col]][1] <- cases[[col]]
     expect_error(knw_ip_read(write_ip(x)), paste0(col, ".*", cases[[col]]), info = col)
   }
+  x <- ip_fixture()
+  x$quote_source[1] <- "abstract"
+  expect_error(knw_ip_read(write_ip(x)), "quote_source outside its vocabulary: abstract")
 })
 
 test_that("required descriptors may not be blank", {
