@@ -26,7 +26,11 @@ or growth at held temperatures, or a development time in degree-days), a
 qualitative statement, or \code{none}, a search that found nothing.
 \code{quote_source} says how a quote can be checked against its PDF: running
 \code{text}, a \code{table} cell (checked by its numbers), or \code{ocr} of a scan with no
-text layer. \code{scale} is the grain a value was measured at: a redd or
+text layer. \code{abstract} is the fallback for a work whose PDF cannot be had: the
+quote is checked against the publisher's abstract, held as the reference
+item's abstract, and so carries no page. An abstract states less than the
+paper (often not which body length was measured, or how), so a row resting
+on one says only what the abstract says. \code{scale} is the grain a value was measured at: a redd or
 microhabitat \code{site}, a surveyed \code{reach}, a model \code{segment}, or a \code{network}
 summary; a site value is not a reach cutoff.
 }

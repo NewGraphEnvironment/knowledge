@@ -24,7 +24,9 @@ write after Zotero syncs, so it cannot make a re-run idempotent.
 
 A second input adds works the group library does not hold at all
 (data/habitat_modelling_additions.csv). A row with a DOI takes its metadata from
-CrossRef; a grey-literature row carries it. `pdf` is a URL (the body must start
+CrossRef, with the abstract the publisher deposited there (tags stripped; none is
+ever written by hand); a grey-literature row carries it. `pdf` is `none` for a work
+whose PDF cannot be had, which 0280 then checks against that abstract, or a URL (the body must start
 with %PDF), a path from the repo root (a PDF only a browser could fetch, kept in the
 ignored data/rag/pdf/), or `zotero:<attachment key>`, a standalone group PDF with no parent
 item, which gets a parent of its own. The standalone is left untouched: making
@@ -44,7 +46,7 @@ OUTPUT  Zotero writes only; one status line per member and a summary.
         --dry-run does every read and no write.
 ---------------------------------------------------------------------------
 """
-import argparse, csv, importlib.util, json, os, re, sqlite3, sys, urllib.parse
+import argparse, csv, html, importlib.util, json, os, re, sqlite3, sys, urllib.parse
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 _spec = importlib.util.spec_from_file_location("z0153", os.path.join(HERE, "0153-reports-to-zotero.py"))
@@ -169,7 +171,9 @@ def same_work(a, b):
     """Titles equal once case and punctuation are dropped. Citation keys are not unique
     across libraries (the same key names different papers in two libraries), so a PDF
     is only taken from an item whose title matches the item it is uploaded to."""
-    n = lambda t: "".join(ch for ch in t.lower() if ch.isalnum())
+    # plain() on both sides: a stored title may carry CrossRef markup ("<i>Oncorhynchus</i>")
+    # that a title made from CrossRef now drops, and the tag letters are alphanumeric.
+    n = lambda t: "".join(ch for ch in plain(t).lower() if ch.isalnum())
     return bool(n(a)) and n(a) == n(b)
 
 
@@ -254,7 +258,9 @@ def group_copy(item):
     title = (item.get("title") or "").strip()
     if not title:
         return None
-    q = urllib.parse.quote(title[:120])
+    # Words only: the search matches each word as a substring, and a plain title's "(Oncorhynchus"
+    # is not one of "( <i>Oncorhynchus", a markup title's.
+    q = urllib.parse.quote(" ".join(re.sub(r"[^\w]+", " ", title[:120]).split()))
     start = 0
     while True:
         page = get_json(f"{z.BASE}/items/top?q={q}&qmode=titleCreatorYear&limit=100&start={start}")
@@ -317,12 +323,29 @@ def ensure(gkey, coll, dry, find_pdf, required=False):
     return steps
 
 
+INLINE = r"</?(?:jats:)?(?:sup|sub|i|b|italic|bold|sc|scp|u|em|strong)\b[^>]*>"
+
+
+def plain(x):
+    """CrossRef markup as plain text: inline tags (italic, super- and subscript) dropped
+    without a gap, so "m<sup>2</sup>" stays "m2" and a gate never reads its exponent as a
+    value; other tags become a space; entities decoded; whitespace collapsed."""
+    x = re.sub(INLINE, "", x or "")
+    return re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", x))).strip()
+
+
+def crossref_abstract(m):
+    """The abstract CrossRef holds, as plain text, without a leading "Abstract" title.
+    "" when there is none."""
+    return plain(re.sub(r"<jats:title>.*?</jats:title>", " ", m.get("abstract") or "", flags=re.S))
+
+
 def crossref_item(doi):
-    """Journal-article JSON from CrossRef. No abstract is carried (none is written by hand either)."""
+    """Journal-article JSON from CrossRef, with the deposited abstract (none is written by hand)."""
     m = json.loads(z.fetch(f"https://api.crossref.org/works/{urllib.parse.quote(doi)}"))["message"]
     parts = m.get("issued", {}).get("date-parts", [[None]])[0]
-    return {
-        "itemType": "journalArticle", "title": m["title"][0],
+    return {"abstractNote": crossref_abstract(m),
+        "itemType": "journalArticle", "title": re.sub(r"\( ", "(", re.sub(r" \)", ")", plain(m["title"][0]))),
         "creators": [{"creatorType": "author", "firstName": a.get("given", ""), "lastName": a.get("family", "")}
                      for a in m.get("author", [])],
         "date": "-".join(str(p).zfill(2) if i else str(p) for i, p in enumerate(parts) if p),
@@ -389,7 +412,33 @@ def do_addition(row, coll, dry):
             steps.append("created")
         except Exception:
             return [f"CREATE-FAIL {st}"], f"- | CREATE-FAIL {st} {bd[:160]!r}"
-    steps += ensure(gkey, coll, dry, lambda: addition_pdf(row), required=True)
+    if row["pdf"].strip().lower() == "none":
+        # Abstract only: no PDF to find, and 0280 has nothing to check a row against
+        # unless the item carries its abstract.
+        steps += ensure(gkey, coll, dry, lambda: None)
+        if steps[-1].startswith("no-pdf"):
+            i = len(steps) - 1
+            # 0280 reads the group item's own abstract, and an item that already existed was
+            # never given CrossRef's; a stored abstract also outlives a fix to plain(). So bring
+            # the group item to CrossRef's current form. (gkey is set: a dry run returns before
+            # create.)
+            held = get_json(f"{z.BASE}/items/{gkey}")["data"]
+            have, want = held.get("abstractNote") or "", item.get("abstractNote") or ""
+            if want and have != want:
+                if dry:
+                    steps.append("would set abstract")
+                    have = want
+                else:
+                    st, bd = z.api("PATCH", f"{z.BASE}/items/{gkey}", data={"abstractNote": want},
+                                   headers={"Content-Type": "application/json",
+                                            "If-Unmodified-Since-Version": str(held["version"])})
+                    steps.append("abstract set" if st == 204 else f"ABSTRACT-FAIL {st} {bd[:160]!r}")
+                    if st == 204:
+                        have = want
+            steps[i] = ("no-pdf: abstract only" if have.strip()
+                        else "ABSTRACT-MISSING: pdf none and the item has no abstract")
+    else:
+        steps += ensure(gkey, coll, dry, lambda: addition_pdf(row), required=True)
     return steps, f"{gkey} | " + ", ".join(steps)
 
 

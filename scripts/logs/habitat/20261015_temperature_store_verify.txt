@@ -1,0 +1,8 @@
+2026-10-15T16:21:52Z
+Using local data/rag/temperature.duckdb (md5 matches manifest; 52 docs, 11350 chunks).
+[1] "Relating Size of Juveniles to Survival Within And AmongPopulati.pdf"                                     
+[2] "Richter_Kolmes_2005_temp_limits.pdf"                                                                     
+[3] "bustard_schell_2002_conserving_morice_watershed_fish_populations_and_their_habitat.pdf"                  
+[4] "Energetic-Status-Harmer-Creek-Evaluation-of-Cause-SME-Report.pdf"                                        
+[5] "ebersole_et_al_2006_juvenile_coho_salmon_growth_and_survival_across_stream_network_seasonal_habitats.pdf"
+EXIT 0

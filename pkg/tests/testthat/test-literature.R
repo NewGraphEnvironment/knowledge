@@ -200,6 +200,22 @@ test_that("a text quote shorter than 20 characters is refused as unverifiable", 
   expect_error(knw_literature_read(write_literature(x)), "quote.*20 characters")
 })
 
+test_that("an abstract quote is running text with no page", {
+  expect_true("abstract" %in% knw_literature_vocab()$quote_source)
+  x <- literature_fixture()
+  x$quote_source[2] <- "abstract"
+  expect_equal(knw_literature_read(write_literature(x))$quote_source[2], "abstract")
+  y <- x
+  y$quote[2] <- "under 6.5%"
+  expect_error(knw_literature_read(write_literature(y)), "abstract quote needs at least 20 characters.*data row 2")
+  y <- x
+  y$page[2] <- "502"
+  expect_error(knw_literature_read(write_literature(y)), "abstract quote carries no page.*data row 2")
+  # a page stays fine on a quote from the PDF
+  y$quote_source[2] <- "text"
+  expect_equal(knw_literature_read(write_literature(y))$page[2], "502")
+})
+
 test_that("model_id is a lower-case identifier, and a 'none' row has none", {
   x <- literature_fixture()
   x$model_id[1] <- "Cooney & Holzer"

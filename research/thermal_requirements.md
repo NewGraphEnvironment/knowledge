@@ -1,12 +1,12 @@
 # Thermal requirements by species and life stage
 
-**Verified:** 2026-10-14 · **Issues:** #38 (this), #40 (Bear et al. 2005 and 2007), #47 (growing-season and first-winter size thresholds, searched beyond the collection); background in `stream_temperature.md`; for
+**Verified:** 2026-10-15 · **Issues:** #38 (this), #40 (Bear et al. 2005 and 2007), #47 (growing-season and first-winter size thresholds, searched beyond the collection), #48 (#47's paywalled candidates, from abstracts where no PDF could be had); background in `stream_temperature.md`; for
 NewGraphEnvironment/link#21, NewGraphEnvironment/wet#40 and NewGraphEnvironment/fish_passage_template_reporting#214 ·
 **Produced by:** rows of `data/literature_evidence.csv` with `variable` `temperature`, `air_temperature` or
-`degree_days` (rows 511 onward are #38's, rows 1071 onward #40's), and `fish_length` (rows 1103 onward are #47's), gated by
-`scripts/0280-literature-verify.R` (log `scripts/logs/habitat/20261013_literature_verify.csv`); sources in the group's
+`degree_days` (rows 511 onward are #38's, rows 1071 onward #40's), and `fish_length` (rows 1103 onward are #47's, rows 1137 onward #48's), gated by
+`scripts/0280-literature-verify.R` (log `scripts/logs/habitat/20261015_literature_verify.csv`); sources in the group's
 `Fisheries/temperature` collection (`data/temperature_members.csv`, 46 members, and `data/temperature_additions.csv`, 8
-works #47 added) and the `temperature` store. #47's search log and the sources it dropped are in
+works #47 added and 7 #48 added) and the `temperature` store. #47's search log and the sources it dropped are in
 `planning/archive/2026-10-issue-47-growing-season-thresholds/findings.md`.
 
 **Status:** every species × cell of the gate's thermal grid has a value or a `none` row. The degree-day
@@ -40,6 +40,11 @@ window is none of these (its note gives the window). Its note gives the base tem
 is a body length tied to first-winter survival, in mm; its `metric` is the length the source measured
 (`total_length`, `fork_length`, `unstated`). Total and fork length differ by about 2 mm at fry size (30–35 mm TL
 is 28–33 mm FL in Thorley & Branton 2022 p. 3), so compare like with like.
+
+`quote_source` `abstract` marks a row resting on a publisher's abstract because the paper could not be had (#48).
+The gate checks the quote against the abstract the Zotero item holds, and refuses it once the item has a PDF. Such
+a row says only what the abstract says: its length type is usually `unstated`, and it has no page. Drop it with
+`x[x$quote_source != "abstract", ]` where only the papers themselves will do.
 
 `kind` separates what a number is: `param` (a value a model or standard sets, such as the Iacarella and
 Isaak thresholds), `expert` (a criterion or recommendation), `lab` (a laboratory or hatchery measurement:
@@ -100,13 +105,28 @@ The fish-size form of the growing-season question: how big an age-0 fish must be
 | CRCT | fork_length | > ~30 mm for > 90 % survival | Hocking et al. 2022 p. 51 | the report's logistic fit to three laboratory means (data row 1114) |
 | CO | fork_length | survival highest > 90 mm | Ebersole et al. 2006 p. 1690 | top length class, Oregon; the model explains 8.7 % of deviance (data row 1131) |
 | CO | fork_length | 80 mm | Ebersole et al. 2009 p. 569 | a threshold the model assumed, which then explained little (data row 1132) |
+| RB | unstated | all mortality < 90 mm, colder site only | Meyer & Griffith 1997, **abstract** | caged fish, Henrys Fork, Idaho; the edge of a size class, and no size effect at the warmer site (data rows 1139–1140) |
 
 Relations with no threshold: Carnation Creek coho winter survival rises with fall fork length (Holtby &
 Scrivener 1989 eq. 18, p. 70; Hartman & Scrivener 1990 Fig. 72, p. 88; data rows 1123, 1126), and is "an
 asymptotic function of size" (data row 1124). Counter-evidence: Ebersole et al. 2009 found fall length
 "relatively uninformative" (data row 1133); Quinn & Peterson 1996 found the size effect in one winter of two
 (data rows 1135–1136); Coleman & Fausch's own laboratory size dependence held only in the colder regimes (data
-row 1105). No source found gives a size threshold for BT, CH or ST. Seven paywalled candidates, among them the rainbow trout 90 and 100 mm cutoffs and the Chinook work, are #48.
+row 1105). Abstract only: coho survival estimates in a northern California stream rose from about 21 % at 55 mm FL
+to about 84 % at 106 mm, which the authors say may reflect movement or tagging mortality as well as winter
+mortality (Brakensiek & Hankin 2007, data row 1141), and Holtby 1988, the primary behind the Carnation Creek
+model, reports larger fall fingerlings after logging, associated with better overwinter survival, and a growing
+season lengthened by earlier emergence (data rows 1137–1138). For caged rainbow trout, all mortality at the colder
+of two sites was in fish under 90 mm, and size made no significant difference at the warmer (Meyer & Griffith 1997,
+data rows 1139–1140); Smith & Griffith 1994 is held only as Quinn & Peterson's paraphrase, which ties the larger
+fish's better survival to warmer water and rocky cover (data row 1145), so its 100 mm October cutoff is not in the
+table. For stream-type Chinook the evidence is against an absolute size floor: survival in a Yukon tributary was
+"not dependent on fish size" (Bradford et al. 2001, abstract, data row 1142), and across 15 Snake River
+populations mean length added nothing once site was modelled, while a fish's length relative to its population
+predicted survival to Lower Granite Dam (Zabel & Achord 2004 pp. 795–803, data rows 1143–1144); the authors
+caution that this does not rule out absolute size mattering at a later life stage. No source found gives a size threshold for BT, CH or ST. Not yet read:
+Connolly & Petersen 2003 (age-0 steelhead) has neither an open PDF nor a CrossRef abstract; #48 holds the rest as
+abstracts until the papers can be had.
 
 ## Temperature limits
 

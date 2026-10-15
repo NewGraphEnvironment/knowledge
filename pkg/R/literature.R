@@ -16,7 +16,11 @@
 #' qualitative statement, or `none`, a search that found nothing.
 #' `quote_source` says how a quote can be checked against its PDF: running
 #' `text`, a `table` cell (checked by its numbers), or `ocr` of a scan with no
-#' text layer. `scale` is the grain a value was measured at: a redd or
+#' text layer. `abstract` is the fallback for a work whose PDF cannot be had: the
+#' quote is checked against the publisher's abstract, held as the reference
+#' item's abstract, and so carries no page. An abstract states less than the
+#' paper (often not which body length was measured, or how), so a row resting
+#' on one says only what the abstract says. `scale` is the grain a value was measured at: a redd or
 #' microhabitat `site`, a surveyed `reach`, a model `segment`, or a `network`
 #' summary; a site value is not a reach cutoff.
 #'
@@ -86,7 +90,7 @@ knw_literature_vocab <- function() {
              "cm", "cm/s", "ft/s", "percentile", "percent exceedance"),
     metric = unique(unlist(.knw_metric_fits(), use.names = FALSE)),
     kind = c("param", "hsi", "max_obs", "dist", "pref", "expert", "lab", "qual", "none"),
-    quote_source = c("text", "table", "ocr"),
+    quote_source = c("text", "table", "ocr", "abstract"),
     scale = c("site", "reach", "segment", "network")
   )
 }
@@ -235,10 +239,15 @@ knw_literature_read <- function(path, species_code = NULL, variable = NULL) {
     stop("a 'none' row has no quote, so no quote_source", first(none & !is.na(x$quote_source)),
          call. = FALSE)
   }
-  short <- !none & x$quote_source %in% "text" & nchar(x$quote) < 20
+  short <- !none & x$quote_source %in% c("text", "abstract") & nchar(x$quote) < 20
   if (any(short)) {
-    stop("a text quote needs at least 20 characters to be checked against its PDF: ",
-         x$quote[short][1], first(short), call. = FALSE)
+    stop("a ", x$quote_source[short][1], " quote needs at least 20 characters to be checked ",
+         "against its source: ", x$quote[short][1], first(short), call. = FALSE)
+  }
+  # An abstract has no page of its own; a page here would read as a place in the paper.
+  paged <- x$quote_source %in% "abstract" & !is.na(x$page)
+  if (any(paged)) {
+    stop("an abstract quote carries no page", first(paged), call. = FALSE)
   }
   no_unit <- has_value & is.na(x$unit)
   if (any(no_unit)) stop("a value needs a unit", first(no_unit), call. = FALSE)
