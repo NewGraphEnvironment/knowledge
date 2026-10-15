@@ -4,46 +4,50 @@
 
 Until now the only MAD we had was fwapg's annual table. It covers the Fraser, Peace and Columbia, and is null on 25.3 % of FDIS visits (`research/habitat_weights.md`). wet's published flow (`research/modelled_discharge.md`, "Use this") now gives annual and monthly flow on about 4.5 M FWA segments province-wide.
 
-## Phase 1: Build (`scripts/0294-ch-mad-build.R`)
-- [ ] Visits: 0290's quality drops (not placed, far snap, ws50 mismatch, junk date, effort sentinel or none,
-  catch unknown), plus a drop where CH absence is blocked (`blocks_absence_of` has CH). The ledger partitions
-  the input.
-- [ ] Population WSGs are those where `bcfishobs.observations` holds any CH record. This is a range filter
-  independent of the FDIS outcome. Count visits dropped outside it.
-- [ ] Exact duplicate visits (#35: same UTM, date, area, catch) are collapsed to one and counted. The
-  `site_visit` ids kept are logged.
-- [ ] Attach annual flow (month 0) from `pick`, plus each source's own value where present, and record which
-  source was picked. A visit with no picked flow is counted and dropped.
-- [ ] Distance: for visits on segments with MAD < 0.5 m³/s, trace downstream (`fwa_downstreamtrace`) to the
-  first segment whose picked MAD is ≥ 10 m³/s. Record the network distance in m and that segment's MAD;
-  NA means none before the sea or the edge of the data.
-- [ ] Accessibility sensitivity column, for the 23 covered WSGs only: does a natural CH barrier sit
-  downstream? First check whether `barriers_ch_access` already has observation overrides removed. If it
-  does, use the pre-override set (gradient and falls). Never use `streams_access` codes.
-- [ ] Output `data/fdis/derived/ch_mad_visits.csv` (ignored, private, like `bt_use_visits.csv`) and
-  `scripts/logs/habitat/<date>_ch_mad_build_ledger.csv`.
+## Phase 1: Build (`scripts/0294-ch-mad-build.R`, `scripts/sql/ch_dist_large.sql`)
+*Revised after the plan review (`review-plan.md`, B1–B4, A2–A8); each change is marked (R).*
+- [x] Visits: 0290's quality drops plus a drop where CH absence is blocked. The ledger partitions the
+  53,018 input rows and names the CH caught in each drop.
+- [x] (R, A2) Population WSGs follow link's CH presence rule: ≥ 5 bcfishobs CH records since 1990 (106 WSGs).
+  It drops 20,832 visits, 3 of them with CH.
+- [x] (R, A8) Exact duplicates (#35) are kept and flagged in `dup_of` after the drops (568), so 0295 can fit
+  with and without them.
+- [x] Picked annual flow plus each source's value, checked against the manifest counts. (R, B2) A segment with
+  no picked flow takes its parent line's flow and codes rather than being dropped (445 visits, 140 CH).
+- [x] (R, B4) Distance: an explicit route-measure walk (`ch_dist_large.sql`) to the first primary-flow segment
+  with picked MAD ≥ 10. It records the target's edge, whether it is a lake, and the mouth-to-parent gap. The
+  coast reads as `none`. `fwa_downstreamtrace` is not used.
+- [x] (R, B3) Ambiguous placement: a MAD ≥ 10 segment on another line lies within the snap distance + 20 m.
+  Side channels are flagged.
+- [x] (R, B1) Regulated: downstream of a CABD dam with a reservoir or ≥ 10 % regulation (101 dams placed).
+- [x] Access sensitivity: `barriers_ch_access` drops overridden barriers (0 of 265 CH override positions
+  survive), so the pre-override natural barriers in `fresh_default.barriers` are used, over 56 WSGs, with and
+  without USER_DEFINITE.
+- [x] Output `data/fdis/derived/ch_mad_visits.csv` and `scripts/logs/habitat/20261015_ch_mad_build_ledger.csv`.
 
 ## Phase 2: Use (`scripts/0295-ch-mad-use.R`)
-- [ ] Fix the spec in the header before the first fit, as 0291 did.
-  - **MAD classes** (m³/s): <0.1, 0.1–0.28, 0.28–0.5, 0.5–1, 1–3, 3–10, 10–30, 30–100, >100. The breaks
-    include link's 0.28 and 100, the 0.5 from the literature, and #52's 0.5 and 10.
-  - **Distance classes** (small streams only): 0–500 m, 0.5–2 km, 2–10 km, >10 km, and no large river.
-- [ ] Raw detection rate per class: overall, and per WSG for WSGs with ≥ 20 CH detections.
-- [ ] Model: CH caught ~ class + log(area) + data_set + era + WSG, binomial with a cloglog link. Drop WSGs that
-  never or always detect CH, and count them. Run 200 bootstrap resamples by `blue_line_key` with a fixed seed.
-  A class is `ok` at ≥ 30 visits and ≥ 10 detections. The same model is run with distance class on the
-  small-stream subset.
-- [ ] Sensitivities, logged only:
-  - each source (`pcic_routed`, `wet_balance`) on its own, where both exist;
-  - the share of visits whose MAD class changes between sources (the "does model error move a visit" number);
-  - accessibility-filtered (23 WSGs);
-  - no dedupe;
-  - excluding river polygons (edge 1250/1350);
-  - the old fwapg `mad_m3s` where present.
-- [ ] Cross-check: the MAD distribution of `bcfishobs.observations` CH records (presence only, all methods)
-  against FDIS CH-present visits.
-- [ ] Output `data/ch_mad_use.csv` (aggregates only: analysis × class with n, detections, raw rate, model
-  rate, CI, power) and `scripts/logs/habitat/<date>_ch_mad_use.txt`.
+- [x] The spec is fixed in the header, and revised once after the review, before any fit.
+  - MAD classes stay at the literature and model breaks; a merged 0.1–0.5 class is a sensitivity.
+  - (R, S2) Distance classes are ≤ 500 m, > 500 m and none.
+  - (R, G1) Three responses: CH caught, any fish, and CH given fish.
+- [x] Raw rates on the modelled visits and on all population visits; per-WSG raw counts for WSGs with ≥ 20 CH.
+- [x] Model and stream bootstrap as 0291. (R, AC3) Each class reports its top-project share and its regulated
+  share.
+  - CHANGE 1, after the first run and before the write-up: distance is a rate ratio against > 500 m, because
+    normalising against the class mean let the 11-detection `none` class break the bounds.
+- [x] Sensitivities:
+  - leave out the regulated reaches, the largest project, and CHES+NECR;
+  - leave out the parent-flow visits;
+  - each source alone;
+  - the old fwapg MAD;
+  - duplicates kept;
+  - no river polygons;
+  - gradient as a covariate, and season as a covariate;
+  - the merged class;
+  - access with and without USER_DEFINITE;
+  - distance with ambiguous visits kept, with lake targets out, and with entry gaps out.
+- [x] (R, G7) Cross-check against non-FDIS bcfishobs CH records.
+- [x] Output `data/ch_mad_use.csv` and `scripts/logs/habitat/20261015_ch_mad_use.txt`.
 
 ## Phase 3: Write-up
 - [ ] `research/chinook_stream_size.md` with the provenance line. It covers:
@@ -52,21 +56,25 @@ Until now the only MAD we had was fwapg's annual table. It covers the Fraser, Pe
   - per-WSG spread;
   - each sensitivity's effect;
   - limits: juveniles only, big rivers under-sampled, modelled flow;
-  - what it means against link's 0.28 / 0.46 / 100 and Woll's 0.5. This is stated as evidence for
-    link#331 and the CH threshold rows, not as a change.
+  - what it means against link's rearing 0.28 / 100 and Woll's 0.5 (not spawn_mad_min: juvenile data, S1).
+    This is stated as evidence for link#331 and the CH threshold rows, not as a change.
 - [ ] Add a `research/README.md` row and the `scripts/README.md` run order (0294, 0295). In CLAUDE.md, list
   `ch_mad_use.csv` in the `data/` root description.
 - [ ] Edit the #52 body to link the research file and the result, and point #42's scope note at it.
 
 ## Validation
-- [ ] Both scripts run clean from the repo root, and the ledger partitions the input
+- [x] Both scripts run clean from the repo root, and the ledger partitions the input
 - [ ] `/code-check branch` clean
 - [ ] PWF checkboxes match landed work
 - [ ] `/planning-archive`, then `/gh-pr-push`
 
 ## Verification
-- Ledger: kept + dropped = 43,141-equivalent input. The CH-present count is reconciled against 0240's 1,189.
-- Picked-MAD coverage of kept visits is reported (expected near 100 % against 61 % for the old MAD).
-- Spot-check 3 distance traces by hand in SQL (a CHES tributary, a NECR one, one with no large river).
-- Restore-the-bug: break the dedupe key, and break the blocked-absence drop. Confirm the ledger counts move.
-- The bootstrap is re-run on a different worker count and gives identical output.
+- Ledger: the drops and the kept rows partition the 53,018 input rows; 1,186 CH visits are kept, and the
+  drops name the CH they remove (AC1).
+- The picked flow covers every kept visit: 445 are covered from the parent line, and 58 visits with no flow
+  either way are dropped (none with CH).
+- Walk spot-checks (AC2): MORK CH tributaries 227–378 m to the Fraser; a TABR side channel to its main line;
+  a STUL lake target; a SALM coastal stream to the sea (`none`). An entry gap over 200 m (7.6 % of walks;
+  lake tributaries coded `999`, e.g. into Shuswap Lake) is a sensitivity.
+- The bootstrap re-run on 2 and 6 workers gives byte-identical `ch_mad_use.csv`.
+- Restore-the-bug: blocked-absence drop and dedupe key mutated; the ledger counts move.

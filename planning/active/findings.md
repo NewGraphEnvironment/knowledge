@@ -49,3 +49,37 @@ Relates to #42, #28
 
 | Error | Resolution |
 |-------|------------|
+
+## Plan review (2026-10-15 22:31Z) and what it changed
+`review-plan.md` holds the review and its disposition. The plan-mode design would have misled in four ways:
+- **B1, regulated rivers.** The ≥ 100 m³/s class is one 2010 FDS Triton survey on the Nechako (432 of 978
+  analysed detections), on a regulated river where wet's natural flow is not the flow the fish meet.
+- **B2, side channels.** The no-pick drop removed side channels and connectors, where CH are caught at four
+  times the overall rate.
+- **B3, snapping.** Small-stream "near a big river" mixed in mainstem visits snapped onto tributary mouths.
+- **B4, the trace.** `fwa_downstreamtrace` returns side channels off the path and drops segments with no lut
+  row, so its rows cannot be summed.
+
+All four were fixed in 0294 before any result was read.
+
+## Facts measured on the way
+- `fresh_default.barriers_ch_access` already drops observation-overridden barriers: 0 of the 265 CH override
+  positions in `barrier_overrides` survive in it, against 265 in `fresh_default.barriers`.
+- Segments with no watershed lut row (edges 1100, 1150, 1350, 1450, 2300) carry a `wscode` but a NULL
+  `localcode`, so `fwa_downstream()` cannot test them. They take the parent segment's codes.
+- Coastal streams drain to a 9xx code that has no lines. Treating that as "no parent" mislabelled 1,302 walks.
+  It is the sea (`none`).
+- Lake tributaries are coded under the river that feeds the lake (`...999...`), so their mouth projects onto
+  that river from far off (up to 15.7 km, Shuswap Lake). The entry gap is recorded, and a sensitivity drops
+  gaps over 200 m.
+- CABD has `degree_of_regulation_pc` for only 38 of 2,592 dams. Regulated is therefore reservoir_present OR
+  ≥ 10 %, which gives 101 dams (Kenney 621 %, La Joie 104 %, Terzaghi 53 %, Seton 16 %, Skins Lake #1 reservoir).
+
+## Errors Encountered (continued)
+
+| Error | Resolution |
+|-------|------------|
+| `coalesce()` integer64 vs double on count() columns | cast counts to integer in SQL; connect with `bigint = "numeric"` |
+| `fwa_downstream(integer, ...)` not found with double blue_line_key from an R temp table | cast `::integer` |
+| `$TMPDIR` unset in the agent shell, so `cp` to it failed and the chain stopped | frozen copies go to the scratchpad |
+| sed edited only the first line of a two-line assignment in a frozen copy | build frozen variants in Python with asserted replacements |

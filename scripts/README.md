@@ -52,6 +52,13 @@ wf_farm_priority.js                          farm priority/crossing tables out o
 0293  BT spawner evidence by gradient class (maturity-coded Aug-Oct visits, size split) -> data/bt_spawn_evidence.csv (+ log; ~10 min)
       then: aws s3 cp data/fdis/derived/bt_use_visits.csv s3://fresh-bc/fdis/derived/
 
+--- CH detection by stream size (after 0240; needs wet's flow loaded in local fwapg :5432) ---
+0294  FDIS visits with wet's picked annual flow (MAD), distance downstream to the first MAD >= 10
+      segment for visits under 0.5, natural CH barrier check -> data/fdis/derived/ch_mad_visits.csv
+      (+ ledger; ~15 min, 4 socket workers)
+0295  effort-corrected CH detection by MAD class and by distance class -> data/ch_mad_use.csv (+ log)
+      then: aws s3 cp data/fdis/derived/ch_mad_visits.csv s3://fresh-bc/fdis/derived/
+
 --- Habitat literature (independent of the watershed-group flow) ---
 0270  build the group's Fisheries/habitat_modelling collection   --dry-run first, then live
       (--collection temperature: Fisheries/temperature, from data/temperature_members.csv)

@@ -1,0 +1,28 @@
+kind,step,n,note
+in,visits_in,53018,
+drop,not_placed,1568,CH caught on 3
+drop,far_snap,5322,CH caught on 110
+drop,ws50_mismatch,1122,CH caught on 49
+drop,junk_date,23,CH caught on 0
+drop,effort_sentinel_or_none,1422,CH caught on 29
+drop,catch_unknown,420,CH caught on 0
+drop,ch_absence_blocked,389,CH caught on 0
+info,population_wsgs,106,>= 5 bcfishobs CH records since 1990-01-01
+drop,wsg_outside_ch_range,20832,CH caught on 3
+info,duplicate_flagged,568,"kept, flagged in dup_of"
+info,flow_from_parent,445,CH caught on 140; parent segment up to 1207 m away
+drop,no_flow,58,CH caught on 0
+info,code_from_parent,444,"segment with no watershed code takes its parent segment's, for the downstream tests"
+drop,no_watershed_code,0,CH caught on 0
+info,regulating_dams_placed,101,within 500 m of a main-flow segment
+info,regulated,1397,CH caught on 624
+info,access_covered,8943,56 fresh_default WSGs
+info,ch_barrier_dnstr,3443,CH caught on 23
+info,small_visits,14185,picked MAD < 0.5
+info,ambiguous_placement,105,CH caught on 33
+info,walk_starts,12932,0.5 min on 4 workers
+info,walk_found,11627,
+info,walk_none,1305,
+info,large_is_lake,2852,
+kept,visits_kept,21862,
+info,ch_present_kept,1186,
