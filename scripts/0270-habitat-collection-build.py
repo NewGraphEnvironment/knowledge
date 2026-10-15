@@ -171,7 +171,9 @@ def same_work(a, b):
     """Titles equal once case and punctuation are dropped. Citation keys are not unique
     across libraries (the same key names different papers in two libraries), so a PDF
     is only taken from an item whose title matches the item it is uploaded to."""
-    n = lambda t: "".join(ch for ch in t.lower() if ch.isalnum())
+    # plain() on both sides: a stored title may carry CrossRef markup ("<i>Oncorhynchus</i>")
+    # that a title made from CrossRef now drops, and the tag letters are alphanumeric.
+    n = lambda t: "".join(ch for ch in plain(t).lower() if ch.isalnum())
     return bool(n(a)) and n(a) == n(b)
 
 
@@ -256,7 +258,9 @@ def group_copy(item):
     title = (item.get("title") or "").strip()
     if not title:
         return None
-    q = urllib.parse.quote(title[:120])
+    # Words only: the search matches each word as a substring, and a plain title's "(Oncorhynchus"
+    # is not one of "( <i>Oncorhynchus", a markup title's.
+    q = urllib.parse.quote(" ".join(re.sub(r"[^\w]+", " ", title[:120]).split()))
     start = 0
     while True:
         page = get_json(f"{z.BASE}/items/top?q={q}&qmode=titleCreatorYear&limit=100&start={start}")
