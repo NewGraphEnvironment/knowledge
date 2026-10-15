@@ -27,14 +27,14 @@ Bradford et al. 2001. Smith & Griffith 1994 and Connolly & Petersen 2003 have no
 - [x] Rebuild and push the `temperature` store once Zotero has synced; verify on a fresh connect.
 
 ## Phase 3: Rows
-- [ ] Draft (about nine rows): Holtby 1988, Meyer & Griffith 1997, Brakensiek & Hankin 2007, Bradford et al. 2001
+- [x] Draft (about nine rows): Holtby 1988, Meyer & Griffith 1997, Brakensiek & Hankin 2007, Bradford et al. 2001
   from abstracts; Zabel & Achord 2004 from the PDF; Smith & Griffith 1994 as cited by Quinn & Peterson 1996.
-- [ ] Blind meaning audit (Explore reader, canary first); fix; audit the fixes.
-- [ ] `0280` passes with the new rows; log.
+- [x] Blind meaning audit (Explore reader, canary first); fix; audit the fixes.
+- [x] `0280` passes with the new rows; log.
 
 ## Phase 4: Write-up
-- [ ] `research/thermal_requirements.md`: the size section names the new rows and says which are abstract-only.
-- [ ] `CLAUDE.md` above the marker: the `abstract` quote source convention.
+- [x] `research/thermal_requirements.md`: the size section names the new rows and says which are abstract-only.
+- [x] `CLAUDE.md` above the marker: the `abstract` quote source convention.
 - [ ] #48 body reconciled.
 
 ## Validation

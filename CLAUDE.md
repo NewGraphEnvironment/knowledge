@@ -174,6 +174,10 @@ meaning per row, not a sample. Settled conventions:
   never solved for a value the source does not print. `growing_season` is only Coleman & Fausch's window; a
   degree-day sum on any other window the vocabulary lacks (Holtby's February–March thermal summation) is `unstated`
   with the window in the note (#47).
+- Where a paper cannot be had, a row may quote its publisher abstract: `quote_source = abstract`, no page, checked
+  against the Zotero item's abstract (`0270` takes it from CrossRef for an additions row with `pdf = none`; never
+  typed by hand). It says only what the abstract says, so a length type the abstract omits is `unstated`, and its
+  note opens "Abstract only". `0280` refuses it once the item has a PDF: re-quote it from the paper then (#48).
 - Append new rows; never insert. `research/` files cite evidence by data row, and data row N is file line
   N + 1 (#36's plan named file lines and called them data rows). A statement that bears on two variables is
   two rows sharing one quote, each noting the other. Copy a sibling's fields only after checking them: #36
