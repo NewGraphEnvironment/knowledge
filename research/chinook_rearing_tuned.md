@@ -10,7 +10,7 @@ a tuned rule is drafted, not filed (planning archive for #54) · **Produced by:*
 - `scripts/0298-ch-rule-compare.R`: `data/ch_rule_compare.csv`, `data/ch_rule_checks.csv`, `data/ch_rule_change.csv`,
   the maps in `fig/`, log
   `scripts/logs/habitat/20261015_ch_rule_compare.txt`;
-- the plan review and its disposition: `planning/archive/2026-10-issue-54-*/review-plan.md`.
+- the plan review and its disposition: `planning/archive/2026-10-issue-54-chinook-rearing-tuned/review-plan.md`.
 
 **Status:** measured; nothing applied in link. Written to lift into a link vignette (last section).
 
