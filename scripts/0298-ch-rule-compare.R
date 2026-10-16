@@ -15,6 +15,11 @@
 #     lnk_pipeline_connect() makes. Regenerated `default` is reported against the stored flags.
 #   - CHECK: the SQL predicate for `default` equals the one fresh::frs_habitat_predicates()
 #     builds from link's configs/default, on every segment (stops otherwise).
+#   - THREE RULES: `default` as it runs (every group on `cw`: width >= 1.5 m); `default_mad`,
+#     the same bundle's MAD bounds (0.28-100 m3/s, bcfishpass's), as fresh's `mad` model builds
+#     them for a group moved to `mad` (the river-polygon branch then takes the MAD range too); and
+#     the tuned rule. default_mad reads wet's `pick`, the flow the tuned rule reads, so the two
+#     differ by rule alone; link main still reads fwapg's old MAD until link#331.
 #   - THE TUNED RULE changes the gradient on the stream and river branches, as a threshold in
 #     link's CSV would; the scoring in 0297 saw the stream branch only. A segment's exception
 #     distance is walked from its downstream end (scripts/sql/ch_dist_profile.sql on `pick`).
@@ -145,6 +150,9 @@ chk <- dbGetQuery(conn, sprintf("
   rule_sql(dflt), fp$rear, wsg_in))
 say("Check: SQL default against fresh::frs_habitat_predicates() on %d segments: %d differ.", chk$n, chk$differ)
 if (chk$differ > 0) stop("the SQL default predicate differs from fresh's on ", chk$differ, " segments")
+fp_mad <- fresh::frs_habitat_predicates(list(species_code = "CH", params_sp = params$CH, spawn_gradient_min = 0,
+                                             spawn_gradient_max = params$CH$ranges$spawn$gradient[2]), "mad")
+log_lines <- c(log_lines, "default_mad: fresh's `mad` rear predicate, on wet's pick as mad_m3s:", fp_mad$rear)
 
 # ---- exception walks for segments only the exception can admit ----------------------
 dbExecute(conn, sprintf("
@@ -153,7 +161,7 @@ dbExecute(conn, sprintf("
          s.downstream_route_measure, s.edge_type, s.gradient, s.channel_width, s.waterbody_key,
          s.stream_order, s.length_metre, h.accessible, h.spawning, h.rearing AS rearing_stored,
          h.lake_rearing AS lake_rearing_stored, h.wetland_rearing AS wetland_rearing_stored,
-         q.q_m3s AS mad, NULL::float8 AS exc_dist
+         q.q_m3s AS mad, q.q_m3s AS mad_m3s, NULL::float8 AS exc_dist
   FROM fresh_default.streams s
   JOIN fresh_default.streams_habitat_ch h
     ON h.id_segment = s.id_segment AND h.watershed_group_code = s.watershed_group_code
@@ -198,7 +206,8 @@ if (!is.na(rec$exc_q)) {
 dbExecute(conn, sprintf("CREATE SCHEMA IF NOT EXISTS %s", scratch))
 dbWriteTable(conn, Id(schema = scratch, table = "uhc"), uhc, overwrite = TRUE)
 run_conn <- getFromNamespace(".frs_run_connectivity", "fresh")
-rules <- list(default = dflt, tuned = rec)
+rule_preds <- list(default = rule_sql(dflt), default_mad = sprintf("coalesce((%s), FALSE)", fp_mad$rear),
+                   tuned = rule_sql(rec))
 flags <- list()
 t0 <- Sys.time()
 for (w in wsgs) {
@@ -210,7 +219,7 @@ for (w in wsgs) {
   dbExecute(conn, sprintf("CREATE INDEX ON %s.streams USING gist (wscode_ltree)", scratch))
   dbExecute(conn, sprintf("CREATE INDEX ON %s.streams USING gist (localcode_ltree)", scratch))
   dbExecute(conn, sprintf("CREATE INDEX ON %s.streams (blue_line_key, downstream_route_measure)", scratch))
-  for (k in names(rules)) {
+  for (k in names(rule_preds)) {
     h <- paste0(scratch, ".habitat_", k)
     dbExecute(conn, sprintf("DROP TABLE IF EXISTS %s", h))
     dbExecute(conn, sprintf("CREATE TABLE %1$s AS
@@ -219,7 +228,7 @@ for (w in wsgs) {
              s.accessible AND coalesce(s.waterbody_key IN (SELECT waterbody_key FROM tmp_wb WHERE t = 'L'), FALSE) AS lake_rearing,
              s.accessible AND coalesce(s.waterbody_key IN (SELECT waterbody_key FROM tmp_wb WHERE t = 'W'), FALSE) AS wetland_rearing,
              FALSE AS rearing_pre_connect
-      FROM tmp_seg s WHERE s.watershed_group_code = '%3$s'", h, rule_sql(rules[[k]]), w))
+      FROM tmp_seg s WHERE s.watershed_group_code = '%3$s'", h, rule_preds[[k]], w))
     dbExecute(conn, sprintf("UPDATE %s SET rearing_pre_connect = rearing", h))
     dbExecute(conn, sprintf("CREATE INDEX ON %s (id_segment)", h))
     fresh::frs_habitat_overlay(conn, from = paste0(scratch, ".uhc"), to = h, bridge = paste0(scratch, ".streams"),
@@ -231,7 +240,7 @@ for (w in wsgs) {
        FROM %s", k, h))
   }
 }
-say("Classify, overlay and connect: %d groups x 2 rules, %.1f min.", length(wsgs),
+say("Classify, overlay and connect: %d groups x %d rules, %.1f min.", length(wsgs), length(rule_preds),
     as.numeric(difftime(Sys.time(), t0, units = "mins")))
 seg <- dbGetQuery(conn, "SELECT id_segment, watershed_group_code, linear_feature_id, blue_line_key,
                                 downstream_route_measure, edge_type, stream_order, length_metre, accessible,
@@ -241,7 +250,9 @@ fl <- bind_rows(flags) |>
   tidyr::pivot_wider(id_cols = c(id_segment, watershed_group_code), names_from = rule,
                      values_from = c(rearing, lake_rearing, wetland_rearing, rearing_pre_connect))
 seg <- seg |> left_join(fl, by = c("id_segment", "watershed_group_code"))
-if (anyNA(seg$rearing_default) || anyNA(seg$rearing_tuned)) stop("a segment has no regenerated flag")
+if (anyNA(seg$rearing_default) || anyNA(seg$rearing_default_mad) || anyNA(seg$rearing_tuned)) {
+  stop("a segment has no regenerated flag")
+}
 
 # ---- per group --------------------------------------------------------------------
 km <- function(x, len) sum(len[x %in% TRUE]) / 1000
@@ -251,19 +262,24 @@ per <- seg |>
             accessible_stream_km = km(accessible & edge_type %in% edge_stream, length_metre),
             stored_rear_km = km(rearing_stored, length_metre),
             default_rear_km = km(rearing_default, length_metre),
+            default_mad_rear_km = km(rearing_default_mad, length_metre),
             tuned_rear_km = km(rearing_tuned, length_metre),
             stored_vs_default_differ_km = km(rearing_stored != rearing_default, length_metre),
             gained_n = sum(rearing_tuned & !rearing_default), gained_km = km(rearing_tuned & !rearing_default, length_metre),
             lost_n = sum(!rearing_tuned & rearing_default), lost_km = km(!rearing_tuned & rearing_default, length_metre),
+            vs_mad_gained_km = km(rearing_tuned & !rearing_default_mad, length_metre),
+            vs_mad_lost_km = km(!rearing_tuned & rearing_default_mad, length_metre),
             lake_rear_km = km(lake_rearing_tuned, length_metre), wetland_rear_km = km(wetland_rearing_tuned, length_metre),
             lake_wetland_same = all(lake_rearing_tuned == lake_rearing_default & wetland_rearing_tuned == wetland_rearing_default),
             order12_share = km(accessible & edge_type %in% edge_stream & stream_order <= 2, length_metre) /
               km(accessible & edge_type %in% edge_stream, length_metre),
             .groups = "drop") |>
-  mutate(change_pct = 100 * (tuned_rear_km - default_rear_km) / default_rear_km)
+  mutate(change_pct = 100 * (tuned_rear_km - default_rear_km) / default_rear_km,
+         mad_change_pct = 100 * (default_mad_rear_km - default_rear_km) / default_rear_km)
 tot <- per |> summarise(watershed_group_code = "ALL", across(where(is.numeric) & !c(order12_share, change_pct), sum),
                         lake_wetland_same = all(lake_wetland_same)) |>
-  mutate(change_pct = 100 * (tuned_rear_km - default_rear_km) / default_rear_km)
+  mutate(change_pct = 100 * (tuned_rear_km - default_rear_km) / default_rear_km,
+         mad_change_pct = 100 * (default_mad_rear_km - default_rear_km) / default_rear_km)
 compare <- bind_rows(per, tot) |> mutate(default_rule = dflt$rule, tuned_rule = rec$rule)
 block("rearing km by group", compare |> mutate(across(where(is.numeric), ~ round(.x, 1))))
 
@@ -273,9 +289,9 @@ vis <- read_csv("data/fdis/derived/ch_rule_visits.csv", show_col_types = FALSE, 
   filter(edge_type %in% c(1000, 1050, 1100, 1150, 2000, 2100, 2300, 1250, 1350), !is.na(area_m2),
          area_m2 >= 10, area_m2 <= 10000, is.na(dup_of), !is.na(link_id_segment))
 vd <- vis |> inner_join(seg |> select(link_id_segment = id_segment, watershed_group_code, accessible,
-                                      rearing_default, rearing_tuned),
+                                      rearing_default, rearing_default_mad, rearing_tuned),
                         by = c("link_id_segment", "watershed_group_code"))
-det <- bind_rows(lapply(c("default", "tuned"), function(k) {
+det <- bind_rows(lapply(names(rule_preds), function(k) {
   r <- vd[[paste0("rearing_", k)]]
   tibble(check = "fdis_visits", rule = k, segment = c("rearing", "accessible_not_rearing"),
          n = c(sum(r), sum(vd$accessible & !r)), n_ch = c(sum(vd$present_CH[r]), sum(vd$present_CH[vd$accessible & !r])))
@@ -309,7 +325,8 @@ pl <- dbGetQuery(conn, sprintf("
   ORDER BY t.loc_id, (s.downstream_route_measure BETWEEN t.m - 1 AND t.m + 1) DESC,
            s.downstream_route_measure DESC, s.id_segment", scratch))
 loc <- loc |> mutate(loc_id = row_number()) |> inner_join(pl, by = "loc_id") |> filter(!in_uhc) |>
-  inner_join(seg |> select(id_segment, watershed_group_code, accessible, rearing_default, rearing_tuned),
+  inner_join(seg |> select(id_segment, watershed_group_code, accessible, rearing_default, rearing_default_mad,
+                           rearing_tuned),
              by = c("id_segment", "watershed_group_code"))
 say("")
 say("Outside check: %d non-FDIS CH records in these groups; %d match A/B; %d locations not spawn-only, placed, outside the overlay.",
@@ -320,18 +337,23 @@ lift <- function(l, k, idx = seq_len(nrow(l))) {
   mean(r) / (km(seg[[paste0("rearing_", k)]] & seg$edge_type %in% edge_stream, seg$length_metre) / acc_km)
 }
 set.seed(seed_boot)
+rk <- names(rule_preds)
 bs <- t(vapply(seq_len(n_boot), function(b) {
   i <- sample.int(nrow(loc), nrow(loc), replace = TRUE)
-  c(default = lift(loc, "default", i), tuned = lift(loc, "tuned", i))
-}, numeric(2)))
-outside <- tibble(check = "bcfishobs_outside", rule = c("default", "tuned", "tuned_minus_default"),
-                  n = nrow(loc),
-                  n_on_rearing = c(sum(loc$rearing_default), sum(loc$rearing_tuned), NA),
-                  km_share = c(km(seg$rearing_default & seg$edge_type %in% edge_stream, seg$length_metre) / acc_km,
-                               km(seg$rearing_tuned & seg$edge_type %in% edge_stream, seg$length_metre) / acc_km, NA),
-                  lift = c(lift(loc, "default"), lift(loc, "tuned"), lift(loc, "tuned") - lift(loc, "default")),
-                  lift_lo = c(quantile(bs[, 1], 0.025), quantile(bs[, 2], 0.025), quantile(bs[, 2] - bs[, 1], 0.025)),
-                  lift_hi = c(quantile(bs[, 1], 0.975), quantile(bs[, 2], 0.975), quantile(bs[, 2] - bs[, 1], 0.975))) |>
+  vapply(rk, function(k) lift(loc, k, i), numeric(1))
+}, numeric(length(rk))))
+ks <- function(k) km(seg[[paste0("rearing_", k)]] & seg$edge_type %in% edge_stream, seg$length_metre) / acc_km
+q <- function(x, p) unname(quantile(x, p))
+outside <- bind_rows(
+  tibble(check = "bcfishobs_outside", rule = rk, n = nrow(loc),
+         n_on_rearing = vapply(rk, function(k) sum(loc[[paste0("rearing_", k)]]), numeric(1)),
+         km_share = vapply(rk, ks, numeric(1)),
+         lift = vapply(rk, function(k) lift(loc, k), numeric(1)),
+         lift_lo = apply(bs, 2, q, 0.025), lift_hi = apply(bs, 2, q, 0.975)),
+  tibble(check = "bcfishobs_outside", rule = c("tuned_minus_default", "tuned_minus_default_mad"), n = nrow(loc),
+         lift = c(lift(loc, "tuned") - lift(loc, "default"), lift(loc, "tuned") - lift(loc, "default_mad")),
+         lift_lo = c(q(bs[, "tuned"] - bs[, "default"], 0.025), q(bs[, "tuned"] - bs[, "default_mad"], 0.025)),
+         lift_hi = c(q(bs[, "tuned"] - bs[, "default"], 0.975), q(bs[, "tuned"] - bs[, "default_mad"], 0.975)))) |>
   mutate(capture_share = n_on_rearing / n)
 block("outside check (stream km share against accessible stream km)", outside)
 
