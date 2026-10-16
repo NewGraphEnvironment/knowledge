@@ -87,7 +87,13 @@ if (pull) {
     if (!identical(sha256(dst), f$sha256)) stop(f$path, ": sha256 differs from the manifest", call. = FALSE)
     out <- file.path(dir_in, paste0(f$table, ".csv"))
     if (file.exists(out)) stop(out, " exists; move it aside to pull", call. = FALSE)
-    arrow::write_csv_arrow(arrow::read_parquet(dst), out)
+    # written aside and moved in once complete, so an interrupted pull leaves no CSV that
+    # 0291-0298 would read as whole
+    part <- paste0(out, ".part")
+    arrow::write_csv_arrow(arrow::read_parquet(dst), part)
+    n <- arrow::read_csv_arrow(part, as_data_frame = FALSE)$num_rows
+    if (n != f$rows) stop(part, ": ", n, " rows, the manifest says ", f$rows, call. = FALSE)
+    if (!file.rename(part, out)) stop("could not move ", part, " into place", call. = FALSE)
     message(sprintf("%-15s %8d rows -> %s", f$table, f$rows, out))
   }
   quit(save = "no", status = 0)

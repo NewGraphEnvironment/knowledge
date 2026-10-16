@@ -41,3 +41,11 @@
   failure leaves only `.part` and the re-run verifies 26/0). The sweep missed retitle entries (now read; #4's "from the
   M1" is the one hit, owner's decision) and the generated conventions below CLAUDE.md's marker (39 hits; reported, not
   failed; soul#439 filed). A third bucket-policy comment on #56 was edited.
+- Round 3 (`review-round3.md`) named the mechanism: guards that decide "clean" or "done" from a list or marker written
+  from what was known, not from the population. 6 findings, all reproduced: the issue's one project name
+  (`data/context_bowron_mcgregor.md`, never carried into the plan) and the same slug in #17's body, both reworded, with
+  the slug class added to the sweep; inside round-2's fix, `0230`'s credentialed sync could also land the manifest
+  before the rest (now synced with `--exclude MANIFEST.md5` and the manifest copied last; a fresh sync verifies
+  26/0); `PULL` wrote CSVs in place (now `.part`, row-checked, renamed); #19's revisions were missing from the recalled
+  deletion list (a `history` sweep mode now measures it: 23 items); CLAUDE.md overstated what `planning/` and the sweep
+  cover (reworded). Owner decisions left: #4's retitle entry, and the issue branch behind open PR #12.

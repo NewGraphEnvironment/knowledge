@@ -108,7 +108,10 @@ posted during this work, by the bucket-policy session). PR-body `sred` cross-ref
 (feature-workflow.md) and are exempt; issue #20's `m1` is a formula term. Each was rewritten in plain words, and #4's
 title ("from the M1") renamed. After the edits the GitHub sweep returns no hits.
 
-Earlier revisions stay visible in each item's edit history until deleted in the web UI (the API cannot). Items edited:
+Earlier revisions stay visible in each item's edit history until deleted in the web UI (the API cannot). The list
+is measured, not recalled: `public_sweep.py history` reads every body's and comment's revisions (GraphQL
+`userContentEdits`) and reports those whose text hits a pattern. On 2026-10-16 after the edits, 23 items
+(code-check round 3 found #19, edited clean before this branch, missing from the first, recalled list):
 
 - https://github.com/NewGraphEnvironment/knowledge/issues/3
 - https://github.com/NewGraphEnvironment/knowledge/issues/4
@@ -118,22 +121,26 @@ Earlier revisions stay visible in each item's edit history until deleted in the 
 - https://github.com/NewGraphEnvironment/knowledge/issues/16
 - https://github.com/NewGraphEnvironment/knowledge/issues/17
 - https://github.com/NewGraphEnvironment/knowledge/issues/18
+- https://github.com/NewGraphEnvironment/knowledge/issues/19
 - https://github.com/NewGraphEnvironment/knowledge/issues/25
-- https://github.com/NewGraphEnvironment/knowledge/pull/26
 - https://github.com/NewGraphEnvironment/knowledge/issues/33
-- https://github.com/NewGraphEnvironment/knowledge/pull/37
 - https://github.com/NewGraphEnvironment/knowledge/issues/38
-- https://github.com/NewGraphEnvironment/knowledge/pull/39
 - https://github.com/NewGraphEnvironment/knowledge/issues/47
-- https://github.com/NewGraphEnvironment/knowledge/pull/49
 - https://github.com/NewGraphEnvironment/knowledge/issues/51
 - https://github.com/NewGraphEnvironment/knowledge/issues/56
 - https://github.com/NewGraphEnvironment/knowledge/issues/56#issuecomment-6224964138
 - https://github.com/NewGraphEnvironment/knowledge/issues/56#issuecomment-6225367874
+- https://github.com/NewGraphEnvironment/knowledge/issues/56#issuecomment-6225458231
 - https://github.com/NewGraphEnvironment/knowledge/issues/57
+- https://github.com/NewGraphEnvironment/knowledge/pull/26
+- https://github.com/NewGraphEnvironment/knowledge/pull/37
+- https://github.com/NewGraphEnvironment/knowledge/pull/39
+- https://github.com/NewGraphEnvironment/knowledge/pull/49
 
-- https://github.com/NewGraphEnvironment/knowledge/issues/56#issuecomment-6225458231 (posted 21:56Z by the bucket-policy
-  session after the first pass; edited the same way)
+Branch `11-quick-read-of-the-north-thompson-fish-pa` (open PR #12) goes public with the repo, and two files that exist
+only there carry a client project path and database literals (code-check round 3). Git history and `refs/pull/*` are
+exempt by the issue's decision, but this is a live branch: accept it, close #12 and delete the branch, or fix the two
+files before the flip. The owner's decision.
 
 Issue #4's rename entry ("… from the M1") shows the old title and cannot be deleted (code-check round 2); the sweep now
 reads rename entries and reports it. Accepting it or deleting and re-filing #4 is the owner's decision.

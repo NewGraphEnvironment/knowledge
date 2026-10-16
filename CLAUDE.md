@@ -57,10 +57,14 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
 The watershed group is an argument, never a project or a client. Nothing tracked here, and no
 issue, PR or commit message, carries client or project identifiers, host or machine names,
 database hosts, ports or logins, credential file paths, password-manager references, or links to
-private repositories. That includes `planning/` and this file. Context that needs any of them
-belongs in a private coordination repo, not here. Credentials come from the environment
-(`PG*`, `ZOTERO_API_KEY`, AWS). The #56 archive's `public_sweep.py` is the check: it searches the
-tree, the GitHub text and a branch's commit messages for all of the above.
+private repositories. That holds for new `planning/` files and for this file too; the
+`planning/archive/` and `scripts/logs/` written before 2026-10-16 are left as they were and do carry
+such text. Context that needs any of them belongs in a private coordination repo, not here.
+Credentials come from the environment (`PG*`, `ZOTERO_API_KEY`, AWS). The #56 archive's
+`public_sweep.py` is the check: it searches tracked files (outside `planning/` and `scripts/logs/`),
+issue and PR text, retitles and a branch's commit messages for these patterns, and with `history`
+the earlier revisions GitHub keeps. Its patterns are a list, not the class: a new kind of
+identifier needs a new pattern.
 
 ## Working notes
 

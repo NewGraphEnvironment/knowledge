@@ -78,8 +78,13 @@ if (!file.exists(file.path(cache, "MANIFEST.md5"))) {
     for (key in sub("^\\./", "", substring(read_lines(pending), 34))) get(key)
     if (!file.rename(pending, file.path(cache, "MANIFEST.md5"))) stop("could not move ", pending, " into place")
   } else {
-    rc <- system2("aws", c("s3", "sync", "s3://fresh-bc/fdis/", cache, "--only-show-errors"))
+    # the manifest last here too: its presence is what marks the cache complete
+    rc <- system2("aws", c("s3", "sync", "s3://fresh-bc/fdis/", cache, "--exclude", "MANIFEST.md5",
+                           "--only-show-errors"))
     if (rc != 0) stop("aws s3 sync failed (exit ", rc, ")")
+    rc <- system2("aws", c("s3", "cp", "s3://fresh-bc/fdis/MANIFEST.md5", file.path(cache, "MANIFEST.md5"),
+                           "--only-show-errors"))
+    if (rc != 0) stop("aws s3 cp of MANIFEST.md5 failed (exit ", rc, ")")
   }
 }
 # md5 -r format: 32 hex, a space, then the path (paths contain spaces)

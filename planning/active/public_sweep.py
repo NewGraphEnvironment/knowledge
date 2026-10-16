@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Sweep for text that must not be public (#56).
 
-Usage: python3 planning/active/public_sweep.py [tree|github|commits|all]
+Usage: python3 planning/active/public_sweep.py [tree|github|commits|all|history]
+(history is separate: earlier revisions that need deleting in the web UI)
 
 Tree: every tracked file except the exemptions. GitHub: issue and PR bodies,
 issue/PR conversation comments and PR review comments. Prints one line per
@@ -23,7 +24,8 @@ PATTERNS = {
     "password_manager": r"1Password|op://|\bop read\b",
     "host": r"\b(m1|M1|m4|M4|cypher|openclaw)\b|tailnet|Tailscale|Dropbox|OneDrive",
     "private_repo": rf"NewGraphEnvironment/({PRIVATE_REPOS})\b|\b(template|{PRIVATE_REPOS})#\d+",
-    "project_repo": r"\b[a-z]+_[a-z_]*\d{4}_(reporting|planning)\b|fish_passage_[a-z]+_\d{4}",
+    # Repo-shaped names, and the client/project slug class <client>_<region>_<year>.
+    "project_repo": r"\b[a-z]+_[a-z_]*\d{4}_(reporting|planning)\b|fish_passage_[a-z]+_\d{4}|\b[a-z]+_[a-z]+_20\d{2}\b",
     "internal_ref": r"\bdb-newgraph\b|\bcomms/|\bpoisreport\b",
     "local_path": r"airvine|/Users/|claude-50\d|~/Projects|Projects/repo",
     "template_name": r"fish[-_]passage[-_]template[-_]reporting",
@@ -141,6 +143,41 @@ def commits():
     return hits
 
 
+def history():
+    """Every earlier revision of an issue or PR body or a comment (GraphQL userContentEdits).
+    GitHub shows these to anyone who can read the item; only the web UI deletes them, so this
+    mode lists what is still to delete rather than failing the default sweep."""
+    q = """query($o:String!,$r:String!,$c:String){repository(owner:$o,name:$r){
+      issues(first:20,after:$c){pageInfo{hasNextPage endCursor} nodes{url
+        userContentEdits(first:100){nodes{editedAt diff}}
+        comments(first:50){nodes{url userContentEdits(first:100){nodes{editedAt diff}}}}}}}}"""
+    qp = q.replace("issues(first:20", "pullRequests(first:20")
+    hits = []
+    owner, name = REPO.split("/")
+    for query, key in ((q, "issues"), (qp, "pullRequests")):
+        cursor = None
+        while True:
+            args = ["graphql", "-f", f"query={query}", "-F", f"o={owner}", "-F", f"r={name}"]
+            if cursor:
+                args += ["-F", f"c={cursor}"]
+            out = subprocess.run(["gh", "api", *args], capture_output=True, text=True)
+            if out.returncode != 0:
+                sys.exit(f"gh api graphql failed: {out.stdout or out.stderr}")
+            page = json.loads(out.stdout)["data"]["repository"][key]
+            for it in page["nodes"]:
+                for obj in [it] + it["comments"]["nodes"]:
+                    for ed in obj["userContentEdits"]["nodes"]:
+                        for k, rx in RX.items():
+                            m = rx.search(ed.get("diff") or "")
+                            if m and not ("/pull/" in obj["url"] and m.group(0) == "NewGraphEnvironment/sred") \
+                                    and not (obj["url"].endswith("/issues/20") and m.group(0) == "m1"):
+                                hits.append((k, f"{obj['url']} (revision {ed['editedAt']})", m.group(0)))
+            if not page["pageInfo"]["hasNextPage"]:
+                break
+            cursor = page["pageInfo"]["endCursor"]
+    return hits
+
+
 def generated():
     """CLAUDE.md below its marker: synced from soul, public in the repo though not on the site.
     Reported, not failed: a fix belongs at the source, in soul, not here."""
@@ -160,6 +197,8 @@ def main():
         hits += github()
     if mode in ("commits", "all"):
         hits += commits()
+    if mode == "history":
+        hits += history()
     if mode in ("tree", "all"):
         g = generated()
         print("generated CLAUDE.md conventions (not failed; fix in soul):",
