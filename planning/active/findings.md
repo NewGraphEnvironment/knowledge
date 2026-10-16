@@ -138,6 +138,25 @@ The distances for Q = 1, 10, 50 are monotone. `none` counts: 602 at Q = 1, 1,305
   to 0298 as a third rule. Its 100 m³/s cap, inherited by the river branch under the `mad` model, drops 441 of the
   699 FDIS CH on accessible link segments.
 
+## Code-check rounds (2026-10-16)
+
+- **Round 1:** 17 findings, all fixed.
+  - The tuned rule's MAD floor sat on river polygons.
+  - The draft config did not encode the rule.
+  - The lift was taken across edge types.
+  - The positive control used `%in%`.
+  - Prose numbers.
+- **Round 2:** 10 findings, 2 of them inside round-1 fixes: the lift across access, and 702/978 given with the
+  23.3 % rate.
+- **Round 3** named the mechanism. Each figure comes out of a filter in code, while the prose names its population
+  with a noun defined elsewhere, and the two lists are kept equal by hand.
+  - It enumerated 140 rows (write-up, draft, CLAUDE.md) and found 8 issues, 6 of them inside earlier fixes.
+  - It found that the recommended rule (MAD ≥ 0.75, 7 %) is outside the region of both readings on the 16
+    link-placed groups. The two rules inside all 15 regions are MAD ≥ 0.5, Q 3 @ 1,000 m, at 7 or 9 %.
+  - The pre-registered pick stays the recommendation. The all-readings rules are reported beside it, and the choice
+    for link goes to the user.
+- **Round 4:** re-runs the enumeration on round 3's changed lines.
+
 ## Errors Encountered
 
 | Error | Resolution |

@@ -36,9 +36,8 @@ The rule tuned here is link's `default` CH rearing rule with three things open:
 
 Nothing else in `default` changes. River polygons keep their size test (any non-NULL width) under every rule. In
 this comparison their gradient maximum moves with the stream branch's. In the configuration the link draft proposes,
-those are two settings (the stream rule's own gradient and the CSV's `rear_gradient_max`), and they must be moved
-together. Wetlands, lakes,
-access, the user-habitat overlay and the cluster pass that keeps only rearing connected to spawning are unchanged.
+those are three settings (each of the two stream rules' own gradient, and the CSV's `rear_gradient_max`, which the
+river rule inherits), and they must be moved together. Wetlands, lakes, access, the user-habitat overlay and the cluster pass that keeps only rearing connected to spawning are unchanged.
 
 ## Short answer
 
@@ -59,8 +58,9 @@ access, the user-habitat overlay and the cluster pass that keeps only rearing co
 
    **Two rules are inside the region of all 15 readings:** MAD ≥ 0.5 m³/s, Q 3 m³/s within 1,000 m, at a gradient of
    7 % or 9 %. On the main reading they are 4.1 (SE 17.0) and 2.8 (SE 18.2) above the best. The recommended rule is
-   inside 13 regions. It is outside both readings on the 16 link-placed groups, where MAD ≥ 0.75 is in the region only
-   at 9 %.
+   inside 13 regions. It is outside the region of both readings on the visits placed on link's segments (2,826
+   modelled visits in 16 WSGs). There, on link's segment gradient MAD ≥ 0.75 is in the region only at 9 %, and on the
+   FWA gradient only at 5.49 % and 7 %.
 2. **The tuned rule is narrower than `default`, not wider.** On the 3,434 modelled visits it admits 731 against
    1,788 and takes in 128 CH against 130 (raw rates 17.5 % against 7.3 %). On link's segments in the 31 groups,
    CH rearing falls from 31,948 to 26,092 km (−18 %).
@@ -254,7 +254,7 @@ rule is MAD ≥ 0.5, 9 %, Q 3 @ 1,000 m with either gradient. The regions differ
 - **FWA gradient**: 89 rules, at 5.49–9 %, with 2 width rules. Its fewest-departures pick is MAD ≥ 0.5, 5.49 %,
   Q 3 @ 1,000 m, 22.5 above the best.
 
-On link's own segments, then, the gradient settles at 7–9 %, and the floor leans to 0.5 m³/s. `default` is out of
+On link's own segments, then, the gradient settles at 7–9 %, and the best rule's floor is 0.5 m³/s. `default` is out of
 the region on both.
 
 ### Where the flow model moves the answer
@@ -284,9 +284,9 @@ tuning population has no visits in zone 23, and 18 in zone 24 with no flips (`da
 
 ### Sensitivities
 
-`default` is outside the region in every one. The recommended rule:
+`default` is outside the region in every one. Each sensitivity's own pick:
 
-| sensitivity | modelled visits (CH) | recommended |
+| sensitivity | modelled visits (CH) | pick |
 |---|---|---|
 | every stream-branch visit (barrier unknown or blocked kept) | 9,742 (263) | MAD ≥ 0.75, 7 %, Q 3 @ 2,000 m |
 | stored width (field measurements kept) | 3,434 (166) | unchanged |

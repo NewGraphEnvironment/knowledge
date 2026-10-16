@@ -215,8 +215,8 @@ Width and flow carry two traps (#54):
 - **Widths.** fwapg models width only where `stream_order > 1`, and its FIELD_MEASURMENT widths are FDIS sites. An
   order-1 stream therefore has a width only where it was measured. A width rule scored at visits sees widths link
   never sees on unmeasured streams; use `0296`'s `cw_deploy`.
-- **Flow on river polygons.** Connector lines inside river polygons (edge 1450) carry their tributary's own small
-  wet flow, and so do the main lines (1250) of some small double-line rivers. At `default`'s gradient, a 0.75 m³/s
+- **Flow on river polygons.** Connector lines inside river polygons (edge 1450) carry their tributary's small wet
+  flow, and the main lines (1250) of some small double-line rivers carry a small flow of their own. At `default`'s gradient, a 0.75 m³/s
   floor on the river branch drops 636 km of edge 1450, 1250 and 1350 lines in the 31 groups.
 
 ### Database access
