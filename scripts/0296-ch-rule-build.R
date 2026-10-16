@@ -50,9 +50,9 @@
 # INPUT:  data/fdis/derived/ch_mad_visits.csv (scripts/0294), scripts/sql/ch_dist_profile.sql;
 #         fwapg database (PG* env vars) (discharge.fwa_v1_segment_monthly, whse_basemapping, cabd.dams,
 #         fresh_default); the BC Hydrologic Zones zip (catalogue.data.gov.bc.ca)
-# OUTPUT: data/fdis/derived/ch_rule_visits.csv  one row per 0294 visit (ignored, private)
+# OUTPUT: data/fdis/derived/ch_rule_visits.csv  one row per 0294 visit (ignored)
 #         data/fdis/derived/ch_rule_walks.csv   one row per start x source x river size (same)
-#         both: aws s3 cp to s3://fresh-bc/fdis/derived/
+#         both published by 0299
 #         scripts/logs/habitat/<date>_ch_rule_build_ledger.csv
 # RUN:    Rscript scripts/0296-ch-rule-build.R   (after 0294, from the repo root; 4 socket workers)
 # ---------------------------------------------------------------------------

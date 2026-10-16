@@ -35,7 +35,6 @@ wf_farm_priority.js                          farm priority/crossing tables out o
 --- FDIS electrofishing export (province-wide, not per group) ---
 0230  sync s3://fresh-bc/fdis/, QA, roll passes to site visits, place on FWA   (fwapg database (PG* env vars))
 0240  size classes + CH / char evidence + summary vs thresholds -> data/fdis_*.csv
-      then: aws s3 sync data/fdis/derived/ s3://fresh-bc/fdis/derived/
 
 --- FISS individual fish -> size-class evidence (after 0220 on each group, and 0230) ---
 0250  Step 3 fish + Step 2 counts, deduped against FDIS -> data/fiss_evidence.csv (fwapg database (PG* env vars))
@@ -50,14 +49,12 @@ wf_farm_priority.js                          farm priority/crossing tables out o
       -> data/bt_rear_use_curve.csv (+ log; ~10 min, socket workers)
 0292  candidate weight per gradient class -> data/habitat_weight_bt_rear.csv
 0293  BT spawner evidence by gradient class (maturity-coded Aug-Oct visits, size split) -> data/bt_spawn_evidence.csv (+ log; ~10 min)
-      then: aws s3 cp data/fdis/derived/bt_use_visits.csv s3://fresh-bc/fdis/derived/
 
 --- CH detection by stream size (after 0240; needs wet's flow loaded in fwapg database (PG* env vars)) ---
 0294  FDIS visits with wet's picked annual flow (MAD), distance downstream to the first MAD >= 10
       segment for visits under 0.5, natural CH barrier check -> data/fdis/derived/ch_mad_visits.csv
       (+ ledger; ~15 min, 4 socket workers)
 0295  effort-corrected CH detection by MAD class and by distance class -> data/ch_mad_use.csv (+ log)
-      then: aws s3 cp data/fdis/derived/ch_mad_visits.csv s3://fresh-bc/fdis/derived/
 
 --- Tuned CH rearing rule (after 0294; wet's flow, fresh_default and fresh in fwapg database (PG* env vars)) ---
 0296  walks to rivers of 1-50 m3/s on each flow source, link's width (and fwapg's model recomputed),
@@ -69,8 +66,10 @@ wf_farm_priority.js                          farm priority/crossing tables out o
 0298  recommended rule beside default on fresh_default's CH groups (predicate, overlay and fresh's
       connectivity pass on scratch copies; needs the link repo, LINK_REPO) -> data/ch_rule_compare.csv,
       ch_rule_checks.csv, ch_rule_change.csv, maps in research/fig/ (+ log; ~20 min)
-      then: aws s3 cp data/fdis/derived/ch_rule_visits.csv s3://fresh-bc/fdis/derived/
-            aws s3 cp data/fdis/derived/ch_rule_walks.csv s3://fresh-bc/fdis/derived/
+
+--- Publish the FDIS visit tables (after any of 0240, 0290, 0294, 0296 changes its table) ---
+0299  data/fdis/derived/*.csv -> Parquet + manifest.json in data/fdis/publish/; with PUBLISH=TRUE (clean
+      tree) uploads them to s3://fresh-bc/knowledge/fdis/ and data/fdis_README.md to s3://fresh-bc/fdis/README.md
 
 --- Habitat literature (independent of the watershed-group flow) ---
 0270  build the group's Fisheries/habitat_modelling collection   --dry-run first, then live
@@ -202,8 +201,8 @@ A report is reachable from more than one place; using only one axis misses repor
 
 ## 0230 / 0240 — FDIS electrofishing export → size-class evidence
 
-Province-wide, from the FDIS export the Province supplied (`s3://fresh-bc/fdis/`, private;
-`research/fdis_export.md` documents it). Electrofishing only. Individual fish lengths, weights
+Province-wide, from the FDIS export the Province supplied (`s3://fresh-bc/fdis/`, published as received
+with the Province's agreement; `research/fdis_export.md` documents it). Electrofishing only. Individual fish lengths, weights
 and maturity, per-pass effort, measured channel width and gradient, and explicit zero catch
 (`NFC`): none of it is in the public FISS layers.
 
@@ -214,8 +213,8 @@ and maturity, per-pass effort, measured channel width and gradient, and explicit
 - **CH gives rearing evidence only**; EF caught no adult CH. Char spawner evidence is maturity
   (SP/ST, or M in Aug–Oct), not length.
 - Outputs: `data/fdis_evidence.csv`, `data/fdis_summary_ch_bt.csv`, `data/fdis_size_breaks.csv`,
-  `data/fdis_maturity_check.csv` (tracked), and `fdis_sites.{csv,gpkg}` (17 MB each), which go to
-  `s3://fresh-bc/fdis/derived/`.
+  `data/fdis_maturity_check.csv` (tracked), and `fdis_sites.{csv,gpkg}` (17 MB each, ignored), which `0299`
+  publishes as Parquet to `s3://fresh-bc/knowledge/fdis/`.
 - Logs: `scripts/logs/fdis/`.
 
 ## 0200 / 0210 / 0220 — FISS `.xls` → No-Fish-Captured layer

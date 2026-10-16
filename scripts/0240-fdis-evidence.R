@@ -22,7 +22,7 @@
 #         Size classing is knw_size_class() from the package (shared with 0250).
 # OUTPUT: data/fdis/derived/fdis_sites.{csv,gpkg}  one row per site visit: placement, measured
 #                                        and modelled habitat, effort, catch status, focal
-#                                        counts (ignored; pushed to s3://fresh-bc/fdis/derived/)
+#                                        counts (ignored; 0299 publishes the csv)
 #         data/fdis_evidence.csv         site visit x focal species x size class (measured
 #                                        fish), plus counted-but-unmeasured and spawner rows;
 #                                        `source`/`method` match data/fiss_evidence.csv (0250)
@@ -143,7 +143,7 @@ site_out <- sites |>
          starts_with("flag_"), habitat_conflict, grad_sentinel, cw_sentinel, has_habitat,
          ws50_checked)
 # the site table (~17 MB) and its points are too large to churn in git: they go to
-# data/fdis/derived/ (ignored) and s3://fresh-bc/fdis/derived/ (see scripts/README.md)
+# data/fdis/derived/ (ignored); 0299 publishes the site table (see scripts/README.md)
 derived <- "data/fdis/derived"
 dir.create(derived, showWarnings = FALSE)
 write_csv(site_out, file.path(derived, "fdis_sites.csv"), na = "")

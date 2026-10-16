@@ -41,8 +41,8 @@
 #
 # INPUT:  data/fdis/derived/fdis_sites.csv (scripts/0240), data/fdis_species_codes.csv;
 #         fwapg database (PG* env vars) (fresh_default, score284_*); link >= 0.55.0 (lnk_species_pooling)
-# OUTPUT: data/fdis/derived/bt_use_visits.csv  one row per kept visit (ignored, private;
-#         aws s3 cp to s3://fresh-bc/fdis/derived/)
+# OUTPUT: data/fdis/derived/bt_use_visits.csv  one row per kept visit (ignored;
+#         published by 0299)
 #         scripts/logs/habitat/<date>_bt_use_build_ledger.csv
 # RUN:    Rscript scripts/0290-bt-use-build.R   (from the repo root)
 # ---------------------------------------------------------------------------

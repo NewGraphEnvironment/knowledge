@@ -3,7 +3,7 @@
 # FDIS electrofishing export: load, QA, and place on the FWA network. Issue #18.
 #
 # WHY / DESIGN NOTES (research/fdis_export.md has the measurements behind each):
-#   - Source is the province-supplied FDIS export at s3://fresh-bc/fdis/ (private).
+#   - Source is the province-supplied FDIS export at s3://fresh-bc/fdis/ (as received; see its README.md).
 #   - GRAIN IS THE SITE VISIT (first three KEY parts). KEY is one electrofishing pass,
 #     and 5,748 of 53,018 site visits have 2-8 depletion passes of the same population,
 #     so per-pass rows would weight those sites up to 8x. Catch and effort sum over passes.

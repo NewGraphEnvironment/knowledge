@@ -50,8 +50,8 @@
 # INPUT:  data/fdis/derived/fdis_sites.csv (scripts/0240), data/fdis_species_codes.csv,
 #         scripts/sql/ch_dist_large.sql; fwapg database (PG* env vars) (discharge.fwa_v1_segment_monthly,
 #         bcfishobs.observations, cabd.dams, fresh_default.barriers, whse_basemapping)
-# OUTPUT: data/fdis/derived/ch_mad_visits.csv  one row per kept visit (ignored, private;
-#         aws s3 cp to s3://fresh-bc/fdis/derived/)
+# OUTPUT: data/fdis/derived/ch_mad_visits.csv  one row per kept visit (ignored;
+#         published by 0299)
 #         scripts/logs/habitat/<date>_ch_mad_build_ledger.csv
 # RUN:    Rscript scripts/0294-ch-mad-build.R   (from the repo root; ~10 min, 4 socket workers)
 # ---------------------------------------------------------------------------

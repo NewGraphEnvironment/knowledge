@@ -15,3 +15,7 @@
 - Phase 3: `_pkgdown.yml` (reference grouped by topic), `.github/workflows/pkgdown.yaml` from fresh (drops CLAUDE.md
   before the build, fails on unexpected top-level pages), README rewritten as the home page with research links.
   `pkgdown::build_site()` (CLAUDE.md held aside, as CI does): finished, no problems reported, no internal pages.
+- Phase 4: `data/fdis_README.md` (provenance), `scripts/0299-fdis-publish.R` (Parquet read back equal to the CSV as
+  read; manifest with rows, sha256, producing script, commit). Local `ch_mad_visits.csv` was never pushed to S3; its
+  21,862 rows match the #52 run log. Other local derived CSVs are byte-identical to the S3 copies. Moved
+  `fdis/fissr_explore.sqlite` and `fdis/derived/` to `s3://fresh-bc/archive/fdis/`.

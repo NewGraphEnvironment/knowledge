@@ -1,16 +1,31 @@
 # FDIS electrofishing export: contents, defects, and what it adds
 
-**Verified:** 2026-09-26 · **Issues:** #18 (built from), NewGraphEnvironment/link#284 (consumer) ·
+**Verified:** 2026-09-26 (Provenance and Where it lives: 2026-10-16) · **Issues:** #18 (built from), #56 (published), NewGraphEnvironment/link#284 (consumer) ·
 **Produced by:** direct reads of `s3://fresh-bc/fdis/` and the public BCGW layers (WFS
 `DescribeFeatureType`, local `whse_fish`) · **Status:** evidence built (`scripts/0230`, `scripts/0240`); first calibration read below.
 
 ## Provenance
 
-The Province supplied extracts of the Fisheries Data Information System (FDIS) to New Graph for the
-2021–22 channel-width and fish-density work with Poisson Consulting. No use terms were attached;
-the purpose was to advance knowledge of fish–habitat relationships in BC. The files lived only on
-a shared drive. They were moved byte-identical to `s3://fresh-bc/fdis/` (private prefix) on
-2026-09-26; `MANIFEST.md5` there is the checksum record.
+The Province of British Columbia supplied extracts of its Fisheries Data Information System (FDIS),
+exported on 2020-11-16 and 2022-03-22, to New Graph Environment for the 2021–22 channel-width and
+fish-density work with Poisson Consulting. No use terms were attached; the purpose was to advance
+knowledge of fish–habitat relationships in BC. The files lived only on a shared drive until they were
+moved byte-identical to `s3://fresh-bc/fdis/` on 2026-09-26; `MANIFEST.md5` there is the checksum
+record. On 2026-10-16 the Province agreed to the extract being public, provided it carries a note of
+when and from where it was received (#56).
+
+## Where it lives
+
+- `s3://fresh-bc/fdis/`: the extract as received (`2020-11-16/`, `2022-03-22-ef-export/`), the export
+  queries, the FDIS data-model documents, `MANIFEST.md5`, and `README.md`, the provenance note, whose
+  tracked source is `data/fdis_README.md`. `MANIFEST.md5` also lists `fissr_explore.sqlite`, a 2021
+  working database that is not part of the extract; it and the old `derived/` copies were moved to the
+  bucket's private `archive/fdis/`.
+- `s3://fresh-bc/knowledge/fdis/`: the visit-level tables built here (`fdis_sites`, `bt_use_visits`,
+  `ch_mad_visits`, `ch_rule_visits`, `ch_rule_walks`) as Parquet, with a `manifest.json` naming each
+  table's rows, checksum and producing script, and the knowledge commit. `scripts/0299` writes them.
+- Both prefixes are readable without credentials once the bucket policy grants them; the bucket does not
+  list, so start from the manifest.
 
 ## Contents and join structure
 
