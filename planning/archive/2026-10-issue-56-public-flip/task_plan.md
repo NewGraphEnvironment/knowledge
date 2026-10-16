@@ -87,9 +87,10 @@ being public, provided it ships with a note of when and from where it was receiv
       full (no `data/` diff, `fdis_sites.csv` identical; 0280 exit 0). 0260 refuses without `TEMPLATE_DIR` (a full run
       would overwrite the hand-edited table). 0100 and 0110 need the remote bcfishpass server, unreachable here: they
       load and stop at the connection timeout.
-- [ ] `/code-check branch` clean (three-round floor)
-- [ ] PWF checkboxes match landed work
-- [ ] `/planning-archive`, then `/gh-pr-push`
+- [x] `/code-check branch`: four rounds (17 findings, 16 fixed, 3 rounds finding a defect inside the previous fix), ended
+      by enumeration
+- [x] PWF checkboxes match landed work
+- [x] `/planning-archive`, then `/gh-pr-push`
 
 ## After merge (not in this run; each on your word)
 1. Delete earlier revisions in the web UI. Take the list from `public_sweep.py history` on the day, not from the
