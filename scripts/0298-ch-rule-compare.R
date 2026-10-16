@@ -21,8 +21,9 @@
 #     the tuned rule. default_mad reads wet's `pick`, the flow the tuned rule reads, so the two
 #     differ by rule alone; link main still reads fwapg's old MAD until link#331.
 #   - THE TUNED RULE changes the gradient on the stream and river branches, as a threshold in
-#     link's CSV would; the scoring in 0297 saw the stream branch only. A segment's exception
-#     distance is walked from its downstream end (scripts/sql/ch_dist_profile.sql on `pick`).
+#     link's CSV would, and keeps default's river test (a non-NULL width); the scoring in 0297 saw
+#     the stream branch only. A segment's exception distance is walked from its downstream end
+#     (scripts/sql/ch_dist_profile.sql on `pick`); 0296 walked from the visit's own point.
 #   - LINK INPUTS come from a pinned commit of the link repository (`link_sha`), read with
 #     git show, so the run does not depend on the installed link or a moving checkout.
 #   - FDIS DETECTION: 0296's visits on link segments (0290's placement) in 0295's population; the
@@ -31,8 +32,10 @@
 #     match types A/B, one per blue line x metre, spawn-staged-only locations out (link's stage
 #     regexes), locations inside a CH rearing overlay reach out (captured by construction). Placed
 #     on the segment starting within 1 m, else the one containing the point. Criterion fixed
-#     before the run: lift = (share of locations on rearing) / (rearing km / accessible stream km),
-#     with a 200-resample bootstrap of locations for each rule and for tuned minus default.
+#     before the run: lift = (share of locations on rearing) / (rearing km / accessible km), with a
+#     200-resample bootstrap of locations for each rule and for tuned minus each other rule. Both
+#     shares are on stream edges (revised after the first run, round-1 review: the location share
+#     had counted river, lake and wetland locations against a stream-only km share).
 #   - MAPS, groups chosen by criteria fixed before drawing: small-stream-heavy, the group with
 #     the largest share of accessible stream km on order 1-2; interior, the group with the largest
 #     share of its FDIS visits in hydrologic zones 15, 17, 23 or 24 (where wet's balance is
@@ -126,7 +129,7 @@ wb_sql <- sprintf("
 rule_sql <- function(r, a = "s") {
   size <- if (r$size_var == "width") sprintf("%1$s.channel_width BETWEEN %2$s AND 9999", a, r$size_min) else
     sprintf("%s.mad >= %s", a, r$size_min)
-  river_size <- if (r$size_var == "width") sprintf("%s.channel_width BETWEEN 0 AND 9999", a) else size
+  river_size <- sprintf("%s.channel_width BETWEEN 0 AND 9999", a)   # default's river test, every rule (0297)
   ex <- if (is.na(r$exc_q)) "FALSE" else sprintf("coalesce(%s.exc_dist <= %s, FALSE)", a, r$exc_d)
   g <- sprintf("%s.gradient BETWEEN 0 AND %s", a, r$grad_max)
   sprintf("coalesce((%1$s.edge_type IN (%2$s) AND %3$s AND (%4$s OR %5$s))
@@ -336,11 +339,12 @@ block("FDIS visits on link segments: raw CH rate", det)
 # ---- outside check: bcfishobs records FDIS does not hold ------------------------------
 obs <- dbGetQuery(conn, sprintf("
   SELECT o.observation_key, o.watershed_group_code, o.blue_line_key, o.downstream_route_measure,
-         o.activity_code, o.activity, o.life_stage, o.match_type
+         o.activity_code, o.activity, o.life_stage, o.match_type, o.observation_date
   FROM bcfishobs.observations o
   WHERE o.species_code = 'CH' AND coalesce(o.source, '') !~ '^FDIS' AND o.watershed_group_code IN (%s)", wsg_in))
 n0 <- nrow(obs)
 obs <- obs |> filter(substr(match_type, 1, 1) %in% c("A", "B"))
+yr <- as.integer(format(as.Date(obs$observation_date), "%Y"))
 act <- paste(obs$activity_code, obs$activity)
 obs <- obs |> mutate(is_spawn = grepl("\\bSPL\\b|\\bSPM\\b|\\bS\\b|Spawning", act),
                      is_rear = grepl("\\bR\\b|\\bREA\\b|Rearing", act) | grepl("Fry|Parr|Juvenile", coalesce(life_stage, "")),
@@ -359,38 +363,43 @@ pl <- dbGetQuery(conn, sprintf("
         OR (t.m >= s.downstream_route_measure AND t.m < s.downstream_route_measure + s.length_metre))
   ORDER BY t.loc_id, (s.downstream_route_measure BETWEEN t.m - 1 AND t.m + 1) DESC,
            s.downstream_route_measure DESC, s.id_segment", scratch))
-loc <- loc |> mutate(loc_id = row_number()) |> inner_join(pl, by = "loc_id") |> filter(!in_uhc) |>
-  inner_join(seg |> select(id_segment, watershed_group_code, accessible, rearing_default, rearing_default_mad,
-                           rearing_tuned),
-             by = c("id_segment", "watershed_group_code"))
-say("")
-say("Outside check: %d non-FDIS CH records in these groups; %d match A/B; %d locations not spawn-only, placed, outside the overlay.",
-    n0, nrow(obs), nrow(loc))
-acc_km <- km(seg$accessible & seg$edge_type %in% edge_stream, seg$length_metre)
-lift <- function(l, k, idx = seq_len(nrow(l))) {
-  r <- l[[paste0("rearing_", k)]][idx]
-  mean(r) / (km(seg[[paste0("rearing_", k)]] & seg$edge_type %in% edge_stream, seg$length_metre) / acc_km)
-}
-set.seed(seed_boot)
 rk <- names(rule_preds)
-bs <- t(vapply(seq_len(n_boot), function(b) {
-  i <- sample.int(nrow(loc), nrow(loc), replace = TRUE)
-  vapply(rk, function(k) lift(loc, k, i), numeric(1))
-}, numeric(length(rk))))
+loc <- loc |> mutate(loc_id = row_number()) |> inner_join(pl, by = "loc_id") |> filter(!in_uhc) |>
+  inner_join(seg |> select(id_segment, watershed_group_code, edge_type, accessible,
+                           all_of(paste0("rearing_", rk))),
+             by = c("id_segment", "watershed_group_code"))
+# lift compares a share of locations with a share of km, so both are taken on stream edges: the
+# km share is stream-edge rearing km over accessible stream-edge km
+loc_s <- loc |> filter(edge_type %in% edge_stream)
+say("")
+say("Outside check: %d non-FDIS CH records in these groups; %d match A/B (years %d-%d, %d undated); %d locations not spawn-only, placed, outside the overlay; %d of them on stream edges (lift is on these).",
+    n0, nrow(obs), min(yr, na.rm = TRUE), max(yr, na.rm = TRUE), sum(is.na(yr)), nrow(loc), nrow(loc_s))
+acc_km <- km(seg$accessible & seg$edge_type %in% edge_stream, seg$length_metre)
 ks <- function(k) km(seg[[paste0("rearing_", k)]] & seg$edge_type %in% edge_stream, seg$length_metre) / acc_km
+lift <- function(l, k, idx = seq_len(nrow(l))) mean(l[[paste0("rearing_", k)]][idx]) / ks(k)
+set.seed(seed_boot)
+bs <- t(vapply(seq_len(n_boot), function(b) {
+  i <- sample.int(nrow(loc_s), nrow(loc_s), replace = TRUE)
+  vapply(rk, function(k) lift(loc_s, k, i), numeric(1))
+}, numeric(length(rk))))
 q <- function(x, p) unname(quantile(x, p))
+on <- function(l, k) l[[paste0("rearing_", k)]]
+vs <- function(k) c(n_gained = sum(on(loc_s, "tuned") & !on(loc_s, k)), n_lost = sum(!on(loc_s, "tuned") & on(loc_s, k)))
 outside <- bind_rows(
-  tibble(check = "bcfishobs_outside", rule = rk, n = nrow(loc),
-         n_on_rearing = vapply(rk, function(k) sum(loc[[paste0("rearing_", k)]]), numeric(1)),
+  tibble(check = "bcfishobs_outside", rule = rk, n = nrow(loc_s),
+         n_on_rearing = vapply(rk, function(k) sum(on(loc_s, k)), numeric(1)),
          km_share = vapply(rk, ks, numeric(1)),
-         lift = vapply(rk, function(k) lift(loc, k), numeric(1)),
-         lift_lo = apply(bs, 2, q, 0.025), lift_hi = apply(bs, 2, q, 0.975)),
-  tibble(check = "bcfishobs_outside", rule = c("tuned_minus_default", "tuned_minus_default_mad"), n = nrow(loc),
-         lift = c(lift(loc, "tuned") - lift(loc, "default"), lift(loc, "tuned") - lift(loc, "default_mad")),
+         lift = vapply(rk, function(k) lift(loc_s, k), numeric(1)),
+         lift_lo = apply(bs, 2, q, 0.025), lift_hi = apply(bs, 2, q, 0.975),
+         n_all = nrow(loc), n_all_on_rearing = vapply(rk, function(k) sum(on(loc, k)), numeric(1))),
+  tibble(check = "bcfishobs_outside", rule = c("tuned_minus_default", "tuned_minus_default_mad"), n = nrow(loc_s),
+         lift = c(lift(loc_s, "tuned") - lift(loc_s, "default"), lift(loc_s, "tuned") - lift(loc_s, "default_mad")),
          lift_lo = c(q(bs[, "tuned"] - bs[, "default"], 0.025), q(bs[, "tuned"] - bs[, "default_mad"], 0.025)),
-         lift_hi = c(q(bs[, "tuned"] - bs[, "default"], 0.975), q(bs[, "tuned"] - bs[, "default_mad"], 0.975)))) |>
+         lift_hi = c(q(bs[, "tuned"] - bs[, "default"], 0.975), q(bs[, "tuned"] - bs[, "default_mad"], 0.975)),
+         n_gained = c(vs("default")[["n_gained"]], vs("default_mad")[["n_gained"]]),
+         n_lost = c(vs("default")[["n_lost"]], vs("default_mad")[["n_lost"]]))) |>
   mutate(capture_share = n_on_rearing / n)
-block("outside check (stream km share against accessible stream km)", outside)
+block("outside check, stream-edge locations (km share: stream-edge rearing km / accessible stream-edge km)", outside)
 
 # ---- maps ----------------------------------------------------------------------------------
 zone_share <- vis |> group_by(watershed_group_code) |> summarise(interior = mean(hydro_zone %in% interior_zones))

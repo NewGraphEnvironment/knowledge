@@ -62,12 +62,13 @@ wf_farm_priority.js                          farm priority/crossing tables out o
 --- Tuned CH rearing rule (after 0294; wet's flow, fresh_default and fresh in local fwapg :5432) ---
 0296  walks to rivers of 1-50 m3/s on each flow source, link's width (and fwapg's model recomputed),
       natural CH barrier status, link segment, hydrologic zone -> data/fdis/derived/ch_rule_visits.csv
-      and ch_rule_walks.csv (+ ledger; ~6 min, 4 socket workers)
+      and ch_rule_walks.csv (+ ledger; ~4 min, 4 socket workers)
 0297  2,795 rules scored on held-out WSGs, curves, flow sources, sensitivities -> data/ch_rule_tune.csv,
-      ch_rule_curves.csv, ch_rule_flips.csv, research/fig/chinook_rearing_tuned_curves.png (+ log; ~1 h)
+      ch_rule_curves.csv, ch_rule_flips.csv, research/fig/chinook_rearing_tuned_curves.png (+ log; ~25 min,
+      6 socket workers)
 0298  recommended rule beside default on fresh_default's CH groups (predicate, overlay and fresh's
       connectivity pass on scratch copies; needs the link repo, LINK_REPO) -> data/ch_rule_compare.csv,
-      ch_rule_checks.csv, maps in research/fig/ (+ log)
+      ch_rule_checks.csv, ch_rule_change.csv, maps in research/fig/ (+ log; ~30 min)
       then: aws s3 cp data/fdis/derived/ch_rule_visits.csv s3://fresh-bc/fdis/derived/
             aws s3 cp data/fdis/derived/ch_rule_walks.csv s3://fresh-bc/fdis/derived/
 

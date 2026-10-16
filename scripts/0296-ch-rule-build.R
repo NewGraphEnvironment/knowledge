@@ -133,7 +133,7 @@ ref <- v |> filter(!is.na(walk_status)) |>
 chk <- ref |> inner_join(w |> filter(src == "pick", qmin == 10),
                          by = c("blue_line_key", "downstream_route_measure"))
 bad <- chk$status != chk$walk_status |
-  !((is.na(chk$large_lfid.x) & is.na(chk$large_lfid.y)) | chk$large_lfid.x %in% chk$large_lfid.y) |
+  !coalesce(chk$large_lfid.x == chk$large_lfid.y, is.na(chk$large_lfid.x) & is.na(chk$large_lfid.y)) |
   is.na(chk$dist_m) != is.na(chk$dist_large_m) |
   coalesce(abs(chk$dist_m - chk$dist_large_m) > 1e-6, FALSE)
 if (nrow(chk) != nrow(ref) || any(bad)) {

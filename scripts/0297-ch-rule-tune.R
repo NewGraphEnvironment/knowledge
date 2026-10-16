@@ -13,9 +13,12 @@
 #       river   in a river polygon, 0 <= gradient <= g, and the river size test;
 #       wetland edge 1000/1100/1050/1150 in a wetland >= 1 ha;
 #       lake    lake edges in a lake or man-made waterbody >= 100 ha.
-#     The size test is either width w <= width <= 9999 (river test: a non-NULL width), or MAD
-#     m <= MAD with no maximum. Under fresh's `mad` model the floor sets the river test too, and
-#     default's 100 m3/s maximum never acts while every group is on `cw`. A NULL width fails
+#     The size test is either width w <= width <= 9999, or MAD m <= MAD with no maximum
+#     (default's 100 m3/s maximum never acts while every group is on `cw`). The river test is
+#     default's under every rule: a non-NULL width. (Revised after the first run, round-1 review: it
+#     had been the MAD floor for a MAD rule, which on link's segments removes river-polygon lines
+#     carrying a tributary's own small flow. No scored visit is in a river polygon, which
+#     run_grid() asserts, so the scores do not change.) A NULL width fails
 #     (fwapg models no order-1 stream, so `default` never rears CH on an unmeasured order-1
 #     stream). The exception holds where a segment of flow >= Q, of any kind (a lake segment
 #     counts, as a rule in link would), lies within D m downstream on the same flow source
@@ -147,6 +150,9 @@ sb_all <- base |> filter(edge_type %in% edge_stream, !wb_river, !wb_wetland, !wb
 v <- sb_all |> filter(natural_barrier_dnstr %in% FALSE)
 say("CH rearing rule, knowledge#54. 0296 visits: %d. 0295's population: %d visits (%d CH) in %d WSGs.",
     nrow(all_visits), nrow(base), sum(base$U), n_distinct(base$wsg))
+rv <- base |> filter(wb_river | edge_type %in% c(1250, 1350))
+say("River polygons (in one, or on its edges 1250/1350): %d visits (%d CH, %.1f %%).", nrow(rv), sum(rv$U),
+    100 * mean(rv$U))
 say("Stream branch: %d (%d CH). Barrier status known: %d (%d CH); natural CH barrier downstream: %d (%d CH).",
     nrow(sb_all), sum(sb_all$U), sum(!is.na(sb_all$natural_barrier_dnstr)),
     sum(sb_all$U[!is.na(sb_all$natural_barrier_dnstr)]), sum(sb_all$natural_barrier_dnstr %in% TRUE),
@@ -186,11 +192,10 @@ rule_in <- function(d, r, inp) {
   if (r$size_var == "width") {
     wd <- d[[inp$width]]
     size_ok <- coalesce(wd >= r$size_min & wd <= 9999, FALSE)
-    river_size <- coalesce(wd >= 0 & wd <= 9999, FALSE)
   } else {
     size_ok <- coalesce(d[[inp$mad]] >= r$size_min, FALSE)
-    river_size <- size_ok
   }
+  river_size <- coalesce(d[[inp$width]] >= 0 & d[[inp$width]] <= 9999, FALSE)
   ex <- FALSE
   if (!is.na(r$exc_q)) {
     e <- exc[[paste(inp$src, r$exc_q, sep = "|")]]
@@ -302,6 +307,7 @@ pick_of <- function(s, col, conv) {
 run_grid <- function(name, d, resp = "U", inp = inputs(), keep_all = FALSE, extra = FALSE) {
   if (resp == "C") { d <- d[d$F == 1L, ]; y <- "U" } else y <- resp
   d <- modelled(d, y)
+  if (any(d$wb_river)) stop(name, ": a scored visit is in a river polygon; the spec scores the stream branch only")
   X <- vapply(seq_len(nrow(grid)), function(i) rule_in(d, grid[i, ], inp), logical(nrow(d)))
   key <- apply(X, 2, function(x) paste(packBits(c(x, logical((8 - length(x) %% 8) %% 8))), collapse = ""))
   u <- !duplicated(key)
@@ -471,7 +477,7 @@ curve_of <- function(m, d, var, xs, label, thr, x_log = TRUE) {
   xm <- (xs[-1] + xs[-length(xs)]) / 2
   sl <- diff(s) / diff(xs)
   inm <- xm >= q[1] & xm <= q[2]
-  tibble(curve = label, x = xs, rel_rate = exp(s - at), rel_lo = exp(s - 1.96 * se - at),
+  tibble(curve = label, n_fit = nrow(d), x = xs, rel_rate = exp(s - at), rel_lo = exp(s - 1.96 * se - at),
          rel_hi = exp(s + 1.96 * se - at), threshold = thr, rise_share_at_threshold = (at - lo) / (hi - lo),
          x_steepest = xm[inm][which.max(abs(sl[inm]))], x_log = x_log)
 }
@@ -514,12 +520,12 @@ panel <- function(k) {
     geom_line() +
     geom_vline(xintercept = cd$threshold[1], linetype = 2) +
     scale_y_log10() +
-    labs(x = k, y = "relative to threshold") +
+    labs(x = sprintf("%s (n = %d)", k, cd$n_fit[1]), y = "relative to threshold") +
     theme_minimal(base_size = 10)
   if (cd$x_log[1]) p + scale_x_log10() else p
 }
 fig <- patchwork::wrap_plots(lapply(unique(curves$curve), panel), ncol = 2) +
-  patchwork::plot_annotation(title = sprintf("CH detection (cloglog GAM, 95 %%), %d stream-branch FDIS visits", nrow(v)),
+  patchwork::plot_annotation(title = "CH detection (cloglog GAM, 95 %), stream-branch FDIS visits in WSGs with both outcomes",
                               subtitle = sprintf("dashed: the recommended rule's thresholds (%s)", rec$rule))
 ggsave(path_fig, fig, width = 8, height = 6, dpi = 150, bg = "white")
 
