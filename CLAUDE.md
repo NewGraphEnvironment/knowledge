@@ -8,8 +8,8 @@ consume snapshots from here instead of carrying the pipeline.
 
 ## Repository Context
 
-**Repository:** NewGraphEnvironment/knowledge (private; a public mirror of `pkg/` is a later
-squashed snapshot, not a flip)
+**Repository:** NewGraphEnvironment/knowledge (private; to be cleaned up and made public in place,
+with the package at the root, #56)
 **Primary Language:** R, with Python (`0153`) and workflow JS (`wf_*.js`)
 **Origin:** seeded with history from `fish_passage_template_reporting`
 ([template#236](https://github.com/NewGraphEnvironment/fish_passage_template_reporting/issues/236)).
