@@ -112,8 +112,9 @@ The distances for Q = 1, 10, 50 are monotone. `none` counts: 602 at Q = 1, 1,305
   cluster pass, and reports regenerated `default` against the stored flags per group. Visit-level scoring
   (0297) uses the predicate only. The cluster pass is a stated limit there.
 - **MAD-floor rules.** Under fresh's `mad` model the river-polygon branch drops its width test and inherits the MAD
-  range. A tuned MAD rule therefore sets `rear_mad_max` open (9999), because `default`'s 100 never acts while
-  every group is on `cw`.
+  range. The tuned rule puts its MAD floor on the stream branch only, with no maximum, and keeps `default`'s river
+  test (a non-NULL width). Round 1 caught the first version, which had the floor on the river branch too and so
+  dropped 7,415 river-polygon lines carrying a tributary's own flow (636 km).
 
 ## Results (2026-10-16)
 
@@ -122,9 +123,17 @@ The distances for Q = 1, 10, 50 are monotone. `none` counts: 602 at Q = 1, 1,305
   (SE 59). The region holds 27 rules: MAD 0.28–1, g 7–9 %, Q 1–10, D 1–2 km, and all of them have the exception.
   Nested selection gives 937.7 against 1,039.8 for `default`. The MAD and width smooths are log-linear, with no bend.
   The re-run is byte-identical for `ch_rule_tune.csv` and `ch_rule_flips.csv`.
-- **0298.** The SQL `default` equals fresh's predicate on 786,317 segments. Regenerated `default` differs from the
-  stored flags on 4,584 km. CH rearing km: tuned −20.2 %, `default_mad` −32.6 %. Outside-check lift: `default`
-  2.97, `default_mad` 4.75, tuned 4.36.
+- **0298** (final, after code-check rounds 1–2). The SQL `default` equals fresh's predicate on 786,317 segments.
+  Regenerated `default` differs from the stored flags on 4,584 km. CH rearing km: tuned −18.3 % (26,092 against
+  31,948), `default_mad` −32.6 %. Outside-check lift on the 315 accessible stream-edge locations: `default` 2.82, `default_mad` 4.54, tuned 4.00.
+  - The first runs read −20.2 %, then lifts of 2.97 / 4.75 / 4.36 on all locations, then 2.73 / 4.39 / 3.86 on all
+    stream-edge locations. Round 1 and round 2 each corrected one.
+  - Round 2's mechanism: a ratio whose numerator and denominator cover different populations. All 22 ratios in 0296,
+    0297 and 0298 were enumerated, plus `order12_share`, which wraps a line. The lift was the only mismatch.
+    - The rest are unit conversions, change_pct (both rules over the same segments), the FDIS rates (rearing implies
+      accessible), the km share, capture, the interior and sea shares (both over the same visits), raw rates in and
+      out, the bootstrap shares, the flip shares (per zone over `both`), the rise share, and the width-model agreement
+      (over distinct MODELLED segments).
 - **The user asked, mid-run, whether the MAD form of `default` (the bcfishpass bounds) was compared.** It was added
   to 0298 as a third rule. Its 100 m³/s cap, inherited by the river branch under the `mad` model, drops 441 of the
   699 FDIS CH on accessible link segments.

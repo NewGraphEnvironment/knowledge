@@ -45,7 +45,8 @@ access, the user-habitat overlay and the cluster pass that keeps only rearing co
    apart (within one SE of the best):
    - MAD floor 0.28–1 m³/s, with 0.5–0.75 in 86 % of bootstrap resamples;
    - gradient 7–9 %, the best rule's 7 or 9 % in all 15 readings (5.49 % is recommended in 23.5 % of bootstrap
-     resamples, and falls inside a region only on FWA gradients for link-placed visits and on fwapg's old MAD);
+     resamples and on one of four extra fold seeds, and is in the region of only two of the 15 readings: FWA gradients
+     for link-placed visits, and fwapg's old MAD);
    - river size Q 1–10 m³/s, mostly 3;
    - distance D 1–2 km.
 
@@ -97,8 +98,8 @@ two differ in structure.
 0294's FDIS visits (`chinook_stream_size.md`): 21,862 visits, 1,186 with CH. 0295's population (0291's edges, a fished
 area of 10–10,000 m², #35's duplicates out) is 19,077 visits, 978 CH. The plan review moved the tuning onto a
 narrower population before any fit, for two reasons:
-- **The rule only acts on the stream branch.** 3,013 of 0295's visits are in a river polygon or on its edges, with
-  702 of the 978 CH (23.3 %). Every rule keeps a river polygon's size test, so only the gradient maximum can differ
+- **The rule only acts on the stream branch.** 3,013 of 0295's visits are in a river polygon or on its edges. They
+  hold 702 of the 978 CH, a detection rate of 23.3 %. Every rule keeps a river polygon's size test, so only the gradient maximum can differ
   there. Those visits would set the in-group's rate, and one regulated Nechako survey
   dominates them. So the rule is scored on stream-branch visits: stream edges not in a river polygon, a wetland of at
   least 1 ha, or a lake of at least 100 ha. That is 15,178 visits, 264 CH.
@@ -288,8 +289,11 @@ tuning population has no visits in zone 23, and 18 in zone 24 with no flips (`da
 
 Three rules on the 31 groups where `fresh_default` classified CH: `default` as it runs (width), `default`'s MAD
 bounds as fresh's `mad` model builds them (`default_mad`, on wet's `pick`), and the recommended rule. Each goes
-through the same steps: the predicate behind stored access, link's CH user-habitat overlay (1,949 rows), and fresh's
-connectivity pass (`.frs_run_connectivity`, link `default` params at commit 62fae0bb), on scratch copies.
+through the same steps, on scratch copies:
+- the predicate behind stored access;
+- link's CH user-habitat overlay for rearing. Its 24 CH rows with rearing set are in HORS and QUES, none in these
+  groups, so here it changes nothing;
+- fresh's connectivity pass (`.frs_run_connectivity`, link `default` params at commit 62fae0bb).
 
 Two checks:
 - **The SQL `default` predicate equals fresh's own** on all 786,317 segments.
@@ -308,17 +312,18 @@ groups gain. Lake and wetland rearing (4,208 and 7,449 km) are the same under th
 group.
 
 **What changes, tuned against `default`** (`data/ch_rule_change.csv`). Each reason is read from the predicates'
-parts; where the two predicates agree, the difference came from the overlay or the connectivity pass.
+parts. Where the two predicates agree, the difference came from the connectivity pass, because the overlay has no CH
+rearing rows here. The script labels that `connectivity or overlay`.
 
 | | segments | km | of which order 1 | order 2 | order 3 | order 4+ |
 |---|---:|---:|---:|---:|---:|---:|
 | **lost** | 25,451 | 8,756 | 174 | 2,817 | 3,272 | 2,492 |
 | width passes, MAD < 0.75, no river within 1 km | 24,893 | 8,660 | | | | |
-| connectivity or overlay | 558 | 96 | | | | |
+| connectivity | 558 | 96 | | | | |
 | **gained** | 10,656 | 2,900 | 1,991 | 489 | 177 | 244 |
 | the exception (size fails, a ≥ 3 m³/s river within 1 km) | 8,676 | 2,471 | | | | |
 | gradient between 5.49 and 7 % | 854 | 211 | | | | |
-| connectivity or overlay | 419 | 111 | | | | |
+| connectivity | 419 | 111 | | | | |
 | MAD passes where width fails or is NULL | 316 | 77 | | | | |
 | other (river-polygon branch, mixed) | 391 | 29 | | | | |
 
@@ -338,30 +343,33 @@ is under 0.75 m³/s. The gains are mostly the small streams the exception admits
 
 **Outside check: bcfishobs records FDIS does not hold.** In these groups there are:
 - 1,344 non-FDIS CH records, 1,215 of them of match type A/B, dated 1964–2007 (78 undated);
-- 812 locations once deduplicated per blue line and metre, with spawn-only locations and overlay reaches out;
-- 326 of those on stream edges.
+- 812 locations once deduplicated per blue line and metre, with spawn-only locations out (no location falls in an
+  overlay rearing reach here);
+- 326 of those on stream edges, 315 of them on accessible segments.
 
-The lift compares the share of stream-edge locations on rearing with the share of accessible stream-edge km that
-rears. It was fixed before the run, with a 200-resample location bootstrap:
+The lift compares the share of the 315 accessible stream-edge locations on rearing with the share of accessible
+stream-edge km that rears. It was fixed before the run, with a 200-resample location bootstrap:
 
-| rule | stream-edge locations on rearing | capture | km share | lift (95 %) | all 812 locations on rearing |
+| rule | locations on rearing (of 315) | capture | km share | lift (95 %) | all 812 locations on rearing |
 |---|---:|---:|---:|---|---:|
-| `default` | 267 | 81.9 % | 30.0 % | 2.73 (2.60–2.86) | 724 |
-| `default_mad` | 225 | 69.0 % | 15.7 % | 4.39 (4.03–4.72) | 607 |
-| tuned | 241 | 73.9 % | 19.1 % | 3.86 (3.64–4.12) | 698 |
+| `default` | 267 | 84.8 % | 30.0 % | 2.82 (2.69–2.95) | 724 |
+| `default_mad` | 225 | 71.4 % | 15.7 % | 4.54 (4.28–4.88) | 607 |
+| tuned | 241 | 76.5 % | 19.1 % | 4.00 (3.71–4.20) | 698 |
 
-- **Against `default`**, the tuned rule's lift is higher by 1.13 (0.95–1.34). On stream edges it loses 40 of
-  `default`'s locations and gains 14, for 10.9 points less km share.
-- **Against `default_mad`**, it is lower by 0.53 (0.23–0.78). It keeps 40 locations `default_mad` misses and misses 24
+- **Against `default`**, the tuned rule's lift is higher by 1.17 (0.94–1.37). It loses 40 of `default`'s locations
+  and gains 14, for 10.9 points less km share.
+- **Against `default_mad`**, it is lower by 0.54 (0.30–0.87). It keeps 40 locations `default_mad` misses and misses 24
   it keeps, for 3.4 points more km share.
 
-A presence-only lift always favours fewer km, so the lift ranks rules by concentration, not by what they leave out.
+A presence-only lift tends to favour fewer km: it ranks rules by concentration, not by what they leave out.
 The life stage of these records is mostly unrecorded, and only spawn-only locations could be removed.
 
-**Maps.** The groups were chosen by criteria fixed before drawing: SALR has the largest share of accessible stream
-km on order 1–2 (0.85); TWAC has all of its visits in hydrologic zones 15, 17, 23 or 24; LFRA has the largest
-share of visits whose 10 m³/s walk reaches the sea (0.21). The visit shares are over the analysed FDIS visits on
-link segments. Orange is `default` only, green tuned only, blue both.
+**Maps.** The groups were chosen by criteria fixed before drawing. The visit shares are over the analysed FDIS
+visits on link segments. Orange is `default` only, green tuned only, blue both.
+- **SALR** has the largest share of accessible stream km on order 1–2 (0.85).
+- **TWAC** has all of its visits in hydrologic zones 15, 17, 23 or 24. That is 2 visits, so it was picked on a thin
+  base. The best-sampled interior group is NARC: 320 visits, 99.7 % of them in those zones, with a −42.6 % change.
+- **LFRA** has the largest share of visits whose 10 m³/s walk reaches the sea (0.21).
 
 ![SALR](fig/chinook_rearing_tuned_salr.png)
 ![TWAC](fig/chinook_rearing_tuned_twac.png)
@@ -388,7 +396,7 @@ eastern sub-basin's network. The green (tuned only) is short reaches on small st
   where to cut a slope.
 - **Distance.** It runs to the river's centreline. The scoring measured it from the visit's own point. On link's
   segments it is measured from the segment's downstream end, which on the 3,544 tuning visits placed on a link
-  segment lies a median 0.9 m below the visit, 90 m at the 75th percentile and 333 m at the 90th. The applied rule is
+  segment lies a median 0.9 m below the visit, 90 m at the 75th percentile and 332 m at the 90th. The applied rule is
   therefore slightly looser than the scored one. Under 200 m a distance cannot be told from mainstem catches
   snapped to a tributary mouth; no main-reading region rule is that close. The ambiguous-placement
   sensitivity uses #52's flag, which was set at 10 m³/s on visits under 0.5 m³/s.

@@ -4,8 +4,8 @@ Groups where fresh_default classified CH: 31.
 Check: SQL default against fresh::frs_habitat_predicates() on 786317 segments: 0 differ.
 default_mad: fresh's `mad` rear predicate, on wet's pick as mad_m3s:
 ((s.edge_type IN (1000, 1100, 2000, 2300) AND s.gradient BETWEEN 0 AND 0.0549 AND s.mad_m3s BETWEEN 0.28 AND 100) OR (s.waterbody_key IN (SELECT waterbody_key FROM whse_basemapping.fwa_rivers_poly) AND s.gradient BETWEEN 0 AND 0.0549 AND s.mad_m3s BETWEEN 0.28 AND 100) OR (s.edge_type IN (1000, 1100) AND s.waterbody_key IN (SELECT waterbody_key FROM whse_basemapping.fwa_wetlands_poly WHERE area_ha >= 1)) OR (s.edge_type IN (1050, 1150) AND s.waterbody_key IN (SELECT waterbody_key FROM whse_basemapping.fwa_wetlands_poly WHERE area_ha >= 1)) OR (s.edge_type IN (1000, 1100, 1200, 1250, 1300, 1350, 1400, 1450, 1475) AND s.waterbody_key IN (SELECT waterbody_key FROM whse_basemapping.fwa_lakes_poly WHERE area_ha >= 100 UNION ALL SELECT waterbody_key FROM whse_basemapping.fwa_manmade_waterbodies_poly WHERE area_ha >= 100)))
-Exception walks: 110358 segment starts at Q 3 on pick, 4.5 min on 4 workers; found 109526.
-Classify, overlay and connect: 31 groups x 3 rules, 18.7 min.
+Exception walks: 110358 segment starts at Q 3 on pick, 3.4 min on 4 workers; found 109526.
+Classify, overlay and connect: 31 groups x 3 rules, 16.1 min.
 
 ## rearing km by group
  watershed_group_code accessible_km accessible_stream_km stored_rear_km
@@ -204,25 +204,25 @@ Classify, overlay and connect: 31 groups x 3 rules, 18.7 min.
  fdis_visits       tuned                rearing 1859  644 0.34642281
  fdis_visits       tuned accessible_not_rearing 3085   55 0.01782820
 
-Outside check: 1344 non-FDIS CH records in these groups; 1215 match A/B (years 1964-2007, 78 undated); 812 locations not spawn-only, placed, outside the overlay; 326 of them on stream edges (lift is on these).
+Outside check: 1344 non-FDIS CH records in these groups; 1215 match A/B (years 1964-2007, 78 undated); 812 locations not spawn-only, placed, outside the overlay; 326 on stream edges, 315 of them accessible (lift is on these).
 
 ## outside check, stream-edge locations (km share: stream-edge rearing km / accessible stream-edge km)
              check                    rule   n n_on_rearing  km_share
- bcfishobs_outside                 default 326          267 0.3002248
- bcfishobs_outside             default_mad 326          225 0.1573477
- bcfishobs_outside                   tuned 326          241 0.1914626
- bcfishobs_outside     tuned_minus_default 326           NA        NA
- bcfishobs_outside tuned_minus_default_mad 326           NA        NA
+ bcfishobs_outside                 default 315          267 0.3002248
+ bcfishobs_outside             default_mad 315          225 0.1573477
+ bcfishobs_outside                   tuned 315          241 0.1914626
+ bcfishobs_outside     tuned_minus_default 315           NA        NA
+ bcfishobs_outside tuned_minus_default_mad 315           NA        NA
        lift    lift_lo    lift_hi n_all n_all_on_rearing n_gained n_lost
-  2.7280169  2.5951921  2.8610971   812              724       NA     NA
-  4.3863634  4.0349670  4.7182649   812              607       NA     NA
-  3.8611385  3.6364394  4.1178802   812              698       NA     NA
-  1.1331216  0.9495411  1.3384170    NA               NA       14     40
- -0.5252249 -0.7781114 -0.2327791    NA               NA       40     24
+  2.8232810  2.6858179  2.9501700   812              724       NA     NA
+  4.5395380  4.2772536  4.8825253   812              607       NA     NA
+  3.9959719  3.7136838  4.1953560   812              698       NA     NA
+  1.1726909  0.9436096  1.3676068    NA               NA       14     40
+ -0.5435661 -0.8731057 -0.3041552    NA               NA       40     24
  capture_share
-     0.8190184
-     0.6901840
-     0.7392638
+     0.8476190
+     0.7142857
+     0.7650794
             NA
             NA
 

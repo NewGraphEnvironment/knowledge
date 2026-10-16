@@ -40,14 +40,14 @@ visits on the CH stream branch with no natural CH barrier downstream before obse
 Applied to the 31 groups `fresh_default` classifies for CH, all rules went through the same predicate, overlay and
 connectivity pass:
 - **CH rearing** goes from 31,948 to 26,092 km (−18 %).
-  - 8,756 km are lost. 8,660 km of it is streams of order 2 and above that pass the 1.5 m width but carry under
-    0.75 m³/s with no ≥ 3 m³/s river within 1 km.
+  - 8,756 km are lost. 8,660 km of it is streams that pass the 1.5 m width but carry under 0.75 m³/s with no
+    ≥ 3 m³/s river within 1 km. 98 % of the loss is on order 2 and above.
   - 2,900 km are gained. 2,471 km of it comes through the exception, mostly on order-1 streams, which `default`
     leaves out because fwapg models no width there.
 - **Raw FDIS detection** on rearing segments is 34.6 % against 24.7 %, and on accessible non-rearing segments 1.8 %
   against 2.6 %.
-- **bcfishobs CH records not from FDIS**, on stream edges (326 locations), fall on rearing at 3.9 times the rearing km
-  share, against 2.7 under `default`.
+- **bcfishobs CH records not from FDIS**, at 315 locations on accessible stream edges, fall on rearing at 4.0 times
+  the rearing km share, against 2.8 under `default`.
 
 `default`'s MAD bounds, applied as fresh's `mad` model does, would also drop rivers over 100 m³/s, because the
 river-polygon branch takes the MAD range. Most FDIS CH detections on accessible segments in those groups are on
@@ -71,6 +71,9 @@ such rivers.
      of the size test.
    - **The river-polygon rule** keeps `channel_width: [0, 9999]`, taking the gradient from the CSV.
    - `rear_gradient_max` 0.07.
+   - **The habitat method stays `cw`.** Under `mad`, fresh drops the river rule's `channel_width` and the river
+     branch takes the CSV's MAD range (0.28–100 m³/s), which removes large rivers. Set CH `rear_mad_min` to 0 and
+     `rear_mad_max` to 9999 in the bundle's CSV, so that a group moved to `mad` keeps them.
 
    This needs wet's discharge (#331). The values were tuned on wet's `pick`, and fwapg's MAD covers only part of the
    province.

@@ -5,8 +5,8 @@ fdis_visits,default_mad,rearing,1324,186,0.1405,,,,,,,,,,
 fdis_visits,default_mad,accessible_not_rearing,3620,513,0.1417,,,,,,,,,,
 fdis_visits,tuned,rearing,1859,644,0.3464,,,,,,,,,,
 fdis_visits,tuned,accessible_not_rearing,3085,55,0.0178,,,,,,,,,,
-bcfishobs_outside,default,,326,,,267,0.3002,2.728,2.5952,2.8611,812,724,,,0.819
-bcfishobs_outside,default_mad,,326,,,225,0.1573,4.3864,4.035,4.7183,812,607,,,0.6902
-bcfishobs_outside,tuned,,326,,,241,0.1915,3.8611,3.6364,4.1179,812,698,,,0.7393
-bcfishobs_outside,tuned_minus_default,,326,,,,,1.1331,0.9495,1.3384,,,14,40,
-bcfishobs_outside,tuned_minus_default_mad,,326,,,,,-0.5252,-0.7781,-0.2328,,,40,24,
+bcfishobs_outside,default,,315,,,267,0.3002,2.8233,2.6858,2.9502,812,724,,,0.8476
+bcfishobs_outside,default_mad,,315,,,225,0.1573,4.5395,4.2773,4.8825,812,607,,,0.7143
+bcfishobs_outside,tuned,,315,,,241,0.1915,3.996,3.7137,4.1954,812,698,,,0.7651
+bcfishobs_outside,tuned_minus_default,,315,,,,,1.1727,0.9436,1.3676,,,14,40,
+bcfishobs_outside,tuned_minus_default_mad,,315,,,,,-0.5436,-0.8731,-0.3042,,,40,24,

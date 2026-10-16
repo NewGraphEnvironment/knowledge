@@ -201,6 +201,23 @@ live. #28 used it as evidence once, after the plan review had flagged it (archiv
 `2026-10-issue-28-habitat-weights`). link segments also overlap by up to ~1.4 mm at breaks, so a
 point join needs a deterministic tiebreak (`0290`).
 
+### link's CH rearing: regenerate it, never compare to the stored flags
+
+`default`'s CH rearing has three stages:
+1. fresh's predicate (`fresh::frs_habitat_predicates()` on link's `configs/default`), gated by access;
+2. the user-habitat overlay;
+3. `.frs_run_connectivity()`, which drops rearing clusters with no spawning within 10 km.
+
+`fresh_default.log` has no rows for the 31 CH groups, and a regeneration differs from their stored flags on 4,584 km.
+So compare rules regenerated through all three stages on scratch copies (`0298`), never against the stored flags.
+
+Width and flow carry two traps (#54):
+- **Widths.** fwapg models width only where `stream_order > 1`, and its FIELD_MEASURMENT widths are FDIS sites. An
+  order-1 stream therefore has a width only where it was measured. A width rule scored at visits sees widths link
+  never sees on unmeasured streams; use `0296`'s `cw_deploy`.
+- **Flow on river polygons.** River-polygon lines (edges 1450, 1250, 1350) carry a tributary's own small wet flow. A
+  MAD floor on the river branch drops 636 km of them in the 31 groups.
+
 ### Database access
 
 `0100`, `0110`, `0160`, `0162` connect on the bcfishpass tunnel (`0200`/`0220` try it first and
