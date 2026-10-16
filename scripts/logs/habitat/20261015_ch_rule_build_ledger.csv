@@ -1,0 +1,26 @@
+kind,step,n,note
+in,visits_in,21862,0294's kept visits
+info,walk_starts,17747,x 3 sources x 7 sizes; 2.1 min on 4 workers
+info,walk_pick_found,110742,"rows, all sizes"
+info,walk_pick_none,13487,"rows, all sizes"
+info,walk_pcic_routed_found,108528,"rows, all sizes"
+info,walk_pcic_routed_none,15701,"rows, all sizes"
+info,walk_wet_balance_found,110823,"rows, all sizes"
+info,walk_wet_balance_none,13406,"rows, all sizes"
+info,walk_control_0294,12932,identical to 0294's ch_dist_large at 10 m3/s on pick
+info,walk_targets,8424,777 on regulated reaches
+info,width_missing,4175,no row or NULL in fwa_stream_networks_channel_width
+info,cw_model_control,3645,recomputed model within 5 % of the stored MODELLED width on 96.2 %; median ratio 0.997
+info,cw_deploy_from_model,7928,field-measured segments given the model width
+info,cw_deploy_null_order1,1268,"field-measured order-1 segments, NULL as link would read them unmeasured"
+info,width_source_FIELD_MEASURMENT,9196,
+info,width_source_FWA_RIVERS_POLY,2549,
+info,width_source_MODELLED,5942,
+info,link_multi_match,6,max overlap 0.0014 m
+info,barrier_known,13085,"56 WSGs from fresh_default, 46 more from fresh (bcfishpass bundle)"
+info,barrier_dnstr,6152,CH caught on 28
+info,link_ch_wsgs,31,WSGs with fresh_default.streams_habitat_ch rows
+info,link_ch_visits,8943,placed on a link segment: 8724
+info,zone_zip,7729083,md5 f369d684fd3939acbdd6b06097a3d4b0 https://catalogue.data.gov.bc.ca/dataset/f1f86c41-ae83-49d5-92e1-526897b99fa2/resource/fc209bd0-26ab-4f8b-9415-8f34081a3c0e/download/bc_hydrologic_zones.zip
+info,zone_unmatched,0,segment midpoint in no hydrologic zone
+kept,visits_kept,21862,

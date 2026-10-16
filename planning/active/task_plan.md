@@ -24,33 +24,39 @@ The two wet flow sources agree within 2× on 81–88 % of small-stream visits, a
       side by side regenerates `default` and tuned through the same predicate and cluster pass (Phase 5).
 
 ## Phase 2: Build (0296)
-- [ ] Every 0294 kept visit: walks at Q ∈ {1, 3, 5, 10, 20, 30, 50} m³/s on each of `pick`, `pcic_routed` and
+- [x] Every 0294 kept visit: walks at Q ∈ {1, 3, 5, 10, 20, 30, 50} m³/s on each of `pick`, `pcic_routed` and
       `wet_balance`, keeping whether the target is a lake or a regulated reach. Every visit is walked, not only
       those under 1 m³/s, because a width rule can fail a visit above 1 m³/s.
-- [ ] Attach link's channel width and its source from `fwa_stream_networks_channel_width`. In the 27 covered
+- [x] Attach link's channel width and its source from `fwa_stream_networks_channel_width`. In the 27 covered
       groups, attach link's segment (0290's placement and tiebreak, `overlap_max_m` stop), its gradient and
       width, and `default`'s CH rearing.
-- [ ] Hydrologic zone per visit, from the BC catalogue zip, point in polygon. The count of unmatched points is
+- [x] Hydrologic zone per visit, from the BC catalogue zip, point in polygon. The count of unmatched points is
       logged.
-- [ ] Ledger that partitions the input, as in 0294. Write `ch_rule_visits.csv` and the ledger log.
+- [x] Plan review (review-plan.md): also attach the pre-override natural CH barrier test (fresh_default, else
+      fresh's bcfishpass bundle; 51 of 103 groups) and fwapg's width model recomputed (`cw_deploy`, the width link
+      reads unmeasured; 96.2 % within 5 % of stored MODELLED)
+- [x] Ledger that partitions the input, as in 0294. Write `ch_rule_visits.csv` and the ledger log.
 
 ## Phase 3: Analysis spec, fixed and committed before any fit (0297 header)
-- [ ] Population: 0295's MAD analysis (edges, area, duplicates out). Models use groups with both outcomes.
-- [ ] Rule = stream-branch size test (MAD floor *m* or width floor *w*) AND gradient ≤ *g*, OR (size fails AND
+Revised before any fit for the plan review: population is stream-branch visits with no natural barrier
+downstream (B2, B3); width is `cw_deploy` (G3); folds stratified; stability is a WSG bootstrap plus 4 more fold
+seeds; nested selection; component profiles; decision rule if `default` is in the region.
+- [x] Population: 0295's MAD analysis (edges, area, duplicates out). Models use groups with both outcomes.
+- [x] Rule = stream-branch size test (MAD floor *m* or width floor *w*) AND gradient ≤ *g*, OR (size fails AND
       gradient ≤ *g* AND a ≥ *Q* segment within *D* downstream). It is applied where `default` applies its tests.
       River-polygon and lake-edge visits keep `default`'s branch. Grid as the issue lists it, plus `default` and
       "all in".
-- [ ] Score: 0295's cloglog (log area, data set, era, WSG) + the rule term. Five folds hold out whole WSGs,
+- [x] Score: 0295's cloglog (log area, data set, era, WSG) + the rule term. Five folds hold out whole WSGs,
       assigned by a fixed seed. Held-out deviance: rule, area, data-set and era coefficients from training; only
       each held-out WSG's intercept refit on its own visits (the same one parameter per WSG for every rule).
       Unseen nuisance levels go to the reference and are counted.
-- [ ] Optimum: the rules whose held-out deviance is within one SE of the best. The SE is of the paired difference
+- [x] Optimum: the rules whose held-out deviance is within one SE of the best. The SE is of the paired difference
       from the best, with the WSG as the unit. "Simplest" is the fewest departures from `default` (size variable
       and value, gradient, exception). Ties go to the lower deviance. Each component's value range inside the
       region is reported.
-- [ ] Stability: 200 bootstrap resamples, by stream, of the per-visit held-out deviances; the region and the pick
+- [x] Stability: 200 bootstrap resamples, by stream, of the per-visit held-out deviances; the region and the pick
       are recomputed each time. Report the share choosing each component value.
-- [ ] Width results always shown beside their source split (`FIELD_MEASURMENT` / `MODELLED`), with the
+- [x] Width results always shown beside their source split (`FIELD_MEASURMENT` / `MODELLED`), with the
       field-measured visits-out sensitivity. Optimum D < 200 m is reported, not recommended.
 
 ## Phase 4: Tune (0297)
@@ -63,9 +69,7 @@ The two wet flow sources agree within 2× on 81–88 % of small-stream visits, a
       sources, by hydrologic zone and MAD class.
 - [ ] Sensitivities: lake targets out; regulated targets and visits out; ambiguous placements out; CHES and NECR
       out; C (CH given any fish) in place of U
-- [ ] Outside check: bcfishobs non-FDIS CH records (1,346 in covered groups), placed on link segments with the
-      same tiebreak. Records on rearing segments as a share, against rearing km, for `default` and the tuned rule
-      (access is `default`'s for both)
+- [x] Outside check moved to 0298 (review O1, G7): it needs the tuned rule on link's segments
 - [ ] Write `data/ch_rule_tune.csv` (aggregates only) and `scripts/logs/habitat/<date>_ch_rule_tune.txt`
 
 ## Phase 5: Side by side (0298)
@@ -79,7 +83,10 @@ The two wet flow sources agree within 2× on 81–88 % of small-stream visits, a
       reported beside. No link change.
 - [ ] Maps of three groups (one small-stream-heavy, one interior, one coastal, chosen by a stated criterion before
       drawing) → `research/fig/chinook_rearing_tuned_<wsg>.png`
-- [ ] Write `data/ch_rule_compare.csv`
+- [ ] Outside check (review G7): bcfishobs non-FDIS CH, match A/B, one per blue line x metre, spawn-only out,
+      overlay reaches out; lift = capture share / km share with a location bootstrap; FDIS detection on each
+      rule's segments (G9)
+- [ ] Write `data/ch_rule_compare.csv` and `data/ch_rule_checks.csv`
 
 ## Phase 6: Write-up and handoff
 - [ ] `research/chinook_rearing_tuned.md`: provenance line, every figure naming its population (the #52 rule),
@@ -94,7 +101,7 @@ The two wet flow sources agree within 2× on 81–88 % of small-stream visits, a
 
 - [ ] Positive controls pass (walk reproduces 0294; SQL predicate reproduces `default`)
 - [ ] Ledger partitions; bootstrap identical across worker counts
-- [ ] Tests pass
+- [ ] Positive controls in the run logs (walk = 0294; SQL default = fresh's predicate; width model)
 - [ ] `/code-check` clean (each commit, or once over the branch with `/code-check branch`)
 - [ ] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion
