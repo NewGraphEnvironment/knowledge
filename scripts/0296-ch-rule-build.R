@@ -43,6 +43,7 @@
 # RUN:    Rscript scripts/0296-ch-rule-build.R   (after 0294, from the repo root; 4 socket workers)
 # ---------------------------------------------------------------------------
 suppressMessages({ library(dplyr); library(readr); library(DBI); library(RPostgres) })
+options(warn = 1)
 
 q_grid <- c(1, 3, 5, 10, 20, 30, 50)              # m3/s: river sizes walked to
 sources <- c("pick", "pcic_routed", "wet_balance")
@@ -239,9 +240,11 @@ hz_dir <- tempfile("hydz")
 utils::unzip(hz_zip, exdir = hz_dir)
 hz_shp <- list.files(hz_dir, "\\.shp$", full.names = TRUE, recursive = TRUE)
 if (length(hz_shp) != 1) stop("expected one shapefile in the hydrologic zones zip, found ", length(hz_shp))
+# transform the points, not the zones: the layer's CRS is BC Albers in WKT, and a transform of it
+# to EPSG:3005 corrupts 7 of its 43 features (st_is_valid NA), which then fail st_join
 hz <- sf::st_read(hz_shp, quiet = TRUE) |>
-  sf::st_transform(3005) |>
   transmute(hydro_zone = sprintf("%02d", as.integer(HYDZN_NO)))
+if (!all(sf::st_is_valid(hz))) stop("a hydrologic zone geometry is invalid as read")
 pt_sql <- v |> select(site_visit, linear_feature_id)
 conn <- pg()
 dbWriteTable(conn, "tmp_ch_rule_pt", pt_sql, temporary = TRUE, overwrite = TRUE)
@@ -252,7 +255,7 @@ mid <- dbGetQuery(conn, "
   JOIN whse_basemapping.fwa_stream_networks_sp s ON s.linear_feature_id = t.linear_feature_id
   CROSS JOIN LATERAL (SELECT ST_LineInterpolatePoint(ST_Force2D(s.geom), 0.5) AS p) q")
 dbDisconnect(conn)
-mid_sf <- sf::st_as_sf(mid, coords = c("x", "y"), crs = 3005)
+mid_sf <- sf::st_as_sf(mid, coords = c("x", "y"), crs = 3005) |> sf::st_transform(sf::st_crs(hz))
 zj <- sf::st_join(mid_sf, hz, join = sf::st_intersects) |> sf::st_drop_geometry()
 zj <- zj |> group_by(site_visit) |> summarise(n_zone = n_distinct(hydro_zone, na.rm = TRUE),
                                               hydro_zone = min(hydro_zone), .groups = "drop")
