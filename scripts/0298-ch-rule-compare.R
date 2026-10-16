@@ -59,7 +59,7 @@
 suppressMessages({ library(dplyr); library(readr); library(DBI); library(RPostgres) })
 options(warn = 1)
 
-link_repo <- Sys.getenv("LINK_REPO", file.path(Sys.getenv("HOME"), "Projects/repo/link"))
+link_repo <- Sys.getenv("LINK_REPO", "../link")   # a checkout of NewGraphEnvironment/link
 link_sha <- "62fae0bb8667779b9abd0533e9c45b206616b544"    # link main, 2026-10-15
 scratch <- "ch_rule_scratch"
 edge_stream <- c(1000, 1100, 2000, 2300)

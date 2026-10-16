@@ -60,14 +60,14 @@ being public, provided it ships with a note of when and from where it was receiv
 - [x] `pkgdown::build_site()` locally builds with no warnings; `docs/` ignored
 
 ## Phase 4: FDIS on a public prefix
-- [ ] `s3://fresh-bc/fdis/README.md` rewritten with the provenance note (received from the Province of BC, FDIS,
+- [x] `s3://fresh-bc/fdis/README.md` rewritten with the provenance note (received from the Province of BC, FDIS,
       exports dated 2020-11-16 and 2022-03-22, supplied for the 2021–22 channel-width and fish-density work; published
       with the Province's agreement, 2026-10-16); a tracked copy at `data/fdis_README.md` is the source
-- [ ] Move `fdis/fissr_explore.sqlite` and `fdis/derived/` to `s3://fresh-bc/archive/fdis/`; `MANIFEST.md5` still
-      verifies the extract
-- [ ] New `scripts/0299-fdis-publish.R`: reads `data/fdis/derived/*` visit tables, writes Parquet + `manifest.json`
+- [x] Move `fdis/fissr_explore.sqlite` and `fdis/derived/` to `s3://fresh-bc/archive/fdis/`; `MANIFEST.md5` rewritten without
+      the sqlite line (original kept beside it in the archive); a fresh sync verifies 26/0
+- [x] New `scripts/0299-fdis-publish.R`: reads `data/fdis/derived/*` visit tables, writes Parquet + `manifest.json`
       (id, built, knowledge commit, per-file rows/bytes/sha256, producing script, source note) to
-      `s3://fresh-bc/knowledge/fdis/`; `scripts/README.md`'s per-script `aws s3 cp … fdis/derived/` lines replaced by it;
+      `s3://fresh-bc/knowledge/fdis/v1/` (review G6); `PULL=TRUE` restores the CSVs (G4); `scripts/README.md`'s per-script `aws s3 cp … fdis/derived/` lines replaced by it;
       `0230`'s sync excludes nothing new (derived no longer under `fdis/`)
 - [ ] Run it; read back each Parquet and compare rows to the CSV
 - [ ] `research/fdis_export.md` Provenance and CLAUDE.md's FDIS note: public, with the note, and where each part lives

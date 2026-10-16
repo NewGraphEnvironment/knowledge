@@ -1,8 +1,8 @@
 # Stream temperature: what the network models do, and what NGE holds
 
 **Verified:** 2026-10-06 (model repos read 2026-10-03; evidence and Zotero bullets revised for #38) · **Issues:**
-NewGraphEnvironment/wet#36, NewGraphEnvironment/link#21, #20 · **Produced by:** reading `fish-passage-22` `526d02c`, `fish-passage-22b` `1464c9d` and
-`skeena-stream-temp-25` `c128f14` (the NGE fork), the rendered memos
+NewGraphEnvironment/wet#36, NewGraphEnvironment/link#21, #20 · **Produced by:** reading `fish-passage-22` `526d02c`, `fish-passage-22b` `1464c9d` and the
+Skeena model's code (not public), the rendered memos
 ([hill_etal2024Spatialstream](https://www.poissonconsulting.ca/analyses/fish-passage-22b/),
 [hill_etal2025Spatialstream](https://www.poissonconsulting.ca/analyses/skeena-stream-temp-25/)), and a read-only copy of the
 group library.
@@ -79,14 +79,12 @@ Anything daily, wet#36 included, needs either a daily step or an explicit weekly
 
 ## Re-running them today
 
-- **Licence.** None of the three repos has a licence. `skeena-stream-temp-25` is a private fork of a
-  private upstream, which is 3 small commits ahead: CODEOWNERS, a comment, and a non-SSN `air2stream.stan`
-  kept for comparison.
+- **Licence.** None of the three code bases has a licence, and the Skeena model's code is not public.
 - **Stan versions.** The 22/22b Stan files use pre-2.33 array syntax, so they need rstan 2.32 or a port.
   Skeena runs on current cmdstan.
 - **Packages.** The stack is the public Poisson packages (`embr`, `smbr2`, `mcmcderive`, `subfoldr2`,
-  `gsdd`, `fwapgr`, `fwatlasbc`, `evrfish`) plus `SSNbler`, `SSN2` and `SSNbayes`. `poisreport`, needed
-  only to knit, is private.
+  `gsdd`, `fwapgr`, `fwatlasbc`, `evrfish`) plus `SSNbler`, `SSN2` and `SSNbayes`. Knitting the memos also
+  needs a reporting package that is not public.
 - **Skeena data URL.** `.../data/realtime_raw_20250521.parquet` now returns 404 (checked 2026-10-06).
   water-temp-bc's read path is `data/canonical/Parameter=5/`.
 - **Data paths.** They are hard-coded to the authors' local synced folders. `output/` is gitignored,

@@ -32,7 +32,7 @@
 #     the record of which input produced the table.
 #
 # INPUT:  $TEMPLATE_DIR/data/inputs_raw/fish_species_life_history_gantt.csv
-#         (TEMPLATE_DIR, required: a checkout of the fish-passage reporting template)
+#         (TEMPLATE_DIR, required: a checkout of the fish-passage reporting template, which is not public)
 # OUTPUT: data/life_history_timing.csv
 # RUN:    Rscript scripts/0260-timing-seed.R 2>&1 | tee scripts/logs/timing/<yyyymmdd>_timing_seed.log
 #         (repo root)

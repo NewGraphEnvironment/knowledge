@@ -64,6 +64,9 @@ fiss_layer <- "whse_fish.fiss_fish_obsrvtn_pnt_sp"
 # fiss_xls_reports.csv (db_source), so a short manifest is explainable by its snapshot.
 conn <- DBI::dbConnect(RPostgres::Postgres())
 db_source <- DBI::dbGetQuery(conn, "SELECT current_database() AS d")$d
+if (!nrow(DBI::dbGetQuery(conn, "SELECT 1 FROM pg_namespace WHERE nspname = 'bcfishpass'")))
+  message("Database ", db_source, " has no bcfishpass schema: its FISS snapshot may lack a few ",
+          "report pages that a bcfishpass database carries; db_source is recorded.")
 # on.exit() does NOT fire at a script's top level (see CLAUDE.md) — it would leave
 # this connection open. reg.finalizer(onexit = TRUE) fires on both a clean exit and stop().
 reg.finalizer(environment(),

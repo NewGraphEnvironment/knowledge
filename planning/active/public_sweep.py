@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Sweep for text that must not be public (#56).
 
-Usage: python3 planning/active/public_sweep.py [tree|github|all]
+Usage: python3 planning/active/public_sweep.py [tree|github|commits|all]
 
 Tree: every tracked file except the exemptions. GitHub: issue and PR bodies,
 issue/PR conversation comments and PR review comments. Prints one line per
@@ -24,13 +24,15 @@ PATTERNS = {
     "host": r"\b(m1|M1|m4|M4|cypher|openclaw)\b|tailnet|Tailscale|Dropbox|OneDrive",
     "private_repo": rf"NewGraphEnvironment/({PRIVATE_REPOS})\b|\b(template|{PRIVATE_REPOS})#\d+",
     "project_repo": r"\b[a-z]+_[a-z_]*\d{4}_(reporting|planning)\b|fish_passage_[a-z]+_\d{4}",
-    "internal_ref": r"\bdb-newgraph\b|\bcomms/",
+    "internal_ref": r"\bdb-newgraph\b|\bcomms/|\bpoisreport\b",
+    "local_path": r"airvine|/Users/|claude-50\d|~/Projects|Projects/repo",
+    "template_name": r"fish[-_]passage[-_]template[-_]reporting",
 }
 RX = {k: re.compile(v) for k, v in PATTERNS.items()}
 
 # Left as they are (#56): planning/ (PWF and archives), run logs, git history (not
 # swept), and the literature tables' cited quotes.
-EXEMPT_PREFIX = ("planning/", "scripts/logs/")
+EXEMPT_PREFIX = ("planning/archive/", "planning/active/", "scripts/logs/")
 EXEMPT_FILE = {"data/literature_evidence.csv"}
 # Per-pattern exemptions for measured false positives: site labels such as M1 in
 # data tables, and the model objects m1..m3 in 0297.
@@ -83,6 +85,8 @@ def github():
         (gh([f"repos/{REPO}/issues/comments?per_page=100"]), "body"),
         (gh([f"repos/{REPO}/pulls/comments?per_page=100"]), "body"),
     ]
+    for pr in gh([f"repos/{REPO}/pulls?state=all&per_page=100"]):
+        sources.append((gh([f"repos/{REPO}/pulls/{pr['number']}/reviews?per_page=100"]), "body"))
     for items, field in sources:
         for it in items:
             body = it.get(field) or ""
@@ -95,6 +99,24 @@ def github():
     return hits
 
 
+# Measured hits accepted as they stand: commit messages are not rewritten.
+ALLOW = {("commit 34f773c", "comms/")}  # "comms/ is removed"
+
+
+def commits():
+    """This branch's commit messages, which become public; earlier history is exempt."""
+    out = subprocess.run(["git", "log", "--format=%h%x00%B%x01", "origin/main..HEAD"],
+                         capture_output=True, text=True, check=True).stdout
+    hits = []
+    for rec in filter(None, (r.strip() for r in out.split("\x01"))):
+        sha, msg = rec.split("\x00", 1)
+        for k, rx in RX.items():
+            m = rx.search(msg)
+            if m and (f"commit {sha}", m.group(0)) not in ALLOW:
+                hits.append((k, f"commit {sha}", m.group(0)))
+    return hits
+
+
 def main():
     mode = sys.argv[1] if len(sys.argv) > 1 else "all"
     hits = []
@@ -102,6 +124,8 @@ def main():
         hits += tree()
     if mode in ("github", "all"):
         hits += github()
+    if mode in ("commits", "all"):
+        hits += commits()
     for k, where, text in sorted(hits):
         print(f"{k:16} {where}  {text}")
     counts = {}

@@ -62,7 +62,9 @@ is_sentinel <- function(x) !is.na(x) & x >= sentinel_min
 # ---- sync + verify ---------------------------------------------------------
 if (!file.exists(file.path(cache, "MANIFEST.md5"))) {
   message("Syncing s3://fresh-bc/fdis/ -> ", cache)
-  rc <- system2("aws", c("s3", "sync", "s3://fresh-bc/fdis/", cache, "--only-show-errors"))
+  # NO_SIGN=TRUE reads the public prefix without AWS credentials
+  rc <- system2("aws", c("s3", "sync", "s3://fresh-bc/fdis/", cache, "--only-show-errors",
+                         if (identical(Sys.getenv("NO_SIGN"), "TRUE")) "--no-sign-request"))
   if (rc != 0) stop("aws s3 sync failed (exit ", rc, ")")
 }
 # md5 -r format: 32 hex, a space, then the path (paths contain spaces)

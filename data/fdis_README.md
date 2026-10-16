@@ -8,9 +8,9 @@ exported on 2020-11-16 and 2022-03-22 and supplied by the Province to New Graph 
 received, with the Province's agreement (2026-10-16), to advance knowledge of fish–habitat relationships in
 BC. No other use terms came with them.
 
-`MANIFEST.md5` is the checksum record made when the files were moved to this bucket on 2026-09-26. It also
-lists `fissr_explore.sqlite`, a working database from the 2021 exploration that is not part of the extract
-and is not published.
+`MANIFEST.md5` holds the checksums recorded when the files were moved to this bucket on 2026-09-26, for
+every file published here. (The record made then also listed a 2021 working database that is not part of
+the extract; it and that record are kept privately.)
 
 ## Contents
 
@@ -32,9 +32,9 @@ and is not published.
 ## Built from it
 
 Visit-level tables (passes rolled to site visits, placed on the FWA stream network, joined to modelled
-segments) are published as Parquet under `knowledge/fdis/`, with a `manifest.json`. The bucket does not
+segments) are published as Parquet under `knowledge/fdis/v1/`, with a `manifest.json`. The bucket does not
 list, so start from that manifest:
-`https://fresh-bc.s3.us-west-2.amazonaws.com/knowledge/fdis/manifest.json`.
+`https://fresh-bc.s3.us-west-2.amazonaws.com/knowledge/fdis/v1/manifest.json`.
 
 How the extract was read, its defects and what it adds over the public layers:
 <https://github.com/NewGraphEnvironment/knowledge/blob/main/research/fdis_export.md>.

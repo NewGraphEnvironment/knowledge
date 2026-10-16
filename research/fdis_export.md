@@ -18,12 +18,13 @@ when and from where it was received (#56).
 
 - `s3://fresh-bc/fdis/`: the extract as received (`2020-11-16/`, `2022-03-22-ef-export/`), the export
   queries, the FDIS data-model documents, `MANIFEST.md5`, and `README.md`, the provenance note, whose
-  tracked source is `data/fdis_README.md`. `MANIFEST.md5` also lists `fissr_explore.sqlite`, a 2021
-  working database that is not part of the extract; it and the old `derived/` copies were moved to the
-  bucket's private `archive/fdis/`.
-- `s3://fresh-bc/knowledge/fdis/`: the visit-level tables built here (`fdis_sites`, `bt_use_visits`,
+  tracked source is `data/fdis_README.md`. `fissr_explore.sqlite`, a 2021 working database that is not
+  part of the extract, and the old `derived/` copies moved to the bucket's private `archive/fdis/`, with
+  the original `MANIFEST.md5`; the one in `fdis/` is that record less the sqlite line (26 files).
+- `s3://fresh-bc/knowledge/fdis/v1/`: the visit-level tables built here (`fdis_sites`, `bt_use_visits`,
   `ch_mad_visits`, `ch_rule_visits`, `ch_rule_walks`) as Parquet, with a `manifest.json` naming each
-  table's rows, checksum and producing script, and the knowledge commit. `scripts/0299` writes them.
+  table's rows, checksum, producing script and source CSV, and the commit it was published from.
+  `scripts/0299` writes them, and with `PULL=TRUE` restores `data/fdis/derived/` from them.
 - Both prefixes are readable without credentials once the bucket policy grants them; the bucket does not
   list, so start from the manifest.
 

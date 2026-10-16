@@ -69,7 +69,8 @@ wf_farm_priority.js                          farm priority/crossing tables out o
 
 --- Publish the FDIS visit tables (after any of 0240, 0290, 0294, 0296 changes its table) ---
 0299  data/fdis/derived/*.csv -> Parquet + manifest.json in data/fdis/publish/; with PUBLISH=TRUE (clean
-      tree) uploads them to s3://fresh-bc/knowledge/fdis/ and data/fdis_README.md to s3://fresh-bc/fdis/README.md
+      tree) uploads them to s3://fresh-bc/knowledge/fdis/v1/ and data/fdis_README.md to s3://fresh-bc/fdis/README.md
+      PULL=TRUE restores data/fdis/derived/*.csv from the published Parquet (NO_SIGN=TRUE: no credentials)
 
 --- Habitat literature (independent of the watershed-group flow) ---
 0270  build the group's Fisheries/habitat_modelling collection   --dry-run first, then live
@@ -214,7 +215,7 @@ and maturity, per-pass effort, measured channel width and gradient, and explicit
   (SP/ST, or M in Aug–Oct), not length.
 - Outputs: `data/fdis_evidence.csv`, `data/fdis_summary_ch_bt.csv`, `data/fdis_size_breaks.csv`,
   `data/fdis_maturity_check.csv` (tracked), and `fdis_sites.{csv,gpkg}` (17 MB each, ignored), which `0299`
-  publishes as Parquet to `s3://fresh-bc/knowledge/fdis/`.
+  publishes as Parquet to `s3://fresh-bc/knowledge/fdis/v1/`.
 - Logs: `scripts/logs/fdis/`.
 
 ## 0200 / 0210 / 0220 — FISS `.xls` → No-Fish-Captured layer
@@ -235,9 +236,11 @@ fishless. Run on five groups (PINE, COTR, UNTH, LNTH, UPCE; #5).
   headless conversions contend for one LibreOffice profile lock.
 - Database: `0200` and `0220` connect to the database the `PG*` environment variables name. Point
   them at a bcfishpass database where one is available: its FISS snapshot was a superset of a plain
-  fwapg load (measured 2026-09-04, 5 report ids across COTR/UNTH/UPCE existed only there). `0220`
-  needs only the group polygon. `0200` records the database name (`db_source` in
-  `fiss_xls_reports.csv`) so a short manifest is explainable.
+  fwapg load (measured 2026-09-04, 5 report ids across COTR/UNTH/UPCE existed only there), and `0200`
+  says so when the database has no `bcfishpass` schema. `0220` needs only the group polygon. `0200`
+  records the database name (`db_source` in `fiss_xls_reports.csv`) so a short manifest is
+  explainable; rows written before 2026-10-16 say `tunnel` (a bcfishpass database) or `local_fwapg`
+  (an fwapg load).
 - R: `curl` (page fetch with explicit HTTP status), `readxl`, `janitor`, `rvest`, `xml2`, `sf`, `RPostgres`.
 
 **What each step writes to `data/<wsg>/`**
@@ -411,6 +414,11 @@ The cited basis for CH and BT habitat thresholds (#19). Not per watershed group.
     `fiss_stream_sample_sites_sp` / `fiss_obstacles_pnt_sp` and the bcfishpass model columns
     (`0100`, `0110`, `0160`; `0200` prefers it, above);
   - the CH and BT work (`0290`–`0298`) also needs wet's flow and link's `fresh_default` loaded.
+
+  R reads `~/.Renviron` at startup and its values **replace** the shell's, so where it sets `PG*`, a
+  `PGDATABASE=… Rscript …` on the command line is ignored. Either set the database there, or name a
+  `~/.pg_service.conf` entry with `PGSERVICE=<entry> Rscript …`: libpq takes a service's settings over
+  the `PG*` variables. Set `PGCONNECT_TIMEOUT` so an unreachable server fails instead of hanging.
 
 ## Gotchas worth knowing before you start
 

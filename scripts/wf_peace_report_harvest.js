@@ -8,7 +8,10 @@ export const meta = {
   ],
 }
 
-const HARVEST = '/private/tmp/claude-501/-Users-airvine-Projects-repo-fish-passage-template-reporting/e183f2c3-3a66-4a4b-a375-24fc6560ada4/scratchpad/harvest'
+// args: { harvest_dir: "..." } (an existing directory the PDFs are downloaded into)
+const A = typeof args === 'string' ? JSON.parse(args) : (args || {})
+const HARVEST = A.harvest_dir
+if (!HARVEST) throw new Error('args.harvest_dir is required')
 
 const GNIS_SCHEMA = {
   type: 'object', additionalProperties: false,

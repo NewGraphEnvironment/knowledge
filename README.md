@@ -81,7 +81,7 @@ planning at group scale.
 - **On S3** (`fresh-bc`, `us-west-2`), read by manifest because the bucket does not list:
   - `fdis/`: the FDIS electrofishing extract as received from the Province of BC, with its provenance
     note and checksums;
-  - `knowledge/fdis/`: the visit-level tables built from it, as Parquet with a `manifest.json`;
+  - `knowledge/fdis/v1/`: the visit-level tables built from it, as Parquet with a `manifest.json`;
   - `rag/` (not public): the searchable report-text stores.
 - **Databases:** scripts that query PostgreSQL connect through the standard `PGHOST`, `PGPORT`,
   `PGDATABASE`, `PGUSER` and `PGPASSWORD` environment variables; each script's header names the schemas
