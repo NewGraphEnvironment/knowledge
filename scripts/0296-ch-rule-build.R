@@ -25,8 +25,9 @@
 #     area and upstream mean annual precipitation), and `cw_deploy` is the width link would read
 #     with no field measurement: the stored width unless it is FIELD_MEASURMENT, then the model
 #     where stream_order > 1 (fwapg models no order-1 stream) and NULL otherwise. Check: the
-#     recomputed model matches the stored MODELLED widths (`cw_model_tol_m`; stops under
-#     `cw_model_agree_min`).
+#     recomputed model matches the stored MODELLED widths within `cw_model_tol`, relative (the
+#     stored widths are from older inputs: a 300-segment BULK sample has correlation 1.000 and a
+#     mean ratio of 1.007); the run stops under `cw_model_agree_min`.
 #   - NATURAL CH BARRIER DOWNSTREAM, before observation overrides (0294's test): GRADIENT, FALLS,
 #     SUBSURFACE_FLOW and USER_DEFINITE barriers that block CH (link's gradient barriers block CH
 #     only from its access_gradient_max, lnk_barriers_unify()). From fresh_default.barriers, or
@@ -64,7 +65,7 @@ dam_snap_m <- 500                                 # 0294's
 wetland_ha_min <- 1                               # link configs/default rules.yaml, CH rear W
 lake_ha_min <- 100                                # same, CH rear L
 natural <- c("GRADIENT", "FALLS", "SUBSURFACE_FLOW", "USER_DEFINITE")   # 0294's
-cw_model_tol_m <- 0.01
+cw_model_tol <- 0.05      # relative: the stored widths come from older area and precipitation inputs
 cw_model_agree_min <- 0.95
 start_window_m <- 5                               # 0290's
 overlap_max_m <- 0.01                             # 0290's
@@ -236,9 +237,10 @@ v <- v |>
                                fwa_stream_order > 1 ~ cw_model,
                                TRUE ~ NA_real_))
 mo <- v |> filter(fwa_cw_source %in% "MODELLED") |> distinct(linear_feature_id, fwa_channel_width, cw_model)
-agree <- mean(coalesce(abs(mo$cw_model - mo$fwa_channel_width) <= cw_model_tol_m, FALSE))
+agree <- mean(coalesce(abs(mo$cw_model / mo$fwa_channel_width - 1) <= cw_model_tol, FALSE))
 add("info", "cw_model_control", nrow(mo),
-    sprintf("recomputed model within %.2f m of the stored MODELLED width on %.1f %%", cw_model_tol_m, 100 * agree))
+    sprintf("recomputed model within %.0f %% of the stored MODELLED width on %.1f %%; median ratio %.3f",
+            100 * cw_model_tol, 100 * agree, median(mo$cw_model / mo$fwa_channel_width, na.rm = TRUE)))
 if (agree < cw_model_agree_min) stop("fwapg's width model reproduces the stored width on only ", round(100 * agree, 1), " %")
 fm <- v$fwa_cw_source %in% "FIELD_MEASURMENT"
 add("info", "cw_deploy_from_model", sum(fm & !is.na(v$cw_deploy)), "field-measured segments given the model width")
