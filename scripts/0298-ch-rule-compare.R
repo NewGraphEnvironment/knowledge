@@ -202,8 +202,9 @@ rules <- list(default = dflt, tuned = rec)
 flags <- list()
 t0 <- Sys.time()
 for (w in wsgs) {
-  dbExecute(conn, sprintf("DROP TABLE IF EXISTS %1$s.streams; CREATE TABLE %1$s.streams AS
-                           SELECT * FROM fresh_default.streams WHERE watershed_group_code = '%2$s'", scratch, w))
+  dbExecute(conn, sprintf("DROP TABLE IF EXISTS %s.streams", scratch))
+  dbExecute(conn, sprintf("CREATE TABLE %s.streams AS SELECT * FROM fresh_default.streams
+                           WHERE watershed_group_code = '%s'", scratch, w))
   dbExecute(conn, sprintf("CREATE INDEX ON %s.streams (id_segment)", scratch))
   dbExecute(conn, sprintf("CREATE INDEX ON %s.streams USING gist (geom)", scratch))
   dbExecute(conn, sprintf("CREATE INDEX ON %s.streams USING gist (wscode_ltree)", scratch))
@@ -211,7 +212,8 @@ for (w in wsgs) {
   dbExecute(conn, sprintf("CREATE INDEX ON %s.streams (blue_line_key, downstream_route_measure)", scratch))
   for (k in names(rules)) {
     h <- paste0(scratch, ".habitat_", k)
-    dbExecute(conn, sprintf("DROP TABLE IF EXISTS %1$s; CREATE TABLE %1$s AS
+    dbExecute(conn, sprintf("DROP TABLE IF EXISTS %s", h))
+    dbExecute(conn, sprintf("CREATE TABLE %1$s AS
       SELECT s.id_segment, s.watershed_group_code, 'CH'::text AS species_code, s.accessible, s.spawning,
              s.accessible AND %2$s AS rearing,
              s.accessible AND coalesce(s.waterbody_key IN (SELECT waterbody_key FROM tmp_wb WHERE t = 'L'), FALSE) AS lake_rearing,

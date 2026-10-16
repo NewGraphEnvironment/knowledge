@@ -498,7 +498,7 @@ say("Distance curve: %d visits fail the recommended size floor; %d of them have 
 d3 <- modelled(sd_ |> filter(is.finite(dist)) |> mutate(log_dist = log(dist + 10)), "U")
 m3 <- gam_fit(d3, "s(log_dist, k = 6)")
 thr_d <- if (is.na(rec$exc_d)) 500 else rec$exc_d
-curves$dist <- curve_of(m3, d3, "log_dist", seq(log(10), log(50010), length.out = 120),
+curves$dist <- curve_of(m3, d3, "log_dist", seq(log(20), log(50010), length.out = 120),
                         sprintf("dist_to_Q%g_m", qd), log(thr_d + 10)) |>
   mutate(x = exp(x) - 10, threshold = exp(threshold) - 10, x_steepest = exp(x_steepest) - 10)
 curves <- bind_rows(curves) |> mutate(rule = rec$rule)
@@ -519,8 +519,8 @@ panel <- function(k) {
   if (cd$x_log[1]) p + scale_x_log10() else p
 }
 fig <- patchwork::wrap_plots(lapply(unique(curves$curve), panel), ncol = 2) +
-  patchwork::plot_annotation(title = sprintf("CH detection, cloglog GAM (95 %%), on %d stream-branch FDIS visits; dashed: %s",
-                                             nrow(v), rec$rule))
+  patchwork::plot_annotation(title = sprintf("CH detection (cloglog GAM, 95 %%), %d stream-branch FDIS visits", nrow(v)),
+                              subtitle = sprintf("dashed: the recommended rule's thresholds (%s)", rec$rule))
 ggsave(path_fig, fig, width = 8, height = 6, dpi = 150, bg = "white")
 
 # ---- write ----------------------------------------------------------------------------
