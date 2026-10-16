@@ -94,6 +94,13 @@ def github():
             for k, rx in RX.items():
                 for text, where in ((title, "title"), (body, "body")):
                     m = rx.search(text)
+                    # The R&D tracking cross-reference in PR bodies is the one private pointer
+                    # a public repo carries (feature-workflow.md); /gh-pr-push writes it.
+                    if m and "/pull/" in it["html_url"] and m.group(0) == "NewGraphEnvironment/sred":
+                        m = rx.search(text.replace("NewGraphEnvironment/sred", ""))
+                    # issue 20 writes a formula with a term m1 (mean precipitation), not a host
+                    if m and it["html_url"].endswith("/issues/20") and m.group(0) == "m1":
+                        m = None
                     if m:
                         hits.append((k, f"{it['html_url']} ({where})", m.group(0)))
     return hits

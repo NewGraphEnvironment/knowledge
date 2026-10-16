@@ -100,7 +100,42 @@ After Phase 2, only README.md (Phase 3) and CLAUDE.md (Phase 5) hit.
   in `data/<wsg>/fiss_xls_reports.csv` keep the old values. Nothing reads the column but `0220`'s informational check.
 - `0260` defaulted `TEMPLATE_DIR` to a local checkout path of the private template; it is now required.
 
+## GitHub text (Phase 5, 2026-10-16)
+
+`public_sweep.py github` before editing: 14 issue bodies, 4 PR bodies and 4 comments carried private-repo links,
+machine names, a home path or a project-named repo (the issue's count was 11 / 4 / 1; two of the comments on #56 were
+posted during this work, by the bucket-policy session). PR-body `sred` cross-references are the R&D tracking exception
+(feature-workflow.md) and are exempt; issue #20's `m1` is a formula term. Each was rewritten in plain words, and #4's
+title ("from the M1") renamed. After the edits the GitHub sweep returns no hits.
+
+Earlier revisions stay visible in each item's edit history until deleted in the web UI (the API cannot). Items edited:
+
+- https://github.com/NewGraphEnvironment/knowledge/issues/3
+- https://github.com/NewGraphEnvironment/knowledge/issues/4
+- https://github.com/NewGraphEnvironment/knowledge/issues/4#issuecomment-5527643637
+- https://github.com/NewGraphEnvironment/knowledge/issues/4#issuecomment-5546870197
+- https://github.com/NewGraphEnvironment/knowledge/issues/5
+- https://github.com/NewGraphEnvironment/knowledge/issues/16
+- https://github.com/NewGraphEnvironment/knowledge/issues/17
+- https://github.com/NewGraphEnvironment/knowledge/issues/18
+- https://github.com/NewGraphEnvironment/knowledge/issues/25
+- https://github.com/NewGraphEnvironment/knowledge/pull/26
+- https://github.com/NewGraphEnvironment/knowledge/issues/33
+- https://github.com/NewGraphEnvironment/knowledge/pull/37
+- https://github.com/NewGraphEnvironment/knowledge/issues/38
+- https://github.com/NewGraphEnvironment/knowledge/pull/39
+- https://github.com/NewGraphEnvironment/knowledge/issues/47
+- https://github.com/NewGraphEnvironment/knowledge/pull/49
+- https://github.com/NewGraphEnvironment/knowledge/issues/51
+- https://github.com/NewGraphEnvironment/knowledge/issues/56
+- https://github.com/NewGraphEnvironment/knowledge/issues/56#issuecomment-6224964138
+- https://github.com/NewGraphEnvironment/knowledge/issues/56#issuecomment-6225367874
+- https://github.com/NewGraphEnvironment/knowledge/issues/57
+
 ## Errors Encountered
 
 | Error | Resolution |
 |-------|------------|
+| `0299` upload exit 127 on the README | `system2()` runs a shell, so `text/markdown; charset=utf-8` split at `;`; arguments are now `shQuote()`d |
+| `values_differ()` passed a zero-padded `"007"` id read as 7 | numeric comparison now fails any text matching `^[-+]?0[0-9]` |
+| `ch_rule_visits.hydro_zone` read as integers (`"08"` → 8) | zero-padded columns are kept as text before writing Parquet |

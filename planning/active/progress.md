@@ -25,3 +25,6 @@
 - Published `s3://fresh-bc/knowledge/fdis/v1/` (5 Parquet + manifest at 2b14507) and `fdis/README.md`; removed the
   earlier unversioned upload. `PULL=TRUE` into a scratch checkout restores all five CSVs equal as `readr` reads them.
 - Phase 5: CLAUDE.md top half rewritten; tree sweep clean.
+- Phase 5: `/claude-md-init --public-clean` from soul origin/main@7360fe9 (5 internal headings checked, none present;
+  992d65f). GitHub text: 14 issues, 4 PRs, 4 comments edited and #4 retitled; sweep of tree, GitHub text and branch
+  commits returns no hits. Revision-deletion list in findings.md.

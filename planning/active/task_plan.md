@@ -75,10 +75,10 @@ being public, provided it ships with a note of when and from where it was receiv
 ## Phase 5: CLAUDE.md, visibility, GitHub text
 - [x] Rewrite CLAUDE.md's repo-specific top half for a public reader (Database access → `PG*`; Zotero → env vars, no
       1Password/cyclops; no host names; layout at root; "One discipline" restated without "private repo")
-- [ ] `.claude/visibility` → `public`; `/claude-md-init --public-clean`; grep that internal-only conventions are gone
-- [ ] Edit the issue bodies, PR bodies and the comment the sweep lists (11 / 4 / 1 per the issue) via `gh`;
+- [x] `.claude/visibility` → `public`; `/claude-md-init --public-clean`; grep that internal-only conventions are gone
+- [x] Edit the issue bodies, PR bodies and the comment the sweep lists (11 / 4 / 1 per the issue) via `gh`;
       list each URL whose earlier revisions you must delete in the web UI
-- [ ] Final sweep (tree + GitHub text) returns nothing outside the exemptions; output saved to findings.md
+- [x] Final sweep (tree + GitHub text) returns nothing outside the exemptions; output saved to findings.md
 
 ## Validation
 - [ ] Tests pass; `devtools::check()` clean
