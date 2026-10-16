@@ -20,9 +20,10 @@
 #     carrying a tributary's own small flow. No scored visit is in a river polygon, which
 #     run_grid() asserts, so the scores do not change.) A NULL width fails
 #     (fwapg models no order-1 stream, so `default` never rears CH on an unmeasured order-1
-#     stream). The exception holds where a segment of flow >= Q, of any kind (a lake segment
-#     counts, as a rule in link would), lies within D m downstream on the same flow source
-#     (0296's walks). A walk that reaches the sea first fails it.
+#     stream). The exception holds where a primary-flow segment of flow >= Q (side channels and
+#     other secondary-flow edges are passed over; a lake segment counts, as a rule in link would)
+#     lies within D m downstream on the same flow source (0296's walks). A walk that reaches the
+#     sea first fails it.
 #   - POPULATION: 0295's MAD analysis (0294's visits on 0291's edges, fished area 10-10,000 m2,
 #     duplicates (#35) out), restricted to where the rule can change anything and link would
 #     apply it:

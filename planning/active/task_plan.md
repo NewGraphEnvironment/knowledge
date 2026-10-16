@@ -73,35 +73,37 @@ seeds; nested selection; component profiles; decision rule if `default` is in th
 - [x] Write `data/ch_rule_tune.csv` (aggregates only) and `scripts/logs/habitat/<date>_ch_rule_tune.txt`
 
 ## Phase 5: Side by side (0298)
-- [ ] Walk the accessible stream-edge CH segments that fail the tuned size floor (profile, `pick`), in covered
+- [x] Walk the accessible stream-edge CH segments that fail the tuned size floor (profile, `pick`), in covered
       groups
-- [ ] In a scratch schema of local fwapg (never `fresh_default`), classify CH rearing on copies of the covered
+- [x] In a scratch schema of local fwapg (never `fresh_default`), classify CH rearing on copies of the covered
       groups' `fresh_default` segments twice, with fresh's generated predicate under `default` and under the tuned
       rule (exception OR'd onto the stream branch). Run `fresh::frs_cluster()` with link's CH cluster settings on
       each, with spawning and access as stored. Report regenerated `default` against the stored flags per group.
-- [ ] Per group: rearing km under each rule, segments and km gained and lost, with lake and wetland rearing
+- [x] Per group: rearing km under each rule, segments and km gained and lost, with lake and wetland rearing
       reported beside. No link change.
-- [ ] Maps of three groups (one small-stream-heavy, one interior, one coastal, chosen by a stated criterion before
+- [x] Maps of three groups (one small-stream-heavy, one interior, one coastal, chosen by a stated criterion before
       drawing) → `research/fig/chinook_rearing_tuned_<wsg>.png`
-- [ ] Outside check (review G7): bcfishobs non-FDIS CH, match A/B, one per blue line x metre, spawn-only out,
+- [x] Outside check (review G7): bcfishobs non-FDIS CH, match A/B, one per blue line x metre, spawn-only out,
       overlay reaches out; lift = capture share / km share with a location bootstrap; FDIS detection on each
       rule's segments (G9)
-- [ ] Write `data/ch_rule_compare.csv` and `data/ch_rule_checks.csv`
+- [x] Write `data/ch_rule_compare.csv` and `data/ch_rule_checks.csv`
+- [x] At the user's question, `default`'s MAD bounds (bcfishpass's 0.28-100) added as a third rule
+- [x] Gained and lost km by reason and stream order (`data/ch_rule_change.csv`), to replace unmeasured prose
 
 ## Phase 6: Write-up and handoff
-- [ ] `research/chinook_rearing_tuned.md`: provenance line, every figure naming its population (the #52 rule),
+- [x] `research/chinook_rearing_tuned.md`: provenance line, every figure naming its population (the #52 rule),
       `default` beside tuned, flow-model section by zone, the limits stated up front, structured to lift into a
       link vignette, and a bcfishpass one-line pointer
-- [ ] `research/README.md` row; `scripts/README.md` run order; CLAUDE.md `data/` root list (`ch_rule_tune.csv`,
+- [x] `research/README.md` row; `scripts/README.md` run order; CLAUDE.md `data/` root list (`ch_rule_tune.csv`,
       `ch_rule_compare.csv`); a forward pointer in `chinook_stream_size.md`
-- [ ] Draft the link issue (a `default_tuned` CH rearing rule plus the vignette) in `planning/active/`, not filed
-- [ ] Push `ch_rule_visits.csv` to `s3://fresh-bc/fdis/derived/`
+- [x] Draft the link issue (a `default_tuned` CH rearing rule plus the vignette) in `planning/active/`, not filed
+- [x] Push `ch_rule_visits.csv` to `s3://fresh-bc/fdis/derived/`
 
 ## Validation
 
-- [ ] Positive controls pass (walk reproduces 0294; SQL predicate reproduces `default`)
-- [ ] Ledger partitions; bootstrap identical across worker counts
-- [ ] Positive controls in the run logs (walk = 0294; SQL default = fresh's predicate; width model)
+- [x] Positive controls pass (walk reproduces 0294 row by row; SQL `default` = fresh's predicate on 786,317 segments)
+- [x] Ledger partitions; 0297 re-run byte-identical on its rule outputs (twice)
+- [x] Positive controls in the run logs (walk = 0294; SQL default = fresh's predicate; width model 96.2 %)
 - [ ] `/code-check` clean (each commit, or once over the branch with `/code-check branch`)
 - [ ] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion

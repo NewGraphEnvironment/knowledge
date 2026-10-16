@@ -34,8 +34,9 @@
 #     on the segment starting within 1 m, else the one containing the point. Criterion fixed
 #     before the run: lift = (share of locations on rearing) / (rearing km / accessible km), with a
 #     200-resample bootstrap of locations for each rule and for tuned minus each other rule. Both
-#     shares are on stream edges (revised after the first run, round-1 review: the location share
-#     had counted river, lake and wetland locations against a stream-only km share).
+#     shares are on accessible stream edges (revised after the first run: round 1 found the location
+#     share counting river, lake and wetland locations against a stream-only km share, and round 2
+#     found it counting inaccessible locations against an accessible km share).
 #   - MAPS, groups chosen by criteria fixed before drawing: small-stream-heavy, the group with
 #     the largest share of accessible stream km on order 1-2; interior, the group with the largest
 #     share of its FDIS visits in hydrologic zones 15, 17, 23 or 24 (where wet's balance is
@@ -368,12 +369,14 @@ loc <- loc |> mutate(loc_id = row_number()) |> inner_join(pl, by = "loc_id") |> 
   inner_join(seg |> select(id_segment, watershed_group_code, edge_type, accessible,
                            all_of(paste0("rearing_", rk))),
              by = c("id_segment", "watershed_group_code"))
-# lift compares a share of locations with a share of km, so both are taken on stream edges: the
-# km share is stream-edge rearing km over accessible stream-edge km
-loc_s <- loc |> filter(edge_type %in% edge_stream)
+# lift compares a share of locations with a share of km, so both are taken on one population:
+# accessible stream edges. The km share is stream-edge rearing km over accessible stream-edge km
+# (rearing implies accessible), and the locations are those on accessible stream-edge segments.
+loc_s <- loc |> filter(edge_type %in% edge_stream, accessible)
 say("")
-say("Outside check: %d non-FDIS CH records in these groups; %d match A/B (years %d-%d, %d undated); %d locations not spawn-only, placed, outside the overlay; %d of them on stream edges (lift is on these).",
-    n0, nrow(obs), min(yr, na.rm = TRUE), max(yr, na.rm = TRUE), sum(is.na(yr)), nrow(loc), nrow(loc_s))
+say("Outside check: %d non-FDIS CH records in these groups; %d match A/B (years %d-%d, %d undated); %d locations not spawn-only, placed, outside the overlay; %d on stream edges, %d of them accessible (lift is on these).",
+    n0, nrow(obs), min(yr, na.rm = TRUE), max(yr, na.rm = TRUE), sum(is.na(yr)), nrow(loc),
+    sum(loc$edge_type %in% edge_stream), nrow(loc_s))
 acc_km <- km(seg$accessible & seg$edge_type %in% edge_stream, seg$length_metre)
 ks <- function(k) km(seg[[paste0("rearing_", k)]] & seg$edge_type %in% edge_stream, seg$length_metre) / acc_km
 lift <- function(l, k, idx = seq_len(nrow(l))) mean(l[[paste0("rearing_", k)]][idx]) / ks(k)

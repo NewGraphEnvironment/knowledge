@@ -14,3 +14,7 @@
 - 0297 run (23 min, 6 workers); re-run byte-identical on the rule outputs; figure redrawn
 - 0298 run; then, at the user's question, default's MAD bounds added as a third rule; then a gained/lost breakdown
 - research/chinook_rearing_tuned.md drafted; link issue drafted (planning/active/link-issue-draft.md, link is public)
+- Code-check round 1 (review-round1.md): 17 findings, all real; fixed in e273731 (code) and aff2a28 (outputs,
+  prose). River test kept for every rule (636 km of river-polygon lines had been dropped); lift on stream edges.
+  0296/0297/0298 re-run: 0296 and 0297 outputs byte-identical, 0298 changed (tuned -18.3 %).
+- Code-check round 2 spawned 04:18 UTC
