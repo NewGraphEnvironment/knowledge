@@ -1,0 +1,89 @@
+# Findings — Tuned Chinook rearing rule: size, gradient and distance to a large river, set beside link's default (#54)
+
+## Issue context
+
+**If done:** a tuned Chinook rearing rule, built on link's `default` bundle and changing only Chinook's rearing size and gradient tests plus a near-a-large-river exception, each value given as the range the data cannot tell apart, scored on held-out watershed groups and against bcfishobs records FDIS does not hold. A research page sets it beside `default` on the same segments (km, maps, detection rates), says where the flow model moves the answer by hydrologic zone, and is written to become a link vignette once the kinks are out. **If never:** Chinook rearing stays width ≥ 1.5 m and gradient ≤ 5.49 %, values copied from bcfishpass and never checked against where Chinook are caught, and #52's 0.5 / 10 m³/s / 500 m stays a hand-picked illustration.
+
+## Problem
+
+#52 (PR #53) found Chinook rarely caught in streams under about 0.5 m³/s unless a ≥ 10 m³/s river is within 500 m downstream (14.5 % of visits against 0.8 %, rate ratio 26.7). Those three numbers were picked by hand. What link runs today:
+
+- **bcfishpass and our `default` carry identical Chinook thresholds**: spawning gradient ≤ 4.49 %, width ≥ 4 m, MAD ≥ 0.46 m³/s; rearing gradient ≤ 5.49 %, width ≥ 1.5 m, MAD 0.28–100 m³/s.
+- **The MAD bounds never act.** All 188 groups size streams by channel width (`parameters_habitat_method.csv`, `cw`), in both bundles.
+- **`default` and bcfishpass differ for Chinook rearing by structure, not threshold**: +24 % (DEAD) to +184 % (BABL) rearing km in link's four-group comparison, plus lake and wetland hectares, from intermittent streams, wetlands, lakes and river polygons (link `research/default_vs_bcfishpass.md`). Spawning km are identical.
+
+So the comparison is tuned against `default`, two side by side, with bcfishpass a one-line pointer.
+
+The two wet flow sources agree within 2× on 81–88 % of small-stream visits, against the 1.8× between 0.28 and 0.5, so where a size step sits can depend on the flow model. wet's balance is adjusted by the Extended BC Hydrologic Zones and is weakest on small basins, headwaters and the dry interior (zones 15, 17, 23, 24; `research/modelled_discharge.md`).
+
+## Plan
+
+Built on 0294/0295 and `ch_mad_visits.csv`; new `scripts/0296-ch-rule-tune.R` (and a build step if the walks need one).
+
+1. **Walks at several river sizes.** `ch_dist_large.sql` takes the river size as an argument: run *Q* ∈ {1, 3, 5, 10, 20, 30, 50} m³/s on every kept visit under 1 m³/s (15,486), keeping whether each target is a lake or a regulated river.
+2. **Attach what link classifies on**: segment gradient and link's modelled channel width from `fresh_default.streams` where the group is covered (56 groups locally), so the tuned rule is tested on the same inputs `default` uses.
+3. **Grid of rules**, rearing only: size floor by MAD *m* ∈ {0.1, 0.15, 0.2, 0.28, 0.35, 0.5, 0.75, 1} m³/s, or by width *w* ∈ {1, 1.5, 2, 3, 4} m; gradient maximum ∈ {3, 4, 5.49, 7, 9} %; exception *Q* as above and *D* ∈ {100, 250, 500, 1000, 2000, 5000} m, plus no exception. Each rule enters 0295's cloglog model (area, data set, era, WSG) as one in/out term, scored by held-out deviance with watershed groups held out together in 5 folds. **The optimum is the region within one standard error of the best; the simplest rule in it is reported**, with its stability over 200 bootstrap resamples by stream.
+4. **Curves.** A GAM (`mgcv` 1.9.3) of detection on s(log MAD) or s(log width), s(gradient), and on small streams s(log distance) to the tuned *Q*, WSG as a random effect: a check that each threshold sits where the curve bends, not partway up a slope.
+5. **Outside check.** Score `default` and the tuned rule against bcfishobs CH records not in FDIS (other methods and years), as share of records falling on rearing segments against rearing km.
+6. **Where the flow model matters.** Re-run 3–4 on routed flow alone, the balance alone, and fwapg's old MAD; report how far each optimum moves, and at the chosen rule count visits whose in/out flips between sources by hydrologic zone and MAD class.
+7. **Sensitivities**: lake targets out, regulated targets and visits out (Nechako 2010), ambiguous placements out, CHES and NECR out, and C (CH given any fish) in place of U.
+8. **Side by side.** Apply the tuned rule to `fresh_default`'s Chinook segments in SQL for the covered groups: rearing km per group under each, segments gained and lost, and maps of two or three groups (one small-stream-heavy, one interior, one coastal). No link change.
+9. **Write-up.** `research/chinook_rearing_tuned.md` (provenance line, figures), aggregates in `data/ch_rule_tune.csv`, a `research/README.md` row and run order. Structured to lift into a link vignette; the link issue for a `default_tuned` Chinook rule and the vignette is drafted at the end, not filed.
+
+## Limits stated up front
+
+- **Width is circular in part.** link's modelled channel widths were fitted on the same FDIS field measurements, so a width rule scores optimistically on these sites, and holding out watershed groups does not remove it. Said beside every width result; the outside check (5) is the guard.
+- **Distance floor.** An optimum *D* under about 200 m cannot be told from mainstem catches snapped onto a tributary mouth; reported, not recommended.
+- **Rearing only.** Electrofishing catches juveniles; spawning's 0.46 m³/s and 4 m are out of scope.
+- **The exception is a new rule shape** for link (a downstream walk to a size), not a threshold edit; how link would carry it is the link issue's question.
+
+Depends on PR #53. Relates to #52, #42.
+
+## Plan-mode exploration (2026-10-15)
+
+- **`fresh_default` covers only 27 of the CH-range groups the visits sit in**: 7,917 of 19,077 analysed visits and
+  760 of 978 CH. Of those 760, 432 are the 2010 Nechako survey, and 22 of the groups have both outcomes. Fitting the
+  grid only there would leave about 330 CH outside NECR for 2,795 rules.
+- **link's channel width is province-wide.** `lnk_pipeline_prepare()` joins
+  `whse_basemapping.fwa_stream_networks_channel_width` by `linear_feature_id`, so the width default uses can be
+  attached to every visit. That table's `FIELD_MEASURMENT` rows (75,736) are the FDIS sites themselves (CLAUDE.md).
+  At a visit, then, the width can be **that visit's own measured width**: a sharper form of the issue's
+  circularity limit.
+- **Gradient differs.** link's segment gradient (over its own break-at-everything segmentation) exists only in
+  `fresh_default`. Elsewhere only the FWA segment gradient (`fwa_gradient` in `ch_mad_visits.csv`) is available.
+- **Decision (mine, stated here for the gate):** the grid runs on all 0295 MAD-analysis visits (67 groups with
+  both outcomes). Width comes from link's province table, and gradient from the FWA segment. The grid is repeated on
+  the 27 covered groups with link's segment gradient, and the write-up reports how far the optimum moves.
+- `ch_dist_large.sql` already takes `qmin`, and 0294 ran it only below 0.5 m³/s. Walking every kept visit at every Q
+  costs about 0.4 min per 13k starts. One walk that returns the first hit for an **array** of Q values also serves
+  the side-by-side: about 172k accessible stream-edge CH segments, roughly 5 min per flow source.
+- Hydrologic zones are not in fwapg. wet reads them from the BC catalogue zip (`bc_hydrologic_zones.zip`,
+  `HYDZN_NO`). We do the same, into a tempfile, with a point-in-polygon on each visit's UTM point.
+- `mgcv` 1.9.3 is installed. `lme4` and `glmmTMB` are not, so WSG random effects use `s(wsg, bs = "re")` in mgcv.
+- link's CH `rear` rule (`parameters_habitat_rules.yaml`) has branches for stream edges (1000/1100/2000/2300), river
+  polygons (R, any width), wetlands and lakes. Only the stream branch's size test, and the gradient test wherever
+  `default` applies one, change. The lake and wetland branches depend on spawning, which does not change.
+- A visit's CH access is circular in the same way as `access_bt = 2`: link's `barriers_ch_access` drops barriers
+  that observations override, and those observations are mostly FDIS. **The rule term is the size, gradient and
+  exception test alone. Access is never a covariate.** In the side-by-side, access is `default`'s under both rules.
+
+## Scripts and names (locked before baseline)
+
+- `scripts/sql/ch_dist_profile.sql`: `pg_temp.ch_dist_profile(blk, m, qmins float8[], src text)`. It runs
+  `ch_dist_large`'s walk, returns one row per Q for the first hit, and `src` is `pick | pcic_routed | wet_balance`.
+  `ch_dist_large.sql` stays untouched for 0294.
+- `scripts/0296-ch-rule-build.R`: visits with walks, width, link segment, zone →
+  `data/fdis/derived/ch_rule_visits.csv` (private, to S3).
+- `scripts/0297-ch-rule-tune.R`: grid, CV, bootstrap, GAM, flow sources, sensitivities, outside check →
+  `data/ch_rule_tune.csv` + log.
+- `scripts/0298-ch-rule-compare.R`: the tuned rule against `default` on `fresh_default` segments →
+  `data/ch_rule_compare.csv`, figures under `research/fig/`.
+- `research/chinook_rearing_tuned.md`.
+
+The issue named `0296-ch-rule-tune.R`. The split follows 0294/0295's build/use pair and keeps the side-by-side's
+database writes-out-of-R separate from the model.
+
+## Errors Encountered
+
+| Error | Resolution |
+|-------|------------|
