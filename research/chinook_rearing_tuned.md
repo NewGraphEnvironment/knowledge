@@ -19,7 +19,8 @@ Every figure names its population. Three recur:
   166 CH.
 - **All stream-branch visits**, barrier status unknown or blocked kept: 15,178 visits (264 CH); 9,742 visits
   (263 CH) in 46 WSGs modelled.
-- **Side-by-side groups.** The 31 WSGs where link's `fresh_default` classified CH.
+- **Side-by-side groups.** The 31 WSGs where link's `fresh_default` classified CH: 53,653 km of accessible stream
+  edges.
 
 ## The question
 
@@ -37,7 +38,29 @@ pass that keeps only rearing connected to spawning.
 
 ## Short answer
 
-(filled in after the side by side)
+1. **The visits support a different rule from `default`, in all three components.** Recommended:
+   **MAD ≥ 0.75 m³/s, gradient ≤ 7 %, or a ≥ 3 m³/s river within 1,000 m downstream.** Ranges the data cannot tell
+   apart (within one SE of the best):
+   - MAD floor 0.28–1 m³/s, with 0.5–0.75 in 86 % of bootstrap resamples;
+   - gradient 7–9 % (5.49–9 % across resamples and on link's segments);
+   - river size Q 1–10 m³/s, mostly 3;
+   - distance D 1–2 km.
+
+   `default` (width ≥ 1.5 m, ≤ 5.49 %) is outside the region in every analysis: 188 deviance above the best (SE 79)
+   on held-out groups. So is `default`'s MAD form (0.28 m³/s, 5.49 %, no exception), at 131 (SE 59). No width rule
+   and no rule without the exception reaches the region.
+2. **The tuned rule is narrower than `default`, not wider.** On the tuning visits it admits 731 visits against
+   1,788 and takes in 128 CH against 130 (raw rates 17.5 % against 7.3 %). On link's segments in the 31 groups,
+   CH rearing falls from 31,948 to 25,494 km (−20 %). 9,399 km are lost, mostly small tributaries, and 2,945 km
+   are gained, mostly small streams within a kilometre of a river.
+3. **Neither size nor distance has a threshold in the data.** Detection rises log-linearly with MAD and steadily
+   with width, and falls steadily with distance. Each value is the cut that best separates held-out detection, not a
+   bend in a curve.
+4. **The flow model moves the floor between 0.5 and 0.75 m³/s** (routed alone 0.5, balance alone 0.75). It does not
+   move the exception or the conclusion about `default`.
+5. **`default`'s MAD bounds, if a group were moved to `mad`, would drop large rivers.** Under fresh's `mad` model the
+   river-polygon branch takes the 0.28–100 m³/s range. On link's segments, 441 of the 699 FDIS CH detections on
+   accessible segments are on segments over 100 m³/s, and they fall outside rearing.
 
 ## What `default` does
 
@@ -148,6 +171,11 @@ The tuned rule is **narrower** on the stream branch than `default`, not wider. I
 `default`'s 130, on 41 % as many visits. The exception does not mainly add streams: it is what lets a stricter size
 floor keep the small streams near a river where CH are caught.
 
+`default`'s MAD bounds (0.28–100 m³/s, as in bcfishpass) at its gradient and with no exception score 131.0 above the
+best (SE 59.5), outside the region. On this population the 100 m³/s cap cuts nothing, because no tuning visit is
+above it, so the grid rule MAD ≥ 0.28, 5.49 %, none is that rule exactly. It admits 737 visits, with 98 CH (13.3 %;
+2.5 % outside).
+
 ### Component profiles
 
 For each value, the best score over every other component, as deviance above the best rule. Each rule carries its own
@@ -192,9 +220,11 @@ On the tuning population:
   sits low on the curve: 6 % of its rise over the 5–95 % range of widths.
 - **Gradient.** With MAD in the model, gradient adds little (p = 0.46). The grid's preference for 7–9 % over 5.49 %
   is a held-out improvement of about 50 deviance (SE 26). The curve itself does not show a step there.
-- **Distance.** Among visits failing the 0.75 m³/s floor (3,523; 72 with no ≥ 3 m³/s river before the sea, left
-  out), detection is flat out to about a kilometre and falls steeply beyond a few kilometres. 1,000 m sits at 81 %
-  of the curve's range, on the shoulder before the fall.
+- **Distance.** The visits failing the 0.75 m³/s floor number 3,523; 72 of them have no ≥ 3 m³/s river before the
+  sea and are left out, and the model uses 2,463 in the WSGs with both outcomes. Among them, detection falls
+  steadily with distance from 10 m (edf 2.3) and more steeply beyond about 1–2 km. There is no plateau.
+  1,000 m sits 81 % of the way down from the curve's 5th-percentile end. As with size, D is a cut on a slope; the
+  grid puts it at 1–2 km.
 
 ### link's own gradient
 
@@ -240,7 +270,66 @@ tuning population has no visits in zone 23, and 18 in zone 24 with no flips (`da
 
 ## Side by side on link's segments
 
-(filled in after 0298)
+Three rules on the 31 groups where `fresh_default` classified CH: `default` as it runs (width), `default`'s MAD
+bounds as fresh's `mad` model builds them (`default_mad`, on wet's `pick`), and the recommended rule. Each goes
+through the same steps: the predicate behind stored access, link's CH user-habitat overlay (1,949 rows), and fresh's
+connectivity pass (`.frs_run_connectivity`, link `default` params at commit 62fae0bb), on scratch copies.
+
+Two checks:
+- **The SQL `default` predicate equals fresh's own** on all 786,317 segments.
+- **Regenerated `default` against the stored flags.** They differ on 4,584 km: 31,948 km regenerated against 27,953
+  stored. FRAN (+955 km) and HARR (+547 km) differ most. The stored flags come from link runs of unknown vintage (no
+  `fresh_default.log` rows for these groups), so the comparison below is between rules regenerated alike, never
+  against the stored flags.
+
+| | `default` | `default_mad` | tuned |
+|---|---:|---:|---:|
+| CH rearing km (31 groups) | 31,948 | 21,548 | 25,494 |
+| change from `default` | | −32.6 % | −20.2 % |
+
+Across groups the tuned rule's change runs from −43 % (NARC) to +11 % (UFRA), median −17.5 %; 5 of 31 groups gain.
+Against `default`, the tuned rule loses 9,399 km on 32,906 segments and gains 2,945 km on 10,994. Lake and wetland
+rearing (4,208 and 7,449 km) are the same under all three rules in every group.
+
+**FDIS detection on each rule's segments.** The 4,944 analysed visits on accessible link segments (699 CH), raw:
+
+| rule | visits on rearing | CH rate on rearing | CH rate on accessible non-rearing |
+|---|---:|---:|---:|
+| `default` | 2,582 | 24.7 % | 2.6 % |
+| `default_mad` | 1,324 | 14.0 % | 14.2 % |
+| tuned | 1,834 | 34.6 % | 2.1 % |
+
+`default_mad` separates nothing here because of its 100 m³/s cap: 441 of the 699 CH are on segments over 100 m³/s,
+196 of them in NECR. Below the cap, its out-rate would be about 2.3 %, on 72 CH among 3,099 visits.
+
+**Outside check: bcfishobs records FDIS does not hold.** In these groups there are 1,344 non-FDIS CH records and
+1,215 of match type A/B. They make 812 locations once deduplicated per blue line and metre, with spawn-only
+locations and overlay reaches out. The share of locations on rearing is set against the share of accessible stream
+km that rears (lift, fixed before the run; 200-resample location bootstrap):
+
+| rule | locations on rearing | capture | km share | lift (95 %) |
+|---|---:|---:|---:|---|
+| `default` | 724 | 89.2 % | 30.0 % | 2.97 (2.90–3.03) |
+| `default_mad` | 607 | 74.8 % | 15.7 % | 4.75 (4.57–4.93) |
+| tuned | 674 | 83.0 % | 19.1 % | 4.36 (4.23–4.48) |
+
+The tuned rule's lift exceeds `default`'s by 1.39 (1.28–1.52). It falls below `default_mad`'s by 0.39
+(0.22–0.56). A presence-only lift always favours fewer km. The tuned rule keeps 67 more locations than `default_mad`
+for 3.3 points more km share, and loses 50 of `default`'s locations for 10.9 points less.
+
+Most of these records are dated 1926–2007. Their life stage is mostly unrecorded, and only spawn-only locations
+could be removed.
+
+**Maps.** The groups were chosen by criteria fixed before drawing: SALR has the largest share of accessible stream
+km on order 1–2 (0.85); TWAC has all of its FDIS visits in hydrologic zones 15, 17, 23 or 24; LFRA has the largest
+share of visits whose 10 m³/s walk reaches the sea (0.21). Orange is `default` only, green tuned only, blue both.
+
+![SALR](fig/chinook_rearing_tuned_salr.png)
+![TWAC](fig/chinook_rearing_tuned_twac.png)
+![LFRA](fig/chinook_rearing_tuned_lfra.png)
+
+In each, the tuned rule drops headwater tributaries that pass `default`'s 1.5 m width but carry under 0.75 m³/s, and
+adds short tributary reaches along the mainstem: the exception.
 
 ## Limits
 
@@ -260,7 +349,24 @@ tuning population has no visits in zone 23, and 18 in zone 24 with no flips (`da
   recommendation moves between 5.49 and 9 %. In link the threshold also applies to river polygons; the scoring did
   not see them, and 0 of 156 river-polygon visits above 5.49 % caught CH.
 - **The cluster pass is not in the scoring.** It is in the side by side.
+- **The side by side reads wet's `pick` for every rule.** link main still sizes a `mad` group with fwapg's old MAD
+  (`fwa_stream_networks_discharge`, bcfishpass's) until link#331. That table covers only part of the province, and on
+  it the recommendation was MAD ≥ 0.5, 5.49 %, Q 50 @ 2,000 m.
+- **Outside-check records are presence only**, mostly undated as to life stage. Their lift ranks rules by
+  concentration, not by how much habitat they leave out.
 
 ## For a link vignette
 
-(filled in after the side by side)
+The parts lift as they are. The question is the paragraph under "The question". The rule tables are "What `default`
+does" and the recommended rule. The evidence is the curves figure and the region table. Then come the side by side
+and its maps, and the limits.
+
+Three things change in the move:
+- **Restate the populations in link's terms**, with no FDIS file paths.
+- **Rebuild the figures from link's own run of the rule.** The rule needs a new rule shape in link: a downstream walk
+  to a river of a given MAD, as a stream-branch alternative to the size test. This page applied it in SQL over
+  scratch copies.
+- **Carry the decision with the numbers.** `default` is outside the region on every reading, and the tuned rule is
+  20 % narrower, not wider.
+
+The link issue is drafted in this issue's planning archive (`link-issue-draft.md`), not filed.

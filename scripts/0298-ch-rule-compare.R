@@ -46,6 +46,8 @@
 # WRITES: schema ch_rule_scratch in local fwapg (scratch copies; never fresh_default)
 # OUTPUT: data/ch_rule_compare.csv   one row per group and a total: km and segments by rule
 #         data/ch_rule_checks.csv    FDIS detection and the outside check, by rule
+#         data/ch_rule_change.csv    km and segments gained and lost (tuned against default), by
+#                                    reason and stream order
 #         research/fig/chinook_rearing_tuned_<wsg>.png
 #         scripts/logs/habitat/<date>_ch_rule_compare.txt
 # RUN:    Rscript scripts/0298-ch-rule-compare.R   (after 0297, from the repo root)
@@ -69,6 +71,7 @@ path_tune <- "data/ch_rule_tune.csv"
 path_sql <- "scripts/sql/ch_dist_profile.sql"
 path_out <- "data/ch_rule_compare.csv"
 path_checks <- "data/ch_rule_checks.csv"
+path_change <- "data/ch_rule_change.csv"
 path_log <- file.path("scripts/logs/habitat", paste0(format(Sys.Date(), "%Y%m%d"), "_ch_rule_compare.txt"))
 
 log_lines <- character()
@@ -244,6 +247,7 @@ say("Classify, overlay and connect: %d groups x %d rules, %.1f min.", length(wsg
     as.numeric(difftime(Sys.time(), t0, units = "mins")))
 seg <- dbGetQuery(conn, "SELECT id_segment, watershed_group_code, linear_feature_id, blue_line_key,
                                 downstream_route_measure, edge_type, stream_order, length_metre, accessible,
+                                gradient, channel_width, mad, exc_dist,
                                 rearing_stored, lake_rearing_stored, wetland_rearing_stored
                          FROM tmp_seg")
 fl <- bind_rows(flags) |>
@@ -282,6 +286,37 @@ tot <- per |> summarise(watershed_group_code = "ALL", across(where(is.numeric) &
          mad_change_pct = 100 * (default_mad_rear_km - default_rear_km) / default_rear_km)
 compare <- bind_rows(per, tot) |> mutate(default_rule = dflt$rule, tuned_rule = rec$rule)
 block("rearing km by group", compare |> mutate(across(where(is.numeric), ~ round(.x, 1))))
+
+# ---- why segments change between default and tuned ------------------------------------
+# reason from the predicate's parts where the predicates differ; where both predicates hold
+# (or both fail), the difference came from the overlay or the connectivity pass
+ex_on <- !is.na(rec$exc_q)
+chg <- seg |>
+  filter(rearing_default != rearing_tuned) |>
+  mutate(direction = if_else(rearing_tuned, "gained", "lost"),
+         stream = edge_type %in% edge_stream,
+         g_def = coalesce(gradient >= 0 & gradient <= dflt$grad_max, FALSE),
+         g_tun = coalesce(gradient >= 0 & gradient <= rec$grad_max, FALSE),
+         w_ok = coalesce(channel_width >= dflt$size_min & channel_width <= 9999, FALSE),
+         size_tun = if (rec$size_var == "mad") coalesce(mad >= rec$size_min, FALSE) else
+           coalesce(channel_width >= rec$size_min & channel_width <= 9999, FALSE),
+         ex_ok = ex_on & coalesce(exc_dist <= rec$exc_d, FALSE),
+         reason = case_when(
+           rearing_pre_connect_default == rearing_pre_connect_tuned ~ "connectivity or overlay",
+           direction == "gained" & stream & g_tun & !size_tun & ex_ok ~ "exception (size fails, river within D)",
+           direction == "gained" & stream & size_tun & g_tun & w_ok & !g_def ~ "gradient between the two maxima",
+           direction == "gained" & stream & size_tun & g_tun & !w_ok ~ "size: tuned passes, width fails or NULL",
+           direction == "lost" & stream & w_ok & g_def & !size_tun & !ex_ok ~ "size: width passes, tuned fails, no exception",
+           TRUE ~ "other (river-polygon branch or mixed)"),
+         order = case_when(stream_order <= 1 ~ "1", stream_order == 2 ~ "2", stream_order == 3 ~ "3", TRUE ~ "4+"))
+change <- chg |>
+  group_by(direction, reason, order) |>
+  summarise(n_segments = n(), km = sum(length_metre) / 1000, .groups = "drop") |>
+  mutate(default_rule = dflt$rule, tuned_rule = rec$rule)
+block("km gained and lost, tuned against default, by reason",
+      change |> group_by(direction, reason) |> summarise(n_segments = sum(n_segments), km = round(sum(km), 1), .groups = "drop"))
+block("km gained and lost, tuned against default, by stream order",
+      change |> group_by(direction, order) |> summarise(km = round(sum(km), 1), .groups = "drop"))
 
 # ---- FDIS detection on each rule's segments ------------------------------------------
 vis <- read_csv("data/fdis/derived/ch_rule_visits.csv", show_col_types = FALSE, guess_max = 1e5,
@@ -403,5 +438,6 @@ dbExecute(conn, sprintf("DROP SCHEMA %s CASCADE", scratch))
 dbDisconnect(conn)
 write_csv(compare |> mutate(across(where(is.numeric), ~ round(.x, 3))), path_out, na = "")
 write_csv(bind_rows(det, outside) |> mutate(across(where(is.numeric), ~ round(.x, 4))), path_checks, na = "")
+write_csv(change |> mutate(km = round(km, 3)), path_change, na = "")
 writeLines(log_lines, path_log)
 cat(log_lines, sep = "\n")
