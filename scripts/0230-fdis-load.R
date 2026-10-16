@@ -64,17 +64,19 @@ if (!file.exists(file.path(cache, "MANIFEST.md5"))) {
   message("Syncing s3://fresh-bc/fdis/ -> ", cache)
   if (identical(Sys.getenv("NO_SIGN"), "TRUE")) {
     # Without credentials the public prefix serves exact keys but cannot be listed, so a sync
-    # fails: fetch the manifest and README, then each key the manifest names.
-    get <- function(key) {
-      dst <- file.path(cache, key)
+    # fails: fetch the manifest aside, then the README and each key it names, and put the
+    # manifest in place last, because its presence is what marks the cache complete above.
+    get <- function(key, dst = file.path(cache, key)) {
       dir.create(dirname(dst), recursive = TRUE, showWarnings = FALSE)
       rc <- system2("aws", shQuote(c("s3", "cp", paste0("s3://fresh-bc/fdis/", key), dst,
                                      "--no-sign-request", "--only-show-errors")))
       if (rc != 0) stop("aws s3 cp of fdis/", key, " failed (exit ", rc, ")")
     }
-    get("MANIFEST.md5")
+    pending <- file.path(cache, "MANIFEST.md5.part")
+    get("MANIFEST.md5", pending)
     get("README.md")
-    for (key in sub("^\\./", "", substring(read_lines(file.path(cache, "MANIFEST.md5")), 34))) get(key)
+    for (key in sub("^\\./", "", substring(read_lines(pending), 34))) get(key)
+    if (!file.rename(pending, file.path(cache, "MANIFEST.md5"))) stop("could not move ", pending, " into place")
   } else {
     rc <- system2("aws", c("s3", "sync", "s3://fresh-bc/fdis/", cache, "--only-show-errors"))
     if (rc != 0) stop("aws s3 sync failed (exit ", rc, ")")

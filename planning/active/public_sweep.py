@@ -95,6 +95,15 @@ def github():
     ]
     for pr in gh([f"repos/{REPO}/pulls?state=all&per_page=100"]):
         sources.append((gh([f"repos/{REPO}/pulls/{pr['number']}/reviews?per_page=100"]), "body"))
+    # A retitle leaves a "renamed" entry on the page showing the old title, and it cannot be
+    # deleted; editing the title does not remove what the old one said.
+    renames = []
+    for it in sources[0][0]:
+        for ev in gh([f"repos/{REPO}/issues/{it['number']}/timeline?per_page=100"]):
+            if ev.get("event") == "renamed":
+                renames.append({"html_url": it["html_url"] + " (rename)",
+                                "body": ev["rename"]["from"] + "\n" + ev["rename"]["to"]})
+    sources.append((renames, "body"))
     for items, field in sources:
         for it in items:
             body = it.get(field) or ""
@@ -132,6 +141,16 @@ def commits():
     return hits
 
 
+def generated():
+    """CLAUDE.md below its marker: synced from soul, public in the repo though not on the site.
+    Reported, not failed: a fix belongs at the source, in soul, not here."""
+    text = open("CLAUDE.md", encoding="utf-8").read()
+    if CLAUDE_MARKER not in text:
+        return {}
+    text = text.split(CLAUDE_MARKER, 1)[1]
+    return {k: len(rx.findall(text)) for k, rx in RX.items() if rx.search(text)}
+
+
 def main():
     mode = sys.argv[1] if len(sys.argv) > 1 else "all"
     hits = []
@@ -141,6 +160,10 @@ def main():
         hits += github()
     if mode in ("commits", "all"):
         hits += commits()
+    if mode in ("tree", "all"):
+        g = generated()
+        print("generated CLAUDE.md conventions (not failed; fix in soul):",
+              ", ".join(f"{k} {v}" for k, v in sorted(g.items())) or "no hits")
     for k, where, text in sorted(hits):
         print(f"{k:16} {where}  {text}")
     counts = {}

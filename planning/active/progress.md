@@ -36,3 +36,8 @@
   grant omits (now fetches `MANIFEST.md5`, `README.md` and each listed key; the key-by-key fetch verifies 26/0);
   nothing stopped an overwrite of `v1` (manifest now records schemas; `PUBLISH` refuses a changed table set or
   schema); the sweep skipped non-UTF-8 files (now reads their printable runs; a planted gpkg string is caught).
+- Round 2 (`review-round2.md`): 3 findings, all reproduced. Inside round-1 fix 2: `0230`'s `NO_SIGN` fetch wrote
+  `MANIFEST.md5` first, so a partial fetch looked complete (now fetched aside and moved in last; a simulated mid-fetch
+  failure leaves only `.part` and the re-run verifies 26/0). The sweep missed retitle entries (now read; #4's "from the
+  M1" is the one hit, owner's decision) and the generated conventions below CLAUDE.md's marker (39 hits; reported, not
+  failed; soul#439 filed). A third bucket-policy comment on #56 was edited.

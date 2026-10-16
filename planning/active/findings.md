@@ -132,6 +132,16 @@ Earlier revisions stay visible in each item's edit history until deleted in the 
 - https://github.com/NewGraphEnvironment/knowledge/issues/56#issuecomment-6225367874
 - https://github.com/NewGraphEnvironment/knowledge/issues/57
 
+- https://github.com/NewGraphEnvironment/knowledge/issues/56#issuecomment-6225458231 (posted 21:56Z by the bucket-policy
+  session after the first pass; edited the same way)
+
+Issue #4's rename entry ("… from the M1") shows the old title and cannot be deleted (code-check round 2); the sweep now
+reads rename entries and reports it. Accepting it or deleting and re-filing #4 is the owner's decision.
+
+The generated conventions below CLAUDE.md's marker carry private-repo references, local paths and host names (39
+pattern hits). They are public in the repo, though not on the site. They are synced from soul, so they are fixed at
+the source (NewGraphEnvironment/soul issue, filed), and the sweep reports them without failing.
+
 ## Errors Encountered
 
 | Error | Resolution |
