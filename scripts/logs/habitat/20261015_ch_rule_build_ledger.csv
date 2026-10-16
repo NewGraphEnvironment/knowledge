@@ -1,6 +1,6 @@
 kind,step,n,note
 in,visits_in,21862,0294's kept visits
-info,walk_starts,17747,x 3 sources x 7 sizes; 2.1 min on 4 workers
+info,walk_starts,17747,x 3 sources x 7 sizes; 2.2 min on 4 workers
 info,walk_pick_found,110742,"rows, all sizes"
 info,walk_pick_none,13487,"rows, all sizes"
 info,walk_pcic_routed_found,108528,"rows, all sizes"

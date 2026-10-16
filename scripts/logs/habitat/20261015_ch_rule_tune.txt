@@ -1,4 +1,5 @@
 CH rearing rule, knowledge#54. 0296 visits: 21862. 0295's population: 19077 visits (978 CH) in 102 WSGs.
+River polygons (in one, or on its edges 1250/1350): 3013 visits (702 CH, 23.3 %).
 Stream branch: 15178 (264 CH). Barrier status known: 9290 (191 CH); natural CH barrier downstream: 4774 (25 CH).
 POPULATION (stream branch, no natural barrier downstream): 4516 visits (166 CH) in 45 WSGs.
 
@@ -9,7 +10,7 @@ POPULATION (stream branch, no natural barrier downstream): 4516 visits (166 CH) 
          MODELLED       FALSE 1731
              <NA>        TRUE  685
 main / U: 3434 visits (166 detections) in 26 WSGs; 2639 distinct in/out patterns; 0 not converged; region 27 rules; default in region: FALSE; recommended mad>=0.75|g<=0.07|Q3@D1000
-main grid, bootstrap, nested selection and 4 more seeds: 6.3 min on 6 workers
+main grid, bootstrap, nested selection and 4 more seeds: 6.4 min on 6 workers
 
 PICK: mad>=0.75|g<=0.07|Q3@D1000 (departures 3). RECOMMENDED: mad>=0.75|g<=0.07|Q3@D1000.
 DECISION: default is outside the region (188.2 deviance above the best, SE 78.7): the recommended rule.

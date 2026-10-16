@@ -1,0 +1,29 @@
+direction,reason,order,n_segments,km,default_rule,tuned_rule
+gained,connectivity or overlay,1,87,13.714,width>=1.5|g<=0.0549|none,mad>=0.75|g<=0.07|Q3@D1000
+gained,connectivity or overlay,2,196,54.358,width>=1.5|g<=0.0549|none,mad>=0.75|g<=0.07|Q3@D1000
+gained,connectivity or overlay,3,95,32.279,width>=1.5|g<=0.0549|none,mad>=0.75|g<=0.07|Q3@D1000
+gained,connectivity or overlay,4+,41,11.045,width>=1.5|g<=0.0549|none,mad>=0.75|g<=0.07|Q3@D1000
+gained,"exception (size fails, river within D)",1,6519,1905.778,width>=1.5|g<=0.0549|none,mad>=0.75|g<=0.07|Q3@D1000
+gained,"exception (size fails, river within D)",2,1754,425.853,width>=1.5|g<=0.0549|none,mad>=0.75|g<=0.07|Q3@D1000
+gained,"exception (size fails, river within D)",3,306,97.703,width>=1.5|g<=0.0549|none,mad>=0.75|g<=0.07|Q3@D1000
+gained,"exception (size fails, river within D)",4+,97,41.587,width>=1.5|g<=0.0549|none,mad>=0.75|g<=0.07|Q3@D1000
+gained,gradient between the two maxima,1,2,0.666,width>=1.5|g<=0.0549|none,mad>=0.75|g<=0.07|Q3@D1000
+gained,gradient between the two maxima,2,14,5.03,width>=1.5|g<=0.0549|none,mad>=0.75|g<=0.07|Q3@D1000
+gained,gradient between the two maxima,3,108,40.14,width>=1.5|g<=0.0549|none,mad>=0.75|g<=0.07|Q3@D1000
+gained,gradient between the two maxima,4+,730,165.557,width>=1.5|g<=0.0549|none,mad>=0.75|g<=0.07|Q3@D1000
+gained,other (river-polygon branch or mixed),1,6,0.101,width>=1.5|g<=0.0549|none,mad>=0.75|g<=0.07|Q3@D1000
+gained,other (river-polygon branch or mixed),2,106,2.307,width>=1.5|g<=0.0549|none,mad>=0.75|g<=0.07|Q3@D1000
+gained,other (river-polygon branch or mixed),3,87,6.01,width>=1.5|g<=0.0549|none,mad>=0.75|g<=0.07|Q3@D1000
+gained,other (river-polygon branch or mixed),4+,192,21.003,width>=1.5|g<=0.0549|none,mad>=0.75|g<=0.07|Q3@D1000
+gained,"size: tuned passes, width fails or NULL",1,294,70.243,width>=1.5|g<=0.0549|none,mad>=0.75|g<=0.07|Q3@D1000
+gained,"size: tuned passes, width fails or NULL",2,7,1.841,width>=1.5|g<=0.0549|none,mad>=0.75|g<=0.07|Q3@D1000
+gained,"size: tuned passes, width fails or NULL",3,4,0.478,width>=1.5|g<=0.0549|none,mad>=0.75|g<=0.07|Q3@D1000
+gained,"size: tuned passes, width fails or NULL",4+,11,4.66,width>=1.5|g<=0.0549|none,mad>=0.75|g<=0.07|Q3@D1000
+lost,connectivity or overlay,1,160,26.595,width>=1.5|g<=0.0549|none,mad>=0.75|g<=0.07|Q3@D1000
+lost,connectivity or overlay,2,228,40.375,width>=1.5|g<=0.0549|none,mad>=0.75|g<=0.07|Q3@D1000
+lost,connectivity or overlay,3,165,27.977,width>=1.5|g<=0.0549|none,mad>=0.75|g<=0.07|Q3@D1000
+lost,connectivity or overlay,4+,5,0.602,width>=1.5|g<=0.0549|none,mad>=0.75|g<=0.07|Q3@D1000
+lost,"size: width passes, tuned fails, no exception",1,478,147.157,width>=1.5|g<=0.0549|none,mad>=0.75|g<=0.07|Q3@D1000
+lost,"size: width passes, tuned fails, no exception",2,7932,2776.745,width>=1.5|g<=0.0549|none,mad>=0.75|g<=0.07|Q3@D1000
+lost,"size: width passes, tuned fails, no exception",3,9239,3244.461,width>=1.5|g<=0.0549|none,mad>=0.75|g<=0.07|Q3@D1000
+lost,"size: width passes, tuned fails, no exception",4+,7244,2491.631,width>=1.5|g<=0.0549|none,mad>=0.75|g<=0.07|Q3@D1000

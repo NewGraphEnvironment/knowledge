@@ -1,0 +1,12 @@
+check,rule,segment,n,n_ch,rate,n_on_rearing,km_share,lift,lift_lo,lift_hi,n_all,n_all_on_rearing,n_gained,n_lost,capture_share
+fdis_visits,default,rearing,2582,637,0.2467,,,,,,,,,,
+fdis_visits,default,accessible_not_rearing,2362,62,0.0262,,,,,,,,,,
+fdis_visits,default_mad,rearing,1324,186,0.1405,,,,,,,,,,
+fdis_visits,default_mad,accessible_not_rearing,3620,513,0.1417,,,,,,,,,,
+fdis_visits,tuned,rearing,1859,644,0.3464,,,,,,,,,,
+fdis_visits,tuned,accessible_not_rearing,3085,55,0.0178,,,,,,,,,,
+bcfishobs_outside,default,,326,,,267,0.3002,2.728,2.5952,2.8611,812,724,,,0.819
+bcfishobs_outside,default_mad,,326,,,225,0.1573,4.3864,4.035,4.7183,812,607,,,0.6902
+bcfishobs_outside,tuned,,326,,,241,0.1915,3.8611,3.6364,4.1179,812,698,,,0.7393
+bcfishobs_outside,tuned_minus_default,,326,,,,,1.1331,0.9495,1.3384,,,14,40,
+bcfishobs_outside,tuned_minus_default_mad,,326,,,,,-0.5252,-0.7781,-0.2328,,,40,24,
