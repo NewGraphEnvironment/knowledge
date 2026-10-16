@@ -18,3 +18,5 @@
   prose). River test kept for every rule (636 km of river-polygon lines had been dropped); lift on stream edges.
   0296/0297/0298 re-run: 0296 and 0297 outputs byte-identical, 0298 changed (tuned -18.3 %).
 - Code-check round 2 spawned 04:18 UTC
+- Code-check rounds 2-4 and a closing enumeration (review-round*.md); 0298 re-run after rounds 1 and 2
+- Archived to planning/archive/2026-10-issue-54-chinook-rearing-tuned

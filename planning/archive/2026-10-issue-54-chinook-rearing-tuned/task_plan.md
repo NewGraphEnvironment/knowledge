@@ -104,6 +104,6 @@ seeds; nested selection; component profiles; decision rule if `default` is in th
 - [x] Positive controls pass (walk reproduces 0294 row by row; SQL `default` = fresh's predicate on 786,317 segments)
 - [x] Ledger partitions; 0297 re-run byte-identical on its rule outputs (twice)
 - [x] Positive controls in the run logs (walk = 0294; SQL default = fresh's predicate; width model 96.2 %)
-- [ ] `/code-check` clean (each commit, or once over the branch with `/code-check branch`)
-- [ ] PWF checkboxes match landed work
-- [ ] `/planning-archive` on completion
+- [x] `/code-check` clean (once over the branch: 4 reviewer rounds + a closing enumeration, review-round*.md)
+- [x] PWF checkboxes match landed work
+- [x] `/planning-archive` on completion
