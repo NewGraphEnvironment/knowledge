@@ -755,22 +755,332 @@ repro and the exact lines, report it, and carry on if it is not blocking. The ru
 *5 lines of evidence for this rule are in `conventions/agent-operations.md`.*
 
 
-# Always Away
+# Cartography
 
-Assume the user is away from the keyboard at all times. Design every operation to run unattended by default; there is no separate "remote work" or "trip prep" mode.
+## Style Registry
 
-*"Let's assume I'm always away. No special planning for remote work anymore. We are integrated thanks to claude."* (airvine, 2026-07-10)
+Use the `gq` package for all shared layer symbology. Never hardcode hex color values when a registry style exists.
 
-## Why
+```r
+library(gq)
+reg <- gq_reg_main()  # load once per script — 51+ layers
+```
 
-The machines are always online and Claude sessions drive them. Distinguishing "user present" from "user traveling" added planning overhead with no payoff — and operations designed for co-presence silently break the moment the user steps away.
+**Core pattern:** `reg$layers$lake`, `reg$layers$road`, `reg$layers$bec_zone`, etc.
 
-## How to apply
+### Translators
 
-- **Unattended by default:** background loops with server-state prechecks, scheduled probes where recovery detection matters, teed logs committed per the log-tracking convention.
-- **Survive the laptop lifecycle:** `caffeinate -i` for long runs — and know its limit: it does not survive lid close. A killed wrapper can orphan child processes that keep working; check `pgrep` before declaring a run dead, and record enough state (PWF, committed logs) that any interruption is resumable.
-- **Gates are phone-answerable:** steps that genuinely need the user (QGIS desktop verification, a push into an artifact a human is testing on, content decisions — not a git push to a feature branch, which `agent-operations.md` §4 puts inside an approved plan) are explicit checkpoints answerable from a phone — never assumed co-presence, never blocking questions mid-run.
-- **Every interruption is a resume point:** commit state before long waits; a session death, sleep, or shutdown should cost a re-run at most, never lost context.
+| Target | Simple layer | Classified layer |
+|--------|-------------|-----------------|
+| tmap | `gq_tmap_style(layer)` → `do.call(tm_polygons, ...)` | `gq_tmap_classes(layer)` → field, values, labels |
+| mapgl | `gq_mapgl_style(layer)` → paint properties | `gq_mapgl_classes(layer)` → match expression |
+
+### Custom styles
+
+For project-specific layers not in the main registry, use a hand-curated CSV and merge:
+
+```r
+reg <- gq_reg_merge(gq_reg_main(), gq_reg_custom("path/to/custom.csv"))
+```
+
+Install: `pak::pak("NewGraphEnvironment/gq")`
+
+## Map Targets
+
+| Output | Tool | When |
+|--------|------|------|
+| PDF / print figures | `tmap` v4 | Bookdown PDF, static reports |
+| Interactive HTML | `mapgl` (MapLibre GL) | Bookdown gitbook, memos, web pages |
+| QGIS project | Native QML | Field work, Mergin Maps |
+
+## Key Rules
+
+- **`sf_use_s2(FALSE)`** at top of every mapping script
+- **Compute area BEFORE simplify** in SQL
+- **No map title** — title belongs in the report caption
+- **Legend over least-important terrain** — swap legend and logo sides when it reduces AOI occlusion. No fixed convention for which side.
+- **Four-corner rule** — legend, logo, scale bar, keymap each get their own corner. Never stack two in the same quadrant.
+- **Bbox must match canvas aspect ratio** — compute the ratio from geographic extents and page dimensions. Mismatch causes white space bands.
+- **Consistent element-to-frame spacing** — all inset elements should have visually equal margins from the frame edge
+- **Map fills to frame** — basemap extends edge-to-edge, no dead bands. Use near-zero `inner.margins` and `outer.margins`.
+- **Suppress auto-legends** — build manual ones from registry values
+- **ALL CAPS labels appear larger** — use title case for legend labels (gq `gq_tmap_classes()` handles this automatically via `to_title()` fallback)
+
+## Self-Review (after every render)
+
+Read the PNG and check before showing anyone.
+
+### Placement
+
+1. Correct polygon/study area shown? (verify source data, not just the bbox)
+2. Map fills the page? (no white/black bands)
+3. Keymap inside frame with spacing from edge?
+4. No element overlap? (each in its own corner)
+5. Legend over least-important terrain?
+6. Consistent spacing across all elements?
+7. Scale bar breaks appropriate for extent?
+
+### Does it communicate?
+
+Every check above is about **where elements sit**. A map can satisfy all seven
+and still fail to say what it is about — so these are not optional extras, they
+are the half of the review that the placement list structurally cannot reach.
+
+8. **Is every prominent feature in the legend?** Work the other direction from
+   the usual one: rank what draws the eye *in the rendered image*, then confirm
+   each of the top few appears in the legend. Building the legend from the layer
+   list instead answers "did I list my layers", which is a different question and
+   always says yes.
+9. **Is the subject obvious to someone who has never seen this area?** An AOI
+   that renders identically to its surroundings is not delineated by a thin
+   boundary line — the reader has to be told where to look. Containment (a fill,
+   a dimmed exterior, a mask) is what does it.
+10. **Does the symbology have a hierarchy, or is it flat?** If one class holds
+    the great majority of the features, it will dominate regardless of how
+    correct its size is. Ask what the map is *for* and de-emphasise or filter
+    accordingly — and say in the caption or prose that you did.
+11. **Does the basemap earn its contrast cost?** A basemap that adds no readable
+    terrain is not neutral: it lowers the contrast of everything drawn over it.
+    Blend parameters that mute it into a flat field are worse than no basemap.
+12. **Is the type sized for the width it is published at, not rendered at?** A
+    7 in figure squeezed into a ~700 px column loses roughly 40% — text set at
+    `size = 0.5` for the render lands at a few pixels on the page. Check the
+    figure at its delivered width.
+
+### Why this half exists
+
+Added 2026-08-26 after gq's flagship vignette map was reported as passing all
+seven placement checks and was, on being looked at, unreadable: 89% of its point
+symbols were one modelled class, the basemap was a featureless grey field, the
+AOI was indistinguishable from its surroundings, and the single most prominent
+feature on the map — a bright red 397-feature habitat network — **was not in the
+legend at all**, while the prose beneath the figure described its styling in
+detail (gq#61).
+
+The seven checks had returned green, accurately. They were simply not asking.
+
+See the `cartography` skill for full reference: basemap blending, BC spatial data queries, label hierarchy, mapgl gotchas, and worked examples.
+
+## Land Cover Change
+
+Use [drift](https://github.com/NewGraphEnvironment/drift) and [flooded](https://github.com/NewGraphEnvironment/flooded) together for riparian land cover change analysis. flooded delineates floodplain extents from DEMs and stream networks; drift tracks what's changing inside them over time.
+
+**Pipeline:**
+
+```r
+# 1. Delineate floodplain AOI (flooded)
+valleys <- flooded::fl_valley_confine(dem, streams, area_field = "upstream_area_ha")
+
+# 2. Fetch, classify, summarize (drift)
+rasters   <- drift::dft_stac_fetch(aoi, source = "io-lulc", years = c(2017, 2020, 2023))
+classified <- drift::dft_rast_classify(rasters, source = "io-lulc")
+summary    <- drift::dft_rast_summarize(classified, unit = "ha")
+
+# 3. Interactive map with layer toggle
+drift::dft_map_interactive(classified, aoi = aoi)
+```
+
+- Class colors come from drift's shipped class tables (IO LULC, ESA WorldCover)
+- For production COGs on S3, `dft_map_interactive()` serves tiles via titiler — set `options(drift.titiler_url = "...")`
+- See the [drift vignette](https://www.newgraphenvironment.com/drift/articles/neexdzii-kwa.html) for a worked example (Neexdzii Kwa floodplain, 2017-2023)
+
+
+# CI Monitoring
+
+When this repo has GitHub Actions workflows, scan recent runs on session start. Catches failed pkgdown deploys, broken vignette builds, and stale citation regenerations that would otherwise linger until the user manually checks.
+
+## On Session Start
+
+```bash
+gh run list --limit 5 --json status,conclusion,name,createdAt,databaseId \
+  --jq '.[] | select(.conclusion == "failure")'
+```
+
+If any failures since the last visit, surface to the user before starting other work:
+
+> Workflow `<name>` failed `<time>` ago (run `<id>`). Investigate with `gh run view <id> --log-failed`. Fix or proceed with current task?
+
+User decides; do not auto-fix.
+
+## Particular Failures Worth Naming
+
+- **pkgdown** — docs site on GitHub Pages broken
+- **R-CMD-check** — package may not install
+- **Vignette / build-vignettes** — vignette docs incomplete
+- **update-citation-cff** — CITATION.cff stale
+
+## Why This Matters
+
+Without this scan, post-merge workflow failures linger until someone (often the user) notices a stale docs site or a missing vignette. The session-start sweep catches them on the first re-entry into the repo.
+
+## Pairs with `/gh-pr-merge`
+
+The skill watches workflows triggered by a fresh merge in real time — that's the targeted catch. This convention is the backstop for failures that landed when no one was watching (merges via web UI, scheduled triggers, manually-triggered workflows).
+
+## A green run does not mean the site is current
+
+CI conclusion and published content are two different facts. Check the second one
+directly when it matters — the deploy commit, not the run status:
+
+```bash
+git fetch -q origin gh-pages && git log -1 --format='%s' FETCH_HEAD
+# "Deploying to gh-pages from @ owner/repo@<sha> 🚀"  <- the last NON-BOT commit? A bot commit never deploys
+```
+
+GitHub can create a workflow run minutes after the push that triggered it, and
+out of order with a later push. Observed 2026-08-26 in `fly`: `7a7700c` built and
+deployed at 17:21, then its own *parent* `be77eca` had its run created at 17:22:52
+— twelve minutes after that push — and deployed over it. Both runs green, `gh run
+list` all success, published site one commit stale.
+
+Things that do **not** fix this, so don't reach for them:
+
+- `cancel-in-progress: true` — cancels an *overlapping* run. Here the runs never
+  overlapped (`created == started` on both, second created after first finished),
+  so there was nothing to cancel.
+- A `concurrency:` group — the r-lib pkgdown template already sets one at the job
+  level (`group: pkgdown-${{ github.event_name != 'pull_request' || github.run_id }}`).
+  Grepping for a top-level `concurrency:` key misses it and invites a redundant
+  "fix". Serializing runs doesn't order events that arrive late.
+
+There is no workflow-side fix, because the reordering happens before the workflow
+exists. The remedy is detection: check the deploy provenance, and re-dispatch
+(`gh workflow run <file> --ref main`) if it's behind. Harmless when the stale
+commit changed nothing the site publishes — confirm via `.Rbuildignore` / `_pkgdown.yml`
+rather than assuming.
+
+*2 lines of evidence for this rule are in `conventions/ci-monitoring.md`.*
+
+## Don't push to the default branch between a merge and its CI settling
+
+The r-lib templates set `concurrency` with `cancel-in-progress: true`, so a second push
+to `main` cancels the first push's still-running workflows. That is correct behaviour and
+it is not the problem; the problem is that a **cancelled** run and a **failed** run look
+the same in the status column, so a routine follow-up push turns a green merge into
+something the next person has to go read a log about — and the log does not exist.
+
+The routine follow-up is the one that bites, because it is the one nobody counts as a
+push: a `CLAUDE.md` drift sync, a typo fix, a `.gitignore` line. `/compact-prep` step 6
+runs `claude_md_drift.sh apply`, which **pushes**, and after `/gh-pr-merge` that lands
+seconds after the merge.
+
+Order them: watch the merge's runs to completion, *then* push anything else. Measured
+2026-09-08 in gq — the merge's pkgdown and R-CMD-check were allowed to finish green and
+the deploy provenance checked before the sync went out, and the sync's own runs then went
+green on their own SHA. Holding it cost about three minutes.
+
+Where a push has already gone out and cancelled something, `/gh-pr-merge` step 10 has the
+reading: `cancelled`/`skipped` is `⊘ superseded`, not `✗ failed`, and the thing to confirm
+is that the newest **non-bot** SHA's run passed. Do not re-dispatch the cancelled one.
+
+## Don't use `gh run watch` to wait
+
+It polls hard enough to trip GitHub's *secondary* rate limit, which `gh api
+/rate_limit` does not report — every primary bucket reads full while calls return
+403. Retrying extends it. Poll sparsely with `gh run view <id> --json status,conclusion`,
+and prefer `git fetch` over the REST API for anything git can answer.
+
+## A setup failure and a build failure look identical in the status column
+
+`gh pr checks` and the Actions UI report one word per job. A run that died fetching its
+own toolchain and a run that died because the code is broken both read `fail`, and only
+the second says anything about what you just shipped.
+
+```
+Error in download.file(...) : status was 'SSL connect error'
+download of package 'pak' failed
+Error in loadNamespace(x) : there is no package called 'pak'
+```
+
+That is `setup-r-dependencies` failing before the package was ever built. Seen
+2026-09-02 on a tagged spacehakr release, where the same workflow had passed on the merge
+commit minutes earlier with identical content — the natural but wrong reading is "the
+release is broken".
+
+**Read which step failed before drawing a conclusion**, especially on a release commit
+where the instinct is to distrust the tag:
+
+```bash
+gh run view <id> --log-failed | grep -iE 'error|fatal' | head
+```
+
+If it died in dependency setup, rerun once. If it dies the same way again it is the
+upstream CDN, and the honest move is to say so and stop — not to keep spending runs on
+something no change in the repo can fix.
+
+## A citation run failing "fetch first" beside a green twin lost a push race
+Before reading a red `Update CITATION.cff` as a broken release, find a green run of it on the same or a later SHA (not earlier), then confirm `git show origin/main:CITATION.cff` carries the released version and date.
+
+*5 lines of evidence for this rule are in `conventions/ci-monitoring.md`.*
+
+## A hung setup step holds the concurrency group for six hours
+A run `in_progress` long past its usual duration, with a newer run of it `pending` behind, is a hang: confirm no step moved (`gh run view <id> --json jobs`), then `gh run cancel <id>`; the lasting fix is `timeout-minutes:`.
+
+*4 lines of evidence for this rule are in `conventions/ci-monitoring.md`.*
+
+## A job-level `concurrency` group must vary with the matrix, or the jobs cancel each other
+
+`concurrency` at the **job** level is evaluated **per matrix job**, so a group string that
+does not vary with the matrix puts every runner in one group — and with
+`cancel-in-progress: true` they cancel each other. At most one platform runs per push,
+which is the entire justification for having a matrix.
+
+```yaml
+# WRONG: identical for all three entries
+concurrency:
+  group: check-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# right
+  group: check-${{ github.workflow }}-${{ github.ref }}-${{ matrix.config.os }}
+```
+
+`fail-fast: false` does not help — that governs failures, not cancellation.
+
+**It fails in the quiet direction.** A cancelled run reports `cancelled`, not `failure`,
+which `/gh-pr-merge` step 10 correctly reads as `⊘ superseded` — so two platforms that
+never ran look like two platforms that were superseded by a newer push. Nothing is red and
+nothing says the coverage was lost.
+
+The decisive evidence is GitHub's own context-availability table: `matrix` is listed for
+`jobs.<job_id>.concurrency` and **not** for the top-level `concurrency`. If it were not
+evaluated per job, the context could not be in scope there.
+
+```bash
+curl -s https://raw.githubusercontent.com/github/docs/main/content/actions/reference/workflows-and-actions/contexts.md \
+  | grep 'concurrency'
+```
+
+Cheapest confirmation on a live workflow: the first run's job list. Three jobs
+`in_progress` at once is the pass; one running while two read `cancelled` is this.
+
+The entries above concern cancellation **between pushes**, which is the behaviour you
+want. This is cancellation **within one push**, which is never what you want.
+
+*4 lines of evidence for this rule are in `conventions/ci-monitoring.md`.*
+
+
+## A push `paths:` filter skips an empty commit, and dispatch and schedule run only from the default branch
+Before planning to re-run a workflow on a feature branch, check how it is triggered. An empty commit (`git commit --allow-empty`) changes no files, so a `push` trigger with a `paths:` filter skips it, and the skip is silent: no run is created, so nothing reports anything. `workflow_dispatch` only works for a workflow file already on the default branch, and `schedule` only fires from there. So a branch-only workflow is re-run in one of three ways: push trigger with no `paths:` (the branch filter scopes it), `gh run rerun <id>`, or a commit that touches a filtered path.
+
+*1 line of evidence for this rule is in `conventions/ci-monitoring.md`.*
+
+## A commit pushed by the Actions token starts no workflow, so wait on the SHA you pushed
+Key a CI waiter on the SHA you pushed, never on the default branch's tip: a bot commit made with `GITHUB_TOKEN` (an `update-citation-cff` auto-commit, a docs regen) lands on top of yours and, by GitHub's design, triggers no workflow run, so a loop waiting for runs on the tip waits forever.
+
+The tip moves seconds after a release push, which is exactly when a waiter is started. The bot commit also needs no check of its own when it only touches a file the site does not publish; confirm the deploy provenance instead (the `gh-pages` subject names the SHA that was built).
+
+*1 line of evidence for this rule is in `conventions/ci-monitoring.md`.*
+
+## A pending run cancelled by a `concurrency` group runs no steps, so its failure alarm never fires
+With `cancel-in-progress: false`, GitHub keeps one running and one pending run per group, and a newer run cancels the pending one before its job starts. An `if: failure() || cancelled()` alarm step is part of that job, so it never runs and the displaced run disappears silently. Count on the next scheduled run to pick the work up, or dispatch it by hand. Do not write that the alarm covers it.
+
+*1 line of evidence for this rule is in `conventions/ci-monitoring.md`.*
+
+## A deploy commit on `gh-pages` is not yet a served page
+Before telling anyone a Pages URL is live, fetch it and compare the bytes with the source: the deploy commit lands on `gh-pages` before the `pages-build-deployment` run publishes it, and until that run finishes the URL still answers 404.
+
+*1 line of evidence for this rule is in `conventions/ci-monitoring.md`.*
 
 # Code Check — Python
 Traps in Python: the interpreter, pytest, the HTTP stack under pystac, and MkDocs.
@@ -1729,87 +2039,6 @@ Before reporting that a spreadsheet value is off by a factor, check the cell's *
 Never strip non-digits to clean a number extracted from PDF text: corrupted glyphs (an `O` for a `0`, a Private Use Area micron sign) become plausible wrong values, so anchor on the label and check against an independent identity.
 
 
-# Comms Conventions
-
-This repo has a `comms/` directory — you're in the cross-repo Claude-to-Claude messaging system. Full protocol in `comms/README.md`. Peer list (who to scan) in `soul/conventions/comms_peers.md` (internal-only). Load-bearing behaviors below.
-
-## On Session Start
-
-1. **Inbound scan.** `<this-repo>/comms/*/` — files with `status: open` and mtime newer than your last `comms/` commit are mail for you.
-2. **Outbound scan.** For each peer in `comms_peers.md`, check `<peer>/comms/<this-repo>/*.md` — files with `from: <this-repo>, status: open` are your un-answered sent mail.
-
-If either surfaces open threads, raise to the user before starting other work.
-
-## Commit Prefix
-
-- `comms(→peer):` — you committed a file in peer's repo (outbound)
-- `comms(←peer):` — you committed a file in your own repo (inbound reply)
-- `comms:` — meta (close, reopen, rename, README update)
-
-Arrow points to the repo whose `comms/` contains the file you committed.
-
-## Non-negotiables
-
-- One commit per appended message.
-- **Push immediately.** Un-pushed comms is invisible to the other Claude.
-- Code + comms = separate commits.
-- Status flips bundle with the triggering message.
-- **Use `git commit --only <file>`** for any commit in a peer's repo (thread files). Immune to index races from parallel sessions.
-
-## Propagation: soul publishes, peers pull
-
-Soul is the source of truth for `comms/README.md`. Peers sync by running `/comms-init` in their own repo, from their own Claude session. **Do not push README updates into a peer's repo from another session** — cross-session index races can bundle unrelated staged files into misleading commits.
-
-Within your own session, the only things you commit into a peer's repo are **thread files** (hosted in the receiver's repo per the receiver-hosts rule). Everything else — README syncs, infra — the peer-Claude pulls itself.
-
-### Cross-repo thread commits: which branch?
-
-Commit on peer's **current branch** — whatever they've got checked out. Don't stash, switch, or force main.
-
-If peer isn't on main, surface to the user: _"thread landing on `<peer>`:`<branch>`, won't hit main until PR merges. Continue or hold?"_ If peer has complicated local state (mid-rebase, partial merge), defer to the user.
-
-
-# Comms Peers
-
-The list of repos that participate in the cross-repo Claude-to-Claude messaging system. Each peer auto-scans every other peer for inbound mail on session start.
-
-## Rule: peers must be private
-
-A `comms/` directory on a public repo leaks coordination-layer content even if individual messages are benign — the existence of the peer list, threads, and cross-references reveals NGE's internal architecture. Public packages are *tools*, not comms peers.
-
-### Participants vs subjects
-
-Public packages are **subjects** of cross-repo conversation, not **participants**. Discussion about a public package (e.g. drift, mc, gq) lives in the private coordination repo that depends on it — for example `rtj/comms/compost/20260501_drift_question.md` for an rtj↔compost thread that talks about drift. Drift itself never hosts a thread; nothing about the conversation appears in drift's git history.
-
-This keeps public repos clean (no `comms/` leak) while letting the conversation continue in the private layer that has the surrounding context.
-
-Three categories within the private side:
-
-- **Coordination/governance repos** (peers): `soul`, `rtj`, `kdot`, `compost` (pending bootstrap), `logic`, `rfp`, `fish_passage_template_reporting`. The active recurring conversation partners.
-- **Proposals**: NEVER public. Always private. Comms peers if they're recurring conversation partners; otherwise consume the pattern from their parent template.
-- **Templates** (e.g. `fish_passage_template_reporting`): persistent private. Carry the full Claude + comms context. Reports spawned from templates inherit a public-safe form on publication (CLAUDE.md scrubbed, `comms/` purged). The template is the canonical engineering home.
-
-## Publication flip procedure
-
-When a private repo flips public — `crate` once `link` requires it as a dependency, or any report on publication — three things happen in the same commit that flips repo visibility:
-
-1. **Remove from the peer list** in this file (`soul/conventions/comms_peers.md`).
-2. **Purge `comms/`** directory in the flipping repo.
-3. **Scrub `CLAUDE.md`** to public-safe form via `/claude-md-init --public-clean` (sets `.claude/visibility=public`, re-runs init filtered to public-safe conventions only).
-
-## Peers (recurring cross-repo conversation partners)
-
-- rtj
-- kdot
-- soul
-- logic
-- rfp
-- fish_passage_template_reporting
-- knowledge
-
-Update when a private repo joins (after `/comms-init` adoption) or a peer flips public (publication-flip procedure above).
-
-
 # NGE Feature Workflow
 
 For non-trivial issue-driven work, follow this checklist. Each step exists for a reason — skipping leads to rework, broken builds, and avoidable bugs that we've hit repeatedly.
@@ -2124,550 +2353,150 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 **These guidelines are working if:** fewer unnecessary changes in diffs, fewer rewrites due to overcomplication, and clarifying questions come before implementation rather than after mistakes.
 
 
-# New Graph Environment Conventions
+# pkgdown Publishing
 
-Core patterns for professional, efficient workflows across New Graph Environment repositories.
+What a pkgdown deploy puts on the public internet, and the two ways that has
+already gone wrong.
 
-## Ecosystem Overview
+## A pkgdown site publishes every root-level markdown file
 
-Six repos form the governance and operations layer across all New Graph Environment work:
+`pkgdown:::package_mds()` renders **every** `.md` in the package root except a
+hardcoded allowlist — `README`, `LICENSE`, `NEWS`, and two GitHub templates.
+There is **no config option to exclude a file**.
 
-| Repo | Purpose | Analogy |
-|------|---------|---------|
-| [compass](https://github.com/NewGraphEnvironment/compass) | Ethics, values, guiding principles | The "why" |
-| [soul](https://github.com/NewGraphEnvironment/soul) | Standards, skills, conventions for LLM agents | The "how" |
-| [compost](https://github.com/NewGraphEnvironment/compost) | Communications templates, email workflows, contact management | The "who" |
-| [rtj](https://github.com/NewGraphEnvironment/rtj) (formerly awshak) | Infrastructure as Code, deployment | The "where" |
-| [gq](https://github.com/NewGraphEnvironment/gq) | Cartographic style management across QGIS, tmap, leaflet, web | The "look" |
-| [crate](https://github.com/NewGraphEnvironment/crate) | Data governance: canonical schemas, data dictionary, QC rules (scoping; normalization functions are Year 2+) | The "what" |
+So `CLAUDE.md` gets published. So would `INTERNAL.md`, `NOTES.md`, or a PWF
+`task_plan.md` left at the root.
 
-**Adaptive management:** Conventions evolve from real project work, not theory. When a pattern is learned or refined during project work, propagate it back to soul so all projects benefit. The `/claude-md-init` skill builds each project's `CLAUDE.md` from soul conventions.
+**Repo visibility does not protect you.** GitHub Pages serves publicly
+regardless of whether the repo is private, and there is no private Pages mode
+below Enterprise Cloud. A private repo with a pkgdown deploy has public docs.
 
-**Promoting a convention means deleting the local copy, in the same commit.** A repo-local section lives *above* the CLAUDE.md marker and the soul copy lands *below* it, so after promotion both are present and both read as authoritative — and nothing warns you, because the two halves are maintained by different mechanisms. They then drift, and the next reader has no way to tell which one is current. Two sections promoted out of rfp in one session both left duplicates behind. Verify after `/claude-md-init`:
+Measured 2026-08-23: `CLAUDE.html` was live on six NGE sites. On `rfp` and `gq` —
+both private repos, so their `CLAUDE.md` legitimately carried the internal-only
+conventions — that put the SR&ED section on the public web: claim structure,
+field code, fiscal year, and the consultant by name.
+
+The visibility filter was working correctly the whole time. It rests on an
+assumption pkgdown breaks: that a private repo's `CLAUDE.md` stays private.
+
+### Remove it before the build, not after
+
+There are three copies, not one:
+
+| file | what it is |
+|---|---|
+| `CLAUDE.html` | the rendered page |
+| `CLAUDE.md` | a **verbatim copy of the source**, served as-is |
+| `search.json` | the full-text index, containing the text |
+
+Deleting `docs/CLAUDE.html` after the build leaves the other two. It looks like a
+fix and achieves nothing. Remove the file from the CI checkout **before**
+`build_site()` runs:
+
+```yaml
+- name: Keep internal notes out of the published site
+  run: rm -f CLAUDE.md
+```
+
+### Gate on a declared allowlist
+
+Each repo states which extra root pages it *intends* to publish. Anything else
+fails the build, so a new root markdown file cannot leak silently:
+
+```yaml
+- name: Fail if an unexpected page reached the site
+  run: |
+    allowed="404 authors index LICENSE LICENSE-text"   # + declared extras
+    ...
+```
+
+Add to `allowed` only after deciding the page should be public. `link` publishes
+`NOTICE` and `RUNBOOK` deliberately — it is a public repo and both are genuine
+documentation. That is the decision the allowlist is meant to record.
+
+Test the gate against **both** known answers before shipping it: it must exit
+non-zero on a site that does contain the file, and zero on one that does not. A
+guard that only ever returns one value is indistinguishable from a broken one.
+
+## Deploy with `clean: true`
+
+`JamesIves/github-pages-deploy-action` defaults matter here. With
+`clean: false`, the action **never deletes** — every file ever deployed stays on
+`gh-pages` forever, whether or not the source still produces it.
+
+Two consequences, both observed:
+
+- Removing a file from the repo does **not** unpublish it. Measured on `gq`:
+  `task_plan.html`, `progress.html` and `findings.html` were still returning 200
+  long after the PWF documents had been moved out of the root.
+- A leak cannot be fixed by fixing the build. The stale copies need a separate
+  explicit purge, which is a step people forget.
+
+`clean: true` makes the deployed site equal to what the build produced, so
+removing a file from source removes it from the web on the next deploy. That is
+the property you want, and it makes the site auditable.
+
+### Check before flipping it
+
+`clean: true` deletes anything on `gh-pages` not present in `docs/`. Confirm
+none of these exist first:
+
+- **`CNAME`** — a custom domain file would be deleted and the domain would break.
+  (NGE repos have none; the domain comes from the org site repo, and project
+  sites inherit it as subpaths.)
+- **`dev/`** — versioned docs from `development: mode: devel`, if the deploying
+  build is not the dev one.
+- **hand-added assets** not produced by the build. Favicons and web manifests
+  under `pkgdown/favicon/` *are* produced by the build and are safe.
+
+Use `clean-exclude` for anything that must survive.
 
 ```bash
-grep -c "^#\+ <the heading you promoted>" CLAUDE.md   # must be 1
+gh api "repos/OWNER/REPO/contents?ref=gh-pages" --jq '.[] | "\(.type) \(.name)"'
 ```
 
-**Cross-references:** [sred](https://github.com/NewGraphEnvironment/sred) tracks R&D activities across repos. Compost is the centralized communications workflow — all email drafts, contact registry, and external outreach are authored there, not in individual project repos.
-
-## Three-Layer Repo Architecture
-
-Repos live in one of three layers, distinguished by audience and what context they carry:
-
-| Layer | Role | Examples |
-|---|---|---|
-| **Public — tools** | Atomic, reusable, no NGE-specific context | R packages (`mc`, `crate`, `fresh`, `drift`, `flooded`, `gq`, `link`), `bcfishpass`, `fwapg`, STAC catalogs, post-publication reports |
-| **Private — coordination** | How tools compose into NGE workflows. The competitive moat. | `compost` (uses `mc`), `rfp` (uses `fresh`/`link`/etc.), `rtj` (uses `crate`, deploys), `fish_passage_template_reporting`, all proposals (never public) |
-| **Private — governance** | Strategy, values, conventions, R&D | `soul`, `logic`, `compass`, `sred` |
-
-**Rule:** tools don't know about each other or about NGE. Coordination repos know how to use tools. `mc/CLAUDE.md` does not know `compost` exists; `compost/CLAUDE.md` knows "for email use `mc`."
-
-**Publication flip:** when a private repo flips public (e.g., `crate` once `link` requires it; reports on publication), three things happen in the same commit: removed from comms peer list, `comms/` directory purged, `CLAUDE.md` scrubbed to public-safe form. Use `/claude-md-init --public-clean` for the scrub.
-
-**Per-repo classification** is recorded in `.claude/visibility` (one line: `public` or `internal`; default `internal` if missing). Soul conventions carry `visibility:` frontmatter (`public-safe` or `internal`); `/claude-md-init` filter skips internal-only conventions when repo is marked public.
-
-Strategic call recorded in `logic/comms/soul/20260428_public_vs_internal_repo_architecture.md`.
-
-## Issue Workflow
-
-### Before Creating an Issue (non-negotiable)
-
-1. **Check for duplicates:** `gh issue list --state open --search "<keywords>"` -- search before creating.
-   Read the body of every hit whose subject is adjacent before calling it unrelated: titles understate
-   scope, umbrella issues most of all. If one already covers the work, edit its body instead of filing.
-2. **One issue, one concern.** Keep focused.
-3. **Show the draft before filing.** Title and body, in the conversation, for the author to read. An issue is outward-facing and permanent, so filing first and reporting it afterwards turns a proposal into something already done, and every correction from there is public history. This holds even when the issue is plainly wanted: it costs one message, and it buys the author shaping the framing rather than editing it.
-
-SRED cross-refs go in **PR bodies only** (via `/gh-pr-push`), not in issues or commits. PRs aggregate commits and are the merge unit; per-issue and per-commit SRED tags add noise without adding traceability.
-
-### Professional Issue Writing
-
-Write issues with clear technical focus:
-
-- **Use normal technical language** in titles and descriptions
-- **Focus on the problem and solution** approach
-- **Add tracking links at the end** (e.g., `Relates to Owner/repo#N`)
-
-#### Client-aware tone
-
-Issues, PR descriptions, and commit messages are client-visible deliverables, not internal notes.
-
-Avoid in these artifacts:
-- Framing work as unsolicited or unpaid ("not assigned by a client")
-- Self-justifying adjectives ("defensible", "rigorous") — show, don't claim
-- Internal workflow meta (PWF refs, SRED xrefs, planning context)
-- Performative effort language ("attempts were unsuccessful") — state factual current state
-
-**Integrity-preserving ≠ self-effacing.** Factual, not performatively humble.
-
-**Scope:** repo artifacts (issues, PRs, commits, reports). Does not apply to internal planning docs, CLAUDE.md, or chat.
-
-#### Check repo visibility before writing project or client identifiers
-
-The three-layer architecture above says tools don't know about NGE. That is a
-statement of intent; this is the check that enforces it at the moment it
-matters.
-
-**Before creating or editing an issue, PR, or comment, confirm where it lands:**
-
-```bash
-gh repo view <owner>/<repo> --json nameWithOwner,visibility --jq '"\(.nameWithOwner): \(.visibility)"'
-```
-
-Name the destination repo. With no argument, `gh` reports the repo you are standing in,
-which is not where the text lands when a session files across repos. If the answer is `PUBLIC`, the artifact must carry no client or project
-identifiers: project slugs (`<client>_<region>_<year>`), workspace or tenant
-names, internal host names (outside a measurement whose subject is the machine; see the sibling below), or a roster of engagements. Those names identify
-who we work for and where, and a repo being a shared tool is exactly what makes
-them easy to paste in without noticing.
-
-Findings from internal work are still worth reporting to a public tool repo —
-report them **aggregated**. "6 of 16 projects use this layer" carries the whole
-argument; the list of which six carries nothing extra and cannot be unpublished.
-
-Its sibling covers the rest of what public text must not carry: our hosts (unless the
-machine is what a measurement is about), tunnels, ports, local env files, and links to
-private repos other than the R&D tracking line (`feature-workflow.md`, "Public-repo text
-describes the package, and points nowhere private"). That one is public-safe, so it also
-reaches sessions running inside a public repo, which this file never does.
-
-Caught 2026-08-12: a correction to a public style-registry repo enumerated 16
-client project identifiers plus an internal workspace name, as supporting
-evidence for a layer being worth adding. The aggregate counts made the case on
-their own.
-
-Two habits that make this cheap:
-
-- **Check before writing, not before posting.** Knowing the destination is
-  public shapes what you draft, so there is nothing to scrub later.
-- **Prefer editing over commenting on a young issue.** A correction comment
-  leaves the original text in the thread. `gh issue edit --body-file` replaces
-  it, which matters when the thing being corrected is a disclosure rather than
-  a mistake of fact.
-
-**Issue body structure:**
-```markdown
-## Problem
-<what's wrong or missing>
-
-## Proposed Solution
-<approach>
-
-Relates to #<local>
-```
-
-#### Infrastructure references
-
-In a private repo, use **tailnet hostnames** (`cypher`, `m1`, `openclaw`) in issue and PR bodies, not public IPs. In a public repo, name no host except as the subject of a measurement (`feature-workflow.md`, "Public-repo text describes the package, and points nowhere private"). Within NGE infrastructure, those hostnames are how scripts and operators address machines anyway; the public IP is an implementation detail that belongs in gitignored `*.tfvars` and the Tailscale admin panel.
-
-In a private repo, public IPs in issues are appropriate only when the IP itself is the subject — reserved-IP migrations, DNS records, firewall rules that key on a specific IP. For everything else, use a placeholder like `<cypher_public_ip>` if the shape of the value matters at all.
-
-Aggregation is the risk: any single IP in a private repo is fine, but issue bodies tend to collect IP + hostname + service description + access path into a coherent attack-surface map. Tailnet hostnames keep the map terse.
-
-### GitHub Issue Creation - Always Use Files
-
-The `gh issue create` command with heredoc syntax fails repeatedly with EOF errors. ALWAYS use `--body-file`:
-
-```bash
-cat > /tmp/issue_body.md << 'EOF'
-## Problem
-...
-
-## Proposed Solution
-...
-EOF
-
-gh issue create --title "Brief technical title" --body-file /tmp/issue_body.md
-```
-
-## Issue bodies get edited, not appended
-
-Moved to `feature-workflow.md`, which is public-safe. The rule is GitHub
-hygiene with nothing internal in it, and living here meant every **public** repo
-was filtered out of receiving it — measured in gq, which had the rule only in
-machine-local memory.
-
-## Closing Issues
-
-**DO:** Close issues via commit messages. The commit IS the closure and the documentation.
-
-```
-Fix broken DEM path in loading pipeline
-
-Update hardcoded path to use config-driven resolution.
-
-Fixes #20
-Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
-```
-
-**DON'T:** Close issues with `gh issue close`. This breaks the audit trail — there's no linked diff showing what changed. The exception is an issue closed *without* work, where there is no diff to link; see Auto-filed issues and the backlog below.
-
-- `Fixes #N` or `Closes #N` — auto-closes and links the commit to the issue
-- `Relates to #N` — partial progress, does not close
-- Always close issues when work is complete. Don't leave stale open issues.
-- **Moving an issue to the repo that now owns it is a transfer, not a close and refile.** `gh issue transfer N <owner>/<repo> --repo <owner>/<from>` carries the comments and history, redirects the old URL, and rewrites `#N` references in other issues' bodies to the new number, so there is nothing to close and no pointer comment to write. The one exception is private to public, which GitHub refuses (`code-check-shell.md`).
-
-## Auto-filed issues and the backlog
-
-Agents file issues without asking — that is the default disposition in
-`/compact-prep` for anything needing a decision. It is the right default, because an
-unread issue costs far less than an interruption. But filing without a filter turns
-the backlog into a guilt pile: measured 2026-08-28 in soul, 28 open with 12 older
-than three months and the oldest from 7 February.
-
-Four rules keep it a queue rather than a pile.
-
-**Every auto-filed issue opens with what changes if we do it, and what happens if we
-never do.** Not a summary — a consequence, on both sides. That single field is what
-lets a later pass close things in seconds, because most stale issues die the moment
-someone has to state what breaks without them. Write it first, above the Problem
-section.
-
-**An issue closes on a stated reason, never on a clock.** Three reasons hold up: its
-premise was disproved by something measured since it was filed; it was superseded, by
-work that landed or by another issue; or its own "what happens if we never do" line,
-re-read today, turns out to be "nothing". Anything else stays open, however old. This
-applies to issues an agent filed on its own initiative — anything the user opened, or
-that came out of a conversation with them, closes only with their say-so.
-
-**Silence is not evidence.** Long gaps are the normal shape of this work: weeks pass with
-no session in a given repo, and there are stretches where we are not working together at
-all. Elapsed time therefore measures *availability*, not worth, and an issue untouched for
-six months during one of those stretches is exactly as valid as one filed yesterday.
-
-This replaced a 60-day clock (airvine, 2026-09-20: *"sometimes we just don't have time to
-look at things for a long time and we are not working together for big stretches"*). The
-clock was a proxy for "nobody will ever do this" and measured something else — the same
-shape `code-check.md` names under "A proxy is not the property". Its own tell was that it
-needed a warning against its most obvious misuse, and then nominated itself as the thing
-separating a filter from an excuse; "it is old" always reads as a legitimate reason, which
-is exactly what an excuse needs.
-
-**A recurrence promotes, it does not merely exempt.** An issue naming a failure that has
-since happened again is the strongest signal this backlog carries — it goes to the top of
-the ranked list, not merely onto the survivors' list. Under the old clock, recurrence
-bought an issue nothing but the right to keep existing.
-
-**Sweep in batches, decide once.** A backlog pass produces one message: proposed
-closures as a group, plus a ranked top three worth actually doing. One decision
-instead of twenty-eight. Reviewing a backlog issue-by-issue costs more attention than
-the backlog does.
-
-### Closing with no diff is the one case for `gh issue close`
-
-Closing Issues above says to close via commit, because the commit is the diff that
-documents what changed. That reasoning assumes work happened. An issue closed for one of
-the three reasons above has no diff — the decision is precisely that nothing will be
-built — so there is no commit to carry the closure, and `gh issue close --comment` is
-correct there.
-
-State the reason in the comment. That comment is the audit trail in the no-work case,
-and it is the whole record of the decision:
-
-```bash
-gh issue close "$N" --comment "<premise disproved | superseded by #M | no consequence>: <what would have changed if we did it, and why that no longer holds>."
-```
-
-Name which of the three it was, and what makes it true — a closure whose comment could be
-written without reading the issue is not a closure, it is tidying. "Nobody has looked at
-this" is not one of the three.
-
-### Batching pays for a shared cost, not a shared topic
-
-Grouping issues by subject is free and buys nothing. Batching saves something only where
-the members share an expensive **setup** (one build-and-verify chain paid once instead of
-five times), an **oracle** (one issue makes the rest cheap to verify), or a
-**prerequisite** (one issue's answer rescopes the others). Check which of the three
-before proposing a group; if none applies, the issues are merely adjacent.
-
-An umbrella issue that only lists children is a document to maintain. The version worth
-creating carries the shared thing, and the children reference it — on that test the
-prerequisite is often already an issue and just needs saying out loud.
-
-Three things measurement gives you that titles do not. **The reference graph** — count
-which open issues other open issues cite; the in-degree hub is the prerequisite, and an
-externally blocked hub means its dependents cannot be batched at all. **Decide versus
-implement** — a deferred default or scope decision is decided *first* and built *last*,
-so its position in a queue is two positions. **Stale members** — a stale issue inside a
-batch wastes the batch, and the staleness is as often in the *title* as in the body,
-since a reconciled body still gets picked by title.
-
-
-## Commit Quality
-
-Write clear, informative commit messages:
-
-```
-Brief description (50 chars or less)
-
-Detailed explanation of changes and impact.
-
-Fixes #<issue> (or Relates to #<issue>)
-
-Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
-```
-
-**When to commit:**
-- Logical, atomic units of work
-- Working state (tests pass)
-- Clear description of changes
-
-**What to avoid:**
-- "WIP" or "temp" commits in main branch
-- Combining unrelated changes
-- Vague messages like "fixes" or "updates"
-
-### Stage by path when a sequence of commits must stay separate
-
-`git add -A` between edits sweeps unrelated staged work into the wrong commit.
-The failure is silent: edit `NEWS.md` and `DESCRIPTION`, then run
-`git add -A && git commit` for something else, and the release lands inside the
-feature commit. `git log --oneline` looks right; only `git show --stat` reveals
-it.
-
-**The archive step is where it gets in.** Archiving genuinely moves several
-files at once — a `git mv` of the PWF files, a new README, a `touch .gitkeep` —
-so `-A` *feels* like the right tool there and nowhere else. It is not:
-`git add planning/` covers all of it. Observed four times in one session even
-with the rule written down, every time at that step.
-
-```bash
-git add R/ tests/ inst/          # the work
-git commit -F msg.txt
-git add planning/                # the archive
-git commit -m "Archive planning files for #N"
-git add NEWS.md DESCRIPTION      # the release, last
-git commit -m "Release vX.Y.Z"
-```
-
-Verify before pushing — `git log --oneline` is not enough:
-
-```bash
-for c in $(git log --format=%h -3); do git show --stat --format="%s" $c | head -5; done
-```
-
-### Pass commit messages via a file, not a heredoc
-
-Same failure mode as `gh issue create` above: `git commit -m "$(cat <<'EOF' ... EOF)"`
-is unreliable in the agent Bash tool. Two heredocs in one call abort the whole
-compound command with "unexpected EOF" (so *neither* commit runs — verify with
-`git log`, don't assume partial success), and even a single heredoc has failed
-when the message body contains apostrophes. Mixing a Python heredoc and a git
-heredoc in one call is likewise fragile.
-
-**Do:** Write the message to a scratch file, then `git commit -F <file>`. It never
-breaks. This is the commit-message counterpart to the "Always Use Files" rule for
-issue bodies.
-
-## LLM Agent Conventions
-
-Rules learned from real project sessions. These apply across all repos.
-
-- **Install missing packages, don't workaround** — if a package is needed, ask the user to install it (e.g. `pak::pak("pkg")`). Don't write degraded fallback code to avoid the dependency. The same instinct for a *broken* dependency is `agent-operations.md` §4, "Surface upstream defects; do not work around them".
-- **Hand the user bare commands, never `!`-prefixed** — moved to `karpathy.md` §8 on 2026-09-05 so it reaches public repos too, and is now `agent-operations.md` §4; this file is internal and public repos never received it here.
-- **Never hardcode extractable data** — if coordinates, station names, or metadata can be pulled from an API or database at runtime, do that. Don't hardcode values that have a programmatic source.
-- **Close issues via commits, not `gh issue close`** — see Closing Issues above.
-- **Cite primary sources** — see references conventions.
-
-### State the plan before changing the machine
-
-Installing software, editing dotfiles, or otherwise modifying the workstation
-gets a stated plan **first** — then wait. A repo has git; a laptop does not.
-
-**Why:** asked to upgrade QGIS, an agent went straight to `brew install --cask`
-and was pulled up with *"Don't install without telling me the plan?"* The
-install was the right call and was approved a minute later — the objection was
-that it started before it could be seen. Two things were worth surfacing and
-would otherwise have been invisible: the cask installed *alongside* the existing
-app rather than over it, and the old app was owned by a different user account.
-
-**How to apply:** a short table beats prose — source URL, install path, what it
-replaces (or explicitly does not), size, and the uninstall command. This is the
-machine-level sibling of proposing an architecture call before filing it.
-
-### Reading a secret clamps the rest of the session
-
-If a session reads a live credential out of a file, expect every later
-system-mutating command to be refused, with a message naming *"earlier
-conversation content"* rather than the action itself.
-
-Observed 2026-08-19 after a dotfile was read and found to contain a plaintext
-GitHub PAT: **seven** consecutive refusals across unrelated routes — a
-cross-repo `gh issue edit` (three attempts), a `Write` to a dotfile,
-`brew cleanup`, a `curl` validating the token, and finally a plain `bash
-script.sh` **dry run**. Everything before the secret read had worked.
-
-**How to apply:** after two refusals in a row, say it is systematic and hand the
-user exact commands. Retrying different phrasings spends their time and reads as
-trying to get around the block. `/permissions` does not clear it — the check
-sits above permission rules; a new session does. Cheapest avoidance: `grep` for
-the key you need instead of reading a whole dotfile. If a secret does surface,
-say so immediately — it is now in the transcript and in any backup made.
-
-**A context compaction does not clear it. Only a genuine restart does.** "A new
-session" is ambiguous from inside a session whose context has just been replaced,
-which looks a lot like starting fresh. Measured 2026-08-26/28 in `cd`: a `gh secret
-set` was refused (correctly), the conversation was compacted, and `gh issue edit`
-and `gh pr merge` were still refused afterwards; the operator restarted the session
-and both succeeded on the first attempt, unchanged.
-
-**The diagnostic is the read/write asymmetry.** In that window every read kept
-working — `gh pr view`, `gh issue list`, `gh run list`, all `git` reads, even a `Write`
-to `/tmp` — while every outward-facing write was refused: `gh secret set`, `gh issue
-comment`, `gh issue edit`, `gh pr merge`. The earlier observation above saw a dotfile
-`Write` refused too, so the exact scope is not settled from two data points. The
-cheap signal is narrower and holds in both: **if reads succeed and outward-facing
-writes are refused, suspect the clamp before suspecting a per-command permission
-rule.** That turns "these two `gh` commands need an allowlist entry" into "the
-session is clamped, restart it" — a diagnosis the agent can reach on its own.
-
-## Naming Conventions
-
-**Pattern: `noun_verb-detail`** -- noun first, verb second across all naming:
-
-| What | Example |
-|------|---------|
-| Skills | `claude-md-init`, `gh-issue-create`, `planning-update` |
-| Scripts | `stac_register-baseline.sh`, `stac_register-pypgstac.sh` |
-| Logs | `20260209_stac_register-baseline_stac-dem-bc.txt` |
-| Log format | `yyyymmdd_noun_verb-detail_target.ext` |
-
-Scripts and logs live together: `scripts/<module>/logs/`
-
-This covers **operational scripts of any language** — shell under `scripts/`, and R
-under `data-raw/` or `scripts/` that is run rather than exported. `region_run.R`,
-not `run_region.R`. Alphabetical listing then groups by the thing being operated
-on, which is what an operator scans for: they ask "what tooling exists for X?" far
-more often than "what verbs are available?".
-
-Exported package functions are **out of scope** — those follow their package's own
-prefix convention (`lnk_*`, `dft_*`), which is verb-position-agnostic.
-
-Worth checking for local contradictions when you touch a repo: a `data-raw/README.md`
-asserting verb-first outranks nothing, but it will be believed by the next reader.
-
-### Which logs to commit
-
-Logs are R&D evidence. **Split them on provenance, not on how many there are.**
-
-- **Evidence** (commit): output of an **intentional, dated run whose question you can
-  name**. One run that emits six files is one piece of evidence, not six pieces of
-  clutter. Committed to the **default branch** — git gives free versioning and
-  commit-provenance (the log sits next to the change that produced it), and committed
-  logs are discoverable cross-machine via the GitHub API without cloning.
-- **Debris** (gitignore): retries of a run you already have, aborted or offline attempts,
-  per-shard and per-watershed dumps, and iteration output nobody chose to produce. A
-  gitignored subdir (`logs/runs/`, `logs/archive/`) keeps it out of the repo.
-
-The test is **"can I say what question this run answered?"** If yes it is evidence, at
-any file count. If the honest answer is "it is what the pipeline emitted", it is debris,
-even if there is only one of them.
-
-**This replaced a count-based rule that nobody followed.** The previous version called a
-single conventionally-named file per run evidence and "hundreds of files a pipeline
-emitted" bulk. Measured 2026-08-31 across `~/Projects/repo`, practice had diverged three
-ways: `link/data-raw/logs` 791 of 791 tracked, `rtj/scripts/cypher/logs` 175 of 179,
-`fresh/scripts/habitat/logs` 16 of 16, and `floodplains/data/logs` 0 of 40 with the
-directory gitignored. Two repos committed at a scale the rule said to exclude and one
-excluded everything.
-
-The count was a proxy for the wrong thing. `link/data-raw/logs/study_area_run/` holds 84
-files, but that is three to six files per run across roughly fifteen to twenty
-intentional runs — a `compare.csv`, a `compare.log`, a `run_local.log`, then per-job burn
-and prep logs. The old binary had no category for *an intentional run that emits several
-files*, which is the normal case, so anyone applying it literally would have deleted the
-best evidence in the fleet.
-
-Don't reach for S3 for text logs — git is the right home; external object storage only
-earns its place for large binaries. Logs that aren't committed to the default branch are
-invisible to other machines and to evidence tooling — so commit evidence logs **before**
-moving machines, or it's stranded.
-
-#### One subdirectory per campaign
-
-A run producing several files goes in its own subdirectory named for the workload:
-`logs/<campaign>/`. `link/data-raw/logs/study_area_run/` already does this; the rule is
-documenting the practice rather than inventing one. The subdirectory is what lets an
-archive cite a whole run by prefix instead of listing files.
-
-Filenames follow `yyyymmdd_noun_verb-detail_target.ext`. Where one day carries several
-runs, a sequence segment disambiguates — `20260413_01_compare_bcfishpass_baseline.txt`,
-already the pattern in `link/data-raw/logs/`.
-
-#### The directory carries a README, and it names the cutover date
-
-One file, written once, in each run-log directory. Three things:
-
-1. **What produced these** — the script or workload, so a reader is not reverse-engineering it from filenames.
-2. **What the filename pattern means** — each segment.
-3. **That they are retained as contemporaneous evidence of measurement runs**, not accumulated by accident. Without this line a directory called `logs` reads as debris and the next tidy-up gitignores it.
-
-Then the load-bearing line: **the date the naming convention changed in this directory.**
-
-Naming drifts, and converging retroactively is the wrong trade — renaming tracked files
-breaks the filename-to-commit link that makes a log evidence at all, and stales every
-prefix already cited in a PR or an archive README. So convergence is forward-only, and
-the cutover date is what keeps that legible:
-
-```markdown
-Naming: `yyyymmdd_noun_verb-detail_target.ext` from 2026-08-31.
-Files dated before that use `yyyymmdd_HHMMSS_<part>.ext`; they are not being renamed.
-```
-
-The test for that line is that a reader can decide which pattern a file follows **from
-its date alone**, without inspecting neighbouring files. Two patterns coexisting with a
-stated boundary is a documented history. Two coexisting silently is rot.
-
-## QGIS map themes: name one theme, and verify that the layer draws
-
-A map theme (`<visibility-preset>`) stores two things: a list of layers, each with a
-`visible` flag, and the state of each group, keyed by path, in `<checked-group-nodes>`.
-A layer draws in a theme only when it is in that list **and** every group on its path is
-checked in that theme. Promoted from rtj's `CLAUDE.md` on 2026-10-09.
-
-**How to apply:**
-
-- **Name the one theme a layer belongs in.** Write `rfp_qgs_raster_add(themes = "<theme>")`,
-  and never `"all"` for a layer that should not be everywhere. To repair a project that
-  already carries unwanted entries, remove them. `restyle = TRUE` replaces only
-  `<maplayer>` and leaves themes alone, so the add path cannot fix them.
-- **Do not rely on `visible="0"` to keep a layer off.** Mobile honours it, measured on a
-  device, yet one batch of entries showed anyway and is still unexplained. On desktop,
-  switching to a theme that checks the layer's group draws the entry and rewrites it to
-  on, and a save carries that to every device. Inside a theme, `visible="0"` is ordinary
-  serialization, not a sign of a defect.
-- **Verify the layer's presence and its group path, never `visible` alone.** A layer
-  can be in the theme, set `visible="1"` and checked in the layer tree, and still draw
-  nothing, because a parent group is missing from that theme's `checked-group-nodes`.
-  The layer is buried. `rfp_qgs_theme_unbury()` reports buried layers whatever the
-  cause, and repairs them with `dry_run = FALSE`. Since rfp#358, rfp's layer-adding
-  writers tick the group path when they add a layer with `visible = TRUE`, in themes
-  that record group state. `rfp_qgs_theme_layer_add()` does so only with
-  `check_groups = TRUE`, whose default is `FALSE`. An add with `visible = FALSE` ticks
-  nothing, and hand edits still bury layers. rtj's `scripts/gis/stac_raster-verify.R`
-  checks presence and the `visible` set, not the group path.
-- **Draw order is set by the tree, not by the call.** `position = "top"` means the top of
-  the layer's own group. Where that group sits in the tree decides what draws over what.
-- **When a change lands in two projects, compare the projects.** What differs between them
-  is the property nobody specified. When a theme renders nothing on device, check its
-  composition against sibling projects before assuming a client quirk.
-
-*17 lines of evidence for this rule are in `conventions/newgraph.md`.*
-
-## Projects vs Milestones
-
-- **Projects** = daily cross-repo tracking (always add to relevant project)
-- **Milestones** = iteration boundaries (only for release/claim prep)
-- Don't double-track unless there's a reason
-
-| Content | Project |
-|---------|---------|
-| R&D, experiments, SRED-related | **SRED R&D Tracking (#8)** |
-| Data storage, sqlite, postgres, pipelines | **Data Architecture (#9)** |
-| Fish passage field/reporting | **Fish Passage 2025 (#6)** |
-| Restoration planning | **Aquatic Restoration Planning (#5)** |
-| QGIS, Mergin, field forms | **Collaborative GIS (#3)** |
+## Removing something already published
+
+1. **Stop generating it** — the pre-build removal above.
+2. **Remove the deployed copy** — automatic once `clean: true` is in; otherwise
+   an explicit purge.
+3. **De-index** — a Search Console removal request per property, *after* the URL
+   404s.
+
+Do **not** add a `robots.txt` block first. Blocking crawl prevents crawlers from
+seeing the 404, which keeps stale search entries alive longer than doing
+nothing.
+
+`gh-pages` history is not a problem the way normal git history is: on a private
+repo the branch is not publicly browsable, and only the currently-served content
+is public. Deleting the file genuinely ends the exposure — no history rewriting.
+
+## pkgdown drops a footnote's body and keeps its marker
+
+A pandoc footnote — `text[^k]` with a `[^k]: …` block — renders in an article as a
+**superscript marker with no footnote section under it**. The marker is emitted
+(`class="footnote-ref"`), the content is not, and nothing warns.
+
+So the failure is silent and lands on exactly the material a footnote is for: the caveat, the
+definition, the reconciliation. Measured 2026-09-06 in drift#66, where a footnote carrying the
+reconciliation of two circulating hectare totals — the sentence that stops a reader treating them
+as a disagreement — was absent from the published page while `rmarkdown::render()` of the same
+source showed it fine.
+
+- **Do not write footnotes in a pkgdown article.** Promote the content to a block quote, a
+  parenthetical, or its own short paragraph. If it is worth a footnote it is usually worth being
+  visible.
+- **Check the rendered HTML, not the source.** The tell is a marker with nothing to jump to:
+
+  ```bash
+  grep -c 'footnote-ref' docs/articles/<name>.html     # markers emitted
+  grep -c 'class="footnotes' docs/articles/<name>.html # section emitted — expect these to agree
+  ```
+
+Same family as the cross-reference gotcha already noted for vignettes (`\@ref(fig:…)` compiling
+to a literal): bookdown output formats do not carry all of bookdown's machinery through pkgdown,
+and each missing piece fails quietly in its own way. Verify anything structural — footnotes,
+cross-references, numbered captions — against the built page the first time you use it.
 
 
 # Planning Conventions
@@ -3094,6 +2923,363 @@ Conda stays where a conda-forge binary that has no wheel is load-bearing, and Py
 A script that runs `conda run -n <env>` against an environment declared in no file of its own repo cannot run from a fresh clone, so declare the dependencies here instead.
 
 
+# R Package Development Conventions
+
+Standards for R package development across New Graph Environment repositories.
+Based on [R Packages (2e)](https://r-pkgs.org/) by Hadley Wickham and Jenny Bryan.
+
+**Reference packages:** When starting a new package, study these existing
+packages for patterns: `flooded`, `gq`. They demonstrate the conventions below
+in practice (DESCRIPTION fields, NEWS.md style, pkgdown setup, test structure,
+hex sticker, etc.). README layout is `readme.md`, with `link` as its worked example.
+
+## Style
+
+- tidyverse style guide: snake_case, pipe operators (`|>` or `%>%`)
+- Match existing patterns in each codebase
+- Use `pak` for package installation (not `install.packages`)
+- Prefer `fs::` helpers over base R for filesystem path operations in build
+  scripts and scaffolds: `fs::dir_create()` (creates parents by default, no
+  `recursive`/`showWarnings` fiddliness), `fs::path()`, `fs::file_delete()`,
+  `fs::file_exists()`, `fs::path_file()`. Avoids cross-platform separator
+  issues and silent no-ops on empty paths.
+- Prefix column name vectors with `cols_` for discoverability in the
+  environment pane: `cols_all`, `cols_carry`, `cols_split`, `cols_writable`.
+  Same principle for other grouped vectors (`params_`, `tbl_`, etc.)
+- For SQL DDL+INSERT pairs that share a schema, use a single named
+  vector as the source of truth. Both `CREATE TABLE` and
+  `INSERT (cols) SELECT cols` derive their column lists from the same
+  `cols_*` vector. Avoids drift between table shape and write
+  projection — when columns change, you edit one place. Example:
+  ```r
+  cols_streams <- c(
+    id_segment           = "integer NOT NULL",
+    watershed_group_code = "varchar(4) NOT NULL",
+    geom                 = "geometry(MultiLineStringZM, 3005)"
+    # …
+  )
+  # CREATE TABLE consumes both names + types
+  ddl_body <- paste(names(cols_streams), unname(cols_streams), sep = " ",
+                    collapse = ", ")
+  # INSERT consumes names only
+  proj <- paste(names(cols_streams), collapse = ", ")
+  ```
+
+## Package Structure
+
+Follow R Packages (2e) conventions:
+- `R/` for functions, `tests/testthat/` for tests, `man/` for docs
+- `DESCRIPTION` with proper fields (Title, Description, Authors@R)
+- `DESCRIPTION` URL field: include both the GitHub repo and the pkgdown site
+  so pkgdown links correctly (e.g., `URL: https://github.com/OWNER/PKG,
+  https://owner.github.io/PKG/`)
+- `NAMESPACE` managed by roxygen2 (`#' @export`, `#' @import`, `#' @importFrom`)
+- Never edit `NAMESPACE` or `man/` by hand
+
+## One Function, One File
+
+Each exported function gets its own R file and its own test file:
+- `R/fl_mask.R` → `tests/testthat/test-fl_mask.R`
+- Commit the function and its tests together
+- Use `Fixes #N` in the commit message to close the corresponding issue
+
+## GitHub Issues and SRED Tracking
+
+### Issue-per-function workflow
+
+File a GitHub issue for each function before building it. This creates a
+traceable record of what was planned, built, and verified.
+
+### Branching for SRED
+
+For new packages or major features, work on a branch and merge via PR:
+
+```
+main ← scaffold-branch (PR closes with "Relates to NewGraphEnvironment/sred#N")
+```
+
+This gives one PR that contains all commits — a single SRED cross-reference
+covers the entire body of work. Individual commits within the branch close
+their respective function issues with `Fixes #N`.
+
+### Closing issues
+
+Close function issues via commit messages — see Closing Issues in newgraph conventions.
+
+## Testing
+
+- Use testthat 3e (`Config/testthat/edition: 3` in DESCRIPTION)
+- Run `devtools::test()` before committing
+- Test files mirror source: `R/utils.R` -> `tests/testthat/test-utils.R`
+- Test for edge cases and potential failures, not just happy paths
+- Tests must pass before closing the function's issue
+- Always grep for errors in the same command as the test run to avoid
+  running twice:
+  ```bash
+  Rscript -e 'devtools::test()' 2>&1 | grep -E "(FAIL|ERROR|PASS)" | tail -5
+  ```
+  For error context: `grep -E "(ERROR:|FAIL )" -A 10 | head -25`
+
+### Common pitfalls
+
+- **`cli::cli_alert_warning()` is not `warning()`.** It's visual only —
+  callers can't catch it with `withCallingHandlers(warning = ...)` and
+  testthat's `expect_warning()` won't fire. When a function offers a
+  `warn` mode that callers may want to react to programmatically, use
+  `warning()`. Reserve `cli_alert_warning()` for FYI messages with no
+  programmatic contract.
+
+- **`expect_match(x, ..., all = FALSE)` passes silently on `character(0)`.**
+  If the input is empty (e.g. no warnings fired), the assertion succeeds
+  vacuously and defeats the test. Always pair with
+  `expect_gt(length(x), 0)` first when input may be empty.
+
+- **`skip_on_cran()` does not skip on GitHub Actions.** It skips when
+  `NOT_CRAN` is unset — and `devtools`, `usethis`'s check workflow and
+  `r-lib/actions` all set `NOT_CRAN=true`, precisely so your tests *do* run in
+  CI. So a network test guarded only by `skip_on_cran()` runs on every push,
+  and any upstream hiccup reddens the build for a reason unrelated to the
+  change under review.
+  - Use **`skip_on_ci()`** for a test that is meant for a human's machine — a
+    live canary against a third-party service, something slow, anything whose
+    failure needs a person to interpret it.
+  - `skip_if_offline()` is not a substitute: it tests whether the network is
+    reachable, not whether the *service* is behaving, and it calls
+    `skip_if_not_installed("curl")`, so add `curl` to Suggests or the guard
+    itself is what breaks.
+  - Caught 2026-08 in gq#57 by self-review: a comment claiming "skipped off-CI"
+    sat directly above code that did not skip off-CI. Read the guard, not the
+    comment above it.
+
+- **`testthat::test_file()` does NOT set `NOT_CRAN`, so re-running one file to
+  diagnose a failure can execute none of it.** The mirror of the rule above, and
+  the more dangerous direction: `devtools::test()` sets `NOT_CRAN=true`, so a
+  `skip_on_cran()`-guarded test runs there and fails; re-running that same file
+  with `testthat::test_file()` to investigate reports `SKIP` and looks like
+  exoneration.
+
+  ```
+  devtools::test()                 -> [ FAIL 1 | PASS 4495 ]
+  testthat::test_file("that.R")    -> [ FAIL 0 | SKIP 6 ]   Reason: On CRAN
+  NOT_CRAN=true testthat::test_file("that.R") -> [ FAIL 0 | PASS 259 ]
+  ```
+
+  Only the third line is evidence. Measured twice on 2026-09-01 in rfp, both
+  times while confirming whether a Docker-gated failure was a real regression —
+  which is exactly when a false "it passes now" is most expensive. Prefix
+  `NOT_CRAN=true` on any single-file re-run, or read the SKIP count rather than
+  the FAIL count.
+
+- **`local_mocked_bindings(.package = )` needs testthat >= 3.2.0.** A package
+  pinned at `testthat (>= 3.0.0)` errors rather than skipping on an older
+  install. Bump the pin when you first mock another package's binding.
+
+## Examples and Vignettes
+
+### Runnable examples on every exported function
+
+Examples are how users discover what a function does. They must:
+- **Actually run** — no `\dontrun{}` unless external resources are required
+- **Use bundled test data** via `system.file()` so they work for anyone
+- **Show why the function is useful** — not just that it runs, but what it
+  produces and why you'd use it
+- **Use qualified names** for non-exported dependencies (`terra::rast()`,
+  `sf::st_read()`) since examples run in the user's environment
+
+### Vignettes
+
+At least one vignette showing the full pipeline on real data:
+- Demonstrates the package solving an actual problem end-to-end
+- Uses bundled test data (committed to `inst/testdata/`)
+- Hosted on pkgdown so users can read it without installing
+
+What a vignette says, and in what order, is `writing.md`.
+
+**Output format:** Use `bookdown::html_vignette2` (not
+`rmarkdown::html_vignette`) for figure numbering. Requires `bookdown` in
+Suggests and chunks must have `fig.cap` / `caption =` for numbered
+figures and tables.
+
+**Gotcha — cross-references don't resolve in vignettes.** `Table \@ref(tab:foo)`
+and `Figure \@ref(fig:foo)` markers compile to a literal `\@ref(...)` in
+the rendered HTML rather than a numbered link. Bookdown's cross-ref
+machinery isn't fully wired through `html_vignette2` under pkgdown.
+Use natural language instead — "the table below", "the floodplain map",
+"the parameter table" — and let the captions speak for themselves. If
+you need real numbered cross-refs, use `bookdown::html_document2`
+(matches the cd-style report-appendix pattern) and accept that the
+output is no longer a true package vignette.
+
+**Vignettes that need external resources (DB, API, STAC):** Do NOT use
+the `.Rmd.orig` pre-knit pattern — it breaks `bookdown` figure numbering
+because knitr evaluates chunks during pre-knit and emits `![](path)`
+markdown that bookdown can't number.
+
+Instead, separate data generation from presentation:
+1. `data-raw/vignette_data.R` — runs the queries, saves results as `.rds`
+   to `inst/testdata/` (or `inst/vignette-data/`)
+2. Vignette loads `.rds` files, all chunks run live during pkgdown build
+3. A comment in the vignette's setup chunk names the script: `# data from data-raw/script.R`
+4. bookdown controls all chunks — figure numbers, cross-refs work
+
+This is the same pattern as test data: `data-raw/` documents how the data
+was produced, committed artifacts make vignettes reproducible without the
+external resource.
+
+### Test data
+
+- Created via a script in `data-raw/` that documents exactly how the data
+  was produced (database queries, spatial crops, etc.)
+- Committed to `inst/testdata/` — small enough to ship with the package
+- Used by tests, examples, and vignettes — one dataset, three purposes
+
+## Documentation
+
+- roxygen2 for all exported functions
+- `@import` or `@importFrom` in the package-level doc (`R/<pkg>-package.R`)
+  to populate NAMESPACE — don't rely on `::` everywhere in function bodies
+- pkgdown site for public packages with `_pkgdown.yml` (bootstrap 5)
+- GitHub Action for pkgdown (`usethis::use_github_action("pkgdown")`)
+
+## lintr
+
+Run `lintr::lint_package()` before committing R package code. Fix all warnings — every lint should be worth fixing.
+
+### Recommended .lintr config
+
+```r
+linters: linters_with_defaults(
+    line_length_linter(120),
+    object_name_linter(styles = c("snake_case", "dotted.case")),
+    commented_code_linter = NULL
+  )
+exclusions: list(
+    "renv" = list(linters = "all")
+  )
+```
+
+- 120 char line length (default 80 is too strict for data pipelines)
+- Allow dotted.case (common in base R and legacy code)
+- Suppress commented code lints (exploratory R scripts often have commented alternatives)
+- Exclude renv directory entirely
+
+## Dependencies
+
+- Minimize Imports — use `Suggests` for packages only needed in tests/vignettes
+- Pin versions only when breaking changes are known
+- Prefer packages already in the tidyverse ecosystem
+
+## Releasing
+
+1. Update `NEWS.md` — keep it concise:
+   - First release: one line (e.g., "Initial release. Brief description.")
+   - Later releases: describe what changed and why, not function-by-function.
+     Link to the pkgdown reference page for details — don't duplicate it.
+   - Don't list every function; the pkgdown reference page is the single
+     source of truth for what's in the package.
+2. Bump version in `DESCRIPTION` (e.g., `0.0.0.9000` → `0.1.0`) — as the **final** commit of the branch, after verification numbers/tests are final. Mid-branch bumps are premature and churn: additional code changes end up bundled inside a "release" that already claimed the version.
+3. Commit as "Release vX.Y.Z"
+4. Tag: `git tag vX.Y.Z && git push && git push --tags`
+
+## Repository Setup
+
+### Branch protection
+
+Protect main from deletion and force pushes:
+
+```bash
+gh api repos/OWNER/REPO/rulesets --method POST --input - <<'EOF'
+{
+  "name": "Protect main",
+  "target": "branch",
+  "enforcement": "active",
+  "bypass_actors": [
+    { "actor_id": 5, "actor_type": "RepositoryRole", "bypass_mode": "always" }
+  ],
+  "conditions": { "ref_name": { "include": ["refs/heads/main"], "exclude": [] } },
+  "rules": [ { "type": "deletion" }, { "type": "non_fast_forward" } ]
+}
+EOF
+```
+
+### Scaffold checklist
+
+- `usethis::create_package(".")`
+- `usethis::use_mit_license("New Graph Environment Ltd.")`
+- `usethis::use_testthat(edition = 3)`
+- `usethis::use_pkgdown()`
+- `usethis::use_github_action("pkgdown")`
+- `usethis::use_directory("dev")` — reproducible setup script
+- `usethis::use_directory("data-raw")` — data generation scripts
+- Hex sticker via `hexSticker` (see `data-raw/make_hexsticker.R`)
+- Set GitHub Pages to serve from `gh-pages` branch
+
+### dev/dev.R
+
+Keep a `dev/dev.R` file that documents every setup step. Not idempotent —
+run interactively. This is the reproducible recipe for the package scaffold.
+
+## README
+
+What a README says, in what order, and what stays out of it is `readme.md`, which loads
+wherever this file does.
+
+## LLM Workflow
+
+When an LLM assistant modifies R package code:
+1. Run `lintr::lint_package()` — fix issues before committing
+2. Run `devtools::test()` with error grep — ensure tests pass in one call:
+   ```bash
+   Rscript -e 'devtools::test()' 2>&1 | grep -E "(FAIL|ERROR|PASS)" | tail -5
+   ```
+3. Run `devtools::document()` and grep for results:
+   ```bash
+   Rscript -e 'devtools::document()' 2>&1 | grep -E "(Writing|Updating|warning)" | tail -10
+   ```
+4. If the repo has a `_pkgdown.yml`, run `Rscript -e 'pkgdown::check_pkgdown()'`
+   after adding or removing an export. A new export missing from the reference
+   index is an **error**, not a note, so it reddens the pkgdown workflow after
+   the PR is already open — the check costs a second locally and saves the round
+   trip. (Adding to the index is usually right; `@keywords internal` is the
+   alternative it names.)
+5. Check `devtools::check()` passes for releases — capture results in one call:
+   ```bash
+   Rscript -e 'devtools::check()' 2>&1 | grep -E "(ERROR|WARNING|NOTE|errors|warnings|notes)" | tail -10
+   ```
+
+# Writing a README
+A README tells a stranger what a package is, why it is worth their time, and how to try it, in that order and in the fewest words that stay true.
+
+*Index only: each rule's heading and first sentence. The full text is `~/Projects/repo/soul/conventions/readme.md`; read it before writing or reviewing code in its area.*
+
+### Open with what the package is and why it is valuable, not with a list of features
+Open with one to three sentences on what the package is, what data it works on, and why that is valuable, with the restoration planning, implementation or monitoring decision it informs where there is one.
+
+### Write the tagline, the description field, the GitHub About and the opening together
+Change the README tagline, the DESCRIPTION `Title` (or a Python package's pyproject `description`) and the GitHub About text together so they say the same thing, and keep the DESCRIPTION `Description` and the README opening in step with each other.
+
+### Show a little code and its real output, a figure of real output, or both
+Show the package working instead of listing what it can do: a figure of real output where the output is spatial or visual, a short example with the output it really prints, or both.
+
+### Describe nothing that is not fully built
+Leave out every capability that has not shipped, including partly built ones and those framed as a target, a next iteration or a roadmap; add each one when it ships.
+
+### Check each claim against the code path a run takes
+Before a README sentence is published, find the code path a real run takes for it, and check that every "every", "each", "both" or plural holds for every member of the set it names.
+
+### Sections run in a fixed order
+Order a README as: name, hex sticker, a lifecycle badge while unstable, and tagline; the opening; the figure; Installation; the example; Learn more; Ecosystem; Data and methods it builds on; Citation, License and NOTICE.
+
+### State development status with a lifecycle badge, not a warning in the prose
+Mark an unstable installable package with a lifecycle badge under the title, and after the install command say that functions change between releases, link NEWS, and show how to pin a release.
+
+### A README figure of output is made by committed code
+Make every README figure of the package's output from a committed script that runs on real data, check it at its published width, give it alt text and a short caption saying what it shows, and style a map through gq.
+
+### Leave out what another file already keeps
+Leave out roadmaps, changelogs, function tables, version strings in prose, counts of published things, and internal hosts or private repos, because each is kept somewhere else and goes stale in a README.
+
+
 # Reference Management Conventions
 
 How references flow between Claude Code, Zotero, and technical writing at New Graph Environment.
@@ -3291,68 +3477,28 @@ Always verify downloads: `file paper.pdf` should say "PDF document", not HTML.
 - NEVER cite specific numbers without verifying from the source PDF via ragnar search
 - NEVER paraphrase equations — copy exact notation and cite page/section
 
+# Writing for the Reader
+A vignette or a report is written for someone who wants to use what it describes, so it answers their questions in their order and carries nothing that served only its authors.
 
-# SRED Conventions
+*Index only: each rule's heading and first sentence. The full text is `~/Projects/repo/soul/conventions/writing.md`; read it before writing or reviewing code in its area.*
 
-How SR&ED tracking integrates with New Graph Environment's development workflows.
+### Headings are the reader's questions, in the order they ask them
+Make each heading a question the reader brings, in the order they ask it, within whatever sections a report template fixes; in a data product's article, limits and validation go last.
 
-## The Claim: One Project
+### Define a term in its own place, before it is used
+Give a term the article depends on its own short section, ahead of its first use, with its rule, why it exists, and how many cases fall each way.
 
-All SRED-eligible work across NGE falls under a **single continuous project**:
+### A figure must say something a sentence can't
+Keep a figure only when a sentence cannot carry its point; otherwise keep the sentence and drop the figure.
 
-> **Dynamic GIS-based Data Processing and Reporting Framework**
+### Cut what serves the authors
+Remove what the authors needed and the reader does not: parity with superseded products, paths to internal research, and the history of how a decision was reached.
 
-- **Field:** Software Engineering (2.02.09)
-- **Start date:** May 2022
-- **Fiscal year:** May 1 – April 30
-- **Consultant:** Boast Capital (prepares final technical report)
+### State a weakness as what the product does, not what the reader should do
+Describe each of the product's weaknesses in one sentence about what it does, and attach no advice on working around it beyond the product's own rule.
 
-**Do not fragment work into separate claims.** Each fiscal year's work is structured as iterations within this one project. Internal tracking (experiment numbers in `sred`) maps to iterations — Boast assembles the final narrative.
+### State each claim by the code's definition
+Describe a set the code defines by that definition, never by its most familiar member or by a nearby proxy, because the sentence, and any guard written for it, then covers the proxy, not the set.
 
-## Tagging Work for SRED
-
-### PRs (single enforcement point)
-
-SRED cross-references (`Relates to NewGraphEnvironment/sred#N`) go in **PR body templates only** — not in issue bodies, commit messages, or any other surface. The `/gh-pr-push` skill is the single enforcement point. PRs aggregate commits and are the merge unit, so per-issue and per-commit SRED tags only add noise.
-
-### Time entries (rolex)
-
-Tag hours with `sred_ref` field linking to the relevant `sred` issue number.
-
-## Where the evidence lives
-
-Tagging says *which claim* work belongs to. It does not preserve the thing a claim is
-made of — the chain from an uncertainty, through a measurement, to what changed. Three
-conventions hold that, and they are the ones to reach for when a run produces a number:
-
-- **`planning.md`, "The archive README is the measurement record."** The PWF archive
-  carries `Measurement` (numbers, units, what changed because of them) and `Evidence`
-  (a log prefix). Wrong turns stay in — a diagnosis made, retracted, then confirmed by
-  measurement is what systematic investigation looks like, and it is the part a
-  sanitised summary destroys.
-- **`newgraph.md`, "Which logs to commit."** Run logs are evidence when you can name
-  the question the run answered, at any file count. They are committed to the default
-  branch, grouped one subdirectory per campaign, so the archive can cite them.
-- **`planning.md`, "`research/` — what is known, outliving the issue that found it."**
-  The verdict layer: one topic file per settled finding, revised in place so `git log`
-  is its dated history, its header naming what produced it and which issues it came
-  from. The archive is the story of one issue; this is what is known afterwards.
-
-None of the three needs a separate SRED artifact. Boast assembles the narrative from what the
-work already left behind, which is the argument for leaving it behind in a findable
-shape rather than writing a report nobody reads.
-
-## What Qualifies as SRED
-
-**Eligible (systematic investigation to overcome technological uncertainty):**
-- Building tools/functions that don't exist in standard practice
-- Prototyping new integrations between systems (GIS ↔ reporting ↔ field collection)
-- Testing whether an approach works and documenting why it did/didn't
-- Iterating on failed approaches with new hypotheses
-
-**Not eligible:**
-- Standard configuration of known tools
-- Routine bug fixes in working systems
-- Writing reports using the framework (that's service delivery)
-
-**The test:** "Did we try something we weren't sure would work, and did we learn something from the attempt?" If yes, it's likely eligible.
+### Measure the simplification
+Report word and line counts before and after a rewrite, against what was forecast, and name what set the floor.
