@@ -1,0 +1,15 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^\.git$
+^\.github$
+^\.claude$
+^\.Rprofile$
+^\.DS_Store$
+^CLAUDE\.md$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^data$
+^scripts$
+^planning$
+^research$

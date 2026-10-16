@@ -19,7 +19,7 @@
 #     FIELD_MEASUREMENT widths are these same FISS sites.
 #
 # INPUT:  data/fdis/build/{sites,catch,fish}.rds (from 0230), data/fdis_size_breaks.csv
-#         Size classing is knw_size_class() from pkg/ (shared with 0250).
+#         Size classing is knw_size_class() from the package (shared with 0250).
 # OUTPUT: data/fdis/derived/fdis_sites.{csv,gpkg}  one row per site visit: placement, measured
 #                                        and modelled habitat, effort, catch status, focal
 #                                        counts (ignored; pushed to s3://fresh-bc/fdis/derived/)
@@ -32,7 +32,7 @@
 # RUN:    Rscript scripts/0240-fdis-evidence.R   (after 0230, from the repo root)
 # ---------------------------------------------------------------------------
 suppressMessages({ library(dplyr); library(readr); library(tidyr); library(DBI); library(RPostgres) })
-pkgload::load_all("pkg", quiet = TRUE)
+pkgload::load_all(quiet = TRUE)
 
 build <- "data/fdis/build"
 sites <- readRDS(file.path(build, "sites.rds"))

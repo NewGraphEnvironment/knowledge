@@ -56,7 +56,7 @@
 #         Exits non-zero when any row, registry quote, model link, timing source,
 #         coverage cell, thermal cell or flow cell fails.
 # ---------------------------------------------------------------------------
-pkgload::load_all("pkg", quiet = TRUE)   # the source tree, not an installed copy
+pkgload::load_all(quiet = TRUE)   # the source tree, not an installed copy
 
 group_id <- Sys.getenv("GROUP_ID", "4733734")
 evidence_path <- Sys.getenv("EVIDENCE", "data/literature_evidence.csv")

@@ -12,6 +12,9 @@ Description: Functions for assembling fisheries background per watershed group:
     literature evidence for habitat variables by species, and reading the
     registry of intrinsic-potential habitat models that evidence links to.
 License: MIT + file LICENSE
+URL: https://newgraphenvironment.github.io/knowledge/,
+    https://github.com/NewGraphEnvironment/knowledge
+BugReports: https://github.com/NewGraphEnvironment/knowledge/issues
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3

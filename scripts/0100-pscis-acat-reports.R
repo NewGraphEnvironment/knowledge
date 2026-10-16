@@ -47,7 +47,7 @@ conn <- DBI::dbConnect(RPostgres::Postgres(),
 # ---- pull + derive, through the package -------------------------------------
 # knw_pscis_pull() intersects each PSCIS layer with the FWA watershed-group
 # polygon in the database; the two table builders are pure and tested in pkg/.
-pkgload::load_all("pkg", quiet = TRUE)
+pkgload::load_all(quiet = TRUE)
 message("Pulling PSCIS layers for ", wsg_target, " ...")
 layers <- knw_pscis_pull(conn, wsg_target)
 for (nm in names(layers)) message(sprintf("  %-12s %s rows", nm, nrow(layers[[nm]])))

@@ -21,7 +21,7 @@ counter-evidence that size does not set first-winter survival everywhere (below)
 ## How to read the rows
 
 ```r
-pkgload::load_all("pkg")
+pkgload::load_all()   # from the repo root
 x <- knw_literature_read("data/literature_evidence.csv",
                          species_code = c("BT", "WCT", "CH", "CO", "ST", "CRCT"),
                          variable = c("temperature", "degree_days"))

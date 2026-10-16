@@ -26,15 +26,15 @@ being public, provided it ships with a note of when and from where it was receiv
   make public, enable Pages, link#346 edit, rtj#397 apply. This run ends at the open PR.
 
 ## Phase 1: Package at the root
-- [ ] `git mv pkg/{DESCRIPTION,NAMESPACE,LICENSE,NEWS.md,R,man,tests} .`; merge `pkg/.Rbuildignore` into a root one
+- [x] `git mv pkg/{DESCRIPTION,NAMESPACE,LICENSE,NEWS.md,R,man,tests} .`; merge `pkg/.Rbuildignore` into a root one
       excluding `^data$`, `^scripts$`, `^planning$`, `^research$`, `^\.claude$`, `^\.Rprofile$`, `^CLAUDE\.md$`,
       `^docs$`, `^_pkgdown\.yml$`, `^\.github$`, `^\.git$`, `^\.DS_Store$`; remove `pkg/`
-- [ ] DESCRIPTION gains `URL` (site + repo) and `BugReports`
-- [ ] Test pinning the standing rule: no `.R`/`.rda`/`.RData` at the top of `data/` (skips when `data/` is absent,
+- [x] DESCRIPTION gains `URL` (site + repo) and `BugReports`
+- [x] Test pinning the standing rule: no `.R`/`.rda`/`.RData` at the top of `data/` (skips when `data/` is absent,
       i.e. under `R CMD check`); restore-the-bug check that it fires
-- [ ] Scripts load with `pkgload::load_all(quiet = TRUE)` from the root (0100, 0110, 0240, 0250, 0260, 0280); comments
+- [x] Scripts load with `pkgload::load_all(quiet = TRUE)` from the root (0100, 0110, 0240, 0250, 0260, 0280); comments
       saying "pkg/" reworded
-- [ ] `devtools::document()`, `devtools::test()`, `devtools::check()` clean
+- [x] `devtools::document()`, `devtools::test()`, `devtools::check()` clean
 
 ## Phase 2: Clean the live files
 - [ ] Sweep script `planning/active/public_sweep.sh`: one pattern list (DB literals, key path, password-manager names,

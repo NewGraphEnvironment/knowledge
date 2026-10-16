@@ -51,7 +51,7 @@ suppressMessages({
   library(sf); library(DBI); library(RPostgres)
 })
 sf::sf_use_s2(FALSE)
-pkgload::load_all("pkg", quiet = TRUE)
+pkgload::load_all(quiet = TRUE)
 
 snap_tol_m  <- 500   # fwa_indexpoint search radius, as 0230
 snap_flag_m <- 100   # farther snaps are flagged, not dropped, as 0230

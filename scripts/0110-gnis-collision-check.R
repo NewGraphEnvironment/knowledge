@@ -27,7 +27,7 @@ tbls <- DBI::dbGetQuery(conn, "
 tbl <- if (any(tbls$table_schema=="bcfishpass" & tbls$table_name=="streams")) "bcfishpass.streams" else
        paste(tbls$table_schema[1], tbls$table_name[1], sep=".")
 
-pkgload::load_all("pkg", quiet = TRUE)
+pkgload::load_all(quiet = TRUE)
 seed <- readr::read_csv(seed_csv, show_col_types=FALSE)$gnis_base
 amb  <- knw_gnis_collisions(conn, seed, wsg, table = tbl)
 readr::write_csv(amb, file.path("data", tolower(wsg), "gnis_seed_ambiguity.csv"))

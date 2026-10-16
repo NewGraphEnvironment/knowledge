@@ -38,7 +38,7 @@
 #         (repo root)
 # ---------------------------------------------------------------------------
 
-pkgload::load_all("pkg", quiet = TRUE)
+pkgload::load_all(quiet = TRUE)
 
 template_dir <- Sys.getenv("TEMPLATE_DIR", path.expand("~/Projects/repo/fish_passage_template_reporting"))
 rel <- "data/inputs_raw/fish_species_life_history_gantt.csv"
