@@ -19,7 +19,20 @@
 #   - CHANNEL WIDTH is link's: lnk_pipeline_prepare() joins
 #     whse_basemapping.fwa_stream_networks_channel_width by linear_feature_id, province-wide.
 #     Its FIELD_MEASURMENT rows are FDIS sites (CLAUDE.md), so at a visit the width can be that
-#     visit's own measurement; the source is kept so 0297 can split on it.
+#     visit's own measurement, which link will not see on the unmeasured streams it classifies.
+#     So the model width is also recomputed here, by fwapg's own formula
+#     (extras/channel_width/sql/channel_width_modelled.sql, Thorley and Irvine 2021b: upstream
+#     area and upstream mean annual precipitation), and `cw_deploy` is the width link would read
+#     with no field measurement: the stored width unless it is FIELD_MEASURMENT, then the model
+#     where stream_order > 1 (fwapg models no order-1 stream) and NULL otherwise. Check: the
+#     recomputed model matches the stored MODELLED widths (`cw_model_tol_m`; stops under
+#     `cw_model_agree_min`).
+#   - NATURAL CH BARRIER DOWNSTREAM, before observation overrides (0294's test): GRADIENT, FALLS,
+#     SUBSURFACE_FLOW and USER_DEFINITE barriers that block CH (link's gradient barriers block CH
+#     only from its access_gradient_max, lnk_barriers_unify()). From fresh_default.barriers, or
+#     from fresh.barriers (link's bcfishpass bundle) where fresh_default lacks the WSG; NA where
+#     neither holds it. Access decides where link applies a rearing rule, so 0297 scores on
+#     visits with no barrier downstream; the overridden access is never used.
 #   - WATERBODY TESTS of link's CH rear predicate (fresh::frs_habitat_predicates() on link's
 #     configs/default): river polygon, wetland >= `wetland_ha_min`, lake or man-made waterbody
 #     >= `lake_ha_min`, read from the FWA polygons by the visit segment's waterbody_key.
@@ -50,6 +63,9 @@ sources <- c("pick", "pcic_routed", "wet_balance")
 dam_snap_m <- 500                                 # 0294's
 wetland_ha_min <- 1                               # link configs/default rules.yaml, CH rear W
 lake_ha_min <- 100                                # same, CH rear L
+natural <- c("GRADIENT", "FALLS", "SUBSURFACE_FLOW", "USER_DEFINITE")   # 0294's
+cw_model_tol_m <- 0.01
+cw_model_agree_min <- 0.95
 start_window_m <- 5                               # 0290's
 overlap_max_m <- 0.01                             # 0290's
 n_workers <- 4
@@ -186,6 +202,47 @@ v <- v |> left_join(fs |> rename(fwa_waterbody_key = waterbody_key, fwa_channel_
                                  fwa_cw_source = channel_width_source),
                     by = "linear_feature_id")
 add("info", "width_missing", sum(is.na(v$fwa_channel_width)), "no row or NULL in fwa_stream_networks_channel_width")
+
+# fwapg's width model, recomputed for the visits' watershed codes (its SQL, restricted to them)
+cwm <- dbGetQuery(conn, "
+  WITH vc AS (
+    SELECT DISTINCT s.wscode_ltree, s.localcode_ltree, s.watershed_group_code
+    FROM tmp_ch_rule_lf t
+    JOIN whse_basemapping.fwa_stream_networks_sp s ON s.linear_feature_id = t.linear_feature_id
+    WHERE s.localcode_ltree IS NOT NULL),
+  streams AS (
+    SELECT s.wscode_ltree, s.localcode_ltree, s.watershed_group_code,
+           max(coalesce(ua.upstream_area_ha, 0)) + 1 AS upstream_area_ha
+    FROM whse_basemapping.fwa_stream_networks_sp s
+    JOIN vc ON vc.wscode_ltree = s.wscode_ltree AND vc.localcode_ltree = s.localcode_ltree
+           AND vc.watershed_group_code = s.watershed_group_code
+    LEFT JOIN whse_basemapping.fwa_streams_watersheds_lut l ON s.linear_feature_id = l.linear_feature_id
+    JOIN whse_basemapping.fwa_watersheds_upstream_area ua ON l.watershed_feature_id = ua.watershed_feature_id
+    GROUP BY 1, 2, 3)
+  SELECT t.linear_feature_id, s.stream_order AS fwa_stream_order,
+         round(exp(0.3071300 + 0.4577882 *
+           (ln(m.upstream_area_ha) + ln(coalesce(p.map_upstream, 0) + 1) - ln(100) - ln(1000)))::numeric, 2)::float8
+           AS cw_model
+  FROM tmp_ch_rule_lf t
+  JOIN whse_basemapping.fwa_stream_networks_sp s ON s.linear_feature_id = t.linear_feature_id
+  LEFT JOIN streams m ON m.wscode_ltree = s.wscode_ltree AND m.localcode_ltree = s.localcode_ltree
+                     AND m.watershed_group_code = s.watershed_group_code
+  LEFT JOIN whse_basemapping.fwa_stream_networks_mean_annual_precip p
+    ON p.wscode_ltree = s.wscode_ltree AND p.localcode_ltree = s.localcode_ltree")
+if (anyDuplicated(cwm$linear_feature_id)) stop("a segment has two modelled widths")
+v <- v |>
+  left_join(cwm, by = "linear_feature_id") |>
+  mutate(cw_deploy = case_when(!fwa_cw_source %in% "FIELD_MEASURMENT" ~ fwa_channel_width,
+                               fwa_stream_order > 1 ~ cw_model,
+                               TRUE ~ NA_real_))
+mo <- v |> filter(fwa_cw_source %in% "MODELLED") |> distinct(linear_feature_id, fwa_channel_width, cw_model)
+agree <- mean(coalesce(abs(mo$cw_model - mo$fwa_channel_width) <= cw_model_tol_m, FALSE))
+add("info", "cw_model_control", nrow(mo),
+    sprintf("recomputed model within %.2f m of the stored MODELLED width on %.1f %%", cw_model_tol_m, 100 * agree))
+if (agree < cw_model_agree_min) stop("fwapg's width model reproduces the stored width on only ", round(100 * agree, 1), " %")
+fm <- v$fwa_cw_source %in% "FIELD_MEASURMENT"
+add("info", "cw_deploy_from_model", sum(fm & !is.na(v$cw_deploy)), "field-measured segments given the model width")
+add("info", "cw_deploy_null_order1", sum(fm & is.na(v$cw_deploy)), "field-measured order-1 segments, NULL as link would read them unmeasured")
 for (s in sort(unique(na.omit(v$fwa_cw_source)))) add("info", paste0("width_source_", s), sum(v$fwa_cw_source %in% s))
 
 # ---- link's segment where fresh_default classified CH --------------------------
@@ -229,6 +286,42 @@ seg <- dbGetQuery(conn, sprintf("
 dbDisconnect(conn)
 v <- v |> mutate(link_ch_classified = watershed_group_code %in% wsg_ch) |>
   left_join(seg, by = "site_visit")
+
+# ---- natural CH barrier downstream, before overrides ----------------------------
+conn <- pg()
+pts <- v |> distinct(watershed_group_code, linear_feature_id, blue_line_key, downstream_route_measure)
+code <- dbGetQuery(conn, "SELECT linear_feature_id, wscode_ltree::text AS wscode, localcode_ltree::text AS localcode
+                          FROM whse_basemapping.fwa_stream_networks_sp
+                          WHERE linear_feature_id = ANY($1::bigint[])",
+                   params = list(paste0("{", paste(unique(pts$linear_feature_id), collapse = ","), "}")))
+# 0294 gave a segment with no codes its parent's; those visits keep NA here and are counted
+pts <- pts |> left_join(code, by = "linear_feature_id")
+bar_src <- function(schema) dbGetQuery(conn, sprintf("SELECT DISTINCT watershed_group_code w FROM %s.barriers", schema))$w
+wsg_fd <- bar_src("fresh_default")
+wsg_fr <- setdiff(bar_src("fresh"), wsg_fd)
+bar_hit <- function(schema, wsgs) {
+  p <- pts |> filter(watershed_group_code %in% wsgs, !is.na(wscode), !is.na(localcode))
+  dbWriteTable(conn, "tmp_ch_rule_bp", p, temporary = TRUE, overwrite = TRUE)
+  dbGetQuery(conn, sprintf("
+    SELECT t.linear_feature_id, t.downstream_route_measure,
+           EXISTS (SELECT 1 FROM %1$s.barriers b
+                   WHERE b.wscode_ltree @> t.wscode::ltree
+                     AND b.barrier_source IN (%2$s) AND 'CH' = ANY(b.blocks_species)
+                     AND fwa_downstream(t.blue_line_key::integer, t.downstream_route_measure,
+                                        t.wscode::ltree, t.localcode::ltree,
+                                        b.blue_line_key::integer, b.downstream_route_measure,
+                                        b.wscode_ltree, b.localcode_ltree)) AS natural_barrier_dnstr
+    FROM tmp_ch_rule_bp t", schema, paste0("'", natural, "'", collapse = ",")))
+}
+bh <- bind_rows(bar_hit("fresh_default", wsg_fd) |> mutate(barrier_schema = "fresh_default"),
+                bar_hit("fresh", wsg_fr) |> mutate(barrier_schema = "fresh"))
+dbDisconnect(conn)
+if (anyDuplicated(bh[c("linear_feature_id", "downstream_route_measure")])) stop("a point has two barrier results")
+v <- v |> left_join(bh, by = c("linear_feature_id", "downstream_route_measure"))
+add("info", "barrier_known", sum(!is.na(v$natural_barrier_dnstr)),
+    sprintf("%d WSGs from fresh_default, %d more from fresh (bcfishpass bundle)", length(wsg_fd), length(wsg_fr)))
+add("info", "barrier_dnstr", sum(v$natural_barrier_dnstr %in% TRUE),
+    sprintf("CH caught on %d", sum(v$present_CH & v$natural_barrier_dnstr %in% TRUE)))
 add("info", "link_ch_wsgs", length(wsg_ch), "WSGs with fresh_default.streams_habitat_ch rows")
 add("info", "link_ch_visits", nrow(vc), sprintf("placed on a link segment: %d", sum(!is.na(v$link_id_segment))))
 
@@ -236,6 +329,7 @@ add("info", "link_ch_visits", nrow(vc), sprintf("placed on a link segment: %d", 
 hz_zip <- tempfile(fileext = ".zip")
 h <- curl::curl_fetch_disk(hz_url, hz_zip, handle = curl::new_handle(timeout = 300, followlocation = TRUE))
 if (h$status_code != 200) stop("hydrologic zones download returned HTTP ", h$status_code)
+add("info", "zone_zip", file.size(hz_zip), paste("md5", unname(tools::md5sum(hz_zip)), hz_url))
 hz_dir <- tempfile("hydz")
 utils::unzip(hz_zip, exdir = hz_dir)
 hz_shp <- list.files(hz_dir, "\\.shp$", full.names = TRUE, recursive = TRUE)
