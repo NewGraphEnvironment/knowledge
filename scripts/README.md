@@ -68,7 +68,7 @@ wf_farm_priority.js                          farm priority/crossing tables out o
       6 socket workers)
 0298  recommended rule beside default on fresh_default's CH groups (predicate, overlay and fresh's
       connectivity pass on scratch copies; needs the link repo, LINK_REPO) -> data/ch_rule_compare.csv,
-      ch_rule_checks.csv, ch_rule_change.csv, maps in research/fig/ (+ log; ~30 min)
+      ch_rule_checks.csv, ch_rule_change.csv, maps in research/fig/ (+ log; ~20 min)
       then: aws s3 cp data/fdis/derived/ch_rule_visits.csv s3://fresh-bc/fdis/derived/
             aws s3 cp data/fdis/derived/ch_rule_walks.csv s3://fresh-bc/fdis/derived/
 
