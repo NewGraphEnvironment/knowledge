@@ -83,6 +83,38 @@ Depends on PR #53. Relates to #52, #42.
 The issue named `0296-ch-rule-tune.R`. The split follows 0294/0295's build/use pair and keeps the side-by-side's
 database writes-out-of-R separate from the model.
 
+## Walk profile positive control (2026-10-16)
+
+`ch_dist_profile(blk, m, '{1,10,50}', 'pick')` was run on 0294's 12,932 small-stream starts, on 4 workers in 0.65 min.
+At Q = 10 it matches 0294's `ch_dist_large` on all 12,932: status, `large_lfid`, and distance to within 2.9e-11 m.
+The distances for Q = 1, 10, 50 are monotone. `none` counts: 602 at Q = 1, 1,305 at Q = 10, 2,019 at Q = 50.
+
+## link's `default` CH rearing is a predicate, then a cluster pass (2026-10-16)
+
+- **The predicate.** `fresh::frs_habitat_predicates()` builds it from link `configs/default` (thresholds plus
+  `rules.yaml`):
+  - stream edges (1000, 1100, 2000, 2300) with `gradient BETWEEN 0 AND 0.0549` and `channel_width BETWEEN 1.5 AND 9999`;
+  - OR a river polygon with the same gradient and `channel_width BETWEEN 0 AND 9999`, which fails a NULL width;
+  - OR a wetland ≥ 1 ha on edges 1000/1100/1050/1150;
+  - OR a lake or man-made waterbody ≥ 100 ha on lake edges.
+  `BETWEEN 0` means a negative FWA gradient fails.
+- **The cluster pass.** `lnk_pipeline_connect()` runs `fresh::frs_cluster()` after it. For CH that is
+  `cluster_rearing TRUE`, direction `both`, bridge gradient 0.05, bridge distance 10 km, confluence 10 m
+  (`parameters_fresh.csv`). A rearing cluster with no spawning connection loses its rearing.
+- **No stream-order bypass.** For CH, `rear_stream_order_bypass` is `no`.
+- **Mixed versions.** `fresh_default.log` records runs for only 5 of 56 groups, at link 0.44.3–0.63.1. CH is
+  classified in 31 groups.
+- **Agreement of the predicate alone with stored `rearing`** (accessible segments):
+  - predicate true, stored false: 7,795 segments, 2,472 km. Expected from the cluster pass, plus any version drift.
+  - stored true, no branch true: 2,664 segments, 210 km. Overlay or drift.
+  - both true: 107,646 segments.
+- **Consequence.** The side by side regenerates both rules through the same predicate generator and the same
+  cluster pass, and reports regenerated `default` against the stored flags per group. Visit-level scoring
+  (0297) uses the predicate only. The cluster pass is a stated limit there.
+- **MAD-floor rules.** Under fresh's `mad` model the river-polygon branch drops its width test and inherits the MAD
+  range. A tuned MAD rule therefore sets `rear_mad_max` open (9999), because `default`'s 100 never acts while
+  every group is on `cw`.
+
 ## Errors Encountered
 
 | Error | Resolution |
