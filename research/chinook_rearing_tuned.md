@@ -51,8 +51,7 @@ pass that keeps only rearing connected to spawning.
    and no rule without the exception reaches the region.
 2. **The tuned rule is narrower than `default`, not wider.** On the tuning visits it admits 731 visits against
    1,788 and takes in 128 CH against 130 (raw rates 17.5 % against 7.3 %). On link's segments in the 31 groups,
-   CH rearing falls from 31,948 to 25,494 km (−20 %). 9,399 km are lost, mostly small tributaries, and 2,945 km
-   are gained, mostly small streams within a kilometre of a river.
+   CH rearing falls from 31,948 to 25,494 km (−20 %): 9,399 km are lost and 2,945 km gained (TODO_REASONS).
 3. **Neither size nor distance has a threshold in the data.** Detection rises log-linearly with MAD and steadily
    with width, and falls steadily with distance. Each value is the cut that best separates held-out detection, not a
    bend in a curve.
@@ -321,15 +320,15 @@ Most of these records are dated 1926–2007. Their life stage is mostly unrecord
 could be removed.
 
 **Maps.** The groups were chosen by criteria fixed before drawing: SALR has the largest share of accessible stream
-km on order 1–2 (0.85); TWAC has all of its FDIS visits in hydrologic zones 15, 17, 23 or 24; LFRA has the largest
-share of visits whose 10 m³/s walk reaches the sea (0.21). Orange is `default` only, green tuned only, blue both.
+km on order 1–2 (0.85); TWAC has all of its visits in hydrologic zones 15, 17, 23 or 24; LFRA has the largest
+share of visits whose 10 m³/s walk reaches the sea (0.21). The visit shares are over the analysed FDIS visits on
+link segments. Orange is `default` only, green tuned only, blue both.
 
 ![SALR](fig/chinook_rearing_tuned_salr.png)
 ![TWAC](fig/chinook_rearing_tuned_twac.png)
 ![LFRA](fig/chinook_rearing_tuned_lfra.png)
 
-In each, the tuned rule drops headwater tributaries that pass `default`'s 1.5 m width but carry under 0.75 m³/s, and
-adds short tributary reaches along the mainstem: the exception.
+TODO_MAPS
 
 ## Limits
 

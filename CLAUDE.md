@@ -38,6 +38,9 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   `bt_spawn_evidence.csv` (BT spawner-evidence rates by gradient class; `0293`, `research/bt_spawning.md`),
   `ch_mad_use.csv` (CH detection by wet's MAD class and, on small streams, by distance to a large river,
   from FDIS visits; `0294`-`0295`, `research/chinook_stream_size.md`),
+  `ch_rule_{tune,curves,flips,compare,checks,change}.csv` (the tuned CH rearing rule: every rule's held-out
+  score, the GAM curves, flow-source flips, and the rule beside `default` on link's segments; `0296`-`0298`,
+  `research/chinook_rearing_tuned.md`),
   and
   `habitat_modelling_{members,additions}.csv` (what `0270` puts in the group's `Fisheries/habitat_modelling`
   collection, which with the species collections feeds the `habitat_modelling` store), and
