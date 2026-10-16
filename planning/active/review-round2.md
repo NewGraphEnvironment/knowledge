@@ -26,8 +26,8 @@ S3, a database or GitHub.
   over the part after the marker gives 39 hits:
   - 16 `private_repo`: `soul#366`, `soul#352`, `soul#52`, `rfp#268`, `rtj#322`, `fish_passage_template_reporting#236`,
     and two `https://github.com/NewGraphEnvironment/soul/...` links, which 404 for the public;
-  - 15 `local_path`: `~/Projects/repo/soul/conventions/...` (eight times), `/Users/airvine/...`, and
-    `(airvine, 2026-08-29)`;
+  - 15 `local_path`: `<soul checkout>/conventions/...` (eight times), an absolute home path, and
+    an author handle with a date;
   - 6 `host`: `m1 0.0391 vs cypher 0.0872` at CLAUDE.md:2611, `tailnet`, and `Tailscale` (three);
   - 1 `internal_ref` and 1 `template_name`.
 
@@ -87,4 +87,4 @@ S3, a database or GitHub.
   - The pkgdown workflow removes CLAUDE.md before the build and then asserts the set of top-level pages.
   - The tree sweep exits clean on HEAD.
 
-/Users/airvine/Projects/repo/knowledge/planning/active/review-round2.md
+planning/active/review-round2.md

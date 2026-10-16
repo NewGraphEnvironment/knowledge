@@ -66,4 +66,4 @@ scratchpad only. Nothing in the repo was edited except this file, and nothing wa
 - 0153 and 0270: the key is read once at import of 0153, which 0270 loads as a module. The env-only change applies to
   both.
 
-/Users/airvine/Projects/repo/knowledge/planning/active/review-round1.md
+planning/active/review-round1.md

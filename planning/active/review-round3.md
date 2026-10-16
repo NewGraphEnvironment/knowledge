@@ -30,14 +30,14 @@ state, not from the full population. Two cases remain:
 
 | Surface | Verdict | Evidence |
 |---|---|---|
-| Tracked tree at HEAD, including binary files | **Does not hold for project identifiers** | The tree sweep is clean, but `data/context_bowron_mcgregor.md:3` names the QGIS project `sern_fraser_2024`. That is the `<client>_<region>_<year>` form. `project_repo` matches only `…_\d{4}_(reporting\|planning)` and `fish_passage_x_yyyy`, so it cannot see it. This is the issue's own "one field-project name in one file". Its checkbox is still open in findings.md:30, and Phase 2 of task_plan.md replaced it with the repo-name items. No other `[a-z]+_[a-z]+_20xx` slug sits outside the exemptions. The host exemption for every `.csv` hides only site labels M1/M4 in `priority_farmed_all.csv`. There is no Dropbox, cypher or tailnet text in any csv, and 0297 has no host hits. Email addresses: only `al@newgraphenvironment.com` (DESCRIPTION, Rd). No `/home/` or IP literals. |
+| Tracked tree at HEAD, including binary files | **Does not hold for project identifiers** | The tree sweep is clean, but `data/context_bowron_mcgregor.md:3` names the QGIS project `<client project slug>`. That is the `<client>_<region>_<year>` form. `project_repo` matches only `…_\d{4}_(reporting\|planning)` and `fish_passage_x_yyyy`, so it cannot see it. This is the issue's own "one field-project name in one file". Its checkbox is still open in findings.md:30, and Phase 2 of task_plan.md replaced it with the repo-name items. No other `[a-z]+_[a-z]+_20xx` slug sits outside the exemptions. The host exemption for every `.csv` hides only site labels M1/M4 in `priority_farmed_all.csv`. There is no Dropbox, cypher or tailnet text in any csv, and 0297 has no host hits. Email addresses: only `al@newgraphenvironment.com` (DESCRIPTION, Rd). No `/home/` or IP literals. |
 | CLAUDE.md below the marker | Reported, not failed (accepted) | `generated()` counts it. |
-| `planning/`, `scripts/logs/` | Exempt by decision, **but CLAUDE.md says the opposite** | 98 of 313 tracked files there carry 2,671 pattern hits (2,372 of them `local_path`). It also holds the slugs `sern_fraser_2024` and `hagenj_spendlowi_2019`. See the third finding. |
+| `planning/`, `scripts/logs/` | Exempt by decision, **but CLAUDE.md says the opposite** | 98 of 313 tracked files there carry 2,671 pattern hits (2,372 of them `local_path`). It also holds the slugs `<client project slug>` and `<a second slug>`. See the third finding. |
 | Issue and PR titles and bodies, conversation comments, review comments, review bodies | Holds | Current text is swept. First-match masking was checked in round 2. |
 | Rename events | Holds | Swept since round 2. The only hit is #4 (known). |
 | **Edit histories of bodies and comments** | **Does not hold** | The sweep does not read them. The deletion list in findings.md:111-136 is the items this session edited. Measured with GraphQL `userContentEdits` across all 57 items: 35 bodies and 5 comments have histories, and old revisions carry hits on 23 items. Every one is on the list except #19, #20, #43, #45, #50 and #53. #20 is the `m1` formula term. #43, #45, #50 and #53 are the allowed `sred` reference. **#19 is a real miss:** its 2026-09-26T05:53Z and 2026-09-29T04:20Z revisions name `fish_passage_template_reporting`. They were edited out on 2026-09-30, before this branch, so its current body is clean and the list never saw it. |
 | This branch's commit messages | Holds | `origin/main..HEAD`. A stale `origin/main` widens the range, so it fails toward fail. The branch is not pushed yet: the API lists only `main` and the #11 branch. |
-| Other live branch `11-quick-read-of-the-north-thompson-fish-pa` (open PR #12) | Exempt as history / `refs/pull/*` by decision. **Owner should confirm** | It holds 9 unmerged commits. Its tip tree carries 117 pattern hits, mostly old CLAUDE.md, pkg/R/pscis.R, 0100 and scripts/README.md, which the forward fix supersedes on main. Two of those files exist only on that branch, so main's clean-up never reaches them. `scripts/0106-reports-sites-geojson.R` has the tunnel/63333 and postgres/postgres literals. `scripts/0107-report-sites-crossings-join.R:25` has `/Users/airvine/Projects/gis/sern_thompson_2026/…`, a client project slug inside a home path. The open PR's "Files changed" tab shows both. Deleting the branch does not remove `refs/pull/12/head`. |
+| Other live branch `11-quick-read-of-the-north-thompson-fish-pa` (open PR #12) | Exempt as history / `refs/pull/*` by decision. **Owner should confirm** | It holds 9 unmerged commits. Its tip tree carries 117 pattern hits, mostly old CLAUDE.md, pkg/R/pscis.R, 0100 and scripts/README.md, which the forward fix supersedes on main. Two of those files exist only on that branch, so main's clean-up never reaches them. `scripts/0106-reports-sites-geojson.R` has the tunnel/63333 and postgres/postgres literals. `scripts/0107-report-sites-crossings-join.R:25` has `<home>/<gis dir>/<client project slug>/…`, a client project slug inside a home path. The open PR's "Files changed" tab shows both. Deleting the branch does not remove `refs/pull/12/head`. |
 | Actions runs and artifacts | Holds | 0 runs, 0 artifacts. Runs after merge build only public content. |
 | `gh-pages` branch, created by the deploy after merge | Holds | Build output only, behind the page check below. Pages is not enabled (404), so nothing is served before the flip. |
 | Wiki, discussions, releases, tags, milestones, commit comments, labels, environments, deployments, description, topics, homepage | Holds | Wiki has no pages, discussions are off, 0/0/0/0, labels are the defaults, 0 environments, 0 deployments. The description is generic, topics are empty and homepage is null. |
@@ -65,7 +65,7 @@ state, not from the full population. Two cases remain:
 
 ## Findings
 
-- **[security] data/context_bowron_mcgregor.md:3**: `` `sern_fraser_2024` QGIS project `` is a client project
+- **[security] data/context_bowron_mcgregor.md:3**: `` `<client project slug>` QGIS project `` is a client project
   identifier. It will be public in the tree at the flip.
   - It is the "one field-project name in one file" the issue lists (findings.md:14, 30). That checkbox was never
     carried into task_plan.md, which substituted the repo-name items.
@@ -107,7 +107,7 @@ state, not from the full population. Two cases remain:
 - **[fragile] CLAUDE.md:57-63** states two things the guard does not support:
   - "Nothing tracked here … carries client or project identifiers, host or machine names … That includes
     `planning/`". In fact `planning/` and `scripts/logs/` are exempt by decision and carry 2,671 hits in 98 files,
-    including `sern_fraser_2024`.
+    including `<client project slug>`.
   - `public_sweep.py` "searches … for all of the above". It skips those directories and has no general
     project-identifier pattern.
 
@@ -119,7 +119,7 @@ state, not from the full population. Two cases remain:
 - **[security, low; owner decision] branch `11-quick-read-of-the-north-thompson-fish-pa` / open PR #12**: this
   becomes public with the repo. Its tip tree is browsable on the branch selector and in the PR's Files tab. Two
   scripts exist only on that branch, so main's clean-up never reaches them:
-  - `scripts/0107-report-sites-crossings-join.R:25` holds `/Users/airvine/Projects/gis/sern_thompson_2026/…`, a
+  - `scripts/0107-report-sites-crossings-join.R:25` holds `<home>/<gis dir>/<client project slug>/…`, a
     client project slug inside a home path.
   - `scripts/0106-reports-sites-geojson.R:16,34-41` holds the tunnel/63333 and postgres/postgres literals.
 
@@ -130,4 +130,4 @@ state, not from the full population. Two cases remain:
   - close PR #12 and delete the branch, which still leaves `refs/pull/12/head`;
   - fix the two files on that branch before the flip.
 
-/Users/airvine/Projects/repo/knowledge/planning/active/review-round3.md
+planning/active/review-round3.md

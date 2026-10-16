@@ -24,8 +24,8 @@ PATTERNS = {
     "password_manager": r"1Password|op://|\bop read\b",
     "host": r"\b(m1|M1|m4|M4|cypher|openclaw)\b|tailnet|Tailscale|Dropbox|OneDrive",
     "private_repo": rf"NewGraphEnvironment/({PRIVATE_REPOS})\b|\b(template|{PRIVATE_REPOS})#\d+",
-    # Repo-shaped names, and the client/project slug class <client>_<region>_<year>.
-    "project_repo": r"\b[a-z]+_[a-z_]*\d{4}_(reporting|planning)\b|fish_passage_[a-z]+_\d{4}|\b[a-z]+_[a-z]+_20\d{2}\b",
+    # Repo-shaped names, and the client/project slug class <client>_<region>_<year> (or hyphenated).
+    "project_repo": r"\b[a-z]+_[a-z_]*\d{4}_(reporting|planning)\b|fish_passage_[a-z]+_\d{4}|\b(?!et[-_]al[-_])[a-z]+[-_][a-z]+[-_]20\d{2}\b",
     "internal_ref": r"\bdb-newgraph\b|\bcomms/|\bpoisreport\b",
     "local_path": r"airvine|/Users/|claude-50\d|~/Projects|Projects/repo",
     "template_name": r"fish[-_]passage[-_]template[-_]reporting",
@@ -34,7 +34,10 @@ RX = {k: re.compile(v) for k, v in PATTERNS.items()}
 
 # Left as they are (#56): planning/ (PWF and archives), run logs, git history (not
 # swept), and the literature tables' cited quotes.
-EXEMPT_PREFIX = ("planning/archive/", "planning/active/", "scripts/logs/")
+EXEMPT_PREFIX = ("planning/archive/", "scripts/logs/")
+# planning/active/ is the PWF in flight, which discusses the removed text by necessity; it is
+# held only to the client/project and local-path classes, which no planning file may carry.
+PARTIAL = {"planning/active/": ("project_repo", "local_path")}
 EXEMPT_FILE = {"data/literature_evidence.csv"}
 # Per-pattern exemptions for measured false positives: site labels such as M1 in
 # data tables, and the model objects m1..m3 in 0297.
@@ -66,6 +69,10 @@ def tree():
         for n, line in enumerate(text.split("\n"), 1):
             for k, rx in RX.items():
                 if k in EXEMPT_PATTERN and EXEMPT_PATTERN[k](f):
+                    continue
+                if any(f.startswith(pre) and k not in keep for pre, keep in PARTIAL.items()):
+                    continue
+                if f == "planning/active/public_sweep.py":
                     continue
                 if rx.search(line):
                     hits.append((k, f"{f}:{n}", line.strip()[:160]))
@@ -144,17 +151,28 @@ def commits():
 
 
 def history():
-    """Every earlier revision of an issue or PR body or a comment (GraphQL userContentEdits).
-    GitHub shows these to anyone who can read the item; only the web UI deletes them, so this
-    mode lists what is still to delete rather than failing the default sweep."""
-    q = """query($o:String!,$r:String!,$c:String){repository(owner:$o,name:$r){
-      issues(first:20,after:$c){pageInfo{hasNextPage endCursor} nodes{url
-        userContentEdits(first:100){nodes{editedAt diff}}
-        comments(first:50){nodes{url userContentEdits(first:100){nodes{editedAt diff}}}}}}}}"""
-    qp = q.replace("issues(first:20", "pullRequests(first:20")
+    """Every earlier revision of an issue or PR body, a comment, a PR review or a review comment
+    (GraphQL userContentEdits). GitHub shows these to anyone who can read the item; only the web
+    UI deletes them, so this mode lists what is still to delete rather than failing the default
+    sweep. Each connection's totalCount is checked against its page, so a long thread stops the
+    run instead of reading as clean."""
+    E = "userContentEdits(first:100){totalCount nodes{editedAt diff}}"
+    C = f"comments(first:50){{totalCount nodes{{url {E}}}}}"
+    issues_q = ("query($o:String!,$r:String!,$c:String){repository(owner:$o,name:$r){"
+                f"issues(first:20,after:$c){{pageInfo{{hasNextPage endCursor}} nodes{{url {E} {C}}}}}}}}}")
+    R = f"reviews(first:20){{totalCount nodes{{url {E} comments(first:20){{totalCount nodes{{url {E}}}}}}}}}"
+    prs_q = ("query($o:String!,$r:String!,$c:String){repository(owner:$o,name:$r){"
+             f"pullRequests(first:10,after:$c){{pageInfo{{hasNextPage endCursor}} nodes{{url {E} {C} {R}}}}}}}}}")
+    limits = {"comments": 50, "reviews": 20, "review comments": 20, "edits": 100}
+
+    def full(conn, what, where):
+        if conn["totalCount"] > limits[what]:
+            sys.exit(f"history: {where} has {conn['totalCount']} {what}, more than one page reads")
+        return conn["nodes"]
+
     hits = []
     owner, name = REPO.split("/")
-    for query, key in ((q, "issues"), (qp, "pullRequests")):
+    for query, key in ((issues_q, "issues"), (prs_q, "pullRequests")):
         cursor = None
         while True:
             args = ["graphql", "-f", f"query={query}", "-F", f"o={owner}", "-F", f"r={name}"]
@@ -165,8 +183,11 @@ def history():
                 sys.exit(f"gh api graphql failed: {out.stdout or out.stderr}")
             page = json.loads(out.stdout)["data"]["repository"][key]
             for it in page["nodes"]:
-                for obj in [it] + it["comments"]["nodes"]:
-                    for ed in obj["userContentEdits"]["nodes"]:
+                objs = [it] + full(it["comments"], "comments", it["url"])
+                for rv in full(it["reviews"], "reviews", it["url"]) if "reviews" in it else []:
+                    objs += [rv] + full(rv["comments"], "review comments", rv["url"])
+                for obj in objs:
+                    for ed in full(obj["userContentEdits"], "edits", obj["url"]):
                         for k, rx in RX.items():
                             m = rx.search(ed.get("diff") or "")
                             if m and not ("/pull/" in obj["url"] and m.group(0) == "NewGraphEnvironment/sred") \

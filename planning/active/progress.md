@@ -49,3 +49,13 @@
   26/0); `PULL` wrote CSVs in place (now `.part`, row-checked, renamed); #19's revisions were missing from the recalled
   deletion list (a `history` sweep mode now measures it: 23 items); CLAUDE.md overstated what `planning/` and the sweep
   cover (reworded). Owner decisions left: #4's retitle entry, and the issue branch behind open PR #12.
+- Round 4 (`review-round4.md`, an enumeration round): its enumeration held on every surface and every completion marker
+  except four findings, three inside round-3 fixes, all reproduced and fixed: the slug class took only underscores
+  (a hyphenated client slug sits in the generated conventions; pattern now `[-_]`, soul#439 updated); this branch's
+  PWF quoted client slugs and home paths (scrubbed, and `planning/active/` is now swept for those two classes); the
+  flip followed a revision list frozen at PR time (now gated on `history` and `all` run on the day); `history()` read
+  one page of comments with no check and no PR reviews (every connection's `totalCount` is now checked, a lowered
+  limit stops the run, and reviews and review comments are read; same 23 items).
+- Loop ended by enumeration rather than a fifth reviewer: the slug class matches only exempt areas (old archives, a
+  literature citation key) and the generated text in soul#439; `all` returns only #4's retitle; `history` returns the
+  23 recorded items; each CLAUDE.md sentence about the sweep was checked against its code.

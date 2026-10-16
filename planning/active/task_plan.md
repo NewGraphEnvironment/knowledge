@@ -92,8 +92,11 @@ being public, provided it ships with a note of when and from where it was receiv
 - [ ] `/planning-archive`, then `/gh-pr-push`
 
 ## After merge (not in this run; each on your word)
-1. Delete earlier revisions of the edited issue/PR bodies in the web UI (list provided in the PR).
-2. Make the repo public; enable Pages on gh-pages.
+1. Delete earlier revisions in the web UI. Take the list from `public_sweep.py history` on the day, not from the
+   PR: revisions keep arriving (code-check round 4).
+2. Gate: on the day of the flip, `public_sweep.py history` prints no hits and `public_sweep.py all` prints only
+   accepted items (#4's retitle, if accepted). Decide on #4 (accept, or delete and re-file) and on the issue branch
+   behind open PR #12 first. Then make the repo public and enable Pages on gh-pages.
 3. rtj#397: apply the bucket policy for `fdis/` and `knowledge/`.
 4. link#346: name this repo and link #57.
 5. Drop the `fdis-public-release` memory.

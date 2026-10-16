@@ -74,8 +74,7 @@ public funder names in area briefs, and the literature table's cited quotes.
   `0200`–`0220`, `scripts/README.md`, two research files, `data/temperature_members.csv`), `logic#4` in
   `research/stream_temperature.md`; `db-newgraph` skill in `scripts/README.md`. link, fwapg, wet, cred, fresh,
   bcfishpass are public and stay.
-- Project-named repos: `fish_passage_skeena_2022_planning` (`0100`), `fish_passage_skeena_2025_reporting`,
-  `fish_passage_elk_2022_reporting` (`research/stream_temperature.md`).
+- Project-named repos: three report and planning repos named for their projects (`0100`, `research/stream_temperature.md`).
 - No consumer installs `knowledge/pkg` in code; scripts load with `pkgload::load_all("pkg")` (6 scripts).
 - `pkgload::load_data()` sources only `.R`/`.rda` at the top of `data/`; none exist today.
 - `s3://fresh-bc/fdis/` holds the extract, `queries/`, `fiss-database-structure/`, plus `fissr_explore.sqlite` and
