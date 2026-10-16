@@ -1,0 +1,34 @@
+url: https://newgraphenvironment.github.io/knowledge/
+template:
+  bootstrap: 5
+
+reference:
+  - title: Habitat evidence
+    desc: >
+      Read and validate the cited literature evidence and the intrinsic-potential
+      model registry.
+    contents:
+      - knw_literature_read
+      - knw_literature_vocab
+      - knw_ip_read
+      - knw_ip_vocab
+  - title: Life-history timing
+    contents:
+      - knw_timing_read
+      - knw_timing_stages
+  - title: Fish records
+    contents:
+      - knw_size_class
+  - title: Crossings and past reports
+    desc: >
+      Pull PSCIS crossing layers for a watershed group and derive the crossing
+      and past-report tables; check stream names before searching by name.
+    contents:
+      - knw_pscis_layers
+      - knw_pscis_pull
+      - knw_pscis_crossings
+      - knw_pscis_reports
+      - knw_gnis_collisions
+  - title: Package
+    contents:
+      - knowledge-package

@@ -52,12 +52,12 @@ being public, provided it ships with a note of when and from where it was receiv
 - [x] Sweep over the tree returns only exempt hits (left: README, rewritten in Phase 3; CLAUDE.md, Phase 5)
 
 ## Phase 3: pkgdown site
-- [ ] `_pkgdown.yml` (url `https://newgraphenvironment.github.io/knowledge/`, bootstrap 5, reference index grouping
+- [x] `_pkgdown.yml` (url `https://newgraphenvironment.github.io/knowledge/`, bootstrap 5, reference index grouping
       the `knw_*` readers/builders) and `.github/workflows/pkgdown.yaml` copied from fresh
-- [ ] Root README rewritten as the public home page: what the repo is, install
+- [x] Root README rewritten as the public home page: what the repo is, install
       (`pak::pak("NewGraphEnvironment/knowledge")`), layout, the three tracks, and links to `research/README.md` and
       each research file (GitHub URLs, since `research/` is not in the build)
-- [ ] `pkgdown::build_site()` locally builds with no warnings; `docs/` ignored
+- [x] `pkgdown::build_site()` locally builds with no warnings; `docs/` ignored
 
 ## Phase 4: FDIS on a public prefix
 - [ ] `s3://fresh-bc/fdis/README.md` rewritten with the provenance note (received from the Province of BC, FDIS,

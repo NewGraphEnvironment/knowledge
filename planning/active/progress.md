@@ -12,3 +12,6 @@
 - Phase 2: sweep script; DB connections through `PG*` in 17 scripts and `knw_pscis_pull()`'s example (fallbacks
   removed; `db_source` is the database name); Zotero key from `ZOTERO_API_KEY` only; host names, private-repo links and
   project-named repos reworded; `comms/` removed; soul#438 filed for the peer list. All scripts parse.
+- Phase 3: `_pkgdown.yml` (reference grouped by topic), `.github/workflows/pkgdown.yaml` from fresh (drops CLAUDE.md
+  before the build, fails on unexpected top-level pages), README rewritten as the home page with research links.
+  `pkgdown::build_site()` (CLAUDE.md held aside, as CI does): finished, no problems reported, no internal pages.
