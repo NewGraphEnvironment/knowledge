@@ -108,7 +108,7 @@ if (!publish) {
 }
 
 aws <- function(...) {
-  rc <- system2("aws", c(...))
+  rc <- system2("aws", shQuote(c(...)))   # system2 runs a shell; a content type carries ";"
   if (rc != 0) stop("aws ", paste(c(...), collapse = " "), " failed (exit ", rc, ")", call. = FALSE)
 }
 # Parquet first, manifest last, so a reader never finds a manifest naming a file not yet there.
