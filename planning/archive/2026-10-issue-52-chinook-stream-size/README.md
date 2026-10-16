@@ -8,7 +8,7 @@ review changed the build before any result was read:
 - it found that `fwa_downstreamtrace` is not a path. Distance became an explicit route-measure walk
   (`scripts/sql/ch_dist_large.sql`), and side channels took their parent line's flow.
 
-The result is in `research/chinook_stream_size.md`, which bears on link#331's predicate. Four code-check
+The result is in `research/chinook_stream_size.md`, which #54 builds on to tune a rearing rule. Four code-check
 rounds found the code clean every time, and every finding was in the prose: numbers that matched the outputs,
 framed by words (most, smaller, better, downstream) that claimed something about a population the number did
 not measure. Two of those sat inside earlier fixes. It ended when the write-up was rewritten under one rule

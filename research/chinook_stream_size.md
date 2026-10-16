@@ -1,8 +1,8 @@
 # Stream size where Chinook are caught: CH detection by MAD, and small streams near large rivers
 
 **Verified:** 2026-10-15 · **Issues:** #52 (this); beside #42 (flow in stage windows); uses #18 (FDIS
-export), #28's design (`habitat_weights.md`) and wet's published flow (`modelled_discharge.md`); bears on
-NewGraphEnvironment/link#331 · **Produced by:**
+export), #28's design (`habitat_weights.md`) and wet's published flow (`modelled_discharge.md`); tuned in #54;
+link's move onto wet's flow is NewGraphEnvironment/link#331 · **Produced by:**
 - `scripts/0294-ch-mad-build.R` with `scripts/sql/ch_dist_large.sql`: visits, flow, distance and flags;
   ledger `scripts/logs/habitat/20261015_ch_mad_build_ledger.csv`;
 - `scripts/0295-ch-mad-use.R`: `data/ch_mad_use.csv`, with log `scripts/logs/habitat/20261015_ch_mad_use.txt`;
@@ -151,8 +151,8 @@ link's `default` CH rearing bounds come from Rebellato et al. 2024 (evidence dat
   500 m of a large river had CH on 14.5 % of visits. Those further away had CH on 0.8 %, and the < 0.1 m³/s
   class in the MAD analysis on 0.9 %.
 - **A rule of the form "MAD ≥ 0.5 m³/s, or MAD < 0.5 m³/s within about 500 m downstream of a ≥ 10 m³/s
-  river"** follows the pattern above. No rule was fitted here, or scored against a single floor. It is
-  evidence for link#331's predicate, not a change made here.
+  river"** follows the pattern above. No rule was fitted here, or scored against a single floor; #54 tunes one. link's
+  CH MAD bounds act in no group today (all 188 size streams by channel width), so this is not a change to them.
 - **On `rear_mad_max` 100 m³/s.** CH were caught on 27.5 % of the 149 unregulated visits at ≥ 100 m³/s.
   Electrofishing samples river margins, so this measures use of margins, not of channels.
 - **Spawning bounds (0.46 m³/s) are not tested.** These are juvenile records.
