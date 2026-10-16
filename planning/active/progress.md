@@ -11,3 +11,6 @@
   pass in the side by side); width model recomputed after finding order-1 widths exist only where measured
 - 0296 run: 21,862 visits, walk control exact, width model 96.2 % within 5 %, barrier status on 13,085
 - 0297 committed (47cbfb9) before its first fit; running
+- 0297 run (23 min, 6 workers); re-run byte-identical on the rule outputs; figure redrawn
+- 0298 run; then, at the user's question, default's MAD bounds added as a third rule; then a gained/lost breakdown
+- research/chinook_rearing_tuned.md drafted; link issue drafted (planning/active/link-issue-draft.md, link is public)

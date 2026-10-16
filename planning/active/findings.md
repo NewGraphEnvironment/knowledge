@@ -115,7 +115,26 @@ The distances for Q = 1, 10, 50 are monotone. `none` counts: 602 at Q = 1, 1,305
   range. A tuned MAD rule therefore sets `rear_mad_max` open (9999), because `default`'s 100 never acts while
   every group is on `cw`.
 
+## Results (2026-10-16)
+
+- **0297.** On the main population (3,434 visits, 166 CH, 26 WSGs), the recommended rule is MAD ≥ 0.75, ≤ 7 %,
+  Q 3 @ 1,000 m. `default` is +188 (SE 79), outside the region in all 15 analyses. `default`'s MAD form is +131
+  (SE 59). The region holds 27 rules: MAD 0.28–1, g 7–9 %, Q 1–10, D 1–2 km, and all of them have the exception.
+  Nested selection gives 937.7 against 1,039.8 for `default`. The MAD and width smooths are log-linear, with no bend.
+  The re-run is byte-identical for `ch_rule_tune.csv` and `ch_rule_flips.csv`.
+- **0298.** The SQL `default` equals fresh's predicate on 786,317 segments. Regenerated `default` differs from the
+  stored flags on 4,584 km. CH rearing km: tuned −20.2 %, `default_mad` −32.6 %. Outside-check lift: `default`
+  2.97, `default_mad` 4.75, tuned 4.36.
+- **The user asked, mid-run, whether the MAD form of `default` (the bcfishpass bounds) was compared.** It was added
+  to 0298 as a third rule. Its 100 m³/s cap, inherited by the river branch under the `mad` model, drops 441 of the
+  699 FDIS CH on accessible link segments.
+
 ## Errors Encountered
 
 | Error | Resolution |
 |-------|------------|
+| `OGR: Corrupt data` in st_join of hydrologic zones | `st_transform(3005)` of a layer already in BC Albers (WKT) corrupted 7 of 43 features; transform the points to the layer's CRS instead |
+| width-model control at 20.4 % agreement (0.01 m tolerance) | stored widths are from older inputs (corr 1.000, ratio 1.007); relative 5 % tolerance gives 96.2 % |
+| `cannot insert multiple commands into a prepared statement` | one statement per `dbExecute()` |
+| distance curve drawn flat to 1 km | the grid started at x = 0 on a log axis; started at 10 m, and the curve falls steadily (write-up corrected) |
+| field-measured widths at visits | an order-1 stream has a width only where measured (fwapg models order > 1); `cw_deploy` is the unmeasured width |

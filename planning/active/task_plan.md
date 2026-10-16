@@ -60,17 +60,17 @@ seeds; nested selection; component profiles; decision rule if `default` is in th
       field-measured visits-out sensitivity. Optimum D < 200 m is reported, not recommended.
 
 ## Phase 4: Tune (0297)
-- [ ] Grid, CV, 1-SE region, bootstrap stability (socket workers, seed fixed, resamples drawn before the fits)
-- [ ] GAM check (mgcv): s(log MAD) or s(log width), s(gradient), and on small streams s(log distance to tuned Q),
+- [x] Grid, CV, 1-SE region, bootstrap stability (socket workers, seed fixed, resamples drawn before the fits)
+- [x] GAM check (mgcv): s(log MAD) or s(log width), s(gradient), and on small streams s(log distance to tuned Q),
       with WSG `bs = "re"`. Where each tuned threshold sits on its curve.
-- [ ] Repeat on the 27 covered groups with link's segment gradient. Report how far the optimum moves.
-- [ ] Flow sources: re-run the grid and the GAM on routed alone, balance alone (walks per source) and fwapg's old
+- [x] Repeat on the 27 covered groups with link's segment gradient. Report how far the optimum moves.
+- [x] Flow sources: re-run the grid and the GAM on routed alone, balance alone (walks per source) and fwapg's old
       MAD (size floor only; exception on `pick`). At the chosen rule, count visits whose in/out flips between
       sources, by hydrologic zone and MAD class.
-- [ ] Sensitivities: lake targets out; regulated targets and visits out; ambiguous placements out; CHES and NECR
+- [x] Sensitivities: lake targets out; regulated targets and visits out; ambiguous placements out; CHES and NECR
       out; C (CH given any fish) in place of U
 - [x] Outside check moved to 0298 (review O1, G7): it needs the tuned rule on link's segments
-- [ ] Write `data/ch_rule_tune.csv` (aggregates only) and `scripts/logs/habitat/<date>_ch_rule_tune.txt`
+- [x] Write `data/ch_rule_tune.csv` (aggregates only) and `scripts/logs/habitat/<date>_ch_rule_tune.txt`
 
 ## Phase 5: Side by side (0298)
 - [ ] Walk the accessible stream-edge CH segments that fail the tuned size floor (profile, `pick`), in covered
