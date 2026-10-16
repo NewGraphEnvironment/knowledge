@@ -10,7 +10,9 @@
 #   - The tables built from it are ours, so they go under s3://fresh-bc/knowledge/fdis/v1/ (named
 #     by producer, versioned like discharge/fwa/v1/ so a consumer can pin one). The bucket does
 #     not list, so readers start from manifest.json. A change to a table's columns or meaning
-#     is a new version, never an overwrite of v1.
+#     is a new version, never an overwrite of v1: the manifest records each table's schema, and
+#     PUBLISH=TRUE stops when the published manifest's tables or schemas differ (bump s3_id).
+#     A change of meaning with the same schema is the one case it cannot see.
 #   - Only fdis_sites.csv is taken of 0240's two forms: the gpkg is the same rows with a
 #     geometry, and a CSV-to-Parquet copy keeps one reading of each table.
 #   - Each table is read with arrow's CSV reader and written as Parquet. The Parquet is then
@@ -156,6 +158,8 @@ for (i in seq_len(nrow(tables))) {
     path = basename(dst), table = tb, description = tables$description[i],
     producing_script = tables$script[i], rows = x$num_rows, columns = x$num_columns,
     bytes = file.size(dst), sha256 = sha256(dst),
+    schema = stats::setNames(lapply(x$schema$fields, function(fl) fl$type$ToString()),
+                             vapply(x$schema$fields, function(fl) fl$name, character(1))),
     source_csv = list(path = src, sha256 = sha256(src),
                       modified = format(file.mtime(src), "%Y-%m-%dT%H:%M:%SZ", tz = "UTC")))
 }
@@ -180,6 +184,32 @@ message("wrote ", dir_out, "/ (", nrow(tables), " tables + manifest.json) at ", 
 if (!publish) {
   message("PUBLISH is not TRUE: nothing uploaded")
   quit(save = "no", status = 0)
+}
+
+# ---- refuse to change a published version's tables or schemas ----------------------
+prior_path <- file.path(dir_out, "manifest_published.json")
+unlink(prior_path)
+listed <- suppressWarnings(system2("aws", shQuote(c("s3", "ls", paste0(s3_tables, "manifest.json"))),
+                                   stdout = TRUE, stderr = TRUE))
+if (!is.null(attr(listed, "status")) && length(listed))
+  stop("could not check the published manifest: ", paste(listed, collapse = " "), call. = FALSE)
+if (length(listed)) {
+  aws("s3", "cp", paste0(s3_tables, "manifest.json"), prior_path, "--only-show-errors")
+  prior <- jsonlite::read_json(prior_path)
+  key <- function(fs) vapply(fs, function(f) f$table, character(1))
+  now_t <- key(files)
+  was_t <- key(prior$files)
+  changed <- union(setdiff(now_t, was_t), setdiff(was_t, now_t))
+  for (f in files) {
+    p <- prior$files[[match(f$table, was_t)]]
+    if (is.null(p)) next
+    same <- if (is.null(p$schema)) identical(as.integer(p$columns), as.integer(f$columns)) else
+      identical(lapply(p$schema, as.character), lapply(f$schema, as.character))
+    if (!same) changed <- c(changed, f$table)
+  }
+  if (length(changed))
+    stop(s3_id, " is published with different tables or schemas (", paste(unique(changed), collapse = ", "),
+         "): publish to a new version (bump s3_id), never over this one", call. = FALSE)
 }
 
 # Parquet first, manifest last, so a reader never finds a manifest naming a file not yet there.

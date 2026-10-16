@@ -23,10 +23,16 @@
   replaces shell `PG*`; `PGSERVICE` wins) and B2 (`MANIFEST.md5` listed the archived sqlite). The value-level read-back
   it asked for caught `ch_rule_visits.hydro_zone` read as integers; fixed before the v1 publish.
 - Published `s3://fresh-bc/knowledge/fdis/v1/` (5 Parquet + manifest at 2b14507) and `fdis/README.md`; removed the
-  earlier unversioned upload. `PULL=TRUE` into a scratch checkout restores all five CSVs equal as `readr` reads them.
+  earlier unversioned upload. `PULL=TRUE` into a scratch checkout restores all five CSVs equal as `readr` reads them within 1e-12 (code-check round 1: `readr` parses 17-digit
+  text to within an ulp, while the Parquet holds arrow's exact parse; types are identical).
 - Phase 5: CLAUDE.md top half rewritten; tree sweep clean.
 - Phase 5: `/claude-md-init --public-clean` from soul origin/main@7360fe9 (5 internal headings checked, none present;
   992d65f). GitHub text: 13 issues, 4 PRs, 4 comments edited and #4 retitled; sweep of tree, GitHub text and branch
   commits returns no hits. Revision-deletion list in findings.md.
 - Validation: `devtools::test()` 105 passed; `devtools::check()` clean. 0240 and 0250 reproduced every tracked output;
   0280 passed with its log in scratch; 0100/0110 stop at the remote server's connection timeout (unreachable here).
+- `/code-check branch` round 1 (`review-round1.md`): 4 findings, all reproduced and fixed: a duplicate `const A` in
+  `wf_peace_report_harvest.js` (`node --check` now passes); `0230`'s `NO_SIGN` sync needs ListBucket, which the public
+  grant omits (now fetches `MANIFEST.md5`, `README.md` and each listed key; the key-by-key fetch verifies 26/0);
+  nothing stopped an overwrite of `v1` (manifest now records schemas; `PUBLISH` refuses a changed table set or
+  schema); the sweep skipped non-UTF-8 files (now reads their printable runs; a planted gpkg string is caught).

@@ -62,10 +62,23 @@ is_sentinel <- function(x) !is.na(x) & x >= sentinel_min
 # ---- sync + verify ---------------------------------------------------------
 if (!file.exists(file.path(cache, "MANIFEST.md5"))) {
   message("Syncing s3://fresh-bc/fdis/ -> ", cache)
-  # NO_SIGN=TRUE reads the public prefix without AWS credentials
-  rc <- system2("aws", c("s3", "sync", "s3://fresh-bc/fdis/", cache, "--only-show-errors",
-                         if (identical(Sys.getenv("NO_SIGN"), "TRUE")) "--no-sign-request"))
-  if (rc != 0) stop("aws s3 sync failed (exit ", rc, ")")
+  if (identical(Sys.getenv("NO_SIGN"), "TRUE")) {
+    # Without credentials the public prefix serves exact keys but cannot be listed, so a sync
+    # fails: fetch the manifest and README, then each key the manifest names.
+    get <- function(key) {
+      dst <- file.path(cache, key)
+      dir.create(dirname(dst), recursive = TRUE, showWarnings = FALSE)
+      rc <- system2("aws", shQuote(c("s3", "cp", paste0("s3://fresh-bc/fdis/", key), dst,
+                                     "--no-sign-request", "--only-show-errors")))
+      if (rc != 0) stop("aws s3 cp of fdis/", key, " failed (exit ", rc, ")")
+    }
+    get("MANIFEST.md5")
+    get("README.md")
+    for (key in sub("^\\./", "", substring(read_lines(file.path(cache, "MANIFEST.md5")), 34))) get(key)
+  } else {
+    rc <- system2("aws", c("s3", "sync", "s3://fresh-bc/fdis/", cache, "--only-show-errors"))
+    if (rc != 0) stop("aws s3 sync failed (exit ", rc, ")")
+  }
 }
 # md5 -r format: 32 hex, a space, then the path (paths contain spaces)
 manifest <- tibble(line = read_lines(file.path(cache, "MANIFEST.md5"))) |>

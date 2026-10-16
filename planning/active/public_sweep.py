@@ -48,9 +48,17 @@ def tree():
         if f.startswith(EXEMPT_PREFIX) or f in EXEMPT_FILE:
             continue
         try:
-            text = open(f, encoding="utf-8").read()
-        except (UnicodeDecodeError, IsADirectoryError, FileNotFoundError):
+            raw = open(f, "rb").read()
+        except (IsADirectoryError, FileNotFoundError):
             continue
+        # A binary file (gpkg, png) is scanned as bytes, not skipped: a gpkg carries free-text
+        # notes, and skipping it would report "no hits" over text never read.
+        # Only its printable runs of 8 or more characters, as `strings` reads it: compressed bytes
+        # match short patterns such as m1 by chance.
+        try:
+            text = raw.decode("utf-8")
+        except UnicodeDecodeError:
+            text = "\n".join(m.group(0).decode("ascii") for m in re.finditer(rb"[\x20-\x7e\t]{8,}", raw))
         if f == "CLAUDE.md" and CLAUDE_MARKER in text:
             text = text.split(CLAUDE_MARKER, 1)[0]
         for n, line in enumerate(text.split("\n"), 1):
