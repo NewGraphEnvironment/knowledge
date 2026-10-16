@@ -81,9 +81,12 @@ being public, provided it ships with a note of when and from where it was receiv
 - [x] Final sweep (tree + GitHub text) returns nothing outside the exemptions; output saved to findings.md
 
 ## Validation
-- [ ] Tests pass; `devtools::check()` clean
-- [ ] Each script that loads the package starts from the root; 0280 runs end to end (read-only gate); writers whose
-      inputs are available reproduce their tracked outputs (`git diff --stat data/` empty)
+- [x] Tests pass (105, 0 failed); `devtools::check()` 0 errors, 0 warnings, 0 notes
+- [x] Each script that loads the package starts from the root; 0280 runs end to end (read-only gate); writers whose
+      inputs are available reproduce their tracked outputs (`git diff --stat data/` empty). 0240, 0250 and 0280 ran in
+      full (no `data/` diff, `fdis_sites.csv` identical; 0280 exit 0). 0260 refuses without `TEMPLATE_DIR` (a full run
+      would overwrite the hand-edited table). 0100 and 0110 need the remote bcfishpass server, unreachable here: they
+      load and stop at the connection timeout.
 - [ ] `/code-check branch` clean (three-round floor)
 - [ ] PWF checkboxes match landed work
 - [ ] `/planning-archive`, then `/gh-pr-push`

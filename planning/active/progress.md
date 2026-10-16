@@ -26,5 +26,7 @@
   earlier unversioned upload. `PULL=TRUE` into a scratch checkout restores all five CSVs equal as `readr` reads them.
 - Phase 5: CLAUDE.md top half rewritten; tree sweep clean.
 - Phase 5: `/claude-md-init --public-clean` from soul origin/main@7360fe9 (5 internal headings checked, none present;
-  992d65f). GitHub text: 14 issues, 4 PRs, 4 comments edited and #4 retitled; sweep of tree, GitHub text and branch
+  992d65f). GitHub text: 13 issues, 4 PRs, 4 comments edited and #4 retitled; sweep of tree, GitHub text and branch
   commits returns no hits. Revision-deletion list in findings.md.
+- Validation: `devtools::test()` 105 passed; `devtools::check()` clean. 0240 and 0250 reproduced every tracked output;
+  0280 passed with its log in scratch; 0100/0110 stop at the remote server's connection timeout (unreachable here).

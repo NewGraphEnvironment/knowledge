@@ -102,7 +102,7 @@ After Phase 2, only README.md (Phase 3) and CLAUDE.md (Phase 5) hit.
 
 ## GitHub text (Phase 5, 2026-10-16)
 
-`public_sweep.py github` before editing: 14 issue bodies, 4 PR bodies and 4 comments carried private-repo links,
+`public_sweep.py github` before editing: 13 issue bodies, 4 PR bodies and 4 comments carried private-repo links,
 machine names, a home path or a project-named repo (the issue's count was 11 / 4 / 1; two of the comments on #56 were
 posted during this work, by the bucket-policy session). PR-body `sred` cross-references are the R&D tracking exception
 (feature-workflow.md) and are exempt; issue #20's `m1` is a formula term. Each was rewritten in plain words, and #4's
