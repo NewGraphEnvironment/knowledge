@@ -9,16 +9,16 @@
 #     crossing to the report that documents the assessment / confirmation /
 #     design / remediation. We harvest those URLs -> the past-reports list.
 #   - The raw SVW layers have NO watershed_group_code, so we spatially intersect
-#     each with whse_basemapping.fwa_watershed_groups_poly (proven pattern from
-#     fish_passage_skeena_2022_planning/scripts/extract-pg.R and
-#     scripts/02_reporting/0100-load-bcfishpass-data.R).
-#   - `acat_report_point_pub_svw` is NOT in the newgraph DB -> pulled via bcdata.
-#   - GOTCHA (skeena extract-pg.R): the ecocat_url stored in PSCIS is sometimes
+#     each with whse_basemapping.fwa_watershed_groups_poly (the pattern earlier
+#     fish-passage report pipelines used).
+#   - `acat_report_point_pub_svw` is NOT in the bcfishpass database -> pulled via bcdata.
+#   - GOTCHA (seen in earlier report pipelines): the ecocat_url stored in PSCIS is sometimes
 #     wrong for the crossing. Treat the harvested list as leads to verify, not gospel.
 #
-# INPUT:  wsg_target (watershed group code). Live bcfishpass DB via SSH tunnel :63333.
+# INPUT:  wsg_target (watershed group code). A bcfishpass database (fwapg's whse_basemapping
+#         and the whse_fish PSCIS layers), reached through the standard PG* environment variables.
 # OUTPUT: data/<wsg>/crossings.csv, reports.csv, pscis_<wsg>.gpkg
-# The pull and the two table builders live in pkg/R/pscis.R (knw_pscis_*).
+# The pull and the two table builders live in R/pscis.R (knw_pscis_*).
 #
 # OPEN QUESTIONS:
 #   - Do we want ALL assessments or only barriers/potential-barriers in `crossings`?
@@ -38,15 +38,12 @@ out_dir    <- file.path("data", wsg_lower)
 dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
 
 # ---- connection -------------------------------------------------------------
-# Direct DBI to the tunnel (proven). fpr::fpr_db_conn() is the ~/.Renviron-based
-# equivalent used elsewhere in the template.
-conn <- DBI::dbConnect(RPostgres::Postgres(),
-                       host = "localhost", port = 63333,
-                       dbname = "bcfishpass", user = "newgraph")
+# libpq reads PGHOST, PGPORT, PGDATABASE, PGUSER and PGPASSWORD.
+conn <- DBI::dbConnect(RPostgres::Postgres())
 
 # ---- pull + derive, through the package -------------------------------------
 # knw_pscis_pull() intersects each PSCIS layer with the FWA watershed-group
-# polygon in the database; the two table builders are pure and tested in pkg/.
+# polygon in the database; the two table builders are pure and tested in tests/.
 pkgload::load_all(quiet = TRUE)
 message("Pulling PSCIS layers for ", wsg_target, " ...")
 layers <- knw_pscis_pull(conn, wsg_target)

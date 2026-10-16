@@ -56,8 +56,7 @@ thresholds <- tribble(
 )
 
 # ---- major drainage (first FWA watershed-code segment) ----------------------
-conn <- DBI::dbConnect(RPostgres::Postgres(), host = "localhost", port = 5432,
-                       dbname = "fwapg", user = "postgres", password = "postgres")
+conn <- DBI::dbConnect(RPostgres::Postgres())
 lf <- unique(na.omit(sites$linear_feature_id))
 basin <- DBI::dbGetQuery(conn, "SELECT linear_feature_id, left(fwa_watershed_code, 3) AS fwa_basin
                                   FROM whse_basemapping.fwa_stream_networks_sp

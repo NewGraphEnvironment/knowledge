@@ -2,7 +2,7 @@
 # ---------------------------------------------------------------------------
 # Enrich the Pine priority table (Guppy Table 8, from 0140) and export for the field:
 #   - Guppy's per-site NoPass issue + recommendation text (farmed from the PDF)
-#   - bcfishpass bull-trout habitat km (grayling is NOT modelled -> see NewGraphEnvironment/fish_passage_template_reporting#192)
+#   - bcfishpass bull-trout habitat km (grayling is NOT modelled by bcfishpass)
 #   - XREF: confirmations / designs / remediations already done on the same crossing
 #           (queried live by stream_crossing_id)
 #   - GPKG + KML for QGIS / Mergin field navigation
@@ -16,7 +16,7 @@
 # them: habitat km and the confirmation/design/remediation xref are left NA/FALSE.
 # Only query the DB for the rows that actually have an id.
 #
-# INPUT:  data/pine/priority_guppy_p1.csv, PDF_PATH (Guppy inventory), DB :63333
+# INPUT:  data/pine/priority_guppy_p1.csv, PDF_PATH (Guppy inventory), a bcfishpass database (PG* env vars)
 # OUTPUT: data/pine/priority_pine_enriched.csv + .gpkg + .kml
 # ---------------------------------------------------------------------------
 suppressMessages({library(DBI); library(RPostgres); library(sf); library(dplyr); library(stringr)})
@@ -57,7 +57,7 @@ pri <- pri |> left_join(notes, by = "guppy_id")
 ids <- paste(na.omit(pri$stream_crossing_id), collapse = ",")
 # a watershed group whose priority sites are ALL un-entered would give "IN ()" -> SQL error
 if (nzchar(ids)) {
-  conn <- DBI::dbConnect(RPostgres::Postgres(), host = "localhost", port = 63333, dbname = "bcfishpass", user = "newgraph")
+  conn <- DBI::dbConnect(RPostgres::Postgres())   # libpq reads the PG* environment variables
   hab <- DBI::dbGetQuery(conn, sprintf("
     SELECT stream_crossing_id, aggregated_crossings_id,
            bt_spawningrearing_km, bt_spawningrearing_belowupstrbarriers_km
@@ -78,7 +78,7 @@ out <- pri |>
   mutate(
     # NA (not 0) where bcfishpass has no row — an un-entered site is "unknown", not "no habitat"
     bt_hab_km        = round(bt_spawningrearing_belowupstrbarriers_km, 2),
-    grayling_modelled = FALSE,                        # bcfishpass has no grayling model (NewGraphEnvironment/fish_passage_template_reporting#192)
+    grayling_modelled = FALSE,                        # bcfishpass has no grayling model
     has_confirmation = stream_crossing_id %in% conf,
     has_design       = stream_crossing_id %in% des,
     has_remediation  = stream_crossing_id %in% rem

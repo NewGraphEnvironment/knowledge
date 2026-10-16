@@ -16,7 +16,7 @@ WHY ALL DOCUMENTS (not just the first PDF):
   An EcoCat report is usually several documents: main report + appendices +
   maps + data files (3-19 seen; report 163 has 19). The harvest grabs only the
   first PDF, so appendices/maps/XLS were being dropped -- including the FPCI
-  form spreadsheets that carry per-site "no fish captured" comments (see NewGraphEnvironment/fish_passage_template_reporting#199)
+  form spreadsheets that carry per-site "no fish captured" comments
   and the 1:20k inventory map sheets. This files every document EcoCat serves
   for the report, so the record is complete even where the rag only has one
   document's text.
@@ -28,7 +28,7 @@ dedups attachments by md5, so re-runs are cheap.
 INPUT   REPORTS=COTR:48,FRAN:80,...  -- or --  --from-store data/rag/fraser.duckdb
         (--from-store reads `EXTENT__reportId.pdf` origins straight out of a
          ragnar store, which is how we recover ids after a harvest dir is gone)
-        ZOTERO API key: ZOTERO_API_KEY env or ~/.config/newgraph/zotero-api-key ; group 4733734
+        ZOTERO_API_KEY environment variable (write access to the group) ; group 4733734
 OUTPUT  items + attachments in Zotero; a per-report status line; nothing local.
 ---------------------------------------------------------------------------
 """
@@ -46,17 +46,16 @@ COLLECTIONS = {
     "NECR": "977GE58E",
 }
 DOC_RE = re.compile(r'/pub/acat/documents/r\d+/[^"\']+?\.(?:pdf|zip|xls|xlsx|doc|docx|csv|txt)', re.I)
-# Same resolution as the R scripts: env, then the materialized file (see CLAUDE.md).
-API = os.environ.get("ZOTERO_API_KEY") or open(os.path.expanduser("~/.config/newgraph/zotero-api-key")).read().strip()
+API = os.environ.get("ZOTERO_API_KEY", "").strip()
 if not API:
-    sys.exit("Zotero API key is empty: set ZOTERO_API_KEY or re-materialize ~/.config/newgraph/zotero-api-key")
+    sys.exit("ZOTERO_API_KEY is unset or empty: set it to a Zotero Web API key with write access to the group")
 
 # ---- document selection policy -------------------------------------------
 # An EcoCat report is 3-19 documents (main report + appendices + scanned 1:20k map
 # sheets + data files). Attaching everything is several GB across a corpus this size
 # and the scanned appendix parts (23-43 MB each) dominate that, so by default we take:
 #   * ALL data files  (.xls/.xlsx/.zip/.csv/.doc/.docx) -- small, and the highest-value
-#     material: FPCI form spreadsheets carry per-site "no fish captured" comments (NewGraphEnvironment/fish_passage_template_reporting#199),
+#     material: FPCI form spreadsheets carry per-site "no fish captured" comments,
 #     .zip are shapefiles
 #   * the MAIN report PDF only -- prefer a filename saying report/final, else the first
 #     non-appendix PDF; appendix/attachment/map/plate PDFs are skipped

@@ -2,7 +2,7 @@
 # ---------------------------------------------------------------------------
 # Content-tag the harvested report corpus so themes are findable without farming.
 #
-# WHY (see NewGraphEnvironment/fish_passage_template_reporting#205):
+# WHY:
 #   The only decision we make per report is a binary farm/skip, taken on a
 #   TITLE-keyword regex in the triage step. That is invisible (nothing records
 #   what a report contains or why it was skipped) and judges by title rather

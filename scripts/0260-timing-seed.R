@@ -32,7 +32,7 @@
 #     the record of which input produced the table.
 #
 # INPUT:  $TEMPLATE_DIR/data/inputs_raw/fish_species_life_history_gantt.csv
-#         (TEMPLATE_DIR defaults to ~/Projects/repo/fish_passage_template_reporting)
+#         (TEMPLATE_DIR, required: a checkout of the fish-passage reporting template)
 # OUTPUT: data/life_history_timing.csv
 # RUN:    Rscript scripts/0260-timing-seed.R 2>&1 | tee scripts/logs/timing/<yyyymmdd>_timing_seed.log
 #         (repo root)
@@ -40,7 +40,8 @@
 
 pkgload::load_all(quiet = TRUE)
 
-template_dir <- Sys.getenv("TEMPLATE_DIR", path.expand("~/Projects/repo/fish_passage_template_reporting"))
+template_dir <- Sys.getenv("TEMPLATE_DIR")
+if (!nzchar(template_dir)) stop("set TEMPLATE_DIR to the reporting template's checkout", call. = FALSE)
 rel <- "data/inputs_raw/fish_species_life_history_gantt.csv"
 src_path <- file.path(template_dir, rel)
 if (!file.exists(src_path)) stop("template CSV not found: ", src_path, call. = FALSE)

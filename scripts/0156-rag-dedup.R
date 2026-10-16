@@ -10,7 +10,7 @@
 #   304 documents but only 283 unique. Duplicates are not harmless: a duplicated
 #   report gets two chances at every retrieval, quietly biasing search toward
 #   whichever reports happen to be doubled (the McGregor inventories among them).
-#   Fix before syncing to S3 (NewGraphEnvironment/fish_passage_template_reporting#207) so the M1 does not pull the skew.
+#   Fix before syncing to S3, so no machine that pulls the store inherits the skew.
 #
 # WHICH COPY WINS: the EXTENT__<reportId> one — it carries the watershed group,
 #   which is what 0154 attribution and the farm join depend on.

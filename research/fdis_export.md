@@ -8,8 +8,8 @@
 
 The Province supplied extracts of the Fisheries Data Information System (FDIS) to New Graph for the
 2021–22 channel-width and fish-density work with Poisson Consulting. No use terms were attached;
-the purpose was to advance knowledge of fish–habitat relationships in BC. The files lived only in
-Dropbox (m4). They were moved byte-identical to `s3://fresh-bc/fdis/` (private prefix) on
+the purpose was to advance knowledge of fish–habitat relationships in BC. The files lived only on
+a shared drive. They were moved byte-identical to `s3://fresh-bc/fdis/` (private prefix) on
 2026-09-26; `MANIFEST.md5` there is the checksum record.
 
 ## Contents and join structure

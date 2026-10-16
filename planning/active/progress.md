@@ -9,3 +9,6 @@
 - Phase 1: package at the root (`git mv`), root `.Rbuildignore`, `URL`/`BugReports`, scripts `load_all()` from the
   root, `test-data-dir.R` (planted `data/zz_probe.R` and `.rda` each fail it; clean tree passes). `devtools::check()`:
   0 errors, 0 warnings, 1 note (`comms` at top level, removed in Phase 2).
+- Phase 2: sweep script; DB connections through `PG*` in 17 scripts and `knw_pscis_pull()`'s example (fallbacks
+  removed; `db_source` is the database name); Zotero key from `ZOTERO_API_KEY` only; host names, private-repo links and
+  project-named repos reworded; `comms/` removed; soul#438 filed for the peer list. All scripts parse.

@@ -5,7 +5,7 @@ Watershed group **PCEA / Peace Arm** = the Peace-River arm of **Williston Reserv
 "learn everything first" layer: who's here, what's been done, who cares, and what to read before the field.
 
 > Status: draft from web + EcoCat + PSCIS pull, 2026-07-10. Citations inline. Reports flagged
-> **[grabbable]** have a working direct-PDF path (proven downloadable on the M4).
+> **[grabbable]** have a working direct-PDF path (proven downloadable).
 
 ## Nations & territory (engagement-critical)
 

@@ -37,19 +37,19 @@ being public, provided it ships with a note of when and from where it was receiv
 - [x] `devtools::document()`, `devtools::test()`, `devtools::check()` clean
 
 ## Phase 2: Clean the live files
-- [ ] Sweep script `planning/active/public_sweep.sh`: one pattern list (DB literals, key path, password-manager names,
+- [x] Sweep script `planning/active/public_sweep.sh`: one pattern list (DB literals, key path, password-manager names,
       host names, private repos, project-named repos, the comms/skill refs) run over the tree minus exemptions
       (`planning/archive/`, `scripts/logs/`, literature quotes) and over issue/PR bodies and comments; baseline its
       output into findings.md
-- [ ] DB connections → `PG*` in all 17 scripts and `knw_pscis_pull()`'s example; headers name required schemas;
+- [x] DB connections → `PG*` in all 17 scripts and `knw_pscis_pull()`'s example; headers name required schemas;
       fallback blocks removed; `scripts/README.md` "Database access" text rewritten
-- [ ] `0153`: key from `ZOTERO_API_KEY` only (exit with a clear message if unset); `0270`'s docstring follows
-- [ ] Host names reworded (`research/bt_spawning.md`, `research/fdis_export.md`, `0156`)
-- [ ] Private-repo links → plain words or dropped (README, scripts, research, `data/temperature_members.csv` note text,
+- [x] `0153`: key from `ZOTERO_API_KEY` only (exit with a clear message if unset); `0270`'s docstring follows
+- [x] Host names reworded (`research/bt_spawning.md`, `research/fdis_export.md`, `0156`)
+- [x] Private-repo links → plain words or dropped (README, scripts, research, `data/temperature_members.csv` note text,
       `scripts/README.md`'s `db-newgraph` pointer)
-- [ ] Project-named repos reworded (`0100`, `research/stream_temperature.md`)
-- [ ] `git rm -r comms/`; file a soul issue to drop knowledge from `conventions/comms_peers.md`
-- [ ] Sweep over the tree returns only exempt hits
+- [x] Project-named repos reworded (`0100`, `research/stream_temperature.md`)
+- [x] `git rm -r comms/`; filed NewGraphEnvironment/soul#438 to drop knowledge from `conventions/comms_peers.md`
+- [x] Sweep over the tree returns only exempt hits (left: README, rewritten in Phase 3; CLAUDE.md, Phase 5)
 
 ## Phase 3: pkgdown site
 - [ ] `_pkgdown.yml` (url `https://newgraphenvironment.github.io/knowledge/`, bootstrap 5, reference index grouping

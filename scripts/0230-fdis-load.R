@@ -22,7 +22,7 @@
 #     GRADIENT11/12 are the primary measurement, 21/22 a second one (a separate method code
 #     not exported, and it runs higher), so they are kept apart. Sentinels (width >= 500 m,
 #     gradient > 100 %) are flagged and excluded.
-#   - PLACEMENT: whse_basemapping.fwa_indexpoint on the local fwapg :5432, with an explicit
+#   - PLACEMENT: whse_basemapping.fwa_indexpoint in the fwapg database (PG* environment variables), with an explicit
 #     tolerance (its default is 5 km). The matched FWA feature's gradient, order, edge type,
 #     modelled channel width and MAD are joined province-wide, not fresh.streams (98 groups
 #     locally). Placement is checked against the 50k watershed code FDIS recorded
@@ -253,9 +253,8 @@ sites <- sites |>
   )
 
 # ---- place site visits on the network --------------------------------------
-conn <- tryCatch(DBI::dbConnect(RPostgres::Postgres(), host = "localhost", port = 5432,
-                                dbname = "fwapg", user = "postgres", password = "postgres"),
-                 error = function(e) stop("local fwapg :5432 unreachable: ", conditionMessage(e)))
+conn <- tryCatch(DBI::dbConnect(RPostgres::Postgres()),
+                 error = function(e) stop("database unreachable (PG* environment variables): ", conditionMessage(e)))
 
 pts <- sites |>
   filter(!flag_no_utm) |>

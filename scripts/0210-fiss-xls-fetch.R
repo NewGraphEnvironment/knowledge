@@ -1,6 +1,6 @@
 # scripts/0210-fiss-xls-fetch.R
 # ---------------------------------------------------------------------------
-# FISS .xls harvest — STEP 2 of 3 (fetch). Issue NewGraphEnvironment/fish_passage_template_reporting#199.
+# FISS .xls harvest — STEP 2 of 3 (fetch).
 #
 # Download the .xls/.xlsx submissions listed in the manifest from 0200. This is
 # a DELIBERATE, OPT-IN step — it can pull dozens-to-hundreds of files per WSG, so

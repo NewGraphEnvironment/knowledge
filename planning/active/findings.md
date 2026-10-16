@@ -85,6 +85,21 @@ public funder names in area briefs, and the literature table's cited quotes.
 - Sibling pkgdown pattern: fresh/link/drift (`_pkgdown.yml` with `url:` + bootstrap 5, `.github/workflows/pkgdown.yaml`,
   gh-pages branch).
 
+## Public sweep baseline (Phase 2, 2026-10-16)
+
+`planning/active/public_sweep.py tree` before any clean-up, after two measured false-positive fixes (`63333` inside
+decimals such as `0.6333333` in data tables; `M1`-style site labels in data CSVs and the GAM objects `m1..m3` in
+`0297`): db 74, host 10, internal_ref 13, key_path 4, password_manager 1, private_repo 23, project_repo 3 (128 hits).
+After Phase 2, only README.md (Phase 3) and CLAUDE.md (Phase 5) hit.
+
+## Database connections
+
+- No `PG*` variable is set in the agent shell; with `PGHOST=localhost PGPORT=5432 PGDATABASE=fwapg PGUSER=postgres
+  PGPASSWORD=postgres` set, `DBI::dbConnect(RPostgres::Postgres())` reaches fwapg (246 watershed-group polygons).
+- `0200` and `0220` recorded `db_source` as `tunnel` / `local_fwapg`; they now record `current_database()`. Old rows
+  in `data/<wsg>/fiss_xls_reports.csv` keep the old values. Nothing reads the column but `0220`'s informational check.
+- `0260` defaulted `TEMPLATE_DIR` to a local checkout path of the private template; it is now required.
+
 ## Errors Encountered
 
 | Error | Resolution |

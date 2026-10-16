@@ -48,7 +48,7 @@
 #     no UTM; the segment is where the visit's flow is read).
 #
 # INPUT:  data/fdis/derived/ch_mad_visits.csv (scripts/0294), scripts/sql/ch_dist_profile.sql;
-#         local fwapg :5432 (discharge.fwa_v1_segment_monthly, whse_basemapping, cabd.dams,
+#         fwapg database (PG* env vars) (discharge.fwa_v1_segment_monthly, whse_basemapping, cabd.dams,
 #         fresh_default); the BC Hydrologic Zones zip (catalogue.data.gov.bc.ca)
 # OUTPUT: data/fdis/derived/ch_rule_visits.csv  one row per 0294 visit (ignored, private)
 #         data/fdis/derived/ch_rule_walks.csv   one row per start x source x river size (same)
@@ -84,9 +84,8 @@ add <- function(kind, step, n, note = "") {
   ledger <<- bind_rows(ledger, tibble(kind = kind, step = step, n = as.integer(n), note = note))
 }
 pg <- function() {
-  tryCatch(DBI::dbConnect(RPostgres::Postgres(), host = "localhost", port = 5432, dbname = "fwapg",
-                          user = "postgres", password = "postgres", bigint = "numeric"),
-           error = function(e) stop("local fwapg :5432 unreachable: ", conditionMessage(e)))
+  tryCatch(DBI::dbConnect(RPostgres::Postgres(), bigint = "numeric"),
+           error = function(e) stop("database unreachable (PG* environment variables): ", conditionMessage(e)))
 }
 
 v <- read_csv(path_in, show_col_types = FALSE, guess_max = 1e5,

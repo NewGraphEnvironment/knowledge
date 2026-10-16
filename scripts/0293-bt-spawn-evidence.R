@@ -45,7 +45,7 @@
 #     separated; it is written as `Inf`.
 #
 # INPUT:  data/fdis/derived/bt_use_visits.csv (0290), data/fdis/build/{fish,sites}.rds (0230),
-#         data/fdis_evidence.csv (0240), data/fiss_evidence.csv (0250); local fwapg :5432
+#         data/fdis_evidence.csv (0240), data/fiss_evidence.csv (0250); fwapg database (PG* env vars)
 # OUTPUT: data/bt_spawn_evidence.csv   aggregates: response x class (rates, rate ratios, power)
 #         scripts/logs/habitat/<date>_bt_spawn_evidence.txt
 # RUN:    Rscript scripts/0293-bt-spawn-evidence.R   (from the repo root; ~10 min)
@@ -282,8 +282,7 @@ steep_large <- pop |> filter(S_large == 1L, segment_gradient > spawn_max)
 say("")
 say("Large-spawner visits on segments > %.4f: %d.", spawn_max, nrow(steep_large))
 if (nrow(steep_large) > 0) {
-  conn <- dbConnect(Postgres(), host = "localhost", port = 5432, dbname = "fwapg",
-                    user = "postgres", password = "postgres")
+  conn <- dbConnect(Postgres())
   dbWriteTable(conn, "tmp_bt_spawn_steep", steep_large |>
                  transmute(site_visit, watershed_group_code, link_schema, id_segment),
                temporary = TRUE, overwrite = TRUE)
