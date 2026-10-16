@@ -1,0 +1,680 @@
+CH detection by stream size, knowledge#52. Visits in 0294's table: 21862 (CH on 1186).
+On 0291's edges with a fished area of 10-10000 m2: 19584; duplicates left out: 507; analysed: 19077 (CH on 978) in 102 WSGs.
+Of these, in a lake polygon: 0 (CH 0); in a river polygon: 3010 (CH 702); flow from the parent line: 267 (CH 74); regulated: 1249 (CH 571).
+mad_pick / ch_caught: 15626 visits (978 detections) in 67 WSGs modelled; 3451 visits in 35 WSGs with one outcome only left out
+mad_pick / any_fish: 19038 visits (9934 detections) in 94 WSGs modelled; 39 visits in 8 WSGs with one outcome only left out
+mad_pick / ch_given_fish: 8090 visits (978 detections) in 67 WSGs modelled; 1874 visits in 33 WSGs with one outcome only left out
+
+Small streams (picked MAD < 0.5): 12677 visits (CH 153). Side channels: 82 (CH 22). Ambiguous placement: 52 (CH 15).
+
+## small streams: walk status
+ walk_status     n
+       found 11431
+        none  1246
+distance_small / ch_caught: 7319 visits (118 detections) in 34 WSGs modelled; 5231 visits in 62 WSGs with one outcome only left out
+sens_distance_ambiguous_kept / ch_caught: 7516 visits (131 detections) in 35 WSGs modelled; 5079 visits in 61 WSGs with one outcome only left out
+sens_distance_lake_targets_out / ch_caught: 5297 visits (110 detections) in 31 WSGs modelled; 4778 visits in 63 WSGs with one outcome only left out
+sens_distance_entry_gap_out / ch_caught: 6457 visits (114 detections) in 32 WSGs modelled; 5124 visits in 63 WSGs with one outcome only left out
+
+## small-stream side channels (raw)
+ n_visits n_ch raw_rate
+       82   22    0.268
+
+## raw CH detections / visits by MAD class, WSGs with >= 20 CH detections
+ watershed_group_code   <0.1 0.1-0.28 0.28-0.5 0.5-1  1-3   >=100  3-10 10-30
+                 CHES  0/136    14/29      0/2   0/3  0/2 249/276            
+                 COTR 12/584     3/96     2/16  4/12 5/12     1/1  7/15   6/6
+                 LISR             1/2      2/2   3/5  2/3   24/69   1/6  1/13
+                 LSKE   0/48      0/7     1/13  0/16 2/43   31/96 12/43   0/3
+                 MORK  4/115     0/14     4/10  0/14  4/9     1/1  5/14  1/10
+                 NECR  5/266     7/24      0/2   5/8  1/1 200/239            
+                 SETN 12/121     0/43     0/25  0/16 0/16          0/24  1/14
+                 TABR   0/78     7/29     0/10 17/31  5/9     1/1            
+ 30-100
+       
+       
+       
+    2/4
+    1/1
+       
+  56/86
+       
+
+Both sources on 17459 visits: class differs on 2735 (15.7 %), by more than one class on 347 (2.0 %).
+
+## source agreement on the class, by the picked class
+      cls    n agree
+     <0.1 8809 0.941
+ 0.1-0.28 1965 0.670
+ 0.28-0.5  871 0.529
+    0.5-1  995 0.531
+      1-3 1226 0.754
+     3-10 1515 0.902
+    10-30 1007 0.832
+   30-100  444 0.851
+    >=100  627 0.990
+
+## picked source of analysed visits
+ pick_source     n
+ pcic_routed 17289
+ wet_balance  1788
+Largest project by CH detections: FDS|Triton Environmental Consultants Ltd.|2010|356362759 (432 of 978).
+sens_regulated_out / ch_caught: 14287 visits (407 detections) in 62 WSGs modelled; 3541 visits in 39 WSGs with one outcome only left out
+sens_largest_project_out / ch_caught: 15131 visits (546 detections) in 67 WSGs modelled; 3451 visits in 35 WSGs with one outcome only left out
+sens_ches_necr_out / ch_caught: 14638 visits (497 detections) in 65 WSGs modelled; 3451 visits in 35 WSGs with one outcome only left out
+sens_parent_flow_out / ch_caught: 15371 visits (904 detections) in 67 WSGs modelled; 3439 visits in 35 WSGs with one outcome only left out
+sens_pcic_routed_where_both / ch_caught: 14481 visits (891 detections) in 66 WSGs modelled; 2978 visits in 34 WSGs with one outcome only left out
+sens_wet_balance_where_both / ch_caught: 14481 visits (891 detections) in 66 WSGs modelled; 2978 visits in 34 WSGs with one outcome only left out
+sens_fwapg_old_mad / ch_caught: 7993 visits (231 detections) in 33 WSGs modelled; 1266 visits in 14 WSGs with one outcome only left out
+sens_duplicates_kept / ch_caught: 16112 visits (989 detections) in 67 WSGs modelled; 3472 visits in 35 WSGs with one outcome only left out
+sens_no_river_polygons / ch_caught: 10461 visits (275 detections) in 47 WSGs modelled; 5603 visits in 51 WSGs with one outcome only left out
+sens_gradient_covariate / ch_caught: 15626 visits (978 detections) in 67 WSGs modelled; 3451 visits in 35 WSGs with one outcome only left out
+sens_season_covariate / ch_caught: 15626 visits (978 detections) in 67 WSGs modelled; 3451 visits in 35 WSGs with one outcome only left out
+sens_merged_0.1-0.5 / ch_caught: 15626 visits (978 detections) in 67 WSGs modelled; 3451 visits in 35 WSGs with one outcome only left out
+sens_access_wsgs_unfiltered / ch_caught: 7176 visits (760 detections) in 22 WSGs modelled; 741 visits in 5 WSGs with one outcome only left out
+sens_access_no_natural_barrier / ch_caught: 4484 visits (739 detections) in 21 WSGs modelled; 261 visits in 4 WSGs with one outcome only left out
+sens_access_no_natural_barrier_no_user_definite / ch_caught: 4485 visits (739 detections) in 21 WSGs modelled; 261 visits in 4 WSGs with one outcome only left out
+Natural CH barrier downstream: 3172 of 7917 visits in fresh_default WSGs; CH caught on 21 of them.
+
+bcfishobs CH records: 9044; not FDIS: 4384; of those with picked flow: 4369.
+
+## bcfishobs non-FDIS CH records by life stage
+     life_stage    n
+           <NA> 4311
+        Unknown   29
+       Juvenile   28
+            Fry    9
+          Adult    3
+       Immature    2
+ Juvenile,Adult    1
+   Juvenile,Fry    1
+
+## class mix of CH presence: non-FDIS bcfishobs records vs FDIS visits that caught CH
+      cls bcfishobs_non_fdis fdis_ch_visits
+     <0.1              0.053          0.072
+ 0.1-0.28              0.044          0.058
+ 0.28-0.5              0.034          0.027
+    0.5-1              0.065          0.062
+      1-3              0.144          0.051
+     3-10              0.237          0.074
+    10-30              0.198          0.041
+   30-100              0.129          0.073
+    >=100              0.098          0.543
+
+## all analyses (also data/ch_mad_use.csv)
+                                        analysis      response    class
+                                        mad_pick     ch_caught     <0.1
+                                        mad_pick     ch_caught 0.1-0.28
+                                        mad_pick     ch_caught 0.28-0.5
+                                        mad_pick     ch_caught    0.5-1
+                                        mad_pick     ch_caught      1-3
+                                        mad_pick     ch_caught     3-10
+                                        mad_pick     ch_caught    10-30
+                                        mad_pick     ch_caught   30-100
+                                        mad_pick     ch_caught    >=100
+                                        mad_pick      any_fish     <0.1
+                                        mad_pick      any_fish 0.1-0.28
+                                        mad_pick      any_fish 0.28-0.5
+                                        mad_pick      any_fish    0.5-1
+                                        mad_pick      any_fish      1-3
+                                        mad_pick      any_fish     3-10
+                                        mad_pick      any_fish    10-30
+                                        mad_pick      any_fish   30-100
+                                        mad_pick      any_fish    >=100
+                                        mad_pick ch_given_fish     <0.1
+                                        mad_pick ch_given_fish 0.1-0.28
+                                        mad_pick ch_given_fish 0.28-0.5
+                                        mad_pick ch_given_fish    0.5-1
+                                        mad_pick ch_given_fish      1-3
+                                        mad_pick ch_given_fish     3-10
+                                        mad_pick ch_given_fish    10-30
+                                        mad_pick ch_given_fish   30-100
+                                        mad_pick ch_given_fish    >=100
+                                  distance_small     ch_caught   >500 m
+                                  distance_small     ch_caught  <=500 m
+                                  distance_small     ch_caught     none
+                    sens_distance_ambiguous_kept     ch_caught   >500 m
+                    sens_distance_ambiguous_kept     ch_caught  <=500 m
+                    sens_distance_ambiguous_kept     ch_caught     none
+                  sens_distance_lake_targets_out     ch_caught   >500 m
+                  sens_distance_lake_targets_out     ch_caught  <=500 m
+                  sens_distance_lake_targets_out     ch_caught     none
+                     sens_distance_entry_gap_out     ch_caught   >500 m
+                     sens_distance_entry_gap_out     ch_caught  <=500 m
+                     sens_distance_entry_gap_out     ch_caught     none
+                              sens_regulated_out     ch_caught     <0.1
+                              sens_regulated_out     ch_caught 0.1-0.28
+                              sens_regulated_out     ch_caught 0.28-0.5
+                              sens_regulated_out     ch_caught    0.5-1
+                              sens_regulated_out     ch_caught      1-3
+                              sens_regulated_out     ch_caught     3-10
+                              sens_regulated_out     ch_caught    10-30
+                              sens_regulated_out     ch_caught   30-100
+                              sens_regulated_out     ch_caught    >=100
+                        sens_largest_project_out     ch_caught     <0.1
+                        sens_largest_project_out     ch_caught 0.1-0.28
+                        sens_largest_project_out     ch_caught 0.28-0.5
+                        sens_largest_project_out     ch_caught    0.5-1
+                        sens_largest_project_out     ch_caught      1-3
+                        sens_largest_project_out     ch_caught     3-10
+                        sens_largest_project_out     ch_caught    10-30
+                        sens_largest_project_out     ch_caught   30-100
+                        sens_largest_project_out     ch_caught    >=100
+                              sens_ches_necr_out     ch_caught     <0.1
+                              sens_ches_necr_out     ch_caught 0.1-0.28
+                              sens_ches_necr_out     ch_caught 0.28-0.5
+                              sens_ches_necr_out     ch_caught    0.5-1
+                              sens_ches_necr_out     ch_caught      1-3
+                              sens_ches_necr_out     ch_caught     3-10
+                              sens_ches_necr_out     ch_caught    10-30
+                              sens_ches_necr_out     ch_caught   30-100
+                              sens_ches_necr_out     ch_caught    >=100
+                            sens_parent_flow_out     ch_caught     <0.1
+                            sens_parent_flow_out     ch_caught 0.1-0.28
+                            sens_parent_flow_out     ch_caught 0.28-0.5
+                            sens_parent_flow_out     ch_caught    0.5-1
+                            sens_parent_flow_out     ch_caught      1-3
+                            sens_parent_flow_out     ch_caught     3-10
+                            sens_parent_flow_out     ch_caught    10-30
+                            sens_parent_flow_out     ch_caught   30-100
+                            sens_parent_flow_out     ch_caught    >=100
+                     sens_pcic_routed_where_both     ch_caught     <0.1
+                     sens_pcic_routed_where_both     ch_caught 0.1-0.28
+                     sens_pcic_routed_where_both     ch_caught 0.28-0.5
+                     sens_pcic_routed_where_both     ch_caught    0.5-1
+                     sens_pcic_routed_where_both     ch_caught      1-3
+                     sens_pcic_routed_where_both     ch_caught     3-10
+                     sens_pcic_routed_where_both     ch_caught    10-30
+                     sens_pcic_routed_where_both     ch_caught   30-100
+                     sens_pcic_routed_where_both     ch_caught    >=100
+                     sens_wet_balance_where_both     ch_caught     <0.1
+                     sens_wet_balance_where_both     ch_caught 0.1-0.28
+                     sens_wet_balance_where_both     ch_caught 0.28-0.5
+                     sens_wet_balance_where_both     ch_caught    0.5-1
+                     sens_wet_balance_where_both     ch_caught      1-3
+                     sens_wet_balance_where_both     ch_caught     3-10
+                     sens_wet_balance_where_both     ch_caught    10-30
+                     sens_wet_balance_where_both     ch_caught   30-100
+                     sens_wet_balance_where_both     ch_caught    >=100
+                              sens_fwapg_old_mad     ch_caught     <0.1
+                              sens_fwapg_old_mad     ch_caught 0.1-0.28
+                              sens_fwapg_old_mad     ch_caught 0.28-0.5
+                              sens_fwapg_old_mad     ch_caught    0.5-1
+                              sens_fwapg_old_mad     ch_caught      1-3
+                              sens_fwapg_old_mad     ch_caught     3-10
+                              sens_fwapg_old_mad     ch_caught    10-30
+                              sens_fwapg_old_mad     ch_caught   30-100
+                              sens_fwapg_old_mad     ch_caught    >=100
+                            sens_duplicates_kept     ch_caught     <0.1
+                            sens_duplicates_kept     ch_caught 0.1-0.28
+                            sens_duplicates_kept     ch_caught 0.28-0.5
+                            sens_duplicates_kept     ch_caught    0.5-1
+                            sens_duplicates_kept     ch_caught      1-3
+                            sens_duplicates_kept     ch_caught     3-10
+                            sens_duplicates_kept     ch_caught    10-30
+                            sens_duplicates_kept     ch_caught   30-100
+                            sens_duplicates_kept     ch_caught    >=100
+                          sens_no_river_polygons     ch_caught     <0.1
+                          sens_no_river_polygons     ch_caught 0.1-0.28
+                          sens_no_river_polygons     ch_caught 0.28-0.5
+                          sens_no_river_polygons     ch_caught    0.5-1
+                          sens_no_river_polygons     ch_caught      1-3
+                          sens_no_river_polygons     ch_caught     3-10
+                          sens_no_river_polygons     ch_caught    10-30
+                          sens_no_river_polygons     ch_caught   30-100
+                          sens_no_river_polygons     ch_caught    >=100
+                         sens_gradient_covariate     ch_caught     <0.1
+                         sens_gradient_covariate     ch_caught 0.1-0.28
+                         sens_gradient_covariate     ch_caught 0.28-0.5
+                         sens_gradient_covariate     ch_caught    0.5-1
+                         sens_gradient_covariate     ch_caught      1-3
+                         sens_gradient_covariate     ch_caught     3-10
+                         sens_gradient_covariate     ch_caught    10-30
+                         sens_gradient_covariate     ch_caught   30-100
+                         sens_gradient_covariate     ch_caught    >=100
+                           sens_season_covariate     ch_caught     <0.1
+                           sens_season_covariate     ch_caught 0.1-0.28
+                           sens_season_covariate     ch_caught 0.28-0.5
+                           sens_season_covariate     ch_caught    0.5-1
+                           sens_season_covariate     ch_caught      1-3
+                           sens_season_covariate     ch_caught     3-10
+                           sens_season_covariate     ch_caught    10-30
+                           sens_season_covariate     ch_caught   30-100
+                           sens_season_covariate     ch_caught    >=100
+                             sens_merged_0.1-0.5     ch_caught     <0.1
+                             sens_merged_0.1-0.5     ch_caught  0.1-0.5
+                             sens_merged_0.1-0.5     ch_caught    0.5-1
+                             sens_merged_0.1-0.5     ch_caught      1-3
+                             sens_merged_0.1-0.5     ch_caught     3-10
+                             sens_merged_0.1-0.5     ch_caught    10-30
+                             sens_merged_0.1-0.5     ch_caught   30-100
+                             sens_merged_0.1-0.5     ch_caught    >=100
+                     sens_access_wsgs_unfiltered     ch_caught     <0.1
+                     sens_access_wsgs_unfiltered     ch_caught 0.1-0.28
+                     sens_access_wsgs_unfiltered     ch_caught 0.28-0.5
+                     sens_access_wsgs_unfiltered     ch_caught    0.5-1
+                     sens_access_wsgs_unfiltered     ch_caught      1-3
+                     sens_access_wsgs_unfiltered     ch_caught     3-10
+                     sens_access_wsgs_unfiltered     ch_caught    10-30
+                     sens_access_wsgs_unfiltered     ch_caught   30-100
+                     sens_access_wsgs_unfiltered     ch_caught    >=100
+                  sens_access_no_natural_barrier     ch_caught     <0.1
+                  sens_access_no_natural_barrier     ch_caught 0.1-0.28
+                  sens_access_no_natural_barrier     ch_caught 0.28-0.5
+                  sens_access_no_natural_barrier     ch_caught    0.5-1
+                  sens_access_no_natural_barrier     ch_caught      1-3
+                  sens_access_no_natural_barrier     ch_caught     3-10
+                  sens_access_no_natural_barrier     ch_caught    10-30
+                  sens_access_no_natural_barrier     ch_caught   30-100
+                  sens_access_no_natural_barrier     ch_caught    >=100
+ sens_access_no_natural_barrier_no_user_definite     ch_caught     <0.1
+ sens_access_no_natural_barrier_no_user_definite     ch_caught 0.1-0.28
+ sens_access_no_natural_barrier_no_user_definite     ch_caught 0.28-0.5
+ sens_access_no_natural_barrier_no_user_definite     ch_caught    0.5-1
+ sens_access_no_natural_barrier_no_user_definite     ch_caught      1-3
+ sens_access_no_natural_barrier_no_user_definite     ch_caught     3-10
+ sens_access_no_natural_barrier_no_user_definite     ch_caught    10-30
+ sens_access_no_natural_barrier_no_user_definite     ch_caught   30-100
+ sens_access_no_natural_barrier_no_user_definite     ch_caught    >=100
+                 presence_mix_bcfishobs_non_fdis      presence     <0.1
+                 presence_mix_bcfishobs_non_fdis      presence 0.1-0.28
+                 presence_mix_bcfishobs_non_fdis      presence 0.28-0.5
+                 presence_mix_bcfishobs_non_fdis      presence    0.5-1
+                 presence_mix_bcfishobs_non_fdis      presence      1-3
+                 presence_mix_bcfishobs_non_fdis      presence     3-10
+                 presence_mix_bcfishobs_non_fdis      presence    10-30
+                 presence_mix_bcfishobs_non_fdis      presence   30-100
+                 presence_mix_bcfishobs_non_fdis      presence    >=100
+                     presence_mix_fdis_ch_visits      presence     <0.1
+                     presence_mix_fdis_ch_visits      presence 0.1-0.28
+                     presence_mix_fdis_ch_visits      presence 0.28-0.5
+                     presence_mix_fdis_ch_visits      presence    0.5-1
+                     presence_mix_fdis_ch_visits      presence      1-3
+                     presence_mix_fdis_ch_visits      presence     3-10
+                     presence_mix_fdis_ch_visits      presence    10-30
+                     presence_mix_fdis_ch_visits      presence   30-100
+                     presence_mix_fdis_ch_visits      presence    >=100
+ n_visits n_detect raw_rate rel_rate rel_lo       rel_hi        power
+     7840       70    0.009    0.142  0.046        0.257           ok
+     1791       57    0.032    0.468  0.200        0.696           ok
+      797       26    0.033    0.607  0.269        1.037           ok
+      885       61    0.069    1.524  0.686        2.329           ok
+     1048       50    0.048    1.404  0.798        2.064           ok
+     1171       72    0.061    2.404  1.384        3.802           ok
+      857       40    0.047    2.161  0.835        4.599           ok
+      452       71    0.157    7.757  2.011       15.604           ok
+      785      531    0.676    2.805  1.529        5.773           ok
+     9385     2914    0.310    0.417  0.351        0.482           ok
+     2282     1284    0.563    0.937  0.780        1.077           ok
+      998      620    0.621    1.183  0.972        1.432           ok
+     1133      745    0.658    1.269  1.064        1.490           ok
+     1402      987    0.704    1.349  1.126        1.645           ok
+     1559     1278    0.820    1.783  1.501        2.135           ok
+     1031      923    0.895    2.108  1.734        2.570           ok
+      463      430    0.929    2.515  1.894        3.301           ok
+      785      753    0.959    3.003  1.665        4.563           ok
+     2373       70    0.029    0.255  0.093        0.477           ok
+     1025       57    0.056    0.414  0.191        0.671           ok
+      503       26    0.052    0.475  0.178        0.825           ok
+      598       61    0.102    1.029  0.442        1.485           ok
+      721       50    0.069    0.905  0.452        1.397           ok
+      932       72    0.077    1.518  0.792        2.130           ok
+      764       40    0.052    1.321  0.537        2.724           ok
+      420       71    0.169    4.162  1.174        7.949           ok
+      754      531    0.704    1.831  1.005        3.273           ok
+     6523       55    0.008    1.000  1.000        1.000           ok
+      358       52    0.145   26.674 14.960       58.259           ok
+      438       11    0.025   10.016  1.632 26626532.391           ok
+     6688       55    0.008    1.000     NA           NA           ok
+      390       65    0.167   30.205     NA           NA           ok
+      438       11    0.025   11.381     NA           NA           ok
+     4561       48    0.011    1.000     NA           NA           ok
+      330       51    0.155   28.831     NA           NA           ok
+      406       11    0.027   13.144     NA           NA           ok
+     5701       55    0.010    1.000     NA           NA           ok
+      319       48    0.150   23.977     NA           NA           ok
+      437       11    0.025    7.002     NA           NA           ok
+     7661       70    0.009    0.187     NA           NA           ok
+     1736       41    0.024    0.460     NA           NA           ok
+      786       26    0.033    0.719     NA           NA           ok
+      872       60    0.069    1.893     NA           NA           ok
+     1019       48    0.047    1.850     NA           NA           ok
+     1160       72    0.062    3.491     NA           NA           ok
+      751       37    0.049    2.863     NA           NA           ok
+      153       12    0.078    8.335     NA           NA           ok
+      149       41    0.275    3.199     NA           NA           ok
+     7840       70    0.009    0.151     NA           NA           ok
+     1791       57    0.032    0.503     NA           NA           ok
+      797       26    0.033    0.649     NA           NA           ok
+      885       61    0.069    1.627     NA           NA           ok
+     1048       50    0.048    1.499     NA           NA           ok
+     1171       72    0.061    2.555     NA           NA           ok
+      857       40    0.047    2.294     NA           NA           ok
+      452       71    0.157    8.219     NA           NA           ok
+      290       99    0.341    2.901     NA           NA           ok
+     7438       65    0.009    0.164     NA           NA           ok
+     1738       36    0.021    0.353     NA           NA           ok
+      793       26    0.033    0.616     NA           NA           ok
+      874       56    0.064    1.429     NA           NA           ok
+     1045       49    0.047    1.398     NA           NA           ok
+     1171       72    0.061    2.546     NA           NA           ok
+      857       40    0.047    2.300     NA           NA           ok
+      452       71    0.157    8.558     NA           NA           ok
+      270       82    0.304    2.923     NA           NA           ok
+     7834       70    0.009    0.138     NA           NA           ok
+     1788       57    0.032    0.455     NA           NA           ok
+      794       26    0.033    0.574     NA           NA           ok
+      878       61    0.069    1.528     NA           NA           ok
+     1041       50    0.048    1.440     NA           NA           ok
+     1149       72    0.063    2.537     NA           NA           ok
+      832       36    0.043    2.378     NA           NA           ok
+      435       69    0.159    8.182     NA           NA           ok
+      620      463    0.747    2.778     NA           NA           ok
+     7570       73    0.010    0.137     NA           NA           ok
+     1537       49    0.032    0.397     NA           NA           ok
+      700       25    0.036    0.548     NA           NA           ok
+      777       59    0.076    1.456     NA           NA           ok
+      895       47    0.053    1.385     NA           NA           ok
+     1118       72    0.064    2.695     NA           NA           ok
+      832       36    0.043    2.294     NA           NA           ok
+      435       69    0.159    8.186     NA           NA           ok
+      617      461    0.747    2.583     NA           NA           ok
+     7282       66    0.009    0.111     NA           NA           ok
+     1632       39    0.024    0.326     NA           NA           ok
+      692       18    0.026    0.293     NA           NA           ok
+      724       21    0.029    0.544     NA           NA           ok
+      947       60    0.063    1.430     NA           NA           ok
+     1171       71    0.061    2.657     NA           NA           ok
+      794       36    0.045    1.701     NA           NA           ok
+      531       72    0.136    6.798     NA           NA           ok
+      708      508    0.718    4.399     NA           NA           ok
+     4853       63    0.013    0.242     NA           NA           ok
+      903       30    0.033    0.584     NA           NA           ok
+      388       16    0.041    0.743     NA           NA           ok
+      421       34    0.081    2.249     NA           NA           ok
+      521       34    0.065    3.478     NA           NA           ok
+      647       31    0.048    3.146     NA           NA           ok
+      207       19    0.092    5.321     NA           NA           ok
+       44        4    0.091    2.422     NA           NA underpowered
+        9        0    0.000    0.000     NA           NA underpowered
+     8134       72    0.009    0.142     NA           NA           ok
+     1864       57    0.031    0.455     NA           NA           ok
+      825       26    0.032    0.592     NA           NA           ok
+      909       62    0.068    1.512     NA           NA           ok
+     1068       51    0.048    1.406     NA           NA           ok
+     1184       73    0.062    2.391     NA           NA           ok
+      872       43    0.049    2.203     NA           NA           ok
+      453       72    0.159    8.291     NA           NA           ok
+      803      533    0.664    2.781     NA           NA           ok
+     6732       70    0.010    0.335     NA           NA           ok
+     1478       42    0.028    0.863     NA           NA           ok
+      590       25    0.042    1.388     NA           NA           ok
+      590       35    0.059    2.493     NA           NA           ok
+      685       41    0.060    3.364     NA           NA           ok
+      279       27    0.097    4.539     NA           NA           ok
+       25        3    0.120   21.572     NA           NA underpowered
+       38       18    0.474    7.797     NA           NA           ok
+       44       14    0.318    5.332     NA           NA           ok
+     7840       70    0.009    0.181     NA           NA           ok
+     1791       57    0.032    0.551     NA           NA           ok
+      797       26    0.033    0.678     NA           NA           ok
+      885       61    0.069    1.717     NA           NA           ok
+     1048       50    0.048    1.528     NA           NA           ok
+     1171       72    0.061    2.337     NA           NA           ok
+      857       40    0.047    2.017     NA           NA           ok
+      452       71    0.157    6.719     NA           NA           ok
+      785      531    0.676    2.618     NA           NA           ok
+     7840       70    0.009    0.138     NA           NA           ok
+     1791       57    0.032    0.476     NA           NA           ok
+      797       26    0.033    0.619     NA           NA           ok
+      885       61    0.069    1.596     NA           NA           ok
+     1048       50    0.048    1.397     NA           NA           ok
+     1171       72    0.061    2.512     NA           NA           ok
+      857       40    0.047    2.123     NA           NA           ok
+      452       71    0.157    7.420     NA           NA           ok
+      785      531    0.676    2.814     NA           NA           ok
+     7840       70    0.009    0.142     NA           NA           ok
+     2588       83    0.032    0.504     NA           NA           ok
+      885       61    0.069    1.524     NA           NA           ok
+     1048       50    0.048    1.404     NA           NA           ok
+     1171       72    0.061    2.405     NA           NA           ok
+      857       40    0.047    2.160     NA           NA           ok
+      452       71    0.157    7.741     NA           NA           ok
+      785      531    0.676    2.829     NA           NA           ok
+     4093       41    0.010    0.141     NA           NA           ok
+      801       37    0.046    0.521     NA           NA           ok
+      290       16    0.055    0.806     NA           NA           ok
+      393       41    0.104    1.836     NA           NA           ok
+      437       26    0.059    1.569     NA           NA           ok
+      328       38    0.116    2.699     NA           NA           ok
+       98       14    0.143    3.335     NA           NA           ok
+      107       61    0.570   13.139     NA           NA           ok
+      629      486    0.773    3.058     NA           NA           ok
+     2229       25    0.011    0.082     NA           NA           ok
+      456       37    0.081    0.428     NA           NA           ok
+      175       16    0.091    0.633     NA           NA           ok
+      267       39    0.146    1.438     NA           NA           ok
+      333       24    0.072    0.839     NA           NA           ok
+      246       37    0.150    1.531     NA           NA           ok
+       48       14    0.292    4.671     NA           NA           ok
+      101       61    0.604   17.016     NA           NA           ok
+      629      486    0.773    1.611     NA           NA           ok
+     2230       25    0.011    0.082     NA           NA           ok
+      456       37    0.081    0.428     NA           NA           ok
+      175       16    0.091    0.633     NA           NA           ok
+      267       39    0.146    1.438     NA           NA           ok
+      333       24    0.072    0.839     NA           NA           ok
+      246       37    0.150    1.531     NA           NA           ok
+       48       14    0.292    4.672     NA           NA           ok
+      101       61    0.604   17.020     NA           NA           ok
+      629      486    0.773    1.611     NA           NA           ok
+      231       NA    0.053       NA     NA           NA         <NA>
+      191       NA    0.044       NA     NA           NA         <NA>
+      149       NA    0.034       NA     NA           NA         <NA>
+      282       NA    0.065       NA     NA           NA         <NA>
+      629       NA    0.144       NA     NA           NA         <NA>
+     1035       NA    0.237       NA     NA           NA         <NA>
+      863       NA    0.198       NA     NA           NA         <NA>
+      563       NA    0.129       NA     NA           NA         <NA>
+      426       NA    0.098       NA     NA           NA         <NA>
+       70       NA    0.072       NA     NA           NA         <NA>
+       57       NA    0.058       NA     NA           NA         <NA>
+       26       NA    0.027       NA     NA           NA         <NA>
+       61       NA    0.062       NA     NA           NA         <NA>
+       50       NA    0.051       NA     NA           NA         <NA>
+       72       NA    0.074       NA     NA           NA         <NA>
+       40       NA    0.041       NA     NA           NA         <NA>
+       71       NA    0.073       NA     NA           NA         <NA>
+      531       NA    0.543       NA     NA           NA         <NA>
+ top_project_share regulated_detect_share
+             0.171                  0.000
+             0.158                  0.281
+             0.154                  0.000
+             0.180                  0.016
+             0.060                  0.040
+             0.069                  0.000
+             0.125                  0.075
+             0.507                  0.831
+             0.814                  0.923
+             0.006                  0.001
+             0.010                  0.020
+             0.024                  0.002
+             0.026                  0.032
+             0.031                  0.021
+             0.025                  0.023
+             0.040                  0.195
+             0.100                  0.663
+             0.655                  0.835
+             0.171                  0.000
+             0.158                  0.281
+             0.154                  0.000
+             0.180                  0.016
+             0.060                  0.040
+             0.069                  0.000
+             0.125                  0.075
+             0.507                  0.831
+             0.814                  0.923
+             0.091                  0.000
+             0.096                  0.000
+             0.182                  0.000
+             0.091                  0.000
+             0.185                  0.000
+             0.182                  0.000
+             0.104                  0.000
+             0.098                  0.000
+             0.182                  0.000
+             0.091                  0.000
+             0.104                  0.000
+             0.182                  0.000
+             0.171                  0.000
+             0.122                  0.000
+             0.154                  0.000
+             0.183                  0.000
+             0.062                  0.000
+             0.069                  0.000
+             0.135                  0.000
+             0.167                  0.000
+             0.122                  0.000
+             0.171                  0.000
+             0.158                  0.281
+             0.154                  0.000
+             0.180                  0.016
+             0.060                  0.040
+             0.069                  0.000
+             0.125                  0.075
+             0.507                  0.831
+             0.131                  0.586
+             0.185                  0.000
+             0.083                  0.000
+             0.154                  0.000
+             0.196                  0.018
+             0.061                  0.041
+             0.069                  0.000
+             0.125                  0.075
+             0.507                  0.831
+             0.073                  0.500
+             0.171                  0.000
+             0.158                  0.281
+             0.154                  0.000
+             0.180                  0.016
+             0.060                  0.040
+             0.069                  0.000
+             0.139                  0.083
+             0.522                  0.841
+             0.933                  0.957
+             0.164                  0.000
+             0.184                  0.327
+             0.160                  0.080
+             0.186                  0.017
+             0.064                  0.043
+             0.069                  0.000
+             0.139                  0.083
+             0.522                  0.841
+             0.933                  0.957
+             0.182                  0.000
+             0.231                  0.000
+             0.222                  0.000
+             0.190                  0.000
+             0.083                  0.033
+             0.070                  0.000
+             0.139                  0.028
+             0.500                  0.833
+             0.850                  0.906
+             0.190                  0.000
+             0.300                  0.000
+             0.250                  0.000
+             0.147                  0.000
+             0.088                  0.059
+             0.161                  0.000
+             0.263                  0.000
+             0.250                  0.250
+                NA                     NA
+             0.167                  0.000
+             0.158                  0.281
+             0.154                  0.000
+             0.177                  0.016
+             0.059                  0.039
+             0.068                  0.000
+             0.116                  0.070
+             0.500                  0.819
+             0.811                  0.921
+             0.171                  0.000
+             0.119                  0.048
+             0.160                  0.000
+             0.143                  0.000
+             0.073                  0.049
+             0.185                  0.000
+             0.667                  0.000
+             0.500                  1.000
+             0.286                  0.143
+             0.171                  0.000
+             0.158                  0.281
+             0.154                  0.000
+             0.180                  0.016
+             0.060                  0.040
+             0.069                  0.000
+             0.125                  0.075
+             0.507                  0.831
+             0.814                  0.923
+             0.171                  0.000
+             0.158                  0.281
+             0.154                  0.000
+             0.180                  0.016
+             0.060                  0.040
+             0.069                  0.000
+             0.125                  0.075
+             0.507                  0.831
+             0.814                  0.923
+             0.171                  0.000
+             0.108                  0.193
+             0.180                  0.016
+             0.060                  0.040
+             0.069                  0.000
+             0.125                  0.075
+             0.507                  0.831
+             0.814                  0.923
+             0.293                  0.000
+             0.243                  0.432
+             0.250                  0.000
+             0.268                  0.024
+             0.077                  0.000
+             0.132                  0.000
+             0.214                  0.071
+             0.590                  0.918
+             0.889                  0.996
+             0.200                  0.000
+             0.243                  0.432
+             0.250                  0.000
+             0.282                  0.026
+             0.083                  0.000
+             0.135                  0.000
+             0.214                  0.071
+             0.590                  0.918
+             0.889                  0.996
+             0.200                  0.000
+             0.243                  0.432
+             0.250                  0.000
+             0.282                  0.026
+             0.083                  0.000
+             0.135                  0.000
+             0.214                  0.071
+             0.590                  0.918
+             0.889                  0.996
+                NA                     NA
+                NA                     NA
+                NA                     NA
+                NA                     NA
+                NA                     NA
+                NA                     NA
+                NA                     NA
+                NA                     NA
+                NA                     NA
+                NA                     NA
+                NA                     NA
+                NA                     NA
+                NA                     NA
+                NA                     NA
+                NA                     NA
+                NA                     NA
+                NA                     NA
+                NA                     NA
