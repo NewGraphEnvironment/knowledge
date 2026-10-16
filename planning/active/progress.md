@@ -19,3 +19,9 @@
   read; manifest with rows, sha256, producing script, commit). Local `ch_mad_visits.csv` was never pushed to S3; its
   21,862 rows match the #52 run log. Other local derived CSVs are byte-identical to the S3 copies. Moved
   `fdis/fissr_explore.sqlite` and `fdis/derived/` to `s3://fresh-bc/archive/fdis/`.
+- Plan review (`review-plan.md`) arrived during Phase 4; dispositions recorded there. Reproduced B1 (`~/.Renviron`
+  replaces shell `PG*`; `PGSERVICE` wins) and B2 (`MANIFEST.md5` listed the archived sqlite). The value-level read-back
+  it asked for caught `ch_rule_visits.hydro_zone` read as integers; fixed before the v1 publish.
+- Published `s3://fresh-bc/knowledge/fdis/v1/` (5 Parquet + manifest at 2b14507) and `fdis/README.md`; removed the
+  earlier unversioned upload. `PULL=TRUE` into a scratch checkout restores all five CSVs equal as `readr` reads them.
+- Phase 5: CLAUDE.md top half rewritten; tree sweep clean.

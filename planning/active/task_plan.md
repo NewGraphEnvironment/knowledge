@@ -69,11 +69,11 @@ being public, provided it ships with a note of when and from where it was receiv
       (id, built, knowledge commit, per-file rows/bytes/sha256, producing script, source note) to
       `s3://fresh-bc/knowledge/fdis/v1/` (review G6); `PULL=TRUE` restores the CSVs (G4); `scripts/README.md`'s per-script `aws s3 cp … fdis/derived/` lines replaced by it;
       `0230`'s sync excludes nothing new (derived no longer under `fdis/`)
-- [ ] Run it; read back each Parquet and compare rows to the CSV
-- [ ] `research/fdis_export.md` Provenance and CLAUDE.md's FDIS note: public, with the note, and where each part lives
+- [x] Run it; read back each Parquet and compare values with an all-character read of the CSV (review G11)
+- [x] `research/fdis_export.md` Provenance and CLAUDE.md's FDIS note: public, with the note, and where each part lives
 
 ## Phase 5: CLAUDE.md, visibility, GitHub text
-- [ ] Rewrite CLAUDE.md's repo-specific top half for a public reader (Database access → `PG*`; Zotero → env vars, no
+- [x] Rewrite CLAUDE.md's repo-specific top half for a public reader (Database access → `PG*`; Zotero → env vars, no
       1Password/cyclops; no host names; layout at root; "One discipline" restated without "private repo")
 - [ ] `.claude/visibility` → `public`; `/claude-md-init --public-clean`; grep that internal-only conventions are gone
 - [ ] Edit the issue bodies, PR bodies and the comment the sweep lists (11 / 4 / 1 per the issue) via `gh`;

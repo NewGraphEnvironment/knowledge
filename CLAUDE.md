@@ -1,26 +1,27 @@
 # knowledge
 
-Watershed-group fisheries background for New Graph Environment: the past-report corpus (EcoCat
-harvest → Zotero → ragnar store → content tags), provincial FISS data submissions (`.xls` → a
-no-fish-captured layer), and the priority tables farmed out of both and reconciled to PSCIS
-crossings. The unit of work is the **watershed group**; report, permit, proposal and eDNA repos
-consume snapshots from here instead of carrying the pipeline.
+Watershed-group fisheries background for British Columbia: the past-report corpus (EcoCat
+harvest → Zotero → ragnar store → content tags), provincial fish records (FISS data submissions
+and the FDIS electrofishing export), the cited habitat literature, and the habitat thresholds
+tested against them. The unit of work is the **watershed group**; downstream report and model
+repos consume snapshots from here instead of carrying the pipeline.
 
 ## Repository Context
 
-**Repository:** NewGraphEnvironment/knowledge (private; to be cleaned up and made public in place,
-with the package at the root, #56)
-**Primary Language:** R, with Python (`0153`) and workflow JS (`wf_*.js`)
-**Origin:** seeded with history from `fish_passage_template_reporting`
-([template#236](https://github.com/NewGraphEnvironment/fish_passage_template_reporting/issues/236)).
+**Repository:** NewGraphEnvironment/knowledge (public since #56; site at
+<https://newgraphenvironment.github.io/knowledge/>)
+**Primary Language:** R, with Python (`0153`, `0270`) and workflow JS (`wf_*.js`)
+**Origin:** seeded in September 2026 with history from an earlier fish-passage reporting template.
 Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` refer to that repo.
 
 ## Layout
 
-- `pkg/` — R package `knowledge`, installable as `NewGraphEnvironment/knowledge/pkg`. Only code that
-  has run on two regions graduates here; it must carry no client or project identifiers.
-- `scripts/` — the run order (`scripts/README.md`), calling `pkg` and `cred`. Legacy literals in
-  scripts are fixed forward as they are touched.
+- `R/`, `man/`, `tests/` at the root — R package `knowledge` (`pak::pak("NewGraphEnvironment/knowledge")`).
+  Only code that has run on two regions graduates here. `.Rbuildignore` keeps `data/`, `scripts/`,
+  `planning/` and `research/` out of the build, and `tests/testthat/test-data-dir.R` keeps `.R` and
+  `.rda` files off the top of `data/`, where `pkgload::load_all()` would source or load them.
+- `scripts/` — the run order (`scripts/README.md`), calling the package (`pkgload::load_all()` from
+  the root) and `cred`. Legacy literals in scripts are fixed forward as they are touched.
 - `data/<wsg>/` — per-group snapshots (csv/md) and small spatial deliverables (gpkg/kml). Tracked.
 - `data/` root — cross-group tier: `corpus_tags.csv`, `priority_farmed_all.csv`,
   `zotero_key_map.csv`, `rag_priorities.{gpkg,kml}`, `life_history_timing.csv` (seeded by `0260`,
@@ -47,20 +48,26 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   `temperature_{members,additions}.csv` (what `0270 --collection temperature` puts in `Fisheries/temperature`, the sole
   input of the `temperature` store), and `flow_{members,additions}.csv` (what `0270 --collection flow` puts in
   `Fisheries/flow`, the sole input of the `flow` store; #44, `research/flow_requirements.md`).
-- `data/rag/` — ignored local cache of the ragnar stores. Source of truth is `s3://fresh-bc/rag/`.
+- `data/rag/` — ignored local cache of the ragnar stores. Source of truth is `s3://fresh-bc/rag/` (not public).
+- `data/fdis/` — ignored cache of the FDIS export (`0230` syncs it) and of the visit tables built from it
+  (`data/fdis/derived/`; `0299` publishes them, and restores them with `PULL=TRUE`).
 
-## One discipline
+## One discipline: everything here is public
 
-No client or project identifiers in commit messages, issue titles, code or fixtures — the
-watershed group is an argument. Context that needs them goes in this file, `comms/` and
-`planning/`, which never leave the private repo.
+The watershed group is an argument, never a project or a client. Nothing tracked here, and no
+issue, PR or commit message, carries client or project identifiers, host or machine names,
+database hosts, ports or logins, credential file paths, password-manager references, or links to
+private repositories. That includes `planning/` and this file. Context that needs any of them
+belongs in a private coordination repo, not here. Credentials come from the environment
+(`PG*`, `ZOTERO_API_KEY`, AWS). The #56 archive's `public_sweep.py` is the check: it searches the
+tree, the GitHub text and a branch's commit messages for all of the above.
 
 ## Working notes
 
 ### Ragnar stores live in S3 through `cred`; a local ingest must be pushed
 
-`.Rprofile` sets `options(cred.store_source = "s3://fresh-bc/rag/")` (committed there because
-`~/.gitignore` drops `.Renviron` on every NGE machine). `cred::crd_store_connect("<store>")` pulls
+`.Rprofile` sets `options(cred.store_source = "s3://fresh-bc/rag/")` (committed there so it travels
+with the repo; a project `.Renviron` would replace the user's, see Database access). `cred::crd_store_connect("<store>")` pulls
 and md5-verifies; `cred::crd_store_push()` uploads and merges the `log.json` manifest. After a
 local write (`0152` ingest, `0156` dedup) the local md5 no longer matches the manifest, and the
 next `verify = TRUE` connect **replaces the local file with the bucket copy**. Push first.
@@ -107,15 +114,22 @@ They are the stale submitted versions. They reach Zotero from the report repos.
 ### Zotero access is local, except for filing
 
 Store builds read `~/Zotero/zotero.sqlite` read-only, so they need a synced Zotero data directory
-and no key. `0153` writes to the group library through the Web API and resolves its key from
-`ZOTERO_API_KEY`, then `~/.config/newgraph/zotero-api-key` (0600, materialized per machine from
-1Password — see cyclops #9/#10). It exits on an empty file, because a truncated write there
-otherwise reads as a JSON parse error three calls later.
+and no key. `0153` and `0270` write to the group library through the Web API with the key in
+`ZOTERO_API_KEY`, and exit at once when it is unset or empty, because an empty key otherwise
+reads as a JSON parse error three calls later. Items `0270` creates through the Web API sync and
+get Better BibTeX keys without a Zotero restart (measured 2026-10-02), so `0270` → `0150` build →
+`0280` runs end to end in one sitting.
 
-### The FDIS electrofishing export is ours, private, and richer than the public layers
+### The FDIS electrofishing export: public as received, and richer than the public layers
 
 `s3://fresh-bc/fdis/` holds province-wide FDIS extracts the Province supplied for the 2021–22
-channel-width work (moved from Dropbox on 2026-09-26; `MANIFEST.md5`). It is electrofishing only.
+channel-width work (exports of 2020-11-16 and 2022-03-22; `MANIFEST.md5`). The Province agreed on
+2026-10-16 to their publication provided they carry a note of when and from where they were
+received: that note is `fdis/README.md`, whose source is `data/fdis_README.md`, so edit it there
+and publish with `0299`. Nothing that is not part of the extract goes under `fdis/`, because the
+whole prefix is public; working files go to the bucket's private `archive/`. The visit tables built
+from it are published under `knowledge/fdis/v1/` (a change of columns or meaning is a new version).
+It is electrofishing only.
 The 2022 `Details*` files contain every 2020 fish row, and exact duplicate rows are distinct fish.
 `counts` is the abundance table; `details` is a length subsample. `scripts/0230`–`0240` build
 from it, and `research/fdis_export.md` is the reference. The FWA "field measurement" channel
@@ -221,28 +235,23 @@ Width and flow carry two traps (#54):
 
 ### Database access
 
-`0100`, `0110`, `0160`, `0162` connect on the bcfishpass tunnel (`0200`/`0220` try it first and
-fall back to the local `fwapg` only when it is down — `scripts/README.md`). They **hardcode**
-`host="localhost", port=63333, dbname="bcfishpass", user="newgraph"` and pass **no password** —
-verified 2026-09-04: no script reads `PG_*_SHARE`, so setting those variables changes nothing.
-Authentication therefore comes from the ambient libpq environment (`PGPASSWORD`, or a `~/.pgpass`
-if one exists — there is none on m1), which means an empty `PGPASSWORD` breaks all six.
+Every script connects with `DBI::dbConnect(RPostgres::Postgres())`, so libpq reads `PGHOST`,
+`PGPORT`, `PGDATABASE`, `PGUSER` and `PGPASSWORD` (or `~/.pgpass`), and nothing in the code names a
+server. Each script's header names the schemas it needs: most need an fwapg load; `0100`, `0110`
+and `0160` need a bcfishpass database, and `0200` prefers one (its FISS snapshot was a superset,
+and `0200` says when the database has no `bcfishpass` schema). There is no fallback from one
+database to another: point the variables at the one the script needs.
 
-The tunnel command in `~/.Renviron` ends in `sleep 10`; re-run it with a longer hold before
-anything more than one query. `0162` can also use a local `fwapg` on 5432, and hardcodes
-`postgres/postgres` for it.
+R reads `~/.Renviron` at startup and its values **replace** the shell's, so where it sets `PG*`, a
+`PGDATABASE=… Rscript …` on the command line is silently ignored (measured 2026-10-16). Set the
+database there, or select a `~/.pg_service.conf` entry with `PGSERVICE=<entry>`, which libpq takes
+over the `PG*` variables. Set `PGCONNECT_TIMEOUT`, or an unreachable server hangs the script.
 
 **Run R from the repo root, and never add a project-level `.Renviron` here.** R loads a
 project `.Renviron` *instead of* `~/.Renviron`, not in addition to it, so one silently empties
-every `PG_*`, `AWS_*` and `GITHUB_PAT`. The symptom accuses the database
-(`invalid integer value "NA" for connection option "port"`). One removed on 2026-09-04 held a
-single line already set by `.Rprofile`; the positive control is running the same command from
-`~`. `cred.store_source` belongs in `.Rprofile`, which is why it is there.
-
-On m1 the agent shell cannot drive anything interactive (`op`). Zotero desktop was running there on
-2026-10-02, though, and items `0270` created through the Web API synced and got Better BibTeX keys
-without a restart, so `0270` → `0150` build → `0280` ran end to end on m1. The Web API needs no
-desktop either way, so `0153` is unaffected.
+every `PG*`, `AWS_*` and `GITHUB_PAT`. The symptom accuses the database
+(`invalid integer value "NA" for connection option "port"`); the positive control is running the
+same command from `~`. `cred.store_source` belongs in `.Rprofile`, which is why it is there.
 
 <!-- BEGIN SOUL CONVENTIONS — DO NOT EDIT BELOW THIS LINE -->
 
