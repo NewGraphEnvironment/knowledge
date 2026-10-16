@@ -1,0 +1,233 @@
+CH rule compare, knowledge#54. link 62fae0bb8667779b9abd0533e9c45b206616b544; fresh 0.39.0; CH overlay rows 1949.
+Tuned rule: mad>=0.75|g<=0.07|Q3@D1000. Default: width>=1.5|g<=0.0549|none.
+Groups where fresh_default classified CH: 31.
+Check: SQL default against fresh::frs_habitat_predicates() on 786317 segments: 0 differ.
+default_mad: fresh's `mad` rear predicate, on wet's pick as mad_m3s:
+((s.edge_type IN (1000, 1100, 2000, 2300) AND s.gradient BETWEEN 0 AND 0.0549 AND s.mad_m3s BETWEEN 0.28 AND 100) OR (s.waterbody_key IN (SELECT waterbody_key FROM whse_basemapping.fwa_rivers_poly) AND s.gradient BETWEEN 0 AND 0.0549 AND s.mad_m3s BETWEEN 0.28 AND 100) OR (s.edge_type IN (1000, 1100) AND s.waterbody_key IN (SELECT waterbody_key FROM whse_basemapping.fwa_wetlands_poly WHERE area_ha >= 1)) OR (s.edge_type IN (1050, 1150) AND s.waterbody_key IN (SELECT waterbody_key FROM whse_basemapping.fwa_wetlands_poly WHERE area_ha >= 1)) OR (s.edge_type IN (1000, 1100, 1200, 1250, 1300, 1350, 1400, 1450, 1475) AND s.waterbody_key IN (SELECT waterbody_key FROM whse_basemapping.fwa_lakes_poly WHERE area_ha >= 100 UNION ALL SELECT waterbody_key FROM whse_basemapping.fwa_manmade_waterbodies_poly WHERE area_ha >= 100)))
+Exception walks: 110358 segment starts at Q 3 on pick, 3.4 min on 4 workers; found 109526.
+Classify, overlay and connect: 31 groups x 3 rules, 16.1 min.
+
+## rearing km by group
+ watershed_group_code accessible_km accessible_stream_km stored_rear_km
+                 ADMS         865.9                422.4          351.7
+                 BBAR         404.8                222.3          169.1
+                 BULK        5200.2               4160.4         2038.1
+                 CHES         788.7                539.5          258.9
+                 CHWK         710.9                475.8          310.8
+                 COTR        4178.0               3177.7         1364.6
+                 DOGC         394.4                319.5          196.9
+                 FRAN        7390.2               5125.5         1631.9
+                 FRCN         783.7                475.0          482.0
+                 HARR        1206.4                349.7          385.8
+                 KISP        2896.9               2051.9         1178.8
+                 KLUM        1618.1                925.8          905.5
+                 LCHL        4373.7               3311.1         1153.8
+                 LFRA        3127.9               2165.3         1255.0
+                 LKEL         336.7                215.4          162.9
+                 LSAL        3034.0               2139.0         1060.9
+                 LSKE        2206.2                996.9         1308.6
+                 MFRA         327.2                193.1          121.9
+                 MORK        6037.6               4717.0         2499.1
+                 MORR        3434.7               2266.8         1171.3
+                 MSKE        1667.9               1115.0          856.1
+                 NARC        3572.1               2719.3         1327.2
+                 NECR        5618.8               4333.6         1649.2
+                 SALR        3180.4               2172.4          966.2
+                 SETN        1635.1                965.4          663.5
+                 TABR        2644.7               2091.6          789.9
+                 TWAC         716.9                460.8          228.3
+                 UFRA        1555.9                902.3          764.6
+                 USKE        1574.8               1103.2          734.0
+                 WILL        3613.9               2746.6         1364.3
+                 ZYMO        1273.5                792.1          602.2
+                  ALL       76370.5              53652.7        27953.2
+ default_rear_km default_mad_rear_km tuned_rear_km stored_vs_default_differ_km
+           587.5               553.2         583.0                       237.8
+           168.8                25.2         152.3                         0.3
+          2123.0              1324.6        1569.4                       101.3
+           283.7               139.2         182.1                        31.2
+           373.6               333.6         334.7                        63.9
+          1375.7               797.1         905.1                        41.7
+           196.7               149.5         160.1                         0.2
+          2587.0              1818.5        1843.8                      1017.9
+           499.2               361.8         512.9                        17.9
+           932.4               789.3         910.0                       546.8
+          1278.9               926.3        1098.4                       112.0
+           936.9               703.6        1000.9                        33.2
+          1294.4               653.3         823.3                       185.8
+          1611.5              1090.3        1370.2                       357.5
+           193.1               171.5         189.3                        30.3
+          1104.5               686.5         790.7                        99.0
+          1390.7              1121.2        1529.1                        85.6
+           120.7                30.5          95.1                         1.2
+          2513.2              1440.4        2096.5                        52.5
+          1619.4              1289.4        1409.7                       478.3
+           858.2               662.5         901.3                        20.4
+          1325.9               734.2         760.9                        94.3
+          1781.3               785.4        1092.4                       202.5
+          1132.1               841.1         938.4                       186.0
+          1016.6               874.5         970.0                       353.9
+           785.2               340.3         481.2                        18.1
+           242.0               137.9         174.3                        20.1
+           811.2               659.1         920.7                        48.6
+           737.7               657.1         711.5                         8.3
+          1423.4               912.5         942.3                        90.9
+           642.9               538.9         642.6                        46.5
+         31947.6             21548.4       26092.4                      4584.1
+ gained_n gained_km lost_n lost_km vs_mad_gained_km vs_mad_lost_km lake_rear_km
+      227      41.4    129    45.9             55.5           25.6        234.3
+       50       6.2     70    22.7            141.5           14.4          0.0
+      592     190.4   2031   744.1            468.9          224.1         91.8
+       10       5.4    260   107.1             43.3            0.4         21.3
+      275      47.7    310    86.6             59.9           58.8         62.9
+      272      80.0   1501   550.7            241.7          133.7         26.4
+       40       3.7     91    40.3             34.4           23.8          0.0
+      340      89.1   2332   832.2            124.6           99.2        942.0
+      262      42.8    118    29.1            178.9           27.8         17.6
+      202      38.6    267    61.1            153.2           32.5        546.1
+      349     123.1    855   303.6            293.5          121.3        106.0
+      610     121.7    239    57.7            330.2           32.9         32.3
+      258      78.7   1538   549.8            230.3           60.3        158.5
+      761     207.9   1924   449.1            448.2          168.2        352.6
+       69      22.4    100    26.2             29.9           12.0         30.3
+      250      95.5   1202   409.3            145.0           40.8         66.9
+     1121     182.6    169    44.2            444.6           36.8         83.8
+       14       2.2    113    27.8             71.5            6.8          0.0
+     1264     405.1   2183   821.7            898.2          242.0         33.3
+      384     137.0   1000   346.8            211.8           91.5        455.0
+      464     148.2    359   105.1            328.6           89.8         11.2
+       43      15.7   1529   580.8             88.7           62.0         43.2
+      237      88.5   2128   777.5            328.5           21.5        173.0
+      217     101.2    835   294.8            122.9           25.6        172.6
+      410      58.5    481   105.1            167.0           71.5        352.5
+      204      78.0   1083   382.0            245.8          104.9          6.7
+       43      13.0    218    80.8             76.4           40.0         16.9
+      668     156.5    146    47.0            282.3           20.7         46.1
+      255     105.3    330   131.6            129.3           75.0          6.0
+      361     114.0   1541   595.1            175.7          145.9         75.0
+      404      99.6    369    99.9            152.2           48.5         43.6
+    10656    2900.4  25451  8755.5           6702.5         2158.5       4208.0
+ wetland_rear_km lake_wetland_same order12_share change_pct mad_change_pct
+            50.3              TRUE           0.5       -0.8           -5.8
+             1.7              TRUE           0.7       -9.8          -85.1
+           430.7              TRUE           0.6      -26.1          -37.6
+           150.7              TRUE           0.8      -35.8          -50.9
+             6.6              TRUE           0.7      -10.4          -10.7
+           507.8              TRUE           0.8      -34.2          -42.1
+            19.4              TRUE           0.4      -18.6          -24.0
+           819.7              TRUE           0.8      -28.7          -29.7
+            12.6              TRUE           0.3        2.7          -27.5
+            12.3              TRUE           0.7       -2.4          -15.4
+           173.1              TRUE           0.6      -14.1          -27.6
+            95.1              TRUE           0.6        6.8          -24.9
+           452.8              TRUE           0.8      -36.4          -49.5
+            98.9              TRUE           0.8      -15.0          -32.3
+            44.6              TRUE           0.7       -2.0          -11.2
+           502.6              TRUE           0.8      -28.4          -37.8
+           158.6              TRUE           0.6       10.0          -19.4
+            15.7              TRUE           0.7      -21.2          -74.7
+           353.9              TRUE           0.7      -16.6          -42.7
+           365.1              TRUE           0.7      -13.0          -20.4
+            85.4              TRUE           0.5        5.0          -22.8
+           617.4              TRUE           0.8      -42.6          -44.6
+           706.8              TRUE           0.8      -38.7          -55.9
+           625.3              TRUE           0.9      -17.1          -25.7
+            64.4              TRUE           0.4       -4.6          -14.0
+           211.4              TRUE           0.8      -38.7          -56.7
+            92.3              TRUE           0.7      -28.0          -43.0
+            61.7              TRUE           0.6       13.5          -18.7
+           181.7              TRUE           0.6       -3.6          -10.9
+           441.3              TRUE           0.7      -33.8          -35.9
+            89.5              TRUE           0.6       -0.1          -16.2
+          7449.4              TRUE            NA      -18.3          -32.6
+              default_rule                 tuned_rule
+ width>=1.5|g<=0.0549|none mad>=0.75|g<=0.07|Q3@D1000
+ width>=1.5|g<=0.0549|none mad>=0.75|g<=0.07|Q3@D1000
+ width>=1.5|g<=0.0549|none mad>=0.75|g<=0.07|Q3@D1000
+ width>=1.5|g<=0.0549|none mad>=0.75|g<=0.07|Q3@D1000
+ width>=1.5|g<=0.0549|none mad>=0.75|g<=0.07|Q3@D1000
+ width>=1.5|g<=0.0549|none mad>=0.75|g<=0.07|Q3@D1000
+ width>=1.5|g<=0.0549|none mad>=0.75|g<=0.07|Q3@D1000
+ width>=1.5|g<=0.0549|none mad>=0.75|g<=0.07|Q3@D1000
+ width>=1.5|g<=0.0549|none mad>=0.75|g<=0.07|Q3@D1000
+ width>=1.5|g<=0.0549|none mad>=0.75|g<=0.07|Q3@D1000
+ width>=1.5|g<=0.0549|none mad>=0.75|g<=0.07|Q3@D1000
+ width>=1.5|g<=0.0549|none mad>=0.75|g<=0.07|Q3@D1000
+ width>=1.5|g<=0.0549|none mad>=0.75|g<=0.07|Q3@D1000
+ width>=1.5|g<=0.0549|none mad>=0.75|g<=0.07|Q3@D1000
+ width>=1.5|g<=0.0549|none mad>=0.75|g<=0.07|Q3@D1000
+ width>=1.5|g<=0.0549|none mad>=0.75|g<=0.07|Q3@D1000
+ width>=1.5|g<=0.0549|none mad>=0.75|g<=0.07|Q3@D1000
+ width>=1.5|g<=0.0549|none mad>=0.75|g<=0.07|Q3@D1000
+ width>=1.5|g<=0.0549|none mad>=0.75|g<=0.07|Q3@D1000
+ width>=1.5|g<=0.0549|none mad>=0.75|g<=0.07|Q3@D1000
+ width>=1.5|g<=0.0549|none mad>=0.75|g<=0.07|Q3@D1000
+ width>=1.5|g<=0.0549|none mad>=0.75|g<=0.07|Q3@D1000
+ width>=1.5|g<=0.0549|none mad>=0.75|g<=0.07|Q3@D1000
+ width>=1.5|g<=0.0549|none mad>=0.75|g<=0.07|Q3@D1000
+ width>=1.5|g<=0.0549|none mad>=0.75|g<=0.07|Q3@D1000
+ width>=1.5|g<=0.0549|none mad>=0.75|g<=0.07|Q3@D1000
+ width>=1.5|g<=0.0549|none mad>=0.75|g<=0.07|Q3@D1000
+ width>=1.5|g<=0.0549|none mad>=0.75|g<=0.07|Q3@D1000
+ width>=1.5|g<=0.0549|none mad>=0.75|g<=0.07|Q3@D1000
+ width>=1.5|g<=0.0549|none mad>=0.75|g<=0.07|Q3@D1000
+ width>=1.5|g<=0.0549|none mad>=0.75|g<=0.07|Q3@D1000
+ width>=1.5|g<=0.0549|none mad>=0.75|g<=0.07|Q3@D1000
+
+## km gained and lost, tuned against default, by reason
+ direction                                        reason n_segments     km
+    gained                       connectivity or overlay        419  111.4
+    gained        exception (size fails, river within D)       8676 2470.9
+    gained               gradient between the two maxima        854  211.4
+    gained         other (river-polygon branch or mixed)        391   29.4
+    gained       size: tuned passes, width fails or NULL        316   77.2
+      lost                       connectivity or overlay        558   95.5
+      lost size: width passes, tuned fails, no exception      24893 8660.0
+
+## km gained and lost, tuned against default, by stream order
+ direction order     km
+    gained     1 1990.5
+    gained     2  489.4
+    gained     3  176.6
+    gained    4+  243.9
+      lost     1  173.8
+      lost     2 2817.1
+      lost     3 3272.4
+      lost    4+ 2492.2
+
+## FDIS visits on link segments: raw CH rate
+       check        rule                segment    n n_ch       rate
+ fdis_visits     default                rearing 2582  637 0.24670798
+ fdis_visits     default accessible_not_rearing 2362   62 0.02624894
+ fdis_visits default_mad                rearing 1324  186 0.14048338
+ fdis_visits default_mad accessible_not_rearing 3620  513 0.14171271
+ fdis_visits       tuned                rearing 1859  644 0.34642281
+ fdis_visits       tuned accessible_not_rearing 3085   55 0.01782820
+
+Outside check: 1344 non-FDIS CH records in these groups; 1215 match A/B (years 1964-2007, 78 undated); 812 locations not spawn-only, placed, outside the overlay; 326 on stream edges, 315 of them accessible (lift is on these).
+
+## outside check, stream-edge locations (km share: stream-edge rearing km / accessible stream-edge km)
+             check                    rule   n n_on_rearing  km_share
+ bcfishobs_outside                 default 315          267 0.3002248
+ bcfishobs_outside             default_mad 315          225 0.1573477
+ bcfishobs_outside                   tuned 315          241 0.1914626
+ bcfishobs_outside     tuned_minus_default 315           NA        NA
+ bcfishobs_outside tuned_minus_default_mad 315           NA        NA
+       lift    lift_lo    lift_hi n_all n_all_on_rearing n_gained n_lost
+  2.8232810  2.6858179  2.9501700   812              724       NA     NA
+  4.5395380  4.2772536  4.8825253   812              607       NA     NA
+  3.9959719  3.7136838  4.1953560   812              698       NA     NA
+  1.1726909  0.9436096  1.3676068    NA               NA       14     40
+ -0.5435661 -0.8731057 -0.3041552    NA               NA       40     24
+ capture_share
+     0.8476190
+     0.7142857
+     0.7650794
+            NA
+            NA
+
+## map groups (criteria in the header)
+ watershed_group_code order12_share interior      sea         role
+                 LFRA     0.8103651        0 0.205052      coastal
+                 SALR     0.8536908        0 0.000000 small_stream
+                 TWAC     0.7354059        1 0.000000     interior

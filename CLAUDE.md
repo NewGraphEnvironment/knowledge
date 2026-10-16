@@ -38,6 +38,9 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   `bt_spawn_evidence.csv` (BT spawner-evidence rates by gradient class; `0293`, `research/bt_spawning.md`),
   `ch_mad_use.csv` (CH detection by wet's MAD class and, on small streams, by distance to a large river,
   from FDIS visits; `0294`-`0295`, `research/chinook_stream_size.md`),
+  `ch_rule_{tune,curves,flips,compare,checks,change}.csv` (the tuned CH rearing rule: every rule's held-out
+  score on the main reading, with each other reading's region and picks, the GAM curves, flow-source flips, and the rule beside `default` on link's segments; `0296`-`0298`,
+  `research/chinook_rearing_tuned.md`),
   and
   `habitat_modelling_{members,additions}.csv` (what `0270` puts in the group's `Fisheries/habitat_modelling`
   collection, which with the species collections feeds the `habitat_modelling` store), and
@@ -197,6 +200,24 @@ Keep code 2 in the population, but never use it as a covariate, a stratum, or ev
 live. #28 used it as evidence once, after the plan review had flagged it (archive
 `2026-10-issue-28-habitat-weights`). link segments also overlap by up to ~1.4 mm at breaks, so a
 point join needs a deterministic tiebreak (`0290`).
+
+### link's CH rearing: regenerate it, never compare to the stored flags
+
+`default`'s CH rearing has three stages:
+1. fresh's predicate (`fresh::frs_habitat_predicates()` on link's `configs/default`), gated by access;
+2. the user-habitat overlay;
+3. `.frs_run_connectivity()`, which drops rearing clusters with no spawning within 10 km.
+
+`fresh_default.log` has no rows for the 31 CH groups, and a regeneration differs from their stored flags on 4,584 km.
+So compare rules regenerated through all three stages on scratch copies (`0298`), never against the stored flags.
+
+Width and flow carry two traps (#54):
+- **Widths.** fwapg models width only where `stream_order > 1`, and its FIELD_MEASURMENT widths are FDIS sites. An
+  order-1 stream therefore has a width only where it was measured. A width rule scored at visits sees widths link
+  never sees on unmeasured streams; use `0296`'s `cw_deploy`.
+- **Flow on river polygons.** Connector lines inside river polygons (edge 1450) carry their tributary's small wet
+  flow, and the main lines (1250) of some small double-line rivers carry a small flow of their own. At `default`'s gradient, a 0.75 m³/s
+  floor on the river branch drops 636 km of edge 1450, 1250 and 1350 lines in the 31 groups.
 
 ### Database access
 
