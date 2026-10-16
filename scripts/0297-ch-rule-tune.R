@@ -19,8 +19,8 @@
 #     had been the MAD floor for a MAD rule, which on link's segments removes river-polygon lines
 #     carrying a tributary's own small flow. No scored visit is in a river polygon, which
 #     run_grid() asserts, so the scores do not change.) A NULL width fails
-#     (fwapg models no order-1 stream, so `default` never rears CH on an unmeasured order-1
-#     stream). The exception holds where a primary-flow segment of flow >= Q (side channels and
+#     (fwapg models no order-1 stream, so `default`'s stream branch never admits an unmeasured
+#     order-1 stream; its wetland and lake branches carry no width test). The exception holds where a primary-flow segment of flow >= Q (side channels and
 #     other secondary-flow edges are passed over; a lake segment counts, as a rule in link would)
 #     lies within D m downstream on the same flow source (0296's walks). A walk that reaches the
 #     sea first fails it.

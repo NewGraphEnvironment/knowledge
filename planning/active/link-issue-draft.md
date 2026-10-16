@@ -26,9 +26,12 @@ visits on the CH stream branch with no natural CH barrier downstream before obse
   - a size floor: MAD 0.1–1 m³/s or width 1–4 m;
   - a gradient maximum: 3–9 %;
   - optionally an exception: a segment of MAD ≥ Q (1–50 m³/s) within D m downstream (100–5,000 m).
-- **Every rule within one SE of the best** has the exception and sizes by MAD (0.28–1 m³/s), with gradient 7–9 %,
-  Q 1–10 m³/s and D 1–2 km. The best, and the recommendation, is **MAD ≥ 0.75 m³/s, gradient ≤ 7 %, or a ≥ 3 m³/s
-  segment within 1,000 m downstream**.
+- **Every rule within one SE of the best** on the main reading has the exception and sizes by MAD (0.28–1 m³/s),
+  with gradient 7–9 %, Q 1–10 m³/s and D 1–2 km. The best, and the pick by the rule fixed before the run, is
+  **gradient ≤ 7 %, and either MAD ≥ 0.75 m³/s or a ≥ 3 m³/s segment within 1,000 m downstream**.
+  - Across 15 readings (sensitivities, flow sources, link's own segment gradient), two rules stay within one SE of
+    each reading's best: MAD ≥ 0.5 m³/s, Q 3 m³/s within 1,000 m, at 7 % or 9 %.
+  - The 0.75 floor drops out on the 16 groups placed on link's segments, where MAD ≥ 0.75 stays in only at 9 %.
   - In a watershed-group bootstrap, 86 % of resamples put the floor at 0.5–0.75 m³/s, and 78 % put Q at 3 m³/s.
   - The gradient is the least settled component. 5.49 % is recommended in 23.5 % of resamples, while the best rule
     has 7 or 9 % in every reading, including on link's own segment gradient.
@@ -62,7 +65,8 @@ such rivers.
    - `fwa_downstreamtrace()` returns side channels off the path and drops segments with no watershed lookup row, so
      its rows cannot be summed into a distance.
    - Lake segments count as targets. A walk that reaches the sea first fails.
-2. **In `default_tuned`**, CH rearing (the bundle then needs its own `rules.yaml`):
+2. **In `default_tuned`**, CH rearing, at the main pick's values (the bundle then needs its own `rules.yaml`). Whether
+   to carry the 0.5 m³/s floor that holds across every reading instead is a choice for this issue:
    - **The stream rule**: `edge_types_explicit: [1000, 1100, 2000, 2300]`, `thresholds: false`,
      `gradient: [0, 0.07]` and `mad: [0.75, 9999]`. With `thresholds: false` the inherited width test drops out;
      without it, a rule-level `mad:` is added to the width test rather than replacing it. There is no MAD maximum,
@@ -70,7 +74,8 @@ such rivers.
    - **A second stream rule** with the same edges and gradient and the new exception (Q 3 m³/s, D 1,000 m) in place
      of the size test.
    - **The river-polygon rule** keeps `channel_width: [0, 9999]`, taking the gradient from the CSV.
-   - `rear_gradient_max` 0.07.
+   - `rear_gradient_max` 0.07. With `thresholds: false` the stream rules no longer inherit it, so the stream gradient
+     and this one are two settings that must be moved together.
    - **The habitat method stays `cw`.** Under `mad`, fresh drops the river rule's `channel_width` and the river
      branch takes the CSV's MAD range (0.28–100 m³/s), which removes large rivers. Set CH `rear_mad_min` to 0 and
      `rear_mad_max` to 9999 in the bundle's CSV, so that a group moved to `mad` keeps them.

@@ -39,7 +39,7 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   `ch_mad_use.csv` (CH detection by wet's MAD class and, on small streams, by distance to a large river,
   from FDIS visits; `0294`-`0295`, `research/chinook_stream_size.md`),
   `ch_rule_{tune,curves,flips,compare,checks,change}.csv` (the tuned CH rearing rule: every rule's held-out
-  score, the GAM curves, flow-source flips, and the rule beside `default` on link's segments; `0296`-`0298`,
+  score on the main reading, with each other reading's region and picks, the GAM curves, flow-source flips, and the rule beside `default` on link's segments; `0296`-`0298`,
   `research/chinook_rearing_tuned.md`),
   and
   `habitat_modelling_{members,additions}.csv` (what `0270` puts in the group's `Fisheries/habitat_modelling`
@@ -215,8 +215,9 @@ Width and flow carry two traps (#54):
 - **Widths.** fwapg models width only where `stream_order > 1`, and its FIELD_MEASURMENT widths are FDIS sites. An
   order-1 stream therefore has a width only where it was measured. A width rule scored at visits sees widths link
   never sees on unmeasured streams; use `0296`'s `cw_deploy`.
-- **Flow on river polygons.** River-polygon lines (edges 1450, 1250, 1350) carry a tributary's own small wet flow. A
-  MAD floor on the river branch drops 636 km of them in the 31 groups.
+- **Flow on river polygons.** Connector lines inside river polygons (edge 1450) carry their tributary's own small
+  wet flow, and so do the main lines (1250) of some small double-line rivers. At `default`'s gradient, a 0.75 m³/s
+  floor on the river branch drops 636 km of edge 1450, 1250 and 1350 lines in the 31 groups.
 
 ### Database access
 

@@ -152,8 +152,8 @@ link's `default` CH rearing bounds come from Rebellato et al. 2024 (evidence dat
   class in the MAD analysis on 0.9 %.
 - **A rule of the form "MAD ≥ 0.5 m³/s, or MAD < 0.5 m³/s within about 500 m downstream of a ≥ 10 m³/s
   river"** follows the pattern above. No rule was fitted here, or scored against a single floor. #54 tunes one
-  (`chinook_rearing_tuned.md`): on held-out groups the data prefer MAD ≥ 0.75 m³/s, a 7 % gradient maximum, and a
-  ≥ 3 m³/s river within 1,000 m, with each value given as a range. link's
+  (`chinook_rearing_tuned.md`): on held-out groups the data prefer a gradient of at most 7 % and either MAD ≥ 0.75 m³/s or a ≥ 3 m³/s river
+  within 1,000 m downstream, with each value given as a range. link's
   CH MAD bounds act in no group today (all 188 size streams by channel width), so this is not a change to them.
 - **On `rear_mad_max` 100 m³/s.** CH were caught on 27.5 % of the 149 unregulated visits at ≥ 100 m³/s.
   Electrofishing samples river margins, so this measures use of margins, not of channels.
