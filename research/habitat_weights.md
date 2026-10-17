@@ -4,7 +4,7 @@
 (FDIS export), #19 (literature) and #35 · **Produced by:**
 - `scripts/0290-bt-use-build.R`: visits on link segments; ledger `scripts/logs/habitat/20261002_bt_use_build_ledger.csv`.
   Since #35 the table is that build less the repeated-survey copies 0230 drops
-  (`scripts/logs/habitat/20261017_fdis_repeat_filter.txt`; a rebuild on the current `fresh_default` is #59);
+  (`scripts/logs/habitat/20261017_fdis_repeat_filter.txt`; a rebuild on the current `fresh_default` is part of #57);
 - `scripts/0291-bt-use-curve.R`: `data/bt_rear_use_curve.csv`, with log `scripts/logs/habitat/20261017_bt_use_curve.txt`;
 - `scripts/0292-bt-weight-candidate.R`: `data/habitat_weight_bt_rear.csv`;
 - literature rows 482–489 of `data/literature_evidence.csv`.

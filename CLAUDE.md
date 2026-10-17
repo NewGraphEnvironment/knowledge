@@ -145,7 +145,7 @@ catch). `0230` keeps one copy, the one with the most measured fish, because the 
 the later id only, and lists the rest in `data/fdis_repeat_surveys.csv` (#35). Downstream scripts
 carry no duplicate logic of their own. `bt_use_visits`, `ch_mad_visits` and `ch_rule_*` are the pre-#35
 builds less those copies (the #35 archive's `fdis_repeat_filter.py`), because `fresh_default` was rebuilt
-province-wide meanwhile and 0290 now stops on it; rebuilding them is #59.
+province-wide meanwhile and 0290 now stops on it; #57 rebuilds them (it replaced #59).
 
 ### FISS submission workbooks: editions drift, and most EF fish are already in FDIS
 
@@ -223,6 +223,14 @@ Keep code 2 in the population, but never use it as a covariate, a stratum, or ev
 live. #28 used it as evidence once, after the plan review had flagged it (archive
 `2026-10-issue-28-habitat-weights`). link segments also overlap by up to ~1.4 mm at breaks, so a
 point join needs a deterministic tiebreak (`0290`).
+
+### link's access: gate on `streams_access`, not the habitat tables' `accessible`
+
+`streams_habitat_<sp>.accessible` and `streams_access.access_<sp>` disagree in link's `default` builds, and did before
+the province-wide run: about 2 % of habitat-accessible segments for most species, 17–27 % for RB and 90 % for KO, with
+rearing and spawning set on segments `streams_access` blocks (NewGraphEnvironment/link#349, cause not established).
+Gate on `streams_access`, as `0290` does with `access_bt`, re-gate the habitat flags on it, and record the
+cross-tabulation per species with each build (#57).
 
 ### link's CH rearing: regenerate it, never compare to the stored flags
 

@@ -6,7 +6,7 @@ link's move onto wet's flow is NewGraphEnvironment/link#331 · **Produced by:**
 - `scripts/0294-ch-mad-build.R` with `scripts/sql/ch_dist_large.sql`: visits, flow, distance and flags;
   ledger `scripts/logs/habitat/20261015_ch_mad_build_ledger.csv`. Since #35 the table is that build less the
   repeated-survey copies 0230 drops (`scripts/logs/habitat/20261017_fdis_repeat_filter.txt`; a rebuild on the
-  current `fresh_default` is #59);
+  current `fresh_default` is part of #57);
 - `scripts/0295-ch-mad-use.R`: `data/ch_mad_use.csv`, with log `scripts/logs/habitat/20261017_ch_mad_use.txt`;
 - plan review, review rounds and their disposition: `planning/archive/2026-10-issue-52-chinook-stream-size/`.
 

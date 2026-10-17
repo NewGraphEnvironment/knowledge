@@ -6,7 +6,7 @@ a tuned rule is drafted, not filed (planning archive for #54) · **Produced by:*
 - `scripts/0296-ch-rule-build.R` with `scripts/sql/ch_dist_profile.sql`: walks, widths, barrier status, link segment
   and zone per visit; ledger `scripts/logs/habitat/20261015_ch_rule_build_ledger.csv`. Since #35 the table is that
   build less the repeated-survey copies 0230 drops (`scripts/logs/habitat/20261017_fdis_repeat_filter.txt`; a rebuild
-  on the current `fresh_default` is #59);
+  on the current `fresh_default` is part of #57);
 - `scripts/0297-ch-rule-tune.R`: `data/ch_rule_tune.csv`, `data/ch_rule_curves.csv`, `data/ch_rule_flips.csv`,
   `fig/chinook_rearing_tuned_curves.png`, log `scripts/logs/habitat/20261017_ch_rule_tune.txt`;
 - `scripts/0298-ch-rule-compare.R`: `data/ch_rule_compare.csv`, `data/ch_rule_checks.csv`, `data/ch_rule_change.csv`,
