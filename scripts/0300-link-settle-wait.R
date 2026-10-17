@@ -64,7 +64,7 @@ shas <- function() {
     SELECT string_agg(DISTINCT run_uid, ';') AS log_run_uid, string_agg(DISTINCT link_version, ';') AS link_version,
            string_agg(DISTINCT link_sha, ';') AS link_sha, string_agg(DISTINCT fresh_version, ';') AS fresh_version,
            string_agg(DISTINCT fresh_sha, ';') AS fresh_sha, string_agg(DISTINCT fwapg_sha, ';') AS fwapg_sha,
-           string_agg(DISTINCT config_hash, ';') AS config_hash, count(*) AS n_log_rows
+           string_agg(DISTINCT config_hash, ';') AS config_hash, count(*)::integer AS n_log_rows
     FROM %s.log", schema))
 }
 

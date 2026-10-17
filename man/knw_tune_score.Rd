@@ -73,7 +73,9 @@ exception; otherwise it is the pick. With \code{extra = TRUE} the call also runs
 the share of resamples recommending each rule), a nested selection (the pick
 chosen on the other folds' held-out deviance and scored on each fold, against
 \code{default} and against the no-rule model) and the grid on \code{seeds_more} more
-fold seeds.
+fold seeds (each reporting its best, pick and recommended rule, whether
+\code{default} and the main reading's recommended rule are in its region, and the
+region's size).
 
 Groups where the response never or always occurs are left out (they inform no
 contrast) and counted.

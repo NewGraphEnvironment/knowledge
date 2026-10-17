@@ -24,7 +24,9 @@
 #' the share of resamples recommending each rule), a nested selection (the pick
 #' chosen on the other folds' held-out deviance and scored on each fold, against
 #' `default` and against the no-rule model) and the grid on `seeds_more` more
-#' fold seeds.
+#' fold seeds (each reporting its best, pick and recommended rule, whether
+#' `default` and the main reading's recommended rule are in its region, and the
+#' region's size).
 #'
 #' Groups where the response never or always occurs are left out (they inform no
 #' contrast) and counted.
@@ -148,6 +150,7 @@ knw_tune_score <- function(d, rule_in, grid, resp = "U", seed = 54L, folds = 5L,
       p2 <- .tune_pick(ss, col, s2$conv, grid, d_floor)
       data.frame(seed = sd_, best = grid$rule[which(col == ss$best)[1]], pick = grid$rule[p2[["pick"]]],
                  recommended = grid$rule[p2[["recommended"]]], default_in_region = ss$region[col[default_ix]],
+                 main_rec_in_region = ss$region[col[pk[["recommended"]]]] & s2$conv[col[pk[["recommended"]]]],
                  region_n = sum(ss$region[col] & s2$conv[col]))
     }))
   }

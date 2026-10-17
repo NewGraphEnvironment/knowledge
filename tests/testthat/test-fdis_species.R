@@ -106,6 +106,18 @@ test_that("an explicit zero catch is an absence for every species", {
   expect_equal(unique(out$n_caught[out$site_visit == "v3"]), 0)
 })
 
+test_that("a measured fish of a species the breaks do not tile keeps its count and no class", {
+  f <- fx()
+  f$fish <- rbind(f$fish, data.frame(site_visit = "v4", species_code = "RB", length_mm = 88))
+  f$catch$n_measured[f$catch$species_code == "RB"] <- 2
+  out <- knw_fdis_species(f$sites, f$catch, f$fish, f$codes, f$breaks, species = "RB")
+  v4 <- out[out$site_visit == "v4", ]
+  expect_equal(v4$n_caught, 1)
+  expect_equal(v4$n_measured, 2)
+  expect_equal(v4$n_fry + v4$n_adult + v4$n_parr, 0L)
+  expect_equal(v4$n_unmeasured, 1)
+})
+
 test_that("a measured fish with no length is counted as unmeasured", {
   out <- run("RB")
   v4 <- out[out$site_visit == "v4", ]

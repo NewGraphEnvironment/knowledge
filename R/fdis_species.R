@@ -19,7 +19,8 @@
 #'
 #' `n_caught` is `NA` where every counting code's count was a sentinel (caught,
 #' abundance unknown). Size-class counts exist only for the species groups
-#' `breaks` tiles; `n_unmeasured` is the counted fish with no usable length.
+#' `breaks` tiles (a measured fish of another species has a length and no
+#' class); `n_unmeasured` is the counted fish with no usable length.
 #'
 #' @param sites `data.frame` with `site_visit`, `watershed_group_code`, `year`
 #'   and `catch_status`.
@@ -93,9 +94,14 @@ knw_fdis_species <- function(sites, catch, fish, codes, breaks, species = knw_sp
     dv_pooled <- !is.na(i) & (is.na(ymax) | sites$year <= ymax)
   }
 
-  # size classes per measured fish, per code
+  # size classes per measured fish, for the species groups the breaks tile; other groups' fish keep
+  # their count and length but no class
   fish <- fish[fish$species_code %in% fish_codes, c("site_visit", "species_code", "length_mm")]
-  fish$size_class <- knw_size_class(group_of(fish$species_code), as.numeric(fish$length_mm), breaks)
+  fish$length_mm <- suppressWarnings(as.numeric(fish$length_mm))
+  grp_f <- group_of(fish$species_code)
+  tiled <- !is.na(grp_f) & grp_f %in% breaks$species_group
+  fish$size_class <- rep(NA_character_, nrow(fish))
+  fish$size_class[tiled] <- knw_size_class(grp_f[tiled], fish$length_mm[tiled], breaks)
   classes <- unique(breaks$size_class)
 
   rows <- lapply(species, function(sp) {
@@ -127,7 +133,7 @@ knw_fdis_species <- function(sites, catch, fish, codes, breaks, species = knw_sp
     fsp <- fsp[fsp$site_visit %in% sites$site_visit, , drop = FALSE]
     by_class <- table(factor(fsp$site_visit, levels = sites$site_visit),
                       factor(fsp$size_class, levels = classes))
-    n_nolength <- tapply(is.na(fsp$size_class), factor(fsp$site_visit, levels = sites$site_visit), sum)
+    n_nolength <- tapply(is.na(fsp$length_mm) | fsp$length_mm <= 0, factor(fsp$site_visit, levels = sites$site_visit), sum)
     # no counting code caught: 0 where the visit's catch is known, NA where it is unknown
     n_caught <- as.numeric(n_caught)
     none <- !present & sites$catch_status != "unknown"

@@ -65,7 +65,8 @@ not pooled, as link counts it);
 
 \code{n_caught} is \code{NA} where every counting code's count was a sentinel (caught,
 abundance unknown). Size-class counts exist only for the species groups
-\code{breaks} tiles; \code{n_unmeasured} is the counted fish with no usable length.
+\code{breaks} tiles (a measured fish of another species has a length and no
+class); \code{n_unmeasured} is the counted fish with no usable length.
 }
 \examples{
 sites <- data.frame(site_visit = c("v1", "v2"), watershed_group_code = "BULK",

@@ -34,6 +34,7 @@
 # OUTPUT: data/tune/<sp>_<stage>_tune.csv      every rule's score (the full grid), with pick, recommended, region
 #         data/tune/<sp>_<stage>_curves.csv    the marginal curves at the pick
 #         data/tune/<sp>_<stage>_grades.csv    one row per segment of the species' groups (ignored; 0325 publishes)
+#         data/tune/<sp>_<stage>_groups.csv    the groups modelled, with their fold
 #         data/tune/tune_summary.csv           one row per species x stage: status, population, pick, held-out deviances
 #         data/tune/curves.rds                 the fitted curve objects (ignored)
 #         scripts/logs/habitat/<date>_tune_run.txt
@@ -80,12 +81,22 @@ spawner <- knw_spawner_evidence(fish, vl |> inner_join(vs |> filter(species_code
                                   select(site_visit, month, pooling), codes)
 say("Spawner evidence: %d BT visits with a coded fish, %d with evidence.", sum(!is.na(spawner$S)), sum(spawner$S %in% 1L))
 
-# link's thresholds at the build's commit
-thr_file <- tempfile(fileext = ".csv")
-st <- system2("git", c("-C", link_repo, "show", paste0(link_sha, ":inst/extdata/configs/default/parameters_habitat_thresholds.csv")), stdout = thr_file)
-if (!identical(st, 0L) || !file.exists(thr_file) || file.size(thr_file) == 0) stop("could not read link's thresholds at ", link_sha, " from ", link_repo)
-thr <- read.csv(thr_file, stringsAsFactors = FALSE)
-say("link default thresholds at %s: %d species.", link_sha, nrow(thr))
+# link's thresholds at the build's commit(s): a run whose groups were fixed at a later commit logs two
+# SHAs; the thresholds must be the same text at each, and the first (HEAD of the run) is the one named
+shas <- strsplit(link_sha, ";", fixed = TRUE)[[1]]
+read_thr <- function(sha) {
+  f <- tempfile(fileext = ".csv")
+  st <- system2("git", c("-C", link_repo, "show", paste0(sha, ":inst/extdata/configs/default/parameters_habitat_thresholds.csv")), stdout = f)
+  if (!identical(st, 0L) || !file.exists(f) || file.size(f) == 0) stop("could not read link's thresholds at ", sha, " from ", link_repo)
+  f
+}
+thr_files <- vapply(shas, read_thr, character(1))
+if (length(thr_files) > 1 && length(unique(unname(tools::md5sum(thr_files)))) != 1) {
+  stop("link's thresholds differ between the run's commits ", link_sha)
+}
+link_sha <- shas[1]
+thr <- read.csv(thr_files[1], stringsAsFactors = FALSE)
+say("link default thresholds at %s (same at %s): %d species.", shas[1], paste(shas[-1], collapse = ","), nrow(thr))
 
 # ---- score, pick, curve ------------------------------------------------------------------
 t0 <- Sys.time()
@@ -104,6 +115,8 @@ for (k in names(out)) {
     write_csv(r$curve$curves |> mutate(across(where(is.numeric), ~ signif(.x, 5)), species_code = r$species_code, stage = r$stage,
                                        rule = r$pick$rule),
               file.path(dir_out, paste0(k, "_curves.csv")), na = "")
+    write_csv(tibble(species_code = r$species_code, stage = r$stage, watershed_group_code = names(r$score$folds),
+                     fold = as.integer(r$score$folds)), file.path(dir_out, paste0(k, "_groups.csv")), na = "")
     dflt <- rules |> filter(is_default)
     best <- rules |> filter(ddev_best == 0) |> slice(1)
     row <- row |> mutate(
@@ -116,6 +129,7 @@ for (k in names(out)) {
       honest_dev_rec = sum(r$score$honest$dev_rec), honest_dev_default = sum(r$score$honest$dev_default),
       honest_dev_null = sum(r$score$honest$dev_null),
       seeds_same_rec = sum(r$score$seeds$recommended == r$pick$rule), seeds_default_in_region = sum(r$score$seeds$default_in_region),
+      seeds_rec_in_region = sum(r$score$seeds$main_rec_in_region), seeds_n = nrow(r$score$seeds),
       boot_rec_share = rules$boot_rec_share[rules$recommended])
     say("%s: %s. %d visits (%d detections) in %d groups (%d both). Recommended %s; default %s the region (+%.1f, SE %.1f). Curve held-out %.1f vs grid best %.1f.",
         k, r$status, row$visits_in, row$detections, row$groups, row$groups_both, r$pick$rule,
