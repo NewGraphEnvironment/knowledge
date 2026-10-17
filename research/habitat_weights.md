@@ -9,7 +9,11 @@
 - `scripts/0292-bt-weight-candidate.R`: `data/habitat_weight_bt_rear.csv`;
 - literature rows 482–489 of `data/literature_evidence.csv`.
 
-**Status:** candidate weight drafted; nothing applied in link.
+**Status:** candidate weight drafted; nothing applied in link. **Superseded for the weight by #57**
+(`bull_trout_tuned.md`, `habitat_thresholds_tuned.md`): the BT rearing grade is one surface over size, gradient
+and distance to a river on the province-wide run, graded against the best accessible segments. The sections
+below that rest on link's step-5 held-out split (the held-out elevation contrast, the step-5 classes) are
+history: one province-wide schema no longer carries that split.
 
 link draws BT rearing as on/off at a gradient cutoff (`rear_gradient_max`, 0.1049 in `default`, 0.1349 in
 `default_tuned`). link#284 step 5 showed sightings per km taper across that line rather than stop. This

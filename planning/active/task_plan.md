@@ -43,7 +43,7 @@ Replaces #59. Decisions taken at the plan gate (2026-10-17) and the plan review'
       (link#349's query), written to the ledger on every run; RB and KO flagged unresolved
 - [x] Species pooling per group through `link::lnk_species_pooling()` per species (BT/DV is the only pool; no row
       is the normal result); `access_<sp> = 2` kept in the population, never a covariate
-- [ ] `scripts/0310-evidence-build.R` runs the above → `data/fdis/derived/visits_link.csv`, `walks.csv`,
+- [x] `scripts/0310-evidence-build.R` runs the above → `data/fdis/derived/visits_link.csv`, `walks.csv`,
       `access_check.csv`; ledger in `scripts/logs/habitat/`; `0290`, `0294`, `0296` reduced to calls that write their
       tables from it; `0299` gains `VERSION=` for `PULL` and publishes the set as `knowledge/fdis/v3`
 - [x] Tests: pure parts (placement tiebreak, ledger partition, absence blocking, size classes, match logic) as
@@ -75,27 +75,27 @@ Replaces #59. Decisions taken at the plan gate (2026-10-17) and the plan review'
 - [x] `knw_tune_run(evidence, species, stages, workers, seed)`: one job, socket workers, seed fixed, writes
       `data/tune/<sp>_<stage>_{tune,curves,flips}.csv`; CH's size floor (0.75 vs 0.5) read off the CH rearing row
       on all CH groups
-- [ ] `scripts/0320-tune-run.R` on the 16-core machine after its link/fresh upgrade; versions asserted; log with
+- [x] `scripts/0320-tune-run.R` on the 16-core machine after its link/fresh upgrade; versions asserted; log with
       runtimes; two re-runs byte-identical
 
 ## Phase 3: Published results
-- [ ] Thresholds table `knowledge/thresholds/v1`, one row per species × stage × component of the joint pick:
+- [x] Thresholds table `knowledge/thresholds/v1`, one row per species × stage × component of the joint pick:
       `rule_id` (ties the components), `species_code`, `stage`, `response`, `component` (`size`, `gradient`,
       `exception_q`, `exception_d`), `link_parameter` (link's column name where one exists, e.g. `rear_mad_min`,
       `rear_gradient_max`; `NA` for the exception, which link has no column for), `model` (`cw`/`mad`), `value`,
       `unit`, `range_lo`, `range_hi` (one-SE), `readings_in`, `default_value`, `default_in_region`, `n_visits`,
       `n_detect`, `n_wsg`, `power`, `evidence_version`, `link_run_uid`, `link_sha`, `config`; a companion
       `thresholds_groups` table lists the groups each `rule_id` was scored on
-- [ ] Grade table `knowledge/habitat_grade/v1`: `blue_line_key`, `downstream_route_measure`,
+- [x] Grade table `knowledge/habitat_grade/v1`: `blue_line_key`, `downstream_route_measure`,
       `upstream_route_measure`, `linear_feature_id`, `watershed_group_code`, `length_metre`, `access` (`access_<sp>`
       value; inaccessible segments carry grade NA), `species_code`, `stage`, `grade`, `grade_class`, `rule_id`,
       `config`, `link_run_uid`, `evidence_version`; Hive `species=/stage=`, one part per FWA drainage
 - [x] `knw_publish(tables, dataset_id)` generalising `0299` (schema-drift and sha gates kept); built locally in every
       run; `PUBLISH=TRUE` only after #56's bucket policy is applied (gate in the script, noted in README)
-- [ ] `research/` one file per species, revised in place: `chinook_rearing_tuned.md` and `habitat_weights.md` gain
+- [x] `research/` one file per species, revised in place: `chinook_rearing_tuned.md` and `habitat_weights.md` gain
       the table pointers and the historical markers (decision 2); new species get `<species>_tuned.md`;
       `research/README.md` rows
-- [ ] `scripts/README.md` run order (new block, frozen-on-v2 note); CLAUDE.md layout entries
+- [x] `scripts/README.md` run order (new block, frozen-on-v2 note); CLAUDE.md layout entries
 
 ## Phase 4: What a tuning changes: comparison outputs
 - [x] flooded: file an issue and PR so `fl_valley_join()`'s `nearest` returns the owning segment row (`seg`), which
@@ -119,7 +119,7 @@ Replaces #59. Decisions taken at the plan gate (2026-10-17) and the plan review'
       a crossing left to link#321
 
 ## Phase 5: Take over link's calibration
-- [ ] WCT, GR, RB and KO are in Phase 2's species set wherever the evidence admits them; what each lacks is stated
+- [x] WCT, GR, RB and KO are in Phase 2's species set wherever the evidence admits them; what each lacks is stated
       in its thresholds rows
 - [ ] After the repo is public (#56): file the transfer issues here for link#322 and link#343, pointing at the
       thresholds table (link is public, so `NewGraphEnvironment/link#N` links are fine); draft, not post, the link

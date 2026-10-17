@@ -18,6 +18,19 @@ a tuned rule is drafted, not filed (planning archive for #54) · **Produced by:*
 
 **Status:** measured; nothing applied in link. Written to lift into a link vignette (last section).
 
+**On the province-wide run (#57, 2026-10-17).** The same rule family rescored by `scripts/0320` on `0310`'s
+evidence build (link run `20261017_004619-3f4c713b`, 241 groups): 4,490 stream-branch visits (215 CH) in 43
+groups with both outcomes, against 3,433 in 26 here. The shape holds: the region is 23 rules, all MAD rules with
+the exception, MAD 0.35–1 m³/s, gradient 7–9 %, Q 1–10 m³/s, D 1–2 km; the recommended rule is
+**MAD ≥ 0.75 m³/s, gradient ≤ 9 %, a ≥ 3 m³/s river within 1 km**, which differs from this file's only in the
+gradient (9 % against 7 %, both inside both regions). `default` is 196.3 above the best (SE 81.6), outside on
+every seed; nested selection 1,234 against `default`'s 1,347. **The size floor settles at 0.75 m³/s** (the open
+question of #54), with 0.5 inside the region. The thresholds table carries it as `CH_rear_v1`
+(`data/thresholds.csv`); every CH segment of the 125 groups carries a grade (`knowledge/habitat_grade/v1`:
+856,244 accessible segments, 852,431 graded, reference rate 0.146, 76 % of graded km under 0.2). The method
+and the cross-species table are `habitat_thresholds_tuned.md`. The figures below are #54's, on the 55-group
+build.
+
 Every figure names its population. Three recur:
 - **Tuning population.** FDIS electrofishing visits on link's CH stream branch, with no natural CH barrier downstream:
   4,516 visits (166 CH) in 45 WSGs. The models use the 26 WSGs where CH were both caught and missed: 3,433 visits,

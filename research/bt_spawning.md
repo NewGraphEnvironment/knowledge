@@ -7,7 +7,8 @@
 - literature rows 490–510 of `data/literature_evidence.csv`, gate `scripts/logs/habitat/20261002_literature_verify.csv`;
 - groundwater rows 675–686 (#36), gate `scripts/logs/habitat/20261007_literature_verify.csv`.
 
-**Status:** Tracks 1 and 2 done. Track 3 (the Williston critical spawning segments) is pending: the layer
+**Status:** Tracks 1 and 2 done. Track 3 (the Williston critical spawning segments) is pending: the layer **#57** rescored a BT spawning rule on the province-wide run (`bull_trout_tuned.md`): the recommended rule
+separates nothing in raw terms and nested selection puts it behind `default`, so this file's conclusion stands.
 was on a machine that could not be reached when this ran. Nothing is proposed for link yet.
 
 link rears BT only where stream connects to spawning, and spawning is gated at `spawn_gradient_max` 0.0549
