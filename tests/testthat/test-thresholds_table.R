@@ -5,7 +5,8 @@ tune_dir_fx <- function() {
     visits_in = c(3000, 0), detections = c(150, NA), groups = c(30, NA), groups_both = c(20, NA),
     seeds_n = c(4, NA), seeds_rec_in_region = c(3, NA)
   )
-  utils::write.csv(summ, file.path(d, "tune_summary.csv"), row.names = FALSE, na = "")
+  utils::write.csv(summ[1, ], file.path(d, "CH_rear_summary.csv"), row.names = FALSE, na = "")
+  utils::write.csv(summ[2, ], file.path(d, "KO_rear_summary.csv"), row.names = FALSE, na = "")
   tune <- data.frame(
     rule = c("width>=1.5|g<=0.0549|none", "mad>=0.75|g<=0.07|Q3@D1000", "mad>=0.5|g<=0.09|Q3@D2000", "mad>=0.5|g<=0.07|Q3@D1000"),
     size_var = c("width", "mad", "mad", "mad"), size_min = c(1.5, 0.75, 0.5, 0.5), grad_max = c(0.0549, 0.07, 0.09, 0.07),

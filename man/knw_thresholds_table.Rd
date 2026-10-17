@@ -13,7 +13,8 @@ knw_thresholds_table(
 )
 }
 \arguments{
-\item{tune_dir}{\code{character(1)} the directory \code{scripts/0320} wrote.}
+\item{tune_dir}{\code{character(1)} the directory \code{scripts/0320} wrote (one
+\verb{<sp>_<stage>_summary.csv} per species × stage, bound here).}
 
 \item{evidence_version, link_run_uid, link_sha, config}{\code{character(1)} the
 provenance every row carries.}

@@ -36,14 +36,18 @@
 #         data/tune/<sp>_<stage>_grades.csv    one row per segment of the species' groups (ignored; 0325 publishes)
 #         data/tune/<sp>_<stage>_groups.csv    the groups modelled, with their fold
 #         data/tune/<sp>_<stage>_score.rds     the scored grid, read back on a rerun (ignored)
-#         data/tune/tune_summary.csv           one row per species x stage: status, population, pick, held-out deviances
-#         data/tune/curves.rds                 the fitted curve objects (ignored)
+#         data/tune/<sp>_<stage>_summary.csv   one row: status, population, pick, held-out deviances (0325 binds them)
+#         data/tune/<sp>_<stage>_curve.rds     the fitted curve object (ignored; 0330 reads them)
 #         scripts/logs/habitat/<date>_tune_run.txt
 # RUN:    Rscript scripts/0320-tune-run.R   (from the repo root; SPECIES=CH,BT to restrict; WORKERS=14)
+#         Scored grids (<key>_score.rds) and grade tables already in data/tune/ are kept, so a run over a subset of
+#         species on another host, with the caches copied, grades only what is missing.
 # ---------------------------------------------------------------------------
 suppressMessages({ library(dplyr); library(readr); library(DBI); library(RPostgres) })
 pkgload::load_all(quiet = TRUE)
 options(warn = 1)
+# an unreachable or saturated server hangs a connection attempt forever without this (CLAUDE.md)
+if (!nzchar(Sys.getenv("PGCONNECT_TIMEOUT"))) Sys.setenv(PGCONNECT_TIMEOUT = "30")
 
 link_repo <- Sys.getenv("LINK_REPO", "../link")
 workers <- as.integer(Sys.getenv("WORKERS", max(1L, min(14L, parallel::detectCores() - 2L))))
@@ -146,7 +150,12 @@ for (k in names(out)) {
   summ[[k]] <- row
 }
 summ <- bind_rows(summ)
-saveRDS(lapply(out, function(r) r[c("species_code", "stage", "response", "status", "pick", "curve")]), file.path(dir_out, "curves.rds"))
+# per species x stage, so runs on several hosts over different species merge by file (0325 and 0330 bind them)
+for (k in names(out)) {
+  write_csv(summ |> filter(species_code == out[[k]]$species_code, stage == out[[k]]$stage) |>
+              mutate(across(where(is.numeric), ~ round(.x, 4))), file.path(dir_out, paste0(k, "_summary.csv")), na = "")
+  saveRDS(out[[k]][c("species_code", "stage", "response", "status", "pick", "curve")], file.path(dir_out, paste0(k, "_curve.rds")))
+}
 
 # ---- grade every segment of each fitted species' groups ----------------------------------
 conn <- pg()
@@ -155,6 +164,7 @@ grade_rows <- list()
 for (k in names(out)) {
   r <- out[[k]]
   if (is.null(r$curve)) next
+  if (file.exists(file.path(dir_out, paste0(k, "_grades.csv")))) { say("%s grades: already written, kept.", k); next }
   wsg <- groups_sp(r$species_code)
   t1 <- Sys.time()
   g <- knw_grade_species(pg, schema, r$species_code, wsg, r$curve, r$pick, stage = r$stage, workers = min(workers, 8L))
@@ -168,6 +178,5 @@ for (k in names(out)) {
 }
 dbDisconnect(conn)
 block("grades", bind_rows(grade_rows))
-write_csv(summ |> mutate(across(where(is.numeric), ~ round(.x, 4))), file.path(dir_out, "tune_summary.csv"), na = "")
 say("Done in %.1f min.", as.numeric(difftime(Sys.time(), t0, units = "mins")))
 writeLines(log_lines, path_log)

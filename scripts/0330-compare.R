@@ -21,7 +21,7 @@
 #   - Species run in parallel on socket workers, each with its own scratch schema; groups within a
 #     species run in order.
 #
-# INPUT:  data/tune/{curves.rds,<sp>_<stage>_grades.csv} (0320), data/fdis/derived/{visits_link,visits_species}.csv
+# INPUT:  data/tune/<sp>_<stage>_{curve.rds,grades.csv} (0320), data/fdis/derived/{visits_link,visits_species}.csv
 #         (0310), the link repository at LINK_REPO at the build's link_sha, the stac_floodplains_bc catalog
 #         (items read from its public bucket), fwapg database (PG* env vars): fresh_default, bcfishobs, whse_basemapping
 # WRITES: schemas knw_cmp_<sp> in the fwapg database (scratch; dropped)
@@ -37,6 +37,7 @@ suppressMessages({ library(dplyr); library(readr); library(DBI); library(RPostgr
 pkgload::load_all(quiet = TRUE)
 options(warn = 1)
 sf::sf_use_s2(FALSE)
+if (!nzchar(Sys.getenv("PGCONNECT_TIMEOUT"))) Sys.setenv(PGCONNECT_TIMEOUT = "30")
 
 link_repo <- Sys.getenv("LINK_REPO", "../link")
 workers <- as.integer(Sys.getenv("WORKERS", "4"))
@@ -61,8 +62,9 @@ ledger_path <- sort(list.files("scripts/logs/habitat", "_evidence_build_ledger\\
 led <- read_csv(ledger_path, show_col_types = FALSE, col_types = cols(.default = "c"))
 run_uid <- led$note[led$step == "link_run_uid"]
 link_sha <- strsplit(led$note[led$step == "run_link_sha"], ";", fixed = TRUE)[[1]][1]
-curves <- readRDS("data/tune/curves.rds")
-fitted <- Filter(function(r) !is.null(r$pick), curves)
+cf <- list.files("data/tune", "_curve\\.rds$", full.names = TRUE)
+curves <- setNames(lapply(cf, readRDS), sub("_curve\\.rds$", "", basename(cf)))
+fitted <- Filter(function(r) !is.null(r$pick) && !is.null(r$curve), curves)
 if (nzchar(only)) fitted <- fitted[vapply(fitted, function(r) r$species_code %in% strsplit(only, ",")[[1]], logical(1))]
 say("Comparison, knowledge#57: %d fitted species x stage; link run %s at %s.", length(fitted), run_uid, link_sha)
 vl <- read_csv("data/fdis/derived/visits_link.csv", show_col_types = FALSE, guess_max = 1e5,

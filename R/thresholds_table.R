@@ -12,7 +12,8 @@
 #' was not fitted (no stream rule, no response, too few groups) gets one row
 #' per stage with `status` saying why and no values.
 #'
-#' @param tune_dir `character(1)` the directory `scripts/0320` wrote.
+#' @param tune_dir `character(1)` the directory `scripts/0320` wrote (one
+#'   `<sp>_<stage>_summary.csv` per species × stage, bound here).
 #' @param evidence_version,link_run_uid,link_sha,config `character(1)` the
 #'   provenance every row carries.
 #' @return A list: `thresholds` and `groups` (one row per `rule_id` and
@@ -28,7 +29,10 @@ knw_thresholds_table <- function(tune_dir, evidence_version, link_run_uid, link_
   chk::chk_string(evidence_version)
   chk::chk_string(link_run_uid)
   chk::chk_string(link_sha)
-  summ <- utils::read.csv(file.path(tune_dir, "tune_summary.csv"), stringsAsFactors = FALSE)
+  files <- list.files(tune_dir, "_summary\\.csv$", full.names = TRUE)
+  if (!length(files)) stop("no *_summary.csv in ", tune_dir, call. = FALSE)
+  summ <- do.call(rbind, lapply(files, utils::read.csv, stringsAsFactors = FALSE))
+  summ <- summ[order(summ$species_code, summ$stage), , drop = FALSE]
   rows <- list()
   groups <- list()
   for (i in seq_len(nrow(summ))) {

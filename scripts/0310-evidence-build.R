@@ -48,6 +48,7 @@
 suppressMessages({ library(dplyr); library(readr); library(DBI); library(RPostgres) })
 pkgload::load_all(quiet = TRUE)
 options(warn = 1)
+if (!nzchar(Sys.getenv("PGCONNECT_TIMEOUT"))) Sys.setenv(PGCONNECT_TIMEOUT = "30")
 
 schema <- "fresh_default"
 q_grid <- c(1, 3, 5, 10, 20, 30, 50)
