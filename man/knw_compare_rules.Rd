@@ -81,7 +81,8 @@ predicate on every segment, which the call asserts.
 \examples{
 \dontrun{
 pg <- function() DBI::dbConnect(RPostgres::Postgres(), bigint = "numeric")
-cmp <- knw_compare_rules(pg, "fresh_default", "CH", "rear", pick, c("BULK", "MORR"), link_dir, grades)
+cmp <- knw_compare_rules(pg, "fresh_default", "CH", "rear", pick, c("BULK", "MORR"),
+                         link_dir, grades)
 cmp$compare
 }
 }

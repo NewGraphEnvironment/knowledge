@@ -34,9 +34,20 @@ Imports:
 Suggests:
     arrow,
     duckdb,
+    flooded,
+    fresh,
+    gq,
+    htmlwidgets,
     jsonlite,
+    mapgl,
     mgcv,
     RPostgres,
+    terra,
     testthat (>= 3.0.0),
+    tmap,
     withr
+Remotes:
+    NewGraphEnvironment/flooded,
+    NewGraphEnvironment/fresh,
+    NewGraphEnvironment/gq
 Config/testthat/edition: 3
