@@ -35,12 +35,11 @@
 #     "spawning in place".
 #   - POWER labels count all visits in a cell; the estimate beside them uses the modelled
 #     subset (WSGs with both outcomes).
-#   - REPEATED SURVEYS: about 2.8 % of visits match another on UTM, date, area, total catch and
-#     species caught (#35). Most are one survey loaded under two or three collection ids, though
-#     for zero-catch visits the match rests on UTM, date and area alone. They are kept here, as
-#     0290 keeps them, and a sensitivity keeps only the lowest-id copy.
+#   - REPEATED SURVEYS: one survey loaded under several collection ids is kept once by 0230
+#     (#35), so every visit here is a distinct survey. Until #35 this script flagged them itself
+#     and ran a lowest-id-copy sensitivity.
 #   - ADDED AFTER CODE-CHECK ROUND 1 (not part of the spec fixed before the first fit): the
-#     repeated-survey flag and sensitivity, the power-label note, and the no-WSG, WSG-only and
+#     repeated-survey flag and sensitivity (removed by #35), the power-label note, and the no-WSG, WSG-only and
 #     coding-and-month-only sensitivities. An upper interval of Inf means sparse resamples
 #     separated; it is written as `Inf`.
 #
@@ -94,16 +93,6 @@ v <- read_csv(path_visits, show_col_types = FALSE, col_types = cols(site_visit =
          data_set = factor(data_set), wsg = factor(watershed_group_code),
          stream = factor(blue_line_key), month_f = factor(month), U = as.integer(bt_present))
 if (anyNA(v$cls)) stop("visits without a gradient class")
-sig <- read_csv("data/fdis/derived/fdis_sites.csv", show_col_types = FALSE, guess_max = 1e5,
-                col_types = cols(site_visit = "c", species_caught = "c")) |>
-  filter(site_visit %in% v$site_visit) |>
-  transmute(site_visit, sig = paste(utm_easting, utm_northing, date, area_m2, n_caught_all,
-                                    species_caught),
-            coll = as.numeric(sub("_.*", "", site_visit)))
-first_copy <- sig |> group_by(sig) |> slice_min(coll, n = 1, with_ties = FALSE) |> ungroup()
-v <- v |> mutate(first_copy = site_visit %in% first_copy$site_visit)
-say("Repeated surveys (#35): %d of %d visits are a second copy of another visit.",
-    sum(!v$first_copy), nrow(v))
 
 fish <- readRDS("data/fdis/build/fish.rds") |>
   filter(site_visit %in% v$site_visit) |>
@@ -250,7 +239,6 @@ add_sens("no_river_polygons", pop |> filter(segment_edge_type %in% edge_stream))
 add_sens("no_wsg_term", pop, nuis = c("data_set", "era"))
 add_sens("wsg_term_only", pop, extra = NULL, nuis = "wsg")
 add_sens("coding_and_month_only", pop, nuis = character(0))
-add_sens("first_copy_only_35", pop |> filter(first_copy))
 add_sens("site_gradient_class", pop |> filter(!is.na(gradient_pct)) |>
            mutate(cls = classify(gradient_pct / 100)))
 block(sprintf("S rate ratios under each sensitivity, point estimates only (top two agencies by evidence visits removed: %s)",
@@ -317,9 +305,9 @@ if (nrow(steep_large) > 0) {
   dbDisconnect(conn)
   desc <- steep_large |>
     select(site_visit, watershed_group_code, cls, blue_line_key, downstream_route_measure,
-           segment_gradient, first_copy) |>
+           segment_gradient) |>
     left_join(patch |> rename(patch_blk = blue_line_key), by = "site_visit", relationship = "many-to-many") |>
-    group_by(site_visit, watershed_group_code, cls, segment_gradient, first_copy) |>
+    group_by(site_visit, watershed_group_code, cls, segment_gradient) |>
     summarise(patches_upstream = sum(!is.na(run_m)),
               same_blue_line_m = suppressWarnings(min(
                 (run_drm - downstream_route_measure)[!is.na(patch_blk) & patch_blk == blue_line_key &

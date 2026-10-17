@@ -24,7 +24,7 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   the root) and `cred`. Legacy literals in scripts are fixed forward as they are touched.
 - `data/<wsg>/` — per-group snapshots (csv/md) and small spatial deliverables (gpkg/kml). Tracked.
 - `data/` root — cross-group tier: `corpus_tags.csv`, `priority_farmed_all.csv`,
-  `zotero_key_map.csv`, `rag_priorities.{gpkg,kml}`, `life_history_timing.csv` (seeded by `0260`,
+  `zotero_key_map.csv`, `rag_priorities.{gpkg,kml}`, `fdis_repeat_surveys.csv` (FDIS copies `0230` drops, #35), `life_history_timing.csv` (seeded by `0260`,
   then hand-edited; read with `knw_timing_read()`), `literature_evidence.csv` (cited habitat-threshold
   values with verbatim quotes, read with `knw_literature_read()`, gated by `0280`; a row stating an
   intrinsic-potential model's threshold carries that model's `model_id`; a temperature, air-temperature or
@@ -133,15 +133,17 @@ channel-width work (exports of 2020-11-16 and 2022-03-22; `MANIFEST.md5`). The P
 received: that note is `fdis/README.md`, whose source is `data/fdis_README.md`, so edit it there
 and publish with `0299`. Nothing that is not part of the extract goes under `fdis/`, because the
 whole prefix is public; working files go to the bucket's private `archive/`. The visit tables built
-from it are published under `knowledge/fdis/v1/` (a change of columns or meaning is a new version).
+from it are published under `knowledge/fdis/v2/` (a change of columns or meaning is a new version;
+v1 predates #35).
 It is electrofishing only.
 The 2022 `Details*` files contain every 2020 fish row, and exact duplicate rows are distinct fish.
 `counts` is the abundance table; `details` is a length subsample. `scripts/0230`–`0240` build
 from it, and `research/fdis_export.md` is the reference. The FWA "field measurement" channel
 widths are these same sites, so never score the width model against them.
-About 2.8 % of site visits are one survey loaded under two or three collection ids (same UTM,
-date, area and catch; #35). They are not yet deduplicated, so a per-visit count treats them as
-separate visits until #35 lands.
+Some surveys were loaded under two to four collection ids (same UTM, date, per-pass effort and
+catch). `0230` keeps one copy, the one with the most measured fish, because the fish often sit on
+the later id only, and lists the rest in `data/fdis_repeat_surveys.csv` (#35). Downstream scripts
+carry no duplicate logic of their own.
 
 ### FISS submission workbooks: editions drift, and most EF fish are already in FDIS
 

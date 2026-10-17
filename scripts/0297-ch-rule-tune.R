@@ -24,8 +24,8 @@
 #     other secondary-flow edges are passed over; a lake segment counts, as a rule in link would)
 #     lies within D m downstream on the same flow source (0296's walks). A walk that reaches the
 #     sea first fails it.
-#   - POPULATION: 0295's MAD analysis (0294's visits on 0291's edges, fished area 10-10,000 m2,
-#     duplicates (#35) out), restricted to where the rule can change anything and link would
+#   - POPULATION: 0295's MAD analysis (0294's visits on 0291's edges, fished area 10-10,000 m2;
+#     0230 keeps one copy of a repeated survey, #35), restricted to where the rule can change anything and link would
 #     apply it:
 #       stream branch  stream edges, not in a river polygon, a wetland >= 1 ha or a lake
 #                      >= 100 ha (B2: elsewhere every rule is constant, and 702 of the 978 CH sit
@@ -133,11 +133,10 @@ block <- function(title, x) {
 
 # ---- data ------------------------------------------------------------------------
 all_visits <- read_csv("data/fdis/derived/ch_rule_visits.csv", show_col_types = FALSE, guess_max = 1e5,
-                       col_types = cols(site_visit = "c", dup_of = "c", hydro_zone = "c"))
+                       col_types = cols(site_visit = "c", hydro_zone = "c"))
 walks <- read_csv("data/fdis/derived/ch_rule_walks.csv", show_col_types = FALSE)
 base <- all_visits |>
-  filter(edge_type %in% edge_ok, !is.na(area_m2), area_m2 >= area_range[1], area_m2 <= area_range[2],
-         is.na(dup_of)) |>
+  filter(edge_type %in% edge_ok, !is.na(area_m2), area_m2 >= area_range[1], area_m2 <= area_range[2]) |>
   mutate(log_area = log(area_m2),
          era = factor(cut(year, c(-Inf, 1994, 2004, Inf), labels = c("to1994", "1995-2004", "2005on"))),
          data_set = factor(data_set),

@@ -16,8 +16,10 @@
 #   - POPULATION (A2): WSGs where bcfishobs holds at least 5 CH records dated 1990 or later,
 #     link's own presence rule for CH (parameters_fresh.csv: observation_threshold 5,
 #     observation_date_min 1990-01-01). A range filter at WSG scale only.
-#   - DUPLICATES (#35, A8): visits with the same UTM, date, area and catch, after the drops, are
-#     KEPT and flagged (`dup_of` = the lowest site_visit of the group, NA on that one).
+#   - DUPLICATES (#35, A8): 0230 keeps one copy of a survey loaded under several collection ids,
+#     so none are flagged here. The ledger counts the visits this script's old, looser signature
+#     (UTM, date, area and catch) would still flag; they differ in per-pass effort or per-species
+#     counts, so they are distinct visits.
 #   - FLOW is month 0 (the annual mean) of discharge/fwa/v1/segment_monthly, scenario historical,
 #     as wet::wet_db_load() loaded it into the fwapg database; `pick` marks wet's default source per
 #     segment, both sources' values are kept, and the picked counts are checked against the
@@ -108,13 +110,11 @@ add("info", "population_wsgs", length(ch_wsg),
 v <- drop(v, v$watershed_group_code %in% ch_wsg, "wsg_outside_ch_range")
 
 # ---- duplicates (#35) -------------------------------------------------------
-v <- v |>
-  group_by(utm_zone, utm_easting, utm_northing, date, area_m2,
-           species_caught = coalesce(species_caught, ""), n_caught_all) |>
-  mutate(dup_of = if (n() > 1) min(site_visit) else NA_character_) |>
-  ungroup() |>
-  mutate(dup_of = if_else(dup_of == site_visit, NA_character_, dup_of))
-add("info", "duplicate_flagged", sum(!is.na(v$dup_of)), "kept, flagged in dup_of")
+loose <- v |>
+  count(utm_zone, utm_easting, utm_northing, date, area_m2,
+        species_caught = coalesce(species_caught, ""), n_caught_all)
+add("info", "loose_signature_surplus", sum(loose$n - 1L),
+    "visits the pre-#35 signature would flag; 0230 already kept one copy of each repeated survey")
 
 # ---- flow -------------------------------------------------------------------
 picked <- dbGetQuery(conn, "SELECT source, count(*)::integer n FROM discharge.fwa_v1_segment_monthly
@@ -293,7 +293,7 @@ v <- v |> mutate(large_is_lake = !is.na(large_waterbody_key) & large_waterbody_k
 add("info", "large_is_lake", sum(v$large_is_lake))
 
 v <- v |>
-  select(site_visit, dup_of, watershed_group_code, blue_line_key, downstream_route_measure,
+  select(site_visit, watershed_group_code, blue_line_key, downstream_route_measure,
          linear_feature_id, distance_to_stream, data_set, agency, year, month, n_pass,
          fishing_time_s, area_m2, fished_length_m, wetted_width_m, edge_type, stream_order,
          fwa_gradient, side_channel, in_lake, in_river_poly, catch_status, n_caught_all,

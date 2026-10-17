@@ -60,11 +60,11 @@ signature without fishing time; rerun the full chain, CH included, in this PR.
       inputs are cached; otherwise record the probe.
 
 ## Phase 3: One definition downstream
-- [ ] 0293: remove the `first_copy` signature and the `first_copy_only_35` sensitivity. Header points to 0230.
-- [ ] 0294: remove the `dup_of` block and column. Log how many visits its old signature would still have
+- [x] 0293: remove the `first_copy` signature and the `first_copy_only_35` sensitivity. Header points to 0230.
+- [x] 0294: remove the `dup_of` block and column. Log how many visits its old signature would still have
       flagged. 0295: remove `v_dup` and `sens_duplicates_kept`. 0296, 0297, 0298: drop the `dup_of`
       column types and filters.
-- [ ] 0299: `s3_id` becomes `knowledge/fdis/v2` (rows and columns change; v1 stays as published).
+- [x] 0299: `s3_id` becomes `knowledge/fdis/v2` (rows and columns change; v1 stays as published).
       Update the table descriptions to drop the "not deduplicated" sentence. Update `CLAUDE.md`'s FDIS
       note and data-root list, and `scripts/README.md` if its wording names duplicates.
 

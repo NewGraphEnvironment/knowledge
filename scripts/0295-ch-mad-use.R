@@ -6,7 +6,8 @@
 # ANALYSIS SPEC, fixed before the first fit and revised once, before any fit, after the plan
 # review (planning archive for #52, review-plan.md). The reviewer had tabulated detections by
 # class from the raw export before this spec was final; that table is what B1 and A6 cite.
-#   - POPULATION: 0294's visits (link's CH range rule, quality drops), duplicates (#35) left out,
+#   - POPULATION: 0294's visits (link's CH range rule, quality drops; 0230 keeps one copy of a
+#     repeated survey, #35),
 #     on stream, canal and river-polygon edges (0291's set; lake construction lines are not in
 #     it), with a fished area of 10 to 10,000 m2. Raw rates are reported on the same visits the
 #     model uses (WSGs with both outcomes), and on all population visits beside them.
@@ -40,7 +41,7 @@
 #     and `none`. A walk that ended other than found or none is left out and counted.
 #   - SENSITIVITY (rows in the csv without intervals; U unless named):
 #       regulated reaches out; the largest project out; CHES and NECR out; the parent-flow visits
-#       out; each wet source alone where both exist; the old fwapg MAD; duplicates kept; no river
+#       out; each wet source alone where both exist; the old fwapg MAD; no river
 #       polygons; FWA gradient class as a covariate; season as a covariate; merged 0.1-0.5;
 #       a natural CH barrier downstream out (fresh_default WSGs, against the same WSGs
 #       unfiltered; with and without USER_DEFINITE); distance with ambiguous placements kept,
@@ -83,7 +84,7 @@ dist_class <- function(status, d) {
 }
 
 all_visits <- read_csv("data/fdis/derived/ch_mad_visits.csv", show_col_types = FALSE,
-                       col_types = cols(site_visit = "c", dup_of = "c"))
+                       col_types = cols(site_visit = "c"))
 prep <- function(d) {
   d |>
     filter(edge_type %in% edge_ok, !is.na(area_m2), area_m2 >= area_range[1],
@@ -102,8 +103,7 @@ prep <- function(d) {
            U = as.integer(present_CH),
            F = as.integer(catch_status == "fish"))
 }
-v_dup <- prep(all_visits)
-v <- v_dup |> filter(is.na(dup_of))
+v <- prep(all_visits)
 if (any(v$U == 1L & v$F == 0L)) stop("a visit caught CH but no fish")
 
 log_lines <- character()
@@ -114,8 +114,8 @@ block <- function(title, x) {
 }
 say("CH detection by stream size, knowledge#52. Visits in 0294's table: %d (CH on %d).",
     nrow(all_visits), sum(all_visits$present_CH))
-say("On 0291's edges with a fished area of %g-%g m2: %d; duplicates left out: %d; analysed: %d (CH on %d) in %d WSGs.",
-    area_range[1], area_range[2], nrow(v_dup), nrow(v_dup) - nrow(v), nrow(v), sum(v$U),
+say("On 0291's edges with a fished area of %g-%g m2: %d (CH on %d) in %d WSGs.",
+    area_range[1], area_range[2], nrow(v), sum(v$U),
     length(unique(v$wsg)))
 say("Of these, in a lake polygon: %d (CH %d); in a river polygon: %d (CH %d); flow from the parent line: %d (CH %d); regulated: %d (CH %d).",
     sum(v$in_lake), sum(v$U[v$in_lake]), sum(v$in_river_poly), sum(v$U[v$in_river_poly]),
@@ -281,7 +281,6 @@ res$routed <- analyse("sens_pcic_routed_where_both", with_cls(both, cr))
 res$balance <- analyse("sens_wet_balance_where_both", with_cls(both, cb))
 old <- v |> filter(!is.na(mad_fwapg))
 res$old <- analyse("sens_fwapg_old_mad", with_cls(old, mad_class(old$mad_fwapg)))
-res$dup <- analyse("sens_duplicates_kept", with_cls(v_dup, mad_class(v_dup$mad_pick)))
 res$noriver <- analyse("sens_no_river_polygons", d_mad |> filter(!edge_type %in% edge_river, !in_river_poly))
 res$grad <- analyse("sens_gradient_covariate", d_mad |> filter(!is.na(grad_class)), extra = "grad_class")
 res$season <- analyse("sens_season_covariate", d_mad, extra = "season")

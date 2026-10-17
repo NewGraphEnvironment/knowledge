@@ -7,12 +7,14 @@
 #   - The Province agreed (2026-10-16) to the FDIS extract being public provided it carries a
 #     note of when and from where it was received. The extract stays as received under
 #     s3://fresh-bc/fdis/; data/fdis_README.md is the tracked source of its README.
-#   - The tables built from it are ours, so they go under s3://fresh-bc/knowledge/fdis/v1/ (named
+#   - The tables built from it are ours, so they go under s3://fresh-bc/knowledge/fdis/v2/ (named
 #     by producer, versioned like discharge/fwa/v1/ so a consumer can pin one). The bucket does
 #     not list, so readers start from manifest.json. A change to a table's columns or meaning
-#     is a new version, never an overwrite of v1: the manifest records each table's schema, and
+#     is a new version, never an overwrite of the last: the manifest records each table's schema, and
 #     PUBLISH=TRUE stops when the published manifest's tables or schemas differ (bump s3_id).
 #     A change of meaning with the same schema is the one case it cannot see.
+#   - v2 (#35): 0230 keeps one copy of a survey loaded under several collection ids, so every table
+#     has fewer rows, and ch_mad_visits and ch_rule_visits lose `dup_of`. v1 stays as published.
 #   - Only fdis_sites.csv is taken of 0240's two forms: the gpkg is the same rows with a
 #     geometry, and a CSV-to-Parquet copy keeps one reading of each table.
 #   - Each table is read with arrow's CSV reader and written as Parquet. The Parquet is then
@@ -28,7 +30,7 @@
 # INPUT:  data/fdis/derived/{fdis_sites,bt_use_visits,ch_mad_visits,ch_rule_visits,ch_rule_walks}.csv
 #         (scripts/0240, 0290, 0294, 0296), data/fdis_README.md
 # OUTPUT: data/fdis/publish/ (ignored): <table>.parquet, manifest.json
-#         with PUBLISH=TRUE also: s3://fresh-bc/knowledge/fdis/v1/ (the Parquet and manifest.json)
+#         with PUBLISH=TRUE also: s3://fresh-bc/knowledge/fdis/v2/ (the Parquet and manifest.json)
 #         and s3://fresh-bc/fdis/README.md
 #         with PULL=TRUE instead: data/fdis/derived/<table>.csv from the published Parquet
 # RUN:    Rscript scripts/0299-fdis-publish.R              (from the repo root; local only)
@@ -43,7 +45,7 @@ no_sign <- identical(Sys.getenv("NO_SIGN"), "TRUE")
 if (publish && pull) stop("PUBLISH and PULL are exclusive", call. = FALSE)
 dir_in <- "data/fdis/derived"
 dir_out <- "data/fdis/publish"
-s3_id <- "knowledge/fdis/v1"
+s3_id <- "knowledge/fdis/v2"
 s3_tables <- paste0("s3://fresh-bc/", s3_id, "/")
 s3_readme <- "s3://fresh-bc/fdis/README.md"
 path_readme <- "data/fdis_README.md"
@@ -54,7 +56,7 @@ tables <- data.frame(
              "scripts/0294-ch-mad-build.R", "scripts/0296-ch-rule-build.R",
              "scripts/0296-ch-rule-build.R"),
   description = c(
-    "One row per FDIS site visit (passes rolled up): placement on the FWA network, effort, measured habitat and catch. About 2.8 % of visits are one survey loaded under two or three collection ids and are not deduplicated (#35).",
+    "One row per FDIS site visit (passes rolled up): placement on the FWA network, effort, measured habitat and catch. A survey loaded under several collection ids is kept once (#35; the copies dropped are listed in the repository's data/fdis_repeat_surveys.csv).",
     "FDIS site visits placed on link's segments, with pooled BT presence and the attributes the BT rearing use curve reads (#28).",
     "FDIS site visits with the published annual flow (MAD) on their FWA segment, distance to the first large river, and placement flags (#52).",
     "FDIS site visits with the attributes the tuned CH rearing rule is scored on: flow, width, gradient, barrier status, hydrologic zone (#54).",

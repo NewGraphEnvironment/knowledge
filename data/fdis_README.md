@@ -32,9 +32,11 @@ the extract; it and that record are kept privately.)
 ## Built from it
 
 Visit-level tables (passes rolled to site visits, placed on the FWA stream network, joined to modelled
-segments) are published as Parquet under `knowledge/fdis/v1/`, with a `manifest.json`. The bucket does not
+segments) are published as Parquet under `knowledge/fdis/v2/`, with a `manifest.json`. The bucket does not
 list, so start from that manifest:
-`https://fresh-bc.s3.us-west-2.amazonaws.com/knowledge/fdis/v1/manifest.json`.
+`https://fresh-bc.s3.us-west-2.amazonaws.com/knowledge/fdis/v2/manifest.json`.
+`knowledge/fdis/v1/` is the earlier release, before surveys loaded under several collection ids were
+kept once.
 
 How the extract was read, its defects and what it adds over the public layers:
 <https://github.com/NewGraphEnvironment/knowledge/blob/main/research/fdis_export.md>.
