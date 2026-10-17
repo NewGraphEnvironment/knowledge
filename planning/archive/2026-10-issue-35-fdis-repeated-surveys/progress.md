@@ -55,3 +55,4 @@
   chinook_rearing_tuned, research/README. devtools::test(): 258 pass.
 - Code-check: 3 rounds (plus the plan review: 4 reviewer agents), each round finding a defect inside the
   previous fix; ended by the terminal enumeration over all 60 visit columns.
+- PR #60 opened; v2 published from 11ba3a1 (6 tables, manifest supersedes v1) and verified anonymously (sha256 and rows per table, README bytes, v1 still served); #35 body edited with the outcome.

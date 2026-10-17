@@ -103,18 +103,18 @@ pick changes. Rebuilding on the new fresh_default is a follow-up issue.
       check. Refresh its counts table. Revise every number that moved in `research/habitat_weights.md`,
       `bt_spawning.md`, `chinook_stream_size.md` and `chinook_rearing_tuned.md` (grep each for the old
       values, row by row), and update their Verified lines.
-- [ ] Edit #35's body with the outcome (figures, rule, link to research).
+- [x] Edit #35's body with the outcome (figures, rule, link to research).
 
 ## Phase 6: Publish v2
-- [ ] `0299` dry run, then `PUBLISH=TRUE` from a clean tree to `s3://fresh-bc/knowledge/fdis/v2/`. Check
+- [x] `0299` dry run, then `PUBLISH=TRUE` from a clean tree to `s3://fresh-bc/knowledge/fdis/v2/`. Check
       manifest row counts against the CSVs. If auto mode refuses the upload, hand over the bare command.
 - [x] `research/fdis_export.md` "Where it lives" names v2, and says v1 predates the dedup.
 
 ## Validation
 - [x] `devtools::test()` passes (`test-data-dir.R` still holds with the new data-root csv)
 - [x] `/code-check branch`: three rounds, each finding a defect inside the previous fix; ended by the terminal enumeration (findings.md)
-- [ ] PWF checkboxes match landed work
-- [ ] `/planning-archive`, then `/gh-pr-push`
+- [x] PWF checkboxes match landed work
+- [x] `/planning-archive`, then `/gh-pr-push`
 
 ## Critical files
 `scripts/0230-fdis-load.R`, `0293`, `0294`, `0295`, `0296`, `0297`, `0298`, `0299`, `CLAUDE.md`,
