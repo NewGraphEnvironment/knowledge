@@ -22,7 +22,8 @@ knw_tune_run(
   d_floor = 200,
   min_wsg = 5L,
   power_wsg = 10L,
-  src = "pick"
+  src = "pick",
+  cache_dir = NULL
 )
 }
 \arguments{
@@ -45,13 +46,18 @@ knw_tune_run(
 \item{min_wsg, power_wsg}{\code{integer(1)} the floors described above.}
 
 \item{src}{\code{character(1)} the flow source the exception reads.}
+
+\item{cache_dir}{\code{NULL}, or a directory where each species × stage's scored
+grid is saved as \verb{<sp>_<stage>_score.rds} and read back on a rerun when the
+population has the same number of visits.}
 }
 \value{
 A list with one element per species × stage (\code{"<sp>_<stage>"}): a
 list with \code{species_code}, \code{stage}, \code{response}, \code{status} (\code{fitted},
-\code{underpowered}, \code{no_stream_rule}, \code{no_response}, \code{too_few_groups}),
-\code{population}, and when fitted \code{score} (\code{\link[=knw_tune_score]{knw_tune_score()}}'s result),
-\code{pick} (the recommended rule row) and \code{curve} (\code{\link[=knw_tune_curve]{knw_tune_curve()}}'s).
+\code{underpowered}, \code{no_stream_rule}, \code{no_response}, \code{too_few_groups},
+\code{curve_failed}), \code{population}, and when scored \code{score} (\code{\link[=knw_tune_score]{knw_tune_score()}}'s
+result), \code{pick} (the recommended rule row) and \code{curve} (\code{\link[=knw_tune_curve]{knw_tune_curve()}}'s;
+\code{NULL} with \code{curve_error} when its fit failed).
 }
 \description{
 For each species in \code{species} and each stage in \code{stages}: the scoring

@@ -101,12 +101,16 @@ knw_tune_curve <- function(d, pick, walks, folds, resp = "U",
   for (kf in sort(unique(fo))) {
     tr <- dd[fo != kf, , drop = FALSE]
     ho <- dd[fo == kf, , drop = FALSE]
+    # the fit knows only the levels the training fold holds, so drop the rest before fitting
     tr$wsg <- droplevels(tr$wsg)
+    tr$data_set <- droplevels(tr$data_set)
+    tr$era <- droplevels(tr$era)
     nu <- nuis[vapply(nuis, function(t) length(unique(tr[[t]])) > 1L, logical(1))]
     mk <- mgcv::gam(stats::as.formula(paste(resp, "~", smooths(nu), "+ s(wsg, bs = 're')")), family = fam,
                     data = tr, method = "REML")
-    # a held-out level unseen in training takes the reference: set it to the training mode
-    for (t in intersect(nu, c("data_set", "era"))) {
+    # a held-out level unseen in training takes the training mode, and the held-out factors carry
+    # exactly the training levels
+    for (t in c("data_set", "era")) {
       lv <- as.character(ho[[t]])
       lv[!lv %in% levels(tr[[t]])] <- names(which.max(table(tr[[t]])))
       ho[[t]] <- factor(lv, levels = levels(tr[[t]]))

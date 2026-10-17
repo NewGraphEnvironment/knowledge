@@ -27,11 +27,15 @@
 #' @param seed,folds,n_boot,seeds_more,workers,d_floor passed to [knw_tune_score()].
 #' @param min_wsg,power_wsg `integer(1)` the floors described above.
 #' @param src `character(1)` the flow source the exception reads.
+#' @param cache_dir `NULL`, or a directory where each species × stage's scored
+#'   grid is saved as `<sp>_<stage>_score.rds` and read back on a rerun when the
+#'   population has the same number of visits.
 #' @return A list with one element per species × stage (`"<sp>_<stage>"`): a
 #'   list with `species_code`, `stage`, `response`, `status` (`fitted`,
-#'   `underpowered`, `no_stream_rule`, `no_response`, `too_few_groups`),
-#'   `population`, and when fitted `score` ([knw_tune_score()]'s result),
-#'   `pick` (the recommended rule row) and `curve` ([knw_tune_curve()]'s).
+#'   `underpowered`, `no_stream_rule`, `no_response`, `too_few_groups`,
+#'   `curve_failed`), `population`, and when scored `score` ([knw_tune_score()]'s
+#'   result), `pick` (the recommended rule row) and `curve` ([knw_tune_curve()]'s;
+#'   `NULL` with `curve_error` when its fit failed).
 #' @export
 #' @examples
 #' \dontrun{
@@ -43,7 +47,7 @@ knw_tune_run <- function(visits, species_tbl, walks, thresholds, species = knw_s
                          stages = c("rear", "spawn"), spawner = NULL,
                          edge_stream = c(1000L, 1100L, 2000L, 2300L), area_range = c(10, 10000),
                          seed = 54L, folds = 5L, n_boot = 200L, seeds_more = 55:58, workers = 1L, d_floor = 200,
-                         min_wsg = 5L, power_wsg = 10L, src = "pick") {
+                         min_wsg = 5L, power_wsg = 10L, src = "pick", cache_dir = NULL) {
   chk::chk_data(visits)
   chk::check_names(visits, c("site_visit", "watershed_group_code", "blue_line_key", "downstream_route_measure",
                              "edge_type", "wb_river", "wb_wetland", "wb_lake", "area_m2", "year", "data_set",
@@ -106,14 +110,26 @@ knw_tune_run <- function(visits, species_tbl, walks, thresholds, species = knw_s
         next
       }
       rule_in <- function(dd, r) knw_rule_in(dd, r, walks = wi, src = src, edge_stream = edge_stream)
-      sc <- knw_tune_score(d, rule_in, grid, resp, seed = seed, folds = folds, n_boot = n_boot,
-                           seeds_more = seeds_more, d_floor = d_floor, workers = workers, extra = TRUE)
+      # a scored grid is hours of work: keep it beside the run so a later failure does not cost it
+      cache <- if (is.null(cache_dir)) NULL else file.path(cache_dir, paste0(key, "_score.rds"))
+      sc <- NULL
+      if (!is.null(cache) && file.exists(cache)) {
+        sc <- readRDS(cache)
+        if (!identical(sc$population[["visits_in"]], nrow(d))) sc <- NULL
+      }
+      if (is.null(sc)) {
+        sc <- knw_tune_score(d, rule_in, grid, resp, seed = seed, folds = folds, n_boot = n_boot,
+                             seeds_more = seeds_more, d_floor = d_floor, workers = workers, extra = TRUE)
+        if (!is.null(cache)) saveRDS(sc, cache)
+      }
       pick <- sc$rules[sc$rules$recommended, , drop = FALSE]
-      cv <- knw_tune_curve(d, pick, wi, sc$folds, resp = resp, src = src)
-      rec$status <- if (n_both < power_wsg) "underpowered" else "fitted"
+      cv <- tryCatch(knw_tune_curve(d, pick, wi, sc$folds, resp = resp, src = src),
+                     error = function(e) structure(list(message = conditionMessage(e)), class = "knw_curve_failed"))
+      rec$status <- if (inherits(cv, "knw_curve_failed")) "curve_failed" else if (n_both < power_wsg) "underpowered" else "fitted"
       rec$score <- sc
       rec$pick <- pick
-      rec$curve <- cv
+      rec$curve <- if (inherits(cv, "knw_curve_failed")) NULL else cv
+      rec$curve_error <- if (inherits(cv, "knw_curve_failed")) cv$message else NULL
       out[[key]] <- rec
     }
   }

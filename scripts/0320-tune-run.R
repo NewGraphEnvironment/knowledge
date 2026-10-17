@@ -35,6 +35,7 @@
 #         data/tune/<sp>_<stage>_curves.csv    the marginal curves at the pick
 #         data/tune/<sp>_<stage>_grades.csv    one row per segment of the species' groups (ignored; 0325 publishes)
 #         data/tune/<sp>_<stage>_groups.csv    the groups modelled, with their fold
+#         data/tune/<sp>_<stage>_score.rds     the scored grid, read back on a rerun (ignored)
 #         data/tune/tune_summary.csv           one row per species x stage: status, population, pick, held-out deviances
 #         data/tune/curves.rds                 the fitted curve objects (ignored)
 #         scripts/logs/habitat/<date>_tune_run.txt
@@ -100,7 +101,7 @@ say("link default thresholds at %s (same at %s): %d species.", shas[1], paste(sh
 
 # ---- score, pick, curve ------------------------------------------------------------------
 t0 <- Sys.time()
-out <- knw_tune_run(vl, vs, walks, thr, species = species, spawner = spawner, workers = workers)
+out <- knw_tune_run(vl, vs, walks, thr, species = species, spawner = spawner, workers = workers, cache_dir = dir_out)
 say("Scored %d species x stage in %.1f min on %d workers.", length(out), as.numeric(difftime(Sys.time(), t0, units = "mins")), workers)
 
 summ <- list()
@@ -109,7 +110,8 @@ for (k in names(out)) {
   row <- tibble(species_code = r$species_code, stage = r$stage, response = r$response, status = r$status,
                 visits_in = r$population[["visits_in"]], detections = r$population["detections"],
                 groups = r$population["groups"], groups_both = r$population["groups_both"])
-  if (!is.null(r$score)) {
+  if (!is.null(r$score) && is.null(r$curve)) say("%s: curve failed: %s", k, r$curve_error)
+  if (!is.null(r$score) && !is.null(r$curve)) {
     rules <- r$score$rules |> mutate(species_code = r$species_code, stage = r$stage, response = r$response, status = r$status)
     write_csv(rules |> mutate(across(where(is.numeric), ~ round(.x, 6))), file.path(dir_out, paste0(k, "_tune.csv")), na = "")
     write_csv(r$curve$curves |> mutate(across(where(is.numeric), ~ signif(.x, 5)), species_code = r$species_code, stage = r$stage,

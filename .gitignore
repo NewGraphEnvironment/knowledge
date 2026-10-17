@@ -22,6 +22,7 @@ docs/
 # Tuning run (scripts/0320): the per-segment grade tables and fitted curves are large; 0325 publishes the grades
 data/tune/*_grades.csv
 data/tune/curves.rds
+data/tune/*_score.rds
 # Comparison (scripts/0330): the catalog's floodplain GeoPackages are a cache; the interactive maps are local
 data/compare/catalog/
 data/compare/maps/
