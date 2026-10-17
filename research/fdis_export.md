@@ -104,10 +104,15 @@ same catch, under ids thousands apart (`42511_102_1` and `65734_102_1`). `script
   visits.
 - **The copy kept** has the most measured fish, then the most maturity-coded fish, then a known catch,
   then habitat, then the lowest collection id. The fish are not reliably on the lowest id: in 94 of the
-  95 groups where one copy alone has measured fish, it is the higher one. Where the kept copy has no
-  habitat and a dropped one does (3 groups, a zero copy kept over an unknown one), the habitat moves to
-  the copy kept. No copy kept has fewer measured or maturity-coded fish than a copy dropped, and no
-  habitat leaves with a dropped copy (0230 stops if it would).
+  95 groups where one copy alone has measured fish, it is the higher one. A habitat value the kept copy
+  lacks moves to it from a dropped copy (5 pairs: 3 kept copies with no habitat record, 2 whose record
+  lacks a gradient, a width or a temperature), and 0230 stops if any habitat value would leave with a
+  dropped copy. The placement check reads the 50k watershed codes of every copy, which sit on the fish
+  rows.
+- **What one copy gives up:** 78 measured fish rows held only on a dropped copy (mostly the same fish
+  with another weight or code), 3 maturity-coded fish (none char), 1 species measured only on a dropped
+  copy, and 3 count length bounds. Merging copies would count the identical fish twice. A sweep of every
+  visit column over the 1,431 pairs finds no other value held only on a dropped copy.
 - **Measured** (`scripts/logs/fdis/20261017_03_fdis_load.log`): 1,308 groups; 1,431 visits dropped (623
   fish, 623 zero catch, 185 unknown), with 1,504 passes, 3,591 measured fish rows and 9,597 of 990,606
   counted fish; 51,587 visits remain. In 114 groups the copies' measured fish differ, in 115 their
