@@ -143,7 +143,9 @@ widths are these same sites, so never score the width model against them.
 Some surveys were loaded under two to four collection ids (same UTM, date, per-pass effort and
 catch). `0230` keeps one copy, the one with the most measured fish, because the fish often sit on
 the later id only, and lists the rest in `data/fdis_repeat_surveys.csv` (#35). Downstream scripts
-carry no duplicate logic of their own.
+carry no duplicate logic of their own. `bt_use_visits`, `ch_mad_visits` and `ch_rule_*` are the pre-#35
+builds less those copies (the #35 archive's `fdis_repeat_filter.py`), because `fresh_default` was rebuilt
+province-wide meanwhile and 0290 now stops on it; rebuilding them is #59.
 
 ### FISS submission workbooks: editions drift, and most EF fish are already in FDIS
 
