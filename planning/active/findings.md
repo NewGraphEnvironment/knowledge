@@ -243,3 +243,5 @@ MODELLED_CROSSINGS (232), PSCIS (129), FALLS (187), CABD (142), USER_DEFINITE (8
 | `knw_size_class()`: 302,904 fish in no class | class only fish of the species groups the breaks tile |
 | `left_join`: `integer64` ids against doubles | coerce the site table's `integer64` columns to double |
 | bash 3.2: `gh pr create --body "$(cat <<'EOF' … it's …)"` unterminated quote | `--body-file` and `-F` for the commit |
+| tuning run hung 3 h grading BT spawning on the run host: process idle, no query, walk workers' connections opened with no connect timeout | `PGCONNECT_TIMEOUT=30` set by the scripts; grading moved to this machine (RB's 210 groups in 3.2 min against the host's 54 min for BT) |
+| copies from the run host read as empty: `ls | grep '^BT_'` matched nothing | `ls` is aliased with colour codes here; verify with `command ls` (code-check-shell: a verification command can be shadowed) |

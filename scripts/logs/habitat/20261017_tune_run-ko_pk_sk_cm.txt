@@ -1,0 +1,19 @@
+Tuning run, knowledge#57. Evidence build scripts/logs/habitat/20261017_evidence_build_ledger.csv on link run 20261017_004619-3f4c713b (link a17e91773b283b021811f8b5b76b887d5f4c16e4;ee21eb1371cbc4d7a2d598f8bbeeaeb0534d7994).
+  visits_link md5 5954951fd7ab147b41c9299e82042d58
+  visits_species md5 bc71243b0a4eb2e360e1e8410db34125
+  walks md5 403c2b4200898f30e00a3f65a879e19c
+Spawner evidence: 1069 BT visits with a coded fish, 194 with evidence.
+link default thresholds at a17e91773b283b021811f8b5b76b887d5f4c16e4 (same at ee21eb1371cbc4d7a2d598f8bbeeaeb0534d7994): 11 species.
+Scored 8 species x stage in 0.0 min on 2 workers.
+KO_rear: no_stream_rule (visits_in=0).
+KO_spawn: no_response (visits_in=0).
+PK_rear: no_stream_rule (visits_in=0).
+PK_spawn: no_response (visits_in=3976).
+SK_rear: no_stream_rule (visits_in=0).
+SK_spawn: no_response (visits_in=5070).
+CM_rear: no_stream_rule (visits_in=0).
+CM_spawn: no_response (visits_in=2911).
+
+## grades
+data frame with 0 columns and 0 rows
+Done in 0.0 min.

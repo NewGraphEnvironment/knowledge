@@ -54,7 +54,10 @@ workers <- as.integer(Sys.getenv("WORKERS", max(1L, min(14L, parallel::detectCor
 species <- strsplit(Sys.getenv("SPECIES", paste(knw_species(), collapse = ",")), ",")[[1]]
 schema <- "fresh_default"
 dir_out <- "data/tune"
-path_log <- file.path("scripts/logs/habitat", paste0(format(Sys.Date(), "%Y%m%d"), "_tune_run.txt"))
+# one log per pass: a pass over a subset of species (SPECIES=) names them, so passes do not overwrite each other
+path_log <- file.path("scripts/logs/habitat", paste0(format(Sys.Date(), "%Y%m%d"), "_tune_run",
+                                                     if (nzchar(Sys.getenv("SPECIES"))) paste0("-", tolower(gsub(",", "_", Sys.getenv("SPECIES")))) else "",
+                                                     ".txt"))
 dir.create(dir_out, showWarnings = FALSE, recursive = TRUE)
 log_lines <- character()
 say <- function(...) { log_lines <<- c(log_lines, sprintf(...)); message(sprintf(...)) }
