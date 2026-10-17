@@ -35,3 +35,11 @@
   copy (the habitat defect one axis over): 5 surveys flagged ws50-mismatched only because the copy whose
   codes matched was dropped. Fixed: the ws50 check pools the codes of every copy. Because a fix carried a
   defect twice, the loop ends by enumeration (findings.md, "Enumeration"), not by a clean round.
+- Rebuilt with pooled ws50 codes (0230 306 s, 0240 22 s, 0250 37 s; logs _04): tracked outputs unchanged;
+  ws50 flags change on 4 kept copies (3 now pass, 1 now fails). The reviewer's PCEA pair stays flagged
+  correctly: its dropped twin had no codes (unchecked), the kept copy's own codes contradict the snap.
+  Filter extended: a kept copy that now fails leaves; one that now passes takes its twin's row (MAHD
+  75709_133_1 into the CH tables); the 3 (BT) / 2 (CH) with neither copy in the old table have twins that
+  passed every flag drop, so left at a shared later step (asserted). bt_use_visits unchanged (md5 as read by
+  0291-0293); CH tables gain MAHD and lose DEAD 80783_132_1, so 0295 and 0297 rerun (the 0297 run on the
+  superseded table was stopped at 44 min).
