@@ -31,7 +31,8 @@
 #     (0296's method, unchanged).
 #   - Every drop is a ledger row, and the drops and kept rows partition the input.
 #
-# INPUT:  data/fdis/build/{sites,catch,fish}.rds (0230), data/fdis_species_codes.csv,
+# INPUT:  data/fdis/build/{sites,catch,fish}.rds (0230), data/fdis_species_codes.csv, data/fiss_evidence.csv (0250),
+#         data/<wsg>/fiss_step2_fishcoll_<wsg>.csv (0220),
 #         data/fdis_size_breaks.csv, scripts/logs/habitat/<date>_link_settle.csv (0300);
 #         fwapg database (PG* env vars): fresh_default, discharge, cabd, bcfishobs, whse_basemapping;
 #         link >= 0.66.0 (lnk_species_pooling); the BC Hydrologic Zones zip
@@ -40,6 +41,7 @@
 #         data/fdis/derived/walks.csv           one row per start x source x river size
 #         data/fdis/derived/bcfishobs_fdis_match.csv
 #         data/fdis/derived/access_check.csv
+#         data/fdis/derived/workbook_{sites,species}.csv  the FISS workbook sites placed on link's segments
 #         scripts/logs/habitat/<date>_evidence_build_ledger.csv
 # RUN:    Rscript scripts/0310-evidence-build.R   (from the repo root; ~15 min, 4 socket workers)
 # ---------------------------------------------------------------------------
@@ -237,6 +239,30 @@ zj <- sf::st_join(mid_sf, hz, join = sf::st_intersects) |> sf::st_drop_geometry(
 if (any(zj$n_zone > 1)) stop(sum(zj$n_zone > 1), " visits fall in two hydrologic zones")
 v <- v |> left_join(zj |> select(site_visit, hydro_zone), by = "site_visit")
 add("info", "zone_unmatched", sum(is.na(v$hydro_zone)))
+
+# ---- workbook sites (#23's second source) ---------------------------------------------
+# 0250's FISS evidence, deduped against FDIS; effort from the step-2 collection forms the groups hold.
+# A site scores only with an electrofishing effort; the rest are presence-only. They are placed on
+# link's segments and written beside the FDIS visits, keyed by site_key and flagged by data_set.
+ev <- read_csv("data/fiss_evidence.csv", show_col_types = FALSE, col_types = cols(site_visit = "c"), guess_max = 1e5)
+s2_files <- list.files("data", "^fiss_step2_fishcoll_.*\\.csv$", recursive = TRUE, full.names = TRUE)
+s2 <- if (length(s2_files)) bind_rows(lapply(s2_files, read_csv, show_col_types = FALSE, col_types = cols(.default = "c"))) else NULL
+fw <- knw_fiss_visits(ev, s2)
+add("info", "workbook_species_rows", nrow(fw), sprintf("%d sites; %d rows score (electrofishing with effort)",
+                                                       n_distinct(fw$site_visit), sum(fw$scores)))
+fw_sites <- fw |> distinct(site_visit, watershed_group_code, blue_line_key, downstream_route_measure, year, month,
+                           fishing_time_s, area_m2, fished_length_m, data_set) |>
+  filter(!is.na(blue_line_key), !is.na(downstream_route_measure))
+fw_pl <- knw_link_place(conn, fw_sites |> select(site_visit, watershed_group_code, blue_line_key, downstream_route_measure), schema)
+fw_sites <- fw_sites |> inner_join(fw_pl$placed, by = "site_visit")
+add("info", "workbook_sites_placed", nrow(fw_sites), sprintf("of %d with a placement", n_distinct(fw$site_visit)))
+if (nrow(fw_sites)) {
+  fw_fl <- knw_link_flow(conn, unique(fw_sites$linear_feature_id <- fw_sites$segment_linear_feature_id))
+  fw_sites <- fw_sites |> left_join(fw_fl, by = "linear_feature_id")
+}
+write_csv(fw |> inner_join(fw_sites |> select(site_visit, id_segment), by = "site_visit"),
+          file.path(dir_out, "workbook_species.csv"), na = "")
+write_csv(fw_sites, file.path(dir_out, "workbook_sites.csv"), na = "")
 
 # ---- bcfishobs records from these visits ---------------------------------------------
 bm <- knw_bcfishobs_match(conn, sites |> select(site_visit, date), catch |> select(site_visit, species_code), species)
