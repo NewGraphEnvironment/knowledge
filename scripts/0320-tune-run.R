@@ -57,7 +57,7 @@ block <- function(title, x) {
   log_lines <<- c(log_lines, "", paste("##", title), capture.output(print(as.data.frame(x), row.names = FALSE)))
 }
 pg <- function() {
-  tryCatch(dbConnect(Postgres(), bigint = "numeric"),
+  tryCatch(DBI::dbConnect(RPostgres::Postgres(), bigint = "numeric"),
            error = function(e) stop("database unreachable (PG* environment variables): ", conditionMessage(e)))
 }
 

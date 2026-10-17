@@ -49,7 +49,7 @@ v <- drop(v, v$ch_status != "blocked", "ch_absence_blocked")
 v <- drop(v, !is.na(v$mad_pick), "no_flow")
 v <- drop(v, !is.na(v$wscode) & !is.na(v$localcode), "no_watershed_code")
 
-conn <- tryCatch(dbConnect(Postgres(), bigint = "numeric"),
+conn <- tryCatch(DBI::dbConnect(RPostgres::Postgres(), bigint = "numeric"),
                  error = function(e) stop("database unreachable (PG* environment variables): ", conditionMessage(e)))
 pts <- v |> distinct(blue_line_key, downstream_route_measure, wscode, localcode)
 nu <- knw_link_barrier_dnstr(conn, pts, "CH", "fresh_default", natural = c("GRADIENT", "FALLS", "SUBSURFACE_FLOW")) |>

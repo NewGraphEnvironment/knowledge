@@ -71,7 +71,7 @@ add <- function(kind, step, n, note = "") {
   ledger <<- bind_rows(ledger, tibble(kind = kind, step = step, n = as.numeric(n), note = note))
 }
 pg <- function() {
-  tryCatch(dbConnect(Postgres(), bigint = "numeric"),
+  tryCatch(DBI::dbConnect(RPostgres::Postgres(), bigint = "numeric"),
            error = function(e) stop("database unreachable (PG* environment variables): ", conditionMessage(e)))
 }
 
@@ -95,6 +95,8 @@ build <- "data/fdis/build"
 sites <- readRDS(file.path(build, "sites.rds"))
 catch <- readRDS(file.path(build, "catch.rds"))
 fish <- readRDS(file.path(build, "fish.rds"))
+# 0230 keeps the FWA ids as integer64; the package functions return doubles, and dplyr will not join the two
+sites <- sites |> mutate(across(where(~ inherits(.x, "integer64")), as.numeric))
 codes <- read_csv("data/fdis_species_codes.csv", col_types = cols(.default = "c"), na = "")
 breaks <- read_csv("data/fdis_size_breaks.csv", col_types = cols(.default = "c")) |>
   mutate(across(c(length_min_mm, length_max_mm), as.numeric))

@@ -52,7 +52,7 @@ for (d in c(dir_out, dir_cat, dir_maps, "research/fig")) dir.create(d, showWarni
 log_lines <- character()
 say <- function(...) { log_lines <<- c(log_lines, sprintf(...)); message(sprintf(...)) }
 pg <- function() {
-  tryCatch(dbConnect(Postgres(), bigint = "numeric"),
+  tryCatch(DBI::dbConnect(RPostgres::Postgres(), bigint = "numeric"),
            error = function(e) stop("database unreachable (PG* environment variables): ", conditionMessage(e)))
 }
 

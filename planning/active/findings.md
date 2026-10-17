@@ -194,7 +194,45 @@ sources; scripts `0300`–`0330`; the `fresh` barrier fallback dropped.
 | 30 | Acceptance | predicate check per species | yes |
 | 31 | Acceptance | bcfishobs outside check missing | in `knw_compare_rules` |
 
+## Phase 0: release (2026-10-17)
+
+`scripts/0300` released at 10:54:24Z on its third stable poll (10:34:16, 10:44:20, 10:54:24; churn 179,288,878
+throughout; 241/241 `log_recompute` rows ended; no active session). Record: `scripts/logs/habitat/20261017_link_settle.csv`.
+`run_uid 20261017_004619-3f4c713b`; link 0.66.0 at `a17e9177` and `ee21eb13` (the two-group fix on top of the run);
+fresh 0.39.0 `e247ca19`; fwapg `f9718cb7`; config `sha256:7e9dffa4…`; `discharge_source fwapg`, `config_drift false`.
+A first run of the waiter met the conditions at 10:29:03Z and died writing its release row (columns bound to one row);
+the record is from the fixed run. `fresh_default.barriers`: 241 groups, 7.74 M rows; sources GRADIENT (241 groups),
+MODELLED_CROSSINGS (232), PSCIS (129), FALLS (187), CABD (142), USER_DEFINITE (8); no SUBSURFACE_FLOW rows, as before.
+
+## Findings along the way
+
+- **wet's discharge load cannot be checked by rows per source.** The manifest (`discharge/fwa/v1`, built
+  2026-10-15T02:06:57Z) sums 100.8 M `wet_balance` rows; the database holds 58.9 M = 4,529,939 segments × 13 months
+  exactly, and `pcic_routed` matches (43.9 M). `wet::wet_db_load()` filters the manifest's rows on load (its `WHERE` at
+  `R/wet_db_load.R:95`), so the row count is the loader's to assert. The build ledgers the manifest's `built` stamp and
+  the picked counts per source instead (plan-review finding 20 revised).
+- **fwapg's width model reproduces the stored MODELLED width within 5 % on 88 % of a two-group sample** (BULK, MORR);
+  0296 measured 96.2 % province-wide. The control is for a formula or input change, so the build's floor is 0.9.
+- **The floodplain catalog's polygons are exact 30 m BC Albers cells** (every vertex a multiple of 30 in EPSG:3005),
+  and the per-blue-line polygons tile `all_ff04` exactly (LARL: union 375.5088 km² against the item's 375.51; their sum
+  972 km² is the overlapping claims). The valley raster is `all_ff04` on that grid, no reprojection; the item's
+  `proj:transform` (10 m, EPSG:32611) is the land-cover rasters' grid, not this join's (plan corrected). On LARL:
+  417,232 cells, all attributed and owned, 596 ties, 30 s.
+- **flooded#89 / PR #90**: `fl_valley_join()`'s `nearest` now returns `seg`, the owning segment. Installed here from the
+  branch; the run host still has 0.8.2 without it.
+- **bcfishobs ↔ FDIS match (BT and CH, smoke run):** of 11,379 BT records 4,321 match one visit, 130 several, 230 a
+  collection with no visit on that date, 3,504 an unknown collection, 3,194 are not FDIS-keyed; CH 1,286 / 38 / 42 /
+  3,294 / 4,384.
+- `knw_link_flow()`'s per-segment `LATERAL` parent fallback took 25 s for 223 segments, so segment-scale reads
+  (`knw_link_segments()`) join own flow in one pass and run the fallback only on segments without it.
+
 ## Errors Encountered
 
 | Error | Resolution |
 |-------|------------|
+| waiter: `invalid format '%d'` on `integer64` counts | cast every count to integer before formatting |
+| waiter: `rbind` refused the release row (extra SHA columns) | bind on the union of columns |
+| run host `pak`: link pins `fresh@v0.39.0`, conflicts with an unpinned `fresh` request | install link alone, then flooded |
+| `knw_size_class()`: 302,904 fish in no class | class only fish of the species groups the breaks tile |
+| `left_join`: `integer64` ids against doubles | coerce the site table's `integer64` columns to double |
+| bash 3.2: `gh pr create --body "$(cat <<'EOF' … it's …)"` unterminated quote | `--body-file` and `-F` for the commit |
