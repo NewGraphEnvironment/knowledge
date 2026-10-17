@@ -13,10 +13,10 @@ link's move onto wet's flow is NewGraphEnvironment/link#331 · **Produced by:**
 **Status:** measured; nothing applied in link.
 
 Every figure below names its population. Two populations recur:
-- **MAD analysis.** 19,085 visits (978 CH) in 102 WSGs, of which the model uses 15,631 visits in the 67 WSGs
-  where CH were both caught and missed. Raw rates and counts in the MAD table are on those 15,631.
+- **MAD analysis.** 19,085 visits (978 CH) in 102 WSGs, of which the model uses 15,630 visits in the 67 WSGs
+  where CH were both caught and missed. Raw rates and counts in the MAD table are on those 15,630.
 - **Distance analysis.** Visits under 0.5 m³/s, with side channels and ambiguous placements out, in the 34 WSGs
-  where CH were both caught and missed: 7,320 visits, 118 CH.
+  where CH were both caught and missed: 7,319 visits, 118 CH.
 
 ## The question
 
@@ -39,7 +39,7 @@ link's CH range. #42's seasonal question needs timing, which only BULK and MORR 
    Among visits that caught any fish, it is 0.26–0.48 under 0.5 m³/s and 0.91–1.52 from 0.5 to 30 m³/s.
 2. **In the distance analysis, CH were caught on 14.6 % of small-stream visits with a ≥ 10 m³/s segment within
    500 m downstream, and on 0.8 % of those with one further downstream.** That is a rate ratio of **26.7**
-   (bootstrap 14.2–65.1). These are 52 and 55 detections respectively.
+   (bootstrap 13.8–55.6). These are 52 and 55 detections respectively.
 
    Counted on every small-stream CH visit, without the model's restrictions, 82 of the 142 that have a large
    river downstream are within 500 m of it (counted before #35 dropped repeated surveys).
@@ -87,15 +87,15 @@ own small flow, in CHES (14) and NECR (2).
 
 | MAD (m³/s) | visits | CH | raw | U rel (95 %) | C rel | regulated | top project |
 |---|---:|---:|---:|---|---:|---:|---:|
-| < 0.1 | 7,840 | 70 | 0.9 % | 0.14 (0.05–0.26) | 0.26 | 0 % | 17 % |
-| 0.1–0.28 | 1,793 | 57 | 3.2 % | 0.47 (0.19–0.70) | 0.41 | 28 % | 16 % |
-| 0.28–0.5 | 798 | 26 | 3.3 % | 0.61 (0.26–0.98) | 0.48 | 0 % | 15 % |
-| 0.5–1 | 886 | 61 | 6.9 % | 1.52 (0.74–2.20) | 1.02 | 2 % | 18 % |
-| 1–3 | 1,049 | 50 | 4.8 % | 1.41 (0.67–2.05) | 0.91 | 4 % | 6 % |
-| 3–10 | 1,171 | 72 | 6.1 % | 2.40 (1.37–3.60) | 1.52 | 0 % | 7 % |
-| 10–30 | 857 | 40 | 4.7 % | 2.16 (0.95–4.53) | 1.32 | 8 % | 12 % |
-| 30–100 | 452 | 71 | 15.7 % | 7.76 (1.49–14.3) | 4.16 | 83 % | 51 % |
-| ≥ 100 | 785 | 531 | 67.6 % | 2.80 (1.65–5.93) | 1.83 | 92 % | 81 % |
+| < 0.1 | 7,839 | 70 | 0.9 % | 0.14 (0.06–0.24) | 0.26 | 0 % | 17 % |
+| 0.1–0.28 | 1,793 | 57 | 3.2 % | 0.47 (0.22–0.69) | 0.41 | 28 % | 16 % |
+| 0.28–0.5 | 798 | 26 | 3.3 % | 0.61 (0.26–1.00) | 0.48 | 0 % | 15 % |
+| 0.5–1 | 886 | 61 | 6.9 % | 1.52 (0.70–2.25) | 1.02 | 2 % | 18 % |
+| 1–3 | 1,049 | 50 | 4.8 % | 1.41 (0.81–2.21) | 0.91 | 4 % | 6 % |
+| 3–10 | 1,171 | 72 | 6.1 % | 2.40 (1.26–3.62) | 1.52 | 0 % | 7 % |
+| 10–30 | 857 | 40 | 4.7 % | 2.16 (0.97–5.19) | 1.32 | 8 % | 12 % |
+| 30–100 | 452 | 71 | 15.7 % | 7.76 (1.94–14.5) | 4.16 | 83 % | 51 % |
+| ≥ 100 | 785 | 531 | 67.6 % | 2.80 (1.58–6.06) | 1.83 | 92 % | 81 % |
 
 Any fish caught (F) is higher in each class than in the one below it: 0.42 under 0.1 m³/s, 3.0 at ≥ 100.
 
@@ -105,9 +105,9 @@ Distance analysis. The rate ratio is against > 500 m.
 
 | ≥ 10 m³/s segment downstream | visits | CH | raw | rate ratio (95 %) |
 |---|---:|---:|---:|---|
-| within 500 m | 357 | 52 | 14.6 % | 26.7 (14.2–65.1) |
-| further than 500 m | 6,525 | 55 | 0.8 % | 1 |
-| none before the sea | 438 | 11 | 2.5 % | 10.0 (1.0–unbounded) |
+| within 500 m | 357 | 52 | 14.6 % | 26.7 (13.8–55.6) |
+| further than 500 m | 6,524 | 55 | 0.8 % | 1 |
+| none before the sea | 438 | 11 | 2.5 % | 10.0 (0.9–unbounded) |
 
 Reading the table:
 - The 14.6 % raw rate within 500 m is above the raw rate of every MAD class below 30 m³/s in the MAD table
@@ -132,7 +132,7 @@ Reading the table:
 - **Regulated reaches out**, relative rates from 3 m³/s up are:
   - 3.49 at 3–10 m³/s (72 CH);
   - 2.86 at 10–30 (37 CH);
-  - 8.35 at 30–100 (12 CH);
+  - 8.34 at 30–100 (12 CH);
   - 3.20 at ≥ 100 (41 CH; 27.5 % of its 149 visits).
 - **No river polygons.** 275 of the 978 detections remain. From < 0.1 to 3–10 m³/s the relative rates are 0.34,
   0.86, 1.39, 2.49, 3.36 and 4.54.

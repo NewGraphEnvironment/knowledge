@@ -1,9 +1,9 @@
 CH detection by stream size, knowledge#52. Visits in 0294's table: 21325 (CH on 1173).
 On 0291's edges with a fished area of 10-10000 m2: 19085 (CH on 978) in 102 WSGs.
 Of these, in a lake polygon: 0 (CH 0); in a river polygon: 3011 (CH 702); flow from the parent line: 267 (CH 74); regulated: 1249 (CH 571).
-mad_pick / ch_caught: 15631 visits (978 detections) in 67 WSGs modelled; 3454 visits in 35 WSGs with one outcome only left out
+mad_pick / ch_caught: 15630 visits (978 detections) in 67 WSGs modelled; 3455 visits in 35 WSGs with one outcome only left out
 mad_pick / any_fish: 19046 visits (9935 detections) in 94 WSGs modelled; 39 visits in 8 WSGs with one outcome only left out
-mad_pick / ch_given_fish: 8091 visits (978 detections) in 67 WSGs modelled; 1874 visits in 33 WSGs with one outcome only left out
+mad_pick / ch_given_fish: 8090 visits (978 detections) in 67 WSGs modelled; 1875 visits in 33 WSGs with one outcome only left out
 
 Small streams (picked MAD < 0.5): 12682 visits (CH 153). Side channels: 82 (CH 22). Ambiguous placement: 52 (CH 15).
 
@@ -11,10 +11,10 @@ Small streams (picked MAD < 0.5): 12682 visits (CH 153). Side channels: 82 (CH 2
  walk_status     n
        found 11436
         none  1246
-distance_small / ch_caught: 7320 visits (118 detections) in 34 WSGs modelled; 5235 visits in 62 WSGs with one outcome only left out
-sens_distance_ambiguous_kept / ch_caught: 7517 visits (131 detections) in 35 WSGs modelled; 5083 visits in 61 WSGs with one outcome only left out
-sens_distance_lake_targets_out / ch_caught: 5297 visits (110 detections) in 31 WSGs modelled; 4783 visits in 63 WSGs with one outcome only left out
-sens_distance_entry_gap_out / ch_caught: 6458 visits (114 detections) in 32 WSGs modelled; 5128 visits in 63 WSGs with one outcome only left out
+distance_small / ch_caught: 7319 visits (118 detections) in 34 WSGs modelled; 5236 visits in 62 WSGs with one outcome only left out
+sens_distance_ambiguous_kept / ch_caught: 7516 visits (131 detections) in 35 WSGs modelled; 5084 visits in 61 WSGs with one outcome only left out
+sens_distance_lake_targets_out / ch_caught: 5296 visits (110 detections) in 31 WSGs modelled; 4783 visits in 63 WSGs with one outcome only left out
+sens_distance_entry_gap_out / ch_caught: 6457 visits (114 detections) in 32 WSGs modelled; 5129 visits in 63 WSGs with one outcome only left out
 
 ## small-stream side channels (raw)
  n_visits n_ch raw_rate
@@ -44,8 +44,8 @@ Both sources on 17467 visits: class differs on 2738 (15.7 %), by more than one c
 
 ## source agreement on the class, by the picked class
       cls    n agree
-     <0.1 8812 0.941
- 0.1-0.28 1966 0.670
+     <0.1 8811 0.941
+ 0.1-0.28 1967 0.670
  0.28-0.5  872 0.529
     0.5-1  996 0.530
       1-3 1227 0.754
@@ -59,17 +59,17 @@ Both sources on 17467 visits: class differs on 2738 (15.7 %), by more than one c
  pcic_routed 17297
  wet_balance  1788
 Largest project by CH detections: FDS|Triton Environmental Consultants Ltd.|2010|356362759 (432 of 978).
-sens_regulated_out / ch_caught: 14292 visits (407 detections) in 62 WSGs modelled; 3544 visits in 39 WSGs with one outcome only left out
-sens_largest_project_out / ch_caught: 15136 visits (546 detections) in 67 WSGs modelled; 3454 visits in 35 WSGs with one outcome only left out
-sens_ches_necr_out / ch_caught: 14643 visits (497 detections) in 65 WSGs modelled; 3454 visits in 35 WSGs with one outcome only left out
-sens_parent_flow_out / ch_caught: 15376 visits (904 detections) in 67 WSGs modelled; 3442 visits in 35 WSGs with one outcome only left out
-sens_pcic_routed_where_both / ch_caught: 14486 visits (891 detections) in 66 WSGs modelled; 2981 visits in 34 WSGs with one outcome only left out
-sens_wet_balance_where_both / ch_caught: 14486 visits (891 detections) in 66 WSGs modelled; 2981 visits in 34 WSGs with one outcome only left out
-sens_fwapg_old_mad / ch_caught: 7996 visits (231 detections) in 33 WSGs modelled; 1268 visits in 14 WSGs with one outcome only left out
-sens_no_river_polygons / ch_caught: 10464 visits (275 detections) in 47 WSGs modelled; 5607 visits in 51 WSGs with one outcome only left out
-sens_gradient_covariate / ch_caught: 15631 visits (978 detections) in 67 WSGs modelled; 3454 visits in 35 WSGs with one outcome only left out
-sens_season_covariate / ch_caught: 15631 visits (978 detections) in 67 WSGs modelled; 3454 visits in 35 WSGs with one outcome only left out
-sens_merged_0.1-0.5 / ch_caught: 15631 visits (978 detections) in 67 WSGs modelled; 3454 visits in 35 WSGs with one outcome only left out
+sens_regulated_out / ch_caught: 14291 visits (407 detections) in 62 WSGs modelled; 3545 visits in 39 WSGs with one outcome only left out
+sens_largest_project_out / ch_caught: 15135 visits (546 detections) in 67 WSGs modelled; 3455 visits in 35 WSGs with one outcome only left out
+sens_ches_necr_out / ch_caught: 14642 visits (497 detections) in 65 WSGs modelled; 3455 visits in 35 WSGs with one outcome only left out
+sens_parent_flow_out / ch_caught: 15375 visits (904 detections) in 67 WSGs modelled; 3443 visits in 35 WSGs with one outcome only left out
+sens_pcic_routed_where_both / ch_caught: 14485 visits (891 detections) in 66 WSGs modelled; 2982 visits in 34 WSGs with one outcome only left out
+sens_wet_balance_where_both / ch_caught: 14485 visits (891 detections) in 66 WSGs modelled; 2982 visits in 34 WSGs with one outcome only left out
+sens_fwapg_old_mad / ch_caught: 7995 visits (231 detections) in 33 WSGs modelled; 1269 visits in 14 WSGs with one outcome only left out
+sens_no_river_polygons / ch_caught: 10463 visits (275 detections) in 47 WSGs modelled; 5608 visits in 51 WSGs with one outcome only left out
+sens_gradient_covariate / ch_caught: 15630 visits (978 detections) in 67 WSGs modelled; 3455 visits in 35 WSGs with one outcome only left out
+sens_season_covariate / ch_caught: 15630 visits (978 detections) in 67 WSGs modelled; 3455 visits in 35 WSGs with one outcome only left out
+sens_merged_0.1-0.5 / ch_caught: 15630 visits (978 detections) in 67 WSGs modelled; 3455 visits in 35 WSGs with one outcome only left out
 sens_access_wsgs_unfiltered / ch_caught: 7179 visits (760 detections) in 22 WSGs modelled; 741 visits in 5 WSGs with one outcome only left out
 sens_access_no_natural_barrier / ch_caught: 4485 visits (739 detections) in 21 WSGs modelled; 261 visits in 4 WSGs with one outcome only left out
 sens_access_no_natural_barrier_no_user_definite / ch_caught: 4486 visits (739 detections) in 21 WSGs modelled; 261 visits in 4 WSGs with one outcome only left out
@@ -284,189 +284,189 @@ bcfishobs CH records: 9044; not FDIS: 4384; of those with picked flow: 4369.
                      presence_mix_fdis_ch_visits      presence    10-30
                      presence_mix_fdis_ch_visits      presence   30-100
                      presence_mix_fdis_ch_visits      presence    >=100
- n_visits n_detect raw_rate rel_rate rel_lo       rel_hi        power
-     7840       70    0.009    0.142  0.047        0.257           ok
-     1793       57    0.032    0.468  0.191        0.700           ok
-      798       26    0.033    0.607  0.259        0.984           ok
-      886       61    0.069    1.520  0.744        2.201           ok
-     1049       50    0.048    1.405  0.670        2.048           ok
-     1171       72    0.061    2.404  1.367        3.605           ok
-      857       40    0.047    2.161  0.947        4.533           ok
-      452       71    0.157    7.759  1.487       14.316           ok
-      785      531    0.676    2.803  1.647        5.932           ok
-     9388     2913    0.310    0.417  0.352        0.479           ok
-     2283     1284    0.562    0.936  0.803        1.088           ok
-      999      620    0.621    1.180  0.954        1.427           ok
-     1134      746    0.658    1.271  1.062        1.473           ok
-     1403      987    0.703    1.347  1.113        1.633           ok
-     1560     1279    0.820    1.785  1.504        2.152           ok
-     1031      923    0.895    2.109  1.713        2.637           ok
-      463      430    0.929    2.516  1.911        3.275           ok
-      785      753    0.959    3.005  1.842        4.601           ok
-     2372       70    0.030    0.256  0.088        0.449           ok
-     1026       57    0.056    0.415  0.198        0.645           ok
-      503       26    0.052    0.476  0.200        0.776           ok
-      599       61    0.102    1.025  0.491        1.430           ok
-      721       50    0.069    0.906  0.484        1.375           ok
-      932       72    0.077    1.518  0.807        2.168           ok
-      764       40    0.052    1.321  0.590        2.748           ok
-      420       71    0.169    4.163  1.334        8.537           ok
-      754      531    0.704    1.830  0.896        3.105           ok
-     6525       55    0.008    1.000  1.000        1.000           ok
-      357       52    0.146   26.712 14.247       65.066           ok
-      438       11    0.025   10.027  0.995 36338122.177           ok
-     6690       55    0.008    1.000     NA           NA           ok
-      389       65    0.167   30.245     NA           NA           ok
-      438       11    0.025   11.394     NA           NA           ok
-     4562       48    0.011    1.000     NA           NA           ok
-      329       51    0.155   28.872     NA           NA           ok
-      406       11    0.027   13.159     NA           NA           ok
-     5703       55    0.010    1.000     NA           NA           ok
-      318       48    0.151   24.013     NA           NA           ok
-      437       11    0.025    7.011     NA           NA           ok
-     7661       70    0.009    0.188     NA           NA           ok
-     1738       41    0.024    0.460     NA           NA           ok
-      787       26    0.033    0.719     NA           NA           ok
-      873       60    0.069    1.886     NA           NA           ok
-     1020       48    0.047    1.851     NA           NA           ok
-     1160       72    0.062    3.491     NA           NA           ok
-      751       37    0.049    2.862     NA           NA           ok
-      153       12    0.078    8.345     NA           NA           ok
-      149       41    0.275    3.199     NA           NA           ok
-     7840       70    0.009    0.152     NA           NA           ok
-     1793       57    0.032    0.504     NA           NA           ok
-      798       26    0.033    0.650     NA           NA           ok
-      886       61    0.069    1.622     NA           NA           ok
-     1049       50    0.048    1.499     NA           NA           ok
-     1171       72    0.061    2.555     NA           NA           ok
-      857       40    0.047    2.293     NA           NA           ok
-      452       71    0.157    8.221     NA           NA           ok
-      290       99    0.341    2.899     NA           NA           ok
-     7438       65    0.009    0.164     NA           NA           ok
-     1740       36    0.021    0.353     NA           NA           ok
-      794       26    0.033    0.617     NA           NA           ok
-      875       56    0.064    1.424     NA           NA           ok
-     1046       49    0.047    1.399     NA           NA           ok
-     1171       72    0.061    2.546     NA           NA           ok
-      857       40    0.047    2.299     NA           NA           ok
-      452       71    0.157    8.560     NA           NA           ok
-      270       82    0.304    2.920     NA           NA           ok
-     7834       70    0.009    0.139     NA           NA           ok
-     1790       57    0.032    0.456     NA           NA           ok
-      795       26    0.033    0.575     NA           NA           ok
-      879       61    0.069    1.524     NA           NA           ok
-     1042       50    0.048    1.441     NA           NA           ok
-     1149       72    0.063    2.537     NA           NA           ok
-      832       36    0.043    2.378     NA           NA           ok
-      435       69    0.159    8.184     NA           NA           ok
-      620      463    0.747    2.777     NA           NA           ok
-     7570       73    0.010    0.138     NA           NA           ok
-     1539       49    0.032    0.397     NA           NA           ok
-      701       25    0.036    0.549     NA           NA           ok
-      778       59    0.076    1.451     NA           NA           ok
-      896       47    0.052    1.386     NA           NA           ok
-     1118       72    0.064    2.695     NA           NA           ok
-      832       36    0.043    2.294     NA           NA           ok
-      435       69    0.159    8.189     NA           NA           ok
-      617      461    0.747    2.582     NA           NA           ok
-     7283       66    0.009    0.112     NA           NA           ok
-     1633       39    0.024    0.327     NA           NA           ok
-      692       18    0.026    0.294     NA           NA           ok
-      725       21    0.029    0.545     NA           NA           ok
-      948       60    0.063    1.434     NA           NA           ok
-     1171       71    0.061    2.661     NA           NA           ok
-      794       36    0.045    1.703     NA           NA           ok
-      531       72    0.136    6.808     NA           NA           ok
-      709      508    0.717    4.366     NA           NA           ok
-     4854       63    0.013    0.242     NA           NA           ok
-      903       30    0.033    0.584     NA           NA           ok
-      389       16    0.041    0.740     NA           NA           ok
-      421       34    0.081    2.248     NA           NA           ok
-      522       34    0.065    3.476     NA           NA           ok
-      647       31    0.048    3.147     NA           NA           ok
-      207       19    0.092    5.323     NA           NA           ok
-       44        4    0.091    2.422     NA           NA underpowered
-        9        0    0.000    0.000     NA           NA underpowered
-     6732       70    0.010    0.335     NA           NA           ok
-     1480       42    0.028    0.861     NA           NA           ok
-      590       25    0.042    1.388     NA           NA           ok
-      590       35    0.059    2.493     NA           NA           ok
-      686       41    0.060    3.363     NA           NA           ok
-      279       27    0.097    4.540     NA           NA           ok
-       25        3    0.120   21.576     NA           NA underpowered
-       38       18    0.474    7.800     NA           NA           ok
-       44       14    0.318    5.331     NA           NA           ok
-     7840       70    0.009    0.182     NA           NA           ok
-     1793       57    0.032    0.551     NA           NA           ok
-      798       26    0.033    0.679     NA           NA           ok
-      886       61    0.069    1.712     NA           NA           ok
-     1049       50    0.048    1.529     NA           NA           ok
-     1171       72    0.061    2.337     NA           NA           ok
-      857       40    0.047    2.016     NA           NA           ok
-      452       71    0.157    6.721     NA           NA           ok
-      785      531    0.676    2.616     NA           NA           ok
-     7840       70    0.009    0.138     NA           NA           ok
-     1793       57    0.032    0.476     NA           NA           ok
-      798       26    0.033    0.620     NA           NA           ok
-      886       61    0.069    1.593     NA           NA           ok
-     1049       50    0.048    1.398     NA           NA           ok
-     1171       72    0.061    2.512     NA           NA           ok
-      857       40    0.047    2.123     NA           NA           ok
-      452       71    0.157    7.421     NA           NA           ok
-      785      531    0.676    2.813     NA           NA           ok
-     7840       70    0.009    0.143     NA           NA           ok
-     2591       83    0.032    0.504     NA           NA           ok
-      886       61    0.069    1.520     NA           NA           ok
-     1049       50    0.048    1.405     NA           NA           ok
-     1171       72    0.061    2.405     NA           NA           ok
-      857       40    0.047    2.160     NA           NA           ok
-      452       71    0.157    7.743     NA           NA           ok
-      785      531    0.676    2.827     NA           NA           ok
-     4093       41    0.010    0.141     NA           NA           ok
-      801       37    0.046    0.522     NA           NA           ok
-      291       16    0.055    0.808     NA           NA           ok
-      394       41    0.104    1.829     NA           NA           ok
-      438       26    0.059    1.570     NA           NA           ok
-      328       38    0.116    2.698     NA           NA           ok
-       98       14    0.143    3.336     NA           NA           ok
-      107       61    0.570   13.141     NA           NA           ok
-      629      486    0.773    3.054     NA           NA           ok
-     2228       25    0.011    0.082     NA           NA           ok
-      456       37    0.081    0.429     NA           NA           ok
-      176       16    0.091    0.635     NA           NA           ok
-      268       39    0.146    1.431     NA           NA           ok
-      333       24    0.072    0.840     NA           NA           ok
-      246       37    0.150    1.530     NA           NA           ok
-       48       14    0.292    4.676     NA           NA           ok
-      101       61    0.604   17.025     NA           NA           ok
-      629      486    0.773    1.608     NA           NA           ok
-     2229       25    0.011    0.082     NA           NA           ok
-      456       37    0.081    0.429     NA           NA           ok
-      176       16    0.091    0.635     NA           NA           ok
-      268       39    0.146    1.432     NA           NA           ok
-      333       24    0.072    0.841     NA           NA           ok
-      246       37    0.150    1.531     NA           NA           ok
-       48       14    0.292    4.677     NA           NA           ok
-      101       61    0.604   17.028     NA           NA           ok
-      629      486    0.773    1.609     NA           NA           ok
-      231       NA    0.053       NA     NA           NA         <NA>
-      191       NA    0.044       NA     NA           NA         <NA>
-      149       NA    0.034       NA     NA           NA         <NA>
-      282       NA    0.065       NA     NA           NA         <NA>
-      629       NA    0.144       NA     NA           NA         <NA>
-     1035       NA    0.237       NA     NA           NA         <NA>
-      863       NA    0.198       NA     NA           NA         <NA>
-      563       NA    0.129       NA     NA           NA         <NA>
-      426       NA    0.098       NA     NA           NA         <NA>
-       70       NA    0.072       NA     NA           NA         <NA>
-       57       NA    0.058       NA     NA           NA         <NA>
-       26       NA    0.027       NA     NA           NA         <NA>
-       61       NA    0.062       NA     NA           NA         <NA>
-       50       NA    0.051       NA     NA           NA         <NA>
-       72       NA    0.074       NA     NA           NA         <NA>
-       40       NA    0.041       NA     NA           NA         <NA>
-       71       NA    0.073       NA     NA           NA         <NA>
-      531       NA    0.543       NA     NA           NA         <NA>
+ n_visits n_detect raw_rate rel_rate rel_lo      rel_hi        power
+     7839       70    0.009    0.142  0.056 2.39000e-01           ok
+     1793       57    0.032    0.468  0.220 6.90000e-01           ok
+      798       26    0.033    0.607  0.255 1.00200e+00           ok
+      886       61    0.069    1.520  0.705 2.25200e+00           ok
+     1049       50    0.048    1.405  0.809 2.21500e+00           ok
+     1171       72    0.061    2.404  1.263 3.62000e+00           ok
+      857       40    0.047    2.161  0.972 5.18700e+00           ok
+      452       71    0.157    7.759  1.943 1.44910e+01           ok
+      785      531    0.676    2.803  1.584 6.06200e+00           ok
+     9387     2912    0.310    0.417  0.335 4.79000e-01           ok
+     2284     1285    0.563    0.937  0.757 1.07100e+00           ok
+      999      620    0.621    1.180  0.900 1.38800e+00           ok
+     1134      746    0.658    1.271  1.004 1.49900e+00           ok
+     1403      987    0.703    1.347  1.030 1.60600e+00           ok
+     1560     1279    0.820    1.785  1.447 2.10600e+00           ok
+     1031      923    0.895    2.109  1.629 2.53200e+00           ok
+      463      430    0.929    2.516  1.802 3.19500e+00           ok
+      785      753    0.959    3.005  1.704 4.30000e+00           ok
+     2371       70    0.030    0.256  0.079 4.55000e-01           ok
+     1026       57    0.056    0.415  0.168 6.25000e-01           ok
+      503       26    0.052    0.476  0.153 8.40000e-01           ok
+      599       61    0.102    1.025  0.455 1.46200e+00           ok
+      721       50    0.069    0.905  0.475 1.35700e+00           ok
+      932       72    0.077    1.518  0.764 2.16400e+00           ok
+      764       40    0.052    1.321  0.607 2.49600e+00           ok
+      420       71    0.169    4.163  1.178 8.73100e+00           ok
+      754      531    0.704    1.830  0.984 3.47500e+00           ok
+     6524       55    0.008    1.000  1.000 1.00000e+00           ok
+      357       52    0.146   26.711 13.756 5.56440e+01           ok
+      438       11    0.025   10.028  0.934 2.92261e+07           ok
+     6689       55    0.008    1.000     NA          NA           ok
+      389       65    0.167   30.244     NA          NA           ok
+      438       11    0.025   11.395     NA          NA           ok
+     4561       48    0.011    1.000     NA          NA           ok
+      329       51    0.155   28.871     NA          NA           ok
+      406       11    0.027   13.160     NA          NA           ok
+     5702       55    0.010    1.000     NA          NA           ok
+      318       48    0.151   24.012     NA          NA           ok
+      437       11    0.025    7.011     NA          NA           ok
+     7660       70    0.009    0.188     NA          NA           ok
+     1738       41    0.024    0.460     NA          NA           ok
+      787       26    0.033    0.719     NA          NA           ok
+      873       60    0.069    1.886     NA          NA           ok
+     1020       48    0.047    1.851     NA          NA           ok
+     1160       72    0.062    3.490     NA          NA           ok
+      751       37    0.049    2.862     NA          NA           ok
+      153       12    0.078    8.344     NA          NA           ok
+      149       41    0.275    3.199     NA          NA           ok
+     7839       70    0.009    0.152     NA          NA           ok
+     1793       57    0.032    0.504     NA          NA           ok
+      798       26    0.033    0.650     NA          NA           ok
+      886       61    0.069    1.622     NA          NA           ok
+     1049       50    0.048    1.499     NA          NA           ok
+     1171       72    0.061    2.555     NA          NA           ok
+      857       40    0.047    2.293     NA          NA           ok
+      452       71    0.157    8.220     NA          NA           ok
+      290       99    0.341    2.899     NA          NA           ok
+     7437       65    0.009    0.164     NA          NA           ok
+     1740       36    0.021    0.353     NA          NA           ok
+      794       26    0.033    0.617     NA          NA           ok
+      875       56    0.064    1.424     NA          NA           ok
+     1046       49    0.047    1.399     NA          NA           ok
+     1171       72    0.061    2.546     NA          NA           ok
+      857       40    0.047    2.299     NA          NA           ok
+      452       71    0.157    8.560     NA          NA           ok
+      270       82    0.304    2.920     NA          NA           ok
+     7833       70    0.009    0.139     NA          NA           ok
+     1790       57    0.032    0.456     NA          NA           ok
+      795       26    0.033    0.575     NA          NA           ok
+      879       61    0.069    1.524     NA          NA           ok
+     1042       50    0.048    1.441     NA          NA           ok
+     1149       72    0.063    2.537     NA          NA           ok
+      832       36    0.043    2.378     NA          NA           ok
+      435       69    0.159    8.184     NA          NA           ok
+      620      463    0.747    2.777     NA          NA           ok
+     7569       73    0.010    0.138     NA          NA           ok
+     1539       49    0.032    0.397     NA          NA           ok
+      701       25    0.036    0.549     NA          NA           ok
+      778       59    0.076    1.451     NA          NA           ok
+      896       47    0.052    1.386     NA          NA           ok
+     1118       72    0.064    2.695     NA          NA           ok
+      832       36    0.043    2.293     NA          NA           ok
+      435       69    0.159    8.188     NA          NA           ok
+      617      461    0.747    2.582     NA          NA           ok
+     7282       66    0.009    0.112     NA          NA           ok
+     1633       39    0.024    0.327     NA          NA           ok
+      692       18    0.026    0.294     NA          NA           ok
+      725       21    0.029    0.545     NA          NA           ok
+      948       60    0.063    1.434     NA          NA           ok
+     1171       71    0.061    2.661     NA          NA           ok
+      794       36    0.045    1.703     NA          NA           ok
+      531       72    0.136    6.807     NA          NA           ok
+      709      508    0.717    4.366     NA          NA           ok
+     4853       63    0.013    0.242     NA          NA           ok
+      903       30    0.033    0.584     NA          NA           ok
+      389       16    0.041    0.740     NA          NA           ok
+      421       34    0.081    2.248     NA          NA           ok
+      522       34    0.065    3.475     NA          NA           ok
+      647       31    0.048    3.147     NA          NA           ok
+      207       19    0.092    5.323     NA          NA           ok
+       44        4    0.091    2.422     NA          NA underpowered
+        9        0    0.000    0.000     NA          NA underpowered
+     6731       70    0.010    0.335     NA          NA           ok
+     1480       42    0.028    0.861     NA          NA           ok
+      590       25    0.042    1.388     NA          NA           ok
+      590       35    0.059    2.493     NA          NA           ok
+      686       41    0.060    3.362     NA          NA           ok
+      279       27    0.097    4.540     NA          NA           ok
+       25        3    0.120   21.574     NA          NA underpowered
+       38       18    0.474    7.801     NA          NA           ok
+       44       14    0.318    5.330     NA          NA           ok
+     7839       70    0.009    0.182     NA          NA           ok
+     1793       57    0.032    0.551     NA          NA           ok
+      798       26    0.033    0.679     NA          NA           ok
+      886       61    0.069    1.712     NA          NA           ok
+     1049       50    0.048    1.529     NA          NA           ok
+     1171       72    0.061    2.337     NA          NA           ok
+      857       40    0.047    2.016     NA          NA           ok
+      452       71    0.157    6.720     NA          NA           ok
+      785      531    0.676    2.616     NA          NA           ok
+     7839       70    0.009    0.138     NA          NA           ok
+     1793       57    0.032    0.476     NA          NA           ok
+      798       26    0.033    0.620     NA          NA           ok
+      886       61    0.069    1.593     NA          NA           ok
+     1049       50    0.048    1.398     NA          NA           ok
+     1171       72    0.061    2.512     NA          NA           ok
+      857       40    0.047    2.123     NA          NA           ok
+      452       71    0.157    7.421     NA          NA           ok
+      785      531    0.676    2.813     NA          NA           ok
+     7839       70    0.009    0.143     NA          NA           ok
+     2591       83    0.032    0.504     NA          NA           ok
+      886       61    0.069    1.520     NA          NA           ok
+     1049       50    0.048    1.405     NA          NA           ok
+     1171       72    0.061    2.405     NA          NA           ok
+      857       40    0.047    2.160     NA          NA           ok
+      452       71    0.157    7.743     NA          NA           ok
+      785      531    0.676    2.827     NA          NA           ok
+     4093       41    0.010    0.141     NA          NA           ok
+      801       37    0.046    0.522     NA          NA           ok
+      291       16    0.055    0.808     NA          NA           ok
+      394       41    0.104    1.829     NA          NA           ok
+      438       26    0.059    1.570     NA          NA           ok
+      328       38    0.116    2.698     NA          NA           ok
+       98       14    0.143    3.336     NA          NA           ok
+      107       61    0.570   13.141     NA          NA           ok
+      629      486    0.773    3.054     NA          NA           ok
+     2228       25    0.011    0.082     NA          NA           ok
+      456       37    0.081    0.429     NA          NA           ok
+      176       16    0.091    0.635     NA          NA           ok
+      268       39    0.146    1.431     NA          NA           ok
+      333       24    0.072    0.840     NA          NA           ok
+      246       37    0.150    1.530     NA          NA           ok
+       48       14    0.292    4.676     NA          NA           ok
+      101       61    0.604   17.025     NA          NA           ok
+      629      486    0.773    1.608     NA          NA           ok
+     2229       25    0.011    0.082     NA          NA           ok
+      456       37    0.081    0.429     NA          NA           ok
+      176       16    0.091    0.635     NA          NA           ok
+      268       39    0.146    1.432     NA          NA           ok
+      333       24    0.072    0.841     NA          NA           ok
+      246       37    0.150    1.531     NA          NA           ok
+       48       14    0.292    4.677     NA          NA           ok
+      101       61    0.604   17.028     NA          NA           ok
+      629      486    0.773    1.609     NA          NA           ok
+      231       NA    0.053       NA     NA          NA         <NA>
+      191       NA    0.044       NA     NA          NA         <NA>
+      149       NA    0.034       NA     NA          NA         <NA>
+      282       NA    0.065       NA     NA          NA         <NA>
+      629       NA    0.144       NA     NA          NA         <NA>
+     1035       NA    0.237       NA     NA          NA         <NA>
+      863       NA    0.198       NA     NA          NA         <NA>
+      563       NA    0.129       NA     NA          NA         <NA>
+      426       NA    0.098       NA     NA          NA         <NA>
+       70       NA    0.072       NA     NA          NA         <NA>
+       57       NA    0.058       NA     NA          NA         <NA>
+       26       NA    0.027       NA     NA          NA         <NA>
+       61       NA    0.062       NA     NA          NA         <NA>
+       50       NA    0.051       NA     NA          NA         <NA>
+       72       NA    0.074       NA     NA          NA         <NA>
+       40       NA    0.041       NA     NA          NA         <NA>
+       71       NA    0.073       NA     NA          NA         <NA>
+      531       NA    0.543       NA     NA          NA         <NA>
  top_project_share regulated_detect_share
              0.171                  0.000
              0.158                  0.281
