@@ -13,3 +13,6 @@
   rows and 1,487 passes with them; 12 single-collection groups left alone; fish differ in 132 groups,
   habitat in 112, fishing time in 47; the kept copy is not the lowest id in 117.
 - Phase 3: 0293's first_copy and 0294's dup_of removed, with their consumers in 0295-0298; 0299 to v2; READMEs, CLAUDE.md and data/fdis_README.md point at v2.
+- Phase 1: baseline 0230/0240/0250 reproduce exactly; 0290 stopped by fresh_default being rewritten
+  by a provincial link run. User chose to filter the existing visit tables (plan correction in task_plan).
+- New 0230 (233 s), 0240 (6 s), 0250 (9 s) run; visit tables filtered; log 20261017_fdis_repeat_filter.txt.

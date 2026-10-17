@@ -48,3 +48,30 @@ Scripts: scratchpad `probe35.R`, `probe35b.R`, `probe35c.R` (not committed) over
 
 | Error | Resolution |
 |-------|------------|
+
+## Phase 1: reproduction and the moving database (2026-10-17)
+
+- link installed 0.50.0 -> 0.66.0 (pak); fresh 0.39.0 (as in 0298's 2026-10-15 log); wet 0.4.5.
+- 0230 (240 s) and 0240 (8 s) on main's code reproduce sites/catch/fish.rds, reconcile.csv and
+  fdis_sites.csv exactly; tracked outputs unchanged. 0250 (11 s) reproduces too.
+- 0290 fails: `a held-out WSG is in fresh_default: it would be calibration`. fresh_default now holds
+  241 WSGs, all 8 held-out ones included; pg_stat shows its tables written 06:25-07:20 UTC today by a
+  client on the database host's Docker bridge, still running (zz_lnk_streams_chwk, 4 active
+  queries). Not this session's.
+- Readers of fresh_default: 0290, 0294, 0296 (builds), 0293 (steep large-spawner patch block, joins by
+  id_segment), 0298 (all of it). 0291, 0292, 0297 read only derived tables; 0295 reads bcfishobs and
+  discharge.
+
+## Phase 2/4: new build (2026-10-17)
+
+- 0230: 51,605 visits (from 53,018); 1,286 groups, 1,413 dropped (657 fish, 660 zero, 96 unknown);
+  1,487 passes and 4,370 fish rows with them; fish differ in 132 groups, habitat in 112, fishing time
+  in 47; 12 single-collection groups kept.
+- New fdis_sites.csv == old minus the 1,413 dropped rows, column for column.
+- 0250: fish matched by length 91,986 -> 91,960; sites in FDIS 2,952 and EF fish dropped 100,297 both
+  unchanged; data/fiss_evidence.csv unchanged; data/fiss_fdis_overlap.csv: 2 reports move by 1-25 fish.
+- 0240: CH present 1,377 -> 1,359 visits (with gradient 151 -> 138); char present 7,043 -> 6,867;
+  char spawner evidence 348 -> 340.
+- Filter: bt_use_visits 17,606 -> 17,165 (441 dropped), ch_mad_visits and ch_rule_visits 21,862 ->
+  21,306 (556), ch_rule_walks 372,687 -> 372,645. In 3 surveys the kept copy had failed the build's
+  own drops, so the survey leaves those tables, as a rebuild would.

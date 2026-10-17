@@ -35,12 +35,12 @@ in 0230, and reruns the chain.
 signature without fishing time; rerun the full chain, CH included, in this PR.
 
 ## Phase 1: Baseline reproduction (drift check before any code change)
-- [ ] Install link >= 0.55.0 (installed: 0.50.0; 0290 needs `lnk_species_pooling()`). Record the link,
+- [x] Install link >= 0.55.0 (installed: 0.50.0; 0290 needs `lnk_species_pooling()`). Record the link,
       fresh and wet versions and the database schemas used.
-- [ ] Copy the current `data/fdis/derived/*.csv` and `data/fdis/build/*` to the scratchpad. Rerun
+- [x] Copy the current `data/fdis/derived/*.csv` and `data/fdis/build/*` to the scratchpad. Rerun
       0230, 0240, 0290, 0294 and 0296 on main's code. Compare md5 and row counts with the copies and
       the committed tracked outputs (`data/fdis_evidence.csv`, `data/fdis_summary_ch_bt.csv`, ledgers).
-- [ ] If they reproduce: the later dedup diff is the dedup alone. If they do not: rerun 0291–0293, 0295,
+- [x] If they reproduce: the later dedup diff is the dedup alone. If they do not: rerun 0291–0293, 0295,
       0297 and 0298 too, and commit the reproduction as its own commit ("rerun at current inputs"), so
       the dedup commit's diff carries nothing else. Record what drifted in findings.
 
@@ -51,12 +51,12 @@ signature without fishing time; rerun the full chain, CH included, in this PR.
       counted and left alone.
 - [x] Keep rule: most measured fish, then has habitat, then lowest numeric collection id, then
       `site_visit`. Drop the other copies from `sites`, `catch` and `fish`, before placement.
-- [ ] Write `data/fdis_repeat_surveys.csv` (tracked): dropped `site_visit`, kept `site_visit`, catch
+- [x] Write `data/fdis_repeat_surveys.csv` (tracked): dropped `site_visit`, kept `site_visit`, catch
       status, fish dropped, whether fish, habitat and fishing time are identical to the kept copy.
 - [x] Ledger rows in `reconcile.csv`: groups, visits dropped (by catch status), fish rows dropped, groups
       whose copies differ in fishing time, fish or habitat, and single-collection groups left alone.
       Reconcile guards rewritten so passes and fish partition into kept plus dropped. Header WHY note.
-- [ ] Probe 0250's FDIS overlap: no FISS fish matched only a dropped copy. Rerun 0250 if its per-group
+- [x] Probe 0250's FDIS overlap: no FISS fish matched only a dropped copy. Rerun 0250 if its per-group
       inputs are cached; otherwise record the probe.
 
 ## Phase 3: One definition downstream
@@ -67,6 +67,20 @@ signature without fishing time; rerun the full chain, CH included, in this PR.
 - [x] 0299: `s3_id` becomes `knowledge/fdis/v2` (rows and columns change; v1 stays as published).
       Update the table descriptions to drop the "not deduplicated" sentence. Update `CLAUDE.md`'s FDIS
       note and data-root list, and `scripts/README.md` if its wording names duplicates.
+
+## Plan correction (2026-10-17, user-approved): fresh_default moved underneath
+
+A provincial link run was rewriting `fresh_default` during Phase 1 (55 -> 241 WSGs, all 8 of
+link#284's held-out WSGs in it), so 0290 stops ("a held-out WSG is in fresh_default") and 0294, 0296
+and 0298 would read a different network. 0230, 0240 and 0250 reproduced byte for byte. 0290, 0294
+and 0296 give each visit its own row, and the new `fdis_sites.csv` is exactly the old one minus the
+1,413 dropped copies, so the copies are removed from the existing visit tables
+(`planning/active/fdis_repeat_filter.py`) instead of rebuilding them. 0293's steep-patch block
+(reads fresh_default by id_segment) is carried from its 2026-10-02 log; 0298 reruns only if 0297's
+pick changes. Rebuilding on the new fresh_default is a follow-up issue.
+
+- [x] Filter bt_use_visits, ch_mad_visits, ch_rule_visits (dup_of removed) and ch_rule_walks; only mapped copies leave
+- [ ] File the follow-up issue for rebuilding 0290, 0294, 0296 and 0298 on the provincial fresh_default
 
 ## Phase 4: Rerun the chain (commit first; run frozen copies of the scripts in the background)
 - [ ] 0230 → 0240 → 0290 → 0291 → 0292 → 0293; 0294 → 0295; 0296 → 0297 → 0298. Logs land in
