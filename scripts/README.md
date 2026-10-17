@@ -69,7 +69,7 @@ wf_farm_priority.js                          farm priority/crossing tables out o
 
 --- Publish the FDIS visit tables (after any of 0240, 0290, 0294, 0296 changes its table) ---
 0299  data/fdis/derived/*.csv -> Parquet + manifest.json in data/fdis/publish/; with PUBLISH=TRUE (clean
-      tree) uploads them to s3://fresh-bc/knowledge/fdis/v1/ and data/fdis_README.md to s3://fresh-bc/fdis/README.md
+      tree) uploads them to s3://fresh-bc/knowledge/fdis/v2/ and data/fdis_README.md to s3://fresh-bc/fdis/README.md
       PULL=TRUE restores data/fdis/derived/*.csv from the published Parquet (NO_SIGN=TRUE: no credentials)
 
 --- Habitat literature (independent of the watershed-group flow) ---
@@ -215,7 +215,7 @@ and maturity, per-pass effort, measured channel width and gradient, and explicit
   (SP/ST, or M in Aug–Oct), not length.
 - Outputs: `data/fdis_evidence.csv`, `data/fdis_summary_ch_bt.csv`, `data/fdis_size_breaks.csv`,
   `data/fdis_maturity_check.csv` (tracked), and `fdis_sites.{csv,gpkg}` (17 MB each, ignored), which `0299`
-  publishes as Parquet to `s3://fresh-bc/knowledge/fdis/v1/`.
+  publishes as Parquet to `s3://fresh-bc/knowledge/fdis/v2/`.
 - Logs: `scripts/logs/fdis/`.
 
 ## 0200 / 0210 / 0220 — FISS `.xls` → No-Fish-Captured layer

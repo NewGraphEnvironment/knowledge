@@ -89,7 +89,7 @@ pg <- function() {
 }
 
 v <- read_csv(path_in, show_col_types = FALSE, guess_max = 1e5,
-              col_types = cols(site_visit = "c", dup_of = "c"))
+              col_types = cols(site_visit = "c"))
 add("in", "visits_in", nrow(v), "0294's kept visits")
 if (anyDuplicated(v$site_visit)) stop("a visit appears twice in ", path_in)
 

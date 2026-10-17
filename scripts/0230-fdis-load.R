@@ -22,6 +22,13 @@
 #     GRADIENT11/12 are the primary measurement, 21/22 a second one (a separate method code
 #     not exported, and it runs higher), so they are kept apart. Sentinels (width >= 500 m,
 #     gradient > 100 %) are flagged and excluded.
+#   - REPEATED SURVEYS (#35): one survey loaded under two to four collection ids is kept once.
+#     The signature is UTM, date, pass count, per-pass fished length and width and per-species
+#     catch; every member of a group needs its own collection id, and the members share a site
+#     number or identical measured fish. The copy kept has the most measured fish, then the most
+#     maturity-coded fish, a known catch, habitat, and the lowest collection id. Visits with no UTM
+#     or no date are never matched. data/fdis_repeat_surveys.csv lists every other member of a
+#     matching group: dropped, or kept with the reason.
 #   - PLACEMENT: whse_basemapping.fwa_indexpoint in the fwapg database (PG* environment variables), with an explicit
 #     tolerance (its default is 5 km). The matched FWA feature's gradient, order, edge type,
 #     modelled channel width and MAD are joined province-wide, not fresh.streams (98 groups
@@ -34,6 +41,7 @@
 #         data/fdis/build/catch.rds    site visit x species: n counted, n measured
 #         data/fdis/build/fish.rds     one row per measured fish, keyed to site visit
 #         data/fdis/build/reconcile.csv
+#         data/fdis_repeat_surveys.csv   each dropped copy, the copy kept, and what differs
 # RUN:    Rscript scripts/0230-fdis-load.R   (from the repo root)
 # ---------------------------------------------------------------------------
 suppressMessages({
@@ -274,6 +282,136 @@ sites <- sites |>
       TRUE             ~ "unknown")
   )
 
+# ---- repeated surveys (#35) -------------------------------------------------
+# One survey loaded under several collection ids: same UTM, date, pass count, per-pass fished
+# length and width, and per-species catch (an empty catch matches whether NFC was recorded or
+# not). A group counts when every member has its own collection id (copies within one collection
+# are separate sites) and the members share a site number or hold identical measured fish;
+# otherwise they may be adjacent sites at one rounded UTM, and are kept and listed. The copy kept
+# holds the most measured fish, then the most maturity-coded fish, then a known catch, then
+# habitat, then the lowest collection id: in 94 of the 95 groups where one copy alone has
+# measured fish, it is the higher id. A habitat value the copy kept lacks and a dropped copy holds
+# moves to the kept one, and the placement check below reads the 50k watershed codes of every copy.
+maturity_coded <- c("IM", "M", "MT", "SP", "ST")
+pass_sig <- visits |>
+  transmute(site_visit = site_of(KEY),
+            method = as.integer(sub("^(?:[^_]+_){3}([^_]+)_.*$", "\\1", KEY, perl = TRUE)),
+            pass = as.integer(sub("^.*_", "", KEY)),
+            lw = paste(num(FISHING_AREA_LENGTH), num(FISHING_AREA_WIDTH), sep = "x")) |>
+  arrange(site_visit, method, pass) |>
+  group_by(site_visit) |>
+  summarise(lw = paste(lw, collapse = "|"), .groups = "drop")
+catch_sig <- catch |>
+  arrange(site_visit, species_code) |>
+  group_by(site_visit) |>
+  summarise(n_measured_all = sum(n_measured), spc = paste(species_code, n_caught, sep = ":", collapse = ";"),
+            .groups = "drop")
+fish_sig <- fish |>
+  filter(!is_nfc, !species_code %in% nonfish_codes) |>
+  arrange(site_visit, species_code, length_mm, weight_g, age, sex_code, maturity_code) |>
+  group_by(site_visit) |>
+  summarise(n_coded = sum(maturity_code %in% maturity_coded),
+            fsig = paste(species_code, length_mm, weight_g, age, sex_code, maturity_code, collapse = ";"),
+            .groups = "drop")
+rep_cand <- sites |>
+  filter(!flag_no_utm, !is.na(date)) |>
+  left_join(pass_sig, by = "site_visit") |>
+  left_join(catch_sig, by = "site_visit") |>
+  left_join(fish_sig, by = "site_visit") |>
+  mutate(coll = as.numeric(sub("_.*$", "", site_visit)),
+         site_number = sub("^[^_]+_([^_]+)_.*$", "\\1", site_visit),
+         n_measured_all = coalesce(n_measured_all, 0L), n_coded = coalesce(n_coded, 0L),
+         spc = coalesce(spc, ""), fsig = coalesce(fsig, ""),
+         hsig = paste(has_habitat, gradient_pct, gradient2_pct, channel_width_m, wetted_width_m, water_temp_c),
+         sig = paste(utm_zone, utm_easting, utm_northing, date, n_pass, lw, spc)) |>
+  group_by(sig) |>
+  filter(n() > 1) |>
+  arrange(desc(n_measured_all), desc(n_coded), catch_status == "unknown", desc(has_habitat), coll, site_visit,
+          .by_group = TRUE) |>
+  mutate(kept = first(site_visit),
+         status = case_when(n_distinct(coll) < n() ~ "kept_one_collection",
+                            n_distinct(site_number) == 1 ~ "dropped",
+                            n_distinct(fsig) == 1 & first(n_measured_all) > 0 ~ "dropped",
+                            TRUE ~ "kept_site_differs"),
+         fish_same = fsig == first(fsig), habitat_same = hsig == first(hsig),
+         time_same = (is.na(fishing_time_s) & is.na(first(fishing_time_s))) |
+           coalesce(fishing_time_s == first(fishing_time_s), FALSE),
+         coded_lost = n_coded > first(n_coded)) |>
+  ungroup()
+repeat_map <- rep_cand |>
+  filter(site_visit != kept) |>
+  transmute(site_visit, kept_site_visit = kept, status, data_set, catch_status,
+            kept_catch_status = rep_cand$catch_status[match(kept, rep_cand$site_visit)],
+            site_number_same = site_number == rep_cand$site_number[match(kept, rep_cand$site_visit)],
+            collection_offset = coll - rep_cand$coll[match(kept, rep_cand$site_visit)],
+            n_measured = n_measured_all, fish_same, habitat_same, time_same) |>
+  arrange(kept_site_visit, site_visit)
+dropped <- repeat_map$site_visit[repeat_map$status == "dropped"]
+# habitat moves value by value: a kept copy can hold a habitat record with no gradient or width
+# in it. Each value missing on the kept copy is taken from the best-ranked dropped copy that has
+# it (a width with its measure count); the record's flags are OR-ed in from those copies.
+cols_hab_value <- list("gradient_pct", "gradient2_pct", c("channel_width_m", "n_cw_measures"), "wetted_width_m",
+                       "water_temp_c", "bed_dominant")
+drop_order <- rep_cand |> filter(site_visit %in% dropped) |> select(site_visit, kept)   # in keep order
+i_drop <- match(drop_order$site_visit, sites$site_visit)
+donors <- character()
+for (cc in cols_hab_value) {
+  has <- !is.na(sites[[cc[1]]][i_drop])
+  d <- drop_order[has, ] |> distinct(kept, .keep_all = TRUE)
+  i_k <- match(d$kept, sites$site_visit)
+  fill <- is.na(sites[[cc[1]]][i_k])
+  sites[i_k[fill], cc] <- sites[match(d$site_visit[fill], sites$site_visit), cc]
+  donors <- union(donors, d$site_visit[fill])
+}
+i_dn <- match(donors, sites$site_visit)
+i_kd <- match(drop_order$kept[match(donors, drop_order$site_visit)], sites$site_visit)
+for (cc in c("has_habitat", "habitat_conflict", "grad_sentinel", "cw_sentinel")) {
+  sites[[cc]][i_kd] <- sites[[cc]][i_kd] | sites[[cc]][i_dn]
+}
+sites$habitat_rows[i_kd] <- coalesce(sites$habitat_rows[i_kd], sites$habitat_rows[i_dn])
+repeat_map <- repeat_map |> mutate(habitat_carried = site_visit %in% donors)
+rep_groups <- rep_cand |> filter(sig %in% sig[status == "dropped"]) |> group_by(sig) |>
+  summarise(fish_differs = !all(fish_same), habitat_differs = !all(habitat_same),
+            time_differs = !all(time_same), coded_lost = any(coded_lost & site_visit %in% dropped),
+            status_mixed = n_distinct(catch_status) > 1, .groups = "drop")
+# the 50k watershed codes sit on fish rows, so a dropped copy's codes count for the copy kept
+kept_of <- repeat_map$kept_site_visit[repeat_map$status == "dropped"]
+fish_ws50 <- fish |> mutate(site_visit = coalesce(kept_of[match(site_visit, dropped)], site_visit))
+fish_ws50_from <- unique(fish$site_visit[fish$site_visit %in% dropped & !is.na(fish$watershed_code_50k)])
+# what the keep-one-copy rule gives up, for the ledger: measured fish (as a multiset of species,
+# length, weight, age, sex and maturity) and count length bounds held only on a dropped copy
+fish_key <- function(x) paste(x$species_code, x$length_mm, x$weight_g, x$age, x$sex_code, x$maturity_code)
+# each dropped copy against the copy kept, the largest shortfall per group and key (copies of one
+# survey repeat the same fish, so summing them would count a fish once per copy)
+not_on_kept <- function(f, key) {
+  f |> filter(!is_nfc, site_visit %in% dropped) |>
+    mutate(kept = kept_of[match(site_visit, dropped)], key = key(pick(everything()))) |>
+    count(site_visit, kept, key) |>
+    left_join(f |> filter(!is_nfc, site_visit %in% kept_of) |> mutate(key = key(pick(everything()))) |>
+                count(kept = site_visit, key, name = "n_kept"), by = c("kept", "key")) |>
+    group_by(kept, key) |> summarise(lost = max(pmax(0L, n - coalesce(n_kept, 0L))), .groups = "drop") |>
+    summarise(n = sum(lost)) |> pull(n)
+}
+n_fish_not_on_kept <- not_on_kept(fish, fish_key)
+lengths_d <- catch |> filter(site_visit %in% dropped) |> mutate(kept = kept_of[match(site_visit, dropped)])
+lengths_k <- catch |> filter(site_visit %in% kept_of) |> select(kept = site_visit, species_code, min_k = min_length_mm)
+n_lengths_not_on_kept <- lengths_d |> left_join(lengths_k, by = c("kept", "species_code")) |>
+  summarise(n = sum(!is.na(min_length_mm) & is.na(min_k))) |> pull(n)
+rep_hab <- sites |> filter(site_visit %in% dropped) |>
+  select(site_visit, all_of(unlist(cols_hab_value)))
+coded_key <- function(x) paste(x$species_code, x$maturity_code)
+n_coded_not_on_kept <- not_on_kept(fish |> filter(maturity_code %in% maturity_coded), coded_key)
+n_pass_dropped  <- sum(sites$n_pass[sites$site_visit %in% dropped])
+n_fish_dropped  <- sum(fish$site_visit %in% dropped)
+is_counted_fish <- !counts$species_code %in% c(zero_catch_codes, nonfish_codes)
+n_counted_dropped <- sum(counts$n[is_counted_fish & counts$site_visit %in% dropped], na.rm = TRUE)
+n_counted_all     <- sum(counts$n[is_counted_fish], na.rm = TRUE)
+sites  <- sites  |> filter(!site_visit %in% dropped)
+catch  <- catch  |> filter(!site_visit %in% dropped)
+fish   <- fish   |> filter(!site_visit %in% dropped)
+counts <- counts |> filter(!site_visit %in% dropped)
+message("Repeated surveys: ", length(dropped), " visits dropped from ", nrow(rep_groups), " groups")
+
 # ---- place site visits on the network --------------------------------------
 conn <- tryCatch(DBI::dbConnect(RPostgres::Postgres()),
                  error = function(e) stop("database unreachable (PG* environment variables): ", conditionMessage(e)))
@@ -307,7 +445,7 @@ stopifnot(!anyDuplicated(placed$site_visit))
 # placement check: the 50k watershed code FDIS recorded -> the 20k blue_line_keys it maps to
 # a 50k code is a 3-digit basin then seven 6-digit levels; a code with every level zero names
 # only a mainstem and cannot place a site on a tributary, so it is not a check
-ws50 <- fish |> filter(!is.na(watershed_code_50k), nchar(watershed_code_50k) == 45,
+ws50 <- fish_ws50 |> filter(!is.na(watershed_code_50k), nchar(watershed_code_50k) == 45,
                        substr(watershed_code_50k, 4, 45) != strrep("0", 42)) |>
   distinct(site_visit, watershed_code_50k)
 xref <- DBI::dbGetQuery(conn, "SELECT DISTINCT watershed_code_50k, blue_line_key_20k
@@ -358,13 +496,47 @@ add("sites_blocking_char_absence", sum(grepl("char", sites$blocks_absence_of)))
 add("catch_pairs_count_unknown", sum(is.na(catch$n_caught)))
 add("counts_fish_total", n_counts_fish); add("counts_sentinel_rows", sum(counts$flag_count_sentinel))
 add("catch_pairs_counts_lt_measured", sum(catch$flag_counts_lt_measured))
+add("repeat_groups", nrow(rep_groups)); add("repeat_visits_dropped", length(dropped))
+dmap <- repeat_map[repeat_map$status == "dropped", ]
+add("repeat_dropped_fish", sum(dmap$catch_status == "fish"))
+add("repeat_dropped_zero", sum(dmap$catch_status == "zero"))
+add("repeat_dropped_unknown", sum(dmap$catch_status == "unknown"))
+add("repeat_passes_dropped", n_pass_dropped); add("repeat_fish_rows_dropped", n_fish_dropped)
+add("repeat_counted_fish_dropped", n_counted_dropped)
+add("repeat_groups_fish_differ", sum(rep_groups$fish_differs))
+add("repeat_groups_habitat_differ", sum(rep_groups$habitat_differs))
+add("repeat_groups_time_differ", sum(rep_groups$time_differs))
+add("repeat_groups_zero_and_unknown", sum(rep_groups$status_mixed))
+add("repeat_groups_maturity_coded_lost", sum(rep_groups$coded_lost))
+add("repeat_habitat_carried_to_kept", length(unique(i_kd)))
+add("repeat_coded_fish_not_on_kept", n_coded_not_on_kept)
+add("repeat_ws50_codes_pooled", sum(dmap$site_visit %in% fish_ws50_from))
+add("repeat_fish_rows_not_on_kept", n_fish_not_on_kept)
+add("repeat_count_lengths_not_on_kept", n_lengths_not_on_kept)
+add("repeat_groups_one_collection_kept", n_distinct(rep_cand$sig[rep_cand$status == "kept_one_collection"]))
+add("repeat_groups_site_differs_kept", n_distinct(rep_cand$sig[rep_cand$status == "kept_site_differs"]))
 print(rec, n = Inf)
 
 unclassified <- setdiff(unique(c(counts$species_code, fish$species_code)), species_codes$code)
 if (length(unclassified)) stop("species codes missing from data/fdis_species_codes.csv: ",
                                paste(unclassified, collapse = ", "))
-if (nrow(fish_raw) != nrow(fish)) stop("fish rows lost")
-if (sum(sites$n_pass) != nrow(visits)) stop("site roll-up lost passes")
+if (nrow(fish_raw) != nrow(fish) + n_fish_dropped) stop("fish rows lost")
+if (sum(sites$n_pass) + n_pass_dropped != nrow(visits)) stop("site roll-up lost passes")
+if (anyDuplicated(rep_cand$sig[rep_cand$sig %in% rep_groups$sig & rep_cand$site_visit %in% sites$site_visit])) {
+  stop("a repeated survey kept two copies")
+}
+if (!all(repeat_map$kept_site_visit %in% sites$site_visit)) stop("a repeated survey kept no copy")
+# value by value: no habitat value a dropped copy held is missing from the copy kept
+hab_lost <- unlist(lapply(unlist(lapply(cols_hab_value, `[`, 1)), function(cc) {
+  dv <- rep_hab[[cc]][match(dmap$site_visit, rep_hab$site_visit)]
+  kv <- sites[[cc]][match(dmap$kept_site_visit, sites$site_visit)]
+  dmap$kept_site_visit[!is.na(dv) & is.na(kv)]
+}))
+if (length(hab_lost)) stop("habitat dropped with a repeated copy: ", paste(unique(hab_lost), collapse = ", "))
+if (any(dmap$n_measured > rep_cand$n_measured_all[match(dmap$kept_site_visit, rep_cand$site_visit)])) {
+  stop("a dropped copy holds more measured fish than the copy kept")
+}
+if (!isTRUE(all.equal(n_counts_fish + n_counted_dropped, n_counted_all))) stop("counted fish lost in the repeat drop")
 if (sum(catch$n_measured) != sum(!fish$is_nfc & !fish$species_code %in% nonfish_codes)) stop("measured fish lost in the catch roll-up")
 # rows dropped as "0 caught, nothing measured" carry n_counted 0, so the sum is unchanged
 if (!isTRUE(all.equal(sum(catch$n_counted, na.rm = TRUE), n_counts_fish))) stop("counted fish lost in the catch roll-up")
@@ -372,6 +544,7 @@ if (sum(sites$catch_status == "fish") + sum(sites$catch_status == "zero") +
     sum(sites$catch_status == "unknown") != nrow(sites)) stop("catch status does not partition sites")
 
 write_csv(rec, file.path(build, "reconcile.csv"))
+write_csv(repeat_map, "data/fdis_repeat_surveys.csv", na = "")
 saveRDS(sites, file.path(build, "sites.rds"))
 saveRDS(catch, file.path(build, "catch.rds"))
 saveRDS(fish,  file.path(build, "fish.rds"))

@@ -323,9 +323,9 @@ block("km gained and lost, tuned against default, by stream order",
 
 # ---- FDIS detection on each rule's segments ------------------------------------------
 vis <- read_csv("data/fdis/derived/ch_rule_visits.csv", show_col_types = FALSE, guess_max = 1e5,
-                col_types = cols(site_visit = "c", dup_of = "c", hydro_zone = "c")) |>
+                col_types = cols(site_visit = "c", hydro_zone = "c")) |>
   filter(edge_type %in% c(1000, 1050, 1100, 1150, 2000, 2100, 2300, 1250, 1350), !is.na(area_m2),
-         area_m2 >= 10, area_m2 <= 10000, is.na(dup_of), !is.na(link_id_segment))
+         area_m2 >= 10, area_m2 <= 10000, !is.na(link_id_segment))
 vd <- vis |> inner_join(seg |> select(link_id_segment = id_segment, watershed_group_code, accessible,
                                       rearing_default, rearing_default_mad, rearing_tuned),
                         by = c("link_id_segment", "watershed_group_code"))

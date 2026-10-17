@@ -1,0 +1,5 @@
+#35 repeat filter: 1431 copies dropped by 0230 (data/fdis_repeat_surveys.csv); ws50 flag changed on 1 kept copies to fail, 3 to pass.
+bt_use_visits: 17606 -> 17184 rows; habitat carried on 2; ws50 now fails 0, now passes 0 (and 3 whose twin left at a later step both copies share)
+ch_mad_visits: 21862 -> 21325 rows; dup_of removed; habitat carried on 4; ws50 now fails 1, now passes 1 (and 2 whose twin left at a later step both copies share)
+ch_rule_visits: 21862 -> 21325 rows; dup_of removed; habitat carried on 4; ws50 now fails 1, now passes 1 (and 2 whose twin left at a later step both copies share)
+ch_rule_walks: 372687 -> 372645 rows (starts with no remaining visit dropped)

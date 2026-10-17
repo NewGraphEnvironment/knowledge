@@ -1,0 +1,422 @@
+CH rearing rule, knowledge#54. 0296 visits: 21325. 0295's population: 19085 visits (978 CH) in 102 WSGs.
+River polygons (in one, or on its edges 1250/1350): 3014 visits (702 CH, 23.3 %).
+Stream branch: 15186 (264 CH). Barrier status known: 9293 (191 CH); natural CH barrier downstream: 4777 (25 CH).
+POPULATION (stream branch, no natural barrier downstream): 4516 visits (166 CH) in 45 WSGs.
+
+## population: width source and cw_deploy
+    fwa_cw_source deploy_null    n
+ FIELD_MEASURMENT       FALSE 1877
+ FIELD_MEASURMENT        TRUE  224
+         MODELLED       FALSE 1731
+             <NA>        TRUE  684
+main / U: 3433 visits (166 detections) in 26 WSGs; 2637 distinct in/out patterns; 0 not converged; region 27 rules; default in region: FALSE; recommended mad>=0.75|g<=0.07|Q3@D1000
+main grid, bootstrap, nested selection and 4 more seeds: 8.5 min on 6 workers
+
+PICK: mad>=0.75|g<=0.07|Q3@D1000 (departures 3). RECOMMENDED: mad>=0.75|g<=0.07|Q3@D1000.
+DECISION: default is outside the region (188.3 deviance above the best, SE 78.7): the recommended rule.
+
+## main: region
+                        rule departures ddev_best  se_diff n_wsg_varies n_in
+  mad>=0.75|g<=0.07|Q3@D1000          3  0.000000  0.00000           26  730
+  mad>=0.75|g<=0.09|Q3@D1000          3  2.697398 14.73750           26  808
+   mad>=0.5|g<=0.09|Q3@D1000          3  2.828467 18.21788           26  943
+   mad>=0.5|g<=0.07|Q3@D1000          3  4.121984 16.98573           26  861
+  mad>=0.75|g<=0.09|Q3@D2000          3  5.398894 24.73982           26 1012
+  mad>=0.75|g<=0.07|Q3@D2000          3  7.559932 29.54449           26  918
+   mad>=0.5|g<=0.09|Q3@D2000          3  9.052401 26.40347           26 1137
+   mad>=0.5|g<=0.07|Q3@D2000          3 12.996233 32.84688           26 1040
+   mad>=0.5|g<=0.07|Q1@D1000          3 13.014670 16.06943           26  951
+  mad>=0.35|g<=0.09|Q3@D2000          3 17.860189 28.92787           26 1192
+   mad>=0.5|g<=0.09|Q1@D1000          3 19.091241 19.18223           26 1071
+  mad>=0.35|g<=0.07|Q3@D2000          3 21.456803 36.23964           26 1093
+  mad>=0.75|g<=0.07|Q1@D2000          3 22.632488 32.97523           26 1127
+     mad>=1|g<=0.07|Q1@D2000          3 26.106534 36.15769           26 1115
+   mad>=0.5|g<=0.07|Q1@D2000          3 26.391904 34.14885           26 1216
+  mad>=0.75|g<=0.09|Q1@D2000          3 26.643919 29.82241           26 1266
+     mad>=1|g<=0.09|Q3@D2000          3 27.676374 28.07464           26  971
+     mad>=1|g<=0.07|Q3@D2000          3 27.899490 34.25965           26  877
+   mad>=0.5|g<=0.09|Q1@D2000          3 28.965751 30.27786           26 1356
+   mad>=0.5|g<=0.09|Q5@D2000          3 29.203434 29.31633           26 1070
+  mad>=0.75|g<=0.07|Q5@D2000          3 30.024662 32.79459           26  855
+ mad>=0.75|g<=0.07|Q10@D2000          3 30.270503 33.13855           26  802
+     mad>=1|g<=0.09|Q1@D2000          3 31.343637 33.44109           26 1254
+  mad>=0.35|g<=0.07|Q1@D2000          3 31.746370 37.65911           26 1260
+   mad>=0.5|g<=0.07|Q5@D2000          3 32.859660 36.12054           26  985
+  mad>=0.28|g<=0.07|Q3@D2000          3 33.120347 34.19214           26 1147
+  mad>=0.5|g<=0.07|Q10@D2000          3 34.496848 35.47323           26  940
+ n_detect_in raw_rate_in raw_rate_out boot_region_share
+         128   0.1753425  0.014058454             0.675
+         133   0.1646040  0.012571429             0.680
+         138   0.1463415  0.011244980             0.520
+         133   0.1544715  0.012830482             0.610
+         143   0.1413043  0.009500207             0.455
+         138   0.1503268  0.011133201             0.600
+         146   0.1284081  0.008710801             0.330
+         141   0.1355769  0.010447137             0.500
+         135   0.1419558  0.012489927             0.160
+         147   0.1233221  0.008478358             0.205
+         140   0.1307190  0.011007621             0.120
+         142   0.1299177  0.010256410             0.335
+         142   0.1259982  0.010407632             0.240
+         140   0.1255605  0.011216566             0.310
+         144   0.1184211  0.009923320             0.155
+         147   0.1161137  0.008767882             0.140
+         137   0.1410917  0.011779041             0.105
+         132   0.1505131  0.013302034             0.210
+         149   0.1098820  0.008184882             0.065
+         141   0.1317757  0.010579771             0.060
+         132   0.1543860  0.013188518             0.135
+         129   0.1608479  0.014063094             0.215
+         145   0.1156300  0.009637448             0.150
+         145   0.1150794  0.009664059             0.170
+         136   0.1380711  0.012254902             0.115
+         142   0.1238012  0.010498688             0.105
+         134   0.1425532  0.012835941             0.110
+
+## main: default, best, pick, recommended
+                       rule departures dev_heldout ddev_best  se_diff
+ mad>=0.75|g<=0.07|Q3@D1000          3    851.4861    0.0000  0.00000
+  width>=1.5|g<=0.0549|none          0   1039.7664  188.2803 78.67059
+  ddev_null n_wsg_varies n_in n_detect_in raw_rate_in raw_rate_out
+ -211.91045           26  730         128  0.17534247   0.01405845
+  -23.63011           26 1788         130  0.07270694   0.02188450
+
+## main: nested selection, per fold
+ fold                        rule n_wsg  dev_rec dev_default dev_null
+    1  mad>=0.75|g<=0.09|Q3@D2000     5 151.5573    195.0200 208.0182
+    2   mad>=0.5|g<=0.09|Q3@D1000     5 212.2783    217.2001 225.4978
+    3 mad>=0.5|g<=0.0549|Q3@D2000     5 231.8356    251.7463 235.1042
+    4  mad>=0.75|g<=0.09|Q3@D1000     6 184.2183    196.8099 201.1966
+    5   mad>=0.5|g<=0.09|Q3@D1000     5 157.6427    178.9901 193.5796
+Nested selection: the recommended rule's held-out deviance is 937.5 against default's 1039.8 and all-in's 1063.4 (lower is better).
+
+## main: 4 more fold seeds
+ seed                       best                         pick
+   55 mad>=0.75|g<=0.07|Q3@D1000   mad>=0.75|g<=0.07|Q3@D1000
+   56  mad>=0.5|g<=0.09|Q3@D2000    mad>=0.5|g<=0.09|Q3@D2000
+   57  mad>=0.5|g<=0.07|Q3@D1000 mad>=0.75|g<=0.0549|Q3@D2000
+   58 mad>=0.75|g<=0.07|Q3@D1000   mad>=0.75|g<=0.07|Q3@D1000
+                  recommended default_in_region region_n
+   mad>=0.75|g<=0.07|Q3@D1000             FALSE       21
+    mad>=0.5|g<=0.09|Q3@D2000             FALSE       19
+ mad>=0.75|g<=0.0549|Q3@D2000             FALSE       29
+   mad>=0.75|g<=0.07|Q3@D1000             FALSE       25
+
+## WSG bootstrap: recommended size_var
+ size_var   n share
+      mad 199 0.995
+    width   1 0.005
+
+## WSG bootstrap: recommended size_min
+ size_min   n share
+     0.15   2 0.010
+     0.28   5 0.025
+     0.35   6 0.030
+     0.50  57 0.285
+     0.75 115 0.575
+     1.00  14 0.070
+     4.00   1 0.005
+
+## WSG bootstrap: recommended grad_max
+ grad_max  n share
+   0.0549 47 0.235
+   0.0700 64 0.320
+   0.0900 89 0.445
+
+## WSG bootstrap: recommended exc_q
+ exc_q   n share
+     1  16 0.080
+     3 155 0.775
+     5   3 0.015
+    10  22 0.110
+    50   4 0.020
+
+## WSG bootstrap: recommended exc_d
+ exc_d   n share
+   250   5 0.025
+  1000 115 0.575
+  2000  80 0.400
+
+## main: component profiles
+                 analysis      value                    best_rule  ddev_best
+        main_profile_size   mad>=0.1    mad>=0.1|g<=0.09|Q3@D1000  76.797406
+        main_profile_size  mad>=0.15   mad>=0.15|g<=0.09|Q3@D1000  52.022189
+        main_profile_size   mad>=0.2    mad>=0.2|g<=0.09|Q3@D1000  28.496167
+        main_profile_size  mad>=0.28   mad>=0.28|g<=0.09|Q3@D1000  26.563010
+        main_profile_size  mad>=0.35   mad>=0.35|g<=0.09|Q3@D2000  17.860189
+        main_profile_size   mad>=0.5    mad>=0.5|g<=0.09|Q3@D1000   2.828467
+        main_profile_size  mad>=0.75   mad>=0.75|g<=0.07|Q3@D1000   0.000000
+        main_profile_size     mad>=1      mad>=1|g<=0.07|Q1@D2000  26.106534
+        main_profile_size   width>=1    width>=1|g<=0.07|Q1@D1000 174.802541
+        main_profile_size width>=1.5  width>=1.5|g<=0.07|Q1@D1000 164.034497
+        main_profile_size   width>=2    width>=2|g<=0.07|Q1@D1000 145.928340
+        main_profile_size   width>=3    width>=3|g<=0.09|Q3@D1000 111.332614
+        main_profile_size   width>=4    width>=4|g<=0.09|Q3@D1000  61.459848
+    main_profile_gradient    g<=0.03   mad>=0.75|g<=0.03|Q3@D2000 111.636748
+    main_profile_gradient    g<=0.04   mad>=0.75|g<=0.04|Q3@D2000  89.125082
+    main_profile_gradient  g<=0.0549 mad>=0.75|g<=0.0549|Q3@D1000  49.643808
+    main_profile_gradient    g<=0.07   mad>=0.75|g<=0.07|Q3@D1000   0.000000
+    main_profile_gradient    g<=0.09   mad>=0.75|g<=0.09|Q3@D1000   2.697398
+ main_profile_exception_q         Q1    mad>=0.5|g<=0.07|Q1@D1000  13.014670
+ main_profile_exception_q        Q10  mad>=0.75|g<=0.07|Q10@D1000  25.716786
+ main_profile_exception_q        Q20   mad>=0.5|g<=0.07|Q20@D2000  49.989007
+ main_profile_exception_q         Q3   mad>=0.75|g<=0.07|Q3@D1000   0.000000
+ main_profile_exception_q        Q30   mad>=0.5|g<=0.07|Q30@D2000  51.779534
+ main_profile_exception_q         Q5    mad>=0.5|g<=0.09|Q5@D1000  21.822204
+ main_profile_exception_q        Q50   mad>=0.5|g<=0.07|Q50@D1000  48.253157
+ main_profile_exception_q       none        mad>=0.1|g<=0.07|none 105.370524
+ main_profile_exception_d       D100     mad>=0.2|g<=0.09|Q1@D100  70.980265
+ main_profile_exception_d      D1000   mad>=0.75|g<=0.07|Q3@D1000   0.000000
+ main_profile_exception_d      D2000   mad>=0.75|g<=0.09|Q3@D2000   5.398894
+ main_profile_exception_d       D250     mad>=0.5|g<=0.07|Q1@D250  51.485665
+ main_profile_exception_d       D500     mad>=0.5|g<=0.07|Q3@D500  30.086413
+ main_profile_exception_d      D5000   mad>=0.75|g<=0.09|Q3@D5000  46.948204
+ main_profile_exception_d       none        mad>=0.1|g<=0.07|none 105.370524
+  se_diff in_region
+ 30.80171     FALSE
+ 25.49554     FALSE
+ 21.45188     FALSE
+ 19.49312     FALSE
+ 28.92787      TRUE
+ 18.21788      TRUE
+  0.00000      TRUE
+ 36.15769      TRUE
+ 72.36581     FALSE
+ 68.73040     FALSE
+ 62.21180     FALSE
+ 43.60679     FALSE
+ 28.38461     FALSE
+ 57.88107     FALSE
+ 51.25656     FALSE
+ 25.53078     FALSE
+  0.00000      TRUE
+ 14.73750      TRUE
+ 16.06943      TRUE
+ 15.24365     FALSE
+ 43.81739     FALSE
+  0.00000      TRUE
+ 42.72122     FALSE
+ 20.38647     FALSE
+ 35.91526     FALSE
+ 53.26368     FALSE
+ 34.96423     FALSE
+  0.00000      TRUE
+ 24.73982      TRUE
+ 33.12547     FALSE
+ 21.17177     FALSE
+ 33.04566     FALSE
+ 53.26368     FALSE
+link_gradient / U: 2825 visits (131 detections) in 16 WSGs; 2690 distinct in/out patterns; 0 not converged; region 25 rules; default in region: FALSE; recommended mad>=0.5|g<=0.09|Q3@D1000
+link_visits_fwa_gradient / U: 2825 visits (131 detections) in 16 WSGs; 2501 distinct in/out patterns; 0 not converged; region 87 rules; default in region: FALSE; recommended mad>=0.5|g<=0.0549|Q3@D1000
+sens_all_stream_branch / U: 9745 visits (263 detections) in 46 WSGs; 2750 distinct in/out patterns; 0 not converged; region 13 rules; default in region: FALSE; recommended mad>=0.75|g<=0.07|Q3@D2000
+sens_stored_width / U: 3433 visits (166 detections) in 26 WSGs; 2646 distinct in/out patterns; 0 not converged; region 27 rules; default in region: FALSE; recommended mad>=0.75|g<=0.07|Q3@D1000
+sens_lake_targets_out / U: 3433 visits (166 detections) in 26 WSGs; 2637 distinct in/out patterns; 0 not converged; region 32 rules; default in region: FALSE; recommended mad>=0.75|g<=0.09|Q3@D1000
+sens_regulated_out / U: 3353 visits (147 detections) in 25 WSGs; 2529 distinct in/out patterns; 0 not converged; region 23 rules; default in region: FALSE; recommended mad>=0.5|g<=0.07|Q3@D1000
+sens_ambiguous_out / U: 3427 visits (163 detections) in 26 WSGs; 2625 distinct in/out patterns; 0 not converged; region 27 rules; default in region: FALSE; recommended mad>=0.75|g<=0.07|Q3@D1000
+sens_ches_necr_out / U: 3267 visits (154 detections) in 25 WSGs; 2633 distinct in/out patterns; 0 not converged; region 18 rules; default in region: FALSE; recommended mad>=0.5|g<=0.07|Q3@D1000
+sens_ch_given_fish / C: 2136 visits (166 detections) in 26 WSGs; 2565 distinct in/out patterns; 0 not converged; region 14 rules; default in region: FALSE; recommended mad>=0.75|g<=0.07|Q3@D2000
+src_pick_where_both / U: 3027 visits (163 detections) in 26 WSGs; 2635 distinct in/out patterns; 0 not converged; region 22 rules; default in region: FALSE; recommended mad>=0.5|g<=0.07|Q3@D1000
+src_routed / U: 3027 visits (163 detections) in 26 WSGs; 2635 distinct in/out patterns; 0 not converged; region 22 rules; default in region: FALSE; recommended mad>=0.5|g<=0.07|Q3@D1000
+src_balance / U: 3027 visits (163 detections) in 26 WSGs; 2649 distinct in/out patterns; 0 not converged; region 40 rules; default in region: FALSE; recommended mad>=0.75|g<=0.07|Q3@D1000
+src_pick_where_fwapg / U: 2695 visits (112 detections) in 18 WSGs; 2331 distinct in/out patterns; 4 not converged; region 38 rules; default in region: FALSE; recommended mad>=0.5|g<=0.09|Q3@D1000
+src_fwapg_old_mad / U: 2695 visits (112 detections) in 18 WSGs; 2344 distinct in/out patterns; 6 not converged; region 62 rules; default in region: FALSE; recommended mad>=0.5|g<=0.0549|Q50@D2000
+
+## pick and recommended in each analysis
+                 analysis response                         rule pick
+                     main        U   mad>=0.75|g<=0.07|Q3@D1000 TRUE
+            link_gradient        U    mad>=0.5|g<=0.09|Q3@D1000 TRUE
+ link_visits_fwa_gradient        U  mad>=0.5|g<=0.0549|Q3@D1000 TRUE
+   sens_all_stream_branch        U   mad>=0.75|g<=0.07|Q3@D2000 TRUE
+        sens_stored_width        U   mad>=0.75|g<=0.07|Q3@D1000 TRUE
+    sens_lake_targets_out        U   mad>=0.75|g<=0.09|Q3@D1000 TRUE
+       sens_regulated_out        U    mad>=0.5|g<=0.07|Q3@D1000 TRUE
+       sens_ambiguous_out        U   mad>=0.75|g<=0.07|Q3@D1000 TRUE
+       sens_ches_necr_out        U    mad>=0.5|g<=0.07|Q3@D1000 TRUE
+       sens_ch_given_fish        C   mad>=0.75|g<=0.07|Q3@D2000 TRUE
+      src_pick_where_both        U    mad>=0.5|g<=0.07|Q3@D1000 TRUE
+               src_routed        U    mad>=0.5|g<=0.07|Q3@D1000 TRUE
+              src_balance        U   mad>=0.75|g<=0.07|Q3@D1000 TRUE
+     src_pick_where_fwapg        U    mad>=0.5|g<=0.09|Q3@D1000 TRUE
+        src_fwapg_old_mad        U mad>=0.5|g<=0.0549|Q50@D2000 TRUE
+        main_profile_size        U   mad>=0.75|g<=0.07|Q3@D1000 TRUE
+    main_profile_gradient        U   mad>=0.75|g<=0.07|Q3@D1000 TRUE
+ main_profile_exception_q        U   mad>=0.75|g<=0.07|Q3@D1000 TRUE
+ main_profile_exception_d        U   mad>=0.75|g<=0.07|Q3@D1000 TRUE
+ recommended departures n_visits n_detect n_wsg ddev_best
+        TRUE          3     3433      166    26   0.00000
+        TRUE          3     2825      131    16   0.00000
+        TRUE          2     2825      131    16  22.52585
+        TRUE          3     9745      263    46   0.00000
+        TRUE          3     3433      166    26   0.00000
+        TRUE          3     3433      166    26   0.00000
+        TRUE          3     3353      147    25   0.00000
+        TRUE          3     3427      163    26   0.00000
+        TRUE          3     3267      154    25   0.00000
+        TRUE          3     2136      166    26   0.00000
+        TRUE          3     3027      163    26   0.00000
+        TRUE          3     3027      163    26   0.00000
+        TRUE          3     3027      163    26   0.00000
+        TRUE          3     2695      112    18   0.00000
+        TRUE          2     2695      112    18  55.83843
+        TRUE          3     3433      166    26   0.00000
+        TRUE          3     3433      166    26   0.00000
+        TRUE          3     3433      166    26   0.00000
+        TRUE          3     3433      166    26   0.00000
+
+## default in each analysis
+                 analysis ddev_best  se_diff in_region
+                     main  188.2803 78.67059     FALSE
+            link_gradient  166.5523 85.60385     FALSE
+ link_visits_fwa_gradient  145.0805 86.98505     FALSE
+   sens_all_stream_branch  257.6419 76.39996     FALSE
+        sens_stored_width  178.7551 76.06014     FALSE
+    sens_lake_targets_out  180.4917 89.92272     FALSE
+       sens_regulated_out  129.7976 56.01967     FALSE
+       sens_ambiguous_out  178.0415 75.68213     FALSE
+       sens_ches_necr_out  151.5989 64.27420     FALSE
+       sens_ch_given_fish  161.0860 57.33984     FALSE
+      src_pick_where_both  200.7377 73.72856     FALSE
+               src_routed  204.4319 74.70844     FALSE
+              src_balance  191.6203 65.89316     FALSE
+     src_pick_where_fwapg  183.1911 82.39887     FALSE
+        src_fwapg_old_mad  180.9181 80.44737     FALSE
+
+## flips by hydrologic zone (all MAD classes)
+ hydro_zone n_visits n_ch n_flip_routed n_flip_balance share_routed
+         01      184    6             0              3        0.000
+         05       13    0             0              0        0.000
+         08     1139   37             0             10        0.000
+         09      297    5             0              4        0.000
+         10      244   19             3              6        0.012
+         12       91   13             0              0        0.000
+         13       38    3             0              1        0.000
+         14      487   31             1              6        0.002
+         15      677   43             1              9        0.001
+         16      102    1             0              0        0.000
+         17       28    0             0              1        0.000
+         24       18    0             0              0        0.000
+         25      137    0             0              3        0.000
+         26      161    0            50              0        0.311
+         27      262    3             0              3        0.000
+         28      132    1             0              0        0.000
+         29       75    1             0              1        0.000
+ share_balance
+         0.016
+         0.000
+         0.009
+         0.013
+         0.025
+         0.000
+         0.026
+         0.012
+         0.013
+         0.000
+         0.036
+         0.000
+         0.022
+         0.000
+         0.011
+         0.000
+         0.013
+
+## flips by MAD class (all zones)
+ mad_class n_visits n_ch n_flip_routed n_flip_balance
+      <0.1     2297   24             1              9
+  0.1-0.28      539   28             2              1
+  0.28-0.5      203   19             0              2
+     0.5-1      259   28             1             32
+       1-3      434   27            51              3
+      3-10      312   17             0              0
+     10-30        9    3             0              0
+    30-100       32   17             0              0
+
+Distance curve: 3523 visits fail the recommended size floor; 72 of them have no >= 3 m3/s target (left out).
+
+## curves: threshold position
+        curve threshold rise_share_at_threshold   x_steepest
+      mad_m3s      0.75              0.78341240 2.564443e+00
+     gradient      0.07              0.86729442 1.571429e-01
+      width_m      1.50              0.06495875 1.075829e+01
+ dist_to_Q3_m   1000.00              0.81016919 3.719146e+04
+
+
+Family: binomial 
+Link function: cloglog 
+
+Formula:
+U ~ s(log_mad, k = 8) + s(grad, k = 6) + log_area + data_set + 
+    era + s(wsg, bs = "re")
+
+Parametric coefficients:
+            Estimate Std. Error z value Pr(>|z|)    
+(Intercept) -5.21873    0.53356  -9.781  < 2e-16 ***
+log_area     0.22572    0.07383   3.057  0.00223 ** 
+data_setFDS  1.28525    0.48459   2.652  0.00800 ** 
+era2005on   -0.77071    0.47079  -1.637  0.10161    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Approximate significance of smooth terms:
+              edf Ref.df  Chi.sq p-value    
+s(log_mad)  1.000  1.000  92.689  <2e-16 ***
+s(grad)     1.545  1.904   1.806   0.461    
+s(wsg)     20.677 25.000 157.668  <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+R-sq.(adj) =  0.242   Deviance explained = 32.5%
+-REML = 489.15  Scale est. = 1         n = 3432
+
+
+Family: binomial 
+Link function: cloglog 
+
+Formula:
+U ~ s(log_width, k = 8) + s(grad, k = 6) + log_area + data_set + 
+    era + s(wsg, bs = "re")
+
+Parametric coefficients:
+            Estimate Std. Error z value Pr(>|z|)    
+(Intercept) -4.37135    0.53161  -8.223   <2e-16 ***
+log_area     0.16242    0.07758   2.094   0.0363 *  
+data_setFDS  1.04848    0.47695   2.198   0.0279 *  
+era2005on   -0.68314    0.47015  -1.453   0.1462    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Approximate significance of smooth terms:
+                edf Ref.df  Chi.sq p-value    
+s(log_width)  3.257  4.006  85.032  <2e-16 ***
+s(grad)       2.077  2.597   3.063   0.319    
+s(wsg)       19.294 25.000 114.045  <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+R-sq.(adj) =  0.238   Deviance explained = 31.6%
+-REML = 445.37  Scale est. = 1         n = 2677
+
+
+Family: binomial 
+Link function: cloglog 
+
+Formula:
+U ~ s(log_dist, k = 6) + log_area + data_set + era + s(wsg, bs = "re")
+
+Parametric coefficients:
+            Estimate Std. Error z value Pr(>|z|)    
+(Intercept)  -6.9023     0.7534  -9.162  < 2e-16 ***
+log_area      0.3737     0.1092   3.422 0.000622 ***
+data_setFDS   2.1775     0.7102   3.066 0.002168 ** 
+era2005on    -2.1626     0.6763  -3.198 0.001384 ** 
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Approximate significance of smooth terms:
+               edf Ref.df Chi.sq p-value    
+s(log_dist)  2.304  2.817 133.17  <2e-16 ***
+s(wsg)      14.578 18.000  89.39  <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+R-sq.(adj) =  0.373   Deviance explained = 47.4%
+-REML = 232.04  Scale est. = 1         n = 2462

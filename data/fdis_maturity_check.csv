@@ -1,8 +1,8 @@
 maturity,size_class,n,share
 IM,adult,9,0.001
-IM,fry,3836,0.557
-IM,juvenile,2953,0.429
-IM,subadult,93,0.013
-SP/ST,adult,26,0.283
-SP/ST,juvenile,30,0.326
-SP/ST,subadult,36,0.391
+IM,fry,3820,0.558
+IM,juvenile,2931,0.428
+IM,subadult,92,0.013
+SP/ST,adult,25,0.275
+SP/ST,juvenile,30,0.33
+SP/ST,subadult,36,0.396

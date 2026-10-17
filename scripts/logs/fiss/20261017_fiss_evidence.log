@@ -1,0 +1,68 @@
+Spherical geometry (s2) switched off
+5 groups, 215 reports (17 parsed in more than one group); 175414 Step 3 fish
+FDIS overlap: 2952 sites, 100297 electrofished fish dropped (91961 matched by length)
+Note: method with signature ‘DBIObject#sf’ chosen for function ‘dbDataType’,
+ target signature ‘PqConnection#sf’.
+ "PqConnection#ANY" would also be valid
+      level species_group disagree   n
+1      fish            CH    0.581  62
+2      fish          char    0.086 579
+3 step2_row            CH    0.763  38
+4 step2_row          char    0.121 522
+   check                                                  expected
+1  step3_fish_in_buckets_vs_owner_groups                  175414  
+2  unmeasured_formula_classed_plus_unmeasured_eq_n_caught 0       
+3  site_species_step3_fish_blank_beside_named_method      0       
+4  step3_method_inherited_from_step2                      <NA>    
+5  step3_method_blank                                     <NA>    
+6  reports_parsed_differently_across_groups               0       
+7  buckets                                                <NA>    
+8  species_labels_unmapped                                <NA>    
+9  sites_undated                                          <NA>    
+10 evidence_sites_unplaced                                <NA>    
+11 evidence_sites_not_placeable                           <NA>    
+12 fdis_overlap_sites                                     <NA>    
+13 stage_fish_groups_ambiguous                            <NA>    
+   actual                                                                                                   
+1  175414                                                                                                   
+2  0                                                                                                        
+3  0                                                                                                        
+4  308                                                                                                      
+5  824                                                                                                      
+6  0                                                                                                        
+7  classed=1283; focal_no_length=3; in_fdis=100297; no_step1_site=851; not_focal=72610; species_unmapped=370
+8  11                                                                                                       
+9  32                                                                                                       
+10 16                                                                                                       
+11 1                                                                                                        
+12 2952                                                                                                     
+13 39                                                                                                       
+   pass
+1  TRUE
+2  TRUE
+3  TRUE
+4  TRUE
+5  TRUE
+6  TRUE
+7  TRUE
+8  TRUE
+9  TRUE
+10 TRUE
+11 TRUE
+12 TRUE
+13 TRUE
+   note                                                                                                                         
+1                                                                                                                               
+2                                                                                                                               
+3                                                                                                                               
+4                                                                                                                               
+5                                                                                                                               
+6                                                                                                                               
+7                                                                                                                               
+8  WSC=783; Trout Perch=100; PMC=29; YSU=16; SC=9; Lamprey=4; LNS=1; LSC=1; MU=1; Unidentified Species=1; unidentified species=1
+9                                                                                                                               
+10 placeable sites fwa_indexpoint found no stream for within 500 m                                                              
+11                                                                                                                              
+12                                                                                                                              
+13 site x species x method with more than one staged Step 2 row; its fish are not compared                                      
+fiss_evidence: 1348 rows over 1154 sites | focal fish classed 1283 | CH 45, char 1238
