@@ -106,8 +106,10 @@ jobs <- lapply(names(fitted), function(k) {
   list(key = k, species_code = r$species_code, stage = r$stage, pick = r$pick, groups = groups_sp(r$species_code))
 })
 dbDisconnect(conn)
-# largest species first, load-balanced, so the two 158-group BT jobs do not share one worker
+# largest species first, load-balanced, so the two 158-group BT jobs do not share one worker; named by key,
+# because the results are filtered to the jobs that succeeded and every later lookup goes by key, not position
 jobs <- jobs[order(-vapply(jobs, function(j) length(j$groups), integer(1)))]
+names(jobs) <- vapply(jobs, `[[`, character(1), "key")
 # each job writes its own tables as it finishes and returns its error rather than raising it, so one failed
 # species cannot discard the others at collection (code-check round 2); the grade table is read with the
 # six columns the comparison needs, not its 25 (RB's is 1.5 GB)
@@ -118,7 +120,8 @@ run_one <- function(job, schema, link_dir, vl, vs) {
   out <- tryCatch({
     grades <- readr::read_csv(file.path("data/tune", paste0(job$key, "_grades.csv")), show_col_types = FALSE,
                               col_select = c("id_segment", "watershed_group_code", "size", "dist_m", "grade", "grade_class"),
-                              col_types = readr::cols(grade_class = "c", .default = readr::col_double()))
+                              col_types = readr::cols(id_segment = "d", watershed_group_code = "c", size = "d", dist_m = "d",
+                                                      grade = "d", grade_class = "c"))
     cmp <- knw_compare_rules(pg, schema, job$species_code, job$stage, job$pick, job$groups, link_dir, grades,
                              visits = vl, visit_species = vs, scratch = paste0("knw_cmp_", tolower(job$key)))
     readr::write_csv(cmp$compare, file.path("data/compare", paste0(job$key, "_compare.csv")), na = "")
@@ -145,6 +148,7 @@ say("Compared %d species x stage in %.1f min on %d workers.", length(res), as.nu
 failed <- names(res)[vapply(res, function(x) !is.null(x$error), logical(1))]
 for (k in failed) say("%s FAILED after %.1f min: %s", k, res[[k]]$minutes, res[[k]]$error)
 res <- res[setdiff(names(res), failed)]
+if (!length(res)) { writeLines(log_lines, path_log); stop("every comparison job failed: ", paste(failed, collapse = ", ")) }
 for (k in names(res)) {
   tot <- res[[k]]$compare |> filter(watershed_group_code == "ALL")
   say("%s: %d groups, %.1f min; default %.0f km, tuned %.0f km (%+.1f %%); graded km %.0f -> %.0f; lost %.0f, gained %.0f.",
@@ -169,9 +173,9 @@ water_of <- function(w) {
 fp_rows <- list()
 for (k in names(res)) {
   r <- res[[k]]
-  stage <- jobs[[match(k, names(res))]]$stage
+  stage <- jobs[[k]]$stage
   flag <- if (stage == "rear") "rearing" else "spawning"
-  sp <- jobs[[match(k, names(res))]]$species_code
+  sp <- jobs[[k]]$species_code
   seg_all <- readRDS(file.path("data/compare", paste0(k, "_segments.rds")))
   per <- r$compare |> filter(watershed_group_code != "ALL")
   # three groups by the criteria in the header: largest gained share, largest lost share, most default km
