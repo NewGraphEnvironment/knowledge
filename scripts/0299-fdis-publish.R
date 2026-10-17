@@ -37,10 +37,12 @@
 #         with PUBLISH=TRUE also: s3://fresh-bc/knowledge/fdis/v2/ (the Parquet and manifest.json)
 #         and s3://fresh-bc/fdis/README.md
 #         with PULL=TRUE instead: data/fdis/derived/<table>.csv from the published Parquet
-# RUN:    Rscript scripts/0299-fdis-publish.R              (from the repo root; local only)
+# RUN:    Rscript scripts/0299-fdis-publish.R              (from the repo root; local only; VERSION=v3)
 #         PUBLISH=TRUE Rscript scripts/0299-fdis-publish.R  (uploads; needs write access to fresh-bc)
 #         PUBLISH=TRUE REPUBLISH=TRUE ...                   (replace a published version's contents)
-#         PULL=TRUE [NO_SIGN=TRUE] Rscript scripts/0299-fdis-publish.R
+#         PULL=TRUE [VERSION=v2] [NO_SIGN=TRUE] Rscript scripts/0299-fdis-publish.R
+#         VERSION names the dataset version (default v3). v2 is the pre-#57 set that 0291-0298 read;
+#         v3 (#57) adds 0310's tables and rebuilds the species tables from them.
 # ---------------------------------------------------------------------------
 suppressMessages({ library(arrow) })
 
@@ -51,13 +53,15 @@ republish <- identical(Sys.getenv("REPUBLISH"), "TRUE")
 if (publish && pull) stop("PUBLISH and PULL are exclusive", call. = FALSE)
 dir_in <- "data/fdis/derived"
 dir_out <- "data/fdis/publish"
-s3_id <- "knowledge/fdis/v2"
-s3_supersedes <- "knowledge/fdis/v1"
+version <- Sys.getenv("VERSION", "v3")
+if (!version %in% c("v2", "v3")) stop("VERSION must be v2 or v3", call. = FALSE)
+s3_id <- paste0("knowledge/fdis/", version)
+s3_supersedes <- paste0("knowledge/fdis/", c(v2 = "v1", v3 = "v2")[[version]])
 s3_tables <- paste0("s3://fresh-bc/", s3_id, "/")
 s3_readme <- "s3://fresh-bc/fdis/README.md"
 path_readme <- "data/fdis_README.md"
 
-tables <- data.frame(
+tables_v2 <- data.frame(
   table = c("fdis_sites", "bt_use_visits", "ch_mad_visits", "ch_rule_visits", "ch_rule_walks",
             "fdis_repeat_surveys"),
   source = c(file.path(dir_in, c("fdis_sites", "bt_use_visits", "ch_mad_visits", "ch_rule_visits",
@@ -73,6 +77,28 @@ tables <- data.frame(
     "Downstream walks from each CH visit to rivers of 1-50 m3/s on each flow source, read by the CH rule tuning (#54).",
     "Every other member of a group of FDIS visits that match as one survey loaded under several collection ids, with the copy kept: `dropped` (absent from the other tables from v2), or kept because the copies share one collection or differ in site number without identical measured fish (#35). The crosswalk from a v1 site_visit."),
   stringsAsFactors = FALSE)
+# v3 (#57): the one evidence build's tables, and the species tables rebuilt from it on the
+# province-wide fresh_default (the step-5 and score284 columns of v2's bt_use_visits are gone)
+tables_v3 <- rbind(
+  tables_v2[tables_v2$table %in% c("fdis_sites", "fdis_repeat_surveys"), ],
+  data.frame(
+    table = c("visits_link", "visits_species", "walks", "bcfishobs_fdis_match", "access_check"),
+    source = file.path(dir_in, paste0(c("visits_link", "visits_species", "walks", "bcfishobs_fdis_match",
+                                        "access_check"), ".csv")),
+    script = "scripts/0310-evidence-build.R",
+    description = c(
+      "One row per quality-passed FDIS site visit placed on a link `default` segment (province-wide `fresh_default`): the visit's effort, measured habitat and catch, the segment's attributes and elevation, link's access code per species and its habitat flags per species (re-gated on access, with the stored flag beside), wet's annual flow by source with the parent fallback, the width link reads on an unmeasured stream, regulated reach, natural barrier downstream per species, and hydrologic zone (#57).",
+      "One row per placed visit and species: fish caught, measured per size class, presence, whether an absence is blocked by a code that could hide the species, DV pooling for BT, and whether the group is in link's range for the species (#57).",
+      "Downstream walks from every placed visit to the first river of 1-50 m3/s on each flow source, with the target's lake and regulated flags (#57).",
+      "bcfishobs records matched to the FDIS visit they came from by collection, species and date, with the match class (#57, #23).",
+      "link#349's cross-tabulation of streams_habitat_<sp>.accessible against streams_access.access_<sp> per species, on the build's link run (#57)."),
+    stringsAsFactors = FALSE),
+  tables_v2[tables_v2$table %in% c("bt_use_visits", "ch_mad_visits", "ch_rule_visits", "ch_rule_walks"), ])
+tables_v3$description[tables_v3$table %in% c("bt_use_visits", "ch_mad_visits", "ch_rule_visits", "ch_rule_walks")] <-
+  paste(tables_v3$description[tables_v3$table %in% c("bt_use_visits", "ch_mad_visits", "ch_rule_visits", "ch_rule_walks")],
+        "From v3 written from visits_link by its script, on the province-wide link run; bt_use_visits no longer carries the held-out role, step-5 class or score284 columns (#57).")
+tables <- if (version == "v2") tables_v2 else tables_v3
+rownames(tables) <- NULL
 
 stopifnot("run from the repo root" = file.exists("DESCRIPTION") && dir.exists("scripts"))
 
@@ -186,8 +212,14 @@ manifest <- list(
   manifest_version = 1L,
   id = s3_id,
   supersedes = s3_supersedes,
-  note = paste("v2 keeps one copy of an FDIS survey loaded under several collection ids (knowledge#35);",
-               "fdis_repeat_surveys maps each v1 site_visit that left to the copy kept."),
+  note = if (version == "v2") {
+    paste("v2 keeps one copy of an FDIS survey loaded under several collection ids (knowledge#35);",
+          "fdis_repeat_surveys maps each v1 site_visit that left to the copy kept.")
+  } else {
+    paste("v3 is the one evidence build for every species on the province-wide link default run (knowledge#57):",
+          "visits_link, visits_species, walks, bcfishobs_fdis_match and access_check are new, and the four",
+          "species tables are written from visits_link. v2 stays as published for the scripts frozen on it.")
+  },
   built = format(Sys.time(), "%Y-%m-%dT%H:%M:%SZ", tz = "UTC"),
   provenance = list(
     published_from_commit = commit,
