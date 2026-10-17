@@ -246,7 +246,7 @@ log(segment width) coefficient in U: 0.230 (se 0.029)
 
 ## visits by segment class (rows) and the class the measured site gradient gives (columns)
                class core 0-2 core 2-5 core 5-8 core 8-10.49
-            core 0-2      683      296       40            7
+            core 0-2      684      296       40            7
             core 2-5      305      571      147           34
             core 5-8       56      266      179           58
         core 8-10.49        7       67       86           55
@@ -268,7 +268,7 @@ log(segment width) coefficient in U: 0.230 (se 0.029)
 
 ## raw rates by measured-site class
             site_cls n_visits  bt fish bt_rate bt_given_fish
-            core 0-2     1051 133  628   0.127         0.212
+            core 0-2     1052 133  629   0.126         0.211
             core 2-5     1201 236  784   0.197         0.301
             core 5-8      452  93  245   0.206         0.380
         core 8-10.49      154  17   55   0.110         0.309
