@@ -31,3 +31,7 @@
   copy, a ledger row, and `habitat_carried` in the map (the filter applies the same carry). (2) 0294's
   header overstated what its loose-signature count holds: reworded.
 - Rebuilt with the carry (0230 413 s, 0240 27 s, 0250 36 s; logs _03): only the 3 carried rows differ from the old fdis_sites minus the dropped copies; filter carried them in ch_mad_visits and ch_rule_visits (none in bt_use_visits). 0295 rerun (279 s) on the filtered table.
+- /code-check round 2 (review-round2.md): ws50 placement codes sit on fish rows and left with a dropped
+  copy (the habitat defect one axis over): 5 surveys flagged ws50-mismatched only because the copy whose
+  codes matched was dropped. Fixed: the ws50 check pools the codes of every copy. Because a fix carried a
+  defect twice, the loop ends by enumeration (findings.md, "Enumeration"), not by a clean round.

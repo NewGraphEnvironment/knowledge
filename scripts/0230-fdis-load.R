@@ -291,7 +291,8 @@ sites <- sites |>
 # holds the most measured fish, then the most maturity-coded fish, then a known catch, then
 # habitat, then the lowest collection id: in 94 of the 95 groups where one copy alone has
 # measured fish, it is the higher id. Where the copy kept has no habitat and a dropped copy does
-# (a zero copy kept over an unknown one), the dropped copy's habitat moves to the kept one.
+# (a zero copy kept over an unknown one), the dropped copy's habitat moves to the kept one, and
+# the placement check below reads the 50k watershed codes of every copy.
 maturity_coded <- c("IM", "M", "MT", "SP", "ST")
 pass_sig <- visits |>
   transmute(site_visit = site_of(KEY),
@@ -359,6 +360,22 @@ rep_groups <- rep_cand |> filter(sig %in% sig[status == "dropped"]) |> group_by(
   summarise(fish_differs = !all(fish_same), habitat_differs = !all(habitat_same),
             time_differs = !all(time_same), coded_lost = any(coded_lost & site_visit %in% dropped),
             status_mixed = n_distinct(catch_status) > 1, .groups = "drop")
+# the 50k watershed codes sit on fish rows, so a dropped copy's codes count for the copy kept
+kept_of <- repeat_map$kept_site_visit[repeat_map$status == "dropped"]
+fish_ws50 <- fish |> mutate(site_visit = coalesce(kept_of[match(site_visit, dropped)], site_visit))
+fish_ws50_from <- unique(fish$site_visit[fish$site_visit %in% dropped & !is.na(fish$watershed_code_50k)])
+# what the keep-one-copy rule gives up, for the ledger: measured fish (as a multiset of species,
+# length, weight, age, sex and maturity) and count length bounds held only on a dropped copy
+fish_key <- function(x) paste(x$species_code, x$length_mm, x$weight_g, x$age, x$sex_code, x$maturity_code)
+n_fish_not_on_kept <- fish |> filter(!is_nfc, site_visit %in% dropped) |>
+  mutate(kept = kept_of[match(site_visit, dropped)], key = fish_key(pick(everything()))) |> count(kept, key) |>
+  left_join(fish |> filter(!is_nfc, site_visit %in% kept_of) |> mutate(key = fish_key(pick(everything()))) |>
+              count(kept = site_visit, key, name = "n_kept"), by = c("kept", "key")) |>
+  summarise(n = sum(pmax(0L, n - coalesce(n_kept, 0L)))) |> pull(n)
+lengths_d <- catch |> filter(site_visit %in% dropped) |> mutate(kept = kept_of[match(site_visit, dropped)])
+lengths_k <- catch |> filter(site_visit %in% kept_of) |> select(kept = site_visit, species_code, min_k = min_length_mm)
+n_lengths_not_on_kept <- lengths_d |> left_join(lengths_k, by = c("kept", "species_code")) |>
+  summarise(n = sum(!is.na(min_length_mm) & is.na(min_k))) |> pull(n)
 n_pass_dropped  <- sum(sites$n_pass[sites$site_visit %in% dropped])
 n_fish_dropped  <- sum(fish$site_visit %in% dropped)
 is_counted_fish <- !counts$species_code %in% c(zero_catch_codes, nonfish_codes)
@@ -403,7 +420,7 @@ stopifnot(!anyDuplicated(placed$site_visit))
 # placement check: the 50k watershed code FDIS recorded -> the 20k blue_line_keys it maps to
 # a 50k code is a 3-digit basin then seven 6-digit levels; a code with every level zero names
 # only a mainstem and cannot place a site on a tributary, so it is not a check
-ws50 <- fish |> filter(!is.na(watershed_code_50k), nchar(watershed_code_50k) == 45,
+ws50 <- fish_ws50 |> filter(!is.na(watershed_code_50k), nchar(watershed_code_50k) == 45,
                        substr(watershed_code_50k, 4, 45) != strrep("0", 42)) |>
   distinct(site_visit, watershed_code_50k)
 xref <- DBI::dbGetQuery(conn, "SELECT DISTINCT watershed_code_50k, blue_line_key_20k
@@ -467,6 +484,9 @@ add("repeat_groups_time_differ", sum(rep_groups$time_differs))
 add("repeat_groups_zero_and_unknown", sum(rep_groups$status_mixed))
 add("repeat_groups_maturity_coded_lost", sum(rep_groups$coded_lost))
 add("repeat_habitat_carried_to_kept", nrow(donor))
+add("repeat_ws50_codes_pooled", sum(dmap$site_visit %in% fish_ws50_from))
+add("repeat_fish_rows_not_on_kept", n_fish_not_on_kept)
+add("repeat_count_lengths_not_on_kept", n_lengths_not_on_kept)
 add("repeat_groups_one_collection_kept", n_distinct(rep_cand$sig[rep_cand$status == "kept_one_collection"]))
 add("repeat_groups_site_differs_kept", n_distinct(rep_cand$sig[rep_cand$status == "kept_site_differs"]))
 print(rec, n = Inf)

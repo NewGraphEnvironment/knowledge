@@ -90,3 +90,21 @@ Scripts: scratchpad `probe35.R`, `probe35b.R`, `probe35c.R` (not committed) over
   (review C4); fiss_evidence.csv and its reconcile unchanged.
 - Filter: bt_use_visits 17,606 -> 17,184 (422 dropped; 3 surveys leave because the kept copy had
   failed 0290's drops); ch_mad_visits / ch_rule_visits 21,862 -> 21,325 (537); walks 372,687 -> 372,645.
+
+## Enumeration: per-visit values a dropped copy can hold (code-check round 2, 2026-10-17)
+
+Mechanism (rounds 1 and 2): 0230 drops a copy's rows from passes, habitat, counts and fish, so anything
+rolled up per visit from them is lost unless the kept copy holds it too. Every per-visit value 0230
+derives from those tables, measured over the 1,431 dropped / kept pairs on the pre-drop data:
+- passes: fishing time differs on 36 pairs, never present on the dropped copy only; area, fished length,
+  pass count, date, data set, and the effort, area and date flags never differ; agency differs on 44
+  (load metadata; the kept copy's is kept).
+- habitat: present on the dropped copy only in 3 groups, now carried (guarded).
+- counts and catch: species, counts, total, blocks_absence_of and the count-unknown flag are fixed by the
+  signature; NFC and catch status differ only as zero vs unknown, and the known catch is kept; count
+  length bounds exist on a dropped copy only for 3 species (ledger row).
+- fish: maturity-coded fish never lost (guarded); 346 measured fish rows in 38 groups are on a dropped
+  copy and not on the kept one, mostly the same fish with another weight or code, and 1 species is
+  measured only on a dropped copy (ledger row; merging copies would double-count the identical fish);
+  50k watershed codes now pooled across copies for the placement check.
+- placement: copies share the UTM, so the snap is the same.
