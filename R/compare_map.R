@@ -38,24 +38,28 @@ knw_compare_map <- function(segments, water = NULL, title = "", png = NULL, html
   seg$rule_class <- factor(ifelse(seg$flag_default & seg$flag_tuned, "kept (both rules)",
                            ifelse(seg$flag_default, "lost (default only)",
                            ifelse(seg$flag_tuned, "gained (tuned only)", "accessible, neither"))),
-                           levels = c("kept (both rules)", "lost (default only)", "gained (tuned only)", "accessible, neither"))
+                           levels = c("kept (both rules)", "lost (default only)", "gained (tuned only)",
+                                      "accessible, neither"))
   seg$grade_class <- factor(ifelse(is.na(seg$grade_class), "not graded", seg$grade_class),
                             levels = c("0-0.2", "0.2-0.4", "0.4-0.6", "0.6-0.8", "0.8-1", "not graded"))
   seg$lwd <- pmin(pmax(as.numeric(seg$stream_order), 1), 6) / 3
   rule_cols <- c("kept (both rules)" = "#1b6ca8", "lost (default only)" = "#d95f02", "gained (tuned only)" = "#1b9e77",
                  "accessible, neither" = "grey80")
-  grade_cols <- c("0-0.2" = "#f7fbff", "0.2-0.4" = "#c6dbef", "0.4-0.6" = "#6baed6", "0.6-0.8" = "#2171b5", "0.8-1" = "#08306b",
-                  "not graded" = "grey85")
+  grade_cols <- c("0-0.2" = "#f7fbff", "0.2-0.4" = "#c6dbef", "0.4-0.6" = "#6baed6", "0.6-0.8" = "#2171b5",
+                  "0.8-1" = "#08306b", "not graded" = "grey85")
   water_style <- NULL
   if (!is.null(water) && nrow(water) && requireNamespace("gq", quietly = TRUE)) {
     reg <- tryCatch(gq::gq_reg_main(), error = function(e) NULL)
-    if (!is.null(reg) && !is.null(reg$layers$lake)) water_style <- tryCatch(gq::gq_tmap_style(reg$layers$lake), error = function(e) NULL)
+    if (!is.null(reg) && !is.null(reg$layers$lake)) {
+      water_style <- tryCatch(gq::gq_tmap_style(reg$layers$lake), error = function(e) NULL)
+    }
   }
   base <- function() {
     m <- tmap::tm_shape(seg) + tmap::tm_lines(col = "grey90", lwd = 0.3)
     if (!is.null(water) && nrow(water)) {
       m <- m + tmap::tm_shape(water) +
-        (if (is.null(water_style)) tmap::tm_polygons(fill = "#9ecae1", col = NA) else do.call(tmap::tm_polygons, water_style))
+        (if (is.null(water_style)) tmap::tm_polygons(fill = "#9ecae1", col = NA)
+         else do.call(tmap::tm_polygons, water_style))
     }
     m
   }
@@ -64,22 +68,26 @@ knw_compare_map <- function(segments, water = NULL, title = "", png = NULL, html
     tmap::tmap_mode("plot")
     p1 <- base() + tmap::tm_shape(seg) +
       tmap::tm_lines(col = "rule_class", col.scale = tmap::tm_scale_categorical(values = rule_cols),
-                     col.legend = tmap::tm_legend(title = "Habitat by rule"), lwd = "lwd", lwd.legend = tmap::tm_legend_hide()) +
+                     col.legend = tmap::tm_legend(title = "Habitat by rule"), lwd = "lwd",
+                     lwd.legend = tmap::tm_legend_hide()) +
       tmap::tm_layout(frame = FALSE, inner.margins = 0, legend.position = tmap::tm_pos_in("left", "bottom"))
     p2 <- base() + tmap::tm_shape(seg) +
       tmap::tm_lines(col = "grade_class", col.scale = tmap::tm_scale_categorical(values = grade_cols),
-                     col.legend = tmap::tm_legend(title = "Grade (expected use)"), lwd = "lwd", lwd.legend = tmap::tm_legend_hide()) +
+                     col.legend = tmap::tm_legend(title = "Grade (expected use)"), lwd = "lwd",
+                     lwd.legend = tmap::tm_legend_hide()) +
       tmap::tm_layout(frame = FALSE, inner.margins = 0, legend.position = tmap::tm_pos_in("left", "bottom"))
     panels <- list(p1, p2)
     if (!is.null(fp_cells)) {
       p3 <- base() + tmap::tm_shape(fp_cells) +
-        tmap::tm_raster(col.scale = tmap::tm_scale_intervals(breaks = c(0, 0.2, 0.4, 0.6, 0.8, 1), values = unname(grade_cols[1:5])),
+        tmap::tm_raster(col.scale = tmap::tm_scale_intervals(breaks = c(0, 0.2, 0.4, 0.6, 0.8, 1),
+                                                             values = unname(grade_cols[1:5])),
                         col.legend = tmap::tm_legend(title = "Floodplain by its segment's grade")) +
         tmap::tm_layout(frame = FALSE, inner.margins = 0, legend.position = tmap::tm_pos_in("left", "bottom"))
       panels <- c(panels, list(p3))
     }
     dir.create(dirname(png), showWarnings = FALSE, recursive = TRUE)
-    tmap::tmap_save(tmap::tmap_arrange(panels, ncol = length(panels)), png, width = 4 * length(panels), height = 4.6, dpi = 150)
+    tmap::tmap_save(tmap::tmap_arrange(panels, ncol = length(panels)), png, width = 4 * length(panels),
+                    height = 4.6, dpi = 150)
     written <- c(written, png)
   }
   if (!is.null(html) && requireNamespace("mapgl", quietly = TRUE) && requireNamespace("htmlwidgets", quietly = TRUE)) {
@@ -89,11 +97,13 @@ knw_compare_map <- function(segments, water = NULL, title = "", png = NULL, html
     m <- mapgl::maplibre(style = mapgl::carto_style("positron"), bounds = s4) |>
       mapgl::add_source("seg", s4) |>
       mapgl::add_line_layer("rules", source = "seg",
-                            line_color = mapgl::match_expr("rule_class", values = names(rule_cols), stops = unname(rule_cols), default = "grey"),
+                            line_color = mapgl::match_expr("rule_class", values = names(rule_cols),
+                                                           stops = unname(rule_cols), default = "grey"),
                             line_width = mapgl::interpolate("stream_order", values = c(1, 6), stops = c(0.6, 3)),
                             tooltip = "rule_class") |>
       mapgl::add_line_layer("grade", source = "seg",
-                            line_color = mapgl::match_expr("grade_class", values = names(grade_cols), stops = unname(grade_cols), default = "grey"),
+                            line_color = mapgl::match_expr("grade_class", values = names(grade_cols),
+                                                           stops = unname(grade_cols), default = "grey"),
                             line_width = mapgl::interpolate("stream_order", values = c(1, 6), stops = c(0.6, 3)),
                             tooltip = "grade_class", visibility = "none") |>
       mapgl::add_categorical_legend(legend_title = title, values = names(rule_cols), colors = unname(rule_cols)) |>

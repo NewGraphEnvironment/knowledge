@@ -42,7 +42,8 @@ Needs \code{flooded} with \code{nearest$seg} (flooded#89).
 }
 \examples{
 \dontrun{
-seg <- sf::st_read(conn, query = "SELECT id_segment, blue_line_key, geom FROM fresh_default.streams WHERE watershed_group_code = 'LARL'")
+seg <- sf::st_read(conn, query = "SELECT id_segment, blue_line_key, geom FROM fresh_default.streams
+                                  WHERE watershed_group_code = 'LARL'")
 seg$rearing_default <- ...; seg$rearing_tuned <- ...; seg$grade <- ...
 fp <- knw_floodplain_ha("larl_floodplain.gpkg", seg, c("rearing_default", "rearing_tuned"))
 fp$summary

@@ -28,7 +28,8 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' seg <- sf::st_read(conn, query = "SELECT id_segment, blue_line_key, geom FROM fresh_default.streams WHERE watershed_group_code = 'LARL'")
+#' seg <- sf::st_read(conn, query = "SELECT id_segment, blue_line_key, geom FROM fresh_default.streams
+#'                                   WHERE watershed_group_code = 'LARL'")
 #' seg$rearing_default <- ...; seg$rearing_tuned <- ...; seg$grade <- ...
 #' fp <- knw_floodplain_ha("larl_floodplain.gpkg", seg, c("rearing_default", "rearing_tuned"))
 #' fp$summary
@@ -40,11 +41,7 @@ knw_floodplain_ha <- function(gpkg, segments, flags, scenario = "all_ff04") {
   if (!requireNamespace("flooded", quietly = TRUE) || !requireNamespace("terra", quietly = TRUE)) {
     stop("flooded and terra are needed", call. = FALSE)
   }
-  if (!"seg" %in% names(flooded::fl_valley_join(terra::rast(nrows = 2, ncols = 2, xmin = 0, xmax = 60, ymin = 0, ymax = 60,
-                                                                crs = "EPSG:3005", vals = 1L),
-                                                   sf::st_sf(k = 1L, geometry = sf::st_sfc(sf::st_polygon(list(rbind(c(0, 0), c(60, 0), c(60, 60), c(0, 60), c(0, 0)))), crs = 3005)),
-                                                   sf::st_sf(k = 1L, f = TRUE, geometry = sf::st_sfc(sf::st_linestring(rbind(c(5, 0), c(5, 60))), crs = 3005)),
-                                                   group = "k", cols = "f")$nearest)) {
+  if (!.knw_flooded_has_seg()) {
     stop("flooded::fl_valley_join() does not return the owning segment: install flooded with #89", call. = FALSE)
   }
   layers <- sf::st_layers(gpkg)$name
@@ -53,7 +50,9 @@ knw_floodplain_ha <- function(gpkg, segments, flags, scenario = "all_ff04") {
   if (!all(c(lyr_fp, lyr_bl) %in% layers)) stop(gpkg, " lacks ", lyr_fp, " or ", lyr_bl, call. = FALSE)
   fp <- sf::st_read(gpkg, layer = lyr_fp, quiet = TRUE)
   bl <- sf::st_read(gpkg, layer = lyr_bl, quiet = TRUE)
-  if (sf::st_crs(fp)$epsg != 3005 || sf::st_crs(bl)$epsg != 3005) stop("the floodplain layers are not in EPSG:3005", call. = FALSE)
+  if (sf::st_crs(fp)$epsg != 3005 || sf::st_crs(bl)$epsg != 3005) {
+    stop("the floodplain layers are not in EPSG:3005", call. = FALSE)
+  }
   if (!nrow(segments)) stop("segments has no rows", call. = FALSE)
   if (is.na(sf::st_crs(segments))) stop("segments has no CRS", call. = FALSE)
   if (!isTRUE(sf::st_crs(segments)$epsg == 3005)) segments <- sf::st_transform(segments, 3005)
@@ -74,8 +73,8 @@ knw_floodplain_ha <- function(gpkg, segments, flags, scenario = "all_ff04") {
   area_poly_km2 <- as.numeric(sum(sf::st_area(fp))) / 1e6
   area_rast_km2 <- n_cells * res * res / 1e6
   if (abs(area_rast_km2 - area_poly_km2) / area_poly_km2 > 0.001) {
-    stop(sprintf("the rasterised floodplain (%.3f km2) does not reproduce the polygon (%.3f km2): the grid is not the polygons'",
-                 area_rast_km2, area_poly_km2), call. = FALSE)
+    stop(sprintf(paste("the rasterised floodplain (%.3f km2) does not reproduce the polygon (%.3f km2):",
+                       "the grid is not the polygons'"), area_rast_km2, area_poly_km2), call. = FALSE)
   }
   sg <- segments[, c("id_segment", "blue_line_key", "grade", flags)]
   sg <- sg[sg$blue_line_key %in% bl$blue_line_key, ]
@@ -103,4 +102,14 @@ knw_floodplain_ha <- function(gpkg, segments, flags, scenario = "all_ff04") {
              cells_unowned = sum(!ok), area_poly_km2 = area_poly_km2, area_rast_km2 = area_rast_km2,
              floodplain_ha = n_cells * cell_ha, ha_owned = sum(out$fp_ha))
   list(segments = out, summary = summary, check = check)
+}
+
+# Whether the installed flooded returns the owning segment in `nearest` (flooded#89): one join on a
+# two-cell valley with one claiming group and one segment.
+.knw_flooded_has_seg <- function() {
+  r <- terra::rast(nrows = 2, ncols = 2, xmin = 0, xmax = 60, ymin = 0, ymax = 60, crs = "EPSG:3005", vals = 1L)
+  ring <- rbind(c(0, 0), c(60, 0), c(60, 60), c(0, 60), c(0, 0))
+  a <- sf::st_sf(k = 1L, geometry = sf::st_sfc(sf::st_polygon(list(ring)), crs = 3005))
+  s <- sf::st_sf(k = 1L, f = TRUE, geometry = sf::st_sfc(sf::st_linestring(rbind(c(5, 0), c(5, 60))), crs = 3005))
+  "seg" %in% names(flooded::fl_valley_join(r, a, s, group = "k", cols = "f")$nearest)
 }
