@@ -44,10 +44,10 @@
 #     the sea. Each map shows accessible stream segments by rule and FDIS visits that caught CH.
 #
 # INPUT:  data/ch_rule_tune.csv (scripts/0297), data/fdis/derived/ch_rule_visits.csv and
-#         ch_rule_walks.csv (scripts/0296), scripts/sql/ch_dist_profile.sql; local fwapg :5432
+#         ch_rule_walks.csv (scripts/0296), scripts/sql/ch_dist_profile.sql; fwapg database (PG* env vars)
 #         (fresh_default, bcfishobs, discharge, whse_basemapping); the link repository at
 #         `link_repo`, commit `link_sha`
-# WRITES: schema ch_rule_scratch in local fwapg (scratch copies; never fresh_default)
+# WRITES: schema ch_rule_scratch in the fwapg database (scratch copies; never fresh_default)
 # OUTPUT: data/ch_rule_compare.csv   one row per group and a total: km and segments by rule
 #         data/ch_rule_checks.csv    FDIS detection and the outside check, by rule
 #         data/ch_rule_change.csv    km and segments gained and lost (tuned against default), by
@@ -59,7 +59,7 @@
 suppressMessages({ library(dplyr); library(readr); library(DBI); library(RPostgres) })
 options(warn = 1)
 
-link_repo <- Sys.getenv("LINK_REPO", file.path(Sys.getenv("HOME"), "Projects/repo/link"))
+link_repo <- Sys.getenv("LINK_REPO", "../link")   # a checkout of NewGraphEnvironment/link
 link_sha <- "62fae0bb8667779b9abd0533e9c45b206616b544"    # link main, 2026-10-15
 scratch <- "ch_rule_scratch"
 edge_stream <- c(1000, 1100, 2000, 2300)
@@ -85,9 +85,8 @@ block <- function(title, x) {
                   capture.output(print(as.data.frame(x), row.names = FALSE)))
 }
 pg <- function() {
-  tryCatch(DBI::dbConnect(RPostgres::Postgres(), host = "localhost", port = 5432, dbname = "fwapg",
-                          user = "postgres", password = "postgres", bigint = "numeric"),
-           error = function(e) stop("local fwapg :5432 unreachable: ", conditionMessage(e)))
+  tryCatch(DBI::dbConnect(RPostgres::Postgres(), bigint = "numeric"),
+           error = function(e) stop("database unreachable (PG* environment variables): ", conditionMessage(e)))
 }
 
 # ---- link inputs at a pinned commit ------------------------------------------------

@@ -48,7 +48,7 @@
 #   - CROSS-CHECK: picked MAD class of bcfishobs CH records that are not FDIS (presence only,
 #     every method and life stage), against the class mix of FDIS visits that caught CH.
 #
-# INPUT:  data/fdis/derived/ch_mad_visits.csv (scripts/0294); local fwapg :5432 (cross-check)
+# INPUT:  data/fdis/derived/ch_mad_visits.csv (scripts/0294); fwapg database (PG* env vars) (cross-check)
 # OUTPUT: data/ch_mad_use.csv   aggregates only: analysis x response x class
 #         scripts/logs/habitat/<date>_ch_mad_use.txt
 # RUN:    Rscript scripts/0295-ch-mad-use.R   (after 0294, from the repo root; ~5 min)
@@ -298,8 +298,7 @@ say("Natural CH barrier downstream: %d of %d visits in fresh_default WSGs; CH ca
 parallel::stopCluster(cl)
 
 # ---- cross-check: bcfishobs CH records that are not FDIS --------------------------
-conn <- dbConnect(Postgres(), host = "localhost", port = 5432, dbname = "fwapg",
-                  user = "postgres", password = "postgres", bigint = "numeric")
+conn <- dbConnect(Postgres(), bigint = "numeric")
 obs <- dbGetQuery(conn, "
   SELECT o.observation_key, o.life_stage, o.source, q.q_m3s
   FROM bcfishobs.observations o

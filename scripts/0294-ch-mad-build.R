@@ -19,7 +19,7 @@
 #   - DUPLICATES (#35, A8): visits with the same UTM, date, area and catch, after the drops, are
 #     KEPT and flagged (`dup_of` = the lowest site_visit of the group, NA on that one).
 #   - FLOW is month 0 (the annual mean) of discharge/fwa/v1/segment_monthly, scenario historical,
-#     as wet::wet_db_load() loaded it into local fwapg; `pick` marks wet's default source per
+#     as wet::wet_db_load() loaded it into the fwapg database; `pick` marks wet's default source per
 #     segment, both sources' values are kept, and the picked counts are checked against the
 #     manifest this was written for. A segment with no picked flow (B2: side channels and
 #     connectors with no watershed lut row, where CH are caught at about six times the overall rate)
@@ -48,10 +48,10 @@
 #   - Every drop is counted in the ledger, and the drops and the kept rows partition the input.
 #
 # INPUT:  data/fdis/derived/fdis_sites.csv (scripts/0240), data/fdis_species_codes.csv,
-#         scripts/sql/ch_dist_large.sql; local fwapg :5432 (discharge.fwa_v1_segment_monthly,
+#         scripts/sql/ch_dist_large.sql; fwapg database (PG* env vars) (discharge.fwa_v1_segment_monthly,
 #         bcfishobs.observations, cabd.dams, fresh_default.barriers, whse_basemapping)
-# OUTPUT: data/fdis/derived/ch_mad_visits.csv  one row per kept visit (ignored, private;
-#         aws s3 cp to s3://fresh-bc/fdis/derived/)
+# OUTPUT: data/fdis/derived/ch_mad_visits.csv  one row per kept visit (ignored;
+#         published by 0299)
 #         scripts/logs/habitat/<date>_ch_mad_build_ledger.csv
 # RUN:    Rscript scripts/0294-ch-mad-build.R   (from the repo root; ~10 min, 4 socket workers)
 # ---------------------------------------------------------------------------
@@ -81,9 +81,8 @@ drop <- function(x, keep, step) {
   x[keep, ]
 }
 pg <- function() {
-  tryCatch(DBI::dbConnect(RPostgres::Postgres(), host = "localhost", port = 5432, dbname = "fwapg",
-                          user = "postgres", password = "postgres", bigint = "numeric"),
-           error = function(e) stop("local fwapg :5432 unreachable: ", conditionMessage(e)))
+  tryCatch(DBI::dbConnect(RPostgres::Postgres(), bigint = "numeric"),
+           error = function(e) stop("database unreachable (PG* environment variables): ", conditionMessage(e)))
 }
 
 sites <- read_csv("data/fdis/derived/fdis_sites.csv", show_col_types = FALSE, guess_max = 1e5,

@@ -9,14 +9,14 @@
 # Precedent: the "Clearwater" collision (Marjorie/Clearwater LAKE = Cariboo, not the
 # PCEA "Trib to Clearwater Creek" near Mackenzie).
 #
-# INPUT:  data/<wsg>/gnis_seed.csv (from the PSCIS pull), live DB :63333
+# INPUT:  data/<wsg>/gnis_seed.csv (from the PSCIS pull); a bcfishpass database (PG* env vars)
 # OUTPUT: data/<wsg>/gnis_seed_ambiguity.csv (name, n_wsg, wsgs, wsg_only)
 # ---------------------------------------------------------------------------
 suppressMessages({library(DBI); library(RPostgres)})
 
 wsg  <- toupper(if (nzchar(Sys.getenv("WSG_TARGET"))) Sys.getenv("WSG_TARGET") else "PINE")
 seed_csv <- file.path("data", tolower(wsg), "gnis_seed.csv")
-conn <- DBI::dbConnect(RPostgres::Postgres(), host="localhost", port=63333, dbname="bcfishpass", user="newgraph")
+conn <- DBI::dbConnect(RPostgres::Postgres())   # libpq reads the PG* environment variables
 
 # a table carrying BOTH gnis_name and watershed_group_code (prefer bcfishpass.streams)
 tbls <- DBI::dbGetQuery(conn, "
@@ -27,7 +27,7 @@ tbls <- DBI::dbGetQuery(conn, "
 tbl <- if (any(tbls$table_schema=="bcfishpass" & tbls$table_name=="streams")) "bcfishpass.streams" else
        paste(tbls$table_schema[1], tbls$table_name[1], sep=".")
 
-pkgload::load_all("pkg", quiet = TRUE)
+pkgload::load_all(quiet = TRUE)
 seed <- readr::read_csv(seed_csv, show_col_types=FALSE)$gnis_base
 amb  <- knw_gnis_collisions(conn, seed, wsg, table = tbl)
 readr::write_csv(amb, file.path("data", tolower(wsg), "gnis_seed_ambiguity.csv"))

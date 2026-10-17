@@ -20,7 +20,8 @@
 # All farmed columns (incl. notes) travel into the gpkg so it is self-sufficient
 # in the field.
 #
-# INPUT:  data/priority_farmed_all.csv (0161), live DB :63333 for polys
+# INPUT:  data/priority_farmed_all.csv (0161); a database carrying fwapg's whse_basemapping
+#         (PG* environment variables) for the stream snap and the clip polygons, optional
 # OUTPUT: data/rag_priorities.gpkg (layer rag_priorities) + .kml
 # ---------------------------------------------------------------------------
 suppressMessages({library(sf); library(dplyr); library(stringr); library(readr); library(purrr); library(DBI); library(RPostgres)})
@@ -119,8 +120,7 @@ snap_pts <- NULL
 if (nrow(rest2)) {
   sn <- map(rest2$stream_name, snap_name)
   rest2 <- rest2 %>% mutate(snap_nm = map_chr(sn, "name"), snap_parent = map_lgl(sn, "parent"))
-  cn <- tryCatch(dbConnect(RPostgres::Postgres(), host="localhost", port=5432, dbname="fwapg", user="postgres", password="postgres"), error=function(e) NULL)
-  if (is.null(cn)) cn <- tryCatch(dbConnect(RPostgres::Postgres(), host="localhost", port=63333, dbname="bcfishpass", user="newgraph"), error=function(e) NULL)
+  cn <- tryCatch(dbConnect(RPostgres::Postgres()), error=function(e) NULL)   # PG* environment variables
   if (!is.null(cn)) {
     look <- rest2 %>% distinct(watershed_group_code, snap_nm) %>% filter(!is.na(snap_nm) & snap_nm != "")
     pairs <- paste(sprintf("(lower('%s'),'%s')", gsub("'","''",look$snap_nm), look$watershed_group_code), collapse=",")
@@ -155,10 +155,8 @@ n_unplaced <- nrow(d) - nrow(placed)
 g <- st_as_sf(placed, coords = c("lon","lat"), crs = 4326)
 
 # ---- clip to the UNION of the Fraser polys (drop far off-region strays) ----
-# remote tunnel (bcfishpass:63333), else local fresh-db (fwapg:5432) — both carry
-# whse_basemapping.fwa_watershed_groups_poly.
-conn <- tryCatch(dbConnect(RPostgres::Postgres(), host="localhost", port=63333, dbname="bcfishpass", user="newgraph"), error=function(e) NULL)
-if (is.null(conn)) conn <- tryCatch(dbConnect(RPostgres::Postgres(), host="localhost", port=5432, dbname="fwapg", user="postgres", password="postgres"), error=function(e) NULL)
+# any database carrying whse_basemapping.fwa_watershed_groups_poly (PG* environment variables)
+conn <- tryCatch(dbConnect(RPostgres::Postgres()), error=function(e) NULL)
 if (!is.null(conn)) {
   poly <- st_read(conn, query = sprintf(
     "SELECT ST_Union(geom) geom FROM whse_basemapping.fwa_watershed_groups_poly WHERE watershed_group_code IN (%s)",

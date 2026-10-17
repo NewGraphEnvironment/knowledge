@@ -8,7 +8,7 @@ export const meta = {
   ],
 }
 
-const HARVEST = '/private/tmp/claude-501/-Users-airvine-Projects-repo-fish-passage-template-reporting/e183f2c3-3a66-4a4b-a375-24fc6560ada4/scratchpad/harvest'
+// args.harvest_dir: an existing directory the PDFs are downloaded into (read below, with the other args)
 
 const GNIS_SCHEMA = {
   type: 'object', additionalProperties: false,
@@ -33,6 +33,8 @@ const chunk = (a, n) => { const o = []; for (let i = 0; i < a.length; i += n) o.
 
 // args may arrive as a JSON string or a parsed object — normalize.
 const A = typeof args === 'string' ? JSON.parse(args) : (args || {})
+const HARVEST = A.harvest_dir
+if (!HARVEST) throw new Error('args.harvest_dir is required')
 
 // ---- Phase 1: GNIS supplement (find non-FISS reports by PINE-unique stream name) ----
 phase('GNIS supplement')

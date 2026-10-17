@@ -3,7 +3,7 @@
 # FDIS electrofishing export: load, QA, and place on the FWA network. Issue #18.
 #
 # WHY / DESIGN NOTES (research/fdis_export.md has the measurements behind each):
-#   - Source is the province-supplied FDIS export at s3://fresh-bc/fdis/ (private).
+#   - Source is the province-supplied FDIS export at s3://fresh-bc/fdis/ (as received; see its README.md).
 #   - GRAIN IS THE SITE VISIT (first three KEY parts). KEY is one electrofishing pass,
 #     and 5,748 of 53,018 site visits have 2-8 depletion passes of the same population,
 #     so per-pass rows would weight those sites up to 8x. Catch and effort sum over passes.
@@ -22,7 +22,7 @@
 #     GRADIENT11/12 are the primary measurement, 21/22 a second one (a separate method code
 #     not exported, and it runs higher), so they are kept apart. Sentinels (width >= 500 m,
 #     gradient > 100 %) are flagged and excluded.
-#   - PLACEMENT: whse_basemapping.fwa_indexpoint on the local fwapg :5432, with an explicit
+#   - PLACEMENT: whse_basemapping.fwa_indexpoint in the fwapg database (PG* environment variables), with an explicit
 #     tolerance (its default is 5 km). The matched FWA feature's gradient, order, edge type,
 #     modelled channel width and MAD are joined province-wide, not fresh.streams (98 groups
 #     locally). Placement is checked against the 50k watershed code FDIS recorded
@@ -62,8 +62,30 @@ is_sentinel <- function(x) !is.na(x) & x >= sentinel_min
 # ---- sync + verify ---------------------------------------------------------
 if (!file.exists(file.path(cache, "MANIFEST.md5"))) {
   message("Syncing s3://fresh-bc/fdis/ -> ", cache)
-  rc <- system2("aws", c("s3", "sync", "s3://fresh-bc/fdis/", cache, "--only-show-errors"))
-  if (rc != 0) stop("aws s3 sync failed (exit ", rc, ")")
+  if (identical(Sys.getenv("NO_SIGN"), "TRUE")) {
+    # Without credentials the public prefix serves exact keys but cannot be listed, so a sync
+    # fails: fetch the manifest aside, then the README and each key it names, and put the
+    # manifest in place last, because its presence is what marks the cache complete above.
+    get <- function(key, dst = file.path(cache, key)) {
+      dir.create(dirname(dst), recursive = TRUE, showWarnings = FALSE)
+      rc <- system2("aws", shQuote(c("s3", "cp", paste0("s3://fresh-bc/fdis/", key), dst,
+                                     "--no-sign-request", "--only-show-errors")))
+      if (rc != 0) stop("aws s3 cp of fdis/", key, " failed (exit ", rc, ")")
+    }
+    pending <- file.path(cache, "MANIFEST.md5.part")
+    get("MANIFEST.md5", pending)
+    get("README.md")
+    for (key in sub("^\\./", "", substring(read_lines(pending), 34))) get(key)
+    if (!file.rename(pending, file.path(cache, "MANIFEST.md5"))) stop("could not move ", pending, " into place")
+  } else {
+    # the manifest last here too: its presence is what marks the cache complete
+    rc <- system2("aws", c("s3", "sync", "s3://fresh-bc/fdis/", cache, "--exclude", "MANIFEST.md5",
+                           "--only-show-errors"))
+    if (rc != 0) stop("aws s3 sync failed (exit ", rc, ")")
+    rc <- system2("aws", c("s3", "cp", "s3://fresh-bc/fdis/MANIFEST.md5", file.path(cache, "MANIFEST.md5"),
+                           "--only-show-errors"))
+    if (rc != 0) stop("aws s3 cp of MANIFEST.md5 failed (exit ", rc, ")")
+  }
 }
 # md5 -r format: 32 hex, a space, then the path (paths contain spaces)
 manifest <- tibble(line = read_lines(file.path(cache, "MANIFEST.md5"))) |>
@@ -253,9 +275,8 @@ sites <- sites |>
   )
 
 # ---- place site visits on the network --------------------------------------
-conn <- tryCatch(DBI::dbConnect(RPostgres::Postgres(), host = "localhost", port = 5432,
-                                dbname = "fwapg", user = "postgres", password = "postgres"),
-                 error = function(e) stop("local fwapg :5432 unreachable: ", conditionMessage(e)))
+conn <- tryCatch(DBI::dbConnect(RPostgres::Postgres()),
+                 error = function(e) stop("database unreachable (PG* environment variables): ", conditionMessage(e)))
 
 pts <- sites |>
   filter(!flag_no_utm) |>

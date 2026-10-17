@@ -33,33 +33,30 @@ wf_farm_priority.js                          farm priority/crossing tables out o
       (also writes Step 2 life stage and Step 3 individual fish, raw, per group)
 
 --- FDIS electrofishing export (province-wide, not per group) ---
-0230  sync s3://fresh-bc/fdis/, QA, roll passes to site visits, place on FWA   (local fwapg :5432)
+0230  sync s3://fresh-bc/fdis/, QA, roll passes to site visits, place on FWA   (fwapg database (PG* env vars))
 0240  size classes + CH / char evidence + summary vs thresholds -> data/fdis_*.csv
-      then: aws s3 sync data/fdis/derived/ s3://fresh-bc/fdis/derived/
 
 --- FISS individual fish -> size-class evidence (after 0220 on each group, and 0230) ---
-0250  Step 3 fish + Step 2 counts, deduped against FDIS -> data/fiss_evidence.csv (local fwapg :5432)
+0250  Step 3 fish + Step 2 counts, deduped against FDIS -> data/fiss_evidence.csv (fwapg database (PG* env vars))
 
 --- Life-history timing (independent; re-run only when the template's Gantt CSV changes) ---
 0260  reshape the template's Gantt CSV -> data/life_history_timing.csv   (read with knw_timing_read())
 
---- BT rearing use curve and candidate weight (after 0240; needs link >= 0.55.0 and local fwapg :5432) ---
+--- BT rearing use curve and candidate weight (after 0240; needs link >= 0.55.0 and fwapg database (PG* env vars)) ---
 0290  place FDIS site visits on link's segments (fresh_default + score284_default), pooled BT presence,
       elevation third, step-5 class -> data/fdis/derived/bt_use_visits.csv (+ ledger)
 0291  effort-corrected use curve, three responses (BT caught, any fish, BT given fish)
       -> data/bt_rear_use_curve.csv (+ log; ~10 min, socket workers)
 0292  candidate weight per gradient class -> data/habitat_weight_bt_rear.csv
 0293  BT spawner evidence by gradient class (maturity-coded Aug-Oct visits, size split) -> data/bt_spawn_evidence.csv (+ log; ~10 min)
-      then: aws s3 cp data/fdis/derived/bt_use_visits.csv s3://fresh-bc/fdis/derived/
 
---- CH detection by stream size (after 0240; needs wet's flow loaded in local fwapg :5432) ---
+--- CH detection by stream size (after 0240; needs wet's flow loaded in fwapg database (PG* env vars)) ---
 0294  FDIS visits with wet's picked annual flow (MAD), distance downstream to the first MAD >= 10
       segment for visits under 0.5, natural CH barrier check -> data/fdis/derived/ch_mad_visits.csv
       (+ ledger; ~15 min, 4 socket workers)
 0295  effort-corrected CH detection by MAD class and by distance class -> data/ch_mad_use.csv (+ log)
-      then: aws s3 cp data/fdis/derived/ch_mad_visits.csv s3://fresh-bc/fdis/derived/
 
---- Tuned CH rearing rule (after 0294; wet's flow, fresh_default and fresh in local fwapg :5432) ---
+--- Tuned CH rearing rule (after 0294; wet's flow, fresh_default and fresh in fwapg database (PG* env vars)) ---
 0296  walks to rivers of 1-50 m3/s on each flow source, link's width (and fwapg's model recomputed),
       natural CH barrier status, link segment, hydrologic zone -> data/fdis/derived/ch_rule_visits.csv
       and ch_rule_walks.csv (+ ledger; ~4 min, 4 socket workers)
@@ -69,8 +66,11 @@ wf_farm_priority.js                          farm priority/crossing tables out o
 0298  recommended rule beside default on fresh_default's CH groups (predicate, overlay and fresh's
       connectivity pass on scratch copies; needs the link repo, LINK_REPO) -> data/ch_rule_compare.csv,
       ch_rule_checks.csv, ch_rule_change.csv, maps in research/fig/ (+ log; ~20 min)
-      then: aws s3 cp data/fdis/derived/ch_rule_visits.csv s3://fresh-bc/fdis/derived/
-            aws s3 cp data/fdis/derived/ch_rule_walks.csv s3://fresh-bc/fdis/derived/
+
+--- Publish the FDIS visit tables (after any of 0240, 0290, 0294, 0296 changes its table) ---
+0299  data/fdis/derived/*.csv -> Parquet + manifest.json in data/fdis/publish/; with PUBLISH=TRUE (clean
+      tree) uploads them to s3://fresh-bc/knowledge/fdis/v1/ and data/fdis_README.md to s3://fresh-bc/fdis/README.md
+      PULL=TRUE restores data/fdis/derived/*.csv from the published Parquet (NO_SIGN=TRUE: no credentials)
 
 --- Habitat literature (independent of the watershed-group flow) ---
 0270  build the group's Fisheries/habitat_modelling collection   --dry-run first, then live
@@ -202,8 +202,8 @@ A report is reachable from more than one place; using only one axis misses repor
 
 ## 0230 / 0240 — FDIS electrofishing export → size-class evidence
 
-Province-wide, from the FDIS export the Province supplied (`s3://fresh-bc/fdis/`, private;
-`research/fdis_export.md` documents it). Electrofishing only. Individual fish lengths, weights
+Province-wide, from the FDIS export the Province supplied (`s3://fresh-bc/fdis/`, published as received
+with the Province's agreement; `research/fdis_export.md` documents it). Electrofishing only. Individual fish lengths, weights
 and maturity, per-pass effort, measured channel width and gradient, and explicit zero catch
 (`NFC`): none of it is in the public FISS layers.
 
@@ -214,8 +214,8 @@ and maturity, per-pass effort, measured channel width and gradient, and explicit
 - **CH gives rearing evidence only**; EF caught no adult CH. Char spawner evidence is maturity
   (SP/ST, or M in Aug–Oct), not length.
 - Outputs: `data/fdis_evidence.csv`, `data/fdis_summary_ch_bt.csv`, `data/fdis_size_breaks.csv`,
-  `data/fdis_maturity_check.csv` (tracked), and `fdis_sites.{csv,gpkg}` (17 MB each), which go to
-  `s3://fresh-bc/fdis/derived/`.
+  `data/fdis_maturity_check.csv` (tracked), and `fdis_sites.{csv,gpkg}` (17 MB each, ignored), which `0299`
+  publishes as Parquet to `s3://fresh-bc/knowledge/fdis/v1/`.
 - Logs: `scripts/logs/fdis/`.
 
 ## 0200 / 0210 / 0220 — FISS `.xls` → No-Fish-Captured layer
@@ -234,12 +234,13 @@ fishless. Run on five groups (PINE, COTR, UNTH, LNTH, UPCE; #5).
   `SOFFICE_BIN=/path/to/soffice`. ~40% of legacy `.xls` fail readxl/libxls with *unsupported
   encryption*; `0210` converts those to `.xlsx` headless. Run groups **sequentially** — parallel
   headless conversions contend for one LibreOffice profile lock.
-- Database: `0200` and `0220` try the bcfishpass tunnel (`:63333`) first and fall back to the local
-  `fwapg` (`:5432`) only when the tunnel is **down** (connection refused); an authentication error
-  stops instead of degrading. The tunnel is primary because its FISS snapshot is a superset —
-  measured 2026-09-04, 5 report ids across COTR/UNTH/UPCE exist only there. `0220` needs only the
-  group polygon, identical on both, so its fallback is harmless; `0200`'s is loud and recorded
-  (`db_source` in `fiss_xls_reports.csv`).
+- Database: `0200` and `0220` connect to the database the `PG*` environment variables name. Point
+  them at a bcfishpass database where one is available: its FISS snapshot was a superset of a plain
+  fwapg load (measured 2026-09-04, 5 report ids across COTR/UNTH/UPCE existed only there), and `0200`
+  says so when the database has no `bcfishpass` schema. `0220` needs only the group polygon. `0200`
+  records the database name (`db_source` in `fiss_xls_reports.csv`) so a short manifest is
+  explainable; rows written before 2026-10-16 say `tunnel` (a bcfishpass database) or `local_fwapg`
+  (an fwapg load).
 - R: `curl` (page fetch with explicit HTTP status), `readxl`, `janitor`, `rvest`, `xml2`, `sf`, `RPostgres`.
 
 **What each step writes to `data/<wsg>/`**
@@ -320,9 +321,9 @@ workbooks carry every method.
 
 ## 0260 — life-history timing table
 
-Seeds `data/life_history_timing.csv` from `fish_passage_template_reporting`'s
-`data/inputs_raw/fish_species_life_history_gantt.csv` (#25). Reads the sibling checkout
-(`TEMPLATE_DIR`); the log records its commit SHA.
+Seeds `data/life_history_timing.csv` from the fish-passage reporting template's
+`data/inputs_raw/fish_species_life_history_gantt.csv` (#25). Reads a checkout of it named by
+`TEMPLATE_DIR`; the log records its commit SHA.
 
 - **Grain:** `wsg_code` × `species_code` × `life_stage` × window. `start`/`end` are `MM-DD`;
   `start > end` crosses 1 January. Stages are `knw_timing_stages()`.
@@ -403,10 +404,21 @@ The cited basis for CH and BT habitat thresholds (#19). Not per watershed group.
 
 ## Data sources
 
-- **Local fresh-db (`fwapg`, port 5432)** carries the PSCIS SVW layers, FISS fish observations
-  (`acat_report_url`), `fwa_watershed_groups_poly` and `fwa_named_streams` — so most of this runs
-  with **no SSH tunnel**. `fiss_stream_sample_sites_sp` / `fiss_obstacles_pnt_sp` and the bcfishpass
-  model columns are remote-only (tunnel on 63333). See the `db-newgraph` skill.
+- **PostgreSQL.** Every script connects with `DBI::dbConnect(RPostgres::Postgres())`, so libpq
+  reads the standard `PGHOST`, `PGPORT`, `PGDATABASE`, `PGUSER` and `PGPASSWORD` (or `~/.pgpass`);
+  nothing in the code names a server. Point them per run at the database the script's header names:
+  - an [fwapg](https://github.com/NewGraphEnvironment/fwapg) load with the BCGW layers (`fwapg`) carries the
+    PSCIS SVW layers, FISS fish observations (`acat_report_url`), `fwa_watershed_groups_poly` and
+    `fwa_named_streams`, so most of this runs against it;
+  - a [bcfishpass](https://github.com/NewGraphEnvironment/bcfishpass) database adds
+    `fiss_stream_sample_sites_sp` / `fiss_obstacles_pnt_sp` and the bcfishpass model columns
+    (`0100`, `0110`, `0160`; `0200` prefers it, above);
+  - the CH and BT work (`0290`–`0298`) also needs wet's flow and link's `fresh_default` loaded.
+
+  R reads `~/.Renviron` at startup and its values **replace** the shell's, so where it sets `PG*`, a
+  `PGDATABASE=… Rscript …` on the command line is ignored. Either set the database there, or name a
+  `~/.pg_service.conf` entry with `PGSERVICE=<entry> Rscript …`: libpq takes a service's settings over
+  the `PG*` variables. Set `PGCONNECT_TIMEOUT` so an unreachable server fails instead of hanging.
 
 ## Gotchas worth knowing before you start
 
@@ -420,6 +432,5 @@ The cited basis for CH and BT habitat thresholds (#19). Not per watershed group.
   report, appendices, 1:20k map sheets, and `.xls`/`.zip` data files. The harvest workflows take only
   the **first** PDF, so the rag store holds one document's text per report; `0153` files all of them
   to Zotero. Two consequences: (a) the first PDF is not always the main report — report `52264`'s is
-  `Appendix1`; (b) the FPCI form spreadsheets carrying per-site *no fish captured* comments (see
-  [NewGraphEnvironment/fish_passage_template_reporting#199](https://github.com/NewGraphEnvironment/fish_passage_template_reporting/issues/199)) and the
+  `Appendix1`; (b) the FPCI form spreadsheets carrying per-site *no fish captured* comments and the
   inventory map sheets are **not** in the rag. Widening the harvest to all documents is open work.

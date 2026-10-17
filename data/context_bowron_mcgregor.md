@@ -1,6 +1,6 @@
 # Bowron (BOWR) + McGregor (MCGR) — field-prep brief
 
-Two adjacent **upper-Fraser** watershed groups now in the `sern_fraser_2024` QGIS project.
+Two adjacent **upper-Fraser** watershed groups now in a field QGIS project.
 **Bowron** = the Bowron River / Bowron Lakes country east of Quesnel (Cariboo). **McGregor** = the
 McGregor River east of Prince George (Robson Valley / Rocky Mountain foothills). Grounded in the
 19-report Fraser corpus (`data/rag/fraser.duckdb`) + the PSCIS crossing data.

@@ -17,3 +17,5 @@ data/fdis/
 # Local cache of public EcoCat/ACAT report PDFs (with .url and pdftotext .txt sidecars) per watershed group.
 # Re-fetchable from the report id (a100.gov.bc.ca/pub/acat/documents/r<id>/); no script reads it.
 data/*/reports_pdf/
+# pkgdown site, built by .github/workflows/pkgdown.yaml
+docs/

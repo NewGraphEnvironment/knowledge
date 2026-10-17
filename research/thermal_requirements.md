@@ -1,7 +1,7 @@
 # Thermal requirements by species and life stage
 
 **Verified:** 2026-10-15 · **Issues:** #38 (this), #40 (Bear et al. 2005 and 2007), #47 (growing-season and first-winter size thresholds, searched beyond the collection), #48 (#47's paywalled candidates, from abstracts where no PDF could be had); background in `stream_temperature.md`; for
-NewGraphEnvironment/link#21, NewGraphEnvironment/wet#40 and NewGraphEnvironment/fish_passage_template_reporting#214 ·
+NewGraphEnvironment/link#21 and NewGraphEnvironment/wet#40 ·
 **Produced by:** rows of `data/literature_evidence.csv` with `variable` `temperature`, `air_temperature` or
 `degree_days` (rows 511 onward are #38's, rows 1071 onward #40's), and `fish_length` (rows 1103 onward are #47's, rows 1137 onward #48's), gated by
 `scripts/0280-literature-verify.R` (log `scripts/logs/habitat/20261015_literature_verify.csv`); sources in the group's
@@ -21,7 +21,7 @@ counter-evidence that size does not set first-winter survival everywhere (below)
 ## How to read the rows
 
 ```r
-pkgload::load_all("pkg")
+pkgload::load_all()   # from the repo root
 x <- knw_literature_read("data/literature_evidence.csv",
                          species_code = c("BT", "WCT", "CH", "CO", "ST", "CRCT"),
                          variable = c("temperature", "degree_days"))
@@ -191,7 +191,7 @@ Conventions a reader needs:
   `CRCT`). For WCT, the Elk Valley reports (Thorley & Branton 2022, Hocking et al. 2022) are the BC
   precedent for applying them, and say BC fry ran slightly larger than the Colorado relation predicts. Do not
   threshold bull trout on 800: Mochnacz 2021 reports self-sustaining northern populations at or below it.
-- **template#214 (Weigert Creek, 693.5 °C-days).** That total runs "across the logger deployment", which is
+- **Weigert Creek (693.5 °C-days).** That total runs "across the logger deployment", which is
   neither the growing season nor the time from spawning. Compute GSDD on the Coleman & Fausch window before
   comparing it with 800. Compare degree-days from WCT spawning (5 °C daily mean and 7 °C daily maximum, Cope et
   al. 2016 via Thorley 2022 p. 30) with the 575–600 to emergence. The source does not say when the hatchery

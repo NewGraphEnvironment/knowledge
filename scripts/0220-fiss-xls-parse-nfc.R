@@ -1,6 +1,6 @@
 # scripts/0220-fiss-xls-parse-nfc.R
 # ---------------------------------------------------------------------------
-# FISS .xls harvest — STEP 3 of 3 (parse -> normalize -> NFC -> spatial). Issue NewGraphEnvironment/fish_passage_template_reporting#199.
+# FISS .xls harvest — STEP 3 of 3 (parse -> normalize -> NFC -> spatial).
 #
 # Parse each fetched Fish Data Submission spreadsheet, farm the wanted columns,
 # normalize the drift across template editions, flag No-Fish-Captured (NFC) sites,
@@ -29,8 +29,8 @@
 # INPUT:  data/<wsg>/fiss_xls_fetch_log.csv (from 0210; uses parse_path), and
 #         data/<wsg>/fiss_xls_manifest.csv for the reconciliation at the end.
 #         WSG_TARGET has no default: unset used to run PINE silently.
-#         The WSG clip polygon comes from the bcfishpass tunnel :63333, falling back
-#         to the local fwapg :5432 (identical polygons); both down -> stop().
+#         The WSG clip polygon comes from the database the PG* environment variables
+#         name (any fwapg-based one); unreachable -> stop().
 # OUTPUT: data/<wsg>/fiss_xls_parse_log.csv   (one row per workbook x step: which sheet
 #           matched, where the header was, rows before/after filtering, and a status
 #           naming WHY a step yielded nothing — the five silent-return paths made loud)
@@ -344,7 +344,7 @@ reconcile_a <- bind_rows(
   chk("fetch_unreadable", NA, sum(flog_all$status == "unreadable"), pass = TRUE,
       note = paste(flog_all$file_name[flog_all$status == "unreadable"], collapse = "; ")),
   if (!is.null(reports))
-    chk("enumerate_db_source", "tunnel", paste(unique(reports$db_source), collapse = "|"), pass = TRUE),
+    chk("enumerate_db_source", NA, paste(unique(reports$db_source), collapse = "|"), pass = TRUE),
   chk("fetch_parseable_vs_parse_log_workbooks", nrow(flog), n_parse_wb),
   chk("parse_log_rows_vs_steps_per_workbook", n_steps * n_parse_wb, nrow(parse_log)),
   # a per-fish sheet Step 2 set aside must have been read by Step 3, or its fish are in neither
@@ -517,18 +517,9 @@ if (nrow(geo)) {
                   paste(sprintf("zone %d=%d", as.integer(names(table(geo$utm_zone))), table(geo$utm_zone)), collapse = ", ")))
   # clip to the target watershed group — a submission (.xls) can span several WSGs,
   # so the sheet carries sites well outside the linked group (same reason 0100 clips).
-  # Polygon source: the bcfishpass tunnel, else the local fwapg (same FWA polygons).
-  conn <- tryCatch(DBI::dbConnect(RPostgres::Postgres(), host = "localhost",
-                                  port = 63333, dbname = "bcfishpass", user = "newgraph"),
-                   error = function(e) NULL)
-  db_source <- "tunnel"
-  if (is.null(conn)) {
-    conn <- tryCatch(DBI::dbConnect(RPostgres::Postgres(), host = "localhost", port = 5432,
-                                    dbname = "fwapg", user = "postgres", password = "postgres"),
-                     error = function(e) NULL)
-    db_source <- "local_fwapg"
-    if (!is.null(conn)) message("  bcfishpass tunnel :63333 unavailable — clipping with the local fwapg :5432 polygon.")
-  }
+  # Polygon source: the database the PG* environment variables name.
+  conn <- tryCatch(DBI::dbConnect(RPostgres::Postgres()), error = function(e) NULL)
+  if (!is.null(conn)) db_source <- DBI::dbGetQuery(conn, "SELECT current_database() AS d")$d
   if (!is.null(conn)) {
     wsg_poly <- sf::st_read(conn, query = glue::glue_sql(
       "SELECT watershed_group_code, geom FROM whse_basemapping.fwa_watershed_groups_poly
@@ -560,8 +551,8 @@ if (nrow(geo)) {
     # multiple groups, so writing unclipped-but-<wsg>-stamped .gpkg/.csv would
     # silently mislabel cross-group sites. The full unclipped parse is already on
     # disk (fiss_sites_<wsg>_all.csv), so no work is lost.
-    stop("Neither the bcfishpass tunnel :63333 nor the local fwapg :5432 is reachable — cannot clip to ", wsg_target,
-         ". Refusing to write a mislabeled WSG deliverable. Bring one up and ",
+    stop("The database (PG* environment variables) is not reachable — cannot clip to ", wsg_target,
+         ". Refusing to write a mislabeled WSG deliverable. Bring it up and ",
          "re-run; the full unclipped parse is in fiss_sites_", wsg_lower, "_all.csv.")
   }
   gpkg <- file.path(out_dir, paste0("fiss_sites_", wsg_lower, ".gpkg"))
@@ -607,7 +598,7 @@ reconcile <- bind_rows(
   # no-fish site. A gate on species_caught would restate the nfc predicate and never fire.
   chk("nfc_sites_listing_a_species", NA, sum(sites$nfc %in% TRUE & nzchar(coalesce(sites$species_list, ""))),
       pass = TRUE, note = "explicit zero counts; nfc_conflict sites are not flagged nfc"),
-  chk("clip_polygon_source", "tunnel|local_fwapg", db_source, pass = TRUE)
+  chk("clip_polygon_source", NA, db_source, pass = TRUE)
 )
 readr::write_csv(reconcile, file.path(out_dir, "fiss_xls_reconcile.csv"))
 print(as.data.frame(reconcile), right = FALSE)

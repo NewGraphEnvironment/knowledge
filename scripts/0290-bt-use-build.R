@@ -40,9 +40,9 @@
 #   - Every drop is counted in the ledger, and the drops and the kept rows partition the input.
 #
 # INPUT:  data/fdis/derived/fdis_sites.csv (scripts/0240), data/fdis_species_codes.csv;
-#         local fwapg :5432 (fresh_default, score284_*); link >= 0.55.0 (lnk_species_pooling)
-# OUTPUT: data/fdis/derived/bt_use_visits.csv  one row per kept visit (ignored, private;
-#         aws s3 cp to s3://fresh-bc/fdis/derived/)
+#         fwapg database (PG* env vars) (fresh_default, score284_*); link >= 0.55.0 (lnk_species_pooling)
+# OUTPUT: data/fdis/derived/bt_use_visits.csv  one row per kept visit (ignored;
+#         published by 0299)
 #         scripts/logs/habitat/<date>_bt_use_build_ledger.csv
 # RUN:    Rscript scripts/0290-bt-use-build.R   (from the repo root)
 # ---------------------------------------------------------------------------
@@ -88,9 +88,8 @@ v <- drop(v, !v$flag_effort_sentinel & (!v$flag_no_area | !v$flag_no_effort),
 v <- drop(v, v$catch_status != "unknown", "catch_unknown")
 
 # ---- link's WSGs and pooling ------------------------------------------------
-conn <- tryCatch(dbConnect(Postgres(), host = "localhost", port = 5432, dbname = "fwapg",
-                           user = "postgres", password = "postgres"),
-                 error = function(e) stop("local fwapg :5432 unreachable: ", conditionMessage(e)))
+conn <- tryCatch(dbConnect(Postgres()),
+                 error = function(e) stop("database unreachable (PG* environment variables): ", conditionMessage(e)))
 wsg_fresh <- dbGetQuery(conn, "SELECT DISTINCT watershed_group_code w FROM fresh_default.streams")$w
 wsg_score <- dbGetQuery(conn, "SELECT DISTINCT watershed_group_code w FROM score284_default.streams")$w
 if (!all(c(held_out, in_sample) %in% wsg_score)) stop("step-5 pilots missing from score284_default")

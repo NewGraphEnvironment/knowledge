@@ -1,14 +1,11 @@
 # Stream temperature: what the network models do, and what NGE holds
 
-**Verified:** 2026-10-06 (model repos read 2026-10-03; evidence and Zotero bullets revised for #38) · **Issues:** NewGraphEnvironment/logic#4 (roadmap);
-NewGraphEnvironment/wet#36, NewGraphEnvironment/link#21, NewGraphEnvironment/fish_passage_template_reporting#214,
-#20 · **Produced by:** reading `fish-passage-22` `526d02c`, `fish-passage-22b` `1464c9d` and
-`skeena-stream-temp-25` `c128f14` (the NGE fork), the rendered memos
+**Verified:** 2026-10-06 (model repos read 2026-10-03; evidence and Zotero bullets revised for #38) · **Issues:**
+NewGraphEnvironment/wet#36, NewGraphEnvironment/link#21, #20 · **Produced by:** reading `fish-passage-22` `526d02c`, `fish-passage-22b` `1464c9d` and the
+Skeena model's code (not public), the rendered memos
 ([hill_etal2024Spatialstream](https://www.poissonconsulting.ca/analyses/fish-passage-22b/),
 [hill_etal2025Spatialstream](https://www.poissonconsulting.ca/analyses/skeena-stream-temp-25/)), and a read-only copy of the
 group library.
-
-Where the work is going is logic#4. This file is the technical state that roadmap rests on.
 
 ## The three model repos
 
@@ -68,7 +65,7 @@ mean GSDD by year runs 1,815–2,233. By site it runs from 1,029 (08EE020) to 2,
 - Site parameters have no covariates (elevation, upstream area, lakes, glacier). A new site could only take
   the population means.
 - Kriging was planned (`fish-passage-22` issue #5, step 3) and never coded.
-- **The Skeena 2025 report overstates this.** `fish_passage_skeena_2025_reporting/0300-methods.Rmd` l.193
+- **The Skeena 2025 fish-passage report overstates this.** Its methods chapter (`0300-methods.Rmd` l.193)
   says the models "predict stream temperature at fine spatial resolution across the FWA network".
 
 **Validation: none out of sample.**
@@ -82,17 +79,15 @@ Anything daily, wet#36 included, needs either a daily step or an explicit weekly
 
 ## Re-running them today
 
-- **Licence.** None of the three repos has a licence. `skeena-stream-temp-25` is a private fork of a
-  private upstream, which is 3 small commits ahead: CODEOWNERS, a comment, and a non-SSN `air2stream.stan`
-  kept for comparison.
+- **Licence.** None of the three code bases has a licence, and the Skeena model's code is not public.
 - **Stan versions.** The 22/22b Stan files use pre-2.33 array syntax, so they need rstan 2.32 or a port.
   Skeena runs on current cmdstan.
 - **Packages.** The stack is the public Poisson packages (`embr`, `smbr2`, `mcmcderive`, `subfoldr2`,
-  `gsdd`, `fwapgr`, `fwatlasbc`, `evrfish`) plus `SSNbler`, `SSN2` and `SSNbayes`. `poisreport`, needed
-  only to knit, is private.
+  `gsdd`, `fwapgr`, `fwatlasbc`, `evrfish`) plus `SSNbler`, `SSN2` and `SSNbayes`. Knitting the memos also
+  needs a reporting package that is not public.
 - **Skeena data URL.** `.../data/realtime_raw_20250521.parquet` now returns 404 (checked 2026-10-06).
   water-temp-bc's read path is `data/canonical/Parameter=5/`.
-- **Data paths.** They are hard-coded to Dropbox (22/22b) and OneDrive (Skeena). `output/` is gitignored,
+- **Data paths.** They are hard-coded to the authors' local synced folders. `output/` is gitignored,
   so no fitted objects are kept.
 - **Manual steps.** The Skeena network build has hand-listed connecting segments and reversals in
   `ssnbler.R`, and the ERA5 pull is noted at about 8 h.
@@ -116,10 +111,10 @@ distance script, and logger-cleaning literals.
   - water-temp-bc has 306 ECCC stations, hourly, from 2002 (`canonical/Parameter=5/`); wet#36 reads it.
   - FDIS and FISS spot temperatures are parsed in this repo (`water_temp_c`, `temperature_c`) and not used.
   - There are logger series from the Upper Bulkley, the Nechako (Gilbert et al. 2022) and Weigert Creek.
-    Weigert Creek recorded 693.5 °C-days, against a WCT requirement of 570–600 thermal units (template#214).
+    Weigert Creek recorded 693.5 °C-days, against a WCT requirement of 570–600 thermal units.
 - **Evidence.** `data/literature_evidence.csv` holds the cited thermal requirements for BT, WCT, CH, CO and
   ST by life stage, each value with its `metric`, plus degree-day rows (#38). What they say, and what has no
-  source, is `thermal_requirements.md`. The template#214 and `fish_passage_elk_2022_reporting#55` thresholds
+  source, is `thermal_requirements.md`. The two thresholds earlier fish-passage reports compared against
   are rows now: WCT emergence at 575–600 thermal units (Thorley et al. 2022), and the 800–900 degree-day
   recruitment threshold, which is Colorado River cutthroat (Coleman & Fausch 2007a).
 - **Zotero.** Both memos (`QYU2YFFZ`, `F4Y3AQZH`) have PDFs since #38. They were printed from the rendered

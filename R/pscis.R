@@ -33,8 +33,9 @@ knw_pscis_layers <- function() {
 #' @export
 #' @examples
 #' \dontrun{
-#' conn <- DBI::dbConnect(RPostgres::Postgres(), host = "localhost",
-#'                        port = 63333, dbname = "bcfishpass", user = "newgraph")
+#' # connection details from the standard PGHOST, PGPORT, PGDATABASE, PGUSER
+#' # and PGPASSWORD environment variables
+#' conn <- DBI::dbConnect(RPostgres::Postgres())
 #' layers <- knw_pscis_pull(conn, "PINE")
 #' }
 knw_pscis_pull <- function(conn, wsg_code, layers = knw_pscis_layers()) {

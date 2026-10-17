@@ -41,7 +41,7 @@ machine without the file is a no-op once the upload has landed.
 INPUT   data/<collection>_members.csv   (citation_key, source, optional pdf)
         data/<collection>_additions.csv (metadata or DOI, pdf, why), if it exists
         ~/Zotero/zotero.sqlite, via a checked copy (key -> item, local PDF paths)
-        ZOTERO API key as in 0153; group 4733734
+        ZOTERO_API_KEY environment variable, as in 0153; group 4733734
 OUTPUT  Zotero writes only; one status line per member and a summary.
         --dry-run does every read and no write.
 ---------------------------------------------------------------------------

@@ -13,7 +13,7 @@ Tracks planning-with-files (PWF) artifacts for structured task execution.
       YYYY-MM-issue-N-slug/
 
 The two `2026-07-issue-198-*` archives were copied from
-`fish_passage_template_reporting`, where this pipeline was built; their issue and PR numbers
+the fish-passage reporting template, where this pipeline was built; their issue and PR numbers
 refer to that repo.
 
 ## Workflow

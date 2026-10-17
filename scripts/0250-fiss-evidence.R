@@ -36,7 +36,7 @@
 # INPUT:  data/<wsg>/fiss_step3_fish_<wsg>.csv, fiss_step2_fishcoll_<wsg>.csv,
 #         fiss_sites_<wsg>_all.csv (from 0220, every group that has them);
 #         data/fdis/build/{sites,fish}.rds (from 0230); data/fdis_size_breaks.csv;
-#         data/fdis_species_codes.csv. Placement on the local fwapg :5432.
+#         data/fdis_species_codes.csv. Placement in the fwapg database (PG* environment variables).
 # OUTPUT: data/fiss_evidence.csv            site x species x class x method, fdis shape plus
 #                                           `source` and `method`
 #         data/fiss_fdis_overlap.csv        per report: electrofished fish, fish matched in
@@ -51,7 +51,7 @@ suppressMessages({
   library(sf); library(DBI); library(RPostgres)
 })
 sf::sf_use_s2(FALSE)
-pkgload::load_all("pkg", quiet = TRUE)
+pkgload::load_all(quiet = TRUE)
 
 snap_tol_m  <- 500   # fwa_indexpoint search radius, as 0230
 snap_flag_m <- 100   # farther snaps are flagged, not dropped, as 0230
@@ -263,9 +263,8 @@ unmeasured <- catch_all |>
   filter(is.na(n) | n > 0)
 
 # ---- placement (0230's fwa_indexpoint query) --------------------------------
-conn <- tryCatch(DBI::dbConnect(RPostgres::Postgres(), host = "localhost", port = 5432,
-                                dbname = "fwapg", user = "postgres", password = "postgres"),
-                 error = function(e) stop("local fwapg :5432 unreachable: ", conditionMessage(e)))
+conn <- tryCatch(DBI::dbConnect(RPostgres::Postgres()),
+                 error = function(e) stop("database unreachable (PG* environment variables): ", conditionMessage(e)))
 used_sites <- unique(c(by_class$site_key, unmeasured$site_key, spawners$site_key))
 pts <- sites |> filter(placeable, site_key %in% used_sites) |>
   group_split(utm_zone) |>

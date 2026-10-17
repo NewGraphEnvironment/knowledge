@@ -8,6 +8,15 @@
 \description{
 Functions for assembling fisheries background per watershed group: pulling provincial PSCIS crossing layers clipped to a group, deriving the past-report and crossing tables from them, and checking GNIS stream names for cross-group collisions before searching by name, reading the life-history timing table by group and species, and reading the cited literature evidence for habitat variables by species, and reading the registry of intrinsic-potential habitat models that evidence links to.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://newgraphenvironment.github.io/knowledge/}
+  \item \url{https://github.com/NewGraphEnvironment/knowledge}
+  \item Report bugs at \url{https://github.com/NewGraphEnvironment/knowledge/issues}
+}
+
+}
 \author{
 \strong{Maintainer}: Allan Irvine \email{al@newgraphenvironment.com}
 

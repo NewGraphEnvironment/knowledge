@@ -1,6 +1,6 @@
 # scripts/0200-fiss-xls-enumerate.R
 # ---------------------------------------------------------------------------
-# FISS .xls harvest — STEP 1 of 3 (enumerate). Issue NewGraphEnvironment/fish_passage_template_reporting#199.
+# FISS .xls harvest — STEP 1 of 3 (enumerate).
 #
 # Per watershed group, build a manifest of the data-only `.xls`/`.xlsx` fish
 # data submissions that the FISS layers link to (NOT the narrative PDFs). These
@@ -21,14 +21,14 @@
 #     provincial layer is sometimes wrong for the point. Treat as leads to verify.
 #
 # INPUT:  WSG_TARGET env var (else `wsg_target` in the session; no default — an unset
-#         variable used to run PINE silently and overwrite its outputs). FISS layer via
-#         the bcfishpass tunnel :63333, falling back to the local fwapg :5432. The tunnel
-#         is primary because its FISS snapshot is a superset of the local one (measured
-#         2026-09-04: 5 report ids across COTR/UNTH/UPCE present only on the tunnel).
+#         variable used to run PINE silently and overwrite its outputs). The FISS layer and
+#         the WSG polygons from the database the standard PG* environment variables name.
+#         Prefer a bcfishpass database: its FISS snapshot was a superset of a plain fwapg
+#         load (measured 2026-09-04: 5 report ids across COTR/UNTH/UPCE only in bcfishpass).
 # OUTPUT: data/<wsg>/fiss_xls_manifest.csv
 #           report_id, report_url, xls_url, file_name
 #         data/<wsg>/fiss_xls_reports.csv  — one row per report page: n_xls, page_status,
-#           db_source. This is what makes a failed page fetch distinguishable from a page
+#           db_source (the database name). This is what makes a failed page fetch distinguishable from a page
 #           with no attachments; the script stops if any page still fails after a retry.
 #
 # NEXT:   0210-fiss-xls-fetch.R (opt-in download), then 0220-fiss-xls-parse-nfc.R.
@@ -58,28 +58,15 @@ dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
 
 fiss_layer <- "whse_fish.fiss_fish_obsrvtn_pnt_sp"
 
-# ---- connection: tunnel first, local fwapg as fallback ----------------------
-# Both carry fiss_fish_obsrvtn_pnt_sp (with acat_report_url) and the WSG polygons.
-# The tunnel wins because its FISS snapshot is the superset; the fallback is loud and
-# recorded in fiss_xls_reports.csv (db_source) so a short manifest is explainable.
-# Only a tunnel that is DOWN falls back. A tunnel that is up and refuses the credential
-# (empty PGPASSWORD — see CLAUDE.md, Database access) must stay loud, or a bad
-# credential silently degrades every run to the shorter snapshot.
-tunnel_err <- NULL
-conn <- tryCatch(DBI::dbConnect(RPostgres::Postgres(), host = "localhost", port = 63333,
-                                dbname = "bcfishpass", user = "newgraph"),
-                 error = function(e) { tunnel_err <<- conditionMessage(e); NULL })
-db_source <- "tunnel"
-if (is.null(conn)) {
-  if (!grepl("connection refused|could not connect|Connection refused|timed out", tunnel_err, ignore.case = TRUE))
-    stop("bcfishpass tunnel :63333 answered but the connection failed — not falling back to the ",
-         "local snapshot on an authentication or server error:\n  ", tunnel_err, call. = FALSE)
-  conn <- DBI::dbConnect(RPostgres::Postgres(), host = "localhost", port = 5432,
-                         dbname = "fwapg", user = "postgres", password = "postgres")
-  db_source <- "local_fwapg"
-  message("bcfishpass tunnel :63333 is down (", tunnel_err, ") — using local fwapg :5432. ",
-          "Its FISS snapshot may lack a few report pages; db_source is recorded.")
-}
+# ---- connection ---------------------------------------------------------------
+# libpq reads PGHOST, PGPORT, PGDATABASE, PGUSER and PGPASSWORD. The database must carry
+# fiss_fish_obsrvtn_pnt_sp (with acat_report_url) and the WSG polygons. Its name goes into
+# fiss_xls_reports.csv (db_source), so a short manifest is explainable by its snapshot.
+conn <- DBI::dbConnect(RPostgres::Postgres())
+db_source <- DBI::dbGetQuery(conn, "SELECT current_database() AS d")$d
+if (!nrow(DBI::dbGetQuery(conn, "SELECT 1 FROM pg_namespace WHERE nspname = 'bcfishpass'")))
+  message("Database ", db_source, " has no bcfishpass schema: its FISS snapshot may lack a few ",
+          "report pages that a bcfishpass database carries; db_source is recorded.")
 # on.exit() does NOT fire at a script's top level (see CLAUDE.md) — it would leave
 # this connection open. reg.finalizer(onexit = TRUE) fires on both a clean exit and stop().
 reg.finalizer(environment(),

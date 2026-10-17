@@ -19,10 +19,10 @@
 #     FIELD_MEASUREMENT widths are these same FISS sites.
 #
 # INPUT:  data/fdis/build/{sites,catch,fish}.rds (from 0230), data/fdis_size_breaks.csv
-#         Size classing is knw_size_class() from pkg/ (shared with 0250).
+#         Size classing is knw_size_class() from the package (shared with 0250).
 # OUTPUT: data/fdis/derived/fdis_sites.{csv,gpkg}  one row per site visit: placement, measured
 #                                        and modelled habitat, effort, catch status, focal
-#                                        counts (ignored; pushed to s3://fresh-bc/fdis/derived/)
+#                                        counts (ignored; 0299 publishes the csv)
 #         data/fdis_evidence.csv         site visit x focal species x size class (measured
 #                                        fish), plus counted-but-unmeasured and spawner rows;
 #                                        `source`/`method` match data/fiss_evidence.csv (0250)
@@ -32,7 +32,7 @@
 # RUN:    Rscript scripts/0240-fdis-evidence.R   (after 0230, from the repo root)
 # ---------------------------------------------------------------------------
 suppressMessages({ library(dplyr); library(readr); library(tidyr); library(DBI); library(RPostgres) })
-pkgload::load_all("pkg", quiet = TRUE)
+pkgload::load_all(quiet = TRUE)
 
 build <- "data/fdis/build"
 sites <- readRDS(file.path(build, "sites.rds"))
@@ -56,8 +56,7 @@ thresholds <- tribble(
 )
 
 # ---- major drainage (first FWA watershed-code segment) ----------------------
-conn <- DBI::dbConnect(RPostgres::Postgres(), host = "localhost", port = 5432,
-                       dbname = "fwapg", user = "postgres", password = "postgres")
+conn <- DBI::dbConnect(RPostgres::Postgres())
 lf <- unique(na.omit(sites$linear_feature_id))
 basin <- DBI::dbGetQuery(conn, "SELECT linear_feature_id, left(fwa_watershed_code, 3) AS fwa_basin
                                   FROM whse_basemapping.fwa_stream_networks_sp
@@ -144,7 +143,7 @@ site_out <- sites |>
          starts_with("flag_"), habitat_conflict, grad_sentinel, cw_sentinel, has_habitat,
          ws50_checked)
 # the site table (~17 MB) and its points are too large to churn in git: they go to
-# data/fdis/derived/ (ignored) and s3://fresh-bc/fdis/derived/ (see scripts/README.md)
+# data/fdis/derived/ (ignored); 0299 publishes the site table (see scripts/README.md)
 derived <- "data/fdis/derived"
 dir.create(derived, showWarnings = FALSE)
 write_csv(site_out, file.path(derived, "fdis_sites.csv"), na = "")
