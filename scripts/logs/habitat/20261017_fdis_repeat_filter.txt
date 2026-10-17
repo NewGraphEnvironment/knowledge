@@ -1,5 +1,5 @@
 #35 repeat filter: 1431 copies dropped by 0230 (data/fdis_repeat_surveys.csv).
-bt_use_visits: 17606 -> 17184 rows (422 dropped)
-ch_mad_visits: 21862 -> 21325 rows (537 dropped); dup_of removed
-ch_rule_visits: 21862 -> 21325 rows (537 dropped); dup_of removed
+bt_use_visits: 17606 -> 17184 rows (422 dropped); habitat carried on 0
+ch_mad_visits: 21862 -> 21325 rows (537 dropped); dup_of removed; habitat carried on 3
+ch_rule_visits: 21862 -> 21325 rows (537 dropped); dup_of removed; habitat carried on 3
 ch_rule_walks: 372687 -> 372645 rows (starts with no remaining visit dropped)

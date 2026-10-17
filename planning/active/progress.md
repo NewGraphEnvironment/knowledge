@@ -30,3 +30,4 @@
   moving a dropped copy's habitat to a kept copy that has none, with a guard that no habitat leaves with a
   copy, a ledger row, and `habitat_carried` in the map (the filter applies the same carry). (2) 0294's
   header overstated what its loose-signature count holds: reworded.
+- Rebuilt with the carry (0230 413 s, 0240 27 s, 0250 36 s; logs _03): only the 3 carried rows differ from the old fdis_sites minus the dropped copies; filter carried them in ch_mad_visits and ch_rule_visits (none in bt_use_visits). 0295 rerun (279 s) on the filtered table.
