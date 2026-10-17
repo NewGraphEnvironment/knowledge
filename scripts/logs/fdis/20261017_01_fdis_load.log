@@ -1,0 +1,37 @@
+Cache verified: 26 files match MANIFEST.md5
+Note: method with signature ‘DBIObject#sf’ chosen for function ‘dbDataType’,
+ target signature ‘PqConnection#sf’.
+ "PqConnection#ANY" would also be valid
+Indexing 51981 site visits with fwa_indexpoint (tolerance 500 m)
+# A tibble: 28 × 2
+   check                               n
+   <chr>                           <dbl>
+ 1 passes                          62892
+ 2 site_visits                     53018
+ 3 sites_multi_pass                 5748
+ 4 sites_with_utm                  51981
+ 5 sites_placed                    51450
+ 6 sites_far_snap                   5322
+ 7 sites_ws50_checked              12654
+ 8 sites_ws50_mismatch              1360
+ 9 sites_catch_fish                30076
+10 sites_catch_zero                22390
+11 sites_catch_unknown               552
+12 sites_nfc_conflict                 65
+13 sites_with_habitat              21846
+14 sites_habitat_conflict           1961
+15 sites_junk_date                    23
+16 sites_no_area                    7683
+17 fish_rows_in                   341607
+18 fish_rows_out                  341607
+19 fish_nfc_rows                     139
+20 fish_without_visit              16233
+21 fish_no_length                   5429
+22 sites_effort_sentinel              91
+23 sites_blocking_ch_absence         565
+24 sites_blocking_char_absence      1039
+25 catch_pairs_count_unknown          58
+26 counts_fish_total              990606
+27 counts_sentinel_rows               71
+28 catch_pairs_counts_lt_measured    482
+Wrote sites.rds, catch.rds, fish.rds, reconcile.csv to data/fdis/build

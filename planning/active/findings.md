@@ -75,3 +75,16 @@ Scripts: scratchpad `probe35.R`, `probe35b.R`, `probe35c.R` (not committed) over
 - Filter: bt_use_visits 17,606 -> 17,165 (441 dropped), ch_mad_visits and ch_rule_visits 21,862 ->
   21,306 (556), ch_rule_walks 372,687 -> 372,645. In 3 surveys the kept copy had failed the build's
   own drops, so the survey leaves those tables, as a rebuild would.
+
+## Final rule, rebuilt (2026-10-17, commit 11c0009)
+
+- 0230: 51,587 visits; 1,308 groups, 1,431 dropped (623 fish, 623 zero, 185 unknown); 1,504 passes,
+  3,591 fish rows and 9,597 of 990,606 counted fish with them; fish differ in 114 groups, habitat in
+  115, fishing time in 33; 89 groups pair a zero with an unknown copy (the zero kept); 0 groups lose
+  maturity-coded fish; 65 groups kept for differing site numbers without identical fish, 13 inside
+  one collection.
+- New fdis_sites.csv == old minus the 1,431 dropped, column for column.
+- 0250: 91,986 -> 91,961 fish matched by length; in_fdis 100,297 and overlap sites 2,952 unchanged
+  (review C4); fiss_evidence.csv and its reconcile unchanged.
+- Filter: bt_use_visits 17,606 -> 17,184 (422 dropped; 3 surveys leave because the kept copy had
+  failed 0290's drops); ch_mad_visits / ch_rule_visits 21,862 -> 21,325 (537); walks 372,687 -> 372,645.

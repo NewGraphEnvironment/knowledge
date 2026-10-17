@@ -1,5 +1,5 @@
-#35 repeat filter: 1413 copies dropped by 0230 (data/fdis_repeat_surveys.csv).
-bt_use_visits: 17606 -> 17165 rows (441 dropped)
-ch_mad_visits: 21862 -> 21306 rows (556 dropped); dup_of removed
-ch_rule_visits: 21862 -> 21306 rows (556 dropped); dup_of removed
+#35 repeat filter: 1431 copies dropped by 0230 (data/fdis_repeat_surveys.csv).
+bt_use_visits: 17606 -> 17184 rows (422 dropped)
+ch_mad_visits: 21862 -> 21325 rows (537 dropped); dup_of removed
+ch_rule_visits: 21862 -> 21325 rows (537 dropped); dup_of removed
 ch_rule_walks: 372687 -> 372645 rows (starts with no remaining visit dropped)

@@ -15,6 +15,10 @@
 #     A change of meaning with the same schema is the one case it cannot see.
 #   - v2 (#35): 0230 keeps one copy of a survey loaded under several collection ids, so every table
 #     has fewer rows, and ch_mad_visits and ch_rule_visits lose `dup_of`. v1 stays as published.
+#     v2 also carries fdis_repeat_surveys, the crosswalk from a v1 site_visit to the copy kept.
+#   - Republishing to a version that exists refuses when any table's sha256 or row count differs
+#     from the published manifest, unless REPUBLISH=TRUE: a published version is not rewritten by
+#     accident, including by a change of meaning that keeps the schema.
 #   - Only fdis_sites.csv is taken of 0240's two forms: the gpkg is the same rows with a
 #     geometry, and a CSV-to-Parquet copy keeps one reading of each table.
 #   - Each table is read with arrow's CSV reader and written as Parquet. The Parquet is then
@@ -35,6 +39,7 @@
 #         with PULL=TRUE instead: data/fdis/derived/<table>.csv from the published Parquet
 # RUN:    Rscript scripts/0299-fdis-publish.R              (from the repo root; local only)
 #         PUBLISH=TRUE Rscript scripts/0299-fdis-publish.R  (uploads; needs write access to fresh-bc)
+#         PUBLISH=TRUE REPUBLISH=TRUE ...                   (replace a published version's contents)
 #         PULL=TRUE [NO_SIGN=TRUE] Rscript scripts/0299-fdis-publish.R
 # ---------------------------------------------------------------------------
 suppressMessages({ library(arrow) })
@@ -42,25 +47,31 @@ suppressMessages({ library(arrow) })
 publish <- identical(Sys.getenv("PUBLISH"), "TRUE")
 pull <- identical(Sys.getenv("PULL"), "TRUE")
 no_sign <- identical(Sys.getenv("NO_SIGN"), "TRUE")
+republish <- identical(Sys.getenv("REPUBLISH"), "TRUE")
 if (publish && pull) stop("PUBLISH and PULL are exclusive", call. = FALSE)
 dir_in <- "data/fdis/derived"
 dir_out <- "data/fdis/publish"
 s3_id <- "knowledge/fdis/v2"
+s3_supersedes <- "knowledge/fdis/v1"
 s3_tables <- paste0("s3://fresh-bc/", s3_id, "/")
 s3_readme <- "s3://fresh-bc/fdis/README.md"
 path_readme <- "data/fdis_README.md"
 
 tables <- data.frame(
-  table = c("fdis_sites", "bt_use_visits", "ch_mad_visits", "ch_rule_visits", "ch_rule_walks"),
+  table = c("fdis_sites", "bt_use_visits", "ch_mad_visits", "ch_rule_visits", "ch_rule_walks",
+            "fdis_repeat_surveys"),
+  source = c(file.path(dir_in, c("fdis_sites", "bt_use_visits", "ch_mad_visits", "ch_rule_visits",
+                                 "ch_rule_walks")), "data/fdis_repeat_surveys") |> paste0(".csv"),
   script = c("scripts/0240-fdis-evidence.R", "scripts/0290-bt-use-build.R",
              "scripts/0294-ch-mad-build.R", "scripts/0296-ch-rule-build.R",
-             "scripts/0296-ch-rule-build.R"),
+             "scripts/0296-ch-rule-build.R", "scripts/0230-fdis-load.R"),
   description = c(
     "One row per FDIS site visit (passes rolled up): placement on the FWA network, effort, measured habitat and catch. A survey loaded under several collection ids is kept once (#35; the copies dropped are listed in the repository's data/fdis_repeat_surveys.csv).",
     "FDIS site visits placed on link's segments, with pooled BT presence and the attributes the BT rearing use curve reads (#28).",
     "FDIS site visits with the published annual flow (MAD) on their FWA segment, distance to the first large river, and placement flags (#52).",
     "FDIS site visits with the attributes the tuned CH rearing rule is scored on: flow, width, gradient, barrier status, hydrologic zone (#54).",
-    "Downstream walks from each CH visit to rivers of 1-50 m3/s on each flow source, read by the CH rule tuning (#54)."),
+    "Downstream walks from each CH visit to rivers of 1-50 m3/s on each flow source, read by the CH rule tuning (#54).",
+    "Every other member of a group of FDIS visits that match as one survey loaded under several collection ids, with the copy kept: `dropped` (absent from the other tables from v2), or kept because the copies share one collection or differ in site number without identical measured fish (#35). The crosswalk from a v1 site_visit."),
   stringsAsFactors = FALSE)
 
 stopifnot("run from the repo root" = file.exists("DESCRIPTION") && dir.exists("scripts"))
@@ -101,8 +112,7 @@ if (pull) {
   quit(save = "no", status = 0)
 }
 
-missing_in <- file.path(dir_in, paste0(tables$table, ".csv"))
-missing_in <- missing_in[!file.exists(missing_in)]
+missing_in <- tables$source[!file.exists(tables$source)]
 if (length(missing_in)) stop("missing input: ", paste(missing_in, collapse = ", "), call. = FALSE)
 if (!file.exists(path_readme)) stop("missing ", path_readme, call. = FALSE)
 
@@ -145,7 +155,7 @@ dir.create(dir_out, recursive = TRUE, showWarnings = FALSE)
 files <- vector("list", nrow(tables))
 for (i in seq_len(nrow(tables))) {
   tb <- tables$table[i]
-  src <- file.path(dir_in, paste0(tb, ".csv"))
+  src <- tables$source[i]
   dst <- file.path(dir_out, paste0(tb, ".parquet"))
   x <- arrow::read_csv_arrow(src, as_data_frame = FALSE)
   # arrow reads a zero-padded code ("08", a hydrologic zone) as a number; keep such columns as text
@@ -175,6 +185,9 @@ for (i in seq_len(nrow(tables))) {
 manifest <- list(
   manifest_version = 1L,
   id = s3_id,
+  supersedes = s3_supersedes,
+  note = paste("v2 keeps one copy of an FDIS survey loaded under several collection ids (knowledge#35);",
+               "fdis_repeat_surveys maps each v1 site_visit that left to the copy kept."),
   built = format(Sys.time(), "%Y-%m-%dT%H:%M:%SZ", tz = "UTC"),
   provenance = list(
     published_from_commit = commit,
@@ -214,6 +227,9 @@ if (length(listed)) {
     same <- if (is.null(p$schema)) identical(as.integer(p$columns), as.integer(f$columns)) else
       identical(lapply(p$schema, as.character), lapply(f$schema, as.character))
     if (!same) changed <- c(changed, f$table)
+    if (same && !republish && (!identical(p$sha256, f$sha256) || !identical(as.integer(p$rows), as.integer(f$rows))))
+      stop(s3_id, " is published with different contents in ", f$table,
+           ": set REPUBLISH=TRUE to replace them, or publish to a new version", call. = FALSE)
   }
   if (length(changed))
     stop(s3_id, " is published with different tables or schemas (", paste(unique(changed), collapse = ", "),
