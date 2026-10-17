@@ -233,6 +233,36 @@ MODELLED_CROSSINGS (232), PSCIS (129), FALLS (187), CABD (142), USER_DEFINITE (8
 - `knw_link_flow()`'s per-segment `LATERAL` parent fallback took 25 s for 223 segments, so segment-scale reads
   (`knw_link_segments()`) join own flow in one pass and run the fallback only on segments without it.
 
+## Code-check (branch mode, 2026-10-17 21:04–23:00Z)
+
+| Round | Findings | Fixed | Accepted | Inside previous fix? |
+|---|---|---|---|---|
+| 1 | 7 | 7 | 0 | — |
+| 2 | 6 | 6 | 0 | y: the access gate (round 1's fix 4) |
+| 3 | 2 | 2 | 0 | y: both inside round 2's `0330` fix |
+
+Three reviewer agents and one plan review: four of the per-task bound of about five. The loop ended by enumeration,
+not by a quiet round, as the stopping rule requires once a finding sits inside a fix:
+- **fresh's rule semantics re-derived in SQL.** `planning/active/review-round2-oracle_predicate.R` builds the
+  injected tuned predicate at `default`'s own values for every fitted species and both stages and counts segments
+  where it differs from `fresh::frs_habitat_predicates()`: 0 of 185,174 on PARS and BULK (round 2), 0 of 149,024 on
+  LFRA, OKAN and NARC (round 3, with CO's floorless rules and the spawning rules' `in_waterbody: false` in play).
+- **One access gate written at every consumer.** Thirteen places read it (round 3's table in `review-round3.md`):
+  `link_place`, `link_segments`, `grade_species`, `grade`, `compare_rules` (two SQL), `compare_map`,
+  `floodplain_ha` all `accessible_stored AND access > 0`; `link_access_check` and `0310` cross-tabulate by design;
+  `0290` and `0296` keep the frozen scripts' own shape; `knw_tune_run()` has no gate, as `0297` had none.
+- **A fix landing at one end of a contract.** Round 3's two findings were both ends of `0330`'s job→result
+  contract after round 2 made jobs survive each other's failures. Eight contract points enumerated (lines 104–112,
+  116–137, 141/144, 146, 148–151, 152–157, the binds, 174–179): every lookup is by key or in the input order
+  `parLapplyLB` preserves; the grade read types its six columns.
+
+Round 1's main finding: the comparison's scratch schema keyed on species, so the two BT jobs destroyed each
+other's tables. Round 2's: the branch reader misread CO (an always-in rule taken as the stream rule; an absent
+floor sent to PostgreSQL as `Inf`) and ignored `in_waterbody: false`, so every spawning comparison would have
+applied the tuned test inside wetlands and lakes `default` never admits. The comparison run was restarted after
+each round; the published thresholds and grades were not affected by any finding (the `dev_null` sign error sat
+in the summaries alone).
+
 ## Errors Encountered
 
 | Error | Resolution |
