@@ -206,6 +206,13 @@ MODELLED_CROSSINGS (232), PSCIS (129), FALLS (187), CABD (142), USER_DEFINITE (8
 
 ## Findings along the way
 
+- **link recomputed one group after the waiter released.** `log_recompute` went from 241 to 243 rows under the same
+  `run_uid`: UPET, twice (10:58:12–10:58:51Z and 10:59:09–10:59:45Z, from a link session on another checkout), after
+  the release at 10:54:24Z and before the build started reading at 10:59:53Z; churn 179,288,878 → 179,319,500, then
+  still. The build's five UPET visits place today on the same segments with the same access codes and flags, so the
+  build stands on the current state. A three-poll quiet window is a necessary condition, not proof the run is over;
+  the build records the `log_recompute` count it read against.
+
 - **wet's discharge load cannot be checked by rows per source.** The manifest (`discharge/fwa/v1`, built
   2026-10-15T02:06:57Z) sums 100.8 M `wet_balance` rows; the database holds 58.9 M = 4,529,939 segments × 13 months
   exactly, and `pcic_routed` matches (43.9 M). `wet::wet_db_load()` filters the manifest's rows on load (its `WHERE` at
