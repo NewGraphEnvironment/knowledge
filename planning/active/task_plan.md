@@ -80,7 +80,7 @@ and 0296 give each visit its own row, and the new `fdis_sites.csv` is exactly th
 pick changes. Rebuilding on the new fresh_default is a follow-up issue.
 
 - [x] Filter bt_use_visits, ch_mad_visits, ch_rule_visits (dup_of removed) and ch_rule_walks; only mapped copies leave
-- [ ] File the follow-up issue for rebuilding 0290, 0294, 0296 and 0298 on the provincial fresh_default
+- [x] File the follow-up issue for rebuilding 0290, 0294, 0296 and 0298 on the provincial fresh_default
 
 ## Plan correction 2 (2026-10-17): after the plan review
 
@@ -88,18 +88,18 @@ pick changes. Rebuilding on the new fresh_default is a follow-up issue.
       user's rule: shared site number or identical measured fish). Rebuilt 0230, 0240, 0250; re-filtered.
 - [x] 0299: republish guard (REPUBLISH=TRUE to replace a published version's contents), `supersedes`,
       and `fdis_repeat_surveys` published as the v1 -> v2 crosswalk
-- [ ] Order (B2): `/code-check branch` and its fixes land before the v2 publish, which is the last step
+- [x] Order (B2): `/code-check branch` and its fixes land before the v2 publish, which is the last step
 
 ## Phase 4: Rerun the chain (commit first; run frozen copies of the scripts in the background)
-- [ ] 0230 → 0240 → 0290 → 0291 → 0292 → 0293; 0294 → 0295; 0296 → 0297 → 0298. Logs land in
+- [x] 0230 → 0240 → 0290 → 0291 → 0292 → 0293; 0294 → 0295; 0296 → 0297 → 0298. Logs land in
       `scripts/logs/habitat/` under today's date. Measure each runtime with `date -u`.
-- [ ] Commit tracked outputs: `data/fdis_evidence.csv`, `fdis_summary_ch_bt.csv`, `bt_rear_use_curve.csv`,
+- [x] Commit tracked outputs: `data/fdis_evidence.csv`, `fdis_summary_ch_bt.csv`, `bt_rear_use_curve.csv`,
       `habitat_weight_bt_rear.csv`, `bt_spawn_evidence.csv`, `ch_mad_use.csv`, `ch_rule_*.csv`, figures and logs.
 
 ## Phase 5: Report the moves
-- [ ] Before/after tables: #28 weights per gradient class, #33 rates and ratios, CH detection by MAD class,
+- [x] Before/after tables: #28 weights per gradient class, #33 rates and ratios, CH detection by MAD class,
       the tuned rule's pick and score, and 0298's km change.
-- [ ] `research/fdis_export.md`: a "Repeated surveys" section with the probe figures, the rule and the fish
+- [x] `research/fdis_export.md`: a "Repeated surveys" section with the probe figures, the rule and the fish
       check. Refresh its counts table. Revise every number that moved in `research/habitat_weights.md`,
       `bt_spawning.md`, `chinook_stream_size.md` and `chinook_rearing_tuned.md` (grep each for the old
       values, row by row), and update their Verified lines.
@@ -108,11 +108,11 @@ pick changes. Rebuilding on the new fresh_default is a follow-up issue.
 ## Phase 6: Publish v2
 - [ ] `0299` dry run, then `PUBLISH=TRUE` from a clean tree to `s3://fresh-bc/knowledge/fdis/v2/`. Check
       manifest row counts against the CSVs. If auto mode refuses the upload, hand over the bare command.
-- [ ] `research/fdis_export.md` "Where it lives" names v2, and says v1 predates the dedup.
+- [x] `research/fdis_export.md` "Where it lives" names v2, and says v1 predates the dedup.
 
 ## Validation
-- [ ] `devtools::test()` passes (`test-data-dir.R` still holds with the new data-root csv)
-- [ ] `/code-check branch` clean
+- [x] `devtools::test()` passes (`test-data-dir.R` still holds with the new data-root csv)
+- [x] `/code-check branch`: three rounds, each finding a defect inside the previous fix; ended by the terminal enumeration (findings.md)
 - [ ] PWF checkboxes match landed work
 - [ ] `/planning-archive`, then `/gh-pr-push`
 

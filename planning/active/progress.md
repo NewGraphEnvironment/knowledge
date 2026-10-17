@@ -48,3 +48,10 @@
   dropped copy with the kept one (78 and 3, not 346 and 217: the first versions summed a triple's copies);
   the filter judges copied columns numerically (MAHD 75709_133_1 had kept its twin's wetted width) and its
   assertion covers the effort drop.
+- 0297 rerun on the final CH tables (2,361 s): same recommended rule (MAD >= 0.75, <= 7 %, Q 3 @ 1,000 m);
+  0298 not rerun (its km comparison cannot move; its FDIS detection figures labelled pre-#35, rebuild in #59).
+- BT rerun on the final table (0291 161 s, 0292 1 s, 0293 43 s): tracked CSVs unchanged.
+- Research files revised: fdis_export, habitat_weights, bt_spawning, chinook_stream_size,
+  chinook_rearing_tuned, research/README. devtools::test(): 258 pass.
+- Code-check: 3 rounds (plus the plan review: 4 reviewer agents), each round finding a defect inside the
+  previous fix; ended by the terminal enumeration over all 60 visit columns.
