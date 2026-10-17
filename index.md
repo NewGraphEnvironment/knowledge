@@ -103,7 +103,7 @@ crossings (`0100`–`0162`) feed field planning at group scale.
   bucket does not list:
   - `fdis/`: the FDIS electrofishing extract as received from the
     Province of BC, with its provenance note and checksums;
-  - `knowledge/fdis/v1/`: the visit-level tables built from it, as
+  - `knowledge/fdis/v2/`: the visit-level tables built from it, as
     Parquet with a `manifest.json`;
   - `rag/` (not public): the searchable report-text stores.
 - **Databases:** scripts that query PostgreSQL connect through the
