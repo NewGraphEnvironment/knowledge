@@ -31,7 +31,11 @@ knw_thresholds_table <- function(tune_dir, evidence_version, link_run_uid, link_
   chk::chk_string(link_sha)
   files <- list.files(tune_dir, "_summary\\.csv$", full.names = TRUE)
   if (!length(files)) stop("no *_summary.csv in ", tune_dir, call. = FALSE)
-  summ <- do.call(rbind, lapply(files, utils::read.csv, stringsAsFactors = FALSE))
+  parts <- lapply(files, utils::read.csv, stringsAsFactors = FALSE)
+  # a species x stage that was not fitted has fewer columns: bind on the union
+  cols <- unique(unlist(lapply(parts, names)))
+  parts <- lapply(parts, function(x) { x[setdiff(cols, names(x))] <- NA; x[cols] })
+  summ <- do.call(rbind, parts)
   summ <- summ[order(summ$species_code, summ$stage), , drop = FALSE]
   rows <- list()
   groups <- list()
