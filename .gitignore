@@ -27,5 +27,6 @@ data/tune/*_curve.rds
 # Comparison (scripts/0330): the catalog's floodplain GeoPackages are a cache; the interactive maps are local
 data/compare/catalog/
 data/compare/maps/
+data/compare/*_segments.rds
 # Published Parquet sets (scripts/0325): the manifest and bucket are the record
 data/publish/

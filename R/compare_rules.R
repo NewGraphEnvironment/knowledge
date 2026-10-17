@@ -2,9 +2,11 @@
 #'
 #' `scripts/0298`'s comparison for any species and stage. Each rule goes through
 #' the three stages that make link's stored flags, on scratch copies of each
-#' group: the predicate gated by access (`streams_access.access_<sp> > 0`, the
-#' gate the grades were built on; the habitat table's `accessible` is kept beside
-#' it and the km where the two disagree reported), `fresh::frs_habitat_overlay()`
+#' group: the predicate gated by access (the habitat table's `accessible` and
+#' `streams_access.access_<sp> > 0` together, the one gate [knw_link_place()],
+#' [knw_link_segments()] and the grades use; the km the gate removes from the
+#' habitat table's `accessible` is reported as `access_gate_differ_km`),
+#' `fresh::frs_habitat_overlay()`
 #' with link's user-habitat rows for the species, and fresh's connectivity pass
 #' (`.frs_run_connectivity()` with link's `default` parameters), rearing and
 #' spawning together, because the connectivity pass reads spawning. Regenerated
@@ -105,9 +107,13 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
       UNION SELECT DISTINCT waterbody_key, 'M' AS t FROM whse_basemapping.fwa_manmade_waterbodies_poly WHERE area_ha >= %1$s", br$lake_ha_min),
     "SELECT NULL::integer AS waterbody_key, 'none' AS t WHERE FALSE")
   wb_sql <- paste("CREATE TEMPORARY TABLE IF NOT EXISTS tmp_knw_wb AS", paste(wb_parts, collapse = "\n    UNION "))
-  sb <- sprintf(paste("(s.edge_type IN (%s) AND NOT coalesce(s.waterbody_key IN",
-                      "(SELECT waterbody_key FROM tmp_knw_wb), FALSE))"),
-                paste(edge_stream, collapse = ", "))
+  sb <- if (br$no_waterbody) {
+    sprintf("(s.edge_type IN (%s) AND s.waterbody_key IS NULL)", paste(edge_stream, collapse = ", "))
+  } else {
+    sprintf(paste("(s.edge_type IN (%s) AND NOT coalesce(s.waterbody_key IN",
+                  "(SELECT waterbody_key FROM tmp_knw_wb), FALSE))"),
+            paste(edge_stream, collapse = ", "))
+  }
   size_ok <- if (tuned$size_var == "width") {
     sprintf("coalesce(s.channel_width BETWEEN %s AND 9999, FALSE)", tuned$size_min)
   } else {
@@ -143,7 +149,7 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
     DBI::dbExecute(conn, sprintf("DROP TABLE IF EXISTS %s.streams", scratch))
     DBI::dbExecute(conn, sprintf("
       CREATE TABLE %1$s.streams AS
-      SELECT s.*, coalesce(a.access_%3$s > 0, FALSE) AS accessible, h.accessible AS accessible_stored,
+      SELECT s.*, (h.accessible AND coalesce(a.access_%3$s > 0, FALSE)) AS accessible, h.accessible AS accessible_stored,
              g.size AS knw_size, g.dist_m AS knw_dist
       FROM %2$s.streams s
       JOIN %2$s.streams_habitat_%3$s h
@@ -200,7 +206,7 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
   seg <- DBI::dbGetQuery(conn, sprintf("
     SELECT s.id_segment, s.watershed_group_code, s.linear_feature_id, s.blue_line_key, s.downstream_route_measure,
            s.upstream_route_measure, s.edge_type, s.stream_order, s.length_metre, s.gradient, s.channel_width,
-           coalesce(a.access_%2$s > 0, FALSE) AS accessible, h.accessible AS accessible_stored,
+           (h.accessible AND coalesce(a.access_%2$s > 0, FALSE)) AS accessible, h.accessible AS accessible_stored,
            h.rearing AS rearing_stored, h.spawning AS spawning_stored,
            g.size AS knw_size, g.dist_m AS knw_dist, g.grade, g.grade_class
     FROM %1$s.streams s
@@ -389,30 +395,38 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
   })), segments = seg, log = log)
 }
 
-# A species' branches under one stage of fresh's rules: the stream rule's edge types (the rule with no
-# waterbody_type), whether a river-polygon rule exists, and the wetland and lake area floors (NULL where the
-# species has no such rule).
+# A species' branches under one stage of fresh's rules: the stream rule (the rule with no waterbody_type
+# that carries thresholds; an always-in rule such as CO's 1050/1150 edges is not it), its edge types and
+# whether it requires the segment to lie in no waterbody (`in_waterbody: false`, fresh's
+# `waterbody_key IS NULL`); whether a river-polygon rule exists; and the wetland and lake area floors, 0
+# where the rule names none (any wetland, any lake) and NULL where the species has no such rule.
 .knw_fresh_branches <- function(ps, stage) {
   rules <- ps$rules[[stage]]
   edge_stream <- c(1000L, 1100L, 2000L, 2300L)
+  no_waterbody <- FALSE
   river <- FALSE
   wetland <- NULL
   lake <- NULL
+  stream_seen <- FALSE
   for (r in rules) {
     wt <- r[["waterbody_type"]]
     if (is.null(wt)) {
+      if (isFALSE(r[["thresholds"]]) || stream_seen) next
+      stream_seen <- TRUE
       if (!is.null(r[["edge_types_explicit"]])) edge_stream <- as.integer(r[["edge_types_explicit"]])
       if (!is.null(r[["edge_types"]])) {
         cats <- trimws(strsplit(r[["edge_types"]], ",")[[1]])
         edge_stream <- as.integer(unlist(lapply(cats, function(ct) fresh::frs_edge_types(category = ct)$edge_type)))
       }
+      no_waterbody <- isFALSE(r[["in_waterbody"]])
     } else if (wt == "R") {
       river <- TRUE
     } else if (wt == "W") {
-      wetland <- min(c(wetland, r[["wetland_ha_min"]]))
+      wetland <- min(c(wetland, if (is.null(r[["wetland_ha_min"]])) 0 else r[["wetland_ha_min"]]))
     } else if (wt == "L") {
-      lake <- min(c(lake, r[["lake_ha_min"]]))
+      lake <- min(c(lake, if (is.null(r[["lake_ha_min"]])) 0 else r[["lake_ha_min"]]))
     }
   }
-  list(edge_stream = edge_stream, river = river, wetland_ha_min = wetland, lake_ha_min = lake)
+  list(edge_stream = edge_stream, no_waterbody = no_waterbody, river = river, wetland_ha_min = wetland,
+       lake_ha_min = lake)
 }

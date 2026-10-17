@@ -167,7 +167,16 @@ grade_rows <- list()
 for (k in names(out)) {
   r <- out[[k]]
   if (is.null(r$curve)) next
-  if (file.exists(file.path(dir_out, paste0(k, "_grades.csv")))) { say("%s grades: already written, kept.", k); next }
+  gpath <- file.path(dir_out, paste0(k, "_grades.csv"))
+  if (file.exists(gpath)) {
+    # kept only when it was graded under this pick on this link run
+    head1 <- readr::read_csv(gpath, n_max = 1, show_col_types = FALSE, col_types = readr::cols(.default = "c"))
+    if (identical(head1$rule, r$pick$rule) && identical(head1$run_uid, run_uid)) {
+      say("%s grades: already written under %s on %s, kept.", k, r$pick$rule, run_uid)
+      next
+    }
+    say("%s grades: on file for %s / %s, regraded for %s / %s.", k, head1$rule, head1$run_uid, r$pick$rule, run_uid)
+  }
   wsg <- groups_sp(r$species_code)
   t1 <- Sys.time()
   g <- knw_grade_species(pg, schema, r$species_code, wsg, r$curve, r$pick, stage = r$stage, workers = min(workers, 8L))

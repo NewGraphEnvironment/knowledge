@@ -16,8 +16,10 @@
 #     the catalog holds (23 at 2026-10-17) until whole-network floodplains are published for all
 #     (NewGraphEnvironment/floodplains#123).
 #   - MAPS: a static three-panel figure (rules, grade, floodplain by grade) for each catalog group and
-#     the three criteria groups 0298 fixed (small-stream-heavy, interior, coastal) per species x stage,
-#     in research/fig/; an interactive page per catalog group in data/compare/maps/ (ignored).
+#     three groups per species x stage chosen by criteria fixed here: the largest share of `default` km gained,
+#     the largest share lost, and the most `default` km; in research/fig/; an interactive page per catalog
+#     group in data/compare/maps/ (ignored). 0298's criteria (small-stream-heavy, interior, coastal) are not
+#     reproduced: they need the visits' hydrologic zones and sea walks per group, which this script does not read.
 #   - Species run in parallel on socket workers, each with its own scratch schema; groups within a
 #     species run in order.
 #
@@ -25,7 +27,8 @@
 #         (0310), the link repository at LINK_REPO at the build's link_sha, the stac_floodplains_bc catalog
 #         (items read from its public bucket), fwapg database (PG* env vars): fresh_default, bcfishobs, whse_basemapping
 # WRITES: schemas knw_cmp_<sp>_<stage> in the fwapg database (scratch; one per job, dropped)
-# OUTPUT: data/compare/compare.csv     per species x stage x group and total: km by rule, graded km, km by class
+# OUTPUT: data/compare/<key>_{compare,change,checks}.csv, <key>_segments.rds  per job, as it finishes (rds ignored)
+#         data/compare/compare.csv     per species x stage x group and total: km by rule, graded km, km by class
 #         data/compare/change.csv      km gained and lost by reason and stream order
 #         data/compare/checks.csv      FDIS detection on each rule's segments; the bcfishobs lift
 #         data/compare/floodplain.csv  per species x stage x catalog group: ha, graded ha, ha by class under each rule
@@ -105,20 +108,33 @@ jobs <- lapply(names(fitted), function(k) {
 dbDisconnect(conn)
 # largest species first, load-balanced, so the two 158-group BT jobs do not share one worker
 jobs <- jobs[order(-vapply(jobs, function(j) length(j$groups), integer(1)))]
+# each job writes its own tables as it finishes and returns its error rather than raising it, so one failed
+# species cannot discard the others at collection (code-check round 2); the grade table is read with the
+# six columns the comparison needs, not its 25 (RB's is 1.5 GB)
 run_one <- function(job, schema, link_dir, vl, vs) {
   pkgload::load_all(quiet = TRUE)
   pg <- function() DBI::dbConnect(RPostgres::Postgres(), bigint = "numeric")
-  grades <- readr::read_csv(file.path("data/tune", paste0(job$key, "_grades.csv")), show_col_types = FALSE, guess_max = 1e5)
   t0 <- Sys.time()
-  cmp <- knw_compare_rules(pg, schema, job$species_code, job$stage, job$pick, job$groups, link_dir, grades,
-                           visits = vl, visit_species = vs, scratch = paste0("knw_cmp_", tolower(job$key)))
-  cmp$minutes <- as.numeric(difftime(Sys.time(), t0, units = "mins"))
-  cmp$key <- job$key
-  cmp
+  out <- tryCatch({
+    grades <- readr::read_csv(file.path("data/tune", paste0(job$key, "_grades.csv")), show_col_types = FALSE,
+                              col_select = c("id_segment", "watershed_group_code", "size", "dist_m", "grade", "grade_class"),
+                              col_types = readr::cols(grade_class = "c", .default = readr::col_double()))
+    cmp <- knw_compare_rules(pg, schema, job$species_code, job$stage, job$pick, job$groups, link_dir, grades,
+                             visits = vl, visit_species = vs, scratch = paste0("knw_cmp_", tolower(job$key)))
+    readr::write_csv(cmp$compare, file.path("data/compare", paste0(job$key, "_compare.csv")), na = "")
+    readr::write_csv(cmp$change, file.path("data/compare", paste0(job$key, "_change.csv")), na = "")
+    if (!is.null(cmp$checks)) readr::write_csv(cmp$checks, file.path("data/compare", paste0(job$key, "_checks.csv")), na = "")
+    saveRDS(cmp$segments, file.path("data/compare", paste0(job$key, "_segments.rds")))
+    cmp$segments <- NULL
+    cmp
+  }, error = function(e) list(error = conditionMessage(e), compare = NULL, change = NULL, checks = NULL, log = character()))
+  out$minutes <- as.numeric(difftime(Sys.time(), t0, units = "mins"))
+  out$key <- job$key
+  out
 }
 t0 <- Sys.time()
 if (workers > 1L && length(jobs) > 1L) {
-  cl <- parallel::makeCluster(min(workers, length(jobs)))
+  cl <- parallel::makeCluster(min(workers, length(jobs)), outfile = file.path("scripts/logs/habitat", paste0(format(Sys.Date(), "%Y%m%d"), "_compare-workers.out")))
   res <- tryCatch(parallel::parLapplyLB(cl, jobs, run_one, schema = schema, link_dir = link_dir, vl = vl, vs = vs),
                   finally = parallel::stopCluster(cl))
 } else {
@@ -126,6 +142,9 @@ if (workers > 1L && length(jobs) > 1L) {
 }
 names(res) <- vapply(jobs, `[[`, character(1), "key")
 say("Compared %d species x stage in %.1f min on %d workers.", length(res), as.numeric(difftime(Sys.time(), t0, units = "mins")), workers)
+failed <- names(res)[vapply(res, function(x) !is.null(x$error), logical(1))]
+for (k in failed) say("%s FAILED after %.1f min: %s", k, res[[k]]$minutes, res[[k]]$error)
+res <- res[setdiff(names(res), failed)]
 for (k in names(res)) {
   tot <- res[[k]]$compare |> filter(watershed_group_code == "ALL")
   say("%s: %d groups, %.1f min; default %.0f km, tuned %.0f km (%+.1f %%); graded km %.0f -> %.0f; lost %.0f, gained %.0f.",
@@ -153,9 +172,9 @@ for (k in names(res)) {
   stage <- jobs[[match(k, names(res))]]$stage
   flag <- if (stage == "rear") "rearing" else "spawning"
   sp <- jobs[[match(k, names(res))]]$species_code
-  seg_all <- r$segments
+  seg_all <- readRDS(file.path("data/compare", paste0(k, "_segments.rds")))
   per <- r$compare |> filter(watershed_group_code != "ALL")
-  # the three criteria groups (0298): most order 1-2 stream, and the two largest changes either way
+  # three groups by the criteria in the header: largest gained share, largest lost share, most default km
   crit <- c(per$watershed_group_code[which.max(per$gained_km / pmax(per$default_km, 1))],
             per$watershed_group_code[which.max(per$lost_km / pmax(per$default_km, 1))],
             per$watershed_group_code[which.max(per$default_km)])
