@@ -37,6 +37,8 @@ Scripts: scratchpad `probe35.R`, `probe35b.R`, `probe35c.R` (not committed) over
   on one copy only (on the lowest collection id in 1 of 95), and 32 differ otherwise (small differences,
   e.g. 63 vs 62 fish). So "lowest id" would lose measured fish. Keep rule "most fish, then habitat, then
   lowest id" loses no fish and no habitat in any group (measured with the with-time signature).
+  (Superseded: the refined order put known catch above habitat, which dropped the habitat of 3 unknown
+  copies paired with zero copies, code-check round 1. 0230 now moves that habitat to the copy kept.)
 - Habitat on more than one copy: 813 groups, identical in 767 (with-time figures: 810 / 767).
 - 0290's 17,606 kept visits: 810 are in a group, and 429 would be dropped (with-time signature).
 - 0294's looser signature (UTM, date, area_m2, n_caught_all, species set) adds 159 groups (323 visits)

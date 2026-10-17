@@ -290,7 +290,8 @@ sites <- sites |>
 # otherwise they may be adjacent sites at one rounded UTM, and are kept and listed. The copy kept
 # holds the most measured fish, then the most maturity-coded fish, then a known catch, then
 # habitat, then the lowest collection id: in 94 of the 95 groups where one copy alone has
-# measured fish, it is the higher id.
+# measured fish, it is the higher id. Where the copy kept has no habitat and a dropped copy does
+# (a zero copy kept over an unknown one), the dropped copy's habitat moves to the kept one.
 maturity_coded <- c("IM", "M", "MT", "SP", "ST")
 pass_sig <- visits |>
   transmute(site_visit = site_of(KEY),
@@ -346,6 +347,14 @@ repeat_map <- rep_cand |>
             n_measured = n_measured_all, fish_same, habitat_same, time_same) |>
   arrange(kept_site_visit, site_visit)
 dropped <- repeat_map$site_visit[repeat_map$status == "dropped"]
+cols_habitat <- c(names(hab_site)[names(hab_site) != "site_visit"], "has_habitat")
+donor <- rep_cand |>
+  filter(site_visit %in% dropped, has_habitat,
+         !rep_cand$has_habitat[match(kept, rep_cand$site_visit)]) |>
+  distinct(kept, .keep_all = TRUE)   # rep_cand is in keep order, so the best-ranked donor
+i_kept <- match(donor$kept, sites$site_visit)
+sites[i_kept, cols_habitat] <- sites[match(donor$site_visit, sites$site_visit), cols_habitat]
+repeat_map <- repeat_map |> mutate(habitat_carried = site_visit %in% donor$site_visit)
 rep_groups <- rep_cand |> filter(sig %in% sig[status == "dropped"]) |> group_by(sig) |>
   summarise(fish_differs = !all(fish_same), habitat_differs = !all(habitat_same),
             time_differs = !all(time_same), coded_lost = any(coded_lost & site_visit %in% dropped),
@@ -457,6 +466,7 @@ add("repeat_groups_habitat_differ", sum(rep_groups$habitat_differs))
 add("repeat_groups_time_differ", sum(rep_groups$time_differs))
 add("repeat_groups_zero_and_unknown", sum(rep_groups$status_mixed))
 add("repeat_groups_maturity_coded_lost", sum(rep_groups$coded_lost))
+add("repeat_habitat_carried_to_kept", nrow(donor))
 add("repeat_groups_one_collection_kept", n_distinct(rep_cand$sig[rep_cand$status == "kept_one_collection"]))
 add("repeat_groups_site_differs_kept", n_distinct(rep_cand$sig[rep_cand$status == "kept_site_differs"]))
 print(rec, n = Inf)
@@ -470,6 +480,9 @@ if (anyDuplicated(rep_cand$sig[rep_cand$sig %in% rep_groups$sig & rep_cand$site_
   stop("a repeated survey kept two copies")
 }
 if (!all(repeat_map$kept_site_visit %in% sites$site_visit)) stop("a repeated survey kept no copy")
+hab_lost <- dmap$kept_site_visit[dmap$site_visit %in% hab_rows$site_visit &
+                                   !sites$has_habitat[match(dmap$kept_site_visit, sites$site_visit)]]
+if (length(hab_lost)) stop("habitat dropped with a repeated copy: ", paste(unique(hab_lost), collapse = ", "))
 if (any(dmap$n_measured > rep_cand$n_measured_all[match(dmap$kept_site_visit, rep_cand$site_visit)])) {
   stop("a dropped copy holds more measured fish than the copy kept")
 }

@@ -18,8 +18,9 @@
 #     observation_date_min 1990-01-01). A range filter at WSG scale only.
 #   - DUPLICATES (#35, A8): 0230 keeps one copy of a survey loaded under several collection ids,
 #     so none are flagged here. The ledger counts the visits this script's old, looser signature
-#     (UTM, date, area and catch) would still flag; they differ in per-pass effort or per-species
-#     counts, so they are distinct visits.
+#     (UTM, date, area and catch) would still flag: copies 0230 kept on purpose (one collection,
+#     or a different site number without identical fish; data/fdis_repeat_surveys.csv), and
+#     visits that differ in per-pass effort or per-species counts.
 #   - FLOW is month 0 (the annual mean) of discharge/fwa/v1/segment_monthly, scenario historical,
 #     as wet::wet_db_load() loaded it into the fwapg database; `pick` marks wet's default source per
 #     segment, both sources' values are kept, and the picked counts are checked against the

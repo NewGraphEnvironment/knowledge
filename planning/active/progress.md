@@ -25,3 +25,8 @@
   collection; 9,597 of 990,606 counted fish dropped.
 - BT reruns on the filtered visits: 0291 (236 s), 0292 (2 s), 0293 (46 s; its steep-patch block switched
   off in the frozen copy and carried from the 2026-10-02 log for the 10 visits still in the table).
+- /code-check branch round 1 (review-round1.md): (1) bug inside the refined keep rule: known catch above
+  habitat dropped the habitat of 3 unknown copies (90818_909_1, 90853_913_1, 90855_939_1). Fixed by
+  moving a dropped copy's habitat to a kept copy that has none, with a guard that no habitat leaves with a
+  copy, a ledger row, and `habitat_carried` in the map (the filter applies the same carry). (2) 0294's
+  header overstated what its loose-signature count holds: reworded.
