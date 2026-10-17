@@ -1,8 +1,9 @@
 # BT spawning: what the evidence says about gradient and channel size
 
-**Verified:** 2026-10-02; groundwater rows 2026-10-07 (#36) · **Issues:** #33 (this); follows #28 (`habitat_weights.md`); spawned #34, #35, #36 ·
+**Verified:** 2026-10-02; groundwater rows 2026-10-07 (#36); fish-record figures rerun 2026-10-17 without repeated surveys (#35) · **Issues:** #33 (this); follows #28 (`habitat_weights.md`); spawned #34, #35, #36 ·
 **Produced by:**
-- `scripts/0293-bt-spawn-evidence.R`: `data/bt_spawn_evidence.csv`, log `scripts/logs/habitat/20261002_bt_spawn_evidence.txt`;
+- `scripts/0293-bt-spawn-evidence.R`: `data/bt_spawn_evidence.csv`, log `scripts/logs/habitat/20261017_bt_spawn_evidence.txt`
+  (its steep-patch table carried from `20261002_bt_spawn_evidence.txt`, see that log);
 - literature rows 490–510 of `data/literature_evidence.csv`, gate `scripts/logs/habitat/20261002_literature_verify.csv`;
 - groundwater rows 675–686 (#36), gate `scripts/logs/habitat/20261007_literature_verify.csv`.
 
@@ -17,14 +18,14 @@ about those two numbers.
 
 - **Electrofishing spawner evidence cannot settle spawning gradient.**
   - Among Aug–Oct visits that caught BT and maturity-coded at least one, the share with spawner evidence
-    rises with segment gradient: 0.146, 0.188, 0.182, 0.293, 0.302, 0.352 across ≤ 2 to > 10.49 %.
+    rises with segment gradient: 0.148, 0.182, 0.187, 0.282, 0.302, 0.353 across ≤ 2 to > 10.49 %.
   - The rise is between watershed groups, not within them. With a WSG term in the model the rate ratios
-    are 0.75–1.22, with intervals of roughly 0–3.6 (zero lower bounds where sparse resamples separate). Without one they climb to 3.07 at > 10.49 %.
+    are 0.81–1.16, with intervals of roughly 0–3.4 (zero lower bounds where sparse resamples separate). Without one they climb to 3.05 at > 10.49 %.
   - Coding effort and month do not remove the rise; the WSG term does.
   - So nothing detectable within WSGs, and nothing ruled out.
 - **The spawners caught on steep stream are mostly small.**
   - Large spawners (≥ 350 mm) number 3–9 visits per class, too few to read.
-  - Small mature fish appear on steep segments and in a few streams under 2 m wide: 10 spawner-evidence
+  - Small mature fish appear on steep segments and in a few streams under 2 m wide: 9 spawner-evidence
     visits below 2 m, 8 of them small fish.
   - That fits resident spawning beyond link's thresholds. But "spawner" includes M-coded fish in August,
     which may be migrants.
@@ -88,7 +89,9 @@ State the layer's delineation method beside any number taken from it.
   - Pearce et al. 2019 (in the library, no PDF);
   - Montana FWP redd counts.
 - **Other sources not used:** the USFWS critical habitat GIS and state redd layers.
-- **Upstream defects found:** FDIS surveys loaded under two collection ids (#35, 2.8 % of visits); FISS
+- **Upstream defects found:** FDIS surveys loaded under two to four collection ids (#35; 1,431 of the export's
+  53,018 visits, now dropped by 0230, which moved the Aug–Oct spawner rates by at most 0.011 and their rate ratios by at
+  most 0.07); FISS
   workbook site gradient read as a fraction (#34).
 
 ## Dead ends, kept because they are evidence
@@ -98,6 +101,6 @@ State the layer's delineation method beside any number taken from it.
   network position differing between the
   groups. A prototype found no upstream separation. Cut to a descriptive table.
 - **Spawner evidence on all BT visits.** That measured who maturity-coded fish: the coded share is 0.27 at
-  ≤ 2 % against 0.40–0.45 steeper. Restricted to coded Aug–Oct visits.
+  ≤ 2 % against 0.39–0.45 steeper. Restricted to coded Aug–Oct visits.
 - **"Explained by where and how sampling was done."** A first write-up. Review showed coding effort and
   month leave the rise in place, and only the WSG term removes it.
