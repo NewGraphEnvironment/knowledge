@@ -32,7 +32,10 @@ Imports:
     tibble,
     utils
 Suggests:
+    arrow,
     duckdb,
+    jsonlite,
+    mgcv,
     RPostgres,
     testthat (>= 3.0.0),
     withr
