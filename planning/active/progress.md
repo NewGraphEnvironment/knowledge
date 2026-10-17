@@ -43,3 +43,8 @@
   passed every flag drop, so left at a shared later step (asserted). bt_use_visits unchanged (md5 as read by
   0291-0293); CH tables gain MAHD and lose DEAD 80783_132_1, so 0295 and 0297 rerun (the 0297 run on the
   superseded table was stopped at 44 min).
+- /code-check round 3 (review-round3.md): mechanism named (container checks, not values). Fixed: habitat
+  carried and guarded value by value (5 pairs, not 3); coded-fish and fish-row ledger counts compare each
+  dropped copy with the kept one (78 and 3, not 346 and 217: the first versions summed a triple's copies);
+  the filter judges copied columns numerically (MAHD 75709_133_1 had kept its twin's wetted width) and its
+  assertion covers the effort drop.

@@ -99,12 +99,23 @@ derives from those tables, measured over the 1,431 dropped / kept pairs on the p
 - passes: fishing time differs on 36 pairs, never present on the dropped copy only; area, fished length,
   pass count, date, data set, and the effort, area and date flags never differ; agency differs on 44
   (load metadata; the kept copy's is kept).
-- habitat: present on the dropped copy only in 3 groups, now carried (guarded).
+- habitat: a record on the dropped copy only in 3 groups, and values (a gradient and widths, a water
+  temperature) on the dropped copy only, under a kept record without them, in 2 more (round 3). Now
+  carried value by value, guarded value by value.
 - counts and catch: species, counts, total, blocks_absence_of and the count-unknown flag are fixed by the
   signature; NFC and catch status differ only as zero vs unknown, and the known catch is kept; count
   length bounds exist on a dropped copy only for 3 species (ledger row).
-- fish: maturity-coded fish never lost (guarded); 346 measured fish rows in 38 groups are on a dropped
-  copy and not on the kept one, mostly the same fish with another weight or code, and 1 species is
-  measured only on a dropped copy (ledger row; merging copies would double-count the identical fish);
+- fish: no group keeps fewer maturity-coded fish than a dropped copy holds (guarded by count), but 3
+  coded fish (species SP IM x2, RB MT x1; no char) are on a dropped copy only (round 3; ledger row);
+  78 measured fish rows are on a dropped copy and not on the kept one, mostly the same fish with another
+  weight or code, and 1 species is measured only on a dropped copy (ledger row; merging copies would
+  double-count the identical fish). An earlier count of 346 summed the copies of a triple against the
+  kept copy, counting a fish once per copy; each dropped copy is now compared with the kept one;
   50k watershed codes now pooled across copies for the placement check.
 - placement: copies share the UTM, so the snap is the same.
+
+Round 3 named the mechanism: each check asked whether the kept copy held a container (a habitat record,
+fish rows, a count of coded fish) rather than each value. Fixed at value level in 0230 (habitat carry and
+guard, coded fish ledger row); the filter now compares numbers numerically when judging which columns it
+copies from fdis_sites (a borrowed row had kept its twin's wetted width), and its shared-later-step
+assertion covers the effort drop.

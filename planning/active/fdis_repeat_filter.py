@@ -11,8 +11,8 @@ Two changes 0230 makes to a kept copy are applied as a rebuild would:
   habitat columns are taken from the new fdis_sites.csv;
 - it pools the copies' 50k watershed codes, so a kept copy's ws50 flag can change. One that now
   fails leaves the table. One that now passes, where only a dropped twin was in the table, takes
-  the twin's row (same placement and catch), with every column that the table copies verbatim
-  from fdis_sites.csv set to the kept copy's value.
+  the twin's row (same placement and catch), with every column that the table copies from
+  fdis_sites.csv (equal on every old row, numbers to 1e-9 relative) set to the kept copy's value.
 Any other difference between the old fdis_sites.csv (less the dropped copies) and the new one
 stops the run.
 
@@ -59,6 +59,16 @@ log = [f"#35 repeat filter: {len(dropped)} copies dropped by 0230 (data/fdis_rep
        f"ws50 flag changed on {len(ws50_now_fails)} kept copies to fail, {len(ws50_now_passes)} to pass."]
 
 
+def same(a, b):
+    if a == b:
+        return True
+    try:
+        x, y = float(a), float(b)
+    except ValueError:
+        return False
+    return abs(x - y) <= 1e-9 * max(1.0, abs(x))
+
+
 def rows(path):
     with open(path, newline="") as f:
         lines = f.read().splitlines(keepends=True)
@@ -81,7 +91,10 @@ for tb in ["bt_use_visits", "ch_mad_visits", "ch_rule_visits"]:
     drop_col = len(head) > 1 and head[1] == "dup_of"
     # columns the table copies verbatim from fdis_sites.csv, judged on every old row
     verbatim = [i for i, c in enumerate(head) if c != "site_visit" and c in next(iter(sites_old.values()))
-                and all(r[i] == sites_old[r[0]][c] for r in body)]
+                and all(same(r[i], sites_old[r[0]][c]) for r in body)]
+    shared = [c for c in head if c != "site_visit" and c in next(iter(sites_old.values()))]
+    assert len(verbatim) == len(shared), f"{tb}: columns shared with fdis_sites.csv but not copied from it: " \
+        f"{sorted(set(shared) - {head[i] for i in verbatim})}"
     present = {r[0] for r in body}
     old_rows = {r[0]: r for r in body}
     n = {"carried": 0, "fails": 0, "passes": 0, "shared_later_drop": 0}
@@ -95,7 +108,10 @@ for tb in ["bt_use_visits", "ch_mad_visits", "ch_rule_visits"]:
             for d in twins[k]:
                 o = sites_old[d]
                 assert all(o[c] == "FALSE" for c in ["flag_not_placed", "flag_far_snap", "flag_ws50_mismatch",
-                                                      "flag_junk_date"]) and o["catch_status"] != "unknown", \
+                                                      "flag_junk_date", "flag_effort_sentinel"]) \
+                    and (o["flag_no_area"] == "FALSE" or o["flag_no_effort"] == "FALSE") \
+                    and all(o[c] == sites_new[k][c] for c in ["flag_effort_sentinel", "flag_no_area", "flag_no_effort"]) \
+                    and o["catch_status"] != "unknown", \
                     f"{tb}: {k}'s twin {d} left at a step the kept copy may not share"
             n["shared_later_drop"] += 1
             continue
