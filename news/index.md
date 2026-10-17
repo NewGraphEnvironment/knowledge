@@ -1,5 +1,13 @@
 # Changelog
 
+## knowledge 0.4.2
+
+- The README points at the published FDIS visit tables’ second release,
+  `knowledge/fdis/v2/`, which keeps one copy of a survey loaded under
+  several collection ids and carries the crosswalk from v1’s
+  `site_visit` ids
+  ([\#35](https://github.com/NewGraphEnvironment/knowledge/issues/35)).
+
 ## knowledge 0.4.1
 
 - The package now sits at the repository root and installs with
