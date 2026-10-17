@@ -55,15 +55,16 @@ knw_grade_species <- function(connector, schema, species, wsg, curve, pick, stag
       w <- knw_link_walks(connector, starts, q_grid = pick$exc_q, sources = src, workers = workers)
       w <- w[w$status == "found", , drop = FALSE]
       found <- nrow(w)
-      i <- match(paste(seg$blue_line_key, seg$downstream_route_measure), paste(w$blue_line_key, w$downstream_route_measure))
+      i <- match(paste(seg$blue_line_key, seg$downstream_route_measure),
+                 paste(w$blue_line_key, w$downstream_route_measure))
       seg$dist_m <- ifelse(cand & !is.na(i), w$dist_m[i], NA_real_)
     }
   }
   g <- knw_grade(curve, seg, cols = c(size = "size", grad = "gradient", dist = "dist_m"))
   flag <- if (stage == "rear") "rearing" else "spawning"
-  grades <- seg[, c("id_segment", "watershed_group_code", "linear_feature_id", "blue_line_key", "downstream_route_measure",
-                    "upstream_route_measure", "length_metre", "edge_type", "stream_order", "access", "accessible", flag,
-                    "size", "dist_m")]
+  grades <- seg[, c("id_segment", "watershed_group_code", "linear_feature_id", "blue_line_key",
+                    "downstream_route_measure", "upstream_route_measure", "length_metre", "edge_type", "stream_order",
+                    "access", "accessible", flag, "size", "dist_m")]
   grades$rate <- g$grades$rate
   grades$grade <- ifelse(grades$accessible, g$grades$grade, NA_real_)
   grades$grade_class <- ifelse(grades$accessible, g$grades$grade_class, NA_character_)

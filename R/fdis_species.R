@@ -133,7 +133,8 @@ knw_fdis_species <- function(sites, catch, fish, codes, breaks, species = knw_sp
     fsp <- fsp[fsp$site_visit %in% sites$site_visit, , drop = FALSE]
     by_class <- table(factor(fsp$site_visit, levels = sites$site_visit),
                       factor(fsp$size_class, levels = classes))
-    n_nolength <- tapply(is.na(fsp$length_mm) | fsp$length_mm <= 0, factor(fsp$site_visit, levels = sites$site_visit), sum)
+    n_nolength <- tapply(is.na(fsp$length_mm) | fsp$length_mm <= 0,
+                         factor(fsp$site_visit, levels = sites$site_visit), sum)
     # no counting code caught: 0 where the visit's catch is known, NA where it is unknown
     n_caught <- as.numeric(n_caught)
     none <- !present & sites$catch_status != "unknown"

@@ -36,20 +36,23 @@ knw_link_segments <- function(conn, schema, species, wsg, parent_fallback = TRUE
   seg <- DBI::dbGetQuery(conn, sprintf("
     SELECT s.id_segment, s.watershed_group_code, s.linear_feature_id, s.blue_line_key, s.downstream_route_measure,
            s.upstream_route_measure, s.length_metre, s.edge_type, s.stream_order, s.waterbody_key, s.gradient,
-           s.channel_width, s.channel_width_source, s.wscode_ltree::text AS wscode, s.localcode_ltree::text AS localcode,
+           s.channel_width, s.channel_width_source, s.wscode_ltree::text AS wscode,
+           s.localcode_ltree::text AS localcode,
            a.access_%1$s AS access,
            h.accessible AS accessible_stored, h.spawning AS spawning_stored, h.rearing AS rearing_stored,
            h.lake_rearing AS lake_rearing_stored, h.wetland_rearing AS wetland_rearing_stored,
            q.q_m3s AS own_mad, q.source AS own_source
     FROM %2$s.streams s
     LEFT JOIN %2$s.streams_access a ON a.id_segment = s.id_segment AND a.watershed_group_code = s.watershed_group_code
-    LEFT JOIN %2$s.streams_habitat_%1$s h ON h.id_segment = s.id_segment AND h.watershed_group_code = s.watershed_group_code
+    LEFT JOIN %2$s.streams_habitat_%1$s h
+      ON h.id_segment = s.id_segment AND h.watershed_group_code = s.watershed_group_code
     LEFT JOIN discharge.fwa_v1_segment_monthly q
       ON q.linear_feature_id = s.linear_feature_id AND q.scenario = 'historical' AND q.month = 0 AND q.pick
     WHERE s.watershed_group_code IN (%3$s)", s, schema, wsg_in))
   seg <- tibble::as_tibble(seg)
-  for (col in c("id_segment", "linear_feature_id", "blue_line_key", "downstream_route_measure", "upstream_route_measure",
-                "length_metre", "gradient", "channel_width", "own_mad", "waterbody_key")) {
+  num_cols <- c("id_segment", "linear_feature_id", "blue_line_key", "downstream_route_measure",
+                "upstream_route_measure", "length_metre", "gradient", "channel_width", "own_mad", "waterbody_key")
+  for (col in num_cols) {
     seg[[col]] <- as.numeric(seg[[col]])
   }
   seg$edge_type <- as.integer(seg$edge_type)

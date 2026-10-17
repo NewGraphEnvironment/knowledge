@@ -128,7 +128,8 @@ knw_tune_curve <- function(d, pick, walks, folds, resp = "U",
   thr_dist <- if (is.na(pick$exc_d)) 500 else pick$exc_d
   base <- function(n) {
     nd <- data.frame(log_area = rep(ref$log_area, n), data_set = factor(ref$data_set, levels = levels(dd$data_set)),
-                     era = factor(ref$era, levels = levels(dd$era)), wsg = factor(levels(dd$wsg)[1], levels = levels(dd$wsg)))
+                     era = factor(ref$era, levels = levels(dd$era)),
+                     wsg = factor(levels(dd$wsg)[1], levels = levels(dd$wsg)))
     nd$log_size <- log(thr_size)
     nd$log_dist <- log(dist_cap_m + 10)
     nd$grad <- min(pick$grad_max, 0.2) / 2
@@ -137,10 +138,12 @@ knw_tune_curve <- function(d, pick, walks, folds, resp = "U",
   curve_of <- function(label, var, xs, thr, transform = identity) {
     nd <- base(length(xs))
     nd[[var]] <- xs
-    pr <- mgcv::predict.gam(fit, newdata = nd, type = "link", se.fit = TRUE, exclude = "s(wsg)", newdata.guaranteed = TRUE)
+    pr <- mgcv::predict.gam(fit, newdata = nd, type = "link", se.fit = TRUE, exclude = "s(wsg)",
+                            newdata.guaranteed = TRUE)
     at <- stats::approx(xs, as.numeric(pr$fit), xout = thr)$y
     tibble::tibble(curve = label, x = transform(xs), rate = fam$linkinv(as.numeric(pr$fit)),
-                   rel_rate = exp(as.numeric(pr$fit) - at), rel_lo = exp(as.numeric(pr$fit) - 1.96 * as.numeric(pr$se.fit) - at),
+                   rel_rate = exp(as.numeric(pr$fit) - at),
+                   rel_lo = exp(as.numeric(pr$fit) - 1.96 * as.numeric(pr$se.fit) - at),
                    rel_hi = exp(as.numeric(pr$fit) + 1.96 * as.numeric(pr$se.fit) - at), threshold = transform(thr))
   }
   rs <- range(dd$log_size)

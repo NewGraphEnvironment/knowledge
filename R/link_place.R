@@ -95,8 +95,8 @@ knw_link_place <- function(conn, visits, schema, start_window_m = 5, overlap_max
     sprintf("LEFT JOIN %1$s.streams_habitat_%2$s h_%2$s
     ON h_%2$s.id_segment = s.id_segment AND h_%2$s.watershed_group_code = s.watershed_group_code", schema, s)
   })), collapse = "\n  ")
-  win <- sprintf("(s.downstream_route_measure BETWEEN t.downstream_route_measure - 1 AND t.downstream_route_measure + %s)",
-                 start_window_m)
+  win <- sprintf(paste("(s.downstream_route_measure BETWEEN t.downstream_route_measure - 1",
+                       "AND t.downstream_route_measure + %s)"), start_window_m)
   place <- sprintf("
   SELECT DISTINCT ON (t.site_visit) t.site_visit,
          s.id_segment, s.downstream_route_measure - t.downstream_route_measure AS segment_start_offset_m,

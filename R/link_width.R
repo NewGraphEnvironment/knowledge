@@ -46,7 +46,8 @@ knw_link_width <- function(conn, linear_feature_id, tol = 0.05, agree_min = 0.95
     SELECT t.linear_feature_id, s.waterbody_key, s.stream_order AS fwa_stream_order,
            cw.channel_width, cw.channel_width_source,
            s.waterbody_key IN (SELECT waterbody_key FROM whse_basemapping.fwa_rivers_poly) AS wb_river,
-           s.waterbody_key IN (SELECT waterbody_key FROM whse_basemapping.fwa_wetlands_poly WHERE area_ha >= %2$s) AS wb_wetland,
+           s.waterbody_key IN (SELECT waterbody_key FROM whse_basemapping.fwa_wetlands_poly WHERE area_ha >= %2$s)
+             AS wb_wetland,
            s.waterbody_key IN (SELECT waterbody_key FROM whse_basemapping.fwa_lakes_poly WHERE area_ha >= %3$s
                                UNION SELECT waterbody_key FROM whse_basemapping.fwa_manmade_waterbodies_poly
                                WHERE area_ha >= %3$s) AS wb_lake,

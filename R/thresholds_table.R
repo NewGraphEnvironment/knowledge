@@ -41,7 +41,8 @@ knw_thresholds_table <- function(tune_dir, evidence_version, link_run_uid, link_
     if (!summ$status[i] %in% c("fitted", "underpowered")) {
       rows[[key]] <- cbind(base, tibble::tibble(
         component = NA_character_, link_parameter = NA_character_, model = NA_character_, value = NA_real_,
-        unit = NA_character_, range_lo = NA_real_, range_hi = NA_real_, readings_in = NA_integer_, readings = NA_integer_,
+        unit = NA_character_, range_lo = NA_real_, range_hi = NA_real_, readings_in = NA_integer_,
+        readings = NA_integer_,
         default_value = NA_real_, default_in_region = NA, rule = NA_character_, n_visits = summ$visits_in[i],
         n_detect = summ$detections[i], n_wsg = summ$groups_both[i], power = summ$status[i]))
       next

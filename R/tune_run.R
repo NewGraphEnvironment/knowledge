@@ -57,8 +57,8 @@ knw_tune_run <- function(visits, species_tbl, walks, thresholds, species = knw_s
                    !(visits$wb_lake %in% TRUE) & !is.na(visits$area_m2) & visits$area_m2 >= area_range[1] &
                    visits$area_m2 <= area_range[2], , drop = FALSE]
   base$log_area <- log(base$area_m2)
-  base$era <- factor(as.character(cut(base$year, c(-Inf, 1994, 2004, Inf), labels = c("to1994", "1995-2004", "2005on"))),
-                     levels = c("to1994", "1995-2004", "2005on"))
+  eras <- c("to1994", "1995-2004", "2005on")
+  base$era <- factor(as.character(cut(base$year, c(-Inf, 1994, 2004, Inf), labels = eras)), levels = eras)
   base$data_set <- factor(base$data_set)
   base$wsg <- factor(base$watershed_group_code)
 
@@ -98,7 +98,8 @@ knw_tune_run <- function(visits, species_tbl, walks, thresholds, species = knw_s
       d$wsg <- droplevels(d$wsg)
       both <- tapply(d[[resp]], d$wsg, function(x) any(x == 1L) && any(x == 0L))
       n_both <- sum(both %in% TRUE)
-      rec$population <- c(visits_in = nrow(d), detections = sum(d[[resp]]), groups = nlevels(d$wsg), groups_both = n_both)
+      rec$population <- c(visits_in = nrow(d), detections = sum(d[[resp]]), groups = nlevels(d$wsg),
+                          groups_both = n_both)
       if (n_both < max(min_wsg, folds)) {
         rec$status <- "too_few_groups"
         out[[key]] <- rec

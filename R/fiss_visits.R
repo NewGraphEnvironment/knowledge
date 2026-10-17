@@ -44,8 +44,12 @@ knw_fiss_visits <- function(evidence, step2 = NULL) {
     s2 <- step2[step2$sampling_method %in% "EF", , drop = FALSE]
     num <- function(x) suppressWarnings(as.numeric(x))
     s2$ef_seconds <- num(s2$ef_seconds)
-    len <- if ("ef_length_m" %in% names(s2)) ifelse(is.na(num(s2$ef_length_m)), num(s2$length_m), num(s2$ef_length_m)) else num(s2$length_m)
-    wid <- if ("ef_width_m" %in% names(s2)) ifelse(is.na(num(s2$ef_width_m)), num(s2$width_m), num(s2$ef_width_m)) else num(s2$width_m)
+    pick_measure <- function(ef, plain) {
+      if (is.null(ef)) return(num(plain))
+      ifelse(is.na(num(ef)), num(plain), num(ef))
+    }
+    len <- pick_measure(s2[["ef_length_m"]], s2$length_m)
+    wid <- pick_measure(s2[["ef_width_m"]], s2$width_m)
     s2$len <- len
     s2$wid <- wid
     s2$pass <- num(s2$haul_pass)
