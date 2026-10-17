@@ -47,10 +47,15 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   collection, which with the species collections feeds the `habitat_modelling` store), and
   `temperature_{members,additions}.csv` (what `0270 --collection temperature` puts in `Fisheries/temperature`, the sole
   input of the `temperature` store), and `flow_{members,additions}.csv` (what `0270 --collection flow` puts in
-  `Fisheries/flow`, the sole input of the `flow` store; #44, `research/flow_requirements.md`).
+  `Fisheries/flow`, the sole input of the `flow` store; #44, `research/flow_requirements.md`), and
+  `thresholds.csv` and `thresholds_groups.csv` (the tuned thresholds per species × stage × component in link's
+  parameter names, and the groups each rule was scored on; `0325`, #57). `data/tune/` holds the tuning run's
+  per-rule scores and curves (its grade tables and fitted curves are ignored), `data/compare/` the comparison
+  tables (its catalog cache and interactive maps ignored), `data/publish/` the Parquet sets (ignored).
 - `data/rag/` — ignored local cache of the ragnar stores. Source of truth is `s3://fresh-bc/rag/` (not public).
 - `data/fdis/` — ignored cache of the FDIS export (`0230` syncs it) and of the visit tables built from it
-  (`data/fdis/derived/`; `0299` publishes them, and restores them with `PULL=TRUE`).
+  (`data/fdis/derived/`; `0299` publishes them as `knowledge/fdis/v3`, and restores them with `PULL=TRUE`;
+  `VERSION=v2` restores the pre-#57 set that `0291`–`0298` read).
 
 ## One discipline: everything here is public
 
@@ -143,9 +148,9 @@ widths are these same sites, so never score the width model against them.
 Some surveys were loaded under two to four collection ids (same UTM, date, per-pass effort and
 catch). `0230` keeps one copy, the one with the most measured fish, because the fish often sit on
 the later id only, and lists the rest in `data/fdis_repeat_surveys.csv` (#35). Downstream scripts
-carry no duplicate logic of their own. `bt_use_visits`, `ch_mad_visits` and `ch_rule_*` are the pre-#35
-builds less those copies (the #35 archive's `fdis_repeat_filter.py`), because `fresh_default` was rebuilt
-province-wide meanwhile and 0290 now stops on it; #57 rebuilds them (it replaced #59).
+carry no duplicate logic of their own. From #57, `0310` builds every species' visit table on the province-wide
+`fresh_default` in one pass and `0290`, `0294` and `0296` write their tables from it; `0291`–`0298` are frozen on
+the published v2 tables (`0299 PULL=TRUE VERSION=v2`).
 
 ### FISS submission workbooks: editions drift, and most EF fish are already in FDIS
 
