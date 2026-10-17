@@ -119,3 +119,13 @@ fish rows, a count of coded fish) rather than each value. Fixed at value level i
 guard, coded fish ledger row); the filter now compares numbers numerically when judging which columns it
 copies from fdis_sites (a borrowed row had kept its twin's wetted width), and its shared-later-step
 assertion covers the effort drop.
+
+## Terminal enumeration (2026-10-17, after the round 3 fixes)
+
+Every one of the 60 columns of fdis_sites.csv, over all 1,431 dropped / kept pairs: a value present on
+the dropped copy (pre-#35 table) and absent on the kept copy (new table) occurs only for `cw_comparable`
+(13 pairs: unplaced visits where the kept copy has a width the dropped copy lacked, so the derived flag
+reads NA instead of FALSE, more information, not less) and `n_cw_measures` (1 pair: a count of 0
+measures). Below the visit grain, what the keep-one-copy rule gives up is counted in the ledger: 78
+measured fish rows, 3 maturity-coded fish (no char), 3 count length bounds, 1 species measured only on a
+dropped copy. The loop ends on this enumeration, not on a clean round.
