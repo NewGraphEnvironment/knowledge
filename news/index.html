@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">knowledge</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -29,9 +29,13 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/v0.4.1/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.4.1" id="knowledge-041">knowledge 0.4.1<a class="anchor" aria-label="anchor" href="#knowledge-041"></a></h2>
+<ul><li>The package now sits at the repository root and installs with <code>pak::pak("NewGraphEnvironment/knowledge")</code>. <code>DESCRIPTION</code> gains <code>URL</code> (the new pkgdown site and the repository) and <code>BugReports</code>, and the <code><a href="../reference/knw_pscis_pull.html">knw_pscis_pull()</a></code> example connects through the standard <code>PG*</code> environment variables.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.0" id="knowledge-040">knowledge 0.4.0<a class="anchor" aria-label="anchor" href="#knowledge-040"></a></h2>
 <ul><li>New evidence variable <code>instream_flow</code>: a flow need, the water a life stage needs while it is in the stream, kept apart from <code>discharge</code>, which is stream size (usually the MAD an intrinsic-potential model filters on). It takes <code>m3/s</code>, <code>cfs</code>, <code>percent MAD</code>, a <code>percentile</code> or a <code>percent exceedance</code>, and a <code>metric</code> naming the flow statistic it is held to (<code>instantaneous</code>, <code>daily_mean</code>, <code>7day_low</code>, <code>monthly_mean</code>, <code>monthly_median</code>, <code>unstated</code>). It carries no <code>parameter</code> or <code>model_id</code>, and the <code>*_mad_*</code> parameters now sit on <code>discharge</code> rows only. A <code>7day_low</code> row needs a note giving its return period.</li>

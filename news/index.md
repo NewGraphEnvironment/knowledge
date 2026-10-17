@@ -1,5 +1,13 @@
 # Changelog
 
+## knowledge 0.4.1
+
+- The package now sits at the repository root and installs with
+  `pak::pak("NewGraphEnvironment/knowledge")`. `DESCRIPTION` gains `URL`
+  (the new pkgdown site and the repository) and `BugReports`, and the
+  [`knw_pscis_pull()`](https://newgraphenvironment.github.io/knowledge/reference/knw_pscis_pull.md)
+  example connects through the standard `PG*` environment variables.
+
 ## knowledge 0.4.0
 
 - New evidence variable `instream_flow`: a flow need, the water a life
