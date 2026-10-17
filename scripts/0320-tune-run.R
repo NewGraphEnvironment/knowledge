@@ -132,7 +132,7 @@ for (k in names(out)) {
       rule_recommended = r$pick$rule, rule_pick = rules$rule[rules$pick], rule_best = best$rule,
       default_in_region = dflt$in_region, default_ddev = dflt$ddev_best, default_se = dflt$se_diff,
       region_n = sum(rules$in_region), patterns = r$score$population[["patterns"]],
-      dev_default = dflt$dev_heldout, dev_best = best$dev_heldout, dev_null = best$dev_heldout + best$ddev_null - best$ddev_best,
+      dev_default = dflt$dev_heldout, dev_best = best$dev_heldout, dev_null = best$dev_heldout - best$ddev_null,
       dev_curve = r$curve$heldout, curve_dist_in_model = r$curve$dist_in_model,
       curve_edf = paste(sprintf("%s=%.2f", names(r$curve$edf), r$curve$edf), collapse = "; "),
       honest_dev_rec = sum(r$score$honest$dev_rec), honest_dev_default = sum(r$score$honest$dev_default),

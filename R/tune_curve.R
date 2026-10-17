@@ -29,7 +29,8 @@
 #' @return A list: `model` (the `mgcv::gam`), `data` (the rows fitted, with
 #'   `log_size`, `log_dist`, `grad`), `ref` (the reference nuisance values a
 #'   segment is predicted at: median `log_area`, modal `data_set`, latest `era`),
-#'   `dropped` (visits with no size, gradient or walk), `heldout` (summed
+#'   `dropped` (visits with no size or gradient), `capped` (visits kept at the
+#'   distance cap: no walk, or no river found), `heldout` (summed
 #'   held-out deviance), `edf` (the smooths' effective degrees of freedom), and
 #'   `curves`, a `tibble` of marginal curves (`curve`, `x`, `rate`, `rel_rate`,
 #'   `rel_lo`, `rel_hi`, `threshold`) relative to the pick's thresholds, each
@@ -64,7 +65,8 @@ knw_tune_curve <- function(d, pick, walks, folds, resp = "U",
   d$log_size <- log(d[[size_col]])
   d$grad <- pmin(pmax(d[[cols[["grad"]]]], 0), 0.2)
   ok <- is.finite(d$log_size) & !is.na(d$grad) & !is.na(d$log_dist)
-  dropped <- c(no_size = sum(!is.finite(d$log_size)), no_gradient = sum(is.na(d$grad)), no_walk = sum(is.na(m)))
+  dropped <- c(no_size = sum(!is.finite(d$log_size)), no_gradient = sum(is.na(d$grad)))
+  capped <- c(no_walk_at_cap = sum(is.na(m)), no_river_at_cap = sum(!is.na(m) & !is.finite(dist)))
   dd <- .tune_modelled(d[ok, , drop = FALSE], resp)
   nuis <- c("log_area", "data_set", "era")
   nuis <- nuis[vapply(nuis, function(t) length(unique(dd[[t]])) > 1L, logical(1))]
@@ -157,6 +159,6 @@ knw_tune_curve <- function(d, pick, walks, folds, resp = "U",
     curve_of(sprintf("dist_to_Q%g_m", q), "log_dist", seq(log(20), log(dist_cap_m + 10), length.out = 120),
              log(thr_dist + 10), function(x) exp(x) - 10)
   )
-  list(model = fit, data = dd, ref = ref, dropped = dropped, heldout = dev, edf = edf, curves = curves,
+  list(model = fit, data = dd, ref = ref, dropped = dropped, capped = capped, heldout = dev, edf = edf, curves = curves,
        size_var = pick$size_var, q = q, dist_cap_m = dist_cap_m, dist_in_model = dist_in_model)
 }

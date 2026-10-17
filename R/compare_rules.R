@@ -2,7 +2,9 @@
 #'
 #' `scripts/0298`'s comparison for any species and stage. Each rule goes through
 #' the three stages that make link's stored flags, on scratch copies of each
-#' group: the predicate gated by stored access, `fresh::frs_habitat_overlay()`
+#' group: the predicate gated by access (`streams_access.access_<sp> > 0`, the
+#' gate the grades were built on; the habitat table's `accessible` is kept beside
+#' it and the km where the two disagree reported), `fresh::frs_habitat_overlay()`
 #' with link's user-habitat rows for the species, and fresh's connectivity pass
 #' (`.frs_run_connectivity()` with link's `default` parameters), rearing and
 #' spawning together, because the connectivity pass reads spawning. Regenerated
@@ -141,10 +143,13 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
     DBI::dbExecute(conn, sprintf("DROP TABLE IF EXISTS %s.streams", scratch))
     DBI::dbExecute(conn, sprintf("
       CREATE TABLE %1$s.streams AS
-      SELECT s.*, h.accessible, g.size AS knw_size, g.dist_m AS knw_dist
+      SELECT s.*, coalesce(a.access_%3$s > 0, FALSE) AS accessible, h.accessible AS accessible_stored,
+             g.size AS knw_size, g.dist_m AS knw_dist
       FROM %2$s.streams s
       JOIN %2$s.streams_habitat_%3$s h
         ON h.id_segment = s.id_segment AND h.watershed_group_code = s.watershed_group_code
+      LEFT JOIN %2$s.streams_access a
+        ON a.id_segment = s.id_segment AND a.watershed_group_code = s.watershed_group_code
       LEFT JOIN %1$s.grades g ON g.id_segment = s.id_segment AND g.watershed_group_code = s.watershed_group_code
       WHERE s.watershed_group_code = '%4$s'", scratch, schema, s, w))
     for (ix in c("(id_segment)", "USING gist (geom)", "USING gist (wscode_ltree)", "USING gist (localcode_ltree)",
@@ -195,10 +200,12 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
   seg <- DBI::dbGetQuery(conn, sprintf("
     SELECT s.id_segment, s.watershed_group_code, s.linear_feature_id, s.blue_line_key, s.downstream_route_measure,
            s.upstream_route_measure, s.edge_type, s.stream_order, s.length_metre, s.gradient, s.channel_width,
-           h.accessible, h.rearing AS rearing_stored, h.spawning AS spawning_stored,
+           coalesce(a.access_%2$s > 0, FALSE) AS accessible, h.accessible AS accessible_stored,
+           h.rearing AS rearing_stored, h.spawning AS spawning_stored,
            g.size AS knw_size, g.dist_m AS knw_dist, g.grade, g.grade_class
     FROM %1$s.streams s
     JOIN %1$s.streams_habitat_%2$s h ON h.id_segment = s.id_segment AND h.watershed_group_code = s.watershed_group_code
+    LEFT JOIN %1$s.streams_access a ON a.id_segment = s.id_segment AND a.watershed_group_code = s.watershed_group_code
     LEFT JOIN %3$s.grades g ON g.id_segment = s.id_segment AND g.watershed_group_code = s.watershed_group_code
     WHERE s.watershed_group_code IN (%4$s)", schema, s, scratch, wsg_in))
   fl <- do.call(rbind, flags)
@@ -229,6 +236,7 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
     out <- tibble::tibble(
       watershed_group_code = name, species_code = sp, stage = stage,
       accessible_km = km(seg$accessible[idx], len),
+      access_gate_differ_km = km(seg$accessible[idx] != (seg$accessible_stored[idx] %in% TRUE), len),
       stored_km = km(seg[[paste0(flag, "_stored")]][idx], len),
       default_km = km(fd_i, len), tuned_km = km(ft_i, len),
       stored_vs_default_differ_km = km(seg[[paste0(flag, "_stored")]][idx] != fd_i, len),
@@ -331,8 +339,15 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
     }
     loc$loc_id <- seq_len(nrow(loc))
     DBI::dbWriteTable(conn, "tmp_knw_loc", loc, temporary = TRUE, overwrite = TRUE)
+    # 0298: a location inside a user-habitat overlay reach for the stage is captured by construction and left out
+    in_uhc <- if (nrow(uhc) && flag %in% names(uhc)) {
+      sprintf("EXISTS (SELECT 1 FROM %s.uhc u WHERE u.blue_line_key = t.blue_line_key AND u.%s = 1
+                      AND t.m BETWEEN u.downstream_route_measure AND u.upstream_route_measure)", scratch, flag)
+    } else {
+      "FALSE"
+    }
     pl <- DBI::dbGetQuery(conn, sprintf("
-      SELECT DISTINCT ON (t.loc_id) t.loc_id, s.id_segment, s.watershed_group_code
+      SELECT DISTINCT ON (t.loc_id) t.loc_id, s.id_segment, s.watershed_group_code, %3$s AS in_uhc
       FROM tmp_knw_loc t
       JOIN %1$s.streams s ON s.watershed_group_code = t.watershed_group_code AND s.blue_line_key = t.blue_line_key
        AND ((s.downstream_route_measure BETWEEN t.m - 1 AND t.m + 1)
@@ -340,7 +355,9 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
       WHERE s.watershed_group_code IN (%2$s)
       ORDER BY t.loc_id, (s.downstream_route_measure BETWEEN t.m - 1 AND t.m + 1) DESC,
                s.downstream_route_measure DESC, s.id_segment",
-      schema, wsg_in))
+      schema, wsg_in, in_uhc))
+    n_uhc <- sum(pl$in_uhc %in% TRUE)
+    pl <- pl[!(pl$in_uhc %in% TRUE), , drop = FALSE]
     i <- match(paste(pl$id_segment, pl$watershed_group_code), paste(seg$id_segment, seg$watershed_group_code))
     on_stream <- seg$edge_type[i] %in% edge_stream & seg$accessible[i]
     ls <- i[on_stream]
@@ -362,8 +379,8 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
       lift = c(lift("default"), lift("tuned"), lift("tuned") - lift("default")),
       lift_lo = c(q(bs[, "default"], 0.025), q(bs[, "tuned"], 0.025), q(bs[, "tuned"] - bs[, "default"], 0.025)),
       lift_hi = c(q(bs[, "default"], 0.975), q(bs[, "tuned"], 0.975), q(bs[, "tuned"] - bs[, "default"], 0.975)))
-    say("Outside check: %d non-FDIS %s records; %d locations placed, %d on accessible stream edges.",
-        n0, sp, nrow(pl), length(ls))
+    say("Outside check: %d non-FDIS %s records; %d locations placed (%d inside an overlay reach left out), %d on accessible stream edges.",
+        n0, sp, nrow(pl) + n_uhc, n_uhc, length(ls))
   }
   DBI::dbExecute(conn, sprintf("DROP SCHEMA IF EXISTS %s CASCADE", scratch))
   list(compare = compare, change = change, checks = do.call(rbind, lapply(checks, function(x) {

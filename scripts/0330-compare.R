@@ -24,7 +24,7 @@
 # INPUT:  data/tune/<sp>_<stage>_{curve.rds,grades.csv} (0320), data/fdis/derived/{visits_link,visits_species}.csv
 #         (0310), the link repository at LINK_REPO at the build's link_sha, the stac_floodplains_bc catalog
 #         (items read from its public bucket), fwapg database (PG* env vars): fresh_default, bcfishobs, whse_basemapping
-# WRITES: schemas knw_cmp_<sp> in the fwapg database (scratch; dropped)
+# WRITES: schemas knw_cmp_<sp>_<stage> in the fwapg database (scratch; one per job, dropped)
 # OUTPUT: data/compare/compare.csv     per species x stage x group and total: km by rule, graded km, km by class
 #         data/compare/change.csv      km gained and lost by reason and stream order
 #         data/compare/checks.csv      FDIS detection on each rule's segments; the bcfishobs lift
@@ -111,7 +111,7 @@ run_one <- function(job, schema, link_dir, vl, vs) {
   grades <- readr::read_csv(file.path("data/tune", paste0(job$key, "_grades.csv")), show_col_types = FALSE, guess_max = 1e5)
   t0 <- Sys.time()
   cmp <- knw_compare_rules(pg, schema, job$species_code, job$stage, job$pick, job$groups, link_dir, grades,
-                           visits = vl, visit_species = vs, scratch = paste0("knw_cmp_", tolower(job$species_code)))
+                           visits = vl, visit_species = vs, scratch = paste0("knw_cmp_", tolower(job$key)))
   cmp$minutes <- as.numeric(difftime(Sys.time(), t0, units = "mins"))
   cmp$key <- job$key
   cmp

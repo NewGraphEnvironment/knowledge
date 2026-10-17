@@ -59,7 +59,9 @@ each rule, for maps), and \code{log} lines.
 \description{
 \code{scripts/0298}'s comparison for any species and stage. Each rule goes through
 the three stages that make link's stored flags, on scratch copies of each
-group: the predicate gated by stored access, \code{fresh::frs_habitat_overlay()}
+group: the predicate gated by access (\verb{streams_access.access_<sp> > 0}, the
+gate the grades were built on; the habitat table's \code{accessible} is kept beside
+it and the km where the two disagree reported), \code{fresh::frs_habitat_overlay()}
 with link's user-habitat rows for the species, and fresh's connectivity pass
 (\code{.frs_run_connectivity()} with link's \code{default} parameters), rearing and
 spawning together, because the connectivity pass reads spawning. Regenerated

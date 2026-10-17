@@ -47,7 +47,7 @@ if (length(dirty) && publish) stop("working tree has uncommitted changes; commit
 commit <- git("rev-parse", "--short=7", "HEAD")
 prov <- list(published_from_commit = commit, repository = "https://github.com/NewGraphEnvironment/knowledge",
              evidence_version = evidence_version, link_run_uid = run_uid, link_sha = link_sha, config = "default",
-             tune_log = sort(list.files("scripts/logs/habitat", "_tune_run\\.txt$"), decreasing = TRUE)[1])
+             tune_logs = sort(list.files("scripts/logs/habitat", "_tune_run.*\\.txt$")))
 
 # ---- thresholds -------------------------------------------------------------------------
 tt <- knw_thresholds_table(tune_dir, evidence_version, run_uid, link_sha)

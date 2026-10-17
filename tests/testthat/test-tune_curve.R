@@ -21,7 +21,10 @@ test_that("the joint curve fits, reports its held-out deviance, and rises with s
   cv <- knw_tune_curve(s$d, pick, s$walks, folds)
   expect_s3_class(cv$model, "gam")
   expect_true(is.finite(cv$heldout) && cv$heldout > 0)
-  expect_equal(unname(cv$dropped), c(0, 0, 0))
+  expect_equal(unname(cv$dropped), c(0, 0))
+  expect_named(cv$capped, c("no_walk_at_cap", "no_river_at_cap"))
+  expect_equal(unname(cv$capped[["no_walk_at_cap"]]), 0)
+  expect_true(cv$capped[["no_river_at_cap"]] > 0)   # the fixture's walks past 30 km found no river
   expect_setequal(unique(cv$curves$curve), c("size_mad", "gradient", "dist_to_Q3_m"))
   sz <- cv$curves[cv$curves$curve == "size_mad", ]
   expect_true(sz$rate[nrow(sz)] > sz$rate[1])

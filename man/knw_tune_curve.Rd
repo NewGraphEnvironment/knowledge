@@ -39,7 +39,8 @@ cap, the river size when the pick has no exception, and the basis sizes
 A list: \code{model} (the \code{mgcv::gam}), \code{data} (the rows fitted, with
 \code{log_size}, \code{log_dist}, \code{grad}), \code{ref} (the reference nuisance values a
 segment is predicted at: median \code{log_area}, modal \code{data_set}, latest \code{era}),
-\code{dropped} (visits with no size, gradient or walk), \code{heldout} (summed
+\code{dropped} (visits with no size or gradient), \code{capped} (visits kept at the
+distance cap: no walk, or no river found), \code{heldout} (summed
 held-out deviance), \code{edf} (the smooths' effective degrees of freedom), and
 \code{curves}, a \code{tibble} of marginal curves (\code{curve}, \code{x}, \code{rate}, \code{rel_rate},
 \code{rel_lo}, \code{rel_hi}, \code{threshold}) relative to the pick's thresholds, each

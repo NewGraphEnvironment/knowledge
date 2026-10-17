@@ -81,6 +81,9 @@ knw_publish <- function(tables, dir_out, id, note, provenance = list(), supersed
         dir.create(dirname(dst), recursive = TRUE, showWarnings = FALSE)
         part <- arrow::Table$create(df[sel, , drop = FALSE])
         arrow::write_parquet(part, dst, compression = "zstd")
+        # the same column-by-column check the flat tables get, on this part against the CSV rows it holds
+        bad <- .knw_values_differ_df(raw[sel, , drop = FALSE], as.data.frame(arrow::read_parquet(dst)))
+        if (length(bad)) stop(tb, " (", rel, "): Parquet values differ from the CSV in ", paste(bad, collapse = ", "), call. = FALSE)
         parts[[j]] <- list(path = rel, rows = part$num_rows, bytes = file.size(dst), sha256 = .knw_sha256(dst),
                            keys = as.list(keys[j, , drop = FALSE]))
       }
@@ -167,6 +170,10 @@ knw_publish <- function(tables, dir_out, id, note, provenance = list(), supersed
 .knw_values_differ <- function(src, dst) {
   raw <- utils::read.csv(src, colClasses = "character", na.strings = character(), check.names = FALSE)
   pq <- as.data.frame(arrow::read_parquet(dst))
+  .knw_values_differ_df(raw, pq)
+}
+
+.knw_values_differ_df <- function(raw, pq) {
   if (!identical(names(raw), names(pq)) || nrow(raw) != nrow(pq)) return("<names or rows>")
   bad <- character()
   for (nm in names(raw)) {
