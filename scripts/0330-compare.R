@@ -40,7 +40,7 @@ sf::sf_use_s2(FALSE)
 if (!nzchar(Sys.getenv("PGCONNECT_TIMEOUT"))) Sys.setenv(PGCONNECT_TIMEOUT = "30")
 
 link_repo <- Sys.getenv("LINK_REPO", "../link")
-workers <- as.integer(Sys.getenv("WORKERS", "4"))
+workers <- as.integer(Sys.getenv("WORKERS", "6"))
 only <- Sys.getenv("SPECIES", "")
 schema <- "fresh_default"
 catalog_bucket <- "https://stac-floodplains-bc.s3.us-west-2.amazonaws.com"
@@ -103,6 +103,8 @@ jobs <- lapply(names(fitted), function(k) {
   list(key = k, species_code = r$species_code, stage = r$stage, pick = r$pick, groups = groups_sp(r$species_code))
 })
 dbDisconnect(conn)
+# largest species first, load-balanced, so the two 158-group BT jobs do not share one worker
+jobs <- jobs[order(-vapply(jobs, function(j) length(j$groups), integer(1)))]
 run_one <- function(job, schema, link_dir, vl, vs) {
   pkgload::load_all(quiet = TRUE)
   pg <- function() DBI::dbConnect(RPostgres::Postgres(), bigint = "numeric")
@@ -117,7 +119,7 @@ run_one <- function(job, schema, link_dir, vl, vs) {
 t0 <- Sys.time()
 if (workers > 1L && length(jobs) > 1L) {
   cl <- parallel::makeCluster(min(workers, length(jobs)))
-  res <- tryCatch(parallel::parLapply(cl, jobs, run_one, schema = schema, link_dir = link_dir, vl = vl, vs = vs),
+  res <- tryCatch(parallel::parLapplyLB(cl, jobs, run_one, schema = schema, link_dir = link_dir, vl = vl, vs = vs),
                   finally = parallel::stopCluster(cl))
 } else {
   res <- lapply(jobs, run_one, schema = schema, link_dir = link_dir, vl = vl, vs = vs)
