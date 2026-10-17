@@ -45,15 +45,15 @@ signature without fishing time; rerun the full chain, CH included, in this PR.
       the dedup commit's diff carries nothing else. Record what drifted in findings.
 
 ## Phase 2: Repeated surveys in 0230
-- [ ] Signature on each visit: UTM zone/E/N, date, `n_pass`, per-pass fished length and width (in pass
+- [x] Signature on each visit: UTM zone/E/N, date, `n_pass`, per-pass fished length and width (in pass
       order, as recorded), per-species `n_caught` and `catch_status`. A group is a repeat only when it
       has 2 or more members and every member has its own collection id. Groups that fail that test are
       counted and left alone.
-- [ ] Keep rule: most measured fish, then has habitat, then lowest numeric collection id, then
+- [x] Keep rule: most measured fish, then has habitat, then lowest numeric collection id, then
       `site_visit`. Drop the other copies from `sites`, `catch` and `fish`, before placement.
 - [ ] Write `data/fdis_repeat_surveys.csv` (tracked): dropped `site_visit`, kept `site_visit`, catch
       status, fish dropped, whether fish, habitat and fishing time are identical to the kept copy.
-- [ ] Ledger rows in `reconcile.csv`: groups, visits dropped (by catch status), fish rows dropped, groups
+- [x] Ledger rows in `reconcile.csv`: groups, visits dropped (by catch status), fish rows dropped, groups
       whose copies differ in fishing time, fish or habitat, and single-collection groups left alone.
       Reconcile guards rewritten so passes and fish partition into kept plus dropped. Header WHY note.
 - [ ] Probe 0250's FDIS overlap: no FISS fish matched only a dropped copy. Rerun 0250 if its per-group

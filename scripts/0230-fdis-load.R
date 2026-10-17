@@ -22,6 +22,11 @@
 #     GRADIENT11/12 are the primary measurement, 21/22 a second one (a separate method code
 #     not exported, and it runs higher), so they are kept apart. Sentinels (width >= 500 m,
 #     gradient > 100 %) are flagged and excluded.
+#   - REPEATED SURVEYS (#35): one survey loaded under two to four collection ids is kept once.
+#     The signature is UTM, date, pass count, per-pass fished length and width, per-species catch
+#     and catch status; every member of a group needs its own collection id. The copy kept has
+#     the most measured fish, then habitat, then the lowest collection id. Visits with no UTM or
+#     no date are never matched. Dropped copies are listed in data/fdis_repeat_surveys.csv.
 #   - PLACEMENT: whse_basemapping.fwa_indexpoint in the fwapg database (PG* environment variables), with an explicit
 #     tolerance (its default is 5 km). The matched FWA feature's gradient, order, edge type,
 #     modelled channel width and MAD are joined province-wide, not fresh.streams (98 groups
@@ -34,6 +39,7 @@
 #         data/fdis/build/catch.rds    site visit x species: n counted, n measured
 #         data/fdis/build/fish.rds     one row per measured fish, keyed to site visit
 #         data/fdis/build/reconcile.csv
+#         data/fdis_repeat_surveys.csv   each dropped copy, the copy kept, and what differs
 # RUN:    Rscript scripts/0230-fdis-load.R   (from the repo root)
 # ---------------------------------------------------------------------------
 suppressMessages({
@@ -274,6 +280,69 @@ sites <- sites |>
       TRUE             ~ "unknown")
   )
 
+# ---- repeated surveys (#35) -------------------------------------------------
+# One survey loaded under several collection ids: same UTM, date, pass count, per-pass fished
+# length and width, per-species catch and catch status. A group counts only when every member
+# has its own collection id (copies within one collection are separate sites). The copy kept
+# holds the most measured fish, then habitat, then the lowest collection id: in 94 of the 95
+# groups where one copy alone has measured fish, it is the higher id.
+pass_sig <- visits |>
+  transmute(site_visit = site_of(KEY),
+            method = as.integer(sub("^(?:[^_]+_){3}([^_]+)_.*$", "\\1", KEY, perl = TRUE)),
+            pass = as.integer(sub("^.*_", "", KEY)),
+            lw = paste(num(FISHING_AREA_LENGTH), num(FISHING_AREA_WIDTH), sep = "x")) |>
+  arrange(site_visit, method, pass) |>
+  group_by(site_visit) |>
+  summarise(lw = paste(lw, collapse = "|"), .groups = "drop")
+catch_sig <- catch |>
+  arrange(site_visit, species_code) |>
+  group_by(site_visit) |>
+  summarise(n_measured_all = sum(n_measured), spc = paste(species_code, n_caught, sep = ":", collapse = ";"),
+            .groups = "drop")
+fish_sig <- fish |>
+  filter(!is_nfc, !species_code %in% nonfish_codes) |>
+  arrange(site_visit, species_code, length_mm, weight_g, age, sex_code, maturity_code) |>
+  group_by(site_visit) |>
+  summarise(fsig = paste(species_code, length_mm, weight_g, age, sex_code, maturity_code, collapse = ";"),
+            .groups = "drop")
+rep_cand <- sites |>
+  filter(!flag_no_utm, !is.na(date)) |>
+  left_join(pass_sig, by = "site_visit") |>
+  left_join(catch_sig, by = "site_visit") |>
+  left_join(fish_sig, by = "site_visit") |>
+  mutate(coll = as.numeric(sub("_.*$", "", site_visit)),
+         n_measured_all = coalesce(n_measured_all, 0L), spc = coalesce(spc, ""), fsig = coalesce(fsig, ""),
+         hsig = paste(has_habitat, gradient_pct, gradient2_pct, channel_width_m, wetted_width_m, water_temp_c),
+         sig = paste(utm_zone, utm_easting, utm_northing, date, n_pass, lw, spc, catch_status)) |>
+  group_by(sig) |>
+  filter(n() > 1) |>
+  mutate(one_collection = n_distinct(coll) < n()) |>
+  ungroup()
+rep <- rep_cand |>
+  filter(!one_collection) |>
+  arrange(sig, desc(n_measured_all), desc(has_habitat), coll, site_visit) |>
+  group_by(sig) |>
+  mutate(kept = first(site_visit), fish_same = fsig == first(fsig), habitat_same = hsig == first(hsig),
+         time_same = (is.na(fishing_time_s) & is.na(first(fishing_time_s))) |
+           coalesce(fishing_time_s == first(fishing_time_s), FALSE)) |>
+  ungroup()
+repeat_map <- rep |>
+  filter(site_visit != kept) |>
+  transmute(site_visit, kept_site_visit = kept, data_set, catch_status, n_measured = n_measured_all,
+            fish_same, habitat_same, time_same) |>
+  arrange(kept_site_visit, site_visit)
+dropped <- repeat_map$site_visit
+rep_groups <- rep |> group_by(sig) |>
+  summarise(fish_differs = !all(fish_same), habitat_differs = !all(habitat_same),
+            time_differs = !all(time_same), .groups = "drop")
+n_pass_dropped  <- sum(sites$n_pass[sites$site_visit %in% dropped])
+n_fish_dropped  <- sum(fish$site_visit %in% dropped)
+sites  <- sites  |> filter(!site_visit %in% dropped)
+catch  <- catch  |> filter(!site_visit %in% dropped)
+fish   <- fish   |> filter(!site_visit %in% dropped)
+counts <- counts |> filter(!site_visit %in% dropped)
+message("Repeated surveys: ", length(dropped), " visits dropped from ", nrow(rep_groups), " groups")
+
 # ---- place site visits on the network --------------------------------------
 conn <- tryCatch(DBI::dbConnect(RPostgres::Postgres()),
                  error = function(e) stop("database unreachable (PG* environment variables): ", conditionMessage(e)))
@@ -358,13 +427,27 @@ add("sites_blocking_char_absence", sum(grepl("char", sites$blocks_absence_of)))
 add("catch_pairs_count_unknown", sum(is.na(catch$n_caught)))
 add("counts_fish_total", n_counts_fish); add("counts_sentinel_rows", sum(counts$flag_count_sentinel))
 add("catch_pairs_counts_lt_measured", sum(catch$flag_counts_lt_measured))
+add("repeat_groups", nrow(rep_groups)); add("repeat_visits_dropped", length(dropped))
+add("repeat_dropped_fish", sum(repeat_map$catch_status == "fish"))
+add("repeat_dropped_zero", sum(repeat_map$catch_status == "zero"))
+add("repeat_dropped_unknown", sum(repeat_map$catch_status == "unknown"))
+add("repeat_passes_dropped", n_pass_dropped); add("repeat_fish_rows_dropped", n_fish_dropped)
+add("repeat_groups_fish_differ", sum(rep_groups$fish_differs))
+add("repeat_groups_habitat_differ", sum(rep_groups$habitat_differs))
+add("repeat_groups_time_differ", sum(rep_groups$time_differs))
+add("repeat_groups_one_collection_kept", n_distinct(rep_cand$sig[rep_cand$one_collection]))
 print(rec, n = Inf)
 
 unclassified <- setdiff(unique(c(counts$species_code, fish$species_code)), species_codes$code)
 if (length(unclassified)) stop("species codes missing from data/fdis_species_codes.csv: ",
                                paste(unclassified, collapse = ", "))
-if (nrow(fish_raw) != nrow(fish)) stop("fish rows lost")
-if (sum(sites$n_pass) != nrow(visits)) stop("site roll-up lost passes")
+if (nrow(fish_raw) != nrow(fish) + n_fish_dropped) stop("fish rows lost")
+if (sum(sites$n_pass) + n_pass_dropped != nrow(visits)) stop("site roll-up lost passes")
+if (anyDuplicated(rep$sig[rep$site_visit %in% sites$site_visit])) stop("a repeated survey kept two copies")
+if (!all(repeat_map$kept_site_visit %in% sites$site_visit)) stop("a repeated survey kept no copy")
+if (any(repeat_map$n_measured > rep$n_measured_all[match(repeat_map$kept_site_visit, rep$site_visit)])) {
+  stop("a dropped copy holds more measured fish than the copy kept")
+}
 if (sum(catch$n_measured) != sum(!fish$is_nfc & !fish$species_code %in% nonfish_codes)) stop("measured fish lost in the catch roll-up")
 # rows dropped as "0 caught, nothing measured" carry n_counted 0, so the sum is unchanged
 if (!isTRUE(all.equal(sum(catch$n_counted, na.rm = TRUE), n_counts_fish))) stop("counted fish lost in the catch roll-up")
@@ -372,6 +455,7 @@ if (sum(sites$catch_status == "fish") + sum(sites$catch_status == "zero") +
     sum(sites$catch_status == "unknown") != nrow(sites)) stop("catch status does not partition sites")
 
 write_csv(rec, file.path(build, "reconcile.csv"))
+write_csv(repeat_map, "data/fdis_repeat_surveys.csv", na = "")
 saveRDS(sites, file.path(build, "sites.rds"))
 saveRDS(catch, file.path(build, "catch.rds"))
 saveRDS(fish,  file.path(build, "fish.rds"))
