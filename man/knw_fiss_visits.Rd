@@ -13,7 +13,7 @@ knw_fiss_visits(evidence, step2 = NULL)
 together; \code{NULL} when none are held.}
 }
 \value{
-A \code{tibble}, one row per site and species: \code{site_visit} (the
+A \code{tibble}, one row per site, species and method: \code{site_visit} (the
 \code{site_key}), \code{watershed_group_code}, \code{blue_line_key},
 \code{downstream_route_measure}, \code{year}, \code{month}, \code{method}, \code{species_code},
 \code{n_caught}, \code{fishing_time_s}, \code{area_m2}, \code{fished_length_m}, \code{scores},
@@ -24,8 +24,9 @@ The FDIS export covers electrofishing to about 2022; the workbooks \code{0220}
 parses cover later years and other methods (issue #23). \code{0250} already
 dedupes their fish against the export and writes \code{data/fiss_evidence.csv} at
 the site × species × size-class grain, keyed by \code{site_key}
-(\code{report_id:reference_number}). This turns those rows into one row per site
-and species, and takes the site's effort from the step-2 collection form where
+(\code{report_id:reference_number}). This turns those rows into one row per site,
+species and method (a site records each method's catch on its own), and takes
+the site's electrofishing effort from the step-2 collection form where
 the group's \verb{fiss_step2_fishcoll_<wsg>.csv} holds it: electrofishing seconds
 summed over passes, and the fished area as the first pass's length × width.
 A site enters the scoring only with an effort (\code{scores}); the rest are

@@ -35,8 +35,16 @@ test_that("a site with no electrofishing effort, or another method, does not sco
   expect_true(all(!out2$scores))
 })
 
-test_that("two counts for one site and species are refused", {
+test_that("two counts for one site, species and method are refused; two methods are two rows", {
   ev <- ev_fx()
   ev$n_caught[2] <- 5
   expect_error(knw_fiss_visits(ev, NULL), "two counts")
+  ev <- ev_fx()
+  ev$method[2] <- "dip netting"
+  ev$n_caught[2] <- 1
+  out <- knw_fiss_visits(ev, s2_fx())
+  bt <- out[out$site_visit == "1:1" & out$species_code == "BT", ]
+  expect_equal(nrow(bt), 2)
+  expect_equal(bt$scores, c(FALSE, TRUE))
+  expect_true(is.na(bt$fishing_time_s[bt$method == "dip netting"]))
 })

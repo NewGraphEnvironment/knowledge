@@ -4,8 +4,9 @@
 #' parses cover later years and other methods (issue #23). `0250` already
 #' dedupes their fish against the export and writes `data/fiss_evidence.csv` at
 #' the site × species × size-class grain, keyed by `site_key`
-#' (`report_id:reference_number`). This turns those rows into one row per site
-#' and species, and takes the site's effort from the step-2 collection form where
+#' (`report_id:reference_number`). This turns those rows into one row per site,
+#' species and method (a site records each method's catch on its own), and takes
+#' the site's electrofishing effort from the step-2 collection form where
 #' the group's `fiss_step2_fishcoll_<wsg>.csv` holds it: electrofishing seconds
 #' summed over passes, and the fished area as the first pass's length × width.
 #' A site enters the scoring only with an effort (`scores`); the rest are
@@ -15,7 +16,7 @@
 #' @param evidence `data.frame`, `data/fiss_evidence.csv` as written by `0250`.
 #' @param step2 `data.frame`, the step-2 rows of the groups (`0220`), bound
 #'   together; `NULL` when none are held.
-#' @return A `tibble`, one row per site and species: `site_visit` (the
+#' @return A `tibble`, one row per site, species and method: `site_visit` (the
 #'   `site_key`), `watershed_group_code`, `blue_line_key`,
 #'   `downstream_route_measure`, `year`, `month`, `method`, `species_code`,
 #'   `n_caught`, `fishing_time_s`, `area_m2`, `fished_length_m`, `scores`,
@@ -35,8 +36,9 @@ knw_fiss_visits <- function(evidence, step2 = NULL) {
   chk::chk_null_or(step2, vld = chk::vld_data)
   ev <- unique(evidence[, c("site_visit", "watershed_group_code", "blue_line_key", "downstream_route_measure",
                             "year", "month", "method", "species_code", "n_caught")])
-  if (anyDuplicated(ev[, c("site_visit", "species_code")])) {
-    stop("a site and species carries two counts in evidence", call. = FALSE)
+  # a site records each method's catch on its own: one row per site, species and method
+  if (anyDuplicated(ev[, c("site_visit", "species_code", "method")])) {
+    stop("a site, species and method carries two counts in evidence", call. = FALSE)
   }
   eff <- NULL
   if (!is.null(step2) && nrow(step2)) {
@@ -71,7 +73,11 @@ knw_fiss_visits <- function(evidence, step2 = NULL) {
   out$fishing_time_s <- if (is.null(eff)) NA_real_ else eff$fishing_time_s[i]
   out$area_m2 <- if (is.null(eff)) NA_real_ else eff$area_m2[i]
   out$fished_length_m <- if (is.null(eff)) NA_real_ else eff$fished_length_m[i]
-  out$scores <- out$method %in% "electrofishing" & (!is.na(out$fishing_time_s) | !is.na(out$area_m2))
+  ef <- out$method %in% "electrofishing"
+  out$fishing_time_s[!ef] <- NA_real_
+  out$area_m2[!ef] <- NA_real_
+  out$fished_length_m[!ef] <- NA_real_
+  out$scores <- ef & (!is.na(out$fishing_time_s) | !is.na(out$area_m2))
   out$data_set <- "FISS_WORKBOOK"
-  out[order(out$site_visit, out$species_code), , drop = FALSE]
+  out[order(out$site_visit, out$species_code, out$method), , drop = FALSE]
 }

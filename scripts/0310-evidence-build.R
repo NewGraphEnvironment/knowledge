@@ -252,9 +252,13 @@ s2 <- if (length(s2_files)) bind_rows(lapply(s2_files, read_csv, show_col_types 
 fw <- knw_fiss_visits(ev, s2)
 add("info", "workbook_species_rows", nrow(fw), sprintf("%d sites; %d rows score (electrofishing with effort)",
                                                        n_distinct(fw$site_visit), sum(fw$scores)))
-fw_sites <- fw |> distinct(site_visit, watershed_group_code, blue_line_key, downstream_route_measure, year, month,
-                           fishing_time_s, area_m2, fished_length_m, data_set) |>
+# one row per site: the electrofishing effort where the site has one (other methods carry none)
+fw_sites <- fw |>
+  group_by(site_visit, watershed_group_code, blue_line_key, downstream_route_measure, year, month, data_set) |>
+  summarise(across(c(fishing_time_s, area_m2, fished_length_m), ~ if (all(is.na(.x))) NA_real_ else max(.x, na.rm = TRUE)),
+            .groups = "drop") |>
   filter(!is.na(blue_line_key), !is.na(downstream_route_measure))
+if (anyDuplicated(fw_sites$site_visit)) stop("a workbook site has two placements or dates")
 fw_pl <- knw_link_place(conn, fw_sites |> select(site_visit, watershed_group_code, blue_line_key, downstream_route_measure), schema)
 fw_sites <- fw_sites |> inner_join(fw_pl$placed, by = "site_visit")
 add("info", "workbook_sites_placed", nrow(fw_sites), sprintf("of %d with a placement", n_distinct(fw$site_visit)))
