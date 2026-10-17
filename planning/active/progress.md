@@ -16,3 +16,10 @@
 - Phase 1: baseline 0230/0240/0250 reproduce exactly; 0290 stopped by fresh_default being rewritten
   by a provincial link run. User chose to filter the existing visit tables (plan correction in task_plan).
 - New 0230 (233 s), 0240 (6 s), 0250 (9 s) run; visit tables filtered; log 20261017_fdis_repeat_filter.txt.
+- Plan review delivered (review-plan.md). Acted on: B1 (zero and unknown copies of an empty catch
+  match; known catch kept), G2 (maturity-coded tie-break), G3 (counted fish partition guard), and
+  A2 by the user's rule: a group needs a shared site number or identical measured fish, otherwise its
+  copies are kept and listed (status kept_site_differs). B2: publish moves after /code-check.
+  Revised dry run: 1,308 groups, 1,431 dropped (623 fish, 623 zero, 185 unknown), 89 zero+unknown
+  groups, 0 groups lose maturity-coded fish, 71 copies kept for differing site numbers, 15 in one
+  collection; 9,597 of 990,606 counted fish dropped.

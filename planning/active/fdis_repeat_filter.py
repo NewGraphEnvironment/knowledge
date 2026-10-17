@@ -16,7 +16,7 @@ import sys
 src, log_path = sys.argv[1], sys.argv[2]
 dst = "data/fdis/derived"
 with open("data/fdis_repeat_surveys.csv", newline="") as f:
-    dropped = {r["site_visit"] for r in csv.DictReader(f)}
+    dropped = {r["site_visit"] for r in csv.DictReader(f) if r["status"] == "dropped"}
 with open("data/fdis/derived/fdis_sites.csv", newline="") as f:
     kept_all = {r["site_visit"] for r in csv.DictReader(f)}
 assert not dropped & kept_all, "a dropped copy is still in fdis_sites.csv"
