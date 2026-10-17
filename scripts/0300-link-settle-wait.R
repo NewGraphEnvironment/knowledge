@@ -71,8 +71,11 @@ shas <- function() {
 dir.create(dirname(path_log), showWarnings = FALSE, recursive = TRUE)
 t0 <- Sys.time()
 rows <- list()
+# the release row carries the SHA columns the polling rows lack, so bind on the union of columns
 write_log <- function() {
-  utils::write.csv(do.call(rbind, rows), path_log, row.names = FALSE, na = "")
+  cols <- unique(unlist(lapply(rows, names)))
+  filled <- lapply(rows, function(r) { r[setdiff(cols, names(r))] <- NA; r[cols] })
+  utils::write.csv(do.call(rbind, filled), path_log, row.names = FALSE, na = "")
 }
 repeat {
   r <- poll()

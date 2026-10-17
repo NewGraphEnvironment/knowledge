@@ -24,12 +24,16 @@ Imports:
     DBI,
     dplyr,
     lubridate,
+    parallel,
     rlang,
     sf,
+    stats,
     stringr,
-    tibble
+    tibble,
+    utils
 Suggests:
     duckdb,
     RPostgres,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    withr
 Config/testthat/edition: 3
