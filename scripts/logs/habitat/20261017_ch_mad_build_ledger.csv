@@ -1,0 +1,10 @@
+kind,step,n,note
+in,visits_in,40552,0310's placed visits
+drop,wsg_outside_ch_range,17964,CH caught on 0
+drop,ch_absence_blocked,186,CH caught on 0
+drop,no_flow,0,CH caught on 0
+drop,no_watershed_code,0,CH caught on 0
+info,small_visits,15066,picked MAD < 0.5
+info,ambiguous_placement,110,
+kept,visits_kept,22402,
+info,ch_present_kept,1041,

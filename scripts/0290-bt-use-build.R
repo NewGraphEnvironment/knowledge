@@ -14,7 +14,7 @@
 # link's presence rule marks BT present, with no code blocking a BT absence (DV pooled into BT where
 # link's tracker says so), on segments with access_bt 1 or 2.
 #
-# INPUT:  data/fdis/derived/{visits_link,visits_species}.csv (scripts/0310), data/fdis/derived/fdis_sites.csv (0240)
+# INPUT:  data/fdis/derived/{visits_link,visits_species}.csv (scripts/0310), data/fdis/derived/fdis_sites.csv (0240: n_bt, n_dv, n_char)
 # OUTPUT: data/fdis/derived/bt_use_visits.csv  one row per kept visit (ignored; published by 0299)
 #         scripts/logs/habitat/<date>_bt_use_build_ledger.csv
 # RUN:    Rscript scripts/0290-bt-use-build.R   (after 0310, from the repo root)
@@ -37,9 +37,14 @@ vl <- read_csv("data/fdis/derived/visits_link.csv", show_col_types = FALSE, gues
                col_types = cols(site_visit = "c", species_caught = "c", blocks_absence_of = "c", hydro_zone = "c"))
 vs <- read_csv("data/fdis/derived/visits_species.csv", show_col_types = FALSE, guess_max = 1e5,
                col_types = cols(site_visit = "c")) |> filter(species_code == "BT")
+# 0240's focal counts (n_bt, n_dv, n_char) are not in 0310's table, which carries every species' catch in
+# visits_species; 0291-0293 read them by these names
+fs <- read_csv("data/fdis/derived/fdis_sites.csv", show_col_types = FALSE, guess_max = 1e5,
+               col_types = cols(site_visit = "c", .default = col_guess())) |> select(site_visit, n_bt, n_dv, n_char)
 add("in", "visits_in", nrow(vl), "0310's placed visits")
 v <- vl |> inner_join(vs |> select(site_visit, pooling, bt_present = present, bt_status = status, in_range),
-                      by = "site_visit")
+                      by = "site_visit") |>
+  left_join(fs, by = "site_visit")
 v <- drop(v, v$in_range, "bt_absent_from_wsg")
 v <- drop(v, v$bt_status != "blocked", "bt_absence_blocked")
 add("info", "bt_present_on_access_bt_0", sum(v$bt_present & v$access_bt %in% 0L), "BT caught on a segment link models as blocked")

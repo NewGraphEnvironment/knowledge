@@ -13,7 +13,7 @@
 # distance plus 20 m of a >= 10 m3/s segment on another blue line) and `ch_barrier_dnstr_no_user`
 # (the barrier test without USER_DEFINITE), each one database read.
 #
-# INPUT:  data/fdis/derived/{visits_link,visits_species,walks}.csv (scripts/0310);
+# INPUT:  data/fdis/derived/{visits_link,visits_species,walks}.csv (scripts/0310), fdis_sites.csv (0240: n_ch, present_CH);
 #         fwapg database (PG* env vars)
 # OUTPUT: data/fdis/derived/ch_mad_visits.csv  one row per kept visit (ignored; published by 0299)
 #         scripts/logs/habitat/<date>_ch_mad_build_ledger.csv
@@ -42,8 +42,11 @@ vl <- read_csv("data/fdis/derived/visits_link.csv", show_col_types = FALSE, gues
 vs <- read_csv("data/fdis/derived/visits_species.csv", show_col_types = FALSE, guess_max = 1e5,
                col_types = cols(site_visit = "c")) |> filter(species_code == "CH")
 walks <- read_csv("data/fdis/derived/walks.csv", show_col_types = FALSE) |> filter(src == "pick", qmin == large_min)
+fs <- read_csv("data/fdis/derived/fdis_sites.csv", show_col_types = FALSE, guess_max = 1e5,
+               col_types = cols(site_visit = "c", .default = col_guess())) |> select(site_visit, n_ch, present_CH)
 add("in", "visits_in", nrow(vl), "0310's placed visits")
-v <- vl |> inner_join(vs |> select(site_visit, ch_status = status, in_range), by = "site_visit")
+v <- vl |> inner_join(vs |> select(site_visit, ch_status = status, in_range), by = "site_visit") |>
+  left_join(fs, by = "site_visit")
 v <- drop(v, v$in_range, "wsg_outside_ch_range")
 v <- drop(v, v$ch_status != "blocked", "ch_absence_blocked")
 v <- drop(v, !is.na(v$mad_pick), "no_flow")
