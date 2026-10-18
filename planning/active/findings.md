@@ -275,6 +275,8 @@ in the summaries alone).
 | bash 3.2: `gh pr create --body "$(cat <<'EOF' … it's …)"` unterminated quote | `--body-file` and `-F` for the commit |
 | tuning run hung 3 h grading BT spawning on the run host: process idle, no query, walk workers' connections opened with no connect timeout | `PGCONNECT_TIMEOUT=30` set by the scripts; grading moved to this machine (RB's 210 groups in 3.2 min against the host's 54 min for BT) |
 | copies from the run host read as empty: `ls | grep '^BT_'` matched nothing | `ls` is aliased with colour codes here; verify with `command ls` (code-check-shell: a verification command can be shadowed) |
+| `0330` floodplain: KISP and KOTL `Timeout was reached` (download during the 2026-10-18 01:14Z internet outage), then `Open failed.` for every later species | `curl_fetch_disk()` raised before the status check, so the 0-byte file stayed and read as a cache hit; the two files removed mid-run; `gpkg_of()` to unlink on any failure and treat an empty file as absent; the maps stage re-run for the affected rows |
+| floodplain panel legend read `0.0 - 0.1`, `0.2 - 0.3` for breaks at 0.2 steps | tmap's interval labels; explicit `labels` from the grade classes (`R/compare_map.R`) |
 
 ## Comparison run (2026-10-18 00:00–01:50Z, in flight): whole groups fail the RB access gate
 

@@ -1,0 +1,13 @@
+direction,reason,order,n_segments,km,species_code,stage,tuned_rule
+gained,"exception (size fails, river within D)",1,59576,15699.015151327043,BT,spawn,mad>=0.75|g<=0.0549|Q3@D2000
+gained,"size: tuned passes, width fails or NULL",1,2904,715.8568026076608,BT,spawn,mad>=0.75|g<=0.0549|Q3@D2000
+lost,"size: width passes, tuned fails, no exception",1,1145,376.70736219651326,BT,spawn,mad>=0.75|g<=0.0549|Q3@D2000
+gained,"exception (size fails, river within D)",2,22263,5331.630877632055,BT,spawn,mad>=0.75|g<=0.0549|Q3@D2000
+gained,"size: tuned passes, width fails or NULL",2,12,3.373586632680637,BT,spawn,mad>=0.75|g<=0.0549|Q3@D2000
+lost,"size: width passes, tuned fails, no exception",2,29718,11506.708480054858,BT,spawn,mad>=0.75|g<=0.0549|Q3@D2000
+gained,"exception (size fails, river within D)",3,3320,837.0925147604894,BT,spawn,mad>=0.75|g<=0.0549|Q3@D2000
+gained,"size: tuned passes, width fails or NULL",3,29,6.62367308038891,BT,spawn,mad>=0.75|g<=0.0549|Q3@D2000
+lost,"size: width passes, tuned fails, no exception",3,65433,22936.557062813416,BT,spawn,mad>=0.75|g<=0.0549|Q3@D2000
+gained,"exception (size fails, river within D)",4+,147,49.74317704520484,BT,spawn,mad>=0.75|g<=0.0549|Q3@D2000
+gained,"size: tuned passes, width fails or NULL",4+,171,45.161064689820044,BT,spawn,mad>=0.75|g<=0.0549|Q3@D2000
+lost,"size: width passes, tuned fails, no exception",4+,62661,21463.842531503215,BT,spawn,mad>=0.75|g<=0.0549|Q3@D2000

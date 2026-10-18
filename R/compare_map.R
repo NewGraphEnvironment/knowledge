@@ -85,7 +85,8 @@ knw_compare_map <- function(segments, water = NULL, title = "", png = NULL, html
     if (!is.null(fp_cells)) {
       p3 <- base() + tmap::tm_shape(fp_cells) +
         tmap::tm_raster(col.scale = tmap::tm_scale_intervals(breaks = c(0, 0.2, 0.4, 0.6, 0.8, 1),
-                                                             values = unname(grade_cols[1:5])),
+                                                             values = unname(grade_cols[1:5]),
+                                                             labels = names(grade_cols)[1:5]),
                         col.legend = tmap::tm_legend(title = "Floodplain by its segment's grade")) +
         tmap::tm_layout(frame = FALSE, inner.margins = 0, legend.position = tmap::tm_pos_in("left", "bottom"))
       panels <- c(panels, list(p3))

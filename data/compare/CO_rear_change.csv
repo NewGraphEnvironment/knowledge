@@ -1,0 +1,25 @@
+direction,reason,order,n_segments,km,species_code,stage,tuned_rule
+gained,connectivity or overlay,1,440,75.00776419033123,CO,rear,mad>=0.03|g<=0.04|none
+lost,connectivity or overlay,1,434,65.35393605534176,CO,rear,mad>=0.03|g<=0.04|none
+lost,gradient: tuned maximum lower,1,149,48.11490788804277,CO,rear,mad>=0.03|g<=0.04|none
+lost,other (river-polygon branch or mixed),1,41,1.5320252303332567,CO,rear,mad>=0.03|g<=0.04|none
+gained,"size: tuned passes, width fails or NULL",1,12953,4633.861925778816,CO,rear,mad>=0.03|g<=0.04|none
+lost,"size: width passes, tuned fails, no exception",1,591,175.3142521876186,CO,rear,mad>=0.03|g<=0.04|none
+gained,connectivity or overlay,2,214,29.318095814410178,CO,rear,mad>=0.03|g<=0.04|none
+lost,connectivity or overlay,2,714,107.18510088516678,CO,rear,mad>=0.03|g<=0.04|none
+lost,gradient: tuned maximum lower,2,4114,1387.0381798594424,CO,rear,mad>=0.03|g<=0.04|none
+lost,other (river-polygon branch or mixed),2,565,15.03258207085636,CO,rear,mad>=0.03|g<=0.04|none
+gained,"size: tuned passes, width fails or NULL",2,1270,311.72010217143753,CO,rear,mad>=0.03|g<=0.04|none
+lost,"size: width passes, tuned fails, no exception",2,6215,2173.5266668470813,CO,rear,mad>=0.03|g<=0.04|none
+gained,connectivity or overlay,3,49,7.095724063301083,CO,rear,mad>=0.03|g<=0.04|none
+lost,connectivity or overlay,3,185,24.140019430249378,CO,rear,mad>=0.03|g<=0.04|none
+lost,gradient: tuned maximum lower,3,5352,1772.40199656948,CO,rear,mad>=0.03|g<=0.04|none
+lost,other (river-polygon branch or mixed),3,392,28.681282264899888,CO,rear,mad>=0.03|g<=0.04|none
+gained,"size: tuned passes, width fails or NULL",3,304,77.00947787851801,CO,rear,mad>=0.03|g<=0.04|none
+lost,"size: width passes, tuned fails, no exception",3,3499,1083.0331554242748,CO,rear,mad>=0.03|g<=0.04|none
+gained,connectivity or overlay,4+,1,0.3182802531842439,CO,rear,mad>=0.03|g<=0.04|none
+lost,connectivity or overlay,4+,23,2.7770890449151646,CO,rear,mad>=0.03|g<=0.04|none
+lost,gradient: tuned maximum lower,4+,6237,1851.381751196878,CO,rear,mad>=0.03|g<=0.04|none
+lost,other (river-polygon branch or mixed),4+,2005,280.93715402000817,CO,rear,mad>=0.03|g<=0.04|none
+gained,"size: tuned passes, width fails or NULL",4+,120,33.06871439867322,CO,rear,mad>=0.03|g<=0.04|none
+lost,"size: width passes, tuned fails, no exception",4+,516,167.4805997704834,CO,rear,mad>=0.03|g<=0.04|none

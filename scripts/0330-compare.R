@@ -34,7 +34,8 @@
 #         data/compare/floodplain.csv  per species x stage x catalog group: ha, graded ha, ha by class under each rule
 #         research/fig/compare_<sp>_<stage>_<wsg>.png, data/compare/maps/*.html (ignored)
 #         scripts/logs/habitat/<date>_compare.txt
-# RUN:    Rscript scripts/0330-compare.R   (from the repo root; SPECIES=CH,BT to restrict; WORKERS=4)
+# RUN:    Rscript scripts/0330-compare.R   (from the repo root; SPECIES=CH,BT to restrict; WORKERS=4;
+#         STAGE=maps redraws the floodplain table and the maps from the tables the last full run saved)
 # ---------------------------------------------------------------------------
 suppressMessages({ library(dplyr); library(readr); library(DBI); library(RPostgres) })
 pkgload::load_all(quiet = TRUE)
@@ -45,13 +46,16 @@ if (!nzchar(Sys.getenv("PGCONNECT_TIMEOUT"))) Sys.setenv(PGCONNECT_TIMEOUT = "30
 link_repo <- Sys.getenv("LINK_REPO", "../link")
 workers <- as.integer(Sys.getenv("WORKERS", "6"))
 only <- Sys.getenv("SPECIES", "")
+stage_only <- Sys.getenv("STAGE", "")
+if (!stage_only %in% c("", "maps")) stop("STAGE must be unset or 'maps', not '", stage_only, "'")
 schema <- "fresh_default"
 catalog_bucket <- "https://stac-floodplains-bc.s3.us-west-2.amazonaws.com"
 catalog_items <- "../stac_floodplains_bc/data/stac"      # the catalog repo's item records
 dir_out <- "data/compare"
 dir_cat <- file.path(dir_out, "catalog")
 dir_maps <- file.path(dir_out, "maps")
-path_log <- file.path("scripts/logs/habitat", paste0(format(Sys.Date(), "%Y%m%d"), "_compare.txt"))
+path_log <- file.path("scripts/logs/habitat", paste0(format(Sys.Date(), "%Y%m%d"), "_compare",
+                                                     if (stage_only == "maps") "-maps", ".txt"))
 for (d in c(dir_out, dir_cat, dir_maps, "research/fig")) dir.create(d, showWarnings = FALSE, recursive = TRUE)
 log_lines <- character()
 say <- function(...) { log_lines <<- c(log_lines, sprintf(...)); message(sprintf(...)) }
@@ -90,10 +94,16 @@ cat_wsg <- toupper(sub("_all_ff04\\.json$", "", basename(items)))
 say("Floodplain catalog: %d whole-network groups (%s).", length(cat_wsg), paste(cat_wsg, collapse = " "))
 gpkg_of <- function(w) {
   f <- file.path(dir_cat, paste0(tolower(w), "_floodplain.gpkg"))
+  # an empty file is a download that died (a timeout raises before the status is read and leaves one behind,
+  # which every later call would take as a cache hit): fetch to a sibling and move it in only on 200
+  if (file.exists(f) && file.size(f) == 0) unlink(f)
   if (!file.exists(f)) {
-    h <- curl::curl_fetch_disk(sprintf("%s/%s_all_ff04/floodplain.gpkg", catalog_bucket, tolower(w)), f,
+    part <- paste0(f, ".part")
+    on.exit(unlink(part), add = TRUE)
+    h <- curl::curl_fetch_disk(sprintf("%s/%s_all_ff04/floodplain.gpkg", catalog_bucket, tolower(w)), part,
                                handle = curl::new_handle(timeout = 600, followlocation = TRUE))
-    if (h$status_code != 200) { unlink(f); stop("catalog item ", w, ": HTTP ", h$status_code) }
+    if (h$status_code != 200) stop("catalog item ", w, ": HTTP ", h$status_code)
+    if (!file.rename(part, f)) stop("could not move the download of ", w, " into place")
   }
   f
 }
@@ -136,32 +146,47 @@ run_one <- function(job, schema, link_dir, vl, vs) {
   out
 }
 t0 <- Sys.time()
-if (workers > 1L && length(jobs) > 1L) {
+if (stage_only == "maps") {
+  # the floodplain and map stage alone, from the tables and segments the last full run saved per key
+  res <- lapply(names(jobs), function(k) {
+    f <- file.path(dir_out, paste0(k, "_compare.csv"))
+    if (!file.exists(f) || !file.exists(file.path(dir_out, paste0(k, "_segments.rds")))) return(NULL)
+    list(compare = read_csv(f, show_col_types = FALSE,
+                            col_types = cols(watershed_group_code = "c", species_code = "c", stage = "c",
+                                             default_rule = "c", tuned_rule = "c", .default = "d")))
+  })
+  names(res) <- names(jobs)
+  res <- Filter(Negate(is.null), res)
+  if (!length(res)) stop("STAGE=maps: no saved comparison under ", dir_out)
+  say("STAGE=maps: floodplain and maps from the saved comparison of %s.", paste(names(res), collapse = " "))
+} else if (workers > 1L && length(jobs) > 1L) {
   cl <- parallel::makeCluster(min(workers, length(jobs)), outfile = file.path("scripts/logs/habitat", paste0(format(Sys.Date(), "%Y%m%d"), "_compare-workers.out")))
   res <- tryCatch(parallel::parLapplyLB(cl, jobs, run_one, schema = schema, link_dir = link_dir, vl = vl, vs = vs),
                   finally = parallel::stopCluster(cl))
 } else {
   res <- lapply(jobs, run_one, schema = schema, link_dir = link_dir, vl = vl, vs = vs)
 }
-names(res) <- vapply(jobs, `[[`, character(1), "key")
-say("Compared %d species x stage in %.1f min on %d workers.", length(res), as.numeric(difftime(Sys.time(), t0, units = "mins")), workers)
-failed <- names(res)[vapply(res, function(x) !is.null(x$error), logical(1))]
-for (k in failed) say("%s FAILED after %.1f min: %s", k, res[[k]]$minutes, res[[k]]$error)
-res <- res[setdiff(names(res), failed)]
-if (!length(res)) { writeLines(log_lines, path_log); stop("every comparison job failed: ", paste(failed, collapse = ", ")) }
-for (k in names(res)) {
-  tot <- res[[k]]$compare |> filter(watershed_group_code == "ALL")
-  say("%s: %d groups, %.1f min; default %.0f km, tuned %.0f km (%+.1f %%); graded km %.0f -> %.0f; lost %.0f, gained %.0f.",
-      k, nrow(res[[k]]$compare) - 1, res[[k]]$minutes, tot$default_km, tot$tuned_km, tot$change_pct,
-      tot$default_graded_km, tot$tuned_graded_km, tot$lost_km, tot$gained_km)
-  log_lines <- c(log_lines, paste("  ", res[[k]]$log))
+if (stage_only != "maps") {
+  names(res) <- vapply(jobs, `[[`, character(1), "key")
+  say("Compared %d species x stage in %.1f min on %d workers.", length(res), as.numeric(difftime(Sys.time(), t0, units = "mins")), workers)
+  failed <- names(res)[vapply(res, function(x) !is.null(x$error), logical(1))]
+  for (k in failed) say("%s FAILED after %.1f min: %s", k, res[[k]]$minutes, res[[k]]$error)
+  res <- res[setdiff(names(res), failed)]
+  if (!length(res)) { writeLines(log_lines, path_log); stop("every comparison job failed: ", paste(failed, collapse = ", ")) }
+  for (k in names(res)) {
+    tot <- res[[k]]$compare |> filter(watershed_group_code == "ALL")
+    say("%s: %d groups, %.1f min; default %.0f km, tuned %.0f km (%+.1f %%); graded km %.0f -> %.0f; lost %.0f, gained %.0f.",
+        k, nrow(res[[k]]$compare) - 1, res[[k]]$minutes, tot$default_km, tot$tuned_km, tot$change_pct,
+        tot$default_graded_km, tot$tuned_graded_km, tot$lost_km, tot$gained_km)
+    log_lines <- c(log_lines, paste("  ", res[[k]]$log))
+  }
+  compare <- bind_rows(lapply(res, `[[`, "compare"))
+  change <- bind_rows(lapply(res, `[[`, "change"))
+  checks <- bind_rows(lapply(res, function(x) x$checks))
+  write_csv(compare |> mutate(across(where(is.numeric), ~ round(.x, 3))), file.path(dir_out, "compare.csv"), na = "")
+  write_csv(change |> mutate(km = round(km, 3)), file.path(dir_out, "change.csv"), na = "")
+  write_csv(checks |> mutate(across(where(is.numeric), ~ round(.x, 4))), file.path(dir_out, "checks.csv"), na = "")
 }
-compare <- bind_rows(lapply(res, `[[`, "compare"))
-change <- bind_rows(lapply(res, `[[`, "change"))
-checks <- bind_rows(lapply(res, function(x) x$checks))
-write_csv(compare |> mutate(across(where(is.numeric), ~ round(.x, 3))), file.path(dir_out, "compare.csv"), na = "")
-write_csv(change |> mutate(km = round(km, 3)), file.path(dir_out, "change.csv"), na = "")
-write_csv(checks |> mutate(across(where(is.numeric), ~ round(.x, 4))), file.path(dir_out, "checks.csv"), na = "")
 
 # ---- floodplain hectares and maps -----------------------------------------------------------
 conn <- pg()
