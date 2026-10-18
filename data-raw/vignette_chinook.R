@@ -142,8 +142,11 @@ if (!identical(out$meta$grade$groups, nrow(out$compare) - 1)) {
 f_curve <- sprintf("data/tune/%s_curve.rds", key)
 cr <- readRDS(f_curve)$curve
 rec_row <- out$tune[out$tune$recommended %in% TRUE, ]
+if (any(c(0.1, 0.3, 0.75, 2) >= cr$q)) stop("the surface's flows must stay below the river size ", cr$q)
 grad_ref <- min(rec_row$grad_max, 0.2) / 2   # knw_tune_curve()'s reference gradient
-grid <- expand.grid(size = c(0.1, 0.3, 0.75, 2, 5), dist_m = c(100, 300, 1000, 3000, 10000, cr$dist_cap_m))
+# flows below the river size only: a stream of q m³/s or more is itself the river, at 0 m, so a row above q
+# would read the surface where no visit lies (#62 draft 2, review round 3)
+grid <- expand.grid(size = c(0.1, 0.3, 0.75, 2), dist_m = c(100, 300, 1000, 3000, 10000, cr$dist_cap_m))
 grid$gradient <- grad_ref
 grid$accessible <- TRUE
 gr <- knw_grade(cr, grid, cols = c(size = "size", grad = "gradient", dist = "dist_m"))

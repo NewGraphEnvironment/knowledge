@@ -151,7 +151,8 @@ A rule is worth having if it predicts where chinook are caught in a watershed it
 from. So the `r summ$groups_both` groups are split at random into `r meta$spec$folds` sets,
 called **folds**. A model learns how much the rule matters from four folds and predicts the
 visits in the fifth, and this repeats until every group has been predicted once. The model also
-allows for fished area, data set, era, and each group's own overall catch rate.
+allows for fished area, data set and era. Each held-out group's own overall catch rate is the one
+thing fitted on its own visits, and that costs every rule the same.
 
 The **score** adds up, over every predicted visit, how far the prediction was from what the crew
 found (the deviance). Lower is better. Only differences between rules matter: the model with no
@@ -256,7 +257,8 @@ near a river. The gradient maximum is the least settled part.
 
 After the choice, one model was fitted to the visits that carry a modelled flow, with flow and
 distance to a river of at least `r meta$curve_ref$q` m³/s as one surface. The table reads the
-fitted chance of a catch on one standard visit:
+fitted chance of a catch on one standard visit. It stops below `r meta$curve_ref$q` m³/s, because a
+stream that size is itself the river:
 
 ```{r surface-tab}
 sf_ <- x$surface
@@ -276,7 +278,8 @@ near <- sf_$rate[sf_$dist_m == min(dists)]
 
 Within `r km_d(min(dists))` of a river the chance is about the same whatever the stream's flow,
 `r pc(min(near), 1)` to `r pc(max(near), 1)`. Ten kilometres away it rises with flow, from
-`r pc(r_at(0.1, 10000), 1)` at 0.1 m³/s to `r pc(r_at(5, 10000), 1)` at 5 m³/s. That is the
+`r pc(r_at(min(sf_$size), 10000), 1)` at `r min(sf_$size)` m³/s to `r pc(r_at(max(sf_$size), 10000), 1)` at
+`r max(sf_$size)` m³/s. That is the
 shape the recommended rule draws: beside a river a small stream counts, and away from one only a
 stream above the floor does. The chance falls off past a few hundred metres from the river, so
 `r km_d(rec$exc_d)` sits on the way down. Steepness matters less: at `r grad(0.09)` the chance is
@@ -348,8 +351,9 @@ grid::grid.raster(png::readPNG(f1), vp = grid::viewport(layout.pos.row = 1, layo
 grid::grid.raster(png::readPNG(f2), vp = grid::viewport(layout.pos.row = 1, layout.pos.col = 2))
 ```
 
-Orange is whole tributaries that fall below the flow floor with no river close. Green is short
-reaches of small streams beside a river, which the exception adds.
+Orange is mostly the upper reaches of tributaries: flow grows downstream, so a tributary keeps its
+lower reach and loses the part where its flow falls below the floor more than `r km_d(rec$exc_d)`
+from a river. Green is short reaches of small streams beside a river, which the exception adds.
 
 ```{r checks}
 ck <- x$checks
@@ -362,14 +366,15 @@ ob <- ck[ck$check == "bcfishobs_outside", ]
 ```
 
 **Two checks.** On the `r n0(sum(fv$n[fv$rule == "default"]))` electrofishing visits with a fished
-area of 10 to 10,000 m² on accessible streams, canals and river lines in the `r nrow(per_group)`
-groups, chinook were caught on
+area of 10 to 10,000 m² on accessible streams (wetland lines included), canals, reservoir banks
+and river lines in the `r nrow(per_group)` groups, chinook were caught on
 `r pc(rate("tuned", "rearing"))` of visits on the recommended rule's habitat and
 `r pc(rate("tuned", "accessible_not_rearing"), 1)` elsewhere, against
 `r pc(rate("default", "rearing"))` and `r pc(rate("default", "accessible_not_rearing"), 1)` for
-`default`; the rule was chosen on these records, so this shows it does what it was chosen to do.
-Other sources record chinook at `r n0(ob$n[1])` places within 100 m of an accessible stream or
-canal, spawning-only places left out; no rule was scored on them. The share of those places on the
+`default`. These visits overlap the ones the tuning scored, so this shows the rule does what it
+was chosen to do.
+Other sources record chinook at `r n0(ob$n[1])` places within 100 m of an accessible single-line
+stream or canal not drawn through a wetland, spawning-only places left out; no rule was scored on them. The share of those places on the
 recommended rule's habitat is `r n1(ob$lift[ob$rule == "tuned"])` times the rule's share of that
 stream length, against `r n1(ob$lift[ob$rule == "default"])` for `default`.
 

@@ -118,3 +118,11 @@ introduced or dropped; a shorter article with fewer, better-labelled tables; dra
   steepest maximum tried), the km table's nesting lost in the render (rows now say what they nest under), the
   `png` roxygen, and the `mark` test, which now bounds the changed pixels: 0.29 % with the outline, 4.8 % when
   the mark takes over the extent; both mutations fail the test.
+- Draft 2, code-check round 3 (`review-draft2-round3.md`): an enumeration of 83 units, 5 wrong, code clean. Fixed:
+  the surface table's 5 m³/s row read the smooth where no visit lies (a stream of 3 m³/s or more is the river,
+  at 0 m), so the data script now stops at 2 m³/s and asserts it; "orange is whole tributaries" (78 % of BULK's
+  lost km is on lines that keep their lower reaches), now "mostly the upper reaches"; the held-out group's own
+  catch rate; the detection check's overlap with the tuning; the two checks' edge sets named apart. The loop
+  ended by that enumeration plus a check of each rewritten unit against its definition.
+- Draft 2 is about 2,270 words of article text with tables, against about 3,000 for draft 1; five tables became
+  two plus one merged km table, and three figures became two.
