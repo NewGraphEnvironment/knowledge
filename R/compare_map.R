@@ -18,8 +18,8 @@
 #' @param water an `sf` of lake and river polygons for the group, or `NULL`.
 #' @param title `character(1)` the figure's caption line (the map carries no
 #'   title; this goes under it).
-#' @param png `character(1)` path for the static figure (three panels), or
-#'   `NULL`.
+#' @param png `character(1)` path for the static figure (the `panels` asked
+#'   for, side by side or as `ncol` sets), or `NULL`.
 #' @param html `character(1)` path for the interactive page, or `NULL`.
 #' @param fp_cells `NULL`, or a `SpatRaster` of grade per floodplain cell.
 #' @param ncol `integer(1)` panels per row in the static figure, or `NULL`

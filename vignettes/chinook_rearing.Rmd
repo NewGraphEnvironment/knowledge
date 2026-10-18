@@ -105,12 +105,14 @@ four tests holds:
 - **wetland**: inside a wetland of at least 1 ha;
 - **lake**: inside a lake or reservoir of at least 100 ha.
 
-Rearing with no spawning within 10 km is then removed, and reaches confirmed by hand are added.
+Reaches confirmed by hand are then added, and any rearing with no spawning within 10 km is
+removed.
 Channel width is modelled only on streams of order 2 and up, so the stream test never admits a
 small, unmeasured first-order stream.
 
-Only the stream test is tuned here. Rivers, wetlands and lakes keep their tests, except that river
-polygons share the stream test's gradient maximum.
+Only the stream test is tuned here. Wetlands and lakes keep their tests. River polygons keep
+theirs too, except that they share the stream test's gradient maximum, so a new maximum moves
+them as well, untested: no visit scored here is in a river polygon.
 
 ## What evidence is used?
 
@@ -277,9 +279,9 @@ Within `r km_d(min(dists))` of a river the chance is about the same whatever the
 shape the recommended rule draws: beside a river a small stream counts, and away from one only a
 stream above the floor does. The chance falls off past a few hundred metres from the river, so
 `r km_d(rec$exc_d)` sits on the way down. Steepness matters less: at `r grad(0.09)` the chance is
-about `r pc(grad_at(0.09) / grad_at(0.02))` of what it is at `r grad(0.02)`. Neither flow nor
-gradient shows a step at its threshold; each threshold is where habitat and non-habitat separate
-best, a cut across a slope.
+about `r pc(grad_at(0.09) / grad_at(0.02))` of what it is at `r grad(0.02)`. The model fits smooth
+curves, so it cannot show a step at a threshold; each threshold is where habitat and non-habitat
+separate best on held-out groups, a cut across a slope.
 
 ## What does it change on the ground?
 
@@ -372,8 +374,9 @@ stream length, against `r n1(ob$lift[ob$rule == "default"])` for `default`.
 
 - **Not applied yet.** `link` changes nothing until a configuration reads the new thresholds
   ([link#346](https://github.com/NewGraphEnvironment/link/issues/346)).
-- **Juveniles caught by electrofishing, on streams.** Spawning is outside it, and rivers, wetlands
-  and lakes keep their own tests.
+- **Juveniles caught by electrofishing, on streams.** Spawning is outside it. Wetlands and lakes
+  keep their own tests; river polygons take the new gradient maximum without any record having
+  tested it there.
 - **Better separation, less extent.** The score rewards a rule whose habitat and non-habitat
   differ most, not one that leaves nothing out: `r pc(rec$raw_rate_out, 1)` of visits outside the
   new rule still caught chinook.

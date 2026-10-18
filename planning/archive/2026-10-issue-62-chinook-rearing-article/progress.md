@@ -106,3 +106,8 @@ introduced or dropped; a shorter article with fewer, better-labelled tables; dra
   DOI; the article prints `citation("knowledge")`.
 - Found: the knowledge site answers 404. GitHub Pages is not enabled and the repo is private, so the `gh-pages`
   deploys serve nothing; the article URL the research files cite is dead until that changes (Al's decision).
+- Draft 2, code-check round 1 (`review-draft2-round1.md`; 94 claims enumerated, 90 hold): fixed the order of
+  link's passes (hand-confirmed reaches are added before the 10 km connectivity pass), the river polygons'
+  gradient (it moves with the stream test's, untested: no scored visit is in a river polygon), a sentence that
+  was true by construction (a smooth model cannot show a step), the `png` roxygen, and a `mark` test that could
+  not fail (now fails with the outline removed, passes with it). Draft 2 tests: 521 pass; check 0/0/1 NOTE.
