@@ -10,10 +10,10 @@ Plan approved 2026-10-18 and reviewed by a Plan agent before it was written into
 phases below are that plan verbatim.
 
 ## Phase 1: Vignette plumbing
-- [ ] `DESCRIPTION`: `VignetteBuilder: knitr`; add `knitr`, `rmarkdown`, `bookdown`, `ggplot2`, `png` to Suggests
-- [ ] `.Rbuildignore`: add `^data-raw$`, `^doc$`, `^Meta$`
-- [ ] `vignettes/.gitignore` for knitr debris (`*.html`, `*.R`), as gq has; `data-raw/README.md`, one paragraph
-- [ ] `pkgdown::check_pkgdown()` still clean (no `articles:` section needed)
+- [x] `DESCRIPTION`: `VignetteBuilder: knitr`; add `knitr`, `rmarkdown`, `bookdown`, `ggplot2`, `png` to Suggests
+- [x] `.Rbuildignore`: add `^data-raw$`, `^doc$`, `^Meta$`
+- [x] `vignettes/.gitignore` for knitr debris (`*.html`, `*.R`), as gq has; `data-raw/README.md`, one paragraph
+- [x] `pkgdown::check_pkgdown()` still clean (no `articles:` section needed)
 
 ## Phase 2: `data-raw/vignette_chinook.R` writes `inst/vignette-data/`
 - [ ] Header in the `scripts/` style: reads `data/tune/CH_rear_{tune,summary,curves,groups}.csv`, the local

@@ -33,19 +33,25 @@ Imports:
     utils
 Suggests:
     arrow,
+    bookdown,
     duckdb,
     flooded,
     fresh,
+    ggplot2,
     gq,
     htmlwidgets,
     jsonlite,
+    knitr,
     mapgl,
     mgcv,
+    png,
+    rmarkdown,
     RPostgres,
     terra,
     testthat (>= 3.0.0),
     tmap,
     withr
+VignetteBuilder: knitr
 Remotes:
     NewGraphEnvironment/flooded,
     NewGraphEnvironment/fresh,
