@@ -80,3 +80,5 @@
   in bcfishobs' match-type labels). The three rewritten sentences checked against those definitions by hand.
   Loop ended by enumeration: round 3 enumerated 161 article units and 23 research sentences; round 4 every unit
   round 3's fixes changed; the last three rewrites against the code's set definitions.
+- Final run on `0392ec7` (frozen worktree): `devtools::test()` 521 pass, 0 skipped; `devtools::check()` 0 errors,
+  0 warnings, 1 NOTE (pre-existing Rd example widths); the vignette rebuilds; the build adds no dependency.

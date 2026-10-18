@@ -82,7 +82,7 @@ phases below are that plan verbatim.
 
 ## Phase 5: Audit, check, PR
 - [x] Row-by-row audit of the article's prose claims against the saved tables and the two research files
-- [ ] `devtools::test()`, `devtools::check()` (installed-size NOTE read, not ignored), `lintr` on `R/`, the test
+- [x] `devtools::test()`, `devtools::check()` (installed-size NOTE read, not ignored), `lintr` on `R/`, the test
       and the data-raw script
 - [x] `/code-check branch`
 - [ ] `/planning-archive`, `/gh-pr-push`; the PR's pkgdown run builds the article; after merge confirm the deploy
@@ -90,10 +90,10 @@ phases below are that plan verbatim.
 
 ## Validation
 
-- [ ] Tests pass
-- [ ] `/code-check` clean (each commit, or once over the branch with `/code-check branch`)
-- [ ] PWF checkboxes match landed work
-- [ ] `/planning-archive` on completion
+- [x] Tests pass
+- [x] `/code-check` clean (each commit, or once over the branch with `/code-check branch`)
+- [x] PWF checkboxes match landed work
+- [x] `/planning-archive` on completion
 
 ## Decisions taken (conventional defaults, stated)
 - Three map panels (rules, grade, floodplain by grade), not two: the floodplain hectares are in the issue
