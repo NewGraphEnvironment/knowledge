@@ -489,12 +489,13 @@ rate <- function(r, s) { v <- fv[fv$rule == r & fv$segment == s, ]; v$n_detect /
 ob <- ck[ck$check == "bcfishobs_outside", ]
 ```
 
-- On all FDIS visits on these groups' accessible segments, rivers included, chinook were caught
-  on `r pc(rate("tuned", "rearing"))` of visits on the recommended rule's segments and
+- On the `r n0(sum(fv$n[fv$rule == "default"]))` FDIS visits with a recorded catch or miss on
+  accessible segments in all `r nrow(per_group)` groups, rivers included, chinook were caught on
+  `r pc(rate("tuned", "rearing"))` of visits on the recommended rule's segments and
   `r pc(rate("tuned", "accessible_not_rearing"), 1)` elsewhere; on `default`'s,
   `r pc(rate("default", "rearing"))` and `r pc(rate("default", "accessible_not_rearing"), 1)`.
-  These are the visits the tuning learned from, so this shows the rule does what it was chosen
-  to do, not that it is right.
+  The tuning chose its rule on visits from this same record, so this shows the rule does what it
+  was chosen to do, not that it is right.
 - Chinook records from other sources, which never scored a rule, fall
   `r n1(ob$lift[ob$rule == "tuned"])` times as often on the recommended rule's streams as its share
   of accessible km would give, against `r n1(ob$lift[ob$rule == "default"])` for `default`. These

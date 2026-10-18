@@ -7,7 +7,8 @@
 # WHY / DESIGN NOTES:
 #   - THE TABLES ARE COPIED, NOT RECOMPUTED. Every number the article prints comes from a table 0320 or
 #     0330 wrote; this script selects the CH rearing rows and saves them in one list. `meta$md5` records
-#     each tracked source's md5 at write time, and tests/testthat/test-vignette-data.R fails when a source
+#     each tracked source's md5 at write time (for thresholds.csv and floodplain.csv, which hold every
+#     species, the md5 of their CH rearing rows), and tests/testthat/test-vignette-data.R fails when a source
 #     has moved on, so a rerun of 0320 or 0330 cannot leave the article quoting the run before it.
 #   - SEEDS AND FOLDS. 0320 writes <key>_{seeds,honest}.csv from #62 on; this run predates that, so they
 #     come from the ignored score.rds when the csv is absent, and either way must print exactly as the
@@ -53,7 +54,10 @@ src <- c(tune = sprintf("data/tune/%s_tune.csv", key), summary = sprintf("data/t
          thresholds = "data/thresholds.csv", compare = sprintf("data/compare/%s_compare.csv", key),
          change = sprintf("data/compare/%s_change.csv", key), checks = sprintf("data/compare/%s_checks.csv", key),
          floodplain = "data/compare/floodplain.csv", log = path_log)
-ledger <- sort(list.files("scripts/logs/habitat", "_evidence_build_ledger\\.csv$", full.names = TRUE), decreasing = TRUE)[1]
+# the evidence build the tuning ran on is the one its log names on its first line, not the newest on disk
+log1 <- readLines(path_log, n = 1)
+ledger <- sub("^.*Evidence build (\\S+) on link run.*$", "\\1", log1)
+if (identical(ledger, log1) || !file.exists(ledger)) stop("the tuning log's first line names no evidence ledger on disk: ", log1)
 src <- c(src, ledger = ledger)
 missing <- src[!file.exists(src)]
 if (length(missing)) stop("missing inputs: ", paste(missing, collapse = ", "))
@@ -128,8 +132,15 @@ out$meta <- list(
               min_wsg = eval(fm$min_wsg), power_wsg = eval(fm$power_wsg)),
   stability_from = stab_from,
   map_group = wsg,
-  md5 = tools::md5sum(unname(src)) |> stats::setNames(unname(src))
+  # whole files, except the two that hold every species, which are hashed on their CH rearing rows
+  md5 = tools::md5sum(unname(src[!names(src) %in% c("thresholds", "floodplain")])) |>
+    stats::setNames(unname(src[!names(src) %in% c("thresholds", "floodplain")])),
+  md5_rows = vapply(unname(src[c("thresholds", "floodplain")]), .knw_rows_md5, character(1),
+                    species_code = "CH", stage = "rear")
 )
+if (!identical(led$note[led$step == "link_run_uid"], sub("^.*on link run (\\S+) .*$", "\\1", log1))) {
+  stop("the evidence ledger's link run differs from the tuning log's")
+}
 if (!identical(out$meta$grade$groups, nrow(out$compare) - 1)) {
   stop("the grade's groups (", out$meta$grade$groups, ") differ from compare's (", nrow(out$compare) - 1, ")")
 }

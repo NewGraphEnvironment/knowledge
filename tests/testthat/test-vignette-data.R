@@ -27,6 +27,16 @@ test_that("every source the article's tables came from is unchanged since they w
   }
 })
 
+test_that("the CH rearing rows of the tables that hold every species are unchanged since they were saved", {
+  skip_if_not(has_src, "no source-tree data/ (installed package)")
+  x <- readRDS(vd("chinook_rearing.rds"))
+  expect_length(x$meta$md5_rows, 2)
+  for (f in names(x$meta$md5_rows)) {
+    expect_identical(.knw_rows_md5(file.path(root, f), "CH", "rear"), unname(x$meta$md5_rows[[f]]),
+                     info = paste(f, "CH rearing rows changed: rerun Rscript data-raw/vignette_chinook.R"))
+  }
+})
+
 test_that("the saved recommended rule is the thresholds table's CH_rear_v1 rule", {
   skip_if_not(has_src, "no source-tree data/ (installed package)")
   x <- readRDS(vd("chinook_rearing.rds"))

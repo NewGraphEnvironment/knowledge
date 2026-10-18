@@ -44,3 +44,11 @@
 - Phase 4: the thresholds file opens with a plain-language paragraph; the chinook file's last section points at the
   article and its head paragraph records that the province-wide curve bends in distance (#54's did not); both
   READMEs name the article; `scripts/README.md` names the refresh after `0330`.
+- Code-check round 1 (`review-round1.md`, 3 findings, all fixed): the evidence ledger is now the one the tuning
+  log names on its first line, with a stop when its link run differs; `thresholds.csv` and `floodplain.csv`,
+  which hold every species, are guarded on their CH rearing rows (`.knw_rows_md5()`; proven: a BT-row edit
+  stays green, a CH-row edit goes red); the detection check's sentence names its own population (10,515
+  visits in all 125 groups) and no longer calls them the tuning's visits. Data script rerun 19:10-19:12 UTC.
+- Tests (frozen worktree at `1c8c5c9`): 522 pass, 0 skipped. `devtools::check()`: 0 errors, 0 warnings, 1 NOTE
+  (Rd example lines over 100 characters in five pages that predate this branch); installed size OK; the
+  vignette builds and rebuilds. The build adds R >= 3.5 (the rds files) and R >= 4.1 (the native pipe).
