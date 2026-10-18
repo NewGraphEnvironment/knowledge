@@ -105,14 +105,15 @@ four tests holds:
 - **wetland**: inside a wetland of at least 1 ha;
 - **lake**: inside a lake or reservoir of at least 100 ha.
 
-Reaches confirmed by hand are then added, and any rearing with no spawning within 10 km is
-removed.
+Reaches confirmed by hand are then added. Last, rearing is kept only where it connects to
+spawning: spawning anywhere upstream, or within 10 km downstream with no stretch of 5 % or steeper
+between them.
 Channel width is modelled only on streams of order 2 and up, so the stream test never admits a
 small, unmeasured first-order stream.
 
 Only the stream test is tuned here. Wetlands and lakes keep their tests. River polygons keep
 theirs too, except that they share the stream test's gradient maximum, so a new maximum moves
-them as well, untested: no visit scored here is in a river polygon.
+them as well, though the tuning scored no visit in a river polygon.
 
 ## What evidence is used?
 
@@ -281,7 +282,9 @@ stream above the floor does. The chance falls off past a few hundred metres from
 `r km_d(rec$exc_d)` sits on the way down. Steepness matters less: at `r grad(0.09)` the chance is
 about `r pc(grad_at(0.09) / grad_at(0.02))` of what it is at `r grad(0.02)`. The model fits smooth
 curves, so it cannot show a step at a threshold; each threshold is where habitat and non-habitat
-separate best on held-out groups, a cut across a slope.
+separate best on held-out groups, a cut across a slope. For the gradient that is at the edge of
+what was tried: `r grad(max(tune$grad_max))` is the steepest maximum scored, and nothing steeper
+was.
 
 ## What does it change on the ground?
 
@@ -297,9 +300,9 @@ gain_exc <- ch$km_all[ch$direction == "gained" & grepl("^exception", ch$reason)]
 gain_exc_1 <- ch$km_1[ch$direction == "gained" & grepl("^exception", ch$reason)]
 km_t <- tibble(
   ` ` = c("Habitat under default", "Habitat under the recommended rule",
-          "Lost", "  of which wide enough for default but below the flow floor, with no river close",
-          "Gained", "  of which small streams near a river (the exception)",
-          "    of which first-order streams"),
+          "Lost, all reasons", "Lost: wide enough for default, below the flow floor, no river close",
+          "Gained, all reasons", "Gained through the exception (small streams near a river)",
+          "Gained through the exception, on first-order streams"),
   km = n0(c(all_row$default_km, all_row$tuned_km, all_row$lost_km, lost_size, all_row$gained_km, gain_exc, gain_exc_1)))
 knitr::kable(km_t, align = "lr",
              caption = paste("Chinook rearing habitat in km under each rule, over all", nrow(per_group), "watershed groups."))
@@ -375,8 +378,8 @@ stream length, against `r n1(ob$lift[ob$rule == "default"])` for `default`.
 - **Not applied yet.** `link` changes nothing until a configuration reads the new thresholds
   ([link#346](https://github.com/NewGraphEnvironment/link/issues/346)).
 - **Juveniles caught by electrofishing, on streams.** Spawning is outside it. Wetlands and lakes
-  keep their own tests; river polygons take the new gradient maximum without any record having
-  tested it there.
+  keep their own tests; river polygons take the new gradient maximum, which the tuning scored on
+  streams only.
 - **Better separation, less extent.** The score rewards a rule whose habitat and non-habitat
   differ most, not one that leaves nothing out: `r pc(rec$raw_rate_out, 1)` of visits outside the
   new rule still caught chinook.

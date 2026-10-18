@@ -54,7 +54,12 @@ test_that("knw_compare_map draws only the panels asked for, with a window outlin
   plain <- tempfile(fileext = ".png")
   knw_compare_map(seg, NULL, "a group", png = one, panels = "rules", mark = box)
   knw_compare_map(seg, NULL, "a group", png = plain, panels = "rules")
-  expect_false(identical(png::readPNG(one), png::readPNG(plain)))
+  # the outline is drawn and the map keeps the segments' extent: a few pixels change, not the whole panel
+  a <- png::readPNG(one)
+  b <- png::readPNG(plain)
+  changed <- mean(apply(abs(a[, , 1:3] - b[, , 1:3]), c(1, 2), max) > 0.1)
+  expect_gt(changed, 0)
+  expect_lt(changed, 0.01)
   expect_equal(dim(png::readPNG(one))[1:2], c(4.6, 4) * 150)
   expect_error(knw_compare_map(seg, NULL, "a group", png = one, panels = "floodplain"), "needs fp_cells")
   expect_error(knw_compare_map(seg, NULL, "a group", png = one, panels = "rivers"))

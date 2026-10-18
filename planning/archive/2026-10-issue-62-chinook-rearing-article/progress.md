@@ -111,3 +111,10 @@ introduced or dropped; a shorter article with fewer, better-labelled tables; dra
   gradient (it moves with the stream test's, untested: no scored visit is in a river polygon), a sentence that
   was true by construction (a smooth model cannot show a step), the `png` roxygen, and a `mark` test that could
   not fail (now fails with the outline removed, passes with it). Draft 2 tests: 521 pass; check 0/0/1 NOTE.
+- Draft 2, code-check round 2 (`review-draft2-round2.md`): two defects inside round 1's fixes (the connectivity pass
+  is "spawning anywhere upstream, or within 10 km downstream with no 5 % step between", confirmed in fresh's
+  `.frs_cluster_both` and link's `parameters_fresh.csv`; "untested" was false, since 73 checked visits sit on
+  river-polygon lines, so the claim now names the tuning score only), the gradient grid's edge (9 % is the
+  steepest maximum tried), the km table's nesting lost in the render (rows now say what they nest under), the
+  `png` roxygen, and the `mark` test, which now bounds the changed pixels: 0.29 % with the outline, 4.8 % when
+  the mark takes over the extent; both mutations fail the test.

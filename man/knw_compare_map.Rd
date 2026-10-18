@@ -28,8 +28,9 @@ knw_compare_map(
 \item{title}{\code{character(1)} the figure's caption line (the map carries no
 title; this goes under it).}
 
-\item{png}{\code{character(1)} path for the static figure (the \code{panels} asked
-for, side by side or as \code{ncol} sets), or \code{NULL}.}
+\item{png}{\code{character(1)} path for the static figure, or \code{NULL}: one panel
+for each of \code{panels} that can be drawn (\code{"floodplain"} needs \code{fp_cells}),
+\code{ncol} to a row.}
 
 \item{html}{\code{character(1)} path for the interactive page, or \code{NULL}.}
 
