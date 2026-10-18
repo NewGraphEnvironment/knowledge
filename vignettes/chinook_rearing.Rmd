@@ -54,9 +54,9 @@ lst <- function(v, and = "and") if (length(v) < 2) v else paste(paste(v[-length(
 words <- function(r) {
   size <- if (r$size_var == "mad") sprintf("a mean annual flow of at least %s m³/s", format(r$size_min, trim = TRUE))
           else sprintf("a channel at least %s m wide", format(r$size_min, trim = TRUE))
-  exc <- if (is.na(r$exc_q)) ""
-         else sprintf(", or a river of at least %s m³/s within %s downstream", r$exc_q, km_d(r$exc_d))
-  sprintf("a gradient of at most %s, and %s%s", grad(r$grad_max), size, exc)
+  if (is.na(r$exc_q)) return(sprintf("a gradient of at most %s, and %s", grad(r$grad_max), size))
+  sprintf("a gradient of at most %s, and either %s or a river of at least %s m³/s within %s downstream",
+          grad(r$grad_max), size, r$exc_q, km_d(r$exc_d))
 }
 share_of <- function(col, v) sum(tune$boot_rec_share[tune[[col]] %in% v])
 no_grad <- function(rule) sub("\\|g<=[0-9.]+\\|", "|", rule)
@@ -340,11 +340,13 @@ seg_z <- suppressWarnings(sf::st_crop(seg, box))
 water_z <- suppressWarnings(sf::st_crop(water, box))
 
 # one example per case inside the window: the segment meeting the case's conditions with the most length
-# inside the window, on the stream test's own edges, and with neither rule's verdict changed by the hand-entered
-# reaches or the connectivity pass, so its row in the table explains both verdicts
+# inside the window, on the stream test's own edges and in no waterbody (stricter than the stream branch, which
+# excludes river polygons, wetlands of 1 ha or more and lakes of 100 ha or more), and with neither rule's verdict
+# changed by the hand-entered reaches or the connectivity pass, so its row in the table explains both verdicts
 in_w <- seg[seg$id_segment %in% seg_z$id_segment, ]
 in_w$len_in <- as.numeric(sf::st_length(seg_z[match(in_w$id_segment, seg_z$id_segment), ]))
-in_w <- in_w[in_w$edge_type %in% c(1000, 1100, 2000, 2300) & (in_w$pre_default == in_w$flag_default) %in% TRUE & (in_w$pre_tuned == in_w$flag_tuned) %in% TRUE, ]
+in_w <- in_w[in_w$edge_type %in% c(1000, 1100, 2000, 2300) & !in_w$in_waterbody &
+               (in_w$pre_default == in_w$flag_default) %in% TRUE & (in_w$pre_tuned == in_w$flag_tuned) %in% TRUE, ]
 cases <- list(
   "Kept by both" = with(in_w, flag_default & flag_tuned & mad >= rec$size_min & channel_width >= dflt$size_min &
                           gradient <= dflt$grad_max),
@@ -395,18 +397,24 @@ knitr::kable(ex_t, align = "llrrrrll",
              caption = paste0("The numbered segments on the map: what each rule reads and what each decides. ",
                               "default needs a channel at least ", dflt$size_min, " m wide and a gradient of at most ",
                               grad(dflt$grad_max), "; the recommended rule needs a gradient of at most ",
-                              grad(rec$grad_max), " and a flow of at least ", rec$size_min, " m³/s, or a river of at least ",
+                              grad(rec$grad_max), " and either a flow of at least ", rec$size_min, " m³/s or a river of at least ",
                               rec$exc_q, " m³/s within ", km_d(rec$exc_d), " downstream. The distance is to the first ",
                               "such river downstream, measured only where the exception could apply."))
 gain_grad <- ch$km_all[ch$direction == "gained" & grepl("^gradient", ch$reason)]
 gain_flow <- ch$km_all[ch$direction == "gained" & grepl("^size: tuned passes", ch$reason)]
+conn_gain <- ch$km_all[ch$direction == "gained" & grepl("^connectivity", ch$reason)]
+conn_lost <- ch$km_all[ch$direction == "lost" & grepl("^connectivity", ch$reason)]
+other_gain <- ch$km_all[ch$direction == "gained" & grepl("^other", ch$reason)]
 ```
 
-The examples show what both rules keep and the two largest changes. Two smaller kinds of gain are not
-among them:
+The examples show what both rules keep and the two largest changes. Two smaller gains through the
+stream test are not among them:
 streams between `r grad(dflt$grad_max)` and `r grad(rec$grad_max)` steep, which only the new gradient
 maximum admits (`r n0(gain_grad)` km across the province), and streams whose flow passes the floor
-where `default`'s width test fails or has no width (`r n0(gain_flow)` km).
+where `default`'s width test fails or has no width (`r n0(gain_flow)` km). The rest of the change
+comes from the hand-entered reaches and the connectivity pass
+(`r n0(conn_gain)` km gained, `r n0(conn_lost)` km lost), and from river polygons and mixed causes
+(`r n0(other_gain)` km gained).
 
 Orange is mostly the upper reaches of tributaries: flow grows downstream, so a tributary keeps its
 lower reach and loses the part where its flow falls below the floor more than `r km_d(rec$exc_d)`

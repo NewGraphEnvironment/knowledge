@@ -144,3 +144,9 @@ article (link#346). Al chose labelled real examples here, for the reader and for
   names both smaller gains (1,398 km by gradient, 439 km where flow passes and width fails) and claims nothing
   about the window; the distance header says downstream and "at least"; a missing distance reads "not needed"
   only where the flow passes, else "no river found". The same three segments are picked.
+- Examples review round 2 (`review-examples-round2.md`): one defect inside round 1's fix (the "smaller gains"
+  sentence read as the full list; it now names the stream-test gains and gives the rest of the change table:
+  533 km gained and 301 lost through the overlay and connectivity, 230 km gained on river polygons and mixed
+  causes); the data header's "before connectivity" is now "the habitat test alone"; examples now exclude any
+  segment in a waterbody (stricter than the stream branch's river-polygon, wetland and lake exclusion, so it
+  needs no second copy of that test); "gradient AND (flow OR river)" written with "either", in the headline too.

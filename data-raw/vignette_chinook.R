@@ -18,8 +18,9 @@
 #     simplified at 10 m (a 4 in panel at 150 dpi is about 250 m a pixel at the group's extent, and the
 #     zoomed window is 12 km); lengths stay the segments' own. Each segment also carries what the two rules
 #     read (edge type, link's segment gradient and channel width, wet's MAD and the walk distance to the
-#     pick's river, measured only where the exception could admit the segment) and each rule's flag before the
-#     connectivity pass, for the labelled examples. The floodplain is not in the article (#62's
+#     pick's river, measured only where the exception could admit the segment), each rule's verdict from the
+#     habitat test alone (before the hand-entered reaches and the connectivity pass), and whether the segment
+#     lies in any waterbody, for the labelled examples. The floodplain is not in the article (#62's
 #     second draft); it is in research/habitat_thresholds_tuned.md.
 #
 # INPUT:  data/tune/CH_rear_{tune,summary,curves,groups}.csv, data/tune/CH_rear_{seeds,honest}.csv or
@@ -165,7 +166,8 @@ rm(seg_all)
 conn <- tryCatch(DBI::dbConnect(RPostgres::Postgres(), bigint = "numeric"),
                  error = function(e) stop("database unreachable (PG* environment variables): ", conditionMessage(e)))
 geom <- sf::st_zm(sf::st_read(conn, quiet = TRUE, query = sprintf(
-  "SELECT id_segment, geom FROM fresh_default.streams WHERE watershed_group_code = '%s'", wsg)), drop = TRUE)
+  "SELECT id_segment, waterbody_key, geom FROM fresh_default.streams WHERE watershed_group_code = '%s'", wsg)),
+  drop = TRUE)
 geom$id_segment <- as.numeric(geom$id_segment)
 water <- sf::st_zm(sf::st_read(conn, quiet = TRUE, query = sprintf("
   SELECT waterbody_key, 'lake' AS kind, geom FROM whse_basemapping.fwa_lakes_poly WHERE watershed_group_code = '%1$s' AND area_ha >= 10
@@ -177,6 +179,7 @@ sg <- geom |> inner_join(s |> transmute(id_segment, blue_line_key, accessible, s
                                         edge_type, gradient, channel_width, mad = knw_size, dist_m = knw_dist,
                                         pre_default = rearing_pre_default, pre_tuned = rearing_pre_tuned),
                          by = "id_segment")
+sg$in_waterbody <- !is.na(sg$waterbody_key)
 if (nrow(sg) != nrow(s)) stop(nrow(s) - nrow(sg), " saved segments have no geometry in fresh_default.streams")
 
 src_local <- c(segments = sprintf("data/compare/%s_segments.rds", key), curve = f_curve)
@@ -187,7 +190,7 @@ out$meta$md5_local <- tools::md5sum(unname(src_local)) |> stats::setNames(unname
 seg_out <- sg |>
   filter(accessible %in% TRUE) |>
   select(id_segment, blue_line_key, stream_order, accessible, grade, grade_class, flag_default, flag_tuned, length_metre,
-         edge_type, gradient, channel_width, mad, dist_m, pre_default, pre_tuned) |>
+         edge_type, gradient, channel_width, mad, dist_m, pre_default, pre_tuned, in_waterbody) |>
   sf::st_simplify(preserveTopology = TRUE, dTolerance = 10)
 cmp_w <- out$compare |> filter(watershed_group_code == wsg)
 km <- function(f) sum(seg_out$length_metre[seg_out[[f]] %in% TRUE]) / 1000
