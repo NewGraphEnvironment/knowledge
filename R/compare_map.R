@@ -35,6 +35,11 @@ knw_compare_map <- function(segments, water = NULL, title = "", png = NULL, html
   if (!requireNamespace("tmap", quietly = TRUE)) stop("tmap is needed", call. = FALSE)
   sf::sf_use_s2(FALSE)
   seg <- segments[segments$accessible %in% TRUE, ]
+  if (!nrow(seg)) {
+    # a group where no segment passes the species' access gate (link#349: RB in 23 groups) has nothing to draw
+    message("no accessible segment: nothing drawn for ", title)
+    return(invisible(character()))
+  }
   seg$rule_class <- factor(ifelse(seg$flag_default & seg$flag_tuned, "kept (both rules)",
                            ifelse(seg$flag_default, "lost (default only)",
                            ifelse(seg$flag_tuned, "gained (tuned only)", "accessible, neither"))),

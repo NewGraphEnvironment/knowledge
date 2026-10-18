@@ -275,3 +275,36 @@ in the summaries alone).
 | bash 3.2: `gh pr create --body "$(cat <<'EOF' … it's …)"` unterminated quote | `--body-file` and `-F` for the commit |
 | tuning run hung 3 h grading BT spawning on the run host: process idle, no query, walk workers' connections opened with no connect timeout | `PGCONNECT_TIMEOUT=30` set by the scripts; grading moved to this machine (RB's 210 groups in 3.2 min against the host's 54 min for BT) |
 | copies from the run host read as empty: `ls | grep '^BT_'` matched nothing | `ls` is aliased with colour codes here; verify with `command ls` (code-check-shell: a verification command can be shadowed) |
+
+## Comparison run (2026-10-18 00:00–01:50Z, in flight): whole groups fail the RB access gate
+
+`data/compare/RB_rear_compare.csv`: 23 groups have `accessible_km = 0` with stored RB rearing on 37,895 km
+(BRID CANO CARP CLRH CRKD FINA FINL FIRE FOXR INGR LEUT LOMI MAHD MESI MURT NATR OSPK PARA PARS PCEA TURN UEUT
+UOMI). `streams_access.access_rb` is 0 on every segment there while `streams_habitat_rb.accessible` and its
+rearing flag are set: link#349's RB disagreement (17 % of habitat-accessible segments, 481,275 segments,
+102,578 km in `access_check.csv`) is mostly whole groups, not scattered segments. GR has three such groups
+(BULL ELKR TURN), BT one (TURN); CH, CO, ST, WCT none. Under the gate the comparison counts no km there for
+either rule, and `knw_compare_map()` failed on PARS and PCEA (`subscript out of bounds` from tmap on zero
+rows; caught per group). Fix: the map returns early with a message when no segment passes the gate
+(`R/compare_map.R`, `tests/testthat/test-compare_map.R`); the two groups stay unmapped. The 23 groups go to
+the research file's limits and to the link#349 draft comment.
+
+## Comparison, province-wide (`data/compare/compare.csv`, ALL rows; final before the map stage)
+
+| species × stage | accessible km | default km | tuned km | lost | gained | change | default graded km | tuned graded km |
+|---|---|---|---|---|---|---|---|---|
+| RB rearing | 509,975 | 227,089 | 183,988 | 44,368 | 1,267 | −19.0 % | 115,119 | 101,860 |
+| BT rearing | 576,908 | 248,927 | 156,141 | 94,139 | 1,352 | −37.3 % | 114,856 | 76,118 |
+| BT spawning | 576,908 | 133,382 | 99,786 | 56,284 | 22,688 | −25.2 % | 66,216 | 43,559 |
+| CH rearing | 225,152 | 101,184 | 88,607 | 24,843 | 12,266 | −12.4 % | 27,681 | 32,018 |
+| CO rearing | 147,795 | 81,629 | 77,612 | 9,184 | 5,167 | −4.9 % | 48,879 | 48,516 |
+| GR rearing | 258,576 | 77,740 | 77,740 | 0 | 0 | 0 | 46,831 | 46,831 |
+| ST rearing | 155,357 | 71,619 | 45,214 | 26,731 | 326 | −36.9 % | 28,717 | 25,571 |
+| WCT rearing | 35,285 | 20,749 | 16,243 | 4,510 | 4 | −21.7 % | 12,463 | 8,543 |
+
+Loss is the size floor on small streams in every case (`change.csv`: "size: width passes, tuned fails, no
+exception", orders 1–4+); the gains are the exceptions (BT spawning 21,918 km, 15,699 of them order 1; CH
+9,666 km, 6,952 order 1) and CO's floor at 0.03 (4,634 km of order-1 streams). Connectivity and overlay
+move under 1,000 km per species. `checks.csv`: the bcfishobs outside lift rises under every tuned rule (RB
+2.34 → 3.04, BT rearing 2.45 → 5.17, CH 2.46 → 3.27, CO 1.75 → 1.82), i.e. the tuned rules hold a larger
+share of the presence records they were not fitted to per km they draw.
