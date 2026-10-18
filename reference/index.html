@@ -107,6 +107,222 @@
 
         </dt>
         <dd>Size class of each fish from a table of length breaks</dd>
+
+        <dt>
+
+          <code><a href="knw_species.html">knw_species()</a></code>
+
+        </dt>
+        <dd>The species the habitat evidence is built for</dd>
+
+        <dt>
+
+          <code><a href="knw_fdis_quality.html">knw_fdis_quality()</a></code>
+
+        </dt>
+        <dd>Drop the FDIS site visits that cannot carry evidence, and count every drop</dd>
+
+        <dt>
+
+          <code><a href="knw_fdis_species.html">knw_fdis_species()</a></code>
+
+        </dt>
+        <dd>Catch, presence and absence per FDIS site visit and species</dd>
+
+        <dt>
+
+          <code><a href="knw_spawner_evidence.html">knw_spawner_evidence()</a></code>
+
+        </dt>
+        <dd>Spawner evidence per visit for the char species, from maturity codes</dd>
+
+        <dt>
+
+          <code><a href="knw_fiss_visits.html">knw_fiss_visits()</a></code>
+
+        </dt>
+        <dd>Fish Data Submission workbook sites as visits, with the effort they recorded</dd>
+
+        <dt>
+
+          <code><a href="knw_bcfishobs_match.html">knw_bcfishobs_match()</a></code>
+
+        </dt>
+        <dd>Match bcfishobs records to the FDIS site visits they came from</dd>
+      </dl></div><div class="section level2">
+      <h2 id="evidence-on-link-s-segments">Evidence on link’s segments<a class="anchor" aria-label="anchor" href="#evidence-on-link-s-segments"></a></h2>
+
+      <div class="section-desc"><p>Place site visits on link’s segments with every species’ access and habitat flags; read flow, width, regulated reaches, natural barriers downstream and the walks to rivers.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="knw_link_place.html">knw_link_place()</a></code>
+
+        </dt>
+        <dd>Place site visits on link's segments, with access and habitat for every species</dd>
+
+        <dt>
+
+          <code><a href="knw_link_segments.html">knw_link_segments()</a></code>
+
+        </dt>
+        <dd>link's segments for one species in a set of groups, with flow and access, for grading</dd>
+
+        <dt>
+
+          <code><a href="knw_link_flow.html">knw_link_flow()</a></code>
+
+        </dt>
+        <dd>wet's annual flow on FWA segments, with a parent fallback</dd>
+
+        <dt>
+
+          <code><a href="knw_link_width.html">knw_link_width()</a></code>
+
+        </dt>
+        <dd>The channel width link reads on a stream nobody measured, and the waterbody tests</dd>
+
+        <dt>
+
+          <code><a href="knw_link_regulated.html">knw_link_regulated()</a></code>
+
+        </dt>
+        <dd>Points on the FWA network downstream of a regulating dam</dd>
+
+        <dt>
+
+          <code><a href="knw_link_barrier_dnstr.html">knw_link_barrier_dnstr()</a></code>
+
+        </dt>
+        <dd>Whether a natural barrier to a species lies downstream of each point</dd>
+
+        <dt>
+
+          <code><a href="knw_link_walks.html">knw_link_walks()</a></code>
+
+        </dt>
+        <dd>Network distance downstream to the first river of each size, on each flow source</dd>
+
+        <dt>
+
+          <code><a href="knw_link_access_check.html">knw_link_access_check()</a></code>
+
+        </dt>
+        <dd>How link's two access columns disagree, per species</dd>
+      </dl></div><div class="section level2">
+      <h2 id="tuning">Tuning<a class="anchor" aria-label="anchor" href="#tuning"></a></h2>
+
+      <div class="section-desc"><p>Score candidate rules on held-out watershed groups, fit the joint use curve at the pick, and grade every segment by expected use.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="knw_tune_grid.html">knw_tune_grid()</a></code>
+
+        </dt>
+        <dd>The candidate rules for one species and stage, around link's own thresholds</dd>
+
+        <dt>
+
+          <code><a href="knw_walk_index.html">knw_walk_index()</a></code>
+
+        </dt>
+        <dd>Index the walks by source and river size, for the exception test</dd>
+
+        <dt>
+
+          <code><a href="knw_rule_in.html">knw_rule_in()</a></code>
+
+        </dt>
+        <dd>Whether each visit is in under one rule, on the stream branch</dd>
+
+        <dt>
+
+          <code><a href="knw_tune_score.html">knw_tune_score()</a></code>
+
+        </dt>
+        <dd>Score candidate rules on held-out watershed groups</dd>
+
+        <dt>
+
+          <code><a href="knw_tune_curve.html">knw_tune_curve()</a></code>
+
+        </dt>
+        <dd>One curve per species and stage: use against size, gradient and distance to a river, together</dd>
+
+        <dt>
+
+          <code><a href="knw_grade.html">knw_grade()</a></code>
+
+        </dt>
+        <dd>Grade segments by expected use, 0 to 1</dd>
+
+        <dt>
+
+          <code><a href="knw_grade_species.html">knw_grade_species()</a></code>
+
+        </dt>
+        <dd>Grade every segment of a species' groups by its tuned curve</dd>
+
+        <dt>
+
+          <code><a href="knw_tune_run.html">knw_tune_run()</a></code>
+
+        </dt>
+        <dd>Tune every species and stage the evidence can speak to, in one run</dd>
+      </dl></div><div class="section level2">
+      <h2 id="published-results-and-comparison">Published results and comparison<a class="anchor" aria-label="anchor" href="#published-results-and-comparison"></a></h2>
+
+
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="knw_thresholds_table.html">knw_thresholds_table()</a></code>
+
+        </dt>
+        <dd>The published thresholds table, from a tuning run's outputs</dd>
+
+        <dt>
+
+          <code><a href="knw_publish.html">knw_publish()</a></code>
+
+        </dt>
+        <dd>Write a set of tables as Parquet with a manifest, and upload them</dd>
+
+        <dt>
+
+          <code><a href="knw_compare_rules.html">knw_compare_rules()</a></code>
+
+        </dt>
+        <dd>Set a tuned rule beside link's <code>default</code> on link's own segments</dd>
+
+        <dt>
+
+          <code><a href="knw_floodplain_ha.html">knw_floodplain_ha()</a></code>
+
+        </dt>
+        <dd>Floodplain hectares beside each segment, from a catalog item's floodplain</dd>
+
+        <dt>
+
+          <code><a href="knw_compare_map.html">knw_compare_map()</a></code>
+
+        </dt>
+        <dd>Map a group's segments under two rules, by grade, and its floodplain by the grade beside it</dd>
       </dl></div><div class="section level2">
       <h2 id="crossings-and-past-reports">Crossings and past reports<a class="anchor" aria-label="anchor" href="#crossings-and-past-reports"></a></h2>
 
