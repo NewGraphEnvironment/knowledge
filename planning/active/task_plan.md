@@ -71,13 +71,13 @@ phases below are that plan verbatim.
       class drawn and the floodplain legend shows five classes on 0–1, `footnote-ref` count 0, no literal `\@ref`
 
 ## Phase 4: The research files point at the article
-- [ ] `research/habitat_thresholds_tuned.md`: one plain-language paragraph under the header line, above "The
+- [x] `research/habitat_thresholds_tuned.md`: one plain-language paragraph under the header line, above "The
       question"; the specification stays
-- [ ] `research/chinook_rearing_tuned.md`: "For a link vignette" becomes a pointer to the article's URL
+- [x] `research/chinook_rearing_tuned.md`: "For a link vignette" becomes a pointer to the article's URL
       (`https://newgraphenvironment.github.io/knowledge/articles/chinook_rearing.html`) and to link#346; the
       `**Status:**` line stops saying "written to lift into a link vignette"
-- [ ] `research/README.md` and the repo `README.md`'s "What is known" list name the article
-- [ ] `scripts/README.md`: one line after `0330` naming `data-raw/vignette_chinook.R` as what refreshes the
+- [x] `research/README.md` and the repo `README.md`'s "What is known" list name the article
+- [x] `scripts/README.md`: one line after `0330` naming `data-raw/vignette_chinook.R` as what refreshes the
       article's data after a rerun
 
 ## Phase 5: Audit, check, PR

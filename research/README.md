@@ -23,3 +23,6 @@ Naming: `<topic>.md`, from 2026-09-26.
 | `steelhead_rearing_tuned.md` | ST rearing: MAD ≥ 1 m³/s on 82 detections in 11 groups; the curve overfits |
 | `westslope_cutthroat_rearing_tuned.md` | WCT rearing on six groups with both outcomes: underpowered |
 | `chinook_rearing_tuned.md` | a tuned CH rearing rule (#54): 2,795 size, gradient and near-a-river rules scored on held-out WSGs from FDIS visits on link's stream branch, the recommended gradient ≤ 7 % and either MAD ≥ 0.75 m³/s or a ≥ 3 m³/s river within 1 km (MAD ≥ 0.5 at 7–9 % is in every reading's region) (`default` and its MAD bounds outside the region), the range of each value, curves with no bend, where the flow source moves it, and the rule beside `default` on link's segments (−18 % CH rearing km), with bcfishobs and FDIS checks |
+
+The chinook rearing result is told in plain language, for a reader who has not seen the tuning, in the package
+article <https://newgraphenvironment.github.io/knowledge/articles/chinook_rearing.html> (#62).

@@ -41,3 +41,6 @@
   depends on the number.
 - Prose corrected after reading the render: the distance curve does bend (highest about 120 m from the river,
   falling past a few hundred metres), so the sentence that none of the three curves bends was wrong.
+- Phase 4: the thresholds file opens with a plain-language paragraph; the chinook file's last section points at the
+  article and its head paragraph records that the province-wide curve bends in distance (#54's did not); both
+  READMEs name the article; `scripts/README.md` names the refresh after `0330`.

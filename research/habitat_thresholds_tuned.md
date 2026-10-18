@@ -18,6 +18,17 @@
 `coho_rearing_tuned.md`, `grayling_rearing_tuned.md`, `rainbow_rearing_tuned.md`, `steelhead_rearing_tuned.md`,
 `westslope_cutthroat_rearing_tuned.md`.
 
+**In plain words.** link calls a stream segment rearing or spawning habitat for a species with a yes-or-no
+test: big enough, and not too steep. This run asked, for each species and life stage the electrofishing record
+can speak to, which version of that test best predicts where the fish were caught in watersheds the scoring had
+not seen. For each one it tried a ladder of size floors (by flow or by width) and gradient limits, and, for small
+streams, an allowance for a river close downstream. It scored every version on held-out watershed groups,
+kept every version the data cannot tell from the best, and recommended the one of those closest to link's
+current test. link's current test is not among them for any fitted species but grayling, and every recommended
+rule but grayling's draws less habitat than link does now. A grade from 0 to 1 then gives the use to expect on
+each segment. The package article on chinook rearing (https://newgraphenvironment.github.io/knowledge/articles/chinook_rearing.html) walks through one species from the question to
+the map; the specification below is the record.
+
 ## The question
 
 link's `default` draws habitat as on/off at a size floor and a gradient maximum per species and stage, set from

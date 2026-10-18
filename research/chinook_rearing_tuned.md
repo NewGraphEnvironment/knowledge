@@ -1,6 +1,6 @@
 # A tuned Chinook rearing rule: stream size, gradient and distance to a river, beside link's `default`
 
-**Verified:** 2026-10-16; 0297's figures rerun 2026-10-17 without repeated surveys (#35), with the same recommended rule · **Issues:** #54 (this); builds on #52 (`chinook_stream_size.md`), which picked 0.5 m³/s, 10 m³/s
+**Verified:** 2026-10-16; 0297's figures rerun 2026-10-17 without repeated surveys (#35), with the same recommended rule; the head paragraph and the last section 2026-10-18 (#62) · **Issues:** #54 (this); builds on #52 (`chinook_stream_size.md`), which picked 0.5 m³/s, 10 m³/s
 and 500 m by hand; uses wet's flow (`modelled_discharge.md`) and the FDIS export (`fdis_export.md`); the link issue for
 a tuned rule is drafted, not filed (planning archive for #54) · **Produced by:**
 - `scripts/0296-ch-rule-build.R` with `scripts/sql/ch_dist_profile.sql`: walks, widths, barrier status, link segment
@@ -16,7 +16,7 @@ a tuned rule is drafted, not filed (planning archive for #54) · **Produced by:*
   the visits before #35 dropped repeated surveys;
 - the plan review and its disposition: `planning/archive/2026-10-issue-54-chinook-rearing-tuned/review-plan.md`.
 
-**Status:** measured; nothing applied in link. Written to lift into a link vignette (last section).
+**Status:** measured; nothing applied in link. The plain-language account is the package article (last section).
 
 **On the province-wide run (#57, 2026-10-17).** The same rule family rescored by `scripts/0320` on `0310`'s
 evidence build (link run `20261017_004619-3f4c713b`, 241 groups): 4,490 stream-branch visits (215 CH) in 43
@@ -34,7 +34,9 @@ and the cross-species table are `habitat_thresholds_tuned.md`. Regenerated on al
 order 1) and 1,398 between the two gradient maxima. Graded km rises, 27,681 → 32,018, the only species where it
 does. FDIS detection on the rule's segments is 17 % against 1.5 % outside (`default`: 14 % against 2 %); the
 bcfishobs outside lift moves 2.46 → 3.27. Floodplain (16 catalog groups): 341,298 ha beside the rule's habitat
-against 426,681 under `default` (−20 %, more than the km's −12 %), graded ha 146,059 → 147,442. The figures below are #54's, on the 55-group build; the province-wide
+against 426,681 under `default` (−20 %, more than the km's −12 %), graded ha 146,059 → 147,442. Unlike #54's curve below, the
+province-wide one bends in distance: the predicted chance is highest about 120 m from a ≥ 3 m³/s river and falls past
+a few hundred metres, to 0.42 of the 1 km value at 3 km (`data/tune/CH_rear_curves.csv`), so D = 1 km sits past the bend. The figures below are #54's, on the 55-group build; the province-wide
 maps are `research/fig/compare_ch_rear_*.png`.
 
 Every figure names its population. Three recur:
@@ -445,18 +447,10 @@ eastern sub-basin's network. The green (tuned only) is short reaches on small st
 - **Outside-check records are presence only**, mostly undated as to life stage. Their lift ranks rules by
   concentration, not by how much habitat they leave out.
 
-## For a link vignette
+## The plain-language account
 
-The parts lift as they are. The question is the paragraph under "The question". The rule tables are "What `default`
-does" and the recommended rule. The evidence is the curves figure and the region table. Then come the side by side
-and its maps, and the limits.
-
-Three things change in the move:
-- **Restate the populations in link's terms**, with no FDIS file paths.
-- **Rebuild the figures from link's own run of the rule.** The rule needs a new rule shape in link: a downstream walk
-  to a river of a given MAD, as a stream-branch alternative to the size test. This page applied it in SQL over
-  scratch copies.
-- **Carry the decision with the numbers.** `default` is outside the region on every reading, and the tuned rule is
-  18 % narrower, not wider.
-
-The link issue is drafted in this issue's planning archive (`link-issue-draft.md`), not filed.
+The province-wide result is told for a reader who has not seen the tuning in the package article
+<https://newgraphenvironment.github.io/knowledge/articles/chinook_rearing.html> (#62), built from `inst/vignette-data/` by `data-raw/vignette_chinook.R`: what link draws now, the
+rules, the scoring, the region, the pick, the stability checks, the curves and the grade, and what the rule
+changes on the ground, with a Bulkley map. link's own account, the rule drawn by link, waits on its configuration
+reading the thresholds table (NewGraphEnvironment/link#346).

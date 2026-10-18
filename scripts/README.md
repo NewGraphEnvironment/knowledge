@@ -63,6 +63,8 @@ wf_farm_priority.js                          farm priority/crossing tables out o
 0330  default against the recommended rule on link's segments for every species x stage and group (km, graded
       km, km by grade class, change by reason, FDIS and bcfishobs checks), floodplain ha beside each rule's
       habitat in the catalog's groups, maps -> data/compare/, research/fig/compare_*.png (+ log)
+      then Rscript data-raw/vignette_chinook.R refreshes the chinook article's data (inst/vignette-data/);
+      tests/testthat/test-vignette-data.R fails until it does
 
 --- Frozen on the published v2 tables (0299 PULL=TRUE VERSION=v2): the one-species analyses #57 superseded ---
 0291  BT use curve (#28)   0292  BT candidate weight   0293  BT spawner evidence (#33)
