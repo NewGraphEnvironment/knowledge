@@ -126,8 +126,8 @@ Replaces #59. Decisions taken at the plan gate (2026-10-17) and the plan review'
       comments that close the loop on link#346
 
 ## Validation
-- [ ] Tests pass (`devtools::test()`), `devtools::document()`, `pkgdown::check_pkgdown()`, `lintr`
+- [x] Tests pass (`devtools::test()`), `devtools::document()`, `pkgdown::check_pkgdown()`, `lintr`
 - [x] `/code-check branch` clean (three-round floor)
-- [ ] Every build's ledger partitions its input; rule outputs byte-identical on a re-run
+- [x] Every build's ledger partitions its input; rule outputs byte-identical on a re-run
 - [ ] PWF checkboxes match landed work; `/planning-archive` on completion
 

@@ -10,7 +10,8 @@
   `scripts/logs/habitat/20261017_tune_run-*`);
 - `scripts/0325`: `data/thresholds.csv`, `data/thresholds_groups.csv`, and the Parquet sets `knowledge/thresholds/v1`
   and `knowledge/habitat_grade/v1`;
-- `scripts/0330`: `data/compare/*.csv`, `research/fig/compare_*.png` (the comparison; below).
+- `scripts/0330`: `data/compare/*.csv` (`compare`, `change`, `checks`, `floodplain`), `research/fig/compare_*.png`
+  (the comparison; below; logs `scripts/logs/habitat/20261017_compare*`).
 
 **Status:** measured; nothing applied in link. One file per species holds the species' reading:
 `bull_trout_tuned.md`, `chinook_rearing_tuned.md` (#54's file, with the province-wide rescoring at its head),
@@ -147,6 +148,29 @@ km × grade (`data/compare/compare.csv`, `change.csv`, `checks.csv`).
 three groups per species chosen by criteria fixed before drawing (largest gained share, largest lost share, most
 `default` km): habitat by rule (kept, lost, gained), grade class, and the floodplain shaded by its segment's grade.
 `data/compare/maps/` holds the interactive pages (ignored).
+
+**Floodplain as a unit** (`data/compare/floodplain.csv`). For the 23 groups whose whole-network floodplain the
+stac-floodplains-bc catalog holds (`<wsg>_all_ff04`; NewGraphEnvironment/floodplains#123 for the rest),
+`knw_floodplain_ha()` gives every 30 m floodplain cell one owning segment, the nearest among the claiming blue
+lines' segments through `flooded::fl_valley_join()`, and sums hectares beside each rule's habitat; graded ha is
+ha × the owning segment's grade. Hectares beside accessible stream are the group's whole accessible floodplain.
+
+| species × stage | catalog groups | ha beside accessible stream | beside `default` habitat | beside tuned | change | graded ha, `default` → tuned |
+|---|---|---|---|---|---|---|
+| RB rearing | 23 | 781,723 | 663,464 | 560,759 | −15 % | 324,847 → 293,833 |
+| BT rearing | 22 | 894,237 | 746,145 | 565,869 | −24 % | 278,349 → 215,614 |
+| BT spawning | 22 | 894,237 | 354,423 | 275,514 | −22 % | 163,055 → 115,833 |
+| CH rearing | 16 | 588,216 | 426,681 | 341,298 | −20 % | 146,059 → 147,442 |
+| CO rearing | 10 | 329,838 | 272,429 | 243,051 | −11 % | 176,396 → 166,814 |
+| GR rearing | 3 | 137,000 | 96,530 | 96,530 | 0 | 46,793 → 46,793 |
+| ST rearing | 4 | 143,349 | 108,807 | 74,933 | −31 % | 44,775 → 41,791 |
+| WCT rearing | 4 | 129,911 | 122,584 | 117,691 | −4 % | 47,027 → 43,010 |
+
+The floodplain and the kilometres move apart. For BT rearing, RB, ST and WCT the floodplain falls less than the
+km (BT 24 % against 37 %, RB 15 against 19, ST 31 against 37, WCT 4 against 22): the small streams a higher size
+floor drops carry little floodplain. For CH and CO it falls more (CH 20 % against 12, CO 11 against 5): their
+losses sit on mid-sized streams with floodplain beside them, and their gains, order-1 streams, bring almost none.
+Graded ha follows graded km, rising only for CH.
 
 ## Limits
 

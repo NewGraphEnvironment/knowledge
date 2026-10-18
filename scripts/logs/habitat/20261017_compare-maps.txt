@@ -1,0 +1,37 @@
+Comparison, knowledge#57: 8 fitted species x stage; link run 20261017_004619-3f4c713b at a17e91773b283b021811f8b5b76b887d5f4c16e4.
+link configs/default at a17e91773b283b021811f8b5b76b887d5f4c16e4 read from ../link; fresh 0.39.0.
+Floodplain catalog: 23 whole-network groups (BOWR BULK DUNC FRAN KISP KOTL LARL LCHL LNTH LSAL MCGR MORK MORR NECR PARS PCEA PINE SLOC TABR THOM UFRA UNTH WILL).
+STAGE=maps: floodplain and maps from the saved comparison of RB_rear BT_rear BT_spawn CH_rear CO_rear GR_rear ST_rear WCT_rear.
+RB_rear: maps for BOWR BULK DUNC FRAN KISP KOTL LARL LCHL LNTH LSAL MCGR MORK MORR NECR PARS PCEA PINE SLOC TABR THOM UFRA UNTH WILL CARR PORI GRAI.
+BT_rear: maps for BOWR BULK DUNC FRAN KISP KOTL LARL LCHL LNTH MCGR MORK MORR NECR PARS PCEA PINE SLOC TABR THOM UFRA UNTH WILL LMUS LHAF NATR.
+BT_spawn: maps for BOWR BULK DUNC FRAN KISP KOTL LARL LCHL LNTH MCGR MORK MORR NECR PARS PCEA PINE SLOC TABR THOM UFRA UNTH WILL LTRE UDEN.
+CH_rear: maps for BOWR BULK FRAN KISP LCHL LNTH LSAL MCGR MORK MORR NECR TABR THOM UFRA UNTH WILL VICT QUES.
+CO_rear: maps for BOWR BULK KISP LCHL LNTH MORR NECR THOM UNTH WILL CHWK GUIC GRAI.
+GR_rear: maps for PARS PCEA PINE ATLL.
+ST_rear: maps for BULK KISP MORR THOM SEYM PORI GRAI.
+WCT_rear: maps for DUNC KOTL LARL SLOC KHOR KETL.
+floodplain BT rear accessible: 894237 ha, 306438 graded ha over 22 groups
+floodplain BT rear default: 746145 ha, 278349 graded ha over 22 groups
+floodplain BT rear tuned: 565869 ha, 215614 graded ha over 22 groups
+floodplain BT spawn accessible: 894237 ha, 459488 graded ha over 22 groups
+floodplain BT spawn default: 354423 ha, 163055 graded ha over 22 groups
+floodplain BT spawn tuned: 275514 ha, 115833 graded ha over 22 groups
+floodplain CH rear accessible: 588216 ha, 155411 graded ha over 16 groups
+floodplain CH rear default: 426681 ha, 146059 graded ha over 16 groups
+floodplain CH rear tuned: 341298 ha, 147442 graded ha over 16 groups
+floodplain CO rear accessible: 329838 ha, 192360 graded ha over 10 groups
+floodplain CO rear default: 272429 ha, 176396 graded ha over 10 groups
+floodplain CO rear tuned: 243051 ha, 166814 graded ha over 10 groups
+floodplain GR rear accessible: 137000 ha, 61631 graded ha over 3 groups
+floodplain GR rear default: 96530 ha, 46793 graded ha over 3 groups
+floodplain GR rear tuned: 96530 ha, 46793 graded ha over 3 groups
+floodplain RB rear accessible: 781723 ha, 341714 graded ha over 23 groups
+floodplain RB rear default: 663464 ha, 324847 graded ha over 23 groups
+floodplain RB rear tuned: 560759 ha, 293833 graded ha over 23 groups
+floodplain ST rear accessible: 143349 ha, 48276 graded ha over 4 groups
+floodplain ST rear default: 108807 ha, 44775 graded ha over 4 groups
+floodplain ST rear tuned: 74933 ha, 41791 graded ha over 4 groups
+floodplain WCT rear accessible: 129911 ha, 50747 graded ha over 4 groups
+floodplain WCT rear default: 122584 ha, 47027 graded ha over 4 groups
+floodplain WCT rear tuned: 117691 ha, 43010 graded ha over 4 groups
+Done in 131.6 min.

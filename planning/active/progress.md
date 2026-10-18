@@ -51,3 +51,6 @@
   the RB access-gate groups and the regenerated-vs-stored limit) and a comparison paragraph in each species file
 - Next: floodplain numbers into the research files after the re-run; commit figures and logs; one code-check
   round on the delta since `12933fc`; lint; `/planning-archive`; PR
+- `STAGE=maps` re-run done 2026-10-18 06:08Z (131.6 min): 121 figures redrawn with the class labels, `floodplain.csv`
+  complete (RB 23 groups, BT 22, CH 16); the two stale RB PARS/PCEA figures from an earlier attempt removed (no
+  accessible segment, no map). Floodplain hectares written into the research files. Code-check round 4 clean.

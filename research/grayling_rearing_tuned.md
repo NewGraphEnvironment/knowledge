@@ -24,7 +24,8 @@ grade is relative to a low top. Of 258,724 accessible km, 146,128 are graded (83
 spread evenly across the classes (5 % under 0.2, 24 % at 0.8–1).
 
 **Comparison (`scripts/0330`, `data/compare/GR_rear_*`).** The recommended rule is `default`, so nothing
-changes: 77,740 km on link's 82 GR groups under both, graded km 46,831, bcfishobs outside lift 3.56. Three
+changes: 77,740 km on link's 82 GR groups under both, graded km 46,831, bcfishobs outside lift 3.56, 96,530 ha of
+floodplain beside the habitat in the three catalog groups. Three
 groups (BULL ELKR TURN) have no segment passing the GR access gate and draw no map.
 
 **What link#343 asked.** The MAD minima link proposed to re-tune on wet's discharge do not enter: the grid

@@ -34,7 +34,8 @@ grade-weighted km). Reference rate 0.411. Graded km spread evenly: 24 % under 0.
 and 1,267 gained between the two gradient maxima. Graded km 115,119 → 101,860. FDIS detection on the rule's
 segments is 35 % against 18 % outside (`default`: 33 % against 15 %); the bcfishobs outside lift moves
 2.34 → 3.04. The regenerated `default` differs from link's stored RB flags by 45,970 km, more than for any other
-species. Maps: `research/fig/compare_rb_rear_*.png`.
+species. Floodplain (23 catalog groups): 560,759 ha beside the rule's habitat against 663,464 under `default`
+(−15 %); graded ha 324,847 → 293,833. Maps: `research/fig/compare_rb_rear_*.png`.
 
 **Access.** link's two access columns disagree most for RB (`access_check.csv`: 481,275 habitat-accessible
 segments with `access_rb = 0`, 147,445 of them rearing), and the comparison shows the disagreement is whole

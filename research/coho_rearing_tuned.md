@@ -33,4 +33,6 @@ rate 0.514, the highest of any species, so grades spread: 20 % of graded km unde
 3,599 streams over 1.5 m wide under 0.03 m³/s; 5,167 km are gained, 4,634 of them order-1 streams under 1.5 m
 wide that carry the flow. Graded km 48,879 → 48,516. FDIS detection on the rule's segments is 32 % against 11 %
 on accessible segments outside it (`default`: 29 % against 13 %); the bcfishobs outside lift moves 1.75 → 1.82.
+Floodplain (10 catalog groups): 243,051 ha beside the rule's habitat against 272,429 under `default` (−11 %, more than
+the km's −5 %: the lost streams carry floodplain, the gained order-1 streams do not); graded ha 176,396 → 166,814.
 Maps: `research/fig/compare_co_rear_*.png`.

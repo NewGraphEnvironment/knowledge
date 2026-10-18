@@ -55,7 +55,10 @@ FDIS detection on the rule's segments is 21 % against 8 % on accessible segments
 against 6 %), and the bcfishobs outside lift moves 2.45 → 5.17, the largest rise of any rule. The spawning rule
 draws 99,786 km against 133,382 (−25.2 %): 56,284 km lost to the 0.75 m³/s floor and 22,688 gained, 21,917 of
 them through the river-within-2-km exception (15,699 order 1); graded km 66,216 → 43,559; lift 3.04 → 3.70. The
-spawning row is weak (above), so its change is a description of the rule, not a recommendation. Maps:
+spawning row is weak (above), so its change is a description of the rule, not a recommendation. Floodplain (22
+catalog groups): rearing 565,869 ha beside the rule's habitat against 746,145 under `default` (−24 %, against
+−37 % in km: the small streams the floor drops carry little floodplain), graded ha 278,349 → 215,614; spawning
+275,514 against 354,423 (−22 %), graded ha 163,055 → 115,833. Maps:
 `research/fig/compare_bt_{rear,spawn}_*.png`.
 
 ## What this replaces

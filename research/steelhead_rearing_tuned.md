@@ -27,4 +27,5 @@ accessible km, 154,855 are graded (44,545 grade-weighted km); 61 % of graded km 
 45,214 km against `default`'s 71,619 (−36.9 %): 26,731 km lost, 26,337 of them to the 1 m³/s floor, and 326
 gained. Graded km 28,717 → 25,571. FDIS detection on the rule's segments is 7.5 % against 0.6 % outside
 (`default`: 4.8 % against 0.7 %); the bcfishobs outside lift moves 2.20 → 4.09, the largest rise after BT
-rearing. Read with the row's 82 detections. Maps: `research/fig/compare_st_rear_*.png`.
+rearing. Floodplain (4 catalog groups): 74,933 ha beside the rule's habitat against 108,807 under `default`
+(−31 %); graded ha 44,775 → 41,791. Read with the row's 82 detections. Maps: `research/fig/compare_st_rear_*.png`.

@@ -33,7 +33,8 @@ and the cross-species table are `habitat_thresholds_tuned.md`. Regenerated on al
 24,843 km lost, 24,542 of them to the 0.75 m³/s floor, and 12,266 gained, 9,666 through the exception (6,952
 order 1) and 1,398 between the two gradient maxima. Graded km rises, 27,681 → 32,018, the only species where it
 does. FDIS detection on the rule's segments is 17 % against 1.5 % outside (`default`: 14 % against 2 %); the
-bcfishobs outside lift moves 2.46 → 3.27. The figures below are #54's, on the 55-group build; the province-wide
+bcfishobs outside lift moves 2.46 → 3.27. Floodplain (16 catalog groups): 341,298 ha beside the rule's habitat
+against 426,681 under `default` (−20 %, more than the km's −12 %), graded ha 146,059 → 147,442. The figures below are #54's, on the 55-group build; the province-wide
 maps are `research/fig/compare_ch_rear_*.png`.
 
 Every figure names its population. Three recur:

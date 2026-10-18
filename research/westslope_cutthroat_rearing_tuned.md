@@ -26,7 +26,9 @@ WCT hold, most accessible stream reads as near the top.
 16,243 km against `default`'s 20,749 (−21.7 %): 4,510 km lost, 4,332 of them to the 4 % gradient maximum, and
 4 km gained. Graded km 12,463 → 8,543. FDIS detection on the rule's segments is 35 % against 27 % outside
 (`default`: 35 % against 24 %): the segments the rule drops hold detections at nearly the rate it keeps, which is
-the underpowered row showing in the change. The bcfishobs outside lift moves 1.56 → 1.73. Maps:
+the underpowered row showing in the change. The bcfishobs outside lift moves 1.56 → 1.73. Floodplain (4 catalog
+groups): 117,691 ha beside the rule's habitat against 122,584 under `default` (−4 %, against −22 % in km); graded
+ha 47,027 → 43,010. Maps:
 `research/fig/compare_wct_rear_*.png`.
 
 **What link#322 asked.** A calibration scored on held-out groups needs groups where WCT are absent as well as
