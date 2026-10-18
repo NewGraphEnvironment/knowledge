@@ -81,10 +81,10 @@ phases below are that plan verbatim.
       article's data after a rerun
 
 ## Phase 5: Audit, check, PR
-- [ ] Row-by-row audit of the article's prose claims against the saved tables and the two research files
+- [x] Row-by-row audit of the article's prose claims against the saved tables and the two research files
 - [ ] `devtools::test()`, `devtools::check()` (installed-size NOTE read, not ignored), `lintr` on `R/`, the test
       and the data-raw script
-- [ ] `/code-check branch`
+- [x] `/code-check branch`
 - [ ] `/planning-archive`, `/gh-pr-push`; the PR's pkgdown run builds the article; after merge confirm the deploy
       provenance and that the article URL the research files cite answers 200
 

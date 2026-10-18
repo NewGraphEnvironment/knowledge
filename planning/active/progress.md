@@ -73,3 +73,10 @@
   its rows), so 1.7 -> 1.6, 2.6 -> 2.5, 42 % -> 43 %; distance always to a river of at least 3 m³/s; the
   floodplain cell's owner; lakes or reservoirs; the scoring population's edge types and quality checks;
   "held out of the fit" for "not seen"; the earlier tuning's group count no longer typed.
+- Code-check round 4 (`review-round4.md`): all 26 units round 3's fixes changed, 24 hold; the probability-ratio
+  conversion verified exact. Two low defects fixed: each edge set now named by its own types (the default
+  stream test and the outside check take 1000/1100/2000/2300; the FDIS check also takes wetland lines, the
+  reservoir bank and the double-line river lines), and the outside check's A/B match (within 100 m, confirmed
+  in bcfishobs' match-type labels). The three rewritten sentences checked against those definitions by hand.
+  Loop ended by enumeration: round 3 enumerated 161 article units and 23 research sentences; round 4 every unit
+  round 3's fixes changed; the last three rewrites against the code's set definitions.

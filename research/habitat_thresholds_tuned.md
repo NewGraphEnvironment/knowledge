@@ -149,7 +149,7 @@ km × grade (`data/compare/compare.csv`, `change.csv`, `checks.csv`).
 4. **Checks** (`checks.csv`). FDIS detection on each rule's segments against accessible segments outside it,
    `default` then tuned: RB 33 % against 15 %, then 35 % against 18 %; BT rearing 17 against 6, then 21 against
    8; CH 14 against 2, then 17 against 1.5; CO 29 against 13, then 32 against 11; ST 4.8 against 0.7, then 7.5
-   against 0.6; WCT 35 against 24, then 35 against 27. On the bcfishobs records FDIS does not hold (presence only,
+   against 0.6; WCT 35 against 24, then 35 against 27. On the bcfishobs records FDIS does not hold (A/B matches, presence only,
    never scored), the share of their locations on accessible stream edges that falls on the rule's segments, over the
    rule's share of accessible stream-edge km, rises under every tuned
    rule: RB 2.34 → 3.04, BT rearing 2.45 → 5.17, BT spawning 3.04 → 3.70, CH 2.46 → 3.27, CO 1.75 → 1.82,

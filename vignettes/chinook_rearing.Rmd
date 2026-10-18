@@ -82,7 +82,7 @@ The recommended rule, in one line: **`r words(rec)`**.
 link's `default` configuration marks a segment as chinook rearing habitat when the segment is
 accessible to chinook and one of four tests holds:
 
-- **stream**: a single-line stream or canal with a gradient of at most `r grad(dflt$grad_max)` and a channel
+- **stream**: a single-line stream or canal, not one drawn through a wetland, with a gradient of at most `r grad(dflt$grad_max)` and a channel
   width of at least `r dflt$size_min` m;
 - **river**: inside a river polygon, at the same gradient, with any width;
 - **wetland**: inside a wetland of at least 1 ha;
@@ -558,14 +558,16 @@ ob <- ck[ck$check == "bcfishobs_outside", ]
 
 - On the `r n0(sum(fv$n[fv$rule == "default"]))` FDIS visits in all `r nrow(per_group)` groups
   with a recorded catch or miss and a fished area of 10 to 10,000 m², on accessible single-line
-  streams, canals and the lines through double-line rivers, chinook were caught on
+  streams (through wetlands too), canals, reservoir banks and the lines through double-line
+  rivers, chinook were caught on
   `r pc(rate("tuned", "rearing"))` of visits on the recommended rule's segments and
   `r pc(rate("tuned", "accessible_not_rearing"), 1)` elsewhere; on `default`'s,
   `r pc(rate("default", "rearing"))` and `r pc(rate("default", "accessible_not_rearing"), 1)`.
   The tuning chose its rule on visits from this same record, so this shows the rule does what it
   was chosen to do, not that it is right.
 - Chinook records from other sources never scored a rule. Of the `r n0(ob$n[1])` places they were
-  recorded on accessible single-line streams and canals, spawning-only places and hand-entered
+  recorded close to a stream (within 100 m) on accessible single-line streams and canals not
+  drawn through a wetland, spawning-only places and hand-entered
   reaches left out, the share on the recommended rule's streams is
   `r n1(ob$lift[ob$rule == "tuned"])` times the rule's share of those streams' km, against
   `r n1(ob$lift[ob$rule == "default"])` for `default`. These
