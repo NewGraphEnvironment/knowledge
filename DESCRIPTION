@@ -16,6 +16,8 @@ License: MIT + file LICENSE
 URL: https://newgraphenvironment.github.io/knowledge/,
     https://github.com/NewGraphEnvironment/knowledge
 BugReports: https://github.com/NewGraphEnvironment/knowledge/issues
+Depends:
+    R (>= 4.1.0)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
