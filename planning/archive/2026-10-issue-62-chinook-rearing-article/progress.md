@@ -80,5 +80,8 @@
   in bcfishobs' match-type labels). The three rewritten sentences checked against those definitions by hand.
   Loop ended by enumeration: round 3 enumerated 161 article units and 23 research sentences; round 4 every unit
   round 3's fixes changed; the last three rewrites against the code's set definitions.
-- Final run on `0392ec7` (frozen worktree): `devtools::test()` 521 pass, 0 skipped; `devtools::check()` 0 errors,
+- Final run on `1cc5b5c` (frozen worktree): `devtools::test()` 521 pass, 0 skipped; `devtools::check()` 0 errors,
   0 warnings, 1 NOTE (pre-existing Rd example widths); the vignette rebuilds; the build adds no dependency.
+- Before the PR, a review file was found carrying a home path; the unpushed branch was rewritten to drop that one
+  line, which changed the SHAs from round 2's commit on. The review files' headers cite the old ones:
+  `4f1048b` is `d60d98c`, `c34813a` is `b39af1c`, `0392ec7` is `1cc5b5c`, `70b5647` is `b310c9c`.
