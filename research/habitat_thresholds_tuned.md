@@ -105,6 +105,49 @@ A width rule grades only measured streams: fwapg models width where `stream_orde
 every unmeasured first-order stream `NA` (RB: 6.26 M of 10.33 M segments). A MAD rule grades almost everything
 (BT: 33,988 segments with no flow even from a parent).
 
+## What each rule changes on link's segments
+
+`scripts/0330` regenerates `default` and the tuned rule through fresh's predicate, the user-habitat overlay and
+connectivity on scratch copies of every group the species' habitat table covers (`knw_compare_rules()`; the
+regenerated `default` equals fresh's own predicate on every segment), and reads the grade beside each segment.
+Kilometres are accessible stream under `streams_access`, flagged rearing or spawning by each rule; graded km is
+km × grade (`data/compare/compare.csv`, `change.csv`, `checks.csv`).
+
+| species × stage | accessible km | `default` km | tuned km | change | lost | gained | graded km, `default` → tuned |
+|---|---|---|---|---|---|---|---|
+| RB rearing | 509,975 | 227,089 | 183,988 | −19.0 % | 44,368 | 1,267 | 115,119 → 101,860 |
+| BT rearing | 576,908 | 248,927 | 156,141 | −37.3 % | 94,139 | 1,352 | 114,856 → 76,118 |
+| BT spawning | 576,908 | 133,382 | 99,786 | −25.2 % | 56,284 | 22,688 | 66,216 → 43,559 |
+| CH rearing | 225,152 | 101,184 | 88,607 | −12.4 % | 24,843 | 12,266 | 27,681 → 32,018 |
+| CO rearing | 147,795 | 81,629 | 77,612 | −4.9 % | 9,184 | 5,167 | 48,879 → 48,516 |
+| GR rearing | 258,576 | 77,740 | 77,740 | 0 | 0 | 0 | 46,831 → 46,831 |
+| ST rearing | 155,357 | 71,619 | 45,214 | −36.9 % | 26,731 | 326 | 28,717 → 25,571 |
+| WCT rearing | 35,285 | 20,749 | 16,243 | −21.7 % | 4,510 | 4 | 12,463 → 8,543 |
+
+1. **Every tuned rule but grayling's draws less than `default`**, from 5 % less for coho to 37 % less for bull
+   trout rearing and steelhead. The loss is the size floor: segments over 1.5 m wide that fail the tuned flow or
+   width floor with no exception (BT rearing 93,316 of its 94,139 km lost, RB all 44,368, ST 26,337 of 26,731,
+   CH 24,542 of 24,843). For coho and cutthroat it is the lower gradient maximum (5,059 and 4,332 km).
+2. **The gains are the exception and coho's floor.** BT spawning gains 21,917 km through its river-within-2-km
+   exception, 15,699 of them order-1 streams, and CH 9,666 km (6,952 order 1); coho's 0.03 m³/s floor admits
+   5,056 km of streams under 1.5 m wide (4,634 order 1). Connectivity and the overlay move under 1,000 km for
+   every species.
+3. **Graded km falls with km except for chinook**, whose tuned 88,607 km carry 32,018 graded km against
+   `default`'s 27,681 on 101,184: the rule trades small low-grade streams for the near-river exception.
+4. **Checks** (`checks.csv`). FDIS detection on each rule's segments against accessible segments outside it,
+   `default` then tuned: RB 33 % against 15 %, then 35 % against 18 %; BT rearing 17 against 6, then 21 against
+   8; CH 14 against 2, then 17 against 1.5; CO 29 against 13, then 32 against 11; ST 4.8 against 0.7, then 7.5
+   against 0.6; WCT 35 against 24, then 35 against 27. On the bcfishobs records FDIS does not hold (presence only,
+   never scored), the share on the rule's segments over the rule's share of accessible km rises under every tuned
+   rule: RB 2.34 → 3.04, BT rearing 2.45 → 5.17, BT spawning 3.04 → 3.70, CH 2.46 → 3.27, CO 1.75 → 1.82,
+   ST 2.20 → 4.09, WCT 1.56 → 1.73 (bootstrap intervals in the table). The tuned rules hold more of the
+   independent records per kilometre they draw, which is what the score rewards; it is not a claim about extent.
+
+**Maps.** `research/fig/compare_<sp>_<stage>_<wsg>.png` for every floodplain-catalog group the species covers and
+three groups per species chosen by criteria fixed before drawing (largest gained share, largest lost share, most
+`default` km): habitat by rule (kept, lost, gained), grade class, and the floodplain shaded by its segment's grade.
+`data/compare/maps/` holds the interactive pages (ignored).
+
 ## Limits
 
 - **Juveniles, electrofished, on the stream branch.** Spawning has a response for char only, and that one is weak.
@@ -118,5 +161,12 @@ every unmeasured first-order stream `NA` (RB: 6.26 M of 10.33 M segments). A MAD
   sums measured streams only.
 - **One link run.** Every grade carries `run_uid 20261017_004619-3f4c713b`; link recomputed UPET twice after the
   waiter released and before the build read, and the build's UPET visits place identically on the result.
-- **The access gate.** Grades are gated on `streams_access`; link's `accessible` disagrees on 1.6–3.5 % of
-  habitat-accessible segments for most species, 17 % for RB and 90 % for KO (link#349), ledgered per run.
+- **The access gate.** Grades and the comparison are gated on `streams_access`; link's `accessible` disagrees on
+  1.6–3.5 % of habitat-accessible segments for most species, 17 % for RB and 90 % for KO (link#349), ledgered per
+  run. For RB the disagreement is whole groups: in 23 of its 210 groups (BRID CANO CARP CLRH CRKD FINA FINL FIRE
+  FOXR INGR LEUT LOMI MAHD MESI MURT NATR OSPK PARA PARS PCEA TURN UEUT UOMI; 37,895 km of stored rearing) every
+  segment has `access_rb = 0`, so they carry no graded and no compared RB km; GR has three such groups (BULL ELKR
+  TURN) and BT one (TURN).
+- **Regenerated, not stored.** The comparison's `default` is fresh's predicate rerun, which differs from the flags
+  link stores by 45,970 km for RB, 2,659 for BT, 2,142 for GR and under 125 km for the rest (`compare.csv`,
+  `stored_vs_default_differ_km`); the stored flags are not what any rule here is compared with.

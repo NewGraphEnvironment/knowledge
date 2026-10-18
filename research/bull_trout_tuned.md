@@ -46,6 +46,18 @@ reference rate is 0.239, and the curve is nearly flat: 61 % of graded km falls i
 under 0.2. #33's conclusion stands: the within-group spawner-evidence rate does not fall with gradient in a
 way electrofishing can show, and redd surveys are the evidence spawning needs.
 
+## What each rule changes (`scripts/0330`, `data/compare/BT_*`)
+
+Regenerated on link's 158 BT groups, the rearing rule draws 156,141 km against `default`'s 248,927 (−37.3 %),
+the largest change of any species: 94,139 km lost, 93,316 of them streams over 1.5 m wide under 0.35 m³/s, and
+1,352 gained (1,085 of them order-1 streams under 1.5 m wide that carry the flow). Graded km 114,856 → 76,118.
+FDIS detection on the rule's segments is 21 % against 8 % on accessible segments outside it (`default`: 17 %
+against 6 %), and the bcfishobs outside lift moves 2.45 → 5.17, the largest rise of any rule. The spawning rule
+draws 99,786 km against 133,382 (−25.2 %): 56,284 km lost to the 0.75 m³/s floor and 22,688 gained, 21,917 of
+them through the river-within-2-km exception (15,699 order 1); graded km 66,216 → 43,559; lift 3.04 → 3.70. The
+spawning row is weak (above), so its change is a description of the rule, not a recommendation. Maps:
+`research/fig/compare_bt_{rear,spawn}_*.png`.
+
 ## What this replaces
 
 #28's candidate weight per gradient class (`data/habitat_weight_bt_rear.csv`) is superseded by the rearing grade:

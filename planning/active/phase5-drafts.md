@@ -47,9 +47,11 @@ rather than restating them.
 > `0320` tunes GR and RB rearing on wet's `pick` flow wherever the evidence admits it (`GR_rear`, `RB_rear`
 > in `data/thresholds.csv`). KO rears in lakes only under `default` (no stream rule), so its rearing row
 > says `no_stream_rule`; KO spawning has no electrofishing response. RB's access columns disagree in link
-> (NewGraphEnvironment/link#349: 17 % of habitat-accessible segments have `access_rb = 0`), and the build's
-> `access_check.csv` carries the cross-tabulation on every run; RB's grades are gated on `streams_access`
-> until link says which column is meant.
+> (NewGraphEnvironment/link#349: 17 % of habitat-accessible segments have `access_rb = 0`, and the
+> comparison shows it is whole groups: in 23 of RB's 210 groups every segment has `access_rb = 0`, 37,895 km
+> of stored rearing; GR has three such groups and BT one), and the build's `access_check.csv` carries the
+> cross-tabulation on every run; RB's grades are gated on `streams_access` until link says which column is
+> meant.
 >
 > ## To carry from link#343
 >

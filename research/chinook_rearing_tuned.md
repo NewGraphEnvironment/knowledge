@@ -28,8 +28,13 @@ every seed; nested selection 1,234 against `default`'s 1,347. **The size floor s
 question of #54), with 0.5 inside the region. The thresholds table carries it as `CH_rear_v1`
 (`data/thresholds.csv`); every CH segment of the 125 groups carries a grade (`knowledge/habitat_grade/v1`:
 856,244 accessible segments, 852,431 graded, reference rate 0.146, 76 % of graded km under 0.2). The method
-and the cross-species table are `habitat_thresholds_tuned.md`. The figures below are #54's, on the 55-group
-build.
+and the cross-species table are `habitat_thresholds_tuned.md`. Regenerated on all 125 CH groups
+(`scripts/0330`, `data/compare/CH_rear_*`), the rule draws 88,607 km against `default`'s 101,184 (−12.4 %):
+24,843 km lost, 24,542 of them to the 0.75 m³/s floor, and 12,266 gained, 9,666 through the exception (6,952
+order 1) and 1,398 between the two gradient maxima. Graded km rises, 27,681 → 32,018, the only species where it
+does. FDIS detection on the rule's segments is 17 % against 1.5 % outside (`default`: 14 % against 2 %); the
+bcfishobs outside lift moves 2.46 → 3.27. The figures below are #54's, on the 55-group build; the province-wide
+maps are `research/fig/compare_ch_rear_*.png`.
 
 Every figure names its population. Three recur:
 - **Tuning population.** FDIS electrofishing visits on link's CH stream branch, with no natural CH barrier downstream:

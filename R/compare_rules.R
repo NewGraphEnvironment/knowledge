@@ -102,9 +102,15 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
   p_tuned_base <- pred_of(ps_t)
   wb_parts <- c(
     if (br$river) "SELECT DISTINCT waterbody_key, 'R' AS t FROM whse_basemapping.fwa_rivers_poly",
-    if (!is.null(br$wetland_ha_min)) sprintf("SELECT DISTINCT waterbody_key, 'W' AS t FROM whse_basemapping.fwa_wetlands_poly WHERE area_ha >= %s", br$wetland_ha_min),
-    if (!is.null(br$lake_ha_min)) sprintf("SELECT DISTINCT waterbody_key, 'L' AS t FROM whse_basemapping.fwa_lakes_poly WHERE area_ha >= %1$s
-      UNION SELECT DISTINCT waterbody_key, 'M' AS t FROM whse_basemapping.fwa_manmade_waterbodies_poly WHERE area_ha >= %1$s", br$lake_ha_min),
+    if (!is.null(br$wetland_ha_min)) {
+      sprintf("SELECT DISTINCT waterbody_key, 'W' AS t FROM whse_basemapping.fwa_wetlands_poly WHERE area_ha >= %s",
+              br$wetland_ha_min)
+    },
+    if (!is.null(br$lake_ha_min)) {
+      sprintf("SELECT DISTINCT waterbody_key, 'L' AS t FROM whse_basemapping.fwa_lakes_poly WHERE area_ha >= %1$s
+               UNION SELECT DISTINCT waterbody_key, 'M' AS t FROM whse_basemapping.fwa_manmade_waterbodies_poly
+               WHERE area_ha >= %1$s", br$lake_ha_min)
+    },
     "SELECT NULL::integer AS waterbody_key, 'none' AS t WHERE FALSE")
   wb_sql <- paste("CREATE TEMPORARY TABLE IF NOT EXISTS tmp_knw_wb AS", paste(wb_parts, collapse = "\n    UNION "))
   sb <- if (br$no_waterbody) {
@@ -149,8 +155,8 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
     DBI::dbExecute(conn, sprintf("DROP TABLE IF EXISTS %s.streams", scratch))
     DBI::dbExecute(conn, sprintf("
       CREATE TABLE %1$s.streams AS
-      SELECT s.*, (h.accessible AND coalesce(a.access_%3$s > 0, FALSE)) AS accessible, h.accessible AS accessible_stored,
-             g.size AS knw_size, g.dist_m AS knw_dist
+      SELECT s.*, (h.accessible AND coalesce(a.access_%3$s > 0, FALSE)) AS accessible,
+             h.accessible AS accessible_stored, g.size AS knw_size, g.dist_m AS knw_dist
       FROM %2$s.streams s
       JOIN %2$s.streams_habitat_%3$s h
         ON h.id_segment = s.id_segment AND h.watershed_group_code = s.watershed_group_code
@@ -179,8 +185,8 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
         CREATE TABLE %1$s AS
         SELECT s.id_segment, s.watershed_group_code, '%2$s'::text AS species_code, s.accessible,
                s.accessible AND %3$s AS spawning, s.accessible AND %4$s AS rearing,
-               s.accessible AND coalesce(s.waterbody_key IN (SELECT waterbody_key FROM tmp_knw_wb WHERE t IN ('L', 'M')), FALSE)
-                 AS lake_rearing,
+               s.accessible AND coalesce(s.waterbody_key IN (SELECT waterbody_key FROM tmp_knw_wb WHERE t IN ('L','M')),
+                                         FALSE) AS lake_rearing,
                s.accessible AND coalesce(s.waterbody_key IN (SELECT waterbody_key FROM tmp_knw_wb WHERE t = 'W'), FALSE)
                  AS wetland_rearing,
                FALSE AS rearing_pre_connect, FALSE AS spawning_pre_connect
@@ -191,7 +197,8 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
         # link's user-habitat table carries spawning and rearing; the overlay takes the types it holds
         fresh::frs_habitat_overlay(conn, from = paste0(scratch, ".uhc"), to = h, bridge = paste0(scratch, ".streams"),
                                    species = sp, verbose = FALSE,
-                                   habitat_types = intersect(c("spawning", "rearing", "lake_rearing", "wetland_rearing"), names(uhc)))
+                                   habitat_types = intersect(names(uhc),
+                                                             c("spawning", "rearing", "lake_rearing", "wetland_rearing")))
       }
       run_conn(conn, table = paste0(scratch, ".streams"), habitat = h, species = sp, params = params,
                params_fresh = params_fresh, verbose = FALSE)
@@ -233,7 +240,6 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
   fd <- seg[[paste0(flag, "_default")]]
   ft <- seg[[paste0(flag, "_tuned")]]
   km <- function(x, len) sum(len[x %in% TRUE]) / 1000
-  gkm <- function(x) sum((seg$length_metre * ifelse(is.na(seg$grade), 0, seg$grade))[x %in% TRUE]) / 1000
   classes <- c("0-0.2", "0.2-0.4", "0.4-0.6", "0.6-0.8", "0.8-1")
   per_group <- function(idx, name) {
     fd_i <- fd[idx]
@@ -291,7 +297,8 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
     tibble::as_tibble(stats::aggregate(cbind(n_segments = 1, km = chg$length_metre / 1000),
                                        by = list(direction = direction, reason = reason, order = ord), FUN = sum))
   } else {
-    tibble::tibble(direction = character(), reason = character(), order = character(), n_segments = numeric(), km = numeric())
+    tibble::tibble(direction = character(), reason = character(), order = character(), n_segments = numeric(),
+                   km = numeric())
   }
   change$species_code <- sp
   change$stage <- stage
@@ -385,8 +392,8 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
       lift = c(lift("default"), lift("tuned"), lift("tuned") - lift("default")),
       lift_lo = c(q(bs[, "default"], 0.025), q(bs[, "tuned"], 0.025), q(bs[, "tuned"] - bs[, "default"], 0.025)),
       lift_hi = c(q(bs[, "default"], 0.975), q(bs[, "tuned"], 0.975), q(bs[, "tuned"] - bs[, "default"], 0.975)))
-    say("Outside check: %d non-FDIS %s records; %d locations placed (%d inside an overlay reach left out), %d on accessible stream edges.",
-        n0, sp, nrow(pl) + n_uhc, n_uhc, length(ls))
+    say(paste("Outside check: %d non-FDIS %s records; %d locations placed (%d inside an overlay reach left out),",
+              "%d on accessible stream edges."), n0, sp, nrow(pl) + n_uhc, n_uhc, length(ls))
   }
   DBI::dbExecute(conn, sprintf("DROP SCHEMA IF EXISTS %s CASCADE", scratch))
   list(compare = compare, change = change, checks = do.call(rbind, lapply(checks, function(x) {

@@ -27,3 +27,10 @@ surface; coho detection is high and flat across small streams, and the gradient 
 **Grade.** 4.92 M segments in 100 groups, 615,302 accessible, 607,483 graded (10,518 with no flow); reference
 rate 0.514, the highest of any species, so grades spread: 20 % of graded km under 0.2, 14 % at 0.8–1. Of
 147,962 accessible km, 146,612 are graded (66,893 grade-weighted km).
+
+**Comparison (`scripts/0330`, `data/compare/CO_rear_*`).** Regenerated on link's 100 CO groups, the rule draws
+77,612 km against `default`'s 81,629 (−4.9 %). 9,184 km are lost, 5,059 of them to the 4 % gradient maximum and
+3,599 streams over 1.5 m wide under 0.03 m³/s; 5,167 km are gained, 4,634 of them order-1 streams under 1.5 m
+wide that carry the flow. Graded km 48,879 → 48,516. FDIS detection on the rule's segments is 32 % against 11 %
+on accessible segments outside it (`default`: 29 % against 13 %); the bcfishobs outside lift moves 1.75 → 1.82.
+Maps: `research/fig/compare_co_rear_*.png`.

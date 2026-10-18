@@ -29,6 +29,16 @@ surface carries what a cut cannot.
 first-order stream is ungraded (`NA`, counted), and of 510,150 accessible km only 277,539 are graded (134,596
 grade-weighted km). Reference rate 0.411. Graded km spread evenly: 24 % under 0.2, 21 % at 0.8–1.
 
+**Comparison (`scripts/0330`, `data/compare/RB_rear_*`).** Regenerated on link's 210 RB groups, the rule draws
+183,988 km against `default`'s 227,089 (−19.0 %): 44,368 km lost, all of them streams between 1.5 and 3 m wide,
+and 1,267 gained between the two gradient maxima. Graded km 115,119 → 101,860. FDIS detection on the rule's
+segments is 35 % against 18 % outside (`default`: 33 % against 15 %); the bcfishobs outside lift moves
+2.34 → 3.04. The regenerated `default` differs from link's stored RB flags by 45,970 km, more than for any other
+species. Maps: `research/fig/compare_rb_rear_*.png`.
+
 **Access.** link's two access columns disagree most for RB (`access_check.csv`: 481,275 habitat-accessible
-segments with `access_rb = 0`, 147,445 of them rearing); the grade is gated on `streams_access` until link
-settles which is meant (NewGraphEnvironment/link#349).
+segments with `access_rb = 0`, 147,445 of them rearing), and the comparison shows the disagreement is whole
+groups: in 23 of the 210 (BRID CANO CARP CLRH CRKD FINA FINL FIRE FOXR INGR LEUT LOMI MAHD MESI MURT NATR OSPK
+PARA PARS PCEA TURN UEUT UOMI; 37,895 km of stored rearing) every segment has `access_rb = 0`, so they carry no
+grade and draw no map. The grade is gated on `streams_access` until link settles which column is meant
+(NewGraphEnvironment/link#349).

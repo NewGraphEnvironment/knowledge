@@ -107,15 +107,15 @@ Replaces #59. Decisions taken at the plan gate (2026-10-17) and the plan review'
       (count in the ledger); spawning and rearing regenerated together (connectivity reads spawning); km kept, lost,
       gained; graded km (km × grade); km by grade class; change by reason and order; `0298`'s bcfishobs outside
       check (lift with bootstrap) per species
-- [ ] Floodplain as a unit: for the 23 catalog groups, `floodplain.gpkg`'s `all_ff04` polygon rasterised on the
+- [x] Floodplain as a unit: for the 23 catalog groups, `floodplain.gpkg`'s `all_ff04` polygon rasterised on the
       item's `proj:transform` grid in its CRS (reproduces `floodplain_ff04_km2` within a cell's tolerance, checked),
       `all_ff04_by_blue_line_key` as the attributed layer (claims must cover exactly the raster's cells, checked),
       link segments cut from the FWA blue line at their measures and transformed; `fl_valley_join(nearest)` → ha
       beside each segment; graded ha = ha × grade; ha, graded ha and ha by grade class under each rule; the FWA
       version and the item's `link:config_sha256` recorded
-- [ ] Maps per group: kept / lost / gained; grade class; floodplain polygons shaded by their segment's grade; static
+- [x] Maps per group: kept / lost / gained; grade class; floodplain polygons shaded by their segment's grade; static
       through gq (`gq_reg_main()`), interactive through mapgl; `research/fig/`
-- [ ] `scripts/0330-compare.R` → `data/compare/*.csv`, maps; parallel per group on the run host; totals upstream of
+- [x] `scripts/0330-compare.R` → `data/compare/*.csv`, maps; parallel per group on the run host; totals upstream of
       a crossing left to link#321
 
 ## Phase 5: Take over link's calibration

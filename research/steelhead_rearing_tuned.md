@@ -22,3 +22,9 @@ prediction at the reference, so read it as a ranking, not a rate.
 
 **Grade.** 4.14 M segments in 79 groups, 720,768 accessible, 717,790 graded; reference rate 0.236. Of 155,481
 accessible km, 154,855 are graded (44,545 grade-weighted km); 61 % of graded km is under 0.2.
+
+**Comparison (`scripts/0330`, `data/compare/ST_rear_*`).** Regenerated on link's 79 ST groups, the rule draws
+45,214 km against `default`'s 71,619 (−36.9 %): 26,731 km lost, 26,337 of them to the 1 m³/s floor, and 326
+gained. Graded km 28,717 → 25,571. FDIS detection on the rule's segments is 7.5 % against 0.6 % outside
+(`default`: 4.8 % against 0.7 %); the bcfishobs outside lift moves 2.20 → 4.09, the largest rise after BT
+rearing. Read with the row's 82 detections. Maps: `research/fig/compare_st_rear_*.png`.

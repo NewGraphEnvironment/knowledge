@@ -125,7 +125,8 @@ knw_tune_run <- function(visits, species_tbl, walks, thresholds, species = knw_s
       pick <- sc$rules[sc$rules$recommended, , drop = FALSE]
       cv <- tryCatch(knw_tune_curve(d, pick, wi, sc$folds, resp = resp, src = src),
                      error = function(e) structure(list(message = conditionMessage(e)), class = "knw_curve_failed"))
-      rec$status <- if (inherits(cv, "knw_curve_failed")) "curve_failed" else if (n_both < power_wsg) "underpowered" else "fitted"
+      rec$status <- if (inherits(cv, "knw_curve_failed")) "curve_failed" else
+        if (n_both < power_wsg) "underpowered" else "fitted"
       rec$score <- sc
       rec$pick <- pick
       rec$curve <- if (inherits(cv, "knw_curve_failed")) NULL else cv

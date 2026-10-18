@@ -83,7 +83,9 @@ knw_publish <- function(tables, dir_out, id, note, provenance = list(), supersed
         arrow::write_parquet(part, dst, compression = "zstd")
         # the same column-by-column check the flat tables get, on this part against the CSV rows it holds
         bad <- .knw_values_differ_df(raw[sel, , drop = FALSE], as.data.frame(arrow::read_parquet(dst)))
-        if (length(bad)) stop(tb, " (", rel, "): Parquet values differ from the CSV in ", paste(bad, collapse = ", "), call. = FALSE)
+        if (length(bad)) {
+          stop(tb, " (", rel, "): Parquet values differ from the CSV in ", paste(bad, collapse = ", "), call. = FALSE)
+        }
         parts[[j]] <- list(path = rel, rows = part$num_rows, bytes = file.size(dst), sha256 = .knw_sha256(dst),
                            keys = as.list(keys[j, , drop = FALSE]))
       }

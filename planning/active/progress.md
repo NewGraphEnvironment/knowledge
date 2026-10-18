@@ -37,3 +37,17 @@
 - research: `habitat_thresholds_tuned.md` and one file per species; CH, BT files point at them
 - `0330` in flight (compare + floodplain + maps)
 - Next: `0330` results into the research files; lint/code-check branch; planning-archive; PR
+
+## Session 2026-10-17 (comparison)
+
+- `0330` ran 306 min (parallel compare 7 min on 6 workers after the segment-table fix; floodplain and maps serial
+  ~3 h): `data/compare/compare.csv`, `change.csv`, `checks.csv`, per-species tables; 123 maps. Two defects it
+  showed: a zero-accessible group broke the map (fixed, `247448c`), and the floodplain download helper kept a
+  0-byte file from a timeout during an internet outage (KISP, KOTL), failing every later species' floodplain for
+  those groups; the helper fixed and `STAGE=maps` added so the stage re-runs from the saved tables (`fa311e5`)
+- `STAGE=maps` re-run launched 2026-10-18 03:57Z for the 7 missing floodplain rows and the legend-label fix on
+  every map
+- research: the comparison section in `habitat_thresholds_tuned.md` (km table, change by reason, checks, maps,
+  the RB access-gate groups and the regenerated-vs-stored limit) and a comparison paragraph in each species file
+- Next: floodplain numbers into the research files after the re-run; commit figures and logs; one code-check
+  round on the delta since `12933fc`; lint; `/planning-archive`; PR

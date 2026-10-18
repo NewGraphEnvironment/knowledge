@@ -22,6 +22,13 @@ groups, 167,459 accessible, 111,698 graded (683,918 with no width); reference ra
 km, 25,932 are graded (16,871 grade-weighted km), and 47 % of graded km is in the 0.8–1 class: in the groups
 WCT hold, most accessible stream reads as near the top.
 
+**Comparison (`scripts/0330`, `data/compare/WCT_rear_*`).** Regenerated on link's 16 WCT groups, the rule draws
+16,243 km against `default`'s 20,749 (−21.7 %): 4,510 km lost, 4,332 of them to the 4 % gradient maximum, and
+4 km gained. Graded km 12,463 → 8,543. FDIS detection on the rule's segments is 35 % against 27 % outside
+(`default`: 35 % against 24 %): the segments the rule drops hold detections at nearly the rate it keeps, which is
+the underpowered row showing in the change. The bcfishobs outside lift moves 1.56 → 1.73. Maps:
+`research/fig/compare_wct_rear_*.png`.
+
 **What link#322 asked.** A calibration scored on held-out groups needs groups where WCT are absent as well as
 present; with six such groups the evidence here cannot carry it, and link#322's design (its held-out groups
 and ladders) is what the transfer issue should bring, not a number from this row.
