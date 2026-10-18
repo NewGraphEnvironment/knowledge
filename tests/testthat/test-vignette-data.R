@@ -7,7 +7,7 @@
 vd <- function(f) system.file("vignette-data", f, package = "knowledge")
 
 test_that("the article's data ships with the package", {
-  for (f in c("chinook_rearing.rds", "bulk_segments.rds", "bulk_water.rds", "bulk_fp_grade.tif")) {
+  for (f in c("chinook_rearing.rds", "bulk_segments.rds", "bulk_water.rds")) {
     expect_true(nzchar(vd(f)), info = f)
   }
 })
@@ -27,10 +27,10 @@ test_that("every source the article's tables came from is unchanged since they w
   }
 })
 
-test_that("the CH rearing rows of the tables that hold every species are unchanged since they were saved", {
+test_that("the CH rearing rows of the table that holds every species are unchanged since they were saved", {
   skip_if_not(has_src, "no source-tree data/ (installed package)")
   x <- readRDS(vd("chinook_rearing.rds"))
-  expect_length(x$meta$md5_rows, 2)
+  expect_length(x$meta$md5_rows, 1)
   for (f in names(x$meta$md5_rows)) {
     expect_identical(.knw_rows_md5(file.path(root, f), "CH", "rear"), unname(x$meta$md5_rows[[f]]),
                      info = paste(f, "CH rearing rows changed: rerun Rscript data-raw/vignette_chinook.R"))
@@ -56,15 +56,4 @@ test_that("the map's segments carry the comparison's km for their group", {
   expect_equal(km("flag_default"), row$default_km, tolerance = 1e-9)
   expect_equal(km("flag_tuned"), row$tuned_km, tolerance = 1e-9)
   expect_equal(sum(seg$length_metre) / 1000, row$accessible_km, tolerance = 1e-9)
-})
-
-test_that("the floodplain raster's graded cells are the group's graded accessible floodplain", {
-  skip_if_not_installed("terra")
-  x <- readRDS(vd("chinook_rearing.rds"))
-  r <- terra::rast(vd("bulk_fp_grade.tif"))
-  v <- terra::values(r, mat = FALSE)
-  expect_true(all(v[!is.na(v)] >= 0 & v[!is.na(v)] <= 100))
-  fp <- x$floodplain[x$floodplain$watershed_group_code == x$meta$map_group & x$floodplain$rule == "accessible", ]
-  expect_equal(nrow(fp), 1)
-  expect_lt(abs(sum(!is.na(v)) * 0.09 - (fp$ha - fp$ha_grade_na)), 1)
 })

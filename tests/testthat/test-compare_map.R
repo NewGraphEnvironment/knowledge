@@ -41,3 +41,30 @@ test_that("knw_compare_map stacks the panels when ncol is 1", {
   expect_equal(dt[1:2], c(9.2, 4) * 150)
   expect_error(knw_compare_map(seg, NULL, "a group", png = tall, ncol = 0))
 })
+
+test_that("knw_compare_map draws only the panels asked for, with a window outlined", {
+  skip_if_not_installed("tmap")
+  skip_if_not_installed("png")
+  seg <- sf::st_sf(
+    accessible = rep(TRUE, 2), stream_order = 1:2, grade_class = c("0-0.2", "0.8-1"),
+    flag_default = c(TRUE, FALSE), flag_tuned = c(TRUE, TRUE),
+    geometry = sf::st_sfc(lapply(0:1, function(i) sf::st_linestring(rbind(c(i, 0), c(i + 1, 1)))), crs = 3005))
+  box <- sf::st_sf(geometry = sf::st_as_sfc(sf::st_bbox(c(xmin = 0.2, ymin = 0.2, xmax = 0.8, ymax = 0.8), crs = 3005)))
+  one <- tempfile(fileext = ".png")
+  knw_compare_map(seg, NULL, "a group", png = one, panels = "rules", mark = box)
+  expect_equal(dim(png::readPNG(one))[1:2], c(4.6, 4) * 150)
+  expect_error(knw_compare_map(seg, NULL, "a group", png = one, panels = "floodplain"), "needs fp_cells")
+  expect_error(knw_compare_map(seg, NULL, "a group", png = one, panels = "rivers"))
+  thin <- tempfile(fileext = ".png")
+  thick <- tempfile(fileext = ".png")
+  knw_compare_map(seg, NULL, "a group", png = thin, panels = "rules", legend = FALSE)
+  knw_compare_map(seg, NULL, "a group", png = thick, panels = "rules", lwd = 3, legend = FALSE)
+  # thicker lines cover more of the panel: count the pixels that are not white
+  inked <- function(f) {
+    img <- png::readPNG(f)
+    sum(img[, , 1] + img[, , 2] + img[, , 3] < 2.9)
+  }
+  expect_gt(inked(thick), 1.5 * inked(thin))
+  bare <- thick
+  expect_error(knw_compare_map(seg, NULL, "a group", png = bare, lwd = 0))
+})

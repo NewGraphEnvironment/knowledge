@@ -85,3 +85,24 @@
 - Before the PR, a review file was found carrying a home path; the unpushed branch was rewritten to drop that one
   line, which changed the SHAs from round 2's commit on. The review files' headers cite the old ones:
   `4f1048b` is `d60d98c`, `c34813a` is `b39af1c`, `0392ec7` is `1cc5b5c`, `70b5647` is `b310c9c`.
+
+## Session 2026-10-18 (draft 2, after Al's review of draft 1)
+
+Al's review asked for: packages named in code font, linked, introduced as R packages and cited; the context first
+(what `link` and `default` are, `bcfishpass`'s part); plain explanations of folds, seeds and watershed groups at
+first use; the per-fold table explained or dropped; "region" defined before use; a zoomed map; the floodplain
+introduced or dropped; a shorter article with fewer, better-labelled tables; drafts kept in git.
+- Draft 1 is `741facc`. Draft 2 rewrites the article in that order; drops the per-fold table, the seeds table, the
+  grade-by-class table, the change-by-reason table (folded into one km table), the floodplain table and panel, and
+  the curve figure (the flow-by-distance table carries it); adds a 12 km zoom chosen by a stated criterion.
+- Floodplain dropped from the article: for chinook it moves with the km on the same groups (-20 % against
+  -18.8 %), it needs its own introduction, and it rests on the provisional grade (#65). It stays in
+  `research/habitat_thresholds_tuned.md`. The data script no longer builds the raster (`inst/vignette-data/`
+  1.06 MB).
+- `knw_compare_map()` gains `panels`, `mark`, `lwd` and `legend`. A first try at `lwd` multiplied the data and
+  changed nothing, because tmap rescales a data-driven width; it now sets the scale's `values.scale`, and a test
+  that counts inked pixels fails on the first try and passes on the fix.
+- Convention filed as soul#466 (name, link and cite software); the DOI half waits on soul#40. No package has a
+  DOI; the article prints `citation("knowledge")`.
+- Found: the knowledge site answers 404. GitHub Pages is not enabled and the repo is private, so the `gh-pages`
+  deploys serve nothing; the article URL the research files cite is dead until that changes (Al's decision).
