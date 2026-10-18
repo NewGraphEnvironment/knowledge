@@ -1,5 +1,48 @@
 # Changelog
 
+## knowledge 0.4.3
+
+- One evidence build, one tuning run and one comparison across species
+  and life stages, as package functions on link’s province-wide
+  `default` run
+  ([\#57](https://github.com/NewGraphEnvironment/knowledge/issues/57)):
+  `knw_fdis_visits()`,
+  [`knw_link_place()`](https://newgraphenvironment.github.io/knowledge/reference/knw_link_place.md),
+  [`knw_link_flow()`](https://newgraphenvironment.github.io/knowledge/reference/knw_link_flow.md),
+  [`knw_link_width()`](https://newgraphenvironment.github.io/knowledge/reference/knw_link_width.md),
+  [`knw_link_walks()`](https://newgraphenvironment.github.io/knowledge/reference/knw_link_walks.md),
+  [`knw_link_barrier_dnstr()`](https://newgraphenvironment.github.io/knowledge/reference/knw_link_barrier_dnstr.md),
+  [`knw_bcfishobs_match()`](https://newgraphenvironment.github.io/knowledge/reference/knw_bcfishobs_match.md)
+  and
+  [`knw_link_access_check()`](https://newgraphenvironment.github.io/knowledge/reference/knw_link_access_check.md)
+  build the evidence;
+  [`knw_tune_grid()`](https://newgraphenvironment.github.io/knowledge/reference/knw_tune_grid.md),
+  [`knw_tune_score()`](https://newgraphenvironment.github.io/knowledge/reference/knw_tune_score.md),
+  [`knw_tune_curve()`](https://newgraphenvironment.github.io/knowledge/reference/knw_tune_curve.md),
+  [`knw_grade()`](https://newgraphenvironment.github.io/knowledge/reference/knw_grade.md)
+  and
+  [`knw_tune_run()`](https://newgraphenvironment.github.io/knowledge/reference/knw_tune_run.md)
+  score every rule of each species and stage on held-out watershed
+  groups, pick, fit the joint curve and grade every segment;
+  [`knw_thresholds_table()`](https://newgraphenvironment.github.io/knowledge/reference/knw_thresholds_table.md)
+  and
+  [`knw_publish()`](https://newgraphenvironment.github.io/knowledge/reference/knw_publish.md)
+  write the thresholds and grade tables;
+  [`knw_compare_rules()`](https://newgraphenvironment.github.io/knowledge/reference/knw_compare_rules.md),
+  [`knw_floodplain_ha()`](https://newgraphenvironment.github.io/knowledge/reference/knw_floodplain_ha.md)
+  and
+  [`knw_compare_map()`](https://newgraphenvironment.github.io/knowledge/reference/knw_compare_map.md)
+  show what a rule changes on link’s segments (km, graded km, floodplain
+  hectares, maps). Scripts `0300`–`0330` run them.
+- Eight species × stage fit. `default` is outside the one-SE region for
+  every species but grayling; chinook’s size floor settles at 0.75 m³/s;
+  bull trout spawning fits but is weak. `data/thresholds.csv` and
+  `data/thresholds_groups.csv` carry the result in link’s parameter
+  names; `0290`, `0294` and `0296` write their tables from the new
+  build, and `0291`–`0298` read the published v2 visit tables
+  (`0299 PULL=TRUE VERSION=v2`). Results:
+  `research/habitat_thresholds_tuned.md` and one file per species.
+
 ## knowledge 0.4.2
 
 - The README points at the published FDIS visit tables’ second release,
