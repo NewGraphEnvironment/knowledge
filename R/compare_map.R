@@ -34,6 +34,9 @@
 #'   zoomed window where stream-order widths read too thin.
 #' @param legend `logical(1)` draw the static panels' legends; `FALSE` for a
 #'   zoomed panel beside an overview that carries them.
+#' @param labels `NULL`, or an `sf` of points with a `label` column, drawn as
+#'   numbered markers on every static panel (examples a table beside the map
+#'   describes).
 #' @return Invisibly, the paths written.
 #' @export
 #' @examples
@@ -43,7 +46,7 @@
 #' }
 knw_compare_map <- function(segments, water = NULL, title = "", png = NULL, html = NULL, fp_cells = NULL,
                             ncol = NULL, panels = c("rules", "grade", "floodplain"), mark = NULL, lwd = 1,
-                            legend = TRUE) {
+                            legend = TRUE, labels = NULL) {
   chk::chk_s3_class(segments, "sf")
   chk::check_names(segments, c("accessible", "stream_order", "grade_class", "flag_default", "flag_tuned"))
   if (!is.null(ncol)) chk::chk_whole_number(ncol)
@@ -55,6 +58,10 @@ knw_compare_map <- function(segments, water = NULL, title = "", png = NULL, html
   chk::chk_number(lwd)
   chk::chk_gt(lwd, 0)
   chk::chk_flag(legend)
+  if (!is.null(labels)) {
+    chk::chk_s3_class(labels, "sf")
+    chk::check_names(labels, "label")
+  }
   if (!requireNamespace("tmap", quietly = TRUE)) stop("tmap is needed", call. = FALSE)
   sf::sf_use_s2(FALSE)
   seg <- segments[segments$accessible %in% TRUE, ]
@@ -96,6 +103,11 @@ knw_compare_map <- function(segments, water = NULL, title = "", png = NULL, html
     tmap::tmap_mode("plot")
     lay <- tmap::tm_layout(frame = FALSE, inner.margins = 0, legend.position = tmap::tm_pos_in("left", "bottom"))
     outline <- if (is.null(mark)) NULL else tmap::tm_shape(mark) + tmap::tm_borders(col = "black", lwd = 1.5)
+    if (!is.null(labels)) {
+      marks <- tmap::tm_shape(labels) + tmap::tm_symbols(size = 1.1, fill = "white", col = "black", lwd = 1.2) +
+        tmap::tm_text(text = "label", size = 0.8, fontface = "bold")
+      outline <- if (is.null(outline)) marks else outline + marks
+    }
     drawn <- list()
     if ("rules" %in% panels) {
       drawn$rules <- base() + tmap::tm_shape(seg) +

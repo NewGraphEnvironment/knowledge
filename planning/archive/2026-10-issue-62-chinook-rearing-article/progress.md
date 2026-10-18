@@ -126,3 +126,15 @@ introduced or dropped; a shorter article with fewer, better-labelled tables; dra
   ended by that enumeration plus a check of each rewritten unit against its definition.
 - Draft 2 is about 2,270 words of article text with tables, against about 3,000 for draft 1; five tables became
   two plus one merged km table, and three figures became two.
+
+## Session 2026-10-18 (labelled examples, after Al asked for segment-level examples)
+
+Discussed a schematic, labelled real examples, or both, and whether segment-level figures belong in link's
+article (link#346). Al chose labelled real examples here, for the reader and for us.
+- The data script saves what the rules read with the map's segments (edge type, link's gradient and channel
+  width, wet's MAD, the walk distance); `inst/vignette-data/` 1.20 MB.
+- The zoom labels one segment per case found in the window (kept by both; lost below the flow floor with no
+  river close; gained through the exception), the one with the most length inside the window, with a table of
+  what each rule reads and decides. The gradient case (5.49-9 %) has no segment in the window (64 in the
+  Bulkley); the text gives its province-wide 1,398 km.
+- `knw_compare_map()` gains `labels` (numbered markers); its test fails with the markers removed.

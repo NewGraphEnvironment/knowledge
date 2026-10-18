@@ -338,18 +338,66 @@ box <- sf::st_sf(geometry = sf::st_as_sfc(sf::st_bbox(c(xmin = best$x0, ymin = b
                                                         ymax = best$y0 + w), crs = 3005)))
 seg_z <- suppressWarnings(sf::st_crop(seg, box))
 water_z <- suppressWarnings(sf::st_crop(water, box))
+
+# one example per case inside the window: the segment meeting the case's conditions with the most length
+# inside the window
+in_w <- seg[seg$id_segment %in% seg_z$id_segment, ]
+in_w$len_in <- as.numeric(sf::st_length(seg_z[match(in_w$id_segment, seg_z$id_segment), ]))
+cases <- list(
+  "Kept by both" = with(in_w, flag_default & flag_tuned & mad >= rec$size_min & channel_width >= dflt$size_min &
+                          gradient <= dflt$grad_max),
+  "Lost: below the flow floor, no river close" = with(in_w, flag_default & !flag_tuned & mad < rec$size_min &
+                                                          (is.na(dist_m) | dist_m > rec$exc_d)),
+  "Gained: small stream near a river" = with(in_w, !flag_default & flag_tuned & mad < rec$size_min &
+                                                 !is.na(dist_m) & dist_m <= rec$exc_d))
+ex <- do.call(rbind, lapply(names(cases), function(k) {
+  i <- which(cases[[k]] %in% TRUE)
+  if (!length(i)) return(NULL)
+  r <- in_w[i[which.max(in_w$len_in[i])], ]
+  r$case <- k
+  r
+}))
+ex$label <- as.character(seq_len(nrow(ex)))
+# marker on the part of each segment inside the window, so a segment crossing its edge is still marked
+ex_in <- seg_z[match(ex$id_segment, seg_z$id_segment), ]
+ex_pts <- sf::st_sf(label = ex$label, geometry = suppressWarnings(sf::st_point_on_surface(sf::st_geometry(ex_in))))
 ```
 
-```{r map, fig.width = 8, fig.height = 4.6, out.width = "100%", fig.cap = paste0("Chinook rearing in the Bulkley (", meta$map_group, ") under each rule: kept by both, lost (default only) and gained (the legend's 'tuned only', meaning the recommended rule only). Left, the whole group with the window outlined; right, the ", w / 1000, " km window. Line width follows stream order.")}
+```{r map, fig.width = 8, fig.height = 4.6, out.width = "100%", fig.cap = paste0("Chinook rearing in the Bulkley (", meta$map_group, ") under each rule: kept by both, lost (default only) and gained (the legend's 'tuned only', meaning the recommended rule only). Left, the whole group with the window outlined; right, the ", w / 1000, " km window, with the numbered examples the table below describes. Line width follows stream order.")}
 f1 <- tempfile(fileext = ".png")
 f2 <- tempfile(fileext = ".png")
 knw_compare_map(seg, water, png = f1, panels = "rules", mark = box)
-knw_compare_map(seg_z, water_z, png = f2, panels = "rules", lwd = 2.5, legend = FALSE)
+knw_compare_map(seg_z, water_z, png = f2, panels = "rules", lwd = 2.5, legend = FALSE, labels = ex_pts)
 grid::grid.newpage()
 grid::pushViewport(grid::viewport(layout = grid::grid.layout(1, 2)))
 grid::grid.raster(png::readPNG(f1), vp = grid::viewport(layout.pos.row = 1, layout.pos.col = 1))
 grid::grid.raster(png::readPNG(f2), vp = grid::viewport(layout.pos.row = 1, layout.pos.col = 2))
 ```
+
+```{r examples}
+f_num <- function(v, d) ifelse(is.na(v), NA, formatC(v, format = "fg", digits = d))
+yes_no <- function(v) ifelse(v, "habitat", "not habitat")
+ex_t <- tibble(
+  `#` = ex$label,
+  Case = ex$case,
+  `Flow (m³/s)` = f_num(ex$mad, 2),
+  `Channel width (m)` = ifelse(is.na(ex$channel_width), "none modelled", f_num(ex$channel_width, 2)),
+  Gradient = grad(round(ex$gradient, 4)),
+  `To a river of 3 m³/s` = vapply(ex$dist_m, function(d) if (is.na(d)) "not needed" else km_d(signif(d, 2)), ""),
+  default = yes_no(ex$flag_default),
+  Recommended = yes_no(ex$flag_tuned))
+knitr::kable(ex_t, align = "llrrrrll",
+             caption = paste0("The numbered segments on the map: what each rule reads and what each decides. ",
+                              "default needs a channel at least ", dflt$size_min, " m wide and a gradient of at most ",
+                              grad(dflt$grad_max), "; the recommended rule needs a gradient of at most ",
+                              grad(rec$grad_max), " and a flow of at least ", rec$size_min, " m³/s, or a river within ",
+                              km_d(rec$exc_d), ". Distance is measured only where the exception could apply."))
+gain_grad <- ch$km_all[ch$direction == "gained" & grepl("^gradient", ch$reason)]
+```
+
+A fourth case, a stream between `r grad(dflt$grad_max)` and `r grad(rec$grad_max)` steep that only the
+new gradient maximum admits, does not occur in this window; across the province it adds
+`r n0(gain_grad)` km.
 
 Orange is mostly the upper reaches of tributaries: flow grows downstream, so a tributary keeps its
 lower reach and loses the part where its flow falls below the floor more than `r km_d(rec$exc_d)`

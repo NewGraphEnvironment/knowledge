@@ -15,7 +15,8 @@ knw_compare_map(
   panels = c("rules", "grade", "floodplain"),
   mark = NULL,
   lwd = 1,
-  legend = TRUE
+  legend = TRUE,
+  labels = NULL
 )
 }
 \arguments{
@@ -51,6 +52,10 @@ zoomed window where stream-order widths read too thin.}
 
 \item{legend}{\code{logical(1)} draw the static panels' legends; \code{FALSE} for a
 zoomed panel beside an overview that carries them.}
+
+\item{labels}{\code{NULL}, or an \code{sf} of points with a \code{label} column, drawn as
+numbered markers on every static panel (examples a table beside the map
+describes).}
 }
 \value{
 Invisibly, the paths written.

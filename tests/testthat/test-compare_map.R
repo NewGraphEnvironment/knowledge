@@ -76,3 +76,24 @@ test_that("knw_compare_map draws only the panels asked for, with a window outlin
   bare <- thick
   expect_error(knw_compare_map(seg, NULL, "a group", png = bare, lwd = 0))
 })
+
+test_that("knw_compare_map draws numbered markers where labels are given", {
+  skip_if_not_installed("tmap")
+  skip_if_not_installed("png")
+  seg <- sf::st_sf(
+    accessible = rep(TRUE, 2), stream_order = 1:2, grade_class = c("0-0.2", "0.8-1"),
+    flag_default = c(TRUE, FALSE), flag_tuned = c(TRUE, TRUE),
+    geometry = sf::st_sfc(lapply(0:1, function(i) sf::st_linestring(rbind(c(i, 0), c(i + 1, 1)))), crs = 3005))
+  pts <- sf::st_sf(label = c("1", "2"), geometry = sf::st_sfc(sf::st_point(c(0.5, 0.5)), sf::st_point(c(1.5, 0.5)),
+                                                             crs = 3005))
+  with_l <- tempfile(fileext = ".png")
+  without <- tempfile(fileext = ".png")
+  knw_compare_map(seg, NULL, "g", png = with_l, panels = "rules", labels = pts)
+  knw_compare_map(seg, NULL, "g", png = without, panels = "rules")
+  a <- png::readPNG(with_l)
+  b <- png::readPNG(without)
+  changed <- mean(apply(abs(a[, , 1:3] - b[, , 1:3]), c(1, 2), max) > 0.1)
+  expect_gt(changed, 0)
+  expect_lt(changed, 0.05)
+  expect_error(knw_compare_map(seg, NULL, "g", png = with_l, labels = sf::st_sf(geometry = sf::st_geometry(pts))))
+})
