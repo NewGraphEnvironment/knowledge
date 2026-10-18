@@ -138,3 +138,9 @@ article (link#346). Al chose labelled real examples here, for the reader and for
   what each rule reads and decides. The gradient case (5.49-9 %) has no segment in the window (64 in the
   Bulkley); the text gives its province-wide 1,398 km.
 - `knw_compare_map()` gains `labels` (numbered markers); its test fails with the markers removed.
+- Examples review round 1 (`review-examples-round1.md`): the three printed examples hold; four latent defects
+  fixed. Case filters now require the stream test's edges and a verdict the connectivity pass and hand-entered
+  reaches did not change (the data carries each rule's pre-connectivity flag); the "fourth case" sentence now
+  names both smaller gains (1,398 km by gradient, 439 km where flow passes and width fails) and claims nothing
+  about the window; the distance header says downstream and "at least"; a missing distance reads "not needed"
+  only where the flow passes, else "no river found". The same three segments are picked.

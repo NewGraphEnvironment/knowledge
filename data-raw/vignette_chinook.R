@@ -18,7 +18,8 @@
 #     simplified at 10 m (a 4 in panel at 150 dpi is about 250 m a pixel at the group's extent, and the
 #     zoomed window is 12 km); lengths stay the segments' own. Each segment also carries what the two rules
 #     read (edge type, link's segment gradient and channel width, wet's MAD and the walk distance to the
-#     pick's river, measured only where the exception could admit the segment), for the labelled examples. The floodplain is not in the article (#62's
+#     pick's river, measured only where the exception could admit the segment) and each rule's flag before the
+#     connectivity pass, for the labelled examples. The floodplain is not in the article (#62's
 #     second draft); it is in research/habitat_thresholds_tuned.md.
 #
 # INPUT:  data/tune/CH_rear_{tune,summary,curves,groups}.csv, data/tune/CH_rear_{seeds,honest}.csv or
@@ -173,7 +174,8 @@ DBI::dbDisconnect(conn)
 # as 0330 builds `sg`
 sg <- geom |> inner_join(s |> transmute(id_segment, blue_line_key, accessible, stream_order, grade, grade_class,
                                         length_metre, flag_default = rearing_default, flag_tuned = rearing_tuned,
-                                        edge_type, gradient, channel_width, mad = knw_size, dist_m = knw_dist),
+                                        edge_type, gradient, channel_width, mad = knw_size, dist_m = knw_dist,
+                                        pre_default = rearing_pre_default, pre_tuned = rearing_pre_tuned),
                          by = "id_segment")
 if (nrow(sg) != nrow(s)) stop(nrow(s) - nrow(sg), " saved segments have no geometry in fresh_default.streams")
 
@@ -185,7 +187,7 @@ out$meta$md5_local <- tools::md5sum(unname(src_local)) |> stats::setNames(unname
 seg_out <- sg |>
   filter(accessible %in% TRUE) |>
   select(id_segment, blue_line_key, stream_order, accessible, grade, grade_class, flag_default, flag_tuned, length_metre,
-         edge_type, gradient, channel_width, mad, dist_m) |>
+         edge_type, gradient, channel_width, mad, dist_m, pre_default, pre_tuned) |>
   sf::st_simplify(preserveTopology = TRUE, dTolerance = 10)
 cmp_w <- out$compare |> filter(watershed_group_code == wsg)
 km <- function(f) sum(seg_out$length_metre[seg_out[[f]] %in% TRUE]) / 1000

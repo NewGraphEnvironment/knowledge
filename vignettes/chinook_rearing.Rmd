@@ -340,9 +340,11 @@ seg_z <- suppressWarnings(sf::st_crop(seg, box))
 water_z <- suppressWarnings(sf::st_crop(water, box))
 
 # one example per case inside the window: the segment meeting the case's conditions with the most length
-# inside the window
+# inside the window, on the stream test's own edges, and with neither rule's verdict changed by the hand-entered
+# reaches or the connectivity pass, so its row in the table explains both verdicts
 in_w <- seg[seg$id_segment %in% seg_z$id_segment, ]
 in_w$len_in <- as.numeric(sf::st_length(seg_z[match(in_w$id_segment, seg_z$id_segment), ]))
+in_w <- in_w[in_w$edge_type %in% c(1000, 1100, 2000, 2300) & (in_w$pre_default == in_w$flag_default) %in% TRUE & (in_w$pre_tuned == in_w$flag_tuned) %in% TRUE, ]
 cases <- list(
   "Kept by both" = with(in_w, flag_default & flag_tuned & mad >= rec$size_min & channel_width >= dflt$size_min &
                           gradient <= dflt$grad_max),
@@ -383,21 +385,28 @@ ex_t <- tibble(
   `Flow (m³/s)` = f_num(ex$mad, 2),
   `Channel width (m)` = ifelse(is.na(ex$channel_width), "none modelled", f_num(ex$channel_width, 2)),
   Gradient = grad(round(ex$gradient, 4)),
-  `To a river of 3 m³/s` = vapply(ex$dist_m, function(d) if (is.na(d)) "not needed" else km_d(signif(d, 2)), ""),
+  `Downstream to a river` = vapply(seq_len(nrow(ex)), function(i) {
+    d <- ex$dist_m[i]
+    if (!is.na(d)) km_d(signif(d, 2)) else if (ex$mad[i] >= rec$size_min) "not needed" else "no river found"
+  }, ""),
   default = yes_no(ex$flag_default),
   Recommended = yes_no(ex$flag_tuned))
 knitr::kable(ex_t, align = "llrrrrll",
              caption = paste0("The numbered segments on the map: what each rule reads and what each decides. ",
                               "default needs a channel at least ", dflt$size_min, " m wide and a gradient of at most ",
                               grad(dflt$grad_max), "; the recommended rule needs a gradient of at most ",
-                              grad(rec$grad_max), " and a flow of at least ", rec$size_min, " m³/s, or a river within ",
-                              km_d(rec$exc_d), ". Distance is measured only where the exception could apply."))
+                              grad(rec$grad_max), " and a flow of at least ", rec$size_min, " m³/s, or a river of at least ",
+                              rec$exc_q, " m³/s within ", km_d(rec$exc_d), " downstream. The distance is to the first ",
+                              "such river downstream, measured only where the exception could apply."))
 gain_grad <- ch$km_all[ch$direction == "gained" & grepl("^gradient", ch$reason)]
+gain_flow <- ch$km_all[ch$direction == "gained" & grepl("^size: tuned passes", ch$reason)]
 ```
 
-A fourth case, a stream between `r grad(dflt$grad_max)` and `r grad(rec$grad_max)` steep that only the
-new gradient maximum admits, does not occur in this window; across the province it adds
-`r n0(gain_grad)` km.
+The examples show what both rules keep and the two largest changes. Two smaller kinds of gain are not
+among them:
+streams between `r grad(dflt$grad_max)` and `r grad(rec$grad_max)` steep, which only the new gradient
+maximum admits (`r n0(gain_grad)` km across the province), and streams whose flow passes the floor
+where `default`'s width test fails or has no width (`r n0(gain_flow)` km).
 
 Orange is mostly the upper reaches of tributaries: flow grows downstream, so a tributary keeps its
 lower reach and loses the part where its flow falls below the floor more than `r km_d(rec$exc_d)`
