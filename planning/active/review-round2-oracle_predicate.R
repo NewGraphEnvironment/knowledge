@@ -1,6 +1,6 @@
 suppressMessages({library(dplyr); pkgload::load_all(quiet = TRUE)})
 con <- DBI::dbConnect(RPostgres::Postgres(), bigint = "numeric")
-link_dir <- "/private/tmp/claude-501/-Users-airvine-Projects-repo-knowledge/613e59da-4a81-4e58-b22c-c7646e0aa675/scratchpad/link_default"
+link_dir <- file.path(tempdir(), "link_default")  # link's configs/default at the build's link_sha, as 0330 reads them
 params <- fresh::frs_params(csv = file.path(link_dir, "parameters_habitat_thresholds.csv"),
                             rules_yaml = file.path(link_dir, "rules.yaml"))
 groups <- c("PARS", "BULK")

@@ -63,7 +63,7 @@ tables_thr <- data.frame(
     "One row per species x stage x component (size, gradient, exception_q, exception_d) of the rule recommended by the tuning run (knowledge#57): the value in link's parameter name and unit, the one-SE range on the main reading, the readings the rule holds in, default's value and whether default is inside the region, the visits, detections and groups scored, the power label, and the evidence version and link run the rule was scored on. The grade is expected use, not habitat quality.",
     "The watershed groups each rule_id was scored on (groups with both outcomes), with the fold each held out in."),
   stringsAsFactors = FALSE)
-m1 <- knw_publish(tables_thr, "data/publish/thresholds_v1", id = "knowledge/thresholds/v1",
+man_thr <- knw_publish(tables_thr, "data/publish/thresholds_v1", id = "knowledge/thresholds/v1",
                   note = "First tuned thresholds for every species and stage the electrofishing evidence can speak to, on link's province-wide default run (knowledge#57).",
                   provenance = prov, s3 = if (publish) s3 else NULL, republish = republish)
 
@@ -83,7 +83,7 @@ tables_gr <- data.frame(
   table = "habitat_grade", source = gpath, script = "scripts/0325-publish.R",
   description = "One row per link default segment x species x stage: the segment's FWA position key, its link access code, and its grade (expected use per standard electrofishing visit relative to the 95th percentile of accessible segments, 0-1, NA where inaccessible or the size or gradient is missing) in fifths, with the rule_id it was graded under and the link run and evidence version (knowledge#57).",
   stringsAsFactors = FALSE)
-m2 <- knw_publish(tables_gr, "data/publish/habitat_grade_v1", id = "knowledge/habitat_grade/v1",
+man_grade <- knw_publish(tables_gr, "data/publish/habitat_grade_v1", id = "knowledge/habitat_grade/v1",
                   note = "Expected-use grades for every segment of each tuned species' groups on link's province-wide default run (knowledge#57). Hive-partitioned by species_code and stage.",
                   provenance = prov, s3 = if (publish) s3 else NULL, republish = republish, hive = "habitat_grade")
 message("wrote data/publish/{thresholds_v1,habitat_grade_v1} at ", commit, if (!publish) " (PUBLISH is not TRUE: nothing uploaded)")
