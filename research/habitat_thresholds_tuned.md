@@ -26,7 +26,7 @@ streams, an allowance for a river close downstream. It scored every version on h
 kept every version the data cannot tell from the best, and recommended the one of those closest to link's
 current test. link's current test is not among them for any fitted species but grayling, and every recommended
 rule but grayling's draws less habitat than link does now. A grade from 0 to 1 then gives the use to expect on
-each segment. The package article on chinook rearing (https://newgraphenvironment.github.io/knowledge/articles/chinook_rearing.html) walks through one species from the question to
+each segment (provisional until #65: it reads a segment that passes the size test as far from any river). The package article on chinook rearing (https://newgraphenvironment.github.io/knowledge/articles/chinook_rearing.html) walks through one species from the question to
 the map; the specification below is the record.
 
 ## The question
@@ -177,11 +177,13 @@ ha × the owning segment's grade. Hectares beside accessible stream are the grou
 | ST rearing | 4 | 143,349 | 108,807 | 74,933 | −31 % | 44,775 → 41,791 |
 | WCT rearing | 4 | 129,911 | 122,584 | 117,691 | −4 % | 47,027 → 43,010 |
 
-The floodplain and the kilometres move apart. For BT rearing, RB, ST and WCT the floodplain falls less than the
-km (BT 24 % against 37 %, RB 15 against 19, ST 31 against 37, WCT 4 against 22): the small streams a higher size
-floor drops carry little floodplain. For CH and CO it falls more (CH 20 % against 12, CO 11 against 5): their
-losses sit on mid-sized streams with floodplain beside them, and their gains, order-1 streams, bring almost none.
-Graded ha follows graded km, rising only for CH.
+Set against the km on the same catalog groups (`compare.csv`'s rows for those groups; the km table above is over
+every group), the floodplain falls less than the km for BT rearing (24 % against 37 %), CO (11 against 14), RB (15
+against 20), ST (31 against 45) and WCT (4 against 24): the streams those rules drop carry less floodplain per km
+than the habitat `default` draws. For CH (20 against 19) and BT spawning (22 against 19) the two fall about
+together. Graded ha follows graded km, rising only for CH; both rest on the grade, which reads every segment that
+passes its size test at the 50 km distance cap (#65), so read them as provisional. (Revised 2026-10-18, #62: this
+paragraph first compared catalog-group floodplain with all-group km.)
 
 ## Limits
 

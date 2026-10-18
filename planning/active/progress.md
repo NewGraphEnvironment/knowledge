@@ -52,3 +52,16 @@
 - Tests (frozen worktree at `1c8c5c9`): 522 pass, 0 skipped. `devtools::check()`: 0 errors, 0 warnings, 1 NOTE
   (Rd example lines over 100 characters in five pages that predate this branch); installed size OK; the
   vignette builds and rebuilds. The build adds R >= 3.5 (the rds files) and R >= 4.1 (the native pipe).
+- Article audit (`review-audit.md`, 141 claims; 8 wrong, 7 unsupported). One is a defect in #57's published grade,
+  reproduced from `CH_rear_curve.rds` and filed as #65: segments that pass the size test are graded at the 50 km
+  distance cap, though the curve was fitted on every visit's real distance (a 2 m³/s stream 100 m from a river
+  grades 0.6 at its own distance and 0.2 at the cap). Not fixed here: regrading republishes `habitat_grade`.
+  The article now says what the grade does and calls graded figures provisional; the data script saves a
+  flow-by-distance surface from the curve so the curve section shows the joint shape and names its reference
+  values. Other fixes: the scoring's held-out intercept, 534 rules worse than no rule, the nested selection's
+  partial separation, floodplain against km on the same 16 groups (-20 % against -18.8 %), river polygons'
+  gradient in the limits, the comparison (not link) measuring distance from a segment's end; three
+  unsupported causal sentences cut. `habitat_thresholds_tuned.md`'s floodplain paragraph compared
+  catalog-group floodplain with all-group km for every species; rewritten on the same groups.
+- Code-check round 2 (`review-round2.md`): one defect inside round 1's fix, the check sentence still omitting
+  the area filter and the edge types the check keeps; fixed from `fwa_edge_type_codes`.

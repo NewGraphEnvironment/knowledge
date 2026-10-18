@@ -72,8 +72,8 @@ no_grad <- function(rule) sub("\\|g<=[0-9.]+\\|", "|", rule)
 link draws chinook rearing habitat as a yes or a no on every stream segment, from a size floor
 and a gradient maximum. This article follows, for someone who has not seen the work, how the
 province's electrofishing record was used to choose between `r n0(nrow(tune))` versions of
-that rule, how firm the choice is, and what the chosen rule changes on the ground. Every number
-is read from the tables the tuning wrote.
+that rule, how firm the choice is, and what the chosen rule changes on the ground. Every result
+is computed from the tables the tuning wrote.
 
 The recommended rule, in one line: **`r words(rec)`**.
 
@@ -153,17 +153,20 @@ whether that split predicts where chinook are caught in watersheds the model has
 1. A model of the chance of catching chinook on a visit takes the fished area, the data set, the
    era and the watershed group into account, and adds the rule as one more term: in or out.
 2. The `r summ$groups_both` groups are dealt into `r meta$spec$folds` folds of
-   `r lst(as.integer(fold_n))` groups, balanced by detections. The model is fitted on four folds
-   and predicts the visits of the fifth, so each group is held out once.
-3. The score is the held-out deviance: how surprised the model is, in total, by the visits it
-   did not see. Lower is better. A rule that sorts caught from not-caught visits in a new
+   `r lst(as.integer(fold_n))` groups, balanced by detections. The rule's effect is fitted on four
+   folds and used to predict the visits of the fifth, so each group is held out once. A held-out
+   group gets only its own baseline level, fitted on its own visits, which costs every rule the
+   same.
+3. The score is the held-out deviance: how surprised the model is, in total, by the held-out
+   visits. Lower is better. A rule that sorts caught from not-caught visits in a new
    watershed scores low.
 4. Each rule is compared with the best one group by group. The standard error (SE) of the
    difference is taken over groups, because a watershed group, not a visit, is the unit that
    repeats.
 
-The model with no rule term at all scores `r n1(rec$ddev_null * -1)` above the best rule. That
-is the range a rule can move the score.
+The model with no rule term at all scores `r n1(rec$ddev_null * -1)` above the best rule, a scale
+for the differences below. A rule can also do worse than no rule at all, and
+`r n0(sum(tune$ddev_null > 0))` of the `r n0(nrow(tune))` do.
 
 ## Which rules can the data not tell apart?
 
@@ -246,9 +249,6 @@ knitr::kable(raw, align = "lrrrr",
                               "that caught chinook in and out."))
 ```
 
-The exception is not mainly a way of adding streams. It is what lets a higher size floor keep the
-small streams beside a river, where chinook are caught.
-
 ## How firm is the choice?
 
 Three checks were fixed before the run.
@@ -266,8 +266,9 @@ knitr::kable(tibble(Seed = seeds$seed, `Recommended` = vapply(seq_len(nrow(seed_
 ```
 
 **Choosing and scoring on different groups.** The region and the pick above use every group. To
-see whether choosing a rule on the same data it is scored on flatters it, the choice was made
-on four folds and scored on the fifth, once per fold:
+see whether choosing a rule on the same data it is scored on flatters it, each fold's rule was
+chosen on the other four folds' groups and scored on that fold's. The separation is partial: the
+other folds' scores came from models that had the fold being scored among their training data.
 
 ```{r honest}
 hk <- tibble(Fold = honest$fold, Groups = honest$n_wsg,
@@ -311,14 +312,41 @@ about 3 m³/s. The gradient maximum is the least settled part.
 An earlier tuning of the same rules, on the 55 groups link had run by then, recommended the
 same shape at a gradient of 7 %.
 
-## How does the chance of a catch change across each threshold?
+## How does the chance of a catch change with flow, gradient and distance?
 
-After the choice, one smooth model of detection was fitted on the same visits: stream size and
-distance to a `r rec$exc_q` m³/s river together, gradient on its own, with the same other terms.
-Each curve below holds the other two at reference values and is shown relative to the chance at
-the recommended threshold.
+After the choice, one smooth model of detection was fitted on the same visits. Flow and distance
+to a `r rec$exc_q` m³/s river enter as one surface, because how much flow matters depends on how
+close a river is; gradient enters on its own, with the same other terms as in the scoring.
 
-```{r curves, fig.height = 3.4, fig.cap = "The chance of catching chinook on a visit against stream size, gradient and distance to a river, relative to the chance at the recommended threshold (dashed), with its 95 % band. Size and distance are on log scales."}
+```{r surface-tab}
+sf_ <- x$surface
+dists <- sort(unique(sf_$dist_m))
+st <- tibble(`MAD (m³/s)` = format(sort(unique(sf_$size)), trim = TRUE, drop0trailing = TRUE))
+for (dm in dists) {
+  col <- if (dm >= meta$curve_ref$dist_cap_m) paste(km_d(dm), "(the cap)") else km_d(dm)
+  st[[col]] <- pc(sf_$rate[sf_$dist_m == dm][order(sf_$size[sf_$dist_m == dm])], 1)
+}
+knitr::kable(st, align = paste0("l", strrep("r", length(dists))),
+             caption = paste0("The fitted chance of catching chinook on a standard visit, by flow and by distance ",
+                              "downstream to a river of at least ", meta$curve_ref$q, " m³/s, at a gradient of ",
+                              grad(meta$curve_ref$gradient), "."))
+r_at <- function(s, dm) sf_$rate[sf_$size == s & sf_$dist_m == dm]
+near <- sf_$rate[sf_$dist_m == min(dists)]
+```
+
+Within `r km_d(min(dists))` of a river the chance is between `r pc(min(near), 1)` and
+`r pc(max(near), 1)` whatever the flow. At `r km_d(10000)` from one it rises with flow, from
+`r pc(r_at(0.1, 10000), 1)` at 0.1 m³/s to `r pc(r_at(5, 10000), 1)` at 5 m³/s. That is the shape
+the recommended rule draws: beside a river a small stream counts, and away from one only a stream
+above the floor does.
+
+The curves below take one variable at a time and hold the others at reference values: flow and
+gradient are drawn `r km_d(meta$curve_ref$dist_cap_m)` from any river, distance at
+`r meta$curve_ref$size` m³/s, and flow and distance at a gradient of
+`r grad(meta$curve_ref$gradient)`. Each is shown relative to the chance at the recommended
+threshold.
+
+```{r curves, fig.height = 3.4, fig.cap = paste0("The chance of catching chinook on a visit against flow, gradient and distance to a river, each relative to the chance at the recommended threshold (dashed), with the 95 % band of the fitted curve. Flow and gradient are drawn ", km_d(meta$curve_ref$dist_cap_m), " from any river, distance at ", meta$curve_ref$size, " m³/s, and flow and distance at a gradient of ", grad(meta$curve_ref$gradient), ". Flow and distance are on log scales.")}
 one_curve <- function(cname, xlab, log_x) {
   d <- x$curves[x$curves$curve == cname, ]
   if (cname == "size_mad") d <- d[d$x >= 0.01, ]
@@ -347,40 +375,51 @@ at <- function(cname, v) {
   d <- x$curves[x$curves$curve == cname, ]
   stats::approx(log(d$x), d$rel_rate, xout = log(v))$y
 }
-```
-
-```{r dist-peak}
 dc <- x$curves[x$curves$curve == "dist_to_Q3_m", ]
 peak_m <- dc$x[which.max(dc$rel_rate)]
+low_m <- dc$x[which.min(dc$rel_rate)]
 ```
 
-Flow and gradient have no bend at their thresholds. The chance of a catch rises steadily with
-flow: at 0.1 m³/s it is `r pc(at("size_mad", 0.1))` of the chance at `r rec$size_min` m³/s, and
-at 5 m³/s it is `r n1(at("size_mad", 5))` times as high. It falls in a straight line on this scale
-as gradient rises, and less steeply than with flow. Those two thresholds are where in and out
-separate best on held-out groups, a cut across a slope, not a step in the curve.
+Far from a river, flow has no bend at its threshold: the chance at 0.1 m³/s is
+`r pc(at("size_mad", 0.1))` of the chance at `r rec$size_min` m³/s, and at 5 m³/s it is
+`r n1(at("size_mad", 5))` times as high. The chance falls in a straight line on this scale as
+gradient rises. Those two thresholds are where in and out separate best on held-out groups, a cut
+across a slope, not a step in the curve.
 
-Distance does bend. The chance is highest about `r n0(signif(peak_m, 2))` m from the river and
-nearly as high at 300 m, `r n1(at("dist_to_Q3_m", 300))` times the chance at
-`r km_d(rec$exc_d)`. Past a few hundred metres it falls: to `r pc(at("dist_to_Q3_m", 3000))` of
-the chance at `r km_d(rec$exc_d)` by 3 km and `r pc(at("dist_to_Q3_m", 10000))` by 10 km. The
-recommended distance sits on the way down, past the bend. Beyond about 10 km the band widens
-and the curve is not to be read.
+Distance does bend. At `r rec$size_min` m³/s the chance is highest about
+`r n0(signif(peak_m, 2))` m from the river and nearly as high at 300 m,
+`r n1(at("dist_to_Q3_m", 300))` times the chance at `r km_d(rec$exc_d)`. Past a few hundred metres
+it falls, to `r pc(at("dist_to_Q3_m", 3000))` of the chance at `r km_d(rec$exc_d)` by 3 km and
+`r pc(at("dist_to_Q3_m", 10000))` by 10 km. The recommended distance sits on the way down, past
+the bend. The curve is lowest about `r n0(signif(low_m, 2))` m out and turns up beyond it.
 
 ## What is the grade?
 
 The yes-or-no rule says where chinook rear. The grade says how much use to expect. A segment's
-grade is the curve's predicted chance of a catch on a standard electrofishing visit at the
-segment's own size, gradient and distance to a river, with the group's own level left out so
-grades compare across watersheds. It is divided by the chance that 95 % of accessible segments
-fall below, `r format(meta$grade$reference_rate)`, and capped at 1. A segment at 1 is in the top
-twentieth of the accessible network; a segment at 0.3 is expected to give a catch about a third
-as often as one at 1. It is expected use, not habitat quality.
+grade is the curve's predicted chance of a catch on a standard electrofishing visit, with the
+group's own level left out so grades compare across watersheds. It is divided by the chance that
+95 % of accessible segments fall below, `r format(meta$grade$reference_rate)`, and capped at 1. A
+segment at 1 is in the top twentieth of the accessible network; a segment at 0.3 is expected to
+give a catch about a third as often as one at 1. It is expected use, not habitat quality.
+
+```{r grade-cap}
+g_of <- function(r) min(r / meta$grade$reference_rate, 1)
+```
+
+The grade reads each segment's own flow and gradient. It reads the segment's own distance to a
+river only where the segment fails the size test, the segments the exception could admit; every
+other segment is read at the `r km_d(meta$curve_ref$dist_cap_m)` cap, as if far from any river.
+The table above shows what that costs: at a gradient of `r grad(meta$curve_ref$gradient)`, a
+2 m³/s stream `r km_d(min(dists))` from a river would grade `r n1(g_of(r_at(2, min(dists))))` at its
+own distance and grades `r n1(g_of(r_at(2, meta$curve_ref$dist_cap_m)))` at the cap. So the grade
+understates streams above the floor wherever a river is close. Regrading every segment at its own
+distance is an open issue in this repository; until it is done, read the graded figures below as
+provisional.
 
 Across the `r meta$grade$groups` groups link classifies for chinook,
 `r n0(meta$grade$graded)` of the `r n0(meta$grade$accessible)` accessible segments received a
-grade; the rest have no modelled flow. The grade is the same under
-either rule. What changes is which segments each rule keeps:
+grade; the rest have no modelled flow. The grade is the same under either rule. What changes is
+which segments each rule keeps:
 
 ```{r grade-km}
 cls <- c("0-0.2", "0.2-0.4", "0.4-0.6", "0.6-0.8", "0.8-1")
@@ -395,8 +434,10 @@ knitr::kable(gk, align = "lrr",
 ```
 
 The recommended rule draws `r n0(all_row$default_km - all_row$tuned_km)` fewer km, and
-`r n0(all_row$tuned_graded_km - all_row$default_graded_km)` more graded km. It gives up
-low-grade streams and takes on high-grade ones near rivers.
+`r n0(all_row$tuned_graded_km - all_row$default_graded_km)` more graded km. The streams both rules
+keep above the floor are read at the cap under both, which understates both totals alike. The
+difference sets mostly streams graded at their own distance against each other: those lost,
+which fail the floor with no river close, and those the exception adds beside a river.
 
 ## What does it change on the ground?
 
@@ -476,9 +517,17 @@ knitr::kable(fp_tab, align = "lrrrrr",
 fp_change <- by_rule(fpt, "tuned", "ha") / by_rule(fpt, "default", "ha") - 1
 ```
 
-The floodplain beside the habitat falls by `r pc(-fp_change)`, more than the km. The streams the
-flow floor drops are mid-sized ones with floodplain beside them, and the small streams the
-exception adds bring little. Weighted by grade, it barely moves.
+```{r fp-km}
+fp_g <- unique(x$floodplain$watershed_group_code)
+pg_fp <- per_group[per_group$watershed_group_code %in% fp_g, ]
+km_change_fp <- sum(pg_fp$tuned_km) / sum(pg_fp$default_km) - 1
+lost_2up <- 1 - sum(ch$km_1[ch$direction == "lost"]) / sum(ch$km_all[ch$direction == "lost"])
+```
+
+The floodplain beside the habitat falls by `r pc(-fp_change)`. On the same `r length(fp_g)`
+groups the km fall by `r pc(-km_change_fp, 1)`, so the two move together there. Across all groups,
+`r pc(lost_2up)` of the km lost are on streams of order 2 and up. Weighted by grade, the
+floodplain barely moves, with the grade's limit above.
 
 **Two checks on the result.**
 
@@ -489,8 +538,9 @@ rate <- function(r, s) { v <- fv[fv$rule == r & fv$segment == s, ]; v$n_detect /
 ob <- ck[ck$check == "bcfishobs_outside", ]
 ```
 
-- On the `r n0(sum(fv$n[fv$rule == "default"]))` FDIS visits with a recorded catch or miss on
-  accessible segments in all `r nrow(per_group)` groups, rivers included, chinook were caught on
+- On the `r n0(sum(fv$n[fv$rule == "default"]))` FDIS visits in all `r nrow(per_group)` groups
+  with a recorded catch or miss and a fished area of 10 to 10,000 m², on accessible single-line
+  streams, canals and the lines through double-line rivers, chinook were caught on
   `r pc(rate("tuned", "rearing"))` of visits on the recommended rule's segments and
   `r pc(rate("tuned", "accessible_not_rearing"), 1)` elsewhere; on `default`'s,
   `r pc(rate("default", "rearing"))` and `r pc(rate("default", "accessible_not_rearing"), 1)`.
@@ -506,16 +556,19 @@ ob <- ck[ck$check == "bcfishobs_outside", ]
 
 - **Not applied.** Nothing in link changes until its configuration reads the thresholds table.
 - **Juveniles caught by electrofishing, on streams.** River polygons, wetlands and lakes keep
-  `default`'s tests under every rule, and spawning is not part of it.
+  `default`'s size tests under every rule, though river polygons take the stream test's gradient
+  maximum. Spawning is not part of it.
 - **Separation, not extent.** The score prefers the rule whose in and out differ most. It does
   not weigh the streams it leaves out: `r pc(rec$raw_rate_out, 1)` of the visits outside the
   recommended rule caught chinook, against `r pc(dflt$raw_rate_out, 1)` outside `default`.
 - **A cut on a slope.** No threshold sits where the curve bends, so a value next to the
   recommended one is nearly as good. The region gives the range.
 - **Measured at the visit, applied at the segment.** The distance to a river was measured from
-  each visit; link measures it from a segment's downstream end, so the applied rule is a little
-  looser. The gradient was scored on Freshwater Atlas segments; link applies it to its own,
+  each visit; on link's segments the comparison measured it from each segment's downstream end,
+  so the rule as applied there is a little looser. The gradient was scored on Freshwater Atlas segments; link applies it to its own,
   finer ones.
+- **A provisional grade.** Streams above the floor are graded as if far from any river, which
+  understates them wherever a river is close.
 - **One link run.** Every figure is on link run `r meta$link_run_uid`.
 - **Not habitat quality.** The grade is expected use per standard visit.
 

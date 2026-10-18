@@ -34,9 +34,12 @@ and the cross-species table are `habitat_thresholds_tuned.md`. Regenerated on al
 order 1) and 1,398 between the two gradient maxima. Graded km rises, 27,681 → 32,018, the only species where it
 does. FDIS detection on the rule's segments is 17 % against 1.5 % outside (`default`: 14 % against 2 %); the
 bcfishobs outside lift moves 2.46 → 3.27. Floodplain (16 catalog groups): 341,298 ha beside the rule's habitat
-against 426,681 under `default` (−20 %, more than the km's −12 %), graded ha 146,059 → 147,442. Unlike #54's curve below, the
-province-wide one bends in distance: the predicted chance is highest about 120 m from a ≥ 3 m³/s river and falls past
-a few hundred metres, to 0.42 of the 1 km value at 3 km (`data/tune/CH_rear_curves.csv`), so D = 1 km sits past the bend. The figures below are #54's, on the 55-group build; the province-wide
+against 426,681 under `default` (−20 %, against −18.8 % in km on the same 16 groups), graded ha 146,059 → 147,442;
+graded figures are provisional until #65, because the grade reads a segment that passes the size test at the 50 km
+distance cap. The province-wide joint curve bends in distance (at 0.75 m³/s, the predicted chance is highest about
+120 m from a ≥ 3 m³/s river and falls past a few hundred metres, to 0.42 of the 1 km value at 3 km;
+`data/tune/CH_rear_curves.csv`), so D = 1 km sits past the bend. #54's distance curve below, fitted separately on the
+visits failing the floor, showed no plateau; the two are different models. The figures below are #54's, on the 55-group build; the province-wide
 maps are `research/fig/compare_ch_rear_*.png`.
 
 Every figure names its population. Three recur:

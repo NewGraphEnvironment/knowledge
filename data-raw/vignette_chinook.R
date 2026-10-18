@@ -22,7 +22,7 @@
 # INPUT:  data/tune/CH_rear_{tune,summary,curves,groups}.csv, data/tune/CH_rear_{seeds,honest}.csv or
 #         data/tune/CH_rear_score.rds (ignored), data/thresholds.csv,
 #         data/compare/CH_rear_{compare,change,checks}.csv, data/compare/floodplain.csv,
-#         data/compare/CH_rear_segments.rds (ignored; 0330), the tuning log and the evidence build ledger
+#         data/compare/CH_rear_segments.rds (ignored; 0330), data/tune/CH_rear_curve.rds (ignored; 0320), the tuning log and the evidence build ledger
 #         in scripts/logs/habitat/, the catalog's bulk floodplain.gpkg (data/compare/catalog/, fetched
 #         from the public bucket when absent, as 0330 does), fwapg database (PG* env vars):
 #         fresh_default.streams, whse_basemapping.fwa_{lakes,rivers}_poly. Needs flooded with #89.
@@ -145,6 +145,22 @@ if (!identical(out$meta$grade$groups, nrow(out$compare) - 1)) {
   stop("the grade's groups (", out$meta$grade$groups, ") differ from compare's (", nrow(out$compare) - 1, ")")
 }
 
+# ---- the fitted surface: the chance of a catch by flow and distance together --------------------------
+# the curves table holds one variable at a time with the others at reference values (distance at the 50 km
+# cap); the surface shows how flow and distance act together, at the curves' reference gradient
+f_curve <- sprintf("data/tune/%s_curve.rds", key)
+cr <- readRDS(f_curve)$curve
+rec_row <- out$tune[out$tune$recommended %in% TRUE, ]
+grad_ref <- min(rec_row$grad_max, 0.2) / 2   # knw_tune_curve()'s reference gradient
+grid <- expand.grid(size = c(0.1, 0.3, 0.75, 2, 5), dist_m = c(100, 300, 1000, 3000, 10000, cr$dist_cap_m))
+grid$gradient <- grad_ref
+grid$accessible <- TRUE
+gr <- knw_grade(cr, grid, cols = c(size = "size", grad = "gradient", dist = "dist_m"))
+out$surface <- tibble::as_tibble(grid[c("size", "dist_m", "gradient")]) |> mutate(rate = gr$grades$rate)
+if (anyNA(out$surface$rate)) stop("the surface has missing rates")
+out$meta$curve_ref <- list(gradient = grad_ref, dist_cap_m = cr$dist_cap_m, size = rec_row$size_min,
+                           q = cr$q, log_area = cr$ref$log_area, data_set = cr$ref$data_set, era = cr$ref$era)
+
 # ---- BULK on link's segments -----------------------------------------------------------------
 seg_all <- readRDS(sprintf("data/compare/%s_segments.rds", key))
 s <- seg_all |> filter(watershed_group_code == wsg)
@@ -174,7 +190,7 @@ if (!file.exists(gpkg)) {
   if (h$status_code != 200) { unlink(part); stop("catalog item ", wsg, ": HTTP ", h$status_code) }
   if (!file.rename(part, gpkg)) stop("could not move the download of ", wsg, " into place")
 }
-src_local <- c(segments = sprintf("data/compare/%s_segments.rds", key), floodplain_gpkg = gpkg)
+src_local <- c(segments = sprintf("data/compare/%s_segments.rds", key), floodplain_gpkg = gpkg, curve = f_curve)
 if (stab_from != "csv") src_local <- c(src_local, score = f_score)
 out$meta$md5_local <- tools::md5sum(unname(src_local)) |> stats::setNames(unname(src_local))
 
