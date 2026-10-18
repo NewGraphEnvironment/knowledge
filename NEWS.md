@@ -1,3 +1,19 @@
+# knowledge 0.4.3
+
+* One evidence build, one tuning run and one comparison across species and life stages, as package functions on
+  link's province-wide `default` run (#57): `knw_fdis_visits()`, `knw_link_place()`, `knw_link_flow()`,
+  `knw_link_width()`, `knw_link_walks()`, `knw_link_barrier_dnstr()`, `knw_bcfishobs_match()` and
+  `knw_link_access_check()` build the evidence; `knw_tune_grid()`, `knw_tune_score()`, `knw_tune_curve()`,
+  `knw_grade()` and `knw_tune_run()` score every rule of each species and stage on held-out watershed groups, pick,
+  fit the joint curve and grade every segment; `knw_thresholds_table()` and `knw_publish()` write the thresholds and
+  grade tables; `knw_compare_rules()`, `knw_floodplain_ha()` and `knw_compare_map()` show what a rule changes on
+  link's segments (km, graded km, floodplain hectares, maps). Scripts `0300`–`0330` run them.
+* Eight species × stage fit. `default` is outside the one-SE region for every species but grayling; chinook's
+  size floor settles at 0.75 m³/s; bull trout spawning fits but is weak. `data/thresholds.csv` and
+  `data/thresholds_groups.csv` carry the result in link's parameter names; `0290`, `0294` and `0296` write their
+  tables from the new build, and `0291`–`0298` read the published v2 visit tables (`0299 PULL=TRUE VERSION=v2`).
+  Results: `research/habitat_thresholds_tuned.md` and one file per species.
+
 # knowledge 0.4.2
 
 * The README points at the published FDIS visit tables' second release, `knowledge/fdis/v2/`, which keeps one
