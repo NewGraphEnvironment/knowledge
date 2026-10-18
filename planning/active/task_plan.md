@@ -48,9 +48,9 @@ phases below are that plan verbatim.
       `ha_grade_na` within 1 ha; the saved recommended rule equals `thresholds`' `CH_rear_v1` rule
 
 ## Phase 3: `vignettes/chinook_rearing.Rmd`
-- [ ] `bookdown::html_vignette2` header and setup chunk as link's; hidden `load` chunk reading the three files
+- [x] `bookdown::html_vignette2` header and setup chunk as link's; hidden `load` chunk reading the three files
       through `system.file(mustWork = TRUE)`; `library(knowledge)` for `knw_compare_map()`
-- [ ] Sections in the issue's order, each a reader's question: what link draws now (`default`'s four branches
+- [x] Sections in the issue's order, each a reader's question: what link draws now (`default`'s four branches
       and three passes, in words); the rules asked about (the grid in words, 2,795 counted from `tune`); how a
       rule is scored (held-out groups, the folds from `groups`, what the deviance and the SE mean, the scoring
       inputs from `meta`, which population each count names); the region (the one-SE band; a figure of each
@@ -63,10 +63,10 @@ phases below are that plan verbatim.
       groups and BULK; `change` by reason; floodplain hectares for the 16 catalog groups and BULK); what the
       recommendation is not (limits, one list); one sentence pointing at link#346; #54's 55-group figures
       mentioned in one sentence at most, never restated as #57's
-- [ ] Every number in the prose computed inline from the saved list, except the spec constants, which come from
+- [x] Every number in the prose computed inline from the saved list, except the spec constants, which come from
       `meta`; every figure has `fig.cap`, every table `caption =`; no `\@ref()`, no footnotes; figures sized for
       the article column
-- [ ] Render locally (`pkgdown::build_article("chinook_rearing")` into the ignored `docs/`), read the HTML and
+- [x] Render locally (`pkgdown::build_article("chinook_rearing")` into the ignored `docs/`), read the HTML and
       the map png: every `<img src>` resolves under `docs/articles/`, captions numbered, map legend names every
       class drawn and the floodplain legend shows five classes on 0–1, `footnote-ref` count 0, no literal `\@ref`
 

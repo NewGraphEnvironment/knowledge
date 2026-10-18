@@ -23,3 +23,21 @@ test_that("knw_compare_map writes the static figure for one accessible segment u
   expect_true(file.exists(png))
   expect_gt(file.size(png), 0)
 })
+
+test_that("knw_compare_map stacks the panels when ncol is 1", {
+  skip_if_not_installed("tmap")
+  skip_if_not_installed("png")
+  seg <- sf::st_sf(
+    accessible = rep(TRUE, 2), stream_order = 1:2, grade_class = c("0-0.2", "0.8-1"),
+    flag_default = c(TRUE, FALSE), flag_tuned = c(TRUE, TRUE),
+    geometry = sf::st_sfc(lapply(0:1, function(i) sf::st_linestring(rbind(c(i, 0), c(i + 1, 1)))), crs = 3005))
+  wide <- tempfile(fileext = ".png")
+  tall <- tempfile(fileext = ".png")
+  knw_compare_map(seg, NULL, "a group", png = wide)
+  knw_compare_map(seg, NULL, "a group", png = tall, ncol = 1)
+  dw <- dim(png::readPNG(wide))
+  dt <- dim(png::readPNG(tall))
+  expect_equal(dw[1:2], c(4.6, 8) * 150)
+  expect_equal(dt[1:2], c(9.2, 4) * 150)
+  expect_error(knw_compare_map(seg, NULL, "a group", png = tall, ncol = 0))
+})

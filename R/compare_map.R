@@ -22,6 +22,9 @@
 #'   `NULL`.
 #' @param html `character(1)` path for the interactive page, or `NULL`.
 #' @param fp_cells `NULL`, or a `SpatRaster` of grade per floodplain cell.
+#' @param ncol `integer(1)` panels per row in the static figure, or `NULL`
+#'   for all panels side by side; each panel is 4 in by 4.6 in, so `ncol = 1`
+#'   stacks them for a narrow column.
 #' @return Invisibly, the paths written.
 #' @export
 #' @examples
@@ -29,9 +32,12 @@
 #' knw_compare_map(seg, water, "BULK: CH rearing, default against the tuned rule",
 #'                 png = "research/fig/compare_ch_rear_bulk.png")
 #' }
-knw_compare_map <- function(segments, water = NULL, title = "", png = NULL, html = NULL, fp_cells = NULL) {
+knw_compare_map <- function(segments, water = NULL, title = "", png = NULL, html = NULL, fp_cells = NULL,
+                            ncol = NULL) {
   chk::chk_s3_class(segments, "sf")
   chk::check_names(segments, c("accessible", "stream_order", "grade_class", "flag_default", "flag_tuned"))
+  if (!is.null(ncol)) chk::chk_whole_number(ncol)
+  if (!is.null(ncol)) chk::chk_gte(ncol, 1)
   if (!requireNamespace("tmap", quietly = TRUE)) stop("tmap is needed", call. = FALSE)
   sf::sf_use_s2(FALSE)
   seg <- segments[segments$accessible %in% TRUE, ]
@@ -92,8 +98,10 @@ knw_compare_map <- function(segments, water = NULL, title = "", png = NULL, html
       panels <- c(panels, list(p3))
     }
     dir.create(dirname(png), showWarnings = FALSE, recursive = TRUE)
-    tmap::tmap_save(tmap::tmap_arrange(panels, ncol = length(panels)), png, width = 4 * length(panels),
-                    height = 4.6, dpi = 150)
+    nc <- min(if (is.null(ncol)) length(panels) else as.integer(ncol), length(panels))
+    nr <- ceiling(length(panels) / nc)
+    tmap::tmap_save(tmap::tmap_arrange(panels, ncol = nc, nrow = nr), png, width = 4 * nc,
+                    height = 4.6 * nr, dpi = 150)
     written <- c(written, png)
   }
   if (!is.null(html) && requireNamespace("mapgl", quietly = TRUE) && requireNamespace("htmlwidgets", quietly = TRUE)) {

@@ -181,3 +181,12 @@ Depends on #57 (merged). Relates to NewGraphEnvironment/link#346.
 
 | Error | Resolution |
 |-------|------------|
+| `devtools::install(upgrade = "never")`: `upgrade` must be TRUE, FALSE or NA | Installed into a scratch library with `R CMD INSTALL -l` and rendered with `R_LIBS` |
+
+## Rendering the article (2026-10-18)
+
+- pkgdown drops bookdown's caption numbering: `chinook_rearing.html` has full captions and no "Figure N",
+  and the published link and flooded articles carry none either.
+- The province-wide curve bends in distance where #54's did not: the predicted chance is highest about
+  120 m from a 3 m³/s river, still 1.7 times the 1 km value at 300 m, 0.42 at 3 km, 0.21 at 10 km.
+  `chinook_rearing_tuned.md`'s "D is a cut on a slope" describes #54's curve, not this one.

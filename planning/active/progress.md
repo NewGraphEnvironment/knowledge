@@ -29,3 +29,15 @@
 - `meta$md5` covers the tracked sources (the ten tables, the tuning log, the evidence ledger);
   `meta$md5_local` records the ignored ones (saved segments, catalog gpkg, score.rds) for provenance only,
   since the test cannot expect them on another clone.
+- Phase 3: `vignettes/chinook_rearing.Rmd` rendered with `pkgdown::build_article()` against a scratch install
+  (knowledge is not installed on this machine, and the article calls `library(knowledge)`). Every `<img src>`
+  resolves under `docs/articles/chinook_rearing_files/`; `footnote-ref` 0; no literal `\@ref`; no `Error`.
+  The figures were read at their rendered size: the profile marks `default` in all four panels, the map is
+  three stacked panels with every class in its legend and the floodplain legend in five classes on 0-1.
+- Deviation: `knw_compare_map()` gains `ncol` (default unchanged, side by side). Side by side the map is
+  12 in wide and its legends unreadable in a 700 px column; `ncol = 1` stacks it 4 in wide. One test added.
+- Deviation: captions carry no "Figure N" on the site. pkgdown renders articles in its own format, and the
+  published link and flooded articles show none either. The article cross-references nothing, so nothing
+  depends on the number.
+- Prose corrected after reading the render: the distance curve does bend (highest about 120 m from the river,
+  falling past a few hundred metres), so the sentence that none of the three curves bends was wrong.

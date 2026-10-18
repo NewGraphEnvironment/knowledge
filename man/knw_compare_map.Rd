@@ -10,7 +10,8 @@ knw_compare_map(
   title = "",
   png = NULL,
   html = NULL,
-  fp_cells = NULL
+  fp_cells = NULL,
+  ncol = NULL
 )
 }
 \arguments{
@@ -29,6 +30,10 @@ title; this goes under it).}
 \item{html}{\code{character(1)} path for the interactive page, or \code{NULL}.}
 
 \item{fp_cells}{\code{NULL}, or a \code{SpatRaster} of grade per floodplain cell.}
+
+\item{ncol}{\code{integer(1)} panels per row in the static figure, or \code{NULL}
+for all panels side by side; each panel is 4 in by 4.6 in, so \code{ncol = 1}
+stacks them for a narrow column.}
 }
 \value{
 Invisibly, the paths written.
