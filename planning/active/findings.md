@@ -263,6 +263,17 @@ applied the tuned test inside wetlands and lakes `default` never admits. The com
 each round; the published thresholds and grades were not affected by any finding (the `dev_null` sign error sat
 in the summaries alone).
 
+## Validation checks (2026-10-18)
+
+- The evidence-build ledger partitions its input: 51,587 sites in; drops 1,563 + 5,242 + 1,088 + 23 + 1,353 + 275 +
+  1,491 = 11,035; 40,552 kept; 11,035 + 40,552 = 51,587 (`scripts/logs/habitat/20261017_evidence_build_ledger.csv`).
+- Re-run of `0320` for WCT alone (`SPECIES=WCT`, 2026-10-18 04:02Z, 0.1 min) rewrote `data/tune/WCT_rear_{tune,curves,
+  groups,summary}.csv` byte-identical (`git status` clean). The grade table is kept, not regenerated, when already
+  written under the same rule and run, so identity is shown for scoring and curves.
+- `devtools::test()` 482 pass, 0 skip; `document()` and `pkgdown::check_pkgdown()` clean; `lint_package()` 117 → the
+  branch's own brace, semicolon, unused-variable and line-length lints fixed; hanging-indent, matrix-name and
+  installed-package object-usage lints left.
+
 ## Errors Encountered
 
 | Error | Resolution |
