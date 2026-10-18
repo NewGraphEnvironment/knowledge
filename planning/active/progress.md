@@ -65,3 +65,11 @@
   catalog-group floodplain with all-group km for every species; rewritten on the same groups.
 - Code-check round 2 (`review-round2.md`): one defect inside round 1's fix, the check sentence still omitting
   the area filter and the edge types the check keeps; fixed from `fwa_edge_type_codes`.
+- Code-check round 3 (`review-round3.md`): mechanism named (a sentence describes a quantity by its role in the
+  story or by a neighbouring set, not by the code that computes it); enumeration of 161 article units and 23
+  added research sentences; 9 prose findings, code clean. Fixed: the bcfishobs check's set (826 locations on
+  accessible stream edges) and denominator (stream-edge km share); curve ratios were cloglog hazard ratios,
+  now converted to ratios of predicted chances (exact: each curve's implied baseline hazard is constant across
+  its rows), so 1.7 -> 1.6, 2.6 -> 2.5, 42 % -> 43 %; distance always to a river of at least 3 m³/s; the
+  floodplain cell's owner; lakes or reservoirs; the scoring population's edge types and quality checks;
+  "held out of the fit" for "not seen"; the earlier tuning's group count no longer typed.

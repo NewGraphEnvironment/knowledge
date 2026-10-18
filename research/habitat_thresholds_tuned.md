@@ -20,13 +20,13 @@
 
 **In plain words.** link calls a stream segment rearing or spawning habitat for a species with a yes-or-no
 test: big enough, and not too steep. This run asked, for each species and life stage the electrofishing record
-can speak to, which version of that test best predicts where the fish were caught in watersheds the scoring had
-not seen. For each one it tried a ladder of size floors (by flow or by width) and gradient limits, and, for small
+can speak to, which version of that test best predicts where the fish were caught in watersheds held out of the
+fit. For each one it tried a ladder of size floors (by flow or by width) and gradient limits, and, for small
 streams, an allowance for a river close downstream. It scored every version on held-out watershed groups,
 kept every version the data cannot tell from the best, and recommended the one of those closest to link's
 current test. link's current test is not among them for any fitted species but grayling, and every recommended
 rule but grayling's draws less habitat than link does now. A grade from 0 to 1 then gives the use to expect on
-each segment (provisional until #65: it reads a segment that passes the size test as far from any river). The package article on chinook rearing (https://newgraphenvironment.github.io/knowledge/articles/chinook_rearing.html) walks through one species from the question to
+each segment (provisional until #65: it reads a segment that passes the size test as far from the river the curve measures to). The package article on chinook rearing (https://newgraphenvironment.github.io/knowledge/articles/chinook_rearing.html) walks through one species from the question to
 the map; the specification below is the record.
 
 ## The question
@@ -150,7 +150,8 @@ km × grade (`data/compare/compare.csv`, `change.csv`, `checks.csv`).
    `default` then tuned: RB 33 % against 15 %, then 35 % against 18 %; BT rearing 17 against 6, then 21 against
    8; CH 14 against 2, then 17 against 1.5; CO 29 against 13, then 32 against 11; ST 4.8 against 0.7, then 7.5
    against 0.6; WCT 35 against 24, then 35 against 27. On the bcfishobs records FDIS does not hold (presence only,
-   never scored), the share on the rule's segments over the rule's share of accessible km rises under every tuned
+   never scored), the share of their locations on accessible stream edges that falls on the rule's segments, over the
+   rule's share of accessible stream-edge km, rises under every tuned
    rule: RB 2.34 → 3.04, BT rearing 2.45 → 5.17, BT spawning 3.04 → 3.70, CH 2.46 → 3.27, CO 1.75 → 1.82,
    ST 2.20 → 4.09, WCT 1.56 → 1.73 (bootstrap intervals in the table). The tuned rules hold more of the
    independent records per kilometre they draw, which is what the score rewards; it is not a claim about extent.
