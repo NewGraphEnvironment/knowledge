@@ -1,0 +1,17 @@
+direction,reason,order,n_segments,km,species_code,stage,tuned_rule
+gained,connectivity or overlay,1,30,6.664143423220653,ST,rear,mad>=1|g<=0.0849|none
+lost,connectivity or overlay,1,629,102.00101531526836,ST,rear,mad>=1|g<=0.0849|none
+gained,"size: tuned passes, width fails or NULL",1,1150,284.06262224456344,ST,rear,mad>=1|g<=0.0849|none
+lost,"size: width passes, tuned fails, no exception",1,1679,485.43709427504325,ST,rear,mad>=1|g<=0.0849|none
+gained,connectivity or overlay,2,24,11.535749867634134,ST,rear,mad>=1|g<=0.0849|none
+lost,connectivity or overlay,2,973,175.45927871730507,ST,rear,mad>=1|g<=0.0849|none
+gained,"size: tuned passes, width fails or NULL",2,5,1.4524029665848792,ST,rear,mad>=1|g<=0.0849|none
+lost,"size: width passes, tuned fails, no exception",2,31450,9676.543772924291,ST,rear,mad>=1|g<=0.0849|none
+gained,connectivity or overlay,3,24,4.1745079990993705,ST,rear,mad>=1|g<=0.0849|none
+lost,connectivity or overlay,3,566,102.29119919889372,ST,rear,mad>=1|g<=0.0849|none
+gained,"size: tuned passes, width fails or NULL",3,10,1.4926030595675512,ST,rear,mad>=1|g<=0.0849|none
+lost,"size: width passes, tuned fails, no exception",3,30922,9672.135439848389,ST,rear,mad>=1|g<=0.0849|none
+gained,connectivity or overlay,4+,6,0.8966618761745082,ST,rear,mad>=1|g<=0.0849|none
+lost,connectivity or overlay,4+,77,13.667599360938572,ST,rear,mad>=1|g<=0.0849|none
+gained,"size: tuned passes, width fails or NULL",4+,68,15.37599567036927,ST,rear,mad>=1|g<=0.0849|none
+lost,"size: width passes, tuned fails, no exception",4+,19488,6503.04501998518,ST,rear,mad>=1|g<=0.0849|none

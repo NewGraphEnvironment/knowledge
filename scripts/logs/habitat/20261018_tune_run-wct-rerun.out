@@ -1,0 +1,21 @@
+Tuning run, knowledge#57. Evidence build scripts/logs/habitat/20261017_evidence_build_ledger.csv on link run 20261017_004619-3f4c713b (link a17e91773b283b021811f8b5b76b887d5f4c16e4;ee21eb1371cbc4d7a2d598f8bbeeaeb0534d7994).
+  visits_link md5 5954951fd7ab147b41c9299e82042d58
+  visits_species md5 bc71243b0a4eb2e360e1e8410db34125
+  walks md5 403c2b4200898f30e00a3f65a879e19c
+Spawner evidence: 1069 BT visits with a coded fish, 194 with evidence.
+link default thresholds at a17e91773b283b021811f8b5b76b887d5f4c16e4 (same at ee21eb1371cbc4d7a2d598f8bbeeaeb0534d7994): 11 species.
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Scored 2 species x stage in 0.1 min on 6 workers.
+WCT_rear: underpowered. 1679 visits (536 detections) in 14 groups (6 both). Recommended width>=1.5|g<=0.04|none; default outside the region (+17.8, SE 13.4). Curve held-out 1375.2 vs grid best 1311.1.
+WCT_spawn: no_response (visits_in=1679).
+WCT_rear grades: already written under width>=1.5|g<=0.04|none on 20261017_004619-3f4c713b, kept.
+Done in 0.1 min.

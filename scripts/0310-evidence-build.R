@@ -1,0 +1,293 @@
+# scripts/0310-evidence-build.R
+# ---------------------------------------------------------------------------
+# One evidence build for every species: FDIS electrofishing site visits placed on link's segments
+# province-wide, with each species' catch, presence and absence, link's access and habitat flags,
+# wet's flow by source, the width link reads on an unmeasured stream, regulated reaches, the
+# natural barriers downstream per species, the walks to rivers of each size on each flow source,
+# the hydrologic zone, and the bcfishobs records these visits produced. Issue #57, phase 1.
+# Replaces the builds 0290, 0294 and 0296 did one species at a time (those scripts now write
+# their tables from this one). Consumers: 0320 (tuning), 0330 (comparison), 0299 (publish).
+#
+# WHY / DESIGN NOTES (the package functions carry the method; this script carries the order,
+# the gates and the ledger):
+#   - GATE: runs only after 0300 released on the current fresh_default (the settle log's last row
+#     is `released`), and records that run's run_uid and SHAs. The link commit the configs are
+#     read from later is that run's link_sha.
+#   - ONE SCHEMA. fresh_default holds every modelable group, so there is no held-out schema and
+#     no step-5 class; #28's fixed split is not carried (decided 2026-10-17).
+#   - ACCESS gates on streams_access (access_<sp> > 0); the habitat flags are re-gated on it and
+#     the stored flags kept beside them; knw_link_access_check() writes the disagreement per
+#     species on every run (link#349). access_<sp> = 2 stays in the population and is never a
+#     covariate.
+#   - SPECIES RANGE: a visit's species row scores only in groups where link's presence rule
+#     (lnk_species_pooling() on the default bundle) marks the species present; DV pools into BT
+#     where the tracker says so, up to obs_year_max.
+#   - FLOW: wet's pick with the parent fallback. The wet manifest's build stamp and the loaded
+#     picked counts per source are ledgered; which build the table holds is wet_db_load()'s to
+#     assert (it filters the manifest's rows on load, so a row count cannot be compared here).
+#   - WALKS from every placed visit's own point (not the segment start), all sizes in q_grid on
+#     every source; the positive control against 0294's one-size walk is a test, not repeated here.
+#   - HYDROLOGIC ZONE from the BC catalogue zip, placed by the visit's FWA segment midpoint
+#     (0296's method, unchanged).
+#   - Every drop is a ledger row, and the drops and kept rows partition the input.
+#
+# INPUT:  data/fdis/build/{sites,catch,fish}.rds (0230), data/fdis_species_codes.csv, data/fiss_evidence.csv (0250),
+#         data/<wsg>/fiss_step2_fishcoll_<wsg>.csv (0220),
+#         data/fdis_size_breaks.csv, scripts/logs/habitat/<date>_link_settle.csv (0300);
+#         fwapg database (PG* env vars): fresh_default, discharge, cabd, bcfishobs, whse_basemapping;
+#         link >= 0.66.0 (lnk_species_pooling); the BC Hydrologic Zones zip
+# OUTPUT: data/fdis/derived/visits_link.csv     one row per placed visit (ignored; 0299 publishes)
+#         data/fdis/derived/visits_species.csv  one row per placed visit x species
+#         data/fdis/derived/walks.csv           one row per start x source x river size
+#         data/fdis/derived/bcfishobs_fdis_match.csv
+#         data/fdis/derived/access_check.csv
+#         data/fdis/derived/workbook_{sites,species}.csv  the FISS workbook sites placed on link's segments
+#         scripts/logs/habitat/<date>_evidence_build_ledger.csv
+# RUN:    Rscript scripts/0310-evidence-build.R   (from the repo root; ~15 min, 4 socket workers)
+# ---------------------------------------------------------------------------
+suppressMessages({ library(dplyr); library(readr); library(DBI); library(RPostgres) })
+pkgload::load_all(quiet = TRUE)
+options(warn = 1)
+if (!nzchar(Sys.getenv("PGCONNECT_TIMEOUT"))) Sys.setenv(PGCONNECT_TIMEOUT = "30")
+
+schema <- "fresh_default"
+q_grid <- c(1, 3, 5, 10, 20, 30, 50)
+sources <- c("pick", "pcic_routed", "wet_balance")
+n_workers <- 4L
+link_min <- "0.66.0"
+cw_agree_min <- 0.9    # 0296 measured 96.2 % province-wide; a two-group sample gave 88 %. The control
+                       # is for a formula or input change, which collapses agreement, not for regional drift.
+hz_url <- paste0("https://catalogue.data.gov.bc.ca/dataset/f1f86c41-ae83-49d5-92e1-526897b99fa2/",
+                 "resource/fc209bd0-26ab-4f8b-9415-8f34081a3c0e/download/bc_hydrologic_zones.zip")
+dir_out <- "data/fdis/derived"
+stamp <- format(Sys.Date(), "%Y%m%d")
+path_ledger <- file.path("scripts/logs/habitat", paste0(stamp, "_evidence_build_ledger.csv"))
+species <- knw_species()
+
+if (!requireNamespace("link", quietly = TRUE) || packageVersion("link") < link_min) {
+  stop("needs link >= ", link_min, ": pak::pak(\"NewGraphEnvironment/link\")")
+}
+ledger <- tibble(kind = character(), step = character(), n = numeric(), note = character())
+add <- function(kind, step, n, note = "") {
+  ledger <<- bind_rows(ledger, tibble(kind = kind, step = step, n = as.numeric(n), note = note))
+}
+pg <- function() {
+  tryCatch(DBI::dbConnect(RPostgres::Postgres(), bigint = "numeric"),
+           error = function(e) stop("database unreachable (PG* environment variables): ", conditionMessage(e)))
+}
+
+# ---- gate: 0300 released on this schema -----------------------------------------
+settle <- sort(list.files("scripts/logs/habitat", "_link_settle\\.csv$", full.names = TRUE), decreasing = TRUE)
+if (!length(settle)) stop("no settle log: run scripts/0300-link-settle-wait.R first")
+st <- read_csv(settle[1], show_col_types = FALSE, col_types = cols(.default = "c"))
+st <- st[nrow(st), ]
+if (!identical(st$status, "released")) stop(settle[1], " did not release (status ", st$status, ")")
+add("info", "settle_log", 0, settle[1])
+add("info", "link_run_uid", 0, st$run_uid)
+for (k in c("link_version", "link_sha", "fresh_version", "fresh_sha", "fwapg_sha", "config_hash")) {
+  add("info", paste0("run_", k), 0, st[[k]])
+}
+conn <- pg()
+now <- dbGetQuery(conn, sprintf("SELECT string_agg(DISTINCT run_uid, ';') AS u FROM %s.log_recompute", schema))$u
+if (!identical(now, st$run_uid)) stop("fresh_default.log_recompute run_uid is ", now, ", not the released ", st$run_uid)
+
+# ---- visits: quality, species -----------------------------------------------------
+build <- "data/fdis/build"
+sites <- readRDS(file.path(build, "sites.rds"))
+catch <- readRDS(file.path(build, "catch.rds"))
+fish <- readRDS(file.path(build, "fish.rds"))
+# 0230 keeps the FWA ids as integer64; the package functions return doubles, and dplyr will not join the two
+sites <- sites |> mutate(across(where(~ inherits(.x, "integer64")), as.numeric))
+codes <- read_csv("data/fdis_species_codes.csv", col_types = cols(.default = "c"), na = "")
+breaks <- read_csv("data/fdis_size_breaks.csv", col_types = cols(.default = "c")) |>
+  mutate(across(c(length_min_mm, length_max_mm), as.numeric))
+for (f in c("sites", "catch", "fish")) add("info", paste0("md5_", f), 0, unname(tools::md5sum(file.path(build, paste0(f, ".rds")))))
+add("info", "fdis_sites_in", nrow(sites))
+
+q <- knw_fdis_quality(sites)
+ledger <- bind_rows(ledger, q$ledger |> filter(kind == "drop") |> mutate(n = as.numeric(n)))
+v <- q$kept
+
+# species range and pooling from link's default bundle
+cfg <- link::lnk_config("default")
+loaded <- suppressWarnings(link::lnk_load_overrides(cfg))
+aoi <- sort(unique(v$watershed_group_code))
+pool <- bind_rows(lapply(species, function(sp) {
+  tryCatch(link::lnk_species_pooling(loaded, aoi = aoi, species = sp),
+           error = function(e) { add("info", paste0("pooling_error_", sp), 0, conditionMessage(e)); NULL })
+}))
+range_sp <- pool |> distinct(species_code, watershed_group_code)
+pooled_bt <- pool |> filter(species_code == "BT", obs_species == "DV") |>
+  distinct(watershed_group_code, obs_year_max)
+add("info", "link_version", 0, as.character(packageVersion("link")))
+add("info", "species_pooling_md5", 0,
+    unname(tools::md5sum(system.file("extdata/configs/default/species_pooling.csv", package = "link"))))
+add("info", "bt_dv_pooled_wsgs", nrow(pooled_bt))
+
+vs <- knw_fdis_species(v |> select(site_visit, watershed_group_code, year, catch_status), catch, fish, codes,
+                       breaks, species = species, pooled = pooled_bt)
+vs <- vs |>
+  left_join(v |> select(site_visit, watershed_group_code), by = "site_visit") |>
+  mutate(in_range = paste(species_code, watershed_group_code) %in% paste(range_sp$species_code, range_sp$watershed_group_code)) |>
+  select(-watershed_group_code)
+for (sp in species) {
+  x <- vs[vs$species_code == sp, ]
+  add("info", paste0("species_", sp), sum(x$present),
+      sprintf("present on %d visits; absent %d; blocked %d; unknown %d; in link's range %d",
+              sum(x$present), sum(x$status == "absent"), sum(x$status == "blocked"), sum(x$status == "unknown"),
+              sum(x$in_range)))
+}
+
+# ---- place on link's segments ----------------------------------------------------
+pl <- knw_link_place(conn, v |> select(site_visit, watershed_group_code, blue_line_key, downstream_route_measure),
+                     schema)
+add("info", "link_multi_match", pl$overlap$n, sprintf("max overlap %.4f m", pl$overlap$max_overlap))
+add("info", "species_with_access", length(pl$species_access), paste(pl$species_access, collapse = ";"))
+add("info", "species_with_habitat", length(pl$species_habitat), paste(pl$species_habitat, collapse = ";"))
+n0 <- nrow(v)
+v <- v |> inner_join(pl$placed, by = "site_visit")
+add("drop", "no_link_segment", n0 - nrow(v), "no fresh_default segment on the visit's blue line at its measure")
+add("info", "segment_starts_in_window", sum(v$segment_start_offset_m >= -1 & v$segment_start_offset_m <= 5))
+vs <- vs |> filter(site_visit %in% v$site_visit)
+
+# ---- flow, width, regulated, barriers ---------------------------------------------
+cat_wet <- wet::wet_catalog()
+add("info", "wet_manifest", 0, paste(attr(cat_wet, "id"), "built", attr(cat_wet, "built"), "at", attr(cat_wet, "manifest")))
+picked <- dbGetQuery(conn, "SELECT source, count(*) FILTER (WHERE pick) AS picked, count(*) AS n_segments
+                            FROM discharge.fwa_v1_segment_monthly WHERE scenario = 'historical' AND month = 0 GROUP BY 1")
+for (i in seq_len(nrow(picked))) {
+  add("info", paste0("wet_loaded_", picked$source[i]), picked$picked[i],
+      sprintf("picked annual rows; %s segments loaded (wet_db_load() filters the manifest's rows on load)", picked$n_segments[i]))
+}
+fl <- knw_link_flow(conn, unique(v$linear_feature_id))
+v <- v |> left_join(fl, by = "linear_feature_id")
+add("info", "flow_from_parent", sum(v$flow_from %in% "parent"))
+add("info", "flow_missing", sum(is.na(v$mad_pick)), "no picked flow on the segment or a parent")
+add("info", "code_from_parent", sum(v$code_from_parent %in% TRUE))
+
+wd <- knw_link_width(conn, unique(v$linear_feature_id), agree_min = cw_agree_min)
+v <- v |> left_join(wd$widths, by = "linear_feature_id")
+add("info", "cw_model_control", wd$control$n_modelled,
+    sprintf("recomputed model within 5 %% of the stored MODELLED width on %.1f %%; median ratio %.3f",
+            100 * wd$control$agree_share, wd$control$median_ratio))
+for (s in sort(unique(na.omit(v$fwa_cw_source)))) add("info", paste0("width_source_", s), sum(v$fwa_cw_source %in% s))
+add("info", "cw_deploy_null", sum(is.na(v$cw_deploy)))
+
+pts <- v |> distinct(blue_line_key, downstream_route_measure, wscode, localcode)
+rg <- knw_link_regulated(conn, pts)
+v <- v |> left_join(rg$regulated, by = c("blue_line_key", "downstream_route_measure"))
+add("info", "regulating_dams_placed", nrow(rg$dams))
+add("info", "regulated", sum(v$regulated %in% TRUE))
+
+bd <- knw_link_barrier_dnstr(conn, pts, species, schema)
+v <- v |> left_join(bd, by = c("blue_line_key", "downstream_route_measure"))
+for (sp in species) add("info", paste0("barrier_dnstr_", sp), sum(v[[paste0("barrier_dnstr_", tolower(sp))]] %in% TRUE))
+add("info", "barrier_unknown_codes", sum(is.na(v$wscode) | is.na(v$localcode)), "no watershed code even from a parent")
+
+# ---- access check (link#349) -------------------------------------------------------
+ac <- knw_link_access_check(conn, schema, species)
+add("info", "access_check_skipped", length(ac$skipped), paste(ac$skipped, collapse = ";"))
+dis <- ac$check |> filter(habitat_accessible, !access_gt0)
+for (i in seq_len(nrow(dis))) {
+  add("info", paste0("access_disagree_", dis$species_code[i]), dis$n_segments[i],
+      sprintf("habitat accessible, access = 0: %d rearing, %d spawning, %.0f km", dis$n_rearing[i], dis$n_spawning[i], dis$km[i]))
+}
+dbDisconnect(conn)
+
+# ---- walks ------------------------------------------------------------------------
+starts <- v |> distinct(blue_line_key, downstream_route_measure)
+t0 <- Sys.time()
+w <- knw_link_walks(pg, starts, q_grid = q_grid, sources = sources, workers = n_workers)
+add("info", "walk_starts", nrow(starts),
+    sprintf("x %d sources x %d sizes; %.1f min on %d workers", length(sources), length(q_grid),
+            as.numeric(difftime(Sys.time(), t0, units = "mins")), n_workers))
+for (s in sources) for (st_ in sort(unique(w$status))) {
+  add("info", sprintf("walk_%s_%s", s, st_), sum(w$src == s & w$status == st_), "rows, all sizes")
+}
+# target flags: a lake target, and a target on a regulated reach
+conn <- pg()
+tg <- w |> filter(status == "found") |> distinct(large_lfid)
+tgw <- knw_link_width(conn, tg$large_lfid, agree_min = 0)$widths |> select(large_lfid = linear_feature_id, target_lake = wb_any_lake)
+tgp <- dbGetQuery(conn, "SELECT linear_feature_id AS large_lfid, blue_line_key, downstream_route_measure,
+                                wscode_ltree::text AS wscode, localcode_ltree::text AS localcode
+                         FROM whse_basemapping.fwa_stream_networks_sp WHERE linear_feature_id = ANY($1::bigint[])",
+                  params = list(paste0("{", paste(tg$large_lfid, collapse = ","), "}")))
+if (nrow(tgp) != nrow(tg)) stop("a walk target is not in the FWA stream network")
+tgr <- knw_link_regulated(conn, tgp)$regulated |> rename(target_regulated = regulated)
+tgp <- tgp |> left_join(tgr, by = c("blue_line_key", "downstream_route_measure")) |> select(large_lfid, target_regulated)
+w <- w |> left_join(tgw, by = "large_lfid") |> left_join(tgp, by = "large_lfid") |>
+  mutate(target_lake = coalesce(target_lake, FALSE), target_regulated = coalesce(target_regulated, FALSE))
+add("info", "walk_targets", nrow(tg), sprintf("%d on regulated reaches, %d in lakes", sum(tgp$target_regulated), sum(tgw$target_lake)))
+
+# ---- hydrologic zone (0296's method) --------------------------------------------------
+hz_zip <- tempfile(fileext = ".zip")
+h <- curl::curl_fetch_disk(hz_url, hz_zip, handle = curl::new_handle(timeout = 300, followlocation = TRUE))
+if (h$status_code != 200) stop("hydrologic zones download returned HTTP ", h$status_code)
+add("info", "zone_zip", file.size(hz_zip), paste("md5", unname(tools::md5sum(hz_zip)), hz_url))
+hz_dir <- tempfile("hydz")
+utils::unzip(hz_zip, exdir = hz_dir)
+hz_shp <- list.files(hz_dir, "\\.shp$", full.names = TRUE, recursive = TRUE)
+if (length(hz_shp) != 1) stop("expected one shapefile in the hydrologic zones zip, found ", length(hz_shp))
+hz <- sf::st_read(hz_shp, quiet = TRUE) |> transmute(hydro_zone = sprintf("%02d", as.integer(HYDZN_NO)))
+if (!all(sf::st_is_valid(hz))) stop("a hydrologic zone geometry is invalid as read")
+dbWriteTable(conn, "tmp_knw_pt", v |> select(site_visit, linear_feature_id), temporary = TRUE, overwrite = TRUE)
+mid <- dbGetQuery(conn, "
+  SELECT t.site_visit, ST_X(p) AS x, ST_Y(p) AS y
+  FROM tmp_knw_pt t
+  JOIN whse_basemapping.fwa_stream_networks_sp s ON s.linear_feature_id = t.linear_feature_id
+  CROSS JOIN LATERAL (SELECT ST_LineInterpolatePoint(ST_Force2D(s.geom), 0.5) AS p) q")
+mid_sf <- sf::st_as_sf(mid, coords = c("x", "y"), crs = 3005) |> sf::st_transform(sf::st_crs(hz))
+zj <- sf::st_join(mid_sf, hz, join = sf::st_intersects) |> sf::st_drop_geometry() |>
+  group_by(site_visit) |> summarise(n_zone = n_distinct(hydro_zone, na.rm = TRUE), hydro_zone = min(hydro_zone), .groups = "drop")
+if (any(zj$n_zone > 1)) stop(sum(zj$n_zone > 1), " visits fall in two hydrologic zones")
+v <- v |> left_join(zj |> select(site_visit, hydro_zone), by = "site_visit")
+add("info", "zone_unmatched", sum(is.na(v$hydro_zone)))
+
+# ---- workbook sites (#23's second source) ---------------------------------------------
+# 0250's FISS evidence, deduped against FDIS; effort from the step-2 collection forms the groups hold.
+# A site scores only with an electrofishing effort; the rest are presence-only. They are placed on
+# link's segments and written beside the FDIS visits, keyed by site_key and flagged by data_set.
+ev <- read_csv("data/fiss_evidence.csv", show_col_types = FALSE, col_types = cols(site_visit = "c"), guess_max = 1e5)
+s2_files <- list.files("data", "^fiss_step2_fishcoll_.*\\.csv$", recursive = TRUE, full.names = TRUE)
+s2 <- if (length(s2_files)) bind_rows(lapply(s2_files, read_csv, show_col_types = FALSE, col_types = cols(.default = "c"))) else NULL
+fw <- knw_fiss_visits(ev, s2)
+add("info", "workbook_species_rows", nrow(fw), sprintf("%d sites; %d rows score (electrofishing with effort)",
+                                                       n_distinct(fw$site_visit), sum(fw$scores)))
+# one row per site: the electrofishing effort where the site has one (other methods carry none)
+fw_sites <- fw |>
+  group_by(site_visit, watershed_group_code, blue_line_key, downstream_route_measure, year, month, data_set) |>
+  summarise(across(c(fishing_time_s, area_m2, fished_length_m), ~ if (all(is.na(.x))) NA_real_ else max(.x, na.rm = TRUE)),
+            .groups = "drop") |>
+  filter(!is.na(blue_line_key), !is.na(downstream_route_measure))
+if (anyDuplicated(fw_sites$site_visit)) stop("a workbook site has two placements or dates")
+fw_pl <- knw_link_place(conn, fw_sites |> select(site_visit, watershed_group_code, blue_line_key, downstream_route_measure), schema)
+fw_sites <- fw_sites |> inner_join(fw_pl$placed, by = "site_visit")
+add("info", "workbook_sites_placed", nrow(fw_sites), sprintf("of %d with a placement", n_distinct(fw$site_visit)))
+if (nrow(fw_sites)) {
+  fw_fl <- knw_link_flow(conn, unique(fw_sites$linear_feature_id <- fw_sites$segment_linear_feature_id))
+  fw_sites <- fw_sites |> left_join(fw_fl, by = "linear_feature_id")
+}
+write_csv(fw |> inner_join(fw_sites |> select(site_visit, id_segment), by = "site_visit"),
+          file.path(dir_out, "workbook_species.csv"), na = "")
+write_csv(fw_sites, file.path(dir_out, "workbook_sites.csv"), na = "")
+
+# ---- bcfishobs records from these visits ---------------------------------------------
+bm <- knw_bcfishobs_match(conn, sites |> select(site_visit, date), catch |> select(site_visit, species_code), species)
+dbDisconnect(conn)
+for (i in seq_len(nrow(bm$summary))) {
+  add("info", paste0("bcfishobs_", bm$summary$species_code[i], "_", bm$summary$match[i]), bm$summary$n_records[i])
+}
+
+# ---- write ---------------------------------------------------------------------------
+add("kept", "visits_kept", nrow(v))
+out <- sum(ledger$n[ledger$kind %in% c("drop", "kept")])
+if (nrow(sites) != out) stop("ledger does not partition the input: ", nrow(sites), " in, ", out, " out")
+v <- v |> select(-any_of(c("geom")))
+write_csv(v, file.path(dir_out, "visits_link.csv"), na = "")
+write_csv(vs, file.path(dir_out, "visits_species.csv"), na = "")
+write_csv(w, file.path(dir_out, "walks.csv"), na = "")
+write_csv(bm$matched, file.path(dir_out, "bcfishobs_fdis_match.csv"), na = "")
+write_csv(ac$check |> mutate(run_uid = st$run_uid), file.path(dir_out, "access_check.csv"), na = "")
+write_csv(ledger, path_ledger, na = "")
+print(ledger, n = Inf)
+message(sprintf("%d visits placed; %d walk rows; ledger %s", nrow(v), nrow(w), path_ledger))

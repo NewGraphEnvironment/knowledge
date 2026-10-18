@@ -19,6 +19,45 @@ reference:
   - title: Fish records
     contents:
       - knw_size_class
+      - knw_species
+      - knw_fdis_quality
+      - knw_fdis_species
+      - knw_spawner_evidence
+      - knw_fiss_visits
+      - knw_bcfishobs_match
+  - title: Evidence on link's segments
+    desc: >
+      Place site visits on link's segments with every species' access and habitat flags; read
+      flow, width, regulated reaches, natural barriers downstream and the walks to rivers.
+    contents:
+      - knw_link_place
+      - knw_link_segments
+      - knw_link_flow
+      - knw_link_width
+      - knw_link_regulated
+      - knw_link_barrier_dnstr
+      - knw_link_walks
+      - knw_link_access_check
+  - title: Tuning
+    desc: >
+      Score candidate rules on held-out watershed groups, fit the joint use curve at the pick, and
+      grade every segment by expected use.
+    contents:
+      - knw_tune_grid
+      - knw_walk_index
+      - knw_rule_in
+      - knw_tune_score
+      - knw_tune_curve
+      - knw_grade
+      - knw_grade_species
+      - knw_tune_run
+  - title: Published results and comparison
+    contents:
+      - knw_thresholds_table
+      - knw_publish
+      - knw_compare_rules
+      - knw_floodplain_ha
+      - knw_compare_map
   - title: Crossings and past reports
     desc: >
       Pull PSCIS crossing layers for a watershed group and derive the crossing

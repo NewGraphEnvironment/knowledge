@@ -1,8 +1,8 @@
 code,name,catch_class,species_group,blocks_absence_of,note
 AC,Arctic Char,fish,,,
-AF,All Fish,fish,,CH;char,All fish: could be anything
+AF,All Fish,fish,,BT;CH;CM;CO;GR;KO;PK;RB;SK;ST;WCT;char,All fish: could be anything
 ANODON,Floater Mussel (General),not_fish,,,"Floater mussel, not a fish"
-AO,All Salmon,fish,,CH,All salmon: could be CH
+AO,All Salmon,fish,,CH;CM;CO;KO;PK;SK,"All salmon: could be any salmon, kokanee included"
 AS,Atlantic Salmon,fish,,,
 BB,Burbot,fish,,,
 BCB,Black Crappie,fish,,,
@@ -40,11 +40,11 @@ CRA,Signal Crayfish,not_fish,,,"Signal crayfish, not a fish"
 CRH,Torrent Sculpin,fish,,,
 CRI,Spoonhead Sculpin,fish,,,
 CRM,Rocky Mountain Sculpin,fish,,,
-CRS,Cutthroat/Rainbow cross,fish,,,
+CRS,Cutthroat/Rainbow cross,fish,,RB;WCT,Cutthroat x rainbow cross: blocks a rainbow or westslope cutthroat absence claim
 CS,Least Cisco,fish,,,
 CSU,Largescale Sucker,fish,,,
-CT,Cutthroat Trout,fish,,,
-CT/RB,"Fish are either RB or CT, but suspect they are CT",fish,,,
+CT,Cutthroat Trout,fish,,WCT,"Cutthroat, species not given: could be westslope cutthroat"
+CT/RB,"Fish are either RB or CT, but suspect they are CT",fish,,RB;WCT,Either cutthroat or rainbow: blocks a rainbow or westslope cutthroat absence claim
 DC,Dace (General),fish,,,
 DV,Dolly Varden,fish,char,,
 DV/BT,"Fish are either DV or BT, but suspect they are DV",fish,char,,
@@ -59,7 +59,7 @@ GC,Goldfish,fish,,,
 GE,Goldeye,fish,,,
 GR,Arctic Grayling,fish,,,
 IN,Inconnu,fish,,,
-KO,Kokanee,fish,,,
+KO,Kokanee,fish,,SK,Juvenile kokanee and sockeye cannot be told apart in the field: blocks a sockeye absence claim
 L,Lamprey (General),fish,,,
 LDC,Leopard Dace,fish,,,
 LKC,Lake Chub,fish,,,
@@ -83,27 +83,27 @@ PL,Pacific Lamprey,fish,,,
 PMB,Pumpkinseed,fish,,,
 PW,Pygmy Whitefish,fish,,,
 RB,Rainbow Trout,fish,,,
-RB/CT,"Fish are either RB or CT, but suspect they are RB",fish,,,
+RB/CT,"Fish are either RB or CT, but suspect they are RB",fish,,RB;WCT,Either rainbow or cutthroat: blocks a rainbow or westslope cutthroat absence claim
 RDC,Northern Redbelly Dace,fish,,,
 RL,River Lamprey,fish,,,
 RSC,Redside Shiner,fish,,,
 RW,Round Whitefish,fish,,,
-SA,Salmon (General),fish,,CH,"Salmon, general: could be CH"
+SA,Salmon (General),fish,,CH;CM;CO;KO;PK;SK,"Salmon, general: could be any salmon, kokanee included"
 SB,Stickleback (General),fish,,,
 SDC,Speckled Dace,fish,,,
 SFL,Starry Flounder,fish,,,
 SH,American Shad,fish,,,
-SK,Sockeye Salmon,fish,,,
+SK,Sockeye Salmon,fish,,KO,Juvenile sockeye and kokanee cannot be told apart in the field: blocks a kokanee absence claim
 SLV,"Char, General",fish,char,,"Char, general: counted as char presence"
 SMB,Smallmouth Bass,fish,,,
-SP,Fish Unidentified Species,fish,,CH;char,Unidentified species: could be anything
+SP,Fish Unidentified Species,fish,,BT;CH;CM;CO;GR;KO;PK;RB;SK;ST;WCT;char,Unidentified species: could be anything
 SSU,Salish Sucker,fish,,,
 ST,Steelhead,fish,,,
 STC,Spottail Shiner,fish,,,
 SU,Sucker (General),fish,,,
 TC,Tench,fish,,,
 TP,Trout-perch,fish,,,
-TR,Unidentifiable Trout - only fry <70mm in length ,fish,,char,Unidentifiable trout fry < 70 mm: conservatively blocks a char absence claim (field ID of small char vs trout fry is unreliable); a judgement call
+TR,Unidentifiable Trout - only fry <70mm in length ,fish,,RB;ST;WCT;char,"Unidentifiable trout fry < 70 mm: conservatively blocks a char, rainbow, steelhead or cutthroat absence claim (field ID of small salmonid fry is unreliable); a judgement call"
 TSB,Threespine Stickleback,fish,,,
 UDC,Umatilla Dace,fish,,,
 WCT,Westslope (Yellowstone) Cutthroat Trout,fish,,,

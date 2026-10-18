@@ -42,35 +42,38 @@ wf_farm_priority.js                          farm priority/crossing tables out o
 --- Life-history timing (independent; re-run only when the template's Gantt CSV changes) ---
 0260  reshape the template's Gantt CSV -> data/life_history_timing.csv   (read with knw_timing_read())
 
---- BT rearing use curve and candidate weight (after 0240; needs link >= 0.55.0 and fwapg database (PG* env vars)) ---
-0290  place FDIS site visits on link's segments (fresh_default + score284_default), pooled BT presence,
-      elevation third, step-5 class -> data/fdis/derived/bt_use_visits.csv (+ ledger)
-0291  effort-corrected use curve, three responses (BT caught, any fish, BT given fish)
-      -> data/bt_rear_use_curve.csv (+ log; ~10 min, socket workers)
-0292  candidate weight per gradient class -> data/habitat_weight_bt_rear.csv
-0293  BT spawner evidence by gradient class (maturity-coded Aug-Oct visits, size split) -> data/bt_spawn_evidence.csv (+ log; ~10 min)
+--- One evidence build and one tuning run for every species (#57; needs link >= 0.66.0, fresh, wet's flow,
+    fresh_default province-wide, and the link repo at LINK_REPO) ---
+0300  wait until link's run has settled in fresh_default (log_recompute ended for every group, churn
+      unchanged over three polls, no active session) -> scripts/logs/habitat/<date>_link_settle.csv (released row)
+0310  one evidence build: quality-passed FDIS visits x every species (catch, size classes, presence, blocked
+      absence, DV pooling), placed on link's segments with every species' access and re-gated habitat flags,
+      wet's flow by source, cw_deploy, regulated reach, natural barriers downstream per species, walks to
+      rivers of 1-50 m3/s on each source, hydrologic zone, the bcfishobs match, link#349's access check, the
+      workbook sites -> data/fdis/derived/{visits_link,visits_species,walks,bcfishobs_fdis_match,access_check,
+      workbook_sites,workbook_species}.csv (+ ledger; ~20 min, 4 socket workers)
+0290  bt_use_visits.csv written from 0310 (BT's rows and the columns 0291-0293 read; no held-out columns)
+0294  ch_mad_visits.csv written from 0310 (+ two database reads: ambiguous placement, barriers without USER_DEFINITE)
+0296  ch_rule_visits.csv and ch_rule_walks.csv written from 0294 and 0310
+0320  score every rule of each species x stage on held-out groups, pick, fit the joint curve, grade every
+      segment of the species' groups -> data/tune/ (+ log; run on the 16-core machine, WORKERS=14)
+0325  thresholds table, the groups each rule was scored on, and the grade table as Parquet + manifest
+      -> data/publish/{thresholds_v1,habitat_grade_v1}/, data/thresholds*.csv; PUBLISH=TRUE uploads to
+      s3://fresh-bc/knowledge/{thresholds,habitat_grade}/v1/ (after the bucket policy of #56)
+0330  default against the recommended rule on link's segments for every species x stage and group (km, graded
+      km, km by grade class, change by reason, FDIS and bcfishobs checks), floodplain ha beside each rule's
+      habitat in the catalog's groups, maps -> data/compare/, research/fig/compare_*.png (+ log)
 
---- CH detection by stream size (after 0240; needs wet's flow loaded in fwapg database (PG* env vars)) ---
-0294  FDIS visits with wet's picked annual flow (MAD), distance downstream to the first MAD >= 10
-      segment for visits under 0.5, natural CH barrier check -> data/fdis/derived/ch_mad_visits.csv
-      (+ ledger; ~15 min, 4 socket workers)
-0295  effort-corrected CH detection by MAD class and by distance class -> data/ch_mad_use.csv (+ log)
-
---- Tuned CH rearing rule (after 0294; wet's flow, fresh_default and fresh in fwapg database (PG* env vars)) ---
-0296  walks to rivers of 1-50 m3/s on each flow source, link's width (and fwapg's model recomputed),
-      natural CH barrier status, link segment, hydrologic zone -> data/fdis/derived/ch_rule_visits.csv
-      and ch_rule_walks.csv (+ ledger; ~4 min, 4 socket workers)
-0297  2,795 rules scored on held-out WSGs, curves, flow sources, sensitivities -> data/ch_rule_tune.csv,
-      ch_rule_curves.csv, ch_rule_flips.csv, research/fig/chinook_rearing_tuned_curves.png (+ log; ~25 min,
-      6 socket workers)
-0298  recommended rule beside default on fresh_default's CH groups (predicate, overlay and fresh's
-      connectivity pass on scratch copies; needs the link repo, LINK_REPO) -> data/ch_rule_compare.csv,
-      ch_rule_checks.csv, ch_rule_change.csv, maps in research/fig/ (+ log; ~20 min)
+--- Frozen on the published v2 tables (0299 PULL=TRUE VERSION=v2): the one-species analyses #57 superseded ---
+0291  BT use curve (#28)   0292  BT candidate weight   0293  BT spawner evidence (#33)
+0295  CH detection by MAD class (#52)   0297  CH rule tuning (#54)   0298  CH rule beside default (#54)
+      They read the v2 bt_use_visits / ch_mad_visits / ch_rule_* tables and are not run on v3's.
 
 --- Publish the FDIS visit tables (after any of 0240, 0290, 0294, 0296 changes its table) ---
 0299  data/fdis/derived/*.csv -> Parquet + manifest.json in data/fdis/publish/; with PUBLISH=TRUE (clean
-      tree) uploads them to s3://fresh-bc/knowledge/fdis/v2/ and data/fdis_README.md to s3://fresh-bc/fdis/README.md
-      PULL=TRUE restores data/fdis/derived/*.csv from the published Parquet (NO_SIGN=TRUE: no credentials)
+      tree) uploads them to s3://fresh-bc/knowledge/fdis/<VERSION>/ (default v3; v2 is the pre-#57 set) and
+      data/fdis_README.md to s3://fresh-bc/fdis/README.md
+      PULL=TRUE [VERSION=v2] restores data/fdis/derived/*.csv from the published Parquet (NO_SIGN=TRUE: no credentials)
 
 --- Habitat literature (independent of the watershed-group flow) ---
 0270  build the group's Fisheries/habitat_modelling collection   --dry-run first, then live

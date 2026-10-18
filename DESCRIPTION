@@ -24,12 +24,30 @@ Imports:
     DBI,
     dplyr,
     lubridate,
+    parallel,
     rlang,
     sf,
+    stats,
     stringr,
-    tibble
+    tibble,
+    utils
 Suggests:
+    arrow,
     duckdb,
+    flooded,
+    fresh,
+    gq,
+    htmlwidgets,
+    jsonlite,
+    mapgl,
+    mgcv,
     RPostgres,
-    testthat (>= 3.0.0)
+    terra,
+    testthat (>= 3.0.0),
+    tmap,
+    withr
+Remotes:
+    NewGraphEnvironment/flooded,
+    NewGraphEnvironment/fresh,
+    NewGraphEnvironment/gq
 Config/testthat/edition: 3

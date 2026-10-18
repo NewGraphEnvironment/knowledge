@@ -1,0 +1,801 @@
+Spherical geometry (s2) switched off
+Comparison, knowledge#57: 8 fitted species x stage; link run 20261017_004619-3f4c713b at a17e91773b283b021811f8b5b76b887d5f4c16e4.
+link configs/default at a17e91773b283b021811f8b5b76b887d5f4c16e4 read from ../link; fresh 0.39.0.
+Floodplain catalog: 23 whole-network groups (BOWR BULK DUNC FRAN KISP KOTL LARL LCHL LNTH LSAL MCGR MORK MORR NECR PARS PCEA PINE SLOC TABR THOM UFRA UNTH WILL).
+STAGE=maps: floodplain and maps from the saved comparison of RB_rear BT_rear BT_spawn CH_rear CO_rear GR_rear ST_rear WCT_rear.
+ℹ 855 cells tied between claiming groups - assigned to the lowest key.
+ℹ 855 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+ℹ toggle with `tmap::ttm()`
+This message is displayed once per session.
+Linking to GEOS 3.13.0, GDAL 3.8.5, PROJ 9.5.1; sf_use_s2() is FALSE
+SpatRaster object downsampled to 3703 by 2702 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_rb_rear_bowr.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 674 cells tied between claiming groups - assigned to the lowest key.
+ℹ 674 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 3564 by 2806 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_rb_rear_bulk.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 610 cells tied between claiming groups - assigned to the lowest key.
+ℹ 610 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_rb_rear_dunc.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 1102 cells tied between claiming groups - assigned to the lowest key.
+ℹ 1102 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 2072 by 4828 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_rb_rear_fran.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 385 cells tied between claiming groups - assigned to the lowest key.
+ℹ 385 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 3789 by 2640 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_rb_rear_kisp.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 1253 cells tied between claiming groups - assigned to the lowest key.
+ℹ 1253 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 2937 by 3406 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_rb_rear_kotl.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 596 cells tied between claiming groups - assigned to the lowest key.
+ℹ 596 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 3246 by 3082 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_rb_rear_larl.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 340 cells tied between claiming groups - assigned to the lowest key.
+ℹ 340 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_rb_rear_lchl.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 1111 cells tied between claiming groups - assigned to the lowest key.
+ℹ 1111 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 4027 by 2484 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_rb_rear_lnth.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 344 cells tied between claiming groups - assigned to the lowest key.
+ℹ 344 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_rb_rear_lsal.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 971 cells tied between claiming groups - assigned to the lowest key.
+ℹ 971 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 2151 by 4650 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_rb_rear_mcgr.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 664 cells tied between claiming groups - assigned to the lowest key.
+ℹ 664 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 2779 by 3600 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_rb_rear_mork.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 1877 cells tied between claiming groups - assigned to the lowest key.
+ℹ 1877 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_rb_rear_morr.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 540 cells tied between claiming groups - assigned to the lowest key.
+ℹ 540 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_rb_rear_necr.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 633 cells tied between claiming groups - assigned to the lowest key.
+ℹ 633 cells tied between claiming groups - assigned to the lowest key.
+no accessible segment: nothing drawn for PARS: RB rearing, default against width>=3|g<=0.09|none
+ℹ 535 cells tied between claiming groups - assigned to the lowest key.
+ℹ 535 cells tied between claiming groups - assigned to the lowest key.
+no accessible segment: nothing drawn for PCEA: RB rearing, default against width>=3|g<=0.09|none
+ℹ 1011 cells tied between claiming groups - assigned to the lowest key.
+ℹ 1011 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 3285 by 3045 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_rb_rear_pine.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 324 cells tied between claiming groups - assigned to the lowest key.
+ℹ 324 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_rb_rear_sloc.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 137 cells tied between claiming groups - assigned to the lowest key.
+ℹ 137 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_rb_rear_tabr.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 561 cells tied between claiming groups - assigned to the lowest key.
+ℹ 561 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_rb_rear_thom.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 345 cells tied between claiming groups - assigned to the lowest key.
+ℹ 345 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 2590 by 3862 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_rb_rear_ufra.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 545 cells tied between claiming groups - assigned to the lowest key.
+ℹ 545 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 4069 by 2458 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_rb_rear_unth.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 271 cells tied between claiming groups - assigned to the lowest key.
+ℹ 271 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 4083 by 2450 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_rb_rear_will.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ tmap modes "plot" - "view"
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_rb_rear_carr.png
+Resolution: 1200 by 690 pixels
+Size: 8 by 4.6 inches (150 dpi)
+ℹ tmap modes "plot" - "view"
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_rb_rear_pori.png
+Resolution: 1200 by 690 pixels
+Size: 8 by 4.6 inches (150 dpi)
+ℹ tmap modes "plot" - "view"
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_rb_rear_grai.png
+Resolution: 1200 by 690 pixels
+Size: 8 by 4.6 inches (150 dpi)
+RB_rear: maps for BOWR BULK DUNC FRAN KISP KOTL LARL LCHL LNTH LSAL MCGR MORK MORR NECR PARS PCEA PINE SLOC TABR THOM UFRA UNTH WILL CARR PORI GRAI.
+ℹ 855 cells tied between claiming groups - assigned to the lowest key.
+ℹ 855 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 3703 by 2702 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_bt_rear_bowr.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 674 cells tied between claiming groups - assigned to the lowest key.
+ℹ 674 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 3564 by 2806 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_bt_rear_bulk.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 610 cells tied between claiming groups - assigned to the lowest key.
+ℹ 610 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_bt_rear_dunc.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 1102 cells tied between claiming groups - assigned to the lowest key.
+ℹ 1102 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 2072 by 4828 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_bt_rear_fran.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 385 cells tied between claiming groups - assigned to the lowest key.
+ℹ 385 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 3789 by 2640 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_bt_rear_kisp.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 1253 cells tied between claiming groups - assigned to the lowest key.
+ℹ 1253 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 2937 by 3406 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_bt_rear_kotl.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 596 cells tied between claiming groups - assigned to the lowest key.
+ℹ 596 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 3246 by 3082 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_bt_rear_larl.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 340 cells tied between claiming groups - assigned to the lowest key.
+ℹ 340 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_bt_rear_lchl.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 1111 cells tied between claiming groups - assigned to the lowest key.
+ℹ 1111 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 4027 by 2484 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_bt_rear_lnth.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 971 cells tied between claiming groups - assigned to the lowest key.
+ℹ 971 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 2151 by 4650 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_bt_rear_mcgr.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 664 cells tied between claiming groups - assigned to the lowest key.
+ℹ 664 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 2779 by 3600 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_bt_rear_mork.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 1877 cells tied between claiming groups - assigned to the lowest key.
+ℹ 1877 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_bt_rear_morr.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 540 cells tied between claiming groups - assigned to the lowest key.
+ℹ 540 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_bt_rear_necr.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 633 cells tied between claiming groups - assigned to the lowest key.
+ℹ 633 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 3145 by 3181 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_bt_rear_pars.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 535 cells tied between claiming groups - assigned to the lowest key.
+ℹ 535 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 2999 by 3335 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_bt_rear_pcea.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 1011 cells tied between claiming groups - assigned to the lowest key.
+ℹ 1011 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 3285 by 3045 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_bt_rear_pine.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 324 cells tied between claiming groups - assigned to the lowest key.
+ℹ 324 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_bt_rear_sloc.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 137 cells tied between claiming groups - assigned to the lowest key.
+ℹ 137 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_bt_rear_tabr.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 561 cells tied between claiming groups - assigned to the lowest key.
+ℹ 561 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_bt_rear_thom.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 345 cells tied between claiming groups - assigned to the lowest key.
+ℹ 345 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 2590 by 3862 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_bt_rear_ufra.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 545 cells tied between claiming groups - assigned to the lowest key.
+ℹ 545 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 4069 by 2458 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_bt_rear_unth.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 271 cells tied between claiming groups - assigned to the lowest key.
+ℹ 271 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 4083 by 2450 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_bt_rear_will.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ tmap modes "plot" - "view"
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_bt_rear_lmus.png
+Resolution: 1200 by 690 pixels
+Size: 8 by 4.6 inches (150 dpi)
+ℹ tmap modes "plot" - "view"
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_bt_rear_lhaf.png
+Resolution: 1200 by 690 pixels
+Size: 8 by 4.6 inches (150 dpi)
+ℹ tmap modes "plot" - "view"
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_bt_rear_natr.png
+Resolution: 1200 by 690 pixels
+Size: 8 by 4.6 inches (150 dpi)
+BT_rear: maps for BOWR BULK DUNC FRAN KISP KOTL LARL LCHL LNTH MCGR MORK MORR NECR PARS PCEA PINE SLOC TABR THOM UFRA UNTH WILL LMUS LHAF NATR.
+ℹ 855 cells tied between claiming groups - assigned to the lowest key.
+ℹ 855 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 3703 by 2702 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_bt_spawn_bowr.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 674 cells tied between claiming groups - assigned to the lowest key.
+ℹ 674 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 3564 by 2806 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_bt_spawn_bulk.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 610 cells tied between claiming groups - assigned to the lowest key.
+ℹ 610 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_bt_spawn_dunc.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 1102 cells tied between claiming groups - assigned to the lowest key.
+ℹ 1102 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 2072 by 4828 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_bt_spawn_fran.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 385 cells tied between claiming groups - assigned to the lowest key.
+ℹ 385 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 3789 by 2640 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_bt_spawn_kisp.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 1253 cells tied between claiming groups - assigned to the lowest key.
+ℹ 1253 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 2937 by 3406 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_bt_spawn_kotl.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 596 cells tied between claiming groups - assigned to the lowest key.
+ℹ 596 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 3246 by 3082 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_bt_spawn_larl.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 340 cells tied between claiming groups - assigned to the lowest key.
+ℹ 340 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_bt_spawn_lchl.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 1111 cells tied between claiming groups - assigned to the lowest key.
+ℹ 1111 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 4027 by 2484 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_bt_spawn_lnth.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 971 cells tied between claiming groups - assigned to the lowest key.
+ℹ 971 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 2151 by 4650 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_bt_spawn_mcgr.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 664 cells tied between claiming groups - assigned to the lowest key.
+ℹ 664 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 2779 by 3600 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_bt_spawn_mork.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 1877 cells tied between claiming groups - assigned to the lowest key.
+ℹ 1877 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_bt_spawn_morr.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 540 cells tied between claiming groups - assigned to the lowest key.
+ℹ 540 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_bt_spawn_necr.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 633 cells tied between claiming groups - assigned to the lowest key.
+ℹ 633 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 3145 by 3181 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_bt_spawn_pars.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 535 cells tied between claiming groups - assigned to the lowest key.
+ℹ 535 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 2999 by 3335 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_bt_spawn_pcea.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 1011 cells tied between claiming groups - assigned to the lowest key.
+ℹ 1011 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 3285 by 3045 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_bt_spawn_pine.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 324 cells tied between claiming groups - assigned to the lowest key.
+ℹ 324 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_bt_spawn_sloc.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 137 cells tied between claiming groups - assigned to the lowest key.
+ℹ 137 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_bt_spawn_tabr.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 561 cells tied between claiming groups - assigned to the lowest key.
+ℹ 561 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_bt_spawn_thom.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 345 cells tied between claiming groups - assigned to the lowest key.
+ℹ 345 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 2590 by 3862 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_bt_spawn_ufra.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 545 cells tied between claiming groups - assigned to the lowest key.
+ℹ 545 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 4069 by 2458 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_bt_spawn_unth.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 271 cells tied between claiming groups - assigned to the lowest key.
+ℹ 271 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 4083 by 2450 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_bt_spawn_will.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ tmap modes "plot" - "view"
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_bt_spawn_ltre.png
+Resolution: 1200 by 690 pixels
+Size: 8 by 4.6 inches (150 dpi)
+ℹ tmap modes "plot" - "view"
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_bt_spawn_uden.png
+Resolution: 1200 by 690 pixels
+Size: 8 by 4.6 inches (150 dpi)
+BT_spawn: maps for BOWR BULK DUNC FRAN KISP KOTL LARL LCHL LNTH MCGR MORK MORR NECR PARS PCEA PINE SLOC TABR THOM UFRA UNTH WILL LTRE UDEN.
+ℹ 855 cells tied between claiming groups - assigned to the lowest key.
+ℹ 855 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 3703 by 2702 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_ch_rear_bowr.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 674 cells tied between claiming groups - assigned to the lowest key.
+ℹ 674 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 3564 by 2806 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_ch_rear_bulk.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 1102 cells tied between claiming groups - assigned to the lowest key.
+ℹ 1102 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 2072 by 4828 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_ch_rear_fran.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 385 cells tied between claiming groups - assigned to the lowest key.
+ℹ 385 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 3789 by 2640 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_ch_rear_kisp.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 340 cells tied between claiming groups - assigned to the lowest key.
+ℹ 340 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_ch_rear_lchl.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 1111 cells tied between claiming groups - assigned to the lowest key.
+ℹ 1111 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 4027 by 2484 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_ch_rear_lnth.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 344 cells tied between claiming groups - assigned to the lowest key.
+ℹ 344 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_ch_rear_lsal.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 971 cells tied between claiming groups - assigned to the lowest key.
+ℹ 971 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 2151 by 4650 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_ch_rear_mcgr.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 664 cells tied between claiming groups - assigned to the lowest key.
+ℹ 664 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 2779 by 3600 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_ch_rear_mork.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 1877 cells tied between claiming groups - assigned to the lowest key.
+ℹ 1877 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_ch_rear_morr.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 540 cells tied between claiming groups - assigned to the lowest key.
+ℹ 540 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_ch_rear_necr.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 137 cells tied between claiming groups - assigned to the lowest key.
+ℹ 137 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_ch_rear_tabr.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 561 cells tied between claiming groups - assigned to the lowest key.
+ℹ 561 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_ch_rear_thom.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 345 cells tied between claiming groups - assigned to the lowest key.
+ℹ 345 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 2590 by 3862 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_ch_rear_ufra.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 545 cells tied between claiming groups - assigned to the lowest key.
+ℹ 545 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 4069 by 2458 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_ch_rear_unth.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 271 cells tied between claiming groups - assigned to the lowest key.
+ℹ 271 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 4083 by 2450 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_ch_rear_will.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ tmap modes "plot" - "view"
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_ch_rear_vict.png
+Resolution: 1200 by 690 pixels
+Size: 8 by 4.6 inches (150 dpi)
+ℹ tmap modes "plot" - "view"
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_ch_rear_ques.png
+Resolution: 1200 by 690 pixels
+Size: 8 by 4.6 inches (150 dpi)
+CH_rear: maps for BOWR BULK FRAN KISP LCHL LNTH LSAL MCGR MORK MORR NECR TABR THOM UFRA UNTH WILL VICT QUES.
+ℹ 855 cells tied between claiming groups - assigned to the lowest key.
+ℹ 855 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 3703 by 2702 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_co_rear_bowr.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 674 cells tied between claiming groups - assigned to the lowest key.
+ℹ 674 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 3564 by 2806 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_co_rear_bulk.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 385 cells tied between claiming groups - assigned to the lowest key.
+ℹ 385 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 3789 by 2640 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_co_rear_kisp.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 340 cells tied between claiming groups - assigned to the lowest key.
+ℹ 340 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_co_rear_lchl.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 1111 cells tied between claiming groups - assigned to the lowest key.
+ℹ 1111 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 4027 by 2484 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_co_rear_lnth.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 1877 cells tied between claiming groups - assigned to the lowest key.
+ℹ 1877 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_co_rear_morr.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 540 cells tied between claiming groups - assigned to the lowest key.
+ℹ 540 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_co_rear_necr.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 561 cells tied between claiming groups - assigned to the lowest key.
+ℹ 561 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_co_rear_thom.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 545 cells tied between claiming groups - assigned to the lowest key.
+ℹ 545 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 4069 by 2458 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_co_rear_unth.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 271 cells tied between claiming groups - assigned to the lowest key.
+ℹ 271 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 4083 by 2450 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_co_rear_will.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ tmap modes "plot" - "view"
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_co_rear_chwk.png
+Resolution: 1200 by 690 pixels
+Size: 8 by 4.6 inches (150 dpi)
+ℹ tmap modes "plot" - "view"
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_co_rear_guic.png
+Resolution: 1200 by 690 pixels
+Size: 8 by 4.6 inches (150 dpi)
+ℹ tmap modes "plot" - "view"
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_co_rear_grai.png
+Resolution: 1200 by 690 pixels
+Size: 8 by 4.6 inches (150 dpi)
+CO_rear: maps for BOWR BULK KISP LCHL LNTH MORR NECR THOM UNTH WILL CHWK GUIC GRAI.
+ℹ 633 cells tied between claiming groups - assigned to the lowest key.
+ℹ 633 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 3145 by 3181 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_gr_rear_pars.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 535 cells tied between claiming groups - assigned to the lowest key.
+ℹ 535 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 2999 by 3335 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_gr_rear_pcea.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 1011 cells tied between claiming groups - assigned to the lowest key.
+ℹ 1011 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 3285 by 3045 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_gr_rear_pine.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ tmap modes "plot" - "view"
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_gr_rear_atll.png
+Resolution: 1200 by 690 pixels
+Size: 8 by 4.6 inches (150 dpi)
+GR_rear: maps for PARS PCEA PINE ATLL.
+ℹ 674 cells tied between claiming groups - assigned to the lowest key.
+ℹ 674 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 3564 by 2806 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_st_rear_bulk.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 385 cells tied between claiming groups - assigned to the lowest key.
+ℹ 385 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 3789 by 2640 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_st_rear_kisp.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 1877 cells tied between claiming groups - assigned to the lowest key.
+ℹ 1877 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_st_rear_morr.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 561 cells tied between claiming groups - assigned to the lowest key.
+ℹ 561 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_st_rear_thom.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ tmap modes "plot" - "view"
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_st_rear_seym.png
+Resolution: 1200 by 690 pixels
+Size: 8 by 4.6 inches (150 dpi)
+ℹ tmap modes "plot" - "view"
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_st_rear_pori.png
+Resolution: 1200 by 690 pixels
+Size: 8 by 4.6 inches (150 dpi)
+ℹ tmap modes "plot" - "view"
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_st_rear_grai.png
+Resolution: 1200 by 690 pixels
+Size: 8 by 4.6 inches (150 dpi)
+ST_rear: maps for BULK KISP MORR THOM SEYM PORI GRAI.
+ℹ 610 cells tied between claiming groups - assigned to the lowest key.
+ℹ 610 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_wct_rear_dunc.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 1253 cells tied between claiming groups - assigned to the lowest key.
+ℹ 1253 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 2937 by 3406 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_wct_rear_kotl.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 596 cells tied between claiming groups - assigned to the lowest key.
+ℹ 596 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+SpatRaster object downsampled to 3246 by 3082 cells.
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_wct_rear_larl.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ 324 cells tied between claiming groups - assigned to the lowest key.
+ℹ 324 cells tied between claiming groups - assigned to the lowest key.
+ℹ tmap modes "plot" - "view"
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_wct_rear_sloc.png
+Resolution: 1800 by 690 pixels
+Size: 12 by 4.6 inches (150 dpi)
+ℹ tmap modes "plot" - "view"
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_wct_rear_khor.png
+Resolution: 1200 by 690 pixels
+Size: 8 by 4.6 inches (150 dpi)
+ℹ tmap modes "plot" - "view"
+Map saved to /Users/airvine/Projects/repo/knowledge/research/fig/compare_wct_rear_ketl.png
+Resolution: 1200 by 690 pixels
+Size: 8 by 4.6 inches (150 dpi)
+WCT_rear: maps for DUNC KOTL LARL SLOC KHOR KETL.
+floodplain BT rear accessible: 894237 ha, 306438 graded ha over 22 groups
+floodplain BT rear default: 746145 ha, 278349 graded ha over 22 groups
+floodplain BT rear tuned: 565869 ha, 215614 graded ha over 22 groups
+floodplain BT spawn accessible: 894237 ha, 459488 graded ha over 22 groups
+floodplain BT spawn default: 354423 ha, 163055 graded ha over 22 groups
+floodplain BT spawn tuned: 275514 ha, 115833 graded ha over 22 groups
+floodplain CH rear accessible: 588216 ha, 155411 graded ha over 16 groups
+floodplain CH rear default: 426681 ha, 146059 graded ha over 16 groups
+floodplain CH rear tuned: 341298 ha, 147442 graded ha over 16 groups
+floodplain CO rear accessible: 329838 ha, 192360 graded ha over 10 groups
+floodplain CO rear default: 272429 ha, 176396 graded ha over 10 groups
+floodplain CO rear tuned: 243051 ha, 166814 graded ha over 10 groups
+floodplain GR rear accessible: 137000 ha, 61631 graded ha over 3 groups
+floodplain GR rear default: 96530 ha, 46793 graded ha over 3 groups
+floodplain GR rear tuned: 96530 ha, 46793 graded ha over 3 groups
+floodplain RB rear accessible: 781723 ha, 341714 graded ha over 23 groups
+floodplain RB rear default: 663464 ha, 324847 graded ha over 23 groups
+floodplain RB rear tuned: 560759 ha, 293833 graded ha over 23 groups
+floodplain ST rear accessible: 143349 ha, 48276 graded ha over 4 groups
+floodplain ST rear default: 108807 ha, 44775 graded ha over 4 groups
+floodplain ST rear tuned: 74933 ha, 41791 graded ha over 4 groups
+floodplain WCT rear accessible: 129911 ha, 50747 graded ha over 4 groups
+floodplain WCT rear default: 122584 ha, 47027 graded ha over 4 groups
+floodplain WCT rear tuned: 117691 ha, 43010 graded ha over 4 groups
+Done in 131.6 min.
