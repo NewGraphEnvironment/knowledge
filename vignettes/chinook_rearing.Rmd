@@ -412,8 +412,8 @@ stream test are not among them:
 streams between `r grad(dflt$grad_max)` and `r grad(rec$grad_max)` steep, which only the new gradient
 maximum admits (`r n0(gain_grad)` km across the province), and streams whose flow passes the floor
 where `default`'s width test fails or has no width (`r n0(gain_flow)` km). The rest of the change
-comes from the hand-entered reaches and the connectivity pass
-(`r n0(conn_gain)` km gained, `r n0(conn_lost)` km lost), and from river polygons and mixed causes
+comes from the connectivity pass, which keeps different stretches under each rule because each
+rule's habitat connects to spawning differently (`r n0(conn_gain)` km gained, `r n0(conn_lost)` km lost), and from river polygons and mixed causes
 (`r n0(other_gain)` km gained).
 
 Orange is mostly the upper reaches of tributaries: flow grows downstream, so a tributary keeps its

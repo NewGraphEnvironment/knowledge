@@ -18,7 +18,8 @@
 #     simplified at 10 m (a 4 in panel at 150 dpi is about 250 m a pixel at the group's extent, and the
 #     zoomed window is 12 km); lengths stay the segments' own. Each segment also carries what the two rules
 #     read (edge type, link's segment gradient and channel width, wet's MAD and the walk distance to the
-#     pick's river, measured only where the exception could admit the segment), each rule's verdict from the
+#     pick's river, measured only on accessible stream-edge segments inside the gradient maximum that fail the
+#     size test, as knw_grade_species() walks them, wetland lines included), each rule's verdict from the
 #     habitat test alone (before the hand-entered reaches and the connectivity pass), and whether the segment
 #     lies in any waterbody, for the labelled examples. The floodplain is not in the article (#62's
 #     second draft); it is in research/habitat_thresholds_tuned.md.

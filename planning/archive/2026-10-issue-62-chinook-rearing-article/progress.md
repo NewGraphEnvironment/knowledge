@@ -150,3 +150,8 @@ article (link#346). Al chose labelled real examples here, for the reader and for
   causes); the data header's "before connectivity" is now "the habitat test alone"; examples now exclude any
   segment in a waterbody (stricter than the stream branch's river-polygon, wetland and lake exclusion, so it
   needs no second copy of that test); "gradient AND (flow OR river)" written with "either", in the headline too.
+- Examples review round 3 (`review-examples-round3.md`): an enumeration of 36 units, 2 wrong, no number changed.
+  The overlay-and-connectivity row is the connectivity pass alone (the overlay sets the same reaches under both
+  rules; 533.1 of 533.2 km gained and all 300.6 km lost are segments both habitat tests already admit), and the
+  data header now states the walk set as `knw_grade_species()` selects it. Both rewrites checked against those
+  definitions; the loop ended there. `knw_grade_species()`'s roxygen ("stream-branch segments") is noted in #65.
