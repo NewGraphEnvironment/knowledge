@@ -16,32 +16,32 @@ phases below are that plan verbatim.
 - [x] `pkgdown::check_pkgdown()` still clean (no `articles:` section needed)
 
 ## Phase 2: `data-raw/vignette_chinook.R` writes `inst/vignette-data/`
-- [ ] Header in the `scripts/` style: reads `data/tune/CH_rear_{tune,summary,curves,groups}.csv`, the local
+- [x] Header in the `scripts/` style: reads `data/tune/CH_rear_{tune,summary,curves,groups}.csv`, the local
       ignored `CH_rear_score.rds` (`$seeds`, `$honest`), `data/thresholds.csv`,
       `data/compare/CH_rear_{compare,change,checks}.csv`, `floodplain.csv`, `fresh_default.streams` and
       `whse_basemapping` water through `PG*`, the catalog's `bulk_floodplain.gpkg` (fetched as `0330` does when
       not cached); needs `flooded` with #89; writes the three files below; run `Rscript data-raw/vignette_chinook.R`
       from the repo root with `pkgload::load_all()`, after any `0320`/`0330` rerun
-- [ ] `chinook_rearing.rds`: one named list: `tune` (all 2,795 rules, the columns the article uses), `summary`,
+- [x] `chinook_rearing.rds`: one named list: `tune` (all 2,795 rules, the columns the article uses), `summary`,
       `groups`, `curves`, `thresholds` (CH rows), `compare` (all CH rows incl. `ALL`, full precision), `change`,
       `checks`, `floodplain` (CH rows), `seeds`, `honest`, and `meta`: link `run_uid`, `link_sha`, evidence
       version, the grade reference rate and counts (from the log line, with the log path), the scoring's
       constants read from the function formals (`cols`, `src`, seeds, `n_boot`, `d_floor`), `tools::md5sum()`
       of every source file at write time, and the date written
-- [ ] `0320` also writes `<key>_seeds.csv` and `<key>_honest.csv` from `r$score` so the next run needs no rds
+- [x] `0320` also writes `<key>_seeds.csv` and `<key>_honest.csv` from `r$score` so the next run needs no rds
       (writer change only; this run's files come from `score.rds`, and the script asserts the seeds table
       equals the log's)
-- [ ] `bulk_segments.rds` (xz): BULK accessible CH segments as an `sf`, EPSG:3005, `id_segment`, `blue_line_key`,
+- [x] `bulk_segments.rds` (xz): BULK accessible CH segments as an `sf`, EPSG:3005, `id_segment`, `blue_line_key`,
       `stream_order`, `accessible`, `grade`, `grade_class`, `flag_default`, `flag_tuned`, `length_metre`;
       `st_zm`, `st_simplify(dTolerance = 10)`; geometry pulled for all BULK segments (the raster join needs
       them), subset to accessible after
-- [ ] `bulk_water.rds` (xz): lakes ≥ 10 ha and rivers as `0330`'s `water_of()`, simplified at 10 m
-- [ ] `bulk_fp_grade.tif`: floodplain cells by the owning segment's grade, built as `0330` builds `fp_cells` on all
+- [x] `bulk_water.rds` (xz): lakes ≥ 10 ha and rivers as `0330`'s `water_of()`, simplified at 10 m
+- [x] `bulk_fp_grade.tif`: floodplain cells by the owning segment's grade, built as `0330` builds `fp_cells` on all
       BULK segments; `INT1U` grade × 100, `NAflag = 255`, DEFLATE; the script asserts the join summary equals
       `floodplain.csv`'s BULK CH rows before writing
-- [ ] Record each file's size and the directory's in `progress.md` (about 1.6 MB; the installed-size NOTE counts
+- [x] Record each file's size and the directory's in `progress.md` (about 1.6 MB; the installed-size NOTE counts
       `doc/` too, so read it if it appears and say so rather than trim)
-- [ ] `tests/testthat/test-vignette-data.R`, skipped when the source tree's `data/` is absent (as
+- [x] `tests/testthat/test-vignette-data.R`, skipped when the source tree's `data/` is absent (as
       `test-data-dir.R` skips): `meta$md5` equals `tools::md5sum()` of each live source file (the saved copy is
       stale after a rerun); the segments' km by rule equals `compare`'s BULK row (`length_metre` is carried, so
       simplification cannot move it); the raster's graded cells × 0.09 equals BULK accessible ha −
