@@ -1,3 +1,11 @@
+# knowledge (development version)
+
+* `knw_tune_run()` gains `grid_args`, passed to `knw_tune_grid()`, and reads a cached score back only for the grid
+  it was scored on (#67). `scripts/0322` scored chinook rearing on gradient limits up to 30 %: the best rule moves
+  from 9 % to 15 %, and every limit from 7 to 30 % has rules in the region, but choosing among the longer ladder loses
+  to `default` under nested selection. `CH_rear_v1` keeps 9 %; extending the ladder for every species is #68. The
+  chinook rearing article says so.
+
 # knowledge 0.4.4
 
 * A pkgdown article, `vignette("chinook_rearing")`, explains in plain language how the chinook rearing threshold

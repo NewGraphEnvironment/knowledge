@@ -24,7 +24,9 @@
 #     to 0330's recommended-rule segments on (id_segment, watershed_group_code): id_segment repeats
 #     across groups.
 #   - The extended run's own curve (grad_ext/CH_rear_curve.rds) is written for the record; the compare
-#     does not read it. Regrading moves the grades' 95th-percentile reference, so every segment's grade
+#     does not read it, and it is not fit for grading: its held-out deviance (2,442.7 on the 30 % run) is
+#     worse than the no-rule model's. A candidate whose exception names a river other than the curve's Q
+#     (the extended recommended rule's 1 m3/s against 3) has habitat km but no comparable graded km. Regrading moves the grades' 95th-percentile reference, so every segment's grade
 #     shifts a little, not only the band's: graded km here is provisional on that count too.
 #   - "Stream edges" are the comparison's own test (FWA edge types 1000/1100/2000/2300); the segments
 #     carry no waterbody key, so added km off them is logged by edge type.
@@ -226,10 +228,26 @@ dbDisconnect(conn)
 if (nzchar(smoke)) wsg <- intersect(wsg, strsplit(smoke, ",")[[1]])
 say("%d CH groups%s.", length(wsg), if (nzchar(smoke)) paste0(" (smoke run: ", dir_cmp, ")") else "")
 
-# grade each candidate at its own rule, one at a time (each walk already runs on several workers)
+# a candidate is done when its comparison is on file under the same rule (0330's default check below catches a
+# moved link run); one that is not is graded afresh, so a grade table is never reused for another rule
+done_rule <- function(k) {
+  f <- file.path(dir_cmp, paste0(key, "_", k, "_compare.csv"))
+  file.exists(f) && file.exists(file.path(dir_cmp, paste0(key, "_", k, "_segments.rds"))) &&
+    identical(unique(read_csv(f, show_col_types = FALSE)$tuned_rule), cands[[k]]$rule)
+}
+todo <- names(cands)[!vapply(names(cands), done_rule, logical(1))]
+say("To compare: %s.", if (length(todo)) paste(todo, collapse = ", ") else "none (all on file under their rules)")
+# the curve reads distance to a river of its own Q; a candidate whose exception names another Q is walked to
+# that river for its exception, which is right, but its grades read the walk as the curve's: they are not reported
 for (k in names(cands)) {
+  if (!identical(cands[[k]]$exc_q, main$curve$q)) {
+    say("%s: its exception's river is %g m3/s and the curve's %g m3/s, so its graded km is not comparable (habitat km is).",
+        k, cands[[k]]$exc_q, main$curve$q)
+  }
+}
+# grade each candidate at its own rule, one at a time (each walk already runs on several workers)
+for (k in todo) {
   gpath <- file.path(dir_cmp, paste0(key, "_", k, "_grades.rds"))
-  if (file.exists(gpath)) { say("%s grades: on file, kept.", k); next }
   t1 <- Sys.time()
   g <- knw_grade_species(pg, schema, "CH", wsg, main$curve, cands[[k]], stage = "rear", workers = 8L)
   saveRDS(g$grades[, c("id_segment", "watershed_group_code", "size", "dist_m", "grade", "grade_class")], gpath)
@@ -253,7 +271,6 @@ run_one <- function(k, cand, schema, wsg, link_dir, vl, vs, key, dir_cmp) {
     list(key = k, minutes = as.numeric(difftime(Sys.time(), t1, units = "mins")), log = cmp$log, error = NULL)
   }, error = function(e) list(key = k, error = conditionMessage(e)))
 }
-todo <- names(cands)[!file.exists(file.path(dir_cmp, paste0(key, "_", names(cands), "_segments.rds")))]
 if (length(todo)) {
   cl <- parallel::makeCluster(min(workers, length(todo)))
   res <- parallel::clusterMap(cl, run_one, todo, cands[todo],
@@ -273,7 +290,10 @@ for (k in names(cands)) {
     inner_join(cmp0 |> select(watershed_group_code, default_0330 = default_km), by = "watershed_group_code")
   dd <- max(abs(ck$default_km - ck$default_0330))
   say("%s: regenerated default against 0330's, %d groups, largest difference %.3g km.", k, nrow(ck), dd)
-  if (nrow(ck) != nrow(cmp0) || dd > 1e-6) stop(k, ": default differs from 0330's; fresh_default has moved since 0330")
+  if (nrow(ck) != nrow(cmp0) || dd > 1e-6) {
+    writeLines(log_lines, path_log)
+    stop(k, ": default differs from 0330's; fresh_default has moved since 0330")
+  }
 }
 for (k in names(cands)) {
   tot <- read_csv(file.path(dir_cmp, paste0(key, "_", k, "_compare.csv")), show_col_types = FALSE) |> filter(watershed_group_code == "ALL")
@@ -295,7 +315,10 @@ for (k in names(cands)) {
   cand <- cands[[k]]
   s <- readRDS(file.path(dir_cmp, paste0(key, "_", k, "_segments.rds")))[, cols_seg]
   j <- inner_join(base, s, by = c("id_segment", "watershed_group_code"), suffix = c("_v1", "_new"))
-  if (nrow(j) != nrow(base) || nrow(j) != nrow(s)) stop(k, ": segments do not match CH_rear_v1's one to one")
+  if (nrow(j) != nrow(base) || nrow(j) != nrow(s)) {
+    writeLines(log_lines, path_log)
+    stop(k, ": segments do not match CH_rear_v1's one to one")
+  }
   j <- j |> filter(rearing_tuned_v1 != rearing_tuned_new) |>
     mutate(direction = if_else(rearing_tuned_new, "added", "removed"),
            band = !is.na(gradient_new) & gradient_new > v1$grad_max & gradient_new <= cand$grad_max,

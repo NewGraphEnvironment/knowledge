@@ -1,6 +1,6 @@
 # A tuned Chinook rearing rule: stream size, gradient and distance to a river, beside link's `default`
 
-**Verified:** 2026-10-16; 0297's figures rerun 2026-10-17 without repeated surveys (#35), with the same recommended rule; the head paragraph and the last section 2026-10-18 (#62) · **Issues:** #54 (this); builds on #52 (`chinook_stream_size.md`), which picked 0.5 m³/s, 10 m³/s
+**Verified:** 2026-10-16; 0297's figures rerun 2026-10-17 without repeated surveys (#35), with the same recommended rule; the head paragraph and the last section 2026-10-18 (#62); the gradient maximum above 9 % 2026-10-19 (#67) · **Issues:** #54 (this), #67, #68; builds on #52 (`chinook_stream_size.md`), which picked 0.5 m³/s, 10 m³/s
 and 500 m by hand; uses wet's flow (`modelled_discharge.md`) and the FDIS export (`fdis_export.md`); the link issue for
 a tuned rule is drafted, not filed (planning archive for #54) · **Produced by:**
 - `scripts/0296-ch-rule-build.R` with `scripts/sql/ch_dist_profile.sql`: walks, widths, barrier status, link segment
@@ -41,6 +41,53 @@ distance cap. The province-wide joint curve bends in distance (at 0.75 m³/s, th
 `data/tune/CH_rear_curves.csv`), so D = 1 km sits past the bend. #54's distance curve below, fitted separately on the
 visits failing the floor, showed no plateau; the two are different models. The figures below are #54's, on the 55-group build; the province-wide
 maps are `research/fig/compare_ch_rear_*.png`.
+
+**The gradient maximum above 9 % (#67, 2026-10-19).** `CH_rear_v1` took 9 %, the steepest gradient maximum on the
+shared ladder, so `scripts/0322` scored CH rearing again on the same evidence build, link run, folds, seeds and
+bootstrap with the ladder extended to 11, 13, 15, 20, 25 and 30 % (6,149 rules; `data/tune/grad_ext/`, log
+`scripts/logs/habitat/20261018_tune_grad_extend.txt`). A first pass to 15 % put the best at 15 %, the top again
+(`…-to15.txt`), so the ladder ran on. The 2,795 rules both grids hold score as 0320 scored them (largest difference
+in held-out deviance 9.1e-13).
+
+- **The best rule moves to MAD ≥ 0.75 m³/s, gradient ≤ 15 %, a ≥ 1 m³/s river within 1 km** (held-out deviance
+  1,131.0). `CH_rear_v1` is 19.7 behind it (SE 22.1), still inside the region, which grows from 23 to 91 rules. The
+  fewest-departures pick and the recommended rule are the best rule (every region rule has three departures).
+- **Every gradient maximum from 7 % to 30 % has rules in the region; none below 7 % does.** Best rule at each
+  maximum, as deviance behind the best (SE of the difference):
+
+  | Gradient max | Best rule there | Behind the best | Region rules | Recommended in the bootstrap |
+  |---|---|---|---|---|
+  | 5.49 % | MAD ≥ 0.75, Q3 within 1 km | 66.8 (43.3) | 0 | 11.5 % |
+  | 7 % | MAD ≥ 0.75, Q3 within 1 km | 21.2 (29.0) | 6 | 3.0 % |
+  | 9 % (`CH_rear_v1`) | MAD ≥ 0.75, Q3 within 1 km | 19.7 (22.1) | 1 | 0 % |
+  | 11 % | MAD ≥ 0.75, Q1 within 1 km | 11.6 (16.5) | 13 | 17.0 % |
+  | 13 % | MAD ≥ 1, Q3 within 2 km | 15.6 (34.1) | 9 | 7.0 % |
+  | 15 % | MAD ≥ 0.75, Q1 within 1 km | 0 | 22 | 43.0 % |
+  | 20 % | MAD ≥ 0.75, Q1 within 1 km | 5.3 (4.6) | 16 | 0.5 % |
+  | 25 % | MAD ≥ 0.75, Q1 within 1 km | 10.7 (5.2) | 12 | 0 % |
+  | 30 % | MAD ≥ 0.75, Q1 within 1 km | 7.3 (9.9) | 12 | 17.5 % |
+
+  3 % and 4 % are 142.9 and 106.9 behind; 4 % is recommended in 0.5 % of draws.
+- **The other fold seeds agree on steeper than 9 %.** All four recommend a 15 % rule (MAD ≥ 0.75 with Q3 within
+  1 km on two, Q3 within 2 km on one, MAD ≥ 0.5 with Q1 within 1 km on one). Of the 559 size-and-exception shapes,
+  392–495 score better at each steeper maximum than at 9 %; none ties.
+- **Nested selection does not hold up.** Choosing a rule without each fold and scoring the choice on that fold,
+  the longer ladder's choices total 1,389.4 held-out deviance, against 1,234.5 for 0320's choices among limits to
+  9 %, 1,347.0 for `default` and 1,382.5 for no rule (`data/tune/grad_ext/CH_rear_honest.csv`). The folds' picks are
+  11 % (fold 1), 15 % (folds 2, 3 and 5, the last at MAD ≥ 0.2) and 30 % (fold 4); folds 1 and 4 lose most, 299.6
+  and 333.9 against 201.7 and 233.9 for 0320's picks there. So the steeper limits' edge on the main reading comes from groups
+  the choice was fitted on, and does not carry to groups it has not seen.
+- **It rests on few catches.** Above 9 % the scoring population holds 397 visits with 17 CH (214 with 9 at 9–11 %,
+  127 with 3 at 11–13 %, 56 with 5 at 13–15 %), and above 15 % 236 visits with 2 CH. Steeper limits admit these
+  visits only where the segment passes the floor or the exception, so the score is nearly flat from 11 % to 30 %:
+  the best rule at each of those maximums lies within 15.6 of the best.
+- **Decision: `CH_rear_v1` keeps 9 %.** The steeper limits' advantage does not survive nested selection, and every
+  species is tuned on one shared ladder (`knw_tune_grid()`), with BT and RB rearing also recommending its top, so
+  a CH-only change would break the comparison across species.
+  Extending the ladder for every species, retuning and republishing is #68. What the records say for CH is that
+  the gradient maximum sits at 7 % or above and cannot be placed between 7 % and 30 %.
+
+KM_PLACEHOLDER
 
 Every figure names its population. Three recur:
 - **Tuning population.** FDIS electrofishing visits on link's CH stream branch, with no natural CH barrier downstream:
@@ -441,8 +488,9 @@ eastern sub-basin's network. The green (tuned only) is short reaches on small st
   snapped to a tributary mouth; no main-reading region rule is that close. The ambiguous-placement
   sensitivity uses #52's flag, which was set at 10 m³/s on visits under 0.5 m³/s.
 - **Gradient.** Tuned on FWA segments, while link applies it to its own finer segments. On link's segment gradient
-  the region's gradient is 7–9 %, and on FWA gradients for the same visits 5.49–9 %. In link the threshold also applies to river polygons; the scoring did
-  not see them, and 0 of 156 river-polygon visits above 5.49 % caught CH.
+  the region's gradient is 7–9 %, and on FWA gradients for the same visits 5.49–9 %. 9 % was the top of the ladder;
+  on a ladder to 30 % (#67, above) every maximum from 7 to 30 % is in the region. In link the threshold also applies
+  to river polygons; the scoring did not see them, and 0 of 156 river-polygon visits above 5.49 % caught CH.
 - **The cluster pass is not in the scoring.** It is in the side by side.
 - **The side by side reads wet's `pick` for every rule.** link main still sizes a `mad` group with fwapg's old MAD
   (`fwa_stream_networks_discharge`, bcfishpass's) until link#331. That table covers only part of the province. On it

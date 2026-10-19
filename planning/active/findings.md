@@ -196,3 +196,21 @@ limit tried and nothing steeper was.
 - Compare candidates (Phase 3): CH_rear_v1's parts at 11, 13, 15 and 30 %, and the extended recommended rule.
   Smoke run on BULK (4.2 min): regenerated default equals 0330's to 5e-12 km; beside CH_rear_v1 the 11/13/15 %
   rules add 29/42/44 km and the recommended rule (Q 1 m3/s) 289 km, removing none.
+
+## Nested selection on the 30 % ladder (2026-10-19)
+
+Summed over folds (`data/tune/grad_ext/CH_rear_honest.csv` against `data/tune/CH_rear_summary.csv`): the extended
+ladder's choices 1,389.4, 0320's 1,234.5, `default` 1,347.0, no rule 1,382.5. Folds 1 (11 % pick, 299.6 vs 201.7)
+and 4 (30 % pick, 333.9 vs 233.9) carry the loss. The steeper limits' edge on the main reading does not carry to
+groups the choice has not seen; this is the main reason `CH_rear_v1` keeps 9 %, beside the shared ladder.
+The extended run's own curve has held-out deviance 2,442.7, worse than no rule (round-1 review).
+
+## Code-check round 1 (`review-round1.md`)
+
+1. `rec_g15` (Q 1 m3/s) is graded with 0320's curve, which reads distance to a Q 3 river: its graded km is wrong;
+   its habitat km is right (the exception uses its own walk). [fixed: 0322 logs it and its graded km is not reported]
+2. Resume caches keyed by candidate name only. [fixed: a candidate is done when its compare csv carries the rule;
+   otherwise graded afresh; a moved link run is caught by the default-km check]
+3. Two late `stop()`s lost the log. [fixed: log written first]
+4. The article's "fit as well or slightly better" was unguarded. [fixed: stopifnot]
+5. scripts/README.md and CLAUDE.md said 15 %. [fixed]

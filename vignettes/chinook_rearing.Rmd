@@ -48,9 +48,13 @@ ge <- x$grad_ext
 ge_best <- ge[ge$ddev_best == 0, ]
 ge_rec <- ge[abs(ge$grad_max - rec$grad_max) < 1e-9, ]
 ge_reg <- ge$grad_max[ge$in_region > 0]
+ges <- x$grad_ext_summary
 # the sentences on steeper limits read these as true; a rerun that breaks one must change the prose
 stopifnot(nrow(ge_best) == 1, ge_best$grad_max > rec$grad_max, ge_best$grad_max < max(ge$grad_max),
-          identical(ge_rec$best_rule, rec$rule), all(ge$in_region[ge$grad_max >= min(ge_reg)] > 0))
+          identical(ge_rec$best_rule, rec$rule), all(ge$in_region[ge$grad_max >= min(ge_reg)] > 0),
+          all(ge$ddev_best[ge$grad_max > rec$grad_max] <= ge_rec$ddev_best),
+          abs(ges$honest_dev_default - summ$honest_dev_default) < 0.01,
+          ges$honest_dev_rec > ges$honest_dev_default, summ$honest_dev_rec < summ$honest_dev_default)
 
 # formatting
 n0 <- function(v) format(round(v), big.mark = ",", scientific = FALSE, trim = TRUE)
@@ -306,9 +310,13 @@ was the steepest limit first scored, so the cut sat at the edge of what was trie
 with steeper limits too, up to `r grad(max(ge$grad_max))`. Its best rule allows
 `r grad(ge_best$grad_max)`, and the recommended rule scores `r n1(ge_rec$ddev_best)` worse, with a
 standard error of `r n1(ge_rec$se_diff)`. Every limit from `r grad(min(ge_reg))` to
-`r grad(max(ge_reg))` has rules in that run's region, so the records cannot rank them. The
-recommended rule keeps `r grad(rec$grad_max)`, because every species is tuned on one set of gradient
-limits and only chinook has been scored on the longer one.
+`r grad(max(ge_reg))` has rules in that run's region, so the records cannot rank them. And
+choosing among the longer set does not hold up: choosing on four folds and scoring on the fifth,
+its choices lose to `default` over all five together, `r n1(ges$honest_dev_rec)` against
+`r n1(ges$honest_dev_default)`, where the choices among limits up to `r grad(max(tune$grad_max))`
+beat it at `r n1(summ$honest_dev_rec)`. The recommended rule keeps `r grad(rec$grad_max)`: the
+steeper limits' edge does not carry to groups the choice has not seen, and every species is tuned on
+one set of gradient limits.
 
 ## What does it change on the ground?
 
@@ -488,8 +496,8 @@ reg_mad <- reg$size_min[reg$size_var == "mad"]
   the records almost as well: flow floors from `r min(reg_mad)` to `r max(reg_mad)`
   m³/s, and gradient limits of `r lst(grad(sort(unique(reg$grad_max))), "or")`. The flow floor is
   the firmer choice. Steeper limits, scored later up to `r grad(max(ge$grad_max))`, fit as well or
-  slightly better, so `r grad(rec$grad_max)` is one choice among limits from `r grad(min(ge_reg))`
-  to `r grad(max(ge_reg))`.
+  slightly better, though choosing among them does not hold up on groups left out of the choice, so
+  `r grad(rec$grad_max)` is one choice among limits from `r grad(min(ge_reg))` to `r grad(max(ge_reg))`.
 - **On the map, distance is measured from the bottom of each segment.** The exception asks
   whether a large river is within `r km_d(rec$exc_d)` downstream. To choose the rule, that
   distance was measured from each fished site. On the map it is measured from the downstream end
