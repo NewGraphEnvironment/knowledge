@@ -20,5 +20,5 @@
   fix, so round 3 enumerated 48 places; `review-ref-round*.md`). Follow-up: knowledge#72 (grade provenance).
 - Full regrade started 2026-10-19 ~21:24 UTC from a frozen copy of 0320 (`20261019_tune_run.txt`), all keys,
   CH included. Next: when it exits, check `git status`/`git diff data/tune`, then 0325, the full 0330 (about
-  5 h on #57's run), the invariant check (scratch `check_rules_unchanged.R`: every non-grade compare column
+  5 h on #57's run), the invariant check (`planning/active/check_rules_unchanged.R`: every non-grade compare column
   equal to origin/main's), `data-raw/vignette_chinook.R`, `devtools::test()`, then Phase 3's numbers.
