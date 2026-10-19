@@ -74,6 +74,20 @@ share_of <- function(col, v) sum(tune$boot_rec_share[tune[[col]] %in% v])
 no_grad <- function(rule) sub("\\|g<=[0-9.]+\\|", "|", rule)
 seed_other <- tune[tune$rule %in% seeds$recommended[no_grad(seeds$recommended) != no_grad(rec$rule)], ]
 seed_same_shape <- sum(no_grad(seeds$recommended) == no_grad(rec$rule))
+# the steeper run's best rule, read back from its rule string ("mad>=0.75|g<=0.15|Q1@D1000") into words()'s fields
+rule_parts <- function(s) {
+  p <- strsplit(s, "|", fixed = TRUE)[[1]]
+  sz <- strsplit(p[1], ">=", fixed = TRUE)[[1]]
+  qd <- if (p[3] == "none") c(NA, NA) else as.numeric(strsplit(sub("^Q", "", p[3]), "@D", fixed = TRUE)[[1]])
+  data.frame(size_var = sz[1], size_min = as.numeric(sz[2]), grad_max = as.numeric(sub("^g<=", "", p[2])),
+             exc_q = qd[1], exc_d = qd[2])
+}
+ge_best_r <- rule_parts(ge_best$best_rule)
+stopifnot(identical(rule_parts(rec$rule)$exc_q, rec$exc_q), identical(ge_best$best_rule, ges$rule_recommended),
+          dflt$ddev_best > 2 * dflt$se_diff, ge_rec$ddev_best < ge_rec$se_diff,
+          ges$seeds_same_rec < ges$seeds_n / 2, ges$boot_rec_share < 0.5,
+          ge_best_r$size_var == rec$size_var, ge_best_r$size_min == rec$size_min, ge_best_r$exc_d == rec$exc_d,
+          ge_best_r$exc_q < rec$exc_q)
 
 # the saved curves give exp(fit - fit at the threshold) on the cloglog scale, a ratio of hazards; the
 # rates are the fitted chances themselves
@@ -248,9 +262,14 @@ knitr::kable(raw, align = "lrrrr",
 
 ## How firm is the choice?
 
-Three checks, fixed before the run, ask whether the choice rests on chance or on reusing the same
-data to choose and to score.
+A gap in score is a real difference only when it is large against its noise and survives being
+checked again. These checks, fixed before the run, ask whether the choice rests on chance or on
+reusing the same data to choose and to score.
 
+- **The gap against its noise.** Each gap between two rules has a standard error, from how much it
+  varies between watershed groups. A gap under one standard error is noise: that is the region.
+  One over about two is a real difference. `default` is `r n1(dflt$ddev_best / dflt$se_diff)`
+  standard errors worse than the best rule, so its gap is real.
 - **Other random splits.** The split into folds is random, set by a number called a seed.
   Scored again on `r nrow(seeds)` other seeds, the recommended rule is in the region on
   `r sum(seeds$main_rec_in_region)` of them and `default` on `r sum(seeds$default_in_region)`.
@@ -272,6 +291,23 @@ data to choose and to score.
 
 The shape is settled: a flow floor near `r rec$size_min` m³/s and an exception for small streams
 near a river. The gradient maximum is the least settled part.
+
+**Steeper limits give the same answer.** `r grad(max(tune$grad_max))` was the steepest limit in the
+rules tried. Scoring the same records again with limits up to `r grad(max(ge$grad_max))` among the rules
+from the start, the best score moves to `r grad(ge_best$grad_max)`, with a smaller river in the
+exception (`r words(ge_best_r)`). It fails every check above:
+
+- its gap over the recommended rule is `r n1(ge_rec$ddev_best)`, with a standard error of
+  `r n1(ge_rec$se_diff)`, so it is noise;
+- it is the pick on `r ges$seeds_same_rec` of `r ges$seeds_n` other seeds, and in
+  `r pc(ges$boot_rec_share)` of redraws;
+- chosen on four folds and scored on the fifth, choices from the longer set lose to `default`,
+  `r n1(ges$honest_dev_rec)` against `r n1(ges$honest_dev_default)`, where choices from the rules up to
+  `r grad(max(tune$grad_max))` beat it at `r n1(summ$honest_dev_rec)`.
+
+The records cannot rank any limit from `r grad(min(ge_reg))` to `r grad(max(ge_reg))`, so the
+recommended rule keeps `r grad(rec$grad_max)`. The first run's region holds
+`r lst(grad(sort(unique(region$grad_max))))`.
 
 ## Why does a nearby river matter?
 
@@ -305,18 +341,7 @@ stream above the floor does. The chance falls off past a few hundred metres from
 `r km_d(rec$exc_d)` sits on the way down. Steepness matters less: at `r grad(0.09)` the chance is
 about `r pc(grad_at(0.09) / grad_at(0.02))` of what it is at `r grad(0.02)`. The model fits smooth
 curves, so it cannot show a step at a threshold; each threshold is where habitat and non-habitat
-separate best on held-out groups, a cut across a slope. For the gradient, `r grad(max(tune$grad_max))`
-was the steepest limit first scored, so the cut sat at the edge of what was tried. A second run scored chinook on the same records
-with steeper limits too, up to `r grad(max(ge$grad_max))`. Its best rule allows
-`r grad(ge_best$grad_max)`, and the recommended rule scores `r n1(ge_rec$ddev_best)` worse, with a
-standard error of `r n1(ge_rec$se_diff)`. Every limit from `r grad(min(ge_reg))` to
-`r grad(max(ge_reg))` has rules in that run's region, so the records cannot rank them. And
-choosing among the longer set does not hold up: choosing on four folds and scoring on the fifth,
-its choices lose to `default` over all five together, `r n1(ges$honest_dev_rec)` against
-`r n1(ges$honest_dev_default)`, where the choices among limits up to `r grad(max(tune$grad_max))`
-beat it at `r n1(summ$honest_dev_rec)`. The recommended rule keeps `r grad(rec$grad_max)`: the
-steeper limits' edge does not carry to groups the choice has not seen, and every species is tuned on
-one set of gradient limits.
+separate best on held-out groups, a cut across a slope.
 
 ## What does it change on the ground?
 
