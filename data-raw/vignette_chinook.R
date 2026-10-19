@@ -24,7 +24,7 @@
 #     lies in any waterbody, for the labelled examples. The floodplain is not in the article (#62's
 #     second draft); it is in research/habitat_thresholds_tuned.md.
 #
-# INPUT:  data/tune/CH_rear_{tune,summary,curves,groups}.csv, data/tune/grad_ext/CH_rear_{by_grad,summary}.csv
+# INPUT:  data/tune/CH_rear_{tune,summary,curves,groups}.csv, data/tune/grad_ext/CH_rear_{by_grad,summary,seeds}.csv
 #         (0322, #67), data/tune/CH_rear_{seeds,honest}.csv or
 #         data/tune/CH_rear_score.rds (ignored), data/thresholds.csv,
 #         data/compare/CH_rear_{compare,change,checks}.csv, data/compare/CH_rear_segments.rds (ignored;
@@ -112,10 +112,13 @@ if (!in_log(paste(key, "nested selection"), out$honest)) stop("the nested-select
 # the CH rearing ladder extended to 30 % (#67, scripts/0322): the best rule per gradient maximum, and that run's
 # summary; the published rule stays CH_rear_v1, so these sit beside the main reading, never in place of it
 f_ge <- c(grad_ext = sprintf("data/tune/grad_ext/%s_by_grad.csv", key),
-          grad_ext_summary = sprintf("data/tune/grad_ext/%s_summary.csv", key))
+          grad_ext_summary = sprintf("data/tune/grad_ext/%s_summary.csv", key),
+          grad_ext_seeds = sprintf("data/tune/grad_ext/%s_seeds.csv", key))
 if (!all(file.exists(f_ge))) stop("missing ", paste(f_ge[!file.exists(f_ge)], collapse = ", "), ": run scripts/0322")
 out$grad_ext <- rd(f_ge[["grad_ext"]]) |> select(-species_code, -stage)
 out$grad_ext_summary <- rd(f_ge[["grad_ext_summary"]])
+out$grad_ext_seeds <- rd(f_ge[["grad_ext_seeds"]]) |> select(-species_code, -stage)
+if (!identical(sort(as.integer(out$grad_ext_seeds$seed)), sort(as.integer(out$seeds$seed)))) stop("the extended run's seeds differ from the main run's")
 if (!all(sort(unique(out$tune$grad_max)) %in% out$grad_ext$grad_max)) stop("the extended ladder lacks a gradient the main one has")
 # the same population as the main reading, and one run's two tables
 pop <- c("visits_in", "detections", "groups", "groups_both")
