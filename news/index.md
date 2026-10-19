@@ -1,5 +1,21 @@
 # Changelog
 
+## knowledge 0.4.4
+
+- A pkgdown article,
+  [`vignette("chinook_rearing")`](https://newgraphenvironment.github.io/knowledge/articles/chinook_rearing.md),
+  explains in plain language how the chinook rearing threshold was
+  chosen from the province’s electrofishing records and what it changes
+  on link’s segments, with a Bulkley map, a zoom and three labelled
+  example segments
+  ([\#62](https://github.com/NewGraphEnvironment/knowledge/issues/62)).
+  Its data are written by `data-raw/vignette_chinook.R` to
+  `inst/vignette-data/`, and a test fails when a tracked source moves
+  on.
+  [`knw_compare_map()`](https://newgraphenvironment.github.io/knowledge/reference/knw_compare_map.md)
+  gains `ncol`, `panels`, `mark`, `lwd`, `legend` and `labels`; its
+  default output is unchanged. The package now declares R \>= 4.1.0.
+
 ## knowledge 0.4.3
 
 - One evidence build, one tuning run and one comparison across species

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">knowledge</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,9 +33,13 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/v0.4.4/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.4.4" id="knowledge-044">knowledge 0.4.4<a class="anchor" aria-label="anchor" href="#knowledge-044"></a></h2>
+<ul><li>A pkgdown article, <code><a href="../articles/chinook_rearing.html">vignette("chinook_rearing")</a></code>, explains in plain language how the chinook rearing threshold was chosen from the province’s electrofishing records and what it changes on link’s segments, with a Bulkley map, a zoom and three labelled example segments (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/62" class="external-link">#62</a>). Its data are written by <code>data-raw/vignette_chinook.R</code> to <code>inst/vignette-data/</code>, and a test fails when a tracked source moves on. <code><a href="../reference/knw_compare_map.html">knw_compare_map()</a></code> gains <code>ncol</code>, <code>panels</code>, <code>mark</code>, <code>lwd</code>, <code>legend</code> and <code>labels</code>; its default output is unchanged. The package now declares R &gt;= 4.1.0.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.3" id="knowledge-043">knowledge 0.4.3<a class="anchor" aria-label="anchor" href="#knowledge-043"></a></h2>
 <ul><li>One evidence build, one tuning run and one comparison across species and life stages, as package functions on link’s province-wide <code>default</code> run (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/57" class="external-link">#57</a>): <code>knw_fdis_visits()</code>, <code><a href="../reference/knw_link_place.html">knw_link_place()</a></code>, <code><a href="../reference/knw_link_flow.html">knw_link_flow()</a></code>, <code><a href="../reference/knw_link_width.html">knw_link_width()</a></code>, <code><a href="../reference/knw_link_walks.html">knw_link_walks()</a></code>, <code><a href="../reference/knw_link_barrier_dnstr.html">knw_link_barrier_dnstr()</a></code>, <code><a href="../reference/knw_bcfishobs_match.html">knw_bcfishobs_match()</a></code> and <code><a href="../reference/knw_link_access_check.html">knw_link_access_check()</a></code> build the evidence; <code><a href="../reference/knw_tune_grid.html">knw_tune_grid()</a></code>, <code><a href="../reference/knw_tune_score.html">knw_tune_score()</a></code>, <code><a href="../reference/knw_tune_curve.html">knw_tune_curve()</a></code>, <code><a href="../reference/knw_grade.html">knw_grade()</a></code> and <code><a href="../reference/knw_tune_run.html">knw_tune_run()</a></code> score every rule of each species and stage on held-out watershed groups, pick, fit the joint curve and grade every segment; <code><a href="../reference/knw_thresholds_table.html">knw_thresholds_table()</a></code> and <code><a href="../reference/knw_publish.html">knw_publish()</a></code> write the thresholds and grade tables; <code><a href="../reference/knw_compare_rules.html">knw_compare_rules()</a></code>, <code><a href="../reference/knw_floodplain_ha.html">knw_floodplain_ha()</a></code> and <code><a href="../reference/knw_compare_map.html">knw_compare_map()</a></code> show what a rule changes on link’s segments (km, graded km, floodplain hectares, maps). Scripts <code>0300</code>–<code>0330</code> run them.</li>
