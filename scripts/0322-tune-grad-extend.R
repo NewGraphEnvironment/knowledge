@@ -20,8 +20,9 @@
 #     CH_rear_v1's size test and exception with that gradient maximum, and the extended grid's recommended
 #     rule itself where it differs from those. Each candidate is graded at its own rule before its
 #     comparison, because the grades' dist_m is also its exception's distance (to its own exc_q). Grades
-#     made before #65 (no dist_status) walked only segments inside the pick's gradient maximum that
-#     failed its size test and read the rest at the 50 km cap, so done_rule() regrades them; the
+#     made before #65 walked only segments inside the pick's gradient maximum that failed its size test,
+#     read the rest at the 50 km cap and took the reference over every accessible segment, so
+#     done_rule() regrades any without ref_population = stream_branch; the
 #     curve is 0320's (fitted at the 9 % pick), so graded km above 9 % reads the curve past the
 #     gradients its pick admitted and is provisional. The candidate's segments are then joined to
 #     0330's recommended-rule segments on (id_segment, watershed_group_code): id_segment repeats
@@ -252,14 +253,15 @@ if (nzchar(smoke)) wsg <- intersect(wsg, strsplit(smoke, ",")[[1]])
 say("%d CH groups%s.", length(wsg), if (nzchar(smoke)) paste0(" (smoke run: ", dir_cmp, ")") else "")
 
 # a candidate is done when its comparison is on file under the same rule (0330's default check below catches a
-# moved link run) and its grades carry dist_status (graded after #65, every segment walked); one that is not is
-# graded afresh, so a grade table is never reused for another rule or mixed with grades from the old walk set
+# moved link run) and its grades were made as 0320's are since #65 (every segment walked, the reference over
+# the stream branch: ref_population); one that is not is graded afresh, so a grade table is never reused for
+# another rule or mixed with grades from an earlier walk set or reference
 done_rule <- function(k) {
   f <- file.path(dir_cmp, paste0(key, "_", k, "_compare.csv"))
   g <- file.path(dir_cmp, paste0(key, "_", k, "_grades.rds"))
   file.exists(f) && file.exists(file.path(dir_cmp, paste0(key, "_", k, "_segments.rds"))) &&
     identical(unique(read_csv(f, show_col_types = FALSE)$tuned_rule), cands[[k]]$rule) &&
-    file.exists(g) && "dist_status" %in% names(readRDS(g))
+    file.exists(g) && identical(unique(readRDS(g)$ref_population), "stream_branch")
 }
 todo <- names(cands)[!vapply(names(cands), done_rule, logical(1))]
 say("To compare: %s.", if (length(todo)) paste(todo, collapse = ", ") else "none (all on file under their rules)")
@@ -276,8 +278,9 @@ for (k in todo) {
   gpath <- file.path(dir_cmp, paste0(key, "_", k, "_grades.rds"))
   t1 <- Sys.time()
   g <- knw_grade_species(pg, schema, "CH", wsg, main$curve, cands[[k]], stage = "rear", workers = 8L)
-  saveRDS(g$grades[, c("id_segment", "watershed_group_code", "size", "dist_m", "dist_status", "grade", "grade_class")],
-          gpath)
+  gr <- g$grades[, c("id_segment", "watershed_group_code", "size", "dist_m", "dist_status", "grade", "grade_class")]
+  gr$ref_population <- "stream_branch"
+  saveRDS(gr, gpath)
   say("%s grades: %s; walks %.1f min; total %.1f min.", k, paste(names(g$counts), g$counts, sep = "=", collapse = ", "),
       g$walk_minutes, as.numeric(difftime(Sys.time(), t1, units = "mins")))
 }

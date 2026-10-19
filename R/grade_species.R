@@ -17,7 +17,10 @@
 #'
 #' The curve was fitted on stream-branch visits outside lakes, wetlands and
 #' river polygons, so a river-polygon or wetland segment reads it near 0 m and
-#' at sizes few visits had: its grade is an extrapolation.
+#' at sizes few visits had: its grade is an extrapolation. The reference rate
+#' that reads 1 is therefore taken over the stream branch alone (`ref_edge`;
+#' Al, 2026-10-19): over every accessible segment, river polygons at 0 m set
+#' it, and chinook's rose from 0.14 to 0.52.
 #'
 #' A walk that finds no river of `q` (`none`: the sea first; `no_parent`;
 #' `too_many_hops`) leaves `dist_m` missing, which the grade reads as the
@@ -35,6 +38,9 @@
 #' @param stage `"rear"` or `"spawn"`.
 #' @param workers `integer(1)` walk workers.
 #' @param src `character(1)` the flow source.
+#' @param ref_edge `integer` the stream-branch edge types the reference rate is
+#'   taken over. The default is [knw_tune_run()]'s default `edge_stream`, the
+#'   edge types of the curve's visits; a curve fitted on others needs them here.
 #' @return A list: `grades`, one row per segment with the segment's keys,
 #'   `length_metre`, `access`, `accessible`, the stage's flag, `size`, `dist_m`,
 #'   `dist_status`, `rate`, `grade`, `grade_class`; `reference`; `counts`
@@ -47,7 +53,7 @@
 #' g <- knw_grade_species(pg, "fresh_default", "CH", c("BULK", "MORR"), out$CH_rear$curve, out$CH_rear$pick)
 #' }
 knw_grade_species <- function(connector, schema, species, wsg, curve, pick, stage = "rear",
-                              workers = 4L, src = "pick") {
+                              workers = 4L, src = "pick", ref_edge = c(1000L, 1100L, 2000L, 2300L)) {
   chk::chk_function(connector)
   chk::chk_string(species)
   chk::chk_character(wsg)
@@ -73,7 +79,8 @@ knw_grade_species <- function(connector, schema, species, wsg, curve, pick, stag
     seg$dist_status[hit] <- w$status[i[hit]]
     seg$dist_m[hit] <- ifelse(w$status[i[hit]] == "found", w$dist_m[i[hit]], NA_real_)
   }
-  g <- knw_grade(curve, seg, cols = c(size = "size", grad = "gradient", dist = "dist_m"))
+  g <- knw_grade(curve, seg, cols = c(size = "size", grad = "gradient", dist = "dist_m"),
+                 ref_rows = seg$edge_type %in% ref_edge)
   flag <- if (stage == "rear") "rearing" else "spawning"
   grades <- seg[, c("id_segment", "watershed_group_code", "linear_feature_id", "blue_line_key",
                     "downstream_route_measure", "upstream_route_measure", "length_metre", "edge_type", "stream_order",

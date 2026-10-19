@@ -9,7 +9,8 @@ knw_grade(
   segments,
   cols = c(size = "mad_pick", grad = "gradient", dist = "dist_m"),
   ref_quantile = 0.95,
-  classes = c(0, 0.2, 0.4, 0.6, 0.8, 1)
+  classes = c(0, 0.2, 0.4, 0.6, 0.8, 1),
+  ref_rows = NULL
 )
 }
 \arguments{
@@ -22,10 +23,15 @@ none).}
 
 \item{cols}{named \code{character}: \code{size}, \code{grad}, \code{dist}.}
 
-\item{ref_quantile}{\code{numeric(1)} the quantile of accessible segments' rate
-that reads 1.}
+\item{ref_quantile}{\code{numeric(1)} the quantile of the reference segments'
+rate (accessible, and marked by \code{ref_rows}) that reads 1.}
 
 \item{classes}{\code{numeric} the class breaks on the grade.}
+
+\item{ref_rows}{\code{NULL}, or a logical vector of \code{nrow(segments)} marking the
+segments the reference is taken over (among the accessible ones), such as
+the stream branch the curve was fitted on. \code{NULL} takes every accessible
+segment. Every segment is graded either way.}
 }
 \value{
 A list: \code{grades}, a \code{tibble} of \code{nrow(segments)} with \code{rate},
@@ -37,9 +43,10 @@ A segment's grade is the curve's predicted detection rate at the segment's
 size, gradient and distance to a river, at the reference nuisance values and
 with the group random effect excluded (so grades compare across groups),
 divided by the \code{ref_quantile} of that rate over the species' accessible
-segments, and capped at 1. The top of the accessible network reads 1, and a
-segment at a third of that rate reads about 0.3. It is expected use per
-standard electrofishing visit, not habitat quality, and is labelled so.
+segments (those of them \code{ref_rows} marks), and capped at 1. The top of the
+reference segments reads 1, and a segment at a third of that rate reads about
+0.3. It is expected use per standard electrofishing visit, not habitat
+quality, and is labelled so.
 }
 \details{
 A segment whose size variable is missing (an unmeasured first-order stream

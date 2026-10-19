@@ -13,7 +13,8 @@ knw_grade_species(
   pick,
   stage = "rear",
   workers = 4L,
-  src = "pick"
+  src = "pick",
+  ref_edge = c(1000L, 1100L, 2000L, 2300L)
 )
 }
 \arguments{
@@ -35,6 +36,10 @@ opens its own).}
 \item{workers}{\code{integer(1)} walk workers.}
 
 \item{src}{\code{character(1)} the flow source.}
+
+\item{ref_edge}{\code{integer} the stream-branch edge types the reference rate is
+taken over. The default is \code{\link[=knw_tune_run]{knw_tune_run()}}'s default \code{edge_stream}, the
+edge types of the curve's visits; a curve fitted on others needs them here.}
 }
 \value{
 A list: \code{grades}, one row per segment with the segment's keys,
@@ -62,7 +67,10 @@ gets a correct exception and a grade that is not comparable.
 
 The curve was fitted on stream-branch visits outside lakes, wetlands and
 river polygons, so a river-polygon or wetland segment reads it near 0 m and
-at sizes few visits had: its grade is an extrapolation.
+at sizes few visits had: its grade is an extrapolation. The reference rate
+that reads 1 is therefore taken over the stream branch alone (\code{ref_edge};
+Al, 2026-10-19): over every accessible segment, river polygons at 0 m set
+it, and chinook's rose from 0.14 to 0.52.
 
 A walk that finds no river of \code{q} (\code{none}: the sea first; \code{no_parent};
 \code{too_many_hops}) leaves \code{dist_m} missing, which the grade reads as the

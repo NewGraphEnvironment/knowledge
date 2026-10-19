@@ -114,6 +114,25 @@ By branch (accessible, graded): stream (1000/1100/2000/2300) 478,597 segments, 1
 stream branch. The run for the other seven keys, started on the old reference, was stopped two minutes in
 (no grade table written) and rerun after the change.
 
+## Reviews of the reference change (2026-10-19)
+
+`review-ref-round{1,2,3}.md`. Round 1: the published description named the old population; a same-day CH rerun
+would overwrite the superseded log (committed instead, and the rerun is a full pass with its own log name); 0322
+could reuse candidate grades made on the old reference. Round 2 found a defect inside round 1's fix (the new
+description said "the rule's river", but six of eight rules have none) and that 0325 and 0330 consumed grade
+tables without checking how they were made; both now stop on a table without `ref_population`. So only an
+enumeration could end the loop: round 3 named the mechanism (nothing that makes a grade records how it was
+made; descriptions are prose restated from the CH case; guards read a stand-in) and enumerated 48 places that
+state or rely on it. Its wrong statements were fixed (research "pick's size", "most read 1"; NEWS; 0322 header;
+`ref_edge` roxygen), 0330's maps-only mode now refuses segments older than their grade table, the vignette data
+script reads the full run's log and refuses an unmarked grade table, and the six species research files joined
+Phase 3.
+
+Accepted, not fixed here: `ref_population` is a literal 0320 and 0322 write, so it vouches for `ref_edge`'s
+default rather than for the call, which agrees with the curve's `edge_stream` because the two defaults are the
+same list. Recording provenance where the grade is made (`knw_grade_species()` returning `ref_edge` and `q`,
+written by 0320 and checked by each consumer) would change code the running regrade uses; filed as a follow-up.
+
 ## Errors Encountered
 
 | Error | Resolution |

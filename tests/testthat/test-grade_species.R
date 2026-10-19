@@ -98,3 +98,23 @@ test_that("a size-passing segment's distance reaches its rate: beside a river is
   expect_true(is.finite(near$rate[near$id_segment == 1]) && is.finite(far$rate[far$id_segment == 1]))
   expect_gt(abs(near$rate[near$id_segment == 1] - far$rate[far$id_segment == 1]), 1e-4)
 })
+
+test_that("the reference reads 1 at the stream branch's top, and off-branch segments are still graded", {
+  skip_if_not_installed("mgcv")
+  skip_if_not_installed("duckdb")
+  fx <- grade_fixture()
+  r <- run_grade(fx)$g
+  gr <- r$grades
+  stream <- gr$accessible & !is.na(gr$rate) & gr$edge_type %in% c(1000L, 1100L, 2000L, 2300L)
+  expect_equal(r$reference, unname(stats::quantile(gr$rate[stream], 0.95)))
+  # the river polygon (d) and the wetland line (e) are graded against it, not left out
+  expect_false(anyNA(gr$grade[gr$id_segment %in% c(4, 5)]))
+  # knw_grade() alone: ref_rows narrows the reference, NULL keeps every accessible segment
+  seg <- data.frame(accessible = TRUE, size = c(0.5, 2, 30), gradient = 0.02, dist_m = c(5000, 100, 0))
+  all <- knw_grade(fx$curve, seg, cols = c(size = "size", grad = "gradient", dist = "dist_m"))
+  one <- knw_grade(fx$curve, seg, cols = c(size = "size", grad = "gradient", dist = "dist_m"),
+                   ref_rows = c(TRUE, TRUE, FALSE))
+  expect_equal(one$reference, unname(stats::quantile(all$grades$rate[1:2], 0.95)))
+  expect_error(knw_grade(fx$curve, seg, cols = c(size = "size", grad = "gradient", dist = "dist_m"),
+                         ref_rows = TRUE), "one value per segment")
+})

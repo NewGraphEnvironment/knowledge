@@ -70,6 +70,13 @@ man_thr <- knw_publish(tables_thr, "data/publish/thresholds_v1", id = "knowledge
 # ---- grades ----------------------------------------------------------------------------
 gfiles <- list.files(tune_dir, "_grades\\.csv$", full.names = TRUE)
 if (!length(gfiles)) stop("no grade tables in ", tune_dir)
+# the description below says how the grades were made (#65): refuse a table 0320 wrote before that
+stale <- gfiles[!vapply(gfiles, function(f) {
+  h <- read_csv(f, n_max = 1, show_col_types = FALSE, col_types = cols(.default = "c"))
+  "ref_population" %in% names(h) && identical(h$ref_population, "stream_branch")
+}, logical(1))]
+if (length(stale)) stop("grade tables made before #65 (no ref_population = stream_branch); rerun 0320: ",
+                        paste(basename(stale), collapse = ", "))
 grades <- bind_rows(lapply(gfiles, read_csv, show_col_types = FALSE, guess_max = 1e5)) |>
   transmute(blue_line_key, downstream_route_measure, upstream_route_measure, linear_feature_id, watershed_group_code,
             length_metre, access, species_code, stage, grade, grade_class,
@@ -81,7 +88,7 @@ write_csv(grades, gpath, na = "")
 message(sprintf("grades: %d segment rows, %d species x stage", nrow(grades), n_distinct(paste(grades$species_code, grades$stage))))
 tables_gr <- data.frame(
   table = "habitat_grade", source = gpath, script = "scripts/0325-publish.R",
-  description = "One row per link default segment x species x stage: the segment's FWA position key, its link access code, and its grade (expected use per standard electrofishing visit relative to the 95th percentile of accessible segments, 0-1, NA where inaccessible or the size or gradient is missing) in fifths, with the rule_id it was graded under and the link run and evidence version (knowledge#57).",
+  description = "One row per link default segment x species x stage: the segment's FWA position key, its link access code, and its grade (expected use per standard electrofishing visit, read at the segment's own walked distance to the first river of the rule's exception flow, or of 10 m3/s where the rule has none, relative to the 95th percentile of accessible stream-branch segments (FWA edge types 1000, 1100, 2000, 2300), 0-1, NA where inaccessible or the size or gradient is missing) in fifths, with the rule_id it was graded under and the link run and evidence version (knowledge#57, knowledge#65).",
   stringsAsFactors = FALSE)
 man_grade <- knw_publish(tables_gr, "data/publish/habitat_grade_v1", id = "knowledge/habitat_grade/v1",
                   note = "Expected-use grades for every segment of each tuned species' groups on link's province-wide default run (knowledge#57). Hive-partitioned by species_code and stage.",
