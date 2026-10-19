@@ -23,6 +23,7 @@ knw_tune_run(
   min_wsg = 5L,
   power_wsg = 10L,
   src = "pick",
+  grid_args = list(),
   cache_dir = NULL
 )
 }
@@ -47,9 +48,14 @@ knw_tune_run(
 
 \item{src}{\code{character(1)} the flow source the exception reads.}
 
+\item{grid_args}{\code{list} of arguments passed to \code{\link[=knw_tune_grid]{knw_tune_grid()}} for every
+species × stage (for example \code{list(grid_grad = c(0.03, 0.09, 0.15))}); empty
+for its defaults.}
+
 \item{cache_dir}{\code{NULL}, or a directory where each species × stage's scored
 grid is saved as \verb{<sp>_<stage>_score.rds} and read back on a rerun when the
-population has the same number of visits.}
+population has the same number of visits and the grid the same rules, in
+the same order.}
 }
 \value{
 A list with one element per species × stage (\code{"<sp>_<stage>"}): a

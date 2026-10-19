@@ -18,12 +18,12 @@ Phases are the plan approved at the plan gate on 2026-10-18 and parked in the is
 Decision taken there: this issue measures and records; `CH_rear_v1` stays at 9 % here either way.
 
 ## Phase 1: `knw_tune_run()` takes a grid, and its cache is keyed on the grid
-- [ ] `R/tune_run.R`: add `grid_args = list()` (passed to `knw_tune_grid()` with `do.call`), documented; the cache
+- [x] `R/tune_run.R`: add `grid_args = list()` (passed to `knw_tune_grid()` with `do.call`), documented; the cache
       read also requires `identical(sc$rules$rule, grid$rule)`, else it rescores
-- [ ] `tests/testthat/test-tune_run.R`: `grid_args = list(grid_grad = c(0.03, 0.04, 0.0549, 0.07, 0.09, 0.11, 0.13, 0.15))`
+- [x] `tests/testthat/test-tune_run.R`: `grid_args = list(grid_grad = c(0.03, 0.04, 0.0549, 0.07, 0.09, 0.11, 0.13, 0.15))`
       gives 4,472 rules; a cache written on the 5-gradient grid is refused by an 8-gradient run (restore the bug,
       prove the guard fires: with the grid check removed the stale cache is read)
-- [ ] `devtools::document()`, `lintr::lint_package()`, `devtools::test()`; commit
+- [x] `devtools::document()`, `lintr::lint_package()`, `devtools::test()`; commit
 
 ## Phase 2: the extended scoring run
 - [ ] `scripts/0322-tune-grad-extend.R` (header in `0320`'s shape: WHY, INPUT, OUTPUT, RUN): CH rearing only, the

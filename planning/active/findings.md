@@ -155,3 +155,14 @@ limit tried and nothing steeper was.
 
 | Error | Resolution |
 |-------|------------|
+
+## Phase 1: what the grid and the cache depend on (2026-10-19)
+
+- `knw_tune_score()` returns `rules` in grid order (`res <- tibble::as_tibble(grid)`), so the cache can be keyed
+  on `identical(sc$rules$rule, grid$rule)`.
+- Folds come from `.tune_fold_of_wsg(d, resp, seed, folds)` and the bootstrap from `seed_boot` over groups: neither
+  depends on the grid, and held-out deviance is computed per unique membership pattern. So a rule shared by two
+  grids should get the same `dev_heldout`; `ddev_best`, region and picks can move only if the best moves.
+- Pre-existing, not changed: in `knw_tune_run()`, a species absent from `thresholds` takes the
+  `knw_tune_grid(thr[0, ], stage)` branch, which stops ("thresholds must be one species' row") instead of
+  recording `no_stream_rule`. Every species in link's table has a row, so it has not bitten.
