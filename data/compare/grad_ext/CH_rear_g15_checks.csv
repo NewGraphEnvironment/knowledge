@@ -1,0 +1,8 @@
+check,species_code,stage,rule,segment,n,n_detect,km_share,lift,lift_lo,lift_hi
+fdis_visits,CH,rear,default,rearing,5717,773,,,,
+fdis_visits,CH,rear,default,accessible_not_rearing,4798,107,,,,
+fdis_visits,CH,rear,tuned,rearing,4950,805,,,,
+fdis_visits,CH,rear,tuned,accessible_not_rearing,5565,75,,,,
+bcfishobs_outside,CH,rear,default,,826,668,0.3292123149935145,2.4565202156478367,2.3609071533621426,2.5303445320088103
+bcfishobs_outside,CH,rear,tuned,,826,682,0.26105966227011934,3.162747750396786,3.0604917564140157,3.246222031199047
+bcfishobs_outside,CH,rear,tuned_minus_default,,826,,,0.7062275347489493,0.5971528299966687,0.801786881533671

@@ -94,7 +94,9 @@ Three readings across the table:
    width. Where the floor moves it moves up for CH (0.75), BT (0.35) and ST (1 m³/s) and down to the bottom of
    the grid for CO (0.03), whose juveniles rear in the smallest streams.
 2. **The gradient maximum moves both ways:** up to 9 % for CH and RB, down to 4 % for CO and WCT, unchanged for
-   BT (10.49 %) and GR (3.49 %).
+   BT (10.49 %) and GR (3.49 %). For CH and RB, 9 % is the top of the shared ladder. CH alone, scored again on a
+   ladder to 30 % (#67, `chinook_rearing_tuned.md`), moves its best rule to 15 %, and every limit from 7 to 30 %
+   has rules in the region; `CH_rear_v1` keeps 9 % until every species is tuned on the longer ladder (#68).
 3. **Only CH's rule needs the near-a-river exception** on the main reading; BT spawning's does too, but that row
    is weak (its raw rates do not separate, and nested selection puts the pick behind `default`).
 

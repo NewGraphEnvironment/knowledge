@@ -60,3 +60,40 @@ test_that("spawning without spawner evidence is no_response, and with it fits on
   expect_equal(out$CH_spawn$response, "S")
   expect_equal(out$CH_spawn$score$rules$rule[out$CH_spawn$score$rules$is_default], "width>=4|g<=0.0449|none")
 })
+
+test_that("grid_args reaches knw_tune_grid: the ladder above 9 % gives 559 rules per gradient", {
+  s <- sim_build()
+  g8 <- c(0.03, 0.04, 0.0549, 0.07, 0.09, 0.11, 0.13, 0.15)
+  expect_equal(nrow(knw_tune_grid(s$thr[1, ], "rear", grid_grad = g8)), 4472)
+  local_mocked_bindings(knw_tune_score = function(d, rule_in, grid, ...) stop("rules=", nrow(grid)))
+  expect_error(knw_tune_run(s$v, s$sp, s$walks, s$thr, species = "CH", stages = "rear",
+                            grid_args = list(grid_grad = g8)), "rules=4472")
+  expect_error(knw_tune_run(s$v, s$sp, s$walks, s$thr, species = "CH", stages = "rear"), "rules=2795")
+})
+
+test_that("a cached score is read back only for the grid it was scored on", {
+  skip_if_not_installed("mgcv")
+  s <- sim_build()
+  dir <- withr::local_tempdir()
+  small <- list(grid_grad = 0.0549, grid_q = 3, grid_d = 1000)
+  wider <- list(grid_grad = c(0.0549, 0.09), grid_q = 3, grid_d = 1000)
+  run <- function(ga) {
+    knw_tune_run(s$v, s$sp, s$walks, s$thr, species = "CH", stages = "rear", n_boot = 5L,
+                 seeds_more = integer(), grid_args = ga, cache_dir = dir)
+  }
+  first <- run(small)
+  expect_equal(nrow(first$CH_rear$score$rules), 26)
+  expect_true(file.exists(file.path(dir, "CH_rear_score.rds")))
+  # from here a rescore errors, so a run that returns read the cache
+  local_mocked_bindings(knw_tune_score = function(...) stop("rescored"))
+  expect_equal(run(small)$CH_rear$score$rules$rule, first$CH_rear$score$rules$rule)
+  expect_error(run(wider), "rescored")
+  # link's default width moving to another value on the ladder leaves every rule string as it was, but not the
+  # grid's default
+  thr2 <- s$thr
+  thr2$rear_channel_width_min[thr2$species_code == "CH"] <- 2
+  expect_identical(knw_tune_grid(thr2[1, ], "rear", grid_grad = 0.0549, grid_q = 3, grid_d = 1000)$rule,
+                   first$CH_rear$score$rules$rule)
+  expect_error(knw_tune_run(s$v, s$sp, s$walks, thr2, species = "CH", stages = "rear", n_boot = 5L,
+                            seeds_more = integer(), grid_args = small, cache_dir = dir), "rescored")
+})

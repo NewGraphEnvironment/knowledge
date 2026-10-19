@@ -22,7 +22,7 @@ Naming: `<topic>.md`, from 2026-09-26.
 | `rainbow_rearing_tuned.md` | RB rearing: width ≥ 3 m, ≤ 9 %; the largest population; a width rule grades measured streams only |
 | `steelhead_rearing_tuned.md` | ST rearing: MAD ≥ 1 m³/s on 82 detections in 11 groups; the curve overfits |
 | `westslope_cutthroat_rearing_tuned.md` | WCT rearing on six groups with both outcomes: underpowered |
-| `chinook_rearing_tuned.md` | a tuned CH rearing rule (#54): 2,795 size, gradient and near-a-river rules scored on held-out WSGs from FDIS visits on link's stream branch, the recommended gradient ≤ 7 % and either MAD ≥ 0.75 m³/s or a ≥ 3 m³/s river within 1 km (MAD ≥ 0.5 at 7–9 % is in every reading's region) (`default` and its MAD bounds outside the region), the range of each value, curves with no bend, where the flow source moves it, and the rule beside `default` on link's segments (−18 % CH rearing km), with bcfishobs and FDIS checks |
+| `chinook_rearing_tuned.md` | the tuned CH rearing rule (#54, rescored province-wide by #57 as `CH_rear_v1`): size, gradient and near-a-river rules scored on held-out WSGs from FDIS visits on link's stream branch; recommended MAD ≥ 0.75 m³/s, gradient ≤ 9 %, and either the floor or a ≥ 3 m³/s river within 1 km (`default` outside the region); the range of each value, curves with no bend, where the flow source moves it, the rule beside `default` on link's segments, and the gradient limit scored again up to 30 % (#67: best 15 %, every limit from 7 to 30 % in the region, `CH_rear_v1` unchanged) |
 
 The chinook rearing result is told in plain language, for a reader who has not seen the tuning, in the package
 article <https://newgraphenvironment.github.io/knowledge/articles/chinook_rearing.html> (#62).

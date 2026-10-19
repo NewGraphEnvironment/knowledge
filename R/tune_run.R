@@ -27,9 +27,16 @@
 #' @param seed,folds,n_boot,seeds_more,workers,d_floor passed to [knw_tune_score()].
 #' @param min_wsg,power_wsg `integer(1)` the floors described above.
 #' @param src `character(1)` the flow source the exception reads.
+#' @param grid_args `list` of arguments passed to [knw_tune_grid()] for every
+#'   species × stage (for example `list(grid_grad = c(0.03, 0.09, 0.15))`); empty
+#'   for its defaults.
 #' @param cache_dir `NULL`, or a directory where each species × stage's scored
 #'   grid is saved as `<sp>_<stage>_score.rds` and read back on a rerun when the
-#'   population has the same number of visits.
+#'   population has the same number of visits and the grid the same rows, in
+#'   the same order (every [knw_tune_grid()] column, so a moved `default`
+#'   counts). The other scoring arguments (`seed`, `folds`, `n_boot`,
+#'   `seeds_more`, `d_floor`) are not checked: give a run with different ones its
+#'   own directory.
 #' @return A list with one element per species × stage (`"<sp>_<stage>"`): a
 #'   list with `species_code`, `stage`, `response`, `status` (`fitted`,
 #'   `underpowered`, `no_stream_rule`, `no_response`, `too_few_groups`,
@@ -47,8 +54,9 @@ knw_tune_run <- function(visits, species_tbl, walks, thresholds, species = knw_s
                          stages = c("rear", "spawn"), spawner = NULL,
                          edge_stream = c(1000L, 1100L, 2000L, 2300L), area_range = c(10, 10000),
                          seed = 54L, folds = 5L, n_boot = 200L, seeds_more = 55:58, workers = 1L, d_floor = 200,
-                         min_wsg = 5L, power_wsg = 10L, src = "pick", cache_dir = NULL) {
+                         min_wsg = 5L, power_wsg = 10L, src = "pick", grid_args = list(), cache_dir = NULL) {
   chk::chk_data(visits)
+  chk::chk_list(grid_args)
   chk::check_names(visits, c("site_visit", "watershed_group_code", "blue_line_key", "downstream_route_measure",
                              "edge_type", "wb_river", "wb_wetland", "wb_lake", "area_m2", "year", "data_set",
                              "fwa_gradient", "cw_deploy", "mad_pick"))
@@ -74,7 +82,8 @@ knw_tune_run <- function(visits, species_tbl, walks, thresholds, species = knw_s
     for (stage in stages) {
       key <- paste(sp, stage, sep = "_")
       rec <- list(species_code = sp, stage = stage, response = if (stage == "rear") "U" else "S")
-      grid <- if (nrow(thr) == 1L) knw_tune_grid(thr, stage) else knw_tune_grid(thr[0, ], stage)[0, ]
+      tune_grid <- function(t) do.call(knw_tune_grid, c(list(t, stage), grid_args))
+      grid <- if (nrow(thr) == 1L) tune_grid(thr) else tune_grid(thr[0, ])[0, ]
       if (nrow(thr) != 1L || !nrow(grid)) {
         rec$status <- "no_stream_rule"
         rec$population <- c(visits_in = 0L)
@@ -115,7 +124,10 @@ knw_tune_run <- function(visits, species_tbl, walks, thresholds, species = knw_s
       sc <- NULL
       if (!is.null(cache) && file.exists(cache)) {
         sc <- readRDS(cache)
-        if (!identical(sc$population[["visits_in"]], nrow(d))) sc <- NULL
+        # a cache scored on another grid would be read back as this one's result; the rule strings alone do not
+        # carry which rule is `default` (it moves with link's thresholds), so every grid column is compared
+        if (!identical(sc$population[["visits_in"]], nrow(d)) ||
+              !identical(as.list(sc$rules[names(grid)]), as.list(grid))) sc <- NULL
       }
       if (is.null(sc)) {
         sc <- knw_tune_score(d, rule_in, grid, resp, seed = seed, folds = folds, n_boot = n_boot,

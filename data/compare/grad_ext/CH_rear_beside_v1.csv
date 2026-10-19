@@ -1,0 +1,28 @@
+candidate,rule,beside,direction,reason,n_segments,km,visits,detections
+g11,mad>=0.75|g<=0.11|Q3@D1000,mad>=0.75|g<=0.09|Q3@D1000,added,connectivity or overlay,1983,506.916,43,1
+g11,mad>=0.75|g<=0.11|Q3@D1000,mad>=0.75|g<=0.09|Q3@D1000,added,off the stream edges in the band (river-polygon branch and others),556,29.57,2,0
+g11,mad>=0.75|g<=0.11|Q3@D1000,mad>=0.75|g<=0.09|Q3@D1000,added,other,1,0.015,,
+g11,mad>=0.75|g<=0.11|Q3@D1000,mad>=0.75|g<=0.09|Q3@D1000,added,"stream edge in the band, exception",4605,907.099,68,3
+g11,mad>=0.75|g<=0.11|Q3@D1000,mad>=0.75|g<=0.09|Q3@D1000,added,"stream edge in the band, size passes",1250,236.69,49,1
+g11,mad>=0.75|g<=0.11|Q3@D1000,mad>=0.75|g<=0.09|Q3@D1000,removed,connectivity or overlay,2,0.163,,
+g13,mad>=0.75|g<=0.13|Q3@D1000,mad>=0.75|g<=0.09|Q3@D1000,added,connectivity or overlay,3014,759.84,84,4
+g13,mad>=0.75|g<=0.13|Q3@D1000,mad>=0.75|g<=0.09|Q3@D1000,added,off the stream edges in the band (river-polygon branch and others),916,44.68,7,0
+g13,mad>=0.75|g<=0.13|Q3@D1000,mad>=0.75|g<=0.09|Q3@D1000,added,other,1,0.015,,
+g13,mad>=0.75|g<=0.13|Q3@D1000,mad>=0.75|g<=0.09|Q3@D1000,added,"stream edge in the band, exception",7639,1332.85,96,3
+g13,mad>=0.75|g<=0.13|Q3@D1000,mad>=0.75|g<=0.09|Q3@D1000,added,"stream edge in the band, size passes",1971,332.709,76,1
+g15,mad>=0.75|g<=0.15|Q3@D1000,mad>=0.75|g<=0.09|Q3@D1000,added,connectivity or overlay,3517,877.233,90,5
+g15,mad>=0.75|g<=0.15|Q3@D1000,mad>=0.75|g<=0.09|Q3@D1000,added,off the stream edges in the band (river-polygon branch and others),1132,50.155,7,0
+g15,mad>=0.75|g<=0.15|Q3@D1000,mad>=0.75|g<=0.09|Q3@D1000,added,other,1,0.015,,
+g15,mad>=0.75|g<=0.15|Q3@D1000,mad>=0.75|g<=0.09|Q3@D1000,added,"stream edge in the band, exception",9082,1462.238,113,3
+g15,mad>=0.75|g<=0.15|Q3@D1000,mad>=0.75|g<=0.09|Q3@D1000,added,"stream edge in the band, size passes",2325,364.304,80,2
+g30,mad>=0.75|g<=0.3|Q3@D1000,mad>=0.75|g<=0.09|Q3@D1000,added,connectivity or overlay,4391,1077.137,117,8
+g30,mad>=0.75|g<=0.3|Q3@D1000,mad>=0.75|g<=0.09|Q3@D1000,added,off the stream edges in the band (river-polygon branch and others),1559,58.447,16,3
+g30,mad>=0.75|g<=0.3|Q3@D1000,mad>=0.75|g<=0.09|Q3@D1000,added,other,1,0.015,,
+g30,mad>=0.75|g<=0.3|Q3@D1000,mad>=0.75|g<=0.09|Q3@D1000,added,"stream edge in the band, exception",10337,1542.416,126,3
+g30,mad>=0.75|g<=0.3|Q3@D1000,mad>=0.75|g<=0.09|Q3@D1000,added,"stream edge in the band, size passes",2860,391.55,106,2
+rec_g15,mad>=0.75|g<=0.15|Q1@D1000,mad>=0.75|g<=0.09|Q3@D1000,added,"below the band, the exception's river or distance",21844,6794.87,325,5
+rec_g15,mad>=0.75|g<=0.15|Q1@D1000,mad>=0.75|g<=0.09|Q3@D1000,added,connectivity or overlay,4185,981.291,94,5
+rec_g15,mad>=0.75|g<=0.15|Q1@D1000,mad>=0.75|g<=0.09|Q3@D1000,added,off the stream edges in the band (river-polygon branch and others),1132,50.155,7,0
+rec_g15,mad>=0.75|g<=0.15|Q1@D1000,mad>=0.75|g<=0.09|Q3@D1000,added,other,1,0.015,,
+rec_g15,mad>=0.75|g<=0.15|Q1@D1000,mad>=0.75|g<=0.09|Q3@D1000,added,"stream edge in the band, exception",13415,2201.197,185,3
+rec_g15,mad>=0.75|g<=0.15|Q1@D1000,mad>=0.75|g<=0.09|Q3@D1000,added,"stream edge in the band, size passes",2325,364.304,80,2

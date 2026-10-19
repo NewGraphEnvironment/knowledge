@@ -1,0 +1,175 @@
+CH rearing, gradient ladder extended (knowledge#67), stage compare. Evidence build scripts/logs/habitat/20261017_evidence_build_ledger.csv on link run 20261017_004619-3f4c713b (link a17e91773b283b021811f8b5b76b887d5f4c16e4;ee21eb1371cbc4d7a2d598f8bbeeaeb0534d7994).
+  visits_link md5 5954951fd7ab147b41c9299e82042d58
+  visits_species md5 bc71243b0a4eb2e360e1e8410db34125
+  walks md5 403c2b4200898f30e00a3f65a879e19c
+link configs/default at a17e91773b283b021811f8b5b76b887d5f4c16e4 read from ../link.
+CH_rear_v1: mad>=0.75|g<=0.09|Q3@D1000. Recommended on the extended grid: mad>=0.75|g<=0.15|Q1@D1000. Candidates: g11 = mad>=0.75|g<=0.11|Q3@D1000, g13 = mad>=0.75|g<=0.13|Q3@D1000, g15 = mad>=0.75|g<=0.15|Q3@D1000, g30 = mad>=0.75|g<=0.3|Q3@D1000, rec_g15 = mad>=0.75|g<=0.15|Q1@D1000.
+Curve: 0320's, fitted at mad>=0.75|g<=0.09|Q3@D1000 (graded km above its gradient maximum is provisional).
+125 CH groups.
+g11 grades: segments=5757827, accessible=856244, walked=397788, found=371728, graded=852431, no_size=6259, no_gradient=0; walks 7.2 min; total 9.0 min.
+g13 grades: segments=5757827, accessible=856244, walked=410476, found=383417, graded=852431, no_size=6259, no_gradient=0; walks 6.3 min; total 7.8 min.
+g15 grades: segments=5757827, accessible=856244, walked=415290, found=387787, graded=852431, no_size=6259, no_gradient=0; walks 7.9 min; total 9.3 min.
+g30 grades: segments=5757827, accessible=856244, walked=419288, found=391246, graded=852431, no_size=6259, no_gradient=0; walks 7.8 min; total 9.2 min.
+rec_g15 grades: segments=5757827, accessible=856244, walked=415290, found=396060, graded=852431, no_size=6259, no_gradient=0; walks 6.2 min; total 7.5 min.
+g11 compare: 61.1 min.
+g13 compare: 61.6 min.
+g15 compare: 61.2 min.
+g30 compare: 61.4 min.
+rec_g15 compare: 61.7 min.
+g11: regenerated default against 0330's, 126 groups, largest difference 2.47e-10 km.
+g13: regenerated default against 0330's, 126 groups, largest difference 3.2e-10 km.
+g15: regenerated default against 0330's, 126 groups, largest difference 2.91e-10 km.
+g30: regenerated default against 0330's, 126 groups, largest difference 1.46e-10 km.
+rec_g15: regenerated default against 0330's, 126 groups, largest difference 2.47e-10 km.
+g11 (mad>=0.75|g<=0.11|Q3@D1000) beside default: default 101184 km, tuned 90287 km; gained 13946, lost 24843.
+g13 (mad>=0.75|g<=0.13|Q3@D1000) beside default: default 101184 km, tuned 91077 km; gained 14736, lost 24843.
+g15 (mad>=0.75|g<=0.15|Q3@D1000) beside default: default 101184 km, tuned 91361 km; gained 15020, lost 24843.
+g30 (mad>=0.75|g<=0.3|Q3@D1000) beside default: default 101184 km, tuned 91676 km; gained 15335, lost 24843.
+rec_g15 (mad>=0.75|g<=0.15|Q1@D1000) beside default: default 101184 km, tuned 98999 km; gained 20619, lost 22804.
+mad>=0.75|g<=0.11|Q3@D1000 beside mad>=0.75|g<=0.09|Q3@D1000: added 1680 km, removed 0 km.
+
+## g11 beside CH_rear_v1, by reason (km; FDIS visits and CH detections on those segments)
+ candidate                       rule                     beside direction
+       g11 mad>=0.75|g<=0.11|Q3@D1000 mad>=0.75|g<=0.09|Q3@D1000     added
+       g11 mad>=0.75|g<=0.11|Q3@D1000 mad>=0.75|g<=0.09|Q3@D1000     added
+       g11 mad>=0.75|g<=0.11|Q3@D1000 mad>=0.75|g<=0.09|Q3@D1000     added
+       g11 mad>=0.75|g<=0.11|Q3@D1000 mad>=0.75|g<=0.09|Q3@D1000     added
+       g11 mad>=0.75|g<=0.11|Q3@D1000 mad>=0.75|g<=0.09|Q3@D1000     added
+       g11 mad>=0.75|g<=0.11|Q3@D1000 mad>=0.75|g<=0.09|Q3@D1000   removed
+                                                             reason n_segments
+                                            connectivity or overlay       1983
+ off the stream edges in the band (river-polygon branch and others)        556
+                                                              other          1
+                                 stream edge in the band, exception       4605
+                               stream edge in the band, size passes       1250
+                                            connectivity or overlay          2
+          km visits detections
+ 506.9161845     43          1
+  29.5696379      2          0
+   0.0148989     NA         NA
+ 907.0986562     68          3
+ 236.6897769     49          1
+   0.1628892     NA         NA
+
+## g11 added km off the stream edges in the band, by FWA edge type
+ edge_type          km
+      1050  0.04435044
+      1250 24.36779074
+      1350  0.05017066
+      1450  5.15167652
+mad>=0.75|g<=0.13|Q3@D1000 beside mad>=0.75|g<=0.09|Q3@D1000: added 2470 km, removed 0 km.
+
+## g13 beside CH_rear_v1, by reason (km; FDIS visits and CH detections on those segments)
+ candidate                       rule                     beside direction
+       g13 mad>=0.75|g<=0.13|Q3@D1000 mad>=0.75|g<=0.09|Q3@D1000     added
+       g13 mad>=0.75|g<=0.13|Q3@D1000 mad>=0.75|g<=0.09|Q3@D1000     added
+       g13 mad>=0.75|g<=0.13|Q3@D1000 mad>=0.75|g<=0.09|Q3@D1000     added
+       g13 mad>=0.75|g<=0.13|Q3@D1000 mad>=0.75|g<=0.09|Q3@D1000     added
+       g13 mad>=0.75|g<=0.13|Q3@D1000 mad>=0.75|g<=0.09|Q3@D1000     added
+                                                             reason n_segments
+                                            connectivity or overlay       3014
+ off the stream edges in the band (river-polygon branch and others)        916
+                                                              other          1
+                                 stream edge in the band, exception       7639
+                               stream edge in the band, size passes       1971
+           km visits detections
+  759.8404968     84          4
+   44.6804160      7          0
+    0.0148989     NA         NA
+ 1332.8504200     96          3
+  332.7094428     76          1
+
+## g13 added km off the stream edges in the band, by FWA edge type
+ edge_type         km
+      1050  0.2129641
+      1250 35.9723898
+      1350  0.1098018
+      1450  8.5982243
+mad>=0.75|g<=0.15|Q3@D1000 beside mad>=0.75|g<=0.09|Q3@D1000: added 2754 km, removed 0 km.
+
+## g15 beside CH_rear_v1, by reason (km; FDIS visits and CH detections on those segments)
+ candidate                       rule                     beside direction
+       g15 mad>=0.75|g<=0.15|Q3@D1000 mad>=0.75|g<=0.09|Q3@D1000     added
+       g15 mad>=0.75|g<=0.15|Q3@D1000 mad>=0.75|g<=0.09|Q3@D1000     added
+       g15 mad>=0.75|g<=0.15|Q3@D1000 mad>=0.75|g<=0.09|Q3@D1000     added
+       g15 mad>=0.75|g<=0.15|Q3@D1000 mad>=0.75|g<=0.09|Q3@D1000     added
+       g15 mad>=0.75|g<=0.15|Q3@D1000 mad>=0.75|g<=0.09|Q3@D1000     added
+                                                             reason n_segments
+                                            connectivity or overlay       3517
+ off the stream edges in the band (river-polygon branch and others)       1132
+                                                              other          1
+                                 stream edge in the band, exception       9082
+                               stream edge in the band, size passes       2325
+           km visits detections
+  877.2330535     90          5
+   50.1546649      7          0
+    0.0148989     NA         NA
+ 1462.2381225    113          3
+  364.3038090     80          2
+
+## g15 added km off the stream edges in the band, by FWA edge type
+ edge_type         km
+      1050  0.2381410
+      1250 39.7121204
+      1350  0.1112442
+      1450 10.3313004
+mad>=0.75|g<=0.3|Q3@D1000 beside mad>=0.75|g<=0.09|Q3@D1000: added 3070 km, removed 0 km.
+
+## g30 beside CH_rear_v1, by reason (km; FDIS visits and CH detections on those segments)
+ candidate                      rule                     beside direction
+       g30 mad>=0.75|g<=0.3|Q3@D1000 mad>=0.75|g<=0.09|Q3@D1000     added
+       g30 mad>=0.75|g<=0.3|Q3@D1000 mad>=0.75|g<=0.09|Q3@D1000     added
+       g30 mad>=0.75|g<=0.3|Q3@D1000 mad>=0.75|g<=0.09|Q3@D1000     added
+       g30 mad>=0.75|g<=0.3|Q3@D1000 mad>=0.75|g<=0.09|Q3@D1000     added
+       g30 mad>=0.75|g<=0.3|Q3@D1000 mad>=0.75|g<=0.09|Q3@D1000     added
+                                                             reason n_segments
+                                            connectivity or overlay       4391
+ off the stream edges in the band (river-polygon branch and others)       1559
+                                                              other          1
+                                 stream edge in the band, exception      10337
+                               stream edge in the band, size passes       2860
+           km visits detections
+ 1077.1365457    117          8
+   58.4469643     16          3
+    0.0148989     NA         NA
+ 1542.4160418    126          3
+  391.5499159    106          2
+
+## g30 added km off the stream edges in the band, by FWA edge type
+ edge_type         km
+      1050  0.2655524
+      1250 44.5389737
+      1350  0.1538884
+      1450 13.7541021
+mad>=0.75|g<=0.15|Q1@D1000 beside mad>=0.75|g<=0.09|Q3@D1000: added 10392 km, removed 0 km.
+
+## rec_g15 beside CH_rear_v1, by reason (km; FDIS visits and CH detections on those segments)
+ candidate                       rule                     beside direction
+   rec_g15 mad>=0.75|g<=0.15|Q1@D1000 mad>=0.75|g<=0.09|Q3@D1000     added
+   rec_g15 mad>=0.75|g<=0.15|Q1@D1000 mad>=0.75|g<=0.09|Q3@D1000     added
+   rec_g15 mad>=0.75|g<=0.15|Q1@D1000 mad>=0.75|g<=0.09|Q3@D1000     added
+   rec_g15 mad>=0.75|g<=0.15|Q1@D1000 mad>=0.75|g<=0.09|Q3@D1000     added
+   rec_g15 mad>=0.75|g<=0.15|Q1@D1000 mad>=0.75|g<=0.09|Q3@D1000     added
+   rec_g15 mad>=0.75|g<=0.15|Q1@D1000 mad>=0.75|g<=0.09|Q3@D1000     added
+                                                             reason n_segments
+                  below the band, the exception's river or distance      21844
+                                            connectivity or overlay       4185
+ off the stream edges in the band (river-polygon branch and others)       1132
+                                                              other          1
+                                 stream edge in the band, exception      13415
+                               stream edge in the band, size passes       2325
+           km visits detections
+ 6794.8700916    325          5
+  981.2906889     94          5
+   50.1546649      7          0
+    0.0148989     NA         NA
+ 2201.1972986    185          3
+  364.3038090     80          2
+
+## rec_g15 added km off the stream edges in the band, by FWA edge type
+ edge_type         km
+      1050  0.4865718
+      1250 39.7121204
+      1350  0.1112442
+      1450 10.3313004
+Done in 105.1 min.

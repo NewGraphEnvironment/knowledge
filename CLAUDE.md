@@ -57,6 +57,9 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   parameter names, and the groups each rule was scored on; `0325`, #57). `data/tune/` holds the tuning run's
   per-rule scores and curves (its grade tables and fitted curves are ignored), `data/compare/` the comparison
   tables (its catalog cache and interactive maps ignored), `data/publish/` the Parquet sets (ignored).
+  `data/tune/grad_ext/` and `data/compare/grad_ext/` hold `0322`'s CH rearing run on a gradient ladder extended to
+  30 % (#67); nothing that publishes reads them, because `0325`, `0330` and `knw_thresholds_table()` list their
+  directories non-recursively.
 - `data/rag/` — ignored local cache of the ragnar stores. Source of truth is `s3://fresh-bc/rag/` (not public).
 - `data/fdis/` — ignored cache of the FDIS export (`0230` syncs it) and of the visit tables built from it
   (`data/fdis/derived/`; `0299` publishes them as `knowledge/fdis/v3`, and restores them with `PULL=TRUE`;
