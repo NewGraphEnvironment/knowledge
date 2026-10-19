@@ -9,7 +9,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/NewGraphEnvironment/knowledge/blob/v0.4.4/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/NewGraphEnvironment/knowledge/blob/main/DESCRIPTION)
 
 Irvine A (2026). *knowledge: Watershed-Group Fisheries Background*. R
 package version 0.4.4,
