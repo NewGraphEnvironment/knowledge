@@ -39,7 +39,7 @@ Decision taken there: this issue measures and records; `CH_rear_v1` stays at 9 %
       `dev_heldout` (same folds, same seed); report whether the best, the region's membership and the recommended
       rule moved
 - [x] Commit the tables and the log
-- [ ] Added 2026-10-19 after the run: the best rule sat at 15 %, the top of the extended ladder, so the ladder is
+- [x] Added 2026-10-19 after the run: the best rule sat at 15 %, the top of the extended ladder, so the ladder is
       extended again to 20, 25 and 30 % (same script, same seeds) to find where the score stops improving; the 15 %
       run's log is kept as `scripts/logs/habitat/20261018_tune_grad_extend-to15.txt` and its tables in git history
 

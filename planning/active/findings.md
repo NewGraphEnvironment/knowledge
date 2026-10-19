@@ -180,3 +180,19 @@ limit tried and nothing steeper was.
 - Visits behind it (scoring population, 4,490 visits, 215 CH): 214 visits with 9 CH at 9-11 %, 127 with 3 at
   11-13 %, 56 with 5 at 13-15 %; above 15 % 236 visits with 2 CH. The 15 % result rests on 17 catches above 9 %.
 - The best sits at the top of the ladder again, so the issue's question is not answered by this run.
+
+## Phase 2: the ladder to 30 % (2026-10-19, `scripts/logs/habitat/20261018_tune_grad_extend.txt`)
+
+- 6,149 rules (11 gradients), 22.4 min on 8 workers; regression as before (2,795 shared rules within 9.1e-13).
+- The best stays `mad>=0.75|g<=0.15|Q1@D1000`, so 15 % is interior now. Best per gradient behind it: 20 % +5.3
+  (SE 4.6), 25 % +10.7 (SE 5.2), 30 % +7.3 (SE 9.9); every gradient from 7 % to 30 % has rules in the region
+  (91 rules). Below 7 % none does.
+- Bootstrap recommended share by gradient: 15 % 43 %, 30 % 17.5 %, 11 % 17 %, 5.49 % 11.5 %, 13 % 7 %, 7 % 3 %,
+  20 % 0.5 %, 4 % 0.5 %, 9 % 0 %. The four other seeds recommend 15 %. Nested selection picks 11 %, 15 % (three
+  folds) and 30 %.
+- Reading: the records place the gradient maximum at 7 % or above and cannot rank the values from 7 % to 30 %;
+  15 % is best by a few deviance units. A steeper limit scores at least as well as 9 % for most rule shapes
+  (392-495 of 559 at each gradient).
+- Compare candidates (Phase 3): CH_rear_v1's parts at 11, 13, 15 and 30 %, and the extended recommended rule.
+  Smoke run on BULK (4.2 min): regenerated default equals 0330's to 5e-12 km; beside CH_rear_v1 the 11/13/15 %
+  rules add 29/42/44 km and the recommended rule (Q 1 m3/s) 289 km, removing none.

@@ -15,7 +15,7 @@
 #     the 2,795 rules the two grids share must score the same; the log checks it.
 #   - EVERY SPECIES IS TUNED ON ONE SHARED LADDER (knw_tune_grid()), so this run measures and records:
 #     it writes no thresholds and changes no published rule (#67's plan gate, 2026-10-18).
-#   - COMPARE (STAGE=compare): for each steeper gradient (11, 13, 15 % and the extended grid's best),
+#   - COMPARE (STAGE=compare): for each steeper gradient (11, 13, 15, 30 % and the extended grid's best),
 #     CH_rear_v1's size test and exception with that gradient maximum, and the extended grid's recommended
 #     rule itself where it differs from those. knw_grade_species() walks the exception's distance only for segments
 #     inside the pick's gradient maximum, so each candidate is graded at its own rule before its
@@ -61,7 +61,7 @@ workers <- as.integer(Sys.getenv("WORKERS", if (stage_run == "score") max(1L, mi
 schema <- "fresh_default"
 key <- "CH_rear"
 grid_grad <- c(0.03, 0.04, 0.0549, 0.07, 0.09, 0.11, 0.13, 0.15, 0.2, 0.25, 0.3)
-grad_new <- c(0.11, 0.13, 0.15)
+grad_new <- c(0.11, 0.13, 0.15, 0.3)
 dir_tune <- "data/tune/grad_ext"
 dir_cmp <- "data/compare/grad_ext"
 path_log <- file.path("scripts/logs/habitat", paste0(format(Sys.Date(), "%Y%m%d"), "_tune_grad_extend",
