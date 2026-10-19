@@ -2,8 +2,10 @@
 # ---------------------------------------------------------------------------
 # CH rearing's recommended rule (mad>=0.75|g<=0.09|Q3@D1000) takes the steepest gradient maximum 0320
 # scored, so its tuning could not say whether a steeper limit scores as well. This run scores CH rearing
-# again with the gradient ladder extended to 11, 13 and 15 %, and sets the steeper rules beside the
-# recommended one on link's segments. Issue #67. Input from 0310 and 0320; nothing downstream reads it
+# again with the gradient ladder extended to 11, 13, 15, 20, 25 and 30 %, and sets the steeper rules beside
+# the recommended one on link's segments. A first run to 15 % put the best rule at 15 %, the ladder's top
+# again (log 20261018_tune_grad_extend-to15.txt), so the ladder runs on to 30 %; above 15 % the scoring
+# population holds 236 visits and 2 CH catches. Issue #67. Input from 0310 and 0320; nothing downstream reads it
 # (0325 and 0330 list data/tune/ and data/compare/ non-recursively).
 #
 # WHY / DESIGN NOTES:
@@ -56,7 +58,7 @@ if (!stage_run %in% c("score", "compare")) stop("STAGE must be 'score' or 'compa
 workers <- as.integer(Sys.getenv("WORKERS", if (stage_run == "score") max(1L, min(8L, parallel::detectCores() - 2L)) else 3L))
 schema <- "fresh_default"
 key <- "CH_rear"
-grid_grad <- c(0.03, 0.04, 0.0549, 0.07, 0.09, 0.11, 0.13, 0.15)
+grid_grad <- c(0.03, 0.04, 0.0549, 0.07, 0.09, 0.11, 0.13, 0.15, 0.2, 0.25, 0.3)
 grad_new <- c(0.11, 0.13, 0.15)
 dir_tune <- "data/tune/grad_ext"
 dir_cmp <- "data/compare/grad_ext"
