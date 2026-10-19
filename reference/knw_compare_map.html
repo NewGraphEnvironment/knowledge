@@ -34,6 +34,10 @@ that owns them (fp_cells, from knw_floodplain_ha()'s join), where given.
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/chinook_rearing.html">Chinook rearing: choosing link's thresholds from fish records</a></li>
+  </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
@@ -69,7 +73,13 @@ that owns them (<code>fp_cells</code>, from <code><a href="knw_floodplain_ha.htm
 <span>  title <span class="op">=</span> <span class="st">""</span>,</span>
 <span>  png <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  html <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  fp_cells <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  fp_cells <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ncol <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  panels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"rules"</span>, <span class="st">"grade"</span>, <span class="st">"floodplain"</span><span class="op">)</span>,</span>
+<span>  mark <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  lwd <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  legend <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  labels <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -93,8 +103,9 @@ title; this goes under it).</p></dd>
 
 
 <dt id="arg-png">png<a class="anchor" aria-label="anchor" href="#arg-png"></a></dt>
-<dd><p><code>character(1)</code> path for the static figure (three panels), or
-<code>NULL</code>.</p></dd>
+<dd><p><code>character(1)</code> path for the static figure, or <code>NULL</code>: one panel
+for each of <code>panels</code> that can be drawn (<code>"floodplain"</code> needs <code>fp_cells</code>),
+<code>ncol</code> to a row.</p></dd>
 
 
 <dt id="arg-html">html<a class="anchor" aria-label="anchor" href="#arg-html"></a></dt>
@@ -103,6 +114,38 @@ title; this goes under it).</p></dd>
 
 <dt id="arg-fp-cells">fp_cells<a class="anchor" aria-label="anchor" href="#arg-fp-cells"></a></dt>
 <dd><p><code>NULL</code>, or a <code>SpatRaster</code> of grade per floodplain cell.</p></dd>
+
+
+<dt id="arg-ncol">ncol<a class="anchor" aria-label="anchor" href="#arg-ncol"></a></dt>
+<dd><p><code>integer(1)</code> panels per row in the static figure, or <code>NULL</code>
+for all panels side by side; each panel is 4 in by 4.6 in, so <code>ncol = 1</code>
+stacks them for a narrow column.</p></dd>
+
+
+<dt id="arg-panels">panels<a class="anchor" aria-label="anchor" href="#arg-panels"></a></dt>
+<dd><p><code>character</code> which static panels to draw, any of <code>"rules"</code>,
+<code>"grade"</code> and <code>"floodplain"</code> (drawn only where <code>fp_cells</code> is given).</p></dd>
+
+
+<dt id="arg-mark">mark<a class="anchor" aria-label="anchor" href="#arg-mark"></a></dt>
+<dd><p><code>NULL</code>, or an <code>sf</code> polygon outlined on every static panel, such
+as the window of a zoomed map drawn by a second call on cropped segments.</p></dd>
+
+
+<dt id="arg-lwd">lwd<a class="anchor" aria-label="anchor" href="#arg-lwd"></a></dt>
+<dd><p><code>numeric(1)</code> multiplier on the static panels' line widths, for a
+zoomed window where stream-order widths read too thin.</p></dd>
+
+
+<dt id="arg-legend">legend<a class="anchor" aria-label="anchor" href="#arg-legend"></a></dt>
+<dd><p><code>logical(1)</code> draw the static panels' legends; <code>FALSE</code> for a
+zoomed panel beside an overview that carries them.</p></dd>
+
+
+<dt id="arg-labels">labels<a class="anchor" aria-label="anchor" href="#arg-labels"></a></dt>
+<dd><p><code>NULL</code>, or an <code>sf</code> of points with a <code>label</code> column, drawn as
+numbered markers on every static panel (examples a table beside the map
+describes).</p></dd>
 
 </dl></div>
     <div class="section level2">

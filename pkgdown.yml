@@ -1,8 +1,9 @@
 pandoc: 3.8.3
 pkgdown: 2.2.1
 pkgdown_sha: ~
-articles: {}
-last_built: 2026-10-18T16:44Z
+articles:
+  chinook_rearing: chinook_rearing.html
+last_built: 2026-10-19T03:48Z
 urls:
   reference: https://newgraphenvironment.github.io/knowledge/reference
   article: https://newgraphenvironment.github.io/knowledge/articles

@@ -23,7 +23,13 @@ knw_compare_map(
   title = "",
   png = NULL,
   html = NULL,
-  fp_cells = NULL
+  fp_cells = NULL,
+  ncol = NULL,
+  panels = c("rules", "grade", "floodplain"),
+  mark = NULL,
+  lwd = 1,
+  legend = TRUE,
+  labels = NULL
 )
 ```
 
@@ -45,7 +51,9 @@ knw_compare_map(
 
 - png:
 
-  `character(1)` path for the static figure (three panels), or `NULL`.
+  `character(1)` path for the static figure, or `NULL`: one panel for
+  each of `panels` that can be drawn (`"floodplain"` needs `fp_cells`),
+  `ncol` to a row.
 
 - html:
 
@@ -54,6 +62,38 @@ knw_compare_map(
 - fp_cells:
 
   `NULL`, or a `SpatRaster` of grade per floodplain cell.
+
+- ncol:
+
+  `integer(1)` panels per row in the static figure, or `NULL` for all
+  panels side by side; each panel is 4 in by 4.6 in, so `ncol = 1`
+  stacks them for a narrow column.
+
+- panels:
+
+  `character` which static panels to draw, any of `"rules"`, `"grade"`
+  and `"floodplain"` (drawn only where `fp_cells` is given).
+
+- mark:
+
+  `NULL`, or an `sf` polygon outlined on every static panel, such as the
+  window of a zoomed map drawn by a second call on cropped segments.
+
+- lwd:
+
+  `numeric(1)` multiplier on the static panels' line widths, for a
+  zoomed window where stream-order widths read too thin.
+
+- legend:
+
+  `logical(1)` draw the static panels' legends; `FALSE` for a zoomed
+  panel beside an overview that carries them.
+
+- labels:
+
+  `NULL`, or an `sf` of points with a `label` column, drawn as numbered
+  markers on every static panel (examples a table beside the map
+  describes).
 
 ## Value
 
