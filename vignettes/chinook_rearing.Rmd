@@ -84,7 +84,8 @@ rule_parts <- function(s) {
 }
 ge_best_r <- rule_parts(ge_best$best_rule)
 stopifnot(identical(rule_parts(rec$rule)$exc_q, rec$exc_q), identical(ge_best$best_rule, ges$rule_recommended),
-          dflt$ddev_best > dflt$se_diff, ge_rec$ddev_best < ge_rec$se_diff,
+          dflt$ddev_best > dflt$se_diff, identical(ges$rule_pick, ge_best$best_rule),
+          ge_best$boot_rec_share == max(ge$boot_rec_share), ge_rec$boot_rec_share < ge_best$boot_rec_share,
           ge_best_r$size_var == rec$size_var, ge_best_r$size_min == rec$size_min, ge_best_r$exc_d == rec$exc_d,
           ge_best_r$exc_q < rec$exc_q)
 
@@ -290,20 +291,20 @@ reusing the same data to choose and to score.
 The shape is settled: a flow floor near `r rec$size_min` m³/s and an exception for small streams
 near a river. The gradient maximum is the least settled part.
 
-**Steeper limits do not change the choice.** `r grad(max(tune$grad_max))` was the steepest limit in the
-rules tried. Scoring the same records again with limits up to `r grad(max(ge$grad_max))` among the rules
-from the start, the best score moves to `r grad(ge_best$grad_max)`, with a smaller river in the
-exception (`r words(ge_best_r)`). Two of the checks above set it apart:
+**Steeper limits.** `r grad(max(tune$grad_max))` was the steepest limit in the rules tried. Scored
+again on the same records with limits up to `r grad(max(ge$grad_max))` among the rules from the
+start, the same procedure picks `r grad(ge_best$grad_max)`, with a smaller river in the exception:
+`r words(ge_best_r)`. Redraws of the groups choose a `r grad(ge_best$grad_max)` limit in
+`r pc(ge_best$boot_rec_share)` of draws and `r grad(rec$grad_max)` in `r pc(ge_rec$boot_rec_share)`.
+One check goes against the steeper limits: chosen on four folds and scored on the fifth, choices
+from the longer set lose to `default`, `r n1(ges$honest_dev_rec)` against
+`r n1(ges$honest_dev_default)`, where choices from the rules up to `r grad(max(tune$grad_max))` beat
+it at `r n1(summ$honest_dev_rec)`.
 
-- its gap over the recommended rule is `r n1(ge_rec$ddev_best)`, with a standard error of
-  `r n1(ge_rec$se_diff)`, so it is noise;
-- chosen on four folds and scored on the fifth, choices from the longer set lose to `default`,
-  `r n1(ges$honest_dev_rec)` against `r n1(ges$honest_dev_default)`, where choices from the rules up to
-  `r grad(max(tune$grad_max))` beat it at `r n1(summ$honest_dev_rec)`.
-
-The records cannot rank any limit from `r grad(min(ge_reg))` to `r grad(max(ge_reg))`, so the
-recommended rule keeps `r grad(rec$grad_max)`. The first run's region holds
-`r lst(grad(sort(unique(region$grad_max))))`.
+Every limit from `r grad(min(ge_reg))` to
+`r grad(max(ge_reg))` has rules in the region, so the records cannot place the limit within that range. The recommended rule keeps `r grad(rec$grad_max)` by decision, not because
+the procedure picks it: a steeper choice does not hold up on groups left out of the choice, and
+every species is tuned on one set of gradient limits.
 
 ## Why does a nearby river matter?
 
