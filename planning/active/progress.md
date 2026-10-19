@@ -12,4 +12,7 @@
   scorer; a cache written on a 26-rule grid is read for that grid and refused for a 52-rule one. With the grid
   check removed (in a copy), the refusal test fails. testthat floor raised to 3.2.0 for `local_mocked_bindings()`.
   Suite: 533 pass.
-- Next: Phase 2
+- Plan review returned (`review-plan.md`); its findings folded into 0322 before the run (join on two keys,
+  unrounded regression by rule, input md5 check, per-gradient table, recursive ignore rules, default-km check).
+- Phase 2: 0322 scored the 15 % ladder, 05:57-06:10 UTC; the best moved to 15 %, the ladder's top. Committed the
+  tables and log as the record; extending to 30 % next.

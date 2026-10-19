@@ -26,19 +26,22 @@ Decision taken there: this issue measures and records; `CH_rear_v1` stays at 9 %
 - [x] `devtools::document()`, `lintr::lint_package()`, `devtools::test()`; commit
 
 ## Phase 2: the extended scoring run
-- [ ] `scripts/0322-tune-grad-extend.R` (header in `0320`'s shape: WHY, INPUT, OUTPUT, RUN): CH rearing only, the
+- [x] `scripts/0322-tune-grad-extend.R` (header in `0320`'s shape: WHY, INPUT, OUTPUT, RUN): CH rearing only, the
       same evidence build, link thresholds at the ledger's `link_sha`, seeds, bootstrap and `d_floor` as `0320`,
       with `grid_grad = c(0.03, 0.04, 0.0549, 0.07, 0.09, 0.11, 0.13, 0.15)`; `cache_dir = "data/tune/grad_ext"`;
       writes `data/tune/grad_ext/CH_rear_{tune,seeds,honest,groups,summary}.csv` (tracked) and `_score.rds`,
       `_curve.rds` (ignored: two `.gitignore` lines); log `scripts/logs/habitat/<date>_tune_grad_extend.txt` with
       the region, best per gradient, nested selection, more seeds, and the bootstrap recommended and region shares
       by gradient
-- [ ] Run it in the background (`WORKERS=8`), the start time from `date -u`; wait for the exit, then read the log
+- [x] Run it in the background (`WORKERS=8`), the start time from `date -u`; wait for the exit, then read the log
       and the tables
-- [ ] Regression check in the script's log: the 2,795 rules shared with `data/tune/CH_rear_tune.csv` have identical
+- [x] Regression check in the script's log: the 2,795 rules shared with `data/tune/CH_rear_tune.csv` have identical
       `dev_heldout` (same folds, same seed); report whether the best, the region's membership and the recommended
       rule moved
-- [ ] Commit the tables and the log
+- [x] Commit the tables and the log
+- [ ] Added 2026-10-19 after the run: the best rule sat at 15 %, the top of the extended ladder, so the ladder is
+      extended again to 20, 25 and 30 % (same script, same seeds) to find where the score stops improving; the 15 %
+      run's log is kept as `scripts/logs/habitat/20261018_tune_grad_extend-to15.txt` and its tables in git history
 
 ## Phase 3: the steeper rules beside the recommended one on link's segments
 - [ ] Same script, `STAGE=compare` (reads the Phase 2 tables): for each steeper gradient (11, 13, 15 %), the

@@ -166,3 +166,17 @@ limit tried and nothing steeper was.
 - Pre-existing, not changed: in `knw_tune_run()`, a species absent from `thresholds` takes the
   `knw_tune_grid(thr[0, ], stage)` branch, which stops ("thresholds must be one species' row") instead of
   recording `no_stream_rule`. Every species in link's table has a row, so it has not bitten.
+
+## Phase 2: the ladder to 15 % (2026-10-19, `scripts/logs/habitat/20261018_tune_grad_extend-to15.txt`)
+
+- 4,472 rules, 13.6 min on 8 workers. Regression: all 2,795 rules shared with 0320's grid equal in `dev_heldout`
+  (largest difference 9.1e-13, against 0320's unrounded scores from another host).
+- The best, the pick and the recommended rule are all `mad>=0.75|g<=0.15|Q1@D1000` (held-out deviance 1131.00).
+  The 9 % rule (`CH_rear_v1`) is +19.66 (SE 22.14), still in the region; the region grows from 23 to 51 rules,
+  gradient 7-15 %. Best per gradient: 7 % +21.2 (SE 29.0), 9 % +19.7 (22.1), 11 % +11.6 (16.5), 13 % +15.6 (34.1).
+- Bootstrap recommended share by gradient: 15 % 55 %, 11 % 21 %, 5.49 % 12.5 %, 13 % 7.5 %, 7 % 3.5 %, 9 % 0 %.
+- The four other seeds all recommend a 15 % rule (two with Q3@D1000, one Q1@D1000 at 0.5 m3/s, one Q3@D2000).
+- Of the 559 rule shapes, 483-495 score better at 11, 13 or 15 % than at 9 %; none tie.
+- Visits behind it (scoring population, 4,490 visits, 215 CH): 214 visits with 9 CH at 9-11 %, 127 with 3 at
+  11-13 %, 56 with 5 at 13-15 %; above 15 % 236 visits with 2 CH. The 15 % result rests on 17 catches above 9 %.
+- The best sits at the top of the ladder again, so the issue's question is not answered by this run.

@@ -1,0 +1,2 @@
+species_code,stage,response,status,visits_in,detections,groups,groups_both,grid_grad,rules_n,rule_recommended,rule_pick,rule_best,default_in_region,default_ddev,default_se,region_n,patterns,dev_default,dev_best,dev_curve,honest_dev_rec,honest_dev_default,seeds_same_rec,seeds_n,boot_rec_share
+CH,rear,U,fitted,7123,216,104,43,0.03;0.04;0.0549;0.07;0.09;0.11;0.13;0.15,4472,mad>=0.75|g<=0.15|Q1@D1000,mad>=0.75|g<=0.15|Q1@D1000,mad>=0.75|g<=0.15|Q1@D1000,FALSE,215.9496,87.1057,51,4377,1346.9518,1131.0022,2442.6807,1384.8899,1346.9518,0,4,0.145
