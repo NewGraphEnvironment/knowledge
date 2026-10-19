@@ -445,8 +445,7 @@ stream length, against `r n1(ob$lift[ob$rule == "default"])` for `default`.
 
 ## What the recommendation is not
 
-- **Not applied yet.** `link` changes nothing until a configuration reads the new thresholds
-  ([link#346](https://github.com/NewGraphEnvironment/link/issues/346)).
+- **Not applied yet.** `link` changes nothing until a configuration reads the new thresholds.
 - **Juveniles caught by electrofishing, on streams.** Spawning is outside it. Wetlands and lakes
   keep their own tests; river polygons take the new gradient maximum, which the tuning scored on
   streams only.
