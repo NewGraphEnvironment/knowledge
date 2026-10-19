@@ -1,0 +1,88 @@
+Tuning run, knowledge#57. Evidence build scripts/logs/habitat/20261017_evidence_build_ledger.csv on link run 20261017_004619-3f4c713b (link a17e91773b283b021811f8b5b76b887d5f4c16e4;ee21eb1371cbc4d7a2d598f8bbeeaeb0534d7994).
+  visits_link md5 5954951fd7ab147b41c9299e82042d58
+  visits_species md5 bc71243b0a4eb2e360e1e8410db34125
+  walks md5 403c2b4200898f30e00a3f65a879e19c
+Spawner evidence: 1069 BT visits with a coded fish, 194 with evidence.
+link default thresholds at a17e91773b283b021811f8b5b76b887d5f4c16e4 (same at ee21eb1371cbc4d7a2d598f8bbeeaeb0534d7994): 11 species.
+Scored 2 species x stage in 0.1 min on 8 workers.
+CH_rear: fitted. 7123 visits (216 detections) in 104 groups (43 both). Recommended mad>=0.75|g<=0.09|Q3@D1000; default outside the region (+196.3, SE 81.6). Curve held-out 1323.6 vs grid best 1150.7.
+
+## CH_rear region
+                        rule departures ddev_best  se_diff n_wsg_varies n_in
+  mad>=0.75|g<=0.09|Q3@D1000          3  0.000000  0.00000           42 1047
+  mad>=0.75|g<=0.07|Q3@D1000          3  1.557205 14.18484           42  950
+  mad>=0.75|g<=0.07|Q1@D1000          3  7.809773 12.24659           42 1065
+   mad>=0.5|g<=0.09|Q3@D1000          3  8.479557 15.30608           42 1193
+  mad>=0.75|g<=0.09|Q3@D2000          3 10.684941 23.33066           42 1334
+   mad>=0.5|g<=0.07|Q3@D1000          3 11.715815 24.41659           42 1092
+     mad>=1|g<=0.07|Q3@D1000          3 12.710291 23.68334           41  894
+  mad>=0.75|g<=0.07|Q3@D2000          3 13.382178 31.78935           42 1212
+   mad>=0.5|g<=0.07|Q1@D1000          3 15.516841 21.81618           42 1194
+   mad>=0.5|g<=0.09|Q3@D2000          3 17.808385 27.04867           42 1469
+     mad>=1|g<=0.07|Q3@D2000          3 20.074468 36.30924           41 1162
+     mad>=1|g<=0.09|Q3@D2000          3 20.163595 28.65312           42 1284
+     mad>=1|g<=0.07|Q1@D1000          3 21.338208 22.24003           41 1026
+   mad>=0.5|g<=0.07|Q3@D2000          3 21.564758 36.38101           42 1344
+     mad>=1|g<=0.07|Q1@D2000          3 26.450973 35.06549           41 1429
+  mad>=0.35|g<=0.09|Q3@D2000          3 27.502341 30.39632           42 1532
+  mad>=0.35|g<=0.07|Q3@D2000          3 29.512054 39.63049           42 1400
+  mad>=0.5|g<=0.07|Q10@D1000          3 29.625806 30.18457           42 1011
+  mad>=0.75|g<=0.07|Q1@D2000          3 30.548852 33.51811           42 1449
+ mad>=0.75|g<=0.07|Q10@D2000          3 32.091081 35.50552           42 1063
+  mad>=0.75|g<=0.07|Q5@D2000          3 33.644944 35.47185           42 1130
+   mad>=0.5|g<=0.07|Q1@D2000          3 35.092637 37.19208           42 1546
+   mad>=0.5|g<=0.07|Q5@D2000          3 39.175494 40.14862           42 1270
+ n_detect_in raw_rate_in raw_rate_out boot_region_share
+         166   0.1585482   0.01423177             0.750
+         158   0.1663158   0.01610169             0.685
+         161   0.1511737   0.01576642             0.300
+         172   0.1441744   0.01304216             0.430
+         179   0.1341829   0.01140684             0.400
+         164   0.1501832   0.01500883             0.475
+         150   0.1677852   0.01807564             0.455
+         171   0.1410891   0.01342282             0.510
+         167   0.1398660   0.01456311             0.215
+         183   0.1245745   0.01059252             0.250
+         165   0.1419966   0.01502404             0.390
+         173   0.1347352   0.01310044             0.230
+         153   0.1491228   0.01789838             0.135
+         175   0.1302083   0.01271456             0.345
+         174   0.1217635   0.01339432             0.280
+         184   0.1201044   0.01048005             0.105
+         176   0.1257143   0.01262136             0.275
+         156   0.1543027   0.01695890             0.170
+         176   0.1214631   0.01282473             0.160
+         160   0.1505174   0.01604902             0.225
+         164   0.1451327   0.01517857             0.150
+         179   0.1157827   0.01222826             0.140
+         169   0.1330709   0.01428571             0.130
+
+## CH_rear nested selection
+ fold                          rule n_wsg  dev_rec dev_default dev_null
+    1    mad>=0.75|g<=0.07|Q3@D1000     9 201.6588    238.7608 248.0700
+    2     mad>=1|g<=0.0549|Q1@D2000     8 203.9195    233.8164 246.2100
+    3    mad>=0.75|g<=0.09|Q3@D2000     9 254.1973    257.1591 266.5865
+    4    mad>=0.75|g<=0.09|Q3@D1000     8 233.9270    230.2852 231.9222
+    5 mad>=0.75|g<=0.0549|Q10@D2000     9 340.7909    386.9303 389.7277
+
+## CH_rear more seeds
+ seed                       best                        pick
+   55 mad>=0.75|g<=0.07|Q3@D1000  mad>=0.75|g<=0.07|Q3@D1000
+   56 mad>=0.75|g<=0.09|Q3@D1000 mad>=0.5|g<=0.0549|Q3@D2000
+   57 mad>=0.75|g<=0.07|Q3@D1000  mad>=0.75|g<=0.07|Q3@D1000
+   58 mad>=0.75|g<=0.07|Q3@D1000  mad>=0.75|g<=0.07|Q3@D1000
+                 recommended default_in_region main_rec_in_region region_n
+  mad>=0.75|g<=0.07|Q3@D1000             FALSE               TRUE       24
+ mad>=0.5|g<=0.0549|Q3@D2000             FALSE               TRUE       59
+  mad>=0.75|g<=0.07|Q3@D1000             FALSE               TRUE       18
+  mad>=0.75|g<=0.07|Q3@D1000             FALSE               TRUE       24
+CH_spawn: no_response (visits_in=7123).
+CH_rear: grades on file for mad>=0.75|g<=0.09|Q3@D1000 / 20261017_004619-3f4c713b (walked only the exception's candidates), regraded for mad>=0.75|g<=0.09|Q3@D1000 / 20261017_004619-3f4c713b.
+CH_rear grades: 125 groups, segments=5757827, accessible=856244, walked=856244, walk_found=809412, walk_none=46831, walk_other=1, graded=852431, no_size=6259, no_gradient=0; reference rate 0.5156; walks 11.1 min; total 12.6 min.
+
+## grades
+     key groups reference_rate segments accessible walked walk_found walk_none
+ CH_rear    125      0.5155667  5757827     856244 856244     809412     46831
+ walk_other graded no_size no_gradient
+          1 852431    6259           0
+Done in 12.7 min.

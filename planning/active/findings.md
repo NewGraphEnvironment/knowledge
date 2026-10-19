@@ -93,6 +93,27 @@ Plan review: `review-plan.md`, each finding with its verdict. Code-check round 1
   two with one. So every change table must come back identical; the scratch check over every tracked
   `data/compare` csv tests it.
 
+## First CH regrade (2026-10-19, all-accessible reference; superseded)
+
+`scripts/logs/habitat/20261019_tune_run-ch.txt`: score cache hit (0.1 min); the fit line identical to
+20261017's; walked 856,244 (every accessible segment has a gradient), found 809,412, none 46,831, other 1;
+walks 11.1 min on 8 workers (77 k/min, against 62 k/min for #57's 373 k candidates); reference 0.5156 against
+0.1457. Tracked `data/tune` files unchanged; new `CH_rear_{seeds,honest}.csv`.
+
+By branch (accessible, graded): stream (1000/1100/2000/2300) 478,597 segments, 147,668 km, median distance
+6.8 km, 95th-percentile rate 0.139; river and lake edges 275,772 segments, 60,627 km, median distance 0.7 mm
+(34 % exactly 0), 95th percentile 0.880; other edges 98,062 segments, 16,165 km, 0.258.
+
+| reference | value | grade-weighted km, all | stream | stream km < 0.2 | stream km ≥ 0.8 | river/lake km ≥ 0.8 |
+|---|---|---|---|---|---|---|
+| #57's (capped walks) | 0.146 | 61,889 | 20,348 | 81.3 % | 6.2 % | 48.0 % |
+| every accessible segment | 0.516 | 32,965 | 6,756 | 92.1 % | 0.4 % | 20.4 % |
+| stream branch only | 0.139 | 63,058 | 21,091 | 80.9 % | 6.9 % | 49.0 % |
+
+(The #57 row applies its reference to the new rates, so it isolates the reference.) Asked Al, who chose the
+stream branch. The run for the other seven keys, started on the old reference, was stopped two minutes in
+(no grade table written) and rerun after the change.
+
 ## Errors Encountered
 
 | Error | Resolution |

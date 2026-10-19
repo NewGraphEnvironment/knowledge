@@ -24,6 +24,12 @@ Settled by Al on 2026-10-19 in plan mode (issue body), re-approved with this pla
 - Walk every gradable accessible segment: accessible, size present and > 0, gradient present (`knw_grade()`'s
   own test, `R/grade.R:48`), any edge type, any gradient. About 9.3 M walks, roughly 2.5 h on 8 workers.
 - `habitat_grade/v1` stays v1: nothing under `s3://fresh-bc/knowledge/` but `fdis/`, so no consumer read the capped one.
+- **Mid-run, 2026-10-19 (Al, asked with the measurement):** the reference rate that reads 1 is taken over the
+  stream branch only (edge types 1000/1100/2000/2300, the curve's visits' edge types), not every accessible
+  segment. The first CH regrade put river-polygon and lake segments at about 0 m and they set the reference
+  (0.146 → 0.516; stream km graded ≥ 0.8 fell 6.2 % → 0.4 %); over the stream branch it is 0.139 (6.9 %).
+  Every segment is still graded. `knw_grade(ref_rows =)`, `knw_grade_species(ref_edge =)`; the grade table
+  carries `ref_population` and 0320 regrades a table without it.
 - A walk whose status is `none`, `no_parent` or `too_many_hops` keeps `dist_m = NA` (the cap), as
   `knw_tune_curve()` censors visits (`R/tune_curve.R:64`); the table records which in `dist_status`.
 
