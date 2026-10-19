@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">knowledge</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,11 +33,11 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/v0.4.5/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="development version" id="knowledge-development-version">knowledge (development version)<a class="anchor" aria-label="anchor" href="#knowledge-development-version"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.4.5" id="knowledge-045">knowledge 0.4.5<a class="anchor" aria-label="anchor" href="#knowledge-045"></a></h2>
 <ul><li>
 <code><a href="../reference/knw_tune_run.html">knw_tune_run()</a></code> gains <code>grid_args</code>, passed to <code><a href="../reference/knw_tune_grid.html">knw_tune_grid()</a></code>, and reads a cached score back only for the grid it was scored on (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/67" class="external-link">#67</a>). <code>scripts/0322</code> scored chinook rearing on gradient limits up to 30 %: the best rule moves from 9 % to 15 %, and every limit from 7 to 30 % has rules in the region, but choosing among the longer ladder loses to <code>default</code> under nested selection. <code>CH_rear_v1</code> keeps 9 %; extending the ladder for every species is <a href="https://github.com/NewGraphEnvironment/knowledge/issues/68" class="external-link">#68</a>. The chinook rearing article says so.</li>
 </ul></div>

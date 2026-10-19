@@ -1,6 +1,6 @@
 # Changelog
 
-## knowledge (development version)
+## knowledge 0.4.5
 
 - [`knw_tune_run()`](https://newgraphenvironment.github.io/knowledge/reference/knw_tune_run.md)
   gains `grid_args`, passed to
