@@ -82,7 +82,7 @@ Decision taken there: this issue measures and records; `CH_rear_v1` stays at 9 %
 ## Phase 6: close out
 - [x] If a steeper rule is the main reading's recommended rule: file the follow-up issue (extend the ladder for
       every species, retune, republish `thresholds`), link it from the research section and this body
-- [ ] Edit this body: the findings as spec, the research section linked
+- [x] Edit this body: the findings as spec, the research section linked
 - [ ] `/code-check branch`; `/planning-archive`; `/gh-pr-push`
 
 ## Validation
