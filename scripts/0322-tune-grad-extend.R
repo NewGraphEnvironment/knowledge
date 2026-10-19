@@ -3,7 +3,7 @@
 # CH rearing's recommended rule (mad>=0.75|g<=0.09|Q3@D1000) takes the steepest gradient maximum 0320
 # scored, so its tuning could not say whether a steeper limit scores as well. This run scores CH rearing
 # again with the gradient ladder extended to 11, 13, 15, 20, 25 and 30 %, and sets the steeper rules beside
-# the recommended one on link's segments. A first run to 15 % put the best rule at 15 %, the ladder's top
+# CH_rear_v1 (0320's recommended rule) on link's segments. A first run to 15 % put the best rule at 15 %, the ladder's top
 # again (log 20261018_tune_grad_extend-to15.txt), so the ladder runs on to 30 %; above 15 % the scoring
 # population holds 236 visits and 2 CH catches. Issue #67. Input from 0310 and 0320; nothing downstream reads it
 # (0325 and 0330 list data/tune/ and data/compare/ non-recursively).
@@ -15,8 +15,9 @@
 #     the 2,795 rules the two grids share must score the same; the log checks it.
 #   - EVERY SPECIES IS TUNED ON ONE SHARED LADDER (knw_tune_grid()), so this run measures and records:
 #     it writes no thresholds and changes no published rule (#67's plan gate, 2026-10-18).
-#   - COMPARE (STAGE=compare): for each steeper gradient, the recommended rule's size test and exception
-#     with that gradient maximum. knw_grade_species() walks the exception's distance only for segments
+#   - COMPARE (STAGE=compare): for each steeper gradient (11, 13, 15 % and the extended grid's best),
+#     CH_rear_v1's size test and exception with that gradient maximum, and the extended grid's recommended
+#     rule itself where it differs from those. knw_grade_species() walks the exception's distance only for segments
 #     inside the pick's gradient maximum, so each candidate is graded at its own rule before its
 #     comparison; the curve is 0320's (fitted at the 9 % pick), so graded km above 9 % reads the curve
 #     past the gradients its pick admitted and is provisional. The candidate's segments are then joined
@@ -41,11 +42,12 @@
 #         data/tune/grad_ext/CH_rear_{score,curve}.rds                         (ignored)
 #         data/compare/grad_ext/CH_rear_g<pct>_{compare,change,checks}.csv     each steeper rule beside default
 #         data/compare/grad_ext/CH_rear_g<pct>_segments.rds                    (ignored)
-#         data/compare/grad_ext/CH_rear_beside_recommended.csv                 km added and removed beside the
-#                                                                              recommended rule, by reason
+#         data/compare/grad_ext/CH_rear_beside_v1.csv     km each candidate adds and removes beside CH_rear_v1
+#                                                        (0330's rule), by reason, with FDIS visits on them
 #         scripts/logs/habitat/<date>_tune_grad_extend.txt, <date>_tune_grad_extend-compare.txt
 # RUN:    Rscript scripts/0322-tune-grad-extend.R                  (from the repo root; WORKERS=8)
-#         STAGE=compare Rscript scripts/0322-tune-grad-extend.R    (after the scoring; WORKERS=3 jobs)
+#         STAGE=compare Rscript scripts/0322-tune-grad-extend.R    (after the scoring; WORKERS=5 jobs)
+#         STAGE=compare SMOKE=BULK Rscript ...                     (one group, into a temporary directory)
 # ---------------------------------------------------------------------------
 suppressMessages({ library(dplyr); library(readr); library(DBI); library(RPostgres) })
 pkgload::load_all(quiet = TRUE)
@@ -55,7 +57,7 @@ if (!nzchar(Sys.getenv("PGCONNECT_TIMEOUT"))) Sys.setenv(PGCONNECT_TIMEOUT = "30
 link_repo <- Sys.getenv("LINK_REPO", "../link")
 stage_run <- Sys.getenv("STAGE", "score")
 if (!stage_run %in% c("score", "compare")) stop("STAGE must be 'score' or 'compare', not '", stage_run, "'")
-workers <- as.integer(Sys.getenv("WORKERS", if (stage_run == "score") max(1L, min(8L, parallel::detectCores() - 2L)) else 3L))
+workers <- as.integer(Sys.getenv("WORKERS", if (stage_run == "score") max(1L, min(8L, parallel::detectCores() - 2L)) else 5L))
 schema <- "fresh_default"
 key <- "CH_rear"
 grid_grad <- c(0.03, 0.04, 0.0549, 0.07, 0.09, 0.11, 0.13, 0.15, 0.2, 0.25, 0.3)
@@ -64,6 +66,13 @@ dir_tune <- "data/tune/grad_ext"
 dir_cmp <- "data/compare/grad_ext"
 path_log <- file.path("scripts/logs/habitat", paste0(format(Sys.Date(), "%Y%m%d"), "_tune_grad_extend",
                                                      if (stage_run == "compare") "-compare", ".txt"))
+# SMOKE=<wsg,...> runs the compare stage on those groups into a temporary directory, writing nothing tracked
+smoke <- Sys.getenv("SMOKE", "")
+if (nzchar(smoke)) {
+  if (stage_run != "compare") stop("SMOKE is for STAGE=compare")
+  dir_cmp <- file.path(tempdir(), "grad_ext_smoke")
+  path_log <- file.path(dir_cmp, basename(path_log))
+}
 for (d in c(dir_tune, dir_cmp)) dir.create(d, showWarnings = FALSE, recursive = TRUE)
 log_lines <- character()
 say <- function(...) { log_lines <<- c(log_lines, sprintf(...)); message(sprintf(...)) }
@@ -186,25 +195,36 @@ if (stage_run == "score") {
   quit(save = "no")
 }
 
-# ---- STAGE=compare: each steeper rule beside default, then beside the recommended rule --------------
+# ---- STAGE=compare: each steeper rule beside default, then beside CH_rear_v1 ---------------------------
+# CH_rear_v1 is the rule 0320 recommended and 0330 compared (0330's segments are its); the candidates are its
+# parts at each steeper gradient, and the extended grid's own recommended rule where that is not one of them
 t0 <- Sys.time()
 tune <- read_csv(file.path(dir_tune, paste0(key, "_tune.csv")), show_col_types = FALSE)
 rec <- tune |> filter(recommended)
-cands <- lapply(grad_new, function(g) {
-  x <- tune |> filter(size_var == rec$size_var, size_min == rec$size_min, grad_max == g,
-                      (is.na(exc_q) & is.na(rec$exc_q)) | (exc_q %in% rec$exc_q & exc_d %in% rec$exc_d))
-  if (nrow(x) != 1L) stop("no single rule with ", rec$rule, "'s parts at gradient ", g)
+v1_rule <- unique(read_csv(file.path("data/compare", paste0(key, "_change.csv")), show_col_types = FALSE)$tuned_rule)
+v1_0320 <- read_csv(file.path("data/tune", paste0(key, "_tune.csv")), show_col_types = FALSE) |> filter(recommended)
+if (length(v1_rule) != 1L || !identical(v1_rule, v1_0320$rule)) stop("0330's compared rule is not 0320's recommended rule")
+v1 <- tune |> filter(rule == v1_rule)
+grad_cand <- sort(unique(c(grad_new, rec$grad_max[rec$grad_max > v1$grad_max])))
+cands <- lapply(grad_cand, function(g) {
+  x <- tune |> filter(size_var == v1$size_var, size_min == v1$size_min, grad_max == g,
+                      (is.na(exc_q) & is.na(v1$exc_q)) | (exc_q %in% v1$exc_q & exc_d %in% v1$exc_d))
+  if (nrow(x) != 1L) stop("no single rule with ", v1$rule, "'s parts at gradient ", g)
   x
 })
-names(cands) <- vapply(grad_new, pct, character(1))
-say("Recommended rule on the extended grid: %s. Candidates: %s.", rec$rule,
-    paste(vapply(cands, `[[`, character(1), "rule"), collapse = ", "))
+names(cands) <- vapply(grad_cand, pct, character(1))
+if (!rec$rule %in% vapply(cands, `[[`, character(1), "rule") && rec$rule != v1$rule) {
+  cands[[paste0("rec_", pct(rec$grad_max))]] <- rec
+}
+say("CH_rear_v1: %s. Recommended on the extended grid: %s. Candidates: %s.", v1$rule, rec$rule,
+    paste(names(cands), vapply(cands, `[[`, character(1), "rule"), sep = " = ", collapse = ", "))
 main <- readRDS(file.path("data/tune", paste0(key, "_curve.rds")))
 say("Curve: 0320's, fitted at %s (graded km above its gradient maximum is provisional).", main$pick$rule)
 conn <- pg()
 wsg <- dbGetQuery(conn, sprintf("SELECT DISTINCT watershed_group_code w FROM %s.streams_habitat_ch ORDER BY 1", schema))$w
 dbDisconnect(conn)
-say("%d CH groups.", length(wsg))
+if (nzchar(smoke)) wsg <- intersect(wsg, strsplit(smoke, ",")[[1]])
+say("%d CH groups%s.", length(wsg), if (nzchar(smoke)) paste0(" (smoke run: ", dir_cmp, ")") else "")
 
 # grade each candidate at its own rule, one at a time (each walk already runs on several workers)
 for (k in names(cands)) {
@@ -246,7 +266,8 @@ if (length(todo)) {
   if (any(vapply(res, function(x) !is.null(x$error), logical(1)))) { writeLines(log_lines, path_log); stop("a comparison failed") }
 }
 # fresh_default must still hold the link run 0330 compared on: regenerated default, per group, as 0330's
-cmp0 <- read_csv(file.path("data/compare", paste0(key, "_compare.csv")), show_col_types = FALSE)
+cmp0 <- read_csv(file.path("data/compare", paste0(key, "_compare.csv")), show_col_types = FALSE) |>
+  filter(watershed_group_code %in% c(wsg, if (!nzchar(smoke)) "ALL"))
 for (k in names(cands)) {
   ck <- read_csv(file.path(dir_cmp, paste0(key, "_", k, "_compare.csv")), show_col_types = FALSE) |>
     inner_join(cmp0 |> select(watershed_group_code, default_0330 = default_km), by = "watershed_group_code")
@@ -260,13 +281,11 @@ for (k in names(cands)) {
       tot$default_km, tot$tuned_km, tot$gained_km, tot$lost_km)
 }
 
-# ---- beside the recommended rule ---------------------------------------------------------------
+# ---- beside CH_rear_v1 -------------------------------------------------------------------------
 cols_seg <- c("id_segment", "watershed_group_code", "edge_type", "stream_order", "length_metre", "gradient", "knw_size",
               "knw_dist", "rearing_pre_tuned", "rearing_tuned")
 base <- readRDS(file.path("data/compare", paste0(key, "_segments.rds")))[, cols_seg]
-if (!identical(unique(read_csv(file.path("data/compare", paste0(key, "_change.csv")), show_col_types = FALSE)$tuned_rule), rec$rule)) {
-  stop("data/compare/", key, "_segments.rds is not the recommended rule's (", rec$rule, ")")
-}
+base <- base[base$watershed_group_code %in% wsg, , drop = FALSE]
 edge_stream <- c(1000L, 1100L, 2000L, 2300L)
 fv <- vs |> filter(species_code == "CH", status %in% c("present", "absent")) |> select(site_visit, present) |>
   inner_join(vl |> filter(!is.na(area_m2), area_m2 >= 10, area_m2 <= 10000) |>
@@ -275,32 +294,34 @@ beside <- list()
 for (k in names(cands)) {
   cand <- cands[[k]]
   s <- readRDS(file.path(dir_cmp, paste0(key, "_", k, "_segments.rds")))[, cols_seg]
-  j <- inner_join(base, s, by = c("id_segment", "watershed_group_code"), suffix = c("_rec", "_new"))
-  if (nrow(j) != nrow(base) || nrow(j) != nrow(s)) stop(k, ": segments do not match the recommended rule's one to one")
-  j <- j |> filter(rearing_tuned_rec != rearing_tuned_new) |>
+  j <- inner_join(base, s, by = c("id_segment", "watershed_group_code"), suffix = c("_v1", "_new"))
+  if (nrow(j) != nrow(base) || nrow(j) != nrow(s)) stop(k, ": segments do not match CH_rear_v1's one to one")
+  j <- j |> filter(rearing_tuned_v1 != rearing_tuned_new) |>
     mutate(direction = if_else(rearing_tuned_new, "added", "removed"),
-           band = !is.na(gradient_new) & gradient_new > rec$grad_max & gradient_new <= cand$grad_max,
+           band = !is.na(gradient_new) & gradient_new > v1$grad_max & gradient_new <= cand$grad_max,
            stream = edge_type_new %in% edge_stream,
            size_ok = !is.na(knw_size_new) & knw_size_new >= cand$size_min,
            exc_ok = !is.na(cand$exc_q) & !is.na(knw_dist_new) & knw_dist_new <= cand$exc_d,
-           reason = case_when(rearing_pre_tuned_rec == rearing_pre_tuned_new ~ "connectivity or overlay",
+           reason = case_when(rearing_pre_tuned_v1 == rearing_pre_tuned_new ~ "connectivity or overlay",
                               band & stream & size_ok ~ "stream edge in the band, size passes",
                               band & stream & exc_ok ~ "stream edge in the band, exception",
                               band & !stream ~ "off the stream edges in the band (river-polygon branch and others)",
+                              !band & stream & direction == "added" & exc_ok ~ "below the band, the exception's river or distance",
+                              !band & stream & direction == "removed" ~ "below the band, the exception's river or distance",
                               TRUE ~ "other"))
   vis <- fv |> inner_join(j |> select(id_segment, watershed_group_code, direction, reason), by = c("id_segment", "watershed_group_code"))
   tab <- j |> group_by(direction, reason) |> summarise(n_segments = n(), km = sum(length_metre_new) / 1000, .groups = "drop") |>
     left_join(vis |> group_by(direction, reason) |> summarise(visits = n(), detections = sum(present), .groups = "drop"),
               by = c("direction", "reason")) |>
-    mutate(rule = cand$rule, recommended = rec$rule, .before = 1)
+    mutate(candidate = k, rule = cand$rule, beside = v1$rule, .before = 1)
   beside[[k]] <- tab
   edges <- j |> filter(direction == "added", band, !stream) |> count(edge_type = edge_type_new, wt = length_metre_new / 1000, name = "km")
-  say("%s beside %s: added %.0f km, removed %.0f km.", cand$rule, rec$rule, sum(tab$km[tab$direction == "added"]),
+  say("%s beside %s: added %.0f km, removed %.0f km.", cand$rule, v1$rule, sum(tab$km[tab$direction == "added"]),
       sum(tab$km[tab$direction == "removed"]))
-  block(paste(k, "beside the recommended rule, by reason (km; FDIS visits and CH detections on those segments)"), tab)
+  block(paste(k, "beside CH_rear_v1, by reason (km; FDIS visits and CH detections on those segments)"), tab)
   block(paste(k, "added km off the stream edges in the band, by FWA edge type"), edges)
 }
 beside <- bind_rows(beside) |> mutate(across(where(is.double), ~ round(.x, 3)))
-write_csv(beside, file.path(dir_cmp, paste0(key, "_beside_recommended.csv")), na = "")
+write_csv(beside, file.path(dir_cmp, paste0(key, "_beside_v1.csv")), na = "")
 say("Done in %.1f min.", as.numeric(difftime(Sys.time(), t0, units = "mins")))
 writeLines(log_lines, path_log)
