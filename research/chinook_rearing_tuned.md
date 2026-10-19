@@ -71,17 +71,20 @@ in held-out deviance 9.1e-13).
 - **The other fold seeds agree on steeper than 9 %.** All four recommend a 15 % rule (MAD ≥ 0.75 with Q3 within
   1 km on two, Q3 within 2 km on one, MAD ≥ 0.5 with Q1 within 1 km on one). Of the 559 size-and-exception shapes,
   392–495 score better at each steeper maximum than at 9 %; none ties.
-- **Nested selection does not hold up.** Choosing a rule without each fold and scoring the choice on that fold,
+- **Nested selection: the longer ladder's choice is unstable.** Choosing a rule without each fold and scoring the choice on that fold,
   the longer ladder's choices total 1,389.4 held-out deviance, against 1,234.5 for 0320's choices among limits to
   9 %, 1,347.0 for `default` and 1,382.5 for no rule (`data/tune/grad_ext/CH_rear_honest.csv`). The folds' picks are
   11 % (fold 1), 15 % (folds 2, 3 and 5, the last at MAD ≥ 0.2) and 30 % (fold 4); folds 1 and 4 lose most, 299.6
-  and 333.9 against 201.7 and 233.9 for 0320's picks there. So the steeper limits' edge on the main reading comes from groups
-  the choice was fitted on, and does not carry to groups it has not seen.
+  and 333.9 against 201.7 and 233.9 for 0320's picks there. On the three folds that chose 15 %, the picks total
+  755.9 against 877.9 for `default` and 798.9 for 0320's picks. So the check shows the longer ladder's choice
+  swinging between folds, not 15 % failing on groups it has not seen.
 - **It rests on few catches.** Above 9 % the scoring population holds 397 visits with 17 CH (214 with 9 at 9–11 %,
   127 with 3 at 11–13 %, 56 with 5 at 13–15 %), and above 15 % 236 visits with 2 CH. Steeper limits admit these
   visits only where the segment passes the floor or the exception, so the score is nearly flat from 11 % to 30 %:
   the best rule at each of those maximums lies within 15.6 of the best.
-- **Decision: `CH_rear_v1` keeps 9 %.** The steeper limits' advantage does not survive nested selection, and every
+- **Decision: `CH_rear_v1` keeps 9 %.** Nothing in the records argues for 9 % over a steeper limit: the procedure,
+  the seeds and the bootstrap lean to 15 %, and the gap is within its standard error. 9 % is kept because it is the
+  pick on the ladder fixed before the run, the longer ladder's choice is unstable across folds, and every
   species is tuned on one shared ladder (`knw_tune_grid()`), with BT and RB rearing also recommending its top, so
   a CH-only change would break the comparison across species.
   Extending the ladder for every species, retuning and republishing is #68. What the records say for CH is that

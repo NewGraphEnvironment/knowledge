@@ -4,9 +4,10 @@ CH rearing's recommended rule (`CH_rear_v1`: MAD ≥ 0.75 m³/s, gradient ≤ 9 
 steepest gradient on the shared tuning ladder, so `scripts/0322-tune-grad-extend.R` scored CH rearing again with the
 ladder extended above 9 %, on the same evidence, folds, seeds and bootstrap, and set the steeper rules beside
 `CH_rear_v1` on link's segments. A first pass to 15 % put the best at 15 %, the top again, so the ladder ran on to
-30 %. 15 % stayed best, every limit from 7 to 30 % had rules in the region, and the other seeds all chose 15 %. But
-nested selection on the longer ladder lost to `default`, so the steeper edge does not carry to groups the choice
-has not seen. `CH_rear_v1` stays at 9 %; extending the ladder for every species is #68 (BT and RB rearing also sit
+30 %. 15 % stayed best, every limit from 7 to 30 % had rules in the region, and the other seeds all chose 15 %.
+Nested selection on the longer ladder lost to `default`, but its folds chose 11, 15 and 30 %: the three 15 % picks
+beat `default` (755.9 against 877.9), and the loss came from the 11 % and 30 % folds. So it shows an unstable
+choice, not 15 % failing (corrected 2026-10-19; the first write-up read it as the steeper edge not carrying). `CH_rear_v1` stays at 9 %; extending the ladder for every species is #68 (BT and RB rearing also sit
 at its top). `knw_tune_run()` gained `grid_args`, and its score cache is now read back only for the grid it was
 scored on (it had read the old grid's scores for any grid, and the rule strings alone missed a moved `default`).
 The article says what the second run found, computed from its tables. The verdict is the section "The gradient
@@ -30,7 +31,7 @@ and an enumeration of 15 artifact pairs, after round 3 found a defect inside rou
 | of which off the stream edges (river polygons) | 30–58 km |
 | run times | scoring 13.6 min (to 15 %) and 22.4 min (to 30 %) on 8 workers; grading 7.5–9.3 min per rule; five comparisons 62 min in parallel |
 
-The nested-selection result changed the decision's reason: before it, 9 % was kept for the shared ladder alone.
+The nested-selection result was first read as a reason against steeper limits; read fold by fold it is not one, and 9 % rests on the pre-set ladder and the shared ladder.
 
 ## Evidence
 
