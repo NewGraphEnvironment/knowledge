@@ -451,7 +451,7 @@ stream or canal not drawn through a wetland, spawning-only places left out; no r
 recommended rule's habitat is `r n1(ob$lift[ob$rule == "tuned"])` times the rule's share of that
 stream length, against `r n1(ob$lift[ob$rule == "default"])` for `default`.
 
-## What the recommendation is not
+## What should you know before using it?
 
 ```{r limits-region}
 reg <- tune[tune$in_region, ]
