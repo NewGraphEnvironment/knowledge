@@ -131,7 +131,7 @@ Phase 3.
 Accepted, not fixed here: `ref_population` is a literal 0320 and 0322 write, so it vouches for `ref_edge`'s
 default rather than for the call, which agrees with the curve's `edge_stream` because the two defaults are the
 same list. Recording provenance where the grade is made (`knw_grade_species()` returning `ref_edge` and `q`,
-written by 0320 and checked by each consumer) would change code the running regrade uses; filed as a follow-up.
+written by 0320 and checked by each consumer) would change code the running regrade uses; filed as knowledge#72.
 
 ## Errors Encountered
 

@@ -13,3 +13,12 @@
 - Phase 1 done: `knw_grade_species()` walks every accessible segment with a gradient to the pick's `exc_q`
   (else `curve$q`), with `dist_status` and walk counts; 0320 regrades tables without `dist_status`; tests pass,
   and red against both the old size filter (8 failures) and round 1's defect (3).
+- First CH regrade (`scripts/logs/habitat/20261019_tune_run-ch.txt`, committed): 856,244 walks in 11.1 min;
+  the reference rose 0.146 → 0.516 because river and lake segments set it. Asked Al with the measurement; he
+  chose the stream branch. The run for the other seven keys was stopped two minutes in (nothing written).
+- Reference change committed (`9f35e8e`) after three review rounds (round 2 found a defect inside round 1's
+  fix, so round 3 enumerated 48 places; `review-ref-round*.md`). Follow-up: knowledge#72 (grade provenance).
+- Full regrade started 2026-10-19 ~21:24 UTC from a frozen copy of 0320 (`20261019_tune_run.txt`), all keys,
+  CH included. Next: when it exits, check `git status`/`git diff data/tune`, then 0325, the full 0330 (about
+  5 h on #57's run), the invariant check (scratch `check_rules_unchanged.R`: every non-grade compare column
+  equal to origin/main's), `data-raw/vignette_chinook.R`, `devtools::test()`, then Phase 3's numbers.
