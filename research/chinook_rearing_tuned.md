@@ -87,7 +87,28 @@ in held-out deviance 9.1e-13).
   Extending the ladder for every species, retuning and republishing is #68. What the records say for CH is that
   the gradient maximum sits at 7 % or above and cannot be placed between 7 % and 30 %.
 
-KM_PLACEHOLDER
+- **On link's segments a steeper limit adds little; the 1 m³/s river adds most.** `scripts/0322 STAGE=compare`
+  regenerated each candidate through link's three stages on all 125 CH groups (regenerated `default` equals 0330's
+  to 3.2e-10 km) and set it beside `CH_rear_v1`'s 88,607 km (`data/compare/grad_ext/CH_rear_beside_v1.csv`, logs
+  `scripts/logs/habitat/20261018_tune_grad_extend-compare.txt` for the run, `20261019_…-compare.txt` for the
+  checks). No candidate removes more than 0.2 km. FDIS visits are those of 10–10,000 m² on the added segments:
+
+  | Rule | km added | stream edges in the band, size passes | stream edges in the band, exception | off the stream edges in the band | the exception's river, below the band | connectivity or overlay | FDIS visits (CH) |
+  |---|---|---|---|---|---|---|---|
+  | `CH_rear_v1`'s parts at 11 % | 1,680 | 237 | 907 | 30 | – | 507 | 162 (5) |
+  | at 13 % | 2,470 | 333 | 1,333 | 45 | – | 760 | 263 (8) |
+  | at 15 % | 2,754 | 364 | 1,462 | 50 | – | 877 | 290 (10) |
+  | at 30 % | 3,070 | 392 | 1,542 | 58 | – | 1,077 | 365 (16) |
+  | the extended best (15 %, Q1 within 1 km) | 10,392 | 364 | 2,201 | 50 | 6,795 | 981 | 691 (15) |
+
+  The band is the gradients above 9 % up to the rule's maximum. About half of what a steeper limit adds (50–54 %) is
+  stream segments under the flow floor that the exception admits, and about a third (30–35 %) is the connectivity
+  pass keeping clusters the new segments join. The
+  extended best's own increase comes mostly from its smaller river, not its gradient: 6,795 km lie at 9 % or less.
+  Its graded km is not reported, because the grade's curve reads distance to a 3 m³/s river.
+- **River polygons.** Off the stream edges, a steeper limit adds 30–58 km, almost all FWA edge 1250 (river main
+  flow, 24–45 km) and 1450 (connectors in river polygons, 5–14 km). FDIS caught CH on none of the 2–7 visits on those
+  segments at 11–15 %, and on 3 of 16 at 30 %.
 
 Every figure names its population. Three recur:
 - **Tuning population.** FDIS electrofishing visits on link's CH stream branch, with no natural CH barrier downstream:

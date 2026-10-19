@@ -81,4 +81,3 @@ Checked and not flagged:
 - the vignette md5 sources include both grad_ext files;
 - `pct()` names, the candidate filter on NA `exc_q`, and the join keys.
 
-/Users/airvine/Projects/repo/knowledge/planning/active/review-round3.md
