@@ -214,3 +214,9 @@ The extended run's own curve has held-out deviance 2,442.7, worse than no rule (
 3. Two late `stop()`s lost the log. [fixed: log written first]
 4. The article's "fit as well or slightly better" was unguarded. [fixed: stopifnot]
 5. scripts/README.md and CLAUDE.md said 15 %. [fixed]
+
+## Code-check round 2 (`review-round2.md`)
+
+No wrong numbers; round 1's fixes hold. 1. A failed regression only logged, after the tables were written, and the
+article reads two of them. [fixed: log, remove the tables, stop] 2. The header said nothing reads the outputs; the
+article does. [fixed] Neither finding sits inside a round 1 fix.

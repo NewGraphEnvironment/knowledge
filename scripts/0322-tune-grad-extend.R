@@ -5,8 +5,9 @@
 # again with the gradient ladder extended to 11, 13, 15, 20, 25 and 30 %, and sets the steeper rules beside
 # CH_rear_v1 (0320's recommended rule) on link's segments. A first run to 15 % put the best rule at 15 %, the ladder's top
 # again (log 20261018_tune_grad_extend-to15.txt), so the ladder runs on to 30 %; above 15 % the scoring
-# population holds 236 visits and 2 CH catches. Issue #67. Input from 0310 and 0320; nothing downstream reads it
-# (0325 and 0330 list data/tune/ and data/compare/ non-recursively).
+# population holds 236 visits and 2 CH catches. Issue #67. Input from 0310 and 0320. Only the chinook rearing
+# article reads it (data-raw/vignette_chinook.R takes grad_ext/CH_rear_{by_grad,summary}.csv); 0325, 0330 and the
+# thresholds table list data/tune/ and data/compare/ non-recursively, so nothing that publishes does.
 #
 # WHY / DESIGN NOTES:
 #   - SAME SPEC AS 0320 except the ladder: the same evidence build, link's thresholds at the ledger's
@@ -191,7 +192,13 @@ if (stage_run == "score") {
       nrow(both), nrow(old), sum(abs(both$dev_old - both$dev_heldout) < 1e-8), dmax)
   say("Regression: region membership on the shared rules moved for %d; recommended was %s, is %s; best was %s, is %s.",
       sum(both$region_old != both$in_region), old$rule[old$recommended], r$pick$rule, old$rule[old$ddev_best == 0][1], best$rule)
-  if (nrow(both) != nrow(old) || dmax >= 1e-8) say("REGRESSION FAILED: shared rules scored differently.")
+  if (nrow(both) != nrow(old) || dmax >= 1e-8) {
+    # the tables are already written and the article reads two of them: take them back before stopping
+    say("REGRESSION FAILED: shared rules scored differently; the tables are removed.")
+    writeLines(log_lines, path_log)
+    unlink(file.path(dir_tune, paste0(key, c("_tune", "_groups", "_seeds", "_honest", "_summary", "_by_grad"), ".csv")))
+    stop("the rules both grids share scored differently from 0320")
+  }
   say("Done in %.1f min.", as.numeric(difftime(Sys.time(), t0, units = "mins")))
   writeLines(log_lines, path_log)
   quit(save = "no")
