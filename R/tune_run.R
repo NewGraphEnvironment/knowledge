@@ -32,8 +32,8 @@
 #'   for its defaults.
 #' @param cache_dir `NULL`, or a directory where each species × stage's scored
 #'   grid is saved as `<sp>_<stage>_score.rds` and read back on a rerun when the
-#'   population has the same number of visits and the grid the same rules, in
-#'   the same order. The other scoring arguments (`seed`, `folds`, `n_boot`,
+#'   population has the same number of visits and the grid the same rows, in
+#'   the same order (every [knw_tune_grid()] column, so a moved `default` counts). The other scoring arguments (`seed`, `folds`, `n_boot`,
 #'   `seeds_more`, `d_floor`) are not checked: give a run with different ones its
 #'   own directory.
 #' @return A list with one element per species × stage (`"<sp>_<stage>"`): a
@@ -123,8 +123,10 @@ knw_tune_run <- function(visits, species_tbl, walks, thresholds, species = knw_s
       sc <- NULL
       if (!is.null(cache) && file.exists(cache)) {
         sc <- readRDS(cache)
-        # a cache scored on another grid would be read back as this one's result
-        if (!identical(sc$population[["visits_in"]], nrow(d)) || !identical(sc$rules$rule, grid$rule)) sc <- NULL
+        # a cache scored on another grid would be read back as this one's result; the rule strings alone do not
+        # carry which rule is `default` (it moves with link's thresholds), so every grid column is compared
+        if (!identical(sc$population[["visits_in"]], nrow(d)) ||
+              !identical(as.list(sc$rules[names(grid)]), as.list(grid))) sc <- NULL
       }
       if (is.null(sc)) {
         sc <- knw_tune_score(d, rule_in, grid, resp, seed = seed, folds = folds, n_boot = n_boot,

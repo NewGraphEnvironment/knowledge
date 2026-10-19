@@ -88,4 +88,12 @@ test_that("a cached score is read back only for the grid it was scored on", {
   local_mocked_bindings(knw_tune_score = function(...) stop("rescored"))
   expect_equal(run(small)$CH_rear$score$rules$rule, first$CH_rear$score$rules$rule)
   expect_error(run(wider), "rescored")
+  # link's default width moving to another value on the ladder leaves every rule string as it was, but not the
+  # grid's default
+  thr2 <- s$thr
+  thr2$rear_channel_width_min[thr2$species_code == "CH"] <- 2
+  expect_identical(knw_tune_grid(thr2[1, ], "rear", grid_grad = 0.0549, grid_q = 3, grid_d = 1000)$rule,
+                   first$CH_rear$score$rules$rule)
+  expect_error(knw_tune_run(s$v, s$sp, s$walks, thr2, species = "CH", stages = "rear", n_boot = 5L,
+                            seeds_more = integer(), grid_args = small, cache_dir = dir), "rescored")
 })

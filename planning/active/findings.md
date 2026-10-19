@@ -220,3 +220,30 @@ The extended run's own curve has held-out deviance 2,442.7, worse than no rule (
 No wrong numbers; round 1's fixes hold. 1. A failed regression only logged, after the tables were written, and the
 article reads two of them. [fixed: log, remove the tables, stop] 2. The header said nothing reads the outputs; the
 article does. [fixed] Neither finding sits inside a round 1 fix.
+
+## Code-check round 3 (`review-round3.md`) and the enumeration that ended the loop
+
+Round 3 found a defect inside round 2's fix (the tables were taken back only when the regression ran and failed;
+a missing 0320 cache or any error before it left them for the article), so by the code-check rule only an
+enumeration ends the loop. Its mechanism: one artifact vouches for another and the pair is not checked where the
+second is used. Every such pair in the diff, with its check:
+
+| # | Pair | Check |
+|---|---|---|
+| 1 | evidence ledger used against the one 0320's log names | 0322 takes the ledger from 0320's log's first line (was: newest on disk) |
+| 2 | visit and walk tables against 0320's | md5 against 0320's log, stop |
+| 3 | score cache against the grid | `knw_tune_run()`: every grid column, in order (was: rule strings; a moved `default` passed). Test added; with the old check restored it fails; the real 0320 and 0322 caches pass |
+| 4 | 0320's score cache against its committed table | rules, recommended rule and rounded deviance equal, else stop |
+| 5 | regression against the written tables | run before any table is written; `die()` logs first |
+| 6 | 0330's compared rule against 0320's recommended | stop |
+| 7 | 0320's curve against CH_rear_v1 | stop unless its pick is CH_rear_v1 |
+| 8 | 0330's segments against 0330's compare table | km per group equal (125 groups, 1.1e-13 km), stop |
+| 9 | regenerated `default` against 0330's | km per group, stop |
+| 10 | resume marker against the data it vouches for | compare csv carries the rule and is written last; grades regenerated for anything not done |
+| 11 | each candidate's segments against its compare table | km per group equal, stop |
+| 12 | curve's river size against a candidate's exception river | logged; that candidate's graded km not reported |
+| 13 | extended summary's population against the main reading's (article data) | equal, stop |
+| 14 | per-gradient table against its own run's summary (article data) | best rule equal, stop |
+| 15 | article sentences against the tables | `stopifnot()` on each premise, 9 % in the region included |
+
+The score stage, rerun from its cache after the restructure, wrote byte-identical tables.

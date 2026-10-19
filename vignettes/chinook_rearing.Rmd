@@ -51,7 +51,7 @@ ge_reg <- ge$grad_max[ge$in_region > 0]
 ges <- x$grad_ext_summary
 # the sentences on steeper limits read these as true; a rerun that breaks one must change the prose
 stopifnot(nrow(ge_best) == 1, ge_best$grad_max > rec$grad_max, ge_best$grad_max < max(ge$grad_max),
-          identical(ge_rec$best_rule, rec$rule), all(ge$in_region[ge$grad_max >= min(ge_reg)] > 0),
+          identical(ge_rec$best_rule, rec$rule), ge_rec$in_region > 0, all(ge$in_region[ge$grad_max >= min(ge_reg)] > 0),
           all(ge$ddev_best[ge$grad_max > rec$grad_max] <= ge_rec$ddev_best),
           abs(ges$honest_dev_default - summ$honest_dev_default) < 0.01,
           ges$honest_dev_rec > ges$honest_dev_default, summ$honest_dev_rec < summ$honest_dev_default)

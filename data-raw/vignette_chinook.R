@@ -117,6 +117,12 @@ if (!all(file.exists(f_ge))) stop("missing ", paste(f_ge[!file.exists(f_ge)], co
 out$grad_ext <- rd(f_ge[["grad_ext"]]) |> select(-species_code, -stage)
 out$grad_ext_summary <- rd(f_ge[["grad_ext_summary"]])
 if (!all(sort(unique(out$tune$grad_max)) %in% out$grad_ext$grad_max)) stop("the extended ladder lacks a gradient the main one has")
+# the same population as the main reading, and one run's two tables
+pop <- c("visits_in", "detections", "groups", "groups_both")
+if (!isTRUE(all.equal(unlist(out$grad_ext_summary[pop]), unlist(out$summary[pop])))) stop("the extended run scored another population")
+if (!identical(out$grad_ext$best_rule[out$grad_ext$ddev_best == 0], out$grad_ext_summary$rule_best)) {
+  stop("the per-gradient table and the summary are not one run's")
+}
 src <- c(src, f_ge)
 
 # ---- meta: provenance and the scoring's constants -------------------------------------------------

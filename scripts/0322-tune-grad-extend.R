@@ -35,6 +35,7 @@
 #     river-polygon visit. The km a steeper maximum adds off the stream edges is reported on its own.
 #
 # INPUT:  data/fdis/derived/{visits_link,visits_species,walks}.csv (0310); the evidence build ledger;
+#         data/tune/CH_rear_score.rds (0320, ignored: copied from the host that ran it) for the regression;
 #         the link repository at LINK_REPO at the build's link_sha; for STAGE=compare also
 #         data/tune/CH_rear_curve.rds (0320), data/compare/CH_rear_segments.rds (0330) and the fwapg
 #         database (PG* env vars): fresh_default
@@ -87,10 +88,19 @@ pg <- function() {
            error = function(e) stop("database unreachable (PG* environment variables): ", conditionMessage(e)))
 }
 pct <- function(g) sprintf("g%02d", round(100 * g))
+# stop after work has been done: the log goes out first, so the reason is on file
+die <- function(...) {
+  say("STOPPED: %s", paste0(...))
+  writeLines(log_lines, path_log)
+  stop(..., call. = FALSE)
+}
 
 # ---- inputs and their provenance ------------------------------------------------------
-ledger_path <- sort(list.files("scripts/logs/habitat", "_evidence_build_ledger\\.csv$", full.names = TRUE), decreasing = TRUE)[1]
-if (is.na(ledger_path)) stop("no evidence build ledger: run scripts/0310 first")
+# the evidence build 0320 scored CH rearing on is the one its log names on its first line, not the newest on disk
+path_0320 <- "scripts/logs/habitat/20261017_tune_run-bt_ch_co_st.txt"
+log_0320 <- readLines(path_0320, n = 6)
+ledger_path <- sub("^.*Evidence build (\\S+) on link run.*$", "\\1", log_0320[1])
+if (identical(ledger_path, log_0320[1]) || !file.exists(ledger_path)) stop("0320's log names no evidence ledger on disk: ", log_0320[1])
 led <- read_csv(ledger_path, show_col_types = FALSE, col_types = cols(.default = "c"))
 run_uid <- led$note[led$step == "link_run_uid"]
 shas <- strsplit(led$note[led$step == "run_link_sha"], ";", fixed = TRUE)[[1]]
@@ -98,7 +108,6 @@ link_sha <- shas[1]
 say("CH rearing, gradient ladder extended (knowledge#67), stage %s. Evidence build %s on link run %s (link %s).",
     stage_run, ledger_path, run_uid, paste(shas, collapse = ";"))
 # the inputs must be the ones 0320 scored on, or the comparison with its grid means nothing
-log_0320 <- readLines("scripts/logs/habitat/20261017_tune_run-bt_ch_co_st.txt", n = 6)
 for (f in c("visits_link", "visits_species", "walks")) {
   m <- unname(tools::md5sum(file.path("data/fdis/derived", paste0(f, ".csv"))))
   say("  %s md5 %s", f, m)
@@ -122,6 +131,9 @@ say("link configs/default at %s read from %s.", link_sha, link_repo)
 
 if (stage_run == "score") {
   # ---- score the extended grid -------------------------------------------------------------
+  # 0320's unrounded scores, for the regression; an ignored cache, so present only where 0320 ran
+  f_old <- file.path("data/tune", paste0(key, "_score.rds"))
+  if (!file.exists(f_old)) die(f_old, " is missing: copy it from the host that ran 0320, or rerun 0320 for CH")
   walks <- read_csv("data/fdis/derived/walks.csv", show_col_types = FALSE)
   t0 <- Sys.time()
   out <- knw_tune_run(vl, vs, walks, thr, species = "CH", stages = "rear", workers = workers,
@@ -129,8 +141,28 @@ if (stage_run == "score") {
   r <- out[[key]]
   say("Scored %s in %.1f min on %d workers: %s, %d rules, %s.", key, as.numeric(difftime(Sys.time(), t0, units = "mins")),
       workers, r$status, nrow(r$score$rules), paste(names(r$score$population), r$score$population, sep = "=", collapse = ", "))
-  if (is.null(r$curve)) stop(key, ": no curve (", r$status, "): ", r$curve_error)
+  if (is.null(r$curve)) die(key, ": no curve (", r$status, "): ", r$curve_error)
   rules <- r$score$rules |> mutate(species_code = r$species_code, stage = r$stage, response = r$response, status = r$status)
+  best <- rules |> filter(ddev_best == 0) |> slice(1)
+  # ---- regression: the rules both grids hold score the same ------------------------------------
+  # against 0320's unrounded scores, by rule (the two grids order their rules differently); 0320 scored on
+  # another host, so equal means within 1e-8, not bit-identical
+  old <- readRDS(f_old)$rules
+  # the cache must be the run that wrote 0320's committed table
+  tab_0320 <- read_csv(file.path("data/tune", paste0(key, "_tune.csv")), show_col_types = FALSE)
+  if (!identical(old$rule, tab_0320$rule) || !identical(old$rule[old$recommended], tab_0320$rule[tab_0320$recommended]) ||
+      max(abs(round(old$dev_heldout, 6) - tab_0320$dev_heldout)) > 1e-6) {
+    die(f_old, " is not the run that wrote data/tune/", key, "_tune.csv")
+  }
+  both <- inner_join(old |> select(rule, dev_old = dev_heldout, region_old = in_region, rec_old = recommended),
+                     rules |> select(rule, dev_heldout, in_region, recommended), by = "rule")
+  dmax <- max(abs(both$dev_old - both$dev_heldout))
+  say("Regression: %d of %d rules of 0320's grid are in this one; %d equal in dev_heldout within 1e-8 (largest difference %.2g).",
+      nrow(both), nrow(old), sum(abs(both$dev_old - both$dev_heldout) < 1e-8), dmax)
+  say("Regression: region membership on the shared rules moved for %d; recommended was %s, is %s; best was %s, is %s.",
+      sum(both$region_old != both$in_region), old$rule[old$recommended], r$pick$rule, old$rule[old$ddev_best == 0][1], best$rule)
+  # before any table is written: the article reads two of them
+  if (nrow(both) != nrow(old) || dmax >= 1e-8) die("REGRESSION FAILED: the rules both grids share scored differently from 0320")
   write_csv(rules |> mutate(across(where(is.numeric), ~ round(.x, 6))), file.path(dir_tune, paste0(key, "_tune.csv")), na = "")
   write_csv(tibble(species_code = r$species_code, stage = r$stage, watershed_group_code = names(r$score$folds),
                    fold = as.integer(r$score$folds)), file.path(dir_tune, paste0(key, "_groups.csv")), na = "")
@@ -140,7 +172,6 @@ if (stage_run == "score") {
                                                 species_code = r$species_code, stage = r$stage),
             file.path(dir_tune, paste0(key, "_honest.csv")), na = "")
   dflt <- rules |> filter(is_default)
-  best <- rules |> filter(ddev_best == 0) |> slice(1)
   summ <- tibble(species_code = r$species_code, stage = r$stage, response = r$response, status = r$status,
                  visits_in = r$population[["visits_in"]], detections = r$population[["detections"]],
                  groups = r$population[["groups"]], groups_both = r$population[["groups_both"]],
@@ -181,24 +212,6 @@ if (stage_run == "score") {
       sum(as.numeric(sub(".*\\|g<=([0-9.]+)\\|.*", "\\1", r$score$seeds$recommended)) > 0.09), nrow(r$score$seeds),
       sum(as.numeric(sub(".*\\|g<=([0-9.]+)\\|.*", "\\1", r$score$seeds$best)) > 0.09), nrow(r$score$seeds))
 
-  # ---- regression: the rules both grids hold score the same ------------------------------------
-  # against 0320's unrounded scores, by rule (the two grids order their rules differently); 0320 scored on
-  # another host, so equal means within 1e-8, not bit-identical
-  old <- readRDS(file.path("data/tune", paste0(key, "_score.rds")))$rules
-  both <- inner_join(old |> select(rule, dev_old = dev_heldout, region_old = in_region, rec_old = recommended),
-                     rules |> select(rule, dev_heldout, in_region, recommended), by = "rule")
-  dmax <- max(abs(both$dev_old - both$dev_heldout))
-  say("Regression: %d of %d rules of 0320's grid are in this one; %d equal in dev_heldout within 1e-8 (largest difference %.2g).",
-      nrow(both), nrow(old), sum(abs(both$dev_old - both$dev_heldout) < 1e-8), dmax)
-  say("Regression: region membership on the shared rules moved for %d; recommended was %s, is %s; best was %s, is %s.",
-      sum(both$region_old != both$in_region), old$rule[old$recommended], r$pick$rule, old$rule[old$ddev_best == 0][1], best$rule)
-  if (nrow(both) != nrow(old) || dmax >= 1e-8) {
-    # the tables are already written and the article reads two of them: take them back before stopping
-    say("REGRESSION FAILED: shared rules scored differently; the tables are removed.")
-    writeLines(log_lines, path_log)
-    unlink(file.path(dir_tune, paste0(key, c("_tune", "_groups", "_seeds", "_honest", "_summary", "_by_grad"), ".csv")))
-    stop("the rules both grids share scored differently from 0320")
-  }
   say("Done in %.1f min.", as.numeric(difftime(Sys.time(), t0, units = "mins")))
   writeLines(log_lines, path_log)
   quit(save = "no")
@@ -229,6 +242,7 @@ say("CH_rear_v1: %s. Recommended on the extended grid: %s. Candidates: %s.", v1$
     paste(names(cands), vapply(cands, `[[`, character(1), "rule"), sep = " = ", collapse = ", "))
 main <- readRDS(file.path("data/tune", paste0(key, "_curve.rds")))
 say("Curve: 0320's, fitted at %s (graded km above its gradient maximum is provisional).", main$pick$rule)
+if (!identical(main$pick$rule, v1$rule)) die("0320's curve was fitted at ", main$pick$rule, ", not CH_rear_v1 (", v1$rule, ")")
 conn <- pg()
 wsg <- dbGetQuery(conn, sprintf("SELECT DISTINCT watershed_group_code w FROM %s.streams_habitat_ch ORDER BY 1", schema))$w
 dbDisconnect(conn)
@@ -271,10 +285,11 @@ run_one <- function(k, cand, schema, wsg, link_dir, vl, vs, key, dir_cmp) {
     grades <- readRDS(file.path(dir_cmp, paste0(key, "_", k, "_grades.rds")))
     cmp <- knw_compare_rules(pg, schema, "CH", "rear", cand, wsg, link_dir, grades, visits = vl, visit_species = vs,
                              scratch = paste0("knw_gx_", tolower(key), "_", k))
-    for (t in c("compare", "change", "checks")) {
+    # the compare table marks the candidate done (done_rule()), so it is written last
+    saveRDS(cmp$segments, file.path(dir_cmp, paste0(key, "_", k, "_segments.rds")))
+    for (t in c("change", "checks", "compare")) {
       if (!is.null(cmp[[t]])) readr::write_csv(cmp[[t]], file.path(dir_cmp, paste0(key, "_", k, "_", t, ".csv")), na = "")
     }
-    saveRDS(cmp$segments, file.path(dir_cmp, paste0(key, "_", k, "_segments.rds")))
     list(key = k, minutes = as.numeric(difftime(Sys.time(), t1, units = "mins")), log = cmp$log, error = NULL)
   }, error = function(e) list(key = k, error = conditionMessage(e)))
 }
@@ -287,7 +302,7 @@ if (length(todo)) {
   for (x in res) {
     if (!is.null(x$error)) say("%s compare FAILED: %s", x$key, x$error) else say("%s compare: %.1f min.", x$key, x$minutes)
   }
-  if (any(vapply(res, function(x) !is.null(x$error), logical(1)))) { writeLines(log_lines, path_log); stop("a comparison failed") }
+  if (any(vapply(res, function(x) !is.null(x$error), logical(1)))) die("a comparison failed")
 }
 # fresh_default must still hold the link run 0330 compared on: regenerated default, per group, as 0330's
 cmp0 <- read_csv(file.path("data/compare", paste0(key, "_compare.csv")), show_col_types = FALSE) |>
@@ -297,10 +312,7 @@ for (k in names(cands)) {
     inner_join(cmp0 |> select(watershed_group_code, default_0330 = default_km), by = "watershed_group_code")
   dd <- max(abs(ck$default_km - ck$default_0330))
   say("%s: regenerated default against 0330's, %d groups, largest difference %.3g km.", k, nrow(ck), dd)
-  if (nrow(ck) != nrow(cmp0) || dd > 1e-6) {
-    writeLines(log_lines, path_log)
-    stop(k, ": default differs from 0330's; fresh_default has moved since 0330")
-  }
+  if (nrow(ck) != nrow(cmp0) || dd > 1e-6) die(k, ": default differs from 0330's; fresh_default has moved since 0330")
 }
 for (k in names(cands)) {
   tot <- read_csv(file.path(dir_cmp, paste0(key, "_", k, "_compare.csv")), show_col_types = FALSE) |> filter(watershed_group_code == "ALL")
@@ -313,6 +325,11 @@ cols_seg <- c("id_segment", "watershed_group_code", "edge_type", "stream_order",
               "knw_dist", "rearing_pre_tuned", "rearing_tuned")
 base <- readRDS(file.path("data/compare", paste0(key, "_segments.rds")))[, cols_seg]
 base <- base[base$watershed_group_code %in% wsg, , drop = FALSE]
+# 0330's segments must be the ones its compare table counted (CH_rear_v1's)
+b_km <- tapply(base$length_metre * (base$rearing_tuned %in% TRUE), base$watershed_group_code, sum) / 1000
+c_km <- cmp0$tuned_km[match(names(b_km), cmp0$watershed_group_code)]
+if (anyNA(c_km) || max(abs(b_km - c_km)) > 1e-6) die("0330's segments do not add up to its compare table's tuned km")
+say("0330's segments: CH_rear_v1 km per group equals its compare table's (%d groups).", length(b_km))
 edge_stream <- c(1000L, 1100L, 2000L, 2300L)
 fv <- vs |> filter(species_code == "CH", status %in% c("present", "absent")) |> select(site_visit, present) |>
   inner_join(vl |> filter(!is.na(area_m2), area_m2 >= 10, area_m2 <= 10000) |>
@@ -321,11 +338,14 @@ beside <- list()
 for (k in names(cands)) {
   cand <- cands[[k]]
   s <- readRDS(file.path(dir_cmp, paste0(key, "_", k, "_segments.rds")))[, cols_seg]
+  # its segments must be the ones its own compare table counted
+  ck_k <- read_csv(file.path(dir_cmp, paste0(key, "_", k, "_compare.csv")), show_col_types = FALSE)
+  s_km <- tapply(s$length_metre * (s$rearing_tuned %in% TRUE), s$watershed_group_code, sum) / 1000
+  k_km <- ck_k$tuned_km[match(names(s_km), ck_k$watershed_group_code)]
+  if (anyNA(k_km) || max(abs(s_km - k_km)) > 1e-6) die(k, ": its segments do not add up to its compare table's tuned km")
+  s <- s[s$watershed_group_code %in% wsg, , drop = FALSE]
   j <- inner_join(base, s, by = c("id_segment", "watershed_group_code"), suffix = c("_v1", "_new"))
-  if (nrow(j) != nrow(base) || nrow(j) != nrow(s)) {
-    writeLines(log_lines, path_log)
-    stop(k, ": segments do not match CH_rear_v1's one to one")
-  }
+  if (nrow(j) != nrow(base) || nrow(j) != nrow(s)) die(k, ": segments do not match CH_rear_v1's one to one")
   j <- j |> filter(rearing_tuned_v1 != rearing_tuned_new) |>
     mutate(direction = if_else(rearing_tuned_new, "added", "removed"),
            band = !is.na(gradient_new) & gradient_new > v1$grad_max & gradient_new <= cand$grad_max,

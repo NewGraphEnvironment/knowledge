@@ -54,8 +54,8 @@ for its defaults.}
 
 \item{cache_dir}{\code{NULL}, or a directory where each species × stage's scored
 grid is saved as \verb{<sp>_<stage>_score.rds} and read back on a rerun when the
-population has the same number of visits and the grid the same rules, in
-the same order. The other scoring arguments (\code{seed}, \code{folds}, \code{n_boot},
+population has the same number of visits and the grid the same rows, in
+the same order (every \code{\link[=knw_tune_grid]{knw_tune_grid()}} column, so a moved \code{default} counts). The other scoring arguments (\code{seed}, \code{folds}, \code{n_boot},
 \code{seeds_more}, \code{d_floor}) are not checked: give a run with different ones its
 own directory.}
 }
