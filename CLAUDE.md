@@ -263,6 +263,20 @@ Width and flow carry two traps (#54):
   flow, and the main lines (1250) of some small double-line rivers carry a small flow of their own. At `default`'s gradient, a 0.75 m³/s
   floor on the river branch drops 636 km of edge 1450, 1250 and 1350 lines in the 31 groups.
 
+### Reading the tuning's stability checks: say what each one counts
+
+The checks answer different questions, and #67's article needed four review rounds to stop quoting them past what
+they show:
+- **Exact rule or component.** `seeds_same_rec` and a rule's `boot_rec_share` in `<key>_tune.csv` count the exact rule;
+  `boot_rec_share` in `grad_ext/<key>_by_grad.csv` counts any rule at that gradient. On #67's 30 % ladder the exact
+  15 % rule came back on 0 of 4 seeds while all 4 picked a 15 % limit, and the published 9 % rule was itself the
+  exact pick on 0 of 4.
+- **Nested selection tests the choosing, not an option.** `honest` picks from the whole grid on four folds and
+  scores the fifth. Read its fold picks before citing it for or against a value: the 30 % ladder lost to `default`
+  overall because its picks swung between 11, 15 and 30 %, while its three 15 % picks beat `default`.
+- **A decision made before the run is stated as one.** List every check with its direction; do not sort them by
+  the side they support.
+
 ### Database access
 
 Every script connects with `DBI::dbConnect(RPostgres::Postgres())`, so libpq reads `PGHOST`,
