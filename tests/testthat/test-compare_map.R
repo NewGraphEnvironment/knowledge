@@ -23,3 +23,77 @@ test_that("knw_compare_map writes the static figure for one accessible segment u
   expect_true(file.exists(png))
   expect_gt(file.size(png), 0)
 })
+
+test_that("knw_compare_map stacks the panels when ncol is 1", {
+  skip_if_not_installed("tmap")
+  skip_if_not_installed("png")
+  seg <- sf::st_sf(
+    accessible = rep(TRUE, 2), stream_order = 1:2, grade_class = c("0-0.2", "0.8-1"),
+    flag_default = c(TRUE, FALSE), flag_tuned = c(TRUE, TRUE),
+    geometry = sf::st_sfc(lapply(0:1, function(i) sf::st_linestring(rbind(c(i, 0), c(i + 1, 1)))), crs = 3005))
+  wide <- tempfile(fileext = ".png")
+  tall <- tempfile(fileext = ".png")
+  knw_compare_map(seg, NULL, "a group", png = wide)
+  knw_compare_map(seg, NULL, "a group", png = tall, ncol = 1)
+  dw <- dim(png::readPNG(wide))
+  dt <- dim(png::readPNG(tall))
+  expect_equal(dw[1:2], c(4.6, 8) * 150)
+  expect_equal(dt[1:2], c(9.2, 4) * 150)
+  expect_error(knw_compare_map(seg, NULL, "a group", png = tall, ncol = 0))
+})
+
+test_that("knw_compare_map draws only the panels asked for, with a window outlined", {
+  skip_if_not_installed("tmap")
+  skip_if_not_installed("png")
+  seg <- sf::st_sf(
+    accessible = rep(TRUE, 2), stream_order = 1:2, grade_class = c("0-0.2", "0.8-1"),
+    flag_default = c(TRUE, FALSE), flag_tuned = c(TRUE, TRUE),
+    geometry = sf::st_sfc(lapply(0:1, function(i) sf::st_linestring(rbind(c(i, 0), c(i + 1, 1)))), crs = 3005))
+  box <- sf::st_sf(geometry = sf::st_as_sfc(sf::st_bbox(c(xmin = 0.2, ymin = 0.2, xmax = 0.8, ymax = 0.8), crs = 3005)))
+  one <- tempfile(fileext = ".png")
+  plain <- tempfile(fileext = ".png")
+  knw_compare_map(seg, NULL, "a group", png = one, panels = "rules", mark = box)
+  knw_compare_map(seg, NULL, "a group", png = plain, panels = "rules")
+  # the outline is drawn and the map keeps the segments' extent: a few pixels change, not the whole panel
+  a <- png::readPNG(one)
+  b <- png::readPNG(plain)
+  changed <- mean(apply(abs(a[, , 1:3] - b[, , 1:3]), c(1, 2), max) > 0.1)
+  expect_gt(changed, 0)
+  expect_lt(changed, 0.01)
+  expect_equal(dim(png::readPNG(one))[1:2], c(4.6, 4) * 150)
+  expect_error(knw_compare_map(seg, NULL, "a group", png = one, panels = "floodplain"), "needs fp_cells")
+  expect_error(knw_compare_map(seg, NULL, "a group", png = one, panels = "rivers"))
+  thin <- tempfile(fileext = ".png")
+  thick <- tempfile(fileext = ".png")
+  knw_compare_map(seg, NULL, "a group", png = thin, panels = "rules", legend = FALSE)
+  knw_compare_map(seg, NULL, "a group", png = thick, panels = "rules", lwd = 3, legend = FALSE)
+  # thicker lines cover more of the panel: count the pixels that are not white
+  inked <- function(f) {
+    img <- png::readPNG(f)
+    sum(img[, , 1] + img[, , 2] + img[, , 3] < 2.9)
+  }
+  expect_gt(inked(thick), 1.5 * inked(thin))
+  bare <- thick
+  expect_error(knw_compare_map(seg, NULL, "a group", png = bare, lwd = 0))
+})
+
+test_that("knw_compare_map draws numbered markers where labels are given", {
+  skip_if_not_installed("tmap")
+  skip_if_not_installed("png")
+  seg <- sf::st_sf(
+    accessible = rep(TRUE, 2), stream_order = 1:2, grade_class = c("0-0.2", "0.8-1"),
+    flag_default = c(TRUE, FALSE), flag_tuned = c(TRUE, TRUE),
+    geometry = sf::st_sfc(lapply(0:1, function(i) sf::st_linestring(rbind(c(i, 0), c(i + 1, 1)))), crs = 3005))
+  pts <- sf::st_sf(label = c("1", "2"), geometry = sf::st_sfc(sf::st_point(c(0.5, 0.5)), sf::st_point(c(1.5, 0.5)),
+                                                             crs = 3005))
+  with_l <- tempfile(fileext = ".png")
+  without <- tempfile(fileext = ".png")
+  knw_compare_map(seg, NULL, "g", png = with_l, panels = "rules", labels = pts)
+  knw_compare_map(seg, NULL, "g", png = without, panels = "rules")
+  a <- png::readPNG(with_l)
+  b <- png::readPNG(without)
+  changed <- mean(apply(abs(a[, , 1:3] - b[, , 1:3]), c(1, 2), max) > 0.1)
+  expect_gt(changed, 0)
+  expect_lt(changed, 0.05)
+  expect_error(knw_compare_map(seg, NULL, "g", png = with_l, labels = sf::st_sf(geometry = sf::st_geometry(pts))))
+})

@@ -13,3 +13,6 @@
 ^scripts$
 ^planning$
 ^research$
+^data-raw$
+^doc$
+^Meta$

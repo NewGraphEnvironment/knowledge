@@ -35,6 +35,8 @@
 #         data/tune/<sp>_<stage>_curves.csv    the marginal curves at the pick
 #         data/tune/<sp>_<stage>_grades.csv    one row per segment of the species' groups (ignored; 0325 publishes)
 #         data/tune/<sp>_<stage>_groups.csv    the groups modelled, with their fold
+#         data/tune/<sp>_<stage>_seeds.csv     the four more fold seeds' best, pick and recommended rules
+#         data/tune/<sp>_<stage>_honest.csv    nested selection: each fold's pick and its held-out deviance
 #         data/tune/<sp>_<stage>_score.rds     the scored grid, read back on a rerun (ignored)
 #         data/tune/<sp>_<stage>_summary.csv   one row: status, population, pick, held-out deviances (0325 binds them)
 #         data/tune/<sp>_<stage>_curve.rds     the fitted curve object (ignored; 0330 reads them)
@@ -126,6 +128,12 @@ for (k in names(out)) {
               file.path(dir_out, paste0(k, "_curves.csv")), na = "")
     write_csv(tibble(species_code = r$species_code, stage = r$stage, watershed_group_code = names(r$score$folds),
                      fold = as.integer(r$score$folds)), file.path(dir_out, paste0(k, "_groups.csv")), na = "")
+    # the stability tables the score object holds, so a reader of the tables needs no rds (#62)
+    write_csv(as_tibble(r$score$seeds) |> mutate(species_code = r$species_code, stage = r$stage),
+              file.path(dir_out, paste0(k, "_seeds.csv")), na = "")
+    write_csv(as_tibble(r$score$honest) |> mutate(across(where(is.double), ~ round(.x, 6)),
+                                                  species_code = r$species_code, stage = r$stage),
+              file.path(dir_out, paste0(k, "_honest.csv")), na = "")
     dflt <- rules |> filter(is_default)
     best <- rules |> filter(ddev_best == 0) |> slice(1)
     row <- row |> mutate(

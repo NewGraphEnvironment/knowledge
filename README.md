@@ -44,6 +44,8 @@ topic, revised in place as the evidence moves:
   by gradient and channel size
 - [Chinook by stream size](https://github.com/NewGraphEnvironment/knowledge/blob/main/research/chinook_stream_size.md)
   and [a tuned Chinook rearing rule](https://github.com/NewGraphEnvironment/knowledge/blob/main/research/chinook_rearing_tuned.md)
+- [How the Chinook rearing threshold was chosen and what it draws](https://newgraphenvironment.github.io/knowledge/articles/chinook_rearing.html):
+  the same result in plain language, as a package article
 - [Thermal requirements](https://github.com/NewGraphEnvironment/knowledge/blob/main/research/thermal_requirements.md),
   [stream temperature models](https://github.com/NewGraphEnvironment/knowledge/blob/main/research/stream_temperature.md),
   [flow requirements](https://github.com/NewGraphEnvironment/knowledge/blob/main/research/flow_requirements.md)

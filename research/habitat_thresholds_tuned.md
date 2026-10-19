@@ -18,6 +18,17 @@
 `coho_rearing_tuned.md`, `grayling_rearing_tuned.md`, `rainbow_rearing_tuned.md`, `steelhead_rearing_tuned.md`,
 `westslope_cutthroat_rearing_tuned.md`.
 
+**In plain words.** link calls a stream segment rearing or spawning habitat for a species with a yes-or-no
+test: big enough, and not too steep. This run asked, for each species and life stage the electrofishing record
+can speak to, which version of that test best predicts where the fish were caught in watersheds held out of the
+fit. For each one it tried a ladder of size floors (by flow or by width) and gradient limits, and, for small
+streams, an allowance for a river close downstream. It scored every version on held-out watershed groups,
+kept every version the data cannot tell from the best, and recommended the one of those closest to link's
+current test. link's current test is not among them for any fitted species but grayling, and every recommended
+rule but grayling's draws less habitat than link does now. A grade from 0 to 1 then gives the use to expect on
+each segment (provisional until #65: it reads a segment that passes the size test as far from the river the curve measures to). The package article on chinook rearing (https://newgraphenvironment.github.io/knowledge/articles/chinook_rearing.html) walks through one species from the question to
+the map; the specification below is the record.
+
 ## The question
 
 link's `default` draws habitat as on/off at a size floor and a gradient maximum per species and stage, set from
@@ -138,8 +149,9 @@ km × grade (`data/compare/compare.csv`, `change.csv`, `checks.csv`).
 4. **Checks** (`checks.csv`). FDIS detection on each rule's segments against accessible segments outside it,
    `default` then tuned: RB 33 % against 15 %, then 35 % against 18 %; BT rearing 17 against 6, then 21 against
    8; CH 14 against 2, then 17 against 1.5; CO 29 against 13, then 32 against 11; ST 4.8 against 0.7, then 7.5
-   against 0.6; WCT 35 against 24, then 35 against 27. On the bcfishobs records FDIS does not hold (presence only,
-   never scored), the share on the rule's segments over the rule's share of accessible km rises under every tuned
+   against 0.6; WCT 35 against 24, then 35 against 27. On the bcfishobs records FDIS does not hold (A/B matches, presence only,
+   never scored), the share of their locations on accessible stream edges that falls on the rule's segments, over the
+   rule's share of accessible stream-edge km, rises under every tuned
    rule: RB 2.34 → 3.04, BT rearing 2.45 → 5.17, BT spawning 3.04 → 3.70, CH 2.46 → 3.27, CO 1.75 → 1.82,
    ST 2.20 → 4.09, WCT 1.56 → 1.73 (bootstrap intervals in the table). The tuned rules hold more of the
    independent records per kilometre they draw, which is what the score rewards; it is not a claim about extent.
@@ -166,11 +178,13 @@ ha × the owning segment's grade. Hectares beside accessible stream are the grou
 | ST rearing | 4 | 143,349 | 108,807 | 74,933 | −31 % | 44,775 → 41,791 |
 | WCT rearing | 4 | 129,911 | 122,584 | 117,691 | −4 % | 47,027 → 43,010 |
 
-The floodplain and the kilometres move apart. For BT rearing, RB, ST and WCT the floodplain falls less than the
-km (BT 24 % against 37 %, RB 15 against 19, ST 31 against 37, WCT 4 against 22): the small streams a higher size
-floor drops carry little floodplain. For CH and CO it falls more (CH 20 % against 12, CO 11 against 5): their
-losses sit on mid-sized streams with floodplain beside them, and their gains, order-1 streams, bring almost none.
-Graded ha follows graded km, rising only for CH.
+Set against the km on the same catalog groups (`compare.csv`'s rows for those groups; the km table above is over
+every group), the floodplain falls less than the km for BT rearing (24 % against 37 %), CO (11 against 14), RB (15
+against 20), ST (31 against 45) and WCT (4 against 24): the streams those rules drop carry less floodplain per km
+than the habitat `default` draws. For CH (20 against 19) and BT spawning (22 against 19) the two fall about
+together. Graded ha follows graded km, rising only for CH; both rest on the grade, which reads every segment that
+passes its size test at the 50 km distance cap (#65), so read them as provisional. (Revised 2026-10-18, #62: this
+paragraph first compared catalog-group floodplain with all-group km.)
 
 ## Limits
 

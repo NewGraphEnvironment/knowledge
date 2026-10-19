@@ -10,7 +10,13 @@ knw_compare_map(
   title = "",
   png = NULL,
   html = NULL,
-  fp_cells = NULL
+  fp_cells = NULL,
+  ncol = NULL,
+  panels = c("rules", "grade", "floodplain"),
+  mark = NULL,
+  lwd = 1,
+  legend = TRUE,
+  labels = NULL
 )
 }
 \arguments{
@@ -23,12 +29,33 @@ knw_compare_map(
 \item{title}{\code{character(1)} the figure's caption line (the map carries no
 title; this goes under it).}
 
-\item{png}{\code{character(1)} path for the static figure (three panels), or
-\code{NULL}.}
+\item{png}{\code{character(1)} path for the static figure, or \code{NULL}: one panel
+for each of \code{panels} that can be drawn (\code{"floodplain"} needs \code{fp_cells}),
+\code{ncol} to a row.}
 
 \item{html}{\code{character(1)} path for the interactive page, or \code{NULL}.}
 
 \item{fp_cells}{\code{NULL}, or a \code{SpatRaster} of grade per floodplain cell.}
+
+\item{ncol}{\code{integer(1)} panels per row in the static figure, or \code{NULL}
+for all panels side by side; each panel is 4 in by 4.6 in, so \code{ncol = 1}
+stacks them for a narrow column.}
+
+\item{panels}{\code{character} which static panels to draw, any of \code{"rules"},
+\code{"grade"} and \code{"floodplain"} (drawn only where \code{fp_cells} is given).}
+
+\item{mark}{\code{NULL}, or an \code{sf} polygon outlined on every static panel, such
+as the window of a zoomed map drawn by a second call on cropped segments.}
+
+\item{lwd}{\code{numeric(1)} multiplier on the static panels' line widths, for a
+zoomed window where stream-order widths read too thin.}
+
+\item{legend}{\code{logical(1)} draw the static panels' legends; \code{FALSE} for a
+zoomed panel beside an overview that carries them.}
+
+\item{labels}{\code{NULL}, or an \code{sf} of points with a \code{label} column, drawn as
+numbered markers on every static panel (examples a table beside the map
+describes).}
 }
 \value{
 Invisibly, the paths written.
