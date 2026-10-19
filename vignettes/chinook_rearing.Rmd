@@ -298,7 +298,8 @@ near a river. The gradient maximum is the least settled part.
 **Steeper limits.** `r grad(max(tune$grad_max))` was the steepest limit in the rules tried. Scored
 again on the same records with limits up to `r grad(max(ge$grad_max))` among the rules from the
 start, the same procedure picks `r grad(ge_best$grad_max)`, with a smaller river in the exception:
-`r words(ge_best_r)`. `r ge_seeds_best` of the `r nrow(ges_seeds)` other seeds also pick a
+`r words(ge_best_r)`. The best `r grad(rec$grad_max)` rule is `r n1(ge_rec$ddev_best)` behind it, with a
+standard error of `r n1(ge_rec$se_diff)`. `r ge_seeds_best` of the `r nrow(ges_seeds)` other seeds also pick a
 `r grad(ge_best$grad_max)` limit, and redraws of the groups choose one in
 `r pc(ge_best$boot_rec_share)` of draws and `r grad(rec$grad_max)` in `r pc(ge_rec$boot_rec_share)`.
 Chosen on four folds and scored on the fifth, the longer list's choices lose to `default` over all
@@ -308,7 +309,7 @@ the rules up to `r grad(max(tune$grad_max))` beat it at `r n1(summ$honest_dev_re
 Every limit tried from `r grad(min(ge_reg))` to `r grad(max(ge_reg))` has rules in the region, so
 the records cannot place the limit in that range. The recommended rule keeps
 `r grad(rec$grad_max)`, the pick from the rules fixed before the run, because every species is tuned
-on one set of gradient limits, and a longer set is a change for all of them at once.
+on one shared ladder of gradient limits, and a longer ladder is a change for all of them at once.
 
 ## Why does a nearby river matter?
 
@@ -522,8 +523,9 @@ reg_mad <- reg$size_min[reg$size_var == "mad"]
   the records almost as well: flow floors from `r min(reg_mad)` to `r max(reg_mad)`
   m³/s, and gradient limits of `r lst(grad(sort(unique(reg$grad_max))), "or")`. The flow floor is
   the firmer choice. Steeper limits, scored later up to `r grad(max(ge$grad_max))`, fit as well or
-  slightly better, so `r grad(rec$grad_max)` is one choice among limits from `r grad(min(ge_reg))` to
-  `r grad(max(ge_reg))` that the records cannot rank.
+  slightly better, though choices from that longer list, scored on groups left out of the choice,
+  do worse than `default`. So `r grad(rec$grad_max)` is one choice among limits from
+  `r grad(min(ge_reg))` to `r grad(max(ge_reg))` that the records cannot rank.
 - **On the map, distance is measured from the bottom of each segment.** The exception asks
   whether a large river is within `r km_d(rec$exc_d)` downstream. To choose the rule, that
   distance was measured from each fished site. On the map it is measured from the downstream end

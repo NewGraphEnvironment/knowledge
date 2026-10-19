@@ -119,6 +119,15 @@ out$grad_ext <- rd(f_ge[["grad_ext"]]) |> select(-species_code, -stage)
 out$grad_ext_summary <- rd(f_ge[["grad_ext_summary"]])
 out$grad_ext_seeds <- rd(f_ge[["grad_ext_seeds"]]) |> select(-species_code, -stage)
 if (!identical(sort(as.integer(out$grad_ext_seeds$seed)), sort(as.integer(out$seeds$seed)))) stop("the extended run's seeds differ from the main run's")
+# and 0322's own seeds: the table must print as its log's block does (seed numbers alone would pass the table of
+# another run on the same settings, such as the earlier run capped at 15 %)
+f_ge_log <- c(grad_ext_log = "scripts/logs/habitat/20261018_tune_grad_extend.txt")
+ge_log <- readLines(f_ge_log[["grad_ext_log"]])
+at_ge <- which(ge_log == "## more seeds")
+want_ge <- capture.output(print(as.data.frame(out$grad_ext_seeds), row.names = FALSE))
+if (length(at_ge) != 1 || !identical(ge_log[at_ge + seq_along(want_ge)], want_ge)) {
+  stop("the extended run's seeds table differs from ", f_ge_log[["grad_ext_log"]], "'s 'more seeds' block")
+}
 if (!all(sort(unique(out$tune$grad_max)) %in% out$grad_ext$grad_max)) stop("the extended ladder lacks a gradient the main one has")
 # the same population as the main reading, and one run's two tables
 pop <- c("visits_in", "detections", "groups", "groups_both")
@@ -126,7 +135,7 @@ if (!isTRUE(all.equal(unlist(out$grad_ext_summary[pop]), unlist(out$summary[pop]
 if (!identical(out$grad_ext$best_rule[out$grad_ext$ddev_best == 0], out$grad_ext_summary$rule_best)) {
   stop("the per-gradient table and the summary are not one run's")
 }
-src <- c(src, f_ge)
+src <- c(src, f_ge, f_ge_log)
 
 # ---- meta: provenance and the scoring's constants -------------------------------------------------
 led <- rd(ledger, col_types = cols(.default = "c"))
