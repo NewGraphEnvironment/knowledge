@@ -24,7 +24,8 @@
 #     lies in any waterbody, for the labelled examples. The floodplain is not in the article (#62's
 #     second draft); it is in research/habitat_thresholds_tuned.md.
 #
-# INPUT:  data/tune/CH_rear_{tune,summary,curves,groups}.csv, data/tune/CH_rear_{seeds,honest}.csv or
+# INPUT:  data/tune/CH_rear_{tune,summary,curves,groups}.csv, data/tune/grad_ext/CH_rear_{by_grad,summary}.csv
+#         (0322, #67), data/tune/CH_rear_{seeds,honest}.csv or
 #         data/tune/CH_rear_score.rds (ignored), data/thresholds.csv,
 #         data/compare/CH_rear_{compare,change,checks}.csv, data/compare/CH_rear_segments.rds (ignored;
 #         0330), data/tune/CH_rear_curve.rds (ignored; 0320), the tuning log and the evidence build ledger in
@@ -33,7 +34,7 @@
 # OUTPUT: inst/vignette-data/chinook_rearing.rds   the tables and `meta`, one named list
 #         inst/vignette-data/bulk_segments.rds     BULK accessible CH segments, sf, EPSG:3005
 #         inst/vignette-data/bulk_water.rds        BULK lakes >= 10 ha and rivers, sf, EPSG:3005
-# RUN:    Rscript data-raw/vignette_chinook.R   (from the repo root, after any 0320 or 0330 rerun)
+# RUN:    Rscript data-raw/vignette_chinook.R   (from the repo root, after any 0320, 0322 or 0330 rerun)
 # ---------------------------------------------------------------------------
 suppressMessages({ library(dplyr); library(readr) })
 pkgload::load_all(quiet = TRUE)
@@ -107,6 +108,16 @@ in_log <- function(title, x) {
 }
 if (!in_log(paste(key, "more seeds"), out$seeds)) stop("the seeds table differs from the tuning log's")
 if (!in_log(paste(key, "nested selection"), out$honest)) stop("the nested-selection table differs from the tuning log's")
+
+# the CH rearing ladder extended to 30 % (#67, scripts/0322): the best rule per gradient maximum, and that run's
+# summary; the published rule stays CH_rear_v1, so these sit beside the main reading, never in place of it
+f_ge <- c(grad_ext = sprintf("data/tune/grad_ext/%s_by_grad.csv", key),
+          grad_ext_summary = sprintf("data/tune/grad_ext/%s_summary.csv", key))
+if (!all(file.exists(f_ge))) stop("missing ", paste(f_ge[!file.exists(f_ge)], collapse = ", "), ": run scripts/0322")
+out$grad_ext <- rd(f_ge[["grad_ext"]]) |> select(-species_code, -stage)
+out$grad_ext_summary <- rd(f_ge[["grad_ext_summary"]])
+if (!all(sort(unique(out$tune$grad_max)) %in% out$grad_ext$grad_max)) stop("the extended ladder lacks a gradient the main one has")
+src <- c(src, f_ge)
 
 # ---- meta: provenance and the scoring's constants -------------------------------------------------
 led <- rd(ledger, col_types = cols(.default = "c"))

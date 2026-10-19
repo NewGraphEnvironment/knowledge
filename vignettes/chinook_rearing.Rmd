@@ -43,6 +43,14 @@ per_group <- cmp[cmp$watershed_group_code != "ALL", ]
 map_row <- cmp[cmp$watershed_group_code == meta$map_group, ]
 seeds <- x$seeds
 honest <- x$honest
+# chinook alone, scored again on gradient limits up to 30 % (#67): the best rule per gradient limit
+ge <- x$grad_ext
+ge_best <- ge[ge$ddev_best == 0, ]
+ge_rec <- ge[abs(ge$grad_max - rec$grad_max) < 1e-9, ]
+ge_reg <- ge$grad_max[ge$in_region > 0]
+# the sentences on steeper limits read these as true; a rerun that breaks one must change the prose
+stopifnot(nrow(ge_best) == 1, ge_best$grad_max > rec$grad_max, ge_best$grad_max < max(ge$grad_max),
+          identical(ge_rec$best_rule, rec$rule), all(ge$in_region[ge$grad_max >= min(ge_reg)] > 0))
 
 # formatting
 n0 <- function(v) format(round(v), big.mark = ",", scientific = FALSE, trim = TRUE)
@@ -293,9 +301,14 @@ stream above the floor does. The chance falls off past a few hundred metres from
 `r km_d(rec$exc_d)` sits on the way down. Steepness matters less: at `r grad(0.09)` the chance is
 about `r pc(grad_at(0.09) / grad_at(0.02))` of what it is at `r grad(0.02)`. The model fits smooth
 curves, so it cannot show a step at a threshold; each threshold is where habitat and non-habitat
-separate best on held-out groups, a cut across a slope. For the gradient that is at the edge of
-what was tried: `r grad(max(tune$grad_max))` is the steepest maximum scored, and nothing steeper
-was.
+separate best on held-out groups, a cut across a slope. For the gradient, `r grad(max(tune$grad_max))`
+was the steepest limit first scored, so the cut sat at the edge of what was tried. A second run scored chinook on the same records
+with steeper limits too, up to `r grad(max(ge$grad_max))`. Its best rule allows
+`r grad(ge_best$grad_max)`, and the recommended rule scores `r n1(ge_rec$ddev_best)` worse, with a
+standard error of `r n1(ge_rec$se_diff)`. Every limit from `r grad(min(ge_reg))` to
+`r grad(max(ge_reg))` has rules in that run's region, so the records cannot rank them. The
+recommended rule keeps `r grad(rec$grad_max)`, because every species is tuned on one set of gradient
+limits and only chinook has been scored on the longer one.
 
 ## What does it change on the ground?
 
@@ -474,8 +487,9 @@ reg_mad <- reg$size_min[reg$size_var == "mad"]
   streams get smaller and steeper; there is no flow or slope where they stop. Nearby cut-offs fit
   the records almost as well: flow floors from `r min(reg_mad)` to `r max(reg_mad)`
   m³/s, and gradient limits of `r lst(grad(sort(unique(reg$grad_max))), "or")`. The flow floor is
-  the firmer choice. `r grad(max(tune$grad_max))` is the steepest gradient limit tried, so a
-  steeper one may fit as well.
+  the firmer choice. Steeper limits, scored later up to `r grad(max(ge$grad_max))`, fit as well or
+  slightly better, so `r grad(rec$grad_max)` is one choice among limits from `r grad(min(ge_reg))`
+  to `r grad(max(ge_reg))`.
 - **On the map, distance is measured from the bottom of each segment.** The exception asks
   whether a large river is within `r km_d(rec$exc_d)` downstream. To choose the rule, that
   distance was measured from each fished site. On the map it is measured from the downstream end

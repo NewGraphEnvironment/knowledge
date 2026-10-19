@@ -16,3 +16,10 @@
   unrounded regression by rule, input md5 check, per-gradient table, recursive ignore rules, default-km check).
 - Phase 2: 0322 scored the 15 % ladder, 05:57-06:10 UTC; the best moved to 15 %, the ladder's top. Committed the
   tables and log as the record; extending to 30 % next.
+- Phase 2 extended: the 30 % ladder, 06:12-06:35 UTC; 15 % stays best, interior. Committed.
+- Phase 3 started 06:36 UTC: five comparisons on all 125 CH groups (BULK smoke run passed first).
+- Phase 5 while it runs: the article reads `data/tune/grad_ext/CH_rear_{by_grad,summary}.csv` (md5-tracked) as
+  `x$grad_ext`; its two passages on the gradient limit are computed from it, guarded by a `stopifnot()` on the
+  premises they state. The article data's tests pass (35); the article renders against the source tree (the
+  package is not installed here, so `pkgdown::build_article()` cannot `library(knowledge)`; rendered with
+  `rmarkdown::render()` after `load_all()`).

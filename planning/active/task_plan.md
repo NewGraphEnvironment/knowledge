@@ -68,13 +68,13 @@ Decision taken there: this issue measures and records; `CH_rear_v1` stays at 9 %
 - [ ] Every quantified claim in the new text checked against the tables (audit per row); commit
 
 ## Phase 5: the article stops saying nothing steeper was tried
-- [ ] `data-raw/vignette_chinook.R`: read `data/tune/grad_ext/CH_rear_tune.csv` (md5-tracked) and save its best
+- [x] `data-raw/vignette_chinook.R`: read `data/tune/grad_ext/CH_rear_tune.csv` (md5-tracked) and save its best
       rule per gradient (`dev_heldout`, `ddev_best`, `se_diff`, `in_region`, `boot_rec_share`) as `x$grad_ext`;
       rerun the script
-- [ ] `vignettes/chinook_rearing.Rmd`: the two sentences (near lines 297 and 477) computed from `x$grad_ext`
+- [x] `vignettes/chinook_rearing.Rmd`: the two sentences (near lines 297 and 477) computed from `x$grad_ext`
       (which steeper limits were scored, whether any entered the region, where the best sits), nothing typed; the
       "least settled part" paragraph stays
-- [ ] `tests/testthat/test-vignette-data.R` passes on the new md5s; `pkgdown::build_article("chinook_rearing")`
+- [x] `tests/testthat/test-vignette-data.R` passes on the new md5s; `pkgdown::build_article("chinook_rearing")`
       renders locally and the two passages read correctly; commit
 
 ## Phase 6: close out
