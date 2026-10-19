@@ -1,4 +1,4 @@
-# knowledge (development version)
+# knowledge 0.4.5
 
 * `knw_tune_run()` gains `grid_args`, passed to `knw_tune_grid()`, and reads a cached score back only for the grid
   it was scored on (#67). `scripts/0322` scored chinook rearing on gradient limits up to 30 %: the best rule moves
