@@ -33,7 +33,8 @@
 #' @param cache_dir `NULL`, or a directory where each species × stage's scored
 #'   grid is saved as `<sp>_<stage>_score.rds` and read back on a rerun when the
 #'   population has the same number of visits and the grid the same rows, in
-#'   the same order (every [knw_tune_grid()] column, so a moved `default` counts). The other scoring arguments (`seed`, `folds`, `n_boot`,
+#'   the same order (every [knw_tune_grid()] column, so a moved `default`
+#'   counts). The other scoring arguments (`seed`, `folds`, `n_boot`,
 #'   `seeds_more`, `d_floor`) are not checked: give a run with different ones its
 #'   own directory.
 #' @return A list with one element per species × stage (`"<sp>_<stage>"`): a
