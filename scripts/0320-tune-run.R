@@ -25,7 +25,9 @@
 #   - GRADE (#57, decided 2026-10-17): predicted rate at the reference nuisance values with the
 #     group effect excluded, over the 95th percentile of accessible segments' rate, capped at 1,
 #     in fifths. Expected use, not habitat quality. Walks for the grade run from the segment's
-#     downstream end, only for segments the exception could admit.
+#     downstream end, for every gradable accessible segment, since the curve reads size and
+#     distance jointly (#65; #57's grades walked only the exception's candidates and read the
+#     rest at the 50 km cap).
 #   - CH's size floor (0.75 against 0.5 m3/s) is read off CH rearing's pick on all CH groups.
 #
 # INPUT:  data/fdis/derived/{visits_link,visits_species,walks}.csv (0310), data/fdis/build/fish.rds
@@ -33,7 +35,8 @@
 #         (parameters_habitat_thresholds.csv); fwapg database (PG* env vars): fresh_default, discharge
 # OUTPUT: data/tune/<sp>_<stage>_tune.csv      every rule's score (the full grid), with pick, recommended, region
 #         data/tune/<sp>_<stage>_curves.csv    the marginal curves at the pick
-#         data/tune/<sp>_<stage>_grades.csv    one row per segment of the species' groups (ignored; 0325 publishes)
+#         data/tune/<sp>_<stage>_grades.csv    one row per segment of the species' groups, each graded segment at
+#                                              its own walked distance, with dist_status (ignored; 0325 publishes)
 #         data/tune/<sp>_<stage>_groups.csv    the groups modelled, with their fold
 #         data/tune/<sp>_<stage>_seeds.csv     the four more fold seeds' best, pick and recommended rules
 #         data/tune/<sp>_<stage>_honest.csv    nested selection: each fold's pick and its held-out deviance
@@ -177,13 +180,16 @@ for (k in names(out)) {
   if (is.null(r$curve)) next
   gpath <- file.path(dir_out, paste0(k, "_grades.csv"))
   if (file.exists(gpath)) {
-    # kept only when it was graded under this pick on this link run
+    # kept only when it was graded under this pick on this link run with every graded segment walked
+    # (dist_status, #65); #57's tables walked only the exception's candidates and are regraded
     head1 <- readr::read_csv(gpath, n_max = 1, show_col_types = FALSE, col_types = readr::cols(.default = "c"))
-    if (identical(head1$rule, r$pick$rule) && identical(head1$run_uid, run_uid)) {
+    if (identical(head1$rule, r$pick$rule) && identical(head1$run_uid, run_uid) && "dist_status" %in% names(head1)) {
       say("%s grades: already written under %s on %s, kept.", k, r$pick$rule, run_uid)
       next
     }
-    say("%s grades: on file for %s / %s, regraded for %s / %s.", k, head1$rule, head1$run_uid, r$pick$rule, run_uid)
+    # not "<key> grades:", which data-raw/vignette_chinook.R reads as the one result line
+    say("%s: grades on file for %s / %s%s, regraded for %s / %s.", k, head1$rule, head1$run_uid,
+        if ("dist_status" %in% names(head1)) "" else " (walked only the exception's candidates)", r$pick$rule, run_uid)
   }
   wsg <- groups_sp(r$species_code)
   t1 <- Sys.time()

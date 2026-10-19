@@ -12,7 +12,6 @@ knw_grade_species(
   curve,
   pick,
   stage = "rear",
-  edge_stream = c(1000L, 1100L, 2000L, 2300L),
   workers = 4L,
   src = "pick"
 )
@@ -33,8 +32,6 @@ opens its own).}
 
 \item{stage}{\code{"rear"} or \code{"spawn"}.}
 
-\item{edge_stream}{\code{integer} stream-branch edge types.}
-
 \item{workers}{\code{integer(1)} walk workers.}
 
 \item{src}{\code{character(1)} the flow source.}
@@ -42,19 +39,36 @@ opens its own).}
 \value{
 A list: \code{grades}, one row per segment with the segment's keys,
 \code{length_metre}, \code{access}, \code{accessible}, the stage's flag, \code{size}, \code{dist_m},
-\code{rate}, \code{grade}, \code{grade_class}; \code{reference}; \code{counts} (segments, walked,
-found, graded, no size, no gradient); \code{walk_minutes}.
+\code{dist_status}, \code{rate}, \code{grade}, \code{grade_class}; \code{reference}; \code{counts}
+(segments, accessible, walked starts, segments whose walk was found, none
+or other, graded, no size, no gradient); \code{walk_minutes}.
 }
 \description{
-Reads the species' segments (\code{\link[=knw_link_segments]{knw_link_segments()}}), walks the ones the pick's
-exception could admit (accessible stream-branch segments inside the gradient
-maximum that fail the size test) to the first river of the pick's \code{exc_q}
-from the segment's downstream end, and grades them all (\code{\link[=knw_grade]{knw_grade()}}).
-Segments the exception cannot reach take the distance cap: a segment passing
-the size test is graded on its size, and one off the stream branch or above
-the gradient maximum is far from any river by construction, which the curve
-reads as the exception not helping it. With no exception on the pick, no walk
-is made.
+Reads the species' segments (\code{\link[=knw_link_segments]{knw_link_segments()}}), walks every accessible
+segment with a gradient (on any edge type and at any gradient: wetland lines,
+river polygons and steep segments included, and whatever its size) from its
+downstream end to the first river of the pick's \code{exc_q}, or of the curve's
+\code{q} when the pick has no exception, and grades them all (\code{\link[=knw_grade]{knw_grade()}}). The
+curve reads size and distance jointly, so every graded segment needs its own
+distance, whether or not it passes the size test. For the pick the curve was
+fitted on, the two rivers are the same.
+}
+\details{
+\code{dist_m} also serves \code{\link[=knw_compare_rules]{knw_compare_rules()}} as the exception's distance. That
+is why a segment with no size is walked although it is not graded (the
+exception admits a segment whose size fails, missing included), and why a
+pick's own \code{exc_q} wins: a candidate whose river differs from the curve's
+gets a correct exception and a grade that is not comparable.
+
+The curve was fitted on stream-branch visits outside lakes, wetlands and
+river polygons, so a river-polygon or wetland segment reads it near 0 m and
+at sizes few visits had: its grade is an extrapolation.
+
+A walk that finds no river of \code{q} (\code{none}: the sea first; \code{no_parent};
+\code{too_many_hops}) leaves \code{dist_m} missing, which the grade reads as the
+distance cap, as \code{\link[=knw_tune_curve]{knw_tune_curve()}} censors such visits. \code{dist_status} says
+which, and is \code{no_walk} for a segment outside the walk set (not accessible,
+or with no gradient).
 }
 \examples{
 \dontrun{

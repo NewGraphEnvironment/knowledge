@@ -45,8 +45,10 @@ standard electrofishing visit, not habitat quality, and is labelled so.
 A segment whose size variable is missing (an unmeasured first-order stream
 under a width model; a segment with no flow even from a parent under a MAD
 model) or whose gradient is missing gets \code{NA}, and the counts come back. A
-distance the walk did not find, or a segment with no walk, is the cap
-(\code{dist_cap_m}): far from any river.
+missing distance is the cap (\code{dist_cap_m}): the walk found no river of at
+least the curve's \code{q} downstream (the sea came first, or the walk stopped),
+not that the segment is far from any river. \code{\link[=knw_grade_species]{knw_grade_species()}} walks every
+gradable accessible segment, so a segment reads the cap only for that reason.
 }
 \examples{
 \dontrun{

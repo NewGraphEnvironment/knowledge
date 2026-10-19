@@ -11,8 +11,10 @@
 #' A segment whose size variable is missing (an unmeasured first-order stream
 #' under a width model; a segment with no flow even from a parent under a MAD
 #' model) or whose gradient is missing gets `NA`, and the counts come back. A
-#' distance the walk did not find, or a segment with no walk, is the cap
-#' (`dist_cap_m`): far from any river.
+#' missing distance is the cap (`dist_cap_m`): the walk found no river of at
+#' least the curve's `q` downstream (the sea came first, or the walk stopped),
+#' not that the segment is far from any river. [knw_grade_species()] walks every
+#' gradable accessible segment, so a segment reads the cap only for that reason.
 #'
 #' @param curve the list [knw_tune_curve()] returns.
 #' @param segments `data.frame` with `accessible` (logical) and the columns

@@ -68,6 +68,31 @@ Reach (settled 2026-10-19 in plan mode):
 - Uploading thresholds/v1 and habitat_grade/v1 to the bucket (`PUBLISH=TRUE`), which #57 left open and which waits on #56's bucket policy.
 - The floodplain catalog's missing groups (floodplains#123) and the gradient ladder for every species (#68).
 
+## Reviews (2026-10-19)
+
+Plan review: `review-plan.md`, each finding with its verdict. Code-check round 1: `review-round1.md`.
+
+- **Both found the same blocker independently.** The parked plan's walk set ("size > 0 and a gradient")
+  dropped segments the old set walked: the old `!size_ok` was TRUE for a missing size. `knw_compare_rules()`
+  reads `knw_dist` as the exception's distance, so those segments would have left the tuned rule. Round 1
+  measured it on the current `*_segments.rds`: 638 CH segments (172.7 km, 324 gained) and 2,700 BT spawning
+  segments (957.4 km, 2,156 gained) in the tuned flag have a missing or zero size. Fixed: walk every
+  accessible segment with a gradient; the test now fails if either the old size filter or the gradable-only
+  filter returns (8 and 3 failures).
+- **The walk goes to the pick's own `exc_q`**, else the curve's `q`. For 0320's picks they are the same
+  (`R/tune_curve.R:55`); `0322` grades candidates on 0320's curve whose exception names another river.
+- **The basis of "rule verdicts identical".** The tuned rule is `stream AND gradient ok AND (size ok OR
+  knw_dist <= exc_d)` (`R/compare_rules.R:128-131`); the walk set is now a superset of the old, from the
+  same starts, river and source, so every old distance is reproduced and a new one lands only where the
+  stream or gradient test already fails. One exception: a lost segment between the tuned and default
+  gradient maxima (tuned lower) now carries a distance, so its reason can move from "size …, no exception"
+  to "gradient: tuned maximum lower" (`R/compare_rules.R:290-292`). Where no tuned maximum is below
+  default's, change tables come back identical. Measured in `data/thresholds.csv`: CO (0.04 against 0.0549)
+  and WCT (0.04 against 0.0849) are the only keys with a lower tuned maximum, and neither has an exception
+  (`ex_ok` is FALSE whenever `exc_q` is NA); CH (0.09 / 0.0549) and BT spawning (0.0549 / 0.0549) are the
+  two with one. So every change table must come back identical; the scratch check over every tracked
+  `data/compare` csv tests it.
+
 ## Errors Encountered
 
 | Error | Resolution |
