@@ -72,6 +72,7 @@ grad_at <- function(g) {
 
 link_site <- "https://www.newgraphenvironment.com/link/"
 fresh_site <- "https://www.newgraphenvironment.com/fresh/"
+wet_site <- "https://www.newgraphenvironment.com/wet/"
 link_default <- sprintf("https://github.com/NewGraphEnvironment/link/tree/%s/inst/extdata/configs/default", meta$link_sha)
 ```
 
@@ -96,8 +97,8 @@ more sharply.
 
 ## What does `default` draw for chinook rearing?
 
-Under `default`, a segment is chinook rearing habitat when chinook can reach it and one of
-four tests holds:
+`default` counts a segment as chinook rearing habitat if chinook can reach it and it meets the
+condition for its kind of water:
 
 - **stream**: a single-line stream or canal, not one drawn through a wetland, with a gradient of
   at most `r grad(dflt$grad_max)` and a channel at least `r dflt$size_min` m wide;
@@ -108,11 +109,11 @@ four tests holds:
 Reaches confirmed by hand are then added. Last, rearing is kept only where it connects to
 spawning: spawning anywhere upstream, or within 10 km downstream with no stretch of 5 % or steeper
 between them.
-Channel width is modelled only on streams of order 2 and up, so the stream test never admits a
+Channel width is modelled only on streams of order 2 and up, so the stream condition never admits a
 small, unmeasured first-order stream.
 
-Only the stream test is tuned here. Wetlands and lakes keep their tests. River polygons keep
-theirs too, except that they share the stream test's gradient maximum, so a new maximum moves
+Only the stream condition is tuned here. Wetlands and lakes keep their conditions. River polygons
+keep theirs too, except that they share the stream condition's gradient maximum, so a new maximum moves
 them as well, though the tuning scored no visit in a river polygon.
 
 ## What evidence is used?
@@ -120,9 +121,16 @@ them as well, though the tuning scored no visit in a river polygon.
 The province's stream atlas divides British Columbia into **watershed groups**, large basins such
 as the Bulkley. They are the unit everything below is counted in and tested on.
 
+Each stream segment carries a gradient, a flow and, where one is modelled, a channel width, all
+from one `link` run (`r meta$link_run_uid`). The streams and their gradients are the BC Freshwater
+Atlas, loaded through fwapg. Flow is the mean annual flow [`wet`](`r wet_site`) publishes: mostly
+the Pacific Climate Impacts Consortium's routed model, tied to the atlas by fwapg, with `wet`'s own
+water balance where that model does not reach or reads far too low. Channel width is fwapg's model, on streams of order
+2 and up.
+
 The evidence is the provincial Fisheries Data Information System (FDIS) electrofishing records,
 placed on `link`'s stream segments. A visit counts when it is on the kind of stream the stream
-test covers, outside wetlands of 1 ha or more and lakes of 100 ha or more. It must have a fished
+condition covers, outside wetlands of 1 ha or more and lakes of 100 ha or more. It must have a fished
 area of 10 to 10,000 m², and be in a group where `link` expects chinook. It must also have no
 natural barrier to chinook downstream, and no record code that could hide a catch. After checks
 on placement, date and effort, that leaves `r n0(summ$visits_in)` visits in `r summ$groups`
@@ -408,10 +416,10 @@ other_gain <- ch$km_all[ch$direction == "gained" & grepl("^other", ch$reason)]
 ```
 
 The examples show what both rules keep and the two largest changes. Two smaller gains through the
-stream test are not among them:
+stream condition are not among them:
 streams between `r grad(dflt$grad_max)` and `r grad(rec$grad_max)` steep, which only the recommended gradient
 maximum admits (`r n0(gain_grad)` km across the province), and streams whose flow passes the floor
-where `default`'s width test fails or has no width (`r n0(gain_flow)` km). The rest of the change
+where `default`'s width condition fails or has no width (`r n0(gain_flow)` km). The rest of the change
 comes from the connectivity pass, which keeps different stretches under each rule because each
 rule's habitat connects to spawning differently (`r n0(conn_gain)` km gained, `r n0(conn_lost)` km lost), and from river polygons and mixed causes
 (`r n0(other_gain)` km gained).
@@ -445,26 +453,29 @@ stream length, against `r n1(ob$lift[ob$rule == "default"])` for `default`.
 
 ## What the recommendation is not
 
-- **Written for a `link` configuration.** The size floor and gradient maximum are stored under the
-  `link` parameters they set, `rear_mad_min` and `rear_gradient_max`; the near-a-river exception is
-  stored as a flow and a distance, for a configuration that tests one.
-- **Juveniles caught by electrofishing, on streams.** Spawning is outside it. Wetlands and lakes
-  keep their own tests; river polygons take the recommended gradient maximum, which the tuning scored on
-  streams only.
-- **Better separation, less extent.** The score rewards a rule whose habitat and non-habitat
-  differ most, not one that leaves nothing out: `r pc(rec$raw_rate_out, 1)` of visits outside the
-  recommended rule still caught chinook.
-- **A cut on a slope.** Values next to the recommended ones are nearly as good; the region gives
-  the range.
-- **One run of `link`**, `r meta$link_run_uid`. Distances were scored from each visit; on `link`'s
-  segments they are measured from each segment's downstream end, which is a little looser.
-- **Habitat, not use.** A 0 to 1 grade of expected use per segment was also published, but it
-  currently understates large streams near rivers and is being redone.
+- **Ready to feed `link`.** The flow floor and the gradient limit use the names of `link`'s own
+  settings, `rear_mad_min` and `rear_gradient_max`. The near-a-river exception is kept as two
+  numbers, a river's flow and a distance, for any configuration that adds it.
+- **Young chinook in streams only.** The rule comes from juvenile chinook caught by electrofishing
+  in streams, and says nothing about spawning. Wetlands and lakes keep their own conditions. River
+  polygons also get the `r grad(rec$grad_max)` gradient limit, although no fished site in a river
+  polygon was scored.
+- **Sharper, not bigger.** The rule was picked because chinook catch rates differ most between what
+  it calls habitat and what it does not. Catching every fish was not the aim:
+  `r pc(rec$raw_rate_out, 1)` of fished sites outside it still caught chinook.
+- **The numbers are not hard lines.** Rules with nearby values score almost as well. The range is
+  shown under "Which rules can the data not tell apart?"
+- **On the map, distance to a river is measured from each segment's lower end.** The rule asks
+  whether a large river is within `r km_d(rec$exc_d)` downstream. When rules were scored, that
+  distance was measured from each fished site. On the map it is measured from the lower end of each
+  segment, so a segment whose lower end is within `r km_d(rec$exc_d)` counts along its whole length,
+  including any part farther upstream.
 
 ## Software and how to cite it
 
 - [`link`](`r link_site`): the habitat model and its configurations.
 - [`fresh`](`r fresh_site`): runs `link`'s rules on the BC Freshwater Atlas.
+- [`wet`](`r wet_site`): the flow on each segment.
 - `knowledge`: the fish records, the tests and this article. Cite it as:
 
 ```{r cite, results = "asis"}
