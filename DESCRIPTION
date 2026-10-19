@@ -1,7 +1,7 @@
 Package: knowledge
 Title: Watershed-Group Fisheries Background
-Version: 0.4.3
-Date: 2026-10-18
+Version: 0.4.4
+Date: 2026-10-19
 Authors@R: c(
     person("Allan", "Irvine", , "al@newgraphenvironment.com", role = c("aut", "cre")),
     person("New Graph Environment Ltd.", role = "cph"))
