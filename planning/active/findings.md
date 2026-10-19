@@ -1,0 +1,74 @@
+# Findings — The grade reads segments that pass the size test at the 50 km distance cap (#65)
+
+## Issue context
+
+**If done:** a segment's grade reads the curve at the segment's own distance to a river whenever the curve was fitted on distance, so a large stream beside a river grades like the visits the curve learned from, and `knowledge/habitat_grade/v1` is corrected before its first publication. **If never:** every segment that passes its species' size test is graded as if 50 km from any river, which understates it wherever a river is close, and every graded-km and graded-ha figure built on the grade (the comparison's, the floodplain's) carries that bias.
+
+## Problem
+
+`knw_tune_curve()` fits one surface, `te(log size, log distance to the pick's river)`, on visits that each carry their real walk distance. `knw_grade_species()` then walks only the segments the pick's exception could admit (accessible, stream branch, inside the gradient maximum, failing the size test) and gives every other segment `dist_m = NA`, which `knw_grade()` reads as the 50 km cap. Its roxygen says this is deliberate ("a segment passing the size test is graded on its size"), but on a joint surface the size effect depends on distance, so the cap is not neutral.
+
+Reproduced from `data/tune/CH_rear_curve.rds`, gradient 3 %, reference rate 0.1457 (found while auditing #62's article):
+
+| MAD (m³/s) | rate 100 m from a 3 m³/s river | rate at the 50 km cap | grade at 100 m | grade at the cap |
+|---|---|---|---|---|
+| 0.3 | 0.114 | 0.011 | 0.78 | 0.07 |
+| 0.8 | 0.110 | 0.020 | 0.75 | 0.13 |
+| 2 | 0.108 | 0.032 | 0.74 | 0.22 |
+
+A 0.3 m³/s stream 100 m from a river is walked (it fails the 0.75 floor) and grades 0.78; a 0.8 m³/s stream at the same spot is not walked and grades 0.13. In the CH run 373,133 of 856,244 accessible segments were walked, so about 480,000 were graded at the cap.
+
+Reach (settled 2026-10-19 in plan mode):
+- **All eight fitted species × stage**, not only the two with an exception. `curve_dist_in_model` is TRUE for every fitted curve (`data/tune/*_summary.csv`): a pick with no exception fits distance to a `q_default = 10` m³/s river (`R/tune_curve.R:55`), and `knw_grade_species()` walks nothing for it, so every one of its segments sits at the cap (BT rearing, CO, GR, RB, ST, WCT: `walked=0` in the #57 logs). BT spawning walked 682,254 of 2.68 M accessible; CH rearing 373,133 of 856,244.
+- `data/compare/*` graded km and km by grade class, `floodplain.csv` graded ha, the maps' grade and floodplain panels, and the 95th-percentile reference rate, which is taken over the capped grades.
+- The thresholds themselves (`thresholds/v1`) do not depend on the grade and are unaffected.
+
+## Decisions
+
+- **Walk every gradable accessible segment**: accessible, size present and > 0, gradient present (`knw_grade()`'s own test), any edge type and any gradient. The curve reads distance for all of them, so a river-polygon segment takes its true distance (0 m where its downstream neighbour is already ≥ q; `inst/sql/ch_dist_profile.sql` starts strictly below the start measure) and a steep segment its own. About 9.3 M walks over the eight keys (BT's 2.66 M twice, at q 10 and q 3); CH's measured rate is 373 k walks in 6.0 min on 8 workers, so about 2.5 h in all.
+- **`habitat_grade/v1` stays v1.** `s3://fresh-bc/knowledge/` holds only `fdis/`: #57 built thresholds/v1 and habitat_grade/v1 locally and left `PUBLISH=TRUE` open, so no consumer has read a capped v1 (link#346 is open). The corrected table is the first v1 published; the research file's revision and this issue record that #57's local build was capped. (The body first said v2.)
+- A walk whose status is `none` (the sea before any river of q), `no_parent` or `too_many_hops` keeps `dist_m = NA` and so the cap, which is how `knw_tune_curve()` censored those visits (`R/tune_curve.R:64`). The grades table says which (`dist_status`).
+
+## Plan
+
+### Phase 1: walk every gradable accessible segment (`R/grade_species.R`, `R/grade.R`, `scripts/0320`)
+
+- [ ] `knw_grade_species()` walks every accessible segment with a size > 0 and a gradient to the first river of `curve$q` (the pick's `exc_q`, or `q_default` when it has none) on the curve's source; the `pick$exc_q` gate, the edge-type filter, the gradient filter and the size-test filter go. `starts` are the unique `(blue_line_key, downstream_route_measure)` of that set.
+- [ ] The grades carry `dist_status` (`found`, `none`, `no_parent`, `too_many_hops`, or `no_walk` for a segment outside the walk set); `dist_m` stays `NA` except where found. `counts` gains `walk_found`, `walk_none`, `walk_other` beside `walked`.
+- [ ] Roxygen: `knw_grade_species()` describes the walk set as above (not "stream-branch segments"; wetland lines and river polygons are in it) and what the cap now means; `knw_grade()` L14-15 says a capped distance is far from a river of at least the curve's `q` (or the walk found none), not "far from any river".
+- [ ] `tests/testthat/test-grade_species.R`: with `local_mocked_bindings()` on `knw_link_segments` (a small frame: accessible and not, with and without size, with and without gradient, edge types 1000/1250/2000, gradients above and below the pick's maximum, sizes above and below `size_min`) and `knw_link_walks` (records the `starts` and `q_grid` it was given; returns `found` for some, `none` for one), assert: every accessible gradable segment is a start and nothing else is; `q_grid` is `curve$q`; a size-passing segment near a river carries its distance; the `none` segment has `dist_m = NA` and `dist_status = "none"`; an inaccessible segment has `NA` grade. Restore-the-bug check: with the old `!size_ok` filter put back, the "size-passing segment is a start" assertion must fail.
+- [ ] `scripts/0320-tune-run.R`: the keep-on-file check (L179-187) also requires `dist_status` in the table's header, so #57's capped tables are regraded under the same rule and `run_uid`; the spec comment (L25-28) and the OUTPUT line say the walk covers every graded segment.
+- [ ] `/code-check` on the diff; commit.
+
+### Phase 2: regrade, publish locally, compare
+
+- [ ] CH first and alone: `SPECIES=CH Rscript scripts/0320-tune-run.R` (the scored grid is cached in `CH_rear_score.rds`, so only the grade runs). Record in `findings.md`: walk minutes against 6.0, `walked`/`walk_found`/`walk_none`, the reference rate against 0.1457, and the grade-class km shares against 76 % under 0.2 and 7 % at 0.8–1.
+- [ ] The other seven keys (`SPECIES=BT,CO,GR,RB,ST,WCT`), on the 16-core host with `WORKERS=14` or locally; `PGCONNECT_TIMEOUT` set (#57's grading hang). BT walks twice (q 10 for rearing, q 3 for spawning); if the measured CH rate makes that unreasonable, share one walk at `q_grid = c(3, 10)` per species inside 0320 and say so.
+- [ ] `Rscript scripts/0325-publish.R` (local; `PUBLISH` stays open as #57 left it). The `habitat_grade` description says the distance is walked for every graded segment. Assert `git diff --stat data/thresholds.csv data/thresholds_groups.csv` is empty.
+- [ ] `Rscript scripts/0330-compare.R` for every species (full run, not `STAGE=maps`: the grade is read per segment), then `Rscript data-raw/vignette_chinook.R`, then `devtools::test()`.
+- [ ] Commit the tune, compare and vignette-data outputs with the log paths in `progress.md`; the archive README's `Measurement` carries the before/after reference rates and graded km per key.
+
+### Phase 3: revise the record
+
+- [ ] `research/habitat_thresholds_tuned.md`: the Grade bullet of the method (every graded segment at its own walked distance to the curve's river; the cap is a walk that found none); the Grades table; the "What each rule changes" km table; the floodplain table and its paragraph (drop "provisional"); the Limits list if any limit moved; `Verified` date in the header; a dated revision note saying #57's grades were capped.
+- [ ] `research/chinook_rearing_tuned.md` L34-39: graded km and graded ha under the corrected grade; drop "provisional until #65".
+- [ ] `data-raw/vignette_chinook.R` L19-22 and `vignettes/chinook_rearing.Rmd`: the comment and any sentence that says the distance is measured only on exception candidates; the examples table's distance column now reads for the kept-by-both example. Render before and after, strip to text, diff: only the prose meant to change differs.
+- [ ] `scripts/README.md` 0320 line; `NEWS.md` entry under the next version (the grade walks every graded segment; v1 corrected before publication; the two roxygen fixes).
+- [ ] `/code-check branch`; `/planning-archive`; `/gh-pr-push`.
+
+## Validation
+
+- [ ] Tests pass (`devtools::test()`, including `test-vignette-data.R` after the vignette data rerun)
+- [ ] `/code-check` clean (once over the branch with `/code-check branch`)
+- [ ] PWF checkboxes match landed work
+- [ ] `/planning-archive` on completion
+
+## Not in scope
+
+- Uploading thresholds/v1 and habitat_grade/v1 to the bucket (`PUBLISH=TRUE`), which #57 left open and which waits on #56's bucket policy.
+- The floodplain catalog's missing groups (floodplains#123) and the gradient ladder for every species (#68).
+
+## Errors Encountered
+
+| Error | Resolution |
+|-------|------------|
