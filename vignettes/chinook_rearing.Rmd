@@ -453,23 +453,34 @@ stream length, against `r n1(ob$lift[ob$rule == "default"])` for `default`.
 
 ## What the recommendation is not
 
-- **Ready to feed `link`.** The flow floor and the gradient limit use the names of `link`'s own
-  settings, `rear_mad_min` and `rear_gradient_max`. The near-a-river exception is kept as two
-  numbers, a river's flow and a distance, for any configuration that adds it.
-- **Young chinook in streams only.** The rule comes from juvenile chinook caught by electrofishing
-  in streams, and says nothing about spawning. Wetlands and lakes keep their own conditions. River
-  polygons also get the `r grad(rec$grad_max)` gradient limit, although no fished site in a river
-  polygon was scored.
-- **Sharper, not bigger.** The rule was picked because chinook catch rates differ most between what
-  it calls habitat and what it does not. Catching every fish was not the aim:
-  `r pc(rec$raw_rate_out, 1)` of fished sites outside it still caught chinook.
-- **The numbers are not hard lines.** Rules with nearby values score almost as well. The range is
-  shown under "Which rules can the data not tell apart?"
-- **On the map, distance to a river is measured from each segment's lower end.** The rule asks
-  whether a large river is within `r km_d(rec$exc_d)` downstream. When rules were scored, that
-  distance was measured from each fished site. On the map it is measured from the lower end of each
-  segment, so a segment whose lower end is within `r km_d(rec$exc_d)` counts along its whole length,
-  including any part farther upstream.
+```{r limits-region}
+reg <- tune[tune$in_region, ]
+reg_mad <- reg$size_min[reg$size_var == "mad"]
+```
+
+- **It can feed `link` directly.** The flow floor and the gradient limit are stored under the
+  names `link` already uses for those settings, `rear_mad_min` and `rear_gradient_max`. The
+  near-a-river exception is stored as two numbers, the river's flow and the distance to it, ready
+  for any configuration that adds that check.
+- **It is about young chinook in streams.** It was fitted to juvenile chinook caught by
+  electrofishing in streams, and says nothing about spawning. Wetlands and lakes keep their own
+  conditions. River polygons share the stream gradient limit, so they get
+  `r grad(rec$grad_max)` too, although no fished site in a river polygon was used to choose it.
+- **It draws less habitat, in the places chinook are caught.** It was chosen because chinook were
+  caught far more often inside it than outside it, not because it takes in every place they were
+  caught: `r pc(rec$raw_rate_in, 1)` of fished sites inside it caught chinook, and
+  `r pc(rec$raw_rate_out, 1)` outside it.
+- **The cut-offs are good choices, not hard limits.** Chinook get gradually less common as
+  streams get smaller and steeper; there is no flow or slope where they stop. Nearby cut-offs fit
+  the records almost as well: flow floors from `r min(reg_mad)` to `r max(reg_mad)`
+  m³/s, and gradient limits of `r lst(grad(sort(unique(reg$grad_max))), "or")`. The flow floor is
+  the firmer choice. `r grad(max(tune$grad_max))` is the steepest gradient limit tried, so a
+  steeper one may fit as well.
+- **On the map, distance is measured from the bottom of each segment.** The exception asks
+  whether a large river is within `r km_d(rec$exc_d)` downstream. To choose the rule, that
+  distance was measured from each fished site. On the map it is measured from the downstream end
+  of each stream segment, so when that end is within `r km_d(rec$exc_d)` of the river the whole
+  segment counts, even the part farther up.
 
 ## Software and how to cite it
 
