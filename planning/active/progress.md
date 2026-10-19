@@ -23,3 +23,8 @@
   premises they state. The article data's tests pass (35); the article renders against the source tree (the
   package is not installed here, so `pkgdown::build_article()` cannot `library(knowledge)`; rendered with
   `rmarkdown::render()` after `load_all()`).
+- Code-check branch: plan review plus three rounds, ended by an enumeration of the 15 artifact pairs the diff reads
+  (findings.md); round 3 found a defect inside round 2's fix. Four review agents in all.
+- Phase 3 finished 08:21 UTC (comparisons 07:19-08:21 after 45 min of grading); rerun with the checked script
+  reproduced the beside table byte for byte. Research section, NEWS, pointers and the follow-up issue #68 done.
+- Next: edit #67's body, /planning-archive, /gh-pr-push.

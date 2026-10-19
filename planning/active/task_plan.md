@@ -44,28 +44,30 @@ Decision taken there: this issue measures and records; `CH_rear_v1` stays at 9 %
       run's log is kept as `scripts/logs/habitat/20261018_tune_grad_extend-to15.txt` and its tables in git history
 
 ## Phase 3: the steeper rules beside the recommended one on link's segments
-- [ ] Same script, `STAGE=compare` (reads the Phase 2 tables): for each steeper gradient (11, 13, 15 %), the
+- [x] Same script, `STAGE=compare` (reads the Phase 2 tables): for each steeper gradient (11, 13, 15 %), the
       recommended rule's other parts with that gradient; `knw_grade_species()` at that rule on all 125 CH groups
       (the main run's `CH_rear_curve.rds` for the rate, so graded km is provisional as under #65), then
       `knw_compare_rules()` against `default`; `data/compare/grad_ext/CH_rear_g<pct>_{compare,change,checks}.csv`
       (tracked) and `_segments.rds` (ignored)
-- [ ] From the segments joined to `data/compare/CH_rear_segments.rds` by `id_segment`: km each rule adds and
+- [x] (As built: joined on `id_segment` and `watershed_group_code`, because `id_segment` repeats across groups;
+      candidates 11, 13, 15, 30 % and the extended best, beside `CH_rear_v1`, the rule 0330 compared.)
+      From the segments joined to `data/compare/CH_rear_segments.rds` by `id_segment`: km each rule adds and
       removes beside the recommended rule, by reason (stream segments in the new gradient band passing the size
       test; the exception in the band; river-polygon segments in the band; connectivity), and FDIS detection on
       the added km
-- [ ] Run (background), log `scripts/logs/habitat/<date>_tune_grad_extend-compare.txt`; commit
+- [x] Run (background), log `scripts/logs/habitat/<date>_tune_grad_extend-compare.txt`; commit
 
 ## Phase 4: the research record
-- [ ] `research/chinook_rearing_tuned.md`: a section "The gradient maximum above 9 % (#67)" under the
+- [x] `research/chinook_rearing_tuned.md`: a section "The gradient maximum above 9 % (#67)" under the
       province-wide paragraph: the extended region, best per gradient with deviance and SE, picks on the main
       reading and the four seeds, bootstrap shares by gradient, the km table beside the recommended rule, the
       river-polygon km, and the decision (`CH_rear_v1` stays at 9 %: the reason; or the follow-up issue filed);
       the `**Verified:**` line and the Gradient limit bullet updated
-- [ ] `research/habitat_thresholds_tuned.md`: the sentence on CH's gradient moving up to 9 % gains the pointer;
+- [x] `research/habitat_thresholds_tuned.md`: the sentence on CH's gradient moving up to 9 % gains the pointer;
       `research/README.md` row for `chinook_rearing_tuned.md`
-- [ ] `scripts/README.md` run order (0322 line); `CLAUDE.md` layout bullet for `data/tune/grad_ext/` and
+- [x] `scripts/README.md` run order (0322 line); `CLAUDE.md` layout bullet for `data/tune/grad_ext/` and
       `data/compare/grad_ext/`; `NEWS.md` entry (no version bump: `/gh-pr-merge`'s)
-- [ ] Every quantified claim in the new text checked against the tables (audit per row); commit
+- [x] Every quantified claim in the new text checked against the tables (audit per row); commit
 
 ## Phase 5: the article stops saying nothing steeper was tried
 - [x] `data-raw/vignette_chinook.R`: read `data/tune/grad_ext/CH_rear_tune.csv` (md5-tracked) and save its best
@@ -78,18 +80,18 @@ Decision taken there: this issue measures and records; `CH_rear_v1` stays at 9 %
       renders locally and the two passages read correctly; commit
 
 ## Phase 6: close out
-- [ ] If a steeper rule is the main reading's recommended rule: file the follow-up issue (extend the ladder for
+- [x] If a steeper rule is the main reading's recommended rule: file the follow-up issue (extend the ladder for
       every species, retune, republish `thresholds`), link it from the research section and this body
 - [ ] Edit this body: the findings as spec, the research section linked
 - [ ] `/code-check branch`; `/planning-archive`; `/gh-pr-push`
 
 ## Validation
 
-- [ ] Tests pass
-- [ ] `/code-check` clean (each commit, or once over the branch with `/code-check branch`)
-- [ ] PWF checkboxes match landed work
+- [x] Tests pass
+- [x] `/code-check` clean (each commit, or once over the branch with `/code-check branch`)
+- [x] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion
-- [ ] `devtools::test()` green, including the vignette-data md5 tests after the data script rerun
-- [ ] `lintr::lint_package()` clean on the touched files
-- [ ] The Phase 2 log's regression line: 2,795 shared rules identical in `dev_heldout`
-- [ ] The article's two gradient passages render from `x$grad_ext` with no literal numbers
+- [x] `devtools::test()` green, including the vignette-data md5 tests after the data script rerun
+- [x] `lintr::lint_package()` clean on the touched files
+- [x] The Phase 2 log's regression line: 2,795 shared rules identical in `dev_heldout`
+- [x] The article's two gradient passages render from `x$grad_ext` with no literal numbers
