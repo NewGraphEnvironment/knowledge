@@ -8,8 +8,9 @@ repos consume snapshots from here instead of carrying the pipeline.
 
 ## Repository Context
 
-**Repository:** NewGraphEnvironment/knowledge (public since #56; site at
-<https://newgraphenvironment.github.io/knowledge/>)
+**Repository:** NewGraphEnvironment/knowledge (#56 prepared it to go public, but `gh repo view` still read
+PRIVATE on 2026-10-19, and the pkgdown site, <https://newgraphenvironment.github.io/knowledge/>, answered 404
+although `gh-pages` deploys; check both before citing the site's URL as live)
 **Primary Language:** R, with Python (`0153`, `0270`) and workflow JS (`wf_*.js`)
 **Origin:** seeded in September 2026 with history from an earlier fish-passage reporting template.
 Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` refer to that repo.
@@ -20,6 +21,10 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   Only code that has run on two regions graduates here. `.Rbuildignore` keeps `data/`, `scripts/`,
   `planning/` and `research/` out of the build, and `tests/testthat/test-data-dir.R` keeps `.R` and
   `.rda` files off the top of `data/`, where `pkgload::load_all()` would source or load them.
+- `vignettes/chinook_rearing.Rmd` — the pkgdown article on the chinook rearing threshold (#62). It reads
+  `inst/vignette-data/`, which `data-raw/vignette_chinook.R` writes from the tune and compare tables and the
+  database; rerun that script after any `0320`/`0330` rerun, because `tests/testthat/test-vignette-data.R` fails
+  when a tracked source's md5 moves. Every number in its prose is computed inline from those files.
 - `scripts/` — the run order (`scripts/README.md`), calling the package (`pkgload::load_all()` from
   the root) and `cred`. Legacy literals in scripts are fixed forward as they are touched.
 - `data/<wsg>/` — per-group snapshots (csv/md) and small spatial deliverables (gpkg/kml). Tracked.
