@@ -29,6 +29,7 @@ knw_tune_run(
   min_wsg = 5L,
   power_wsg = 10L,
   src = "pick",
+  grid_args = list(),
   cache_dir = NULL
 )
 ```
@@ -80,11 +81,23 @@ knw_tune_run(
 
   `character(1)` the flow source the exception reads.
 
+- grid_args:
+
+  `list` of arguments passed to
+  [`knw_tune_grid()`](https://newgraphenvironment.github.io/knowledge/reference/knw_tune_grid.md)
+  for every species × stage (for example
+  `list(grid_grad = c(0.03, 0.09, 0.15))`); empty for its defaults.
+
 - cache_dir:
 
   `NULL`, or a directory where each species × stage's scored grid is
   saved as `<sp>_<stage>_score.rds` and read back on a rerun when the
-  population has the same number of visits.
+  population has the same number of visits and the grid the same rows,
+  in the same order (every
+  [`knw_tune_grid()`](https://newgraphenvironment.github.io/knowledge/reference/knw_tune_grid.md)
+  column, so a moved `default` counts). The other scoring arguments
+  (`seed`, `folds`, `n_boot`, `seeds_more`, `d_floor`) are not checked:
+  give a run with different ones its own directory.
 
 ## Value
 

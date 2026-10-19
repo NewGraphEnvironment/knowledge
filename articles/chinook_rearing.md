@@ -153,9 +153,15 @@ What each rule calls habitat among the 4,490 visits tested. {.table}
 
 ## How firm is the choice?
 
-Three checks, fixed before the run, ask whether the choice rests on
-chance or on reusing the same data to choose and to score.
+A gap in score is a real difference only when it is large against its
+noise and survives being checked again. These checks, fixed before the
+run, ask whether the choice rests on chance or on reusing the same data
+to choose and to score.
 
+- **The gap against its noise.** Each gap between two rules has a
+  standard error, from how much it varies between watershed groups. A
+  gap under one standard error cannot be told from noise: that is the
+  region. `default` is 2.4 standard errors worse than the best rule.
 - **Other random splits.** The split into folds is random, set by a
   number called a seed. Scored again on 4 other seeds, the recommended
   rule is in the region on 4 of them and `default` on 0. 3 of the 4 pick
@@ -176,6 +182,24 @@ chance or on reusing the same data to choose and to score.
 The shape is settled: a flow floor near 0.75 m³/s and an exception for
 small streams near a river. The gradient maximum is the least settled
 part.
+
+**Steeper limits.** 9 % was the steepest limit in the rules tried.
+Scored again on the same records with limits up to 30 % among the rules
+from the start, the same procedure picks 15 %, with a smaller river in
+the exception: a gradient of at most 15 %, and either a mean annual flow
+of at least 0.75 m³/s or a river of at least 1 m³/s within 1 km
+downstream. The best 9 % rule is 19.7 behind it, with a standard error
+of 22.1. 4 of the 4 other seeds also pick a 15 % limit, and redraws of
+the groups choose one in 43 % of draws and 9 % in 0 %. Chosen on four
+folds and scored on the fifth, the longer list’s choices lose to
+`default` over all five together, 1,389.4 against 1,347.0, where choices
+from the rules up to 9 % beat it at 1,234.5.
+
+Every limit tried from 7 % to 30 % has rules in the region, so the
+records cannot place the limit in that range. The recommended rule keeps
+9 %, the pick from the rules fixed before the run, because every species
+is tuned on one shared ladder of gradient limits, and a longer ladder is
+a change for all of them at once.
 
 ## Why does a nearby river matter?
 
@@ -205,9 +229,7 @@ few hundred metres from the river, so 1 km sits on the way down.
 Steepness matters less: at 9 % the chance is about 51 % of what it is at
 2 %. The model fits smooth curves, so it cannot show a step at a
 threshold; each threshold is where habitat and non-habitat separate best
-on held-out groups, a cut across a slope. For the gradient that is at
-the edge of what was tried: 9 % is the steepest maximum scored, and
-nothing steeper was.
+on held-out groups, a cut across a slope.
 
 ## What does it change on the ground?
 
@@ -305,8 +327,11 @@ share of that stream length, against 2.5 for `default`.
   gradually less common as streams get smaller and steeper; there is no
   flow or slope where they stop. Nearby cut-offs fit the records almost
   as well: flow floors from 0.35 to 1 m³/s, and gradient limits of 7 %
-  or 9 %. The flow floor is the firmer choice. 9 % is the steepest
-  gradient limit tried, so a steeper one may fit as well.
+  or 9 %. The flow floor is the firmer choice. Steeper limits, scored
+  later up to 30 %, fit as well or slightly better, though choices from
+  that longer list, scored on groups left out of the choice, do worse
+  than `default`. So 9 % is one choice among limits from 7 % to 30 %
+  that the records cannot rank.
 - **On the map, distance is measured from the bottom of each segment.**
   The exception asks whether a large river is within 1 km downstream. To
   choose the rule, that distance was measured from each fished site. On
