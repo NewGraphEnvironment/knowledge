@@ -90,11 +90,11 @@ version of the rule the records support, how sure that answer is, and what the c
 changes on the ground. The tests are part of `knowledge`, the R package this article belongs to.
 
 **The answer.** The records support a different rule from `default`: **`r words(rec)`**.
-`default` asks for `r words(dflt)`. The new rule draws less habitat, `r n1(-all_row$change_pct)` %
+`default` asks for `r words(dflt)`. The recommended rule draws less habitat, `r n1(-all_row$change_pct)` %
 fewer km across the province, and separates where chinook are caught from where they are not
 more sharply.
 
-## What does link draw for chinook rearing now?
+## What does `default` draw for chinook rearing?
 
 Under `default`, a segment is chinook rearing habitat when chinook can reach it and one of
 four tests holds:
@@ -215,7 +215,7 @@ ggplot(prof, aes(value, best)) +
 
 The choice was fixed before any rule was scored: from the region, the rule closest to `default`.
 Every rule in the region differs from `default` in all three settings, so the best scorer is
-recommended. The new rule calls fewer visits habitat and takes in as many catches:
+recommended. It calls fewer visits habitat and takes in as many catches:
 
 ```{r raw}
 raw <- bind_rows(dflt, rec) |>
@@ -409,7 +409,7 @@ other_gain <- ch$km_all[ch$direction == "gained" & grepl("^other", ch$reason)]
 
 The examples show what both rules keep and the two largest changes. Two smaller gains through the
 stream test are not among them:
-streams between `r grad(dflt$grad_max)` and `r grad(rec$grad_max)` steep, which only the new gradient
+streams between `r grad(dflt$grad_max)` and `r grad(rec$grad_max)` steep, which only the recommended gradient
 maximum admits (`r n0(gain_grad)` km across the province), and streams whose flow passes the floor
 where `default`'s width test fails or has no width (`r n0(gain_flow)` km). The rest of the change
 comes from the connectivity pass, which keeps different stretches under each rule because each
@@ -445,13 +445,15 @@ stream length, against `r n1(ob$lift[ob$rule == "default"])` for `default`.
 
 ## What the recommendation is not
 
-- **Not applied yet.** `link` changes nothing until a configuration reads the new thresholds.
+- **Written for a `link` configuration.** The size floor and gradient maximum are stored under the
+  `link` parameters they set, `rear_mad_min` and `rear_gradient_max`; the near-a-river exception is
+  stored as a flow and a distance, for a configuration that tests one.
 - **Juveniles caught by electrofishing, on streams.** Spawning is outside it. Wetlands and lakes
-  keep their own tests; river polygons take the new gradient maximum, which the tuning scored on
+  keep their own tests; river polygons take the recommended gradient maximum, which the tuning scored on
   streams only.
 - **Better separation, less extent.** The score rewards a rule whose habitat and non-habitat
   differ most, not one that leaves nothing out: `r pc(rec$raw_rate_out, 1)` of visits outside the
-  new rule still caught chinook.
+  recommended rule still caught chinook.
 - **A cut on a slope.** Values next to the recommended ones are nearly as good; the region gives
   the range.
 - **One run of `link`**, `r meta$link_run_uid`. Distances were scored from each visit; on `link`'s
@@ -463,7 +465,7 @@ stream length, against `r n1(ob$lift[ob$rule == "default"])` for `default`.
 
 - [`link`](`r link_site`): the habitat model and its configurations.
 - [`fresh`](`r fresh_site`): runs `link`'s rules on the BC Freshwater Atlas.
-- `knowledge`: the fish records, the tests and this article. It has no DOI yet; cite it as:
+- `knowledge`: the fish records, the tests and this article. Cite it as:
 
 ```{r cite, results = "asis"}
 cat(format(utils::citation("knowledge"), style = "text"), sep = "\n\n")
