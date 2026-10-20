@@ -10,3 +10,4 @@
 - Measured: `knowledge/fdis/v3` is not uploaded (v1, v2 only); README names no FDIS version (findings).
 - Phases 2, 4, 5: README rewritten in the convention's order; DESCRIPTION Title, Description and canonical
   Authors@R; `man/knowledge-package.Rd`; GitHub About set to the tagline and read back.
+- Phase 6: inst/CITATION, CITATION.cff (validated), update-citation-cff workflow, NOTICE.md; filed #76 (PSCIS is Access Only)

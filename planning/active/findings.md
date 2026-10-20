@@ -83,3 +83,11 @@ From a grep of `scripts/`, `R/`, `data-raw/` for `whse_*`, `bcfishpass.*`, `a100
   segment geometry in `bulk_segments.rds`
 - bcfishpass (`bcfishpass.streams`, `bcfishpass.crossings_vw`; `0110`, `0160`) -> GNIS seeds, priority enrichment
 - EcoCat report text -> farmed priority tables (`data/<wsg>/priority_farmed.*`, `data/priority_farmed_all.csv`)
+
+## Licences of the tracked data (Phase 6, measured 2026-10-20)
+
+BC Data Catalogue `package_show` licences: the four PSCIS datasets are **Access Only**; Known BC Fish Observations
+and the Freshwater Atlas layers are OGL-BC. `fiss_sites_*` are written by `0220` from the EcoCat workbooks, not from
+the observations layer (a first NOTICE draft had them under OGL-BC; corrected). Filed #76 (PSCIS and EcoCat terms,
+to settle before #56's flip) and commented on #56. NOTICE.md lists the confirmed sources and names the unsettled
+files as outside it; `NOTICE` added to the pkgdown page allowlist (link ships its NOTICE the same way).

@@ -51,9 +51,9 @@ The README was last rewritten before #57. It is close to correct on the report c
 - [x] Re-check each `_pkgdown.yml` group `desc:` covers every function listed under it (claim set includes them)
 
 ## Phase 6: Citation, License, NOTICE
-- [ ] `/citation-cff`: `CITATION.cff`, `inst/CITATION`, `.github/workflows/update-citation-cff.yaml`; `Date:` already set
-- [ ] Enumerate every external read in `scripts/` and `R/` whose output is tracked under `data/` (PSCIS, FISS, FDIS, GNIS, link/fwapg-derived tables …), each with its licence; write `NOTICE.md` by source if any is redistributed beyond the FDIS extract, and add `NOTICE` to the pkgdown workflow's `allowed` list. A source with an unconfirmed licence → a filed issue, not the NOTICE
-- [ ] README Citation (`citation("knowledge")`) and License sections
+- [x] `/citation-cff`: `CITATION.cff`, `inst/CITATION`, `.github/workflows/update-citation-cff.yaml`; `Date:` already set
+- [x] Enumerate every external read in `scripts/` and `R/` whose output is tracked under `data/` (PSCIS, FISS, FDIS, GNIS, link/fwapg-derived tables …), each with its licence; write `NOTICE.md` by source if any is redistributed beyond the FDIS extract, and add `NOTICE` to the pkgdown workflow's `allowed` list. A source with an unconfirmed licence → a filed issue, not the NOTICE
+- [x] README Citation (`citation("knowledge")`) and License sections
 
 ## Phase 7: Review
 - [ ] Every function the README names is in `NAMESPACE`; every link resolves (`curl -sIL` each, GitHub ones via `gh api`, noting which wait on #56)
