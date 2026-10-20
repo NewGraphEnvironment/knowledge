@@ -9,16 +9,16 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/NewGraphEnvironment/knowledge/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/NewGraphEnvironment/knowledge/blob/v0.4.6/DESCRIPTION)
 
 Irvine A (2026). *knowledge: Watershed-Group Fisheries Background*. R
-package version 0.4.5,
+package version 0.4.6,
 <https://newgraphenvironment.github.io/knowledge/>.
 
     @Manual{,
       title = {knowledge: Watershed-Group Fisheries Background},
       author = {Allan Irvine},
       year = {2026},
-      note = {R package version 0.4.5},
+      note = {R package version 0.4.6},
       url = {https://newgraphenvironment.github.io/knowledge/},
     }

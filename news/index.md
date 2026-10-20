@@ -1,6 +1,6 @@
 # Changelog
 
-## knowledge (development version)
+## knowledge 0.4.6
 
 - The grade reads every segment at its own distance to a river
   ([\#65](https://github.com/NewGraphEnvironment/knowledge/issues/65)).
