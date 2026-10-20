@@ -351,4 +351,4 @@ share of that stream length, against 2.5 for `default`.
 
 Irvine A (2026). *knowledge: Fisheries Evidence and Tuned Habitat
 Thresholds for BC Watershed Groups*. New Graph Environment Ltd. Version
-0.4.6, <https://newgraphenvironment.github.io/knowledge/>.
+0.4.7, <https://newgraphenvironment.github.io/knowledge/>.

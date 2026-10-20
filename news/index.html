@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">knowledge</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,9 +32,13 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/v0.4.7/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.4.7" id="knowledge-047">knowledge 0.4.7<a class="anchor" aria-label="anchor" href="#knowledge-047"></a></h2>
+<ul><li>The README is rewritten to the README convention (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/75" class="external-link">#75</a>). It says what knowledge is and the thresholds it tunes for link’s habitat models, maps chinook rearing in the Bulkley under link’s <code>default</code> rule and the tuned rule (<code>data-raw/readme_figure.R</code>), shows how to install the package and reach the published FDIS data, and reads <code>data/thresholds.csv</code> in a short example. DESCRIPTION’s title and description say the same. The package gains a hex sticker, a citation (<code>citation("knowledge")</code>, and <code>CITATION.cff</code> kept current by a workflow) and <code>inst/NOTICE.md</code>, which names each outside data source with its terms; the terms of the PSCIS layers and the EcoCat- and bcfishpass-derived files are open in <a href="https://github.com/NewGraphEnvironment/knowledge/issues/76" class="external-link">#76</a>. <code><a href="../reference/knw_compare_map.html">knw_compare_map()</a></code>’s <code>title</code> is documented as what it does: it names the interactive page and the message when nothing is drawn, and the static map draws none.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.6" id="knowledge-046">knowledge 0.4.6<a class="anchor" aria-label="anchor" href="#knowledge-046"></a></h2>
 <ul><li>The grade reads every segment at its own distance to a river (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/65" class="external-link">#65</a>). <code><a href="../reference/knw_grade_species.html">knw_grade_species()</a></code> used to walk only the segments the rule’s exception could admit and read the rest at the 50 km distance cap, which on the joint size and distance curve understates any segment near a river: every key was affected, and six of the eight walked nothing at all. It now walks every accessible segment with a gradient to the pick’s exception river (10 m³/s where it has none) and records <code>dist_status</code>. The reference rate that reads 1 is now taken over the stream branch, the edge types the curve was fitted on. Over every accessible segment, river-polygon segments would make up most of the top 5 % for chinook, coho, steelhead and cutthroat and raise their reference 1.4 to 4 times (chinook 0.14 to 0.52); for bull trout, grayling and rainbow the two references are within 7 %. <code><a href="../reference/knw_grade.html">knw_grade()</a></code> gains <code>ref_rows</code> and <code><a href="../reference/knw_grade_species.html">knw_grade_species()</a></code> gains <code>ref_edge</code> for this; its <code>edge_stream</code>, which limited the walk to the stream branch and which no caller set, goes with the walk’s old limits. <code>habitat_grade/v1</code>, never uploaded, is regraded before its first publication, and gains <code>stream_branch</code>: off the stream branch, on lines through lakes, wetlands and double-line rivers and on other connectors, the grade extrapolates the curve past its visits, and those lines hold 21–79 % of each key’s km graded 0.8 or more. The thresholds, <code>default</code>‘s km and the width rules’ km do not move; the flow-ruled tuned rules move by under 0.3 % because wet republished the segment flows the same day (NewGraphEnvironment/wet#103), and retuning on those flows is <a href="https://github.com/NewGraphEnvironment/knowledge/issues/73" class="external-link">#73</a>.</li>

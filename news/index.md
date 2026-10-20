@@ -1,5 +1,24 @@
 # Changelog
 
+## knowledge 0.4.7
+
+- The README is rewritten to the README convention
+  ([\#75](https://github.com/NewGraphEnvironment/knowledge/issues/75)).
+  It says what knowledge is and the thresholds it tunes for link’s
+  habitat models, maps chinook rearing in the Bulkley under link’s
+  `default` rule and the tuned rule (`data-raw/readme_figure.R`), shows
+  how to install the package and reach the published FDIS data, and
+  reads `data/thresholds.csv` in a short example. DESCRIPTION’s title
+  and description say the same. The package gains a hex sticker, a
+  citation (`citation("knowledge")`, and `CITATION.cff` kept current by
+  a workflow) and `inst/NOTICE.md`, which names each outside data source
+  with its terms; the terms of the PSCIS layers and the EcoCat- and
+  bcfishpass-derived files are open in
+  [\#76](https://github.com/NewGraphEnvironment/knowledge/issues/76).
+  [`knw_compare_map()`](https://newgraphenvironment.github.io/knowledge/reference/knw_compare_map.md)’s
+  `title` is documented as what it does: it names the interactive page
+  and the message when nothing is drawn, and the static map draws none.
+
 ## knowledge 0.4.6
 
 - The grade reads every segment at its own distance to a river
