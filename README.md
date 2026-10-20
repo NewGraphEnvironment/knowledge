@@ -99,8 +99,9 @@ and dams from the [Canadian Aquatic Barriers Database](https://aquaticbarriers.c
 to the records it produced in [bcfishobs](https://github.com/smnorris/bcfishobs). The floodplain panels of the
 comparison maps in `research/fig/`, and the floodplain areas in `data/compare/floodplain.csv`, come from
 [stac_floodplains_bc](https://www.newgraphenvironment.com/stac_floodplains_bc/). Some crossing and report scripts
-also read a [bcfishpass](https://smnorris.github.io/bcfishpass/) database. Each value taken from the literature
-carries a verbatim quote, checked against its source.
+also read a [bcfishpass](https://smnorris.github.io/bcfishpass/) database. fwapg, bcfishobs and bcfishpass are Simon
+Norris's (Hillcrest Geographics), bcfishpass maintained with contributions from many groups. Each value taken from the
+literature carries a verbatim quote, checked against its source.
 
 ## Citation
 

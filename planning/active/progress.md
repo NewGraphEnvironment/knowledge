@@ -27,3 +27,4 @@
   the vector gave `3.7e-02`, so per-value `formatC(fg)`. Classes as integer codes. Bulkley segment GeoJSON 5.2 MB
   (8.3 MB with a prebuilt HTML popup per segment). Grade layer and its legend swap in through the switch.
   Planted bugs (a grey80 colour, unrounded coordinates, vector format, switch position, legend position) each fail
+- Phase 7: README credits fwapg, bcfishobs and bcfishpass to Simon Norris (Hillcrest Geographics), in link README's words for bcfishpass

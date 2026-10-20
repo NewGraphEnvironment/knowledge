@@ -113,7 +113,7 @@ article in plain words with the 1.96 table and a bibliography, an interactive Bu
 - [ ] Word count after against the 1,400 target, and what set the floor
 
 ## Phase 7: README and link
-- [ ] README Data and methods: fwapg, bcfishobs and bcfishpass are Simon Norris's (Hillcrest Geographics),
+- [x] README Data and methods: fwapg, bcfishobs and bcfishpass are Simon Norris's (Hillcrest Geographics),
       bcfishpass with contributions from many groups, as link's README words it
 - [ ] link#346 body: the thresholds table's `rule_196` and `holds_196`, and which rules hold
 
