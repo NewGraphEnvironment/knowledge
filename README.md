@@ -31,7 +31,7 @@ reproducible work: `pak::pak("NewGraphEnvironment/knowledge@vX.Y.Z")`.
 
 The evidence tables live in the repository, not the package, so most work happens in a clone with the
 package loaded from the source tree (`pkgload::load_all()`). The scripts that build them, in the run order
-of [`scripts/README.md`](scripts/README.md), read a PostgreSQL database holding the BC Freshwater Atlas
+of [`scripts/README.md`](https://github.com/NewGraphEnvironment/knowledge/blob/main/scripts/README.md), read a PostgreSQL database holding the BC Freshwater Atlas
 through fwapg, found by the standard `PG*` environment variables; the tuning also reads link's
 province-wide run there.
 
@@ -60,9 +60,9 @@ Juvenile chinook rear where the gradient is at most 9 % and either the mean annu
 
 ## Learn more
 
-- [How the chinook rearing threshold was chosen and what it draws](vignettes/chinook_rearing.Rmd): the
+- [How the chinook rearing threshold was chosen and what it draws](https://github.com/NewGraphEnvironment/knowledge/blob/main/vignettes/chinook_rearing.Rmd): the
   tuning told in plain language, with the map above and what changes on the ground.
-- [What is known](research/README.md): one file per topic, from the FDIS export and the cited literature
+- [What is known](https://github.com/NewGraphEnvironment/knowledge/blob/main/research/README.md): one file per topic, from the FDIS export and the cited literature
   to the tuned thresholds for each species.
 - [Function reference](https://github.com/NewGraphEnvironment/knowledge/tree/main/man)
 
