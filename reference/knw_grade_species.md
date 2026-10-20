@@ -2,16 +2,15 @@
 
 Reads the species' segments
 ([`knw_link_segments()`](https://newgraphenvironment.github.io/knowledge/reference/knw_link_segments.md)),
-walks the ones the pick's exception could admit (accessible
-stream-branch segments inside the gradient maximum that fail the size
-test) to the first river of the pick's `exc_q` from the segment's
-downstream end, and grades them all
+walks every accessible segment with a gradient (on any edge type and at
+any gradient: wetland lines, river polygons and steep segments included,
+and whatever its size) from its downstream end to the first river of the
+pick's `exc_q`, or of the curve's `q` when the pick has no exception,
+and grades them all
 ([`knw_grade()`](https://newgraphenvironment.github.io/knowledge/reference/knw_grade.md)).
-Segments the exception cannot reach take the distance cap: a segment
-passing the size test is graded on its size, and one off the stream
-branch or above the gradient maximum is far from any river by
-construction, which the curve reads as the exception not helping it.
-With no exception on the pick, no walk is made.
+The curve reads size and distance jointly, so every graded segment needs
+its own distance, whether or not it passes the size test. For the pick
+the curve was fitted on, the two rivers are the same.
 
 ## Usage
 
@@ -24,9 +23,9 @@ knw_grade_species(
   curve,
   pick,
   stage = "rear",
-  edge_stream = c(1000L, 1100L, 2000L, 2300L),
   workers = 4L,
-  src = "pick"
+  src = "pick",
+  ref_edge = c(1000L, 1100L, 2000L, 2300L)
 )
 ```
 
@@ -62,10 +61,6 @@ knw_grade_species(
 
   `"rear"` or `"spawn"`.
 
-- edge_stream:
-
-  `integer` stream-branch edge types.
-
 - workers:
 
   `integer(1)` walk workers.
@@ -74,12 +69,50 @@ knw_grade_species(
 
   `character(1)` the flow source.
 
+- ref_edge:
+
+  `integer` the stream-branch edge types the reference rate is taken
+  over. The default is
+  [`knw_tune_run()`](https://newgraphenvironment.github.io/knowledge/reference/knw_tune_run.md)'s
+  default `edge_stream`, the edge types of the curve's visits; a curve
+  fitted on others needs them here.
+
 ## Value
 
 A list: `grades`, one row per segment with the segment's keys,
 `length_metre`, `access`, `accessible`, the stage's flag, `size`,
-`dist_m`, `rate`, `grade`, `grade_class`; `reference`; `counts`
-(segments, walked, found, graded, no size, no gradient); `walk_minutes`.
+`dist_m`, `dist_status`, `rate`, `grade`, `grade_class`; `reference`;
+`counts` (segments, accessible, walked starts, segments whose walk was
+found, none or other, graded, no size, no gradient); `walk_minutes`.
+
+## Details
+
+`dist_m` also serves
+[`knw_compare_rules()`](https://newgraphenvironment.github.io/knowledge/reference/knw_compare_rules.md)
+as the exception's distance. That is why a segment with no size is
+walked although it is not graded (the exception admits a segment whose
+size fails, missing included), and why a pick's own `exc_q` wins: a
+candidate whose river differs from the curve's gets a correct exception
+and a grade that is not comparable.
+
+The curve was fitted on stream-branch visits outside lakes, wetlands and
+river polygons, so a grade off that branch is an extrapolation: a
+river-polygon segment often reads the curve near 0 m (about half of
+their km within 1 m for grayling, four fifths for chinook) and at sizes
+few visits had, and a wetland or lake segment lies outside the visits it
+was fitted on. The reference rate that reads 1 is therefore taken over
+the stream branch alone (`ref_edge`; Al, 2026-10-19): over every
+accessible segment, river-polygon segments make up most of the top 5 %
+for chinook, coho, steelhead and cutthroat, whose reference rises 1.4 to
+4 times (chinook's from 0.14 to 0.52); for bull trout, grayling and
+rainbow the two references are within 7 %.
+
+A walk that finds no river of `q` (`none`: the sea first; `no_parent`;
+`too_many_hops`) leaves `dist_m` missing, which the grade reads as the
+distance cap, as
+[`knw_tune_curve()`](https://newgraphenvironment.github.io/knowledge/reference/knw_tune_curve.md)
+censors such visits. `dist_status` says which, and is `no_walk` for a
+segment outside the walk set (not accessible, or with no gradient).
 
 ## Examples
 

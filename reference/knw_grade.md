@@ -4,10 +4,10 @@ A segment's grade is the curve's predicted detection rate at the
 segment's size, gradient and distance to a river, at the reference
 nuisance values and with the group random effect excluded (so grades
 compare across groups), divided by the `ref_quantile` of that rate over
-the species' accessible segments, and capped at 1. The top of the
-accessible network reads 1, and a segment at a third of that rate reads
-about 0.3. It is expected use per standard electrofishing visit, not
-habitat quality, and is labelled so.
+the species' accessible segments (those of them `ref_rows` marks), and
+capped at 1. The top of the reference segments reads 1, and a segment at
+a third of that rate reads about 0.3. It is expected use per standard
+electrofishing visit, not habitat quality, and is labelled so.
 
 ## Usage
 
@@ -17,7 +17,8 @@ knw_grade(
   segments,
   cols = c(size = "mad_pick", grad = "gradient", dist = "dist_m"),
   ref_quantile = 0.95,
-  classes = c(0, 0.2, 0.4, 0.6, 0.8, 1)
+  classes = c(0, 0.2, 0.4, 0.6, 0.8, 1),
+  ref_rows = NULL
 )
 ```
 
@@ -42,11 +43,19 @@ knw_grade(
 
 - ref_quantile:
 
-  `numeric(1)` the quantile of accessible segments' rate that reads 1.
+  `numeric(1)` the quantile of the reference segments' rate (accessible,
+  and marked by `ref_rows`) that reads 1.
 
 - classes:
 
   `numeric` the class breaks on the grade.
+
+- ref_rows:
+
+  `NULL`, or a logical vector of `nrow(segments)` marking the segments
+  the reference is taken over (among the accessible ones), such as the
+  stream branch the curve was fitted on. `NULL` takes every accessible
+  segment. Every segment is graded either way.
 
 ## Value
 
@@ -59,8 +68,12 @@ segments with no size or gradient.
 A segment whose size variable is missing (an unmeasured first-order
 stream under a width model; a segment with no flow even from a parent
 under a MAD model) or whose gradient is missing gets `NA`, and the
-counts come back. A distance the walk did not find, or a segment with no
-walk, is the cap (`dist_cap_m`): far from any river.
+counts come back. A missing distance is the cap (`dist_cap_m`): the walk
+found no river of at least the curve's `q` downstream (the sea came
+first, or the walk stopped), not that the segment is far from any river.
+[`knw_grade_species()`](https://newgraphenvironment.github.io/knowledge/reference/knw_grade_species.md)
+walks every gradable accessible segment, so a segment reads the cap only
+for that reason.
 
 ## Examples
 

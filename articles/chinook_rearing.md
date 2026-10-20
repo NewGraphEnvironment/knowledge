@@ -239,19 +239,19 @@ Both rules were run through all of `link`’s steps on every one of the
 |  | km |
 |:---|---:|
 | Habitat under default | 101,184 |
-| Habitat under the recommended rule | 88,607 |
-| Lost, all reasons | 24,843 |
-| Lost: wide enough for default, below the flow floor, no river close | 24,542 |
-| Gained, all reasons | 12,266 |
-| Gained through the exception (small streams near a river) | 9,666 |
-| Gained through the exception, on first-order streams | 6,952 |
+| Habitat under the recommended rule | 88,641 |
+| Lost, all reasons | 24,832 |
+| Lost: wide enough for default, below the flow floor, no river close | 24,532 |
+| Gained, all reasons | 12,289 |
+| Gained through the exception (small streams near a river) | 9,665 |
+| Gained through the exception, on first-order streams | 6,948 |
 
 Chinook rearing habitat in km under each rule, over all 125 watershed
 groups. {.table}
 
-The change varies by group, from -73.6 % to 29.9 %; 48 of the 125 groups
-gain. In the Bulkley the recommended rule draws 1,611 km against
-`default`’s 2,123 (-24.1 %).
+The change varies by group, from -73.6 % to 30.0 %; 48 of the 125 groups
+gain. In the Bulkley the recommended rule draws 1,608 km against
+`default`’s 2,123 (-24.3 %).
 
 ![Chinook rearing in the Bulkley (BULK) under each rule: kept by both,
 lost (default only) and gained (the legend's 'tuned only', meaning the
@@ -268,25 +268,25 @@ describes. Line width follows stream order.
 
 | \# | Case | Flow (m³/s) | Channel width (m) | Gradient | Downstream to a river | default | Recommended |
 |:---|:---|---:|---:|---:|---:|:---|:---|
-| 1 | Kept by both | 3.6 | 19 | 0.06 % | not needed | habitat | habitat |
+| 1 | Kept by both | 3.6 | 19 | 0.06 % | 0 m | habitat | habitat |
 | 2 | Lost: below the flow floor, no river close | 0.48 | 6.7 | 2.16 % | 6.8 km | habitat | not habitat |
-| 3 | Gained: small stream near a river | 0.00049 | none modelled | 2.23 % | 940 m | not habitat | habitat |
+| 3 | Gained: small stream near a river | 0.00048 | none modelled | 2.23 % | 940 m | not habitat | habitat |
 
 The numbered segments on the map: what each rule reads and what each
 decides. default needs a channel at least 1.5 m wide and a gradient of
 at most 5.49 %; the recommended rule needs a gradient of at most 9 % and
 either a flow of at least 0.75 m³/s or a river of at least 3 m³/s within
-1 km downstream. The distance is to the first such river downstream,
-measured only where the exception could apply. {.table}
+1 km downstream. The distance is to the first such river downstream; the
+recommended rule reads it only where the flow falls short. {.table}
 
 The examples show what both rules keep and the two largest changes. Two
 smaller gains through the stream condition are not among them: streams
 between 5.49 % and 9 % steep, which only the recommended gradient
-maximum admits (1,398 km across the province), and streams whose flow
+maximum admits (1,411 km across the province), and streams whose flow
 passes the floor where `default`’s width condition fails or has no width
-(439 km). The rest of the change comes from the connectivity pass, which
+(449 km). The rest of the change comes from the connectivity pass, which
 keeps different stretches under each rule because each rule’s habitat
-connects to spawning differently (533 km gained, 301 km lost), and from
+connects to spawning differently (535 km gained, 301 km lost), and from
 river polygons and mixed causes (230 km gained).
 
 Orange is mostly the upper reaches of tributaries: flow grows

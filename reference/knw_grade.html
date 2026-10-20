@@ -3,15 +3,17 @@
 size, gradient and distance to a river, at the reference nuisance values and
 with the group random effect excluded (so grades compare across groups),
 divided by the ref_quantile of that rate over the species' accessible
-segments, and capped at 1. The top of the accessible network reads 1, and a
-segment at a third of that rate reads about 0.3. It is expected use per
-standard electrofishing visit, not habitat quality, and is labelled so."><meta property="og:description" content="A segment's grade is the curve's predicted detection rate at the segment's
+segments (those of them ref_rows marks), and capped at 1. The top of the
+reference segments reads 1, and a segment at a third of that rate reads about
+0.3. It is expected use per standard electrofishing visit, not habitat
+quality, and is labelled so."><meta property="og:description" content="A segment's grade is the curve's predicted detection rate at the segment's
 size, gradient and distance to a river, at the reference nuisance values and
 with the group random effect excluded (so grades compare across groups),
 divided by the ref_quantile of that rate over the species' accessible
-segments, and capped at 1. The top of the accessible network reads 1, and a
-segment at a third of that rate reads about 0.3. It is expected use per
-standard electrofishing visit, not habitat quality, and is labelled so."></head><body>
+segments (those of them ref_rows marks), and capped at 1. The top of the
+reference segments reads 1, and a segment at a third of that rate reads about
+0.3. It is expected use per standard electrofishing visit, not habitat
+quality, and is labelled so."></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -54,9 +56,10 @@ standard electrofishing visit, not habitat quality, and is labelled so."></head>
 size, gradient and distance to a river, at the reference nuisance values and
 with the group random effect excluded (so grades compare across groups),
 divided by the <code>ref_quantile</code> of that rate over the species' accessible
-segments, and capped at 1. The top of the accessible network reads 1, and a
-segment at a third of that rate reads about 0.3. It is expected use per
-standard electrofishing visit, not habitat quality, and is labelled so.</p>
+segments (those of them <code>ref_rows</code> marks), and capped at 1. The top of the
+reference segments reads 1, and a segment at a third of that rate reads about
+0.3. It is expected use per standard electrofishing visit, not habitat
+quality, and is labelled so.</p>
     </div>
 
     <div class="section level2">
@@ -66,7 +69,8 @@ standard electrofishing visit, not habitat quality, and is labelled so.</p>
 <span>  <span class="va">segments</span>,</span>
 <span>  cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>size <span class="op">=</span> <span class="st">"mad_pick"</span>, grad <span class="op">=</span> <span class="st">"gradient"</span>, dist <span class="op">=</span> <span class="st">"dist_m"</span><span class="op">)</span>,</span>
 <span>  ref_quantile <span class="op">=</span> <span class="fl">0.95</span>,</span>
-<span>  classes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.2</span>, <span class="fl">0.4</span>, <span class="fl">0.6</span>, <span class="fl">0.8</span>, <span class="fl">1</span><span class="op">)</span></span>
+<span>  classes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.2</span>, <span class="fl">0.4</span>, <span class="fl">0.6</span>, <span class="fl">0.8</span>, <span class="fl">1</span><span class="op">)</span>,</span>
+<span>  ref_rows <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -90,12 +94,19 @@ none).</p></dd>
 
 
 <dt id="arg-ref-quantile">ref_quantile<a class="anchor" aria-label="anchor" href="#arg-ref-quantile"></a></dt>
-<dd><p><code>numeric(1)</code> the quantile of accessible segments' rate
-that reads 1.</p></dd>
+<dd><p><code>numeric(1)</code> the quantile of the reference segments'
+rate (accessible, and marked by <code>ref_rows</code>) that reads 1.</p></dd>
 
 
 <dt id="arg-classes">classes<a class="anchor" aria-label="anchor" href="#arg-classes"></a></dt>
 <dd><p><code>numeric</code> the class breaks on the grade.</p></dd>
+
+
+<dt id="arg-ref-rows">ref_rows<a class="anchor" aria-label="anchor" href="#arg-ref-rows"></a></dt>
+<dd><p><code>NULL</code>, or a logical vector of <code>nrow(segments)</code> marking the
+segments the reference is taken over (among the accessible ones), such as
+the stream branch the curve was fitted on. <code>NULL</code> takes every accessible
+segment. Every segment is graded either way.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -109,8 +120,10 @@ counts of segments with no size or gradient.</p>
     <p>A segment whose size variable is missing (an unmeasured first-order stream
 under a width model; a segment with no flow even from a parent under a MAD
 model) or whose gradient is missing gets <code>NA</code>, and the counts come back. A
-distance the walk did not find, or a segment with no walk, is the cap
-(<code>dist_cap_m</code>): far from any river.</p>
+missing distance is the cap (<code>dist_cap_m</code>): the walk found no river of at
+least the curve's <code>q</code> downstream (the sea came first, or the walk stopped),
+not that the segment is far from any river. <code><a href="knw_grade_species.html">knw_grade_species()</a></code> walks every
+gradable accessible segment, so a segment reads the cap only for that reason.</p>
     </div>
 
     <div class="section level2">
