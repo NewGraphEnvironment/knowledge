@@ -63,7 +63,7 @@ knw_gnis_collisions(con, c("Boulder Creek", "Wildmare Creek", "Ghost Creek"),
 DBI::dbDisconnect(con, shutdown = TRUE)
 }
 #> duckdb keeps downloaded extensions and secrets in a temporary directory:
-#> ℹ /tmp/Rtmpe2uOig/duckdb
+#> ℹ /tmp/Rtmp0wn8Li/duckdb
 #> This is removed when the R session ends.
 #> • Extensions are re-downloaded each session.
 #> • Secrets are lost.
