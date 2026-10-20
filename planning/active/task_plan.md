@@ -30,24 +30,24 @@ The README was last rewritten before #57. It is close to correct on the report c
 - [x] Read the PNG: name inside the hexagon, opaque (corners transparent, as in every hex sticker)
 
 ## Phase 2: Opening and the texts that travel with it
-- [ ] README: title line with sticker (`height="139"`), lifecycle badge block, tagline, opening of 1–3 plain sentences: what knowledge is (fish records, past reports and cited literature per watershed group), and the decision it informs (the thresholds link's habitat model uses to say where fish can spawn and rear, which restoration planning reads)
-- [ ] DESCRIPTION `Title` and `Description` rewritten in step (thresholds included; "Under active development."); `Authors@R` to the `/citation-cff` block (firm `cph`, `fnd`); `devtools::document()` for `man/knowledge-package.Rd`
-- [ ] GitHub About: `gh repo edit NewGraphEnvironment/knowledge --description "<tagline>"`, read back with `gh repo view --json description`
+- [x] README: title line with sticker (`height="139"`), lifecycle badge block, tagline, opening of 1–3 plain sentences: what knowledge is (fish records, past reports and cited literature per watershed group), and the decision it informs (the thresholds link's habitat model uses to say where fish can spawn and rear, which restoration planning reads)
+- [x] DESCRIPTION `Title` and `Description` rewritten in step (thresholds included; "Under active development."); `Authors@R` to the `/citation-cff` block (firm `cph`, `fnd`); `devtools::document()` for `man/knowledge-package.Rd`
+- [x] GitHub About: `gh repo edit NewGraphEnvironment/knowledge --description "<tagline>"`, read back with `gh repo view --json description`
 
 ## Phase 3: Figure
 - [x] `data-raw/readme_figure.R`: reads the two bundled `.rds` (via `system.file()` after `pkgload::load_all()`), calls `knw_compare_map(..., panels = "rules")`, writes `man/figures/readme-bulk.png`, opaque
 - [x] Self-review per `cartography.md` (all 12 checks), checked at ~830 px published width; set `width` in the `<img>` so a portrait panel is not blown up
-- [ ] Alt text and a plain caption (what kept / lost / gained mean, in words); caption numbers, if any, computed from the same data
+- [x] Alt text and a plain caption (what kept / lost / gained mean, in words); caption numbers, if any, computed from the same data
 
 ## Phase 4: Installation, example, stale facts
-- [ ] Installation: `pak::pak(...)`, the pin line with `@vX.Y.Z` placeholder and NEWS link, the clone (`pkgload::load_all()`), what runs need (PG* env vars, fwapg / bcfishpass, `ZOTERO_API_KEY`, AWS for `rag/`); published data on `fresh-bc`: `fdis/` and `knowledge/fdis/v3/`
-- [ ] Example: a few lines reading `data/thresholds.csv` (e.g. CH rearing's components, value and range, `default_value`), run for real, output pasted verbatim
-- [ ] Stale facts gone or fixed: `v2` → `v3`; no `0260`–`0298` claim (point at `scripts/README.md`); research covered by the index line
+- [x] Installation: `pak::pak(...)`, the pin line with `@vX.Y.Z` placeholder and NEWS link, the clone (`pkgload::load_all()`), what runs need (PG* env vars, fwapg / bcfishpass, `ZOTERO_API_KEY`, AWS for `rag/`); published data on `fresh-bc`: `fdis/` and `knowledge/fdis/v3/`
+- [x] Example: a few lines reading `data/thresholds.csv` (e.g. CH rearing's components, value and range, `default_value`), run for real, output pasted verbatim
+- [x] Stale facts gone or fixed: no FDIS version in prose (v3 is not uploaded, v2 is; see findings); no `0260`–`0298` claim (point at `scripts/README.md`); research covered by the index line
 
 ## Phase 5: Learn more, Ecosystem, Data and methods
-- [ ] Learn more: the chinook rearing article (GitHub path `vignettes/chinook_rearing.Rmd` while #56 is open), the research index, and the grouped reference (`_pkgdown.yml` groups, by `man/` or GitHub while the site is down)
-- [ ] Ecosystem table per decision 3
-- [ ] Data and methods: FDIS (Province of BC, with the `fdis/README.md` provenance note), FISS data submissions and the public FISS layers, EcoCat, PSCIS, fwapg, bcfishpass, link's `default` run, wet's flows, Zotero group library; each linked to its own site
+- [x] Learn more: the chinook rearing article (GitHub path `vignettes/chinook_rearing.Rmd` while #56 is open), the research index, and the grouped reference (`_pkgdown.yml` groups, by `man/` or GitHub while the site is down)
+- [x] Ecosystem table per decision 3
+- [x] Data and methods: FDIS (Province of BC, with the `fdis/README.md` provenance note), FISS data submissions and the public FISS layers, EcoCat, PSCIS, fwapg, bcfishpass, link's `default` run, wet's flows, Zotero group library; each linked to its own site
 - [ ] Re-check each `_pkgdown.yml` group `desc:` covers every function listed under it (claim set includes them)
 
 ## Phase 6: Citation, License, NOTICE

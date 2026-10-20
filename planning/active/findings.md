@@ -64,3 +64,22 @@ dominates the trunk, lost reads in orange on tributaries; gained is sparse in th
 gives the km). No scale bar or keymap: `knw_compare_map()` draws neither, in the article too; adding them would
 change the shared function and the article, outside this issue. Published at `width="70%"` (~600 px of GitHub's
 ~850 px column), so the legend text is shown near its rendered size.
+
+## `knowledge/fdis/v3` is not published (2026-10-20, measured)
+
+`aws s3 ls s3://fresh-bc/knowledge/fdis/` lists `v1/` and `v2/` only; `v3/manifest.json` answers 403 and
+`v2/manifest.json` 200 over plain HTTPS. `0299` defaults to `VERSION=v3` but its `PUBLISH=TRUE` upload of v3 has not
+run. So the issue's "Stale: the Data section names v2; 0299 publishes v3" is wrong: v2 is what a reader can fetch.
+The README names no version (it points at `knowledge/fdis/` and its manifests), so it does not go stale when v3
+is uploaded. Issue body corrected.
+
+## External reads whose output is tracked (for Data and methods, NOTICE)
+
+From a grep of `scripts/`, `R/`, `data-raw/` for `whse_*`, `bcfishpass.*`, `a100.gov.bc.ca`:
+- PSCIS (`whse_fish.pscis_*_svw`, `R/pscis.R`, `0100`) -> `data/<wsg>/pscis_<wsg>.gpkg`, `crossings.csv`, `reports.csv`
+- FISS fish observations (`whse_fish.fiss_fish_obsrvtn_pnt_sp`, `0200`) and EcoCat data-submission workbooks
+  (`a100.gov.bc.ca/pub/acat`, `0200`-`0220`) -> `data/<wsg>/fiss_*`
+- FWA (`whse_basemapping.fwa_*`) -> `inst/vignette-data/bulk_water.rds` (lakes and rivers, ships in the package),
+  segment geometry in `bulk_segments.rds`
+- bcfishpass (`bcfishpass.streams`, `bcfishpass.crossings_vw`; `0110`, `0160`) -> GNIS seeds, priority enrichment
+- EcoCat report text -> farmed priority tables (`data/<wsg>/priority_farmed.*`, `data/priority_farmed_all.csv`)
