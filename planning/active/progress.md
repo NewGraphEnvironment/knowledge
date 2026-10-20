@@ -14,3 +14,9 @@
   (no upload): `thresholds.csv` equals main's with the two columns removed. Expected red until Phase 5 rebuilds the
   bundle: `test-vignette-data.R`'s CH-rows md5 (the header gained two columns)
 - Phase 3: the one-SE wording in four research files; `habitat_thresholds_tuned.md` gains "At 1.96 SE" (table from `knw_tune_repick()`), `chinook_rearing_tuned.md` its #57 paragraph's 1.96 pick
+- Phase 5 (data): bundle rebuilt (frozen copy of the script, from the repo root). Against main's bundle: new
+  `tune_all` (8 tables, 26,875 rows) and `wetland`; `thresholds` gains `rule_196`/`holds_196`, every other column's
+  values identical; `meta` changes only `written`, `md5` (7 tune files added), `md5_rows`, and adds `versions`;
+  `bulk_segments` gains `water`/`water_ha`, every other column identical; `bulk_water` identical. Wetland lines
+  (edge 1050/1150): default 10,286.8 km, recommended 10,197.0 km, both 10,075.1 km, median grade 0.0307 under the
+  recommended rule. BULK segments: 10,846 stream, 2,127 river, 2,540 wetland, 1,173 lake

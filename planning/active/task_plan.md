@@ -87,7 +87,7 @@ article in plain words with the 1.96 table and a bibliography, an interactive Bu
       background choice); render one page and look at it in a browser
 
 ## Phase 5: the article's data
-- [ ] `data-raw/vignette_chinook.R`: add `tune_all` (the eight tune tables' columns `knw_tune_repick()` reads, each
+- [x] `data-raw/vignette_chinook.R`: add `tune_all` (the eight tune tables' columns `knw_tune_repick()` reads, each
       file's md5 in `meta$md5`), each BULK segment's kind of water (stream, river polygon, wetland ≥ 1 ha, lake ≥
       100 ha; FWA waterbody join), the province-wide km and median grade of CH rearing through wetlands of 1 ha or
       more (the issue measured about 10,200 km, median 0.03), and the run's versions from the ledger (link 0.66.0,
@@ -95,7 +95,7 @@ article in plain words with the 1.96 table and a bibliography, an interactive Bu
       change is `identical()` to the old bundle
 - [ ] `data-raw/vignette_bib.R`: write `vignettes/chinook_rearing.bib` with rbbt from the keys the Rmd cites (group
       library), set software versions from `meta`, refuse an unresolved key; commit the `.bib` (CI has no Zotero)
-- [ ] `tests/testthat/test-vignette-data.R`: the new elements
+- [x] `tests/testthat/test-vignette-data.R`: the new elements
 
 ## Phase 6: the article
 - [ ] Word count before (prose outside chunks and YAML, each inline `r` as one word; same command after)

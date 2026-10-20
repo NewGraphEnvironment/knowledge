@@ -22,14 +22,20 @@
 #     since #65), each rule's verdict from the habitat test alone (before the hand-entered reaches and the
 #     connectivity pass), and whether the segment lies in any waterbody, for the labelled examples. The
 #     floodplain is not in the article (#62's second draft); it is in research/habitat_thresholds_tuned.md.
+#   - #79 ADDS: every species' tune table (the columns knw_tune_repick() reads and those that name a rule), so the
+#     article computes the picks at 1.96 SE inline; each BULK segment's water (stream, river polygon, wetland or lake,
+#     from the FWA waterbody it lies in, with the polygon's area), for the interactive map's popups; the km and median
+#     grade of CH rearing on lines through wetlands (edge types 1050 and 1150, link's wetland rule with no size or
+#     gradient test) over every group; and the run's software versions from the evidence ledger, which
+#     data-raw/vignette_bib.R writes into the article's references.
 #
-# INPUT:  data/tune/CH_rear_{tune,summary,curves,groups}.csv, data/tune/grad_ext/CH_rear_{by_grad,summary,seeds}.csv
+# INPUT:  data/tune/<sp>_<stage>_tune.csv for every fitted species x stage, data/tune/CH_rear_{summary,curves,groups}.csv, data/tune/grad_ext/CH_rear_{by_grad,summary,seeds}.csv
 #         (0322, #67), data/tune/CH_rear_{seeds,honest}.csv or
 #         data/tune/CH_rear_score.rds (ignored), data/thresholds.csv,
 #         data/compare/CH_rear_{compare,change,checks}.csv, data/compare/CH_rear_segments.rds (ignored;
 #         0330), data/tune/CH_rear_curve.rds (ignored; 0320), the tuning log and the evidence build ledger in
 #         scripts/logs/habitat/, fwapg database (PG* env vars): fresh_default.streams,
-#         whse_basemapping.fwa_{lakes,rivers}_poly.
+#         whse_basemapping.fwa_{lakes,rivers,wetlands,manmade_waterbodies}_poly, whse_basemapping.fwa_waterbodies.
 # OUTPUT: inst/vignette-data/chinook_rearing.rds   the tables and `meta`, one named list
 #         inst/vignette-data/bulk_segments.rds     BULK accessible CH segments, sf, EPSG:3005
 #         inst/vignette-data/bulk_water.rds        BULK lakes >= 10 ha and rivers, sf, EPSG:3005
@@ -78,6 +84,19 @@ out <- list(
   change = rd(src[["change"]]),
   checks = rd(src[["checks"]])
 )
+# every fitted species x stage's tune table, for the picks at 1.96 SE (#79)
+f_tune_all <- sort(list.files("data/tune", "_tune\\.csv$", full.names = TRUE))
+cols_tune_all <- c("species_code", "stage", "rule", "size_var", "size_min", "grad_max", "exc_q", "exc_d", "departures",
+                   "is_default", "converged", "dev_heldout", "ddev_best", "se_diff", "in_region", "recommended")
+out$tune_all <- bind_rows(lapply(f_tune_all, function(f) rd(f) |> select(all_of(cols_tune_all))))
+for (k in unique(paste(out$tune_all$species_code, out$tune_all$stage))) {
+  t <- out$tune_all[paste(out$tune_all$species_code, out$tune_all$stage) == k, ]
+  if (sum(t$is_default) != 1 || !identical(knw_tune_repick(t)$rule, t$rule[t$recommended %in% TRUE])) {
+    stop(k, ": no single default, or the one-SE replay is not the recommended rule")
+  }
+}
+f_tune_more <- setdiff(f_tune_all, src[["tune"]])
+src <- c(src, stats::setNames(f_tune_more, paste0("tune_", basename(f_tune_more))))
 if (nrow(out$tune) == 0 || nrow(out$summary) != 1 || nrow(out$thresholds) == 0) stop("CH rearing rows missing")
 if (!"ALL" %in% out$compare$watershed_group_code || !wsg %in% out$compare$watershed_group_code) stop("compare lacks ALL or ", wsg)
 rec <- out$tune$rule[out$tune$recommended %in% TRUE]
@@ -162,6 +181,11 @@ out$meta <- list(
               seeds_more = eval(fm$seeds_more), n_boot = eval(fm$n_boot), d_floor = eval(fm$d_floor),
               min_wsg = eval(fm$min_wsg), power_wsg = eval(fm$power_wsg)),
   stability_from = stab_from,
+  # the software the run used, for the article's references (data-raw/vignette_bib.R)
+  versions = list(link = led$note[led$step == "run_link_version"], link_sha = led$note[led$step == "run_link_sha"],
+                  fresh = led$note[led$step == "run_fresh_version"], fresh_sha = led$note[led$step == "run_fresh_sha"],
+                  fwapg_sha = led$note[led$step == "run_fwapg_sha"],
+                  wet = sub(" at .*$", "", led$note[led$step == "wet_manifest"])),
   map_group = wsg,
   # whole files, except thresholds.csv, which holds every species and is hashed on its CH rearing rows
   md5 = tools::md5sum(unname(src[names(src) != "thresholds"])) |> stats::setNames(unname(src[names(src) != "thresholds"])),
@@ -190,13 +214,20 @@ grid$accessible <- TRUE
 gr <- knw_grade(cr, grid, cols = c(size = "size", grad = "gradient", dist = "dist_m"))
 out$surface <- tibble::as_tibble(grid[c("size", "dist_m", "gradient")]) |> mutate(rate = gr$grades$rate)
 if (anyNA(out$surface$rate)) stop("the surface has missing rates")
+stopifnot(lengths(out$meta$versions) == 1, nzchar(unlist(out$meta$versions)))
 out$meta$curve_ref <- list(gradient = grad_ref, dist_cap_m = cr$dist_cap_m, size = rec_row$size_min,
                            q = cr$q, log_area = cr$ref$log_area, data_set = cr$ref$data_set, era = cr$ref$era)
 
 # ---- BULK on link's segments -----------------------------------------------------------------
 seg_all <- readRDS(sprintf("data/compare/%s_segments.rds", key))
 s <- seg_all |> filter(watershed_group_code == wsg)
-rm(seg_all)
+# lines through wetlands (link's wetland rule on edge types 1050 and 1150 has no size or gradient test), over every group
+wl <- seg_all |> filter(edge_type %in% c(1050, 1150))
+out$wetland <- tibble(edge_types = "1050, 1150", km_default = sum(wl$length_metre[wl$rearing_default %in% TRUE]) / 1000,
+                      km_tuned = sum(wl$length_metre[wl$rearing_tuned %in% TRUE]) / 1000,
+                      km_both = sum(wl$length_metre[wl$rearing_default %in% TRUE & wl$rearing_tuned %in% TRUE]) / 1000,
+                      grade_median_tuned = stats::median(wl$grade[wl$rearing_tuned %in% TRUE], na.rm = TRUE))
+rm(seg_all, wl)
 conn <- tryCatch(DBI::dbConnect(RPostgres::Postgres(), bigint = "numeric"),
                  error = function(e) stop("database unreachable (PG* environment variables): ", conditionMessage(e)))
 geom <- sf::st_zm(sf::st_read(conn, quiet = TRUE, query = sprintf(
@@ -206,7 +237,18 @@ geom$id_segment <- as.numeric(geom$id_segment)
 water <- sf::st_zm(sf::st_read(conn, quiet = TRUE, query = sprintf("
   SELECT waterbody_key, 'lake' AS kind, geom FROM whse_basemapping.fwa_lakes_poly WHERE watershed_group_code = '%1$s' AND area_ha >= 10
   UNION ALL SELECT waterbody_key, 'river', geom FROM whse_basemapping.fwa_rivers_poly WHERE watershed_group_code = '%1$s'", wsg)), drop = TRUE)
+# the waterbody each segment lies in, with its polygon's area, for the map's popups (#79)
+wb <- DBI::dbGetQuery(conn, sprintf("
+  SELECT w.waterbody_key, w.waterbody_type,
+         coalesce(l.area_ha, wl.area_ha, m.area_ha) AS waterbody_ha
+  FROM whse_basemapping.fwa_waterbodies w
+  LEFT JOIN (SELECT waterbody_key, sum(area_ha) area_ha FROM whse_basemapping.fwa_lakes_poly GROUP BY 1) l USING (waterbody_key)
+  LEFT JOIN (SELECT waterbody_key, sum(area_ha) area_ha FROM whse_basemapping.fwa_wetlands_poly GROUP BY 1) wl USING (waterbody_key)
+  LEFT JOIN (SELECT waterbody_key, sum(area_ha) area_ha FROM whse_basemapping.fwa_manmade_waterbodies_poly GROUP BY 1) m USING (waterbody_key)
+  WHERE w.waterbody_key IN (SELECT DISTINCT waterbody_key FROM fresh_default.streams
+                            WHERE watershed_group_code = '%s' AND waterbody_key IS NOT NULL)", wsg))
 DBI::dbDisconnect(conn)
+if (anyDuplicated(wb$waterbody_key)) stop("a waterbody key with two rows in fwa_waterbodies")
 # as 0330 builds `sg`
 sg <- geom |> inner_join(s |> transmute(id_segment, blue_line_key, accessible, stream_order, grade, grade_class,
                                         length_metre, flag_default = rearing_default, flag_tuned = rearing_tuned,
@@ -214,6 +256,13 @@ sg <- geom |> inner_join(s |> transmute(id_segment, blue_line_key, accessible, s
                                         pre_default = rearing_pre_default, pre_tuned = rearing_pre_tuned),
                          by = "id_segment")
 sg$in_waterbody <- !is.na(sg$waterbody_key)
+i_wb <- match(sg$waterbody_key, wb$waterbody_key)
+if (any(sg$in_waterbody & is.na(i_wb))) stop("a segment's waterbody is not in fwa_waterbodies")
+# R, W and L as link's rules name them; X (a reservoir or other man-made waterbody) reads as a lake, as link's lake rule does
+sg$water <- unname(c(R = "river", W = "wetland", L = "lake", X = "lake")[wb$waterbody_type[i_wb]])
+sg$water[!sg$in_waterbody] <- "stream"
+sg$water_ha <- as.numeric(wb$waterbody_ha[i_wb])
+if (anyNA(sg$water)) stop("a waterbody type other than R, W, L or X")
 if (nrow(sg) != nrow(s)) stop(nrow(s) - nrow(sg), " saved segments have no geometry in fresh_default.streams")
 
 src_local <- c(segments = sprintf("data/compare/%s_segments.rds", key), curve = f_curve)
@@ -224,7 +273,7 @@ out$meta$md5_local <- tools::md5sum(unname(src_local)) |> stats::setNames(unname
 seg_out <- sg |>
   filter(accessible %in% TRUE) |>
   select(id_segment, blue_line_key, stream_order, accessible, grade, grade_class, flag_default, flag_tuned, length_metre,
-         edge_type, gradient, channel_width, mad, dist_m, pre_default, pre_tuned, in_waterbody) |>
+         edge_type, gradient, channel_width, mad, dist_m, pre_default, pre_tuned, in_waterbody, water, water_ha) |>
   sf::st_simplify(preserveTopology = TRUE, dTolerance = 10)
 cmp_w <- out$compare |> filter(watershed_group_code == wsg)
 km <- function(f) sum(seg_out$length_metre[seg_out[[f]] %in% TRUE]) / 1000

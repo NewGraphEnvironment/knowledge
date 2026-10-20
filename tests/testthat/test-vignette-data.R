@@ -57,3 +57,33 @@ test_that("the map's segments carry the comparison's km for their group", {
   expect_equal(km("flag_tuned"), row$tuned_km, tolerance = 1e-9)
   expect_equal(sum(seg$length_metre) / 1000, row$accessible_km, tolerance = 1e-9)
 })
+
+test_that("every species' tune table is saved, and replays to its recommended rule at one SE (#79)", {
+  x <- readRDS(vd("chinook_rearing.rds"))
+  ta <- x$tune_all
+  keys <- unique(paste(ta$species_code, ta$stage))
+  expect_length(keys, 8)
+  expect_true("CH rear" %in% keys)
+  for (k in keys) {
+    t <- ta[paste(ta$species_code, ta$stage) == k, ]
+    expect_equal(sum(t$is_default), 1, info = k)
+    expect_identical(knw_tune_repick(t)$rule, t$rule[t$recommended %in% TRUE], info = k)
+  }
+  # the CH rows are the CH table the rest of the article reads
+  ch <- ta[ta$species_code == "CH" & ta$stage == "rear", ]
+  expect_identical(ch$rule, x$tune$rule)
+  expect_equal(ch$ddev_best, x$tune$ddev_best)
+})
+
+test_that("the wetland figure, the run's versions and each map segment's water are saved (#79)", {
+  x <- readRDS(vd("chinook_rearing.rds"))
+  w <- x$wetland
+  expect_equal(nrow(w), 1)
+  expect_true(all(is.finite(c(w$km_default, w$km_tuned, w$km_both, w$grade_median_tuned))))
+  expect_lte(w$km_both, min(w$km_default, w$km_tuned))
+  expect_true(all(nzchar(unlist(x$meta$versions))))
+  expect_setequal(names(x$meta$versions), c("link", "link_sha", "fresh", "fresh_sha", "fwapg_sha", "wet"))
+  seg <- readRDS(vd("bulk_segments.rds"))
+  expect_true(all(seg$water %in% c("stream", "river", "wetland", "lake")))
+  expect_identical(seg$water == "stream", !seg$in_waterbody)
+})
