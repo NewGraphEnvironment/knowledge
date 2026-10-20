@@ -8,8 +8,9 @@
   branch, the edge types the curve was fitted on: river-polygon and lake segments, about 0 m from their river,
   would otherwise set it (chinook's 0.52 over every accessible segment against 0.14). `knw_grade()` gains
   `ref_rows` and `knw_grade_species()` gains `ref_edge` for this, in place of its unused `edge_stream`.
-  `habitat_grade/v1`, never uploaded, is regraded before its first publication; the thresholds and every rule's
-  km do not move.
+  `habitat_grade/v1`, never uploaded, is regraded before its first publication. The thresholds, `default`'s km and
+  the width rules' km do not move; the flow-ruled tuned rules move by under 0.3 % because wet republished the
+  segment flows the same day (NewGraphEnvironment/wet#103), and retuning on those flows is #73.
 
 # knowledge 0.4.5
 

@@ -131,8 +131,8 @@ Revised 2026-10-19 (#65). #57's grades read every segment the exception could no
 cap, and six of the eight keys walked no segment at all; every segment now reads its own distance, and the
 reference is the stream branch's 95th percentile. The regrade also reads the flows wet republished on
 2026-10-19 (NewGraphEnvironment/wet#103, about ±5 % on most segments; BT gains 4 segments with no flow), after
-the thresholds were tuned on the load before it (#73 retunes). The references move by under 1 % (CO, GR) to
-25 % (BT rearing, up); CH's grade-weighted km nearly doubles (36,149 → 63,059) and its km at 0.8–1 triples.
+the thresholds were tuned on the load before it (#73 retunes). The references move by under 1 % (CO) and 2 % (GR)
+to 25 % (BT rearing, up); CH's grade-weighted km nearly doubles (36,149 → 63,059) and its km at 0.8–1 triples.
 
 ## What each rule changes on link's segments
 
@@ -218,7 +218,8 @@ connectivity cascade from one. Width rules did not move.)
   segments but their rates are not to be read.
 - **The grade on river polygons and wetlands is an extrapolation.** The curve was fitted on stream-branch visits
   outside lakes, wetlands and river polygons; a river-polygon segment reads it at 0 m from the river it is part of
-  and at flows few visits had, so its grade rests on the surface past its data, and about half of their km reads 0.8 or more (CH).
+  and at flows few visits had, so its grade rests on the surface past its data: for CH, 77 % of river-polygon km
+  grades 0.8 or more and 69 % reads 1.
   The reference is taken over the stream branch so that they do not set it: over every accessible segment, CH's
   rose from 0.14 to 0.52 and left 0.4 % of stream km at 0.8 or more (#65).
 - **Width rules leave first-order streams ungraded**; a consumer summing graded km over a width-ruled species

@@ -49,15 +49,16 @@ commit <- git("rev-parse", "--short=7", "HEAD")
 prov <- list(published_from_commit = commit, repository = "https://github.com/NewGraphEnvironment/knowledge",
              evidence_version = evidence_version, link_run_uid = run_uid, link_sha = link_sha, config = "default",
              tune_logs = sort(list.files("scripts/logs/habitat", "_tune_run.*\\.txt$")))
-# the segment flows the grade read: the database's discharge load, which wet republished on 2026-10-19 (wet#103),
-# after #57 tuned the thresholds on the load before it (#65). Its comment names the build; the grade carries it.
+# the database's discharge load when this publishes, which wet republished on 2026-10-19 (wet#103), after #57 tuned
+# the thresholds on the load before it (#65). The grade tables do not record the load they read, so this is the
+# load at publish time, named so; it equals the graded load only if wet has not reloaded since 0320 ran (#72).
 pgc <- DBI::dbConnect(RPostgres::Postgres())
 discharge_load <- DBI::dbGetQuery(pgc, "SELECT obj_description('discharge.fwa_v1_segment_monthly'::regclass) AS d")$d
 DBI::dbDisconnect(pgc)
 if (length(discharge_load) != 1 || is.na(discharge_load) || !nzchar(discharge_load)) {
   stop("discharge.fwa_v1_segment_monthly carries no load comment; cannot say which flows the grade read")
 }
-prov_grade <- c(prov, list(discharge_load = discharge_load))
+prov_grade <- c(prov, list(discharge_load_at_publish = discharge_load))
 
 # ---- thresholds -------------------------------------------------------------------------
 tt <- knw_thresholds_table(tune_dir, evidence_version, run_uid, link_sha)

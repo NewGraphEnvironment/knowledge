@@ -94,7 +94,8 @@ in held-out deviance 9.1e-13).
 
 - **On link's segments a steeper limit adds little; the 1 m³/s river adds most.** `scripts/0322 STAGE=compare`
   regenerated each candidate through link's three stages on all 125 CH groups (regenerated `default` equals 0330's
-  to 3.2e-10 km) and set it beside `CH_rear_v1`'s 88,607 km (`data/compare/grad_ext/CH_rear_beside_v1.csv`, logs
+  to 3.2e-10 km) and set it beside `CH_rear_v1`'s 88,607 km on the flows before wet's 2026-10-19 republish
+  (88,641 after it, #65; `data/compare/grad_ext/CH_rear_beside_v1.csv`, logs
   `scripts/logs/habitat/20261018_tune_grad_extend-compare.txt` for the run, `20261019_…-compare.txt` for the
   checks). No candidate removes more than 0.2 km. FDIS visits are those of 10–10,000 m² on the added segments:
 

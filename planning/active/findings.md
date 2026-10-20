@@ -104,7 +104,7 @@ By branch (accessible, graded): stream (1000/1100/2000/2300) 478,597 segments, 1
 6.8 km, 95th-percentile rate 0.139; river and lake edges 275,772 segments, 60,627 km, median distance 0.7 mm
 (34 % exactly 0), 95th percentile 0.880; other edges 98,062 segments, 16,165 km, 0.258.
 
-| reference | value | grade-weighted km, all | stream | stream km < 0.2 | stream km ≥ 0.8 | river/lake km ≥ 0.8 |
+| reference | value | grade-weighted km, all | stream | stream km < 0.2 | stream km ≥ 0.8 | off-branch km ≥ 0.8 |
 |---|---|---|---|---|---|---|
 | #57's (capped walks) | 0.146 | 61,889 | 20,348 | 81.3 % | 6.2 % | 48.0 % |
 | every accessible segment | 0.516 | 32,965 | 6,756 | 92.1 % | 0.4 % | 20.4 % |
@@ -197,6 +197,15 @@ Every figure the research quotes, before and after: `compare_before_after.txt` (
 examples table's caption and distance column (the kept-by-both example reads 0 m: its 3.6 m³/s stream is itself a
 river of the size) and in figures the flow republish moved (CH tuned 88,607 → 88,641, the exception 9,666 →
 9,665). `devtools::test()`: 173 tests, 569 expectations, 0 failed.
+
+## Branch review round 1 (2026-10-20)
+
+`review-branch-round1.md`. Three false statements, all fixed: NEWS said every rule's km was unchanged (the flow
+republish moved the flow rules by under 0.3 %); the research Limits said "about half" of off-branch km grades
+0.8+, from the table above, whose last column was labelled river/lake but measured every off-branch edge type
+(re-measured: CH river-polygon edges 1250/1350/1450, 42,181 km, 76.7 % at 0.8+, 69.3 % at 1; all off-branch
+76,792 km, 49.0 %); "under 1 % (CO, GR)" (GR moved 0.0344 → 0.0338, −1.7 %). And 0325 read the discharge load at
+publish time while calling it the load the grade read: renamed `discharge_load_at_publish`, #72 extended.
 
 ## Errors Encountered
 

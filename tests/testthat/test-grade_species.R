@@ -17,7 +17,7 @@ grade_fixture <- function() {
   pick <- data.frame(rule = "r1", size_var = "mad", size_min = 0.75, grad_max = 0.07, exc_q = 3, exc_d = 1000)
   cv <- knw_tune_curve(d, pick, knw_walk_index(w), knowledge:::.tune_fold_of_wsg(d, "U", 1, 5))
   # segments: a = accessible, size-passing stream near a river; b = accessible, failing size;
-  # c = accessible, steep; d = river polygon; e = wetland line; f = inaccessible; g = no size;
+  # c = accessible, steep; d = river polygon; e = canal (2000); f = inaccessible; g = no size;
   # h = no gradient; i = zero size; j = accessible, walk finds no river (the sea first)
   seg <- data.frame(id_segment = 1:10, watershed_group_code = "W01", linear_feature_id = 1:10,
                     blue_line_key = 100 + 1:10, downstream_route_measure = 0, upstream_route_measure = 100,
@@ -107,7 +107,7 @@ test_that("the reference reads 1 at the stream branch's top, and off-branch segm
   gr <- r$grades
   stream <- gr$accessible & !is.na(gr$rate) & gr$edge_type %in% c(1000L, 1100L, 2000L, 2300L)
   expect_equal(r$reference, unname(stats::quantile(gr$rate[stream], 0.95)))
-  # the river polygon (d) and the wetland line (e) are graded against it, not left out
+  # the river polygon (d), outside the reference population, is graded against it, not left out
   expect_false(anyNA(gr$grade[gr$id_segment %in% c(4, 5)]))
   # knw_grade() alone: ref_rows narrows the reference, NULL keeps every accessible segment
   seg <- data.frame(accessible = TRUE, size = c(0.5, 2, 30), gradient = 0.02, dist_m = c(5000, 100, 0))
