@@ -62,7 +62,7 @@ The README was last rewritten before #57. It is close to correct on the report c
 - [x] `/code-check branch`, three-round floor, ending on the enumeration
 
 ## Phase 8: soul convention
-- [ ] soul branch + PR amending `conventions/readme.md` with what this README teaches (a data repo that both installs and publishes; a figure taken as one panel of an article's composite; knowledge's Ecosystem membership as an open question), `Relates to NewGraphEnvironment/soul#416`
+- [x] soul branch + PR amending `conventions/readme.md` with what this README teaches (a data repo that both installs and publishes; a figure taken as one panel of an article's composite; knowledge's Ecosystem membership as an open question), `Relates to NewGraphEnvironment/soul#416` (soul PR #479)
 
 ## Owed at the end (reported, done after merge)
 
@@ -74,10 +74,10 @@ The README was last rewritten before #57. It is close to correct on the report c
 
 ## Validation
 
-- [ ] Tests pass
-- [ ] `/code-check` clean (once over the branch with `/code-check branch`)
-- [ ] PWF checkboxes match landed work
-- [ ] `/planning-archive` on completion
+- [x] Tests pass
+- [x] `/code-check` clean (once over the branch with `/code-check branch`)
+- [x] PWF checkboxes match landed work
+- [x] `/planning-archive` on completion
 
 Verification: the README example rerun from a clean session prints the pasted output byte for byte; the
 figure regenerates identically from `data-raw/readme_figure.R`; `R CMD build` tarball contains
