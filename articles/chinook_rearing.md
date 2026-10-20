@@ -349,6 +349,6 @@ share of that stream length, against 2.5 for `default`.
   segment.
 - `knowledge`: the fish records, the tests and this article. Cite it as:
 
-Irvine A (2026). *knowledge: Watershed-Group Fisheries Background*. R
-package version 0.4.6,
-<https://newgraphenvironment.github.io/knowledge/>.
+Irvine A (2026). *knowledge: Fisheries Evidence and Tuned Habitat
+Thresholds for BC Watershed Groups*. New Graph Environment Ltd. Version
+0.4.6, <https://newgraphenvironment.github.io/knowledge/>.

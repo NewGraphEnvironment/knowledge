@@ -46,8 +46,9 @@ knw_compare_map(
 
 - title:
 
-  `character(1)` the figure's caption line (the map carries no title;
-  this goes under it).
+  `character(1)` names the figure in the message when nothing is drawn,
+  and is the interactive page's title and legend title; the static
+  figure draws no title (that belongs in the caption).
 
 - png:
 

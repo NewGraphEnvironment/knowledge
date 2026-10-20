@@ -3,7 +3,8 @@
 ## Habitat evidence
 
 Read and validate the cited literature evidence and the
-intrinsic-potential model registry.
+intrinsic-potential model registry, and list their controlled
+vocabularies.
 
 - [`knw_literature_read()`](https://newgraphenvironment.github.io/knowledge/reference/knw_literature_read.md)
   : Read the literature evidence table, filtered by species and variable
@@ -43,8 +44,9 @@ intrinsic-potential model registry.
 ## Evidence on link’s segments
 
 Place site visits on link’s segments with every species’ access and
-habitat flags; read flow, width, regulated reaches, natural barriers
-downstream and the walks to rivers.
+habitat flags; read a species’ segments, flow, width, regulated reaches,
+natural barriers downstream and the walks to rivers; and count where
+link’s two access columns disagree.
 
 - [`knw_link_place()`](https://newgraphenvironment.github.io/knowledge/reference/knw_link_place.md)
   : Place site visits on link's segments, with access and habitat for
@@ -69,8 +71,10 @@ downstream and the walks to rivers.
 
 ## Tuning
 
-Score candidate rules on held-out watershed groups, fit the joint use
-curve at the pick, and grade every segment by expected use.
+Build candidate rules around link’s thresholds and score them on
+held-out watershed groups, fit the joint use curve at the pick, and
+grade every segment by expected use. The building, scoring and fitting
+run in one call for every species and stage the evidence can speak to.
 
 - [`knw_tune_grid()`](https://newgraphenvironment.github.io/knowledge/reference/knw_tune_grid.md)
   : The candidate rules for one species and stage, around link's own
@@ -132,4 +136,5 @@ and past-report tables; check stream names before searching by name.
 
 - [`knowledge`](https://newgraphenvironment.github.io/knowledge/reference/knowledge-package.md)
   [`knowledge-package`](https://newgraphenvironment.github.io/knowledge/reference/knowledge-package.md)
-  : knowledge: Watershed-Group Fisheries Background
+  : knowledge: Fisheries Evidence and Tuned Habitat Thresholds for BC
+  Watershed Groups

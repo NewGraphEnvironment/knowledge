@@ -5,14 +5,15 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Watershed-Group Fisheries Background • knowledge</title>
+<title>Fisheries Evidence and Tuned Habitat Thresholds for BC Watershed Groups • knowledge</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
 <script src="deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Watershed-Group Fisheries Background">
-<meta name="description" content="Functions for assembling fisheries background per watershed group: pulling provincial PSCIS crossing layers clipped to a group, deriving the past-report and crossing tables from them, and checking GNIS stream names for cross-group collisions before searching by name, reading the life-history timing table by group and species, and reading the cited literature evidence for habitat variables by species, and reading the registry of intrinsic-potential habitat models that evidence links to.">
-<meta property="og:description" content="Functions for assembling fisheries background per watershed group: pulling provincial PSCIS crossing layers clipped to a group, deriving the past-report and crossing tables from them, and checking GNIS stream names for cross-group collisions before searching by name, reading the life-history timing table by group and species, and reading the cited literature evidence for habitat variables by species, and reading the registry of intrinsic-potential habitat models that evidence links to.">
+<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Fisheries Evidence and Tuned Habitat Thresholds for BC Watershed Groups">
+<meta name="description" content="Gathers fisheries evidence for British Columbia watershed groups (provincial fish sampling records, past reports, cited literature values with their quotes, intrinsic-potential models and life-history timing) and tunes from the fish records the gradient and stream-size thresholds that the link habitat models use: it places sampling visits on links stream segments, scores candidate rules on held-out watershed groups, grades segments by expected use, and tabulates, maps and compares the tuned rules with links defaults. It also pulls PSCIS crossing layers and past-report tables for a group and checks stream names before a search. Under active development.">
+<meta property="og:description" content="Gathers fisheries evidence for British Columbia watershed groups (provincial fish sampling records, past reports, cited literature values with their quotes, intrinsic-potential models and life-history timing) and tunes from the fish records the gradient and stream-size thresholds that the link habitat models use: it places sampling visits on links stream segments, scores candidate rules on held-out watershed groups, grades segments by expected use, and tabulates, maps and compares the tuned rules with links defaults. It also pulls PSCIS crossing layers and past-report tables for a group and checks stream names before a search. Under active development.">
+<meta property="og:image" content="https://newgraphenvironment.github.io/knowledge/logo.png">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -53,63 +54,55 @@
 </nav><div class="container template-home">
 <div class="row">
   <main id="main" class="col-md-9"><div class="section level1">
-<div class="page-header"><h1 id="knowledge">knowledge<a class="anchor" aria-label="anchor" href="#knowledge"></a>
-</h1></div>
-<p>Fisheries background for British Columbia, assembled per <strong>watershed group</strong>: what past reports, provincial fish records and the literature say about where fish live, and the habitat thresholds that evidence supports. Three things live here together:</p>
-<ul>
-<li>an R package, <code>knowledge</code>, with the readers and builders that have proved themselves on more than one region;</li>
-<li>the scripts that build the evidence tables, in run order (<code>scripts/README.md</code>);</li>
-<li>the evidence itself (<code>data/</code>) and what is known from it (<code>research/</code>).</li>
-</ul>
-<p>The evidence for the habitat thresholds the <a href="https://github.com/NewGraphEnvironment/link" class="external-link">link</a> habitat model uses is gathered here, and candidate thresholds are tested against fish records.</p>
+<div class="page-header">
+<img src="logo.png" class="logo" alt=""><h1 id="knowledge-">knowledge <a class="anchor" aria-label="anchor" href="#knowledge-"></a>
+</h1>
+</div>
+<!-- badges: start -->
+
+<blockquote>
+<p>Fisheries evidence and tuned habitat thresholds for BC watershed groups</p>
+</blockquote>
+<p>knowledge gathers what is known about where fish live in British Columbia’s streams, a watershed group at a time: the Province’s fish sampling records, past reports and the published literature. From the fish records it tunes, where they allow, the thresholds that <a href="https://www.newgraphenvironment.com/link/" class="external-link">link</a>’s habitat models use to decide where a species can spawn and rear, such as the smallest stream and the steepest gradient for juvenile chinook rearing, and compares the tuned rules with the ones link uses today. Those models show restoration and fish passage planning where habitat lies on a stream network.</p>
+<p><img src="reference/figures/readme-bulk.png" alt="Map of the streams chinook can reach in the Bulkley River watershed group, coloured by whether each is chinook rearing habitat under both rules, only under link's default rule, only under the tuned rule, or under neither" width="70%"></p>
+<p><em>Chinook rearing habitat in the Bulkley River watershed group, around Smithers and Houston, under link’s <code>default</code> rule and the rule tuned here. Blue streams are habitat under both, orange only under <code>default</code>, green only under the tuned rule; grey streams are open to chinook but habitat under neither. Here the tuned rule drops more than it adds.</em></p>
 <div class="section level2">
-<h2 id="install">Install<a class="anchor" aria-label="anchor" href="#install"></a>
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"NewGraphEnvironment/knowledge"</span><span class="op">)</span></span></code></pre></div>
-<p>The package reads the evidence tables by path, so most work happens in a clone, with the package loaded from the source tree:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">pkgload</span><span class="fu">::</span><span class="fu"><a href="https://pkgload.r-lib.org/reference/load_all.html" class="external-link">load_all</a></span><span class="op">(</span><span class="op">)</span>   <span class="co"># from the repo root</span></span>
-<span><span class="va">ev</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/knw_literature_read.html">knw_literature_read</a></span><span class="op">(</span><span class="st">"data/literature_evidence.csv"</span>,</span>
-<span>                          species_code <span class="op">=</span> <span class="st">"BT"</span>, variable <span class="op">=</span> <span class="st">"temperature"</span><span class="op">)</span></span></code></pre></div>
+<p>knowledge is under active development and its functions change between releases (see <a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/NEWS.md" class="external-link">NEWS</a>). Pin a release for reproducible work: <code>pak::pak("NewGraphEnvironment/knowledge@vX.Y.Z")</code>.</p>
+<p>The evidence tables live in the repository, not the package, so most work happens in a clone with the package loaded from the source tree (<code><a href="https://pkgload.r-lib.org/reference/load_all.html" class="external-link">pkgload::load_all()</a></code>). The scripts that build them run in the order of <a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/scripts/README.md" class="external-link"><code>scripts/README.md</code></a>. Many read a PostgreSQL database holding the BC Freshwater Atlas through fwapg, found by the standard <code>PG*</code> environment variables, and the tuning also reads link’s province-wide run and wet’s flows there. Others need other databases, tools and credentials, among them a bcfishpass database, a synced Zotero library and Web API key, Ollama, AWS credentials and Python.</p>
+<p>The FDIS electrofishing extract is public as the Province supplied it, under <code>s3://fresh-bc/fdis/</code>, and so are the visit tables built from it, as Parquet under <code>s3://fresh-bc/knowledge/fdis/</code>. The bucket does not list: start from the extract’s <a href="https://fresh-bc.s3.us-west-2.amazonaws.com/fdis/README.md" class="external-link">provenance note</a>, which links the published tables’ manifest.</p>
 </div>
 <div class="section level2">
-<h2 id="what-is-known">What is known<a class="anchor" aria-label="anchor" href="#what-is-known"></a>
+<h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
 </h2>
-<p><a href="https://github.com/NewGraphEnvironment/knowledge/tree/main/research" class="external-link"><code>research/</code></a> holds one file per topic, revised in place as the evidence moves:</p>
+<p>The tuned thresholds are one table. Each rule’s parts are rows, with the link parameter each fills where link has one:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">th</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="st">"data/thresholds.csv"</span><span class="op">)</span></span>
+<span><span class="va">ch</span> <span class="op">&lt;-</span> <span class="va">th</span><span class="op">[</span><span class="va">th</span><span class="op">$</span><span class="va">rule_id</span> <span class="op">==</span> <span class="st">"CH_rear_v1"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"component"</span>, <span class="st">"link_parameter"</span>, <span class="st">"value"</span>, <span class="st">"unit"</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">ch</span>, row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="co">#&gt;    component    link_parameter   value     unit</span></span>
+<span><span class="co">#&gt;         size      rear_mad_min    0.75     m3/s</span></span>
+<span><span class="co">#&gt;     gradient rear_gradient_max    0.09 fraction</span></span>
+<span><span class="co">#&gt;  exception_q                      3.00     m3/s</span></span>
+<span><span class="co">#&gt;  exception_d                   1000.00        m</span></span></code></pre></div>
+<p>On a stream line, the tuned rule passes a segment for chinook rearing where its gradient is at most 9 % and either its mean annual flow is at least 0.75 m³/s or a river of at least 3 m³/s lies within 1 km downstream. Access and link’s other steps then apply as they do to <code>default</code>.</p>
+</div>
+<div class="section level2">
+<h2 id="learn-more">Learn more<a class="anchor" aria-label="anchor" href="#learn-more"></a>
+</h2>
 <ul>
 <li>
-<a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/research/fdis_export.md" class="external-link">FDIS electrofishing export</a>: the provincial Fisheries Data Information System extract, its join structure, defects, and what it adds over the public layers</li>
+<a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/vignettes/chinook_rearing.Rmd" class="external-link">How the chinook rearing threshold was chosen and what it draws</a>: the tuning told in plain language, with the map above and what changes on the ground.</li>
 <li>
-<a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/research/habitat_literature.md" class="external-link">Habitat literature</a>: where each modelled Chinook and bull trout threshold comes from, and how cited quotes are verified</li>
-<li>
-<a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/research/ip_models.md" class="external-link">Intrinsic-potential models</a>: what each Pacific Northwest model thresholds on and how it sized streams</li>
-<li>
-<a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/research/habitat_weights.md" class="external-link">Bull trout rearing use</a> and <a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/research/bt_spawning.md" class="external-link">bull trout spawning</a> by gradient and channel size</li>
-<li>
-<a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/research/chinook_stream_size.md" class="external-link">Chinook by stream size</a> and <a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/research/chinook_rearing_tuned.md" class="external-link">a tuned Chinook rearing rule</a>
-</li>
-<li>
-<a href="https://newgraphenvironment.github.io/knowledge/articles/chinook_rearing.html">How the Chinook rearing threshold was chosen and what it draws</a>: the same result in plain language, as a package article</li>
-<li>
-<a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/research/thermal_requirements.md" class="external-link">Thermal requirements</a>, <a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/research/stream_temperature.md" class="external-link">stream temperature models</a>, <a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/research/flow_requirements.md" class="external-link">flow requirements</a> and <a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/research/modelled_discharge.md" class="external-link">modelled discharge</a>
-</li>
+<a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/research/README.md" class="external-link">What is known</a>: one file per topic, from the FDIS export and the cited literature to the tuned rules.</li>
+<li><a href="https://github.com/NewGraphEnvironment/knowledge/tree/main/man" class="external-link">Function reference</a></li>
 </ul>
-<p>The <a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/research/README.md" class="external-link">research index</a> lists them all.</p>
 </div>
 <div class="section level2">
-<h2 id="layout">Layout<a class="anchor" aria-label="anchor" href="#layout"></a>
-</h2>
-<pre><code>R/, man/, tests/  the R package `knowledge`
-scripts/          run-order scripts; scripts/README.md is the run order
-data/&lt;wsg&gt;/       per-group snapshots: crossings, reports, GNIS seeds, FISS sites, priorities
-data/             cross-group tables: literature evidence, IP model registry, life-history timing,
-                  FDIS and FISS evidence, tuned-rule results, the farmed priority tables
-research/         what is known, one topic per file
-planning/         work in flight and archived issues</code></pre>
-</div>
-<div class="section level2">
-<h2 id="three-tracks">Three tracks<a class="anchor" aria-label="anchor" href="#three-tracks"></a>
+<h2 id="ecosystem">Ecosystem<a class="anchor" aria-label="anchor" href="#ecosystem"></a>
 </h2>
 <table class="table">
 <colgroup>
@@ -117,67 +110,68 @@ planning/         work in flight and archived issues</code></pre>
 <col width="50%">
 </colgroup>
 <thead><tr>
-<th>Track</th>
-<th>Scripts</th>
+<th>Package</th>
+<th>Role</th>
 </tr></thead>
 <tbody>
 <tr>
-<td>Report corpus: EcoCat discovery, PDF harvest, Zotero filing, a searchable store, content tags</td>
-<td>
-<code>wf_*harvest.js</code>, <code>0150</code>, <code>0152</code>–<code>0154</code>, <code>0156</code>
-</td>
+<td><strong>knowledge</strong></td>
+<td>Fisheries evidence and tuned habitat thresholds for BC watershed groups (this package)</td>
 </tr>
 <tr>
-<td>Fish records: FISS data submissions (<code>.xls</code>, no-fish-captured sites) and the FDIS electrofishing export, each as evidence by species and size class</td>
-<td>
-<code>0200</code>–<code>0250</code>
-</td>
+<td><a href="https://www.newgraphenvironment.com/fresh/" class="external-link">fresh</a></td>
+<td>Stream network modelling engine: segment, classify, cluster, aggregate</td>
 </tr>
 <tr>
-<td>Habitat thresholds: cited literature, intrinsic-potential models, use curves and tuned rules from fish records on modelled stream segments</td>
-<td>
-<code>0260</code>–<code>0298</code>
-</td>
+<td><a href="https://www.newgraphenvironment.com/link/" class="external-link">link</a></td>
+<td>Intrinsic habitat models: develop, test and communicate</td>
+</tr>
+<tr>
+<td><a href="https://www.newgraphenvironment.com/wet/" class="external-link">wet</a></td>
+<td>Stream flow and water temperature for BC’s Freshwater Atlas</td>
+</tr>
+<tr>
+<td><a href="https://www.newgraphenvironment.com/flooded/" class="external-link">flooded</a></td>
+<td>Delineate floodplain extents from DEMs and stream networks</td>
+</tr>
+<tr>
+<td><a href="https://www.newgraphenvironment.com/drift/" class="external-link">drift</a></td>
+<td>Track land cover change within floodplains over time</td>
+</tr>
+<tr>
+<td><a href="https://www.newgraphenvironment.com/floodplains/" class="external-link">floodplains</a></td>
+<td>Floodplain and land cover change modelling for BC watershed groups</td>
+</tr>
+<tr>
+<td><a href="https://www.newgraphenvironment.com/stac_floodplains_bc/" class="external-link">stac_floodplains_bc</a></td>
+<td>STAC catalogue of floodplain land cover change in BC, 2017-2023, by watershed group</td>
+</tr>
+<tr>
+<td><a href="https://www.newgraphenvironment.com/cd/" class="external-link">cd</a></td>
+<td>Climate departure analysis from ERA5-Land reanalysis</td>
+</tr>
+<tr>
+<td><a href="https://www.newgraphenvironment.com/fly/" class="external-link">fly</a></td>
+<td>Estimate airphoto footprints and select photos that cover a study area</td>
 </tr>
 </tbody>
 </table>
-<p>Priority tables farmed out of past reports and reconciled to PSCIS crossings (<code>0100</code>–<code>0162</code>) feed field planning at group scale.</p>
 </div>
 <div class="section level2">
-<h2 id="data">Data<a class="anchor" aria-label="anchor" href="#data"></a>
+<h2 id="data-and-methods-it-builds-on">Data and methods it builds on<a class="anchor" aria-label="anchor" href="#data-and-methods-it-builds-on"></a>
 </h2>
-<ul>
-<li>
-<strong>Tracked:</strong> text snapshots (csv, md) and small spatial deliverables (gpkg, kml).</li>
-<li>
-<strong>Regenerable, not tracked:</strong> raw FISS <code>.xls</code> (<code>data/&lt;wsg&gt;/fiss_xls/</code>, from <code>fiss_xls_manifest.csv</code>).</li>
-<li>
-<strong>On S3</strong> (<code>fresh-bc</code>, <code>us-west-2</code>), read by manifest because the bucket does not list:
-<ul>
-<li>
-<code>fdis/</code>: the FDIS electrofishing extract as received from the Province of BC, with its provenance note and checksums;</li>
-<li>
-<code>knowledge/fdis/v2/</code>: the visit-level tables built from it, as Parquet with a <code>manifest.json</code>;</li>
-<li>
-<code>rag/</code> (not public): the searchable report-text stores.</li>
-</ul>
-</li>
-<li>
-<strong>Databases:</strong> scripts that query PostgreSQL connect through the standard <code>PGHOST</code>, <code>PGPORT</code>, <code>PGDATABASE</code>, <code>PGUSER</code> and <code>PGPASSWORD</code> environment variables; each script’s header names the schemas it needs (an <a href="https://github.com/NewGraphEnvironment/fwapg" class="external-link">fwapg</a> load, and for some a <a href="https://github.com/NewGraphEnvironment/bcfishpass" class="external-link">bcfishpass</a> database).</li>
-<li>
-<strong>Zotero:</strong> store builds read a local, synced Zotero data directory; filing to the group library reads a Web API key from <code>ZOTERO_API_KEY</code>.</li>
-</ul>
+<p>Fish records come from the Province of British Columbia: the Fisheries Data Information System (FDIS) electrofishing extract it supplied, <a href="https://catalogue.data.gov.bc.ca/dataset/known-bc-fish-observations-and-bc-fish-distributions" class="external-link">Known BC Fish Observations</a>, and the fish data submissions filed in <a href="https://a100.gov.bc.ca/pub/acat/" class="external-link">EcoCat</a>, which also holds the past reports. Stream crossings come from <a href="https://catalogue.data.gov.bc.ca/dataset/pscis-assessments" class="external-link">PSCIS</a>. The FDIS visits are placed on the stream segments of link’s province-wide run, built on the <a href="https://www2.gov.bc.ca/gov/content/data/geographic-data-services/topographic-data/freshwater" class="external-link">BC Freshwater Atlas</a> through <a href="https://smnorris.github.io/fwapg/" class="external-link">fwapg</a>, with flows from <a href="https://www.newgraphenvironment.com/wet/" class="external-link">wet</a> and dams from the <a href="https://aquaticbarriers.ca/" class="external-link">Canadian Aquatic Barriers Database</a>, and each visit is matched to the records it produced in <a href="https://github.com/smnorris/bcfishobs" class="external-link">bcfishobs</a>. The floodplain panels of the comparison maps in <code>research/fig/</code>, and the floodplain areas in <code>data/compare/floodplain.csv</code>, come from <a href="https://www.newgraphenvironment.com/stac_floodplains_bc/" class="external-link">stac_floodplains_bc</a>. Some crossing and report scripts also read a <a href="https://smnorris.github.io/bcfishpass/" class="external-link">bcfishpass</a> database. Each value taken from the literature carries a verbatim quote, checked against its source.</p>
 </div>
 <div class="section level2">
-<h2 id="conventions">Conventions<a class="anchor" aria-label="anchor" href="#conventions"></a>
+<h2 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
 </h2>
-<p>The watershed group is an argument, never a project or a client: no client or project identifiers go in code, fixtures, commit messages or issue titles. Code graduates from <code>scripts/</code> into the package only once it has run on two regions.</p>
-<p>The repository began in September 2026 with history seeded from an earlier fish-passage reporting template, so issue and PR numbers in that seeded history refer to the template, not to this repository.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/citation.html" class="external-link">citation</a></span><span class="op">(</span><span class="st">"knowledge"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="license">License<a class="anchor" aria-label="anchor" href="#license"></a>
 </h2>
-<p>MIT for the code. Data sources carry their own terms; the FDIS extract is published with the Province’s agreement (see its provenance note).</p>
+<p>MIT for the code (see <a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/LICENSE" class="external-link"><code>LICENSE</code></a>). Data from other sources carries its own terms: see <a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/inst/NOTICE.md" class="external-link"><code>NOTICE.md</code></a>.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
@@ -208,19 +202,25 @@ planning/         work in flight and archived issues</code></pre>
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Allan Irvine <br><small class="roles"> Author, maintainer </small>   </li>
+<li>Allan Irvine <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-3495-2128" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a>  </li>
+<li>New Graph Environment Ltd. <br><small class="roles"> Copyright holder, funder </small>   </li>
 <li><a href="authors.html">More about authors...</a></li>
 </ul>
 </div>
 
-
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
+</ul>
+</div>
 
   </aside>
 </div>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Allan Irvine.</p>
+  <p>Developed by Allan Irvine, New Graph Environment Ltd..</p>
 </div>
 
 <div class="pkgdown-footer-right">

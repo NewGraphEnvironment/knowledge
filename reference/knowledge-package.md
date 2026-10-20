@@ -1,12 +1,15 @@
-# knowledge: Watershed-Group Fisheries Background
+# knowledge: Fisheries Evidence and Tuned Habitat Thresholds for BC Watershed Groups
 
-Functions for assembling fisheries background per watershed group:
-pulling provincial PSCIS crossing layers clipped to a group, deriving
-the past-report and crossing tables from them, and checking GNIS stream
-names for cross-group collisions before searching by name, reading the
-life-history timing table by group and species, and reading the cited
-literature evidence for habitat variables by species, and reading the
-registry of intrinsic-potential habitat models that evidence links to.
+Gathers fisheries evidence for British Columbia watershed groups
+(provincial fish sampling records, past reports, cited literature values
+with their quotes, intrinsic-potential models and life-history timing)
+and tunes from the fish records the gradient and stream-size thresholds
+that the link habitat models use: it places sampling visits on link's
+stream segments, scores candidate rules on held-out watershed groups,
+grades segments by expected use, and tabulates, maps and compares the
+tuned rules with link's defaults. It also pulls PSCIS crossing layers
+and past-report tables for a group and checks stream names before a
+search. Under active development.
 
 ## See also
 
@@ -22,7 +25,9 @@ Useful links:
 ## Author
 
 **Maintainer**: Allan Irvine <al@newgraphenvironment.com>
+([ORCID](https://orcid.org/0000-0002-3495-2128)) (New Graph Environment
+Ltd.)
 
 Other contributors:
 
-- New Graph Environment Ltd. \[copyright holder\]
+- New Graph Environment Ltd. \[copyright holder, funder\]

@@ -3,22 +3,26 @@
 ## Authors
 
 - **Allan Irvine**. Author, maintainer.
+  [](https://orcid.org/0000-0002-3495-2128)  
+  New Graph Environment Ltd.
 
-- **New Graph Environment Ltd.**. Copyright holder.
+- **New Graph Environment Ltd.**. Copyright holder, funder.
 
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/NewGraphEnvironment/knowledge/blob/main/DESCRIPTION)
+[`inst/CITATION`](https://github.com/NewGraphEnvironment/knowledge/blob/main/inst/CITATION)
 
-Irvine A (2026). *knowledge: Watershed-Group Fisheries Background*. R
-package version 0.4.6,
-<https://newgraphenvironment.github.io/knowledge/>.
+Irvine A (2026). *knowledge: Fisheries Evidence and Tuned Habitat
+Thresholds for BC Watershed Groups*. New Graph Environment Ltd. Version
+0.4.6, <https://newgraphenvironment.github.io/knowledge/>.
 
-    @Manual{,
-      title = {knowledge: Watershed-Group Fisheries Background},
+    @Manual{knowledge,
+      title = {knowledge: Fisheries Evidence and Tuned Habitat Thresholds for BC Watershed Groups},
       author = {Allan Irvine},
+      organization = {New Graph Environment Ltd.},
       year = {2026},
-      note = {R package version 0.4.6},
+      version = {0.4.6},
+      note = {Version 0.4.6},
       url = {https://newgraphenvironment.github.io/knowledge/},
     }
