@@ -13,3 +13,4 @@
   guard that the one-SE replay is the recommended rule; three more planted bugs each caught). 0325 rerun locally
   (no upload): `thresholds.csv` equals main's with the two columns removed. Expected red until Phase 5 rebuilds the
   bundle: `test-vignette-data.R`'s CH-rows md5 (the header gained two columns)
+- Phase 3: the one-SE wording in four research files; `habitat_thresholds_tuned.md` gains "At 1.96 SE" (table from `knw_tune_repick()`), `chinook_rearing_tuned.md` its #57 paragraph's 1.96 pick

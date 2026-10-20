@@ -2,7 +2,7 @@
 
 **Verified:** 2026-10-17; the grade, graded figures and rule km regraded and recompared 2026-10-19 (#65, on the
 flows wet republished that day; retuning on them is #73); the `stream_branch` flag and the connector measure
-2026-10-20 (#65) · **Issues:** #57 (this; replaced #59), #65; the one-species tunings it supersedes are #28
+2026-10-20 (#65); the one-SE wording and the picks at 1.96 SE 2026-10-20 (#79) · **Issues:** #57 (this; replaced #59), #65, #79; the one-species tunings it supersedes are #28
 (`habitat_weights.md`), #33 (`bt_spawning.md`), #52 (`chinook_stream_size.md`) and #54
 (`chinook_rearing_tuned.md`); link reads the result through NewGraphEnvironment/link#346 · **Produced by:**
 - `scripts/0300`: the wait for link's province-wide `default` run (`scripts/logs/habitat/20261017_link_settle.csv`);
@@ -28,8 +28,8 @@ test: big enough, and not too steep. This run asked, for each species and life s
 can speak to, which version of that test best predicts where the fish were caught in watersheds held out of the
 fit. For each one it tried a ladder of size floors (by flow or by width) and gradient limits, and, for small
 streams, an allowance for a river close downstream. It scored every version on held-out watershed groups,
-kept every version the data cannot tell from the best, and recommended the one of those closest to link's
-current test. link's current test is not among them for any fitted species but grayling, and every recommended
+kept every version within one standard error of the best (a rule of thumb fixed before the run, not a
+boundary of noise), and recommended the one of those closest to link's current test. link's current test is not among them for any fitted species but grayling, and every recommended
 rule but grayling's draws less habitat than link does now. A grade from 0 to 1 then gives the use to expect on
 each segment, read at that segment's own distance to a river (#65 corrected a first build that read most segments at
 the distance cap). The package article on chinook rearing (https://newgraphenvironment.github.io/knowledge/articles/chinook_rearing.html) walks through one species from the question to
@@ -68,7 +68,8 @@ species and date, and the rest give the outside check. The Fish Data Submission 
   downstream. 2,795 rules for CH; a species whose `default` has no stream rule (KO, SK: lake rearing only) has no grid.
 - **Score:** held-out binomial deviance (cloglog, with log area, data set, era and the group), five stratified
   group folds, each group held out once, each held-out group refitting only its own intercept. The **region** is
-  every rule within one SE of the best (the group is the unit); the **pick** is the region rule with the fewest
+  every rule within one SE of the best (the group is the unit), a parsimony rule of thumb fixed before the run, not a
+  boundary of noise ("At 1.96 SE", below); the **pick** is the region rule with the fewest
   departures from `default`; `recommended` moves off an exception under 200 m. A 200-resample group bootstrap, a
   nested selection and four more fold seeds measure stability. A species × stage fits with ≥ 5 groups having both
   outcomes and is `underpowered` under 10.
@@ -110,6 +111,36 @@ Three readings across the table:
    has rules in the region; `CH_rear_v1` keeps 9 % until every species is tuned on the longer ladder (#68).
 3. **Only CH's rule needs the near-a-river exception** on the main reading; BT spawning's does too, but that row
    is weak (its raw rates do not separate, and nested selection puts the pick behind `default`).
+
+### At 1.96 SE (#79, 2026-10-20)
+
+One standard error is a rule of thumb, not a test. Its sources are Breiman et al. 1984, who proposed it for pruning trees; Hastie, Tibshirani & Friedman 2009, pp. 61 and 244, whose only rationale is that the curve "is estimated with error, and hence takes a conservative approach". Chen & Yang (2021, §6) find "no evidence
+confirming that the 1se rule can consistently outperform the regular CV", with an SE that can be off by 100 % either
+way; no unbiased estimator of K-fold cross-validation's variance exists (Bengio & Grandvalet 2004), and the usual
+estimate is too small (Bates, Hastie & Tibshirani 2024). The threshold was fixed before the run and is kept. Replayed
+from the saved tables with the same pick at 1.96 SE (`knw_tune_repick()` on `data/tune/<sp>_<stage>_tune.csv`, the
+main ladders; #67's ladder to 30 % is not replayed):
+
+| species × stage | `default` behind the best, in SEs | pick at 1 SE | pick at 1.96 SE | rules within 1 SE → 1.96 SE, of |
+|---|---|---|---|---|
+| BT rearing | 1.58 | MAD ≥ 0.35, ≤ 10.49 % | `default` | 196 → 1,066, of 3,612 |
+| BT spawning | 1.06 | MAD ≥ 0.75, ≤ 5.49 %, a ≥ 3 m³/s river within 2 km | `default` | 18 → 3,010, of 3,010 |
+| CH rearing | 2.40 | MAD ≥ 0.75, ≤ 9 %, a ≥ 3 m³/s river within 1 km | MAD ≥ 0.75, ≤ 5.49 % | 23 → 1,098, of 2,795 |
+| CO rearing | 2.47 | MAD ≥ 0.03, ≤ 4 % | width ≥ 1.5, ≤ 4 % | 87 → 1,023, of 3,010 |
+| GR rearing | 0.89 | `default` | `default` | 799 → 3,493, of 3,612 |
+| RB rearing | 2.36 | width ≥ 3, ≤ 9 % | width ≥ 3, ≤ 8.49 % | 81 → 323, of 3,612 |
+| ST rearing | 1.42 | MAD ≥ 1, ≤ 8.49 % | `default` | 330 → 3,307, of 3,612 |
+| WCT rearing | 1.33 | width ≥ 1.5, ≤ 4 % | `default` | 677 → 3,010, of 3,612 |
+
+- **Five of eight keep `default` at 1.96**, and three move off it: CH, CO and RB. For BT spawning, GR, ST and WCT the
+  1.96 region holds most or all of the grid, so keeping `default` there says the stricter bar cannot separate the
+  rules, not that the records support `default`.
+- **CH keeps its flow floor and nothing else:** at 1.96 its pick returns to `default`'s 5.49 % gradient and drops the
+  near-a-river exception (`default` stays outside, 2.40 SEs behind). RB keeps its 3 m width floor at `default`'s
+  gradient; CO goes back to width at its 4 % gradient.
+- `data/thresholds.csv` carries the 1.96 pick per rule as `rule_196`, and per component whether it keeps the value
+  as `holds_196` (a size row also needs the same size variable). A component equal to `default`'s value holds
+  trivially (BT rearing's 10.49 %), and a MAD row's `link_parameter` is not what a width rule at 1.96 would set.
 
 **CH's open floor (#54) settles at 0.75 m³/s**, with 0.5 inside the region on all five seeds.
 

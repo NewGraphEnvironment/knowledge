@@ -72,9 +72,10 @@ article in plain words with the 1.96 table and a bibliography, an interactive Bu
 - [x] `_pkgdown.yml` reference entry, `devtools::document()`, `pkgdown::check_pkgdown()`
 
 ## Phase 3: research files
-- [ ] `research/habitat_thresholds_tuned.md` and `research/chinook_rearing_tuned.md`: "within one SE" stated as a
+- [x] `research/habitat_thresholds_tuned.md` and `research/chinook_rearing_tuned.md`: "within one SE" stated as a
       parsimony heuristic fixed before the run, with its sources; the 1.96 table (producer: `knw_tune_repick()` on
-      `data/tune/*_tune.csv`), dated
+      `data/tune/*_tune.csv`), dated; also `research/grayling_rearing_tuned.md` and `research/README.md`'s "cannot
+      tell" wording (plan review)
 
 ## Phase 4: the interactive map
 - [ ] `knw_compare_mapgl(segments, water, title, background = c("voyager", "openfreemap"))`: hex colours for the
