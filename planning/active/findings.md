@@ -153,6 +153,29 @@ Every accessible segment walked (all have a gradient); tracked `data/tune` files
 Graded km is unchanged for every key (the gradable set does not depend on the walk). Walk rates 52–65 k/min on
 8 workers. CH's grades under the first regrade's all-accessible reference are superseded.
 
+## The flows moved under the run (2026-10-19)
+
+BT's grade table had 4 more segments with no flow than #57's (no_size 33,988 → 33,992), so the 17 October
+`*_segments.rds` (copied aside before the comparison overwrote them) were joined to the new grade tables: 73–81 %
+of accessible stream-branch segments of every MAD-ruled key carry a different flow (new/old 0.94–1.04 between the
+5th and 95th percentiles); width keys do not move. Cause: `discharge.fwa_v1_segment_monthly` was reloaded at
+16:40 UTC on 2026-10-19 (`pg_stat_user_tables`: 102.8 M rows deleted, 205.6 M inserted; analyzed 16:40 and
+17:19 UTC), its comment "built 2026-10-19T06:08:31Z, wet 94deeb5": NewGraphEnvironment/wet#103 (routed PCIC
+1951–2012 → 1981–2010), merged 17:42 UTC. Every run on this branch started after it (the first CH regrade at
+20:56 UTC), so the branch's grades are on one flow build.
+
+Floor crossings on accessible stream-branch segments, 17 October flow against today's:
+
+| key (floor) | km now passing | km now failing |
+|---|---|---|
+| BT rear (0.35) | 222 | 252 |
+| BT spawn (0.75) | 191 | 213 |
+| CH rear (0.75) | 104 | 62 |
+| CO rear (0.03) | 132 | 150 |
+| ST rear (1.0) | 89 | 20 |
+
+Asked Al; he chose to proceed on the new flows (#73 retunes on them).
+
 ## Errors Encountered
 
 | Error | Resolution |

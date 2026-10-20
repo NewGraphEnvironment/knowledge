@@ -17,6 +17,7 @@
 #     the bucket policy of #56 is applied; until then a reader needs credentials.
 #
 # INPUT:  data/tune/ (0320), the evidence build ledger (0310), data/fdis/publish/manifest.json (0299, v3)
+#         and the fwapg database (PG* env vars): the discharge load's comment, for the grade's provenance
 # OUTPUT: data/publish/thresholds_v1/{thresholds,thresholds_groups}.parquet + manifest.json (ignored)
 #         data/publish/habitat_grade_v1/habitat_grade/species_code=<sp>/stage=<stage>/part.parquet + manifest.json
 #         data/thresholds.csv, data/thresholds_groups.csv   (tracked copies of the small tables)
@@ -48,6 +49,15 @@ commit <- git("rev-parse", "--short=7", "HEAD")
 prov <- list(published_from_commit = commit, repository = "https://github.com/NewGraphEnvironment/knowledge",
              evidence_version = evidence_version, link_run_uid = run_uid, link_sha = link_sha, config = "default",
              tune_logs = sort(list.files("scripts/logs/habitat", "_tune_run.*\\.txt$")))
+# the segment flows the grade read: the database's discharge load, which wet republished on 2026-10-19 (wet#103),
+# after #57 tuned the thresholds on the load before it (#65). Its comment names the build; the grade carries it.
+pgc <- DBI::dbConnect(RPostgres::Postgres())
+discharge_load <- DBI::dbGetQuery(pgc, "SELECT obj_description('discharge.fwa_v1_segment_monthly'::regclass) AS d")$d
+DBI::dbDisconnect(pgc)
+if (length(discharge_load) != 1 || is.na(discharge_load) || !nzchar(discharge_load)) {
+  stop("discharge.fwa_v1_segment_monthly carries no load comment; cannot say which flows the grade read")
+}
+prov_grade <- c(prov, list(discharge_load = discharge_load))
 
 # ---- thresholds -------------------------------------------------------------------------
 tt <- knw_thresholds_table(tune_dir, evidence_version, run_uid, link_sha)
@@ -92,5 +102,5 @@ tables_gr <- data.frame(
   stringsAsFactors = FALSE)
 man_grade <- knw_publish(tables_gr, "data/publish/habitat_grade_v1", id = "knowledge/habitat_grade/v1",
                   note = "Expected-use grades for every segment of each tuned species' groups on link's province-wide default run (knowledge#57). Hive-partitioned by species_code and stage.",
-                  provenance = prov, s3 = if (publish) s3 else NULL, republish = republish, hive = "habitat_grade")
+                  provenance = prov_grade, s3 = if (publish) s3 else NULL, republish = republish, hive = "habitat_grade")
 message("wrote data/publish/{thresholds_v1,habitat_grade_v1} at ", commit, if (!publish) " (PUBLISH is not TRUE: nothing uploaded)")

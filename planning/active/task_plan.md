@@ -30,6 +30,12 @@ Settled by Al on 2026-10-19 in plan mode (issue body), re-approved with this pla
   (0.146 → 0.516; stream km graded ≥ 0.8 fell 6.2 % → 0.4 %); over the stream branch it is 0.139 (6.9 %).
   Every segment is still graded. `knw_grade(ref_rows =)`, `knw_grade_species(ref_edge =)`; the grade table
   carries `ref_population` and 0320 regrades a table without it.
+- **Mid-run, 2026-10-19 (Al, asked with the measurement): proceed on the flows wet republished that day.**
+  wet#103 reloaded `discharge.fwa_v1_segment_monthly` at about 16:40 UTC (wet 94deeb5), after #57 tuned on the
+  load before it; the regrade and the comparison read the new flows. The grade manifest records the load
+  (`discharge_load`); the rule-unchanged check becomes `check_rule_changes_explained.R` (every moved verdict
+  explained by its size crossing the floor or its exception distance crossing the limit, or cascading through
+  connectivity); retuning on the new flows is #73.
 - A walk whose status is `none`, `no_parent` or `too_many_hops` keeps `dist_m = NA` (the cap), as
   `knw_tune_curve()` censors visits (`R/tune_curve.R:64`); the table records which in `dist_status`.
 
@@ -65,8 +71,8 @@ fitting both use `pick`.
 - [x] CH first and alone: `SPECIES=CH Rscript scripts/0320-tune-run.R` (the scored grid is cached in `CH_rear_score.rds`, so only the grade runs). Record in `findings.md`: walk minutes against 6.0, `walked`/`walk_found`/`walk_none`, the reference rate against 0.1457, and the grade-class km shares against 76 % under 0.2 and 7 % at 0.8–1.
 - [x] The other seven keys (`SPECIES=BT,CO,GR,RB,ST,WCT`), on the 16-core host with `WORKERS=14` or locally; `PGCONNECT_TIMEOUT` set (#57's grading hang). BT walks twice (q 10 for rearing, q 3 for spawning); if the measured CH rate makes that unreasonable, share one walk at `q_grid = c(3, 10)` per species inside 0320 and say so.
 - [x] Assert the tracked `data/tune/` files (tune, summary, curves, groups) are unchanged by the regrade: `git diff --stat data/tune` is empty; confirm the "Scored" log line shows the score cache was hit; `git status --short data/tune` for the new `<key>_{seeds,honest}.csv` that the vignette data pins (plan review #4), committed.
-- [ ] `Rscript scripts/0325-publish.R` (local; `PUBLISH` stays open as #57 left it). The `habitat_grade` description says the distance is walked for every graded segment. Assert `git diff --stat data/thresholds.csv data/thresholds_groups.csv` is empty.
-- [ ] `Rscript scripts/0330-compare.R` for every species (full run, not `STAGE=maps`: the grade is read per segment). Assert the rule columns did not move: in every `*_compare.csv` the default, tuned, lost and gained km are identical to `origin/main`'s, and every `*_change.csv` is identical apart from grade columns; only graded km, km by class, `floodplain.csv` graded ha and ha by class differ.
+- [x] `Rscript scripts/0325-publish.R` (local; `PUBLISH` stays open as #57 left it). Rerun after the comparison so the grade manifest carries `discharge_load`. The `habitat_grade` description says the distance is walked for every graded segment. Assert `git diff --stat data/thresholds.csv data/thresholds_groups.csv` is empty.
+- [ ] `Rscript scripts/0330-compare.R` for every species (full run, not `STAGE=maps`: the grade is read per segment). ~~Assert the rule columns did not move~~ (superseded by the flow decision): run `planning/active/check_rule_changes_explained.R` against the 17 October `*_segments.rds` (preserved before the run overwrote them) and record every moved verdict by cause; the research tables' rule km are then revised too.
 - [ ] Point `data-raw/vignette_chinook.R`'s `path_log` at the new CH tuning log, run it, then `devtools::test()`.
 - [ ] Commit the tune, compare and vignette-data outputs with the log paths in `progress.md`; the archive README's `Measurement` carries the before/after reference rates and graded km per key.
 
