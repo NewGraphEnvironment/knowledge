@@ -49,6 +49,7 @@ reference:
       - knw_walk_index
       - knw_rule_in
       - knw_tune_score
+      - knw_tune_repick
       - knw_tune_curve
       - knw_grade
       - knw_grade_species

@@ -9,7 +9,8 @@ knw_thresholds_table(
   evidence_version,
   link_run_uid,
   link_sha,
-  config = "default"
+  config = "default",
+  d_floor = 200
 )
 }
 \arguments{
@@ -18,6 +19,9 @@ knw_thresholds_table(
 
 \item{evidence_version, link_run_uid, link_sha, config}{\code{character(1)} the
 provenance every row carries.}
+
+\item{d_floor}{\code{numeric(1)} the run's shortest exception distance (m), as given
+to \code{\link[=knw_tune_run]{knw_tune_run()}}, so the 1.96 replay picks as the run did.}
 }
 \value{
 A list: \code{thresholds} and \code{groups} (one row per \code{rule_id} and
@@ -32,7 +36,11 @@ and is \code{NA}); \code{model} says whether the size test is a width (\code{cw}
 (\code{mad}) floor; \code{range_lo} and \code{range_hi} are the smallest and largest value of
 the component among the rules inside the one-SE region on the main reading;
 \code{readings_in} is the number of fold seeds (the main one and the extra seeds) in
-whose region the recommended rule sits, of \code{readings}. A species × stage that
+whose region the recommended rule sits, of \code{readings}; \code{rule_196} is the rule
+the same pick makes from a region 1.96 standard errors wide
+(\code{\link[=knw_tune_repick]{knw_tune_repick()}}), and \code{holds_196} is \code{TRUE} where that rule keeps the
+row's value (a size row also needs the same size variable; a component the
+recommended rule lacks holds when the 1.96 rule lacks it too). A species × stage that
 was not fitted (no stream rule, no response, too few groups) gets one row
 per stage with \code{status} saying why and no values.
 }

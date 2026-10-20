@@ -61,15 +61,15 @@ article in plain words with the 1.96 table and a bibliography, an interactive Bu
       record every key in `findings.md`
 
 ## Phase 2: the 1.96 pick, as code
-- [ ] `R/tune_repick.R`: `knw_tune_repick(tune, se_mult = 1, d_floor = 200)` — region = converged and
+- [x] `R/tune_repick.R`: `knw_tune_repick(tune, se_mult = 1, d_floor = 200)` — region = converged and
       `ddev_best <= se_mult * se_diff`, pick by fewest departures then score, `d_floor` as `.tune_pick()`; runnable
       example
-- [ ] Tests: on a small hand-built table (k moves a rule in and out; the floor); on the source tree, k = 1 returns
+- [x] Tests: on a small hand-built table (k moves a rule in and out; the floor); on the source tree, k = 1 returns
       `recommended` for all eight `data/tune/*_tune.csv`, and k = 1.96 returns the issue's column; restore-the-bug
       check that each test fires
-- [ ] `knw_thresholds_table()`: `rule_196` and `holds_196` per row; test; rerun `scripts/0325-publish.R` locally
+- [x] `knw_thresholds_table()`: `rule_196` and `holds_196` per row; test; rerun `scripts/0325-publish.R` locally
       (no `PUBLISH`), and check the `thresholds.csv` diff is only the two columns
-- [ ] `_pkgdown.yml` reference entry, `devtools::document()`, `pkgdown::check_pkgdown()`
+- [x] `_pkgdown.yml` reference entry, `devtools::document()`, `pkgdown::check_pkgdown()`
 
 ## Phase 3: research files
 - [ ] `research/habitat_thresholds_tuned.md` and `research/chinook_rearing_tuned.md`: "within one SE" stated as a
