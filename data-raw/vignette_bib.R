@@ -9,11 +9,16 @@
 #     Zotero does not return stops the script, so the article cannot build with a reference missing.
 #   - VERSIONS COME FROM THE RUN, NOT FROM ZOTERO. One Zotero item serves every report that cites the tool, so it
 #     carries no version; the article's copy gets the version the tuning ran on, from the evidence build ledger as
-#     data-raw/vignette_chinook.R saved it (`meta$versions`). A tool whose version the run did not record (bcfishpass,
-#     bcfishobs) says so rather than borrowing one.
+#     data-raw/vignette_chinook.R saved it (`meta$versions`); a tool whose version the run did not record is given
+#     none rather than a borrowed one.
 #   - A VERSIONED ENTRY IS @misc. pandoc's default style prints a @software entry's version as "V. 0.66.0. Released.",
-#     a @misc's as "Version 0.66.0." (measured with pandoc 3.9.0.2), and drops `note` in both, so the commit goes in
-#     `version`. Titles are braced so the style does not capitalise a package name.
+#     a @misc's as "Version 0.66.0." (measured with pandoc 3.9.0.2), and drops `note` in both. A version that is more
+#     than one token ("0.66.0 (commit a17e917)", "not recorded") prints as "Versions ...", so each is one token: the
+#     release, or for fwapg (no release) the commit, or for wet the flow set it published. bcfishpass and bcfishobs,
+#     whose versions the run did not record, carry none. Titles are braced so the style does not capitalise a name.
+#   - ONLY WHAT A READER NEEDS. Better BibTeX writes each attachment's local path (`file`, a home directory), and the
+#     abstract, keywords, access and original dates; the committed file keeps none of them. A timestamp date
+#     (`2024-01-01T12:42:29Z`) is cut to its day.
 #
 # INPUT:  vignettes/chinook_rearing.Rmd, inst/vignette-data/chinook_rearing.rds (meta$versions), and Zotero running
 #         with Better BibTeX, synced with the group library
@@ -34,31 +39,38 @@ if (!setequal(got, keys)) {
   stop("Zotero returned ", paste(setdiff(got, keys), collapse = ", "), " and not ", paste(setdiff(keys, got), collapse = ", "))
 }
 names(entries) <- got
+entries <- gsub("\n  (file|abstract|keywords|urldate|origdate) = \\{[^\n]*\\},?(?=\n)", "", entries, perl = TRUE)
+entries <- gsub("(\n  date = \\{[0-9-]{4,10})T[^}]*\\}", "\\1}", entries, perl = TRUE)
+if (any(grepl("/Users/|file = ", entries))) stop("a local path is left in an entry")
 
 # ---- versions from the run ------------------------------------------------------------------------
 v <- readRDS("inst/vignette-data/chinook_rearing.rds")$meta$versions
 short_sha <- function(s) substr(strsplit(s, ";", fixed = TRUE)[[1]][1], 1, 7)
 # the article's key for each tool, read from the Rmd's own keys by the title Zotero holds
-title_of <- function(e) sub("^.*?\\n  title = \\{(.*?)\\},\\n.*$", "\\1", e, perl = TRUE)
+title_of <- function(e) sub("(?s)^.*?\\n  title = \\{(.*?)\\},\\n.*$", "\\1", e, perl = TRUE)
 key_for <- function(pattern) {
   k <- got[grepl(pattern, vapply(entries, title_of, ""), ignore.case = TRUE)]
   if (length(k) != 1) stop("expected one cited entry titled like '", pattern, "', found ", length(k))
   k
 }
 ver <- list(
-  list(key = key_for("^(smnorris/)?fwapg"), title = "fwapg", version = paste0("commit ", short_sha(v$fwapg_sha))),
-  list(key = key_for("^(smnorris/)?bcfishpass"), title = "bcfishpass", version = "not recorded by the run"),
-  list(key = key_for("^(smnorris/)?bcfishobs"), title = "bcfishobs", version = "not recorded by the run"),
-  list(key = key_for("^link"), title = NULL, version = paste0(v$link, " (commit ", short_sha(v$link_sha), ")")),
-  list(key = key_for("^fresh"), title = NULL, version = paste0(v$fresh, " (commit ", short_sha(v$fresh_sha), ")")),
-  list(key = key_for("^wet"), title = NULL, version = paste0("flows ", v$wet))
+  list(key = key_for("^(smnorris/)?fwapg"), title = "fwapg", version = short_sha(v$fwapg_sha)),
+  list(key = key_for("^(smnorris/)?bcfishpass"), title = "bcfishpass", version = NULL),
+  list(key = key_for("^(smnorris/)?bcfishobs"), title = "bcfishobs", version = NULL),
+  list(key = key_for("^link"), title = "link", version = v$link),
+  list(key = key_for("^fresh"), title = "fresh", version = v$fresh),
+  list(key = key_for("^wet"), title = "wet", version = sub(" .*$", "", v$wet))
 )
 for (x in ver) {
   e <- entries[[x$key]]
   e <- sub("^@[a-zA-Z]+\\{", "@misc{", e)
   e <- sub("\\n  version = \\{[^\\n]*\\},", "", e)
-  t <- if (is.null(x$title)) title_of(e) else x$title
-  e <- sub("\\n  title = \\{.*?\\},", sprintf("\n  title = {{%s}},\n  version = {%s},", t, x$version), e, perl = TRUE)
+  # the package's own name, lower case and braced; a subtitle Zotero holds ("Link: {{Develop}} ...") is kept after it
+  t <- title_of(e)
+  t <- if (grepl("^[^:]+: ", t) && !grepl("/", t)) sub("^[^:]+: ", paste0("{", x$title, "}: "), t) else paste0("{", x$title, "}")
+  if (!is.null(x$version) && grepl("\\s", x$version)) stop(x$key, ": a version with a space prints as 'Versions'")
+  new <- if (is.null(x$version)) sprintf("\n  title = {%s},", t) else sprintf("\n  title = {%s},\n  version = {%s},", t, x$version)
+  e <- sub("\\n  title = \\{[^\\n]*\\},(?=\\n)", new, e, perl = TRUE)
   entries[[x$key]] <- e
 }
 

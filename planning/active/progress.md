@@ -37,3 +37,4 @@
   path. Citation keys for the new Zotero items are `TODOKEY_*` placeholders until Phase 1 runs; the group library has
   no FDIS item, so Phase 1 adds one
 - Phase 7: link#346's body gains the 1.96 item (link is public and knowledge private, so it names no knowledge issue)
+- Phase 1: filed through the Web API (12 items, one subcollection, three merges); keys after the desktop synced. `vignette_bib.R` writes 12 entries, deterministic across two runs; site and package renders show 12 references, versions as "Version 0.66.0"

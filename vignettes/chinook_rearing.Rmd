@@ -111,7 +111,7 @@ link_default <- sprintf("https://github.com/NewGraphEnvironment/link/tree/%s/ins
 ```
 
 New Graph Environment maps where fish can live in British Columbia's streams with
-[`link`](`r link_site`) [@TODOKEY_link], an R package that marks every stream segment as spawning or
+[`link`](`r link_site`) [@irvine2026linkDevelop], an R package that marks every stream segment as spawning or
 rearing habitat for each species, and as reachable by fish or not. Its standard settings, called
 [`default`](`r link_default`), start from those [bcfishpass](https://smnorris.github.io/bcfishpass/) has used for years
 [@norris2024smnorrisbcfishpass]. This article tests one of them, where young chinook salmon rear, against the
@@ -133,10 +133,10 @@ conditions (last section).
 ## What records were used?
 
 The province's stream atlas divides British Columbia into **watershed groups**, large basins such as the Bulkley.
-The records are the Fisheries Data Information System's electrofishing sites [@TODOKEY_fdis]: where crews fished, and
+The records are the Fisheries Data Information System's electrofishing sites [@provinceofbritishcolumbia2022FisheriesData]: where crews fished, and
 whether they caught chinook. Each site was matched to the records it produced in bcfishobs [@norris2024smnorrisbcfishobs] and placed on link's
-streams, built on the BC Freshwater Atlas through fwapg [@norris2024smnorrisfwapg], with flows from wet [@TODOKEY_wet]
-and the rules run by fresh [@TODOKEY_fresh]. Sites
+streams, built on the BC Freshwater Atlas through fwapg [@norris2024smnorrisfwapg], with flows from wet [@irvine2026wetStream]
+and the rules run by fresh [@irvine2026freshFreshwater]. Sites
 were kept when they were on ordinary stream lines, of a usual fished area, with no barrier to chinook downstream, in a
 group where link expects chinook: `r n0(summ$visits_in)` sites in `r summ$groups` groups. The tests use the
 `r summ$groups_both` groups where chinook were caught at some sites and not others:
@@ -161,9 +161,9 @@ how far each prediction was from what the crew found; lower is better.
 
 **Close-call rules.** Scores carry error: another draw of watersheds would rank close rules differently. So the tuning
 kept every rule within one standard error of the best, a common rule of thumb for preferring the simpler of close
-models [@TODOKEY_breiman; @TODOKEY_hastie]. It is a convention fixed before the run, not a line below which rules are
-equal: there is no evidence it beats taking the best score [@TODOKEY_chen], and the error it rests on is hard to
-estimate and usually too small [@TODOKEY_bengio; @TODOKEY_bates]. For chinook, `r nrow(region)` rules are close calls,
+models [@breiman_etal1984ClassificationRegression; @hastie_etal2009ElementsStatistical]. It is a convention fixed before the run, not a line below which rules are
+equal: there is no evidence it beats taking the best score [@chen_yang2021OneStandard], and the error it rests on is hard to
+estimate and usually too small [@bengio_grandvalet2004NoUnbiased; @bates_etal2024CrossValidationWhat]. For chinook, `r nrow(region)` rules are close calls,
 all with a flow floor of `r min(region$size_min)` to `r max(region$size_min)` m³/s, the near-a-river allowance, and a
 slope limit of `r lst(grad(sort(unique(region$grad_max))), "or")`. From them, the rule fixed in advance takes the one
 closest to link's; all differ in every dial, so it is the best scorer. link's rule is

@@ -106,3 +106,44 @@ Sources held locally (PDFs) for filing: Chen & Yang 2021 (*Stats* 4(4):868–892
 
 | Error | Resolution |
 |-------|------------|
+
+## Zotero filing (Phase 1, 2026-10-20, Web API, key injected from the environment per command)
+
+- New subcollection `statistics/model_selection` (K2P7XGFG). Items, with the item key: Chen & Yang 2021 64V43FIF,
+  Bengio & Grandvalet 2004 897I4775, Bates, Hastie & Tibshirani 2024 DN7K8IDE (arXiv v4 attached as the preprint),
+  Hastie, Tibshirani & Friedman 2009 HIFGGNV2 (full 2nd ed. 12th printing; CrossRef has no subtitle, taken from the
+  title page), Breiman et al. 1984 BBA2Q7W2 (metadata only, OpenLibrary ISBN 0534980538). PDFs: the server already held
+  each file (upload authorisation answered `exists`), so each attachment registered without an upload.
+- `software`: glmnet (Friedman, Hastie & Tibshirani 2010, JSS) HQR5HXSS, link TZPVPG42, fresh 9A9WTK26, wet PK7HW9S6,
+  flooded ZA7A3PZ5, stac_floodplains_bc 997T7F8N (no CITATION.cff; title from its repository description).
+- FDIS: no item existed (only per-project `fdisdat` attachments), so a dataset item, Province of British Columbia,
+  243TD7QM, unfiled (no collection is named for data).
+- Merges: each master keeps its title (its Better BibTeX key is cited by report repos), gains `software` +
+  `Fisheries/Fish Passage/references` and a `dc:replaces` per copy; copies trashed: fwapg 3QKQ8RBH, bcfishpass
+  LNXZ5KDE, bcfishobs C7SJX5IU, K7NDE7QF, UIYJKXDC. The issue's 3/3/5 counted copies already in the trash (fwapg
+  NX4NTJFN, bcfishpass TDT6ZC48); by URL bcfishobs had four live copies.
+
+## Better BibTeX keys (read back 2026-10-20 23:56 UTC from a guarded `zotero.sqlite` copy, about 2 min after filing)
+
+chen_yang2021OneStandard, bengio_grandvalet2004NoUnbiased, bates_etal2024CrossValidationWhat,
+hastie_etal2009ElementsStatistical, breiman_etal1984ClassificationRegression, friedman_etal2010RegularizationPaths,
+irvine2026linkDevelop, irvine2026freshFreshwater, irvine2026wetStream, irvine2026floodedMap,
+irvine2026stac_floodplains_bcSTAC, provinceofbritishcolumbia2022FisheriesData. The masters' keys are unchanged
+(norris2024smnorris{fwapg,bcfishpass,bcfishobs}); the five copies are in the trash. All four PDFs are in local storage.
+
+## How the references render (pandoc 3.9.0.2, default Chicago author-date)
+
+- `@software` prints a version as "V. 0.66.0. Released."; `@misc` as "Version 0.66.0."; `note` is dropped by both.
+- A version of more than one token ("0.66.0 (commit a17e917)", "not recorded") prints "Versions ...", so each version is
+  one token and bcfishpass and bcfishobs, whose versions the run did not record, carry none.
+- Better BibTeX's biblatex export carries `file = {/Users/...}` per attachment: `vignette_bib.R` strips it, with
+  abstract, keywords, urldate and origdate, and refuses an entry still holding a local path.
+
+## Errors Encountered
+
+| Error | Resolution |
+|-------|------------|
+| `ZOTERO_API_KEY` unset in shell and R | injected per command with the environment; Al approves each prompt (first prompt timed out unanswered) |
+| Carto Voyager blank under the widget; "Layer water already exists" | the style has its own `water` layer: ids prefixed `knw_` |
+| popup showed `match,get,vt,...` as text | mapgl 0.4.6's evaluator reads only get/concat/to-string/to-number/number-format: display strings |
+| `vignette_bib.R` found no title | perl `.` does not cross newlines: `(?s)`; a lazy `\{.*?\},` stopped inside link's title: anchored to the line end |

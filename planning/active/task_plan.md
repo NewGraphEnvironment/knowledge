@@ -47,17 +47,17 @@ article in plain words with the 1.96 table and a bibliography, an interactive Bu
   the only keys any local checkout cites (1, 8 and 26 files); every other copy is cited nowhere locally.
 
 ## Phase 1: Zotero (group library 4733734, Web API)
-- [ ] New subcollection `statistics/model_selection`; add Chen & Yang 2021 (DOI 10.3390/stats4040051), Bengio &
+- [x] New subcollection `statistics/model_selection`; add Chen & Yang 2021 (DOI 10.3390/stats4040051), Bengio &
       Grandvalet 2004 (JMLR 5), Bates et al. 2024 (JASA, DOI 10.1080/01621459.2023.2197686), Hastie et al. 2009
       (ESL 2nd ed., DOI 10.1007/978-0-387-84858-7), Breiman et al. 1984 (metadata only), metadata from CrossRef or
       the publisher, no hand-written abstracts; attach the PDFs held in a local folder where each is the work
       itself (check the ESL file is more than its table of contents)
-- [ ] `software`: glmnet (Friedman, Hastie & Tibshirani 2010, JSS, as `citation("glmnet")` gives it); link, fresh,
+- [x] `software`: glmnet (Friedman, Hastie & Tibshirani 2010, JSS, as `citation("glmnet")` gives it); link, fresh,
       wet, flooded from each `CITATION.cff`; stac_floodplains_bc (no `CITATION.cff`: from its DESCRIPTION/README)
-- [ ] Merge duplicates: find every fwapg, bcfishpass and bcfishobs copy by title and URL (title search finds 2, 2 and
+- [x] Merge duplicates: find every fwapg, bcfishpass and bcfishobs copy by title and URL (title search finds 2, 2 and
       4 against the issue's 3, 3 and 5); give each master both collection memberships, a `dc:replaces` relation to
       each copy, and a consistent title; trash the copies
-- [ ] Read back through the Web API and a guarded `zotero.sqlite` copy: items, collections, attachments, BBT keys;
+- [x] Read back through the Web API and a guarded `zotero.sqlite` copy: items, collections, attachments, BBT keys;
       record every key in `findings.md`
 
 ## Phase 2: the 1.96 pick, as code
@@ -93,7 +93,7 @@ article in plain words with the 1.96 table and a bibliography, an interactive Bu
       more (the issue measured about 10,200 km, median 0.03), and the run's versions from the ledger (link 0.66.0,
       fresh 0.39.0, the fwapg sha, wet's `discharge/fwa/v1` build); rerun it, and assert every element it did not
       change is `identical()` to the old bundle
-- [ ] `data-raw/vignette_bib.R`: write `vignettes/chinook_rearing.bib` with rbbt from the keys the Rmd cites (group
+- [x] `data-raw/vignette_bib.R`: write `vignettes/chinook_rearing.bib` with rbbt from the keys the Rmd cites (group
       library), set software versions from `meta`, refuse an unresolved key; commit the `.bib` (CI has no Zotero)
 - [x] `tests/testthat/test-vignette-data.R`: the new elements
 
@@ -108,7 +108,7 @@ article in plain words with the 1.96 table and a bibliography, an interactive Bu
       candidates); the wetland sentence in "Before you use it", with no pointer to pending work
 - [x] Map: `knw_compare_mapgl()` when `IN_PKGDOWN` is `"true"`, coordinates rounded and only the popup fields; the
       static map otherwise
-- [ ] `bibliography: chinook_rearing.bib`, `[@key]` citations (link, fresh, wet, fwapg, bcfishpass, bcfishobs,
+- [x] `bibliography: chinook_rearing.bib`, `[@key]` citations (link, fresh, wet, fwapg, bcfishpass, bcfishobs,
       FDIS, the one-SE sources) and a References section; `stopifnot()` on every quoted number the rewrite keeps or adds
 - [x] Word count after against the 1,400 target, and what set the floor
 
