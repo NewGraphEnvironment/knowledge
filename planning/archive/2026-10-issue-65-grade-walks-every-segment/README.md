@@ -53,8 +53,9 @@ that the flow republish made impossible; and the seven false statements the bran
 Off the stream branch (`check_off_branch.txt`): 24–36 % of each key's graded km, 21–79 % of its km at 0.8 or more
 (CH 79 %, ST 70 %, CO 66 %; below its km share for BT spawning, GR and RB). Edge-1200 lines (main flow through lakes
 and wetlands) are 20 % at 0.8+ for CH. Connectors (`check_connector_share.txt`): of visit sites whose walk found a
-river, 59–94 % end on a double-line river, where the traced connector adds a median 14–46 m (90th percentile
-34–321 m); to the bank, 22 of 2,260 traced CH sites would cross the 1 km exception.
+river, 59–94 % end on a double-line river; of the traced ones, 89–96 % cross it on a connector, which adds a median
+14–88 m (90th percentile 38–324 m), and the rest hop an uncounted gap; to the bank, 22 of 2,260 traced CH sites would
+cross the 1 km exception.
 
 Research revised: `research/habitat_thresholds_tuned.md` (method, Grades, rule-change and floodplain tables,
 Limits), `research/chinook_rearing_tuned.md` and the six other species files.
@@ -63,6 +64,6 @@ Limits), `research/chinook_rearing_tuned.md` and the six other species files.
 
 - `scripts/logs/habitat/20261019_tune_run*` (the superseded CH regrade `-ch.txt`, the full regrade `.txt`/`.out`)
 - `scripts/logs/habitat/20261019_compare*`
-- this directory's `review-*.md` (ten reviewer rounds), `check_rule_changes_explained.R`, `compare_before_after.R`, `check_off_branch.R`, `check_connector_share.R`
+- this directory's `review-*.md` (thirteen reviewer rounds; `review-flag-round{1,2,3}.md` are on the `stream_branch` flag), `check_rule_changes_explained.R`, `compare_before_after.R`, `check_off_branch.R`, `check_connector_share.R`
 
 Closed by: PR (this branch, `65-the-grade-reads-segments-that-pass-the-s`)

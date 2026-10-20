@@ -223,8 +223,8 @@ connectivity cascade from one. Width rules did not move.)
   outside lakes, wetlands and river polygons; a river-polygon segment often reads it at 0 m from the river it is
   part of (48 % of river-polygon km within 1 m for GR, 79 % for CH) and at flows few visits had, so its grade rests
   on the surface past its data: for CH, 77 % of river-polygon km grades 0.8 or more and 69 % reads 1. Main-flow
-  lines through lakes and wetlands (edge type 1200) read a river 0 m away less often (10–18 % of their graded km
-  within 1 m for every key but WCT, 62 %), and 4–34 % of their km grades 0.8 or more (WCT 79 %). Off the stream
+  lines through lakes and wetlands (edge type 1200) read their river within 1 m on 10–18 % of their graded km
+  (WCT 62 %), and 4–34 % of their km grades 0.8 or more (WCT 79 %). Off the stream
   branch is 24–36 % of each key's graded km and 21–79 % of its km at 0.8 or more, far above its share for CH (79 %),
   ST (70 %) and CO (66 %) and below it for BT spawning, GR and RB, so `habitat_grade/v1` carries `stream_branch` to
   say which segments the curve's visits support (`check_off_branch.txt` in #65's archive).
@@ -233,13 +233,14 @@ connectivity cascade from one. Width rules did not move.)
   (CH's from 0.14 to 0.52, leaving 0.4 % of stream km at 0.8 or more); for BT, GR and RB they are 19–34 % of it
   and the two references are within 7 % (#65).
 - **Distance is to the river's main line, not its bank.** Where a tributary meets a double-line river, its line
-  crosses the polygon as a connector to the river's centreline, and the connector carries the tributary's flow, so
-  the walk counts it, for visits and segments alike. Of the curves' visit sites whose walk found a river, 59–94 % per
-  key end on a double-line river, and where the connector could be traced (97–99 % of those) it adds a median of
-  14–46 m (90th percentile 34–321 m), a median 0–2 % of the site's distance. Measured to the bank instead, 22 of the
-  2,260 traced CH sites would fall inside its 1 km exception, and none of BT spawning's inside 2 km
-  (`check_connector_share.txt` in #65's archive). Ending the walk at the bank changes the visits' distances,
-  so it waits for the retune (#73).
+  usually crosses the polygon as a connector (edge type 1450) to the river's centreline, and the connector carries
+  the tributary's flow, so the walk counts it, for visits and segments alike. Of the curves' visit sites whose walk
+  found a river, 59–94 % per key end on a double-line river. Of those whose tributary could be traced (97–99 %),
+  89–96 % have a connector, which adds a median of 14–88 m (90th percentile 38–324 m), a median 0–2 % of the
+  site's distance; the rest have none, and the walk hops from the tributary's mouth to the river's line without
+  counting the gap. Measured to the bank instead, 22 of the 2,260 traced CH sites would fall inside its 1 km
+  exception, and none of BT spawning's inside 2 km (`check_connector_share.txt` in #65's archive). Ending the walk at
+  the bank changes the visits' distances, so it waits for the retune (#73).
 - **Width rules leave first-order streams ungraded**; a consumer summing graded km over a width-ruled species
   sums measured streams only.
 - **One link run.** Every grade carries `run_uid 20261017_004619-3f4c713b`; link recomputed UPET twice after the

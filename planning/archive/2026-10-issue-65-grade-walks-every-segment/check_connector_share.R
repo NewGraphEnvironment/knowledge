@@ -1,7 +1,9 @@
 # Run from the repo root: Rscript planning/archive/2026-10-issue-65-grade-walks-every-segment/check_connector_share.R > planning/archive/2026-10-issue-65-grade-walks-every-segment/check_connector_share.txt
 # How much of a fit site's walked distance is the tributary's connector across the target river's polygon
 # A site ending on a double-line river whose river line is not an ancestor of the site's line gets no connector
-# length; n_double_line - n_measured counts them, and the medians and flips_exc are over n_measured.
+# length; n_double_line - n_measured counts them. Of the measured, n_connector have an edge-1450 connector on the
+# tributary's line (the rest end on another edge, often across a gap the walk bridges without counting it: gap_med_m
+# is the median max_entry_gap_m of those); the connector medians are over n_connector, flips_exc over n_measured.
 options(width = 250)
 suppressMessages(library(dplyr))
 walks <- readr::read_csv("data/fdis/derived/walks.csv", show_col_types = FALSE) |> filter(src == "pick")
@@ -41,8 +43,10 @@ for (k in c("BT_rear", "BT_spawn", "CH_rear", "CO_rear", "GR_rear", "RB_rear", "
     n_double_line = sum(f$large_edge == 1250), n_measured = nrow(dl),
     end_connector_pct = round(100 * mean(f$large_edge == 1450)),
     end_lake_pct = round(100 * mean(f$large_edge == 1200)),
-    conn_med_m = round(median(dl$conn_m)), conn_p90_m = round(quantile(dl$conn_m, 0.9)),
-    share_of_dist_med_pct = round(100 * median(dl$conn_m / pmax(dl$dist_m, 1))),
+    n_connector = sum(dl$conn_m > 0), connector_pct = round(100 * mean(dl$conn_m > 0)),
+    conn_med_m = round(median(dl$conn_m[dl$conn_m > 0])), conn_p90_m = round(quantile(dl$conn_m[dl$conn_m > 0], 0.9)),
+    share_of_dist_med_pct = round(100 * median(dl$conn_m[dl$conn_m > 0] / pmax(dl$dist_m[dl$conn_m > 0], 1))),
+    gap_med_m = round(median(dl$max_entry_gap_m[dl$conn_m == 0])),
     within_1km = sum(f$dist_m <= 1000),
     within_1km_conn_over_100m = sum(dl$dist_m <= 1000 & dl$conn_m > 100),
     flips_exc = if (is.na(ed)) NA_integer_ else sum(dl$dist_m > ed & dl$dist_m - dl$conn_m <= ed))
