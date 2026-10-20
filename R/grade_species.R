@@ -17,11 +17,14 @@
 #'
 #' The curve was fitted on stream-branch visits outside lakes, wetlands and
 #' river polygons, so a grade off that branch is an extrapolation: a
-#' river-polygon segment mostly reads the curve near 0 m and at sizes few visits
-#' had, and a wetland or lake segment lies outside the visits it was fitted on. The reference rate
+#' river-polygon segment often reads the curve near 0 m (about half of their km
+#' within 1 m for grayling, four fifths for chinook) and at sizes few visits had,
+#' and a wetland or lake segment lies outside the visits it was fitted on. The reference rate
 #' that reads 1 is therefore taken over the stream branch alone (`ref_edge`;
-#' Al, 2026-10-19): over every accessible segment, river polygons at 0 m set
-#' it, and chinook's rose from 0.14 to 0.52.
+#' Al, 2026-10-19): over every accessible segment, river-polygon segments make
+#' up most of the top 5 % for chinook, coho, steelhead and cutthroat, whose
+#' reference rises 1.4 to 4 times (chinook's from 0.14 to 0.52); for bull trout,
+#' grayling and rainbow the two references are within 7 %.
 #'
 #' A walk that finds no river of `q` (`none`: the sea first; `no_parent`;
 #' `too_many_hops`) leaves `dist_m` missing, which the grade reads as the

@@ -24,8 +24,8 @@
 #     deviance on the same folds beside the grid's.
 #   - GRADE (#57, decided 2026-10-17): predicted rate at the reference nuisance values with the
 #     group effect excluded, over the 95th percentile of accessible segments' rate, capped at 1,
-#     in fifths (the percentile over the stream branch's edge types since #65: river polygons at 0 m
-#     otherwise set it). Expected use, not habitat quality. Walks for the grade run from the segment's
+#     in fifths (the percentile over the stream branch's edge types since #65: for CH, CO, ST and WCT,
+#     river polygons near 0 m otherwise set it). Expected use, not habitat quality. Walks for the grade run from the segment's
 #     downstream end, for every accessible segment with a gradient, since the curve reads size and
 #     distance jointly (#65; #57's grades walked only the exception's candidates and read the
 #     rest at the 50 km cap).

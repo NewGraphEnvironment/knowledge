@@ -217,6 +217,30 @@ doubles" (1.74×) and WCT's "most accessible stream" (52 % of graded km; 38 % of
 prose restated from an intermediate summary rather than recomputed at the grain the sentence names, and one
 member's property given to a set; NEWS's "river-polygon and lake segments" was the same and is narrowed.
 
+## Branch review round 3 (2026-10-20): the reference effect by key
+
+`review-branch-round3.md` found a defect inside round 2's fix: "a river-polygon segment mostly reads the curve
+near 0 m" and "river polygons at 0 m set it" generalized CH's measurement to every key. Reproduced
+(`ref_by_key.R` in the session scratchpad, against `data/tune/*_grades.csv`):
+
+| key | reference, stream branch → every accessible segment | river-polygon share of the top 5 % | river-polygon km within 1 m |
+|---|---|---|---|
+| BT rear | 0.2255 → 0.2400 (×1.06) | 31.3 % | 56.6 % |
+| BT spawn | 0.2098 → 0.2093 (×1.00) | 19.0 % | 75.2 % |
+| CH rear | 0.1388 → 0.5156 (×3.72) | 88.9 % | 78.6 % |
+| CO rear | 0.5121 → 0.8724 (×1.70) | 89.1 % | 62.1 % |
+| GR rear | 0.0338 → 0.0345 (×1.02) | 31.8 % | 48.2 % |
+| RB rear | 0.4454 → 0.4536 (×1.02) | 33.6 % | 58.2 % |
+| ST rear | 0.2012 → 0.7982 (×3.97) | 73.4 % | 57.5 % |
+| WCT rear | 0.4727 → 0.6810 (×1.44) | 66.0 % | 60.4 % |
+
+Enumerated every added sentence about river polygons, 0 m or the reference effect (`git diff 78a427d...HEAD` over
+R, NEWS, research, scripts, vignettes, data-raw, tests, grepped for river.polygon / 0 m / set it / 0.52): four
+were unscoped (NEWS, the `knw_grade_species()` roxygen twice, the research Limits bullet, the 0320 spec comment)
+and now name their keys and ranges; the issue body's sentence was already scoped to the CH regrade. The
+stream-branch decision stands for every key: it changes four keys' references by 1.4–4× and the other four's by
+under 7 %.
+
 ## Errors Encountered
 
 | Error | Resolution |

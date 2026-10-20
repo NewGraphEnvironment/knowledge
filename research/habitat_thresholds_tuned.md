@@ -217,11 +217,13 @@ connectivity cascade from one. Width rules did not move.)
   applied. For ST and GR the joint curve predicts worse than the cut on held-out groups, so their grades rank
   segments but their rates are not to be read.
 - **The grade on river polygons and wetlands is an extrapolation.** The curve was fitted on stream-branch visits
-  outside lakes, wetlands and river polygons; a river-polygon segment reads it at 0 m from the river it is part of
-  and at flows few visits had, so its grade rests on the surface past its data: for CH, 77 % of river-polygon km
-  grades 0.8 or more and 69 % reads 1.
-  The reference is taken over the stream branch so that they do not set it: over every accessible segment, CH's
-  rose from 0.14 to 0.52 and left 0.4 % of stream km at 0.8 or more (#65).
+  outside lakes, wetlands and river polygons; a river-polygon segment often reads it at 0 m from the river it is
+  part of (48 % of river-polygon km within 1 m for GR, 79 % for CH) and at flows few visits had, so its grade rests
+  on the surface past its data: for CH, 77 % of river-polygon km grades 0.8 or more and 69 % reads 1.
+  The reference is taken over the stream branch so that they do not set it: over every accessible segment, river
+  polygons would make up 66–89 % of the top 5 % for CH, CO, ST and WCT and raise the reference 1.4 to 4 times
+  (CH's from 0.14 to 0.52, leaving 0.4 % of stream km at 0.8 or more); for BT, GR and RB they are 19–34 % of it
+  and the two references are within 7 % (#65).
 - **Width rules leave first-order streams ungraded**; a consumer summing graded km over a width-ruled species
   sums measured streams only.
 - **One link run.** Every grade carries `run_uid 20261017_004619-3f4c713b`; link recomputed UPET twice after the
