@@ -36,3 +36,8 @@
   requirements sentence regains a non-exhaustive list (convention item 4). Each new sentence then enumerated by
   hand against its set (floodplain.csv header, knw_floodplain_ha, 0230's S3 sync, 0150's local Zotero read);
   test-vignette-data passes 43. Loop ended on enumeration.
+- Soul amendment review: reviewed in knowledge rounds 2 and 3, then a soul-only round 3 (review-soul-round3.md):
+  one low finding in the original draft (the absolute-link rule also covered files pkgdown publishes, such as
+  the sticker), fixed by narrowing to files the site does not publish; checked by hand against what pkgdown
+  builds. Stopped there rather than a sixth reviewer. Soul commits 72a52a9, 72d0c66, a3c6072 on
+  `416-readme-knowledge`.

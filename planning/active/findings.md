@@ -97,3 +97,14 @@ files as outside it; the notice later moved to `inst/NOTICE.md` (plan review G2)
 0 errors, 0 warnings, 2 NOTEs, both outside this branch: Rd example lines over 100 characters in
 `knw_fiss_visits`, `knw_grade_species`, `knw_rule_in` (unchanged here), and "unable to verify current time".
 No top-level non-standard file NOTE (`CITATION.cff` is build-ignored; the notice is `inst/NOTICE.md`).
+
+## Word count (measured 2026-10-20, `wc -w`)
+
+680 on main, 739 at the first draft, 858 after the plan review and three code-check rounds. By section now:
+top (title, badge markup, opening, figure tag with alt text, caption) 223, Installation 161, Ecosystem 140,
+Data and methods 136, Example 121, Learn more 54, License 18, Citation 5. Before: What is known 138, Data 136,
+top 102, Three tracks 95, Conventions 75, Layout 64, Install 45, License 25. The floor is set by the sections
+the convention requires that the old README lacked (Ecosystem's nine decided rows, Data and methods, the figure
+and the example with output); the reviews' growth went to Installation (what a run needs, the published data)
+and Data and methods (bcfishobs, CABD, stac_floodplains_bc), each added to make a sentence true, not longer.
+link's README is 595 words and wet's 582; both carry the same Ecosystem table shape.
