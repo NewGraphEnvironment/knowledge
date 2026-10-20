@@ -90,4 +90,10 @@ BC Data Catalogue `package_show` licences: the four PSCIS datasets are **Access 
 and the Freshwater Atlas layers are OGL-BC. `fiss_sites_*` are written by `0220` from the EcoCat workbooks, not from
 the observations layer (a first NOTICE draft had them under OGL-BC; corrected). Filed #76 (PSCIS and EcoCat terms,
 to settle before #56's flip) and commented on #56. NOTICE.md lists the confirmed sources and names the unsettled
-files as outside it; `NOTICE` added to the pkgdown page allowlist (link ships its NOTICE the same way).
+files as outside it; the notice later moved to `inst/NOTICE.md` (plan review G2), so the pkgdown allowlist is unchanged.
+
+## R CMD check (2026-10-20, branch at 9bb77ef)
+
+0 errors, 0 warnings, 2 NOTEs, both outside this branch: Rd example lines over 100 characters in
+`knw_fiss_visits`, `knw_grade_species`, `knw_rule_in` (unchanged here), and "unable to verify current time".
+No top-level non-standard file NOTE (`CITATION.cff` is build-ignored; the notice is `inst/NOTICE.md`).

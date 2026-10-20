@@ -19,3 +19,7 @@
   #76 brought in line; G3 bcfishobs and CABD in Data and methods, wet linked; G4 gq asserted; G5 quantifiers
   narrowed; G6 `title` doc corrected; G7 rerun line added to #68 and #73; A1/A5 plan text; CLAUDE.md's v3 line;
   O4 owed items. Kept as is: S1 NEWS is written by `/gh-pr-merge` at release (NEWS has no development heading).
+- Code-check round 1 (review-round1.md): 7 findings, all reproduced and fixed: opening's "smallest flow" (link
+  sizes CH by width in 188/188 groups), example prose scoped to the stream-line test, requirements sentence now
+  points at each script's header, Tuning desc (knw_tune_run does not grade), CLAUDE.md's PULL claim,
+  data-raw/README.md, gq translation asserted. Four sat inside earlier fixes: the loop ends on an enumeration.

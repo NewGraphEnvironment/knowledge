@@ -9,7 +9,7 @@
 knowledge gathers what is known about where fish live in British Columbia's streams, a watershed group
 at a time: the Province's fish sampling records, past reports and the published literature. From the fish
 records it tunes, where they allow, the thresholds that [link](https://www.newgraphenvironment.com/link/)'s
-habitat models use to decide where a species can spawn and rear, such as the smallest flow and the steepest
+habitat models use to decide where a species can spawn and rear, such as the smallest stream and the steepest
 gradient for juvenile chinook rearing, and compares the tuned rules with the ones link uses today. Those models show
 restoration and fish passage planning where habitat lies on a stream network.
 
@@ -31,11 +31,11 @@ knowledge is under active development and its functions change between releases 
 reproducible work: `pak::pak("NewGraphEnvironment/knowledge@vX.Y.Z")`.
 
 The evidence tables live in the repository, not the package, so most work happens in a clone with the
-package loaded from the source tree (`pkgload::load_all()`). The scripts that build them run in the order of
-[`scripts/README.md`](https://github.com/NewGraphEnvironment/knowledge/blob/main/scripts/README.md), and each one's header names what it needs. Most read a
-PostgreSQL database holding the BC Freshwater Atlas through fwapg, found by the standard `PG*` environment
-variables, and the tuning also reads link's province-wide run and wet's flows there. Others need a
-bcfishpass database, a Zotero Web API key, AWS credentials or Python.
+package loaded from the source tree (`pkgload::load_all()`). The scripts that build them run in the order
+of [`scripts/README.md`](https://github.com/NewGraphEnvironment/knowledge/blob/main/scripts/README.md), and
+each one's header names the databases, credentials and tools it needs. Many read a PostgreSQL database holding the BC Freshwater Atlas through fwapg, found by the
+standard `PG*` environment variables, and the tuning also reads link's province-wide run and wet's flows
+there.
 
 The FDIS electrofishing extract is public as the Province supplied it, under `s3://fresh-bc/fdis/`, and so
 are the visit tables built from it, as Parquet under `s3://fresh-bc/knowledge/fdis/`. The bucket does not
@@ -58,8 +58,9 @@ print(ch, row.names = FALSE)
 #>  exception_d                   1000.00        m
 ```
 
-The tuned rule counts a stream segment as chinook rearing habitat where its gradient is at most 9 % and
+On a stream line, the tuned rule passes a segment for chinook rearing where its gradient is at most 9 % and
 either its mean annual flow is at least 0.75 m³/s or a river of at least 3 m³/s lies within 1 km downstream.
+Access and link's other steps then apply as they do to `default`.
 
 ## Learn more
 

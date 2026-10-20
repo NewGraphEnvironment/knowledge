@@ -42,8 +42,8 @@ reference:
   - title: Tuning
     desc: >
       Build candidate rules around link's thresholds and score them on held-out watershed groups, fit
-      the joint use curve at the pick, grade every segment by expected use, and run all of it in one call
-      for every species and stage the evidence can speak to.
+      the joint use curve at the pick, and grade every segment by expected use. The building, scoring and
+      fitting run in one call for every species and stage the evidence can speak to.
     contents:
       - knw_tune_grid
       - knw_walk_index

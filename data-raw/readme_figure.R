@@ -9,7 +9,8 @@ seg <- readRDS(vd("bulk_segments.rds"))
 water <- readRDS(vd("bulk_water.rds"))
 
 # knw_compare_map() falls back to a plain fill without gq; the README map is styled through gq's registry
-stopifnot(requireNamespace("gq", quietly = TRUE), !is.null(gq::gq_reg_main()$layers$lake))
+stopifnot(requireNamespace("gq", quietly = TRUE), !is.null(gq::gq_reg_main()$layers$lake),
+          !is.null(gq::gq_tmap_style(gq::gq_reg_main()$layers$lake)))
 
 out <- "man/figures/readme-bulk.png"
 knw_compare_map(seg, water, png = out, panels = "rules")
