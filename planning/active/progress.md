@@ -29,7 +29,7 @@
   Planted bugs (a grey80 colour, unrounded coordinates, vector format, switch position, legend position) each fail
 - Phase 7: README credits fwapg, bcfishobs and bcfishpass to Simon Norris (Hillcrest Geographics), in link README's words for bcfishpass
 - Phase 6: article rewritten. Words (prose outside YAML and chunks, inline `r` as one word,
-  `scratchpad wc_article.sh`, the awk/sed pipeline in this file's history): 2,434 before, 1,303 after, against a
+  `scratchpad wc_article.sh`, the awk/sed pipeline in this file's history): 2,434 before, 1,295 after, against a
   1,400 target; 11 sections before, 7 plus References after. The floor was the 1.96 table's two framing sentences and
   the surface table's reading, which the outline keeps. Built with `pkgdown::build_article()` after installing the
   branch: 12 reference entries (stub bib), no `???`, the widget draws in Chrome (9,839 rendered features, no console
