@@ -34,7 +34,9 @@ The evidence tables live in the repository, not the package, so most work happen
 package loaded from the source tree (`pkgload::load_all()`). The scripts that build them run in the order
 of [`scripts/README.md`](https://github.com/NewGraphEnvironment/knowledge/blob/main/scripts/README.md).
 Many read a PostgreSQL database holding the BC Freshwater Atlas through fwapg, found by the standard `PG*`
-environment variables, and the tuning also reads link's province-wide run and wet's flows there.
+environment variables, and the tuning also reads link's province-wide run and wet's flows there. Others need
+other databases, tools and credentials, among them a bcfishpass database, a synced Zotero library and Web API
+key, Ollama, AWS credentials and Python.
 
 The FDIS electrofishing extract is public as the Province supplied it, under `s3://fresh-bc/fdis/`, and so
 are the visit tables built from it, as Parquet under `s3://fresh-bc/knowledge/fdis/`. The bucket does not
@@ -94,9 +96,10 @@ FDIS visits are placed on the stream segments of link's province-wide run, built
 [BC Freshwater Atlas](https://www2.gov.bc.ca/gov/content/data/geographic-data-services/topographic-data/freshwater)
 through [fwapg](https://smnorris.github.io/fwapg/), with flows from [wet](https://www.newgraphenvironment.com/wet/)
 and dams from the [Canadian Aquatic Barriers Database](https://aquaticbarriers.ca/), and each visit is matched
-to the records it produced in [bcfishobs](https://github.com/smnorris/bcfishobs). The comparison maps draw
-floodplains from [stac_floodplains_bc](https://www.newgraphenvironment.com/stac_floodplains_bc/). Some crossing
-and report scripts also read a [bcfishpass](https://smnorris.github.io/bcfishpass/) database. Each value taken from the literature
+to the records it produced in [bcfishobs](https://github.com/smnorris/bcfishobs). The floodplain panels of the
+comparison maps in `research/fig/`, and the floodplain areas in `data/compare/floodplain.csv`, come from
+[stac_floodplains_bc](https://www.newgraphenvironment.com/stac_floodplains_bc/). Some crossing and report scripts
+also read a [bcfishpass](https://smnorris.github.io/bcfishpass/) database. Each value taken from the literature
 carries a verbatim quote, checked against its source.
 
 ## Citation

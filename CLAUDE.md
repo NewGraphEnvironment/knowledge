@@ -63,7 +63,7 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
 - `data/rag/` — ignored local cache of the ragnar stores. Source of truth is `s3://fresh-bc/rag/` (not public).
 - `data/fdis/` — ignored cache of the FDIS export (`0230` syncs it) and of the visit tables built from it
   (`data/fdis/derived/`; `0299` builds them as `knowledge/fdis/v3`, which is not yet uploaded (`v2` is the
-  published set, measured 2026-10-20). `PULL=TRUE` restores a published version, so today only with
+  newest published set, measured 2026-10-20). `PULL=TRUE` restores a published version, so today only with
   `VERSION=v2`, the pre-#57 set that `0291`–`0298` read).
 
 ## One discipline: everything here is public

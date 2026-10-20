@@ -29,3 +29,10 @@
   alt text names the fourth class. Hydrologic zones left out: 0310 attaches them, nothing in the tuning reads
   them (grep). Soul: figure sentence reworded as a conditional permission; evidence's unrecorded "because" dropped.
   #76 notes bcfishpass's database is ODbL (share-alike).
+- Code-check round 3 (review-round3.md): enumeration of all 29 sentences rewritten since 9bb77ef and 22 soul
+  sentences; 3 FALSE, fixed by narrowing to the enumerated sets: the README's floodplain sentence (102 of 121
+  compare maps have the panel; plus data/compare/floodplain.csv), the NOTICE's floodplain section gains
+  floodplain.csv, the rerun list gains 0325 (it writes data/thresholds.csv, which the bundle hashes). The
+  requirements sentence regains a non-exhaustive list (convention item 4). Each new sentence then enumerated by
+  hand against its set (floodplain.csv header, knw_floodplain_ha, 0230's S3 sync, 0150's local Zotero read);
+  test-vignette-data passes 43. Loop ended on enumeration.

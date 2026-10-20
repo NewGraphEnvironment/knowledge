@@ -33,7 +33,7 @@
 # OUTPUT: inst/vignette-data/chinook_rearing.rds   the tables and `meta`, one named list
 #         inst/vignette-data/bulk_segments.rds     BULK accessible CH segments, sf, EPSG:3005
 #         inst/vignette-data/bulk_water.rds        BULK lakes >= 10 ha and rivers, sf, EPSG:3005
-# RUN:    Rscript data-raw/vignette_chinook.R   (from the repo root, after any 0320, 0322 or 0330 rerun)
+# RUN:    Rscript data-raw/vignette_chinook.R   (from the repo root, after any 0320, 0322, 0325 or 0330 rerun)
 # ---------------------------------------------------------------------------
 suppressMessages({ library(dplyr); library(readr) })
 pkgload::load_all(quiet = TRUE)

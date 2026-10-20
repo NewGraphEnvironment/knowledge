@@ -56,10 +56,10 @@ The README was last rewritten before #57. It is close to correct on the report c
 - [x] README Citation (`citation("knowledge")`) and License sections
 
 ## Phase 7: Review
-- [ ] Every function the README names is in `NAMESPACE`; every link resolves (`curl -sIL` each, GitHub ones via `gh api`, noting which wait on #56)
-- [ ] Every claim (README, tagline, Title, Description, About, caption, alt text, group `desc:`) enumerated against the code path a run takes
-- [ ] `pkgdown::check_pkgdown()`, `devtools::test()`, `lintr` on any R touched; word count before (680) and after, with what set the floor
-- [ ] `/code-check branch`, three-round floor, ending on the enumeration
+- [x] Every function the README names is in `NAMESPACE`; every link resolves (`curl -sIL` each, GitHub ones via `gh api`, noting which wait on #56)
+- [x] Every claim (README, tagline, Title, Description, About, caption, alt text, group `desc:`) enumerated against the code path a run takes
+- [x] `pkgdown::check_pkgdown()`, `devtools::test()`, `lintr` on any R touched; word count before (680) and after, with what set the floor
+- [x] `/code-check branch`, three-round floor, ending on the enumeration
 
 ## Phase 8: soul convention
 - [ ] soul branch + PR amending `conventions/readme.md` with what this README teaches (a data repo that both installs and publishes; a figure taken as one panel of an article's composite; knowledge's Ecosystem membership as an open question), `Relates to NewGraphEnvironment/soul#416`

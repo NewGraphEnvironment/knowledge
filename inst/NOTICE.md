@@ -13,12 +13,12 @@ rivers drawn in `man/figures/readme-bulk.png` and the maps in `research/fig/`.
 
 ## Floodplains (CC BY 4.0)
 
-The floodplain panel of the comparison maps in `research/fig/compare_*.png`, where a map has one, is drawn from
-the floodplains of [stac_floodplains_bc](https://www.newgraphenvironment.com/stac_floodplains_bc/), published under
+The floodplain panel of the comparison maps in `research/fig/compare_*.png`, where a map has one, and the
+floodplain areas in `data/compare/floodplain.csv` are drawn from the floodplains of [stac_floodplains_bc](https://www.newgraphenvironment.com/stac_floodplains_bc/), published under
 [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Its floodplain delineation contains information
 licensed under the Open Government Licence – Canada (MRDEM-30, Natural Resources Canada) and the Open Government
-Licence – British Columbia (Freshwater Atlas stream network). The maps modify them: each floodplain cell is
-shaded by the grade of the stream segment that owns it.
+Licence – British Columbia (Freshwater Atlas stream network). The maps and the areas modify them: each floodplain cell
+is assigned the grade of the stream segment that owns it.
 
 ## Fisheries Data Information System (FDIS) extract
 
