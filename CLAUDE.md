@@ -277,6 +277,18 @@ they show:
 - **A decision made before the run is stated as one.** List every check with its direction; do not sort them by
   the side they support.
 
+### The segment flows can change under a run; the table comment names the build
+
+`discharge.fwa_v1_segment_monthly` is wet's database load, and wet can reload it between two runs: NewGraphEnvironment/wet#103
+reloaded it on 2026-10-19, after #57 tuned and before #65 regraded, and most segment flows moved by up to about ±5 %.
+Before comparing two runs that read flows, read the table comment
+(`obj_description('discharge.fwa_v1_segment_monthly'::regclass)`, which names the build), and expect a rule-unchanged
+check to fail when it differs. `0325` publishes the comment as `discharge_load_at_publish`; recording it at grading
+time is #72.
+
+The walk (`inst/sql/ch_dist_profile.sql`) measures distance to a double-line river's centreline, through the
+tributary's connector (edge 1450), not to its bank (#65's Limits in `research/habitat_thresholds_tuned.md`; #73).
+
 ### Database access
 
 Every script connects with `DBI::dbConnect(RPostgres::Postgres())`, so libpq reads `PGHOST`,
