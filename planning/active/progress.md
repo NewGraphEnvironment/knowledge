@@ -23,3 +23,9 @@
   sizes CH by width in 188/188 groups), example prose scoped to the stream-line test, requirements sentence now
   points at each script's header, Tuning desc (knw_tune_run does not grade), CLAUDE.md's PULL claim,
   data-raw/README.md, gq translation asserted. Four sat inside earlier fixes: the loop ends on an enumeration.
+- Code-check round 2 (review-round2.md, 60 + 17 claim enumeration): README requirements sentence narrowed (no
+  per-script header claim; the wf_*.js have none); NOTICE adds the floodplain panel's CC BY 4.0 / OGL-Canada
+  source; Data and methods names stac_floodplains_bc; data-raw/README.md drops the floodplain input, adds 0322;
+  alt text names the fourth class. Hydrologic zones left out: 0310 attaches them, nothing in the tuning reads
+  them (grep). Soul: figure sentence reworded as a conditional permission; evidence's unrecorded "because" dropped.
+  #76 notes bcfishpass's database is ODbL (share-alike).

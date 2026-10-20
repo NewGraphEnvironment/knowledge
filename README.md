@@ -13,7 +13,7 @@ habitat models use to decide where a species can spawn and rear, such as the sma
 gradient for juvenile chinook rearing, and compares the tuned rules with the ones link uses today. Those models show
 restoration and fish passage planning where habitat lies on a stream network.
 
-<img src="man/figures/readme-bulk.png" alt="Map of the streams chinook can reach in the Bulkley River watershed group, coloured by whether each is chinook rearing habitat under both rules, only under link's default rule, or only under the tuned rule" width="70%" />
+<img src="man/figures/readme-bulk.png" alt="Map of the streams chinook can reach in the Bulkley River watershed group, coloured by whether each is chinook rearing habitat under both rules, only under link's default rule, only under the tuned rule, or under neither" width="70%" />
 
 *Chinook rearing habitat in the Bulkley River watershed group, around Smithers and Houston, under link's
 `default` rule and the rule tuned here. Blue streams are habitat under both, orange only under `default`,
@@ -32,10 +32,9 @@ reproducible work: `pak::pak("NewGraphEnvironment/knowledge@vX.Y.Z")`.
 
 The evidence tables live in the repository, not the package, so most work happens in a clone with the
 package loaded from the source tree (`pkgload::load_all()`). The scripts that build them run in the order
-of [`scripts/README.md`](https://github.com/NewGraphEnvironment/knowledge/blob/main/scripts/README.md), and
-each one's header names the databases, credentials and tools it needs. Many read a PostgreSQL database holding the BC Freshwater Atlas through fwapg, found by the
-standard `PG*` environment variables, and the tuning also reads link's province-wide run and wet's flows
-there.
+of [`scripts/README.md`](https://github.com/NewGraphEnvironment/knowledge/blob/main/scripts/README.md).
+Many read a PostgreSQL database holding the BC Freshwater Atlas through fwapg, found by the standard `PG*`
+environment variables, and the tuning also reads link's province-wide run and wet's flows there.
 
 The FDIS electrofishing extract is public as the Province supplied it, under `s3://fresh-bc/fdis/`, and so
 are the visit tables built from it, as Parquet under `s3://fresh-bc/knowledge/fdis/`. The bucket does not
@@ -95,8 +94,9 @@ FDIS visits are placed on the stream segments of link's province-wide run, built
 [BC Freshwater Atlas](https://www2.gov.bc.ca/gov/content/data/geographic-data-services/topographic-data/freshwater)
 through [fwapg](https://smnorris.github.io/fwapg/), with flows from [wet](https://www.newgraphenvironment.com/wet/)
 and dams from the [Canadian Aquatic Barriers Database](https://aquaticbarriers.ca/), and each visit is matched
-to the records it produced in [bcfishobs](https://github.com/smnorris/bcfishobs). Some crossing and report
-scripts also read a [bcfishpass](https://smnorris.github.io/bcfishpass/) database. Each value taken from the literature
+to the records it produced in [bcfishobs](https://github.com/smnorris/bcfishobs). The comparison maps draw
+floodplains from [stac_floodplains_bc](https://www.newgraphenvironment.com/stac_floodplains_bc/). Some crossing
+and report scripts also read a [bcfishpass](https://smnorris.github.io/bcfishpass/) database. Each value taken from the literature
 carries a verbatim quote, checked against its source.
 
 ## Citation
