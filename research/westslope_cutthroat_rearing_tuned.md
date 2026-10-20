@@ -1,6 +1,6 @@
 # Westslope cutthroat rearing rule tuned on the province-wide run (underpowered)
 
-**Verified:** 2026-10-17 · **Issues:** #57; link's own WCT calibration is NewGraphEnvironment/link#322 ·
+**Verified:** 2026-10-17; grade and comparison figures 2026-10-19 (#65) · **Issues:** #57, #65; link's own WCT calibration is NewGraphEnvironment/link#322 ·
 **Produced by:** `scripts/0310`, `scripts/0320` (`data/tune/WCT_rear_*`), `scripts/0325` (`data/thresholds.csv`
 row `WCT_rear_v1`, `power = underpowered`) · **Status:** measured; nothing applied in link. Method:
 `habitat_thresholds_tuned.md`.
@@ -18,17 +18,18 @@ caught on 60.3 % of the visits the rule admits against 35.9 % outside (`default`
 pick is in the region of all five seeds, and recommended by 12.5 % of bootstrap resamples.
 
 **Curve and grade.** The joint GAM scores 1,375 held-out against the grid's best 1,311. 1.19 M segments in 16
-groups, 167,459 accessible, 111,698 graded (683,918 with no width); reference rate 0.429. Of 35,320 accessible
-km, 25,932 are graded (16,871 grade-weighted km), and 47 % of graded km is in the 0.8–1 class: in the groups
-WCT hold, most accessible stream reads as near the top.
+groups, 167,459 accessible, 111,698 graded (683,918 with no width); reference rate 0.473 (regraded 2026-10-19,
+#65: every segment at its own distance to a 10 m³/s river, the reference over the stream branch). Of 35,320
+accessible km, 25,932 are graded (18,671 grade-weighted km), and 52 % of graded km is in the 0.8–1 class: in the groups
+WCT hold, most graded stream reads as near the top.
 
 **Comparison (`scripts/0330`, `data/compare/WCT_rear_*`).** Regenerated on link's 16 WCT groups, the rule draws
 16,243 km against `default`'s 20,749 (−21.7 %): 4,510 km lost, 4,332 of them to the 4 % gradient maximum, and
-4 km gained. Graded km 12,463 → 8,543. FDIS detection on the rule's segments is 35 % against 27 % outside
+4 km gained. Graded km 14,939 → 11,277 (#65's regrade; 12,463 → 8,543 before). FDIS detection on the rule's segments is 35 % against 27 % outside
 (`default`: 35 % against 24 %): the segments the rule drops hold detections at nearly the rate it keeps, which is
 the underpowered row showing in the change. The bcfishobs outside lift moves 1.56 → 1.73. Floodplain (4 catalog
 groups): 117,691 ha beside the rule's habitat against 122,584 under `default` (−4 %, against −22 % in km); graded
-ha 47,027 → 43,010. Maps:
+ha 89,778 → 85,858. Maps:
 `research/fig/compare_wct_rear_*.png`.
 
 **What link#322 asked.** A calibration scored on held-out groups needs groups where WCT are absent as well as

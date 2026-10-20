@@ -120,6 +120,15 @@ dbDisconnect(conn)
 # because the results are filtered to the jobs that succeeded and every later lookup goes by key, not position
 jobs <- jobs[order(-vapply(jobs, function(j) length(j$groups), integer(1)))]
 names(jobs) <- vapply(jobs, `[[`, character(1), "key")
+# the graded km read the grade tables 0320 wrote; refuse one made before #65 (every segment walked, the reference
+# over the stream branch), which would put the old grades under the new run's numbers
+stale <- names(jobs)[!vapply(names(jobs), function(k) {
+  h <- readr::read_csv(file.path("data/tune", paste0(k, "_grades.csv")), n_max = 1, show_col_types = FALSE,
+                       col_types = readr::cols(.default = "c"))
+  "ref_population" %in% names(h) && identical(h$ref_population, "stream_branch")
+}, logical(1))]
+if (length(stale)) stop("grade tables made before #65 (no ref_population = stream_branch); rerun 0320: ",
+                        paste(stale, collapse = ", "))
 # each job writes its own tables as it finishes and returns its error rather than raising it, so one failed
 # species cannot discard the others at collection (code-check round 2); the grade table is read with the
 # six columns the comparison needs, not its 25 (RB's is 1.5 GB)
@@ -158,6 +167,13 @@ if (stage_only == "maps") {
   names(res) <- names(jobs)
   res <- Filter(Negate(is.null), res)
   if (!length(res)) stop("STAGE=maps: no saved comparison under ", dir_out)
+  # the saved segments carry the grade the full run read; one older than its grade table carries a superseded
+  # grade (#65), which the guard on the grade tables above cannot see
+  old <- names(res)[vapply(names(res), function(k) {
+    file.mtime(file.path(dir_out, paste0(k, "_segments.rds"))) < file.mtime(file.path("data/tune", paste0(k, "_grades.csv")))
+  }, logical(1))]
+  if (length(old)) stop("STAGE=maps: the saved segments predate their grade tables; run the full compare: ",
+                        paste(old, collapse = ", "))
   say("STAGE=maps: floodplain and maps from the saved comparison of %s.", paste(names(res), collapse = " "))
 } else if (workers > 1L && length(jobs) > 1L) {
   cl <- parallel::makeCluster(min(workers, length(jobs)), outfile = file.path("scripts/logs/habitat", paste0(format(Sys.Date(), "%Y%m%d"), "_compare-workers.out")))

@@ -2,12 +2,12 @@ direction,reason,order,n_segments,km,species_code,stage,tuned_rule
 gained,gradient between the two maxima,1,41,7.8118651534367975,RB,rear,width>=3|g<=0.09|none
 gained,other (river-polygon branch or mixed),1,4,0.10282615406861463,RB,rear,width>=3|g<=0.09|none
 lost,"size: width passes, tuned fails, no exception",1,2350,785.9999403683971,RB,rear,width>=3|g<=0.09|none
-gained,gradient between the two maxima,2,729,190.11042054134083,RB,rear,width>=3|g<=0.09|none
+gained,gradient between the two maxima,2,729,190.11042054134086,RB,rear,width>=3|g<=0.09|none
 gained,other (river-polygon branch or mixed),2,115,2.2472910597684006,RB,rear,width>=3|g<=0.09|none
-lost,"size: width passes, tuned fails, no exception",2,81659,27671.968941558112,RB,rear,width>=3|g<=0.09|none
-gained,gradient between the two maxima,3,2277,587.6653297492182,RB,rear,width>=3|g<=0.09|none
+lost,"size: width passes, tuned fails, no exception",2,81659,27671.968941558116,RB,rear,width>=3|g<=0.09|none
+gained,gradient between the two maxima,3,2277,587.6653297492181,RB,rear,width>=3|g<=0.09|none
 gained,other (river-polygon branch or mixed),3,69,7.869871420086082,RB,rear,width>=3|g<=0.09|none
-lost,"size: width passes, tuned fails, no exception",3,46737,14630.311226942471,RB,rear,width>=3|g<=0.09|none
-gained,gradient between the two maxima,4+,1972,453.71528820814257,RB,rear,width>=3|g<=0.09|none
+lost,"size: width passes, tuned fails, no exception",3,46737,14630.311226942491,RB,rear,width>=3|g<=0.09|none
+gained,gradient between the two maxima,4+,1972,453.71528820814245,RB,rear,width>=3|g<=0.09|none
 gained,other (river-polygon branch or mixed),4+,163,17.17334462043757,RB,rear,width>=3|g<=0.09|none
-lost,"size: width passes, tuned fails, no exception",4+,4467,1279.883863128866,RB,rear,width>=3|g<=0.09|none
+lost,"size: width passes, tuned fails, no exception",4+,4467,1279.8838631288652,RB,rear,width>=3|g<=0.09|none

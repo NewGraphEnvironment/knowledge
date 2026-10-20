@@ -1,6 +1,6 @@
 # Arctic grayling rearing rule tuned on the province-wide run
 
-**Verified:** 2026-10-17 · **Issues:** #57; link's own GR calibration is NewGraphEnvironment/link#343 ·
+**Verified:** 2026-10-17; grade and comparison figures 2026-10-19 (#65) · **Issues:** #57, #65; link's own GR calibration is NewGraphEnvironment/link#343 ·
 **Produced by:** `scripts/0310`, `scripts/0320` (`data/tune/GR_rear_*`), `scripts/0325` (`data/thresholds.csv`
 row `GR_rear_v1`) · **Status:** measured; nothing applied in link. Method: `habitat_thresholds_tuned.md`.
 
@@ -18,13 +18,15 @@ outside. `default` is in the region of three of five seeds.
 **Curve.** The joint GAM scores 1,022 held-out against the grid's best 825: the cut beats the surface here,
 as for steelhead. Grayling are a river fish; width carries most of the signal, and the smooth adds noise.
 
-**Grade.** 4.21 M segments in 82 groups, 856,113 accessible, 496,267 graded; 2.62 M have no width (unmeasured
+**Grade** (regraded 2026-10-19, #65: every segment at its own distance to a 10 m³/s river, the reference over
+the stream branch). 4.21 M segments in 82 groups, 856,113 accessible, 496,267 graded; 2.62 M have no width (unmeasured
 first-order streams). Reference rate 0.034: grayling are rarely caught by electrofishing anywhere, so the
-grade is relative to a low top. Of 258,724 accessible km, 146,128 are graded (83,850 grade-weighted km),
-spread evenly across the classes (5 % under 0.2, 24 % at 0.8–1).
+grade is relative to a low top. Of 258,724 accessible km, 146,128 are graded (72,867 grade-weighted km),
+spread evenly across the classes (25 % under 0.2, 25 % at 0.8–1).
 
 **Comparison (`scripts/0330`, `data/compare/GR_rear_*`).** The recommended rule is `default`, so nothing
-changes: 77,740 km on link's 82 GR groups under both, graded km 46,831, bcfishobs outside lift 3.56, 96,530 ha of
+changes: 77,740 km on link's 82 GR groups under both, graded km 44,602 (#65's regrade; 46,831 before),
+bcfishobs outside lift 3.56, 96,530 ha of
 floodplain beside the habitat in the three catalog groups. Three
 groups (BULL ELKR TURN) have no segment passing the GR access gate and draw no map.
 

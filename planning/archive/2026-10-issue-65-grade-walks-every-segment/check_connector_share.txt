@@ -1,0 +1,18 @@
+       key  q sites found end_double_line_pct end_double_line_of_all_pct n_double_line n_measured end_connector_pct end_lake_pct n_connector connector_pct conn_med_m conn_p90_m share_of_dist_med_pct gap_med_m n_no_connector no_conn_nogap_pct
+1  BT_rear 10  7887  7772                  79                         78          6118       6042                 0           20        5468            90         35        166                     0         0            574                53
+2 BT_spawn  3   451   451                  59                         59           264        260                 0           14         243            93         14         38                     0         0             17                71
+3  CH_rear  3  4010  3862                  60                         58          2318       2260                 0           19        2063            91         33        182                     1       181            197                43
+4  CO_rear 10  3530  2854                  74                         60          2103       2059                 0           23        1832            89         36        219                     1         0            227                55
+5  GR_rear 10  1010  1004                  94                         94           947        934                 0            5         898            96         46        138                     0       135             36                31
+6  RB_rear 10  9067  8557                  79                         75          6769       6654                 0           19        6008            90         36        182                     0         0            646                55
+7  ST_rear 10  1001   614                  87                         53           532        519                 0            3         474            91         88        324                     2         0             45                96
+8 WCT_rear 10   984   984                  87                         87           853        834                 0           12         774            93         31         49                     0       311             60                40
+  within_1km within_1km_conn_over_100m flips_exc
+1        844                       138        NA
+2         99                         3         0
+3        777                        77        22
+4        447                        54        NA
+5         96                         6        NA
+6        938                       119        NA
+7        110                        32        NA
+8        116                         3        NA

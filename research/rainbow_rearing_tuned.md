@@ -1,6 +1,6 @@
 # Rainbow trout rearing rule tuned on the province-wide run
 
-**Verified:** 2026-10-17 · **Issues:** #57 (this); link's own RB calibration is NewGraphEnvironment/link#343 ·
+**Verified:** 2026-10-17; grade and comparison figures 2026-10-19 (#65) · **Issues:** #57 (this), #65; link's own RB calibration is NewGraphEnvironment/link#343 ·
 **Produced by:** `scripts/0310`, `scripts/0320` (`data/tune/RB_rear_*`), `scripts/0325` (`data/thresholds.csv`
 row `RB_rear_v1`) · **Status:** measured; nothing applied in link. Method: `habitat_thresholds_tuned.md`.
 
@@ -24,18 +24,20 @@ the direction: wider and steeper than `default`.
 species. Rainbow detection rises with width over the whole range rather than stepping at a floor, so a graded
 surface carries what a cut cannot.
 
-**Grade, and the width rule's blind spot.** 10.33 M segments in 210 groups, 2.35 M accessible, 1.22 M graded.
+**Grade, and the width rule's blind spot** (regraded 2026-10-19, #65: every segment at its own distance to a
+10 m³/s river, the reference over the stream branch). 10.33 M segments in 210 groups, 2.35 M accessible, 1.22 M graded.
 6.26 M segments have no width: fwapg models width only where `stream_order > 1`, so every unmeasured
-first-order stream is ungraded (`NA`, counted), and of 510,150 accessible km only 277,539 are graded (134,596
-grade-weighted km). Reference rate 0.411. Graded km spread evenly: 24 % under 0.2, 21 % at 0.8–1.
+first-order stream is ungraded (`NA`, counted), and of 510,150 accessible km only 277,539 are graded (121,816
+grade-weighted km). Reference rate 0.445. Graded km spread evenly: 27 % under 0.2, 15 % at 0.8–1.
 
 **Comparison (`scripts/0330`, `data/compare/RB_rear_*`).** Regenerated on link's 210 RB groups, the rule draws
 183,988 km against `default`'s 227,089 (−19.0 %): 44,368 km lost, all of them streams between 1.5 and 3 m wide,
-and 1,267 gained between the two gradient maxima. Graded km 115,119 → 101,860. FDIS detection on the rule's
+and 1,267 gained between the two gradient maxima. Graded km 103,160 → 90,429 (#65's regrade; 115,119 → 101,860
+before). FDIS detection on the rule's
 segments is 35 % against 18 % outside (`default`: 33 % against 15 %); the bcfishobs outside lift moves
 2.34 → 3.04. The regenerated `default` differs from link's stored RB flags by 45,970 km, more than for any other
 species. Floodplain (23 catalog groups): 560,759 ha beside the rule's habitat against 663,464 under `default`
-(−15 %); graded ha 324,847 → 293,833. Maps: `research/fig/compare_rb_rear_*.png`.
+(−15 %); graded ha 273,535 → 243,741. Maps: `research/fig/compare_rb_rear_*.png`.
 
 **Access.** link's two access columns disagree most for RB (`access_check.csv`: 481,275 habitat-accessible
 segments with `access_rb = 0`, 147,445 of them rearing), and the comparison shows the disagreement is whole

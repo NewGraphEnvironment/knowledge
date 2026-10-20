@@ -1,3 +1,22 @@
+# knowledge (development version)
+
+* The grade reads every segment at its own distance to a river (#65). `knw_grade_species()` used to walk only the
+  segments the rule's exception could admit and read the rest at the 50 km distance cap, which on the joint size
+  and distance curve understates any segment near a river: every key was affected, and six of the eight walked
+  nothing at all. It now walks every accessible segment with a gradient to the pick's exception river (10 m³/s
+  where it has none) and records `dist_status`. The reference rate that reads 1 is now taken over the stream
+  branch, the edge types the curve was fitted on. Over every accessible segment, river-polygon segments would make
+  up most of the top 5 % for chinook, coho, steelhead and cutthroat and raise their reference 1.4 to 4 times
+  (chinook 0.14 to 0.52); for bull trout, grayling and rainbow the two references are within 7 %. `knw_grade()`
+  gains `ref_rows` and `knw_grade_species()` gains `ref_edge` for this; its `edge_stream`, which limited the walk
+  to the stream branch and which no caller set, goes with the walk's old limits.
+  `habitat_grade/v1`, never uploaded, is regraded before its first publication, and gains `stream_branch`: off the
+  stream branch, on lines through lakes, wetlands and double-line rivers and on other connectors, the grade
+  extrapolates the curve past its visits, and those lines hold 21–79 % of each key's km graded 0.8 or more. The
+  thresholds, `default`'s km and
+  the width rules' km do not move; the flow-ruled tuned rules move by under 0.3 % because wet republished the
+  segment flows the same day (NewGraphEnvironment/wet#103), and retuning on those flows is #73.
+
 # knowledge 0.4.5
 
 * `knw_tune_run()` gains `grid_args`, passed to `knw_tune_grid()`, and reads a cached score back only for the grid

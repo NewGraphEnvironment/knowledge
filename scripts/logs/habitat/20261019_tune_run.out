@@ -1,0 +1,80 @@
+Tuning run, knowledge#57. Evidence build scripts/logs/habitat/20261017_evidence_build_ledger.csv on link run 20261017_004619-3f4c713b (link a17e91773b283b021811f8b5b76b887d5f4c16e4;ee21eb1371cbc4d7a2d598f8bbeeaeb0534d7994).
+  visits_link md5 5954951fd7ab147b41c9299e82042d58
+  visits_species md5 bc71243b0a4eb2e360e1e8410db34125
+  walks md5 403c2b4200898f30e00a3f65a879e19c
+Spawner evidence: 1069 BT visits with a coded fish, 194 with evidence.
+link default thresholds at a17e91773b283b021811f8b5b76b887d5f4c16e4 (same at ee21eb1371cbc4d7a2d598f8bbeeaeb0534d7994): 11 species.
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Scored 22 species x stage in 4.0 min on 8 workers.
+BT_rear: fitted. 11015 visits (1199 detections) in 122 groups (75 both). Recommended mad>=0.35|g<=0.1049|none; default outside the region (+138.7, SE 87.8). Curve held-out 5731.1 vs grid best 5792.3.
+BT_spawn: fitted. 552 visits (101 detections) in 50 groups (22 both). Recommended mad>=0.75|g<=0.0549|Q3@D2000; default outside the region (+44.0, SE 41.6). Curve held-out 423.2 vs grid best 409.0.
+CH_rear: fitted. 7123 visits (216 detections) in 104 groups (43 both). Recommended mad>=0.75|g<=0.09|Q3@D1000; default outside the region (+196.3, SE 81.6). Curve held-out 1323.6 vs grid best 1150.7.
+CH_spawn: no_response (visits_in=7123).
+CM_rear: no_stream_rule (visits_in=0).
+CM_spawn: no_response (visits_in=2911).
+CO_rear: fitted. 5442 visits (1107 detections) in 85 groups (62 both). Recommended mad>=0.03|g<=0.04|none; default outside the region (+113.2, SE 45.8). Curve held-out 4068.4 vs grid best 3854.9.
+CO_spawn: no_response (visits_in=5442).
+GR_rear: fitted. 1472 visits (212 detections) in 44 groups (26 both). Recommended width>=1.5|g<=0.0349|none; default in the region (+10.7, SE 12.1). Curve held-out 1022.1 vs grid best 825.3.
+GR_spawn: no_response (visits_in=1472).
+KO_rear: no_stream_rule (visits_in=0).
+KO_spawn: no_response (visits_in=0).
+PK_rear: no_stream_rule (visits_in=0).
+PK_spawn: no_response (visits_in=3976).
+RB_rear: fitted. 13578 visits (3514 detections) in 160 groups (129 both). Recommended width>=3|g<=0.09|none; default outside the region (+150.6, SE 63.9). Curve held-out 9737.5 vs grid best 11804.2.
+RB_spawn: no_response (visits_in=13578).
+SK_rear: no_stream_rule (visits_in=0).
+SK_spawn: no_response (visits_in=5070).
+ST_rear: fitted. 4798 visits (82 detections) in 68 groups (11 both). Recommended mad>=1|g<=0.0849|none; default outside the region (+42.4, SE 29.9). Curve held-out 2353.7 vs grid best 673.5.
+ST_spawn: no_response (visits_in=4798).
+WCT_rear: underpowered. 1679 visits (536 detections) in 14 groups (6 both). Recommended width>=1.5|g<=0.04|none; default outside the region (+17.8, SE 13.4). Curve held-out 1375.2 vs grid best 1311.1.
+WCT_spawn: no_response (visits_in=1679).
+BT_rear: grades on file for mad>=0.35|g<=0.1049|none / 20261017_004619-3f4c713b (walked only the exception's candidates), regraded for mad>=0.35|g<=0.1049|none / 20261017_004619-3f4c713b.
+BT_rear grades: 158 groups, segments=8406979, accessible=2681583, walked=2681583, walk_found=2647784, walk_none=33782, walk_other=17, graded=2656472, no_size=33992, no_gradient=0; reference rate 0.2255; walks 51.7 min; total 53.3 min.
+BT_spawn: grades on file for mad>=0.75|g<=0.0549|Q3@D2000 / 20261017_004619-3f4c713b (walked only the exception's candidates), regraded for mad>=0.75|g<=0.0549|Q3@D2000 / 20261017_004619-3f4c713b.
+BT_spawn grades: 158 groups, segments=8406979, accessible=2681583, walked=2681583, walk_found=2665023, walk_none=16543, walk_other=17, graded=2656472, no_size=33992, no_gradient=0; reference rate 0.2098; walks 44.6 min; total 46.2 min.
+CH_rear: grades on file for mad>=0.75|g<=0.09|Q3@D1000 / 20261017_004619-3f4c713b (reference over every accessible segment), regraded for mad>=0.75|g<=0.09|Q3@D1000 / 20261017_004619-3f4c713b.
+CH_rear grades: 125 groups, segments=5757827, accessible=856244, walked=856244, walk_found=809412, walk_none=46831, walk_other=1, graded=852431, no_size=6259, no_gradient=0; reference rate 0.1388; walks 16.1 min; total 17.3 min.
+CO_rear: grades on file for mad>=0.03|g<=0.04|none / 20261017_004619-3f4c713b (walked only the exception's candidates), regraded for mad>=0.03|g<=0.04|none / 20261017_004619-3f4c713b.
+CO_rear grades: 100 groups, segments=4919304, accessible=615302, walked=615302, walk_found=484753, walk_none=130548, walk_other=1, graded=607483, no_size=10518, no_gradient=0; reference rate 0.5121; walks 8.5 min; total 9.7 min.
+GR_rear: grades on file for width>=1.5|g<=0.0349|none / 20261017_004619-3f4c713b (walked only the exception's candidates), regraded for width>=1.5|g<=0.0349|none / 20261017_004619-3f4c713b.
+GR_rear grades: 82 groups, segments=4214528, accessible=856113, walked=856113, walk_found=841456, walk_none=14641, walk_other=16, graded=496267, no_size=2620145, no_gradient=0; reference rate 0.0338; walks 13.7 min; total 14.7 min.
+RB_rear: grades on file for width>=3|g<=0.09|none / 20261017_004619-3f4c713b (walked only the exception's candidates), regraded for width>=3|g<=0.09|none / 20261017_004619-3f4c713b.
+RB_rear grades: 210 groups, segments=10331001, accessible=2350883, walked=2350883, walk_found=2135004, walk_none=215878, walk_other=1, graded=1221351, no_size=6258271, no_gradient=0; reference rate 0.4454; walks 37.0 min; total 38.7 min.
+ST_rear: grades on file for mad>=1|g<=0.0849|none / 20261017_004619-3f4c713b (walked only the exception's candidates), regraded for mad>=1|g<=0.0849|none / 20261017_004619-3f4c713b.
+ST_rear grades: 79 groups, segments=4142681, accessible=720768, walked=720768, walk_found=566649, walk_none=154119, walk_other=0, graded=717790, no_size=3766, no_gradient=0; reference rate 0.2012; walks 9.5 min; total 10.6 min.
+WCT_rear: grades on file for width>=1.5|g<=0.04|none / 20261017_004619-3f4c713b (walked only the exception's candidates), regraded for width>=1.5|g<=0.04|none / 20261017_004619-3f4c713b.
+WCT_rear grades: 16 groups, segments=1190110, accessible=167459, walked=167459, walk_found=166124, walk_none=1335, walk_other=0, graded=111698, no_size=683918, no_gradient=0; reference rate 0.4726; walks 2.2 min; total 2.9 min.
+Done in 197.7 min.

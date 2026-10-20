@@ -24,8 +24,11 @@
 #     deviance on the same folds beside the grid's.
 #   - GRADE (#57, decided 2026-10-17): predicted rate at the reference nuisance values with the
 #     group effect excluded, over the 95th percentile of accessible segments' rate, capped at 1,
-#     in fifths. Expected use, not habitat quality. Walks for the grade run from the segment's
-#     downstream end, only for segments the exception could admit.
+#     in fifths (the percentile over the stream branch's edge types since #65: for CH, CO, ST and WCT,
+#     river polygons near 0 m otherwise set it). Expected use, not habitat quality. Walks for the grade run from the segment's
+#     downstream end, for every accessible segment with a gradient, since the curve reads size and
+#     distance jointly (#65; #57's grades walked only the exception's candidates and read the
+#     rest at the 50 km cap).
 #   - CH's size floor (0.75 against 0.5 m3/s) is read off CH rearing's pick on all CH groups.
 #
 # INPUT:  data/fdis/derived/{visits_link,visits_species,walks}.csv (0310), data/fdis/build/fish.rds
@@ -33,7 +36,8 @@
 #         (parameters_habitat_thresholds.csv); fwapg database (PG* env vars): fresh_default, discharge
 # OUTPUT: data/tune/<sp>_<stage>_tune.csv      every rule's score (the full grid), with pick, recommended, region
 #         data/tune/<sp>_<stage>_curves.csv    the marginal curves at the pick
-#         data/tune/<sp>_<stage>_grades.csv    one row per segment of the species' groups (ignored; 0325 publishes)
+#         data/tune/<sp>_<stage>_grades.csv    one row per segment of the species' groups, each graded segment at
+#                                              its own walked distance, with dist_status (ignored; 0325 publishes)
 #         data/tune/<sp>_<stage>_groups.csv    the groups modelled, with their fold
 #         data/tune/<sp>_<stage>_seeds.csv     the four more fold seeds' best, pick and recommended rules
 #         data/tune/<sp>_<stage>_honest.csv    nested selection: each fold's pick and its held-out deviance
@@ -177,18 +181,28 @@ for (k in names(out)) {
   if (is.null(r$curve)) next
   gpath <- file.path(dir_out, paste0(k, "_grades.csv"))
   if (file.exists(gpath)) {
-    # kept only when it was graded under this pick on this link run
+    # kept only when it was graded under this pick on this link run with every graded segment walked
+    # (dist_status, #65) and the reference taken over the stream branch (ref_population, #65); #57's tables
+    # walked only the exception's candidates, and #65's first CH table took the reference over every
+    # accessible segment, so both are regraded
     head1 <- readr::read_csv(gpath, n_max = 1, show_col_types = FALSE, col_types = readr::cols(.default = "c"))
-    if (identical(head1$rule, r$pick$rule) && identical(head1$run_uid, run_uid)) {
+    walked_all <- "dist_status" %in% names(head1)
+    ref_stream <- "ref_population" %in% names(head1) && identical(head1$ref_population, "stream_branch")
+    if (identical(head1$rule, r$pick$rule) && identical(head1$run_uid, run_uid) && walked_all && ref_stream) {
       say("%s grades: already written under %s on %s, kept.", k, r$pick$rule, run_uid)
       next
     }
-    say("%s grades: on file for %s / %s, regraded for %s / %s.", k, head1$rule, head1$run_uid, r$pick$rule, run_uid)
+    # not "<key> grades:", which data-raw/vignette_chinook.R reads as the one result line
+    say("%s: grades on file for %s / %s%s, regraded for %s / %s.", k, head1$rule, head1$run_uid,
+        if (!walked_all) " (walked only the exception's candidates)"
+        else if (!ref_stream) " (reference over every accessible segment)" else "",
+        r$pick$rule, run_uid)
   }
   wsg <- groups_sp(r$species_code)
   t1 <- Sys.time()
   g <- knw_grade_species(pg, schema, r$species_code, wsg, r$curve, r$pick, stage = r$stage, workers = min(workers, 8L))
   write_csv(g$grades |> mutate(species_code = r$species_code, stage = r$stage, rule = r$pick$rule, run_uid = run_uid,
+                               ref_population = "stream_branch",
                                across(c(rate, grade), ~ signif(.x, 5))),
             file.path(dir_out, paste0(k, "_grades.csv")), na = "")
   say("%s grades: %d groups, %s; reference rate %.4f; walks %.1f min; total %.1f min.", k, length(wsg),
