@@ -5,9 +5,10 @@
   and distance curve understates any segment near a river: every key was affected, and six of the eight walked
   nothing at all. It now walks every accessible segment with a gradient to the pick's exception river (10 m³/s
   where it has none) and records `dist_status`. The reference rate that reads 1 is now taken over the stream
-  branch, the edge types the curve was fitted on: river-polygon and lake segments, about 0 m from their river,
+  branch, the edge types the curve was fitted on: river-polygon segments, mostly about 0 m from their river,
   would otherwise set it (chinook's 0.52 over every accessible segment against 0.14). `knw_grade()` gains
-  `ref_rows` and `knw_grade_species()` gains `ref_edge` for this, in place of its unused `edge_stream`.
+  `ref_rows` and `knw_grade_species()` gains `ref_edge` for this; its `edge_stream`, which limited the walk to the
+  stream branch and which no caller set, goes with the walk's old limits.
   `habitat_grade/v1`, never uploaded, is regraded before its first publication. The thresholds, `default`'s km and
   the width rules' km do not move; the flow-ruled tuned rules move by under 0.3 % because wet republished the
   segment flows the same day (NewGraphEnvironment/wet#103), and retuning on those flows is #73.

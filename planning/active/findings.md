@@ -207,6 +207,16 @@ republish moved the flow rules by under 0.3 %); the research Limits said "about 
 76,792 km, 49.0 %); "under 1 % (CO, GR)" (GR moved 0.0344 → 0.0338, −1.7 %). And 0325 read the discharge load at
 publish time while calling it the load the grade read: renamed `discharge_load_at_publish`, #72 extended.
 
+## Branch review round 2 (2026-10-20)
+
+`review-branch-round2.md`: round 1's fixes hold; it enumerated 38 numbers and quantified claims the branch adds,
+all holding but two, both fixed: the `knw_grade_species()` roxygen said wetland segments read the curve near
+0 m (measured: wetland edges 1050 and 1150 have 2.7 % and 1.7 % of km within 1 m; river-polygon edges 78.6 %),
+and NEWS called `edge_stream` unused (in 0.4.5 it limited the walk; no caller set it). Also fixed: "nearly
+doubles" (1.74×) and WCT's "most accessible stream" (52 % of graded km; 38 % of accessible). Mechanism (round 2):
+prose restated from an intermediate summary rather than recomputed at the grain the sentence names, and one
+member's property given to a set; NEWS's "river-polygon and lake segments" was the same and is narrowed.
+
 ## Errors Encountered
 
 | Error | Resolution |

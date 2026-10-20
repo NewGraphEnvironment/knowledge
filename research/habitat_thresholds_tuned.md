@@ -132,7 +132,7 @@ cap, and six of the eight keys walked no segment at all; every segment now reads
 reference is the stream branch's 95th percentile. The regrade also reads the flows wet republished on
 2026-10-19 (NewGraphEnvironment/wet#103, about ±5 % on most segments; BT gains 4 segments with no flow), after
 the thresholds were tuned on the load before it (#73 retunes). The references move by under 1 % (CO) and 2 % (GR)
-to 25 % (BT rearing, up); CH's grade-weighted km nearly doubles (36,149 → 63,059) and its km at 0.8–1 triples.
+to 25 % (BT rearing, up); CH's grade-weighted km grows by three quarters (36,149 → 63,059) and its km at 0.8–1 triples.
 
 ## What each rule changes on link's segments
 

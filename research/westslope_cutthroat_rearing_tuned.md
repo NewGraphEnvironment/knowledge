@@ -21,7 +21,7 @@ pick is in the region of all five seeds, and recommended by 12.5 % of bootstrap 
 groups, 167,459 accessible, 111,698 graded (683,918 with no width); reference rate 0.473 (regraded 2026-10-19,
 #65: every segment at its own distance to a 10 m³/s river, the reference over the stream branch). Of 35,320
 accessible km, 25,932 are graded (18,671 grade-weighted km), and 52 % of graded km is in the 0.8–1 class: in the groups
-WCT hold, most accessible stream reads as near the top.
+WCT hold, most graded stream reads as near the top.
 
 **Comparison (`scripts/0330`, `data/compare/WCT_rear_*`).** Regenerated on link's 16 WCT groups, the rule draws
 16,243 km against `default`'s 20,749 (−21.7 %): 4,510 km lost, 4,332 of them to the 4 % gradient maximum, and

@@ -16,8 +16,9 @@
 #' gets a correct exception and a grade that is not comparable.
 #'
 #' The curve was fitted on stream-branch visits outside lakes, wetlands and
-#' river polygons, so a river-polygon or wetland segment reads it near 0 m and
-#' at sizes few visits had: its grade is an extrapolation. The reference rate
+#' river polygons, so a grade off that branch is an extrapolation: a
+#' river-polygon segment mostly reads the curve near 0 m and at sizes few visits
+#' had, and a wetland or lake segment lies outside the visits it was fitted on. The reference rate
 #' that reads 1 is therefore taken over the stream branch alone (`ref_edge`;
 #' Al, 2026-10-19): over every accessible segment, river polygons at 0 m set
 #' it, and chinook's rose from 0.14 to 0.52.
