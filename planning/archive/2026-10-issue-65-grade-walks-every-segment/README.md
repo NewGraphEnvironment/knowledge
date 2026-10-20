@@ -14,6 +14,8 @@ within 7 %. Mid-run, the segment flows turned out to have been republished by we
 check that every moved verdict is explained (it passed), and retuning on the new flows is #73. Grade provenance
 recorded from the call that made the grade is #72. All eight keys were regraded and recompared;
 `habitat_grade/v1` (still not uploaded) is regraded before its first publication; the thresholds do not move.
+After the PR opened, Al chose to flag the grade off the stream branch in `habitat_grade/v1` (`stream_branch`, 2026-10-20)
+rather than blank it, and to leave the walk ending at the river's centreline until the retune (#73).
 Lesson, from three review loops: prose restated from an intermediate summary, rather than recomputed at the grain
 the sentence names, is where the errors were; the branch review found seven false statements (3, 2 and 2 by
 round), two of them a chinook measurement written into an every-species sentence.
@@ -48,6 +50,12 @@ Wrong turns kept: the parked plan's "size > 0" walk set (would have dropped 638 
 from the tuned rules); the all-accessible reference (CH stream km at 0.8+ fell to 0.4 %); a rule-unchanged check
 that the flow republish made impossible; and the seven false statements the branch review found.
 
+Off the stream branch (`check_off_branch.txt`): 24–36 % of each key's graded km, 21–79 % of its km at 0.8 or more
+(CH 79 %, ST 70 %, CO 66 %; below its km share for BT spawning, GR and RB). Edge-1200 lines (main flow through lakes
+and wetlands) are 20 % at 0.8+ for CH. Connectors (`check_connector_share.txt`): of visit sites whose walk found a
+river, 59–94 % end on a double-line river, where the traced connector adds a median 14–46 m (90th percentile
+34–321 m); to the bank, 22 of 2,260 traced CH sites would cross the 1 km exception.
+
 Research revised: `research/habitat_thresholds_tuned.md` (method, Grades, rule-change and floodplain tables,
 Limits), `research/chinook_rearing_tuned.md` and the six other species files.
 
@@ -55,6 +63,6 @@ Limits), `research/chinook_rearing_tuned.md` and the six other species files.
 
 - `scripts/logs/habitat/20261019_tune_run*` (the superseded CH regrade `-ch.txt`, the full regrade `.txt`/`.out`)
 - `scripts/logs/habitat/20261019_compare*`
-- this directory's `review-*.md` (ten reviewer rounds), `check_rule_changes_explained.R`, `compare_before_after.R`
+- this directory's `review-*.md` (ten reviewer rounds), `check_rule_changes_explained.R`, `compare_before_after.R`, `check_off_branch.R`, `check_connector_share.R`
 
 Closed by: PR (this branch, `65-the-grade-reads-segments-that-pass-the-s`)

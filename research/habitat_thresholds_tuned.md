@@ -1,7 +1,8 @@
 # Habitat thresholds tuned for every species and life stage in one run
 
 **Verified:** 2026-10-17; the grade, graded figures and rule km regraded and recompared 2026-10-19 (#65, on the
-flows wet republished that day; retuning on them is #73) · **Issues:** #57 (this; replaced #59), #65; the one-species tunings it supersedes are #28
+flows wet republished that day; retuning on them is #73); the `stream_branch` flag and the connector measure
+2026-10-20 (#65) · **Issues:** #57 (this; replaced #59), #65; the one-species tunings it supersedes are #28
 (`habitat_weights.md`), #33 (`bt_spawning.md`), #52 (`chinook_stream_size.md`) and #54
 (`chinook_rearing_tuned.md`); link reads the result through NewGraphEnvironment/link#346 · **Produced by:**
 - `scripts/0300`: the wait for link's province-wide `default` run (`scripts/logs/habitat/20261017_link_settle.csv`);
@@ -12,6 +13,8 @@ flows wet republished that day; retuning on them is #73) · **Issues:** #57 (thi
   `20261019_tune_run-ch.txt`);
 - `scripts/0325`: `data/thresholds.csv`, `data/thresholds_groups.csv`, and the Parquet sets `knowledge/thresholds/v1`
   and `knowledge/habitat_grade/v1`;
+- `planning/archive/2026-10-issue-65-grade-walks-every-segment/check_{off_branch,connector_share}.R`: the grade off
+  the stream branch and the connector's share of the walked distance (Limits);
 - `scripts/0330`: `data/compare/*.csv` (`compare`, `change`, `checks`, `floodplain`), `research/fig/compare_*.png`
   (the comparison; below; logs `scripts/logs/habitat/20261017_compare*`, and #65's `20261019_compare.txt`).
 
@@ -216,14 +219,27 @@ connectivity cascade from one. Width rules did not move.)
 - **Thin rows.** ST (82 detections, 11 groups) and WCT (6 groups) carry their labels; BT spawning should not be
   applied. For ST and GR the joint curve predicts worse than the cut on held-out groups, so their grades rank
   segments but their rates are not to be read.
-- **The grade on river polygons and wetlands is an extrapolation.** The curve was fitted on stream-branch visits
+- **The grade off the stream branch is an extrapolation.** The curve was fitted on stream-branch visits
   outside lakes, wetlands and river polygons; a river-polygon segment often reads it at 0 m from the river it is
   part of (48 % of river-polygon km within 1 m for GR, 79 % for CH) and at flows few visits had, so its grade rests
-  on the surface past its data: for CH, 77 % of river-polygon km grades 0.8 or more and 69 % reads 1.
-  The reference is taken over the stream branch so that they do not set it: over every accessible segment, river
-  polygons would make up 66–89 % of the top 5 % for CH, CO, ST and WCT and raise the reference 1.4 to 4 times
+  on the surface past its data: for CH, 77 % of river-polygon km grades 0.8 or more and 69 % reads 1. Main-flow
+  lines through lakes and wetlands (edge type 1200) read a river 0 m away less often (10–18 % of their graded km
+  within 1 m for every key but WCT, 62 %), and 4–34 % of their km grades 0.8 or more (WCT 79 %). Off the stream
+  branch is 24–36 % of each key's graded km and 21–79 % of its km at 0.8 or more, far above its share for CH (79 %),
+  ST (70 %) and CO (66 %) and below it for BT spawning, GR and RB, so `habitat_grade/v1` carries `stream_branch` to
+  say which segments the curve's visits support (`check_off_branch.txt` in #65's archive).
+  The reference is taken over the stream branch so that river polygons do not set it: over every accessible
+  segment, they would make up 66–89 % of the top 5 % for CH, CO, ST and WCT and raise the reference 1.4 to 4 times
   (CH's from 0.14 to 0.52, leaving 0.4 % of stream km at 0.8 or more); for BT, GR and RB they are 19–34 % of it
   and the two references are within 7 % (#65).
+- **Distance is to the river's main line, not its bank.** Where a tributary meets a double-line river, its line
+  crosses the polygon as a connector to the river's centreline, and the connector carries the tributary's flow, so
+  the walk counts it, for visits and segments alike. Of the curves' visit sites whose walk found a river, 59–94 % per
+  key end on a double-line river, and where the connector could be traced (97–99 % of those) it adds a median of
+  14–46 m (90th percentile 34–321 m), a median 0–2 % of the site's distance. Measured to the bank instead, 22 of the
+  2,260 traced CH sites would fall inside its 1 km exception, and none of BT spawning's inside 2 km
+  (`check_connector_share.txt` in #65's archive). Ending the walk at the bank changes the visits' distances,
+  so it waits for the retune (#73).
 - **Width rules leave first-order streams ungraded**; a consumer summing graded km over a width-ruled species
   sums measured streams only.
 - **One link run.** Every grade carries `run_uid 20261017_004619-3f4c713b`; link recomputed UPET twice after the
