@@ -98,19 +98,19 @@ article in plain words with the 1.96 table and a bibliography, an interactive Bu
 - [x] `tests/testthat/test-vignette-data.R`: the new elements
 
 ## Phase 6: the article
-- [ ] Word count before (prose outside chunks and YAML, each inline `r` as one word; same command after)
-- [ ] Restructure to the issue's eight sections plus References, in its plain words; cut the profile plot, the zoom
+- [x] Word count before (prose outside chunks and YAML, each inline `r` as one word; same command after)
+- [x] Restructure to the issue's eight sections plus References, in its plain words; cut the profile plot, the zoom
       panel, the examples table, the bootstrap percentages, the small causes of change (one sentence)
-- [ ] The close-call sentence: one SE as a parsimony rule of thumb fixed before the run, cited; the 1.96 table
+- [x] The close-call sentence: one SE as a parsimony rule of thumb fixed before the run, cited; the 1.96 table
       computed inline with `knw_tune_repick()`, saying plainly that CH keeps its flow floor but loses the near-a-river
       allowance at 1.96
-- [ ] "What the comparison is against" sentence (link's width rule in every group; flow cut-offs scored as
+- [x] "What the comparison is against" sentence (link's width rule in every group; flow cut-offs scored as
       candidates); the wetland sentence in "Before you use it", with no pointer to pending work
-- [ ] Map: `knw_compare_mapgl()` when `IN_PKGDOWN` is `"true"`, coordinates rounded and only the popup fields; the
+- [x] Map: `knw_compare_mapgl()` when `IN_PKGDOWN` is `"true"`, coordinates rounded and only the popup fields; the
       static map otherwise
 - [ ] `bibliography: chinook_rearing.bib`, `[@key]` citations (link, fresh, wet, fwapg, bcfishpass, bcfishobs,
       FDIS, the one-SE sources) and a References section; `stopifnot()` on every quoted number the rewrite keeps or adds
-- [ ] Word count after against the 1,400 target, and what set the floor
+- [x] Word count after against the 1,400 target, and what set the floor
 
 ## Phase 7: README and link
 - [x] README Data and methods: fwapg, bcfishobs and bcfishpass are Simon Norris's (Hillcrest Geographics),

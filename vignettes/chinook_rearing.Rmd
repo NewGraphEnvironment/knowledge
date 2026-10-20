@@ -2,6 +2,8 @@
 title: "Chinook rearing: choosing link's thresholds from fish records"
 output:
   bookdown::html_vignette2
+bibliography: chinook_rearing.bib
+link-citations: true
 vignette: >
   %\VignetteIndexEntry{Chinook rearing: choosing link's thresholds from fish records}
   %\VignetteEngine{knitr::rmarkdown}
@@ -20,8 +22,8 @@ knitr::opts_chunk$set(
   warning = FALSE
 )
 library(knowledge)
-library(dplyr)
-library(ggplot2)
+# pkgdown sets IN_PKGDOWN while it builds the website: the site gets the interactive map, the package copy the static one
+on_site <- identical(Sys.getenv("IN_PKGDOWN"), "true")
 ```
 
 ```{r load}
@@ -43,285 +45,171 @@ per_group <- cmp[cmp$watershed_group_code != "ALL", ]
 map_row <- cmp[cmp$watershed_group_code == meta$map_group, ]
 seeds <- x$seeds
 honest <- x$honest
-# chinook alone, scored again on gradient limits up to 30 % (#67): the best rule per gradient limit
 ge <- x$grad_ext
 ge_best <- ge[ge$ddev_best == 0, ]
-ge_rec <- ge[abs(ge$grad_max - rec$grad_max) < 1e-9, ]
 ge_reg <- ge$grad_max[ge$in_region > 0]
-ges <- x$grad_ext_summary
-# the sentences on steeper limits read these as true; a rerun that breaks one must change the prose
-stopifnot(nrow(ge_best) == 1, ge_best$grad_max > rec$grad_max,
-          identical(ge_rec$best_rule, rec$rule), ge_rec$in_region > 0, all(ge$in_region[ge$grad_max >= min(ge_reg)] > 0),
-          all(ge$ddev_best[ge$grad_max > rec$grad_max] <= ge_rec$ddev_best),
-          abs(ges$honest_dev_default - summ$honest_dev_default) < 0.01,
-          ges$honest_dev_rec > ges$honest_dev_default, summ$honest_dev_rec < summ$honest_dev_default)
 
 # formatting
 n0 <- function(v) format(round(v), big.mark = ",", scientific = FALSE, trim = TRUE)
 n1 <- function(v) format(round(v, 1), big.mark = ",", nsmall = 1, scientific = FALSE, trim = TRUE)
 pc <- function(v, d = 0) paste0(formatC(100 * v, format = "f", digits = d), " %")
-grad <- function(g) paste0(signif(100 * g, 3), " %")
+grad <- function(g) paste0(signif(100 * g, 4), " %")
 km_d <- function(d) if (d >= 1000) paste(format(d / 1000, trim = TRUE), "km") else paste(d, "m")
 lst <- function(v, and = "and") if (length(v) < 2) v else paste(paste(v[-length(v)], collapse = ", "), and, v[length(v)])
 words <- function(r) {
-  size <- if (r$size_var == "mad") sprintf("a mean annual flow of at least %s m³/s", format(r$size_min, trim = TRUE))
+  size <- if (r$size_var == "mad") sprintf("an average flow of at least %s m³/s", format(r$size_min, trim = TRUE))
           else sprintf("a channel at least %s m wide", format(r$size_min, trim = TRUE))
-  if (is.na(r$exc_q)) return(sprintf("a gradient of at most %s, and %s", grad(r$grad_max), size))
-  sprintf("a gradient of at most %s, and either %s or a river of at least %s m³/s within %s downstream",
+  if (is.na(r$exc_q)) return(sprintf("a slope of at most %s, and %s", grad(r$grad_max), size))
+  sprintf("a slope of at most %s, and either %s or a river of at least %s m³/s within %s downstream",
           grad(r$grad_max), size, r$exc_q, km_d(r$exc_d))
 }
-share_of <- function(col, v) sum(tune$boot_rec_share[tune[[col]] %in% v])
-no_grad <- function(rule) sub("\\|g<=[0-9.]+\\|", "|", rule)
-seed_other <- tune[tune$rule %in% seeds$recommended[no_grad(seeds$recommended) != no_grad(rec$rule)], ]
-seed_same_shape <- sum(no_grad(seeds$recommended) == no_grad(rec$rule))
-# the steeper run's best rule, read back from its rule string ("mad>=0.75|g<=0.15|Q1@D1000") into words()'s fields
-rule_parts <- function(s) {
-  p <- strsplit(s, "|", fixed = TRUE)[[1]]
-  sz <- strsplit(p[1], ">=", fixed = TRUE)[[1]]
-  qd <- if (p[3] == "none") c(NA, NA) else as.numeric(strsplit(sub("^Q", "", p[3]), "@D", fixed = TRUE)[[1]])
-  data.frame(size_var = sz[1], size_min = as.numeric(sz[2]), grad_max = as.numeric(sub("^g<=", "", p[2])),
-             exc_q = qd[1], exc_d = qd[2])
+# a rule in a table cell
+short <- function(r, d) {
+  if (r$rule == d$rule) return("link's current rule")
+  size <- if (r$size_var == "mad") paste0("flow ≥ ", format(r$size_min, trim = TRUE), " m³/s")
+          else paste0("width ≥ ", format(r$size_min, trim = TRUE), " m")
+  near <- if (is.na(r$exc_q)) "" else paste0(", or a ", r$exc_q, " m³/s river within ", km_d(r$exc_d))
+  paste0(size, ", slope ≤ ", grad(r$grad_max), near)
 }
-ge_best_r <- rule_parts(ge_best$best_rule)
-ges_seeds <- x$grad_ext_seeds
-ge_seeds_best <- sum(vapply(ges_seeds$recommended, function(r) isTRUE(all.equal(rule_parts(r)$grad_max, ge_best$grad_max)),
-                            logical(1)))
-stopifnot(identical(rule_parts(rec$rule)$exc_q, rec$exc_q), identical(ge_best$best_rule, ges$rule_recommended),
-          dflt$ddev_best > dflt$se_diff, identical(ges$rule_pick, ge_best$best_rule),
-          ge_best$boot_rec_share == max(ge$boot_rec_share), ge_rec$boot_rec_share < ge_best$boot_rec_share,
-          ge_best_r$size_var == rec$size_var, ge_best_r$size_min == rec$size_min, ge_best_r$exc_d == rec$exc_d,
-          ge_best_r$exc_q < rec$exc_q)
 
-# the saved curves give exp(fit - fit at the threshold) on the cloglog scale, a ratio of hazards; the
-# rates are the fitted chances themselves
-grad_at <- function(g) {
-  d <- x$curves[x$curves$curve == "gradient", ]
-  stats::approx(d$x, d$rate, xout = g)$y
-}
+# every rule in the close-call set has the same shape; the sentences below say so
+stopifnot(all(region$size_var == "mad"), all(!is.na(region$exc_q)), dflt$ddev_best > dflt$se_diff,
+          all(region$departures == 3))
+
+# the stricter bar: the same choice from rules within 1.96 standard errors, for every species and stage tuned
+ta <- x$tune_all
+keys <- unique(ta[c("species_code", "stage")])
+strict <- do.call(rbind, lapply(seq_len(nrow(keys)), function(i) {
+  t <- ta[ta$species_code == keys$species_code[i] & ta$stage == keys$stage[i], ]
+  d <- t[t$is_default, ]
+  a <- knw_tune_repick(t)
+  b <- knw_tune_repick(t, se_mult = 1.96)
+  data.frame(species_code = keys$species_code[i], stage = keys$stage[i], behind = d$ddev_best / d$se_diff,
+             one = short(a, d), strict = short(b, d), keeps_default = b$rule == d$rule, n_strict = b$n_region,
+             n_rules = nrow(t))
+}))
+ch196 <- knw_tune_repick(ta[ta$species_code == "CH" & ta$stage == "rear", ], se_mult = 1.96)
+# chinook at 1.96: the flow floor holds, the slope goes back to link's and the near-a-river allowance goes
+stopifnot(ch196$size_var == "mad", ch196$size_min == rec$size_min, ch196$grad_max == dflt$grad_max, is.na(ch196$exc_q),
+          !strict$keeps_default[strict$species_code == "CH"])
+n_keep <- sum(strict$keeps_default)
+wide <- strict[strict$keeps_default & strict$n_strict / strict$n_rules > 0.8, ]
+stopifnot(nrow(wide) >= 3)
+
+# steeper slope limits (scored later on a longer list, up to 30 %)
+stopifnot(nrow(ge_best) == 1, ge_best$grad_max > rec$grad_max, all(ge$in_region[ge$grad_max >= min(ge_reg)] > 0))
+
+boot_mad <- sum(tune$boot_rec_share[tune$size_var == "mad"])
+boot_grad <- sum(tune$boot_rec_share[tune$grad_max == rec$grad_max])
+stopifnot(boot_mad > 0.9, boot_grad < 0.5)
+
+wl <- x$wetland
+stopifnot(abs(wl$km_tuned - 10200) < 200, wl$grade_median_tuned < 0.05)
 
 link_site <- "https://www.newgraphenvironment.com/link/"
-fresh_site <- "https://www.newgraphenvironment.com/fresh/"
-wet_site <- "https://www.newgraphenvironment.com/wet/"
 link_default <- sprintf("https://github.com/NewGraphEnvironment/link/tree/%s/inst/extdata/configs/default", meta$link_sha)
 ```
 
 New Graph Environment maps where fish can live in British Columbia's streams with
-[`link`](`r link_site`), an R package that marks every segment of the provincial stream
-network as spawning or rearing habitat for each species, and as reachable by fish or not. It does
-this with a **configuration**: a set of rules and thresholds for stream size and steepness, one
-set per species and life stage. Its standard configuration is called
-[`default`](`r link_default`). Its thresholds start from the ones
-[`bcfishpass`](https://github.com/smnorris/bcfishpass) has used for years, a project New Graph
-contributes to.
+[`link`](`r link_site`) [@TODOKEY_link], an R package that marks every stream segment as spawning or
+rearing habitat for each species, and as reachable by fish or not. Its standard settings, called
+[`default`](`r link_default`), start from those [bcfishpass](https://smnorris.github.io/bcfishpass/) has used for years
+[@norris2024smnorrisbcfishpass]. This article tests one of them, where young chinook salmon rear, against the
+province's electrofishing records.
 
-This article tests one of those rules, where juvenile chinook salmon rear, against the province's
-electrofishing records: places crews fished, and whether they caught chinook. It asks which
-version of the rule the records support, how sure that answer is, and what the chosen rule
-changes on the ground. The tests are part of `knowledge`, the R package this article belongs to.
+**The answer.** The records support a different rule from link's current one: **`r words(rec)`**. link now asks
+for `r words(dflt)`. The new rule draws `r n1(-all_row$change_pct)` % less habitat across the province, and
+chinook are caught far more often inside it than outside. Its cut-offs are a judgment call, though: under a stricter
+bar only the flow floor holds (below).
 
-**The answer.** The records support a different rule from `default`: **`r words(rec)`**.
-`default` asks for `r words(dflt)`. The recommended rule draws less habitat, `r n1(-all_row$change_pct)` %
-fewer km across the province, and separates where chinook are caught from where they are not
-more sharply.
+## What does link do now?
 
-## What does `default` draw for chinook rearing?
+link counts a stream segment as chinook rearing habitat when chinook can reach it, its slope is at most
+`r grad(dflt$grad_max)`, and its channel is at least `r dflt$size_min` m wide. link can size streams by width or by
+flow, set group by group. Its `default` uses width in every group, and every comparison here is against that. link's
+own flow cut-offs were scored as candidates, not used as the starting point. Rivers, wetlands and lakes have their own
+conditions (last section).
 
-`default` counts a segment as chinook rearing habitat if chinook can reach it and it meets the
-condition for its kind of water:
+## What records were used?
 
-- **stream**: a single-line stream or canal, not one drawn through a wetland, with a gradient of
-  at most `r grad(dflt$grad_max)` and a channel at least `r dflt$size_min` m wide;
-- **river**: inside a river polygon, at the same gradient, any width;
-- **wetland**: inside a wetland of at least 1 ha;
-- **lake**: inside a lake or reservoir of at least 100 ha.
+The province's stream atlas divides British Columbia into **watershed groups**, large basins such as the Bulkley.
+The records are the Fisheries Data Information System's electrofishing sites [@TODOKEY_fdis]: where crews fished, and
+whether they caught chinook. Each site was matched to the records it produced in bcfishobs [@norris2024smnorrisbcfishobs] and placed on link's
+streams, built on the BC Freshwater Atlas through fwapg [@norris2024smnorrisfwapg], with flows from wet [@TODOKEY_wet]
+and the rules run by fresh [@TODOKEY_fresh]. Sites
+were kept when they were on ordinary stream lines, of a usual fished area, with no barrier to chinook downstream, in a
+group where link expects chinook: `r n0(summ$visits_in)` sites in `r summ$groups` groups. The tests use the
+`r summ$groups_both` groups where chinook were caught at some sites and not others:
+**`r n0(dflt$n_visits)` sites, `r n0(dflt$n_detect)` with chinook**.
 
-Reaches confirmed by hand are then added. Last, rearing is kept only where it connects to
-spawning: spawning anywhere upstream, or within 10 km downstream with no stretch of 5 % or steeper
-between them.
-Channel width is modelled only on streams of order 2 and up, so the stream condition never admits a
-small, unmeasured first-order stream.
+## How were rules compared?
 
-Only the stream condition is tuned here. Wetlands and lakes keep their conditions. River polygons
-keep theirs too, except that they share the stream condition's gradient maximum, so a new maximum moves
-them as well, though the tuning scored no visit in a river polygon.
+Each candidate rule sets three dials:
 
-## What evidence is used?
+- **the smallest stream**: an average flow of `r lst(sort(unique(tune$size_min[tune$size_var == "mad"])), "or")` m³/s,
+  or a channel width of `r lst(sort(unique(tune$size_min[tune$size_var == "width"])), "or")` m;
+- **the steepest slope**: `r lst(grad(sort(unique(tune$grad_max))), "or")`;
+- **a near-a-river allowance**: none, or a stream below the smallest size still counts when a river of
+  `r lst(sort(unique(na.omit(tune$exc_q))), "or")` m³/s is within
+  `r lst(format(sort(unique(na.omit(tune$exc_d))), big.mark = ",", trim = TRUE), "or")` m downstream.
 
-The province's stream atlas divides British Columbia into **watershed groups**, large basins such
-as the Bulkley. They are the unit everything below is counted in and tested on.
+That makes `r n0(nrow(tune))` rules, link's among them. Each was scored on watersheds it never saw: the groups were
+split into `r meta$spec$folds` sets, and each set was predicted by a model fitted to the other four. The score adds up
+how far each prediction was from what the crew found; lower is better.
 
-Each stream segment carries a gradient, a flow and, where one is modelled, a channel width, all
-from one `link` run (`r meta$link_run_uid`). The streams and their gradients are the BC Freshwater
-Atlas, loaded through fwapg. Flow is the mean annual flow [`wet`](`r wet_site`) publishes: mostly
-the Pacific Climate Impacts Consortium's routed model, tied to the atlas by fwapg, with `wet`'s own
-water balance where that model does not reach or reads far too low. Channel width is fwapg's model, on streams of order
-2 and up.
+## Which rule fits best, and how sure are we?
 
-The evidence is the provincial Fisheries Data Information System (FDIS) electrofishing records,
-placed on `link`'s stream segments. A visit counts when it is on the kind of stream the stream
-condition covers, outside wetlands of 1 ha or more and lakes of 100 ha or more. It must have a fished
-area of 10 to 10,000 m², and be in a group where `link` expects chinook. It must also have no
-natural barrier to chinook downstream, and no record code that could hide a catch. After checks
-on placement, date and effort, that leaves `r n0(summ$visits_in)` visits in `r summ$groups`
-groups. A group where chinook were always or never caught cannot tell rules apart, so the tests
-use the `r summ$groups_both` groups with both outcomes: **`r n0(dflt$n_visits)` visits, of which
-`r n0(dflt$n_detect)` caught chinook**.
+**Close-call rules.** Scores carry error: another draw of watersheds would rank close rules differently. So the tuning
+kept every rule within one standard error of the best, a common rule of thumb for preferring the simpler of close
+models [@TODOKEY_breiman; @TODOKEY_hastie]. It is a convention fixed before the run, not a line below which rules are
+equal: there is no evidence it beats taking the best score [@TODOKEY_chen], and the error it rests on is hard to
+estimate and usually too small [@TODOKEY_bengio; @TODOKEY_bates]. For chinook, `r nrow(region)` rules are close calls,
+all with a flow floor of `r min(region$size_min)` to `r max(region$size_min)` m³/s, the near-a-river allowance, and a
+slope limit of `r lst(grad(sort(unique(region$grad_max))), "or")`. From them, the rule fixed in advance takes the one
+closest to link's; all differ in every dial, so it is the best scorer. link's rule is
+`r n1(dflt$ddev_best / dflt$se_diff)` standard errors behind it. It calls fewer sites habitat
+(`r n0(rec$n_in)` against `r n0(dflt$n_in)`) and catches as many chinook there (`r n0(rec$n_detect_in)` against
+`r n0(dflt$n_detect_in)`).
 
-## Which rules were tried?
+**A stricter bar.** Widen the close calls to 1.96 standard errors, and the same choice keeps link's rule for
+`r n_keep` of the `r nrow(strict)` species and stages tuned:
 
-Each candidate rule sets three things, the same three `default` sets:
-
-- **a size floor**: a mean annual flow (MAD, modelled) of
-  `r lst(sort(unique(tune$size_min[tune$size_var == "mad"])), "or")` m³/s, or a channel width of
-  `r lst(sort(unique(tune$size_min[tune$size_var == "width"])), "or")` m;
-- **a gradient maximum** of `r lst(grad(sort(unique(tune$grad_max))), "or")`;
-- **a near-a-river exception**: none, or a stream below the size floor still counts when a river of
-  at least Q m³/s is within D m downstream (Q of `r lst(sort(unique(na.omit(tune$exc_q))), "or")`;
-  D of `r lst(format(sort(unique(na.omit(tune$exc_d))), big.mark = ",", trim = TRUE), "or")`).
-
-Every combination is one rule, `r n0(nrow(tune))` in all, `default` among them. The exception is
-there because juvenile chinook move up from large rivers into small streams close by.
-
-## How is a rule scored?
-
-A rule is worth having if it predicts where chinook are caught in a watershed it was not built
-from. So the `r summ$groups_both` groups are split at random into `r meta$spec$folds` sets,
-called **folds**. A model learns how much the rule matters from four folds and predicts the
-visits in the fifth, and this repeats until every group has been predicted once. The model also
-allows for fished area, data set and era. Each held-out group's own overall catch rate is the one
-thing fitted on its own visits, and that costs every rule the same.
-
-The **score** adds up, over every predicted visit, how far the prediction was from what the crew
-found (the deviance). Lower is better. Only differences between rules matter: the model with no
-rule at all scores `r n1(-rec$ddev_null)` worse than the best rule.
-
-## Which rules can the data not tell apart?
-
-Scores carry noise: another set of watersheds would rank close rules differently. So the choice is
-not simply the best score. Every rule within one standard error of the best, measured across
-watershed groups, is kept. That set is the **region**: the rules the records cannot rank. It
-holds `r nrow(region)` rules, all of one shape:
-
-- a flow floor of `r min(region$size_min)` to `r max(region$size_min)` m³/s, never a width floor;
-- the exception, with a river of `r min(region$exc_q)` to `r max(region$exc_q)` m³/s within
-  `r km_d(min(region$exc_d))` to `r km_d(max(region$exc_d))`;
-- a gradient maximum of `r lst(grad(sort(unique(region$grad_max))), "or")`.
-
-`default` scores `r n1(dflt$ddev_best)` worse than the best rule, with a standard error of
-`r n1(dflt$se_diff)`, so it is outside the region.
-
-```{r profile, fig.height = 5.2, fig.cap = "How good each value of each setting can be. Each point is the best score of any rule using that value, as deviance above the best rule, so lower is better. A filled point has at least one rule in the region. A ring marks the value default uses."}
-comp <- function(lab, v, key) {
-  tune |>
-    mutate(value = v) |>
-    group_by(value, key = key) |>
-    summarise(best = min(ddev_best), in_region = any(in_region), .groups = "drop") |>
-    mutate(part = lab)
-}
-size_lab <- paste(ifelse(tune$size_var == "mad", "MAD", "width"), as.character(tune$size_min))
-size_key <- ifelse(tune$size_var == "mad", tune$size_min, 10 + tune$size_min)
-prof <- bind_rows(
-  comp("Size floor (m³/s or m)", size_lab, size_key),
-  comp("Gradient maximum", grad(tune$grad_max), tune$grad_max),
-  comp("Exception: river size Q (m³/s)", ifelse(is.na(tune$exc_q), "none", format(tune$exc_q, trim = TRUE)),
-       ifelse(is.na(tune$exc_q), -1, tune$exc_q)),
-  comp("Exception: distance D (m)", ifelse(is.na(tune$exc_d), "none", format(tune$exc_d, big.mark = ",", trim = TRUE)),
-       ifelse(is.na(tune$exc_d), -1, tune$exc_d))
-)
-prof$part <- factor(prof$part, levels = unique(prof$part))
-prof <- prof |> group_by(part) |> mutate(value = factor(value, levels = unique(value[order(key)]))) |> ungroup()
-dflt_vals <- tibble(
-  part = factor(levels(prof$part), levels = levels(prof$part)),
-  value = c(paste("width", as.character(dflt$size_min)), grad(dflt$grad_max), "none", "none")
-)
-dpts <- inner_join(prof, dflt_vals, by = c("part", "value"))
-ggplot(prof, aes(value, best)) +
-  geom_line(aes(group = 1), colour = "grey70") +
-  geom_point(aes(fill = in_region), shape = 21, size = 2.6, colour = "grey20") +
-  geom_point(data = dpts, shape = 21, size = 5, stroke = 1, colour = "#d95f02", fill = NA) +
-  scale_fill_manual(values = c(`TRUE` = "#1b6ca8", `FALSE` = "white"),
-                    labels = c(`TRUE` = "a rule in the region", `FALSE` = "none in the region"), name = NULL) +
-  facet_wrap(~part, scales = "free_x", ncol = 2) +
-  labs(x = NULL, y = "Deviance above the best rule") +
-  theme_minimal(base_size = 10) +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1), legend.position = "bottom",
-        panel.grid.minor = element_blank())
+```{r strict}
+sp <- c(BT = "Bull trout", CH = "Chinook", CO = "Coho", GR = "Grayling", RB = "Rainbow trout", ST = "Steelhead",
+        WCT = "Westslope cutthroat")
+tab <- data.frame(
+  ` ` = paste(sp[strict$species_code], ifelse(strict$stage == "rear", "rearing", "spawning")),
+  `link's rule behind the best (standard errors)` = formatC(strict$behind, format = "f", digits = 2),
+  `Choice at one standard error` = strict$one, `Choice at 1.96` = strict$strict,
+  check.names = FALSE)
+knitr::kable(tab, align = "lrll",
+             caption = "The rule each species and stage gets when close calls are rules within one standard error of the best, and within 1.96. Computed from the saved tuning tables.")
 ```
 
-## Which rule is recommended?
+For chinook the flow floor holds, but the slope limit goes back to link's `r grad(dflt$grad_max)` and the near-a-river
+allowance drops out. Where link's rule is kept, the stricter bar mostly cannot separate rules at all: for
+`r lst(paste(sp[wide$species_code], ifelse(wide$stage == "rear", "rearing", "spawning")))`, over four in five of all
+rules are close calls at 1.96.
 
-The choice was fixed before any rule was scored: from the region, the rule closest to `default`.
-Every rule in the region differs from `default` in all three settings, so the best scorer is
-recommended. It calls fewer visits habitat and takes in as many catches:
-
-```{r raw}
-raw <- bind_rows(dflt, rec) |>
-  transmute(Rule = c("default", "recommended"),
-            `Visits it calls habitat` = n0(n_in), `Of those, chinook caught` = n0(n_detect_in),
-            `Catch rate on habitat` = pc(raw_rate_in, 1), `Catch rate elsewhere` = pc(raw_rate_out, 1))
-knitr::kable(raw, align = "lrrrr",
-             caption = paste0("What each rule calls habitat among the ", n0(dflt$n_visits), " visits tested."))
-```
-
-## How firm is the choice?
-
-A gap in score is a real difference only when it is large against its noise and survives being
-checked again. These checks, fixed before the run, ask whether the choice rests on chance or on
-reusing the same data to choose and to score.
-
-- **The gap against its noise.** Each gap between two rules has a standard error, from how much it
-  varies between watershed groups. A gap under one standard error cannot be told from noise: that is
-  the region.
-  `default` is `r n1(dflt$ddev_best / dflt$se_diff)` standard errors worse than the best rule.
-- **Other random splits.** The split into folds is random, set by a number called a seed.
-  Scored again on `r nrow(seeds)` other seeds, the recommended rule is in the region on
-  `r sum(seeds$main_rec_in_region)` of them and `default` on `r sum(seeds$default_in_region)`.
-  `r seed_same_shape` of the `r nrow(seeds)` pick the same rule at a different gradient; the other
-  picks `r words(seed_other[1, ])`.
-- **Choosing on some groups, scoring on others.** Choosing a rule on four folds and scoring it on
-  the fifth, the chosen rule beats `default` in `r sum(honest$dev_rec < honest$dev_default)` of the
-  `r nrow(honest)` folds, and `r if (sum(honest$dev_rec) < sum(honest$dev_default)) "beats it" else "loses to it"`
-  over all five together. The separation is partial, because each fold's choice
-  leans on scores from models that had seen that fold.
-- **Drawing the groups again.** Repeating the choice on `r meta$spec$n_boot` random redraws of
-  the groups, the exact recommended rule comes back `r pc(rec$boot_rec_share)` of the time, but
-  its parts are steadier: a flow floor in `r pc(sum(tune$boot_rec_share[tune$size_var == "mad"]))`
-  of draws, `r rec$size_min` m³/s in `r pc(share_of("size_min", rec$size_min))`, and a
-  `r rec$exc_q` m³/s river in `r pc(share_of("exc_q", rec$exc_q))`. The gradient maximum varies
-  most: `r grad(rec$grad_max)` in `r pc(share_of("grad_max", rec$grad_max))`, `r grad(0.07)` in
-  `r pc(share_of("grad_max", 0.07))`, and `default`'s `r grad(dflt$grad_max)` in
-  `r pc(share_of("grad_max", dflt$grad_max))`.
-
-The shape is settled: a flow floor near `r rec$size_min` m³/s and an exception for small streams
-near a river. The gradient maximum is the least settled part.
-
-**Steeper limits.** `r grad(max(tune$grad_max))` was the steepest limit in the rules tried. Scored
-again on the same records with limits up to `r grad(max(ge$grad_max))` among the rules from the
-start, the same procedure picks `r grad(ge_best$grad_max)`, with a smaller river in the exception:
-`r words(ge_best_r)`. The best `r grad(rec$grad_max)` rule is `r n1(ge_rec$ddev_best)` behind it, with a
-standard error of `r n1(ge_rec$se_diff)`. `r ge_seeds_best` of the `r nrow(ges_seeds)` other seeds also pick a
-`r grad(ge_best$grad_max)` limit, and redraws of the groups choose one in
-`r pc(ge_best$boot_rec_share)` of draws and `r grad(rec$grad_max)` in `r pc(ge_rec$boot_rec_share)`.
-Chosen on four folds and scored on the fifth, the longer list's choices lose to `default` over all
-five together, `r n1(ges$honest_dev_rec)` against `r n1(ges$honest_dev_default)`, where choices from
-the rules up to `r grad(max(tune$grad_max))` beat it at `r n1(summ$honest_dev_rec)`.
-
-Every limit tried from `r grad(min(ge_reg))` to `r grad(max(ge_reg))` has rules in the region, so
-the records cannot place the limit in that range. The recommended rule keeps
-`r grad(rec$grad_max)`, the pick from the rules fixed before the run, because every species is tuned
-on one shared ladder of gradient limits, and a longer ladder is a change for all of them at once.
+**Two other checks.** Split into sets again with `r nrow(seeds)` other random draws, the recommended rule is a close
+call on `r sum(seeds$main_rec_in_region)` and link's on `r sum(seeds$default_in_region)`. Chosen on four sets and
+scored on the fifth, the chosen rule beats link's on `r sum(honest$dev_rec < honest$dev_default)` of
+`r nrow(honest)` and `r if (sum(honest$dev_rec) < sum(honest$dev_default)) "beats it" else "loses to it"` overall.
+Redrawing the groups `r meta$spec$n_boot` times, a flow floor is chosen in
+`r if (isTRUE(all.equal(boot_mad, 1))) "every draw" else paste(pc(boot_mad, 1), "of draws")` but the recommended slope limit in only
+`r pc(boot_grad)`: the shape is steady, the slope limit is not.
 
 ## Why does a nearby river matter?
 
-After the choice, one model was fitted to the visits that carry a modelled flow, with flow and
-distance to a river of at least `r meta$curve_ref$q` m³/s as one surface. The table reads the
-fitted chance of a catch on one standard visit. It stops below `r meta$curve_ref$q` m³/s, because a
-stream that size is itself the river:
+Young chinook move up from large rivers into small streams close by. A model fitted after the choice, with flow and
+distance to a river of at least `r meta$curve_ref$q` m³/s together, gives the chance of a catch on one standard
+visit:
 
 ```{r surface-tab}
 sf_ <- x$surface
 dists <- sort(unique(sf_$dist_m))
-st <- tibble(`Stream flow (m³/s)` = format(sort(unique(sf_$size)), trim = TRUE, drop0trailing = TRUE))
+st <- data.frame(`Stream flow (m³/s)` = format(sort(unique(sf_$size)), trim = TRUE, drop0trailing = TRUE),
+                 check.names = FALSE)
 for (dm in dists) {
   col <- if (dm >= meta$curve_ref$dist_cap_m) paste(km_d(dm), "or more") else km_d(dm)
   st[[col]] <- pc(sf_$rate[sf_$dist_m == dm][order(sf_$size[sf_$dist_m == dm])], 1)
@@ -329,216 +217,77 @@ for (dm in dists) {
 knitr::kable(st, align = paste0("l", strrep("r", length(dists))),
              caption = paste0("The fitted chance of catching chinook on one standard visit, by stream flow (rows) and by ",
                               "distance downstream to a river of at least ", meta$curve_ref$q, " m³/s (columns), at a ",
-                              "gradient of ", grad(meta$curve_ref$gradient), "."))
+                              "slope of ", grad(meta$curve_ref$gradient), "."))
 r_at <- function(s, dm) sf_$rate[sf_$size == s & sf_$dist_m == dm]
 near <- sf_$rate[sf_$dist_m == min(dists)]
 ```
 
 Within `r km_d(min(dists))` of a river the chance is about the same whatever the stream's flow,
 `r pc(min(near), 1)` to `r pc(max(near), 1)`. Ten kilometres away it rises with flow, from
-`r pc(r_at(min(sf_$size), 10000), 1)` at `r min(sf_$size)` m³/s to `r pc(r_at(max(sf_$size), 10000), 1)` at
-`r max(sf_$size)` m³/s. That is the
-shape the recommended rule draws: beside a river a small stream counts, and away from one only a
-stream above the floor does. The chance falls off past a few hundred metres from the river, so
-`r km_d(rec$exc_d)` sits on the way down. Steepness matters less: at `r grad(0.09)` the chance is
-about `r pc(grad_at(0.09) / grad_at(0.02))` of what it is at `r grad(0.02)`. The model fits smooth
-curves, so it cannot show a step at a threshold; each threshold is where habitat and non-habitat
-separate best on held-out groups, a cut across a slope.
+`r pc(r_at(min(sf_$size), 10000), 1)` to `r pc(r_at(max(sf_$size), 10000), 1)`. That is the shape the recommended
+rule draws: beside a river a small stream counts, away from one only a larger stream does.
 
-## What does it change on the ground?
+## What changes on the ground?
 
-Both rules were run through all of `link`'s steps on every one of the `r nrow(per_group)`
-watershed groups `link` classifies for chinook.
+Both rules were run through all of link's steps on the `r nrow(per_group)` watershed groups link classifies for
+chinook: `r n0(all_row$default_km)` km of rearing habitat under link's rule, `r n0(all_row$tuned_km)` km under the
+recommended one. The change ranges from `r n1(min(per_group$change_pct))` % to `r n1(max(per_group$change_pct))` %
+by group. In the Bulkley the recommended rule draws `r n0(map_row$tuned_km)` km against `r n0(map_row$default_km)`.
+`r if (on_site) "On the map, click a stream for what each rule reads there; the switch at the top right shows the grade, the use to expect on each segment." else ""`
 
-```{r km}
-ch <- x$change |>
-  group_by(direction, reason) |>
-  summarise(km_all = sum(km), km_1 = sum(km[order == "1"]), .groups = "drop")
-lost_size <- ch$km_all[ch$direction == "lost" & grepl("^size", ch$reason)]
-gain_exc <- ch$km_all[ch$direction == "gained" & grepl("^exception", ch$reason)]
-gain_exc_1 <- ch$km_1[ch$direction == "gained" & grepl("^exception", ch$reason)]
-km_t <- tibble(
-  ` ` = c("Habitat under default", "Habitat under the recommended rule",
-          "Lost, all reasons", "Lost: wide enough for default, below the flow floor, no river close",
-          "Gained, all reasons", "Gained through the exception (small streams near a river)",
-          "Gained through the exception, on first-order streams"),
-  km = n0(c(all_row$default_km, all_row$tuned_km, all_row$lost_km, lost_size, all_row$gained_km, gain_exc, gain_exc_1)))
-knitr::kable(km_t, align = "lr",
-             caption = paste("Chinook rearing habitat in km under each rule, over all", nrow(per_group), "watershed groups."))
-```
-
-The change varies by group, from `r n1(min(per_group$change_pct))` % to
-`r n1(max(per_group$change_pct))` %; `r sum(per_group$change_pct > 0)` of the
-`r nrow(per_group)` groups gain. In the Bulkley the recommended rule draws
-`r n0(map_row$tuned_km)` km against `default`'s `r n0(map_row$default_km)`
-(`r n1(map_row$change_pct)` %).
-
-```{r zoom}
-# the window: the 12 km square, on a grid offset by half a window, holding the most km of whichever
-# of lost and gained is smaller, so the detail shows both
-w <- 12000
-cen <- sf::st_coordinates(suppressWarnings(sf::st_point_on_surface(seg)))
-lost_l <- seg$length_metre * (seg$flag_default & !seg$flag_tuned)
-gain_l <- seg$length_metre * (!seg$flag_default & seg$flag_tuned)
-cand <- do.call(rbind, lapply(list(c(0, 0), c(0.5, 0), c(0, 0.5), c(0.5, 0.5)), function(o) {
-  kx <- floor(cen[, 1] / w - o[1])
-  ky <- floor(cen[, 2] / w - o[2])
-  k <- paste(kx, ky)
-  sc <- pmin(tapply(lost_l, k, sum), tapply(gain_l, k, sum))
-  i <- which.max(sc)
-  kk <- as.numeric(strsplit(names(sc)[i], " ")[[1]])
-  data.frame(x0 = (kk[1] + o[1]) * w, y0 = (kk[2] + o[2]) * w, score = sc[i])
-}))
-best <- cand[which.max(cand$score), ]
-box <- sf::st_sf(geometry = sf::st_as_sfc(sf::st_bbox(c(xmin = best$x0, ymin = best$y0, xmax = best$x0 + w,
-                                                        ymax = best$y0 + w), crs = 3005)))
-seg_z <- suppressWarnings(sf::st_crop(seg, box))
-water_z <- suppressWarnings(sf::st_crop(water, box))
-
-# one example per case inside the window: the segment meeting the case's conditions with the most length
-# inside the window, on the stream test's own edges and in no waterbody (stricter than the stream branch, which
-# excludes river polygons, wetlands of 1 ha or more and lakes of 100 ha or more), and with neither rule's verdict
-# changed by the hand-entered reaches or the connectivity pass, so its row in the table explains both verdicts
-in_w <- seg[seg$id_segment %in% seg_z$id_segment, ]
-in_w$len_in <- as.numeric(sf::st_length(seg_z[match(in_w$id_segment, seg_z$id_segment), ]))
-in_w <- in_w[in_w$edge_type %in% c(1000, 1100, 2000, 2300) & !in_w$in_waterbody &
-               (in_w$pre_default == in_w$flag_default) %in% TRUE & (in_w$pre_tuned == in_w$flag_tuned) %in% TRUE, ]
-cases <- list(
-  "Kept by both" = with(in_w, flag_default & flag_tuned & mad >= rec$size_min & channel_width >= dflt$size_min &
-                          gradient <= dflt$grad_max),
-  "Lost: below the flow floor, no river close" = with(in_w, flag_default & !flag_tuned & mad < rec$size_min &
-                                                          (is.na(dist_m) | dist_m > rec$exc_d)),
-  "Gained: small stream near a river" = with(in_w, !flag_default & flag_tuned & mad < rec$size_min &
-                                                 !is.na(dist_m) & dist_m <= rec$exc_d))
-ex <- do.call(rbind, lapply(names(cases), function(k) {
-  i <- which(cases[[k]] %in% TRUE)
-  if (!length(i)) return(NULL)
-  r <- in_w[i[which.max(in_w$len_in[i])], ]
-  r$case <- k
-  r
-}))
-ex$label <- as.character(seq_len(nrow(ex)))
-# marker on the part of each segment inside the window, so a segment crossing its edge is still marked
-ex_in <- seg_z[match(ex$id_segment, seg_z$id_segment), ]
-ex_pts <- sf::st_sf(label = ex$label, geometry = suppressWarnings(sf::st_point_on_surface(sf::st_geometry(ex_in))))
-```
-
-```{r map, fig.width = 8, fig.height = 4.6, out.width = "100%", fig.cap = paste0("Chinook rearing in the Bulkley (", meta$map_group, ") under each rule: kept by both, lost (default only) and gained (the legend's 'tuned only', meaning the recommended rule only). Left, the whole group with the window outlined; right, the ", w / 1000, " km window, with the numbered examples the table below describes. Line width follows stream order.")}
+```{r map-static, eval = !on_site, fig.width = 6, fig.height = 6.9, out.width = "80%", fig.cap = paste0("Chinook rearing in the Bulkley (", meta$map_group, ") under each rule: kept by both, lost (link's rule only) and gained (the legend's 'tuned only', the recommended rule only). Line width follows stream order.")}
 f1 <- tempfile(fileext = ".png")
-f2 <- tempfile(fileext = ".png")
-knw_compare_map(seg, water, png = f1, panels = "rules", mark = box)
-knw_compare_map(seg_z, water_z, png = f2, panels = "rules", lwd = 2.5, legend = FALSE, labels = ex_pts)
-grid::grid.newpage()
-grid::pushViewport(grid::viewport(layout = grid::grid.layout(1, 2)))
-grid::grid.raster(png::readPNG(f1), vp = grid::viewport(layout.pos.row = 1, layout.pos.col = 1))
-grid::grid.raster(png::readPNG(f2), vp = grid::viewport(layout.pos.row = 1, layout.pos.col = 2))
+knw_compare_map(seg, water, png = f1, panels = "rules")
+grid::grid.raster(png::readPNG(f1))
 ```
 
-```{r examples}
-f_num <- function(v, d) ifelse(is.na(v), NA, formatC(v, format = "fg", digits = d))
-yes_no <- function(v) ifelse(v, "habitat", "not habitat")
-ex_t <- tibble(
-  `#` = ex$label,
-  Case = ex$case,
-  `Flow (m³/s)` = f_num(ex$mad, 2),
-  `Channel width (m)` = ifelse(is.na(ex$channel_width), "none modelled", f_num(ex$channel_width, 2)),
-  Gradient = grad(round(ex$gradient, 4)),
-  `Downstream to a river` = vapply(seq_len(nrow(ex)), function(i) {
-    d <- ex$dist_m[i]
-    if (!is.na(d)) km_d(signif(d, 2)) else "no river found"
-  }, ""),
-  default = yes_no(ex$flag_default),
-  Recommended = yes_no(ex$flag_tuned))
-knitr::kable(ex_t, align = "llrrrrll",
-             caption = paste0("The numbered segments on the map: what each rule reads and what each decides. ",
-                              "default needs a channel at least ", dflt$size_min, " m wide and a gradient of at most ",
-                              grad(dflt$grad_max), "; the recommended rule needs a gradient of at most ",
-                              grad(rec$grad_max), " and either a flow of at least ", rec$size_min, " m³/s or a river of at least ",
-                              rec$exc_q, " m³/s within ", km_d(rec$exc_d), " downstream. The distance is to the first ",
-                              "such river downstream; the recommended rule reads it only where the flow falls short."))
-gain_grad <- ch$km_all[ch$direction == "gained" & grepl("^gradient", ch$reason)]
-gain_flow <- ch$km_all[ch$direction == "gained" & grepl("^size: tuned passes", ch$reason)]
-conn_gain <- ch$km_all[ch$direction == "gained" & grepl("^connectivity", ch$reason)]
-conn_lost <- ch$km_all[ch$direction == "lost" & grepl("^connectivity", ch$reason)]
-other_gain <- ch$km_all[ch$direction == "gained" & grepl("^other", ch$reason)]
+```{r map-site, eval = on_site, out.width = "100%"}
+knw_compare_mapgl(seg, water, title = "Habitat by rule", background = "voyager")
 ```
 
-The examples show what both rules keep and the two largest changes. Two smaller gains through the
-stream condition are not among them:
-streams between `r grad(dflt$grad_max)` and `r grad(rec$grad_max)` steep, which only the recommended gradient
-maximum admits (`r n0(gain_grad)` km across the province), and streams whose flow passes the floor
-where `default`'s width condition fails or has no width (`r n0(gain_flow)` km). The rest of the change
-comes from the connectivity pass, which keeps different stretches under each rule because each
-rule's habitat connects to spawning differently (`r n0(conn_gain)` km gained, `r n0(conn_lost)` km lost), and from river polygons and mixed causes
-(`r n0(other_gain)` km gained).
-
-Orange is mostly the upper reaches of tributaries: flow grows downstream, so a tributary keeps its
-lower reach and loses the part where its flow falls below the floor more than `r km_d(rec$exc_d)`
-from a river. Green is short reaches of small streams beside a river, which the exception adds.
+Orange is mostly the upper reaches of tributaries, where flow falls below the floor more than `r km_d(rec$exc_d)`
+from a river. Green is short reaches of small streams beside a river. The rest of the change comes from the step that
+keeps rearing only where it links to spawning, which keeps different stretches under each rule.
 
 ```{r checks}
-ck <- x$checks
-fv <- ck[ck$check == "fdis_visits", ]
+fv <- x$checks[x$checks$check == "fdis_visits", ]
 rate <- function(r, s) {
   v <- fv[fv$rule == r & fv$segment == s, ]
   v$n_detect / v$n
 }
-ob <- ck[ck$check == "bcfishobs_outside", ]
 ```
 
-**Two checks.** On the `r n0(sum(fv$n[fv$rule == "default"]))` electrofishing visits with a fished
-area of 10 to 10,000 m² on accessible streams (wetland lines included), canals, reservoir banks
-and river lines in the `r nrow(per_group)` groups, chinook were caught on
-`r pc(rate("tuned", "rearing"))` of visits on the recommended rule's habitat and
-`r pc(rate("tuned", "accessible_not_rearing"), 1)` elsewhere, against
-`r pc(rate("default", "rearing"))` and `r pc(rate("default", "accessible_not_rearing"), 1)` for
-`default`. These visits overlap the ones the tuning scored, so this shows the rule does what it
-was chosen to do.
-Other sources record chinook at `r n0(ob$n[1])` places within 100 m of an accessible single-line
-stream or canal not drawn through a wetland, spawning-only places left out; no rule was scored on them. The share of those places on the
-recommended rule's habitat is `r n1(ob$lift[ob$rule == "tuned"])` times the rule's share of that
-stream length, against `r n1(ob$lift[ob$rule == "default"])` for `default`.
+**A check.** On the `r n0(sum(fv$n[fv$rule == "default"]))` electrofishing sites on reachable streams in those
+groups, chinook were caught at `r pc(rate("tuned", "rearing"))` of sites on the recommended rule's habitat and
+`r pc(rate("tuned", "accessible_not_rearing"), 1)` elsewhere, against `r pc(rate("default", "rearing"))` and
+`r pc(rate("default", "accessible_not_rearing"), 1)` for link's. These sites overlap the ones scored, so this shows the
+rule does what it was chosen to do, not that it predicts new places.
 
-## What should you know before using it?
+## Before you use it
 
-```{r limits-region}
-reg <- tune[tune$in_region, ]
-reg_mad <- reg$size_min[reg$size_var == "mad"]
-```
+- **It is about young chinook in streams.** It was fitted to juvenile chinook caught by electrofishing in streams and
+  says nothing about spawning. River polygons share the stream slope limit, so they get `r grad(rec$grad_max)` too,
+  though no site in one was scored. A stretch through a wetland of 1 ha or more is rearing under both rules whatever
+  its size, slope or distance from a river (link's wetland rule): about `r n0(round(wl$km_tuned, -2))` km of chinook
+  rearing, with a median grade of `r formatC(wl$grade_median_tuned, format = "f", digits = 2)`. Lakes keep their own
+  condition.
+- **The cut-offs are a judgment call.** Chinook get gradually less common as streams get smaller and steeper; there is
+  no flow or slope where they stop. At one standard error, flow floors of `r min(region$size_min)` to
+  `r max(region$size_min)` m³/s fit almost as well; at 1.96, only the flow floor holds.
+- **Steeper slopes fit nearly as well.** Scored again with slope limits up to `r grad(max(ge$grad_max))`, the same
+  procedure picks `r grad(ge_best$grad_max)`, and every limit from `r grad(min(ge_reg))` to `r grad(max(ge_reg))` has
+  close-call rules. `r grad(rec$grad_max)` is kept because every species is tuned on one shared list of limits.
+- **On the map, distance is measured from the bottom of each segment.** To choose the rule, the distance to a river
+  was measured from each site. On the map it is measured from each segment's downstream end, so when that end is within
+  `r km_d(rec$exc_d)` of the river the whole segment counts.
 
-- **It can feed `link` directly.** The flow floor and the gradient limit are stored under the
-  names `link` already uses for those settings, `rear_mad_min` and `rear_gradient_max`. The
-  near-a-river exception is stored as two numbers, the river's flow and the distance to it, ready
-  for any configuration that adds that check.
-- **It is about young chinook in streams.** It was fitted to juvenile chinook caught by
-  electrofishing in streams, and says nothing about spawning. Wetlands and lakes keep their own
-  conditions. River polygons share the stream gradient limit, so they get
-  `r grad(rec$grad_max)` too, although no fished site in a river polygon was used to choose it.
-- **It draws less habitat, in the places chinook are caught.** It was chosen because chinook were
-  caught far more often inside it than outside it, not because it takes in every place they were
-  caught: `r pc(rec$raw_rate_in, 1)` of fished sites inside it caught chinook, and
-  `r pc(rec$raw_rate_out, 1)` outside it.
-- **The cut-offs are good choices, not hard limits.** Chinook get gradually less common as
-  streams get smaller and steeper; there is no flow or slope where they stop. Nearby cut-offs fit
-  the records almost as well: flow floors from `r min(reg_mad)` to `r max(reg_mad)`
-  m³/s, and gradient limits of `r lst(grad(sort(unique(reg$grad_max))), "or")`. The flow floor is
-  the firmer choice. Steeper limits, scored later up to `r grad(max(ge$grad_max))`, fit as well or
-  slightly better, though choices from that longer list, scored on groups left out of the choice,
-  do worse than `default`. So `r grad(rec$grad_max)` is one choice among limits from
-  `r grad(min(ge_reg))` to `r grad(max(ge_reg))` that the records cannot rank.
-- **On the map, distance is measured from the bottom of each segment.** The exception asks
-  whether a large river is within `r km_d(rec$exc_d)` downstream. To choose the rule, that
-  distance was measured from each fished site. On the map it is measured from the downstream end
-  of each stream segment, so when that end is within `r km_d(rec$exc_d)` of the river the whole
-  segment counts, even the part farther up.
+## References
 
-## Software and how to cite it
-
-- [`link`](`r link_site`): the habitat model and its configurations.
-- [`fresh`](`r fresh_site`): runs `link`'s rules on the BC Freshwater Atlas.
-- [`wet`](`r wet_site`): the flow on each segment.
-- `knowledge`: the fish records, the tests and this article. Cite it as:
+To cite this package, `citation("knowledge")` gives:
 
 ```{r cite, results = "asis"}
 cat(format(utils::citation("knowledge"), style = "text"), sep = "\n\n")
 ```
+
+::: {#refs}
+:::
