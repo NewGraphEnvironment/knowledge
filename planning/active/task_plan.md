@@ -115,7 +115,7 @@ article in plain words with the 1.96 table and a bibliography, an interactive Bu
 ## Phase 7: README and link
 - [x] README Data and methods: fwapg, bcfishobs and bcfishpass are Simon Norris's (Hillcrest Geographics),
       bcfishpass with contributions from many groups, as link's README words it
-- [ ] link#346 body: the thresholds table's `rule_196` and `holds_196`, and which rules hold
+- [x] link#346 body: the thresholds table's `rule_196` and `holds_196`, and which rules hold
 
 ## Owed at the end (reported, done after merge)
 

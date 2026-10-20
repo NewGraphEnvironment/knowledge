@@ -36,3 +36,4 @@
   errors), page 5.5 MB (742 KB gzipped) plus 11 MB of shared widget libraries; `rmarkdown::render()` takes the static
   path. Citation keys for the new Zotero items are `TODOKEY_*` placeholders until Phase 1 runs; the group library has
   no FDIS item, so Phase 1 adds one
+- Phase 7: link#346's body gains the 1.96 item (link is public and knowledge private, so it names no knowledge issue)
