@@ -26,8 +26,9 @@ knw_compare_map(
 
 \item{water}{an \code{sf} of lake and river polygons for the group, or \code{NULL}.}
 
-\item{title}{\code{character(1)} the figure's caption line (the map carries no
-title; this goes under it).}
+\item{title}{\code{character(1)} names the figure in the message when nothing is
+drawn, and is the interactive page's title and legend title; the static
+figure draws no title (that belongs in the caption).}
 
 \item{png}{\code{character(1)} path for the static figure, or \code{NULL}: one panel
 for each of \code{panels} that can be drawn (\code{"floodplain"} needs \code{fp_cells}),

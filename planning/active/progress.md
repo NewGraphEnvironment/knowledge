@@ -11,3 +11,11 @@
 - Phases 2, 4, 5: README rewritten in the convention's order; DESCRIPTION Title, Description and canonical
   Authors@R; `man/knowledge-package.Rd`; GitHub About set to the tagline and read back.
 - Phase 6: inst/CITATION, CITATION.cff (validated), update-citation-cff workflow, NOTICE.md; filed #76 (PSCIS is Access Only)
+- Plan review delivered (review-plan.md). Probed and acted on: B1 filed #77 (no scale bar or keymap in
+  `knw_compare_map()`), caption names Smithers and Houston (both in BULK, queried); B2 requirements sentence
+  rewritten; B3 example prose states the rule, not biology; B4 alt text scoped to reachable streams; G1 links the
+  public FDIS provenance note; G2 NOTICE moved to `inst/NOTICE.md` (installs with the FWA geometry, as flooded),
+  file names fixed (`gnis_seed.csv`), unlisted EcoCat, bcfishpass and PCIC-derived files added, `fdis_*.csv` glob;
+  #76 brought in line; G3 bcfishobs and CABD in Data and methods, wet linked; G4 gq asserted; G5 quantifiers
+  narrowed; G6 `title` doc corrected; G7 rerun line added to #68 and #73; A1/A5 plan text; CLAUDE.md's v3 line;
+  O4 owed items. Kept as is: S1 NEWS is written by `/gh-pr-merge` at release (NEWS has no development heading).

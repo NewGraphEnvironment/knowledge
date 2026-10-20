@@ -13,7 +13,7 @@ The README was last rewritten before #57. It is close to correct on the report c
      `knw_compare_map(seg, water, panels = "rules")` from `inst/vignette-data/bulk_{segments,water}.rds`.
      The 12 km window and its numbered markers stay in the article: they belong to a table the README
      does not carry, and copying the window search would derive one fact twice.
-  2. **Research list → one Learn more line** to `research/README.md` (which already lists all 19), plus the
+  2. **Research list → one Learn more line** to `research/README.md` (which already lists all 18 topic files), plus the
      article and the reference groups. No per-file list in the README (convention: leave out what another
      file keeps). Layout, Three tracks and Conventions sections go too: `scripts/README.md` and
      `CLAUDE.md` keep them.
@@ -22,7 +22,7 @@ The README was last rewritten before #57. It is close to correct on the report c
      knowledge is not in the decided membership: say so in the soul amendment.
   4. **Example reads `data/thresholds.csv` from a clone** with base R (no exported reader exists; `data/`
      is not in the build), output pasted from a real run.
-  5. **Published data** (`fdis/`, `knowledge/fdis/v3/`) goes under Installation, as "how to reach what it
+  5. **Published data** (`fdis/`, `knowledge/fdis/`; v3 is not uploaded, see findings) goes under Installation, as "how to reach what it
      publishes". `thresholds/v1` and `habitat_grade/v1` are not named (not uploaded).
 
 ## Phase 1: Hex sticker
@@ -40,7 +40,7 @@ The README was last rewritten before #57. It is close to correct on the report c
 - [x] Alt text and a plain caption (what kept / lost / gained mean, in words); caption numbers, if any, computed from the same data
 
 ## Phase 4: Installation, example, stale facts
-- [x] Installation: `pak::pak(...)`, the pin line with `@vX.Y.Z` placeholder and NEWS link, the clone (`pkgload::load_all()`), what runs need (PG* env vars, fwapg / bcfishpass, `ZOTERO_API_KEY`, AWS for `rag/`); published data on `fresh-bc`: `fdis/` and `knowledge/fdis/v3/`
+- [x] Installation: `pak::pak(...)`, the pin line with `@vX.Y.Z` placeholder and NEWS link, the clone (`pkgload::load_all()`), what runs need (PG* env vars, fwapg / bcfishpass, `ZOTERO_API_KEY`, AWS for `rag/`); published data on `fresh-bc`: `fdis/` and `knowledge/fdis/`
 - [x] Example: a few lines reading `data/thresholds.csv` (e.g. CH rearing's components, value and range, `default_value`), run for real, output pasted verbatim
 - [x] Stale facts gone or fixed: no FDIS version in prose (v3 is not uploaded, v2 is; see findings); no `0260`–`0298` claim (point at `scripts/README.md`); research covered by the index line
 
@@ -68,6 +68,9 @@ The README was last rewritten before #57. It is close to correct on the report c
 
 - [ ] Add knowledge to soul#416's Wave list as done once the PR merges
 - [ ] Learn-more links switch from GitHub paths to the pkgdown site when #56 makes it resolve (note on #56)
+- [ ] DESCRIPTION `URL`, `inst/CITATION`'s url and `CITATION.cff`'s url name the pkgdown site, which answers 404 until #56; confirm it resolves after the flip
+- [ ] #76 (PSCIS Access Only, EcoCat terms) settled before #56's flip; then update `inst/NOTICE.md`
+- [ ] #77 scale bar and keymap on `knw_compare_map()`, then rerun `data-raw/readme_figure.R`
 
 ## Validation
 
