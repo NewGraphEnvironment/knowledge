@@ -38,4 +38,4 @@ with these lessons in soul PR #479.
 - #76 (PSCIS Access Only, EcoCat terms) settled before #56's flip; then update `inst/NOTICE.md`
 - #77 scale bar and keymap on `knw_compare_map()`, then rerun `data-raw/readme_figure.R`
 
-Closed by: PR (to be opened from branch `75-readme-bring-it-to-the-readme-convention`)
+Closed by: PR #78
