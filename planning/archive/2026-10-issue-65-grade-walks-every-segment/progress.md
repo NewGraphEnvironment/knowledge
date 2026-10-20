@@ -20,5 +20,20 @@
   fix, so round 3 enumerated 48 places; `review-ref-round*.md`). Follow-up: knowledge#72 (grade provenance).
 - Full regrade started 2026-10-19 ~21:24 UTC from a frozen copy of 0320 (`20261019_tune_run.txt`), all keys,
   CH included. Next: when it exits, check `git status`/`git diff data/tune`, then 0325, the full 0330 (about
-  5 h on #57's run), the invariant check (`planning/active/check_rules_unchanged.R`: every non-grade compare column
+  5 h on #57's run), the invariant check (`planning/archive/2026-10-issue-65-grade-walks-every-segment/check_rules_unchanged.R`: every non-grade compare column
   equal to origin/main's), `data-raw/vignette_chinook.R`, `devtools::test()`, then Phase 3's numbers.
+
+## Session 2026-10-20 (UTC)
+
+- Full regrade (197.7 min) and full comparison (262.6 min) on the stream-branch reference and the flows wet
+  republished on 2026-10-19 (Al chose to proceed on them; #73 retunes). The rule-change attribution check passed.
+- 0325 rerun twice locally (the grade manifest now names `discharge_load_at_publish`); thresholds unchanged.
+- Vignette data rebuilt; the rendered article differs from #57's only in the intended caption and distance
+  column and in figures the flow republish moved. `devtools::test()`: 173 tests, 569 expectations, 0 failed
+  (at `b6216da`).
+- Branch review: three rounds (`review-branch-round{1,2,3}.md`), each finding false statements in prose; round 3
+  found one inside round 2's fix, and the loop ended on an enumeration of every added river-polygon and reference
+  sentence against a per-key table (findings.md).
+- Reviewer agents this issue: 10 (the plan review; three rounds on Phase 1; three on the reference change; three
+  on the branch). Over the usual bound of about five; 8 of the 10 found a real defect (Phase 1's rounds 2 and 3
+  were the clean ones).

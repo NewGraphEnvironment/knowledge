@@ -52,7 +52,7 @@ Diff: `/tmp/codecheck.wdiHrA/diff4.patch` (staged vs HEAD ec67685).
 - **[fragile — evidence loss] scripts/0320-tune-run.R:64-66, 216** — the regrade this diff exists to trigger, if run
   as `SPECIES=CH` on 2026-10-19, writes `scripts/logs/habitat/20261019_tune_run-ch.txt` with `writeLines()`,
   overwriting the untracked log of the all-accessible run (`reference rate 0.5156`, the walks timing) that
-  `planning/active/findings.md:98-110` cites as evidence for the decision. The file is `??` in git, so nothing
+  `planning/archive/2026-10-issue-65-grade-walks-every-segment/findings.md:98-110` cites as evidence for the decision. The file is `??` in git, so nothing
   recovers it. Commit or copy it before the rerun (or run under another SPECIES/date).
 
 - **[fragile — low] scripts/0322-tune-grad-extend.R:256-263** — the sibling caller of `knw_grade_species()` keeps a

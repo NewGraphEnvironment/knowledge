@@ -72,7 +72,7 @@ fitting both use `pick`.
 - [x] The other seven keys (`SPECIES=BT,CO,GR,RB,ST,WCT`), on the 16-core host with `WORKERS=14` or locally; `PGCONNECT_TIMEOUT` set (#57's grading hang). BT walks twice (q 10 for rearing, q 3 for spawning); if the measured CH rate makes that unreasonable, share one walk at `q_grid = c(3, 10)` per species inside 0320 and say so.
 - [x] Assert the tracked `data/tune/` files (tune, summary, curves, groups) are unchanged by the regrade: `git diff --stat data/tune` is empty; confirm the "Scored" log line shows the score cache was hit; `git status --short data/tune` for the new `<key>_{seeds,honest}.csv` that the vignette data pins (plan review #4), committed.
 - [x] `Rscript scripts/0325-publish.R` (local; `PUBLISH` stays open as #57 left it). Rerun after the comparison so the grade manifest carries `discharge_load`. The `habitat_grade` description says the distance is walked for every graded segment. Assert `git diff --stat data/thresholds.csv data/thresholds_groups.csv` is empty.
-- [x] `Rscript scripts/0330-compare.R` for every species (full run, not `STAGE=maps`: the grade is read per segment). ~~Assert the rule columns did not move~~ (superseded by the flow decision): run `planning/active/check_rule_changes_explained.R` against the 17 October `*_segments.rds` (preserved before the run overwrote them) and record every moved verdict by cause; the research tables' rule km are then revised too.
+- [x] `Rscript scripts/0330-compare.R` for every species (full run, not `STAGE=maps`: the grade is read per segment). ~~Assert the rule columns did not move~~ (superseded by the flow decision): run `planning/archive/2026-10-issue-65-grade-walks-every-segment/check_rule_changes_explained.R` against the 17 October `*_segments.rds` (preserved before the run overwrote them) and record every moved verdict by cause; the research tables' rule km are then revised too.
 - [x] Point `data-raw/vignette_chinook.R`'s `path_log` at the new CH tuning log, run it, then `devtools::test()`.
 - [x] Commit the tune, compare and vignette-data outputs with the log paths in `progress.md`; the archive README's `Measurement` carries the before/after reference rates and graded km per key.
 
@@ -83,7 +83,7 @@ fitting both use `pick`.
 - [x] `research/chinook_rearing_tuned.md` L34-39: graded km and graded ha under the corrected grade; drop "provisional until #65".
 - [x] `data-raw/vignette_chinook.R` L19-22 and `vignettes/chinook_rearing.Rmd`: the comment and any sentence that says the distance is measured only on exception candidates; the examples table's distance column now reads for the kept-by-both example, and the "Lost" example may change (L410). Render before and after, strip to text, diff: only the prose meant to change differs.
 - [x] `scripts/README.md` 0320 line; `NEWS.md` entry under the next version (the grade walks every graded segment; v1 corrected before publication; the two roxygen fixes).
-- [ ] `/code-check branch`; `/planning-archive`; `/gh-pr-push`.
+- [x] `/code-check branch`; `/planning-archive`; `/gh-pr-push`.
 
 ## Owed at the end (reported, done after merge)
 
@@ -91,10 +91,10 @@ None. Upload (`PUBLISH=TRUE`) stays out of scope, below.
 
 ## Validation
 
-- [ ] Tests pass (`devtools::test()`, including `test-vignette-data.R` after the vignette data rerun)
-- [ ] `/code-check` clean (once over the branch with `/code-check branch`)
-- [ ] PWF checkboxes match landed work
-- [ ] `/planning-archive` on completion
+- [x] Tests pass (`devtools::test()`, including `test-vignette-data.R` after the vignette data rerun)
+- [x] `/code-check` clean (once over the branch with `/code-check branch`)
+- [x] PWF checkboxes match landed work
+- [x] `/planning-archive` on completion
 
 How each change is proved:
 - The walk set: the mocked unit test, and the restore-the-bug run that must turn it red.

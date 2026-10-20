@@ -1,6 +1,6 @@
 # #65 Phase 2: every rule verdict that moved between #57's comparison (17 October, on the flows before wet#103)
 # and #65's (on the republished flows) must be explained by a segment input that moved. Run from the repo root
-# after 0330: Rscript planning/active/check_rule_changes_explained.R <dir of 17 October *_segments.rds> [out.csv]
+# after 0330: Rscript planning/archive/2026-10-issue-65-grade-walks-every-segment/check_rule_changes_explained.R <dir of 17 October *_segments.rds> [out.csv]
 # [new dir, default data/compare]
 #
 # Per segment and rule (default, tuned), the habitat test's own verdict (`<flag>_pre_<rule>`, before the

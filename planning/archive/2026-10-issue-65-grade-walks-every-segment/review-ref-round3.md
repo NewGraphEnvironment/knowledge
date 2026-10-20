@@ -18,7 +18,7 @@ logs to `scripts/logs/habitat/20261019_tune_run.txt`).
 
 - **[bug: wrong statement]** `research/habitat_thresholds_tuned.md` Limits, new bullet (unstaged): "so its grade rests
   on the surface past its data, and most such segments read 1." The only measurement on file
-  (`planning/active/findings.md`, "First CH regrade", table) gives river/lake km at **>= 0.8** as 49.0 % under the
+  (`planning/archive/2026-10-issue-65-grade-walks-every-segment/findings.md`, "First CH regrade", table) gives river/lake km at **>= 0.8** as 49.0 % under the
   stream-branch reference (20.4 % under every-accessible). The share reading exactly 1 is at most that, so "most"
   is not supported by km; nothing records it by segment count. Measure it (count and km, river polygons alone
   rather than river + lake edges) or reword to the measured 49 % at 0.8 or more.

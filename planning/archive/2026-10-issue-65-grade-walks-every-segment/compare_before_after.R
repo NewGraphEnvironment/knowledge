@@ -1,5 +1,5 @@
 # #65: every comparison figure the research files quote, #57's (origin/main) against #65's (working tree).
-# Run from the repo root after 0330: Rscript planning/active/compare_before_after.R
+# Run from the repo root after 0330: Rscript planning/archive/2026-10-issue-65-grade-walks-every-segment/compare_before_after.R
 suppressPackageStartupMessages({ library(dplyr); library(readr) })
 rd_main <- function(f) read_csv(I(paste(system2("git", c("show", paste0("origin/main:", f)), stdout = TRUE), collapse = "\n")),
                                 show_col_types = FALSE)

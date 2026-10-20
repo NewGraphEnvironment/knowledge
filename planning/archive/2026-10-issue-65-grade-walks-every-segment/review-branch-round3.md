@@ -17,7 +17,7 @@
 - `branch3_since_round2.patch` read line by line. The changed prose was checked against
   `git show 78a427d:R/grade_species.R`, the callers at `78a427d` (`git grep knw_grade_species( 78a427d`),
   `R/tune_run.R:68-70` (the visit filter), `R/grade.R:67-73` (the reference), `R/grade_species.R:57-84`,
-  `planning/active/grades_summary_{before,after}.csv`, and passes over all eight `data/tune/*_grades.csv` (awk, and
+  `planning/archive/2026-10-issue-65-grade-walks-every-segment/grades_summary_{before,after}.csv`, and passes over all eight `data/tune/*_grades.csv` (awk, and
   `data.table` from the scratchpad). The pass recomputed each key's reference over the stream branch and over every
   accessible segment, with `quantile(rate, 0.95)` on `accessible & !is.na(rate)` as `knw_grade()` takes it. It
   reproduces CH 0.1388 / 0.5156 and CO 0.5121, so the recomputation is faithful. The pass also measured which edge
