@@ -11,8 +11,9 @@
   gains `ref_rows` and `knw_grade_species()` gains `ref_edge` for this; its `edge_stream`, which limited the walk
   to the stream branch and which no caller set, goes with the walk's old limits.
   `habitat_grade/v1`, never uploaded, is regraded before its first publication, and gains `stream_branch`: off the
-  stream branch, on lines through lakes, wetlands and double-line rivers, the grade extrapolates the curve past its
-  visits, and those lines hold 21–79 % of each key's km graded 0.8 or more. The thresholds, `default`'s km and
+  stream branch, on lines through lakes, wetlands and double-line rivers and on other connectors, the grade
+  extrapolates the curve past its visits, and those lines hold 21–79 % of each key's km graded 0.8 or more. The
+  thresholds, `default`'s km and
   the width rules' km do not move; the flow-ruled tuned rules move by under 0.3 % because wet republished the
   segment flows the same day (NewGraphEnvironment/wet#103), and retuning on those flows is #73.
 

@@ -3,7 +3,9 @@
 # A site ending on a double-line river whose river line is not an ancestor of the site's line gets no connector
 # length; n_double_line - n_measured counts them. Of the measured, n_connector have an edge-1450 connector on the
 # tributary's line (the rest end on another edge, often across a gap the walk bridges without counting it: gap_med_m
-# is the median max_entry_gap_m of those); the connector medians are over n_connector, flips_exc over n_measured.
+# is the median max_entry_gap_m, the largest gap over all of a walk's hops, of those; no_conn_nogap_pct is the share
+# of them whose every hop gap is under 1 m, which join the river where it is single-line); the connector medians are
+# over n_connector, flips_exc over n_measured.
 options(width = 250)
 suppressMessages(library(dplyr))
 walks <- readr::read_csv("data/fdis/derived/walks.csv", show_col_types = FALSE) |> filter(src == "pick")
@@ -47,6 +49,8 @@ for (k in c("BT_rear", "BT_spawn", "CH_rear", "CO_rear", "GR_rear", "RB_rear", "
     conn_med_m = round(median(dl$conn_m[dl$conn_m > 0])), conn_p90_m = round(quantile(dl$conn_m[dl$conn_m > 0], 0.9)),
     share_of_dist_med_pct = round(100 * median(dl$conn_m[dl$conn_m > 0] / pmax(dl$dist_m[dl$conn_m > 0], 1))),
     gap_med_m = round(median(dl$max_entry_gap_m[dl$conn_m == 0])),
+    n_no_connector = sum(dl$conn_m == 0),
+    no_conn_nogap_pct = round(100 * mean(dl$max_entry_gap_m[dl$conn_m == 0] < 1)),
     within_1km = sum(f$dist_m <= 1000),
     within_1km_conn_over_100m = sum(dl$dist_m <= 1000 & dl$conn_m > 100),
     flips_exc = if (is.na(ed)) NA_integer_ else sum(dl$dist_m > ed & dl$dist_m - dl$conn_m <= ed))

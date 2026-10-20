@@ -1,0 +1,2 @@
+     km lake_pct wetland_pct manmade_pct river_pct none_pct
+1 64927     83.8        16.1         0.1        NA        0

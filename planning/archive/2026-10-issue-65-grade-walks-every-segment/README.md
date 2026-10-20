@@ -54,7 +54,8 @@ Off the stream branch (`check_off_branch.txt`): 24–36 % of each key's graded k
 (CH 79 %, ST 70 %, CO 66 %; below its km share for BT spawning, GR and RB). Edge-1200 lines (main flow through lakes
 and wetlands) are 20 % at 0.8+ for CH. Connectors (`check_connector_share.txt`): of visit sites whose walk found a
 river, 59–94 % end on a double-line river; of the traced ones, 89–96 % cross it on a connector, which adds a median
-14–88 m (90th percentile 38–324 m), and the rest hop an uncounted gap; to the bank, 22 of 2,260 traced CH sites would
+14–88 m (90th percentile 38–324 m); of the rest, 31–96 % hop no gap of 1 m or more and the others hop one the walk
+does not count; to the bank, 22 of 2,260 traced CH sites would
 cross the 1 km exception.
 
 Research revised: `research/habitat_thresholds_tuned.md` (method, Grades, rule-change and floodplain tables,
@@ -64,6 +65,7 @@ Limits), `research/chinook_rearing_tuned.md` and the six other species files.
 
 - `scripts/logs/habitat/20261019_tune_run*` (the superseded CH regrade `-ch.txt`, the full regrade `.txt`/`.out`)
 - `scripts/logs/habitat/20261019_compare*`
-- this directory's `review-*.md` (thirteen reviewer rounds; `review-flag-round{1,2,3}.md` are on the `stream_branch` flag), `check_rule_changes_explained.R`, `compare_before_after.R`, `check_off_branch.R`, `check_connector_share.R`
+- this directory's `review-*.md` (thirteen reviewer rounds; `review-flag-round{1,2,3}.md` are on the `stream_branch` flag, which ended on
+  `enumerate_flag_claims.md`), `check_rule_changes_explained.R`, `compare_before_after.R`, `check_off_branch.R`, `check_connector_share.R`
 
 Closed by: PR (this branch, `65-the-grade-reads-segments-that-pass-the-s`)

@@ -237,10 +237,10 @@ connectivity cascade from one. Width rules did not move.)
   the tributary's flow, so the walk counts it, for visits and segments alike. Of the curves' visit sites whose walk
   found a river, 59–94 % per key end on a double-line river. Of those whose tributary could be traced (97–99 %),
   89–96 % have a connector, which adds a median of 14–88 m (90th percentile 38–324 m), a median 0–2 % of the
-  site's distance; the rest have none, and the walk hops from the tributary's mouth to the river's line without
-  counting the gap. Measured to the bank instead, 22 of the 2,260 traced CH sites would fall inside its 1 km
-  exception, and none of BT spawning's inside 2 km (`check_connector_share.txt` in #65's archive). Ending the walk at
-  the bank changes the visits' distances, so it waits for the retune (#73).
+  site's distance. The rest (4–11 %) have none: 31–96 % of them hop no gap of 1 m or more on the way, and the others
+  hop one somewhere on the walk, which the walk does not count. Measured to the bank instead, 22 of the 2,260 traced
+  CH sites would fall inside its 1 km exception, and none of BT spawning's inside 2 km (`check_connector_share.txt`
+  in #65's archive). Ending the walk at the bank changes the visits' distances, so it waits for the retune (#73).
 - **Width rules leave first-order streams ungraded**; a consumer summing graded km over a width-ruled species
   sums measured streams only.
 - **One link run.** Every grade carries `run_uid 20261017_004619-3f4c713b`; link recomputed UPET twice after the
