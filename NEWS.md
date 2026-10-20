@@ -1,4 +1,4 @@
-# knowledge (development version)
+# knowledge 0.4.6
 
 * The grade reads every segment at its own distance to a river (#65). `knw_grade_species()` used to walk only the
   segments the rule's exception could admit and read the rest at the 50 km distance cap, which on the joint size
