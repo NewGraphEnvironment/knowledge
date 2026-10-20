@@ -6,7 +6,7 @@ reference:
   - title: Habitat evidence
     desc: >
       Read and validate the cited literature evidence and the intrinsic-potential
-      model registry.
+      model registry, and list their controlled vocabularies.
     contents:
       - knw_literature_read
       - knw_literature_vocab
@@ -27,8 +27,9 @@ reference:
       - knw_bcfishobs_match
   - title: Evidence on link's segments
     desc: >
-      Place site visits on link's segments with every species' access and habitat flags; read
-      flow, width, regulated reaches, natural barriers downstream and the walks to rivers.
+      Place site visits on link's segments with every species' access and habitat flags; read a
+      species' segments, flow, width, regulated reaches, natural barriers downstream and the walks to
+      rivers; and count where link's two access columns disagree.
     contents:
       - knw_link_place
       - knw_link_segments
@@ -40,8 +41,9 @@ reference:
       - knw_link_access_check
   - title: Tuning
     desc: >
-      Score candidate rules on held-out watershed groups, fit the joint use curve at the pick, and
-      grade every segment by expected use.
+      Build candidate rules around link's thresholds and score them on held-out watershed groups, fit
+      the joint use curve at the pick, and grade every segment by expected use. The building, scoring and
+      fitting run in one call for every species and stage the evidence can speak to.
     contents:
       - knw_tune_grid
       - knw_walk_index

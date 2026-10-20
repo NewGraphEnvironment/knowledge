@@ -62,8 +62,9 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   directories non-recursively.
 - `data/rag/` — ignored local cache of the ragnar stores. Source of truth is `s3://fresh-bc/rag/` (not public).
 - `data/fdis/` — ignored cache of the FDIS export (`0230` syncs it) and of the visit tables built from it
-  (`data/fdis/derived/`; `0299` publishes them as `knowledge/fdis/v3`, and restores them with `PULL=TRUE`;
-  `VERSION=v2` restores the pre-#57 set that `0291`–`0298` read).
+  (`data/fdis/derived/`; `0299` builds them as `knowledge/fdis/v3`, which is not yet uploaded (`v2` is the
+  newest published set, measured 2026-10-20). `PULL=TRUE` restores a published version, so today only with
+  `VERSION=v2`, the pre-#57 set that `0291`–`0298` read).
 
 ## One discipline: everything here is public
 
@@ -79,6 +80,13 @@ archive's `public_sweep.py` is the check: it searches tracked files outside `pla
 `scripts/logs/` (`planning/active/` for client slugs and local paths only), issue and PR text,
 retitles and a branch's commit messages, and with `history` every earlier revision GitHub keeps.
 Its patterns are a list, not the class: a new kind of identifier needs a new pattern.
+
+Tracked data from other sources carries their terms, and `inst/NOTICE.md` lists each source with its files (it
+installs with the package because `inst/vignette-data/` ships Freshwater Atlas geometry). A new tracked source
+gets its row there, its licence read from the source's own catalogue record; one whose terms are unconfirmed goes
+to an issue instead. The PSCIS layers are "Access Only" in the BC Data Catalogue, and they, the EcoCat-derived
+tables and the bcfishpass-derived files (bcfishpass's database is ODbL, share-alike) are #76, to settle before
+the repo is public.
 
 ## Working notes
 

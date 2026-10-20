@@ -16,8 +16,9 @@
 #'   `grade_class` and the two logical rule columns `flag_default` and
 #'   `flag_tuned`.
 #' @param water an `sf` of lake and river polygons for the group, or `NULL`.
-#' @param title `character(1)` the figure's caption line (the map carries no
-#'   title; this goes under it).
+#' @param title `character(1)` names the figure in the message when nothing is
+#'   drawn, and is the interactive page's title and legend title; the static
+#'   figure draws no title (that belongs in the caption).
 #' @param png `character(1)` path for the static figure, or `NULL`: one panel
 #'   for each of `panels` that can be drawn (`"floodplain"` needs `fp_cells`),
 #'   `ncol` to a row.

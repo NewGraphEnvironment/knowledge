@@ -1,107 +1,114 @@
-# knowledge
+# knowledge <img src="man/figures/logo.png" align="right" height="139" alt="knowledge hex sticker" />
 
-Fisheries background for British Columbia, assembled per **watershed group**: what past reports,
-provincial fish records and the literature say about where fish live, and the habitat thresholds that
-evidence supports. Three things live here together:
+<!-- badges: start -->
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+<!-- badges: end -->
 
-- an R package, `knowledge`, with the readers and builders that have proved themselves on more than one
-  region;
-- the scripts that build the evidence tables, in run order (`scripts/README.md`);
-- the evidence itself (`data/`) and what is known from it (`research/`).
+> Fisheries evidence and tuned habitat thresholds for BC watershed groups
 
-The evidence for the habitat thresholds the [link](https://github.com/NewGraphEnvironment/link) habitat
-model uses is gathered here, and candidate thresholds are tested against fish records.
+knowledge gathers what is known about where fish live in British Columbia's streams, a watershed group
+at a time: the Province's fish sampling records, past reports and the published literature. From the fish
+records it tunes, where they allow, the thresholds that [link](https://www.newgraphenvironment.com/link/)'s
+habitat models use to decide where a species can spawn and rear, such as the smallest stream and the steepest
+gradient for juvenile chinook rearing, and compares the tuned rules with the ones link uses today. Those models show
+restoration and fish passage planning where habitat lies on a stream network.
 
-## Install
+<img src="man/figures/readme-bulk.png" alt="Map of the streams chinook can reach in the Bulkley River watershed group, coloured by whether each is chinook rearing habitat under both rules, only under link's default rule, only under the tuned rule, or under neither" width="70%" />
+
+*Chinook rearing habitat in the Bulkley River watershed group, around Smithers and Houston, under link's
+`default` rule and the rule tuned here. Blue streams are habitat under both, orange only under `default`,
+green only under the tuned rule; grey streams are open to chinook but habitat under neither. Here the tuned
+rule drops more than it adds.*
+
+## Installation
 
 ```r
 pak::pak("NewGraphEnvironment/knowledge")
 ```
 
-The package reads the evidence tables by path, so most work happens in a clone, with the package loaded
-from the source tree:
+knowledge is under active development and its functions change between releases (see
+[NEWS](https://github.com/NewGraphEnvironment/knowledge/blob/main/NEWS.md)). Pin a release for
+reproducible work: `pak::pak("NewGraphEnvironment/knowledge@vX.Y.Z")`.
+
+The evidence tables live in the repository, not the package, so most work happens in a clone with the
+package loaded from the source tree (`pkgload::load_all()`). The scripts that build them run in the order
+of [`scripts/README.md`](https://github.com/NewGraphEnvironment/knowledge/blob/main/scripts/README.md).
+Many read a PostgreSQL database holding the BC Freshwater Atlas through fwapg, found by the standard `PG*`
+environment variables, and the tuning also reads link's province-wide run and wet's flows there. Others need
+other databases, tools and credentials, among them a bcfishpass database, a synced Zotero library and Web API
+key, Ollama, AWS credentials and Python.
+
+The FDIS electrofishing extract is public as the Province supplied it, under `s3://fresh-bc/fdis/`, and so
+are the visit tables built from it, as Parquet under `s3://fresh-bc/knowledge/fdis/`. The bucket does not
+list: start from the extract's [provenance note](https://fresh-bc.s3.us-west-2.amazonaws.com/fdis/README.md),
+which links the published tables' manifest.
+
+## Example
+
+The tuned thresholds are one table. Each rule's parts are rows, with the link parameter each fills where
+link has one:
 
 ```r
-pkgload::load_all()   # from the repo root
-ev <- knw_literature_read("data/literature_evidence.csv",
-                          species_code = "BT", variable = "temperature")
+th <- read.csv("data/thresholds.csv")
+ch <- th[th$rule_id == "CH_rear_v1", c("component", "link_parameter", "value", "unit")]
+print(ch, row.names = FALSE)
+#>    component    link_parameter   value     unit
+#>         size      rear_mad_min    0.75     m3/s
+#>     gradient rear_gradient_max    0.09 fraction
+#>  exception_q                      3.00     m3/s
+#>  exception_d                   1000.00        m
 ```
 
-## What is known
+On a stream line, the tuned rule passes a segment for chinook rearing where its gradient is at most 9 % and
+either its mean annual flow is at least 0.75 m³/s or a river of at least 3 m³/s lies within 1 km downstream.
+Access and link's other steps then apply as they do to `default`.
 
-[`research/`](https://github.com/NewGraphEnvironment/knowledge/tree/main/research) holds one file per
-topic, revised in place as the evidence moves:
+## Learn more
 
-- [FDIS electrofishing export](https://github.com/NewGraphEnvironment/knowledge/blob/main/research/fdis_export.md):
-  the provincial Fisheries Data Information System extract, its join structure, defects, and what it adds
-  over the public layers
-- [Habitat literature](https://github.com/NewGraphEnvironment/knowledge/blob/main/research/habitat_literature.md):
-  where each modelled Chinook and bull trout threshold comes from, and how cited quotes are verified
-- [Intrinsic-potential models](https://github.com/NewGraphEnvironment/knowledge/blob/main/research/ip_models.md):
-  what each Pacific Northwest model thresholds on and how it sized streams
-- [Bull trout rearing use](https://github.com/NewGraphEnvironment/knowledge/blob/main/research/habitat_weights.md)
-  and [bull trout spawning](https://github.com/NewGraphEnvironment/knowledge/blob/main/research/bt_spawning.md)
-  by gradient and channel size
-- [Chinook by stream size](https://github.com/NewGraphEnvironment/knowledge/blob/main/research/chinook_stream_size.md)
-  and [a tuned Chinook rearing rule](https://github.com/NewGraphEnvironment/knowledge/blob/main/research/chinook_rearing_tuned.md)
-- [How the Chinook rearing threshold was chosen and what it draws](https://newgraphenvironment.github.io/knowledge/articles/chinook_rearing.html):
-  the same result in plain language, as a package article
-- [Thermal requirements](https://github.com/NewGraphEnvironment/knowledge/blob/main/research/thermal_requirements.md),
-  [stream temperature models](https://github.com/NewGraphEnvironment/knowledge/blob/main/research/stream_temperature.md),
-  [flow requirements](https://github.com/NewGraphEnvironment/knowledge/blob/main/research/flow_requirements.md)
-  and [modelled discharge](https://github.com/NewGraphEnvironment/knowledge/blob/main/research/modelled_discharge.md)
+- [How the chinook rearing threshold was chosen and what it draws](https://github.com/NewGraphEnvironment/knowledge/blob/main/vignettes/chinook_rearing.Rmd): the
+  tuning told in plain language, with the map above and what changes on the ground.
+- [What is known](https://github.com/NewGraphEnvironment/knowledge/blob/main/research/README.md): one file per topic, from the FDIS export and the cited literature
+  to the tuned rules.
+- [Function reference](https://github.com/NewGraphEnvironment/knowledge/tree/main/man)
 
-The [research index](https://github.com/NewGraphEnvironment/knowledge/blob/main/research/README.md) lists them all.
+## Ecosystem
 
-## Layout
-
-```
-R/, man/, tests/  the R package `knowledge`
-scripts/          run-order scripts; scripts/README.md is the run order
-data/<wsg>/       per-group snapshots: crossings, reports, GNIS seeds, FISS sites, priorities
-data/             cross-group tables: literature evidence, IP model registry, life-history timing,
-                  FDIS and FISS evidence, tuned-rule results, the farmed priority tables
-research/         what is known, one topic per file
-planning/         work in flight and archived issues
-```
-
-## Three tracks
-
-| Track | Scripts |
+| Package | Role |
 |---|---|
-| Report corpus: EcoCat discovery, PDF harvest, Zotero filing, a searchable store, content tags | `wf_*harvest.js`, `0150`, `0152`–`0154`, `0156` |
-| Fish records: FISS data submissions (`.xls`, no-fish-captured sites) and the FDIS electrofishing export, each as evidence by species and size class | `0200`–`0250` |
-| Habitat thresholds: cited literature, intrinsic-potential models, use curves and tuned rules from fish records on modelled stream segments | `0260`–`0298` |
+| **knowledge** | Fisheries evidence and tuned habitat thresholds for BC watershed groups (this package) |
+| [fresh](https://www.newgraphenvironment.com/fresh/) | Stream network modelling engine: segment, classify, cluster, aggregate |
+| [link](https://www.newgraphenvironment.com/link/) | Intrinsic habitat models: develop, test and communicate |
+| [wet](https://www.newgraphenvironment.com/wet/) | Stream flow and water temperature for BC's Freshwater Atlas |
+| [flooded](https://www.newgraphenvironment.com/flooded/) | Delineate floodplain extents from DEMs and stream networks |
+| [drift](https://www.newgraphenvironment.com/drift/) | Track land cover change within floodplains over time |
+| [floodplains](https://www.newgraphenvironment.com/floodplains/) | Floodplain and land cover change modelling for BC watershed groups |
+| [stac_floodplains_bc](https://www.newgraphenvironment.com/stac_floodplains_bc/) | STAC catalogue of floodplain land cover change in BC, 2017-2023, by watershed group |
+| [cd](https://www.newgraphenvironment.com/cd/) | Climate departure analysis from ERA5-Land reanalysis |
+| [fly](https://www.newgraphenvironment.com/fly/) | Estimate airphoto footprints and select photos that cover a study area |
 
-Priority tables farmed out of past reports and reconciled to PSCIS crossings (`0100`–`0162`) feed field
-planning at group scale.
+## Data and methods it builds on
 
-## Data
+Fish records come from the Province of British Columbia: the Fisheries Data Information System (FDIS)
+electrofishing extract it supplied, [Known BC Fish Observations](https://catalogue.data.gov.bc.ca/dataset/known-bc-fish-observations-and-bc-fish-distributions),
+and the fish data submissions filed in [EcoCat](https://a100.gov.bc.ca/pub/acat/), which also holds the past
+reports. Stream crossings come from [PSCIS](https://catalogue.data.gov.bc.ca/dataset/pscis-assessments). The
+FDIS visits are placed on the stream segments of link's province-wide run, built on the
+[BC Freshwater Atlas](https://www2.gov.bc.ca/gov/content/data/geographic-data-services/topographic-data/freshwater)
+through [fwapg](https://smnorris.github.io/fwapg/), with flows from [wet](https://www.newgraphenvironment.com/wet/)
+and dams from the [Canadian Aquatic Barriers Database](https://aquaticbarriers.ca/), and each visit is matched
+to the records it produced in [bcfishobs](https://github.com/smnorris/bcfishobs). The floodplain panels of the
+comparison maps in `research/fig/`, and the floodplain areas in `data/compare/floodplain.csv`, come from
+[stac_floodplains_bc](https://www.newgraphenvironment.com/stac_floodplains_bc/). Some crossing and report scripts
+also read a [bcfishpass](https://smnorris.github.io/bcfishpass/) database. Each value taken from the literature
+carries a verbatim quote, checked against its source.
 
-- **Tracked:** text snapshots (csv, md) and small spatial deliverables (gpkg, kml).
-- **Regenerable, not tracked:** raw FISS `.xls` (`data/<wsg>/fiss_xls/`, from `fiss_xls_manifest.csv`).
-- **On S3** (`fresh-bc`, `us-west-2`), read by manifest because the bucket does not list:
-  - `fdis/`: the FDIS electrofishing extract as received from the Province of BC, with its provenance
-    note and checksums;
-  - `knowledge/fdis/v2/`: the visit-level tables built from it, as Parquet with a `manifest.json`;
-  - `rag/` (not public): the searchable report-text stores.
-- **Databases:** scripts that query PostgreSQL connect through the standard `PGHOST`, `PGPORT`,
-  `PGDATABASE`, `PGUSER` and `PGPASSWORD` environment variables; each script's header names the schemas
-  it needs (an [fwapg](https://github.com/NewGraphEnvironment/fwapg) load, and for some a
-  [bcfishpass](https://github.com/NewGraphEnvironment/bcfishpass) database).
-- **Zotero:** store builds read a local, synced Zotero data directory; filing to the group library reads
-  a Web API key from `ZOTERO_API_KEY`.
+## Citation
 
-## Conventions
-
-The watershed group is an argument, never a project or a client: no client or project identifiers go in
-code, fixtures, commit messages or issue titles. Code graduates from `scripts/` into the package only
-once it has run on two regions.
-
-The repository began in September 2026 with history seeded from an earlier fish-passage reporting
-template, so issue and PR numbers in that seeded history refer to the template, not to this repository.
+```r
+citation("knowledge")
+```
 
 ## License
 
-MIT for the code. Data sources carry their own terms; the FDIS extract is published with the Province's
-agreement (see its provenance note).
+MIT for the code (see [`LICENSE`](https://github.com/NewGraphEnvironment/knowledge/blob/main/LICENSE)). Data from other sources carries its own terms: see
+[`NOTICE.md`](https://github.com/NewGraphEnvironment/knowledge/blob/main/inst/NOTICE.md).
