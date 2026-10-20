@@ -26,7 +26,8 @@ streams, an allowance for a river close downstream. It scored every version on h
 kept every version the data cannot tell from the best, and recommended the one of those closest to link's
 current test. link's current test is not among them for any fitted species but grayling, and every recommended
 rule but grayling's draws less habitat than link does now. A grade from 0 to 1 then gives the use to expect on
-each segment (provisional until #65: it reads a segment that passes the size test as far from the river the curve measures to). The package article on chinook rearing (https://newgraphenvironment.github.io/knowledge/articles/chinook_rearing.html) walks through one species from the question to
+each segment, read at that segment's own distance to a river (#65 corrected a first build that read most segments at
+the distance cap). The package article on chinook rearing (https://newgraphenvironment.github.io/knowledge/articles/chinook_rearing.html) walks through one species from the question to
 the map; the specification below is the record.
 
 ## The question
@@ -69,9 +70,14 @@ species and date, and the rest give the outside check. The Fish Data Submission 
 - **Curve:** one GAM per species × stage after the pick, `te(log size, log distance to the pick's river)` +
   `s(gradient)` with the same nuisance terms and a group random effect; held-out deviance on the same folds.
 - **Grade:** the curve's predicted rate at the reference nuisance values (group effect excluded) over the 95th
-  percentile of accessible segments' rate, capped at 1, in fifths. Expected use per standard electrofishing
+  percentile of the rate on accessible stream-branch segments (the edge types of the curve's visits; since #65),
+  capped at 1, in fifths. Expected use per standard electrofishing
   visit, not habitat quality. A segment with no size (an unmeasured first-order stream under a width rule) or no
-  gradient is `NA`, counted.
+  gradient is `NA`, counted. Every accessible segment with a gradient is walked from its downstream end to the
+  first river of the pick's exception flow (10 m³/s where the pick has no exception), on any edge type and at any gradient,
+  because the curve reads size and distance together; a walk that reaches the sea first, or stops, reads the
+  50 km cap, as the curve's visits did (`dist_status` in the grade table says which). #57's first build walked
+  only the segments the exception could admit and read every other segment at the cap (#65).
 
 ## Results
 
@@ -106,18 +112,25 @@ Three readings across the table:
 
 | species × stage | segments (groups) | accessible km | graded km | grade-weighted km | reference rate | km under 0.2 | km at 0.8–1 |
 |---|---|---|---|---|---|---|---|
-| BT rearing | 8.41 M (158) | 577,130 | 571,306 | 175,327 | 0.180 | 54 % | 9 % |
-| BT spawning | 8.41 M (158) | 577,130 | 571,306 | 375,213 | 0.239 | 0.1 % | 21 % |
-| CH rearing | 5.76 M (125) | 225,326 | 224,459 | 36,149 | 0.146 | 76 % | 7 % |
-| CO rearing | 4.92 M (100) | 147,962 | 146,612 | 66,893 | 0.514 | 20 % | 14 % |
-| GR rearing | 4.21 M (82) | 258,724 | 146,128 | 83,850 | 0.034 | 5 % | 24 % |
-| RB rearing | 10.33 M (210) | 510,150 | 277,539 | 134,596 | 0.411 | 24 % | 21 % |
-| ST rearing | 4.14 M (79) | 155,481 | 154,855 | 44,545 | 0.236 | 61 % | 14 % |
-| WCT rearing | 1.19 M (16) | 35,320 | 25,932 | 16,871 | 0.429 | 15 % | 47 % |
+| BT rearing | 8.41 M (158) | 577,130 | 571,305 | 151,418 | 0.226 | 63 % | 10 % |
+| BT spawning | 8.41 M (158) | 577,130 | 571,305 | 392,475 | 0.210 | 0.2 % | 23 % |
+| CH rearing | 5.76 M (125) | 225,326 | 224,459 | 63,059 | 0.139 | 67 % | 21 % |
+| CO rearing | 4.92 M (100) | 147,962 | 146,612 | 70,905 | 0.512 | 22 % | 22 % |
+| GR rearing | 4.21 M (82) | 258,724 | 146,128 | 72,867 | 0.034 | 25 % | 25 % |
+| RB rearing | 10.33 M (210) | 510,150 | 277,539 | 121,816 | 0.445 | 27 % | 15 % |
+| ST rearing | 4.14 M (79) | 155,481 | 154,855 | 32,290 | 0.201 | 76 % | 14 % |
+| WCT rearing | 1.19 M (16) | 35,320 | 25,932 | 18,671 | 0.473 | 6 % | 52 % |
 
 A width rule grades only measured streams: fwapg models width where `stream_order > 1`, so GR, RB and WCT leave
 every unmeasured first-order stream `NA` (RB: 6.26 M of 10.33 M segments). A MAD rule grades almost everything
-(BT: 33,988 segments with no flow even from a parent).
+(BT: 33,992 segments with no flow even from a parent).
+
+Revised 2026-10-19 (#65). #57's grades read every segment the exception could not admit at the 50 km distance
+cap, and six of the eight keys walked no segment at all; every segment now reads its own distance, and the
+reference is the stream branch's 95th percentile. The regrade also reads the flows wet republished on
+2026-10-19 (NewGraphEnvironment/wet#103, about ±5 % on most segments; BT gains 4 segments with no flow), after
+the thresholds were tuned on the load before it (#73 retunes). The references move by under 1 % (CO, GR) to
+25 % (BT rearing, up); CH's grade-weighted km nearly doubles (36,149 → 63,059) and its km at 0.8–1 triples.
 
 ## What each rule changes on link's segments
 
@@ -197,6 +210,11 @@ paragraph first compared catalog-group floodplain with all-group km.)
 - **Thin rows.** ST (82 detections, 11 groups) and WCT (6 groups) carry their labels; BT spawning should not be
   applied. For ST and GR the joint curve predicts worse than the cut on held-out groups, so their grades rank
   segments but their rates are not to be read.
+- **The grade on river polygons and wetlands is an extrapolation.** The curve was fitted on stream-branch visits
+  outside lakes, wetlands and river polygons; a river-polygon segment reads it at 0 m from the river it is part of
+  and at flows few visits had, so its grade rests on the surface past its data, and about half of their km reads 0.8 or more (CH).
+  The reference is taken over the stream branch so that they do not set it: over every accessible segment, CH's
+  rose from 0.14 to 0.52 and left 0.4 % of stream km at 0.8 or more (#65).
 - **Width rules leave first-order streams ungraded**; a consumer summing graded km over a width-ruled species
   sums measured streams only.
 - **One link run.** Every grade carries `run_uid 20261017_004619-3f4c713b`; link recomputed UPET twice after the

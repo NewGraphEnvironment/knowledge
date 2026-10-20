@@ -18,8 +18,9 @@ caught on 60.3 % of the visits the rule admits against 35.9 % outside (`default`
 pick is in the region of all five seeds, and recommended by 12.5 % of bootstrap resamples.
 
 **Curve and grade.** The joint GAM scores 1,375 held-out against the grid's best 1,311. 1.19 M segments in 16
-groups, 167,459 accessible, 111,698 graded (683,918 with no width); reference rate 0.429. Of 35,320 accessible
-km, 25,932 are graded (16,871 grade-weighted km), and 47 % of graded km is in the 0.8–1 class: in the groups
+groups, 167,459 accessible, 111,698 graded (683,918 with no width); reference rate 0.473 (regraded 2026-10-19,
+#65: every segment at its own distance to a 10 m³/s river, the reference over the stream branch). Of 35,320
+accessible km, 25,932 are graded (18,671 grade-weighted km), and 52 % of graded km is in the 0.8–1 class: in the groups
 WCT hold, most accessible stream reads as near the top.
 
 **Comparison (`scripts/0330`, `data/compare/WCT_rear_*`).** Regenerated on link's 16 WCT groups, the rule draws

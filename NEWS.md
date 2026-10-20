@@ -1,3 +1,16 @@
+# knowledge (development version)
+
+* The grade reads every segment at its own distance to a river (#65). `knw_grade_species()` used to walk only the
+  segments the rule's exception could admit and read the rest at the 50 km distance cap, which on the joint size
+  and distance curve understates any segment near a river: every key was affected, and six of the eight walked
+  nothing at all. It now walks every accessible segment with a gradient to the pick's exception river (10 m³/s
+  where it has none) and records `dist_status`. The reference rate that reads 1 is now taken over the stream
+  branch, the edge types the curve was fitted on: river-polygon and lake segments, about 0 m from their river,
+  would otherwise set it (chinook's 0.52 over every accessible segment against 0.14). `knw_grade()` gains
+  `ref_rows` and `knw_grade_species()` gains `ref_edge` for this, in place of its unused `edge_stream`.
+  `habitat_grade/v1`, never uploaded, is regraded before its first publication; the thresholds and every rule's
+  km do not move.
+
 # knowledge 0.4.5
 
 * `knw_tune_run()` gains `grid_args`, passed to `knw_tune_grid()`, and reads a cached score back only for the grid

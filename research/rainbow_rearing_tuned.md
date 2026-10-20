@@ -24,10 +24,11 @@ the direction: wider and steeper than `default`.
 species. Rainbow detection rises with width over the whole range rather than stepping at a floor, so a graded
 surface carries what a cut cannot.
 
-**Grade, and the width rule's blind spot.** 10.33 M segments in 210 groups, 2.35 M accessible, 1.22 M graded.
+**Grade, and the width rule's blind spot** (regraded 2026-10-19, #65: every segment at its own distance to a
+10 m³/s river, the reference over the stream branch). 10.33 M segments in 210 groups, 2.35 M accessible, 1.22 M graded.
 6.26 M segments have no width: fwapg models width only where `stream_order > 1`, so every unmeasured
-first-order stream is ungraded (`NA`, counted), and of 510,150 accessible km only 277,539 are graded (134,596
-grade-weighted km). Reference rate 0.411. Graded km spread evenly: 24 % under 0.2, 21 % at 0.8–1.
+first-order stream is ungraded (`NA`, counted), and of 510,150 accessible km only 277,539 are graded (121,816
+grade-weighted km). Reference rate 0.445. Graded km spread evenly: 27 % under 0.2, 15 % at 0.8–1.
 
 **Comparison (`scripts/0330`, `data/compare/RB_rear_*`).** Regenerated on link's 210 RB groups, the rule draws
 183,988 km against `default`'s 227,089 (−19.0 %): 44,368 km lost, all of them streams between 1.5 and 3 m wide,

@@ -24,9 +24,10 @@ pick in 18.5 % of resamples.
 **Curve.** The joint GAM scores 4,068 held-out against the grid's best 3,855: the cut carries more than the
 surface; coho detection is high and flat across small streams, and the gradient cut is what separates.
 
-**Grade.** 4.92 M segments in 100 groups, 615,302 accessible, 607,483 graded (10,518 with no flow); reference
-rate 0.514, the highest of any species, so grades spread: 20 % of graded km under 0.2, 14 % at 0.8–1. Of
-147,962 accessible km, 146,612 are graded (66,893 grade-weighted km).
+**Grade** (regraded 2026-10-19, #65: every segment at its own distance to a 10 m³/s river, the reference over
+the stream branch, on the flows wet republished that day). 4.92 M segments in 100 groups, 615,302 accessible,
+607,483 graded (10,518 with no flow); reference rate 0.512, the highest of any species: 22 % of graded km under
+0.2, 22 % at 0.8–1. Of 147,962 accessible km, 146,612 are graded (70,905 grade-weighted km).
 
 **Comparison (`scripts/0330`, `data/compare/CO_rear_*`).** Regenerated on link's 100 CO groups, the rule draws
 77,612 km against `default`'s 81,629 (−4.9 %). 9,184 km are lost, 5,059 of them to the 4 % gradient maximum and

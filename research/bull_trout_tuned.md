@@ -25,9 +25,10 @@ against 8.5 %). The bootstrap recommends this exact rule in 30 % of resamples; t
 **Curve.** The joint GAM (log MAD × log distance to a 10 m³/s river, gradient) scores 5,731 held-out against the
 grid's best 5,792: the curve carries a little more than the cut.
 
-**Grade.** 8.41 M segments in 158 groups, 2.68 M accessible, 2.66 M graded (33,988 with no flow even from a
-parent); reference rate 0.180. Of 577,130 accessible km, 571,306 are graded and sum to 175,327 grade-weighted
-km: 54 % of graded km lies in the 0–0.2 class, 9 % in 0.8–1.
+**Grade** (regraded 2026-10-19, #65: every segment at its own distance to a 10 m³/s river, the reference over
+the stream branch, on the flows wet republished that day). 8.41 M segments in 158 groups, 2.68 M accessible,
+2.66 M graded (33,992 with no flow even from a parent); reference rate 0.226. Of 577,130 accessible km, 571,305
+are graded and sum to 151,418 grade-weighted km: 63 % of graded km lies in the 0–0.2 class, 10 % in 0.8–1.
 
 ## Spawning
 
@@ -42,8 +43,8 @@ region holds 18 rules (MAD 0.15–1, gradient 4–9 %, Q 1–5, D 500–2,000 m;
 admits and 20.8 % of those it leaves out. Nested selection puts the pick *worse* than `default` (462.6 against
 453.0; no rule 449.2), it is in the region of only one of five fold seeds, and the bootstrap recommends it in
 6.5 % of resamples. Ninety-eight detections in 22 groups do not carry a three-component rule. The grade's
-reference rate is 0.239, and the curve is nearly flat: 61 % of graded km falls in the 0.4–0.8 classes and 0.1 %
-under 0.2. #33's conclusion stands: the within-group spawner-evidence rate does not fall with gradient in a
+reference rate is 0.210 (#65's regrade), and the curve is nearly flat: 72 % of graded km falls in the 0.4–0.8
+classes and 0.2 % under 0.2. #33's conclusion stands: the within-group spawner-evidence rate does not fall with gradient in a
 way electrofishing can show, and redd surveys are the evidence spawning needs.
 
 ## What each rule changes (`scripts/0330`, `data/compare/BT_*`)
@@ -64,6 +65,6 @@ catalog groups): rearing 565,869 ha beside the rule's habitat against 746,145 un
 ## What this replaces
 
 #28's candidate weight per gradient class (`data/habitat_weight_bt_rear.csv`) is superseded by the rearing grade:
-one surface over size, gradient and distance, graded against the best accessible segments, instead of a class
+one surface over size, gradient and distance, graded against the best accessible stream-branch segments, instead of a class
 ratio. #28's held-out elevation contrast used link's step-5 split, which one province-wide schema no longer
 carries; `habitat_weights.md` keeps those sections as history.

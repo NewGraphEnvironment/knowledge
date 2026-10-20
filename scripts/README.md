@@ -56,7 +56,8 @@ wf_farm_priority.js                          farm priority/crossing tables out o
 0294  ch_mad_visits.csv written from 0310 (+ two database reads: ambiguous placement, barriers without USER_DEFINITE)
 0296  ch_rule_visits.csv and ch_rule_walks.csv written from 0294 and 0310
 0320  score every rule of each species x stage on held-out groups, pick, fit the joint curve, grade every
-      segment of the species' groups -> data/tune/ (+ log; run on the 16-core machine, WORKERS=14)
+      segment of the species' groups, each accessible one at its own walked distance to the pick's river (#65)
+      -> data/tune/ (+ log; run on the 16-core machine, WORKERS=14)
 0322  CH rearing only, the gradient ladder extended to 30 % (#67): the scores -> data/tune/grad_ext/; STAGE=compare
       sets CH_rear_v1's parts at 11, 13, 15 and 30 % and the extended grid's recommended rule beside default and
       beside CH_rear_v1 -> data/compare/grad_ext/ (+ logs).

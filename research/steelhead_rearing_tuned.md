@@ -20,8 +20,10 @@ against 2.0 % outside (`default`: 8.3 % against 2.9 %). The pick is in the regio
 overfits its training folds badly, and the cut is the better predictor. The grade is still the curve's
 prediction at the reference, so read it as a ranking, not a rate.
 
-**Grade.** 4.14 M segments in 79 groups, 720,768 accessible, 717,790 graded; reference rate 0.236. Of 155,481
-accessible km, 154,855 are graded (44,545 grade-weighted km); 61 % of graded km is under 0.2.
+**Grade** (regraded 2026-10-19, #65: every segment at its own distance to a 10 m³/s river, the reference over
+the stream branch, on the flows wet republished that day). 4.14 M segments in 79 groups, 720,768 accessible,
+717,790 graded; reference rate 0.201. Of 155,481 accessible km, 154,855 are graded (32,290 grade-weighted km);
+76 % of graded km is under 0.2.
 
 **Comparison (`scripts/0330`, `data/compare/ST_rear_*`).** Regenerated on link's 79 ST groups, the rule draws
 45,214 km against `default`'s 71,619 (−36.9 %): 26,731 km lost, 26,337 of them to the 1 m³/s floor, and 326
