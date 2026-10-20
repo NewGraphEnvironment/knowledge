@@ -133,6 +133,26 @@ default rather than for the call, which agrees with the curve's `edge_stream` be
 same list. Recording provenance where the grade is made (`knw_grade_species()` returning `ref_edge` and `q`,
 written by 0320 and checked by each consumer) would change code the running regrade uses; filed as knowledge#72.
 
+## Full regrade (2026-10-19, stream-branch reference)
+
+`scripts/logs/habitat/20261019_tune_run.{txt,out}`, 197.7 min, all keys from a frozen copy of 0320 at `9f35e8e`.
+Every accessible segment walked (all have a gradient); tracked `data/tune` files unchanged; new
+`<key>_{seeds,honest}.csv` committed. Grade summaries: `grades_summary_{before,after}.csv` (`grade_summary.R`).
+
+| key | walks (min) | found / none / other | reference before → after | grade-weighted km before → after | km < 0.2 | km 0.8–1 |
+|---|---|---|---|---|---|---|
+| BT rear | 51.7 | 2,647,784 / 33,782 / 17 | 0.180 → 0.226 | 175,327 → 151,418 | 54 → 63 % | 9 → 10 % |
+| BT spawn | 44.6 | 2,665,023 / 16,543 / 17 | 0.239 → 0.210 | 375,213 → 392,475 | 0.1 → 0.2 % | 21 → 23 % |
+| CH rear | 16.1 | 809,412 / 46,831 / 1 | 0.146 → 0.139 | 36,149 → 63,059 | 76 → 67 % | 7 → 21 % |
+| CO rear | 8.5 | 484,753 / 130,548 / 1 | 0.514 → 0.512 | 66,893 → 70,905 | 20 → 22 % | 14 → 22 % |
+| GR rear | 13.7 | 841,456 / 14,641 / 16 | 0.034 → 0.034 | 83,850 → 72,867 | 5 → 25 % | 24 → 25 % |
+| RB rear | 37.0 | 2,135,004 / 215,878 / 1 | 0.411 → 0.445 | 134,596 → 121,816 | 24 → 27 % | 21 → 15 % |
+| ST rear | 9.5 | 566,649 / 154,119 / 0 | 0.236 → 0.201 | 44,545 → 32,290 | 61 → 76 % | 14 → 14 % |
+| WCT rear | 2.2 | 166,124 / 1,335 / 0 | 0.429 → 0.473 | 16,871 → 18,671 | 15 → 6 % | 47 → 52 % |
+
+Graded km is unchanged for every key (the gradable set does not depend on the walk). Walk rates 52–65 k/min on
+8 workers. CH's grades under the first regrade's all-accessible reference are superseded.
+
 ## Errors Encountered
 
 | Error | Resolution |

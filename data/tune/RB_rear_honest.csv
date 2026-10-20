@@ -1,0 +1,6 @@
+fold,rule,n_wsg,dev_rec,dev_default,dev_null,species_code,stage
+1,width>=3|g<=0.09|none,26,2397.971038,2433.96448,2537.54528,RB,rear
+2,width>=3|g<=0.09|none,26,2313.724731,2329.234713,2511.738214,RB,rear
+3,width>=2|g<=0.07|none,26,2682.603601,2719.676838,2745.005609,RB,rear
+4,width>=3|g<=0.09|none,25,2354.692344,2362.862058,2498.958991,RB,rear
+5,width>=2|g<=0.07|none,26,2114.207556,2109.101961,2324.127831,RB,rear
