@@ -20,3 +20,10 @@
   `bulk_segments` gains `water`/`water_ha`, every other column identical; `bulk_water` identical. Wetland lines
   (edge 1050/1150): default 10,286.8 km, recommended 10,197.0 km, both 10,075.1 km, median grade 0.0307 under the
   recommended rule. BULK segments: 10,846 stream, 2,127 river, 2,540 wetland, 1,173 lake
+- Phase 4: `knw_compare_mapgl()`. Checked in Chrome on the Bulkley: the source id `water` collided with Carto
+  Voyager's own `water` layer ("Layer water already exists"), which left the basemap blank, so the ids are
+  `knw_water`/`knw_seg`; mapgl 0.4.6's popup evaluator (`maplibregl.js:397`) reads only get, concat, to-string,
+  to-number and number-format, so the popup fields are short display strings ("none" for missing); `format()` over
+  the vector gave `3.7e-02`, so per-value `formatC(fg)`. Classes as integer codes. Bulkley segment GeoJSON 5.2 MB
+  (8.3 MB with a prebuilt HTML popup per segment). Grade layer and its legend swap in through the switch.
+  Planted bugs (a grey80 colour, unrounded coordinates, vector format, switch position, legend position) each fail

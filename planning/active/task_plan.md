@@ -78,12 +78,12 @@ article in plain words with the 1.96 table and a bibliography, an interactive Bu
       tell" wording (plan review)
 
 ## Phase 4: the interactive map
-- [ ] `knw_compare_mapgl(segments, water, title, background = c("voyager", "openfreemap"))`: hex colours for the
+- [x] `knw_compare_mapgl(segments, water, title, background = c("voyager", "openfreemap"))`: hex colours for the
       "neither" and "not graded" classes (MapLibre rejects `grey80`/`grey85`); rules legend bottom-left, layer switch
       top-right; a grade legend shown with the grade layer; a click popup per segment (class, grade, average flow,
       channel width, gradient, distance to the rule's river, stream order, which of link's conditions kept it under
       each rule, and whether the hand-entered reaches or the connectivity step changed it)
-- [ ] `knw_compare_map(html =)` saves that widget; tests (every colour stop is hex, positions, popup column,
+- [x] `knw_compare_map(html =)` saves that widget; tests (every colour stop is hex, positions, popup column,
       background choice); render one page and look at it in a browser
 
 ## Phase 5: the article's data

@@ -97,3 +97,73 @@ test_that("knw_compare_map draws numbered markers where labels are given", {
   expect_lt(changed, 0.05)
   expect_error(knw_compare_map(seg, NULL, "g", png = with_l, labels = sf::st_sf(geometry = sf::st_geometry(pts))))
 })
+
+mapgl_fx <- function() {
+  sf::st_sf(
+    accessible = c(TRUE, TRUE, TRUE, FALSE), stream_order = 1:4, grade_class = c("0-0.2", "0.8-1", NA, "0.4-0.6"),
+    grade = c(0.1, 0.9, NA, 0.5), flag_default = c(TRUE, TRUE, FALSE, TRUE), flag_tuned = c(TRUE, FALSE, TRUE, TRUE),
+    pre_default = c(TRUE, TRUE, FALSE, TRUE), pre_tuned = c(TRUE, TRUE, FALSE, TRUE),
+    mad = c(0.0372, 19.4, NA, 1), channel_width = c(2.2, NA, 1, 1), gradient = c(0.024, 0.001, 0.08, 0.01),
+    dist_m = c(19400, 0, 250, NA), water = c("stream", "wetland", "river", "stream"), water_ha = c(NA, 7.93, NA, NA),
+    geometry = sf::st_sfc(lapply(0:3, function(i) {
+      sf::st_linestring(rbind(c(1e6 + i * 500.123456, 1e6), c(1e6 + (i + 1) * 500.987654, 1e6 + 300.55555)))
+    }), crs = 3005))
+}
+
+test_that("knw_compare_mapgl colours every class in hex, places the legends and the switch, and keeps the background", {
+  skip_if_not_installed("mapgl")
+  m <- knw_compare_mapgl(mapgl_fx(), title = "Habitat by rule")
+  expect_s3_class(m, "maplibregl")
+  colours <- unlist(lapply(m$x$layers, function(l) unlist(l$paint[grepl("color", names(l$paint))])))
+  colours <- colours[!grepl("^(match|get|rc|gc)$", colours) & is.na(suppressWarnings(as.numeric(colours)))]
+  expect_true(all(grepl("^#[0-9a-f]{6}$", colours)), info = paste(unique(colours), collapse = " "))
+  expect_true(all(grepl("^#[0-9a-f]{6}$", c(knowledge:::.compare_rule_cols, knowledge:::.compare_grade_cols))))
+  json <- as.character(jsonlite::toJSON(m$x, auto_unbox = TRUE, null = "null"))
+  # the legends bottom-left and the layer switch top-right, so they never share a corner
+  expect_identical(m$x$layers_control$position, "top-right")
+  expect_setequal(m$x$layers_control$layers, c("rules", "grade"))
+  expect_match(m$x$legend_html, "legend_rules[^>]*bottom-left")
+  expect_match(m$x$legend_html, "legend_grade[^>]*bottom-left")
+  expect_false(grepl("grey8", json))
+  expect_match(json, "voyager")
+  m2 <- knw_compare_mapgl(mapgl_fx(), background = "openfreemap")
+  expect_match(as.character(jsonlite::toJSON(m2$x$style, auto_unbox = TRUE)), "openfreemap")
+})
+
+test_that("knw_compare_mapgl's popup reads only expressions mapgl's evaluator knows, with per-value numbers", {
+  skip_if_not_installed("mapgl")
+  m <- knw_compare_mapgl(mapgl_fx())
+  pop <- m$x$layers[[which(vapply(m$x$layers, `[[`, "", "id") == "rules")]]$popup
+  ops <- character()
+  walk <- function(e) {
+    if (is.list(e)) {
+      if (is.character(e[[1]])) ops <<- c(ops, e[[1]])
+      lapply(e[-1], walk)
+    }
+  }
+  walk(pop)
+  expect_true(all(ops %in% c("get", "concat", "to-string", "to-number", "number-format")), info = paste(unique(ops)))
+  src <- jsonlite::fromJSON(m$x$sources[[1]]$data)$features$properties
+  # only the accessible segments, each with its own notation, and "none" for a missing value
+  expect_equal(nrow(src), 3)
+  expect_identical(src$q, c("0.037", "19", "none"))
+  expect_identical(src$d, c("19", "0", "0.25"))
+  expect_identical(src$vd, c("yes", "yes", "no"))
+  expect_identical(src$vt, c("yes", "no (not connected to spawning)", "yes (a hand-entered reach)"))
+  expect_identical(src$wa, c("stream line", "wetland, 7.93 ha", "river polygon"))
+})
+
+test_that("knw_compare_mapgl rounds coordinates after the transform to degrees", {
+  skip_if_not_installed("mapgl")
+  m <- knw_compare_mapgl(mapgl_fx(), digits = 3)
+  xy <- unlist(jsonlite::fromJSON(m$x$sources[[1]]$data, simplifyVector = FALSE)$features[[1]]$geometry$coordinates)
+  expect_true(all(abs(xy * 1000 - round(xy * 1000)) < 1e-6))
+})
+
+test_that("knw_compare_mapgl says so and returns NULL when no segment is accessible", {
+  skip_if_not_installed("mapgl")
+  seg <- mapgl_fx()
+  seg$accessible <- FALSE
+  expect_message(out <- knw_compare_mapgl(seg, title = "PARS"), "no accessible segment")
+  expect_null(out)
+})

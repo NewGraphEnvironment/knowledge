@@ -2,6 +2,7 @@
 
 export(knw_bcfishobs_match)
 export(knw_compare_map)
+export(knw_compare_mapgl)
 export(knw_compare_rules)
 export(knw_fdis_quality)
 export(knw_fdis_species)
