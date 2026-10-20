@@ -1,6 +1,6 @@
 # A tuned Chinook rearing rule: stream size, gradient and distance to a river, beside link's `default`
 
-**Verified:** 2026-10-16; 0297's figures rerun 2026-10-17 without repeated surveys (#35), with the same recommended rule; the head paragraph and the last section 2026-10-18 (#62); the gradient maximum above 9 % 2026-10-19 (#67) · **Issues:** #54 (this), #67, #68; builds on #52 (`chinook_stream_size.md`), which picked 0.5 m³/s, 10 m³/s
+**Verified:** 2026-10-16; 0297's figures rerun 2026-10-17 without repeated surveys (#35), with the same recommended rule; the head paragraph and the last section 2026-10-18 (#62); the gradient maximum above 9 % 2026-10-19 (#67); the grade and the comparison's figures 2026-10-19 (#65) · **Issues:** #54 (this), #67, #68, #65; builds on #52 (`chinook_stream_size.md`), which picked 0.5 m³/s, 10 m³/s
 and 500 m by hand; uses wet's flow (`modelled_discharge.md`) and the FDIS export (`fdis_export.md`); the link issue for
 a tuned rule is drafted, not filed (planning archive for #54) · **Produced by:**
 - `scripts/0296-ch-rule-build.R` with `scripts/sql/ch_dist_profile.sql`: walks, widths, barrier status, link segment
@@ -27,16 +27,18 @@ gradient (9 % against 7 %, both inside both regions). `default` is 196.3 above t
 every seed; nested selection 1,234 against `default`'s 1,347. **The size floor settles at 0.75 m³/s** (the open
 question of #54), with 0.5 inside the region. The thresholds table carries it as `CH_rear_v1`
 (`data/thresholds.csv`); every CH segment of the 125 groups carries a grade (`knowledge/habitat_grade/v1`:
-856,244 accessible segments, 852,431 graded, reference rate 0.146, 76 % of graded km under 0.2). The method
+856,244 accessible segments, 852,431 graded, reference rate 0.139, 67 % of graded km under 0.2 and 21 % at 0.8–1,
+each segment at its own distance to a ≥ 3 m³/s river since #65). The method
 and the cross-species table are `habitat_thresholds_tuned.md`. Regenerated on all 125 CH groups
-(`scripts/0330`, `data/compare/CH_rear_*`), the rule draws 88,607 km against `default`'s 101,184 (−12.4 %):
-24,843 km lost, 24,542 of them to the 0.75 m³/s floor, and 12,266 gained, 9,666 through the exception (6,952
-order 1) and 1,398 between the two gradient maxima. Graded km rises, 27,681 → 32,018, the only species where it
-does. FDIS detection on the rule's segments is 17 % against 1.5 % outside (`default`: 14 % against 2 %); the
-bcfishobs outside lift moves 2.46 → 3.27. Floodplain (16 catalog groups): 341,298 ha beside the rule's habitat
-against 426,681 under `default` (−20 %, against −18.8 % in km on the same 16 groups), graded ha 146,059 → 147,442;
-graded figures are provisional until #65, because the grade reads a segment that passes the size test at the 50 km
-distance cap. The province-wide joint curve bends in distance (at 0.75 m³/s, the predicted chance is highest about
+(`scripts/0330`, `data/compare/CH_rear_*`; #65's run, on the flows wet republished on 2026-10-19), the rule
+draws 88,641 km against `default`'s 101,184 (−12.4 %): 24,832 km lost, 24,532 of them to the 0.75 m³/s floor,
+and 12,289 gained, 9,665 through the exception (6,948 order 1) and 1,411 between the two gradient maxima. Graded
+km rises, 49,434 → 54,443, the only species where it does. FDIS detection on the rule's segments is 17 % against
+1.5 % outside (`default`: 14 % against 2 %); the bcfishobs outside lift moves 2.46 → 3.26. Floodplain (16
+catalog groups): 340,929 ha beside the rule's habitat against 426,681 under `default` (−20 %, against −18.9 % in
+km on the same 16 groups), graded ha 206,011 → 207,639. (Revised 2026-10-19, #65: #57's grade read every segment
+the exception could not admit at the 50 km distance cap, and graded km was 27,681 → 32,018; the flow republish
+moved the rule's km by +34.) The province-wide joint curve bends in distance (at 0.75 m³/s, the predicted chance is highest about
 120 m from a ≥ 3 m³/s river and falls past a few hundred metres, to 0.43 of the 1 km value at 3 km, as a ratio of predicted chances;
 `data/tune/CH_rear_curves.csv`), so D = 1 km sits past the bend. #54's distance curve below, fitted separately on the
 visits failing the floor, showed no plateau; the two are different models. The figures below are #54's, on the 55-group build; the province-wide

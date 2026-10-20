@@ -1,6 +1,6 @@
 # Bull trout rearing and spawning rules tuned on the province-wide run
 
-**Verified:** 2026-10-17 · **Issues:** #57 (this); builds on #28 (`habitat_weights.md`, the gradient use curve on
+**Verified:** 2026-10-17; grade and comparison figures 2026-10-19 (#65) · **Issues:** #57 (this), #65; builds on #28 (`habitat_weights.md`, the gradient use curve on
 link's 55-group build) and #33 (`bt_spawning.md`, spawner evidence by gradient class) · **Produced by:**
 `scripts/0310` (evidence build, ledger `scripts/logs/habitat/20261017_evidence_build_ledger.csv`),
 `scripts/0320` (`data/tune/BT_{rear,spawn}_*`, logs `scripts/logs/habitat/20261017_tune_run-*`), `scripts/0325`
@@ -49,17 +49,19 @@ way electrofishing can show, and redd surveys are the evidence spawning needs.
 
 ## What each rule changes (`scripts/0330`, `data/compare/BT_*`)
 
-Regenerated on link's 158 BT groups, the rearing rule draws 156,141 km against `default`'s 248,927 (−37.3 %),
-the largest change of any species: 94,139 km lost, 93,316 of them streams over 1.5 m wide under 0.35 m³/s, and
-1,352 gained (1,085 of them order-1 streams under 1.5 m wide that carry the flow). Graded km 114,856 → 76,118.
-FDIS detection on the rule's segments is 21 % against 8 % on accessible segments outside it (`default`: 17 %
-against 6 %), and the bcfishobs outside lift moves 2.45 → 5.17, the largest rise of any rule. The spawning rule
-draws 99,786 km against 133,382 (−25.2 %): 56,284 km lost to the 0.75 m³/s floor and 22,688 gained, 21,917 of
-them through the river-within-2-km exception (15,699 order 1); graded km 66,216 → 43,559; lift 3.04 → 3.70. The
-spawning row is weak (above), so its change is a description of the rule, not a recommendation. Floodplain (22
-catalog groups): rearing 565,869 ha beside the rule's habitat against 746,145 under `default` (−24 %, against
-−37 % in km: the small streams the floor drops carry little floodplain), graded ha 278,349 → 215,614; spawning
-275,514 against 354,423 (−22 %), graded ha 163,055 → 115,833. Maps:
+Regenerated on link's 158 BT groups (#65's run, on the flows wet republished on 2026-10-19), the rearing rule
+draws 156,091 km against `default`'s 248,927 (−37.3 %), the largest change of any species: 94,199 km lost, 93,376
+of them streams over 1.5 m wide under 0.35 m³/s, and 1,363 gained (1,094 of them order-1 streams under 1.5 m wide
+that carry the flow). Graded km 105,605 → 77,856. FDIS detection on the rule's segments is 21 % against 8 % on
+accessible segments outside it (`default`: 17 % against 6 %), and the bcfishobs outside lift moves 2.45 → 5.21,
+the largest rise of any rule. The spawning rule draws 99,555 km against 133,382 (−25.4 %): 56,411 km lost to the
+0.75 m³/s floor and 22,585 gained, 21,807 of them through the river-within-2-km exception (15,617 order 1);
+graded km 88,070 → 62,266; lift 3.04 → 3.70. The spawning row is weak (above), so its change is a description of
+the rule, not a recommendation. Floodplain (22 catalog groups): rearing 565,706 ha beside the rule's habitat
+against 746,145 under `default` (−24 %, against −37 % in km: the small streams the floor drops carry little
+floodplain), graded ha 260,172 → 216,596; spawning 275,002 against 354,423 (−22 %), graded ha 253,726 → 199,664.
+(Revised 2026-10-19, #65: graded figures regraded with every segment at its own distance; the flow republish moved
+the rearing rule by −49 km and the spawning rule by −231.) Maps:
 `research/fig/compare_bt_{rear,spawn}_*.png`.
 
 ## What this replaces

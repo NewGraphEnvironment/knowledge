@@ -18,11 +18,10 @@
 #     simplified at 10 m (a 4 in panel at 150 dpi is about 250 m a pixel at the group's extent, and the
 #     zoomed window is 12 km); lengths stay the segments' own. Each segment also carries what the two rules
 #     read (edge type, link's segment gradient and channel width, wet's MAD and the walk distance to the
-#     pick's river, measured only on accessible stream-edge segments inside the gradient maximum that fail the
-#     size test, as knw_grade_species() walks them, wetland lines included), each rule's verdict from the
-#     habitat test alone (before the hand-entered reaches and the connectivity pass), and whether the segment
-#     lies in any waterbody, for the labelled examples. The floodplain is not in the article (#62's
-#     second draft); it is in research/habitat_thresholds_tuned.md.
+#     pick's river, measured on every accessible segment with a gradient, as knw_grade_species() walks them
+#     since #65), each rule's verdict from the habitat test alone (before the hand-entered reaches and the
+#     connectivity pass), and whether the segment lies in any waterbody, for the labelled examples. The
+#     floodplain is not in the article (#62's second draft); it is in research/habitat_thresholds_tuned.md.
 #
 # INPUT:  data/tune/CH_rear_{tune,summary,curves,groups}.csv, data/tune/grad_ext/CH_rear_{by_grad,summary,seeds}.csv
 #         (0322, #67), data/tune/CH_rear_{seeds,honest}.csv or
@@ -45,7 +44,9 @@ if (!nzchar(Sys.getenv("PGCONNECT_TIMEOUT"))) Sys.setenv(PGCONNECT_TIMEOUT = "30
 key <- "CH_rear"
 wsg <- "BULK"
 dir_out <- "inst/vignette-data"
-path_log <- "scripts/logs/habitat/20261017_tune_run-bt_ch_co_st.txt"
+# #65's full regrade (the reference over the stream branch); 20261019_tune_run-ch.txt is the superseded first
+# CH regrade, whose reference was taken over every accessible segment
+path_log <- "scripts/logs/habitat/20261019_tune_run.txt"
 dir.create(dir_out, showWarnings = FALSE, recursive = TRUE)
 rd <- function(f, ...) read_csv(f, show_col_types = FALSE, guess_max = 1e5, ...)
 
@@ -62,6 +63,9 @@ if (identical(ledger, log1) || !file.exists(ledger)) stop("the tuning log's firs
 src <- c(src, ledger = ledger)
 missing <- src[!file.exists(src)]
 if (length(missing)) stop("missing inputs: ", paste(missing, collapse = ", "))
+# the grade the compare tables read must be the one #65 made (ref_population), not #57's or the first CH regrade's
+g1 <- rd(sprintf("data/tune/%s_grades.csv", key), n_max = 1, col_types = cols(.default = "c"))
+if (!identical(g1$ref_population, "stream_branch")) stop("data/tune/", key, "_grades.csv was graded before #65; rerun 0320")
 
 out <- list(
   tune = rd(src[["tune"]]),

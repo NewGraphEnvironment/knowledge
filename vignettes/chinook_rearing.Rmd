@@ -445,7 +445,7 @@ ex_t <- tibble(
   Gradient = grad(round(ex$gradient, 4)),
   `Downstream to a river` = vapply(seq_len(nrow(ex)), function(i) {
     d <- ex$dist_m[i]
-    if (!is.na(d)) km_d(signif(d, 2)) else if (ex$mad[i] >= rec$size_min) "not needed" else "no river found"
+    if (!is.na(d)) km_d(signif(d, 2)) else "no river found"
   }, ""),
   default = yes_no(ex$flag_default),
   Recommended = yes_no(ex$flag_tuned))
@@ -455,7 +455,7 @@ knitr::kable(ex_t, align = "llrrrrll",
                               grad(dflt$grad_max), "; the recommended rule needs a gradient of at most ",
                               grad(rec$grad_max), " and either a flow of at least ", rec$size_min, " m³/s or a river of at least ",
                               rec$exc_q, " m³/s within ", km_d(rec$exc_d), " downstream. The distance is to the first ",
-                              "such river downstream, measured only where the exception could apply."))
+                              "such river downstream; the recommended rule reads it only where the flow falls short."))
 gain_grad <- ch$km_all[ch$direction == "gained" & grepl("^gradient", ch$reason)]
 gain_flow <- ch$km_all[ch$direction == "gained" & grepl("^size: tuned passes", ch$reason)]
 conn_gain <- ch$km_all[ch$direction == "gained" & grepl("^connectivity", ch$reason)]

@@ -176,6 +176,28 @@ Floor crossings on accessible stream-branch segments, 17 October flow against to
 
 Asked Al; he chose to proceed on the new flows (#73 retunes on them).
 
+## Comparison and the article (2026-10-20)
+
+`scripts/logs/habitat/20261019_compare.{txt,out}`: 262.6 min. `check_rule_changes_explained.R` against the
+17 October segments: **PASS**. `default` moved nowhere; the tuned rule moved only for MAD-ruled keys, every
+stream-branch verdict explained (`rule_changes_explained.csv`):
+
+| key | tuned km, #57 → #65 | moved by size | moved by exception distance | cascade |
+|---|---|---|---|---|
+| BT rear | 156,141 → 156,091 | 1,299 segments (424 km) | | |
+| BT spawn | 99,786 → 99,555 | 765 (261 km) | 803 (229 km) | |
+| CH rear | 88,607 → 88,641 | 378 (130 km) | 286 (79 km) | 9 (1 km) |
+| CO rear | 77,612 → 77,603 | 463 (156 km) | | 4 (0.1 km) |
+| ST rear | 45,214 → 45,274 | 346 (100 km) | | |
+| GR, RB, WCT | unchanged | | | |
+
+Every figure the research quotes, before and after: `compare_before_after.txt` (`compare_before_after.R`; its
+#57 column reproduces the published order-1 figures 15,699, 6,952, 4,634 and 1,085). GR's checks differ in the
+14th significant digit (summation order). The article's rendered text differs from the #57 render only in the
+examples table's caption and distance column (the kept-by-both example reads 0 m: its 3.6 m³/s stream is itself a
+river of the size) and in figures the flow republish moved (CH tuned 88,607 → 88,641, the exception 9,666 →
+9,665). `devtools::test()`: 173 tests, 569 expectations, 0 failed.
+
 ## Errors Encountered
 
 | Error | Resolution |

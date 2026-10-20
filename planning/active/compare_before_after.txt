@@ -1,0 +1,104 @@
+== km by rule, all groups (compare.csv ALL rows)
+RB rear   default 227,089 | tuned 183,988 -> 183,988 | change -19.0 -> -19.0 % | lost 44,368 -> 44,368 | gained 1,267 -> 1,267 | graded 115,119 -> 101,860  =>  103,160 -> 90,429
+BT rear   default 248,927 | tuned 156,141 -> 156,091 | change -37.3 -> -37.3 % | lost 94,139 -> 94,199 | gained 1,352 -> 1,363 | graded 114,856 -> 76,118  =>  105,605 -> 77,856
+BT spawn  default 133,382 | tuned 99,786 -> 99,555 | change -25.2 -> -25.4 % | lost 56,284 -> 56,411 | gained 22,688 -> 22,585 | graded 66,216 -> 43,559  =>  88,070 -> 62,266
+CH rear   default 101,184 | tuned 88,607 -> 88,641 | change -12.4 -> -12.4 % | lost 24,843 -> 24,832 | gained 12,266 -> 12,289 | graded 27,681 -> 32,018  =>  49,434 -> 54,443
+CO rear   default 81,629 | tuned 77,612 -> 77,603 | change -4.9 -> -4.9 % | lost 9,184 -> 9,215 | gained 5,167 -> 5,189 | graded 48,879 -> 48,516  =>  49,790 -> 49,570
+GR rear   default 77,740 | tuned 77,740 -> 77,740 | change 0.0 -> 0.0 % | lost 0 -> 0 | gained 0 -> 0 | graded 46,831 -> 46,831  =>  44,602 -> 44,602
+ST rear   default 71,619 | tuned 45,214 -> 45,274 | change -36.9 -> -36.8 % | lost 26,731 -> 26,677 | gained 326 -> 332 | graded 28,717 -> 25,571  =>  22,498 -> 20,730
+WCT rear  default 20,749 | tuned 16,243 -> 16,243 | change -21.7 -> -21.7 % | lost 4,510 -> 4,510 | gained 4 -> 4 | graded 12,463 -> 8,543  =>  14,939 -> 11,277
+
+== change by reason (km), old -> new
+BT  rear  gained connectivity or overlay                             180 ->       180 (order 1: 66 -> 66)
+BT  rear  gained size: tuned passes, width fails or NULL           1,172 ->     1,182 (order 1: 1,085 -> 1,094)
+BT  rear  lost   connectivity or overlay                             823 ->       823 (order 1: 270 -> 270)
+BT  rear  lost   size: width passes, tuned fails, no exception    93,316 ->    93,376 (order 1: 1,098 -> 1,098)
+BT  spawn gained exception (size fails, river within D)           21,917 ->    21,807 (order 1: 15,699 -> 15,617)
+BT  spawn gained size: tuned passes, width fails or NULL             771 ->       778 (order 1: 716 -> 722)
+BT  spawn lost   size: width passes, tuned fails, no exception    56,284 ->    56,411 (order 1: 377 -> 377)
+CH  rear  gained connectivity or overlay                             533 ->       535 (order 1: 103 -> 104)
+CH  rear  gained exception (size fails, river within D)            9,666 ->     9,665 (order 1: 6,952 -> 6,948)
+CH  rear  gained gradient between the two maxima                   1,398 ->     1,411 (order 1: 1 -> 1)
+CH  rear  gained other (river-polygon branch or mixed)               230 ->       230 (order 1: 1 -> 1)
+CH  rear  gained size: tuned passes, width fails or NULL             439 ->       449 (order 1: 422 -> 432)
+CH  rear  lost   connectivity or overlay                             301 ->       301 (order 1: 73 -> 73)
+CH  rear  lost   size: width passes, tuned fails, no exception    24,542 ->    24,532 (order 1: 302 -> 301)
+CO  rear  gained connectivity or overlay                             112 ->       112 (order 1: 75 -> 75)
+CO  rear  gained size: tuned passes, width fails or NULL           5,056 ->     5,077 (order 1: 4,634 -> 4,653)
+CO  rear  lost   connectivity or overlay                             199 ->       198 (order 1: 65 -> 65)
+CO  rear  lost   gradient: tuned maximum lower                     5,059 ->     5,047 (order 1: 48 -> 45)
+CO  rear  lost   other (river-polygon branch or mixed)               326 ->       326 (order 1: 2 -> 2)
+CO  rear  lost   size: width passes, tuned fails, no exception     3,599 ->     3,643 (order 1: 175 -> 179)
+RB  rear  gained gradient between the two maxima                   1,239 ->     1,239 (order 1: 8 -> 8)
+RB  rear  gained other (river-polygon branch or mixed)                27 ->        27 (order 1: 0 -> 0)
+RB  rear  lost   size: width passes, tuned fails, no exception    44,368 ->    44,368 (order 1: 786 -> 786)
+ST  rear  gained connectivity or overlay                              23 ->        23 (order 1: 7 -> 7)
+ST  rear  gained size: tuned passes, width fails or NULL             302 ->       309 (order 1: 284 -> 290)
+ST  rear  lost   connectivity or overlay                             393 ->       393 (order 1: 102 -> 102)
+ST  rear  lost   size: width passes, tuned fails, no exception    26,337 ->    26,284 (order 1: 485 -> 485)
+WCT rear  gained connectivity or overlay                               4 ->         4 (order 1: 1 -> 1)
+WCT rear  lost   connectivity or overlay                              68 ->        68 (order 1: 5 -> 5)
+WCT rear  lost   gradient: tuned maximum lower                     4,332 ->     4,332 (order 1: 57 -> 57)
+WCT rear  lost   other (river-polygon branch or mixed)               110 ->       110 (order 1: 1 -> 1)
+
+== checks: FDIS detection share on / off each rule's segments, and the bcfishobs outside lift
+old 
+  species_code stage default_rearing default_accessible_not_rearing
+1           RB  rear          0.3343                        0.15404
+2           BT  rear          0.1661                        0.06291
+3           CH  rear          0.1352                        0.02230
+4           CO  rear          0.2891                        0.12971
+5           GR  rear          0.1504                        0.05044
+6           ST  rear          0.0483                        0.00674
+7          WCT  rear          0.3457                        0.23577
+  tuned_rearing tuned_accessible_not_rearing lift_default lift_tuned
+1        0.3503                      0.18066         2.34       3.04
+2        0.2064                      0.07934         2.45       5.17
+3        0.1706                      0.01452         2.46       3.27
+4        0.3234                      0.11311         1.75       1.82
+5        0.1504                      0.05044         3.56       3.56
+6        0.0753                      0.00627         2.20       4.09
+7        0.3475                      0.27176         1.56       1.73
+new 
+  species_code stage default_rearing default_accessible_not_rearing
+1           RB  rear          0.3343                        0.15404
+2           BT  rear          0.1661                        0.06291
+3           CH  rear          0.1352                        0.02230
+4           CO  rear          0.2891                        0.12971
+5           GR  rear          0.1504                        0.05044
+6           ST  rear          0.0483                        0.00674
+7          WCT  rear          0.3457                        0.23577
+  tuned_rearing tuned_accessible_not_rearing lift_default lift_tuned
+1        0.3503                      0.18066         2.34       3.04
+2        0.2063                      0.07938         2.45       5.21
+3        0.1701                      0.01502         2.46       3.26
+4        0.3245                      0.11246         1.75       1.82
+5        0.1504                      0.05044         3.56       3.56
+6        0.0754                      0.00627         2.20       4.08
+7        0.3475                      0.27176         1.56       1.73
+
+== floodplain (catalog groups): ha and graded ha beside each rule's habitat, summed over groups
+BT  rear  accessible groups 22 | ha 894,237 -> 894,237 | graded ha 306,438 -> 285,792
+BT  rear  default    groups 22 | ha 746,145 -> 746,145 | graded ha 278,349 -> 260,172
+BT  rear  tuned      groups 22 | ha 565,869 -> 565,706 | graded ha 215,614 -> 216,596
+BT  spawn accessible groups 22 | ha 894,237 -> 894,237 | graded ha 459,488 -> 596,908
+BT  spawn default    groups 22 | ha 354,423 -> 354,423 | graded ha 163,055 -> 253,726
+BT  spawn tuned      groups 22 | ha 275,514 -> 275,002 | graded ha 115,833 -> 199,664
+CH  rear  accessible groups 16 | ha 588,216 -> 588,216 | graded ha 155,411 -> 219,048
+CH  rear  default    groups 16 | ha 426,681 -> 426,681 | graded ha 146,059 -> 206,011
+CH  rear  tuned      groups 16 | ha 341,298 -> 340,929 | graded ha 147,442 -> 207,639
+CO  rear  accessible groups 10 | ha 329,838 -> 329,838 | graded ha 192,360 -> 188,458
+CO  rear  default    groups 10 | ha 272,429 -> 272,429 | graded ha 176,396 -> 168,866
+CO  rear  tuned      groups 10 | ha 243,051 -> 242,163 | graded ha 166,814 -> 158,795
+GR  rear  accessible groups 3 | ha 137,000 -> 137,000 | graded ha 61,631 -> 40,464
+GR  rear  default    groups 3 | ha 96,530 -> 96,530 | graded ha 46,793 -> 32,386
+GR  rear  tuned      groups 3 | ha 96,530 -> 96,530 | graded ha 46,793 -> 32,386
+RB  rear  accessible groups 23 | ha 781,723 -> 781,723 | graded ha 341,714 -> 289,946
+RB  rear  default    groups 23 | ha 663,464 -> 663,464 | graded ha 324,847 -> 273,535
+RB  rear  tuned      groups 23 | ha 560,759 -> 560,759 | graded ha 293,833 -> 243,741
+ST  rear  accessible groups 4 | ha 143,349 -> 143,349 | graded ha 48,276 -> 36,782
+ST  rear  default    groups 4 | ha 108,807 -> 108,807 | graded ha 44,775 -> 35,822
+ST  rear  tuned      groups 4 | ha 74,933 -> 74,948 | graded ha 41,791 -> 34,802
+WCT rear  accessible groups 4 | ha 129,911 -> 129,911 | graded ha 50,747 -> 92,842
+WCT rear  default    groups 4 | ha 122,584 -> 122,584 | graded ha 47,027 -> 89,778
+WCT rear  tuned      groups 4 | ha 117,691 -> 117,691 | graded ha 43,010 -> 85,858
