@@ -55,3 +55,12 @@ Models: link PR #340, wet PR #96 (wet#75), fly PR #105. The README today is 680 
 
 | Error | Resolution |
 |-------|------------|
+
+## README figure (Phase 3)
+
+`knw_compare_map(seg, water, png =, panels = "rules")` writes 600 x 690 px (4 x 4.6 in at 150 dpi), RGB, opaque.
+Cartography self-review: legend bottom-left over empty ground; lakes styled through gq's `lake`; one class (kept)
+dominates the trunk, lost reads in orange on tributaries; gained is sparse in the Bulkley (the article's prose
+gives the km). No scale bar or keymap: `knw_compare_map()` draws neither, in the article too; adding them would
+change the shared function and the article, outside this issue. Published at `width="70%"` (~600 px of GitHub's
+~850 px column), so the legend text is shown near its rendered size.

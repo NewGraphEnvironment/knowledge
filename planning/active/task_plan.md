@@ -35,8 +35,8 @@ The README was last rewritten before #57. It is close to correct on the report c
 - [ ] GitHub About: `gh repo edit NewGraphEnvironment/knowledge --description "<tagline>"`, read back with `gh repo view --json description`
 
 ## Phase 3: Figure
-- [ ] `data-raw/readme_figure.R`: reads the two bundled `.rds` (via `system.file()` after `pkgload::load_all()`), calls `knw_compare_map(..., panels = "rules")`, writes `man/figures/readme-bulk.png`, opaque
-- [ ] Self-review per `cartography.md` (all 12 checks), checked at ~830 px published width; set `width` in the `<img>` so a portrait panel is not blown up
+- [x] `data-raw/readme_figure.R`: reads the two bundled `.rds` (via `system.file()` after `pkgload::load_all()`), calls `knw_compare_map(..., panels = "rules")`, writes `man/figures/readme-bulk.png`, opaque
+- [x] Self-review per `cartography.md` (all 12 checks), checked at ~830 px published width; set `width` in the `<img>` so a portrait panel is not blown up
 - [ ] Alt text and a plain caption (what kept / lost / gained mean, in words); caption numbers, if any, computed from the same data
 
 ## Phase 4: Installation, example, stale facts
