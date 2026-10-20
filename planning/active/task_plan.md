@@ -26,8 +26,8 @@ The README was last rewritten before #57. It is close to correct on the report c
      publishes". `thresholds/v1` and `habitat_grade/v1` are not named (not uploaded).
 
 ## Phase 1: Hex sticker
-- [ ] Copy soul's `templates/make_hexsticker.R` to `data-raw/make_hexsticker.R`; run it to write `man/figures/logo.png` (and the small one if the template writes it); `data-raw/nge-icon_white.png` committed as link does
-- [ ] Read the PNG: name inside the hexagon, opaque
+- [x] Copy soul's `templates/make_hexsticker.R` to `data-raw/make_hexsticker.R`; run it to write `man/figures/logo.png` (and the small one if the template writes it); `data-raw/nge-icon_white.png` committed as link does
+- [x] Read the PNG: name inside the hexagon, opaque (corners transparent, as in every hex sticker)
 
 ## Phase 2: Opening and the texts that travel with it
 - [ ] README: title line with sticker (`height="139"`), lifecycle badge block, tagline, opening of 1–3 plain sentences: what knowledge is (fish records, past reports and cited literature per watershed group), and the decision it informs (the thresholds link's habitat model uses to say where fish can spawn and rear, which restoration planning reads)
