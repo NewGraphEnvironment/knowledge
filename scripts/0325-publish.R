@@ -88,9 +88,13 @@ stale <- gfiles[!vapply(gfiles, function(f) {
 }, logical(1))]
 if (length(stale)) stop("grade tables made before #65 (no ref_population = stream_branch); rerun 0320: ",
                         paste(basename(stale), collapse = ", "))
+# the stream branch: the edge types the curves' visits were on and the reference was taken over (0320 grades with
+# knw_grade_species()'s default ref_edge). Off it, on lakes, wetlands and river polygons, the grade extrapolates the
+# curve past its visits, so the table says which segments those are
+edge_stream <- eval(formals(knw_grade_species)$ref_edge)
 grades <- bind_rows(lapply(gfiles, read_csv, show_col_types = FALSE, guess_max = 1e5)) |>
   transmute(blue_line_key, downstream_route_measure, upstream_route_measure, linear_feature_id, watershed_group_code,
-            length_metre, access, species_code, stage, grade, grade_class,
+            length_metre, access, species_code, stage, grade, grade_class, stream_branch = edge_type %in% edge_stream,
             rule_id = paste(species_code, stage, "v1", sep = "_"), config = "default", link_run_uid = run_uid,
             evidence_version = evidence_version)
 dir.create("data/publish", showWarnings = FALSE, recursive = TRUE)
@@ -99,7 +103,7 @@ write_csv(grades, gpath, na = "")
 message(sprintf("grades: %d segment rows, %d species x stage", nrow(grades), n_distinct(paste(grades$species_code, grades$stage))))
 tables_gr <- data.frame(
   table = "habitat_grade", source = gpath, script = "scripts/0325-publish.R",
-  description = "One row per link default segment x species x stage: the segment's FWA position key, its link access code, and its grade (expected use per standard electrofishing visit, read at the segment's own walked distance to the first river of the rule's exception flow, or of 10 m3/s where the rule has none, relative to the 95th percentile of accessible stream-branch segments (FWA edge types 1000, 1100, 2000, 2300), 0-1, NA where inaccessible or the size or gradient is missing) in fifths, with the rule_id it was graded under and the link run and evidence version (knowledge#57, knowledge#65).",
+  description = paste0("One row per link default segment x species x stage: the segment's FWA position key, its link access code, and its grade (expected use per standard electrofishing visit, read at the segment's own walked distance to the first river of the rule's exception flow, or of 10 m3/s where the rule has none, relative to the 95th percentile of accessible stream-branch segments, 0-1, NA where inaccessible or the size or gradient is missing) in fifths; stream_branch, TRUE on the FWA edge types the curve's visits were on (", paste(edge_stream, collapse = ", "), "), FALSE on lines through lakes, wetlands and double-line rivers and on other connectors, where the grade extrapolates the curve past the visits it was fitted on; with the rule_id it was graded under and the link run and evidence version (knowledge#57, knowledge#65)."),
   stringsAsFactors = FALSE)
 man_grade <- knw_publish(tables_gr, "data/publish/habitat_grade_v1", id = "knowledge/habitat_grade/v1",
                   note = "Expected-use grades for every segment of each tuned species' groups on link's province-wide default run (knowledge#57). Hive-partitioned by species_code and stage.",
