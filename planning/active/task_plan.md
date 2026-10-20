@@ -48,7 +48,7 @@ The README was last rewritten before #57. It is close to correct on the report c
 - [x] Learn more: the chinook rearing article (GitHub path `vignettes/chinook_rearing.Rmd` while #56 is open), the research index, and the grouped reference (`_pkgdown.yml` groups, by `man/` or GitHub while the site is down)
 - [x] Ecosystem table per decision 3
 - [x] Data and methods: FDIS (Province of BC, with the `fdis/README.md` provenance note), FISS data submissions and the public FISS layers, EcoCat, PSCIS, fwapg, bcfishpass, link's `default` run, wet's flows, Zotero group library; each linked to its own site
-- [ ] Re-check each `_pkgdown.yml` group `desc:` covers every function listed under it (claim set includes them)
+- [x] Re-check each `_pkgdown.yml` group `desc:` covers every function listed under it (claim set includes them)
 
 ## Phase 6: Citation, License, NOTICE
 - [ ] `/citation-cff`: `CITATION.cff`, `inst/CITATION`, `.github/workflows/update-citation-cff.yaml`; `Date:` already set
