@@ -130,9 +130,11 @@ panels of the comparison maps in `research/fig/`, and the floodplain
 areas in `data/compare/floodplain.csv`, come from
 [stac_floodplains_bc](https://www.newgraphenvironment.com/stac_floodplains_bc/).
 Some crossing and report scripts also read a
-[bcfishpass](https://smnorris.github.io/bcfishpass/) database. Each
-value taken from the literature carries a verbatim quote, checked
-against its source.
+[bcfishpass](https://smnorris.github.io/bcfishpass/) database. fwapg,
+bcfishobs and bcfishpass are Simon Norris’s (Hillcrest Geographics),
+bcfishpass maintained with contributions from many groups. Each value
+taken from the literature carries a verbatim quote, checked against its
+source.
 
 ## Citation
 

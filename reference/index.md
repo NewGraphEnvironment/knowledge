@@ -85,6 +85,9 @@ run in one call for every species and stage the evidence can speak to.
   : Whether each visit is in under one rule, on the stream branch
 - [`knw_tune_score()`](https://newgraphenvironment.github.io/knowledge/reference/knw_tune_score.md)
   : Score candidate rules on held-out watershed groups
+- [`knw_tune_repick()`](https://newgraphenvironment.github.io/knowledge/reference/knw_tune_repick.md)
+  : Pick a rule again from a tuning table, at another width of the
+  region
 - [`knw_tune_curve()`](https://newgraphenvironment.github.io/knowledge/reference/knw_tune_curve.md)
   : One curve per species and stage: use against size, gradient and
   distance to a river, together
@@ -115,6 +118,9 @@ run in one call for every species and stage the evidence can speak to.
 - [`knw_compare_map()`](https://newgraphenvironment.github.io/knowledge/reference/knw_compare_map.md)
   : Map a group's segments under two rules, by grade, and its floodplain
   by the grade beside it
+
+- [`knw_compare_mapgl()`](https://newgraphenvironment.github.io/knowledge/reference/knw_compare_mapgl.md)
+  : The interactive map of a group's segments under two rules
 
 ## Crossings and past reports
 

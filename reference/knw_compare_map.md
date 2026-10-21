@@ -2,7 +2,9 @@
 
 Three readings of one group for one species and stage, each as a static
 figure (tmap, lakes and rivers styled through gq's registry) and, when
-`html` is given, an interactive page (mapgl):
+`html` is given, an interactive page
+([`knw_compare_mapgl()`](https://newgraphenvironment.github.io/knowledge/reference/knw_compare_mapgl.md),
+saved self-contained):
 
 - **rules**: accessible segments coloured kept (habitat under both
   rules), lost (`default` only), gained (tuned only), neither;
@@ -29,7 +31,8 @@ knw_compare_map(
   mark = NULL,
   lwd = 1,
   legend = TRUE,
-  labels = NULL
+  labels = NULL,
+  background = c("voyager", "openfreemap", "esri_topo")
 )
 ```
 
@@ -95,6 +98,12 @@ knw_compare_map(
   `NULL`, or an `sf` of points with a `label` column, drawn as numbered
   markers on every static panel (examples a table beside the map
   describes).
+
+- background:
+
+  passed to
+  [`knw_compare_mapgl()`](https://newgraphenvironment.github.io/knowledge/reference/knw_compare_mapgl.md)
+  for the interactive page.
 
 ## Value
 

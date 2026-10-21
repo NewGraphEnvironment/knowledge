@@ -1,213 +1,143 @@
 # Chinook rearing: choosing link's thresholds from fish records
 
 New Graph Environment maps where fish can live in British Columbia’s
-streams with [`link`](https://www.newgraphenvironment.com/link/), an R
-package that marks every segment of the provincial stream network as
-spawning or rearing habitat for each species, and as reachable by fish
-or not. It does this with a **configuration**: a set of rules and
-thresholds for stream size and steepness, one set per species and life
-stage. Its standard configuration is called
-[`default`](https://github.com/NewGraphEnvironment/link/tree/a17e91773b283b021811f8b5b76b887d5f4c16e4/inst/extdata/configs/default).
-Its thresholds start from the ones
-[`bcfishpass`](https://github.com/smnorris/bcfishpass) has used for
-years, a project New Graph contributes to.
+streams with [`link`](https://www.newgraphenvironment.com/link/)
+([Irvine 2026b](#ref-irvine2026linkDevelop)), an R package that marks
+every stream segment as spawning or rearing habitat for each species,
+and as reachable by fish or not. Its standard settings, called
+[`default`](https://github.com/NewGraphEnvironment/link/tree/a17e91773b283b021811f8b5b76b887d5f4c16e4/inst/extdata/configs/default),
+start from those [bcfishpass](https://smnorris.github.io/bcfishpass/)
+has used for years ([Norris 2024b](#ref-norris2024smnorrisbcfishpass)).
+This article tests one of them, where young chinook salmon rear, against
+the province’s electrofishing records.
 
-This article tests one of those rules, where juvenile chinook salmon
-rear, against the province’s electrofishing records: places crews
-fished, and whether they caught chinook. It asks which version of the
-rule the records support, how sure that answer is, and what the chosen
-rule changes on the ground. The tests are part of `knowledge`, the R
-package this article belongs to.
+**The answer.** The records support a different rule from link’s current
+one: **a slope of at most 9 %, and either an average flow of at least
+0.75 m³/s or a river of at least 3 m³/s within 1 km downstream**. link
+now asks for a slope of at most 5.49 %, and a channel at least 1.5 m
+wide. The new rule draws 12.4 % less habitat across the province, and
+chinook are caught far more often inside it than outside. Its cut-offs
+are a judgment call, though: under a stricter bar only the flow floor
+holds (below).
 
-**The answer.** The records support a different rule from `default`: **a
-gradient of at most 9 %, and either a mean annual flow of at least 0.75
-m³/s or a river of at least 3 m³/s within 1 km downstream**. `default`
-asks for a gradient of at most 5.49 %, and a channel at least 1.5 m
-wide. The recommended rule draws less habitat, 12.4 % fewer km across
-the province, and separates where chinook are caught from where they are
-not more sharply.
+## What does link do now?
 
-## What does `default` draw for chinook rearing?
+link counts a stream segment as chinook rearing habitat when chinook can
+reach it, its slope is at most 5.49 %, and its channel is at least 1.5 m
+wide. link can size streams by width or by flow, set group by group. Its
+`default` uses width in every group, and every comparison here is
+against that. link’s own flow cut-offs were scored as candidates, not
+used as the starting point. Rivers, wetlands and lakes have their own
+conditions (last section).
 
-`default` counts a segment as chinook rearing habitat if chinook can
-reach it and it meets the condition for its kind of water:
-
-- **stream**: a single-line stream or canal, not one drawn through a
-  wetland, with a gradient of at most 5.49 % and a channel at least 1.5
-  m wide;
-- **river**: inside a river polygon, at the same gradient, any width;
-- **wetland**: inside a wetland of at least 1 ha;
-- **lake**: inside a lake or reservoir of at least 100 ha.
-
-Reaches confirmed by hand are then added. Last, rearing is kept only
-where it connects to spawning: spawning anywhere upstream, or within 10
-km downstream with no stretch of 5 % or steeper between them. Channel
-width is modelled only on streams of order 2 and up, so the stream
-condition never admits a small, unmeasured first-order stream.
-
-Only the stream condition is tuned here. Wetlands and lakes keep their
-conditions. River polygons keep theirs too, except that they share the
-stream condition’s gradient maximum, so a new maximum moves them as
-well, though the tuning scored no visit in a river polygon.
-
-## What evidence is used?
+## What records were used?
 
 The province’s stream atlas divides British Columbia into **watershed
-groups**, large basins such as the Bulkley. They are the unit everything
-below is counted in and tested on.
+groups**, large basins such as the Bulkley. The records are the
+Fisheries Data Information System’s electrofishing sites ([Province of
+British Columbia
+2022](#ref-provinceofbritishcolumbia2022FisheriesData)): where crews
+fished, and whether they caught chinook. Each site was matched to the
+records it produced in bcfishobs ([Norris
+2024a](#ref-norris2024smnorrisbcfishobs)) and placed on link’s streams,
+built on the BC Freshwater Atlas through fwapg ([Norris
+2024c](#ref-norris2024smnorrisfwapg)), with flows from wet ([Irvine
+2026c](#ref-irvine2026wetStream)) and the rules run by fresh ([Irvine
+2026a](#ref-irvine2026freshFreshwater)). Sites were kept when they were
+on ordinary stream lines, of a usual fished area, with no barrier to
+chinook downstream, in a group where link expects chinook: 7,123 sites
+in 104 groups. The tests use the 43 groups where chinook were caught at
+some sites and not others: **4,490 sites, 215 with chinook**.
 
-Each stream segment carries a gradient, a flow and, where one is
-modelled, a channel width, all from one `link` run
-(20261017_004619-3f4c713b). The streams and their gradients are the BC
-Freshwater Atlas, loaded through fwapg. Flow is the mean annual flow
-[`wet`](https://www.newgraphenvironment.com/wet/) publishes: mostly the
-Pacific Climate Impacts Consortium’s routed model, tied to the atlas by
-fwapg, with `wet`’s own water balance where that model does not reach or
-reads far too low. Channel width is fwapg’s model, on streams of order 2
-and up.
+## How were rules compared?
 
-The evidence is the provincial Fisheries Data Information System (FDIS)
-electrofishing records, placed on `link`’s stream segments. A visit
-counts when it is on the kind of stream the stream condition covers,
-outside wetlands of 1 ha or more and lakes of 100 ha or more. It must
-have a fished area of 10 to 10,000 m², and be in a group where `link`
-expects chinook. It must also have no natural barrier to chinook
-downstream, and no record code that could hide a catch. After checks on
-placement, date and effort, that leaves 7,123 visits in 104 groups. A
-group where chinook were always or never caught cannot tell rules apart,
-so the tests use the 43 groups with both outcomes: **4,490 visits, of
-which 215 caught chinook**.
+Each candidate rule sets three dials:
 
-## Which rules were tried?
+- **the smallest stream**: an average flow of 0.1, 0.15, 0.2, 0.28,
+  0.35, 0.5, 0.75 or 1 m³/s, or a channel width of 1, 1.5, 2, 3 or 4 m;
+- **the steepest slope**: 3 %, 4 %, 5.49 %, 7 % or 9 %;
+- **a near-a-river allowance**: none, or a stream below the smallest
+  size still counts when a river of 1, 3, 5, 10, 20, 30 or 50 m³/s is
+  within 100, 250, 500, 1,000, 2,000 or 5,000 m downstream.
 
-Each candidate rule sets three things, the same three `default` sets:
+That makes 2,795 rules, link’s among them. Each was scored on watersheds
+it never saw: the groups were split into 5 sets, and each set was
+predicted by a model fitted to the other four. The score adds up how far
+each prediction was from what the crew found; lower is better.
 
-- **a size floor**: a mean annual flow (MAD, modelled) of 0.1, 0.15,
-  0.2, 0.28, 0.35, 0.5, 0.75 or 1 m³/s, or a channel width of 1, 1.5, 2,
-  3 or 4 m;
-- **a gradient maximum** of 3 %, 4 %, 5.49 %, 7 % or 9 %;
-- **a near-a-river exception**: none, or a stream below the size floor
-  still counts when a river of at least Q m³/s is within D m downstream
-  (Q of 1, 3, 5, 10, 20, 30 or 50; D of 100, 250, 500, 1,000, 2,000 or
-  5,000).
+## Which rule fits best, and how sure are we?
 
-Every combination is one rule, 2,795 in all, `default` among them. The
-exception is there because juvenile chinook move up from large rivers
-into small streams close by.
+**Close-call rules.** Scores carry error: another draw of watersheds
+would rank close rules differently. So the tuning kept every rule within
+one standard error of the best. That rule of thumb began with pruning
+classification trees ([Breiman et al.
+1984](#ref-breiman_etal1984ClassificationRegression); as cited in [Chen
+and Yang 2021](#ref-chen_yang2021OneStandard)) and is now a common way
+to prefer the simpler of close models ([Hastie et al.
+2009](#ref-hastie_etal2009ElementsStatistical)). It is a convention
+fixed before the run, not a line below which rules are equal. There is
+no evidence it consistently beats taking the best score, though it often
+picks fewer variables ([Chen and Yang
+2021](#ref-chen_yang2021OneStandard)). The error it rests on has no
+unbiased estimate ([Bengio and Grandvalet
+2004](#ref-bengio_grandvalet2004NoUnbiased)), and the usual estimate is
+often too small ([Bengio and Grandvalet
+2004](#ref-bengio_grandvalet2004NoUnbiased); [Bates et al.
+2024](#ref-bates_etal2024CrossValidationWhat)), though it can also be
+too large ([Chen and Yang 2021](#ref-chen_yang2021OneStandard)). For
+chinook, 23 rules are close calls, all with a flow floor of 0.35 to 1
+m³/s, the near-a-river allowance, and a slope limit of 7 % or 9 %. From
+them, the rule fixed in advance takes the one closest to link’s; all
+differ in every dial, so it is the best scorer. link’s rule is 2.4
+standard errors behind it. It calls fewer sites habitat (1,047 against
+2,330) and catches as many chinook there (166 against 165).
 
-## How is a rule scored?
+![How close the best rule using each value of each dial comes to the
+best rule overall, as score above the best (lower is better). Dark blue:
+at least one rule with that value is a close call at one standard error;
+light blue: only at 1.96 standard errors; white: neither. The orange
+ring marks link's current
+value.](chinook_rearing_files/figure-html/profile-1.png)
 
-A rule is worth having if it predicts where chinook are caught in a
-watershed it was not built from. So the 43 groups are split at random
-into 5 sets, called **folds**. A model learns how much the rule matters
-from four folds and predicts the visits in the fifth, and this repeats
-until every group has been predicted once. The model also allows for
-fished area, data set and era. Each held-out group’s own overall catch
-rate is the one thing fitted on its own visits, and that costs every
-rule the same.
+How close the best rule using each value of each dial comes to the best
+rule overall, as score above the best (lower is better). Dark blue: at
+least one rule with that value is a close call at one standard error;
+light blue: only at 1.96 standard errors; white: neither. The orange
+ring marks link’s current value.
 
-The **score** adds up, over every predicted visit, how far the
-prediction was from what the crew found (the deviance). Lower is better.
-Only differences between rules matter: the model with no rule at all
-scores 231.9 worse than the best rule.
+The flow floors near the best are close calls at one standard error and
+no width floor is; the slope limit is flat from 7 % up.
 
-## Which rules can the data not tell apart?
+**A stricter bar.** Widen the close calls to 1.96 standard errors and
+1,098 rules are close calls instead of 23. The same choice then changes:
 
-Scores carry noise: another set of watersheds would rank close rules
-differently. So the choice is not simply the best score. Every rule
-within one standard error of the best, measured across watershed groups,
-is kept. That set is the **region**: the rules the records cannot rank.
-It holds 23 rules, all of one shape:
+|  | Close-call rules | Smallest stream | Steepest slope | Near-a-river allowance |
+|:---|---:|:---|:---|:---|
+| Chosen at one standard error | 23 | 0.75 m³/s average flow | 9 % | a 3 m³/s river within 1 km |
+| Chosen at 1.96 | 1,098 | 0.75 m³/s average flow | 5.49 % | none |
+| link’s current rule | outside both | 1.5 m channel width | 5.49 % | none |
 
-- a flow floor of 0.35 to 1 m³/s, never a width floor;
-- the exception, with a river of 1 to 10 m³/s within 1 km to 2 km;
-- a gradient maximum of 7 % or 9 %.
+The chinook rule chosen from the close calls at each bar, beside link’s
+current rule. {.table}
 
-`default` scores 196.3 worse than the best rule, with a standard error
-of 81.6, so it is outside the region.
+The flow floor holds, but the slope limit goes back to link’s 5.49 % and
+the near-a-river allowance drops out. link’s own rule is still not a
+close call. link’s thresholds table gives the choice at 1.96 for every
+species tuned (`rule_196`).
 
-![How good each value of each setting can be. Each point is the best
-score of any rule using that value, as deviance above the best rule, so
-lower is better. A filled point has at least one rule in the region. A
-ring marks the value default
-uses.](chinook_rearing_files/figure-html/profile-1.png)
-
-How good each value of each setting can be. Each point is the best score
-of any rule using that value, as deviance above the best rule, so lower
-is better. A filled point has at least one rule in the region. A ring
-marks the value default uses.
-
-## Which rule is recommended?
-
-The choice was fixed before any rule was scored: from the region, the
-rule closest to `default`. Every rule in the region differs from
-`default` in all three settings, so the best scorer is recommended. It
-calls fewer visits habitat and takes in as many catches:
-
-| Rule | Visits it calls habitat | Of those, chinook caught | Catch rate on habitat | Catch rate elsewhere |
-|:---|---:|---:|---:|---:|
-| default | 2,330 | 165 | 7.1 % | 2.3 % |
-| recommended | 1,047 | 166 | 15.9 % | 1.4 % |
-
-What each rule calls habitat among the 4,490 visits tested. {.table}
-
-## How firm is the choice?
-
-A gap in score is a real difference only when it is large against its
-noise and survives being checked again. These checks, fixed before the
-run, ask whether the choice rests on chance or on reusing the same data
-to choose and to score.
-
-- **The gap against its noise.** Each gap between two rules has a
-  standard error, from how much it varies between watershed groups. A
-  gap under one standard error cannot be told from noise: that is the
-  region. `default` is 2.4 standard errors worse than the best rule.
-- **Other random splits.** The split into folds is random, set by a
-  number called a seed. Scored again on 4 other seeds, the recommended
-  rule is in the region on 4 of them and `default` on 0. 3 of the 4 pick
-  the same rule at a different gradient; the other picks a gradient of
-  at most 5.49 %, and either a mean annual flow of at least 0.5 m³/s or
-  a river of at least 3 m³/s within 2 km downstream.
-- **Choosing on some groups, scoring on others.** Choosing a rule on
-  four folds and scoring it on the fifth, the chosen rule beats
-  `default` in 4 of the 5 folds, and beats it over all five together.
-  The separation is partial, because each fold’s choice leans on scores
-  from models that had seen that fold.
-- **Drawing the groups again.** Repeating the choice on 200 random
-  redraws of the groups, the exact recommended rule comes back 22 % of
-  the time, but its parts are steadier: a flow floor in 100 % of draws,
-  0.75 m³/s in 55 %, and a 3 m³/s river in 76 %. The gradient maximum
-  varies most: 9 % in 40 %, 7 % in 34 %, and `default`’s 5.49 % in 26 %.
-
-The shape is settled: a flow floor near 0.75 m³/s and an exception for
-small streams near a river. The gradient maximum is the least settled
-part.
-
-**Steeper limits.** 9 % was the steepest limit in the rules tried.
-Scored again on the same records with limits up to 30 % among the rules
-from the start, the same procedure picks 15 %, with a smaller river in
-the exception: a gradient of at most 15 %, and either a mean annual flow
-of at least 0.75 m³/s or a river of at least 1 m³/s within 1 km
-downstream. The best 9 % rule is 19.7 behind it, with a standard error
-of 22.1. 4 of the 4 other seeds also pick a 15 % limit, and redraws of
-the groups choose one in 43 % of draws and 9 % in 0 %. Chosen on four
-folds and scored on the fifth, the longer list’s choices lose to
-`default` over all five together, 1,389.4 against 1,347.0, where choices
-from the rules up to 9 % beat it at 1,234.5.
-
-Every limit tried from 7 % to 30 % has rules in the region, so the
-records cannot place the limit in that range. The recommended rule keeps
-9 %, the pick from the rules fixed before the run, because every species
-is tuned on one shared ladder of gradient limits, and a longer ladder is
-a change for all of them at once.
+**Two other checks.** Split into sets again with 4 other random draws,
+the recommended rule is a close call on 4 and link’s on 0. Chosen on
+four sets and scored on the fifth, the chosen rule beats link’s on 4 of
+5 and beats it overall. Redrawing the groups 200 times, a flow floor is
+chosen in every draw but the recommended slope limit in only 40 %: the
+shape is steady, the slope limit is not.
 
 ## Why does a nearby river matter?
 
-After the choice, one model was fitted to the visits that carry a
-modelled flow, with flow and distance to a river of at least 3 m³/s as
-one surface. The table reads the fitted chance of a catch on one
-standard visit. It stops below 3 m³/s, because a stream that size is
-itself the river:
+Young chinook move up from large rivers into small streams close by. A
+model fitted after the choice, with flow and distance to a river of at
+least 3 m³/s together, gives the chance of a catch on one standard
+visit:
 
 | Stream flow (m³/s) |  100 m | 300 m |  1 km |  3 km | 10 km | 50 km or more |
 |:-------------------|-------:|------:|------:|------:|------:|--------------:|
@@ -218,137 +148,111 @@ itself the river:
 
 The fitted chance of catching chinook on one standard visit, by stream
 flow (rows) and by distance downstream to a river of at least 3 m³/s
-(columns), at a gradient of 4.5 %. {.table}
+(columns), at a slope of 4.5 %. {.table}
 
 Within 100 m of a river the chance is about the same whatever the
 stream’s flow, 9.4 % to 10.3 %. Ten kilometres away it rises with flow,
-from 0.2 % at 0.1 m³/s to 2.6 % at 2 m³/s. That is the shape the
-recommended rule draws: beside a river a small stream counts, and away
-from one only a stream above the floor does. The chance falls off past a
-few hundred metres from the river, so 1 km sits on the way down.
-Steepness matters less: at 9 % the chance is about 51 % of what it is at
-2 %. The model fits smooth curves, so it cannot show a step at a
-threshold; each threshold is where habitat and non-habitat separate best
-on held-out groups, a cut across a slope.
+from 0.2 % to 2.6 %. That is the shape the recommended rule draws:
+beside a river a small stream counts, away from one only a larger stream
+does.
 
-## What does it change on the ground?
+## What changes on the ground?
 
-Both rules were run through all of `link`’s steps on every one of the
-125 watershed groups `link` classifies for chinook.
+Both rules were run through all of link’s steps on the 125 watershed
+groups link classifies for chinook: 101,184 km of rearing habitat under
+link’s rule, 88,641 km under the recommended one. The change ranges from
+-73.6 % to 30.0 % by group. In the Bulkley the recommended rule draws
+1,608 km against 2,123. On the map, click a stream for what each rule
+reads there; the switch at the top right shows the grade, the use to
+expect on each segment.
 
-|  | km |
-|:---|---:|
-| Habitat under default | 101,184 |
-| Habitat under the recommended rule | 88,641 |
-| Lost, all reasons | 24,832 |
-| Lost: wide enough for default, below the flow floor, no river close | 24,532 |
-| Gained, all reasons | 12,289 |
-| Gained through the exception (small streams near a river) | 9,665 |
-| Gained through the exception, on first-order streams | 6,948 |
+Orange is mostly the upper reaches of tributaries, where flow falls
+below the floor more than 1 km from a river. Green is short reaches of
+small streams beside a river. The rest of the change comes from the step
+that keeps rearing only where it links to spawning, which keeps
+different stretches under each rule.
 
-Chinook rearing habitat in km under each rule, over all 125 watershed
-groups. {.table}
+**A check.** On the 10,515 electrofishing sites on reachable streams in
+those groups, chinook were caught at 17 % of sites on the recommended
+rule’s habitat and 1.5 % elsewhere, against 14 % and 2.2 % for link’s.
+These sites overlap the ones scored, so this shows the rule does what it
+was chosen to do, not that it predicts new places.
 
-The change varies by group, from -73.6 % to 30.0 %; 48 of the 125 groups
-gain. In the Bulkley the recommended rule draws 1,608 km against
-`default`’s 2,123 (-24.3 %).
+## Before you use it
 
-![Chinook rearing in the Bulkley (BULK) under each rule: kept by both,
-lost (default only) and gained (the legend's 'tuned only', meaning the
-recommended rule only). Left, the whole group with the window outlined;
-right, the 12 km window, with the numbered examples the table below
-describes. Line width follows stream
-order.](chinook_rearing_files/figure-html/map-1.png)
-
-Chinook rearing in the Bulkley (BULK) under each rule: kept by both,
-lost (default only) and gained (the legend’s ‘tuned only’, meaning the
-recommended rule only). Left, the whole group with the window outlined;
-right, the 12 km window, with the numbered examples the table below
-describes. Line width follows stream order.
-
-| \# | Case | Flow (m³/s) | Channel width (m) | Gradient | Downstream to a river | default | Recommended |
-|:---|:---|---:|---:|---:|---:|:---|:---|
-| 1 | Kept by both | 3.6 | 19 | 0.06 % | 0 m | habitat | habitat |
-| 2 | Lost: below the flow floor, no river close | 0.48 | 6.7 | 2.16 % | 6.8 km | habitat | not habitat |
-| 3 | Gained: small stream near a river | 0.00048 | none modelled | 2.23 % | 940 m | not habitat | habitat |
-
-The numbered segments on the map: what each rule reads and what each
-decides. default needs a channel at least 1.5 m wide and a gradient of
-at most 5.49 %; the recommended rule needs a gradient of at most 9 % and
-either a flow of at least 0.75 m³/s or a river of at least 3 m³/s within
-1 km downstream. The distance is to the first such river downstream; the
-recommended rule reads it only where the flow falls short. {.table}
-
-The examples show what both rules keep and the two largest changes. Two
-smaller gains through the stream condition are not among them: streams
-between 5.49 % and 9 % steep, which only the recommended gradient
-maximum admits (1,411 km across the province), and streams whose flow
-passes the floor where `default`’s width condition fails or has no width
-(449 km). The rest of the change comes from the connectivity pass, which
-keeps different stretches under each rule because each rule’s habitat
-connects to spawning differently (535 km gained, 301 km lost), and from
-river polygons and mixed causes (230 km gained).
-
-Orange is mostly the upper reaches of tributaries: flow grows
-downstream, so a tributary keeps its lower reach and loses the part
-where its flow falls below the floor more than 1 km from a river. Green
-is short reaches of small streams beside a river, which the exception
-adds.
-
-**Two checks.** On the 10,515 electrofishing visits with a fished area
-of 10 to 10,000 m² on accessible streams (wetland lines included),
-canals, reservoir banks and river lines in the 125 groups, chinook were
-caught on 17 % of visits on the recommended rule’s habitat and 1.5 %
-elsewhere, against 14 % and 2.2 % for `default`. These visits overlap
-the ones the tuning scored, so this shows the rule does what it was
-chosen to do. Other sources record chinook at 826 places within 100 m of
-an accessible single-line stream or canal not drawn through a wetland,
-spawning-only places left out; no rule was scored on them. The share of
-those places on the recommended rule’s habitat is 3.3 times the rule’s
-share of that stream length, against 2.5 for `default`.
-
-## What should you know before using it?
-
-- **It can feed `link` directly.** The flow floor and the gradient limit
-  are stored under the names `link` already uses for those settings,
-  `rear_mad_min` and `rear_gradient_max`. The near-a-river exception is
-  stored as two numbers, the river’s flow and the distance to it, ready
-  for any configuration that adds that check.
 - **It is about young chinook in streams.** It was fitted to juvenile
-  chinook caught by electrofishing in streams, and says nothing about
-  spawning. Wetlands and lakes keep their own conditions. River polygons
-  share the stream gradient limit, so they get 9 % too, although no
-  fished site in a river polygon was used to choose it.
-- **It draws less habitat, in the places chinook are caught.** It was
-  chosen because chinook were caught far more often inside it than
-  outside it, not because it takes in every place they were caught: 15.9
-  % of fished sites inside it caught chinook, and 1.4 % outside it.
-- **The cut-offs are good choices, not hard limits.** Chinook get
-  gradually less common as streams get smaller and steeper; there is no
-  flow or slope where they stop. Nearby cut-offs fit the records almost
-  as well: flow floors from 0.35 to 1 m³/s, and gradient limits of 7 %
-  or 9 %. The flow floor is the firmer choice. Steeper limits, scored
-  later up to 30 %, fit as well or slightly better, though choices from
-  that longer list, scored on groups left out of the choice, do worse
-  than `default`. So 9 % is one choice among limits from 7 % to 30 %
-  that the records cannot rank.
+  chinook caught by electrofishing in streams and says nothing about
+  spawning. River polygons share the stream slope limit, so they get 9 %
+  too, though no site in one was scored. A line drawn through a wetland
+  of 1 ha or more passes link’s wetland condition under both rules
+  whatever its size, slope or distance from a river, and is rearing
+  wherever it connects to spawning: about 10,200 km of chinook rearing,
+  with a median grade of 0.03. Lakes keep their own condition.
+- **The cut-offs are a judgment call.** Chinook get gradually less
+  common as streams get smaller and steeper; there is no flow or slope
+  where they stop. At one standard error, flow floors of 0.35 to 1 m³/s
+  fit almost as well; at 1.96, only the flow floor holds.
+- **Steeper slopes fit nearly as well.** Scored again with slope limits
+  up to 30 %, the same procedure picks 15 %, and every limit from 7 % to
+  30 % has close-call rules. 9 % is kept because every species is tuned
+  on one shared list of limits.
 - **On the map, distance is measured from the bottom of each segment.**
-  The exception asks whether a large river is within 1 km downstream. To
-  choose the rule, that distance was measured from each fished site. On
-  the map it is measured from the downstream end of each stream segment,
-  so when that end is within 1 km of the river the whole segment counts,
-  even the part farther up.
+  To choose the rule, the distance to a river was measured from each
+  site. On the map it is measured from each segment’s downstream end, so
+  when that end is within 1 km of the river the whole segment counts.
 
-## Software and how to cite it
+## References
 
-- [`link`](https://www.newgraphenvironment.com/link/): the habitat model
-  and its configurations.
-- [`fresh`](https://www.newgraphenvironment.com/fresh/): runs `link`’s
-  rules on the BC Freshwater Atlas.
-- [`wet`](https://www.newgraphenvironment.com/wet/): the flow on each
-  segment.
-- `knowledge`: the fish records, the tests and this article. Cite it as:
+To cite this package, `citation("knowledge")` gives:
 
 Irvine A (2026). *knowledge: Fisheries Evidence and Tuned Habitat
 Thresholds for BC Watershed Groups*. New Graph Environment Ltd. Version
 0.4.7, <https://newgraphenvironment.github.io/knowledge/>.
+
+Bates, Stephen, Trevor Hastie, and Robert Tibshirani. 2024.
+“Cross-Validation: What Does It Estimate and How Well Does It Do It?”
+*Journal of the American Statistical Association* 119 (546): 1434–45.
+<https://doi.org/10.1080/01621459.2023.2197686>.
+
+Bengio, Yoshua, and Yves Grandvalet. 2004. “No Unbiased Estimator of the
+Variance of K-Fold Cross-Validation.” *Journal of Machine Learning
+Research* 5: 1089–105. <https://jmlr.org/papers/v5/grandvalet04a.html>.
+
+Breiman, Leo, Jerome H. Friedman, Richard A. Olshen, and Charles J.
+Stone. 1984. *Classification and Regression Trees*. The Wadsworth
+Statistics/Probability Series. Wadsworth International Group.
+
+Chen, Yuchen, and Yuhong Yang. 2021. “The One Standard Error Rule for
+Model Selection: Does It Work?” *Stats* 4 (4): 868–92.
+<https://doi.org/10.3390/stats4040051>.
+
+Hastie, Trevor, Robert Tibshirani, and Jerome Friedman. 2009. *The
+Elements of Statistical Learning: Data Mining, Inference, and
+Prediction*. 2nd ed. Springer Series in Statistics. Springer.
+<https://doi.org/10.1007/978-0-387-84858-7>.
+
+Irvine, Allan. 2026a. *fresh: Freshwater Referenced Spatial Hydrology*.
+Version 0.39.0. New Graph Environment Ltd.
+<https://github.com/NewGraphEnvironment/fresh>.
+
+Irvine, Allan. 2026b. *link: Develop, Test and Communicate Intrinsic
+Habitat and Connectivity Models for the BC Freshwater Atlas Stream
+Network*. Version 0.66.0. New Graph Environment Ltd.
+<https://doi.org/10.5281/zenodo.23264990>.
+
+Irvine, Allan. 2026c. *wet: Stream Flow and Water Temperature for the BC
+Freshwater Atlas*. Version discharge/fwa/v1. New Graph Environment Ltd.
+<https://doi.org/10.5281/zenodo.23305781>.
+
+Norris, Simon. 2024a. *bcfishobs*.
+<https://github.com/smnorris/bcfishobs>.
+
+Norris, Simon. 2024b. *bcfishpass*.
+<https://github.com/smnorris/bcfishpass>.
+
+Norris, Simon. 2024c. *fwapg*. Version f9718cb.
+<https://github.com/smnorris/fwapg>.
+
+Province of British Columbia. 2022. “Fisheries Data Information System
+(FDIS) Electrofishing Extract.” Electrofishing extract, exports of
+2020-11-16 and 2022-03-22.

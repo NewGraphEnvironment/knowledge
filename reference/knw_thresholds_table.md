@@ -9,10 +9,15 @@ whether the size test is a width (`cw`) or a MAD (`mad`) floor;
 `range_lo` and `range_hi` are the smallest and largest value of the
 component among the rules inside the one-SE region on the main reading;
 `readings_in` is the number of fold seeds (the main one and the extra
-seeds) in whose region the recommended rule sits, of `readings`. A
-species × stage that was not fitted (no stream rule, no response, too
-few groups) gets one row per stage with `status` saying why and no
-values.
+seeds) in whose region the recommended rule sits, of `readings`;
+`rule_196` is the rule the same pick makes from a region 1.96 standard
+errors wide
+([`knw_tune_repick()`](https://newgraphenvironment.github.io/knowledge/reference/knw_tune_repick.md)),
+and `holds_196` is `TRUE` where that rule keeps the row's value (a size
+row also needs the same size variable; a component the recommended rule
+lacks holds when the 1.96 rule lacks it too). A species × stage that was
+not fitted (no stream rule, no response, too few groups) gets one row
+per stage with `status` saying why and no values.
 
 ## Usage
 
@@ -22,7 +27,8 @@ knw_thresholds_table(
   evidence_version,
   link_run_uid,
   link_sha,
-  config = "default"
+  config = "default",
+  d_floor = 200
 )
 ```
 
@@ -36,6 +42,12 @@ knw_thresholds_table(
 - evidence_version, link_run_uid, link_sha, config:
 
   `character(1)` the provenance every row carries.
+
+- d_floor:
+
+  `numeric(1)` the run's shortest exception distance (m), as given to
+  [`knw_tune_run()`](https://newgraphenvironment.github.io/knowledge/reference/knw_tune_run.md),
+  so the 1.96 replay picks as the run did.
 
 ## Value
 
