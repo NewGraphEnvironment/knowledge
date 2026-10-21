@@ -22,6 +22,8 @@ knitr::opts_chunk$set(
   warning = FALSE
 )
 library(knowledge)
+library(dplyr)
+library(ggplot2)
 # pkgdown sets IN_PKGDOWN while it builds the website: the site gets the interactive map, the package copy the
 # static one
 on_site <- identical(Sys.getenv("IN_PKGDOWN"), "true")
@@ -64,38 +66,18 @@ words <- function(r) {
   sprintf("a slope of at most %s, and either %s or a river of at least %s m³/s within %s downstream",
           grad(r$grad_max), size, r$exc_q, km_d(r$exc_d))
 }
-# a rule in a table cell
-short <- function(r, d) {
-  if (r$rule == d$rule) return("link's current rule")
-  size <- if (r$size_var == "mad") paste0("flow ≥ ", format(r$size_min, trim = TRUE), " m³/s")
-          else paste0("width ≥ ", format(r$size_min, trim = TRUE), " m")
-  near <- if (is.na(r$exc_q)) "" else paste0(", or a ", r$exc_q, " m³/s river within ", km_d(r$exc_d))
-  paste0(size, ", slope ≤ ", grad(r$grad_max), near)
-}
-
 # every rule in the close-call set has the same shape; the sentences below say so
 stopifnot(all(region$size_var == "mad"), all(!is.na(region$exc_q)), dflt$ddev_best > dflt$se_diff,
           all(region$departures == 3))
 
-# the stricter bar: the same choice from rules within 1.96 standard errors, for every species and stage tuned
-ta <- x$tune_all
-keys <- unique(ta[c("species_code", "stage")])
-strict <- do.call(rbind, lapply(seq_len(nrow(keys)), function(i) {
-  t <- ta[ta$species_code == keys$species_code[i] & ta$stage == keys$stage[i], ]
-  d <- t[t$is_default, ]
-  a <- knw_tune_repick(t)
-  b <- knw_tune_repick(t, se_mult = 1.96)
-  data.frame(species_code = keys$species_code[i], stage = keys$stage[i], behind = d$ddev_best / d$se_diff,
-             one = short(a, d), strict = short(b, d), keeps_default = b$rule == d$rule, n_strict = b$n_region,
-             n_rules = nrow(t))
-}))
-ch196 <- knw_tune_repick(ta[ta$species_code == "CH" & ta$stage == "rear", ], se_mult = 1.96)
-# chinook at 1.96: the flow floor holds, the slope goes back to link's and the near-a-river allowance goes
+# the stricter bar: the same choice from rules within 1.96 standard errors
+tune$in_196 <- tune$converged %in% TRUE & tune$ddev_best <= 1.96 * tune$se_diff
+ch196 <- knw_tune_repick(tune, se_mult = 1.96)
+# at 1.96 the flow floor holds, the slope goes back to link's, the near-a-river allowance goes, and link's rule
+# stays out
 stopifnot(ch196$size_var == "mad", ch196$size_min == rec$size_min, ch196$grad_max == dflt$grad_max, is.na(ch196$exc_q),
-          !strict$keeps_default[strict$species_code == "CH"])
-n_keep <- sum(strict$keeps_default)
-wide <- strict[strict$keeps_default & strict$n_strict / strict$n_rules > 0.8, ]
-stopifnot(nrow(wide) >= 3)
+          ch196$rule != dflt$rule, !tune$in_196[tune$is_default], sum(tune$in_196) == ch196$n_region,
+          all(tune$in_196[tune$in_region]))
 
 # steeper slope limits (scored later on a longer list, up to 30 %)
 stopifnot(nrow(ge_best) == 1, ge_best$grad_max > rec$grad_max, all(ge$in_region[ge$grad_max >= min(ge_reg)] > 0))
@@ -161,10 +143,14 @@ how far each prediction was from what the crew found; lower is better.
 ## Which rule fits best, and how sure are we?
 
 **Close-call rules.** Scores carry error: another draw of watersheds would rank close rules differently. So the tuning
-kept every rule within one standard error of the best, a common rule of thumb for preferring the simpler of close
-models [@breiman_etal1984ClassificationRegression; @hastie_etal2009ElementsStatistical]. It is a convention fixed before the run, not a line below which rules are
-equal: there is no evidence it beats taking the best score [@chen_yang2021OneStandard], and the error it rests on is hard to
-estimate and usually too small [@bengio_grandvalet2004NoUnbiased; @bates_etal2024CrossValidationWhat]. For chinook, `r nrow(region)` rules are close calls,
+kept every rule within one standard error of the best. That rule of thumb began with pruning classification trees
+[@breiman_etal1984ClassificationRegression; as cited in @chen_yang2021OneStandard] and is now a common way to prefer
+the simpler of close models [@hastie_etal2009ElementsStatistical]. It is a convention fixed before the run, not a line
+below which rules are equal. There is no evidence it consistently beats taking the best score, though it often picks
+fewer variables [@chen_yang2021OneStandard]. The error it rests on has no unbiased estimate
+[@bengio_grandvalet2004NoUnbiased], and the usual estimate is often too small
+[@bengio_grandvalet2004NoUnbiased; @bates_etal2024CrossValidationWhat], though it can also be too large
+[@chen_yang2021OneStandard]. For chinook, `r nrow(region)` rules are close calls,
 all with a flow floor of `r min(region$size_min)` to `r max(region$size_min)` m³/s, the near-a-river allowance, and a
 slope limit of `r lst(grad(sort(unique(region$grad_max))), "or")`. From them, the rule fixed in advance takes the one
 closest to link's; all differ in every dial, so it is the best scorer. link's rule is
@@ -172,24 +158,78 @@ closest to link's; all differ in every dial, so it is the best scorer. link's ru
 (`r n0(rec$n_in)` against `r n0(dflt$n_in)`) and catches as many chinook there (`r n0(rec$n_detect_in)` against
 `r n0(dflt$n_detect_in)`).
 
-**A stricter bar.** Widen the close calls to 1.96 standard errors, and the same choice keeps link's rule for
-`r n_keep` of the `r nrow(strict)` species and stages tuned:
-
-```{r strict}
-sp <- c(BT = "Bull trout", CH = "Chinook", CO = "Coho", GR = "Grayling", RB = "Rainbow trout", ST = "Steelhead",
-        WCT = "Westslope cutthroat")
-tab <- data.frame(paste(sp[strict$species_code], ifelse(strict$stage == "rear", "rearing", "spawning")),
-                  formatC(strict$behind, format = "f", digits = 2), strict$one, strict$strict)
-names(tab) <- c(" ", "link's rule behind the best (standard errors)", "Choice at one standard error", "Choice at 1.96")
-knitr::kable(tab, align = "lrll",
-             caption = paste("The rule each species and stage gets when close calls are rules within one standard error",
-                             "of the best, and within 1.96. Computed from the saved tuning tables."))
+```{r profile, fig.height = 5.2, fig.cap = "How close the best rule using each value of each dial comes to the best rule overall, as score above the best (lower is better). Dark blue: at least one rule with that value is a close call at one standard error; light blue: only at 1.96 standard errors; white: neither. The orange ring marks link's current value."}
+dial <- function(lab, v, key) {
+  tune |>
+    mutate(value = v) |>
+    group_by(value, key = key) |>
+    summarise(best = min(ddev_best), one = any(in_region), strict = any(in_196), .groups = "drop") |>
+    mutate(part = lab)
+}
+size_lab <- paste(ifelse(tune$size_var == "mad", "flow", "width"), as.character(tune$size_min))
+size_key <- ifelse(tune$size_var == "mad", tune$size_min, 10 + tune$size_min)
+prof <- bind_rows(
+  dial("Smallest stream (flow m³/s or width m)", size_lab, size_key),
+  dial("Steepest slope", grad(tune$grad_max), tune$grad_max),
+  dial("Near-a-river allowance: river size (m³/s)", ifelse(is.na(tune$exc_q), "none", format(tune$exc_q, trim = TRUE)),
+       ifelse(is.na(tune$exc_q), -1, tune$exc_q)),
+  dial("Near-a-river allowance: distance (m)",
+       ifelse(is.na(tune$exc_d), "none", format(tune$exc_d, big.mark = ",", trim = TRUE)),
+       ifelse(is.na(tune$exc_d), -1, tune$exc_d))
+)
+prof$part <- factor(prof$part, levels = unique(prof$part))
+prof <- prof |>
+  group_by(part) |>
+  mutate(value = factor(value, levels = unique(value[order(key)]))) |>
+  ungroup() |>
+  mutate(close = factor(ifelse(one, "close call at one SE", ifelse(strict, "only at 1.96 SE", "neither")),
+                        levels = c("close call at one SE", "only at 1.96 SE", "neither")))
+dflt_vals <- tibble::tibble(
+  part = factor(levels(prof$part), levels = levels(prof$part)),
+  value = c(paste("width", as.character(dflt$size_min)), grad(dflt$grad_max), "none", "none")
+)
+dpts <- inner_join(prof, dflt_vals, by = c("part", "value"))
+stopifnot(nrow(dpts) == 4)
+ggplot(prof, aes(value, best)) +
+  geom_line(aes(group = 1), colour = "grey70") +
+  geom_point(aes(fill = close), shape = 21, size = 2.6, colour = "grey20") +
+  geom_point(data = dpts, shape = 21, size = 5, stroke = 1, colour = "#d95f02", fill = NA) +
+  scale_fill_manual(values = c("close call at one SE" = "#1b6ca8", "only at 1.96 SE" = "#9ecae1", "neither" = "white"),
+                    drop = FALSE, name = NULL) +
+  facet_wrap(~part, scales = "free_x", ncol = 2) +
+  labs(x = NULL, y = "Score above the best rule") +
+  theme_minimal(base_size = 10) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1), legend.position = "bottom",
+        panel.grid.minor = element_blank())
 ```
 
-For chinook the flow floor holds, but the slope limit goes back to link's `r grad(dflt$grad_max)` and the near-a-river
-allowance drops out. Where link's rule is kept, the stricter bar mostly cannot separate rules at all: for
-`r lst(paste(sp[wide$species_code], ifelse(wide$stage == "rear", "rearing", "spawning")))`, over four in five of all
-rules are close calls at 1.96.
+The flow floors near the best are close calls at one standard error and no width floor is; the slope limit is
+flat from `r grad(min(region$grad_max))` up.
+
+**A stricter bar.** Widen the close calls to 1.96 standard errors and `r n0(ch196$n_region)` rules are close calls
+instead of `r nrow(region)`. The same choice then changes:
+
+```{r strict}
+cell <- function(r) {
+  c(n0(r$n_region),
+    if (r$size_var == "mad") paste(format(r$size_min, trim = TRUE), "m³/s average flow")
+    else paste(format(r$size_min, trim = TRUE), "m channel width"),
+    grad(r$grad_max),
+    if (is.na(r$exc_q)) "none" else paste0("a ", r$exc_q, " m³/s river within ", km_d(r$exc_d)))
+}
+rec1 <- rec
+rec1$n_region <- nrow(region)
+tab <- data.frame(rbind(cell(rec1), cell(ch196), cell(transform(dflt, n_region = NA))))
+tab[3, 1] <- "outside both"
+tab <- cbind(c("Chosen at one standard error", "Chosen at 1.96", "link's current rule"), tab)
+names(tab) <- c(" ", "Close-call rules", "Smallest stream", "Steepest slope", "Near-a-river allowance")
+knitr::kable(tab, align = "lrlll",
+             caption = "The chinook rule chosen from the close calls at each bar, beside link's current rule.")
+```
+
+The flow floor holds, but the slope limit goes back to link's `r grad(dflt$grad_max)` and the near-a-river allowance
+drops out. link's own rule is still not a close call. link's thresholds table gives the choice at 1.96 for every
+species tuned (`rule_196`).
 
 **Two other checks.** Split into sets again with `r nrow(seeds)` other random draws, the recommended rule is a close
 call on `r sum(seeds$main_rec_in_region)` and link's on `r sum(seeds$default_in_region)`. Chosen on four sets and
