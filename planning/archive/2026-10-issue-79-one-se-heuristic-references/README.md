@@ -42,4 +42,4 @@ only its 0.75 m³/s flow floor (back to 5.49 % and no near-a-river allowance). T
 
 `planning/archive/2026-10-issue-79-one-se-heuristic-references/review-*.md` (the plan review and three code-check rounds).
 
-Closed by: PR (opened from branch `79-one-se-region-state-it-as-a-heuristic-pu`)
+Closed by: PR #82
