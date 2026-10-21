@@ -119,7 +119,7 @@ article in plain words with the 1.96 table and a bibliography, an interactive Bu
 
 ## Owed at the end (reported, done after merge)
 
-- [ ] None planned: the upload (`PUBLISH=TRUE` 0325) stays with link#346, #80 and #81 carry their own work
+- [x] None planned: the upload (`PUBLISH=TRUE` 0325) stays with link#346, #80 and #81 carry their own work
 
 ## Validation
 
