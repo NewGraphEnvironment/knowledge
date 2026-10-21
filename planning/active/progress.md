@@ -38,3 +38,12 @@
   no FDIS item, so Phase 1 adds one
 - Phase 7: link#346's body gains the 1.96 item (link is public and knowledge private, so it names no knowledge issue)
 - Phase 1: filed through the Web API (12 items, one subcollection, three merges); keys after the desktop synced. `vignette_bib.R` writes 12 entries, deterministic across two runs; site and package renders show 12 references, versions as "Version 0.66.0"
+
+## Session 2026-10-21 (UTC)
+
+- Code-check over the branch: three rounds, ten findings fixed, closed on an enumeration (findings.md, "Code-check").
+  The unpushed branch's history was rewritten once (round 2) so no commit carries a home path or credential-store
+  wording; `public_sweep.py commits` empty.
+- Final: 189 tests, 0 failed, 0 skipped; `check_pkgdown()` clean; the article 1,303 words, 6 lints (19 on main);
+  site build shows the 1.96 table, 12 references and the widget. Issue body unchanged since planning; main has not
+  moved.

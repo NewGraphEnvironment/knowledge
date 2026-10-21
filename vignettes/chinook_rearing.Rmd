@@ -22,7 +22,8 @@ knitr::opts_chunk$set(
   warning = FALSE
 )
 library(knowledge)
-# pkgdown sets IN_PKGDOWN while it builds the website: the site gets the interactive map, the package copy the static one
+# pkgdown sets IN_PKGDOWN while it builds the website: the site gets the interactive map, the package copy the
+# static one
 on_site <- identical(Sys.getenv("IN_PKGDOWN"), "true")
 ```
 
@@ -177,13 +178,12 @@ closest to link's; all differ in every dial, so it is the best scorer. link's ru
 ```{r strict}
 sp <- c(BT = "Bull trout", CH = "Chinook", CO = "Coho", GR = "Grayling", RB = "Rainbow trout", ST = "Steelhead",
         WCT = "Westslope cutthroat")
-tab <- data.frame(
-  ` ` = paste(sp[strict$species_code], ifelse(strict$stage == "rear", "rearing", "spawning")),
-  `link's rule behind the best (standard errors)` = formatC(strict$behind, format = "f", digits = 2),
-  `Choice at one standard error` = strict$one, `Choice at 1.96` = strict$strict,
-  check.names = FALSE)
+tab <- data.frame(paste(sp[strict$species_code], ifelse(strict$stage == "rear", "rearing", "spawning")),
+                  formatC(strict$behind, format = "f", digits = 2), strict$one, strict$strict)
+names(tab) <- c(" ", "link's rule behind the best (standard errors)", "Choice at one standard error", "Choice at 1.96")
 knitr::kable(tab, align = "lrll",
-             caption = "The rule each species and stage gets when close calls are rules within one standard error of the best, and within 1.96. Computed from the saved tuning tables.")
+             caption = paste("The rule each species and stage gets when close calls are rules within one standard error",
+                             "of the best, and within 1.96. Computed from the saved tuning tables."))
 ```
 
 For chinook the flow floor holds, but the slope limit goes back to link's `r grad(dflt$grad_max)` and the near-a-river
