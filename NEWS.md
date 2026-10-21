@@ -1,3 +1,18 @@
+# knowledge 0.4.8
+
+* The tuning's "within one standard error of the best" is stated as what it is, a parsimony rule of thumb fixed before
+  the run, with its sources, and the same choice at 1.96 standard errors is published beside it (#79).
+  `knw_tune_repick()` replays the pick from a saved tune table at any width, and `data/thresholds.csv` gains
+  `rule_196` and `holds_196` (still `knowledge/thresholds/v1`, not uploaded). At 1.96, five of eight species ×
+  stages keep `default`, though for four of them the stricter bar takes in most or all of the rules; chinook keeps
+  its 0.75 m³/s flow floor at `default`'s 5.49 % with no near-a-river allowance. The chinook rearing article is
+  shorter and plainer, with its sources checked against the papers, a bibliography that `data-raw/vignette_bib.R`
+  writes from Zotero with the run's software versions, the line-graph figure marking close calls at both bars, a
+  chinook 1.96 table, and on the website an interactive Bulkley map on Esri's World Topographic Map
+  (`knw_compare_mapgl()`). The README credits fwapg, bcfishobs and bcfishpass to Simon Norris.
+* `inst/CITATION` reads a Zenodo concept DOI from DESCRIPTION's `Config/DOI` when the package has one. It has none
+  yet, so the citation is unchanged.
+
 # knowledge 0.4.7
 
 * The README is rewritten to the README convention (#75). It says what knowledge is and the thresholds it tunes
