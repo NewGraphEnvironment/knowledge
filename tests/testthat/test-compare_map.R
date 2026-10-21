@@ -119,11 +119,11 @@ test_that("knw_compare_mapgl colours every class in hex, places the legends and 
   expect_true(all(grepl("^#[0-9a-f]{6}$", colours)), info = paste(unique(colours), collapse = " "))
   expect_true(all(grepl("^#[0-9a-f]{6}$", c(knowledge:::.compare_rule_cols, knowledge:::.compare_grade_cols))))
   json <- as.character(jsonlite::toJSON(m$x, auto_unbox = TRUE, null = "null"))
-  # the legends bottom-left and the layer switch top-right, so they never share a corner
+  # the legends top-left, the layer switch top-right and the attribution along the bottom, so none share a corner
   expect_identical(m$x$layers_control$position, "top-right")
   expect_setequal(m$x$layers_control$layers, c("rules", "grade"))
-  expect_match(m$x$legend_html, "legend_rules[^>]*bottom-left")
-  expect_match(m$x$legend_html, "legend_grade[^>]*bottom-left")
+  expect_match(m$x$legend_html, "legend_rules[^>]*top-left")
+  expect_match(m$x$legend_html, "legend_grade[^>]*top-left")
   expect_false(grepl("grey8", json))
   expect_match(json, "voyager")
   m2 <- knw_compare_mapgl(mapgl_fx(), background = "openfreemap")
@@ -175,4 +175,19 @@ test_that("knw_compare_mapgl writes a large or tiny waterbody area in fixed nota
   seg$water_ha <- c(123456, 0.0001, 654.2, NA)
   src <- jsonlite::fromJSON(knw_compare_mapgl(seg)$x$sources[[1]]$data)$features$properties
   expect_identical(src$wa, c("lake, 123000 ha", "wetland, 0.0001 ha", "lake, 654 ha"))
+})
+
+test_that("knw_compare_mapgl's Esri topo background is a keyless raster style that carries Esri's attribution", {
+  skip_if_not_installed("mapgl")
+  st <- knw_compare_mapgl(mapgl_fx(), background = "esri_topo")$x$style
+  expect_identical(st$version, 8)
+  src <- st$sources$esri_topo
+  expect_identical(src$type, "raster")
+  expect_match(src$tiles[[1]], "^https://server\\.arcgisonline\\.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/")
+  expect_false(grepl("token|key", src$tiles[[1]]))
+  expect_match(src$attribution, "Powered by .*Esri")
+  expect_match(src$attribution, "OpenStreetMap contributors")
+  expect_identical(st$layers[[1]]$source, "esri_topo")
+  # serialised as the widget sends it: tiles must be a JSON array
+  expect_match(as.character(jsonlite::toJSON(st, auto_unbox = TRUE)), '"tiles":\\["https')
 })

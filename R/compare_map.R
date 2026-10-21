@@ -49,7 +49,7 @@
 #' }
 knw_compare_map <- function(segments, water = NULL, title = "", png = NULL, html = NULL, fp_cells = NULL,
                             ncol = NULL, panels = c("rules", "grade", "floodplain"), mark = NULL, lwd = 1,
-                            legend = TRUE, labels = NULL, background = c("voyager", "openfreemap")) {
+                            legend = TRUE, labels = NULL, background = c("voyager", "openfreemap", "esri_topo")) {
   chk::chk_s3_class(segments, "sf")
   chk::check_names(segments, c("accessible", "stream_order", "grade_class", "flag_default", "flag_tuned"))
   if (!is.null(ncol)) chk::chk_whole_number(ncol)
@@ -164,7 +164,7 @@ knw_compare_map <- function(segments, water = NULL, title = "", png = NULL, html
 #' The page [knw_compare_map()] saves when given `html`, as a mapgl widget to
 #' print in an R Markdown page or save: accessible segments coloured by rule
 #' (kept by both, lost, gained, neither) and, on a second layer the switch at the
-#' top right turns on, by grade class, each with its legend at the bottom left;
+#' top right turns on, by grade class, each with its legend at the top left;
 #' lakes and rivers styled through gq's registry where it loads. Clicking a
 #' segment opens a popup with the fields it carries among the stream order, grade,
 #' mean annual flow (`mad`), channel width, gradient, the walk distance to the
@@ -179,8 +179,9 @@ knw_compare_map <- function(segments, water = NULL, title = "", png = NULL, html
 #'
 #' @inheritParams knw_compare_map
 #' @param title `character(1)` the rules legend's title.
-#' @param background `"voyager"` (Carto Voyager) or `"openfreemap"` (OpenFreeMap
-#'   Liberty), both open to a public site.
+#' @param background `"voyager"` (Carto Voyager), `"openfreemap"` (OpenFreeMap
+#'   Liberty) or `"esri_topo"` (Esri's World Topographic Map raster tiles, keyless;
+#'   Esri allows free noncommercial use with attribution, which the map shows).
 #' @param digits `integer(1)` decimal places kept in the coordinates.
 #' @return A `maplibregl` htmlwidget, or `NULL` with a message when no segment is
 #'   accessible.
@@ -197,7 +198,8 @@ knw_compare_map <- function(segments, water = NULL, title = "", png = NULL, html
 #'   m <- knw_compare_mapgl(seg, title = "Habitat by rule")
 #'   class(m)
 #' }
-knw_compare_mapgl <- function(segments, water = NULL, title = "", background = c("voyager", "openfreemap"),
+knw_compare_mapgl <- function(segments, water = NULL, title = "",
+                              background = c("voyager", "openfreemap", "esri_topo"),
                               digits = 5L) {
   chk::chk_s3_class(segments, "sf")
   chk::check_names(segments, c("accessible", "stream_order", "grade_class", "flag_default", "flag_tuned"))
@@ -215,7 +217,10 @@ knw_compare_mapgl <- function(segments, water = NULL, title = "", background = c
   s4 <- sf::st_sf(data.frame(rc = as.integer(seg$rule_class), gc = as.integer(seg$grade_class),
                              stream_order = as.integer(seg$stream_order), pop$props, stringsAsFactors = FALSE),
                   geometry = .round_sfc(sf::st_transform(sf::st_geometry(sf::st_zm(seg, drop = TRUE)), 4326), digits))
-  style <- if (background == "voyager") mapgl::carto_style("voyager") else mapgl::openfreemap_style("liberty")
+  style <- switch(background,
+                  voyager = mapgl::carto_style("voyager"),
+                  openfreemap = mapgl::openfreemap_style("liberty"),
+                  esri_topo = .esri_topo_style())
   m <- mapgl::maplibre(style = style, bounds = s4)
   if (!is.null(water) && nrow(water)) {
     # an attribute column, because geojsonsf writes a geometry-only sf as bare geometries, not a FeatureCollection
@@ -244,10 +249,10 @@ knw_compare_mapgl <- function(segments, water = NULL, title = "", background = c
                                                          stops = unname(.compare_grade_cols), default = "#d9d9d9"),
                           line_width = width, popup = pop$expr, visibility = "none") |>
     mapgl::add_categorical_legend(legend_title = title, values = names(.compare_rule_cols),
-                                  colors = unname(.compare_rule_cols), position = "bottom-left", layer_id = "rules",
+                                  colors = unname(.compare_rule_cols), position = "top-left", layer_id = "rules",
                                   unique_id = "legend_rules") |>
     mapgl::add_categorical_legend(legend_title = "Grade (expected use)", values = names(.compare_grade_cols),
-                                  colors = unname(.compare_grade_cols), position = "bottom-left", layer_id = "grade",
+                                  colors = unname(.compare_grade_cols), position = "top-left", layer_id = "grade",
                                   unique_id = "legend_grade", add = TRUE) |>
     mapgl::add_layers_control(layers = c("rules", "grade"), position = "top-right")
 }
@@ -303,4 +308,18 @@ knw_compare_mapgl <- function(segments, water = NULL, title = "", background = c
     y
   }
   sf::st_sfc(lapply(g, rnd), crs = sf::st_crs(g))
+}
+
+# Esri's World Topographic Map as a MapLibre raster style. Its tile service needs no key, and Esri allows free
+# noncommercial use with attribution; the attribution is the service's own `copyrightText` (World_Topo_Map/MapServer,
+# read 2026-10-21) after "Powered by Esri", shown in the map's attribution control.
+.esri_topo_style <- function() {
+  attribution <- paste0("Powered by <a href=\"https://www.esri.com\">Esri</a> | Sources: Esri, HERE, Garmin, ",
+                        "Intermap, increment P Corp., GEBCO, USGS, FAO, NPS, NRCAN, GeoBase, IGN, Kadaster NL, ",
+                        "Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), (c) OpenStreetMap contributors, ",
+                        "and the GIS User Community")
+  tiles <- "https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}"
+  src <- list(type = "raster", tiles = list(tiles), tileSize = 256, maxzoom = 19, attribution = attribution)
+  list(version = 8, sources = list(esri_topo = src),
+       layers = list(list(id = "esri_topo", type = "raster", source = "esri_topo")))
 }

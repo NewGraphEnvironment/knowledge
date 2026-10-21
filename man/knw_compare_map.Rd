@@ -17,7 +17,7 @@ knw_compare_map(
   lwd = 1,
   legend = TRUE,
   labels = NULL,
-  background = c("voyager", "openfreemap")
+  background = c("voyager", "openfreemap", "esri_topo")
 )
 }
 \arguments{

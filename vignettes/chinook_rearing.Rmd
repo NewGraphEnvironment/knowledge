@@ -282,7 +282,7 @@ grid::grid.raster(png::readPNG(f1))
 ```
 
 ```{r map-site, eval = on_site, out.width = "100%"}
-knw_compare_mapgl(seg, water, title = "Habitat by rule", background = "voyager")
+knw_compare_mapgl(seg, water, title = "Habitat by rule", background = "esri_topo")
 ```
 
 Orange is mostly the upper reaches of tributaries, where flow falls below the floor more than `r km_d(rec$exc_d)`

@@ -8,7 +8,7 @@ knw_compare_mapgl(
   segments,
   water = NULL,
   title = "",
-  background = c("voyager", "openfreemap"),
+  background = c("voyager", "openfreemap", "esri_topo"),
   digits = 5L
 )
 }
@@ -21,8 +21,9 @@ knw_compare_mapgl(
 
 \item{title}{\code{character(1)} the rules legend's title.}
 
-\item{background}{\code{"voyager"} (Carto Voyager) or \code{"openfreemap"} (OpenFreeMap
-Liberty), both open to a public site.}
+\item{background}{\code{"voyager"} (Carto Voyager), \code{"openfreemap"} (OpenFreeMap
+Liberty) or \code{"esri_topo"} (Esri's World Topographic Map raster tiles, keyless;
+Esri allows free noncommercial use with attribution, which the map shows).}
 
 \item{digits}{\code{integer(1)} decimal places kept in the coordinates.}
 }
@@ -34,7 +35,7 @@ accessible.
 The page \code{\link[=knw_compare_map]{knw_compare_map()}} saves when given \code{html}, as a mapgl widget to
 print in an R Markdown page or save: accessible segments coloured by rule
 (kept by both, lost, gained, neither) and, on a second layer the switch at the
-top right turns on, by grade class, each with its legend at the bottom left;
+top right turns on, by grade class, each with its legend at the top left;
 lakes and rivers styled through gq's registry where it loads. Clicking a
 segment opens a popup with the fields it carries among the stream order, grade,
 mean annual flow (\code{mad}), channel width, gradient, the walk distance to the
