@@ -167,3 +167,12 @@ test_that("knw_compare_mapgl says so and returns NULL when no segment is accessi
   expect_message(out <- knw_compare_mapgl(seg, title = "PARS"), "no accessible segment")
   expect_null(out)
 })
+
+test_that("knw_compare_mapgl writes a large or tiny waterbody area in fixed notation", {
+  skip_if_not_installed("mapgl")
+  seg <- mapgl_fx()
+  seg$water <- c("lake", "wetland", "lake", "stream")
+  seg$water_ha <- c(123456, 0.0001, 654.2, NA)
+  src <- jsonlite::fromJSON(knw_compare_mapgl(seg)$x$sources[[1]]$data)$features$properties
+  expect_identical(src$wa, c("lake, 123000 ha", "wetland, 0.0001 ha", "lake, 654 ha"))
+})

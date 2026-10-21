@@ -81,6 +81,8 @@ test_that("the wetland figure, the run's versions and each map segment's water a
   expect_equal(nrow(w), 1)
   expect_true(all(is.finite(c(w$km_default, w$km_tuned, w$km_both, w$grade_median_tuned))))
   expect_lte(w$km_both, min(w$km_default, w$km_tuned))
+  # nzchar(NA) is TRUE, so NA needs its own check
+  expect_false(anyNA(unlist(x$meta$versions)))
   expect_true(all(nzchar(unlist(x$meta$versions))))
   expect_setequal(names(x$meta$versions), c("link", "link_sha", "fresh", "fresh_sha", "fwapg_sha", "wet"))
   seg <- readRDS(vd("bulk_segments.rds"))

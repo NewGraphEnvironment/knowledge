@@ -281,7 +281,8 @@ knw_compare_mapgl <- function(segments, water = NULL, title = "", background = c
   if (has("water")) {
     wa <- unname(c(stream = "stream line", river = "river polygon", wetland = "wetland", lake = "lake")[seg$water])
     wa[is.na(wa)] <- "unknown"
-    if (has("water_ha")) wa <- ifelse(is.na(seg$water_ha), wa, paste0(wa, ", ", signif(seg$water_ha, 3), " ha"))
+    sig3 <- function(v) trimws(formatC(signif(v, 3), digits = 3, format = "fg"))
+    if (has("water_ha")) wa <- ifelse(is.na(seg$water_ha), wa, paste0(wa, ", ", sig3(seg$water_ha), " ha"))
     add("Water", "wa", wa)
   }
   if (has("mad")) add("Average flow (m\u00b3/s)", "q", txt(seg$mad, sig2))

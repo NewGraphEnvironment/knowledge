@@ -147,3 +147,20 @@ irvine2026stac_floodplains_bcSTAC, provinceofbritishcolumbia2022FisheriesData. T
 | Carto Voyager blank under the widget; "Layer water already exists" | the style has its own `water` layer: ids prefixed `knw_` |
 | popup showed `match,get,vt,...` as text | mapgl 0.4.6's evaluator reads only get/concat/to-string/to-number/number-format: display strings |
 | `vignette_bib.R` found no title | perl `.` does not cross newlines: `(?s)`; a lazy `\{.*?\},` stopped inside link's title: anchored to the line end |
+
+## Code-check (branch, 2026-10-21)
+
+| Round | Findings | Fixed | Accepted | Inside previous fix? |
+|-------|----------|-------|----------|----------------------|
+| 1 | 3 (home path and credential-store wording in planning; bib title through a `sub()` replacement drops backslashes) | 3 | 0 | — |
+| 2 | 3 (+1 found after: the bib's path guard named a home prefix) — non-ASCII `³` in R code; round 1's review file re-quoted what round 1 removed; `nzchar(NA)` in the versions guard | 4 | 0 | y (the review-file quote) |
+| 3 | 3 — the vignette-data test kept round 2's `nzchar(NA)` gap; the wetland sentence said "whatever its distance" though the connectivity step still drops 31 % of those lines in the Bulkley; a waterbody area written with `as.character()` (`1e+05`) | 3 | 0 | y (the test twin) |
+
+Round 2 rewrote the unpushed branch's history (`git filter-branch` over 67c60ce..HEAD on `planning/active/*.md`):
+13 commits, tip tree identical, `public_sweep.py commits` and `git log -S` over the strings empty. Round 3 named the
+mechanism: a string checked where it was written breaks under its next reader (the public tree and history, a
+`sub()` replacement, R CMD check's ASCII rule, `nzchar()` on NA, `as.character()` on a number). The loop ended on an
+enumeration of every added R line (`git diff 67c60ce -- R data-raw tests vignettes/*.Rmd`): `nzchar` 2 uses, both
+with an NA check; `sub`/`gsub` with a non-literal replacement 1, a package name from the script's own list; numbers
+turned to text 10, each a scalar, an integer, or a vector read on the rendered page; `R/` passes
+`tools:::.check_package_ASCII_code()`; `public_sweep.py tree` hits only four untouched PNGs (byte noise).

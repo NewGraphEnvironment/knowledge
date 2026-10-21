@@ -267,10 +267,10 @@ rule does what it was chosen to do, not that it predicts new places.
 
 - **It is about young chinook in streams.** It was fitted to juvenile chinook caught by electrofishing in streams and
   says nothing about spawning. River polygons share the stream slope limit, so they get `r grad(rec$grad_max)` too,
-  though no site in one was scored. A stretch through a wetland of 1 ha or more is rearing under both rules whatever
-  its size, slope or distance from a river (link's wetland rule): about `r n0(round(wl$km_tuned, -2))` km of chinook
-  rearing, with a median grade of `r formatC(wl$grade_median_tuned, format = "f", digits = 2)`. Lakes keep their own
-  condition.
+  though no site in one was scored. A line drawn through a wetland of 1 ha or more passes link's wetland condition
+  under both rules whatever its size, slope or distance from a river, and is rearing wherever it connects to spawning:
+  about `r n0(round(wl$km_tuned, -2))` km of chinook rearing, with a median grade of
+  `r formatC(wl$grade_median_tuned, format = "f", digits = 2)`. Lakes keep their own condition.
 - **The cut-offs are a judgment call.** Chinook get gradually less common as streams get smaller and steeper; there is
   no flow or slope where they stop. At one standard error, flow floors of `r min(region$size_min)` to
   `r max(region$size_min)` m³/s fit almost as well; at 1.96, only the flow floor holds.
