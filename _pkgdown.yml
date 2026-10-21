@@ -49,6 +49,7 @@ reference:
       - knw_walk_index
       - knw_rule_in
       - knw_tune_score
+      - knw_tune_repick
       - knw_tune_curve
       - knw_grade
       - knw_grade_species
@@ -60,6 +61,7 @@ reference:
       - knw_compare_rules
       - knw_floodplain_ha
       - knw_compare_map
+      - knw_compare_mapgl
   - title: Crossings and past reports
     desc: >
       Pull PSCIS crossing layers for a watershed group and derive the crossing

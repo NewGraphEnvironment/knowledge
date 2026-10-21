@@ -8,7 +8,11 @@
 #' (`mad`) floor; `range_lo` and `range_hi` are the smallest and largest value of
 #' the component among the rules inside the one-SE region on the main reading;
 #' `readings_in` is the number of fold seeds (the main one and the extra seeds) in
-#' whose region the recommended rule sits, of `readings`. A species × stage that
+#' whose region the recommended rule sits, of `readings`; `rule_196` is the rule
+#' the same pick makes from a region 1.96 standard errors wide
+#' ([knw_tune_repick()]), and `holds_196` is `TRUE` where that rule keeps the
+#' row's value (a size row also needs the same size variable; a component the
+#' recommended rule lacks holds when the 1.96 rule lacks it too). A species × stage that
 #' was not fitted (no stream rule, no response, too few groups) gets one row
 #' per stage with `status` saying why and no values.
 #'
@@ -16,6 +20,8 @@
 #'   `<sp>_<stage>_summary.csv` per species × stage, bound here).
 #' @param evidence_version,link_run_uid,link_sha,config `character(1)` the
 #'   provenance every row carries.
+#' @param d_floor `numeric(1)` the run's shortest exception distance (m), as given
+#'   to [knw_tune_run()], so the 1.96 replay picks as the run did.
 #' @return A list: `thresholds` and `groups` (one row per `rule_id` and
 #'   watershed group the rule was scored on), both `tibble`s.
 #' @export
@@ -24,7 +30,8 @@
 #' t <- knw_thresholds_table("data/tune", "knowledge/fdis/v3", "20261017_004619-3f4c713b", "a17e9177", "default")
 #' t$thresholds
 #' }
-knw_thresholds_table <- function(tune_dir, evidence_version, link_run_uid, link_sha, config = "default") {
+knw_thresholds_table <- function(tune_dir, evidence_version, link_run_uid, link_sha, config = "default",
+                                 d_floor = 200) {
   chk::chk_dir(tune_dir)
   chk::chk_string(evidence_version)
   chk::chk_string(link_run_uid)
@@ -53,7 +60,7 @@ knw_thresholds_table <- function(tune_dir, evidence_version, link_run_uid, link_
       rows[[key]] <- cbind(base, tibble::tibble(
         component = NA_character_, link_parameter = NA_character_, model = NA_character_, value = NA_real_,
         unit = NA_character_, range_lo = NA_real_, range_hi = NA_real_, readings_in = NA_integer_,
-        readings = NA_integer_,
+        readings = NA_integer_, rule_196 = NA_character_, holds_196 = NA,
         default_value = NA_real_, default_in_region = NA, rule = NA_character_, n_visits = summ$visits_in[i],
         n_detect = summ$detections[i], n_wsg = summ$groups_both[i], power = summ$status[i]))
       next
@@ -67,6 +74,14 @@ knw_thresholds_table <- function(tune_dir, evidence_version, link_run_uid, link_
     readings <- summ$seeds_n[i] + 1L
     readings_in <- summ$seeds_rec_in_region[i] + 1L
     model <- if (rec$size_var == "width") "cw" else "mad"
+    # the replay must make the run's own pick at one SE before its 1.96 pick means anything
+    if (!identical(knw_tune_repick(tune, se_mult = 1, d_floor = d_floor)$rule, rec$rule)) {
+      stop(key, ": replaying the pick at one SE does not give the recommended rule", call. = FALSE)
+    }
+    r196 <- knw_tune_repick(tune, se_mult = 1.96, d_floor = d_floor)
+    same <- function(a, b) (is.na(a) & is.na(b)) | (!is.na(a) & !is.na(b) & abs(a - b) < 1e-9)
+    holds <- c(rec$size_var == r196$size_var && same(rec$size_min, r196$size_min), same(rec$grad_max, r196$grad_max),
+               same(rec$exc_q, r196$exc_q), same(rec$exc_d, r196$exc_d))
     comp <- tibble::tibble(
       component = c("size", "gradient", "exception_q", "exception_d"),
       link_parameter = c(paste0(stage, if (rec$size_var == "width") "_channel_width_min" else "_mad_min"),
@@ -80,7 +95,7 @@ knw_thresholds_table <- function(tune_dir, evidence_version, link_run_uid, link_
       range_hi = c(if (nrow(same_size)) max(same_size$size_min) else NA, max(region$grad_max),
                    if (any(!is.na(region$exc_q))) max(region$exc_q, na.rm = TRUE) else NA,
                    if (any(!is.na(region$exc_d))) max(region$exc_d, na.rm = TRUE) else NA),
-      readings_in = readings_in, readings = readings,
+      readings_in = readings_in, readings = readings, rule_196 = r196$rule, holds_196 = holds,
       default_value = c(dflt$size_min, dflt$grad_max, NA_real_, NA_real_),
       default_in_region = dflt$in_region %in% TRUE, rule = rec$rule,
       n_visits = rec$n_visits, n_detect = rec$n_detect, n_wsg = rec$n_wsg, power = summ$status[i]

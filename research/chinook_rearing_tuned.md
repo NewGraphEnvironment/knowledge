@@ -1,6 +1,6 @@
 # A tuned Chinook rearing rule: stream size, gradient and distance to a river, beside link's `default`
 
-**Verified:** 2026-10-16; 0297's figures rerun 2026-10-17 without repeated surveys (#35), with the same recommended rule; the head paragraph and the last section 2026-10-18 (#62); the gradient maximum above 9 % 2026-10-19 (#67); the grade and the comparison's figures 2026-10-19 (#65) · **Issues:** #54 (this), #67, #68, #65; builds on #52 (`chinook_stream_size.md`), which picked 0.5 m³/s, 10 m³/s
+**Verified:** 2026-10-16; 0297's figures rerun 2026-10-17 without repeated surveys (#35), with the same recommended rule; the head paragraph and the last section 2026-10-18 (#62); the gradient maximum above 9 % 2026-10-19 (#67); the grade and the comparison's figures 2026-10-19 (#65); the one-SE wording and the pick at 1.96 SE 2026-10-20 (#79) · **Issues:** #54 (this), #67, #68, #65, #79; builds on #52 (`chinook_stream_size.md`), which picked 0.5 m³/s, 10 m³/s
 and 500 m by hand; uses wet's flow (`modelled_discharge.md`) and the FDIS export (`fdis_export.md`); the link issue for
 a tuned rule is drafted, not filed (planning archive for #54) · **Produced by:**
 - `scripts/0296-ch-rule-build.R` with `scripts/sql/ch_dist_profile.sql`: walks, widths, barrier status, link segment
@@ -25,7 +25,9 @@ the exception, MAD 0.35–1 m³/s, gradient 7–9 %, Q 1–10 m³/s, D 1–2 km;
 **MAD ≥ 0.75 m³/s, gradient ≤ 9 %, a ≥ 3 m³/s river within 1 km**, which differs from this file's only in the
 gradient (9 % against 7 %, both inside both regions). `default` is 196.3 above the best (SE 81.6), outside on
 every seed; nested selection 1,234 against `default`'s 1,347. **The size floor settles at 0.75 m³/s** (the open
-question of #54), with 0.5 inside the region. The thresholds table carries it as `CH_rear_v1`
+question of #54), with 0.5 inside the region. **At 1.96 SE (#79)** the same pick on the same table keeps only the floor:
+MAD ≥ 0.75 m³/s at `default`'s 5.49 % and no exception, from a region of 1,098 rules against 23; `default` is 2.40
+SEs behind and stays outside (`habitat_thresholds_tuned.md`, "At 1.96 SE"). The thresholds table carries it as `CH_rear_v1`
 (`data/thresholds.csv`); every CH segment of the 125 groups carries a grade (`knowledge/habitat_grade/v1`:
 856,244 accessible segments, 852,431 graded, reference rate 0.139, 67 % of graded km under 0.2 and 21 % at 0.8–1,
 each segment at its own distance to a ≥ 3 m³/s river since #65). The method
@@ -144,8 +146,8 @@ river rule inherits), and they must be moved together. Wetlands, lakes, access, 
 ## Short answer
 
 1. **The visits support a different rule from `default`, in all three components.** Recommended, by the rule fixed
-   before the run (the main reading's pick): **gradient ≤ 7 %, and either MAD ≥ 0.75 m³/s or a ≥ 3 m³/s river within 1,000 m downstream**. Ranges the data cannot tell apart on the main reading
-   (within one SE of the best):
+   before the run (the main reading's pick): **gradient ≤ 7 %, and either MAD ≥ 0.75 m³/s or a ≥ 3 m³/s river within 1,000 m downstream**. Ranges within one SE of the best on the main reading
+   (a rule of thumb fixed before the run, not a boundary of noise; "Method"):
    - MAD floor 0.28–1 m³/s, with 0.5–0.75 in 86 % of bootstrap resamples;
    - gradient 7–9 %, the best rule's 7 or 9 % in all 15 readings (5.49 % is recommended in 23.5 % of bootstrap
      resamples and on one of four extra fold seeds, and is in the region of only two of the 15 readings: FWA gradients
@@ -249,7 +251,9 @@ narrower population before any fit, for two reasons:
   differences, so the WSG is the unit. The **pick** is the region rule with the fewest departures from `default`,
   ties to the lower score. Each component is also reported as a **profile**: for each value, the best score over
   every other component.
-- **Decision rule, fixed before the run.** If `default` is in the region, the data cannot tell the tuned rule from it.
+- **Decision rule, fixed before the run.** If `default` is in the region, it is the pick. One SE is a parsimony rule of
+  thumb (Breiman et al. 1984, who proposed it for pruning trees, as cited in Chen & Yang 2021, §1.3, since no copy is held; Hastie, Tibshirani & Friedman 2009, pp. 61 and 244, whose only rationale is that the curve "is estimated with error, and hence takes a conservative approach"), not a boundary of noise; `habitat_thresholds_tuned.md`, "At 1.96 SE", gives its sources and
+  the picks under a stricter bar (#79).
 - **Honesty and stability.**
   - Nested selection: the pick is chosen on four folds and scored on the fifth.
   - A WSG bootstrap (200 resamples) of the selection.

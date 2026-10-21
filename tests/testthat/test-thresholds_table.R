@@ -1,4 +1,4 @@
-tune_dir_fx <- function() {
+tune_dir_fx <- function(se_default = 60, edit = identity) {
   d <- withr::local_tempdir(.local_envir = parent.frame())
   summ <- data.frame(
     species_code = c("CH", "KO"), stage = "rear", response = "U", status = c("fitted", "no_stream_rule"),
@@ -14,8 +14,9 @@ tune_dir_fx <- function() {
     is_default = c(TRUE, FALSE, FALSE, FALSE), in_region = c(FALSE, TRUE, TRUE, TRUE),
     recommended = c(FALSE, TRUE, FALSE, FALSE), pick = c(FALSE, TRUE, FALSE, FALSE),
     n_visits = 3000, n_detect = 150, n_wsg = 20, dev_heldout = c(1100, 950, 960, 955), ddev_best = c(150, 0, 10, 5),
-    se_diff = c(60, 0, 15, 12)
+    se_diff = c(se_default, 0, 15, 12), converged = TRUE
   )
+  tune <- edit(tune)
   utils::write.csv(tune, file.path(d, "CH_rear_tune.csv"), row.names = FALSE, na = "")
   utils::write.csv(data.frame(species_code = "CH", stage = "rear", watershed_group_code = c("BULK", "MORR"), fold = c(1L, 2L)),
                    file.path(d, "CH_rear_groups.csv"), row.names = FALSE)
@@ -52,4 +53,43 @@ test_that("a species x stage that was not fitted gets one row that says why", {
   expect_equal(ko$status, "no_stream_rule")
   expect_true(is.na(ko$value))
   expect_equal(ko$power, "no_stream_rule")
+})
+
+test_that("rule_196 is the pick at 1.96 SE, and holds_196 says which components it keeps", {
+  t <- knw_thresholds_table(tune_dir_fx(), "knowledge/fdis/v3", "run1", "abc1234")$thresholds
+  ch <- t[t$species_code == "CH", ]
+  expect_identical(unique(ch$rule_196), "mad>=0.75|g<=0.07|Q3@D1000")
+  expect_identical(ch$holds_196, rep(TRUE, 4))
+  # default 150 behind with an SE of 80: inside 1.96 SE (156.8), so the 1.96 pick is default, and nothing holds
+  t <- knw_thresholds_table(tune_dir_fx(se_default = 80), "knowledge/fdis/v3", "run1", "abc1234")$thresholds
+  ch <- t[t$species_code == "CH", ]
+  expect_identical(unique(ch$rule_196), "width>=1.5|g<=0.0549|none")
+  expect_identical(ch$holds_196, rep(FALSE, 4))
+  ko <- t[t$species_code == "KO", ]
+  expect_true(is.na(ko$rule_196) && is.na(ko$holds_196))
+})
+
+test_that("holds_196 needs the same size variable, and a missing exception holds when the 1.96 rule has none", {
+  # recommended mad>=1.5 with no exception; the 1.96 pick is default, width>=1.5 at the same gradient, no exception
+  t <- knw_thresholds_table(tune_dir_fx(se_default = 80, edit = function(x) {
+    x$rule[2] <- "mad>=1.5|g<=0.0549|none"
+    x$size_min[2] <- 1.5
+    x$grad_max[2] <- 0.0549
+    x$exc_q[2] <- NA
+    x$exc_d[2] <- NA
+    x$departures[2] <- 1L
+    x
+  }), "knowledge/fdis/v3", "run1", "abc1234")$thresholds
+  ch <- t[t$species_code == "CH", ]
+  expect_identical(unique(ch$rule), "mad>=1.5|g<=0.0549|none")
+  expect_identical(unique(ch$rule_196), "width>=1.5|g<=0.0549|none")
+  expect_identical(ch$holds_196, c(FALSE, TRUE, TRUE, TRUE))
+})
+
+test_that("a tune table whose one-SE replay is not its recommended rule is refused", {
+  d <- tune_dir_fx(edit = function(x) {
+    x$recommended <- c(FALSE, FALSE, TRUE, FALSE)
+    x
+  })
+  expect_error(knw_thresholds_table(d, "knowledge/fdis/v3", "run1", "abc1234"), "does not give the recommended rule")
 })

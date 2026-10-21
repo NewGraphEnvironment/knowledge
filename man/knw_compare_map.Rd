@@ -16,7 +16,8 @@ knw_compare_map(
   mark = NULL,
   lwd = 1,
   legend = TRUE,
-  labels = NULL
+  labels = NULL,
+  background = c("voyager", "openfreemap", "esri_topo")
 )
 }
 \arguments{
@@ -57,6 +58,8 @@ zoomed panel beside an overview that carries them.}
 \item{labels}{\code{NULL}, or an \code{sf} of points with a \code{label} column, drawn as
 numbered markers on every static panel (examples a table beside the map
 describes).}
+
+\item{background}{passed to \code{\link[=knw_compare_mapgl]{knw_compare_mapgl()}} for the interactive page.}
 }
 \value{
 Invisibly, the paths written.
@@ -64,7 +67,8 @@ Invisibly, the paths written.
 \description{
 Three readings of one group for one species and stage, each as a static
 figure (tmap, lakes and rivers styled through gq's registry) and, when
-\code{html} is given, an interactive page (mapgl):
+\code{html} is given, an interactive page (\code{\link[=knw_compare_mapgl]{knw_compare_mapgl()}}, saved
+self-contained):
 \itemize{
 \item \strong{rules}: accessible segments coloured kept (habitat under both rules),
 lost (\code{default} only), gained (tuned only), neither;

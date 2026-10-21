@@ -1,6 +1,6 @@
 # Arctic grayling rearing rule tuned on the province-wide run
 
-**Verified:** 2026-10-17; grade and comparison figures 2026-10-19 (#65) · **Issues:** #57, #65; link's own GR calibration is NewGraphEnvironment/link#343 ·
+**Verified:** 2026-10-17; grade and comparison figures 2026-10-19 (#65); the one-SE wording 2026-10-20 (#79) · **Issues:** #57, #65, #79; link's own GR calibration is NewGraphEnvironment/link#343 ·
 **Produced by:** `scripts/0310`, `scripts/0320` (`data/tune/GR_rear_*`), `scripts/0325` (`data/thresholds.csv`
 row `GR_rear_v1`) · **Status:** measured; nothing applied in link. Method: `habitat_thresholds_tuned.md`.
 
@@ -8,10 +8,10 @@ row `GR_rear_v1`) · **Status:** measured; nothing applied in link. Method: `hab
 range with no natural barrier downstream; 82 groups carry a GR habitat table.
 
 **`default` is inside the region, and is the pick.** `default` (width ≥ 1.5 m, gradient ≤ 3.49 %) is 10.7
-deviance above the best rule with an SE of 12.1, so by the decision rule fixed before the run the data cannot
-tell a tuned rule from it, and the recommended rule *is* `default`. The region is wide: 799 rules, width 1–4 m
+deviance above the best rule with an SE of 12.1, so by the decision rule fixed before the run (one SE, a rule of
+thumb, not a boundary of noise) the recommended rule *is* `default`. The region is wide: 799 rules, width 1–4 m
 (792 width rules, 7 MAD rules), gradient 3–9 %, with or without an exception. The best rule (width ≥ 2 m,
-5.49 %, a 3 m³/s river within 250 m) buys 10.7 deviance, inside the noise. Nested selection: 849 against
+5.49 %, a 3 m³/s river within 250 m) buys 10.7 deviance, under one SE. Nested selection: 849 against
 `default`'s 836 and 848 for no rule. GR are caught on 23.8 % of the visits `default` admits against 7.9 %
 outside. `default` is in the region of three of five seeds.
 
