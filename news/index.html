@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">knowledge</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.8</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,9 +32,15 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/v0.4.8/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.4.8" id="knowledge-048">knowledge 0.4.8<a class="anchor" aria-label="anchor" href="#knowledge-048"></a></h2>
+<ul><li>The tuning’s “within one standard error of the best” is stated as what it is, a parsimony rule of thumb fixed before the run, with its sources, and the same choice at 1.96 standard errors is published beside it (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/79" class="external-link">#79</a>). <code><a href="../reference/knw_tune_repick.html">knw_tune_repick()</a></code> replays the pick from a saved tune table at any width, and <code>data/thresholds.csv</code> gains <code>rule_196</code> and <code>holds_196</code> (still <code>knowledge/thresholds/v1</code>, not uploaded). At 1.96, five of eight species × stages keep <code>default</code>, though for four of them the stricter bar takes in most or all of the rules; chinook keeps its 0.75 m³/s flow floor at <code>default</code>’s 5.49 % with no near-a-river allowance. The chinook rearing article is shorter and plainer, with its sources checked against the papers, a bibliography that <code>data-raw/vignette_bib.R</code> writes from Zotero with the run’s software versions, the line-graph figure marking close calls at both bars, a chinook 1.96 table, and on the website an interactive Bulkley map on Esri’s World Topographic Map (<code><a href="../reference/knw_compare_mapgl.html">knw_compare_mapgl()</a></code>). The README credits fwapg, bcfishobs and bcfishpass to Simon Norris.</li>
+<li>
+<code>inst/CITATION</code> reads a Zenodo concept DOI from DESCRIPTION’s <code>Config/DOI</code> when the package has one. It has none yet, so the citation is unchanged.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.7" id="knowledge-047">knowledge 0.4.7<a class="anchor" aria-label="anchor" href="#knowledge-047"></a></h2>
 <ul><li>The README is rewritten to the README convention (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/75" class="external-link">#75</a>). It says what knowledge is and the thresholds it tunes for link’s habitat models, maps chinook rearing in the Bulkley under link’s <code>default</code> rule and the tuned rule (<code>data-raw/readme_figure.R</code>), shows how to install the package and reach the published FDIS data, and reads <code>data/thresholds.csv</code> in a short example. DESCRIPTION’s title and description say the same. The package gains a hex sticker, a citation (<code>citation("knowledge")</code>, and <code>CITATION.cff</code> kept current by a workflow) and <code>inst/NOTICE.md</code>, which names each outside data source with its terms; the terms of the PSCIS layers and the EcoCat- and bcfishpass-derived files are open in <a href="https://github.com/NewGraphEnvironment/knowledge/issues/76" class="external-link">#76</a>. <code><a href="../reference/knw_compare_map.html">knw_compare_map()</a></code>’s <code>title</code> is documented as what it does: it names the interactive page and the message when nothing is drawn, and the static map draws none.</li>
