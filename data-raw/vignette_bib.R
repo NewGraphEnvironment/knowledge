@@ -41,7 +41,8 @@ if (!setequal(got, keys)) {
 names(entries) <- got
 entries <- gsub("\n  (file|abstract|keywords|urldate|origdate) = \\{[^\n]*\\},?(?=\n)", "", entries, perl = TRUE)
 entries <- gsub("(\n  date = \\{[0-9-]{4,10})T[^}]*\\}", "\\1}", entries, perl = TRUE)
-if (any(grepl("/Users/|file = ", entries))) stop("a local path is left in an entry")
+# any field whose value starts with / is a local path (urls and dois are https)
+if (any(grepl("file = |= \\{/", entries))) stop("a local path is left in an entry")
 
 # ---- versions from the run ------------------------------------------------------------------------
 v <- readRDS("inst/vignette-data/chinook_rearing.rds")$meta$versions
