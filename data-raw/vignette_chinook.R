@@ -214,7 +214,8 @@ grid$accessible <- TRUE
 gr <- knw_grade(cr, grid, cols = c(size = "size", grad = "gradient", dist = "dist_m"))
 out$surface <- tibble::as_tibble(grid[c("size", "dist_m", "gradient")]) |> mutate(rate = gr$grades$rate)
 if (anyNA(out$surface$rate)) stop("the surface has missing rates")
-stopifnot(lengths(out$meta$versions) == 1, nzchar(unlist(out$meta$versions)))
+# a ledger read all-character gives NA for an empty note, and nzchar(NA) is TRUE
+stopifnot(lengths(out$meta$versions) == 1, !is.na(unlist(out$meta$versions)), nzchar(unlist(out$meta$versions)))
 out$meta$curve_ref <- list(gradient = grad_ref, dist_cap_m = cr$dist_cap_m, size = rec_row$size_min,
                            q = cr$q, log_area = cr$ref$log_area, data_set = cr$ref$data_set, era = cr$ref$era)
 

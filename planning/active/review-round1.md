@@ -33,16 +33,12 @@
 
 ## Findings
 
-- **[security] planning/active/findings.md:101, planning/active/task_plan.md:53**: a home path,
-  `` a local folder ``. CLAUDE.md, "One discipline": from 2026-10-16, `planning/` carries "no client or project
-  identifiers and no home paths", and these lines were written on 2026-10-20 in a repo being prepared to go public.
-  Describe the folder in words (for example, "the source PDFs held locally"), or leave the location out.
+- **[security] planning/active/findings.md:101, planning/active/task_plan.md:53**: a home path. CLAUDE.md, "One
+  discipline": from 2026-10-16, `planning/` carries no home paths. Describe the location in words, or leave it out.
 
-- **[security] planning/active/findings.md:110 and :146**: "key injected from the environment per command" and
-  "injected per command with the environment". CLAUDE.md's top rule says no tracked file carries
-  credential-store references. The `planning/` exception covers "what was removed, hosts and our other
-  repositories", not credential handling. No item or vault is named, so this is a lesser case than the home path.
-  Still, it records how the Zotero key reaches the shell. Say "the key from the environment", or drop the clause.
+- **[security] planning/active/findings.md:110 and :146**: a credential-store reference (how the Zotero key reached
+  the shell). CLAUDE.md's top rule keeps such references out of tracked files; the `planning/` exception does not
+  cover them. Say the key came from the environment, or drop the clause.
 
 - **[fragile] data-raw/vignette_bib.R:70 and :73**: the new title `t` (taken from Zotero's title) is passed as the
   replacement in `sub(..., new, e, perl = TRUE)`. R parses backslashes in a replacement string, so any LaTeX escape

@@ -284,7 +284,7 @@ knw_compare_mapgl <- function(segments, water = NULL, title = "", background = c
     if (has("water_ha")) wa <- ifelse(is.na(seg$water_ha), wa, paste0(wa, ", ", signif(seg$water_ha, 3), " ha"))
     add("Water", "wa", wa)
   }
-  if (has("mad")) add("Average flow (m³/s)", "q", txt(seg$mad, sig2))
+  if (has("mad")) add("Average flow (m\u00b3/s)", "q", txt(seg$mad, sig2))
   if (has("channel_width")) add("Channel width (m)", "w", txt(seg$channel_width, sig2))
   pct1 <- function(v) formatC(100 * v, format = "f", digits = 1)
   if (has("gradient")) add("Gradient (%)", "g", txt(seg$gradient, pct1))
