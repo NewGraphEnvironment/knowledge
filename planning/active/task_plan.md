@@ -50,7 +50,7 @@ article in plain words with the 1.96 table and a bibliography, an interactive Bu
 - [x] New subcollection `statistics/model_selection`; add Chen & Yang 2021 (DOI 10.3390/stats4040051), Bengio &
       Grandvalet 2004 (JMLR 5), Bates et al. 2024 (JASA, DOI 10.1080/01621459.2023.2197686), Hastie et al. 2009
       (ESL 2nd ed., DOI 10.1007/978-0-387-84858-7), Breiman et al. 1984 (metadata only), metadata from CrossRef or
-      the publisher, no hand-written abstracts; attach the PDFs held in a local folder where each is the work
+      the publisher, no hand-written abstracts; attach the PDFs held locally where each is the work
       itself (check the ESL file is more than its table of contents)
 - [x] `software`: glmnet (Friedman, Hastie & Tibshirani 2010, JSS, as `citation("glmnet")` gives it); link, fresh,
       wet, flooded from each `CITATION.cff`; stac_floodplains_bc (no `CITATION.cff`: from its DESCRIPTION/README)

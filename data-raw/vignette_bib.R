@@ -70,7 +70,10 @@ for (x in ver) {
   t <- if (grepl("^[^:]+: ", t) && !grepl("/", t)) sub("^[^:]+: ", paste0("{", x$title, "}: "), t) else paste0("{", x$title, "}")
   if (!is.null(x$version) && grepl("\\s", x$version)) stop(x$key, ": a version with a space prints as 'Versions'")
   new <- if (is.null(x$version)) sprintf("\n  title = {%s},", t) else sprintf("\n  title = {%s},\n  version = {%s},", t, x$version)
-  e <- sub("\\n  title = \\{[^\\n]*\\},(?=\\n)", new, e, perl = TRUE)
+  # spliced by position: as a sub() replacement the new text would lose its backslashes (a title's \\& or \\_)
+  at <- regexpr("\\n  title = \\{[^\\n]*\\},(?=\\n)", e, perl = TRUE)
+  if (at < 0) stop(x$key, ": no title line")
+  e <- paste0(substr(e, 1, at - 1), new, substr(e, at + attr(at, "match.length"), nchar(e)))
   entries[[x$key]] <- e
 }
 
