@@ -114,7 +114,7 @@ Three readings across the table:
 
 ### At 1.96 SE (#79, 2026-10-20)
 
-One standard error is a rule of thumb, not a test. Its sources are Breiman et al. 1984, who proposed it for pruning trees; Hastie, Tibshirani & Friedman 2009, pp. 61 and 244, whose only rationale is that the curve "is estimated with error, and hence takes a conservative approach". Chen & Yang (2021, §6) find "no evidence
+One standard error is a rule of thumb, not a test. Its sources are Breiman et al. 1984, who proposed it for pruning trees, as cited in Chen & Yang 2021, §1.3, since no copy is held; Hastie, Tibshirani & Friedman 2009, pp. 61 and 244, whose only rationale is that the curve "is estimated with error, and hence takes a conservative approach". Chen & Yang (2021, §6) find "no evidence
 confirming that the 1se rule can consistently outperform the regular CV", with an SE that can be off by 100 % either
 way; no unbiased estimator of K-fold cross-validation's variance exists (Bengio & Grandvalet 2004), and the usual
 estimate is too small (Bates, Hastie & Tibshirani 2024). The threshold was fixed before the run and is kept. Replayed

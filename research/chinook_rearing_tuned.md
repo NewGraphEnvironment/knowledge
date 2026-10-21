@@ -252,7 +252,7 @@ narrower population before any fit, for two reasons:
   ties to the lower score. Each component is also reported as a **profile**: for each value, the best score over
   every other component.
 - **Decision rule, fixed before the run.** If `default` is in the region, it is the pick. One SE is a parsimony rule of
-  thumb (Breiman et al. 1984, who proposed it for pruning trees; Hastie, Tibshirani & Friedman 2009, pp. 61 and 244, whose only rationale is that the curve "is estimated with error, and hence takes a conservative approach"), not a boundary of noise; `habitat_thresholds_tuned.md`, "At 1.96 SE", gives its sources and
+  thumb (Breiman et al. 1984, who proposed it for pruning trees, as cited in Chen & Yang 2021, §1.3, since no copy is held; Hastie, Tibshirani & Friedman 2009, pp. 61 and 244, whose only rationale is that the curve "is estimated with error, and hence takes a conservative approach"), not a boundary of noise; `habitat_thresholds_tuned.md`, "At 1.96 SE", gives its sources and
   the picks under a stricter bar (#79).
 - **Honesty and stability.**
   - Nested selection: the pick is chosen on four folds and scored on the fifth.
