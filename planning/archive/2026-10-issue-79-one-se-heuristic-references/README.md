@@ -42,4 +42,20 @@ only its 0.75 m³/s flow floor (back to 5.49 % and no near-a-river allowance). T
 
 `planning/archive/2026-10-issue-79-one-se-heuristic-references/review-*.md` (the plan review and three code-check rounds).
 
+## After the PR opened (2026-10-21)
+
+- **Citations checked against the sources.** cred's audit (`crd_aud_write()` then `crd_aud_verify_all()`) matched a
+  passage for each of the four held papers, but each was unrelated to the claim (the extractor cuts a claim at the
+  Rmd's line breaks), so every claim was checked by hand against the PDFs' text. Three corrections: Breiman et al.
+  1984 is cited "as cited in" Chen & Yang 2021 (§1.3; no copy held); Chen & Yang find no evidence the rule
+  "consistently" outperforms plain CV (the article had dropped the word), and it often does better at variable
+  selection; the standard error can also be too large (Chen & Yang §6: up to 100 % either way). Hastie et al.
+  pp. 61 and 244, Bengio & Grandvalet's abstract and Bates et al. §1 support the rest as written.
+- **No search store for the papers.** `crd_store_build(collection = "model_selection")` aborts on the ESL book (a chunk
+  over the embedding model's context, HTTP 400) and skips the Bates arXiv PDF (`Embedded NUL in string`); filed as
+  NewGraphEnvironment/cred#35. No partial store was pushed.
+- **The line-graph figure is back**, marking each dial's values as close calls at one SE and at 1.96, and the 1.96
+  table is chinook only (Al: "it is a ch article"); `thresholds.csv`'s `rule_196` carries every species. Article 1,352
+  words.
+
 Closed by: PR #82
