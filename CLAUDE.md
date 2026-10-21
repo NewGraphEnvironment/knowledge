@@ -24,7 +24,14 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
 - `vignettes/chinook_rearing.Rmd` — the pkgdown article on the chinook rearing threshold (#62). It reads
   `inst/vignette-data/`, which `data-raw/vignette_chinook.R` writes from the tune and compare tables and the
   database; rerun that script after any `0320`/`0330` rerun, because `tests/testthat/test-vignette-data.R` fails
-  when a tracked source's md5 moves. Every number in its prose is computed inline from those files.
+  when a tracked source's md5 moves. Every number in its prose is computed inline from those files. Its references
+  are `vignettes/chinook_rearing.bib`, which `data-raw/vignette_bib.R` writes from the group library through Better
+  BibTeX (Zotero must be running): rerun it after any citation change. It refuses a key Zotero does not return, strips
+  each entry's local attachment path, and sets software versions from the run's ledger, one token each, because
+  citeproc prints a version with a space as "Versions …". Its map is interactive only when pkgdown builds the site
+  (`IN_PKGDOWN`), on Esri's World Topographic Map. Check a cited
+  claim against the PDF's text: cred's `crd_aud_verify_all()` cuts each claim at the Rmd's line breaks and matches
+  unrelated passages (#79).
 - `scripts/` — the run order (`scripts/README.md`), calling the package (`pkgload::load_all()` from
   the root) and `cred`. Legacy literals in scripts are fixed forward as they are touched.
 - `data/<wsg>/` — per-group snapshots (csv/md) and small spatial deliverables (gpkg/kml). Tracked.
