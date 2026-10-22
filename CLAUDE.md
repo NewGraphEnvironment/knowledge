@@ -324,6 +324,26 @@ every `PG*`, `AWS_*` and `GITHUB_PAT`. The symptom accuses the database
 (`invalid integer value "NA" for connection option "port"`); the positive control is running the
 same command from `~`. `cred.store_source` belongs in `.Rprofile`, which is why it is there.
 
+### Report a result as a plain-language walk, with the specification below it
+
+Lead a modelling result with a plain-language walk (what link does now, what was asked, how it was judged, what was
+chosen and why) and a before/after table, then the caveats. For a species, open with its life-history expectation,
+then the evidence, then the recommendation, and name what the recommendation is not. Keep the specification below,
+not instead.
+
+**Why:** the `research/` files are specifications for whoever did the work; the adopter decides one species at a
+time, prior first. Al found `research/habitat_thresholds_tuned.md`'s Method and tie-break "hard to digest"
+(2026-10-18), which is what #62, #63 and #64 answer.
+
+### A pointer to another issue goes in that issue's body, not a comment
+
+Write a dependency, a "blocked by", a "folded into" or an owed step into the target issue's body, as a task or a
+line in its plan, and delete a pointer comment once its content is in the body. Reserve comments for discussion.
+
+**Why:** comments get missed (Al, 2026-10-20). This is stricter than the shared convention ("Issue bodies get edited,
+not appended"), which still allows a comment for a cross-repo pointer. A pointer from a public repo names no private
+one.
+
 <!-- BEGIN SOUL CONVENTIONS — DO NOT EDIT BELOW THIS LINE -->
 
 
