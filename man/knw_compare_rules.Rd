@@ -17,7 +17,10 @@ knw_compare_rules(
   visit_species = NULL,
   scratch = "knw_compare_scratch",
   n_boot = 200L,
-  seed_boot = 542L
+  seed_boot = 542L,
+  structures = NULL,
+  tuned_as = "door",
+  config_sha = NA_character_
 )
 }
 \arguments{
@@ -34,13 +37,14 @@ knw_compare_rules(
 \item{groups}{\code{character} watershed groups to compare.}
 
 \item{link_dir}{\code{character(1)} a directory holding link's \code{configs/default}
-files at the run's commit: \code{parameters_habitat_thresholds.csv},
-\code{rules.yaml}, \code{parameters_fresh.csv}, \code{overrides/user_habitat_classification.csv}.}
+files: \code{parameters_habitat_thresholds.csv}, \code{rules.yaml},
+\code{parameters_fresh.csv}, \code{overrides/user_habitat_classification.csv}, and,
+read when present, \code{parameters_habitat_method.csv} and \code{dimensions.csv}.}
 
 \item{grades}{the species × stage grade table \code{\link[=knw_grade_species]{knw_grade_species()}} wrote
 (\code{id_segment}, \code{watershed_group_code}, \code{size}, \code{dist_m}, \code{grade},
-\code{grade_class}), for the MAD with parent fallback, the exception distance
-and the graded km.}
+\code{grade_class}, and \code{target_in_group} when the table carries it), for the
+MAD with parent fallback, the exception distance and the graded km.}
 
 \item{visits, visit_species}{the build's \code{visits_link} and \code{visits_species}
 tables, for the FDIS detection check (\code{NULL} to skip).}
@@ -48,13 +52,23 @@ tables, for the FDIS detection check (\code{NULL} to skip).}
 \item{scratch}{\code{character(1)} the scratch schema (dropped at the end).}
 
 \item{n_boot, seed_boot}{the bcfishobs lift's bootstrap.}
+
+\item{structures}{\code{NULL} (chosen as above) or a subset of \code{c("free", "door", "door_wetland")}.}
+
+\item{tuned_as}{\code{character(1)} the structure reported as \code{tuned}.}
+
+\item{config_sha}{\code{character(1)} the link commit \code{link_dir} was read at,
+carried on every output row (\code{NA} when unknown).}
 }
 \value{
-A list of \code{tibble}s: \code{compare} (per group and total: km by rule,
-graded km, km by grade class, gained and lost), \code{change} (km gained and lost
-by reason and stream order), \code{checks} (FDIS detection on each rule's
-segments and the bcfishobs lift), \code{segments} (the per-segment flags under
-each rule, for maps), and \code{log} lines.
+A list of \code{tibble}s: \code{compare} (per structure, group and total: km by
+rule, graded km, km by grade class, gained and lost, and the km gained by an
+exception whose river lies in another watershed group), \code{change} (km gained
+and lost by structure, reason and stream order), \code{checks} (FDIS detection on
+each rule's segments and the bcfishobs lift, per structure), \code{segments} (the
+per-segment flags under \code{default} and each structure, with \code{tuned} the
+\code{tuned_as} structure, and the \code{default} branch each segment lies on), and
+\code{log} lines.
 }
 \description{
 \code{scripts/0298}'s comparison for any species and stage. Each rule goes through
@@ -70,23 +84,47 @@ spawning together, because the connectivity pass reads spawning. Regenerated
 \code{default} is reported against the stored flags, never compared to them.
 }
 \details{
-\code{default}'s predicate is \code{fresh::frs_habitat_predicates()} on link's
-\code{configs/default}. A tuned rule is the same predicate with its gradient maximum
-and, under a width rule, its width floor substituted, and with the stream
-branch's size test replaced: a stream-branch segment (a stream edge in no river
-polygon, wetland of at least 1 ha or lake of at least 100 ha) is in when its
-gradient is inside the maximum and either the size test holds (width, or MAD at
-least the floor) or a river of the rule's \code{exc_q} lies within \code{exc_d} m
-downstream (\code{dist_m}, walked from the segment's downstream end by
-\code{\link[=knw_grade_species]{knw_grade_species()}}). The river, wetland and lake branches stay fresh's. When
-a tuned rule equals \code{default} the injected form must equal fresh's own
-predicate on every segment, which the call asserts.
+\code{default}'s predicate is \code{fresh::frs_habitat_predicates()} on the \code{configs/default}
+in \code{link_dir}, under each group's size model (\code{parameters_habitat_method.csv};
+\code{cw} where a group is not listed). Since link 0.67.0 a rule can carry a
+near-river pair (a river of at least some size within some distance
+downstream, fresh#263), so where the species' rules resolve to one, the pairs
+are walked on the scratch copy with \code{fresh::frs_near_river()} first, exactly
+as \code{frs_habitat_classify()} walks them, and the predicate reads that table.
+
+A tuned rule is the same predicate with its gradient maximum and, under a
+width rule, its width floor substituted, and with two branches replaced by the
+rule's own tests, in one of three \strong{structures} (#73, link#364):
+\itemize{
+\item on the \strong{stream branch} (a stream edge in no river polygon, wetland of at
+least 1 ha or lake of at least 100 ha), a segment is in when its gradient is
+inside the maximum and either the size test holds (width, or MAD at least
+the floor) or the exception does: a river of the rule's \code{exc_q} lies within
+\code{exc_d} m downstream (\code{dist_m}, walked from the segment's downstream end to
+the river's bank by \code{\link[=knw_grade_species]{knw_grade_species()}}), on a segment with a local
+watershed code, the only segments link's own walk measures;
+\item on \strong{through-wetland lines} (FWA edge types 1050 and 1150) the structures
+differ: \code{free} keeps the free pass link's \code{default} gave them before 0.67.0
+(in, with no test, inside a wetland of at least 1 ha); \code{door} puts them
+through the stream branch's door, size or exception (link's
+\code{rear_near_river = both}); \code{door_wetland} puts them through the door with the
+exception while the stream branch keeps the size test alone (link's
+\code{wetland_flow}, \code{default}'s choice for chinook).
+The river, wetland-polygon and lake branches stay fresh's. A species whose
+\code{default} has no through-wetland rule (grayling) is compared under \code{door} alone,
+with those lines out as \code{default} has them; one whose tuned rule carries no
+exception under \code{free} and \code{door}, since \code{door_wetland} would equal \code{door};
+otherwise under all three. The structure named \code{tuned_as} is also reported as
+\code{tuned}, the name the maps and the article read. When a tuned rule under \code{door}
+equals \code{default} and \code{default} resolves no pair, the injected form must equal
+fresh's own predicate on every segment, which the call asserts.
+}
 }
 \examples{
 \dontrun{
 pg <- function() DBI::dbConnect(RPostgres::Postgres(), bigint = "numeric")
 cmp <- knw_compare_rules(pg, "fresh_default", "CH", "rear", pick, c("BULK", "MORR"),
                          link_dir, grades)
-cmp$compare
+cmp$compare[cmp$compare$watershed_group_code == "ALL", ]
 }
 }

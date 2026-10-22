@@ -26,7 +26,9 @@
 #     picked counts per source are ledgered; which build the table holds is wet_db_load()'s to
 #     assert (it filters the manifest's rows on load, so a row count cannot be compared here).
 #   - WALKS from every placed visit's own point (not the segment start), all sizes in q_grid on
-#     every source; the positive control against 0294's one-size walk is a test, not repeated here.
+#     every source, to the river's bank with every hop's gap counted (#73; fresh 0.42.0's convention, checked
+#     against its walk by data-raw/walk_bank_check.R); the positive control against 0294's one-size walk is a
+#     test, not repeated here.
 #   - HYDROLOGIC ZONE from the BC catalogue zip, placed by the visit's FWA segment midpoint
 #     (0296's method, unchanged).
 #   - Every drop is a ledger row, and the drops and kept rows partition the input.
@@ -201,6 +203,11 @@ w <- knw_link_walks(pg, starts, q_grid = q_grid, sources = sources, workers = n_
 add("info", "walk_starts", nrow(starts),
     sprintf("x %d sources x %d sizes; %.1f min on %d workers", length(sources), length(q_grid),
             as.numeric(difftime(Sys.time(), t0, units = "mins")), n_workers))
+# the walk's convention (#73): to the river's bank, every hop's gap counted; bank_m is what the bank rule took off
+add("info", "walk_convention", 0, "bank: the distance ends at the river's bank and counts every hop's gap (fresh 0.42.0's rule, #73)")
+add("info", "walk_bank_m_positive", sum(w$status == "found" & w$bank_m > 0),
+    sprintf("of %d found rows; median %.1f m, 90th percentile %.1f m", sum(w$status == "found"),
+            median(w$bank_m[w$status == "found" & w$bank_m > 0]), quantile(w$bank_m[w$status == "found" & w$bank_m > 0], 0.9)))
 for (s in sources) for (st_ in sort(unique(w$status))) {
   add("info", sprintf("walk_%s_%s", s, st_), sum(w$src == s & w$status == st_), "rows, all sizes")
 }

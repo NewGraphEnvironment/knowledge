@@ -81,6 +81,16 @@ rule; the class `bank_jump` now separates these from a true rule difference (`ba
 20 km cap against our uncapped walk. Our walk's `bank_m` is positive on 67 % of found starts: median 31.8 m, 90th
 percentile 66.1 m, largest 599 m (against #65's connector estimate, median 14–88 m). 2,460 starts walked in 4.7 s.
 
+## The comparison smoke on ADMS and BULK (2026-10-22, old grades and pick, link 0.67.0 configs at 67a410e)
+
+CH rearing, 3.6 min for 2 groups × 4 rules (near-river walks 0.8 min). `default` under 0.67.0 (the door on through-wetland
+lines, CH's 15 m pair on them) is 588.7 km on ADMS and 2,096.4 on BULK against 588.9 and 2,123.0 under the run's `default`:
+the door took 26.8 km of through-wetland CH rearing off the two groups. The `free` structure gives 608.304 and 1,608.110
+km, #65's tuned km to the metre, so T1 is the structure `CH_rear_v1` was scored and compared under. Through-wetland CH km
+on the two groups: `default` 184.4 (216.9 before connectivity), `free` 205.8, `door` 45.9, `door_wetland` 43.6. The
+bcfishobs lift (40 locations on accessible stream edges): default 2.63, free 3.72, door 3.72, door_wetland 4.06.
+`gained_exception_other_group_km` reads 0 because the old grade tables carry no `target_in_group`; the regrade will.
+
 ## Errors Encountered
 
 | Error | Resolution |

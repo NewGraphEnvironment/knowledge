@@ -90,13 +90,18 @@ knw_tune_grid <- function(thresholds, stage = c("rear", "spawn"),
   def_var <- if (!is.na(w_def)) "width" else "mad"
   def_min <- if (!is.na(w_def)) w_def else m_def
   g$departures <- as.integer((g$size_var != def_var | g$size_min != def_min) + (g$grad_max != g_def) + !is.na(g$exc_q))
-  g$departures_flow <- if (is.na(m_def)) NA_integer_ else {
-    as.integer((g$size_var != "mad" | g$size_min != m_def) + (g$grad_max != g_def) + !is.na(g$exc_q))
+  g$departures_flow <- NA_integer_
+  if (!is.na(m_def)) {
+    g$departures_flow <- as.integer((g$size_var != "mad" | g$size_min != m_def) + (g$grad_max != g_def) +
+                                      !is.na(g$exc_q))
   }
   g$is_default <- g$departures == 0L
   if (sum(g$is_default) != 1L) stop("the grid holds ", sum(g$is_default), " default rules", call. = FALSE)
-  g$is_link_tuned <- if (is.na(m_x)) FALSE else g$size_var == "mad" & g$size_min == m_x & g$grad_max == g_x & is.na(g$exc_q)
-  if (!is.na(m_x) && sum(g$is_link_tuned) != 1L) stop("the grid holds ", sum(g$is_link_tuned), " link_tuned rules", call. = FALSE)
+  g$is_link_tuned <- FALSE
+  if (!is.na(m_x)) {
+    g$is_link_tuned <- g$size_var == "mad" & g$size_min == m_x & g$grad_max == g_x & is.na(g$exc_q)
+    if (sum(g$is_link_tuned) != 1L) stop("the grid holds ", sum(g$is_link_tuned), " link_tuned rules", call. = FALSE)
+  }
   g$rule <- sprintf("%s>=%g|g<=%g|%s", g$size_var, g$size_min, g$grad_max,
                     ifelse(is.na(g$exc_q), "none", sprintf("Q%g@D%g", g$exc_q, g$exc_d)))
   tibble::as_tibble(g[, c("rule", "size_var", "size_min", "grad_max", "exc_q", "exc_d", "departures", "departures_flow",

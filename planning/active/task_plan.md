@@ -124,21 +124,21 @@ in this repo has moved since.
 
 `R/compare_rules.R`, `scripts/0330-compare.R`, `R/thresholds_table.R`.
 
-- [ ] `knw_compare_rules()` reads link's configs at `config_sha` (default: `LINK_REPO`'s `origin/main` at run time,
+- [x] `knw_compare_rules()` reads link's configs at `config_sha` (default: `LINK_REPO`'s `origin/main` at run time,
       recorded in the log and `compare.csv`); for a `default` rule carrying `near_river`, join wet's pick as `mad_m3s`
       on the scratch copy, walk the rule's pairs with `frs_near_river()` and pass `near_river_table` to
       `frs_habitat_predicates()`
-- [ ] One-time check (before the baseline moves): `default` at the run's `link_sha` regenerated equals #65's
+- [x] One-time check (before the baseline moves): `default` at the run's `link_sha` regenerated equals #65's
       `compare.csv` `default` km per group for every key; logged
-- [ ] The tuned predicate takes a `structure` argument: T1 (free pass on 1050/1150, pair on stream lines), T2 (door,
+- [x] The tuned predicate takes a `structure` argument: T1 (free pass on 1050/1150, pair on stream lines), T2 (door,
       pair on stream and 1050/1150 lines), T3 (door, pair on 1050/1150 only); the exception applies only where
       `localcode_ltree` is present; km passing only through a river in another group counted (`large_lfid`'s group)
-- [ ] `0330` runs `default` + T1 + T2 (+ T3 where the rule has an exception) per key; `compare.csv`, `change.csv` and
+- [x] `0330` runs `default` + T1 + T2 (+ T3 where the rule has an exception) per key; `compare.csv`, `change.csv` and
       `checks.csv` carry a `structure` column; the default run draws nothing and skips the floodplain (`STAGE=maps`
       keeps both); one GeoPackage per key under `data/compare/gpkg/` (ignored) with each segment's verdict under each
       rule and structure, class, grade, size, width, gradient, walked distance, stream order and the link branch that
       kept it (#81's data part)
-- [ ] `knw_thresholds_table()` fills `link_parameter` for `exception_q` and `exception_d`, adds `river_measure =
+- [x] `knw_thresholds_table()` fills `link_parameter` for `exception_q` and `exception_d`, adds `river_measure =
       discharge`, `rule_flow` and `rule_flow_196` (the flow-start picks); the recommended scope of the pair is a
       judgement made after the comparison and goes in the research files and link#346's body, not the table (plan
       review O1); `test-thresholds_table.R` pins it

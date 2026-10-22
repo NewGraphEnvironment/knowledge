@@ -31,8 +31,11 @@ watershed group the rule was scored on), both \code{tibble}s.
 One row per species × stage × component of the joint pick, in the columns
 link's calibration reads (link#346): \code{rule_id} ties the components of one
 rule; \code{link_parameter} is the column of link's \code{parameters_habitat_thresholds.csv}
-the value fills, where one exists (the near-a-river exception has none in link
-and is \code{NA}); \code{model} says whether the size test is a width (\code{cw}) or a MAD
+the value fills: since link 0.67.0 (fresh 0.42.0) the near-a-river exception
+fills \verb{<stage>_river_discharge_min} and \verb{<stage>_river_distance_max}, with
+\code{river_measure = discharge} saying which of fresh's three measures of a river
+the value is in (link converts to width where a group sizes streams by width);
+\code{model} says whether the size test is a width (\code{cw}) or a MAD
 (\code{mad}) floor; \code{range_lo} and \code{range_hi} are the smallest and largest value of
 the component among the rules inside the one-SE region on the main reading;
 \code{readings_in} is the number of fold seeds (the main one and the extra seeds) in
@@ -40,7 +43,10 @@ whose region the recommended rule sits, of \code{readings}; \code{rule_196} is t
 the same pick makes from a region 1.96 standard errors wide
 (\code{\link[=knw_tune_repick]{knw_tune_repick()}}), and \code{holds_196} is \code{TRUE} where that rule keeps the
 row's value (a size row also needs the same size variable; a component the
-recommended rule lacks holds when the 1.96 rule lacks it too). A species × stage that
+recommended rule lacks holds when the 1.96 rule lacks it too). \code{rule_flow} and
+\code{rule_flow_196} are the same picks read from link's flow version of \code{default}
+as the starting point (#80; \code{NA} on a table scored before that, or for a
+species whose \code{default} has no MAD floor). A species × stage that
 was not fitted (no stream rule, no response, too few groups) gets one row
 per stage with \code{status} saying why and no values.
 }

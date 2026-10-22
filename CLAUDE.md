@@ -65,8 +65,10 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   per-rule scores and curves (its grade tables and fitted curves are ignored), `data/compare/` the comparison
   tables (its catalog cache and interactive maps ignored), `data/publish/` the Parquet sets (ignored).
   `data/tune/grad_ext/` and `data/compare/grad_ext/` hold `0322`'s CH rearing run on a gradient ladder extended to
-  30 % (#67); nothing that publishes reads them, because `0325`, `0330` and `knw_thresholds_table()` list their
-  directories non-recursively.
+  30 % (#67, on the evidence build before #73; the main run carries that ladder for every species since #68);
+  nothing that publishes reads them, because `0325`, `0330` and `knw_thresholds_table()` list their directories
+  non-recursively. `data/compare/gpkg/` (ignored) holds one GeoPackage per species × stage from `0330`, the
+  comparison's view for QGIS (#81).
 - `data/rag/` — ignored local cache of the ragnar stores. Source of truth is `s3://fresh-bc/rag/` (not public).
 - `data/fdis/` — ignored cache of the FDIS export (`0230` syncs it) and of the visit tables built from it
   (`data/fdis/derived/`; `0299` builds them as `knowledge/fdis/v3`, which is not yet uploaded (`v2` is the
@@ -301,8 +303,14 @@ Before comparing two runs that read flows, read the table comment
 check to fail when it differs. `0325` publishes the comment as `discharge_load_at_publish`; recording it at grading
 time is #72.
 
-The walk (`inst/sql/ch_dist_profile.sql`) measures distance to a double-line river's centreline, through the
-tributary's connector (edge 1450), not to its bank (#65's Limits in `research/habitat_thresholds_tuned.md`; #73).
+The walk (`inst/sql/ch_dist_profile.sql`) ends at a double-line river's bank, by fresh 0.42.0's rule (#73): a
+connector (edge 1400/1450) is never a target, the connector run and the jump's crossing inside the target's polygon
+are left out, and every other hop's gap counts. It differs from fresh's `frs_near_river()` in what it is for, not
+in the rule: it walks seven river sizes on three flow sources in one pass, uncapped, across watershed-group outlets,
+and from any point (a visit's own; the grade starts it at a segment's downstream end). `data-raw/walk_bank_check.R`
+is the check against fresh's walk on one group (BULK, 2026-10-22: 0 of 2,460 starts differ by the bank rule; the
+`path` class is the two walks' entry conventions, fresh by local code, ours by nearest point). `scripts/sql/` keeps
+#54's centreline walk for the frozen `0298`.
 
 ### Database access
 

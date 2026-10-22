@@ -86,8 +86,9 @@ knw_link_walks <- function(connector, starts, q_grid = c(1, 3, 5, 10, 20, 30, 50
   if (nrow(w) != n_expect) stop("walks returned ", nrow(w), " rows, expected ", n_expect, call. = FALSE)
   out <- tibble::as_tibble(w)
   out$blue_line_key <- as.numeric(out$blue_line_key)
-  for (col in c("qmin", "dist_m", "large_mad", "large_lfid", "large_waterbody_key", "max_entry_gap_m",
-               "dist_centre_m", "bank_m")) {
+  num_cols <- c("qmin", "dist_m", "large_mad", "large_lfid", "large_waterbody_key", "max_entry_gap_m", "dist_centre_m",
+                "bank_m")
+  for (col in num_cols) {
     out[[col]] <- as.numeric(out[[col]])
   }
   out$large_edge <- as.integer(out$large_edge)

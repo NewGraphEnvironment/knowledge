@@ -82,7 +82,8 @@ knw_tune_run <- function(visits, species_tbl, walks, thresholds, species = knw_s
   out <- list()
   for (sp in species) {
     thr <- thresholds[thresholds$species_code == sp, , drop = FALSE]
-    thx <- if (is.null(thresholds_extra)) NULL else thresholds_extra[thresholds_extra$species_code == sp, , drop = FALSE]
+    thx <- NULL
+    if (!is.null(thresholds_extra)) thx <- thresholds_extra[thresholds_extra$species_code == sp, , drop = FALSE]
     if (!is.null(thx) && nrow(thx) != 1L) thx <- NULL
     st <- species_tbl[species_tbl$species_code == sp, c("site_visit", "present", "status", "in_range")]
     bcol <- paste0("barrier_dnstr_", tolower(sp))

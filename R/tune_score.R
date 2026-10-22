@@ -142,7 +142,9 @@ knw_tune_score <- function(d, rule_in, grid, resp = "U", seed = 54L, folds = 5L,
       s <- .tune_sel(sw$Sw, sample.int(nw, nw, replace = TRUE))
       reg_n <- reg_n + (s$region & sw$conv)
       recs[b] <- .tune_pick(s, col, sw$conv, grid, d_floor)[["recommended"]]
-      if (flow_start) recs_flow[b] <- .tune_pick(s, col, sw$conv, grid, d_floor, dep = grid$departures_flow)[["recommended"]]
+      if (flow_start) {
+        recs_flow[b] <- .tune_pick(s, col, sw$conv, grid, d_floor, dep = grid$departures_flow)[["recommended"]]
+      }
     }
     out$rules$boot_region_share <- reg_n[col] / n_boot
     out$rules$boot_rec_share <- tabulate(recs, nrow(grid)) / n_boot

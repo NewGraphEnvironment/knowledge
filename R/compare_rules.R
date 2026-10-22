@@ -12,17 +12,39 @@
 #' spawning together, because the connectivity pass reads spawning. Regenerated
 #' `default` is reported against the stored flags, never compared to them.
 #'
-#' `default`'s predicate is `fresh::frs_habitat_predicates()` on link's
-#' `configs/default`. A tuned rule is the same predicate with its gradient maximum
-#' and, under a width rule, its width floor substituted, and with the stream
-#' branch's size test replaced: a stream-branch segment (a stream edge in no river
-#' polygon, wetland of at least 1 ha or lake of at least 100 ha) is in when its
-#' gradient is inside the maximum and either the size test holds (width, or MAD at
-#' least the floor) or a river of the rule's `exc_q` lies within `exc_d` m
-#' downstream (`dist_m`, walked from the segment's downstream end by
-#' [knw_grade_species()]). The river, wetland and lake branches stay fresh's. When
-#' a tuned rule equals `default` the injected form must equal fresh's own
-#' predicate on every segment, which the call asserts.
+#' `default`'s predicate is `fresh::frs_habitat_predicates()` on the `configs/default`
+#' in `link_dir`, under each group's size model (`parameters_habitat_method.csv`;
+#' `cw` where a group is not listed). Since link 0.67.0 a rule can carry a
+#' near-river pair (a river of at least some size within some distance
+#' downstream, fresh#263), so where the species' rules resolve to one, the pairs
+#' are walked on the scratch copy with `fresh::frs_near_river()` first, exactly
+#' as `frs_habitat_classify()` walks them, and the predicate reads that table.
+#'
+#' A tuned rule is the same predicate with its gradient maximum and, under a
+#' width rule, its width floor substituted, and with two branches replaced by the
+#' rule's own tests, in one of three **structures** (#73, link#364):
+#' - on the **stream branch** (a stream edge in no river polygon, wetland of at
+#'   least 1 ha or lake of at least 100 ha), a segment is in when its gradient is
+#'   inside the maximum and either the size test holds (width, or MAD at least
+#'   the floor) or the exception does: a river of the rule's `exc_q` lies within
+#'   `exc_d` m downstream (`dist_m`, walked from the segment's downstream end to
+#'   the river's bank by [knw_grade_species()]), on a segment with a local
+#'   watershed code, the only segments link's own walk measures;
+#' - on **through-wetland lines** (FWA edge types 1050 and 1150) the structures
+#'   differ: `free` keeps the free pass link's `default` gave them before 0.67.0
+#'   (in, with no test, inside a wetland of at least 1 ha); `door` puts them
+#'   through the stream branch's door, size or exception (link's
+#'   `rear_near_river = both`); `door_wetland` puts them through the door with the
+#'   exception while the stream branch keeps the size test alone (link's
+#'   `wetland_flow`, `default`'s choice for chinook).
+#' The river, wetland-polygon and lake branches stay fresh's. A species whose
+#' `default` has no through-wetland rule (grayling) is compared under `door` alone,
+#' with those lines out as `default` has them; one whose tuned rule carries no
+#' exception under `free` and `door`, since `door_wetland` would equal `door`;
+#' otherwise under all three. The structure named `tuned_as` is also reported as
+#' `tuned`, the name the maps and the article read. When a tuned rule under `door`
+#' equals `default` and `default` resolves no pair, the injected form must equal
+#' fresh's own predicate on every segment, which the call asserts.
 #'
 #' @param connector a function returning a `DBI` connection.
 #' @param schema `character(1)` link persist schema.
@@ -31,32 +53,42 @@
 #' @param tuned one row of the scored grid (the recommended rule).
 #' @param groups `character` watershed groups to compare.
 #' @param link_dir `character(1)` a directory holding link's `configs/default`
-#'   files at the run's commit: `parameters_habitat_thresholds.csv`,
-#'   `rules.yaml`, `parameters_fresh.csv`, `overrides/user_habitat_classification.csv`.
+#'   files: `parameters_habitat_thresholds.csv`, `rules.yaml`,
+#'   `parameters_fresh.csv`, `overrides/user_habitat_classification.csv`, and,
+#'   read when present, `parameters_habitat_method.csv` and `dimensions.csv`.
 #' @param grades the species × stage grade table [knw_grade_species()] wrote
 #'   (`id_segment`, `watershed_group_code`, `size`, `dist_m`, `grade`,
-#'   `grade_class`), for the MAD with parent fallback, the exception distance
-#'   and the graded km.
+#'   `grade_class`, and `target_in_group` when the table carries it), for the
+#'   MAD with parent fallback, the exception distance and the graded km.
 #' @param visits,visit_species the build's `visits_link` and `visits_species`
 #'   tables, for the FDIS detection check (`NULL` to skip).
 #' @param scratch `character(1)` the scratch schema (dropped at the end).
 #' @param n_boot,seed_boot the bcfishobs lift's bootstrap.
-#' @return A list of `tibble`s: `compare` (per group and total: km by rule,
-#'   graded km, km by grade class, gained and lost), `change` (km gained and lost
-#'   by reason and stream order), `checks` (FDIS detection on each rule's
-#'   segments and the bcfishobs lift), `segments` (the per-segment flags under
-#'   each rule, for maps), and `log` lines.
+#' @param structures `NULL` (chosen as above) or a subset of `c("free", "door",
+#'   "door_wetland")`.
+#' @param tuned_as `character(1)` the structure reported as `tuned`.
+#' @param config_sha `character(1)` the link commit `link_dir` was read at,
+#'   carried on every output row (`NA` when unknown).
+#' @return A list of `tibble`s: `compare` (per structure, group and total: km by
+#'   rule, graded km, km by grade class, gained and lost, and the km gained by an
+#'   exception whose river lies in another watershed group), `change` (km gained
+#'   and lost by structure, reason and stream order), `checks` (FDIS detection on
+#'   each rule's segments and the bcfishobs lift, per structure), `segments` (the
+#'   per-segment flags under `default` and each structure, with `tuned` the
+#'   `tuned_as` structure, and the `default` branch each segment lies on), and
+#'   `log` lines.
 #' @export
 #' @examples
 #' \dontrun{
 #' pg <- function() DBI::dbConnect(RPostgres::Postgres(), bigint = "numeric")
 #' cmp <- knw_compare_rules(pg, "fresh_default", "CH", "rear", pick, c("BULK", "MORR"),
 #'                          link_dir, grades)
-#' cmp$compare
+#' cmp$compare[cmp$compare$watershed_group_code == "ALL", ]
 #' }
 knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, link_dir, grades,
                               visits = NULL, visit_species = NULL, scratch = "knw_compare_scratch",
-                              n_boot = 200L, seed_boot = 542L) {
+                              n_boot = 200L, seed_boot = 542L, structures = NULL, tuned_as = "door",
+                              config_sha = NA_character_) {
   chk::chk_function(connector)
   chk::chk_string(schema)
   chk::chk_string(species)
@@ -66,6 +98,7 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
   chk::chk_dir(link_dir)
   chk::chk_data(grades)
   chk::check_names(grades, c("id_segment", "watershed_group_code", "size", "dist_m", "grade", "grade_class"))
+  chk::chk_string(tuned_as)
   if (!requireNamespace("fresh", quietly = TRUE)) stop("fresh is needed", call. = FALSE)
   sp <- toupper(species)
   s <- tolower(species)
@@ -76,65 +109,82 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
   f_rules <- file.path(link_dir, "rules.yaml")
   f_fresh <- file.path(link_dir, "parameters_fresh.csv")
   f_uhc <- file.path(link_dir, "overrides", "user_habitat_classification.csv")
+  f_method <- file.path(link_dir, "parameters_habitat_method.csv")
+  f_dims <- file.path(link_dir, "dimensions.csv")
   for (f in c(f_thr, f_rules, f_fresh, f_uhc)) if (!file.exists(f)) stop("missing ", f, call. = FALSE)
   params <- fresh::frs_params(csv = f_thr, rules_yaml = f_rules)
   if (is.null(params[[sp]])) stop("link's default has no parameters for ", sp, call. = FALSE)
   params_fresh <- utils::read.csv(f_fresh, stringsAsFactors = FALSE)
   uhc <- utils::read.csv(f_uhc, stringsAsFactors = FALSE)
   uhc <- uhc[uhc$species_code == sp, , drop = FALSE]
-  thr <- utils::read.csv(f_thr, stringsAsFactors = FALSE)
-  thr <- thr[thr$species_code == sp, , drop = FALSE]
+  method <- if (file.exists(f_method)) utils::read.csv(f_method, stringsAsFactors = FALSE) else NULL
+  model_of <- function(w) {
+    m <- if (is.null(method)) character() else method$model[method$watershed_group_code == w]
+    if (length(m) == 1L && m %in% c("cw", "mad")) m else "cw"
+  }
+  dims <- if (file.exists(f_dims)) utils::read.csv(f_dims, stringsAsFactors = FALSE) else NULL
   # the species' own branches, from fresh's rule list: the stream rule's edge types, and the river, wetland
   # and lake rules' polygons and area floors (a species without a rule of a type has no such branch)
   br <- .knw_fresh_branches(params[[sp]], stage)
   edge_stream <- br$edge_stream
   flag <- if (stage == "rear") "rearing" else "spawning"
-  pred_of <- function(ps, model = "cw") {
+  other <- if (stage == "rear") "spawn" else "rear"
+  structures <- .knw_compare_structures(br, tuned, structures)
+  if (!tuned_as %in% structures) stop("tuned_as must be one of the structures run: ", paste(structures, collapse = ", "), call. = FALSE)
+
+  # the near-river pairs default's rules resolve to under each model (fresh's own resolver, so the walk is the
+  # one frs_habitat_classify() would make), and the pairs' table on the scratch copy
+  specs_of <- utils::getFromNamespace(".frs_near_river_specs", "fresh")
+  near_tbl <- paste0(scratch, ".near_river")
+  specs <- list(cw = specs_of(params, sp, "cw"), mad = specs_of(params, sp, "mad"))
+  pred_cache <- list()
+  pred_of <- function(ps, model) {
     fresh::frs_habitat_predicates(list(species_code = sp, params_sp = ps, spawn_gradient_min = 0,
-                                       spawn_gradient_max = ps$ranges$spawn$gradient[2]), model)
+                                       spawn_gradient_max = ps$ranges$spawn$gradient[2]), model,
+                                  near_river_table = if (nrow(specs[[model]])) near_tbl else NULL)
   }
-  p_default <- pred_of(params[[sp]])
-  # the tuned rule: off the stream branch, fresh's own predicate with the tuned gradient (and, under a width
-  # rule, the tuned width); on the stream branch, the tuned size test or the exception
+  # the tuned rule's base: fresh's predicate with the tuned gradient (and width), and the through-wetland rule
+  # taken out, because every structure writes that branch itself
   ps_t <- params[[sp]]
   ps_t$ranges[[stage]]$gradient[2] <- tuned$grad_max
   if (tuned$size_var == "width") ps_t$ranges[[stage]]$channel_width <- c(tuned$size_min, 9999)
-  p_tuned_base <- pred_of(ps_t)
-  wb_parts <- c(
-    if (br$river) "SELECT DISTINCT waterbody_key, 'R' AS t FROM whse_basemapping.fwa_rivers_poly",
-    if (!is.null(br$wetland_ha_min)) {
-      sprintf("SELECT DISTINCT waterbody_key, 'W' AS t FROM whse_basemapping.fwa_wetlands_poly WHERE area_ha >= %s",
-              br$wetland_ha_min)
-    },
-    if (!is.null(br$lake_ha_min)) {
-      sprintf("SELECT DISTINCT waterbody_key, 'L' AS t FROM whse_basemapping.fwa_lakes_poly WHERE area_ha >= %1$s
-               UNION SELECT DISTINCT waterbody_key, 'M' AS t FROM whse_basemapping.fwa_manmade_waterbodies_poly
-               WHERE area_ha >= %1$s", br$lake_ha_min)
-    },
-    "SELECT NULL::integer AS waterbody_key, 'none' AS t WHERE FALSE")
-  wb_sql <- paste("CREATE TEMPORARY TABLE IF NOT EXISTS tmp_knw_wb AS", paste(wb_parts, collapse = "\n    UNION "))
-  sb <- if (br$no_waterbody) {
-    sprintf("(s.edge_type IN (%s) AND s.waterbody_key IS NULL)", paste(edge_stream, collapse = ", "))
-  } else {
-    sprintf(paste("(s.edge_type IN (%s) AND NOT coalesce(s.waterbody_key IN",
-                  "(SELECT waterbody_key FROM tmp_knw_wb), FALSE))"),
-            paste(edge_stream, collapse = ", "))
+  ps_t$rules[[stage]] <- Filter(function(r) !.knw_is_wetland_line_rule(r), ps_t$rules[[stage]])
+  preds_for <- function(model) {
+    if (!is.null(pred_cache[[model]])) return(pred_cache[[model]])
+    p_default <- pred_of(params[[sp]], model)
+    p_tuned_base <- pred_of(ps_t, model)
+    size_ok <- if (tuned$size_var == "width") {
+      sprintf("coalesce(s.channel_width BETWEEN %s AND 9999, FALSE)", tuned$size_min)
+    } else {
+      sprintf("coalesce(s.knw_size >= %s, FALSE)", tuned$size_min)
+    }
+    # the exception applies where link's own walk would measure a distance: a segment with a local code
+    ex <- if (is.na(tuned$exc_q)) "FALSE" else {
+      sprintf("(coalesce(s.knw_dist <= %s, FALSE) AND s.localcode_ltree IS NOT NULL)", tuned$exc_d)
+    }
+    grad_ok <- sprintf("coalesce(s.gradient BETWEEN 0 AND %s, FALSE)", tuned$grad_max)
+    door_ex <- sprintf("(%s AND (%s OR %s))", grad_ok, size_ok, ex)
+    door_noex <- sprintf("(%s AND %s)", grad_ok, size_ok)
+    free_wl <- "coalesce(s.waterbody_key IN (SELECT waterbody_key FROM tmp_knw_wb WHERE t = 'W'), FALSE)"
+    arms <- list(
+      free = c(stream = door_ex, wetland = if (br$wetland_line) free_wl else "FALSE"),
+      door = c(stream = door_ex, wetland = if (br$wetland_line) door_ex else "FALSE"),
+      door_wetland = c(stream = door_noex, wetland = if (br$wetland_line) door_ex else "FALSE"))
+    out <- list(default = sprintf("coalesce((%s), FALSE)", p_default[[stage]]),
+                other = sprintf("coalesce((%s), FALSE)", p_default[[other]]))
+    for (st in structures) {
+      out[[st]] <- sprintf("(CASE WHEN %1$s THEN %2$s WHEN s.edge_type IN (1050, 1150) THEN %3$s ELSE coalesce((%4$s), FALSE) END)",
+                           .knw_stream_branch_sql(br, edge_stream), arms[[st]][["stream"]], arms[[st]][["wetland"]],
+                           p_tuned_base[[stage]])
+    }
+    pred_cache[[model]] <<- out
+    out
   }
-  size_ok <- if (tuned$size_var == "width") {
-    sprintf("coalesce(s.channel_width BETWEEN %s AND 9999, FALSE)", tuned$size_min)
-  } else {
-    sprintf("coalesce(s.knw_size >= %s, FALSE)", tuned$size_min)
-  }
-  ex <- if (is.na(tuned$exc_q)) "FALSE" else sprintf("coalesce(s.knw_dist <= %s, FALSE)", tuned$exc_d)
-  grad_ok <- sprintf("coalesce(s.gradient BETWEEN 0 AND %s, FALSE)", tuned$grad_max)
-  tuned_sql <- sprintf("((NOT %2$s AND coalesce((%1$s), FALSE)) OR (%2$s AND %5$s AND (%3$s OR %4$s)))",
-                       p_tuned_base[[stage]], sb, size_ok, ex, grad_ok)
-  preds <- list(default = sprintf("coalesce((%s), FALSE)", p_default[[stage]]), tuned = tuned_sql)
-  other <- if (stage == "rear") "spawn" else "rear"
-  pred_other <- sprintf("coalesce((%s), FALSE)", p_default[[other]])
+  wb_sql <- .knw_wb_sql(br)
   rng <- params[[sp]]$ranges[[stage]]
   is_default_rule <- tuned$size_var == "width" && isTRUE(all.equal(tuned$size_min, rng$channel_width[1])) &&
     isTRUE(all.equal(tuned$grad_max, rng$gradient[2])) && is.na(tuned$exc_q)
+  default_rule <- .knw_default_rule_label(rng, specs, dims, sp, stage)
 
   conn <- connector()
   on.exit(try(DBI::dbExecute(conn, sprintf("DROP SCHEMA IF EXISTS %s CASCADE", scratch)), silent = TRUE), add = TRUE)
@@ -143,44 +193,65 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
   DBI::dbExecute(conn, sprintf("CREATE SCHEMA IF NOT EXISTS %s", scratch))
   DBI::dbWriteTable(conn, DBI::Id(schema = scratch, table = "uhc"), uhc, overwrite = TRUE)
   run_conn <- utils::getFromNamespace(".frs_run_connectivity", "fresh")
-  g_sp <- grades[grades$watershed_group_code %in% groups,
-                 c("id_segment", "watershed_group_code", "size", "dist_m", "grade", "grade_class")]
+  g_cols <- intersect(c("id_segment", "watershed_group_code", "size", "dist_m", "grade", "grade_class", "target_in_group"),
+                      names(grades))
+  g_sp <- grades[grades$watershed_group_code %in% groups, g_cols]
+  if (!"target_in_group" %in% names(g_sp)) g_sp$target_in_group <- NA
   DBI::dbWriteTable(conn, DBI::Id(schema = scratch, table = "grades"), as.data.frame(g_sp), overwrite = TRUE)
   DBI::dbExecute(conn, sprintf("CREATE INDEX ON %s.grades (id_segment, watershed_group_code)", scratch))
-  say("%s %s: %d groups; default %s; tuned %s.", sp, stage, length(groups), p_default[[stage]], tuned$rule)
+  say("%s %s: %d groups; link configs at %s; default %s; tuned %s under %s (reported as tuned: %s).", sp, stage,
+      length(groups), config_sha, default_rule, tuned$rule, paste(structures, collapse = ", "), tuned_as)
 
+  rule_names <- c("default", structures)
   flags <- list()
   t0 <- Sys.time()
+  walk_s <- 0
   for (w in groups) {
+    model <- model_of(w)
+    preds <- preds_for(model)
     DBI::dbExecute(conn, sprintf("DROP TABLE IF EXISTS %s.streams", scratch))
+    # wet's pick joins as mad_m3s, the column link's prepare gives the working table and a discharge pair walks on
     DBI::dbExecute(conn, sprintf("
       CREATE TABLE %1$s.streams AS
       SELECT s.*, (h.accessible AND coalesce(a.access_%3$s > 0, FALSE)) AS accessible,
-             h.accessible AS accessible_stored, g.size AS knw_size, g.dist_m AS knw_dist
+             h.accessible AS accessible_stored, g.size AS knw_size, g.dist_m AS knw_dist, g.target_in_group,
+             nullif(q.q_m3s, 0) AS mad_m3s
       FROM %2$s.streams s
       JOIN %2$s.streams_habitat_%3$s h
         ON h.id_segment = s.id_segment AND h.watershed_group_code = s.watershed_group_code
       LEFT JOIN %2$s.streams_access a
         ON a.id_segment = s.id_segment AND a.watershed_group_code = s.watershed_group_code
       LEFT JOIN %1$s.grades g ON g.id_segment = s.id_segment AND g.watershed_group_code = s.watershed_group_code
+      LEFT JOIN discharge.fwa_v1_segment_monthly q
+        ON q.linear_feature_id = s.linear_feature_id AND q.scenario = 'historical' AND q.month = 0 AND q.pick
       WHERE s.watershed_group_code = '%4$s'", scratch, schema, s, w))
+    # link stores one-part MultiLineStrings with Z and M; fresh's walk locates points along a LineString, and nothing
+    # here reads Z or M, so the copy is merged and flattened (a segment of more than one part would refuse the cast,
+    # which is the right failure)
+    DBI::dbExecute(conn, sprintf("ALTER TABLE %s.streams ALTER COLUMN geom TYPE geometry(LineString, 3005) USING ST_Force2D(ST_LineMerge(geom))", scratch))
     for (ix in c("(id_segment)", "USING gist (geom)", "USING gist (wscode_ltree)", "USING gist (localcode_ltree)",
                  "(blue_line_key, downstream_route_measure)")) {
       DBI::dbExecute(conn, sprintf("CREATE INDEX ON %s.streams %s", scratch, ix))
     }
-    if (is_default_rule) {
+    if (nrow(specs[[model]])) {
+      t1 <- Sys.time()
+      fresh::frs_near_river(conn, paste0(scratch, ".streams"), near_tbl, threshold = specs[[model]]$threshold,
+                            distance_max = specs[[model]]$distance_max, measure = specs[[model]]$measure, verbose = FALSE)
+      walk_s <- walk_s + as.numeric(difftime(Sys.time(), t1, units = "secs"))
+    }
+    if (is_default_rule && "door" %in% structures && !nrow(specs[[model]])) {
       dif <- DBI::dbGetQuery(conn, sprintf(
         "SELECT count(*) FILTER (WHERE (%s) IS DISTINCT FROM (%s)) AS n FROM %s.streams s",
-        preds$default, preds$tuned, scratch))$n
+        preds$default, preds$door, scratch))$n
       if (as.integer(dif) > 0L) {
-        stop("the injected tuned predicate differs from fresh's default on ", dif, " segments in ", w, call. = FALSE)
+        stop("the injected tuned predicate (door) differs from fresh's default on ", dif, " segments in ", w, call. = FALSE)
       }
     }
-    for (k in names(preds)) {
+    for (k in rule_names) {
       h <- paste0(scratch, ".habitat_", k)
       DBI::dbExecute(conn, sprintf("DROP TABLE IF EXISTS %s", h))
-      rear_sql <- if (stage == "rear") preds[[k]] else pred_other
-      spawn_sql <- if (stage == "spawn") preds[[k]] else pred_other
+      rear_sql <- if (stage == "rear") preds[[k]] else preds$other
+      spawn_sql <- if (stage == "spawn") preds[[k]] else preds$other
       DBI::dbExecute(conn, sprintf("
         CREATE TABLE %1$s AS
         SELECT s.id_segment, s.watershed_group_code, '%2$s'::text AS species_code, s.accessible,
@@ -207,46 +278,72 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
                 rearing_pre_connect, spawning_pre_connect FROM %s", k, h))
     }
   }
-  say("Classify, overlay and connect: %d groups x 2 rules, %.1f min.", length(groups),
-      as.numeric(difftime(Sys.time(), t0, units = "mins")))
+  say("Classify, overlay and connect: %d groups x %d rules, %.1f min (near-river walks %.1f min).", length(groups),
+      length(rule_names), as.numeric(difftime(Sys.time(), t0, units = "mins")), walk_s / 60)
   wsg_in <- paste0("'", groups, "'", collapse = ",")
+  # the default branch each segment lies on, as link's rules name them, and whether a user-habitat reach covers it
+  in_uhc_seg <- if (nrow(uhc) && flag %in% names(uhc)) {
+    sprintf("EXISTS (SELECT 1 FROM %s.uhc u WHERE u.blue_line_key = s.blue_line_key AND u.%s = 1
+                    AND s.downstream_route_measure < u.upstream_route_measure AND s.upstream_route_measure > u.downstream_route_measure)",
+            scratch, flag)
+  } else {
+    "FALSE"
+  }
   seg <- DBI::dbGetQuery(conn, sprintf("
     SELECT s.id_segment, s.watershed_group_code, s.linear_feature_id, s.blue_line_key, s.downstream_route_measure,
            s.upstream_route_measure, s.edge_type, s.stream_order, s.length_metre, s.gradient, s.channel_width,
            (h.accessible AND coalesce(a.access_%2$s > 0, FALSE)) AS accessible, h.accessible AS accessible_stored,
            h.rearing AS rearing_stored, h.spawning AS spawning_stored,
-           g.size AS knw_size, g.dist_m AS knw_dist, g.grade, g.grade_class
+           g.size AS knw_size, g.dist_m AS knw_dist, g.grade, g.grade_class, g.target_in_group,
+           s.localcode_ltree IS NOT NULL AS localcode_present,
+           CASE WHEN s.waterbody_key IN (SELECT waterbody_key FROM tmp_knw_wb WHERE t = 'R') THEN 'river polygon'
+                WHEN s.edge_type IN (1050, 1150) THEN 'through wetland'
+                WHEN s.waterbody_key IN (SELECT waterbody_key FROM tmp_knw_wb WHERE t = 'W') THEN 'wetland polygon'
+                WHEN s.waterbody_key IN (SELECT waterbody_key FROM tmp_knw_wb WHERE t IN ('L', 'M')) THEN 'lake'
+                WHEN s.edge_type IN (%5$s) THEN 'stream line'
+                ELSE 'other' END AS link_branch,
+           %6$s AS user_habitat
     FROM %1$s.streams s
     JOIN %1$s.streams_habitat_%2$s h ON h.id_segment = s.id_segment AND h.watershed_group_code = s.watershed_group_code
     LEFT JOIN %1$s.streams_access a ON a.id_segment = s.id_segment AND a.watershed_group_code = s.watershed_group_code
     LEFT JOIN %3$s.grades g ON g.id_segment = s.id_segment AND g.watershed_group_code = s.watershed_group_code
-    WHERE s.watershed_group_code IN (%4$s)", schema, s, scratch, wsg_in))
+    WHERE s.watershed_group_code IN (%4$s)",
+    schema, s, scratch, wsg_in, paste(edge_stream, collapse = ", "), in_uhc_seg))
   fl <- do.call(rbind, flags)
-  for (k in names(preds)) {
+  for (k in rule_names) {
     fk <- fl[fl$rule == k, ]
     i <- match(paste(seg$id_segment, seg$watershed_group_code), paste(fk$id_segment, fk$watershed_group_code))
     seg[[paste0(flag, "_", k)]] <- fk[[flag]][i]
     seg[[paste0(flag, "_pre_", k)]] <- fk[[paste0(flag, "_pre_connect")]][i]
+    if (anyNA(seg[[paste0(flag, "_", k)]])) stop("a segment has no regenerated flag under ", k, call. = FALSE)
   }
-  if (anyNA(seg[[paste0(flag, "_default")]]) || anyNA(seg[[paste0(flag, "_tuned")]])) {
-    stop("a segment has no regenerated flag", call. = FALSE)
-  }
+  seg[[paste0(flag, "_tuned")]] <- seg[[paste0(flag, "_", tuned_as)]]
+  seg[[paste0(flag, "_pre_tuned")]] <- seg[[paste0(flag, "_pre_", tuned_as)]]
   seg <- tibble::as_tibble(seg)
   num_cols <- c("id_segment", "linear_feature_id", "blue_line_key", "downstream_route_measure",
                 "upstream_route_measure", "length_metre", "gradient", "channel_width", "knw_size", "knw_dist", "grade")
   for (col in num_cols) {
     seg[[col]] <- as.numeric(seg[[col]])
   }
+  seg$tuned_structure <- tuned_as
   fd <- seg[[paste0(flag, "_default")]]
-  ft <- seg[[paste0(flag, "_tuned")]]
   km <- function(x, len) sum(len[x %in% TRUE]) / 1000
   classes <- c("0-0.2", "0.2-0.4", "0.4-0.6", "0.6-0.8", "0.8-1")
-  per_group <- function(idx, name) {
+  # the tuned rule's own tests per segment, for the change reasons and the other-group count
+  g_def <- !is.na(seg$gradient) & seg$gradient >= 0 & seg$gradient <= rng$gradient[2]
+  g_tun <- !is.na(seg$gradient) & seg$gradient >= 0 & seg$gradient <= tuned$grad_max
+  w_ok <- !is.na(seg$channel_width) & seg$channel_width >= rng$channel_width[1] & seg$channel_width <= 9999
+  size_tun <- if (tuned$size_var == "mad") !is.na(seg$knw_size) & seg$knw_size >= tuned$size_min else
+    !is.na(seg$channel_width) & seg$channel_width >= tuned$size_min & seg$channel_width <= 9999
+  ex_ok <- !is.na(tuned$exc_q) & !is.na(seg$knw_dist) & seg$knw_dist <= tuned$exc_d & seg$localcode_present %in% TRUE
+  stream <- seg$edge_type %in% edge_stream
+  per_group <- function(st, idx, name) {
+    ft <- seg[[paste0(flag, "_", st)]]
     fd_i <- fd[idx]
     ft_i <- ft[idx]
     len <- seg$length_metre[idx]
     out <- tibble::tibble(
-      watershed_group_code = name, species_code = sp, stage = stage,
+      watershed_group_code = name, species_code = sp, stage = stage, structure = st,
       accessible_km = km(seg$accessible[idx], len),
       access_gate_differ_km = km(seg$accessible[idx] != (seg$accessible_stored[idx] %in% TRUE), len),
       stored_km = km(seg[[paste0(flag, "_stored")]][idx], len),
@@ -254,6 +351,11 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
       stored_vs_default_differ_km = km(seg[[paste0(flag, "_stored")]][idx] != fd_i, len),
       gained_km = km(ft_i & !fd_i, len), lost_km = km(!ft_i & fd_i, len), kept_km = km(ft_i & fd_i, len),
       gained_n = sum(ft_i & !fd_i), lost_n = sum(!ft_i & fd_i),
+      # gained by the exception alone (the size test fails) through a river in another watershed group, which
+      # link's own walk, one group's table at a time, would not find
+      gained_exception_km = km(ft_i & !fd_i & !size_tun[idx] & ex_ok[idx], len),
+      gained_exception_other_group_km = km(ft_i & !fd_i & !size_tun[idx] & ex_ok[idx] &
+                                             seg$target_in_group[idx] %in% FALSE, len),
       default_graded_km = sum((len * ifelse(is.na(seg$grade[idx]), 0, seg$grade[idx]))[fd_i]) / 1000,
       tuned_graded_km = sum((len * ifelse(is.na(seg$grade[idx]), 0, seg$grade[idx]))[ft_i]) / 1000,
       graded_na_km = km(is.na(seg$grade[idx]) & seg$accessible[idx], len)
@@ -265,41 +367,52 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
     out$change_pct <- 100 * (out$tuned_km - out$default_km) / out$default_km
     out
   }
-  per <- do.call(rbind, lapply(groups, function(w) per_group(seg$watershed_group_code == w, w)))
-  tot <- per_group(rep(TRUE, nrow(seg)), "ALL")
-  compare <- rbind(per, tot)
-  compare$default_rule <- paste0("width>=", rng$channel_width[1], "|g<=", rng$gradient[2], "|none")
+  compare <- do.call(rbind, lapply(structures, function(st) {
+    rbind(do.call(rbind, lapply(groups, function(w) per_group(st, seg$watershed_group_code == w, w))),
+          per_group(st, rep(TRUE, nrow(seg)), "ALL"))
+  }))
+  compare$default_rule <- default_rule
   compare$tuned_rule <- tuned$rule
+  compare$tuned_structure <- tuned_as
+  compare$config_sha <- config_sha
 
   # why segments change: from the predicates' parts where the predicates differ; else connectivity or overlay
-  chg <- seg[fd != ft, , drop = FALSE]
-  pre_d <- chg[[paste0(flag, "_pre_default")]]
-  pre_t <- chg[[paste0(flag, "_pre_tuned")]]
-  g_def <- !is.na(chg$gradient) & chg$gradient >= 0 & chg$gradient <= rng$gradient[2]
-  g_tun <- !is.na(chg$gradient) & chg$gradient >= 0 & chg$gradient <= tuned$grad_max
-  w_ok <- !is.na(chg$channel_width) & chg$channel_width >= rng$channel_width[1] & chg$channel_width <= 9999
-  size_tun <- if (tuned$size_var == "mad") !is.na(chg$knw_size) & chg$knw_size >= tuned$size_min else
-    !is.na(chg$channel_width) & chg$channel_width >= tuned$size_min & chg$channel_width <= 9999
-  ex_ok <- !is.na(tuned$exc_q) & !is.na(chg$knw_dist) & chg$knw_dist <= tuned$exc_d
-  stream <- chg$edge_type %in% edge_stream
-  direction <- ifelse(chg[[paste0(flag, "_tuned")]], "gained", "lost")
-  reason <- ifelse(pre_d == pre_t, "connectivity or overlay",
-            ifelse(direction == "gained" & stream & g_tun & !size_tun & ex_ok, "exception (size fails, river within D)",
-            ifelse(direction == "gained" & stream & size_tun & g_tun & w_ok & !g_def, "gradient between the two maxima",
-            ifelse(direction == "gained" & stream & size_tun & g_tun & !w_ok, "size: tuned passes, width fails or NULL",
-            ifelse(direction == "lost" & stream & w_ok & g_def & !size_tun & !ex_ok,
-                   "size: width passes, tuned fails, no exception",
-            ifelse(direction == "lost" & stream & w_ok & g_def & !g_tun, "gradient: tuned maximum lower",
-                   "other (river-polygon branch or mixed)"))))))
-  ord <- ifelse(chg$stream_order <= 1, "1",
-         ifelse(chg$stream_order == 2, "2", ifelse(chg$stream_order == 3, "3", "4+")))
-  change <- if (nrow(chg)) {
-    tibble::as_tibble(stats::aggregate(cbind(n_segments = 1, km = chg$length_metre / 1000),
-                                       by = list(direction = direction, reason = reason, order = ord), FUN = sum))
-  } else {
-    tibble::tibble(direction = character(), reason = character(), order = character(), n_segments = numeric(),
-                   km = numeric())
-  }
+  change <- do.call(rbind, lapply(structures, function(st) {
+    ft <- seg[[paste0(flag, "_", st)]]
+    ix <- which(fd != ft)
+    chg <- seg[ix, , drop = FALSE]
+    pre_d <- chg[[paste0(flag, "_pre_default")]]
+    pre_t <- chg[[paste0(flag, "_pre_", st)]]
+    gained <- ft[ix]
+    wl <- chg$edge_type %in% c(1050L, 1150L)
+    st_ <- stream[ix]
+    gt <- g_tun[ix]
+    gd <- g_def[ix]
+    sz <- size_tun[ix]
+    wo <- w_ok[ix]
+    ex <- ex_ok[ix]
+    direction <- ifelse(gained, "gained", "lost")
+    reason <- rep("other (river-polygon branch or mixed)", length(ix))
+    reason[!gained & st_ & wo & gd & !gt] <- "gradient: tuned maximum lower"
+    reason[!gained & st_ & wo & gd & !sz & !ex] <- "size: width passes, tuned fails, no exception"
+    reason[gained & st_ & sz & gt & !wo] <- "size: tuned passes, width fails or NULL"
+    reason[gained & st_ & sz & gt & wo & !gd] <- "gradient between the two maxima"
+    reason[gained & st_ & gt & !sz & ex] <- "exception (size fails, river within D)"
+    reason[wl & !gained] <- "through-wetland line: tuned structure drops"
+    reason[wl & gained] <- "through-wetland line: tuned structure admits"
+    reason[pre_d == pre_t] <- "connectivity or overlay"
+    ord <- ifelse(chg$stream_order <= 1, "1",
+           ifelse(chg$stream_order == 2, "2", ifelse(chg$stream_order == 3, "3", "4+")))
+    out <- if (nrow(chg)) {
+      tibble::as_tibble(stats::aggregate(cbind(n_segments = 1, km = chg$length_metre / 1000),
+                                         by = list(direction = direction, reason = reason, order = ord), FUN = sum))
+    } else {
+      tibble::tibble(direction = character(), reason = character(), order = character(), n_segments = numeric(),
+                     km = numeric())
+    }
+    out$structure <- st
+    out
+  }))
   change$species_code <- sp
   change$stage <- stage
   change$tuned_rule <- tuned$rule
@@ -316,7 +429,7 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
     i <- match(paste(vv$id_segment, vv$watershed_group_code), paste(seg$id_segment, seg$watershed_group_code))
     vv <- vv[!is.na(i), , drop = FALSE]
     i <- i[!is.na(i)]
-    for (k in names(preds)) {
+    for (k in rule_names) {
       r <- seg[[paste0(flag, "_", k)]][i]
       acc <- seg$accessible[i]
       checks[[k]] <- tibble::tibble(check = "fdis_visits", species_code = sp, stage = stage, rule = k,
@@ -380,33 +493,40 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
     set.seed(seed_boot)
     bs <- t(vapply(seq_len(n_boot), function(b) {
       idx <- sample.int(length(ls), length(ls), replace = TRUE)
-      c(default = lift("default", idx), tuned = lift("tuned", idx))
-    }, numeric(2)))
+      vapply(rule_names, function(k) lift(k, idx), numeric(1))
+    }, numeric(length(rule_names))))
+    colnames(bs) <- rule_names
     q <- function(x, p) unname(stats::quantile(x, p))
-    checks$outside <- tibble::tibble(
-      check = "bcfishobs_outside", species_code = sp, stage = stage,
-      rule = c("default", "tuned", "tuned_minus_default"),
-      segment = NA_character_, n = length(ls),
-      n_detect = c(sum(seg[[paste0(flag, "_default")]][ls]), sum(seg[[paste0(flag, "_tuned")]][ls]), NA),
-      km_share = c(ks("default"), ks("tuned"), NA),
-      lift = c(lift("default"), lift("tuned"), lift("tuned") - lift("default")),
-      lift_lo = c(q(bs[, "default"], 0.025), q(bs[, "tuned"], 0.025), q(bs[, "tuned"] - bs[, "default"], 0.025)),
-      lift_hi = c(q(bs[, "default"], 0.975), q(bs[, "tuned"], 0.975), q(bs[, "tuned"] - bs[, "default"], 0.975)))
+    row_of <- function(k) {
+      tibble::tibble(check = "bcfishobs_outside", species_code = sp, stage = stage, rule = k, segment = NA_character_,
+                     n = length(ls), n_detect = sum(seg[[paste0(flag, "_", k)]][ls]), km_share = ks(k), lift = lift(k),
+                     lift_lo = q(bs[, k], 0.025), lift_hi = q(bs[, k], 0.975))
+    }
+    diff_of <- function(st) {
+      d <- bs[, st] - bs[, "default"]
+      tibble::tibble(check = "bcfishobs_outside", species_code = sp, stage = stage, rule = paste0(st, "_minus_default"),
+                     segment = NA_character_, n = length(ls), n_detect = NA_integer_, km_share = NA_real_,
+                     lift = lift(st) - lift("default"), lift_lo = q(d, 0.025), lift_hi = q(d, 0.975))
+    }
+    checks$outside <- do.call(rbind, c(lapply(rule_names, row_of), lapply(structures, diff_of)))
     say(paste("Outside check: %d non-FDIS %s records; %d locations placed (%d inside an overlay reach left out),",
               "%d on accessible stream edges."), n0, sp, nrow(pl) + n_uhc, n_uhc, length(ls))
   }
   DBI::dbExecute(conn, sprintf("DROP SCHEMA IF EXISTS %s CASCADE", scratch))
-  list(compare = compare, change = change, checks = do.call(rbind, lapply(checks, function(x) {
+  checks <- do.call(rbind, lapply(checks, function(x) {
     for (c in c("km_share", "lift", "lift_lo", "lift_hi")) if (!c %in% names(x)) x[[c]] <- NA_real_
     x
-  })), segments = seg, log = log)
+  }))
+  if (!is.null(checks)) checks$tuned_structure <- tuned_as
+  list(compare = compare, change = change, checks = checks, segments = seg, log = log)
 }
 
 # A species' branches under one stage of fresh's rules: the stream rule (the rule with no waterbody_type
-# that carries thresholds; an always-in rule such as CO's 1050/1150 edges is not it), its edge types and
-# whether it requires the segment to lie in no waterbody (`in_waterbody: false`, fresh's
-# `waterbody_key IS NULL`); whether a river-polygon rule exists; and the wetland and lake area floors, 0
-# where the rule names none (any wetland, any lake) and NULL where the species has no such rule.
+# that carries thresholds and is not the through-wetland rule), its edge types and whether it requires the
+# segment to lie in no waterbody (`in_waterbody: false`, fresh's `waterbody_key IS NULL`); whether a
+# river-polygon rule exists; whether a through-wetland rule (edge types 1050/1150 alone, no waterbody type)
+# exists, free (`thresholds: false`, link before 0.67.0) or the door (link 0.67.0); and the wetland and lake
+# area floors, 0 where the rule names none (any wetland, any lake) and NULL where the species has no such rule.
 .knw_fresh_branches <- function(ps, stage) {
   rules <- ps$rules[[stage]]
   edge_stream <- c(1000L, 1100L, 2000L, 2300L)
@@ -415,8 +535,15 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
   wetland <- NULL
   lake <- NULL
   stream_seen <- FALSE
+  wetland_line <- FALSE
+  wetland_line_free <- FALSE
   for (r in rules) {
     wt <- r[["waterbody_type"]]
+    if (.knw_is_wetland_line_rule(r)) {
+      wetland_line <- TRUE
+      wetland_line_free <- isFALSE(r[["thresholds"]])
+      next
+    }
     if (is.null(wt)) {
       if (isFALSE(r[["thresholds"]]) || stream_seen) next
       stream_seen <- TRUE
@@ -429,11 +556,81 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
     } else if (wt == "R") {
       river <- TRUE
     } else if (wt == "W") {
-      wetland <- min(c(wetland, if (is.null(r[["wetland_ha_min"]])) 0 else r[["wetland_ha_min"]]))
+      if (is.null(r[["edge_types_explicit"]]) || !all(as.integer(r[["edge_types_explicit"]]) %in% c(1050L, 1150L))) {
+        wetland <- min(c(wetland, if (is.null(r[["wetland_ha_min"]])) 0 else r[["wetland_ha_min"]]))
+      } else {
+        # link before 0.67.0: the through-wetland free pass typed W with a 1 ha floor
+        wetland_line <- TRUE
+        wetland_line_free <- TRUE
+        wetland <- min(c(wetland, if (is.null(r[["wetland_ha_min"]])) 0 else r[["wetland_ha_min"]]))
+      }
     } else if (wt == "L") {
       lake <- min(c(lake, if (is.null(r[["lake_ha_min"]])) 0 else r[["lake_ha_min"]]))
     }
   }
   list(edge_stream = edge_stream, no_waterbody = no_waterbody, river = river, wetland_ha_min = wetland,
-       lake_ha_min = lake)
+       lake_ha_min = lake, wetland_line = wetland_line, wetland_line_free = wetland_line_free)
+}
+
+# a rule that names the through-wetland lines alone (FWA 1050 and 1150) with no waterbody type: link 0.67.0's door
+# (inherits thresholds), or the earlier free pass when untyped
+.knw_is_wetland_line_rule <- function(r) {
+  is.null(r[["waterbody_type"]]) && !is.null(r[["edge_types_explicit"]]) &&
+    setequal(as.integer(r[["edge_types_explicit"]]), c(1050L, 1150L))
+}
+
+# which structures a species x rule is compared under (see knw_compare_rules())
+.knw_compare_structures <- function(br, tuned, structures = NULL) {
+  all <- c("free", "door", "door_wetland")
+  pick <- if (!br$wetland_line) "door" else if (is.na(tuned$exc_q)) c("free", "door") else all
+  if (is.null(structures)) return(pick)
+  chk::chk_subset(structures, all)
+  structures
+}
+
+# the stream-branch test: a stream edge in no polygon of the species' river, wetland or lake branches
+.knw_stream_branch_sql <- function(br, edge_stream) {
+  if (br$no_waterbody) {
+    sprintf("(s.edge_type IN (%s) AND s.waterbody_key IS NULL)", paste(edge_stream, collapse = ", "))
+  } else {
+    sprintf(paste("(s.edge_type IN (%s) AND NOT coalesce(s.waterbody_key IN",
+                  "(SELECT waterbody_key FROM tmp_knw_wb), FALSE))"),
+            paste(edge_stream, collapse = ", "))
+  }
+}
+
+# the session's table of the species' branch polygons: river polygons, wetlands at the rule's floor, lakes and
+# man-made waterbodies at the rule's floor
+.knw_wb_sql <- function(br) {
+  wb_parts <- c(
+    if (br$river) "SELECT DISTINCT waterbody_key, 'R' AS t FROM whse_basemapping.fwa_rivers_poly",
+    if (!is.null(br$wetland_ha_min)) {
+      sprintf("SELECT DISTINCT waterbody_key, 'W' AS t FROM whse_basemapping.fwa_wetlands_poly WHERE area_ha >= %s",
+              br$wetland_ha_min)
+    },
+    if (!is.null(br$lake_ha_min)) {
+      sprintf("SELECT DISTINCT waterbody_key, 'L' AS t FROM whse_basemapping.fwa_lakes_poly WHERE area_ha >= %1$s
+               UNION SELECT DISTINCT waterbody_key, 'M' AS t FROM whse_basemapping.fwa_manmade_waterbodies_poly
+               WHERE area_ha >= %1$s", br$lake_ha_min)
+    },
+    "SELECT NULL::integer AS waterbody_key, 'none' AS t WHERE FALSE")
+  paste("CREATE TEMPORARY TABLE IF NOT EXISTS tmp_knw_wb AS", paste(wb_parts, collapse = "\n    UNION "))
+}
+
+# default's rule as a label: its width floor and gradient maximum, and the near-river pair it resolves to under
+# each model with the scope dimensions.csv gives it
+.knw_default_rule_label <- function(rng, specs, dims, sp, stage) {
+  base <- paste0("width>=", rng$channel_width[1], "|g<=", rng$gradient[2])
+  pairs <- unlist(lapply(c("cw", "mad"), function(m) {
+    sx <- specs[[m]]
+    if (!nrow(sx)) return(NULL)
+    sprintf("%s %s>=%g@D%g", m, sx$measure, sx$threshold, sx$distance_max)
+  }))
+  if (is.null(pairs)) return(paste0(base, "|none"))
+  scope_col <- paste0(stage, "_near_river")
+  scope <- NA_character_
+  if (!is.null(dims) && scope_col %in% names(dims) && any(dims$species == sp)) {
+    scope <- dims[[scope_col]][dims$species == sp][1]
+  }
+  paste0(base, "|", paste(pairs, collapse = "; "), if (!is.na(scope)) paste0(" on ", scope) else "")
 }

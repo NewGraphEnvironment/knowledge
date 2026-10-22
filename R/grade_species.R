@@ -99,9 +99,10 @@ knw_grade_species <- function(connector, schema, species, wsg, curve, pick, stag
       lf <- unique(stats::na.omit(w$large_lfid[w$status == "found"]))
       if (length(lf)) {
         conn <- connector()
-        tg <- DBI::dbGetQuery(conn, "SELECT linear_feature_id AS lfid, watershed_group_code AS wsg
-                                       FROM whse_basemapping.fwa_stream_networks_sp WHERE linear_feature_id = ANY($1::bigint[])",
-                              params = list(paste0("{", paste(format(lf, scientific = FALSE, trim = TRUE), collapse = ","), "}")))
+        ids <- paste0("{", paste(format(lf, scientific = FALSE, trim = TRUE), collapse = ","), "}")
+        tg <- DBI::dbGetQuery(conn, paste("SELECT linear_feature_id AS lfid, watershed_group_code AS wsg",
+                                          "FROM whse_basemapping.fwa_stream_networks_sp",
+                                          "WHERE linear_feature_id = ANY($1::bigint[])"), params = list(ids))
         DBI::dbDisconnect(conn)
         tw <- tg$wsg[match(w$large_lfid[i[hit]], as.numeric(tg$lfid))]
         seg$target_in_group[hit] <- ifelse(w$status[i[hit]] == "found", tw == seg$watershed_group_code[hit], NA)

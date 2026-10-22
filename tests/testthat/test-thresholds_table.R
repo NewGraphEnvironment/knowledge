@@ -28,7 +28,9 @@ test_that("one row per component of the pick, in link's parameter names, with th
   t <- knw_thresholds_table(d, "knowledge/fdis/v3", "run1", "abc1234")
   ch <- t$thresholds[t$thresholds$species_code == "CH", ]
   expect_equal(ch$component, c("size", "gradient", "exception_q", "exception_d"))
-  expect_equal(ch$link_parameter, c("rear_mad_min", "rear_gradient_max", NA, NA))
+  expect_equal(ch$link_parameter, c("rear_mad_min", "rear_gradient_max", "rear_river_discharge_min", "rear_river_distance_max"))
+  expect_equal(ch$river_measure, c(NA, NA, "discharge", "discharge"))
+  expect_true(all(is.na(ch$rule_flow)) && all(is.na(ch$rule_flow_196)))   # the fixture predates the flow start
   expect_equal(ch$model, rep("mad", 4))
   expect_equal(ch$value, c(0.75, 0.07, 3, 1000))
   expect_equal(ch$unit, c("m3/s", "fraction", "m3/s", "m"))
@@ -92,4 +94,17 @@ test_that("a tune table whose one-SE replay is not its recommended rule is refus
     x
   })
   expect_error(knw_thresholds_table(d, "knowledge/fdis/v3", "run1", "abc1234"), "does not give the recommended rule")
+})
+
+test_that("rule_flow and rule_flow_196 are the picks from the flow start where the table carries one (#80)", {
+  # departures from the flow version (mad>=0.28|g<=0.0549|none, not in the fixture): default 1, the exception rules 3,
+  # and the mad>=0.5 Q3@D1000 rule made nearer (2) so the flow start picks it at one SE
+  t <- knw_thresholds_table(tune_dir_fx(edit = function(x) { x$departures_flow <- c(1L, 3L, 3L, 2L); x }),
+                            "knowledge/fdis/v3", "run1", "abc1234")$thresholds
+  ch <- t[t$species_code == "CH", ]
+  expect_identical(unique(ch$rule), "mad>=0.75|g<=0.07|Q3@D1000")
+  expect_identical(unique(ch$rule_flow), "mad>=0.5|g<=0.07|Q3@D1000")
+  expect_identical(unique(ch$rule_flow_196), "mad>=0.5|g<=0.07|Q3@D1000")
+  ko <- t[t$species_code == "KO", ]
+  expect_true(is.na(ko$rule_flow))
 })
