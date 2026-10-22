@@ -40,6 +40,47 @@ Thresholds/v1 and habitat_grade/v1 have not been uploaded (#56's bucket policy);
 
 
 
+## Plan review (2026-10-22)
+
+`review-plan.md` holds the Plan agent's findings and what was done about each. Two defects in Phase 1's first draft came
+from it (a record variable shadowing a table alias, so every hopping walk errored; and a jump subtracted that the walk
+never counted), and two corrections to the plan (the near-river pair link walks under `cw` is channel width 15 m, not
+3 m³/s; `default_tuned` is read at the run's sha).
+
+## Decisions and overrides recorded
+
+- `knowledge/fdis/v3`, `thresholds/v1` and `habitat_grade/v1` keep their version numbers although values and (for the
+  thresholds) columns move: none has been uploaded, and a version is a published thing (plan review S1, B5).
+- The near-river scope the comparison recommends is not a thresholds-table column: it is a judgement made after
+  Phases 6–7, carried in the research files and link#346's body (plan review O1).
+
+## One-time check of the comparison code (plan review O4, 2026-10-22)
+
+Before `knw_compare_rules()` was edited: CH rearing on ADMS and BULK with link's configs at the run's sha (a17e9177),
+fresh 0.42.0, 2.3 min. `default_km` and `tuned_km` per group reproduce `data/compare/CH_rear_compare.csv` (#65, fresh
+0.39.0) to within 1e-11 km (ADMS 588.884 / 608.304; BULK 2,123.017 / 1,608.110). So the regeneration is unchanged across
+the fresh bump, and a difference after the Phase 4 edits is the edits' (`scratchpad/default_check_o4.out`).
+
+## The walk against fresh's on BULK (`scripts/logs/habitat/20261022_walk_bank_check.txt`)
+
+Three runs on 2026-10-22, each 2,460 origins (2,000 random main-flow segments below 3 m³/s with a local code, plus 500
+fresh places within 200 m of a river), fresh 0.42.0 at 3 m³/s within 20 km:
+
+| run | agree | bank | path | beyond | note |
+|---|---|---|---|---|---|
+| first draft | — | — | — | — | every hopping walk errored (record `c` shadowed the alias `c`) |
+| hops fixed, gaps not counted | 1,799 (73.1 %) | 0 | 216 (8.8 %) | 445 (18.1 %) | 209 of the 216 `path` rows had our walk shorter: the uncounted jumps, which the `bank` class could not see (review B3) |
+| gaps counted | 1,859 (75.6 %) | 8 (0.3 %) | 148 (6.0 %) | 445 (18.1 %) | 85 side-line-connector origins agree with fresh to 0.00 m |
+| final, `bank_jump` classed apart | 1,859 (75.6 %) | 0 (`bank_jump` 8) | 148 (6.0 %) | 445 (18.1 %) | the gate: `bank` 0; fresh's subtraction and ours identical within 0.01 m on 92.6 % of 2,006 starts both found, within 1 m on 92.9 %; the rest are `path` rows, whose subtractions differ with their paths |
+
+The 8 `bank` rows all land on two rivers (waterbody keys 329706585 and 329706586) by a jump of 311 m or 46 m from a line
+ending in a plain stream segment; our subtraction is 26.6 m against fresh's 23.8, and 16.2 against 15.7. The
+subtraction there is the jump line's crossing of the bank, which depends on the row each walk lands on (fresh: the row
+`FWA_Downstream()` orders first; ours: the nearest), so the difference, 1 % of the jump, is the landing point, not the
+rule; the class `bank_jump` now separates these from a true rule difference (`bank`, expected 0). `beyond` is fresh's
+20 km cap against our uncapped walk. Our walk's `bank_m` is positive on 67 % of found starts: median 31.8 m, 90th
+percentile 66.1 m, largest 599 m (against #65's connector estimate, median 14–88 m). 2,460 starts walked in 4.7 s.
+
 ## Errors Encountered
 
 | Error | Resolution |

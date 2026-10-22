@@ -54,8 +54,9 @@ in this repo has moved since.
    rest, with a mixed table in between.
 4. **The pair is published as discharge:** `exception_q` → `<stage>_river_discharge_min` (`_river_measure =
    discharge`), `exception_d` → `<stage>_river_distance_max`; link converts to width where a group is on `cw`, as it
-   did 3 m³/s → 15 m. No new column, so `thresholds/v1` stays v1 (never uploaded); `knowledge/fdis/v3` likewise
-   (never uploaded) and `habitat_grade/v1`.
+   did 3 m³/s → 15 m. The table gains `river_measure`, `rule_flow` and `rule_flow_196` (plan review B5): a change of
+   columns is a new version once a version is published, and `thresholds/v1` has never been uploaded, so it stays v1,
+   as do `knowledge/fdis/v3` and `habitat_grade/v1` (the issue's own rule for them).
 5. **The scope of the pair is compared, not inherited:** for every species the tuned rule is set beside `default`
    under (T1) the run's structure (free pass on 1050/1150, pair on every stream line, as `CH_rear_v1` was scored),
    (T2) the door with the pair on every stream and 1050/1150 line (link's `both`), and, where the rule has an
@@ -77,18 +78,21 @@ in this repo has moved since.
 
 `inst/sql/ch_dist_profile.sql`, `R/link_walks.R` (`scripts/sql/ch_dist_profile.sql` stays frozen for `0298`).
 
-- [ ] Never stop on an edge 1400/1450 segment: the target is the first primary-flow segment with flow ≥ q that is
+- [x] Never stop on an edge 1400/1450 segment: the target is the first primary-flow segment with flow ≥ q that is
       not a connector
-- [ ] When the target is a double-line river (edge 1250, a `waterbody_key`), leave out the connector run inside its
+- [x] When the target is a double-line river (edge 1250, a `waterbody_key`), leave out the connector run inside its
       polygon (same `waterbody_key`) and the mouth-to-centreline jump into it; keep every other gap in `max_entry_gap_m`
       and return the old distance as `dist_centre_m` and the subtraction as `bank_m`, so the change is measurable per
       start
-- [ ] `knw_link_walks()` returns the two new columns; roxygen and `man/` say the distance ends at the bank
-- [ ] `data-raw/walk_bank_check.R`: on BULK, a scratch segmentation with wet's pick as `mad_m3s` (fresh's
+- [x] `knw_link_walks()` returns the two new columns; roxygen and `man/` say the distance ends at the bank
+- [x] `data-raw/walk_bank_check.R`: on BULK, a scratch segmentation with wet's pick as `mad_m3s` (fresh's
       `near_river_check.R` pattern), `frs_near_river()` at 3 m³/s within 20 km against our walk from the same
-      segments' downstream ends; classes `agree`, `beyond`, `truncation`, `nested_code`, each residual in one; `bank`
-      must be 0 rows; log under `scripts/logs/habitat/<date>_walk_bank_check.txt`
-- [ ] Unit test on a synthetic three-segment network (tributary, connector, river) if the suite can hold one without a
+      segments' downstream ends; classes `agree`, `bank`, `bank_jump`, `path`, `beyond`, `truncation`, `ref_none`,
+      each residual in one, the bank residual reported by class and for origins whose line ends at a side-line
+      connector (plan review B3); `bank` must be 0 rows; log under `scripts/logs/habitat/<date>_walk_bank_check.txt`
+- [x] Every hop's gap counts in the distance, as fresh counts it (plan review B2: the walk before #73 counted none,
+      so subtracting a jump's crossing of the bank would have discounted a length never counted)
+- [x] Unit test on a synthetic three-segment network (tributary, connector, river) if the suite can hold one without a
       database; otherwise the BULK check is the gate and the test file says so
 
 ## Phase 2: The grid, the pick and link's floors
@@ -98,7 +102,8 @@ in this repo has moved since.
 - [ ] `knw_tune_grid()` default `grid_grad` extended to 11, 13, 15, 20, 25 and 30 % (#67's steps), one shared ladder
       (#68); `test-tune_grid.R` pins the ladder
 - [ ] link's `default_tuned` MAD floors join each species' grid as candidates (read from `configs/default_tuned` at
-      `config_sha`), labelled so the tune table can name them
+      the run's `link_sha`, where `default` is read too: the grid is anchored on the run's bundle; plan review O2),
+      labelled so the tune table can name them
 - [ ] The pick with link's flow version as the starting point (#80 task 1): `departures` counted from a chosen start
       rule; `knw_tune_score()` / `knw_tune_repick()` take `start`, the tune table carries `recommended` (width start)
       and `recommended_flow_start`, each at 1 and 1.96 SE; smoke it on the saved tables before the retune
@@ -134,7 +139,9 @@ in this repo has moved since.
       rule and structure, class, grade, size, width, gradient, walked distance, stream order and the link branch that
       kept it (#81's data part)
 - [ ] `knw_thresholds_table()` fills `link_parameter` for `exception_q` and `exception_d`, adds `river_measure =
-      discharge` and the recommended `near_river_scope`; `test-thresholds_table.R` pins it
+      discharge`, `rule_flow` and `rule_flow_196` (the flow-start picks); the recommended scope of the pair is a
+      judgement made after the comparison and goes in the research files and link#346's body, not the table (plan
+      review O1); `test-thresholds_table.R` pins it
 
 ## Phase 5: The evidence build on the current flows
 
