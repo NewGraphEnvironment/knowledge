@@ -27,6 +27,9 @@
 #' @param seed,folds,n_boot,seeds_more,workers,d_floor passed to [knw_tune_score()].
 #' @param min_wsg,power_wsg `integer(1)` the floors described above.
 #' @param src `character(1)` the flow source the exception reads.
+#' @param thresholds_extra `NULL`, or another bundle's
+#'   `parameters_habitat_thresholds.csv` (link's `default_tuned`): each species'
+#'   row joins its grid as the `is_link_tuned` candidate ([knw_tune_grid()]).
 #' @param grid_args `list` of arguments passed to [knw_tune_grid()] for every
 #'   species × stage (for example `list(grid_grad = c(0.03, 0.09, 0.15))`); empty
 #'   for its defaults.
@@ -54,9 +57,11 @@ knw_tune_run <- function(visits, species_tbl, walks, thresholds, species = knw_s
                          stages = c("rear", "spawn"), spawner = NULL,
                          edge_stream = c(1000L, 1100L, 2000L, 2300L), area_range = c(10, 10000),
                          seed = 54L, folds = 5L, n_boot = 200L, seeds_more = 55:58, workers = 1L, d_floor = 200,
-                         min_wsg = 5L, power_wsg = 10L, src = "pick", grid_args = list(), cache_dir = NULL) {
+                         min_wsg = 5L, power_wsg = 10L, src = "pick", grid_args = list(), cache_dir = NULL,
+                         thresholds_extra = NULL) {
   chk::chk_data(visits)
   chk::chk_list(grid_args)
+  if (!is.null(thresholds_extra)) chk::chk_data(thresholds_extra)
   chk::check_names(visits, c("site_visit", "watershed_group_code", "blue_line_key", "downstream_route_measure",
                              "edge_type", "wb_river", "wb_wetland", "wb_lake", "area_m2", "year", "data_set",
                              "fwa_gradient", "cw_deploy", "mad_pick"))
@@ -77,12 +82,14 @@ knw_tune_run <- function(visits, species_tbl, walks, thresholds, species = knw_s
   out <- list()
   for (sp in species) {
     thr <- thresholds[thresholds$species_code == sp, , drop = FALSE]
+    thx <- if (is.null(thresholds_extra)) NULL else thresholds_extra[thresholds_extra$species_code == sp, , drop = FALSE]
+    if (!is.null(thx) && nrow(thx) != 1L) thx <- NULL
     st <- species_tbl[species_tbl$species_code == sp, c("site_visit", "present", "status", "in_range")]
     bcol <- paste0("barrier_dnstr_", tolower(sp))
     for (stage in stages) {
       key <- paste(sp, stage, sep = "_")
       rec <- list(species_code = sp, stage = stage, response = if (stage == "rear") "U" else "S")
-      tune_grid <- function(t) do.call(knw_tune_grid, c(list(t, stage), grid_args))
+      tune_grid <- function(t) do.call(knw_tune_grid, c(list(t, stage, extra = thx), grid_args))
       grid <- if (nrow(thr) == 1L) tune_grid(thr) else tune_grid(thr[0, ])[0, ]
       if (nrow(thr) != 1L || !nrow(grid)) {
         rec$status <- "no_stream_rule"
@@ -135,12 +142,14 @@ knw_tune_run <- function(visits, species_tbl, walks, thresholds, species = knw_s
         if (!is.null(cache)) saveRDS(sc, cache)
       }
       pick <- sc$rules[sc$rules$recommended, , drop = FALSE]
-      cv <- tryCatch(knw_tune_curve(d, pick, wi, sc$folds, resp = resp, src = src),
+      pick_flow <- sc$rules[sc$rules$recommended_flow %in% TRUE, , drop = FALSE]
+      cv <- tryCatch(knw_tune_curve(d, pick, wi, sc$folds, resp = resp, src = src, edge_stream = edge_stream),
                      error = function(e) structure(list(message = conditionMessage(e)), class = "knw_curve_failed"))
       rec$status <- if (inherits(cv, "knw_curve_failed")) "curve_failed" else
         if (n_both < power_wsg) "underpowered" else "fitted"
       rec$score <- sc
       rec$pick <- pick
+      rec$pick_flow <- if (nrow(pick_flow)) pick_flow else NULL
       rec$curve <- if (inherits(cv, "knw_curve_failed")) NULL else cv
       rec$curve_error <- if (inherits(cv, "knw_curve_failed")) cv$message else NULL
       out[[key]] <- rec

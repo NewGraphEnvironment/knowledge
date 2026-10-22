@@ -14,7 +14,8 @@ knw_tune_curve(
   src = "pick",
   dist_cap_m = 50000,
   q_default = 10,
-  k = c(size = 6, dist = 6, grad = 6)
+  k = c(size = 6, dist = 6, grad = 6),
+  edge_stream = NULL
 )
 }
 \arguments{
@@ -34,6 +35,10 @@ name.}
 \item{dist_cap_m, q_default, k}{\code{numeric} the spec's constants: the distance
 cap, the river size when the pick has no exception, and the basis sizes
 (\code{size}, \code{dist}, \code{grad}).}
+
+\item{edge_stream}{\code{integer} or \code{NULL}: the FWA edge types the visits in \code{d}
+were filtered on, recorded on the result as \code{edge_stream} so the grade's
+reference population can be taken from the curve (#72).}
 }
 \value{
 A list: \code{model} (the \code{mgcv::gam}), \code{data} (the rows fitted, with
@@ -44,7 +49,7 @@ distance cap: no walk, or no river found), \code{heldout} (summed
 held-out deviance), \code{edf} (the smooths' effective degrees of freedom), and
 \code{curves}, a \code{tibble} of marginal curves (\code{curve}, \code{x}, \code{rate}, \code{rel_rate},
 \code{rel_lo}, \code{rel_hi}, \code{threshold}) relative to the pick's thresholds, each
-other variable held at its reference; \code{dist_in_model}, \code{FALSE} when the
+other variable held at its reference; \code{edge_stream}, as given; \code{dist_in_model}, \code{FALSE} when the
 distances were too few to carry a smooth and size stood alone.
 }
 \description{

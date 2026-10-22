@@ -24,7 +24,8 @@ knw_tune_run(
   power_wsg = 10L,
   src = "pick",
   grid_args = list(),
-  cache_dir = NULL
+  cache_dir = NULL,
+  thresholds_extra = NULL
 )
 }
 \arguments{
@@ -59,6 +60,10 @@ the same order (every \code{\link[=knw_tune_grid]{knw_tune_grid()}} column, so a
 counts). The other scoring arguments (\code{seed}, \code{folds}, \code{n_boot},
 \code{seeds_more}, \code{d_floor}) are not checked: give a run with different ones its
 own directory.}
+
+\item{thresholds_extra}{\code{NULL}, or another bundle's
+\code{parameters_habitat_thresholds.csv} (link's \code{default_tuned}): each species'
+row joins its grid as the \code{is_link_tuned} candidate (\code{\link[=knw_tune_grid]{knw_tune_grid()}}).}
 }
 \value{
 A list with one element per species × stage (\code{"<sp>_<stage>"}): a

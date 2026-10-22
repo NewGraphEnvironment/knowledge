@@ -38,8 +38,11 @@ test_that("one run covers fitted, no-stream-rule and too-few-groups species, and
                       n_boot = 10L, seeds_more = 55L, workers = 1L)
   expect_named(out, c("CH_rear", "KO_rear", "BT_rear"))
   expect_true(out$CH_rear$status %in% c("fitted", "underpowered"))
-  expect_equal(nrow(out$CH_rear$score$rules), 2795 + 0)   # the default's own values are on 0297's ladders
+  expect_equal(nrow(out$CH_rear$score$rules), 6149)   # the default's own values are on the ladders (#68: 11 gradients)
   expect_equal(sum(out$CH_rear$score$rules$recommended), 1)
+  expect_equal(sum(out$CH_rear$score$rules$recommended_flow), 1)
+  expect_equal(nrow(out$CH_rear$pick_flow), 1)
+  expect_true(all(out$CH_rear$score$rules$boot_rec_share_flow >= 0))
   expect_s3_class(out$CH_rear$curve$model, "gam")
   expect_equal(out$KO_rear$status, "no_stream_rule")
   expect_equal(out$BT_rear$status, "too_few_groups")
@@ -68,7 +71,7 @@ test_that("grid_args reaches knw_tune_grid: the ladder above 9 % gives 559 rules
   local_mocked_bindings(knw_tune_score = function(d, rule_in, grid, ...) stop("rules=", nrow(grid)))
   expect_error(knw_tune_run(s$v, s$sp, s$walks, s$thr, species = "CH", stages = "rear",
                             grid_args = list(grid_grad = g8)), "rules=4472")
-  expect_error(knw_tune_run(s$v, s$sp, s$walks, s$thr, species = "CH", stages = "rear"), "rules=2795")
+  expect_error(knw_tune_run(s$v, s$sp, s$walks, s$thr, species = "CH", stages = "rear"), "rules=6149")   # the 30 % ladder (#68)
 })
 
 test_that("a cached score is read back only for the grid it was scored on", {
@@ -96,4 +99,21 @@ test_that("a cached score is read back only for the grid it was scored on", {
                    first$CH_rear$score$rules$rule)
   expect_error(knw_tune_run(s$v, s$sp, s$walks, thr2, species = "CH", stages = "rear", n_boot = 5L,
                             seeds_more = integer(), grid_args = small, cache_dir = dir), "rescored")
+})
+
+test_that("thresholds_extra puts another bundle's rule in the grid, and a species it lacks is unaffected", {
+  skip_if_not_installed("mgcv")
+  s <- sim_build()
+  extra <- data.frame(species_code = "CH", rear_gradient_max = 0.0549, rear_channel_width_min = 1.5, rear_mad_min = 0.043,
+                      spawn_gradient_max = 0.0449, spawn_channel_width_min = 4, spawn_mad_min = 0.46)
+  out <- knw_tune_run(s$v, s$sp, s$walks, s$thr, species = "CH", stages = "rear", n_boot = 5L, seeds_more = integer(),
+                      workers = 1L, grid_args = list(grid_grad = 0.0549, grid_q = 3, grid_d = 1000),
+                      thresholds_extra = extra)
+  r <- out$CH_rear$score$rules
+  expect_equal(sum(r$is_link_tuned), 1)
+  expect_equal(r$rule[r$is_link_tuned], "mad>=0.043|g<=0.0549|none")
+  out2 <- knw_tune_run(s$v, s$sp, s$walks, s$thr, species = "CH", stages = "rear", n_boot = 5L, seeds_more = integer(),
+                       workers = 1L, grid_args = list(grid_grad = 0.0549, grid_q = 3, grid_d = 1000),
+                       thresholds_extra = extra[extra$species_code == "BT", ])
+  expect_false(any(out2$CH_rear$score$rules$is_link_tuned))
 })

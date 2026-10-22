@@ -30,6 +30,11 @@
 #     distance jointly (#65; #57's grades walked only the exception's candidates and read the
 #     rest at the 50 km cap).
 #   - CH's size floor (0.75 against 0.5 m3/s) is read off CH rearing's pick on all CH groups.
+#   - LADDER (#68): the gradient ladder runs to 30 % for every species (knw_tune_grid()'s default since
+#     #68; #67 ran it for CH alone), on the evidence build of #73, whose walks end at the river's bank.
+#   - TWO STARTS (#80): the pick is read from link's width `default` (`recommended`, as before) and from
+#     its flow version (`recommended_flow`), at 1 and 1.96 SE; link's `default_tuned` row joins each grid
+#     as a scored candidate (`is_link_tuned`), so the table says how link's own flow floors score.
 #
 # INPUT:  data/fdis/derived/{visits_link,visits_species,walks}.csv (0310), data/fdis/build/fish.rds
 #         (0230), data/fdis_species_codes.csv; the link repository at LINK_REPO at the build's link_sha
@@ -96,25 +101,32 @@ spawner <- knw_spawner_evidence(fish, vl |> inner_join(vs |> filter(species_code
 say("Spawner evidence: %d BT visits with a coded fish, %d with evidence.", sum(!is.na(spawner$S)), sum(spawner$S %in% 1L))
 
 # link's thresholds at the build's commit(s): a run whose groups were fixed at a later commit logs two
-# SHAs; the thresholds must be the same text at each, and the first (HEAD of the run) is the one named
+# SHAs; the thresholds must be the same text at each, and the first (HEAD of the run) is the one named.
+# default_tuned's row joins each grid as the is_link_tuned candidate (#80), read at the same commits.
 shas <- strsplit(link_sha, ";", fixed = TRUE)[[1]]
-read_thr <- function(sha) {
+read_thr <- function(sha, bundle = "default") {
   f <- tempfile(fileext = ".csv")
-  st <- system2("git", c("-C", link_repo, "show", paste0(sha, ":inst/extdata/configs/default/parameters_habitat_thresholds.csv")), stdout = f)
-  if (!identical(st, 0L) || !file.exists(f) || file.size(f) == 0) stop("could not read link's thresholds at ", sha, " from ", link_repo)
+  st <- system2("git", c("-C", link_repo, "show", sprintf("%s:inst/extdata/configs/%s/parameters_habitat_thresholds.csv", sha, bundle)), stdout = f)
+  if (!identical(st, 0L) || !file.exists(f) || file.size(f) == 0) stop("could not read link's ", bundle, " thresholds at ", sha, " from ", link_repo)
   f
 }
-thr_files <- vapply(shas, read_thr, character(1))
-if (length(thr_files) > 1 && length(unique(unname(tools::md5sum(thr_files)))) != 1) {
-  stop("link's thresholds differ between the run's commits ", link_sha)
+thr_of <- function(bundle) {
+  fs <- vapply(shas, read_thr, character(1), bundle = bundle)
+  if (length(fs) > 1 && length(unique(unname(tools::md5sum(fs)))) != 1) {
+    stop("link's ", bundle, " thresholds differ between the run's commits ", link_sha)
+  }
+  read.csv(fs[1], stringsAsFactors = FALSE)
 }
+thr <- thr_of("default")
+thr_tuned <- thr_of("default_tuned")
 link_sha <- shas[1]
-thr <- read.csv(thr_files[1], stringsAsFactors = FALSE)
-say("link default thresholds at %s (same at %s): %d species.", shas[1], paste(shas[-1], collapse = ","), nrow(thr))
+say("link default thresholds at %s (same at %s): %d species; default_tuned: %d species (its MAD floors join the grids).",
+    shas[1], paste(shas[-1], collapse = ","), nrow(thr), nrow(thr_tuned))
 
 # ---- score, pick, curve ------------------------------------------------------------------
 t0 <- Sys.time()
-out <- knw_tune_run(vl, vs, walks, thr, species = species, spawner = spawner, workers = workers, cache_dir = dir_out)
+out <- knw_tune_run(vl, vs, walks, thr, species = species, spawner = spawner, workers = workers, cache_dir = dir_out,
+                    thresholds_extra = thr_tuned)
 say("Scored %d species x stage in %.1f min on %d workers.", length(out), as.numeric(difftime(Sys.time(), t0, units = "mins")), workers)
 
 summ <- list()
@@ -140,8 +152,16 @@ for (k in names(out)) {
               file.path(dir_out, paste0(k, "_honest.csv")), na = "")
     dflt <- rules |> filter(is_default)
     best <- rules |> filter(ddev_best == 0) |> slice(1)
+    ltn <- rules |> filter(is_link_tuned %in% TRUE)
+    rep_of <- function(se, start) tryCatch(knw_tune_repick(rules, se_mult = se, start = start)$rule, error = function(e) NA_character_)
     row <- row |> mutate(
       rule_recommended = r$pick$rule, rule_pick = rules$rule[rules$pick], rule_best = best$rule,
+      rule_recommended_196 = rep_of(1.96, "default"),
+      rule_recommended_flow = if (is.null(r$pick_flow)) NA_character_ else r$pick_flow$rule,
+      rule_recommended_flow_196 = rep_of(1.96, "flow"),
+      rule_link_tuned = if (nrow(ltn)) ltn$rule else NA_character_,
+      link_tuned_ddev = if (nrow(ltn)) ltn$ddev_best else NA_real_, link_tuned_se = if (nrow(ltn)) ltn$se_diff else NA_real_,
+      link_tuned_in_region = if (nrow(ltn)) ltn$in_region else NA,
       default_in_region = dflt$in_region, default_ddev = dflt$ddev_best, default_se = dflt$se_diff,
       region_n = sum(rules$in_region), patterns = r$score$population[["patterns"]],
       dev_default = dflt$dev_heldout, dev_best = best$dev_heldout, dev_null = best$dev_heldout - best$ddev_null,
@@ -155,6 +175,9 @@ for (k in names(out)) {
     say("%s: %s. %d visits (%d detections) in %d groups (%d both). Recommended %s; default %s the region (+%.1f, SE %.1f). Curve held-out %.1f vs grid best %.1f.",
         k, r$status, row$visits_in, row$detections, row$groups, row$groups_both, r$pick$rule,
         if (dflt$in_region) "in" else "outside", dflt$ddev_best, dflt$se_diff, r$curve$heldout, best$dev_heldout)
+    say("%s: from the flow start %s (1.96 SE: %s); from the width start at 1.96 SE %s; link's default_tuned rule %s %s.",
+        k, row$rule_recommended_flow, row$rule_recommended_flow_196, row$rule_recommended_196,
+        row$rule_link_tuned, if (nrow(ltn)) sprintf("%s the region (+%.1f, SE %.1f)", if (ltn$in_region) "in" else "outside", ltn$ddev_best, ltn$se_diff) else "(none)")
     block(paste(k, "region"), rules |> filter(in_region) |> arrange(ddev_best) |>
             select(rule, departures, ddev_best, se_diff, n_wsg_varies, n_in, n_detect_in, raw_rate_in, raw_rate_out, boot_region_share))
     block(paste(k, "nested selection"), r$score$honest)
@@ -175,40 +198,55 @@ for (k in names(out)) {
 # ---- grade every segment of each fitted species' groups ----------------------------------
 conn <- pg()
 groups_sp <- function(sp) dbGetQuery(conn, sprintf("SELECT DISTINCT watershed_group_code w FROM %s.streams_habitat_%s ORDER BY 1", schema, tolower(sp)))$w
+# the flow build the grade reads (#72): wet can reload discharge.fwa_v1_segment_monthly between runs (wet#103 did on
+# 2026-10-19, after #57 tuned), so the table's comment, which names the build, goes into every grade table and 0325
+# refuses to publish a grade whose build is not the live one
+discharge_load <- dbGetQuery(conn, "SELECT obj_description('discharge.fwa_v1_segment_monthly'::regclass) AS d")$d
+if (length(discharge_load) != 1 || is.na(discharge_load) || !nzchar(discharge_load)) stop("discharge.fwa_v1_segment_monthly carries no load comment")
+say("Grading on the flow build: %s", discharge_load)
 grade_rows <- list()
 for (k in names(out)) {
   r <- out[[k]]
   if (is.null(r$curve)) next
   gpath <- file.path(dir_out, paste0(k, "_grades.csv"))
+  ref_edge_curve <- if (!is.null(r$curve$edge_stream)) r$curve$edge_stream else eval(formals(knw_tune_run)$edge_stream)
+  ref_edge_txt <- paste(ref_edge_curve, collapse = ";")
   if (file.exists(gpath)) {
-    # kept only when it was graded under this pick on this link run with every graded segment walked
-    # (dist_status, #65) and the reference taken over the stream branch (ref_population, #65); #57's tables
-    # walked only the exception's candidates, and #65's first CH table took the reference over every
-    # accessible segment, so both are regraded
+    # kept only when it was graded under this pick on this link run and this flow build, with every graded segment
+    # walked to the bank (#73), and the reference taken over the curve's own edge types (#72): the table records all
+    # of it from the call that made it, and a table that predates the record (#57, #65) is regraded
     head1 <- readr::read_csv(gpath, n_max = 1, show_col_types = FALSE, col_types = readr::cols(.default = "c"))
-    walked_all <- "dist_status" %in% names(head1)
-    ref_stream <- "ref_population" %in% names(head1) && identical(head1$ref_population, "stream_branch")
-    if (identical(head1$rule, r$pick$rule) && identical(head1$run_uid, run_uid) && walked_all && ref_stream) {
+    same <- identical(head1$rule, r$pick$rule) && identical(head1$run_uid, run_uid) &&
+      "walk" %in% names(head1) && identical(head1$walk, "bank") &&
+      "ref_edge" %in% names(head1) && identical(head1$ref_edge, ref_edge_txt) &&
+      "discharge_load" %in% names(head1) && identical(head1$discharge_load, discharge_load)
+    if (same) {
       say("%s grades: already written under %s on %s, kept.", k, r$pick$rule, run_uid)
       next
     }
     # not "<key> grades:", which data-raw/vignette_chinook.R reads as the one result line
-    say("%s: grades on file for %s / %s%s, regraded for %s / %s.", k, head1$rule, head1$run_uid,
-        if (!walked_all) " (walked only the exception's candidates)"
-        else if (!ref_stream) " (reference over every accessible segment)" else "",
-        r$pick$rule, run_uid)
+    say("%s: grades on file for %s / %s (walk %s, reference over %s, flows %s), regraded for %s / %s.", k, head1$rule,
+        head1$run_uid, if ("walk" %in% names(head1)) head1$walk else "centreline",
+        if ("ref_edge" %in% names(head1)) head1$ref_edge else if ("ref_population" %in% names(head1)) head1$ref_population else "every accessible segment",
+        if ("discharge_load" %in% names(head1)) head1$discharge_load else "unrecorded", r$pick$rule, run_uid)
   }
   wsg <- groups_sp(r$species_code)
   t1 <- Sys.time()
   g <- knw_grade_species(pg, schema, r$species_code, wsg, r$curve, r$pick, stage = r$stage, workers = min(workers, 8L))
+  if (!identical(as.integer(g$ref_edge), as.integer(ref_edge_curve))) stop(k, ": the grade's reference edge types are not the curve's")
+  # ref_population is kept as the name 0325, 0330 and the article read; ref_edge, q_walk, walk and discharge_load
+  # are the record (#72), written from what knw_grade_species() returns, not from a literal beside the call
   write_csv(g$grades |> mutate(species_code = r$species_code, stage = r$stage, rule = r$pick$rule, run_uid = run_uid,
-                               ref_population = "stream_branch",
+                               ref_population = "stream_branch", ref_edge = paste(g$ref_edge, collapse = ";"),
+                               q_walk = g$q, walk = g$walk, discharge_load = discharge_load,
                                across(c(rate, grade), ~ signif(.x, 5))),
             file.path(dir_out, paste0(k, "_grades.csv")), na = "")
-  say("%s grades: %d groups, %s; reference rate %.4f; walks %.1f min; total %.1f min.", k, length(wsg),
-      paste(names(g$counts), g$counts, sep = "=", collapse = ", "), g$reference, g$walk_minutes,
-      as.numeric(difftime(Sys.time(), t1, units = "mins")))
-  grade_rows[[k]] <- tibble(key = k, groups = length(wsg), reference_rate = g$reference, as_tibble(as.list(g$counts)))
+  say("%s grades: %d groups, %s; reference rate %.4f over edge types %s; walks to %g m3/s, to the bank, %.1f min; %d of %d found rivers lie in another group; total %.1f min.",
+      k, length(wsg), paste(names(g$counts), g$counts, sep = "=", collapse = ", "), g$reference,
+      paste(g$ref_edge, collapse = ","), g$q, g$walk_minutes, sum(g$grades$target_in_group %in% FALSE),
+      sum(!is.na(g$grades$target_in_group)), as.numeric(difftime(Sys.time(), t1, units = "mins")))
+  grade_rows[[k]] <- tibble(key = k, groups = length(wsg), reference_rate = g$reference, ref_edge = paste(g$ref_edge, collapse = ";"),
+                            q_walk = g$q, target_other_group = sum(g$grades$target_in_group %in% FALSE), as_tibble(as.list(g$counts)))
 }
 dbDisconnect(conn)
 block("grades", bind_rows(grade_rows))

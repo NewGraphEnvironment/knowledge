@@ -37,6 +37,18 @@ test_that("ties in departures go to the lower score, and an exception under d_fl
   expect_identical(knw_tune_repick(t, se_mult = 10, d_floor = 50)$rule, "mad>=0.5|g<=0.09|Q3@D100")
 })
 
+test_that("start = 'flow' counts departures from the flow version, and is refused without the column (#80)", {
+  t <- repick_fx()
+  expect_error(knw_tune_repick(t, start = "flow"), "departures_flow")
+  t$departures_flow <- c(1L, 2L, 1L, 2L, 0L)
+  # at 1 SE the region is the two exception rules; from the flow start the 1000 m one is still nearest (2 vs 2, lower score)
+  expect_identical(knw_tune_repick(t, start = "flow")$rule, "mad>=0.75|g<=0.09|Q3@D1000")
+  # at 1.96 SE the no-exception MAD rule joins and is one departure from the flow start (its gradient), as from the width start
+  expect_identical(knw_tune_repick(t, se_mult = 1.96, start = "flow")$rule, "mad>=0.75|g<=0.0549|none")
+  t$departures_flow <- NA_integer_
+  expect_error(knw_tune_repick(t, start = "flow"), "no flow start")
+})
+
 test_that("an empty region is an error, not a silent NA row", {
   t <- repick_fx()
   t$converged <- FALSE

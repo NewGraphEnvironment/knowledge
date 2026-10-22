@@ -19,7 +19,11 @@
 #' lower score. If the pick's exception distance is under `d_floor` (where
 #' mainstem catches snapped to a tributary mouth cannot be told apart),
 #' **recommended** is the pick among region rules with `exc_d >= d_floor` or no
-#' exception; otherwise it is the pick. With `extra = TRUE` the call also runs
+#' exception; otherwise it is the pick. Where the grid carries
+#' `departures_flow` (the departures from link's flow version of `default`,
+#' [knw_tune_grid()]), the same pick is made from that starting point too
+#' (`pick_flow`, `recommended_flow`; #80), on the same region: the region does
+#' not depend on the start, only which of its rules is nearest. With `extra = TRUE` the call also runs
 #' `n_boot` bootstrap resamples of groups (each rule's share in the region, and
 #' the share of resamples recommending each rule), a nested selection (the pick
 #' chosen on the other folds' held-out deviance and scored on each fold, against
@@ -45,8 +49,9 @@
 #' @return A list: `rules`, the grid with `n_visits`, `n_detect`, `n_wsg`,
 #'   `unseen_level_visits`, `n_wsg_varies`, `converged`, `dev_heldout`,
 #'   `ddev_best`, `se_diff`, `ddev_null`, `in_region`, `n_in`, `n_detect_in`,
-#'   `raw_rate_in`, `raw_rate_out`, `pick`, `recommended`, and with `extra`
-#'   `boot_region_share` and `boot_rec_share`; `folds`, the fold of each group;
+#'   `raw_rate_in`, `raw_rate_out`, `pick`, `recommended`, `pick_flow`,
+#'   `recommended_flow` (`NA` with no flow start), and with `extra`
+#'   `boot_region_share`, `boot_rec_share` and `boot_rec_share_flow`; `folds`, the fold of each group;
 #'   `honest`, `seeds`, `boot_recs` (with `extra`), and `population`, counts.
 #' @export
 #' @examples
@@ -99,6 +104,8 @@ knw_tune_score <- function(d, rule_in, grid, resp = "U", seed = 54L, folds = 5L,
   sw <- .tune_score_wsg(d, resp, pats, seed, folds, cl)
   s0 <- .tune_sel(sw$Sw, seq_len(nrow(sw$Sw)))
   pk <- .tune_pick(s0, col, sw$conv, grid, d_floor)
+  flow_start <- "departures_flow" %in% names(grid) && !all(is.na(grid$departures_flow))
+  pkf <- if (flow_start) .tune_pick(s0, col, sw$conv, grid, d_floor, dep = grid$departures_flow) else NULL
   R <- rowsum(X * 1, d$wsg)
   N <- as.vector(table(d$wsg)[rownames(R)])
   y <- d[[resp]]
@@ -120,6 +127,8 @@ knw_tune_score <- function(d, rule_in, grid, resp = "U", seed = 54L, folds = 5L,
   res$raw_rate_out <- (sum(y) - res$n_detect_in) / (nrow(d) - res$n_in)
   res$pick <- seq_len(nrow(grid)) == pk[["pick"]]
   res$recommended <- seq_len(nrow(grid)) == pk[["recommended"]]
+  res$pick_flow <- if (flow_start) seq_len(nrow(grid)) == pkf[["pick"]] else NA
+  res$recommended_flow <- if (flow_start) seq_len(nrow(grid)) == pkf[["recommended"]] else NA
   out <- list(rules = res, folds = sw$fold,
               population = c(visits_in = n_all, visits_modelled = nrow(d), detections = sum(y),
                              groups = nlevels(d$wsg), patterns = sum(u), not_converged = sum(!sw$conv)))
@@ -128,13 +137,16 @@ knw_tune_score <- function(d, rule_in, grid, resp = "U", seed = 54L, folds = 5L,
     nw <- nrow(sw$Sw)
     reg_n <- numeric(ncol(sw$Sw))
     recs <- integer(n_boot)
+    recs_flow <- integer(n_boot)
     for (b in seq_len(n_boot)) {
       s <- .tune_sel(sw$Sw, sample.int(nw, nw, replace = TRUE))
       reg_n <- reg_n + (s$region & sw$conv)
       recs[b] <- .tune_pick(s, col, sw$conv, grid, d_floor)[["recommended"]]
+      if (flow_start) recs_flow[b] <- .tune_pick(s, col, sw$conv, grid, d_floor, dep = grid$departures_flow)[["recommended"]]
     }
     out$rules$boot_region_share <- reg_n[col] / n_boot
     out$rules$boot_rec_share <- tabulate(recs, nrow(grid)) / n_boot
+    out$rules$boot_rec_share_flow <- if (flow_start) tabulate(recs_flow, nrow(grid)) / n_boot else NA_real_
     out$boot_recs <- grid[recs, , drop = FALSE]
     out$honest <- do.call(rbind, lapply(seq_len(folds), function(k) {
       out_k <- which(sw$fold != k)
@@ -256,10 +268,10 @@ knw_tune_score <- function(d, rule_in, grid, resp = "U", seed = 54L, folds = 5L,
   list(tot = tot, best = best, se = se, region = tot - tot[best] <= se)
 }
 
-# grid indices of the pick and the recommended rule
-.tune_pick <- function(s, col, conv, grid, d_floor) {
+# grid indices of the pick and the recommended rule, counting departures from `dep`'s starting point
+.tune_pick <- function(s, col, conv, grid, d_floor, dep = grid$departures) {
   rr <- which(s$region[col] & conv[col])
-  rr <- rr[order(grid$departures[rr], s$tot[col[rr]])]
+  rr <- rr[order(dep[rr], s$tot[col[rr]])]
   p <- rr[1]
   ok_d <- rr[is.na(grid$exc_d[rr]) | grid$exc_d[rr] >= d_floor]
   c(pick = p, recommended = if (!is.na(grid$exc_d[p]) && grid$exc_d[p] < d_floor) ok_d[1] else p)

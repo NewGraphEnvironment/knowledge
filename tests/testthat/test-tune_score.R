@@ -70,3 +70,17 @@ test_that("two re-runs are identical", {
   b <- knw_tune_score(pop(), rin, grid3, "U", seed = 7, n_boot = 10, extra = TRUE)
   expect_identical(a$rules, b$rules)
 })
+
+test_that("a grid with departures_flow gives a second pick from the flow start; without it the columns are NA", {
+  s <- knw_tune_score(pop(), rin, grid3, "U", seed = 1)
+  expect_true(all(is.na(s$rules$pick_flow)) && all(is.na(s$rules$recommended_flow)))
+  g <- grid3
+  g$departures_flow <- c(1L, 0L, 1L)   # the "tuned" rule is the flow start
+  s2 <- knw_tune_score(pop(), rin, g, "U", seed = 1, extra = TRUE, n_boot = 5L)
+  expect_equal(sum(s2$rules$pick_flow), 1)
+  expect_equal(sum(s2$rules$recommended_flow), 1)
+  expect_equal(s2$rules$rule[s2$rules$recommended_flow], "tuned")
+  expect_equal(sum(s2$rules$boot_rec_share_flow), 1)
+  # the region is the same whichever start reads it
+  expect_identical(s2$rules$in_region, s$rules$in_region)
+})

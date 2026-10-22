@@ -16,11 +16,17 @@ test_that("a species with access but no habitat table gets no habitat columns", 
   expect_no_match(q$place, "ko_rearing")
 })
 
-test_that("the package copy of the walk SQL is the text the frozen scripts read", {
-  pkg <- system.file("sql/ch_dist_profile.sql", package = "knowledge")
+test_that("the package walk ends at the bank (#73) and the frozen scripts' copy is still #54's centreline walk", {
+  pkg <- readLines(system.file("sql/ch_dist_profile.sql", package = "knowledge"))
+  expect_true(any(grepl("bank_m", pkg)))
+  expect_true(any(grepl("d := d \\+ par\\.g", pkg)))
   scripts <- testthat::test_path("..", "..", "scripts", "sql", "ch_dist_profile.sql")
   skip_if_not(file.exists(scripts), "scripts/ not present (installed package)")
-  expect_identical(readLines(pkg)[-1], readLines(scripts)[-1])
+  frozen <- readLines(scripts)
+  # 0298 (frozen on the v2 tables) reads this copy; it keeps the centreline walk it was scored with
+  expect_false(any(grepl("bank_m", frozen)))
+  expect_identical(frozen[grep("^CREATE OR REPLACE FUNCTION", frozen)],
+                   "CREATE OR REPLACE FUNCTION pg_temp.ch_dist_profile(start_blk integer, start_m double precision,")
 })
 
 test_that("placement runs against a live schema and re-gates the habitat flags on access", {

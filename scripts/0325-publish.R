@@ -50,15 +50,15 @@ prov <- list(published_from_commit = commit, repository = "https://github.com/Ne
              evidence_version = evidence_version, link_run_uid = run_uid, link_sha = link_sha, config = "default",
              tune_logs = sort(list.files("scripts/logs/habitat", "_tune_run.*\\.txt$")))
 # the database's discharge load when this publishes, which wet republished on 2026-10-19 (wet#103), after #57 tuned
-# the thresholds on the load before it (#65). The grade tables do not record the load they read, so this is the
-# load at publish time, named so; it equals the graded load only if wet has not reloaded since 0320 ran (#72).
+# the thresholds on the load before it (#65). Since #72 every grade table records the load it was graded on
+# (discharge_load, written by 0320 from the table comment at grading); the publish refuses when the live load is
+# another build, because the grade would then describe flows the segments no longer carry.
 pgc <- DBI::dbConnect(RPostgres::Postgres())
 discharge_load <- DBI::dbGetQuery(pgc, "SELECT obj_description('discharge.fwa_v1_segment_monthly'::regclass) AS d")$d
 DBI::dbDisconnect(pgc)
 if (length(discharge_load) != 1 || is.na(discharge_load) || !nzchar(discharge_load)) {
   stop("discharge.fwa_v1_segment_monthly carries no load comment; cannot say which flows the grade read")
 }
-prov_grade <- c(prov, list(discharge_load_at_publish = discharge_load))
 
 # ---- thresholds -------------------------------------------------------------------------
 tt <- knw_thresholds_table(tune_dir, evidence_version, run_uid, link_sha)
@@ -81,17 +81,29 @@ man_thr <- knw_publish(tables_thr, "data/publish/thresholds_v1", id = "knowledge
 # ---- grades ----------------------------------------------------------------------------
 gfiles <- list.files(tune_dir, "_grades\\.csv$", full.names = TRUE)
 if (!length(gfiles)) stop("no grade tables in ", tune_dir)
-# the description below says how the grades were made (#65): refuse a table 0320 wrote before that
-stale <- gfiles[!vapply(gfiles, function(f) {
-  h <- read_csv(f, n_max = 1, show_col_types = FALSE, col_types = cols(.default = "c"))
-  "ref_population" %in% names(h) && identical(h$ref_population, "stream_branch")
+# the description below says how the grades were made: each table records it from the call that made it (#72), and a
+# table written before the record (#57, #65) or on another convention is refused rather than described wrongly
+heads <- lapply(gfiles, function(f) read_csv(f, n_max = 1, show_col_types = FALSE, col_types = cols(.default = "c")))
+names(heads) <- basename(gfiles)
+stale <- names(heads)[!vapply(heads, function(h) {
+  all(c("ref_population", "ref_edge", "walk", "discharge_load") %in% names(h)) &&
+    identical(h$ref_population, "stream_branch") && identical(h$walk, "bank")
 }, logical(1))]
-if (length(stale)) stop("grade tables made before #65 (no ref_population = stream_branch); rerun 0320: ",
-                        paste(basename(stale), collapse = ", "))
-# the stream branch: the edge types the curves' visits were on and the reference was taken over (0320 grades with
-# knw_grade_species()'s default ref_edge). Off it, on lakes, wetlands and river polygons, the grade extrapolates the
-# curve past its visits, so the table says which segments those are
-edge_stream <- eval(formals(knw_grade_species)$ref_edge)
+if (length(stale)) stop("grade tables made before #73 (no record of the bank walk, the reference edge types and the flow build); rerun 0320: ",
+                        paste(stale, collapse = ", "))
+ref_edges <- unique(vapply(heads, function(h) h$ref_edge, character(1)))
+if (length(ref_edges) != 1) stop("the grade tables took their reference over different edge types: ", paste(ref_edges, collapse = " | "))
+loads <- unique(vapply(heads, function(h) h$discharge_load, character(1)))
+if (length(loads) != 1) stop("the grade tables were graded on different flow builds: ", paste(loads, collapse = " | "))
+if (!identical(loads, discharge_load)) {
+  stop("the grade tables were graded on another flow build than the live one; regrade (0320) before publishing.\n  graded: ",
+       loads, "\n  live:   ", discharge_load)
+}
+prov_grade <- c(prov, list(discharge_load_at_grade = loads, discharge_load_at_publish = discharge_load, walk = "bank"))
+# the stream branch: the edge types the curves' visits were on and the reference was taken over, as the tables record
+# them. Off it, on lakes, wetlands and river polygons, the grade extrapolates the curve past its visits, so the table
+# says which segments those are
+edge_stream <- as.integer(strsplit(ref_edges, ";", fixed = TRUE)[[1]])
 grades <- bind_rows(lapply(gfiles, read_csv, show_col_types = FALSE, guess_max = 1e5)) |>
   transmute(blue_line_key, downstream_route_measure, upstream_route_measure, linear_feature_id, watershed_group_code,
             length_metre, access, species_code, stage, grade, grade_class, stream_branch = edge_type %in% edge_stream,
@@ -103,7 +115,7 @@ write_csv(grades, gpath, na = "")
 message(sprintf("grades: %d segment rows, %d species x stage", nrow(grades), n_distinct(paste(grades$species_code, grades$stage))))
 tables_gr <- data.frame(
   table = "habitat_grade", source = gpath, script = "scripts/0325-publish.R",
-  description = paste0("One row per link default segment x species x stage: the segment's FWA position key, its link access code, and its grade (expected use per standard electrofishing visit, read at the segment's own walked distance to the first river of the rule's exception flow, or of 10 m3/s where the rule has none, relative to the 95th percentile of accessible stream-branch segments, 0-1, NA where inaccessible or the size or gradient is missing) in fifths; stream_branch, TRUE on the FWA edge types the curve's visits were on (", paste(edge_stream, collapse = ", "), "), FALSE on lines through lakes, wetlands and double-line rivers and on other connectors, where the grade extrapolates the curve past the visits it was fitted on; with the rule_id it was graded under and the link run and evidence version (knowledge#57, knowledge#65)."),
+  description = paste0("One row per link default segment x species x stage: the segment's FWA position key, its link access code, and its grade (expected use per standard electrofishing visit, read at the segment's own walked distance, from its downstream end to the bank of the first river of the rule's exception flow, or of 10 m3/s where the rule has none, relative to the 95th percentile of accessible stream-branch segments, 0-1, NA where inaccessible or the size or gradient is missing) in fifths; stream_branch, TRUE on the FWA edge types the curve's visits were on (", paste(edge_stream, collapse = ", "), "), FALSE on lines through lakes, wetlands and double-line rivers and on other connectors, where the grade extrapolates the curve past the visits it was fitted on; with the rule_id it was graded under and the link run and evidence version (knowledge#57, knowledge#65, knowledge#73)."),
   stringsAsFactors = FALSE)
 man_grade <- knw_publish(tables_gr, "data/publish/habitat_grade_v1", id = "knowledge/habitat_grade/v1",
                   note = "Expected-use grades for every segment of each tuned species' groups on link's province-wide default run (knowledge#57). Hive-partitioned by species_code and stage.",

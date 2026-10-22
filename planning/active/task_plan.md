@@ -99,25 +99,25 @@ in this repo has moved since.
 
 `R/tune_grid.R`, `R/tune_score.R`, `R/tune_repick.R`, `R/tune_run.R`, `scripts/0320-tune-run.R`.
 
-- [ ] `knw_tune_grid()` default `grid_grad` extended to 11, 13, 15, 20, 25 and 30 % (#67's steps), one shared ladder
+- [x] `knw_tune_grid()` default `grid_grad` extended to 11, 13, 15, 20, 25 and 30 % (#67's steps), one shared ladder
       (#68); `test-tune_grid.R` pins the ladder
-- [ ] link's `default_tuned` MAD floors join each species' grid as candidates (read from `configs/default_tuned` at
+- [x] link's `default_tuned` MAD floors join each species' grid as candidates (read from `configs/default_tuned` at
       the run's `link_sha`, where `default` is read too: the grid is anchored on the run's bundle; plan review O2),
       labelled so the tune table can name them
-- [ ] The pick with link's flow version as the starting point (#80 task 1): `departures` counted from a chosen start
+- [x] The pick with link's flow version as the starting point (#80 task 1): `departures` counted from a chosen start
       rule; `knw_tune_score()` / `knw_tune_repick()` take `start`, the tune table carries `recommended` (width start)
       and `recommended_flow_start`, each at 1 and 1.96 SE; smoke it on the saved tables before the retune
-- [ ] `0320` writes both picks to `<key>_summary.csv`; the scored-grid cache stays keyed on the grid (#67)
+- [x] `0320` writes both picks to `<key>_summary.csv`; the scored-grid cache stays keyed on the grid (#67)
 
 ## Phase 3: Grade tables say how they were made (#72)
 
 `R/tune_curve.R`, `R/grade_species.R`, `scripts/0320`, `scripts/0325`, `scripts/0330`, `R/thresholds_table.R`.
 
-- [ ] `knw_tune_curve()` records `edge_stream` on the curve object; `knw_grade_species()` takes `ref_edge` from the
+- [x] `knw_tune_curve()` records `edge_stream` on the curve object; `knw_grade_species()` takes `ref_edge` from the
       curve by default and returns `ref_edge`, `q` and `walk = "bank"` beside `reference`
-- [ ] `0320` writes `ref_edge`, `q`, `walk`, `discharge_load` (the table comment at grading) into the grade table and
+- [x] `0320` writes `ref_edge`, `q`, `walk`, `discharge_load` (the table comment at grading) into the grade table and
       its log line; the keep check reads them, not the `stream_branch` literal
-- [ ] `0325` derives `stream_branch` from the recorded edges, publishes `discharge_load` and refuses when the live
+- [x] `0325` derives `stream_branch` from the recorded edges, publishes `discharge_load` and refuses when the live
       comment differs; `0330` and `data-raw/vignette_chinook.R` check the recorded values
 
 ## Phase 4: The comparison without maps, both structures, a GeoPackage

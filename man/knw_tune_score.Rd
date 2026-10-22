@@ -43,8 +43,9 @@ whether each visit is in under one row of \code{grid} (see \code{\link[=knw_rule
 A list: \code{rules}, the grid with \code{n_visits}, \code{n_detect}, \code{n_wsg},
 \code{unseen_level_visits}, \code{n_wsg_varies}, \code{converged}, \code{dev_heldout},
 \code{ddev_best}, \code{se_diff}, \code{ddev_null}, \code{in_region}, \code{n_in}, \code{n_detect_in},
-\code{raw_rate_in}, \code{raw_rate_out}, \code{pick}, \code{recommended}, and with \code{extra}
-\code{boot_region_share} and \code{boot_rec_share}; \code{folds}, the fold of each group;
+\code{raw_rate_in}, \code{raw_rate_out}, \code{pick}, \code{recommended}, \code{pick_flow},
+\code{recommended_flow} (\code{NA} with no flow start), and with \code{extra}
+\code{boot_region_share}, \code{boot_rec_share} and \code{boot_rec_share_flow}; \code{folds}, the fold of each group;
 \code{honest}, \code{seeds}, \code{boot_recs} (with \code{extra}), and \code{population}, counts.
 }
 \description{
@@ -68,7 +69,11 @@ is the region rule with the fewest departures from \code{default}, ties to the
 lower score. If the pick's exception distance is under \code{d_floor} (where
 mainstem catches snapped to a tributary mouth cannot be told apart),
 \strong{recommended} is the pick among region rules with \code{exc_d >= d_floor} or no
-exception; otherwise it is the pick. With \code{extra = TRUE} the call also runs
+exception; otherwise it is the pick. Where the grid carries
+\code{departures_flow} (the departures from link's flow version of \code{default},
+\code{\link[=knw_tune_grid]{knw_tune_grid()}}), the same pick is made from that starting point too
+(\code{pick_flow}, \code{recommended_flow}; #80), on the same region: the region does
+not depend on the start, only which of its rules is nearest. With \code{extra = TRUE} the call also runs
 \code{n_boot} bootstrap resamples of groups (each rule's share in the region, and
 the share of resamples recommending each rule), a nested selection (the pick
 chosen on the other folds' held-out deviance and scored on each fold, against

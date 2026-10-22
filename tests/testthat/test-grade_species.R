@@ -118,3 +118,23 @@ test_that("the reference reads 1 at the stream branch's top, and off-branch segm
   expect_error(knw_grade(fx$curve, seg, cols = c(size = "size", grad = "gradient", dist = "dist_m"),
                          ref_rows = TRUE), "one value per segment")
 })
+
+test_that("the grade records how it was made: the curve's edge types, the river size and the walk (#72)", {
+  skip_if_not_installed("mgcv")
+  skip_if_not_installed("duckdb")
+  fx <- grade_fixture()
+  r <- run_grade(fx)$g
+  # a curve with no edge_stream recorded takes knw_tune_run()'s default
+  expect_identical(r$ref_edge, c(1000L, 1100L, 2000L, 2300L))
+  expect_identical(r$q, 3)
+  expect_identical(r$walk, "bank")
+  expect_true("target_in_group" %in% names(r$grades))
+  expect_true(all(is.na(r$grades$target_in_group)))   # the mock walk names no river segment
+  # a curve that records its edge types is graded against them
+  fx$curve$edge_stream <- c(1000L, 2000L)
+  r2 <- run_grade(fx)$g
+  expect_identical(r2$ref_edge, c(1000L, 2000L))
+  gr <- r2$grades
+  stream <- gr$accessible & !is.na(gr$rate) & gr$edge_type %in% c(1000L, 2000L)
+  expect_equal(r2$reference, unname(stats::quantile(gr$rate[stream], 0.95)))
+})

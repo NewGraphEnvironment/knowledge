@@ -26,6 +26,9 @@
 #' @param dist_cap_m,q_default,k `numeric` the spec's constants: the distance
 #'   cap, the river size when the pick has no exception, and the basis sizes
 #'   (`size`, `dist`, `grad`).
+#' @param edge_stream `integer` or `NULL`: the FWA edge types the visits in `d`
+#'   were filtered on, recorded on the result as `edge_stream` so the grade's
+#'   reference population can be taken from the curve (#72).
 #' @return A list: `model` (the `mgcv::gam`), `data` (the rows fitted, with
 #'   `log_size`, `log_dist`, `grad`), `ref` (the reference nuisance values a
 #'   segment is predicted at: median `log_area`, modal `data_set`, latest `era`),
@@ -34,7 +37,7 @@
 #'   held-out deviance), `edf` (the smooths' effective degrees of freedom), and
 #'   `curves`, a `tibble` of marginal curves (`curve`, `x`, `rate`, `rel_rate`,
 #'   `rel_lo`, `rel_hi`, `threshold`) relative to the pick's thresholds, each
-#'   other variable held at its reference; `dist_in_model`, `FALSE` when the
+#'   other variable held at its reference; `edge_stream`, as given; `dist_in_model`, `FALSE` when the
 #'   distances were too few to carry a smooth and size stood alone.
 #' @export
 #' @examples
@@ -45,7 +48,8 @@
 #' }
 knw_tune_curve <- function(d, pick, walks, folds, resp = "U",
                            cols = c(grad = "fwa_gradient", width = "cw_deploy", mad = "mad_pick"), src = "pick",
-                           dist_cap_m = 50000, q_default = 10, k = c(size = 6, dist = 6, grad = 6)) {
+                           dist_cap_m = 50000, q_default = 10, k = c(size = 6, dist = 6, grad = 6),
+                           edge_stream = NULL) {
   chk::chk_data(d)
   chk::check_names(d, c(resp, "wsg", "log_area", "data_set", "era", "blue_line_key", "downstream_route_measure",
                         unname(cols)))
@@ -160,5 +164,6 @@ knw_tune_curve <- function(d, pick, walks, folds, resp = "U",
              log(thr_dist + 10), function(x) exp(x) - 10)
   )
   list(model = fit, data = dd, ref = ref, dropped = dropped, capped = capped, heldout = dev, edf = edf, curves = curves,
-       size_var = pick$size_var, q = q, dist_cap_m = dist_cap_m, dist_in_model = dist_in_model)
+       size_var = pick$size_var, q = q, dist_cap_m = dist_cap_m, dist_in_model = dist_in_model,
+       edge_stream = if (is.null(edge_stream)) NULL else as.integer(edge_stream))
 }
