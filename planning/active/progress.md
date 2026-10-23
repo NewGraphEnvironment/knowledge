@@ -39,6 +39,11 @@
   `SCHEMA=fresh_default_20261017 SPECIES=GR,ST,WCT 0330`, its stdout `20261023_0330-gr_st_wct.out`. #73's body
   and the plan say so; findings, "Rainbow deferred"
 
+- The four-species scores were impossible (GR no-rule 8,397 against #57's 848); replayed, the intercept minimiser
+  sticks on the clamp's plateau when a fold's offsets are large. `0320` stopped while grading GR at 16:14 UTC, its
+  orphaned workers stopped, no queries left; the fix and a test that fails on the old search (`ca78ca6`); the broken
+  tables restored and their caches removed. Rescoring is on hold while the tuning is organized (Al)
+
 ### Resume (written 2026-10-23 05:30 UTC, for the session that picks this up after a compact and clear)
 
 The branch stays `73-rebuild-the-evidence-and-retune-on-the-r`; no new issue, no new plan-init. Resume with

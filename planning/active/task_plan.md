@@ -171,6 +171,11 @@ in this repo has moved since.
       the ladder sentence. **RB deferred (Al, 2026-10-23):** scored and graded by this `0320` (its tables kept), left
       out of the comparison, the write-ups and the thresholds table until the scorer's cost is fixed (#83; findings,
       "Rainbow deferred"); `rainbow_rearing_tuned.md` says so in its status
+- [ ] **On hold (Al, 2026-10-23): no rescore until the tuning is organized for fast, checked iteration** (findings,
+      "The intercept minimiser sticks on a flat clamp"). The fix is in (`ca78ca6`); every #73 score (CH, CO, BT and the
+      four) came from the old search. `data/tune/{CH,CO,BT}_*_score.rds` are stale caches of it and must be removed
+      before any `0320`, which keys its cache on the grid, not the code. The committed CH, CO and BT write-ups rest
+      on those scores until a rescore says whether their picks hold
 - [ ] `research/habitat_thresholds_tuned.md`: Results, "At 1.96 SE", Grades, "What each rule changes" and Limits
       rewritten from the new tables (the distance bullet now says bank); every quantified claim recomputed at the grain
       of the sentence
