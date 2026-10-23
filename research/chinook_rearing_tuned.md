@@ -34,9 +34,10 @@ between 3.5 and 10 %, against link's `default` of width ≥ 1.5 m, gradient ≤ 
 ## Evidence
 
 7,123 stream-branch electrofishing visits (216 with CH) in 104 groups in link's CH range with no natural barrier
-downstream; 4,490 of them, in the 43 groups where chinook were both caught and missed, are modelled. Chinook were caught
-on 5.6 % of the 3,066 modelled visits at 5.49 % or less, 3.3 % at 5.49–7 %, 2.5 % at 7–9 %, 4.2 % at 9–11 %, 2.4 % at
-11–13 %, 8.9 % of the 56 visits at 13–15 % and 0.8 % of the 236 above 15 %; none of the modelled visits is above 20 %.
+downstream; 4,490 of them, in the 43 groups where chinook were both caught and missed, are modelled (4,487 carry a size
+and a gradient). On the FWA gradient the rules read, chinook were caught on 5.6 % of the 3,066 visits at 5.49 % or less,
+3.3 % of 422 at 5.49–7 %, 2.5 % of 366 at 7–9 %, 4.7 % of 169 at 9–10.49 %, 2.3 % of 172 at 10.49–13 %, 8.9 % of 56 at
+13–15 %, 1 of 91 at 15–20 % and 1 of the 145 above 20 % (67 at 20–25 %, 35 at 25–30 %, 43 steeper).
 Of the 3,792 visits on streams under 0.75 m³/s, the 672 within 1 km of a ≥ 3 m³/s river hold 91 of the 123 detections
 (13.5 % against 1.0 %), and 211 visits at a distance of 0, the visit lying on the river's own line, hold 46.
 
