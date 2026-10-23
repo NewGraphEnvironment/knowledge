@@ -368,3 +368,71 @@ separated coefficient), far under anything the pick reads. Minutes per species, 
 load: CH 19.0 → 4.9, CO 22.0 → 2.4, BT (both stages) 65.5 → 5.9, GR 1.1 → 1.1, ST 1.5 → 1.6, WCT 0.8 → 1.0; the three
 small keys are the curve and the prep, not the fits. The caches under `data/tune/ref_*/` are ignored (the score
 caches already were); the comparison table is the record.
+
+**Rainbow with every extra, on m4 (2026-10-23, 20:58 to 21:15 UTC; `data/tune/ref_fe_extra/` there, log
+`~/Projects/repo_aside/rb_m4.log` on m4):** `FIT=fe EXTRA=1 SPECIES=RB WORKERS=12` took **16.6 min** for the whole
+`knw_tune_run()` (7,706 patterns, 0 not converged, the 200-resample bootstrap, nested selection and four extra seeds,
+the curve), against the **8.1 h** of 2026-10-23 for the same job on the dense fit here (6 workers, load about 13; the
+run that was stopped). m4 has 16 cores at load 2 to 6 against 10 here under link's provincial run, so the comparison is
+machine to machine as well as fit to fit; the six-species reference on one machine is the like-for-like (110 min to
+17). The same probe as chinook's on rainbow (52-pattern grid, 455 fits): 0 fall-backs, 9.1 iterations a fit, and
+of 966 s under the loaded machine 18 s were fits, the rest the GAM curve, so rainbow's floor is the curve. Rainbow's
+gates were off in this run and it fails the coefficient gate without the prior, so nothing it scored is a result.
+m4 now carries the branch, the evidence build (md5s checked against the ledger), link's threshold commits and the
+database, so Phase 7's rescore runs there.
+
+## The prior on the data-set and era coefficients (option A, Al 2026-10-23)
+
+**The principle.** The model adds effects on the cloglog scale, where a step of one multiplies the hazard of
+detection by e, and turns the sum into a probability. The data-set and era terms are there so that a rule is not
+credited for a sampling difference (which provincial record a visit came from, and whether it was fished before 1995,
+1995 to 2004 or since). With one intercept per group in the model, each of those effects is measured only by the
+contrast between the two levels inside the groups that hold both. Where every detection of those groups sits on one
+level there is no finite effect that fits best: the likelihood keeps improving as the coefficient grows, the fitter
+stops only when the deviance stops moving, and it reports convergence (steelhead's `data_set` 19.6, a hazard ratio
+near 300 million; grayling's era 14.0, rainbow's 11.3, cutthroat's 10.1). That coefficient is then an offset on the
+held-out groups' visits of that level, so they start at a chance of detection near zero or one before the rule says
+anything, and every rule is scored on that noise. A normal prior on the coefficient, SD `prior_sd` on the cloglog
+scale, says that a sampling effect is probably modest: the fit adds `b^2 / prior_sd^2` to the deviance (a ridge), so
+a coefficient costs more the further it sits from zero. A real effect of two or three units is left nearly where it
+is; a runaway stops where the evidence runs out. Nothing else in the model is penalised: not the group intercepts,
+not area, not the rule.
+
+**Where it is.** `.tune_glm_fe(ridge = )` adds one pseudo-observation per penalised column to each weighted
+least-squares step (sqrt of the weight in that column, response 0, which is the penalty's contribution to the
+quadratic the step minimises) and tests convergence on the penalised deviance; the held-out deviance it reports is
+unpenalised. `.tune_fold_setup()` marks the `data_set` and `era` columns, `.tune_score_one(prior_sd = )` turns the
+SD into weights, and `prior_sd = 2.5` is the default of `knw_tune_score()`, `knw_tune_smoke()` and
+`knw_tune_run()`; `Inf` is no prior, and the dense fit takes none (it errors on a finite `prior_sd`), so it stays the
+unpenalised reference. A penalised column is never aliased: a level the groups carry gets 0 and the groups take it,
+so the fall-back to the dense fit has nothing left to fire on. `test-tune_score.R` checks the fit against a general
+optimiser on the penalised deviance (to 1e-4 in the coefficients), that zero weights reproduce the unpenalised fit
+exactly, that a separated data set's coefficient is held between 2 and 6 in size where it ran past 8, and that the
+prior reaches the scorer and the smoke run.
+
+**The measurement the prior is adopted on** (`planning/active/scratch/prior_smoke.R` → `prior_smoke.csv`,
+`prior_smoke_rules.csv`, `prior_smoke_lines.txt`; the smoke run on every key, main seed, 0320's inputs, 2026-10-23;
+each setting 0.1 min over the eight keys). The gates and the largest non-group coefficient of any smoke rule:
+
+| key | no prior | SD 5 | SD 2.5 | SD 1.5 |
+|---|---|---|---|---|
+| BT_rear | pass, 1.15 (rule) | pass, 1.15 | pass, 1.15 | pass, 1.15 |
+| BT_spawn | pass, 3.63 (data set) | pass, 3.40 | pass, 2.92 | pass, 2.28 |
+| CH_rear | pass, 3.12 (rule) | pass, 3.12 | pass, 3.12 | pass, 3.12 |
+| CO_rear | pass, 1.51 (era) | pass, 1.21 | pass, 1.16 | pass, 1.05 |
+| GR_rear | **coef**, 13.96 (era) | pass, 4.44 | pass, 2.89 | pass, 1.29 |
+| RB_rear | **coef**, 11.31 (era) | pass, 1.80 | pass, 1.17 | pass, 1.17 |
+| ST_rear | **null_ratio, coef**, 19.63 (data set) | pass, 2.50 | pass, 2.10 | pass, 2.02 |
+| WCT_rear | **coef**, 10.12 (era) | pass, 0.74 | pass, 0.74 | pass, 0.74 |
+
+The no-rule model's held-out deviance under each: BT_rear 6,031.2 at every setting; BT_spawn 408.0, 405.9, 401.4,
+395.1; CH 1,382.5, 1,382.0, 1,380.5, 1,377.9; CO 4,024.6 to 4,023.2; GR 848.4, 831.2, 828.0, 825.0; RB 12,617.4 at
+every setting; **ST 634.5, 439.8, 420.8, 407.7**; WCT 1,329.9 to 1,329.5. Steelhead's previous pick goes from 586.6
+held-out to 372.9 at 2.5 while its distance from no rule hardly moves (−47.9 to −47.9): the runaway had been scoring
+a fold's held-out visits at a chance near zero, for every rule alike. Reading the table: the sound keys' largest
+coefficients are the rule's or a data-set effect of about 3, and 2.5 moves them by at most 0.7 (BT_spawn's 3.63 to
+2.92, the one real effect the prior visibly shrinks); the separated keys' coefficients fall from 10 to 20 to under 3,
+with grayling's at 4.4 under SD 5 still near the limit; the null ratio on steelhead goes from 1.42 to 0.94; nothing
+is at the clamp and no rule is behind no rule anywhere. **Adopted: SD 2.5**, the default, with SD 5 and 1.5 on record
+as the sensitivity. The curve's GAM has its own `data_set` and `era` terms and no prior; its held-out deviance beside
+the grid's will say whether that matters on the four keys (Phase 7).

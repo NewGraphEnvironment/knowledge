@@ -14,7 +14,8 @@ knw_tune_smoke(
   folds = 5L,
   tol_null = 0.25,
   coef_max = 5,
-  fit = c("fe", "dense")
+  fit = c("fe", "dense"),
+  prior_sd = 2.5
 )
 }
 \arguments{
@@ -38,7 +39,7 @@ pick, which must be in \code{grid}.}
 
 \item{coef_max}{\code{numeric(1)} check 4's limit.}
 
-\item{fit}{passed to the fits, as in \code{\link[=knw_tune_score]{knw_tune_score()}}.}
+\item{fit, prior_sd}{passed to the fits, as in \code{\link[=knw_tune_score]{knw_tune_score()}}.}
 }
 \value{
 A list: \code{rules}, one row per smoke rule (\code{role}, \code{rule},

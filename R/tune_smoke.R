@@ -29,7 +29,7 @@
 #'    sets or eras is separation, not a measured effect.
 #'
 #' @inheritParams knw_tune_score
-#' @param fit passed to the fits, as in [knw_tune_score()].
+#' @param fit,prior_sd passed to the fits, as in [knw_tune_score()].
 #' @param previous `NULL`, or `character(1)` the rule string of the previous
 #'   pick, which must be in `grid`.
 #' @param tol_null `numeric(1)` check 1's tolerance.
@@ -54,8 +54,11 @@
 #' sm$checks
 #' cat(sm$lines, sep = "\n")
 knw_tune_smoke <- function(d, rule_in, grid, resp = "U", previous = NULL, seed = 54L, folds = 5L,
-                           tol_null = 0.25, coef_max = 5, fit = c("fe", "dense")) {
+                           tol_null = 0.25, coef_max = 5, fit = c("fe", "dense"), prior_sd = 2.5) {
   fit <- match.arg(fit)
+  chk::chk_number(prior_sd)
+  if (prior_sd <= 0) stop("prior_sd must be positive (Inf for no prior)", call. = FALSE)
+  if (fit == "dense" && is.finite(prior_sd)) stop("the dense fit takes no prior; set prior_sd = Inf", call. = FALSE)
   chk::chk_data(d)
   chk::check_names(d, c(resp, "wsg", "log_area", "data_set", "era"))
   chk::chk_function(rule_in)
@@ -92,7 +95,7 @@ knw_tune_smoke <- function(d, rule_in, grid, resp = "U", previous = NULL, seed =
   u <- !duplicated(key)
   fold_of <- .tune_fold_of_wsg(d, resp, seed, folds)
   fs <- .tune_fold_setup(d, resp, fold_of, folds)
-  sc <- lapply(pats[u], .tune_score_one, folds = fs, fit = fit)[match(key, key[u])]
+  sc <- lapply(pats[u], .tune_score_one, folds = fs, fit = fit, prior_sd = prior_sd)[match(key, key[u])]
   names(sc) <- names(pats)
   y <- d[[resp]]
   null_in <- .tune_null_insample(y, d$wsg)

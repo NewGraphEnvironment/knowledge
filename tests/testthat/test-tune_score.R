@@ -241,23 +241,90 @@ test_that("the group-absorbing fit is glm.fit's: coefficients, deviance, iterati
   expect_equal(m2$deviance, m1$deviance, tolerance = 1e-10)
 })
 
+test_that("the ridge is a normal prior on the named columns: the penalised maximum, bounded where separated", {
+  fam <- stats::binomial(link = "cloglog")
+  set.seed(12)
+  n <- 400
+  n_g <- 6
+  g <- sample.int(n_g, n, TRUE)
+  d <- data.frame(log_area = log(stats::runif(n, 20, 400)), data_set = factor(sample(c("FDIS", "FDS"), n, TRUE)),
+                  era = factor(sample(c("to1994", "2005on"), n, TRUE)))
+  eta <- stats::rnorm(n_g, -2, 0.5)[g] + 0.4 * (d$log_area - 5) + 0.8 * (d$data_set == "FDS")
+  d$y <- stats::rbinom(n, 1, 1 - exp(-exp(eta)))
+  rule <- as.numeric(stats::runif(n) < 0.5)
+  X <- cbind(stats::model.matrix(~ log_area + data_set + era, d)[, -1], rule = rule)
+  ridge <- c(0, 1 / 2.5^2, 1 / 2.5^2, 0)
+  m <- knowledge:::.tune_glm_fe(X, g, d$y, fam, ridge = ridge)
+  expect_true(m$converged)
+  # the objective the fit minimises, over every coefficient, found by a general optimiser from the fit's answer
+  # shifted and from zero
+  obj <- function(th) {
+    e <- drop(X %*% th[1:4]) + th[4 + g]
+    sum(fam$dev.resids(d$y, fam$linkinv(e), rep(1, n))) + sum(ridge * th[1:4]^2)
+  }
+  th0 <- c(m$coefficients, m$alpha)
+  expect_equal(m$penalty, sum(ridge * m$coefficients^2))
+  o1 <- stats::optim(th0 + 0.3, obj, method = "BFGS", control = list(reltol = 1e-14, maxit = 2000))
+  expect_lt(abs(o1$value - obj(th0)), 1e-6)
+  expect_equal(unname(o1$par[1:4]), unname(m$coefficients), tolerance = 1e-4)
+  # no weight on any column is the unpenalised fit exactly
+  m0 <- knowledge:::.tune_glm_fe(X, g, d$y, fam)
+  expect_identical(knowledge:::.tune_glm_fe(X, g, d$y, fam, ridge = rep(0, 4)), m0)
+  expect_gt(abs(m0$coefficients[["data_setFDS"]] - m$coefficients[["data_setFDS"]]), 0)
+  expect_lt(abs(m0$coefficients[["data_setFDS"]] - m$coefficients[["data_setFDS"]]), 0.15)
+  # a separated data set: the unpenalised coefficient runs past 8; the prior holds it to a few units, converged
+  ds <- d
+  ds$y[ds$data_set == "FDS"] <- 0L
+  m1 <- knowledge:::.tune_glm_fe(X, g, ds$y, fam)
+  m2 <- knowledge:::.tune_glm_fe(X, g, ds$y, fam, ridge = ridge)
+  expect_lt(m1$coefficients[["data_setFDS"]], -8)
+  expect_gt(m2$coefficients[["data_setFDS"]], -6)
+  expect_lt(m2$coefficients[["data_setFDS"]], -2)
+  expect_true(m2$converged)
+  expect_lt(m2$iter, m1$iter)
+  # a level the groups carry is not aliased under the prior: it gets 0 and the groups take it, no fall-back
+  da <- X
+  da[, "data_setFDS"] <- as.numeric(g == 3)
+  m3 <- knowledge:::.tune_glm_fe(da, g, d$y, fam, ridge = ridge)
+  expect_equal(m3$coefficients[["data_setFDS"]], 0, tolerance = 1e-10)
+  expect_false(m3$fallback)
+  # a zero column is NA under the prior as without it
+  dz <- X
+  dz[, "erato1994"] <- 0
+  expect_true(is.na(knowledge:::.tune_glm_fe(dz, g, d$y, fam, ridge = ridge)$coefficients[["erato1994"]]))
+  expect_error(knowledge:::.tune_glm_fe(X, g, d$y, fam, ridge = c(1, 1)), "one non-negative weight")
+})
+
 test_that("the scorer gives the same table with the groups absorbed as with one column per group", {
-  a <- knw_tune_score(pop(), rin, grid3, "U", seed = 7, n_boot = 10, seeds_more = 8L, extra = TRUE, fit = "dense")
-  b <- knw_tune_score(pop(), rin, grid3, "U", seed = 7, n_boot = 10, seeds_more = 8L, extra = TRUE, fit = "fe")
+  expect_error(knw_tune_score(pop(), rin, grid3, "U", seed = 7, fit = "dense"), "takes no prior")
+  expect_error(knw_tune_score(pop(), rin, grid3, "U", seed = 7, prior_sd = 0), "positive")
+  a <- knw_tune_score(pop(), rin, grid3, "U", seed = 7, n_boot = 10, seeds_more = 8L, extra = TRUE, fit = "dense",
+                      prior_sd = Inf)
+  b <- knw_tune_score(pop(), rin, grid3, "U", seed = 7, n_boot = 10, seeds_more = 8L, extra = TRUE, fit = "fe",
+                      prior_sd = Inf)
   expect_equal(b$rules, a$rules, tolerance = 1e-9)
   expect_identical(b$rules$converged, a$rules$converged)
   expect_equal(b$honest, a$honest, tolerance = 1e-9)
   expect_equal(b$seeds, a$seeds)
   # socket workers carry the solver
-  w <- knw_tune_score(pop(), rin, grid3, "U", seed = 7, n_boot = 10, extra = TRUE, workers = 2L, fit = "fe")
+  w <- knw_tune_score(pop(), rin, grid3, "U", seed = 7, n_boot = 10, extra = TRUE, workers = 2L, fit = "fe",
+                      prior_sd = Inf)
   expect_equal(w$rules, b$rules[names(w$rules)], tolerance = 1e-9)
   # the fall-back reaches the scorer: a data set carried by one whole group
   d <- pop()
   d$data_set <- factor(ifelse(d$wsg == "W02", "FDS", "FDIS"))
-  expect_equal(knw_tune_score(d, rin, grid3, "U", seed = 7, fit = "fe")$rules,
-               knw_tune_score(d, rin, grid3, "U", seed = 7, fit = "dense")$rules, tolerance = 1e-9)
-  sm_a <- knw_tune_smoke(pop(), rin, grid3, "U", previous = "tuned", seed = 7, fit = "dense")
-  sm_b <- knw_tune_smoke(pop(), rin, grid3, "U", previous = "tuned", seed = 7)
+  expect_equal(knw_tune_score(d, rin, grid3, "U", seed = 7, fit = "fe", prior_sd = Inf)$rules,
+               knw_tune_score(d, rin, grid3, "U", seed = 7, fit = "dense", prior_sd = Inf)$rules, tolerance = 1e-9)
+  sm_a <- knw_tune_smoke(pop(), rin, grid3, "U", previous = "tuned", seed = 7, fit = "dense", prior_sd = Inf)
+  sm_b <- knw_tune_smoke(pop(), rin, grid3, "U", previous = "tuned", seed = 7, prior_sd = Inf)
   expect_equal(sm_b$rules, sm_a$rules, tolerance = 1e-9)
   expect_equal(sm_b$checks, sm_a$checks, tolerance = 1e-9)
+  # the prior reaches the scorer: the same picks on sound data, every coefficient a little nearer zero
+  p <- knw_tune_score(pop(), rin, grid3, "U", seed = 7)
+  expect_equal(p$rules$recommended, b$rules$recommended)
+  expect_false(isTRUE(all.equal(p$rules$dev_heldout, b$rules$dev_heldout)))
+  expect_lt(max(abs(p$rules$dev_heldout - b$rules$dev_heldout)), 2)
+  sm_p <- knw_tune_smoke(pop(), rin, grid3, "U", previous = "tuned", seed = 7)
+  expect_equal(sm_p$rules$coef_max_term, sm_b$rules$coef_max_term)
+  expect_equal(sm_p$rules$coef_max, sm_b$rules$coef_max, tolerance = 1e-2)
 })

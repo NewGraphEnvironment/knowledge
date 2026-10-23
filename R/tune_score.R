@@ -52,6 +52,19 @@
 #'   group (`stats::glm.fit()`). They give the same coefficients and deviances to
 #'   numerical tolerance; `"fe"` falls back to `"dense"` on a fold where a
 #'   nuisance level is a combination of groups.
+#' @param prior_sd `numeric(1)` the standard deviation, on the cloglog scale,
+#'   of a normal prior on every training fit's `data_set` and `era`
+#'   coefficients, `Inf` for none. The fit adds `b^2 / prior_sd^2` per
+#'   coefficient to the deviance (a ridge), so a coefficient costs more the
+#'   further it sits from zero. These terms are in the model so that a rule is
+#'   not credited for a sampling difference, and with a group intercept each is
+#'   measured only by the contrast between the two levels inside the groups that
+#'   hold both; where every detection of those groups sits on one level the
+#'   contrast is separated and the unpenalised coefficient runs until the
+#'   deviance stops moving (steelhead's `data_set` to 19.6, a hazard ratio past
+#'   a hundred million, 2026-10-23). At 2.5 a measured effect of two or three
+#'   units (chinook's data set, bull trout spawning's) is left nearly where it
+#'   is and a runaway is held to a few units. The dense fit takes none.
 #' @return A list: `rules`, the grid with `n_visits`, `n_detect`, `n_wsg`,
 #'   `unseen_level_visits`, `n_wsg_varies`, `converged`, `dev_heldout`,
 #'   `ddev_best`, `se_diff`, `ddev_null`, `in_region`, `n_in`, `n_detect_in`,
@@ -75,8 +88,11 @@
 #' s$rules[, c("rule", "dev_heldout", "ddev_best", "se_diff", "in_region", "pick")]
 knw_tune_score <- function(d, rule_in, grid, resp = "U", seed = 54L, folds = 5L, n_boot = 200L,
                            seed_boot = 541L, seeds_more = integer(), d_floor = 200, workers = 1L,
-                           extra = FALSE, fit = c("fe", "dense")) {
+                           extra = FALSE, fit = c("fe", "dense"), prior_sd = 2.5) {
   fit <- match.arg(fit)
+  chk::chk_number(prior_sd)
+  if (prior_sd <= 0) stop("prior_sd must be positive (Inf for no prior)", call. = FALSE)
+  if (fit == "dense" && is.finite(prior_sd)) stop("the dense fit takes no prior; set prior_sd = Inf", call. = FALSE)
   chk::chk_data(d)
   chk::check_names(d, c(resp, "wsg", "log_area", "data_set", "era"))
   chk::chk_function(rule_in)
@@ -108,7 +124,7 @@ knw_tune_score <- function(d, rule_in, grid, resp = "U", seed = 54L, folds = 5L,
     cl <- parallel::makeCluster(workers)
     on.exit(parallel::stopCluster(cl), add = TRUE)
   }
-  sw <- .tune_score_wsg(d, resp, pats, seed, folds, cl, fit)
+  sw <- .tune_score_wsg(d, resp, pats, seed, folds, cl, fit, prior_sd)
   s0 <- .tune_sel(sw$Sw, seq_len(nrow(sw$Sw)))
   pk <- .tune_pick(s0, col, sw$conv, grid, d_floor)
   flow_start <- "departures_flow" %in% names(grid) && !all(is.na(grid$departures_flow))
@@ -166,7 +182,7 @@ knw_tune_score <- function(d, rule_in, grid, resp = "U", seed = 54L, folds = 5L,
                  dev_default = sum(sw$Sw[in_k, col[default_ix]]), dev_null = sum(sw$null[in_k]))
     }))
     out$seeds <- do.call(rbind, lapply(seeds_more, function(sd_) {
-      s2 <- .tune_score_wsg(d, resp, pats, sd_, folds, cl, fit)
+      s2 <- .tune_score_wsg(d, resp, pats, sd_, folds, cl, fit, prior_sd)
       ss <- .tune_sel(s2$Sw, seq_len(nrow(s2$Sw)))
       p2 <- .tune_pick(ss, col, s2$conv, grid, d_floor)
       data.frame(seed = sd_, best = grid$rule[which(col == ss$best)[1]], pick = grid$rule[p2[["pick"]]],
@@ -223,16 +239,20 @@ knw_tune_score <- function(d, rule_in, grid, resp = "U", seed = 54L, folds = 5L,
       matrix(numeric(0), nrow = length(tr), ncol = 0)
     }
     list(tr = tr, ho = ho, X = X, Xn = Xn, g = as.integer(dtr$wsg), y = d[[resp]][tr], Xh = Xh[, cols, drop = FALSE],
-         cols = cols, yh = d[[resp]][ho], wh = droplevels(d$wsg[ho]), unseen = unseen)
+         cols = cols, yh = d[[resp]][ho], wh = droplevels(d$wsg[ho]), unseen = unseen,
+         pen = grepl("^(data_set|era)", colnames(Xn)))
   })
 }
 
 # held-out deviance per visit for one in/out pattern, with each fold's non-group training coefficients
 # (the nuisance terms and the rule; `NA` where aliased), which the smoke run's coefficient gate reads (#84).
 # `fit = "fe"` absorbs the groups (`.tune_glm_fe()`, #83) and falls back to the dense `glm.fit()` on a fold where
-# the two would drop different columns; `"dense"` is the model matrix with one column per group.
-.tune_score_one <- function(x, folds, fit = "fe") {
+# the two would drop different columns; `"dense"` is the model matrix with one column per group. `prior_sd` is the
+# normal prior on the `data_set` and `era` coefficients (a ridge inside the fit; `Inf` for none), which the dense fit
+# does not take.
+.tune_score_one <- function(x, folds, fit = "fe", prior_sd = 2.5) {
   fam <- stats::binomial(link = "cloglog")
+  if (fit == "dense" && is.finite(prior_sd)) stop("the dense fit takes no prior; set prior_sd = Inf", call. = FALSE)
   n <- sum(vapply(folds, function(f) length(f$ho), integer(1)))
   dv <- rep(NA_real_, n)
   ok <- TRUE
@@ -240,7 +260,8 @@ knw_tune_score <- function(d, rule_in, grid, resp = "U", seed = 54L, folds = 5L,
   for (k in seq_along(folds)) {
     f <- folds[[k]]
     xt <- as.numeric(x[f$tr])
-    m <- if (fit == "fe") .tune_glm_fe(cbind(f$Xn, rule = xt), f$g, f$y, fam) else NULL
+    ridge <- if (is.finite(prior_sd)) c(ifelse(f$pen, 1 / prior_sd^2, 0), 0) else NULL
+    m <- if (fit == "fe") .tune_glm_fe(cbind(f$Xn, rule = xt), f$g, f$y, fam, ridge = ridge) else NULL
     if (is.null(m) || m$fallback) {
       m <- suppressWarnings(stats::glm.fit(cbind(f$X, rule = xt), f$y, family = fam,
                                            control = stats::glm.control(maxit = 100)))
@@ -269,16 +290,29 @@ knw_tune_score <- function(d, rule_in, grid, resp = "U", seed = 54L, folds = 5L,
 # fit's intercept. A column that is zero, or a combination of earlier columns, is dropped as the dense fit's
 # QR drops it (`NA`); a nuisance column that is a combination of the groups, but not of the intercept and the
 # nuisance columns before it, is dropped here but kept by the dense fit, which drops a group column instead, so
-# `fallback` says the caller should use the dense fit.
-.tune_glm_fe <- function(X, g, y, fam = stats::binomial(link = "cloglog"), maxit = 100L, epsilon = 1e-8) {
+# `fallback` says the caller should use the dense fit. `ridge`, a weight per column (0 for none), adds
+# sum(ridge * b^2) to the deviance, a normal prior with SD 1/sqrt(ridge) on each coefficient: each least-squares step
+# carries one pseudo-observation per penalised column, sqrt(ridge) in that column with response 0 (the penalty's
+# contribution to the quadratic the step minimises), and the convergence test is on the penalised deviance. A
+# penalised column is never aliased, so a level the groups carry gets 0 and the groups take it.
+.tune_glm_fe <- function(X, g, y, fam = stats::binomial(link = "cloglog"), maxit = 100L, epsilon = 1e-8,
+                         ridge = NULL) {
   n <- length(y)
   p <- ncol(X)
   G <- max(g)
+  pen <- !is.null(ridge) && any(ridge > 0)
+  if (pen) {
+    if (length(ridge) != p || any(ridge < 0)) stop("ridge needs one non-negative weight per column", call. = FALSE)
+    R <- diag(sqrt(ridge), p)[ridge > 0, , drop = FALSE]
+    z0 <- numeric(nrow(R))
+  }
+  penalty <- function(b) if (pen) sum(ridge * b^2) else 0
   mustart <- (y + 0.5) / 2
   eta <- fam$linkfun(mustart)
   mu <- fam$linkinv(eta)
   w1 <- rep(1, n)
   devold <- sum(fam$dev.resids(y, mu, w1))
+  objold <- devold
   b <- rep(0, p)
   a <- rep(0, G)
   coefold <- NULL
@@ -299,7 +333,13 @@ knw_tune_score <- function(d, rule_in, grid, resp = "U", seed = 54L, folds = 5L,
     gi <- match(gg, grp)
     mX <- rowsum(Xg * w2, gg) / sw
     mz <- as.vector(rowsum(z * w2, gg)) / sw
-    ls <- .lm.fit((Xg - mX[gi, , drop = FALSE]) * w, (z - mz[gi]) * w, tol = 1e-11)
+    Xd <- (Xg - mX[gi, , drop = FALSE]) * w
+    zd <- (z - mz[gi]) * w
+    if (pen) {
+      Xd <- rbind(Xd, R)
+      zd <- c(zd, z0)
+    }
+    ls <- .lm.fit(Xd, zd, tol = 1e-11)
     b <- numeric(p)
     b[ls$pivot[seq_len(ls$rank)]] <- ls$coefficients[seq_len(ls$rank)]
     if (ls$rank < p) dropped[ls$pivot[-seq_len(ls$rank)]] <- TRUE
@@ -324,20 +364,22 @@ knw_tune_score <- function(d, rule_in, grid, resp = "U", seed = 54L, folds = 5L,
         dev <- sum(fam$dev.resids(y, mu, w1))
       }
     }
-    if (abs(dev - devold) / (abs(dev) + 0.1) < epsilon) {
+    obj <- dev + penalty(b)
+    if (abs(obj - objold) / (abs(obj) + 0.1) < epsilon) {
       conv <- TRUE
       break
     }
-    devold <- dev
+    objold <- obj
     coefold <- start
   }
-  b[dropped] <- NA_real_
+  zero <- colSums(X != 0) == 0
+  b[dropped | zero] <- NA_real_
   names(b) <- colnames(X)
   # the rule is the last column, and is dropped by both fits when aliased. A dropped nuisance column is one the
   # dense fit keeps unless it is zero or its own QR (the intercept, then the nuisance columns, before the groups)
   # drops it as a combination of the intercept and the columns before it: an era dummy on a fold with no visit in
   # the reference era is, and the fall-back on it cost chinook every fit twice over (2026-10-23)
-  cand <- (dropped & colSums(X != 0) > 0)[-p]
+  cand <- (dropped & !zero)[-p]
   fallback <- FALSE
   if (any(cand)) {
     q <- qr(cbind(1, X[, -p, drop = FALSE]), tol = 1e-11)
@@ -345,7 +387,8 @@ knw_tune_score <- function(d, rule_in, grid, resp = "U", seed = 54L, folds = 5L,
     if (q$rank < p) dense_drop[q$pivot[-seq_len(q$rank)] - 1L] <- TRUE
     fallback <- any(cand & !dense_drop)
   }
-  list(coefficients = b, alpha = a, converged = conv, iter = iter, deviance = dev, fallback = fallback)
+  list(coefficients = b, alpha = a, converged = conv, iter = iter, deviance = dev, penalty = penalty(ifelse(is.na(b), 0, b)),
+       fallback = fallback)
 }
 
 # a held-out group's deviance per visit, its own intercept fitted over the visits' offsets. The
@@ -380,20 +423,20 @@ knw_tune_score <- function(d, rule_in, grid, resp = "U", seed = 54L, folds = 5L,
 }
 
 # per-group held-out deviance for every distinct pattern, plus the no-rule model
-.tune_score_wsg <- function(d, resp, pats, seed, folds, cl, fit = "fe") {
+.tune_score_wsg <- function(d, resp, pats, seed, folds, cl, fit = "fe", prior_sd = 2.5) {
   fold_of <- .tune_fold_of_wsg(d, resp, seed, folds)
   fs <- .tune_fold_setup(d, resp, fold_of, folds)
   sc <- if (is.null(cl)) {
-    lapply(pats, .tune_score_one, folds = fs, fit = fit)
+    lapply(pats, .tune_score_one, folds = fs, fit = fit, prior_sd = prior_sd)
   } else {
     # every function a worker calls goes by name: a worker loads no package
     parallel::clusterExport(cl, c(".tune_score_one", ".tune_group_dev", ".tune_glm_fe"), envir = environment())
-    parallel::parLapply(cl, pats, .tune_score_one, folds = fs, fit = fit)
+    parallel::parLapply(cl, pats, .tune_score_one, folds = fs, fit = fit, prior_sd = prior_sd)
   }
   devm <- vapply(sc, `[[`, numeric(nrow(d)), "dev")
   Sw <- rowsum(devm, d$wsg)
   list(Sw = Sw, conv = vapply(sc, `[[`, logical(1), "ok"),
-       null = rowsum(.tune_score_one(rep(FALSE, nrow(d)), fs, fit = fit)$dev, d$wsg)[, 1],
+       null = rowsum(.tune_score_one(rep(FALSE, nrow(d)), fs, fit = fit, prior_sd = prior_sd)$dev, d$wsg)[, 1],
        unseen = sum(vapply(fs, `[[`, numeric(1), "unseen")),
        fold = fold_of[rownames(Sw)])
 }

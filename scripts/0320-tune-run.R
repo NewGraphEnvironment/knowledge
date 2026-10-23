@@ -145,6 +145,8 @@ for (f in list.files("data/tune", "_tune\\.csv$", full.names = TRUE)) {
     previous[sub("_tune\\.csv$", "", basename(f))] <- r$rule[r$recommended == "TRUE"]
   }
 }
+say("Fit: group intercepts absorbed (#83); normal prior SD %s on the data_set and era coefficients, cloglog scale (#84).",
+    format(formals(knw_tune_score)$prior_sd))
 say("Smoke run first%s: previous picks on file for %s.", if (dev) " (DEV=1: the main seed only, no grades, outputs under data/tune/dev)" else "",
     paste(names(previous), collapse = ", "))
 t0 <- Sys.time()

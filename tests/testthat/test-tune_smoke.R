@@ -91,7 +91,7 @@ test_that("the null_ratio and clamp checks fire on the 84c3c78 search and pass o
 
 test_that("the behind_null and coef checks fire on what the fits return", {
   n <- nrow(pop_s())
-  fake <- function(x, folds, fit = "fe") {
+  fake <- function(x, folds, fit = "fe", prior_sd = 2.5) {
     in_rule <- any(x)
     list(dev = rep(if (in_rule) 3 else 1, n), ok = TRUE,
          coef = lapply(1:5, function(k) c(log_area = 0.2, rule = if (in_rule) 13 else NA_real_)))

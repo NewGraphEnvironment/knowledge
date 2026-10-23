@@ -75,7 +75,15 @@
   region, pick, recommended rule and convergence flag the same, deviances to 1e-9 relative except six CH rules at
   3e-7 (`compare_fit.R`, `fit_compare.csv`). The first reproduction run fell back on every chinook fold (an era dummy
   both fits drop) and was stopped; the test now asks what the dense fit's own QR would drop. Rainbow's timing with the
-  extras (`EXTRA=1`) is running; the box flips with it.
+  extras (`EXTRA=1`) is running; the box flips with it. Committed as `9d8f136`.
+- Rainbow's timing moved to m4 (16 cores, idle) when a virtual machine here, link's provincial run, left my workers a
+  fifth of a core each: m4 got the branch, the two evidence files that differed (md5s checked), and already had link's
+  commits and the database; 16.6 min with every extra against 8.1 h here. #83's box flipped.
+- Al chose option A for the coefficient finding: a normal prior, SD 2.5 on the cloglog scale, on the `data_set` and
+  `era` coefficients (`.tune_glm_fe(ridge = )`, `prior_sd` through the scorer, smoke and run; the dense fit takes none).
+  Measured on every key at no prior, 5, 2.5 and 1.5 (`planning/active/scratch/prior_smoke.R`): every gate passes at
+  every prior; without one the coefficient gate fails on GR, RB, ST and WCT and steelhead's null ratio too. Phase 7's
+  hold lifted; the rescore runs on m4. Al's rule for the write-ups, 2026-10-23: teach the principle beside each result.
 
 ### Resume (revised 2026-10-23, for the session that picks this up after a compact and clear)
 

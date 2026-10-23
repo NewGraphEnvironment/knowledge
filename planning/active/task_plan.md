@@ -176,17 +176,21 @@ run (findings, "The intercept minimiser sticks on a flat clamp"), so Phase 7's r
 - [x] #84: `0320` runs the smoke run and gates first, for every key, and refuses the full grid on a failure; a
       development setting skips the extra seeds, the bootstrap and nested selection (`knw_tune_run(smoke, smoke_only,
       previous, extra)`; `0320` `DEV=1`: main seed only, no grades, outputs under `data/tune/dev/`)
-- [ ] #84: the gates fail on the scorer at `84c3c78` and pass on `ca78ca6` (mutation table in findings); the
+- [x] #84: the gates fail on the scorer at `84c3c78` and pass on `ca78ca6` (mutation table in findings); the
       coefficient check's finding on `data_set` and `era` recorded, and any change to those terms decided from it.
       **Measured 2026-10-23: they do not all pass on `ca78ca6`** (findings, "The smoke run's mutation table"): the
       centred search still stops on the plateau where a held-out group's offsets are spread (ST), so the search is
       now the root of the deviance's derivative; the coefficient check fails on GR, RB, ST and WCT at every scorer
-      version, which is the training fit's finding, to decide
-- [ ] #83: group intercepts without a dense column per group; a dense-fit reference rescored first on the current
+      version, which is the training fit's finding. **Decided (Al, 2026-10-23): option A**, a normal prior, SD 2.5
+      on the cloglog scale, on the `data_set` and `era` coefficients inside the fit (`prior_sd`); measured on every
+      key at no prior, 5, 2.5 and 1.5 (findings, "The prior on the data-set and era coefficients"): every gate passes
+      on every key at every prior, the largest coefficient at 2.5 is 3.12
+- [x] #83: group intercepts without a dense column per group; a dense-fit reference rescored first on the current
       scorer (the committed CH and CO tables came from the old search) and reproduced; rainbow timed against 8.1 h
       (`.tune_glm_fe()` in, `fit = "fe"` the default; the reference on six species reproduced rule by rule on
-      2026-10-23, findings "The fit with the groups absorbed"; the fall-back test narrowed after it fired on every
-      chinook fold; the rainbow timing is the open part)
+      2026-10-23, 110 min to 17, findings "The fit with the groups absorbed"; the fall-back test narrowed after it
+      fired on every chinook fold; rainbow with every extra 16.6 min on m4's 12 workers against 8.1 h here, a
+      machine-to-machine comparison as well; m4 set up with the branch, the evidence build and the database)
 - [ ] Run rule from here: no chained tuning and comparison; every key's gates pass, then score, check, grade, compare
 
 ## Phase 7: BT, then GR, RB, ST and WCT
@@ -197,7 +201,9 @@ run (findings, "The intercept minimiser sticks on a flat clamp"), so Phase 7's r
       the ladder sentence. **RB deferred (Al, 2026-10-23):** left out of the comparison, the write-ups and the
       thresholds table until #83 lands (findings, "Rainbow deferred"); the stopped run's RB tables were restored to
       HEAD, so nothing of it is kept. If #83 makes RB feasible, it comes back in this box
-- [ ] **On hold until Phase 6a (Al, 2026-10-23): no rescore until the tuning is organized for fast, checked iteration** (findings,
+- [ ] **Hold lifted 2026-10-23: Phase 6a done, the prior adopted, every gate passes on every key; the rescore runs on
+      m4** (findings, "The prior on the data-set and era coefficients"). Was: on hold until Phase 6a (Al, 2026-10-23),
+      no rescore until the tuning is organized for fast, checked iteration (findings,
       "The intercept minimiser sticks on a flat clamp"). The fix is in (`ca78ca6`); every #73 score (CH, CO, BT and the
       four) came from the old search. `data/tune/{CH,CO,BT}_*_score.rds` are stale caches of it and must be removed
       before any `0320`, which keys its cache on the grid, not the code. The committed CH, CO and BT write-ups rest
