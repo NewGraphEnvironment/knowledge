@@ -259,7 +259,8 @@ knw_tune_score <- function(d, rule_in, grid, resp = "U", seed = 54L, folds = 5L,
   sc <- if (is.null(cl)) {
     lapply(pats, .tune_score_one, folds = fs)
   } else {
-    parallel::clusterExport(cl, c(".tune_score_one"), envir = environment())
+    # every function a worker calls goes by name: a worker loads no package
+    parallel::clusterExport(cl, c(".tune_score_one", ".tune_group_dev"), envir = environment())
     parallel::parLapply(cl, pats, .tune_score_one, folds = fs)
   }
   devm <- vapply(sc, `[[`, numeric(nrow(d)), "dev")

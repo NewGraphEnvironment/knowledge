@@ -65,10 +65,13 @@ test_that("too few groups for the folds is refused", {
   expect_error(knw_tune_score(pop(n_wsg = 3), rin, grid3, "U", seed = 1), "3 groups")
 })
 
-test_that("two re-runs are identical", {
+test_that("two re-runs are identical, and socket workers score as the main process does", {
   a <- knw_tune_score(pop(), rin, grid3, "U", seed = 7, n_boot = 10, extra = TRUE)
   b <- knw_tune_score(pop(), rin, grid3, "U", seed = 7, n_boot = 10, extra = TRUE)
   expect_identical(a$rules, b$rules)
+  # a worker loads no package, so every function it calls must be exported to it by name
+  w <- knw_tune_score(pop(), rin, grid3, "U", seed = 7, n_boot = 10, extra = TRUE, workers = 2L)
+  expect_equal(w$rules, a$rules)
 })
 
 test_that("a grid with departures_flow gives a second pick from the flow start; without it the columns are NA", {
