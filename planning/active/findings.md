@@ -174,6 +174,8 @@ another group); km accessible 225,152, graded 224,459, grade-weighted 61,423 (#6
 size), reference 0.5196, walks to 10 m³/s (43,945 of 484,751 found rivers in another group); km accessible 147,795,
 graded 146,612, grade-weighted 72,637 (#65: 70,905); under 0.2: 28,477 km (19 %); 0.8–1: 33,620 km (23 %).
 
+The first scoring's tables (before the intercept fix) are kept as `scripts/logs/habitat/20261022_tune_run-ch_co_run1_{CH,CO}_rear_tune.csv`; the rescored tables are `data/tune/`. The probes used in the diagnosis (`curve_diag.R`, `score_probe.R`, the three-pattern probe that wrongly cleared the scorer) and the walk and baseline checks (`walks_moved.R`, `default_check_o4.R`) are in `planning/active/scratch/`.
+
 ## Phase 8 notes gathered while the runs went (2026-10-23)
 
 `vignettes/chinook_rearing.Rmd` guards that the new chinook pick will break: line 78 `ch196$size_min == rec$size_min`
