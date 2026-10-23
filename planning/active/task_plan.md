@@ -145,11 +145,11 @@ in this repo has moved since.
 
 ## Phase 5: The evidence build on the current flows
 
-- [ ] Install link 0.67.0; confirm the discharge comment is still build 94deeb5 and `fresh_default.log_recompute`
+- [x] Install link 0.67.0; confirm the discharge comment is still build 94deeb5 and `fresh_default.log_recompute`
       still the released run (else rerun `0300`)
 - [ ] `0310` (~20 min): the visit tables and the walks rebuilt; `0290`, `0294`, `0296` rewritten from it; `0299`
       local build as v3 (unpublished; the ledger records the flow build)
-- [ ] Record in `findings.md` how many visit distances moved and by how much (bank rule and flows separately, from
+- [x] Record in `findings.md` how many visit distances moved and by how much (bank rule and flows separately, from
       `dist_centre_m` and `bank_m`)
 
 ## Phase 6: CH and CO, all the way through

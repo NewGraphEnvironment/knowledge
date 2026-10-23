@@ -235,8 +235,9 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
     }
     if (nrow(specs[[model]])) {
       t1 <- Sys.time()
-      fresh::frs_near_river(conn, paste0(scratch, ".streams"), near_tbl, threshold = specs[[model]]$threshold,
-                            distance_max = specs[[model]]$distance_max, measure = specs[[model]]$measure, verbose = FALSE)
+      sx <- specs[[model]]
+      fresh::frs_near_river(conn, paste0(scratch, ".streams"), near_tbl, threshold = sx$threshold,
+                            distance_max = sx$distance_max, measure = sx$measure, verbose = FALSE)
       walk_s <- walk_s + as.numeric(difftime(Sys.time(), t1, units = "secs"))
     }
     if (is_default_rule && "door" %in% structures && !nrow(specs[[model]])) {
@@ -244,7 +245,8 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
         "SELECT count(*) FILTER (WHERE (%s) IS DISTINCT FROM (%s)) AS n FROM %s.streams s",
         preds$default, preds$door, scratch))$n
       if (as.integer(dif) > 0L) {
-        stop("the injected tuned predicate (door) differs from fresh's default on ", dif, " segments in ", w, call. = FALSE)
+        stop("the injected tuned predicate (door) differs from fresh's default on ", dif, " segments in ", w,
+             call. = FALSE)
       }
     }
     for (k in rule_names) {
@@ -284,7 +286,8 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
   # the default branch each segment lies on, as link's rules name them, and whether a user-habitat reach covers it
   in_uhc_seg <- if (nrow(uhc) && flag %in% names(uhc)) {
     sprintf("EXISTS (SELECT 1 FROM %s.uhc u WHERE u.blue_line_key = s.blue_line_key AND u.%s = 1
-                    AND s.downstream_route_measure < u.upstream_route_measure AND s.upstream_route_measure > u.downstream_route_measure)",
+                    AND s.downstream_route_measure < u.upstream_route_measure
+                    AND s.upstream_route_measure > u.downstream_route_measure)",
             scratch, flag)
   } else {
     "FALSE"

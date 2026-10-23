@@ -91,6 +91,31 @@ on the two groups: `default` 184.4 (216.9 before connectivity), `free` 205.8, `d
 bcfishobs lift (40 locations on accessible stream edges): default 2.63, free 3.72, door 3.72, door_wetland 4.06.
 `gained_exception_other_group_km` reads 0 because the old grade tables carry no `target_in_group`; the regrade will.
 
+## The evidence rebuild (0310, 2026-10-22; `scripts/logs/habitat/20261022_evidence_build_ledger.csv`)
+
+Same run (`20261017_004619-3f4c713b`, link a17e9177), link 0.67.0 installed, the database's flow build still
+2026-10-19 (wet 94deeb5; the S3 manifest the ledger names is wet's 2026-10-20 publish, which added `segment_daily`
+without changing the monthly table the database holds). 40,552 visits placed, 34,192 walk starts × 3 sources × 7 sizes
+in 4.2 min (4.4 in #57). The loaded pick counts moved with the 2026-10-19 reload (routed 3,152,838 → 3,154,131; balance
+1,380,005 → 1,378,712); every other drop and kept count is #57's.
+
+How the visits' distances moved, old (v3 Parquet of 2026-10-17: centreline, no gaps, the flows of 2026-10-17) against
+new (bank, gaps, the flows of 2026-10-19), on `pick`, 213,738 of 239,344 rows joined on the start key (the rest differ
+in the measure's printed precision between Parquet and CSV):
+
+| river size | both found | change, median (p10, p90) | bank taken off, median | gaps and flows, median (p90) | abs change > 100 m | crossing 1 km down / up | crossing 2 km down / up |
+|---|---|---|---|---|---|---|---|
+| 1 m³/s | 29,852 | 0.0 (−428, 0) | 0.0 | 0.0 (0.0) | 21.9 % | 594 / 136 | 478 / 151 |
+| 3 m³/s | 29,481 | −11.9 (−757, 43) | 14.6 | 0.0 (99) | 29.7 % | 607 / 120 | 518 / 125 |
+| 10 m³/s | 28,546 | −24.4 (−1,081, 345) | 34.7 | 0.0 (462) | 39.0 % | 572 / 108 | 502 / 123 |
+| 50 m³/s | 26,906 | −49.4 (−1,458, 1,071) | 67.9 | 0.0 (2,084) | 46.9 % | 373 / 80 | 358 / 81 |
+
+So the bank rule shortens the typical walk to a 3 m³/s river by about 15 m, the counted gaps lengthen one walk in ten
+to a large river by hundreds of metres (a tributary ending across a lake or a wide polygon from its parent's line), and
+the republished flows move the first segment at or above a size up or down the line, which is most of the p10. No walk
+that found a river lost it; 15 found one they had not. Over every source and size, 459,556 of 654,793 found rows have
+`bank_m > 0`, median 66.9 m, 90th percentile 1,816 m (the lake case: the walk ends at the shore).
+
 ## Errors Encountered
 
 | Error | Resolution |

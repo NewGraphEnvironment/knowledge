@@ -1,0 +1,140 @@
+kind,step,n,note
+info,settle_log,0,scripts/logs/habitat/20261017_link_settle.csv
+info,link_run_uid,0,20261017_004619-3f4c713b
+info,run_link_version,0,0.66.0
+info,run_link_sha,0,a17e91773b283b021811f8b5b76b887d5f4c16e4;ee21eb1371cbc4d7a2d598f8bbeeaeb0534d7994
+info,run_fresh_version,0,0.39.0
+info,run_fresh_sha,0,e247ca19a7803982dc7e5f55dbbf377dfc85d007
+info,run_fwapg_sha,0,f9718cb739d376155641f484456eb2a93ce2f481
+info,run_config_hash,0,sha256:7e9dffa4a5b84d99c30928ecaf5eda30e7ccf9342f1fc53a2d9a3ce2840eb66b
+info,md5_sites,0,98d4d6dd0c2694092b91f54dd9a49361
+info,md5_catch,0,a31fd7bbe2febbe31d70fc8f4cd3a161
+info,md5_fish,0,8cf273515ce2b692c3719130eac75b93
+info,fdis_sites_in,51587,
+drop,not_placed,1563,not placed on the FWA network
+drop,far_snap,5242,snapped beyond the placement limit
+drop,ws50_mismatch,1088,FDIS 1:50k watershed code disagrees with the placement
+drop,junk_date,23,
+drop,effort_sentinel_or_none,1353,"sentinel effort, or neither fished area nor time"
+drop,catch_unknown,275,catch neither fish nor an explicit zero
+info,link_version,0,0.67.0
+info,species_pooling_md5,0,31ca5df552fdef1160b271dd7cb04ee6
+info,bt_dv_pooled_wsgs,122,
+info,species_BT,3876,present on 3876 visits; absent 37370; blocked 797; unknown 0; in link's range 34738
+info,species_CH,1176,present on 1176 visits; absent 40482; blocked 385; unknown 0; in link's range 23118
+info,species_CM,51,present on 51 visits; absent 41590; blocked 402; unknown 0; in link's range 11159
+info,species_CO,2356,present on 2356 visits; absent 39353; blocked 334; unknown 0; in link's range 18375
+info,species_GR,942,present on 942 visits; absent 40740; blocked 361; unknown 0; in link's range 10433
+info,species_KO,385,present on 385 visits; absent 41201; blocked 457; unknown 0; in link's range 2196
+info,species_PK,16,present on 16 visits; absent 41622; blocked 405; unknown 0; in link's range 12828
+info,species_RB,9745,present on 9745 visits; absent 31813; blocked 485; unknown 0; in link's range 41409
+info,species_SK,79,present on 79 visits; absent 41201; blocked 763; unknown 0; in link's range 16615
+info,species_ST,259,present on 259 visits; absent 40939; blocked 845; unknown 0; in link's range 14283
+info,species_WCT,1371,present on 1371 visits; absent 38396; blocked 2276; unknown 0; in link's range 8031
+info,link_multi_match,70,max overlap 0.0014 m
+info,species_with_access,11,BT;CH;CM;CO;PK;SK;ST;WCT;KO;RB;GR
+info,species_with_habitat,11,BT;CH;CM;CO;GR;KO;PK;RB;SK;ST;WCT
+drop,no_link_segment,1491,no fresh_default segment on the visit's blue line at its measure
+info,segment_starts_in_window,19255,
+info,wet_manifest,0,discharge/fwa/v1 built 2026-10-20T18:40:10Z at https://fresh-bc.s3.us-west-2.amazonaws.com/discharge/fwa/v1/manifest.json
+info,wet_loaded_pcic_routed,3154131,picked annual rows; 3377037 segments loaded (wet_db_load() filters the manifest's rows on load)
+info,wet_loaded_wet_balance,1378712,picked annual rows; 4529939 segments loaded (wet_db_load() filters the manifest's rows on load)
+info,flow_from_parent,11,
+info,flow_missing,0,no picked flow on the segment or a parent
+info,code_from_parent,0,
+info,cw_model_control,6784,recomputed model within 5 % of the stored MODELLED width on 94.4 %; median ratio 0.999
+info,width_source_FIELD_MEASURMENT,17974,
+info,width_source_FWA_RIVERS_POLY,5818,
+info,width_source_MODELLED,10600,
+info,cw_deploy_null,8481,
+info,regulating_dams_placed,101,
+info,regulated,2926,
+info,barrier_dnstr_BT,17403,
+info,barrier_dnstr_CH,23318,
+info,barrier_dnstr_CM,23318,
+info,barrier_dnstr_CO,23318,
+info,barrier_dnstr_GR,23318,
+info,barrier_dnstr_KO,23318,
+info,barrier_dnstr_PK,23318,
+info,barrier_dnstr_RB,17403,
+info,barrier_dnstr_SK,23318,
+info,barrier_dnstr_ST,19162,
+info,barrier_dnstr_WCT,19162,
+info,barrier_unknown_codes,0,no watershed code even from a parent
+info,access_check_skipped,0,
+info,access_disagree_BT,48728,"habitat accessible, access = 0: 8867 rearing, 4697 spawning, 9691 km"
+info,access_disagree_CH,14242,"habitat accessible, access = 0: 330 rearing, 106 spawning, 2607 km"
+info,access_disagree_CM,7798,"habitat accessible, access = 0: 0 rearing, 175 spawning, 1485 km"
+info,access_disagree_CO,12717,"habitat accessible, access = 0: 531 rearing, 216 spawning, 2330 km"
+info,access_disagree_GR,30996,"habitat accessible, access = 0: 7170 rearing, 5031 spawning, 7195 km"
+info,access_disagree_KO,55989,"habitat accessible, access = 0: 983 rearing, 432 spawning, 15393 km"
+info,access_disagree_PK,7572,"habitat accessible, access = 0: 0 rearing, 153 spawning, 1320 km"
+info,access_disagree_RB,481275,"habitat accessible, access = 0: 147445 rearing, 66983 spawning, 102578 km"
+info,access_disagree_SK,11298,"habitat accessible, access = 0: 193 rearing, 59 spawning, 2119 km"
+info,access_disagree_ST,9611,"habitat accessible, access = 0: 434 rearing, 77 spawning, 1911 km"
+info,access_disagree_WCT,2284,"habitat accessible, access = 0: 44 rearing, 17 spawning, 466 km"
+info,walk_starts,34192,x 3 sources x 7 sizes; 4.2 min on 4 workers
+info,walk_convention,0,"bank: the distance ends at the river's bank and counts every hop's gap (fresh 0.42.0's rule, #73)"
+info,walk_bank_m_positive,459556,"of 654793 found rows; median 66.9 m, 90th percentile 1815.8 m"
+info,walk_pick_found,222709,"rows, all sizes"
+info,walk_pick_none,16635,"rows, all sizes"
+info,walk_pcic_routed_found,209303,"rows, all sizes"
+info,walk_pcic_routed_none,30041,"rows, all sizes"
+info,walk_wet_balance_found,222781,"rows, all sizes"
+info,walk_wet_balance_none,16563,"rows, all sizes"
+info,walk_targets,15419,"1395 on regulated reaches, 1647 in lakes"
+info,zone_zip,7729083,md5 f369d684fd3939acbdd6b06097a3d4b0 https://catalogue.data.gov.bc.ca/dataset/f1f86c41-ae83-49d5-92e1-526897b99fa2/resource/fc209bd0-26ab-4f8b-9415-8f34081a3c0e/download/bc_hydrologic_zones.zip
+info,zone_unmatched,0,
+info,workbook_species_rows,1165,1154 sites; 92 rows score (electrofishing with effort)
+info,workbook_sites_placed,871,of 1154 with a placement
+info,bcfishobs_BT_collection_only,230,
+info,bcfishobs_CH_collection_only,42,
+info,bcfishobs_CM_collection_only,4,
+info,bcfishobs_CO_collection_only,132,
+info,bcfishobs_GR_collection_only,49,
+info,bcfishobs_KO_collection_only,16,
+info,bcfishobs_PK_collection_only,8,
+info,bcfishobs_RB_collection_only,568,
+info,bcfishobs_SK_collection_only,11,
+info,bcfishobs_ST_collection_only,13,
+info,bcfishobs_WCT_collection_only,90,
+info,bcfishobs_BT_many,130,
+info,bcfishobs_CH_many,38,
+info,bcfishobs_CO_many,7,
+info,bcfishobs_GR_many,21,
+info,bcfishobs_RB_many,135,
+info,bcfishobs_WCT_many,69,
+info,bcfishobs_BT_not_fdis,3194,
+info,bcfishobs_CH_not_fdis,4384,
+info,bcfishobs_CM_not_fdis,3787,
+info,bcfishobs_CO_not_fdis,10834,
+info,bcfishobs_GR_not_fdis,1329,
+info,bcfishobs_KO_not_fdis,6665,
+info,bcfishobs_PK_not_fdis,3176,
+info,bcfishobs_RB_not_fdis,97088,
+info,bcfishobs_SK_not_fdis,3171,
+info,bcfishobs_ST_not_fdis,13945,
+info,bcfishobs_WCT_not_fdis,4388,
+info,bcfishobs_BT_one,4321,
+info,bcfishobs_CH_one,1286,
+info,bcfishobs_CM_one,57,
+info,bcfishobs_CO_one,2810,
+info,bcfishobs_GR_one,1322,
+info,bcfishobs_KO_one,901,
+info,bcfishobs_PK_one,15,
+info,bcfishobs_RB_one,11551,
+info,bcfishobs_SK_one,86,
+info,bcfishobs_ST_one,323,
+info,bcfishobs_WCT_one,1491,
+info,bcfishobs_BT_unmatched,3504,
+info,bcfishobs_CH_unmatched,3294,
+info,bcfishobs_CM_unmatched,1052,
+info,bcfishobs_CO_unmatched,8759,
+info,bcfishobs_GR_unmatched,577,
+info,bcfishobs_KO_unmatched,2083,
+info,bcfishobs_PK_unmatched,636,
+info,bcfishobs_RB_unmatched,10541,
+info,bcfishobs_SK_unmatched,921,
+info,bcfishobs_ST_unmatched,2266,
+info,bcfishobs_WCT_unmatched,739,
+kept,visits_kept,40552,

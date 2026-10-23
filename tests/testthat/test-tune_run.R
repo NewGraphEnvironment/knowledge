@@ -91,6 +91,12 @@ test_that("a cached score is read back only for the grid it was scored on", {
   local_mocked_bindings(knw_tune_score = function(...) stop("rescored"))
   expect_equal(run(small)$CH_rear$score$rules$rule, first$CH_rear$score$rules$rule)
   expect_error(run(wider), "rescored")
+  # a cache written before a grid column existed is rescored, not read as this grid's (it stopped 0320 on 2026-10-22)
+  old_cache <- readRDS(file.path(dir, "CH_rear_score.rds"))
+  old_cache$rules$departures_flow <- NULL
+  old_cache$rules$is_link_tuned <- NULL
+  saveRDS(old_cache, file.path(dir, "CH_rear_score.rds"))
+  expect_error(run(small), "rescored")
   # link's default width moving to another value on the ladder leaves every rule string as it was, but not the
   # grid's default
   thr2 <- s$thr

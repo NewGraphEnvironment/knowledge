@@ -134,7 +134,8 @@ knw_tune_run <- function(visits, species_tbl, walks, thresholds, species = knw_s
         sc <- readRDS(cache)
         # a cache scored on another grid would be read back as this one's result; the rule strings alone do not
         # carry which rule is `default` (it moves with link's thresholds), so every grid column is compared
-        if (!identical(sc$population[["visits_in"]], nrow(d)) ||
+        # a cache from before a grid column existed (#80's departures_flow, is_link_tuned) is another grid too
+        if (!identical(sc$population[["visits_in"]], nrow(d)) || !all(names(grid) %in% names(sc$rules)) ||
               !identical(as.list(sc$rules[names(grid)]), as.list(grid))) sc <- NULL
       }
       if (is.null(sc)) {
