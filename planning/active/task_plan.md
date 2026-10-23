@@ -165,7 +165,8 @@ in this repo has moved since.
 
 ## Phase 7: BT, then GR, RB, ST and WCT
 
-- [ ] `SPECIES=BT` `0320` and `0330` (rear and spawn; the long one); `bull_trout_tuned.md`
+- [x] `SPECIES=BT` `0320` and `0330` (rear and spawn; the long one); `bull_trout_tuned.md` (0320 262.7 min on
+      2026-10-22; 0330 206.9 min on 2026-10-23 against the archived schema; file rewritten)
 - [ ] `SPECIES=GR,RB,ST,WCT` `0320` and `0330`; their research files' numbers, picks and the ladder sentence
 - [ ] `research/habitat_thresholds_tuned.md`: Results, "At 1.96 SE", Grades, "What each rule changes" and Limits
       rewritten from the new tables (the distance bullet now says bank); every quantified claim recomputed at the grain

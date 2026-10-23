@@ -1,13 +1,9 @@
-direction,reason,order,n_segments,km,species_code,stage,tuned_rule
-gained,"exception (size fails, river within D)",1,59481,15616.559945576839,BT,spawn,mad>=0.75|g<=0.0549|Q3@D2000
-gained,"size: tuned passes, width fails or NULL",1,2922,722.4313142377973,BT,spawn,mad>=0.75|g<=0.0549|Q3@D2000
-lost,"size: width passes, tuned fails, no exception",1,1145,376.70736219651343,BT,spawn,mad>=0.75|g<=0.0549|Q3@D2000
-gained,"exception (size fails, river within D)",2,22234,5306.149772003986,BT,spawn,mad>=0.75|g<=0.0549|Q3@D2000
-gained,"size: tuned passes, width fails or NULL",2,12,3.373586632680637,BT,spawn,mad>=0.75|g<=0.0549|Q3@D2000
-lost,"size: width passes, tuned fails, no exception",2,29708,11511.467773249167,BT,spawn,mad>=0.75|g<=0.0549|Q3@D2000
-gained,"exception (size fails, river within D)",3,3315,834.7084871074511,BT,spawn,mad>=0.75|g<=0.0549|Q3@D2000
-gained,"size: tuned passes, width fails or NULL",3,29,6.62367308038891,BT,spawn,mad>=0.75|g<=0.0549|Q3@D2000
-lost,"size: width passes, tuned fails, no exception",3,65436,22958.811909870015,BT,spawn,mad>=0.75|g<=0.0549|Q3@D2000
-gained,"exception (size fails, river within D)",4+,147,49.74317704520484,BT,spawn,mad>=0.75|g<=0.0549|Q3@D2000
-gained,"size: tuned passes, width fails or NULL",4+,171,45.161064689820044,BT,spawn,mad>=0.75|g<=0.0549|Q3@D2000
-lost,"size: width passes, tuned fails, no exception",4+,62831,21564.066109926163,BT,spawn,mad>=0.75|g<=0.0549|Q3@D2000
+direction,reason,order,n_segments,km,structure,species_code,stage,tuned_rule
+gained,gradient between the two maxima,1,1473,380.0921065015699,door,BT,spawn,width>=2|g<=0.13|none
+gained,other (river-polygon branch or mixed),1,90,1.902959833836453,door,BT,spawn,width>=2|g<=0.13|none
+gained,gradient between the two maxima,2,29780,8738.856550516284,door,BT,spawn,width>=2|g<=0.13|none
+gained,other (river-polygon branch or mixed),2,1931,43.81363592272342,door,BT,spawn,width>=2|g<=0.13|none
+gained,gradient between the two maxima,3,59075,16740.924454355867,door,BT,spawn,width>=2|g<=0.13|none
+gained,other (river-polygon branch or mixed),3,1382,123.12169663378488,door,BT,spawn,width>=2|g<=0.13|none
+gained,gradient between the two maxima,4+,37747,9640.561590916644,door,BT,spawn,width>=2|g<=0.13|none
+gained,other (river-polygon branch or mixed),4+,3346,365.18719307513857,door,BT,spawn,width>=2|g<=0.13|none

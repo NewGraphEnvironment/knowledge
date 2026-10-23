@@ -1,0 +1,18 @@
+Spherical geometry (s2) switched off
+Comparison, knowledge#57: 2 fitted species x stage; link run 20261017_004619-3f4c713b at a17e91773b283b021811f8b5b76b887d5f4c16e4.
+link configs/default at 5f8f9f1d12422418ac6b411e5f3111c4f78770fe (the baseline; the schema fresh_default_20261017's run is at a17e91773b283b021811f8b5b76b887d5f4c16e4) read from ../link; fresh 0.42.0; tuned reported as door.
+Floodplain catalog: 23 whole-network groups (BOWR BULK DUNC FRAN KISP KOTL LARL LCHL LNTH LSAL MCGR MORK MORR NECR PARS PCEA PINE SLOC TABR THOM UFRA UNTH WILL).
+Compared 2 species x stage in 206.9 min on 2 workers.
+BT_rear: 158 groups, 206.9 min; default 244328 km (width>=1.5|g<=0.1049|none).
+  free: tuned 190117 km (-22.2 %); graded km 101583 -> 91323; lost 62557, gained 8346 (0 by the exception, 0 of it through a river in another group).
+  door (= tuned): tuned 177669 km (-27.3 %); graded km 101583 -> 90145; lost 69697, gained 3038 (0 by the exception, 0 of it through a river in another group).
+BT_spawn: 158 groups, 154.7 min; default 133382 km (width>=2|g<=0.0549|none).
+  door (= tuned): tuned 169416 km (+27.0 %); graded km 93411 -> 123823; lost 0, gained 36034 (0 by the exception, 0 of it through a river in another group).
+Composed with the saved comparison of CH_rear CO_rear.
+  CH_rear free: default 99186 km (width>=1.5|g<=0.0549|cw channel_width>=15@D1000; mad discharge>=3@D1000 on wetland_flow); tuned 92041 km (-7.2 %, mad>=0.75|g<=0.13|Q3@D1000).
+  CH_rear door: default 99186 km (width>=1.5|g<=0.0549|cw channel_width>=15@D1000; mad discharge>=3@D1000 on wetland_flow); tuned 84294 km (-15.0 %, mad>=0.75|g<=0.13|Q3@D1000).
+  CH_rear door_wetland: default 99186 km (width>=1.5|g<=0.0549|cw channel_width>=15@D1000; mad discharge>=3@D1000 on wetland_flow); tuned 66832 km (-32.6 %, mad>=0.75|g<=0.13|Q3@D1000).
+  CO_rear free: default 79829 km (width>=1.5|g<=0.0549|none); tuned 77602 km (-2.8 %, mad>=0.03|g<=0.04|none).
+  CO_rear door: default 79829 km (width>=1.5|g<=0.0549|none); tuned 75430 km (-5.5 %, mad>=0.03|g<=0.04|none).
+Left out of the combined tables (saved under another comparison; rerun them): GR_rear RB_rear ST_rear WCT_rear.
+Done in 206.9 min.

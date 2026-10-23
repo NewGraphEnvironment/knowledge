@@ -89,8 +89,8 @@ species and date, and the rest give the outside check. The Fish Data Submission 
 
 | species × stage | visits (detections), groups | recommended rule | region | `default` | pick holds in | power |
 |---|---|---|---|---|---|---|
-| BT rearing | 8,717 (1,198), 75 | MAD ≥ 0.35, ≤ 10.49 %, none | 196 rules: MAD 0.1–0.5, 9–10.49 % | out, +138.7 (SE 87.8) | 5 of 5 seeds | fitted |
-| BT spawning | 475 (98), 22 | MAD ≥ 0.75, ≤ 5.49 %, Q3 within 2 km | 18: MAD 0.15–1, 4–9 %, Q 1–5, D 0.5–2 km | out, +44.0 (SE 41.6) | 1 of 5 | fitted, **weak** |
+| BT rearing | 8,717 (1,198), 75 | MAD ≥ 0.1, ≤ 10.49 %, none | 594 rules: MAD 0.043–0.5 or width 3–4, 10.49–30 % | out, +229.2 (SE 127.5) | 2 of 5 seeds | fitted |
+| BT spawning | 475 (98), 22 | width ≥ 2, ≤ 13 %, none | 328: width 1–3 or MAD 0.041–1, 11–30 %, any exception or none | out, +10.2 (SE 5.8) | 4 of 5 | fitted, **weak** |
 | CH rearing | 4,490 (215), 43 | MAD ≥ 0.75, ≤ 13 %, Q3 within 1 km | 83: MAD 0.15–1, 7–30 %, Q 1–10, D 0.5–2 km | out, +226.4 (SE 91.8) | 5 of 5 | fitted |
 | CO rearing | 4,263 (1,107), 62 | MAD ≥ 0.03, ≤ 4 %, none | 89: MAD 0.03–0.2, 3–4 % (one at 7 %) | out, +111.8 (SE 47.4) | 5 of 5 | fitted |
 | GR rearing | 1,230 (212), 26 | **`default`** (width ≥ 1.5, ≤ 3.49 %) | 799: width 1–4, 3–9 % | **in**, +10.7 (SE 12.1) | 3 of 5 | fitted |
@@ -100,8 +100,8 @@ species and date, and the rest give the outside check. The Fish Data Submission 
 | CH, CO, GR, RB, ST, WCT spawning | — | — | — | — | — | no electrofishing response |
 | KO, SK rearing; CM, PK | — | — | — | — | — | no stream rule in `default` |
 
-The CH and CO rows are #73's retune (2026-10-23: the evidence rebuilt on wet's 2026-10-19 flows, the walk to the bank,
-the ladder to 30 %, 6,149 and 6,622 rules); the other rows are #57's until #73 reruns them.
+The BT, CH and CO rows are #73's retune (2026-10-23: the evidence rebuilt on wet's 2026-10-19 flows, the walk to the
+bank, the ladder to 30 %, 8,385, 7,095, 6,149 and 6,622 rules); the other rows are #57's until #73 reruns them.
 
 Three readings across the table:
 1. **`default` is outside the one-SE region for every fitted species but grayling.** For BT, CH, CO and ST the
@@ -126,8 +126,8 @@ main ladders; #67's ladder to 30 % is not replayed):
 
 | species × stage | `default` behind the best, in SEs | pick at 1 SE | pick at 1.96 SE | rules within 1 SE → 1.96 SE, of |
 |---|---|---|---|---|
-| BT rearing | 1.58 | MAD ≥ 0.35, ≤ 10.49 % | `default` | 196 → 1,066, of 3,612 |
-| BT spawning | 1.06 | MAD ≥ 0.75, ≤ 5.49 %, a ≥ 3 m³/s river within 2 km | `default` | 18 → 3,010, of 3,010 |
+| BT rearing | 1.80 | MAD ≥ 0.1, ≤ 10.49 % | `default` | 594 → 4,860, of 8,385 |
+| BT spawning | 1.74 | width ≥ 2, ≤ 13 % | `default` | 328 → 5,780, of 7,095 |
 | CH rearing | 2.47 | MAD ≥ 0.75, ≤ 13 %, a ≥ 3 m³/s river within 1 km | MAD ≥ 1, ≤ 5.49 %, a ≥ 3 m³/s river within 1 km | 83 → 2,066, of 6,149 |
 | CO rearing | 2.36 | MAD ≥ 0.03, ≤ 4 % | width ≥ 1.5, ≤ 4 % | 89 → 1,507, of 6,622 |
 | GR rearing | 0.89 | `default` | `default` | 799 → 3,493, of 3,612 |
@@ -151,8 +151,8 @@ main ladders; #67's ladder to 30 % is not replayed):
 
 | species × stage | segments (groups) | accessible km | graded km | grade-weighted km | reference rate | km under 0.2 | km at 0.8–1 |
 |---|---|---|---|---|---|---|---|
-| BT rearing | 8.41 M (158) | 577,130 | 571,305 | 151,418 | 0.226 | 63 % | 10 % |
-| BT spawning | 8.41 M (158) | 577,130 | 571,305 | 392,475 | 0.210 | 0.2 % | 23 % |
+| BT rearing | 8.41 M (158) | 576,908 | 571,305 | 146,894 | 0.221 | 64 % | 10 % |
+| BT spawning | 8.41 M (158) | 576,908 | 319,633 | 246,569 | 0.148 | 0 % | 39 % |
 | CH rearing | 5.76 M (125) | 225,152 | 224,459 | 61,423 | 0.136 | 68 % | 21 % |
 | CO rearing | 4.92 M (100) | 147,795 | 146,612 | 72,637 | 0.520 | 19 % | 23 % |
 | GR rearing | 4.21 M (82) | 258,724 | 146,128 | 72,867 | 0.034 | 25 % | 25 % |
@@ -160,8 +160,9 @@ main ladders; #67's ladder to 30 % is not replayed):
 | ST rearing | 4.14 M (79) | 155,481 | 154,855 | 32,290 | 0.201 | 76 % | 14 % |
 | WCT rearing | 1.19 M (16) | 35,320 | 25,932 | 18,671 | 0.473 | 6 % | 52 % |
 
-The CH and CO rows are #73's grades (2026-10-23: each segment walked to the river's bank, the reference over edge types
-1000, 1100, 2000 and 2300, CH under its new pick); the other rows are #65's until #73 regrades them.
+The BT, CH and CO rows are #73's grades (2026-10-23: each segment walked to the river's bank, the reference over edge
+types 1000, 1100, 2000 and 2300, BT and CH under their new picks; BT spawning now a width rule, so it grades only
+measured streams); the other rows are #65's until #73 regrades them.
 
 A width rule grades only measured streams: fwapg models width where `stream_order > 1`, so GR, RB and WCT leave
 every unmeasured first-order stream `NA` (RB: 6.26 M of 10.33 M segments). A MAD rule grades almost everything
@@ -180,39 +181,43 @@ to 25 % (BT rearing, up); CH's grade-weighted km grows by three quarters (36,149
 connectivity on scratch copies of every group the species' habitat table covers (`knw_compare_rules()`; the
 regenerated `default` equals fresh's own predicate on every segment), and reads the grade beside each segment.
 Kilometres are accessible stream under `streams_access`, flagged rearing or spawning by each rule; graded km is
-km × grade (`data/compare/compare.csv`, `change.csv`, `checks.csv`). The CH and CO rows are #73's, against link 0.67.0's
-`default` and under the structure each species file records; the other rows and the numbered points below are #65's, on the
-run's own configs, until their species rerun (Phase 7).
+km × grade (`data/compare/compare.csv`, `change.csv`, `checks.csv`). The BT, CH and CO rows are #73's, against link
+0.67.0's `default` (BT's read it at 0.68.0, `configs/` unchanged) and under the structure each species file records; the
+other rows and the numbered points below are #65's, on the run's own configs, until their species rerun (Phase 7), with
+the BT figures in points 1, 2 and 4 replaced by #73's.
 
 | species × stage | accessible km | `default` km | tuned km | change | lost | gained | graded km, `default` → tuned |
 |---|---|---|---|---|---|---|---|
 | RB rearing | 509,975 | 227,089 | 183,988 | −19.0 % | 44,368 | 1,267 | 103,160 → 90,429 |
-| BT rearing | 576,908 | 248,927 | 156,091 | −37.3 % | 94,199 | 1,363 | 105,605 → 77,856 |
-| BT spawning | 576,908 | 133,382 | 99,555 | −25.4 % | 56,411 | 22,585 | 88,070 → 62,266 |
+| BT rearing (#73, door) | 576,908 | 244,328 | 177,669 | −27.3 % | 69,697 | 3,038 | 101,584 → 90,145 |
+| BT spawning (#73, one structure) | 576,908 | 133,382 | 169,416 | +27.0 % | 0 | 36,034 | 93,411 → 123,823 |
 | CH rearing (#73, door, pair on every line) | 225,152 | 99,186 | 84,294 | −15.0 % | 30,477 | 15,585 | 48,091 → 53,911 |
 | CO rearing (#73, door) | 147,795 | 79,829 | 75,430 | −5.5 % | 9,945 | 5,546 | 50,801 → 50,540 |
 | GR rearing | 258,576 | 77,740 | 77,740 | 0 | 0 | 0 | 44,602 → 44,602 |
 | ST rearing | 155,357 | 71,619 | 45,274 | −36.8 % | 26,677 | 332 | 22,498 → 20,730 |
 | WCT rearing | 35,285 | 20,749 | 16,243 | −21.7 % | 4,510 | 4 | 14,939 → 11,277 |
 
-1. **Every tuned rule but grayling's draws less than `default`**, from 5 % less for coho to 37 % less for bull
-   trout rearing and steelhead. The loss is the size floor: segments over 1.5 m wide that fail the tuned flow or
-   width floor with no exception (BT rearing 93,376 of its 94,199 km lost, RB all 44,368, ST 26,284 of 26,677,
+1. **Every tuned rearing rule but grayling's draws less than `default`**, from 5 % less for coho to 37 % less for
+   steelhead. The loss is the size floor: segments over 1.5 m wide that fail the tuned flow or
+   width floor with no exception (BT rearing 61,172 of its 69,697 km lost (#73), RB all 44,368, ST 26,284 of 26,677,
    CH 24,532 of 24,832). For coho and cutthroat it is the lower gradient maximum (5,047 and 4,332 km).
-2. **The gains are the exception and coho's floor.** BT spawning gains 21,807 km through its river-within-2-km
-   exception, 15,617 of them order-1 streams, and CH 9,665 km (6,948 order 1); coho's 0.03 m³/s floor admits
-   5,077 km of streams under 1.5 m wide (4,653 order 1). Connectivity and the overlay move under 1,000 km for
-   every species.
-3. **Graded km falls with km except for chinook**, whose tuned 88,641 km carry 54,443 graded km against
-   `default`'s 49,434 on 101,184: the rule trades small low-grade streams for the near-river exception.
+2. **The gains are the exception, coho's floor and bull trout spawning's gradient.** BT spawning's tuned rule contains
+   `default` (the same 2 m width, 13 % in place of 5.49 %) and gains 36,034 km, 35,500 of them stream between the two
+   maxima and 35,652 of order 2 and up (#73); CH gains 9,665 km through its exception (6,948 order 1); coho's 0.03 m³/s
+   floor admits 5,077 km of streams under 1.5 m wide (4,653 order 1). Connectivity and the overlay move under 1,000 km
+   for every species.
+3. **Graded km falls with km except for chinook and bull trout spawning**: chinook's tuned 88,641 km carry 54,443
+   graded km against `default`'s 49,434 on 101,184, the rule trading small low-grade streams for the near-river
+   exception; bull trout spawning's gain sits in the grade's 0.8–1 class (12,608 → 46,131 km).
 4. **Checks** (`checks.csv`). FDIS detection on each rule's segments against accessible segments outside it,
-   `default` then tuned: RB 33 % against 15 %, then 35 % against 18 %; BT rearing 17 against 6, then 21 against
-   8; CH 13.6 against 2.2, then 16.7 against 1.3 (#73, door); CO 29 against 13, then 33 against 11 (#73, door); ST 4.8 against 0.7, then 7.5
+   `default` then tuned: RB 33 % against 15 %, then 35 % against 18 %; BT rearing 16.7 against 6.2, then 19.9
+   against 6.3 (#73, door); CH 13.6 against 2.2, then 16.7 against 1.3 (#73, door); CO 29 against 13, then 33 against 11 (#73, door); ST 4.8 against 0.7, then 7.5
    against 0.6; WCT 35 against 24, then 35 against 27. On the bcfishobs records FDIS does not hold (A/B matches, presence only,
    never scored), the share of their locations on accessible stream edges that falls on the rule's segments, over the
    rule's share of accessible stream-edge km, rises under every tuned
-   rule: RB 2.34 → 3.04, BT rearing 2.45 → 5.21, BT spawning 3.04 → 3.70, CH 2.46 → 3.11, CO 1.75 → 1.82 (both #73),
-   ST 2.20 → 4.08, WCT 1.56 → 1.73 (bootstrap intervals in the table). The tuned rules hold more of the
+   rule but bull trout spawning's: RB 2.34 → 3.04, BT rearing 2.45 → 3.81, CH 2.46 → 3.11, CO 1.75 → 1.82 (the
+   three #73), ST 2.20 → 4.08, WCT 1.56 → 1.73 (bootstrap intervals in the table); BT spawning 3.04 → 3.03 (#73), the
+   added km holding records at `default`'s density. The tuned rules hold more of the
    independent records per kilometre they draw, which is what the score rewards; it is not a claim about extent.
 
 **Maps.** `research/fig/compare_<sp>_<stage>_<wsg>.png` for every floodplain-catalog group the species covers and

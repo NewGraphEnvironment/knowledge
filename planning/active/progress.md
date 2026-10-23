@@ -20,6 +20,19 @@
 - The hand-off committed (`f00ef42`): the detached chain and the Resume brief below
 - Next: the chain (BT 0330, then GR,RB,ST,WCT 0320 and 0330); write-ups per the Resume section
 
+## Session 2026-10-23
+
+- The chinook gradient bands corrected (`cd4084d`: the curve object clamps gradient at 0.2; the bands read `fwa_gradient`)
+- link#361's provincial run renamed `fresh_default` to `fresh_default_20261017` at 07:41 UTC under the first chain:
+  the bull trout comparison failed on connect and the four-species tuning was stopped; `0320` and `0330` now take
+  `SCHEMA` (`468153d`); the second chain (`20261023_chain2_73.sh`) relaunched both at 07:48 UTC on the archived schema
+- Bull trout through the comparison (206.9 min, exit 0 at 11:15 UTC; rearing under free and door, spawning under its
+  one structure); `research/bull_trout_tuned.md` rewritten prior-first for both stages (227 lines in place of #57/#65's
+  72); BT rows of `habitat_thresholds_tuned.md` (Results, 1.96, Grades, changes table, points 1–4's BT figures);
+  `research/README.md`'s row; Phase 7's BT box ticked
+- Next: the four-species tuning (running since 07:48 UTC) and comparison under the chain; their write-ups per the Resume
+  section; then the `habitat_thresholds_tuned.md` rewrite and Phase 8
+
 ### Resume (written 2026-10-23 05:30 UTC, for the session that picks this up after a compact and clear)
 
 The branch stays `73-rebuild-the-evidence-and-retune-on-the-r`; no new issue, no new plan-init. Resume with
@@ -27,7 +40,10 @@ The branch stays `73-rebuild-the-evidence-and-retune-on-the-r`; no new issue, no
 read this section and `task_plan.md`'s unticked boxes, and `findings.md`'s "The CH and CO tuning on the rebuilt
 evidence" for the numbers' shape.
 
-**What is running without a session (revised 2026-10-23 07:50 UTC).** The first chain
+**What is running without a session (revised 2026-10-23 11:25 UTC).** The second chain's bull trout comparison
+exited 0 at 11:15 UTC (206.9 min) and its logs are kept as `20261023_compare-bt.txt` and `20261023_compare-workers-bt.out`;
+its tables are committed with the bull trout write-up. The four-species tuning (`SPECIES=GR,RB,ST,WCT WORKERS=6 0320`,
+started 07:48 UTC) is still running, and the chain runs the four-species comparison after it. The history: the first chain
 (`scripts/logs/habitat/20261023_chain_73.sh`, log `20261023_chain_73.out`) stopped at its first step: link#361's
 provincial run renamed `fresh_default` to `fresh_default_20261017` at 07:41 UTC, after the two jobs it had waited on
 (the chinook comparison and the bull trout tuning) exited at 07:40 and before the chain's bull trout comparison
