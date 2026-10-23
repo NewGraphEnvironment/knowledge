@@ -7,4 +7,6 @@
 - Scaffolded PWF baseline from issue #73 with approved phases
 - Plan review (Plan agent, background) folded in: `review-plan.md`; two defects in Phase 1's first draft fixed from it
 - Phase 1 done: the walk ends at the bank and counts hop gaps; checked against fresh 0.42.0 on BULK (`bank` 0 of 2,460)
-- Next: Phase 2 and 3 commit (code written, tests green), then Phase 4
+- Phases 2–5 committed: ladder and flow-start picks, grade provenance, the comparison under three structures against
+  link 0.67.0's default, the evidence rebuilt (0310, species tables, local v3 Parquet)
+- Next: 0320 SPECIES=CH,CO (running, 8 workers on this machine), then 0330 SPECIES=CH,CO, then the CH and CO write-up
