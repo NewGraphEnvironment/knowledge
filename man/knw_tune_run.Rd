@@ -30,7 +30,8 @@ knw_tune_run(
   smoke = TRUE,
   smoke_only = FALSE,
   smoke_args = list(),
-  extra = TRUE
+  extra = TRUE,
+  fit = c("fe", "dense")
 )
 }
 \arguments{
@@ -48,7 +49,8 @@ knw_tune_run(
 
 \item{edge_stream, area_range}{the population's constants.}
 
-\item{seed, folds, n_boot, seeds_more, workers, d_floor}{passed to \code{\link[=knw_tune_score]{knw_tune_score()}}.}
+\item{seed, folds, n_boot, seeds_more, workers, d_floor, fit}{passed to \code{\link[=knw_tune_score]{knw_tune_score()}} (and \code{fit} to
+\code{\link[=knw_tune_smoke]{knw_tune_smoke()}}).}
 
 \item{min_wsg, power_wsg}{\code{integer(1)} the floors described above.}
 

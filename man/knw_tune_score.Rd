@@ -16,7 +16,8 @@ knw_tune_score(
   seeds_more = integer(),
   d_floor = 200,
   workers = 1L,
-  extra = FALSE
+  extra = FALSE,
+  fit = c("fe", "dense")
 )
 }
 \arguments{
@@ -38,6 +39,13 @@ whether each visit is in under one row of \code{grid} (see \code{\link[=knw_rule
 \item{workers}{\code{integer(1)} socket workers for the pattern fits.}
 
 \item{extra}{\code{logical(1)} run the bootstrap, nested selection and extra seeds.}
+
+\item{fit}{\code{"fe"} fits each pattern with the groups absorbed (one intercept
+per group found by projection, so a fit's cost grows with the nuisance
+columns, not the groups; #83), \code{"dense"} with one model-matrix column per
+group (\code{stats::glm.fit()}). They give the same coefficients and deviances to
+numerical tolerance; \code{"fe"} falls back to \code{"dense"} on a fold where a
+nuisance level is a combination of groups.}
 }
 \value{
 A list: \code{rules}, the grid with \code{n_visits}, \code{n_detect}, \code{n_wsg},

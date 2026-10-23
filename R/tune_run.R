@@ -32,7 +32,8 @@
 #' @param species,stages which to run.
 #' @param spawner `NULL`, or [knw_spawner_evidence()]'s table.
 #' @param edge_stream,area_range the population's constants.
-#' @param seed,folds,n_boot,seeds_more,workers,d_floor passed to [knw_tune_score()].
+#' @param seed,folds,n_boot,seeds_more,workers,d_floor,fit passed to [knw_tune_score()] (and `fit` to
+#'   [knw_tune_smoke()]).
 #' @param min_wsg,power_wsg `integer(1)` the floors described above.
 #' @param src `character(1)` the flow source the exception reads.
 #' @param thresholds_extra `NULL`, or another bundle's
@@ -78,7 +79,8 @@ knw_tune_run <- function(visits, species_tbl, walks, thresholds, species = knw_s
                          seed = 54L, folds = 5L, n_boot = 200L, seeds_more = 55:58, workers = 1L, d_floor = 200,
                          min_wsg = 5L, power_wsg = 10L, src = "pick", grid_args = list(), cache_dir = NULL,
                          thresholds_extra = NULL, previous = NULL, smoke = TRUE, smoke_only = FALSE,
-                         smoke_args = list(), extra = TRUE) {
+                         smoke_args = list(), extra = TRUE, fit = c("fe", "dense")) {
+  fit <- match.arg(fit)
   chk::chk_data(visits)
   chk::chk_list(grid_args)
   chk::chk_list(smoke_args)
@@ -166,8 +168,8 @@ knw_tune_run <- function(visits, species_tbl, walks, thresholds, species = knw_s
     for (key in names(prep)) {
       p <- prep[[key]]
       prev <- if (!is.null(previous) && key %in% names(previous)) unname(previous[[key]]) else NULL
-      sm <- do.call(knw_tune_smoke, c(list(p$d, rule_in, p$grid, p$resp, previous = prev, seed = seed, folds = folds),
-                                      smoke_args))
+      sm <- do.call(knw_tune_smoke, c(list(p$d, rule_in, p$grid, p$resp, previous = prev, seed = seed, folds = folds,
+                                           fit = fit), smoke_args))
       out[[key]]$smoke <- sm
       message(key, " ", paste(sm$lines, collapse = "\n  "))
       if (!sm$pass) failed <- c(failed, key)
@@ -204,7 +206,7 @@ knw_tune_run <- function(visits, species_tbl, walks, thresholds, species = knw_s
     }
     if (is.null(sc)) {
       sc <- knw_tune_score(d, rule_in, grid, resp, seed = seed, folds = folds, n_boot = n_boot,
-                           seeds_more = seeds_more, d_floor = d_floor, workers = workers, extra = extra)
+                           seeds_more = seeds_more, d_floor = d_floor, workers = workers, extra = extra, fit = fit)
       if (!is.null(cache)) saveRDS(sc, cache)
     }
     pick <- sc$rules[sc$rules$recommended, , drop = FALSE]

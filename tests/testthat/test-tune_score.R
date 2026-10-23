@@ -166,3 +166,98 @@ test_that("the intercept is the exact minimiser where both golden-section search
   eta3 <- c(-400, -399, 400, 401, 0)
   expect_true(all(is.finite(knowledge:::.tune_group_dev(y3, eta3, fam))))
 })
+
+test_that("the group-absorbing fit is glm.fit's: coefficients, deviance, iterations, convergence and aliasing", {
+  fam <- stats::binomial(link = "cloglog")
+  set.seed(11)
+  n <- 900
+  n_g <- 12
+  g <- sample.int(n_g, n, TRUE)
+  d <- data.frame(wsg = factor(sprintf("W%02d", g)), log_area = log(stats::runif(n, 20, 400)),
+                  data_set = factor(sample(c("FDIS", "FDS"), n, TRUE)),
+                  era = factor(sample(c("to1994", "1995-2004", "2005on"), n, TRUE)))
+  eta <- stats::rnorm(n_g, -2.5, 0.8)[g] + 0.4 * (d$log_area - 5) + 0.6 * (d$data_set == "FDS") - 0.3 * (d$era == "2005on")
+  d$y <- stats::rbinom(n, 1, 1 - exp(-exp(eta)))
+  rule <- as.numeric(stats::runif(n) < 0.6)
+  dense <- function(d, rule) {
+    suppressWarnings(stats::glm.fit(cbind(stats::model.matrix(~ log_area + data_set + era + wsg, d), rule = rule), d$y,
+                                    family = fam, control = stats::glm.control(maxit = 100)))
+  }
+  fe <- function(d, rule) {
+    knowledge:::.tune_glm_fe(cbind(stats::model.matrix(~ log_area + data_set + era, d)[, -1], rule = rule),
+                             as.integer(d$wsg), d$y, fam)
+  }
+  # the era levels sort as 1995-2004 (the reference), 2005on, to1994
+  cols <- c("log_area", "data_setFDS", "era2005on", "erato1994", "rule")
+  expect_true(all(cols %in% names(dense(d, rule)$coefficients)))
+  same <- function(m1, m2) {
+    expect_equal(m2$coefficients[cols], m1$coefficients[cols], tolerance = 1e-9)
+    expect_identical(is.na(m2$coefficients[cols]), is.na(m1$coefficients[cols]))
+    expect_equal(m2$deviance, m1$deviance, tolerance = 1e-10)
+    expect_identical(m2$converged, m1$converged)
+    expect_identical(m2$iter, m1$iter)
+    # the group effects: the dense fit's intercept and its contrasts
+    a1 <- unname(m1$coefficients[1] + c(0, m1$coefficients[grep("^wsg", names(m1$coefficients))]))
+    expect_equal(m2$alpha, a1, tolerance = 1e-8)
+    expect_false(m2$fallback)
+  }
+  same(dense(d, rule), fe(d, rule))
+  # a rule in for no training visit, and a level with no visit: zero columns both fits drop
+  same(dense(d, rep(0, n)), fe(d, rep(0, n)))
+  d0 <- d
+  d0$era <- factor(as.character(d0$era), levels = c("to1994", "1995-2004", "2005on", "later"))
+  same(dense(d0, rule), fe(d0, rule))
+  # a separated data set: the coefficient runs to about 20 in both, over the same iterations
+  ds <- d
+  ds$y[ds$data_set == "FDS"] <- 0L
+  m1 <- dense(ds, rule)
+  m2 <- fe(ds, rule)
+  expect_lt(m1$coefficients[["data_setFDS"]], -8)
+  same(m1, m2)
+  # a rule in for whole groups only is aliased with them: both drop the rule
+  rg <- as.numeric(d$wsg %in% c("W03", "W07"))
+  m1 <- dense(d, rg)
+  m2 <- fe(d, rg)
+  expect_true(is.na(m1$coefficients[["rule"]]))
+  same(m1, m2)
+  # no training visit in the reference era: the era dummies sum to the intercept, which the groups carry, and
+  # both fits drop the last one; no fall-back (every chinook fold did, 2026-10-23)
+  de <- d
+  de$era <- factor(ifelse(de$era == "1995-2004", "2005on", as.character(de$era)), levels = levels(d$era))
+  m1 <- dense(de, rule)
+  m2 <- fe(de, rule)
+  expect_true(is.na(m1$coefficients[["erato1994"]]))
+  expect_false(is.na(m1$coefficients[["era2005on"]]))
+  same(m1, m2)
+  # a data-set level carried by one whole group: the dense fit keeps the level and drops the group, so the
+  # projection asks for the dense fit
+  da <- d
+  da$data_set <- factor(ifelse(da$wsg == "W05", "FDS", "FDIS"))
+  m2 <- fe(da, rule)
+  expect_true(m2$fallback)
+  expect_true(is.na(m2$coefficients[["data_setFDS"]]))
+  m1 <- dense(da, rule)
+  expect_false(is.na(m1$coefficients[["data_setFDS"]]))
+  expect_equal(m2$deviance, m1$deviance, tolerance = 1e-10)
+})
+
+test_that("the scorer gives the same table with the groups absorbed as with one column per group", {
+  a <- knw_tune_score(pop(), rin, grid3, "U", seed = 7, n_boot = 10, seeds_more = 8L, extra = TRUE, fit = "dense")
+  b <- knw_tune_score(pop(), rin, grid3, "U", seed = 7, n_boot = 10, seeds_more = 8L, extra = TRUE, fit = "fe")
+  expect_equal(b$rules, a$rules, tolerance = 1e-9)
+  expect_identical(b$rules$converged, a$rules$converged)
+  expect_equal(b$honest, a$honest, tolerance = 1e-9)
+  expect_equal(b$seeds, a$seeds)
+  # socket workers carry the solver
+  w <- knw_tune_score(pop(), rin, grid3, "U", seed = 7, n_boot = 10, extra = TRUE, workers = 2L, fit = "fe")
+  expect_equal(w$rules, b$rules[names(w$rules)], tolerance = 1e-9)
+  # the fall-back reaches the scorer: a data set carried by one whole group
+  d <- pop()
+  d$data_set <- factor(ifelse(d$wsg == "W02", "FDS", "FDIS"))
+  expect_equal(knw_tune_score(d, rin, grid3, "U", seed = 7, fit = "fe")$rules,
+               knw_tune_score(d, rin, grid3, "U", seed = 7, fit = "dense")$rules, tolerance = 1e-9)
+  sm_a <- knw_tune_smoke(pop(), rin, grid3, "U", previous = "tuned", seed = 7, fit = "dense")
+  sm_b <- knw_tune_smoke(pop(), rin, grid3, "U", previous = "tuned", seed = 7)
+  expect_equal(sm_b$rules, sm_a$rules, tolerance = 1e-9)
+  expect_equal(sm_b$checks, sm_a$checks, tolerance = 1e-9)
+})

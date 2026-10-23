@@ -301,3 +301,70 @@ Bold fails. What the table says, in order:
   `log(area)`, the rule and the groups, which loses the real data-set effects (CH 2.3, BT_spawn 3.6); (C) drop a term
   per fold where its coefficient passes the limit, which makes the model differ between folds. Recommended: A, with
   the penalty measured on the smoke run of every key before it is adopted. Nothing is changed in the fit here.
+
+## The fit with the groups absorbed (#83, 2026-10-23)
+
+`.tune_glm_fe()` (`R/tune_score.R`) is `stats::glm.fit()`'s IRLS (its start from `mustart`, its `good` subset where
+`mu.eta` is zero, its step halving, its convergence test on the deviance at `epsilon` 1e-8, `maxit` 100) with each
+weighted least-squares step solved by projecting the groups out: the weighted group means of the working response and
+of the nuisance columns are subtracted, a pivoted QR (`.lm.fit`, the LINPACK routine `glm.fit` uses, at its tolerance)
+solves for the nuisance coefficients and the rule, and each group's effect is its weighted mean residual. A step costs
+n × p² in the nuisance columns (five or six) instead of in the groups (43 to 129), and no package is added. Checked
+on simulated data against `glm.fit` before it went in (scratchpad `glm_fe.R`): coefficients to 1e-15, the same
+iteration count and convergence flag, a separated data-set coefficient to 1.7e-12 over the same 20 iterations,
+zero columns dropped alike; at rainbow's size (10,400 visits, 103 training groups) one fit took 0.012 s against
+0.293 s. The one divergence is a nuisance level that is exactly a combination of groups: `glm.fit`'s QR keeps the
+level and drops a group column, the projection drops the level, and though the fitted values and deviance are the
+same the held-out offsets would not be, so the solver reports `fallback` and `.tune_score_one()` uses the dense fit
+on that fold. `test-tune_score.R` holds each case, and the scorer's whole table under `fit = "dense"` against
+`fit = "fe"` (equal to 1e-9, flags identical). The pivoting order is the dense fit's (nuisance, then the rule last),
+so a rule aliased with whole groups is dropped by both.
+
+**The fall-back test was too coarse, and it cost chinook every fit twice over (found 2026-10-23).** The first
+reproduction run (`FIT=fe`, 3 workers, alongside the dense run and link#361) took 50.4 min on CH rearing and 41.5 on
+CO against the dense run's 19.0 and 22.0 on 6 workers, and a probe on CH with a 52-pattern grid (scratchpad
+`fit_probe.R`, one worker) showed why: 265 fits, 265 fall-backs, so each fold paid the projection and then the dense
+fit. The dropped column was `era2005on` on every fold. Chinook's population has no visit before 1995, so the two era
+dummies sum to the intercept, which the groups carry; the dense fit drops that column too (its QR has the intercept
+and the nuisance columns before the groups), so the two fits agree and no fall-back is needed. The test now asks
+whether the dense fit's own QR (`qr(cbind(1, nuisance))` at the same tolerance) drops the column, and falls back only
+on a dropped non-zero column it would keep: a level that is a combination of the groups but not of the intercept and
+the columns before it. `test-tune_score.R` holds the era case (both drop the last dummy, no fall-back) beside the
+group-carried level (fall-back). On the fixed code the same probe: 265 fits, 0 fall-backs, 8.9 iterations a fit under
+either solver, 0.013 s a fit against the dense fit's 0.033 s on chinook's 34 training groups (the 25-fold gain of the
+design note is rainbow's, with 103). The reproduction run was stopped (its CH and CO caches were the dense fit's, and
+were removed) and relaunched on the fixed code with 6 workers.
+
+**The dense reference on the current scorer (8a20461, `FIT=dense`, 6 workers, main seed, no bootstrap, nested
+selection or extra seeds; `data/tune/ref_dense/`, scratchpad `ref_dense.log`, 18:17 to 20:07 UTC on 2026-10-23
+alongside link#361 and, from 18:31, the first `fe` run):**
+
+| key | min | patterns | not converged | recommended | no-rule held-out | best | curve held-out |
+|---|---|---|---|---|---|---|---|
+| CH_rear | 19.0 | 6,101 | 27 | `mad>=0.75\|g<=0.13\|Q3@D1000` | 1,382.5 | 1,120.5 | 1,053.2 |
+| CO_rear | 22.0 | 6,526 | 0 | `mad>=0.03\|g<=0.04\|none` | 4,024.6 | 3,856.3 | 4,092.5 |
+| BT_rear | 65.5 (BT both) | 8,285 | 0 | `mad>=0.35\|g<=0.25\|none` | 6,031.2 | 5,704.6 | 5,618.5 |
+| BT_spawn | (with BT_rear) | 3,023 | 0 | `width>=2\|g<=0.13\|none` | 408.0 | 402.0 | 403.7 |
+| GR_rear | 1.1 | 5,046 | 0 | `width>=1.5\|g<=0.0349\|none` | 848.4 | 825.3 | 786.9 |
+| ST_rear | 1.5 | 6,366 | 0 | `mad>=1\|g<=0.0849\|none` | 634.5 | 569.1 | 860.8 |
+| WCT_rear | 0.8 | 5,268 | 0 | `mad>=0.03\|g<=0.3\|none` | 1,329.9 | 1,298.4 | 1,454.5 |
+
+The minutes are a species' whole `knw_tune_run()` (prep, the grid, the curve), under load. The picks are the main
+seed's alone and the smoke gates were off (they refuse GR, ST and WCT on the coefficient check), so none of this is a
+rescore. Still, CH's and CO's recommended rules are their committed tables' (`data/tune/{CH,CO}_rear_tune.csv`, old
+search, with the extra seeds), and BT rearing's is not: committed `mad>=0.1|g<=0.1049|none` against
+`mad>=0.35|g<=0.25|none` here, which is the key the smoke run's mutation table showed the old search had moved
+(no rule 6,180.6 against 6,031.2). Phase 7's rescore settles it. The reference exists to be reproduced by the
+group-absorbing fit, rule by rule, flag by flag (`compare_fit.R`, below).
+
+**The reproduction (`FIT=fe` on the fixed fall-back test, 6 workers, 20:17 to 20:34 UTC on 2026-10-23;
+`data/tune/ref_fe/`, scratchpad `ref_fe.log`; `compare_fit.R` → `planning/active/scratch/fit_compare.csv`):** on every
+key the region, the pick, the recommended rule, the fold assignment and every rule's convergence flag are identical to
+the dense reference's, and the curve's held-out deviance is the same to the printed digit. Held-out deviances agree to
+1e-9 relative on BT_spawn, CO, GR, ST and WCT and to 2.5e-9 on BT_rear (one rule at 1.5e-5 absolute); on CH six
+converged rules differ by up to 4.0e-4 absolute (3.3e-7 relative, on about 1,200) and 4 of the 27 unconverged ones by
+more than 1e-9, which is the two solvers stopping at slightly different points of a flat deviance (CH's fold with the
+separated coefficient), far under anything the pick reads. Minutes per species, whole `knw_tune_run()`, both under
+load: CH 19.0 → 4.9, CO 22.0 → 2.4, BT (both stages) 65.5 → 5.9, GR 1.1 → 1.1, ST 1.5 → 1.6, WCT 0.8 → 1.0; the three
+small keys are the curve and the prep, not the fits. The caches under `data/tune/ref_*/` are ignored (the score
+caches already were); the comparison table is the record.

@@ -67,7 +67,15 @@
   coefficient on GR, RB, ST and WCT (limit 5); the options are in the finding, for Al.
 - Stale `data/tune/{CH,CO,BT}_*_score.rds` removed. Pre-existing test failures on this branch, not touched:
   `test-tune_repick.R:79` (#79's pin against the rescored CH table) and `test-vignette-data.R` (md5s moved by Phase 7's
-  runs), both Phase 8's.
+  runs), both Phase 8's. Committed as `8a20461`.
+- #83 built: `.tune_glm_fe()` (`R/tune_score.R`), `glm.fit`'s IRLS with the groups projected out of each least-squares
+  step; `fit = "fe"` (default) or `"dense"` through `knw_tune_score()`, `knw_tune_smoke()` and `knw_tune_run()`; a fold
+  where the two fits would drop different columns falls back to the dense fit. The dense reference
+  (`planning/active/scratch/ref_fit.R` on `8a20461`, six species, 110 min) is reproduced by the fe fit (17 min): every
+  region, pick, recommended rule and convergence flag the same, deviances to 1e-9 relative except six CH rules at
+  3e-7 (`compare_fit.R`, `fit_compare.csv`). The first reproduction run fell back on every chinook fold (an era dummy
+  both fits drop) and was stopped; the test now asks what the dense fit's own QR would drop. Rainbow's timing with the
+  extras (`EXTRA=1`) is running; the box flips with it.
 
 ### Resume (revised 2026-10-23, for the session that picks this up after a compact and clear)
 

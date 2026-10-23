@@ -184,6 +184,9 @@ run (findings, "The intercept minimiser sticks on a flat clamp"), so Phase 7's r
       version, which is the training fit's finding, to decide
 - [ ] #83: group intercepts without a dense column per group; a dense-fit reference rescored first on the current
       scorer (the committed CH and CO tables came from the old search) and reproduced; rainbow timed against 8.1 h
+      (`.tune_glm_fe()` in, `fit = "fe"` the default; the reference on six species reproduced rule by rule on
+      2026-10-23, findings "The fit with the groups absorbed"; the fall-back test narrowed after it fired on every
+      chinook fold; the rainbow timing is the open part)
 - [ ] Run rule from here: no chained tuning and comparison; every key's gates pass, then score, check, grade, compare
 
 ## Phase 7: BT, then GR, RB, ST and WCT
