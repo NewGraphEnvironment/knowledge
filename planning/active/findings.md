@@ -194,3 +194,5 @@ does link do now?" (0.67.0's pair on 1050/1150, the flow start), "A stricter bar
 
 Detached chain: `scripts/logs/habitat/20261023_chain_73.sh`, launched 05:12 UTC with nohup, pid 83818; its log is
 `20261023_chain_73.out`. The handoff brief is `progress.md`'s "Resume" section.
+
+| `relation "fresh_default.streams" does not exist` (bull trout `0330`, 2026-10-23 07:42 UTC, two minutes after the tuning exited) | link#361's provincial run renamed the schema to `fresh_default_20261017` at 07:41 UTC, having waited for the two jobs it could see; the chain's next step was not one of them. `0320`/`0330` take `SCHEMA` (default `fresh_default`), log it, and the second chain sets `SCHEMA=fresh_default_20261017`. `0325` and `data-raw/vignette_chinook.R` still name `fresh_default` (Phase 8). |

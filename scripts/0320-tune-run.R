@@ -38,7 +38,8 @@
 #
 # INPUT:  data/fdis/derived/{visits_link,visits_species,walks}.csv (0310), data/fdis/build/fish.rds
 #         (0230), data/fdis_species_codes.csv; the link repository at LINK_REPO at the build's link_sha
-#         (parameters_habitat_thresholds.csv); fwapg database (PG* env vars): fresh_default, discharge
+#         (parameters_habitat_thresholds.csv); fwapg database (PG* env vars): the run's schema (SCHEMA, default
+#         fresh_default), discharge
 # OUTPUT: data/tune/<sp>_<stage>_tune.csv      every rule's score (the full grid), with pick, recommended, region
 #         data/tune/<sp>_<stage>_curves.csv    the marginal curves at the pick
 #         data/tune/<sp>_<stage>_grades.csv    one row per segment of the species' groups, each graded segment at
@@ -63,7 +64,7 @@ if (!nzchar(Sys.getenv("PGCONNECT_TIMEOUT"))) Sys.setenv(PGCONNECT_TIMEOUT = "30
 link_repo <- Sys.getenv("LINK_REPO", "../link")
 workers <- as.integer(Sys.getenv("WORKERS", max(1L, min(14L, parallel::detectCores() - 2L))))
 species <- strsplit(Sys.getenv("SPECIES", paste(knw_species(), collapse = ",")), ",")[[1]]
-schema <- "fresh_default"
+schema <- Sys.getenv("SCHEMA", "fresh_default")  # the run's persist schema, by its current name (renamed after the run, #73)
 dir_out <- "data/tune"
 # one log per pass: a pass over a subset of species (SPECIES=) names them, so passes do not overwrite each other
 path_log <- file.path("scripts/logs/habitat", paste0(format(Sys.Date(), "%Y%m%d"), "_tune_run",
@@ -86,7 +87,7 @@ if (is.na(ledger_path)) stop("no evidence build ledger: run scripts/0310 first")
 led <- read_csv(ledger_path, show_col_types = FALSE, col_types = cols(.default = "c"))
 run_uid <- led$note[led$step == "link_run_uid"]
 link_sha <- led$note[led$step == "run_link_sha"]
-say("Tuning run, knowledge#57. Evidence build %s on link run %s (link %s).", ledger_path, run_uid, link_sha)
+say("Tuning run, knowledge#57. Evidence build %s on link run %s (link %s), schema %s.", ledger_path, run_uid, link_sha, schema)
 for (f in c("visits_link", "visits_species", "walks")) {
   say("  %s md5 %s", f, unname(tools::md5sum(file.path("data/fdis/derived", paste0(f, ".csv")))))
 }

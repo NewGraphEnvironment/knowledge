@@ -27,15 +27,26 @@ The branch stays `73-rebuild-the-evidence-and-retune-on-the-r`; no new issue, no
 read this section and `task_plan.md`'s unticked boxes, and `findings.md`'s "The CH and CO tuning on the rebuilt
 evidence" for the numbers' shape.
 
-**What is running without a session.** `scripts/logs/habitat/20261023_chain_73.sh` (detached with nohup at 05:12 UTC,
-pid 83818) waits for the chinook comparison and the bull trout tuning to exit, checks the tuning log ends with
-`Done in`, then runs `SPECIES=BT 0330` beside `SPECIES=GR,RB,ST,WCT WORKERS=6 0320`, then `SPECIES=GR,RB,ST,WCT 0330`.
-Its own log is `scripts/logs/habitat/20261023_chain_73.out` (one timestamped line per step, `FAILED:` on a stop);
-each step's stdout is `20261023_chain_0330-bt.out`, `20261023_chain_0320-gr_rb_st_wct.out`,
-`20261023_chain_0330-gr_rb_st_wct.out` beside it. The scripts write their own logs there too (`<date>_tune_run-<sp>.txt`,
-`<date>_compare.txt`). **Do not edit `scripts/0320-tune-run.R`, `scripts/0330-compare.R` or anything under `R/` while
-the chain runs** (Rscript reads a file as it runs). Check the chain by its log and the per-key files on disk
-(`data/tune/<key>_summary.csv`, `data/compare/<key>_compare.csv`), not by `ps`. Expected finish: Friday morning PDT.
+**What is running without a session (revised 2026-10-23 07:50 UTC).** The first chain
+(`scripts/logs/habitat/20261023_chain_73.sh`, log `20261023_chain_73.out`) stopped at its first step: link#361's
+provincial run renamed `fresh_default` to `fresh_default_20261017` at 07:41 UTC, after the two jobs it had waited on
+(the chinook comparison and the bull trout tuning) exited at 07:40 and before the chain's bull trout comparison
+connected (`20261023_chain_0330-bt_attempt1.out`: `relation "fresh_default.streams" does not exist`). The four-species
+tuning was stopped six minutes in (exit 143, nothing cached) so the scripts could take the schema. `scripts/0320` and
+`0330` now read `SCHEMA` (default `fresh_default`) and log it. **Every database step from here on sets
+`SCHEMA=fresh_default_20261017`**, the run the evidence, grades and chinook/coho comparison were built on; the new
+`fresh_default` is a different run (link 0.68.0, `20261023_074321-24d85e8c`) that link#361 is building over the next
+day, and its before/after diff reads the archived schema, which is dropped later at the operator's call.
+`scripts/logs/habitat/20261023_chain2_73.sh` (nohup at 07:48 UTC, pid 78023) runs `SPECIES=BT WORKERS=2 0330` beside
+`SPECIES=GR,RB,ST,WCT WORKERS=6 0320`, moves the bull trout comparison's date-named logs to `<date>_compare-bt.txt`
+and `<date>_compare-workers-bt.out` (the four-species run would overwrite them), then runs `SPECIES=GR,RB,ST,WCT 0330`
+only if both exited 0 (the four-species comparison composes the saved bull trout tables). Its log is
+`20261023_chain2_73.out` (one timestamped line per step, `FAILED:` on a stop); each step's stdout is
+`20261023_chain2_0330-bt.out`, `20261023_chain2_0320-gr_rb_st_wct.out`, `20261023_chain2_0330-gr_rb_st_wct.out`.
+The database is shared with the provincial run's primitive load and recompute on this machine, so expect every step
+slower than the chinook timings. **Do not edit `scripts/0320-tune-run.R`, `scripts/0330-compare.R` or anything under
+`R/` while the chain runs** (Rscript reads a file as it runs). Check the chain by its log and the per-key files on disk
+(`data/tune/<key>_summary.csv`, `data/compare/<key>_compare.csv`), not by `ps`.
 
 **Model plan (Al, 2026-10-22 evening).** The four smaller species' research files on a cheaper model; the bull trout
 file, the `habitat_thresholds_tuned.md` rewrite, Phase 8, the branch review and the PR on Fable.

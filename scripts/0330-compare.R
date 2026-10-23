@@ -37,7 +37,8 @@
 #
 # INPUT:  data/tune/<sp>_<stage>_{curve.rds,grades.csv} (0320), data/fdis/derived/{visits_link,visits_species}.csv
 #         (0310), the link repository at LINK_REPO at the build's link_sha, the stac_floodplains_bc catalog
-#         (items read from its public bucket), fwapg database (PG* env vars): fresh_default, bcfishobs, whse_basemapping
+#         (items read from its public bucket), fwapg database (PG* env vars): the run's schema (SCHEMA, default
+#         fresh_default), bcfishobs, whse_basemapping
 # WRITES: schemas knw_cmp_<sp>_<stage> in the fwapg database (scratch; one per job, dropped)
 # OUTPUT: data/compare/<key>_{compare,change,checks}.csv, <key>_segments.rds  per job, as it finishes (rds ignored)
 #         data/compare/gpkg/<key>.gpkg  every segment's verdict under each rule and structure, grade, size, distance,
@@ -66,7 +67,7 @@ stage_only <- Sys.getenv("STAGE", "")
 tuned_as <- Sys.getenv("TUNED_AS", "door")
 gpkg <- !identical(Sys.getenv("GPKG"), "FALSE")
 if (!stage_only %in% c("", "maps")) stop("STAGE must be unset or 'maps', not '", stage_only, "'")
-schema <- "fresh_default"
+schema <- Sys.getenv("SCHEMA", "fresh_default")  # the run's persist schema, by its current name (renamed after the run, #73)
 catalog_bucket <- "https://stac-floodplains-bc.s3.us-west-2.amazonaws.com"
 catalog_items <- "../stac_floodplains_bc/data/stac"      # the catalog repo's item records
 dir_out <- "data/compare"
@@ -116,8 +117,8 @@ if (!file.exists(file.path(link_dir, "parameters_habitat_thresholds.csv")) ||
       !any(grepl("rear_river_distance_max", readLines(file.path(link_dir, "parameters_habitat_thresholds.csv"), n = 1)))) {
   stop("link's thresholds at ", config_sha, " carry no near-river columns: the baseline needs link >= 0.67.0 (#73)")
 }
-say("link configs/default at %s (the baseline; the schema's run is at %s) read from %s; fresh %s; tuned reported as %s.",
-    config_sha, link_sha, link_repo, as.character(packageVersion("fresh")), tuned_as)
+say("link configs/default at %s (the baseline; the schema %s's run is at %s) read from %s; fresh %s; tuned reported as %s.",
+    config_sha, schema, link_sha, link_repo, as.character(packageVersion("fresh")), tuned_as)
 
 # the catalog's groups
 items <- list.files(catalog_items, "_all_ff04\\.json$", full.names = TRUE)

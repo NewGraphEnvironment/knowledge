@@ -1,0 +1,15 @@
+Spherical geometry (s2) switched off
+Comparison, knowledge#57: 2 fitted species x stage; link run 20261017_004619-3f4c713b at a17e91773b283b021811f8b5b76b887d5f4c16e4.
+link configs/default at 5f8f9f1d12422418ac6b411e5f3111c4f78770fe (the baseline; the schema's run is at a17e91773b283b021811f8b5b76b887d5f4c16e4) read from ../link; fresh 0.42.0; tuned reported as door.
+Floodplain catalog: 23 whole-network groups (BOWR BULK DUNC FRAN KISP KOTL LARL LCHL LNTH LSAL MCGR MORK MORR NECR PARS PCEA PINE SLOC TABR THOM UFRA UNTH WILL).
+Compared 2 species x stage in 1.2 min on 6 workers.
+BT_rear FAILED after 1.2 min: Failed to prepare query : ERROR:  relation "fresh_default.streams" does not exist
+LINE 6:       FROM fresh_default.streams s
+                   ^
+
+BT_spawn FAILED after 0.9 min: Failed to prepare query : ERROR:  relation "fresh_default.streams" does not exist
+LINE 6:       FROM fresh_default.streams s
+                   ^
+
+Error: every comparison job failed: BT_rear, BT_spawn
+Execution halted

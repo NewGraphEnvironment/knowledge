@@ -178,6 +178,9 @@ in this repo has moved since.
       (found 2026-10-23); `test-thresholds_table.R` pins it; `R/` is edited only after the chain's last `0320`/`0330` exits
 - [ ] `0325`: `thresholds/v1`, `thresholds_groups`, `habitat_grade/v1` (local; `PUBLISH` waits on #56's bucket
       policy); `data/thresholds.csv` and `thresholds_groups.csv`
+- [ ] `0325`, `data-raw/vignette_chinook.R` and `data-raw/readme_figure.R` read the run's schema by name (`SCHEMA`,
+      default `fresh_default`), as `0320`/`0330` do since link#361 renamed it to `fresh_default_20261017` on 2026-10-23;
+      the thresholds table's provenance names the run, not the schema
 - [ ] `data-raw/vignette_chinook.R`, then `data-raw/vignette_bib.R` if a citation changed, then
       `data-raw/readme_figure.R`; the article's prose checked against the new numbers (every number is computed inline;
       read the rendered page for sentences the numbers no longer support); the `grad_ext` section now reads as the run
