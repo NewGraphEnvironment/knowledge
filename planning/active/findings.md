@@ -120,4 +120,55 @@ that found a river lost it; 15 found one they had not. Over every source and siz
 
 | Error | Resolution |
 |-------|------------|
-| CH rearing's curve scored 2,434 held-out against 1,383 for no rule (`0320`, 2026-10-22), while its rules scored as before | The per-group intercept refit (`stats::glm.fit()` with the fold's predictions as offset, cloglog) reported convergence at an intercept where every detection's chance was under the 1e-12 clamp (55.3 deviance each: NECR's 12 detections 663.1, 28 detections in 7 groups in all). The joint curve's held-out offsets spread over twelve units on a fold; a rule's one in/out term never does, and the scorer's sums for three patterns are unchanged to 0.01 under the fix. `.tune_group_dev()` now fits the intercept by a bounded golden-section minimiser of the deviance, convex in the intercept under cloglog, in both callers; the replayed CH curve scores 1,029 (`scratchpad/curve_diag*.out`, recomputed by the rerun) |
+| CH rearing's curve scored 2,434 held-out against 1,383 for no rule (`0320`, 2026-10-22) | The per-group intercept refit (`stats::glm.fit()` with the fold's predictions as offset, cloglog) reported convergence at an intercept where every detection's chance was under the 1e-12 clamp (55.3 deviance each: NECR's 12 detections 663.1, 28 detections in 7 groups in all). `.tune_group_dev()` now fits the intercept by a bounded golden-section minimiser of the deviance, convex in the intercept under cloglog, in both callers. A probe that replayed three rule patterns (no rule, the pick, the flow default) found their scores unchanged to 0.01 and was read as the rule scorer being unaffected; the rescoring showed otherwise: 2,269 of CH's 6,149 rules moved, 2,267 of them down (median drop 445, up to 1,195), every one an exception rule or a MAD rule, while the three replayed patterns and CO's 6,149 rules did not move. The pick moved from `mad>=0.5\|g<=0.15\|Q1@D1000` (unchanged at 1,132.1, now 11.5 behind) to `mad>=0.75\|g<=0.13\|Q3@D1000` (1,305.6 before, 1,120.5 after); the curve scores 1,053 |
+| The first `0320` rerun failed on every socket worker: `could not find function ".tune_group_dev"` | A worker loads no package and gets its functions by `clusterExport()`; the new helper is exported beside `.tune_score_one()`, and the re-run test now scores on two workers |
+| The `0330` run launched beside the rescoring compared CH against the first run's pick | `0330` reads the picks when it starts, so it was stopped once the rescoring moved CH's pick (CO's tables were written, its pick unchanged); it now composes the combined tables from every per-key table made under this comparison, and CH reruns alone |
+
+## The CH and CO tuning on the rebuilt evidence (`0320`, 2026-10-22/23; `scripts/logs/habitat/20261022_tune_run-ch_co.txt`)
+
+Two runs: the first (67.6 min, 8 workers) scored the rules with the runaway intercept refit; the second (91.2 min, 6
+workers) rescored them under `.tune_group_dev()`. The tables in `data/tune/` are the second's. Rule deviances that
+did not involve a pinned group are identical between the two (CO: every rule; CH: 3,880 of 6,149).
+
+**CH rear** (7,123 visits, 216 detections, 104 groups, 43 with both outcomes; 4,490 modelled): best and recommended
+`mad>=0.75|g<=0.13|Q3@D1000` at 1,120.5 (null 1,382.5; `default` 1,347.0, +226.4, SE 91.8, 2.47 SE behind, outside
+the region; link's `default_tuned` `mad>=0.28|g<=0.0549|none` +188.9, SE 81.2, outside). Region 83 rules, every one a
+MAD rule with an exception (MAD 0.15–1, gradient 7–30 %, Q 1–10, D 500–2,000), all three departures from `default`;
+from the flow start the pick is `mad>=0.28|g<=0.11|Q3@D1000` (+26.3, SE 28.8, in the region, two departures). At
+1.96 SE: `mad>=1|g<=0.0549|Q3@D1000` (width start), `mad>=0.28|g<=0.0549|Q3@D1000` (flow start); the 1.96 region
+holds 2,066 rules and `default` is 2.47 SE outside it. Profiles (best per value; ddev, SE): size 0.75 best, 1 +1.8
+(18.2), 0.5 +4.4 (20.6), 0.2 +19.5, 0.35 +21.0, 0.28 +25.7, 0.15 +34.7, 0.1 +52.9 (50.6); widths +66.4 (4 m) to
++199.0 (1 m), none in the region. Gradient 13 % best, 11 % +0.4 (12.9), 15 % +2.3 (6.0), 30 % +7.3 (11.9), 20 % +7.3
+(7.7), 25 % +11.4, 9 % +17.5 (17.3), 7 % +21.6 (29.9), 5.49 % +63.6 (46.1), 4 % +105.4, 3 % +149.6. Q 3 best, 1 +11.5
+(24.7), 5 +20.9, 10 +26.6, 20 +54.1, 50 +105.0, 30 +112.6, none +150.5 (77.8). D 1,000 best, 2,000 +16.3 (23.5), 500
++35.4, 5,000 +51.2, 250 +54.3, 100 +85.5. Best rule without an exception `mad>=0.2|g<=0.11|none` +150.5 (SE 77.8); best
+width rule `width>=4|g<=0.15|Q3@D1000` +66.4 (40.5). Raw rates: the pick 1,234 visits in, 180 detections, 14.6 % against
+1.1 % out; `default` 2,330 in, 165 detections, 7.1 % against 2.3 %. Bootstrap (200 resamples; width start | flow
+start): MAD 100 % | 100 %; 0.75 28.5 | 18.5, 0.5 24.5 | 18.5, 1 23.5 | 18.5, 0.28 2.0 | 37.0; gradient 11 % 26.0 |
+26.5, 15 % 24.0 | 27.5, 30 % 18.5 | 16.5, 5.49 % 15.0 | 10.5, 13 % 14.0 | 16.0; Q 3 68.5 | 62.5, 1 21.0 | 26.5; D
+1,000 71.0 | 71.5, 2,000 21.5 | 19.0. The exact pick came back on 5.5 % of resamples; its region share 59.5 %. Seeds
+55–58 recommend `mad>=0.75|g<=0.15|Q3@D1000`, `mad>=0.5|g<=0.11|Q3@D1000`, `mad>=0.5|g<=0.13|Q3@D1000`,
+`mad>=0.75|g<=0.11|Q3@D1000`: the exact rule on 0 of 4, a MAD floor of 0.5 or 0.75 with 3 m³/s within 1 km on 4 of 4,
+`default` outside on 4 of 4, the main pick inside the region on 4 of 4. Honest (nested) 1,183.4 for the pick against
+1,347.0 for `default` and 1,382.5 for no rule; fold picks `mad>=1|g<=0.11|Q3@D1000` (twice), `mad>=0.75|g<=0.11|Q3@D1000`,
+`mad>=0.5|g<=0.13|Q3@D1000`, `mad>=0.5|g<=0.13|Q10@D1000`, each beating `default` on its fold except fold 4 (243.4
+against 230.3). Curve 1,053.2 held-out, below the grid's best; edf te(log_size, log_dist) 12.11, s(grad) 1.00,
+s(wsg) 33.56.
+
+**CO rear** (5,442 visits, 1,107 detections, 85 groups, 62 both; 4,263 modelled): unchanged by the rescoring.
+Recommended `mad>=0.03|g<=0.04|none` from both starts (+11.8, SE 17.3; raw 41.2 % in against 15.2 % out); best
+`mad>=0.1|g<=0.04|Q3@D2000` 3,856.3; null 4,024.6; `default` 3,968.1 (+111.8, SE 47.4, 2.36 SE, outside);
+`default_tuned` `mad>=0.03|g<=0.0549|none` +72.5 (SE 28.5), outside. Region 89 rules (87 with an exception). 1.96 pick
+`width>=1.5|g<=0.04|none`. Bootstrap: MAD 86 | 97 %, 0.03 69 | 86 %, gradient 4 % 54 | 50.5, 3 % 37.5 | 41.5, no
+exception 55.5 | 59; exact pick 27 %. Seeds 4 of 4 the same pick, `default` outside on 4 of 4. Honest 3,877.8 against
+3,968.1 and 4,024.6 (folds 1–3 pick 3 %, 4–5 4 %). Curve 4,092.5 held-out, above the grid's best and the null; edf te
+23.11, s(grad) 3.75, s(wsg) 48.74.
+
+**Grades** (`scratchpad/grade_summ*.out`; discharge load "built 2026-10-19T06:08:31Z, wet 94deeb5"; walk `bank`;
+reference over edges 1000, 1100, 2000, 2300). CH under the pick: 125 groups, 856,244 accessible segments, 852,431
+graded (6,259 without a size), reference rate 0.1357, walks to 3 m³/s (18.7 min; 9,159 of 809,410 found rivers in
+another group); km accessible 225,152, graded 224,459, grade-weighted 61,423 (#65: 63,059); under 0.2: 153,211 km
+(68 %); 0.8–1: 46,373 km (20.7 %); km at distance 0: 51,257 (river polygons 33,350, stream branch 12,827). CO
+(kept from the first run; the pick did not move): 100 groups, 615,302 accessible, 607,483 graded (10,518 without a
+size), reference 0.5196, walks to 10 m³/s (43,945 of 484,751 found rivers in another group); km accessible 147,795,
+graded 146,612, grade-weighted 72,637 (#65: 70,905); under 0.2: 28,477 km (19 %); 0.8–1: 33,620 km (23 %).
