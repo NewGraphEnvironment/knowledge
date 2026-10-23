@@ -1,6 +1,6 @@
 suppressPackageStartupMessages(library(DBI))
 con <- dbConnect(duckdb::duckdb())
-for (sp in c("CH", "CO")) {
+for (sp in sub("_rear$", "", strsplit(Sys.getenv("KEYS"), ",")[[1]])) {
   f <- sprintf("data/tune/%s_rear_grades.csv", sp)
   q <- sprintf("SELECT count(*) n, sum(accessible::int) acc, sum(CASE WHEN grade IS NOT NULL THEN 1 ELSE 0 END) graded,
     sum(length_metre)/1000 km, sum(CASE WHEN accessible THEN length_metre END)/1000 km_acc,

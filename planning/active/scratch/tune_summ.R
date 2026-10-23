@@ -1,5 +1,5 @@
 suppressPackageStartupMessages(library(dplyr))
-for (sp in c("CH", "CO")) {
+for (sp in sub("_rear$", "", strsplit(Sys.getenv("KEYS"), ",")[[1]])) {
   t <- readr::read_csv(sprintf("data/tune/%s_rear_tune.csv", sp), show_col_types = FALSE)
   cat("\n=====", sp, "rules", nrow(t), "\n")
   best <- t[which.min(t$dev_heldout), ]

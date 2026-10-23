@@ -65,8 +65,8 @@ the old intercept search: remove them before any `0320`. Every database step of 
 
 **Next, in order:** Phase 6a (#84's smoke run and gates, proved on `84c3c78` and `ca78ca6`; then #83's fit, proved
 against a dense-fit reference on the current scorer); then Phase 7's rescore of every key, its grades and the
-comparisons it needs; then the write-ups below. The probes that found the defect are in the old session's scratchpad
-(gone after it ends): `probe_null.R` captured the scorer's input `d` by overriding `knw_tune_score` in the namespace and
+comparisons it needs; then the write-ups below. The probe that found the defect is `planning/active/scratch/intercept_probe.R` (with
+`intercept_probe_head.R`, 0320's top): it captured the scorer's input `d` by overriding `knw_tune_score` in the namespace and
 replayed `.tune_fold_setup()` and the no-rule fit per fold; rebuild that as the gate's test, not as a scratch file.
 
 The write-up guidance below still holds for after the rescore; its "what is running" paragraph is gone.
