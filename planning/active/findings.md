@@ -172,3 +172,21 @@ another group); km accessible 225,152, graded 224,459, grade-weighted 61,423 (#6
 (kept from the first run; the pick did not move): 100 groups, 615,302 accessible, 607,483 graded (10,518 without a
 size), reference 0.5196, walks to 10 m³/s (43,945 of 484,751 found rivers in another group); km accessible 147,795,
 graded 146,612, grade-weighted 72,637 (#65: 70,905); under 0.2: 28,477 km (19 %); 0.8–1: 33,620 km (23 %).
+
+## Phase 8 notes gathered while the runs went (2026-10-23)
+
+`vignettes/chinook_rearing.Rmd` guards that the new chinook pick will break: line 78 `ch196$size_min == rec$size_min`
+(1 against 0.75) and `is.na(ch196$exc_q)` (the 1.96 pick now keeps an exception); line 90
+`abs(wl$km_tuned - 10200) < 200` (through-wetland km change under the door); line 83 `ge_best$grad_max > rec$grad_max`
+now holds (15 > 13); boot_grad 0.14 < 0.5 still ok. Prose to revise: "The answer" (the stricter-bar sentence), "What
+does link do now?" (0.67.0's pair on 1050/1150, the flow start), "A stricter bar", "Before you use it" wetland bullet
+(door now), "Steeper slopes" bullet (the ladder is shared; 13 % pick), the distance-from-bottom bullet (bank).
+`data-raw/vignette_chinook.R` already checks `walk == "bank"`, the `structure` columns, `link_config_sha` and
+`tuned_structure`; builds `out$wetland` per structure from `<key>_segments.rds`; reads the grad_ext tables and
+`scripts/logs/habitat/20261018_tune_grad_extend.txt`; takes meta from the tuning log's `CH_rear grades:` line.
+`scripts/README.md`'s 0310/0320/0322/0325/0330 entries and CLAUDE.md's walk sentence already describe the #73 state.
+`README.md`'s thresholds example (lines ~48–60) is repasted after 0325 (#75). `data/thresholds.csv` carries
+`rule_196`, `holds_196`, `config`; `R/thresholds_table.R` has `river_measure` and `near_river_scope`.
+
+Detached chain: `scripts/logs/habitat/20261023_chain_73.sh`, launched 05:12 UTC with nohup, pid 83818; its log is
+`20261023_chain_73.out`. The handoff brief is `progress.md`'s "Resume" section.
