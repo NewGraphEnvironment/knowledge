@@ -1,40 +1,111 @@
 # Coho rearing rule tuned on the province-wide run
 
-**Verified:** 2026-10-17; grade and comparison figures 2026-10-19 (#65) · **Issues:** #57, #65 · **Produced by:** `scripts/0310`, `scripts/0320`
-(`data/tune/CO_rear_*`), `scripts/0325` (`data/thresholds.csv` row `CO_rear_v1`) · **Status:** measured;
-nothing applied in link. Method: `habitat_thresholds_tuned.md`.
+**Verified:** 2026-10-23 (retuned on the evidence rebuilt on wet's 2026-10-19 flows, with the walk ending at the river's
+bank and the gradient ladder to 30 %, #73; first tuned 2026-10-17, #57; regraded 2026-10-19, #65) · **Issues:** #57,
+#65, #73 (folding #68, #80 and #81's run-time pieces) · **Produced by:** `scripts/0310` (evidence build, ledger
+`scripts/logs/habitat/20261022_evidence_build_ledger.csv`), `scripts/0320` (`data/tune/CO_rear_*`, log
+`scripts/logs/habitat/20261022_tune_run-ch_co.txt`), `scripts/0330` (`data/compare/CO_rear_*`, log
+`scripts/logs/habitat/20261022_compare.txt`), `scripts/0325` (`data/thresholds.csv` row `CO_rear_v1`; the grade table
+`knowledge/habitat_grade/v1`) · **Status:** measured; nothing applied in link. The method and the cross-species table
+are `habitat_thresholds_tuned.md`.
 
-**Population.** 4,263 stream-branch visits (1,107 with CO) in 62 groups with both outcomes, of 5,442 in link's
-CO range with no natural barrier downstream; 100 groups carry a CO habitat table.
+## What to expect of juvenile coho
 
-**Recommended rule: MAD ≥ 0.03 m³/s, gradient ≤ 4 %, no exception** (two departures from `default`'s width
-≥ 1.5 m, ≤ 5.49 %). The region holds 87 rules, all MAD rules: MAD 0.03–0.2 m³/s, gradient 3–4 %, with or
-without an exception (2 of the 87 have none). The best rule (MAD ≥ 0.1, 4 %, a 3 m³/s river within 2 km) is 15.6
-below the pick, inside the SE.
+Coho fry and parr rear in small streams and in pools, side channels and off-channel water, and the intrinsic-potential
+models size their streams accordingly. Burnett et al. (2007) start the coho flow curve at modelled mean annual flows
+under 0.06 m³/s, the Oregon "small stream" class, and let it decline only above 21.24 m³/s, to 0.5 above 76.45
+(`data/literature_evidence.csv` rows 191–193); Agrawal's model, as Sheer et al. (2009) summarise it, puts the floor at
+0.01 m³/s (row 287); Woll et al. (2017) give stream orders 1–4 the top class (row 456). On gradient the same models
+agree on a low optimum and a limit near 5–7 %: Burnett's curve is highest at 0 % and falls linearly to no use above
+7 % (rows 201–202), Agrawal's ends at 7 % with "very low" potential above 5 % (rows 285–286), Woll (2015) rates streams
+over 5 % no potential (row 426), and Porter et al. (2008), from FDIS catch in the Thompson, put the top class at
+2.45–3.25 % (row 472). The expectation, then, is a rule with the smallest size floor the data can carry and a gradient
+limit at or below link's `default` (width ≥ 1.5 m, gradient ≤ 5.49 %).
 
-**The size floor is the smallest a rule can carry: coho rear in the smallest streams.** 0.03 m³/s is the bottom
-of the grid (`default`'s MAD form is 0.03), and the region runs to 0.2. The change from `default` is the
-gradient: 4 % against 5.49 %, with 3 % inside the region too. Coho are caught on 40.9 % of the visits the rule
-admits against 15.2 % outside (`default`: 33.0 % against 19.2 %).
+## Evidence
 
-**`default` is outside the region**: 113.2 above the best (SE 45.8), on four of five seeds for the pick's
-standing. Nested selection: 3,880 against `default`'s 3,968 and 4,025 for no rule. The bootstrap recommends the
-pick in 18.5 % of resamples.
+5,442 stream-branch electrofishing visits (1,107 with CO) in 85 groups in link's CO range with no natural barrier
+downstream; 4,263 of them, in the 62 groups where coho were both caught and missed, are modelled. Half the modelled
+visits are on streams under 0.15 m³/s (a quarter under 0.04). Coho were caught on 40 % of the visits at 3 % or less,
+23 % at 3–4 %, 14 % at 4–5.49 %, and still on 18 % of the 802 visits above 9 % (148 detections).
 
-**Curve.** The joint GAM scores 4,068 held-out against the grid's best 3,855: the cut carries more than the
-surface; coho detection is high and flat across small streams, and the gradient cut is what separates.
+## Recommended rule: MAD ≥ 0.03 m³/s, gradient ≤ 4 %, no exception
 
-**Grade** (regraded 2026-10-19, #65: every segment at its own distance to a 10 m³/s river, the reference over
-the stream branch, on the flows wet republished that day). 4.92 M segments in 100 groups, 615,302 accessible,
-607,483 graded (10,518 with no flow); reference rate 0.512, the highest of any species: 22 % of graded km under
-0.2, 22 % at 0.8–1. Of 147,962 accessible km, 146,612 are graded (70,905 grade-weighted km).
+Two departures from `default` (the size test moves from width to flow; the gradient falls from 5.49 to 4 %), and the
+same rule from link's flow start (`default_tuned`'s MAD ≥ 0.03 m³/s at 5.49 %, link#331; from there it is one departure).
+It sits 11.8 deviance behind the best rule (MAD ≥ 0.1, 4 %, a ≥ 3 m³/s river within 2 km; held-out deviance 3,856.3
+against 4,024.6 for no rule) with an SE of 17.3, inside the region. The region holds 89 rules, all MAD rules: MAD
+0.03–0.2 m³/s, gradient 3 or 4 % (one rule at 7 %), with or without an exception (87 have one, at every Q and D on the
+ladder, because the exception admits almost nothing a 0.03 floor refuses). Coho are caught on 41.2 % of the visits the
+rule admits against 15.2 % outside (`default`: 33.0 % against 19.2 %).
 
-**Comparison (`scripts/0330`, `data/compare/CO_rear_*`).** Regenerated on link's 100 CO groups (#65's run, on
-the flows wet republished on 2026-10-19, which moved the rule by −9 km), the rule draws 77,603 km against
-`default`'s 81,629 (−4.9 %). 9,215 km are lost, 5,047 of them to the 4 % gradient maximum and 3,643 streams over
-1.5 m wide under 0.03 m³/s; 5,189 km are gained, 4,653 of them order-1 streams under 1.5 m wide that carry the
-flow. Graded km 49,790 → 49,570. FDIS detection on the rule's segments is 32 % against 11 % on accessible
-segments outside it (`default`: 29 % against 13 %); the bcfishobs outside lift moves 1.75 → 1.82. Floodplain (10
-catalog groups): 242,163 ha beside the rule's habitat against 272,429 under `default` (−11 %, more than the km's
-−5 %: the lost streams carry floodplain, the gained order-1 streams do not); graded ha 168,866 → 158,795.
-Maps: `research/fig/compare_co_rear_*.png`.
+**`default` is outside the region**, 111.8 behind the best (SE 47.4, 2.36 SEs), on all four extra fold seeds; so is link's
+`default_tuned` floor at `default`'s gradient (72.5, SE 28.5). The 1.96 SE pick (#79) is width ≥ 1.5 m at 4 %, from a
+region of 1,507 rules: at the stricter bar the size test cannot be told from `default`'s and the gradient still can.
+
+**What the checks say** (each listed with its direction):
+- *Nested selection* (the pick chosen on four folds, scored on the fifth): 3,877.8 against `default`'s 3,968.1 and
+  4,024.6 for no rule; folds 1–3 pick 3 %, folds 4 and 5 pick 4 %. For the rule.
+- *Four more fold seeds*: all four recommend this exact rule; `default` outside on all four. For.
+- *Group bootstrap* (200 resamples, width start | flow start): a MAD floor in 86 | 97 %, 0.03 in 69 | 86 %; gradient
+  4 % in 54 | 50.5 %, 3 % in 37.5 | 41.5 %, 5.49 % in 6 | 6.5 %; no exception in 55.5 | 59 %. The exact rule in 27 %.
+  For the size variable and the gradient; the exact rule is one of several the resamples spread over.
+- *Profiles* (best rule at each value, as deviance behind the best, SE): size 0.1 best, 0.03 +4.4 (15.6), 0.15 +25.5,
+  0.2 +27.7, every width floor +27.9 to +37.3; gradient 4 % best, 3 % +11.2 (35.8), 7 % +35.3 (37.7), 5.49 % +47.4
+  (25.9), 9–30 % +62 to +76. For a floor at the bottom of the ladder and against 5.49 %.
+- *The joint curve* (size × distance to a 10 m³/s river, gradient; edf 23.1, 3.75, group effect 48.7) scores 4,092.5
+  held-out, above the grid's best and above no rule: the surface overfits the 62 groups, so its grade ranks segments
+  and its rates are not to be read. Against reading more than a cut into the curve.
+
+## What it is not
+
+- **Not a lower bound on coho streams.** 0.03 m³/s is the bottom of the ladder (`default`'s own MAD floor), and the
+  visits below it still catch coho on 10 % (96 of 922): the floor is the smallest the grid offers, not a value the data
+  placed.
+- **Not a limit of use at 4 %.** The cut best separates held-out detection, and the gradient curve falls steadily
+  (relative rate 1.7 at 0.5 %, 1.0 at 4 %, 0.76 at 5.5 %, about 0.6 from 7 to 15 %) with no step; coho are caught above
+  9 % on 18 % of visits. Porter's 3.25 % and Burnett's 7 % bracket it.
+- **Not a change to river polygons, wetlands or lakes**, which keep `default`'s tests under every rule.
+- **A rate per standard electrofishing visit, not capacity or density.**
+
+## Grade (`knowledge/habitat_grade/v1`; `scripts/0320`, 2026-10-22)
+
+Every accessible segment of the 100 groups is walked from its downstream end to the first ≥ 10 m³/s river, ending at a
+double-line river's bank (#73), and read on the flows wet republished on 2026-10-19 (the table records the load). 4.92 M
+segments, 615,302 accessible, 607,483 graded (10,518 with no flow even from a parent); reference rate 0.520 over edge
+types 1000, 1100, 2000 and 2300, the highest of any species. Of 147,795 accessible km, 146,612 are graded and sum to
+72,637 grade-weighted km (#65: 70,905, to the centreline); 19 % of graded km lies under 0.2, 23 % at 0.8–1. 25,990 km
+read a distance of 0 (20,152 of them river-polygon lines), where the curve is an extrapolation
+(`habitat_thresholds_tuned.md`, Limits); 43,945 of the 484,751 segments whose walk found a river found it in another
+watershed group.
+
+## What the rule changes on link's segments (`scripts/0330`, `data/compare/CO_rear_*`)
+
+The baseline is link 0.67.0's `default` (configs at `67a410e2`, origin/main on 2026-10-22), regenerated through fresh's
+predicate, the user-habitat overlay and connectivity on link's 100 CO groups: through-wetland lines (edge 1050/1150) go
+through the gradient and size door (link#364), so it draws 79,829 km where the stored flags, from the run's older
+configs, hold 81,750 (#65's regeneration under the run's configs drew 81,629, so the door takes about 1,800 km). The tuned rule is set beside it under two structures;
+having no exception, it has no third:
+
+| structure | tuned km | change | lost | gained | of the gain, through-wetland lines | graded km, `default` → tuned |
+|---|---|---|---|---|---|---|
+| free pass on through-wetland lines (as the rule was scored) | 77,602 | −2.8 % | 9,149 | 6,922 | 1,679 | 50,801 → 51,288 |
+| door on through-wetland lines (link's `stream`) | 75,430 | −5.5 % | 9,945 | 5,546 | 403 | 50,801 → 50,540 |
+
+Under the door, 5,045 km are lost to the 4 % gradient maximum, 3,613 km of streams over 1.5 m wide under 0.03 m³/s, 805
+km of through-wetland lines that pass `default`'s door and fail the tuned one, and under 500 km to connectivity and the
+river-polygon branch; 5,063 km are gained where the flow passes and the width fails or is unmeasured (5,048 of the
+5,546 km gained are order-1 streams), and 403 km of through-wetland lines that pass the tuned door and not `default`'s.
+Across groups the change runs from −35.9 % (UDEN) to +22.9 % (COMX), median −4.0 %; 32 of 100 groups gain.
+
+**Checks.** FDIS detection on each rule's segments against accessible segments outside it: `default` 29.1 % against
+12.9 % (1,407 of 4,829 visits, 399 of 3,101); the tuned rule 32.5 % against 11.2 % with the free pass, 33.0 % against
+11.1 % with the door. On the bcfishobs records FDIS does not hold (presence only, never scored), the share of
+locations on the rule's segments over the rule's share of accessible stream-edge km is 1.750 (1.714–1.787) for
+`default`, 1.815 (1.770–1.862) with the free pass and 1.818 (1.773–1.864) with the door; the door's lift over `default`
+is 0.068 (0.033–0.098). **The two structures cannot be told apart by either check**, and the scoring never saw a
+through-wetland line (its visits are on edge 1000/1100/2000/2300), so the structure is link's call: `door` is what
+link#364 chose for coho and what the thresholds table records (`near_river_scope` is empty, the rule having no pair).
+
+The floodplain table (`data/compare/floodplain.csv`) and the maps were not redrawn for #73 (`0330 STAGE=maps`); their
+coho figures are #65's, on the run's own configs. Maps: `research/fig/compare_co_rear_*.png`.

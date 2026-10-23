@@ -91,14 +91,17 @@ species and date, and the rest give the outside check. The Fish Data Submission 
 |---|---|---|---|---|---|---|
 | BT rearing | 8,717 (1,198), 75 | MAD ≥ 0.35, ≤ 10.49 %, none | 196 rules: MAD 0.1–0.5, 9–10.49 % | out, +138.7 (SE 87.8) | 5 of 5 seeds | fitted |
 | BT spawning | 475 (98), 22 | MAD ≥ 0.75, ≤ 5.49 %, Q3 within 2 km | 18: MAD 0.15–1, 4–9 %, Q 1–5, D 0.5–2 km | out, +44.0 (SE 41.6) | 1 of 5 | fitted, **weak** |
-| CH rearing | 4,490 (215), 43 | MAD ≥ 0.75, ≤ 9 %, Q3 within 1 km | 23: MAD 0.35–1, 7–9 %, Q 1–10, D 1–2 km | out, +196.3 (SE 81.6) | 5 of 5 | fitted |
-| CO rearing | 4,263 (1,107), 62 | MAD ≥ 0.03, ≤ 4 %, none | 87: MAD 0.03–0.2, 3–4 % | out, +113.2 (SE 45.8) | 4 of 5 | fitted |
+| CH rearing | 4,490 (215), 43 | MAD ≥ 0.75, ≤ 13 %, Q3 within 1 km | 83: MAD 0.15–1, 7–30 %, Q 1–10, D 0.5–2 km | out, +226.4 (SE 91.8) | 5 of 5 | fitted |
+| CO rearing | 4,263 (1,107), 62 | MAD ≥ 0.03, ≤ 4 %, none | 89: MAD 0.03–0.2, 3–4 % (one at 7 %) | out, +111.8 (SE 47.4) | 5 of 5 | fitted |
 | GR rearing | 1,230 (212), 26 | **`default`** (width ≥ 1.5, ≤ 3.49 %) | 799: width 1–4, 3–9 % | **in**, +10.7 (SE 12.1) | 3 of 5 | fitted |
 | RB rearing | 12,959 (3,513), 129 | width ≥ 3, ≤ 9 %, none | 81: width 2–3, 7–9 % | out, +150.6 (SE 63.9) | 2 of 5 | fitted |
 | ST rearing | 1,375 (82), 11 | MAD ≥ 1, ≤ 8.49 %, none | 330: MAD 0.35–1, 3–9 % | out, +42.4 (SE 29.9) | 4 of 5 | fitted |
 | WCT rearing | 1,157 (536), 6 | width ≥ 1.5, ≤ 4 %, none | 677: width 1–4 or MAD ≥ 0.28, 3–9 % | out, +17.8 (SE 13.4) | 5 of 5 | underpowered |
 | CH, CO, GR, RB, ST, WCT spawning | — | — | — | — | — | no electrofishing response |
 | KO, SK rearing; CM, PK | — | — | — | — | — | no stream rule in `default` |
+
+The CH and CO rows are #73's retune (2026-10-23: the evidence rebuilt on wet's 2026-10-19 flows, the walk to the bank,
+the ladder to 30 %, 6,149 and 6,622 rules); the other rows are #57's until #73 reruns them.
 
 Three readings across the table:
 1. **`default` is outside the one-SE region for every fitted species but grayling.** For BT, CH, CO and ST the
@@ -125,8 +128,8 @@ main ladders; #67's ladder to 30 % is not replayed):
 |---|---|---|---|---|
 | BT rearing | 1.58 | MAD ≥ 0.35, ≤ 10.49 % | `default` | 196 → 1,066, of 3,612 |
 | BT spawning | 1.06 | MAD ≥ 0.75, ≤ 5.49 %, a ≥ 3 m³/s river within 2 km | `default` | 18 → 3,010, of 3,010 |
-| CH rearing | 2.40 | MAD ≥ 0.75, ≤ 9 %, a ≥ 3 m³/s river within 1 km | MAD ≥ 0.75, ≤ 5.49 % | 23 → 1,098, of 2,795 |
-| CO rearing | 2.47 | MAD ≥ 0.03, ≤ 4 % | width ≥ 1.5, ≤ 4 % | 87 → 1,023, of 3,010 |
+| CH rearing | 2.47 | MAD ≥ 0.75, ≤ 13 %, a ≥ 3 m³/s river within 1 km | MAD ≥ 1, ≤ 5.49 %, a ≥ 3 m³/s river within 1 km | 83 → 2,066, of 6,149 |
+| CO rearing | 2.36 | MAD ≥ 0.03, ≤ 4 % | width ≥ 1.5, ≤ 4 % | 89 → 1,507, of 6,622 |
 | GR rearing | 0.89 | `default` | `default` | 799 → 3,493, of 3,612 |
 | RB rearing | 2.36 | width ≥ 3, ≤ 9 % | width ≥ 3, ≤ 8.49 % | 81 → 323, of 3,612 |
 | ST rearing | 1.42 | MAD ≥ 1, ≤ 8.49 % | `default` | 330 → 3,307, of 3,612 |
@@ -135,9 +138,9 @@ main ladders; #67's ladder to 30 % is not replayed):
 - **Five of eight keep `default` at 1.96**, and three move off it: CH, CO and RB. For BT spawning, GR, ST and WCT the
   1.96 region holds most or all of the grid, so keeping `default` there says the stricter bar cannot separate the
   rules, not that the records support `default`.
-- **CH keeps its flow floor and nothing else:** at 1.96 its pick returns to `default`'s 5.49 % gradient and drops the
-  near-a-river exception (`default` stays outside, 2.40 SEs behind). RB keeps its 3 m width floor at `default`'s
-  gradient; CO goes back to width at its 4 % gradient.
+- **CH keeps a flow floor and the exception at `default`'s 5.49 %** (MAD ≥ 1 from the width start, 0.28 from link's
+  flow start, #73; before the retune the 1.96 pick had dropped the exception), and `default` stays outside, 2.47 SEs
+  behind. RB keeps its 3 m width floor at `default`'s gradient; CO goes back to width at its 4 % gradient.
 - `data/thresholds.csv` carries the 1.96 pick per rule as `rule_196`, and per component whether it keeps the value
   as `holds_196` (a size row also needs the same size variable). A component equal to `default`'s value holds
   trivially (BT rearing's 10.49 %), and a MAD row's `link_parameter` is not what a width rule at 1.96 would set.
@@ -150,12 +153,15 @@ main ladders; #67's ladder to 30 % is not replayed):
 |---|---|---|---|---|---|---|---|
 | BT rearing | 8.41 M (158) | 577,130 | 571,305 | 151,418 | 0.226 | 63 % | 10 % |
 | BT spawning | 8.41 M (158) | 577,130 | 571,305 | 392,475 | 0.210 | 0.2 % | 23 % |
-| CH rearing | 5.76 M (125) | 225,326 | 224,459 | 63,059 | 0.139 | 67 % | 21 % |
-| CO rearing | 4.92 M (100) | 147,962 | 146,612 | 70,905 | 0.512 | 22 % | 22 % |
+| CH rearing | 5.76 M (125) | 225,152 | 224,459 | 61,423 | 0.136 | 68 % | 21 % |
+| CO rearing | 4.92 M (100) | 147,795 | 146,612 | 72,637 | 0.520 | 19 % | 23 % |
 | GR rearing | 4.21 M (82) | 258,724 | 146,128 | 72,867 | 0.034 | 25 % | 25 % |
 | RB rearing | 10.33 M (210) | 510,150 | 277,539 | 121,816 | 0.445 | 27 % | 15 % |
 | ST rearing | 4.14 M (79) | 155,481 | 154,855 | 32,290 | 0.201 | 76 % | 14 % |
 | WCT rearing | 1.19 M (16) | 35,320 | 25,932 | 18,671 | 0.473 | 6 % | 52 % |
+
+The CH and CO rows are #73's grades (2026-10-23: each segment walked to the river's bank, the reference over edge types
+1000, 1100, 2000 and 2300, CH under its new pick); the other rows are #65's until #73 regrades them.
 
 A width rule grades only measured streams: fwapg models width where `stream_order > 1`, so GR, RB and WCT leave
 every unmeasured first-order stream `NA` (RB: 6.26 M of 10.33 M segments). A MAD rule grades almost everything
