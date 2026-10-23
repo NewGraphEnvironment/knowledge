@@ -163,19 +163,38 @@ in this repo has moved since.
       first, then the evidence, the recommendation, what it is not; the pair's scope with link#364's measurement beside
       ours; the flow-start pick; the ladder); the two rows of `research/habitat_thresholds_tuned.md`
 
+## Phase 6a: The gate and the scorer's cost, before any rescore (#84, #83)
+
+Added 2026-10-23 (Al), after Phase 7's BT box: the four-species scores showed a second scorer defect only after the
+run (findings, "The intercept minimiser sticks on a flat clamp"), so Phase 7's remaining boxes wait on this phase.
+
+- [ ] #84: a smoke run per key (no rule, `default`, the previous pick, link's `default_tuned` floor; one fold seed, no
+      bootstrap, no nested selection) and its gates: no-rule held-out deviance near the in-sample null, no visit at the
+      clamp's 55.3, no rule behind no rule by more than the null deviance, no training coefficient past a stated size
+- [ ] #84: `0320` runs the smoke run and gates first, for every key, and refuses the full grid on a failure; a
+      development setting skips the extra seeds, the bootstrap and nested selection
+- [ ] #84: the gates fail on the scorer at `84c3c78` and pass on `ca78ca6` (mutation table in findings); the
+      coefficient check's finding on `data_set` and `era` recorded, and any change to those terms decided from it
+- [ ] #83: group intercepts without a dense column per group; a dense-fit reference rescored first on the current
+      scorer (the committed CH and CO tables came from the old search) and reproduced; rainbow timed against 8.1 h
+- [ ] Run rule from here: no chained tuning and comparison; every key's gates pass, then score, check, grade, compare
+
 ## Phase 7: BT, then GR, RB, ST and WCT
 
 - [x] `SPECIES=BT` `0320` and `0330` (rear and spawn; the long one); `bull_trout_tuned.md` (0320 262.7 min on
       2026-10-22; 0330 206.9 min on 2026-10-23 against the archived schema; file rewritten)
 - [ ] `SPECIES=GR,RB,ST,WCT` `0320` and `SPECIES=GR,ST,WCT` `0330`; GR, ST and WCT research files' numbers, picks and
-      the ladder sentence. **RB deferred (Al, 2026-10-23):** scored and graded by this `0320` (its tables kept), left
-      out of the comparison, the write-ups and the thresholds table until the scorer's cost is fixed (#83; findings,
-      "Rainbow deferred"); `rainbow_rearing_tuned.md` says so in its status
-- [ ] **On hold (Al, 2026-10-23): no rescore until the tuning is organized for fast, checked iteration** (findings,
+      the ladder sentence. **RB deferred (Al, 2026-10-23):** left out of the comparison, the write-ups and the
+      thresholds table until #83 lands (findings, "Rainbow deferred"); the stopped run's RB tables were restored to
+      HEAD, so nothing of it is kept. If #83 makes RB feasible, it comes back in this box
+- [ ] **On hold until Phase 6a (Al, 2026-10-23): no rescore until the tuning is organized for fast, checked iteration** (findings,
       "The intercept minimiser sticks on a flat clamp"). The fix is in (`ca78ca6`); every #73 score (CH, CO, BT and the
       four) came from the old search. `data/tune/{CH,CO,BT}_*_score.rds` are stale caches of it and must be removed
       before any `0320`, which keys its cache on the grid, not the code. The committed CH, CO and BT write-ups rest
-      on those scores until a rescore says whether their picks hold
+      on those scores until a rescore says whether their picks hold. Then one rescore of every key (CH, CO, BT rear and
+      spawn, GR, ST, WCT; RB if #83 allows) on `SCHEMA=fresh_default_20261017`; regrade; recompare the keys whose pick
+      moves and GR, ST, WCT; revise the CH, CO and BT write-ups where a pick moves. The grade keep-check compares rule,
+      run_uid, walk, ref_edge and discharge_load, not `q`: check `q` by hand
 - [ ] `research/habitat_thresholds_tuned.md`: Results, "At 1.96 SE", Grades, "What each rule changes" and Limits
       rewritten from the new tables (the distance bullet now says bank); every quantified claim recomputed at the grain
       of the sentence

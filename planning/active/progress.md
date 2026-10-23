@@ -44,36 +44,32 @@
   orphaned workers stopped, no queries left; the fix and a test that fails on the old search (`ca78ca6`); the broken
   tables restored and their caches removed. Rescoring is on hold while the tuning is organized (Al)
 
-### Resume (written 2026-10-23 05:30 UTC, for the session that picks this up after a compact and clear)
+- Organizing before any rescore (Al): #84 filed (a minutes-long gate `0320` must pass before the full grid, a
+  development setting, the gates proved on `84c3c78` against `ca78ca6`); #83's body says it is blocked by #84 and needs
+  a dense-fit reference on the current scorer; #73's body says the rescore is blocked by both; the plan gains Phase 6a
+  before Phase 7's remaining boxes. Both issues' work lands on this branch
 
-The branch stays `73-rebuild-the-evidence-and-retune-on-the-r`; no new issue, no new plan-init. Resume with
+### Resume (revised 2026-10-23, for the session that picks this up after a compact and clear)
+
+The branch stays `73-rebuild-the-evidence-and-retune-on-the-r`; no new branch and no `/planning-init`: #84 and #83 are
+Phase 6a of this plan. Resume with
 `cd ~/Projects/repo/knowledge && git fetch -q origin && git checkout 73-rebuild-the-evidence-and-retune-on-the-r && git pull --ff-only`,
-read this section and `task_plan.md`'s unticked boxes, and `findings.md`'s "The CH and CO tuning on the rebuilt
-evidence" for the numbers' shape.
+then read `task_plan.md` Phase 6a, #84's and #83's bodies, and `findings.md`'s "The intercept minimiser sticks on a
+flat clamp" and "Rainbow deferred".
 
-**What is running without a session (revised 2026-10-23 11:25 UTC).** The second chain's bull trout comparison
-exited 0 at 11:15 UTC (206.9 min) and its logs are kept as `20261023_compare-bt.txt` and `20261023_compare-workers-bt.out`;
-its tables are committed with the bull trout write-up. The four-species tuning (`SPECIES=GR,RB,ST,WCT WORKERS=6 0320`,
-started 07:48 UTC) is still running, and the chain runs the four-species comparison after it. The history: the first chain
-(`scripts/logs/habitat/20261023_chain_73.sh`, log `20261023_chain_73.out`) stopped at its first step: link#361's
-provincial run renamed `fresh_default` to `fresh_default_20261017` at 07:41 UTC, after the two jobs it had waited on
-(the chinook comparison and the bull trout tuning) exited at 07:40 and before the chain's bull trout comparison
-connected (`20261023_chain_0330-bt_attempt1.out`: `relation "fresh_default.streams" does not exist`). The four-species
-tuning was stopped six minutes in (exit 143, nothing cached) so the scripts could take the schema. `scripts/0320` and
-`0330` now read `SCHEMA` (default `fresh_default`) and log it. **Every database step from here on sets
-`SCHEMA=fresh_default_20261017`**, the run the evidence, grades and chinook/coho comparison were built on; the new
-`fresh_default` is a different run (link 0.68.0, `20261023_074321-24d85e8c`) that link#361 is building over the next
-day, and its before/after diff reads the archived schema, which is dropped later at the operator's call.
-`scripts/logs/habitat/20261023_chain2_73.sh` (nohup at 07:48 UTC, pid 78023) runs `SPECIES=BT WORKERS=2 0330` beside
-`SPECIES=GR,RB,ST,WCT WORKERS=6 0320`, moves the bull trout comparison's date-named logs to `<date>_compare-bt.txt`
-and `<date>_compare-workers-bt.out` (the four-species run would overwrite them), then runs `SPECIES=GR,RB,ST,WCT 0330`
-only if both exited 0 (the four-species comparison composes the saved bull trout tables). Its log is
-`20261023_chain2_73.out` (one timestamped line per step, `FAILED:` on a stop); each step's stdout is
-`20261023_chain2_0330-bt.out`, `20261023_chain2_0320-gr_rb_st_wct.out`, `20261023_chain2_0330-gr_rb_st_wct.out`.
-The database is shared with the provincial run's primitive load and recompute on this machine, so expect every step
-slower than the chinook timings. **Do not edit `scripts/0320-tune-run.R`, `scripts/0330-compare.R` or anything under
-`R/` while the chain runs** (Rscript reads a file as it runs). Check the chain by its log and the per-key files on disk
-(`data/tune/<key>_summary.csv`, `data/compare/<key>_compare.csv`), not by `ps`.
+**Nothing is running.** The second chain was stopped at 15:55 UTC and its four-species `0320` at 16:14 UTC; both chain
+logs are committed (`scripts/logs/habitat/20261023_chain2_*`). The broken run's `data/tune/{GR,RB,ST,WCT}_*` tables
+were restored to HEAD and their score and curve caches removed. `data/tune/{CH,CO,BT}_*_score.rds` are stale caches of
+the old intercept search: remove them before any `0320`. Every database step of this retune sets
+`SCHEMA=fresh_default_20261017`.
+
+**Next, in order:** Phase 6a (#84's smoke run and gates, proved on `84c3c78` and `ca78ca6`; then #83's fit, proved
+against a dense-fit reference on the current scorer); then Phase 7's rescore of every key, its grades and the
+comparisons it needs; then the write-ups below. The probes that found the defect are in the old session's scratchpad
+(gone after it ends): `probe_null.R` captured the scorer's input `d` by overriding `knw_tune_score` in the namespace and
+replayed `.tune_fold_setup()` and the no-rule fit per fold; rebuild that as the gate's test, not as a scratch file.
+
+The write-up guidance below still holds for after the rescore; its "what is running" paragraph is gone.
 
 **Model plan (Al, 2026-10-22 evening).** The four smaller species' research files on a cheaper model; the bull trout
 file, the `habitat_thresholds_tuned.md` rewrite, Phase 8, the branch review and the PR on Fable.
