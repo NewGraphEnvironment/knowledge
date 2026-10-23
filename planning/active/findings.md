@@ -196,3 +196,27 @@ Detached chain: `scripts/logs/habitat/20261023_chain_73.sh`, launched 05:12 UTC 
 `20261023_chain_73.out`. The handoff brief is `progress.md`'s "Resume" section.
 
 | `relation "fresh_default.streams" does not exist` (bull trout `0330`, 2026-10-23 07:42 UTC, two minutes after the tuning exited) | link#361's provincial run renamed the schema to `fresh_default_20261017` at 07:41 UTC, having waited for the two jobs it could see; the chain's next step was not one of them. `0320`/`0330` take `SCHEMA` (default `fresh_default`), log it, and the second chain sets `SCHEMA=fresh_default_20261017`. `0325` and `data-raw/vignette_chinook.R` still name `fresh_default` (Phase 8). |
+
+## Rainbow deferred (Al, 2026-10-23)
+
+The four-species `0320` (6 workers on this 10-core machine, shared with link#361's provincial run, load ~13) scored
+rainbow alone from 07:48 to 15:52 UTC: 8.1 h, each worker ~88 % busy (grayling's score came from the stopped first
+attempt's cache; steelhead and cutthroat score in minutes). The cost is the scorer's design: each pattern's fold fit
+(`R/tune_score.R`, `.tune_fold_setup()` and `.tune_score_one()`) is a dense `glm.fit()` whose model matrix carries one
+column per training group, so a fit costs about n × p² and grows with the square of the group count. Per pattern,
+against CH (4,490 modelled visits, 43 groups with both outcomes): CO about 2×, BT rearing about 6×, RB (12,959 visits,
+129 groups, #57's population) about 25×. RB's rule result was also the least settled of the fitted rows (#57: the pick
+in the region on 2 of 5 seeds, 4 % of bootstrap resamples; the pick at the top of the old 9 % ladder), its width rule
+grades only measured streams (6.26 M of 10.33 M segments ungraded), link's access columns disagree on whole RB groups
+(link#349), and the export records most juvenile steelhead as rainbow.
+
+Decided: the middle course. The chain's wrapper was stopped at 15:55 UTC before its `GR,RB,ST,WCT 0330` (logged in
+`20261023_chain2_73.out`); the `0320` run was left to finish, so RB's tune tables and grade are written and kept, but
+`0330` runs as `SPECIES=GR,ST,WCT`. Its compose step leaves RB's saved comparison (2026-10-20, no `structure` column)
+out of the combined tables and names it ("Left out of the combined tables…"), which is the intended result here, not
+a defect. RB comes back once the scorer's group intercepts are fitted without a dense column per group (#83), on whatever evidence build is current then. Its kept tables are reusable only while the evidence build
+is this one.
+
+mgcv's "Fitting terminated with step failure" appears in the four-species `0320` stdout: once at 07:48:45 UTC, 13 s
+after launch, which is grayling's curve (its score read from cache), and once after rainbow's scoring at 15:52 UTC,
+rainbow's curve; any later occurrence is attributed by its position between the species' score files.

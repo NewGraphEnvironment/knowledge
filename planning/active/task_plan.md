@@ -167,13 +167,18 @@ in this repo has moved since.
 
 - [x] `SPECIES=BT` `0320` and `0330` (rear and spawn; the long one); `bull_trout_tuned.md` (0320 262.7 min on
       2026-10-22; 0330 206.9 min on 2026-10-23 against the archived schema; file rewritten)
-- [ ] `SPECIES=GR,RB,ST,WCT` `0320` and `0330`; their research files' numbers, picks and the ladder sentence
+- [ ] `SPECIES=GR,RB,ST,WCT` `0320` and `SPECIES=GR,ST,WCT` `0330`; GR, ST and WCT research files' numbers, picks and
+      the ladder sentence. **RB deferred (Al, 2026-10-23):** scored and graded by this `0320` (its tables kept), left
+      out of the comparison, the write-ups and the thresholds table until the scorer's cost is fixed (#83; findings,
+      "Rainbow deferred"); `rainbow_rearing_tuned.md` says so in its status
 - [ ] `research/habitat_thresholds_tuned.md`: Results, "At 1.96 SE", Grades, "What each rule changes" and Limits
       rewritten from the new tables (the distance bullet now says bank); every quantified claim recomputed at the grain
       of the sentence
 
 ## Phase 8: Publish and regenerate
 
+- [ ] `0325` leaves RB out of `thresholds/v1` and `thresholds_groups` (deferred, Phase 7), and the grade table with it;
+      the publish step names the deferral rather than carrying #57's RB row
 - [ ] `knw_thresholds_table()` adds `near_river_scope` from each key's `compare.csv` `tuned_structure` (door → `both`,
       door_wetland → `wetland_flow`, empty where the rule has no pair); Phase 4 ticked it but the column was never written
       (found 2026-10-23); `test-thresholds_table.R` pins it; `R/` is edited only after the chain's last `0320`/`0330` exits

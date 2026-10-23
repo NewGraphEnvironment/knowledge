@@ -33,6 +33,12 @@
 - Next: the four-species tuning (running since 07:48 UTC) and comparison under the chain; their write-ups per the Resume
   section; then the `habitat_thresholds_tuned.md` rewrite and Phase 8
 
+- Rainbow deferred (Al, 2026-10-23): its scoring alone took 07:48–15:52 UTC on 6 workers, the scorer's fold fit
+  carrying one dense column per group (#83 filed). The chain's wrapper stopped at 15:55 UTC before its four-species
+  `0330`, the `0320` run (pid 78028) left to finish and grade all four; the comparison then runs by hand as
+  `SCHEMA=fresh_default_20261017 SPECIES=GR,ST,WCT 0330`, its stdout `20261023_0330-gr_st_wct.out`. #73's body
+  and the plan say so; findings, "Rainbow deferred"
+
 ### Resume (written 2026-10-23 05:30 UTC, for the session that picks this up after a compact and clear)
 
 The branch stays `73-rebuild-the-evidence-and-retune-on-the-r`; no new issue, no new plan-init. Resume with
