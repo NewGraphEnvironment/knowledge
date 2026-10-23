@@ -114,3 +114,18 @@ test_that("a held-out group's intercept is fit where glm.fit's IRLS runs away", 
   dev2 <- sum(-2 * (y2 * log(a2$fitted.values) + (1 - y2) * log(1 - a2$fitted.values)))
   expect_equal(sum(knowledge:::.tune_group_dev(y2, eta2, fam)), dev2, tolerance = 1e-6)
 })
+
+test_that("a constant added to a held-out group's offsets changes nothing: the intercept absorbs it", {
+  fam <- stats::binomial(link = "cloglog")
+  # a fold whose training fit sent two nuisance terms to 13 and 14 put every held-out offset at +15 to +20
+  # (GR rearing, 2026-10-23); the deviance is clamped at 1e-12 and so flat far from the minimum, and a
+  # search fixed on [-30, 30] found the plateau there and scored every visit 55.3
+  y <- c(rep(1L, 8), rep(0L, 69))
+  eta <- seq(-1.5, 2.5, length.out = 77)
+  base <- sum(knowledge:::.tune_group_dev(y, eta, fam))
+  for (shift in c(-25, -12, 12, 18, 25)) {
+    expect_equal(sum(knowledge:::.tune_group_dev(y, eta + shift, fam)), base, tolerance = 1e-6,
+                 info = paste("shift", shift))
+  }
+  expect_lt(base, 8 * 55.3)
+})

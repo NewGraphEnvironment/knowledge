@@ -243,12 +243,16 @@ knw_tune_score <- function(d, rule_in, grid, resp = "U", seed = 54L, folds = 5L,
 # offsets spread over twelve units (the joint curve's surface on a held-out fold) it reported
 # convergence at an intercept where every detection's chance was under 1e-12, 55.3 deviance each,
 # which put CH rearing's curve at 2,434 held-out against 1,383 for no rule (2026-10-22, #73).
+# The search is centred on the group's own offsets: the clamp makes the deviance flat far from its
+# minimum, so a range fixed at [-30, 30] found the plateau when a fold's training fit put every offset
+# at +15 to +20, and scored every visit 55.3 (GR rearing's no-rule model 8,397 against 848, 2026-10-23).
 .tune_group_dev <- function(y, eta, fam = stats::binomial(link = "cloglog"), bound = 30) {
   dev_at <- function(b) {
     p <- pmin(pmax(fam$linkinv(eta + b), 1e-12), 1 - 1e-12)
     -2 * (y * log(p) + (1 - y) * log(1 - p))
   }
-  b <- stats::optimize(function(b) sum(dev_at(b)), c(-bound, bound), tol = 1e-8)$minimum
+  centre <- -stats::median(eta)
+  b <- stats::optimize(function(b) sum(dev_at(b)), centre + c(-bound, bound), tol = 1e-8)$minimum
   dev_at(b)
 }
 
