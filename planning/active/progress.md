@@ -85,27 +85,49 @@
   every prior; without one the coefficient gate fails on GR, RB, ST and WCT and steelhead's null ratio too. Phase 7's
   hold lifted; the rescore runs on m4. Al's rule for the write-ups, 2026-10-23: teach the principle beside each result.
 
-### Resume (revised 2026-10-23, for the session that picks this up after a compact and clear)
+### Resume (revised 2026-10-23 21:40 UTC, for the session that picks this up, on any model)
 
-The branch stays `73-rebuild-the-evidence-and-retune-on-the-r`; no new branch and no `/planning-init`: #84 and #83 are
-Phase 6a of this plan. Resume with
-`cd ~/Projects/repo/knowledge && git fetch -q origin && git checkout 73-rebuild-the-evidence-and-retune-on-the-r && git pull --ff-only`,
-then read `task_plan.md` Phase 6a, #84's and #83's bodies, and `findings.md`'s "The intercept minimiser sticks on a
-flat clamp" and "Rainbow deferred".
+The branch stays `73-rebuild-the-evidence-and-retune-on-the-r`; no new branch and no `/planning-init`. From the repo
+root: `git fetch -q origin && git checkout 73-rebuild-the-evidence-and-retune-on-the-r && git pull --ff-only`, then
+read `task_plan.md` Phase 6a (done) and Phase 7, and `findings.md`'s last three sections ("The smoke run's mutation
+table", "The fit with the groups absorbed", "The prior on the data-set and era coefficients"). Rules that hold for
+every step: `SCHEMA=fresh_default_20261017` for every database step; no chained tuning and comparison; judge a run by
+its files and log lines, never by `ps`; a log that shows `FAILED` means stop and report the error lines; never edit a
+script or `R/` while a run reads it (run long jobs from a frozen copy); everything committed is public; commit each
+task with its box flip and a progress entry, and push. Al's rule for the write-ups (2026-10-23): teach the principle
+beside each result, in plain words, the specification below.
 
-**Nothing is running.** The second chain was stopped at 15:55 UTC and its four-species `0320` at 16:14 UTC; both chain
-logs are committed (`scripts/logs/habitat/20261023_chain2_*`). The broken run's `data/tune/{GR,RB,ST,WCT}_*` tables
-were restored to HEAD and their score and curve caches removed. `data/tune/{CH,CO,BT}_*_score.rds` are stale caches of
-the old intercept search: remove them before any `0320`. Every database step of this retune sets
-`SCHEMA=fresh_default_20261017`.
+**What is running: Phase 7's rescore, on m4, not here.** m4 (16 cores, 128 GB) holds a clone of this repo at
+`fa638f2` on the branch, the evidence build (`data/fdis/derived/{visits_link,visits_species,walks}.csv` and
+`data/fdis/build/fish.rds` with the ledger's md5s), link's clone with both threshold commits, and database variables
+that reach the same database. Started 21:21 UTC 2026-10-23: `SCHEMA=fresh_default_20261017 WORKERS=12 Rscript` on a
+frozen copy of `scripts/0320-tune-run.R`, every species, from the runner `repo_aside/run_0320.sh` in the directory
+beside the clones on m4 (`repo_aside/`). Its stdout is `repo_aside/0320_m4.log` there, which ends with a line
+`exit <code>` and a date when the run exits; the script's own log is `scripts/logs/habitat/20261023_tune_run.txt` in
+m4's clone. The smoke run passed on all eight keys (0.1 min) before any grid was scored. Expect one to two hours
+(rainbow with every extra took 16.6 min there; the grades and curves are the rest). Read it over ssh; m4's non-login
+shell lacks Homebrew's PATH (use `/sbin/md5`, absolute paths; no `psql`), its `rsync` rejects `--info`, and `ssh`
+to it exits 0 whatever the remote command returned, so test what a command prints.
 
-**Next, in order:** Phase 6a (#84's smoke run and gates, proved on `84c3c78` and `ca78ca6`; then #83's fit, proved
-against a dense-fit reference on the current scorer); then Phase 7's rescore of every key, its grades and the
-comparisons it needs; then the write-ups below. The probe that found the defect is `planning/active/scratch/intercept_probe.R` (with
-`intercept_probe_head.R`, 0320's top): it captured the scorer's input `d` by overriding `knw_tune_score` in the namespace and
-replayed `.tune_fold_setup()` and the no-rule fit per fold; rebuild that as the gate's test, not as a scratch file.
+**When it exits 0:** in m4's clone, `git status` shows the new `data/tune/*` tables and the `0320` log; commit there
+(git identity is set) with the Phase 7 box annotated, push, and pull here. Its score and curve caches
+(`data/tune/*_score.rds`, `*_curve.rds`, ignored) stay on m4; remove them before any rerun of `0320` there on changed
+code, because the cache is keyed on the grid. If it exits non-zero or the log shows `FAILED`, report the error lines.
+If the smoke run refused a key, it says so in the log and nothing was scored.
 
-The write-up guidance below still holds for after the rescore; its "what is running" paragraph is gone.
+**Then, in order:** `0330` one species at a time on m4 (`SCHEMA=fresh_default_20261017 SPECIES=<sp> Rscript
+scripts/0330-compare.R`, never chained with `0320`; the combined tables are composed per key, see the last bullet
+below); the keep-check on the grades compares rule, run_uid, walk, ref_edge and discharge_load, not `q`, so check `q`
+by hand; then the write-ups per the model plan below, every number recomputed from the new tables; then Phase 8.
+Which picks moved against the committed tables is the first thing to read off the new `*_tune.csv` (`recommended`).
+
+**On this machine nothing of ours runs.** link's provincial run (a virtual machine at two cores) was loading it all
+afternoon on 2026-10-23, which is why the timing moved to m4. The dense and fe reference caches are under
+`data/tune/ref_*/` (ignored); their logs and the prior measurement's are in `planning/active/scratch/logs/`.
+Pre-existing test failures on the branch, Phase 8's, not touched: `test-tune_repick.R:79` (#79's pin) and
+`test-vignette-data.R` (md5s moved by Phase 7's runs); everything else passes (full suite 2026-10-23 before the prior;
+the three tune files after it). m4's old #57 tune outputs were moved to `repo_aside/knowledge_tune_57_20261023/`
+beside the clones, not deleted.
 
 **Model plan (Al, 2026-10-22 evening).** The four smaller species' research files on a cheaper model; the bull trout
 file, the `habitat_thresholds_tuned.md` rewrite, Phase 8, the branch review and the PR on Fable.

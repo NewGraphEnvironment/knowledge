@@ -1,7 +1,7 @@
 # One-time check (plan review O4): today's knw_compare_rules(), on link's configs at the run's sha, reproduces
 # #65's default km per group, before the function is edited for #73. CH rearing on two groups.
 suppressMessages({ library(dplyr); library(readr) })
-setwd("/Users/airvine/Projects/repo/knowledge")
+# run from the repo root
 pkgload::load_all(quiet = TRUE)
 Sys.setenv(PGCONNECT_TIMEOUT = "30")
 pg <- function() DBI::dbConnect(RPostgres::Postgres(), bigint = "numeric")

@@ -310,7 +310,7 @@ weighted least-squares step solved by projecting the groups out: the weighted gr
 of the nuisance columns are subtracted, a pivoted QR (`.lm.fit`, the LINPACK routine `glm.fit` uses, at its tolerance)
 solves for the nuisance coefficients and the rule, and each group's effect is its weighted mean residual. A step costs
 n × p² in the nuisance columns (five or six) instead of in the groups (43 to 129), and no package is added. Checked
-on simulated data against `glm.fit` before it went in (scratchpad `glm_fe.R`): coefficients to 1e-15, the same
+on simulated data against `glm.fit` before it went in (`planning/active/scratch/glm_fe.R`): coefficients to 1e-15, the same
 iteration count and convergence flag, a separated data-set coefficient to 1.7e-12 over the same 20 iterations,
 zero columns dropped alike; at rainbow's size (10,400 visits, 103 training groups) one fit took 0.012 s against
 0.293 s. The one divergence is a nuisance level that is exactly a combination of groups: `glm.fit`'s QR keeps the
@@ -322,8 +322,8 @@ so a rule aliased with whole groups is dropped by both.
 
 **The fall-back test was too coarse, and it cost chinook every fit twice over (found 2026-10-23).** The first
 reproduction run (`FIT=fe`, 3 workers, alongside the dense run and link#361) took 50.4 min on CH rearing and 41.5 on
-CO against the dense run's 19.0 and 22.0 on 6 workers, and a probe on CH with a 52-pattern grid (scratchpad
-`fit_probe.R`, one worker) showed why: 265 fits, 265 fall-backs, so each fold paid the projection and then the dense
+CO against the dense run's 19.0 and 22.0 on 6 workers, and a probe on CH with a 52-pattern grid (`planning/active/scratch/fit_probe.R`,
+one worker; its output `scratch/logs/20261023_fit_probe_fixed.txt` is the fixed code's) showed why: 265 fits, 265 fall-backs, so each fold paid the projection and then the dense
 fit. The dropped column was `era2005on` on every fold. Chinook's population has no visit before 1995, so the two era
 dummies sum to the intercept, which the groups carry; the dense fit drops that column too (its QR has the intercept
 and the nuisance columns before the groups), so the two fits agree and no fall-back is needed. The test now asks
@@ -336,7 +336,7 @@ design note is rainbow's, with 103). The reproduction run was stopped (its CH an
 were removed) and relaunched on the fixed code with 6 workers.
 
 **The dense reference on the current scorer (8a20461, `FIT=dense`, 6 workers, main seed, no bootstrap, nested
-selection or extra seeds; `data/tune/ref_dense/`, scratchpad `ref_dense.log`, 18:17 to 20:07 UTC on 2026-10-23
+selection or extra seeds; `data/tune/ref_dense/`, `planning/active/scratch/logs/20261023_ref_dense.log`, 18:17 to 20:07 UTC on 2026-10-23
 alongside link#361 and, from 18:31, the first `fe` run):**
 
 | key | min | patterns | not converged | recommended | no-rule held-out | best | curve held-out |
@@ -358,7 +358,7 @@ search, with the extra seeds), and BT rearing's is not: committed `mad>=0.1|g<=0
 group-absorbing fit, rule by rule, flag by flag (`compare_fit.R`, below).
 
 **The reproduction (`FIT=fe` on the fixed fall-back test, 6 workers, 20:17 to 20:34 UTC on 2026-10-23;
-`data/tune/ref_fe/`, scratchpad `ref_fe.log`; `compare_fit.R` → `planning/active/scratch/fit_compare.csv`):** on every
+`data/tune/ref_fe/`, `scratch/logs/20261023_ref_fe.log`; `compare_fit.R` → `planning/active/scratch/fit_compare.csv`):** on every
 key the region, the pick, the recommended rule, the fold assignment and every rule's convergence flag are identical to
 the dense reference's, and the curve's held-out deviance is the same to the printed digit. Held-out deviances agree to
 1e-9 relative on BT_spawn, CO, GR, ST and WCT and to 2.5e-9 on BT_rear (one rule at 1.5e-5 absolute); on CH six
@@ -369,8 +369,8 @@ load: CH 19.0 → 4.9, CO 22.0 → 2.4, BT (both stages) 65.5 → 5.9, GR 1.1 �
 small keys are the curve and the prep, not the fits. The caches under `data/tune/ref_*/` are ignored (the score
 caches already were); the comparison table is the record.
 
-**Rainbow with every extra, on m4 (2026-10-23, 20:58 to 21:15 UTC; `data/tune/ref_fe_extra/` there, log
-`~/Projects/repo_aside/rb_m4.log` on m4):** `FIT=fe EXTRA=1 SPECIES=RB WORKERS=12` took **16.6 min** for the whole
+**Rainbow with every extra, on m4 (2026-10-23, 20:58 to 21:15 UTC; `data/tune/ref_fe_extra/` there, its log
+copied to `scratch/logs/20261023_ref_fe_extra_rb_m4.log`):** `FIT=fe EXTRA=1 SPECIES=RB WORKERS=12` took **16.6 min** for the whole
 `knw_tune_run()` (7,706 patterns, 0 not converged, the 200-resample bootstrap, nested selection and four extra seeds,
 the curve), against the **8.1 h** of 2026-10-23 for the same job on the dense fit here (6 workers, load about 13; the
 run that was stopped). m4 has 16 cores at load 2 to 6 against 10 here under link's provincial run, so the comparison is
@@ -411,7 +411,7 @@ exactly, that a separated data set's coefficient is held between 2 and 6 in size
 prior reaches the scorer and the smoke run.
 
 **The measurement the prior is adopted on** (`planning/active/scratch/prior_smoke.R` → `prior_smoke.csv`,
-`prior_smoke_rules.csv`, `prior_smoke_lines.txt`; the smoke run on every key, main seed, 0320's inputs, 2026-10-23;
+`prior_smoke_rules.csv`, `prior_smoke_lines.txt`, `logs/20261023_prior_smoke.log`; the smoke run on every key, main seed, 0320's inputs, 2026-10-23;
 each setting 0.1 min over the eight keys). The gates and the largest non-group coefficient of any smoke rule:
 
 | key | no prior | SD 5 | SD 2.5 | SD 1.5 |

@@ -1,7 +1,7 @@
 # How the visits' walked distances moved from the v3 build (#57, centreline, flows of 2026-10-17; the local Parquet
 # 0299 built on 2026-10-17) to the #73 rebuild (bank, gaps counted, flows of 2026-10-19), by cause.
 suppressMessages({ library(dplyr); library(arrow) })
-setwd("/Users/airvine/Projects/repo/knowledge")
+# run from the repo root
 old <- read_parquet("data/fdis/publish/walks.parquet") |> filter(src == "pick") |>
   select(blue_line_key, downstream_route_measure, qmin, status_old = status, dist_old = dist_m)
 new <- readr::read_csv("data/fdis/derived/walks.csv", show_col_types = FALSE) |> filter(src == "pick") |>
