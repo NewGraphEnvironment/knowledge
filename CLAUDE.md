@@ -312,6 +312,11 @@ is the check against fresh's walk on one group (BULK, 2026-10-22: 0 of 2,460 sta
 `path` class is the two walks' entry conventions, fresh by local code, ours by nearest point). `scripts/sql/` keeps
 #54's centreline walk for the frozen `0298`.
 
+The schema can change under a run too: a provincial run in link renames `fresh_default` to `fresh_default_<date>` and
+builds a new `fresh_default` in its place (link#361 did so on 2026-10-23 while #73's chain was running, and the comparison
+failed on connect). `0320` and `0330` take the schema from `SCHEMA`; every step of one retune names the schema its
+evidence was built on, and a chain of runs sets it once.
+
 ### Database access
 
 Every script connects with `DBI::dbConnect(RPostgres::Postgres())`, so libpq reads `PGHOST`,
