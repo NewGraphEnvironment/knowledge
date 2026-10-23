@@ -105,7 +105,8 @@ locations on the rule's segments over the rule's share of accessible stream-edge
 `default`, 1.815 (1.770–1.862) with the free pass and 1.818 (1.773–1.864) with the door; the door's lift over `default`
 is 0.068 (0.033–0.098). **The two structures cannot be told apart by either check**, and the scoring never saw a
 through-wetland line (its visits are on edge 1000/1100/2000/2300), so the structure is link's call: `door` is what
-link#364 chose for coho and what the thresholds table records (`near_river_scope` is empty, the rule having no pair).
+link#364 chose for coho and what the thresholds table will record from `0325`'s next run (`near_river_scope`, Phase 8;
+coho's is empty, the rule having no pair).
 
 The floodplain table (`data/compare/floodplain.csv`) and the maps were not redrawn for #73 (`0330 STAGE=maps`); their
 coho figures are #65's, on the run's own configs. Maps: `research/fig/compare_co_rear_*.png`.

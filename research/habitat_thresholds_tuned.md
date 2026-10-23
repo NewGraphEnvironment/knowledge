@@ -180,15 +180,17 @@ to 25 % (BT rearing, up); CH's grade-weighted km grows by three quarters (36,149
 connectivity on scratch copies of every group the species' habitat table covers (`knw_compare_rules()`; the
 regenerated `default` equals fresh's own predicate on every segment), and reads the grade beside each segment.
 Kilometres are accessible stream under `streams_access`, flagged rearing or spawning by each rule; graded km is
-km × grade (`data/compare/compare.csv`, `change.csv`, `checks.csv`).
+km × grade (`data/compare/compare.csv`, `change.csv`, `checks.csv`). The CH and CO rows are #73's, against link 0.67.0's
+`default` and under the structure each species file records; the other rows and the numbered points below are #65's, on the
+run's own configs, until their species rerun (Phase 7).
 
 | species × stage | accessible km | `default` km | tuned km | change | lost | gained | graded km, `default` → tuned |
 |---|---|---|---|---|---|---|---|
 | RB rearing | 509,975 | 227,089 | 183,988 | −19.0 % | 44,368 | 1,267 | 103,160 → 90,429 |
 | BT rearing | 576,908 | 248,927 | 156,091 | −37.3 % | 94,199 | 1,363 | 105,605 → 77,856 |
 | BT spawning | 576,908 | 133,382 | 99,555 | −25.4 % | 56,411 | 22,585 | 88,070 → 62,266 |
-| CH rearing | 225,152 | 101,184 | 88,641 | −12.4 % | 24,832 | 12,289 | 49,434 → 54,443 |
-| CO rearing | 147,795 | 81,629 | 77,603 | −4.9 % | 9,215 | 5,189 | 49,790 → 49,570 |
+| CH rearing (#73, door, pair on every line) | 225,152 | 99,186 | 84,294 | −15.0 % | 30,477 | 15,585 | 48,091 → 53,911 |
+| CO rearing (#73, door) | 147,795 | 79,829 | 75,430 | −5.5 % | 9,945 | 5,546 | 50,801 → 50,540 |
 | GR rearing | 258,576 | 77,740 | 77,740 | 0 | 0 | 0 | 44,602 → 44,602 |
 | ST rearing | 155,357 | 71,619 | 45,274 | −36.8 % | 26,677 | 332 | 22,498 → 20,730 |
 | WCT rearing | 35,285 | 20,749 | 16,243 | −21.7 % | 4,510 | 4 | 14,939 → 11,277 |
@@ -205,11 +207,11 @@ km × grade (`data/compare/compare.csv`, `change.csv`, `checks.csv`).
    `default`'s 49,434 on 101,184: the rule trades small low-grade streams for the near-river exception.
 4. **Checks** (`checks.csv`). FDIS detection on each rule's segments against accessible segments outside it,
    `default` then tuned: RB 33 % against 15 %, then 35 % against 18 %; BT rearing 17 against 6, then 21 against
-   8; CH 14 against 2, then 17 against 1.5; CO 29 against 13, then 32 against 11; ST 4.8 against 0.7, then 7.5
+   8; CH 13.6 against 2.2, then 16.7 against 1.3 (#73, door); CO 29 against 13, then 33 against 11 (#73, door); ST 4.8 against 0.7, then 7.5
    against 0.6; WCT 35 against 24, then 35 against 27. On the bcfishobs records FDIS does not hold (A/B matches, presence only,
    never scored), the share of their locations on accessible stream edges that falls on the rule's segments, over the
    rule's share of accessible stream-edge km, rises under every tuned
-   rule: RB 2.34 → 3.04, BT rearing 2.45 → 5.21, BT spawning 3.04 → 3.70, CH 2.46 → 3.26, CO 1.75 → 1.82,
+   rule: RB 2.34 → 3.04, BT rearing 2.45 → 5.21, BT spawning 3.04 → 3.70, CH 2.46 → 3.11, CO 1.75 → 1.82 (both #73),
    ST 2.20 → 4.08, WCT 1.56 → 1.73 (bootstrap intervals in the table). The tuned rules hold more of the
    independent records per kilometre they draw, which is what the score rewards; it is not a claim about extent.
 

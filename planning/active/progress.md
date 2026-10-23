@@ -15,7 +15,10 @@
 - 0330 SPECIES=CH,CO stopped once the CH pick moved (CO written); 0330 now composes per-species runs; CH rerun alone
 - Phase 6 write-up: `coho_rearing_tuned.md` rewritten prior-first; `chinook_rearing_tuned.md`'s head rewritten with
   #54's record kept below; CH and CO rows of `habitat_thresholds_tuned.md`; `research/README.md`
-- Next: CH's comparison section when 0330 lands; BT (0320 running beside it), then GR, RB, ST, WCT
+- CH 0330 alone (153.1 min; compose check: CO's rows joined, the six pre-#73 keys left out as intended); the chinook
+  comparison section written, structure `both` stated as a decision; CH and CO rows of the changes table
+- The hand-off committed (`f00ef42`): the detached chain and the Resume brief below
+- Next: the chain (BT 0330, then GR,RB,ST,WCT 0320 and 0330); write-ups per the Resume section
 
 ### Resume (written 2026-10-23 05:30 UTC, for the session that picks this up after a compact and clear)
 

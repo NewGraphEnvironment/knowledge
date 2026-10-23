@@ -157,8 +157,9 @@ in this repo has moved since.
 - [x] `SPECIES=CH,CO` `0320` on the 16-core machine (`WORKERS=14`): scores on the extended ladder, both picks, curve,
       grade at the bank distance (run on this machine: 67.6 min on 8 workers, then rescored under the intercept fix in
       91.2 min on 6 workers; `scripts/logs/habitat/20261022_tune_run-ch_co.txt` is the second run's)
-- [ ] `SPECIES=CH,CO` `0330`: `default` (0.67.0) + T1 + T2 + T3; FDIS and bcfishobs checks per structure
-- [ ] Write-up: `research/chinook_rearing_tuned.md` and `coho_rearing_tuned.md` revised in place (life-history prior
+- [x] `SPECIES=CH,CO` `0330`: `default` (0.67.0) + T1 + T2 + T3; FDIS and bcfishobs checks per structure (CO in the
+      first run, stopped once the CH pick moved; CH alone 153.1 min, 2026-10-23; the combined tables compose per-key runs)
+- [x] Write-up: `research/chinook_rearing_tuned.md` and `coho_rearing_tuned.md` revised in place (life-history prior
       first, then the evidence, the recommendation, what it is not; the pair's scope with link#364's measurement beside
       ours; the flow-start pick; the ladder); the two rows of `research/habitat_thresholds_tuned.md`
 
@@ -172,6 +173,9 @@ in this repo has moved since.
 
 ## Phase 8: Publish and regenerate
 
+- [ ] `knw_thresholds_table()` adds `near_river_scope` from each key's `compare.csv` `tuned_structure` (door → `both`,
+      door_wetland → `wetland_flow`, empty where the rule has no pair); Phase 4 ticked it but the column was never written
+      (found 2026-10-23); `test-thresholds_table.R` pins it; `R/` is edited only after the chain's last `0320`/`0330` exits
 - [ ] `0325`: `thresholds/v1`, `thresholds_groups`, `habitat_grade/v1` (local; `PUBLISH` waits on #56's bucket
       policy); `data/thresholds.csv` and `thresholds_groups.csv`
 - [ ] `data-raw/vignette_chinook.R`, then `data-raw/vignette_bib.R` if a citation changed, then

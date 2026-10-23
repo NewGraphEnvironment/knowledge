@@ -1,0 +1,18 @@
+Comparison, knowledge#57: 1 fitted species x stage; link run 20261017_004619-3f4c713b at a17e91773b283b021811f8b5b76b887d5f4c16e4.
+link configs/default at 67a410e25c9c2aa6e7be9c75afc0d261a6cb2f8b (the baseline; the schema's run is at a17e91773b283b021811f8b5b76b887d5f4c16e4) read from ../link; fresh 0.42.0; tuned reported as door.
+Floodplain catalog: 23 whole-network groups (BOWR BULK DUNC FRAN KISP KOTL LARL LCHL LNTH LSAL MCGR MORK MORR NECR PARS PCEA PINE SLOC TABR THOM UFRA UNTH WILL).
+Compared 1 species x stage in 153.1 min on 6 workers.
+CH_rear: 125 groups, 153.1 min; default 99186 km (width>=1.5|g<=0.0549|cw channel_width>=15@D1000; mad discharge>=3@D1000 on wetland_flow).
+  free: tuned 92041 km (-7.2 %); graded km 48091 -> 54134; lost 24818, gained 17673 (12840 by the exception, 4 of it through a river in another group).
+  door (= tuned): tuned 84294 km (-15.0 %); graded km 48091 -> 53911; lost 30477, gained 15585 (12949 by the exception, 4 of it through a river in another group).
+  door_wetland: tuned 66832 km (-32.6 %); graded km 48091 -> 44943; lost 35067, gained 2713 (84 by the exception, 0 of it through a river in another group).
+   CH rear: 125 groups; link configs at 67a410e25c9c2aa6e7be9c75afc0d261a6cb2f8b; default width>=1.5|g<=0.0549|cw channel_width>=15@D1000; mad discharge>=3@D1000 on wetland_flow; tuned mad>=0.75|g<=0.13|Q3@D1000 under free, door, door_wetland (reported as tuned: door).
+   Classify, overlay and connect: 125 groups x 4 rules, 134.5 min (near-river walks 49.6 min).
+   Outside check: 4290 non-FDIS CH records; 2409 locations placed (4 inside an overlay reach left out), 826 on accessible stream edges.
+   GeoPackage data/compare/gpkg/CH_rear.gpkg: 5757827 segments in 7.3 min.
+   Through-wetland CH km (edge 1050/1150), link#364's five groups | all groups: rearing_default 212.7 | 8422.2; rearing_pre_default 248.6 | 9999.0; rearing_free 234.8 | 10256.6; rearing_pre_free 322.3 | 13669.1; rearing_door 61.7 | 2494.7; rearing_pre_door 63.0 | 2588.2; rearing_door_wetland 59.0 | 2328.8; rearing_pre_door_wetland 63.0 | 2588.2.
+Composed with the saved comparison of CO_rear.
+  CO_rear free: default 79829 km (width>=1.5|g<=0.0549|none); tuned 77602 km (-2.8 %, mad>=0.03|g<=0.04|none).
+  CO_rear door: default 79829 km (width>=1.5|g<=0.0549|none); tuned 75430 km (-5.5 %, mad>=0.03|g<=0.04|none).
+Left out of the combined tables (saved under another comparison; rerun them): BT_rear BT_spawn GR_rear RB_rear ST_rear WCT_rear.
+Done in 153.1 min.

@@ -48,7 +48,8 @@
 #         scripts/logs/habitat/<date>_compare.txt
 #         STAGE=maps: data/compare/floodplain.csv  per species x stage x catalog group: ha, graded ha, ha by class
 #                     research/fig/compare_<sp>_<stage>_<wsg>.png, data/compare/maps/*.html (ignored)
-# RUN:    Rscript scripts/0330-compare.R   (from the repo root; SPECIES=CH,BT to restrict; WORKERS=4; CONFIG_SHA=<link
+# RUN:    Rscript scripts/0330-compare.R   (from the repo root; SPECIES=CH,BT to restrict, and the combined tables then
+#         compose with the other species' saved per-key tables; WORKERS=4; CONFIG_SHA=<link
 #         commit> for the configs (default origin/main of LINK_REPO); TUNED_AS=door; GPKG=FALSE skips the GeoPackages;
 #         STAGE=maps draws the floodplain table and the maps from the tables the last full run saved)
 # ---------------------------------------------------------------------------
@@ -269,9 +270,47 @@ if (stage_only != "maps") {
     }
     log_lines <- c(log_lines, paste("  ", res[[k]]$log))
   }
-  compare <- bind_rows(lapply(res, `[[`, "compare"))
-  change <- bind_rows(lapply(res, `[[`, "change"))
-  checks <- bind_rows(lapply(res, function(x) x$checks))
+  # the combined tables take every per-key table on disk made under this comparison, so a run restricted by
+  # SPECIES composes with the species an earlier run wrote instead of replacing them (#73: CH and CO, then BT, then
+  # the rest, each its own run); a saved table whose columns differ from this run's (one made before the structures)
+  # is left out and named. The saved tables are read as text and given this run's column types.
+  as_like <- function(x, tpl) {
+    for (nm in names(tpl)) {
+      if (is.numeric(tpl[[nm]])) x[[nm]] <- as.numeric(x[[nm]]) else if (is.logical(tpl[[nm]])) x[[nm]] <- as.logical(x[[nm]])
+    }
+    x
+  }
+  read_saved <- function(k, what, tpl) {
+    f <- file.path(dir_out, paste0(k, "_", what, ".csv"))
+    if (!file.exists(f) || is.null(tpl)) return(NULL)
+    x <- read_csv(f, show_col_types = FALSE, col_types = cols(.default = "c"))
+    if (!identical(names(x), names(tpl))) return(structure(list(), class = "other_comparison"))
+    as_like(x, tpl)
+  }
+  saved <- setdiff(names(Filter(function(r) !is.null(r$pick) && !is.null(r$curve), curves)), names(res))
+  tpl <- function(what) { for (x in res) if (!is.null(x[[what]])) return(x[[what]]); NULL }
+  saved_tbl <- lapply(c(compare = "compare", change = "change", checks = "checks"), function(what) {
+    out <- lapply(saved, read_saved, what = what, tpl = tpl(what))
+    names(out) <- saved
+    out
+  })
+  other <- saved[vapply(saved_tbl$compare, inherits, logical(1), "other_comparison")]
+  composed <- setdiff(saved[!vapply(saved_tbl$compare, is.null, logical(1))], other)
+  if (length(composed)) {
+    say("Composed with the saved comparison of %s.", paste(composed, collapse = " "))
+    for (k in composed) {
+      tots <- saved_tbl$compare[[k]] |> filter(watershed_group_code == "ALL")
+      for (i in seq_len(nrow(tots))) {
+        say("  %s %s: default %.0f km (%s); tuned %.0f km (%+.1f %%, %s).", k, tots$structure[i], tots$default_km[i],
+            tots$default_rule[i], tots$tuned_km[i], tots$change_pct[i], tots$tuned_rule[i])
+      }
+    }
+  }
+  if (length(other)) say("Left out of the combined tables (saved under another comparison; rerun them): %s.", paste(other, collapse = " "))
+  keep <- function(what) c(lapply(res, `[[`, what), lapply(saved_tbl[[what]][composed], function(x) if (inherits(x, "other_comparison")) NULL else x))
+  compare <- bind_rows(keep("compare"))
+  change <- bind_rows(keep("change"))
+  checks <- bind_rows(keep("checks"))
   write_csv(compare |> mutate(across(where(is.numeric), ~ round(.x, 3))), file.path(dir_out, "compare.csv"), na = "")
   write_csv(change |> mutate(km = round(km, 3)), file.path(dir_out, "change.csv"), na = "")
   write_csv(checks |> mutate(across(where(is.numeric), ~ round(.x, 4))), file.path(dir_out, "checks.csv"), na = "")
