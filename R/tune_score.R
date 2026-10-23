@@ -228,19 +228,28 @@ knw_tune_score <- function(d, rule_in, grid, resp = "U", seed = 54L, folds = 5L,
     bn <- b[f$cols]
     bn[is.na(bn)] <- 0
     eta <- (if (length(f$cols)) drop(f$Xh %*% bn) else 0) + br * as.numeric(x[f$ho])
-    p <- numeric(length(f$ho))
     for (w in levels(f$wh)) {
       i <- which(f$wh == w)
-      a <- suppressWarnings(stats::glm.fit(matrix(1, length(i), 1), f$yh[i], family = fam, offset = eta[i],
-                                          control = stats::glm.control(maxit = 100)))
-      if (!a$converged) ok <- FALSE
-      p[i] <- a$fitted.values
+      dv[f$ho[i]] <- .tune_group_dev(f$yh[i], eta[i], fam)
     }
-    p <- pmin(pmax(p, 1e-12), 1 - 1e-12)
-    dv[f$ho] <- -2 * (f$yh * log(p) + (1 - f$yh) * log(1 - p))
   }
   if (anyNA(dv)) stop("a visit was in no held-out fold", call. = FALSE)
   list(dev = dv, ok = ok)
+}
+
+# a held-out group's deviance per visit, its own intercept fitted over the visits' offsets. The
+# intercept is the minimiser of the binomial deviance on a bounded range, found by golden section:
+# the deviance is convex in it under cloglog, and `stats::glm.fit()`'s IRLS is not safe here. With
+# offsets spread over twelve units (the joint curve's surface on a held-out fold) it reported
+# convergence at an intercept where every detection's chance was under 1e-12, 55.3 deviance each,
+# which put CH rearing's curve at 2,434 held-out against 1,383 for no rule (2026-10-22, #73).
+.tune_group_dev <- function(y, eta, fam = stats::binomial(link = "cloglog"), bound = 30) {
+  dev_at <- function(b) {
+    p <- pmin(pmax(fam$linkinv(eta + b), 1e-12), 1 - 1e-12)
+    -2 * (y * log(p) + (1 - y) * log(1 - p))
+  }
+  b <- stats::optimize(function(b) sum(dev_at(b)), c(-bound, bound), tol = 1e-8)$minimum
+  dev_at(b)
 }
 
 # per-group held-out deviance for every distinct pattern, plus the no-rule model

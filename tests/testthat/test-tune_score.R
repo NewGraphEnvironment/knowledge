@@ -84,3 +84,30 @@ test_that("a grid with departures_flow gives a second pick from the flow start; 
   # the region is the same whichever start reads it
   expect_identical(s2$rules$in_region, s$rules$in_region)
 })
+
+test_that("a held-out group's intercept is fit where glm.fit's IRLS runs away", {
+  fam <- stats::binomial(link = "cloglog")
+  # a held-out fold of the joint curve: detections at a middling offset, non-detections spread far below
+  y <- c(rep(1L, 12), rep(0L, 154))
+  eta <- c(rep(-2, 12), seq(-13, -1.7, length.out = 154))
+  a <- suppressWarnings(stats::glm.fit(matrix(1, length(y), 1), y, family = fam, offset = eta,
+                                      control = stats::glm.control(maxit = 100)))
+  p_glm <- pmin(pmax(a$fitted.values, 1e-12), 1 - 1e-12)
+  dev_glm <- sum(-2 * (y * log(p_glm) + (1 - y) * log(1 - p_glm)))
+  dev_null <- {
+    pn <- mean(y)
+    sum(-2 * (y * log(pn) + (1 - y) * log(1 - pn)))
+  }
+  expect_true(all(a$fitted.values[y == 1L] < 1e-12)) # the defect: every detection's chance under 1e-12
+  expect_gt(dev_glm, dev_null)
+  dv <- knowledge:::.tune_group_dev(y, eta, fam)
+  expect_length(dv, length(y))
+  expect_true(all(is.finite(dv)))
+  expect_lt(sum(dv), dev_null)
+  # where IRLS is safe the two agree
+  y2 <- c(rep(1L, 5), rep(0L, 20))
+  eta2 <- seq(-3, -1, length.out = 25)
+  a2 <- stats::glm.fit(matrix(1, 25, 1), y2, family = fam, offset = eta2)
+  dev2 <- sum(-2 * (y2 * log(a2$fitted.values) + (1 - y2) * log(1 - a2$fitted.values)))
+  expect_equal(sum(knowledge:::.tune_group_dev(y2, eta2, fam)), dev2, tolerance = 1e-6)
+})

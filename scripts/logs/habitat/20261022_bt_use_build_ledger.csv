@@ -1,0 +1,7 @@
+kind,step,n,note
+in,visits_in,40552,0310's placed visits
+drop,bt_absent_from_wsg,6994,
+drop,bt_absence_blocked,573,
+info,bt_present_on_access_bt_0,36,BT caught on a segment link models as blocked
+drop,not_bt_accessible,7538,
+kept,visits_kept,25447,

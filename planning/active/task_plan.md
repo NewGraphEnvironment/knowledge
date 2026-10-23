@@ -154,8 +154,8 @@ in this repo has moved since.
 
 ## Phase 6: CH and CO, all the way through
 
-- [ ] `SPECIES=CH,CO` `0320` on the 16-core machine (`WORKERS=14`): scores on the extended ladder, both picks, curve,
-      grade at the bank distance
+- [x] `SPECIES=CH,CO` `0320` on the 16-core machine (`WORKERS=14`): scores on the extended ladder, both picks, curve,
+      grade at the bank distance (run on this machine, 8 workers, 67.6 min; `scripts/logs/habitat/20261022_tune_run-ch_co.txt`)
 - [ ] `SPECIES=CH,CO` `0330`: `default` (0.67.0) + T1 + T2 + T3; FDIS and bcfishobs checks per structure
 - [ ] Write-up: `research/chinook_rearing_tuned.md` and `coho_rearing_tuned.md` revised in place (life-history prior
       first, then the evidence, the recommendation, what it is not; the pair's scope with link#364's measurement beside

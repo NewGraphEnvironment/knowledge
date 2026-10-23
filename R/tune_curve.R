@@ -99,7 +99,7 @@ knw_tune_curve <- function(d, pick, walks, folds, resp = "U",
   edf <- summary(fit)$s.table[, "edf"]
 
   # held-out deviance on the scorer's folds: fixed terms refit on the other folds, each held-out
-  # group its own intercept
+  # group its own intercept (`.tune_group_dev()`, as the scorer fits it)
   fo <- folds[as.character(dd$wsg)]
   if (anyNA(fo)) stop("a modelled group has no fold", call. = FALSE)
   dev <- 0
@@ -126,10 +126,7 @@ knw_tune_curve <- function(d, pick, walks, folds, resp = "U",
     y <- ho[[resp]]
     for (w in unique(as.character(dd$wsg[fo == kf]))) {
       i <- which(as.character(dd$wsg[fo == kf]) == w)
-      a <- suppressWarnings(stats::glm.fit(matrix(1, length(i), 1), y[i], family = fam, offset = eta[i],
-                                          control = stats::glm.control(maxit = 100)))
-      p <- pmin(pmax(a$fitted.values, 1e-12), 1 - 1e-12)
-      dev <- dev + sum(-2 * (y[i] * log(p) + (1 - y[i]) * log(1 - p)))
+      dev <- dev + sum(.tune_group_dev(y[i], eta[i], fam))
     }
   }
 

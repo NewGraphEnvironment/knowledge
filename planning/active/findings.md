@@ -120,3 +120,4 @@ that found a river lost it; 15 found one they had not. Over every source and siz
 
 | Error | Resolution |
 |-------|------------|
+| CH rearing's curve scored 2,434 held-out against 1,383 for no rule (`0320`, 2026-10-22), while its rules scored as before | The per-group intercept refit (`stats::glm.fit()` with the fold's predictions as offset, cloglog) reported convergence at an intercept where every detection's chance was under the 1e-12 clamp (55.3 deviance each: NECR's 12 detections 663.1, 28 detections in 7 groups in all). The joint curve's held-out offsets spread over twelve units on a fold; a rule's one in/out term never does, and the scorer's sums for three patterns are unchanged to 0.01 under the fix. `.tune_group_dev()` now fits the intercept by a bounded golden-section minimiser of the deviance, convex in the intercept under cloglog, in both callers; the replayed CH curve scores 1,029 (`scratchpad/curve_diag*.out`, recomputed by the rerun) |
