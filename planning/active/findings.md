@@ -220,3 +220,21 @@ is this one.
 mgcv's "Fitting terminated with step failure" appears in the four-species `0320` stdout: once at 07:48:45 UTC, 13 s
 after launch, which is grayling's curve (its score read from cache), and once after rainbow's scoring at 15:52 UTC,
 rainbow's curve; any later occurrence is attributed by its position between the species' score files.
+
+## The intercept minimiser sticks on a flat clamp (found 2026-10-23, the four-species `0320`)
+
+The four-species scores came back impossible: GR's no-rule held-out deviance 8,397.5 (#57: about 848), its best rule
+8,384.3; RB's `default` +394,289.7 behind (SE 51,705.8); ST's `default` +2,793.5, WCT's +5,844.2. Replayed for GR
+outside the run (`scratchpad` probe: 0320's inputs, the scorer's input captured, the fold setup and no-rule fit
+rerun): fold 4's training fit sets `data_setFDS` 12.99 and `era1995-2004` 13.96 (near-confounded with the group
+columns; converged, 17 iterations), so its held-out visits carry offsets of +15 to +20. `.tune_group_dev()` (84c3c78)
+searches the group intercept on [−30, 30] with `stats::optimize()`, but the deviance is clamped at p = 1e-12 and so is
+flat at both ends: with offsets that large every first probe lands on the plateau and the search never reaches the
+minimum near −18. Every visit of BLUR, KISK, LHAF and UBTN scores 55.3, and fold 4 carries 7,756.3 of the 8,397.5.
+Centring the search on the group's own offsets (`-median(eta) ± 30`) gives fold 4 207.2 and leaves folds 1, 2, 3 and 5
+identical to 0.001 (85.231, 156.140, 202.773, 197.033); the no-rule total becomes about 848.4.
+
+The minimiser was committed 2026-10-23T01:26Z; CH and CO were rescored with it, and BT's `0320` (started about
+03:17Z) ran with it, so every #73 score carries it. Whether any of their rules hit the plateau is not known without
+rescoring: a probe on a few patterns wrongly cleared the scorer last time. The score caches are keyed on the grid,
+not the code, so a fixed scorer rescores only once the `<key>_score.rds` caches are removed.
