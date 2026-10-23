@@ -49,6 +49,26 @@
   a dense-fit reference on the current scorer; #73's body says the rescore is blocked by both; the plan gains Phase 6a
   before Phase 7's remaining boxes. Both issues' work lands on this branch
 
+## Session 2026-10-23, Phase 6a (Fable)
+
+- #84 built: `knw_tune_smoke()` (`R/tune_smoke.R`) scores no rule, `default`, link's `default_tuned` row and the
+  previous pick on the main seed and checks `null_ratio`, `clamp`, `behind_null` and `coef`; `.tune_score_one()`
+  returns each fold's non-group coefficients; `knw_tune_run()` preps every key, smokes every key, refuses the grid on a
+  failure (`smoke`, `smoke_only`, `previous`, `extra`); `0320` runs the smoke pass first, writes `<key>_smoke.csv`,
+  refuses with the log written, and `DEV=1` runs the main seed only with no grades under `data/tune/dev/`. Tests:
+  `test-tune_smoke.R` (the probe rebuilt: the `84c3c78` search mocked in fails `null_ratio` and `clamp` on a held-out
+  group with large offsets, the current one passes; the `behind_null` and `coef` checks on crafted fits; the run's
+  refusal), `sim_build()` moved to `helper-tune_sim.R`.
+- The mutation table on the real data (findings, "The smoke run's mutation table") found that `ca78ca6` had not fixed
+  the search: ST's no-rule model 3,372 on both golden sections, its previous pick 586.5 on one and 810.0 on the other.
+  The search is now the root of the deviance's derivative (`R/tune_score.R`), which leaves no visit at the clamp on
+  any key and agrees with #57's IRLS scorer to four decimals where that was sane. BT_rear's committed scores carried
+  the old search (no rule 6,180.6 → 6,031.2). Every failure left is the training fit's separated `data_set`/`era`
+  coefficient on GR, RB, ST and WCT (limit 5); the options are in the finding, for Al.
+- Stale `data/tune/{CH,CO,BT}_*_score.rds` removed. Pre-existing test failures on this branch, not touched:
+  `test-tune_repick.R:79` (#79's pin against the rescored CH table) and `test-vignette-data.R` (md5s moved by Phase 7's
+  runs), both Phase 8's.
+
 ### Resume (revised 2026-10-23, for the session that picks this up after a compact and clear)
 
 The branch stays `73-rebuild-the-evidence-and-retune-on-the-r`; no new branch and no `/planning-init`: #84 and #83 are

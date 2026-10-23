@@ -168,13 +168,20 @@ in this repo has moved since.
 Added 2026-10-23 (Al), after Phase 7's BT box: the four-species scores showed a second scorer defect only after the
 run (findings, "The intercept minimiser sticks on a flat clamp"), so Phase 7's remaining boxes wait on this phase.
 
-- [ ] #84: a smoke run per key (no rule, `default`, the previous pick, link's `default_tuned` floor; one fold seed, no
+- [x] #84: a smoke run per key (no rule, `default`, the previous pick, link's `default_tuned` floor; one fold seed, no
       bootstrap, no nested selection) and its gates: no-rule held-out deviance near the in-sample null, no visit at the
       clamp's 55.3, no rule behind no rule by more than the null deviance, no training coefficient past a stated size
-- [ ] #84: `0320` runs the smoke run and gates first, for every key, and refuses the full grid on a failure; a
-      development setting skips the extra seeds, the bootstrap and nested selection
+      (`knw_tune_smoke()`, `R/tune_smoke.R`; `tol_null` 0.25, `coef_max` 10; the whole smoke over eight keys takes
+      about 25 s on one worker, rainbow 11 s)
+- [x] #84: `0320` runs the smoke run and gates first, for every key, and refuses the full grid on a failure; a
+      development setting skips the extra seeds, the bootstrap and nested selection (`knw_tune_run(smoke, smoke_only,
+      previous, extra)`; `0320` `DEV=1`: main seed only, no grades, outputs under `data/tune/dev/`)
 - [ ] #84: the gates fail on the scorer at `84c3c78` and pass on `ca78ca6` (mutation table in findings); the
-      coefficient check's finding on `data_set` and `era` recorded, and any change to those terms decided from it
+      coefficient check's finding on `data_set` and `era` recorded, and any change to those terms decided from it.
+      **Measured 2026-10-23: they do not all pass on `ca78ca6`** (findings, "The smoke run's mutation table"): the
+      centred search still stops on the plateau where a held-out group's offsets are spread (ST), so the search is
+      now the root of the deviance's derivative; the coefficient check fails on GR, RB, ST and WCT at every scorer
+      version, which is the training fit's finding, to decide
 - [ ] #83: group intercepts without a dense column per group; a dense-fit reference rescored first on the current
       scorer (the committed CH and CO tables came from the old search) and reproduced; rainbow timed against 8.1 h
 - [ ] Run rule from here: no chained tuning and comparison; every key's gates pass, then score, check, grade, compare

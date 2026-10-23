@@ -238,3 +238,66 @@ The minimiser was committed 2026-10-23T01:26Z; CH and CO were rescored with it, 
 03:17Z) ran with it, so every #73 score carries it. Whether any of their rules hit the plateau is not known without
 rescoring: a probe on a few patterns wrongly cleared the scorer last time. The score caches are keyed on the grid,
 not the code, so a fixed scorer rescores only once the `<key>_score.rds` caches are removed.
+
+## The smoke run's mutation table (#84, 2026-10-23)
+
+`knw_tune_smoke()` scores no rule, `default`, link's `default_tuned` row and the previous pick on the main fold seed
+and checks four things (`null_ratio` ≤ 1.25, `clamp` = 0 visits at 55.26, `behind_null` ≤ the no-rule deviance,
+`coef` ≤ the stated limit). The whole smoke over the eight keys takes about 20 s on one worker (rainbow 12 s), so a
+scorer change is checked on every species in under a minute. `planning/active/scratch/smoke_mutation.R` ran it on
+`0320`'s own inputs under three intercept searches: `84c3c78` (a golden section of the deviance on [−30, 30]),
+`ca78ca6` (the same centred on the group's offsets) and the root of the deviance's derivative (committed with this
+finding). Tables: `smoke_mutation.csv` (checks), `smoke_mutation_rules.csv` (the rules' scores), `smoke_mutation_lines.txt`.
+
+| key | check | 84c3c78 | ca78ca6 | derivative root |
+|---|---|---|---|---|
+| GR_rear | null_ratio | **9.19** | 0.93 | 0.93 |
+| GR_rear | clamp | **556** | 0 | 0 |
+| RB_rear | null_ratio | **6.96** | 1.02 | 0.99 |
+| RB_rear | clamp | **24,190** | **32** | 0 |
+| RB_rear | behind_null | **332,264 / 89,147** | 0 | 0 |
+| ST_rear | null_ratio | **7.56** | **7.56** | **1.42** |
+| ST_rear | clamp | **165** | **73** | 0 |
+| WCT_rear | clamp | **129** | 0 | 0 |
+| WCT_rear | behind_null | **5,813 / 1,330** | 0 | 0 |
+| BT_rear | clamp | **12** | **12** | 0 |
+| BT_spawn, CH_rear, CO_rear | all four | pass | pass | pass |
+| GR, RB, ST, WCT | coef (limit 5) | **13.96, 11.3, 19.6, 10.1** | same | same |
+
+Bold fails. What the table says, in order:
+
+- **`ca78ca6` did not fix the search.** ST rearing's no-rule model scores 3,372 against 446 in-sample on both golden
+  sections, and its previous pick (`mad>=1|g<=0.0849|none`) scores 586.5 on the fixed range and 810.0 on the centred one:
+  two searches of a convex function returning different minima means neither finds it. Replayed per group
+  (`planning/active/scratch/st_groups.R`): fold 1's training fit sets `data_setFDS` 19.63, so a held-out group's FDS visits sit
+  twenty units above its FDIS ones (BABR: 108 visits, one detection, offsets 0.4 to 20.4), both searches score it
+  1,392.2 and its minimum is 47.4. Golden section stops wherever its first probes land on the clamp's plateau, from
+  either centre. A spread *within* a group is not a constant the intercept absorbs, so centring could not help.
+- **The derivative has no plateau.** The deviance is convex in the intercept (the cloglog log-likelihood is concave
+  in the linear predictor), so its minimiser is the root of its derivative, 2 (Σ_{y=0} e^x − Σ_{y=1} e^x / expm1(e^x)),
+  which is monotone, finite (e^x held at e^700) and bracketed by [−max η − 30, −min η + 30]. `uniroot` finds it to
+  1e-10. `test-tune_score.R` holds the BABR construction (both golden sections > 400, the root 45.0 = a brute-force grid)
+  and the fold that stuck the fixed range. On every key it leaves no visit at the clamp, and where the training fit is
+  sane it agrees with #57's IRLS scorer to four decimals (no rule: GR 848.409, RB 12,617.376, WCT 1,329.869 against
+  the restored `_summary.csv`), so three methods find one minimum where none is pathological.
+- **BT rearing's committed scores carried the search too.** Both golden sections leave 12 BT_rear visits at the clamp;
+  the root moves its no-rule model 6,180.6 → 6,031.2 and its previous pick 5,951.5 → 5,797.9. CH_rear, CO_rear and
+  BT_spawn are identical to three decimals under all three searches, so their committed tables are not affected by
+  the search (they still rest on the pre-#84 run's grid, to be rescored with everything else).
+- **Every failure left is the training fit's.** The coefficient check reads the same numbers at every version, because
+  the search does not touch the fit: GR fold 4 `era1995-2004` 13.96, RB fold 1 `era2005on` 11.3, ST fold 1
+  `data_setFDS` 19.6, WCT fold 2 `era2005on` 10.1, each `converged = TRUE` (IRLS stops when the deviance stops moving,
+  which a separated coefficient does). The sound keys' largest is BT_spawn's `data_setFDS` 3.63 and the separated keys'
+  smallest is RB's no-rule `era2005on` 9.65, so the limit is 5: a hazard ratio past e^5 ≈ 150 between data sets or
+  eras is separation, not a measured effect. ST's ratio of 1.42 at the root is this coefficient's consequence (the
+  FDS visits of a mixed group still pay), so with the fit stabilised every check should pass on every key.
+- **What the separation is.** With a group intercept in the model, a data-set or era effect is identified by the
+  within-group contrast between visits of the two levels. Where the training groups that carry both levels put all
+  their detections on one level (ST: 82 detections in 4,798 visits), the contrast is separated and the coefficient
+  runs until the deviance change is under 1e-8. The options, for Al (a change to the model's terms, so every score
+  moves): (A) a quadratic penalty on the `data_set` and `era` coefficients inside the fit (a ridge with a stated
+  prior SD, say 2.5 on the cloglog scale), which stops a runaway and leaves a measured 2–3 unit effect nearly where it
+  is, and adds no Import once #83's own IRLS exists; (B) drop `data_set` and `era` from every species' model, keeping
+  `log(area)`, the rule and the groups, which loses the real data-set effects (CH 2.3, BT_spawn 3.6); (C) drop a term
+  per fold where its coefficient passes the limit, which makes the model differ between folds. Recommended: A, with
+  the penalty measured on the smoke run of every key before it is adopted. Nothing is changed in the fit here.

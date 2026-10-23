@@ -213,17 +213,21 @@ knw_tune_score <- function(d, rule_in, grid, resp = "U", seed = 54L, folds = 5L,
   })
 }
 
-# held-out deviance per visit for one in/out pattern
+# held-out deviance per visit for one in/out pattern, with each fold's non-group training coefficients
+# (the nuisance terms and the rule; `NA` where aliased), which the smoke run's coefficient gate reads (#84)
 .tune_score_one <- function(x, folds) {
   fam <- stats::binomial(link = "cloglog")
   n <- sum(vapply(folds, function(f) length(f$ho), integer(1)))
   dv <- rep(NA_real_, n)
   ok <- TRUE
-  for (f in folds) {
+  cf <- vector("list", length(folds))
+  for (k in seq_along(folds)) {
+    f <- folds[[k]]
     m <- suppressWarnings(stats::glm.fit(cbind(f$X, rule = as.numeric(x[f$tr])), f$y, family = fam,
                                         control = stats::glm.control(maxit = 100)))
     if (!m$converged) ok <- FALSE
     b <- m$coefficients
+    cf[[k]] <- b[c(f$cols, "rule")]
     br <- if (is.na(b[["rule"]])) 0 else b[["rule"]]
     bn <- b[f$cols]
     bn[is.na(bn)] <- 0
@@ -234,25 +238,37 @@ knw_tune_score <- function(d, rule_in, grid, resp = "U", seed = 54L, folds = 5L,
     }
   }
   if (anyNA(dv)) stop("a visit was in no held-out fold", call. = FALSE)
-  list(dev = dv, ok = ok)
+  list(dev = dv, ok = ok, coef = cf)
 }
 
 # a held-out group's deviance per visit, its own intercept fitted over the visits' offsets. The
-# intercept is the minimiser of the binomial deviance on a bounded range, found by golden section:
-# the deviance is convex in it under cloglog, and `stats::glm.fit()`'s IRLS is not safe here. With
-# offsets spread over twelve units (the joint curve's surface on a held-out fold) it reported
-# convergence at an intercept where every detection's chance was under 1e-12, 55.3 deviance each,
-# which put CH rearing's curve at 2,434 held-out against 1,383 for no rule (2026-10-22, #73).
-# The search is centred on the group's own offsets: the clamp makes the deviance flat far from its
-# minimum, so a range fixed at [-30, 30] found the plateau when a fold's training fit put every offset
-# at +15 to +20, and scored every visit 55.3 (GR rearing's no-rule model 8,397 against 848, 2026-10-23).
-.tune_group_dev <- function(y, eta, fam = stats::binomial(link = "cloglog"), bound = 30) {
+# intercept is the minimiser of the binomial deviance, which is convex in it under cloglog (the
+# log-likelihood is concave in the linear predictor), so it is the root of the deviance's derivative,
+# which is monotone. `stats::glm.fit()`'s IRLS is not safe here: with offsets spread over twelve units
+# (the joint curve's surface on a held-out fold) it reported convergence at an intercept where every
+# detection's chance was under 1e-12, 55.3 deviance each, which put CH rearing's curve at 2,434
+# held-out against 1,383 for no rule (2026-10-22, #73). Nor is a golden-section search of the deviance
+# itself: the clamp at 1e-12 makes it flat far from its minimum, and the search stops on the plateau
+# wherever its first probes land there. On a range fixed at [-30, 30] that scored every visit of a fold
+# 55.3 when the training fit put its offsets at +15 to +20 (GR rearing's no-rule model 8,397 against 848,
+# 2026-10-23); centred on the group's own offsets it still did on ST rearing, whose previous pick scored
+# 810 against 587 on the fixed range (#84's smoke run, 2026-10-23). The derivative has no plateau.
+.tune_group_dev <- function(y, eta, fam = stats::binomial(link = "cloglog")) {
   dev_at <- function(b) {
     p <- pmin(pmax(fam$linkinv(eta + b), 1e-12), 1 - 1e-12)
     -2 * (y * log(p) + (1 - y) * log(1 - p))
   }
-  centre <- -stats::median(eta)
-  b <- stats::optimize(function(b) sum(dev_at(b)), centre + c(-bound, bound), tol = 1e-8)$minimum
+  # d/db of the unclamped deviance: 2 * (sum over non-detections of exp(x) - sum over detections of
+  # exp(x) / expm1(exp(x))), x = eta + b; a non-detection's term grows without bound and a detection's
+  # falls from 1 to 0, so the slope is increasing, negative where every chance is small and positive
+  # where every chance is near 1. exp(x) is held at exp(700) so the slope stays finite.
+  slope <- function(b) {
+    u <- exp(pmin(eta + b, 700))
+    r <- u / expm1(u)
+    r[u == 0] <- 1
+    2 * (sum(u[y == 0L]) - sum(r[y == 1L]))
+  }
+  b <- stats::uniroot(slope, c(-max(eta) - 30, -min(eta) + 30), tol = 1e-10)$root
   dev_at(b)
 }
 

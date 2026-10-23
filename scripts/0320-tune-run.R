@@ -35,12 +35,17 @@
 #   - TWO STARTS (#80): the pick is read from link's width `default` (`recommended`, as before) and from
 #     its flow version (`recommended_flow`), at 1 and 1.96 SE; link's `default_tuned` row joins each grid
 #     as a scored candidate (`is_link_tuned`), so the table says how link's own flow floors score.
+#   - SMOKE RUN FIRST (#84): before any grid is scored, every key that would be fitted scores no rule,
+#     `default`, link's `default_tuned` row and the previous pick (the `recommended` rule of the committed
+#     data/tune/<key>_tune.csv) on the main fold seed, and four checks gate the scorer (knw_tune_smoke()). One
+#     failed check on any key ends the run with every key's report in the log, and nothing is scored.
 #
 # INPUT:  data/fdis/derived/{visits_link,visits_species,walks}.csv (0310), data/fdis/build/fish.rds
 #         (0230), data/fdis_species_codes.csv; the link repository at LINK_REPO at the build's link_sha
 #         (parameters_habitat_thresholds.csv); fwapg database (PG* env vars): the run's schema (SCHEMA, default
-#         fresh_default), discharge
-# OUTPUT: data/tune/<sp>_<stage>_tune.csv      every rule's score (the full grid), with pick, recommended, region
+#         fresh_default), discharge; data/tune/<sp>_<stage>_tune.csv where one exists (the previous pick)
+# OUTPUT: data/tune/<sp>_<stage>_smoke.csv     the smoke run's four checks (value, limit, pass) and its rules' scores
+#         data/tune/<sp>_<stage>_tune.csv      every rule's score (the full grid), with pick, recommended, region
 #         data/tune/<sp>_<stage>_curves.csv    the marginal curves at the pick
 #         data/tune/<sp>_<stage>_grades.csv    one row per segment of the species' groups, each graded segment at
 #                                              its own walked distance, with dist_status (ignored; 0325 publishes)
@@ -53,7 +58,11 @@
 #         scripts/logs/habitat/<date>_tune_run.txt
 # RUN:    Rscript scripts/0320-tune-run.R   (from the repo root; SPECIES=CH,BT to restrict; WORKERS=14)
 #         Scored grids (<key>_score.rds) and grade tables already in data/tune/ are kept, so a run over a subset of
-#         species on another host, with the caches copied, grades only what is missing.
+#         species on another host, with the caches copied, grades only what is missing. The cache is keyed on the
+#         population and the grid, not the scorer's code: remove <key>_score.rds after a change to R/tune_score.R.
+#         DEV=1 is the development setting (#84): the smoke run and the full grid on the main fold seed only (no
+#         bootstrap, nested selection or extra seeds), the curve and the summary, no grades, every output under
+#         data/tune/dev/ (ignored), so a scorer change is proved on every species before a full run.
 # ---------------------------------------------------------------------------
 suppressMessages({ library(dplyr); library(readr); library(DBI); library(RPostgres) })
 pkgload::load_all(quiet = TRUE)
@@ -65,17 +74,20 @@ link_repo <- Sys.getenv("LINK_REPO", "../link")
 workers <- as.integer(Sys.getenv("WORKERS", max(1L, min(14L, parallel::detectCores() - 2L))))
 species <- strsplit(Sys.getenv("SPECIES", paste(knw_species(), collapse = ",")), ",")[[1]]
 schema <- Sys.getenv("SCHEMA", "fresh_default")  # the run's persist schema, by its current name (renamed after the run, #73)
-dir_out <- "data/tune"
+dev <- Sys.getenv("DEV", "") %in% c("1", "TRUE", "true")
+dir_out <- if (dev) "data/tune/dev" else "data/tune"
 # one log per pass: a pass over a subset of species (SPECIES=) names them, so passes do not overwrite each other
 path_log <- file.path("scripts/logs/habitat", paste0(format(Sys.Date(), "%Y%m%d"), "_tune_run",
                                                      if (nzchar(Sys.getenv("SPECIES"))) paste0("-", tolower(gsub(",", "_", Sys.getenv("SPECIES")))) else "",
-                                                     ".txt"))
+                                                     if (dev) "-dev" else "", ".txt"))
 dir.create(dir_out, showWarnings = FALSE, recursive = TRUE)
 log_lines <- character()
 say <- function(...) { log_lines <<- c(log_lines, sprintf(...)); message(sprintf(...)) }
 block <- function(title, x) {
   log_lines <<- c(log_lines, "", paste("##", title), capture.output(print(as.data.frame(x), row.names = FALSE)))
 }
+# a refusal writes the log first: the numbers it names are the point of stopping
+fail <- function(...) { say(...); writeLines(log_lines, path_log); stop(sprintf(...), call. = FALSE) }
 pg <- function() {
   tryCatch(DBI::dbConnect(RPostgres::Postgres(), bigint = "numeric"),
            error = function(e) stop("database unreachable (PG* environment variables): ", conditionMessage(e)))
@@ -124,11 +136,44 @@ link_sha <- shas[1]
 say("link default thresholds at %s (same at %s): %d species; default_tuned: %d species (its MAD floors join the grids).",
     shas[1], paste(shas[-1], collapse = ","), nrow(thr), nrow(thr_tuned))
 
+# ---- the smoke run and its gates on every key, before any grid is scored (#84) ----------------
+# the previous pick is the committed table's recommended rule, read from data/tune whatever dir_out is
+previous <- character()
+for (f in list.files("data/tune", "_tune\\.csv$", full.names = TRUE)) {
+  r <- read_csv(f, show_col_types = FALSE, col_types = cols(.default = "c"))
+  if ("recommended" %in% names(r) && sum(r$recommended == "TRUE") == 1L) {
+    previous[sub("_tune\\.csv$", "", basename(f))] <- r$rule[r$recommended == "TRUE"]
+  }
+}
+say("Smoke run first%s: previous picks on file for %s.", if (dev) " (DEV=1: the main seed only, no grades, outputs under data/tune/dev)" else "",
+    paste(names(previous), collapse = ", "))
+t0 <- Sys.time()
+sm <- knw_tune_run(vl, vs, walks, thr, species = species, spawner = spawner, workers = workers, thresholds_extra = thr_tuned,
+                   previous = previous, smoke_only = TRUE)
+smoke_failed <- character()
+for (k in names(sm)) {
+  s <- sm[[k]]$smoke
+  if (is.null(s)) next
+  say("%s %s", k, paste(s$lines, collapse = "\n  "))
+  write_csv(bind_rows(s$checks |> mutate(table = "checks"),
+                      s$rules |> mutate(table = "rules", across(where(is.numeric), ~ round(.x, 6)))) |>
+              mutate(species_code = sm[[k]]$species_code, stage = sm[[k]]$stage, .before = 1),
+            file.path(dir_out, paste0(k, "_smoke.csv")), na = "")
+  if (!s$pass) smoke_failed <- c(smoke_failed, k)
+}
+say("Smoke run over %d keys in %.1f min.", sum(!vapply(sm, function(x) is.null(x$smoke), logical(1))),
+    as.numeric(difftime(Sys.time(), t0, units = "mins")))
+if (length(smoke_failed)) {
+  fail("The smoke run failed on %s; nothing is scored. Each key's checks are above and in %s/<key>_smoke.csv.",
+       paste(smoke_failed, collapse = ", "), dir_out)
+}
+
 # ---- score, pick, curve ------------------------------------------------------------------
 t0 <- Sys.time()
 out <- knw_tune_run(vl, vs, walks, thr, species = species, spawner = spawner, workers = workers, cache_dir = dir_out,
-                    thresholds_extra = thr_tuned)
-say("Scored %d species x stage in %.1f min on %d workers.", length(out), as.numeric(difftime(Sys.time(), t0, units = "mins")), workers)
+                    thresholds_extra = thr_tuned, smoke = FALSE, extra = !dev)
+say("Scored %d species x stage in %.1f min on %d workers%s.", length(out), as.numeric(difftime(Sys.time(), t0, units = "mins")), workers,
+    if (dev) " (DEV=1: the main seed only)" else "")
 
 summ <- list()
 for (k in names(out)) {
@@ -146,11 +191,13 @@ for (k in names(out)) {
     write_csv(tibble(species_code = r$species_code, stage = r$stage, watershed_group_code = names(r$score$folds),
                      fold = as.integer(r$score$folds)), file.path(dir_out, paste0(k, "_groups.csv")), na = "")
     # the stability tables the score object holds, so a reader of the tables needs no rds (#62)
-    write_csv(as_tibble(r$score$seeds) |> mutate(species_code = r$species_code, stage = r$stage),
-              file.path(dir_out, paste0(k, "_seeds.csv")), na = "")
-    write_csv(as_tibble(r$score$honest) |> mutate(across(where(is.double), ~ round(.x, 6)),
-                                                  species_code = r$species_code, stage = r$stage),
-              file.path(dir_out, paste0(k, "_honest.csv")), na = "")
+    if (!dev) {
+      write_csv(as_tibble(r$score$seeds) |> mutate(species_code = r$species_code, stage = r$stage),
+                file.path(dir_out, paste0(k, "_seeds.csv")), na = "")
+      write_csv(as_tibble(r$score$honest) |> mutate(across(where(is.double), ~ round(.x, 6)),
+                                                    species_code = r$species_code, stage = r$stage),
+                file.path(dir_out, paste0(k, "_honest.csv")), na = "")
+    }
     dflt <- rules |> filter(is_default)
     best <- rules |> filter(ddev_best == 0) |> slice(1)
     ltn <- rules |> filter(is_link_tuned %in% TRUE)
@@ -168,11 +215,15 @@ for (k in names(out)) {
       dev_default = dflt$dev_heldout, dev_best = best$dev_heldout, dev_null = best$dev_heldout - best$ddev_null,
       dev_curve = r$curve$heldout, curve_dist_in_model = r$curve$dist_in_model,
       curve_edf = paste(sprintf("%s=%.2f", names(r$curve$edf), r$curve$edf), collapse = "; "),
-      honest_dev_rec = sum(r$score$honest$dev_rec), honest_dev_default = sum(r$score$honest$dev_default),
-      honest_dev_null = sum(r$score$honest$dev_null),
-      seeds_same_rec = sum(r$score$seeds$recommended == r$pick$rule), seeds_default_in_region = sum(r$score$seeds$default_in_region),
-      seeds_rec_in_region = sum(r$score$seeds$main_rec_in_region), seeds_n = nrow(r$score$seeds),
-      boot_rec_share = rules$boot_rec_share[rules$recommended])
+      # NA under DEV=1, which runs the main seed alone
+      honest_dev_rec = if (dev) NA_real_ else sum(r$score$honest$dev_rec),
+      honest_dev_default = if (dev) NA_real_ else sum(r$score$honest$dev_default),
+      honest_dev_null = if (dev) NA_real_ else sum(r$score$honest$dev_null),
+      seeds_same_rec = if (dev) NA_integer_ else sum(r$score$seeds$recommended == r$pick$rule),
+      seeds_default_in_region = if (dev) NA_integer_ else sum(r$score$seeds$default_in_region),
+      seeds_rec_in_region = if (dev) NA_integer_ else sum(r$score$seeds$main_rec_in_region),
+      seeds_n = if (dev) 0L else nrow(r$score$seeds),
+      boot_rec_share = if (dev) NA_real_ else rules$boot_rec_share[rules$recommended])
     say("%s: %s. %d visits (%d detections) in %d groups (%d both). Recommended %s; default %s the region (+%.1f, SE %.1f). Curve held-out %.1f vs grid best %.1f.",
         k, r$status, row$visits_in, row$detections, row$groups, row$groups_both, r$pick$rule,
         if (dflt$in_region) "in" else "outside", dflt$ddev_best, dflt$se_diff, r$curve$heldout, best$dev_heldout)
@@ -180,9 +231,11 @@ for (k in names(out)) {
         k, row$rule_recommended_flow, row$rule_recommended_flow_196, row$rule_recommended_196,
         row$rule_link_tuned, if (nrow(ltn)) sprintf("%s the region (+%.1f, SE %.1f)", if (ltn$in_region) "in" else "outside", ltn$ddev_best, ltn$se_diff) else "(none)")
     block(paste(k, "region"), rules |> filter(in_region) |> arrange(ddev_best) |>
-            select(rule, departures, ddev_best, se_diff, n_wsg_varies, n_in, n_detect_in, raw_rate_in, raw_rate_out, boot_region_share))
-    block(paste(k, "nested selection"), r$score$honest)
-    block(paste(k, "more seeds"), r$score$seeds)
+            select(rule, departures, ddev_best, se_diff, n_wsg_varies, n_in, n_detect_in, raw_rate_in, raw_rate_out, any_of("boot_region_share")))
+    if (!dev) {
+      block(paste(k, "nested selection"), r$score$honest)
+      block(paste(k, "more seeds"), r$score$seeds)
+    }
   } else {
     say("%s: %s (%s).", k, r$status, paste(names(r$population), r$population, sep = "=", collapse = ", "))
   }
@@ -197,6 +250,11 @@ for (k in names(out)) {
 }
 
 # ---- grade every segment of each fitted species' groups ----------------------------------
+if (dev) {
+  say("DEV=1: no grades. Done in %.1f min.", as.numeric(difftime(Sys.time(), t0, units = "mins")))
+  writeLines(log_lines, path_log)
+  quit(save = "no", status = 0)
+}
 conn <- pg()
 groups_sp <- function(sp) dbGetQuery(conn, sprintf("SELECT DISTINCT watershed_group_code w FROM %s.streams_habitat_%s ORDER BY 1", schema, tolower(sp)))$w
 # the flow build the grade reads (#72): wet can reload discharge.fwa_v1_segment_monthly between runs (wet#103 did on

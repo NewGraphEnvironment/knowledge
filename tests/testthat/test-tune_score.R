@@ -129,3 +129,40 @@ test_that("a constant added to a held-out group's offsets changes nothing: the i
   }
   expect_lt(base, 8 * 55.3)
 })
+
+test_that("the intercept is the exact minimiser where both golden-section searches stopped on the clamp's plateau", {
+  fam <- stats::binomial(link = "cloglog")
+  dev_at <- function(y, eta, b) {
+    p <- pmin(pmax(fam$linkinv(eta + b), 1e-12), 1 - 1e-12)
+    sum(-2 * (y * log(p) + (1 - y) * log(1 - p)))
+  }
+  search_84c3c78 <- function(y, eta) stats::optimize(function(b) dev_at(y, eta, b), c(-30, 30), tol = 1e-8)$minimum
+  search_ca78ca6 <- function(y, eta) {
+    stats::optimize(function(b) dev_at(y, eta, b), -stats::median(eta) + c(-30, 30), tol = 1e-8)$minimum
+  }
+  brute <- function(y, eta) {
+    bs <- seq(-max(eta) - 30, -min(eta) + 30, by = 0.001)
+    min(vapply(bs, function(b) dev_at(y, eta, b), 0))
+  }
+  # ST rearing's fold 1 (2026-10-23): a training coefficient of 19.6 on a data set puts that data set's held-out
+  # visits twenty units above the rest of their group (BABR: 108 visits, one detection, offsets 0.4 to 20.4), and
+  # both searches scored the group 1,392 where its minimum is 47
+  set.seed(7)
+  y <- c(1L, rep(0L, 107))
+  eta <- c(stats::runif(100, 0.4, 0.8), stats::runif(8, 20.0, 20.4))
+  now <- sum(knowledge:::.tune_group_dev(y, eta, fam))
+  expect_equal(now, brute(y, eta), tolerance = 1e-6)
+  expect_lt(now, 60)
+  expect_gt(dev_at(y, eta, search_84c3c78(y, eta)), 400)
+  expect_gt(dev_at(y, eta, search_ca78ca6(y, eta)), 400)
+  # the fold that stuck the fixed range: every offset at +15 to +20 and the minimum near -18
+  y2 <- c(rep(1L, 8), rep(0L, 69))
+  eta2 <- seq(15, 20, length.out = 77)
+  now2 <- sum(knowledge:::.tune_group_dev(y2, eta2, fam))
+  expect_equal(now2, brute(y2, eta2), tolerance = 1e-6)
+  expect_lt(now2, dev_at(y2, eta2, search_84c3c78(y2, eta2)))
+  # a spread past the exponent's range: the slope stays finite and the minimiser is found
+  y3 <- c(1L, 1L, 0L, 0L, 0L)
+  eta3 <- c(-400, -399, 400, 401, 0)
+  expect_true(all(is.finite(knowledge:::.tune_group_dev(y3, eta3, fam))))
+})

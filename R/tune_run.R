@@ -17,6 +17,14 @@
 #' outcomes gets a one-row record saying so and is not fitted. A species × stage
 #' with fewer than `power_wsg` groups is fitted and labelled `underpowered`.
 #'
+#' Before any grid is scored, every species × stage that would be fitted gets
+#' the smoke run ([knw_tune_smoke()]; #84): a handful of rules on the main fold
+#' seed, and four checks on the scorer. One failed check on any key stops the
+#' run, with every key's report printed, so a scorer defect costs minutes, not
+#' the hours of the full grid. `smoke_only = TRUE` returns after the smoke run
+#' (each record carries `smoke`, and none is scored), which is how
+#' `scripts/0320` writes the reports before it decides to score.
+#'
 #' @param visits the build's `visits_link` table.
 #' @param species_tbl the build's `visits_species` table.
 #' @param walks the build's walks, as [knw_link_walks()] returns them.
@@ -38,14 +46,25 @@
 #'   population has the same number of visits and the grid the same rows, in
 #'   the same order (every [knw_tune_grid()] column, so a moved `default`
 #'   counts). The other scoring arguments (`seed`, `folds`, `n_boot`,
-#'   `seeds_more`, `d_floor`) are not checked: give a run with different ones its
-#'   own directory.
+#'   `seeds_more`, `d_floor`, `extra`) are not checked: give a run with different
+#'   ones its own directory.
+#' @param previous `NULL`, or a named `character` vector of the previous pick's
+#'   rule string per `"<sp>_<stage>"`, which the smoke run scores where present.
+#' @param smoke `logical(1)` run the smoke run and its checks first.
+#' @param smoke_only `logical(1)` return after the smoke run, scoring nothing.
+#' @param smoke_args `list` of arguments passed to [knw_tune_smoke()]
+#'   (`tol_null`, `coef_max`).
+#' @param extra `logical(1)` passed to [knw_tune_score()]: the bootstrap, the
+#'   nested selection and the extra fold seeds. `FALSE` is the development
+#'   setting, which proves a scorer change on every species in a fraction of the
+#'   time; a run that publishes keeps `TRUE`.
 #' @return A list with one element per species × stage (`"<sp>_<stage>"`): a
 #'   list with `species_code`, `stage`, `response`, `status` (`fitted`,
 #'   `underpowered`, `no_stream_rule`, `no_response`, `too_few_groups`,
-#'   `curve_failed`), `population`, and when scored `score` ([knw_tune_score()]'s
-#'   result), `pick` (the recommended rule row) and `curve` ([knw_tune_curve()]'s;
-#'   `NULL` with `curve_error` when its fit failed).
+#'   `curve_failed`; `smoke` with `smoke_only`), `population`, and when scored
+#'   `smoke` ([knw_tune_smoke()]'s result, with `smoke`), `score`
+#'   ([knw_tune_score()]'s result), `pick` (the recommended rule row) and `curve`
+#'   ([knw_tune_curve()]'s; `NULL` with `curve_error` when its fit failed).
 #' @export
 #' @examples
 #' \dontrun{
@@ -58,9 +77,16 @@ knw_tune_run <- function(visits, species_tbl, walks, thresholds, species = knw_s
                          edge_stream = c(1000L, 1100L, 2000L, 2300L), area_range = c(10, 10000),
                          seed = 54L, folds = 5L, n_boot = 200L, seeds_more = 55:58, workers = 1L, d_floor = 200,
                          min_wsg = 5L, power_wsg = 10L, src = "pick", grid_args = list(), cache_dir = NULL,
-                         thresholds_extra = NULL) {
+                         thresholds_extra = NULL, previous = NULL, smoke = TRUE, smoke_only = FALSE,
+                         smoke_args = list(), extra = TRUE) {
   chk::chk_data(visits)
   chk::chk_list(grid_args)
+  chk::chk_list(smoke_args)
+  chk::chk_flag(smoke)
+  chk::chk_flag(smoke_only)
+  chk::chk_flag(extra)
+  chk::chk_null_or(previous, vld = chk::vld_character)
+  if (!is.null(previous) && is.null(names(previous))) stop("previous must be named by species_stage", call. = FALSE)
   if (!is.null(thresholds_extra)) chk::chk_data(thresholds_extra)
   chk::check_names(visits, c("site_visit", "watershed_group_code", "blue_line_key", "downstream_route_measure",
                              "edge_type", "wb_river", "wb_wetland", "wb_lake", "area_m2", "year", "data_set",
@@ -78,8 +104,11 @@ knw_tune_run <- function(visits, species_tbl, walks, thresholds, species = knw_s
   base$era <- factor(as.character(cut(base$year, c(-Inf, 1994, 2004, Inf), labels = eras)), levels = eras)
   base$data_set <- factor(base$data_set)
   base$wsg <- factor(base$watershed_group_code)
+  rule_in <- function(dd, r) knw_rule_in(dd, r, walks = wi, src = src, edge_stream = edge_stream)
 
+  # ---- every key's population and grid, and why a key is not fitted ----
   out <- list()
+  prep <- list()
   for (sp in species) {
     thr <- thresholds[thresholds$species_code == sp, , drop = FALSE]
     thx <- NULL
@@ -126,36 +155,70 @@ knw_tune_run <- function(visits, species_tbl, walks, thresholds, species = knw_s
         out[[key]] <- rec
         next
       }
-      rule_in <- function(dd, r) knw_rule_in(dd, r, walks = wi, src = src, edge_stream = edge_stream)
-      # a scored grid is hours of work: keep it beside the run so a later failure does not cost it
-      cache <- if (is.null(cache_dir)) NULL else file.path(cache_dir, paste0(key, "_score.rds"))
-      sc <- NULL
-      if (!is.null(cache) && file.exists(cache)) {
-        sc <- readRDS(cache)
-        # a cache scored on another grid would be read back as this one's result; the rule strings alone do not
-        # carry which rule is `default` (it moves with link's thresholds), so every grid column is compared
-        # a cache from before a grid column existed (#80's departures_flow, is_link_tuned) is another grid too
-        if (!identical(sc$population[["visits_in"]], nrow(d)) || !all(names(grid) %in% names(sc$rules)) ||
-              !identical(as.list(sc$rules[names(grid)]), as.list(grid))) sc <- NULL
-      }
-      if (is.null(sc)) {
-        sc <- knw_tune_score(d, rule_in, grid, resp, seed = seed, folds = folds, n_boot = n_boot,
-                             seeds_more = seeds_more, d_floor = d_floor, workers = workers, extra = TRUE)
-        if (!is.null(cache)) saveRDS(sc, cache)
-      }
-      pick <- sc$rules[sc$rules$recommended, , drop = FALSE]
-      pick_flow <- sc$rules[sc$rules$recommended_flow %in% TRUE, , drop = FALSE]
-      cv <- tryCatch(knw_tune_curve(d, pick, wi, sc$folds, resp = resp, src = src, edge_stream = edge_stream),
-                     error = function(e) structure(list(message = conditionMessage(e)), class = "knw_curve_failed"))
-      rec$status <- if (inherits(cv, "knw_curve_failed")) "curve_failed" else
-        if (n_both < power_wsg) "underpowered" else "fitted"
-      rec$score <- sc
-      rec$pick <- pick
-      rec$pick_flow <- if (nrow(pick_flow)) pick_flow else NULL
-      rec$curve <- if (inherits(cv, "knw_curve_failed")) NULL else cv
-      rec$curve_error <- if (inherits(cv, "knw_curve_failed")) cv$message else NULL
       out[[key]] <- rec
+      prep[[key]] <- list(d = d, grid = grid, resp = resp, n_both = n_both)
     }
+  }
+
+  # ---- the smoke run on every key that would be fitted, before any grid is scored (#84) ----
+  if (smoke || smoke_only) {
+    failed <- character()
+    for (key in names(prep)) {
+      p <- prep[[key]]
+      prev <- if (!is.null(previous) && key %in% names(previous)) unname(previous[[key]]) else NULL
+      sm <- do.call(knw_tune_smoke, c(list(p$d, rule_in, p$grid, p$resp, previous = prev, seed = seed, folds = folds),
+                                      smoke_args))
+      out[[key]]$smoke <- sm
+      message(key, " ", paste(sm$lines, collapse = "\n  "))
+      if (!sm$pass) failed <- c(failed, key)
+    }
+    if (smoke_only) {
+      for (key in names(prep)) out[[key]]$status <- "smoke"
+      return(out)
+    }
+    if (length(failed)) {
+      stop("the smoke run failed on ", paste(vapply(failed, function(k) {
+        ck <- out[[k]]$smoke$checks
+        paste0(k, " (", paste(ck$check[!ck$pass], collapse = ", "), ")")
+      }, ""), collapse = ", "), ". Nothing was scored.", call. = FALSE)
+    }
+  }
+
+  # ---- score, pick and curve ----
+  for (key in names(prep)) {
+    p <- prep[[key]]
+    d <- p$d
+    grid <- p$grid
+    resp <- p$resp
+    rec <- out[[key]]
+    # a scored grid is hours of work: keep it beside the run so a later failure does not cost it
+    cache <- if (is.null(cache_dir)) NULL else file.path(cache_dir, paste0(key, "_score.rds"))
+    sc <- NULL
+    if (!is.null(cache) && file.exists(cache)) {
+      sc <- readRDS(cache)
+      # a cache scored on another grid would be read back as this one's result; the rule strings alone do not
+      # carry which rule is `default` (it moves with link's thresholds), so every grid column is compared
+      # a cache from before a grid column existed (#80's departures_flow, is_link_tuned) is another grid too
+      if (!identical(sc$population[["visits_in"]], nrow(d)) || !all(names(grid) %in% names(sc$rules)) ||
+            !identical(as.list(sc$rules[names(grid)]), as.list(grid))) sc <- NULL
+    }
+    if (is.null(sc)) {
+      sc <- knw_tune_score(d, rule_in, grid, resp, seed = seed, folds = folds, n_boot = n_boot,
+                           seeds_more = seeds_more, d_floor = d_floor, workers = workers, extra = extra)
+      if (!is.null(cache)) saveRDS(sc, cache)
+    }
+    pick <- sc$rules[sc$rules$recommended, , drop = FALSE]
+    pick_flow <- sc$rules[sc$rules$recommended_flow %in% TRUE, , drop = FALSE]
+    cv <- tryCatch(knw_tune_curve(d, pick, wi, sc$folds, resp = resp, src = src, edge_stream = edge_stream),
+                   error = function(e) structure(list(message = conditionMessage(e)), class = "knw_curve_failed"))
+    rec$status <- if (inherits(cv, "knw_curve_failed")) "curve_failed" else
+      if (p$n_both < power_wsg) "underpowered" else "fitted"
+    rec$score <- sc
+    rec$pick <- pick
+    rec$pick_flow <- if (nrow(pick_flow)) pick_flow else NULL
+    rec$curve <- if (inherits(cv, "knw_curve_failed")) NULL else cv
+    rec$curve_error <- if (inherits(cv, "knw_curve_failed")) cv$message else NULL
+    out[[key]] <- rec
   }
   out
 }
