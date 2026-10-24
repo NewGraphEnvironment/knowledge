@@ -85,7 +85,16 @@
   every prior; without one the coefficient gate fails on GR, RB, ST and WCT and steelhead's null ratio too. Phase 7's
   hold lifted; the rescore runs on m4. Al's rule for the write-ups, 2026-10-23: teach the principle beside each result.
 
-### Resume (revised 2026-10-24 06:45 UTC, for the session that picks this up, on any model)
+## Session 2026-10-24 (Opus 5.5)
+
+- m4's grading stopped after 7.5 h (104 ms round trip to the database against 1.6 ms here); Al chose to reuse m4's
+  scores and grade here (option A). Filed #85 (one walk pass per river size), linked from #73's plan.
+- `0320` graded here from a frozen copy at `fa638f2`: 224.6 min, exit 0, no `FAILED`. Picks moved on BT_rear, RB_rear
+  and WCT_rear; five held. Curves refit slightly differently from m4's on RB, ST and WCT; steelhead's curve is far
+  behind its grid (findings, "Phase 7's rescore").
+- Next: `0330` per species here, then the write-ups.
+
+### Resume (revised 2026-10-24 10:30 UTC, for the session that picks this up, on any model)
 
 The branch stays `73-rebuild-the-evidence-and-retune-on-the-r`; no new branch and no `/planning-init`. From the repo
 root: `git fetch -q origin && git checkout 73-rebuild-the-evidence-and-retune-on-the-r && git pull --ff-only`, then
@@ -97,7 +106,8 @@ script or `R/` while a run reads it (run long jobs from a frozen copy); everythi
 task with its box flip and a progress entry, and push. Al's rule for the write-ups (2026-10-23): teach the principle
 beside each result, in plain words, the specification below.
 
-**What is running: Phase 7's grading, here, not on m4 (moved 2026-10-24 06:36 UTC).** The rescore ran on m4 from
+**Nothing is running. Phase 7's rescore is done and committed (2026-10-24 10:20 UTC, exit 0; findings, "Phase 7's
+rescore"); next is `0330`, below.** How it went: The rescore ran on m4 from
 21:21 UTC 2026-10-23 (`fa638f2`, every species, 12 workers) and scored every key with no `FAILED` by 22:26 UTC, then
 graded so slowly that it was stopped at 06:33 UTC (`exit 143`): grading sends one walk query per segment, and a round
 trip to the database costs 104 ms from m4 against 1.6 ms here, so BT rearing had not finished walking after 7.5 h
@@ -106,12 +116,11 @@ trip to the database costs 104 ms from m4 against 1.6 ms here, so BT rearing had
 here were moved to `repo_aside/knowledge_grades_pre_fa638f2_20261024/` beside the clones so every key grades fresh.
 The run: `repo_aside/run_0320_local.sh`, a frozen copy of `0320` at `fa638f2` (md5 7720439…), `SCHEMA=fresh_default_20261017
 WORKERS=8`; stdout `repo_aside/0320_local.log`, which ends with `exit <code>` and a date; the script's own log is
-`scripts/logs/habitat/<date>_tune_run.txt`, dated by the machine's local day. Expect about four to six hours. m4's stdout log stays on m4.
+`scripts/logs/habitat/<date>_tune_run.txt`, dated by the machine's local day. It took 224.6 min. Both stdout logs are in
+`planning/active/scratch/logs/` (`20261023_0320_m4.log`, `20261024_0320_grade_local.log`).
 
-**When it exits 0:** `git status` shows the new `data/tune/*` tables and the `0320` log; commit them with the Phase 7
-box annotated and push. The caches (`data/tune/*_score.rds`, `*_curve.rds`, ignored) are from `fa638f2`; remove them
-before any rerun of `0320` on changed code, because the cache is keyed on the grid. If it exits non-zero or the log
-shows `FAILED`, report the error lines.
+**Caches:** the caches (`data/tune/*_score.rds`, `*_curve.rds`, ignored) are from `fa638f2`; remove them
+before any rerun of `0320` on changed code, because the cache is keyed on the grid.
 
 **Steelhead's curve:** its held-out score is 840.2 against the grid's best 357.5 (every other key's curve is within 13 %
 of its grid's best or below it, on m4's log). The curve's GAM carries data-set and era terms with no prior;

@@ -202,8 +202,9 @@ run (findings, "The intercept minimiser sticks on a flat clamp"), so Phase 7's r
       thresholds table until #83 lands (findings, "Rainbow deferred"); the stopped run's RB tables were restored to
       HEAD, so nothing of it is kept. If #83 makes RB feasible, it comes back in this box
 - [ ] **Hold lifted 2026-10-23: Phase 6a done, the prior adopted, every gate passes on every key; the rescore is
-      running on m4** (`0320`, every species, 12 workers, started 21:21 UTC 2026-10-23 on `fa638f2`; the smoke run
-      passed on all eight keys; progress.md's Resume says where its log is and what follows) (findings, "The prior on
+      scored on m4 and graded here** (`0320` at `fa638f2`, every species: scored on m4 by 22:26 UTC 2026-10-23, smoke
+      passed on all eight keys; grading moved here, 224.6 min, exit 0, 2026-10-24; picks moved on BT_rear, RB_rear and
+      WCT_rear; findings, "Phase 7's rescore"). Left in this box: recompare and the write-ups (findings, "The prior on
       the data-set and era coefficients"). Was: on hold until Phase 6a (Al, 2026-10-23),
       no rescore until the tuning is organized for fast, checked iteration (findings,
       "The intercept minimiser sticks on a flat clamp"). The fix is in (`ca78ca6`); every #73 score (CH, CO, BT and the

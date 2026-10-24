@@ -1,5 +1,5 @@
 seed,best,pick,recommended,default_in_region,main_rec_in_region,region_n,species_code,stage
-55,mad>=0.35|g<=0.0549|Q30@D2000,width>=1.5|g<=0.04|none,width>=1.5|g<=0.04|none,FALSE,TRUE,808,WCT,rear
-56,mad>=0.35|g<=0.0549|Q30@D2000,width>=1.5|g<=0.04|none,width>=1.5|g<=0.04|none,FALSE,TRUE,808,WCT,rear
-57,mad>=0.28|g<=0.04|Q20@D2000,width>=1.5|g<=0.04|none,width>=1.5|g<=0.04|none,FALSE,TRUE,712,WCT,rear
-58,mad>=0.35|g<=0.0549|Q30@D2000,width>=1.5|g<=0.04|none,width>=1.5|g<=0.04|none,FALSE,TRUE,808,WCT,rear
+55,mad>=0.03|g<=0.3|Q5@D250,mad>=0.03|g<=0.3|none,mad>=0.03|g<=0.3|none,FALSE,TRUE,121,WCT,rear
+56,mad>=0.03|g<=0.3|Q5@D250,mad>=0.03|g<=0.3|none,mad>=0.03|g<=0.3|none,FALSE,TRUE,121,WCT,rear
+57,mad>=0.03|g<=0.3|Q5@D250,mad>=0.03|g<=0.3|none,mad>=0.03|g<=0.3|none,FALSE,TRUE,105,WCT,rear
+58,mad>=0.03|g<=0.3|Q5@D250,mad>=0.03|g<=0.3|none,mad>=0.03|g<=0.3|none,FALSE,TRUE,121,WCT,rear

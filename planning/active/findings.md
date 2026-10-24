@@ -436,3 +436,57 @@ with grayling's at 4.4 under SD 5 still near the limit; the null ratio on steelh
 is at the clamp and no rule is behind no rule anywhere. **Adopted: SD 2.5**, the default, with SD 5 and 1.5 on record
 as the sensitivity. The curve's GAM has its own `data_set` and `era` terms and no prior; its held-out deviance beside
 the grid's will say whether that matters on the four keys (Phase 7).
+
+## Phase 7's rescore: scored on m4, graded here (`fa638f2`, 2026-10-23 and 24)
+
+**Scoring, m4.** Every species, 12 workers, from 21:21 UTC 2026-10-23: smoke passed on all eight keys, every grid
+scored with its extras, no `FAILED`, by 22:26 UTC (`scratch/logs/20261023_0320_m4.log`).
+
+**Grading on m4 was stopped, and why.** Grading sends one `ch_dist_profile()` query per accessible segment. A trivial
+query's round trip is 104 ms from m4 and 1.6 ms here (50 each, 2026-10-24). After 7.5 h m4's eight walk workers sat
+at about 2 % CPU each and BT rearing had not finished walking; at that pace the eight keys needed about two days. Al
+chose (2026-10-24, option A) to reuse m4's scores and grade here: the run was stopped at 06:33 UTC (`exit 143`), its
+100 outputs copied into `data/tune/` (md5s checked), the earlier grade tables moved out of `data/tune/` so every key
+graded fresh, and `0320` rerun here from a frozen copy at `fa638f2` (8 workers). The redesign is #85.
+
+**Grading here** (`scratch/logs/20261024_0320_grade_local.log`, `scripts/logs/habitat/20261023_tune_run.txt`, dated by
+the local day): 224.6 min, exit 0, no `FAILED`. Per key, walks and total:
+
+| key | river size walked to | total |
+|---|---|---|
+| BT_rear | 10 m³/s | 55.4 min |
+| BT_spawn | 10 m³/s | 55.9 min |
+| CH_rear | 3 m³/s | 18.2 min |
+| CO_rear | 10 m³/s | 13.7 min |
+| GR_rear | 10 m³/s | 19.5 min |
+| RB_rear | 10 m³/s | 42.2 min |
+| ST_rear | 10 m³/s | 11.9 min |
+| WCT_rear | 10 m³/s | 3.1 min |
+
+`q` checked by hand against the 2026-10-22 runs' lines (BT 10, CH 3): unchanged. Every grade table carries
+`walk = bank`, `ref_edge = 1000;1100;2000;2300`, run_uid `20261017_004619-3f4c713b`.
+
+**Picks against the committed tables** (`recommended` in `<key>_tune.csv`, HEAD before this commit):
+
+| key | committed | rescore |
+|---|---|---|
+| BT_rear | `mad>=0.1\|g<=0.1049\|none` | `mad>=0.35\|g<=0.25\|none` (moved; the dense reference found the same) |
+| BT_spawn | `width>=2\|g<=0.13\|none` | same |
+| CH_rear | `mad>=0.75\|g<=0.13\|Q3@D1000` | same |
+| CO_rear | `mad>=0.03\|g<=0.04\|none` | same |
+| GR_rear | `width>=1.5\|g<=0.0349\|none` | same |
+| RB_rear | `width>=3\|g<=0.09\|none` | `width>=3\|g<=0.3\|none` (moved) |
+| ST_rear | `mad>=1\|g<=0.0849\|none` | same |
+| WCT_rear | `width>=1.5\|g<=0.04\|none` | `mad>=0.03\|g<=0.3\|none` (moved; underpowered, 6 groups with both outcomes) |
+
+**The joint curve does not refit identically on two machines.** The rerun here refit each curve (the GAM; the grid
+scores were the cached ones). Five keys' held-out curve scores match m4's to the digit; three do not: RB 9409.7 on m4,
+9408.7 here; ST 840.2, 860.8; WCT 1464.4, 1454.5. The fits log `newton` "step failure" warnings. The committed grades
+come from this machine's curves.
+
+**Steelhead's curve is far behind its grid.** Held-out 840.2 (m4) or 860.8 (here) against the grid's best 357.5;
+every other key's curve is within 13 % of its grid's best or below it (CO 4092.5 against 3855.9, WCT 1454.5 against
+1298.1, BT_spawn 403.7 against 395.4, the rest below). Steelhead has 82 detections in 68 groups, 11 with both outcomes. The curve's GAM carries
+its own data-set and era terms with no prior; the likely cause is the separation the prior fixed in the grid's fit,
+not yet measured. Its pick comes from the grid, so it stands; its grades come from the curve, so no write-up uses
+steelhead's grades until this is measured.

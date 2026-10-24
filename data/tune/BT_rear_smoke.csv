@@ -1,0 +1,9 @@
+species_code,stage,check,value,limit,pass,table,role,rule,dev_heldout,ddev_null,n_clamp,dev_visit_max,converged,coef_max,coef_max_term,coef_max_fold
+BT,rear,null_ratio,1.002887904882482,1.25,TRUE,checks,,,,,,,,,,
+BT,rear,clamp,0,0,TRUE,checks,,,,,,,,,,
+BT,rear,behind_null,0,6031.204870049295,TRUE,checks,,,,,,,,,,
+BT,rear,coef,1.402036190914733,5,TRUE,checks,,,,,,,,,,
+BT,rear,,,,,rules,no_rule,none,6031.20487,0,0,9.485676,TRUE,0.229236,data_setFDS,4
+BT,rear,,,,,rules,default,width>=1.5|g<=0.1049|none,5930.931745,-100.273125,0,9.284275,TRUE,0.793854,rule,2
+BT,rear,,,,,rules,link_tuned,mad>=0.043|g<=0.1349|none,5824.510609,-206.694262,0,9.481325,TRUE,1.122901,rule,4
+BT,rear,,,,,rules,previous,mad>=0.35|g<=0.25|none,5704.529617,-326.675253,0,9.7202750000000009,TRUE,1.402036,rule,3
