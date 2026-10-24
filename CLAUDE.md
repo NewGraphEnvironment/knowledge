@@ -331,6 +331,13 @@ R reads `~/.Renviron` at startup and its values **replace** the shell's, so wher
 database there, or select a `~/.pg_service.conf` entry with `PGSERVICE=<entry>`, which libpq takes
 over the `PG*` variables. Set `PGCONNECT_TIMEOUT`, or an unreachable server hangs the script.
 
+**Run a database-bound step on the database's own host, against its own database.** Grading (`0320`'s walks) and
+`0330` send a query per segment or per watershed group, so their time is round trips: a trivial query costs 1.6 ms on
+the host and 104 ms from a machine on a remote link (2026-10-24), and #73's rescore graded from a remote machine for
+7.5 h without finishing what takes about an hour on the host. A second machine helps only with a database of its own
+holding the same build: the schema's run, the flow load named in the table comment and the walk code. Scoring is
+CPU-bound: the remote machine scored every key in about an hour on 12 workers (2026-10-23).
+
 **Run R from the repo root, and never add a project-level `.Renviron` here.** R loads a
 project `.Renviron` *instead of* `~/.Renviron`, not in addition to it, so one silently empties
 every `PG*`, `AWS_*` and `GITHUB_PAT`. The symptom accuses the database
