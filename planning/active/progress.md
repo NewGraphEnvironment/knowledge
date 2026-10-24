@@ -117,6 +117,16 @@
   steelhead, coho and WCT. The test fails with the gate disabled.
 - Next: `0320` here (scores cached from `fa638f2`, whose scoring code is unchanged; curves refit; every key regraded),
   then `0330` on every key (graded km and the GeoPackages carry the grades), then the write-ups.
+- `0320` with the prior and the gate, here from a frozen copy at `1d4ceb8` (`SCHEMA=fresh_default_20261017 WORKERS=8`),
+  16:47 to 19:58 UTC: 190.9 min, exit 0, no `FAILED`; scores reused from the `fa638f2` caches (scoring code unchanged),
+  curves refit with `prior_sd = 2.5` and every key regraded. Curve held-out scores match the probe (ST 553.8, GR 743.6,
+  BT_spawn 397.3); grades withheld from CO_rear (4092.0 against no rule's 4024.0), ST_rear (553.8 against 420.8) and
+  WCT_rear (1453.4 against 1329.7). Checked on the grade tables: the three withheld keys carry no rate, grade or class
+  and `grade_withheld = TRUE`, with size and distance kept; the other five are graded; all eight record
+  `curve_prior_sd = 2.5`; `q_walk` is BT 10, CH 3 (and 10 for the rest). The log's `graded=` count for a withheld key
+  counts segments with a size and a gradient, not grades. Picks and rule scores did not move. Stdout in
+  `planning/active/scratch/logs/20261024_0320_prior.log`; script log `scripts/logs/habitat/20261024_tune_run.txt`.
+- Next: `0330` on all eight keys here, one species at a time, from a frozen copy at this commit; then the write-ups.
 
 ### Resume (revised 2026-10-24 15:20 UTC, for the session that picks this up, on any model)
 
@@ -130,7 +140,9 @@ script or `R/` while a run reads it (run long jobs from a frozen copy); everythi
 task with its box flip and a progress entry, and push. Al's rule for the write-ups (2026-10-23): teach the principle
 beside each result, in plain words, the specification below.
 
-**Done: `0330` here, one species at a time (GR, WCT, ST, RB, BT), 10:23 to 15:13 UTC 2026-10-24**, every species
+**Done: the regrade with the curve prior and the grade gate (2026-10-24, 190.9 min, exit 0; progress above).** Next:
+`0330` on every key (CH, CO, BT, GR, RB, ST, WCT), one species at a time, because the grade tables changed; then the
+write-ups, where CO, ST and WCT have no grade section. Before that: **Done: `0330` here, one species at a time (GR, WCT, ST, RB, BT), 10:23 to 15:13 UTC 2026-10-24**, every species
 exit 0 (findings, "Phase 7's recompare"); next are the write-ups. Phase 7's rescore is done and committed (2026-10-24 10:20 UTC, exit 0; findings, "Phase 7's rescore"). How it went: The rescore ran on m4 from
 21:21 UTC 2026-10-23 (`fa638f2`, every species, 12 workers) and scored every key with no `FAILED` by 22:26 UTC, then
 graded so slowly that it was stopped at 06:33 UTC (`exit 143`): grading sends one walk query per segment, and a round
