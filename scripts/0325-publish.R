@@ -86,7 +86,7 @@ if (!length(gfiles)) stop("no grade tables in ", tune_dir)
 heads <- lapply(gfiles, function(f) read_csv(f, n_max = 1, show_col_types = FALSE, col_types = cols(.default = "c")))
 names(heads) <- basename(gfiles)
 stale <- names(heads)[!vapply(heads, function(h) {
-  all(c("ref_population", "ref_edge", "walk", "discharge_load") %in% names(h)) &&
+  all(c("ref_population", "ref_edge", "walk", "discharge_load", "grade_withheld") %in% names(h)) &&
     identical(h$ref_population, "stream_branch") && identical(h$walk, "bank")
 }, logical(1))]
 if (length(stale)) stop("grade tables made before #73 (no record of the bank walk, the reference edge types and the flow build); rerun 0320: ",
@@ -100,6 +100,14 @@ if (!identical(loads, discharge_load)) {
        loads, "\n  live:   ", discharge_load)
 }
 prov_grade <- c(prov, list(discharge_load_at_grade = loads, discharge_load_at_publish = discharge_load, walk = "bank"))
+# a key whose curve was no better than no rule on held-out groups has its grades withheld (0320, #73): its table
+# carries the walks 0330 reads, and no grade, so it is left out of the published set
+withheld <- names(heads)[vapply(heads, function(h) identical(h$grade_withheld, "TRUE"), logical(1))]
+if (length(withheld)) {
+  message("grades withheld, not published: ", paste(sub("_grades\\.csv$", "", withheld), collapse = ", "))
+}
+gfiles <- gfiles[!basename(gfiles) %in% withheld]
+if (!length(gfiles)) stop("every grade table's grades were withheld")
 # the stream branch: the edge types the curves' visits were on and the reference was taken over, as the tables record
 # them. Off it, on lakes, wetlands and river polygons, the grade extrapolates the curve past its visits, so the table
 # says which segments those are

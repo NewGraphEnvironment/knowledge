@@ -109,8 +109,14 @@
 - Found while choosing the gate: coho's curve (4092.5) and WCT's (1454.5) also score worse on held-out groups than no
   rule at all (4024.0, 1329.7), and the prior moves them by about 1. Asked Al whether "worse than no rule" is the gate
   for publishing grades (it would drop steelhead, coho and WCT), before the regrade.
-- Next: Al's answer on the gate, then `0320` (scores cached from `fa638f2`, curves refit, every key regraded), then the
-  write-ups.
+- Al chose the gate (2026-10-24): a key whose curve scores no better on held-out groups than no rule gets no grades.
+  `knw_tune_run()` records `null_heldout` and `grade_withheld`; `0320` logs it, writes it to the summary, and still
+  walks and writes the key's grade table with `rate`, `grade` and `grade_class` blank (0330 reads its sizes and
+  distances to apply the rule); `knw_compare_rules()` reports NA graded km for such a key, not 0; `0325` leaves it out
+  of the published grades; `0330` refuses grade tables made before the prior. With the prior, the gate should withhold
+  steelhead, coho and WCT. The test fails with the gate disabled.
+- Next: `0320` here (scores cached from `fa638f2`, whose scoring code is unchanged; curves refit; every key regraded),
+  then `0330` on every key (graded km and the GeoPackages carry the grades), then the write-ups.
 
 ### Resume (revised 2026-10-24 15:20 UTC, for the session that picks this up, on any model)
 

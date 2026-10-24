@@ -95,7 +95,11 @@ list with \code{species_code}, \code{stage}, \code{response}, \code{status} (\co
 \code{curve_failed}; \code{smoke} with \code{smoke_only}), \code{population}, and when scored
 \code{smoke} (\code{\link[=knw_tune_smoke]{knw_tune_smoke()}}'s result, with \code{smoke}), \code{score}
 (\code{\link[=knw_tune_score]{knw_tune_score()}}'s result), \code{pick} (the recommended rule row) and \code{curve}
-(\code{\link[=knw_tune_curve]{knw_tune_curve()}}'s; \code{NULL} with \code{curve_error} when its fit failed).
+(\code{\link[=knw_tune_curve]{knw_tune_curve()}}'s; \code{NULL} with \code{curve_error} when its fit failed);
+\code{null_heldout} (the held-out deviance with no rule) and \code{grade_withheld},
+\code{TRUE} when the curve's held-out deviance is no better than that: a curve
+that predicts held-out groups no better than knowing nothing ranks segments
+no better either, so its grades are withheld.
 }
 \description{
 For each species in \code{species} and each stage in \code{stages}: the scoring

@@ -215,7 +215,8 @@ for (k in names(out)) {
       default_in_region = dflt$in_region, default_ddev = dflt$ddev_best, default_se = dflt$se_diff,
       region_n = sum(rules$in_region), patterns = r$score$population[["patterns"]],
       dev_default = dflt$dev_heldout, dev_best = best$dev_heldout, dev_null = best$dev_heldout - best$ddev_null,
-      dev_curve = r$curve$heldout, curve_dist_in_model = r$curve$dist_in_model,
+      dev_curve = r$curve$heldout, curve_prior_sd = r$curve$prior_sd, grade_withheld = r$grade_withheld,
+      curve_dist_in_model = r$curve$dist_in_model,
       curve_edf = paste(sprintf("%s=%.2f", names(r$curve$edf), r$curve$edf), collapse = "; "),
       # NA under DEV=1, which runs the main seed alone
       honest_dev_rec = if (dev) NA_real_ else sum(r$score$honest$dev_rec),
@@ -229,6 +230,10 @@ for (k in names(out)) {
     say("%s: %s. %d visits (%d detections) in %d groups (%d both). Recommended %s; default %s the region (+%.1f, SE %.1f). Curve held-out %.1f vs grid best %.1f.",
         k, r$status, row$visits_in, row$detections, row$groups, row$groups_both, r$pick$rule,
         if (dflt$in_region) "in" else "outside", dflt$ddev_best, dflt$se_diff, r$curve$heldout, best$dev_heldout)
+    if (isTRUE(r$grade_withheld)) {
+      say("%s: grades withheld: the curve's held-out %.1f is no better than no rule's %.1f.", k, r$curve$heldout,
+          r$null_heldout)
+    }
     say("%s: from the flow start %s (1.96 SE: %s); from the width start at 1.96 SE %s; link's default_tuned rule %s %s.",
         k, row$rule_recommended_flow, row$rule_recommended_flow_196, row$rule_recommended_196,
         row$rule_link_tuned, if (nrow(ltn)) sprintf("%s the region (+%.1f, SE %.1f)", if (ltn$in_region) "in" else "outside", ltn$ddev_best, ltn$se_diff) else "(none)")
@@ -248,7 +253,8 @@ summ <- bind_rows(summ)
 for (k in names(out)) {
   write_csv(summ |> filter(species_code == out[[k]]$species_code, stage == out[[k]]$stage) |>
               mutate(across(where(is.numeric), ~ round(.x, 4))), file.path(dir_out, paste0(k, "_summary.csv")), na = "")
-  saveRDS(out[[k]][c("species_code", "stage", "response", "status", "pick", "curve")], file.path(dir_out, paste0(k, "_curve.rds")))
+  saveRDS(out[[k]][intersect(c("species_code", "stage", "response", "status", "pick", "curve", "null_heldout", "grade_withheld"),
+                             names(out[[k]]))], file.path(dir_out, paste0(k, "_curve.rds")))
 }
 
 # ---- grade every segment of each fitted species' groups ----------------------------------
@@ -274,6 +280,8 @@ for (k in names(out)) {
   ref_edge_txt <- paste(ref_edge_curve, collapse = ";")
   # the curve's prior on its data-set and era terms (#73, Phase 7): a curve refit with another prior grades differently
   curve_prior_txt <- format(if (is.null(r$curve$prior_sd)) Inf else r$curve$prior_sd)
+  # a withheld key is still walked and written: 0330 reads its sizes and distances to apply the rule
+  withheld_txt <- format(isTRUE(r$grade_withheld))
   if (file.exists(gpath)) {
     # kept only when it was graded under this pick on this link run and this flow build, with every graded segment
     # walked to the bank (#73), and the reference taken over the curve's own edge types (#72): the table records all
@@ -283,7 +291,8 @@ for (k in names(out)) {
       "walk" %in% names(head1) && identical(head1$walk, "bank") &&
       "ref_edge" %in% names(head1) && identical(head1$ref_edge, ref_edge_txt) &&
       "discharge_load" %in% names(head1) && identical(head1$discharge_load, discharge_load) &&
-      "curve_prior_sd" %in% names(head1) && identical(head1$curve_prior_sd, curve_prior_txt)
+      "curve_prior_sd" %in% names(head1) && identical(head1$curve_prior_sd, curve_prior_txt) &&
+      "grade_withheld" %in% names(head1) && identical(head1$grade_withheld, withheld_txt)
     if (same) {
       say("%s grades: already written under %s on %s, kept.", k, r$pick$rule, run_uid)
       next
@@ -300,12 +309,13 @@ for (k in names(out)) {
   t1 <- Sys.time()
   g <- knw_grade_species(pg, schema, r$species_code, wsg, r$curve, r$pick, stage = r$stage, workers = min(workers, 8L))
   if (!identical(as.integer(g$ref_edge), as.integer(ref_edge_curve))) stop(k, ": the grade's reference edge types are not the curve's")
+  if (isTRUE(r$grade_withheld)) g$grades <- g$grades |> mutate(rate = NA_real_, grade = NA_real_, grade_class = NA_character_)
   # ref_population is kept as the name 0325, 0330 and the article read; ref_edge, q_walk, walk and discharge_load
   # are the record (#72), written from what knw_grade_species() returns, not from a literal beside the call
   write_csv(g$grades |> mutate(species_code = r$species_code, stage = r$stage, rule = r$pick$rule, run_uid = run_uid,
                                ref_population = "stream_branch", ref_edge = paste(g$ref_edge, collapse = ";"),
                                q_walk = g$q, walk = g$walk, discharge_load = discharge_load,
-                               curve_prior_sd = curve_prior_txt,
+                               curve_prior_sd = curve_prior_txt, grade_withheld = withheld_txt,
                                across(c(rate, grade), ~ signif(.x, 5))),
             file.path(dir_out, paste0(k, "_grades.csv")), na = "")
   say("%s grades: %d groups, %s; reference rate %.4f over edge types %s; walks to %g m3/s, to the bank, %.1f min; %d of %d found rivers lie in another group; total %.1f min.",

@@ -158,9 +158,11 @@ stale <- names(jobs)[!vapply(names(jobs), function(k) {
   h <- readr::read_csv(file.path("data/tune", paste0(k, "_grades.csv")), n_max = 1, show_col_types = FALSE,
                        col_types = readr::cols(.default = "c"))
   "ref_population" %in% names(h) && identical(h$ref_population, "stream_branch") &&
-    "walk" %in% names(h) && identical(h$walk, "bank")
+    "walk" %in% names(h) && identical(h$walk, "bank") &&
+    # graded from a curve with the prior and the withheld-grade record (#73, Phase 7)
+    all(c("curve_prior_sd", "grade_withheld") %in% names(h))
 }, logical(1))]
-if (length(stale)) stop("grade tables made before #73 (no ref_population = stream_branch, or a walk not ending at the bank); rerun 0320: ",
+if (length(stale)) stop("grade tables made before #73's curve prior (no ref_population = stream_branch, a walk not ending at the bank, or no curve_prior_sd and grade_withheld); rerun 0320: ",
                         paste(stale, collapse = ", "))
 # each job writes its own tables as it finishes and returns its error rather than raising it, so one failed
 # species cannot discard the others at collection (code-check round 2); the grade table is read with the

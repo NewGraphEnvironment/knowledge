@@ -340,11 +340,16 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
     !is.na(seg$channel_width) & seg$channel_width >= tuned$size_min & seg$channel_width <= 9999
   ex_ok <- !is.na(tuned$exc_q) & !is.na(seg$knw_dist) & seg$knw_dist <= tuned$exc_d & seg$localcode_present %in% TRUE
   stream <- seg$edge_type %in% edge_stream
+  # a key whose grades were withheld (0320, #73) has none: its graded km are NA, not 0
+  graded <- any(!is.na(seg$grade))
   per_group <- function(st, idx, name) {
     ft <- seg[[paste0(flag, "_", st)]]
     fd_i <- fd[idx]
     ft_i <- ft[idx]
     len <- seg$length_metre[idx]
+    graded_km <- function(f) {
+      if (graded) sum((len * ifelse(is.na(seg$grade[idx]), 0, seg$grade[idx]))[f]) / 1000 else NA_real_
+    }
     out <- tibble::tibble(
       watershed_group_code = name, species_code = sp, stage = stage, structure = st,
       accessible_km = km(seg$accessible[idx], len),
@@ -359,13 +364,12 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
       gained_exception_km = km(ft_i & !fd_i & !size_tun[idx] & ex_ok[idx], len),
       gained_exception_other_group_km = km(ft_i & !fd_i & !size_tun[idx] & ex_ok[idx] &
                                              seg$target_in_group[idx] %in% FALSE, len),
-      default_graded_km = sum((len * ifelse(is.na(seg$grade[idx]), 0, seg$grade[idx]))[fd_i]) / 1000,
-      tuned_graded_km = sum((len * ifelse(is.na(seg$grade[idx]), 0, seg$grade[idx]))[ft_i]) / 1000,
+      default_graded_km = graded_km(fd_i), tuned_graded_km = graded_km(ft_i),
       graded_na_km = km(is.na(seg$grade[idx]) & seg$accessible[idx], len)
     )
     for (cl in classes) {
-      out[[paste0("default_km_", cl)]] <- km(fd_i & seg$grade_class[idx] %in% cl, len)
-      out[[paste0("tuned_km_", cl)]] <- km(ft_i & seg$grade_class[idx] %in% cl, len)
+      out[[paste0("default_km_", cl)]] <- if (graded) km(fd_i & seg$grade_class[idx] %in% cl, len) else NA_real_
+      out[[paste0("tuned_km_", cl)]] <- if (graded) km(ft_i & seg$grade_class[idx] %in% cl, len) else NA_real_
     }
     out$change_pct <- 100 * (out$tuned_km - out$default_km) / out$default_km
     out

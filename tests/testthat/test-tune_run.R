@@ -90,3 +90,24 @@ test_that("thresholds_extra puts another bundle's rule in the grid, and a specie
                        thresholds_extra = extra[extra$species_code == "BT", ])
   expect_false(any(out2$CH_rear$score$rules$is_link_tuned))
 })
+
+test_that("a curve no better than no rule on held-out groups has its grades withheld", {
+  skip_if_not_installed("mgcv")
+  s <- sim_build()
+  small <- list(grid_grad = 0.0549, grid_q = 3, grid_d = 1000)
+  run <- function() knw_tune_run(s$v, s$sp, s$walks, s$thr, species = "CH", stages = "rear", grid_args = small,
+                                 extra = FALSE, smoke = FALSE)$CH_rear
+  r <- run()
+  rules <- r$score$rules
+  expect_equal(r$null_heldout, rules$dev_heldout[2] - rules$ddev_null[2])
+  expect_equal(r$grade_withheld, r$curve$heldout >= r$null_heldout)
+  # the gate reads the curve's own held-out deviance against no rule's, on either side
+  local_mocked_bindings(knw_tune_curve = function(...) list(heldout = r$null_heldout))
+  expect_true(run()$grade_withheld)
+  local_mocked_bindings(knw_tune_curve = function(...) list(heldout = r$null_heldout - 0.01))
+  expect_false(run()$grade_withheld)
+  local_mocked_bindings(knw_tune_curve = function(...) stop("no fit"))
+  failed <- run()
+  expect_equal(failed$status, "curve_failed")
+  expect_false(failed$grade_withheld)
+})

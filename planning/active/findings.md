@@ -556,3 +556,9 @@ The grid's rules have one binary term each and do not overfit this way; the best
 407.8. Steelhead's pick stands. Its grades come from the curve, so they wait on a decision (Al): give the curve the
 grid's prior (an `R/tune_curve.R` change, so every key's curve refits and every key regrades, about four hours here),
 and whether a key this thin should be graded from a joint curve at all.
+
+**Decided (Al, 2026-10-24).** The curve takes the grid's prior (`44d4372`), and a key whose curve scores no better
+on held-out groups than no rule is published without grades. With the prior that is steelhead (553.8 against 420.8
+for no rule), coho (4092.0 against 4024.0) and WCT (1453.4 against 1329.7); bull trout spawning passes narrowly
+(397.3 against 401.4). Coho's curve is behind no rule with 62 groups with both outcomes, so the cause there is not
+power alone; its write-up loses its grade section.

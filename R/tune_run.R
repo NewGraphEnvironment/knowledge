@@ -65,7 +65,11 @@
 #'   `curve_failed`; `smoke` with `smoke_only`), `population`, and when scored
 #'   `smoke` ([knw_tune_smoke()]'s result, with `smoke`), `score`
 #'   ([knw_tune_score()]'s result), `pick` (the recommended rule row) and `curve`
-#'   ([knw_tune_curve()]'s; `NULL` with `curve_error` when its fit failed).
+#'   ([knw_tune_curve()]'s; `NULL` with `curve_error` when its fit failed);
+#'   `null_heldout` (the held-out deviance with no rule) and `grade_withheld`,
+#'   `TRUE` when the curve's held-out deviance is no better than that: a curve
+#'   that predicts held-out groups no better than knowing nothing ranks segments
+#'   no better either, so its grades are withheld.
 #' @export
 #' @examples
 #' \dontrun{
@@ -222,6 +226,10 @@ knw_tune_run <- function(visits, species_tbl, walks, thresholds, species = knw_s
     rec$pick_flow <- if (nrow(pick_flow)) pick_flow else NULL
     rec$curve <- if (inherits(cv, "knw_curve_failed")) NULL else cv
     rec$curve_error <- if (inherits(cv, "knw_curve_failed")) cv$message else NULL
+    # the no-rule score is the same on every row: each row's held-out deviance less its gain over no rule
+    rec$null_heldout <- sc$rules$dev_heldout[1] - sc$rules$ddev_null[1]
+    # a curve no better than no rule on held-out groups is not graded from (Al, 2026-10-24; #73)
+    rec$grade_withheld <- !inherits(cv, "knw_curve_failed") && cv$heldout >= rec$null_heldout
     out[[key]] <- rec
   }
   out
