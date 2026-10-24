@@ -1,9 +1,9 @@
 direction,reason,order,n_segments,km,structure,species_code,stage,tuned_rule
-gained,gradient between the two maxima,1,1473,380.0921065015699,door,BT,spawn,width>=2|g<=0.13|none
-gained,other (river-polygon branch or mixed),1,90,1.902959833836453,door,BT,spawn,width>=2|g<=0.13|none
-gained,gradient between the two maxima,2,29780,8738.856550516279,door,BT,spawn,width>=2|g<=0.13|none
+gained,gradient between the two maxima,1,1473,380.09210650156984,door,BT,spawn,width>=2|g<=0.13|none
+gained,other (river-polygon branch or mixed),1,90,1.9029598338364533,door,BT,spawn,width>=2|g<=0.13|none
+gained,gradient between the two maxima,2,29780,8738.85655051628,door,BT,spawn,width>=2|g<=0.13|none
 gained,other (river-polygon branch or mixed),2,1931,43.813635922723414,door,BT,spawn,width>=2|g<=0.13|none
-gained,gradient between the two maxima,3,59075,16740.924454355874,door,BT,spawn,width>=2|g<=0.13|none
+gained,gradient between the two maxima,3,59075,16740.92445435589,door,BT,spawn,width>=2|g<=0.13|none
 gained,other (river-polygon branch or mixed),3,1382,123.1216966337849,door,BT,spawn,width>=2|g<=0.13|none
-gained,gradient between the two maxima,4+,37747,9640.561590916648,door,BT,spawn,width>=2|g<=0.13|none
-gained,other (river-polygon branch or mixed),4+,3346,365.18719307513845,door,BT,spawn,width>=2|g<=0.13|none
+gained,gradient between the two maxima,4+,37747,9640.561590916644,door,BT,spawn,width>=2|g<=0.13|none
+gained,other (river-polygon branch or mixed),4+,3346,365.1871930751385,door,BT,spawn,width>=2|g<=0.13|none

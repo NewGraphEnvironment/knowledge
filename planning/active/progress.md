@@ -126,7 +126,19 @@
   `curve_prior_sd = 2.5`; `q_walk` is BT 10, CH 3 (and 10 for the rest). The log's `graded=` count for a withheld key
   counts segments with a size and a gradient, not grades. Picks and rule scores did not move. Stdout in
   `planning/active/scratch/logs/20261024_0320_prior.log`; script log `scripts/logs/habitat/20261024_tune_run.txt`.
-- Next: `0330` on all eight keys here, one species at a time, from a frozen copy at this commit; then the write-ups.
+- `0330` on all eight keys here from a frozen copy at `d02af54` (md5 29a34f3…), link's config pinned at `102762d`
+  (`CONFIG_SHA`; CH and CO were last compared at `67a410e`, whose `configs/default` lacks only
+  `cabd_additions_barriers`, which link says never moves access): WCT alone, 20:00 to 20:19 UTC, 18.4 min, exit 0; then,
+  after one species at a time was seen to hold the database at one core of six, the runner was stopped two minutes
+  into GR and the other seven keys ran in one process on 6 workers, 20:21 to 23:01 UTC, 160.1 min, exit 0, no
+  `FAILED` (database at 578 % CPU). Default and tuned km match the morning's comparison on BT, RB, ST, GR and WCT (picks
+  unchanged); graded km is NA on CO and ST, as the gate means. Stdout in
+  `planning/active/scratch/logs/20261024_0330_prior_{WCT,par}.log`; the script log `20261024_compare.txt` is the
+  seven-key run's (WCT's was overwritten; its stdout carries its lines).
+- Speed: one species at a time used one database core. Filed #86 (the comparison's groups in parallel) and #87 (batch
+  and cache the walks, parallel compare, any machine with the build; Al: plan it separately with `/planning-init`
+  later); #85 and #86 point to #87. CLAUDE.md now says to run database-bound steps on the database's host (`d2c7071`).
+- Next: the write-ups, per the Resume (CO, ST and WCT without a grade section).
 
 ### Resume (revised 2026-10-24 15:20 UTC, for the session that picks this up, on any model)
 
@@ -142,7 +154,7 @@ beside each result, in plain words, the specification below.
 
 **Done: the regrade with the curve prior and the grade gate (2026-10-24, 190.9 min, exit 0; progress above).** Next:
 `0330` on every key (CH, CO, BT, GR, RB, ST, WCT), one species at a time, because the grade tables changed; then the
-write-ups, where CO, ST and WCT have no grade section. Before that: **Done: `0330` here, one species at a time (GR, WCT, ST, RB, BT), 10:23 to 15:13 UTC 2026-10-24**, every species
+write-ups, where CO, ST and WCT have no grade section. (The recompare is done too, 2026-10-24 23:01 UTC.) Before that: **Done: `0330` here, one species at a time (GR, WCT, ST, RB, BT), 10:23 to 15:13 UTC 2026-10-24**, every species
 exit 0 (findings, "Phase 7's recompare"); next are the write-ups. Phase 7's rescore is done and committed (2026-10-24 10:20 UTC, exit 0; findings, "Phase 7's rescore"). How it went: The rescore ran on m4 from
 21:21 UTC 2026-10-23 (`fa638f2`, every species, 12 workers) and scored every key with no `FAILED` by 22:26 UTC, then
 graded so slowly that it was stopped at 06:33 UTC (`exit 143`): grading sends one walk query per segment, and a round

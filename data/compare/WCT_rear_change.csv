@@ -5,7 +5,7 @@ gained,gradient between the two maxima,1,334,52.668115578695506,free,WCT,rear,ma
 gained,other (river-polygon branch or mixed),1,16,0.32596691472894035,free,WCT,rear,mad>=0.03|g<=0.3|none
 gained,"size: tuned passes, width fails or NULL",1,3892,858.1690593475025,free,WCT,rear,mad>=0.03|g<=0.3|none
 lost,"size: width passes, tuned fails, no exception",1,306,64.17061696828428,free,WCT,rear,mad>=0.03|g<=0.3|none
-gained,through-wetland line: tuned structure admits,1,657,127.97584978168335,free,WCT,rear,mad>=0.03|g<=0.3|none
+gained,through-wetland line: tuned structure admits,1,657,127.97584978168337,free,WCT,rear,mad>=0.03|g<=0.3|none
 lost,through-wetland line: tuned structure drops,1,8,0.5668266780770517,free,WCT,rear,mad>=0.03|g<=0.3|none
 gained,connectivity or overlay,2,620,145.93745907003694,free,WCT,rear,mad>=0.03|g<=0.3|none
 lost,connectivity or overlay,2,26,6.803467545896795,free,WCT,rear,mad>=0.03|g<=0.3|none
@@ -34,7 +34,7 @@ gained,connectivity or overlay,1,73,16.285989494054256,door,WCT,rear,mad>=0.03|g
 lost,connectivity or overlay,1,7,0.6409404715458319,door,WCT,rear,mad>=0.03|g<=0.3|none
 gained,gradient between the two maxima,1,334,52.668115578695506,door,WCT,rear,mad>=0.03|g<=0.3|none
 gained,other (river-polygon branch or mixed),1,16,0.32596691472894035,door,WCT,rear,mad>=0.03|g<=0.3|none
-gained,"size: tuned passes, width fails or NULL",1,3923,864.3315437547528,door,WCT,rear,mad>=0.03|g<=0.3|none
+gained,"size: tuned passes, width fails or NULL",1,3923,864.3315437547527,door,WCT,rear,mad>=0.03|g<=0.3|none
 lost,"size: width passes, tuned fails, no exception",1,306,64.17061696828428,door,WCT,rear,mad>=0.03|g<=0.3|none
 gained,through-wetland line: tuned structure admits,1,206,40.3154022607506,door,WCT,rear,mad>=0.03|g<=0.3|none
 lost,through-wetland line: tuned structure drops,1,27,6.232148136246351,door,WCT,rear,mad>=0.03|g<=0.3|none

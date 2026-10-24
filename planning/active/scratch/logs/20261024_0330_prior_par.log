@@ -1,0 +1,33 @@
+Sat Oct 24 20:21:30 UTC 2026
+commit d02af54 frozen 0330 md5 29a34f367afe24daf01861885f8619b4 species GR,ST,CO,CH,RB,BT
+Spherical geometry (s2) switched off
+Comparison, knowledge#57: 7 fitted species x stage; link run 20261017_004619-3f4c713b at a17e91773b283b021811f8b5b76b887d5f4c16e4.
+link configs/default at 102762da54d15ef70c0dadef9b1a3e33a256cd7b (the baseline; the schema fresh_default_20261017's run is at a17e91773b283b021811f8b5b76b887d5f4c16e4) read from ../link; fresh 0.42.0; tuned reported as door.
+Floodplain catalog: 23 whole-network groups (BOWR BULK DUNC FRAN KISP KOTL LARL LCHL LNTH LSAL MCGR MORK MORR NECR PARS PCEA PINE SLOC TABR THOM UFRA UNTH WILL).
+Compared 7 species x stage in 160.1 min on 6 workers.
+RB_rear: 210 groups, 56.0 min; default 219156 km (width>=1.5|g<=0.0849|none).
+  free: tuned 194307 km (-11.3 %); graded km 99441 -> 93416; lost 45037, gained 20189 (0 by the exception, 0 of it through a river in another group).
+  door (= tuned): tuned 180951 km (-17.4 %); graded km 99441 -> 92150; lost 49797, gained 11593 (0 by the exception, 0 of it through a river in another group).
+BT_rear: 158 groups, 160.0 min; default 244328 km (width>=1.5|g<=0.1049|none).
+  free: tuned 158584 km (-35.1 %); graded km 101583 -> 76791; lost 94965, gained 9221 (0 by the exception, 0 of it through a river in another group).
+  door (= tuned): tuned 142015 km (-41.9 %); graded km 101583 -> 74218; lost 106132, gained 3819 (0 by the exception, 0 of it through a river in another group).
+BT_spawn: 158 groups, 130.6 min; default 133382 km (width>=2|g<=0.0549|none).
+  door (= tuned): tuned 169416 km (+27.0 %); graded km 93333 -> 123687; lost 0, gained 36034 (0 by the exception, 0 of it through a river in another group).
+CH_rear: 125 groups, 150.9 min; default 99186 km (width>=1.5|g<=0.0549|cw channel_width>=15@D1000; mad discharge>=3@D1000 on wetland_flow).
+  free: tuned 92041 km (-7.2 %); graded km 48134 -> 54182; lost 24818, gained 17673 (12840 by the exception, 4 of it through a river in another group).
+  door (= tuned): tuned 84294 km (-15.0 %); graded km 48134 -> 53957; lost 30477, gained 15585 (12949 by the exception, 4 of it through a river in another group).
+  door_wetland: tuned 66832 km (-32.6 %); graded km 48134 -> 44976; lost 35067, gained 2713 (84 by the exception, 0 of it through a river in another group).
+CO_rear: 100 groups, 94.6 min; default 79829 km (width>=1.5|g<=0.0549|none).
+  free: tuned 77602 km (-2.8 %); graded km NA -> NA; lost 9149, gained 6922 (0 by the exception, 0 of it through a river in another group).
+  door (= tuned): tuned 75430 km (-5.5 %); graded km NA -> NA; lost 9945, gained 5546 (0 by the exception, 0 of it through a river in another group).
+GR_rear: 82 groups, 49.6 min; default 77740 km (width>=1.5|g<=0.0349|none).
+  door (= tuned): tuned 77740 km (+0.0 %); graded km 45564 -> 45564; lost 0, gained 0 (0 by the exception, 0 of it through a river in another group).
+ST_rear: 79 groups, 62.2 min; default 70980 km (width>=1.5|g<=0.0849|none).
+  free: tuned 45274 km (-36.2 %); graded km NA -> NA; lost 27027, gained 1320 (0 by the exception, 0 of it through a river in another group).
+  door (= tuned): tuned 41714 km (-41.2 %); graded km NA -> NA; lost 29605, gained 339 (0 by the exception, 0 of it through a river in another group).
+Composed with the saved comparison of WCT_rear.
+  WCT_rear free: default 20632 km (width>=1.5|g<=0.0849|none); tuned 24572 km (+19.1 %, mad>=0.03|g<=0.3|none).
+  WCT_rear door: default 20632 km (width>=1.5|g<=0.0849|none); tuned 24428 km (+18.4 %, mad>=0.03|g<=0.3|none).
+Done in 160.1 min.
+exit 0
+Sat Oct 24 23:01:46 UTC 2026

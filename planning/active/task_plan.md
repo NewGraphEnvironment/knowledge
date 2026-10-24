@@ -206,8 +206,8 @@ run (findings, "The intercept minimiser sticks on a flat clamp"), so Phase 7's r
       passed on all eight keys; grading moved here, 224.6 min, exit 0, 2026-10-24; picks moved on BT_rear, RB_rear and
       WCT_rear; findings, "Phase 7's rescore"; recompared here, GR, WCT, ST, RB, BT, all exit 0, 2026-10-24,
       findings, "Phase 7's recompare"; regraded with the curve prior and the grade gate, 190.9 min, exit 0,
-      2026-10-24, grades withheld from CO_rear, ST_rear and WCT_rear; recompare of all eight keys next). Left in this box:
-      the recompare and the write-ups (findings, "The prior on
+      2026-10-24, grades withheld from CO_rear, ST_rear and WCT_rear; recompared on all eight keys, WCT 18.4 min then
+      the other seven in one run, 160.1 min, all exit 0). Left in this box: the write-ups (findings, "The prior on
       the data-set and era coefficients"). Was: on hold until Phase 6a (Al, 2026-10-23),
       no rescore until the tuning is organized for fast, checked iteration (findings,
       "The intercept minimiser sticks on a flat clamp"). The fix is in (`ca78ca6`); every #73 score (CH, CO, BT and the
