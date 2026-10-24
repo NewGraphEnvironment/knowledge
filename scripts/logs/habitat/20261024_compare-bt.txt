@@ -1,0 +1,31 @@
+Comparison, knowledge#57: 2 fitted species x stage; link run 20261017_004619-3f4c713b at a17e91773b283b021811f8b5b76b887d5f4c16e4.
+link configs/default at 102762da54d15ef70c0dadef9b1a3e33a256cd7b (the baseline; the schema fresh_default_20261017's run is at a17e91773b283b021811f8b5b76b887d5f4c16e4) read from ../link; fresh 0.42.0; tuned reported as door.
+Floodplain catalog: 23 whole-network groups (BOWR BULK DUNC FRAN KISP KOTL LARL LCHL LNTH LSAL MCGR MORK MORR NECR PARS PCEA PINE SLOC TABR THOM UFRA UNTH WILL).
+Compared 2 species x stage in 140.1 min on 6 workers.
+BT_rear: 158 groups, 140.1 min; default 244328 km (width>=1.5|g<=0.1049|none).
+  free: tuned 158584 km (-35.1 %); graded km 101583 -> 76791; lost 94965, gained 9221 (0 by the exception, 0 of it through a river in another group).
+  door (= tuned): tuned 142015 km (-41.9 %); graded km 101583 -> 74218; lost 106132, gained 3819 (0 by the exception, 0 of it through a river in another group).
+   BT rear: 158 groups; link configs at 102762da54d15ef70c0dadef9b1a3e33a256cd7b; default width>=1.5|g<=0.1049|none; tuned mad>=0.35|g<=0.25|none under free, door (reported as tuned: door).
+   Classify, overlay and connect: 158 groups x 3 rules, 126.0 min (near-river walks 0.0 min).
+   Outside check: 3194 non-FDIS BT records; 2630 locations placed (0 inside an overlay reach left out), 1516 on accessible stream edges.
+   GeoPackage data/compare/gpkg/BT_rear.gpkg: 8406979 segments in 8.2 min.
+BT_spawn: 158 groups, 118.3 min; default 133382 km (width>=2|g<=0.0549|none).
+  door (= tuned): tuned 169416 km (+27.0 %); graded km 93411 -> 123823; lost 0, gained 36034 (0 by the exception, 0 of it through a river in another group).
+   BT spawn: 158 groups; link configs at 102762da54d15ef70c0dadef9b1a3e33a256cd7b; default width>=2|g<=0.0549|none; tuned width>=2|g<=0.13|none under door (reported as tuned: door).
+   Classify, overlay and connect: 158 groups x 2 rules, 104.8 min (near-river walks 0.0 min).
+   Outside check: 3194 non-FDIS BT records; 2630 locations placed (0 inside an overlay reach left out), 1516 on accessible stream edges.
+   GeoPackage data/compare/gpkg/BT_spawn.gpkg: 8406979 segments in 9.1 min.
+Composed with the saved comparison of CH_rear CO_rear GR_rear RB_rear ST_rear WCT_rear.
+  CH_rear free: default 99186 km (width>=1.5|g<=0.0549|cw channel_width>=15@D1000; mad discharge>=3@D1000 on wetland_flow); tuned 92041 km (-7.2 %, mad>=0.75|g<=0.13|Q3@D1000).
+  CH_rear door: default 99186 km (width>=1.5|g<=0.0549|cw channel_width>=15@D1000; mad discharge>=3@D1000 on wetland_flow); tuned 84294 km (-15.0 %, mad>=0.75|g<=0.13|Q3@D1000).
+  CH_rear door_wetland: default 99186 km (width>=1.5|g<=0.0549|cw channel_width>=15@D1000; mad discharge>=3@D1000 on wetland_flow); tuned 66832 km (-32.6 %, mad>=0.75|g<=0.13|Q3@D1000).
+  CO_rear free: default 79829 km (width>=1.5|g<=0.0549|none); tuned 77602 km (-2.8 %, mad>=0.03|g<=0.04|none).
+  CO_rear door: default 79829 km (width>=1.5|g<=0.0549|none); tuned 75430 km (-5.5 %, mad>=0.03|g<=0.04|none).
+  GR_rear door: default 77740 km (width>=1.5|g<=0.0349|none); tuned 77740 km (+0.0 %, width>=1.5|g<=0.0349|none).
+  RB_rear free: default 219156 km (width>=1.5|g<=0.0849|none); tuned 194307 km (-11.3 %, width>=3|g<=0.3|none).
+  RB_rear door: default 219156 km (width>=1.5|g<=0.0849|none); tuned 180951 km (-17.4 %, width>=3|g<=0.3|none).
+  ST_rear free: default 70980 km (width>=1.5|g<=0.0849|none); tuned 45274 km (-36.2 %, mad>=1|g<=0.0849|none).
+  ST_rear door: default 70980 km (width>=1.5|g<=0.0849|none); tuned 41714 km (-41.2 %, mad>=1|g<=0.0849|none).
+  WCT_rear free: default 20632 km (width>=1.5|g<=0.0849|none); tuned 24572 km (+19.1 %, mad>=0.03|g<=0.3|none).
+  WCT_rear door: default 20632 km (width>=1.5|g<=0.0849|none); tuned 24428 km (+18.4 %, mad>=0.03|g<=0.3|none).
+Done in 140.1 min.

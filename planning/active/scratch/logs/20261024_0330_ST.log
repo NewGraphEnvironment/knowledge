@@ -1,0 +1,4152 @@
+Sat Oct 24 11:18:54 UTC 2026
+commit fca34a6 species ST
+Spherical geometry (s2) switched off
+Comparison, knowledge#57: 1 fitted species x stage; link run 20261017_004619-3f4c713b at a17e91773b283b021811f8b5b76b887d5f4c16e4.
+link configs/default at 102762da54d15ef70c0dadef9b1a3e33a256cd7b (the baseline; the schema fresh_default_20261017's run is at a17e91773b283b021811f8b5b76b887d5f4c16e4) read from ../link; fresh 0.42.0; tuned reported as door.
+Floodplain catalog: 23 whole-network groups (BOWR BULK DUNC FRAN KISP KOTL LARL LCHL LNTH LSAL MCGR MORK MORR NECR PARS PCEA PINE SLOC TABR THOM UFRA UNTH WILL).
+NOTICE:  table "streams" does not exist, skipping
+
+NOTICE:  table "habitat_default" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "habitat_free" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "habitat_door" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_clusters_st" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_lake_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_lake_rearing" does not exist, skipping
+
+NOTICE:  relation "streams_geom_gist_idx" already exists, skipping
+
+NOTICE:  table "frs_bkt_keys_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_poly_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  table "frs_bkt_spawn_st_wetland_rearing" does not exist, skipping
+
+NOTICE:  drop cascades to 6 other objects
+DETAIL:  drop cascades to table knw_cmp_st_rear.uhc
+drop cascades to table knw_cmp_st_rear.grades
+drop cascades to table knw_cmp_st_rear.streams
+drop cascades to table knw_cmp_st_rear.habitat_default
+drop cascades to table knw_cmp_st_rear.habitat_free
+drop cascades to table knw_cmp_st_rear.habitat_door
+
+NOTICE:  schema "knw_cmp_st_rear" does not exist, skipping
+
+Compared 1 species x stage in 53.8 min on 6 workers.
+ST_rear: 79 groups, 53.8 min; default 70980 km (width>=1.5|g<=0.0849|none).
+  free: tuned 45274 km (-36.2 %); graded km 17573 -> 16577; lost 27027, gained 1320 (0 by the exception, 0 of it through a river in another group).
+  door (= tuned): tuned 41714 km (-41.2 %); graded km 17573 -> 16236; lost 29605, gained 339 (0 by the exception, 0 of it through a river in another group).
+Composed with the saved comparison of BT_rear BT_spawn CH_rear CO_rear GR_rear WCT_rear.
+  BT_rear free: default 244328 km (width>=1.5|g<=0.1049|none); tuned 190117 km (-22.2 %, mad>=0.1|g<=0.1049|none).
+  BT_rear door: default 244328 km (width>=1.5|g<=0.1049|none); tuned 177669 km (-27.3 %, mad>=0.1|g<=0.1049|none).
+  BT_spawn door: default 133382 km (width>=2|g<=0.0549|none); tuned 169416 km (+27.0 %, width>=2|g<=0.13|none).
+  CH_rear free: default 99186 km (width>=1.5|g<=0.0549|cw channel_width>=15@D1000; mad discharge>=3@D1000 on wetland_flow); tuned 92041 km (-7.2 %, mad>=0.75|g<=0.13|Q3@D1000).
+  CH_rear door: default 99186 km (width>=1.5|g<=0.0549|cw channel_width>=15@D1000; mad discharge>=3@D1000 on wetland_flow); tuned 84294 km (-15.0 %, mad>=0.75|g<=0.13|Q3@D1000).
+  CH_rear door_wetland: default 99186 km (width>=1.5|g<=0.0549|cw channel_width>=15@D1000; mad discharge>=3@D1000 on wetland_flow); tuned 66832 km (-32.6 %, mad>=0.75|g<=0.13|Q3@D1000).
+  CO_rear free: default 79829 km (width>=1.5|g<=0.0549|none); tuned 77602 km (-2.8 %, mad>=0.03|g<=0.04|none).
+  CO_rear door: default 79829 km (width>=1.5|g<=0.0549|none); tuned 75430 km (-5.5 %, mad>=0.03|g<=0.04|none).
+  GR_rear door: default 77740 km (width>=1.5|g<=0.0349|none); tuned 77740 km (+0.0 %, width>=1.5|g<=0.0349|none).
+  WCT_rear free: default 20632 km (width>=1.5|g<=0.0849|none); tuned 24572 km (+19.1 %, mad>=0.03|g<=0.3|none).
+  WCT_rear door: default 20632 km (width>=1.5|g<=0.0849|none); tuned 24428 km (+18.4 %, mad>=0.03|g<=0.3|none).
+Left out of the combined tables (saved under another comparison; rerun them): RB_rear.
+Done in 53.8 min.
+exit 0
+Sat Oct 24 12:12:53 UTC 2026

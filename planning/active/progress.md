@@ -92,9 +92,14 @@
 - `0320` graded here from a frozen copy at `fa638f2`: 224.6 min, exit 0, no `FAILED`. Picks moved on BT_rear, RB_rear
   and WCT_rear; five held. Curves refit slightly differently from m4's on RB, ST and WCT; steelhead's curve is far
   behind its grid (findings, "Phase 7's rescore").
-- Next: `0330` per species here, then the write-ups.
+- `0330` here from a frozen copy at `eb7b382`, one species at a time, 10:23 to 15:13 UTC: GR 38.3 min, WCT 17.6,
+  ST 53.8, RB 40.4, BT 140.1 (rear and spawn), every one exit 0 with no `FAILED`; 6 workers. The combined tables are
+  composed with the saved CH and CO comparisons. Each run overwrote the script's log, so `scripts/logs/habitat/` keeps
+  BT's (`20261024_compare-bt.txt`, `20261024_compare-workers-bt.out`); every species' stdout is in
+  `planning/active/scratch/logs/20261024_0330_<sp>.log` (findings, "Phase 7's recompare").
+- Next: the write-ups (steelhead's only after its curve is measured), then Phase 8.
 
-### Resume (revised 2026-10-24 10:30 UTC, for the session that picks this up, on any model)
+### Resume (revised 2026-10-24 15:20 UTC, for the session that picks this up, on any model)
 
 The branch stays `73-rebuild-the-evidence-and-retune-on-the-r`; no new branch and no `/planning-init`. From the repo
 root: `git fetch -q origin && git checkout 73-rebuild-the-evidence-and-retune-on-the-r && git pull --ff-only`, then
@@ -106,10 +111,8 @@ script or `R/` while a run reads it (run long jobs from a frozen copy); everythi
 task with its box flip and a progress entry, and push. Al's rule for the write-ups (2026-10-23): teach the principle
 beside each result, in plain words, the specification below.
 
-**Running: `0330` here, one species at a time (GR, WCT, ST, RB, BT), from 10:23 UTC 2026-10-24**, through
-`repo_aside/run_0330_local.sh` (a frozen copy of `0330` at `eb7b382`, `SCHEMA=fresh_default_20261017`); each
-species' stdout is `repo_aside/0330_<sp>.log`, ending `exit <code>`, and the runner stops at the first failure.
-Phase 7's rescore is done and committed (2026-10-24 10:20 UTC, exit 0; findings, "Phase 7's rescore"). How it went: The rescore ran on m4 from
+**Done: `0330` here, one species at a time (GR, WCT, ST, RB, BT), 10:23 to 15:13 UTC 2026-10-24**, every species
+exit 0 (findings, "Phase 7's recompare"); next are the write-ups. Phase 7's rescore is done and committed (2026-10-24 10:20 UTC, exit 0; findings, "Phase 7's rescore"). How it went: The rescore ran on m4 from
 21:21 UTC 2026-10-23 (`fa638f2`, every species, 12 workers) and scored every key with no `FAILED` by 22:26 UTC, then
 graded so slowly that it was stopped at 06:33 UTC (`exit 143`): grading sends one walk query per segment, and a round
 trip to the database costs 104 ms from m4 against 1.6 ms here, so BT rearing had not finished walking after 7.5 h

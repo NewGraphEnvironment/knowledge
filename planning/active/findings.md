@@ -490,3 +490,29 @@ every other key's curve is within 13 % of its grid's best or below it (CO 4092.5
 its own data-set and era terms with no prior; the likely cause is the separation the prior fixed in the grid's fit,
 not yet measured. Its pick comes from the grid, so it stands; its grades come from the curve, so no write-up uses
 steelhead's grades until this is measured.
+
+## Phase 7's recompare (`0330` here at `eb7b382`, 2026-10-24)
+
+`0330` ran here one species at a time from a frozen copy, `SCHEMA=fresh_default_20261017`, 6 workers, 10:23 to 15:13
+UTC: GR 38.3 min, WCT 17.6, ST 53.8, RB 40.4, BT 140.1 (rear and spawn). Every run exited 0 with no `FAILED`. The
+combined `compare`, `change` and `checks` tables are composed with the saved CH and CO comparisons, which did not rerun
+because neither pick moved. Kilometres on link's segments, `default` against the tuned rule (structure `door` is what
+the thresholds table records):
+
+| Key | default | free | door | lift outside FDIS, door minus default (95 % interval) |
+|---|---|---|---|---|
+| BT_rear | 244,328 | 158,584 (-35.1 %) | 142,015 (-41.9 %) | +2.97 (2.82 to 3.10) |
+| BT_spawn | 133,382 | | 169,416 (+27.0 %) | -0.02 (-0.12 to 0.07) |
+| GR_rear | 77,740 | | 77,740 (+0.0 %) | 0 (the pick is `default`'s rule) |
+| RB_rear | 219,156 | 194,307 (-11.3 %) | 180,951 (-17.4 %) | +0.70 (0.65 to 0.73) |
+| ST_rear | 70,980 | 45,274 (-36.2 %) | 41,714 (-41.2 %) | +1.89 (1.67 to 2.11) |
+| WCT_rear | 20,632 | 24,572 (+19.1 %) | 24,428 (+18.4 %) | -0.10 (-0.14 to -0.06) |
+
+BT_rear's pick moved (`mad>=0.1|g<=0.1049` to `mad>=0.35|g<=0.25`), so its comparison moved with it: the door
+structure was 177,669 km (-27.3 %) on 2026-10-23 and is 142,015 km (-41.9 %) now. BT_spawn's pick held and its
+kilometres are the same to the kilometre. WCT's new rule adds stream and lowers the outside-FDIS lift slightly; its pick
+is underpowered (6 groups with both outcomes). Steelhead's lines come from the grid's pick and are usable; its graded
+kilometres (17,573 to 16,236) come from the curve, which is not yet trusted (previous section).
+
+Each species' run overwrote the script's own log, so `scripts/logs/habitat/` keeps BT's (`20261024_compare-bt.txt`,
+`20261024_compare-workers-bt.out`); every species' stdout is `planning/active/scratch/logs/20261024_0330_<sp>.log`.
