@@ -106,8 +106,10 @@ script or `R/` while a run reads it (run long jobs from a frozen copy); everythi
 task with its box flip and a progress entry, and push. Al's rule for the write-ups (2026-10-23): teach the principle
 beside each result, in plain words, the specification below.
 
-**Nothing is running. Phase 7's rescore is done and committed (2026-10-24 10:20 UTC, exit 0; findings, "Phase 7's
-rescore"); next is `0330`, below.** How it went: The rescore ran on m4 from
+**Running: `0330` here, one species at a time (GR, WCT, ST, RB, BT), from 10:23 UTC 2026-10-24**, through
+`repo_aside/run_0330_local.sh` (a frozen copy of `0330` at `eb7b382`, `SCHEMA=fresh_default_20261017`); each
+species' stdout is `repo_aside/0330_<sp>.log`, ending `exit <code>`, and the runner stops at the first failure.
+Phase 7's rescore is done and committed (2026-10-24 10:20 UTC, exit 0; findings, "Phase 7's rescore"). How it went: The rescore ran on m4 from
 21:21 UTC 2026-10-23 (`fa638f2`, every species, 12 workers) and scored every key with no `FAILED` by 22:26 UTC, then
 graded so slowly that it was stopped at 06:33 UTC (`exit 143`): grading sends one walk query per segment, and a round
 trip to the database costs 104 ms from m4 against 1.6 ms here, so BT rearing had not finished walking after 7.5 h
