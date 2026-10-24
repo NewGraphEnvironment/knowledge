@@ -101,7 +101,16 @@
   prior in the curve (860.8 to 553.8 with the grid's prior), and the joint smooth overfits NIMP, which holds a third
   of its detections. The prior also moves grayling's curve (786.9 to 743.6). Probe kept at
   `planning/active/scratch/curve_prior_probe.R`. Asked Al whether the curve takes the prior (every key regrades).
-- Next: Al's answer on the curve; the write-ups that do not depend on it (BT, RB, WCT, CO, CH), then Phase 8.
+- Al chose A (2026-10-24): the curve takes the grid's prior, and steelhead's rule is published without grades.
+  `knw_tune_curve(prior_sd = 2.5)` (the run passes its own), a test that fails without the prior (2 of 7 checks red
+  with the penalty removed), and `0320`'s grade tables record `curve_prior_sd`, which the keep-check compares, so
+  every key regrades on the next run. On steelhead's cached population the new code gives 553.8 with the prior and
+  860.8 with `prior_sd = Inf` (the cached value).
+- Found while choosing the gate: coho's curve (4092.5) and WCT's (1454.5) also score worse on held-out groups than no
+  rule at all (4024.0, 1329.7), and the prior moves them by about 1. Asked Al whether "worse than no rule" is the gate
+  for publishing grades (it would drop steelhead, coho and WCT), before the regrade.
+- Next: Al's answer on the gate, then `0320` (scores cached from `fa638f2`, curves refit, every key regraded), then the
+  write-ups.
 
 ### Resume (revised 2026-10-24 15:20 UTC, for the session that picks this up, on any model)
 

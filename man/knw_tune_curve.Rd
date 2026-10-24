@@ -15,7 +15,8 @@ knw_tune_curve(
   dist_cap_m = 50000,
   q_default = 10,
   k = c(size = 6, dist = 6, grad = 6),
-  edge_stream = NULL
+  edge_stream = NULL,
+  prior_sd = 2.5
 )
 }
 \arguments{
@@ -39,6 +40,11 @@ cap, the river size when the pick has no exception, and the basis sizes
 \item{edge_stream}{\code{integer} or \code{NULL}: the FWA edge types the visits in \code{d}
 were filtered on, recorded on the result as \code{edge_stream} so the grade's
 reference population can be taken from the curve (#72).}
+
+\item{prior_sd}{\code{numeric(1)} the standard deviation, on the cloglog scale,
+of a normal prior on the \code{data_set} and \code{era} coefficients, as in
+\code{\link[=knw_tune_score]{knw_tune_score()}}: a fixed penalty \code{b^2 / prior_sd^2} per coefficient.
+\code{Inf} for none (the curve before #73's Phase 7).}
 }
 \value{
 A list: \code{model} (the \code{mgcv::gam}), \code{data} (the rows fitted, with
@@ -50,7 +56,7 @@ held-out deviance), \code{edf} (the smooths' effective degrees of freedom), and
 \code{curves}, a \code{tibble} of marginal curves (\code{curve}, \code{x}, \code{rate}, \code{rel_rate},
 \code{rel_lo}, \code{rel_hi}, \code{threshold}) relative to the pick's thresholds, each
 other variable held at its reference; \code{edge_stream}, as given; \code{dist_in_model}, \code{FALSE} when the
-distances were too few to carry a smooth and size stood alone.
+distances were too few to carry a smooth and size stood alone; \code{prior_sd}, as given.
 }
 \description{
 After \code{\link[=knw_tune_score]{knw_tune_score()}} has picked a rule, one GAM fits the rule's variables
@@ -58,7 +64,11 @@ together on the scoring population: a tensor smooth of log size (the pick's
 size variable, width or MAD) and log distance downstream to the first river of
 the pick's \code{exc_q} m³/s, a smooth of gradient, and the same nuisance terms as
 the scorer (\code{log_area}, data set, era) with the watershed group as a random
-effect; binomial with a complementary log-log link, REML. A distance the walk
+effect; binomial with a complementary log-log link, REML. The data-set and
+era coefficients carry the scorer's normal prior (\code{prior_sd}): where the two
+nearly coincide (steelhead's FDIS visits are its 1995-2004 visits) an
+unpenalised fit sends them to about +-30 with offsetting signs, and a
+held-out group that mixes the combinations takes one of those offsets. A distance the walk
 did not find (\code{Inf}) is censored at \code{dist_cap_m}, and distance enters as
 \code{log(dist + 10)}. The model is one surface, never a product of one-variable
 curves, so a size effect that only holds far from a river is not counted

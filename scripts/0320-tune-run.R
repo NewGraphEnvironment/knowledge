@@ -272,6 +272,8 @@ for (k in names(out)) {
   gpath <- file.path(dir_out, paste0(k, "_grades.csv"))
   ref_edge_curve <- if (!is.null(r$curve$edge_stream)) r$curve$edge_stream else eval(formals(knw_tune_run)$edge_stream)
   ref_edge_txt <- paste(ref_edge_curve, collapse = ";")
+  # the curve's prior on its data-set and era terms (#73, Phase 7): a curve refit with another prior grades differently
+  curve_prior_txt <- format(if (is.null(r$curve$prior_sd)) Inf else r$curve$prior_sd)
   if (file.exists(gpath)) {
     # kept only when it was graded under this pick on this link run and this flow build, with every graded segment
     # walked to the bank (#73), and the reference taken over the curve's own edge types (#72): the table records all
@@ -280,16 +282,19 @@ for (k in names(out)) {
     same <- identical(head1$rule, r$pick$rule) && identical(head1$run_uid, run_uid) &&
       "walk" %in% names(head1) && identical(head1$walk, "bank") &&
       "ref_edge" %in% names(head1) && identical(head1$ref_edge, ref_edge_txt) &&
-      "discharge_load" %in% names(head1) && identical(head1$discharge_load, discharge_load)
+      "discharge_load" %in% names(head1) && identical(head1$discharge_load, discharge_load) &&
+      "curve_prior_sd" %in% names(head1) && identical(head1$curve_prior_sd, curve_prior_txt)
     if (same) {
       say("%s grades: already written under %s on %s, kept.", k, r$pick$rule, run_uid)
       next
     }
     # not "<key> grades:", which data-raw/vignette_chinook.R reads as the one result line
-    say("%s: grades on file for %s / %s (walk %s, reference over %s, flows %s), regraded for %s / %s.", k, head1$rule,
+    say("%s: grades on file for %s / %s (walk %s, reference over %s, flows %s, curve prior %s), regraded for %s / %s.",
+        k, head1$rule,
         head1$run_uid, if ("walk" %in% names(head1)) head1$walk else "centreline",
         if ("ref_edge" %in% names(head1)) head1$ref_edge else if ("ref_population" %in% names(head1)) head1$ref_population else "every accessible segment",
-        if ("discharge_load" %in% names(head1)) head1$discharge_load else "unrecorded", r$pick$rule, run_uid)
+        if ("discharge_load" %in% names(head1)) head1$discharge_load else "unrecorded",
+        if ("curve_prior_sd" %in% names(head1)) head1$curve_prior_sd else "none recorded", r$pick$rule, run_uid)
   }
   wsg <- groups_sp(r$species_code)
   t1 <- Sys.time()
@@ -300,6 +305,7 @@ for (k in names(out)) {
   write_csv(g$grades |> mutate(species_code = r$species_code, stage = r$stage, rule = r$pick$rule, run_uid = run_uid,
                                ref_population = "stream_branch", ref_edge = paste(g$ref_edge, collapse = ";"),
                                q_walk = g$q, walk = g$walk, discharge_load = discharge_load,
+                               curve_prior_sd = curve_prior_txt,
                                across(c(rate, grade), ~ signif(.x, 5))),
             file.path(dir_out, paste0(k, "_grades.csv")), na = "")
   say("%s grades: %d groups, %s; reference rate %.4f over edge types %s; walks to %g m3/s, to the bank, %.1f min; %d of %d found rivers lie in another group; total %.1f min.",

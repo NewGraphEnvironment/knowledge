@@ -33,7 +33,7 @@
 #' @param spawner `NULL`, or [knw_spawner_evidence()]'s table.
 #' @param edge_stream,area_range the population's constants.
 #' @param seed,folds,n_boot,seeds_more,workers,d_floor,fit,prior_sd passed to [knw_tune_score()] (and `fit` and `prior_sd` to
-#'   [knw_tune_smoke()]).
+#'   [knw_tune_smoke()], `prior_sd` to [knw_tune_curve()]).
 #' @param min_wsg,power_wsg `integer(1)` the floors described above.
 #' @param src `character(1)` the flow source the exception reads.
 #' @param thresholds_extra `NULL`, or another bundle's
@@ -212,7 +212,8 @@ knw_tune_run <- function(visits, species_tbl, walks, thresholds, species = knw_s
     }
     pick <- sc$rules[sc$rules$recommended, , drop = FALSE]
     pick_flow <- sc$rules[sc$rules$recommended_flow %in% TRUE, , drop = FALSE]
-    cv <- tryCatch(knw_tune_curve(d, pick, wi, sc$folds, resp = resp, src = src, edge_stream = edge_stream),
+    cv <- tryCatch(knw_tune_curve(d, pick, wi, sc$folds, resp = resp, src = src, edge_stream = edge_stream,
+                                  prior_sd = prior_sd),
                    error = function(e) structure(list(message = conditionMessage(e)), class = "knw_curve_failed"))
     rec$status <- if (inherits(cv, "knw_curve_failed")) "curve_failed" else
       if (p$n_both < power_wsg) "underpowered" else "fitted"

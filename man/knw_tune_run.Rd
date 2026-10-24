@@ -51,7 +51,7 @@ knw_tune_run(
 \item{edge_stream, area_range}{the population's constants.}
 
 \item{seed, folds, n_boot, seeds_more, workers, d_floor, fit, prior_sd}{passed to \code{\link[=knw_tune_score]{knw_tune_score()}} (and \code{fit} and \code{prior_sd} to
-\code{\link[=knw_tune_smoke]{knw_tune_smoke()}}).}
+\code{\link[=knw_tune_smoke]{knw_tune_smoke()}}, \code{prior_sd} to \code{\link[=knw_tune_curve]{knw_tune_curve()}}).}
 
 \item{min_wsg, power_wsg}{\code{integer(1)} the floors described above.}
 
