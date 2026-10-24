@@ -85,7 +85,7 @@
   every prior; without one the coefficient gate fails on GR, RB, ST and WCT and steelhead's null ratio too. Phase 7's
   hold lifted; the rescore runs on m4. Al's rule for the write-ups, 2026-10-23: teach the principle beside each result.
 
-### Resume (revised 2026-10-23 21:40 UTC, for the session that picks this up, on any model)
+### Resume (revised 2026-10-24 06:45 UTC, for the session that picks this up, on any model)
 
 The branch stays `73-rebuild-the-evidence-and-retune-on-the-r`; no new branch and no `/planning-init`. From the repo
 root: `git fetch -q origin && git checkout 73-rebuild-the-evidence-and-retune-on-the-r && git pull --ff-only`, then
@@ -97,32 +97,34 @@ script or `R/` while a run reads it (run long jobs from a frozen copy); everythi
 task with its box flip and a progress entry, and push. Al's rule for the write-ups (2026-10-23): teach the principle
 beside each result, in plain words, the specification below.
 
-**What is running: Phase 7's rescore, on m4, not here.** m4 (16 cores, 128 GB) holds a clone of this repo at
-`fa638f2` on the branch, the evidence build (`data/fdis/derived/{visits_link,visits_species,walks}.csv` and
-`data/fdis/build/fish.rds` with the ledger's md5s), link's clone with both threshold commits, and database variables
-that reach the same database. Started 21:21 UTC 2026-10-23: `SCHEMA=fresh_default_20261017 WORKERS=12 Rscript` on a
-frozen copy of `scripts/0320-tune-run.R`, every species, from the runner `repo_aside/run_0320.sh` in the directory
-beside the clones on m4 (`repo_aside/`). Its stdout is `repo_aside/0320_m4.log` there, which ends with a line
-`exit <code>` and a date when the run exits; the script's own log is `scripts/logs/habitat/20261023_tune_run.txt` in
-m4's clone. The smoke run passed on all eight keys (0.1 min) before any grid was scored. Expect one to two hours
-(rainbow with every extra took 16.6 min there; the grades and curves are the rest). Read it over ssh; m4's non-login
-shell lacks Homebrew's PATH (use `/sbin/md5`, absolute paths; no `psql`), its `rsync` rejects `--info`, and `ssh`
-to it exits 0 whatever the remote command returned, so test what a command prints.
+**What is running: Phase 7's grading, here, not on m4 (moved 2026-10-24 06:36 UTC).** The rescore ran on m4 from
+21:21 UTC 2026-10-23 (`fa638f2`, every species, 12 workers) and scored every key with no `FAILED` by 22:26 UTC, then
+graded so slowly that it was stopped at 06:33 UTC (`exit 143`): grading sends one walk query per segment, and a round
+trip to the database costs 104 ms from m4 against 1.6 ms here, so BT rearing had not finished walking after 7.5 h
+(about an hour here). The fix is #85. Al chose to reuse m4's scores (2026-10-24, option A): m4's 100 output files
+(scores, curves, summaries, tune tables) were copied into `data/tune/` here, md5s checked, and the earlier grade tables
+here were moved to `repo_aside/knowledge_grades_pre_fa638f2_20261024/` beside the clones so every key grades fresh.
+The run: `repo_aside/run_0320_local.sh`, a frozen copy of `0320` at `fa638f2` (md5 7720439…), `SCHEMA=fresh_default_20261017
+WORKERS=8`; stdout `repo_aside/0320_local.log`, which ends with `exit <code>` and a date; the script's own log is
+`scripts/logs/habitat/<date>_tune_run.txt`, dated by the machine's local day. Expect about four to six hours. m4's stdout log stays on m4.
 
-**When it exits 0:** in m4's clone, `git status` shows the new `data/tune/*` tables and the `0320` log; commit there
-(git identity is set) with the Phase 7 box annotated, push, and pull here. Its score and curve caches
-(`data/tune/*_score.rds`, `*_curve.rds`, ignored) stay on m4; remove them before any rerun of `0320` there on changed
-code, because the cache is keyed on the grid. If it exits non-zero or the log shows `FAILED`, report the error lines.
-If the smoke run refused a key, it says so in the log and nothing was scored.
+**When it exits 0:** `git status` shows the new `data/tune/*` tables and the `0320` log; commit them with the Phase 7
+box annotated and push. The caches (`data/tune/*_score.rds`, `*_curve.rds`, ignored) are from `fa638f2`; remove them
+before any rerun of `0320` on changed code, because the cache is keyed on the grid. If it exits non-zero or the log
+shows `FAILED`, report the error lines.
 
-**Then, in order:** `0330` one species at a time on m4 (`SCHEMA=fresh_default_20261017 SPECIES=<sp> Rscript
+**Steelhead's curve:** its held-out score is 840.2 against the grid's best 357.5 (every other key's curve is within 13 %
+of its grid's best or below it, on m4's log). The curve's GAM carries data-set and era terms with no prior;
+measure it before any write-up uses steelhead's grades (its pick comes from the grid, not the curve).
+
+**Then, in order:** `0330` one species at a time here, not on m4, which is too far from the database (`SCHEMA=fresh_default_20261017 SPECIES=<sp> Rscript
 scripts/0330-compare.R`, never chained with `0320`; the combined tables are composed per key, see the last bullet
 below); the keep-check on the grades compares rule, run_uid, walk, ref_edge and discharge_load, not `q`, so check `q`
 by hand; then the write-ups per the model plan below, every number recomputed from the new tables; then Phase 8.
 Which picks moved against the committed tables is the first thing to read off the new `*_tune.csv` (`recommended`).
 
-**On this machine nothing of ours runs.** link's provincial run (a virtual machine at two cores) was loading it all
-afternoon on 2026-10-23, which is why the timing moved to m4. The dense and fe reference caches are under
+**This machine** was loaded by link's provincial run (a virtual machine at two cores) all afternoon on 2026-10-23,
+which is why the timing moved to m4. The dense and fe reference caches are under
 `data/tune/ref_*/` (ignored); their logs and the prior measurement's are in `planning/active/scratch/logs/`.
 Pre-existing test failures on the branch, Phase 8's, not touched: `test-tune_repick.R:79` (#79's pin) and
 `test-vignette-data.R` (md5s moved by Phase 7's runs); everything else passes (full suite 2026-10-23 before the prior;
