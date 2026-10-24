@@ -516,3 +516,43 @@ kilometres (17,573 to 16,236) come from the curve, which is not yet trusted (pre
 
 Each species' run overwrote the script's own log, so `scripts/logs/habitat/` keeps BT's (`20261024_compare-bt.txt`,
 `20261024_compare-workers-bt.out`); every species' stdout is `planning/active/scratch/logs/20261024_0330_<sp>.log`.
+
+## Why steelhead's curve trails its grid (measured 2026-10-24)
+
+`planning/active/scratch/curve_prior_probe.R` (`KEY=ST_rear`, from the repo root) repeats `knw_tune_curve()`'s held-out
+loop on the cached curve and the score's folds. It reproduces the cached 860.8 exactly, then refits each fold with
+the grid's prior (sd 2.5, a fixed penalty `b^2 / 2.5^2` on the `data_set` and `era` coefficients through `paraPen`).
+Two causes, in order of size:
+
+1. **`data_set` and `era` are aliased and carry no prior in the curve.** Steelhead's FDIS visits are 272, its
+   1995-2004 visits 273; the full fit puts -31.6 on `data_set` FDS and +32.6 on `era` 2005on, each with a standard
+   error of 3e7, and the fold fits put 57 to 99 on them. A held-out group that mixes the two combinations takes
+   one of those offsets on part of its visits. With the prior the coefficients sit between -0.5 and 2.5, and the
+   held-out total falls from 860.8 to 553.8 (SALM 229 to 43, TSAY 172 to 72, BABR 57 to 15). This is the separation
+   the prior fixed in the grid's fit (#84), left unfixed in the curve's.
+2. **The joint smooth overfits on 82 detections.** With the prior, NIMP alone is 260 of the 553.8. NIMP holds 27
+   of the 82 detections; its covariates sit inside fold 4's training range (88 % of its visits, and every detection,
+   are at the distance cap, against 39 % in training). The fold's fit predicts its visits from -19.7 to -2 on the link
+   scale, and NIMP scores 236 under it (no data-set or era terms), 147 under a size-only smooth, against 107.8 for
+   NIMP's own intercept alone. A curve that scores a group worse than no curve at all ranks that group's visits
+   wrongly, and the grade inherits the ranking.
+
+**The prior on every other key's curve** (same probe, each reproducing its cached score):
+
+| Key | as fitted | with prior sd 2.5 | grid's best |
+|---|---|---|---|
+| ST_rear | 860.8 | 553.8 | 357.5 |
+| GR_rear | 786.9 | 743.6 | 804.8 |
+| BT_spawn | 403.7 | 397.3 | 395.4 |
+| WCT_rear | 1454.5 | 1453.4 | 1298.1 |
+| CH_rear | 1053.2 | 1052.7 | 1120.1 |
+| CO_rear | 4092.5 | 4092.0 | 3855.9 |
+| BT_rear | 5618.5 | 5618.4 | 5704.5 |
+| RB_rear | 9408.7 | 9409.8 | 11651.9 |
+
+The prior moves steelhead's curve by 307, grayling's by 43 and bull trout spawning's by 6; the other five by about 1.
+
+The grid's rules have one binary term each and do not overfit this way; the best scores 357.5 against `default`'s
+407.8. Steelhead's pick stands. Its grades come from the curve, so they wait on a decision (Al): give the curve the
+grid's prior (an `R/tune_curve.R` change, so every key's curve refits and every key regrades, about four hours here),
+and whether a key this thin should be graded from a joint curve at all.

@@ -97,7 +97,11 @@
   composed with the saved CH and CO comparisons. Each run overwrote the script's log, so `scripts/logs/habitat/` keeps
   BT's (`20261024_compare-bt.txt`, `20261024_compare-workers-bt.out`); every species' stdout is in
   `planning/active/scratch/logs/20261024_0330_<sp>.log` (findings, "Phase 7's recompare").
-- Next: the write-ups (steelhead's only after its curve is measured), then Phase 8.
+- Steelhead's curve measured (findings, "Why steelhead's curve trails its grid"): `data_set` and `era` aliased with no
+  prior in the curve (860.8 to 553.8 with the grid's prior), and the joint smooth overfits NIMP, which holds a third
+  of its detections. The prior also moves grayling's curve (786.9 to 743.6). Probe kept at
+  `planning/active/scratch/curve_prior_probe.R`. Asked Al whether the curve takes the prior (every key regrades).
+- Next: Al's answer on the curve; the write-ups that do not depend on it (BT, RB, WCT, CO, CH), then Phase 8.
 
 ### Resume (revised 2026-10-24 15:20 UTC, for the session that picks this up, on any model)
 
@@ -127,7 +131,7 @@ WORKERS=8`; stdout `repo_aside/0320_local.log`, which ends with `exit <code>` an
 **Caches:** the caches (`data/tune/*_score.rds`, `*_curve.rds`, ignored) are from `fa638f2`; remove them
 before any rerun of `0320` on changed code, because the cache is keyed on the grid.
 
-**Steelhead's curve:** its held-out score is 840.2 against the grid's best 357.5 (every other key's curve is within 13 %
+**Steelhead's curve (measured 2026-10-24, findings "Why steelhead's curve trails its grid"; decision with Al):** its held-out score is 840.2 against the grid's best 357.5 (every other key's curve is within 13 %
 of its grid's best or below it, on m4's log). The curve's GAM carries data-set and era terms with no prior;
 measure it before any write-up uses steelhead's grades (its pick comes from the grid, not the curve).
 
