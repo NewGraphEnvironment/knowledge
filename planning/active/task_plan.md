@@ -197,8 +197,9 @@ run (findings, "The intercept minimiser sticks on a flat clamp"), so Phase 7's r
 
 - [x] `SPECIES=BT` `0320` and `0330` (rear and spawn; the long one); `bull_trout_tuned.md` (0320 262.7 min on
       2026-10-22; 0330 206.9 min on 2026-10-23 against the archived schema; file rewritten)
-- [ ] `SPECIES=GR,RB,ST,WCT` `0320` and `SPECIES=GR,ST,WCT` `0330`; GR, ST and WCT research files' numbers, picks and
-      the ladder sentence. **RB deferred (Al, 2026-10-23):** left out of the comparison, the write-ups and the
+- [x] `SPECIES=GR,RB,ST,WCT` `0320` and `SPECIES=GR,ST,WCT` `0330`; GR, ST and WCT research files' numbers, picks and
+      the ladder sentence (done 2026-10-24 on every key with RB in: all four files rewritten, `0320` with the curve's
+      prior and the gate, `0330` on all eight keys; coho and chinook revised too). **RB deferred (Al, 2026-10-23):** left out of the comparison, the write-ups and the
       thresholds table until #83 lands (findings, "Rainbow deferred"); the stopped run's RB tables were restored to
       HEAD, so nothing of it is kept. If #83 makes RB feasible, it comes back in this box
 - [ ] **Hold lifted 2026-10-23: Phase 6a done, the prior adopted, every gate passes on every key; the rescore is

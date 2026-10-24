@@ -149,7 +149,13 @@
   The vignette data (Phase 8) still carries the old grades.
 - GR, RB, ST and WCT write-ups started on four Sonnet agents (model plan), each with a claims audit to check before
   commit.
-- Next: check and commit the four write-ups; then BT, `habitat_thresholds_tuned.md` and CH (on Fable, per the model
+- The four write-ups checked and committed: ST (`d1ccfcb`; `FDS` corrected to the export's own data-set code, not the
+  FISS workbooks), WCT (`da0150d`), GR (`c3ad47a`; one first-person sentence), RB (this commit; the gradient-curve
+  sentence, which rises to a peak near 4 % before it falls). Spot checks against the tables held on every file:
+  folds, seeds, bootstrap shares, regions, the 1.96 regions, the cross-key superlatives. Each agent's claims audit is
+  in the session scratchpad, not the repo. Flagged and left: `data/thresholds.csv` rows hold the pre-#73 picks until
+  `0325` (Phase 8); RB has 1,592 accessible segments with a width and no rate (cause untraced).
+- Was next: check and commit the four write-ups; then BT, `habitat_thresholds_tuned.md` and CH (on Fable, per the model
   plan).
 
 ### Resume (revised 2026-10-24 15:20 UTC, for the session that picks this up, on any model)
