@@ -1,12 +1,13 @@
 # Coho rearing rule tuned on the province-wide run
 
-**Verified:** 2026-10-23 (retuned on the evidence rebuilt on wet's 2026-10-19 flows, with the walk ending at the river's
-bank and the gradient ladder to 30 %, #73; first tuned 2026-10-17, #57; regraded 2026-10-19, #65) · **Issues:** #57,
-#65, #73 (folding #68, #80 and #81's run-time pieces) · **Produced by:** `scripts/0310` (evidence build, ledger
-`scripts/logs/habitat/20261022_evidence_build_ledger.csv`), `scripts/0320` (`data/tune/CO_rear_*`, log
-`scripts/logs/habitat/20261022_tune_run-ch_co.txt`), `scripts/0330` (`data/compare/CO_rear_*`, log
-`scripts/logs/habitat/20261022_compare.txt`), `scripts/0325` (`data/thresholds.csv` row `CO_rear_v1`; the grade table
-`knowledge/habitat_grade/v1`) · **Status:** measured; nothing applied in link. The method and the cross-species table
+**Verified:** 2026-10-24 (rescored after the intercept fix, the curve refit with the grid's prior, regraded under the
+grade gate and recompared, #73; tuned on the evidence rebuilt on wet's 2026-10-19 flows, with the walk ending at the
+river's bank and the gradient ladder to 30 %, 2026-10-23; first tuned 2026-10-17, #57; regraded 2026-10-19, #65) ·
+**Issues:** #57, #65, #73 (folding #68, #80 and #81's run-time pieces) · **Produced by:** `scripts/0310` (evidence
+build, ledger `scripts/logs/habitat/20261022_evidence_build_ledger.csv`), `scripts/0320` (`data/tune/CO_rear_*`, log
+`scripts/logs/habitat/20261024_tune_run.txt`), `scripts/0330` (`data/compare/CO_rear_*`, log
+`scripts/logs/habitat/20261024_compare.txt`), `scripts/0325` (`data/thresholds.csv` row `CO_rear_v1`; no grades, see
+"No grade") · **Status:** measured; nothing applied in link. The method and the cross-species table
 are `habitat_thresholds_tuned.md`.
 
 ## What to expect of juvenile coho
@@ -33,29 +34,29 @@ visits are on streams under 0.15 m³/s (a quarter under 0.04). Coho were caught 
 
 Two departures from `default` (the size test moves from width to flow; the gradient falls from 5.49 to 4 %), and the
 same rule from link's flow start (`default_tuned`'s MAD ≥ 0.03 m³/s at 5.49 %, link#331; from there it is one departure).
-It sits 11.8 deviance behind the best rule (MAD ≥ 0.1, 4 %, a ≥ 3 m³/s river within 2 km; held-out deviance 3,856.3
-against 4,024.6 for no rule) with an SE of 17.3, inside the region. The region holds 89 rules, all MAD rules: MAD
+It sits 11.8 deviance behind the best rule (MAD ≥ 0.1, 4 %, a ≥ 3 m³/s river within 2 km; held-out deviance 3,855.9
+against 4,024.0 for no rule) with an SE of 17.3, inside the region. The region holds 89 rules, all MAD rules: MAD
 0.03–0.2 m³/s, gradient 3 or 4 % (one rule at 7 %), with or without an exception (87 have one, at every Q and D on the
 ladder, because the exception admits almost nothing a 0.03 floor refuses). Coho are caught on 41.2 % of the visits the
 rule admits against 15.2 % outside (`default`: 33.0 % against 19.2 %).
 
 **`default` is outside the region**, 111.8 behind the best (SE 47.4, 2.36 SEs), on all four extra fold seeds; so is link's
 `default_tuned` floor at `default`'s gradient (72.5, SE 28.5). The 1.96 SE pick (#79) is width ≥ 1.5 m at 4 %, from a
-region of 1,507 rules: at the stricter bar the size test cannot be told from `default`'s and the gradient still can.
+region of 1,511 rules: at the stricter bar the size test cannot be told from `default`'s and the gradient still can.
 
 **What the checks say** (each listed with its direction):
-- *Nested selection* (the pick chosen on four folds, scored on the fifth): 3,877.8 against `default`'s 3,968.1 and
-  4,024.6 for no rule; folds 1–3 pick 3 %, folds 4 and 5 pick 4 %. For the rule.
+- *Nested selection* (the pick chosen on four folds, scored on the fifth): 3,877.3 against `default`'s 3,967.7 and
+  4,024.0 for no rule; folds 1–3 pick 3 %, folds 4 and 5 pick 4 %. For the rule.
 - *Four more fold seeds*: all four recommend this exact rule; `default` outside on all four. For.
 - *Group bootstrap* (200 resamples, width start | flow start): a MAD floor in 86 | 97 %, 0.03 in 69 | 86 %; gradient
-  4 % in 54 | 50.5 %, 3 % in 37.5 | 41.5 %, 5.49 % in 6 | 6.5 %; no exception in 55.5 | 59 %. The exact rule in 27 %.
+  4 % in 53.5 | 50 %, 3 % in 38 | 42 %, 5.49 % in 6 | 6.5 %; no exception in 55.5 | 59 %. The exact rule in 26.5 %.
   For the size variable and the gradient; the exact rule is one of several the resamples spread over.
 - *Profiles* (best rule at each value, as deviance behind the best, SE): size 0.1 best, 0.03 +4.4 (15.6), 0.15 +25.5,
-  0.2 +27.7, every width floor +27.9 to +37.3; gradient 4 % best, 3 % +11.2 (35.8), 7 % +35.3 (37.7), 5.49 % +47.4
+  0.2 +27.6, every width floor +27.9 to +37.3; gradient 4 % best, 3 % +11.2 (35.8), 7 % +35.3 (37.7), 5.49 % +47.4
   (25.9), 9–30 % +62 to +76. For a floor at the bottom of the ladder and against 5.49 %.
-- *The joint curve* (size × distance to a 10 m³/s river, gradient; edf 23.1, 3.75, group effect 48.7) scores 4,092.5
-  held-out, above the grid's best and above no rule: the surface overfits the 62 groups, so its grade ranks segments
-  and its rates are not to be read. Against reading more than a cut into the curve.
+- *The joint curve* (size × distance to a 10 m³/s river, gradient; edf 23.1, 3.75, group effect 48.7, with the grid's
+  prior on the data-set and era terms) scores 4,092.0 held-out, above the grid's best and above no rule: the surface
+  overfits the 62 groups. Against reading more than a cut into the curve, and the reason coho has no grades (below).
 
 ## What it is not
 
@@ -68,29 +69,35 @@ region of 1,507 rules: at the stricter bar the size test cannot be told from `de
 - **Not a change to river polygons, wetlands or lakes**, which keep `default`'s tests under every rule.
 - **A rate per standard electrofishing visit, not capacity or density.**
 
-## Grade (`knowledge/habitat_grade/v1`; `scripts/0320`, 2026-10-22)
+## No grade
 
-Every accessible segment of the 100 groups is walked from its downstream end to the first ≥ 10 m³/s river, ending at a
-double-line river's bank (#73), and read on the flows wet republished on 2026-10-19 (the table records the load). 4.92 M
-segments, 615,302 accessible, 607,483 graded (10,518 with no flow even from a parent); reference rate 0.520 over edge
-types 1000, 1100, 2000 and 2300, the highest of any species. Of 147,795 accessible km, 146,612 are graded and sum to
-72,637 grade-weighted km (#65: 70,905, to the centreline); 19 % of graded km lies under 0.2, 23 % at 0.8–1. 25,990 km
-read a distance of 0 (20,152 of them river-polygon lines), where the curve is an extrapolation
-(`habitat_thresholds_tuned.md`, Limits); 43,945 of the 484,751 segments whose walk found a river found it in another
-watershed group.
+The rule is a yes or no for each segment. A grade would go further and rank the segments, from the joint curve's
+predicted rate relative to a reference, so the question is whether the curve knows more than the rule. It is judged
+the way every rule was: fitted on most watershed groups and scored on the groups left out (held-out deviance, lower is
+better). Coho's curve scores 4,092.0 there against 4,024.0 for no rule at all, one constant rate everywhere: on groups
+it has not seen, it predicts worse than not ranking, so a ranking from it would mislead. The gate Al set for every
+species on 2026-10-24 follows: a curve no better than no rule on held-out groups gets no grades.
+For coho, then, `0320` still walks every accessible segment and records its size and its distance to a 10 m³/s river,
+because `0330` needs them to apply the rule, but writes no rate, grade or class, and `0325` leaves coho out of
+`knowledge/habitat_grade/v1`. Graded kilometres are blank in the comparison below.
+
+The gate touches only the grade. The rule comes from the grid of cut rules, each scored on the same held-out groups,
+and its best beats no rule by 168 (3,855.9 against 4,024.0). The curve's failure is the surface, not the data-set and
+era terms: giving those the grid's prior (normal, SD 2.5) moved its score by 0.5 (4,092.5 without it).
 
 ## What the rule changes on link's segments (`scripts/0330`, `data/compare/CO_rear_*`)
 
-The baseline is link 0.67.0's `default` (configs at `67a410e2`, origin/main on 2026-10-22), regenerated through fresh's
-predicate, the user-habitat overlay and connectivity on link's 100 CO groups: through-wetland lines (edge 1050/1150) go
+The baseline is link's `default` (configs at `102762da`, which every species' comparison used on 2026-10-24; the
+`67a410e2` configs of the earlier coho comparison lack only `cabd_additions_barriers`, which never moves access, and
+every kilometre below is the same under both), regenerated through fresh's predicate, the user-habitat overlay and connectivity on link's 100 CO groups: through-wetland lines (edge 1050/1150) go
 through the gradient and size door (link#364), so it draws 79,829 km where the stored flags, from the run's older
 configs, hold 81,750 (#65's regeneration under the run's configs drew 81,629, so the door takes about 1,800 km). The tuned rule is set beside it under two structures;
 having no exception, it has no third:
 
-| structure | tuned km | change | lost | gained | of the gain, through-wetland lines | graded km, `default` → tuned |
-|---|---|---|---|---|---|---|
-| free pass on through-wetland lines (as the rule was scored) | 77,602 | −2.8 % | 9,149 | 6,922 | 1,679 | 50,801 → 51,288 |
-| door on through-wetland lines (link's `stream`) | 75,430 | −5.5 % | 9,945 | 5,546 | 403 | 50,801 → 50,540 |
+| structure | tuned km | change | lost | gained | of the gain, through-wetland lines |
+|---|---|---|---|---|---|
+| free pass on through-wetland lines (as the rule was scored) | 77,602 | −2.8 % | 9,149 | 6,922 | 1,679 |
+| door on through-wetland lines (link's `stream`) | 75,430 | −5.5 % | 9,945 | 5,546 | 403 |
 
 Under the door, 5,045 km are lost to the 4 % gradient maximum, 3,613 km of streams over 1.5 m wide under 0.03 m³/s, 805
 km of through-wetland lines that pass `default`'s door and fail the tuned one, and under 500 km to connectivity and the

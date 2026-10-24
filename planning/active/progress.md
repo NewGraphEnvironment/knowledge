@@ -138,7 +138,14 @@
 - Speed: one species at a time used one database core. Filed #86 (the comparison's groups in parallel) and #87 (batch
   and cache the walks, parallel compare, any machine with the build; Al: plan it separately with `/planning-init`
   later); #85 and #86 point to #87. CLAUDE.md now says to run database-bound steps on the database's host (`d2c7071`).
-- Next: the write-ups, per the Resume (CO, ST and WCT without a grade section).
+- `research/coho_rearing_tuned.md` revised: its grade section replaced by "No grade" (the gate and why), the tuning
+  numbers that moved in the rescore (best 3,855.9, no rule 4,024.0, nested 3,877.3, 1.96 region 1,511, bootstrap
+  gradient shares, exact rule 26.5 %, curve 4,092.0) and the baseline commit (`102762d`; every kilometre and check
+  the same as at `67a410e`); the pick, profiles, seeds, folds and gradient curve are unchanged.
+- GR, RB, ST and WCT write-ups started on four Sonnet agents (model plan), each with a claims audit to check before
+  commit.
+- Next: check and commit the four write-ups; then BT, `habitat_thresholds_tuned.md` and CH (on Fable, per the model
+  plan).
 
 ### Resume (revised 2026-10-24 15:20 UTC, for the session that picks this up, on any model)
 
