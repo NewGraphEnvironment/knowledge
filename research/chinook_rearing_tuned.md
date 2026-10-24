@@ -1,6 +1,7 @@
 # A tuned Chinook rearing rule: stream size, gradient and distance to a river, beside link's `default`
 
-**Verified:** 2026-10-23 (retuned province-wide on the evidence rebuilt on wet's 2026-10-19 flows, with the walk ending
+**Verified:** 2026-10-24 (rescored on the fit with the groups absorbed, #83, the curve refit with the grid's prior,
+regraded and recompared, #73); 2026-10-23 (retuned province-wide on the evidence rebuilt on wet's 2026-10-19 flows, with the walk ending
 at the river's bank, the gradient ladder to 30 % for every species and the pick read from link's flow start, #73; the
 earlier states: #54's 55-group build 2026-10-16, rerun without repeated surveys 2026-10-17 (#35); the province-wide
 rescoring 2026-10-17 (#57); the ladder above 9 % 2026-10-19 (#67); the grade and comparison 2026-10-19 (#65); the picks at
@@ -8,8 +9,8 @@ rescoring 2026-10-17 (#57); the ladder above 9 % 2026-10-19 (#67); the grade and
 (`chinook_stream_size.md`), which picked 0.5 m³/s, 10 m³/s and 500 m by hand; uses wet's flow (`modelled_discharge.md`)
 and the FDIS export (`fdis_export.md`); link reads the result through NewGraphEnvironment/link#346 · **Produced by:**
 `scripts/0310` (evidence build, ledger `scripts/logs/habitat/20261022_evidence_build_ledger.csv`), `scripts/0320`
-(`data/tune/CH_rear_*`, log `scripts/logs/habitat/20261022_tune_run-ch_co.txt`), `scripts/0330` (`data/compare/CH_rear_*`,
-log `scripts/logs/habitat/20261022_compare.txt`), `scripts/0325` (`data/thresholds.csv` row `CH_rear_v1`; the grade table
+(`data/tune/CH_rear_*`, log `scripts/logs/habitat/20261024_tune_run.txt`), `scripts/0330` (`data/compare/CH_rear_*`,
+log `scripts/logs/habitat/20261024_compare.txt`), `scripts/0325` (`data/thresholds.csv` row `CH_rear_v1`; the grade table
 `knowledge/habitat_grade/v1`); #54's own scripts are named under "The #54 record" · **Status:** measured; nothing applied
 in link. The method and the cross-species table are `habitat_thresholds_tuned.md`; the plain-language account is the
 package article (last section).
@@ -43,51 +44,52 @@ Of the 3,792 visits on streams under 0.75 m³/s, the 672 within 1 km of a ≥ 3 
 
 ## Recommended rule: gradient ≤ 13 %, and either MAD ≥ 0.75 m³/s or a ≥ 3 m³/s river within 1 km
 
-It is the best rule of the grid (held-out deviance 1,120.5 against 1,382.5 for no rule) and the pick from `default`'s
+It is the best rule of the grid (held-out deviance 1,120.1 against 1,380.5 for no rule) and the pick from `default`'s
 width start, three departures from `default` (the size test moves from width to flow, the gradient from 5.49 to 13 %,
-and the exception is added). The region holds 83 rules, every one a MAD rule with the exception: MAD 0.15–1 m³/s,
+and the exception is added). The region holds 84 rules, every one a MAD rule with the exception: MAD 0.15–1 m³/s,
 gradient 7–30 %, Q 1–10 m³/s, D 500–2,000 m. Chinook are caught on 14.6 % of the 1,234 visits the rule admits
 (180 of the 215 detections) against 1.1 % outside; `default` admits 2,330 with 165 detections, 7.1 % against 2.3 %.
 About half of what the rule admits comes through each gate: on the curve's 4,487 visits, 675 pass the floor (89 CH) and
 557 the exception alone (90 CH).
 
-**`default` is outside the region**, 226.4 behind the best (SE 91.8, 2.47 SEs), on all four extra fold seeds; so is
-link's `default_tuned` floor at `default`'s gradient (MAD ≥ 0.28 m³/s, 5.49 %, no exception; link#331), 188.9 behind
-(SE 81.2). No rule without the exception is in the region (the best, MAD ≥ 0.2 at 11 %, is 150.5 behind, SE 77.8), and no
-width rule is (the best, width ≥ 4 m at 15 % with the exception, 66.4 behind, SE 40.5).
+**`default` is outside the region**, 224.7 behind the best (SE 91.6, 2.45 SEs), on all four extra fold seeds; so is
+link's `default_tuned` floor at `default`'s gradient (MAD ≥ 0.28 m³/s, 5.49 %, no exception; link#331), 187.4 behind
+(SE 81.1). No rule without the exception is in the region (the best, MAD ≥ 0.2 at 11 %, is 150.7 behind, SE 77.9), and no
+width rule is (the best, width ≥ 4 m at 15 % with the exception, 66.5 behind, SE 40.5).
 
 **From link's flow start** (#80; `default_tuned`'s MAD ≥ 0.28 m³/s at 5.49 %), the fewest-departures region rule is
 **MAD ≥ 0.28 m³/s, gradient ≤ 11 %, a ≥ 3 m³/s river within 1 km** (two departures: the gradient and the exception),
 26.3 behind the best (SE 28.8), admitting 1,502 visits with 187 detections (12.5 % against 0.9 %). The two starts agree
 on the exception and disagree on how far the floor moves off 0.28: from the width start the size profile prefers 0.75
-(1 m³/s +1.8, 0.5 +4.4, 0.28 +25.7, SE 24.4), from the flow start the parsimony rule keeps 0.28 because it is within the SE.
+(1 m³/s +1.8, 0.5 +4.5, 0.28 +25.7, SE 24.4), from the flow start the parsimony rule keeps 0.28 because it is within the SE.
 
 **At 1.96 SE** (#79) the pick from the width start is MAD ≥ 1 m³/s at `default`'s 5.49 % with the exception, from the
-flow start MAD ≥ 0.28 at 5.49 % with the exception, from a region of 2,066 rules; `default` is 2.47 SEs behind and stays
+flow start MAD ≥ 0.28 at 5.49 % with the exception, from a region of 2,102 rules; `default` is 2.45 SEs behind and stays
 outside. The exception is the one component the stricter bar keeps from both starts.
 
 **What the checks say** (each listed with its direction):
-- *Nested selection* (the pick chosen on four folds, scored on the fifth): 1,183.4 against `default`'s 1,347.0 and
-  1,382.5 for no rule. The folds pick MAD ≥ 1 at 11 % with Q3 within 1 km (twice), MAD ≥ 0.75 at 11 %, MAD ≥ 0.5 at 13 %
+- *Nested selection* (the pick chosen on four folds, scored on the fifth): 1,183.2 against `default`'s 1,344.8 and
+  1,380.5 for no rule. The folds pick MAD ≥ 1 at 11 % with Q3 within 1 km (twice), MAD ≥ 0.75 at 11 %, MAD ≥ 0.5 at 13 %
   with Q3 within 1 km and MAD ≥ 0.5 at 13 % with Q10 within 1 km, and beat `default` on four of the five folds (fold 4:
-  243.4 against 230.3). For the rule family; no fold picks the exact rule.
+  243.5 against 230.3). For the rule family; no fold picks the exact rule.
 - *Four more fold seeds*: none recommends the exact rule; all four recommend a MAD floor of 0.5 or 0.75 m³/s with a
   ≥ 3 m³/s river within 1 km at 11, 13 or 15 %; `default` outside the region on all four; the main pick inside each
   seed's region. For the shape, not the exact values.
-- *Group bootstrap* (200 resamples, width start | flow start): a MAD floor in 100 | 100 %; 0.75 in 28.5 | 18.5 %, 0.5
-  24.5 | 18.5, 1 23.5 | 18.5, 0.28 2.0 | 37.0; gradient 11 % in 26.0 | 26.5 %, 15 % 24.0 | 27.5, 30 % 18.5 | 16.5, 5.49 %
-  15.0 | 10.5, 13 % 14.0 | 16.0; Q 3 m³/s in 68.5 | 62.5 %, 1 m³/s 21.0 | 26.5; D 1 km in 71.0 | 71.5 %, 2 km 21.5 | 19.0.
+- *Group bootstrap* (200 resamples, width start | flow start): a MAD floor in 100 | 100 %; 0.75 in 28.5 | 18.0 %, 0.5
+  25.0 | 18.5, 1 23.5 | 19.0, 0.28 2.0 | 37.5; gradient 11 % in 25.0 | 26.0 %, 15 % 24.0 | 27.5, 30 % 18.5 | 17.0, 5.49 %
+  16.0 | 11.0, 13 % 14.0 | 16.0; Q 3 m³/s in 67.0 | 61.5 %, 1 m³/s 22.0 | 26.5; D 1 km in 70.0 | 71.0 %, 2 km 23.0 | 19.5.
   The exact rule in 5.5 %. For flow over width and for a ≥ 3 m³/s river within 1 km; the floor's value and the gradient
   are each spread over three or four values.
-- *Profiles* (best rule at each value, as deviance behind the best, SE): size 0.75 best, 1 +1.8 (18.2), 0.5 +4.4 (20.6),
-  0.2 +19.5, 0.35 +21.0, 0.28 +25.7 (24.4), 0.15 +34.7, 0.1 +52.9 (50.6), width 4 m +66.4 (40.5) to 1 m +199.0; gradient
-  13 % best, 11 % +0.4 (12.9), 15 % +2.3 (6.0), 20 % +7.3 (7.7), 30 % +7.3 (11.9), 25 % +11.4, 9 % +17.5 (17.3), 7 % +21.6
-  (29.9), 5.49 % +63.6 (46.1), 4 % +105.4, 3 % +149.6; Q 3 best, 1 +11.5 (24.7), 5 +20.9, 10 +26.6, 20 +54.1, none +150.5
-  (77.8); D 1,000 m best, 2,000 +16.3 (23.5), 500 +35.4, 5,000 +51.2, 250 +54.3, 100 +85.5. For flow over width, for the
+- *Profiles* (best rule at each value, as deviance behind the best, SE): size 0.75 best, 1 +1.8 (18.2), 0.5 +4.5 (20.6),
+  0.2 +19.7, 0.35 +21.0, 0.28 +25.7 (24.4), 0.15 +34.6, 0.1 +52.8 (50.5), width 4 m +66.5 (40.5) to 1 m +198.0; gradient
+  13 % best, 11 % +0.4 (12.9), 15 % +2.3 (6.0), 20 % +7.1 (7.6), 30 % +7.1 (11.9), 25 % +11.2, 9 % +17.4 (17.3), 7 % +21.7
+  (29.9), 5.49 % +62.4 (46.1), 4 % +104.7, 3 % +149.1; Q 3 best, 1 +11.4 (24.7), 5 +21.0, 10 +26.8, 20 +54.3, none +150.7
+  (77.9); D 1,000 m best, 2,000 +16.1 (23.5), 500 +35.4, 5,000 +51.2, 250 +54.5, 100 +85.9. For flow over width, for the
   exception at 1–10 m³/s within 1–2 km, and for a gradient maximum of 7 % or more; flat from 11 to 30 %.
-- *The joint curve* (log size × log distance to a 3 m³/s river, gradient; edf 12.1, 1.0, group effect 33.6) scores
-  1,053.2 held-out, below the grid's best: the surface carries more than the cut. Detection rises log-linearly in size
-  (relative to the rate at 0.75 m³/s: 0.52 at 0.28, 2.2 at 3, 4.0 at 10 m³/s), peaks about 110 m from a 3 m³/s river at
+- *The joint curve* (log size × log distance to a 3 m³/s river, gradient; edf 12.1, 1.0, group effect 33.5, with the
+  grid's prior on the data-set and era terms) scores 1,052.7 held-out, below the grid's best and below no rule, so its
+  grades are published (the gate Al set on 2026-10-24 withholds them from a curve no better than no rule). The
+  surface carries more than the cut. Detection rises log-linearly in size (relative to the rate at 0.75 m³/s: 0.52 at 0.28, 2.2 at 3, 4.0 at 10 m³/s), peaks about 110 m from a 3 m³/s river at
   2.3 times the rate at 1 km and falls to 0.52 at 2 km, 0.37 at 3 km and 0.29 at 5 km, and falls linearly in gradient
   on the link scale (2.1 at 5.5 %, 1.0 at 13 %, 0.82 at 15 %, 0.49 at 20 %). For the three components as slopes: each
   threshold is the cut that best separates held-out detection, and only the distance curve bends, inside the 1 km.
@@ -150,25 +152,26 @@ same happened to 2,269 of the 6,149 rules wherever a rule's fold pinned a group.
 deviance in the intercept directly (bounded golden section; the deviance is convex in the intercept under cloglog);
 the 3,880 rules no fold pinned score identically, CO's tables are unchanged, and the first scoring's pick, MAD ≥ 0.5 at
 15 % with a 1 m³/s river within 1 km, keeps its score (1,132.1) and its place in the region while the rules the fit had
-inflated, this file's pick among them (1,305.6 → 1,120.5), move below it (`planning/active/findings.md` for #73, the
+inflated, this file's pick among them (1,305.6 → 1,120.5; 1,120.1 on the fit with the groups absorbed, #83), move below it (`planning/active/findings.md` for #73, the
 run's two logs).
 
-## Grade (`knowledge/habitat_grade/v1`; `scripts/0320`, 2026-10-23)
+## Grade (`knowledge/habitat_grade/v1`; `scripts/0320`, 2026-10-24)
 
 Every accessible segment of the 125 groups is walked from its downstream end to the first ≥ 3 m³/s river, ending at a
 double-line river's bank (#73; the connector inside the river's polygon and the jump to its centreline left out), and
 read on the flows wet republished on 2026-10-19 (the table records the load). 5.76 M segments, 856,244 accessible,
 852,431 graded (6,259 with no flow even from a parent); 809,410 walks found a river (9,159 of them in another watershed
-group) and 46,833 reached the sea or the cap first. Reference rate 0.136 over edge types 1000, 1100, 2000 and 2300. Of
-225,152 accessible km, 224,459 are graded and sum to 61,423 grade-weighted km (#65: 63,059, to the centreline at 9 %):
+group) and 46,833 reached the sea or the cap first. Reference rate 0.146 over edge types 1000, 1100, 2000 and 2300. Of
+225,152 accessible km, 224,459 are graded and sum to 61,491 grade-weighted km (#65: 63,059, to the centreline at 9 %):
 68 % of graded km lies under 0.2, 21 % at 0.8–1. 51,257 km read a distance of 0, 33,350 of them river-polygon lines
-(31,522 of the 43,497 graded river-polygon km grade 0.8 or more, against 9,664 of the stream branch's 147,668), where
+(31,542 of the 43,497 graded river-polygon km grade 0.8 or more, against 9,684 of the stream branch's 147,668), where
 the curve is an extrapolation (`habitat_thresholds_tuned.md`, Limits).
 
 ## What the rule changes on link's segments (`scripts/0330`, `data/compare/CH_rear_*`)
 
-The baseline is link 0.67.0's `default` (configs at `67a410e2`, origin/main on 2026-10-22), regenerated through fresh's
-predicate, the user-habitat overlay and connectivity on link's 125 CH groups: width ≥ 1.5 m and gradient ≤ 5.49 %, and on
+The baseline is link's `default` (configs at `102762da`, which every species' comparison used on 2026-10-24; the
+`67a410e2` configs of the earlier chinook comparison lack only `cabd_additions_barriers`, which never moves access, and
+every kilometre and check below is the same under both), regenerated through fresh's predicate, the user-habitat overlay and connectivity on link's 125 CH groups: width ≥ 1.5 m and gradient ≤ 5.49 %, and on
 through-wetland lines (edge 1050/1150) that door plus `default`'s own pair, a ≥ 15 m or ≥ 3 m³/s river within 1,000 m
 (link#364). It draws 99,186 km where the stored flags, from the run's older configs, hold 101,229 (the two differ on
 2,942 km; the access gate alone moves 2,607). The tuned rule is set beside it under the three structures the plan named,
@@ -176,9 +179,9 @@ because its exception can be scoped two ways:
 
 | structure | tuned km | change | lost | gained | of the gain, by the exception | graded km, `default` → tuned |
 |---|---|---|---|---|---|---|
-| free pass on through-wetland lines, pair on every stream line (as the rule was scored) | 92,041 | −7.2 % | 24,818 | 17,673 | 12,840 | 48,091 → 54,134 |
-| door on through-wetland lines, pair on every line (link's `both`) | 84,294 | −15.0 % | 30,477 | 15,585 | 12,949 | 48,091 → 53,911 |
-| door, pair on through-wetland lines only (link's `wetland_flow`, `default`'s scope for CH) | 66,832 | −32.6 % | 35,067 | 2,713 | 84 | 48,091 → 44,943 |
+| free pass on through-wetland lines, pair on every stream line (as the rule was scored) | 92,041 | −7.2 % | 24,818 | 17,673 | 12,840 | 48,134 → 54,182 |
+| door on through-wetland lines, pair on every line (link's `both`) | 84,294 | −15.0 % | 30,477 | 15,585 | 12,949 | 48,134 → 53,957 |
+| door, pair on through-wetland lines only (link's `wetland_flow`, `default`'s scope for CH) | 66,832 | −32.6 % | 35,067 | 2,713 | 84 | 48,134 → 44,976 |
 
 Under the door with the pair on every line, 24,250 km are lost where a stream over 1.5 m wide carries under 0.75 m³/s
 with no ≥ 3 m³/s river within 1 km, 6,127 km of through-wetland lines pass `default`'s door and fail the tuned one, and

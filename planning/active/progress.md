@@ -142,6 +142,11 @@
   numbers that moved in the rescore (best 3,855.9, no rule 4,024.0, nested 3,877.3, 1.96 region 1,511, bootstrap
   gradient shares, exact rule 26.5 %, curve 4,092.0) and the baseline commit (`102762d`; every kilometre and check
   the same as at `67a410e`); the pick, profiles, seeds, folds and gradient curve are unchanged.
+- `research/chinook_rearing_tuned.md` revised to the rescore (fit with the groups absorbed), the curve's prior and the
+  regrade: region 84 rules, best 1,120.1 against 1,380.5 for no rule, `default` 224.7 behind (SE 91.6), 1.96 region
+  2,102, bootstrap and profile decimals, curve 1,052.7 (graded: below no rule), reference rate 0.146, 61,491
+  grade-weighted km, graded km in the comparison 48,134 → 53,957 under the door; km, checks and picks unchanged.
+  The vignette data (Phase 8) still carries the old grades.
 - GR, RB, ST and WCT write-ups started on four Sonnet agents (model plan), each with a claims audit to check before
   commit.
 - Next: check and commit the four write-ups; then BT, `habitat_thresholds_tuned.md` and CH (on Fable, per the model
