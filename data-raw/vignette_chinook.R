@@ -58,7 +58,8 @@ dir_out <- "inst/vignette-data"
 # the newest tuning log that graded this key (a pass over a subset of species names them in its file name, 0320); a
 # superseded log of the same day (the first CH regrade of #65) is older than the one that replaced it
 logs <- sort(list.files("scripts/logs/habitat", "_tune_run.*\\.txt$", full.names = TRUE), decreasing = TRUE)
-logs <- logs[vapply(logs, function(f) any(grepl(sprintf("^%s grades:", key), readLines(f, warn = FALSE))), logical(1))]
+# the result line is "<key> grades: <n> groups, …"; a run that kept the table says "<key>: grades already written …"
+logs <- logs[vapply(logs, function(f) any(grepl(sprintf("^%s grades: [0-9]+ groups", key), readLines(f, warn = FALSE))), logical(1))]
 if (!length(logs)) stop("no tuning log in scripts/logs/habitat graded ", key)
 path_log <- logs[1]
 dir.create(dir_out, showWarnings = FALSE, recursive = TRUE)
@@ -81,6 +82,10 @@ if (length(missing)) stop("missing inputs: ", paste(missing, collapse = ", "))
 g1 <- rd(sprintf("data/tune/%s_grades.csv", key), n_max = 1, col_types = cols(.default = "c"))
 if (!identical(g1$ref_population, "stream_branch")) stop("data/tune/", key, "_grades.csv was graded before #65; rerun 0320")
 if (!"walk" %in% names(g1) || !identical(g1$walk, "bank")) stop("data/tune/", key, "_grades.csv was walked before #73 (not to the bank); rerun 0320")
+# and made by the gate that scores no rule on the curve's own visits, under this pick (the branch review of 2026-10-25)
+if (!all(c("curve_prior_sd", "grade_withheld", "null_heldout_curve", "evidence_md5") %in% names(g1))) {
+  stop("data/tune/", key, "_grades.csv predates the gate's record (curve_prior_sd, grade_withheld, null_heldout_curve, evidence_md5); rerun 0320")
+}
 
 out <- list(
   tune = rd(src[["tune"]]),
@@ -119,6 +124,8 @@ rec <- out$tune$rule[out$tune$recommended %in% TRUE]
 if (length(rec) != 1 || !identical(rec, unique(out$thresholds$rule))) {
   stop("the tune table's recommended rule is not the thresholds table's CH_rear rule")
 }
+# and the grade the comparison read was graded under that rule (the branch review of 2026-10-25)
+if (!identical(g1$rule, rec)) stop("data/tune/", key, "_grades.csv was graded under ", g1$rule, ", not the recommended ", rec, "; rerun 0320")
 
 # seeds and folds: the csv 0320 writes from #62, or the score object this run left
 f_seeds <- sprintf("data/tune/%s_seeds.csv", key)
@@ -180,7 +187,7 @@ src <- c(src, f_ge, f_ge_log)
 
 # ---- meta: provenance and the scoring's constants -------------------------------------------------
 led <- rd(ledger, col_types = cols(.default = "c"))
-gl <- grep(sprintf("^%s grades:", key), log_txt, value = TRUE)
+gl <- grep(sprintf("^%s grades: [0-9]+ groups", key), log_txt, value = TRUE)
 if (length(gl) != 1) stop("the tuning log has ", length(gl), " '", key, " grades' lines")
 num_of <- function(pat) as.numeric(sub(pat, "\\1", regmatches(gl, regexpr(pat, gl))))
 fm <- formals(knw_tune_run)

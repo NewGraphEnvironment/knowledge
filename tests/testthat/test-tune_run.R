@@ -65,6 +65,8 @@ test_that("a cached score is read back only for the grid it was scored on", {
                             grid_args = small, cache_dir = dir, prior_sd = 5), "rescored")
   expect_error(knw_tune_run(s$v, s$sp, s$walks, s$thr, species = "CH", stages = "rear", n_boot = 5L, seeds_more = integer(),
                             grid_args = small, cache_dir = dir, seed = 55L), "rescored")
+  expect_error(knw_tune_run(s$v, s$sp, s$walks, s$thr, species = "CH", stages = "rear", n_boot = 5L, seeds_more = integer(),
+                            grid_args = small, cache_dir = dir, evidence_id = "another build"), "rescored")
   no_spec <- readRDS(file.path(dir, "CH_rear_score.rds"))
   no_spec$spec <- NULL
   saveRDS(no_spec, file.path(dir, "CH_rear_score.rds"))

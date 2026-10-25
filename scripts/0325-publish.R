@@ -87,12 +87,24 @@ if (!length(gfiles)) stop("no grade tables in ", tune_dir)
 heads <- lapply(gfiles, function(f) read_csv(f, n_max = 1, show_col_types = FALSE, col_types = cols(.default = "c")))
 names(heads) <- basename(gfiles)
 stale <- names(heads)[!vapply(heads, function(h) {
-  all(c("ref_population", "ref_edge", "walk", "discharge_load", "grade_withheld", "null_heldout_curve") %in% names(h)) &&
+  all(c("ref_population", "ref_edge", "walk", "discharge_load", "grade_withheld", "null_heldout_curve", "evidence_md5",
+        "rule", "run_uid") %in% names(h)) &&
     identical(h$ref_population, "stream_branch") && identical(h$walk, "bank")
 }, logical(1))]
 if (length(stale)) stop("grade tables made before #73 (no record of the bank walk, the reference edge types and the flow build), or graded ",
                         "before the gate scored no rule on the curve's own visits (no null_heldout_curve; the branch review of 2026-10-25); rerun 0320: ",
                         paste(stale, collapse = ", "))
+# the grade is published under the thresholds row's rule_id, so it must have been graded under that row's rule on this
+# link run, and every table on one evidence build (the branch review of 2026-10-25: nothing else compares them)
+mispick <- names(heads)[!vapply(names(heads), function(f) {
+  k <- sub("_grades\\.csv$", "", f)
+  rule <- unique(tt$thresholds$rule[tt$thresholds$rule_id == paste0(k, "_v1")])
+  length(rule) == 1L && identical(heads[[f]]$rule, rule) && identical(heads[[f]]$run_uid, run_uid)
+}, logical(1))]
+if (length(mispick)) stop("grade tables graded under another pick or link run than the thresholds table's; rerun 0320: ",
+                          paste(mispick, collapse = ", "))
+evidence <- unique(vapply(heads, function(h) h$evidence_md5, character(1)))
+if (length(evidence) != 1) stop("the grade tables were graded on different evidence builds: ", paste(evidence, collapse = " | "))
 ref_edges <- unique(vapply(heads, function(h) h$ref_edge, character(1)))
 if (length(ref_edges) != 1) stop("the grade tables took their reference over different edge types: ", paste(ref_edges, collapse = " | "))
 loads <- unique(vapply(heads, function(h) h$discharge_load, character(1)))
@@ -101,7 +113,8 @@ if (!identical(loads, discharge_load)) {
   stop("the grade tables were graded on another flow build than the live one; regrade (0320) before publishing.\n  graded: ",
        loads, "\n  live:   ", discharge_load)
 }
-prov_grade <- c(prov, list(discharge_load_at_grade = loads, discharge_load_at_publish = discharge_load, walk = "bank"))
+prov_grade <- c(prov, list(discharge_load_at_grade = loads, discharge_load_at_publish = discharge_load, walk = "bank",
+                           evidence_md5 = evidence))
 # a key whose curve was no better than no rule on held-out groups has its grades withheld (0320, #73): its table
 # carries the walks 0330 reads, and no grade, so it is left out of the published set
 withheld <- names(heads)[vapply(heads, function(h) identical(h$grade_withheld, "TRUE"), logical(1))]

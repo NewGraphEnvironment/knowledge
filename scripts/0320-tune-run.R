@@ -100,9 +100,14 @@ led <- read_csv(ledger_path, show_col_types = FALSE, col_types = cols(.default =
 run_uid <- led$note[led$step == "link_run_uid"]
 link_sha <- led$note[led$step == "run_link_sha"]
 say("Tuning run, knowledge#57. Evidence build %s on link run %s (link %s), schema %s.", ledger_path, run_uid, link_sha, schema)
-for (f in c("visits_link", "visits_species", "walks")) {
-  say("  %s md5 %s", f, unname(tools::md5sum(file.path("data/fdis/derived", paste0(f, ".csv")))))
-}
+# the evidence's identity: the md5 of each derived table, logged, carried into the score cache's settings and written
+# on every grade table, so a rebuilt evidence of the same visit count is neither read back from the cache nor kept as
+# a grade (the branch review of 2026-10-25)
+evidence_md5s <- vapply(c("visits_link", "visits_species", "walks"), function(f) {
+  unname(tools::md5sum(file.path("data/fdis/derived", paste0(f, ".csv"))))
+}, character(1))
+for (f in names(evidence_md5s)) say("  %s md5 %s", f, evidence_md5s[[f]])
+evidence_md5 <- paste(unname(evidence_md5s), collapse = ";")
 vl <- read_csv("data/fdis/derived/visits_link.csv", show_col_types = FALSE, guess_max = 1e5,
                col_types = cols(site_visit = "c", species_caught = "c", blocks_absence_of = "c", hydro_zone = "c"))
 vs <- read_csv("data/fdis/derived/visits_species.csv", show_col_types = FALSE, guess_max = 1e5, col_types = cols(site_visit = "c"))
@@ -150,7 +155,7 @@ say("Fit: group intercepts absorbed (#83); normal prior SD %s on the data_set an
 say("Smoke run first%s: previous picks on file for %s.", if (dev) " (DEV=1: the main seed only, no grades, outputs under data/tune/dev)" else "",
     paste(names(previous), collapse = ", "))
 t0 <- Sys.time()
-sm <- knw_tune_run(vl, vs, walks, thr, species = species, spawner = spawner, workers = workers, thresholds_extra = thr_tuned,
+sm <- knw_tune_run(vl, vs, walks, thr, species = species, spawner = spawner, workers = workers, thresholds_extra = thr_tuned, evidence_id = evidence_md5,
                    previous = if (length(previous)) previous else NULL, smoke_only = TRUE)
 smoke_failed <- character()
 for (k in names(sm)) {
@@ -173,7 +178,7 @@ if (length(smoke_failed)) {
 # ---- score, pick, curve ------------------------------------------------------------------
 t0 <- Sys.time()
 out <- knw_tune_run(vl, vs, walks, thr, species = species, spawner = spawner, workers = workers, cache_dir = dir_out,
-                    thresholds_extra = thr_tuned, smoke = FALSE, extra = !dev)
+                    thresholds_extra = thr_tuned, smoke = FALSE, extra = !dev, evidence_id = evidence_md5)
 say("Scored %d species x stage in %.1f min on %d workers%s.", length(out), as.numeric(difftime(Sys.time(), t0, units = "mins")), workers,
     if (dev) " (DEV=1: the main seed only)" else "")
 
@@ -301,9 +306,11 @@ for (k in names(out)) {
       "discharge_load" %in% names(head1) && identical(head1$discharge_load, discharge_load) &&
       "curve_prior_sd" %in% names(head1) && identical(head1$curve_prior_sd, curve_prior_txt) &&
       "grade_withheld" %in% names(head1) && identical(head1$grade_withheld, withheld_txt) &&
-      "null_heldout_curve" %in% names(head1)
+      "null_heldout_curve" %in% names(head1) &&
+      "evidence_md5" %in% names(head1) && identical(head1$evidence_md5, evidence_md5)
     if (same) {
-      say("%s grades: already written under %s on %s, kept.", k, r$pick$rule, run_uid)
+      # not "<key> grades: <n> groups", the result line data-raw/vignette_chinook.R reads
+      say("%s: grades already written under %s on %s, kept.", k, r$pick$rule, run_uid)
       next
     }
     # not "<key> grades:", which data-raw/vignette_chinook.R reads as the one result line
@@ -325,6 +332,7 @@ for (k in names(out)) {
                                ref_population = "stream_branch", ref_edge = paste(g$ref_edge, collapse = ";"),
                                q_walk = g$q, walk = g$walk, discharge_load = discharge_load,
                                curve_prior_sd = curve_prior_txt, grade_withheld = withheld_txt, null_heldout_curve = nhc_txt,
+                               evidence_md5 = evidence_md5,
                                across(c(rate, grade), ~ signif(.x, 5))),
             file.path(dir_out, paste0(k, "_grades.csv")), na = "")
   say("%s grades: %d groups, %s; reference rate %.4f over edge types %s; walks to %g m3/s, to the bank, %.1f min; %d of %d found rivers lie in another group; total %.1f min.",

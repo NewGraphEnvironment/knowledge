@@ -53,6 +53,10 @@
 #'   `seeds_more` are not checked: a cache's bootstrap and extra-seed tables are
 #'   read back whatever the run asked for, so give a run with different ones its
 #'   own directory.
+#' @param evidence_id `NULL`, or `character(1)` naming the evidence build the
+#'   visits and walks came from (`scripts/0320` passes the md5s of the three
+#'   derived tables). It joins the cache's settings, so a score made on another
+#'   build of the same visit count is not read back as this one's.
 #' @param previous `NULL`, or a named `character` vector of the previous pick's
 #'   rule string per `"<sp>_<stage>"`, which the smoke run scores where present.
 #' @param smoke `logical(1)` run the smoke run and its checks first.
@@ -92,8 +96,10 @@ knw_tune_run <- function(visits, species_tbl, walks, thresholds, species = knw_s
                          seed = 54L, folds = 5L, n_boot = 200L, seeds_more = 55:58, workers = 1L, d_floor = 200,
                          min_wsg = 5L, power_wsg = 10L, src = "pick", grid_args = list(), cache_dir = NULL,
                          thresholds_extra = NULL, previous = NULL, smoke = TRUE, smoke_only = FALSE,
-                         smoke_args = list(), extra = TRUE, fit = c("fe", "dense"), prior_sd = 2.5) {
+                         smoke_args = list(), extra = TRUE, fit = c("fe", "dense"), prior_sd = 2.5,
+                         evidence_id = NULL) {
   fit <- match.arg(fit)
+  chk::chk_null_or(evidence_id, vld = chk::vld_string)
   chk::chk_data(visits)
   chk::chk_list(grid_args)
   chk::chk_list(smoke_args)
@@ -208,7 +214,8 @@ knw_tune_run <- function(visits, species_tbl, walks, thresholds, species = knw_s
     rec <- out[[key]]
     # a scored grid is hours of work: keep it beside the run so a later failure does not cost it
     cache <- if (is.null(cache_dir)) NULL else file.path(cache_dir, paste0(key, "_score.rds"))
-    spec <- list(fit = fit, prior_sd = prior_sd, seed = seed, folds = folds, d_floor = d_floor, extra = extra)
+    spec <- list(fit = fit, prior_sd = prior_sd, seed = seed, folds = folds, d_floor = d_floor, extra = extra,
+                 evidence = if (is.null(evidence_id)) NA_character_ else evidence_id)
     sc <- NULL
     if (!is.null(cache) && file.exists(cache)) {
       sc <- readRDS(cache)
@@ -232,6 +239,7 @@ knw_tune_run <- function(visits, species_tbl, walks, thresholds, species = knw_s
       sc <- knw_tune_score(d, rule_in, grid, resp, seed = seed, folds = folds, n_boot = n_boot,
                            seeds_more = seeds_more, d_floor = d_floor, workers = workers, extra = extra, fit = fit,
                            prior_sd = prior_sd)
+      sc$spec$evidence <- spec$evidence
       if (!is.null(cache)) saveRDS(sc, cache)
     }
     pick <- sc$rules[sc$rules$recommended, , drop = FALSE]

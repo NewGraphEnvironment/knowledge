@@ -159,11 +159,14 @@ stale <- names(jobs)[!vapply(names(jobs), function(k) {
                        col_types = readr::cols(.default = "c"))
   "ref_population" %in% names(h) && identical(h$ref_population, "stream_branch") &&
     "walk" %in% names(h) && identical(h$walk, "bank") &&
+    # graded under the pick this comparison applies, on this link run and one evidence build (the branch review of
+    # 2026-10-25: a 0320 that stopped between scoring and grading leaves a new pick beside an old table)
+    identical(h$rule, curves[[k]]$pick$rule) && identical(h$run_uid, run_uid) && "evidence_md5" %in% names(h) &&
     # graded from a curve with the prior, the withheld-grade record (#73, Phase 7) and the gate's own number (the branch
     # review of 2026-10-25: a verdict written by the gate before it compared like with like is not read back)
     all(c("curve_prior_sd", "grade_withheld", "null_heldout_curve") %in% names(h))
 }, logical(1))]
-if (length(stale)) stop("grade tables made before #73's curve prior (no ref_population = stream_branch, a walk not ending at the bank, or no curve_prior_sd, grade_withheld and null_heldout_curve); rerun 0320: ",
+if (length(stale)) stop("grade tables made before #73's curve prior (no ref_population = stream_branch, a walk not ending at the bank, or no curve_prior_sd, grade_withheld, null_heldout_curve and evidence_md5), or graded under another pick or link run than the curve's; rerun 0320: ",
                         paste(stale, collapse = ", "))
 # each job writes its own tables as it finishes and returns its error rather than raising it, so one failed
 # species cannot discard the others at collection (code-check round 2); the grade table is read with the
@@ -310,12 +313,14 @@ if (stage_only != "maps") {
     if (is.null(x) || inherits(x, "other_comparison")) return("")
     cs <- unique(x$config_sha)
     ts <- unique(x$tuned_structure)
+    tr <- unique(x$tuned_rule)
     paste(c(if (!identical(cs, config_sha)) sprintf("config %s", paste(substr(cs, 1, 8), collapse = "/")),
-            if (!identical(ts, tuned_as)) sprintf("tuned_as %s", paste(ts, collapse = "/"))), collapse = ", ")
+            if (!identical(ts, tuned_as)) sprintf("tuned_as %s", paste(ts, collapse = "/")),
+            if (!identical(tr, curves[[k]]$pick$rule)) sprintf("rule %s", paste(tr, collapse = "/"))), collapse = ", ")
   }, character(1))
   for (k in saved[nzchar(mismatch)]) {
-    say("Left out of the combined tables (%s was saved under another %s; this run: config %s, tuned_as %s): rerun it.",
-        k, mismatch[[k]], substr(config_sha, 1, 8), tuned_as)
+    say("Left out of the combined tables (%s was saved under another %s; this run: config %s, tuned_as %s, rule %s): rerun it.",
+        k, mismatch[[k]], substr(config_sha, 1, 8), tuned_as, curves[[k]]$pick$rule)
   }
   other <- union(other, saved[nzchar(mismatch)])
   composed <- setdiff(saved[!vapply(saved_tbl$compare, is.null, logical(1))], other)

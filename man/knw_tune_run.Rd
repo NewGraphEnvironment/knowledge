@@ -32,7 +32,8 @@ knw_tune_run(
   smoke_args = list(),
   extra = TRUE,
   fit = c("fe", "dense"),
-  prior_sd = 2.5
+  prior_sd = 2.5,
+  evidence_id = NULL
 )
 }
 \arguments{
@@ -91,6 +92,11 @@ rule string per \code{"<sp>_<stage>"}, which the smoke run scores where present.
 nested selection and the extra fold seeds. \code{FALSE} is the development
 setting, which proves a scorer change on every species in a fraction of the
 time; a run that publishes keeps \code{TRUE}.}
+
+\item{evidence_id}{\code{NULL}, or \code{character(1)} naming the evidence build the
+visits and walks came from (\code{scripts/0320} passes the md5s of the three
+derived tables). It joins the cache's settings, so a score made on another
+build of the same visit count is not read back as this one's.}
 }
 \value{
 A list with one element per species × stage (\code{"<sp>_<stage>"}): a
