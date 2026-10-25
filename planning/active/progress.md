@@ -186,8 +186,16 @@
   beside its group rows, so a plain sum over the file double-counts; the per-key files are what `compare_summ2.R`
   reads. `research/README.md`: the eight tuned-rule rows rewritten to the #73 picks (GR, RB, ST and WCT's had carried
   #57's).
-- Next: Phase 8 (`0325` with RB in and the withheld keys out of `habitat_grade/v1`, `near_river_scope`, the vignette
-  data, README figure and example, `scripts/README.md`, CLAUDE.md's walk sentence, tests), then validation.
+- Phase 8 begun. `knw_thresholds_table(compare_dir = )` adds `near_river_scope` from the comparison's `tuned_structure`
+  (door → `both`, door_wetland → `wetland_flow`, `NA` where the rule has no pair or no directory is given; a pair
+  compared under `free`, or with no comparison on file, is an error), pinned in `test-thresholds_table.R`; `0325`
+  passes `data/compare`. `data-raw/vignette_chinook.R` reads `SCHEMA` (default `fresh_default`) for the map's geometry
+  and records it in `meta$schema`; `0325` reads no schema and `readme_figure.R` no database. `test-tune_repick.R`'s
+  1.96 table is #73's. `scripts/README.md`: 0320's gates, fit, prior and grade gate; grading and 0330 on the
+  database's host. The build's database is reachable from here (the `~/.Renviron` the 2026-10-23 grading used; its
+  discharge comment names wet `94deeb5` and both schemas exist); a trivial query takes 123 ms.
+- Next: `0325` locally, then `SCHEMA=fresh_default_20261017 Rscript data-raw/vignette_chinook.R`, the article's
+  prose and guards, the README example and figure, then tests.
 
 ### Resume (revised 2026-10-25 15:10 UTC: parked here, picked up on m4 under another account, on Fable)
 

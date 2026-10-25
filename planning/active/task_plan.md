@@ -227,12 +227,13 @@ run (findings, "The intercept minimiser sticks on a flat clamp"), so Phase 7's r
 - [ ] `0325` includes RB in `thresholds/v1`, `thresholds_groups` and the grade table (no longer deferred: #83 landed and
       RB was tuned, graded, compared and written up on 2026-10-24; was: leave RB out and name the deferral), and leaves
       the grade-withheld keys (CO, ST, WCT rearing) out of `habitat_grade/v1`
-- [ ] `knw_thresholds_table()` adds `near_river_scope` from each key's `compare.csv` `tuned_structure` (door → `both`,
+- [x] `knw_thresholds_table()` adds `near_river_scope` from each key's `compare.csv` `tuned_structure` (door → `both`,
       door_wetland → `wetland_flow`, empty where the rule has no pair); Phase 4 ticked it but the column was never written
       (found 2026-10-23); `test-thresholds_table.R` pins it; `R/` is edited only after the chain's last `0320`/`0330` exits
 - [ ] `0325`: `thresholds/v1`, `thresholds_groups`, `habitat_grade/v1` (local; `PUBLISH` waits on #56's bucket
       policy); `data/thresholds.csv` and `thresholds_groups.csv`
-- [ ] `0325`, `data-raw/vignette_chinook.R` and `data-raw/readme_figure.R` read the run's schema by name (`SCHEMA`,
+- [x] (2026-10-25: `vignette_chinook.R` takes `SCHEMA`; `0325` reads no schema, only the discharge comment, and
+      `readme_figure.R` reads no database, so neither needed it) `0325`, `data-raw/vignette_chinook.R` and `data-raw/readme_figure.R` read the run's schema by name (`SCHEMA`,
       default `fresh_default`), as `0320`/`0330` do since link#361 renamed it to `fresh_default_20261017` on 2026-10-23;
       the thresholds table's provenance names the run, not the schema
 - [ ] `data-raw/vignette_chinook.R`, then `data-raw/vignette_bib.R` if a citation changed, then

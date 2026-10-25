@@ -23,6 +23,16 @@ tune_dir_fx <- function(se_default = 60, edit = identity) {
   d
 }
 
+# the comparison's table for the fixture's key, with the structure 0330 reported as tuned
+compare_dir_fx <- function(tuned_structure = "door", key = "CH_rear") {
+  d <- withr::local_tempdir(.local_envir = parent.frame())
+  cmp <- data.frame(watershed_group_code = c("BULK", "MORR", "ALL"), species_code = "CH", stage = "rear",
+                    structure = tuned_structure, tuned_structure = tuned_structure, default_km = c(10, 20, 30),
+                    tuned_km = c(8, 18, 26))
+  utils::write.csv(cmp, file.path(d, paste0(key, "_compare.csv")), row.names = FALSE)
+  d
+}
+
 test_that("one row per component of the pick, in link's parameter names, with the region's range", {
   d <- tune_dir_fx()
   t <- knw_thresholds_table(d, "knowledge/fdis/v3", "run1", "abc1234")
@@ -107,4 +117,41 @@ test_that("rule_flow and rule_flow_196 are the picks from the flow start where t
   expect_identical(unique(ch$rule_flow_196), "mad>=0.5|g<=0.07|Q3@D1000")
   ko <- t[t$species_code == "KO", ]
   expect_true(is.na(ko$rule_flow))
+})
+
+test_that("near_river_scope is link's scope for the structure the comparison ran the pair under", {
+  d <- tune_dir_fx()
+  t <- knw_thresholds_table(d, "knowledge/fdis/v3", "run1", "abc1234", compare_dir = compare_dir_fx("door"))$thresholds
+  ch <- t[t$species_code == "CH", ]
+  expect_identical(unique(ch$near_river_scope), "both")
+  expect_true(is.na(t$near_river_scope[t$species_code == "KO"]))
+  t <- knw_thresholds_table(d, "knowledge/fdis/v3", "run1", "abc1234", compare_dir = compare_dir_fx("door_wetland"))$thresholds
+  expect_identical(unique(t$near_river_scope[t$species_code == "CH"]), "wetland_flow")
+  # without a comparison directory the column is there and empty
+  t <- knw_thresholds_table(d, "knowledge/fdis/v3", "run1", "abc1234")$thresholds
+  expect_true("near_river_scope" %in% names(t))
+  expect_true(all(is.na(t$near_river_scope)))
+})
+
+test_that("near_river_scope is empty where the rule has no pair, whatever the comparison ran", {
+  d <- tune_dir_fx(se_default = 80, edit = function(x) {
+    x$rule[2] <- "mad>=1.5|g<=0.0549|none"
+    x$size_min[2] <- 1.5
+    x$grad_max[2] <- 0.0549
+    x$exc_q[2] <- NA
+    x$exc_d[2] <- NA
+    x$departures[2] <- 1L
+    x
+  })
+  t <- knw_thresholds_table(d, "knowledge/fdis/v3", "run1", "abc1234", compare_dir = compare_dir_fx("door"))$thresholds
+  expect_true(all(is.na(t$near_river_scope[t$species_code == "CH"])))
+})
+
+test_that("a pair compared under a structure link has no scope for, or with no comparison on file, is refused", {
+  d <- tune_dir_fx()
+  expect_error(knw_thresholds_table(d, "knowledge/fdis/v3", "run1", "abc1234", compare_dir = compare_dir_fx("free")),
+               "no link near-river scope")
+  empty <- withr::local_tempdir()
+  expect_error(knw_thresholds_table(d, "knowledge/fdis/v3", "run1", "abc1234", compare_dir = empty),
+               "no CH_rear_compare.csv")
 })

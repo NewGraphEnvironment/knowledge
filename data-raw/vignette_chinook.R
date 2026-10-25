@@ -34,12 +34,14 @@
 #         data/tune/CH_rear_score.rds (ignored), data/thresholds.csv,
 #         data/compare/CH_rear_{compare,change,checks}.csv, data/compare/CH_rear_segments.rds (ignored;
 #         0330), data/tune/CH_rear_curve.rds (ignored; 0320), the tuning log and the evidence build ledger in
-#         scripts/logs/habitat/, fwapg database (PG* env vars): fresh_default.streams,
+#         scripts/logs/habitat/, fwapg database (PG* env vars): <SCHEMA>.streams (SCHEMA names the run's schema,
+#         default fresh_default; the run #73 read is fresh_default_20261017 since link#361 renamed it, so set it),
 #         whse_basemapping.fwa_{lakes,rivers,wetlands,manmade_waterbodies}_poly, whse_basemapping.fwa_waterbodies.
 # OUTPUT: inst/vignette-data/chinook_rearing.rds   the tables and `meta`, one named list
 #         inst/vignette-data/bulk_segments.rds     BULK accessible CH segments, sf, EPSG:3005
 #         inst/vignette-data/bulk_water.rds        BULK lakes >= 10 ha and rivers, sf, EPSG:3005
-# RUN:    Rscript data-raw/vignette_chinook.R   (from the repo root, after any 0320, 0322, 0325 or 0330 rerun)
+# RUN:    SCHEMA=fresh_default_20261017 Rscript data-raw/vignette_chinook.R   (from the repo root, after any 0320, 0322,
+#         0325 or 0330 rerun; SCHEMA as 0320 and 0330 took it)
 # ---------------------------------------------------------------------------
 suppressMessages({ library(dplyr); library(readr) })
 pkgload::load_all(quiet = TRUE)
@@ -49,6 +51,9 @@ if (!nzchar(Sys.getenv("PGCONNECT_TIMEOUT"))) Sys.setenv(PGCONNECT_TIMEOUT = "30
 
 key <- "CH_rear"
 wsg <- "BULK"
+# the run's schema, as 0320 and 0330 read it (link#361 renamed the run to fresh_default_20261017 while #73 ran)
+schema <- Sys.getenv("SCHEMA", "fresh_default")
+if (!grepl("^[A-Za-z_][A-Za-z0-9_]*$", schema)) stop("SCHEMA is not a plain identifier: ", schema)
 dir_out <- "inst/vignette-data"
 # the newest tuning log that graded this key (a pass over a subset of species names them in its file name, 0320); a
 # superseded log of the same day (the first CH regrade of #65) is older than the one that replaced it
@@ -200,8 +205,10 @@ out$meta <- list(
                   fwapg_sha = led$note[led$step == "run_fwapg_sha"],
                   wet = sub(" at .*$", "", led$note[led$step == "wet_manifest"])),
   map_group = wsg,
-  # the baseline's configs: link's default at this commit (0330's CONFIG_SHA), not the run's (#73)
+  # the baseline's configs: link's default at this commit (0330's CONFIG_SHA), not the run's (#73); the schema is the
+  # map's geometry source only (the run is named by link_run_uid)
   link_config_sha = unique(out$compare$config_sha),
+  schema = schema,
   tuned_structure = unique(out$compare$tuned_structure),
   # whole files, except thresholds.csv, which holds every species and is hashed on its CH rearing rows
   md5 = tools::md5sum(unname(src[names(src) != "thresholds"])) |> stats::setNames(unname(src[names(src) != "thresholds"])),
@@ -256,7 +263,7 @@ rm(seg_all, wl)
 conn <- tryCatch(DBI::dbConnect(RPostgres::Postgres(), bigint = "numeric"),
                  error = function(e) stop("database unreachable (PG* environment variables): ", conditionMessage(e)))
 geom <- sf::st_zm(sf::st_read(conn, quiet = TRUE, query = sprintf(
-  "SELECT id_segment, waterbody_key, geom FROM fresh_default.streams WHERE watershed_group_code = '%s'", wsg)),
+  "SELECT id_segment, waterbody_key, geom FROM %s.streams WHERE watershed_group_code = '%s'", schema, wsg)),
   drop = TRUE)
 geom$id_segment <- as.numeric(geom$id_segment)
 water <- sf::st_zm(sf::st_read(conn, quiet = TRUE, query = sprintf("
@@ -270,8 +277,8 @@ wb <- DBI::dbGetQuery(conn, sprintf("
   LEFT JOIN (SELECT waterbody_key, sum(area_ha) area_ha FROM whse_basemapping.fwa_lakes_poly GROUP BY 1) l USING (waterbody_key)
   LEFT JOIN (SELECT waterbody_key, sum(area_ha) area_ha FROM whse_basemapping.fwa_wetlands_poly GROUP BY 1) wl USING (waterbody_key)
   LEFT JOIN (SELECT waterbody_key, sum(area_ha) area_ha FROM whse_basemapping.fwa_manmade_waterbodies_poly GROUP BY 1) m USING (waterbody_key)
-  WHERE w.waterbody_key IN (SELECT DISTINCT waterbody_key FROM fresh_default.streams
-                            WHERE watershed_group_code = '%s' AND waterbody_key IS NOT NULL)", wsg))
+  WHERE w.waterbody_key IN (SELECT DISTINCT waterbody_key FROM %s.streams
+                            WHERE watershed_group_code = '%s' AND waterbody_key IS NOT NULL)", schema, wsg))
 DBI::dbDisconnect(conn)
 if (anyDuplicated(wb$waterbody_key)) stop("a waterbody key with two rows in fwa_waterbodies")
 # as 0330 builds `sg`
@@ -288,7 +295,7 @@ sg$water <- unname(c(R = "river", W = "wetland", L = "lake", X = "lake")[wb$wate
 sg$water[!sg$in_waterbody] <- "stream"
 sg$water_ha <- as.numeric(wb$waterbody_ha[i_wb])
 if (anyNA(sg$water)) stop("a waterbody type other than R, W, L or X")
-if (nrow(sg) != nrow(s)) stop(nrow(s) - nrow(sg), " saved segments have no geometry in fresh_default.streams")
+if (nrow(sg) != nrow(s)) stop(nrow(s) - nrow(sg), " saved segments have no geometry in ", schema, ".streams")
 
 src_local <- c(segments = sprintf("data/compare/%s_segments.rds", key), curve = f_curve)
 if (stab_from != "csv") src_local <- c(src_local, score = f_score)

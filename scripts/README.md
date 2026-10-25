@@ -56,11 +56,15 @@ wf_farm_priority.js                          farm priority/crossing tables out o
 0290  bt_use_visits.csv written from 0310 (BT's rows and the columns 0291-0293 read; no held-out columns)
 0294  ch_mad_visits.csv written from 0310 (+ two database reads: ambiguous placement, barriers without USER_DEFINITE)
 0296  ch_rule_visits.csv and ch_rule_walks.csv written from 0294 and 0310
-0320  score every rule of each species x stage on held-out groups (the shared gradient ladder to 30 %, #68; link's
-      default_tuned row as a candidate), pick from link's width default and from its flow version (#80), fit the
-      joint curve, grade every segment of the species' groups, each accessible one at its own walked distance to
-      the pick's river (#65), each grade table recording its reference edges, river size, walk and flow build (#72)
-      -> data/tune/ (+ log; run on the 16-core machine, WORKERS=14)
+0320  a smoke run on four gates first, for every key (#84; a failure scores nothing), then score every rule of each
+      species x stage on held-out groups (the shared gradient ladder to 30 %, #68; link's default_tuned row as a
+      candidate; the fit absorbs the group intercepts and holds the data-set and era terms under a normal prior,
+      #83, #84), pick from link's width default and from its flow version (#80), fit the joint curve with the same
+      prior, grade every segment of the species' groups, each accessible one at its own walked distance to the bank
+      of the pick's river (#65, #73), each grade table recording its reference edges, river size, walk, flow build
+      and curve prior (#72); a key whose curve is no better than no rule on held-out groups gets no grade (#73)
+      -> data/tune/ (+ log; SCHEMA names the run's schema; scoring runs on any machine with the build, WORKERS=14;
+      grading sends a query per segment, so it runs on the database's host, CLAUDE.md "Database access")
 0322  #67's record: CH rearing alone on the ladder extended to 30 %, on the evidence build before #73 (the main
       run carries that ladder for every species since #68): the scores -> data/tune/grad_ext/; STAGE=compare
       sets CH_rear_v1's parts at 11, 13, 15 and 30 % beside default and beside CH_rear_v1 -> data/compare/grad_ext/
@@ -75,11 +79,12 @@ wf_farm_priority.js                          farm priority/crossing tables out o
       every species x stage and group, under each rule structure for the through-wetland lines and the pair (#73:
       free | door | door_wetland; `tuned` is TUNED_AS, door by default): km, graded km, km by grade class, change by
       reason, FDIS and bcfishobs checks -> data/compare/, one GeoPackage per species x stage for QGIS
-      (data/compare/gpkg/, #81; GPKG=FALSE skips) (+ log). No maps in this run.
+      (data/compare/gpkg/, #81; GPKG=FALSE skips) (+ log; SCHEMA as 0320; on the database's host, every key in one
+      process: a key's groups run one after another on one connection, #86). No maps in this run.
       STAGE=maps: floodplain ha beside each rule's habitat in the catalog's groups, and the maps, from the saved
       tables -> data/compare/floodplain.csv, research/fig/compare_*.png
-      then Rscript data-raw/vignette_chinook.R refreshes the chinook article's data (inst/vignette-data/);
-      tests/testthat/test-vignette-data.R fails until it does
+      then SCHEMA=... Rscript data-raw/vignette_chinook.R refreshes the chinook article's data (inst/vignette-data/),
+      after 0325 has rewritten data/thresholds.csv; tests/testthat/test-vignette-data.R fails until it does
 
 --- Frozen on the published v2 tables (0299 PULL=TRUE VERSION=v2): the one-species analyses #57 superseded ---
 0291  BT use curve (#28)   0292  BT candidate weight   0293  BT spawner evidence (#33)

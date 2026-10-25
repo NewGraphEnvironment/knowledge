@@ -16,7 +16,8 @@
 #     version whose tables, schemas or contents differ (knw_publish()). The prefix is public only once
 #     the bucket policy of #56 is applied; until then a reader needs credentials.
 #
-# INPUT:  data/tune/ (0320), the evidence build ledger (0310), data/fdis/publish/manifest.json (0299, v3)
+# INPUT:  data/tune/ (0320), data/compare/<key>_compare.csv (0330; the tuned structure, for near_river_scope),
+#         the evidence build ledger (0310), data/fdis/publish/manifest.json (0299, v3)
 #         and the fwapg database (PG* env vars): the discharge load's comment, for the grade's provenance
 # OUTPUT: data/publish/thresholds_v1/{thresholds,thresholds_groups}.parquet + manifest.json (ignored)
 #         data/publish/habitat_grade_v1/habitat_grade/species_code=<sp>/stage=<stage>/part.parquet + manifest.json
@@ -61,7 +62,7 @@ if (length(discharge_load) != 1 || is.na(discharge_load) || !nzchar(discharge_lo
 }
 
 # ---- thresholds -------------------------------------------------------------------------
-tt <- knw_thresholds_table(tune_dir, evidence_version, run_uid, link_sha)
+tt <- knw_thresholds_table(tune_dir, evidence_version, run_uid, link_sha, compare_dir = "data/compare")
 write_csv(tt$thresholds, "data/thresholds.csv", na = "")
 write_csv(tt$groups, "data/thresholds_groups.csv", na = "")
 message(sprintf("thresholds: %d rows (%d species x stage fitted), groups: %d rows", nrow(tt$thresholds),
@@ -71,7 +72,7 @@ tables_thr <- data.frame(
   source = c("data/thresholds.csv", "data/thresholds_groups.csv"),
   script = "scripts/0325-publish.R",
   description = c(
-    "One row per species x stage x component (size, gradient, exception_q, exception_d) of the rule recommended by the tuning run (knowledge#57): the value in link's parameter name and unit, the range of values within one SE (a parsimony rule of thumb fixed before the run) on the main reading, the readings the rule holds in, the rule the same pick makes at 1.96 SE (rule_196) and whether it keeps the row's value (holds_196), default's value and whether default is inside the region, the visits, detections and groups scored, the power label, and the evidence version and link run the rule was scored on. The grade is expected use, not habitat quality.",
+    "One row per species x stage x component (size, gradient, exception_q, exception_d) of the rule recommended by the tuning run (knowledge#57): the value in link's parameter name and unit, the range of values within one SE (a parsimony rule of thumb fixed before the run) on the main reading, the readings the rule holds in, the rule the same pick makes at 1.96 SE (rule_196) and whether it keeps the row's value (holds_196), the same picks from link's flow version of default (rule_flow, rule_flow_196), the scope link applies the near-river pair on as the comparison ran it (near_river_scope: both, or wetland_flow; empty where the rule has no pair), default's value and whether default is inside the region, the visits, detections and groups scored, the power label, and the evidence version and link run the rule was scored on. The grade is expected use, not habitat quality.",
     "The watershed groups each rule_id was scored on (groups with both outcomes), with the fold each held out in."),
   stringsAsFactors = FALSE)
 man_thr <- knw_publish(tables_thr, "data/publish/thresholds_v1", id = "knowledge/thresholds/v1",

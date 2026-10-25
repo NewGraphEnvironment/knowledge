@@ -18,7 +18,12 @@
 #' recommended rule lacks holds when the 1.96 rule lacks it too). `rule_flow` and
 #' `rule_flow_196` are the same picks read from link's flow version of `default`
 #' as the starting point (#80; `NA` on a table scored before that, or for a
-#' species whose `default` has no MAD floor). A species × stage that
+#' species whose `default` has no MAD floor). `near_river_scope` is the scope
+#' link applies the near-river pair on, read from the comparison's
+#' `tuned_structure` (`scripts/0330`): `door`, which puts through-wetland lines
+#' through the size test or the pair, is link's `both`; `door_wetland`, the pair
+#' on through-wetland lines alone, is link's `wetland_flow`. It is `NA` where the
+#' rule has no pair, and where `compare_dir` is `NULL`. A species × stage that
 #' was not fitted (no stream rule, no response, too few groups) gets one row
 #' per stage with `status` saying why and no values.
 #'
@@ -28,17 +33,23 @@
 #'   provenance every row carries.
 #' @param d_floor `numeric(1)` the run's shortest exception distance (m), as given
 #'   to [knw_tune_run()], so the 1.96 replay picks as the run did.
+#' @param compare_dir `NULL` or `character(1)` the directory `scripts/0330` wrote
+#'   (one `<sp>_<stage>_compare.csv` per compared key), read for
+#'   `near_river_scope`; a fitted rule with a pair and no comparison there is an
+#'   error.
 #' @return A list: `thresholds` and `groups` (one row per `rule_id` and
 #'   watershed group the rule was scored on), both `tibble`s.
 #' @export
 #' @examples
 #' \dontrun{
-#' t <- knw_thresholds_table("data/tune", "knowledge/fdis/v3", "20261017_004619-3f4c713b", "a17e9177", "default")
+#' t <- knw_thresholds_table("data/tune", "knowledge/fdis/v3", "20261017_004619-3f4c713b", "a17e9177", "default",
+#'                           compare_dir = "data/compare")
 #' t$thresholds
 #' }
 knw_thresholds_table <- function(tune_dir, evidence_version, link_run_uid, link_sha, config = "default",
-                                 d_floor = 200) {
+                                 d_floor = 200, compare_dir = NULL) {
   chk::chk_dir(tune_dir)
+  if (!is.null(compare_dir)) chk::chk_dir(compare_dir)
   chk::chk_string(evidence_version)
   chk::chk_string(link_run_uid)
   chk::chk_string(link_sha)
@@ -68,7 +79,7 @@ knw_thresholds_table <- function(tune_dir, evidence_version, link_run_uid, link_
         model = NA_character_, value = NA_real_,
         unit = NA_character_, range_lo = NA_real_, range_hi = NA_real_, readings_in = NA_integer_,
         readings = NA_integer_, rule_196 = NA_character_, holds_196 = NA, rule_flow = NA_character_,
-        rule_flow_196 = NA_character_,
+        rule_flow_196 = NA_character_, near_river_scope = NA_character_,
         default_value = NA_real_, default_in_region = NA, rule = NA_character_, n_visits = summ$visits_in[i],
         n_detect = summ$detections[i], n_wsg = summ$groups_both[i], power = summ$status[i]))
       next
@@ -94,6 +105,18 @@ knw_thresholds_table <- function(tune_dir, evidence_version, link_run_uid, link_
     }
     rule_flow <- flow_pick(1)
     rule_flow_196 <- flow_pick(1.96)
+    # the scope link applies the pair on, as the comparison ran the tuned rule; a rule with no pair has none
+    scope <- NA_character_
+    if (!is.null(compare_dir) && !is.na(rec$exc_q)) {
+      f_cmp <- file.path(compare_dir, paste0(key, "_compare.csv"))
+      if (!file.exists(f_cmp)) stop(key, ": no ", basename(f_cmp), " in ", compare_dir, " to read the near-river scope from", call. = FALSE)
+      ts <- unique(utils::read.csv(f_cmp, stringsAsFactors = FALSE)$tuned_structure)
+      ts <- ts[!is.na(ts)]
+      if (length(ts) != 1L) stop(key, ": the comparison names ", length(ts), " tuned structures, not one", call. = FALSE)
+      scopes <- c(door = "both", door_wetland = "wetland_flow")
+      if (!ts %in% names(scopes)) stop(key, ": tuned structure '", ts, "' has no link near-river scope", call. = FALSE)
+      scope <- unname(scopes[[ts]])
+    }
     same <- function(a, b) (is.na(a) & is.na(b)) | (!is.na(a) & !is.na(b) & abs(a - b) < 1e-9)
     holds <- c(rec$size_var == r196$size_var && same(rec$size_min, r196$size_min), same(rec$grad_max, r196$grad_max),
                same(rec$exc_q, r196$exc_q), same(rec$exc_d, r196$exc_d))
@@ -113,7 +136,7 @@ knw_thresholds_table <- function(tune_dir, evidence_version, link_run_uid, link_
                    if (any(!is.na(region$exc_q))) max(region$exc_q, na.rm = TRUE) else NA,
                    if (any(!is.na(region$exc_d))) max(region$exc_d, na.rm = TRUE) else NA),
       readings_in = readings_in, readings = readings, rule_196 = r196$rule, holds_196 = holds,
-      rule_flow = rule_flow, rule_flow_196 = rule_flow_196,
+      rule_flow = rule_flow, rule_flow_196 = rule_flow_196, near_river_scope = scope,
       default_value = c(dflt$size_min, dflt$grad_max, NA_real_, NA_real_),
       default_in_region = dflt$in_region %in% TRUE, rule = rec$rule,
       n_visits = rec$n_visits, n_detect = rec$n_detect, n_wsg = rec$n_wsg, power = summ$status[i]
