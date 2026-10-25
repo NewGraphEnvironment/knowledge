@@ -298,3 +298,14 @@ the compaction summary's Phase 8 notes and in `findings.md` if copied there: `ch
 if the session's memory lacks it). The final report must name: the curve-intercept defect and fix (CH curve 2,434 →
 1,053), that the rule scorer was affected after all (2,269 CH rules, the pick moved), the worker-export follow-up, the
 rescoring, the stopped and relaunched 0330 with its compose change, the detached chain.
+
+## Host batch for PR #88 (2026-10-25, on the database's host)
+
+- `0320` from a frozen copy at `fc85758` (md5 a48fd4c…), `SCHEMA=fresh_default_20261017 WORKERS=8`, 20:09 to 23:21 UTC:
+  191.1 min, exit 0, no `FAILED`. Every score cache was read as scored with fit `fe`, prior SD 2.5, seed 54, five folds
+  (the settings of `fa638f2`'s scoring), so nothing rescored; every key regraded, because no grade table carried
+  `null_heldout_curve` or `evidence_md5`. The corrected gate withholds BT_spawn: no rule scores 377.9 on the curve's 450
+  visits (401.4 on the grid's 475) against the curve's 397.3. CO_rear, ST_rear and WCT_rear stay withheld (no rule
+  4,021.4, 413.9 and 1,329.7 on their curves' visits). Grade tables checked: BT_spawn carries no rate, grade or class
+  and `grade_withheld = TRUE`; BT_rear is graded; both carry the two new columns. Stdout in
+  `scratch/logs/20261025_0320_host.log`; script log `scripts/logs/habitat/20261025_tune_run.txt`.
