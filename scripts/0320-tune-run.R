@@ -222,6 +222,9 @@ for (k in names(out)) {
       dev_default = dflt$dev_heldout, dev_best = best$dev_heldout, dev_null = best$dev_heldout - best$ddev_null,
       dev_curve = r$curve$heldout, null_heldout_curve = r$null_heldout_curve, curve_prior_sd = r$curve$prior_sd,
       grade_withheld = r$grade_withheld,
+      # the evidence and the link run the pick was scored on, so a grade can be held to its pick's evidence as well as its
+      # rule (the branch review of 2026-10-25)
+      evidence_md5 = evidence_md5, run_uid = run_uid,
       curve_dist_in_model = r$curve$dist_in_model,
       curve_edf = paste(sprintf("%s=%.2f", names(r$curve$edf), r$curve$edf), collapse = "; "),
       # NA under DEV=1, which runs the main seed alone
@@ -262,7 +265,10 @@ summ <- bind_rows(summ)
 for (k in names(out)) {
   write_csv(summ |> filter(species_code == out[[k]]$species_code, stage == out[[k]]$stage) |>
               mutate(across(where(is.numeric), ~ round(.x, 4))), file.path(dir_out, paste0(k, "_summary.csv")), na = "")
-  saveRDS(out[[k]][intersect(c("species_code", "stage", "response", "status", "pick", "curve", "null_heldout", "null_heldout_curve", "grade_withheld"),
+  out[[k]]$evidence_md5 <- evidence_md5
+  out[[k]]$run_uid <- run_uid
+  saveRDS(out[[k]][intersect(c("species_code", "stage", "response", "status", "pick", "curve", "null_heldout", "null_heldout_curve", "grade_withheld",
+                               "evidence_md5", "run_uid"),
                              names(out[[k]]))], file.path(dir_out, paste0(k, "_curve.rds")))
 }
 

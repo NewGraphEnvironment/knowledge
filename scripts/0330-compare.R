@@ -161,12 +161,13 @@ stale <- names(jobs)[!vapply(names(jobs), function(k) {
     "walk" %in% names(h) && identical(h$walk, "bank") &&
     # graded under the pick this comparison applies, on this link run and one evidence build (the branch review of
     # 2026-10-25: a 0320 that stopped between scoring and grading leaves a new pick beside an old table)
-    identical(h$rule, curves[[k]]$pick$rule) && identical(h$run_uid, run_uid) && "evidence_md5" %in% names(h) &&
+    identical(h$rule, curves[[k]]$pick$rule) && identical(h$run_uid, run_uid) &&
+    "evidence_md5" %in% names(h) && identical(h$evidence_md5, curves[[k]]$evidence_md5) &&
     # graded from a curve with the prior, the withheld-grade record (#73, Phase 7) and the gate's own number (the branch
     # review of 2026-10-25: a verdict written by the gate before it compared like with like is not read back)
     all(c("curve_prior_sd", "grade_withheld", "null_heldout_curve") %in% names(h))
 }, logical(1))]
-if (length(stale)) stop("grade tables made before #73's curve prior (no ref_population = stream_branch, a walk not ending at the bank, or no curve_prior_sd, grade_withheld, null_heldout_curve and evidence_md5), or graded under another pick or link run than the curve's; rerun 0320: ",
+if (length(stale)) stop("grade tables made before #73's curve prior (no ref_population = stream_branch, a walk not ending at the bank, or no curve_prior_sd, grade_withheld, null_heldout_curve and evidence_md5), or graded under another pick, link run or evidence build than the curve record's; rerun 0320: ",
                         paste(stale, collapse = ", "))
 # each job writes its own tables as it finishes and returns its error rather than raising it, so one failed
 # species cannot discard the others at collection (code-check round 2); the grade table is read with the

@@ -124,8 +124,16 @@ rec <- out$tune$rule[out$tune$recommended %in% TRUE]
 if (length(rec) != 1 || !identical(rec, unique(out$thresholds$rule))) {
   stop("the tune table's recommended rule is not the thresholds table's CH_rear rule")
 }
-# and the grade the comparison read was graded under that rule (the branch review of 2026-10-25)
+# and the grade the comparison read was graded under that rule, on the evidence the summary and the tuning log name (the
+# branch review of 2026-10-25: the log's md5 lines are the three derived tables', in the summary's order)
 if (!identical(g1$rule, rec)) stop("data/tune/", key, "_grades.csv was graded under ", g1$rule, ", not the recommended ", rec, "; rerun 0320")
+if (!"evidence_md5" %in% names(out$summary) || !identical(g1$evidence_md5, out$summary$evidence_md5)) {
+  stop("data/tune/", key, "_grades.csv and _summary.csv name different evidence builds (or the summary predates the record); rerun 0320")
+}
+log_md5 <- sub("^ +[a-z_]+ md5 ", "", grep("^ +(visits_link|visits_species|walks) md5 [0-9a-f]{32}$", readLines(path_log, warn = FALSE), value = TRUE))
+if (length(log_md5) != 3L || !identical(paste(log_md5, collapse = ";"), g1$evidence_md5)) {
+  stop("the tuning log's evidence md5s are not the grade table's: the log is another run's")
+}
 
 # seeds and folds: the csv 0320 writes from #62, or the score object this run left
 f_seeds <- sprintf("data/tune/%s_seeds.csv", key)

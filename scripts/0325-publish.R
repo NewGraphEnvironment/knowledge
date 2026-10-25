@@ -98,11 +98,20 @@ if (length(stale)) stop("grade tables made before #73 (no record of the bank wal
 # link run, and every table on one evidence build (the branch review of 2026-10-25: nothing else compares them)
 mispick <- names(heads)[!vapply(names(heads), function(f) {
   k <- sub("_grades\\.csv$", "", f)
-  rule <- unique(tt$thresholds$rule[tt$thresholds$rule_id == paste0(k, "_v1")])
-  length(rule) == 1L && identical(heads[[f]]$rule, rule) && identical(heads[[f]]$run_uid, run_uid)
+  row <- tt$thresholds[tt$thresholds$rule_id == paste0(k, "_v1"), , drop = FALSE]
+  rule <- unique(row$rule)
+  ev <- unique(row$evidence_md5)
+  length(rule) == 1L && identical(heads[[f]]$rule, rule) && identical(heads[[f]]$run_uid, run_uid) &&
+    length(ev) == 1L && !is.na(ev) && identical(heads[[f]]$evidence_md5, ev)
 }, logical(1))]
-if (length(mispick)) stop("grade tables graded under another pick or link run than the thresholds table's; rerun 0320: ",
-                          paste(mispick, collapse = ", "))
+if (length(mispick)) stop("grade tables graded under another pick, link run or evidence build than the thresholds table's row (or a row ",
+                          "with no evidence record); rerun 0320: ", paste(mispick, collapse = ", "))
+# and every fitted row has its grade table (a withheld key's table is written too), so a run that stopped between the
+# picks and the grades cannot publish the picks alone
+fitted_keys <- unique(sub("_v1$", "", tt$thresholds$rule_id[tt$thresholds$status %in% c("fitted", "underpowered")]))
+no_grade <- setdiff(fitted_keys, sub("_grades\\.csv$", "", names(heads)))
+if (length(no_grade)) stop("fitted rules with no grade table in ", tune_dir, " (0320 stopped before grading them?): ",
+                           paste(no_grade, collapse = ", "))
 evidence <- unique(vapply(heads, function(h) h$evidence_md5, character(1)))
 if (length(evidence) != 1) stop("the grade tables were graded on different evidence builds: ", paste(evidence, collapse = " | "))
 ref_edges <- unique(vapply(heads, function(h) h$ref_edge, character(1)))

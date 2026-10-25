@@ -119,6 +119,19 @@ test_that("rule_flow and rule_flow_196 are the picks from the flow start where t
   expect_true(is.na(ko$rule_flow))
 })
 
+test_that("evidence_md5 is the summary's, and NA on a summary written before the record", {
+  d <- tune_dir_fx()
+  t <- knw_thresholds_table(d, "knowledge/fdis/v3", "run1", "abc1234")$thresholds
+  expect_true("evidence_md5" %in% names(t))
+  expect_true(all(is.na(t$evidence_md5)))
+  summ <- utils::read.csv(file.path(d, "CH_rear_summary.csv"), stringsAsFactors = FALSE)
+  summ$evidence_md5 <- "a;b;c"
+  utils::write.csv(summ, file.path(d, "CH_rear_summary.csv"), row.names = FALSE, na = "")
+  t <- knw_thresholds_table(d, "knowledge/fdis/v3", "run1", "abc1234")$thresholds
+  expect_identical(unique(t$evidence_md5[t$species_code == "CH"]), "a;b;c")
+  expect_true(is.na(t$evidence_md5[t$species_code == "KO"]))
+})
+
 test_that("near_river_scope is link's scope for the structure the comparison ran the pair under", {
   d <- tune_dir_fx()
   t <- knw_thresholds_table(d, "knowledge/fdis/v3", "run1", "abc1234", compare_dir = compare_dir_fx("door"))$thresholds

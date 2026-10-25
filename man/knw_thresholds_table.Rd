@@ -57,7 +57,10 @@ link applies the near-river pair on, read from the comparison's
 \code{tuned_structure} (\code{scripts/0330}): \code{door}, which puts through-wetland lines
 through the size test or the pair, is link's \code{both}; \code{door_wetland}, the pair
 on through-wetland lines alone, is link's \code{wetland_flow}. It is \code{NA} where the
-rule has no pair, and where \code{compare_dir} is \code{NULL}. A species × stage that
+rule has no pair, and where \code{compare_dir} is \code{NULL}. \code{evidence_md5} is the
+identity of the evidence build the rule was scored on, as the summary records
+it (\code{scripts/0320}; \code{NA} on a summary written before the record), which
+\code{scripts/0325} holds each grade table to. A species × stage that
 was not fitted (no stream rule, no response, too few groups) gets one row
 per stage with \code{status} saying why and no values.
 }
