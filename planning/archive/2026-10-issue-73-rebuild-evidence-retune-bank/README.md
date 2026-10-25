@@ -80,5 +80,6 @@ After merge:
 - #72, #68 and #80 bodies: what landed, then close with #73 when the PR merges
 - `PUBLISH=TRUE` for `0299` v3, `0325` thresholds and grade, once #56's bucket policy is in
 
-Closed by: the branch `73-rebuild-the-evidence-and-retune-on-the-r`'s PR, opened after this archive (its number is
-added to this line when it opens).
+Closed by: PR #88 (https://github.com/NewGraphEnvironment/knowledge/pull/88), from the branch
+`73-rebuild-the-evidence-and-retune-on-the-r`; the host-side regrade listed under Owed runs before it merges. #83 and
+#84's bodies still carry unticked boxes to reconcile with what landed here (owed after merge).
