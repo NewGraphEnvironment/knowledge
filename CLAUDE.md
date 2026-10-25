@@ -295,6 +295,21 @@ they show:
 - **A decision made before the run is stated as one.** List every check with its direction; do not sort them by
   the side they support.
 
+### A run's record travels with its table, and every reader compares it, not its presence
+
+Every `data/tune/<key>_grades.csv` row carries the run that made it: `rule`, `run_uid`, `walk`, `ref_edge`,
+`discharge_load`, `curve_prior_sd`, `grade_withheld`, `null_heldout_curve` (the gate's own number) and `evidence_md5`
+(the md5s of the three derived tables); the summary and `<key>_curve.rds` carry `evidence_md5` and `run_uid`, and the
+score cache its settings (`spec`: fit, prior, seed, folds, d_floor, extra, evidence). `0320`'s keep-check, `0325`,
+`0330` and `data-raw/vignette_chinook.R` each compare those fields with the run's own values and refuse a table that
+does not match; `0325` refuses before it writes anything. So a change to the gate, the prior, the walk or the evidence
+regrades every key (about 190 min on the database's host), which is the cost of never publishing a verdict the code
+no longer makes. #73's branch review (five rounds, `planning/archive/2026-10-issue-73-rebuild-evidence-retune-bank/review-round*.md`)
+found four axes where a reader had checked presence alone, one of them the gate itself: it compared the curve's
+held-out deviance over the visits with a size against no rule's over every modelled visit, so for the width-ruled keys
+it favoured publishing, and bull trout spawning's grade rested on it. Compare two deviances only when they are summed
+over the same rows (`null_heldout_curve` is no rule scored on the curve's own visits).
+
 ### The segment flows can change under a run; the table comment names the build
 
 `discharge.fwa_v1_segment_monthly` is wet's database load, and wet can reload it between two runs: NewGraphEnvironment/wet#103
