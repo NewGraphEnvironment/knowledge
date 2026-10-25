@@ -153,6 +153,8 @@ knw_tune_score <- function(d, rule_in, grid, resp = "U", seed = 54L, folds = 5L,
   res$pick_flow <- if (flow_start) seq_len(nrow(grid)) == pkf[["pick"]] else NA
   res$recommended_flow <- if (flow_start) seq_len(nrow(grid)) == pkf[["recommended"]] else NA
   out <- list(rules = res, folds = sw$fold,
+              # the settings the score depends on, compared by knw_tune_run() before a cache is read back
+              spec = list(fit = fit, prior_sd = prior_sd, seed = seed, folds = folds, d_floor = d_floor, extra = extra),
               population = c(visits_in = n_all, visits_modelled = nrow(d), detections = sum(y),
                              groups = nlevels(d$wsg), patterns = sum(u), not_converged = sum(!sw$conv)))
   if (extra) {

@@ -4,7 +4,7 @@
 # tuning finished, then: bull trout comparison beside the four-species tuning,
 # then the four-species comparison. Each step's stdout goes to scripts/logs/habitat/.
 set -u
-cd /Users/airvine/Projects/repo/knowledge || exit 1
+cd "$(dirname "$0")/../../.." || exit 1   # the repo root, three above scripts/logs/habitat
 LOGS=scripts/logs/habitat
 STAMP=$(date -u +%Y%m%dT%H%M%SZ)
 CHAIN=$LOGS/20261023_chain_73.out

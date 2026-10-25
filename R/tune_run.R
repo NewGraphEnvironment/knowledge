@@ -66,10 +66,15 @@
 #'   `smoke` ([knw_tune_smoke()]'s result, with `smoke`), `score`
 #'   ([knw_tune_score()]'s result), `pick` (the recommended rule row) and `curve`
 #'   ([knw_tune_curve()]'s; `NULL` with `curve_error` when its fit failed);
-#'   `null_heldout` (the held-out deviance with no rule) and `grade_withheld`,
-#'   `TRUE` when the curve's held-out deviance is no better than that: a curve
-#'   that predicts held-out groups no better than knowing nothing ranks segments
-#'   no better either, so its grades are withheld.
+#'   `null_heldout` (the held-out deviance with no rule over the grid's visits),
+#'   `null_heldout_curve` (the same model scored over the curve's own visits,
+#'   those with a size, a gradient and a distance, on the same folds) and
+#'   `grade_withheld`, `TRUE` when the curve's held-out deviance is no better
+#'   than `null_heldout_curve`: a curve that predicts held-out groups no better
+#'   than knowing nothing ranks segments no better either, so its grades are
+#'   withheld. The comparison is over one population because a width rule's
+#'   curve fits fewer visits than the grid (unmeasured streams have no width),
+#'   and each visit it drops would otherwise leave only its own side.
 #' @export
 #' @examples
 #' \dontrun{
@@ -199,6 +204,7 @@ knw_tune_run <- function(visits, species_tbl, walks, thresholds, species = knw_s
     rec <- out[[key]]
     # a scored grid is hours of work: keep it beside the run so a later failure does not cost it
     cache <- if (is.null(cache_dir)) NULL else file.path(cache_dir, paste0(key, "_score.rds"))
+    spec <- list(fit = fit, prior_sd = prior_sd, seed = seed, folds = folds, d_floor = d_floor, extra = extra)
     sc <- NULL
     if (!is.null(cache) && file.exists(cache)) {
       sc <- readRDS(cache)
@@ -206,7 +212,17 @@ knw_tune_run <- function(visits, species_tbl, walks, thresholds, species = knw_s
       # carry which rule is `default` (it moves with link's thresholds), so every grid column is compared
       # a cache from before a grid column existed (#80's departures_flow, is_link_tuned) is another grid too
       if (!identical(sc$population[["visits_in"]], nrow(d)) || !all(names(grid) %in% names(sc$rules)) ||
-            !identical(as.list(sc$rules[names(grid)]), as.list(grid))) sc <- NULL
+            !identical(as.list(sc$rules[names(grid)]), as.list(grid))) {
+        sc <- NULL
+      } else if (is.null(sc$spec)) {
+        # the settings a score depends on (the fit, the prior, the folds, the extras) are recorded with it since
+        # the #73 review; a cache from before the record is read as this run's and says so, because deleting it
+        # would rescore every key for a setting that did not move
+        message(key, ": the score cache records no settings; read as scored with fit = ", fit, ", prior_sd = ",
+                prior_sd, ", seed = ", seed, ", folds = ", folds, " (delete it if any of those moved)")
+      } else if (!identical(.tune_spec_norm(sc$spec[names(spec)]), .tune_spec_norm(spec))) {
+        sc <- NULL
+      }
     }
     if (is.null(sc)) {
       sc <- knw_tune_score(d, rule_in, grid, resp, seed = seed, folds = folds, n_boot = n_boot,
@@ -228,9 +244,26 @@ knw_tune_run <- function(visits, species_tbl, walks, thresholds, species = knw_s
     rec$curve_error <- if (inherits(cv, "knw_curve_failed")) cv$message else NULL
     # the no-rule score is the same on every row: each row's held-out deviance less its gain over no rule
     rec$null_heldout <- sc$rules$dev_heldout[1] - sc$rules$ddev_null[1]
-    # a curve no better than no rule on held-out groups is not graded from (Al, 2026-10-24; #73)
-    rec$grade_withheld <- !inherits(cv, "knw_curve_failed") && cv$heldout >= rec$null_heldout
+    # a curve no better than no rule on held-out groups is not graded from (Al, 2026-10-24; #73). The comparison is
+    # over the curve's own visits: a width rule's curve drops every visit with no width, and against the grid's
+    # no-rule score each dropped visit left the curve's side alone, so the gate favoured publishing (the branch
+    # review of 2026-10-25; bull trout spawning's grade rested on it)
+    rec$null_heldout_curve <- if (inherits(cv, "knw_curve_failed")) NA_real_ else
+      .tune_null_heldout(cv$data, resp, sc$folds, folds, fit = fit, prior_sd = prior_sd)
+    rec$grade_withheld <- !inherits(cv, "knw_curve_failed") && cv$heldout >= rec$null_heldout_curve
     out[[key]] <- rec
   }
   out
 }
+
+# the no-rule model's held-out deviance over `dd` on the run's folds, scored as the grid's own no-rule row is
+# (`.tune_score_one()` with no visit in), so a curve fitted on fewer visits than the grid is compared with no rule
+# on the visits it was fitted on. A fold with no held-out visit in `dd` is left out.
+.tune_null_heldout <- function(dd, resp, fold_of, folds, fit = "fe", prior_sd = 2.5) {
+  fs <- .tune_fold_setup(dd, resp, fold_of, folds)
+  fs <- Filter(function(f) length(f$ho) > 0L, fs)
+  sum(.tune_score_one(rep(FALSE, nrow(dd)), fs, fit = fit, prior_sd = prior_sd)$dev)
+}
+
+# the settings compared between a cached score and the run that reads it; a count given as 5 or 5L is one setting
+.tune_spec_norm <- function(x) lapply(x, function(v) if (is.numeric(v)) as.numeric(v) else v)

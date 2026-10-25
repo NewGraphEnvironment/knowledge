@@ -58,6 +58,18 @@ test_that("a cached score is read back only for the grid it was scored on", {
   local_mocked_bindings(knw_tune_score = function(...) stop("rescored"))
   expect_equal(run(small)$CH_rear$score$rules$rule, first$CH_rear$score$rules$rule)
   expect_error(run(wider), "rescored")
+  # the settings the score depends on are compared too (the branch review of 2026-10-25): another prior or seed is
+  # another score, and a cache from before the record is read back with a message rather than thrown away
+  expect_equal(first$CH_rear$score$spec$prior_sd, 2.5)
+  expect_error(knw_tune_run(s$v, s$sp, s$walks, s$thr, species = "CH", stages = "rear", n_boot = 5L, seeds_more = integer(),
+                            grid_args = small, cache_dir = dir, prior_sd = 5), "rescored")
+  expect_error(knw_tune_run(s$v, s$sp, s$walks, s$thr, species = "CH", stages = "rear", n_boot = 5L, seeds_more = integer(),
+                            grid_args = small, cache_dir = dir, seed = 55L), "rescored")
+  no_spec <- readRDS(file.path(dir, "CH_rear_score.rds"))
+  no_spec$spec <- NULL
+  saveRDS(no_spec, file.path(dir, "CH_rear_score.rds"))
+  expect_message(expect_equal(run(small)$CH_rear$score$rules$rule, first$CH_rear$score$rules$rule), "records no settings")
+  saveRDS(first$CH_rear$score, file.path(dir, "CH_rear_score.rds"))
   # a cache written before a grid column existed is rescored, not read as this grid's (it stopped 0320 on 2026-10-22)
   old_cache <- readRDS(file.path(dir, "CH_rear_score.rds"))
   old_cache$rules$departures_flow <- NULL
@@ -100,12 +112,27 @@ test_that("a curve no better than no rule on held-out groups has its grades with
   r <- run()
   rules <- r$score$rules
   expect_equal(r$null_heldout, rules$dev_heldout[2] - rules$ddev_null[2])
-  expect_equal(r$grade_withheld, r$curve$heldout >= r$null_heldout)
+  # the simulated visits all carry a size, so the curve's population is the grid's and the two no-rule scores agree
+  expect_equal(nrow(r$curve$data), unname(r$score$population[["visits_modelled"]]))
+  expect_equal(r$null_heldout_curve, r$null_heldout)
+  expect_equal(r$grade_withheld, r$curve$heldout >= r$null_heldout_curve)
   # the gate reads the curve's own held-out deviance against no rule's, on either side
-  local_mocked_bindings(knw_tune_curve = function(...) list(heldout = r$null_heldout))
+  local_mocked_bindings(knw_tune_curve = function(...) list(heldout = r$null_heldout_curve, data = r$curve$data))
   expect_true(run()$grade_withheld)
-  local_mocked_bindings(knw_tune_curve = function(...) list(heldout = r$null_heldout - 0.01))
+  local_mocked_bindings(knw_tune_curve = function(...) list(heldout = r$null_heldout_curve - 0.01, data = r$curve$data))
   expect_false(run()$grade_withheld)
+  # no rule is scored on the curve's own visits (the branch review of 2026-10-25): a curve fitted on four visits in
+  # five, scoring between no rule's deviance on those visits and on all of them, is withheld; against the grid's
+  # no-rule score it would have been published, which is how bull trout spawning's grade passed the gate
+  sub <- .tune_modelled(r$curve$data[seq_len(nrow(r$curve$data)) %% 5 != 0, , drop = FALSE], "U")
+  null_sub <- .tune_null_heldout(sub, "U", r$score$folds, 5L)
+  expect_lt(null_sub, r$null_heldout)
+  mid <- (null_sub + r$null_heldout) / 2
+  local_mocked_bindings(knw_tune_curve = function(...) list(heldout = mid, data = sub))
+  g <- run()
+  expect_equal(g$null_heldout_curve, null_sub)
+  expect_true(g$grade_withheld)
+  expect_false(mid >= r$null_heldout)
   local_mocked_bindings(knw_tune_curve = function(...) stop("no fit"))
   failed <- run()
   expect_equal(failed$status, "curve_failed")

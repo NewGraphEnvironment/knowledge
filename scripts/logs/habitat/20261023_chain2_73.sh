@@ -5,7 +5,7 @@
 # archived schema by name (SCHEMA). The bull trout comparison runs beside the four-species tuning; the
 # four-species comparison composes the saved bull trout tables, so it waits for both.
 set -u
-cd /Users/airvine/Projects/repo/knowledge || exit 1
+cd "$(dirname "$0")/../../.." || exit 1   # the repo root, three above scripts/logs/habitat
 export SCHEMA=fresh_default_20261017
 LOGS=scripts/logs/habitat
 CHAIN=$LOGS/20261023_chain2_73.out

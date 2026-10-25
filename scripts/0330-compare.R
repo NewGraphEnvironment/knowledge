@@ -290,7 +290,10 @@ if (stage_only != "maps") {
     if (!identical(names(x), names(tpl))) return(structure(list(), class = "other_comparison"))
     as_like(x, tpl)
   }
-  saved <- setdiff(names(Filter(function(r) !is.null(r$pick) && !is.null(r$curve), curves)), names(res))
+  # a key that failed this run is not read back from its saved table: that table is an older run's, and composing it
+  # under a line that reads as success is how a stale comparison would publish (the branch review of 2026-10-25)
+  saved <- setdiff(names(Filter(function(r) !is.null(r$pick) && !is.null(r$curve), curves)), c(names(res), failed))
+  if (length(failed)) say("Not composed (failed this run; their saved tables, if any, are not read back): %s.", paste(failed, collapse = " "))
   tpl <- function(what) { for (x in res) if (!is.null(x[[what]])) return(x[[what]]); NULL }
   saved_tbl <- lapply(c(compare = "compare", change = "change", checks = "checks"), function(what) {
     out <- lapply(saved, read_saved, what = what, tpl = tpl(what))

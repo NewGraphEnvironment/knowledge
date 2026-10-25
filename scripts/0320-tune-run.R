@@ -151,7 +151,7 @@ say("Smoke run first%s: previous picks on file for %s.", if (dev) " (DEV=1: the 
     paste(names(previous), collapse = ", "))
 t0 <- Sys.time()
 sm <- knw_tune_run(vl, vs, walks, thr, species = species, spawner = spawner, workers = workers, thresholds_extra = thr_tuned,
-                   previous = previous, smoke_only = TRUE)
+                   previous = if (length(previous)) previous else NULL, smoke_only = TRUE)
 smoke_failed <- character()
 for (k in names(sm)) {
   s <- sm[[k]]$smoke
@@ -215,7 +215,8 @@ for (k in names(out)) {
       default_in_region = dflt$in_region, default_ddev = dflt$ddev_best, default_se = dflt$se_diff,
       region_n = sum(rules$in_region), patterns = r$score$population[["patterns"]],
       dev_default = dflt$dev_heldout, dev_best = best$dev_heldout, dev_null = best$dev_heldout - best$ddev_null,
-      dev_curve = r$curve$heldout, curve_prior_sd = r$curve$prior_sd, grade_withheld = r$grade_withheld,
+      dev_curve = r$curve$heldout, null_heldout_curve = r$null_heldout_curve, curve_prior_sd = r$curve$prior_sd,
+      grade_withheld = r$grade_withheld,
       curve_dist_in_model = r$curve$dist_in_model,
       curve_edf = paste(sprintf("%s=%.2f", names(r$curve$edf), r$curve$edf), collapse = "; "),
       # NA under DEV=1, which runs the main seed alone
@@ -230,9 +231,12 @@ for (k in names(out)) {
     say("%s: %s. %d visits (%d detections) in %d groups (%d both). Recommended %s; default %s the region (+%.1f, SE %.1f). Curve held-out %.1f vs grid best %.1f.",
         k, r$status, row$visits_in, row$detections, row$groups, row$groups_both, r$pick$rule,
         if (dflt$in_region) "in" else "outside", dflt$ddev_best, dflt$se_diff, r$curve$heldout, best$dev_heldout)
+    say("%s: no rule scores %.1f held-out on the grid's %d visits and %.1f on the curve's %d; the curve %.1f, so grades are %s.",
+        k, r$null_heldout, r$score$population[["visits_modelled"]], r$null_heldout_curve, nrow(r$curve$data), r$curve$heldout,
+        if (isTRUE(r$grade_withheld)) "withheld" else "published")
     if (isTRUE(r$grade_withheld)) {
-      say("%s: grades withheld: the curve's held-out %.1f is no better than no rule's %.1f.", k, r$curve$heldout,
-          r$null_heldout)
+      say("%s: grades withheld: the curve's held-out %.1f is no better than no rule's %.1f on the curve's own visits.", k,
+          r$curve$heldout, r$null_heldout_curve)
     }
     say("%s: from the flow start %s (1.96 SE: %s); from the width start at 1.96 SE %s; link's default_tuned rule %s %s.",
         k, row$rule_recommended_flow, row$rule_recommended_flow_196, row$rule_recommended_196,
@@ -253,7 +257,7 @@ summ <- bind_rows(summ)
 for (k in names(out)) {
   write_csv(summ |> filter(species_code == out[[k]]$species_code, stage == out[[k]]$stage) |>
               mutate(across(where(is.numeric), ~ round(.x, 4))), file.path(dir_out, paste0(k, "_summary.csv")), na = "")
-  saveRDS(out[[k]][intersect(c("species_code", "stage", "response", "status", "pick", "curve", "null_heldout", "grade_withheld"),
+  saveRDS(out[[k]][intersect(c("species_code", "stage", "response", "status", "pick", "curve", "null_heldout", "null_heldout_curve", "grade_withheld"),
                              names(out[[k]]))], file.path(dir_out, paste0(k, "_curve.rds")))
 }
 
