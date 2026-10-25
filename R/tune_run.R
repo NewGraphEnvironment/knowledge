@@ -46,9 +46,13 @@
 #'   grid is saved as `<sp>_<stage>_score.rds` and read back on a rerun when the
 #'   population has the same number of visits and the grid the same rows, in
 #'   the same order (every [knw_tune_grid()] column, so a moved `default`
-#'   counts). The other scoring arguments (`seed`, `folds`, `n_boot`,
-#'   `seeds_more`, `d_floor`, `extra`) are not checked: give a run with different
-#'   ones its own directory.
+#'   counts), and the settings the score was made with match (`fit`, `prior_sd`,
+#'   `seed`, `folds`, `d_floor` and `extra`, recorded as `spec` by
+#'   [knw_tune_score()]); a cache written before the record is read back with a
+#'   message naming the settings it is taken as. `n_boot`, `seed_boot` and
+#'   `seeds_more` are not checked: a cache's bootstrap and extra-seed tables are
+#'   read back whatever the run asked for, so give a run with different ones its
+#'   own directory.
 #' @param previous `NULL`, or a named `character` vector of the previous pick's
 #'   rule string per `"<sp>_<stage>"`, which the smoke run scores where present.
 #' @param smoke `logical(1)` run the smoke run and its checks first.

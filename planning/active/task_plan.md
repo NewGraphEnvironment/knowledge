@@ -255,8 +255,9 @@ run (findings, "The intercept minimiser sticks on a flat clamp"), so Phase 7's r
 ## Owed before merge, on the database's host (found by the branch review, 2026-10-25)
 
 - [ ] `SCHEMA=fresh_default_20261017 Rscript scripts/0320-tune-run.R` from a frozen copy at the branch's head (scores
-      cached; every curve refits and the gate now scores no rule on the curve's own visits; the keep-check regrades
-      BT_spawn alone, whose verdict moved to withheld, and every summary gains `null_heldout_curve`), then
+      cached; every curve refits and the gate now scores no rule on the curve's own visits; every grade table is
+      regraded, because none carries `null_heldout_curve`, which `0325` and `0330` now require: about 190 min on the
+      host; BT_spawn's verdict moves to withheld and every summary gains the column), then
       `SCHEMA=fresh_default_20261017 SPECIES=BT Rscript scripts/0330-compare.R` (BT spawning's graded km to NA), then
       `Rscript scripts/0325-publish.R` and `SCHEMA=fresh_default_20261017 Rscript data-raw/vignette_chinook.R` (the
       CH summary's md5 moves), then the BT spawning sentences in `research/bull_trout_tuned.md` and

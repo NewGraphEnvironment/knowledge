@@ -87,10 +87,11 @@ if (!length(gfiles)) stop("no grade tables in ", tune_dir)
 heads <- lapply(gfiles, function(f) read_csv(f, n_max = 1, show_col_types = FALSE, col_types = cols(.default = "c")))
 names(heads) <- basename(gfiles)
 stale <- names(heads)[!vapply(heads, function(h) {
-  all(c("ref_population", "ref_edge", "walk", "discharge_load", "grade_withheld") %in% names(h)) &&
+  all(c("ref_population", "ref_edge", "walk", "discharge_load", "grade_withheld", "null_heldout_curve") %in% names(h)) &&
     identical(h$ref_population, "stream_branch") && identical(h$walk, "bank")
 }, logical(1))]
-if (length(stale)) stop("grade tables made before #73 (no record of the bank walk, the reference edge types and the flow build); rerun 0320: ",
+if (length(stale)) stop("grade tables made before #73 (no record of the bank walk, the reference edge types and the flow build), or graded ",
+                        "before the gate scored no rule on the curve's own visits (no null_heldout_curve; the branch review of 2026-10-25); rerun 0320: ",
                         paste(stale, collapse = ", "))
 ref_edges <- unique(vapply(heads, function(h) h$ref_edge, character(1)))
 if (length(ref_edges) != 1) stop("the grade tables took their reference over different edge types: ", paste(ref_edges, collapse = " | "))

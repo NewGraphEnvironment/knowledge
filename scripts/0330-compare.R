@@ -159,10 +159,11 @@ stale <- names(jobs)[!vapply(names(jobs), function(k) {
                        col_types = readr::cols(.default = "c"))
   "ref_population" %in% names(h) && identical(h$ref_population, "stream_branch") &&
     "walk" %in% names(h) && identical(h$walk, "bank") &&
-    # graded from a curve with the prior and the withheld-grade record (#73, Phase 7)
-    all(c("curve_prior_sd", "grade_withheld") %in% names(h))
+    # graded from a curve with the prior, the withheld-grade record (#73, Phase 7) and the gate's own number (the branch
+    # review of 2026-10-25: a verdict written by the gate before it compared like with like is not read back)
+    all(c("curve_prior_sd", "grade_withheld", "null_heldout_curve") %in% names(h))
 }, logical(1))]
-if (length(stale)) stop("grade tables made before #73's curve prior (no ref_population = stream_branch, a walk not ending at the bank, or no curve_prior_sd and grade_withheld); rerun 0320: ",
+if (length(stale)) stop("grade tables made before #73's curve prior (no ref_population = stream_branch, a walk not ending at the bank, or no curve_prior_sd, grade_withheld and null_heldout_curve); rerun 0320: ",
                         paste(stale, collapse = ", "))
 # each job writes its own tables as it finishes and returns its error rather than raising it, so one failed
 # species cannot discard the others at collection (code-check round 2); the grade table is read with the
@@ -301,6 +302,22 @@ if (stage_only != "maps") {
     out
   })
   other <- saved[vapply(saved_tbl$compare, inherits, logical(1), "other_comparison")]
+  # a saved table with this run's columns but another baseline or structure is another comparison too (the branch
+  # review of 2026-10-25): composing it would put two baselines in one compare.csv, told apart only by a column
+  # nothing reads
+  mismatch <- vapply(saved, function(k) {
+    x <- saved_tbl$compare[[k]]
+    if (is.null(x) || inherits(x, "other_comparison")) return("")
+    cs <- unique(x$config_sha)
+    ts <- unique(x$tuned_structure)
+    paste(c(if (!identical(cs, config_sha)) sprintf("config %s", paste(substr(cs, 1, 8), collapse = "/")),
+            if (!identical(ts, tuned_as)) sprintf("tuned_as %s", paste(ts, collapse = "/"))), collapse = ", ")
+  }, character(1))
+  for (k in saved[nzchar(mismatch)]) {
+    say("Left out of the combined tables (%s was saved under another %s; this run: config %s, tuned_as %s): rerun it.",
+        k, mismatch[[k]], substr(config_sha, 1, 8), tuned_as)
+  }
+  other <- union(other, saved[nzchar(mismatch)])
   composed <- setdiff(saved[!vapply(saved_tbl$compare, is.null, logical(1))], other)
   if (length(composed)) {
     say("Composed with the saved comparison of %s.", paste(composed, collapse = " "))

@@ -284,8 +284,12 @@ for (k in names(out)) {
   ref_edge_txt <- paste(ref_edge_curve, collapse = ";")
   # the curve's prior on its data-set and era terms (#73, Phase 7): a curve refit with another prior grades differently
   curve_prior_txt <- format(if (is.null(r$curve$prior_sd)) Inf else r$curve$prior_sd)
-  # a withheld key is still walked and written: 0330 reads its sizes and distances to apply the rule
+  # a withheld key is still walked and written: 0330 reads its sizes and distances to apply the rule. The gate's own
+  # number is written beside the verdict (the branch review of 2026-10-25): a table graded before the gate compared no
+  # rule on the curve's own visits has no null_heldout_curve, and 0325 and 0330 refuse it rather than publish a
+  # verdict the code no longer makes
   withheld_txt <- format(isTRUE(r$grade_withheld))
+  nhc_txt <- format(round(r$null_heldout_curve, 4), nsmall = 4)
   if (file.exists(gpath)) {
     # kept only when it was graded under this pick on this link run and this flow build, with every graded segment
     # walked to the bank (#73), and the reference taken over the curve's own edge types (#72): the table records all
@@ -296,7 +300,8 @@ for (k in names(out)) {
       "ref_edge" %in% names(head1) && identical(head1$ref_edge, ref_edge_txt) &&
       "discharge_load" %in% names(head1) && identical(head1$discharge_load, discharge_load) &&
       "curve_prior_sd" %in% names(head1) && identical(head1$curve_prior_sd, curve_prior_txt) &&
-      "grade_withheld" %in% names(head1) && identical(head1$grade_withheld, withheld_txt)
+      "grade_withheld" %in% names(head1) && identical(head1$grade_withheld, withheld_txt) &&
+      "null_heldout_curve" %in% names(head1)
     if (same) {
       say("%s grades: already written under %s on %s, kept.", k, r$pick$rule, run_uid)
       next
@@ -319,7 +324,7 @@ for (k in names(out)) {
   write_csv(g$grades |> mutate(species_code = r$species_code, stage = r$stage, rule = r$pick$rule, run_uid = run_uid,
                                ref_population = "stream_branch", ref_edge = paste(g$ref_edge, collapse = ";"),
                                q_walk = g$q, walk = g$walk, discharge_load = discharge_load,
-                               curve_prior_sd = curve_prior_txt, grade_withheld = withheld_txt,
+                               curve_prior_sd = curve_prior_txt, grade_withheld = withheld_txt, null_heldout_curve = nhc_txt,
                                across(c(rate, grade), ~ signif(.x, 5))),
             file.path(dir_out, paste0(k, "_grades.csv")), na = "")
   say("%s grades: %d groups, %s; reference rate %.4f over edge types %s; walks to %g m3/s, to the bank, %.1f min; %d of %d found rivers lie in another group; total %.1f min.",
