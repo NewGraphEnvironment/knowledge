@@ -218,8 +218,8 @@ run (findings, "The intercept minimiser sticks on a flat clamp"), so Phase 7's r
       spawn, GR, ST, WCT; RB if #83 allows) on `SCHEMA=fresh_default_20261017`; regrade; recompare the keys whose pick
       moves and GR, ST, WCT; revise the CH, CO and BT write-ups where a pick moves. The grade keep-check compares rule,
       run_uid, walk, ref_edge and discharge_load, not `q`: check `q` by hand
-- [ ] `research/habitat_thresholds_tuned.md`: Results, "At 1.96 SE", Grades, "What each rule changes" and Limits
-      rewritten from the new tables (the distance bullet now says bank); every quantified claim recomputed at the grain
+- [x] `research/habitat_thresholds_tuned.md`: Results, "At 1.96 SE", Grades, "What each rule changes" and Limits
+      rewritten from the new tables (2026-10-25, every row #73's; the README's eight rows with it) (the distance bullet now says bank); every quantified claim recomputed at the grain
       of the sentence
 
 ## Phase 8: Publish and regenerate

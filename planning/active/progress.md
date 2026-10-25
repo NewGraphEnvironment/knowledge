@@ -176,8 +176,18 @@
   visit, 8,717 and 475) for the cross-tabulations and the descriptive bands. The spawning visits are not
   "August–October": #33's rule reads the month for what counts as evidence, and the modelled visits run June to October
   (July 65, August 197, September 170).
-- Next: `habitat_thresholds_tuned.md` and `research/README.md`'s rows (the GR, RB, ST and WCT rows there still carry
-  #57's rules), then Phase 8.
+- `research/habitat_thresholds_tuned.md` rewritten (356 lines in place of 300): every row of Results, the 1.96 table,
+  Grades and the comparison table is #73's, recomputed from the eight summaries and tune tables (`region196` counted
+  from each tune csv), the grade tables (`grade_summ.R`, which fails on a withheld key because duckdb reads an all-NA
+  `grade` as text: run it on graded keys only), the per-key compare and change tables and `checks.csv`; the Method
+  names the fit, the prior, the smoke gates, the two starts, the bank walk and the grade gate; the Limits say the
+  distance is to the bank (the BULK check), which rows have no grade and why, and label #65's off-branch and
+  floodplain measurements as #65's. Found while summing `compare.csv`: each key × structure carries a totals row
+  beside its group rows, so a plain sum over the file double-counts; the per-key files are what `compare_summ2.R`
+  reads. `research/README.md`: the eight tuned-rule rows rewritten to the #73 picks (GR, RB, ST and WCT's had carried
+  #57's).
+- Next: Phase 8 (`0325` with RB in and the withheld keys out of `habitat_grade/v1`, `near_river_scope`, the vignette
+  data, README figure and example, `scripts/README.md`, CLAUDE.md's walk sentence, tests), then validation.
 
 ### Resume (revised 2026-10-25 15:10 UTC: parked here, picked up on m4 under another account, on Fable)
 
