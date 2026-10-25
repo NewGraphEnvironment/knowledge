@@ -562,3 +562,20 @@ on held-out groups than no rule is published without grades. With the prior that
 for no rule), coho (4092.0 against 4024.0) and WCT (1453.4 against 1329.7); bull trout spawning passes narrowly
 (397.3 against 401.4). Coho's curve is behind no rule with 62 groups with both outcomes, so the cause there is not
 power alone; its write-up loses its grade section.
+
+## The regrade, the recompare and what they cost (2026-10-24 and 25)
+
+- **The gate held as predicted.** `0320` at `1d4ceb8`, 190.9 min, exit 0: grades withheld from CO_rear (4,092.0
+  against no rule's 4,024.0), ST_rear (553.8 against 420.8) and WCT_rear (1,453.4 against 1,329.7); their grade tables
+  carry size and distance and no rate, grade or class. Picks and rule scores did not move; only the curves did.
+- **One key at a time uses one database core.** `0330` parallelises across keys only (`R/compare_rules.R` runs a key's
+  groups one after another on one connection), so WCT alone held the database container at 99 % of 600 %, and the
+  other seven keys on six workers at 578 %: 18.4 min plus 160.1 min for all eight keys, against about 5 h for five
+  keys one at a time on 2026-10-24. #86 and #87 hold the fix.
+- **Remote work: queries crawl, copies do not.** A query's round trip is 104 ms from m4 against 1.6 ms on the database's
+  host (2026-10-24); a bulk copy to m4 ran at 3.2 MB/s (200 MB in 63 s, 2026-10-25), and the grade CSVs compress about
+  16× (zstd or gzip), so the 20 GB of ignored tables moved as one archive. CLAUDE.md, "Database access", carries the
+  rule.
+- **Config pin.** Every key was compared at link's configs `102762d`; CH and CO had last been compared at `67a410e`,
+  whose `configs/default` lacks only `cabd_additions_barriers`. Their kilometres and checks came out identical; CH's
+  graded km moved with the curve's prior (48,091 → 48,134 under `default`).

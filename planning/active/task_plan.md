@@ -224,8 +224,9 @@ run (findings, "The intercept minimiser sticks on a flat clamp"), so Phase 7's r
 
 ## Phase 8: Publish and regenerate
 
-- [ ] `0325` leaves RB out of `thresholds/v1` and `thresholds_groups` (deferred, Phase 7), and the grade table with it;
-      the publish step names the deferral rather than carrying #57's RB row
+- [ ] `0325` includes RB in `thresholds/v1`, `thresholds_groups` and the grade table (no longer deferred: #83 landed and
+      RB was tuned, graded, compared and written up on 2026-10-24; was: leave RB out and name the deferral), and leaves
+      the grade-withheld keys (CO, ST, WCT rearing) out of `habitat_grade/v1`
 - [ ] `knw_thresholds_table()` adds `near_river_scope` from each key's `compare.csv` `tuned_structure` (door → `both`,
       door_wetland → `wetland_flow`, empty where the rule has no pair); Phase 4 ticked it but the column was never written
       (found 2026-10-23); `test-thresholds_table.R` pins it; `R/` is edited only after the chain's last `0320`/`0330` exits

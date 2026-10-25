@@ -158,91 +158,56 @@
 - Was next: check and commit the four write-ups; then BT, `habitat_thresholds_tuned.md` and CH (on Fable, per the model
   plan).
 
-### Resume (revised 2026-10-24 15:20 UTC, for the session that picks this up, on any model)
+### Resume (revised 2026-10-25 15:10 UTC: parked here, picked up on m4 under another account, on Fable)
 
-The branch stays `73-rebuild-the-evidence-and-retune-on-the-r`; no new branch and no `/planning-init`. From the repo
-root: `git fetch -q origin && git checkout 73-rebuild-the-evidence-and-retune-on-the-r && git pull --ff-only`, then
-read `task_plan.md` Phase 6a (done) and Phase 7, and `findings.md`'s last three sections ("The smoke run's mutation
-table", "The fit with the groups absorbed", "The prior on the data-set and era coefficients"). Rules that hold for
-every step: `SCHEMA=fresh_default_20261017` for every database step; no chained tuning and comparison; judge a run by
-its files and log lines, never by `ps`; a log that shows `FAILED` means stop and report the error lines; never edit a
-script or `R/` while a run reads it (run long jobs from a frozen copy); everything committed is public; commit each
-task with its box flip and a progress entry, and push. Al's rule for the write-ups (2026-10-23): teach the principle
-beside each result, in plain words, the specification below.
+**Where it stands.** Every run of #73 is done and committed: the rescore (`0320` at `fa638f2`), the regrade with the
+curve's prior and the grade gate (`d02af54`), and the recompare of all eight keys (`b8d3fbd`). The write-ups for CO,
+CH, GR, RB, ST and WCT are rewritten on those tables and committed (`6f9cb8a` to `384d4d8`). Left, in order:
+1. `research/bull_trout_tuned.md` (BT_rear's pick moved in the rescore; BT_spawn graded too; brief below).
+2. `research/habitat_thresholds_tuned.md` (Phase 7's last box) and `research/README.md`'s rows.
+3. Phase 8 as `task_plan.md` lists it. Its first box is stale: RB is no longer deferred (#83 landed; RB was tuned,
+   graded, compared and written up on 2026-10-24), so `0325` includes RB; that box becomes "RB in, no deferral".
+4. Validation: `devtools::test()` (the two known failures, `test-tune_repick.R:79` and `test-vignette-data.R`, are
+   Phase 8's), `/code-check branch`, `/planning-archive`, `/gh-pr-push`.
+No new branch and no `/planning-init` for any of it: it is #73's own plan. The speed work is #87 (with #85 and #86),
+a separate `/planning-init` after #73 merges (Al, 2026-10-24).
 
-**Done: the regrade with the curve prior and the grade gate (2026-10-24, 190.9 min, exit 0; progress above).** Next:
-`0330` on every key (CH, CO, BT, GR, RB, ST, WCT), one species at a time, because the grade tables changed; then the
-write-ups, where CO, ST and WCT have no grade section. (The recompare is done too, 2026-10-24 23:01 UTC.) Before that: **Done: `0330` here, one species at a time (GR, WCT, ST, RB, BT), 10:23 to 15:13 UTC 2026-10-24**, every species
-exit 0 (findings, "Phase 7's recompare"); next are the write-ups. Phase 7's rescore is done and committed (2026-10-24 10:20 UTC, exit 0; findings, "Phase 7's rescore"). How it went: The rescore ran on m4 from
-21:21 UTC 2026-10-23 (`fa638f2`, every species, 12 workers) and scored every key with no `FAILED` by 22:26 UTC, then
-graded so slowly that it was stopped at 06:33 UTC (`exit 143`): grading sends one walk query per segment, and a round
-trip to the database costs 104 ms from m4 against 1.6 ms here, so BT rearing had not finished walking after 7.5 h
-(about an hour here). The fix is #85. Al chose to reuse m4's scores (2026-10-24, option A): m4's 100 output files
-(scores, curves, summaries, tune tables) were copied into `data/tune/` here, md5s checked, and the earlier grade tables
-here were moved to `repo_aside/knowledge_grades_pre_fa638f2_20261024/` beside the clones so every key grades fresh.
-The run: `repo_aside/run_0320_local.sh`, a frozen copy of `0320` at `fa638f2` (md5 7720439…), `SCHEMA=fresh_default_20261017
-WORKERS=8`; stdout `repo_aside/0320_local.log`, which ends with `exit <code>` and a date; the script's own log is
-`scripts/logs/habitat/<date>_tune_run.txt`, dated by the machine's local day. It took 224.6 min. Both stdout logs are in
-`planning/active/scratch/logs/` (`20261023_0320_m4.log`, `20261024_0320_grade_local.log`).
+**Getting started on m4.** From the repo root: `git fetch -q origin && git checkout
+73-rebuild-the-evidence-and-retune-on-the-r && git pull --ff-only` (m4's checkout was at `fa638f2`). The ignored
+tables live only on the machine that ran the regrade, so they were bundled and copied to m4 on 2026-10-25:
+`~/Projects/repo_aside/knowledge_bundle_20261025/` holds `knowledge_tables_20261025.tar.zst` (every
+`data/tune/*_grades.csv`, `*_curve.rds` and `data/compare/*_segments.rds`, paths relative to the repo root) and
+`MANIFEST.md5` (each file's md5 before bundling). Unpack from the repo root with
+`zstd -dc ~/Projects/repo_aside/knowledge_bundle_20261025/knowledge_tables_20261025.tar.zst | tar -xf -`, then check
+with `/sbin/md5 -r $(cut -d' ' -f2 ~/Projects/repo_aside/knowledge_bundle_20261025/MANIFEST.md5) | diff -
+~/Projects/repo_aside/knowledge_bundle_20261025/MANIFEST.md5` (no output means every file matches). m4's own
+`data/tune/*_score.rds` caches are from `fa638f2` and are not needed for anything left.
 
-**Caches:** the caches (`data/tune/*_score.rds`, `*_curve.rds`, ignored) are from `fa638f2`; remove them
-before any rerun of `0320` on changed code, because the cache is keyed on the grid.
+**The database.** Only the build's own database holds `fresh_default_20261017` and the flow load the tables were
+graded on (the table comment names wet `94deeb5`, built 2026-10-19). m4's local database is a partial build on an older
+flow load, so every database step points `PG*` at the build's database, as m4's grading did on 2026-10-23. What is left
+is light on the database: `0325` makes one call and `data-raw/vignette_chinook.R` three, so 104 ms a round trip costs
+seconds. Never rerun grading or `0330` from m4 (CLAUDE.md, "Database access"); if one is needed, run it on the
+database's host. `0325` publishes the flow-load comment of the database it reads, so check it names `94deeb5` first:
+`obj_description('discharge.fwa_v1_segment_monthly'::regclass)`.
 
-**Steelhead's curve (measured 2026-10-24, findings "Why steelhead's curve trails its grid"; decision with Al):** its held-out score is 840.2 against the grid's best 357.5 (every other key's curve is within 13 %
-of its grid's best or below it, on m4's log). The curve's GAM carries data-set and era terms with no prior;
-measure it before any write-up uses steelhead's grades (its pick comes from the grid, not the curve).
+**Rules for every step.** `SCHEMA=fresh_default_20261017` for every database step; judge a run by its files and log
+lines, never by `ps`; a log that shows `FAILED` means stop and report the error lines; never edit a script or `R/` while
+a run reads it; everything committed is public (no home paths, hosts or private links; planning may name a machine
+that is the subject of a measurement); commit each task with its box flip and a progress entry, and push. Al's rule
+for the write-ups (2026-10-23): teach the principle beside each result, in plain words first, the specification below.
+The grade gate (Al, 2026-10-24): a key whose curve scores no better on held-out groups than no rule gets no grades
+(withheld: CO_rear, ST_rear, WCT_rear); its file has a section saying why instead of a Grade section (the coho file is
+the model), and its graded km in the comparison is NA.
 
-**Then, in order:** `0330` one species at a time here, not on m4, which is too far from the database (`SCHEMA=fresh_default_20261017 SPECIES=<sp> Rscript
-scripts/0330-compare.R`, never chained with `0320`; the combined tables are composed per key, see the last bullet
-below); the keep-check on the grades compares rule, run_uid, walk, ref_edge and discharge_load, not `q`, so check `q`
-by hand; then the write-ups per the model plan below, every number recomputed from the new tables; then Phase 8.
-Which picks moved against the committed tables is the first thing to read off the new `*_tune.csv` (`recommended`).
-
-**This machine** was loaded by link's provincial run (a virtual machine at two cores) all afternoon on 2026-10-23,
-which is why the timing moved to m4. The dense and fe reference caches are under
-`data/tune/ref_*/` (ignored); their logs and the prior measurement's are in `planning/active/scratch/logs/`.
-Pre-existing test failures on the branch, Phase 8's, not touched: `test-tune_repick.R:79` (#79's pin) and
-`test-vignette-data.R` (md5s moved by Phase 7's runs); everything else passes (full suite 2026-10-23 before the prior;
-the three tune files after it). m4's old #57 tune outputs were moved to `repo_aside/knowledge_tune_57_20261023/`
-beside the clones, not deleted.
-
-**Model plan (Al, 2026-10-22 evening).** The four smaller species' research files on a cheaper model; the bull trout
-file, the `habitat_thresholds_tuned.md` rewrite, Phase 8, the branch review and the PR on Fable.
-
-**The four smaller species: `research/grayling_rearing_tuned.md` (34 lines), `rainbow_rearing_tuned.md` (47),
-`steelhead_rearing_tuned.md` (34), `westslope_cutthroat_rearing_tuned.md` (37)**, each rewritten in place on the pattern
-of `research/coho_rearing_tuned.md` (111 lines, committed in `05d5faf`): header line (Verified, Issues, Produced by,
-Status), "What to expect of juvenile <species>" from the literature rows, "Evidence", "Recommended rule: …" with the
-flow-start pick and the 1.96 pick, "What the checks say" (every check, each with its direction, never sorted by side),
-"What it is not", "Grade", "What the rule changes on link's segments" with the free/door table and the FDIS and
-bcfishobs checks per structure, the structure the thresholds table records. Keep the old #57/#65 sections only where
-they say something the new ones do not (the coho file dropped them; the chinook file keeps #54's record under its own
-heading). Keys are `GR_rear`, `RB_rear`, `ST_rear`, `WCT_rear`.
-
-- Numbers come from three scripts copied to `planning/active/scratch/` (run from the repo root with
-  `pkgload::load_all()` available): `tune_summ.R` (edit its species vector; prints best, region, picks, profiles,
-  bootstrap, seeds, honest, curve edf), `grade_summ.R` (edit its species vector; duckdb over
-  `data/tune/<key>_grades.csv`: accessible, graded, km, grade-weighted km, grade classes, river-polygon split, dist 0,
-  other-group walks), `compare_summ2.R` (`KEYS=GR_rear Rscript …`; reads the per-key compare, change and checks tables
-  with their `structure` column). The grade meta line is `<key> grades:` in the species' `0320` log, and the
-  `discharge_load` is on the grade table itself.
-- Literature prior rows (`data/literature_evidence.csv`, data row N = file line N + 1): RB rearing gradient 475, 476,
-  478 and channel width 477, instream flow 961–1040 (eleven rows); ST rearing gradient 204, 205, 233, 272, 292, 305,
-  312, 313, 320, 321, 339, 362, 389–392, discharge 196–198, 235, 274, 304, 310, 311, 318, 319, 340, 341, channel width
-  342, 387, 388, 393, bridge distance 363, 366; GR and WCT have **no** rearing gradient or size rows (GR: velocity,
-  depth and one flow row 998; WCT: one flow row 1003), so their prior paragraphs say so and lean on the IP model
-  registry (`data/ip_model_registry.csv`) and the species' life history rather than invent a bound. Re-list with the
-  dplyr filter on `species_code`, `life_stage == "rearing"`, `variable` before writing; cite rows, quote nothing you
-  have not read in the row's `quote`.
-- Every quantified claim is recomputed from the tables at the grain of the sentence (the #65 lesson), and the
-  "Reading the tuning's stability checks" notes in CLAUDE.md say what each check counts. `exact rule` and `any rule at
-  a value` are different numbers.
-- After the four files: their rows in `research/habitat_thresholds_tuned.md` (Results, 1.96, Grades, "What each rule
-  changes") marked as #73's like the CH and CO rows, and `research/README.md`'s four rows. Commit per species with the
-  Phase 7 box annotated, not flipped until all four are through.
-- Verify the combined `data/compare/compare.csv`, `change.csv`, `checks.csv` hold every fitted key's rows after the
-  chain's last 0330 (its log says "Composed with the saved comparison of …" per key composed, and "Left out of the
-  combined tables…" if a per-key file's columns differ, which would be a defect to report, not paper over).
+**How the six write-ups were checked** (repeat it for bull trout). Numbers come from
+`KEYS=<KEY> Rscript planning/active/scratch/tune_summ.R`, `grade_summ.R` and `compare_summ2.R` (the last errors at its
+change-reasons step when a key's change table is empty, as GR's is; the totals print first), the summary and honest
+and seeds csvs, `planning/active/scratch/logs/20261024_0320_prior.log` (status, gate, picks and `<KEY> grades:` lines)
+and `planning/active/scratch/logs/20261024_0330_prior_par.log` (per-key km lines). Four were drafted by Sonnet agents
+with a claims audit each and every file was spot-checked against the tables before commit; the corrections are in the
+2026-10-24 bullets above. Read "Reading the tuning's stability checks" in CLAUDE.md before writing a check's
+direction: the exact rule and any rule at a value are different numbers.
 
 **Bull trout (Fable):** `research/bull_trout_tuned.md` (72 lines; keys `BT_rear` and `BT_spawn`), the same pattern for
 each stage, with link's `default_tuned` floor (0.043 m³/s on wet, link#331) scored in the grid and named, and the
@@ -250,11 +215,12 @@ earlier weights work (`research/habitat_weights.md`, `bt_spawning.md`) as the pr
 18 rows, channel width 6, discharge 2, stream order 4; spawning gradient 20, channel width 5, discharge 1, stream order 7
 (list them with the same filter).
 
-**Then (Fable):** `habitat_thresholds_tuned.md` rewrite (Results, "At 1.96 SE", Grades, "What each rule changes",
+**Then (Fable):** `habitat_thresholds_tuned.md` rewrite, from the eight committed research files and the tables (each
+key's row marked as #73's, CO, ST and WCT with no grades) (Results, "At 1.96 SE", Grades, "What each rule changes",
 Limits: the distance bullet now says bank); Phase 8 as listed in `task_plan.md` (the Rmd guards that will break are in
 the compaction summary's Phase 8 notes and in `findings.md` if copied there: `ch196$size_min == rec$size_min`,
 `is.na(ch196$exc_q)`, `abs(wl$km_tuned - 10200) < 200`, `ge_best$grad_max > rec$grad_max`); `/code-check branch`
-(three-round floor); `/planning-archive`; `/gh-pr-push` (the PR body carries the R&D tracking cross-reference from the
-memory file, not from CLAUDE.md). The final report must name: the curve-intercept defect and fix (CH curve 2,434 →
+(three-round floor); `/planning-archive`; `/gh-pr-push` (the PR body's R&D tracking cross-reference is not in this public repo: ask Al for it
+if the session's memory lacks it). The final report must name: the curve-intercept defect and fix (CH curve 2,434 →
 1,053), that the rule scorer was affected after all (2,269 CH rules, the pick moved), the worker-export follow-up, the
 rescoring, the stopped and relaunched 0330 with its compose change, the detached chain.
