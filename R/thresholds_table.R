@@ -26,7 +26,9 @@
 #' rule has no pair, and where `compare_dir` is `NULL`. `evidence_md5` is the
 #' identity of the evidence build the rule was scored on, as the summary records
 #' it (`scripts/0320`; `NA` on a summary written before the record), which
-#' `scripts/0325` holds each grade table to. A species × stage that
+#' `scripts/0325` holds each grade table to. A summary whose `rule_recommended`
+#' is not its tune table's recommended rule is refused: the two are written at
+#' different points of a run. A species × stage that
 #' was not fitted (no stream rule, no response, too few groups) gets one row
 #' per stage with `status` saying why and no values.
 #'
@@ -91,6 +93,13 @@ knw_thresholds_table <- function(tune_dir, evidence_version, link_run_uid, link_
     tune <- utils::read.csv(file.path(tune_dir, paste0(key, "_tune.csv")), stringsAsFactors = FALSE)
     g <- utils::read.csv(file.path(tune_dir, paste0(key, "_groups.csv")), stringsAsFactors = FALSE)
     rec <- tune[tune$recommended %in% TRUE, , drop = FALSE]
+    # the summary and the tune table are one run's: 0320 writes the tune table inside its loop and the summary after it,
+    # so a run that stopped between them leaves a new grid beside an old summary (the branch review of 2026-10-25)
+    if ("rule_recommended" %in% names(summ) && !is.na(summ$rule_recommended[i]) &&
+          !identical(as.character(summ$rule_recommended[i]), rec$rule)) {
+      stop(key, ": the summary's recommended rule (", summ$rule_recommended[i], ") is not the tune table's (", rec$rule,
+           "); the two were written by different runs", call. = FALSE)
+    }
     dflt <- tune[tune$is_default %in% TRUE, , drop = FALSE]
     region <- tune[tune$in_region %in% TRUE, , drop = FALSE]
     same_size <- region[region$size_var == rec$size_var, , drop = FALSE]

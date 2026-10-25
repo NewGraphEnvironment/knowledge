@@ -119,6 +119,17 @@ test_that("rule_flow and rule_flow_196 are the picks from the flow start where t
   expect_true(is.na(ko$rule_flow))
 })
 
+test_that("a summary whose recommended rule is not its tune table's is refused", {
+  d <- tune_dir_fx()
+  summ <- utils::read.csv(file.path(d, "CH_rear_summary.csv"), stringsAsFactors = FALSE)
+  summ$rule_recommended <- "mad>=0.75|g<=0.07|Q3@D1000"
+  utils::write.csv(summ, file.path(d, "CH_rear_summary.csv"), row.names = FALSE, na = "")
+  expect_identical(unique(knw_thresholds_table(d, "v", "r", "s")$thresholds$rule[1:4]), "mad>=0.75|g<=0.07|Q3@D1000")
+  summ$rule_recommended <- "mad>=0.5|g<=0.09|Q3@D2000"
+  utils::write.csv(summ, file.path(d, "CH_rear_summary.csv"), row.names = FALSE, na = "")
+  expect_error(knw_thresholds_table(d, "v", "r", "s"), "written by different runs")
+})
+
 test_that("evidence_md5 is the summary's, and NA on a summary written before the record", {
   d <- tune_dir_fx()
   t <- knw_thresholds_table(d, "knowledge/fdis/v3", "run1", "abc1234")$thresholds

@@ -218,7 +218,19 @@
   before merge"); the eight research files say what moved. Also fixed: `0330` composing a failed job's saved table,
   the score cache not keyed on fit/prior/seed/folds/d_floor/extra (recorded as `spec`), home paths in the two chain
   scripts, `previous <- character()`; accepted: the `coef` gate reading the rule term (for Al). Round 2 running.
-- Next: review rounds 2 and 3, `/planning-archive`, the cross-reference from Al, `/gh-pr-push`.
+- Rounds 2–5 (`review-round{2..5}.md`): every finding one mechanism, a record written by one run and read back by a
+  later run on its presence alone, each round finding it one axis over inside the previous fix. Round 2: the gate's
+  written verdicts (fixed: `null_heldout_curve` on every grade table, required by `0325` and `0330`, so every table on
+  disk is refused until the host regrades them all, about 190 min); a saved comparison under another baseline (fixed).
+  Round 3: the evidence's content in no record (fixed: `evidence_md5` in the score cache's settings and on every grade
+  table); the pick unchecked by the readers (fixed in `0325`, `0330`, the compose and the vignette script); the
+  vignette's log selector matching the kept line (fixed). Round 4: the pick's evidence on no record the readers hold a
+  grade to (fixed: on the summary and curve records, carried through `knw_thresholds_table()`; a fitted row with no
+  grade table refused). Round 5: `0325`'s checks ran after the thresholds publish (fixed: every refusing check before
+  any write); a summary beside another run's tune table (fixed in `knw_thresholds_table()`); the compare rows'
+  evidence identity accepted as low. Ended by the mechanical enumeration in `review-round5.md`. Five reviewer agents,
+  about 15 min each; `devtools::test()` 942 pass, 0 fail, 1 skip at `bcbe155`.
+- Next: `/planning-archive`, `/gh-pr-push` with `NewGraphEnvironment/sred#41` (Al, 2026-10-25).
 
 ### Resume (revised 2026-10-25 15:10 UTC: parked here, picked up on m4 under another account, on Fable)
 

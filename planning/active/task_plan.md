@@ -275,7 +275,8 @@ run (findings, "The intercept minimiser sticks on a flat clamp"), so Phase 7's r
 
 - [x] Tests pass (2026-10-25, 926 passing, the two Phase 8 failures gone: the vignette data regenerated and the 1.96 pin
       moved to #73's table)
-- [ ] `/code-check branch` clean (three-round floor)
+- [x] `/code-check branch` (five rounds, 2026-10-25: `planning/active/review-round{1..5}.md`; ended by the enumeration in
+      round 5's file; one low-consequence member accepted)
 - [ ] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion
 

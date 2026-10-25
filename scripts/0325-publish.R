@@ -61,29 +61,15 @@ if (length(discharge_load) != 1 || is.na(discharge_load) || !nzchar(discharge_lo
   stop("discharge.fwa_v1_segment_monthly carries no load comment; cannot say which flows the grade read")
 }
 
-# ---- thresholds -------------------------------------------------------------------------
+# ---- the thresholds table, built first because the grade checks hold each table to its row ----------------
 tt <- knw_thresholds_table(tune_dir, evidence_version, run_uid, link_sha, compare_dir = "data/compare")
-write_csv(tt$thresholds, "data/thresholds.csv", na = "")
-write_csv(tt$groups, "data/thresholds_groups.csv", na = "")
-message(sprintf("thresholds: %d rows (%d species x stage fitted), groups: %d rows", nrow(tt$thresholds),
-                n_distinct(tt$thresholds$rule_id[tt$thresholds$status %in% c("fitted", "underpowered")]), nrow(tt$groups)))
-tables_thr <- data.frame(
-  table = c("thresholds", "thresholds_groups"),
-  source = c("data/thresholds.csv", "data/thresholds_groups.csv"),
-  script = "scripts/0325-publish.R",
-  description = c(
-    "One row per species x stage x component (size, gradient, exception_q, exception_d) of the rule recommended by the tuning run (knowledge#57): the value in link's parameter name and unit, the range of values within one SE (a parsimony rule of thumb fixed before the run) on the main reading, the readings the rule holds in, the rule the same pick makes at 1.96 SE (rule_196) and whether it keeps the row's value (holds_196), the same picks from link's flow version of default (rule_flow, rule_flow_196), the scope link applies the near-river pair on as the comparison ran it (near_river_scope: both, or wetland_flow; empty where the rule has no pair), default's value and whether default is inside the region, the visits, detections and groups scored, the power label, and the evidence version and link run the rule was scored on. The grade is expected use, not habitat quality.",
-    "The watershed groups each rule_id was scored on (groups with both outcomes), with the fold each held out in."),
-  stringsAsFactors = FALSE)
-man_thr <- knw_publish(tables_thr, "data/publish/thresholds_v1", id = "knowledge/thresholds/v1",
-                  note = "First tuned thresholds for every species and stage the electrofishing evidence can speak to, on link's province-wide default run (knowledge#57).",
-                  provenance = prov, s3 = if (publish) s3 else NULL, republish = republish)
-
-# ---- grades ----------------------------------------------------------------------------
+# ---- the grade tables' records, checked before anything is written or published ---------------
+# every check that could refuse the run sits here, ahead of the thresholds write and publish, so a run that stopped
+# between the picks and the grades cannot publish the picks alone (the branch review of 2026-10-25, round 5)
 gfiles <- list.files(tune_dir, "_grades\\.csv$", full.names = TRUE)
 if (!length(gfiles)) stop("no grade tables in ", tune_dir)
-# the description below says how the grades were made: each table records it from the call that made it (#72), and a
-# table written before the record (#57, #65) or on another convention is refused rather than described wrongly
+# the grade set's description says how the grades were made: each table records it from the call that made it (#72), and
+# a table written before the record (#57, #65) or on another convention is refused rather than described wrongly
 heads <- lapply(gfiles, function(f) read_csv(f, n_max = 1, show_col_types = FALSE, col_types = cols(.default = "c")))
 names(heads) <- basename(gfiles)
 stale <- names(heads)[!vapply(heads, function(h) {
@@ -124,6 +110,25 @@ if (!identical(loads, discharge_load)) {
 }
 prov_grade <- c(prov, list(discharge_load_at_grade = loads, discharge_load_at_publish = discharge_load, walk = "bank",
                            evidence_md5 = evidence))
+
+# ---- thresholds -------------------------------------------------------------------------
+write_csv(tt$thresholds, "data/thresholds.csv", na = "")
+write_csv(tt$groups, "data/thresholds_groups.csv", na = "")
+message(sprintf("thresholds: %d rows (%d species x stage fitted), groups: %d rows", nrow(tt$thresholds),
+                n_distinct(tt$thresholds$rule_id[tt$thresholds$status %in% c("fitted", "underpowered")]), nrow(tt$groups)))
+tables_thr <- data.frame(
+  table = c("thresholds", "thresholds_groups"),
+  source = c("data/thresholds.csv", "data/thresholds_groups.csv"),
+  script = "scripts/0325-publish.R",
+  description = c(
+    "One row per species x stage x component (size, gradient, exception_q, exception_d) of the rule recommended by the tuning run (knowledge#57): the value in link's parameter name and unit, the range of values within one SE (a parsimony rule of thumb fixed before the run) on the main reading, the readings the rule holds in, the rule the same pick makes at 1.96 SE (rule_196) and whether it keeps the row's value (holds_196), the same picks from link's flow version of default (rule_flow, rule_flow_196), the scope link applies the near-river pair on as the comparison ran it (near_river_scope: both, or wetland_flow; empty where the rule has no pair), default's value and whether default is inside the region, the visits, detections and groups scored, the power label, and the evidence version and link run the rule was scored on. The grade is expected use, not habitat quality.",
+    "The watershed groups each rule_id was scored on (groups with both outcomes), with the fold each held out in."),
+  stringsAsFactors = FALSE)
+man_thr <- knw_publish(tables_thr, "data/publish/thresholds_v1", id = "knowledge/thresholds/v1",
+                  note = "First tuned thresholds for every species and stage the electrofishing evidence can speak to, on link's province-wide default run (knowledge#57).",
+                  provenance = prov, s3 = if (publish) s3 else NULL, republish = republish)
+
+# ---- grades ----------------------------------------------------------------------------
 # a key whose curve was no better than no rule on held-out groups has its grades withheld (0320, #73): its table
 # carries the walks 0330 reads, and no grade, so it is left out of the published set
 withheld <- names(heads)[vapply(heads, function(h) identical(h$grade_withheld, "TRUE"), logical(1))]
