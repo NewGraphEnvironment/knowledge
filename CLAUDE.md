@@ -23,7 +23,7 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   `.rda` files off the top of `data/`, where `pkgload::load_all()` would source or load them.
 - `vignettes/chinook_rearing.Rmd` — the pkgdown article on the chinook rearing threshold (#62). It reads
   `inst/vignette-data/`, which `data-raw/vignette_chinook.R` writes from the tune and compare tables and the
-  database; rerun that script after any `0320`/`0330` rerun, because `tests/testthat/test-vignette-data.R` fails
+  database (`SCHEMA` names the run's schema, as `0320` and `0330` take it); rerun that script after any `0320`/`0325`/`0330` rerun, because `tests/testthat/test-vignette-data.R` fails
   when a tracked source's md5 moves. Every number in its prose is computed inline from those files. Its references
   are `vignettes/chinook_rearing.bib`, which `data-raw/vignette_bib.R` writes from the group library through Better
   BibTeX (Zotero must be running): rerun it after any citation change. It refuses a key Zotero does not return, strips
@@ -61,7 +61,8 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   input of the `temperature` store), and `flow_{members,additions}.csv` (what `0270 --collection flow` puts in
   `Fisheries/flow`, the sole input of the `flow` store; #44, `research/flow_requirements.md`), and
   `thresholds.csv` and `thresholds_groups.csv` (the tuned thresholds per species × stage × component in link's
-  parameter names, and the groups each rule was scored on; `0325`, #57). `data/tune/` holds the tuning run's
+  parameter names, with the near-river pair's scope where a rule has one (`near_river_scope`, from the comparison's
+  tuned structure), and the groups each rule was scored on; `0325`, #57, #73). `data/tune/` holds the tuning run's
   per-rule scores and curves (its grade tables and fitted curves are ignored), `data/compare/` the comparison
   tables (its catalog cache and interactive maps ignored), `data/publish/` the Parquet sets (ignored).
   `data/tune/grad_ext/` and `data/compare/grad_ext/` hold `0322`'s CH rearing run on a gradient ladder extended to

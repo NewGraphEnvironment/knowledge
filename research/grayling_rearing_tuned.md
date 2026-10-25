@@ -7,8 +7,8 @@ bank and the gradient ladder to 30 %, #73; first tuned 2026-10-17, #57; regraded
 `scripts/0320` (`data/tune/GR_rear_*`, with the curve prior and the grade gate; its log for 2026-10-24 is
 `planning/active/scratch/logs/20261024_0320_prior.log`), `scripts/0330` (`data/compare/GR_rear_*`; stdout
 `planning/active/scratch/logs/20261024_0330_prior_par.log`) · **Status:** measured; nothing applied in link. The
-method and the cross-species table are `habitat_thresholds_tuned.md`; `data/thresholds.csv` row `GR_rear_v1` has not
-been rewritten since #57 (`0325` has not rerun), so its region is #57's.
+method and the cross-species table are `habitat_thresholds_tuned.md`; `data/thresholds.csv` row `GR_rear_v1` was
+rewritten by `0325`'s run of 2026-10-25, so its region is #73's.
 
 ## In plain words
 

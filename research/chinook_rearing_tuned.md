@@ -215,8 +215,8 @@ through-wetland lines would publish a rule the evidence never saw. link#364 scop
 `default`'s 15 m or 3 m³/s pair beside its 1.5 m width floor, and this is a 3 m³/s pair beside a 0.75 m³/s floor on
 104 groups' visits, so the two measurements do not contradict each other and link#346 chooses with both in hand. The
 thresholds table publishes the pair as discharge (`rear_river_discharge_min = 3`, `rear_river_distance_max = 1000`,
-`rear_river_measure = discharge`) and, from `0325`'s next run (Phase 8), the scope as `near_river_scope = both`; the
-column is not in the table yet.
+`rear_river_measure = discharge`) and, since `0325`'s run of 2026-10-25, the scope as `near_river_scope = both`, read
+from the comparison's tuned structure.
 
 **Through-wetland lines.** On link#364's five groups (ADMS, BULK, CHWK, CLWR, SQAM) `default` keeps 212.7 km of CH
 rearing on edge 1050/1150 after connectivity, the free pass 234.8, the door 61.7 and the narrow scope 59.0; over all

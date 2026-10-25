@@ -73,21 +73,27 @@ stopifnot(all(region$size_var == "mad"), all(!is.na(region$exc_q)), dflt$ddev_be
 # the stricter bar: the same choice from rules within 1.96 standard errors
 tune$in_196 <- tune$converged %in% TRUE & tune$ddev_best <= 1.96 * tune$se_diff
 ch196 <- knw_tune_repick(tune, se_mult = 1.96)
-# at 1.96 the flow floor holds, the slope goes back to link's, the near-a-river allowance goes, and link's rule
-# stays out
-stopifnot(ch196$size_var == "mad", ch196$size_min == rec$size_min, ch196$grad_max == dflt$grad_max, is.na(ch196$exc_q),
+# at 1.96 the flow floor rises, the slope goes back to link's, the near-a-river allowance stays as it was, and link's
+# rule stays out
+stopifnot(ch196$size_var == "mad", ch196$size_min > rec$size_min, ch196$grad_max == dflt$grad_max, !is.na(ch196$exc_q),
+          ch196$exc_q == rec$exc_q, ch196$exc_d == rec$exc_d,
           ch196$rule != dflt$rule, !tune$in_196[tune$is_default], sum(tune$in_196) == ch196$n_region,
           all(tune$in_196[tune$in_region]))
 
-# steeper slope limits (scored later on a longer list, up to 30 %)
-stopifnot(nrow(ge_best) == 1, ge_best$grad_max > rec$grad_max, all(ge$in_region[ge$grad_max >= min(ge_reg)] > 0))
+# the earlier chinook-only run on the longer list of slope limits, which every species is now tuned on
+stopifnot(nrow(ge_best) == 1, ge_best$grad_max > rec$grad_max, all(ge$in_region[ge$grad_max >= min(ge_reg)] > 0),
+          max(ge$grad_max) == max(tune$grad_max), max(region$grad_max) == max(tune$grad_max))
 
 boot_mad <- sum(tune$boot_rec_share[tune$size_var == "mad"])
 boot_grad <- sum(tune$boot_rec_share[tune$grad_max == rec$grad_max])
 stopifnot(boot_mad > 0.9, boot_grad < 0.5)
 
-wl <- x$wetland
-stopifnot(abs(wl$km_tuned - 10200) < 200, wl$grade_median_tuned < 0.05)
+# lines through wetlands: one row per structure the comparison ran; `wl` is the one reported as tuned (the door, link's
+# own test for them since 0.67.0) and `wl_free` the free pass link gave them before
+wl <- x$wetland[x$wetland$as_tuned, ]
+wl_free <- x$wetland[x$wetland$structure == "free" & !x$wetland$as_tuned, ]
+stopifnot(nrow(wl) == 1, nrow(wl_free) == 1, wl$structure == "door", wl$km_tuned < wl$km_default,
+          wl_free$km_tuned > wl$km_default, wl$grade_median_tuned > 0.2, wl_free$grade_median_tuned < 0.05)
 
 link_site <- "https://www.newgraphenvironment.com/link/"
 link_default <- sprintf("https://github.com/NewGraphEnvironment/link/tree/%s/inst/extdata/configs/default", meta$link_sha)
@@ -103,7 +109,7 @@ province's electrofishing records.
 **The answer.** The records support a different rule from link's current one: **`r words(rec)`**. link now asks
 for `r words(dflt)`. The new rule draws `r n1(-all_row$change_pct)` % less habitat across the province, and
 chinook are caught far more often inside it than outside. Its cut-offs are a judgment call, though: under a stricter
-bar only the flow floor holds (below).
+bar the slope limit goes back to link's and the flow floor moves (below).
 
 ## What does link do now?
 
@@ -227,9 +233,9 @@ knitr::kable(tab, align = "lrlll",
              caption = "The chinook rule chosen from the close calls at each bar, beside link's current rule.")
 ```
 
-The flow floor holds, but the slope limit goes back to link's `r grad(dflt$grad_max)` and the near-a-river allowance
-drops out. link's own rule is still not a close call. link's thresholds table gives the choice at 1.96 for every
-species tuned (`rule_196`).
+The slope limit goes back to link's `r grad(dflt$grad_max)`, the flow floor rises from `r rec$size_min` to
+`r ch196$size_min` m³/s, and the near-a-river allowance stays as it was. link's own rule is still not a close call.
+link's thresholds table gives the choice at 1.96 for every species tuned (`rule_196`).
 
 **Two other checks.** Split into sets again with `r nrow(seeds)` other random draws, the recommended rule is a close
 call on `r sum(seeds$main_rec_in_region)` and link's on `r sum(seeds$default_in_region)`. Chosen on four sets and
@@ -290,16 +296,20 @@ from a river. Green is short reaches of small streams beside a river. The rest o
 keeps rearing only where it links to spawning, which keeps different stretches under each rule.
 
 ```{r checks}
+# the checks table names each structure the comparison ran (#73); the recommended rule's row is the tuned structure's
 fv <- x$checks[x$checks$check == "fdis_visits", ]
+tuned_as <- meta$tuned_structure
 rate <- function(r, s) {
   v <- fv[fv$rule == r & fv$segment == s, ]
+  stopifnot(nrow(v) == 1)
   v$n_detect / v$n
 }
+stopifnot(tuned_as %in% fv$rule)
 ```
 
 **A check.** On the `r n0(sum(fv$n[fv$rule == "default"]))` electrofishing sites on reachable streams in those
-groups, chinook were caught at `r pc(rate("tuned", "rearing"))` of sites on the recommended rule's habitat and
-`r pc(rate("tuned", "accessible_not_rearing"), 1)` elsewhere, against `r pc(rate("default", "rearing"))` and
+groups, chinook were caught at `r pc(rate(tuned_as, "rearing"))` of sites on the recommended rule's habitat and
+`r pc(rate(tuned_as, "accessible_not_rearing"), 1)` elsewhere, against `r pc(rate("default", "rearing"))` and
 `r pc(rate("default", "accessible_not_rearing"), 1)` for link's. These sites overlap the ones scored, so this shows the
 rule does what it was chosen to do, not that it predicts new places.
 
@@ -307,19 +317,25 @@ rule does what it was chosen to do, not that it predicts new places.
 
 - **It is about young chinook in streams.** It was fitted to juvenile chinook caught by electrofishing in streams and
   says nothing about spawning. River polygons share the stream slope limit, so they get `r grad(rec$grad_max)` too,
-  though no site in one was scored. A line drawn through a wetland of 1 ha or more passes link's wetland condition
-  under both rules whatever its size, slope or distance from a river, and is rearing wherever it connects to spawning:
-  about `r n0(round(wl$km_tuned, -2))` km of chinook rearing, with a median grade of
-  `r formatC(wl$grade_median_tuned, format = "f", digits = 2)`. Lakes keep their own condition.
+  though no site in one was scored. Lines drawn through wetlands of 1 ha or more were tested by neither rule's
+  records: link now puts them through the same test as a stream line, and so does the comparison here, which leaves
+  about `r n0(round(wl$km_tuned, -2))` km of them as chinook rearing under the recommended rule, with a median grade
+  of `r formatC(wl$grade_median_tuned, format = "f", digits = 2)`, against `r n0(round(wl$km_default, -2))` km under
+  link's rule; let through untested, as link once did, they would be about `r n0(round(wl_free$km_tuned, -2))` km at
+  a median grade of `r formatC(wl_free$grade_median_tuned, format = "f", digits = 2)`. Lakes keep their own
+  condition.
 - **The cut-offs are a judgment call.** Chinook get gradually less common as streams get smaller and steeper; there is
   no flow or slope where they stop. At one standard error, flow floors of `r min(region$size_min)` to
-  `r max(region$size_min)` m³/s fit almost as well; at 1.96, only the flow floor holds.
-- **Steeper slopes fit nearly as well.** Scored again with slope limits up to `r grad(max(ge$grad_max))`, the same
-  procedure picks `r grad(ge_best$grad_max)`, and every limit from `r grad(min(ge_reg))` to `r grad(max(ge_reg))` has
-  close-call rules. `r grad(rec$grad_max)` is kept because every species is tuned on one shared list of limits.
-- **On the map, distance is measured from the bottom of each segment.** To choose the rule, the distance to a river
-  was measured from each site. On the map it is measured from each segment's downstream end, so when that end is within
-  `r km_d(rec$exc_d)` of the river the whole segment counts.
+  `r max(region$size_min)` m³/s fit almost as well; at 1.96 the choice is `r ch196$size_min` m³/s at link's slope
+  limit, with the allowance kept.
+- **Steeper slopes fit nearly as well.** The close calls run from `r grad(min(region$grad_max))` to
+  `r grad(max(region$grad_max))`, the top of the list, and `r grad(rec$grad_max)` is the best scorer among them, not a
+  slope at which chinook stop. The list was lengthened to `r grad(max(tune$grad_max))` after an earlier run of chinook
+  alone on the longer list picked `r grad(ge_best$grad_max)`, with close calls from `r grad(min(ge_reg))` to
+  `r grad(max(ge_reg))`; every species is now tuned on it.
+- **On the map, distance is measured from the bottom of each segment.** To choose the rule, the distance to a river's
+  bank was measured from each site. On the map it is measured from each segment's downstream end, so when that end is
+  within `r km_d(rec$exc_d)` of the river the whole segment counts.
 
 ## References
 

@@ -194,8 +194,22 @@
   1.96 table is #73's. `scripts/README.md`: 0320's gates, fit, prior and grade gate; grading and 0330 on the
   database's host. The build's database is reachable from here (the `~/.Renviron` the 2026-10-23 grading used; its
   discharge comment names wet `94deeb5` and both schemas exist); a trivial query takes 123 ms.
-- Next: `0325` locally, then `SCHEMA=fresh_default_20261017 Rscript data-raw/vignette_chinook.R`, the article's
-  prose and guards, the README example and figure, then tests.
+- `0325` run locally at `a91309e` (6.4 min; the discharge comment named wet `94deeb5`): `data/thresholds.csv` 46 rows with
+  `near_river_scope` (`both` on CH's four rows, empty elsewhere), `thresholds_groups.csv` unchanged, the grade set 37.1 M
+  segment rows for BT rear and spawn, CH, GR and RB with CO, ST and WCT withheld. `data-raw/vignette_chinook.R` with
+  `SCHEMA=fresh_default_20261017` (45 s): the bundle's versions equal the committed bib's (wet's token is the flow set,
+  not its build time), so `vignette_bib.R` was not rerun; `readme_figure.R` redrew `man/figures/readme-bulk.png`. The
+  article: the 1.96 passages (the floor rises to 1 m³/s, the slope goes back to 5.49 %, the allowance stays), the
+  slope-ladder bullet (the close calls run 7–30 % on the shared ladder; #67's run is told as what lengthened it), the
+  through-wetland bullet (the comparison now carries one row per structure, so `wl` is the tuned row: 2,495 km at a
+  median grade of 0.29 under the door against 10,257 km at 0.03 let through), the distance bullet (to the bank), and
+  the FDIS check, whose `rate("tuned", …)` printed empty because the checks table names the structures: it reads
+  `meta$tuned_structure` and asserts one row. Rendered locally with every guard passing. README example and sentence
+  (13 %); the seven species and cross-species files no longer say the thresholds table awaits `0325`.
+- `devtools::test()`: 926 pass, 0 fail, 1 skip (1.5 min); `test-vignette-data.R` and `test-tune_repick.R` green again.
+  `lintr::lint_package()` reports only the article's pre-existing style notes; `devtools::document()` rewrote
+  `knw_thresholds_table.Rd`; `pkgdown::check_pkgdown()` clean.
+- Next: `/code-check branch`, `/planning-archive`, the cross-reference from Al, `/gh-pr-push`.
 
 ### Resume (revised 2026-10-25 15:10 UTC: parked here, picked up on m4 under another account, on Fable)
 

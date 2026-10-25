@@ -224,27 +224,33 @@ run (findings, "The intercept minimiser sticks on a flat clamp"), so Phase 7's r
 
 ## Phase 8: Publish and regenerate
 
-- [ ] `0325` includes RB in `thresholds/v1`, `thresholds_groups` and the grade table (no longer deferred: #83 landed and
+- [x] (run 2026-10-25 at `a91309e`: 46 thresholds rows, 374 group rows, grades for BT rear and spawn, CH, GR and RB, 37.1 M
+      segment rows; CO, ST and WCT withheld and left out) `0325` includes RB in `thresholds/v1`, `thresholds_groups` and the grade table (no longer deferred: #83 landed and
       RB was tuned, graded, compared and written up on 2026-10-24; was: leave RB out and name the deferral), and leaves
       the grade-withheld keys (CO, ST, WCT rearing) out of `habitat_grade/v1`
 - [x] `knw_thresholds_table()` adds `near_river_scope` from each key's `compare.csv` `tuned_structure` (door → `both`,
       door_wetland → `wetland_flow`, empty where the rule has no pair); Phase 4 ticked it but the column was never written
       (found 2026-10-23); `test-thresholds_table.R` pins it; `R/` is edited only after the chain's last `0320`/`0330` exits
-- [ ] `0325`: `thresholds/v1`, `thresholds_groups`, `habitat_grade/v1` (local; `PUBLISH` waits on #56's bucket
+- [x] `0325`: `thresholds/v1`, `thresholds_groups`, `habitat_grade/v1` (local; `PUBLISH` waits on #56's bucket
       policy); `data/thresholds.csv` and `thresholds_groups.csv`
 - [x] (2026-10-25: `vignette_chinook.R` takes `SCHEMA`; `0325` reads no schema, only the discharge comment, and
       `readme_figure.R` reads no database, so neither needed it) `0325`, `data-raw/vignette_chinook.R` and `data-raw/readme_figure.R` read the run's schema by name (`SCHEMA`,
       default `fresh_default`), as `0320`/`0330` do since link#361 renamed it to `fresh_default_20261017` on 2026-10-23;
       the thresholds table's provenance names the run, not the schema
-- [ ] `data-raw/vignette_chinook.R`, then `data-raw/vignette_bib.R` if a citation changed, then
+- [x] (2026-10-25: data regenerated with `SCHEMA=fresh_default_20261017`; the bib's versions are unchanged, so it was
+      not rerun; the figure redrawn; the article rendered locally with every guard passing after the 1.96, slope-ladder,
+      through-wetland and checks passages were rewritten) `data-raw/vignette_chinook.R`, then `data-raw/vignette_bib.R` if a citation changed, then
       `data-raw/readme_figure.R`; the article's prose checked against the new numbers (every number is computed inline;
       read the rendered page for sentences the numbers no longer support); the `grad_ext` section now reads as the run
       that led to the shared ladder
-- [ ] README example output repasted from the new `data/thresholds.csv` (#75)
-- [ ] `scripts/README.md` run order (0310 bank walk, 0320 ladder and picks, 0330 structures and GeoPackage, 0322 as
+- [x] README example output repasted from the new `data/thresholds.csv` (#75; 2026-10-25, gradient 13 %)
+- [x] (2026-10-25: the run order already carried the bank walk, the ladder and the structures; 0320's gates, fit, prior
+      and grade gate and the database-host rule added; CLAUDE.md's walk sentence and `0322` paragraph were already
+      current, its vignette and thresholds bullets updated) `scripts/README.md` run order (0310 bank walk, 0320 ladder and picks, 0330 structures and GeoPackage, 0322 as
       #67's record), `research/README.md` rows, `CLAUDE.md`'s walk sentence (centreline → bank) and the `0322`
       paragraph
-- [ ] `devtools::test()`, `lintr::lint_package()`, `devtools::document()`, `pkgdown::check_pkgdown()`
+- [x] `devtools::test()`, `lintr::lint_package()`, `devtools::document()`, `pkgdown::check_pkgdown()` (2026-10-25: 926 pass,
+      0 fail, 1 skip; lint clean in `R/`, the vignette's pre-existing style notes left; documented; the index clean)
 
 ## Owed at the end (reported, done after merge)
 
@@ -256,7 +262,8 @@ run (findings, "The intercept minimiser sticks on a flat clamp"), so Phase 7's r
 
 ## Validation
 
-- [ ] Tests pass
+- [x] Tests pass (2026-10-25, 926 passing, the two Phase 8 failures gone: the vignette data regenerated and the 1.96 pin
+      moved to #73's table)
 - [ ] `/code-check branch` clean (three-round floor)
 - [ ] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion

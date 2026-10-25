@@ -15,7 +15,8 @@ link reads the result through NewGraphEnvironment/link#346 · **Produced by:**
   rescore's grading `scripts/logs/habitat/20261023_tune_run.txt`, the regrade with the curve's prior and the grade gate
   `20261024_tune_run.txt`; #57's `20261017_tune_run-*` and #65's `20261019_tune_run.{txt,out}` are the earlier runs);
 - `scripts/0325`: `data/thresholds.csv`, `data/thresholds_groups.csv`, and the Parquet sets `knowledge/thresholds/v1`
-  and `knowledge/habitat_grade/v1` (#73's Phase 8 reruns it; until then the tables hold #57's rules);
+  and `knowledge/habitat_grade/v1` (rerun on #73's tables on 2026-10-25, from commit `a91309e`; CO, ST and WCT rearing
+  are left out of the grade set);
 - `planning/archive/2026-10-issue-65-grade-walks-every-segment/check_{off_branch,connector_share}.R`: the grade off
   the stream branch and the connector's share of the walked distance (Limits; #65's measurement);
 - `scripts/0330`: `data/compare/*.csv` (`compare`, `change` and `checks`, composed over every key; log

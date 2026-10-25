@@ -4,8 +4,8 @@
 bank and the gradient ladder to 30 %, #73; first tuned 2026-10-17, #57; regraded 2026-10-19, #65) · **Issues:** #57,
 #65, #73; link's own WCT calibration is NewGraphEnvironment/link#322 · **Produced by:** `scripts/0310` (evidence build),
 `scripts/0320` (`data/tune/WCT_rear_*`; the grade table is there, with its rates withheld), `scripts/0330`
-(`data/compare/WCT_rear_*`), `scripts/0325` (`data/thresholds.csv` row `WCT_rear_v1`, `power = underpowered`, which still
-holds the pick from before #73 until `0325` runs again; it leaves this key out of the published grades) · **Status:** measured; nothing applied in link. The method and the
+(`data/compare/WCT_rear_*`), `scripts/0325` (`data/thresholds.csv` row `WCT_rear_v1`, `power = underpowered`, this rule since
+the run of 2026-10-25; it leaves this key out of the published grades) · **Status:** measured; nothing applied in link. The method and the
 cross-species table are `habitat_thresholds_tuned.md`.
 
 ## What to expect of juvenile westslope cutthroat

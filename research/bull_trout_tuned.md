@@ -10,8 +10,8 @@ curve on link's 55-group build) and #33 (`bt_spawning.md`, spawner evidence by g
 (`data/tune/BT_{rear,spawn}_*`, log `scripts/logs/habitat/20261024_tune_run.txt`), `scripts/0330`
 (`data/compare/BT_{rear,spawn}_*`, log `scripts/logs/habitat/20261024_compare.txt`), `data/literature_evidence.csv` and
 `data/ip_model_registry.csv` (rows cited), and the visit tables in `data/fdis/derived/` (the descriptive counts below) ·
-**Status:** measured; nothing applied in link (`data/thresholds.csv` still holds #57's `BT_rear_v1` and `BT_spawn_v1`
-until `0325` reruns). The method and the cross-species table are `habitat_thresholds_tuned.md`.
+**Status:** measured; nothing applied in link (`data/thresholds.csv` carries these rules as `BT_rear_v1` and
+`BT_spawn_v1` since `0325`'s run of 2026-10-25). The method and the cross-species table are `habitat_thresholds_tuned.md`.
 
 ## In plain words
 
@@ -329,8 +329,7 @@ accessible stream-edge km is 2.447 (2.397–2.503) for `default`, 5.409 (5.248�
 read 5.21 on #65's run and the 2026-10-23 reading's 3.81: the lift rises as a rule narrows, which is why it reads density
 and not extent. **The two structures cannot be told apart by either check**, and the scoring never saw a through-wetland
 line (its visits are on edge 1000/1100/2000/2300), so the structure is link's call: `door` is link's `stream` for bull
-trout and what the thresholds table will record from `0325`'s next run (`near_river_scope` empty, the rule having no
-pair).
+trout and what the thresholds table records (`0325`, 2026-10-25: `near_river_scope` empty, the rule having no pair).
 
 ### Spawning
 

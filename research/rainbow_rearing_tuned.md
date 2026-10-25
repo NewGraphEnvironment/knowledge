@@ -9,7 +9,7 @@ NewGraphEnvironment/link#343 · **Produced by:** `scripts/0310` (evidence build,
 `scripts/logs/habitat/20261024_tune_run.txt`), `scripts/0330` (`data/compare/RB_rear_*`, log
 `scripts/logs/habitat/20261024_compare.txt`), `data/literature_evidence.csv` and `data/ip_model_registry.csv` (rows
 cited), and the visit tables in `data/fdis/derived/` (the descriptive counts below) · **Status:** measured; nothing
-applied in link (`data/thresholds.csv` still holds #57's `RB_rear_v1`, `width>=3|g<=0.09|none`, until `0325` reruns).
+applied in link (`data/thresholds.csv` carries this rule as `RB_rear_v1` since `0325`'s run of 2026-10-25).
 The method and the cross-species table are `habitat_thresholds_tuned.md`.
 
 ## In plain words
@@ -202,8 +202,7 @@ bcfishobs records FDIS does not hold (presence only, never scored), the share of
 the rule's share of accessible stream-edge km is 2.337 (2.309 to 2.364) for `default` and 3.033 (2.990 to 3.073) for
 both structures; the lift over `default` is 0.696 (0.651 to 0.732). **The two structures cannot be told apart by either
 check**, and the scoring never saw a through-wetland line, so the structure is link's call: `door` is what link#364
-chose and what the thresholds table will record from `0325`'s next run (`near_river_scope` empty, the rule having no
-pair).
+chose and what the thresholds table records (`0325`, 2026-10-25: `near_river_scope` empty, the rule having no pair).
 
 **link's stored flags.** The regenerated `default` differs from link's stored RB rearing flags on 55,242 km, more than
 for any other key (the next, bull trout rearing, 9,243), and the cause is the access gate: link's two access columns
