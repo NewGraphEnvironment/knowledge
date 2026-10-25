@@ -124,7 +124,8 @@ like.
 A grade ranks segments by the rate of detection the curve predicts for each. A curve earns the right to rank only if it
 predicts unseen watersheds better than one constant rate everywhere; if it does worse, its ranking is noise that looks
 like precision. The gate (Al, 2026-10-24) withholds grades from a key whose curve does not beat no rule on held-out
-groups. Cutthroat's curve scores **1,453.4 held-out against 1,329.7 for no rule**: it is 123.6 worse. The curve is a
+groups. Cutthroat's curve scores **1,453.4 held-out against 1,329.7 for no rule** (the same on the curve's visits and
+the grid's: every cutthroat visit carries a flow): it is 123.6 worse. The curve is a
 flexible surface (8.85 effective degrees of freedom for size and distance, plus a group effect of 4.88) learned from
 five watersheds at a time and asked to predict the sixth, which is the thing six groups cannot support. Its grade table
 (1,190,110 segments in 16 groups; 167,459 accessible, 166,124 of them with a river found by the walk to a 10 m³/s river,

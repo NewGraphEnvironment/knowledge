@@ -209,7 +209,16 @@
 - `devtools::test()`: 926 pass, 0 fail, 1 skip (1.5 min); `test-vignette-data.R` and `test-tune_repick.R` green again.
   `lintr::lint_package()` reports only the article's pre-existing style notes; `devtools::document()` rewrote
   `knw_thresholds_table.Rd`; `pkgdown::check_pkgdown()` clean.
-- Next: `/code-check branch`, `/planning-archive`, the cross-reference from Al, `/gh-pr-push`.
+- `/code-check branch`, round 1 (`review-round1.md`, 14.6 min, 6 findings): one bug, the grade gate compared the
+  curve's held-out deviance over its own visits (those with a size) with no rule's over every modelled visit, so for
+  the width-ruled keys it favoured publishing. Reproduced by scoring no rule on each curve's visits with the scorer's
+  own functions (`gate_probe.R`, scratchpad): BT spawning 397.3 against 378.8, withheld (it had passed by 4.2 against
+  401.4); GR's margin 20.3 not 84.4, RB's 906.1 not 3,207.6; the other five verdicts stand. Fixed in `87266b2` with a
+  test that restores the defect; the regrade of BT_spawn and its recompare need the database's host (plan, "Owed
+  before merge"); the eight research files say what moved. Also fixed: `0330` composing a failed job's saved table,
+  the score cache not keyed on fit/prior/seed/folds/d_floor/extra (recorded as `spec`), home paths in the two chain
+  scripts, `previous <- character()`; accepted: the `coef` gate reading the rule term (for Al). Round 2 running.
+- Next: review rounds 2 and 3, `/planning-archive`, the cross-reference from Al, `/gh-pr-push`.
 
 ### Resume (revised 2026-10-25 15:10 UTC: parked here, picked up on m4 under another account, on Fable)
 

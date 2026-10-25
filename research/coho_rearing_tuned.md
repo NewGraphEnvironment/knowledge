@@ -74,7 +74,8 @@ region of 1,511 rules: at the stricter bar the size test cannot be told from `de
 The rule is a yes or no for each segment. A grade would go further and rank the segments, from the joint curve's
 predicted rate relative to a reference, so the question is whether the curve knows more than the rule. It is judged
 the way every rule was: fitted on most watershed groups and scored on the groups left out (held-out deviance, lower is
-better). Coho's curve scores 4,092.0 there against 4,024.0 for no rule at all, one constant rate everywhere: on groups
+better). Coho's curve scores 4,092.0 there against 4,021.5 for no rule at all, one constant rate everywhere, scored on
+the curve's own 4,261 visits (4,024.0 on the grid's 4,263): on groups
 it has not seen, it predicts worse than not ranking, so a ranking from it would mislead. The gate Al set for every
 species on 2026-10-24 follows: a curve no better than no rule on held-out groups gets no grades.
 For coho, then, `0320` still walks every accessible segment and records its size and its distance to a 10 m³/s river,

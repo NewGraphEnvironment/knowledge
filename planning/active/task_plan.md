@@ -252,6 +252,16 @@ run (findings, "The intercept minimiser sticks on a flat clamp"), so Phase 7's r
 - [x] `devtools::test()`, `lintr::lint_package()`, `devtools::document()`, `pkgdown::check_pkgdown()` (2026-10-25: 926 pass,
       0 fail, 1 skip; lint clean in `R/`, the vignette's pre-existing style notes left; documented; the index clean)
 
+## Owed before merge, on the database's host (found by the branch review, 2026-10-25)
+
+- [ ] `SCHEMA=fresh_default_20261017 Rscript scripts/0320-tune-run.R` from a frozen copy at the branch's head (scores
+      cached; every curve refits and the gate now scores no rule on the curve's own visits; the keep-check regrades
+      BT_spawn alone, whose verdict moved to withheld, and every summary gains `null_heldout_curve`), then
+      `SCHEMA=fresh_default_20261017 SPECIES=BT Rscript scripts/0330-compare.R` (BT spawning's graded km to NA), then
+      `Rscript scripts/0325-publish.R` and `SCHEMA=fresh_default_20261017 Rscript data-raw/vignette_chinook.R` (the
+      CH summary's md5 moves), then the BT spawning sentences in `research/bull_trout_tuned.md` and
+      `habitat_thresholds_tuned.md` that say the table on disk is the 2026-10-24 one
+
 ## Owed at the end (reported, done after merge)
 
 - [ ] link#346's body: one line naming the published table's columns for the pair and the scope the comparison

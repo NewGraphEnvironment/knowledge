@@ -157,7 +157,8 @@ from `default`'s.
   steeper than 25 % and bull trout were caught on 26 of them (9.2 %), 156 are steeper than 30 %. Against reading 25 % as a
   placed limit: the data say a limit below about 20 % costs, not where the limit is.
 - *The joint curve* (size × distance to a 10 m³/s river, gradient; edf 18.8, 4.2, group effect 60.8) scores 5,618.4
-  held-out, 86.1 below the grid's best and 412.8 below no rule: the surface carries more than any cut. Its size term rises
+  held-out, 86.1 below the grid's best and 407.9 below no rule scored on the curve's own 8,710 visits (6,026.3; the grid's
+  no-rule score, 6,031.2, is over all 8,717): the surface carries more than any cut. Its size term rises
   through the whole range (relative rate 0.19 at 0.021 m³/s, 0.28 at 0.043, 0.53 at 0.1, 1.0 at the 0.35 floor, 1.12 at
   0.5, 1.29 at 1, a peak of 1.36 near 2.3, 1.19 at 10 and 0.70 at 85 m³/s, with a wide interval). Its gradient term is
   fitted on gradient clamped at 20 % (`knw_tune_curve()`): a rate of 0.093 at 0 %, 0.154 at 3 %, 0.190 at 5.5 %, a first
@@ -195,8 +196,9 @@ from `default`'s.
 The grade is the curve's predicted rate at the reference nuisance values and a segment's own distance to a 10 m³/s
 river, over the rate at the 95th percentile of accessible stream-branch segments, capped at 1 and read in fifths. It is
 a ranking of where an electrofishing visit is more likely to catch bull trout, not a density. Graded because the curve
-earns it: 5,618.4 held-out against 6,031.2 for no rule (a curve that predicted unseen groups worse than one constant
-rate could not rank segments, and the three keys where that happened get no grade).
+earns it: 5,618.4 held-out against 6,026.3 for no rule on the curve's own visits (a curve that predicted unseen groups
+worse than one constant rate could not rank segments, and the four keys where that happened, bull trout spawning among
+them, get no grade).
 
 Every accessible segment of the 158 groups is walked from its downstream end to the first ≥ 10 m³/s river, ending at a
 double-line river's bank (#73), and read on the flows wet republished on 2026-10-19 (the table records the load). 8.41 M
@@ -256,8 +258,10 @@ flow form from the flow start. link's `default_tuned` floor (MAD ≥ 0.043 m³/s
   Against 5.49 %; for nothing in particular.
 - *The joint curve* (width × distance, gradient; edf 3.0, 1.0, group effect 11.1) is flat too: relative rate 0.99 to
   1.01 across widths of 0.7 to 18 m, 0.82 at 0 % rising to 1.10 at 20 % (intervals 0.23–2.8 and 0.28–4.3), 1.02 to 0.97
-  across distance. It scores 397.3 held-out, 4.2 below no rule and 1.9 behind the best cut (403.7 before the curve took the
-  grid's prior). The one check that puts a surface ahead of no rule, and narrowly.
+  across distance. It scores 397.3 held-out, 1.9 behind the best cut (403.7 before the curve took the grid's prior), and
+  behind no rule: scored on the curve's own 450 visits (those with a width), no rule is 378.8, so the curve is 18.5
+  worse. The grid's no-rule score of 401.4 is over all 475 visits, and the 25 the curve leaves out are what made it
+  look 4.2 ahead until the gate was corrected on 2026-10-25 (below). Against the curve as a surface.
 
 Ninety-eight detections in 22 groups do not carry a rule; what they say is that `default`'s 5.49 % limit is the one value
 the evidence scores worse than no rule, in the direction #33 reported.
@@ -274,17 +278,21 @@ the evidence scores worse than no rule, in the direction #33 reported.
   the reach studies above are what describes where bull trout spawn.
 - **A rate per visit, not a count of spawners.**
 
-### Grade (`knowledge/habitat_grade/v1`; `scripts/0320`, 2026-10-24)
+### No grade (the gate, corrected 2026-10-25)
 
-Graded because the curve scores 397.3 against 401.4 for no rule: a margin of 4.2, the narrowest of the five graded keys
-(coho's curve was 68.0 behind no rule and lost its grade), so this is the grade to read with the most caution. The same
-walk and flows as rearing, with the channel width as the size, which fwapg models only where the stream order is above
-1: 1.40 M of the 2.68 M accessible segments are graded (5.10 M of the 8.41 M segments carry no width), 319,633 of 576,908
-accessible km. Reference rate 0.151 (#65: 0.210; before the curve's prior, 0.148). The graded km sum to 246,336
-grade-weighted km, and the surface is nearly flat: 52 % of graded km lies at 0.6–0.8 (165,006 km) and 39 % at 0.8–1
-(123,746), none under 0.2, 2.6 % at 0.2–0.4 and 7.0 % at 0.4–0.6, so the grade orders segments within a narrow band and
-separates little. 40,236 km read a distance of 0 (30,456 river-polygon lines). The curve's prior (sd 2.5) is recorded on
-the table; it moved the grade-weighted km from 246,569 to 246,336.
+A grade is published only where the curve predicts held-out groups better than one constant rate; a curve that does
+not could not rank segments either (Al, 2026-10-24). The 2026-10-24 run published this key's grades on a comparison of
+unlike populations: the curve, 397.3, is scored over the 450 modelled visits that carry a width, while the no-rule
+score it was set against, 401.4, is over all 475, and the 25 visits with no width leave only no rule's side. Scored on
+the curve's own visits, no rule is 378.8 and the curve 18.5 behind it (the branch review of 2026-10-25, which found the
+mismatch in `knw_tune_run()`; the gate now compares like with like, `null_heldout_curve`, and the same correction
+narrows grayling's margin from 84.4 to 20.3 and rainbow's from 3,207.6 to 906.1 without moving their verdicts). Bull
+trout spawning therefore joins coho, steelhead and westslope cutthroat with a rule and no grade. The grade of
+2026-10-24 (reference rate 0.151, 246,336 grade-weighted km, 52 % of graded km at 0.6–0.8 and 39 % at 0.8–1, a surface
+so flat it ordered segments within a narrow band) is withdrawn. Its table and the comparison that read it are still
+the 2026-10-24 ones on disk; the regrade (`0320`, which reruns a key whose verdict moved, blanking `rate`, `grade` and
+`grade_class` with `grade_withheld = TRUE`) and the recompare (`0330 SPECIES=BT`) run on the database's host, and
+`0325` then leaves this key out of `habitat_grade/v1`.
 
 ## What each rule changes on link's segments (`scripts/0330`, `data/compare/BT_*`)
 
@@ -337,9 +345,9 @@ trout and what the thresholds table records (`0325`, 2026-10-25: `near_river_sco
 through-wetland line rule, so the stage has one structure. The tuned rule keeps the size test and raises the gradient
 limit to 13 %, so it contains `default`: 169,416 km (+27.0 %), nothing lost, 36,034 km gained, 35,500 of them stream
 between 5.49 and 13 % and 534 on the river-polygon branch. The gain is on measured or modelled widths, so it is order 2
-and above (382 km order 1, 8,783 order 2, 16,864 order 3, 10,006 order 4 and up). Graded km rises from 93,333 to
-123,687, and the gained km sit high on the spawning grade, whose 0.8–1 class rises from 11,911 to 45,230 km (the same
-consistency, not a check). Every group with `default` km gains, from +0.7 % (UBTN) to +70.8 % (PCEA), median +29.5 %.
+and above (382 km order 1, 8,783 order 2, 16,864 order 3, 10,006 order 4 and up). The graded km the comparison on disk
+reports (93,333 to 123,687, the gain sitting in the withdrawn grade's 0.8–1 class) come from the 2026-10-24 grade; with
+the grade withheld, the recompare reports none. Every group with `default` km gains, from +0.7 % (UBTN) to +70.8 % (PCEA), median +29.5 %.
 
 **Checks.** There is no FDIS check for spawning (electrofishing catch is not spawning evidence). On the bcfishobs
 records, the lift is 3.042 (2.927–3.160) for `default` and 3.025 (2.973–3.083) for the tuned rule, a difference of

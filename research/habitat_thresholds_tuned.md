@@ -38,8 +38,8 @@ them for any fitted species but grayling. Five of the eight recommended rules dr
 less for coho to 42 % less for bull trout rearing), bull trout spawning's and westslope cutthroat's draw
 more, and grayling's is link's own. A grade from 0 to 1 then gives the use to expect on each segment, read at that
 segment's own distance to a river (#65 corrected a first build that read most segments at the distance cap), and is
-published only where the curve behind it predicts held-out groups better than no rule at all: for coho, steelhead and
-westslope cutthroat it does not, so they carry a rule and no grade. The package article on chinook rearing
+published only where the curve behind it predicts held-out groups better than no rule at all: for bull trout spawning,
+coho, steelhead and westslope cutthroat it does not, so they carry a rule and no grade. The package article on chinook rearing
 (https://newgraphenvironment.github.io/knowledge/articles/chinook_rearing.html) walks through one species from the
 question to the map; the specification below is the record.
 
@@ -99,7 +99,10 @@ workbooks add 871 placed sites, 92 of them with electrofishing effort.
   gradient, ending at a double-line river's bank (#73), because the curve reads size and distance together; a walk that
   reaches the sea first, or stops, reads the 50 km cap, as the curve's visits did (`dist_status` in the grade table says
   which). **The gate** (Al, 2026-10-24): a key whose curve scores no better on held-out groups than no rule gets no
-  grade; its grade table carries size and distance with `rate`, `grade` and `grade_class` blank and
+  grade, no rule being scored on the curve's own visits (those with a size, a gradient and a distance) on the same
+  folds (`null_heldout_curve`; until the branch review of 2026-10-25 it was scored on the grid's larger population,
+  which favoured publishing for the width-ruled keys and let bull trout spawning through); its grade table carries size
+  and distance with `rate`, `grade` and `grade_class` blank and
   `grade_withheld = TRUE`, the comparison reports its graded km as NA, and `0325` leaves it out of
   `habitat_grade/v1`. #57's first build walked only the segments the exception could admit and read every other
   segment at the cap (#65).
@@ -182,12 +185,12 @@ each key's summary as `rule_recommended_196`, and from link's flow start as `rul
 | species × stage | segments (groups) | accessible km | graded km | grade-weighted km | reference rate | km under 0.2 | km at 0.8–1 |
 |---|---|---|---|---|---|---|---|
 | BT rearing | 8.41 M (158) | 576,908 | 571,305 | 146,894 | 0.221 | 64 % | 10 % |
-| BT spawning | 8.41 M (158) | 576,908 | 319,633 | 246,336 | 0.151 | 0 % | 39 % |
+| BT spawning | 8.41 M (158) | 576,908 | withheld (corrected 2026-10-25): curve 397.3 against 378.8 for no rule on the curve's 450 visits; the 2026-10-24 grade (246,336 grade-weighted km) is withdrawn and its table awaits the regrade | | | | |
 | CH rearing | 5.76 M (125) | 225,152 | 224,459 | 61,491 | 0.146 | 68 % | 21 % |
-| CO rearing | 4.92 M (100) | 147,795 | withheld: curve 4,092.0 against 4,024.0 for no rule | | | | |
+| CO rearing | 4.92 M (100) | 147,795 | withheld: curve 4,092.0 against 4,021.5 for no rule | | | | |
 | GR rearing | 4.21 M (82) | 258,576 | 146,128 | 74,376 | 0.081 | 22 % | 26 % |
 | RB rearing | 10.33 M (210) | 509,975 | 277,539 | 117,596 | 0.448 | 31 % | 14 % |
-| ST rearing | 4.14 M (79) | 155,357 | withheld: 553.8 against 420.8 | | | | |
+| ST rearing | 4.14 M (79) | 155,357 | withheld: 553.8 against 419.1 | | | | |
 | WCT rearing | 1.19 M (16) | 35,285 | withheld: 1,453.4 against 1,329.7 | | | | |
 
 Every row is #73's grade of 2026-10-24: each accessible segment walked to the river's bank and read on the flows wet
@@ -195,13 +198,18 @@ republished on 2026-10-19 (the table records the load, wet `94deeb5`), the refer
 2000 and 2300, and the curve fitted with the grid's prior (`curve_prior_sd` 2.5 on every table). The prior moved
 steelhead's curve from 860.8 to 553.8 held-out and grayling's from 786.9 to 743.6, bull trout spawning's by 6 and the
 other five by about 1; every key's curve still beats the best cut except coho's, steelhead's, WCT's and bull trout
-spawning's, and of those four only bull trout spawning beats no rule (by 4.2), so it is graded and the other three are
-not. Coho's curve is behind no rule with 62 groups having both outcomes, so the cause there is not power alone
-(`coho_rearing_tuned.md`, "No grade").
+spawning's, and none of those four beats no rule scored on the curve's own visits, so all four are withheld. Bull trout
+spawning's verdict moved on 2026-10-25, when the branch review found the gate comparing the curve, scored over the
+visits with a size, against no rule over every modelled visit: against the grid's 401.4 its curve looked 4.2 ahead,
+against 378.8 on its own 450 visits it is 18.5 behind. The four graded keys' margins over no rule on their own visits
+are BT rearing 407.9, CH 321.5, GR 20.3 and RB 906.1 (the grid's no-rule scores overstate them by 4.9, 6.3, 64.1 and
+2,301.5). Coho's curve is behind no rule with 62 groups having both outcomes, so the cause there is not power alone
+(`coho_rearing_tuned.md`, "No grade"). BT spawning's grade table and comparison on disk are the 2026-10-24 run's; the
+regrade and recompare run on the database's host.
 
 A width rule grades only measured streams: fwapg models width where `stream_order > 1`, so GR and RB leave every
-unmeasured first-order stream `NA` (RB: 6.26 M of 10.33 M segments; GR: 2.62 M of 4.21 M), and so does BT spawning
-now that its pick is a width rule (5.10 M of 8.41 M). A MAD rule grades almost everything (BT rearing: 33,992 segments
+unmeasured first-order stream `NA` (RB: 6.26 M of 10.33 M segments; GR: 2.62 M of 4.21 M), as BT spawning's table
+does (5.10 M of 8.41 M with no width). A MAD rule grades almost everything (BT rearing: 33,992 segments
 with no flow even from a parent). Against #65's grades the references move with the pick and the walk: BT rearing
 0.226 → 0.221, CH 0.136 → 0.146, GR 0.034 → 0.081, RB 0.445 → 0.448, BT spawning 0.210 → 0.151 (a width rule on a
 smaller graded population).
@@ -230,7 +238,7 @@ cannot tell the structures apart for any key, so the structure is link's call.
 | species × stage | accessible km | `default` km | tuned km | change | lost | gained | graded km, `default` → tuned |
 |---|---|---|---|---|---|---|---|
 | BT rearing | 576,908 | 244,328 | 142,015 | −41.9 % | 106,132 | 3,819 | 101,583 → 74,218 |
-| BT spawning | 576,908 | 133,382 | 169,416 | +27.0 % | 0 | 36,034 | 93,333 → 123,687 |
+| BT spawning | 576,908 | 133,382 | 169,416 | +27.0 % | 0 | 36,034 | no grade (the table on disk reads the withdrawn grade: 93,333 → 123,687) |
 | CH rearing | 225,152 | 99,186 | 84,294 | −15.0 % | 30,477 | 15,585 | 48,134 → 53,957 |
 | CO rearing | 147,795 | 79,829 | 75,430 | −5.5 % | 9,945 | 5,546 | no grade |
 | GR rearing | 258,576 | 77,740 | 77,740 | 0 | 0 | 0 | 45,564 → 45,564 |
@@ -249,9 +257,9 @@ cannot tell the structures apart for any key, so the structure is link's call.
    spawning (its rule contains `default`: the same 2 m width, nothing lost; 35,652 of the gain is order 2 and up),
    11,402 km for RB, 3,090 for WCT and 2,107 for BT rearing; coho's 0.03 m³/s floor admits 5,063 km of streams under
    1.5 m wide (5,048 of coho's 5,546 km gained are order 1), and WCT's 1,165. Connectivity and the overlay move under 1,000 km for every key.
-3. **Graded km falls with km except for chinook and bull trout spawning**: chinook's tuned 84,294 km carry 53,957
+3. **Graded km falls with km except for chinook**: chinook's tuned 84,294 km carry 53,957
    graded km against `default`'s 48,134 on 99,186, the rule trading small low-grade streams for the near-river
-   exception; bull trout spawning's gain sits in its grade's 0.8–1 class (11,911 → 45,230 km). Bull trout rearing's
+   exception. Bull trout rearing's
    rule sheds the grade's low end (its 0–0.2 class 88,869 → 46,407 km) and its 0.8–1 class rises (49,466 → 50,485). The
    grade is fitted on the same visits, so this is consistency, not a check.
 4. **Checks** (`checks.csv`). FDIS detection on each rule's segments against accessible segments outside it,
@@ -311,8 +319,8 @@ BT rearing, BT spawning, CH, RB and WCT, so those rows no longer describe the re
 - **The score rewards separation, not extent** (as #54 said): the tuned rules are narrower than `default` where
   the floor moves up.
 - **Thin rows, and the rows with no grade.** ST (82 detections, 11 groups) and WCT (6 groups) carry their labels;
-  BT spawning should not be applied, and its grade passes the gate by 4.2. CO, ST and WCT publish a rule and no grade:
-  their curves predict held-out groups worse than one constant rate, so they could not rank segments. Steelhead's
+  BT spawning should not be applied. BT spawning, CO, ST and WCT publish a rule and no grade: their curves predict
+  held-out groups worse than one constant rate on the visits they were fitted to, so they could not rank segments. Steelhead's
   curve was measured (`steelhead_rearing_tuned.md`): the prior fixed half its gap, and the joint smooth overfits one
   group that holds a third of its detections.
 - **The grade off the stream branch is an extrapolation.** The curve was fitted on stream-branch visits
@@ -338,7 +346,7 @@ BT rearing, BT spawning, CH, RB and WCT, so those rows no longer describe the re
   itself a river-polygon line or sits at the bank (BT rearing 53,897 graded km, CH 51,257), where the curve is read past
   its data. #65's measurement of the centreline walk is in its archive (`check_connector_share.txt`).
 - **Width rules leave first-order streams ungraded**; a consumer summing graded km over a width-ruled species
-  (GR, RB, BT spawning) sums measured streams only.
+  (GR, RB) sums measured streams only.
 - **One link run, one flow load.** Every grade carries `run_uid 20261017_004619-3f4c713b`; link recomputed UPET twice
   after the waiter released and before the build read, and the build's UPET visits place identically on the result.
   Every grade table records the flow load it was read on (wet `94deeb5`, built 2026-10-19), and `0325` refuses to

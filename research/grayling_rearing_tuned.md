@@ -133,8 +133,10 @@ nearest region rule to the flow form of `default`.
 
 The grade does not come from a cut. It comes from a smooth curve fitted to the same visits: the chance of catching
 grayling as a function of stream width, distance to a 10 m³/s river and gradient, with the group effect left out. Its
-held-out deviance, scored on the same folds, is **743.6**: 61.2 better than the best of the 7,740 cuts (804.8) and 84.4
-better than no rule (828.0). The curve is fitted with the same prior as the grid (a normal prior, SD 2.5, on the
+held-out deviance, scored on the same folds, is **743.6**: 61.2 better than the best of the 7,740 cuts (804.8) and 20.3
+better than no rule scored on the curve's own 1,049 visits (763.9; the grid's no-rule score, 828.0, is over all 1,230,
+and the 181 visits with no width the curve leaves out are the difference, which the gate compared across until it
+was corrected on 2026-10-25). The curve is fitted with the same prior as the grid (a normal prior, SD 2.5, on the
 data-set and era coefficients, #84): without it the curve scored 786.9, and #57's curve, fitted without a prior,
 scored 1,022.1 against the grid's 825.3 then (the smoke run's no-prior fit puts 13.96 on the era coefficient, limit
 5).

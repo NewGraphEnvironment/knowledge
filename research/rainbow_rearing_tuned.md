@@ -131,8 +131,9 @@ start is the same rule; from the flow start it is MAD ≥ 0.021 m³/s, gradient 
 - *The ladder's edge.* The best gradient limit is the top rung, so nothing here shows that a limit above 30 % would
   not do as well; 261 of the 12,959 visits (2.0 %) are steeper. Against reading 30 % as a placed limit.
 - *The joint curve* (width × distance to a 10 m³/s river, gradient; edf 20.3, 4.6, group effect 113.7) scores 9,409.8
-  held-out, 2,242.1 below the grid's best and 3,207.6 below no rule: the largest gap of any key. Against a cut being
-  all the structure there is (below).
+  held-out, 2,242.1 below the grid's best and 906.1 below no rule scored on the curve's own 10,047 visits (10,315.9;
+  the grid's 12,617.4 is over all 12,959, the 2,912 with no width among them): the largest gap of any key. Against a cut
+  being all the structure there is (below).
 - *The #57 pick moved.* #57 chose width ≥ 3 m, gradient ≤ 9 % on a grid of 3,612 rules whose gradient ladder ended at
   9 %; it was recommended by 4 % of resamples and in the region on 1 of 4 more seeds. This grid holds 7,740 rules to 30 %,
   and the same rule at 9 % is 185.1 behind the best (SE 84.3, 2.2 SEs). The ladder could not have shown that in
@@ -164,8 +165,8 @@ start is the same rule; from the flow start it is MAD ≥ 0.021 m³/s, gradient 
 The grade is the curve's predicted rate at the reference nuisance values and a segment's own distance to a 10 m³/s
 river, over the rate at the 95th percentile of accessible stream-branch segments, capped at 1 and read in fifths. It is
 a ranking of where an electrofishing visit is more likely to catch rainbow, not a density. Graded because the curve
-earns it: 9,409.8 held-out against 12,617.4 for no rule (a curve that predicted unseen groups worse than one constant
-rate could not rank segments, and the three keys where that happened get no grade).
+earns it: 9,409.8 held-out against 10,315.9 for no rule on the curve's own visits (a curve that predicted unseen groups
+worse than one constant rate could not rank segments, and the four keys where that happened get no grade).
 
 Every accessible segment of the 210 groups is walked from its downstream end to the first ≥ 10 m³/s river, ending at a
 double-line river's bank (#73), and read on the flows wet republished on 2026-10-19 (the table records the load). Of
