@@ -158,6 +158,27 @@
 - Was next: check and commit the four write-ups; then BT, `habitat_thresholds_tuned.md` and CH (on Fable, per the model
   plan).
 
+## Session 2026-10-25 (Fable, m4)
+
+- Picked up on m4: the checkout at `fa638f2` carried 48 modified `data/tune` tables and 8 untracked smoke tables from the
+  2026-10-23 rescore scored here, every one superseded by the regrade commits, so `git pull --ff-only` refused; stashed
+  (`stash@{0}`, not to be popped) and fast-forwarded to `a3f59a3`. The table bundle unpacked from
+  `knowledge_bundle_20261025` and every one of its 38 md5s matched. Three untracked `20261017_tune_run-attempt*.out`
+  logs (a #57 run on this machine) left alone.
+- `research/bull_trout_tuned.md` rewritten on #73's tables (363 lines in place of 227): "In plain words" for both stages
+  (Al's rule, the principle beside each result), the rearing pick's move from the 2026-10-23 reading (MAD ≥ 0.1 at
+  10.49 %, a one-departure tie-break inside the old search's 594-rule region) to the grid's best (MAD ≥ 0.35 at 25 %,
+  316 rules, no one-departure rule inside), every check with its direction, the grade (unchanged to the kilometre by the
+  curve's prior), the recompare under both structures (door 142,015 km, −41.9 %); spawning unchanged in rule and
+  recompare, its grade's margin over no rule (4.2) named as the narrowest of the graded keys. Numbers from `tune_summ.R`,
+  `grade_summ.R` and `compare_summ2.R` (the first two now take a full key, so `BT_spawn` runs), the honest, seeds and
+  curves tables, and a population rebuild (`bt_pop.R`, session scratchpad; the modelled populations reproduced to the
+  visit, 8,717 and 475) for the cross-tabulations and the descriptive bands. The spawning visits are not
+  "August–October": #33's rule reads the month for what counts as evidence, and the modelled visits run June to October
+  (July 65, August 197, September 170).
+- Next: `habitat_thresholds_tuned.md` and `research/README.md`'s rows (the GR, RB, ST and WCT rows there still carry
+  #57's rules), then Phase 8.
+
 ### Resume (revised 2026-10-25 15:10 UTC: parked here, picked up on m4 under another account, on Fable)
 
 **Where it stands.** Every run of #73 is done and committed: the rescore (`0320` at `fa638f2`), the regrade with the
