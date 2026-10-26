@@ -43,6 +43,11 @@ Proposed in the plan and approved with the parked baseline (Al, 2026-10-26):
 7. **Assumption stated, not checked by code:** `whse_basemapping.fwa_stream_networks_sp` carries no load record, so the
    cache treats it as fixed; a reload of it (fwapg PR #43 moves measures by millimetres) means truncating the cache,
    which the function's documentation says.
+8. **Resumed 2026-10-26 from a machine on a remote link (110 ms per round trip; approved by Al with the resume
+   plan).** Code is written here; every database-bound run (the references, the checks, Phase 4) runs on the
+   database's host from its own worktree of this branch (`~/Projects/repo/knowledge-87`), driven over ssh, with the
+   ignored inputs (`data/tune`, `data/fdis`, `data/compare`) cloned copy-on-write from the host's checkout, which
+   another issue's branch holds and is not touched.
 
 ## Context: what was measured and found for the plan (2026-10-26)
 
@@ -61,16 +66,16 @@ exploration found that shapes the design is in `findings.md` ("Exploration"), wi
 
 ## Phase 0: References before anything changes (on the database's host)
 
-- [ ] `.gitignore`: `data/compare/ref_*/`.
+- [x] `.gitignore`: `data/compare/ref_*/` (`data/tune/ref_*/` was already ignored).
 - [ ] `data-raw/walk_batch_check.R` in `REF=1` mode: the grade's own starts in BULK (the bank check's group), from
       `knw_link_segments(conn, "fresh_default_20261017", sp, "BULK")` as `knw_grade_species()` takes them: chinook at
       q 3 (16,686 starts) and bull trout at q 10 (32,342), on `pick`, through the current `knw_link_walks()`, to
-      `data/tune/ref_walks/bulk_<sp>_q<q>_pick.csv` (ignored).
+      `data/tune/ref_walks/bulk_<sp>_q<q>_pick.rds` (ignored; rds because `write.csv` keeps 15 significant digits).
 - [ ] `data-raw/compare_parallel_check.R` in `REF=1` mode: the current `knw_compare_rules()` (`workers` not yet an
       argument) on `WCT_rear` (all 16 groups) and `CH_rear`'s 20 largest groups, `CONFIG_SHA=102762da` (the commit the
       tracked tables carry; nothing under link's `configs/default` changed between it and `origin/main` at `ef5b8234`,
-      checked 2026-10-26), `tuned_as = door`, to `data/compare/ref_<key>/{compare,change,checks}.csv` and
-      `segments.rds`. CH is the only species whose `default` resolves a near-river pair, so its groups exercise the
+      checked 2026-10-26), `tuned_as = door`, to `data/compare/ref_<key>/{compare,change,checks,segments}.rds`
+      (exact). CH is the only species whose `default` resolves a near-river pair, so its groups exercise the
       walk table. About 40 min on the host.
 - [ ] `findings.md`: the exploration with file:line, the measured numbers, the review's findings and their
       disposition (`planning/active/review-plan.md`).

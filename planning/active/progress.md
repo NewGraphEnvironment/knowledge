@@ -25,3 +25,13 @@ git fetch -q origin && git checkout 87-make-a-retune-fast-enough-to-iterate-bat 
 `--ff-only` refuses when this machine's copy has commits origin lacks, so two machines holding the branch stop rather
 than fork; the merge, not a rebase, brings in what landed on main while parked. The approval covered the baseline only:
 the run-to-PR mandate starts at the resume instruction.
+
+## Session 2026-10-26 (resumed)
+
+- `/planning-init 87` re-run on the parked branch: the issue unchanged since the baseline and main not moved, so the
+  parked plan was re-presented verbatim with one addition (decision 8: this machine is on a remote link, 110 ms per
+  round trip, so the database-bound runs go to the host's own worktree over ssh). Approved by Al: run to the PR.
+- Host worktree `~/Projects/repo/knowledge-87` created at `9475f62`; ignored inputs cloned with `cp -c` (APFS clones,
+  no space) from the host's checkout, which holds #94's branch and is left alone.
+- Phase 0: `data-raw/walk_batch_check.R` and `data-raw/compare_parallel_check.R` written; references are rds, because
+  `write.csv` keeps 15 significant digits and the checks demand identity.
