@@ -31,16 +31,21 @@ binary. So the cause was the binary gap after a release, not the 26.04 runner im
       (`gh run view <id> --json status,conclusion`, never `gh run watch`)
 - [ ] Read the job log to confirm the image is 26.04 and `duckdb` installed as a binary (not "installing from source"),
       and record the setup durations in `findings.md`
+- [ ] Dispatch the citation workflow on the branch (`gh workflow run update-citation-cff.yaml --ref <branch>`), which
+      runs the branch's YAML on `ubuntu-latest`; confirm green and that it pushed nothing (plan review)
+- [ ] Read the **first** attempt's log of each: the R library cache is keyed on the OS version, so only the first
+      26.04 run installs packages; a rerun restores the cache and shows no duckdb install (plan review)
+- [ ] Record the probe result on soul#541 (this PR's run is its "one probe run on `ubuntu-latest`")
 - [ ] If the run fails or stalls: read which step (`gh run view --log-failed`), rerun once if it is setup/mirror; if
       duckdb (or anything) is building from source on 26.04, stop, restore the pin and keep the timeouts, and say so
 - [ ] `/planning-archive`, with the measured run as the archive README's Measurement
 
 ## Owed at the end (reported, done after merge)
 
-- [ ] `update-citation-cff.yaml` runs only on `main` (push with a `DESCRIPTION` change, or dispatch), so its unpin is
-      verified after merge: `gh workflow run update-citation-cff.yaml --ref main` once the merge's runs settle, then
-      confirm green and the image in its log
-- [ ] Confirm the post-merge pkgdown deploy provenance on `gh-pages` names the merge SHA
+- [ ] After merge and `/gh-pr-merge`'s release commit, confirm the citation run that the `DESCRIPTION` bump triggers on
+      main is green on `ubuntu-latest` (replaces a manual dispatch; plan review)
+- [ ] Confirm the `gh-pages` deploy provenance names the newest non-bot main SHA (the merge's own run may be cancelled
+      by a newer pending one in the `pkgdown-true` group), and so that deploy works on 26.04, which the PR run skips
 
 ## Validation
 
@@ -49,11 +54,13 @@ binary. So the cause was the binary gap after a release, not the 26.04 runner im
 - [ ] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion
 
-Verification: the PR's pkgdown run green on `ubuntu-latest` with duckdb as a binary (log), YAML parses (the run
-starting at all proves it), and `timeout-minutes` visible in each job's definition.
+Verification: the PR's pkgdown run and a branch dispatch of the citation workflow, both green on `ubuntu-latest`, with
+duckdb as a binary in pkgdown's first-attempt log; both YAMLs parse (each run starting proves its own file); deploy
+on 26.04 only after merge (owed).
 
 ## Noted, not in scope
 
 - At 21:28Z on 2026-10-26, main's pkgdown run 40400891471 (merge commit e3a07d8, on 24.04) had sat in
   `setup-r-dependencies` since 21:09Z, with run 40404388481 (aa0398b) pending behind it: the stall shape this issue
-  describes. Reported to Al; cancelling it is Al's call.
+  describes. Reported to Al; cancelling it is Al's call. It holds the `pkgdown-true` group, so post-merge runs queue
+  behind it until it ends: settle it before merging (plan review).
