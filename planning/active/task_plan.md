@@ -31,7 +31,7 @@ binary. So the cause was the binary gap after a release, not the 26.04 runner im
 
 ## Phase 2: Verify on the PR, then open it
 
-- [ ] Push the branch, open the PR (`/gh-pr-push`), and watch its pkgdown run on `ubuntu-latest` sparsely
+- [x] Push the branch, open the PR (`/gh-pr-push`), and watch its pkgdown run on `ubuntu-latest` sparsely
       (`gh run view <id> --json status,conclusion`, never `gh run watch`)
 - [ ] Read the job log for the image (`gh run view <id> --log | grep -m1 'Image: '`): `ubuntu-latest` moves to 26.04
       over 2026-10-19 to 11-19 (actions/runner-images#14748), so a run can still land on 24.04 and then says nothing
@@ -42,7 +42,7 @@ binary. So the cause was the binary gap after a release, not the 26.04 runner im
       runs the branch's YAML on `ubuntu-latest`; confirm green and that it pushed nothing (plan review)
 - [ ] Read the **first** attempt's log of each: the R library cache is keyed on the OS version, so only the first
       26.04 run installs packages; a rerun restores the cache and shows no duckdb install (plan review)
-- [ ] Write into soul#541's body that a `timeout-minutes` kill reports `cancelled`, so the convention's scan and
+- [x] Write into soul#541's body that a `timeout-minutes` kill reports `cancelled`, so the convention's scan and
       `/gh-pr-merge` step 10 need to read the annotation (code-check round 3)
 - [ ] Record the probe result on soul#541 (this PR's run is its "one probe run on `ubuntu-latest`")
 - [ ] If the run fails, stalls or ends `cancelled`: read which step from `gh run view <id> --json jobs` and the job's

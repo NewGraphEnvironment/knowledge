@@ -13,3 +13,5 @@
   the plan and findings carry each. Ended at round 3: it named the mechanism (a guard that fails toward pass) and
   enumerated where it reaches in the two files (the two `timeout-minutes` lines), and no round found a defect inside
   a fix.
+- Pushed, opened PR #97; dispatched the citation workflow on the branch (run 40406671489); PR pkgdown run 40406663722.
+- soul#541's body gained the "a timeout reads as `cancelled`" bullet (`--log-failed` empty on both drift and fly runs).
