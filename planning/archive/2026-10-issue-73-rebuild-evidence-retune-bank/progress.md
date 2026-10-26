@@ -313,3 +313,7 @@ rescoring, the stopped and relaunched 0330 with its compose change, the detached
   23:21 UTC to 01:45 UTC: 143.3 min, exit 0, no `FAILED`. BT_rear unchanged (`default` 244,328 km, tuned 142,015 under
   the door, −41.9 %); BT_spawn gains 36,034 km (+27.0 %) with graded km NA now its grades are withheld. The other six
   keys composed. Stdout in `scratch/logs/20261025_0330_BT_host.log`; script log `scripts/logs/habitat/20261025_compare.txt`.
+- `0325` at `bf41ebd`, 01:45 to 01:53 UTC, exit 0 (local; `PUBLISH` not set): 46 threshold rows for 8 fitted keys,
+  374 group rows; grades withheld from BT_spawn, CO_rear, ST_rear and WCT_rear, so `habitat_grade/v1` carries
+  28,710,335 segment rows for 4 keys. `data/thresholds.csv` gains `evidence_md5`; every other value is unchanged.
+  Stdout in `scratch/logs/20261025_0325_host.log`.
