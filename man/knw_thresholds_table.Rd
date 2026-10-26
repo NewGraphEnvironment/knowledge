@@ -10,7 +10,8 @@ knw_thresholds_table(
   link_run_uid,
   link_sha,
   config = "default",
-  d_floor = 200
+  d_floor = 200,
+  compare_dir = NULL
 )
 }
 \arguments{
@@ -22,6 +23,11 @@ provenance every row carries.}
 
 \item{d_floor}{\code{numeric(1)} the run's shortest exception distance (m), as given
 to \code{\link[=knw_tune_run]{knw_tune_run()}}, so the 1.96 replay picks as the run did.}
+
+\item{compare_dir}{\code{NULL} or \code{character(1)} the directory \code{scripts/0330} wrote
+(one \verb{<sp>_<stage>_compare.csv} per compared key), read for
+\code{near_river_scope}; a fitted rule with a pair and no comparison there is an
+error.}
 }
 \value{
 A list: \code{thresholds} and \code{groups} (one row per \code{rule_id} and
@@ -31,8 +37,11 @@ watershed group the rule was scored on), both \code{tibble}s.
 One row per species × stage × component of the joint pick, in the columns
 link's calibration reads (link#346): \code{rule_id} ties the components of one
 rule; \code{link_parameter} is the column of link's \code{parameters_habitat_thresholds.csv}
-the value fills, where one exists (the near-a-river exception has none in link
-and is \code{NA}); \code{model} says whether the size test is a width (\code{cw}) or a MAD
+the value fills: since link 0.67.0 (fresh 0.42.0) the near-a-river exception
+fills \verb{<stage>_river_discharge_min} and \verb{<stage>_river_distance_max}, with
+\code{river_measure = discharge} saying which of fresh's three measures of a river
+the value is in (link converts to width where a group sizes streams by width);
+\code{model} says whether the size test is a width (\code{cw}) or a MAD
 (\code{mad}) floor; \code{range_lo} and \code{range_hi} are the smallest and largest value of
 the component among the rules inside the one-SE region on the main reading;
 \code{readings_in} is the number of fold seeds (the main one and the extra seeds) in
@@ -40,13 +49,27 @@ whose region the recommended rule sits, of \code{readings}; \code{rule_196} is t
 the same pick makes from a region 1.96 standard errors wide
 (\code{\link[=knw_tune_repick]{knw_tune_repick()}}), and \code{holds_196} is \code{TRUE} where that rule keeps the
 row's value (a size row also needs the same size variable; a component the
-recommended rule lacks holds when the 1.96 rule lacks it too). A species × stage that
+recommended rule lacks holds when the 1.96 rule lacks it too). \code{rule_flow} and
+\code{rule_flow_196} are the same picks read from link's flow version of \code{default}
+as the starting point (#80; \code{NA} on a table scored before that, or for a
+species whose \code{default} has no MAD floor). \code{near_river_scope} is the scope
+link applies the near-river pair on, read from the comparison's
+\code{tuned_structure} (\code{scripts/0330}): \code{door}, which puts through-wetland lines
+through the size test or the pair, is link's \code{both}; \code{door_wetland}, the pair
+on through-wetland lines alone, is link's \code{wetland_flow}. It is \code{NA} where the
+rule has no pair, and where \code{compare_dir} is \code{NULL}. \code{evidence_md5} is the
+identity of the evidence build the rule was scored on, as the summary records
+it (\code{scripts/0320}; \code{NA} on a summary written before the record), which
+\code{scripts/0325} holds each grade table to. A summary whose \code{rule_recommended}
+is not its tune table's recommended rule is refused: the two are written at
+different points of a run. A species × stage that
 was not fitted (no stream rule, no response, too few groups) gets one row
 per stage with \code{status} saying why and no values.
 }
 \examples{
 \dontrun{
-t <- knw_thresholds_table("data/tune", "knowledge/fdis/v3", "20261017_004619-3f4c713b", "a17e9177", "default")
+t <- knw_thresholds_table("data/tune", "knowledge/fdis/v3", "20261017_004619-3f4c713b", "a17e9177", "default",
+                          compare_dir = "data/compare")
 t$thresholds
 }
 }

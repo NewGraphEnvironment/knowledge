@@ -4,7 +4,7 @@
 \alias{knw_tune_repick}
 \title{Pick a rule again from a tuning table, at another width of the region}
 \usage{
-knw_tune_repick(tune, se_mult = 1, d_floor = 200)
+knw_tune_repick(tune, se_mult = 1, d_floor = 200, start = c("default", "flow"))
 }
 \arguments{
 \item{tune}{a tuning table as \code{\link[=knw_tune_score]{knw_tune_score()}} returns it and \code{scripts/0320}
@@ -15,6 +15,11 @@ saves it (\verb{<sp>_<stage>_tune.csv}), in grid order: \code{rule}, \code{depar
 
 \item{d_floor}{\code{numeric(1)} the shortest exception distance (m) a
 recommended rule may carry, as in \code{\link[=knw_tune_score]{knw_tune_score()}}.}
+
+\item{start}{\code{"default"} counts departures from link's \code{default} (the
+table's \code{departures}); \code{"flow"} from its flow version (\code{departures_flow},
+\code{\link[=knw_tune_grid]{knw_tune_grid()}}; #80), and is refused on a table without that column or
+whose species has no flow start.}
 }
 \value{
 The recommended row of \code{tune} (one row), with \code{n_region}, the number

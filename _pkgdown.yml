@@ -53,6 +53,7 @@ reference:
       - knw_tune_curve
       - knw_grade
       - knw_grade_species
+      - knw_tune_smoke
       - knw_tune_run
   - title: Published results and comparison
     contents:

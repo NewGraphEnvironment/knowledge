@@ -16,7 +16,9 @@ knw_tune_score(
   seeds_more = integer(),
   d_floor = 200,
   workers = 1L,
-  extra = FALSE
+  extra = FALSE,
+  fit = c("fe", "dense"),
+  prior_sd = 2.5
 )
 }
 \arguments{
@@ -38,13 +40,35 @@ whether each visit is in under one row of \code{grid} (see \code{\link[=knw_rule
 \item{workers}{\code{integer(1)} socket workers for the pattern fits.}
 
 \item{extra}{\code{logical(1)} run the bootstrap, nested selection and extra seeds.}
+
+\item{fit}{\code{"fe"} fits each pattern with the groups absorbed (one intercept
+per group found by projection, so a fit's cost grows with the nuisance
+columns, not the groups; #83), \code{"dense"} with one model-matrix column per
+group (\code{stats::glm.fit()}). They give the same coefficients and deviances to
+numerical tolerance; \code{"fe"} falls back to \code{"dense"} on a fold where a
+nuisance level is a combination of groups.}
+
+\item{prior_sd}{\code{numeric(1)} the standard deviation, on the cloglog scale,
+of a normal prior on every training fit's \code{data_set} and \code{era}
+coefficients, \code{Inf} for none. The fit adds \code{b^2 / prior_sd^2} per
+coefficient to the deviance (a ridge), so a coefficient costs more the
+further it sits from zero. These terms are in the model so that a rule is
+not credited for a sampling difference, and with a group intercept each is
+measured only by the contrast between the two levels inside the groups that
+hold both; where every detection of those groups sits on one level the
+contrast is separated and the unpenalised coefficient runs until the
+deviance stops moving (steelhead's \code{data_set} to 19.6, a hazard ratio past
+a hundred million, 2026-10-23). At 2.5 a measured effect of two or three
+units (chinook's data set, bull trout spawning's) is left nearly where it
+is and a runaway is held to a few units. The dense fit takes none.}
 }
 \value{
 A list: \code{rules}, the grid with \code{n_visits}, \code{n_detect}, \code{n_wsg},
 \code{unseen_level_visits}, \code{n_wsg_varies}, \code{converged}, \code{dev_heldout},
 \code{ddev_best}, \code{se_diff}, \code{ddev_null}, \code{in_region}, \code{n_in}, \code{n_detect_in},
-\code{raw_rate_in}, \code{raw_rate_out}, \code{pick}, \code{recommended}, and with \code{extra}
-\code{boot_region_share} and \code{boot_rec_share}; \code{folds}, the fold of each group;
+\code{raw_rate_in}, \code{raw_rate_out}, \code{pick}, \code{recommended}, \code{pick_flow},
+\code{recommended_flow} (\code{NA} with no flow start), and with \code{extra}
+\code{boot_region_share}, \code{boot_rec_share} and \code{boot_rec_share_flow}; \code{folds}, the fold of each group;
 \code{honest}, \code{seeds}, \code{boot_recs} (with \code{extra}), and \code{population}, counts.
 }
 \description{
@@ -68,7 +92,11 @@ is the region rule with the fewest departures from \code{default}, ties to the
 lower score. If the pick's exception distance is under \code{d_floor} (where
 mainstem catches snapped to a tributary mouth cannot be told apart),
 \strong{recommended} is the pick among region rules with \code{exc_d >= d_floor} or no
-exception; otherwise it is the pick. With \code{extra = TRUE} the call also runs
+exception; otherwise it is the pick. Where the grid carries
+\code{departures_flow} (the departures from link's flow version of \code{default},
+\code{\link[=knw_tune_grid]{knw_tune_grid()}}), the same pick is made from that starting point too
+(\code{pick_flow}, \code{recommended_flow}; #80), on the same region: the region does
+not depend on the start, only which of its rules is nearest. With \code{extra = TRUE} the call also runs
 \code{n_boot} bootstrap resamples of groups (each rule's share in the region, and
 the share of resamples recommending each rule), a nested selection (the pick
 chosen on the other folds' held-out deviance and scored on each fold, against

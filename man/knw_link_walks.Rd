@@ -28,7 +28,8 @@ database holding \code{discharge} and \code{whse_basemapping}.}
 \value{
 A \code{tibble}: \code{blue_line_key}, \code{downstream_route_measure}, \code{src}, \code{qmin},
 \code{status}, \code{dist_m}, \code{large_mad}, \code{large_lfid}, \code{large_edge},
-\code{large_waterbody_key}, \code{n_hops}, \code{max_entry_gap_m}; exactly
+\code{large_waterbody_key}, \code{n_hops}, \code{max_entry_gap_m}, \code{dist_centre_m},
+\code{bank_m}; exactly
 \code{nrow(unique(starts)) * length(sources) * length(q_grid)} rows.
 }
 \description{
@@ -37,11 +38,22 @@ downstream on route measures (\code{inst/sql/ch_dist_profile.sql}, the walk
 \code{scripts/0294} fixed for one river size, for an array of sizes) to the first
 primary-flow segment whose annual flow on \code{src} is at least each \code{q} in
 \code{q_grid}. One row per start, source and size: \code{status} is \code{found}, \code{none} (the
-sea first), \code{no_parent} or \code{too_many_hops}. Side channels and other
+sea first), \code{no_parent} or \code{too_many_hops}. Side channels, connectors and other
 secondary-flow edges are passed over; a lake segment counts, as it would in a
 link rule.
 }
 \details{
+The distance ends at the river's bank, by the rule fresh's \code{frs_near_river()}
+applies (#73): where the river found lies in a waterbody polygon, the connector
+segments (FWA edge types 1400 and 1450) the walk passed inside that polygon and
+the part of each hop's jump that crosses it are left out, and a connector inside
+a polygon the walk only passes through stays in. \code{dist_centre_m} is the distance
+to the centreline and \code{bank_m} what the rule took off it, so
+\code{dist_m = pmax(dist_centre_m - bank_m, 0)}. What remains different from fresh's
+walk: this one starts where it is told (a visit's own point; the grade starts it
+at a segment's downstream end), crosses watershed-group outlets, and walks a
+line with no local code.
+
 Each socket worker opens its own connection through \code{connector} and installs
 the walk as a session-temporary function, so a \code{DBI} connection cannot be
 passed: it does not serialise to a worker.

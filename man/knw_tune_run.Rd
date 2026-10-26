@@ -24,7 +24,16 @@ knw_tune_run(
   power_wsg = 10L,
   src = "pick",
   grid_args = list(),
-  cache_dir = NULL
+  cache_dir = NULL,
+  thresholds_extra = NULL,
+  previous = NULL,
+  smoke = TRUE,
+  smoke_only = FALSE,
+  smoke_args = list(),
+  extra = TRUE,
+  fit = c("fe", "dense"),
+  prior_sd = 2.5,
+  evidence_id = NULL
 )
 }
 \arguments{
@@ -42,7 +51,8 @@ knw_tune_run(
 
 \item{edge_stream, area_range}{the population's constants.}
 
-\item{seed, folds, n_boot, seeds_more, workers, d_floor}{passed to \code{\link[=knw_tune_score]{knw_tune_score()}}.}
+\item{seed, folds, n_boot, seeds_more, workers, d_floor, fit, prior_sd}{passed to \code{\link[=knw_tune_score]{knw_tune_score()}} (and \code{fit} and \code{prior_sd} to
+\code{\link[=knw_tune_smoke]{knw_tune_smoke()}}, \code{prior_sd} to \code{\link[=knw_tune_curve]{knw_tune_curve()}}).}
 
 \item{min_wsg, power_wsg}{\code{integer(1)} the floors described above.}
 
@@ -56,17 +66,55 @@ for its defaults.}
 grid is saved as \verb{<sp>_<stage>_score.rds} and read back on a rerun when the
 population has the same number of visits and the grid the same rows, in
 the same order (every \code{\link[=knw_tune_grid]{knw_tune_grid()}} column, so a moved \code{default}
-counts). The other scoring arguments (\code{seed}, \code{folds}, \code{n_boot},
-\code{seeds_more}, \code{d_floor}) are not checked: give a run with different ones its
+counts), and the settings the score was made with match (\code{fit}, \code{prior_sd},
+\code{seed}, \code{folds}, \code{d_floor} and \code{extra}, recorded as \code{spec} by
+\code{\link[=knw_tune_score]{knw_tune_score()}}); a cache written before the record is read back with a
+message naming the settings it is taken as. \code{n_boot}, \code{seed_boot} and
+\code{seeds_more} are not checked: a cache's bootstrap and extra-seed tables are
+read back whatever the run asked for, so give a run with different ones its
 own directory.}
+
+\item{thresholds_extra}{\code{NULL}, or another bundle's
+\code{parameters_habitat_thresholds.csv} (link's \code{default_tuned}): each species'
+row joins its grid as the \code{is_link_tuned} candidate (\code{\link[=knw_tune_grid]{knw_tune_grid()}}).}
+
+\item{previous}{\code{NULL}, or a named \code{character} vector of the previous pick's
+rule string per \code{"<sp>_<stage>"}, which the smoke run scores where present.}
+
+\item{smoke}{\code{logical(1)} run the smoke run and its checks first.}
+
+\item{smoke_only}{\code{logical(1)} return after the smoke run, scoring nothing.}
+
+\item{smoke_args}{\code{list} of arguments passed to \code{\link[=knw_tune_smoke]{knw_tune_smoke()}}
+(\code{tol_null}, \code{coef_max}).}
+
+\item{extra}{\code{logical(1)} passed to \code{\link[=knw_tune_score]{knw_tune_score()}}: the bootstrap, the
+nested selection and the extra fold seeds. \code{FALSE} is the development
+setting, which proves a scorer change on every species in a fraction of the
+time; a run that publishes keeps \code{TRUE}.}
+
+\item{evidence_id}{\code{NULL}, or \code{character(1)} naming the evidence build the
+visits and walks came from (\code{scripts/0320} passes the md5s of the three
+derived tables). It joins the cache's settings, so a score made on another
+build of the same visit count is not read back as this one's.}
 }
 \value{
 A list with one element per species × stage (\code{"<sp>_<stage>"}): a
 list with \code{species_code}, \code{stage}, \code{response}, \code{status} (\code{fitted},
 \code{underpowered}, \code{no_stream_rule}, \code{no_response}, \code{too_few_groups},
-\code{curve_failed}), \code{population}, and when scored \code{score} (\code{\link[=knw_tune_score]{knw_tune_score()}}'s
-result), \code{pick} (the recommended rule row) and \code{curve} (\code{\link[=knw_tune_curve]{knw_tune_curve()}}'s;
-\code{NULL} with \code{curve_error} when its fit failed).
+\code{curve_failed}; \code{smoke} with \code{smoke_only}), \code{population}, and when scored
+\code{smoke} (\code{\link[=knw_tune_smoke]{knw_tune_smoke()}}'s result, with \code{smoke}), \code{score}
+(\code{\link[=knw_tune_score]{knw_tune_score()}}'s result), \code{pick} (the recommended rule row) and \code{curve}
+(\code{\link[=knw_tune_curve]{knw_tune_curve()}}'s; \code{NULL} with \code{curve_error} when its fit failed);
+\code{null_heldout} (the held-out deviance with no rule over the grid's visits),
+\code{null_heldout_curve} (the same model scored over the curve's own visits,
+those with a size, a gradient and a distance, on the same folds) and
+\code{grade_withheld}, \code{TRUE} when the curve's held-out deviance is no better
+than \code{null_heldout_curve}: a curve that predicts held-out groups no better
+than knowing nothing ranks segments no better either, so its grades are
+withheld. The comparison is over one population because a width rule's
+curve fits fewer visits than the grid (unmeasured streams have no width),
+and each visit it drops would otherwise leave only its own side.
 }
 \description{
 For each species in \code{species} and each stage in \code{stages}: the scoring
@@ -86,6 +134,14 @@ detection (\code{U}, the species caught); spawning's is spawner evidence (\code{
 response, no stream rule in \code{default}, or fewer than \code{min_wsg} groups with both
 outcomes gets a one-row record saying so and is not fitted. A species × stage
 with fewer than \code{power_wsg} groups is fitted and labelled \code{underpowered}.
+
+Before any grid is scored, every species × stage that would be fitted gets
+the smoke run (\code{\link[=knw_tune_smoke]{knw_tune_smoke()}}; #84): a handful of rules on the main fold
+seed, and four checks on the scorer. One failed check on any key stops the
+run, with every key's report printed, so a scorer defect costs minutes, not
+the hours of the full grid. \code{smoke_only = TRUE} returns after the smoke run
+(each record carries \code{smoke}, and none is scored), which is how
+\code{scripts/0320} writes the reports before it decides to score.
 }
 \examples{
 \dontrun{

@@ -1,0 +1,26 @@
+walk_bank_check BULK Q=3 D_FAR=20000; fresh 0.42.0, knowledge 2c24b94
+segmented BULK in 0.1 min: 32472 segments, 30011 with flow, 1087 at or above Q
+frs_near_river at 3 within 20000 m: 112.5 s
+origins whose line ends at a side-line connector: 1177 of 28679
+fresh: 28679 origins (main flow, local code, below Q); 22249 found a river within 20000 m, 1153 within 200 m
+origins walked: 2460 (2000 random, 500 within 200 m, after dedup)
+knw_link_walks: 2460 starts in 4.0 s
+classes:
+     class    n  share
+     agree 1859 75.6 %
+ bank_jump    8  0.3 %
+    beyond  445 18.1 %
+      path  148  6.0 %
+bank class: 0 starts. The bank rule here is fresh's.
+bank_jump class (8): bank residual (fresh - ours) median 3.64 m, largest |3.64| m, on jumps of 46 to 311 m (median 311); 2 distinct rivers
+this walk's bank_m over 2460 found starts: 1656 with bank_m > 0 (67.3 %); median 31.8 m, 90th percentile 66.1 m, max 599.1 m
+fresh's subtraction (centre - bank) against ours on 2006 starts both found with both of fresh's walks: identical within 0.01 m on 1857 (92.6 %); within 1 m on 1863
+path class residuals (fresh - ours, centreline): median 154.2 m, 5th -30.0, 95th 1555.9; largest gap this walk hopped, median 134.1 m
+bank residual (fresh - ours, m) by class and side-line connector:
+     class side_connector    n   bank_med   bank_p10  bank_p90 centre_med
+     agree          FALSE 1774 -9.124e-05 -9.556e-04 6.010e-04         NA
+     agree           TRUE   85 -9.871e-05 -1.107e-03 4.447e-04 -9.871e-05
+ bank_jump          FALSE    8  3.638e+00  1.237e+00 3.639e+00  7.776e-01
+      path          FALSE  146  8.934e+01 -3.306e-01 5.531e+02  1.429e+02
+      path           TRUE    2  1.523e+03  1.523e+03 1.523e+03  1.556e+03
+side-connector origins both found with agreeing paths: 85; bank residual median -0.00 m, 90th percentile of |residual| 0.00 m

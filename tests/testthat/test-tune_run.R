@@ -1,36 +1,3 @@
-sim_build <- function(seed = 11, n_wsg = 8, per = 50) {
-  set.seed(seed)
-  n <- n_wsg * per
-  wsg <- rep(sprintf("W%02d", seq_len(n_wsg)), each = per)
-  v <- data.frame(
-    site_visit = sprintf("v%04d", seq_len(n)), watershed_group_code = wsg, blue_line_key = 1,
-    downstream_route_measure = seq_len(n), edge_type = 1000L, wb_river = FALSE, wb_wetland = FALSE, wb_lake = FALSE,
-    area_m2 = stats::runif(n, 20, 400), year = sample(1985:2015, n, TRUE), data_set = sample(c("FDS", "FDIS"), n, TRUE),
-    fwa_gradient = stats::runif(n, 0, 0.12), cw_deploy = exp(stats::runif(n, log(0.5), log(15))),
-    mad_pick = exp(stats::runif(n, log(0.02), log(20))), barrier_dnstr_ch = FALSE, barrier_dnstr_ko = FALSE,
-    barrier_dnstr_bt = FALSE, stringsAsFactors = FALSE
-  )
-  p <- stats::plogis(-2.5 + 1.2 * log(v$mad_pick) - 12 * v$fwa_gradient)
-  present_ch <- stats::rbinom(n, 1, p) == 1
-  sp <- rbind(
-    data.frame(site_visit = v$site_visit, species_code = "CH", present = present_ch,
-               status = ifelse(present_ch, "present", "absent"), in_range = TRUE),
-    data.frame(site_visit = v$site_visit, species_code = "KO", present = FALSE, status = "absent", in_range = TRUE),
-    data.frame(site_visit = v$site_visit, species_code = "BT", present = c(TRUE, rep(FALSE, n - 1)),
-               status = c("present", rep("absent", n - 1)), in_range = wsg %in% c("W01", "W02"))
-  )
-  dist <- exp(stats::runif(n, log(50), log(30000)))
-  walks <- do.call(rbind, lapply(c(1, 3, 5, 10, 20, 30, 50), function(q) {
-    data.frame(blue_line_key = 1, downstream_route_measure = seq_len(n), src = "pick", qmin = q,
-               status = "found", dist_m = dist * q / 3)
-  }))
-  thr <- data.frame(species_code = c("CH", "KO", "BT"), rear_gradient_max = c(0.0549, NA, 0.1049),
-                    rear_channel_width_min = c(1.5, 1.5, 1.5), rear_mad_min = c(0.28, NA, 0.021),
-                    spawn_gradient_max = c(0.0449, 0.0249, 0.0549), spawn_channel_width_min = c(4, 2, 2),
-                    spawn_mad_min = c(0.46, 0.041, 0.041))
-  list(v = v, sp = sp, walks = walks, thr = thr)
-}
-
 test_that("one run covers fitted, no-stream-rule and too-few-groups species, and records why", {
   skip_if_not_installed("mgcv")
   s <- sim_build()
@@ -38,8 +5,11 @@ test_that("one run covers fitted, no-stream-rule and too-few-groups species, and
                       n_boot = 10L, seeds_more = 55L, workers = 1L)
   expect_named(out, c("CH_rear", "KO_rear", "BT_rear"))
   expect_true(out$CH_rear$status %in% c("fitted", "underpowered"))
-  expect_equal(nrow(out$CH_rear$score$rules), 2795 + 0)   # the default's own values are on 0297's ladders
+  expect_equal(nrow(out$CH_rear$score$rules), 6149)   # the default's own values are on the ladders (#68: 11 gradients)
   expect_equal(sum(out$CH_rear$score$rules$recommended), 1)
+  expect_equal(sum(out$CH_rear$score$rules$recommended_flow), 1)
+  expect_equal(nrow(out$CH_rear$pick_flow), 1)
+  expect_true(all(out$CH_rear$score$rules$boot_rec_share_flow >= 0))
   expect_s3_class(out$CH_rear$curve$model, "gam")
   expect_equal(out$KO_rear$status, "no_stream_rule")
   expect_equal(out$BT_rear$status, "too_few_groups")
@@ -68,7 +38,7 @@ test_that("grid_args reaches knw_tune_grid: the ladder above 9 % gives 559 rules
   local_mocked_bindings(knw_tune_score = function(d, rule_in, grid, ...) stop("rules=", nrow(grid)))
   expect_error(knw_tune_run(s$v, s$sp, s$walks, s$thr, species = "CH", stages = "rear",
                             grid_args = list(grid_grad = g8)), "rules=4472")
-  expect_error(knw_tune_run(s$v, s$sp, s$walks, s$thr, species = "CH", stages = "rear"), "rules=2795")
+  expect_error(knw_tune_run(s$v, s$sp, s$walks, s$thr, species = "CH", stages = "rear"), "rules=6149")   # the 30 % ladder (#68)
 })
 
 test_that("a cached score is read back only for the grid it was scored on", {
@@ -88,6 +58,26 @@ test_that("a cached score is read back only for the grid it was scored on", {
   local_mocked_bindings(knw_tune_score = function(...) stop("rescored"))
   expect_equal(run(small)$CH_rear$score$rules$rule, first$CH_rear$score$rules$rule)
   expect_error(run(wider), "rescored")
+  # the settings the score depends on are compared too (the branch review of 2026-10-25): another prior or seed is
+  # another score, and a cache from before the record is read back with a message rather than thrown away
+  expect_equal(first$CH_rear$score$spec$prior_sd, 2.5)
+  expect_error(knw_tune_run(s$v, s$sp, s$walks, s$thr, species = "CH", stages = "rear", n_boot = 5L, seeds_more = integer(),
+                            grid_args = small, cache_dir = dir, prior_sd = 5), "rescored")
+  expect_error(knw_tune_run(s$v, s$sp, s$walks, s$thr, species = "CH", stages = "rear", n_boot = 5L, seeds_more = integer(),
+                            grid_args = small, cache_dir = dir, seed = 55L), "rescored")
+  expect_error(knw_tune_run(s$v, s$sp, s$walks, s$thr, species = "CH", stages = "rear", n_boot = 5L, seeds_more = integer(),
+                            grid_args = small, cache_dir = dir, evidence_id = "another build"), "rescored")
+  no_spec <- readRDS(file.path(dir, "CH_rear_score.rds"))
+  no_spec$spec <- NULL
+  saveRDS(no_spec, file.path(dir, "CH_rear_score.rds"))
+  expect_message(expect_equal(run(small)$CH_rear$score$rules$rule, first$CH_rear$score$rules$rule), "records no settings")
+  saveRDS(first$CH_rear$score, file.path(dir, "CH_rear_score.rds"))
+  # a cache written before a grid column existed is rescored, not read as this grid's (it stopped 0320 on 2026-10-22)
+  old_cache <- readRDS(file.path(dir, "CH_rear_score.rds"))
+  old_cache$rules$departures_flow <- NULL
+  old_cache$rules$is_link_tuned <- NULL
+  saveRDS(old_cache, file.path(dir, "CH_rear_score.rds"))
+  expect_error(run(small), "rescored")
   # link's default width moving to another value on the ladder leaves every rule string as it was, but not the
   # grid's default
   thr2 <- s$thr
@@ -96,4 +86,57 @@ test_that("a cached score is read back only for the grid it was scored on", {
                    first$CH_rear$score$rules$rule)
   expect_error(knw_tune_run(s$v, s$sp, s$walks, thr2, species = "CH", stages = "rear", n_boot = 5L,
                             seeds_more = integer(), grid_args = small, cache_dir = dir), "rescored")
+})
+
+test_that("thresholds_extra puts another bundle's rule in the grid, and a species it lacks is unaffected", {
+  skip_if_not_installed("mgcv")
+  s <- sim_build()
+  extra <- data.frame(species_code = "CH", rear_gradient_max = 0.0549, rear_channel_width_min = 1.5, rear_mad_min = 0.043,
+                      spawn_gradient_max = 0.0449, spawn_channel_width_min = 4, spawn_mad_min = 0.46)
+  out <- knw_tune_run(s$v, s$sp, s$walks, s$thr, species = "CH", stages = "rear", n_boot = 5L, seeds_more = integer(),
+                      workers = 1L, grid_args = list(grid_grad = 0.0549, grid_q = 3, grid_d = 1000),
+                      thresholds_extra = extra)
+  r <- out$CH_rear$score$rules
+  expect_equal(sum(r$is_link_tuned), 1)
+  expect_equal(r$rule[r$is_link_tuned], "mad>=0.043|g<=0.0549|none")
+  out2 <- knw_tune_run(s$v, s$sp, s$walks, s$thr, species = "CH", stages = "rear", n_boot = 5L, seeds_more = integer(),
+                       workers = 1L, grid_args = list(grid_grad = 0.0549, grid_q = 3, grid_d = 1000),
+                       thresholds_extra = extra[extra$species_code == "BT", ])
+  expect_false(any(out2$CH_rear$score$rules$is_link_tuned))
+})
+
+test_that("a curve no better than no rule on held-out groups has its grades withheld", {
+  skip_if_not_installed("mgcv")
+  s <- sim_build()
+  small <- list(grid_grad = 0.0549, grid_q = 3, grid_d = 1000)
+  run <- function() knw_tune_run(s$v, s$sp, s$walks, s$thr, species = "CH", stages = "rear", grid_args = small,
+                                 extra = FALSE, smoke = FALSE)$CH_rear
+  r <- run()
+  rules <- r$score$rules
+  expect_equal(r$null_heldout, rules$dev_heldout[2] - rules$ddev_null[2])
+  # the simulated visits all carry a size, so the curve's population is the grid's and the two no-rule scores agree
+  expect_equal(nrow(r$curve$data), unname(r$score$population[["visits_modelled"]]))
+  expect_equal(r$null_heldout_curve, r$null_heldout)
+  expect_equal(r$grade_withheld, r$curve$heldout >= r$null_heldout_curve)
+  # the gate reads the curve's own held-out deviance against no rule's, on either side
+  local_mocked_bindings(knw_tune_curve = function(...) list(heldout = r$null_heldout_curve, data = r$curve$data))
+  expect_true(run()$grade_withheld)
+  local_mocked_bindings(knw_tune_curve = function(...) list(heldout = r$null_heldout_curve - 0.01, data = r$curve$data))
+  expect_false(run()$grade_withheld)
+  # no rule is scored on the curve's own visits (the branch review of 2026-10-25): a curve fitted on four visits in
+  # five, scoring between no rule's deviance on those visits and on all of them, is withheld; against the grid's
+  # no-rule score it would have been published, which is how bull trout spawning's grade passed the gate
+  sub <- .tune_modelled(r$curve$data[seq_len(nrow(r$curve$data)) %% 5 != 0, , drop = FALSE], "U")
+  null_sub <- .tune_null_heldout(sub, "U", r$score$folds, 5L)
+  expect_lt(null_sub, r$null_heldout)
+  mid <- (null_sub + r$null_heldout) / 2
+  local_mocked_bindings(knw_tune_curve = function(...) list(heldout = mid, data = sub))
+  g <- run()
+  expect_equal(g$null_heldout_curve, null_sub)
+  expect_true(g$grade_withheld)
+  expect_false(mid >= r$null_heldout)
+  local_mocked_bindings(knw_tune_curve = function(...) stop("no fit"))
+  failed <- run()
+  expect_equal(failed$status, "curve_failed")
+  expect_false(failed$grade_withheld)
 })

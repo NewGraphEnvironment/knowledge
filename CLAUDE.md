@@ -23,7 +23,7 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   `.rda` files off the top of `data/`, where `pkgload::load_all()` would source or load them.
 - `vignettes/chinook_rearing.Rmd` — the pkgdown article on the chinook rearing threshold (#62). It reads
   `inst/vignette-data/`, which `data-raw/vignette_chinook.R` writes from the tune and compare tables and the
-  database; rerun that script after any `0320`/`0330` rerun, because `tests/testthat/test-vignette-data.R` fails
+  database (`SCHEMA` names the run's schema, as `0320` and `0330` take it); rerun that script after any `0320`/`0325`/`0330` rerun, because `tests/testthat/test-vignette-data.R` fails
   when a tracked source's md5 moves. Every number in its prose is computed inline from those files. Its references
   are `vignettes/chinook_rearing.bib`, which `data-raw/vignette_bib.R` writes from the group library through Better
   BibTeX (Zotero must be running): rerun it after any citation change. It refuses a key Zotero does not return, strips
@@ -61,12 +61,15 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   input of the `temperature` store), and `flow_{members,additions}.csv` (what `0270 --collection flow` puts in
   `Fisheries/flow`, the sole input of the `flow` store; #44, `research/flow_requirements.md`), and
   `thresholds.csv` and `thresholds_groups.csv` (the tuned thresholds per species × stage × component in link's
-  parameter names, and the groups each rule was scored on; `0325`, #57). `data/tune/` holds the tuning run's
+  parameter names, with the near-river pair's scope where a rule has one (`near_river_scope`, from the comparison's
+  tuned structure), and the groups each rule was scored on; `0325`, #57, #73). `data/tune/` holds the tuning run's
   per-rule scores and curves (its grade tables and fitted curves are ignored), `data/compare/` the comparison
   tables (its catalog cache and interactive maps ignored), `data/publish/` the Parquet sets (ignored).
   `data/tune/grad_ext/` and `data/compare/grad_ext/` hold `0322`'s CH rearing run on a gradient ladder extended to
-  30 % (#67); nothing that publishes reads them, because `0325`, `0330` and `knw_thresholds_table()` list their
-  directories non-recursively.
+  30 % (#67, on the evidence build before #73; the main run carries that ladder for every species since #68);
+  nothing that publishes reads them, because `0325`, `0330` and `knw_thresholds_table()` list their directories
+  non-recursively. `data/compare/gpkg/` (ignored) holds one GeoPackage per species × stage from `0330`, the
+  comparison's view for QGIS (#81).
 - `data/rag/` — ignored local cache of the ragnar stores. Source of truth is `s3://fresh-bc/rag/` (not public).
 - `data/fdis/` — ignored cache of the FDIS export (`0230` syncs it) and of the visit tables built from it
   (`data/fdis/derived/`; `0299` builds them as `knowledge/fdis/v3`, which is not yet uploaded (`v2` is the
@@ -292,6 +295,21 @@ they show:
 - **A decision made before the run is stated as one.** List every check with its direction; do not sort them by
   the side they support.
 
+### A run's record travels with its table, and every reader compares it, not its presence
+
+Every `data/tune/<key>_grades.csv` row carries the run that made it: `rule`, `run_uid`, `walk`, `ref_edge`,
+`discharge_load`, `curve_prior_sd`, `grade_withheld`, `null_heldout_curve` (the gate's own number) and `evidence_md5`
+(the md5s of the three derived tables); the summary and `<key>_curve.rds` carry `evidence_md5` and `run_uid`, and the
+score cache its settings (`spec`: fit, prior, seed, folds, d_floor, extra, evidence). `0320`'s keep-check, `0325`,
+`0330` and `data-raw/vignette_chinook.R` each compare those fields with the run's own values and refuse a table that
+does not match; `0325` refuses before it writes anything. So a change to the gate, the prior, the walk or the evidence
+regrades every key (about 190 min on the database's host), which is the cost of never publishing a verdict the code
+no longer makes. #73's branch review (five rounds, `planning/archive/2026-10-issue-73-rebuild-evidence-retune-bank/review-round*.md`)
+found four axes where a reader had checked presence alone, one of them the gate itself: it compared the curve's
+held-out deviance over the visits with a size against no rule's over every modelled visit, so for the width-ruled keys
+it favoured publishing, and bull trout spawning's grade rested on it. Compare two deviances only when they are summed
+over the same rows (`null_heldout_curve` is no rule scored on the curve's own visits).
+
 ### The segment flows can change under a run; the table comment names the build
 
 `discharge.fwa_v1_segment_monthly` is wet's database load, and wet can reload it between two runs: NewGraphEnvironment/wet#103
@@ -301,8 +319,19 @@ Before comparing two runs that read flows, read the table comment
 check to fail when it differs. `0325` publishes the comment as `discharge_load_at_publish`; recording it at grading
 time is #72.
 
-The walk (`inst/sql/ch_dist_profile.sql`) measures distance to a double-line river's centreline, through the
-tributary's connector (edge 1450), not to its bank (#65's Limits in `research/habitat_thresholds_tuned.md`; #73).
+The walk (`inst/sql/ch_dist_profile.sql`) ends at a double-line river's bank, by fresh 0.42.0's rule (#73): a
+connector (edge 1400/1450) is never a target, the connector run and the jump's crossing inside the target's polygon
+are left out, and every other hop's gap counts. It differs from fresh's `frs_near_river()` in what it is for, not
+in the rule: it walks seven river sizes on three flow sources in one pass, uncapped, across watershed-group outlets,
+and from any point (a visit's own; the grade starts it at a segment's downstream end). `data-raw/walk_bank_check.R`
+is the check against fresh's walk on one group (BULK, 2026-10-22: 0 of 2,460 starts differ by the bank rule; the
+`path` class is the two walks' entry conventions, fresh by local code, ours by nearest point). `scripts/sql/` keeps
+#54's centreline walk for the frozen `0298`.
+
+The schema can change under a run too: a provincial run in link renames `fresh_default` to `fresh_default_<date>` and
+builds a new `fresh_default` in its place (link#361 did so on 2026-10-23 while #73's chain was running, and the comparison
+failed on connect). `0320` and `0330` take the schema from `SCHEMA`; every step of one retune names the schema its
+evidence was built on, and a chain of runs sets it once.
 
 ### Database access
 
@@ -317,6 +346,13 @@ R reads `~/.Renviron` at startup and its values **replace** the shell's, so wher
 `PGDATABASE=… Rscript …` on the command line is silently ignored (measured 2026-10-16). Set the
 database there, or select a `~/.pg_service.conf` entry with `PGSERVICE=<entry>`, which libpq takes
 over the `PG*` variables. Set `PGCONNECT_TIMEOUT`, or an unreachable server hangs the script.
+
+**Run a database-bound step on the database's own host, against its own database.** Grading (`0320`'s walks) and
+`0330` send a query per segment or per watershed group, so their time is round trips: a trivial query costs 1.6 ms on
+the host and 104 ms from a machine on a remote link (2026-10-24), and #73's rescore graded from a remote machine for
+7.5 h without finishing what takes about an hour on the host. A second machine helps only with a database of its own
+holding the same build: the schema's run, the flow load named in the table comment and the walk code. Scoring is
+CPU-bound: the remote machine scored every key in about an hour on 12 workers (2026-10-23).
 
 **Run R from the repo root, and never add a project-level `.Renviron` here.** R loads a
 project `.Renviron` *instead of* `~/.Renviron`, not in addition to it, so one silently empties

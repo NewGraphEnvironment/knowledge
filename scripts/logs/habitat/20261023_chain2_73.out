@@ -1,0 +1,6 @@
+2026-10-23T07:48:32Z chain2 started; SCHEMA=fresh_default_20261017; BT 0330 (2 workers) and GR,RB,ST,WCT 0320 (6 workers)
+2026-10-23T11:15:37Z BT 0330 exit 0
+2026-10-23T11:15:37Z kept scripts/logs/habitat/20261023_compare-bt.txt
+2026-10-23T11:15:37Z kept scripts/logs/habitat/20261023_compare-workers-bt.out
+2026-10-23T15:55:07Z chain2 stopped by the operator before its GR,RB,ST,WCT 0330; the 0320 run (pid 78028) left running; RB deferred from the comparison and the write-ups (Al, 2026-10-23), so the comparison is run as SPECIES=GR,ST,WCT by hand once the tuning's log is written
+2026-10-23T16:14:43Z the 0320 run (pid 78028) stopped by the operator while grading GR: the four species' scores are wrong (the intercept minimiser sticks on the clamp's plateau; findings); every #73 key is rescored after the fix

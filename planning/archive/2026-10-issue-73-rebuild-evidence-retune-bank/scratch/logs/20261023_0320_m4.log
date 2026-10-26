@@ -1,0 +1,208 @@
+Fri Oct 23 21:21:34 UTC 2026
+14:21  up 44 days, 19:08, 5 users, load averages: 3.73 4.66 6.34
+host m4 commit fa638f2
+Tuning run, knowledge#57. Evidence build scripts/logs/habitat/20261022_evidence_build_ledger.csv on link run 20261017_004619-3f4c713b (link a17e91773b283b021811f8b5b76b887d5f4c16e4;ee21eb1371cbc4d7a2d598f8bbeeaeb0534d7994), schema fresh_default_20261017.
+  visits_link md5 d3a434e28f38ef8a234250018c7cb48a
+  visits_species md5 bc71243b0a4eb2e360e1e8410db34125
+  walks md5 f49f863660301299bd632fe998d3b6aa
+Spawner evidence: 1069 BT visits with a coded fish, 194 with evidence.
+link default thresholds at a17e91773b283b021811f8b5b76b887d5f4c16e4 (same at ee21eb1371cbc4d7a2d598f8bbeeaeb0534d7994): 11 species; default_tuned: 11 species (its MAD floors join the grids).
+Fit: group intercepts absorbed (#83); normal prior SD 2.5 on the data_set and era coefficients, cloglog scale (#84).
+Smoke run first: previous picks on file for BT_rear, BT_spawn, CH_rear, CO_rear, GR_rear, RB_rear, ST_rear, WCT_rear.
+BT_rear smoke: 8717 visits (1198 detections) in 75 groups with both outcomes; 4 rules, 4 fits.
+    null_ratio: no rule 6031.2 held-out against 6013.8 in-sample, ratio 1.003 (limit 1.25): pass
+    clamp: 0 visits at 55.26 over 4 rules (limit 0): pass
+    behind_null: no_rule (none) is +0.0 against no rule (limit 6031.2): pass
+    coef: rule 1.15 on fold 3 of previous (mad>=0.1|g<=0.1049|none) (limit 5.0): pass
+    default: width>=1.5|g<=0.1049|none held-out 5930.9 (-100.3 against no rule), converged TRUE
+    link_tuned: mad>=0.043|g<=0.1349|none held-out 5824.5 (-206.7 against no rule), converged TRUE
+    previous: mad>=0.1|g<=0.1049|none held-out 5797.9 (-233.4 against no rule), converged TRUE
+BT_spawn smoke: 475 visits (98 detections) in 22 groups with both outcomes; 4 rules, 4 fits.
+    null_ratio: no rule 401.4 held-out against 385.7 in-sample, ratio 1.041 (limit 1.25): pass
+    clamp: 0 visits at 55.26 over 4 rules (limit 0): pass
+    behind_null: link_tuned (mad>=0.043|g<=0.0549|none) is +7.1 against no rule (limit 401.4): pass
+    coef: data_setFDS 2.92 on fold 4 of link_tuned (mad>=0.043|g<=0.0549|none) (limit 5.0): pass
+    default: width>=2|g<=0.0549|none held-out 405.5 (+4.1 against no rule), converged TRUE
+    link_tuned: mad>=0.043|g<=0.0549|none held-out 408.5 (+7.1 against no rule), converged TRUE
+    previous: width>=2|g<=0.13|none held-out 401.3 (-0.1 against no rule), converged TRUE
+CH_rear smoke: 4490 visits (215 detections) in 43 groups with both outcomes; 4 rules, 4 fits.
+    null_ratio: no rule 1380.5 held-out against 1400.7 in-sample, ratio 0.986 (limit 1.25): pass
+    clamp: 0 visits at 55.26 over 4 rules (limit 0): pass
+    behind_null: no_rule (none) is +0.0 against no rule (limit 1380.5): pass
+    coef: rule 3.12 on fold 4 of previous (mad>=0.75|g<=0.13|Q3@D1000) (limit 5.0): pass
+    default: width>=1.5|g<=0.0549|none held-out 1344.8 (-35.7 against no rule), converged TRUE
+    link_tuned: mad>=0.28|g<=0.0549|none held-out 1307.5 (-73.0 against no rule), converged TRUE
+    previous: mad>=0.75|g<=0.13|Q3@D1000 held-out 1120.1 (-260.4 against no rule), converged TRUE
+CO_rear smoke: 4263 visits (1107 detections) in 62 groups with both outcomes; 4 rules, 4 fits.
+    null_ratio: no rule 4024.0 held-out against 4037.8 in-sample, ratio 0.997 (limit 1.25): pass
+    clamp: 0 visits at 55.26 over 4 rules (limit 0): pass
+    behind_null: no_rule (none) is +0.0 against no rule (limit 4024.0): pass
+    coef: data_setFDS 1.16 on fold 5 of no_rule (none) (limit 5.0): pass
+    default: width>=1.5|g<=0.0549|none held-out 3967.7 (-56.3 against no rule), converged TRUE
+    link_tuned: mad>=0.03|g<=0.0549|none held-out 3928.4 (-95.6 against no rule), converged TRUE
+    previous: mad>=0.03|g<=0.04|none held-out 3867.6 (-156.4 against no rule), converged TRUE
+GR_rear smoke: 1230 visits (212 detections) in 26 groups with both outcomes; 4 rules, 3 fits.
+    null_ratio: no rule 828.0 held-out against 913.7 in-sample, ratio 0.906 (limit 1.25): pass
+    clamp: 0 visits at 55.26 over 4 rules (limit 0): pass
+    behind_null: link_tuned (mad>=0.97|g<=0.0349|none) is +0.5 against no rule (limit 828.0): pass
+    coef: data_setFDS 2.89 on fold 4 of no_rule (none) (limit 5.0): pass
+    default: width>=1.5|g<=0.0349|none held-out 815.6 (-12.4 against no rule), converged TRUE
+    link_tuned: mad>=0.97|g<=0.0349|none held-out 828.5 (+0.5 against no rule), converged TRUE
+    previous: width>=1.5|g<=0.0349|none held-out 815.6 (-12.4 against no rule), converged TRUE
+RB_rear smoke: 12959 visits (3513 detections) in 129 groups with both outcomes; 4 rules, 4 fits.
+    null_ratio: no rule 12617.4 held-out against 12805.0 in-sample, ratio 0.985 (limit 1.25): pass
+    clamp: 0 visits at 55.26 over 4 rules (limit 0): pass
+    behind_null: no_rule (none) is +0.0 against no rule (limit 12617.4): pass
+    coef: rule 1.17 on fold 3 of previous (width>=3|g<=0.09|none) (limit 5.0): pass
+    default: width>=1.5|g<=0.0849|none held-out 11954.8 (-662.5 against no rule), converged TRUE
+    link_tuned: mad>=0.019|g<=0.0849|none held-out 11933.4 (-684.0 against no rule), converged TRUE
+    previous: width>=3|g<=0.09|none held-out 11837.0 (-780.4 against no rule), converged TRUE
+ST_rear smoke: 1375 visits (82 detections) in 11 groups with both outcomes; 4 rules, 4 fits.
+    null_ratio: no rule 420.8 held-out against 445.9 in-sample, ratio 0.944 (limit 1.25): pass
+    clamp: 0 visits at 55.26 over 4 rules (limit 0): pass
+    behind_null: no_rule (none) is +0.0 against no rule (limit 420.8): pass
+    coef: data_setFDS 2.10 on fold 1 of no_rule (none) (limit 5.0): pass
+    default: width>=1.5|g<=0.0849|none held-out 407.8 (-13.0 against no rule), converged TRUE
+    link_tuned: mad>=0.02|g<=0.0849|none held-out 416.3 (-4.5 against no rule), converged TRUE
+    previous: mad>=1|g<=0.0849|none held-out 372.9 (-47.9 against no rule), converged TRUE
+WCT_rear smoke: 1157 visits (536 detections) in 6 groups with both outcomes; 4 rules, 4 fits.
+    null_ratio: no rule 1329.7 held-out against 1292.9 in-sample, ratio 1.028 (limit 1.25): pass
+    clamp: 0 visits at 55.26 over 4 rules (limit 0): pass
+    behind_null: no_rule (none) is +0.0 against no rule (limit 1329.7): pass
+    coef: rule 0.74 on fold 4 of link_tuned (mad>=0.03|g<=0.0849|none) (limit 5.0): pass
+    default: width>=1.5|g<=0.0849|none held-out 1328.8 (-1.0 against no rule), converged TRUE
+    link_tuned: mad>=0.03|g<=0.0849|none held-out 1327.8 (-1.9 against no rule), converged TRUE
+    previous: width>=1.5|g<=0.04|none held-out 1321.3 (-8.5 against no rule), converged TRUE
+BT_rear smoke: 8717 visits (1198 detections) in 75 groups with both outcomes; 4 rules, 4 fits.
+    null_ratio: no rule 6031.2 held-out against 6013.8 in-sample, ratio 1.003 (limit 1.25): pass
+    clamp: 0 visits at 55.26 over 4 rules (limit 0): pass
+    behind_null: no_rule (none) is +0.0 against no rule (limit 6031.2): pass
+    coef: rule 1.15 on fold 3 of previous (mad>=0.1|g<=0.1049|none) (limit 5.0): pass
+    default: width>=1.5|g<=0.1049|none held-out 5930.9 (-100.3 against no rule), converged TRUE
+    link_tuned: mad>=0.043|g<=0.1349|none held-out 5824.5 (-206.7 against no rule), converged TRUE
+    previous: mad>=0.1|g<=0.1049|none held-out 5797.9 (-233.4 against no rule), converged TRUE
+BT_spawn smoke: 475 visits (98 detections) in 22 groups with both outcomes; 4 rules, 4 fits.
+    null_ratio: no rule 401.4 held-out against 385.7 in-sample, ratio 1.041 (limit 1.25): pass
+    clamp: 0 visits at 55.26 over 4 rules (limit 0): pass
+    behind_null: link_tuned (mad>=0.043|g<=0.0549|none) is +7.1 against no rule (limit 401.4): pass
+    coef: data_setFDS 2.92 on fold 4 of link_tuned (mad>=0.043|g<=0.0549|none) (limit 5.0): pass
+    default: width>=2|g<=0.0549|none held-out 405.5 (+4.1 against no rule), converged TRUE
+    link_tuned: mad>=0.043|g<=0.0549|none held-out 408.5 (+7.1 against no rule), converged TRUE
+    previous: width>=2|g<=0.13|none held-out 401.3 (-0.1 against no rule), converged TRUE
+CH_rear smoke: 4490 visits (215 detections) in 43 groups with both outcomes; 4 rules, 4 fits.
+    null_ratio: no rule 1380.5 held-out against 1400.7 in-sample, ratio 0.986 (limit 1.25): pass
+    clamp: 0 visits at 55.26 over 4 rules (limit 0): pass
+    behind_null: no_rule (none) is +0.0 against no rule (limit 1380.5): pass
+    coef: rule 3.12 on fold 4 of previous (mad>=0.75|g<=0.13|Q3@D1000) (limit 5.0): pass
+    default: width>=1.5|g<=0.0549|none held-out 1344.8 (-35.7 against no rule), converged TRUE
+    link_tuned: mad>=0.28|g<=0.0549|none held-out 1307.5 (-73.0 against no rule), converged TRUE
+    previous: mad>=0.75|g<=0.13|Q3@D1000 held-out 1120.1 (-260.4 against no rule), converged TRUE
+CO_rear smoke: 4263 visits (1107 detections) in 62 groups with both outcomes; 4 rules, 4 fits.
+    null_ratio: no rule 4024.0 held-out against 4037.8 in-sample, ratio 0.997 (limit 1.25): pass
+    clamp: 0 visits at 55.26 over 4 rules (limit 0): pass
+    behind_null: no_rule (none) is +0.0 against no rule (limit 4024.0): pass
+    coef: data_setFDS 1.16 on fold 5 of no_rule (none) (limit 5.0): pass
+    default: width>=1.5|g<=0.0549|none held-out 3967.7 (-56.3 against no rule), converged TRUE
+    link_tuned: mad>=0.03|g<=0.0549|none held-out 3928.4 (-95.6 against no rule), converged TRUE
+    previous: mad>=0.03|g<=0.04|none held-out 3867.6 (-156.4 against no rule), converged TRUE
+GR_rear smoke: 1230 visits (212 detections) in 26 groups with both outcomes; 4 rules, 3 fits.
+    null_ratio: no rule 828.0 held-out against 913.7 in-sample, ratio 0.906 (limit 1.25): pass
+    clamp: 0 visits at 55.26 over 4 rules (limit 0): pass
+    behind_null: link_tuned (mad>=0.97|g<=0.0349|none) is +0.5 against no rule (limit 828.0): pass
+    coef: data_setFDS 2.89 on fold 4 of no_rule (none) (limit 5.0): pass
+    default: width>=1.5|g<=0.0349|none held-out 815.6 (-12.4 against no rule), converged TRUE
+    link_tuned: mad>=0.97|g<=0.0349|none held-out 828.5 (+0.5 against no rule), converged TRUE
+    previous: width>=1.5|g<=0.0349|none held-out 815.6 (-12.4 against no rule), converged TRUE
+RB_rear smoke: 12959 visits (3513 detections) in 129 groups with both outcomes; 4 rules, 4 fits.
+    null_ratio: no rule 12617.4 held-out against 12805.0 in-sample, ratio 0.985 (limit 1.25): pass
+    clamp: 0 visits at 55.26 over 4 rules (limit 0): pass
+    behind_null: no_rule (none) is +0.0 against no rule (limit 12617.4): pass
+    coef: rule 1.17 on fold 3 of previous (width>=3|g<=0.09|none) (limit 5.0): pass
+    default: width>=1.5|g<=0.0849|none held-out 11954.8 (-662.5 against no rule), converged TRUE
+    link_tuned: mad>=0.019|g<=0.0849|none held-out 11933.4 (-684.0 against no rule), converged TRUE
+    previous: width>=3|g<=0.09|none held-out 11837.0 (-780.4 against no rule), converged TRUE
+ST_rear smoke: 1375 visits (82 detections) in 11 groups with both outcomes; 4 rules, 4 fits.
+    null_ratio: no rule 420.8 held-out against 445.9 in-sample, ratio 0.944 (limit 1.25): pass
+    clamp: 0 visits at 55.26 over 4 rules (limit 0): pass
+    behind_null: no_rule (none) is +0.0 against no rule (limit 420.8): pass
+    coef: data_setFDS 2.10 on fold 1 of no_rule (none) (limit 5.0): pass
+    default: width>=1.5|g<=0.0849|none held-out 407.8 (-13.0 against no rule), converged TRUE
+    link_tuned: mad>=0.02|g<=0.0849|none held-out 416.3 (-4.5 against no rule), converged TRUE
+    previous: mad>=1|g<=0.0849|none held-out 372.9 (-47.9 against no rule), converged TRUE
+WCT_rear smoke: 1157 visits (536 detections) in 6 groups with both outcomes; 4 rules, 4 fits.
+    null_ratio: no rule 1329.7 held-out against 1292.9 in-sample, ratio 1.028 (limit 1.25): pass
+    clamp: 0 visits at 55.26 over 4 rules (limit 0): pass
+    behind_null: no_rule (none) is +0.0 against no rule (limit 1329.7): pass
+    coef: rule 0.74 on fold 4 of link_tuned (mad>=0.03|g<=0.0849|none) (limit 5.0): pass
+    default: width>=1.5|g<=0.0849|none held-out 1328.8 (-1.0 against no rule), converged TRUE
+    link_tuned: mad>=0.03|g<=0.0849|none held-out 1327.8 (-1.9 against no rule), converged TRUE
+    previous: width>=1.5|g<=0.04|none held-out 1321.3 (-8.5 against no rule), converged TRUE
+Smoke run over 8 keys in 0.1 min.
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Scored 22 species x stage in 64.1 min on 12 workers.
+BT_rear: fitted. 11015 visits (1199 detections) in 122 groups (75 both). Recommended mad>=0.35|g<=0.25|none; default outside the region (+226.4, SE 111.7). Curve held-out 5618.5 vs grid best 5704.5.
+BT_rear: from the flow start mad>=0.35|g<=0.25|none (1.96 SE: mad>=0.021|g<=0.1049|none); from the width start at 1.96 SE mad>=0.35|g<=0.1049|none; link's default_tuned rule mad>=0.043|g<=0.1349|none outside the region (+120.0, SE 109.9).
+BT_spawn: fitted. 552 visits (101 detections) in 50 groups (22 both). Recommended width>=2|g<=0.13|none; default outside the region (+10.1, SE 5.7). Curve held-out 403.7 vs grid best 395.4.
+BT_spawn: from the flow start mad>=0.041|g<=0.13|none (1.96 SE: mad>=0.041|g<=0.0549|none); from the width start at 1.96 SE width>=2|g<=0.0549|none; link's default_tuned rule mad>=0.043|g<=0.0549|none outside the region (+13.1, SE 6.8).
+CH_rear: fitted. 7123 visits (216 detections) in 104 groups (43 both). Recommended mad>=0.75|g<=0.13|Q3@D1000; default outside the region (+224.7, SE 91.6). Curve held-out 1053.2 vs grid best 1120.1.
+CH_rear: from the flow start mad>=0.28|g<=0.11|Q3@D1000 (1.96 SE: mad>=0.28|g<=0.0549|Q3@D1000); from the width start at 1.96 SE mad>=1|g<=0.0549|Q3@D1000; link's default_tuned rule mad>=0.28|g<=0.0549|none outside the region (+187.4, SE 81.1).
+CH_spawn: no_response (visits_in=7123).
+CM_rear: no_stream_rule (visits_in=0).
+CM_spawn: no_response (visits_in=2911).
+CO_rear: fitted. 5442 visits (1107 detections) in 85 groups (62 both). Recommended mad>=0.03|g<=0.04|none; default outside the region (+111.8, SE 47.4). Curve held-out 4092.5 vs grid best 3855.9.
+CO_rear: from the flow start mad>=0.03|g<=0.04|none (1.96 SE: mad>=0.03|g<=0.04|none); from the width start at 1.96 SE width>=1.5|g<=0.04|none; link's default_tuned rule mad>=0.03|g<=0.0549|none outside the region (+72.5, SE 28.5).
+CO_spawn: no_response (visits_in=5442).
+GR_rear: fitted. 1472 visits (212 detections) in 44 groups (26 both). Recommended width>=1.5|g<=0.0349|none; default in the region (+10.8, SE 12.0). Curve held-out 786.9 vs grid best 804.8.
+GR_rear: from the flow start width>=3|g<=0.0349|none (1.96 SE: mad>=0.021|g<=0.0349|none); from the width start at 1.96 SE width>=1.5|g<=0.0349|none; link's default_tuned rule mad>=0.97|g<=0.0349|none outside the region (+23.8, SE 16.3).
+GR_spawn: no_response (visits_in=1472).
+KO_rear: no_stream_rule (visits_in=0).
+KO_spawn: no_response (visits_in=0).
+PK_rear: no_stream_rule (visits_in=0).
+PK_spawn: no_response (visits_in=3976).
+RB_rear: fitted. 13578 visits (3514 detections) in 160 groups (129 both). Recommended width>=3|g<=0.3|none; default outside the region (+302.9, SE 104.8). Curve held-out 9409.7 vs grid best 11651.9.
+RB_rear: from the flow start width>=3|g<=0.3|none (1.96 SE: mad>=0.021|g<=0.11|none); from the width start at 1.96 SE width>=3|g<=0.3|none; link's default_tuned rule mad>=0.019|g<=0.0849|none outside the region (+281.5, SE 116.6).
+RB_spawn: no_response (visits_in=13578).
+SK_rear: no_stream_rule (visits_in=0).
+SK_spawn: no_response (visits_in=5070).
+ST_rear: fitted. 4798 visits (82 detections) in 68 groups (11 both). Recommended mad>=1|g<=0.0849|none; default outside the region (+50.3, SE 29.9). Curve held-out 840.2 vs grid best 357.5.
+ST_rear: from the flow start mad>=1|g<=0.0849|none (1.96 SE: mad>=0.02|g<=0.0849|none); from the width start at 1.96 SE width>=1.5|g<=0.0849|none; link's default_tuned rule mad>=0.02|g<=0.0849|none outside the region (+58.8, SE 31.8).
+ST_spawn: no_response (visits_in=4798).
+WCT_rear: underpowered. 1679 visits (536 detections) in 14 groups (6 both). Recommended mad>=0.03|g<=0.3|none; default outside the region (+30.6, SE 22.4). Curve held-out 1464.4 vs grid best 1298.1.
+WCT_rear: from the flow start mad>=0.03|g<=0.3|none (1.96 SE: mad>=0.03|g<=0.0849|none); from the width start at 1.96 SE width>=1.5|g<=0.0849|none; link's default_tuned rule mad>=0.03|g<=0.0849|none outside the region (+29.7, SE 20.5).
+WCT_spawn: no_response (visits_in=1679).
+Grading on the flow build: wet_db_load(): discharge/fwa/v1/segment_monthly, scenario historical last loaded from https://fresh-bc.s3.us-west-2.amazonaws.com/discharge/fwa/v1/manifest.json (built 2026-10-19T06:08:31Z, wet 94deeb5)
+exit 143
+Sat Oct 24 06:33:55 UTC 2026

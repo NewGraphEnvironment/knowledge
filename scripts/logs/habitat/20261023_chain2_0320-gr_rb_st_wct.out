@@ -1,0 +1,55 @@
+Tuning run, knowledge#57. Evidence build scripts/logs/habitat/20261022_evidence_build_ledger.csv on link run 20261017_004619-3f4c713b (link a17e91773b283b021811f8b5b76b887d5f4c16e4;ee21eb1371cbc4d7a2d598f8bbeeaeb0534d7994), schema fresh_default_20261017.
+  visits_link md5 d3a434e28f38ef8a234250018c7cb48a
+  visits_species md5 bc71243b0a4eb2e360e1e8410db34125
+  walks md5 f49f863660301299bd632fe998d3b6aa
+Spawner evidence: 1069 BT visits with a coded fish, 194 with evidence.
+link default thresholds at a17e91773b283b021811f8b5b76b887d5f4c16e4 (same at ee21eb1371cbc4d7a2d598f8bbeeaeb0534d7994): 11 species; default_tuned: 11 species (its MAD floors join the grids).
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Scored 8 species x stage in 496.0 min on 6 workers.
+GR_rear: fitted. 1472 visits (212 detections) in 44 groups (26 both). Recommended width>=3|g<=0.0349|none; default outside the region (+7.3, SE 6.6). Curve held-out 784.9 vs grid best 8384.3.
+GR_rear: from the flow start width>=3|g<=0.0349|none (1.96 SE: width>=3|g<=0.0349|none); from the width start at 1.96 SE width>=1.5|g<=0.0349|none; link's default_tuned rule mad>=0.97|g<=0.0349|none outside the region (+13.8, SE 9.8).
+GR_spawn: no_response (visits_in=1472).
+RB_rear: fitted. 13578 visits (3514 detections) in 160 groups (129 both). Recommended mad>=0.2|g<=0.03|Q1@D500; default outside the region (+394289.7, SE 51705.8). Curve held-out 11784.8 vs grid best 27148.1.
+RB_rear: from the flow start mad>=0.2|g<=0.03|Q1@D500 (1.96 SE: mad>=0.5|g<=0.03|none); from the width start at 1.96 SE mad>=0.5|g<=0.03|none; link's default_tuned rule mad>=0.019|g<=0.0849|none outside the region (+394285.4, SE 51706.0).
+RB_spawn: no_response (visits_in=13578).
+ST_rear: fitted. 4798 visits (82 detections) in 68 groups (11 both). Recommended mad>=1|g<=0.0849|none; default outside the region (+2793.5, SE 1673.4). Curve held-out 844.8 vs grid best 569.1.
+ST_rear: from the flow start mad>=1|g<=0.0849|none (1.96 SE: mad>=0.02|g<=0.0849|none); from the width start at 1.96 SE width>=1.5|g<=0.0849|none; link's default_tuned rule mad>=0.02|g<=0.0849|none outside the region (+2800.4, SE 1673.7).
+ST_spawn: no_response (visits_in=4798).
+WCT_rear: underpowered. 1679 visits (536 detections) in 14 groups (6 both). Recommended mad>=0.03|g<=0.3|none; default outside the region (+5844.2, SE 4751.0). Curve held-out 1454.5 vs grid best 1298.4.
+WCT_rear: from the flow start mad>=0.03|g<=0.3|none (1.96 SE: mad>=0.03|g<=0.0849|none); from the width start at 1.96 SE width>=1.5|g<=0.0849|none; link's default_tuned rule mad>=0.03|g<=0.0849|none outside the region (+985.6, SE 954.2).
+WCT_spawn: no_response (visits_in=1679).
+Grading on the flow build: wet_db_load(): discharge/fwa/v1/segment_monthly, scenario historical last loaded from https://fresh-bc.s3.us-west-2.amazonaws.com/discharge/fwa/v1/manifest.json (built 2026-10-19T06:08:31Z, wet 94deeb5)
+GR_rear: grades on file for width>=1.5|g<=0.0349|none / 20261017_004619-3f4c713b (walk centreline, reference over stream_branch, flows unrecorded), regraded for width>=3|g<=0.0349|none / 20261017_004619-3f4c713b.

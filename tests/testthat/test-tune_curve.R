@@ -78,3 +78,25 @@ test_that("grades are 0-1, the top of the accessible network reads 1, and missin
   near <- knw_grade(cv, data.frame(accessible = TRUE, mad_pick = c(0.1, 0.1), gradient = 0.02, dist_m = c(100, NA)))
   expect_true(near$grades$rate[1] >= near$grades$rate[2] || abs(near$grades$rate[1] - near$grades$rate[2]) < 1e-6)
 })
+
+test_that("the data-set and era terms carry the scorer's prior, so aliased levels stay bounded", {
+  # steelhead's shape (#73, Phase 7): the FDIS visits are the 1995-2004 visits and none of them detects, so an
+  # unpenalised fit sends the two coefficients far apart with offsetting signs
+  s <- sim()
+  old <- s$d$data_set == "FDIS"
+  s$d$era <- factor(ifelse(old, "1995-2004", "2005on"))
+  s$d$era[which(!old)[1:3]] <- "1995-2004"
+  s$d$U[old] <- 0L
+  pick <- data.frame(size_var = "mad", size_min = 0.5, grad_max = 0.07, exc_q = 3, exc_d = 1000)
+  folds <- knowledge:::.tune_fold_of_wsg(s$d, "U", 1, 5)
+  nuis_coef <- function(cv) stats::coef(cv$model)[grepl("^(data_set|era)", names(stats::coef(cv$model)))]
+  with_prior <- suppressWarnings(knw_tune_curve(s$d, pick, s$walks, folds))
+  none <- suppressWarnings(knw_tune_curve(s$d, pick, s$walks, folds, prior_sd = Inf))
+  expect_equal(with_prior$prior_sd, 2.5)
+  expect_equal(none$prior_sd, Inf)
+  expect_length(nuis_coef(with_prior), 2)
+  expect_true(all(abs(nuis_coef(with_prior)) < 5))
+  expect_gt(max(abs(nuis_coef(none))), 10)
+  expect_lt(with_prior$heldout, none$heldout)
+  expect_error(knw_tune_curve(s$d, pick, s$walks, folds, prior_sd = 0), "positive")
+})

@@ -34,12 +34,14 @@
 #         data/tune/CH_rear_score.rds (ignored), data/thresholds.csv,
 #         data/compare/CH_rear_{compare,change,checks}.csv, data/compare/CH_rear_segments.rds (ignored;
 #         0330), data/tune/CH_rear_curve.rds (ignored; 0320), the tuning log and the evidence build ledger in
-#         scripts/logs/habitat/, fwapg database (PG* env vars): fresh_default.streams,
+#         scripts/logs/habitat/, fwapg database (PG* env vars): <SCHEMA>.streams (SCHEMA names the run's schema,
+#         default fresh_default; the run #73 read is fresh_default_20261017 since link#361 renamed it, so set it),
 #         whse_basemapping.fwa_{lakes,rivers,wetlands,manmade_waterbodies}_poly, whse_basemapping.fwa_waterbodies.
 # OUTPUT: inst/vignette-data/chinook_rearing.rds   the tables and `meta`, one named list
 #         inst/vignette-data/bulk_segments.rds     BULK accessible CH segments, sf, EPSG:3005
 #         inst/vignette-data/bulk_water.rds        BULK lakes >= 10 ha and rivers, sf, EPSG:3005
-# RUN:    Rscript data-raw/vignette_chinook.R   (from the repo root, after any 0320, 0322, 0325 or 0330 rerun)
+# RUN:    SCHEMA=fresh_default_20261017 Rscript data-raw/vignette_chinook.R   (from the repo root, after any 0320, 0322,
+#         0325 or 0330 rerun; SCHEMA as 0320 and 0330 took it)
 # ---------------------------------------------------------------------------
 suppressMessages({ library(dplyr); library(readr) })
 pkgload::load_all(quiet = TRUE)
@@ -49,10 +51,17 @@ if (!nzchar(Sys.getenv("PGCONNECT_TIMEOUT"))) Sys.setenv(PGCONNECT_TIMEOUT = "30
 
 key <- "CH_rear"
 wsg <- "BULK"
+# the run's schema, as 0320 and 0330 read it (link#361 renamed the run to fresh_default_20261017 while #73 ran)
+schema <- Sys.getenv("SCHEMA", "fresh_default")
+if (!grepl("^[A-Za-z_][A-Za-z0-9_]*$", schema)) stop("SCHEMA is not a plain identifier: ", schema)
 dir_out <- "inst/vignette-data"
-# #65's full regrade (the reference over the stream branch); 20261019_tune_run-ch.txt is the superseded first
-# CH regrade, whose reference was taken over every accessible segment
-path_log <- "scripts/logs/habitat/20261019_tune_run.txt"
+# the newest tuning log that graded this key (a pass over a subset of species names them in its file name, 0320); a
+# superseded log of the same day (the first CH regrade of #65) is older than the one that replaced it
+logs <- sort(list.files("scripts/logs/habitat", "_tune_run.*\\.txt$", full.names = TRUE), decreasing = TRUE)
+# the result line is "<key> grades: <n> groups, …"; a run that kept the table says "<key>: grades already written …"
+logs <- logs[vapply(logs, function(f) any(grepl(sprintf("^%s grades: [0-9]+ groups", key), readLines(f, warn = FALSE))), logical(1))]
+if (!length(logs)) stop("no tuning log in scripts/logs/habitat graded ", key)
+path_log <- logs[1]
 dir.create(dir_out, showWarnings = FALSE, recursive = TRUE)
 rd <- function(f, ...) read_csv(f, show_col_types = FALSE, guess_max = 1e5, ...)
 
@@ -72,6 +81,11 @@ if (length(missing)) stop("missing inputs: ", paste(missing, collapse = ", "))
 # the grade the compare tables read must be the one #65 made (ref_population), not #57's or the first CH regrade's
 g1 <- rd(sprintf("data/tune/%s_grades.csv", key), n_max = 1, col_types = cols(.default = "c"))
 if (!identical(g1$ref_population, "stream_branch")) stop("data/tune/", key, "_grades.csv was graded before #65; rerun 0320")
+if (!"walk" %in% names(g1) || !identical(g1$walk, "bank")) stop("data/tune/", key, "_grades.csv was walked before #73 (not to the bank); rerun 0320")
+# and made by the gate that scores no rule on the curve's own visits, under this pick (the branch review of 2026-10-25)
+if (!all(c("curve_prior_sd", "grade_withheld", "null_heldout_curve", "evidence_md5") %in% names(g1))) {
+  stop("data/tune/", key, "_grades.csv predates the gate's record (curve_prior_sd, grade_withheld, null_heldout_curve, evidence_md5); rerun 0320")
+}
 
 out <- list(
   tune = rd(src[["tune"]]),
@@ -79,11 +93,18 @@ out <- list(
   curves = rd(src[["curves"]]),
   groups = rd(src[["groups"]]),
   thresholds = rd(src[["thresholds"]]) |> filter(species_code == "CH", stage == "rear"),
-  compare = rd(src[["compare"]], col_types = cols(watershed_group_code = "c", species_code = "c", stage = "c",
-                                                  default_rule = "c", tuned_rule = "c", .default = "d")),
+  compare_structures = rd(src[["compare"]], col_types = cols(watershed_group_code = "c", species_code = "c", stage = "c",
+                                                             structure = "c", default_rule = "c", tuned_rule = "c",
+                                                             tuned_structure = "c", config_sha = "c", .default = "d")),
   change = rd(src[["change"]]),
   checks = rd(src[["checks"]])
 )
+# the comparison under every structure is kept (#73); `compare` is the structure 0330 reports as tuned, one row per group
+if (!all(c("structure", "tuned_structure") %in% names(out$compare_structures))) stop("the compare table predates #73 (no structure column); rerun 0330")
+out$compare <- out$compare_structures |> filter(structure == tuned_structure)
+if (anyDuplicated(out$compare$watershed_group_code)) {
+  stop("compare has more than one row per group for the tuned structure")
+}
 # every fitted species x stage's tune table, for the picks at 1.96 SE (#79)
 f_tune_all <- sort(list.files("data/tune", "_tune\\.csv$", full.names = TRUE))
 cols_tune_all <- c("species_code", "stage", "rule", "size_var", "size_min", "grad_max", "exc_q", "exc_d", "departures",
@@ -102,6 +123,16 @@ if (!"ALL" %in% out$compare$watershed_group_code || !wsg %in% out$compare$waters
 rec <- out$tune$rule[out$tune$recommended %in% TRUE]
 if (length(rec) != 1 || !identical(rec, unique(out$thresholds$rule))) {
   stop("the tune table's recommended rule is not the thresholds table's CH_rear rule")
+}
+# and the grade the comparison read was graded under that rule, on the evidence the summary and the tuning log name (the
+# branch review of 2026-10-25: the log's md5 lines are the three derived tables', in the summary's order)
+if (!identical(g1$rule, rec)) stop("data/tune/", key, "_grades.csv was graded under ", g1$rule, ", not the recommended ", rec, "; rerun 0320")
+if (!"evidence_md5" %in% names(out$summary) || !identical(g1$evidence_md5, out$summary$evidence_md5)) {
+  stop("data/tune/", key, "_grades.csv and _summary.csv name different evidence builds (or the summary predates the record); rerun 0320")
+}
+log_md5 <- sub("^ +[a-z_]+ md5 ", "", grep("^ +(visits_link|visits_species|walks) md5 [0-9a-f]{32}$", readLines(path_log, warn = FALSE), value = TRUE))
+if (length(log_md5) != 3L || !identical(paste(log_md5, collapse = ";"), g1$evidence_md5)) {
+  stop("the tuning log's evidence md5s are not the grade table's: the log is another run's")
 }
 
 # seeds and folds: the csv 0320 writes from #62, or the score object this run left
@@ -142,6 +173,10 @@ out$grad_ext <- rd(f_ge[["grad_ext"]]) |> select(-species_code, -stage)
 out$grad_ext_summary <- rd(f_ge[["grad_ext_summary"]])
 out$grad_ext_seeds <- rd(f_ge[["grad_ext_seeds"]]) |> select(-species_code, -stage)
 if (!identical(sort(as.integer(out$grad_ext_seeds$seed)), sort(as.integer(out$seeds$seed)))) stop("the extended run's seeds differ from the main run's")
+# #67 ran on the evidence build before #73 (the flows before wet's republish, the centreline walk); its tables are
+# the record of the run that led to the shared ladder, not a reading of the current evidence, so its population is
+# recorded beside the main run's rather than required to equal it
+out$grad_ext_population <- out$grad_ext_summary[c("visits_in", "detections", "groups", "groups_both")]
 # and 0322's own seeds: the table must print as its log's block does (seed numbers alone would pass the table of
 # another run on the same settings, such as the earlier run capped at 15 %)
 f_ge_log <- c(grad_ext_log = "scripts/logs/habitat/20261018_tune_grad_extend.txt")
@@ -152,9 +187,7 @@ if (length(at_ge) != 1 || !identical(ge_log[at_ge + seq_along(want_ge)], want_ge
   stop("the extended run's seeds table differs from ", f_ge_log[["grad_ext_log"]], "'s 'more seeds' block")
 }
 if (!all(sort(unique(out$tune$grad_max)) %in% out$grad_ext$grad_max)) stop("the extended ladder lacks a gradient the main one has")
-# the same population as the main reading, and one run's two tables
-pop <- c("visits_in", "detections", "groups", "groups_both")
-if (!isTRUE(all.equal(unlist(out$grad_ext_summary[pop]), unlist(out$summary[pop])))) stop("the extended run scored another population")
+# one run's two tables
 if (!identical(out$grad_ext$best_rule[out$grad_ext$ddev_best == 0], out$grad_ext_summary$rule_best)) {
   stop("the per-gradient table and the summary are not one run's")
 }
@@ -162,7 +195,7 @@ src <- c(src, f_ge, f_ge_log)
 
 # ---- meta: provenance and the scoring's constants -------------------------------------------------
 led <- rd(ledger, col_types = cols(.default = "c"))
-gl <- grep(sprintf("^%s grades:", key), log_txt, value = TRUE)
+gl <- grep(sprintf("^%s grades: [0-9]+ groups", key), log_txt, value = TRUE)
 if (length(gl) != 1) stop("the tuning log has ", length(gl), " '", key, " grades' lines")
 num_of <- function(pat) as.numeric(sub(pat, "\\1", regmatches(gl, regexpr(pat, gl))))
 fm <- formals(knw_tune_run)
@@ -187,6 +220,11 @@ out$meta <- list(
                   fwapg_sha = led$note[led$step == "run_fwapg_sha"],
                   wet = sub(" at .*$", "", led$note[led$step == "wet_manifest"])),
   map_group = wsg,
+  # the baseline's configs: link's default at this commit (0330's CONFIG_SHA), not the run's (#73); the schema is the
+  # map's geometry source only (the run is named by link_run_uid)
+  link_config_sha = unique(out$compare$config_sha),
+  schema = schema,
+  tuned_structure = unique(out$compare$tuned_structure),
   # whole files, except thresholds.csv, which holds every species and is hashed on its CH rearing rows
   md5 = tools::md5sum(unname(src[names(src) != "thresholds"])) |> stats::setNames(unname(src[names(src) != "thresholds"])),
   md5_rows = vapply(unname(src["thresholds"]), .knw_rows_md5, character(1), species_code = "CH", stage = "rear")
@@ -224,15 +262,23 @@ seg_all <- readRDS(sprintf("data/compare/%s_segments.rds", key))
 s <- seg_all |> filter(watershed_group_code == wsg)
 # lines through wetlands (link's wetland rule on edge types 1050 and 1150 has no size or gradient test), over every group
 wl <- seg_all |> filter(edge_type %in% c(1050, 1150))
-out$wetland <- tibble(edge_types = "1050, 1150", km_default = sum(wl$length_metre[wl$rearing_default %in% TRUE]) / 1000,
-                      km_tuned = sum(wl$length_metre[wl$rearing_tuned %in% TRUE]) / 1000,
-                      km_both = sum(wl$length_metre[wl$rearing_default %in% TRUE & wl$rearing_tuned %in% TRUE]) / 1000,
-                      grade_median_tuned = stats::median(wl$grade[wl$rearing_tuned %in% TRUE], na.rm = TRUE))
+structures <- sub("^rearing_", "", grep("^rearing_(free|door|door_wetland)$", names(wl), value = TRUE))
+out$wetland <- bind_rows(lapply(c("tuned", structures), function(st) {
+  f <- wl[[paste0("rearing_", st)]]
+  tibble(edge_types = "1050, 1150", structure = if (st == "tuned") unique(seg_all$tuned_structure) else st,
+         as_tuned = st == "tuned",
+         km_default = sum(wl$length_metre[wl$rearing_default %in% TRUE]) / 1000,
+         km_default_pre_connect = sum(wl$length_metre[wl$rearing_pre_default %in% TRUE]) / 1000,
+         km_tuned = sum(wl$length_metre[f %in% TRUE]) / 1000,
+         km_both = sum(wl$length_metre[wl$rearing_default %in% TRUE & f %in% TRUE]) / 1000,
+         grade_median_tuned = stats::median(wl$grade[f %in% TRUE], na.rm = TRUE),
+         grade_median_default = stats::median(wl$grade[wl$rearing_default %in% TRUE], na.rm = TRUE))
+}))
 rm(seg_all, wl)
 conn <- tryCatch(DBI::dbConnect(RPostgres::Postgres(), bigint = "numeric"),
                  error = function(e) stop("database unreachable (PG* environment variables): ", conditionMessage(e)))
 geom <- sf::st_zm(sf::st_read(conn, quiet = TRUE, query = sprintf(
-  "SELECT id_segment, waterbody_key, geom FROM fresh_default.streams WHERE watershed_group_code = '%s'", wsg)),
+  "SELECT id_segment, waterbody_key, geom FROM %s.streams WHERE watershed_group_code = '%s'", schema, wsg)),
   drop = TRUE)
 geom$id_segment <- as.numeric(geom$id_segment)
 water <- sf::st_zm(sf::st_read(conn, quiet = TRUE, query = sprintf("
@@ -246,8 +292,8 @@ wb <- DBI::dbGetQuery(conn, sprintf("
   LEFT JOIN (SELECT waterbody_key, sum(area_ha) area_ha FROM whse_basemapping.fwa_lakes_poly GROUP BY 1) l USING (waterbody_key)
   LEFT JOIN (SELECT waterbody_key, sum(area_ha) area_ha FROM whse_basemapping.fwa_wetlands_poly GROUP BY 1) wl USING (waterbody_key)
   LEFT JOIN (SELECT waterbody_key, sum(area_ha) area_ha FROM whse_basemapping.fwa_manmade_waterbodies_poly GROUP BY 1) m USING (waterbody_key)
-  WHERE w.waterbody_key IN (SELECT DISTINCT waterbody_key FROM fresh_default.streams
-                            WHERE watershed_group_code = '%s' AND waterbody_key IS NOT NULL)", wsg))
+  WHERE w.waterbody_key IN (SELECT DISTINCT waterbody_key FROM %s.streams
+                            WHERE watershed_group_code = '%s' AND waterbody_key IS NOT NULL)", schema, wsg))
 DBI::dbDisconnect(conn)
 if (anyDuplicated(wb$waterbody_key)) stop("a waterbody key with two rows in fwa_waterbodies")
 # as 0330 builds `sg`
@@ -264,7 +310,7 @@ sg$water <- unname(c(R = "river", W = "wetland", L = "lake", X = "lake")[wb$wate
 sg$water[!sg$in_waterbody] <- "stream"
 sg$water_ha <- as.numeric(wb$waterbody_ha[i_wb])
 if (anyNA(sg$water)) stop("a waterbody type other than R, W, L or X")
-if (nrow(sg) != nrow(s)) stop(nrow(s) - nrow(sg), " saved segments have no geometry in fresh_default.streams")
+if (nrow(sg) != nrow(s)) stop(nrow(s) - nrow(sg), " saved segments have no geometry in ", schema, ".streams")
 
 src_local <- c(segments = sprintf("data/compare/%s_segments.rds", key), curve = f_curve)
 if (stab_from != "csv") src_local <- c(src_local, score = f_score)

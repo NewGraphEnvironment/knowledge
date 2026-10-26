@@ -1,0 +1,6 @@
+2026-10-23T05:12:48Z chain started; waiting on pids 39789 (CH 0330) and 46864 (BT 0320)
+2026-10-23T07:41:01Z both exited
+2026-10-23T07:41:01Z BT tuning done per scripts/logs/habitat/20261022_tune_run-bt.txt; starting BT 0330 and GR,RB,ST,WCT 0320 (6 workers)
+2026-10-23T07:42:25Z BT 0330 exit 1
+2026-10-23T07:47:24Z GR,RB,ST,WCT 0320 exit 143
+2026-10-23T07:47:24Z FAILED: four-species tuning exit 143; comparison not run

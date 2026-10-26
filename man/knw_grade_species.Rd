@@ -14,7 +14,7 @@ knw_grade_species(
   stage = "rear",
   workers = 4L,
   src = "pick",
-  ref_edge = c(1000L, 1100L, 2000L, 2300L)
+  ref_edge = NULL
 )
 }
 \arguments{
@@ -37,16 +37,23 @@ opens its own).}
 
 \item{src}{\code{character(1)} the flow source.}
 
-\item{ref_edge}{\code{integer} the stream-branch edge types the reference rate is
-taken over. The default is \code{\link[=knw_tune_run]{knw_tune_run()}}'s default \code{edge_stream}, the
-edge types of the curve's visits; a curve fitted on others needs them here.}
+\item{ref_edge}{\code{integer} or \code{NULL} (the default): the stream-branch edge
+types the reference rate is taken over. \code{NULL} takes the curve's own
+\code{edge_stream}, the edge types of the visits it was fitted on (#72), and a
+curve that carries none takes \code{\link[=knw_tune_run]{knw_tune_run()}}'s default \code{edge_stream}.}
 }
 \value{
 A list: \code{grades}, one row per segment with the segment's keys,
 \code{length_metre}, \code{access}, \code{accessible}, the stage's flag, \code{size}, \code{dist_m},
-\code{dist_status}, \code{rate}, \code{grade}, \code{grade_class}; \code{reference}; \code{counts}
-(segments, accessible, walked starts, segments whose walk was found, none
-or other, graded, no size, no gradient); \code{walk_minutes}.
+\code{dist_status}, \code{target_in_group} (\code{TRUE} where the river the walk found
+lies in the segment's own watershed group, \code{FALSE} where it lies in
+another, which link's walk, one group's table at a time, cannot see; \code{NA}
+where no river was found), \code{rate}, \code{grade}, \code{grade_class}; \code{reference};
+\code{ref_edge}, the edge types the reference was taken over; \code{q}, the river
+size walked to; \code{walk}, the walk's convention (\code{"bank"}: the distance ends
+at the river's bank, #73); \code{counts} (segments, accessible, walked starts,
+segments whose walk was found, none or other, graded, no size, no
+gradient); \code{walk_minutes}.
 }
 \description{
 Reads the species' segments (\code{\link[=knw_link_segments]{knw_link_segments()}}), walks every accessible

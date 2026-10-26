@@ -19,7 +19,11 @@
 #' lower score. If the pick's exception distance is under `d_floor` (where
 #' mainstem catches snapped to a tributary mouth cannot be told apart),
 #' **recommended** is the pick among region rules with `exc_d >= d_floor` or no
-#' exception; otherwise it is the pick. With `extra = TRUE` the call also runs
+#' exception; otherwise it is the pick. Where the grid carries
+#' `departures_flow` (the departures from link's flow version of `default`,
+#' [knw_tune_grid()]), the same pick is made from that starting point too
+#' (`pick_flow`, `recommended_flow`; #80), on the same region: the region does
+#' not depend on the start, only which of its rules is nearest. With `extra = TRUE` the call also runs
 #' `n_boot` bootstrap resamples of groups (each rule's share in the region, and
 #' the share of resamples recommending each rule), a nested selection (the pick
 #' chosen on the other folds' held-out deviance and scored on each fold, against
@@ -42,11 +46,31 @@
 #' @param folds,n_boot,seed_boot,seeds_more,d_floor the spec's constants.
 #' @param workers `integer(1)` socket workers for the pattern fits.
 #' @param extra `logical(1)` run the bootstrap, nested selection and extra seeds.
+#' @param fit `"fe"` fits each pattern with the groups absorbed (one intercept
+#'   per group found by projection, so a fit's cost grows with the nuisance
+#'   columns, not the groups; #83), `"dense"` with one model-matrix column per
+#'   group (`stats::glm.fit()`). They give the same coefficients and deviances to
+#'   numerical tolerance; `"fe"` falls back to `"dense"` on a fold where a
+#'   nuisance level is a combination of groups.
+#' @param prior_sd `numeric(1)` the standard deviation, on the cloglog scale,
+#'   of a normal prior on every training fit's `data_set` and `era`
+#'   coefficients, `Inf` for none. The fit adds `b^2 / prior_sd^2` per
+#'   coefficient to the deviance (a ridge), so a coefficient costs more the
+#'   further it sits from zero. These terms are in the model so that a rule is
+#'   not credited for a sampling difference, and with a group intercept each is
+#'   measured only by the contrast between the two levels inside the groups that
+#'   hold both; where every detection of those groups sits on one level the
+#'   contrast is separated and the unpenalised coefficient runs until the
+#'   deviance stops moving (steelhead's `data_set` to 19.6, a hazard ratio past
+#'   a hundred million, 2026-10-23). At 2.5 a measured effect of two or three
+#'   units (chinook's data set, bull trout spawning's) is left nearly where it
+#'   is and a runaway is held to a few units. The dense fit takes none.
 #' @return A list: `rules`, the grid with `n_visits`, `n_detect`, `n_wsg`,
 #'   `unseen_level_visits`, `n_wsg_varies`, `converged`, `dev_heldout`,
 #'   `ddev_best`, `se_diff`, `ddev_null`, `in_region`, `n_in`, `n_detect_in`,
-#'   `raw_rate_in`, `raw_rate_out`, `pick`, `recommended`, and with `extra`
-#'   `boot_region_share` and `boot_rec_share`; `folds`, the fold of each group;
+#'   `raw_rate_in`, `raw_rate_out`, `pick`, `recommended`, `pick_flow`,
+#'   `recommended_flow` (`NA` with no flow start), and with `extra`
+#'   `boot_region_share`, `boot_rec_share` and `boot_rec_share_flow`; `folds`, the fold of each group;
 #'   `honest`, `seeds`, `boot_recs` (with `extra`), and `population`, counts.
 #' @export
 #' @examples
@@ -64,7 +88,11 @@
 #' s$rules[, c("rule", "dev_heldout", "ddev_best", "se_diff", "in_region", "pick")]
 knw_tune_score <- function(d, rule_in, grid, resp = "U", seed = 54L, folds = 5L, n_boot = 200L,
                            seed_boot = 541L, seeds_more = integer(), d_floor = 200, workers = 1L,
-                           extra = FALSE) {
+                           extra = FALSE, fit = c("fe", "dense"), prior_sd = 2.5) {
+  fit <- match.arg(fit)
+  chk::chk_number(prior_sd)
+  if (prior_sd <= 0) stop("prior_sd must be positive (Inf for no prior)", call. = FALSE)
+  if (fit == "dense" && is.finite(prior_sd)) stop("the dense fit takes no prior; set prior_sd = Inf", call. = FALSE)
   chk::chk_data(d)
   chk::check_names(d, c(resp, "wsg", "log_area", "data_set", "era"))
   chk::chk_function(rule_in)
@@ -96,9 +124,11 @@ knw_tune_score <- function(d, rule_in, grid, resp = "U", seed = 54L, folds = 5L,
     cl <- parallel::makeCluster(workers)
     on.exit(parallel::stopCluster(cl), add = TRUE)
   }
-  sw <- .tune_score_wsg(d, resp, pats, seed, folds, cl)
+  sw <- .tune_score_wsg(d, resp, pats, seed, folds, cl, fit, prior_sd)
   s0 <- .tune_sel(sw$Sw, seq_len(nrow(sw$Sw)))
   pk <- .tune_pick(s0, col, sw$conv, grid, d_floor)
+  flow_start <- "departures_flow" %in% names(grid) && !all(is.na(grid$departures_flow))
+  pkf <- if (flow_start) .tune_pick(s0, col, sw$conv, grid, d_floor, dep = grid$departures_flow) else NULL
   R <- rowsum(X * 1, d$wsg)
   N <- as.vector(table(d$wsg)[rownames(R)])
   y <- d[[resp]]
@@ -120,7 +150,11 @@ knw_tune_score <- function(d, rule_in, grid, resp = "U", seed = 54L, folds = 5L,
   res$raw_rate_out <- (sum(y) - res$n_detect_in) / (nrow(d) - res$n_in)
   res$pick <- seq_len(nrow(grid)) == pk[["pick"]]
   res$recommended <- seq_len(nrow(grid)) == pk[["recommended"]]
+  res$pick_flow <- if (flow_start) seq_len(nrow(grid)) == pkf[["pick"]] else NA
+  res$recommended_flow <- if (flow_start) seq_len(nrow(grid)) == pkf[["recommended"]] else NA
   out <- list(rules = res, folds = sw$fold,
+              # the settings the score depends on, compared by knw_tune_run() before a cache is read back
+              spec = list(fit = fit, prior_sd = prior_sd, seed = seed, folds = folds, d_floor = d_floor, extra = extra),
               population = c(visits_in = n_all, visits_modelled = nrow(d), detections = sum(y),
                              groups = nlevels(d$wsg), patterns = sum(u), not_converged = sum(!sw$conv)))
   if (extra) {
@@ -128,13 +162,18 @@ knw_tune_score <- function(d, rule_in, grid, resp = "U", seed = 54L, folds = 5L,
     nw <- nrow(sw$Sw)
     reg_n <- numeric(ncol(sw$Sw))
     recs <- integer(n_boot)
+    recs_flow <- integer(n_boot)
     for (b in seq_len(n_boot)) {
       s <- .tune_sel(sw$Sw, sample.int(nw, nw, replace = TRUE))
       reg_n <- reg_n + (s$region & sw$conv)
       recs[b] <- .tune_pick(s, col, sw$conv, grid, d_floor)[["recommended"]]
+      if (flow_start) {
+        recs_flow[b] <- .tune_pick(s, col, sw$conv, grid, d_floor, dep = grid$departures_flow)[["recommended"]]
+      }
     }
     out$rules$boot_region_share <- reg_n[col] / n_boot
     out$rules$boot_rec_share <- tabulate(recs, nrow(grid)) / n_boot
+    out$rules$boot_rec_share_flow <- if (flow_start) tabulate(recs_flow, nrow(grid)) / n_boot else NA_real_
     out$boot_recs <- grid[recs, , drop = FALSE]
     out$honest <- do.call(rbind, lapply(seq_len(folds), function(k) {
       out_k <- which(sw$fold != k)
@@ -145,7 +184,7 @@ knw_tune_score <- function(d, rule_in, grid, resp = "U", seed = 54L, folds = 5L,
                  dev_default = sum(sw$Sw[in_k, col[default_ix]]), dev_null = sum(sw$null[in_k]))
     }))
     out$seeds <- do.call(rbind, lapply(seeds_more, function(sd_) {
-      s2 <- .tune_score_wsg(d, resp, pats, sd_, folds, cl)
+      s2 <- .tune_score_wsg(d, resp, pats, sd_, folds, cl, fit, prior_sd)
       ss <- .tune_sel(s2$Sw, seq_len(nrow(s2$Sw)))
       p2 <- .tune_pick(ss, col, s2$conv, grid, d_floor)
       data.frame(seed = sd_, best = grid$rule[which(col == ss$best)[1]], pick = grid$rule[p2[["pick"]]],
@@ -194,55 +233,212 @@ knw_tune_score <- function(d, rule_in, grid, resp = "U", seed = 54L, folds = 5L,
     }
     cols <- intersect(colnames(Xh), colnames(X))
     unseen <- sum(!(d$data_set[ho] %in% dtr$data_set) | !(d$era[ho] %in% dtr$era))
-    list(tr = tr, ho = ho, X = X, y = d[[resp]][tr], Xh = Xh[, cols, drop = FALSE], cols = cols,
-         yh = d[[resp]][ho], wh = droplevels(d$wsg[ho]), unseen = unseen)
+    # the same nuisance columns without the intercept, and each training visit's group, for the fit that absorbs
+    # the groups (#83); the first level is the reference the dense fit's intercept carries
+    Xn <- if (length(nuis)) {
+      stats::model.matrix(stats::as.formula(paste("~", paste(nuis, collapse = " + "))), dtr)[, -1, drop = FALSE]
+    } else {
+      matrix(numeric(0), nrow = length(tr), ncol = 0)
+    }
+    list(tr = tr, ho = ho, X = X, Xn = Xn, g = as.integer(dtr$wsg), y = d[[resp]][tr], Xh = Xh[, cols, drop = FALSE],
+         cols = cols, yh = d[[resp]][ho], wh = droplevels(d$wsg[ho]), unseen = unseen,
+         pen = grepl("^(data_set|era)", colnames(Xn)))
   })
 }
 
-# held-out deviance per visit for one in/out pattern
-.tune_score_one <- function(x, folds) {
+# held-out deviance per visit for one in/out pattern, with each fold's non-group training coefficients
+# (the nuisance terms and the rule; `NA` where aliased), which the smoke run's coefficient gate reads (#84).
+# `fit = "fe"` absorbs the groups (`.tune_glm_fe()`, #83) and falls back to the dense `glm.fit()` on a fold where
+# the two would drop different columns; `"dense"` is the model matrix with one column per group. `prior_sd` is the
+# normal prior on the `data_set` and `era` coefficients (a ridge inside the fit; `Inf` for none), which the dense fit
+# does not take.
+.tune_score_one <- function(x, folds, fit = "fe", prior_sd = 2.5) {
   fam <- stats::binomial(link = "cloglog")
+  if (fit == "dense" && is.finite(prior_sd)) stop("the dense fit takes no prior; set prior_sd = Inf", call. = FALSE)
   n <- sum(vapply(folds, function(f) length(f$ho), integer(1)))
   dv <- rep(NA_real_, n)
   ok <- TRUE
-  for (f in folds) {
-    m <- suppressWarnings(stats::glm.fit(cbind(f$X, rule = as.numeric(x[f$tr])), f$y, family = fam,
-                                        control = stats::glm.control(maxit = 100)))
+  cf <- vector("list", length(folds))
+  for (k in seq_along(folds)) {
+    f <- folds[[k]]
+    xt <- as.numeric(x[f$tr])
+    ridge <- if (is.finite(prior_sd)) c(ifelse(f$pen, 1 / prior_sd^2, 0), 0) else NULL
+    m <- if (fit == "fe") .tune_glm_fe(cbind(f$Xn, rule = xt), f$g, f$y, fam, ridge = ridge) else NULL
+    if (is.null(m) || m$fallback) {
+      m <- suppressWarnings(stats::glm.fit(cbind(f$X, rule = xt), f$y, family = fam,
+                                           control = stats::glm.control(maxit = 100)))
+    }
     if (!m$converged) ok <- FALSE
     b <- m$coefficients
+    cf[[k]] <- b[c(f$cols, "rule")]
     br <- if (is.na(b[["rule"]])) 0 else b[["rule"]]
     bn <- b[f$cols]
     bn[is.na(bn)] <- 0
     eta <- (if (length(f$cols)) drop(f$Xh %*% bn) else 0) + br * as.numeric(x[f$ho])
-    p <- numeric(length(f$ho))
     for (w in levels(f$wh)) {
       i <- which(f$wh == w)
-      a <- suppressWarnings(stats::glm.fit(matrix(1, length(i), 1), f$yh[i], family = fam, offset = eta[i],
-                                          control = stats::glm.control(maxit = 100)))
-      if (!a$converged) ok <- FALSE
-      p[i] <- a$fitted.values
+      dv[f$ho[i]] <- .tune_group_dev(f$yh[i], eta[i], fam)
     }
-    p <- pmin(pmax(p, 1e-12), 1 - 1e-12)
-    dv[f$ho] <- -2 * (f$yh * log(p) + (1 - f$yh) * log(1 - p))
   }
   if (anyNA(dv)) stop("a visit was in no held-out fold", call. = FALSE)
-  list(dev = dv, ok = ok)
+  list(dev = dv, ok = ok, coef = cf)
+}
+
+# a binomial GLM with one intercept per group, the groups absorbed (#83): `stats::glm.fit()`'s IRLS, start,
+# step halving and convergence test, with each weighted least-squares step solved by projecting the groups
+# out (the weighted group means of the working response and the other columns) and a pivoted QR on what is
+# left, so a step costs n x p^2 in the nuisance columns rather than in the groups. The nuisance coefficients
+# are the dense fit's; each group's effect is its weighted mean residual, the first group's being the dense
+# fit's intercept. A column that is zero, or a combination of earlier columns, is dropped as the dense fit's
+# QR drops it (`NA`); a nuisance column that is a combination of the groups, but not of the intercept and the
+# nuisance columns before it, is dropped here but kept by the dense fit, which drops a group column instead, so
+# `fallback` says the caller should use the dense fit. `ridge`, a weight per column (0 for none), adds
+# sum(ridge * b^2) to the deviance, a normal prior with SD 1/sqrt(ridge) on each coefficient: each least-squares step
+# carries one pseudo-observation per penalised column, sqrt(ridge) in that column with response 0 (the penalty's
+# contribution to the quadratic the step minimises), and the convergence test is on the penalised deviance. A
+# penalised column is never aliased, so a level the groups carry gets 0 and the groups take it.
+.tune_glm_fe <- function(X, g, y, fam = stats::binomial(link = "cloglog"), maxit = 100L, epsilon = 1e-8,
+                         ridge = NULL) {
+  n <- length(y)
+  p <- ncol(X)
+  G <- max(g)
+  pen <- !is.null(ridge) && any(ridge > 0)
+  if (pen) {
+    if (length(ridge) != p || any(ridge < 0)) stop("ridge needs one non-negative weight per column", call. = FALSE)
+    R <- diag(sqrt(ridge), p)[ridge > 0, , drop = FALSE]
+    z0 <- numeric(nrow(R))
+  }
+  penalty <- function(b) if (pen) sum(ridge * b^2) else 0
+  mustart <- (y + 0.5) / 2
+  eta <- fam$linkfun(mustart)
+  mu <- fam$linkinv(eta)
+  w1 <- rep(1, n)
+  devold <- sum(fam$dev.resids(y, mu, w1))
+  objold <- devold
+  b <- rep(0, p)
+  a <- rep(0, G)
+  coefold <- NULL
+  conv <- FALSE
+  iter <- 0L
+  dropped <- rep(FALSE, p)
+  valid <- function() is.finite(dev) && fam$valideta(eta) && fam$validmu(mu)
+  for (iter in seq_len(maxit)) {
+    mu_eta <- fam$mu.eta(eta)
+    good <- mu_eta != 0
+    z <- eta[good] + (y[good] - mu[good]) / mu_eta[good]
+    w <- sqrt(mu_eta[good]^2 / fam$variance(mu[good]))
+    w2 <- w^2
+    gg <- g[good]
+    Xg <- X[good, , drop = FALSE]
+    sw <- as.vector(rowsum(w2, gg))
+    grp <- sort(unique(gg))
+    gi <- match(gg, grp)
+    mX <- rowsum(Xg * w2, gg) / sw
+    mz <- as.vector(rowsum(z * w2, gg)) / sw
+    Xd <- (Xg - mX[gi, , drop = FALSE]) * w
+    zd <- (z - mz[gi]) * w
+    if (pen) {
+      Xd <- rbind(Xd, R)
+      zd <- c(zd, z0)
+    }
+    ls <- .lm.fit(Xd, zd, tol = 1e-11)
+    b <- numeric(p)
+    b[ls$pivot[seq_len(ls$rank)]] <- ls$coefficients[seq_len(ls$rank)]
+    if (ls$rank < p) dropped[ls$pivot[-seq_len(ls$rank)]] <- TRUE
+    a <- rep(NA_real_, G)
+    a[grp] <- as.vector(mz - mX %*% b)
+    a[is.na(a)] <- a[1]
+    start <- c(b, a)
+    eta <- drop(X %*% b) + a[g]
+    mu <- fam$linkinv(eta)
+    dev <- sum(fam$dev.resids(y, mu, w1))
+    if (!valid()) {
+      if (is.null(coefold)) stop("no valid set of coefficients has been found", call. = FALSE)
+      ii <- 1L
+      while (!valid()) {
+        if (ii > maxit) stop("inner loop; cannot correct step size", call. = FALSE)
+        ii <- ii + 1L
+        start <- (start + coefold) / 2
+        b <- start[seq_len(p)]
+        a <- start[p + seq_len(G)]
+        eta <- drop(X %*% b) + a[g]
+        mu <- fam$linkinv(eta)
+        dev <- sum(fam$dev.resids(y, mu, w1))
+      }
+    }
+    obj <- dev + penalty(b)
+    if (abs(obj - objold) / (abs(obj) + 0.1) < epsilon) {
+      conv <- TRUE
+      break
+    }
+    objold <- obj
+    coefold <- start
+  }
+  zero <- colSums(X != 0) == 0
+  b[dropped | zero] <- NA_real_
+  names(b) <- colnames(X)
+  # the rule is the last column, and is dropped by both fits when aliased. A dropped nuisance column is one the
+  # dense fit keeps unless it is zero or its own QR (the intercept, then the nuisance columns, before the groups)
+  # drops it as a combination of the intercept and the columns before it: an era dummy on a fold with no visit in
+  # the reference era is, and the fall-back on it cost chinook every fit twice over (2026-10-23)
+  cand <- (dropped & !zero)[-p]
+  fallback <- FALSE
+  if (any(cand)) {
+    q <- qr(cbind(1, X[, -p, drop = FALSE]), tol = 1e-11)
+    dense_drop <- logical(p - 1L)
+    if (q$rank < p) dense_drop[q$pivot[-seq_len(q$rank)] - 1L] <- TRUE
+    fallback <- any(cand & !dense_drop)
+  }
+  list(coefficients = b, alpha = a, converged = conv, iter = iter, deviance = dev, penalty = penalty(ifelse(is.na(b), 0, b)),
+       fallback = fallback)
+}
+
+# a held-out group's deviance per visit, its own intercept fitted over the visits' offsets. The
+# intercept is the minimiser of the binomial deviance, which is convex in it under cloglog (the
+# log-likelihood is concave in the linear predictor), so it is the root of the deviance's derivative,
+# which is monotone. `stats::glm.fit()`'s IRLS is not safe here: with offsets spread over twelve units
+# (the joint curve's surface on a held-out fold) it reported convergence at an intercept where every
+# detection's chance was under 1e-12, 55.3 deviance each, which put CH rearing's curve at 2,434
+# held-out against 1,383 for no rule (2026-10-22, #73). Nor is a golden-section search of the deviance
+# itself: the clamp at 1e-12 makes it flat far from its minimum, and the search stops on the plateau
+# wherever its first probes land there. On a range fixed at [-30, 30] that scored every visit of a fold
+# 55.3 when the training fit put its offsets at +15 to +20 (GR rearing's no-rule model 8,397 against 848,
+# 2026-10-23); centred on the group's own offsets it still did on ST rearing, whose previous pick scored
+# 810 against 587 on the fixed range (#84's smoke run, 2026-10-23). The derivative has no plateau.
+.tune_group_dev <- function(y, eta, fam = stats::binomial(link = "cloglog")) {
+  dev_at <- function(b) {
+    p <- pmin(pmax(fam$linkinv(eta + b), 1e-12), 1 - 1e-12)
+    -2 * (y * log(p) + (1 - y) * log(1 - p))
+  }
+  # d/db of the unclamped deviance: 2 * (sum over non-detections of exp(x) - sum over detections of
+  # exp(x) / expm1(exp(x))), x = eta + b; a non-detection's term grows without bound and a detection's
+  # falls from 1 to 0, so the slope is increasing, negative where every chance is small and positive
+  # where every chance is near 1. exp(x) is held at exp(700) so the slope stays finite.
+  slope <- function(b) {
+    u <- exp(pmin(eta + b, 700))
+    r <- u / expm1(u)
+    r[u == 0] <- 1
+    2 * (sum(u[y == 0L]) - sum(r[y == 1L]))
+  }
+  b <- stats::uniroot(slope, c(-max(eta) - 30, -min(eta) + 30), tol = 1e-10)$root
+  dev_at(b)
 }
 
 # per-group held-out deviance for every distinct pattern, plus the no-rule model
-.tune_score_wsg <- function(d, resp, pats, seed, folds, cl) {
+.tune_score_wsg <- function(d, resp, pats, seed, folds, cl, fit = "fe", prior_sd = 2.5) {
   fold_of <- .tune_fold_of_wsg(d, resp, seed, folds)
   fs <- .tune_fold_setup(d, resp, fold_of, folds)
   sc <- if (is.null(cl)) {
-    lapply(pats, .tune_score_one, folds = fs)
+    lapply(pats, .tune_score_one, folds = fs, fit = fit, prior_sd = prior_sd)
   } else {
-    parallel::clusterExport(cl, c(".tune_score_one"), envir = environment())
-    parallel::parLapply(cl, pats, .tune_score_one, folds = fs)
+    # every function a worker calls goes by name: a worker loads no package
+    parallel::clusterExport(cl, c(".tune_score_one", ".tune_group_dev", ".tune_glm_fe"), envir = environment())
+    parallel::parLapply(cl, pats, .tune_score_one, folds = fs, fit = fit, prior_sd = prior_sd)
   }
   devm <- vapply(sc, `[[`, numeric(nrow(d)), "dev")
   Sw <- rowsum(devm, d$wsg)
   list(Sw = Sw, conv = vapply(sc, `[[`, logical(1), "ok"),
-       null = rowsum(.tune_score_one(rep(FALSE, nrow(d)), fs)$dev, d$wsg)[, 1],
+       null = rowsum(.tune_score_one(rep(FALSE, nrow(d)), fs, fit = fit, prior_sd = prior_sd)$dev, d$wsg)[, 1],
        unseen = sum(vapply(fs, `[[`, numeric(1), "unseen")),
        fold = fold_of[rownames(Sw)])
 }
@@ -256,10 +452,10 @@ knw_tune_score <- function(d, rule_in, grid, resp = "U", seed = 54L, folds = 5L,
   list(tot = tot, best = best, se = se, region = tot - tot[best] <= se)
 }
 
-# grid indices of the pick and the recommended rule
-.tune_pick <- function(s, col, conv, grid, d_floor) {
+# grid indices of the pick and the recommended rule, counting departures from `dep`'s starting point
+.tune_pick <- function(s, col, conv, grid, d_floor, dep = grid$departures) {
   rr <- which(s$region[col] & conv[col])
-  rr <- rr[order(grid$departures[rr], s$tot[col[rr]])]
+  rr <- rr[order(dep[rr], s$tot[col[rr]])]
   p <- rr[1]
   ok_d <- rr[is.na(grid$exc_d[rr]) | grid$exc_d[rr] >= d_floor]
   c(pick = p, recommended = if (!is.na(grid$exc_d[p]) && grid$exc_d[p] < d_floor) ok_d[1] else p)

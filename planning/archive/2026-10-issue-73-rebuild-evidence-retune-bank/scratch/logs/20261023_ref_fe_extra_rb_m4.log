@@ -1,0 +1,14 @@
+Fri Oct 23 20:58:34 UTC 2026
+13:58  up 44 days, 18:45, 5 users, load averages: 4.50 3.26 2.85
+host m4 commit 9d8f136
+Tuning run, knowledge#57. Evidence build scripts/logs/habitat/20261022_evidence_build_ledger.csv on link run 20261017_004619-3f4c713b (link a17e91773b283b021811f8b5b76b887d5f4c16e4;ee21eb1371cbc4d7a2d598f8bbeeaeb0534d7994), schema fresh_default_20261017.
+  visits_link md5 d3a434e28f38ef8a234250018c7cb48a
+  visits_species md5 bc71243b0a4eb2e360e1e8410db34125
+  walks md5 f49f863660301299bd632fe998d3b6aa
+Spawner evidence: 1069 BT visits with a coded fish, 194 with evidence.
+link default thresholds at a17e91773b283b021811f8b5b76b887d5f4c16e4 (same at ee21eb1371cbc4d7a2d598f8bbeeaeb0534d7994): 11 species; default_tuned: 11 species (its MAD floors join the grids).
+loaded inputs 2026-10-23 20:58:39 fit fe workers 12 
+RB_rear: fe, 16.6 min, 7706 patterns, 0 not converged, recommended width>=3|g<=0.3|none, curve 9409.7
+DONE 2026-10-23 21:15:18 
+exit 0
+Fri Oct 23 21:15:18 UTC 2026

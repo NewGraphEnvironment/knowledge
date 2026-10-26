@@ -1,0 +1,8 @@
+dense: 17.9 s, 52 patterns, 0 not converged, fe calls 0, fallbacks 0, mean iter 0.0
+fe: 12.5 s, 52 patterns, 0 not converged, fe calls 265, fallbacks 0, mean iter 8.9
+dense: 19.9 s, 52 patterns, 0 not converged, fe calls 0, fallbacks 0, mean iter 0.0
+fe: 12.0 s, 52 patterns, 0 not converged, fe calls 265, fallbacks 0, mean iter 8.9
+"orig"                  3.33     26.34      0.75     5.93
+".tune_glm_fe"          3.33     26.34      0.00     0.00
+"orig"                0.75     5.93       3.33     26.34
+".lm.fit"             0.34     2.69       0.57      4.51

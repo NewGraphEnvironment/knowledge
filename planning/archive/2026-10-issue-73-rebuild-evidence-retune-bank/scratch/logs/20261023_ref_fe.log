@@ -1,0 +1,18 @@
+Fri Oct 23 20:17:00 UTC 2026
+Tuning run, knowledge#57. Evidence build scripts/logs/habitat/20261022_evidence_build_ledger.csv on link run 20261017_004619-3f4c713b (link a17e91773b283b021811f8b5b76b887d5f4c16e4;ee21eb1371cbc4d7a2d598f8bbeeaeb0534d7994), schema fresh_default_20261017.
+  visits_link md5 d3a434e28f38ef8a234250018c7cb48a
+  visits_species md5 bc71243b0a4eb2e360e1e8410db34125
+  walks md5 f49f863660301299bd632fe998d3b6aa
+Spawner evidence: 1069 BT visits with a coded fish, 194 with evidence.
+link default thresholds at a17e91773b283b021811f8b5b76b887d5f4c16e4 (same at ee21eb1371cbc4d7a2d598f8bbeeaeb0534d7994): 11 species; default_tuned: 11 species (its MAD floors join the grids).
+loaded inputs 2026-10-23 20:17:10 fit fe workers 6 
+CH_rear: fe, 4.9 min, 6101 patterns, 27 not converged, recommended mad>=0.75|g<=0.13|Q3@D1000, curve 1053.2
+CO_rear: fe, 2.4 min, 6526 patterns, 0 not converged, recommended mad>=0.03|g<=0.04|none, curve 4092.5
+BT_rear: fe, 5.9 min, 8285 patterns, 0 not converged, recommended mad>=0.35|g<=0.25|none, curve 5618.5
+BT_spawn: fe, 5.9 min, 3023 patterns, 0 not converged, recommended width>=2|g<=0.13|none, curve 403.7
+GR_rear: fe, 1.1 min, 5046 patterns, 0 not converged, recommended width>=1.5|g<=0.0349|none, curve 786.9
+ST_rear: fe, 1.6 min, 6366 patterns, 0 not converged, recommended mad>=1|g<=0.0849|none, curve 860.8
+WCT_rear: fe, 1.0 min, 5268 patterns, 0 not converged, recommended mad>=0.03|g<=0.3|none, curve 1454.5
+DONE 2026-10-23 20:33:59 
+exit 0
+Fri Oct 23 20:33:59 UTC 2026

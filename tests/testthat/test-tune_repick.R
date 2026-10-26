@@ -37,6 +37,18 @@ test_that("ties in departures go to the lower score, and an exception under d_fl
   expect_identical(knw_tune_repick(t, se_mult = 10, d_floor = 50)$rule, "mad>=0.5|g<=0.09|Q3@D100")
 })
 
+test_that("start = 'flow' counts departures from the flow version, and is refused without the column (#80)", {
+  t <- repick_fx()
+  expect_error(knw_tune_repick(t, start = "flow"), "departures_flow")
+  t$departures_flow <- c(1L, 2L, 1L, 2L, 0L)
+  # at 1 SE the region is the two exception rules; from the flow start the 1000 m one is still nearest (2 vs 2, lower score)
+  expect_identical(knw_tune_repick(t, start = "flow")$rule, "mad>=0.75|g<=0.09|Q3@D1000")
+  # at 1.96 SE the no-exception MAD rule joins and is one departure from the flow start (its gradient), as from the width start
+  expect_identical(knw_tune_repick(t, se_mult = 1.96, start = "flow")$rule, "mad>=0.75|g<=0.0549|none")
+  t$departures_flow <- NA_integer_
+  expect_error(knw_tune_repick(t, start = "flow"), "no flow start")
+})
+
 test_that("an empty region is an error, not a silent NA row", {
   t <- repick_fx()
   t$converged <- FALSE
@@ -56,11 +68,11 @@ test_that("at 1 SE the replay is every saved table's recommended rule", {
   }
 })
 
-test_that("at 1.96 SE the replay gives #79's table", {
+test_that("at 1.96 SE the replay gives the table research/habitat_thresholds_tuned.md prints (#79, on #73's tables)", {
   skip_if_not(length(tune_files) > 0, "no source-tree data/tune (installed package)")
-  want <- c(BT_rear = "width>=1.5|g<=0.1049|none", BT_spawn = "width>=2|g<=0.0549|none",
-            CH_rear = "mad>=0.75|g<=0.0549|none", CO_rear = "width>=1.5|g<=0.04|none",
-            GR_rear = "width>=1.5|g<=0.0349|none", RB_rear = "width>=3|g<=0.0849|none",
+  want <- c(BT_rear = "mad>=0.35|g<=0.1049|none", BT_spawn = "width>=2|g<=0.0549|none",
+            CH_rear = "mad>=1|g<=0.0549|Q3@D1000", CO_rear = "width>=1.5|g<=0.04|none",
+            GR_rear = "width>=1.5|g<=0.0349|none", RB_rear = "width>=3|g<=0.3|none",
             ST_rear = "width>=1.5|g<=0.0849|none", WCT_rear = "width>=1.5|g<=0.0849|none")
   got <- vapply(tune_files, function(f) knw_tune_repick(utils::read.csv(f, stringsAsFactors = FALSE), 1.96)$rule, "")
   names(got) <- sub("_tune\\.csv$", "", basename(tune_files))

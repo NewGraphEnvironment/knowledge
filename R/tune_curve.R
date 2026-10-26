@@ -5,7 +5,11 @@
 #' size variable, width or MAD) and log distance downstream to the first river of
 #' the pick's `exc_q` m³/s, a smooth of gradient, and the same nuisance terms as
 #' the scorer (`log_area`, data set, era) with the watershed group as a random
-#' effect; binomial with a complementary log-log link, REML. A distance the walk
+#' effect; binomial with a complementary log-log link, REML. The data-set and
+#' era coefficients carry the scorer's normal prior (`prior_sd`): where the two
+#' nearly coincide (steelhead's FDIS visits are its 1995-2004 visits) an
+#' unpenalised fit sends them to about +-30 with offsetting signs, and a
+#' held-out group that mixes the combinations takes one of those offsets. A distance the walk
 #' did not find (`Inf`) is censored at `dist_cap_m`, and distance enters as
 #' `log(dist + 10)`. The model is one surface, never a product of one-variable
 #' curves, so a size effect that only holds far from a river is not counted
@@ -26,6 +30,13 @@
 #' @param dist_cap_m,q_default,k `numeric` the spec's constants: the distance
 #'   cap, the river size when the pick has no exception, and the basis sizes
 #'   (`size`, `dist`, `grad`).
+#' @param edge_stream `integer` or `NULL`: the FWA edge types the visits in `d`
+#'   were filtered on, recorded on the result as `edge_stream` so the grade's
+#'   reference population can be taken from the curve (#72).
+#' @param prior_sd `numeric(1)` the standard deviation, on the cloglog scale,
+#'   of a normal prior on the `data_set` and `era` coefficients, as in
+#'   [knw_tune_score()]: a fixed penalty `b^2 / prior_sd^2` per coefficient.
+#'   `Inf` for none (the curve before #73's Phase 7).
 #' @return A list: `model` (the `mgcv::gam`), `data` (the rows fitted, with
 #'   `log_size`, `log_dist`, `grad`), `ref` (the reference nuisance values a
 #'   segment is predicted at: median `log_area`, modal `data_set`, latest `era`),
@@ -34,8 +45,8 @@
 #'   held-out deviance), `edf` (the smooths' effective degrees of freedom), and
 #'   `curves`, a `tibble` of marginal curves (`curve`, `x`, `rate`, `rel_rate`,
 #'   `rel_lo`, `rel_hi`, `threshold`) relative to the pick's thresholds, each
-#'   other variable held at its reference; `dist_in_model`, `FALSE` when the
-#'   distances were too few to carry a smooth and size stood alone.
+#'   other variable held at its reference; `edge_stream`, as given; `dist_in_model`, `FALSE` when the
+#'   distances were too few to carry a smooth and size stood alone; `prior_sd`, as given.
 #' @export
 #' @examples
 #' \dontrun{
@@ -45,8 +56,11 @@
 #' }
 knw_tune_curve <- function(d, pick, walks, folds, resp = "U",
                            cols = c(grad = "fwa_gradient", width = "cw_deploy", mad = "mad_pick"), src = "pick",
-                           dist_cap_m = 50000, q_default = 10, k = c(size = 6, dist = 6, grad = 6)) {
+                           dist_cap_m = 50000, q_default = 10, k = c(size = 6, dist = 6, grad = 6),
+                           edge_stream = NULL, prior_sd = 2.5) {
   chk::chk_data(d)
+  chk::chk_number(prior_sd)
+  if (prior_sd <= 0) stop("prior_sd must be positive (Inf for no prior)", call. = FALSE)
   chk::check_names(d, c(resp, "wsg", "log_area", "data_set", "era", "blue_line_key", "downstream_route_measure",
                         unname(cols)))
   chk::check_names(pick, c("size_var", "size_min", "grad_max", "exc_q", "exc_d"))
@@ -79,8 +93,15 @@ knw_tune_curve <- function(d, pick, walks, folds, resp = "U",
            sprintf(" + s(grad, k = %d)", k[["grad"]]),
            if (length(nu)) paste0(" + ", paste(nu, collapse = " + ")) else "")
   }
+  # the prior: a fixed penalty b^2 / prior_sd^2 on each data-set and era coefficient (mgcv's paraPen with its
+  # smoothing parameter supplied, so REML estimates only the smooths')
+  pen <- function(nu, x) {
+    pt <- intersect(c("data_set", "era"), nu)
+    if (!is.finite(prior_sd) || !length(pt)) return(NULL)
+    stats::setNames(lapply(pt, function(t) list(diag(nlevels(x[[t]]) - 1L), sp = 1 / prior_sd^2)), pt)
+  }
   fit <- mgcv::gam(stats::as.formula(paste(resp, "~", smooths(nuis), "+ s(wsg, bs = 're')")),
-                   family = stats::binomial(link = "cloglog"), data = dd, method = "REML")
+                   family = stats::binomial(link = "cloglog"), data = dd, method = "REML", paraPen = pen(nuis, dd))
   # the reference era is the latest one present, in the eras' own order where the levels are the
   # scorer's three; otherwise the last level
   era_order <- c("to1994", "1995-2004", "2005on")
@@ -95,7 +116,7 @@ knw_tune_curve <- function(d, pick, walks, folds, resp = "U",
   edf <- summary(fit)$s.table[, "edf"]
 
   # held-out deviance on the scorer's folds: fixed terms refit on the other folds, each held-out
-  # group its own intercept
+  # group its own intercept (`.tune_group_dev()`, as the scorer fits it)
   fo <- folds[as.character(dd$wsg)]
   if (anyNA(fo)) stop("a modelled group has no fold", call. = FALSE)
   dev <- 0
@@ -109,7 +130,7 @@ knw_tune_curve <- function(d, pick, walks, folds, resp = "U",
     tr$era <- droplevels(tr$era)
     nu <- nuis[vapply(nuis, function(t) length(unique(tr[[t]])) > 1L, logical(1))]
     mk <- mgcv::gam(stats::as.formula(paste(resp, "~", smooths(nu), "+ s(wsg, bs = 're')")), family = fam,
-                    data = tr, method = "REML")
+                    data = tr, method = "REML", paraPen = pen(nu, tr))
     # a held-out level unseen in training takes the training mode, and the held-out factors carry
     # exactly the training levels
     for (t in c("data_set", "era")) {
@@ -122,10 +143,7 @@ knw_tune_curve <- function(d, pick, walks, folds, resp = "U",
     y <- ho[[resp]]
     for (w in unique(as.character(dd$wsg[fo == kf]))) {
       i <- which(as.character(dd$wsg[fo == kf]) == w)
-      a <- suppressWarnings(stats::glm.fit(matrix(1, length(i), 1), y[i], family = fam, offset = eta[i],
-                                          control = stats::glm.control(maxit = 100)))
-      p <- pmin(pmax(a$fitted.values, 1e-12), 1 - 1e-12)
-      dev <- dev + sum(-2 * (y[i] * log(p) + (1 - y[i]) * log(1 - p)))
+      dev <- dev + sum(.tune_group_dev(y[i], eta[i], fam))
     }
   }
 
@@ -160,5 +178,6 @@ knw_tune_curve <- function(d, pick, walks, folds, resp = "U",
              log(thr_dist + 10), function(x) exp(x) - 10)
   )
   list(model = fit, data = dd, ref = ref, dropped = dropped, capped = capped, heldout = dev, edf = edf, curves = curves,
-       size_var = pick$size_var, q = q, dist_cap_m = dist_cap_m, dist_in_model = dist_in_model)
+       size_var = pick$size_var, q = q, dist_cap_m = dist_cap_m, dist_in_model = dist_in_model,
+       edge_stream = if (is.null(edge_stream)) NULL else as.integer(edge_stream), prior_sd = prior_sd)
 }

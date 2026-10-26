@@ -18,6 +18,10 @@
 #' @param se_mult `numeric(1)` the region's width in standard errors.
 #' @param d_floor `numeric(1)` the shortest exception distance (m) a
 #'   recommended rule may carry, as in [knw_tune_score()].
+#' @param start `"default"` counts departures from link's `default` (the
+#'   table's `departures`); `"flow"` from its flow version (`departures_flow`,
+#'   [knw_tune_grid()]; #80), and is refused on a table without that column or
+#'   whose species has no flow start.
 #' @return The recommended row of `tune` (one row), with `n_region`, the number
 #'   of rules in the region at `se_mult`.
 #' @export
@@ -29,15 +33,23 @@
 #' )
 #' knw_tune_repick(tune)$rule              # 1 SE: only the best rule is close enough
 #' knw_tune_repick(tune, se_mult = 1.96)$rule  # 1.96 SE: the one-departure rule joins, and is picked
-knw_tune_repick <- function(tune, se_mult = 1, d_floor = 200) {
+knw_tune_repick <- function(tune, se_mult = 1, d_floor = 200, start = c("default", "flow")) {
+  start <- match.arg(start)
   chk::chk_data(tune)
   chk::check_names(tune, c("rule", "departures", "exc_d", "converged", "dev_heldout", "ddev_best", "se_diff"))
   chk::chk_number(se_mult)
   chk::chk_gte(se_mult, 0)
   chk::chk_number(d_floor)
+  dep <- tune$departures
+  if (start == "flow") {
+    if (!"departures_flow" %in% names(tune) || all(is.na(tune$departures_flow))) {
+      stop("tune carries no departures_flow: the table predates #80 or the species has no flow start", call. = FALSE)
+    }
+    dep <- tune$departures_flow
+  }
   rr <- which(tune$converged %in% TRUE & tune$ddev_best <= se_mult * tune$se_diff)
   if (!length(rr)) stop("no converged rule in the region", call. = FALSE)
-  rr <- rr[order(tune$departures[rr], tune$dev_heldout[rr])]
+  rr <- rr[order(dep[rr], tune$dev_heldout[rr])]
   p <- rr[1]
   ok_d <- rr[is.na(tune$exc_d[rr]) | tune$exc_d[rr] >= d_floor]
   rec <- if (!is.na(tune$exc_d[p]) && tune$exc_d[p] < d_floor) ok_d[1] else p
