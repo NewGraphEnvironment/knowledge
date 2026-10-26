@@ -1,3 +1,19 @@
+# knowledge 0.4.9
+
+* Every species' threshold is retuned on rebuilt evidence (#73): FDIS visits on wet's 2026-10-19 flows, the walk to a
+  river ending at a double-line river's bank with every hop's gap counted (fresh 0.42.0's rule), a gradient ladder to
+  30 % for every species, and a second pick read from link's flow version of `default`. The scorer was reorganised
+  after two defects surfaced on this evidence: the held-out intercept search now minimises the deviance directly, and
+  `knw_tune_smoke()` gates every key with a minutes-long run before a grid is scored (#84). The fit absorbs the
+  watershed-group intercepts and carries a normal prior (SD 2.5) on the data-set and era terms (#83), which made
+  rainbow trout feasible again. The fitted curve takes the same prior, and grades are published only for a key whose
+  curve predicts held-out groups better than no rule on the curve's own visits: bull trout rearing, chinook, grayling
+  and rainbow are graded; bull trout spawning, coho, steelhead and westslope cutthroat carry a rule and no grade.
+  `knw_compare_rules()` sets each tuned rule beside `default` on link's segments under its through-wetland
+  structures, with a GeoPackage per key; the thresholds table gains `near_river_scope` and `evidence_md5`; every table
+  a later run reads back records the gate, the evidence and the pick, and every reader refuses a mismatch. The chinook
+  article and its data are regenerated on the new tables, and the eight research files are rewritten.
+
 # knowledge 0.4.8
 
 * The tuning's "within one standard error of the best" is stated as what it is, a parsimony rule of thumb fixed before
