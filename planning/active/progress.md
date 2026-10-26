@@ -19,3 +19,10 @@
 - Citation dispatch 40406671489: green on `ubuntu-26.04`, pushed nothing (branch still 6092dc9).
 - PR pkgdown 40406663722: killed by the 30-min timeout on 26.04; the logs show every package built from CRAN source
   on both images (findings). Escalated to Al: the plan's premise is disproven.
+- `.Rprofile` code-check: round 1 (`review-rprofile-round1.md`) found self-sourcing recursion when `~/.Rprofile` is this
+  file; the `normalizePath()` guard (291e8af) fixed it only from the checkout. Round 2 (`review-rprofile-round2.md`)
+  found that defect inside the fix: started elsewhere, the guard compared against a missing `./.Rprofile` and recursed.
+  Replaced with a once-per-process option flag. Ended by enumeration, not a third round: every way R reaches the file
+  (project profile; `~/.Rprofile` as a symlink, a hard link, or HOME at the checkout; `R_PROFILE_USER`; a callr
+  child), each started in and outside the checkout, 9 cases, all finish; a separate home profile's repos load in the
+  project and in the callr child (the option is not inherited).
