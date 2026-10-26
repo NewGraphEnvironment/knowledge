@@ -15,3 +15,7 @@
   a fix.
 - Pushed, opened PR #97; dispatched the citation workflow on the branch (run 40406671489); PR pkgdown run 40406663722.
 - soul#541's body gained the "a timeout reads as `cancelled`" bullet (`--log-failed` empty on both drift and fly runs).
+- Cancelled main's stuck runs 40400891471 and 40404388481 on Al's word (22:05Z).
+- Citation dispatch 40406671489: green on `ubuntu-26.04`, pushed nothing (branch still 6092dc9).
+- PR pkgdown 40406663722: killed by the 30-min timeout on 26.04; the logs show every package built from CRAN source
+  on both images (findings). Escalated to Al: the plan's premise is disproven.

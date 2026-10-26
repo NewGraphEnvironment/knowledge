@@ -46,6 +46,28 @@ annotations carry "The job has exceeded the maximum execution time of 6h0m0s". S
 to a `conclusion == "failure"` filter and reads as superseded in `/gh-pr-merge` step 10. Not a defect of this diff
 (the 6 h kill was the same), but the gate's "a stall fails" was wrong; routed to soul#541.
 
+## The PR run timed out, and every package comes from CRAN source (measured 2026-10-26 22:13–22:25Z)
+
+PR #97's pkgdown run 40406663722 (job 121866059012) ran on `Image: ubuntu-26.04` and was killed by the new 30-min
+timeout at 22:13:05Z: conclusion `cancelled`, annotation "The job has exceeded the maximum execution time of 30m0s",
+later steps `skipped`. So round 3's claim holds at 30 min as well as 6 h.
+
+- `setup-r` took 19 min (21:43:09 to 22:02:05): apt on `azure.archive.ubuntu.com` with 4-min silences on single
+  files (cmake 14.1 MB, fonts-urw-base35 10.9 MB). That is the slow mirror, again.
+- `setup-r-dependencies`: no package cache for the 26.04 key ("Cache not found for input keys: Ubuntu 26.04.1 LTS-R
+  version 4.6.1 …"), and pak got all 143 packages as `(source)`, `R6` and `glue` included; 139 resolve to
+  `https://cran.rstudio.com/src/contrib`, not to the `RSPM` URL (`…/__linux__/resolute/latest`) that `setup-r` set.
+  It was still in the system-requirements apt install when killed, before any compile.
+- **The issue's corrected premise is wrong.** The green 24.04 run 40353103033 (attempt 3) did not install `duckdb` as a
+  binary: `✔ Got duckdb 2.0.0 (source)`, `✔ Built duckdb 2.0.0 (57m 5.6s)`, from `cran.rstudio.com/src/contrib`.
+  It restored a 24.04 cache and built only the packages that had changed (knowledge, arrow, duckdb, flooded).
+- The fast runs of 2026-10-21/22 were fast because the cache was restored (24.04 keys), not because of binaries:
+  their lockfiles resolve the same 139 packages to `cran.rstudio.com/src/contrib`.
+
+So the runner image decides only whether a cache exists. Every run on a cold cache, or after a package update, builds
+from CRAN source on either image; that is why 26.04 failed (no cache) and why 24.04 passed (cache). Why pak bypasses
+the PPM repo is not yet known. With a 30-min timeout, a cold-cache or `duckdb`-update run cannot finish on either image.
+
 ## Errors Encountered
 
 | Error | Resolution |
