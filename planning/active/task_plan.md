@@ -22,6 +22,12 @@ binary. So the cause was the binary gap after a release, not the 26.04 runner im
 - Done locally, not waiting for soul#541's shared mechanism; if soul#541 moves the workflows to a shared one later,
   knowledge migrates then.
 
+- **Revised 2026-10-26 22:30Z** after the PR run timed out (findings): every package came from CRAN source on both
+  images, because the repo's `.Rprofile` replaced the `~/.Rprofile` where `setup-r` writes the Posit repository. Al
+  first approved re-pinning to 24.04 with a 120-min pkgdown timeout and a root-cause issue in soul; the cause then
+  proved to be knowledge's own, so the fix is `.Rprofile` sourcing `~/.Rprofile` (Phase 3), and the unpin and 30 / 15
+  stand if the PR's next 26.04 run gets binaries. If it does not, fall back to Al's approved re-pin + 120 min.
+
 ## Phase 1: Unpin and add timeouts
 
 - [x] `.github/workflows/pkgdown.yaml`: `runs-on: ubuntu-latest`, drop the two-line #94 pin comment, add
@@ -49,6 +55,15 @@ binary. So the cause was the binary gap after a release, not the 26.04 runner im
       annotations (`--log-failed` prints nothing for a timeout kill; code-check round 3), rerun once if it is setup/mirror; if
       duckdb (or anything) is building from source on 26.04, stop, restore the pin and keep the timeouts, and say so
 - [ ] `/planning-archive`, with the measured run as the archive README's Measurement
+
+## Phase 3: Fix the repository the install reads (added 2026-10-26)
+
+- [x] `.Rprofile` sources `~/.Rprofile` first; tested locally (repo root now sees `rbbt.default.library_id`; with a
+      setup-r-like `~/.Rprofile` under a temp `HOME`, `getOption("repos")` leads with RSPM); CLAUDE.md says why
+- [ ] PR run on 26.04: packages `Got … (binary)` from the RSPM URL, green inside 30 min; else the fallback above
+- [ ] `/code-check` on the `.Rprofile` and CLAUDE.md change
+- [ ] Correct #94's and soul#541's bodies (the 24.04 run compiled duckdb in 57 min; the cause was the project
+      `.Rprofile`, so it is knowledge's, not org-wide, apart from a convention line)
 
 ## Owed at the end (reported, done after merge)
 
