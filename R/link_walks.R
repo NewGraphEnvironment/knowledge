@@ -22,7 +22,13 @@
 #'
 #' Each socket worker opens its own connection through `connector` and installs
 #' the walk as a session-temporary function, so a `DBI` connection cannot be
-#' passed: it does not serialise to a worker.
+#' passed: it does not serialise to a worker. A worker sends one query per
+#' `batch` starts and source (#87): the starts go to the server as two arrays,
+#' unnested with their position and walked laterally, and each row comes back
+#' tagged with its start's position, so the start's own values are attached in R
+#' and no key or measure is matched by its printed form. Every start must come
+#' back with one row per size. The result does not depend on `batch`: each start
+#' is walked alone, as before.
 #'
 #' @param connector a function of no arguments returning a `DBI` connection to a
 #'   database holding `discharge` and `whse_basemapping`.
@@ -31,6 +37,9 @@
 #' @param sources `character` flow sources: `pick` (wet's default per segment),
 #'   `pcic_routed`, `wet_balance`.
 #' @param workers `integer(1)` socket workers.
+#' @param batch `integer(1)` starts per query. On the database's host a batch of
+#'   500 removes the round trip and R's per-row binding; over a remote link it
+#'   removes almost all of a walk's time.
 #' @return A `tibble`: `blue_line_key`, `downstream_route_measure`, `src`, `qmin`,
 #'   `status`, `dist_m`, `large_mad`, `large_lfid`, `large_edge`,
 #'   `large_waterbody_key`, `n_hops`, `max_entry_gap_m`, `dist_centre_m`,
@@ -44,7 +53,7 @@
 #'                q_grid = c(3, 10), sources = "pick", workers = 1)
 #' }
 knw_link_walks <- function(connector, starts, q_grid = c(1, 3, 5, 10, 20, 30, 50),
-                           sources = c("pick", "pcic_routed", "wet_balance"), workers = 4L) {
+                           sources = c("pick", "pcic_routed", "wet_balance"), workers = 4L, batch = 500L) {
   chk::chk_function(connector)
   chk::chk_data(starts)
   chk::check_names(starts, c("blue_line_key", "downstream_route_measure"))
@@ -52,33 +61,24 @@ knw_link_walks <- function(connector, starts, q_grid = c(1, 3, 5, 10, 20, 30, 50
   chk::chk_subset(sources, c("pick", "pcic_routed", "wet_balance"))
   chk::chk_whole_number(workers)
   chk::chk_gt(workers, 0)
+  chk::chk_whole_number(batch)
+  chk::chk_gt(batch, 0)
   starts <- unique(starts[, c("blue_line_key", "downstream_route_measure")])
   if (!nrow(starts)) stop("no starts to walk", call. = FALSE)
   fn_sql <- paste(readLines(system.file("sql/ch_dist_profile.sql", package = "knowledge", mustWork = TRUE)),
                   collapse = "\n")
-  qs <- paste0("{", paste(q_grid, collapse = ","), "}")
-  walk_chunk <- function(chunk, fn_sql, qs, sources, connector) {
-    conn <- connector()
-    on.exit(DBI::dbDisconnect(conn))
-    DBI::dbExecute(conn, fn_sql)
-    out <- lapply(seq_len(nrow(chunk)), function(i) {
-      do.call(rbind, lapply(sources, function(src) {
-        r <- DBI::dbGetQuery(conn, "SELECT * FROM pg_temp.ch_dist_profile($1::integer, $2, $3::float8[], $4)",
-                             params = list(chunk$blue_line_key[i], chunk$downstream_route_measure[i], qs, src))
-        cbind(chunk[rep(i, nrow(r)), , drop = FALSE], src = src, r, row.names = NULL)
-      }))
-    })
-    do.call(rbind, out)
-  }
   n_chunks <- min(nrow(starts), workers * 8L)
   chunks <- split(starts, rep_len(seq_len(n_chunks), nrow(starts)))
+  # the helpers travel as arguments: a socket worker resolves the package's own names in the installed
+  # package, or in none, never in the source tree a session loaded
+  args <- list(fn_sql = fn_sql, q_grid = q_grid, sources = sources, connector = connector, batch = as.integer(batch),
+               pg_array = .knw_pg_array, batches = .knw_walk_batches)
   if (workers > 1L) {
     cl <- parallel::makeCluster(workers)
-    w <- tryCatch(parallel::parLapply(cl, chunks, walk_chunk, fn_sql = fn_sql, qs = qs, sources = sources,
-                                      connector = connector),
+    w <- tryCatch(do.call(parallel::parLapply, c(list(cl, chunks, .knw_walk_chunk), args)),
                   finally = parallel::stopCluster(cl))
   } else {
-    w <- lapply(chunks, walk_chunk, fn_sql = fn_sql, qs = qs, sources = sources, connector = connector)
+    w <- lapply(chunks, function(ch) do.call(.knw_walk_chunk, c(list(ch), args)))
   }
   w <- do.call(rbind, w)
   rownames(w) <- NULL
@@ -94,4 +94,43 @@ knw_link_walks <- function(connector, starts, q_grid = c(1, 3, 5, 10, 20, 30, 50
   out$large_edge <- as.integer(out$large_edge)
   out$n_hops <- as.integer(out$n_hops)
   out[order(out$blue_line_key, out$downstream_route_measure, out$src, out$qmin), , drop = FALSE]
+}
+
+# One worker's starts: one connection, the walk installed once, one query per batch and source. Self-contained
+# (every helper is an argument) because it runs on a socket worker.
+.knw_walk_chunk <- function(chunk, fn_sql, q_grid, sources, connector, batch, pg_array, batches) {
+  conn <- connector()
+  on.exit(DBI::dbDisconnect(conn))
+  DBI::dbExecute(conn, fn_sql)
+  sql <- paste("SELECT s.ord, w.* FROM unnest($1::integer[], $2::float8[]) WITH ORDINALITY AS s(blk, m, ord)",
+               "CROSS JOIN LATERAL pg_temp.ch_dist_profile(s.blk, s.m, $3::float8[], $4) w ORDER BY s.ord")
+  qs <- pg_array(q_grid)
+  out <- list()
+  for (src in sources) {
+    for (b in batches(nrow(chunk), batch)) {
+      r <- DBI::dbGetQuery(conn, sql, params = list(pg_array(chunk$blue_line_key[b]),
+                                                    pg_array(chunk$downstream_route_measure[b]), qs, src))
+      ord <- as.integer(r$ord)
+      if (length(ord) != length(b) * length(q_grid) || any(tabulate(ord, length(b)) != length(q_grid))) {
+        stop("a batch of ", length(b), " starts on ", src, " came back with ", length(ord), " rows, not one per start ",
+             "and size", call. = FALSE)
+      }
+      out[[length(out) + 1L]] <- cbind(chunk[b[ord], , drop = FALSE], src = src,
+                                       r[, setdiff(names(r), "ord"), drop = FALSE], row.names = NULL)
+    }
+  }
+  do.call(rbind, out)
+}
+
+# A Postgres array literal of doubles that reads back exactly: %.17g is R's double to the last bit, and writes a
+# whole number below 1e17 without an exponent (a round key such as 356000000), where paste() writes 3.56e+08
+.knw_pg_array <- function(x) {
+  if (!length(x) || any(!is.finite(x))) stop("an array element is missing or not finite", call. = FALSE)
+  paste0("{", paste(sprintf("%.17g", x), collapse = ","), "}")
+}
+
+# positions 1..n in consecutive runs of at most `batch`
+.knw_walk_batches <- function(n, batch) {
+  if (n == 0L) return(list())
+  unname(split(seq_len(n), ceiling(seq_len(n) / batch)))
 }

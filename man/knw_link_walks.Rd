@@ -9,7 +9,8 @@ knw_link_walks(
   starts,
   q_grid = c(1, 3, 5, 10, 20, 30, 50),
   sources = c("pick", "pcic_routed", "wet_balance"),
-  workers = 4L
+  workers = 4L,
+  batch = 500L
 )
 }
 \arguments{
@@ -24,6 +25,10 @@ database holding \code{discharge} and \code{whse_basemapping}.}
 \code{pcic_routed}, \code{wet_balance}.}
 
 \item{workers}{\code{integer(1)} socket workers.}
+
+\item{batch}{\code{integer(1)} starts per query. On the database's host a batch of
+500 removes the round trip and R's per-row binding; over a remote link it
+removes almost all of a walk's time.}
 }
 \value{
 A \code{tibble}: \code{blue_line_key}, \code{downstream_route_measure}, \code{src}, \code{qmin},
@@ -56,7 +61,13 @@ line with no local code.
 
 Each socket worker opens its own connection through \code{connector} and installs
 the walk as a session-temporary function, so a \code{DBI} connection cannot be
-passed: it does not serialise to a worker.
+passed: it does not serialise to a worker. A worker sends one query per
+\code{batch} starts and source (#87): the starts go to the server as two arrays,
+unnested with their position and walked laterally, and each row comes back
+tagged with its start's position, so the start's own values are attached in R
+and no key or measure is matched by its printed form. Every start must come
+back with one row per size. The result does not depend on \code{batch}: each start
+is walked alone, as before.
 }
 \examples{
 \dontrun{

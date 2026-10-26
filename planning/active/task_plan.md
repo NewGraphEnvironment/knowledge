@@ -82,13 +82,13 @@ exploration found that shapes the design is in `findings.md` ("Exploration"), wi
 
 ## Phase 1: Walks batched
 
-- [ ] `knw_link_walks(..., batch = 500L)`: each worker sends one query per `batch` starts and source:
+- [x] `knw_link_walks(..., batch = 500L)`: each worker sends one query per `batch` starts and source:
       `unnest(ARRAY[...]::integer[], ARRAY[...]::float8[]) WITH ORDINALITY AS s(blue_line_key, m, ord) CROSS JOIN
       LATERAL pg_temp.ch_dist_profile(s.blue_line_key, s.m, $q, $src) w`, the literals written with
       `format(scientific = FALSE)` for keys and `%.17g` for measures, and the start's own R values attached by
       `ord`, so nothing is bound per row in R and no key passes through `paste()`. Chunks per worker as now; the
       exact-row-count check kept, plus a check that every start came back; the output order kept.
-- [ ] `tests/testthat/test-link_walks.R`: the live test also walks its starts with `batch = 1L` and `batch = 2L` and
+- [x] `tests/testthat/test-link_walks.R`: the live test also walks its starts with `batch = 1L` and `batch = 2L` and
       on two sources, expecting identical frames; a mocked test pins the batching arithmetic (every start in exactly
       one batch, none larger than `batch`) and the literal formatting (a round key, a 17-digit measure).
 - [ ] `data-raw/walk_batch_check.R`: the batched walk on the reference starts against the reference files: every
