@@ -32,6 +32,20 @@ Both workflows that install R packages, `pkgdown.yaml` and `update-citation-cff.
 - pkgdown 40353103033 (PR #88, 24.04, attempt 3): job 17:53:40Z to 19:34:06Z, about 100 min, green.
 - Update CITATION.cff green runs 2026-10-20 to 10-26: 3–5 min.
 
+## `ubuntu-latest` is mid-migration (checked 2026-10-26 21:37Z)
+
+actions/runner-images#14748: the label moves to Ubuntu 26.04 over several weeks from 2026-10-19, to finish by
+2026-11-19. Run logs print the image: 40256692841 (unpinned, 2026-10-26 01:57Z) ran on `ubuntu-26.04`, 40353103033
+(pinned) on `ubuntu-24.04`, both runner version 20261021.618. So a green `ubuntu-latest` run proves 26.04 only if its
+log says `Image: ubuntu-26.04`.
+
+## A `timeout-minutes` kill reports `cancelled` (code-check round 3, verified 2026-10-26 21:43Z)
+
+drift 38592249287 and fly 37670553822 (6 h default kills): run and job conclusion `cancelled`; the check run's
+annotations carry "The job has exceeded the maximum execution time of 6h0m0s". So a kill at 30 or 15 min is invisible
+to a `conclusion == "failure"` filter and reads as superseded in `/gh-pr-merge` step 10. Not a defect of this diff
+(the 6 h kill was the same), but the gate's "a stall fails" was wrong; routed to soul#541.
+
 ## Errors Encountered
 
 | Error | Resolution |

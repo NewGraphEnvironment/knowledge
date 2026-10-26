@@ -6,3 +6,10 @@
 - Created branch `94-ci-unpin-the-runners-and-add-timeouts-af` off main
 - Scaffolded PWF baseline from issue #94 with approved phases
 - Next: start Phase 1
+- Plan review (Plan agent) folded in: b7e393b; `planning/active/review-plan.md`
+- Phase 1: both workflows on `ubuntu-latest` with job `timeout-minutes` 30 / 15. `/code-check`, three rounds
+  (`review-round{1,2,3}.md`): round 1 Clean; round 2 two verification gaps (label mid-migration, citation job not run
+  by the PR); round 3 a timeout kill reports `cancelled` (verified on drift and fly). No code change from any round;
+  the plan and findings carry each. Ended at round 3: it named the mechanism (a guard that fails toward pass) and
+  enumerated where it reaches in the two files (the two `timeout-minutes` lines), and no round found a defect inside
+  a fix.
