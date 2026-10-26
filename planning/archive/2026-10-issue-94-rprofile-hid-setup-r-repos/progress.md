@@ -26,3 +26,9 @@
   (project profile; `~/.Rprofile` as a symlink, a hard link, or HOME at the checkout; `R_PROFILE_USER`; a callr
   child), each started in and outside the checkout, 9 cases, all finish; a separate home profile's repos load in the
   project and in the callr child (the option is not inherited).
+- Final-commit run 40414769800 timed out on the apt mirror (setup-r 19.5 min); rerun green in 2.5 min (attempt 2).
+- #94 and the PR body rewritten to the found cause, without naming private repos; the conventions issue (soul, private)
+  gained the corrected cause and the `.Rprofile` lesson.
+- Not done: rewording commit 4cc6dad, whose message names the conventions issue by number (`soul#541`): auto mode
+  refused the history rewrite as destructive. Left for Al, with the edit-history revisions of #94 and the PR body
+  that named it.

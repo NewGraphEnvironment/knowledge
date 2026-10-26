@@ -50,19 +50,19 @@ binary. So the cause was the binary gap after a release, not the 26.04 runner im
       26.04 run installs packages; a rerun restores the cache and shows no duckdb install (plan review)
 - [x] Write into soul#541's body that a `timeout-minutes` kill reports `cancelled`, so the convention's scan and
       `/gh-pr-merge` step 10 need to read the annotation (code-check round 3)
-- [ ] Record the probe result on soul#541 (this PR's run is its "one probe run on `ubuntu-latest`")
+- [x] Record the probe result on soul#541 (this PR's run is its "one probe run on `ubuntu-latest`")
 - [x] If the run fails, stalls or ends `cancelled`: read which step from `gh run view <id> --json jobs` and the job's
       annotations (`--log-failed` prints nothing for a timeout kill; code-check round 3), rerun once if it is setup/mirror; if
       duckdb (or anything) is building from source on 26.04, stop, restore the pin and keep the timeouts, and say so
-- [ ] `/planning-archive`, with the measured run as the archive README's Measurement
+- [x] `/planning-archive`, with the measured run as the archive README's Measurement
 
 ## Phase 3: Fix the repository the install reads (added 2026-10-26)
 
 - [x] `.Rprofile` sources `~/.Rprofile` first; tested locally (repo root now sees `rbbt.default.library_id`; with a
       setup-r-like `~/.Rprofile` under a temp `HOME`, `getOption("repos")` leads with RSPM); CLAUDE.md says why
 - [x] PR run on 26.04: 134 packages as 26.04 binaries from the RSPM URL, green in 5 min (run 40413562090)
-- [ ] `/code-check` on the `.Rprofile` and CLAUDE.md change
-- [ ] Correct #94's and soul#541's bodies (the 24.04 run compiled duckdb in 57 min; the cause was the project
+- [x] `/code-check` on the `.Rprofile` and CLAUDE.md change
+- [x] Correct #94's and soul#541's bodies (the 24.04 run compiled duckdb in 57 min; the cause was the project
       `.Rprofile`, so it is knowledge's, not org-wide, apart from a convention line)
 
 ## Owed at the end (reported, done after merge)
@@ -74,10 +74,10 @@ binary. So the cause was the binary gap after a release, not the 26.04 runner im
 
 ## Validation
 
-- [ ] Tests pass (no R code changes; `devtools::test()` not needed beyond the CI build)
-- [ ] `/code-check` clean
-- [ ] PWF checkboxes match landed work
-- [ ] `/planning-archive` on completion
+- [x] Tests pass (no R code changes; `devtools::test()` not needed beyond the CI build)
+- [x] `/code-check` clean
+- [x] PWF checkboxes match landed work
+- [x] `/planning-archive` on completion
 
 Verification: the PR's pkgdown run and a branch dispatch of the citation workflow, both green on `ubuntu-latest`, with
 duckdb as a binary in pkgdown's first-attempt log; both YAMLs parse (each run starting proves its own file); deploy

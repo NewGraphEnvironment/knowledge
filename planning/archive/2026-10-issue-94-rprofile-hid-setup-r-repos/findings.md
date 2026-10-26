@@ -88,6 +88,13 @@ So #94's premises were both wrong: not the 26.04 image, and not only duckdb's bi
 Other org repos with a root `.Rprofile` (GitHub code search, 2026-10-26): blackwater_2022_hep, wedzin_kwa_chinook
 (the latter also runs setup-r workflows locally checked out). They may resolve to source the same way.
 
+## The apt mirror is the remaining stall (2026-10-26 22:45–23:15Z)
+
+PR run 40414769800 (7578261, `ubuntu-26.04`, 26.04 cache restored) was killed at 30 min: `setup-r` 19.5 min
+(22:45:03–23:04:31) against 32 s in 40413562090 at 22:35 on the same image, with 4–5 min silences on single
+`azure.archive.ubuntu.com` files (cmake 14.1 MB, fonts-urw-base35 10.9 MB); then `setup-r-dependencies` spent its
+10 min in the system-requirements apt install. Packages were not the problem. Rerun once at 23:16Z: attempt 2 green, `setup-r` 33 s, `setup-r-dependencies` 63 s.
+
 ## Errors Encountered
 
 | Error | Resolution |
