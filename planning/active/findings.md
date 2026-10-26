@@ -131,6 +131,22 @@ Probe scripts (not committed): the session scratchpad's `walk_batch_probe.R` and
 
 `planning/active/review-plan.md`: the Plan agent's findings on the first draft and what each changed.
 
+## Phase 1: the batched walk (2026-10-26)
+
+`data-raw/walk_batch_check.R` on BULK, `fresh_default_20261017`, `pick`, 8 workers (logs
+`scripts/logs/habitat/20261026_walk_batch_check*`):
+
+| run | chinook, q 3, 16,686 starts | bull trout, q 10, 32,342 starts |
+|---|---|---|
+| host, one query per start (`-ref`) | 14.0 s, 6.71 ms per walk per worker | 29.4 s, 7.28 ms |
+| host, batch 500 | 6.9 s, 3.30 ms | 15.6 s, 3.86 ms |
+| remote link, batch 500 (`-remote`) | 36.5 s, 17.5 ms | 47.5 s, 11.7 ms |
+
+Both batched runs: every start back, identical to the reference on all 14 columns. The host's batched run shared
+the database with the Phase 0 compare reference, so its time is an upper bound; Phase 4 times the full grade alone.
+Every BULK start found its river at both sizes, so the check exercises `found` only; the live test's hop start and
+the per-start guard cover the rest of the row shape.
+
 ## Errors Encountered
 
 | Error | Resolution |

@@ -91,10 +91,10 @@ exploration found that shapes the design is in `findings.md` ("Exploration"), wi
 - [x] `tests/testthat/test-link_walks.R`: the live test also walks its starts with `batch = 1L` and `batch = 2L` and
       on two sources, expecting identical frames; a mocked test pins the batching arithmetic (every start in exactly
       one batch, none larger than `batch`) and the literal formatting (a round key, a 17-digit measure).
-- [ ] `data-raw/walk_batch_check.R`: the batched walk on the reference starts against the reference files: every
+- [x] `data-raw/walk_batch_check.R`: the batched walk on the reference starts against the reference files: every
       start matched, and `status`, `dist_m`, `dist_centre_m`, `bank_m`, `large_lfid`, `n_hops`, `max_entry_gap_m`
       identical after sorting; refuses any difference; writes `scripts/logs/habitat/<date>_walk_batch_check.txt`.
-- [ ] Per-walk time recorded from this machine (remote link) and, in Phase 4, on the host.
+- [x] Per-walk time recorded from this machine (remote link) and, in Phase 4, on the host.
 
 ## Phase 2: Walks cached
 
