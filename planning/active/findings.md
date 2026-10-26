@@ -68,6 +68,26 @@ So the runner image decides only whether a cache exists. Every run on a cold cac
 from CRAN source on either image; that is why 26.04 failed (no cache) and why 24.04 passed (cache). Why pak bypasses
 the PPM repo is not yet known. With a 30-min timeout, a cold-cache or `duckdb`-update run cannot finish on either image.
 
+## The cause: the project `.Rprofile` hid setup-r's (measured 2026-10-26 22:35–22:45Z)
+
+`r-lib/actions/setup-r` writes the repos option, RSPM first, into `~/.Rprofile` (`setup-r/src/installer.ts`,
+`setupRLibrary`, v2). R reads one user profile, and a `./.Rprofile` in the working directory wins, so knowledge's
+`.Rprofile` (the `cred.store_source` option) meant setup-r's never loaded: `repos` stayed `@CRAN@`, which pak maps to
+pkgcache's default mirror, `https://cran.rstudio.com` (round-1 reviewer's probe). Locally the same hid Al's
+`~/.Rprofile`: `rbbt.default.library_id` read UNSET from the repo root and 9 from `~`.
+
+Fix (bdb5a7f, guard 291e8af): `.Rprofile` sources `~/.Rprofile` first, unless it is this file. PR run 40413562090 on
+bdb5a7f, `Image: ubuntu-26.04`, no cache ("Cache not found … Ubuntu 26.04.1"): 134 packages `Got … (x86_64-pc-linux-gnu-
+ubuntu-26.04)` from `packagemanager.posit.co/cran/__linux__/resolute/latest`, duckdb 2.0.0 and arrow 26.0.0 among them;
+only knowledge, gq, flooded and fresh (GitHub or local) built from source. `setup-r` 32 s, `setup-r-dependencies`
+3 min 24 s, whole run 5 min, green. The run before the fix timed out at 30 min on the same image.
+
+So #94's premises were both wrong: not the 26.04 image, and not only duckdb's binary gap. Every run since at least
+2026-10-21 resolved to CRAN source; caches hid it until a cold cache (26.04) or a changed package (duckdb 2.0.0).
+
+Other org repos with a root `.Rprofile` (GitHub code search, 2026-10-26): blackwater_2022_hep, wedzin_kwa_chinook
+(the latter also runs setup-r workflows locally checked out). They may resolve to source the same way.
+
 ## Errors Encountered
 
 | Error | Resolution |

@@ -39,19 +39,19 @@ binary. So the cause was the binary gap after a release, not the 26.04 runner im
 
 - [x] Push the branch, open the PR (`/gh-pr-push`), and watch its pkgdown run on `ubuntu-latest` sparsely
       (`gh run view <id> --json status,conclusion`, never `gh run watch`)
-- [ ] Read the job log for the image (`gh run view <id> --log | grep -m1 'Image: '`): `ubuntu-latest` moves to 26.04
+- [x] Read the job log for the image (`gh run view <id> --log | grep -m1 'Image: '`): `ubuntu-latest` moves to 26.04
       over 2026-10-19 to 11-19 (actions/runner-images#14748), so a run can still land on 24.04 and then says nothing
       about 26.04; rerun until a run shows `ubuntu-26.04` (code-check round 2)
-- [ ] Confirm the image is 26.04 and `duckdb` installed as a binary (not "installing from source"),
+- [x] Confirm the image is 26.04 and `duckdb` installed as a binary (not "installing from source"),
       and record the setup durations in `findings.md`
-- [ ] Dispatch the citation workflow on the branch (`gh workflow run update-citation-cff.yaml --ref <branch>`), which
+- [x] Dispatch the citation workflow on the branch (`gh workflow run update-citation-cff.yaml --ref <branch>`), which
       runs the branch's YAML on `ubuntu-latest`; confirm green and that it pushed nothing (plan review)
-- [ ] Read the **first** attempt's log of each: the R library cache is keyed on the OS version, so only the first
+- [x] Read the **first** attempt's log of each: the R library cache is keyed on the OS version, so only the first
       26.04 run installs packages; a rerun restores the cache and shows no duckdb install (plan review)
 - [x] Write into soul#541's body that a `timeout-minutes` kill reports `cancelled`, so the convention's scan and
       `/gh-pr-merge` step 10 need to read the annotation (code-check round 3)
 - [ ] Record the probe result on soul#541 (this PR's run is its "one probe run on `ubuntu-latest`")
-- [ ] If the run fails, stalls or ends `cancelled`: read which step from `gh run view <id> --json jobs` and the job's
+- [x] If the run fails, stalls or ends `cancelled`: read which step from `gh run view <id> --json jobs` and the job's
       annotations (`--log-failed` prints nothing for a timeout kill; code-check round 3), rerun once if it is setup/mirror; if
       duckdb (or anything) is building from source on 26.04, stop, restore the pin and keep the timeouts, and say so
 - [ ] `/planning-archive`, with the measured run as the archive README's Measurement
@@ -60,7 +60,7 @@ binary. So the cause was the binary gap after a release, not the 26.04 runner im
 
 - [x] `.Rprofile` sources `~/.Rprofile` first; tested locally (repo root now sees `rbbt.default.library_id`; with a
       setup-r-like `~/.Rprofile` under a temp `HOME`, `getOption("repos")` leads with RSPM); CLAUDE.md says why
-- [ ] PR run on 26.04: packages `Got … (binary)` from the RSPM URL, green inside 30 min; else the fallback above
+- [x] PR run on 26.04: 134 packages as 26.04 binaries from the RSPM URL, green in 5 min (run 40413562090)
 - [ ] `/code-check` on the `.Rprofile` and CLAUDE.md change
 - [ ] Correct #94's and soul#541's bodies (the 24.04 run compiled duckdb in 57 min; the cause was the project
       `.Rprofile`, so it is knowledge's, not org-wide, apart from a convention line)
