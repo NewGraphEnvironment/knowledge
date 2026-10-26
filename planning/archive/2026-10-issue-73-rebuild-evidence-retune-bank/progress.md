@@ -317,3 +317,11 @@ rescoring, the stopped and relaunched 0330 with its compose change, the detached
   374 group rows; grades withheld from BT_spawn, CO_rear, ST_rear and WCT_rear, so `habitat_grade/v1` carries
   28,710,335 segment rows for 4 keys. `data/thresholds.csv` gains `evidence_md5`; every other value is unchanged.
   Stdout in `scratch/logs/20261025_0325_host.log`.
+- `data-raw/vignette_chinook.R` at `4da99b6` on `fresh_default_20261017`, exit 0: `inst/vignette-data/chinook_rearing.rds`
+  rewritten (the CH summary gained `null_heldout_curve` and `evidence_md5`; the BULK segments and water unchanged).
+  `devtools::test()`: 954 pass, 0 fail, 0 error. The article renders with every inline guard passing.
+- The figures written on m4 before the regrade, for no rule on each curve's own visits, corrected to the run's
+  (`<key>_summary.csv` `null_heldout_curve`): BT spawning 377.9 (was 378.8; the curve 19.4 behind, was 18.5), ST
+  413.9 (419.1), CO 4,021.4 (4,021.5), grayling's margin 19.2 (20.3, no rule 762.7), CH's 320.8 (321.5), and the
+  grid's overstatement 7.0, 65.3 and 2,301.4 for CH, GR and RB; the "on disk, awaits the regrade" sentences in the
+  bull trout and thresholds files now say the regrade and recompare ran. Verdicts unchanged.

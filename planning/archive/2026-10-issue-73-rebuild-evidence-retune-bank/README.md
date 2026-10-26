@@ -16,8 +16,8 @@ and the eight research files rewritten prior-first with a plain-words walk per s
 rounds) found the gate comparing the curve, scored over the visits with a size, with no rule over every modelled
 visit: scored like for like, bull trout spawning's grade is withdrawn and the margins of the width-ruled keys shrink;
 the fix put the gate's number, the evidence's identity and the pick on every record a later run reads back, with every
-reader refusing a record that does not match. The regrade and recompare that make the tables on disk agree with the
-corrected gate run on the database's host before merge (Owed). What was learned, generalised: a verdict written by a
+reader refusing a record that does not match. The regrade and recompare that make the tables agree with the corrected
+gate ran on the database's host on 2026-10-25 (Owed, done). What was learned, generalised: a verdict written by a
 run outlives a fix to the rule that made it unless the record carries the rule's own number and the reader compares
 it; a database-bound step belongs on the database's host; and a check that reads two populations summed as one is
 found only by scoring both on the same rows.
@@ -42,10 +42,10 @@ found only by scoring both on the same rows.
   4 % → MAD ≥ 0.03 at 30 % (underpowered); CH MAD ≥ 0.75 at 13 % with a 3 m³/s river within 1 km (9 % before the
   ladder); BT spawning width ≥ 2 m at 13 %, CO MAD ≥ 0.03 at 4 %, GR `default`, ST MAD ≥ 1 at 8.49 % unchanged.
 - **The curve's prior and the gate.** The prior moved steelhead's curve from 860.8 to 553.8 held-out and grayling's
-  from 786.9 to 743.6. Grades withheld: CO (4,092.0 against 4,021.5 for no rule on the curve's visits), ST (553.8
-  against 419.1), WCT (1,453.4 against 1,329.7) and, after the review, BT spawning (397.3 against 378.8; it had passed
+  from 786.9 to 743.6. Grades withheld: CO (4,092.0 against 4,021.4 for no rule on the curve's visits), ST (553.8
+  against 413.9), WCT (1,453.4 against 1,329.7) and, after the review, BT spawning (397.3 against 377.9; it had passed
   by 4.2 against the grid's 401.4). The graded keys' margins over no rule on their own visits: BT rearing 407.9, CH
-  321.5, GR 20.3 (84.4 against the grid's), RB 906.1 (3,207.6).
+  320.8, GR 19.2 (84.4 against the grid's), RB 906.1 (3,207.6).
 - **What the rules change on link's segments** (door): BT rearing 244,328 → 142,015 km (−41.9 %), BT spawning 133,382
   → 169,416 (+27.0 %), CH 99,186 → 84,294 (−15.0 %), CO −5.5 %, GR unchanged, RB −17.4 %, ST −41.2 %, WCT +18.4 %.
 - **Wrong turns kept.** The first #73 bull trout write-up (2026-10-23) rested on the defective search's pick; the
@@ -61,7 +61,10 @@ runs' stdout, the probes' logs); `planning/archive/2026-10-issue-73-rebuild-evid
 
 ## Owed
 
-Before merge, on the database's host:
+Before merge, on the database's host (done 2026-10-25; `progress.md`, "Host batch for PR #88": `0320` 191.1 min,
+`0330 SPECIES=BT` 143.3 min, `0325` and the vignette data each exit 0; the full suite 954 pass, 0 fail; the article
+renders with every inline guard; the no-rule figures written before the regrade corrected to the run's, e.g. BT
+spawning 377.9 not 378.8, ST 413.9 not 419.1):
 
 - `SCHEMA=fresh_default_20261017 Rscript scripts/0320-tune-run.R` from a frozen copy at the branch's head (scores
   cached; every curve refits and the gate now scores no rule on the curve's own visits; every grade table is
@@ -81,5 +84,5 @@ After merge:
 - `PUBLISH=TRUE` for `0299` v3, `0325` thresholds and grade, once #56's bucket policy is in
 
 Closed by: PR #88 (https://github.com/NewGraphEnvironment/knowledge/pull/88), from the branch
-`73-rebuild-the-evidence-and-retune-on-the-r`; the host-side regrade listed under Owed runs before it merges. #83 and
+`73-rebuild-the-evidence-and-retune-on-the-r`; the host-side regrade listed under Owed ran on 2026-10-25. #83 and
 #84's bodies still carry unticked boxes to reconcile with what landed here (owed after merge).

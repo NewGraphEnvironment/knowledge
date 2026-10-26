@@ -259,7 +259,7 @@ flow form from the flow start. link's `default_tuned` floor (MAD ≥ 0.043 m³/s
 - *The joint curve* (width × distance, gradient; edf 3.0, 1.0, group effect 11.1) is flat too: relative rate 0.99 to
   1.01 across widths of 0.7 to 18 m, 0.82 at 0 % rising to 1.10 at 20 % (intervals 0.23–2.8 and 0.28–4.3), 1.02 to 0.97
   across distance. It scores 397.3 held-out, 1.9 behind the best cut (403.7 before the curve took the grid's prior), and
-  behind no rule: scored on the curve's own 450 visits (those with a width), no rule is 378.8, so the curve is 18.5
+  behind no rule: scored on the curve's own 450 visits (those with a width), no rule is 377.9, so the curve is 19.4
   worse. The grid's no-rule score of 401.4 is over all 475 visits, and the 25 the curve leaves out are what made it
   look 4.2 ahead until the gate was corrected on 2026-10-25 (below). Against the curve as a surface.
 
@@ -284,15 +284,14 @@ A grade is published only where the curve predicts held-out groups better than o
 not could not rank segments either (Al, 2026-10-24). The 2026-10-24 run published this key's grades on a comparison of
 unlike populations: the curve, 397.3, is scored over the 450 modelled visits that carry a width, while the no-rule
 score it was set against, 401.4, is over all 475, and the 25 visits with no width leave only no rule's side. Scored on
-the curve's own visits, no rule is 378.8 and the curve 18.5 behind it (the branch review of 2026-10-25, which found the
+the curve's own visits, no rule is 377.9 and the curve 19.4 behind it (the branch review of 2026-10-25, which found the
 mismatch in `knw_tune_run()`; the gate now compares like with like, `null_heldout_curve`, and the same correction
-narrows grayling's margin from 84.4 to 20.3 and rainbow's from 3,207.6 to 906.1 without moving their verdicts). Bull
+narrows grayling's margin from 84.4 to 19.2 and rainbow's from 3,207.6 to 906.1 without moving their verdicts). Bull
 trout spawning therefore joins coho, steelhead and westslope cutthroat with a rule and no grade. The grade of
 2026-10-24 (reference rate 0.151, 246,336 grade-weighted km, 52 % of graded km at 0.6–0.8 and 39 % at 0.8–1, a surface
-so flat it ordered segments within a narrow band) is withdrawn. Its table and the comparison that read it are still
-the 2026-10-24 ones on disk; the regrade (`0320`, which reruns a key whose verdict moved, blanking `rate`, `grade` and
-`grade_class` with `grade_withheld = TRUE`) and the recompare (`0330 SPECIES=BT`) run on the database's host, and
-`0325` then leaves this key out of `habitat_grade/v1`.
+so flat it ordered segments within a narrow band) is withdrawn. The regrade of 2026-10-25 (`0320` on the database's host, every key, 191.1 min) blanked its `rate`, `grade` and
+`grade_class` with `grade_withheld = TRUE`, the recompare (`0330 SPECIES=BT`, 143.3 min) reports no graded km for it,
+and `0325` leaves it out of `habitat_grade/v1`.
 
 ## What each rule changes on link's segments (`scripts/0330`, `data/compare/BT_*`)
 
@@ -345,9 +344,9 @@ trout and what the thresholds table records (`0325`, 2026-10-25: `near_river_sco
 through-wetland line rule, so the stage has one structure. The tuned rule keeps the size test and raises the gradient
 limit to 13 %, so it contains `default`: 169,416 km (+27.0 %), nothing lost, 36,034 km gained, 35,500 of them stream
 between 5.49 and 13 % and 534 on the river-polygon branch. The gain is on measured or modelled widths, so it is order 2
-and above (382 km order 1, 8,783 order 2, 16,864 order 3, 10,006 order 4 and up). The graded km the comparison on disk
-reports (93,333 to 123,687, the gain sitting in the withdrawn grade's 0.8–1 class) come from the 2026-10-24 grade; with
-the grade withheld, the recompare reports none. Every group with `default` km gains, from +0.7 % (UBTN) to +70.8 % (PCEA), median +29.5 %.
+and above (382 km order 1, 8,783 order 2, 16,864 order 3, 10,006 order 4 and up). With the grade withheld, the recompare of
+2026-10-25 reports no graded km (the withdrawn grade of 2026-10-24 had read 93,333 to 123,687, the gain sitting in its
+0.8–1 class). Every group with `default` km gains, from +0.7 % (UBTN) to +70.8 % (PCEA), median +29.5 %.
 
 **Checks.** There is no FDIS check for spawning (electrofishing catch is not spawning evidence). On the bcfishobs
 records, the lift is 3.042 (2.927–3.160) for `default` and 3.025 (2.973–3.083) for the tuned rule, a difference of

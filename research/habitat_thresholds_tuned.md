@@ -185,12 +185,12 @@ each key's summary as `rule_recommended_196`, and from link's flow start as `rul
 | species × stage | segments (groups) | accessible km | graded km | grade-weighted km | reference rate | km under 0.2 | km at 0.8–1 |
 |---|---|---|---|---|---|---|---|
 | BT rearing | 8.41 M (158) | 576,908 | 571,305 | 146,894 | 0.221 | 64 % | 10 % |
-| BT spawning | 8.41 M (158) | 576,908 | withheld (corrected 2026-10-25): curve 397.3 against 378.8 for no rule on the curve's 450 visits; the 2026-10-24 grade (246,336 grade-weighted km) is withdrawn and its table awaits the regrade | | | | |
+| BT spawning | 8.41 M (158) | 576,908 | withheld (corrected 2026-10-25): curve 397.3 against 377.9 for no rule on the curve's 450 visits; the 2026-10-24 grade (246,336 grade-weighted km) is withdrawn and the 2026-10-25 regrade carries none | | | | |
 | CH rearing | 5.76 M (125) | 225,152 | 224,459 | 61,491 | 0.146 | 68 % | 21 % |
-| CO rearing | 4.92 M (100) | 147,795 | withheld: curve 4,092.0 against 4,021.5 for no rule | | | | |
+| CO rearing | 4.92 M (100) | 147,795 | withheld: curve 4,092.0 against 4,021.4 for no rule | | | | |
 | GR rearing | 4.21 M (82) | 258,576 | 146,128 | 74,376 | 0.081 | 22 % | 26 % |
 | RB rearing | 10.33 M (210) | 509,975 | 277,539 | 117,596 | 0.448 | 31 % | 14 % |
-| ST rearing | 4.14 M (79) | 155,357 | withheld: 553.8 against 419.1 | | | | |
+| ST rearing | 4.14 M (79) | 155,357 | withheld: 553.8 against 413.9 | | | | |
 | WCT rearing | 1.19 M (16) | 35,285 | withheld: 1,453.4 against 1,329.7 | | | | |
 
 Every row is #73's grade of 2026-10-24: each accessible segment walked to the river's bank and read on the flows wet
@@ -201,11 +201,11 @@ other five by about 1; every key's curve still beats the best cut except coho's,
 spawning's, and none of those four beats no rule scored on the curve's own visits, so all four are withheld. Bull trout
 spawning's verdict moved on 2026-10-25, when the branch review found the gate comparing the curve, scored over the
 visits with a size, against no rule over every modelled visit: against the grid's 401.4 its curve looked 4.2 ahead,
-against 378.8 on its own 450 visits it is 18.5 behind. The four graded keys' margins over no rule on their own visits
-are BT rearing 407.9, CH 321.5, GR 20.3 and RB 906.1 (the grid's no-rule scores overstate them by 4.9, 6.3, 64.1 and
-2,301.5). Coho's curve is behind no rule with 62 groups having both outcomes, so the cause there is not power alone
-(`coho_rearing_tuned.md`, "No grade"). BT spawning's grade table and comparison on disk are the 2026-10-24 run's; the
-regrade and recompare run on the database's host.
+against 377.9 on its own 450 visits it is 19.4 behind. The four graded keys' margins over no rule on their own visits
+are BT rearing 407.9, CH 320.8, GR 19.2 and RB 906.1 (the grid's no-rule scores overstate them by 4.9, 7.0, 65.3 and
+2,301.4). Coho's curve is behind no rule with 62 groups having both outcomes, so the cause there is not power alone
+(`coho_rearing_tuned.md`, "No grade"). BT spawning was regraded and recompared on the database's host on 2026-10-25 under the corrected
+gate.
 
 A width rule grades only measured streams: fwapg models width where `stream_order > 1`, so GR and RB leave every
 unmeasured first-order stream `NA` (RB: 6.26 M of 10.33 M segments; GR: 2.62 M of 4.21 M), as BT spawning's table
@@ -238,7 +238,7 @@ cannot tell the structures apart for any key, so the structure is link's call.
 | species × stage | accessible km | `default` km | tuned km | change | lost | gained | graded km, `default` → tuned |
 |---|---|---|---|---|---|---|---|
 | BT rearing | 576,908 | 244,328 | 142,015 | −41.9 % | 106,132 | 3,819 | 101,583 → 74,218 |
-| BT spawning | 576,908 | 133,382 | 169,416 | +27.0 % | 0 | 36,034 | no grade (the table on disk reads the withdrawn grade: 93,333 → 123,687) |
+| BT spawning | 576,908 | 133,382 | 169,416 | +27.0 % | 0 | 36,034 | no grade (the withdrawn grade of 2026-10-24 read 93,333 → 123,687) |
 | CH rearing | 225,152 | 99,186 | 84,294 | −15.0 % | 30,477 | 15,585 | 48,134 → 53,957 |
 | CO rearing | 147,795 | 79,829 | 75,430 | −5.5 % | 9,945 | 5,546 | no grade |
 | GR rearing | 258,576 | 77,740 | 77,740 | 0 | 0 | 0 | 45,564 → 45,564 |

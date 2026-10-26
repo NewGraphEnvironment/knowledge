@@ -110,7 +110,7 @@ data prefer a flow floor at the 1 SE bar and cannot tell any of these rules from
 
 The grade turns the rule into a ranking: the curve's predicted catch rate on each segment, at its own distance to a
 river of 10 m³/s or more. A ranking is worth publishing only if the curve predicts groups it was not fitted to better
-than one constant rate does. Steelhead's curve does not: held-out deviance 553.8 against 419.1 for no rule on the
+than one constant rate does. Steelhead's curve does not: held-out deviance 553.8 against 413.9 for no rule on the
 curve's own 1,374 visits (420.8 on the grid's 1,375), 407.8 for
 `default` and 357.5 for the grid's best, so it ranks unseen segments worse than not ranking them. The gate (Al,
 2026-10-24) therefore withholds the key's grades; the rule itself still comes from the grid of cut rules, which the
