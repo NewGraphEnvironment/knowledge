@@ -371,6 +371,13 @@ not instead.
 time, prior first. Al found `research/habitat_thresholds_tuned.md`'s Method and tie-break "hard to digest"
 (2026-10-18), which is what #62, #63 and #64 answer.
 
+**Teach the principle beside each result.** Before a result, one or two sentences in words a reader without the
+statistics would follow on the principle it rests on: what the model's scale means (a cloglog step multiplies the
+hazard by e), why a term is there (data set and era are sampling differences a rule must not be credited for), what a
+prior, penalty or gate is doing; then the numbers. Al (2026-10-23, choosing #73's prior after a plain-language walk
+through separation, the scale and the prior): "our write up should teach the principles at the same time as it gives
+the results".
+
 ### A pointer to another issue goes in that issue's body, not a comment
 
 Write a dependency, a "blocked by", a "folded into" or an owed step into the target issue's body, as a task or a
