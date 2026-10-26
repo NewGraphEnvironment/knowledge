@@ -309,3 +309,7 @@ rescoring, the stopped and relaunched 0330 with its compose change, the detached
   4,021.4, 413.9 and 1,329.7 on their curves' visits). Grade tables checked: BT_spawn carries no rate, grade or class
   and `grade_withheld = TRUE`; BT_rear is graded; both carry the two new columns. Stdout in
   `scratch/logs/20261025_0320_host.log`; script log `scripts/logs/habitat/20261025_tune_run.txt`.
+- `0330 SPECIES=BT` from a frozen copy at `9492ea2` (md5 05f7434…), link's configs pinned at `102762d`, 6 workers,
+  23:21 UTC to 01:45 UTC: 143.3 min, exit 0, no `FAILED`. BT_rear unchanged (`default` 244,328 km, tuned 142,015 under
+  the door, −41.9 %); BT_spawn gains 36,034 km (+27.0 %) with graded km NA now its grades are withheld. The other six
+  keys composed. Stdout in `scratch/logs/20261025_0330_BT_host.log`; script log `scripts/logs/habitat/20261025_compare.txt`.
