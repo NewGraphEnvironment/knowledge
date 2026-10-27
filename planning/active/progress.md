@@ -18,3 +18,9 @@ cd /Users/airvine/Projects/repo/knowledge && git fetch -q origin && git checkout
 ```
 
 The approval covered the baseline only: the run-to-PR mandate starts when Al says to resume.
+
+## Session 2026-10-27 (resume)
+
+- Resumed: branch synced with origin and main (nothing had moved); #98 still open, #92 open
+- Al confirmed gate decision 1 (evidence only; the retune is #92's) and 2 (the recommended limit rule)
+- Next: Phase 1, the probe

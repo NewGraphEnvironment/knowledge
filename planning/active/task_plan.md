@@ -10,8 +10,8 @@ rises with distance: 8 % within 25 m, 18 % at 25–50, 28 % at 50–100, 34 % at
 predicts a wrong stream, but two-thirds of the 100–200 m snaps agree with their code: the cut throws away many good
 placements, and a near snap to the wrong stream is rejected rather than moved to the right one.
 
-**Parked 2026-10-27**: the baseline below was approved as a baseline only. The run-to-PR mandate starts at the resume
-instruction (`progress.md`, Resume), and the gate decisions stay open until then.
+**Resumed 2026-10-27**: Al confirmed gate decisions 1 (evidence only) and 2 (the recommended rule) at the resume; the
+run-to-PR mandate runs from here.
 
 ## Context (what the exploration and the plan review settled)
 
@@ -58,7 +58,7 @@ instruction (`progress.md`, Resume), and the gate decisions stay open until then
   `0330`'s `tuned_as`) and coerced with `as.numeric()` at use; the script default, `knw_fdis_place()`'s default and the
   register value must agree, and the test holds the three.
 
-## Decided at the gate (Al to confirm or change at the resume)
+## Decided at the gate (1 and 2 confirmed by Al at the resume, 2026-10-27)
 
 1. **Scope of the run on this branch: the evidence, not the retune.** `0230` and `0310` are rerun and the limits are
    measured by scoring two keys on the main fold seed into an untracked directory; `0320`/`0325`/`0330` and the two
