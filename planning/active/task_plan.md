@@ -136,7 +136,7 @@ run-to-PR mandate runs from here.
 
 ## Phase 3: `0310` on a named schema with cached walks
 
-- [ ] `scripts/0310`: `schema <- Sys.getenv("SCHEMA", "fresh_default")` as `0320`/`0330`; `knw_build_record(conn,
+- [x] `scripts/0310`: `schema <- Sys.getenv("SCHEMA", "fresh_default")` as `0320`/`0330`; `knw_build_record(conn,
       schema, run_uid = st$run_uid)` replaces the hand-rolled `log_recompute` check and its line is ledgered
       (`build_record`); `q$ledger`'s `info` rows bound beside its drops (today only `kind == "drop"` is, `0310:111`);
       `knw_link_walks(..., cache = "knw.walk_cache")` with the cache's hit and miss counts ledgered; header,
