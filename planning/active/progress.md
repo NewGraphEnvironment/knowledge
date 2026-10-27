@@ -35,3 +35,16 @@ the run-to-PR mandate starts at the resume instruction.
   no space) from the host's checkout, which holds #94's branch and is left alone.
 - Phase 0: `data-raw/walk_batch_check.R` and `data-raw/compare_parallel_check.R` written; references are rds, because
   `write.csv` keeps 15 significant digits and the checks demand identity.
+
+## Session 2026-10-27
+
+- Phases 1-3 landed and reviewed (rounds 1-3, `review-round*.md`); Phase 4's first chain ran two cold `0320` at once
+  (findings), so the cache was emptied and the chain rerun alone (`phase4c.sh`, then `phase4d.sh` after two lazy-promise
+  fixes in the cache check, `9e56f18` and `147e961`).
+- Phase 4 on the host, 02:49Z-06:47Z: cold `0320` 53.4 min (191 before); cache check passed; `0330` `GPKG=FALSE` 162.9
+  min for eight keys on 6 workers; GeoPackages 14.0 min; warm `0320` (BT spawning alone) 4.1 min, 0 walks.
+- The full compare's tables match the tracked ones within 2.6e-13 relative but for `config_sha` spelled short: `0330`
+  now resolves CONFIG_SHA to the full commit (`38bd09f`). Regenerated tables not committed; the host worktree restored.
+- Every key's grades identical per segment to 2026-10-25's (47,369,409 segments).
+- Decision 5: #101 (the `default`-flags cache, measure first). Phase 5's research note, index row and CLAUDE.md paragraph.
+- Next: merge origin/main (#94, a CLAUDE.md sync), Phase 6.

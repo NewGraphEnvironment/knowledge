@@ -185,6 +185,61 @@ The rerun (`/tmp/knw87_phase4c.sh` on the host, from 02:49:07Z) drops `knw.walk_
 table first, so its `0320` is cold, and runs alone (one `exec/R` process, checked at launch). The dual run's logs
 are kept on the host under `/tmp/knw87_p4_dual/`, not committed.
 
+## Phase 4: the retune measured on the host (2026-10-27)
+
+The clean chain (`phase4c.sh`, then `phase4d.sh` from the cache check after the check's second fix), alone on the
+host, `SCHEMA=fresh_default_20261017`, `CONFIG_SHA=102762da`. Logs: `scripts/logs/habitat/20261026_tune_run.txt`
+(cold), `20261026_tune_run-warm.txt`, `20261026_compare.txt` (`GPKG=FALSE`), `20261026_compare-gpkg.txt`,
+`20261026_walk_batch_check-cache.txt` (dated by the host's local date; the runs were 02:49Z to 06:47Z on 2026-10-27).
+
+| step | before (#73, 2026-10-24/25) | after (#87) |
+|---|---|---|
+| `0320`, every key regraded, walks cold | 190.9 min (191.1 on 2026-10-25) | 53.4 min |
+| `0320`, one key regraded (BT spawning), walks cached | 48.2 min for its grading alone | 4.1 min for the whole run; its grading 3.1 min, 0 walks |
+| `0330`, BT rearing | 143.3 min (with BT spawning alongside, one connection each) | 33.4 min (groups on 6 workers) |
+| `0330`, every key | 160.1 min for 7 keys, one key per worker, GeoPackages inside | 162.9 min for 8 keys in turn, groups on 6 workers, plus 14.0 min of GeoPackages |
+
+Per key, cold `0320` (walk minutes, then total; before → after): BT rearing 46.0 → 26.1, 47.6 → 27.7; BT spawning
+46.5 → 1.2, 48.2 → 2.8 (2,681,583 hits, 0 misses); RB rearing 39.0 → 4.2, 40.8 → 6.0; GR 14.9 → 2.5, 16.0 → 3.6; CH
+11.9 → 5.5, 13.1 → 6.7; ST 10.1 → 0.7, 11.2 → 1.8; CO 8.7 → 1.7, 9.8 → 2.8; WCT 2.4 → 0.3, 3.1 → 1.0. Every later
+key walking to 10 m³/s reads most of its walks from the cache (CO 373,154 of 615,302 starts, the fewest; ST 703,705 of
+720,768), because the species share segments; CH, the one key walking to 3 m³/s, walked all 856,244. BT rearing's walks, all cold, cost 4.67 ms per walk per worker
+against 8.2 ms one query per start: the cold walk is still #85's to fix.
+
+Per key, `0330` with `GPKG=FALSE` (2026-10-24's time, seven keys sharing six workers, then today's): RB 56.0 → 12.6;
+BT rearing 160.0 → 33.4; BT spawning 130.6 → 24.9; CH 150.9 → 37.1; CO 94.6 → 26.3; GR 49.6 → 9.3; ST 62.2 → 14.9;
+WCT (not in that run) 4.5. The 2026-10-24 times include each key's GeoPackage (4 to 17 min) and contention with the
+other keys, so the per-key ratio overstates the change; BT rearing with one other key beside it (2026-10-25) was
+143.3 min.
+
+What the full recompare shows: **its wall time did not move** (160.1 min for seven keys before, 176.9 for eight now).
+Before, seven keys ran at once, one database core each (578 % CPU); now one key at a time uses six. The database's
+cores were the bound both times. What changed is the time to see one key: a recompare of the key being tuned is
+4 to 37 min instead of 50 to 160. Classify, overlay and connect is 115.2 of the 162.9 min (BT rearing 27.4 of 33.4).
+
+Decision 5 (the plan: a follow-up issue if `GPKG=FALSE` exceeds 60 min on 6 workers): it took 162.9 min, so the
+`default`-flags cache gets an issue. `default` is one of three rules for most keys (two for BT spawning and GR, four
+for CH); if every rule cost the same, it would be about 41 of the 115 classify minutes, an estimate, not a
+measurement.
+
+The tables: the full `0330`'s 26 tables against the tracked ones at the branch head have the same rows and columns;
+every numeric column agrees within 2.6e-13 relative (the km sums' order, as in Phase 3). Against `b8d3fbd`, the BT
+tables also differ by `bf41ebd` (BT recompared on the 2026-10-25 regrade), which the head already carries. One
+column differs in every row: `config_sha` reads `102762da`, where the tracked tables read the full 40-character
+sha, because `0330` recorded CONFIG_SHA as spelled (on main too) and the 2026-10-24 run was given the full one. The
+composed-table check compares the strings, so a short spelling would refuse the tracked tables; `0330` now resolves
+CONFIG_SHA (or `origin/main`) to the full commit. The regenerated tables were not committed (the tracked ones are
+the same run's numbers).
+
+The grades, segment by segment: every key's new grade table (BT spawning's from the warm rerun) against the 2026-10-25
+one in the host's main checkout, read-only, joined on segment and group: the same 47,369,409 segments in all, and on
+every one the same walk status, grade class, target-in-group and size, a distance difference of 0, and the same
+grade (or the same withheld grade, for the four keys whose curve lost to no rule). The batched, cached walk changed no
+result. Script: the session scratchpad's `cmp_grades.R` (duckdb over the two CSVs), not committed.
+
+The walk cache after the chain: 4,459,402 rows, 3,606,831 starts (one source, `pick`; sizes 3 and 10 m³/s),
+1,595 MB with its index.
+
 ## Errors Encountered
 
 | Error | Resolution |
@@ -192,3 +247,4 @@ are kept on the host under `/tmp/knw87_p4_dual/`, not committed.
 | `git pull` on the host worktree refused: untracked logs would be overwritten | the logs had been copied here and committed; checked their md5s equal and removed the host's copies before each pull |
 | Phase 4's first `0320` kept running after its chain's shell was killed, so the relaunch ran a second one beside it | rerun from an emptied cache; check leftovers by the script name (`grep 0320` over `ps`), since R runs as `exec/R`, not `Rscript` |
 | `bind message supplies 1 parameters, but prepared statement "" requires 0` in the cache check | `.knw_load_md5()` forces its argument before preparing (`9e56f18`) |
+| `bind message supplies 2 parameters, but prepared statement "" requires 1` in the cache check, after the first fix | the same lazy promise one level up: the md5 call sat in the sample query's `params`; the key's md5s are taken first (`147e961`), and a parse of all 26 parameterised DBI calls found no other |

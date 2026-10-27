@@ -143,17 +143,17 @@ exploration found that shapes the design is in `findings.md` ("Exploration"), wi
 
 ## Phase 4: Measure the retune end to end on the host, and decide item 5
 
-- [ ] On the database's host, `SCHEMA=fresh_default_20261017`, `CONFIG_SHA=102762da`: `0320` (every key regrades
+- [x] On the database's host, `SCHEMA=fresh_default_20261017`, `CONFIG_SHA=102762da`: `0320` (every key regrades
       because `walk_md5` is new; the cache cold, then BT spawning warm from BT rearing: its log must say 0 misses);
       then `0330` for every key with `WORKERS=6`, `GPKG=FALSE`, timed per key; then `0330` again with the GeoPackages
       on, their stage timed; then BT spawning's grade table deleted and `0320` rerun, the warm regrade's time being
       the iteration cost. Logs under `scripts/logs/habitat/`.
-- [ ] The full `0330`'s tables against the tracked ones of `b8d3fbd`: every difference explained by the 2026-10-25
+- [x] The full `0330`'s tables against the tracked ones of `b8d3fbd`: every difference explained by the 2026-10-25
       regrade (reported in `findings.md`, not refused).
-- [ ] Before/after table (the #73 numbers against these) in `findings.md`, the issue body and `scripts/README.md`'s
+- [x] Before/after table (the #73 numbers against these) in `findings.md`, the issue body and `scripts/README.md`'s
       run-order notes for `0320` and `0330`.
-- [ ] Decision 5 from the measurement, recorded in the issue body: a follow-up issue for the `default`-flags cache, or
-      "not needed, measured".
+- [x] Decision 5 from the measurement, recorded in the issue body: a follow-up issue for the `default`-flags cache, or
+      "not needed, measured". `GPKG=FALSE` took 162.9 min on 6 workers: #101.
 
 ## Phase 5: Box portability
 
@@ -161,11 +161,11 @@ exploration found that shapes the design is in `findings.md` ("Exploration"), wi
       and fresh's version, as a named list and a one-line string; `0320` and `0330` compare the schema's `run_uid`
       with the evidence ledger's at connect, before any work, and refuse a mismatch, so the same command runs on any
       machine whose database holds the build and stops on one that does not.
-- [ ] `research/database_builds.md`: what a run reads from the database (the link schema and its run, wet's flow load
+- [x] `research/database_builds.md`: what a run reads from the database (the link schema and its run, wet's flow load
       and its comment, the FWA tables, the walk cache), how to load a build onto a second machine's database (link's
       schema dump, wet's load with its comment), and what that costs against what the database serves; the measured
       round-trip and batched-walk numbers, so the choice of machine is a number, not a rule.
-- [ ] CLAUDE.md "Database access": the host paragraph revised with the batched numbers (what still must run on the
+- [x] CLAUDE.md "Database access": the host paragraph revised with the batched numbers (what still must run on the
       host, what no longer must) and the #84 run rule.
 
 ## Phase 6: Wrap
