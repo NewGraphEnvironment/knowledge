@@ -103,4 +103,7 @@ test_that("the walk cache misses, then reads back what was walked, and misses un
   DBI::dbExecute(conn, sprintf("UPDATE %s SET walk_md5 = 'other' WHERE load_md5 <> 'other'", tbl))
   expect_message(walk_cached(), "0 of 3 start-and-source pairs read")
   expect_error(knw_link_walks(pg, starts, cache = "knw walk"), "schema.table")
+  # the load's md5 taken from a query passed straight in, as data-raw/walk_batch_check.R passes it
+  load <- knw_discharge_load(conn)
+  expect_identical(.knw_load_md5(conn, knw_discharge_load(conn)), .knw_load_md5(conn, load))
 })

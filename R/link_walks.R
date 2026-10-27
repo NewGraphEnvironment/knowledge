@@ -256,8 +256,13 @@ knw_link_walks <- function(connector, starts, q_grid = c(1, 3, 5, 10, 20, 30, 50
   list(load = load, load_md5 = load_md5, walk_md5 = knw_walk_md5())
 }
 
-# the flow load's md5, taken by Postgres, so the key is the same from any R
-.knw_load_md5 <- function(conn, load) DBI::dbGetQuery(conn, "SELECT md5($1) AS m", params = list(load))$m
+# the flow load's md5, taken by Postgres, so the key is the same from any R. `load` is forced first: passed as a
+# query on the same connection (`knw_discharge_load(conn)`), a promise would run that query after this one is
+# prepared, which cancels it ("bind message supplies 1 parameters")
+.knw_load_md5 <- function(conn, load) {
+  force(load)
+  DBI::dbGetQuery(conn, "SELECT md5($1) AS m", params = list(load))$m
+}
 
 #' The flow load the database serves, by its table comment
 #'
