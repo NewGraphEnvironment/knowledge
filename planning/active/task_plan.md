@@ -51,7 +51,7 @@ checked against the code as it stands today (main `80ea4c1`).
       wet's `pick` (PCIC VIC-GL routed by Raven, carried onto Atlas streams by the crosswalk in New Graph's fwapg fork;
       wet's balance elsewhere); bcfishobs only for the outside check; the gradient the tuning read (`fwa_gradient`,
       the Atlas line's) versus link's segment gradient.
-- [ ] Citations: check whether the group library holds PCIC's VIC-GL / Raven routing and the fwapg fork; add any that
+- [x] (moved to Owed: the Zotero write is blocked) Citations: check whether the group library holds PCIC's VIC-GL / Raven routing and the fwapg fork; add any that
       are missing through the Web API (or let wet's citation carry them if wet's docs cite them); rerun
       `data-raw/vignette_bib.R` (Zotero running).
 - [x] `research/habitat_thresholds_tuned.md` Evidence and Method: the same three corrections.
@@ -105,19 +105,25 @@ checked against the code as it stands today (main `80ea4c1`).
       overlay, connectivity on a few BULK segments, from `bulk_segments.rds` if it carries enough); the register table
       with untested/inherited rows first. Every number computed inline, principle before each result (CLAUDE.md).
 - [x] `^vignettes/_` in `.Rbuildignore`.
-- [ ] Write the publish step into #92's body (the retune that redraws it): rerun `vignette_method.R`, rename to
+- [x] Write the publish step into #92's body (the retune that redraws it): rerun `vignette_method.R`, rename to
       `vignettes/tuning_method.Rmd`, then the research Method replacement.
 
 ## Owed at the end (reported, done after merge)
+
+- [ ] Cite PCIC's VIC-GL (Schnorbus 2018), Raven (Craig et al. 2020) and the fwapg fork in the chinook article:
+      `planning/archive/<this archive>/zotero_create_89.py` creates the three items (blocked 2026-10-27: the Zotero key
+      could not be read from its credential store); then cite them in "What records were used?", rerun
+      `data-raw/vignette_bib.R` (Zotero running) and check the fork item's title does not start "fwapg"
+      (`vignette_bib.R`'s `key_for("^(smnorris/)?fwapg")`). Written into #89's body.
 
 - [ ] Publish after the #91/#92 retune: rerender, drop the `_` prefix, replace
       `research/habitat_thresholds_tuned.md`'s Method with a link (the parked plan's Phase 5).
 
 ## Validation
 
-- [ ] Tests pass
-- [ ] `/code-check` clean (once over the branch with `/code-check branch`)
-- [ ] PWF checkboxes match landed work
+- [x] Tests pass
+- [x] `/code-check` clean (once over the branch with `/code-check branch`)
+- [x] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion
 
 How each change is proved: chinook article text diff (Phase 1); register test red on a planted mismatch in each kind

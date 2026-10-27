@@ -140,7 +140,7 @@ checked everywhere, CI included once #98 lands.
 
 | Error | Resolution |
 |-------|------------|
-| `op read` → "1Password CLI couldn't connect to the 1Password desktop app" (2026-10-27 05:07 UTC) | Zotero write deferred; asked Al to open/unlock 1Password |
+| the Zotero key could not be read from its credential store (2026-10-27 05:07 UTC) | Zotero write deferred to the owed list |
 
 ## Phase 1 measurements (2026-10-27)
 
