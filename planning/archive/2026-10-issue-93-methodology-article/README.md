@@ -56,4 +56,4 @@ visit dropped later for its effort; a `summarise()` call read summed flags (stag
 - Publish after the #91/#92 retune: rerender, drop the `_` prefix, replace
       `research/habitat_thresholds_tuned.md`'s Method with a link (the parked plan's Phase 5). Written into #92's body.
 
-Closed by: PR (to follow) on branch `93-a-stepwise-methodology-article-the-pipel`
+Closed by: PR #100 (branch `93-a-stepwise-methodology-article-the-pipel`)
