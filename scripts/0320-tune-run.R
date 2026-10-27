@@ -75,6 +75,7 @@ workers <- as.integer(Sys.getenv("WORKERS", max(1L, min(14L, parallel::detectCor
 species <- strsplit(Sys.getenv("SPECIES", paste(knw_species(), collapse = ",")), ",")[[1]]
 schema <- Sys.getenv("SCHEMA", "fresh_default")  # the run's persist schema, by its current name (renamed after the run, #73)
 dev <- Sys.getenv("DEV", "") %in% c("1", "TRUE", "true")
+se_strict <- 1.96   # the stricter reading of the region, in SE, beside the one-SE pick (#79)
 dir_out <- if (dev) "data/tune/dev" else "data/tune"
 # one log per pass: a pass over a subset of species (SPECIES=) names them, so passes do not overwrite each other
 path_log <- file.path("scripts/logs/habitat", paste0(format(Sys.Date(), "%Y%m%d"), "_tune_run",
@@ -160,7 +161,7 @@ for (f in list.files("data/tune", "_tune\\.csv$", full.names = TRUE)) {
   }
 }
 say("Fit: group intercepts absorbed (#83); normal prior SD %s on the data_set and era coefficients, cloglog scale (#84).",
-    format(formals(knw_tune_score)$prior_sd))
+    format(formals(knw_tune_run)$prior_sd))   # knw_tune_run's default is what runs: it is not passed below
 say("Smoke run first%s: previous picks on file for %s.", if (dev) " (DEV=1: the main seed only, no grades, outputs under data/tune/dev)" else "",
     paste(names(previous), collapse = ", "))
 t0 <- Sys.time()
@@ -220,9 +221,9 @@ for (k in names(out)) {
     rep_of <- function(se, start) tryCatch(knw_tune_repick(rules, se_mult = se, start = start)$rule, error = function(e) NA_character_)
     row <- row |> mutate(
       rule_recommended = r$pick$rule, rule_pick = rules$rule[rules$pick], rule_best = best$rule,
-      rule_recommended_196 = rep_of(1.96, "default"),
+      rule_recommended_196 = rep_of(se_strict, "default"),
       rule_recommended_flow = if (is.null(r$pick_flow)) NA_character_ else r$pick_flow$rule,
-      rule_recommended_flow_196 = rep_of(1.96, "flow"),
+      rule_recommended_flow_196 = rep_of(se_strict, "flow"),
       rule_link_tuned = if (nrow(ltn)) ltn$rule else NA_character_,
       link_tuned_ddev = if (nrow(ltn)) ltn$ddev_best else NA_real_, link_tuned_se = if (nrow(ltn)) ltn$se_diff else NA_real_,
       link_tuned_in_region = if (nrow(ltn)) ltn$in_region else NA,
@@ -255,8 +256,8 @@ for (k in names(out)) {
       say("%s: grades withheld: the curve's held-out %.1f is no better than no rule's %.1f on the curve's own visits.", k,
           r$curve$heldout, r$null_heldout_curve)
     }
-    say("%s: from the flow start %s (1.96 SE: %s); from the width start at 1.96 SE %s; link's default_tuned rule %s %s.",
-        k, row$rule_recommended_flow, row$rule_recommended_flow_196, row$rule_recommended_196,
+    say("%s: from the flow start %s (%s SE: %s); from the width start at %s SE %s; link's default_tuned rule %s %s.",
+        k, row$rule_recommended_flow, se_strict, row$rule_recommended_flow_196, se_strict, row$rule_recommended_196,
         row$rule_link_tuned, if (nrow(ltn)) sprintf("%s the region (+%.1f, SE %.1f)", if (ltn$in_region) "in" else "outside", ltn$ddev_best, ltn$se_diff) else "(none)")
     block(paste(k, "region"), rules |> filter(in_region) |> arrange(ddev_best) |>
             select(rule, departures, ddev_best, se_diff, n_wsg_varies, n_in, n_detect_in, raw_rate_in, raw_rate_out, any_of("boot_region_share")))

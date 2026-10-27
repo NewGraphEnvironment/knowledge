@@ -52,7 +52,7 @@ suppressMessages({
 cache  <- "data/fdis"
 build  <- file.path(cache, "build")
 snap_tol_m  <- 500   # fwa_indexpoint search radius
-snap_flag_m <- 100   # farther snaps are flagged, not dropped
+snap_flag_m <- 100   # farther snaps are flagged here; knw_fdis_quality() drops them (#89)
 # ---- no-data encodings: ONE table (measured field by field in research/fdis_export.md) ----
 # Every "is this a real value" decision reads from here, so a sibling sentinel is added once.
 sentinel_min     <- 9999                # counts, fishing time, fished length/width use 9999, 9999.9, 99999

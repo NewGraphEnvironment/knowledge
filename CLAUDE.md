@@ -9,8 +9,8 @@ repos consume snapshots from here instead of carrying the pipeline.
 ## Repository Context
 
 **Repository:** NewGraphEnvironment/knowledge (#56 prepared it to go public, but `gh repo view` still read
-PRIVATE on 2026-10-19, and the pkgdown site, <https://newgraphenvironment.github.io/knowledge/>, answered 404
-although `gh-pages` deploys; check both before citing the site's URL as live)
+PRIVATE on 2026-10-19; the pkgdown site, <https://newgraphenvironment.github.io/knowledge/>, is live (answered 200 on
+2026-10-27) though not advertised)
 **Primary Language:** R, with Python (`0153`, `0270`) and workflow JS (`wf_*.js`)
 **Origin:** seeded in September 2026 with history from an earlier fish-passage reporting template.
 Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` refer to that repo.
@@ -32,6 +32,15 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   (`IN_PKGDOWN`), on Esri's World Topographic Map. Check a cited
   claim against the PDF's text: cred's `crd_aud_verify_all()` cuts each claim at the Rmd's line breaks and matches
   unrelated passages (#79).
+- `vignettes/habitat_thresholds.Rmd` — the methodology article (#93), "Choosing habitat thresholds from where fish were
+  caught". It reads `inst/vignette-data/method.rds`, which `data-raw/vignette_method.R` writes from
+  `inst/method/pipeline.csv` (the steps) and `inst/method/settings.csv` (every number that shapes a result, with where
+  its value lives); the script refuses to run with its code or registers uncommitted. Rerun it after any `0230`,
+  `0310`, `0320` or `0330` rerun. `tests/testthat/test-settings-register.R` fails when a register value and the code
+  disagree: change both together, and add a row for any new number that shapes a result (the test cannot see one with
+  no row). Its references come from `data-raw/vignette_bib.R` with the chinook article's. A draft article is named
+  `vignettes/_<name>.Rmd`: pkgdown skips it, `.Rbuildignore` keeps it out of the tarball, and pkgdown.yaml fails if
+  one reaches `docs/articles/`.
 - `scripts/` — the run order (`scripts/README.md`), calling the package (`pkgload::load_all()` from
   the root) and `cred`. Legacy literals in scripts are fixed forward as they are touched.
 - `data/<wsg>/` — per-group snapshots (csv/md) and small spatial deliverables (gpkg/kml). Tracked.
@@ -3433,6 +3442,7 @@ EOF
 - `usethis::use_directory("dev")` — reproducible setup script
 - `usethis::use_directory("data-raw")` — data generation scripts
 - Hex sticker: copy soul's `templates/make_hexsticker.R` to `data-raw/`
+- CI: copy soul's `templates/R-CMD-check.yaml` to `.github/workflows/` (one job, `ubuntu-latest`, `timeout-minutes: 45`)
 - Set GitHub Pages to serve from `gh-pages` branch
 
 ### dev/dev.R

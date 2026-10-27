@@ -7,7 +7,7 @@
 vd <- function(f) system.file("vignette-data", f, package = "knowledge")
 
 test_that("the article's data ships with the package", {
-  for (f in c("chinook_rearing.rds", "bulk_segments.rds", "bulk_water.rds")) {
+  for (f in c("chinook_rearing.rds", "bulk_segments.rds", "bulk_water.rds", "method.rds")) {
     expect_true(nzchar(vd(f)), info = f)
   }
 })
@@ -91,4 +91,36 @@ test_that("the wetland figure, the run's versions and each map segment's water a
   seg <- readRDS(vd("bulk_segments.rds"))
   expect_true(all(seg$water %in% c("stream", "river", "wetland", "lake")))
   expect_identical(seg$water == "stream", !seg$in_waterbody)
+})
+
+# the methodology article (#93) reads data-raw/vignette_method.R's bundle
+test_that("every tracked source of the methodology article is unchanged since its bundle was saved", {
+  skip_if_not(has_src, "no source-tree data/ (installed package)")
+  x <- readRDS(vd("method.rds"))
+  expect_gt(length(x$meta$md5), 0)
+  for (f in names(x$meta$md5)) {
+    p <- file.path(root, f)
+    expect_true(file.exists(p), info = f)
+    expect_identical(unname(tools::md5sum(p)), unname(x$meta$md5[[f]]),
+                     info = paste(f, "changed: rerun Rscript data-raw/vignette_method.R"))
+  }
+})
+
+test_that("every ignored source of the methodology article, where present, is unchanged", {
+  skip_if_not(has_src, "no source-tree data/ (installed package)")
+  x <- readRDS(vd("method.rds"))
+  here <- names(x$meta$md5_local)[file.exists(file.path(root, names(x$meta$md5_local)))]
+  skip_if(length(here) == 0, "the ignored FDIS build is not on this machine")
+  for (f in here) {
+    expect_identical(unname(tools::md5sum(file.path(root, f))), unname(x$meta$md5_local[[f]]),
+                     info = paste(f, "changed: rerun Rscript data-raw/vignette_method.R"))
+  }
+})
+
+test_that("the methodology bundle's funnel adds up and every register row was resolved", {
+  x <- readRDS(vd("method.rds"))
+  f <- x$funnel
+  expect_true(all(diff(f$n) <= 0))
+  expect_identical(f$n[1], 51587)
+  expect_setequal(unique(x$resolved$key), x$settings$key)
 })

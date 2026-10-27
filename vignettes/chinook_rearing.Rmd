@@ -70,9 +70,11 @@ words <- function(r) {
 stopifnot(all(region$size_var == "mad"), all(!is.na(region$exc_q)), dflt$ddev_best > dflt$se_diff,
           all(region$departures == 3))
 
-# the stricter bar: the same choice from rules within 1.96 standard errors
-tune$in_196 <- tune$converged %in% TRUE & tune$ddev_best <= 1.96 * tune$se_diff
-ch196 <- knw_tune_repick(tune, se_mult = 1.96)
+# the stricter bar: the same choice from rules within se_strict standard errors (inst/method/settings.csv)
+se_strict <- 1.96  # the register's se_strict
+tune$in_196 <- tune$converged %in% TRUE & tune$ddev_best <= se_strict * tune$se_diff
+ch196 <- knw_tune_repick(tune, se_mult = se_strict)
+lab_strict <- paste("only at", se_strict, "SE")
 # at 1.96 the flow floor rises, the slope goes back to link's, the near-a-river allowance stays as it was, and link's
 # rule stays out
 stopifnot(ch196$size_var == "mad", ch196$size_min > rec$size_min, ch196$grad_max == dflt$grad_max, !is.na(ch196$exc_q),
@@ -123,9 +125,17 @@ conditions (last section).
 
 The province's stream atlas divides British Columbia into **watershed groups**, large basins such as the Bulkley.
 The records are the Fisheries Data Information System's electrofishing sites [@provinceofbritishcolumbia2022FisheriesData]: where crews fished, and
-whether they caught chinook. Each site was matched to the records it produced in bcfishobs [@norris2024smnorrisbcfishobs] and placed on link's
-streams, built on the BC Freshwater Atlas through fwapg [@norris2024smnorrisfwapg], with flows from wet [@irvine2026wetStream]
-and the rules run by fresh [@irvine2026freshFreshwater]. Sites
+whether they caught chinook. Each site's mapped point was snapped to the nearest stream of the BC Freshwater Atlas,
+loaded by fwapg [@norris2024smnorrisfwapg], and kept only when that stream lay within 100 m and, where FDIS recorded
+the site's 1:50k tributary code and the Atlas's 1:20k-1:50k crosswalk knows it, on a stream in it; the site then took
+link's segment at that point. Each segment's flow is wet's default
+[@irvine2026wetStream]: PCIC's modelled flow, VIC-GL runoff [@schnorbus2018VICGlacierVICGL] routed with Raven
+[@craig_etal2020Flexiblewatershed] on PCIC's own network and carried onto Atlas streams by a crosswalk in New Graph's
+fork of fwapg [@norris_irvine2026NewGraphEnvironmentfwapg], with wet's
+own water balance where that flow does not reach or, on a stream's own line, carries under a fifth of the balance's. A site's gradient is its Atlas line's, the line it was snapped to;
+link applies a rule to its own segments, cut from those lines, and recomputes each piece's gradient from its ends.
+fresh ran the rules [@irvine2026freshFreshwater]. The province's other fish observations, gathered in bcfishobs
+[@norris2024smnorrisbcfishobs], scored no rule: they record where fish were found, not where they were sought and missed. Sites
 were kept when they were on ordinary stream lines, of a usual fished area, with no barrier to chinook downstream, in a
 group where link expects chinook: `r n0(summ$visits_in)` sites in `r summ$groups` groups. The tests use the
 `r summ$groups_both` groups where chinook were caught at some sites and not others:
@@ -164,7 +174,7 @@ closest to link's; all differ in every dial, so it is the best scorer. link's ru
 (`r n0(rec$n_in)` against `r n0(dflt$n_in)`) and catches as many chinook there (`r n0(rec$n_detect_in)` against
 `r n0(dflt$n_detect_in)`).
 
-```{r profile, fig.height = 5.2, fig.cap = "How close the best rule using each value of each dial comes to the best rule overall, as score above the best (lower is better). Dark blue: at least one rule with that value is a close call at one standard error; light blue: only at 1.96 standard errors; white: neither. The orange ring marks link's current value."}
+```{r profile, fig.height = 5.2, fig.cap = paste0("How close the best rule using each value of each dial comes to the best rule overall, as score above the best (lower is better). Dark blue: at least one rule with that value is a close call at one standard error; light blue: only at ", se_strict, " standard errors; white: neither. The orange ring marks link's current value.")}
 dial <- function(lab, v, key) {
   tune |>
     mutate(value = v) |>
@@ -188,8 +198,8 @@ prof <- prof |>
   group_by(part) |>
   mutate(value = factor(value, levels = unique(value[order(key)]))) |>
   ungroup() |>
-  mutate(close = factor(ifelse(one, "close call at one SE", ifelse(strict, "only at 1.96 SE", "neither")),
-                        levels = c("close call at one SE", "only at 1.96 SE", "neither")))
+  mutate(close = factor(ifelse(one, "close call at one SE", ifelse(strict, lab_strict, "neither")),
+                        levels = c("close call at one SE", lab_strict, "neither")))
 dflt_vals <- tibble::tibble(
   part = factor(levels(prof$part), levels = levels(prof$part)),
   value = c(paste("width", as.character(dflt$size_min)), grad(dflt$grad_max), "none", "none")
@@ -200,7 +210,7 @@ ggplot(prof, aes(value, best)) +
   geom_line(aes(group = 1), colour = "grey70") +
   geom_point(aes(fill = close), shape = 21, size = 2.6, colour = "grey20") +
   geom_point(data = dpts, shape = 21, size = 5, stroke = 1, colour = "#d95f02", fill = NA) +
-  scale_fill_manual(values = c("close call at one SE" = "#1b6ca8", "only at 1.96 SE" = "#9ecae1", "neither" = "white"),
+  scale_fill_manual(values = stats::setNames(c("#1b6ca8", "#9ecae1", "white"), c("close call at one SE", lab_strict, "neither")),
                     drop = FALSE, name = NULL) +
   facet_wrap(~part, scales = "free_x", ncol = 2) +
   labs(x = NULL, y = "Score above the best rule") +
@@ -212,7 +222,7 @@ ggplot(prof, aes(value, best)) +
 The flow floors near the best are close calls at one standard error and no width floor is; the slope limit is
 flat from `r grad(min(region$grad_max))` up.
 
-**A stricter bar.** Widen the close calls to 1.96 standard errors and `r n0(ch196$n_region)` rules are close calls
+**A stricter bar.** Widen the close calls to `r se_strict` standard errors and `r n0(ch196$n_region)` rules are close calls
 instead of `r nrow(region)`. The same choice then changes:
 
 ```{r strict}
@@ -227,7 +237,7 @@ rec1 <- rec
 rec1$n_region <- nrow(region)
 tab <- data.frame(rbind(cell(rec1), cell(ch196), cell(transform(dflt, n_region = NA))))
 tab[3, 1] <- "outside both"
-tab <- cbind(c("Chosen at one standard error", "Chosen at 1.96", "link's current rule"), tab)
+tab <- cbind(c("Chosen at one standard error", paste("Chosen at", se_strict), "link's current rule"), tab)
 names(tab) <- c(" ", "Close-call rules", "Smallest stream", "Steepest slope", "Near-a-river allowance")
 knitr::kable(tab, align = "lrlll",
              caption = "The chinook rule chosen from the close calls at each bar, beside link's current rule.")
@@ -235,7 +245,7 @@ knitr::kable(tab, align = "lrlll",
 
 The slope limit goes back to link's `r grad(dflt$grad_max)`, the flow floor rises from `r rec$size_min` to
 `r ch196$size_min` m³/s, and the near-a-river allowance stays as it was. link's own rule is still not a close call.
-link's thresholds table gives the choice at 1.96 for every species tuned (`rule_196`).
+link's thresholds table gives the choice at `r se_strict` for every species tuned (`rule_196`).
 
 **Two other checks.** Split into sets again with `r nrow(seeds)` other random draws, the recommended rule is a close
 call on `r sum(seeds$main_rec_in_region)` and link's on `r sum(seeds$default_in_region)`. Chosen on four sets and
@@ -326,7 +336,7 @@ rule does what it was chosen to do, not that it predicts new places.
   condition.
 - **The cut-offs are a judgment call.** Chinook get gradually less common as streams get smaller and steeper; there is
   no flow or slope where they stop. At one standard error, flow floors of `r min(region$size_min)` to
-  `r max(region$size_min)` m³/s fit almost as well; at 1.96 the choice is `r ch196$size_min` m³/s at link's slope
+  `r max(region$size_min)` m³/s fit almost as well; at `r se_strict` the choice is `r ch196$size_min` m³/s at link's slope
   limit, with the allowance kept.
 - **Steeper slopes fit nearly as well.** The close calls run from `r grad(min(region$grad_max))` to
   `r grad(max(region$grad_max))`, the top of the list, and `r grad(rec$grad_max)` is the best scorer among them, not a

@@ -1,3 +1,14 @@
+# knowledge 0.4.10
+
+* A methodology article, "Choosing habitat thresholds from where fish were caught" (`vignettes/habitat_thresholds.Rmd`),
+  walks the pipeline from the FDIS records to the published thresholds in plain language: what a threshold and a tuned
+  threshold are, how rules are scored and chosen (the standard error, and 1 against 1.96 SE), each of the eleven steps
+  with its code and settings, where the fish sampling records are lost, and every setting that shapes a result, with
+  where it came from and whether it has been tested (#93). The settings are `inst/method/settings.csv`, each naming
+  where its value is held, and `test-settings-register.R` fails when the register and the code disagree. The chinook
+  article now says how sites reach the network, where segment flows come from and which gradient was scored, and
+  cites PCIC's VIC-GL, Raven and the fwapg fork (#89).
+
 # knowledge 0.4.9
 
 * Every species' threshold is retuned on rebuilt evidence (#73): FDIS visits on wet's 2026-10-19 flows, the walk to a
