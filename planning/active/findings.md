@@ -215,10 +215,11 @@ The old snap is the placement `0230` stored on 2026-10-17 (`sites.rds`), not a r
 `data-raw/snap_limit_sensitivity.R` (24.8 min, 14 workers; `scripts/logs/fdis/20261027_snap_limit_sensitivity.{txt,csv}`,
 the 500 m build's ledger copied beside them): code-checked disagreement by the nearest stream's distance is 7.5 %,
 16.6 %, 27.1 %, 33.2 % (126 of 379) and 55.8 % in the five bands, so the rule's unconfirmed limit is 200 m, the
-100–200 m band clearing one in three by 0.1 point. No key's region moved between any two cells (every pick lies inside
-every other cell's one-SE region), so neither limit stepped down. The regions are wide, 51 to 244 rules, so the
+100–200 m band clearing one in three by 0.1 point. In none of the five pairs the rule compares did a key's region move, so
+neither limit stepped down. (Across all 36 ordered pairs of cells, one pick falls outside another's region: CH's at
+200/200 is outside the 500/500 cell's; review round 1 caught an earlier sentence here that said none did.) The regions are wide, 51 to 244 rules, so the
 region check is weak: CH rearing's pick is `mad>=0.75|g<=0.15|Q3@D1000` at 200/500 and `mad>=0.15|g<=0.3|Q3@D2000`
-at 100/500, both inside each other's regions. BT rearing's pick is `mad>=0.1|g<=0.25|none` in all six cells.
+at 100/500, each inside the other's region. BT rearing's pick is `mad>=0.1|g<=0.25|none` in all six cells.
 Chosen: `snap_limit` 200 m, `snap_limit_code` 500 m.
 
 The evidence ledger before (2026-10-22, `fwa_indexpoint()`, 100 m, today's schema) and after (2026-10-27, final):

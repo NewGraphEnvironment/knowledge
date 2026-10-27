@@ -12,6 +12,8 @@ info,md5_sites,0,8410465fa985bb27bab30efa2c73c142
 info,md5_catch,0,a31fd7bbe2febbe31d70fc8f4cd3a161
 info,md5_fish,0,8cf273515ce2b692c3719130eac75b93
 info,fdis_sites_in,51587,
+info,snap_limit_m,200,the limit 0230 placed with (its reconcile.csv)
+info,snap_limit_code_m,500,the limit 0230 placed with (its reconcile.csv)
 drop,not_placed,1665,not placed on the FWA network
 drop,far_snap,1941,"snapped beyond the placement limit (one limit for a pick the 1:50k code confirms, one for the rest)"
 drop,ws50_mismatch,377,FDIS 1:50k watershed code names no stream within the snap search
@@ -77,7 +79,7 @@ info,access_disagree_RB,481275,"habitat accessible, access = 0: 147445 rearing, 
 info,access_disagree_SK,11298,"habitat accessible, access = 0: 193 rearing, 59 spawning, 2119 km"
 info,access_disagree_ST,9611,"habitat accessible, access = 0: 434 rearing, 77 spawning, 1911 km"
 info,access_disagree_WCT,2284,"habitat accessible, access = 0: 44 rearing, 17 spawning, 466 km"
-info,walk_starts,36925,x 3 sources x 7 sizes; 0.7 min on 4 workers
+info,walk_starts,36925,x 3 sources x 7 sizes; 0.5 min on 4 workers
 info,walk_cache_hit,110775,start-and-source pairs read from knw.walk_cache
 info,walk_cache_miss,0,start-and-source pairs walked and kept in knw.walk_cache
 info,walk_convention,0,"bank: the distance ends at the river's bank and counts every hop's gap (fresh 0.42.0's rule, #73)"
