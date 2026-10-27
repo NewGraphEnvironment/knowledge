@@ -130,7 +130,7 @@ limits :334 ("not weighed") is now false (review G9). CLAUDE.md's record section
       outcome-linked segment length, and the Atlas sensitivity's result goes in a sentence or a small table.
 - [ ] `vignettes/chinook_rearing.Rmd`: the placement sentence ("stream lay within 100 m") and the gradient sentence
       (line 135). Restore `snap_limit`'s `code:` pointer in `inst/method/settings.csv`.
-- [ ] `research/habitat_thresholds_tuned.md`: replace its long Method section with a link to the methodology article.
+- [x] `research/habitat_thresholds_tuned.md`: replace its long Method section with a link to the methodology article.
 - [ ] `test-vignette-data.R`'s "every tracked source" and "every ignored source" tests pass. Build both articles with
       the branch installed and check every inline number renders.
 - [ ] `CLAUDE.md`: drop the "Until #92's retune…" sentence and say the scoring reads link's segment gradient.

@@ -111,52 +111,14 @@ after the two measurements below.
 Fixed-window gradients, which would not depend on where a catch cut the stream, are #70's (on fresh#257). They can
 test whether the outcome-linked segment length moves a threshold.
 
-## Method (0297's spec, fixed for CH before its first fit, carried to every species)
+## Method
 
-- **Population per species × stage:** stream-branch visits (stream edges in no river polygon, wetland ≥ 1 ha or
-  lake ≥ 100 ha), 10–10,000 m² fished, in groups where link marks the species present, no code blocking its
-  absence, no natural barrier to it downstream. Rearing's response is detection; spawning's is spawner evidence
-  from maturity codes, which only char carry.
-- **Gradient read:** the visit's Freshwater Atlas line's (`fwa_gradient`, from `fwa_stream_networks_sp.gradient`,
-  `knw_link_flow()`), the default `cols` of `knw_rule_in()` and `knw_tune_curve()`. link applies a rule on its own
-  segments, cut from those lines, whose gradient `fresh::frs_col_generate()` recomputes from each piece's end
-  elevations after every cut; the two can differ, and scoring on link's is #92.
-- **Grid** around link's own `default` thresholds: a size test (MAD floor 0.1–1 m³/s or width floor 1–4 m, the
-  species' own values and link's `default_tuned` floor joining the ladder), a gradient maximum on a ladder from 3 to
-  30 % (#68; #57's ended at 9 %) plus the species' own, and an exception admitting a segment that fails the size test
-  when a river of Q ∈ {1…50} m³/s lies within D ∈ {100…5,000} m downstream. 6,149 rules for CH and 6,622 to 8,385
-  for the other keys; a species whose `default` has no stream rule (KO, SK: lake rearing only) has no grid.
-- **Score:** held-out binomial deviance (cloglog, with log area, data set, era and the group), five stratified
-  group folds, each group held out once, each held-out group refitting only its own intercept, found as the root of
-  the deviance's derivative (#84). The fit absorbs the group intercepts instead of carrying a column per group (#83)
-  and holds the data-set and era coefficients under a normal prior, SD 2.5 on the cloglog scale (#84: without it a
-  level that separates runs to a hazard ratio in the millions and every held-out visit of that level is scored on the
-  noise). Before any grid is scored, a smoke run scores no rule, `default`, link's `default_tuned` row and the previous
-  pick on every key and refuses the run on four gates (#84). The **region** is every rule within one SE of the best
-  (the group is the unit), a parsimony rule of thumb fixed before the run, not a boundary of noise ("At 1.96 SE",
-  below); the **pick** is the region rule with the fewest departures from `default`, read from link's width `default`
-  and again from its flow version (#80); `recommended` moves off an exception under 200 m. A 200-resample group
-  bootstrap, a nested selection and four more fold seeds measure stability. A species × stage fits with ≥ 5 groups
-  having both outcomes and is `underpowered` under 10.
-- **Curve:** one GAM per species × stage after the pick, `te(log size, log distance to the pick's river)` +
-  `s(gradient)` with the same nuisance terms under the same prior (#73) and a group random effect; held-out deviance on
-  the same folds.
-- **Grade:** the curve's predicted rate at the reference nuisance values (group effect excluded) over the 95th
-  percentile of the rate on accessible stream-branch segments (the edge types of the curve's visits; since #65),
-  capped at 1, in fifths. Expected use per standard electrofishing
-  visit, not habitat quality. A segment with no size (an unmeasured first-order stream under a width rule) or no
-  gradient is `NA`, counted. Every accessible segment with a gradient is walked from its downstream end to the
-  first river of the pick's exception flow (10 m³/s where the pick has no exception), on any edge type and at any
-  gradient, ending at a double-line river's bank (#73), because the curve reads size and distance together; a walk that
-  reaches the sea first, or stops, reads the 50 km cap, as the curve's visits did (`dist_status` in the grade table says
-  which). **The gate** (Al, 2026-10-24): a key whose curve scores no better on held-out groups than no rule gets no
-  grade, no rule being scored on the curve's own visits (those with a size, a gradient and a distance) on the same
-  folds (`null_heldout_curve`; until the branch review of 2026-10-25 it was scored on the grid's larger population,
-  which favoured publishing for the width-ruled keys and let bull trout spawning through); its grade table carries size
-  and distance with `rate`, `grade` and `grade_class` blank and
-  `grade_withheld = TRUE`, the comparison reports its graded km as NA, and `0325` leaves it out of
-  `habitat_grade/v1`. #57's first build walked only the segments the exception could admit and read every other
-  segment at the cap (#65).
+The method is the methodology article, "Choosing habitat thresholds from where fish were caught"
+(<https://newgraphenvironment.github.io/knowledge/articles/habitat_thresholds.html>, `vignettes/habitat_thresholds.Rmd`,
+#93): every step, what it does and why, with each number that shapes a result in `inst/method/settings.csv`, where its
+value lives and whether it has been tested. It replaced the specification that stood here. `scripts/0320`'s header
+keeps the analysis spec beside the code. The parts each issue settled are named in that header and in the register's
+`issue` column. From #92 the rules and curves read link's segment gradient ("Which gradient is scored", above).
 
 ## Results
 
