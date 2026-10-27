@@ -22,9 +22,10 @@
 #   - SPECIES RANGE: a visit's species row scores only in groups where link's presence rule
 #     (lnk_species_pooling() on the default bundle) marks the species present; DV pools into BT
 #     where the tracker says so, up to obs_year_max.
-#   - FLOW: wet's pick with the parent fallback. The wet manifest's build stamp and the loaded
-#     picked counts per source are ledgered; which build the table holds is wet_db_load()'s to
-#     assert (it filters the manifest's rows on load, so a row count cannot be compared here).
+#   - FLOW: wet's pick with the parent fallback. The live wet manifest's build stamp, the build
+#     the table holds (its comment, written by wet_db_load(); the live manifest can be newer, #89)
+#     and the loaded picked counts per source are ledgered (wet_db_load() filters the manifest's
+#     rows on load, so a row count cannot be compared here).
 #   - WALKS from every placed visit's own point (not the segment start), all sizes in q_grid on
 #     every source, to the river's bank with every hop's gap counted (#73; fresh 0.42.0's convention, checked
 #     against its walk by data-raw/walk_bank_check.R); the positive control against 0294's one-size walk is a
@@ -155,6 +156,8 @@ vs <- vs |> filter(site_visit %in% v$site_visit)
 # ---- flow, width, regulated, barriers ---------------------------------------------
 cat_wet <- wet::wet_catalog()
 add("info", "wet_manifest", 0, paste(attr(cat_wet, "id"), "built", attr(cat_wet, "built"), "at", attr(cat_wet, "manifest")))
+add("info", "wet_loaded_build", 0,
+    dbGetQuery(conn, "SELECT obj_description('discharge.fwa_v1_segment_monthly'::regclass) AS c")$c)
 picked <- dbGetQuery(conn, "SELECT source, count(*) FILTER (WHERE pick) AS picked, count(*) AS n_segments
                             FROM discharge.fwa_v1_segment_monthly WHERE scenario = 'historical' AND month = 0 GROUP BY 1")
 for (i in seq_len(nrow(picked))) {

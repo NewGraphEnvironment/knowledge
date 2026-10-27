@@ -1,14 +1,19 @@
 # Modelled discharge in BC: wet's published flow per FWA segment, and what it is built from
 
-**Verified:** 2026-10-15 for the first section; 2026-10-07 for the rest · **Issues:** #42,
-NewGraphEnvironment/fwapg#5, NewGraphEnvironment/fwapg#6, NewGraphEnvironment/link#331 · **Produced by:** a reading of
-wet at `647767d` (v0.4.7: `NEWS.md`, the `monthly-flow` and `segment-discharge` articles,
-`research/station_flow_departure.md`, `data-raw/station_vignette_data.R`) and of the published manifest
-(`discharge/fwa/v1`, built 2026-10-15T02:06:57Z from wet `acb820f`); before that, `fwapg/extras/discharge`
+**Verified:** 2026-10-27 for the first section, at the build the database holds; 2026-10-07 for the rest · **Issues:**
+#42, #89, NewGraphEnvironment/fwapg#5, NewGraphEnvironment/fwapg#6, NewGraphEnvironment/link#331 · **Produced by:** the
+table comment and a count of `discharge.fwa_v1_segment_monthly` (build 2026-10-19T06:08:31Z from wet `94deeb5`, v0.4.14,
+#103), wet's `data/checks/pcic_routed_compare_20260717.txt` and `segment_output_20260717.txt` at that commit, and its
+`NEWS.md`; the first section's earlier reading was of wet `647767d` (v0.4.7) and build `acb820f`; before that, `fwapg/extras/discharge`
 (fwapg `fbcb0a3`), PCIC's public repos (`chyp`, `hydromosaic-db`, `hydromosaic-service`) and an API probe whose
 commands are at the end of this file.
 
 ## Use this: wet's published flow per FWA segment
+
+**Which build.** The evidence #73 graded on (`scripts/0310`, 2026-10-22) read the build loaded on 2026-10-19 from wet
+`94deeb5`, and this section describes that build. wet has republished since (2026-10-24: monthly shares from donor
+gauges, wet#102, and a daily product, wet#99); the database still holds `94deeb5`. Read the table comment
+(`obj_description('discharge.fwa_v1_segment_monthly'::regclass)`) before comparing two runs.
 
 wet publishes mean monthly and annual flow for every FWA segment at `s3://fresh-bc/discharge/fwa/v1/`. The
 bucket allows reads but no listing, so start from `manifest.json` (`wet_catalog()`); 67 parquet parts,
@@ -18,7 +23,7 @@ Hive-partitioned by `scenario`, `forcing` and `source`. `segment_monthly` holds
 `discharge.fwa_v1_segment_monthly` with `wet_db_load()`.
 
 **Two sources, each kept where it exists:**
-- `pcic_routed`, 1951–2012: PCIC's VIC-GL runoff routed by Raven on PCIC's own network (the hydromosaic
+- `pcic_routed`, 1981–2010 (1951–2012 before wet#103): PCIC's VIC-GL runoff routed by Raven on PCIC's own network (the hydromosaic
   section below), placed on FWA segments by NewGraphEnvironment/fwapg#6. Month 0 is the plain mean of the 12
   months.
 - `wet_balance`, 1981–2010: wet's open water balance, province-wide, Liard included. Annual flow is climr
@@ -28,19 +33,20 @@ Hive-partitioned by `scenario`, `forcing` and `source`. `segment_monthly` holds
 
 **`pick` is the default, chosen once per segment on annual flow.** Routed PCIC, unless its annual flow is
 under 0.2 of the balance's on a segment that lies on its own watershed's line; otherwise whichever exists.
-Routed on 3,152,838 segments, the balance on 1,380,005 (all of the Liard, and most of the Nechako Reservoir
+Routed on 3,154,131 segments, the balance on 1,378,712 (222,906 of them where routed is under the cut) (all of the Liard, and most of the Nechako Reservoir
 groups, where PCIC's outlets are unplaced: NewGraphEnvironment/fwapg#24), neither on 374,598, almost all of
 them segments with no row in `fwa_streams_watersheds_lut` (369,217).
 
 **How good it is, at wet's calibration gauges:**
-- Annual, at the 290 of 315 gauges routed flow reaches: mean absolute error 24.1 % for routed, 27.6 % for
-  the balance scored held out (medians 13.0 and 18.0 %), 22.9 % for `pick`. The balance is weakest on small
+- Annual, at the 290 of 315 gauges routed flow reaches: mean absolute error 24.2 % for routed, 27.6 % for
+  the balance scored held out (medians 13.1 and 18.0 %), 23.0 % for `pick`. The balance is weakest on small
   basins, at headwaters, at lake outlets and in the dry interior (hydrologic zones 15, 17, 23, 24).
 - Monthly, the two fail differently. The balance reads high in April and May (median 7–11 %), within ±5 % in
   the other months, and flattens the freshet: at Buck Creek (08EE013) its highest month is under half the
-  gauge's. Where routed flow does not reach, mostly the Liard, it reads low in winter. Routed PCIC, at 279
-  gauges, reads about 20 % low in March–April and 19 % high in July–August, a late-melt shape wet attributes
-  to PCIC's model (wet#67).
+  gauge's. Where routed flow does not reach, mostly the Liard, it reads low in winter. Routed PCIC reads low in
+  spring and high in summer: on matching periods, 11.5 % low in March–April and 15.8 % high in July–August (wet
+  0.4.14's NEWS; about 20 % and 19 % on the 1951–2012 run), so the period explains part of the shape and PCIC's
+  model the rest (wet#67).
 
 **Flow in a life-stage window.** `wet_flow_window()` gives a window's mean from the monthly values, each day
 taking its month's mean (`basis = "monthly"`). wet's monthly-flow article does this for the upper Bulkley
@@ -58,8 +64,8 @@ path (`wet_station_daily()`, `wet_window_stats(stats = c("mean", "min7"))`, depa
 every year 2023–2026, and the 7-day minima 51–88 % below (wet's `research/station_flow_departure.md`).
 Monthly bias by region and season is wet#6.
 
-**Habitat models do not read it yet.** link and fresh read fwapg's older annual table (next section).
-Moving them to `discharge.fwa_v1_segment_monthly` is NewGraphEnvironment/link#331.
+**Habitat models read it.** link reads `discharge.fwa_v1_segment_monthly` since NewGraphEnvironment/link#331 (closed),
+and this repo's evidence and tuning read its `pick`.
 
 ## Where the flows come from
 

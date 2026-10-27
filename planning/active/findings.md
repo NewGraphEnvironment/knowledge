@@ -140,3 +140,18 @@ checked everywhere, CI included once #98 lands.
 
 | Error | Resolution |
 |-------|------------|
+| `op read` → "1Password CLI couldn't connect to the 1Password desktop app" (2026-10-27 05:07 UTC) | Zotero write deferred; asked Al to open/unlock 1Password |
+
+## Phase 1 measurements (2026-10-27)
+
+- Flow source of the 40,552 placed visits (`data/fdis/derived/visits_link.csv`, `pick_source`): pcic_routed 86.3 %,
+  wet_balance 13.7 %.
+- Loaded flow build: table comment `wet_db_load(): … (built 2026-10-19T06:08:31Z, wet 94deeb5)`; picked routed 3,154,131,
+  balance 1,378,712 (222,906 under the cut); period 1981-2010 both sources. Live manifest now built 2026-10-24T12:23:01Z.
+- At 94deeb5 (`data/checks/pcic_routed_compare_20260717.txt`): annual MAE routed 24.2 %, balance 27.6 % (medians 13.1,
+  18.0), pick 23.0 % at the 290 gauges.
+- `fwa_gradient` is `fwa_stream_networks_sp.gradient` (`R/link_flow.R:36`); link's segment gradient is fresh's
+  generated column, `(Z(end) - Z(start)) / length` (`fresh/R/frs_col_generate.R:27`).
+- The chinook article's check uses FDIS visits (`fdis_visits`), not `bcfishobs_outside`, so the article does not report
+  the bcfishobs check; the rewritten sentence says bcfishobs scores no rule rather than pointing at a section.
+- The group library holds no PCIC, VIC-GL or Raven item; the fork has none either.

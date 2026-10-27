@@ -46,7 +46,7 @@ checked against the code as it stands today (main `80ea4c1`).
 
 ## Phase 1: #89 — say how the evidence reached the network
 
-- [ ] `vignettes/chinook_rearing.Rmd` "What records were used?" (lines 122-131): placement by `fwa_indexpoint()`
+- [x] `vignettes/chinook_rearing.Rmd` "What records were used?" (lines 122-131): placement by `fwa_indexpoint()`
       (500 m search, kept within 100 m and in FDIS's 1:50k watershed), then link's segment at that point; flows as
       wet's `pick` (PCIC VIC-GL routed by Raven, carried onto Atlas streams by the crosswalk in New Graph's fwapg fork;
       wet's balance elsewhere); bcfishobs only for the outside check; the gradient the tuning read (`fwa_gradient`,
@@ -54,13 +54,13 @@ checked against the code as it stands today (main `80ea4c1`).
 - [ ] Citations: check whether the group library holds PCIC's VIC-GL / Raven routing and the fwapg fork; add any that
       are missing through the Web API (or let wet's citation carry them if wet's docs cite them); rerun
       `data-raw/vignette_bib.R` (Zotero running).
-- [ ] `research/habitat_thresholds_tuned.md` Evidence and Method: the same three corrections.
-- [ ] `research/modelled_discharge.md` refreshed to the loaded build `94deeb5` (routed 1981-2010), read from the table
+- [x] `research/habitat_thresholds_tuned.md` Evidence and Method: the same three corrections.
+- [x] `research/modelled_discharge.md` refreshed to the loaded build `94deeb5` (routed 1981-2010), read from the table
       comment and wet at that SHA; header's Verified line updated.
-- [ ] `scripts/0310-evidence-build.R`: a ledger row `wet_loaded_build` from
+- [x] `scripts/0310-evidence-build.R`: a ledger row `wet_loaded_build` from
       `obj_description('discharge.fwa_v1_segment_monthly'::regclass)` beside `wet_manifest` (no rerun).
-- [ ] `scripts/0230-fdis-load.R:55` comment: far snaps are flagged here and dropped by `knw_fdis_quality()`.
-- [ ] Verify: render the chinook article before and after, strip to text, diff: only the evidence paragraph moves;
+- [x] `scripts/0230-fdis-load.R:55` comment: far snaps are flagged here and dropped by `knw_fdis_quality()`.
+- [x] Verify: render the chinook article before and after, strip to text, diff: only the evidence paragraph moves;
       `test-vignette-data.R` still green (no data change).
 
 ## Phase 2: the two CSVs and the register test
