@@ -57,7 +57,7 @@ rule_words <- function(r) {
   } else {
     sprintf("is at least %s m wide", sub("^width>=", "", p[1]))
   }
-  slope <- sprintf("no steeper than %s %%", signif(100 * as.numeric(sub("^g<=", "", p[2])), 3))
+  slope <- sprintf("no steeper than %s %%", round(100 * as.numeric(sub("^g<=", "", p[2])), 1))
   near <- if (p[3] == "none") "" else {
     q <- sub("^Q([0-9.]+)@D.*$", "\\1", p[3])
     d <- as.numeric(sub("^.*@D", "", p[3]))
@@ -165,7 +165,7 @@ detail <- function(step) {
 }
 ```
 
-### 1. The fish records {#step-1}
+### 1. `r pipe$label[1]` {#step-1}
 
 The Province's electrofishing records [@provinceofbritishcolumbia2022FisheriesData]: where crews fished, how much
 stream they covered, and what they caught. About `r about(fn("FDIS visits"))` site visits. A survey loaded twice is
@@ -173,7 +173,7 @@ kept once.
 
 `r detail(1)`
 
-### 2. Putting each site on the stream map {#step-2}
+### 2. `r pipe$label[2]` {#step-2}
 
 Each site's map point is moved to the nearest stream of the BC Freshwater Atlas [@flnrord2021FreshwaterAtlasb], held
 in a database by `fwapg` [@norris2024smnorrisfwapg]. A site is kept only if that stream is close (within
@@ -183,7 +183,7 @@ far away.
 
 `r detail(2)`
 
-### 3. link's stream segments {#step-3}
+### 3. `r pipe$label[3]` {#step-3}
 
 link [@irvine2026linkDevelop] cuts the Atlas streams into short segments and records, for each species, whether fish
 can reach each one and what link's current rules call habitat. It also cuts streams where fish have been observed
@@ -192,7 +192,7 @@ fish were seen, not where they were looked for and missed.
 
 `r detail(3)`
 
-### 4. How much water each stream carries {#step-4}
+### 4. `r pipe$label[4]` {#step-4}
 
 Flows come from `wet` [@irvine2026wetStream]. Where it reaches, that is PCIC's modelled streamflow
 [@schnorbus2018VICGlacierVICGL; @craig_etal2020Flexiblewatershed], carried onto Atlas streams by New Graph's fork of
@@ -202,7 +202,7 @@ of Canada gauges [@environmentandclimatechangecanada2021NationalWater]. About
 
 `r detail(4)`
 
-### 5. Joining each site to its segment {#step-5}
+### 5. `r pipe$label[5]` {#step-5}
 
 Each kept site takes its segment's flow, width, slope and access, and the distance downstream to rivers of each size.
 Sites with no usable date, no fished area or time, no known catch, or no segment at their place drop out. About `r about(fn("no_link_segment"))` sites
@@ -210,14 +210,14 @@ remain.
 
 `r detail(5)`
 
-### 6. Candidate rules {#step-6}
+### 6. `r pipe$label[6]` {#step-6}
 
 For each species we build thousands of rules around link's current values: different minimum stream sizes, slope
 limits, and an allowance for small streams close to a big river.
 
 `r detail(6)`
 
-### 7. Scoring and choosing {#step-7}
+### 7. `r pipe$label[7]` {#step-7}
 
 Each rule is scored as [above](#se). The model also accounts for how much stream was fished, which data set and
 decade the record comes from, and the watershed group, so a rule is not credited for those. A short trial run checks
@@ -225,7 +225,7 @@ the scoring before the full run starts.
 
 `r detail(7)`
 
-### 8. Checking the choice is not luck {#step-8}
+### 8. `r pipe$label[8]` {#step-8}
 
 Many rules score almost alike, so the winner could come down to chance. We choose again three ways: with the groups
 split `r st$seeds_n` other ways; leaving out one part of the groups, choosing on the rest and scoring the choice on the
@@ -237,7 +237,7 @@ better).
 
 `r detail(8)`
 
-### 9. A curve and a grade {#step-9}
+### 9. `r pipe$label[9]` {#step-9}
 
 We fit a smooth curve of how often the species is caught against stream size, distance to the river and slope, and
 use it to grade every segment from low to high expected use. A species whose curve predicts no better than no rule at
@@ -245,7 +245,7 @@ all gets no grade.
 
 `r detail(9)`
 
-### 10. Running the rule on link's streams {#step-10}
+### 10. `r pipe$label[10]` {#step-10}
 
 link's current rule and the chosen rule both go through the steps link itself uses, run by `fresh`
 [@irvine2026freshFreshwater]: the rule's test, link's hand-entered habitat, and dropping rearing that has no spawning
@@ -254,7 +254,7 @@ nearby. On the Bulkley, those last two steps removed `r n0(ex$stages$dropped_def
 
 `r detail(10)`
 
-### 11. Publishing {#step-11}
+### 11. `r pipe$label[11]` {#step-11}
 
 The chosen values are written under link's own parameter names, with the grades, so link can read them.
 
@@ -339,12 +339,19 @@ written. **Source** says where the value came from: a published source, a conven
 from link or bcfishpass [@norris2024smnorrisbcfishpass], or a value measured from data. **Tested** says whether the
 result has been compared with another value. The untested rows come first: they are the work still to do.
 
+Of the `r nrow(reg)` settings, `r sum(reg$tested == "yes")` have been tested and `r sum(reg$tested == "no" & reg$source == "inherited")`
+of the untested ones were inherited.
+
+<details><summary>All `r nrow(reg)` settings</summary>
+
 ```{r register}
 r <- reg[order(reg$tested != "no", reg$source != "inherited", reg$step), ]
 knitr::kable(data.frame(setting = r$label, value = gsub(";", ", ", r$value), unit = r$unit, step = r$step,
                         source = r$source, tested = r$tested, issue = issue(r$issue)),
              caption = "The settings, from inst/method/settings.csv.", align = "llllllr", row.names = FALSE)
 ```
+
+</details>
 
 ## Software and citation {#software}
 

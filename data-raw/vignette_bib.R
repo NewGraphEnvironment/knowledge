@@ -42,6 +42,8 @@ bib_write <- function(rmd, out, all_tools) {
   names(entries) <- got
   entries <- gsub("\n  (file|abstract|keywords|urldate|origdate) = \\{[^\n]*\\},?(?=\n)", "", entries, perl = TRUE)
   entries <- gsub("(\n  date = \\{[0-9-]{4,10})T[^}]*\\}", "\\1}", entries, perl = TRUE)
+  # an organisation is one name: braced, "Environment and Climate Change Canada" does not print as two publishers
+  entries <- gsub("\n  organization = \\{([^{}\n]*)\\}(,?)(?=\n)", "\n  organization = {{\\1}}\\2", entries, perl = TRUE)
   # any field whose value starts with / is a local path (urls and dois are https)
   if (any(grepl("file = |= \\{/", entries))) stop("a local path is left in an entry")
 

@@ -179,14 +179,13 @@ n_placed <- rn("sites_placed")
 if (n_in - n_placed != ln("not_placed")) stop("the reconcile's placed count does not match the ledger's not_placed")
 drops <- c("far_snap", "ws50_mismatch", "junk_date", "effort_sentinel_or_none", "catch_unknown", "no_link_segment")
 val <- function(key) settings$value[settings$key == key]
-why <- c(far_snap = sprintf("snapped more than %s m from its stream", val("snap_limit")),
-         ws50_mismatch = "on a stream outside the 1:50k tributary code FDIS recorded",
-         junk_date = "no usable date", effort_sentinel_or_none = "no fished area or time",
-         catch_unknown = "catch neither fish nor an explicit zero",
-         no_link_segment = "no link segment at the visit's measure")
+why <- c(far_snap = sprintf("more than %s m from its stream", val("snap_limit")),
+         ws50_mismatch = "on the wrong tributary", junk_date = "no usable date",
+         effort_sentinel_or_none = "no fished area or time", catch_unknown = "no known catch",
+         no_link_segment = "no link segment at the site")
 funnel <- tibble(stage = c("FDIS visits", "with a usable point", "placed on the Atlas"),
                  n = c(n_in, n_utm, n_placed),
-                 reason = c(NA, "no usable UTM point", sprintf("no stream within %s m", val("snap_search"))))
+                 reason = c(NA, "no usable map point", sprintf("no stream within %s m", val("snap_search"))))
 n <- n_placed
 for (d in drops) {
   n <- n - ln(d)
@@ -354,15 +353,15 @@ lin <- tribble(
   "fwa", "BC Freshwater Atlas", "source", "ellipse",
   "pcic", "PCIC VIC-GL runoff, routed by Raven", "source", "ellipse",
   "obs", "bcfishobs fish observations", "source", "ellipse",
-  "atlas", "Atlas streams in Postgres", "fwapg", "box",
-  "cross", "PCIC crosswalk (the fwapg fork)", "fwapg", "box",
-  "sites", "placed FDIS visits", "knowledge", "box",
-  "segs", "link's segments, access and default flags, from link's default configuration", "link", "box",
-  "flow", "segment flows: wet's pick of PCIC and its own balance, fitted to HYDAT gauges", "wet", "box",
-  "evid", "evidence tables", "knowledge", "box",
-  "tune", "scores, curves and grades", "knowledge", "box",
-  "cmp", "comparison on link's segments", "fresh", "box",
-  "pub", "thresholds and grades published", "knowledge", "box"
+  "atlas", "Atlas streams in a database", "fwapg", "box",
+  "cross", "PCIC flows put on Atlas streams (the fwapg fork)", "fwapg", "box",
+  "sites", "sites on the stream map", "knowledge", "box",
+  "segs", "link's stream segments, access and habitat", "link", "box",
+  "flow", "flow on each segment, PCIC's or wet's balance", "wet", "box",
+  "evid", "each site with its segment", "knowledge", "box",
+  "tune", "rules scored and chosen, curves and grades", "knowledge", "box",
+  "cmp", "both rules run on link's streams", "fresh", "box",
+  "pub", "thresholds and grades for link", "knowledge", "box"
 )
 lin_edges <- c("fwa -> atlas", "fdis -> sites", "atlas -> sites", "atlas -> segs", "obs -> segs",
                "pcic -> cross", "atlas -> cross", "cross -> flow", "sites -> evid", "segs -> evid",
