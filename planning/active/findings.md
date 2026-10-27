@@ -161,8 +161,8 @@ Every segment's flags identical on both keys (1,190,110 and 1,829,223 segments, 
 in `compare`, `change` and `checks` differ by at most 1.0e-13 relative: the segment query has no `ORDER BY`, so the
 sums' order moved between runs, which is why round 1 of the review was right to relax identity to a relative 1e-9.
 The reference ran while the Phase 1 walk check shared the database for a minute; neither run had the database alone
-otherwise. CH's speed-up (2.7x) is below WCT's (3.8x) because one bin holds the largest groups and fresh's near-river
-walk already uses the server's parallel workers.
+otherwise. CH's speed-up (2.7x) is below WCT's (3.8x); why was not measured (the bins' balance and the near-river walk's own
+use of the server's cores are candidates).
 
 ## Errors Encountered
 
