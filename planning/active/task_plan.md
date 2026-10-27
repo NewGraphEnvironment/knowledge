@@ -174,7 +174,7 @@ run-to-PR mandate runs from here.
       design)
 - [x] `CLAUDE.md` working note (the hint route; `0310`'s walks are cached from here; the two red tests until the
       retune; the articles wait for it); `NEWS.md` entry
-- [ ] #92's body: the retune's tasks (`0320`/`0325`/`0330`, `vignette_method.R` and `vignette_chinook.R` reruns, the
+- [x] #92's body: the retune's tasks (`0320`/`0325`/`0330`, `vignette_method.R` and `vignette_chinook.R` reruns, the
       chinook article's placement sentence and the `snap_limit` row's `code:` pointer restored,
       `vignettes/habitat_thresholds.Rmd` step 2, `#snap` and Limits prose, the two tests green again); #91's body:
       the measured section replaced by the probe's and sensitivity's numbers, linking the research file
@@ -184,11 +184,11 @@ a separate source, noted in `0240`'s header); the frozen `0290`–`0298`; `vigne
 
 ## Owed at the end (reported, done after merge)
 
-- [ ] none owed past the merge: the retune is #92's, written into its body in Phase 5
+- [x] none owed past the merge: the retune is #92's, written into its body in Phase 5
 
 ## Validation
 
-- [ ] Tests pass (`devtools::test()`: `test-fdis_place.R`, `test-fdis_quality.R`, `test-settings-register.R` and
+- [x] Tests pass (`devtools::test()`: `test-fdis_place.R`, `test-fdis_quality.R`, `test-settings-register.R` and
       the rest), except the two `test-vignette-data.R` tests decided at the gate ("every tracked source …" and
       "every ignored source …" of the methodology bundle), named in the PR with the rerun that clears them
 - [ ] `/code-check` clean (once over the branch with `/code-check branch`)
