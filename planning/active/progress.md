@@ -22,3 +22,11 @@
   `main_only` gates extras and grading, `-grad_fwa` log suffix, `cols` on both calls, `curve_grad` in summary and
   grades. 0322 and snap_limit_sensitivity.R pin `fwa_gradient`. Register: `gradient_col` = segment_gradient
   (script:/fn:/record: pointers, tested yes); the register test shown red (4) with the old value restored.
+- Phase 3 started: DEV=1 CH runs on both gradients (logs `20261027_tune_run-ch-dev{,-grad_fwa}.txt`): the same
+  population (7,659 visits, 235 detections, 45 groups both); pick g<=0.11 on segments vs g<=0.15 on the Atlas line.
+  Full suite: 254 tests, 2 failing (test-vignette-data's source tests, expected until Phase 4). Full 0320 launched
+  22:14Z from a frozen copy (SCHEMA=fresh_default_20261017, WORKERS=12); every key's smoke gates passed.
+- Phase 4 drafted while it runs: vignette_method.R bundles `gradient_sensitivity` and `segment_at_site`; the
+  methodology article's steps 2, 3, 5, the snap section (three examples) and limits; the chinook article's placement
+  and gradient sentences, with `snap_limit`/`snap_limit_code`'s `code:` pointers restored (proved by a planted 400 m);
+  CLAUDE.md's record section and a gradient note.

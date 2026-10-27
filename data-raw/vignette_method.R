@@ -31,11 +31,12 @@
 #
 # INPUT:  inst/method/{pipeline,settings}.csv; scripts/logs/habitat/<date>_evidence_build_ledger.csv (the newest);
 #         data/fdis/build/reconcile.csv and data/fdis/derived/{visits_link,visits_species,walks,fdis_sites}.csv
-#         (ignored; 0230, 0310); data/tune/<key>_{summary,tune,grades}.csv; data/compare/<key>_compare.csv;
+#         (ignored; 0230, 0310); data/tune/<key>_{summary,tune,grades}.csv; data/tune/grad_fwa/<key>_{summary,tune}.csv
+#         (0320 with GRADIENT=fwa_gradient, the Atlas-gradient sensitivity, #92); data/compare/<key>_compare.csv;
 #         inst/vignette-data/bulk_segments.rds; ../link and ../wet checkouts holding the run's commits; the fwapg
 #         database (PG* environment variables) for the snap example.
 # OUTPUT: inst/vignette-data/method.rds   one named list: pipeline, settings (with each where's resolved value),
-#         funnel, funnel_species, steps, examples, svg (flow, lineage), meta (md5 of every source, written date, commit)
+#         funnel, funnel_species, steps, picks, gradient_sensitivity, segment_at_site, examples, svg (flow, lineage), meta (md5 of every source, written date, commit)
 # RUN:    Rscript data-raw/vignette_method.R   (from the repo root, after any rerun of 0230, 0310, 0320 or 0330, and
 #         after any change to the registers)
 # ---------------------------------------------------------------------------
@@ -282,6 +283,42 @@ picks <- bind_rows(lapply(keys, function(k) {
          pick_strict = b$rule, close_calls_strict = b$n_region, rules = nrow(t))
 }))
 
+# ---- the segment at a site (#92): link cuts a stream at each catch, so a site with fish usually starts its own -------
+# segment; on the stream-line sites of a usual fished area, as data-raw/segment_gradient_check.R measures them
+d_sg <- vl[stream & area_ok, ]
+at_site <- d_sg$segment_start_offset_m >= -1 & d_sg$segment_start_offset_m <= 5
+fish <- d_sg$catch_status == "fish"
+segment_at_site <- list(n = nrow(d_sg), at_site_fish = mean(at_site[fish]), at_site_zero = mean(at_site[!fish]),
+                        len_fish = stats::median(d_sg$segment_length_m[fish]),
+                        len_zero = stats::median(d_sg$segment_length_m[!fish]))
+if (!all(d_sg$catch_status %in% c("fish", "zero"))) stop("a kept visit has a catch status other than fish or zero")
+
+# ---- the gradient sensitivity: the same keys scored on the Atlas line's gradient (#92) ----------------------------
+# 0320 with GRADIENT=fwa_gradient, on the main fold seed, on this run's evidence; the main run reads link's segment
+# gradient. Each key's summary must name the gradient and the evidence, or the comparison is with another run
+dir_fwa <- "data/tune/grad_fwa"
+f_fwa_tune <- file.path(dir_fwa, paste0(keys, "_tune.csv"))
+f_fwa_summ <- file.path(dir_fwa, paste0(keys, "_summary.csv"))
+miss <- c(f_fwa_tune, f_fwa_summ)[!file.exists(c(f_fwa_tune, f_fwa_summ))]
+if (length(miss)) stop("no Atlas-gradient sensitivity for: ", paste(miss, collapse = ", "), " (GRADIENT=fwa_gradient 0320)")
+if (!all(fitted$curve_grad == "segment_gradient")) stop("the main run's summaries do not all name segment_gradient (#92)")
+gradient_sensitivity <- bind_rows(lapply(seq_along(keys), function(i) {
+  s_fwa <- rd(f_fwa_summ[i], col_types = cols(.default = "c"))
+  if (!identical(s_fwa$curve_grad, "fwa_gradient") || !identical(s_fwa$evidence_md5, ev)) {
+    stop(f_fwa_summ[i], " was not scored on the Atlas line's gradient on this run's evidence")
+  }
+  main <- utils::read.csv(file.path("data/tune", paste0(keys[i], "_tune.csv")))
+  alt <- utils::read.csv(f_fwa_tune[i])
+  rec_main <- main$rule[main$recommended %in% TRUE]
+  rec_alt <- alt$rule[alt$recommended %in% TRUE]
+  tibble(key = keys[i], pick = rec_main, pick_atlas = rec_alt,
+         grad_lo = min(main$grad_max[main$in_region %in% TRUE]), grad_hi = max(main$grad_max[main$in_region %in% TRUE]),
+         grad_lo_atlas = min(alt$grad_max[alt$in_region %in% TRUE]),
+         grad_hi_atlas = max(alt$grad_max[alt$in_region %in% TRUE]),
+         pick_in_atlas_region = rec_main %in% alt$rule[alt$in_region %in% TRUE],
+         atlas_pick_in_region = rec_alt %in% main$rule[main$in_region %in% TRUE])
+}))
+
 # ---- worked examples ----------------------------------------------------------------------------------
 conn <- DBI::dbConnect(RPostgres::Postgres(), bigint = "numeric")
 near <- function(s) {
@@ -413,7 +450,8 @@ svg <- list(flow = svg_of(dot_flow), lineage = svg_of(dot_lin))
 # ---- write ------------------------------------------------------------------------------------------------
 # git, not a list here, says which sources a clone has: an ignored one is checked only where it is present
 sources <- c(f_pipeline, f_settings, ledger, f_tune, f_grades, f_compare,
-             file.path("data/tune", paste0(keys, "_summary.csv")), file.path(dir_out, "bulk_segments.rds"),
+             file.path("data/tune", paste0(keys, "_summary.csv")), f_fwa_tune, f_fwa_summ,
+             file.path(dir_out, "bulk_segments.rds"),
              f_reconcile, unname(derived), f_sites)
 is_tracked <- vapply(sources, function(f) {
   is.null(attr(suppressWarnings(system2("git", c("ls-files", "--error-unmatch", f), stdout = TRUE, stderr = TRUE)),
@@ -423,7 +461,7 @@ tracked <- sources[is_tracked]
 local <- sources[!is_tracked]
 out <- list(
   pipeline = pipeline, settings = settings, resolved = resolved, funnel = funnel, funnel_species = funnel_species,
-  steps = steps, picks = picks,
+  steps = steps, picks = picks, gradient_sensitivity = gradient_sensitivity, segment_at_site = segment_at_site,
   stability = fitted[, c("species_code", "stage", "seeds_n", "seeds_same_rec", "seeds_rec_in_region",
                          "honest_dev_rec", "honest_dev_default", "boot_rec_share")],
   examples = list(kept = ex_kept, moved = ex_moved, far = ex_far, wsg = example_wsg, stages = stages),
