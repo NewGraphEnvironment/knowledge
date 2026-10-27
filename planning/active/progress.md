@@ -18,3 +18,9 @@
   `R/settings_register.R` resolves `fn:` and `script:` wheres (with `[name]`/`[i]` selectors); `0320`'s 1.96 lifted to
   `se_strict`. Register test 109 passed; planted mismatches each go red (register prior SD 2: 4 failures; script
   `snap_flag_m` 150: 1; `knw_grade` `ref_quantile` 0.9: 1), run in scratch copies.
+- Plan review delivered ~05:13 UTC (`review-plan.md`, 22 findings, each probed). Phase 1 follow-up: the 1:50k check
+  stated as reaching only visits with a full tributary code (12,285 of 50,024); the balance also where routed is
+  under 0.2 of it; bcfishobs shapes link's segments though not the snap; link's `default` reads fwapg's flows, not
+  wet's; 50,024 placed vs 40,552 kept; `0310`'s new row refuses a table with no comment; `0320`'s prior log reads
+  `knw_tune_run`'s default (the one that runs). Finding 13 (bib's wet version) probed: the bib keeps only
+  `discharge/fwa/v1`, true of either build; no change.

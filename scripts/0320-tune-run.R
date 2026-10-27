@@ -152,7 +152,7 @@ for (f in list.files("data/tune", "_tune\\.csv$", full.names = TRUE)) {
   }
 }
 say("Fit: group intercepts absorbed (#83); normal prior SD %s on the data_set and era coefficients, cloglog scale (#84).",
-    format(formals(knw_tune_score)$prior_sd))
+    format(formals(knw_tune_run)$prior_sd))   # knw_tune_run's default is what runs: it is not passed below
 say("Smoke run first%s: previous picks on file for %s.", if (dev) " (DEV=1: the main seed only, no grades, outputs under data/tune/dev)" else "",
     paste(names(previous), collapse = ", "))
 t0 <- Sys.time()

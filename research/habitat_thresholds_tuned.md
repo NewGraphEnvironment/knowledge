@@ -54,16 +54,20 @@ move before the data can tell, and what does a segment just inside or just outsi
 
 ## Evidence
 
-FDIS electrofishing site visits (`fdis_export.md`), placed on link's segments: 51,587 visits, 40,552 placed, one
+FDIS electrofishing site visits (`fdis_export.md`), placed on link's segments: 51,587 visits, 50,024 placed on the Atlas, 40,552 kept on a segment, one
 row per visit and species. Placement (#89): `scripts/0230` snaps each visit's UTM point to the nearest Freshwater Atlas
 stream with fwapg's `fwa_indexpoint()` (500 m search, `snap_tol_m`); `knw_fdis_quality()` drops a visit not placed
-(1,563), placed more than 100 m from its stream (`snap_flag_m`, 5,242) or on a stream outside the FDIS 1:50k watershed
-code (1,088); `knw_link_place()` then takes link's segment at the visit's measure (1,491 with none). bcfishobs plays no
-part in placement. The row carries catch, size classes, presence and whether an absence is blocked by a code that
+(1,563: 1,037 with no usable UTM, 526 with no stream within 500 m), placed more than 100 m from its stream
+(`snap_flag_m`, 5,242) or on a stream outside the FDIS 1:50k tributary code (1,088 after the earlier drops; the check
+reaches only the 12,285 placed visits that carry a full tributary code, only a code the 20k-50k crosswalk knows can
+disagree, and 1,311 do, `data/fdis/build/reconcile.csv`); `knw_link_place()` then takes link's segment at the visit's measure
+(1,491 with none). bcfishobs plays no part in the snap, but link breaks its streams at bcfishobs observations
+(`lnk_pipeline_break()`), about half of them FDIS's own, so it shapes the segment a visit takes and where it starts. The row carries catch, size classes, presence and whether an absence is blocked by a code that
 could hide the species (`knw_fdis_species()`). Each visit carries link's access code and habitat flags per
 species (re-gated on `streams_access`; link#349's disagreement is ledgered per run), wet's annual flow by source
 (`modelled_discharge.md`; the default, `pick`, is PCIC's VIC-GL runoff routed by Raven on PCIC's network on 86.3 % of
-the placed visits and wet's water balance on 13.7 %, build `94deeb5`; routed flow reaches Atlas segments through the
+the kept visits and wet's water balance on 13.7 % (where routed does not reach, or carries under 0.2 of the balance on
+the segment's own line), build `94deeb5`; routed flow reaches Atlas segments through the
 PCIC crosswalk on the `newgraph` branch of NewGraphEnvironment/fwapg, fork PRs NewGraphEnvironment/fwapg#6, fwapg#10, fwapg#21, fwapg#26 and fwapg#32, which
 upstream fwapg does not carry), the width link reads on an unmeasured stream, regulated reach, the natural barriers
 downstream per species, and walks to the first river of 1–50 m³/s on each flow source, each ending at a double-line

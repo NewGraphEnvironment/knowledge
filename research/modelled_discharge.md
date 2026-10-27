@@ -64,8 +64,10 @@ path (`wet_station_daily()`, `wet_window_stats(stats = c("mean", "min7"))`, depa
 every year 2023–2026, and the 7-day minima 51–88 % below (wet's `research/station_flow_departure.md`).
 Monthly bias by region and season is wet#6.
 
-**Habitat models read it.** link reads `discharge.fwa_v1_segment_monthly` since NewGraphEnvironment/link#331 (closed),
-and this repo's evidence and tuning read its `pick`.
+**Who reads it.** This repo's evidence, grades and comparison read its `pick` (`knw_link_flow()`, `knw_link_segments()`,
+`knw_compare_rules()`). link reads it only for a bundle that sets `discharge_source: wet` (NewGraphEnvironment/link#331):
+`default_tuned` does; `default` sets none, so it reads fwapg's older annual table (next section), and the province-wide
+`default` run's flow flags were made on those flows.
 
 ## Where the flows come from
 

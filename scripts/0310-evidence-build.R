@@ -156,8 +156,9 @@ vs <- vs |> filter(site_visit %in% v$site_visit)
 # ---- flow, width, regulated, barriers ---------------------------------------------
 cat_wet <- wet::wet_catalog()
 add("info", "wet_manifest", 0, paste(attr(cat_wet, "id"), "built", attr(cat_wet, "built"), "at", attr(cat_wet, "manifest")))
-add("info", "wet_loaded_build", 0,
-    dbGetQuery(conn, "SELECT obj_description('discharge.fwa_v1_segment_monthly'::regclass) AS c")$c)
+wet_load <- dbGetQuery(conn, "SELECT obj_description('discharge.fwa_v1_segment_monthly'::regclass) AS c")$c
+if (length(wet_load) != 1 || is.na(wet_load) || !nzchar(wet_load)) stop("discharge.fwa_v1_segment_monthly carries no load comment")
+add("info", "wet_loaded_build", 0, wet_load)
 picked <- dbGetQuery(conn, "SELECT source, count(*) FILTER (WHERE pick) AS picked, count(*) AS n_segments
                             FROM discharge.fwa_v1_segment_monthly WHERE scenario = 'historical' AND month = 0 GROUP BY 1")
 for (i in seq_len(nrow(picked))) {
