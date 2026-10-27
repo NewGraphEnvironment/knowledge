@@ -29,11 +29,19 @@
 #     maturity-coded fish, a known catch, habitat, and the lowest collection id. Visits with no UTM
 #     or no date are never matched. data/fdis_repeat_surveys.csv lists every other member of a
 #     matching group: dropped, or kept with the reason.
-#   - PLACEMENT: whse_basemapping.fwa_indexpoint in the fwapg database (PG* environment variables), with an explicit
-#     tolerance (its default is 5 km). The matched FWA feature's gradient, order, edge type,
-#     modelled channel width and MAD are joined province-wide, not fresh.streams (98 groups
-#     locally). Placement is checked against the 50k watershed code FDIS recorded
-#     (NEW_WATERSHED_CODE -> fwa_streams_20k_50k -> blue_line_keys).
+#   - PLACEMENT (#91): fresh::frs_point_snap() in the fwapg database (PG* environment variables), twice:
+#     to the nearest stream, and to each stream the visit's FDIS 1:50k watershed code names
+#     (NEW_WATERSHED_CODE -> fwa_streams_20k_50k -> 20k blue_line_keys, passed as a per-point hint,
+#     so that snap lands only on that stream). knw_fdis_place() takes the nearest named stream within
+#     the search ("confirmed", moved where it is not the nearest), else the nearest stream
+#     ("unconfirmed"); a code naming no stream in reach keeps the nearest and is flagged a 1:50k
+#     mismatch. An unconfirmed pick beyond snap_limit, or a confirmed one beyond snap_limit_code, is
+#     flagged far; knw_fdis_quality() drops both flags. fresh never snaps to an unmapped or
+#     placeholder (999) line, and snap_edges_excluded drops subsurface flow and connectors, so a
+#     visit whose nearest line is one of those reaches the next stream link can place it on. The
+#     picked FWA feature's gradient, order, edge type, modelled channel width and MAD are joined
+#     province-wide, not fresh.streams (98 groups locally). research/fdis_export.md, "Placement",
+#     has the probe and the limits' sensitivity.
 #
 # INPUT:  s3://fresh-bc/fdis/ -> data/fdis/ (ignored cache; synced when missing, then
 #         md5-verified against MANIFEST.md5).
@@ -48,11 +56,18 @@ suppressMessages({
   library(dplyr); library(readr); library(tidyr); library(purrr); library(stringr)
   library(sf); library(DBI); library(RPostgres)
 })
+pkgload::load_all(quiet = TRUE)
 
 cache  <- "data/fdis"
 build  <- file.path(cache, "build")
-snap_tol_m  <- 500   # fwa_indexpoint search radius
-snap_flag_m <- 100   # farther snaps are flagged here; knw_fdis_quality() drops them (#89)
+fresh_min <- "0.40.0"   # frs_point_snap() on a dataset, with a per-point stream hint (col_blk)
+snap_search <- 500      # frs_point_snap() tolerance: a visit with no stream inside it is not placed
+# knw_fdis_place()'s limits (#91): farther picks are flagged here and knw_fdis_quality() drops them.
+# Overridable for the sensitivity run (data-raw/snap_limit_sensitivity.R); coerced at use.
+snap_limit      <- Sys.getenv("SNAP_LIMIT", 100)        # a pick no 1:50k code confirms
+snap_limit_code <- Sys.getenv("SNAP_LIMIT_CODE", 500)   # a pick on a stream the visit's 1:50k code names
+# never candidates: subsurface flow (fresh's default) and connectors, which link's streams lack
+snap_edges_excluded <- c(1425L, 6010L)
 # ---- no-data encodings: ONE table (measured field by field in research/fdis_export.md) ----
 # Every "is this a real value" decision reads from here, so a sibling sentinel is added once.
 sentinel_min     <- 9999                # counts, fishing time, fished length/width use 9999, 9999.9, 99999
@@ -413,7 +428,12 @@ counts <- counts |> filter(!site_visit %in% dropped)
 message("Repeated surveys: ", length(dropped), " visits dropped from ", nrow(rep_groups), " groups")
 
 # ---- place site visits on the network --------------------------------------
-conn <- tryCatch(DBI::dbConnect(RPostgres::Postgres()),
+if (!requireNamespace("fresh", quietly = TRUE) || packageVersion("fresh") < fresh_min) {
+  stop("needs fresh >= ", fresh_min, " (frs_point_snap() on a dataset, with col_blk): ",
+       "pak::pak(\"NewGraphEnvironment/fresh\")")
+}
+# bigint = "numeric": FWA ids are below 2^53, and knw_fdis_place() compares them as doubles
+conn <- tryCatch(DBI::dbConnect(RPostgres::Postgres(), bigint = "numeric"),
                  error = function(e) stop("database unreachable (PG* environment variables): ", conditionMessage(e)))
 
 pts <- sites |>
@@ -423,26 +443,10 @@ pts <- sites |>
                                  coords = c("utm_easting", "utm_northing"),
                                  crs = 32600 + d$utm_zone[1]), 3005)) |>
   list_rbind() |>
-  st_as_sf()
+  st_as_sf() |>
+  select(site_visit)
 
-tmp <- "fdis_sites_tmp"
-sf::st_write(pts |> select(site_visit), conn, layer = tmp, temporary = TRUE, quiet = TRUE)
-message("Indexing ", nrow(pts), " site visits with fwa_indexpoint (tolerance ", snap_tol_m, " m)")
-placed <- DBI::dbGetQuery(conn, sprintf("
-  SELECT s.site_visit, i.linear_feature_id, i.blue_line_key, i.downstream_route_measure,
-         i.distance_to_stream, i.gnis_name,
-         st.gradient AS fwa_gradient, st.stream_order, st.edge_type, st.watershed_group_code,
-         cw.channel_width AS modelled_channel_width_m, cw.channel_width_source,
-         q.mad_m3s
-    FROM %s s
-    LEFT JOIN LATERAL whse_basemapping.fwa_indexpoint(s.geometry, %d, 1) i ON TRUE
-    LEFT JOIN whse_basemapping.fwa_stream_networks_sp st ON st.linear_feature_id = i.linear_feature_id
-    LEFT JOIN whse_basemapping.fwa_stream_networks_channel_width cw ON cw.linear_feature_id = i.linear_feature_id
-    LEFT JOIN whse_basemapping.fwa_stream_networks_discharge q ON q.linear_feature_id = i.linear_feature_id",
-  DBI::dbQuoteIdentifier(conn, tmp), snap_tol_m))
-stopifnot(!anyDuplicated(placed$site_visit))
-
-# placement check: the 50k watershed code FDIS recorded -> the 20k blue_line_keys it maps to
+# the 50k watershed code FDIS recorded -> the 20k blue_line_keys it maps to
 # a 50k code is a 3-digit basin then seven 6-digit levels; a code with every level zero names
 # only a mainstem and cannot place a site on a tributary, so it is not a check
 ws50 <- fish_ws50 |> filter(!is.na(watershed_code_50k), nchar(watershed_code_50k) == 45,
@@ -451,25 +455,57 @@ ws50 <- fish_ws50 |> filter(!is.na(watershed_code_50k), nchar(watershed_code_50k
 xref <- DBI::dbGetQuery(conn, "SELECT DISTINCT watershed_code_50k, blue_line_key_20k
                                  FROM whse_basemapping.fwa_streams_20k_50k
                                 WHERE watershed_code_50k IS NOT NULL")
+hint <- ws50 |>
+  inner_join(xref, by = "watershed_code_50k", relationship = "many-to-many") |>
+  distinct(site_visit, hint_blue_line_key = blue_line_key_20k) |>
+  filter(site_visit %in% pts$site_visit)
+
+snap <- function(p, ...) {
+  fresh::frs_point_snap(conn, p, tolerance = snap_search, ...) |>
+    st_drop_geometry() |>
+    mutate(across(where(~ inherits(.x, "integer64")), as.numeric)) |>
+    select(any_of(c("site_visit", "hid")), blue_line_key, downstream_route_measure, linear_feature_id,
+           distance_to_stream)
+}
+message("Snapping ", nrow(pts), " site visits with fresh::frs_point_snap (tolerance ", snap_search, " m; ",
+        nrow(hint), " hinted rows from the 1:50k codes)")
+nearest <- pts |> st_drop_geometry() |>
+  left_join(snap(pts, col_id = "site_visit", exclude_edge_types = snap_edges_excluded), by = "site_visit")
+hp <- pts |> inner_join(hint, by = "site_visit") |> mutate(hid = paste(site_visit, hint_blue_line_key, sep = "|"))
+hinted <- hint |>
+  mutate(hid = paste(site_visit, hint_blue_line_key, sep = "|")) |>
+  left_join(snap(hp |> select(hid, hint_blue_line_key), col_id = "hid", col_blk = "hint_blue_line_key",
+                 exclude_edge_types = snap_edges_excluded), by = "hid") |>
+  select(-hid)
+# the nearest line with no edge type excluded, to count what the exclusion moves
+nearest_any <- snap(pts, col_id = "site_visit", exclude_edge_types = NULL)
+pick <- knw_fdis_place(nearest, hinted, limit_near = as.numeric(snap_limit), limit_code = as.numeric(snap_limit_code))
+
+lfid <- unique(c(pick$linear_feature_id, nearest_any$linear_feature_id))
+lfid <- lfid[!is.na(lfid)]
+attrs <- DBI::dbGetQuery(conn, "
+  SELECT st.linear_feature_id, st.gnis_name, st.gradient AS fwa_gradient, st.stream_order, st.edge_type,
+         st.watershed_group_code,
+         cw.channel_width AS modelled_channel_width_m, cw.channel_width_source,
+         q.mad_m3s
+    FROM whse_basemapping.fwa_stream_networks_sp st
+    LEFT JOIN whse_basemapping.fwa_stream_networks_channel_width cw ON cw.linear_feature_id = st.linear_feature_id
+    LEFT JOIN whse_basemapping.fwa_stream_networks_discharge q ON q.linear_feature_id = st.linear_feature_id
+   WHERE st.linear_feature_id = ANY($1::bigint[])",
+  params = list(paste0("{", paste(format(lfid, scientific = FALSE, trim = TRUE), collapse = ","), "}")))
 DBI::dbDisconnect(conn)
-ws_check <- ws50 |>
-  inner_join(placed |> select(site_visit, blue_line_key), by = "site_visit") |>
-  left_join(xref |> mutate(hit = TRUE),
-            by = c("watershed_code_50k", "blue_line_key" = "blue_line_key_20k")) |>
-  group_by(site_visit) |>
-  summarise(ws50_checked = TRUE, ws50_match = any(coalesce(hit, FALSE)),
-            ws50_known = any(watershed_code_50k %in% xref$watershed_code_50k), .groups = "drop")
+stopifnot(!anyDuplicated(attrs$linear_feature_id), all(lfid %in% attrs$linear_feature_id))
+n_nearest_excluded <- sum(attrs$edge_type[match(nearest_any$linear_feature_id, attrs$linear_feature_id)] %in%
+                            snap_edges_excluded)
 
 sites <- sites |>
-  left_join(placed, by = "site_visit") |>
-  left_join(ws_check, by = "site_visit") |>
+  left_join(pick, by = "site_visit") |>
+  left_join(attrs, by = "linear_feature_id") |>
   mutate(
     fwa_gradient_pct = fwa_gradient * 100,
-    flag_not_placed  = is.na(blue_line_key),
-    flag_far_snap    = !is.na(distance_to_stream) & distance_to_stream > snap_flag_m,
-    ws50_checked     = coalesce(ws50_checked, FALSE),
-    # only a code the xref knows can contradict the snap
-    flag_ws50_mismatch = ws50_checked & coalesce(ws50_known, FALSE) & !coalesce(ws50_match, FALSE)
+    # a visit with no coordinates never reached the snap
+    flag_not_placed = coalesce(flag_not_placed, TRUE),
+    across(c(snap_confirmed, snap_moved, ws50_checked, flag_far_snap, flag_ws50_mismatch), ~ coalesce(.x, FALSE))
   ) |>
   select(-fwa_gradient)
 
@@ -482,6 +518,21 @@ add("sites_multi_pass", sum(sites$n_pass > 1))
 add("sites_with_utm", sum(!sites$flag_no_utm)); add("sites_placed", sum(!sites$flag_not_placed))
 add("sites_far_snap", sum(sites$flag_far_snap))
 add("sites_ws50_checked", sum(sites$ws50_checked)); add("sites_ws50_mismatch", sum(sites$flag_ws50_mismatch))
+add("sites_snap_confirmed", sum(sites$snap_confirmed)); add("sites_snap_moved", sum(sites$snap_moved))
+add("sites_snap_unconfirmed", sum(sites$snap_method %in% "nearest"))
+add("sites_snap_subsurface_excluded", n_nearest_excluded)
+snap_bands <- c(0, 25, 50, 100, 200, snap_search)
+for (i in seq_len(length(snap_bands) - 1)) {
+  d <- sites$distance_to_stream
+  add(sprintf("sites_placed_%g_%gm", snap_bands[i], snap_bands[i + 1]),
+      sum(!sites$flag_not_placed & d >= snap_bands[i] & (d < snap_bands[i + 1] | i == length(snap_bands) - 1)))
+}
+if (sum(rec$n[grepl("^sites_placed_.*m$", rec$check)]) != sum(!sites$flag_not_placed)) {
+  stop("the distance bands do not partition the placed visits")
+}
+if (sum(sites$snap_confirmed) + sum(sites$snap_method %in% "nearest") != sum(!sites$flag_not_placed)) {
+  stop("confirmed and unconfirmed picks do not partition the placed visits")
+}
 add("sites_catch_fish", sum(sites$catch_status == "fish"))
 add("sites_catch_zero", sum(sites$catch_status == "zero"))
 add("sites_catch_unknown", sum(sites$catch_status == "unknown"))

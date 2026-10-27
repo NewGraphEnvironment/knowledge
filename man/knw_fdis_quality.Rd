@@ -14,13 +14,17 @@ and \code{catch_status}.}
 }
 \value{
 A list: \code{kept}, the visits that pass, and \code{ledger}, a \code{tibble} with
-columns \code{kind} (\verb{in}, \code{drop}, \code{kept}), \code{step}, \code{n} and \code{note}.
+columns \code{kind} (\verb{in}, \code{drop}, \code{kept}, \code{info}), \code{step}, \code{n} and \code{note}.
+Where \code{sites} carries \code{0230}'s \code{snap_confirmed} and \code{snap_moved}, two
+\code{info} rows count the kept visits confirmed by their 1:50k code and those
+moved to a named stream that is not the nearest; they are not part of the
+partition.
 }
 \description{
 The quality drops \code{scripts/0290} and \code{0294} applied to \code{0230}'s site table,
-in that order: a visit not placed on the FWA network, a snap over the
-placement limit, an FDIS 1:50k watershed code that disagrees with the
-placement, a junk date, a sentinel effort or no effort at all (a visit with
+in that order: a visit not placed on the FWA network, a pick beyond its
+placement limit (see \code{\link[=knw_fdis_place]{knw_fdis_place()}}), an FDIS 1:50k watershed code that
+names no stream within the snap search, a junk date, a sentinel effort or no effort at all (a visit with
 only one of area and time is kept, so a model can use either), and a catch
 whose status is unknown (neither fish nor an explicit zero). Each drop is one
 ledger row, and the drops and the kept rows partition the input, which the

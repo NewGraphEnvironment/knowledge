@@ -100,7 +100,7 @@ run-to-PR mandate runs from here.
 
 ## Phase 2: Place with fresh's snap and the 1:50k code
 
-- [ ] `R/fdis_place.R`: `knw_fdis_place(nearest, hinted, limit_near = <snap_limit>, limit_code = <snap_limit_code>)`,
+- [x] `R/fdis_place.R`: `knw_fdis_place(nearest, hinted, limit_near = <snap_limit>, limit_code = <snap_limit_code>)`,
       a pure pick with no database: one row per visit with `snap_method` (`code`, `nearest`), `snap_confirmed`,
       `snap_moved` (the pick's stream is not the nearest's), the pick's `blue_line_key`, `downstream_route_measure`,
       `linear_feature_id`, `distance_to_stream`, plus `nearest_distance_m`, `flag_not_placed`, `flag_far_snap` (an
@@ -109,7 +109,7 @@ run-to-PR mandate runs from here.
       `0230`'s connection works; `tests/testthat/test-fdis_place.R` on a fixture that reaches every branch (no
       code, confirmed nearest, moved, no hit, far unconfirmed, far confirmed, not placed, several keys per code, the
       nearest key wins among hits) and shows each limit flipping a row
-- [ ] `scripts/0230`: a `packageVersion("fresh") >= "0.40.0"` stop as `0310`'s link gate; two `frs_point_snap()`
+- [x] `scripts/0230`: a `packageVersion("fresh") >= "0.40.0"` stop as `0310`'s link gate; two `frs_point_snap()`
       calls on the `sf` points (nearest at `snap_search`; hinted, one row per visit × `blue_line_key_20k` of its
       checkable codes, ids `site_visit|key`), `tolerance = snap_search`, `exclude_edge_types` from Phase 1; the stream
       attributes (`fwa_stream_networks_sp`, channel width, discharge) joined by `linear_feature_id` as today;
@@ -117,13 +117,13 @@ run-to-PR mandate runs from here.
       `snap_limit_code` as `Sys.getenv("SNAP_LIMIT", 100)`-form constants coerced at use; the reconcile gains
       `sites_snap_confirmed`, `sites_snap_moved`, `sites_snap_unconfirmed`, `sites_snap_subsurface_excluded`, and
       placed counts by distance band; the header's PLACEMENT note rewritten
-- [ ] `R/fdis_quality.R`: the same drop steps (`not_placed`, `far_snap`, `ws50_mismatch`) with their notes reworded,
+- [x] `R/fdis_quality.R`: the same drop steps (`not_placed`, `far_snap`, `ws50_mismatch`) with their notes reworded,
       plus `info` rows for confirmed and moved placements among the kept; `test-fdis_quality.R` updated
-- [ ] `scripts/0240`: `snap_method`, `snap_confirmed`, `snap_moved`, `nearest_distance_m` into `fdis_sites.csv`
+- [x] `scripts/0240`: `snap_method`, `snap_confirmed`, `snap_moved`, `nearest_distance_m` into `fdis_sites.csv`
       (v3 is unpublished, so no version bump; `0299`'s header notes the columns); its header says `flag_far_snap` in
       `data/fdis_evidence.csv` is this limit while `data/fiss_evidence.csv` (`0250`, bound by row) keeps 100 m on
       `fwa_indexpoint()`
-- [ ] `inst/method/settings.csv`: `snap_search` → fresh's `tolerance` (`script:` row kept); `snap_limit` → the
+- [x] `inst/method/settings.csv`: `snap_search` → fresh's `tolerance` (`script:` row kept); `snap_limit` → the
       unconfirmed limit (`script:` and `fn:knw_fdis_place:limit_near`), its chinook-article `code:` pointer moved to
       the note until the retune; new `snap_limit_code` (`script:` and `fn:knw_fdis_place:limit_code`),
       `snap_edges_excluded` (`script:`); `pipeline.csv` step 2 names

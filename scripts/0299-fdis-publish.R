@@ -16,6 +16,9 @@
 #   - v2 (#35): 0230 keeps one copy of a survey loaded under several collection ids, so every table
 #     has fewer rows, and ch_mad_visits and ch_rule_visits lose `dup_of`. v1 stays as published.
 #     v2 also carries fdis_repeat_surveys, the crosswalk from a v1 site_visit to the copy kept.
+#   - v3, unpublished, also places the visits with fresh's snap and the 1:50k code (#91): fdis_sites
+#     gains snap_method, snap_confirmed, snap_moved and nearest_distance_m, and its blue_line_key,
+#     measure, distance and flags are the new placement's. v3 has not been published, so no bump.
 #   - Republishing to a version that exists refuses when any table's sha256 or row count differs
 #     from the published manifest, unless REPUBLISH=TRUE: a published version is not rewritten by
 #     accident, including by a change of meaning that keeps the schema.

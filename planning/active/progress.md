@@ -26,3 +26,7 @@ The approval covered the baseline only: the run-to-PR mandate starts when Al say
 - Next: Phase 1, the probe
 - Phase 1: probe committed and run (2.1 min); no_link_segment 1,491 reproduced; hint route covers the codes, no fresh
   issue; exclusion set c(1425, 6010) stands; unmapped re-snaps checked against the code (no rule needed)
+- Phase 2 code: `knw_fdis_place()` (refuses integer64 rather than passing it through: base `ifelse()` strips the
+  class, so `0230` and `0240` connect with `bigint = "numeric"`), its tests (three planted defects each fail them),
+  `0230` on fresh's snap and the hint, `knw_fdis_quality()` info rows, `0240` columns and header, registers;
+  `0250`'s comments no longer claim to match `0230`

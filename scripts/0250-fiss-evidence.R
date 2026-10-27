@@ -53,8 +53,8 @@ suppressMessages({
 sf::sf_use_s2(FALSE)
 pkgload::load_all(quiet = TRUE)
 
-snap_tol_m  <- 500   # fwa_indexpoint search radius, as 0230
-snap_flag_m <- 100   # farther snaps are flagged, not dropped, as 0230
+snap_tol_m  <- 500   # fwa_indexpoint search radius, as 0230 before #91 (0230 now snaps with fresh and the 1:50k code)
+snap_flag_m <- 100   # farther snaps are flagged, not dropped, as 0230 before #91
 same_site_m <- 50    # FISS site vs FDIS site visit, same date and zone
 
 na_str <- c("", "NA", "na", "n/a", "N/A", "UN", "-")
@@ -262,7 +262,7 @@ unmeasured <- catch_all |>
             n = pmax(n_caught - n_measured, 0) + n_nolength) |>
   filter(is.na(n) | n > 0)
 
-# ---- placement (0230's fwa_indexpoint query) --------------------------------
+# ---- placement (0230's fwa_indexpoint query before #91) -----------------------
 conn <- tryCatch(DBI::dbConnect(RPostgres::Postgres()),
                  error = function(e) stop("database unreachable (PG* environment variables): ", conditionMessage(e)))
 used_sites <- unique(c(by_class$site_key, unmeasured$site_key, spawners$site_key))
