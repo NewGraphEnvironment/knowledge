@@ -67,6 +67,9 @@ t0 <- Sys.time()
 # ---- inputs ----------------------------------------------------------------------
 sites <- readRDS("data/fdis/build/sites.rds") |>
   mutate(across(where(~ inherits(.x, "integer64")), as.numeric))
+# the old snap is fwa_indexpoint()'s stored placement; from #91 0230 writes fresh's (with snap_method), against which
+# this probe would compare the new snap with itself. Restore the 2026-10-17 build (md5 98d4d6dd…) to rerun it.
+if ("snap_method" %in% names(sites)) stop("data/fdis/build/sites.rds is #91's placement, not fwa_indexpoint()'s")
 fish <- readRDS("data/fdis/build/fish.rds")
 pts <- sites |>
   filter(!flag_no_utm) |>

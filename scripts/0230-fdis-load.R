@@ -37,7 +37,8 @@
 #     ("unconfirmed"); a code naming no stream in reach keeps the nearest and is flagged a 1:50k
 #     mismatch. An unconfirmed pick beyond snap_limit, or a confirmed one beyond snap_limit_code, is
 #     flagged far; knw_fdis_quality() drops both flags. fresh never snaps to an unmapped or
-#     placeholder (999) line, and snap_edges_excluded drops subsurface flow and connectors, so a
+#     placeholder (999) line, and snap_edges_excluded drops subsurface flow (1425) and the group-boundary
+#     connectors (6010), so a
 #     visit whose nearest line is one of those reaches the next stream link can place it on. The
 #     picked FWA feature's gradient, order, edge type, modelled channel width and MAD are joined
 #     province-wide, not fresh.streams (98 groups locally). research/fdis_export.md, "Placement",
@@ -66,7 +67,8 @@ snap_search <- 500      # frs_point_snap() tolerance: a visit with no stream ins
 # Overridable for the sensitivity run (data-raw/snap_limit_sensitivity.R); coerced at use.
 snap_limit      <- Sys.getenv("SNAP_LIMIT", 200)        # a pick no 1:50k code confirms
 snap_limit_code <- Sys.getenv("SNAP_LIMIT_CODE", 500)   # a pick on a stream the visit's 1:50k code names
-# never candidates: subsurface flow (fresh's default) and connectors, which link's streams lack
+# never candidates: subsurface flow (1425, fresh's default) and group-boundary connectors (6010, which link's
+# streams lack); other construction-line connectors (1400, 1410, 1450) stay candidates
 snap_edges_excluded <- c(1425L, 6010L)
 # ---- no-data encodings: ONE table (measured field by field in research/fdis_export.md) ----
 # Every "is this a real value" decision reads from here, so a sibling sentinel is added once.
@@ -521,6 +523,8 @@ add("sites_ws50_checked", sum(sites$ws50_checked)); add("sites_ws50_mismatch", s
 add("sites_snap_confirmed", sum(sites$snap_confirmed)); add("sites_snap_moved", sum(sites$snap_moved))
 add("sites_snap_unconfirmed", sum(sites$snap_method %in% "nearest"))
 add("sites_snap_subsurface_excluded", n_nearest_excluded)
+# the limits this build used: SNAP_LIMIT / SNAP_LIMIT_CODE override the defaults, so readers compare these, not the code
+add("snap_limit_m", as.numeric(snap_limit)); add("snap_limit_code_m", as.numeric(snap_limit_code))
 snap_bands <- c(0, 25, 50, 100, 200, snap_search)
 for (i in seq_len(length(snap_bands) - 1)) {
   d <- sites$distance_to_stream

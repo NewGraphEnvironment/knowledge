@@ -112,6 +112,12 @@ breaks <- read_csv("data/fdis_size_breaks.csv", col_types = cols(.default = "c")
   mutate(across(c(length_min_mm, length_max_mm), as.numeric))
 for (f in c("sites", "catch", "fish")) add("info", paste0("md5_", f), 0, unname(tools::md5sum(file.path(build, paste0(f, ".rds")))))
 add("info", "fdis_sites_in", nrow(sites))
+# the snap limits 0230 placed with (#91): an environment override leaves no other trace, so readers compare these
+rec0230 <- read_csv(file.path(build, "reconcile.csv"), show_col_types = FALSE)
+for (k in c("snap_limit_m", "snap_limit_code_m")) {
+  if (sum(rec0230$check == k) != 1L) stop(build, "/reconcile.csv has no ", k, ": rerun scripts/0230")
+  add("info", k, rec0230$n[rec0230$check == k], "the limit 0230 placed with (its reconcile.csv)")
+}
 
 q <- knw_fdis_quality(sites)
 ledger <- bind_rows(ledger, q$ledger |> filter(kind %in% c("drop", "info")) |> mutate(n = as.numeric(n)))

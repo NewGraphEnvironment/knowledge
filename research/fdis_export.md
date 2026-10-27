@@ -146,8 +146,10 @@ within 500 m: to the nearest stream, and to each 20k stream its FDIS 1:50k water
 
 An unconfirmed pick beyond 200 m (`snap_limit`) and a confirmed one beyond 500 m (`snap_limit_code`) are dropped
 as far snaps. fresh never snaps to an unmapped line (no local code) or a placeholder (`999`) line, and `0230`
-excludes subsurface flow (1425) and connectors (6010) as well. link's segments carry none of the first three
-kinds, so a visit `fwa_indexpoint()` put on one could never be placed on link's segments.
+excludes subsurface flow (1425, fresh's default) and the connectors that carry a stream across a watershed-group
+boundary (6010) as well. link's segments carry no unmapped, placeholder or 6010 line, so a visit `fwa_indexpoint()`
+put on one could never be placed on link's segments. They do carry 1425 lines; the nearest line is one for 13
+visits, which now go to the next stream. Other construction-line connectors (1400, 1410, 1450) stay candidates.
 
 **What changed against `fwa_indexpoint()`** (the probe, `data-raw/snap_candidate_check.R`, on the 2026-10-17
 placement and link's schema of that run). Its classes partition the 50,550 visits with a usable point:
@@ -183,11 +185,14 @@ stream its code does not name:
 | 100–200 m | 379 | 126 | 33.2 % |
 | 200–500 m | 172 | 96 | 55.8 % |
 
-So the unconfirmed limit is 200 m, though the 100–200 m band clears one in three by only 0.1 point. Across
-unconfirmed limits of 100, 200 and 500 m and confirmed limits of 200 and 500 m, neither key's pick ever fell outside
-another cell's one-SE region, so neither limit stepped down. That check is weak, because the regions hold 51 to 244
-rules. CH rearing's pick moves between cells (`g<=0.15` at 200/500, `g<=0.3` with a smaller flow floor at
-100/500) while staying inside every region, and BT rearing's pick is the same rule in all six.
+So the unconfirmed limit is 200 m, though the 100–200 m band clears one in three by only 0.1 point. The rule
+compares five pairs of cells (each unconfirmed limit of 100, 200 and 500 m against the next, with confirmed picks
+at 500 m; and 200 against 500 m for confirmed picks at each unconfirmed limit). In none of them did either key's
+pick fall outside the other cell's one-SE region, so neither limit stepped down. That check is weak, because the
+regions hold 51 to 244 rules. Across all 36 ordered pairs of the six cells one pick falls outside another's region:
+CH rearing's at 200/200 (`g<=0.13`) is outside the 500/500 cell's 51-rule region. CH rearing's pick moves between
+cells (`g<=0.15` at 200/500, `g<=0.3` with a smaller flow floor at 100/500), and BT rearing's pick is the same rule
+in all six.
 
 Moved picks are where the confirmed limit matters. Of 785, 177 move within 25 m. 56 lie under 25 m from their
 nearest stream and are moved 200–500 m to the coded one; the confirmed limit keeps them.
@@ -203,7 +208,8 @@ flow load):
 | no link segment | 1,491 | 178 |
 | kept | 40,552 | 45,523 |
 
-Of the kept visits, 10,247 are confirmed by their code and 754 were moved to a named stream past a nearer one.
+Of the 45,523 kept visits, 10,210 are confirmed by their code and 748 were moved to a named stream past a nearer
+one (the ledger's `kept_snap_*` rows, 10,247 and 754, are counted before link's segment drops 178).
 The FISS workbook sites (`0250`) still snap with `fwa_indexpoint()` and a 100 m flag, so `flag_far_snap` in the
 bound `data/fdis_evidence.csv` and `data/fiss_evidence.csv` is not one placement. fresh#266 (open) proposes a new
 tie rule between two segments of one stream; ties are 29 visits, all on one stream either way.
