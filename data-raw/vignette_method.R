@@ -44,9 +44,19 @@ suppressPackageStartupMessages({
 })
 pkgload::load_all(quiet = TRUE)
 
-# the bundle names the commit it was built at, so the code and registers it read must be that commit's
-src_code <- c("data-raw/vignette_method.R", "inst/method", "R")
-dirty <- system2("git", c("status", "--porcelain", "--", src_code), stdout = TRUE)
+# the bundle names the commit it was built at, so every file it resolves must be that commit's: this script, the
+# registers, the package code, and every file a script: or code: row reads
+git <- function(...) {
+  out <- suppressWarnings(system2("git", c(...), stdout = TRUE, stderr = TRUE))
+  if (!is.null(attr(out, "status"))) stop("git ", paste(c(...), collapse = " "), " failed: ", out[1])
+  out
+}
+reg_files <- unique(vapply(Filter(function(w) grepl("^(script|code):", w),
+                                  unlist(strsplit(utils::read.csv(f_settings, colClasses = "character")$where, ";",
+                                                  fixed = TRUE))),
+                           function(w) .knw_where_parse(w)$parts[1], ""))
+src_code <- unique(c("data-raw/vignette_method.R", "inst/method", "R", reg_files))
+dirty <- git("status", "--porcelain", "--", src_code)
 if (length(dirty)) stop("commit these first, so the bundle's commit is the code it ran: ", paste(dirty, collapse = "; "))
 
 dir_out <- "inst/vignette-data"
@@ -113,9 +123,10 @@ ext_value <- function(w) {
     leaf <- utils::tail(path, 1)
     # an absent leaf reads "unset", so the leaf must be a key the sibling's own code reads at that commit; a
     # misspelt or renamed key is then an error rather than a match
-    hits <- suppressWarnings(system2("git", c("-C", repo, "grep", "-c", "-w", "-F", leaf, sha, "--", "R"),
+    access <- paste(path, collapse = "$")
+    hits <- suppressWarnings(system2("git", c("-C", repo, "grep", "-c", "-F", access, sha, "--", "R"),
                                      stdout = TRUE, stderr = TRUE))
-    if (!is.null(attr(hits, "status"))) stop(leaf, " is not read by ", w$parts[1], "'s R code at ", sha)
+    if (!is.null(attr(hits, "status"))) stop(access, " is not read by ", w$parts[1], "'s R code at ", sha)
     v <- if (is.list(y)) y[[leaf]] else stop(w$parts[2], " at ", sha, ": ", w$parts[3], " is not a key")
     return(list(value = if (is.null(v)) "unset" else as.character(v), sha = sha))
   }
@@ -167,14 +178,15 @@ n_utm <- rn("sites_with_utm")
 n_placed <- rn("sites_placed")
 if (n_in - n_placed != ln("not_placed")) stop("the reconcile's placed count does not match the ledger's not_placed")
 drops <- c("far_snap", "ws50_mismatch", "junk_date", "effort_sentinel_or_none", "catch_unknown", "no_link_segment")
-why <- c(far_snap = "snapped more than 100 m from its stream",
+val <- function(key) settings$value[settings$key == key]
+why <- c(far_snap = sprintf("snapped more than %s m from its stream", val("snap_limit")),
          ws50_mismatch = "on a stream outside the 1:50k tributary code FDIS recorded",
          junk_date = "no usable date", effort_sentinel_or_none = "no fished area or time",
          catch_unknown = "catch neither fish nor an explicit zero",
          no_link_segment = "no link segment at the visit's measure")
 funnel <- tibble(stage = c("FDIS visits", "with a usable point", "placed on the Atlas"),
                  n = c(n_in, n_utm, n_placed),
-                 reason = c(NA, "no usable UTM point", "no stream within 500 m"))
+                 reason = c(NA, "no usable UTM point", sprintf("no stream within %s m", val("snap_search"))))
 n <- n_placed
 for (d in drops) {
   n <- n - ln(d)
@@ -240,9 +252,9 @@ near <- function(s) {
     WITH p AS (SELECT ST_Transform(ST_SetSRID(ST_MakePoint(%.3f, %.3f), %d), 3005) AS g)
     SELECT s.blue_line_key, s.gnis_name, round(min(ST_Distance(s.geom, p.g))::numeric, 1) AS distance_m
       FROM whse_basemapping.fwa_stream_networks_sp s, p
-     WHERE ST_DWithin(s.geom, p.g, 500)
+     WHERE ST_DWithin(s.geom, p.g, %s)
      GROUP BY s.blue_line_key, s.gnis_name
-     ORDER BY 3, 1", s$utm_easting, s$utm_northing, 32600L + as.integer(s$utm_zone)))
+     ORDER BY 3, 1", s$utm_easting, s$utm_northing, 32600L + as.integer(s$utm_zone), val("snap_search")))
 }
 pick_example <- function(cand) {
   for (i in seq_len(nrow(cand))) {
@@ -330,15 +342,22 @@ svg_of <- function(dot) DiagrammeRsvg::export_svg(DiagrammeR::grViz(dot))
 svg <- list(flow = svg_of(dot_flow), lineage = svg_of(dot_lin))
 
 # ---- write ------------------------------------------------------------------------------------------------
-tracked <- c(f_pipeline, f_settings, ledger, f_tune, f_grades, f_compare,
-             file.path("data/tune", paste0(keys, "_summary.csv")), file.path(dir_out, "bulk_segments.rds"))
-local <- c(f_reconcile, unname(derived), f_sites)
+# git, not a list here, says which sources a clone has: an ignored one is checked only where it is present
+sources <- c(f_pipeline, f_settings, ledger, f_tune, f_grades, f_compare,
+             file.path("data/tune", paste0(keys, "_summary.csv")), file.path(dir_out, "bulk_segments.rds"),
+             f_reconcile, unname(derived), f_sites)
+is_tracked <- vapply(sources, function(f) {
+  is.null(attr(suppressWarnings(system2("git", c("ls-files", "--error-unmatch", f), stdout = TRUE, stderr = TRUE)),
+               "status"))
+}, TRUE)
+tracked <- sources[is_tracked]
+local <- sources[!is_tracked]
 out <- list(
   pipeline = pipeline, settings = settings, resolved = resolved, funnel = funnel, funnel_species = funnel_species,
   steps = steps, examples = list(kept = ex_kept, far = ex_far, wsg = example_wsg, stages = stages),
   svg = svg,
   meta = list(written = format(Sys.Date()),
-              commit = system2("git", c("rev-parse", "--short", "HEAD"), stdout = TRUE),
+              commit = git("rev-parse", "--short", "HEAD"),
               ledger = ledger, flow_load = loads, wet_sha = wet_sha, link_config_sha = cfg_sha,
               md5 = tools::md5sum(tracked) |> stats::setNames(tracked),
               md5_local = tools::md5sum(local) |> stats::setNames(local))

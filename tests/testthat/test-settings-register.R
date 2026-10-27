@@ -83,6 +83,11 @@ test_that("the scorer's region is the register's number of SEs from the best", {
   expect_identical(unname(s$region), ratios <= k)
 })
 
+test_that("the 1:50k check's zero run is the code's length less its 3-digit basin", {
+  r <- reg()
+  expect_identical(as.numeric(r$value[r$key == "ws50_code_zeros"]), as.numeric(r$value[r$key == "ws50_code_length"]) - 3)
+})
+
 test_that("every setting #93 names has a row", {
   need <- c("snap_search", "snap_limit", "ws50_code_length", "flow_far_low", "prior_sd", "se_region", "se_strict",
             "folds", "seeds_more", "bridge_distance", "bridge_gradient", "walk_q", "grade_ref", "gradient_col")

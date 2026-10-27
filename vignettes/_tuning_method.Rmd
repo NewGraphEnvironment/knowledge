@@ -35,6 +35,7 @@ ex <- x$examples
 n0 <- function(v) format(round(v), big.mark = ",", trim = TRUE)
 pc <- function(v) paste0(format(round(100 * v, 1), nsmall = 1), " %")
 fn <- function(stage) fun$n[fun$stage == stage]
+val <- function(key) gsub(";", ", ", reg$value[reg$key == key], fixed = TRUE)
 issue <- function(n) {
   ifelse(is.na(n) | !nzchar(n), "",
          sprintf("[#%s](https://github.com/NewGraphEnvironment/knowledge/issues/%s)", n, n))
@@ -62,7 +63,7 @@ alternative; the rest are the list of what to test next.
 
 ## What happens, in order?
 
-Eleven steps, each done by one package. The box colour names the package.
+`r nrow(pipe)` steps, each done by one package. The box colour names the package.
 
 ```{r flow}
 svg_inline(x$svg$flow)
@@ -104,7 +105,7 @@ Of the `r n0(fn("FDIS visits"))` visits, `r n0(fn("no_link_segment"))` (`r pc(fn
 remain on a link segment.
 
 Each species then keeps only the visits its rules can speak to: on a stream line (not in a river polygon, a wetland
-of 1 ha or more or a lake of 100 ha or more), of a usual fished area, in a group where link expects the species, with
+of `r val("wetland_ha_min")` ha or more or a lake of `r val("lake_ha_min")` ha or more), of a usual fished area, in a group where link expects the species, with
 no code that could hide it and no natural barrier to it downstream. The tests use the groups where the species was
 caught at some visits and not others.
 
@@ -137,12 +138,13 @@ link_fn <- function(f) {
 }
 counts <- list(
   `1` = sprintf("In: %s site visits, one row each.", n0(x$steps[["1"]][["visits"]])),
-  `2` = sprintf(paste("In: %s visits. %s have a usable point and %s are placed on a stream within 500 m. %s are",
-                      "dropped for lying more than 100 m from it and %s for lying outside the 1:50k tributary code",
-                      "FDIS recorded; the check reaches only the %s placed visits that carry a full tributary code,",
-                      "and %s of those disagree. Out: %s."),
-                n0(fn("FDIS visits")), n0(fn("with a usable point")), n0(fn("placed on the Atlas")),
-                n0(fn("placed on the Atlas") - fn("far_snap")), n0(fn("far_snap") - fn("ws50_mismatch")),
+  `2` = sprintf(paste("In: %s visits. %s have a usable point and %s are placed on a stream within %s m. %s are",
+                      "dropped for lying more than %s m from it and %s for lying outside the 1:50k tributary code",
+                      "FDIS recorded. A code can disagree only where a placed visit carries a full tributary code",
+                      "(%s do) that the Atlas's 1:20k-1:50k crosswalk knows; %s disagree in all. Out: %s."),
+                n0(fn("FDIS visits")), n0(fn("with a usable point")), n0(fn("placed on the Atlas")), val("snap_search"),
+                n0(fn("placed on the Atlas") - fn("far_snap")), val("snap_limit"),
+                n0(fn("far_snap") - fn("ws50_mismatch")),
                 n0(x$steps[["2"]][["ws50_checked"]]), n0(x$steps[["2"]][["ws50_mismatch_all"]]),
                 n0(fn("ws50_mismatch"))),
   `4` = sprintf("Of the %s kept visits, %s (%s) take PCIC's routed flow and %s (%s) wet's water balance.",
@@ -158,7 +160,7 @@ counts <- list(
   `6` = paste0("Rules per species and stage: ",
                paste(sprintf("%s %s", sub("_", " ", names(x$steps[["6"]])), n0(x$steps[["6"]])), collapse = ", "),
                "."),
-  `7` = paste0("Rules in the region (within one SE of the best): ",
+  `7` = paste0("Rules in the region (within ", val("se_region"), " SE of the best): ",
                paste(sprintf("%s %s", sub("_", " ", names(x$steps[["7"]])), n0(x$steps[["7"]])), collapse = ", "),
                "."),
   `10` = sprintf(paste("On the Bulkley's %s segments, fresh's predicate passes %s for `default` and %s for the tuned",
@@ -187,7 +189,8 @@ for (i in seq_len(nrow(pipe))) {
 
 ## How is a site placed?
 
-A visit's point is snapped to the nearest Atlas stream within 500 m, and kept only if that stream is within 100 m.
+A visit's point is snapped to the nearest Atlas stream within `r val("snap_search")` m, and kept only if that stream
+is within `r val("snap_limit")` m.
 The nearest stream is taken and the others in reach are not weighed; snapping among candidates is
 [#91](https://github.com/NewGraphEnvironment/knowledge/issues/91).
 
@@ -200,9 +203,9 @@ row_of <- function(e, fate) {
 }
 knitr::kable(rbind(row_of(ex$kept, "kept"), row_of(ex$far, "dropped")),
              col.names = c("visit", "fate", "Atlas stream (blue line)", "name", "distance (m)", "snapped to"),
-             caption = sprintf(paste("Two %s visits and every Atlas stream within 500 m of each. The first is kept;",
-                                     "the second is placed, then dropped because its stream is more than 100 m away."),
-                               ex$wsg),
+             caption = sprintf(paste("Two %s visits and every Atlas stream within %s m of each. The first is kept;",
+                                     "the second is placed, then dropped because its stream is more than %s m away."),
+                               ex$wsg, val("snap_search"), val("snap_limit")),
              align = "llrlrl")
 ```
 

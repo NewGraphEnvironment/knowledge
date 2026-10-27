@@ -64,3 +64,11 @@
   value in its files, comments skipped: 42, 31 covered by a where, 11 others each a different quantity or a token-match
   artefact (listed in findings.md). And every row's `tested` flag walked against its evidence: `se_strict` and
   `tuned_as` were compared with alternatives too; 7 rows tested in all.
+- Round 3 (spawned 06:24 UTC, delivered ~06:34; `review-round3.md`), asked for the mechanism: each guard checks the
+  copies its author listed, and the round 2 enumeration searched only files the wheres already name. Fixed: the 1:50k
+  check stated with its crosswalk condition (the article said it "reaches" 12,260; a code the crosswalk does not know
+  cannot disagree) in the article, research, step 2 and the chinook article; the bundle's tracked/ignored split is now
+  git's (`_grades.csv` is ignored and would fail the test on a clone); the dirty check covers every file a script: or
+  code: row reads and errors on a git failure; the leaf check greps link for the access path `pipeline$discharge_source`;
+  the article, the funnel reasons and the snap query take their values from the register; 0320's log and the chinook
+  article's 1.96 are watched; the 42-of-45 relation is tested; era labels noted against the breaks.

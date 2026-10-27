@@ -247,8 +247,8 @@ for (k in names(out)) {
       say("%s: grades withheld: the curve's held-out %.1f is no better than no rule's %.1f on the curve's own visits.", k,
           r$curve$heldout, r$null_heldout_curve)
     }
-    say("%s: from the flow start %s (1.96 SE: %s); from the width start at 1.96 SE %s; link's default_tuned rule %s %s.",
-        k, row$rule_recommended_flow, row$rule_recommended_flow_196, row$rule_recommended_196,
+    say("%s: from the flow start %s (%s SE: %s); from the width start at %s SE %s; link's default_tuned rule %s %s.",
+        k, row$rule_recommended_flow, se_strict, row$rule_recommended_flow_196, se_strict, row$rule_recommended_196,
         row$rule_link_tuned, if (nrow(ltn)) sprintf("%s the region (+%.1f, SE %.1f)", if (ltn$in_region) "in" else "outside", ltn$ddev_best, ltn$se_diff) else "(none)")
     block(paste(k, "region"), rules |> filter(in_region) |> arrange(ddev_best) |>
             select(rule, departures, ddev_best, se_diff, n_wsg_varies, n_in, n_detect_in, raw_rate_in, raw_rate_out, any_of("boot_region_share")))

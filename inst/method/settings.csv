@@ -31,7 +31,7 @@ folds,7,Group folds,5,,fn:knw_tune_run:folds;fn:knw_tune_score:folds;fn:knw_tune
 fit,7,Group intercepts absorbed,fe,,fn:knw_tune_run:fit[1];fn:knw_tune_score:fit[1],convention,yes,83,fe absorbs the group intercepts; it reproduced the dense fit on six species rule by rule (#73)
 prior_sd,7,Prior SD on data set and era,2.5,cloglog,fn:knw_tune_run:prior_sd;fn:knw_tune_score:prior_sd;fn:knw_tune_smoke:prior_sd;fn:knw_tune_curve:prior_sd;record:summary$curve_prior_sd,convention,yes,84,"compared with no prior (#84), which let separating levels run to hazard ratios in the millions; not compared with another SD; chosen by Al 2026-10-23"
 se_region,7,Region width,1,SE,"fn:knw_tune_repick:se_mult;code:R/thresholds_table.R:identical(knw_tune_repick(tune, se_mult = {value}, d_floor;code:R/thresholds_table.R:rule_flow <- flow_pick({value})",convention,yes,79,"a parsimony rule of thumb fixed before the run; the scorer's own region (.tune_sel) is pinned by test-settings-register.R, and every pick is also read at 1.96 SE"
-se_strict,7,Stricter reading,1.96,SE,"script:scripts/0320-tune-run.R:se_strict;code:R/thresholds_table.R:r196 <- knw_tune_repick(tune, se_mult = {value}, d_floor;code:R/thresholds_table.R:rule_flow_196 <- flow_pick({value})",convention,yes,79,"read beside the one-SE pick on every key, so each pick is compared at both widths"
+se_strict,7,Stricter reading,1.96,SE,"script:scripts/0320-tune-run.R:se_strict;code:R/thresholds_table.R:r196 <- knw_tune_repick(tune, se_mult = {value}, d_floor;code:R/thresholds_table.R:rule_flow_196 <- flow_pick({value});code:vignettes/chinook_rearing.Rmd:tune$ddev_best <= {value} * tune$se_diff;code:vignettes/chinook_rearing.Rmd:knw_tune_repick(tune, se_mult = {value})",convention,yes,79,"read beside the one-SE pick on every key, so each pick is compared at both widths"
 d_floor,7,Exception distance the pick moves off,200,m,fn:knw_tune_run:d_floor;fn:knw_tune_score:d_floor;fn:knw_tune_repick:d_floor,convention,no,,recommended moves off an exception under it
 smoke_tol_null,7,Smoke gate: tolerance on no rule,0.25,deviance,fn:knw_tune_smoke:tol_null,convention,no,84,
 smoke_coef_max,7,Smoke gate: largest nuisance coefficient,5,cloglog,fn:knw_tune_smoke:coef_max,convention,no,84,
@@ -41,7 +41,7 @@ spawn_codes,7,Maturity codes that count as spawner evidence,IM;M;MT;SP;ST,,fn:kn
 spawn_large,7,Length counted as a large spawner,350,mm,fn:knw_spawner_evidence:large_mm,convention,no,,
 flow_src,7,Flow source the rules read,pick,,fn:knw_tune_run:src;fn:knw_rule_in:src,convention,no,89,wet's default per segment
 lake_target,7,Walk targets on a lake or regulated river excluded,FALSE,,fn:knw_rule_in:no_lake_target;fn:knw_rule_in:no_reg_target,convention,no,,
-era_breaks,7,Era breaks of the nuisance term,1994;2004,,"code:R/tune_run.R:c(-Inf, {value}, Inf)",convention,no,,
+era_breaks,7,Era breaks of the nuisance term,1994;2004,,"code:R/tune_run.R:c(-Inf, {value}, Inf)",convention,no,,the era labels in R/tune_run.R and R/tune_curve.R restate the breaks; a change to one needs the other
 seeds_more,8,Extra fold seeds,55;56;57;58,,fn:knw_tune_run:seeds_more,convention,no,,
 n_boot,8,Group bootstrap resamples,200,,fn:knw_tune_run:n_boot;fn:knw_tune_score:n_boot,convention,no,,
 seed_boot,8,Bootstrap seed,541,,fn:knw_tune_score:seed_boot,convention,no,,

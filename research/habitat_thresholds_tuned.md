@@ -59,8 +59,8 @@ row per visit and species. Placement (#89): `scripts/0230` snaps each visit's UT
 stream with fwapg's `fwa_indexpoint()` (500 m search, `snap_tol_m`); `knw_fdis_quality()` drops a visit not placed
 (1,563: 1,037 with no usable UTM, 526 with no stream within 500 m), placed more than 100 m from its stream
 (`snap_flag_m`, 5,242) or on a stream outside the FDIS 1:50k tributary code (1,088 after the earlier drops; the check
-reaches only the 12,260 placed visits that carry a full tributary code, only a code the 20k-50k crosswalk knows can
-disagree, and 1,295 do, `data/fdis/derived/fdis_sites.csv`); `knw_link_place()` then takes link's segment at the visit's measure
+can disagree only where a visit carries a full tributary code (12,260 placed visits do) that the 20k-50k crosswalk
+knows, and 1,295 disagree, `data/fdis/derived/fdis_sites.csv`); `knw_link_place()` then takes link's segment at the visit's measure
 (1,491 with none). bcfishobs plays no part in the snap, but link breaks its streams at bcfishobs observations
 (`lnk_pipeline_break()`), 29 % of them FDIS's own for the twelve species codes link models (64,735 of 225,153; 44 % across
 all species), so it shapes the segment a visit takes and where it starts. The row carries catch, size classes, presence and whether an absence is blocked by a code that
