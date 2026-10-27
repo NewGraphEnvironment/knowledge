@@ -153,6 +153,61 @@ to be wrapped or retired in favour of `fresh::frs_point_snap()`, so the network 
   `test-vignette-data.R` on every clone until `data-raw/vignette_method.R` is rerun, which needs the grades to match
   the evidence: the retune. No workflow runs tests, so GitHub shows nothing.
 
+## Phase 1: the probe (2026-10-27, `data-raw/snap_candidate_check.R`)
+
+Run 2026-10-27T17:09Z on fresh 0.43.0, schema `fresh_default_20261017`, from a machine on a remote link to the
+database (about 170 ms a round trip); 2.1 min. Log: `scripts/logs/fdis/20261027_snap_candidate_check.{txt,csv.gz}`.
+The old snap is the placement `0230` stored on 2026-10-17 (`sites.rds`), not a rerun of `fwa_indexpoint()`.
+
+- **Today's path reproduced:** `knw_fdis_quality()` then `knw_link_place()` on the stored placement keeps 42,043 and
+  drops 1,491 as `no_link_segment`, the 2026-10-22 ledger's number.
+- **Classes** (first match; they partition the 50,550 visits with coordinates), with link placement under each snap:
+
+  | class | n | link places, old snap | link places, new nearest |
+  |---|---|---|---|
+  | same_segment | 48,241 | 47,848 | 48,050 |
+  | old_unmapped | 1,347 | 0 | 1,347 |
+  | neither | 526 | 0 | 0 |
+  | old_placeholder | 174 | 0 | 165 |
+  | same_stream | 131 | 107 | 131 |
+  | old_only (no fresh candidate in 500 m) | 102 | 2 | 0 |
+  | tie | 29 | 29 | 29 |
+  | other | 0 | | |
+
+  On one segment the two measures differ by at most 1.000 m (fresh's whole metre). link places 202 more
+  same-segment visits under the new measure than the old: the floored metre lands differently at link's breaks.
+  Of the old snap's 1,995 link misses, 1,421 are unmapped picks and 224 placeholder picks (some placeholder picks
+  fall in `same_segment`/`same_stream` because fresh's first-match class is by difference), 393 other.
+- **Exclusion set:** with no edge type excluded, the nearest line is subsurface (1425) for 13 visits and a connector
+  (6010) for 3. link's streams carry 1425 and lack 6010; the old snap's five 1425 picks all reach a link segment.
+  The counts are small either way, so the default stands on fresh's convention plus the connector:
+  `exclude_edge_types = c(1425L, 6010L)`.
+- **Unmapped and placeholder visits re-snap to a mapped stream a median 135–151 m away, but not to a worse one.**
+  Where the 1:50k code checks them (186), the new nearest agrees with the code by distance band as often as an
+  ordinary same-segment snap does: 0.917 against 0.925 within 25 m, 0.879 against 0.833 at 25–50, 0.707 against
+  0.732 at 50–100, 0.629 against 0.672 at 100–200, 0.458 against 0.439 at 200–500 (from the csv.gz). So the
+  distance limit governs them like any other visit and no rule of their own is needed. At the provisional limits
+  (100 m unconfirmed, 500 m confirmed) 510 of the 1,521 come back (160 confirmed, 350 unconfirmed).
+- **The hint route covers the codes; no fresh issue is filed.** Every one of the 12,285 visits with coordinates and a
+  checkable code has exactly one code. 10,889 have a code `fwa_streams_20k_50k` knows (1,396 codes map to no key:
+  unchecked, as today). Keys per code on these visits: 1 for 4,045, 2 for 3,039, 3–5 for 2,222, 6–20 for 1,195,
+  over 20 for 388. 58,269 hinted rows snapped in 8.5 s. Routes: 10,433 confirmed, 456 no hit within 500 m (a drop),
+  39,055 unconfirmed, 606 not placed.
+- **Confirmed picks by keys** (the union over the visit's codes; "confirmed" means on some stream the code names):
+  1 key 3,868 (301 moved), 2 keys 2,925 (187), 3–5 keys 2,113 (155), over 5 keys 1,527 (144). 787 moved in all.
+- **Moved picks: the move against the nearest.** 179 move within 25 m; 56 visits 0–25 m from their nearest stream
+  move 200–500 m to the coded one, which is where the confirmed limit matters (Phase 4).
+- **The issue's check under the new nearest snap** (checkable, placed): disagreement 7.5 % within 25 m, 16.6 % at
+  25–50, 27.1 % at 50–100, 33.2 % at 100–200, 55.8 % at 200–500, against the issue's 8/18/28/34/57 on the old snap.
+  Under the rule at the gate (the widest band whose disagreement stays under one in three) 100–200 m is at
+  33.2 %, just under one in three, so the unconfirmed limit is 200 m before the region check; Phase 4 settles it.
+- **Preview at 100/500** (before link): `far_snap` 5,242 → 5,524, `ws50_mismatch` 1,088 → 456, not placed
+  1,563 → 1,643, kept 42,043 → 42,286; link then places the unmapped and placeholder visits it could not before.
+- **0230 differs from the probe in one input:** the probe takes codes from `fish.rds`, which lacks the codes 0230
+  pools from dropped repeat copies; 0230 itself has them.
+- fresh#266 (open) proposes a new tie rule (the segment starting at the shared vertex). Ties are 29 visits here
+  and both rules put them on one stream; a change there moves a visit between two segments of its stream.
+
 ## Errors Encountered
 
 | Error | Resolution |

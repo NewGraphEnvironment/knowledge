@@ -1,0 +1,109 @@
+# FDIS placement probe (#91), data-raw/snap_candidate_check.R
+run: 2026-10-27T17:09:13Z  fresh 0.43.0  schema fresh_default_20261017  tolerance 500 m  exclude 1425,6010 
+md5 sites.rds 98d4d6dd0c2694092b91f54dd9a49361  fish.rds 8cf273515ce2b692c3719130eac75b93 
+timing (s): nearest, no exclusion 12.5; nearest 13.4; hinted (58269 rows) 7.0; link placement x2 48.6
+
+## Visits with coordinates: 50550 
+old snap places 50024 (sites_placed in 0230's reconcile: 50,024); new nearest places 49922 
+
+## Where the nearest line is subsurface (1425) or a connector (6010) with no edge type excluded
+        any_class     n
+1 1425 subsurface    13
+2  6010 connector     3
+3 other edge type 49912
+
+## Classes (first match; they partition the visits with coordinates), and link placement under each snap
+            class     n link_old link_new med_old_dist med_new_dist
+1    same_segment 48241    47848    48050          8.4          8.4
+2    old_unmapped  1347        0     1347         29.5        135.1
+3         neither   526        0        0           NA           NA
+4 old_placeholder   174        0      165         81.5        150.9
+5     same_stream   131      107      131         44.0         55.2
+6        old_only   102        2        0         92.9           NA
+7             tie    29       29       29         33.5         33.5
+total 50550 
+same_segment measure difference: max 1.000 m, share under 1 m 1.0000
+
+## Old-snap visits that link cannot place, by the old pick's kind
+             kind     n link_placed not_link
+1           other 48374       47981      393
+2     placeholder   224           0      224
+3 subsurface 1425     5           5        0
+4        unmapped  1421           0     1421
+
+Today's path (knw_fdis_quality() then link): 42043 kept, no_link_segment 1491 (expected 1491: reproduced)
+
+## The hint route
+visits with a checkable code: 12285 ; with a code fwa_streams_20k_50k knows: 10889 (0230's sites_ws50_checked 12,285 counts placed visits with a code, pooled from repeat copies)
+checkable visits that the old snap placed: 12260 
+checkable codes per visit:
+codes (3 = 3+)
+    1 
+12285 
+keys per code (codes on these visits):
+keys
+   0    1    2  3-5 6-20  >20 
+1396 4045 3039 2222 1195  388 
+hinted rows: 58269 ; hits: 11353 
+
+routes (partition of visits with coordinates):
+        route     n
+1   confirmed 10433
+2      no_hit   456
+3  not_placed   606
+4 unconfirmed 39055
+
+confirmed picks, by the visit's keys (union over its codes) and moved:
+  keys moved    n
+1    1 FALSE 3567
+2    1  TRUE  301
+3    2 FALSE 2738
+4    2  TRUE  187
+5  3-5 FALSE 1958
+6  3-5  TRUE  155
+7   >5 FALSE 1383
+8   >5  TRUE  144
+
+moved picks: pick distance band x nearest distance band
+           nearest
+pick        [0,25) [25,50) [50,100) [100,200) [200,500]
+  [0,25)       179       0        0         0         0
+  [25,50)       73      30        0         0         0
+  [50,100)      62      45       42         0         0
+  [100,200)     53      38       46        35         0
+  [200,500]     56      13       41        35        39
+
+pick distance by route (confirmed and unconfirmed):
+           route
+            confirmed unconfirmed
+  [0,25)         8163       25654
+  [25,50)         929        3934
+  [50,100)        656        3943
+  [100,200)       425        3640
+  [200,500]       260        1884
+
+no_hit visits by the nearest snap's distance (a known code, no named stream within 500 m):
+
+   [0,25)   [25,50)  [50,100) [100,200) [200,500]      <NA> 
+      224        38        59        56        57        22 
+
+the issue's check under the new nearest snap: disagreement by nearest distance (checkable, placed)
+       band    n disagree share
+1    [0,25) 8631      647 0.075
+2   [25,50)  990      164 0.166
+3  [50,100)  695      188 0.271
+4 [100,200)  379      126 0.332
+5 [200,500]  172       96 0.558
+
+## Preview at the gate's provisional limits (unconfirmed 100 m, confirmed 500 m), then today's other drops
+                     step today hint route
+1               visits_in 51587      51587
+2              not_placed  1563       1643
+3                far_snap  5242       5524
+4           ws50_mismatch  1088        456
+5               junk_date    23         23
+6 effort_sentinel_or_none  1353       1381
+7           catch_unknown   275        274
+8             visits_kept 42043      42286
+
+elapsed 2.1 min

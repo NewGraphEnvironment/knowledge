@@ -84,17 +84,17 @@ run-to-PR mandate runs from here.
 
 ## Phase 1: Probe first, from a committed script
 
-- [ ] `data-raw/snap_candidate_check.R` (fresh ≥ 0.40.0 required): from `data/fdis/build/sites.rds`'s points
+- [x] `data-raw/snap_candidate_check.R` (fresh ≥ 0.40.0 required): from `data/fdis/build/sites.rds`'s points
       (50,550 with coordinates), rerun the 2026-10-26 comparison: `fwa_indexpoint()` nearest against
       `fresh::frs_point_snap()` nearest at 500 m (same segment, same stream, measure difference), and class every
       difference (unmapped, placeholder, subsurface 1425, connector 6010, tie, no fresh candidate); then run
       `knw_link_place()` on `fresh_default_20261017` for each class under both snaps, so the ledger says what link
       already drops today (expect the old snap to reproduce `no_link_segment` = 1,491) and what fresh's snap recovers
-- [ ] the hint route measured on the visits' own codes: checkable codes per visit, keys per code, hinted-snap
+- [x] the hint route measured on the visits' own codes: checkable codes per visit, keys per code, hinted-snap
       coverage (a code with a segment of its stream within 500 m), moves (hinted pick on another stream than the
       nearest) with the move's distance and the nearest's, confirmed picks by keys-per-code, and the distance of
       confirmed and unconfirmed picks by band
-- [ ] `scripts/logs/fdis/<date>_snap_candidate_check.txt` (the summary) and `.csv` (one row per visit and class);
+- [x] `scripts/logs/fdis/<date>_snap_candidate_check.txt` (the summary) and `.csv` (one row per visit and class);
       the counts into `findings.md`; the exclusion set (`exclude_edge_types`) read off the 1425 and 6010 counts;
       file the fresh issue only if the hint route cannot cover the codes
 

@@ -24,3 +24,5 @@ The approval covered the baseline only: the run-to-PR mandate starts when Al say
 - Resumed: branch synced with origin and main (nothing had moved); #98 still open, #92 open
 - Al confirmed gate decision 1 (evidence only; the retune is #92's) and 2 (the recommended limit rule)
 - Next: Phase 1, the probe
+- Phase 1: probe committed and run (2.1 min); no_link_segment 1,491 reproduced; hint route covers the codes, no fresh
+  issue; exclusion set c(1425, 6010) stands; unmapped re-snaps checked against the code (no rule needed)
