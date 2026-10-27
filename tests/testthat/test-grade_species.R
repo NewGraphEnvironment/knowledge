@@ -63,6 +63,7 @@ test_that("every gradable accessible segment is walked, and nothing else is", {
   expect_identical(r$g$walk, "bank")
   expect_identical(r$g$walk_md5, knw_walk_md5())
   expect_true(all(c("walk_cache_hit", "walk_cache_miss") %in% names(r$g$counts)))
+  expect_type(r$g$counts, "integer")    # 0320 pastes them into the line the vignette script reads by pattern
   gr <- r$g$grades
   expect_equal(gr$dist_m[gr$id_segment == 1], 100)
   expect_equal(gr$dist_status[gr$id_segment == 1], "found")

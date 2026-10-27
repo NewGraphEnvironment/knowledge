@@ -11,9 +11,10 @@
 # knw_compare_rules() that already takes `workers`) and writes compare, change, checks and segments, as
 # returned (rds, so exact), to data/compare/ref_<key>/ (ignored). The default mode runs the current code with
 # WORKERS workers and refuses any difference: every table must have the reference's rows and columns after
-# sorting on its keys, character and logical columns identical, numeric columns within 1e-9 (the largest
-# difference is reported; the seg query's order and the seeded bootstrap are the master's in both, so
-# identity is expected).
+# sorting on its keys, character and logical columns identical, numeric columns within a relative 1e-9 (the
+# largest difference is reported). Not identity: the comparison's km are float sums over its segment query,
+# which has no ORDER BY, so the server may return the rows in another order in the two runs and a total of
+# 1e5 km can move in its last digits; the bootstrap follows the outside check's ORDER BY and is unaffected.
 # INPUT:  data/tune/<key>_{curve.rds,grades.csv} (0320), data/fdis/derived/{visits_link,visits_species}.csv,
 #         the link repository at LINK_REPO (default ../link), fwapg database (PG* env vars): SCHEMA (default
 #         fresh_default_20261017), bcfishobs, whse_basemapping, discharge
@@ -80,14 +81,14 @@ compare_tbl <- function(a, b, what, key) {
   for (c in names(a)) {
     if (is.numeric(a[[c]]) && is.numeric(b[[c]])) {
       if (!identical(is.na(a[[c]]), is.na(b[[c]]))) stop(key, " ", what, ": missing values differ in ", c, call. = FALSE)
-      d <- suppressWarnings(max(abs(a[[c]] - b[[c]]), na.rm = TRUE))
+      d <- suppressWarnings(max(abs(a[[c]] - b[[c]]) / pmax(1, abs(b[[c]])), na.rm = TRUE))
       if (is.finite(d)) worst <- max(worst, d)
-      if (is.finite(d) && d > 1e-9) stop(key, " ", what, ": ", c, " differs by up to ", d, call. = FALSE)
+      if (is.finite(d) && d > 1e-9) stop(key, " ", what, ": ", c, " differs by up to ", d, " (relative)", call. = FALSE)
     } else if (!identical(as.character(a[[c]]), as.character(b[[c]]))) {
       stop(key, " ", what, ": ", c, " differs from the reference", call. = FALSE)
     }
   }
-  say("  %s %s: %d rows x %d columns match the reference; largest numeric difference %g.", key, what, nrow(a),
+  say("  %s %s: %d rows x %d columns match the reference; largest relative numeric difference %g.", key, what, nrow(a),
       ncol(a), worst)
 }
 

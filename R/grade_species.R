@@ -90,10 +90,12 @@ knw_grade_species <- function(connector, schema, species, wsg, curve, pick, stag
   starts <- unique(seg[cand, c("blue_line_key", "downstream_route_measure")])
   walked <- nrow(starts)
   q_walk <- if (is.na(pick$exc_q)) curve$q else pick$exc_q
-  cache_n <- c(walk_cache_hit = 0, walk_cache_miss = if (isFALSE(cache)) walked else 0)
+  # integers: 0320 prints the counts with paste(), which writes a whole double such as 300000 as 3e+05, and the
+  # vignette data script reads them back by pattern
+  cache_n <- c(walk_cache_hit = 0L, walk_cache_miss = if (isFALSE(cache)) as.integer(walked) else 0L)
   if (walked) {
     w <- knw_link_walks(connector, starts, q_grid = q_walk, sources = src, workers = workers, cache = cache)
-    if (!is.null(attr(w, "cache"))) cache_n[] <- attr(w, "cache")[c("hit", "miss")]
+    if (!is.null(attr(w, "cache"))) cache_n[] <- as.integer(attr(w, "cache")[c("hit", "miss")])
     i <- match(paste(seg$blue_line_key, seg$downstream_route_measure),
                paste(w$blue_line_key, w$downstream_route_measure))
     hit <- cand & !is.na(i)
