@@ -62,9 +62,9 @@ bib_write <- function(rmd, out, all_tools) {
     list(key = key_for("^\\{*NewGraphEnvironment\\}*/fwapg", required = FALSE), title = "fwapg, New Graph Environment's fork", version = "7c30f58"),
     list(key = key_for("^(smnorris/)?bcfishpass", required = all_tools), title = "bcfishpass", version = NULL),
     list(key = key_for("^(smnorris/)?bcfishobs", required = all_tools), title = "bcfishobs", version = NULL),
-    list(key = key_for("^link", required = all_tools), title = "link", version = v$link),
-    list(key = key_for("^fresh", required = all_tools), title = "fresh", version = v$fresh),
-    list(key = key_for("^wet", required = all_tools), title = "wet", version = sub(" .*$", "", v$wet))
+    list(key = key_for("^\\{*link\\}*:", required = all_tools), title = "link", version = v$link),
+    list(key = key_for("^\\{*fresh\\}*:", required = all_tools), title = "fresh", version = v$fresh),
+    list(key = key_for("^\\{*wet\\}*:", required = all_tools), title = "wet", version = sub(" .*$", "", v$wet))
   )
   for (x in Filter(function(x) !is.na(x$key), ver)) {
     e <- entries[[x$key]]
