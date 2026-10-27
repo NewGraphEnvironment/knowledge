@@ -104,10 +104,13 @@ vs <- read_csv("data/fdis/derived/visits_species.csv", show_col_types = FALSE, g
 
 # link's configs: the baseline is link's current default (CONFIG_SHA, default origin/main as fetched), not the
 # run's commit, which stays the provenance of the schema (#73)
-config_sha <- Sys.getenv("CONFIG_SHA", "")
-if (!nzchar(config_sha)) {
-  config_sha <- suppressWarnings(system2("git", c("-C", link_repo, "rev-parse", "origin/main"), stdout = TRUE, stderr = TRUE))
-  if (!is.null(attr(config_sha, "status")) || !grepl("^[0-9a-f]{40}$", config_sha)) stop("could not resolve origin/main in ", link_repo, "; set CONFIG_SHA")
+# resolved to the full commit, so the tables record one spelling whether CONFIG_SHA was given short, long or not at
+# all (a short one was recorded as given, and the composed-table check compares the strings)
+config_ref <- Sys.getenv("CONFIG_SHA", "origin/main")
+config_sha <- suppressWarnings(system2("git", c("-C", link_repo, "rev-parse", "--verify", paste0(config_ref, "^{commit}")),
+                                       stdout = TRUE, stderr = TRUE))
+if (!is.null(attr(config_sha, "status")) || length(config_sha) != 1 || !grepl("^[0-9a-f]{40}$", config_sha)) {
+  stop("could not resolve ", config_ref, " to a commit in ", link_repo, "; set CONFIG_SHA")
 }
 link_dir <- file.path(tempdir(), paste0("link_default_", substr(config_sha, 1, 7)))
 dir.create(file.path(link_dir, "overrides"), showWarnings = FALSE, recursive = TRUE)
