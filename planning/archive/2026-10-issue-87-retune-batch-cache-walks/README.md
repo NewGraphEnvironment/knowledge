@@ -44,13 +44,16 @@ flow-load check; round 5 clean).
 
 - [ ] The host's main checkout: its grade tables (2026-10-25) carry no `walk_md5`, so after the merge `0325`, `0330`
       and `data-raw/vignette_chinook.R` refuse them; copy Phase 4's regraded tables from the host worktree, or rerun
-      `0320` there (warm, minutes).
+      `0320` there (warm, minutes). Then rerun `data-raw/vignette_method.R` there: #93's `method.rds` pins those
+      ignored tables' md5s, so `test-vignette-data.R` fails wherever they differ from the copies it was built on.
 
 - [ ] #86's body: "done in #87's PR"; close it.
 - [ ] #85's body: the new per-walk numbers, and that it is the cold-walk fix only.
 - [ ] #91's body: a task for `0310` (`SCHEMA`, `cache = "knw.walk_cache"`) when it reruns there; #92: nothing.
 
-Also in #87's body, owed to #93 once PR #100 lands: settings-register rows for any new argument that shapes a
-result, and `0310`'s inline flow-build read switched to `knw_discharge_load()`.
+PR #100 (#93) merged first, so the branch merged main before its own merge (2026-10-27) and did #93's two tasks
+there: `0310` reads the flow build with `knw_discharge_load()`, and the settings register needed no row, because no
+argument #87 added shapes a result (a batch size and a worker count do not, and the walk cache returns identical
+walks); `test-settings-register.R` passes on the merged tree.
 
 Closed by: the PR from branch `87-make-a-retune-fast-enough-to-iterate-bat`.
