@@ -72,3 +72,7 @@
   code: row reads and errors on a git failure; the leaf check greps link for the access path `pipeline$discharge_source`;
   the article, the funnel reasons and the snap query take their values from the register; 0320's log and the chinook
   article's 1.96 are watched; the 42-of-45 relation is tested; era labels noted against the breaks.
+- Terminal enumeration over every file the pipeline runs (findings.md): copies of registered settings found and
+  covered; three unregistered settings added; the chinook article now prints its 1.96 from one `se_strict` (rendered
+  text identical before and after). The review loop ends on this enumeration: rounds 1-3, 3 reviewers plus the plan
+  review, 4 subagents in all.

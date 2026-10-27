@@ -88,6 +88,12 @@ test_that("the 1:50k check's zero run is the code's length less its 3-digit basi
   expect_identical(as.numeric(r$value[r$key == "ws50_code_zeros"]), as.numeric(r$value[r$key == "ws50_code_length"]) - 3)
 })
 
+test_that("the comparison's FDIS check uses the tuning's fished-area range", {
+  r <- reg()
+  expect_identical(c(r$value[r$key == "cmp_area_min"], r$value[r$key == "cmp_area_max"]),
+                   strsplit(r$value[r$key == "area_range"], ";", fixed = TRUE)[[1]])
+})
+
 test_that("every setting #93 names has a row", {
   need <- c("snap_search", "snap_limit", "ws50_code_length", "flow_far_low", "prior_sd", "se_region", "se_strict",
             "folds", "seeds_more", "bridge_distance", "bridge_gradient", "walk_q", "grade_ref", "gradient_col")

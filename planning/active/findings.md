@@ -174,3 +174,20 @@ bank rule's connector test (a different rule); `thresholds_table.R` 113, 120 the
 indexing; `tune_run.R:124` 2004 inside the era labels; `grade.R:43` 0.2 a grade class break (its own row);
 `tune_curve.R:59` `q_default = 10` (its own row); `grade_species.R:86` `seg$gradient` choosing segments to walk.
 None is a second copy of a row's setting.
+
+## Enumeration over the pipeline's files (2026-10-27, after round 3: the loop's end)
+
+Round 3 named the mechanism: each guard checks the copies its author listed, and the first enumeration searched only
+the files the wheres already name. So every register value (33 trivial values skipped: 0-6, 10, TRUE, FALSE, `pick`,
+`gradient`) was searched as a token outside comments across `R/`, scripts 0230, 0310, 0320, 0325, 0330, `inst/sql/`,
+both articles and the render script: 487 occurrences, 108 covered. Of the 379 others, the copies of a registered setting
+were the comparison's fished-area filter (`compare_rules.R:435`), `knw_thresholds_table()`'s `d_floor`, the grade class
+breaks in `floodplain_ha.R:93` and `compare_map.R:124`, 0230's `maturity_coded`, `knw_compare_rules()`'s `tuned_as`, the
+chinook article's "within 100 m" and its 1.96 (now one `se_strict` the article prints from); the walk also surfaced three
+unregistered settings (the comparison check's edge set, the parent-flow fallback's and regulation's edge exclusions).
+All now have wheres or rows (67 rows), the area pair held to `area_range` by a test. The rest are other quantities that
+share a value: HTTP 200, percent scaling, plot sizes, timeouts, date stubs, structure and column names, and the 0230
+width sentinels (500), the rule test's open width bound (9999), the curve plot's 500 m threshold and its 1.96 band.
+Rerun on the updated register: 565 occurrences, 142 covered; every line still listed is covered under its own row
+(listed under another row only by a shared value) or held to its twin by a test. Accepted restatements: the era labels
+(noted on `era_breaks`), the published column name `rule_196` and its description in 0325.
