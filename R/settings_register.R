@@ -1,14 +1,22 @@
 # The settings register (`inst/method/settings.csv`, #93) names where each value lives. These resolve one `where`
 # entry to the value the code holds, so the register test and data-raw/vignette_method.R compare the same thing.
 # `fn:<function>:<argument>[<name or position>]` is a knowledge function's default; `script:<path>:<name>` a
-# top-level constant assignment in a script under `root`. `ext:` (another repo's file) and `record:` (a value a run
-# recorded) are read by data-raw/vignette_method.R against the run, not here.
-.knw_where_kinds <- c("fn", "script", "ext", "record")
+# top-level constant assignment in a script under `root` (for `Sys.getenv(var, default)`, the default);
+# `code:<path>:<text>` a literal inside a function body or SQL, found as `<text>` with `{value}` replaced by the
+# register's value (pieces joined by ", "). `ext:` (another repo's file) and `record:` (a value a run recorded) are
+# read by data-raw/vignette_method.R against the run, not here.
+.knw_where_kinds <- c("fn", "script", "code", "ext", "record")
 
 .knw_where_parse <- function(where) {
   parts <- strsplit(where, ":", fixed = TRUE)[[1]]
   kind <- parts[1]
   if (!kind %in% .knw_where_kinds) stop("unknown kind in `", where, "`", call. = FALSE)
+  if (kind == "code") {
+    if (length(parts) < 3L || !grepl("{value}", where, fixed = TRUE)) {
+      stop("`", where, "` needs code:<path>:<text with {value}>", call. = FALSE)
+    }
+    return(list(kind = kind, parts = c(parts[2], paste(parts[-(1:2)], collapse = ":")), sel = NA_character_))
+  }
   n_parts <- c(fn = 3L, script = 3L, ext = 4L, record = 2L)[[kind]]
   if (length(parts) != n_parts) stop("`", where, "` needs ", n_parts, " parts separated by ':'", call. = FALSE)
   sel <- NA_character_
@@ -42,7 +50,9 @@
                   as.list(parse(path, keep.source = FALSE)))
     if (length(hit) != 1L) stop(w$parts[1], " assigns ", w$parts[2], " at its top level ", length(hit), " times",
                                 call. = FALSE)
-    x <- eval(hit[[1]][[3]], baseenv())
+    rhs <- hit[[1]][[3]]
+    if (is.call(rhs) && identical(rhs[[1]], as.name("Sys.getenv"))) rhs <- rhs[[3]]
+    x <- eval(rhs, baseenv())
   } else {
     stop("`", where, "` is read against the run, not here", call. = FALSE)
   }
@@ -52,4 +62,16 @@
   }
   x <- unname(x)
   if (is.numeric(x)) as.numeric(x) else as.character(x)
+}
+
+# How many times a `code:` entry's text, with the register's value in it, occurs in its file.
+.knw_where_count <- function(where, value, root = ".") {
+  w <- .knw_where_parse(where)
+  if (w$kind != "code") stop("`", where, "` is not a code: entry", call. = FALSE)
+  path <- file.path(root, w$parts[1])
+  if (!file.exists(path)) stop("no file ", w$parts[1], call. = FALSE)
+  pat <- gsub("{value}", paste(strsplit(value, ";", fixed = TRUE)[[1]], collapse = ", "), w$parts[2], fixed = TRUE)
+  txt <- paste(readLines(path, warn = FALSE), collapse = "\n")
+  hits <- gregexpr(pat, txt, fixed = TRUE)[[1]]
+  sum(hits > 0)
 }

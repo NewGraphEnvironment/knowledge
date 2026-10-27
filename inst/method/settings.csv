@@ -1,17 +1,29 @@
 key,step,label,value,unit,where,source,tested,issue,note
+sentinel_min,1,FDIS sentinel value,9999,,script:scripts/0230-fdis-load.R:sentinel_min,measured,no,,"FDIS's no-value codes for counts, fishing time and fished length, measured field by field in research/fdis_export.md"
+junk_year_min,1,Earliest visit year kept,1950,year,code:scripts/0230-fdis-load.R:year < {value} |,convention,no,,
+junk_year_max,1,Latest visit year kept,2022,year,"code:scripts/0230-fdis-load.R:year > {value},",convention,no,,the later export's year
 snap_search,2,Snap search radius,500,m,script:scripts/0230-fdis-load.R:snap_tol_m,inherited,no,91,fwa_indexpoint()'s search; a visit with no stream inside it is not placed
 snap_limit,2,Snap distance limit,100,m,script:scripts/0230-fdis-load.R:snap_flag_m,inherited,no,91,a visit snapped farther is dropped by knw_fdis_quality()
-sentinel_min,1,FDIS sentinel value,9999,,script:scripts/0230-fdis-load.R:sentinel_min,measured,no,,"FDIS's no-value codes for counts, fishing time and fished length, measured field by field in research/fdis_export.md"
+ws50_code_length,2,1:50k code length the check reads,45,characters,code:scripts/0230-fdis-load.R:nchar(watershed_code_50k) == {value},source,no,91,a 3-digit basin then seven 6-digit levels; an all-zero code below the basin and a code the 20k-50k crosswalk does not know are not checked
 flow_far_low,4,Routed flow kept unless under this share of the balance's,0.2,ratio,ext:wet:scripts/pcic_routed_lib.R:routed_far_low,convention,no,,"wet's default pick, set in wet#57; one cut scored at the calibration gauges"
 cw_agree_min,5,Width model control: least share within 5 %,0.9,share,script:scripts/0310-evidence-build.R:cw_agree_min,measured,no,,0296 measured 96.2 % province-wide
 walk_q,5,River sizes walked to,1;3;5;10;20;30;50,m3/s,fn:knw_link_walks:q_grid;script:scripts/0310-evidence-build.R:q_grid,convention,no,,
-edge_stream,7,Stream edge types scored,1000;1100;2000;2300,FWA edge type,fn:knw_tune_run:edge_stream,convention,no,,"rivers, wetlands and lakes have their own conditions"
-area_range,7,Fished area kept,10;10000,m2,fn:knw_tune_run:area_range,convention,no,,
+place_window,5,Segment start taken as the visit's segment within,5,m,fn:knw_link_place:start_window_m,convention,no,92,
+place_overlap,5,Largest segment overlap tolerated,0.01,m,fn:knw_link_place:overlap_max_m,measured,no,,link segments overlap by up to ~1.4 mm at breaks
+wetland_ha_min,5,Wetland area making a line a wetland branch,1,ha,fn:knw_link_width:wetland_ha_min,inherited,no,,link default's floor
+lake_ha_min,5,Lake area making a line a lake branch,100,ha,fn:knw_link_width:lake_ha_min,inherited,no,,link default's floor
+dam_snap,5,Dam to segment snap,500,m,fn:knw_link_regulated:dam_snap_m,convention,no,,
+regulation_min,5,Degree of regulation that counts a dam without a reservoir,10,%,fn:knw_link_regulated:regulation_min,convention,no,,
+barrier_natural,5,Natural barrier classes downstream,GRADIENT;FALLS;SUBSURFACE_FLOW;USER_DEFINITE,,fn:knw_link_barrier_dnstr:natural,inherited,no,,
+walk_nontarget_edges,5,Edge types a walk never ends on,1100;1150;1300;1350;2300;1400;1450,FWA edge type,code:inst/sql/ch_dist_profile.sql:s.edge_type NOT IN ({value}),convention,no,73,"connectors (1400, 1450) and others; the walk ends at a double-line river's bank"
+walk_hops,5,Most hops a walk takes before it stops,60,hops,code:inst/sql/ch_dist_profile.sql:IF hops > {value} THEN,convention,no,,a stopped walk reads the 50 km cap
 grid_mad,6,MAD floors in the grid,0.1;0.15;0.2;0.28;0.35;0.5;0.75;1,m3/s,fn:knw_tune_grid:grid_mad,convention,no,,the species' own values and link's default_tuned floor join the ladder
 grid_width,6,Width floors in the grid,1;1.5;2;3;4,m,fn:knw_tune_grid:grid_width,convention,no,,
 grid_grad,6,Gradient maxima in the grid,0.03;0.04;0.0549;0.07;0.09;0.11;0.13;0.15;0.2;0.25;0.3,m/m,fn:knw_tune_grid:grid_grad,convention,yes,67,the ladder extended to 30 % in #67 and carried to every species in #68
 grid_q,6,Exception river sizes,1;3;5;10;20;30;50,m3/s,fn:knw_tune_grid:grid_q,convention,no,,
 grid_d,6,Exception distances,100;250;500;1000;2000;5000,m,fn:knw_tune_grid:grid_d,convention,no,,
+edge_stream,7,Stream edge types scored,1000;1100;2000;2300,FWA edge type,fn:knw_tune_run:edge_stream,convention,no,,"rivers, wetlands and lakes have their own conditions"
+area_range,7,Fished area kept,10;10000,m2,fn:knw_tune_run:area_range,convention,no,,
 gradient_col,7,Gradient the rules are scored on,fwa_gradient,,fn:knw_rule_in:cols[grad];fn:knw_tune_curve:cols[grad],inherited,no,92,the Freshwater Atlas line's; link applies its own segment gradient
 seed,7,Fold seed,54,,fn:knw_tune_run:seed;fn:knw_tune_score:seed;fn:knw_tune_smoke:seed,convention,no,,
 folds,7,Group folds,5,,fn:knw_tune_run:folds;fn:knw_tune_score:folds;fn:knw_tune_smoke:folds,convention,no,,each watershed group held out once
@@ -24,6 +36,11 @@ smoke_tol_null,7,Smoke gate: tolerance on no rule,0.25,deviance,fn:knw_tune_smok
 smoke_coef_max,7,Smoke gate: largest nuisance coefficient,5,cloglog,fn:knw_tune_smoke:coef_max,convention,no,84,
 min_wsg,7,Least groups with both outcomes to fit,5,groups,fn:knw_tune_run:min_wsg,convention,no,,
 power_wsg,7,Groups below which a fit is underpowered,10,groups,fn:knw_tune_run:power_wsg,convention,no,,
+spawn_codes,7,Maturity codes that count as spawner evidence,IM;M;MT;SP;ST,,fn:knw_spawner_evidence:coded,source,no,,
+spawn_large,7,Length counted as a large spawner,350,mm,fn:knw_spawner_evidence:large_mm,convention,no,,
+flow_src,7,Flow source the rules read,pick,,fn:knw_tune_run:src;fn:knw_rule_in:src,convention,no,89,wet's default per segment
+lake_target,7,Walk targets on a lake or regulated river excluded,FALSE,,fn:knw_rule_in:no_lake_target;fn:knw_rule_in:no_reg_target,convention,no,,
+era_breaks,7,Era breaks of the nuisance term,1994;2004,year,"code:R/tune_run.R:c(-Inf, {value}, Inf)",convention,no,,
 seeds_more,8,Extra fold seeds,55;56;57;58,,fn:knw_tune_run:seeds_more,convention,no,,
 n_boot,8,Group bootstrap resamples,200,,fn:knw_tune_run:n_boot;fn:knw_tune_score:n_boot,convention,no,,
 seed_boot,8,Bootstrap seed,541,,fn:knw_tune_score:seed_boot,convention,no,,
@@ -32,6 +49,13 @@ q_default,9,River size walked to where the pick has no exception,10,m3/s,fn:knw_
 curve_k,9,"Smooth basis sizes (size, distance, gradient)",6;6;6,,fn:knw_tune_curve:k,convention,no,,
 grade_ref,9,Grade reference quantile,0.95,quantile,fn:knw_grade:ref_quantile,convention,no,,of the rate on accessible stream-branch segments
 grade_classes,9,Grade class breaks,0;0.2;0.4;0.6;0.8;1,,fn:knw_grade:classes,convention,no,,fifths
+grad_clamp,9,Gradient ceiling the curve and grade read,0.2,m/m,"code:R/tune_curve.R:pmin(pmax(d[[cols[[""grad""]]]], 0), {value});code:R/grade.R:pmin(pmax(grad[ok], 0), {value})",convention,no,,
+dist_offset,9,Offset before the log of distance,10,m,"code:R/tune_curve.R:dist_cap_m), dist_cap_m) + {value});code:R/grade.R:log(dist[ok] + {value})",convention,no,,
+grade_grad_col,9,Gradient the grade reads on link's segments,gradient,,fn:knw_grade:cols[grad],inherited,no,92,"link's segment gradient, while the curve was fitted on the Atlas line's"
+grade_size_col,9,Flow the grade reads on link's segments,mad_pick,,fn:knw_grade:cols[size],convention,no,,
 bridge_distance,10,Connectivity bridge distance,10000,m,ext:link:inst/extdata/configs/default/parameters_fresh.csv:cluster_bridge_distance,inherited,no,,a rearing cluster with no spawning within it is dropped
 bridge_gradient,10,Connectivity bridge gradient,0.05,m/m,ext:link:inst/extdata/configs/default/parameters_fresh.csv:cluster_bridge_gradient,inherited,no,,
 cmp_n_boot,10,Comparison bootstrap resamples,200,,fn:knw_compare_rules:n_boot,convention,no,,
+tuned_as,10,Wetland structure reported as tuned,door,,script:scripts/0330-compare.R:tuned_as,convention,no,,
+cmp_seed_boot,10,Comparison bootstrap seed,542,,fn:knw_compare_rules:seed_boot,convention,no,,
+link_default_flow,10,Flow link's default bundle reads,fwapg,,ext:link:inst/extdata/configs/default/config.yaml:discharge_source,inherited,no,89,"default sets no discharge_source, so link reads fwapg's annual table; the evidence, grades and comparison read wet's pick"

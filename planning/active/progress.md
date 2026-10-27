@@ -24,3 +24,7 @@
   wet's; 50,024 placed vs 40,552 kept; `0310`'s new row refuses a table with no comment; `0320`'s prior log reads
   `knw_tune_run`'s default (the one that runs). Finding 13 (bib's wet version) probed: the bib keeps only
   `discharge/fwa/v1`, true of either build; no change.
+- Phase 2 follow-up (review 1, 3-6, 22): `code:` kind (a literal in a body or SQL, found with the register's value);
+  `script:` takes a `Sys.getenv()` default; 24 rows added (60 in all); tests for code literals, the region multiplier in
+  `.tune_sel` on a toy matrix, completeness of #93's named settings, and more "names nothing" cases. 172 passed;
+  mutations go red (SQL hop cap 61: 1 failure; region at 0.1 SE: 2).
