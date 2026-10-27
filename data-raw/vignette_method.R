@@ -44,6 +44,20 @@ suppressPackageStartupMessages({
 })
 pkgload::load_all(quiet = TRUE)
 
+dir_out <- "inst/vignette-data"
+f_pipeline <- "inst/method/pipeline.csv"
+f_settings <- "inst/method/settings.csv"
+ledger <- sort(list.files("scripts/logs/habitat", "_evidence_build_ledger\\.csv$", full.names = TRUE),
+               decreasing = TRUE)[1]
+f_reconcile <- "data/fdis/build/reconcile.csv"
+derived <- c(visits_link = "data/fdis/derived/visits_link.csv", visits_species = "data/fdis/derived/visits_species.csv",
+             walks = "data/fdis/derived/walks.csv")
+f_sites <- "data/fdis/derived/fdis_sites.csv"
+link_repo <- Sys.getenv("LINK_REPO", "../link")
+wet_repo <- Sys.getenv("WET_REPO", "../wet")
+example_wsg <- "BULK"
+rd <- function(f, ...) read_csv(f, show_col_types = FALSE, progress = FALSE, ...)
+
 # the bundle names the commit it was built at, so every file it resolves must be that commit's: this script, the
 # registers, the package code, and every file a script: or code: row reads
 git <- function(...) {
@@ -58,20 +72,6 @@ reg_files <- unique(vapply(Filter(function(w) grepl("^(script|code):", w),
 src_code <- unique(c("data-raw/vignette_method.R", "inst/method", "R", reg_files))
 dirty <- git("status", "--porcelain", "--", src_code)
 if (length(dirty)) stop("commit these first, so the bundle's commit is the code it ran: ", paste(dirty, collapse = "; "))
-
-dir_out <- "inst/vignette-data"
-f_pipeline <- "inst/method/pipeline.csv"
-f_settings <- "inst/method/settings.csv"
-ledger <- sort(list.files("scripts/logs/habitat", "_evidence_build_ledger\\.csv$", full.names = TRUE),
-               decreasing = TRUE)[1]
-f_reconcile <- "data/fdis/build/reconcile.csv"
-derived <- c(visits_link = "data/fdis/derived/visits_link.csv", visits_species = "data/fdis/derived/visits_species.csv",
-             walks = "data/fdis/derived/walks.csv")
-f_sites <- "data/fdis/derived/fdis_sites.csv"
-link_repo <- Sys.getenv("LINK_REPO", "../link")
-wet_repo <- Sys.getenv("WET_REPO", "../wet")
-example_wsg <- "BULK"
-rd <- function(f, ...) read_csv(f, show_col_types = FALSE, progress = FALSE, ...)
 
 # ---- the run: fitted keys, their evidence and flow build -------------------------------------------
 summ <- bind_rows(lapply(sort(list.files("data/tune", "_summary\\.csv$", full.names = TRUE)),
