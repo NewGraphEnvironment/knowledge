@@ -115,7 +115,7 @@ run-to-PR mandate runs from here.
       attributes (`fwa_stream_networks_sp`, channel width, discharge) joined by `linear_feature_id` as today;
       `knw_fdis_place()` picks; the temporary table and the `fwa_indexpoint()` lateral go; `snap_limit` and
       `snap_limit_code` as `Sys.getenv("SNAP_LIMIT", 100)`-form constants coerced at use; the reconcile gains
-      `sites_snap_confirmed`, `sites_snap_moved`, `sites_snap_unconfirmed`, `sites_snap_subsurface_excluded`, and
+      `sites_snap_confirmed`, `sites_snap_moved`, `sites_snap_unconfirmed`, `sites_snap_nearest_edge_<type>_excluded` (one per excluded type), and
       placed counts by distance band; the header's PLACEMENT note rewritten
 - [x] `R/fdis_quality.R`: the same drop steps (`not_placed`, `far_snap`, `ws50_mismatch`) with their notes reworded,
       plus `info` rows for confirmed and moved placements among the kept; `test-fdis_quality.R` updated

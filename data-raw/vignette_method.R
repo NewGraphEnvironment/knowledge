@@ -181,10 +181,15 @@ if (n_in - n_placed != ln("not_placed")) stop("the reconcile's placed count does
 drops <- c("far_snap", "ws50_mismatch", "junk_date", "effort_sentinel_or_none", "catch_unknown", "no_link_segment")
 val <- function(key) settings$value[settings$key == key]
 # the evidence was placed with the register's snap limits (#91): 0230 takes them from SNAP_LIMIT / SNAP_LIMIT_CODE
-# when set, and records what it used
+# when set and records what it used, and 0310 ledgers that record, so the ledger is what describes the evidence. The
+# reconcile table and sites.rds are 0230's current build, which must be the one the ledger was built from.
+if (!identical(led$note[led$step == "md5_sites"], unname(tools::md5sum(file.path(dirname(f_reconcile), "sites.rds"))))) {
+  stop("data/fdis/build/sites.rds is not the build ", ledger, " was made from: rerun 0230 and 0310 together")
+}
 for (k in c("snap_limit", "snap_limit_code")) {
-  if (!isTRUE(rn(paste0(k, "_m")) == as.numeric(val(k)))) {
-    stop("the evidence was placed with ", k, " ", rn(paste0(k, "_m")), ", not the register's ", val(k))
+  got <- ln(paste0(k, "_m"))
+  if (length(got) != 1L || !isTRUE(got == as.numeric(val(k))) || !isTRUE(rn(paste0(k, "_m")) == got)) {
+    stop("the evidence was placed with ", k, " ", paste(got, collapse = ", "), " (ledger), not the register's ", val(k))
   }
 }
 why <- c(far_snap = sprintf("more than %s m from its stream (%s m where its tributary code names the stream)",

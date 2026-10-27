@@ -497,8 +497,7 @@ attrs <- DBI::dbGetQuery(conn, "
   params = list(paste0("{", paste(format(lfid, scientific = FALSE, trim = TRUE), collapse = ","), "}")))
 DBI::dbDisconnect(conn)
 stopifnot(!anyDuplicated(attrs$linear_feature_id), all(lfid %in% attrs$linear_feature_id))
-n_nearest_excluded <- sum(attrs$edge_type[match(nearest_any$linear_feature_id, attrs$linear_feature_id)] %in%
-                            snap_edges_excluded)
+nearest_any_edge <- attrs$edge_type[match(nearest_any$linear_feature_id, attrs$linear_feature_id)]
 
 sites <- sites |>
   left_join(pick, by = "site_visit") |>
@@ -522,7 +521,8 @@ add("sites_far_snap", sum(sites$flag_far_snap))
 add("sites_ws50_checked", sum(sites$ws50_checked)); add("sites_ws50_mismatch", sum(sites$flag_ws50_mismatch))
 add("sites_snap_confirmed", sum(sites$snap_confirmed)); add("sites_snap_moved", sum(sites$snap_moved))
 add("sites_snap_unconfirmed", sum(sites$snap_method %in% "nearest"))
-add("sites_snap_subsurface_excluded", n_nearest_excluded)
+# visits whose nearest line of any kind is an excluded edge type, one row per type
+for (e in snap_edges_excluded) add(sprintf("sites_snap_nearest_edge_%d_excluded", e), sum(nearest_any_edge %in% e))
 # the limits this build used: SNAP_LIMIT / SNAP_LIMIT_CODE override the defaults, so readers compare these, not the code
 add("snap_limit_m", as.numeric(snap_limit)); add("snap_limit_code_m", as.numeric(snap_limit_code))
 snap_bands <- c(0, 25, 50, 100, 200, snap_search)
