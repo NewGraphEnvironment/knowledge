@@ -1,5 +1,22 @@
 # Changelog
 
+## knowledge 0.4.13
+
+- FDIS site visits are placed on the stream their own 1:50k watershed
+  code names where one lies within 500 m
+  ([`knw_fdis_place()`](https://newgraphenvironment.github.io/knowledge/reference/knw_fdis_place.md)),
+  otherwise on the nearest stream within 200 m, with
+  [`fresh::frs_point_snap()`](https://newgraphenvironment.github.io/fresh/reference/frs_point_snap.html)
+  in place of `fwa_indexpoint()`
+  ([\#91](https://github.com/NewGraphEnvironment/knowledge/issues/91)).
+  The limits were set by measurement. The evidence keeps 45,529 visits
+  against 40,552. `0310` takes `SCHEMA` and caches its walks. The tune
+  tables and the articles still describe the
+  [\#73](https://github.com/NewGraphEnvironment/knowledge/issues/73) run
+  until
+  [\#92](https://github.com/NewGraphEnvironment/knowledge/issues/92)’s
+  retune.
+
 ## knowledge 0.4.12
 
 - The methodology article, “Choosing habitat thresholds from where fish
