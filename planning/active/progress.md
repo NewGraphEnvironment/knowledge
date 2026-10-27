@@ -44,3 +44,13 @@
   `chinook_rearing`. CI: a draft-article guard in pkgdown.yaml, tested both ways (clean 0; a leaked
   `tuning_method.html` or `_tuning_method.html` 1). Step 2's text and the 1:50k overstatement fixed in `pipeline.csv`;
   "open work" lists open issues only.
+- `/code-check branch` round 1 (spawned 05:50 UTC, delivered ~06:03; `review-round1.md`): 11 findings, all probed and
+  fixed. The "kept" example was dropped later (no fished area): now drawn from the kept visits. 1:50k counts were over
+  every visit with a point, placed or not: placed-only 12,260 and 1,295. The grade's size column is chosen per rule
+  (`grade_species.R:78`), so the register's `fn:knw_grade:cols` rows named the wrong thing: replaced by `code:` rows
+  for the width and MAD cases and the grade's gradient. The region test's toy matrix could not tell multipliers apart:
+  rebuilt with rules at 0.9 and 1.1 SE. `se_region`/`se_strict` now also watch `R/thresholds_table.R`'s literals. A
+  `code:` entry now requires every occurrence outside a comment to carry the value (the distance offset had four
+  unwatched copies). The YAML check errors on a missing parent instead of reading "unset". `prior_sd` marked tested
+  (compared with no prior). bcfishobs FDIS share corrected (29 % for link's species, not "about half"). wet `94deeb5`
+  is 0.4.13. Mutations: region at 1.96 and 0.5 SE, one offset copy changed: each 1 failure.

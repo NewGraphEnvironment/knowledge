@@ -2,8 +2,8 @@
 
 **Verified:** 2026-10-27 for the first section, at the build the database holds; 2026-10-07 for the rest · **Issues:**
 #42, #89, NewGraphEnvironment/fwapg#5, NewGraphEnvironment/fwapg#6, NewGraphEnvironment/link#331 · **Produced by:** the
-table comment and a count of `discharge.fwa_v1_segment_monthly` (build 2026-10-19T06:08:31Z from wet `94deeb5`, v0.4.14,
-#103), wet's `data/checks/pcic_routed_compare_20260717.txt` and `segment_output_20260717.txt` at that commit, and its
+table comment and a count of `discharge.fwa_v1_segment_monthly` (build 2026-10-19T06:08:31Z from wet `94deeb5`, the
+wet#103 branch at 0.4.13, released as 0.4.14 at `42c3da7`), wet's `data/checks/pcic_routed_compare_20260717.txt` and `segment_output_20260717.txt` at that commit, and its
 `NEWS.md`; the first section's earlier reading was of wet `647767d` (v0.4.7) and build `acb820f`; before that, `fwapg/extras/discharge`
 (fwapg `fbcb0a3`), PCIC's public repos (`chyp`, `hydromosaic-db`, `hydromosaic-service`) and an API probe whose
 commands are at the end of this file.

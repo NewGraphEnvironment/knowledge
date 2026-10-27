@@ -15,13 +15,15 @@
 #     order they ran; data/fdis/build/reconcile.csv splits "not placed" into no usable point and no stream in reach.
 #     The tuning's population filters (stream branch, fished area, range, blocked, barrier) are not ledgered, so they
 #     are applied here step by step to the run's own visit tables, and each rearing key's last count must equal its
-#     summary's `visits_in` and its default rule's scored visits, or the script stops. The visit tables are the run's:
+#     summary's `visits_in`, or the script stops; the scored visits (those in groups with both outcomes) are read
+#     from the key's default rule. The visit tables are the run's:
 #     their md5s must equal the grade tables' `evidence_md5`.
 #   - THE DIAGRAMS ARE STATIC SVG, written by Graphviz (DiagrammeR, DiagrammeRsvg) and saved as text, so the article
 #     needs neither package: package is shown by box colour; the hex stickers were tried beside the legend and dropped,
 #     because at a legible chart width they are identical black hexes whose names cannot be read (#93's decision:
 #     clarity first).
-#   - THE WORKED EXAMPLES: one Bulkley visit kept and one dropped for its snap distance, each with the streams within
+#   - THE WORKED EXAMPLES: one Bulkley visit kept to the end (it is in the visit table) and one dropped for its snap
+#     distance, each with the streams within
 #     the search radius (the database's fwa_stream_networks_sp); and the Bulkley segments of the chinook article's
 #     bundle, counted by what each stage of the comparison did to them (fresh's predicate, then link's user-habitat
 #     overlay and the connectivity pass together, which the saved flags cannot separate).
@@ -97,8 +99,14 @@ ext_value <- function(w) {
   }
   if (grepl("\\.ya?ml$", w$parts[2])) {
     y <- yaml::yaml.load(paste(txt, collapse = "\n"))
-    for (k in strsplit(w$parts[3], ".", fixed = TRUE)[[1]]) y <- if (is.list(y)) y[[k]] else NULL
-    return(list(value = if (is.null(y)) "unset" else as.character(y), sha = sha))
+    path <- strsplit(w$parts[3], ".", fixed = TRUE)[[1]]
+    # every level above the key must exist, so a moved or misspelt path is an error, not "unset"
+    for (k in utils::head(path, -1)) {
+      if (!is.list(y) || !k %in% names(y)) stop(w$parts[2], " at ", sha, " has no ", w$parts[3])
+      y <- y[[k]]
+    }
+    v <- if (is.list(y)) y[[utils::tail(path, 1)]] else stop(w$parts[2], " at ", sha, ": ", w$parts[3], " is not a key")
+    return(list(value = if (is.null(v)) "unset" else as.character(v), sha = sha))
   }
   tf <- tempfile(fileext = ".R")
   on.exit(unlink(tf))
@@ -127,7 +135,7 @@ for (i in seq_len(nrow(settings))) {
       got <- switch(w$kind,
                     fn = .knw_where_value(where),
                     script = .knw_where_value(where, "."),
-                    code = if (.knw_where_count(where, settings$value[i], ".") >= 1) want else "absent",
+                    code = if (.knw_where_holds(where, settings$value[i], ".")) want else .knw_where_values(where, "."),
                     record = record_value(w))
     }
     if (!identical(got, want)) {
@@ -197,10 +205,16 @@ for (k in keys[fitted$stage == "rear"]) {
 funnel_species <- bind_rows(funnel_species)
 
 # ---- step blocks: counts in and out -------------------------------------------------------------------
+sites <- rd(f_sites, guess_max = 1e5,
+            col_types = cols(site_visit = "c", species_caught = "c", blocks_absence_of = "c"))
+if (nrow(sites) != n_in || sum(!sites$flag_not_placed) != n_placed) stop("fdis_sites is not the ledger's build")
+placed <- !sites$flag_not_placed
 steps <- list(
   `1` = c(visits = n_in),
   `2` = c(placed = n_placed, kept_after_snap = n_placed - ln("far_snap") - ln("ws50_mismatch"),
-          ws50_checked = rn("sites_ws50_checked"), ws50_mismatch_all = rn("sites_ws50_mismatch")),
+          # the 1:50k check over placed visits only: 0230 also checks visits it could not place
+          ws50_checked = sum(placed & sites$ws50_checked %in% TRUE),
+          ws50_mismatch_all = sum(placed & sites$flag_ws50_mismatch %in% TRUE)),
   `5` = c(kept = nrow(vl), routed = sum(vl$pick_source == "pcic_routed", na.rm = TRUE),
           balance = sum(vl$pick_source == "wet_balance", na.rm = TRUE)),
   `6` = vapply(f_tune, function(f) as.numeric(nrow(rd(f, col_types = cols(.default = "c")))), 0) |>
@@ -209,8 +223,6 @@ steps <- list(
 )
 
 # ---- worked examples ----------------------------------------------------------------------------------
-sites <- rd(f_sites, guess_max = 1e5,
-            col_types = cols(site_visit = "c", species_caught = "c", blocks_absence_of = "c"))
 conn <- DBI::dbConnect(RPostgres::Postgres(), bigint = "numeric")
 near <- function(s) {
   DBI::dbGetQuery(conn, sprintf("
@@ -231,7 +243,7 @@ pick_example <- function(cand) {
 bulk <- sites[sites$watershed_group_code %in% example_wsg & !sites$flag_not_placed, ]
 bulk <- bulk[order(bulk$site_visit), ]
 ws50_ok <- bulk$ws50_checked %in% TRUE & !(bulk$flag_ws50_mismatch %in% TRUE)
-ex_kept <- pick_example(bulk[!bulk$flag_far_snap & ws50_ok, ])
+ex_kept <- pick_example(bulk[!bulk$flag_far_snap & ws50_ok & bulk$site_visit %in% vl$site_visit, ])
 ex_far <- pick_example(bulk[bulk$flag_far_snap, ])
 DBI::dbDisconnect(conn)
 for (ex in list(ex_kept, ex_far)) {

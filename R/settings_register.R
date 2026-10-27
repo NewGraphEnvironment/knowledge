@@ -2,8 +2,9 @@
 # entry to the value the code holds, so the register test and data-raw/vignette_method.R compare the same thing.
 # `fn:<function>:<argument>[<name or position>]` is a knowledge function's default; `script:<path>:<name>` a
 # top-level constant assignment in a script under `root` (for `Sys.getenv(var, default)`, the default);
-# `code:<path>:<text>` a literal inside a function body or SQL, found as `<text>` with `{value}` replaced by the
-# register's value (pieces joined by ", "). `ext:` (another repo's file) and `record:` (a value a run recorded) are
+# `code:<path>:<text>` a literal inside a function body or SQL: every line of the file outside a comment that
+# matches `<text>`, with any value where `{value}` stands, must carry the register's value (pieces joined by ", ").
+# `ext:` (another repo's file) and `record:` (a value a run recorded) are
 # read by data-raw/vignette_method.R against the run, not here.
 .knw_where_kinds <- c("fn", "script", "code", "ext", "record")
 
@@ -12,8 +13,8 @@
   kind <- parts[1]
   if (!kind %in% .knw_where_kinds) stop("unknown kind in `", where, "`", call. = FALSE)
   if (kind == "code") {
-    if (length(parts) < 3L || !grepl("{value}", where, fixed = TRUE)) {
-      stop("`", where, "` needs code:<path>:<text with {value}>", call. = FALSE)
+    if (length(parts) < 3L || !grepl("{value}", where, fixed = TRUE) || endsWith(where, "{value}")) {
+      stop("`", where, "` needs code:<path>:<text with {value} followed by more text>", call. = FALSE)
     }
     return(list(kind = kind, parts = c(parts[2], paste(parts[-(1:2)], collapse = ":")), sel = NA_character_))
   }
@@ -64,14 +65,24 @@
   if (is.numeric(x)) as.numeric(x) else as.character(x)
 }
 
-# How many times a `code:` entry's text, with the register's value in it, occurs in its file.
-.knw_where_count <- function(where, value, root = ".") {
+# The values a `code:` entry's text carries where `{value}` stands, one per occurrence on a line outside a comment.
+.knw_where_values <- function(where, root = ".") {
   w <- .knw_where_parse(where)
   if (w$kind != "code") stop("`", where, "` is not a code: entry", call. = FALSE)
   path <- file.path(root, w$parts[1])
   if (!file.exists(path)) stop("no file ", w$parts[1], call. = FALSE)
-  pat <- gsub("{value}", paste(strsplit(value, ";", fixed = TRUE)[[1]], collapse = ", "), w$parts[2], fixed = TRUE)
-  txt <- paste(readLines(path, warn = FALSE), collapse = "\n")
-  hits <- gregexpr(pat, txt, fixed = TRUE)[[1]]
-  sum(hits > 0)
+  esc <- function(x) gsub("([][{}()*+?.\\\\^$|])", "\\\\\\1", x)
+  halves <- strsplit(w$parts[2], "{value}", fixed = TRUE)[[1]]
+  rx <- paste0(esc(halves[1]), "(.+?)", esc(halves[2]))
+  lines <- readLines(path, warn = FALSE)
+  lines <- lines[!grepl("^\\s*(#|--)", lines)]
+  m <- regmatches(lines, gregexpr(rx, lines, perl = TRUE))
+  unlist(lapply(unlist(m), function(hit) sub(paste0("^", rx, "$"), "\\1", hit, perl = TRUE)))
+}
+
+# Does every occurrence of a `code:` entry carry `value`, and is there at least one?
+.knw_where_holds <- function(where, value, root = ".") {
+  got <- .knw_where_values(where, root)
+  want <- paste(strsplit(value, ";", fixed = TRUE)[[1]], collapse = ", ")
+  length(got) > 0 && all(got == want)
 }

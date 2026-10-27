@@ -50,13 +50,16 @@ test_that("every script constant the register names holds the register's value",
   expect_gt(n, 0)
 })
 
-test_that("every code literal the register names occurs in its file with the register's value", {
+test_that("every code literal the register names carries the register's value wherever it occurs", {
   skip_if_not(has_src, "no source-tree R/, scripts/ and inst/ (installed package)")
   r <- reg()
   n <- 0L
   for (i in seq_len(nrow(r))) {
     for (w in grep("^code:", strsplit(r$where[i], ";", fixed = TRUE)[[1]], value = TRUE)) {
-      expect_gte(.knw_where_count(w, r$value[i], root), 1, label = paste(r$key[i], w))
+      got <- .knw_where_values(w, root)
+      expect_gt(length(got), 0, label = paste(r$key[i], w))
+      expect_true(all(got == paste(strsplit(r$value[i], ";", fixed = TRUE)[[1]], collapse = ", ")),
+                  info = paste(r$key[i], w, "holds", paste(unique(got), collapse = " / ")))
       n <- n + 1L
     }
   }
@@ -64,14 +67,20 @@ test_that("every code literal the register names occurs in its file with the reg
 })
 
 test_that("the scorer's region is the register's number of SEs from the best", {
-  # .tune_sel fixes the region in its body, where no fn: row can see it; a toy score matrix pins it
+  # .tune_sel fixes the region in its body, where no fn: row can see it. Two rules sit 0.9 and 1.1 SE from the
+  # best, so any multiplier outside (0.9, 1.1) changes the region the scorer returns.
   r <- reg()
   k <- .knw_setting_parse(r$value[r$key == "se_region"])
-  sw <- matrix(c(10, 9, 14, 12, 11, 15, 8, 9.5, 13), nrow = 3, byrow = TRUE)   # rule 1 is 0.5 from the best, 2.5 SE
-  s <- .tune_sel(sw, 1:3)
-  expect_identical(s$region, unname(s$tot - s$tot[s$best] <= k * s$se))
-  expect_false(all(s$region))
-  expect_true(any(s$region[-s$best]))
+  base <- c(10, 11, 9, 12)
+  at <- function(ratio) {
+    a <- 1:4
+    a + (ratio * sqrt(4) * stats::sd(a) - sum(a)) / 4
+  }
+  ratios <- c(0, 0.9, 1.1)
+  sw <- cbind(base, base + at(0.9), base + at(1.1))
+  s <- .tune_sel(sw, 1:4)
+  expect_equal(unname((s$tot - s$tot[s$best]) / pmax(s$se, 1e-12))[-1], ratios[-1], tolerance = 1e-9)
+  expect_identical(unname(s$region), ratios <= k)
 })
 
 test_that("every setting #93 names has a row", {
@@ -88,5 +97,7 @@ test_that("a where naming nothing is an error, not a pass", {
   expect_error(.knw_where_value("script:scripts/0230-fdis-load.R:no_such_name", root), "0 times")
   expect_error(.knw_where_value("script:scripts/0320-tune-run.R:link_sha", root), "2 times")
   expect_error(.knw_where_value("script:scripts/no_such_script.R:x", root), "no script")
-  expect_identical(.knw_where_count("code:scripts/0230-fdis-load.R:year < {value} |", "1949", root), 0L)
+  expect_false(.knw_where_holds("code:scripts/0230-fdis-load.R:year < {value} |", "1949", root))
+  expect_length(.knw_where_values("code:scripts/0230-fdis-load.R:no such text {value} here", root), 0)
+  expect_error(.knw_where_parse("code:R/grade.R:ends with {value}"), "followed by more text")
 })
