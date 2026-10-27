@@ -210,6 +210,42 @@ The old snap is the placement `0230` stored on 2026-10-17 (`sites.rds`), not a r
 - fresh#266 (open) proposes a new tie rule (the segment starting at the shared vertex). Ties are 29 visits here
   and both rules put them on one stream; a change there moves a visit between two segments of its stream.
 
+## Phase 4: the limits and the evidence before and after (2026-10-27)
+
+`data-raw/snap_limit_sensitivity.R` (24.8 min, 14 workers; `scripts/logs/fdis/20261027_snap_limit_sensitivity.{txt,csv}`,
+the 500 m build's ledger copied beside them): code-checked disagreement by the nearest stream's distance is 7.5 %,
+16.6 %, 27.1 %, 33.2 % (126 of 379) and 55.8 % in the five bands, so the rule's unconfirmed limit is 200 m, the
+100–200 m band clearing one in three by 0.1 point. No key's region moved between any two cells (every pick lies inside
+every other cell's one-SE region), so neither limit stepped down. The regions are wide, 51 to 244 rules, so the
+region check is weak: CH rearing's pick is `mad>=0.75|g<=0.15|Q3@D1000` at 200/500 and `mad>=0.15|g<=0.3|Q3@D2000`
+at 100/500, both inside each other's regions. BT rearing's pick is `mad>=0.1|g<=0.25|none` in all six cells.
+Chosen: `snap_limit` 200 m, `snap_limit_code` 500 m.
+
+The evidence ledger before (2026-10-22, `fwa_indexpoint()`, 100 m, today's schema) and after (2026-10-27, final):
+
+| step | before | after |
+|---|---|---|
+| visits in | 51,587 | 51,587 |
+| not placed | 1,563 | 1,665 |
+| far snap | 5,242 | 1,941 |
+| 1:50k code mismatch | 1,088 | 377 |
+| junk date | 23 | 23 |
+| no effort | 1,353 | 1,593 |
+| unknown catch | 275 | 287 |
+| no link segment | 1,491 | 178 |
+| kept | 40,552 | 45,523 |
+| kept, confirmed by the code | | 10,247 |
+| kept, moved to a named stream | | 754 |
+| segment start within the window | 19,255 | 22,877 |
+| walk starts | 34,192 | 36,925 |
+| walk cache hits / misses | (uncached) | 110,775 / 0 |
+
+`0230` (`scripts/logs/fdis/20261027_fdis_load.log`): placed 49,922, unconfirmed 39,483, confirmed 10,439, moved 785,
+far 1,941 (every unconfirmed pick beyond 200 m), code with no named stream in reach 434, 16 visits whose nearest
+line is subsurface or a connector. The 500 m build's `0310` walked 113,658 start-and-source pairs cold in 6.4 min
+from the remote link and cached them; the final run read all 110,775 it needed in 0.7 min. wet's flow load was the
+2026-10-19 one throughout.
+
 ## Phase 4's rule, fixed before the run (2026-10-27)
 
 "A key's region moves" between two limits means either limit's pick lies outside the other limit's one-SE region

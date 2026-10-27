@@ -141,7 +141,7 @@ run-to-PR mandate runs from here.
       (`build_record`); `q$ledger`'s `info` rows bound beside its drops (today only `kind == "drop"` is, `0310:111`);
       `knw_link_walks(..., cache = "knw.walk_cache")` with the cache's hit and miss counts ledgered; header,
       `scripts/README.md` and `inst/method/pipeline.csv` step 5 updated
-- [ ] run `SCHEMA=fresh_default_20261017 Rscript scripts/0310-evidence-build.R` on the 500 m build →
+- [x] run `SCHEMA=fresh_default_20261017 Rscript scripts/0310-evidence-build.R` on the 500 m build →
       `scripts/logs/habitat/<date>_evidence_build_ledger.csv` (cold visit walks: `0310` never cached them); the
       sensitivity script copies this ledger to `scripts/logs/fdis/<date>_snap_limit_sensitivity_ledger-snap500.csv`
       before Phase 4's run overwrites the day's ledger (the `_evidence_build_ledger\.csv$` readers never match the copy)
@@ -155,11 +155,11 @@ run-to-PR mandate runs from here.
       region on the main fold seed (`knw_tune_run(..., species = c("CH", "BT"), stages = "rear", thresholds_extra =
       thr_tuned, smoke = FALSE, extra = FALSE, cache_dir = NULL)`: nothing written under `data/tune`); the
       code-checked disagreement by distance band under the new snap; `scripts/logs/fdis/<date>_snap_limit_sensitivity.{txt,csv}`
-- [ ] set `snap_limit` and `snap_limit_code` by the gate's rule; register rows; rerun `0230` (log
+- [x] set `snap_limit` and `snap_limit_code` by the gate's rule; register rows; rerun `0230` (log
       `<date>_fdis_load.log`), `0240` and `0310` at the defaults (walks now cached, provided wet's flow load has not
       moved between the two runs: the cache keys on `load_md5`) → the final evidence ledger; these outputs
       (`data/fdis_repeat_surveys.csv`, `data/fdis_evidence.csv`, the logs) are the ones committed
-- [ ] the ledger before and after, in `findings.md`: placed, confirmed, moved, unconfirmed, dropped and why,
+- [x] the ledger before and after, in `findings.md`: placed, confirmed, moved, unconfirmed, dropped and why,
       `no_link_segment`, `segment_starts_in_window`, the walk cache's hits and misses
 
 ## Phase 5: Write-up and pointers
