@@ -105,7 +105,7 @@ to be wrapped or retired in favour of `fresh::frs_point_snap()`, so the network 
 - `tests/testthat/test-vignette-data.R`: "every tracked source … unchanged" skips only where `data/` is absent
   (`data/` is tracked, so never on a clone); "every ignored source … unchanged" skips where the ignored build is
   absent.
-- `.github/workflows/`: `pkgdown.yaml` and `update-citation-cff.yaml` only; no workflow runs the tests (#98 open).
+- `.github/workflows/`: `pkgdown.yaml` and `update-citation-cff.yaml` only; no workflow runs the tests yet (#98, an open PR adding R CMD check).
 - `scripts/0240-fdis-evidence.R:134-144`: the `fdis_sites.csv` column list (carries `distance_to_stream`,
   `gnis_name`, `flag_*`, `ws50_checked`); `:159-166` `data/fdis_evidence.csv` (tracked) carries `flag_far_snap` and
   `flag_ws50_mismatch` and binds by row with `data/fiss_evidence.csv`, whose `0250` keeps `fwa_indexpoint()` at 500 m
