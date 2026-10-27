@@ -104,32 +104,6 @@ The fish records support a rule where it `r rule_words(ch$pick)`. We tested betw
 `r about(min(pk$rules))` and `r about(max(pk$rules))` candidate rules for each of the `r nrow(pk)` species and life
 stages with enough records. The [chinook rearing article](chinook_rearing.html) works through one of them in full.
 
-## How are two rules told apart? {#se}
-
-Each rule gets a **score**: how well "habitat or not" predicts where the species was caught, at sites in watershed
-groups that were left out while the model was fitted. Lower is better.
-
-Scores move with the sites we happen to have. The **standard error (SE)** of the difference between two rules' scores
-says how far that difference would move with a different set of watershed groups. Rules whose scores are within
-`r val("se_region")` SE of the best are **close calls**: the records cannot rank them. From the close calls we take
-the one that changes link's current rule least.
-
-One SE is a rule of thumb, fixed before the run. `r val("se_strict")` SE is the stricter reading, about the width of a
-95 % interval: more rules become close calls, and the choice can stay nearer link's rule. Both are reported.
-
-```{r picks}
-knitr::kable(data.frame(
-  `species and stage` = vapply(pk$key, key_words, ""),
-  `link's rule` = vapply(pk$default, rule_words, ""),
-  `close calls at 1 SE` = n0(pk$close_calls),
-  `chosen at 1 SE` = vapply(pk$pick, rule_words, ""),
-  `close calls at 1.96 SE` = n0(pk$close_calls_strict),
-  `chosen at 1.96 SE` = vapply(pk$pick_strict, rule_words, ""),
-  check.names = FALSE),
-  caption = "link's current rule and the rule chosen at each width of close call, for each species and stage tuned.",
-  row.names = FALSE)
-```
-
 ## What happens, in order? {#steps}
 
 The `r nrow(pipe)` steps are each done by one package. Each box links to its package or source; each step links to its section
@@ -224,7 +198,7 @@ limits, and an allowance for small streams close to a big river.
 
 ### 7. `r pipe$label[7]` {#step-7}
 
-Each rule is scored and chosen as [described above](#se), where the table gives each species' choice. The model also accounts for how much stream was fished, which data set the record comes
+Each rule is scored and chosen as [described below](#se), where a table gives each species' choice. The model also accounts for how much stream was fished, which data set the record comes
 from, its period (`r eras[1]` or earlier, `r eras[1] + 1` to `r eras[2]`, or later) and its watershed group, so a rule is not credited for those. A short trial run checks
 the scoring before the full run starts.
 
@@ -265,6 +239,56 @@ The chosen values are written under link's own parameter names, with the grades,
 
 `r detail(11)`
 
+## What feeds what? {#lineage}
+
+```{r lineage, results = "asis"}
+svg_inline(x$svg$lineage)
+```
+
+## How is a site placed? {#snap}
+
+A site's point goes to the nearest Atlas stream within `r val("snap_search")` m, and the site is kept only if that
+stream is within `r val("snap_limit")` m. The other streams in reach are not weighed.
+
+```{r snap}
+row_of <- function(e, fate) {
+  nb <- e$near
+  data.frame(site = e$site$site_visit, fate = fate, stream = nb$blue_line_key,
+             name = ifelse(is.na(nb$gnis_name), "(unnamed)", nb$gnis_name), distance_m = nb$distance_m,
+             chosen = ifelse(seq_len(nrow(nb)) == 1, "yes", ""))
+}
+knitr::kable(rbind(row_of(ex$kept, "kept"), row_of(ex$far, "dropped")),
+             col.names = c("site visit", "fate", "Atlas stream", "name", "distance (m)", "snapped to"),
+             caption = sprintf("Two %s sites and every Atlas stream within %s m of each.", ex$wsg, val("snap_search")),
+             align = "llrlrl", row.names = FALSE)
+```
+
+## How are two rules told apart? {#se}
+
+Each rule gets a **score**: how well "habitat or not" predicts where the species was caught, at sites in watershed
+groups that were left out while the model was fitted. Lower is better.
+
+Scores move with the sites we happen to have. The **standard error (SE)** of the difference between two rules' scores
+says how far that difference would move with a different set of watershed groups. Rules whose scores are within
+`r val("se_region")` SE of the best are **close calls**: the records cannot rank them. From the close calls we take
+the one that changes link's current rule least.
+
+One SE is a rule of thumb, fixed before the run. `r val("se_strict")` SE is the stricter reading, about the width of a
+95 % interval: more rules become close calls, and the choice can stay nearer link's rule. Both are reported.
+
+```{r picks}
+knitr::kable(data.frame(
+  `species and stage` = vapply(pk$key, key_words, ""),
+  `link's rule` = vapply(pk$default, rule_words, ""),
+  `close calls at 1 SE` = n0(pk$close_calls),
+  `chosen at 1 SE` = vapply(pk$pick, rule_words, ""),
+  `close calls at 1.96 SE` = n0(pk$close_calls_strict),
+  `chosen at 1.96 SE` = vapply(pk$pick_strict, rule_words, ""),
+  check.names = FALSE),
+  caption = "link's current rule and the rule chosen at each width of close call, for each species and stage tuned.",
+  row.names = FALSE)
+```
+
 ## Where are fish sampling records lost? {#lost}
 
 Most of the records lost are lost when sites are put on the map (`r pc(lost_place / lost_all)` of the
@@ -304,30 +328,6 @@ knitr::kable(w[, c("species_code", "kept", "stream_branch", "fished_area", "in_r
                            "no barrier", "scored", "groups scored"),
              caption = "Rearing site visits per species after each filter.",
              align = "lrrrrrrrr", row.names = FALSE)
-```
-
-## What feeds what? {#lineage}
-
-```{r lineage, results = "asis"}
-svg_inline(x$svg$lineage)
-```
-
-## How is a site placed? {#snap}
-
-A site's point goes to the nearest Atlas stream within `r val("snap_search")` m, and the site is kept only if that
-stream is within `r val("snap_limit")` m. The other streams in reach are not weighed.
-
-```{r snap}
-row_of <- function(e, fate) {
-  nb <- e$near
-  data.frame(site = e$site$site_visit, fate = fate, stream = nb$blue_line_key,
-             name = ifelse(is.na(nb$gnis_name), "(unnamed)", nb$gnis_name), distance_m = nb$distance_m,
-             chosen = ifelse(seq_len(nrow(nb)) == 1, "yes", ""))
-}
-knitr::kable(rbind(row_of(ex$kept, "kept"), row_of(ex$far, "dropped")),
-             col.names = c("site visit", "fate", "Atlas stream", "name", "distance (m)", "snapped to"),
-             caption = sprintf("Two %s sites and every Atlas stream within %s m of each.", ex$wsg, val("snap_search")),
-             align = "llrlrl", row.names = FALSE)
 ```
 
 ## Limits {#limits}
