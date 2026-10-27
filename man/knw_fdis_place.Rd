@@ -4,7 +4,7 @@
 \alias{knw_fdis_place}
 \title{Pick each FDIS site visit's stream from the nearest snap and the streams its 1:50k code names}
 \usage{
-knw_fdis_place(nearest, hinted, limit_near = 100, limit_code = 500)
+knw_fdis_place(nearest, hinted, limit_near = 200, limit_code = 500)
 }
 \arguments{
 \item{nearest}{\code{data.frame}, one row per visit to place: \code{site_visit},
@@ -57,6 +57,11 @@ because distance predicts a wrong stream only where nothing names the
 stream: \code{flag_far_snap} marks an unconfirmed pick beyond \code{limit_near} and a
 confirmed one beyond \code{limit_code}. Ties in distance go to the lowest
 \code{linear_feature_id}, as in \code{frs_point_snap()}.
+
+The default limits are the ones \code{0230} uses, set by
+\code{data-raw/snap_limit_sensitivity.R} (#91): 200 m, the widest distance band
+whose code-checked disagreement stays under one in three, for an unconfirmed
+pick, and the 500 m search radius for a confirmed one.
 }
 \examples{
 nearest <- data.frame(

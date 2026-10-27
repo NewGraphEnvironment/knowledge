@@ -22,6 +22,11 @@
 #' confirmed one beyond `limit_code`. Ties in distance go to the lowest
 #' `linear_feature_id`, as in `frs_point_snap()`.
 #'
+#' The default limits are the ones `0230` uses, set by
+#' `data-raw/snap_limit_sensitivity.R` (#91): 200 m, the widest distance band
+#' whose code-checked disagreement stays under one in three, for an unconfirmed
+#' pick, and the 500 m search radius for a confirmed one.
+#'
 #' @param nearest `data.frame`, one row per visit to place: `site_visit`,
 #'   `blue_line_key`, `downstream_route_measure`, `linear_feature_id`,
 #'   `distance_to_stream`, with the four position columns missing where no
@@ -57,7 +62,7 @@
 #'   linear_feature_id = c(31, 21), distance_to_stream = c(60, 150)
 #' )
 #' knw_fdis_place(nearest, hinted, limit_near = 100, limit_code = 500)
-knw_fdis_place <- function(nearest, hinted, limit_near = 100, limit_code = 500) {
+knw_fdis_place <- function(nearest, hinted, limit_near = 200, limit_code = 500) {
   pos <- c("blue_line_key", "downstream_route_measure", "linear_feature_id", "distance_to_stream")
   chk::chk_data(nearest)
   chk::chk_data(hinted)

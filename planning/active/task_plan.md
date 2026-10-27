@@ -148,7 +148,7 @@ run-to-PR mandate runs from here.
 
 ## Phase 4: The limits by measurement
 
-- [ ] `data-raw/snap_limit_sensitivity.R`: from the 500 m evidence (`visits_link`, `visits_species`, `walks`, link's
+- [x] `data-raw/snap_limit_sensitivity.R`: from the 500 m evidence (`visits_link`, `visits_species`, `walks`, link's
       `default` and `default_tuned` thresholds at the ledger's `run_link_sha` read as `0320:134-150` reads them, the
       spawner table unused for rearing), for unconfirmed ∈ {100, 200, 500} × confirmed ∈ {200, 500}: visits kept,
       moved picks by move distance and the nearest's distance, and CH rearing's and BT rearing's pick and one-SE

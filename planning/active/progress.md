@@ -31,3 +31,6 @@ The approval covered the baseline only: the run-to-PR mandate starts when Al say
   `0230` on fresh's snap and the hint, `knw_fdis_quality()` info rows, `0240` columns and header, registers;
   `0250`'s comments no longer claim to match `0230`
 - 0230 at 500/500 (1.5 min): placed 49,922, confirmed 10,439, moved 785, ws50 mismatch 434, far 0; data/fdis_repeat_surveys.csv came back byte-identical
+- 0310 on the 500 m build (16 min; walks cold 6.4 min, 113,658 pairs walked and cached): kept 47,247, no_link_segment 198
+- Sensitivity (24.8 min, 14 workers): the rule gives 200 m unconfirmed, 500 m confirmed; no region moves between any two cells
+- Limits set: snap_limit 200 (measured), snap_limit_code 500 (measured)

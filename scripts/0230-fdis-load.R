@@ -64,7 +64,7 @@ fresh_min <- "0.40.0"   # frs_point_snap() on a dataset, with a per-point stream
 snap_search <- 500      # frs_point_snap() tolerance: a visit with no stream inside it is not placed
 # knw_fdis_place()'s limits (#91): farther picks are flagged here and knw_fdis_quality() drops them.
 # Overridable for the sensitivity run (data-raw/snap_limit_sensitivity.R); coerced at use.
-snap_limit      <- Sys.getenv("SNAP_LIMIT", 100)        # a pick no 1:50k code confirms
+snap_limit      <- Sys.getenv("SNAP_LIMIT", 200)        # a pick no 1:50k code confirms
 snap_limit_code <- Sys.getenv("SNAP_LIMIT_CODE", 500)   # a pick on a stream the visit's 1:50k code names
 # never candidates: subsurface flow (fresh's default) and connectors, which link's streams lack
 snap_edges_excluded <- c(1425L, 6010L)
