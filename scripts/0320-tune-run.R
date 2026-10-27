@@ -108,6 +108,15 @@ evidence_md5s <- vapply(c("visits_link", "visits_species", "walks"), function(f)
 }, character(1))
 for (f in names(evidence_md5s)) say("  %s md5 %s", f, evidence_md5s[[f]])
 evidence_md5 <- paste(unname(evidence_md5s), collapse = ";")
+# the database's build, checked before any work (#87): a schema built by another run than the evidence's is refused
+# here, not after the scoring, so the same command runs on any machine whose database holds the build. DEV=1 grades
+# nothing and needs no database
+if (!dev) {
+  conn <- pg()
+  rec <- tryCatch(knw_build_record(conn, schema, run_uid = run_uid), error = function(e) fail("%s", conditionMessage(e)))
+  say("%s", rec$line)
+  dbDisconnect(conn)
+}
 vl <- read_csv("data/fdis/derived/visits_link.csv", show_col_types = FALSE, guess_max = 1e5,
                col_types = cols(site_visit = "c", species_caught = "c", blocks_absence_of = "c", hydro_zone = "c"))
 vs <- read_csv("data/fdis/derived/visits_species.csv", show_col_types = FALSE, guess_max = 1e5, col_types = cols(site_visit = "c"))

@@ -145,6 +145,13 @@ gpkg_of <- function(w) {
 
 # ---- compare, per species x stage (species in parallel) ------------------------------------
 conn <- pg()
+# the database's build, checked before any work (#87): a schema built by another run than the evidence's is refused
+rec <- tryCatch(knw_build_record(conn, schema, run_uid = run_uid), error = function(e) {
+  say("%s", conditionMessage(e))
+  writeLines(log_lines, path_log)
+  stop(conditionMessage(e), call. = FALSE)
+})
+say("%s", rec$line)
 groups_sp <- function(sp) dbGetQuery(conn, sprintf("SELECT DISTINCT watershed_group_code w FROM %s.streams_habitat_%s ORDER BY 1", schema, tolower(sp)))$w
 jobs <- lapply(names(fitted), function(k) {
   r <- fitted[[k]]

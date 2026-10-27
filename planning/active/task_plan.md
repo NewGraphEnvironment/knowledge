@@ -155,7 +155,7 @@ exploration found that shapes the design is in `findings.md` ("Exploration"), wi
 
 ## Phase 5: Box portability
 
-- [ ] `knw_build_record(conn, schema)`: the schema's `run_uid` (`<schema>.log_recompute`), the flow load, the walk md5
+- [x] `knw_build_record(conn, schema)`: the schema's `run_uid` (`<schema>.log_recompute`), the flow load, the walk md5
       and fresh's version, as a named list and a one-line string; `0320` and `0330` compare the schema's `run_uid`
       with the evidence ledger's at connect, before any work, and refuse a mismatch, so the same command runs on any
       machine whose database holds the build and stops on one that does not.
