@@ -191,8 +191,8 @@ a separate source, noted in `0240`'s header); the frozen `0290`–`0298`; `vigne
 - [x] Tests pass (`devtools::test()`: `test-fdis_place.R`, `test-fdis_quality.R`, `test-settings-register.R` and
       the rest), except the two `test-vignette-data.R` tests decided at the gate ("every tracked source …" and
       "every ignored source …" of the methodology bundle), named in the PR with the rerun that clears them
-- [ ] `/code-check` clean (once over the branch with `/code-check branch`)
-- [ ] PWF checkboxes match landed work
+- [x] `/code-check` clean (once over the branch with `/code-check branch`)
+- [x] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion
 
 How each change is proved: the probe's classes partition the 50,550 points and its link-placement counts reproduce

@@ -38,3 +38,6 @@ The approval covered the baseline only: the run-to-PR mandate starts when Al say
 - devtools::test(): 1,382 passed, 14 expectations failed, all in the two test-vignette-data.R tests decided at the gate
 - Phase 5 text: research placement section, tuning file's note, README row, CLAUDE.md note. NEWS.md is left to the
   release commit, as every past entry was (`git log -- NEWS.md` shows only "Release" commits); the PR body carries the line
+- /code-check branch: four rounds; ended by round 4's 44-row enumeration (39 held, 5 prose rows fixed and checked).
+  Round 3 changed the exclusion set to 6010 only, which reran the 500 m build, the sensitivity (same limits) and the
+  final evidence (45,529 kept)
