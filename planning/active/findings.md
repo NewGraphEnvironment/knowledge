@@ -176,8 +176,10 @@ The old snap is the placement `0230` stored on 2026-10-17 (`sites.rds`), not a r
 
   On one segment the two measures differ by at most 1.000 m (fresh's whole metre). link places 202 more
   same-segment visits under the new measure than the old: the floored metre lands differently at link's breaks.
-  Of the old snap's 1,995 link misses, 1,421 are unmapped picks and 224 placeholder picks (some placeholder picks
-  fall in `same_segment`/`same_stream` because fresh's first-match class is by difference), 393 other.
+  Of the old snap's 2,038 link misses, 224 are placeholder picks and 1,421 unmapped ones (not placeholder), and 393
+  other. The placeholder picks are the 174 `old_placeholder` and 50 of the 102 `old_only` (fresh has no mapped
+  stream within 500 m); the unmapped ones are 1,347 `old_unmapped`, 50 `old_only` and 24 `same_stream` (an
+  unmapped segment of a mapped line).
 - **Exclusion set:** with no edge type excluded, the nearest line is subsurface (1425) for 13 visits and a connector
   (6010) for 3. link's streams carry 1425 and lack 6010; the old snap's five 1425 picks all reach a link segment.
   The counts are small either way, so the default stands on fresh's convention plus the connector:
