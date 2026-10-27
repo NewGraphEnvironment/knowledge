@@ -180,6 +180,9 @@ vocabularies.
   : Size class of each fish from a table of length breaks
 - [`knw_species()`](https://newgraphenvironment.github.io/knowledge/reference/knw_species.md)
   : The species the habitat evidence is built for
+- [`knw_fdis_place()`](https://newgraphenvironment.github.io/knowledge/reference/knw_fdis_place.md)
+  : Pick each FDIS site visit's stream from the nearest snap and the
+  streams its 1:50k code names
 - [`knw_fdis_quality()`](https://newgraphenvironment.github.io/knowledge/reference/knw_fdis_quality.md)
   : Drop the FDIS site visits that cannot carry evidence, and count
   every drop

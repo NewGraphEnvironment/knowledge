@@ -1,13 +1,15 @@
 # Drop the FDIS site visits that cannot carry evidence, and count every drop
 
 The quality drops `scripts/0290` and `0294` applied to `0230`'s site
-table, in that order: a visit not placed on the FWA network, a snap over
-the placement limit, an FDIS 1:50k watershed code that disagrees with
-the placement, a junk date, a sentinel effort or no effort at all (a
-visit with only one of area and time is kept, so a model can use
-either), and a catch whose status is unknown (neither fish nor an
-explicit zero). Each drop is one ledger row, and the drops and the kept
-rows partition the input, which the function asserts.
+table, in that order: a visit not placed on the FWA network, a pick
+beyond its placement limit (see
+[`knw_fdis_place()`](https://newgraphenvironment.github.io/knowledge/reference/knw_fdis_place.md)),
+an FDIS 1:50k watershed code that names no stream within the snap
+search, a junk date, a sentinel effort or no effort at all (a visit with
+only one of area and time is kept, so a model can use either), and a
+catch whose status is unknown (neither fish nor an explicit zero). Each
+drop is one ledger row, and the drops and the kept rows partition the
+input, which the function asserts.
 
 ## Usage
 
@@ -27,7 +29,11 @@ knw_fdis_quality(sites)
 ## Value
 
 A list: `kept`, the visits that pass, and `ledger`, a `tibble` with
-columns `kind` (`in`, `drop`, `kept`), `step`, `n` and `note`.
+columns `kind` (`in`, `drop`, `kept`, `info`), `step`, `n` and `note`.
+Where `sites` carries `0230`'s `snap_confirmed` and `snap_moved`, two
+`info` rows count the kept visits confirmed by their 1:50k code and
+those moved to a named stream that is not the nearest; they are not part
+of the partition.
 
 ## Examples
 
@@ -48,8 +54,8 @@ q$ledger
 #>   <chr> <chr>                   <int> <chr>                                     
 #> 1 in    visits_in                   3 ""                                        
 #> 2 drop  not_placed                  1 "not placed on the FWA network"           
-#> 3 drop  far_snap                    0 "snapped beyond the placement limit"      
-#> 4 drop  ws50_mismatch               0 "FDIS 1:50k watershed code disagrees with…
+#> 3 drop  far_snap                    0 "snapped beyond the placement limit (one …
+#> 4 drop  ws50_mismatch               0 "FDIS 1:50k watershed code names no strea…
 #> 5 drop  junk_date                   0 ""                                        
 #> 6 drop  effort_sentinel_or_none     1 "sentinel effort, or neither fished area …
 #> 7 drop  catch_unknown               0 "catch neither fish nor an explicit zero" 
