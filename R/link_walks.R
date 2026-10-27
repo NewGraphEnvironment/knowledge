@@ -272,6 +272,13 @@ knw_link_walks <- function(connector, starts, q_grid = c(1, 3, 5, 10, 20, 30, 50
 #' names the build. A grade records it, a publish compares it, and the walk
 #' cache keys every row on its md5 (#72, #87). Refuses a table with no comment.
 #'
+#' wet writes one comment per table, naming only the scenario loaded last, and
+#' the walk and the grade read only `historical`. Once another scenario is
+#' loaded, the comment no longer names the historical rows' build, so two
+#' different historical loads could share it and the walk cache would serve
+#' walks made on the older one. So this refuses a comment that does not name
+#' `scenario historical`.
+#'
 #' @param conn a `DBI` connection to a database holding `discharge`.
 #' @return `character(1)`, the comment.
 #' @export
@@ -284,6 +291,10 @@ knw_discharge_load <- function(conn) {
   d <- DBI::dbGetQuery(conn, "SELECT obj_description('discharge.fwa_v1_segment_monthly'::regclass) AS d")$d
   if (length(d) != 1L || is.na(d) || !nzchar(d)) {
     stop("discharge.fwa_v1_segment_monthly carries no load comment", call. = FALSE)
+  }
+  if (!grepl("scenario historical ", d, fixed = TRUE)) {
+    stop("discharge.fwa_v1_segment_monthly's comment does not name the historical load the walk reads: ", d,
+         call. = FALSE)
   }
   d
 }

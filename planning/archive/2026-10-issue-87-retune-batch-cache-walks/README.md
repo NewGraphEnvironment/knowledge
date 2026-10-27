@@ -54,6 +54,8 @@ flow-load check; round 5 clean).
 PR #100 (#93) merged first, so the branch merged main before its own merge (2026-10-27) and did #93's two tasks
 there: `0310` reads the flow build with `knw_discharge_load()`, and the settings register needed no row, because no
 argument #87 added shapes a result (a batch size and a worker count do not, and the walk cache returns identical
-walks); `test-settings-register.R` passes on the merged tree.
+walks while the Atlas tables it reads and the historical flow load are unchanged); `test-settings-register.R`
+passes on the merged tree. Review round 3 found the flow comment names only the scenario loaded last, so
+`knw_discharge_load()` now refuses one that does not name `scenario historical` (wet#88 has the load-table need).
 
 Closed by: the PR from branch `87-make-a-retune-fast-enough-to-iterate-bat`.

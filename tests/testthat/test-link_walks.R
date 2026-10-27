@@ -107,3 +107,15 @@ test_that("the walk cache misses, then reads back what was walked, and misses un
   load <- knw_discharge_load(conn)
   expect_identical(.knw_load_md5(conn, knw_discharge_load(conn)), .knw_load_md5(conn, load))
 })
+
+test_that("the flow load is refused unless its comment names the historical load the walk reads", {
+  load_of <- function(comment) {
+    local_mocked_bindings(dbGetQuery = function(...) data.frame(d = comment), .package = "DBI")
+    knw_discharge_load(NULL)
+  }
+  hist <- "wet_db_load(): discharge/fwa/v1/segment_monthly, scenario historical last loaded from m (built b, wet w)"
+  expect_identical(load_of(hist), hist)
+  expect_error(load_of(sub("historical", "ssp245", hist)), "does not name the historical load")
+  expect_error(load_of(NA_character_), "no load comment")
+  expect_error(load_of(""), "no load comment")
+})

@@ -18,6 +18,14 @@ wet can reload \code{discharge.fwa_v1_segment_monthly} between two runs
 names the build. A grade records it, a publish compares it, and the walk
 cache keys every row on its md5 (#72, #87). Refuses a table with no comment.
 }
+\details{
+wet writes one comment per table, naming only the scenario loaded last, and
+the walk and the grade read only \code{historical}. Once another scenario is
+loaded, the comment no longer names the historical rows' build, so two
+different historical loads could share it and the walk cache would serve
+walks made on the older one. So this refuses a comment that does not name
+\verb{scenario historical}.
+}
 \examples{
 \dontrun{
 conn <- DBI::dbConnect(RPostgres::Postgres())
