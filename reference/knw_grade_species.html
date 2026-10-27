@@ -74,7 +74,8 @@ fitted on, the two rivers are the same.</p>
 <span>  stage <span class="op">=</span> <span class="st">"rear"</span>,</span>
 <span>  workers <span class="op">=</span> <span class="fl">4L</span>,</span>
 <span>  src <span class="op">=</span> <span class="st">"pick"</span>,</span>
-<span>  ref_edge <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  ref_edge <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  cache <span class="op">=</span> <span class="st">"knw.walk_cache"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -125,6 +126,11 @@ types the reference rate is taken over. <code>NULL</code> takes the curve's own
 <code>edge_stream</code>, the edge types of the visits it was fitted on (#72), and a
 curve that carries none takes <code><a href="knw_tune_run.html">knw_tune_run()</a></code>'s default <code>edge_stream</code>.</p></dd>
 
+
+<dt id="arg-cache">cache<a class="anchor" aria-label="anchor" href="#arg-cache"></a></dt>
+<dd><p>the walk cache <code><a href="knw_link_walks.html">knw_link_walks()</a></code> reads and keeps walks in
+(<code>"knw.walk_cache"</code>), or <code>FALSE</code> to walk every start.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -136,9 +142,10 @@ another, which link's walk, one group's table at a time, cannot see; <code>NA</c
 where no river was found), <code>rate</code>, <code>grade</code>, <code>grade_class</code>; <code>reference</code>;
 <code>ref_edge</code>, the edge types the reference was taken over; <code>q</code>, the river
 size walked to; <code>walk</code>, the walk's convention (<code>"bank"</code>: the distance ends
-at the river's bank, #73); <code>counts</code> (segments, accessible, walked starts,
-segments whose walk was found, none or other, graded, no size, no
-gradient); <code>walk_minutes</code>.</p>
+at the river's bank, #73); <code>walk_md5</code>, the walk's code (<code><a href="knw_walk_md5.html">knw_walk_md5()</a></code>,
+#87); <code>counts</code> (segments, accessible, walked starts, starts read from the
+walk cache and walked, segments whose walk was found, none or other,
+graded, no size, no gradient); <code>walk_minutes</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>

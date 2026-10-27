@@ -66,6 +66,13 @@ link’s two access columns disagree.
 - [`knw_link_walks()`](https://newgraphenvironment.github.io/knowledge/reference/knw_link_walks.md)
   : Network distance downstream to the first river of each size, on each
   flow source
+- [`knw_walk_md5()`](https://newgraphenvironment.github.io/knowledge/reference/knw_walk_md5.md)
+  : The walk's code, by its md5
+- [`knw_discharge_load()`](https://newgraphenvironment.github.io/knowledge/reference/knw_discharge_load.md)
+  : The flow load the database serves, by its table comment
+- [`knw_build_record()`](https://newgraphenvironment.github.io/knowledge/reference/knw_build_record.md)
+  : The database build a run reads, and the check that it is the
+  evidence's
 - [`knw_link_access_check()`](https://newgraphenvironment.github.io/knowledge/reference/knw_link_access_check.md)
   : How link's two access columns disagree, per species
 

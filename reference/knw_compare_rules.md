@@ -34,7 +34,8 @@ knw_compare_rules(
   seed_boot = 542L,
   structures = NULL,
   tuned_as = "door",
-  config_sha = NA_character_
+  config_sha = NA_character_,
+  workers = 1L
 )
 ```
 
@@ -107,6 +108,17 @@ knw_compare_rules(
 
   `character(1)` the link commit `link_dir` was read at, carried on
   every output row (`NA` when unknown).
+
+- workers:
+
+  `integer(1)` socket workers for the groups (#87). The groups are split
+  into `workers` bins balanced by segment count, largest first; each bin
+  runs on its own connection in its own scratch schema
+  (`<scratch>_w<i>`, dropped when it ends), reading the grades and the
+  user-habitat rows this call writes once to `scratch`. A group's error
+  stops its bin and is raised naming the group. `1` runs the one bin in
+  this process. `connector` and its environment travel to every worker,
+  so build it where it holds nothing large.
 
 ## Value
 

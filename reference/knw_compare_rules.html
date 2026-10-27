@@ -89,7 +89,8 @@ spawning together, because the connectivity pass reads spawning. Regenerated
 <span>  seed_boot <span class="op">=</span> <span class="fl">542L</span>,</span>
 <span>  structures <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  tuned_as <span class="op">=</span> <span class="st">"door"</span>,</span>
-<span>  config_sha <span class="op">=</span> <span class="cn">NA_character_</span></span>
+<span>  config_sha <span class="op">=</span> <span class="cn">NA_character_</span>,</span>
+<span>  workers <span class="op">=</span> <span class="fl">1L</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -159,6 +160,17 @@ tables, for the FDIS detection check (<code>NULL</code> to skip).</p></dd>
 <dt id="arg-config-sha">config_sha<a class="anchor" aria-label="anchor" href="#arg-config-sha"></a></dt>
 <dd><p><code>character(1)</code> the link commit <code>link_dir</code> was read at,
 carried on every output row (<code>NA</code> when unknown).</p></dd>
+
+
+<dt id="arg-workers">workers<a class="anchor" aria-label="anchor" href="#arg-workers"></a></dt>
+<dd><p><code>integer(1)</code> socket workers for the groups (#87). The groups
+are split into <code>workers</code> bins balanced by segment count, largest first;
+each bin runs on its own connection in its own scratch schema
+(<code>&lt;scratch&gt;_w&lt;i&gt;</code>, dropped when it ends), reading the grades and the
+user-habitat rows this call writes once to <code>scratch</code>. A group's error
+stops its bin and is raised naming the group. <code>1</code> runs the one bin in this
+process. <code>connector</code> and its environment travel to every worker, so build
+it where it holds nothing large.</p></dd>
 
 </dl></div>
     <div class="section level2">

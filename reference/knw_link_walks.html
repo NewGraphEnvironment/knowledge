@@ -69,7 +69,9 @@ link rule.</p>
 <span>  <span class="va">starts</span>,</span>
 <span>  q_grid <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span>, <span class="fl">5</span>, <span class="fl">10</span>, <span class="fl">20</span>, <span class="fl">30</span>, <span class="fl">50</span><span class="op">)</span>,</span>
 <span>  sources <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"pick"</span>, <span class="st">"pcic_routed"</span>, <span class="st">"wet_balance"</span><span class="op">)</span>,</span>
-<span>  workers <span class="op">=</span> <span class="fl">4L</span></span>
+<span>  workers <span class="op">=</span> <span class="fl">4L</span>,</span>
+<span>  batch <span class="op">=</span> <span class="fl">500L</span>,</span>
+<span>  cache <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -98,6 +100,17 @@ database holding <code>discharge</code> and <code>whse_basemapping</code>.</p></
 <dt id="arg-workers">workers<a class="anchor" aria-label="anchor" href="#arg-workers"></a></dt>
 <dd><p><code>integer(1)</code> socket workers.</p></dd>
 
+
+<dt id="arg-batch">batch<a class="anchor" aria-label="anchor" href="#arg-batch"></a></dt>
+<dd><p><code>integer(1)</code> starts per query. On the database's host a batch of
+500 removes the round trip and R's per-row binding; over a remote link it
+removes almost all of a walk's time.</p></dd>
+
+
+<dt id="arg-cache">cache<a class="anchor" aria-label="anchor" href="#arg-cache"></a></dt>
+<dd><p><code>FALSE</code> (the default: walk everything), or a table name,
+<code>schema.table</code>, to read walks from and keep them in (see above).</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -105,7 +118,9 @@ database holding <code>discharge</code> and <code>whse_basemapping</code>.</p></
 <code>status</code>, <code>dist_m</code>, <code>large_mad</code>, <code>large_lfid</code>, <code>large_edge</code>,
 <code>large_waterbody_key</code>, <code>n_hops</code>, <code>max_entry_gap_m</code>, <code>dist_centre_m</code>,
 <code>bank_m</code>; exactly
-<code>nrow(unique(starts)) * length(sources) * length(q_grid)</code> rows.</p>
+<code>nrow(unique(starts)) * length(sources) * length(q_grid)</code> rows. With a
+cache, attribute <code>cache</code> holds the start-and-source pairs read (<code>hit</code>) and
+walked (<code>miss</code>).</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -121,7 +136,27 @@ at a segment's downstream end), crosses watershed-group outlets, and walks a
 line with no local code.</p>
 <p>Each socket worker opens its own connection through <code>connector</code> and installs
 the walk as a session-temporary function, so a <code>DBI</code> connection cannot be
-passed: it does not serialise to a worker.</p>
+passed: it does not serialise to a worker. A worker sends one query per
+<code>batch</code> starts and source (#87): the starts go to the server as two arrays,
+unnested with their position and walked laterally, and each row comes back
+tagged with its start's position, so the start's own values are attached in R
+and no key or measure is matched by its printed form. Every start must come
+back with one row per size. The result does not depend on <code>batch</code>: each start
+is walked alone, as before.</p>
+<p>With <code>cache</code> a table name, every walk is kept (#87): a walk depends only on
+its start, the river size, the flow source, the flow load
+(<code><a href="knw_discharge_load.html">knw_discharge_load()</a></code>, by its md5) and the walk's code (<code><a href="knw_walk_md5.html">knw_walk_md5()</a></code>),
+so a row keyed on all six is the walk's own for as long as those hold. The
+starts go to a temporary table and the rows already kept are read with one
+join per 500,000 starts; a start missing any size on a source is walked for
+every size on that source (each size's result is independent of the others),
+and each batch's rows are inserted by the same query that walks them. The
+cache and its table of flow loads (<code>&lt;cache&gt;_load</code>) are created when absent.
+Rows under another load or walk are never read, and nothing prunes them.
+The FWA tables the walk reads carry no load record, so a reload of
+<code>whse_basemapping.fwa_stream_networks_sp</code> (fwapg#43 moves measures by
+millimetres) or of the river, lake, manmade waterbody and wetland polygons
+it measures the bank on needs the cache truncated by hand.</p>
     </div>
 
     <div class="section level2">

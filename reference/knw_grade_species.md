@@ -25,7 +25,8 @@ knw_grade_species(
   stage = "rear",
   workers = 4L,
   src = "pick",
-  ref_edge = NULL
+  ref_edge = NULL,
+  cache = "knw.walk_cache"
 )
 ```
 
@@ -78,6 +79,13 @@ knw_grade_species(
   [`knw_tune_run()`](https://newgraphenvironment.github.io/knowledge/reference/knw_tune_run.md)'s
   default `edge_stream`.
 
+- cache:
+
+  the walk cache
+  [`knw_link_walks()`](https://newgraphenvironment.github.io/knowledge/reference/knw_link_walks.md)
+  reads and keeps walks in (`"knw.walk_cache"`), or `FALSE` to walk
+  every start.
+
 ## Value
 
 A list: `grades`, one row per segment with the segment's keys,
@@ -88,8 +96,11 @@ lies in another, which link's walk, one group's table at a time, cannot
 see; `NA` where no river was found), `rate`, `grade`, `grade_class`;
 `reference`; `ref_edge`, the edge types the reference was taken over;
 `q`, the river size walked to; `walk`, the walk's convention (`"bank"`:
-the distance ends at the river's bank, \#73); `counts` (segments,
-accessible, walked starts, segments whose walk was found, none or other,
+the distance ends at the river's bank, \#73); `walk_md5`, the walk's
+code
+([`knw_walk_md5()`](https://newgraphenvironment.github.io/knowledge/reference/knw_walk_md5.md),
+\#87); `counts` (segments, accessible, walked starts, starts read from
+the walk cache and walked, segments whose walk was found, none or other,
 graded, no size, no gradient); `walk_minutes`.
 
 ## Details
