@@ -56,6 +56,9 @@ key_for <- function(pattern) {
 }
 ver <- list(
   list(key = key_for("^(smnorris/)?fwapg"), title = "fwapg", version = short_sha(v$fwapg_sha)),
+  # the fork's crosswalk built the routed flows the evidence read: wet's data/checks/pcic_routed_compare_20260717.txt at
+  # the loaded build (94deeb5) names the fwapg commit that built pcic.discharge_monthly (#89)
+  list(key = key_for("^\\{*NewGraphEnvironment\\}*/fwapg"), title = "fwapg, New Graph Environment's fork", version = "7c30f58"),
   list(key = key_for("^(smnorris/)?bcfishpass"), title = "bcfishpass", version = NULL),
   list(key = key_for("^(smnorris/)?bcfishobs"), title = "bcfishobs", version = NULL),
   list(key = key_for("^link"), title = "link", version = v$link),

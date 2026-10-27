@@ -48,7 +48,7 @@ visit dropped later for its effort; a `summarise()` call read summed flags (stag
 
 ## Owed
 
-- Cite PCIC's VIC-GL (Schnorbus 2018), Raven (Craig et al. 2020) and the fwapg fork in the chinook article:
+- Done on the branch after the archive (the key came from the Zotero skill's key file): cite PCIC's VIC-GL (Schnorbus 2018), Raven (Craig et al. 2020) and the fwapg fork in the chinook article:
       `planning/archive/<this archive>/zotero_create_89.py` creates the three items (blocked 2026-10-27: the Zotero key
       could not be read from its credential store); then cite them in "What records were used?", rerun
       `data-raw/vignette_bib.R` (Zotero running) and check the fork item's title does not start "fwapg"
