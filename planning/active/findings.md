@@ -164,8 +164,31 @@ The reference ran while the Phase 1 walk check shared the database for a minute;
 otherwise. CH's speed-up (2.7x) is below WCT's (3.8x); why was not measured (the bins' balance and the near-river walk's own
 use of the server's cores are candidates).
 
+## Phase 4: the first launch ran two regrades at once (2026-10-27)
+
+The first Phase 4 chain ran attached over ssh; I stopped it with TaskStop, killed its shell and relaunched detached.
+The R process of the first chain's `0320` survived (its parent was killed, it was reparented and kept running), and
+the check for leftovers looked for `Rscript` while the running process is `exec/R --file=...`. So two cold `0320`
+runs graded side by side from 01:03:57Z and 01:04:27Z, both writing `/tmp/knw87_p4/0320_cold.log` (interleaved lines,
+two `Done in` lines: 97.4 and 96.8 min) and the same grade CSVs. What it did and did not damage:
+
+- The cache: its primary key `(blue_line_key, downstream_route_measure, src, qmin, load_md5, walk_md5)` held; 4,459,402
+  rows, all distinct. Both runs counted BT rearing's 2,681,583 starts as misses, then BT spawning as 2,681,583 hits.
+- The timings: both runs shared the database and the CPUs for the whole 97 min (BT rearing's walks 53.6 min), so
+  no number from it is a measurement of the change. The grade CSVs were written by both, so none is trusted.
+- What it showed anyway: the cache check after it (`data-raw/walk_batch_check.R`) failed on a real bug, not on the
+  dual run: `.knw_load_md5(conn, knw_discharge_load(conn))` ran the comment query as a lazy promise after preparing
+  the md5 query, which cancelled it. Grading assigned the load first, so only the check's call shape hit it. Fixed
+  with `force()` and a test that fails without it (`9e56f18`).
+
+The rerun (`/tmp/knw87_phase4c.sh` on the host, from 02:49:07Z) drops `knw.walk_cache` and deletes every grade
+table first, so its `0320` is cold, and runs alone (one `exec/R` process, checked at launch). The dual run's logs
+are kept on the host under `/tmp/knw87_p4_dual/`, not committed.
+
 ## Errors Encountered
 
 | Error | Resolution |
 |-------|------------|
 | `git pull` on the host worktree refused: untracked logs would be overwritten | the logs had been copied here and committed; checked their md5s equal and removed the host's copies before each pull |
+| Phase 4's first `0320` kept running after its chain's shell was killed, so the relaunch ran a second one beside it | rerun from an emptied cache; check leftovers by the script name (`grep 0320` over `ps`), since R runs as `exec/R`, not `Rscript` |
+| `bind message supplies 1 parameters, but prepared statement "" requires 0` in the cache check | `.knw_load_md5()` forces its argument before preparing (`9e56f18`) |
