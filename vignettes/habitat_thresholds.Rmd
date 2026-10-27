@@ -189,8 +189,8 @@ far away.
 ### 3. `r pipe$label[3]` {#step-3}
 
 link [@irvine2026linkDevelop] cuts the Atlas streams into short segments and records, for each species, whether fish
-can reach each one and what link's current rules call habitat. It also cuts streams where fish have been observed
-[@norris2024smnorrisbcfishobs], so those observations shape the segments, but they never score a rule: they say where
+can reach each one and what link's current rules call habitat. It also cuts streams where fish have been observed, using
+`bcfishobs` [@norris2024smnorrisbcfishobs], so those observations shape the segments, but they never score a rule: they say where
 fish were seen, not where they were looked for and missed.
 
 `r detail(3)`
@@ -224,7 +224,7 @@ limits, and an allowance for small streams close to a big river.
 
 ### 7. `r pipe$label[7]` {#step-7}
 
-Each rule is scored as [above](#se). The model also accounts for how much stream was fished, which data set the record comes
+Each rule is scored and chosen as [described above](#se), where the table gives each species' choice. The model also accounts for how much stream was fished, which data set the record comes
 from, its period (`r eras[1]` or earlier, `r eras[1] + 1` to `r eras[2]`, or later) and its watershed group, so a rule is not credited for those. A short trial run checks
 the scoring before the full run starts.
 
@@ -265,7 +265,7 @@ The chosen values are written under link's own parameter names, with the grades,
 
 `r detail(11)`
 
-## Where are records lost? {#lost}
+## Where are fish sampling records lost? {#lost}
 
 Most of the records lost are lost when sites are put on the map (`r pc(lost_place / lost_all)` of the
 `r about(lost_all)` dropped). A site far from any stream, or on the wrong tributary, cannot be trusted to sit on the
