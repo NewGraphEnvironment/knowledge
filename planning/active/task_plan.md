@@ -170,8 +170,10 @@ exploration found that shapes the design is in `findings.md` ("Exploration"), wi
 
 ## Phase 6: Wrap
 
-- [ ] `/code-check branch` (round 1 over the code at `4615173`, rounds 2 and 3 at `2d395e4` (2026-10-27); 2 findings fixed in round 1, rounds 2 and 3
-      clean, round 3 enumerating 21 boundary crossings; code changed after this gets its own round); `devtools::test()`, `devtools::document()`, `pkgdown::check_pkgdown()`.
+- [x] `/code-check branch` (round 1 over the code at `4615173`, rounds 2 and 3 at `2d395e4` (2026-10-27); 2 findings fixed in round 1, rounds 2 and 3
+      clean, round 3 enumerating 21 boundary crossings; round 4 over the code and docs since (`2851566`): no code bug, five
+      claims corrected, `0330`'s flow-load check added, an empty CONFIG_SHA inside `38bd09f`'s fix enumerated over 17
+      environment reads; round 5 over that change clean); `devtools::test()`, `devtools::document()`, `pkgdown::check_pkgdown()`.
 - [ ] `/planning-archive` with the Measurement and Evidence sections; `/gh-pr-push`.
 
 ## Owed at the end (reported, done after merge)
@@ -186,8 +188,8 @@ exploration found that shapes the design is in `findings.md` ("Exploration"), wi
 
 ## Validation
 
-- [ ] Tests pass
-- [ ] `/code-check` clean (once over the branch with `/code-check branch`)
+- [x] Tests pass
+- [x] `/code-check` clean (once over the branch with `/code-check branch`)
 - [ ] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion
 
