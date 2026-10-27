@@ -147,7 +147,25 @@ the database with the Phase 0 compare reference, so its time is an upper bound; 
 Every BULK start found its river at both sizes, so the check exercises `found` only; the live test's hop start and
 the per-start guard cover the rest of the row shape.
 
+## Phase 3: the parallel comparison (2026-10-27)
+
+`data-raw/compare_parallel_check.R` on the host, `fresh_default_20261017`, link configs at `102762da`, `door` (logs
+`scripts/logs/habitat/20261026_compare_parallel_check*`):
+
+| key | one connection (reference, code before #87) | 6 workers (`f3634dd`) |
+|---|---|---|
+| WCT rearing, 16 groups | 16.9 min | 4.4 min |
+| CH rearing, its 20 largest groups (near-river pairs walked) | 45.3 min | 17.0 min |
+
+Every segment's flags identical on both keys (1,190,110 and 1,829,223 segments, largest difference 0). The km sums
+in `compare`, `change` and `checks` differ by at most 1.0e-13 relative: the segment query has no `ORDER BY`, so the
+sums' order moved between runs, which is why round 1 of the review was right to relax identity to a relative 1e-9.
+The reference ran while the Phase 1 walk check shared the database for a minute; neither run had the database alone
+otherwise. CH's speed-up (2.7x) is below WCT's (3.8x) because one bin holds the largest groups and fresh's near-river
+walk already uses the server's parallel workers.
+
 ## Errors Encountered
 
 | Error | Resolution |
 |-------|------------|
+| `git pull` on the host worktree refused: untracked logs would be overwritten | the logs had been copied here and committed; checked their md5s equal and removed the host's copies before each pull |

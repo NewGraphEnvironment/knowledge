@@ -130,7 +130,7 @@ exploration found that shapes the design is in `findings.md` ("Exploration"), wi
 - [x] `0330`: the jobs run in turn, each `knw_compare_rules(workers = WORKERS)`; then the GeoPackages for every key
       in parallel across keys (one file per key, one writer each) from `<key>_segments.rds`, the loop as it is today
       moved into that stage; `GPKG=FALSE` skips it.
-- [ ] Check in `data-raw/compare_parallel_check.R`, on the host: `WCT_rear` and `CH_rear`'s 20 groups with
+- [x] Check in `data-raw/compare_parallel_check.R`, on the host: `WCT_rear` and `CH_rear`'s 20 groups with
       `workers = 6` at `CONFIG_SHA=102762da` reproduce the Phase 0 references: `compare`, `change`, `checks` and
       `segments` identical after sorting on their keys (the master's `seg` order and the seeded bootstrap are
       unchanged, so identity is expected); the script reports the largest numeric difference and refuses any above
