@@ -339,8 +339,10 @@ head_dot <- paste0('graph [rankdir=TB, nodesep=0.3, ranksep=0.25, fontname="Helv
                    'node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, width=2.8, ',
                    'height=0.5, color="#FFFFFF00"]\nedge [color="#777777", arrowsize=0.6]')
 pkgs_flow <- c("knowledge", "fwapg", "link", "wet", "fresh")
-step_nodes <- sub("]$", sprintf(', URL="#step-%d", target="_self", tooltip="step %d"]', pipeline$step, pipeline$step),
-                  node(paste0("s", pipeline$step), paste0(pipeline$step, "  ", pipeline$label), pipeline$package))
+# sub() takes one replacement, so the per-step link is pasted onto each node instead
+step_nodes <- paste0(sub("]$", "", node(paste0("s", pipeline$step), paste0(pipeline$step, "  ", pipeline$label),
+                                        pipeline$package)),
+                     sprintf(', URL="#step-%d", target="_self", tooltip="step %d"]', pipeline$step, pipeline$step))
 dot_flow <- paste0("digraph pipeline {\n", head_dot, "\n", sources_row, "\n", legend(pkgs_flow), "\n",
                    paste(step_nodes, collapse = "\n"), "\n",
                    paste(sprintf("s%d -> s%d", pipeline$step[-nrow(pipeline)], pipeline$step[-1]), collapse = "\n"),
