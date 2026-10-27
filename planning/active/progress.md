@@ -14,3 +14,7 @@
 - Citations blocked: the three missing references (Schnorbus 2018 VIC-GL, Craig et al. 2020 Raven, the fwapg fork) are
   scripted for the Web API, but `op read` could not reach the 1Password desktop app. The article links the fork
   meanwhile and names PCIC, VIC-GL and Raven without a citation.
+- Phase 2: `inst/method/pipeline.csv` (11 steps) and `settings.csv` (36 rows: 2 tested, the rest the to-do list);
+  `R/settings_register.R` resolves `fn:` and `script:` wheres (with `[name]`/`[i]` selectors); `0320`'s 1.96 lifted to
+  `se_strict`. Register test 109 passed; planted mismatches each go red (register prior SD 2: 4 failures; script
+  `snap_flag_m` 150: 1; `knw_grade` `ref_quantile` 0.9: 1), run in scratch copies.

@@ -75,6 +75,7 @@ workers <- as.integer(Sys.getenv("WORKERS", max(1L, min(14L, parallel::detectCor
 species <- strsplit(Sys.getenv("SPECIES", paste(knw_species(), collapse = ",")), ",")[[1]]
 schema <- Sys.getenv("SCHEMA", "fresh_default")  # the run's persist schema, by its current name (renamed after the run, #73)
 dev <- Sys.getenv("DEV", "") %in% c("1", "TRUE", "true")
+se_strict <- 1.96   # the stricter reading of the region, in SE, beside the one-SE pick (#79)
 dir_out <- if (dev) "data/tune/dev" else "data/tune"
 # one log per pass: a pass over a subset of species (SPECIES=) names them, so passes do not overwrite each other
 path_log <- file.path("scripts/logs/habitat", paste0(format(Sys.Date(), "%Y%m%d"), "_tune_run",
@@ -211,9 +212,9 @@ for (k in names(out)) {
     rep_of <- function(se, start) tryCatch(knw_tune_repick(rules, se_mult = se, start = start)$rule, error = function(e) NA_character_)
     row <- row |> mutate(
       rule_recommended = r$pick$rule, rule_pick = rules$rule[rules$pick], rule_best = best$rule,
-      rule_recommended_196 = rep_of(1.96, "default"),
+      rule_recommended_196 = rep_of(se_strict, "default"),
       rule_recommended_flow = if (is.null(r$pick_flow)) NA_character_ else r$pick_flow$rule,
-      rule_recommended_flow_196 = rep_of(1.96, "flow"),
+      rule_recommended_flow_196 = rep_of(se_strict, "flow"),
       rule_link_tuned = if (nrow(ltn)) ltn$rule else NA_character_,
       link_tuned_ddev = if (nrow(ltn)) ltn$ddev_best else NA_real_, link_tuned_se = if (nrow(ltn)) ltn$se_diff else NA_real_,
       link_tuned_in_region = if (nrow(ltn)) ltn$in_region else NA,

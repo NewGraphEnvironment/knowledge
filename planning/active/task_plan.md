@@ -65,9 +65,9 @@ checked against the code as it stands today (main `80ea4c1`).
 
 ## Phase 2: the two CSVs and the register test
 
-- [ ] `inst/method/pipeline.csv`: one row per step (step, label, package, scripts, functions, inputs, outputs, issue),
+- [x] `inst/method/pipeline.csv`: one row per step (step, label, package, scripts, functions, inputs, outputs, issue),
       the 11 steps of #93's table.
-- [ ] `inst/method/settings.csv`: key, step, value, unit, where, source (source / convention / inherited / measured),
+- [x] `inst/method/settings.csv`: key, step, value, unit, where, source (source / convention / inherited / measured),
       tested, issue. First rows: snap search 500 and limit 100 (`script:scripts/0230-fdis-load.R:snap_tol_m`,
       `…:snap_flag_m`; inherited, untested, #91); gradient source (`fn:knw_tune_curve:cols`, #92); prior SD 2.5
       (`fn:knw_tune_run:prior_sd`, also `_score`, `_curve`); one-SE region (`fn:knw_tune_repick:se_mult`) and the 1.96
@@ -76,14 +76,14 @@ checked against the code as it stands today (main `80ea4c1`).
       (`fn:knw_tune_curve:dist_cap_m`); grade reference 0.95 (`fn:knw_grade:ref_quantile`); the bridge
       (`ext:link:inst/extdata/configs/default/parameters_fresh.csv:cluster_bridge_distance`); wet's `far_low` 0.2
       (`ext:wet:scripts/pcic_routed_lib.R:routed_far_low`). Final list from a walk of each step's code, not this list.
-- [ ] `tests/testthat/test-settings-register.R`, `where` kinds:
+- [x] `tests/testthat/test-settings-register.R`, `where` kinds:
   - `fn:<fn>:<arg>` — a knowledge default, `formals()`; runs everywhere.
   - `script:<path>:<name>` — a top-level assignment found by `parse()`; skipped without the source tree.
   - `ext:<pkg>:<path>:<name>` — another repo's file; not tested here; the render script prints the run's SHA beside
     it (from the ledger's `run_link_sha` etc.).
   - `record:<field>` — a value a run recorded; checked by the render script against the run, not the test.
   Fails on a value mismatch or a `where` that names nothing; every row's kind is one of the four.
-- [ ] Prove it fires: change one CSV value and one script value in a temp copy, each goes red.
+- [x] Prove it fires: change one CSV value and one script value in a temp copy, each goes red.
 
 ## Phase 3: render script and diagrams
 
