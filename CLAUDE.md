@@ -33,7 +33,8 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   claim against the PDF's text: cred's `crd_aud_verify_all()` cuts each claim at the Rmd's line breaks and matches
   unrelated passages (#79).
 - `vignettes/habitat_thresholds.Rmd` — the methodology article (#93), "Choosing habitat thresholds from where fish were
-  caught". It reads `inst/vignette-data/method.rds`, which `data-raw/vignette_method.R` writes from
+  caught": the reference home for the method and its citations. A species article (the chinook one first, #64) gives
+  its own records and result in a sentence or two and links it rather than restating the method. It reads `inst/vignette-data/method.rds`, which `data-raw/vignette_method.R` writes from
   `inst/method/pipeline.csv` (the steps) and `inst/method/settings.csv` (every number that shapes a result, with where
   its value lives); the script refuses to run with its code or registers uncommitted. Rerun it after any `0230`,
   `0310`, `0320` or `0330` rerun. `tests/testthat/test-settings-register.R` fails when a register value and the code
