@@ -36,7 +36,5 @@ GitHub Actions runs `4040666*`, `4040667*`, `40413562090`, `40414769800` on bran
   main is green on `ubuntu-latest` (replaces a manual dispatch; plan review)
 - Confirm the `gh-pages` deploy provenance names the newest non-bot main SHA (the merge's own run may be cancelled
   by a newer pending one in the `pkgdown-true` group), and so that deploy works on 26.04, which the PR run skips
-- Commit 4cc6dad's message names a private repo's issue; auto mode refused the rewrite. Reword before the repo goes
-  public, and delete the edit-history revisions of #94 and PR #97's body that named it (web UI only).
 
 Closed by: PR #97

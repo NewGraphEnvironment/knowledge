@@ -32,3 +32,4 @@
 - Not done: rewording commit 4cc6dad, whose message names the conventions issue by number (`soul#541`): auto mode
   refused the history rewrite as destructive. Left for Al, with the edit-history revisions of #94 and the PR body
   that named it.
+- Al, 2026-10-26: leave commit 4cc6dad's mention of the conventions issue; no reword, history kept.
