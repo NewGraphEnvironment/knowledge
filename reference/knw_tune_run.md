@@ -30,7 +30,16 @@ knw_tune_run(
   power_wsg = 10L,
   src = "pick",
   grid_args = list(),
-  cache_dir = NULL
+  cache_dir = NULL,
+  thresholds_extra = NULL,
+  previous = NULL,
+  smoke = TRUE,
+  smoke_only = FALSE,
+  smoke_args = list(),
+  extra = TRUE,
+  fit = c("fe", "dense"),
+  prior_sd = 2.5,
+  evidence_id = NULL
 )
 ```
 
@@ -68,10 +77,14 @@ knw_tune_run(
 
   the population's constants.
 
-- seed, folds, n_boot, seeds_more, workers, d_floor:
+- seed, folds, n_boot, seeds_more, workers, d_floor, fit, prior_sd:
 
   passed to
-  [`knw_tune_score()`](https://newgraphenvironment.github.io/knowledge/reference/knw_tune_score.md).
+  [`knw_tune_score()`](https://newgraphenvironment.github.io/knowledge/reference/knw_tune_score.md)
+  (and `fit` and `prior_sd` to
+  [`knw_tune_smoke()`](https://newgraphenvironment.github.io/knowledge/reference/knw_tune_smoke.md),
+  `prior_sd` to
+  [`knw_tune_curve()`](https://newgraphenvironment.github.io/knowledge/reference/knw_tune_curve.md)).
 
 - min_wsg, power_wsg:
 
@@ -95,20 +108,80 @@ knw_tune_run(
   population has the same number of visits and the grid the same rows,
   in the same order (every
   [`knw_tune_grid()`](https://newgraphenvironment.github.io/knowledge/reference/knw_tune_grid.md)
-  column, so a moved `default` counts). The other scoring arguments
-  (`seed`, `folds`, `n_boot`, `seeds_more`, `d_floor`) are not checked:
-  give a run with different ones its own directory.
+  column, so a moved `default` counts), and the settings the score was
+  made with match (`fit`, `prior_sd`, `seed`, `folds`, `d_floor` and
+  `extra`, recorded as `spec` by
+  [`knw_tune_score()`](https://newgraphenvironment.github.io/knowledge/reference/knw_tune_score.md));
+  a cache written before the record is read back with a message naming
+  the settings it is taken as. `n_boot`, `seed_boot` and `seeds_more`
+  are not checked: a cache's bootstrap and extra-seed tables are read
+  back whatever the run asked for, so give a run with different ones its
+  own directory.
+
+- thresholds_extra:
+
+  `NULL`, or another bundle's `parameters_habitat_thresholds.csv`
+  (link's `default_tuned`): each species' row joins its grid as the
+  `is_link_tuned` candidate
+  ([`knw_tune_grid()`](https://newgraphenvironment.github.io/knowledge/reference/knw_tune_grid.md)).
+
+- previous:
+
+  `NULL`, or a named `character` vector of the previous pick's rule
+  string per `"<sp>_<stage>"`, which the smoke run scores where present.
+
+- smoke:
+
+  `logical(1)` run the smoke run and its checks first.
+
+- smoke_only:
+
+  `logical(1)` return after the smoke run, scoring nothing.
+
+- smoke_args:
+
+  `list` of arguments passed to
+  [`knw_tune_smoke()`](https://newgraphenvironment.github.io/knowledge/reference/knw_tune_smoke.md)
+  (`tol_null`, `coef_max`).
+
+- extra:
+
+  `logical(1)` passed to
+  [`knw_tune_score()`](https://newgraphenvironment.github.io/knowledge/reference/knw_tune_score.md):
+  the bootstrap, the nested selection and the extra fold seeds. `FALSE`
+  is the development setting, which proves a scorer change on every
+  species in a fraction of the time; a run that publishes keeps `TRUE`.
+
+- evidence_id:
+
+  `NULL`, or `character(1)` naming the evidence build the visits and
+  walks came from (`scripts/0320` passes the md5s of the three derived
+  tables). It joins the cache's settings, so a score made on another
+  build of the same visit count is not read back as this one's.
 
 ## Value
 
 A list with one element per species × stage (`"<sp>_<stage>"`): a list
 with `species_code`, `stage`, `response`, `status` (`fitted`,
 `underpowered`, `no_stream_rule`, `no_response`, `too_few_groups`,
-`curve_failed`), `population`, and when scored `score`
+`curve_failed`; `smoke` with `smoke_only`), `population`, and when
+scored `smoke`
+([`knw_tune_smoke()`](https://newgraphenvironment.github.io/knowledge/reference/knw_tune_smoke.md)'s
+result, with `smoke`), `score`
 ([`knw_tune_score()`](https://newgraphenvironment.github.io/knowledge/reference/knw_tune_score.md)'s
 result), `pick` (the recommended rule row) and `curve`
 ([`knw_tune_curve()`](https://newgraphenvironment.github.io/knowledge/reference/knw_tune_curve.md)'s;
-`NULL` with `curve_error` when its fit failed).
+`NULL` with `curve_error` when its fit failed); `null_heldout` (the
+held-out deviance with no rule over the grid's visits),
+`null_heldout_curve` (the same model scored over the curve's own visits,
+those with a size, a gradient and a distance, on the same folds) and
+`grade_withheld`, `TRUE` when the curve's held-out deviance is no better
+than `null_heldout_curve`: a curve that predicts held-out groups no
+better than knowing nothing ranks segments no better either, so its
+grades are withheld. The comparison is over one population because a
+width rule's curve fits fewer visits than the grid (unmeasured streams
+have no width), and each visit it drops would otherwise leave only its
+own side.
 
 ## Details
 
@@ -125,6 +198,16 @@ rule in `default`, or fewer than `min_wsg` groups with both outcomes
 gets a one-row record saying so and is not fitted. A species × stage
 with fewer than `power_wsg` groups is fitted and labelled
 `underpowered`.
+
+Before any grid is scored, every species × stage that would be fitted
+gets the smoke run
+([`knw_tune_smoke()`](https://newgraphenvironment.github.io/knowledge/reference/knw_tune_smoke.md);
+\#84): a handful of rules on the main fold seed, and four checks on the
+scorer. One failed check on any key stops the run, with every key's
+report printed, so a scorer defect costs minutes, not the hours of the
+full grid. `smoke_only = TRUE` returns after the smoke run (each record
+carries `smoke`, and none is scored), which is how `scripts/0320` writes
+the reports before it decides to score.
 
 ## Examples
 

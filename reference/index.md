@@ -95,6 +95,9 @@ run in one call for every species and stage the evidence can speak to.
   : Grade segments by expected use, 0 to 1
 - [`knw_grade_species()`](https://newgraphenvironment.github.io/knowledge/reference/knw_grade_species.md)
   : Grade every segment of a species' groups by its tuned curve
+- [`knw_tune_smoke()`](https://newgraphenvironment.github.io/knowledge/reference/knw_tune_smoke.md)
+  : Score a handful of rules and gate the scorer before a full tuning
+  run
 - [`knw_tune_run()`](https://newgraphenvironment.github.io/knowledge/reference/knw_tune_run.md)
   : Tune every species and stage the evidence can speak to, in one run
 

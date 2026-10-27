@@ -6,8 +6,8 @@ walk `scripts/0294` fixed for one river size, for an array of sizes) to
 the first primary-flow segment whose annual flow on `src` is at least
 each `q` in `q_grid`. One row per start, source and size: `status` is
 `found`, `none` (the sea first), `no_parent` or `too_many_hops`. Side
-channels and other secondary-flow edges are passed over; a lake segment
-counts, as it would in a link rule.
+channels, connectors and other secondary-flow edges are passed over; a
+lake segment counts, as it would in a link rule.
 
 ## Usage
 
@@ -49,10 +49,23 @@ knw_link_walks(
 
 A `tibble`: `blue_line_key`, `downstream_route_measure`, `src`, `qmin`,
 `status`, `dist_m`, `large_mad`, `large_lfid`, `large_edge`,
-`large_waterbody_key`, `n_hops`, `max_entry_gap_m`; exactly
+`large_waterbody_key`, `n_hops`, `max_entry_gap_m`, `dist_centre_m`,
+`bank_m`; exactly
 `nrow(unique(starts)) * length(sources) * length(q_grid)` rows.
 
 ## Details
+
+The distance ends at the river's bank, by the rule fresh's
+`frs_near_river()` applies (#73): where the river found lies in a
+waterbody polygon, the connector segments (FWA edge types 1400 and 1450)
+the walk passed inside that polygon and the part of each hop's jump that
+crosses it are left out, and a connector inside a polygon the walk only
+passes through stays in. `dist_centre_m` is the distance to the
+centreline and `bank_m` what the rule took off it, so
+`dist_m = pmax(dist_centre_m - bank_m, 0)`. What remains different from
+fresh's walk: this one starts where it is told (a visit's own point; the
+grade starts it at a segment's downstream end), crosses watershed-group
+outlets, and walks a line with no local code.
 
 Each socket worker opens its own connection through `connector` and
 installs the walk as a session-temporary function, so a `DBI` connection

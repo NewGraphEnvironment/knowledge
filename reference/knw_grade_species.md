@@ -25,7 +25,7 @@ knw_grade_species(
   stage = "rear",
   workers = 4L,
   src = "pick",
-  ref_edge = c(1000L, 1100L, 2000L, 2300L)
+  ref_edge = NULL
 )
 ```
 
@@ -71,19 +71,26 @@ knw_grade_species(
 
 - ref_edge:
 
-  `integer` the stream-branch edge types the reference rate is taken
-  over. The default is
+  `integer` or `NULL` (the default): the stream-branch edge types the
+  reference rate is taken over. `NULL` takes the curve's own
+  `edge_stream`, the edge types of the visits it was fitted on (#72),
+  and a curve that carries none takes
   [`knw_tune_run()`](https://newgraphenvironment.github.io/knowledge/reference/knw_tune_run.md)'s
-  default `edge_stream`, the edge types of the curve's visits; a curve
-  fitted on others needs them here.
+  default `edge_stream`.
 
 ## Value
 
 A list: `grades`, one row per segment with the segment's keys,
 `length_metre`, `access`, `accessible`, the stage's flag, `size`,
-`dist_m`, `dist_status`, `rate`, `grade`, `grade_class`; `reference`;
-`counts` (segments, accessible, walked starts, segments whose walk was
-found, none or other, graded, no size, no gradient); `walk_minutes`.
+`dist_m`, `dist_status`, `target_in_group` (`TRUE` where the river the
+walk found lies in the segment's own watershed group, `FALSE` where it
+lies in another, which link's walk, one group's table at a time, cannot
+see; `NA` where no river was found), `rate`, `grade`, `grade_class`;
+`reference`; `ref_edge`, the edge types the reference was taken over;
+`q`, the river size walked to; `walk`, the walk's convention (`"bank"`:
+the distance ends at the river's bank, \#73); `counts` (segments,
+accessible, walked starts, segments whose walk was found, none or other,
+graded, no size, no gradient); `walk_minutes`.
 
 ## Details
 

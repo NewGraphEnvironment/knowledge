@@ -13,7 +13,7 @@ bar (1.96).
 ## Usage
 
 ``` r
-knw_tune_repick(tune, se_mult = 1, d_floor = 200)
+knw_tune_repick(tune, se_mult = 1, d_floor = 200, start = c("default", "flow"))
 ```
 
 ## Arguments
@@ -35,6 +35,14 @@ knw_tune_repick(tune, se_mult = 1, d_floor = 200)
   `numeric(1)` the shortest exception distance (m) a recommended rule
   may carry, as in
   [`knw_tune_score()`](https://newgraphenvironment.github.io/knowledge/reference/knw_tune_score.md).
+
+- start:
+
+  `"default"` counts departures from link's `default` (the table's
+  `departures`); `"flow"` from its flow version (`departures_flow`,
+  [`knw_tune_grid()`](https://newgraphenvironment.github.io/knowledge/reference/knw_tune_grid.md);
+  \#80), and is refused on a table without that column or whose species
+  has no flow start.
 
 ## Value
 

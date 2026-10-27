@@ -7,11 +7,15 @@ scoring population: a tensor smooth of log size (the pick's size
 variable, width or MAD) and log distance downstream to the first river
 of the pick's `exc_q` m³/s, a smooth of gradient, and the same nuisance
 terms as the scorer (`log_area`, data set, era) with the watershed group
-as a random effect; binomial with a complementary log-log link, REML. A
-distance the walk did not find (`Inf`) is censored at `dist_cap_m`, and
-distance enters as `log(dist + 10)`. The model is one surface, never a
-product of one-variable curves, so a size effect that only holds far
-from a river is not counted twice.
+as a random effect; binomial with a complementary log-log link, REML.
+The data-set and era coefficients carry the scorer's normal prior
+(`prior_sd`): where the two nearly coincide (steelhead's FDIS visits are
+its 1995-2004 visits) an unpenalised fit sends them to about +-30 with
+offsetting signs, and a held-out group that mixes the combinations takes
+one of those offsets. A distance the walk did not find (`Inf`) is
+censored at `dist_cap_m`, and distance enters as `log(dist + 10)`. The
+model is one surface, never a product of one-variable curves, so a size
+effect that only holds far from a river is not counted twice.
 
 ## Usage
 
@@ -26,7 +30,9 @@ knw_tune_curve(
   src = "pick",
   dist_cap_m = 50000,
   q_default = 10,
-  k = c(size = 6, dist = 6, grad = 6)
+  k = c(size = 6, dist = 6, grad = 6),
+  edge_stream = NULL,
+  prior_sd = 2.5
 )
 ```
 
@@ -67,6 +73,20 @@ knw_tune_curve(
   the pick has no exception, and the basis sizes (`size`, `dist`,
   `grad`).
 
+- edge_stream:
+
+  `integer` or `NULL`: the FWA edge types the visits in `d` were
+  filtered on, recorded on the result as `edge_stream` so the grade's
+  reference population can be taken from the curve (#72).
+
+- prior_sd:
+
+  `numeric(1)` the standard deviation, on the cloglog scale, of a normal
+  prior on the `data_set` and `era` coefficients, as in
+  [`knw_tune_score()`](https://newgraphenvironment.github.io/knowledge/reference/knw_tune_score.md):
+  a fixed penalty `b^2 / prior_sd^2` per coefficient. `Inf` for none
+  (the curve before \#73's Phase 7).
+
 ## Value
 
 A list: `model` (the
@@ -79,8 +99,9 @@ nuisance values a segment is predicted at: median `log_area`, modal
 degrees of freedom), and `curves`, a `tibble` of marginal curves
 (`curve`, `x`, `rate`, `rel_rate`, `rel_lo`, `rel_hi`, `threshold`)
 relative to the pick's thresholds, each other variable held at its
-reference; `dist_in_model`, `FALSE` when the distances were too few to
-carry a smooth and size stood alone.
+reference; `edge_stream`, as given; `dist_in_model`, `FALSE` when the
+distances were too few to carry a smooth and size stood alone;
+`prior_sd`, as given.
 
 ## Details
 

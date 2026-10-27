@@ -28,7 +28,9 @@ knw_tune_score(
   seeds_more = integer(),
   d_floor = 200,
   workers = 1L,
-  extra = FALSE
+  extra = FALSE,
+  fit = c("fe", "dense"),
+  prior_sd = 2.5
 )
 ```
 
@@ -72,15 +74,43 @@ knw_tune_score(
 
   `logical(1)` run the bootstrap, nested selection and extra seeds.
 
+- fit:
+
+  `"fe"` fits each pattern with the groups absorbed (one intercept per
+  group found by projection, so a fit's cost grows with the nuisance
+  columns, not the groups; \#83), `"dense"` with one model-matrix column
+  per group ([`stats::glm.fit()`](https://rdrr.io/r/stats/glm.html)).
+  They give the same coefficients and deviances to numerical tolerance;
+  `"fe"` falls back to `"dense"` on a fold where a nuisance level is a
+  combination of groups.
+
+- prior_sd:
+
+  `numeric(1)` the standard deviation, on the cloglog scale, of a normal
+  prior on every training fit's `data_set` and `era` coefficients, `Inf`
+  for none. The fit adds `b^2 / prior_sd^2` per coefficient to the
+  deviance (a ridge), so a coefficient costs more the further it sits
+  from zero. These terms are in the model so that a rule is not credited
+  for a sampling difference, and with a group intercept each is measured
+  only by the contrast between the two levels inside the groups that
+  hold both; where every detection of those groups sits on one level the
+  contrast is separated and the unpenalised coefficient runs until the
+  deviance stops moving (steelhead's `data_set` to 19.6, a hazard ratio
+  past a hundred million, 2026-10-23). At 2.5 a measured effect of two
+  or three units (chinook's data set, bull trout spawning's) is left
+  nearly where it is and a runaway is held to a few units. The dense fit
+  takes none.
+
 ## Value
 
 A list: `rules`, the grid with `n_visits`, `n_detect`, `n_wsg`,
 `unseen_level_visits`, `n_wsg_varies`, `converged`, `dev_heldout`,
 `ddev_best`, `se_diff`, `ddev_null`, `in_region`, `n_in`, `n_detect_in`,
-`raw_rate_in`, `raw_rate_out`, `pick`, `recommended`, and with `extra`
-`boot_region_share` and `boot_rec_share`; `folds`, the fold of each
-group; `honest`, `seeds`, `boot_recs` (with `extra`), and `population`,
-counts.
+`raw_rate_in`, `raw_rate_out`, `pick`, `recommended`, `pick_flow`,
+`recommended_flow` (`NA` with no flow start), and with `extra`
+`boot_region_share`, `boot_rec_share` and `boot_rec_share_flow`;
+`folds`, the fold of each group; `honest`, `seeds`, `boot_recs` (with
+`extra`), and `population`, counts.
 
 ## Details
 
@@ -91,7 +121,13 @@ unit). The **pick** is the region rule with the fewest departures from
 `default`, ties to the lower score. If the pick's exception distance is
 under `d_floor` (where mainstem catches snapped to a tributary mouth
 cannot be told apart), **recommended** is the pick among region rules
-with `exc_d >= d_floor` or no exception; otherwise it is the pick. With
+with `exc_d >= d_floor` or no exception; otherwise it is the pick. Where
+the grid carries `departures_flow` (the departures from link's flow
+version of `default`,
+[`knw_tune_grid()`](https://newgraphenvironment.github.io/knowledge/reference/knw_tune_grid.md)),
+the same pick is made from that starting point too (`pick_flow`,
+`recommended_flow`; \#80), on the same region: the region does not
+depend on the start, only which of its rules is nearest. With
 `extra = TRUE` the call also runs `n_boot` bootstrap resamples of groups
 (each rule's share in the region, and the share of resamples
 recommending each rule), a nested selection (the pick chosen on the

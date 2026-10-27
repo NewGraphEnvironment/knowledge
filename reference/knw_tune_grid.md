@@ -9,7 +9,10 @@ size test when a river of at least `exc_q` m³/s lies within `exc_d` m
 downstream. `default` is the member with link's own width floor and
 gradient maximum and no exception; `departures` counts how many parts
 differ from it (a size test that differs in variable or value: 1; a
-gradient that differs: 1; an exception: 1).
+gradient that differs: 1; an exception: 1). `departures_flow` counts the
+same from link's *flow* version of `default` (its MAD floor, its
+gradient maximum, no exception), the starting point \#80 asks the pick
+to be read from as well; `NA` where `default` has no MAD floor.
 
 ## Usage
 
@@ -19,9 +22,10 @@ knw_tune_grid(
   stage = c("rear", "spawn"),
   grid_mad = c(0.1, 0.15, 0.2, 0.28, 0.35, 0.5, 0.75, 1),
   grid_width = c(1, 1.5, 2, 3, 4),
-  grid_grad = c(0.03, 0.04, 0.0549, 0.07, 0.09),
+  grid_grad = c(0.03, 0.04, 0.0549, 0.07, 0.09, 0.11, 0.13, 0.15, 0.2, 0.25, 0.3),
   grid_q = c(1, 3, 5, 10, 20, 30, 50),
-  grid_d = c(100, 250, 500, 1000, 2000, 5000)
+  grid_d = c(100, 250, 500, 1000, 2000, 5000),
+  extra = NULL
 )
 ```
 
@@ -39,21 +43,35 @@ knw_tune_grid(
 
 - grid_mad, grid_width, grid_grad, grid_q, grid_d:
 
-  `numeric` candidate values; the species' own `default` width and
+  `numeric` candidate values; the species' own `default` width, MAD and
   gradient are added when absent.
+
+- extra:
+
+  `NULL`, or one row of another bundle's thresholds for the same
+  species, in the same columns.
 
 ## Value
 
 A `tibble` with `rule`, `size_var`, `size_min`, `grad_max`, `exc_q`,
-`exc_d`, `departures`, `is_default`; zero rows when the species has no
-stream rule for the stage.
+`exc_d`, `departures`, `departures_flow`, `is_default`, `is_link_tuned`;
+zero rows when the species has no stream rule for the stage.
 
 ## Details
 
 The size and gradient grids are the species' `default` values and the
 fixed steps around them, so every species is tuned against the same
-ladder; a species whose `default` has no stream rule for the stage (KO
-and SK rear in lakes only) gets an empty grid, and the caller says so.
+ladder; the gradient ladder runs to 30 % since \#68 (#67 found CH
+rearing's best rule at the top of the 9 % ladder). A species whose
+`default` has no stream rule for the stage (KO and SK rear in lakes
+only) gets an empty grid, and the caller says so.
+
+`extra` adds one more candidate: the rule of another bundle's thresholds
+row (link's `default_tuned`, whose MAD floors were set by a use rate on
+wet's flows, link#331), its MAD floor and gradient maximum joining the
+ladders and the rule flagged `is_link_tuned`, so the table shows how
+link's own flow numbers score beside the grid. A row with no MAD floor
+for the stage adds nothing.
 
 ## Examples
 
@@ -62,10 +80,17 @@ thr <- data.frame(species_code = "CH", rear_gradient_max = 0.0549, rear_channel_
                   rear_mad_min = 0.28)
 g <- knw_tune_grid(thr, "rear")
 nrow(g)
-#> [1] 2795
+#> [1] 6149
 g[g$is_default, ]
-#> # A tibble: 1 × 8
-#>   rule              size_var size_min grad_max exc_q exc_d departures is_default
-#>   <chr>             <chr>       <dbl>    <dbl> <dbl> <dbl>      <int> <lgl>     
-#> 1 width>=1.5|g<=0.… width         1.5   0.0549    NA    NA          0 TRUE      
+#> # A tibble: 1 × 10
+#>   rule         size_var size_min grad_max exc_q exc_d departures departures_flow
+#>   <chr>        <chr>       <dbl>    <dbl> <dbl> <dbl>      <int>           <int>
+#> 1 width>=1.5|… width         1.5   0.0549    NA    NA          0               1
+#> # ℹ 2 more variables: is_default <lgl>, is_link_tuned <lgl>
+g[g$departures_flow == 0, ]
+#> # A tibble: 1 × 10
+#>   rule         size_var size_min grad_max exc_q exc_d departures departures_flow
+#>   <chr>        <chr>       <dbl>    <dbl> <dbl> <dbl>      <int>           <int>
+#> 1 mad>=0.28|g… mad          0.28   0.0549    NA    NA          1               0
+#> # ℹ 2 more variables: is_default <lgl>, is_link_tuned <lgl>
 ```
