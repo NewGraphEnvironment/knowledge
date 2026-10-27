@@ -210,8 +210,18 @@ The old snap is the placement `0230` stored on 2026-10-17 (`sites.rds`), not a r
 - fresh#266 (open) proposes a new tie rule (the segment starting at the shared vertex). Ties are 29 visits here
   and both rules put them on one stream; a change there moves a visit between two segments of its stream.
 
+## Phase 4's rule, fixed before the run (2026-10-27)
+
+"A key's region moves" between two limits means either limit's pick lies outside the other limit's one-SE region
+on the main fold seed. The unconfirmed limit starts at the widest band whose code-checked disagreement (a checkable
+visit whose nearest stream its code does not name) stays under one in three, then steps down one cell for as long
+as CH or BT rearing's region moves between it and the next smaller cell; the confirmed limit is 500 m unless a
+region moves between 200 and 500 m at the chosen unconfirmed limit. Written into `data-raw/snap_limit_sensitivity.R`
+and committed before it ran.
+
 ## Errors Encountered
 
 | Error | Resolution |
 |-------|------------|
 | `psql` in the agent shell: `connection to server on socket "/tmp/.s.PGSQL.5432" failed` (no `PG*` in the shell) | R reads `~/.Renviron`, so the probe ran through `Rscript -e` with `DBI`; `cat()` of an `integer64` count prints a denormal double, so cast with `as.numeric()` or read it through `print()` |
+| `0310`: `'wet_catalog' is not an exported object from 'namespace:wet'` (this machine's `wet` was a 2026-10-01 dev build; the 2026-10-22 build ran elsewhere) | installed `wet` v0.4.23 (`pak`, `upgrade = FALSE`: `fresh` 0.43.0 and `link` 0.66.0 unchanged); link's species pooling md5 is the same at 0.66.0, 0.67.0 and main and is ledgered |

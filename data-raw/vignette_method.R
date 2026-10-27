@@ -22,9 +22,10 @@
 #     needs neither package: package is shown by box colour; the hex stickers were tried beside the legend and dropped,
 #     because at a legible chart width they are identical black hexes whose names cannot be read (#93's decision:
 #     clarity first).
-#   - THE WORKED EXAMPLES: one Bulkley visit kept to the end (it is in the visit table) and one dropped for its snap
-#     distance, each with the streams within
-#     the search radius (the database's fwa_stream_networks_sp); and the Bulkley segments of the chinook article's
+#   - THE WORKED EXAMPLES: three Bulkley visits, one kept on its nearest stream to the end (it is in the visit table),
+#     one moved to the stream its 1:50k code names past a nearer one (#91), and one dropped for its snap distance, each
+#     with the streams within the search radius that fresh's snap can reach (the database's fwa_stream_networks_sp less
+#     unmapped and placeholder lines and the excluded edge types, so the ranking is the snap's); and the Bulkley segments of the chinook article's
 #     bundle, counted by what each stage of the comparison did to them (fresh's predicate, then link's user-habitat
 #     overlay and the connectivity pass together, which the saved flags cannot separate).
 #
@@ -179,8 +180,9 @@ n_placed <- rn("sites_placed")
 if (n_in - n_placed != ln("not_placed")) stop("the reconcile's placed count does not match the ledger's not_placed")
 drops <- c("far_snap", "ws50_mismatch", "junk_date", "effort_sentinel_or_none", "catch_unknown", "no_link_segment")
 val <- function(key) settings$value[settings$key == key]
-why <- c(far_snap = sprintf("more than %s m from its stream", val("snap_limit")),
-         ws50_mismatch = "on the wrong tributary", junk_date = "no usable date",
+why <- c(far_snap = sprintf("more than %s m from its stream (%s m where its tributary code names the stream)",
+                             val("snap_limit"), val("snap_limit_code")),
+         ws50_mismatch = "its tributary code names no stream in reach", junk_date = "no usable date",
          effort_sentinel_or_none = "no fished area or time", catch_unknown = "no known catch",
          no_link_segment = "no link segment at the site")
 funnel <- tibble(stage = c("FDIS visits", "with a usable point", "placed on the Atlas"),
@@ -264,8 +266,10 @@ near <- function(s) {
     SELECT s.blue_line_key, s.gnis_name, round(min(ST_Distance(s.geom, p.g))::numeric, 1) AS distance_m
       FROM whse_basemapping.fwa_stream_networks_sp s, p
      WHERE ST_DWithin(s.geom, p.g, %s)
+       AND s.localcode_ltree IS NOT NULL AND NOT s.wscode_ltree <@ '999' AND s.edge_type NOT IN (%s)
      GROUP BY s.blue_line_key, s.gnis_name
-     ORDER BY 3, 1", s$utm_easting, s$utm_northing, 32600L + as.integer(s$utm_zone), val("snap_search")))
+     ORDER BY 3, 1", s$utm_easting, s$utm_northing, 32600L + as.integer(s$utm_zone), val("snap_search"),
+    gsub(";", ", ", val("snap_edges_excluded"), fixed = TRUE)))
 }
 pick_example <- function(cand) {
   for (i in seq_len(nrow(cand))) {
@@ -276,15 +280,19 @@ pick_example <- function(cand) {
 }
 bulk <- sites[sites$watershed_group_code %in% example_wsg & !sites$flag_not_placed, ]
 bulk <- bulk[order(bulk$site_visit), ]
-ws50_ok <- bulk$ws50_checked %in% TRUE & !(bulk$flag_ws50_mismatch %in% TRUE)
-ex_kept <- pick_example(bulk[!bulk$flag_far_snap & ws50_ok & bulk$site_visit %in% vl$site_visit, ])
-ex_far <- pick_example(bulk[bulk$flag_far_snap, ])
+in_vl <- bulk$site_visit %in% vl$site_visit
+ex_kept <- pick_example(bulk[in_vl & bulk$snap_confirmed %in% TRUE & !(bulk$snap_moved %in% TRUE), ])
+ex_moved <- pick_example(bulk[in_vl & bulk$snap_moved %in% TRUE, ])
+ex_far <- pick_example(bulk[bulk$flag_far_snap & !(bulk$snap_confirmed %in% TRUE), ])
 DBI::dbDisconnect(conn)
+# each example is what it claims: kept and dropped on their nearest stream, moved onto a named one past a nearer one
 for (ex in list(ex_kept, ex_far)) {
   if (ex$near$blue_line_key[1] != ex$site$blue_line_key) {
     stop(ex$site$site_visit, ": the nearest stream is not the one placed")
   }
 }
+i_moved <- match(ex_moved$site$blue_line_key, ex_moved$near$blue_line_key)
+if (is.na(i_moved) || i_moved == 1L) stop(ex_moved$site$site_visit, ": the moved visit's stream is not past a nearer one")
 seg <- readRDS(file.path(dir_out, "bulk_segments.rds")) |> sf::st_drop_geometry()
 # the drops and additions first: summarise() evaluates in order, so a later argument would see the summed flags
 stages <- seg |>
@@ -391,7 +399,7 @@ out <- list(
   steps = steps, picks = picks,
   stability = fitted[, c("species_code", "stage", "seeds_n", "seeds_same_rec", "seeds_rec_in_region",
                          "honest_dev_rec", "honest_dev_default", "boot_rec_share")],
-  examples = list(kept = ex_kept, far = ex_far, wsg = example_wsg, stages = stages),
+  examples = list(kept = ex_kept, moved = ex_moved, far = ex_far, wsg = example_wsg, stages = stages),
   svg = svg,
   meta = list(written = format(Sys.Date()),
               commit = git("rev-parse", "--short", "HEAD"),

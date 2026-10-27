@@ -167,7 +167,7 @@ run-to-PR mandate runs from here.
 - [ ] `research/fdis_export.md`: a placement section (the method, the probe's classes, the sensitivity table, the
       limits and their rule, what "confirmed" means with a multi-key code); `research/habitat_thresholds_tuned.md`
       Evidence paragraph (how a visit reaches the network now); `research/README.md` row
-- [ ] `data-raw/vignette_method.R`, for the retune's rerun (not run here): the drop reasons' wording; the worked
+- [x] `data-raw/vignette_method.R`, for the retune's rerun (not run here): the drop reasons' wording; the worked
       example's `near()` query takes fresh's guards (unmapped, placeholder, the excluded edge types) so its ranking
       is the snap's, and the example set becomes a kept nearest, a moved visit and a dropped one, each with its own
       assertion (today's `:284-286` stops unless the nearest is the placed stream, which a moved example breaks by
