@@ -34,3 +34,7 @@ The approval covered the baseline only: the run-to-PR mandate starts when Al say
 - 0310 on the 500 m build (16 min; walks cold 6.4 min, 113,658 pairs walked and cached): kept 47,247, no_link_segment 198
 - Sensitivity (24.8 min, 14 workers): the rule gives 200 m unconfirmed, 500 m confirmed; no region moves between any two cells
 - Limits set: snap_limit 200 (measured), snap_limit_code 500 (measured)
+- Final chain at 200/500: 0230, 0240, 0310 (10 min; walks all cached, 0.7 min): kept 45,523 against 40,552
+- devtools::test(): 1,382 passed, 14 expectations failed, all in the two test-vignette-data.R tests decided at the gate
+- Phase 5 text: research placement section, tuning file's note, README row, CLAUDE.md note. NEWS.md is left to the
+  release commit, as every past entry was (`git log -- NEWS.md` shows only "Release" commits); the PR body carries the line

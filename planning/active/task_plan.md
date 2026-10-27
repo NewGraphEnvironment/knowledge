@@ -164,7 +164,7 @@ run-to-PR mandate runs from here.
 
 ## Phase 5: Write-up and pointers
 
-- [ ] `research/fdis_export.md`: a placement section (the method, the probe's classes, the sensitivity table, the
+- [x] `research/fdis_export.md`: a placement section (the method, the probe's classes, the sensitivity table, the
       limits and their rule, what "confirmed" means with a multi-key code); `research/habitat_thresholds_tuned.md`
       Evidence paragraph (how a visit reaches the network now); `research/README.md` row
 - [x] `data-raw/vignette_method.R`, for the retune's rerun (not run here): the drop reasons' wording; the worked
@@ -172,7 +172,7 @@ run-to-PR mandate runs from here.
       is the snap's, and the example set becomes a kept nearest, a moved visit and a dropped one, each with its own
       assertion (today's `:284-286` stops unless the nearest is the placed stream, which a moved example breaks by
       design)
-- [ ] `CLAUDE.md` working note (the hint route; `0310`'s walks are cached from here; the two red tests until the
+- [x] `CLAUDE.md` working note (the hint route; `0310`'s walks are cached from here; the two red tests until the
       retune; the articles wait for it); `NEWS.md` entry
 - [ ] #92's body: the retune's tasks (`0320`/`0325`/`0330`, `vignette_method.R` and `vignette_chinook.R` reruns, the
       chinook article's placement sentence and the `snap_limit` row's `code:` pointer restored,

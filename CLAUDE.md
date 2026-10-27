@@ -188,7 +188,23 @@ widths are these same sites, so never score the width model against them.
 Some surveys were loaded under two to four collection ids (same UTM, date, per-pass effort and
 catch). `0230` keeps one copy, the one with the most measured fish, because the fish often sit on
 the later id only, and lists the rest in `data/fdis_repeat_surveys.csv` (#35). Downstream scripts
-carry no duplicate logic of their own. From #57, `0310` builds every species' visit table on the province-wide
+carry no duplicate logic of their own.
+
+`0230` places a visit with `fresh::frs_point_snap()` twice (#91): to the nearest stream, and to each 20k stream its
+FDIS 1:50k code names (`fwa_streams_20k_50k`), passed as a per-point hint so that snap lands only on that stream.
+`knw_fdis_place()` takes the nearest named stream in reach ("confirmed", moved past a nearer stream where need be),
+else the nearest one, and holds the two kinds of pick to their own limits (`snap_limit`, `snap_limit_code`;
+`research/fdis_export.md`, "Placement"). "Confirmed" means on some stream the code names, which for a code naming
+several keys is not necessarily the one the surveyor meant. fresh never snaps to an unmapped or placeholder line, so
+the visits `fwa_indexpoint()` put on one, which link's segments lack, now reach a mapped stream. The FISS workbook
+sites (`0250`) still snap with `fwa_indexpoint()` and a 100 m flag, so `flag_far_snap` means two things in the
+bound `fdis_evidence.csv` and `fiss_evidence.csv`. `0310` takes `SCHEMA` and caches its visit walks in
+`knw.walk_cache` from #91. Until #92's retune reruns `data-raw/vignette_method.R`, `test-vignette-data.R`'s
+"every tracked source" test fails on every clone (the register files moved under the methodology bundle) and its
+"every ignored source" test wherever the new derived tables are, and the two articles keep describing the #73 run's
+placement.
+
+From #57, `0310` builds every species' visit table on the province-wide
 `fresh_default` in one pass and `0290`, `0294` and `0296` write their tables from it; `0291`–`0298` are frozen on
 the published v2 tables (`0299 PULL=TRUE VERSION=v2`).
 
