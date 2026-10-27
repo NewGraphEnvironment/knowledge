@@ -12,9 +12,9 @@ permissions:
 
 jobs:
   update-citation:
-    # ubuntu-24.04, not ubuntu-latest: on 26.04 (latest from October 2026) the runs built every package from source
-    # and duckdb 2.0.0 failed to compile; unpin when packages install as binaries there again (#94)
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
+    # A stalled setup step (an apt mirror, a package compiling from source) otherwise holds the job for 6 h (#94)
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
 
