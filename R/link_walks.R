@@ -40,9 +40,10 @@
 #' and each batch's rows are inserted by the same query that walks them. The
 #' cache and its table of flow loads (`<cache>_load`) are created when absent.
 #' Rows under another load or walk are never read, and nothing prunes them.
-#' The FWA network carries no load record, so a reload of
+#' The FWA tables the walk reads carry no load record, so a reload of
 #' `whse_basemapping.fwa_stream_networks_sp` (fwapg#43 moves measures by
-#' millimetres) needs the cache truncated by hand.
+#' millimetres) or of the river, lake, manmade waterbody and wetland polygons
+#' it measures the bank on needs the cache truncated by hand.
 #'
 #' @param connector a function of no arguments returning a `DBI` connection to a
 #'   database holding `discharge` and `whse_basemapping`.

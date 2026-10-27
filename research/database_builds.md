@@ -58,8 +58,9 @@ What it bought:
 - One key regraded after a curve or pick change: the whole `0320` run 4.1 min, against that key's 48.2 min of
   grading before.
 
-1,000 cached walks re-walked with the cache off were identical on all 14 columns. The cache treats the FWA stream
-network as fixed: a reload of `whse_basemapping.fwa_stream_networks_sp` means emptying the table.
+1,000 cached walks re-walked with the cache off were identical on all 14 columns. The cache treats the FWA
+tables the walk reads as fixed: a reload of `whse_basemapping.fwa_stream_networks_sp`, or of the river, lake, manmade
+waterbody and wetland polygons it measures the bank on, means emptying the table, because no load of them is recorded.
 
 ## Comparing with a key's groups in parallel
 
