@@ -32,6 +32,13 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   (`IN_PKGDOWN`), on Esri's World Topographic Map. Check a cited
   claim against the PDF's text: cred's `crd_aud_verify_all()` cuts each claim at the Rmd's line breaks and matches
   unrelated passages (#79).
+- `vignettes/_tuning_method.Rmd` — the methodology article (#93), a draft: pkgdown skips a `_`-named article,
+  `.Rbuildignore` keeps it out of the tarball, and pkgdown.yaml fails if a draft reaches `docs/articles/`. It
+  publishes, renamed without the `_`, after the #91/#92 retune. It reads `inst/vignette-data/method.rds`, which
+  `data-raw/vignette_method.R` writes from `inst/method/pipeline.csv` (the steps) and `inst/method/settings.csv` (every
+  number that shapes a result, with where its value lives); the script refuses to run with its code or registers
+  uncommitted. `tests/testthat/test-settings-register.R` fails when a register value and the code disagree: change
+  both together, and add a row for any new number that shapes a result (the test cannot see one with no row).
 - `scripts/` — the run order (`scripts/README.md`), calling the package (`pkgload::load_all()` from
   the root) and `cred`. Legacy literals in scripts are fixed forward as they are touched.
 - `data/<wsg>/` — per-group snapshots (csv/md) and small spatial deliverables (gpkg/kml). Tracked.
