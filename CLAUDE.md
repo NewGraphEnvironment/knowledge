@@ -356,8 +356,9 @@ worker on the host and 12 to 18 ms from the remote link, against 116 ms one quer
 took 53.4 min on the host, and one key regraded with its walks cached 4.1 min. `0330` regenerates link's flags group by
 group on 6 connections, one key at a time (BT rearing 33.4 min, every key 162.9 min with `GPKG=FALSE`): it is bound by
 the database's cores, so run it on the host. A second machine helps a database-bound step only with a database of its
-own holding the same build (the schema's run, the flow load named in the table comment, the walk code), which `0320`
-and `0330` check at connect (`knw_build_record()`); `research/database_builds.md` has the numbers and the load recipe.
+own holding the same build (the schema's run and the flow load named in the table comment; the walk travels with the
+code). `0320` and `0330` refuse a schema built by another run at connect (`knw_build_record()`), and every grade table's
+flow load and walk md5 are compared by its readers; `research/database_builds.md` has the numbers and the load recipe.
 Scoring is CPU-bound: the remote machine scored every key in about an hour on 12 workers (2026-10-23).
 
 **Never chain tuning and comparison until every key's smoke gates have passed (#84).** Score every key, check, then

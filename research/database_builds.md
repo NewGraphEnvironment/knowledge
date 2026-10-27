@@ -10,10 +10,12 @@
 
 A retune (`0320` grading, then `0330` comparing) now takes about 4 min to regrade the key being tuned and 4 to 37
 min to recompare it, on the database's own host. A cold regrade of every key takes 53 min (191 before) and a
-recompare of every key about 2.7 h (as before: the database's cores were already the limit). Grading can now also
+recompare of every key 2.9 h with its GeoPackages (2.7 h before, for one key fewer: the database's cores were
+already the limit). Grading can now also
 run from a machine on a remote link: a batched walk cost 12 to 18 ms there, against about 3 ms on the host and 116
 ms one query per walk over the same link. The comparison still belongs on the host, or on a second database that holds the
-same build, which `0320` and `0330` now check before doing any work.
+same build. `0320` and `0330` refuse a schema built by another run before any work, and refuse or regrade a grade
+table walked by other code or on another flow load.
 
 ## Why a query's count matters more than its size
 
@@ -80,7 +82,7 @@ six connections, each with its own scratch schema, gives that one key every core
 
 The #73 times include each key's GeoPackage (4 to 17 min) and the other keys' contention, so the per-key ratios
 overstate the change. On the two keys checked against the one-connection code (WCT rearing's 16 groups, CH
-rearing's 20 largest), every segment's flags were identical and the km sums agreed within 1.0e-13 relative; the
+rearing's 20 largest), every segment's flags were identical and the km sums agreed within 1.04e-13 relative; the
 full run's tables matched the tracked ones within 2.6e-13. The whole recompare did not get faster, because the
 database's cores were the bound both ways: classify, overlay and connect is 115 of its 163 min. Regenerating
 `default`'s flags, unchanged on every rerun, is the next cut (a follow-up issue), not yet measured.
@@ -104,8 +106,8 @@ flow load and walk md5 its readers compare.
 ## A second database
 
 A second machine helps a database-bound step only with a database of its own holding the same build: the schema
-from the same link run, the flow load named by the same comment, the same FWA load, and the walk installed from the
-same code. Loading one means:
+from the same link run, the flow load named by the same comment, and the same FWA load. The walk is not part of
+it: every connection creates it from this package's `inst/sql/ch_dist_profile.sql`, so it travels with the code. Loading one means:
 
 1. link's schema: a `pg_dump` of `<schema>` from the host restored under the same name (its `log_recompute` carries
    the run, which is what the check reads).

@@ -158,7 +158,7 @@ the per-start guard cover the rest of the row shape.
 | CH rearing, its 20 largest groups (near-river pairs walked) | 45.3 min | 17.0 min |
 
 Every segment's flags identical on both keys (1,190,110 and 1,829,223 segments, largest difference 0). The km sums
-in `compare`, `change` and `checks` differ by at most 1.0e-13 relative: the segment query has no `ORDER BY`, so the
+in `compare`, `change` and `checks` differ by at most 1.04e-13 relative: the segment query has no `ORDER BY`, so the
 sums' order moved between runs, which is why round 1 of the review was right to relax identity to a relative 1e-9.
 The reference ran while the Phase 1 walk check shared the database for a minute; neither run had the database alone
 otherwise. CH's speed-up (2.7x) is below WCT's (3.8x); why was not measured (the bins' balance and the near-river walk's own
@@ -202,7 +202,7 @@ host, `SCHEMA=fresh_default_20261017`, `CONFIG_SHA=102762da`. Logs: `scripts/log
 Per key, cold `0320` (walk minutes, then total; before → after): BT rearing 46.0 → 26.1, 47.6 → 27.7; BT spawning
 46.5 → 1.2, 48.2 → 2.8 (2,681,583 hits, 0 misses); RB rearing 39.0 → 4.2, 40.8 → 6.0; GR 14.9 → 2.5, 16.0 → 3.6; CH
 11.9 → 5.5, 13.1 → 6.7; ST 10.1 → 0.7, 11.2 → 1.8; CO 8.7 → 1.7, 9.8 → 2.8; WCT 2.4 → 0.3, 3.1 → 1.0. Every later
-key walking to 10 m³/s reads most of its walks from the cache (CO 373,154 of 615,302 starts, the fewest; ST 703,705 of
+key walking to 10 m³/s reads most of its walks from the cache (CO 373,154 of 615,302 starts, the smallest share; ST 703,705 of
 720,768), because the species share segments; CH, the one key walking to 3 m³/s, walked all 856,244. BT rearing's walks, all cold, cost 4.67 ms per walk per worker
 against 8.2 ms one query per start: the cold walk is still #85's to fix.
 
@@ -213,7 +213,7 @@ other keys, so the per-key ratio overstates the change; BT rearing with one othe
 143.3 min.
 
 What the full recompare shows: **its wall time did not move** (160.1 min for seven keys before, 176.9 for eight now).
-Before, seven keys ran at once, one database core each (578 % CPU); now one key at a time uses six. The database's
+Before, seven keys shared six workers, one database core each (578 % CPU with seven); now one key at a time uses six. The database's
 cores were the bound both times. What changed is the time to see one key: a recompare of the key being tuned is
 4 to 37 min instead of 50 to 160. Classify, overlay and connect is 115.2 of the 162.9 min (BT rearing 27.4 of 33.4).
 
