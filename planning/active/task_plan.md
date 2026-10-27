@@ -67,11 +67,11 @@ exploration found that shapes the design is in `findings.md` ("Exploration"), wi
 ## Phase 0: References before anything changes (on the database's host)
 
 - [x] `.gitignore`: `data/compare/ref_*/` (`data/tune/ref_*/` was already ignored).
-- [ ] `data-raw/walk_batch_check.R` in `REF=1` mode: the grade's own starts in BULK (the bank check's group), from
+- [x] `data-raw/walk_batch_check.R` in `REF=1` mode: the grade's own starts in BULK (the bank check's group), from
       `knw_link_segments(conn, "fresh_default_20261017", sp, "BULK")` as `knw_grade_species()` takes them: chinook at
       q 3 (16,686 starts) and bull trout at q 10 (32,342), on `pick`, through the current `knw_link_walks()`, to
       `data/tune/ref_walks/bulk_<sp>_q<q>_pick.rds` (ignored; rds because `write.csv` keeps 15 significant digits).
-- [ ] `data-raw/compare_parallel_check.R` in `REF=1` mode: the current `knw_compare_rules()` (`workers` not yet an
+- [x] `data-raw/compare_parallel_check.R` in `REF=1` mode: the current `knw_compare_rules()` (`workers` not yet an
       argument) on `WCT_rear` (all 16 groups) and `CH_rear`'s 20 largest groups, `CONFIG_SHA=102762da` (the commit the
       tracked tables carry; nothing under link's `configs/default` changed between it and `origin/main` at `ef5b8234`,
       checked 2026-10-26), `tuned_as = door`, to `data/compare/ref_<key>/{compare,change,checks,segments}.rds`
