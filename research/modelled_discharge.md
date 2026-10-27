@@ -108,6 +108,8 @@ thresholds Chinook on (`load_habitat_linear_ch.sql`). `extras/discharge/discharg
 It covers the watershed groups whose FWA watershed codes fall under `100`, `200` or `300`, which together
 are the Fraser, Peace and Columbia, because the gridded product covers only those basins. So **fwapg's MAD is fully tied to the
 FWA**, and its method is public. PCIC supplies only a gridded runoff field.
+Counted on the database's copy of the table (2026-10-27): none of the 87,492 order-5+ lines outside those basins
+carries a MAD, and only 69 of the 14,957 order-8+ lines inside them do.
 
 A monthly version would change step 2 only: a monthly climatology (`cdo ymonmean` over monthly sums) instead
 of the annual mean, carried through the same accumulation. The limits stay the same: the same three basins,
