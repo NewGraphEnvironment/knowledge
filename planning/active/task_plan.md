@@ -99,12 +99,12 @@ checked against the code as it stands today (main `80ea4c1`).
 
 ## Phase 4: the article (draft, off the site)
 
-- [ ] `vignettes/_tuning_method.Rmd`, "How the thresholds are tuned": the flow chart; per step the block (what it
+- [x] `vignettes/_tuning_method.Rmd`, "How the thresholds are tuned": the flow chart; per step the block (what it
       does, linked functions in knowledge/fresh/link/fwapg reference pages, counts in/kept/dropped with reasons,
       settings rows); the funnel; lineage; the two worked examples (one site snapped; one rule through predicate,
       overlay, connectivity on a few BULK segments, from `bulk_segments.rds` if it carries enough); the register table
       with untested/inherited rows first. Every number computed inline, principle before each result (CLAUDE.md).
-- [ ] `^vignettes/_` in `.Rbuildignore`.
+- [x] `^vignettes/_` in `.Rbuildignore`.
 - [ ] Write the publish step into #92's body (the retune that redraws it): rerun `vignette_method.R`, rename to
       `vignettes/tuning_method.Rmd`, then the research Method replacement.
 

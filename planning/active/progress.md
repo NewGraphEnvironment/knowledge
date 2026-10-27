@@ -36,3 +36,11 @@
   key's `visits_in`; examples: BULK visit 102443_1_1 kept (38.1 m, four streams in reach), 103962_6_1 dropped (239.7 m);
   on BULK's segments the overlay and connectivity drop 999 default and 225 tuned segments the predicate passed, add
   none. `test-vignette-data.R` checks the bundle's md5s (ignored sources where present): 163 passed.
+- Phase 4: `vignettes/_tuning_method.Rmd` (draft, off the site): opening with the answer; flow chart; lineage (four
+  outside sources, so it fits a column); losses per step (a remaining-count funnel showed near-equal bars); per-species
+  population table; eleven step blocks generated from `pipeline.csv` with counts and settings; the snap and
+  segment-stage examples; the register, untested and inherited first. Rendered with `rmarkdown::render()` after
+  `load_all()` and read at 820 px. `^vignettes/_` in `.Rbuildignore`: tarball has no draft; pkgdown lists only
+  `chinook_rearing`. CI: a draft-article guard in pkgdown.yaml, tested both ways (clean 0; a leaked
+  `tuning_method.html` or `_tuning_method.html` 1). Step 2's text and the 1:50k overstatement fixed in `pipeline.csv`;
+  "open work" lists open issues only.

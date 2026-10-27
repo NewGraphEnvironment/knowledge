@@ -80,6 +80,25 @@ jobs:
           fi
           echo "no unexpected top-level pages"
 
+      # A draft article is named vignettes/_<name>.Rmd, which pkgdown skips,
+      # until its counts are the ones it should publish (#93). Assert the skip:
+      # nothing pkgdown would render from a draft may reach docs/articles/.
+      - name: Fail if a draft article reached the site
+        run: |
+          drafts=""
+          for f in vignettes/_*.Rmd; do
+            [ -e "$f" ] || continue
+            b=$(basename "$f" .Rmd)
+            for g in "docs/articles/$b.html" "docs/articles/${b#_}.html"; do
+              [ -e "$g" ] && drafts="$drafts $g"
+            done
+          done
+          if [ -n "$drafts" ]; then
+            echo "Draft article(s) on the site:$drafts"
+            exit 1
+          fi
+          echo "no draft articles on the site"
+
       - name: Deploy to GitHub pages 🚀
         if: github.event_name != 'pull_request'
         uses: JamesIves/github-pages-deploy-action@v4.5.0

@@ -285,26 +285,23 @@ lin <- tribble(
   "fdis", "FDIS electrofishing export (Province of BC)", "source", "ellipse",
   "fwa", "BC Freshwater Atlas", "source", "ellipse",
   "pcic", "PCIC VIC-GL runoff, routed by Raven", "source", "ellipse",
-  "hydat", "HYDAT gauges and climate normals", "source", "ellipse",
   "obs", "bcfishobs fish observations", "source", "ellipse",
-  "cfg", "link's default configuration", "source", "ellipse",
   "atlas", "Atlas streams in Postgres", "fwapg", "box",
   "cross", "PCIC crosswalk (the fwapg fork)", "fwapg", "box",
   "sites", "placed FDIS visits", "knowledge", "box",
-  "segs", "link's segments, access and default flags", "link", "box",
-  "flow", "segment flows (wet's pick)", "wet", "box",
+  "segs", "link's segments, access and default flags, from link's default configuration", "link", "box",
+  "flow", "segment flows: wet's pick of PCIC and its own balance, fitted to HYDAT gauges", "wet", "box",
   "evid", "evidence tables", "knowledge", "box",
   "tune", "scores, curves and grades", "knowledge", "box",
   "cmp", "comparison on link's segments", "fresh", "box",
   "pub", "thresholds and grades published", "knowledge", "box"
 )
-lin_edges <- c("fwa -> atlas", "fdis -> sites", "atlas -> sites", "atlas -> segs", "cfg -> segs", "obs -> segs",
-               "pcic -> cross", "atlas -> cross", "cross -> flow", "hydat -> flow", "sites -> evid", "segs -> evid",
-               "flow -> evid", "evid -> tune", "tune -> cmp", "segs -> cmp", "cfg -> cmp", "tune -> pub",
-               "cmp -> pub")
-dot_lin <- paste0("digraph lineage {\n", head_dot, "\nnode [width=1.5, fontsize=11]\ngraph [nodesep=0.15]\n",
+lin_edges <- c("fwa -> atlas", "fdis -> sites", "atlas -> sites", "atlas -> segs", "obs -> segs",
+               "pcic -> cross", "atlas -> cross", "cross -> flow", "sites -> evid", "segs -> evid",
+               "flow -> evid", "evid -> tune", "tune -> cmp", "segs -> cmp", "tune -> pub", "cmp -> pub")
+dot_lin <- paste0("digraph lineage {\n", head_dot, "\nnode [width=1.4, fontsize=15]\ngraph [nodesep=0.12, ranksep=0.3]\n",
                   legend(c("source", pkgs_flow)), "\n",
-                  paste(node(lin$id, lin$label, lin$pkg, lin$shape, w = 18), collapse = "\n"), "\n",
+                  paste(node(lin$id, lin$label, lin$pkg, lin$shape, w = 15), collapse = "\n"), "\n",
                   paste(lin_edges, collapse = "\n"), "\nl_wet -> fdis [style=invis]\n}")
 svg_of <- function(dot) DiagrammeRsvg::export_svg(DiagrammeR::grViz(dot))
 svg <- list(flow = svg_of(dot_flow), lineage = svg_of(dot_lin))

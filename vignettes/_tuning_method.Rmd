@@ -1,0 +1,241 @@
+---
+title: "How the thresholds are tuned"
+output:
+  bookdown::html_vignette2
+vignette: >
+  %\VignetteIndexEntry{How the thresholds are tuned}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  echo = FALSE,
+  fig.width = 7,
+  fig.height = 4,
+  dpi = 150,
+  message = FALSE,
+  warning = FALSE
+)
+library(knowledge)
+library(ggplot2)
+```
+
+```{r load}
+# data from data-raw/vignette_method.R
+vd <- function(f) system.file("vignette-data", f, package = "knowledge", mustWork = TRUE)
+x <- readRDS(vd("method.rds"))
+pipe <- x$pipeline
+reg <- x$settings
+fun <- x$funnel
+fsp <- x$funnel_species
+ex <- x$examples
+n0 <- function(v) format(round(v), big.mark = ",", trim = TRUE)
+pc <- function(v) paste0(format(round(100 * v, 1), nsmall = 1), " %")
+fn <- function(stage) fun$n[fun$stage == stage]
+issue <- function(n) {
+  ifelse(is.na(n) | !nzchar(n), "",
+         sprintf("[#%s](https://github.com/NewGraphEnvironment/knowledge/issues/%s)", n, n))
+}
+# an SVG Graphviz wrote, inline and as wide as the column allows
+svg_inline <- function(s) {
+  s <- sub("^[^<]*(<\\?xml[^>]*>)?\\s*(<!DOCTYPE[^>]*>)?\\s*", "", s)
+  s <- sub("<svg ", '<svg style="max-width:100%;height:auto" ', s, fixed = TRUE)
+  htmltools::HTML(s)
+}
+scored <- fsp[fsp$stage == "scored", ]
+stopifnot(fun$n[1] == 51587, nrow(scored) >= 1, all(diff(fun$n) <= 0))
+lost_all <- fn("FDIS visits") - fn("no_link_segment")
+lost_place <- fn("FDIS visits") - fn("ws50_mismatch")
+stopifnot(lost_place / lost_all > 0.5)   # "most are lost to placement"
+```
+
+The thresholds this package recommends to link come from one pipeline: `r n0(fn("FDIS visits"))` electrofishing
+visits from the Province's Fisheries Data Information System are placed on the BC Freshwater Atlas and on link's
+segments, `r n0(fn("no_link_segment"))` of them are kept, and each species' rule is chosen by how well it predicts
+where fish were caught in watershed groups it was not fitted to. This article walks the pipeline in order, one step
+at a time: what each step does, the code that does it, how many records go in and come out, and every number that
+shapes the result. Of the `r nrow(reg)` settings it lists, `r sum(reg$tested == "yes")` have been tested against an
+alternative; the rest are the list of what to test next.
+
+## What happens, in order?
+
+Eleven steps, each done by one package. The box colour names the package.
+
+```{r flow}
+svg_inline(x$svg$flow)
+```
+
+## What feeds what?
+
+Four outside sources reach the tuning, and the citations follow from them: the FDIS export, the Freshwater Atlas,
+PCIC's modelled streamflow and the province's other fish observations, which shape link's segments but score no rule.
+wet's water balance is fitted to Water Survey of Canada gauges, and link's segments follow its own configuration.
+
+```{r lineage}
+svg_inline(x$svg$lineage)
+```
+
+## Where are records lost?
+
+A record that does not reach the tuning cannot inform it, so where the losses are matters as much as how many
+remain. Most are lost to placement (`r pc(lost_place / lost_all)` of the `r n0(lost_all)` dropped): a visit whose
+point lies far from any Atlas stream, or on a stream outside the watershed FDIS recorded, cannot be trusted to sit on
+the stream that was fished.
+
+```{r funnel, fig.height = 3, out.width = "100%", fig.cap = "Visits each step drops, in the order the steps run. Each bar is labelled with the count and the reason."}
+f <- fun
+f$drop <- c(NA, -diff(f$n))
+f <- f[-1, ]
+f$label <- factor(f$reason, levels = rev(f$reason))
+ggplot(f, aes(x = drop, y = label)) +
+  geom_col(fill = "#0072B2", width = 0.6) +
+  geom_text(aes(label = n0(drop)), hjust = 0, nudge_x = 60, size = 3.2, colour = "#333333") +
+  scale_x_continuous(labels = function(v) format(v, big.mark = ","), expand = expansion(mult = c(0, 0.12))) +
+  labs(x = "visits dropped", y = NULL) +
+  theme_minimal(base_size = 10) +
+  theme(panel.grid.major.y = element_blank(), panel.grid.minor = element_blank())
+```
+
+Of the `r n0(fn("FDIS visits"))` visits, `r n0(fn("no_link_segment"))` (`r pc(fn("no_link_segment") / fn("FDIS visits"))`)
+remain on a link segment.
+
+Each species then keeps only the visits its rules can speak to: on a stream line (not in a river polygon, a wetland
+of 1 ha or more or a lake of 100 ha or more), of a usual fished area, in a group where link expects the species, with
+no code that could hide it and no natural barrier to it downstream. The tests use the groups where the species was
+caught at some visits and not others.
+
+```{r funnel-species}
+w <- stats::reshape(as.data.frame(fsp[, c("species_code", "stage", "n")]), idvar = "species_code",
+                    timevar = "stage", direction = "wide")
+names(w) <- sub("^n\\.", "", names(w))
+gb <- unique(fsp[, c("species_code", "groups_both")])
+w$groups <- gb$groups_both[match(w$species_code, gb$species_code)]
+w[-1] <- lapply(w[-1], n0)
+knitr::kable(w[, c("species_code", "kept", "stream_branch", "fished_area", "in_range", "not_blocked", "no_barrier",
+                   "scored", "groups")],
+             col.names = c("species", "kept", "stream line", "fished area", "in range", "not blocked",
+                           "no barrier", "scored", "groups scored"),
+             caption = "Rearing visits per species after each population filter. Scored visits lie in the groups with both outcomes.",
+             align = "lrrrrrrrr", row.names = FALSE)
+```
+
+## What does each step do?
+
+Each block says what the step does, the code that does it, what goes in and comes out, and the settings it depends
+on. A setting's row in the last section says where its value came from.
+
+```{r steps, results = "asis"}
+link_fn <- function(f) {
+  if (grepl("^fwapg::", f)) {
+    return(sprintf("[`%s`](https://smnorris.github.io/fwapg/03_functions.html#fwa-indexpoint)", sub("^fwapg::", "", f)))
+  }
+  sprintf("`%s()`", sub("^knowledge::", "", f))
+}
+counts <- list(
+  `1` = sprintf("In: %s site visits, one row each.", n0(x$steps[["1"]][["visits"]])),
+  `2` = sprintf(paste("In: %s visits. %s have a usable point and %s are placed on a stream within 500 m. %s are",
+                      "dropped for lying more than 100 m from it and %s for lying outside the 1:50k tributary code",
+                      "FDIS recorded; the check reaches only the %s placed visits that carry a full tributary code,",
+                      "and %s of those disagree. Out: %s."),
+                n0(fn("FDIS visits")), n0(fn("with a usable point")), n0(fn("placed on the Atlas")),
+                n0(fn("placed on the Atlas") - fn("far_snap")), n0(fn("far_snap") - fn("ws50_mismatch")),
+                n0(x$steps[["2"]][["ws50_checked"]]), n0(x$steps[["2"]][["ws50_mismatch_all"]]),
+                n0(fn("ws50_mismatch"))),
+  `4` = sprintf("Of the %s kept visits, %s (%s) take PCIC's routed flow and %s (%s) wet's water balance.",
+                n0(x$steps[["5"]][["kept"]]), n0(x$steps[["5"]][["routed"]]),
+                pc(x$steps[["5"]][["routed"]] / x$steps[["5"]][["kept"]]), n0(x$steps[["5"]][["balance"]]),
+                pc(x$steps[["5"]][["balance"]] / x$steps[["5"]][["kept"]])),
+  `5` = sprintf(paste("In: %s visits. Dropped: %s with no usable date, %s with no fished area or time, %s with an",
+                      "unknown catch, %s with no link segment at their measure. Out: %s."),
+                n0(fn("ws50_mismatch")), n0(fn("ws50_mismatch") - fn("junk_date")),
+                n0(fn("junk_date") - fn("effort_sentinel_or_none")),
+                n0(fn("effort_sentinel_or_none") - fn("catch_unknown")),
+                n0(fn("catch_unknown") - fn("no_link_segment")), n0(fn("no_link_segment"))),
+  `6` = paste0("Rules per species and stage: ",
+               paste(sprintf("%s %s", sub("_", " ", names(x$steps[["6"]])), n0(x$steps[["6"]])), collapse = ", "),
+               "."),
+  `7` = paste0("Rules in the region (within one SE of the best): ",
+               paste(sprintf("%s %s", sub("_", " ", names(x$steps[["7"]])), n0(x$steps[["7"]])), collapse = ", "),
+               "."),
+  `10` = sprintf(paste("On the Bulkley's %s segments, fresh's predicate passes %s for `default` and %s for the tuned",
+                       "rule; the overlay and the connectivity pass then leave %s and %s."),
+                 n0(ex$stages$segments), n0(ex$stages$pre_default), n0(ex$stages$pre_tuned),
+                 n0(ex$stages$flag_default), n0(ex$stages$flag_tuned))
+)
+for (i in seq_len(nrow(pipe))) {
+  p <- pipe[i, ]
+  fns <- strsplit(p$functions, ";", fixed = TRUE)[[1]]
+  cat(sprintf("### %d. %s\n\n%s\n\n", p$step, p$label, gsub("'", "’", p$does)))
+  cat(sprintf("- **Run by:** %s; %s.\n", gsub(";", ", ", p$scripts), paste(vapply(fns, link_fn, ""), collapse = ", ")))
+  esc <- function(v) gsub(">", "&gt;", gsub("<", "&lt;", v, fixed = TRUE), fixed = TRUE)
+  cat(sprintf("- **In:** %s. **Out:** %s.\n", esc(p$inputs), esc(p$outputs)))
+  if (!is.null(counts[[as.character(p$step)]])) cat(sprintf("- **Counts:** %s\n", counts[[as.character(p$step)]]))
+  s <- reg[reg$step == p$step, ]
+  if (nrow(s)) {
+    cat("- **Settings:**\n")
+    cat(sprintf("    - %s: %s%s\n", s$label, gsub(";", ", ", s$value),
+                ifelse(nzchar(s$unit), paste0(" ", s$unit), "")), sep = "")
+  }
+  if (!is.na(p$issue) && nzchar(p$issue)) cat(sprintf("- **Open work:** %s\n", issue(p$issue)))
+  cat("\n")
+}
+```
+
+## How is a site placed?
+
+A visit's point is snapped to the nearest Atlas stream within 500 m, and kept only if that stream is within 100 m.
+The nearest stream is taken and the others in reach are not weighed; snapping among candidates is
+[#91](https://github.com/NewGraphEnvironment/knowledge/issues/91).
+
+```{r snap}
+row_of <- function(e, fate) {
+  nb <- e$near
+  data.frame(visit = e$site$site_visit, fate = fate, stream = nb$blue_line_key,
+             name = ifelse(is.na(nb$gnis_name), "(unnamed)", nb$gnis_name), distance_m = nb$distance_m,
+             chosen = ifelse(seq_len(nrow(nb)) == 1, "yes", ""))
+}
+knitr::kable(rbind(row_of(ex$kept, "kept"), row_of(ex$far, "dropped")),
+             col.names = c("visit", "fate", "Atlas stream (blue line)", "name", "distance (m)", "snapped to"),
+             caption = sprintf(paste("Two %s visits and every Atlas stream within 500 m of each. The first is kept;",
+                                     "the second is placed, then dropped because its stream is more than 100 m away."),
+                               ex$wsg),
+             align = "llrlrl")
+```
+
+## What do the overlay and the connectivity pass change?
+
+A rule is not the habitat link reports. fresh first applies the rule's test to each segment (the predicate); link's
+hand-entered habitat reaches are then laid over it, and fresh's connectivity pass drops rearing with no spawning within
+the bridge distance. On the Bulkley, the two later stages removed `r n0(ex$stages$dropped_default)` of the
+`r n0(ex$stages$pre_default)` segments `default`'s predicate passed and `r n0(ex$stages$dropped_tuned)` of the
+tuned rule's `r n0(ex$stages$pre_tuned)`, and added `r n0(ex$stages$added_default + ex$stages$added_tuned)`. That is why
+the comparison regenerates both rules through all three stages rather than comparing a predicate with link's stored
+flags.
+
+## Which numbers shape the result, and which have been tested?
+
+Every number below shapes a result: the pick, its stability checks, the grade or the comparison. Each was checked against the code and the run when this
+article's data were written: a function's default, a script's constant, a literal in the code, link's configuration
+at the comparison's commit (`r substr(x$meta$link_config_sha, 1, 7)`), or wet at the flow build the database held
+(`r x$meta$wet_sha`). **Source** says where the value came from: a published source, a convention set here, a value
+inherited from link or bcfishpass, or a value measured from data. **Tested** says whether the result has been
+compared with another value. The untested rows come first: they are the work still to do.
+
+```{r register}
+r <- reg[order(reg$tested != "no", reg$source != "inherited", reg$step), ]
+knitr::kable(data.frame(setting = r$label, value = gsub(";", ", ", r$value), unit = r$unit, step = r$step,
+                        source = r$source, tested = r$tested, issue = issue(r$issue)),
+             caption = "The settings register, from `inst/method/settings.csv`.", align = "llllllr")
+```
+
+## Software and citation
+
+The pipeline runs on [`fwapg`](https://github.com/smnorris/fwapg) (the Freshwater Atlas in PostgreSQL, with New
+Graph's [fork](https://github.com/NewGraphEnvironment/fwapg) carrying PCIC's crosswalk),
+[`link`](https://github.com/NewGraphEnvironment/link) (segments, access and habitat), [`wet`](https://github.com/NewGraphEnvironment/wet)
+(flows), [`fresh`](https://github.com/NewGraphEnvironment/fresh) (the habitat predicates and connectivity) and this
+package, `knowledge`. This article's data were written on `r x$meta$written` at commit
+`r x$meta$commit`, from the evidence ledger `r basename(x$meta$ledger)`.
