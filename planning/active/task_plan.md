@@ -46,8 +46,9 @@ instruction (`progress.md`, Resume), and the gate decisions stay open until then
 - **Two tests go red until that rerun, on every clone.** `method.rds` pins the md5s of its tracked sources, and
   `inst/method/settings.csv` and `pipeline.csv` are among them (`vignette_method.R:380-387`), so the register edit
   alone fails `test-vignette-data.R`'s "every tracked source … unchanged" test wherever `data/` exists, which is every
-  clone (`data/` is tracked); the "every ignored source" test fails too where the new derived tables are. No workflow
-  runs the tests (#98, R CMD check, is open), so nothing on GitHub reads red; `devtools::test()` does, with the
+  clone (`data/` is tracked); the "every ignored source" test fails too where the new derived tables are. No workflow runs the tests yet (#98, the R CMD check
+  workflow, is an open PR: once it merges, the two tests read red on every push), so until then nothing on GitHub
+  reads red; `devtools::test()` does, with the
   message "rerun Rscript data-raw/vignette_method.R".
 - The settings register's `snap_limit` row carries a `code:` pointer into `vignettes/chinook_rearing.Rmd` ("stream
   lay within 100 m"). The chinook article truthfully describes the #73 run until its rerender, so that pointer moves
