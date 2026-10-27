@@ -277,3 +277,12 @@ and committed before it ran.
 |-------|------------|
 | `psql` in the agent shell: `connection to server on socket "/tmp/.s.PGSQL.5432" failed` (no `PG*` in the shell) | R reads `~/.Renviron`, so the probe ran through `Rscript -e` with `DBI`; `cat()` of an `integer64` count prints a denormal double, so cast with `as.numeric()` or read it through `print()` |
 | `0310`: `'wet_catalog' is not an exported object from 'namespace:wet'` (this machine's `wet` was a 2026-10-01 dev build; the 2026-10-22 build ran elsewhere) | installed `wet` v0.4.23 (`pak`, `upgrade = FALSE`: `fresh` 0.43.0 and `link` 0.66.0 unchanged); link's species pooling md5 is the same at 0.66.0, 0.67.0 and main and is ledgered |
+
+## Review round 4 (2026-10-27)
+
+An enumeration of 44 rows (every cross-artifact guard and every quantified claim in the changed prose, recomputed on
+the final build) held on 39. The five that failed were prose: "excluding 1425 lost three link-placed visits" (one of
+those three, `112386_1_1`, is far-dropped under inclusion too; inclusion keeps six more visits, two of them link-placed
+before), "ties are all on one stream" (the probe classes a tie only after `same_stream`, so none is), `0310`'s
+remembered walk timings (replaced by the measured 6.4 / 16 / 0.7 min), "one pick per key outside a region" (CH 1 of
+30, BT 0), and #92's body quoting 45,523. Each was fixed and its replacement checked against the build.

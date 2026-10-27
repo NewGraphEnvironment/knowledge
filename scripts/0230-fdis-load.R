@@ -41,7 +41,7 @@
 #     a watershed-group boundary (6010): link's segments include none of those three kinds, so a visit
 #     whose nearest line is one goes to the next stream within the search, if there is one. Subsurface
 #     flow (1425), which fresh excludes by default, stays a candidate, because link's segments carry it
-#     (#91's review: excluding it lost three visits link placed and gained none). The
+#     (#91's review: excluding it kept six fewer visits, two of them placed by link under the old snap). The
 #     picked FWA feature's gradient, order, edge type, modelled channel width and MAD are joined
 #     province-wide, not fresh.streams (98 groups locally). research/fdis_export.md, "Placement",
 #     has the probe and the limits' sensitivity.

@@ -150,8 +150,9 @@ as far snaps. fresh never snaps to an unmapped line (no local code) or a placeho
 excludes the connectors that carry a stream across a watershed-group boundary (6010) as well. link's segments
 carry none of those three kinds, so a visit `fwa_indexpoint()` put on one could never be placed on link's segments;
 the nearest line is a 6010 connector for 3 visits, which go to the next stream. Subsurface flow (1425), which fresh
-excludes by default, stays a candidate because link's segments carry it: excluding it, as the probe did, lost three
-visits link had placed and gained none. In the final build all 13 visits whose nearest line is 1425 are placed on
+excludes by default, stays a candidate because link's segments carry it. Excluding it, as the probe did, kept six fewer
+visits: two that link had placed on 1425 under the old snap, and four whose only stream in reach is a 1425 line. In
+the final build all 13 visits whose nearest line is 1425 are placed on
 it, and 12 are kept (one is 221 m away with no code). Other construction-line connectors (1400, 1410, 1450) stay
 candidates too.
 
@@ -194,8 +195,8 @@ So the unconfirmed limit is 200 m, though the 100–200 m band clears one in thr
 compares five pairs of cells (each unconfirmed limit of 100, 200 and 500 m against the next, with confirmed picks
 at 500 m; and 200 against 500 m for confirmed picks at each unconfirmed limit). In none of them did either key's
 pick fall outside the other cell's one-SE region, so neither limit stepped down. That check is weak, because the
-regions hold 51 to 244 rules. Across the 30 ordered pairs of the six cells, for each key, one pick falls outside another's region:
-CH rearing's at 200/200 (`g<=0.13`) is outside the 500/500 cell's 51-rule region. CH rearing's pick moves between
+regions hold 51 to 244 rules. Across all ordered pairs of the six cells (30 for each key), one pick falls outside another's
+region, and it is CH rearing's: its pick at 200/200 (`g<=0.13`) is outside the 500/500 cell's 51-rule region. CH rearing's pick moves between
 cells (`g<=0.15` at 200/500, `g<=0.3` with a smaller flow floor at 100/500), and BT rearing's pick is the same rule
 in all six.
 
@@ -217,7 +218,9 @@ Of the 45,529 kept visits, 10,210 are confirmed by their code and 748 were moved
 one (the ledger's `kept_snap_*` rows, 10,247 and 754, are counted before link's segment drops 178).
 The FISS workbook sites (`0250`) still snap with `fwa_indexpoint()` and a 100 m flag, so `flag_far_snap` in the
 bound `data/fdis_evidence.csv` and `data/fiss_evidence.csv` is not one placement. fresh#266 (open) proposes a new
-tie rule between two segments of one stream; ties are 29 visits, all on one stream either way.
+tie rule between two segments of one stream; the probe's 29 `tie` visits lie at equal distance from two
+different streams, so that rule does not reach them; a tie between two segments of one stream falls in `same_segment`
+or `same_stream`.
 
 ## What this adds over the public layers
 

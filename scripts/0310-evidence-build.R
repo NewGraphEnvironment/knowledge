@@ -50,8 +50,8 @@
 #         data/fdis/derived/workbook_{sites,species}.csv  the FISS workbook sites placed on link's segments
 #         scripts/logs/habitat/<date>_evidence_build_ledger.csv
 # RUN:    [SCHEMA=fresh_default_20261017] Rscript scripts/0310-evidence-build.R   (from the repo root; 4 socket
-#         workers; the visit walks are cached from #91, so the first run walks them cold, ~10 min on the database's
-#         host and 40-60 min over a remote link, and a rerun on the same flow load reads them back)
+#         workers; the visit walks are cached from #91, so the first run walks them cold (6.4 min of walks and 16 min
+#         in all from a remote link, 2026-10-27) and a rerun on the same flow load reads them back (0.7 min of walks))
 # ---------------------------------------------------------------------------
 suppressMessages({ library(dplyr); library(readr); library(DBI); library(RPostgres) })
 pkgload::load_all(quiet = TRUE)
