@@ -54,6 +54,8 @@ visit dropped later for its effort; a `summarise()` call read summed flags (stag
       `data-raw/vignette_bib.R` (Zotero running) and check the fork item's title does not start "fwapg"
       (`vignette_bib.R`'s `key_for("^(smnorris/)?fwapg")`). Written into #89's body.
 - Publish after the #91/#92 retune: rerender, drop the `_` prefix, replace
-      `research/habitat_thresholds_tuned.md`'s Method with a link (the parked plan's Phase 5). Written into #92's body.
+      `research/habitat_thresholds_tuned.md`'s Method with a link (the parked plan's Phase 5). Changed after the archive
+      by Al's decision (2026-10-27): the article publishes now as `vignettes/habitat_thresholds.Rmd`; what stays owed,
+      in #92's body, is the rerun after the retune and the research Method's replacement.
 
 Closed by: PR #100 (branch `93-a-stepwise-methodology-article-the-pipel`)
