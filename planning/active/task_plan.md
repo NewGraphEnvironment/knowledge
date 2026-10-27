@@ -57,13 +57,13 @@ reads link's segment `gradient`, so the curve is fitted on one gradient and grad
   recursing, as with `grad_ext/`). `0310` does not rerun: #91's build already carries `segment_gradient`.
 
 ## Phase 1: Measure the segment at a visit and link's breaks (issue steps 1 and 3)
-- [ ] `data-raw/segment_gradient_check.R`. From the derived tables: segment lengths, start offsets, the share starting at
+- [x] `data-raw/segment_gradient_check.R`. From the derived tables: segment lengths, start offsets, the share starting at
       the visit by outcome (catch status and per species), and the Atlas-to-segment gap by length band. Class flips at
       each `default` cut-off. From `SCHEMA`'s `streams`, one aggregate query: whether segment gradients bunch at
       `default`'s cut-offs and the 15–30 % access classes. Log to `scripts/logs/habitat/<date>_segment_gradient_check.txt`.
-- [ ] `research/habitat_thresholds_tuned.md`: a short "Which gradient is scored" section giving the verdict, the
+- [x] `research/habitat_thresholds_tuned.md`: a short "Which gradient is scored" section giving the verdict, the
       producing script, and the log.
-- [ ] Issue bodies: #92 records the step 1 finding and the decision; #70 gets a task line saying fixed windows test the
+- [x] Issue bodies: #92 records the step 1 finding and the decision; #70 gets a task line saying fixed windows test the
       outcome-linked segment length.
 
 ## Phase 2: Name the gradient in the tune functions and in every record (tests first)

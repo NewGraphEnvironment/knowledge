@@ -7,3 +7,6 @@
 - Created branch `92-score-rules-on-the-gradient-link-applies` off main
 - Scaffolded PWF baseline from issue #92 with approved phases
 - Next: start Phase 1
+- Phase 1: `data-raw/segment_gradient_check.R` run on `fresh_default_20261017`; stream branch: 86.2 % of visits with
+  fish on a segment starting at the visit vs 10.2 % of empty ones (median 113 vs 305 m); no bunching at default's
+  cut-offs (0.99-1.03), 15 % access class 0.94. Research section and #92/#70 bodies written.

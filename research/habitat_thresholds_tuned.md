@@ -83,6 +83,34 @@ river's bank (#73). Presence-only bcfishobs records never score a rule; `knw_bcf
 their FDIS visits by collection, species and date, and the rest give the outside check. The Fish Data Submission
 workbooks add 871 placed sites, 92 of them with electrofishing effort.
 
+### Which gradient is scored (#92)
+
+**Verified:** 2026-10-27 on #91's evidence (`fresh_default_20261017`) · **Produced by:**
+`data-raw/segment_gradient_check.R` (`scripts/logs/habitat/20261027_segment_gradient_check.txt`).
+
+From #92, a visit is scored on its link segment's gradient (`segment_gradient`), the gradient link applies a rule to,
+rather than on its whole Atlas line's (`fwa_gradient`), which is kept as a sensitivity. Al chose it on 2026-10-27,
+after the two measurements below.
+
+- **The segment at a visit depends on the catch.** link breaks streams at bcfishobs observations, and a visit that
+  caught a modelled species is one, so its segment starts at the visit and runs upstream to the next break. On the
+  tuning's stream branch (29,335 visits), 86.2 % of visits that caught fish sit on such a segment, against 10.2 % of
+  empty ones. The median segment is 113 m long for visits that caught fish and 305 m for empty ones. Per species, 80.7 %
+  of the visits where chinook were present sit on such a segment, against 44.6 % where they were absent, and 94.2 %
+  against 37.8 % for bull trout. Short segments read noisier gradients. On segments of 10 m or less, 13.5 % read 0 and
+  the median gap from the Atlas line's gradient is 0.015, against 0.0017 on segments over 500 m. The median gap is the
+  same either way (0.0083 for visits with fish and without), so the noise follows segment length, and length follows
+  the outcome. The gradient class at one of `default`'s cut-offs differs between the two gradients on 7.8–12.1 % of
+  visits.
+- **link does not cut at `default`'s cut-offs.** `default` breaks at observations, gradient barriers, falls, definite
+  barriers, habitat endpoints and crossings, and its gradient breaks come only from the access classes (15, 20, 25 and
+  30 %). Over the schema's 9,997,708 stream-branch segments, the count in the half-point band below each rearing or
+  spawning maximum is 0.99–1.03 times the count above it. The 15 % access class is 0.94, slightly more above than
+  below. So segment gradients are not lined up with `default`'s rule.
+
+Fixed-window gradients, which would not depend on where a catch cut the stream, are #70's (on fresh#257). They can
+test whether the outcome-linked segment length moves a threshold.
+
 ## Method (0297's spec, fixed for CH before its first fit, carried to every species)
 
 - **Population per species × stage:** stream-branch visits (stream edges in no river polygon, wetland ≥ 1 ha or
