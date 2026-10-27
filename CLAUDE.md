@@ -295,6 +295,14 @@ Width and flow carry two traps (#54):
   flow, and the main lines (1250) of some small double-line rivers carry a small flow of their own. At `default`'s gradient, a 0.75 m³/s
   floor on the river branch drops 636 km of edge 1450, 1250 and 1350 lines in the 31 groups.
 
+### link's parity reference is its `bcfishpass` config, not `default`
+
+`default` is the bundle knowledge tunes against, not a copy of bcfishpass, so never argue for or against changing it on
+parity grounds. `default` reads fwapg's annual flow table (`fwa_stream_networks_discharge`) until `default_tuned`, which
+reads wet (link#331), has been reviewed; moving `default` to MAD in every group is planned and will be done
+deliberately, not as a side effect (Al, 2026-10-27). A MAD `default` must read wet: fwapg's table covers only the
+Fraser, Peace and Columbia and skips order-8+ mainstems (`research/modelled_discharge.md`).
+
 ### Reading the tuning's stability checks: say what each one counts
 
 The checks answer different questions, and #67's article needed four review rounds to stop quoting them past what
@@ -404,6 +412,12 @@ hazard by e), why a term is there (data set and era are sampling differences a r
 prior, penalty or gate is doing; then the numbers. Al (2026-10-23, choosing #73's prior after a plain-language walk
 through separation, the scale and the prior): "our write up should teach the principles at the same time as it gives
 the results".
+
+**Keep a methods step short.** In a methodology article, explain each step in a few plain sentences, grouping what it
+does, why and how where one sentence carries them, and keep counts and settings out of its way; define each term the
+reader needs once, in its own place. A fixed what/why/how slot per step buries the reader. Al (2026-10-27, on #93's
+article): "burying the reader to meet a format is not the goal. goal is clear methodology and plain language". Read
+`writing.md` in full before drafting public prose, not its index.
 
 ### A pointer to another issue goes in that issue's body, not a comment
 
