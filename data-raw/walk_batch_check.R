@@ -103,9 +103,11 @@ for (i in seq_len(nrow(cases))) {
 if (!ref_mode && has_arg("cache")) {
   ex <- dbGetQuery(conn, "SELECT to_regclass($1) IS NOT NULL AS ok", params = list(cache_tbl))$ok
   if (!isTRUE(ex)) stop("no cache table ", cache_tbl)
+  # taken before the sample's query: a query in its params would run on this connection after it is prepared
+  key_md5 <- list(.knw_load_md5(conn, knw_discharge_load(conn)), knw_walk_md5())
   smp <- dbGetQuery(conn, sprintf(
     "SELECT * FROM %s WHERE load_md5 = $1 AND walk_md5 = $2 ORDER BY md5(blue_line_key::text || '|' || downstream_route_measure::text || '|' || src || '|' || qmin::text) LIMIT 1000",
-    cache_tbl), params = list(.knw_load_md5(conn, knw_discharge_load(conn)), knw_walk_md5()))
+    cache_tbl), params = key_md5)
   if (!nrow(smp)) stop("the cache ", cache_tbl, " holds no rows under this flow load and walk")
   rw <- do.call(rbind, lapply(split(smp, smp$src), function(p) {
     do.call(rbind, lapply(split(p, p$qmin), function(pq) {
