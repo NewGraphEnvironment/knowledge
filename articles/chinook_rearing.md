@@ -231,7 +231,7 @@ To cite this package, `citation("knowledge")` gives:
 
 Irvine A (2026). *knowledge: Fisheries Evidence and Tuned Habitat
 Thresholds for BC Watershed Groups*. New Graph Environment Ltd. Version
-0.4.11, <https://newgraphenvironment.github.io/knowledge/>.
+0.4.12, <https://newgraphenvironment.github.io/knowledge/>.
 
 Bates, Stephen, Trevor Hastie, and Robert Tibshirani. 2024.
 “Cross-Validation: What Does It Estimate and How Well Does It Do It?”

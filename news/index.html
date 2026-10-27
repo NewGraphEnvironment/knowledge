@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">knowledge</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.11</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.12</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,9 +33,13 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/v0.4.12/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.4.12" id="knowledge-0412">knowledge 0.4.12<a class="anchor" aria-label="anchor" href="#knowledge-0412"></a></h2>
+<ul><li>The methodology article, “Choosing habitat thresholds from where fish were caught”, now runs from what a threshold is straight to the flow chart and the eleven steps; how rules are told apart and where the fish sampling records are lost follow the worked snap example, before the limits.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.11" id="knowledge-0411">knowledge 0.4.11<a class="anchor" aria-label="anchor" href="#knowledge-0411"></a></h2>
 <ul><li>A retune is fast enough to iterate on the database’s host (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/87" class="external-link">#87</a>). Grading walks 500 segments per query (<code>knw_link_walks(batch =)</code>) and keeps every walk in <code>knw.walk_cache</code> (<code>cache =</code>), keyed on the flow load (<code><a href="../reference/knw_discharge_load.html">knw_discharge_load()</a></code>) and the walk’s code (<code><a href="../reference/knw_walk_md5.html">knw_walk_md5()</a></code>), so one key regrades in about 4 min with its walks cached, and a cold regrade of every key took 53 min, against 191. <code>knw_compare_rules(workers =)</code> spreads a key’s watershed groups over several connections, so one key recompares in 4.5 to 37 min (BT rearing 33, against 143); the full recompare is still about 2.9 h, bound by the database’s cores (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/101" class="external-link">#101</a>). Every grade table records its <code>walk_md5</code>, which <code>0320</code>, <code>0325</code>, <code>0330</code> and <code>data-raw/vignette_chinook.R</code> compare, and <code>0320</code> and <code>0330</code> refuse a schema built by another run at connect (<code><a href="../reference/knw_build_record.html">knw_build_record()</a></code>). <code><a href="../reference/knw_discharge_load.html">knw_discharge_load()</a></code> refuses a flow comment that does not name the historical load the walk reads. <code>research/database_builds.md</code> covers what a run reads and what a second database needs.</li>

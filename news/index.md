@@ -1,5 +1,13 @@
 # Changelog
 
+## knowledge 0.4.12
+
+- The methodology article, “Choosing habitat thresholds from where fish
+  were caught”, now runs from what a threshold is straight to the flow
+  chart and the eleven steps; how rules are told apart and where the
+  fish sampling records are lost follow the worked snap example, before
+  the limits.
+
 ## knowledge 0.4.11
 
 - A retune is fast enough to iterate on the database’s host
