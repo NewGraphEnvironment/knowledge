@@ -1,6 +1,6 @@
 # Habitat thresholds tuned for every species and life stage in one run
 
-**Verified:** 2026-10-25 (#73: every key retuned on the evidence rebuilt on wet's 2026-10-19 flows with the walk ending at
+**Verified:** 2026-10-27 for Evidence and Method's placement, flow source and gradient read (#89); 2026-10-25 (#73: every key retuned on the evidence rebuilt on wet's 2026-10-19 flows with the walk ending at
 the river's bank, on a gradient ladder to 30 %, with the grid's fit absorbing the groups and a prior on its data-set and
 era terms; graded with the curve's prior under a gate; recompared under link's through-wetland structures); first
 tuned 2026-10-17 (#57); regraded 2026-10-19 (#65); the one-SE wording and the picks at 1.96 SE 2026-10-20 (#79) ·
@@ -54,11 +54,23 @@ move before the data can tell, and what does a segment just inside or just outsi
 
 ## Evidence
 
-FDIS electrofishing site visits (`fdis_export.md`), placed on link's segments: 51,587 visits, 40,552 placed, one
-row per visit and species with catch, size classes, presence and whether an absence is blocked by a code that
+FDIS electrofishing site visits (`fdis_export.md`), placed on link's segments: 51,587 visits, 50,024 placed on the Atlas, 40,552 kept on a segment, one
+row per visit and species. Placement (#89): `scripts/0230` snaps each visit's UTM point to the nearest Freshwater Atlas
+stream with fwapg's `fwa_indexpoint()` (500 m search, `snap_tol_m`); `knw_fdis_quality()` drops a visit not placed
+(1,563: 1,037 with no usable UTM, 526 with no stream within 500 m), placed more than 100 m from its stream
+(`snap_flag_m`, 5,242) or on a stream outside the FDIS 1:50k tributary code (1,088 after the earlier drops; the check
+can disagree only where a visit carries a full tributary code (12,260 placed visits do) that the 20k-50k crosswalk
+knows, and 1,295 disagree, `data/fdis/derived/fdis_sites.csv`); `knw_link_place()` then takes link's segment at the visit's measure
+(1,491 with none). bcfishobs plays no part in the snap, but link breaks its streams at bcfishobs observations
+(`lnk_pipeline_break()`), 29 % of them FDIS's own for the twelve species codes link models (64,735 of 225,153; 44 % across
+all species), so it shapes the segment a visit takes and where it starts. The row carries catch, size classes, presence and whether an absence is blocked by a code that
 could hide the species (`knw_fdis_species()`). Each visit carries link's access code and habitat flags per
 species (re-gated on `streams_access`; link#349's disagreement is ledgered per run), wet's annual flow by source
-(`modelled_discharge.md`), the width link reads on an unmeasured stream, regulated reach, the natural barriers
+(`modelled_discharge.md`; the default, `pick`, is PCIC's VIC-GL runoff routed by Raven on PCIC's network on 86.3 % of
+the kept visits and wet's water balance on 13.7 % (where routed does not reach, or carries under 0.2 of the balance on
+the segment's own line), build `94deeb5`; routed flow reaches Atlas segments through the
+PCIC crosswalk on the `newgraph` branch of NewGraphEnvironment/fwapg, fork PRs NewGraphEnvironment/fwapg#6, fwapg#10, fwapg#21, fwapg#26 and fwapg#32, which
+upstream fwapg does not carry), the width link reads on an unmeasured stream, regulated reach, the natural barriers
 downstream per species, and walks to the first river of 1–50 m³/s on each flow source, each ending at a double-line
 river's bank (#73). Presence-only bcfishobs records never score a rule; `knw_bcfishobs_match()` ties 24,000 of them to
 their FDIS visits by collection, species and date, and the rest give the outside check. The Fish Data Submission
@@ -70,6 +82,10 @@ workbooks add 871 placed sites, 92 of them with electrofishing effort.
   lake ≥ 100 ha), 10–10,000 m² fished, in groups where link marks the species present, no code blocking its
   absence, no natural barrier to it downstream. Rearing's response is detection; spawning's is spawner evidence
   from maturity codes, which only char carry.
+- **Gradient read:** the visit's Freshwater Atlas line's (`fwa_gradient`, from `fwa_stream_networks_sp.gradient`,
+  `knw_link_flow()`), the default `cols` of `knw_rule_in()` and `knw_tune_curve()`. link applies a rule on its own
+  segments, cut from those lines, whose gradient `fresh::frs_col_generate()` recomputes from each piece's end
+  elevations after every cut; the two can differ, and scoring on link's is #92.
 - **Grid** around link's own `default` thresholds: a size test (MAD floor 0.1–1 m³/s or width floor 1–4 m, the
   species' own values and link's `default_tuned` floor joining the ladder), a gradient maximum on a ladder from 3 to
   30 % (#68; #57's ended at 9 %) plus the species' own, and an exception admitting a segment that fails the size test
