@@ -1,7 +1,7 @@
 # Snap limit sensitivity (#91), data-raw/snap_limit_sensitivity.R
-run: 2026-10-27T17:58:55Z  evidence ledger scripts/logs/habitat/20261027_evidence_build_ledger.csv (copied to scripts/logs/fdis/20261027_snap_limit_sensitivity_ledger-snap500.csv )
+run: 2026-10-27T19:32:47Z  evidence ledger scripts/logs/habitat/20261027_evidence_build_ledger.csv (copied to scripts/logs/fdis/20261027_snap_limit_sensitivity_ledger-snap500.csv )
 link a17e91773b283b021811f8b5b76b887d5f4c16e4;ee21eb1371cbc4d7a2d598f8bbeeaeb0534d7994  workers 14 
-evidence md5: b19694a62d2a16e3c0a74c2845611c4d;4f5942af479b1caa2d2a134a1cf70737;7a52ec6e88458025061a2b908dcaf663 
+evidence md5: 890d0224ce0c5cea2284c71657e4aec1;077504dfdc353910326f91e13fbd9d2b;0fde70d6c7e9e09d82f9b1736292760f 
 
 ## Code-checked disagreement by the nearest stream's distance (placed visits with a known code)
        band    n disagree share
@@ -27,37 +27,37 @@ pick        [0,25) [25,50) [50,100) [100,200) [200,500]
             confirmed unconfirmed
   [0,25)         8169       25872
   [25,50)         929        3972
-  [50,100)        656        4002
-  [100,200)       425        3696
+  [50,100)        656        4003
+  [100,200)       425        3701
   [200,500]       260        1941
 
 ## Cells: kept visits and each key's pick and one-SE region on the main fold seed
    limit_near limit_code key     sites_kept moved_kept evidence_visits
-1  100        200        CH_rear 44025      601        41875          
-2  100        200        BT_rear 44025      601        41875          
-3  200        200        CH_rear 47721      601        45282          
-4  200        200        BT_rear 47721      601        45282          
-5  500        200        CH_rear 49662      601        47006          
-6  500        200        BT_rear 49662      601        47006          
-7  100        500        CH_rear 44285      785        42116          
-8  100        500        BT_rear 44285      785        42116          
-9  200        500        CH_rear 47981      785        45523          
-10 200        500        BT_rear 47981      785        45523          
-11 500        500        CH_rear 49922      785        47247          
-12 500        500        BT_rear 49922      785        47247          
+1  100        200        CH_rear 44026      601        41876          
+2  100        200        BT_rear 44026      601        41876          
+3  200        200        CH_rear 47727      601        45288          
+4  200        200        BT_rear 47727      601        45288          
+5  500        200        CH_rear 49668      601        47012          
+6  500        200        BT_rear 49668      601        47012          
+7  100        500        CH_rear 44286      785        42117          
+8  100        500        BT_rear 44286      785        42117          
+9  200        500        CH_rear 47987      785        45529          
+10 200        500        BT_rear 47987      785        45529          
+11 500        500        CH_rear 49928      785        47253          
+12 500        500        BT_rear 49928      785        47253          
    visits_in detections status pick                       region_n
-1   7285      222       fitted mad>=0.75|g<=0.15|Q3@D1000  64     
+1   7283      222       fitted mad>=0.75|g<=0.15|Q3@D1000  64     
 2  11313     1253       fitted mad>=0.1|g<=0.25|none      244     
-3   7616      229       fitted mad>=0.75|g<=0.13|Q3@D1000 154     
-4  11735     1268       fitted mad>=0.1|g<=0.25|none      138     
-5   7908      235       fitted mad>=0.75|g<=0.2|Q3@D2000   92     
-6  12079     1273       fitted mad>=0.1|g<=0.25|none      121     
-7   7330      228       fitted mad>=0.15|g<=0.3|Q3@D2000  188     
+3   7614      229       fitted mad>=0.75|g<=0.13|Q3@D1000 154     
+4  11734     1268       fitted mad>=0.1|g<=0.25|none      139     
+5   7905      235       fitted mad>=0.75|g<=0.2|Q3@D2000   92     
+6  12077     1273       fitted mad>=0.1|g<=0.25|none      123     
+7   7328      228       fitted mad>=0.15|g<=0.3|Q3@D2000  188     
 8  11384     1267       fitted mad>=0.1|g<=0.25|none       91     
-9   7661      235       fitted mad>=0.75|g<=0.15|Q3@D1000 117     
-10 11806     1282       fitted mad>=0.1|g<=0.25|none       91     
-11  7953      241       fitted mad>=0.75|g<=0.2|Q3@D2000   51     
-12 12150     1287       fitted mad>=0.1|g<=0.25|none       63     
+9   7659      235       fitted mad>=0.75|g<=0.15|Q3@D1000 117     
+10 11805     1282       fitted mad>=0.1|g<=0.25|none       91     
+11  7950      241       fitted mad>=0.75|g<=0.2|Q3@D2000   51     
+12 12148     1287       fitted mad>=0.1|g<=0.25|none       63     
 
 ## Region moves between limits (either pick outside the other's region)
   a_near a_code b_near b_code moves_CH_rear moves_BT_rear
@@ -68,4 +68,4 @@ pick        [0,25) [25,50) [50,100) [100,200) [200,500]
 5    500    200    500    500         FALSE         FALSE
 
 chosen: limit_near 200 m, limit_code 500 m
-elapsed 24.8 min
+elapsed 22.6 min

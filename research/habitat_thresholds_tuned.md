@@ -57,7 +57,7 @@ move before the data can tell, and what does a segment just inside or just outsi
 **From #91 (2026-10-27) the evidence is placed differently, and the results below do not rest on it yet.**
 `scripts/0230` now snaps with `fresh::frs_point_snap()` to the nearest stream and to the streams each visit's 1:50k
 code names, keeps an unconfirmed pick to 200 m and a code-confirmed one to 500 m, and never lands on an unmapped,
-placeholder, subsurface (1425) or watershed-group-boundary connector (6010) line (`fdis_export.md`, "Placement"). That evidence keeps 45,523 visits on
+placeholder or watershed-group-boundary connector (6010) line (`fdis_export.md`, "Placement"). That evidence keeps 45,529 visits on
 link's segments where the paragraph below keeps 40,552. The tables in this file describe the #73 run until #92's
 retune scores the new evidence.
 

@@ -138,7 +138,8 @@ within 500 m: to the nearest stream, and to each 20k stream its FDIS 1:50k water
 - **Confirmed:** the code names a stream within reach. The visit goes on the nearest such stream, even past a
   nearer one ("moved"). Confirmed means on *some* stream the code names, which is what the old check asked. A
   code naming several 20k keys can confirm a tributary other than the one the surveyor meant, and most codes on
-  these visits name several: of the 10,889 the crosswalk knows, 4,045 name one key, 3,039 two, 2,222 three to
+  these visits name several: in the probe's count (from `fish.rds`, without the codes `0230` pools from dropped
+  repeat copies), of the 10,889 the crosswalk knows, 4,045 name one key, 3,039 two, 2,222 three to
   five, 1,195 six to twenty and 388 more.
 - **Unconfirmed:** the visit has no code the crosswalk knows. It goes on the nearest stream.
 - **No named stream in reach:** the code names streams, none within 500 m. The visit keeps the nearest stream
@@ -146,13 +147,17 @@ within 500 m: to the nearest stream, and to each 20k stream its FDIS 1:50k water
 
 An unconfirmed pick beyond 200 m (`snap_limit`) and a confirmed one beyond 500 m (`snap_limit_code`) are dropped
 as far snaps. fresh never snaps to an unmapped line (no local code) or a placeholder (`999`) line, and `0230`
-excludes subsurface flow (1425, fresh's default) and the connectors that carry a stream across a watershed-group
-boundary (6010) as well. link's segments carry no unmapped, placeholder or 6010 line, so a visit `fwa_indexpoint()`
-put on one could never be placed on link's segments. They do carry 1425 lines; the nearest line is one for 13
-visits, which now go to the next stream. Other construction-line connectors (1400, 1410, 1450) stay candidates.
+excludes the connectors that carry a stream across a watershed-group boundary (6010) as well. link's segments
+carry none of those three kinds, so a visit `fwa_indexpoint()` put on one could never be placed on link's segments;
+the nearest line is a 6010 connector for 3 visits, which go to the next stream. Subsurface flow (1425), which fresh
+excludes by default, stays a candidate because link's segments carry it: excluding it, as the probe did, lost three
+visits link had placed and gained none. In the final build all 13 visits whose nearest line is 1425 are placed on
+it, and 12 are kept (one is 221 m away with no code). Other construction-line connectors (1400, 1410, 1450) stay
+candidates too.
 
 **What changed against `fwa_indexpoint()`** (the probe, `data-raw/snap_candidate_check.R`, on the 2026-10-17
-placement and link's schema of that run). Its classes partition the 50,550 visits with a usable point:
+placement and link's schema of that run; its new snap also excluded 1425, which the final build does not). Its
+classes partition the 50,550 visits with a usable point:
 
 | class | visits | link places them, before | after |
 |---|---|---|---|
@@ -189,7 +194,7 @@ So the unconfirmed limit is 200 m, though the 100–200 m band clears one in thr
 compares five pairs of cells (each unconfirmed limit of 100, 200 and 500 m against the next, with confirmed picks
 at 500 m; and 200 against 500 m for confirmed picks at each unconfirmed limit). In none of them did either key's
 pick fall outside the other cell's one-SE region, so neither limit stepped down. That check is weak, because the
-regions hold 51 to 244 rules. Across all 36 ordered pairs of the six cells one pick falls outside another's region:
+regions hold 51 to 244 rules. Across the 30 ordered pairs of the six cells, for each key, one pick falls outside another's region:
 CH rearing's at 200/200 (`g<=0.13`) is outside the 500/500 cell's 51-rule region. CH rearing's pick moves between
 cells (`g<=0.15` at 200/500, `g<=0.3` with a smaller flow floor at 100/500), and BT rearing's pick is the same rule
 in all six.
@@ -202,13 +207,13 @@ flow load):
 
 | step | before | after |
 |---|---|---|
-| not placed | 1,563 | 1,665 |
+| not placed | 1,563 | 1,659 |
 | far snap | 5,242 | 1,941 |
 | 1:50k code mismatch | 1,088 | 377 |
 | no link segment | 1,491 | 178 |
-| kept | 40,552 | 45,523 |
+| kept | 40,552 | 45,529 |
 
-Of the 45,523 kept visits, 10,210 are confirmed by their code and 748 were moved to a named stream past a nearer
+Of the 45,529 kept visits, 10,210 are confirmed by their code and 748 were moved to a named stream past a nearer
 one (the ledger's `kept_snap_*` rows, 10,247 and 754, are counted before link's segment drops 178).
 The FISS workbook sites (`0250`) still snap with `fwa_indexpoint()` and a 100 m flag, so `flag_far_snap` in the
 bound `data/fdis_evidence.csv` and `data/fiss_evidence.csv` is not one placement. fresh#266 (open) proposes a new

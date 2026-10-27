@@ -8,11 +8,13 @@ info,run_fresh_sha,0,e247ca19a7803982dc7e5f55dbbf377dfc85d007
 info,run_fwapg_sha,0,f9718cb739d376155641f484456eb2a93ce2f481
 info,run_config_hash,0,sha256:7e9dffa4a5b84d99c30928ecaf5eda30e7ccf9342f1fc53a2d9a3ce2840eb66b
 info,build_record,0,"build: schema fresh_default_20261017, run 20261017_004619-3f4c713b; flows wet_db_load(): discharge/fwa/v1/segment_monthly, scenario historical last loaded from https://fresh-bc.s3.us-west-2.amazonaws.com/discharge/fwa/v1/manifest.json (built 2026-10-19T06:08:31Z, wet 94deeb5); walk c3f7bdbecff1d55107f28afa59d7f532; fresh 0.43.0"
-info,md5_sites,0,b5b0df2b2fc296da423fae3e9e01eca4
+info,md5_sites,0,8cdc1a10464359e32f706984a7363219
 info,md5_catch,0,a31fd7bbe2febbe31d70fc8f4cd3a161
 info,md5_fish,0,8cf273515ce2b692c3719130eac75b93
 info,fdis_sites_in,51587,
-drop,not_placed,1665,not placed on the FWA network
+info,snap_limit_m,500,the limit 0230 placed with (its reconcile.csv)
+info,snap_limit_code_m,500,the limit 0230 placed with (its reconcile.csv)
+drop,not_placed,1659,not placed on the FWA network
 drop,far_snap,0,"snapped beyond the placement limit (one limit for a pick the 1:50k code confirms, one for the rest)"
 drop,ws50_mismatch,434,FDIS 1:50k watershed code names no stream within the snap search
 drop,junk_date,23,
@@ -23,22 +25,22 @@ info,kept_snap_moved,754,kept on a named stream that is not the nearest one (mov
 info,link_version,0,0.66.0
 info,species_pooling_md5,0,31ca5df552fdef1160b271dd7cb04ee6
 info,bt_dv_pooled_wsgs,122,
-info,species_BT,4648,present on 4648 visits; absent 41926; blocked 871; unknown 0; in link's range 39531
-info,species_CH,1305,present on 1305 visits; absent 45684; blocked 456; unknown 0; in link's range 25413
-info,species_CM,57,present on 57 visits; absent 46912; blocked 476; unknown 0; in link's range 12567
-info,species_CO,2738,present on 2738 visits; absent 44306; blocked 401; unknown 0; in link's range 20335
-info,species_GR,1301,present on 1301 visits; absent 45718; blocked 426; unknown 0; in link's range 12342
-info,species_KO,699,present on 699 visits; absent 46221; blocked 525; unknown 0; in link's range 2379
-info,species_PK,15,present on 15 visits; absent 46951; blocked 479; unknown 0; in link's range 14312
-info,species_RB,11133,present on 11133 visits; absent 35762; blocked 550; unknown 0; in link's range 46720
-info,species_SK,83,present on 83 visits; absent 46221; blocked 1141; unknown 0; in link's range 18112
-info,species_ST,308,present on 308 visits; absent 46203; blocked 934; unknown 0; in link's range 15876
-info,species_WCT,1510,present on 1510 visits; absent 43380; blocked 2555; unknown 0; in link's range 9259
+info,species_BT,4648,present on 4648 visits; absent 41932; blocked 871; unknown 0; in link's range 39537
+info,species_CH,1305,present on 1305 visits; absent 45690; blocked 456; unknown 0; in link's range 25419
+info,species_CM,57,present on 57 visits; absent 46918; blocked 476; unknown 0; in link's range 12567
+info,species_CO,2738,present on 2738 visits; absent 44312; blocked 401; unknown 0; in link's range 20335
+info,species_GR,1301,present on 1301 visits; absent 45724; blocked 426; unknown 0; in link's range 12342
+info,species_KO,699,present on 699 visits; absent 46227; blocked 525; unknown 0; in link's range 2379
+info,species_PK,15,present on 15 visits; absent 46957; blocked 479; unknown 0; in link's range 14312
+info,species_RB,11133,present on 11133 visits; absent 35768; blocked 550; unknown 0; in link's range 46726
+info,species_SK,83,present on 83 visits; absent 46227; blocked 1141; unknown 0; in link's range 18118
+info,species_ST,308,present on 308 visits; absent 46209; blocked 934; unknown 0; in link's range 15876
+info,species_WCT,1510,present on 1510 visits; absent 43386; blocked 2555; unknown 0; in link's range 9259
 info,link_multi_match,0,max overlap 0.0000 m
 info,species_with_access,11,BT;CH;CM;CO;PK;SK;ST;WCT;KO;RB;GR
 info,species_with_habitat,11,BT;CH;CM;CO;GR;KO;PK;RB;SK;ST;WCT
 drop,no_link_segment,198,no fresh_default_20261017 segment on the visit's blue line at its measure
-info,segment_starts_in_window,23574,
+info,segment_starts_in_window,23572,
 info,wet_manifest,0,discharge/fwa/v1 built 2026-10-24T12:23:01Z at https://fresh-bc.s3.us-west-2.amazonaws.com/discharge/fwa/v1/manifest.json
 info,wet_loaded_build,0,"wet_db_load(): discharge/fwa/v1/segment_monthly, scenario historical last loaded from https://fresh-bc.s3.us-west-2.amazonaws.com/discharge/fwa/v1/manifest.json (built 2026-10-19T06:08:31Z, wet 94deeb5)"
 info,wet_loaded_pcic_routed,3154131,picked annual rows; 3377037 segments loaded (wet_db_load() filters the manifest's rows on load)
@@ -49,7 +51,7 @@ info,code_from_parent,0,
 info,cw_model_control,7504,recomputed model within 5 % of the stored MODELLED width on 94.6 %; median ratio 0.999
 info,width_source_FIELD_MEASURMENT,19110,
 info,width_source_FWA_RIVERS_POLY,8562,
-info,width_source_MODELLED,11978,
+info,width_source_MODELLED,11984,
 info,cw_deploy_null,10098,
 info,regulating_dams_placed,101,
 info,regulated,5399,
@@ -77,18 +79,18 @@ info,access_disagree_RB,481275,"habitat accessible, access = 0: 147445 rearing, 
 info,access_disagree_SK,11298,"habitat accessible, access = 0: 193 rearing, 59 spawning, 2119 km"
 info,access_disagree_ST,9611,"habitat accessible, access = 0: 434 rearing, 77 spawning, 1911 km"
 info,access_disagree_WCT,2284,"habitat accessible, access = 0: 44 rearing, 17 spawning, 466 km"
-info,walk_starts,37886,x 3 sources x 7 sizes; 6.4 min on 4 workers
-info,walk_cache_hit,0,start-and-source pairs read from knw.walk_cache
-info,walk_cache_miss,113658,start-and-source pairs walked and kept in knw.walk_cache
+info,walk_starts,37889,x 3 sources x 7 sizes; 0.8 min on 4 workers
+info,walk_cache_hit,113643,start-and-source pairs read from knw.walk_cache
+info,walk_cache_miss,24,start-and-source pairs walked and kept in knw.walk_cache
 info,walk_convention,0,"bank: the distance ends at the river's bank and counts every hop's gap (fresh 0.42.0's rule, #73)"
-info,walk_bank_m_positive,499965,"of 723046 found rows; median 67.6 m, 90th percentile 1672.0 m"
-info,walk_pick_found,246093,"rows, all sizes"
+info,walk_bank_m_positive,500028,"of 723109 found rows; median 67.6 m, 90th percentile 1672.0 m"
+info,walk_pick_found,246114,"rows, all sizes"
 info,walk_pick_none,19109,"rows, all sizes"
-info,walk_pcic_routed_found,230779,"rows, all sizes"
+info,walk_pcic_routed_found,230800,"rows, all sizes"
 info,walk_pcic_routed_none,34423,"rows, all sizes"
-info,walk_wet_balance_found,246174,"rows, all sizes"
+info,walk_wet_balance_found,246195,"rows, all sizes"
 info,walk_wet_balance_none,19028,"rows, all sizes"
-info,walk_targets,16602,"1590 on regulated reaches, 1768 in lakes"
+info,walk_targets,16602,"1590 on regulated reaches, 1767 in lakes"
 info,zone_zip,7729083,md5 f369d684fd3939acbdd6b06097a3d4b0 https://catalogue.data.gov.bc.ca/dataset/f1f86c41-ae83-49d5-92e1-526897b99fa2/resource/fc209bd0-26ab-4f8b-9415-8f34081a3c0e/download/bc_hydrologic_zones.zip
 info,zone_unmatched,0,
 info,workbook_species_rows,1165,1154 sites; 92 rows score (electrofishing with effort)
@@ -143,4 +145,4 @@ info,bcfishobs_RB_unmatched,10541,
 info,bcfishobs_SK_unmatched,921,
 info,bcfishobs_ST_unmatched,2266,
 info,bcfishobs_WCT_unmatched,739,
-kept,visits_kept,47247,
+kept,visits_kept,47253,

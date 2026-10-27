@@ -11,12 +11,12 @@
 # A tibble: 12 × 17
    species_group size_class       sites sites_measured_gradient gradient_q10
    <chr>         <chr>            <int>                   <int>        <dbl>
- 1 CH            absent           47695                   19259         1   
+ 1 CH            absent           47701                   19259         1   
  2 CH            fry                312                      98         0.5 
  3 CH            older_juvenile       5                       2        NA   
  4 CH            parr               229                      75         0.5 
  5 CH            present_any_size  1354                     138         0.5 
- 6 char          absent           41885                   17424         1   
+ 6 char          absent           41891                   17424         1   
  7 char          adult              860                      65         1.1 
  8 char          fry               1721                     951         1   
  9 char          juvenile          2671                    1567         1.25
@@ -58,7 +58,7 @@
  3                     1                2.34             2.63
  4                     0.27             0.96             5.57
  5                     0.32             0.17             4.72
- 6                     0.45             3.2             17.9 
+ 6                     0.45             3.19            17.9 
  7                     0.01             0.06             4.44
  8                     0.17             3.26            15.8 
  9                     0.14             3.47            15.8 

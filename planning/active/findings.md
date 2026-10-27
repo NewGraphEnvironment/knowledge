@@ -216,7 +216,7 @@ The old snap is the placement `0230` stored on 2026-10-17 (`sites.rds`), not a r
 the 500 m build's ledger copied beside them): code-checked disagreement by the nearest stream's distance is 7.5 %,
 16.6 %, 27.1 %, 33.2 % (126 of 379) and 55.8 % in the five bands, so the rule's unconfirmed limit is 200 m, the
 100–200 m band clearing one in three by 0.1 point. In none of the five pairs the rule compares did a key's region move, so
-neither limit stepped down. (Across all 36 ordered pairs of cells, one pick falls outside another's region: CH's at
+neither limit stepped down. (Across the 30 ordered pairs of cells for each key, one pick falls outside another's region: CH's at
 200/200 is outside the 500/500 cell's; review round 1 caught an earlier sentence here that said none did.) The regions are wide, 51 to 244 rules, so the
 region check is weak: CH rearing's pick is `mad>=0.75|g<=0.15|Q3@D1000` at 200/500 and `mad>=0.15|g<=0.3|Q3@D2000`
 at 100/500, each inside the other's region. BT rearing's pick is `mad>=0.1|g<=0.25|none` in all six cells.
@@ -227,14 +227,14 @@ The evidence ledger before (2026-10-22, `fwa_indexpoint()`, 100 m, today's schem
 | step | before | after |
 |---|---|---|
 | visits in | 51,587 | 51,587 |
-| not placed | 1,563 | 1,665 |
+| not placed | 1,563 | 1,659 |
 | far snap | 5,242 | 1,941 |
 | 1:50k code mismatch | 1,088 | 377 |
 | junk date | 23 | 23 |
 | no effort | 1,353 | 1,593 |
 | unknown catch | 275 | 287 |
 | no link segment | 1,491 | 178 |
-| kept | 40,552 | 45,523 |
+| kept | 40,552 | 45,529 |
 | kept, confirmed by the code | | 10,247 |
 | kept, moved to a named stream | | 754 |
 | segment start within the window | 19,255 | 22,877 |
@@ -246,6 +246,21 @@ far 1,941 (every unconfirmed pick beyond 200 m), code with no named stream in re
 line is subsurface or a connector. The 500 m build's `0310` walked 113,658 start-and-source pairs cold in 6.4 min
 from the remote link and cached them; the final run read all 110,775 it needed in 0.7 min. wet's flow load was the
 2026-10-19 one throughout.
+
+## Review round 3: subsurface lines stay candidates (2026-10-27)
+
+Phase 1 read the exclusion set off the counts as `c(1425, 6010)`. Round 3 traced the 16 visits whose nearest line is
+one of those (13 on 1425, 3 on 6010) through the final build (from the probe's csv.gz, `sites.rds` and
+`visits_link.csv`). Five of the 1425 visits had an old pick on 1425, and link placed all five. Under the exclusion,
+two of those (`144337_1_1`, `171064_24_1`) went to another line 17 m away and were kept, while three were lost:
+`112386_1_1` and `121402_2_1` found no other stream within 500 m, and `112387_1_1` landed 416 m away and was dropped
+as far. Four more (`121397`–`121400`) found no stream at all. link's segments carry 1425 (353 in
+`fresh_default_20261017.streams`), so excluding it gains nothing. The set is now `6010` only. The probe stays as it
+ran (its `EXCLUDE` default 1425,6010 is the record of what was measured). This reruns the 500 m build, its evidence,
+the sensitivity and the final build. The rerun (2026-10-27, 19:00–19:44Z) gives the same disagreement table, the same
+picks and the same limits (200/500); the final build keeps 45,529 (six more), not placed 1,659, and all 13 visits
+whose nearest line is 1425 are placed on it (12 kept). The tables above are updated to it; the 500 m build's own
+numbers (47,247 kept etc.) move by six or so and are not restated.
 
 ## Phase 4's rule, fixed before the run (2026-10-27)
 
