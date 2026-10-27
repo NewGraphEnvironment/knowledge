@@ -1,5 +1,31 @@
 # Changelog
 
+## knowledge 0.4.11
+
+- A retune is fast enough to iterate on the database’s host
+  ([\#87](https://github.com/NewGraphEnvironment/knowledge/issues/87)).
+  Grading walks 500 segments per query (`knw_link_walks(batch =)`) and
+  keeps every walk in `knw.walk_cache` (`cache =`), keyed on the flow
+  load
+  ([`knw_discharge_load()`](https://newgraphenvironment.github.io/knowledge/reference/knw_discharge_load.md))
+  and the walk’s code
+  ([`knw_walk_md5()`](https://newgraphenvironment.github.io/knowledge/reference/knw_walk_md5.md)),
+  so one key regrades in about 4 min with its walks cached, and a cold
+  regrade of every key took 53 min, against 191.
+  `knw_compare_rules(workers =)` spreads a key’s watershed groups over
+  several connections, so one key recompares in 4.5 to 37 min (BT
+  rearing 33, against 143); the full recompare is still about 2.9 h,
+  bound by the database’s cores
+  ([\#101](https://github.com/NewGraphEnvironment/knowledge/issues/101)).
+  Every grade table records its `walk_md5`, which `0320`, `0325`, `0330`
+  and `data-raw/vignette_chinook.R` compare, and `0320` and `0330`
+  refuse a schema built by another run at connect
+  ([`knw_build_record()`](https://newgraphenvironment.github.io/knowledge/reference/knw_build_record.md)).
+  [`knw_discharge_load()`](https://newgraphenvironment.github.io/knowledge/reference/knw_discharge_load.md)
+  refuses a flow comment that does not name the historical load the walk
+  reads. `research/database_builds.md` covers what a run reads and what
+  a second database needs.
+
 ## knowledge 0.4.10
 
 - A methodology article, “Choosing habitat thresholds from where fish
