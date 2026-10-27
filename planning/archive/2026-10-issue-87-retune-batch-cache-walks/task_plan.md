@@ -174,7 +174,7 @@ exploration found that shapes the design is in `findings.md` ("Exploration"), wi
       clean, round 3 enumerating 21 boundary crossings; round 4 over the code and docs since (`2851566`): no code bug, five
       claims corrected, `0330`'s flow-load check added, an empty CONFIG_SHA inside `38bd09f`'s fix enumerated over 17
       environment reads; round 5 over that change clean); `devtools::test()`, `devtools::document()`, `pkgdown::check_pkgdown()`.
-- [ ] `/planning-archive` with the Measurement and Evidence sections; `/gh-pr-push`.
+- [x] `/planning-archive` with the Measurement and Evidence sections; `/gh-pr-push`.
 
 ## Owed at the end (reported, done after merge)
 
@@ -190,8 +190,8 @@ exploration found that shapes the design is in `findings.md` ("Exploration"), wi
 
 - [x] Tests pass
 - [x] `/code-check` clean (once over the branch with `/code-check branch`)
-- [ ] PWF checkboxes match landed work
-- [ ] `/planning-archive` on completion
+- [x] PWF checkboxes match landed work
+- [x] `/planning-archive` on completion
 
 How each change is proved:
 - Batching: `data-raw/walk_batch_check.R`, the reference starts matched one for one and identical, plus the live test
