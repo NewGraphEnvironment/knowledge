@@ -87,15 +87,15 @@ checked against the code as it stands today (main `80ea4c1`).
 
 ## Phase 3: render script and diagrams
 
-- [ ] Install DiagrammeR, DiagrammeRsvg, rsvg (data-raw only).
-- [ ] Prototype: two steps' boxes with fresh's and link's stickers (`man/figures/logo_small.png` in each repo) inside
+- [x] Install DiagrammeR, DiagrammeRsvg, rsvg (data-raw only).
+- [x] Prototype: two steps' boxes with fresh's and link's stickers (`man/figures/logo_small.png` in each repo) inside
       Graphviz boxes; keep stickers only if labels stay readable at article width, otherwise colour alone.
-- [ ] `data-raw/vignette_method.R` writes `inst/vignette-data/method.rds` and the SVGs: flow chart from
+- [x] `data-raw/vignette_method.R` writes `inst/vignette-data/method.rds` and the SVGs: flow chart from
       `pipeline.csv`; record funnel from `scripts/logs/habitat/20261022_evidence_build_ledger.csv` (51,587 in; not
       placed 1,563, far snap 5,242, ws50 1,088, …; in range per species) to modelled per species from
       `data/thresholds.csv`; data-lineage diagram (FDIS, Atlas via fwapg, PCIC, wet, link, bcfishobs); per-step counts;
       provenance (commit, date, ledger and table md5s), as `vignette_chinook.R` does.
-- [ ] Extend `test-vignette-data.R`'s md5 check to `method.rds`'s sources.
+- [x] Extend `test-vignette-data.R`'s md5 check to `method.rds`'s sources.
 
 ## Phase 4: the article (draft, off the site)
 

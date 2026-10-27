@@ -155,3 +155,13 @@ checked everywhere, CI included once #98 lands.
 - The chinook article's check uses FDIS visits (`fdis_visits`), not `bcfishobs_outside`, so the article does not report
   the bcfishobs check; the rewritten sentence says bcfishobs scores no rule rather than pointing at a section.
 - The group library holds no PCIC, VIC-GL or Raven item; the fork has none either.
+
+## Phase 3 (2026-10-27)
+
+- Hex stickers: tried inside Graphviz (viz.js) via post-processed SVG `<image>` beside the legend entries; at ~700 px
+  the four stickers are identical black hexes with unreadable names, and fwapg has none. Dropped per the gate's
+  "clarity first"; package is box colour (Okabe-Ito hexes).
+- The lineage chart read worse left to right (long edges across the page); top to bottom with 1.5 in boxes is 904 pt
+  wide, about 0.78 scale in an article column.
+- `summarise()` trap met: drops computed after `across()` summed the flags read 0; reordered and the stage counts are
+  now checked to add up.

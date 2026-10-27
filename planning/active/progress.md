@@ -28,3 +28,11 @@
   `script:` takes a `Sys.getenv()` default; 24 rows added (60 in all); tests for code literals, the region multiplier in
   `.tune_sel` on a toy matrix, completeness of #93's named settings, and more "names nothing" cases. 172 passed;
   mutations go red (SQL hop cap 61: 1 failure; region at 0.1 SE: 2).
+- Phase 3: DiagrammeR 1.0.12, DiagrammeRsvg 0.1, rsvg 2.7.0 installed. Stickers prototyped beside the legend
+  (inside the step boxes they would crowd the labels): at a legible chart width they are identical black hexes whose
+  names cannot be read, so they are dropped and package is box colour alone. `data-raw/vignette_method.R` resolves all
+  60 rows (78 wheres: fn 56, code 10, script 7, ext 4 at link `102762d` / wet `94deeb5`, record 1) and stops on a
+  mismatch (planted bridge 5000: stopped, nothing written); the funnel's recomputed populations equal every rearing
+  key's `visits_in`; examples: BULK visit 102443_1_1 kept (38.1 m, four streams in reach), 103962_6_1 dropped (239.7 m);
+  on BULK's segments the overlay and connectivity drop 999 default and 225 tuned segments the predicate passed, add
+  none. `test-vignette-data.R` checks the bundle's md5s (ignored sources where present): 163 passed.

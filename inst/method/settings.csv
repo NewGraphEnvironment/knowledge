@@ -58,4 +58,4 @@ bridge_gradient,10,Connectivity bridge gradient,0.05,m/m,ext:link:inst/extdata/c
 cmp_n_boot,10,Comparison bootstrap resamples,200,,fn:knw_compare_rules:n_boot,convention,no,,
 tuned_as,10,Wetland structure reported as tuned,door,,script:scripts/0330-compare.R:tuned_as,convention,no,,
 cmp_seed_boot,10,Comparison bootstrap seed,542,,fn:knw_compare_rules:seed_boot,convention,no,,
-link_default_flow,10,Flow link's default bundle reads,fwapg,,ext:link:inst/extdata/configs/default/config.yaml:discharge_source,inherited,no,89,"default sets no discharge_source, so link reads fwapg's annual table; the evidence, grades and comparison read wet's pick"
+link_default_flow,10,discharge_source in link's default bundle,unset,,ext:link:inst/extdata/configs/default/config.yaml:pipeline.discharge_source,inherited,no,89,"unset, so link's default reads fwapg's annual flow table; the evidence, grades and comparison read wet's pick"
