@@ -1,0 +1,551 @@
+# Choosing habitat thresholds from where fish were caught
+
+The R package [`link`](https://newgraphenvironment.github.io/link/) maps
+where each fish species can live in British Columbia’s streams. For
+every stretch of stream it asks a few plain questions: is it big enough,
+is it too steep, and can fish get to it? Each question has a cut-off.
+This article describes how we are testing those cut-offs against
+evidence: the places crews have electrofished, and whether they caught
+the species there. We try many possible cut-offs and keep the ones that
+best tell the two kinds of site apart, then check that they hold on
+parts of the province they were not chosen from. The steps run in order,
+from the fish records to values link can read.
+
+## What is a threshold, and what does “tuned” mean?
+
+A **threshold** is one of those cut-offs: a minimum stream size or a
+maximum slope. A **rule** is the few thresholds a species uses together.
+A **tuned** threshold is one chosen by the test this article describes
+rather than taken from the literature or set by judgment.
+
+For chinook rearing, for example, link’s current rule counts a stream as
+habitat if it is at least 1.5 m wide, no steeper than 5.5 %. The fish
+records support a rule where it carries at least 0.75 m³/s, no steeper
+than 13 %; a smaller stream also counts if it passes the slope test and
+a river carrying at least 3 m³/s lies within 1 km downstream. We tested
+between 6,100 and 8,400 candidate rules for each of the 7 species and
+life stages with enough records. The [chinook rearing
+article](https://newgraphenvironment.github.io/knowledge/articles/chinook_rearing.md)
+works through one of them in full.
+
+## How are two rules told apart?
+
+Each rule gets a **score**: how well “habitat or not” predicts where the
+species was caught, at sites in watershed groups that were left out
+while the model was fitted. Lower is better.
+
+Scores move with the sites we happen to have. The **standard error
+(SE)** of the difference between two rules’ scores says how far that
+difference would move with a different set of watershed groups. Rules
+whose scores are within 1 SE of the best are **close calls**: the
+records cannot rank them. From the close calls we take the one that
+changes link’s current rule least.
+
+One SE is a rule of thumb, fixed before the run. 1.96 SE is the stricter
+reading, about the width of a 95 % interval: more rules become close
+calls, and the choice can stay nearer link’s rule. Both are reported.
+
+| species and stage | link’s rule | close calls at 1 SE | chosen at 1 SE | close calls at 1.96 SE | chosen at 1.96 SE |
+|:---|:---|:---|:---|:---|:---|
+| bull trout rearing | is at least 1.5 m wide, no steeper than 10.5 % | 316 | carries at least 0.35 m³/s, no steeper than 25 % | 3,312 | carries at least 0.35 m³/s, no steeper than 10.5 % |
+| bull trout spawning | is at least 2 m wide, no steeper than 5.5 % | 333 | is at least 2 m wide, no steeper than 13 % | 5,774 | is at least 2 m wide, no steeper than 5.5 % |
+| chinook rearing | is at least 1.5 m wide, no steeper than 5.5 % | 84 | carries at least 0.75 m³/s, no steeper than 13 %; a smaller stream also counts if it passes the slope test and a river carrying at least 3 m³/s lies within 1 km downstream | 2,102 | carries at least 1 m³/s, no steeper than 5.5 %; a smaller stream also counts if it passes the slope test and a river carrying at least 3 m³/s lies within 1 km downstream |
+| coho rearing | is at least 1.5 m wide, no steeper than 5.5 % | 89 | carries at least 0.03 m³/s, no steeper than 4 % | 1,511 | is at least 1.5 m wide, no steeper than 4 % |
+| grayling rearing | is at least 1.5 m wide, no steeper than 3.5 % | 1,231 | is at least 1.5 m wide, no steeper than 3.5 % | 7,337 | is at least 1.5 m wide, no steeper than 3.5 % |
+| rainbow trout rearing | is at least 1.5 m wide, no steeper than 8.5 % | 14 | is at least 3 m wide, no steeper than 30 % | 463 | is at least 3 m wide, no steeper than 30 % |
+| steelhead rearing | is at least 1.5 m wide, no steeper than 8.5 % | 1,034 | carries at least 1 m³/s, no steeper than 8.5 % | 6,434 | is at least 1.5 m wide, no steeper than 8.5 % |
+
+link’s current rule and the rule chosen at each width of close call, for
+each species and stage tuned. {.table}
+
+## What happens, in order?
+
+The 11 steps are each done by one package. Each box links to its package
+or source; each step links to its section below.
+
+![](data:image/svg+xml;base64,PHN2ZyBzdHlsZT0ibWF4LXdpZHRoOjEwMCU7aGVpZ2h0OmF1dG8iIHdpZHRoPSI1MzlwdCIgaGVpZ2h0PSI2OTdwdCIgdmlld2JveD0iMC4wMCAwLjAwIDUzOS4wMCA2OTYuODAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiPjxnIGlkPSJncmFwaDAiIGNsYXNzPSJncmFwaCIgdHJhbnNmb3JtPSJzY2FsZSgxIDEpIHJvdGF0ZSgwKSB0cmFuc2xhdGUoNCA2OTIuOCkiPjx0aXRsZT4KcGlwZWxpbmUKPC90aXRsZT4KPGcgaWQ9ImNsdXN0MSIgY2xhc3M9ImNsdXN0ZXIiPjx0aXRsZT4KY2x1c3Rlcl9zcmMKPC90aXRsZT4KPHBhdGggZmlsbD0idHJhbnNwYXJlbnQiIHN0cm9rZT0iI2JiYmJiYiIgc3Ryb2tlLWRhc2hhcnJheT0iNSwyIiBkPSJNODEsLTYzOC44QzgxLC02MzguOCA1MTEsLTYzOC44IDUxMSwtNjM4LjggNTE3LC02MzguOCA1MjMsLTY0NC44IDUyMywtNjUwLjggNTIzLC02NTAuOCA1MjMsLTY2OC44IDUyMywtNjY4LjggNTIzLC02NzQuOCA1MTcsLTY4MC44IDUxMSwtNjgwLjggNTExLC02ODAuOCA4MSwtNjgwLjggODEsLTY4MC44IDc1LC02ODAuOCA2OSwtNjc0LjggNjksLTY2OC44IDY5LC02NjguOCA2OSwtNjUwLjggNjksLTY1MC44IDY5LC02NDQuOCA3NSwtNjM4LjggODEsLTYzOC44IiAvPjwvZz48ZyBpZD0iY2x1c3QzIiBjbGFzcz0iY2x1c3RlciI+PHRpdGxlPgpjbHVzdGVyX2xlZwo8L3RpdGxlPgo8cGF0aCBmaWxsPSJ0cmFuc3BhcmVudCIgc3Ryb2tlPSIjYmJiYmJiIiBkPSJNMjAsLTU4OC44QzIwLC01ODguOCA0NDQsLTU4OC44IDQ0NCwtNTg4LjggNDUwLC01ODguOCA0NTYsLTU5NC44IDQ1NiwtNjAwLjggNDU2LC02MDAuOCA0NTYsLTYxOC44IDQ1NiwtNjE4LjggNDU2LC02MjQuOCA0NTAsLTYzMC44IDQ0NCwtNjMwLjggNDQ0LC02MzAuOCAyMCwtNjMwLjggMjAsLTYzMC44IDE0LC02MzAuOCA4LC02MjQuOCA4LC02MTguOCA4LC02MTguOCA4LC02MDAuOCA4LC02MDAuOCA4LC01OTQuOCAxNCwtNTg4LjggMjAsLTU4OC44IiAvPjwvZz48IS0tIHhfZmRpcyAtLT48ZyBpZD0ibm9kZTEiIGNsYXNzPSJub2RlIj48dGl0bGU+CnhfZmRpcwo8L3RpdGxlPgo8ZyBpZD0iYV9ub2RlMSI+PGEgeGxpbms6aHJlZj0iaHR0cHM6Ly9mcmVzaC1iYy5zMy51cy13ZXN0LTIuYW1hem9uYXdzLmNvbS9mZGlzL1JFQURNRS5tZCIgeGxpbms6dGl0bGU9IkZESVMgZWxlY3Ryb2Zpc2hpbmciIHRhcmdldD0iX3RvcCI+CjxwYXRoIGZpbGw9IiNkZGRkZGQiIHN0cm9rZT0idHJhbnNwYXJlbnQiIGQ9Ik01MDYuMTIwNywtNjcwLjhDNTA2LjEyMDcsLTY3MC44IDQxOS44NzkzLC02NzAuOCA0MTkuODc5MywtNjcwLjggNDE2LjIxMjYsLTY3MC44IDQxMi41NDYsLTY2Ny4xMzMzIDQxMi41NDYsLTY2My40NjY3IDQxMi41NDYsLTY2My40NjY3IDQxMi41NDYsLTY1Ni4xMzMzIDQxMi41NDYsLTY1Ni4xMzMzIDQxMi41NDYsLTY1Mi40NjY3IDQxNi4yMTI2LC02NDguOCA0MTkuODc5MywtNjQ4LjggNDE5Ljg3OTMsLTY0OC44IDUwNi4xMjA3LC02NDguOCA1MDYuMTIwNywtNjQ4LjggNTA5Ljc4NzQsLTY0OC44IDUxMy40NTQsLTY1Mi40NjY3IDUxMy40NTQsLTY1Ni4xMzMzIDUxMy40NTQsLTY1Ni4xMzMzIDUxMy40NTQsLTY2My40NjY3IDUxMy40NTQsLTY2My40NjY3IDUxMy40NTQsLTY2Ny4xMzMzIDUwOS43ODc0LC02NzAuOCA1MDYuMTIwNywtNjcwLjgiIC8+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iNDYzIiB5PSItNjU2LjgiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2Esc2Fucy1TZXJpZiIgZm9udC1zaXplPSIxMC4wMCIgZmlsbD0iIzAwMDAwMCI+RkRJUwplbGVjdHJvZmlzaGluZzwvdGV4dD48L2E+IDwvZz48L2c+PCEtLSB4X2Z3YSAtLT48ZyBpZD0ibm9kZTIiIGNsYXNzPSJub2RlIj48dGl0bGU+CnhfZndhCjwvdGl0bGU+CjxnIGlkPSJhX25vZGUyIj48YSB4bGluazpocmVmPSJodHRwczovL3d3dzIuZ292LmJjLmNhL2dvdi9jb250ZW50L2RhdGEvZ2VvZ3JhcGhpYy1kYXRhLXNlcnZpY2VzL3RvcG9ncmFwaGljLWRhdGEvZnJlc2h3YXRlciIgeGxpbms6dGl0bGU9IkZyZXNod2F0ZXIgQXRsYXMiIHRhcmdldD0iX3RvcCI+CjxwYXRoIGZpbGw9IiNkZGRkZGQiIHN0cm9rZT0idHJhbnNwYXJlbnQiIGQ9Ik0zODMuMTcyNywtNjcwLjhDMzgzLjE3MjcsLTY3MC44IDMwNi44MjczLC02NzAuOCAzMDYuODI3MywtNjcwLjggMzAzLjE2MDcsLTY3MC44IDI5OS40OTQsLTY2Ny4xMzMzIDI5OS40OTQsLTY2My40NjY3IDI5OS40OTQsLTY2My40NjY3IDI5OS40OTQsLTY1Ni4xMzMzIDI5OS40OTQsLTY1Ni4xMzMzIDI5OS40OTQsLTY1Mi40NjY3IDMwMy4xNjA3LC02NDguOCAzMDYuODI3MywtNjQ4LjggMzA2LjgyNzMsLTY0OC44IDM4My4xNzI3LC02NDguOCAzODMuMTcyNywtNjQ4LjggMzg2LjgzOTMsLTY0OC44IDM5MC41MDYsLTY1Mi40NjY3IDM5MC41MDYsLTY1Ni4xMzMzIDM5MC41MDYsLTY1Ni4xMzMzIDM5MC41MDYsLTY2My40NjY3IDM5MC41MDYsLTY2My40NjY3IDM5MC41MDYsLTY2Ny4xMzMzIDM4Ni44MzkzLC02NzAuOCAzODMuMTcyNywtNjcwLjgiIC8+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iMzQ1IiB5PSItNjU2LjgiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2Esc2Fucy1TZXJpZiIgZm9udC1zaXplPSIxMC4wMCIgZmlsbD0iIzAwMDAwMCI+RnJlc2h3YXRlcgpBdGxhczwvdGV4dD48L2E+IDwvZz48L2c+PCEtLSB4X3BjaWMgLS0+PGcgaWQ9Im5vZGUzIiBjbGFzcz0ibm9kZSI+PHRpdGxlPgp4X3BjaWMKPC90aXRsZT4KPGcgaWQ9ImFfbm9kZTMiPjxhIHhsaW5rOmhyZWY9Imh0dHBzOi8vd3d3LnBhY2lmaWNjbGltYXRlLm9yZy8iIHhsaW5rOnRpdGxlPSJQQ0lDIHN0cmVhbWZsb3ciIHRhcmdldD0iX3RvcCI+CjxwYXRoIGZpbGw9IiNkZGRkZGQiIHN0cm9rZT0idHJhbnNwYXJlbnQiIGQ9Ik0yNzAuMTYyNywtNjcwLjhDMjcwLjE2MjcsLTY3MC44IDE5My44MzczLC02NzAuOCAxOTMuODM3MywtNjcwLjggMTkwLjE3MDcsLTY3MC44IDE4Ni41MDQsLTY2Ny4xMzMzIDE4Ni41MDQsLTY2My40NjY3IDE4Ni41MDQsLTY2My40NjY3IDE4Ni41MDQsLTY1Ni4xMzMzIDE4Ni41MDQsLTY1Ni4xMzMzIDE4Ni41MDQsLTY1Mi40NjY3IDE5MC4xNzA3LC02NDguOCAxOTMuODM3MywtNjQ4LjggMTkzLjgzNzMsLTY0OC44IDI3MC4xNjI3LC02NDguOCAyNzAuMTYyNywtNjQ4LjggMjczLjgyOTMsLTY0OC44IDI3Ny40OTYsLTY1Mi40NjY3IDI3Ny40OTYsLTY1Ni4xMzMzIDI3Ny40OTYsLTY1Ni4xMzMzIDI3Ny40OTYsLTY2My40NjY3IDI3Ny40OTYsLTY2My40NjY3IDI3Ny40OTYsLTY2Ny4xMzMzIDI3My44MjkzLC02NzAuOCAyNzAuMTYyNywtNjcwLjgiIC8+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iMjMyIiB5PSItNjU2LjgiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2Esc2Fucy1TZXJpZiIgZm9udC1zaXplPSIxMC4wMCIgZmlsbD0iIzAwMDAwMCI+UENJQwpzdHJlYW1mbG93PC90ZXh0PjwvYT4gPC9nPjwvZz48IS0tIGxfbGluayAtLT48ZyBpZD0ibm9kZTciIGNsYXNzPSJub2RlIj48dGl0bGU+CmxfbGluawo8L3RpdGxlPgo8ZyBpZD0iYV9ub2RlNyI+PGEgeGxpbms6aHJlZj0iaHR0cHM6Ly9uZXdncmFwaGVudmlyb25tZW50LmdpdGh1Yi5pby9saW5rLyIgeGxpbms6dGl0bGU9ImxpbmsiIHRhcmdldD0iX3RvcCI+CjxwYXRoIGZpbGw9IiNkNTVlMDAiIHN0cm9rZT0idHJhbnNwYXJlbnQiIGQ9Ik0yNTguNjY2NywtNjIwLjhDMjU4LjY2NjcsLTYyMC44IDIwNS4zMzMzLC02MjAuOCAyMDUuMzMzMywtNjIwLjggMjAxLjY2NjcsLTYyMC44IDE5OCwtNjE3LjEzMzMgMTk4LC02MTMuNDY2NyAxOTgsLTYxMy40NjY3IDE5OCwtNjA2LjEzMzMgMTk4LC02MDYuMTMzMyAxOTgsLTYwMi40NjY3IDIwMS42NjY3LC01OTguOCAyMDUuMzMzMywtNTk4LjggMjA1LjMzMzMsLTU5OC44IDI1OC42NjY3LC01OTguOCAyNTguNjY2NywtNTk4LjggMjYyLjMzMzMsLTU5OC44IDI2NiwtNjAyLjQ2NjcgMjY2LC02MDYuMTMzMyAyNjYsLTYwNi4xMzMzIDI2NiwtNjEzLjQ2NjcgMjY2LC02MTMuNDY2NyAyNjYsLTYxNy4xMzMzIDI2Mi4zMzMzLC02MjAuOCAyNTguNjY2NywtNjIwLjgiIC8+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iMjMyIiB5PSItNjA2LjgiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2Esc2Fucy1TZXJpZiIgZm9udC1zaXplPSIxMC4wMCIgZmlsbD0iI2ZmZmZmZiI+bGluazwvdGV4dD48L2E+IDwvZz48L2c+PCEtLSB4X3BjaWMmIzQ1OyZndDtsX2xpbmsgLS0+PCEtLSB4X29icyAtLT48ZyBpZD0ibm9kZTQiIGNsYXNzPSJub2RlIj48dGl0bGU+Cnhfb2JzCjwvdGl0bGU+CjxnIGlkPSJhX25vZGU0Ij48YSB4bGluazpocmVmPSJodHRwczovL2dpdGh1Yi5jb20vc21ub3JyaXMvYmNmaXNob2JzIiB4bGluazp0aXRsZT0iYmNmaXNob2JzIiB0YXJnZXQ9Il90b3AiPgo8cGF0aCBmaWxsPSIjZGRkZGRkIiBzdHJva2U9InRyYW5zcGFyZW50IiBkPSJNMTU3LjY2NjcsLTY3MC44QzE1Ny42NjY3LC02NzAuOCA4Ni4zMzMzLC02NzAuOCA4Ni4zMzMzLC02NzAuOCA4Mi42NjY3LC02NzAuOCA3OSwtNjY3LjEzMzMgNzksLTY2My40NjY3IDc5LC02NjMuNDY2NyA3OSwtNjU2LjEzMzMgNzksLTY1Ni4xMzMzIDc5LC02NTIuNDY2NyA4Mi42NjY3LC02NDguOCA4Ni4zMzMzLC02NDguOCA4Ni4zMzMzLC02NDguOCAxNTcuNjY2NywtNjQ4LjggMTU3LjY2NjcsLTY0OC44IDE2MS4zMzMzLC02NDguOCAxNjUsLTY1Mi40NjY3IDE2NSwtNjU2LjEzMzMgMTY1LC02NTYuMTMzMyAxNjUsLTY2My40NjY3IDE2NSwtNjYzLjQ2NjcgMTY1LC02NjcuMTMzMyAxNjEuMzMzMywtNjcwLjggMTU3LjY2NjcsLTY3MC44IiAvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjEyMiIgeT0iLTY1Ni44IiBmb250LWZhbWlseT0iSGVsdmV0aWNhLHNhbnMtU2VyaWYiIGZvbnQtc2l6ZT0iMTAuMDAiIGZpbGw9IiMwMDAwMDAiPmJjZmlzaG9iczwvdGV4dD48L2E+IDwvZz48L2c+PCEtLSBsX2tub3dsZWRnZSAtLT48ZyBpZD0ibm9kZTUiIGNsYXNzPSJub2RlIj48dGl0bGU+Cmxfa25vd2xlZGdlCjwvdGl0bGU+CjxnIGlkPSJhX25vZGU1Ij48YSB4bGluazpocmVmPSJodHRwczovL25ld2dyYXBoZW52aXJvbm1lbnQuZ2l0aHViLmlvL2tub3dsZWRnZS8iIHhsaW5rOnRpdGxlPSJrbm93bGVkZ2UiIHRhcmdldD0iX3RvcCI+CjxwYXRoIGZpbGw9IiMwMDcyYjIiIHN0cm9rZT0idHJhbnNwYXJlbnQiIGQ9Ik00MzguNjY2NywtNjIwLjhDNDM4LjY2NjcsLTYyMC44IDM4NS4zMzMzLC02MjAuOCAzODUuMzMzMywtNjIwLjggMzgxLjY2NjcsLTYyMC44IDM3OCwtNjE3LjEzMzMgMzc4LC02MTMuNDY2NyAzNzgsLTYxMy40NjY3IDM3OCwtNjA2LjEzMzMgMzc4LC02MDYuMTMzMyAzNzgsLTYwMi40NjY3IDM4MS42NjY3LC01OTguOCAzODUuMzMzMywtNTk4LjggMzg1LjMzMzMsLTU5OC44IDQzOC42NjY3LC01OTguOCA0MzguNjY2NywtNTk4LjggNDQyLjMzMzMsLTU5OC44IDQ0NiwtNjAyLjQ2NjcgNDQ2LC02MDYuMTMzMyA0NDYsLTYwNi4xMzMzIDQ0NiwtNjEzLjQ2NjcgNDQ2LC02MTMuNDY2NyA0NDYsLTYxNy4xMzMzIDQ0Mi4zMzMzLC02MjAuOCA0MzguNjY2NywtNjIwLjgiIC8+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iNDEyIiB5PSItNjA2LjgiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2Esc2Fucy1TZXJpZiIgZm9udC1zaXplPSIxMC4wMCIgZmlsbD0iI2ZmZmZmZiI+a25vd2xlZGdlPC90ZXh0PjwvYT4gPC9nPjwvZz48IS0tIGxfZndhcGcgLS0+PGcgaWQ9Im5vZGU2IiBjbGFzcz0ibm9kZSI+PHRpdGxlPgpsX2Z3YXBnCjwvdGl0bGU+CjxnIGlkPSJhX25vZGU2Ij48YSB4bGluazpocmVmPSJodHRwczovL3Ntbm9ycmlzLmdpdGh1Yi5pby9md2FwZy8iIHhsaW5rOnRpdGxlPSJmd2FwZyIgdGFyZ2V0PSJfdG9wIj4KPHBhdGggZmlsbD0iIzAwOWU3MyIgc3Ryb2tlPSJ0cmFuc3BhcmVudCIgZD0iTTM0OC42NjY3LC02MjAuOEMzNDguNjY2NywtNjIwLjggMjk1LjMzMzMsLTYyMC44IDI5NS4zMzMzLC02MjAuOCAyOTEuNjY2NywtNjIwLjggMjg4LC02MTcuMTMzMyAyODgsLTYxMy40NjY3IDI4OCwtNjEzLjQ2NjcgMjg4LC02MDYuMTMzMyAyODgsLTYwNi4xMzMzIDI4OCwtNjAyLjQ2NjcgMjkxLjY2NjcsLTU5OC44IDI5NS4zMzMzLC01OTguOCAyOTUuMzMzMywtNTk4LjggMzQ4LjY2NjcsLTU5OC44IDM0OC42NjY3LC01OTguOCAzNTIuMzMzMywtNTk4LjggMzU2LC02MDIuNDY2NyAzNTYsLTYwNi4xMzMzIDM1NiwtNjA2LjEzMzMgMzU2LC02MTMuNDY2NyAzNTYsLTYxMy40NjY3IDM1NiwtNjE3LjEzMzMgMzUyLjMzMzMsLTYyMC44IDM0OC42NjY3LC02MjAuOCIgLz48dGV4dCB0ZXh0LWFuY2hvcj0ibWlkZGxlIiB4PSIzMjIiIHk9Ii02MDYuOCIgZm9udC1mYW1pbHk9IkhlbHZldGljYSxzYW5zLVNlcmlmIiBmb250LXNpemU9IjEwLjAwIiBmaWxsPSIjZmZmZmZmIj5md2FwZzwvdGV4dD48L2E+IDwvZz48L2c+PCEtLSBzMSAtLT48ZyBpZD0ibm9kZTEwIiBjbGFzcz0ibm9kZSI+PHRpdGxlPgpzMQo8L3RpdGxlPgo8ZyBpZD0iYV9ub2RlMTAiPjxhIHhsaW5rOmhyZWY9IiNzdGVwLTEiIHhsaW5rOnRpdGxlPSJzdGVwIDEiIHRhcmdldD0iX3NlbGYiPgo8cGF0aCBmaWxsPSIjMDA3MmIyIiBzdHJva2U9InRyYW5zcGFyZW50IiBkPSJNMzIxLC01ODAuOEMzMjEsLTU4MC44IDE0MywtNTgwLjggMTQzLC01ODAuOCAxMzcsLTU4MC44IDEzMSwtNTc0LjggMTMxLC01NjguOCAxMzEsLTU2OC44IDEzMSwtNTU2LjggMTMxLC01NTYuOCAxMzEsLTU1MC44IDEzNywtNTQ0LjggMTQzLC01NDQuOCAxNDMsLTU0NC44IDMyMSwtNTQ0LjggMzIxLC01NDQuOCAzMjcsLTU0NC44IDMzMywtNTUwLjggMzMzLC01NTYuOCAzMzMsLTU1Ni44IDMzMywtNTY4LjggMzMzLC01NjguOCAzMzMsLTU3NC44IDMyNywtNTgwLjggMzIxLC01ODAuOCIgLz48dGV4dCB0ZXh0LWFuY2hvcj0ibWlkZGxlIiB4PSIyMzIiIHk9Ii01NTkuMiIgZm9udC1mYW1pbHk9IkhlbHZldGljYSxzYW5zLVNlcmlmIiBmb250LXNpemU9IjEyLjAwIiBmaWxsPSIjZmZmZmZmIj4xClRoZSBmaXNoIHJlY29yZHM8L3RleHQ+PC9hPiA8L2c+PC9nPjwhLS0gbF9saW5rJiM0NTsmZ3Q7czEgLS0+PCEtLSBsX3dldCAtLT48ZyBpZD0ibm9kZTgiIGNsYXNzPSJub2RlIj48dGl0bGU+Cmxfd2V0CjwvdGl0bGU+CjxnIGlkPSJhX25vZGU4Ij48YSB4bGluazpocmVmPSJodHRwczovL25ld2dyYXBoZW52aXJvbm1lbnQuZ2l0aHViLmlvL3dldC8iIHhsaW5rOnRpdGxlPSJ3ZXQiIHRhcmdldD0iX3RvcCI+CjxwYXRoIGZpbGw9IiM1NmI0ZTkiIHN0cm9rZT0idHJhbnNwYXJlbnQiIGQ9Ik0xNjguNjY2NywtNjIwLjhDMTY4LjY2NjcsLTYyMC44IDExNS4zMzMzLC02MjAuOCAxMTUuMzMzMywtNjIwLjggMTExLjY2NjcsLTYyMC44IDEwOCwtNjE3LjEzMzMgMTA4LC02MTMuNDY2NyAxMDgsLTYxMy40NjY3IDEwOCwtNjA2LjEzMzMgMTA4LC02MDYuMTMzMyAxMDgsLTYwMi40NjY3IDExMS42NjY3LC01OTguOCAxMTUuMzMzMywtNTk4LjggMTE1LjMzMzMsLTU5OC44IDE2OC42NjY3LC01OTguOCAxNjguNjY2NywtNTk4LjggMTcyLjMzMzMsLTU5OC44IDE3NiwtNjAyLjQ2NjcgMTc2LC02MDYuMTMzMyAxNzYsLTYwNi4xMzMzIDE3NiwtNjEzLjQ2NjcgMTc2LC02MTMuNDY2NyAxNzYsLTYxNy4xMzMzIDE3Mi4zMzMzLC02MjAuOCAxNjguNjY2NywtNjIwLjgiIC8+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iMTQyIiB5PSItNjA2LjgiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2Esc2Fucy1TZXJpZiIgZm9udC1zaXplPSIxMC4wMCIgZmlsbD0iIzAwMDAwMCI+d2V0PC90ZXh0PjwvYT4gPC9nPjwvZz48IS0tIGxfZnJlc2ggLS0+PGcgaWQ9Im5vZGU5IiBjbGFzcz0ibm9kZSI+PHRpdGxlPgpsX2ZyZXNoCjwvdGl0bGU+CjxnIGlkPSJhX25vZGU5Ij48YSB4bGluazpocmVmPSJodHRwczovL25ld2dyYXBoZW52aXJvbm1lbnQuZ2l0aHViLmlvL2ZyZXNoLyIgeGxpbms6dGl0bGU9ImZyZXNoIiB0YXJnZXQ9Il90b3AiPgo8cGF0aCBmaWxsPSIjZTY5ZjAwIiBzdHJva2U9InRyYW5zcGFyZW50IiBkPSJNNzguNjY2NywtNjIwLjhDNzguNjY2NywtNjIwLjggMjUuMzMzMywtNjIwLjggMjUuMzMzMywtNjIwLjggMjEuNjY2NywtNjIwLjggMTgsLTYxNy4xMzMzIDE4LC02MTMuNDY2NyAxOCwtNjEzLjQ2NjcgMTgsLTYwNi4xMzMzIDE4LC02MDYuMTMzMyAxOCwtNjAyLjQ2NjcgMjEuNjY2NywtNTk4LjggMjUuMzMzMywtNTk4LjggMjUuMzMzMywtNTk4LjggNzguNjY2NywtNTk4LjggNzguNjY2NywtNTk4LjggODIuMzMzMywtNTk4LjggODYsLTYwMi40NjY3IDg2LC02MDYuMTMzMyA4NiwtNjA2LjEzMzMgODYsLTYxMy40NjY3IDg2LC02MTMuNDY2NyA4NiwtNjE3LjEzMzMgODIuMzMzMywtNjIwLjggNzguNjY2NywtNjIwLjgiIC8+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iNTIiIHk9Ii02MDYuOCIgZm9udC1mYW1pbHk9IkhlbHZldGljYSxzYW5zLVNlcmlmIiBmb250LXNpemU9IjEwLjAwIiBmaWxsPSIjMDAwMDAwIj5mcmVzaDwvdGV4dD48L2E+IDwvZz48L2c+PCEtLSBzMiAtLT48ZyBpZD0ibm9kZTExIiBjbGFzcz0ibm9kZSI+PHRpdGxlPgpzMgo8L3RpdGxlPgo8ZyBpZD0iYV9ub2RlMTEiPjxhIHhsaW5rOmhyZWY9IiNzdGVwLTIiIHhsaW5rOnRpdGxlPSJzdGVwIDIiIHRhcmdldD0iX3NlbGYiPgo8cGF0aCBmaWxsPSIjMDA5ZTczIiBzdHJva2U9InRyYW5zcGFyZW50IiBkPSJNMzIxLC01MjYuNzAwNUMzMjEsLTUyNi43MDA1IDE0MywtNTI2LjcwMDUgMTQzLC01MjYuNzAwNSAxMzcsLTUyNi43MDA1IDEzMSwtNTIwLjcwMDUgMTMxLC01MTQuNzAwNSAxMzEsLTUxNC43MDA1IDEzMSwtNTAyLjA5OTUgMTMxLC01MDIuMDk5NSAxMzEsLTQ5Ni4wOTk1IDEzNywtNDkwLjA5OTUgMTQzLC00OTAuMDk5NSAxNDMsLTQ5MC4wOTk1IDMyMSwtNDkwLjA5OTUgMzIxLC00OTAuMDk5NSAzMjcsLTQ5MC4wOTk1IDMzMywtNDk2LjA5OTUgMzMzLC01MDIuMDk5NSAzMzMsLTUwMi4wOTk1IDMzMywtNTE0LjcwMDUgMzMzLC01MTQuNzAwNSAzMzMsLTUyMC43MDA1IDMyNywtNTI2LjcwMDUgMzIxLC01MjYuNzAwNSIgLz48dGV4dCB0ZXh0LWFuY2hvcj0ibWlkZGxlIiB4PSIyMzIiIHk9Ii01MTIiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2Esc2Fucy1TZXJpZiIgZm9udC1zaXplPSIxMi4wMCIgZmlsbD0iI2ZmZmZmZiI+MgpQdXR0aW5nIHNpdGVzIG9uIHRoZTwvdGV4dD48dGV4dCB0ZXh0LWFuY2hvcj0ibWlkZGxlIiB4PSIyMzIiIHk9Ii00OTcuNiIgZm9udC1mYW1pbHk9IkhlbHZldGljYSxzYW5zLVNlcmlmIiBmb250LXNpemU9IjEyLjAwIiBmaWxsPSIjZmZmZmZmIj5zdHJlYW0KbWFwPC90ZXh0PjwvYT4gPC9nPjwvZz48IS0tIHMxJiM0NTsmZ3Q7czIgLS0+PGcgaWQ9ImVkZ2UxIiBjbGFzcz0iZWRnZSI+PHRpdGxlPgpzMS0mZ3Q7czIKPC90aXRsZT4KPHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNzc3Nzc3IiBkPSJNMjMyLC01NDQuNjg1NkMyMzIsLTU0MC45NTM0IDIzMiwtNTM2Ljk2MzQgMjMyLC01MzMuMDQ0OCIgLz48cG9seWdvbiBmaWxsPSIjNzc3Nzc3IiBzdHJva2U9IiM3Nzc3NzciIHBvaW50cz0iMjM0LjEwMDEsLTUzMi45OTMgMjMyLC01MjYuOTkzIDIyOS45MDAxLC01MzIuOTkzIDIzNC4xMDAxLC01MzIuOTkzIj48L3BvbHlnb24+PC9nPjwhLS0gczMgLS0+PGcgaWQ9Im5vZGUxMiIgY2xhc3M9Im5vZGUiPjx0aXRsZT4KczMKPC90aXRsZT4KPGcgaWQ9ImFfbm9kZTEyIj48YSB4bGluazpocmVmPSIjc3RlcC0zIiB4bGluazp0aXRsZT0ic3RlcCAzIiB0YXJnZXQ9Il9zZWxmIj4KPHBhdGggZmlsbD0iI2Q1NWUwMCIgc3Ryb2tlPSJ0cmFuc3BhcmVudCIgZD0iTTMyMSwtNDcxLjkwMDVDMzIxLC00NzEuOTAwNSAxNDMsLTQ3MS45MDA1IDE0MywtNDcxLjkwMDUgMTM3LC00NzEuOTAwNSAxMzEsLTQ2NS45MDA1IDEzMSwtNDU5LjkwMDUgMTMxLC00NTkuOTAwNSAxMzEsLTQ0Ny4yOTk1IDEzMSwtNDQ3LjI5OTUgMTMxLC00NDEuMjk5NSAxMzcsLTQzNS4yOTk1IDE0MywtNDM1LjI5OTUgMTQzLC00MzUuMjk5NSAzMjEsLTQzNS4yOTk1IDMyMSwtNDM1LjI5OTUgMzI3LC00MzUuMjk5NSAzMzMsLTQ0MS4yOTk1IDMzMywtNDQ3LjI5OTUgMzMzLC00NDcuMjk5NSAzMzMsLTQ1OS45MDA1IDMzMywtNDU5LjkwMDUgMzMzLC00NjUuOTAwNSAzMjcsLTQ3MS45MDA1IDMyMSwtNDcxLjkwMDUiIC8+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iMjMyIiB5PSItNDU3LjIiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2Esc2Fucy1TZXJpZiIgZm9udC1zaXplPSIxMi4wMCIgZmlsbD0iI2ZmZmZmZiI+MwpsaW5r4oCZcyBzdHJlYW08L3RleHQ+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iMjMyIiB5PSItNDQyLjgiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2Esc2Fucy1TZXJpZiIgZm9udC1zaXplPSIxMi4wMCIgZmlsbD0iI2ZmZmZmZiI+c2VnbWVudHM8L3RleHQ+PC9hPiA8L2c+PC9nPjwhLS0gczImIzQ1OyZndDtzMyAtLT48ZyBpZD0iZWRnZTIiIGNsYXNzPSJlZGdlIj48dGl0bGU+CnMyLSZndDtzMwo8L3RpdGxlPgo8cGF0aCBmaWxsPSJub25lIiBzdHJva2U9IiM3Nzc3NzciIGQ9Ik0yMzIsLTQ4OS44NDcyQzIzMiwtNDg2LjA5NzkgMjMyLC00ODIuMTAwOSAyMzIsLTQ3OC4xODE3IiAvPjxwb2x5Z29uIGZpbGw9IiM3Nzc3NzciIHN0cm9rZT0iIzc3Nzc3NyIgcG9pbnRzPSIyMzQuMTAwMSwtNDc4LjEzMzYgMjMyLC00NzIuMTMzNyAyMjkuOTAwMSwtNDc4LjEzMzcgMjM0LjEwMDEsLTQ3OC4xMzM2Ij48L3BvbHlnb24+PC9nPjwhLS0gczQgLS0+PGcgaWQ9Im5vZGUxMyIgY2xhc3M9Im5vZGUiPjx0aXRsZT4KczQKPC90aXRsZT4KPGcgaWQ9ImFfbm9kZTEzIj48YSB4bGluazpocmVmPSIjc3RlcC00IiB4bGluazp0aXRsZT0ic3RlcCA0IiB0YXJnZXQ9Il9zZWxmIj4KPHBhdGggZmlsbD0iIzU2YjRlOSIgc3Ryb2tlPSJ0cmFuc3BhcmVudCIgZD0iTTMyMSwtNDE3LjEwMDVDMzIxLC00MTcuMTAwNSAxNDMsLTQxNy4xMDA1IDE0MywtNDE3LjEwMDUgMTM3LC00MTcuMTAwNSAxMzEsLTQxMS4xMDA1IDEzMSwtNDA1LjEwMDUgMTMxLC00MDUuMTAwNSAxMzEsLTM5Mi40OTk1IDEzMSwtMzkyLjQ5OTUgMTMxLC0zODYuNDk5NSAxMzcsLTM4MC40OTk1IDE0MywtMzgwLjQ5OTUgMTQzLC0zODAuNDk5NSAzMjEsLTM4MC40OTk1IDMyMSwtMzgwLjQ5OTUgMzI3LC0zODAuNDk5NSAzMzMsLTM4Ni40OTk1IDMzMywtMzkyLjQ5OTUgMzMzLC0zOTIuNDk5NSAzMzMsLTQwNS4xMDA1IDMzMywtNDA1LjEwMDUgMzMzLC00MTEuMTAwNSAzMjcsLTQxNy4xMDA1IDMyMSwtNDE3LjEwMDUiIC8+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iMjMyIiB5PSItNDAyLjQiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2Esc2Fucy1TZXJpZiIgZm9udC1zaXplPSIxMi4wMCIgZmlsbD0iIzAwMDAwMCI+NApIb3cgbXVjaCB3YXRlciBlYWNoPC90ZXh0Pjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjIzMiIgeT0iLTM4OCIgZm9udC1mYW1pbHk9IkhlbHZldGljYSxzYW5zLVNlcmlmIiBmb250LXNpemU9IjEyLjAwIiBmaWxsPSIjMDAwMDAwIj5zdHJlYW0KY2FycmllczwvdGV4dD48L2E+IDwvZz48L2c+PCEtLSBzMyYjNDU7Jmd0O3M0IC0tPjxnIGlkPSJlZGdlMyIgY2xhc3M9ImVkZ2UiPjx0aXRsZT4KczMtJmd0O3M0CjwvdGl0bGU+CjxwYXRoIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzc3Nzc3NyIgZD0iTTIzMiwtNDM1LjA0NzJDMjMyLC00MzEuMjk3OSAyMzIsLTQyNy4zMDA5IDIzMiwtNDIzLjM4MTciIC8+PHBvbHlnb24gZmlsbD0iIzc3Nzc3NyIgc3Ryb2tlPSIjNzc3Nzc3IiBwb2ludHM9IjIzNC4xMDAxLC00MjMuMzMzNiAyMzIsLTQxNy4zMzM3IDIyOS45MDAxLC00MjMuMzMzNyAyMzQuMTAwMSwtNDIzLjMzMzYiPjwvcG9seWdvbj48L2c+PCEtLSBzNSAtLT48ZyBpZD0ibm9kZTE0IiBjbGFzcz0ibm9kZSI+PHRpdGxlPgpzNQo8L3RpdGxlPgo8ZyBpZD0iYV9ub2RlMTQiPjxhIHhsaW5rOmhyZWY9IiNzdGVwLTUiIHhsaW5rOnRpdGxlPSJzdGVwIDUiIHRhcmdldD0iX3NlbGYiPgo8cGF0aCBmaWxsPSIjMDA3MmIyIiBzdHJva2U9InRyYW5zcGFyZW50IiBkPSJNMzIxLC0zNjIuMzAwNUMzMjEsLTM2Mi4zMDA1IDE0MywtMzYyLjMwMDUgMTQzLC0zNjIuMzAwNSAxMzcsLTM2Mi4zMDA1IDEzMSwtMzU2LjMwMDUgMTMxLC0zNTAuMzAwNSAxMzEsLTM1MC4zMDA1IDEzMSwtMzM3LjY5OTUgMTMxLC0zMzcuNjk5NSAxMzEsLTMzMS42OTk1IDEzNywtMzI1LjY5OTUgMTQzLC0zMjUuNjk5NSAxNDMsLTMyNS42OTk1IDMyMSwtMzI1LjY5OTUgMzIxLC0zMjUuNjk5NSAzMjcsLTMyNS42OTk1IDMzMywtMzMxLjY5OTUgMzMzLC0zMzcuNjk5NSAzMzMsLTMzNy42OTk1IDMzMywtMzUwLjMwMDUgMzMzLC0zNTAuMzAwNSAzMzMsLTM1Ni4zMDA1IDMyNywtMzYyLjMwMDUgMzIxLC0zNjIuMzAwNSIgLz48dGV4dCB0ZXh0LWFuY2hvcj0ibWlkZGxlIiB4PSIyMzIiIHk9Ii0zNDcuNiIgZm9udC1mYW1pbHk9IkhlbHZldGljYSxzYW5zLVNlcmlmIiBmb250LXNpemU9IjEyLjAwIiBmaWxsPSIjZmZmZmZmIj41CkpvaW5pbmcgZWFjaCBzaXRlIHRvPC90ZXh0Pjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjIzMiIgeT0iLTMzMy4yIiBmb250LWZhbWlseT0iSGVsdmV0aWNhLHNhbnMtU2VyaWYiIGZvbnQtc2l6ZT0iMTIuMDAiIGZpbGw9IiNmZmZmZmYiPml0cwpzZWdtZW50PC90ZXh0PjwvYT4gPC9nPjwvZz48IS0tIHM0JiM0NTsmZ3Q7czUgLS0+PGcgaWQ9ImVkZ2U0IiBjbGFzcz0iZWRnZSI+PHRpdGxlPgpzNC0mZ3Q7czUKPC90aXRsZT4KPHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNzc3Nzc3IiBkPSJNMjMyLC0zODAuMjQ3MkMyMzIsLTM3Ni40OTc5IDIzMiwtMzcyLjUwMDkgMjMyLC0zNjguNTgxNyIgLz48cG9seWdvbiBmaWxsPSIjNzc3Nzc3IiBzdHJva2U9IiM3Nzc3NzciIHBvaW50cz0iMjM0LjEwMDEsLTM2OC41MzM2IDIzMiwtMzYyLjUzMzcgMjI5LjkwMDEsLTM2OC41MzM3IDIzNC4xMDAxLC0zNjguNTMzNiI+PC9wb2x5Z29uPjwvZz48IS0tIHM2IC0tPjxnIGlkPSJub2RlMTUiIGNsYXNzPSJub2RlIj48dGl0bGU+CnM2CjwvdGl0bGU+CjxnIGlkPSJhX25vZGUxNSI+PGEgeGxpbms6aHJlZj0iI3N0ZXAtNiIgeGxpbms6dGl0bGU9InN0ZXAgNiIgdGFyZ2V0PSJfc2VsZiI+CjxwYXRoIGZpbGw9IiMwMDcyYjIiIHN0cm9rZT0idHJhbnNwYXJlbnQiIGQ9Ik0zMjEsLTMwNy42QzMyMSwtMzA3LjYgMTQzLC0zMDcuNiAxNDMsLTMwNy42IDEzNywtMzA3LjYgMTMxLC0zMDEuNiAxMzEsLTI5NS42IDEzMSwtMjk1LjYgMTMxLC0yODMuNiAxMzEsLTI4My42IDEzMSwtMjc3LjYgMTM3LC0yNzEuNiAxNDMsLTI3MS42IDE0MywtMjcxLjYgMzIxLC0yNzEuNiAzMjEsLTI3MS42IDMyNywtMjcxLjYgMzMzLC0yNzcuNiAzMzMsLTI4My42IDMzMywtMjgzLjYgMzMzLC0yOTUuNiAzMzMsLTI5NS42IDMzMywtMzAxLjYgMzI3LC0zMDcuNiAzMjEsLTMwNy42IiAvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjIzMiIgeT0iLTI4NiIgZm9udC1mYW1pbHk9IkhlbHZldGljYSxzYW5zLVNlcmlmIiBmb250LXNpemU9IjEyLjAwIiBmaWxsPSIjZmZmZmZmIj42CkNhbmRpZGF0ZSBydWxlczwvdGV4dD48L2E+IDwvZz48L2c+PCEtLSBzNSYjNDU7Jmd0O3M2IC0tPjxnIGlkPSJlZGdlNSIgY2xhc3M9ImVkZ2UiPjx0aXRsZT4KczUtJmd0O3M2CjwvdGl0bGU+CjxwYXRoIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzc3Nzc3NyIgZD0iTTIzMiwtMzI1LjU4MjZDMjMyLC0zMjEuNzc5NyAyMzIsLTMxNy43MjAyIDIzMiwtMzEzLjc0ODYiIC8+PHBvbHlnb24gZmlsbD0iIzc3Nzc3NyIgc3Ryb2tlPSIjNzc3Nzc3IiBwb2ludHM9IjIzNC4xMDAxLC0zMTMuNjI5NCAyMzIsLTMwNy42Mjk0IDIyOS45MDAxLC0zMTMuNjI5NCAyMzQuMTAwMSwtMzEzLjYyOTQiPjwvcG9seWdvbj48L2c+PCEtLSBzNyAtLT48ZyBpZD0ibm9kZTE2IiBjbGFzcz0ibm9kZSI+PHRpdGxlPgpzNwo8L3RpdGxlPgo8ZyBpZD0iYV9ub2RlMTYiPjxhIHhsaW5rOmhyZWY9IiNzdGVwLTciIHhsaW5rOnRpdGxlPSJzdGVwIDciIHRhcmdldD0iX3NlbGYiPgo8cGF0aCBmaWxsPSIjMDA3MmIyIiBzdHJva2U9InRyYW5zcGFyZW50IiBkPSJNMzIxLC0yNTMuNkMzMjEsLTI1My42IDE0MywtMjUzLjYgMTQzLC0yNTMuNiAxMzcsLTI1My42IDEzMSwtMjQ3LjYgMTMxLC0yNDEuNiAxMzEsLTI0MS42IDEzMSwtMjI5LjYgMTMxLC0yMjkuNiAxMzEsLTIyMy42IDEzNywtMjE3LjYgMTQzLC0yMTcuNiAxNDMsLTIxNy42IDMyMSwtMjE3LjYgMzIxLC0yMTcuNiAzMjcsLTIxNy42IDMzMywtMjIzLjYgMzMzLC0yMjkuNiAzMzMsLTIyOS42IDMzMywtMjQxLjYgMzMzLC0yNDEuNiAzMzMsLTI0Ny42IDMyNywtMjUzLjYgMzIxLC0yNTMuNiIgLz48dGV4dCB0ZXh0LWFuY2hvcj0ibWlkZGxlIiB4PSIyMzIiIHk9Ii0yMzIiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2Esc2Fucy1TZXJpZiIgZm9udC1zaXplPSIxMi4wMCIgZmlsbD0iI2ZmZmZmZiI+NwpTY29yaW5nIGFuZCBjaG9vc2luZzwvdGV4dD48L2E+IDwvZz48L2c+PCEtLSBzNiYjNDU7Jmd0O3M3IC0tPjxnIGlkPSJlZGdlNiIgY2xhc3M9ImVkZ2UiPjx0aXRsZT4KczYtJmd0O3M3CjwvdGl0bGU+CjxwYXRoIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzc3Nzc3NyIgZD0iTTIzMiwtMjcxLjMxODFDMjMyLC0yNjcuNzExNCAyMzIsLTI2My44NzIzIDIzMiwtMjYwLjA5ODgiIC8+PHBvbHlnb24gZmlsbD0iIzc3Nzc3NyIgc3Ryb2tlPSIjNzc3Nzc3IiBwb2ludHM9IjIzNC4xMDAxLC0yNTkuODYzMSAyMzIsLTI1My44NjMxIDIyOS45MDAxLC0yNTkuODYzMSAyMzQuMTAwMSwtMjU5Ljg2MzEiPjwvcG9seWdvbj48L2c+PCEtLSBzOCAtLT48ZyBpZD0ibm9kZTE3IiBjbGFzcz0ibm9kZSI+PHRpdGxlPgpzOAo8L3RpdGxlPgo8ZyBpZD0iYV9ub2RlMTciPjxhIHhsaW5rOmhyZWY9IiNzdGVwLTgiIHhsaW5rOnRpdGxlPSJzdGVwIDgiIHRhcmdldD0iX3NlbGYiPgo8cGF0aCBmaWxsPSIjMDA3MmIyIiBzdHJva2U9InRyYW5zcGFyZW50IiBkPSJNMzIxLC0xOTkuNTAwNUMzMjEsLTE5OS41MDA1IDE0MywtMTk5LjUwMDUgMTQzLC0xOTkuNTAwNSAxMzcsLTE5OS41MDA1IDEzMSwtMTkzLjUwMDUgMTMxLC0xODcuNTAwNSAxMzEsLTE4Ny41MDA1IDEzMSwtMTc0Ljg5OTUgMTMxLC0xNzQuODk5NSAxMzEsLTE2OC44OTk1IDEzNywtMTYyLjg5OTUgMTQzLC0xNjIuODk5NSAxNDMsLTE2Mi44OTk1IDMyMSwtMTYyLjg5OTUgMzIxLC0xNjIuODk5NSAzMjcsLTE2Mi44OTk1IDMzMywtMTY4Ljg5OTUgMzMzLC0xNzQuODk5NSAzMzMsLTE3NC44OTk1IDMzMywtMTg3LjUwMDUgMzMzLC0xODcuNTAwNSAzMzMsLTE5My41MDA1IDMyNywtMTk5LjUwMDUgMzIxLC0xOTkuNTAwNSIgLz48dGV4dCB0ZXh0LWFuY2hvcj0ibWlkZGxlIiB4PSIyMzIiIHk9Ii0xODQuOCIgZm9udC1mYW1pbHk9IkhlbHZldGljYSxzYW5zLVNlcmlmIiBmb250LXNpemU9IjEyLjAwIiBmaWxsPSIjZmZmZmZmIj44CkNoZWNraW5nIHRoZSBjaG9pY2U8L3RleHQ+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iMjMyIiB5PSItMTcwLjQiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2Esc2Fucy1TZXJpZiIgZm9udC1zaXplPSIxMi4wMCIgZmlsbD0iI2ZmZmZmZiI+aXMKbm90IGx1Y2s8L3RleHQ+PC9hPiA8L2c+PC9nPjwhLS0gczcmIzQ1OyZndDtzOCAtLT48ZyBpZD0iZWRnZTciIGNsYXNzPSJlZGdlIj48dGl0bGU+CnM3LSZndDtzOAo8L3RpdGxlPgo8cGF0aCBmaWxsPSJub25lIiBzdHJva2U9IiM3Nzc3NzciIGQ9Ik0yMzIsLTIxNy40ODU2QzIzMiwtMjEzLjc1MzQgMjMyLC0yMDkuNzYzNCAyMzIsLTIwNS44NDQ4IiAvPjxwb2x5Z29uIGZpbGw9IiM3Nzc3NzciIHN0cm9rZT0iIzc3Nzc3NyIgcG9pbnRzPSIyMzQuMTAwMSwtMjA1Ljc5MyAyMzIsLTE5OS43OTMgMjI5LjkwMDEsLTIwNS43OTMgMjM0LjEwMDEsLTIwNS43OTMiPjwvcG9seWdvbj48L2c+PCEtLSBzOSAtLT48ZyBpZD0ibm9kZTE4IiBjbGFzcz0ibm9kZSI+PHRpdGxlPgpzOQo8L3RpdGxlPgo8ZyBpZD0iYV9ub2RlMTgiPjxhIHhsaW5rOmhyZWY9IiNzdGVwLTkiIHhsaW5rOnRpdGxlPSJzdGVwIDkiIHRhcmdldD0iX3NlbGYiPgo8cGF0aCBmaWxsPSIjMDA3MmIyIiBzdHJva2U9InRyYW5zcGFyZW50IiBkPSJNMzIxLC0xNDQuOEMzMjEsLTE0NC44IDE0MywtMTQ0LjggMTQzLC0xNDQuOCAxMzcsLTE0NC44IDEzMSwtMTM4LjggMTMxLC0xMzIuOCAxMzEsLTEzMi44IDEzMSwtMTIwLjggMTMxLC0xMjAuOCAxMzEsLTExNC44IDEzNywtMTA4LjggMTQzLC0xMDguOCAxNDMsLTEwOC44IDMyMSwtMTA4LjggMzIxLC0xMDguOCAzMjcsLTEwOC44IDMzMywtMTE0LjggMzMzLC0xMjAuOCAzMzMsLTEyMC44IDMzMywtMTMyLjggMzMzLC0xMzIuOCAzMzMsLTEzOC44IDMyNywtMTQ0LjggMzIxLC0xNDQuOCIgLz48dGV4dCB0ZXh0LWFuY2hvcj0ibWlkZGxlIiB4PSIyMzIiIHk9Ii0xMjMuMiIgZm9udC1mYW1pbHk9IkhlbHZldGljYSxzYW5zLVNlcmlmIiBmb250LXNpemU9IjEyLjAwIiBmaWxsPSIjZmZmZmZmIj45CkEgY3VydmUgYW5kIGEgZ3JhZGU8L3RleHQ+PC9hPiA8L2c+PC9nPjwhLS0gczgmIzQ1OyZndDtzOSAtLT48ZyBpZD0iZWRnZTgiIGNsYXNzPSJlZGdlIj48dGl0bGU+CnM4LSZndDtzOQo8L3RpdGxlPgo8cGF0aCBmaWxsPSJub25lIiBzdHJva2U9IiM3Nzc3NzciIGQ9Ik0yMzIsLTE2Mi43ODI2QzIzMiwtMTU4Ljk3OTcgMjMyLC0xNTQuOTIwMiAyMzIsLTE1MC45NDg2IiAvPjxwb2x5Z29uIGZpbGw9IiM3Nzc3NzciIHN0cm9rZT0iIzc3Nzc3NyIgcG9pbnRzPSIyMzQuMTAwMSwtMTUwLjgyOTQgMjMyLC0xNDQuODI5NCAyMjkuOTAwMSwtMTUwLjgyOTQgMjM0LjEwMDEsLTE1MC44Mjk0Ij48L3BvbHlnb24+PC9nPjwhLS0gczEwIC0tPjxnIGlkPSJub2RlMTkiIGNsYXNzPSJub2RlIj48dGl0bGU+CnMxMAo8L3RpdGxlPgo8ZyBpZD0iYV9ub2RlMTkiPjxhIHhsaW5rOmhyZWY9IiNzdGVwLTEwIiB4bGluazp0aXRsZT0ic3RlcCAxMCIgdGFyZ2V0PSJfc2VsZiI+CjxwYXRoIGZpbGw9IiNlNjlmMDAiIHN0cm9rZT0idHJhbnNwYXJlbnQiIGQ9Ik0zMjEsLTkwLjcwMDVDMzIxLC05MC43MDA1IDE0MywtOTAuNzAwNSAxNDMsLTkwLjcwMDUgMTM3LC05MC43MDA1IDEzMSwtODQuNzAwNSAxMzEsLTc4LjcwMDUgMTMxLC03OC43MDA1IDEzMSwtNjYuMDk5NSAxMzEsLTY2LjA5OTUgMTMxLC02MC4wOTk1IDEzNywtNTQuMDk5NSAxNDMsLTU0LjA5OTUgMTQzLC01NC4wOTk1IDMyMSwtNTQuMDk5NSAzMjEsLTU0LjA5OTUgMzI3LC01NC4wOTk1IDMzMywtNjAuMDk5NSAzMzMsLTY2LjA5OTUgMzMzLC02Ni4wOTk1IDMzMywtNzguNzAwNSAzMzMsLTc4LjcwMDUgMzMzLC04NC43MDA1IDMyNywtOTAuNzAwNSAzMjEsLTkwLjcwMDUiIC8+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iMjMyIiB5PSItNzYiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2Esc2Fucy1TZXJpZiIgZm9udC1zaXplPSIxMi4wMCIgZmlsbD0iIzAwMDAwMCI+MTAKUnVubmluZyB0aGUgcnVsZSBvbjwvdGV4dD48dGV4dCB0ZXh0LWFuY2hvcj0ibWlkZGxlIiB4PSIyMzIiIHk9Ii02MS42IiBmb250LWZhbWlseT0iSGVsdmV0aWNhLHNhbnMtU2VyaWYiIGZvbnQtc2l6ZT0iMTIuMDAiIGZpbGw9IiMwMDAwMDAiPmxpbmvigJlzCnN0cmVhbXM8L3RleHQ+PC9hPiA8L2c+PC9nPjwhLS0gczkmIzQ1OyZndDtzMTAgLS0+PGcgaWQ9ImVkZ2U5IiBjbGFzcz0iZWRnZSI+PHRpdGxlPgpzOS0mZ3Q7czEwCjwvdGl0bGU+CjxwYXRoIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzc3Nzc3NyIgZD0iTTIzMiwtMTA4LjY4NTZDMjMyLC0xMDQuOTUzNCAyMzIsLTEwMC45NjM0IDIzMiwtOTcuMDQ0OCIgLz48cG9seWdvbiBmaWxsPSIjNzc3Nzc3IiBzdHJva2U9IiM3Nzc3NzciIHBvaW50cz0iMjM0LjEwMDEsLTk2Ljk5MyAyMzIsLTkwLjk5MyAyMjkuOTAwMSwtOTYuOTkzIDIzNC4xMDAxLC05Ni45OTMiPjwvcG9seWdvbj48L2c+PCEtLSBzMTEgLS0+PGcgaWQ9Im5vZGUyMCIgY2xhc3M9Im5vZGUiPjx0aXRsZT4KczExCjwvdGl0bGU+CjxnIGlkPSJhX25vZGUyMCI+PGEgeGxpbms6aHJlZj0iI3N0ZXAtMTEiIHhsaW5rOnRpdGxlPSJzdGVwIDExIiB0YXJnZXQ9Il9zZWxmIj4KPHBhdGggZmlsbD0iIzAwNzJiMiIgc3Ryb2tlPSJ0cmFuc3BhcmVudCIgZD0iTTMyMSwtMzZDMzIxLC0zNiAxNDMsLTM2IDE0MywtMzYgMTM3LC0zNiAxMzEsLTMwIDEzMSwtMjQgMTMxLC0yNCAxMzEsLTEyIDEzMSwtMTIgMTMxLC02IDEzNywwIDE0MywwIDE0MywwIDMyMSwwIDMyMSwwIDMyNywwIDMzMywtNiAzMzMsLTEyIDMzMywtMTIgMzMzLC0yNCAzMzMsLTI0IDMzMywtMzAgMzI3LC0zNiAzMjEsLTM2IiAvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjIzMiIgeT0iLTE0LjQiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2Esc2Fucy1TZXJpZiIgZm9udC1zaXplPSIxMi4wMCIgZmlsbD0iI2ZmZmZmZiI+MTEKUHVibGlzaGluZzwvdGV4dD48L2E+IDwvZz48L2c+PCEtLSBzMTAmIzQ1OyZndDtzMTEgLS0+PGcgaWQ9ImVkZ2UxMCIgY2xhc3M9ImVkZ2UiPjx0aXRsZT4KczEwLSZndDtzMTEKPC90aXRsZT4KPHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNzc3Nzc3IiBkPSJNMjMyLC01My45ODI2QzIzMiwtNTAuMTc5NyAyMzIsLTQ2LjEyMDIgMjMyLC00Mi4xNDg2IiAvPjxwb2x5Z29uIGZpbGw9IiM3Nzc3NzciIHN0cm9rZT0iIzc3Nzc3NyIgcG9pbnRzPSIyMzQuMTAwMSwtNDIuMDI5NCAyMzIsLTM2LjAyOTQgMjI5LjkwMDEsLTQyLjAyOTQgMjM0LjEwMDEsLTQyLjAyOTQiPjwvcG9seWdvbj48L2c+PC9nPjwvc3ZnPg==)
+
+### 1. The fish records
+
+The Province’s electrofishing records ([Province of British Columbia
+2022](#ref-provinceofbritishcolumbia2022FisheriesData)): where crews
+fished, how much stream they covered, and what they caught. About 52,000
+site visits. A survey loaded twice is kept once.
+
+Code and settings
+
+- Run by: scripts/0230-fdis-load.R;
+  [`knw_fdis_quality()`](https://newgraphenvironment.github.io/knowledge/reference/knw_fdis_quality.md)
+- In: FDIS electrofishing export (2020-11-16; 2022-03-22). Out:
+  data/fdis/derived/fdis_sites.csv
+- FDIS sentinel value: 9999
+- Earliest visit year kept: 1950
+- Latest visit year kept: 2022
+
+### 2. Putting sites on the stream map
+
+Each site’s map point is moved to the nearest stream of the BC
+Freshwater Atlas ([FLNRORD 2021](#ref-flnrord2021FreshwaterAtlasb)),
+held in a database by `fwapg` ([Norris
+2024c](#ref-norris2024smnorrisfwapg)). A site is kept only if that
+stream is close (within 100 m) and, where the record names the site’s
+tributary in a form the Atlas can check, is that tributary. About 7,900
+visits are dropped here, most because the nearest stream is too far
+away.
+
+Code and settings
+
+- Run by: scripts/0230-fdis-load.R;
+  [`fwa_indexpoint`](https://smnorris.github.io/fwapg/03_functions.html#fwa-indexpoint),
+  [`knw_fdis_quality()`](https://newgraphenvironment.github.io/knowledge/reference/knw_fdis_quality.md)
+- In: FDIS site points; Freshwater Atlas streams; fwa_streams_20k_50k.
+  Out: placed visits (blue line and measure)
+- Snap search radius: 500 m
+- Snap distance limit: 100 m
+- 1:50k code length the check reads: 45 characters
+- 1:50k code digits below the basin that, all zero, mark a code not
+  checked: 42 characters
+- Open work:
+  [\#91](https://github.com/NewGraphEnvironment/knowledge/issues/91)
+
+### 3. link’s stream segments
+
+link ([Irvine 2026b](#ref-irvine2026linkDevelop)) cuts the Atlas streams
+into short segments and records, for each species, whether fish can
+reach each one and what link’s current rules call habitat. It also cuts
+streams where fish have been observed, using `bcfishobs` ([Norris
+2024a](#ref-norris2024smnorrisbcfishobs)), so those observations shape
+the segments, but they never score a rule: they say where fish were
+seen, not where they were looked for and missed.
+
+Code and settings
+
+- Run by: link’s province-wide run; `link::lnk_pipeline_run()`,
+  [`fresh::frs_habitat_classify()`](https://newgraphenvironment.github.io/fresh/reference/frs_habitat_classify.html)
+- In: Freshwater Atlas; link’s default configuration. Out:
+  fresh_default.streams; streams_access; streams_habitat\_\<species\>
+
+### 4. How much water each stream carries
+
+Flows come from `wet` ([Irvine 2026c](#ref-irvine2026wetStream)). Mostly
+that is PCIC’s modelled streamflow ([Schnorbus
+2018](#ref-schnorbus2018VICGlacierVICGL); [Craig et al.
+2020](#ref-craig_etal2020Flexiblewatershed)), carried onto Atlas streams
+by New Graph’s fork of `fwapg` ([Norris and Irvine
+2026](#ref-norris_irvine2026NewGraphEnvironmentfwapg)). Where PCIC’s
+flow does not reach a stream, or carries under a fifth of wet’s estimate
+on a stream’s own line, it is wet’s own water balance, fitted to Water
+Survey of Canada gauges ([Environment and Climate Change Canada
+2021](#ref-environmentandclimatechangecanada2021NationalWater)). About
+86 % of the kept sites use PCIC’s flow.
+
+Code and settings
+
+- Run by: wet’s discharge build; `wet::wet_db_load()`
+- In: PCIC VIC-GL runoff routed by Raven; wet’s water balance. Out:
+  discharge.fwa_v1_segment_monthly
+- Routed flow kept unless under this share of the balance’s: 0.2 ratio
+
+### 5. Joining each site to its segment
+
+Each kept site takes its segment’s flow, width and access, the slope of
+the Atlas stream line it was placed on, and the distance downstream to
+rivers of each size. Sites with no usable date, no fished area or time,
+no known catch, or no segment at their place drop out. About 41,000
+sites remain.
+
+Code and settings
+
+- Run by: scripts/0310-evidence-build.R;
+  [`knw_link_place()`](https://newgraphenvironment.github.io/knowledge/reference/knw_link_place.md),
+  [`knw_fdis_species()`](https://newgraphenvironment.github.io/knowledge/reference/knw_fdis_species.md),
+  [`knw_link_flow()`](https://newgraphenvironment.github.io/knowledge/reference/knw_link_flow.md),
+  [`knw_link_width()`](https://newgraphenvironment.github.io/knowledge/reference/knw_link_width.md),
+  [`knw_link_barrier_dnstr()`](https://newgraphenvironment.github.io/knowledge/reference/knw_link_barrier_dnstr.md),
+  [`knw_link_walks()`](https://newgraphenvironment.github.io/knowledge/reference/knw_link_walks.md),
+  [`knw_bcfishobs_match()`](https://newgraphenvironment.github.io/knowledge/reference/knw_bcfishobs_match.md)
+- In: placed visits; fresh_default; discharge.fwa_v1_segment_monthly.
+  Out: data/fdis/derived/visits_link.csv; visits_species.csv; walks.csv
+- Width model control: least share within 5 %: 0.9 share
+- Edge types a parent’s flow is never taken from: 1100, 1150, 1300,
+  1350, 2300 FWA edge type
+- Edge types a dam’s regulated reach never follows: 1100, 1150, 1300,
+  1350, 2300 FWA edge type
+- River sizes walked to: 1, 3, 5, 10, 20, 30, 50 m3/s
+- Segment start taken as the visit’s segment within: 5 m
+- Largest segment overlap tolerated: 0.01 m
+- Wetland area making a line a wetland branch: 1 ha
+- Lake area making a line a lake branch: 100 ha
+- Dam to segment snap: 500 m
+- Degree of regulation that counts a dam without a reservoir: 10 %
+- Natural barrier classes downstream: GRADIENT, FALLS, SUBSURFACE_FLOW,
+  USER_DEFINITE
+- Edge types a walk never ends on: 1100, 1150, 1300, 1350, 2300, 1400,
+  1450 FWA edge type
+- Most hops a walk takes before it stops: 60 hops
+
+### 6. Candidate rules
+
+For each species we build thousands of rules around link’s current
+values: different minimum stream sizes, slope limits, and an allowance
+for small streams close to a big river.
+
+Code and settings
+
+- Run by: scripts/0320-tune-run.R;
+  [`knw_tune_grid()`](https://newgraphenvironment.github.io/knowledge/reference/knw_tune_grid.md),
+  [`knw_rule_in()`](https://newgraphenvironment.github.io/knowledge/reference/knw_rule_in.md)
+- In: link’s parameters_habitat_thresholds.csv. Out: candidate rules per
+  species and stage
+- MAD floors in the grid: 0.1, 0.15, 0.2, 0.28, 0.35, 0.5, 0.75, 1 m3/s
+- Width floors in the grid: 1, 1.5, 2, 3, 4 m
+- Gradient maxima in the grid: 0.03, 0.04, 0.0549, 0.07, 0.09, 0.11,
+  0.13, 0.15, 0.2, 0.25, 0.3 m/m
+- Exception river sizes: 1, 3, 5, 10, 20, 30, 50 m3/s
+- Exception distances: 100, 250, 500, 1000, 2000, 5000 m
+
+### 7. Scoring and choosing
+
+Each rule is scored and chosen as [described above](#se), where the
+table gives each species’ choice. The model also accounts for how much
+stream was fished, which data set the record comes from, its period
+(1994 or earlier, 1995 to 2004, or later) and its watershed group, so a
+rule is not credited for those. A short trial run checks the scoring
+before the full run starts.
+
+Code and settings
+
+- Run by: scripts/0320-tune-run.R;
+  [`knw_tune_smoke()`](https://newgraphenvironment.github.io/knowledge/reference/knw_tune_smoke.md),
+  [`knw_tune_score()`](https://newgraphenvironment.github.io/knowledge/reference/knw_tune_score.md),
+  [`knw_tune_repick()`](https://newgraphenvironment.github.io/knowledge/reference/knw_tune_repick.md)
+- In: the evidence; the grid. Out: data/tune/\<key\>\_tune.csv
+- Stream edge types scored: 1000, 1100, 2000, 2300 FWA edge type
+- Fished area kept: 10, 10000 m2
+- Gradient the rules are scored on: fwa_gradient
+- Fold seed: 54
+- Group folds: 5
+- Group intercepts absorbed: fe
+- Prior SD on data set and era: 2.5 cloglog
+- Region width: 1 SE
+- Stricter reading: 1.96 SE
+- Exception distance the pick moves off: 200 m
+- Smoke gate: tolerance on no rule: 0.25 deviance
+- Smoke gate: largest nuisance coefficient: 5 cloglog
+- Least groups with both outcomes to fit: 5 groups
+- Groups below which a fit is underpowered: 10 groups
+- Maturity codes that count as spawner evidence: IM, M, MT, SP, ST
+- Length counted as a large spawner: 350 mm
+- Flow source the rules read: pick
+- Walk targets on a lake or regulated river excluded: FALSE
+- Era breaks of the nuisance term: 1994, 2004
+- Open work:
+  [\#92](https://github.com/NewGraphEnvironment/knowledge/issues/92)
+
+### 8. Checking the choice is not luck
+
+Many rules score almost alike, so the winner could come down to chance.
+We choose again three ways: with the groups split 4 other ways; leaving
+out one part of the groups, choosing on the rest and scoring the choice
+on the part left out, for each part in turn; and on 200 random redraws
+of the groups. For chinook rearing the exact rule came back on 0 of the
+4 other splits and in 6 % of the redraws, but it stayed a close call on
+all 4, and choosing this way scored better than link’s rule on the parts
+left out (1,183 against 1,345; lower is better).
+
+Code and settings
+
+- Run by: scripts/0320-tune-run.R;
+  [`knw_tune_score()`](https://newgraphenvironment.github.io/knowledge/reference/knw_tune_score.md)
+- In: the evidence; the grid. Out: data/tune/\<key\>\_seeds.csv;
+  \<key\>\_honest.csv; \<key\>\_summary.csv
+- Extra fold seeds: 55, 56, 57, 58
+- Group bootstrap resamples: 200
+- Bootstrap seed: 541
+
+### 9. A curve and a grade
+
+We fit a smooth curve of how often the species is caught against stream
+size, distance to the river and slope, and use it to grade every segment
+from low to high expected use. A species whose curve predicts no better
+than no rule at all gets no grade.
+
+Code and settings
+
+- Run by: scripts/0320-tune-run.R;
+  [`knw_tune_curve()`](https://newgraphenvironment.github.io/knowledge/reference/knw_tune_curve.md),
+  [`knw_grade_species()`](https://newgraphenvironment.github.io/knowledge/reference/knw_grade_species.md),
+  [`knw_grade()`](https://newgraphenvironment.github.io/knowledge/reference/knw_grade.md)
+- In: the evidence; link’s segments. Out: data/tune/\<key\>\_curves.csv;
+  \<key\>\_grades.csv
+- Walk cap read by the curve: 50000 m
+- River size walked to where the pick has no exception: 10 m3/s
+- Smooth basis sizes (size, distance, gradient): 6, 6, 6
+- Grade reference quantile: 0.95 quantile
+- Grade class breaks: 0, 0.2, 0.4, 0.6, 0.8, 1
+- Gradient ceiling the curve and grade read: 0.2 m/m
+- Offset before the log of distance: 10 m
+- Gradient the grade reads on link’s segments: gradient
+- Flow the grade reads on link’s segments under a MAD rule: mad_pick
+- Width the grade reads on link’s segments under a width rule:
+  channel_width
+
+### 10. Running the rule on link’s streams
+
+link’s current rule and the chosen rule both go through the steps link
+itself uses, run by `fresh` ([Irvine
+2026a](#ref-irvine2026freshFreshwater)): the rule’s test, link’s
+hand-entered habitat, and dropping rearing that has no spawning nearby.
+On the Bulkley, those last two steps removed 999 of the 7,699 segments
+link’s rule passed, so we compare whole runs, not the test alone.
+
+Code and settings
+
+- Run by: scripts/0330-compare.R;
+  [`knw_compare_rules()`](https://newgraphenvironment.github.io/knowledge/reference/knw_compare_rules.md),
+  [`fresh::frs_habitat_predicates()`](https://newgraphenvironment.github.io/fresh/reference/frs_habitat_predicates.html),
+  [`fresh::frs_habitat_overlay()`](https://newgraphenvironment.github.io/fresh/reference/frs_habitat_overlay.html)
+- In: fresh_default; link’s default configuration. Out: data/compare/
+- Comparison check: least fished area: 10 m2
+- Comparison check: largest fished area: 10000 m2
+- Connectivity bridge distance: 10000 m
+- Connectivity bridge gradient: 0.05 m/m
+- Comparison bootstrap resamples: 200
+- Comparison check: edge types of the FDIS visits it counts: 1000, 1050,
+  1100, 1150, 2000, 2100, 2300, 1250, 1350 FWA edge type
+- Wetland structure reported as tuned: door
+- Comparison bootstrap seed: 542
+- discharge_source in link’s default bundle: unset
+
+### 11. Publishing
+
+The chosen values are written under link’s own parameter names, with the
+grades, so link can read them.
+
+Code and settings
+
+- Run by: scripts/0325-publish.R;
+  [`knw_thresholds_table()`](https://newgraphenvironment.github.io/knowledge/reference/knw_thresholds_table.md),
+  [`knw_publish()`](https://newgraphenvironment.github.io/knowledge/reference/knw_publish.md)
+- In: data/tune; data/compare. Out: data/thresholds.csv;
+  data/thresholds_groups.csv; habitat_grade/v1
+
+## Where are fish sampling records lost?
+
+Most of the records lost are lost when sites are put on the map (72 % of
+the 11,000 dropped). A site far from any stream, or on the wrong
+tributary, cannot be trusted to sit on the stream that was fished.
+
+![Site visits each step drops, in the order the steps
+run.](habitat_thresholds_files/figure-html/funnel-1.png)
+
+Site visits each step drops, in the order the steps run.
+
+Each species then keeps the sites its rules can speak to: on a stream
+line (not in a river polygon, a wetland of 1 ha or more or a lake of 100
+ha or more), of a usual fished area, where link expects the species,
+with no code that could hide it and no natural barrier to it downstream.
+The score uses the groups where the species was caught at some sites and
+not others.
+
+| species | kept | stream line | fished area | where expected | not hidden | no barrier | scored | groups scored |
+|:---|---:|---:|---:|---:|---:|---:|---:|---:|
+| bull trout | 40,552 | 29,663 | 27,598 | 22,892 | 22,615 | 11,015 | 8,717 | 75 |
+| chinook | 40,552 | 29,663 | 27,598 | 16,403 | 16,292 | 7,123 | 4,490 | 43 |
+| coho | 40,552 | 29,663 | 27,598 | 12,960 | 12,898 | 5,442 | 4,263 | 62 |
+| grayling | 40,552 | 29,663 | 27,598 | 5,356 | 5,333 | 1,472 | 1,230 | 26 |
+| rainbow trout | 40,552 | 29,663 | 27,598 | 27,349 | 27,100 | 13,578 | 12,959 | 129 |
+| steelhead | 40,552 | 29,663 | 27,598 | 9,789 | 9,462 | 4,798 | 1,375 | 11 |
+
+Rearing site visits per species after each filter. {.table
+style="width:100%;"}
+
+## What feeds what?
+
+![](data:image/svg+xml;base64,PHN2ZyBzdHlsZT0ibWF4LXdpZHRoOjEwMCU7aGVpZ2h0OmF1dG8iIHdpZHRoPSI2NjNwdCIgaGVpZ2h0PSI3NzFwdCIgdmlld2JveD0iMC4wMCAwLjAwIDY2My4wMyA3NzAuODIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiPjxnIGlkPSJncmFwaDAiIGNsYXNzPSJncmFwaCIgdHJhbnNmb3JtPSJzY2FsZSgxIDEpIHJvdGF0ZSgwKSB0cmFuc2xhdGUoNCA3NjYuODE4MykiPjx0aXRsZT4KbGluZWFnZQo8L3RpdGxlPgo8ZyBpZD0iY2x1c3QxIiBjbGFzcz0iY2x1c3RlciI+PHRpdGxlPgpjbHVzdGVyX2xlZwo8L3RpdGxlPgo8cGF0aCBmaWxsPSJ0cmFuc3BhcmVudCIgc3Ryb2tlPSIjYmJiYmJiIiBkPSJNMjAsLTcxMC43MDU2QzIwLC03MTAuNzA1NiA0NjksLTcxMC43MDU2IDQ2OSwtNzEwLjcwNTYgNDc1LC03MTAuNzA1NiA0ODEsLTcxNi43MDU2IDQ4MSwtNzIyLjcwNTYgNDgxLC03MjIuNzA1NiA0ODEsLTc0MC43MDU2IDQ4MSwtNzQwLjcwNTYgNDgxLC03NDYuNzA1NiA0NzUsLTc1Mi43MDU2IDQ2OSwtNzUyLjcwNTYgNDY5LC03NTIuNzA1NiAyMCwtNzUyLjcwNTYgMjAsLTc1Mi43MDU2IDE0LC03NTIuNzA1NiA4LC03NDYuNzA1NiA4LC03NDAuNzA1NiA4LC03NDAuNzA1NiA4LC03MjIuNzA1NiA4LC03MjIuNzA1NiA4LC03MTYuNzA1NiAxNCwtNzEwLjcwNTYgMjAsLTcxMC43MDU2IiAvPjwvZz48IS0tIGxfc291cmNlIC0tPjxnIGlkPSJub2RlMSIgY2xhc3M9Im5vZGUiPjx0aXRsZT4KbF9zb3VyY2UKPC90aXRsZT4KPHBhdGggZmlsbD0iI2RkZGRkZCIgc3Ryb2tlPSJ0cmFuc3BhcmVudCIgZD0iTTQ2My42NjY3LC03NDIuNzA1NkM0NjMuNjY2NywtNzQyLjcwNTYgNDEwLjMzMzMsLTc0Mi43MDU2IDQxMC4zMzMzLC03NDIuNzA1NiA0MDYuNjY2NywtNzQyLjcwNTYgNDAzLC03MzkuMDM5IDQwMywtNzM1LjM3MjMgNDAzLC03MzUuMzcyMyA0MDMsLTcyOC4wMzkgNDAzLC03MjguMDM5IDQwMywtNzI0LjM3MjMgNDA2LjY2NjcsLTcyMC43MDU2IDQxMC4zMzMzLC03MjAuNzA1NiA0MTAuMzMzMywtNzIwLjcwNTYgNDYzLjY2NjcsLTcyMC43MDU2IDQ2My42NjY3LC03MjAuNzA1NiA0NjcuMzMzMywtNzIwLjcwNTYgNDcxLC03MjQuMzcyMyA0NzEsLTcyOC4wMzkgNDcxLC03MjguMDM5IDQ3MSwtNzM1LjM3MjMgNDcxLC03MzUuMzcyMyA0NzEsLTczOS4wMzkgNDY3LjMzMzMsLTc0Mi43MDU2IDQ2My42NjY3LC03NDIuNzA1NiIgLz48dGV4dCB0ZXh0LWFuY2hvcj0ibWlkZGxlIiB4PSI0MzciIHk9Ii03MjguNzA1NiIgZm9udC1mYW1pbHk9IkhlbHZldGljYSxzYW5zLVNlcmlmIiBmb250LXNpemU9IjEwLjAwIiBmaWxsPSIjMDAwMDAwIj5zb3VyY2U8L3RleHQ+PC9nPjwhLS0gbF9rbm93bGVkZ2UgLS0+PGcgaWQ9Im5vZGUyIiBjbGFzcz0ibm9kZSI+PHRpdGxlPgpsX2tub3dsZWRnZQo8L3RpdGxlPgo8ZyBpZD0iYV9ub2RlMiI+PGEgeGxpbms6aHJlZj0iaHR0cHM6Ly9uZXdncmFwaGVudmlyb25tZW50LmdpdGh1Yi5pby9rbm93bGVkZ2UvIiB4bGluazp0aXRsZT0ia25vd2xlZGdlIiB0YXJnZXQ9Il90b3AiPgo8cGF0aCBmaWxsPSIjMDA3MmIyIiBzdHJva2U9InRyYW5zcGFyZW50IiBkPSJNMzg2LjY2NjcsLTc0Mi43MDU2QzM4Ni42NjY3LC03NDIuNzA1NiAzMzMuMzMzMywtNzQyLjcwNTYgMzMzLjMzMzMsLTc0Mi43MDU2IDMyOS42NjY3LC03NDIuNzA1NiAzMjYsLTczOS4wMzkgMzI2LC03MzUuMzcyMyAzMjYsLTczNS4zNzIzIDMyNiwtNzI4LjAzOSAzMjYsLTcyOC4wMzkgMzI2LC03MjQuMzcyMyAzMjkuNjY2NywtNzIwLjcwNTYgMzMzLjMzMzMsLTcyMC43MDU2IDMzMy4zMzMzLC03MjAuNzA1NiAzODYuNjY2NywtNzIwLjcwNTYgMzg2LjY2NjcsLTcyMC43MDU2IDM5MC4zMzMzLC03MjAuNzA1NiAzOTQsLTcyNC4zNzIzIDM5NCwtNzI4LjAzOSAzOTQsLTcyOC4wMzkgMzk0LC03MzUuMzcyMyAzOTQsLTczNS4zNzIzIDM5NCwtNzM5LjAzOSAzOTAuMzMzMywtNzQyLjcwNTYgMzg2LjY2NjcsLTc0Mi43MDU2IiAvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjM2MCIgeT0iLTcyOC43MDU2IiBmb250LWZhbWlseT0iSGVsdmV0aWNhLHNhbnMtU2VyaWYiIGZvbnQtc2l6ZT0iMTAuMDAiIGZpbGw9IiNmZmZmZmYiPmtub3dsZWRnZTwvdGV4dD48L2E+IDwvZz48L2c+PCEtLSBsX2Z3YXBnIC0tPjxnIGlkPSJub2RlMyIgY2xhc3M9Im5vZGUiPjx0aXRsZT4KbF9md2FwZwo8L3RpdGxlPgo8ZyBpZD0iYV9ub2RlMyI+PGEgeGxpbms6aHJlZj0iaHR0cHM6Ly9zbW5vcnJpcy5naXRodWIuaW8vZndhcGcvIiB4bGluazp0aXRsZT0iZndhcGciIHRhcmdldD0iX3RvcCI+CjxwYXRoIGZpbGw9IiMwMDllNzMiIHN0cm9rZT0idHJhbnNwYXJlbnQiIGQ9Ik0zMDkuNjY2NywtNzQyLjcwNTZDMzA5LjY2NjcsLTc0Mi43MDU2IDI1Ni4zMzMzLC03NDIuNzA1NiAyNTYuMzMzMywtNzQyLjcwNTYgMjUyLjY2NjcsLTc0Mi43MDU2IDI0OSwtNzM5LjAzOSAyNDksLTczNS4zNzIzIDI0OSwtNzM1LjM3MjMgMjQ5LC03MjguMDM5IDI0OSwtNzI4LjAzOSAyNDksLTcyNC4zNzIzIDI1Mi42NjY3LC03MjAuNzA1NiAyNTYuMzMzMywtNzIwLjcwNTYgMjU2LjMzMzMsLTcyMC43MDU2IDMwOS42NjY3LC03MjAuNzA1NiAzMDkuNjY2NywtNzIwLjcwNTYgMzEzLjMzMzMsLTcyMC43MDU2IDMxNywtNzI0LjM3MjMgMzE3LC03MjguMDM5IDMxNywtNzI4LjAzOSAzMTcsLTczNS4zNzIzIDMxNywtNzM1LjM3MjMgMzE3LC03MzkuMDM5IDMxMy4zMzMzLC03NDIuNzA1NiAzMDkuNjY2NywtNzQyLjcwNTYiIC8+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iMjgzIiB5PSItNzI4LjcwNTYiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2Esc2Fucy1TZXJpZiIgZm9udC1zaXplPSIxMC4wMCIgZmlsbD0iI2ZmZmZmZiI+ZndhcGc8L3RleHQ+PC9hPiA8L2c+PC9nPjwhLS0gbF9saW5rIC0tPjxnIGlkPSJub2RlNCIgY2xhc3M9Im5vZGUiPjx0aXRsZT4KbF9saW5rCjwvdGl0bGU+CjxnIGlkPSJhX25vZGU0Ij48YSB4bGluazpocmVmPSJodHRwczovL25ld2dyYXBoZW52aXJvbm1lbnQuZ2l0aHViLmlvL2xpbmsvIiB4bGluazp0aXRsZT0ibGluayIgdGFyZ2V0PSJfdG9wIj4KPHBhdGggZmlsbD0iI2Q1NWUwMCIgc3Ryb2tlPSJ0cmFuc3BhcmVudCIgZD0iTTIzMi42NjY3LC03NDIuNzA1NkMyMzIuNjY2NywtNzQyLjcwNTYgMTc5LjMzMzMsLTc0Mi43MDU2IDE3OS4zMzMzLC03NDIuNzA1NiAxNzUuNjY2NywtNzQyLjcwNTYgMTcyLC03MzkuMDM5IDE3MiwtNzM1LjM3MjMgMTcyLC03MzUuMzcyMyAxNzIsLTcyOC4wMzkgMTcyLC03MjguMDM5IDE3MiwtNzI0LjM3MjMgMTc1LjY2NjcsLTcyMC43MDU2IDE3OS4zMzMzLC03MjAuNzA1NiAxNzkuMzMzMywtNzIwLjcwNTYgMjMyLjY2NjcsLTcyMC43MDU2IDIzMi42NjY3LC03MjAuNzA1NiAyMzYuMzMzMywtNzIwLjcwNTYgMjQwLC03MjQuMzcyMyAyNDAsLTcyOC4wMzkgMjQwLC03MjguMDM5IDI0MCwtNzM1LjM3MjMgMjQwLC03MzUuMzcyMyAyNDAsLTczOS4wMzkgMjM2LjMzMzMsLTc0Mi43MDU2IDIzMi42NjY3LC03NDIuNzA1NiIgLz48dGV4dCB0ZXh0LWFuY2hvcj0ibWlkZGxlIiB4PSIyMDYiIHk9Ii03MjguNzA1NiIgZm9udC1mYW1pbHk9IkhlbHZldGljYSxzYW5zLVNlcmlmIiBmb250LXNpemU9IjEwLjAwIiBmaWxsPSIjZmZmZmZmIj5saW5rPC90ZXh0PjwvYT4gPC9nPjwvZz48IS0tIGxfd2V0IC0tPjxnIGlkPSJub2RlNSIgY2xhc3M9Im5vZGUiPjx0aXRsZT4KbF93ZXQKPC90aXRsZT4KPGcgaWQ9ImFfbm9kZTUiPjxhIHhsaW5rOmhyZWY9Imh0dHBzOi8vbmV3Z3JhcGhlbnZpcm9ubWVudC5naXRodWIuaW8vd2V0LyIgeGxpbms6dGl0bGU9IndldCIgdGFyZ2V0PSJfdG9wIj4KPHBhdGggZmlsbD0iIzU2YjRlOSIgc3Ryb2tlPSJ0cmFuc3BhcmVudCIgZD0iTTE1NS42NjY3LC03NDIuNzA1NkMxNTUuNjY2NywtNzQyLjcwNTYgMTAyLjMzMzMsLTc0Mi43MDU2IDEwMi4zMzMzLC03NDIuNzA1NiA5OC42NjY3LC03NDIuNzA1NiA5NSwtNzM5LjAzOSA5NSwtNzM1LjM3MjMgOTUsLTczNS4zNzIzIDk1LC03MjguMDM5IDk1LC03MjguMDM5IDk1LC03MjQuMzcyMyA5OC42NjY3LC03MjAuNzA1NiAxMDIuMzMzMywtNzIwLjcwNTYgMTAyLjMzMzMsLTcyMC43MDU2IDE1NS42NjY3LC03MjAuNzA1NiAxNTUuNjY2NywtNzIwLjcwNTYgMTU5LjMzMzMsLTcyMC43MDU2IDE2MywtNzI0LjM3MjMgMTYzLC03MjguMDM5IDE2MywtNzI4LjAzOSAxNjMsLTczNS4zNzIzIDE2MywtNzM1LjM3MjMgMTYzLC03MzkuMDM5IDE1OS4zMzMzLC03NDIuNzA1NiAxNTUuNjY2NywtNzQyLjcwNTYiIC8+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iMTI5IiB5PSItNzI4LjcwNTYiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2Esc2Fucy1TZXJpZiIgZm9udC1zaXplPSIxMC4wMCIgZmlsbD0iIzAwMDAwMCI+d2V0PC90ZXh0PjwvYT4gPC9nPjwvZz48IS0tIGZkaXMgLS0+PGcgaWQ9Im5vZGU3IiBjbGFzcz0ibm9kZSI+PHRpdGxlPgpmZGlzCjwvdGl0bGU+CjxlbGxpcHNlIGZpbGw9IiNkZGRkZGQiIHN0cm9rZT0idHJhbnNwYXJlbnQiIGN4PSIyODMiIGN5PSItNjA5LjI5NjUiIHJ4PSI3My41Njk2IiByeT0iNjkuMDkzNSI+PC9lbGxpcHNlPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjI4MyIgeT0iLTY0MC43OTY1IiBmb250LWZhbWlseT0iSGVsdmV0aWNhLHNhbnMtU2VyaWYiIGZvbnQtc2l6ZT0iMTUuMDAiIGZpbGw9IiMwMDAwMDAiPkZESVM8L3RleHQ+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iMjgzIiB5PSItNjIyLjc5NjUiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2Esc2Fucy1TZXJpZiIgZm9udC1zaXplPSIxNS4wMCIgZmlsbD0iIzAwMDAwMCI+ZWxlY3Ryb2Zpc2hpbmc8L3RleHQ+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iMjgzIiB5PSItNjA0Ljc5NjUiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2Esc2Fucy1TZXJpZiIgZm9udC1zaXplPSIxNS4wMCIgZmlsbD0iIzAwMDAwMCI+ZXhwb3J0PC90ZXh0Pjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjI4MyIgeT0iLTU4Ni43OTY1IiBmb250LWZhbWlseT0iSGVsdmV0aWNhLHNhbnMtU2VyaWYiIGZvbnQtc2l6ZT0iMTUuMDAiIGZpbGw9IiMwMDAwMDAiPihQcm92aW5jZQpvZjwvdGV4dD48dGV4dCB0ZXh0LWFuY2hvcj0ibWlkZGxlIiB4PSIyODMiIHk9Ii01NjguNzk2NSIgZm9udC1mYW1pbHk9IkhlbHZldGljYSxzYW5zLVNlcmlmIiBmb250LXNpemU9IjE1LjAwIiBmaWxsPSIjMDAwMDAwIj5CQyk8L3RleHQ+PC9nPjwhLS0gbF93ZXQmIzQ1OyZndDtmZGlzIC0tPjwhLS0gbF9mcmVzaCAtLT48ZyBpZD0ibm9kZTYiIGNsYXNzPSJub2RlIj48dGl0bGU+CmxfZnJlc2gKPC90aXRsZT4KPGcgaWQ9ImFfbm9kZTYiPjxhIHhsaW5rOmhyZWY9Imh0dHBzOi8vbmV3Z3JhcGhlbnZpcm9ubWVudC5naXRodWIuaW8vZnJlc2gvIiB4bGluazp0aXRsZT0iZnJlc2giIHRhcmdldD0iX3RvcCI+CjxwYXRoIGZpbGw9IiNlNjlmMDAiIHN0cm9rZT0idHJhbnNwYXJlbnQiIGQ9Ik03OC42NjY3LC03NDIuNzA1NkM3OC42NjY3LC03NDIuNzA1NiAyNS4zMzMzLC03NDIuNzA1NiAyNS4zMzMzLC03NDIuNzA1NiAyMS42NjY3LC03NDIuNzA1NiAxOCwtNzM5LjAzOSAxOCwtNzM1LjM3MjMgMTgsLTczNS4zNzIzIDE4LC03MjguMDM5IDE4LC03MjguMDM5IDE4LC03MjQuMzcyMyAyMS42NjY3LC03MjAuNzA1NiAyNS4zMzMzLC03MjAuNzA1NiAyNS4zMzMzLC03MjAuNzA1NiA3OC42NjY3LC03MjAuNzA1NiA3OC42NjY3LC03MjAuNzA1NiA4Mi4zMzMzLC03MjAuNzA1NiA4NiwtNzI0LjM3MjMgODYsLTcyOC4wMzkgODYsLTcyOC4wMzkgODYsLTczNS4zNzIzIDg2LC03MzUuMzcyMyA4NiwtNzM5LjAzOSA4Mi4zMzMzLC03NDIuNzA1NiA3OC42NjY3LC03NDIuNzA1NiIgLz48dGV4dCB0ZXh0LWFuY2hvcj0ibWlkZGxlIiB4PSI1MiIgeT0iLTcyOC43MDU2IiBmb250LWZhbWlseT0iSGVsdmV0aWNhLHNhbnMtU2VyaWYiIGZvbnQtc2l6ZT0iMTAuMDAiIGZpbGw9IiMwMDAwMDAiPmZyZXNoPC90ZXh0PjwvYT4gPC9nPjwvZz48IS0tIHNpdGVzIC0tPjxnIGlkPSJub2RlMTMiIGNsYXNzPSJub2RlIj48dGl0bGU+CnNpdGVzCjwvdGl0bGU+CjxwYXRoIGZpbGw9IiMwMDcyYjIiIHN0cm9rZT0idHJhbnNwYXJlbnQiIGQ9Ik0zOTEuNSwtNTAwQzM5MS41LC01MDAgMzE0LjUsLTUwMCAzMTQuNSwtNTAwIDMwOC41LC01MDAgMzAyLjUsLTQ5NCAzMDIuNSwtNDg4IDMwMi41LC00ODggMzAyLjUsLTQ2OCAzMDIuNSwtNDY4IDMwMi41LC00NjIgMzA4LjUsLTQ1NiAzMTQuNSwtNDU2IDMxNC41LC00NTYgMzkxLjUsLTQ1NiAzOTEuNSwtNDU2IDM5Ny41LC00NTYgNDAzLjUsLTQ2MiA0MDMuNSwtNDY4IDQwMy41LC00NjggNDAzLjUsLTQ4OCA0MDMuNSwtNDg4IDQwMy41LC00OTQgMzk3LjUsLTUwMCAzOTEuNSwtNTAwIiAvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjM1MyIgeT0iLTQ4Mi41IiBmb250LWZhbWlseT0iSGVsdmV0aWNhLHNhbnMtU2VyaWYiIGZvbnQtc2l6ZT0iMTUuMDAiIGZpbGw9IiNmZmZmZmYiPnNpdGVzCm9uIHRoZTwvdGV4dD48dGV4dCB0ZXh0LWFuY2hvcj0ibWlkZGxlIiB4PSIzNTMiIHk9Ii00NjQuNSIgZm9udC1mYW1pbHk9IkhlbHZldGljYSxzYW5zLVNlcmlmIiBmb250LXNpemU9IjE1LjAwIiBmaWxsPSIjZmZmZmZmIj5zdHJlYW0KbWFwPC90ZXh0PjwvZz48IS0tIGZkaXMmIzQ1OyZndDtzaXRlcyAtLT48ZyBpZD0iZWRnZTIiIGNsYXNzPSJlZGdlIj48dGl0bGU+CmZkaXMtJmd0O3NpdGVzCjwvdGl0bGU+CjxwYXRoIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzc3Nzc3NyIgZD0iTTMxNi4xNTUxLC01NDcuMTA4N0MzMjMuOTM4NywtNTMyLjUwOTIgMzMxLjg0NDQsLTUxNy42ODA4IDMzOC4zMjY1LC01MDUuNTIyNSIgLz48cG9seWdvbiBmaWxsPSIjNzc3Nzc3IiBzdHJva2U9IiM3Nzc3NzciIHBvaW50cz0iMzQwLjIyOTMsLTUwNi40MTcxIDM0MS4xOTkxLC01MDAuMTM0NiAzMzYuNTIzMiwtNTA0LjQ0MTIgMzQwLjIyOTMsLTUwNi40MTcxIj48L3BvbHlnb24+PC9nPjwhLS0gZndhIC0tPjxnIGlkPSJub2RlOCIgY2xhc3M9Im5vZGUiPjx0aXRsZT4KZndhCjwvdGl0bGU+CjxlbGxpcHNlIGZpbGw9IiNkZGRkZGQiIHN0cm9rZT0idHJhbnNwYXJlbnQiIGN4PSI1NzMiIGN5PSItNzMxLjcwNTYiIHJ4PSI4Mi4wNTE2IiByeT0iMzEuMjI1OCI+PC9lbGxpcHNlPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjU3MyIgeT0iLTczNi4yMDU2IiBmb250LWZhbWlseT0iSGVsdmV0aWNhLHNhbnMtU2VyaWYiIGZvbnQtc2l6ZT0iMTUuMDAiIGZpbGw9IiMwMDAwMDAiPkJDCkZyZXNod2F0ZXI8L3RleHQ+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iNTczIiB5PSItNzE4LjIwNTYiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2Esc2Fucy1TZXJpZiIgZm9udC1zaXplPSIxNS4wMCIgZmlsbD0iIzAwMDAwMCI+QXRsYXM8L3RleHQ+PC9nPjwhLS0gYXRsYXMgLS0+PGcgaWQ9Im5vZGUxMSIgY2xhc3M9Im5vZGUiPjx0aXRsZT4KYXRsYXMKPC90aXRsZT4KPHBhdGggZmlsbD0iIzAwOWU3MyIgc3Ryb2tlPSJ0cmFuc3BhcmVudCIgZD0iTTQ2MC4zNDAxLC02MzEuMjk2NUM0NjAuMzQwMSwtNjMxLjI5NjUgMzc3LjY1OTksLTYzMS4yOTY1IDM3Ny42NTk5LC02MzEuMjk2NSAzNzEuNjU5OSwtNjMxLjI5NjUgMzY1LjY1OTksLTYyNS4yOTY1IDM2NS42NTk5LC02MTkuMjk2NSAzNjUuNjU5OSwtNjE5LjI5NjUgMzY1LjY1OTksLTU5OS4yOTY1IDM2NS42NTk5LC01OTkuMjk2NSAzNjUuNjU5OSwtNTkzLjI5NjUgMzcxLjY1OTksLTU4Ny4yOTY1IDM3Ny42NTk5LC01ODcuMjk2NSAzNzcuNjU5OSwtNTg3LjI5NjUgNDYwLjM0MDEsLTU4Ny4yOTY1IDQ2MC4zNDAxLC01ODcuMjk2NSA0NjYuMzQwMSwtNTg3LjI5NjUgNDcyLjM0MDEsLTU5My4yOTY1IDQ3Mi4zNDAxLC01OTkuMjk2NSA0NzIuMzQwMSwtNTk5LjI5NjUgNDcyLjM0MDEsLTYxOS4yOTY1IDQ3Mi4zNDAxLC02MTkuMjk2NSA0NzIuMzQwMSwtNjI1LjI5NjUgNDY2LjM0MDEsLTYzMS4yOTY1IDQ2MC4zNDAxLC02MzEuMjk2NSIgLz48dGV4dCB0ZXh0LWFuY2hvcj0ibWlkZGxlIiB4PSI0MTkiIHk9Ii02MTMuNzk2NSIgZm9udC1mYW1pbHk9IkhlbHZldGljYSxzYW5zLVNlcmlmIiBmb250LXNpemU9IjE1LjAwIiBmaWxsPSIjZmZmZmZmIj5BdGxhcwpzdHJlYW1zPC90ZXh0Pjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjQxOSIgeT0iLTU5NS43OTY1IiBmb250LWZhbWlseT0iSGVsdmV0aWNhLHNhbnMtU2VyaWYiIGZvbnQtc2l6ZT0iMTUuMDAiIGZpbGw9IiNmZmZmZmYiPmluCmEgZGF0YWJhc2U8L3RleHQ+PC9nPjwhLS0gZndhJiM0NTsmZ3Q7YXRsYXMgLS0+PGcgaWQ9ImVkZ2UxIiBjbGFzcz0iZWRnZSI+PHRpdGxlPgpmd2EtJmd0O2F0bGFzCjwvdGl0bGU+CjxwYXRoIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzc3Nzc3NyIgZD0iTTUzNy42NjkzLC03MDMuNjIyNUM1MTEuODYxNSwtNjgzLjEwODggNDc3LjExNjgsLTY1NS40OTE1IDQ1MS44OTYyLC02MzUuNDQ0NSIgLz48cG9seWdvbiBmaWxsPSIjNzc3Nzc3IiBzdHJva2U9IiM3Nzc3NzciIHBvaW50cz0iNDUyLjk4ODIsLTYzMy42Mjk5IDQ0Ni45ODQ1LC02MzEuNTQwNCA0NTAuMzc0OCwtNjM2LjkxNzggNDUyLjk4ODIsLTYzMy42Mjk5Ij48L3BvbHlnb24+PC9nPjwhLS0gcGNpYyAtLT48ZyBpZD0ibm9kZTkiIGNsYXNzPSJub2RlIj48dGl0bGU+CnBjaWMKPC90aXRsZT4KPGVsbGlwc2UgZmlsbD0iI2RkZGRkZCIgc3Ryb2tlPSJ0cmFuc3BhcmVudCIgY3g9IjEyNSIgY3k9Ii02MDkuMjk2NSIgcng9Ijc0LjkwNDUiIHJ5PSI0My42ODE4Ij48L2VsbGlwc2U+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iMTI1IiB5PSItNjIyLjc5NjUiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2Esc2Fucy1TZXJpZiIgZm9udC1zaXplPSIxNS4wMCIgZmlsbD0iIzAwMDAwMCI+UENJQwpWSUMtR0w8L3RleHQ+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iMTI1IiB5PSItNjA0Ljc5NjUiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2Esc2Fucy1TZXJpZiIgZm9udC1zaXplPSIxNS4wMCIgZmlsbD0iIzAwMDAwMCI+cnVub2ZmLApyb3V0ZWQ8L3RleHQ+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iMTI1IiB5PSItNTg2Ljc5NjUiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2Esc2Fucy1TZXJpZiIgZm9udC1zaXplPSIxNS4wMCIgZmlsbD0iIzAwMDAwMCI+YnkKUmF2ZW48L3RleHQ+PC9nPjwhLS0gY3Jvc3MgLS0+PGcgaWQ9Im5vZGUxMiIgY2xhc3M9Im5vZGUiPjx0aXRsZT4KY3Jvc3MKPC90aXRsZT4KPHBhdGggZmlsbD0iIzAwOWU3MyIgc3Ryb2tlPSJ0cmFuc3BhcmVudCIgZD0iTTI4MS42NzU2LC01MThDMjgxLjY3NTYsLTUxOCAxOTAuMzI0NCwtNTE4IDE5MC4zMjQ0LC01MTggMTg0LjMyNDQsLTUxOCAxNzguMzI0NCwtNTEyIDE3OC4zMjQ0LC01MDYgMTc4LjMyNDQsLTUwNiAxNzguMzI0NCwtNDUwIDE3OC4zMjQ0LC00NTAgMTc4LjMyNDQsLTQ0NCAxODQuMzI0NCwtNDM4IDE5MC4zMjQ0LC00MzggMTkwLjMyNDQsLTQzOCAyODEuNjc1NiwtNDM4IDI4MS42NzU2LC00MzggMjg3LjY3NTYsLTQzOCAyOTMuNjc1NiwtNDQ0IDI5My42NzU2LC00NTAgMjkzLjY3NTYsLTQ1MCAyOTMuNjc1NiwtNTA2IDI5My42NzU2LC01MDYgMjkzLjY3NTYsLTUxMiAyODcuNjc1NiwtNTE4IDI4MS42NzU2LC01MTgiIC8+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iMjM2IiB5PSItNTAwLjUiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2Esc2Fucy1TZXJpZiIgZm9udC1zaXplPSIxNS4wMCIgZmlsbD0iI2ZmZmZmZiI+UENJQwpmbG93cyBwdXQ8L3RleHQ+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iMjM2IiB5PSItNDgyLjUiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2Esc2Fucy1TZXJpZiIgZm9udC1zaXplPSIxNS4wMCIgZmlsbD0iI2ZmZmZmZiI+b24KQXRsYXM8L3RleHQ+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iMjM2IiB5PSItNDY0LjUiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2Esc2Fucy1TZXJpZiIgZm9udC1zaXplPSIxNS4wMCIgZmlsbD0iI2ZmZmZmZiI+c3RyZWFtcwoodGhlPC90ZXh0Pjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjIzNiIgeT0iLTQ0Ni41IiBmb250LWZhbWlseT0iSGVsdmV0aWNhLHNhbnMtU2VyaWYiIGZvbnQtc2l6ZT0iMTUuMDAiIGZpbGw9IiNmZmZmZmYiPmZ3YXBnCmZvcmspPC90ZXh0PjwvZz48IS0tIHBjaWMmIzQ1OyZndDtjcm9zcyAtLT48ZyBpZD0iZWRnZTYiIGNsYXNzPSJlZGdlIj48dGl0bGU+CnBjaWMtJmd0O2Nyb3NzCjwvdGl0bGU+CjxwYXRoIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzc3Nzc3NyIgZD0iTTE1OC4zMDM3LC01NjkuOTAzMkMxNzAuODA0LC01NTUuMTE3MSAxODUuMTAzLC01MzguMjAzNSAxOTcuOTk4MSwtNTIyLjk1MDUiIC8+PHBvbHlnb24gZmlsbD0iIzc3Nzc3NyIgc3Ryb2tlPSIjNzc3Nzc3IiBwb2ludHM9IjE5OS42ODE0LC01MjQuMjEyMiAyMDEuOTUxNCwtNTE4LjI3NDQgMTk2LjQ3NCwtNTIxLjUwMDYgMTk5LjY4MTQsLTUyNC4yMTIyIj48L3BvbHlnb24+PC9nPjwhLS0gb2JzIC0tPjxnIGlkPSJub2RlMTAiIGNsYXNzPSJub2RlIj48dGl0bGU+Cm9icwo8L3RpdGxlPgo8ZWxsaXBzZSBmaWxsPSIjZGRkZGRkIiBzdHJva2U9InRyYW5zcGFyZW50IiBjeD0iNTA5IiBjeT0iLTQ3OCIgcng9Ijc1LjYxNTgiIHJ5PSIzMS4yMjU4Ij48L2VsbGlwc2U+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iNTA5IiB5PSItNDgyLjUiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2Esc2Fucy1TZXJpZiIgZm9udC1zaXplPSIxNS4wMCIgZmlsbD0iIzAwMDAwMCI+YmNmaXNob2JzCmZpc2g8L3RleHQ+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iNTA5IiB5PSItNDY0LjUiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2Esc2Fucy1TZXJpZiIgZm9udC1zaXplPSIxNS4wMCIgZmlsbD0iIzAwMDAwMCI+b2JzZXJ2YXRpb25zPC90ZXh0PjwvZz48IS0tIHNlZ3MgLS0+PGcgaWQ9Im5vZGUxNCIgY2xhc3M9Im5vZGUiPjx0aXRsZT4Kc2Vncwo8L3RpdGxlPgo8cGF0aCBmaWxsPSIjZDU1ZTAwIiBzdHJva2U9InRyYW5zcGFyZW50IiBkPSJNNDYyLjAwMzEsLTQxNkM0NjIuMDAzMSwtNDE2IDM3Ny45OTY5LC00MTYgMzc3Ljk5NjksLTQxNiAzNzEuOTk2OSwtNDE2IDM2NS45OTY5LC00MTAgMzY1Ljk5NjksLTQwNCAzNjUuOTk2OSwtNDA0IDM2NS45OTY5LC0zNDggMzY1Ljk5NjksLTM0OCAzNjUuOTk2OSwtMzQyIDM3MS45OTY5LC0zMzYgMzc3Ljk5NjksLTMzNiAzNzcuOTk2OSwtMzM2IDQ2Mi4wMDMxLC0zMzYgNDYyLjAwMzEsLTMzNiA0NjguMDAzMSwtMzM2IDQ3NC4wMDMxLC0zNDIgNDc0LjAwMzEsLTM0OCA0NzQuMDAzMSwtMzQ4IDQ3NC4wMDMxLC00MDQgNDc0LjAwMzEsLTQwNCA0NzQuMDAzMSwtNDEwIDQ2OC4wMDMxLC00MTYgNDYyLjAwMzEsLTQxNiIgLz48dGV4dCB0ZXh0LWFuY2hvcj0ibWlkZGxlIiB4PSI0MjAiIHk9Ii0zOTguNSIgZm9udC1mYW1pbHk9IkhlbHZldGljYSxzYW5zLVNlcmlmIiBmb250LXNpemU9IjE1LjAwIiBmaWxsPSIjZmZmZmZmIj5saW5r4oCZcwpzdHJlYW08L3RleHQ+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iNDIwIiB5PSItMzgwLjUiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2Esc2Fucy1TZXJpZiIgZm9udC1zaXplPSIxNS4wMCIgZmlsbD0iI2ZmZmZmZiI+c2VnbWVudHMsPC90ZXh0Pjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjQyMCIgeT0iLTM2Mi41IiBmb250LWZhbWlseT0iSGVsdmV0aWNhLHNhbnMtU2VyaWYiIGZvbnQtc2l6ZT0iMTUuMDAiIGZpbGw9IiNmZmZmZmYiPmFjY2VzcwphbmQ8L3RleHQ+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iNDIwIiB5PSItMzQ0LjUiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2Esc2Fucy1TZXJpZiIgZm9udC1zaXplPSIxNS4wMCIgZmlsbD0iI2ZmZmZmZiI+aGFiaXRhdDwvdGV4dD48L2c+PCEtLSBvYnMmIzQ1OyZndDtzZWdzIC0tPjxnIGlkPSJlZGdlNSIgY2xhc3M9ImVkZ2UiPjx0aXRsZT4Kb2JzLSZndDtzZWdzCjwvdGl0bGU+CjxwYXRoIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzc3Nzc3NyIgZD0iTTQ4My4yNTc1LC00NDguNDk3NEM0NzUuNjY5MSwtNDM5LjgwMDUgNDY3LjE5LC00MzAuMDgyOSA0NTguOTY2OCwtNDIwLjY1ODYiIC8+PHBvbHlnb24gZmlsbD0iIzc3Nzc3NyIgc3Ryb2tlPSIjNzc3Nzc3IiBwb2ludHM9IjQ2MC40ODI3LC00MTkuMjAxOCA0NTQuOTU1NiwtNDE2LjA2MTUgNDU3LjMxODEsLTQyMS45NjMxIDQ2MC40ODI3LC00MTkuMjAxOCI+PC9wb2x5Z29uPjwvZz48IS0tIGF0bGFzJiM0NTsmZ3Q7Y3Jvc3MgLS0+PGcgaWQ9ImVkZ2U3IiBjbGFzcz0iZWRnZSI+PHRpdGxlPgphdGxhcy0mZ3Q7Y3Jvc3MKPC90aXRsZT4KPHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNzc3Nzc3IiBkPSJNNDA1LjE5NDMsLTU4Ny4yMDA1QzM5NC43MTg3LC01NzIuMDQ0NyAzNzkuMDY2MiwtNTUyLjQ5MTEgMzYxLC01NDAgMzM4LjEyOTgsLTUyNC4xODczIDMyNi4xOTA5LC01MzAuMTMwMyAyOTkuNDAzMiwtNTE4LjQ4MTUiIC8+PHBvbHlnb24gZmlsbD0iIzc3Nzc3NyIgc3Ryb2tlPSIjNzc3Nzc3IiBwb2ludHM9IjMwMC4xNjcxLC01MTYuNTIxMSAyOTMuODQsLTUxNS45MDU1IDI5OC40MDIzLC01MjAuMzMyMyAzMDAuMTY3MSwtNTE2LjUyMTEiPjwvcG9seWdvbj48L2c+PCEtLSBhdGxhcyYjNDU7Jmd0O3NpdGVzIC0tPjxnIGlkPSJlZGdlMyIgY2xhc3M9ImVkZ2UiPjx0aXRsZT4KYXRsYXMtJmd0O3NpdGVzCjwvdGl0bGU+CjxwYXRoIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzc3Nzc3NyIgZD0iTTQwNy44MDQsLTU4Ny4wMjM4QzM5Ni41NjgyLC01NjQuNjcxOSAzNzkuMjI4NCwtNTMwLjE3NzIgMzY3LjA2OTUsLTUwNS45ODkiIC8+PHBvbHlnb24gZmlsbD0iIzc3Nzc3NyIgc3Ryb2tlPSIjNzc3Nzc3IiBwb2ludHM9IjM2OC44MjIsLTUwNC43OTk1IDM2NC4yNTA5LC01MDAuMzgxOSAzNjUuMDY5NSwtNTA2LjY4NTkgMzY4LjgyMiwtNTA0Ljc5OTUiPjwvcG9seWdvbj48L2c+PCEtLSBhdGxhcyYjNDU7Jmd0O3NlZ3MgLS0+PGcgaWQ9ImVkZ2U0IiBjbGFzcz0iZWRnZSI+PHRpdGxlPgphdGxhcy0mZ3Q7c2Vncwo8L3RpdGxlPgo8cGF0aCBmaWxsPSJub25lIiBzdHJva2U9IiM3Nzc3NzciIGQ9Ik00MTkuMDk1OSwtNTg2LjkyN0M0MTkuMjU3NiwtNTQ5LjE5NDUgNDE5LjU4NzksLTQ3Mi4xNTE2IDQxOS44MDEzLC00MjIuMzU4IiAvPjxwb2x5Z29uIGZpbGw9IiM3Nzc3NzciIHN0cm9rZT0iIzc3Nzc3NyIgcG9pbnRzPSI0MjEuOTAyMiwtNDIyLjEzMjcgNDE5LjgyOCwtNDE2LjEyMzggNDE3LjcwMjIsLTQyMi4xMTQ3IDQyMS45MDIyLC00MjIuMTMyNyI+PC9wb2x5Z29uPjwvZz48IS0tIGZsb3cgLS0+PGcgaWQ9Im5vZGUxNSIgY2xhc3M9Im5vZGUiPjx0aXRsZT4KZmxvdwo8L3RpdGxlPgo8cGF0aCBmaWxsPSIjNTZiNGU5IiBzdHJva2U9InRyYW5zcGFyZW50IiBkPSJNMzA0LjAzMDUsLTQxNkMzMDQuMDMwNSwtNDE2IDIxMS45Njk1LC00MTYgMjExLjk2OTUsLTQxNiAyMDUuOTY5NSwtNDE2IDE5OS45Njk1LC00MTAgMTk5Ljk2OTUsLTQwNCAxOTkuOTY5NSwtNDA0IDE5OS45Njk1LC0zNDggMTk5Ljk2OTUsLTM0OCAxOTkuOTY5NSwtMzQyIDIwNS45Njk1LC0zMzYgMjExLjk2OTUsLTMzNiAyMTEuOTY5NSwtMzM2IDMwNC4wMzA1LC0zMzYgMzA0LjAzMDUsLTMzNiAzMTAuMDMwNSwtMzM2IDMxNi4wMzA1LC0zNDIgMzE2LjAzMDUsLTM0OCAzMTYuMDMwNSwtMzQ4IDMxNi4wMzA1LC00MDQgMzE2LjAzMDUsLTQwNCAzMTYuMDMwNSwtNDEwIDMxMC4wMzA1LC00MTYgMzA0LjAzMDUsLTQxNiIgLz48dGV4dCB0ZXh0LWFuY2hvcj0ibWlkZGxlIiB4PSIyNTgiIHk9Ii0zOTguNSIgZm9udC1mYW1pbHk9IkhlbHZldGljYSxzYW5zLVNlcmlmIiBmb250LXNpemU9IjE1LjAwIiBmaWxsPSIjMDAwMDAwIj5mbG93Cm9uIGVhY2g8L3RleHQ+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iMjU4IiB5PSItMzgwLjUiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2Esc2Fucy1TZXJpZiIgZm9udC1zaXplPSIxNS4wMCIgZmlsbD0iIzAwMDAwMCI+c2VnbWVudCw8L3RleHQ+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iMjU4IiB5PSItMzYyLjUiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2Esc2Fucy1TZXJpZiIgZm9udC1zaXplPSIxNS4wMCIgZmlsbD0iIzAwMDAwMCI+UENJQ+KAmXMKb3I8L3RleHQ+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iMjU4IiB5PSItMzQ0LjUiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2Esc2Fucy1TZXJpZiIgZm9udC1zaXplPSIxNS4wMCIgZmlsbD0iIzAwMDAwMCI+d2V04oCZcwpiYWxhbmNlPC90ZXh0PjwvZz48IS0tIGNyb3NzJiM0NTsmZ3Q7ZmxvdyAtLT48ZyBpZD0iZWRnZTgiIGNsYXNzPSJlZGdlIj48dGl0bGU+CmNyb3NzLSZndDtmbG93CjwvdGl0bGU+CjxwYXRoIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzc3Nzc3NyIgZD0iTTI0NC42MzE4LC00MzcuOTc5N0MyNDUuNzM5MywtNDMyLjg0NDkgMjQ2Ljg4MDQsLTQyNy41NTQzIDI0OC4wMDczLC00MjIuMzI5NiIgLz48cG9seWdvbiBmaWxsPSIjNzc3Nzc3IiBzdHJva2U9IiM3Nzc3NzciIHBvaW50cz0iMjUwLjEwODUsLTQyMi41NDc4IDI0OS4zMjA4LC00MTYuMjM5OSAyNDYuMDAyOSwtNDIxLjY2MjIgMjUwLjEwODUsLTQyMi41NDc4Ij48L3BvbHlnb24+PC9nPjwhLS0gZXZpZCAtLT48ZyBpZD0ibm9kZTE2IiBjbGFzcz0ibm9kZSI+PHRpdGxlPgpldmlkCjwvdGl0bGU+CjxwYXRoIGZpbGw9IiMwMDcyYjIiIHN0cm9rZT0idHJhbnNwYXJlbnQiIGQ9Ik0zOTMuMzUyMSwtMzE0QzM5My4zNTIxLC0zMTQgMzEwLjY0NzksLTMxNCAzMTAuNjQ3OSwtMzE0IDMwNC42NDc5LC0zMTQgMjk4LjY0NzksLTMwOCAyOTguNjQ3OSwtMzAyIDI5OC42NDc5LC0zMDIgMjk4LjY0NzksLTI4MiAyOTguNjQ3OSwtMjgyIDI5OC42NDc5LC0yNzYgMzA0LjY0NzksLTI3MCAzMTAuNjQ3OSwtMjcwIDMxMC42NDc5LC0yNzAgMzkzLjM1MjEsLTI3MCAzOTMuMzUyMSwtMjcwIDM5OS4zNTIxLC0yNzAgNDA1LjM1MjEsLTI3NiA0MDUuMzUyMSwtMjgyIDQwNS4zNTIxLC0yODIgNDA1LjM1MjEsLTMwMiA0MDUuMzUyMSwtMzAyIDQwNS4zNTIxLC0zMDggMzk5LjM1MjEsLTMxNCAzOTMuMzUyMSwtMzE0IiAvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjM1MiIgeT0iLTI5Ni41IiBmb250LWZhbWlseT0iSGVsdmV0aWNhLHNhbnMtU2VyaWYiIGZvbnQtc2l6ZT0iMTUuMDAiIGZpbGw9IiNmZmZmZmYiPmVhY2gKc2l0ZSB3aXRoPC90ZXh0Pjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjM1MiIgeT0iLTI3OC41IiBmb250LWZhbWlseT0iSGVsdmV0aWNhLHNhbnMtU2VyaWYiIGZvbnQtc2l6ZT0iMTUuMDAiIGZpbGw9IiNmZmZmZmYiPml0cwpzZWdtZW50PC90ZXh0PjwvZz48IS0tIHNpdGVzJiM0NTsmZ3Q7ZXZpZCAtLT48ZyBpZD0iZWRnZTkiIGNsYXNzPSJlZGdlIj48dGl0bGU+CnNpdGVzLSZndDtldmlkCjwvdGl0bGU+CjxwYXRoIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzc3Nzc3NyIgZD0iTTM1Mi44ODE0LC00NTUuOTMyOUMzNTIuNjk5NCwtNDIyLjA5MzMgMzUyLjM1MTYsLTM1Ny40MDUgMzUyLjE1MTcsLTMyMC4yMDY5IiAvPjxwb2x5Z29uIGZpbGw9IiM3Nzc3NzciIHN0cm9rZT0iIzc3Nzc3NyIgcG9pbnRzPSIzNTQuMjUwOCwtMzIwLjAyNjkgMzUyLjExODUsLTMxNC4wMzgzIDM1MC4wNTA5LC0zMjAuMDQ5NiAzNTQuMjUwOCwtMzIwLjAyNjkiPjwvcG9seWdvbj48L2c+PCEtLSBzZWdzJiM0NTsmZ3Q7ZXZpZCAtLT48ZyBpZD0iZWRnZTEwIiBjbGFzcz0iZWRnZSI+PHRpdGxlPgpzZWdzLSZndDtldmlkCjwvdGl0bGU+CjxwYXRoIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzc3Nzc3NyIgZD0iTTM4Ny41OTMyLC0zMzUuOTY4MUMzODIuOTgzOCwtMzMwLjI3NDEgMzc4LjMzNTIsLTMyNC41MzE4IDM3My45ODc0LC0zMTkuMTYwOSIgLz48cG9seWdvbiBmaWxsPSIjNzc3Nzc3IiBzdHJva2U9IiM3Nzc3NzciIHBvaW50cz0iMzc1LjQ5NjMsLTMxNy42ODcyIDM3MC4wODg4LC0zMTQuMzQ1IDM3Mi4yMzE4LC0zMjAuMzI5OCAzNzUuNDk2MywtMzE3LjY4NzIiPjwvcG9seWdvbj48L2c+PCEtLSBjbXAgLS0+PGcgaWQ9Im5vZGUxOCIgY2xhc3M9Im5vZGUiPjx0aXRsZT4KY21wCjwvdGl0bGU+CjxwYXRoIGZpbGw9IiNlNjlmMDAiIHN0cm9rZT0idHJhbnNwYXJlbnQiIGQ9Ik00NjEuNjkwOSwtMTQ2QzQ2MS42OTA5LC0xNDYgMzc4LjMwOTEsLTE0NiAzNzguMzA5MSwtMTQ2IDM3Mi4zMDkxLC0xNDYgMzY2LjMwOTEsLTE0MCAzNjYuMzA5MSwtMTM0IDM2Ni4zMDkxLC0xMzQgMzY2LjMwOTEsLTk2IDM2Ni4zMDkxLC05NiAzNjYuMzA5MSwtOTAgMzcyLjMwOTEsLTg0IDM3OC4zMDkxLC04NCAzNzguMzA5MSwtODQgNDYxLjY5MDksLTg0IDQ2MS42OTA5LC04NCA0NjcuNjkwOSwtODQgNDczLjY5MDksLTkwIDQ3My42OTA5LC05NiA0NzMuNjkwOSwtOTYgNDczLjY5MDksLTEzNCA0NzMuNjkwOSwtMTM0IDQ3My42OTA5LC0xNDAgNDY3LjY5MDksLTE0NiA0NjEuNjkwOSwtMTQ2IiAvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjQyMCIgeT0iLTEyOC41IiBmb250LWZhbWlseT0iSGVsdmV0aWNhLHNhbnMtU2VyaWYiIGZvbnQtc2l6ZT0iMTUuMDAiIGZpbGw9IiMwMDAwMDAiPmJvdGgKcnVsZXMgcnVuPC90ZXh0Pjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjQyMCIgeT0iLTExMC41IiBmb250LWZhbWlseT0iSGVsdmV0aWNhLHNhbnMtU2VyaWYiIGZvbnQtc2l6ZT0iMTUuMDAiIGZpbGw9IiMwMDAwMDAiPm9uCmxpbmvigJlzPC90ZXh0Pjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjQyMCIgeT0iLTkyLjUiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2Esc2Fucy1TZXJpZiIgZm9udC1zaXplPSIxNS4wMCIgZmlsbD0iIzAwMDAwMCI+c3RyZWFtczwvdGV4dD48L2c+PCEtLSBzZWdzJiM0NTsmZ3Q7Y21wIC0tPjxnIGlkPSJlZGdlMTQiIGNsYXNzPSJlZGdlIj48dGl0bGU+CnNlZ3MtJmd0O2NtcAo8L3RpdGxlPgo8cGF0aCBmaWxsPSJub25lIiBzdHJva2U9IiM3Nzc3NzciIGQ9Ik00MjAsLTMzNS43OTA3QzQyMCwtMjg1LjczODkgNDIwLC0yMDAuOTMwMSA0MjAsLTE1Mi4yODA5IiAvPjxwb2x5Z29uIGZpbGw9IiM3Nzc3NzciIHN0cm9rZT0iIzc3Nzc3NyIgcG9pbnRzPSI0MjIuMTAwMSwtMTUyLjI0MjYgNDIwLC0xNDYuMjQyNyA0MTcuOTAwMSwtMTUyLjI0MjcgNDIyLjEwMDEsLTE1Mi4yNDI2Ij48L3BvbHlnb24+PC9nPjwhLS0gZmxvdyYjNDU7Jmd0O2V2aWQgLS0+PGcgaWQ9ImVkZ2UxMSIgY2xhc3M9ImVkZ2UiPjx0aXRsZT4KZmxvdy0mZ3Q7ZXZpZAo8L3RpdGxlPgo8cGF0aCBmaWxsPSJub25lIiBzdHJva2U9IiM3Nzc3NzciIGQ9Ik0zMDIuNzk3NiwtMzM1Ljk2ODFDMzA5LjUwNDksLTMyOS45NzQ0IDMxNi4yNzIxLC0zMjMuOTI3IDMyMi41NTEzLC0zMTguMzE1OCIgLz48cG9seWdvbiBmaWxsPSIjNzc3Nzc3IiBzdHJva2U9IiM3Nzc3NzciIHBvaW50cz0iMzI0LjE3NDIsLTMxOS42ODIgMzI3LjI0ODgsLTMxNC4xMTgxIDMyMS4zNzU2LC0zMTYuNTUwMiAzMjQuMTc0MiwtMzE5LjY4MiI+PC9wb2x5Z29uPjwvZz48IS0tIHR1bmUgLS0+PGcgaWQ9Im5vZGUxNyIgY2xhc3M9Im5vZGUiPjx0aXRsZT4KdHVuZQo8L3RpdGxlPgo8cGF0aCBmaWxsPSIjMDA3MmIyIiBzdHJva2U9InRyYW5zcGFyZW50IiBkPSJNMzkwLjUsLTI0OEMzOTAuNSwtMjQ4IDMxMy41LC0yNDggMzEzLjUsLTI0OCAzMDcuNSwtMjQ4IDMwMS41LC0yNDIgMzAxLjUsLTIzNiAzMDEuNSwtMjM2IDMwMS41LC0xODAgMzAxLjUsLTE4MCAzMDEuNSwtMTc0IDMwNy41LC0xNjggMzEzLjUsLTE2OCAzMTMuNSwtMTY4IDM5MC41LC0xNjggMzkwLjUsLTE2OCAzOTYuNSwtMTY4IDQwMi41LC0xNzQgNDAyLjUsLTE4MCA0MDIuNSwtMTgwIDQwMi41LC0yMzYgNDAyLjUsLTIzNiA0MDIuNSwtMjQyIDM5Ni41LC0yNDggMzkwLjUsLTI0OCIgLz48dGV4dCB0ZXh0LWFuY2hvcj0ibWlkZGxlIiB4PSIzNTIiIHk9Ii0yMzAuNSIgZm9udC1mYW1pbHk9IkhlbHZldGljYSxzYW5zLVNlcmlmIiBmb250LXNpemU9IjE1LjAwIiBmaWxsPSIjZmZmZmZmIj5ydWxlcwpzY29yZWQ8L3RleHQ+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iMzUyIiB5PSItMjEyLjUiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2Esc2Fucy1TZXJpZiIgZm9udC1zaXplPSIxNS4wMCIgZmlsbD0iI2ZmZmZmZiI+YW5kCmNob3Nlbiw8L3RleHQ+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iMzUyIiB5PSItMTk0LjUiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2Esc2Fucy1TZXJpZiIgZm9udC1zaXplPSIxNS4wMCIgZmlsbD0iI2ZmZmZmZiI+Y3VydmVzCmFuZDwvdGV4dD48dGV4dCB0ZXh0LWFuY2hvcj0ibWlkZGxlIiB4PSIzNTIiIHk9Ii0xNzYuNSIgZm9udC1mYW1pbHk9IkhlbHZldGljYSxzYW5zLVNlcmlmIiBmb250LXNpemU9IjE1LjAwIiBmaWxsPSIjZmZmZmZmIj5ncmFkZXM8L3RleHQ+PC9nPjwhLS0gZXZpZCYjNDU7Jmd0O3R1bmUgLS0+PGcgaWQ9ImVkZ2UxMiIgY2xhc3M9ImVkZ2UiPjx0aXRsZT4KZXZpZC0mZ3Q7dHVuZQo8L3RpdGxlPgo8cGF0aCBmaWxsPSJub25lIiBzdHJva2U9IiM3Nzc3NzciIGQ9Ik0zNTIsLTI2OS45M0MzNTIsLTI2NS4xMDg2IDM1MiwtMjU5LjgzMSAzNTIsLTI1NC40NTUiIC8+PHBvbHlnb24gZmlsbD0iIzc3Nzc3NyIgc3Ryb2tlPSIjNzc3Nzc3IiBwb2ludHM9IjM1NC4xMDAxLC0yNTQuMTIwMiAzNTIsLTI0OC4xMjAyIDM0OS45MDAxLC0yNTQuMTIwMyAzNTQuMTAwMSwtMjU0LjEyMDIiPjwvcG9seWdvbj48L2c+PCEtLSB0dW5lJiM0NTsmZ3Q7Y21wIC0tPjxnIGlkPSJlZGdlMTMiIGNsYXNzPSJlZGdlIj48dGl0bGU+CnR1bmUtJmd0O2NtcAo8L3RpdGxlPgo8cGF0aCBmaWxsPSJub25lIiBzdHJva2U9IiM3Nzc3NzciIGQ9Ik0zODEuNDMwMywtMTY3Ljc0OTdDMzg1LjQ5NzYsLTE2Mi4xODcyIDM4OS42NTM3LC0xNTYuNTAzMSAzOTMuNjYwMSwtMTUxLjAyMzciIC8+PHBvbHlnb24gZmlsbD0iIzc3Nzc3NyIgc3Ryb2tlPSIjNzc3Nzc3IiBwb2ludHM9IjM5NS40NDQzLC0xNTIuMTQxNSAzOTcuMjkwNSwtMTQ2LjA1ODYgMzkyLjA1MzksLTE0OS42NjI1IDM5NS40NDQzLC0xNTIuMTQxNSI+PC9wb2x5Z29uPjwvZz48IS0tIHB1YiAtLT48ZyBpZD0ibm9kZTE5IiBjbGFzcz0ibm9kZSI+PHRpdGxlPgpwdWIKPC90aXRsZT4KPHBhdGggZmlsbD0iIzAwNzJiMiIgc3Ryb2tlPSJ0cmFuc3BhcmVudCIgZD0iTTQzMS4zNjc2LC02MkM0MzEuMzY3NiwtNjIgMzQwLjYzMjQsLTYyIDM0MC42MzI0LC02MiAzMzQuNjMyNCwtNjIgMzI4LjYzMjQsLTU2IDMyOC42MzI0LC01MCAzMjguNjMyNCwtNTAgMzI4LjYzMjQsLTEyIDMyOC42MzI0LC0xMiAzMjguNjMyNCwtNiAzMzQuNjMyNCwwIDM0MC42MzI0LDAgMzQwLjYzMjQsMCA0MzEuMzY3NiwwIDQzMS4zNjc2LDAgNDM3LjM2NzYsMCA0NDMuMzY3NiwtNiA0NDMuMzY3NiwtMTIgNDQzLjM2NzYsLTEyIDQ0My4zNjc2LC01MCA0NDMuMzY3NiwtNTAgNDQzLjM2NzYsLTU2IDQzNy4zNjc2LC02MiA0MzEuMzY3NiwtNjIiIC8+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iMzg2IiB5PSItNDQuNSIgZm9udC1mYW1pbHk9IkhlbHZldGljYSxzYW5zLVNlcmlmIiBmb250LXNpemU9IjE1LjAwIiBmaWxsPSIjZmZmZmZmIj50aHJlc2hvbGRzCmFuZDwvdGV4dD48dGV4dCB0ZXh0LWFuY2hvcj0ibWlkZGxlIiB4PSIzODYiIHk9Ii0yNi41IiBmb250LWZhbWlseT0iSGVsdmV0aWNhLHNhbnMtU2VyaWYiIGZvbnQtc2l6ZT0iMTUuMDAiIGZpbGw9IiNmZmZmZmYiPmdyYWRlcwpmb3I8L3RleHQ+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iMzg2IiB5PSItOC41IiBmb250LWZhbWlseT0iSGVsdmV0aWNhLHNhbnMtU2VyaWYiIGZvbnQtc2l6ZT0iMTUuMDAiIGZpbGw9IiNmZmZmZmYiPmxpbms8L3RleHQ+PC9nPjwhLS0gdHVuZSYjNDU7Jmd0O3B1YiAtLT48ZyBpZD0iZWRnZTE1IiBjbGFzcz0iZWRnZSI+PHRpdGxlPgp0dW5lLSZndDtwdWIKPC90aXRsZT4KPHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNzc3Nzc3IiBkPSJNMzUxLjc2MiwtMTY3Ljc3MjZDMzUyLjQ2OTgsLTE0My4yMjE1IDM1NC45MjI0LC0xMTEuMzkzNCAzNjIsLTg0IDM2My4zOTE3LC03OC42MTM1IDM2NS4yOTU1LC03My4wOTE1IDM2Ny40MjY2LC02Ny43NDE3IiAvPjxwb2x5Z29uIGZpbGw9IiM3Nzc3NzciIHN0cm9rZT0iIzc3Nzc3NyIgcG9pbnRzPSIzNjkuNDQyMSwtNjguMzY0NiAzNjkuODE0OCwtNjIuMDE4NiAzNjUuNTY2LC02Ni43NDcgMzY5LjQ0MjEsLTY4LjM2NDYiPjwvcG9seWdvbj48L2c+PCEtLSBjbXAmIzQ1OyZndDtwdWIgLS0+PGcgaWQ9ImVkZ2UxNiIgY2xhc3M9ImVkZ2UiPjx0aXRsZT4KY21wLSZndDtwdWIKPC90aXRsZT4KPHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNzc3Nzc3IiBkPSJNNDA3LjMzOTcsLTgzLjcyMTVDNDA1LjIzMjEsLTc4LjUxNDcgNDAzLjAyOTMsLTczLjA3MjMgNDAwLjg3MjgsLTY3Ljc0NDYiIC8+PHBvbHlnb24gZmlsbD0iIzc3Nzc3NyIgc3Ryb2tlPSIjNzc3Nzc3IiBwb2ludHM9IjQwMi43NTU1LC02Ni43OTg3IDM5OC41NTc3LC02Mi4wMjQ5IDM5OC44NjIzLC02OC4zNzQ2IDQwMi43NTU1LC02Ni43OTg3Ij48L3BvbHlnb24+PC9nPjwvZz48L3N2Zz4=)
+
+## How is a site placed?
+
+A site’s point goes to the nearest Atlas stream within 500 m, and the
+site is kept only if that stream is within 100 m. The other streams in
+reach are not weighed.
+
+| site visit  | fate    | Atlas stream | name      | distance (m) | snapped to |
+|:------------|:--------|-------------:|:----------|-------------:|:-----------|
+| 103957_16_1 | kept    |    360471389 | (unnamed) |         11.9 | yes        |
+| 103957_16_1 | kept    |    360443578 | (unnamed) |        285.9 |            |
+| 103957_16_1 | kept    |    360430079 | (unnamed) |        395.6 |            |
+| 103957_16_1 | kept    |    360762625 | (unnamed) |        433.6 |            |
+| 103957_16_1 | kept    |    360766426 | (unnamed) |        487.5 |            |
+| 103962_6_1  | dropped |    360559120 | (unnamed) |        239.7 | yes        |
+| 103962_6_1  | dropped |    360717148 | (unnamed) |        348.3 |            |
+| 103962_6_1  | dropped |    360784252 | (unnamed) |        356.7 |            |
+
+Two BULK sites and every Atlas stream within 500 m of each. {.table}
+
+## Limits
+
+- Sites are placed on the nearest stream; a near-equal stream close by
+  is not weighed
+  ([\#91](https://github.com/NewGraphEnvironment/knowledge/issues/91)).
+- Rules are scored on the Atlas line’s slope, while link applies a rule
+  on its own segments, whose slope it works out again after every cut
+  ([\#92](https://github.com/NewGraphEnvironment/knowledge/issues/92)).
+- Flows are 30-year averages, so no single dry year is in them.
+
+## Which numbers shape the result, and which have been tested?
+
+Every number below shapes a result. Each was checked against the code
+and the run when this article’s data were written. **Source** says where
+the value came from: a published source, a convention set here, a value
+inherited from link or bcfishpass ([Norris
+2024b](#ref-norris2024smnorrisbcfishpass)), or a value measured from
+data. **Tested** says whether the result has been compared with another
+value. The untested rows come first: they are the work still to do.
+
+Of the 67 settings, 7 have been tested and 10 of the untested ones were
+inherited.
+
+All 67 settings
+
+| setting | value | unit | step | source | tested | issue |
+|:---|:---|:---|:---|:---|:---|---:|
+| Snap search radius | 500 | m | 2 | inherited | no | [\#91](https://github.com/NewGraphEnvironment/knowledge/issues/91) |
+| Snap distance limit | 100 | m | 2 | inherited | no | [\#91](https://github.com/NewGraphEnvironment/knowledge/issues/91) |
+| Wetland area making a line a wetland branch | 1 | ha | 5 | inherited | no |  |
+| Lake area making a line a lake branch | 100 | ha | 5 | inherited | no |  |
+| Natural barrier classes downstream | GRADIENT, FALLS, SUBSURFACE_FLOW, USER_DEFINITE |  | 5 | inherited | no |  |
+| Gradient the rules are scored on | fwa_gradient |  | 7 | inherited | no | [\#92](https://github.com/NewGraphEnvironment/knowledge/issues/92) |
+| Gradient the grade reads on link’s segments | gradient |  | 9 | inherited | no | [\#92](https://github.com/NewGraphEnvironment/knowledge/issues/92) |
+| Connectivity bridge distance | 10000 | m | 10 | inherited | no |  |
+| Connectivity bridge gradient | 0.05 | m/m | 10 | inherited | no |  |
+| discharge_source in link’s default bundle | unset |  | 10 | inherited | no | [\#89](https://github.com/NewGraphEnvironment/knowledge/issues/89) |
+| FDIS sentinel value | 9999 |  | 1 | measured | no |  |
+| Earliest visit year kept | 1950 |  | 1 | convention | no |  |
+| Latest visit year kept | 2022 |  | 1 | convention | no |  |
+| 1:50k code length the check reads | 45 | characters | 2 | source | no | [\#91](https://github.com/NewGraphEnvironment/knowledge/issues/91) |
+| 1:50k code digits below the basin that, all zero, mark a code not checked | 42 | characters | 2 | source | no | [\#91](https://github.com/NewGraphEnvironment/knowledge/issues/91) |
+| Routed flow kept unless under this share of the balance’s | 0.2 | ratio | 4 | convention | no |  |
+| Width model control: least share within 5 % | 0.9 | share | 5 | measured | no |  |
+| Edge types a parent’s flow is never taken from | 1100, 1150, 1300, 1350, 2300 | FWA edge type | 5 | convention | no |  |
+| Edge types a dam’s regulated reach never follows | 1100, 1150, 1300, 1350, 2300 | FWA edge type | 5 | convention | no |  |
+| River sizes walked to | 1, 3, 5, 10, 20, 30, 50 | m3/s | 5 | convention | no |  |
+| Segment start taken as the visit’s segment within | 5 | m | 5 | convention | no | [\#92](https://github.com/NewGraphEnvironment/knowledge/issues/92) |
+| Largest segment overlap tolerated | 0.01 | m | 5 | measured | no |  |
+| Dam to segment snap | 500 | m | 5 | convention | no |  |
+| Degree of regulation that counts a dam without a reservoir | 10 | % | 5 | convention | no |  |
+| Edge types a walk never ends on | 1100, 1150, 1300, 1350, 2300, 1400, 1450 | FWA edge type | 5 | convention | no | [\#73](https://github.com/NewGraphEnvironment/knowledge/issues/73) |
+| Most hops a walk takes before it stops | 60 | hops | 5 | convention | no |  |
+| MAD floors in the grid | 0.1, 0.15, 0.2, 0.28, 0.35, 0.5, 0.75, 1 | m3/s | 6 | convention | no |  |
+| Width floors in the grid | 1, 1.5, 2, 3, 4 | m | 6 | convention | no |  |
+| Exception river sizes | 1, 3, 5, 10, 20, 30, 50 | m3/s | 6 | convention | no |  |
+| Exception distances | 100, 250, 500, 1000, 2000, 5000 | m | 6 | convention | no |  |
+| Stream edge types scored | 1000, 1100, 2000, 2300 | FWA edge type | 7 | convention | no |  |
+| Fished area kept | 10, 10000 | m2 | 7 | convention | no |  |
+| Group folds | 5 |  | 7 | convention | no |  |
+| Exception distance the pick moves off | 200 | m | 7 | convention | no |  |
+| Smoke gate: tolerance on no rule | 0.25 | deviance | 7 | convention | no | [\#84](https://github.com/NewGraphEnvironment/knowledge/issues/84) |
+| Smoke gate: largest nuisance coefficient | 5 | cloglog | 7 | convention | no | [\#84](https://github.com/NewGraphEnvironment/knowledge/issues/84) |
+| Least groups with both outcomes to fit | 5 | groups | 7 | convention | no |  |
+| Groups below which a fit is underpowered | 10 | groups | 7 | convention | no |  |
+| Maturity codes that count as spawner evidence | IM, M, MT, SP, ST |  | 7 | source | no |  |
+| Length counted as a large spawner | 350 | mm | 7 | convention | no |  |
+| Flow source the rules read | pick |  | 7 | convention | no | [\#89](https://github.com/NewGraphEnvironment/knowledge/issues/89) |
+| Walk targets on a lake or regulated river excluded | FALSE |  | 7 | convention | no |  |
+| Era breaks of the nuisance term | 1994, 2004 |  | 7 | convention | no |  |
+| Extra fold seeds | 55, 56, 57, 58 |  | 8 | convention | no |  |
+| Group bootstrap resamples | 200 |  | 8 | convention | no |  |
+| Bootstrap seed | 541 |  | 8 | convention | no |  |
+| Walk cap read by the curve | 50000 | m | 9 | convention | no |  |
+| River size walked to where the pick has no exception | 10 | m3/s | 9 | convention | no |  |
+| Smooth basis sizes (size, distance, gradient) | 6, 6, 6 |  | 9 | convention | no |  |
+| Grade reference quantile | 0.95 | quantile | 9 | convention | no |  |
+| Grade class breaks | 0, 0.2, 0.4, 0.6, 0.8, 1 |  | 9 | convention | no |  |
+| Gradient ceiling the curve and grade read | 0.2 | m/m | 9 | convention | no |  |
+| Offset before the log of distance | 10 | m | 9 | convention | no |  |
+| Flow the grade reads on link’s segments under a MAD rule | mad_pick |  | 9 | convention | no |  |
+| Width the grade reads on link’s segments under a width rule | channel_width |  | 9 | convention | no |  |
+| Comparison check: least fished area | 10 | m2 | 10 | convention | no |  |
+| Comparison check: largest fished area | 10000 | m2 | 10 | convention | no |  |
+| Comparison bootstrap resamples | 200 |  | 10 | convention | no |  |
+| Comparison check: edge types of the FDIS visits it counts | 1000, 1050, 1100, 1150, 2000, 2100, 2300, 1250, 1350 | FWA edge type | 10 | convention | no |  |
+| Comparison bootstrap seed | 542 |  | 10 | convention | no |  |
+| Gradient maxima in the grid | 0.03, 0.04, 0.0549, 0.07, 0.09, 0.11, 0.13, 0.15, 0.2, 0.25, 0.3 | m/m | 6 | convention | yes | [\#67](https://github.com/NewGraphEnvironment/knowledge/issues/67) |
+| Fold seed | 54 |  | 7 | convention | yes |  |
+| Group intercepts absorbed | fe |  | 7 | convention | yes | [\#83](https://github.com/NewGraphEnvironment/knowledge/issues/83) |
+| Prior SD on data set and era | 2.5 | cloglog | 7 | convention | yes | [\#84](https://github.com/NewGraphEnvironment/knowledge/issues/84) |
+| Region width | 1 | SE | 7 | convention | yes | [\#79](https://github.com/NewGraphEnvironment/knowledge/issues/79) |
+| Stricter reading | 1.96 | SE | 7 | convention | yes | [\#79](https://github.com/NewGraphEnvironment/knowledge/issues/79) |
+| Wetland structure reported as tuned | door |  | 10 | convention | yes |  |
+
+The settings, from inst/method/settings.csv. {.table
+style="width:100%;"}
+
+## Software and citation
+
+The steps run on the PostgreSQL tools
+[`fwapg`](https://smnorris.github.io/fwapg/) and New Graph’s
+[fork](https://github.com/NewGraphEnvironment/fwapg) of it, and on the R
+packages [`link`](https://newgraphenvironment.github.io/link/)
+(segments, access and habitat),
+[`wet`](https://newgraphenvironment.github.io/wet/) (flows),
+[`fresh`](https://newgraphenvironment.github.io/fresh/) (the habitat
+tests) and
+[`knowledge`](https://newgraphenvironment.github.io/knowledge/) (the
+evidence and the tuning). This article’s data were written on 2026-10-27
+at commit deb8bf5. To cite this package:
+
+Irvine A (2026). *knowledge: Fisheries Evidence and Tuned Habitat
+Thresholds for BC Watershed Groups*. New Graph Environment Ltd. Version
+0.4.9, <https://newgraphenvironment.github.io/knowledge/>.
+
+## References
+
+Craig, James R., Genevieve Brown, Robert Chlumsky, et al. 2020.
+“Flexible Watershed Simulation with the Raven Hydrological Modelling
+Framework.” *Environmental Modelling & Software* 129 (July): 104728.
+<https://doi.org/10.1016/j.envsoft.2020.104728>.
+
+Environment and Climate Change Canada. 2021. “National Water Data
+Archive: HYDAT.” Service description. Environment and Climate Change
+Canada (ECCC).
+<https://www.canada.ca/en/environment-climate-change/services/water-overview/quantity/monitoring/survey/data-products-services/national-archive-hydat.html>.
+
+FLNRORD. 2021. “Freshwater Atlas Stream Network - Data Catalogue.”
+Published by Ministry of Forests, Lands, Natural Resource Operations and
+Rural Development.
+<https://catalogue.data.gov.bc.ca/dataset/freshwater-atlas-stream-network>.
+
+Irvine, Allan. 2026a. *fresh: Freshwater Referenced Spatial Hydrology*.
+Version 0.39.0. New Graph Environment Ltd.
+<https://github.com/NewGraphEnvironment/fresh>.
+
+Irvine, Allan. 2026b. *link: Develop, Test and Communicate Intrinsic
+Habitat and Connectivity Models for the BC Freshwater Atlas Stream
+Network*. Version 0.66.0. New Graph Environment Ltd.
+<https://doi.org/10.5281/zenodo.23264990>.
+
+Irvine, Allan. 2026c. *wet: Stream Flow and Water Temperature for the BC
+Freshwater Atlas*. Version discharge/fwa/v1. New Graph Environment Ltd.
+<https://doi.org/10.5281/zenodo.23305781>.
+
+Norris, Simon. 2024a. *bcfishobs*.
+<https://github.com/smnorris/bcfishobs>.
+
+Norris, Simon. 2024b. *bcfishpass*.
+<https://github.com/smnorris/bcfishpass>.
+
+Norris, Simon. 2024c. *fwapg*. Version f9718cb.
+<https://github.com/smnorris/fwapg>.
+
+Norris, Simon, and Allan Irvine. 2026. *fwapg, New Graph Environment’s
+fork*. Version 7c30f58. New Graph Environment Ltd.
+<https://github.com/NewGraphEnvironment/fwapg/tree/newgraph>.
+
+Province of British Columbia. 2022. “Fisheries Data Information System
+(FDIS) Electrofishing Extract.” Electrofishing extract, exports of
+2020-11-16 and 2022-03-22.
+
+Schnorbus, Markus A. 2018. *VIC-Glacier (VIC-GL): Description of VIC
+Model Changes and Upgrades*. Pacific Climate Impacts Consortium,
+University of Victoria. <https://hdl.handle.net/1828/21631>.

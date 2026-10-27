@@ -37,17 +37,33 @@ groups**, large basins such as the Bulkley. The records are the
 Fisheries Data Information System’s electrofishing sites ([Province of
 British Columbia
 2022](#ref-provinceofbritishcolumbia2022FisheriesData)): where crews
-fished, and whether they caught chinook. Each site was matched to the
-records it produced in bcfishobs ([Norris
-2024a](#ref-norris2024smnorrisbcfishobs)) and placed on link’s streams,
-built on the BC Freshwater Atlas through fwapg ([Norris
-2024c](#ref-norris2024smnorrisfwapg)), with flows from wet ([Irvine
-2026c](#ref-irvine2026wetStream)) and the rules run by fresh ([Irvine
-2026a](#ref-irvine2026freshFreshwater)). Sites were kept when they were
-on ordinary stream lines, of a usual fished area, with no barrier to
-chinook downstream, in a group where link expects chinook: 7,123 sites
-in 104 groups. The tests use the 43 groups where chinook were caught at
-some sites and not others: **4,490 sites, 215 with chinook**.
+fished, and whether they caught chinook. Each site’s mapped point was
+snapped to the nearest stream of the BC Freshwater Atlas, loaded by
+fwapg ([Norris 2024c](#ref-norris2024smnorrisfwapg)), and kept only when
+that stream lay within 100 m and, where FDIS recorded the site’s 1:50k
+tributary code and the Atlas’s 1:20k-1:50k crosswalk knows it, on a
+stream in it; the site then took link’s segment at that point. Each
+segment’s flow is wet’s default ([Irvine
+2026c](#ref-irvine2026wetStream)): PCIC’s modelled flow, VIC-GL runoff
+([Schnorbus 2018](#ref-schnorbus2018VICGlacierVICGL)) routed with Raven
+([Craig et al. 2020](#ref-craig_etal2020Flexiblewatershed)) on PCIC’s
+own network and carried onto Atlas streams by a crosswalk in New Graph’s
+fork of fwapg ([Norris and Irvine
+2026](#ref-norris_irvine2026NewGraphEnvironmentfwapg)), with wet’s own
+water balance where that flow does not reach or, on a stream’s own line,
+carries under a fifth of the balance’s. A site’s gradient is its Atlas
+line’s, the line it was snapped to; link applies a rule to its own
+segments, cut from those lines, and recomputes each piece’s gradient
+from its ends. fresh ran the rules ([Irvine
+2026a](#ref-irvine2026freshFreshwater)). The province’s other fish
+observations, gathered in bcfishobs ([Norris
+2024a](#ref-norris2024smnorrisbcfishobs)), scored no rule: they record
+where fish were found, not where they were sought and missed. Sites were
+kept when they were on ordinary stream lines, of a usual fished area,
+with no barrier to chinook downstream, in a group where link expects
+chinook: 7,123 sites in 104 groups. The tests use the 43 groups where
+chinook were caught at some sites and not others: **4,490 sites, 215
+with chinook**.
 
 ## How were rules compared?
 
@@ -234,6 +250,11 @@ Chen, Yuchen, and Yuhong Yang. 2021. “The One Standard Error Rule for
 Model Selection: Does It Work?” *Stats* 4 (4): 868–92.
 <https://doi.org/10.3390/stats4040051>.
 
+Craig, James R., Genevieve Brown, Robert Chlumsky, et al. 2020.
+“Flexible Watershed Simulation with the Raven Hydrological Modelling
+Framework.” *Environmental Modelling & Software* 129 (July): 104728.
+<https://doi.org/10.1016/j.envsoft.2020.104728>.
+
 Hastie, Trevor, Robert Tibshirani, and Jerome Friedman. 2009. *The
 Elements of Statistical Learning: Data Mining, Inference, and
 Prediction*. 2nd ed. Springer Series in Statistics. Springer.
@@ -261,6 +282,14 @@ Norris, Simon. 2024b. *bcfishpass*.
 Norris, Simon. 2024c. *fwapg*. Version f9718cb.
 <https://github.com/smnorris/fwapg>.
 
+Norris, Simon, and Allan Irvine. 2026. *fwapg, New Graph Environment’s
+fork*. Version 7c30f58. New Graph Environment Ltd.
+<https://github.com/NewGraphEnvironment/fwapg/tree/newgraph>.
+
 Province of British Columbia. 2022. “Fisheries Data Information System
 (FDIS) Electrofishing Extract.” Electrofishing extract, exports of
 2020-11-16 and 2022-03-22.
+
+Schnorbus, Markus A. 2018. *VIC-Glacier (VIC-GL): Description of VIC
+Model Changes and Upgrades*. Pacific Climate Impacts Consortium,
+University of Victoria. <https://hdl.handle.net/1828/21631>.

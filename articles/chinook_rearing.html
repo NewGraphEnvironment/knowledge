@@ -33,6 +33,7 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="../articles/chinook_rearing.html">Chinook rearing: choosing link's thresholds from fish records</a></li>
+    <li><a class="dropdown-item" href="../articles/habitat_thresholds.html">Choosing habitat thresholds from where fish were caught</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -108,17 +109,30 @@ have their own conditions (last section).</p>
 records are the Fisheries Data Information System’s electrofishing sites
 <span class="citation">(<a href="#ref-provinceofbritishcolumbia2022FisheriesData">Province of
 British Columbia 2022</a>)</span>: where crews fished, and whether they
-caught chinook. Each site was matched to the records it produced in
-bcfishobs <span class="citation">(<a href="#ref-norris2024smnorrisbcfishobs">Norris 2024a</a>)</span> and
-placed on link’s streams, built on the BC Freshwater Atlas through fwapg
-<span class="citation">(<a href="#ref-norris2024smnorrisfwapg">Norris
-2024c</a>)</span>, with flows from wet <span class="citation">(<a href="#ref-irvine2026wetStream">Irvine 2026c</a>)</span> and the rules
-run by fresh <span class="citation">(<a href="#ref-irvine2026freshFreshwater">Irvine 2026a</a>)</span>. Sites
-were kept when they were on ordinary stream lines, of a usual fished
-area, with no barrier to chinook downstream, in a group where link
-expects chinook: 7,123 sites in 104 groups. The tests use the 43 groups
-where chinook were caught at some sites and not others: <strong>4,490
-sites, 215 with chinook</strong>.</p>
+caught chinook. Each site’s mapped point was snapped to the nearest
+stream of the BC Freshwater Atlas, loaded by fwapg <span class="citation">(<a href="#ref-norris2024smnorrisfwapg">Norris
+2024c</a>)</span>, and kept only when that stream lay within 100 m and,
+where FDIS recorded the site’s 1:50k tributary code and the Atlas’s
+1:20k-1:50k crosswalk knows it, on a stream in it; the site then took
+link’s segment at that point. Each segment’s flow is wet’s default <span class="citation">(<a href="#ref-irvine2026wetStream">Irvine
+2026c</a>)</span>: PCIC’s modelled flow, VIC-GL runoff <span class="citation">(<a href="#ref-schnorbus2018VICGlacierVICGL">Schnorbus
+2018</a>)</span> routed with Raven <span class="citation">(<a href="#ref-craig_etal2020Flexiblewatershed">Craig et al.
+2020</a>)</span> on PCIC’s own network and carried onto Atlas streams by
+a crosswalk in New Graph’s fork of fwapg <span class="citation">(<a href="#ref-norris_irvine2026NewGraphEnvironmentfwapg">Norris and Irvine
+2026</a>)</span>, with wet’s own water balance where that flow does not
+reach or, on a stream’s own line, carries under a fifth of the
+balance’s. A site’s gradient is its Atlas line’s, the line it was
+snapped to; link applies a rule to its own segments, cut from those
+lines, and recomputes each piece’s gradient from its ends. fresh ran the
+rules <span class="citation">(<a href="#ref-irvine2026freshFreshwater">Irvine 2026a</a>)</span>. The
+province’s other fish observations, gathered in bcfishobs <span class="citation">(<a href="#ref-norris2024smnorrisbcfishobs">Norris
+2024a</a>)</span>, scored no rule: they record where fish were found,
+not where they were sought and missed. Sites were kept when they were on
+ordinary stream lines, of a usual fished area, with no barrier to
+chinook downstream, in a group where link expects chinook: 7,123 sites
+in 104 groups. The tests use the 43 groups where chinook were caught at
+some sites and not others: <strong>4,490 sites, 215 with
+chinook</strong>.</p>
 </div>
 <div class="section level2">
 <h2 id="how-were-rules-compared">How were rules compared?<a class="anchor" aria-label="anchor" href="#how-were-rules-compared"></a>
@@ -388,6 +402,12 @@ Chen, Yuchen, and Yuhong Yang. 2021. <span>“The <span>One Standard Error
 Rule</span> for <span>Model Selection</span>: <span>Does It
 Work</span>?”</span> <em>Stats</em> 4 (4): 868–92. <a href="https://doi.org/10.3390/stats4040051" class="external-link">https://doi.org/10.3390/stats4040051</a>.
 </div>
+<div id="ref-craig_etal2020Flexiblewatershed" class="csl-entry">
+Craig, James R., Genevieve Brown, Robert Chlumsky, et al. 2020.
+<span>“Flexible Watershed Simulation with the <span>Raven</span>
+Hydrological Modelling Framework.”</span> <em>Environmental Modelling
+&amp; Software</em> 129 (July): 104728. <a href="https://doi.org/10.1016/j.envsoft.2020.104728" class="external-link">https://doi.org/10.1016/j.envsoft.2020.104728</a>.
+</div>
 <div id="ref-hastie_etal2009ElementsStatistical" class="csl-entry">
 Hastie, Trevor, Robert Tibshirani, and Jerome Friedman. 2009. <em>The
 <span>Elements</span> of <span>Statistical Learning</span>: <span>Data
@@ -398,20 +418,20 @@ Springer. <a href="https://doi.org/10.1007/978-0-387-84858-7" class="external-li
 <div id="ref-irvine2026freshFreshwater" class="csl-entry">
 Irvine, Allan. 2026a. <em><span class="nocase">fresh</span>:
 <span>Freshwater Referenced Spatial Hydrology</span></em>. Version
-0.39.0. New Graph Environment Ltd. <a href="https://github.com/NewGraphEnvironment/fresh" class="external-link">https://github.com/NewGraphEnvironment/fresh</a>.
+0.39.0. <span>New Graph Environment Ltd.</span> <a href="https://github.com/NewGraphEnvironment/fresh" class="external-link">https://github.com/NewGraphEnvironment/fresh</a>.
 </div>
 <div id="ref-irvine2026linkDevelop" class="csl-entry">
 Irvine, Allan. 2026b. <em><span class="nocase">link</span>:
 <span>Develop</span>, <span>Test</span> and <span>Communicate Intrinsic
 Habitat</span> and <span>Connectivity Models</span> for the <span>BC
-Freshwater Atlas Stream Network</span></em>. Version 0.66.0. New Graph
-Environment Ltd. <a href="https://doi.org/10.5281/zenodo.23264990" class="external-link">https://doi.org/10.5281/zenodo.23264990</a>.
+Freshwater Atlas Stream Network</span></em>. Version 0.66.0. <span>New
+Graph Environment Ltd.</span> <a href="https://doi.org/10.5281/zenodo.23264990" class="external-link">https://doi.org/10.5281/zenodo.23264990</a>.
 </div>
 <div id="ref-irvine2026wetStream" class="csl-entry">
 Irvine, Allan. 2026c. <em><span class="nocase">wet</span>: <span>Stream
 Flow</span> and <span>Water Temperature</span> for the <span>BC
-Freshwater Atlas</span></em>. Version discharge/fwa/v1. New Graph
-Environment Ltd. <a href="https://doi.org/10.5281/zenodo.23305781" class="external-link">https://doi.org/10.5281/zenodo.23305781</a>.
+Freshwater Atlas</span></em>. Version discharge/fwa/v1. <span>New Graph
+Environment Ltd.</span> <a href="https://doi.org/10.5281/zenodo.23305781" class="external-link">https://doi.org/10.5281/zenodo.23305781</a>.
 </div>
 <div id="ref-norris2024smnorrisbcfishobs" class="csl-entry">
 Norris, Simon. 2024a. <em><span class="nocase">bcfishobs</span></em>. <a href="https://github.com/smnorris/bcfishobs" class="external-link">https://github.com/smnorris/bcfishobs</a>.
@@ -424,11 +444,22 @@ Norris, Simon. 2024b. <em><span class="nocase">bcfishpass</span></em>.
 Norris, Simon. 2024c. <em><span class="nocase">fwapg</span></em>.
 Version f9718cb. <a href="https://github.com/smnorris/fwapg" class="external-link">https://github.com/smnorris/fwapg</a>.
 </div>
+<div id="ref-norris_irvine2026NewGraphEnvironmentfwapg" class="csl-entry">
+Norris, Simon, and Allan Irvine. 2026. <em><span class="nocase">fwapg,
+New Graph Environment’s fork</span></em>. Version 7c30f58. <span>New
+Graph Environment Ltd.</span> <a href="https://github.com/NewGraphEnvironment/fwapg/tree/newgraph" class="external-link">https://github.com/NewGraphEnvironment/fwapg/tree/newgraph</a>.
+</div>
 <div id="ref-provinceofbritishcolumbia2022FisheriesData" class="csl-entry">
 Province of British Columbia. 2022. <span>“Fisheries <span>Data
 Information System</span> (<span>FDIS</span>) Electrofishing
 Extract.”</span> Electrofishing extract, exports of 2020-11-16 and
 2022-03-22.
+</div>
+<div id="ref-schnorbus2018VICGlacierVICGL" class="csl-entry">
+Schnorbus, Markus A. 2018. <em><span>VIC-Glacier</span>
+(<span>VIC-GL</span>): <span>Description</span> of <span>VIC</span>
+Model Changes and Upgrades</em>. Pacific Climate Impacts Consortium,
+University of Victoria. <a href="https://hdl.handle.net/1828/21631" class="external-link">https://hdl.handle.net/1828/21631</a>.
 </div>
 </div>
 </div>
