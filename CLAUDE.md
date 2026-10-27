@@ -38,7 +38,9 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   its value lives); the script refuses to run with its code or registers uncommitted. Rerun it after any `0230`,
   `0310`, `0320` or `0330` rerun. `tests/testthat/test-settings-register.R` fails when a register value and the code
   disagree: change both together, and add a row for any new number that shapes a result (the test cannot see one with
-  no row). Its references come from `data-raw/vignette_bib.R` with the chinook article's. A draft article is named
+  no row). `method.rds` also pins the md5s of the ignored grade tables (`data/tune/*_grades.csv`) where it was built,
+  and `test-vignette-data.R` checks them wherever they exist, so on a machine whose copies differ it fails there and
+  nowhere else (CI has no `data/`). Its references come from `data-raw/vignette_bib.R` with the chinook article's. A draft article is named
   `vignettes/_<name>.Rmd`: pkgdown skips it, `.Rbuildignore` keeps it out of the tarball, and pkgdown.yaml fails if
   one reaches `docs/articles/`.
 - `scripts/` — the run order (`scripts/README.md`), calling the package (`pkgload::load_all()` from
@@ -329,6 +331,10 @@ Before comparing two runs that read flows, read the table comment
 (`obj_description('discharge.fwa_v1_segment_monthly'::regclass)`, which names the build), and expect a rule-unchanged
 check to fail when it differs. `0325` publishes the comment as `discharge_load_at_publish`; recording it at grading
 time is #72.
+wet writes one comment per table, naming only the scenario loaded last, while the walk and the grade read only
+`historical`, so `knw_discharge_load()` refuses a comment that does not name `scenario historical`: after an ssp load
+the comment no longer identifies the historical rows, and the walk cache would serve walks made on an older load
+(NewGraphEnvironment/wet#88 is the load table that would fix it).
 
 The walk (`inst/sql/ch_dist_profile.sql`) ends at a double-line river's bank, by fresh 0.42.0's rule (#73): a
 connector (edge 1400/1450) is never a target, the connector run and the jump's crossing inside the target's polygon
