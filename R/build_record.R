@@ -31,9 +31,10 @@ knw_build_record <- function(conn, schema, run_uid = NULL) {
   has <- DBI::dbGetQuery(conn, "SELECT to_regclass($1) IS NOT NULL AS ok",
                          params = list(paste0(schema, ".log_recompute")))$ok
   if (!isTRUE(has)) stop("schema ", schema, " has no log_recompute table: not a link persist schema", call. = FALSE)
-  runs <- DBI::dbGetQuery(conn, sprintf(
-    "SELECT string_agg(DISTINCT run_uid, ';' ORDER BY run_uid) AS u FROM %s.log_recompute", schema))$u
-  fresh_v <- if (requireNamespace("fresh", quietly = TRUE)) as.character(utils::packageVersion("fresh")) else NA_character_
+  runs_sql <- "SELECT string_agg(DISTINCT run_uid, ';' ORDER BY run_uid) AS u FROM %s.log_recompute"
+  runs <- DBI::dbGetQuery(conn, sprintf(runs_sql, schema))$u
+  fresh_v <- NA_character_
+  if (requireNamespace("fresh", quietly = TRUE)) fresh_v <- as.character(utils::packageVersion("fresh"))
   rec <- list(schema = schema, run_uid = runs, discharge_load = knw_discharge_load(conn), walk_md5 = knw_walk_md5(),
               fresh_version = fresh_v)
   rec$line <- sprintf("build: schema %s, run %s; flows %s; walk %s; fresh %s", schema, runs, rec$discharge_load,
