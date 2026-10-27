@@ -51,6 +51,9 @@ reads link's segment `gradient`, so the curve is fitted on one gradient and grad
   sensitivity on every key, and both regions are reported. The method says that link cuts a segment at a catch, so the
   segment's length and noise depend on the outcome. That goes into #70, where fixed windows can test whether it moves a
   threshold. (Al, 2026-10-27, after the step 1 measurement above.)
+- `knowledge/thresholds/v1` and `knowledge/habitat_grade/v1` have never been published (`aws s3 ls
+  s3://fresh-bc/knowledge/` holds only `fdis/` v1 and v2, 2026-10-27), so the changed meaning and the new `curve_grad`
+  column stay v1. 0325 builds locally; `PUBLISH=TRUE` is not part of this branch (review G10).
 - Mechanism (mine): the sensitivity scores on the main fold seed only (`extra = FALSE`) and writes no grades. The
   one-SE region and the pick come from the main seed, so the regions compare like for like. It goes to
   `data/tune/grad_fwa/`, which `0325`, `0330` and `knw_thresholds_table()` never read (they list `data/tune/` without
@@ -67,15 +70,15 @@ reads link's segment `gradient`, so the curve is fitted on one gradient and grad
       outcome-linked segment length.
 
 ## Phase 2: Name the gradient in the tune functions and in every record (tests first)
-- [ ] Tests (fail first). `knw_tune_run(cols = )` reaches the rule and the curve. The default reads `segment_gradient`.
+- [x] Tests (fail first). `knw_tune_run(cols = )` reaches the rule and the curve. The default reads `segment_gradient`.
       A score cache made on another gradient column is rescored, not read back (restore the old spec and watch the test
       go red). The curve records its `cols`.
-- [ ] `knw_tune_run()` takes
+- [x] `knw_tune_run()` takes
       `cols = c(grad = "segment_gradient", width = "cw_deploy", mad = "mad_pick")`. It passes them to its `rule_in`
       closure and to `knw_tune_curve()`, checks the named columns instead of `fwa_gradient`, and adds the gradient
       column to the cache `spec`. The defaults of `knw_rule_in()` and `knw_tune_curve()` move to `segment_gradient`,
       and the curve object keeps `cols`.
-- [ ] Update `tests/testthat/helper-tune_sim.R` and the fixtures in `test-rule_in.R`, `test-tune_curve.R` and
+- [x] Update `tests/testthat/helper-tune_sim.R` and the fixtures in `test-rule_in.R`, `test-tune_curve.R` and
       `test-grade_species.R` that build `fwa_gradient`.
 - [ ] `0322` and `data-raw/snap_limit_sensitivity.R` pass `cols` with `fwa_gradient`, so they keep reproducing their
       records.
@@ -84,11 +87,26 @@ reads link's segment `gradient`, so the curve is fitted on one gradient and grad
       run's value and refuse a table without it.
 - [ ] `0320` reads `GRADIENT` (default `segment_gradient`). Any other value scores on the main seed, writes no grades,
       writes to `data/tune/grad_<name>/`, and its log names it. Update the header's ANALYSIS SPEC and RUN lines.
+- [x] (review G1) A cache with no `spec` was scored on the Atlas line's gradient: rescore it unless the run reads
+      `fwa_gradient`.
+- [ ] (review G5, AC2, AC3) One helper holds a grade table's record to the run (`curve_grad` beside the existing
+      fields), and 0320's keep-check, 0325, 0330, vignette_chinook.R and vignette_method.R call it. `knw_grade_species`
+      refuses a curve fitted on any gradient but `segment_gradient`. `knw_thresholds_table` carries `curve_grad` and
+      refuses it NA on a fitted or underpowered row. Unit tests for each.
+- [ ] (review B1, B2, G3, A1) 0320: `GRADIENT` takes only `segment_gradient` or `fwa_gradient` (written to `grad_fwa`).
+      `main_only <- dev || gradient != "segment_gradient"` gates `extra`, the seeds and honest tables, their summary
+      columns and log blocks, and the grading. The log name carries `-grad_fwa`, and both `knw_tune_run` calls get
+      `cols`. DEV=1 with GRADIENT writes to `data/tune/dev/grad_fwa/`.
+- [ ] (review G8) vignette_chinook.R records the run's `curve_grad` rather than `formals(knw_rule_in)$cols`.
+      0322's header no longer claims "same spec as 0320".
 - [ ] Register: `gradient_col` becomes `segment_gradient`, its `fn:` pointers move to `knw_tune_run:cols[grad]` (and
       to the two functions' defaults), and its note says why. Close the gap the `grade_grad_col` note names. Run
-      `devtools::document()`, `lintr`, `devtools::test()`.
+      `devtools::document()`, `lintr`, `devtools::test()` (test-vignette-data's two source tests stay red until Phase 4,
+      review O3). Also `tested = yes` on `gradient_col`; pipeline.csv steps 5, 7 and 9 (review G6).
 
 ## Phase 3: Retune on #91's evidence (`SCHEMA=fresh_default_20261017`)
+- [ ] (review O2, AC1) First, `DEV=1 SPECIES=CH 0320`: the population matches segment_gradient_check's counts and the
+      pick is read on `segment_gradient`. The sensitivity runs apart from the 0320 → 0325 → 0330 chain.
 - [ ] `0320` full run: smoke gates for every key first. The chain stops on any failure, and nothing downstream runs
       until every key passes (#84).
 - [ ] `GRADIENT=fwa_gradient 0320`: the Atlas sensitivity on every key.
@@ -98,6 +116,12 @@ reads link's segment `gradient`, so the curve is fitted on one gradient and grad
       #91's note above its Evidence paragraph.
 
 ## Phase 4: Articles and bundles (owed by #91 and #93)
+
+Order (review O1): the prose that register pointers name, then every settings.csv and pipeline.csv edit, commit, the
+bundle scripts, then the tests. chinook_rearing.Rmd's `stopifnot` guards encode #73's findings: reread the whole
+article against the new tables (review G8). habitat_thresholds.Rmd: step 5 (:185) carries the gradient sentence, and
+limits :334 ("not weighed") is now false (review G9). CLAUDE.md's record section names `curve_grad` and `spec$grad`
+(review G7).
 - [ ] `data-raw/vignette_method.R` bundles the two gradients' regions per key from `data/tune/grad_fwa/`; rerun it,
       `data-raw/vignette_chinook.R`, and `data-raw/vignette_bib.R` (Zotero running).
 - [ ] `vignettes/habitat_thresholds.Rmd`: step 2 (each site takes its segment's gradient, and why), the `#snap` section

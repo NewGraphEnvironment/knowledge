@@ -67,10 +67,27 @@ test_that("a cached score is read back only for the grid it was scored on", {
                             grid_args = small, cache_dir = dir, seed = 55L), "rescored")
   expect_error(knw_tune_run(s$v, s$sp, s$walks, s$thr, species = "CH", stages = "rear", n_boot = 5L, seeds_more = integer(),
                             grid_args = small, cache_dir = dir, evidence_id = "another build"), "rescored")
+  # a score made on another gradient is another score (#92): the record names the column the rules read
+  expect_equal(first$CH_rear$score$spec$grad, "segment_gradient")
+  expect_error(knw_tune_run(s$v, s$sp, s$walks, s$thr, species = "CH", stages = "rear", n_boot = 5L, seeds_more = integer(),
+                            grid_args = small, cache_dir = dir,
+                            cols = c(grad = "fwa_gradient", width = "cw_deploy", mad = "mad_pick")), "rescored")
+  # a cache from before the gradient was recorded was scored on the Atlas line's, so it is rescored too
+  pre92 <- readRDS(file.path(dir, "CH_rear_score.rds"))
+  pre92$spec$grad <- NULL
+  saveRDS(pre92, file.path(dir, "CH_rear_score.rds"))
+  expect_error(run(small), "rescored")
+  saveRDS(first$CH_rear$score, file.path(dir, "CH_rear_score.rds"))
   no_spec <- readRDS(file.path(dir, "CH_rear_score.rds"))
   no_spec$spec <- NULL
   saveRDS(no_spec, file.path(dir, "CH_rear_score.rds"))
-  expect_message(expect_equal(run(small)$CH_rear$score$rules$rule, first$CH_rear$score$rules$rule), "records no settings")
+  # it was scored on the Atlas line's gradient, the only one before #92: read back for that reading alone
+  expect_error(run(small), "rescored")
+  expect_message(fwa_run <- knw_tune_run(s$v, s$sp, s$walks, s$thr, species = "CH", stages = "rear", n_boot = 5L,
+                                         seeds_more = integer(), grid_args = small, cache_dir = dir,
+                                         cols = c(grad = "fwa_gradient", width = "cw_deploy", mad = "mad_pick")),
+                 "records no settings")
+  expect_equal(fwa_run$CH_rear$score$rules$rule, first$CH_rear$score$rules$rule)
   saveRDS(first$CH_rear$score, file.path(dir, "CH_rear_score.rds"))
   # a cache written before a grid column existed is rescored, not read as this grid's (it stopped 0320 on 2026-10-22)
   old_cache <- readRDS(file.path(dir, "CH_rear_score.rds"))
@@ -139,4 +156,42 @@ test_that("a curve no better than no rule on held-out groups has its grades with
   failed <- run()
   expect_equal(failed$status, "curve_failed")
   expect_false(failed$grade_withheld)
+})
+
+test_that("the gradient the rules and the curve read is link's segment gradient unless cols names another (#92)", {
+  skip_if_not_installed("mgcv")
+  s <- sim_build()
+  small <- list(grid_grad = 0.0549, grid_q = 3, grid_d = 1000)
+  cols_fwa <- c(grad = "fwa_gradient", width = "cw_deploy", mad = "mad_pick")
+  expect_identical(eval(formals(knw_tune_run)$cols)[["grad"]], "segment_gradient")
+  expect_identical(eval(formals(knw_rule_in)$cols)[["grad"]], "segment_gradient")
+  expect_identical(eval(formals(knw_tune_curve)$cols)[["grad"]], "segment_gradient")
+  run <- function(...) knw_tune_run(s$v, s$sp, s$walks, s$thr, species = "CH", stages = "rear", grid_args = small,
+                                    extra = FALSE, smoke = FALSE, ...)$CH_rear
+  seg <- run()
+  fwa <- run(cols = cols_fwa)
+  # the curve fits the named column and says which
+  expect_identical(seg$curve$cols[["grad"]], "segment_gradient")
+  expect_identical(fwa$curve$cols[["grad"]], "fwa_gradient")
+  d <- seg$curve$data
+  expect_equal(d$grad, pmin(pmax(s$v$segment_gradient[match(d$site_visit, s$v$site_visit)], 0), 0.2))
+  expect_equal(fwa$curve$data$grad,
+               pmin(pmax(s$v$fwa_gradient[match(fwa$curve$data$site_visit, s$v$site_visit)], 0), 0.2))
+  # the rules read it: the scorer's rule_in agrees with knw_rule_in on the named column and not on the other
+  got <- NULL
+  local_mocked_bindings(knw_tune_score = function(d, rule_in, grid, ...) {
+    got <<- list(d = d, rule_in = rule_in, grid = grid)
+    stop("captured")
+  })
+  wi <- knw_walk_index(s$walks)
+  r <- data.frame(size_var = "mad", size_min = 0.28, grad_max = 0.0549, exc_q = NA_real_, exc_d = NA_real_)
+  expect_error(run(), "captured")
+  expect_identical(got$rule_in(got$d, r), knw_rule_in(got$d, r, walks = wi))
+  expect_false(identical(got$rule_in(got$d, r), knw_rule_in(got$d, r, walks = wi, cols = cols_fwa)))
+  expect_error(run(cols = cols_fwa), "captured")
+  expect_identical(got$rule_in(got$d, r), knw_rule_in(got$d, r, walks = wi, cols = cols_fwa))
+  # a column the visits lack is refused before any work
+  v2 <- s$v
+  v2$segment_gradient <- NULL
+  expect_error(knw_tune_run(v2, s$sp, s$walks, s$thr, species = "CH", stages = "rear"), "segment_gradient")
 })

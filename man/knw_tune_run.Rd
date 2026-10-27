@@ -33,7 +33,8 @@ knw_tune_run(
   extra = TRUE,
   fit = c("fe", "dense"),
   prior_sd = 2.5,
-  evidence_id = NULL
+  evidence_id = NULL,
+  cols = c(grad = "segment_gradient", width = "cw_deploy", mad = "mad_pick")
 )
 }
 \arguments{
@@ -68,7 +69,7 @@ population has the same number of visits and the grid the same rows, in
 the same order (every \code{\link[=knw_tune_grid]{knw_tune_grid()}} column, so a moved \code{default}
 counts), and the settings the score was made with match (\code{fit}, \code{prior_sd},
 \code{seed}, \code{folds}, \code{d_floor} and \code{extra}, recorded as \code{spec} by
-\code{\link[=knw_tune_score]{knw_tune_score()}}); a cache written before the record is read back with a
+\code{\link[=knw_tune_score]{knw_tune_score()}}, and the gradient column, \code{grad}); a cache written before the record is read back with a
 message naming the settings it is taken as. \code{n_boot}, \code{seed_boot} and
 \code{seeds_more} are not checked: a cache's bootstrap and extra-seed tables are
 read back whatever the run asked for, so give a run with different ones its
@@ -97,6 +98,12 @@ time; a run that publishes keeps \code{TRUE}.}
 visits and walks came from (\code{scripts/0320} passes the md5s of the three
 derived tables). It joins the cache's settings, so a score made on another
 build of the same visit count is not read back as this one's.}
+
+\item{cols}{named \code{character}, as in \code{\link[=knw_rule_in]{knw_rule_in()}}: the columns of \code{visits}
+carrying \code{grad}, \code{width} and \code{mad}, read by the rules and the curve. The
+gradient is link's segment gradient (\code{segment_gradient}), the one link
+applies a rule to (#92); the Freshwater Atlas line's (\code{fwa_gradient}) is the
+sensitivity. The gradient column joins the cache's settings.}
 }
 \value{
 A list with one element per species × stage (\code{"<sp>_<stage>"}): a

@@ -9,9 +9,9 @@ grade_fixture <- function() {
                   era = factor(sample(c("to1994", "1995-2004", "2005on"), n, TRUE)),
                   blue_line_key = 1, downstream_route_measure = seq_len(n),
                   edge_type = 1000, mad_pick = exp(stats::runif(n, log(0.02), log(20))),
-                  cw_deploy = exp(stats::runif(n, log(0.5), log(20))), fwa_gradient = stats::runif(n, 0, 0.15))
+                  cw_deploy = exp(stats::runif(n, log(0.5), log(20))), segment_gradient = stats::runif(n, 0, 0.15))
   dist <- exp(stats::runif(n, log(20), log(40000)))
-  d$U <- stats::rbinom(n, 1, stats::plogis(-2 + 0.8 * log(d$mad_pick) - 10 * d$fwa_gradient - 0.3 * log(dist)))
+  d$U <- stats::rbinom(n, 1, stats::plogis(-2 + 0.8 * log(d$mad_pick) - 10 * d$segment_gradient - 0.3 * log(dist)))
   w <- data.frame(blue_line_key = 1, downstream_route_measure = seq_len(n), src = "pick", qmin = 3,
                   status = ifelse(dist > 30000, "none", "found"), dist_m = ifelse(dist > 30000, NA, dist))
   pick <- data.frame(rule = "r1", size_var = "mad", size_min = 0.75, grad_max = 0.07, exc_q = 3, exc_d = 1000)
