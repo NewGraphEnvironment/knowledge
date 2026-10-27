@@ -98,7 +98,7 @@ if (!identical(readRDS("inst/vignette-data/chinook_rearing.rds")$meta$link_run_u
 # the fork's version: the fwapg commit that built the routed flows, as wet's routed report at the loaded build names it
 wet_repo <- Sys.getenv("WET_REPO", "../wet")
 hits <- suppressWarnings(system2("git", c("-C", wet_repo, "grep", "-h", "-o", "-E",
-                                          "built by NewGraphEnvironment/fwapg at [0-9a-f]{7,40}", m$wet_sha, "--",
+                                          shQuote("built by NewGraphEnvironment/fwapg at [0-9a-f]{7,40}"), m$wet_sha, "--",
                                           "data/checks"), stdout = TRUE, stderr = TRUE))
 if (!is.null(attr(hits, "status"))) stop("no routed report at wet ", m$wet_sha, " in ", wet_repo)
 fork_sha <- unique(sub("^.* at ", "", hits))
