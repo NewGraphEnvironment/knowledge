@@ -61,18 +61,19 @@ rule_words <- function(r) {
   near <- if (p[3] == "none") "" else {
     q <- sub("^Q([0-9.]+)@D.*$", "\\1", p[3])
     d <- as.numeric(sub("^.*@D", "", p[3]))
-    sprintf("; a smaller stream also counts within %s of a river carrying %s m³/s",
-            if (d >= 1000) paste(d / 1000, "km") else paste(d, "m"), q)
+    sprintf("; a smaller stream also counts if it passes the slope test and a river carrying at least %s m³/s lies within %s downstream",
+            q, if (d >= 1000) paste(d / 1000, "km") else paste(d, "m"))
   }
   paste0(size, ", ", slope, near)
 }
-# an SVG Graphviz wrote, inline and no wider than the column
+# an SVG Graphviz wrote, inline and no wider than the column (printed by a results = "asis" chunk)
 svg_inline <- function(s) {
   s <- sub("^[^<]*(<\\?xml[^>]*>)?\\s*(<!DOCTYPE[^>]*>)?\\s*", "", s)
-  s <- sub("<svg ", '<svg style="max-width:100%;height:auto" ', s, fixed = TRUE)
-  htmltools::HTML(s)
+  cat(sub("<svg ", '<svg style="max-width:100%;height:auto" ', s, fixed = TRUE), "\n")
 }
+esc <- function(v) gsub(">", "&gt;", gsub("<", "&lt;", gsub("&", "&amp;", v, fixed = TRUE), fixed = TRUE), fixed = TRUE)
 ch <- pk[pk$key == "CH_rear", ]
+eras <- as.numeric(strsplit(reg$value[reg$key == "era_breaks"], ";", fixed = TRUE)[[1]])
 st <- x$stability[x$stability$species_code == "CH" & x$stability$stage == "rear", ]
 st[] <- lapply(st, function(v) if (all(grepl("^-?[0-9.]+$", v))) as.numeric(v) else v)
 # step 8's words: the exact rule seldom returns, it always stays a close call, and the choosing beats link's rule
@@ -134,7 +135,7 @@ knitr::kable(data.frame(
 The `r nrow(pipe)` steps are each done by one package. Each box links to its package or source; each step links to its section
 below.
 
-```{r flow}
+```{r flow, results = "asis"}
 svg_inline(x$svg$flow)
 ```
 
@@ -153,15 +154,16 @@ detail <- function(step) {
   }, "")
   s <- reg[reg$step == step, ]
   set <- if (nrow(s)) {
-    paste0("<li>", s$label, ": ", gsub(";", ", ", s$value), ifelse(nzchar(s$unit), paste0(" ", s$unit), ""),
+    paste0("<li>", esc(s$label), ": ", esc(gsub(";", ", ", s$value)), ifelse(nzchar(s$unit), paste0(" ", s$unit), ""),
            "</li>", collapse = "")
   } else ""
-  htmltools::HTML(paste0(
-    "<details><summary>Code and settings</summary><ul>",
-    "<li>Run by: ", gsub(";", ", ", p$scripts), "; ", paste(code, collapse = ", "), "</li>",
-    "<li>In: ", htmltools::htmlEscape(p$inputs), ". Out: ", htmltools::htmlEscape(p$outputs), "</li>",
-    set, if (!is.na(p$issue) && nzchar(p$issue)) paste0("<li>Open work: ", issue(p$issue), "</li>"),
-    "</ul></details>"))
+  open <- if (!is.na(p$issue) && nzchar(p$issue)) {
+    sprintf("<li>Open work: <a href=\"https://github.com/NewGraphEnvironment/knowledge/issues/%s\">#%s</a></li>",
+            p$issue, p$issue)
+  } else ""
+  paste0("<details><summary>Code and settings</summary><ul>",
+         "<li>Run by: ", esc(gsub(";", ", ", p$scripts)), "; ", paste(code, collapse = ", "), "</li>",
+         "<li>In: ", esc(p$inputs), ". Out: ", esc(p$outputs), "</li>", set, open, "</ul></details>")
 }
 ```
 
@@ -177,7 +179,8 @@ kept once.
 
 Each site's map point is moved to the nearest stream of the BC Freshwater Atlas [@flnrord2021FreshwaterAtlasb], held
 in a database by `fwapg` [@norris2024smnorrisfwapg]. A site is kept only if that stream is close (within
-`r val("snap_limit")` m) and, where the record names the site's tributary, is that tributary. About
+`r val("snap_limit")` m) and, where the record names the site's tributary in a form the Atlas can check, is that
+tributary. About
 `r about(fn("FDIS visits") - fn("ws50_mismatch"))` visits are dropped here, most because the nearest stream is too
 far away.
 
@@ -194,17 +197,19 @@ fish were seen, not where they were looked for and missed.
 
 ### 4. `r pipe$label[4]` {#step-4}
 
-Flows come from `wet` [@irvine2026wetStream]. Where it reaches, that is PCIC's modelled streamflow
+Flows come from `wet` [@irvine2026wetStream]. Mostly that is PCIC's modelled streamflow
 [@schnorbus2018VICGlacierVICGL; @craig_etal2020Flexiblewatershed], carried onto Atlas streams by New Graph's fork of
-`fwapg` [@norris_irvine2026NewGraphEnvironmentfwapg]. Elsewhere it is wet's own water balance, fitted to Water Survey
-of Canada gauges [@environmentandclimatechangecanada2021NationalWater]. About
+`fwapg` [@norris_irvine2026NewGraphEnvironmentfwapg]. Where PCIC's flow does not reach a stream, or carries under a
+fifth of wet's estimate on a stream's own line, it is wet's own water balance, fitted to Water Survey of Canada gauges
+[@environmentandclimatechangecanada2021NationalWater]. About
 `r pc(x$steps[["5"]][["routed"]] / x$steps[["5"]][["kept"]])` of the kept sites use PCIC's flow.
 
 `r detail(4)`
 
 ### 5. `r pipe$label[5]` {#step-5}
 
-Each kept site takes its segment's flow, width, slope and access, and the distance downstream to rivers of each size.
+Each kept site takes its segment's flow, width and access, the slope of the Atlas stream line it was placed on, and the
+distance downstream to rivers of each size.
 Sites with no usable date, no fished area or time, no known catch, or no segment at their place drop out. About `r about(fn("no_link_segment"))` sites
 remain.
 
@@ -219,8 +224,8 @@ limits, and an allowance for small streams close to a big river.
 
 ### 7. `r pipe$label[7]` {#step-7}
 
-Each rule is scored as [above](#se). The model also accounts for how much stream was fished, which data set and
-decade the record comes from, and the watershed group, so a rule is not credited for those. A short trial run checks
+Each rule is scored as [above](#se). The model also accounts for how much stream was fished, which data set the record comes
+from, its period (`r eras[1]` or earlier, `r eras[1] + 1` to `r eras[2]`, or later) and its watershed group, so a rule is not credited for those. A short trial run checks
 the scoring before the full run starts.
 
 `r detail(7)`
@@ -303,7 +308,7 @@ knitr::kable(w[, c("species_code", "kept", "stream_branch", "fished_area", "in_r
 
 ## What feeds what? {#lineage}
 
-```{r lineage}
+```{r lineage, results = "asis"}
 svg_inline(x$svg$lineage)
 ```
 

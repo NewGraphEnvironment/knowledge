@@ -76,3 +76,14 @@
   covered; three unregistered settings added; the chinook article now prints its 1.96 from one `se_strict` (rendered
   text identical before and after). The review loop ends on this enumeration: rounds 1-3, 3 reviewers plus the plan
   review, 4 subagents in all.
+- After the archive (2026-10-27, Al's decisions): the article was retitled, rewritten in plain language, renamed
+  `vignettes/habitat_thresholds.Rmd` and published now; both articles' references come from `vignette_bib.R`.
+  Round 4 (spawned 14:08 UTC, `review-round4.md`) found 10, all fixed:
+  - the step blocks' Open work links printed as Markdown, and the lineage legend's source box linked to `NA`;
+  - the FDIS box pointed at a catalogue record that does not exist (now our public `fdis/README.md`);
+  - step 4 dropped the 0.2 cut, step 5 said the segment's slope where the Atlas line's is scored, step 7 said
+    "decade" for the three eras, and the near-river wording lacked "at least", "downstream" and the slope test;
+  - step 2's tributary check lacked its condition;
+  - the fork version was hardcoded (now read from wet's routed report at the loaded build, with the two bundles
+    checked to describe one link run);
+  - `htmltools` was used but undeclared (now gone).

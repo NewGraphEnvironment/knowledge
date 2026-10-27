@@ -59,9 +59,8 @@ bib_write <- function(rmd, out, all_tools) {
   }
   ver <- list(
     list(key = key_for("^(smnorris/)?fwapg", required = all_tools), title = "fwapg", version = short_sha(v$fwapg_sha)),
-    # the fork's crosswalk built the routed flows the evidence read: wet's data/checks/pcic_routed_compare_20260717.txt at
-    # the loaded build (94deeb5) names the fwapg commit that built pcic.discharge_monthly (#89)
-    list(key = key_for("^\\{*NewGraphEnvironment\\}*/fwapg", required = FALSE), title = "fwapg, New Graph Environment's fork", version = "7c30f58"),
+    # the fork's crosswalk built the routed flows the evidence read: the commit wet's routed report names (#89)
+    list(key = key_for("^\\{*NewGraphEnvironment\\}*/fwapg", required = FALSE), title = "fwapg, New Graph Environment's fork", version = fork_sha),
     list(key = key_for("^(smnorris/)?bcfishpass", required = all_tools), title = "bcfishpass", version = NULL),
     list(key = key_for("^(smnorris/)?bcfishobs", required = all_tools), title = "bcfishobs", version = NULL),
     list(key = key_for("^\\{*link\\}*:", required = all_tools), title = "link", version = v$link),
@@ -89,7 +88,21 @@ bib_write <- function(rmd, out, all_tools) {
   message(sprintf("%s: %d entries (%s)", out, length(entries), paste(sort(names(entries)), collapse = ", ")))
 }
 
-v <- readRDS("inst/vignette-data/chinook_rearing.rds")$meta$versions   # both articles describe this run
+v <- readRDS("inst/vignette-data/chinook_rearing.rds")$meta$versions
+# both articles describe one run: the chinook bundle's link run is the methodology bundle's ledger's
+m <- readRDS("inst/vignette-data/method.rds")$meta
+led <- utils::read.csv(m$ledger, colClasses = "character")
+if (!identical(readRDS("inst/vignette-data/chinook_rearing.rds")$meta$link_run_uid, led$note[led$step == "link_run_uid"])) {
+  stop("the two articles' bundles describe different link runs: rerun data-raw/vignette_chinook.R or vignette_method.R")
+}
+# the fork's version: the fwapg commit that built the routed flows, as wet's routed report at the loaded build names it
+wet_repo <- Sys.getenv("WET_REPO", "../wet")
+hits <- suppressWarnings(system2("git", c("-C", wet_repo, "grep", "-h", "-o", "-E",
+                                          "built by NewGraphEnvironment/fwapg at [0-9a-f]{7,40}", m$wet_sha, "--",
+                                          "data/checks"), stdout = TRUE, stderr = TRUE))
+if (!is.null(attr(hits, "status"))) stop("no routed report at wet ", m$wet_sha, " in ", wet_repo)
+fork_sha <- unique(sub("^.* at ", "", hits))
+if (length(fork_sha) != 1) stop("wet ", m$wet_sha, "'s reports name ", length(fork_sha), " fwapg commits")
 # all_tools: the article must cite fwapg, bcfishpass, bcfishobs, link, fresh and wet (the chinook article does)
 bib_write("vignettes/chinook_rearing.Rmd", "vignettes/chinook_rearing.bib", all_tools = TRUE)
 bib_write("vignettes/habitat_thresholds.Rmd", "vignettes/habitat_thresholds.bib", all_tools = FALSE)

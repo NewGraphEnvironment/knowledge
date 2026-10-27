@@ -317,7 +317,7 @@ url_pkg <- c(knowledge = "https://newgraphenvironment.github.io/knowledge/",
              wet = "https://newgraphenvironment.github.io/wet/", fresh = "https://newgraphenvironment.github.io/fresh/")
 src <- tribble(
   ~id, ~label, ~url,
-  "fdis", "FDIS electrofishing", "https://catalogue.data.gov.bc.ca/dataset/fisheries-data-information-system-fdis",
+  "fdis", "FDIS electrofishing", "https://fresh-bc.s3.us-west-2.amazonaws.com/fdis/README.md",
   "fwa", "Freshwater Atlas",
   "https://www2.gov.bc.ca/gov/content/data/geographic-data-services/topographic-data/freshwater",
   "pcic", "PCIC streamflow", "https://www.pacificclimate.org/",
@@ -326,8 +326,10 @@ src <- tribble(
 legend <- function(pkgs) {
   paste0('subgraph cluster_leg { label=""; margin=10; color="#BBBBBB"; style="rounded"; ',
          "node [fontsize=10, width=0.95, height=0.3]\n{ rank=same; ",
-         paste(sprintf('l_%s [label="%s", fillcolor="%s", fontcolor="%s", URL="%s", target="_top", tooltip="%s"]',
-                       pkgs, pkgs, pal[pkgs], ink[pkgs], url_pkg[pkgs], pkgs), collapse = "; "), " } }")
+         paste(sprintf('l_%s [label="%s", fillcolor="%s", fontcolor="%s"%s]', pkgs, pkgs, pal[pkgs], ink[pkgs],
+                       ifelse(pkgs %in% names(url_pkg),
+                              sprintf(', URL="%s", target="_top", tooltip="%s"', url_pkg[pkgs], pkgs), "")),
+               collapse = "; "), " } }")
 }
 sources_row <- paste0('subgraph cluster_src { label=""; margin=10; color="#BBBBBB"; style="rounded,dashed"; ',
                       "node [fontsize=10, width=1.2, height=0.3]\n{ rank=same; ",
