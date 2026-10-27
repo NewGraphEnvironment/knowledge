@@ -20,7 +20,8 @@ knw_compare_rules(
   seed_boot = 542L,
   structures = NULL,
   tuned_as = "door",
-  config_sha = NA_character_
+  config_sha = NA_character_,
+  workers = 1L
 )
 }
 \arguments{
@@ -59,6 +60,15 @@ tables, for the FDIS detection check (\code{NULL} to skip).}
 
 \item{config_sha}{\code{character(1)} the link commit \code{link_dir} was read at,
 carried on every output row (\code{NA} when unknown).}
+
+\item{workers}{\code{integer(1)} socket workers for the groups (#87). The groups
+are split into \code{workers} bins balanced by segment count, largest first;
+each bin runs on its own connection in its own scratch schema
+(\verb{<scratch>_w<i>}, dropped when it ends), reading the grades and the
+user-habitat rows this call writes once to \code{scratch}. A group's error
+stops its bin and is raised naming the group. \code{1} runs the one bin in this
+process. \code{connector} and its environment travel to every worker, so build
+it where it holds nothing large.}
 }
 \value{
 A list of \code{tibble}s: \code{compare} (per structure, group and total: km by

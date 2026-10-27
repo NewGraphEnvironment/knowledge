@@ -117,7 +117,7 @@ exploration found that shapes the design is in `findings.md` ("Exploration"), wi
 
 ## Phase 3: Compare with the groups in parallel
 
-- [ ] `knw_compare_rules(..., workers = 1L)`: the groups split into `workers` bins balanced by segment count (one
+- [x] `knw_compare_rules(..., workers = 1L)`: the groups split into `workers` bins balanced by segment count (one
       count query), largest first; each bin runs on a socket worker in a self-contained function modelled on
       `walk_chunk` (explicit arguments only: the predicate SQL built by the master for that worker's `near_river`
       table, the config values, the shared table names; `fresh::` and `getFromNamespace` on the worker; no
@@ -127,7 +127,7 @@ exploration found that shapes the design is in `findings.md` ("Exploration"), wi
       error with the group's name; the worker's `on.exit` drops its schema; the master raises naming the group. The
       master keeps its connection and scratch for the `seg` query and the outside check, unchanged. `workers = 1L`
       runs the same function in-process.
-- [ ] `0330`: the jobs run in turn, each `knw_compare_rules(workers = WORKERS)`; then the GeoPackages for every key
+- [x] `0330`: the jobs run in turn, each `knw_compare_rules(workers = WORKERS)`; then the GeoPackages for every key
       in parallel across keys (one file per key, one writer each) from `<key>_segments.rds`, the loop as it is today
       moved into that stage; `GPKG=FALSE` skips it.
 - [ ] Check in `data-raw/compare_parallel_check.R`, on the host: `WCT_rear` and `CH_rear`'s 20 groups with
@@ -135,7 +135,9 @@ exploration found that shapes the design is in `findings.md` ("Exploration"), wi
       `segments` identical after sorting on their keys (the master's `seg` order and the seeded bootstrap are
       unchanged, so identity is expected); the script reports the largest numeric difference and refuses any above
       1e-9; writes `scripts/logs/habitat/<date>_compare_parallel_check.txt`.
-- [ ] Tests: the bin-balancing helper (pure R) and the predicate-per-table change pinned without a database.
+- [x] Tests: the bin-balancing helper (pure R), and both worker functions calling no name of the package (a socket
+      worker resolves those in the installed copy, or none). The predicate per worker's near-river table needs link's
+      configs, so chinook's run in the check proves it, not a unit test.
 
 ## Phase 4: Measure the retune end to end on the host, and decide item 5
 
