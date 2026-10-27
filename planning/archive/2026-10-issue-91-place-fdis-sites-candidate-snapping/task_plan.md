@@ -193,7 +193,7 @@ a separate source, noted in `0240`'s header); the frozen `0290`–`0298`; `vigne
       "every ignored source …" of the methodology bundle), named in the PR with the rerun that clears them
 - [x] `/code-check` clean (once over the branch with `/code-check branch`)
 - [x] PWF checkboxes match landed work
-- [ ] `/planning-archive` on completion
+- [x] `/planning-archive` on completion
 
 How each change is proved: the probe's classes partition the 50,550 points and its link-placement counts reproduce
 today's `no_link_segment` (1,491) on the old snap; `knw_fdis_place()`'s fixture reaches every branch and a mutation of
