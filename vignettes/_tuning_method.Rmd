@@ -70,9 +70,10 @@ svg_inline(x$svg$flow)
 
 ## What feeds what?
 
-Four outside sources reach the tuning, and the citations follow from them: the FDIS export, the Freshwater Atlas,
-PCIC's modelled streamflow and the province's other fish observations, which shape link's segments but score no rule.
-wet's water balance is fitted to Water Survey of Canada gauges, and link's segments follow its own configuration.
+Six sources reach the tuning: the FDIS export, the Freshwater Atlas, PCIC's modelled streamflow, the climate data and
+Water Survey of Canada gauges wet's water balance is built from and fitted to, the province's other fish observations
+(which shape link's segments but score no rule), and link's own configuration. The chart draws the first, second,
+third and fifth as sources and folds the other two into wet's and link's boxes.
 
 ```{r lineage}
 svg_inline(x$svg$lineage)

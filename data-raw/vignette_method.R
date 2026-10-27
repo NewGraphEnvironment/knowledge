@@ -44,6 +44,11 @@ suppressPackageStartupMessages({
 })
 pkgload::load_all(quiet = TRUE)
 
+# the bundle names the commit it was built at, so the code and registers it read must be that commit's
+src_code <- c("data-raw/vignette_method.R", "inst/method", "R")
+dirty <- system2("git", c("status", "--porcelain", "--", src_code), stdout = TRUE)
+if (length(dirty)) stop("commit these first, so the bundle's commit is the code it ran: ", paste(dirty, collapse = "; "))
+
 dir_out <- "inst/vignette-data"
 f_pipeline <- "inst/method/pipeline.csv"
 f_settings <- "inst/method/settings.csv"
@@ -105,7 +110,13 @@ ext_value <- function(w) {
       if (!is.list(y) || !k %in% names(y)) stop(w$parts[2], " at ", sha, " has no ", w$parts[3])
       y <- y[[k]]
     }
-    v <- if (is.list(y)) y[[utils::tail(path, 1)]] else stop(w$parts[2], " at ", sha, ": ", w$parts[3], " is not a key")
+    leaf <- utils::tail(path, 1)
+    # an absent leaf reads "unset", so the leaf must be a key the sibling's own code reads at that commit; a
+    # misspelt or renamed key is then an error rather than a match
+    hits <- suppressWarnings(system2("git", c("-C", repo, "grep", "-c", "-w", "-F", leaf, sha, "--", "R"),
+                                     stdout = TRUE, stderr = TRUE))
+    if (!is.null(attr(hits, "status"))) stop(leaf, " is not read by ", w$parts[1], "'s R code at ", sha)
+    v <- if (is.list(y)) y[[leaf]] else stop(w$parts[2], " at ", sha, ": ", w$parts[3], " is not a key")
     return(list(value = if (is.null(v)) "unset" else as.character(v), sha = sha))
   }
   tf <- tempfile(fileext = ".R")

@@ -165,3 +165,12 @@ checked everywhere, CI included once #98 lands.
   wide, about 0.78 scale in an article column.
 - `summarise()` trap met: drops computed after `across()` summed the flags read 0; reordered and the stage counts are
   now checked to add up.
+
+## Enumeration of the `code:` rows (2026-10-27, after round 2)
+
+Every occurrence, outside a comment, of each `code:` row's value as a token in the files its wheres name: 42, of
+which 31 a where covers. The 11 others: `0230:213` 2022 in a file path; `ch_dist_profile.sql:98` 1400, 1450 in the
+bank rule's connector test (a different rule); `thresholds_table.R` 113, 120 the `1` inside `1.96`, 159-160 `[1]`
+indexing; `tune_run.R:124` 2004 inside the era labels; `grade.R:43` 0.2 a grade class break (its own row);
+`tune_curve.R:59` `q_default = 10` (its own row); `grade_species.R:86` `seg$gradient` choosing segments to walk.
+None is a second copy of a row's setting.

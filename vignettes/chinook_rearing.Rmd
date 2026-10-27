@@ -128,7 +128,7 @@ loaded by fwapg [@norris2024smnorrisfwapg], and kept only when that stream lay w
 the site's 1:50k tributary code, on a stream in it; the site then took link's segment at that point. Each segment's flow is wet's default
 [@irvine2026wetStream]: PCIC's modelled flow, VIC-GL runoff routed with Raven on PCIC's own network and carried onto
 Atlas streams by a crosswalk in [New Graph's fork of fwapg](https://github.com/NewGraphEnvironment/fwapg), with wet's
-own water balance where that flow does not reach or carries under a fifth of the balance's. A site's gradient is its Atlas line's, the line it was snapped to;
+own water balance where that flow does not reach or, on a stream's own line, carries under a fifth of the balance's. A site's gradient is its Atlas line's, the line it was snapped to;
 link applies a rule to its own segments, cut from those lines, and recomputes each piece's gradient from its ends.
 fresh ran the rules [@irvine2026freshFreshwater]. The province's other fish observations, gathered in bcfishobs
 [@norris2024smnorrisbcfishobs], scored no rule: they record where fish were found, not where they were sought and missed. Sites

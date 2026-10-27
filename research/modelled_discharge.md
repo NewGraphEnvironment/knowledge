@@ -11,8 +11,10 @@ commands are at the end of this file.
 ## Use this: wet's published flow per FWA segment
 
 **Which build.** The evidence #73 graded on (`scripts/0310`, 2026-10-22) read the build loaded on 2026-10-19 from wet
-`94deeb5`, and this section describes that build. wet has republished since (2026-10-24: monthly shares from donor
-gauges, wet#102, and a daily product, wet#99); the database still holds `94deeb5`. Read the table comment
+`94deeb5`, and this section describes that build. wet has republished since: the live manifest read
+2026-10-20T18:40:10Z when the evidence was built and 2026-10-24T12:23:01Z on 2026-10-27, after wet 0.4.15 (monthly
+shares from donor gauges, wet#102), 0.4.16 (a daily product, wet#99) and later releases; the database still holds
+`94deeb5`. Read the table comment
 (`obj_description('discharge.fwa_v1_segment_monthly'::regclass)`) before comparing two runs.
 
 wet publishes mean monthly and annual flow for every FWA segment at `s3://fresh-bc/discharge/fwa/v1/`. The

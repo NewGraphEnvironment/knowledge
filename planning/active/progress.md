@@ -54,3 +54,13 @@
   unwatched copies). The YAML check errors on a missing parent instead of reading "unset". `prior_sd` marked tested
   (compared with no prior). bcfishobs FDIS share corrected (29 % for link's species, not "about half"). wet `94deeb5`
   is 0.4.13. Mutations: region at 1.96 and 0.5 SE, one offset copy changed: each 1 failure.
+- Round 2 (spawned 06:09 UTC, delivered ~06:20; `review-round2.md`): 8 findings, 4 inside round 1's fixes, all probed
+  and fixed: unwatched copies of the gradient ceiling (`tune_curve.R` 159, 176) and the 1:50k code length
+  (`0230:449`, plus its 42 zeros as a row); a YAML leaf absent under a present parent read "unset" (now the leaf must be
+  a key the sibling's R code reads at that commit); the bundle named the parent commit (the script now refuses to run
+  with its code or registers uncommitted); `fit` and `seed` were compared with alternatives; step 4 and the chinook
+  article dropped the own-line condition of the 0.2 cut; wet's republish dates; "four sources" against six named.
+- Enumeration (the loop's end, since rounds found defects inside fixes): every token occurrence of every `code:` row's
+  value in its files, comments skipped: 42, 31 covered by a where, 11 others each a different quantity or a token-match
+  artefact (listed in findings.md). And every row's `tested` flag walked against its evidence: `se_strict` and
+  `tuned_as` were compared with alternatives too; 7 rows tested in all.
