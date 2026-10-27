@@ -10,7 +10,8 @@ knw_link_walks(
   q_grid = c(1, 3, 5, 10, 20, 30, 50),
   sources = c("pick", "pcic_routed", "wet_balance"),
   workers = 4L,
-  batch = 500L
+  batch = 500L,
+  cache = FALSE
 )
 }
 \arguments{
@@ -29,13 +30,18 @@ database holding \code{discharge} and \code{whse_basemapping}.}
 \item{batch}{\code{integer(1)} starts per query. On the database's host a batch of
 500 removes the round trip and R's per-row binding; over a remote link it
 removes almost all of a walk's time.}
+
+\item{cache}{\code{FALSE} (the default: walk everything), or a table name,
+\code{schema.table}, to read walks from and keep them in (see above).}
 }
 \value{
 A \code{tibble}: \code{blue_line_key}, \code{downstream_route_measure}, \code{src}, \code{qmin},
 \code{status}, \code{dist_m}, \code{large_mad}, \code{large_lfid}, \code{large_edge},
 \code{large_waterbody_key}, \code{n_hops}, \code{max_entry_gap_m}, \code{dist_centre_m},
 \code{bank_m}; exactly
-\code{nrow(unique(starts)) * length(sources) * length(q_grid)} rows.
+\code{nrow(unique(starts)) * length(sources) * length(q_grid)} rows. With a
+cache, attribute \code{cache} holds the start-and-source pairs read (\code{hit}) and
+walked (\code{miss}).
 }
 \description{
 \code{scripts/0296}'s walks. From a point on an FWA blue line, the path is walked
@@ -68,6 +74,20 @@ tagged with its start's position, so the start's own values are attached in R
 and no key or measure is matched by its printed form. Every start must come
 back with one row per size. The result does not depend on \code{batch}: each start
 is walked alone, as before.
+
+With \code{cache} a table name, every walk is kept (#87): a walk depends only on
+its start, the river size, the flow source, the flow load
+(\code{\link[=knw_discharge_load]{knw_discharge_load()}}, by its md5) and the walk's code (\code{\link[=knw_walk_md5]{knw_walk_md5()}}),
+so a row keyed on all six is the walk's own for as long as those hold. The
+starts go to a temporary table and the rows already kept are read with one
+join per 500,000 starts; a start missing any size on a source is walked for
+every size on that source (each size's result is independent of the others),
+and each batch's rows are inserted by the same query that walks them. The
+cache and its table of flow loads (\verb{<cache>_load}) are created when absent.
+Rows under another load or walk are never read, and nothing prunes them.
+The FWA network carries no load record, so a reload of
+\code{whse_basemapping.fwa_stream_networks_sp} (fwapg#43 moves measures by
+millimetres) needs the cache truncated by hand.
 }
 \examples{
 \dontrun{

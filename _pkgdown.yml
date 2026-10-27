@@ -38,6 +38,8 @@ reference:
       - knw_link_regulated
       - knw_link_barrier_dnstr
       - knw_link_walks
+      - knw_walk_md5
+      - knw_discharge_load
       - knw_link_access_check
   - title: Tuning
     desc: >

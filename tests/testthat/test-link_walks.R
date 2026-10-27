@@ -27,7 +27,8 @@ test_that("a batched walk returns what a walk one start at a time returns, on ev
   conn <- skip_if_no_pg("discharge")
   pg <- function() DBI::dbConnect(RPostgres::Postgres(), bigint = "numeric")
   # three starts, so a batch of 2 splits them unevenly; one at a fractional measure
-  starts <- data.frame(blue_line_key = c(360886335, 360873822, 360886335), downstream_route_measure = c(1520, 0, 2040.5))
+  starts <- data.frame(blue_line_key = c(360886335, 360873822, 360886335),
+                       downstream_route_measure = c(1520, 0, 2040.5))
   w1 <- knw_link_walks(pg, starts, q_grid = c(3, 10), sources = c("pick", "pcic_routed"), workers = 1L, batch = 1L)
   w2 <- knw_link_walks(pg, starts, q_grid = c(3, 10), sources = c("pick", "pcic_routed"), workers = 1L, batch = 2L)
   w500 <- knw_link_walks(pg, starts, q_grid = c(3, 10), sources = c("pick", "pcic_routed"), workers = 1L)
@@ -65,9 +66,41 @@ test_that("a batch that comes back short of a start is refused, though the row c
   local_mocked_bindings(dbExecute = function(...) 0L, dbDisconnect = function(...) TRUE, .package = "DBI")
   run <- function(res) {
     local_mocked_bindings(dbGetQuery = function(...) res, .package = "DBI")
-    .knw_walk_chunk(chunk, "", 3, "pick", function() NULL, 500L, .knw_pg_array, .knw_walk_batches)
+    .knw_walk_chunk(chunk, fn_sql = "", sql = "", q_grid = 3, sources = "pick", connector = function() NULL,
+                    batch = 500L, pg_array = .knw_pg_array, batches = .knw_walk_batches)
   }
   expect_identical(nrow(run(row(c(1, 2)))), 2L)
   expect_error(run(row(c(1, 1))), "not one per start")   # two rows, but the second start's is missing
   expect_error(run(row(1)), "not one per start")
+})
+
+test_that("the walk cache misses, then reads back what was walked, and misses under another load or walk", {
+  conn <- skip_if_no_pg("discharge")
+  pg <- function() DBI::dbConnect(RPostgres::Postgres(), bigint = "numeric")
+  tbl <- paste0("public.knw_walk_cache_test_", Sys.getpid())
+  on.exit({
+    DBI::dbExecute(conn, sprintf("DROP TABLE IF EXISTS %s", tbl))
+    DBI::dbExecute(conn, sprintf("DROP TABLE IF EXISTS %s_load", tbl))
+  }, add = TRUE)
+  starts <- data.frame(blue_line_key = c(360886335, 360873822, 360886335),
+                       downstream_route_measure = c(1520, 0, 2040.5))
+  walk_cached <- function() knw_link_walks(pg, starts, q_grid = c(3, 10), sources = "pick", workers = 1L, cache = tbl)
+  expect_message(cold <- walk_cached(), "0 of 3 start-and-source pairs read, 3 to walk")
+  expect_identical(attr(cold, "cache"), c(hit = 0L, miss = 3L))
+  expect_identical(as.integer(DBI::dbGetQuery(conn, sprintf("SELECT count(*) AS n FROM %s", tbl))$n), 6L)
+  expect_message(warm <- walk_cached(), "3 of 3 start-and-source pairs read, 0 to walk")
+  plain <- knw_link_walks(pg, starts, q_grid = c(3, 10), sources = "pick", workers = 1L)
+  attr(cold, "cache") <- NULL
+  attr(warm, "cache") <- NULL
+  expect_identical(warm, plain)
+  expect_identical(cold, plain)
+  # a size not yet kept walks the start again, whole, and keeps the new size
+  expect_message(knw_link_walks(pg, starts[1, ], q_grid = c(3, 5), sources = "pick", workers = 1L, cache = tbl),
+                 "0 of 1 start-and-source pairs read, 1 to walk")
+  # rows under another flow load or another walk are never read
+  DBI::dbExecute(conn, sprintf("UPDATE %s SET load_md5 = 'other'", tbl))
+  expect_message(walk_cached(), "0 of 3 start-and-source pairs read")
+  DBI::dbExecute(conn, sprintf("UPDATE %s SET walk_md5 = 'other' WHERE load_md5 <> 'other'", tbl))
+  expect_message(walk_cached(), "0 of 3 start-and-source pairs read")
+  expect_error(knw_link_walks(pg, starts, cache = "knw walk"), "schema.table")
 })

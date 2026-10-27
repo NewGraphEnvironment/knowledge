@@ -38,6 +38,7 @@ Imports:
     stats,
     stringr,
     tibble,
+    tools,
     utils
 Suggests:
     arrow,

@@ -33,8 +33,9 @@ grade_fixture <- function() {
 
 run_grade <- function(fx, pick = fx$pick, walks_status = function(blk) ifelse(blk == 110, "none", "found")) {
   seen <- new.env()
-  fake_walks <- function(connector, starts, q_grid, sources, workers) {
+  fake_walks <- function(connector, starts, q_grid, sources, workers, ...) {
     seen$starts <- starts
+    seen$dots <- list(...)
     seen$q_grid <- q_grid
     st <- walks_status(starts$blue_line_key)
     tibble::tibble(blue_line_key = starts$blue_line_key, downstream_route_measure = starts$downstream_route_measure,
@@ -57,6 +58,11 @@ test_that("every gradable accessible segment is walked, and nothing else is", {
   expect_setequal(r$seen$starts$blue_line_key, 100 + c(1, 2, 3, 4, 5, 7, 9, 10))
   # the size-passing segment beside a river carries its distance, not the cap
   expect_true(101 %in% r$seen$starts$blue_line_key)
+  # the grade walks through the walk cache and records the walk's code beside the convention's name (#87)
+  expect_identical(r$seen$dots$cache, "knw.walk_cache")
+  expect_identical(r$g$walk, "bank")
+  expect_identical(r$g$walk_md5, knw_walk_md5())
+  expect_true(all(c("walk_cache_hit", "walk_cache_miss") %in% names(r$g$counts)))
   gr <- r$g$grades
   expect_equal(gr$dist_m[gr$id_segment == 1], 100)
   expect_equal(gr$dist_status[gr$id_segment == 1], "found")

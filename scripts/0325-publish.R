@@ -55,11 +55,10 @@ prov <- list(published_from_commit = commit, repository = "https://github.com/Ne
 # (discharge_load, written by 0320 from the table comment at grading); the publish refuses when the live load is
 # another build, because the grade would then describe flows the segments no longer carry.
 pgc <- DBI::dbConnect(RPostgres::Postgres())
-discharge_load <- DBI::dbGetQuery(pgc, "SELECT obj_description('discharge.fwa_v1_segment_monthly'::regclass) AS d")$d
+discharge_load <- knw_discharge_load(pgc)
 DBI::dbDisconnect(pgc)
-if (length(discharge_load) != 1 || is.na(discharge_load) || !nzchar(discharge_load)) {
-  stop("discharge.fwa_v1_segment_monthly carries no load comment; cannot say which flows the grade read")
-}
+# the walk's code (#87): a grade walked by other code than this tree's is regraded, never published
+walk_md5 <- knw_walk_md5()
 
 # ---- the thresholds table, built first because the grade checks hold each table to its row ----------------
 tt <- knw_thresholds_table(tune_dir, evidence_version, run_uid, link_sha, compare_dir = "data/compare")
@@ -73,11 +72,12 @@ if (!length(gfiles)) stop("no grade tables in ", tune_dir)
 heads <- lapply(gfiles, function(f) read_csv(f, n_max = 1, show_col_types = FALSE, col_types = cols(.default = "c")))
 names(heads) <- basename(gfiles)
 stale <- names(heads)[!vapply(heads, function(h) {
-  all(c("ref_population", "ref_edge", "walk", "discharge_load", "grade_withheld", "null_heldout_curve", "evidence_md5",
-        "rule", "run_uid") %in% names(h)) &&
-    identical(h$ref_population, "stream_branch") && identical(h$walk, "bank")
+  all(c("ref_population", "ref_edge", "walk", "walk_md5", "discharge_load", "grade_withheld", "null_heldout_curve",
+        "evidence_md5", "rule", "run_uid") %in% names(h)) &&
+    identical(h$ref_population, "stream_branch") && identical(h$walk, "bank") && identical(h$walk_md5, walk_md5)
 }, logical(1))]
-if (length(stale)) stop("grade tables made before #73 (no record of the bank walk, the reference edge types and the flow build), or graded ",
+if (length(stale)) stop("grade tables made before #73 (no record of the bank walk, the reference edge types and the flow build), walked by ",
+                        "another walk than this tree's (walk_md5, #87), or graded ",
                         "before the gate scored no rule on the curve's own visits (no null_heldout_curve; the branch review of 2026-10-25); rerun 0320: ",
                         paste(stale, collapse = ", "))
 # the grade is published under the thresholds row's rule_id, so it must have been graded under that row's rule on this
@@ -109,7 +109,7 @@ if (!identical(loads, discharge_load)) {
        loads, "\n  live:   ", discharge_load)
 }
 prov_grade <- c(prov, list(discharge_load_at_grade = loads, discharge_load_at_publish = discharge_load, walk = "bank",
-                           evidence_md5 = evidence))
+                           walk_md5 = walk_md5, evidence_md5 = evidence))
 
 # ---- thresholds -------------------------------------------------------------------------
 write_csv(tt$thresholds, "data/thresholds.csv", na = "")

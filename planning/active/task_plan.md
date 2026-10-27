@@ -98,20 +98,22 @@ exploration found that shapes the design is in `findings.md` ("Exploration"), wi
 
 ## Phase 2: Walks cached
 
-- [ ] `knw_discharge_load(conn)` (the table comment, refusing an empty one) and `knw_walk_md5()` (the md5 of the
+- [x] `knw_discharge_load(conn)` (the table comment, refusing an empty one) and `knw_walk_md5()` (the md5 of the
       package's `sql/ch_dist_profile.sql`); `0320` and `0325` call the first instead of their inline query.
-- [ ] `knw_link_walks(..., cache = FALSE)`: given a table name, creates it (and its load table) if absent; writes
+- [x] `knw_link_walks(..., cache = FALSE)`: given a table name, creates it (and its load table) if absent; writes
       the starts to a typed temp table in chunks and reads the hits for every start, source and size in one join per
       chunk; a start with any miss on a source is walked for the whole size array on that source (Phase 1's batches,
       on the workers, each inserting its batch `ON CONFLICT DO NOTHING`); returns hits and new rows in the same shape
       and order, with the row-count and every-start checks; logs hits and misses.
-- [ ] `knw_grade_species()` walks with `cache = "knw.walk_cache"` and returns `walk_md5`; the grade table gains
+- [x] `knw_grade_species()` walks with `cache = "knw.walk_cache"` and returns `walk_md5`; the grade table gains
       `walk_md5` from it; `0320`'s keep-check, `0325` and `0330` compare it with `knw_walk_md5()` and refuse a table
       that differs (the "every reader compares it" rule).
-- [ ] Tests: `test-grade_species.R`'s mock of `knw_link_walks` takes `...`; the live test, on a throwaway cache
+- [x] Tests: `test-grade_species.R`'s mock of `knw_link_walks` takes `...`; the live test, on a throwaway cache
       table it drops, walks a start with a fractional measure twice and expects every start a miss then every start a
       hit with identical frames, and a changed `walk_md5` or load string to miss everything.
-- [ ] Check in `data-raw/walk_batch_check.R`: 1,000 cached rows re-walked with `cache = FALSE` are identical.
+- [ ] Check in `data-raw/walk_batch_check.R`: 1,000 cached rows re-walked with `cache = FALSE` are identical (run
+      after Phase 4's `0320` has filled `knw.walk_cache`; `data-raw/vignette_chinook.R` compares `walk_md5` too, as
+      the reader rule names it).
 
 ## Phase 3: Compare with the groups in parallel
 
@@ -168,6 +170,10 @@ exploration found that shapes the design is in `findings.md` ("Exploration"), wi
 - [ ] `/planning-archive` with the Measurement and Evidence sections; `/gh-pr-push`.
 
 ## Owed at the end (reported, done after merge)
+
+- [ ] The host's main checkout: its grade tables (2026-10-25) carry no `walk_md5`, so after the merge `0325`, `0330`
+      and `data-raw/vignette_chinook.R` refuse them; copy Phase 4's regraded tables from the host worktree, or rerun
+      `0320` there (warm, minutes).
 
 - [ ] #86's body: "done in #87's PR"; close it.
 - [ ] #85's body: the new per-walk numbers, and that it is the cold-walk fix only.
