@@ -244,6 +244,15 @@ funnel_species <- bind_rows(funnel_species)
 sites <- rd(f_sites, guess_max = 1e5,
             col_types = cols(site_visit = "c", species_caught = "c", blocks_absence_of = "c"))
 if (nrow(sites) != n_in || sum(!sites$flag_not_placed) != n_placed) stop("fdis_sites is not the ledger's build")
+# 0240 writes fdis_sites.csv from sites.rds, which the md5 above ties to the ledger; the placement columns the examples
+# are chosen by must be that build's, or a stale table passes the counts (#91: they do not depend on the limits)
+s_rds <- readRDS(file.path(dirname(f_reconcile), "sites.rds"))
+s_rds <- s_rds[match(sites$site_visit, s_rds$site_visit), ]
+for (col in c("flag_far_snap", "flag_ws50_mismatch", "snap_confirmed", "snap_moved", "blue_line_key")) {
+  if (!identical(as.character(sites[[col]]), as.character(s_rds[[col]]))) {
+    stop("fdis_sites.csv's ", col, " is not sites.rds's: rerun scripts/0240")
+  }
+}
 placed <- !sites$flag_not_placed
 steps <- list(
   `1` = c(visits = n_in),
@@ -302,6 +311,9 @@ for (ex in list(ex_kept, ex_far)) {
   if (ex$near$blue_line_key[1] != ex$site$blue_line_key) {
     stop(ex$site$site_visit, ": the nearest stream is not the one placed")
   }
+}
+if (!(ex_far$site$distance_to_stream > as.numeric(val("snap_limit")))) {
+  stop(ex_far$site$site_visit, ": the dropped example lies within snap_limit")
 }
 i_moved <- match(ex_moved$site$blue_line_key, ex_moved$near$blue_line_key)
 if (is.na(i_moved) || i_moved == 1L) stop(ex_moved$site$site_visit, ": the moved visit's stream is not past a nearer one")

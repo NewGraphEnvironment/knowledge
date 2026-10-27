@@ -37,9 +37,11 @@
 #     ("unconfirmed"); a code naming no stream in reach keeps the nearest and is flagged a 1:50k
 #     mismatch. An unconfirmed pick beyond snap_limit, or a confirmed one beyond snap_limit_code, is
 #     flagged far; knw_fdis_quality() drops both flags. fresh never snaps to an unmapped or
-#     placeholder (999) line, and snap_edges_excluded drops subsurface flow (1425) and the group-boundary
-#     connectors (6010), so a
-#     visit whose nearest line is one of those reaches the next stream link can place it on. The
+#     placeholder (999) line, and snap_edges_excluded drops the connectors that carry a stream across
+#     a watershed-group boundary (6010): link's segments include none of those three kinds, so a visit
+#     whose nearest line is one goes to the next stream within the search, if there is one. Subsurface
+#     flow (1425), which fresh excludes by default, stays a candidate, because link's segments carry it
+#     (#91's review: excluding it lost three visits link placed and gained none). The
 #     picked FWA feature's gradient, order, edge type, modelled channel width and MAD are joined
 #     province-wide, not fresh.streams (98 groups locally). research/fdis_export.md, "Placement",
 #     has the probe and the limits' sensitivity.
@@ -67,9 +69,9 @@ snap_search <- 500      # frs_point_snap() tolerance: a visit with no stream ins
 # Overridable for the sensitivity run (data-raw/snap_limit_sensitivity.R); coerced at use.
 snap_limit      <- Sys.getenv("SNAP_LIMIT", 200)        # a pick no 1:50k code confirms
 snap_limit_code <- Sys.getenv("SNAP_LIMIT_CODE", 500)   # a pick on a stream the visit's 1:50k code names
-# never candidates: subsurface flow (1425, fresh's default) and group-boundary connectors (6010, which link's
-# streams lack); other construction-line connectors (1400, 1410, 1450) stay candidates
-snap_edges_excluded <- c(1425L, 6010L)
+# never candidates: the group-boundary connectors (6010), which link's streams lack. Subsurface flow (1425, fresh's
+# default) and the other construction-line connectors (1400, 1410, 1450) stay candidates: link's streams carry them
+snap_edges_excluded <- 6010L
 # ---- no-data encodings: ONE table (measured field by field in research/fdis_export.md) ----
 # Every "is this a real value" decision reads from here, so a sibling sentinel is added once.
 sentinel_min     <- 9999                # counts, fishing time, fished length/width use 9999, 9999.9, 99999
