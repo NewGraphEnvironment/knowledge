@@ -77,7 +77,7 @@ exploration found that shapes the design is in `findings.md` ("Exploration"), wi
       checked 2026-10-26), `tuned_as = door`, to `data/compare/ref_<key>/{compare,change,checks,segments}.rds`
       (exact). CH is the only species whose `default` resolves a near-river pair, so its groups exercise the
       walk table. About 40 min on the host.
-- [ ] `findings.md`: the exploration with file:line, the measured numbers, the review's findings and their
+- [x] `findings.md`: the exploration with file:line, the measured numbers, the review's findings and their
       disposition (`planning/active/review-plan.md`).
 
 ## Phase 1: Walks batched
@@ -111,9 +111,11 @@ exploration found that shapes the design is in `findings.md` ("Exploration"), wi
 - [x] Tests: `test-grade_species.R`'s mock of `knw_link_walks` takes `...`; the live test, on a throwaway cache
       table it drops, walks a start with a fractional measure twice and expects every start a miss then every start a
       hit with identical frames, and a changed `walk_md5` or load string to miss everything.
-- [ ] Check in `data-raw/walk_batch_check.R`: 1,000 cached rows re-walked with `cache = FALSE` are identical (run
+- [x] Check in `data-raw/walk_batch_check.R`: 1,000 cached rows re-walked with `cache = FALSE` are identical (run
       after Phase 4's `0320` has filled `knw.walk_cache`; `data-raw/vignette_chinook.R` compares `walk_md5` too, as
-      the reader rule names it).
+      the reader rule names it). Passed on the host after the cold `0320` (`147e961`, log
+      `20261026_walk_batch_check-cache.txt`), on the third attempt: two lazy-promise query cancellations fixed on
+      the way (`9e56f18`, `147e961`).
 
 ## Phase 3: Compare with the groups in parallel
 
