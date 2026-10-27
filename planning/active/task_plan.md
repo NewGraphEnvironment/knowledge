@@ -168,7 +168,8 @@ exploration found that shapes the design is in `findings.md` ("Exploration"), wi
 
 ## Phase 6: Wrap
 
-- [ ] `/code-check branch`; `devtools::test()`, `devtools::document()`, `pkgdown::check_pkgdown()`.
+- [ ] `/code-check branch` (rounds 1-3 run 2026-10-27 over the code at `d78c1a2`..; 2 findings fixed in round 1, rounds 2 and 3
+      clean, round 3 enumerating 21 boundary crossings; code changed after this gets its own round); `devtools::test()`, `devtools::document()`, `pkgdown::check_pkgdown()`.
 - [ ] `/planning-archive` with the Measurement and Evidence sections; `/gh-pr-push`.
 
 ## Owed at the end (reported, done after merge)
