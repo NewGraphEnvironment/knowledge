@@ -1,6 +1,6 @@
 # data-raw/vignette_method.R
 # ---------------------------------------------------------------------------
-# The data `vignettes/_tuning_method.Rmd` reads, so the methodology article builds with no database and cannot
+# The data `vignettes/habitat_thresholds.Rmd` reads, so the methodology article builds with no database and cannot
 # quote a count the run did not make. Issue #93.
 #
 # WHY / DESIGN NOTES:
@@ -245,6 +245,18 @@ steps <- list(
   `7` = stats::setNames(as.numeric(fitted$region_n), keys)
 )
 
+# ---- the picks at one and at the stricter number of SEs, every fitted key ----------------------------------
+se_strict <- as.numeric(val("se_strict"))
+picks <- bind_rows(lapply(keys, function(k) {
+  t <- utils::read.csv(file.path("data/tune", paste0(k, "_tune.csv")))
+  a <- knw_tune_repick(t)
+  b <- knw_tune_repick(t, se_mult = se_strict)
+  rec <- fitted$rule_recommended[paste(fitted$species_code, fitted$stage, sep = "_") == k]
+  if (!identical(a$rule, rec)) stop(k, ": the replay at one SE is not the run's recommended rule")
+  tibble(key = k, default = t$rule[t$is_default], pick = a$rule, close_calls = a$n_region,
+         pick_strict = b$rule, close_calls_strict = b$n_region, rules = nrow(t))
+}))
+
 # ---- worked examples ----------------------------------------------------------------------------------
 conn <- DBI::dbConnect(RPostgres::Postgres(), bigint = "numeric")
 near <- function(s) {
@@ -300,20 +312,39 @@ lab <- function(x, w = 24) {
 node <- function(id, label, pkg, shape = "box", w = 24) {
   sprintf('%s [label="%s", fillcolor="%s", fontcolor="%s", shape=%s]', id, lab(label, w), pal[pkg], ink[pkg], shape)
 }
+# each package box opens the package's site, each source box its source, each step box its section below
+url_pkg <- c(knowledge = "https://newgraphenvironment.github.io/knowledge/",
+             fwapg = "https://smnorris.github.io/fwapg/", link = "https://newgraphenvironment.github.io/link/",
+             wet = "https://newgraphenvironment.github.io/wet/", fresh = "https://newgraphenvironment.github.io/fresh/")
+src <- tribble(
+  ~id, ~label, ~url,
+  "fdis", "FDIS electrofishing", "https://catalogue.data.gov.bc.ca/dataset/fisheries-data-information-system-fdis",
+  "fwa", "Freshwater Atlas",
+  "https://www2.gov.bc.ca/gov/content/data/geographic-data-services/topographic-data/freshwater",
+  "pcic", "PCIC streamflow", "https://www.pacificclimate.org/",
+  "obs", "bcfishobs", "https://github.com/smnorris/bcfishobs"
+)
 legend <- function(pkgs) {
   paste0('subgraph cluster_leg { label=""; margin=10; color="#BBBBBB"; style="rounded"; ',
          "node [fontsize=10, width=0.95, height=0.3]\n{ rank=same; ",
-         paste(sprintf('l_%s [label="%s", fillcolor="%s", fontcolor="%s"]', pkgs, pkgs, pal[pkgs], ink[pkgs]),
-               collapse = "; "), " } }")
+         paste(sprintf('l_%s [label="%s", fillcolor="%s", fontcolor="%s", URL="%s", target="_top", tooltip="%s"]',
+                       pkgs, pkgs, pal[pkgs], ink[pkgs], url_pkg[pkgs], pkgs), collapse = "; "), " } }")
 }
+sources_row <- paste0('subgraph cluster_src { label=""; margin=10; color="#BBBBBB"; style="rounded,dashed"; ',
+                      "node [fontsize=10, width=1.2, height=0.3]\n{ rank=same; ",
+                      paste(sprintf('x_%s [label="%s", fillcolor="%s", fontcolor="%s", URL="%s", target="_top", tooltip="%s"]',
+                                    src$id, src$label, pal["source"], ink["source"], src$url, src$label),
+                            collapse = "; "), " } }")
 head_dot <- paste0('graph [rankdir=TB, nodesep=0.3, ranksep=0.25, fontname="Helvetica", bgcolor="transparent"]\n',
                    'node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, width=2.8, ',
                    'height=0.5, color="#FFFFFF00"]\nedge [color="#777777", arrowsize=0.6]')
 pkgs_flow <- c("knowledge", "fwapg", "link", "wet", "fresh")
-dot_flow <- paste0("digraph pipeline {\n", head_dot, "\n", legend(pkgs_flow), "\n",
-                   paste(node(paste0("s", pipeline$step), paste0(pipeline$step, "  ", pipeline$label),
-                              pipeline$package), collapse = "\n"), "\n",
+step_nodes <- sub("]$", sprintf(', URL="#step-%d", target="_self", tooltip="step %d"]', pipeline$step, pipeline$step),
+                  node(paste0("s", pipeline$step), paste0(pipeline$step, "  ", pipeline$label), pipeline$package))
+dot_flow <- paste0("digraph pipeline {\n", head_dot, "\n", sources_row, "\n", legend(pkgs_flow), "\n",
+                   paste(step_nodes, collapse = "\n"), "\n",
                    paste(sprintf("s%d -> s%d", pipeline$step[-nrow(pipeline)], pipeline$step[-1]), collapse = "\n"),
+                   "\nx_pcic -> l_link [style=invis]",
                    sprintf("\nl_%s -> s1 [style=invis]\n}", pkgs_flow[ceiling(length(pkgs_flow) / 2)]))
 lin <- tribble(
   ~id, ~label, ~pkg, ~shape,
@@ -354,7 +385,10 @@ tracked <- sources[is_tracked]
 local <- sources[!is_tracked]
 out <- list(
   pipeline = pipeline, settings = settings, resolved = resolved, funnel = funnel, funnel_species = funnel_species,
-  steps = steps, examples = list(kept = ex_kept, far = ex_far, wsg = example_wsg, stages = stages),
+  steps = steps, picks = picks,
+  stability = fitted[, c("species_code", "stage", "seeds_n", "seeds_same_rec", "seeds_rec_in_region",
+                         "honest_dev_rec", "honest_dev_default", "boot_rec_share")],
+  examples = list(kept = ex_kept, far = ex_far, wsg = example_wsg, stages = stages),
   svg = svg,
   meta = list(written = format(Sys.Date()),
               commit = git("rev-parse", "--short", "HEAD"),

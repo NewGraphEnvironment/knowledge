@@ -1,0 +1,362 @@
+---
+title: "Choosing habitat thresholds from where fish were caught"
+output:
+  bookdown::html_vignette2
+bibliography: habitat_thresholds.bib
+link-citations: true
+vignette: >
+  %\VignetteIndexEntry{Choosing habitat thresholds from where fish were caught}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  echo = FALSE,
+  fig.width = 7,
+  fig.height = 4,
+  dpi = 150,
+  message = FALSE,
+  warning = FALSE
+)
+library(knowledge)
+library(ggplot2)
+```
+
+```{r load}
+# data from data-raw/vignette_method.R
+vd <- function(f) system.file("vignette-data", f, package = "knowledge", mustWork = TRUE)
+x <- readRDS(vd("method.rds"))
+pipe <- x$pipeline
+reg <- x$settings
+fun <- x$funnel
+fsp <- x$funnel_species
+ex <- x$examples
+pk <- x$picks
+n0 <- function(v) format(round(v), big.mark = ",", trim = TRUE)
+about <- function(v) format(signif(v, 2), big.mark = ",", trim = TRUE)
+pc <- function(v) paste0(round(100 * v), " %")
+fn <- function(stage) fun$n[fun$stage == stage]
+val <- function(key) gsub(";", ", ", reg$value[reg$key == key], fixed = TRUE)
+issue <- function(n) {
+  ifelse(is.na(n) | !nzchar(n), "",
+         sprintf("[#%s](https://github.com/NewGraphEnvironment/knowledge/issues/%s)", n, n))
+}
+species <- c(BT = "bull trout", CH = "chinook", CO = "coho", GR = "grayling", RB = "rainbow trout", ST = "steelhead")
+key_words <- function(k) {
+  sp <- species[[sub("_.*$", "", k)]]
+  paste(sp, if (grepl("_rear$", k)) "rearing" else "spawning")
+}
+# a rule string (size|gradient|near-river) in words
+rule_words <- function(r) {
+  p <- strsplit(r, "|", fixed = TRUE)[[1]]
+  size <- if (grepl("^mad>=", p[1])) {
+    sprintf("carries at least %s m³/s", sub("^mad>=", "", p[1]))
+  } else {
+    sprintf("is at least %s m wide", sub("^width>=", "", p[1]))
+  }
+  slope <- sprintf("no steeper than %s %%", signif(100 * as.numeric(sub("^g<=", "", p[2])), 3))
+  near <- if (p[3] == "none") "" else {
+    q <- sub("^Q([0-9.]+)@D.*$", "\\1", p[3])
+    d <- as.numeric(sub("^.*@D", "", p[3]))
+    sprintf("; a smaller stream also counts within %s of a river carrying %s m³/s",
+            if (d >= 1000) paste(d / 1000, "km") else paste(d, "m"), q)
+  }
+  paste0(size, ", ", slope, near)
+}
+# an SVG Graphviz wrote, inline and no wider than the column
+svg_inline <- function(s) {
+  s <- sub("^[^<]*(<\\?xml[^>]*>)?\\s*(<!DOCTYPE[^>]*>)?\\s*", "", s)
+  s <- sub("<svg ", '<svg style="max-width:100%;height:auto" ', s, fixed = TRUE)
+  htmltools::HTML(s)
+}
+ch <- pk[pk$key == "CH_rear", ]
+st <- x$stability[x$stability$species_code == "CH" & x$stability$stage == "rear", ]
+st[] <- lapply(st, function(v) if (all(grepl("^-?[0-9.]+$", v))) as.numeric(v) else v)
+# step 8's words: the exact rule seldom returns, it always stays a close call, and the choosing beats link's rule
+stopifnot(nrow(st) == 1, st$seeds_same_rec < st$seeds_n / 2, st$seeds_rec_in_region == st$seeds_n,
+          st$boot_rec_share < 0.5, st$honest_dev_rec < st$honest_dev_default,
+          # step 2's words: most of the visits dropped at placement are too far from their stream
+          fn("placed on the Atlas") - fn("far_snap") > (fn("FDIS visits") - fn("ws50_mismatch")) / 2)
+lost_all <- fn("FDIS visits") - fn("no_link_segment")
+lost_place <- fn("FDIS visits") - fn("ws50_mismatch")
+stopifnot(fun$n[1] == 51587, nrow(ch) == 1, all(diff(fun$n) <= 0), lost_place / lost_all > 0.5)
+```
+
+The R package [`link`](https://newgraphenvironment.github.io/link/) maps where each fish species can live in British
+Columbia's streams. For every stretch of stream it asks a few plain questions: is it big enough, is it too steep, and
+can fish get to it? Each question has a cut-off. This article describes how we are testing those cut-offs against
+evidence: the places crews have electrofished, and whether they caught the species there. We try many possible
+cut-offs and keep the ones that best tell the two kinds of site apart, then check that they hold on parts of the
+province they were not chosen from. The steps run in order, from the fish records to values link can read.
+
+## What is a threshold, and what does "tuned" mean? {#thresholds}
+
+A **threshold** is one of those cut-offs: a minimum stream size or a maximum slope. A **rule** is the few thresholds a
+species uses together. A **tuned** threshold is one chosen by the test this article describes rather than taken from
+the literature or set by judgment.
+
+For chinook rearing, for example, link's current rule counts a stream as habitat if it `r rule_words(ch$default)`.
+The fish records support a rule where it `r rule_words(ch$pick)`. We tested between
+`r about(min(pk$rules))` and `r about(max(pk$rules))` candidate rules for each of the `r nrow(pk)` species and life
+stages with enough records. The [chinook rearing article](chinook_rearing.html) works through one of them in full.
+
+## How are two rules told apart? {#se}
+
+Each rule gets a **score**: how well "habitat or not" predicts where the species was caught, at sites in watershed
+groups that were left out while the model was fitted. Lower is better.
+
+Scores move with the sites we happen to have. The **standard error (SE)** of the difference between two rules' scores
+says how far that difference would move with a different set of watershed groups. Rules whose scores are within
+`r val("se_region")` SE of the best are **close calls**: the records cannot rank them. From the close calls we take
+the one that changes link's current rule least.
+
+One SE is a rule of thumb, fixed before the run. `r val("se_strict")` SE is the stricter reading, about the width of a
+95 % interval: more rules become close calls, and the choice can stay nearer link's rule. Both are reported.
+
+```{r picks}
+knitr::kable(data.frame(
+  `species and stage` = vapply(pk$key, key_words, ""),
+  `link's rule` = vapply(pk$default, rule_words, ""),
+  `close calls at 1 SE` = n0(pk$close_calls),
+  `chosen at 1 SE` = vapply(pk$pick, rule_words, ""),
+  `close calls at 1.96 SE` = n0(pk$close_calls_strict),
+  `chosen at 1.96 SE` = vapply(pk$pick_strict, rule_words, ""),
+  check.names = FALSE),
+  caption = "link's current rule and the rule chosen at each width of close call, for each species and stage tuned.",
+  row.names = FALSE)
+```
+
+## What happens, in order? {#steps}
+
+The `r nrow(pipe)` steps are each done by one package. Each box links to its package or source; each step links to its section
+below.
+
+```{r flow}
+svg_inline(x$svg$flow)
+```
+
+```{r step-detail}
+# the code and settings of a step, folded under its text
+detail <- function(step) {
+  p <- pipe[pipe$step == step, ]
+  fns <- strsplit(p$functions, ";", fixed = TRUE)[[1]]
+  code <- vapply(fns, function(f) {
+    if (grepl("^fwapg::", f)) {
+      sprintf("<a href=\"https://smnorris.github.io/fwapg/03_functions.html#fwa-indexpoint\"><code>%s</code></a>",
+              sub("^fwapg::", "", f))
+    } else {
+      sprintf("<code>%s()</code>", sub("^knowledge::", "", f))
+    }
+  }, "")
+  s <- reg[reg$step == step, ]
+  set <- if (nrow(s)) {
+    paste0("<li>", s$label, ": ", gsub(";", ", ", s$value), ifelse(nzchar(s$unit), paste0(" ", s$unit), ""),
+           "</li>", collapse = "")
+  } else ""
+  htmltools::HTML(paste0(
+    "<details><summary>Code and settings</summary><ul>",
+    "<li>Run by: ", gsub(";", ", ", p$scripts), "; ", paste(code, collapse = ", "), "</li>",
+    "<li>In: ", htmltools::htmlEscape(p$inputs), ". Out: ", htmltools::htmlEscape(p$outputs), "</li>",
+    set, if (!is.na(p$issue) && nzchar(p$issue)) paste0("<li>Open work: ", issue(p$issue), "</li>"),
+    "</ul></details>"))
+}
+```
+
+### 1. The fish records {#step-1}
+
+The Province's electrofishing records [@provinceofbritishcolumbia2022FisheriesData]: where crews fished, how much
+stream they covered, and what they caught. About `r about(fn("FDIS visits"))` site visits. A survey loaded twice is
+kept once.
+
+`r detail(1)`
+
+### 2. Putting each site on the stream map {#step-2}
+
+Each site's map point is moved to the nearest stream of the BC Freshwater Atlas [@flnrord2021FreshwaterAtlasb], held
+in a database by `fwapg` [@norris2024smnorrisfwapg]. A site is kept only if that stream is close (within
+`r val("snap_limit")` m) and, where the record names the site's tributary, is that tributary. About
+`r about(fn("FDIS visits") - fn("ws50_mismatch"))` visits are dropped here, most because the nearest stream is too
+far away.
+
+`r detail(2)`
+
+### 3. link's stream segments {#step-3}
+
+link [@irvine2026linkDevelop] cuts the Atlas streams into short segments and records, for each species, whether fish
+can reach each one and what link's current rules call habitat. It also cuts streams where fish have been observed
+[@norris2024smnorrisbcfishobs], so those observations shape the segments, but they never score a rule: they say where
+fish were seen, not where they were looked for and missed.
+
+`r detail(3)`
+
+### 4. How much water each stream carries {#step-4}
+
+Flows come from `wet` [@irvine2026wetStream]. Where it reaches, that is PCIC's modelled streamflow
+[@schnorbus2018VICGlacierVICGL; @craig_etal2020Flexiblewatershed], carried onto Atlas streams by New Graph's fork of
+`fwapg` [@norris_irvine2026NewGraphEnvironmentfwapg]. Elsewhere it is wet's own water balance, fitted to Water Survey
+of Canada gauges [@environmentandclimatechangecanada2021NationalWater]. About
+`r pc(x$steps[["5"]][["routed"]] / x$steps[["5"]][["kept"]])` of the kept sites use PCIC's flow.
+
+`r detail(4)`
+
+### 5. Joining each site to its segment {#step-5}
+
+Each kept site takes its segment's flow, width, slope and access, and the distance downstream to rivers of each size.
+Sites with no usable date, no fished area or time, no known catch, or no segment at their place drop out. About `r about(fn("no_link_segment"))` sites
+remain.
+
+`r detail(5)`
+
+### 6. Candidate rules {#step-6}
+
+For each species we build thousands of rules around link's current values: different minimum stream sizes, slope
+limits, and an allowance for small streams close to a big river.
+
+`r detail(6)`
+
+### 7. Scoring and choosing {#step-7}
+
+Each rule is scored as [above](#se). The model also accounts for how much stream was fished, which data set and
+decade the record comes from, and the watershed group, so a rule is not credited for those. A short trial run checks
+the scoring before the full run starts.
+
+`r detail(7)`
+
+### 8. Checking the choice is not luck {#step-8}
+
+Many rules score almost alike, so the winner could come down to chance. We choose again three ways: with the groups
+split `r st$seeds_n` other ways; leaving out one part of the groups, choosing on the rest and scoring the choice on the
+part left out, for each part in turn; and on `r val("n_boot")` random redraws of the groups. For chinook rearing the
+exact rule came back on `r st$seeds_same_rec` of the `r st$seeds_n` other splits and in `r pc(st$boot_rec_share)` of
+the redraws, but it stayed a close call on all `r st$seeds_rec_in_region`, and choosing this way scored better than
+link's rule on the parts left out (`r n0(st$honest_dev_rec)` against `r n0(st$honest_dev_default)`; lower is
+better).
+
+`r detail(8)`
+
+### 9. A curve and a grade {#step-9}
+
+We fit a smooth curve of how often the species is caught against stream size, distance to the river and slope, and
+use it to grade every segment from low to high expected use. A species whose curve predicts no better than no rule at
+all gets no grade.
+
+`r detail(9)`
+
+### 10. Running the rule on link's streams {#step-10}
+
+link's current rule and the chosen rule both go through the steps link itself uses, run by `fresh`
+[@irvine2026freshFreshwater]: the rule's test, link's hand-entered habitat, and dropping rearing that has no spawning
+nearby. On the Bulkley, those last two steps removed `r n0(ex$stages$dropped_default)` of the
+`r n0(ex$stages$pre_default)` segments link's rule passed, so we compare whole runs, not the test alone.
+
+`r detail(10)`
+
+### 11. Publishing {#step-11}
+
+The chosen values are written under link's own parameter names, with the grades, so link can read them.
+
+`r detail(11)`
+
+## Where are records lost? {#lost}
+
+Most of the records lost are lost when sites are put on the map (`r pc(lost_place / lost_all)` of the
+`r about(lost_all)` dropped). A site far from any stream, or on the wrong tributary, cannot be trusted to sit on the
+stream that was fished.
+
+```{r funnel, fig.height = 3, out.width = "100%", fig.cap = "Site visits each step drops, in the order the steps run."}
+f <- fun
+f$drop <- c(NA, -diff(f$n))
+f <- f[-1, ]
+f$label <- factor(f$reason, levels = rev(f$reason))
+ggplot(f, aes(x = drop, y = label)) +
+  geom_col(fill = "#0072B2", width = 0.6) +
+  geom_text(aes(label = n0(drop)), hjust = 0, nudge_x = 60, size = 3.2, colour = "#333333") +
+  scale_x_continuous(labels = function(v) format(v, big.mark = ","), expand = expansion(mult = c(0, 0.12))) +
+  labs(x = "site visits dropped", y = NULL) +
+  theme_minimal(base_size = 10) +
+  theme(panel.grid.major.y = element_blank(), panel.grid.minor = element_blank())
+```
+
+Each species then keeps the sites its rules can speak to: on a stream line (not in a river polygon, a wetland of
+`r val("wetland_ha_min")` ha or more or a lake of `r val("lake_ha_min")` ha or more), of a usual fished area, where
+link expects the species, with no code that could hide it and no natural barrier to it downstream. The score uses the
+groups where the species was caught at some sites and not others.
+
+```{r funnel-species}
+w <- stats::reshape(as.data.frame(fsp[, c("species_code", "stage", "n")]), idvar = "species_code",
+                    timevar = "stage", direction = "wide")
+names(w) <- sub("^n\\.", "", names(w))
+gb <- unique(fsp[, c("species_code", "groups_both")])
+w$groups <- gb$groups_both[match(w$species_code, gb$species_code)]
+w$species_code <- species[w$species_code]
+w[-1] <- lapply(w[-1], n0)
+knitr::kable(w[, c("species_code", "kept", "stream_branch", "fished_area", "in_range", "not_blocked", "no_barrier",
+                   "scored", "groups")],
+             col.names = c("species", "kept", "stream line", "fished area", "where expected", "not hidden",
+                           "no barrier", "scored", "groups scored"),
+             caption = "Rearing site visits per species after each filter.",
+             align = "lrrrrrrrr", row.names = FALSE)
+```
+
+## What feeds what? {#lineage}
+
+```{r lineage}
+svg_inline(x$svg$lineage)
+```
+
+## How is a site placed? {#snap}
+
+A site's point goes to the nearest Atlas stream within `r val("snap_search")` m, and the site is kept only if that
+stream is within `r val("snap_limit")` m. The other streams in reach are not weighed.
+
+```{r snap}
+row_of <- function(e, fate) {
+  nb <- e$near
+  data.frame(site = e$site$site_visit, fate = fate, stream = nb$blue_line_key,
+             name = ifelse(is.na(nb$gnis_name), "(unnamed)", nb$gnis_name), distance_m = nb$distance_m,
+             chosen = ifelse(seq_len(nrow(nb)) == 1, "yes", ""))
+}
+knitr::kable(rbind(row_of(ex$kept, "kept"), row_of(ex$far, "dropped")),
+             col.names = c("site visit", "fate", "Atlas stream", "name", "distance (m)", "snapped to"),
+             caption = sprintf("Two %s sites and every Atlas stream within %s m of each.", ex$wsg, val("snap_search")),
+             align = "llrlrl", row.names = FALSE)
+```
+
+## Limits {#limits}
+
+- Sites are placed on the nearest stream; a near-equal stream close by is not weighed (`r issue("91")`).
+- Rules are scored on the Atlas line's slope, while link applies a rule on its own segments, whose slope it works out
+  again after every cut (`r issue("92")`).
+- Flows are 30-year averages, so no single dry year is in them.
+
+## Which numbers shape the result, and which have been tested? {#settings}
+
+Every number below shapes a result. Each was checked against the code and the run when this article's data were
+written. **Source** says where the value came from: a published source, a convention set here, a value inherited
+from link or bcfishpass [@norris2024smnorrisbcfishpass], or a value measured from data. **Tested** says whether the
+result has been compared with another value. The untested rows come first: they are the work still to do.
+
+```{r register}
+r <- reg[order(reg$tested != "no", reg$source != "inherited", reg$step), ]
+knitr::kable(data.frame(setting = r$label, value = gsub(";", ", ", r$value), unit = r$unit, step = r$step,
+                        source = r$source, tested = r$tested, issue = issue(r$issue)),
+             caption = "The settings, from inst/method/settings.csv.", align = "llllllr", row.names = FALSE)
+```
+
+## Software and citation {#software}
+
+The steps run on the PostgreSQL tools [`fwapg`](https://smnorris.github.io/fwapg/) and New Graph's
+[fork](https://github.com/NewGraphEnvironment/fwapg) of it, and on the R packages
+[`link`](https://newgraphenvironment.github.io/link/) (segments, access and habitat),
+[`wet`](https://newgraphenvironment.github.io/wet/) (flows), [`fresh`](https://newgraphenvironment.github.io/fresh/)
+(the habitat tests) and [`knowledge`](https://newgraphenvironment.github.io/knowledge/) (the evidence and the
+tuning). This article's data were written on `r x$meta$written` at commit `r x$meta$commit`. To cite this package:
+
+```{r citation, results = "asis"}
+cat(format(utils::citation("knowledge"), style = "text"), sep = "\n\n")
+```
+
+## References
