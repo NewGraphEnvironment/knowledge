@@ -55,7 +55,8 @@
 # RUN:    Rscript scripts/0330-compare.R   (from the repo root; SPECIES=CH,BT to restrict, and the combined tables then
 #         compose with the other species' saved per-key tables; WORKERS=6 database cores; CONFIG_SHA=<link
 #         commit> for the configs (default origin/main of LINK_REPO); TUNED_AS=door; GPKG=FALSE skips the GeoPackages;
-#         STAGE=maps draws the floodplain table and the maps from the tables the last full run saved)
+#         STAGE=maps draws the floodplain table and the maps from the tables the last full run saved; STAGE=gpkg writes
+#         the GeoPackages alone from the segments it saved)
 # ---------------------------------------------------------------------------
 suppressMessages({ library(dplyr); library(readr); library(DBI); library(RPostgres) })
 pkgload::load_all(quiet = TRUE)
@@ -69,7 +70,7 @@ only <- Sys.getenv("SPECIES", "")
 stage_only <- Sys.getenv("STAGE", "")
 tuned_as <- Sys.getenv("TUNED_AS", "door")
 gpkg <- !identical(Sys.getenv("GPKG"), "FALSE")
-if (!stage_only %in% c("", "maps")) stop("STAGE must be unset or 'maps', not '", stage_only, "'")
+if (!stage_only %in% c("", "maps", "gpkg")) stop("STAGE must be unset, 'maps' or 'gpkg', not '", stage_only, "'")
 schema <- Sys.getenv("SCHEMA", "fresh_default")  # the run's persist schema, by its current name (renamed after the run, #73)
 catalog_bucket <- "https://stac-floodplains-bc.s3.us-west-2.amazonaws.com"
 catalog_items <- "../stac_floodplains_bc/data/stac"      # the catalog repo's item records
@@ -78,7 +79,7 @@ dir_cat <- file.path(dir_out, "catalog")
 dir_maps <- file.path(dir_out, "maps")
 dir_gpkg <- file.path(dir_out, "gpkg")
 path_log <- file.path("scripts/logs/habitat", paste0(format(Sys.Date(), "%Y%m%d"), "_compare",
-                                                     if (stage_only == "maps") "-maps", ".txt"))
+                                                     if (nzchar(stage_only)) paste0("-", stage_only), ".txt"))
 for (d in c(dir_out, dir_cat, dir_maps, dir_gpkg, "research/fig")) dir.create(d, showWarnings = FALSE, recursive = TRUE)
 log_lines <- character()
 say <- function(...) { log_lines <<- c(log_lines, sprintf(...)); message(sprintf(...)) }
@@ -241,6 +242,21 @@ gpkg_one <- function(key, schema, dir_gpkg) {
     sprintf("GeoPackage %s: %d segments in %.1f min.", f, nrow(seg), as.numeric(difftime(Sys.time(), t1, units = "mins")))
   }, error = function(e) sprintf("GeoPackage for %s FAILED: %s", key, conditionMessage(e)))
 }
+# the GeoPackages of several keys, one key per socket worker (one writer per file)
+write_gpkgs <- function(keys) {
+  t1 <- Sys.time()
+  gl <- if (workers > 1L && length(keys) > 1L) {
+    cl <- parallel::makeCluster(min(workers, length(keys)))
+    tryCatch(parallel::parLapplyLB(cl, keys, gpkg_one, schema = schema, dir_gpkg = dir_gpkg),
+             finally = parallel::stopCluster(cl))
+  } else {
+    lapply(keys, gpkg_one, schema = schema, dir_gpkg = dir_gpkg)
+  }
+  names(gl) <- keys
+  say("GeoPackages for %d keys in %.1f min on %d workers.", length(keys),
+      as.numeric(difftime(Sys.time(), t1, units = "mins")), min(workers, length(keys)))
+  gl
+}
 t0 <- Sys.time()
 if (stage_only == "maps") {
   # the floodplain and map stage alone, from the tables and segments the last full run saved per key
@@ -263,24 +279,26 @@ if (stage_only == "maps") {
   if (length(old)) stop("STAGE=maps: the saved segments predate their grade tables; run the full compare: ",
                         paste(old, collapse = ", "))
   say("STAGE=maps: floodplain and maps from the saved comparison of %s.", paste(names(res), collapse = " "))
+} else if (stage_only == "gpkg") {
+  # the GeoPackages alone, from the segments the last full run saved per key, refusing segments older than their
+  # grade table as STAGE=maps does
+  keys <- names(jobs)[file.exists(file.path(dir_out, paste0(names(jobs), "_segments.rds")))]
+  if (!length(keys)) stop("STAGE=gpkg: no saved segments under ", dir_out)
+  old <- keys[file.mtime(file.path(dir_out, paste0(keys, "_segments.rds"))) <
+                file.mtime(file.path("data/tune", paste0(keys, "_grades.csv")))]
+  if (length(old)) stop("STAGE=gpkg: the saved segments predate their grade tables; run the full compare: ",
+                        paste(old, collapse = ", "))
+  gl <- write_gpkgs(keys)
+  for (k in keys) say("  %s", gl[[k]])
 } else {
   res <- lapply(jobs, run_one)
   if (gpkg) {
     ok <- names(jobs)[vapply(res, function(x) is.null(x$error), logical(1))]
-    t1 <- Sys.time()
-    gl <- if (workers > 1L && length(ok) > 1L) {
-      cl <- parallel::makeCluster(min(workers, length(ok)))
-      tryCatch(parallel::parLapplyLB(cl, ok, gpkg_one, schema = schema, dir_gpkg = dir_gpkg),
-               finally = parallel::stopCluster(cl))
-    } else {
-      lapply(ok, gpkg_one, schema = schema, dir_gpkg = dir_gpkg)
-    }
-    names(gl) <- ok
+    gl <- write_gpkgs(ok)
     for (k in ok) res[[match(k, names(jobs))]]$log <- c(res[[match(k, names(jobs))]]$log, gl[[k]])
-    say("GeoPackages for %d keys in %.1f min.", length(ok), as.numeric(difftime(Sys.time(), t1, units = "mins")))
   }
 }
-if (stage_only != "maps") {
+if (stage_only == "") {
   names(res) <- vapply(jobs, `[[`, character(1), "key")
   say("Compared %d species x stage in %.1f min, each on %d workers.", length(res), as.numeric(difftime(Sys.time(), t0, units = "mins")), workers)
   failed <- names(res)[vapply(res, function(x) !is.null(x$error), logical(1))]
