@@ -35,6 +35,11 @@
 #   - TWO STARTS (#80): the pick is read from link's width `default` (`recommended`, as before) and from
 #     its flow version (`recommended_flow`), at 1 and 1.96 SE; link's `default_tuned` row joins each grid
 #     as a scored candidate (`is_link_tuned`), so the table says how link's own flow floors score.
+#   - GRADIENT (#92): rules and curves read link's segment gradient (`segment_gradient`), the gradient link applies a
+#     rule to and the grade reads, where #57 to #91 read the whole Atlas line's (`fwa_gradient`). link cuts a stream at
+#     each catch, so a visit with fish usually sits on a short segment starting at it (data-raw/segment_gradient_check.R).
+#     GRADIENT=fwa_gradient is the sensitivity: the main fold seed, no grades, outputs under data/tune/grad_fwa/, which
+#     nothing that publishes reads. The column is recorded in the score cache, the summary and every grade table.
 #   - SMOKE RUN FIRST (#84): before any grid is scored, every key that would be fitted scores no rule,
 #     `default`, link's `default_tuned` row and the previous pick (the `recommended` rule of the committed
 #     data/tune/<key>_tune.csv) on the main fold seed, and four checks gate the scorer (knw_tune_smoke()). One
@@ -63,6 +68,8 @@
 #         DEV=1 is the development setting (#84): the smoke run and the full grid on the main fold seed only (no
 #         bootstrap, nested selection or extra seeds), the curve and the summary, no grades, every output under
 #         data/tune/dev/ (ignored), so a scorer change is proved on every species before a full run.
+#         GRADIENT=fwa_gradient scores the Atlas line's gradient on the main fold seed, no grades, into data/tune/grad_fwa/
+#         (data/tune/dev/grad_fwa/ with DEV=1), its log suffixed -grad_fwa.
 # ---------------------------------------------------------------------------
 suppressMessages({ library(dplyr); library(readr); library(DBI); library(RPostgres) })
 pkgload::load_all(quiet = TRUE)
@@ -75,12 +82,22 @@ workers <- as.integer(Sys.getenv("WORKERS", max(1L, min(14L, parallel::detectCor
 species <- strsplit(Sys.getenv("SPECIES", paste(knw_species(), collapse = ",")), ",")[[1]]
 schema <- Sys.getenv("SCHEMA", "fresh_default")  # the run's persist schema, by its current name (renamed after the run, #73)
 dev <- Sys.getenv("DEV", "") %in% c("1", "TRUE", "true")
+# the gradient the rules and the curve read (#92): link's segment gradient, the one link applies a rule to; the Atlas
+# line's is the sensitivity, scored on the main fold seed alone into its own directory and never graded or published
+gradient <- Sys.getenv("GRADIENT", "segment_gradient")
+grad_dirs <- c(segment_gradient = "", fwa_gradient = "grad_fwa")
+if (!gradient %in% names(grad_dirs)) stop("GRADIENT must be one of ", paste(names(grad_dirs), collapse = ", "), ": ", gradient)
+cols_run <- c(grad = gradient, width = "cw_deploy", mad = "mad_pick")
+# the main seed alone, no grades: the development setting and the sensitivity
+main_only <- dev || gradient != "segment_gradient"
 se_strict <- 1.96   # the stricter reading of the region, in SE, beside the one-SE pick (#79)
 dir_out <- if (dev) "data/tune/dev" else "data/tune"
+if (nzchar(grad_dirs[[gradient]])) dir_out <- file.path(dir_out, grad_dirs[[gradient]])
 # one log per pass: a pass over a subset of species (SPECIES=) names them, so passes do not overwrite each other
 path_log <- file.path("scripts/logs/habitat", paste0(format(Sys.Date(), "%Y%m%d"), "_tune_run",
                                                      if (nzchar(Sys.getenv("SPECIES"))) paste0("-", tolower(gsub(",", "_", Sys.getenv("SPECIES")))) else "",
-                                                     if (dev) "-dev" else "", ".txt"))
+                                                     if (dev) "-dev" else "",
+                                                     if (nzchar(grad_dirs[[gradient]])) paste0("-", grad_dirs[[gradient]]) else "", ".txt"))
 dir.create(dir_out, showWarnings = FALSE, recursive = TRUE)
 log_lines <- character()
 say <- function(...) { log_lines <<- c(log_lines, sprintf(...)); message(sprintf(...)) }
@@ -162,10 +179,13 @@ for (f in list.files("data/tune", "_tune\\.csv$", full.names = TRUE)) {
 }
 say("Fit: group intercepts absorbed (#83); normal prior SD %s on the data_set and era coefficients, cloglog scale (#84).",
     format(formals(knw_tune_run)$prior_sd))   # knw_tune_run's default is what runs: it is not passed below
-say("Smoke run first%s: previous picks on file for %s.", if (dev) " (DEV=1: the main seed only, no grades, outputs under data/tune/dev)" else "",
+say("Rules and curves read the gradient from %s%s.", gradient,
+    if (main_only && !dev) sprintf(" (the sensitivity: the main seed only, no grades, outputs under %s)", dir_out) else "")
+say("Smoke run first%s: previous picks on file for %s.", if (dev) sprintf(" (DEV=1: the main seed only, no grades, outputs under %s)", dir_out) else "",
     paste(names(previous), collapse = ", "))
 t0 <- Sys.time()
 sm <- knw_tune_run(vl, vs, walks, thr, species = species, spawner = spawner, workers = workers, thresholds_extra = thr_tuned, evidence_id = evidence_md5,
+                   cols = cols_run,
                    previous = if (length(previous)) previous else NULL, smoke_only = TRUE)
 smoke_failed <- character()
 for (k in names(sm)) {
@@ -188,9 +208,9 @@ if (length(smoke_failed)) {
 # ---- score, pick, curve ------------------------------------------------------------------
 t0 <- Sys.time()
 out <- knw_tune_run(vl, vs, walks, thr, species = species, spawner = spawner, workers = workers, cache_dir = dir_out,
-                    thresholds_extra = thr_tuned, smoke = FALSE, extra = !dev, evidence_id = evidence_md5)
+                    thresholds_extra = thr_tuned, smoke = FALSE, extra = !main_only, evidence_id = evidence_md5, cols = cols_run)
 say("Scored %d species x stage in %.1f min on %d workers%s.", length(out), as.numeric(difftime(Sys.time(), t0, units = "mins")), workers,
-    if (dev) " (DEV=1: the main seed only)" else "")
+    if (main_only) " (the main seed only)" else "")
 
 summ <- list()
 for (k in names(out)) {
@@ -208,7 +228,7 @@ for (k in names(out)) {
     write_csv(tibble(species_code = r$species_code, stage = r$stage, watershed_group_code = names(r$score$folds),
                      fold = as.integer(r$score$folds)), file.path(dir_out, paste0(k, "_groups.csv")), na = "")
     # the stability tables the score object holds, so a reader of the tables needs no rds (#62)
-    if (!dev) {
+    if (!main_only) {
       write_csv(as_tibble(r$score$seeds) |> mutate(species_code = r$species_code, stage = r$stage),
                 file.path(dir_out, paste0(k, "_seeds.csv")), na = "")
       write_csv(as_tibble(r$score$honest) |> mutate(across(where(is.double), ~ round(.x, 6)),
@@ -231,21 +251,23 @@ for (k in names(out)) {
       region_n = sum(rules$in_region), patterns = r$score$population[["patterns"]],
       dev_default = dflt$dev_heldout, dev_best = best$dev_heldout, dev_null = best$dev_heldout - best$ddev_null,
       dev_curve = r$curve$heldout, null_heldout_curve = r$null_heldout_curve, curve_prior_sd = r$curve$prior_sd,
+      # the gradient the rule and the curve read (#92), which every grade table records and its readers compare
+      curve_grad = r$curve$cols[["grad"]],
       grade_withheld = r$grade_withheld,
       # the evidence and the link run the pick was scored on, so a grade can be held to its pick's evidence as well as its
       # rule (the branch review of 2026-10-25)
       evidence_md5 = evidence_md5, run_uid = run_uid,
       curve_dist_in_model = r$curve$dist_in_model,
       curve_edf = paste(sprintf("%s=%.2f", names(r$curve$edf), r$curve$edf), collapse = "; "),
-      # NA under DEV=1, which runs the main seed alone
-      honest_dev_rec = if (dev) NA_real_ else sum(r$score$honest$dev_rec),
-      honest_dev_default = if (dev) NA_real_ else sum(r$score$honest$dev_default),
-      honest_dev_null = if (dev) NA_real_ else sum(r$score$honest$dev_null),
-      seeds_same_rec = if (dev) NA_integer_ else sum(r$score$seeds$recommended == r$pick$rule),
-      seeds_default_in_region = if (dev) NA_integer_ else sum(r$score$seeds$default_in_region),
-      seeds_rec_in_region = if (dev) NA_integer_ else sum(r$score$seeds$main_rec_in_region),
-      seeds_n = if (dev) 0L else nrow(r$score$seeds),
-      boot_rec_share = if (dev) NA_real_ else rules$boot_rec_share[rules$recommended])
+      # NA under DEV=1 and on the sensitivity, which run the main seed alone
+      honest_dev_rec = if (main_only) NA_real_ else sum(r$score$honest$dev_rec),
+      honest_dev_default = if (main_only) NA_real_ else sum(r$score$honest$dev_default),
+      honest_dev_null = if (main_only) NA_real_ else sum(r$score$honest$dev_null),
+      seeds_same_rec = if (main_only) NA_integer_ else sum(r$score$seeds$recommended == r$pick$rule),
+      seeds_default_in_region = if (main_only) NA_integer_ else sum(r$score$seeds$default_in_region),
+      seeds_rec_in_region = if (main_only) NA_integer_ else sum(r$score$seeds$main_rec_in_region),
+      seeds_n = if (main_only) 0L else nrow(r$score$seeds),
+      boot_rec_share = if (main_only) NA_real_ else rules$boot_rec_share[rules$recommended])
     say("%s: %s. %d visits (%d detections) in %d groups (%d both). Recommended %s; default %s the region (+%.1f, SE %.1f). Curve held-out %.1f vs grid best %.1f.",
         k, r$status, row$visits_in, row$detections, row$groups, row$groups_both, r$pick$rule,
         if (dflt$in_region) "in" else "outside", dflt$ddev_best, dflt$se_diff, r$curve$heldout, best$dev_heldout)
@@ -261,7 +283,7 @@ for (k in names(out)) {
         row$rule_link_tuned, if (nrow(ltn)) sprintf("%s the region (+%.1f, SE %.1f)", if (ltn$in_region) "in" else "outside", ltn$ddev_best, ltn$se_diff) else "(none)")
     block(paste(k, "region"), rules |> filter(in_region) |> arrange(ddev_best) |>
             select(rule, departures, ddev_best, se_diff, n_wsg_varies, n_in, n_detect_in, raw_rate_in, raw_rate_out, any_of("boot_region_share")))
-    if (!dev) {
+    if (!main_only) {
       block(paste(k, "nested selection"), r$score$honest)
       block(paste(k, "more seeds"), r$score$seeds)
     }
@@ -283,8 +305,8 @@ for (k in names(out)) {
 }
 
 # ---- grade every segment of each fitted species' groups ----------------------------------
-if (dev) {
-  say("DEV=1: no grades. Done in %.1f min.", as.numeric(difftime(Sys.time(), t0, units = "mins")))
+if (main_only) {
+  say("%s: no grades. Done in %.1f min.", if (dev) "DEV=1" else paste("GRADIENT", gradient), as.numeric(difftime(Sys.time(), t0, units = "mins")))
   writeLines(log_lines, path_log)
   quit(save = "no", status = 0)
 }
@@ -325,7 +347,9 @@ for (k in names(out)) {
       "curve_prior_sd" %in% names(head1) && identical(head1$curve_prior_sd, curve_prior_txt) &&
       "grade_withheld" %in% names(head1) && identical(head1$grade_withheld, withheld_txt) &&
       "null_heldout_curve" %in% names(head1) &&
-      "evidence_md5" %in% names(head1) && identical(head1$evidence_md5, evidence_md5)
+      "evidence_md5" %in% names(head1) && identical(head1$evidence_md5, evidence_md5) &&
+      # graded from a curve fitted on the gradient the segments carry (#92); a table from before the record was not
+      .knw_grade_grad_ok(head1, r$curve$cols[["grad"]])
     if (same) {
       # not "<key> grades: <n> groups", the result line data-raw/vignette_chinook.R reads
       say("%s: grades already written under %s on %s, kept.", k, r$pick$rule, run_uid)
@@ -352,7 +376,7 @@ for (k in names(out)) {
                                ref_population = "stream_branch", ref_edge = paste(g$ref_edge, collapse = ";"),
                                q_walk = g$q, walk = g$walk, walk_md5 = g$walk_md5, discharge_load = discharge_load,
                                curve_prior_sd = curve_prior_txt, grade_withheld = withheld_txt, null_heldout_curve = nhc_txt,
-                               evidence_md5 = evidence_md5,
+                               evidence_md5 = evidence_md5, curve_grad = r$curve$cols[["grad"]],
                                across(c(rate, grade), ~ signif(.x, 5))),
             file.path(dir_out, paste0(k, "_grades.csv")), na = "")
   say("%s grades: %d groups, %s; reference rate %.4f over edge types %s; walks to %g m3/s, to the bank, %.1f min; %d of %d found rivers lie in another group; total %.1f min.",

@@ -145,3 +145,19 @@ test_that("the grade records how it was made: the curve's edge types, the river 
   stream <- gr$accessible & !is.na(gr$rate) & gr$edge_type %in% c(1000L, 2000L)
   expect_equal(r2$reference, unname(stats::quantile(gr$rate[stream], 0.95)))
 })
+
+test_that("a curve fitted on another gradient than the segments carry is not graded, and the record says which (#92)", {
+  skip_if_not_installed("mgcv")
+  skip_if_not_installed("duckdb")
+  fx <- grade_fixture()
+  expect_identical(fx$curve$cols[["grad"]], "segment_gradient")
+  fx$curve$cols[["grad"]] <- "fwa_gradient"
+  expect_error(run_grade(fx), "fitted on fwa_gradient")
+  fx$curve$cols <- NULL
+  expect_error(run_grade(fx), "unrecorded gradient")
+  # a grade table's first row is held to the gradient by its readers
+  expect_true(.knw_grade_grad_ok(data.frame(curve_grad = "segment_gradient")))
+  expect_false(.knw_grade_grad_ok(data.frame(curve_grad = "fwa_gradient")))
+  expect_false(.knw_grade_grad_ok(data.frame(rule = "r1")))
+  expect_false(.knw_grade_grad_ok(data.frame(curve_grad = NA_character_)))
+})

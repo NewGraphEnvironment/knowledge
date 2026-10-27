@@ -102,7 +102,8 @@ knw_tune_run <- function(visits, species_tbl, walks, thresholds, species = knw_s
                          min_wsg = 5L, power_wsg = 10L, src = "pick", grid_args = list(), cache_dir = NULL,
                          thresholds_extra = NULL, previous = NULL, smoke = TRUE, smoke_only = FALSE,
                          smoke_args = list(), extra = TRUE, fit = c("fe", "dense"), prior_sd = 2.5,
-                         evidence_id = NULL, cols = c(grad = "segment_gradient", width = "cw_deploy", mad = "mad_pick")) {
+                         evidence_id = NULL,
+                         cols = c(grad = "segment_gradient", width = "cw_deploy", mad = "mad_pick")) {
   fit <- match.arg(fit)
   chk::chk_null_or(evidence_id, vld = chk::vld_string)
   chk::chk_data(visits)

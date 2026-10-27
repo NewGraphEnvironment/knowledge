@@ -28,7 +28,9 @@ opens its own).}
 
 \item{wsg}{\code{character} the species' groups.}
 
-\item{curve}{\code{\link[=knw_tune_curve]{knw_tune_curve()}}'s result for the species and stage.}
+\item{curve}{\code{\link[=knw_tune_curve]{knw_tune_curve()}}'s result for the species and stage. It must
+have been fitted on link's segment gradient (\code{curve$cols[["grad"]]} is
+\code{segment_gradient}), the gradient the segments are graded on (#92).}
 
 \item{pick}{the recommended rule row.}
 

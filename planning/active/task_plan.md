@@ -80,26 +80,26 @@ reads link's segment `gradient`, so the curve is fitted on one gradient and grad
       and the curve object keeps `cols`.
 - [x] Update `tests/testthat/helper-tune_sim.R` and the fixtures in `test-rule_in.R`, `test-tune_curve.R` and
       `test-grade_species.R` that build `fwa_gradient`.
-- [ ] `0322` and `data-raw/snap_limit_sensitivity.R` pass `cols` with `fwa_gradient`, so they keep reproducing their
+- [x] `0322` and `data-raw/snap_limit_sensitivity.R` pass `cols` with `fwa_gradient`, so they keep reproducing their
       records.
-- [ ] The record. `0320` writes `curve_grad` (the curve's `cols[["grad"]]`) to `<key>_summary.csv` and to
+- [x] The record. `0320` writes `curve_grad` (the curve's `cols[["grad"]]`) to `<key>_summary.csv` and to
       `<key>_grades.csv`. `0320`'s keep-check, `0325`, `0330` and `data-raw/vignette_chinook.R` compare it with the
       run's value and refuse a table without it.
-- [ ] `0320` reads `GRADIENT` (default `segment_gradient`). Any other value scores on the main seed, writes no grades,
+- [x] `0320` reads `GRADIENT` (default `segment_gradient`). Any other value scores on the main seed, writes no grades,
       writes to `data/tune/grad_<name>/`, and its log names it. Update the header's ANALYSIS SPEC and RUN lines.
 - [x] (review G1) A cache with no `spec` was scored on the Atlas line's gradient: rescore it unless the run reads
       `fwa_gradient`.
-- [ ] (review G5, AC2, AC3) One helper holds a grade table's record to the run (`curve_grad` beside the existing
+- [x] (review G5, AC2, AC3) One helper holds a grade table's record to the run (`curve_grad` beside the existing
       fields), and 0320's keep-check, 0325, 0330, vignette_chinook.R and vignette_method.R call it. `knw_grade_species`
       refuses a curve fitted on any gradient but `segment_gradient`. `knw_thresholds_table` carries `curve_grad` and
       refuses it NA on a fitted or underpowered row. Unit tests for each.
-- [ ] (review B1, B2, G3, A1) 0320: `GRADIENT` takes only `segment_gradient` or `fwa_gradient` (written to `grad_fwa`).
+- [x] (review B1, B2, G3, A1) 0320: `GRADIENT` takes only `segment_gradient` or `fwa_gradient` (written to `grad_fwa`).
       `main_only <- dev || gradient != "segment_gradient"` gates `extra`, the seeds and honest tables, their summary
       columns and log blocks, and the grading. The log name carries `-grad_fwa`, and both `knw_tune_run` calls get
       `cols`. DEV=1 with GRADIENT writes to `data/tune/dev/grad_fwa/`.
-- [ ] (review G8) vignette_chinook.R records the run's `curve_grad` rather than `formals(knw_rule_in)$cols`.
+- [x] (review G8) vignette_chinook.R records the run's `curve_grad` rather than `formals(knw_rule_in)$cols`.
       0322's header no longer claims "same spec as 0320".
-- [ ] Register: `gradient_col` becomes `segment_gradient`, its `fn:` pointers move to `knw_tune_run:cols[grad]` (and
+- [x] Register: `gradient_col` becomes `segment_gradient`, its `fn:` pointers move to `knw_tune_run:cols[grad]` (and
       to the two functions' defaults), and its note says why. Close the gap the `grade_grad_col` note names. Run
       `devtools::document()`, `lintr`, `devtools::test()` (test-vignette-data's two source tests stay red until Phase 4,
       review O3). Also `tested = yes` on `gradient_col`; pipeline.csv steps 5, 7 and 9 (review G6).

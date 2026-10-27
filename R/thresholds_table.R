@@ -26,7 +26,9 @@
 #' rule has no pair, and where `compare_dir` is `NULL`. `evidence_md5` is the
 #' identity of the evidence build the rule was scored on, as the summary records
 #' it (`scripts/0320`; `NA` on a summary written before the record), which
-#' `scripts/0325` holds each grade table to. A summary whose `rule_recommended`
+#' `scripts/0325` holds each grade table to; `curve_grad` is the visit column
+#' the rule and its curve read the gradient from (`segment_gradient`, link's
+#' segment gradient, from #92; `NA` on a summary written before the record). A summary whose `rule_recommended`
 #' is not its tune table's recommended rule is refused: the two are written at
 #' different points of a run. A species × stage that
 #' was not fitted (no stream rule, no response, too few groups) gets one row
@@ -70,6 +72,7 @@ knw_thresholds_table <- function(tune_dir, evidence_version, link_run_uid, link_
   summ <- do.call(rbind, parts)
   summ <- summ[order(summ$species_code, summ$stage), , drop = FALSE]
   if (!"evidence_md5" %in% names(summ)) summ$evidence_md5 <- NA_character_
+  if (!"curve_grad" %in% names(summ)) summ$curve_grad <- NA_character_
   rows <- list()
   groups <- list()
   for (i in seq_len(nrow(summ))) {
@@ -86,6 +89,7 @@ knw_thresholds_table <- function(tune_dir, evidence_version, link_run_uid, link_
         unit = NA_character_, range_lo = NA_real_, range_hi = NA_real_, readings_in = NA_integer_,
         readings = NA_integer_, rule_196 = NA_character_, holds_196 = NA, rule_flow = NA_character_,
         rule_flow_196 = NA_character_, near_river_scope = NA_character_, evidence_md5 = NA_character_,
+        curve_grad = NA_character_,
         default_value = NA_real_, default_in_region = NA, rule = NA_character_, n_visits = summ$visits_in[i],
         n_detect = summ$detections[i], n_wsg = summ$groups_both[i], power = summ$status[i]))
       next
@@ -151,6 +155,7 @@ knw_thresholds_table <- function(tune_dir, evidence_version, link_run_uid, link_
       readings_in = readings_in, readings = readings, rule_196 = r196$rule, holds_196 = holds,
       rule_flow = rule_flow, rule_flow_196 = rule_flow_196, near_river_scope = scope,
       evidence_md5 = if (is.na(summ$evidence_md5[i])) NA_character_ else as.character(summ$evidence_md5[i]),
+      curve_grad = if (is.na(summ$curve_grad[i])) NA_character_ else as.character(summ$curve_grad[i]),
       default_value = c(dflt$size_min, dflt$grad_max, NA_real_, NA_real_),
       default_in_region = dflt$in_region %in% TRUE, rule = rec$rule,
       n_visits = rec$n_visits, n_detect = rec$n_detect, n_wsg = rec$n_wsg, power = summ$status[i]

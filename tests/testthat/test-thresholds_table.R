@@ -179,3 +179,16 @@ test_that("a pair compared under a structure link has no scope for, or with no c
   expect_error(knw_thresholds_table(d, "knowledge/fdis/v3", "run1", "abc1234", compare_dir = empty),
                "no CH_rear_compare.csv")
 })
+
+test_that("curve_grad is the summary's gradient column, and NA on a summary written before the record (#92)", {
+  d <- tune_dir_fx()
+  t <- knw_thresholds_table(d, "knowledge/fdis/v3", "run1", "abc1234")$thresholds
+  expect_true("curve_grad" %in% names(t))
+  expect_true(all(is.na(t$curve_grad)))
+  summ <- utils::read.csv(file.path(d, "CH_rear_summary.csv"), stringsAsFactors = FALSE)
+  summ$curve_grad <- "segment_gradient"
+  utils::write.csv(summ, file.path(d, "CH_rear_summary.csv"), row.names = FALSE, na = "")
+  t <- knw_thresholds_table(d, "knowledge/fdis/v3", "run1", "abc1234")$thresholds
+  expect_identical(unique(t$curve_grad[t$species_code == "CH"]), "segment_gradient")
+  expect_true(is.na(t$curve_grad[t$species_code == "KO"]))
+})

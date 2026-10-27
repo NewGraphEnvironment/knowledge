@@ -89,6 +89,7 @@ if (!"walk_md5" %in% names(g1) || !identical(g1$walk_md5, knw_walk_md5())) {
 if (!all(c("curve_prior_sd", "grade_withheld", "null_heldout_curve", "evidence_md5") %in% names(g1))) {
   stop("data/tune/", key, "_grades.csv predates the gate's record (curve_prior_sd, grade_withheld, null_heldout_curve, evidence_md5); rerun 0320")
 }
+if (!.knw_grade_grad_ok(g1)) stop("data/tune/", key, "_grades.csv was not graded from a curve on link's segment gradient (curve_grad, #92); rerun 0320")
 
 out <- list(
   tune = rd(src[["tune"]]),
@@ -132,6 +133,9 @@ if (length(rec) != 1 || !identical(rec, unique(out$thresholds$rule))) {
 if (!identical(g1$rule, rec)) stop("data/tune/", key, "_grades.csv was graded under ", g1$rule, ", not the recommended ", rec, "; rerun 0320")
 if (!"evidence_md5" %in% names(out$summary) || !identical(g1$evidence_md5, out$summary$evidence_md5)) {
   stop("data/tune/", key, "_grades.csv and _summary.csv name different evidence builds (or the summary predates the record); rerun 0320")
+}
+if (!identical(out$summary$curve_grad, g1$curve_grad)) {
+  stop("data/tune/", key, "_grades.csv and _summary.csv name different gradients (or the summary predates the record, #92); rerun 0320")
 }
 log_md5 <- sub("^ +[a-z_]+ md5 ", "", grep("^ +(visits_link|visits_species|walks) md5 [0-9a-f]{32}$", readLines(path_log, warn = FALSE), value = TRUE))
 if (length(log_md5) != 3L || !identical(paste(log_md5, collapse = ";"), g1$evidence_md5)) {
@@ -202,7 +206,6 @@ gl <- grep(sprintf("^%s grades: [0-9]+ groups", key), log_txt, value = TRUE)
 if (length(gl) != 1) stop("the tuning log has ", length(gl), " '", key, " grades' lines")
 num_of <- function(pat) as.numeric(sub(pat, "\\1", regmatches(gl, regexpr(pat, gl))))
 fm <- formals(knw_tune_run)
-fr <- formals(knw_rule_in)
 out$meta <- list(
   written = format(Sys.Date()),
   link_run_uid = led$note[led$step == "link_run_uid"],
@@ -212,7 +215,8 @@ out$meta <- list(
                accessible = num_of("accessible=([0-9]+)"), graded = num_of("graded=([0-9]+)"),
                no_size = num_of("no_size=([0-9]+)"), reference_rate = num_of("reference rate ([0-9.]+)"),
                log = path_log),
-  spec = list(cols = eval(fr$cols), src = eval(fm$src), edge_stream = eval(fm$edge_stream),
+  # the gradient is the run's own record (#92), the width and flow columns the runner's defaults
+  spec = list(cols = c(grad = out$summary$curve_grad, eval(fm$cols)[c("width", "mad")]), src = eval(fm$src), edge_stream = eval(fm$edge_stream),
               area_range = eval(fm$area_range), seed = eval(fm$seed), folds = eval(fm$folds),
               seeds_more = eval(fm$seeds_more), n_boot = eval(fm$n_boot), d_floor = eval(fm$d_floor),
               min_wsg = eval(fm$min_wsg), power_wsg = eval(fm$power_wsg)),

@@ -16,3 +16,9 @@
 - Phase 2 (part): `knw_tune_run(cols = )` with `segment_gradient` the default, threaded to the rule and the curve;
   `spec$grad` in the score cache; a pre-record cache rescored unless the run reads `fwa_gradient`; curve keeps `cols`.
   Tests shown red first (6 failures), then green across the six tune test files.
+- Phase 2 (rest): `knw_grade_species()` refuses a curve not fitted on `segment_gradient`; `.knw_grade_grad_ok()` holds
+  a grade table's `curve_grad`, called by 0320's keep-check, 0325, 0330, vignette_chinook.R and vignette_method.R;
+  `knw_thresholds_table()` carries `curve_grad`. 0320: `GRADIENT` (segment_gradient | fwa_gradient → grad_fwa/),
+  `main_only` gates extras and grading, `-grad_fwa` log suffix, `cols` on both calls, `curve_grad` in summary and
+  grades. 0322 and snap_limit_sensitivity.R pin `fwa_gradient`. Register: `gradient_col` = segment_gradient
+  (script:/fn:/record: pointers, tested yes); the register test shown red (4) with the old value restored.

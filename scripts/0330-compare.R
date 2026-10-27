@@ -185,9 +185,11 @@ stale <- names(jobs)[!vapply(names(jobs), function(k) {
     "evidence_md5" %in% names(h) && identical(h$evidence_md5, curves[[k]]$evidence_md5) &&
     # graded from a curve with the prior, the withheld-grade record (#73, Phase 7) and the gate's own number (the branch
     # review of 2026-10-25: a verdict written by the gate before it compared like with like is not read back)
-    all(c("curve_prior_sd", "grade_withheld", "null_heldout_curve") %in% names(h))
+    all(c("curve_prior_sd", "grade_withheld", "null_heldout_curve") %in% names(h)) &&
+    # graded from a curve fitted on link's segment gradient, the curve this comparison reads (#92)
+    .knw_grade_grad_ok(h) && identical(curves[[k]]$curve$cols[["grad"]], h$curve_grad)
 }, logical(1))]
-if (length(stale)) stop("grade tables made before #73's curve prior (no ref_population = stream_branch, a walk not ending at the bank, or no curve_prior_sd, grade_withheld, null_heldout_curve and evidence_md5), walked by another walk than this tree's (walk_md5, #87) or on another flow load than the database's, or graded under another pick, link run or evidence build than the curve record's; rerun 0320: ",
+if (length(stale)) stop("grade tables made before #73's curve prior (no ref_population = stream_branch, a walk not ending at the bank, or no curve_prior_sd, grade_withheld, null_heldout_curve and evidence_md5), graded from a curve on another gradient than link's segment gradient (curve_grad, #92), walked by another walk than this tree's (walk_md5, #87) or on another flow load than the database's, or graded under another pick, link run or evidence build than the curve record's; rerun 0320: ",
                         paste(stale, collapse = ", "))
 # each job writes its own tables as it finishes and returns its error rather than raising it, so one failed
 # species cannot discard the others (code-check round 2); the grade table is read with the six columns the

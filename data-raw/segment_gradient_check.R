@@ -115,12 +115,13 @@ q <- sprintf("SELECT count(*) AS segments,\n  %s\nFROM %s.streams WHERE edge_typ
 x <- DBI::dbGetQuery(conn, q)
 DBI::dbDisconnect(conn)
 say("Stream-branch segments in %s: %s.", schema, format(as.numeric(x$segments), big.mark = ","))
+val <- function(prefix, scale = 1) {
+  vapply(seq_along(all_cuts), function(i) as.numeric(x[[paste0(prefix, i)]]) / scale, numeric(1))
+}
+kind <- c(rep("default rear/spawn max", length(cuts)), rep("access class", length(access_classes)))
 block(sprintf("segments in the %g-point band below and above each cut-off (%s's stream branch)", 100 * band_w, schema),
-      tibble(cut = all_cuts, kind = c(rep("default rear/spawn max", length(cuts)), rep("access class", length(access_classes))),
-             below_n = vapply(seq_along(all_cuts), function(i) as.numeric(x[[paste0("below_n_", i)]]), numeric(1)),
-             above_n = vapply(seq_along(all_cuts), function(i) as.numeric(x[[paste0("above_n_", i)]]), numeric(1)),
-             below_km = vapply(seq_along(all_cuts), function(i) round(as.numeric(x[[paste0("below_m_", i)]]) / 1000), numeric(1)),
-             above_km = vapply(seq_along(all_cuts), function(i) round(as.numeric(x[[paste0("above_m_", i)]]) / 1000), numeric(1))) |>
+      tibble(cut = all_cuts, kind = kind, below_n = val("below_n_"), above_n = val("above_n_"),
+             below_km = round(val("below_m_", 1000)), above_km = round(val("above_m_", 1000))) |>
         mutate(ratio_n = round(below_n / above_n, 3)))
 writeLines(log_lines, path_log)
 message("Written ", path_log)

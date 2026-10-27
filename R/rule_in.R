@@ -58,7 +58,8 @@ knw_walk_index <- function(walks) {
 #'                 segment_gradient = c(0.02, 0.02, 0.01), cw_deploy = c(2, 1, 50), mad_pick = c(0.3, 0.1, 40))
 #' r <- data.frame(size_var = "width", size_min = 1.5, grad_max = 0.0549, exc_q = NA, exc_d = NA)
 #' knw_rule_in(d, r)
-knw_rule_in <- function(d, rule, walks = NULL, cols = c(grad = "segment_gradient", width = "cw_deploy", mad = "mad_pick"),
+knw_rule_in <- function(d, rule, walks = NULL,
+                        cols = c(grad = "segment_gradient", width = "cw_deploy", mad = "mad_pick"),
                         src = "pick", edge_stream = c(1000L, 1100L, 2000L, 2300L),
                         no_lake_target = FALSE, no_reg_target = FALSE) {
   chk::chk_data(d)

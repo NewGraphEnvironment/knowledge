@@ -83,6 +83,9 @@ f_tune <- file.path("data/tune", paste0(keys, "_tune.csv"))
 f_grades <- file.path("data/tune", paste0(keys, "_grades.csv"))
 f_compare <- sort(list.files("data/compare", "_compare\\.csv$", full.names = TRUE))
 g1 <- lapply(f_grades, rd, n_max = 1, col_types = cols(.default = "c"))
+# graded from curves on link's segment gradient, the gradient the article says the rules were scored on (#92)
+off_grad <- f_grades[!vapply(g1, .knw_grade_grad_ok, logical(1))]
+if (length(off_grad)) stop("not graded from a curve on link's segment gradient (curve_grad, #92); rerun 0320: ", paste(off_grad, collapse = ", "))
 ev <- unique(vapply(g1, function(g) g$evidence_md5, ""))
 if (length(ev) != 1) stop("the grade tables were made on ", length(ev), " evidence builds")
 if (!identical(ev, paste(unname(tools::md5sum(derived)), collapse = ";"))) {
