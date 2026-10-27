@@ -92,105 +92,6 @@ life stages with enough records. The <a href="chinook_rearing.html">chinook rear
 one of them in full.</p>
 </div>
 <div class="section level2">
-<h2 id="se">How are two rules told apart?<a class="anchor" aria-label="anchor" href="#se"></a>
-</h2>
-<p>Each rule gets a <strong>score</strong>: how well “habitat or not”
-predicts where the species was caught, at sites in watershed groups that
-were left out while the model was fitted. Lower is better.</p>
-<p>Scores move with the sites we happen to have. The <strong>standard
-error (SE)</strong> of the difference between two rules’ scores says how
-far that difference would move with a different set of watershed groups.
-Rules whose scores are within 1 SE of the best are <strong>close
-calls</strong>: the records cannot rank them. From the close calls we
-take the one that changes link’s current rule least.</p>
-<p>One SE is a rule of thumb, fixed before the run. 1.96 SE is the
-stricter reading, about the width of a 95 % interval: more rules become
-close calls, and the choice can stay nearer link’s rule. Both are
-reported.</p>
-<table class="table">
-<caption>link’s current rule and the rule chosen at each width of close
-call, for each species and stage tuned.</caption>
-<colgroup>
-<col width="4%">
-<col width="10%">
-<col width="4%">
-<col width="37%">
-<col width="5%">
-<col width="37%">
-</colgroup>
-<thead><tr class="header">
-<th align="left">species and stage</th>
-<th align="left">link’s rule</th>
-<th align="left">close calls at 1 SE</th>
-<th align="left">chosen at 1 SE</th>
-<th align="left">close calls at 1.96 SE</th>
-<th align="left">chosen at 1.96 SE</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="left">bull trout rearing</td>
-<td align="left">is at least 1.5 m wide, no steeper than 10.5 %</td>
-<td align="left">316</td>
-<td align="left">carries at least 0.35 m³/s, no steeper than 25 %</td>
-<td align="left">3,312</td>
-<td align="left">carries at least 0.35 m³/s, no steeper than 10.5 %</td>
-</tr>
-<tr class="even">
-<td align="left">bull trout spawning</td>
-<td align="left">is at least 2 m wide, no steeper than 5.5 %</td>
-<td align="left">333</td>
-<td align="left">is at least 2 m wide, no steeper than 13 %</td>
-<td align="left">5,774</td>
-<td align="left">is at least 2 m wide, no steeper than 5.5 %</td>
-</tr>
-<tr class="odd">
-<td align="left">chinook rearing</td>
-<td align="left">is at least 1.5 m wide, no steeper than 5.5 %</td>
-<td align="left">84</td>
-<td align="left">carries at least 0.75 m³/s, no steeper than 13 %; a
-smaller stream also counts if it passes the slope test and a river
-carrying at least 3 m³/s lies within 1 km downstream</td>
-<td align="left">2,102</td>
-<td align="left">carries at least 1 m³/s, no steeper than 5.5 %; a
-smaller stream also counts if it passes the slope test and a river
-carrying at least 3 m³/s lies within 1 km downstream</td>
-</tr>
-<tr class="even">
-<td align="left">coho rearing</td>
-<td align="left">is at least 1.5 m wide, no steeper than 5.5 %</td>
-<td align="left">89</td>
-<td align="left">carries at least 0.03 m³/s, no steeper than 4 %</td>
-<td align="left">1,511</td>
-<td align="left">is at least 1.5 m wide, no steeper than 4 %</td>
-</tr>
-<tr class="odd">
-<td align="left">grayling rearing</td>
-<td align="left">is at least 1.5 m wide, no steeper than 3.5 %</td>
-<td align="left">1,231</td>
-<td align="left">is at least 1.5 m wide, no steeper than 3.5 %</td>
-<td align="left">7,337</td>
-<td align="left">is at least 1.5 m wide, no steeper than 3.5 %</td>
-</tr>
-<tr class="even">
-<td align="left">rainbow trout rearing</td>
-<td align="left">is at least 1.5 m wide, no steeper than 8.5 %</td>
-<td align="left">14</td>
-<td align="left">is at least 3 m wide, no steeper than 30 %</td>
-<td align="left">463</td>
-<td align="left">is at least 3 m wide, no steeper than 30 %</td>
-</tr>
-<tr class="odd">
-<td align="left">steelhead rearing</td>
-<td align="left">is at least 1.5 m wide, no steeper than 8.5 %</td>
-<td align="left">1,034</td>
-<td align="left">carries at least 1 m³/s, no steeper than 8.5 %</td>
-<td align="left">6,434</td>
-<td align="left">is at least 1.5 m wide, no steeper than 8.5 %</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section level2">
 <h2 id="steps">What happens, in order?<a class="anchor" aria-label="anchor" href="#steps"></a>
 </h2>
 <p>The 11 steps are each done by one package. Each box links to its
@@ -559,8 +460,8 @@ Exception distances: 100, 250, 500, 1000, 2000, 5000 m
 <div class="section level3">
 <h3 id="step-7">7. Scoring and choosing<a class="anchor" aria-label="anchor" href="#step-7"></a>
 </h3>
-<p>Each rule is scored and chosen as <a href="#se">described above</a>,
-where the table gives each species’ choice. The model also accounts for
+<p>Each rule is scored and chosen as <a href="#se">described below</a>,
+where a table gives each species’ choice. The model also accounts for
 how much stream was fished, which data set the record comes from, its
 period (1994 or earlier, 1995 to 2004, or later) and its watershed
 group, so a rule is not credited for those. A short trial run checks the
@@ -789,117 +690,6 @@ data/thresholds_groups.csv; habitat_grade/v1
 </li>
 </ul></details>
 </div>
-</div>
-<div class="section level2">
-<h2 id="lost">Where are fish sampling records lost?<a class="anchor" aria-label="anchor" href="#lost"></a>
-</h2>
-<p>Most of the records lost are lost when sites are put on the map (72 %
-of the 11,000 dropped). A site far from any stream, or on the wrong
-tributary, cannot be trusted to sit on the stream that was fished.</p>
-<div class="figure">
-<img src="habitat_thresholds_files/figure-html/funnel-1.png" class="r-plt" alt="Site visits each step drops, in the order the steps run." width="100%"><p class="caption">
-Site visits each step drops, in the order the steps run.
-</p>
-</div>
-<p>Each species then keeps the sites its rules can speak to: on a stream
-line (not in a river polygon, a wetland of 1 ha or more or a lake of 100
-ha or more), of a usual fished area, where link expects the species,
-with no code that could hide it and no natural barrier to it downstream.
-The score uses the groups where the species was caught at some sites and
-not others.</p>
-<table style="width:100%;" class="table">
-<caption>Rearing site visits per species after each filter.</caption>
-<colgroup>
-<col width="13%">
-<col width="6%">
-<col width="11%">
-<col width="11%">
-<col width="14%">
-<col width="10%">
-<col width="10%">
-<col width="6%">
-<col width="13%">
-</colgroup>
-<thead><tr class="header">
-<th align="left">species</th>
-<th align="right">kept</th>
-<th align="right">stream line</th>
-<th align="right">fished area</th>
-<th align="right">where expected</th>
-<th align="right">not hidden</th>
-<th align="right">no barrier</th>
-<th align="right">scored</th>
-<th align="right">groups scored</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="left">bull trout</td>
-<td align="right">40,552</td>
-<td align="right">29,663</td>
-<td align="right">27,598</td>
-<td align="right">22,892</td>
-<td align="right">22,615</td>
-<td align="right">11,015</td>
-<td align="right">8,717</td>
-<td align="right">75</td>
-</tr>
-<tr class="even">
-<td align="left">chinook</td>
-<td align="right">40,552</td>
-<td align="right">29,663</td>
-<td align="right">27,598</td>
-<td align="right">16,403</td>
-<td align="right">16,292</td>
-<td align="right">7,123</td>
-<td align="right">4,490</td>
-<td align="right">43</td>
-</tr>
-<tr class="odd">
-<td align="left">coho</td>
-<td align="right">40,552</td>
-<td align="right">29,663</td>
-<td align="right">27,598</td>
-<td align="right">12,960</td>
-<td align="right">12,898</td>
-<td align="right">5,442</td>
-<td align="right">4,263</td>
-<td align="right">62</td>
-</tr>
-<tr class="even">
-<td align="left">grayling</td>
-<td align="right">40,552</td>
-<td align="right">29,663</td>
-<td align="right">27,598</td>
-<td align="right">5,356</td>
-<td align="right">5,333</td>
-<td align="right">1,472</td>
-<td align="right">1,230</td>
-<td align="right">26</td>
-</tr>
-<tr class="odd">
-<td align="left">rainbow trout</td>
-<td align="right">40,552</td>
-<td align="right">29,663</td>
-<td align="right">27,598</td>
-<td align="right">27,349</td>
-<td align="right">27,100</td>
-<td align="right">13,578</td>
-<td align="right">12,959</td>
-<td align="right">129</td>
-</tr>
-<tr class="even">
-<td align="left">steelhead</td>
-<td align="right">40,552</td>
-<td align="right">29,663</td>
-<td align="right">27,598</td>
-<td align="right">9,789</td>
-<td align="right">9,462</td>
-<td align="right">4,798</td>
-<td align="right">1,375</td>
-<td align="right">11</td>
-</tr>
-</tbody>
-</table>
 </div>
 <div class="section level2">
 <h2 id="lineage">What feeds what?<a class="anchor" aria-label="anchor" href="#lineage"></a>
@@ -1142,6 +932,216 @@ each.</caption>
 <td align="left">(unnamed)</td>
 <td align="right">356.7</td>
 <td align="left"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level2">
+<h2 id="se">How are two rules told apart?<a class="anchor" aria-label="anchor" href="#se"></a>
+</h2>
+<p>Each rule gets a <strong>score</strong>: how well “habitat or not”
+predicts where the species was caught, at sites in watershed groups that
+were left out while the model was fitted. Lower is better.</p>
+<p>Scores move with the sites we happen to have. The <strong>standard
+error (SE)</strong> of the difference between two rules’ scores says how
+far that difference would move with a different set of watershed groups.
+Rules whose scores are within 1 SE of the best are <strong>close
+calls</strong>: the records cannot rank them. From the close calls we
+take the one that changes link’s current rule least.</p>
+<p>One SE is a rule of thumb, fixed before the run. 1.96 SE is the
+stricter reading, about the width of a 95 % interval: more rules become
+close calls, and the choice can stay nearer link’s rule. Both are
+reported.</p>
+<table class="table">
+<caption>link’s current rule and the rule chosen at each width of close
+call, for each species and stage tuned.</caption>
+<colgroup>
+<col width="4%">
+<col width="10%">
+<col width="4%">
+<col width="37%">
+<col width="5%">
+<col width="37%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">species and stage</th>
+<th align="left">link’s rule</th>
+<th align="left">close calls at 1 SE</th>
+<th align="left">chosen at 1 SE</th>
+<th align="left">close calls at 1.96 SE</th>
+<th align="left">chosen at 1.96 SE</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">bull trout rearing</td>
+<td align="left">is at least 1.5 m wide, no steeper than 10.5 %</td>
+<td align="left">316</td>
+<td align="left">carries at least 0.35 m³/s, no steeper than 25 %</td>
+<td align="left">3,312</td>
+<td align="left">carries at least 0.35 m³/s, no steeper than 10.5 %</td>
+</tr>
+<tr class="even">
+<td align="left">bull trout spawning</td>
+<td align="left">is at least 2 m wide, no steeper than 5.5 %</td>
+<td align="left">333</td>
+<td align="left">is at least 2 m wide, no steeper than 13 %</td>
+<td align="left">5,774</td>
+<td align="left">is at least 2 m wide, no steeper than 5.5 %</td>
+</tr>
+<tr class="odd">
+<td align="left">chinook rearing</td>
+<td align="left">is at least 1.5 m wide, no steeper than 5.5 %</td>
+<td align="left">84</td>
+<td align="left">carries at least 0.75 m³/s, no steeper than 13 %; a
+smaller stream also counts if it passes the slope test and a river
+carrying at least 3 m³/s lies within 1 km downstream</td>
+<td align="left">2,102</td>
+<td align="left">carries at least 1 m³/s, no steeper than 5.5 %; a
+smaller stream also counts if it passes the slope test and a river
+carrying at least 3 m³/s lies within 1 km downstream</td>
+</tr>
+<tr class="even">
+<td align="left">coho rearing</td>
+<td align="left">is at least 1.5 m wide, no steeper than 5.5 %</td>
+<td align="left">89</td>
+<td align="left">carries at least 0.03 m³/s, no steeper than 4 %</td>
+<td align="left">1,511</td>
+<td align="left">is at least 1.5 m wide, no steeper than 4 %</td>
+</tr>
+<tr class="odd">
+<td align="left">grayling rearing</td>
+<td align="left">is at least 1.5 m wide, no steeper than 3.5 %</td>
+<td align="left">1,231</td>
+<td align="left">is at least 1.5 m wide, no steeper than 3.5 %</td>
+<td align="left">7,337</td>
+<td align="left">is at least 1.5 m wide, no steeper than 3.5 %</td>
+</tr>
+<tr class="even">
+<td align="left">rainbow trout rearing</td>
+<td align="left">is at least 1.5 m wide, no steeper than 8.5 %</td>
+<td align="left">14</td>
+<td align="left">is at least 3 m wide, no steeper than 30 %</td>
+<td align="left">463</td>
+<td align="left">is at least 3 m wide, no steeper than 30 %</td>
+</tr>
+<tr class="odd">
+<td align="left">steelhead rearing</td>
+<td align="left">is at least 1.5 m wide, no steeper than 8.5 %</td>
+<td align="left">1,034</td>
+<td align="left">carries at least 1 m³/s, no steeper than 8.5 %</td>
+<td align="left">6,434</td>
+<td align="left">is at least 1.5 m wide, no steeper than 8.5 %</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level2">
+<h2 id="lost">Where are fish sampling records lost?<a class="anchor" aria-label="anchor" href="#lost"></a>
+</h2>
+<p>Most of the records lost are lost when sites are put on the map (72 %
+of the 11,000 dropped). A site far from any stream, or on the wrong
+tributary, cannot be trusted to sit on the stream that was fished.</p>
+<div class="figure">
+<img src="habitat_thresholds_files/figure-html/funnel-1.png" class="r-plt" alt="Site visits each step drops, in the order the steps run." width="100%"><p class="caption">
+Site visits each step drops, in the order the steps run.
+</p>
+</div>
+<p>Each species then keeps the sites its rules can speak to: on a stream
+line (not in a river polygon, a wetland of 1 ha or more or a lake of 100
+ha or more), of a usual fished area, where link expects the species,
+with no code that could hide it and no natural barrier to it downstream.
+The score uses the groups where the species was caught at some sites and
+not others.</p>
+<table style="width:100%;" class="table">
+<caption>Rearing site visits per species after each filter.</caption>
+<colgroup>
+<col width="13%">
+<col width="6%">
+<col width="11%">
+<col width="11%">
+<col width="14%">
+<col width="10%">
+<col width="10%">
+<col width="6%">
+<col width="13%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">species</th>
+<th align="right">kept</th>
+<th align="right">stream line</th>
+<th align="right">fished area</th>
+<th align="right">where expected</th>
+<th align="right">not hidden</th>
+<th align="right">no barrier</th>
+<th align="right">scored</th>
+<th align="right">groups scored</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">bull trout</td>
+<td align="right">40,552</td>
+<td align="right">29,663</td>
+<td align="right">27,598</td>
+<td align="right">22,892</td>
+<td align="right">22,615</td>
+<td align="right">11,015</td>
+<td align="right">8,717</td>
+<td align="right">75</td>
+</tr>
+<tr class="even">
+<td align="left">chinook</td>
+<td align="right">40,552</td>
+<td align="right">29,663</td>
+<td align="right">27,598</td>
+<td align="right">16,403</td>
+<td align="right">16,292</td>
+<td align="right">7,123</td>
+<td align="right">4,490</td>
+<td align="right">43</td>
+</tr>
+<tr class="odd">
+<td align="left">coho</td>
+<td align="right">40,552</td>
+<td align="right">29,663</td>
+<td align="right">27,598</td>
+<td align="right">12,960</td>
+<td align="right">12,898</td>
+<td align="right">5,442</td>
+<td align="right">4,263</td>
+<td align="right">62</td>
+</tr>
+<tr class="even">
+<td align="left">grayling</td>
+<td align="right">40,552</td>
+<td align="right">29,663</td>
+<td align="right">27,598</td>
+<td align="right">5,356</td>
+<td align="right">5,333</td>
+<td align="right">1,472</td>
+<td align="right">1,230</td>
+<td align="right">26</td>
+</tr>
+<tr class="odd">
+<td align="left">rainbow trout</td>
+<td align="right">40,552</td>
+<td align="right">29,663</td>
+<td align="right">27,598</td>
+<td align="right">27,349</td>
+<td align="right">27,100</td>
+<td align="right">13,578</td>
+<td align="right">12,959</td>
+<td align="right">129</td>
+</tr>
+<tr class="even">
+<td align="left">steelhead</td>
+<td align="right">40,552</td>
+<td align="right">29,663</td>
+<td align="right">27,598</td>
+<td align="right">9,789</td>
+<td align="right">9,462</td>
+<td align="right">4,798</td>
+<td align="right">1,375</td>
+<td align="right">11</td>
 </tr>
 </tbody>
 </table>
