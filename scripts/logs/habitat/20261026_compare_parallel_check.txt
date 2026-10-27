@@ -1,0 +1,11 @@
+compare_parallel_check CHECK on fresh_default_20261017; link configs at 102762da; 6 workers; knowledge f3634dd
+WCT_rear: 16 groups (KOTL KETL LARL CLRH ELKR KOTR SMAR KHOR UARL COLR REVL DUNC SLOC USHU SHUL BULL) in 4.4 min.
+  WCT_rear compare: 34 rows x 35 columns match the reference; largest relative numeric difference 1.74857e-14.
+  WCT_rear change: 61 rows x 9 columns match the reference; largest relative numeric difference 7.04984e-16.
+  WCT_rear checks: 11 rows x 12 columns match the reference; largest relative numeric difference 1.85622e-15.
+  WCT_rear segments: 1190110 rows x 32 columns match the reference; largest relative numeric difference 0.
+CH_rear: 20 groups (SETN MORK OWIK INKR UFRA LNAR BULK UNAR HOMA MSKE KNIG TOBA LILL USKE SQAM TATR GRAI LSKE FRCN KISP) in 17.0 min.
+  CH_rear compare: 63 rows x 35 columns match the reference; largest relative numeric difference 1.04344e-13.
+  CH_rear change: 106 rows x 9 columns match the reference; largest relative numeric difference 2.80209e-16.
+  CH_rear checks: 15 rows x 12 columns match the reference; largest relative numeric difference 1.67021e-15.
+  CH_rear segments: 1829223 rows x 34 columns match the reference; largest relative numeric difference 0.

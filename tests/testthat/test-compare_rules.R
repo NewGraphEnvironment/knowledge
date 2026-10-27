@@ -60,3 +60,26 @@ test_that("default's label carries the pair it resolves to and the scope the dim
   expect_identical(knowledge:::.knw_default_rule_label(rng, specs, NULL, "CH", "rear"),
                    "width>=1.5|g<=0.0549|cw channel_width>=15@D1000; mad discharge>=3@D1000")
 })
+
+test_that("groups split into bins balanced by segment count, every group once, largest first (#87)", {
+  n <- c(A = 10, B = 50, C = 30, D = 30, E = 5)
+  b <- .knw_bin_groups(n, 2L)
+  expect_length(b, 2L)
+  expect_setequal(unlist(b), names(n))
+  expect_false(anyDuplicated(unlist(b)) > 0)
+  expect_identical(b[[1]][1], "B")                      # the largest group opens the first bin
+  loads <- vapply(b, function(g) sum(n[g]), numeric(1))
+  expect_lte(diff(range(loads)), max(n))                # greedy: no bin heavier than another by more than one group
+  expect_identical(.knw_bin_groups(n, 2L), b)           # deterministic
+  expect_length(.knw_bin_groups(n, 10L), 5L)            # never more bins than groups
+  expect_identical(.knw_bin_groups(c(A = 1), 6L), list("A"))
+  expect_setequal(unlist(.knw_bin_groups(c(A = NA, B = 2), 2L)), c("A", "B"))
+})
+
+test_that("the worker function calls no name of this package, so it runs where the package is not loaded (#87)", {
+  # a socket worker resolves this package's names in the installed copy, or in none; each worker's near-river
+  # table is proved by data-raw/compare_parallel_check.R on chinook, whose default walks one
+  pkg_names <- ls(asNamespace("knowledge"), all.names = TRUE)
+  expect_length(intersect(all.names(body(.knw_compare_bin)), pkg_names), 0L)
+  expect_length(intersect(all.names(body(.knw_walk_chunk)), pkg_names), 0L)
+})

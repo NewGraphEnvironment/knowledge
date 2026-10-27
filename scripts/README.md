@@ -63,8 +63,11 @@ wf_farm_priority.js                          farm priority/crossing tables out o
       prior, grade every segment of the species' groups, each accessible one at its own walked distance to the bank
       of the pick's river (#65, #73), each grade table recording its reference edges, river size, walk, flow build
       and curve prior (#72); a key whose curve is no better than no rule on held-out groups gets no grade (#73)
-      -> data/tune/ (+ log; SCHEMA names the run's schema; scoring runs on any machine with the build, WORKERS=14;
-      grading sends a query per segment, so it runs on the database's host, CLAUDE.md "Database access")
+      -> data/tune/ (+ log; SCHEMA names the run's schema, refused when its run is not the evidence's; scoring runs
+      on any machine with the build, WORKERS=14; grading walks 500 segments per query and keeps every walk in
+      knw.walk_cache, keyed on the flow load and the walk's md5 (#87): on the database's host a cold regrade of
+      every key took 53.4 min and one key regraded with the walks cached 4.1 min, 2026-10-27; CLAUDE.md
+      "Database access")
 0322  #67's record: CH rearing alone on the ladder extended to 30 %, on the evidence build before #73 (the main
       run carries that ladder for every species since #68): the scores -> data/tune/grad_ext/; STAGE=compare
       sets CH_rear_v1's parts at 11, 13, 15 and 30 % beside default and beside CH_rear_v1 -> data/compare/grad_ext/
@@ -79,8 +82,10 @@ wf_farm_priority.js                          farm priority/crossing tables out o
       every species x stage and group, under each rule structure for the through-wetland lines and the pair (#73:
       free | door | door_wetland; `tuned` is TUNED_AS, door by default): km, graded km, km by grade class, change by
       reason, FDIS and bcfishobs checks -> data/compare/, one GeoPackage per species x stage for QGIS
-      (data/compare/gpkg/, #81; GPKG=FALSE skips) (+ log; SCHEMA as 0320; on the database's host, every key in one
-      process: a key's groups run one after another on one connection, #86). No maps in this run.
+      (data/compare/gpkg/, #81; GPKG=FALSE skips them while iterating, STAGE=gpkg writes them afterwards from the
+      saved segments) (+ log; SCHEMA as 0320; on the database's host, keys in turn, each key's groups split across
+      WORKERS=6 connections, #87: every key 162.9 min with GPKG=FALSE, BT rearing alone 33.4, the GeoPackages
+      14.0, 2026-10-27). No maps in this run.
       STAGE=maps: floodplain ha beside each rule's habitat in the catalog's groups, and the maps, from the saved
       tables -> data/compare/floodplain.csv, research/fig/compare_*.png
       then SCHEMA=... Rscript data-raw/vignette_chinook.R refreshes the chinook article's data (inst/vignette-data/),

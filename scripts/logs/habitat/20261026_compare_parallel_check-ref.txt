@@ -1,0 +1,5 @@
+compare_parallel_check REF on fresh_default_20261017; link configs at 102762da; one connection; knowledge d9190a5
+WCT_rear: 16 groups (KOTL KETL LARL CLRH ELKR KOTR SMAR KHOR UARL COLR REVL DUNC SLOC USHU SHUL BULL) in 16.9 min.
+  reference written to data/compare/ref_WCT_rear (1190110 segments).
+CH_rear: 20 groups (SETN MORK OWIK INKR UFRA LNAR BULK UNAR HOMA MSKE KNIG TOBA LILL USKE SQAM TATR GRAI LSKE FRCN KISP) in 45.3 min.
+  reference written to data/compare/ref_CH_rear (1829223 segments).

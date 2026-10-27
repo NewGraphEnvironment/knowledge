@@ -82,6 +82,9 @@ if (length(missing)) stop("missing inputs: ", paste(missing, collapse = ", "))
 g1 <- rd(sprintf("data/tune/%s_grades.csv", key), n_max = 1, col_types = cols(.default = "c"))
 if (!identical(g1$ref_population, "stream_branch")) stop("data/tune/", key, "_grades.csv was graded before #65; rerun 0320")
 if (!"walk" %in% names(g1) || !identical(g1$walk, "bank")) stop("data/tune/", key, "_grades.csv was walked before #73 (not to the bank); rerun 0320")
+if (!"walk_md5" %in% names(g1) || !identical(g1$walk_md5, knw_walk_md5())) {
+  stop("data/tune/", key, "_grades.csv was walked by another walk than this tree's (walk_md5, #87); rerun 0320")
+}
 # and made by the gate that scores no rule on the curve's own visits, under this pick (the branch review of 2026-10-25)
 if (!all(c("curve_prior_sd", "grade_withheld", "null_heldout_curve", "evidence_md5") %in% names(g1))) {
   stop("data/tune/", key, "_grades.csv predates the gate's record (curve_prior_sd, grade_withheld, null_heldout_curve, evidence_md5); rerun 0320")

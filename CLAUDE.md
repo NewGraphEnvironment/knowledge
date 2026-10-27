@@ -314,7 +314,7 @@ Every `data/tune/<key>_grades.csv` row carries the run that made it: `rule`, `ru
 score cache its settings (`spec`: fit, prior, seed, folds, d_floor, extra, evidence). `0320`'s keep-check, `0325`,
 `0330` and `data-raw/vignette_chinook.R` each compare those fields with the run's own values and refuse a table that
 does not match; `0325` refuses before it writes anything. So a change to the gate, the prior, the walk or the evidence
-regrades every key (about 190 min on the database's host), which is the cost of never publishing a verdict the code
+regrades every key (53 min on the database's host with the walks cold, 2026-10-27; minutes for a key whose walks are cached), which is the cost of never publishing a verdict the code
 no longer makes. #73's branch review (five rounds, `planning/archive/2026-10-issue-73-rebuild-evidence-retune-bank/review-round*.md`)
 found four axes where a reader had checked presence alone, one of them the gate itself: it compared the curve's
 held-out deviance over the visits with a size against no rule's over every modelled visit, so for the width-ruled keys
@@ -358,12 +358,21 @@ R reads `~/.Renviron` at startup and its values **replace** the shell's, so wher
 database there, or select a `~/.pg_service.conf` entry with `PGSERVICE=<entry>`, which libpq takes
 over the `PG*` variables. Set `PGCONNECT_TIMEOUT`, or an unreachable server hangs the script.
 
-**Run a database-bound step on the database's own host, against its own database.** Grading (`0320`'s walks) and
-`0330` send a query per segment or per watershed group, so their time is round trips: a trivial query costs 1.6 ms on
-the host and 104 ms from a machine on a remote link (2026-10-24), and #73's rescore graded from a remote machine for
-7.5 h without finishing what takes about an hour on the host. A second machine helps only with a database of its own
-holding the same build: the schema's run, the flow load named in the table comment and the walk code. Scoring is
-CPU-bound: the remote machine scored every key in about an hour on 12 workers (2026-10-23).
+**Run the comparison on the database's own host, against its own database.** A query's fixed cost is a round trip:
+1.6 ms on the host, 104 to 110 ms from a machine on a remote link (2026-10-24, 2026-10-26). Since #87 grading walks
+500 segments per query and keeps every walk in `knw.walk_cache`, so a batched walk costs about 3 ms per walk per
+worker on the host and 12 to 18 ms from the remote link, against 116 ms one query per walk; a cold regrade of every key
+took 53.4 min on the host, and one key regraded with its walks cached 4.1 min. `0330` regenerates link's flags group by
+group on 6 connections, one key at a time (BT rearing 33.4 min, every key 162.9 min with `GPKG=FALSE`): it is bound by
+the database's cores, so run it on the host. A second machine helps a database-bound step only with a database of its
+own holding the same build (the schema's run and the flow load named in the table comment; the walk travels with the
+code). `0320` and `0330` refuse a schema built by another run at connect (`knw_build_record()`), and every grade table's
+flow load and walk md5 are compared by its readers; `research/database_builds.md` has the numbers and the load recipe.
+Scoring is CPU-bound: the remote machine scored every key in about an hour on 12 workers (2026-10-23).
+
+**Never chain tuning and comparison until every key's smoke gates have passed (#84).** Score every key, check, then
+grade, then compare: `0320` runs its four smoke gates for every key first and stops on a failure, and a chain of runs
+must stop at a failed step, so nothing downstream reads a key whose gates failed.
 
 **Run R from the repo root, and never add a project-level `.Renviron` here.** R loads a
 project `.Renviron` *instead of* `~/.Renviron`, not in addition to it, so one silently empties

@@ -14,7 +14,8 @@ knw_grade_species(
   stage = "rear",
   workers = 4L,
   src = "pick",
-  ref_edge = NULL
+  ref_edge = NULL,
+  cache = "knw.walk_cache"
 )
 }
 \arguments{
@@ -41,6 +42,9 @@ opens its own).}
 types the reference rate is taken over. \code{NULL} takes the curve's own
 \code{edge_stream}, the edge types of the visits it was fitted on (#72), and a
 curve that carries none takes \code{\link[=knw_tune_run]{knw_tune_run()}}'s default \code{edge_stream}.}
+
+\item{cache}{the walk cache \code{\link[=knw_link_walks]{knw_link_walks()}} reads and keeps walks in
+(\code{"knw.walk_cache"}), or \code{FALSE} to walk every start.}
 }
 \value{
 A list: \code{grades}, one row per segment with the segment's keys,
@@ -51,9 +55,10 @@ another, which link's walk, one group's table at a time, cannot see; \code{NA}
 where no river was found), \code{rate}, \code{grade}, \code{grade_class}; \code{reference};
 \code{ref_edge}, the edge types the reference was taken over; \code{q}, the river
 size walked to; \code{walk}, the walk's convention (\code{"bank"}: the distance ends
-at the river's bank, #73); \code{counts} (segments, accessible, walked starts,
-segments whose walk was found, none or other, graded, no size, no
-gradient); \code{walk_minutes}.
+at the river's bank, #73); \code{walk_md5}, the walk's code (\code{\link[=knw_walk_md5]{knw_walk_md5()}},
+#87); \code{counts} (segments, accessible, walked starts, starts read from the
+walk cache and walked, segments whose walk was found, none or other,
+graded, no size, no gradient); \code{walk_minutes}.
 }
 \description{
 Reads the species' segments (\code{\link[=knw_link_segments]{knw_link_segments()}}), walks every accessible

@@ -109,6 +109,15 @@ evidence_md5s <- vapply(c("visits_link", "visits_species", "walks"), function(f)
 }, character(1))
 for (f in names(evidence_md5s)) say("  %s md5 %s", f, evidence_md5s[[f]])
 evidence_md5 <- paste(unname(evidence_md5s), collapse = ";")
+# the database's build, checked before any work (#87): a schema built by another run than the evidence's is refused
+# here, not after the scoring, so the same command runs on any machine whose database holds the build. DEV=1 grades
+# nothing and needs no database
+if (!dev) {
+  conn <- pg()
+  rec <- tryCatch(knw_build_record(conn, schema, run_uid = run_uid), error = function(e) fail("%s", conditionMessage(e)))
+  say("%s", rec$line)
+  dbDisconnect(conn)
+}
 vl <- read_csv("data/fdis/derived/visits_link.csv", show_col_types = FALSE, guess_max = 1e5,
                col_types = cols(site_visit = "c", species_caught = "c", blocks_absence_of = "c", hydro_zone = "c"))
 vs <- read_csv("data/fdis/derived/visits_species.csv", show_col_types = FALSE, guess_max = 1e5, col_types = cols(site_visit = "c"))
@@ -284,9 +293,10 @@ groups_sp <- function(sp) dbGetQuery(conn, sprintf("SELECT DISTINCT watershed_gr
 # the flow build the grade reads (#72): wet can reload discharge.fwa_v1_segment_monthly between runs (wet#103 did on
 # 2026-10-19, after #57 tuned), so the table's comment, which names the build, goes into every grade table and 0325
 # refuses to publish a grade whose build is not the live one
-discharge_load <- dbGetQuery(conn, "SELECT obj_description('discharge.fwa_v1_segment_monthly'::regclass) AS d")$d
-if (length(discharge_load) != 1 || is.na(discharge_load) || !nzchar(discharge_load)) stop("discharge.fwa_v1_segment_monthly carries no load comment")
-say("Grading on the flow build: %s", discharge_load)
+discharge_load <- knw_discharge_load(conn)
+# the walk's code (#87): the walk cache keys every row on it, and a grade walked by other code is regraded
+walk_md5 <- knw_walk_md5()
+say("Grading on the flow build: %s; walk %s, cached in knw.walk_cache.", discharge_load, walk_md5)
 grade_rows <- list()
 for (k in names(out)) {
   r <- out[[k]]
@@ -309,6 +319,7 @@ for (k in names(out)) {
     head1 <- readr::read_csv(gpath, n_max = 1, show_col_types = FALSE, col_types = readr::cols(.default = "c"))
     same <- identical(head1$rule, r$pick$rule) && identical(head1$run_uid, run_uid) &&
       "walk" %in% names(head1) && identical(head1$walk, "bank") &&
+      "walk_md5" %in% names(head1) && identical(head1$walk_md5, walk_md5) &&
       "ref_edge" %in% names(head1) && identical(head1$ref_edge, ref_edge_txt) &&
       "discharge_load" %in% names(head1) && identical(head1$discharge_load, discharge_load) &&
       "curve_prior_sd" %in% names(head1) && identical(head1$curve_prior_sd, curve_prior_txt) &&
@@ -321,9 +332,10 @@ for (k in names(out)) {
       next
     }
     # not "<key> grades:", which data-raw/vignette_chinook.R reads as the one result line
-    say("%s: grades on file for %s / %s (walk %s, reference over %s, flows %s, curve prior %s), regraded for %s / %s.",
+    say("%s: grades on file for %s / %s (walk %s %s, reference over %s, flows %s, curve prior %s), regraded for %s / %s.",
         k, head1$rule,
         head1$run_uid, if ("walk" %in% names(head1)) head1$walk else "centreline",
+        if ("walk_md5" %in% names(head1)) head1$walk_md5 else "unrecorded",
         if ("ref_edge" %in% names(head1)) head1$ref_edge else if ("ref_population" %in% names(head1)) head1$ref_population else "every accessible segment",
         if ("discharge_load" %in% names(head1)) head1$discharge_load else "unrecorded",
         if ("curve_prior_sd" %in% names(head1)) head1$curve_prior_sd else "none recorded", r$pick$rule, run_uid)
@@ -332,12 +344,13 @@ for (k in names(out)) {
   t1 <- Sys.time()
   g <- knw_grade_species(pg, schema, r$species_code, wsg, r$curve, r$pick, stage = r$stage, workers = min(workers, 8L))
   if (!identical(as.integer(g$ref_edge), as.integer(ref_edge_curve))) stop(k, ": the grade's reference edge types are not the curve's")
+  if (!identical(g$walk_md5, walk_md5)) stop(k, ": the grade was walked by another walk than this run's")
   if (isTRUE(r$grade_withheld)) g$grades <- g$grades |> mutate(rate = NA_real_, grade = NA_real_, grade_class = NA_character_)
   # ref_population is kept as the name 0325, 0330 and the article read; ref_edge, q_walk, walk and discharge_load
   # are the record (#72), written from what knw_grade_species() returns, not from a literal beside the call
   write_csv(g$grades |> mutate(species_code = r$species_code, stage = r$stage, rule = r$pick$rule, run_uid = run_uid,
                                ref_population = "stream_branch", ref_edge = paste(g$ref_edge, collapse = ";"),
-                               q_walk = g$q, walk = g$walk, discharge_load = discharge_load,
+                               q_walk = g$q, walk = g$walk, walk_md5 = g$walk_md5, discharge_load = discharge_load,
                                curve_prior_sd = curve_prior_txt, grade_withheld = withheld_txt, null_heldout_curve = nhc_txt,
                                evidence_md5 = evidence_md5,
                                across(c(rate, grade), ~ signif(.x, 5))),

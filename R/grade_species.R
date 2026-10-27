@@ -46,6 +46,8 @@
 #'   types the reference rate is taken over. `NULL` takes the curve's own
 #'   `edge_stream`, the edge types of the visits it was fitted on (#72), and a
 #'   curve that carries none takes [knw_tune_run()]'s default `edge_stream`.
+#' @param cache the walk cache [knw_link_walks()] reads and keeps walks in
+#'   (`"knw.walk_cache"`), or `FALSE` to walk every start.
 #' @return A list: `grades`, one row per segment with the segment's keys,
 #'   `length_metre`, `access`, `accessible`, the stage's flag, `size`, `dist_m`,
 #'   `dist_status`, `target_in_group` (`TRUE` where the river the walk found
@@ -54,9 +56,10 @@
 #'   where no river was found), `rate`, `grade`, `grade_class`; `reference`;
 #'   `ref_edge`, the edge types the reference was taken over; `q`, the river
 #'   size walked to; `walk`, the walk's convention (`"bank"`: the distance ends
-#'   at the river's bank, #73); `counts` (segments, accessible, walked starts,
-#'   segments whose walk was found, none or other, graded, no size, no
-#'   gradient); `walk_minutes`.
+#'   at the river's bank, #73); `walk_md5`, the walk's code ([knw_walk_md5()],
+#'   #87); `counts` (segments, accessible, walked starts, starts read from the
+#'   walk cache and walked, segments whose walk was found, none or other,
+#'   graded, no size, no gradient); `walk_minutes`.
 #' @export
 #' @examples
 #' \dontrun{
@@ -64,7 +67,7 @@
 #' g <- knw_grade_species(pg, "fresh_default", "CH", c("BULK", "MORR"), out$CH_rear$curve, out$CH_rear$pick)
 #' }
 knw_grade_species <- function(connector, schema, species, wsg, curve, pick, stage = "rear",
-                              workers = 4L, src = "pick", ref_edge = NULL) {
+                              workers = 4L, src = "pick", ref_edge = NULL, cache = "knw.walk_cache") {
   chk::chk_function(connector)
   chk::chk_string(species)
   chk::chk_character(wsg)
@@ -87,8 +90,12 @@ knw_grade_species <- function(connector, schema, species, wsg, curve, pick, stag
   starts <- unique(seg[cand, c("blue_line_key", "downstream_route_measure")])
   walked <- nrow(starts)
   q_walk <- if (is.na(pick$exc_q)) curve$q else pick$exc_q
+  # integers: 0320 prints the counts with paste(), which writes a whole double such as 300000 as 3e+05, and the
+  # vignette data script reads them back by pattern
+  cache_n <- c(walk_cache_hit = 0L, walk_cache_miss = if (isFALSE(cache)) as.integer(walked) else 0L)
   if (walked) {
-    w <- knw_link_walks(connector, starts, q_grid = q_walk, sources = src, workers = workers)
+    w <- knw_link_walks(connector, starts, q_grid = q_walk, sources = src, workers = workers, cache = cache)
+    if (!is.null(attr(w, "cache"))) cache_n[] <- as.integer(attr(w, "cache")[c("hit", "miss")])
     i <- match(paste(seg$blue_line_key, seg$downstream_route_measure),
                paste(w$blue_line_key, w$downstream_route_measure))
     hit <- cand & !is.na(i)
@@ -119,7 +126,8 @@ knw_grade_species <- function(connector, schema, species, wsg, curve, pick, stag
   grades$grade <- ifelse(grades$accessible, g$grades$grade, NA_real_)
   grades$grade_class <- ifelse(grades$accessible, g$grades$grade_class, NA_character_)
   list(grades = grades, reference = g$reference, ref_edge = ref_edge, q = q_walk, walk = "bank",
-       counts = c(segments = nrow(seg), accessible = sum(seg$accessible %in% TRUE), walked = walked,
+       walk_md5 = knw_walk_md5(),
+       counts = c(segments = nrow(seg), accessible = sum(seg$accessible %in% TRUE), walked = walked, cache_n,
                   walk_found = sum(seg$dist_status == "found"), walk_none = sum(seg$dist_status == "none"),
                   walk_other = sum(seg$dist_status %in% c("no_parent", "too_many_hops")),
                   graded = sum(!is.na(grades$grade)), g$dropped),

@@ -1,0 +1,14 @@
+Comparison, knowledge#57: 8 fitted species x stage; link run 20261017_004619-3f4c713b at a17e91773b283b021811f8b5b76b887d5f4c16e4.
+link configs/default at 102762da (the baseline; the schema fresh_default_20261017's run is at a17e91773b283b021811f8b5b76b887d5f4c16e4) read from ../link; fresh 0.42.0; tuned reported as door.
+Floodplain catalog: 23 whole-network groups (BOWR BULK DUNC FRAN KISP KOTL LARL LCHL LNTH LSAL MCGR MORK MORR NECR PARS PCEA PINE SLOC TABR THOM UFRA UNTH WILL).
+build: schema fresh_default_20261017, run 20261017_004619-3f4c713b; flows wet_db_load(): discharge/fwa/v1/segment_monthly, scenario historical last loaded from https://fresh-bc.s3.us-west-2.amazonaws.com/discharge/fwa/v1/manifest.json (built 2026-10-19T06:08:31Z, wet 94deeb5); walk c3f7bdbecff1d55107f28afa59d7f532; fresh 0.42.0
+GeoPackages for 8 keys in 14.0 min on 6 workers.
+  GeoPackage data/compare/gpkg/RB_rear.gpkg: 10331001 segments in 14.0 min.
+  GeoPackage data/compare/gpkg/BT_rear.gpkg: 8406979 segments in 12.0 min.
+  GeoPackage data/compare/gpkg/BT_spawn.gpkg: 8406979 segments in 11.9 min.
+  GeoPackage data/compare/gpkg/CH_rear.gpkg: 5757827 segments in 8.6 min.
+  GeoPackage data/compare/gpkg/CO_rear.gpkg: 4919304 segments in 7.3 min.
+  GeoPackage data/compare/gpkg/GR_rear.gpkg: 4214528 segments in 6.2 min.
+  GeoPackage data/compare/gpkg/ST_rear.gpkg: 4142681 segments in 5.5 min.
+  GeoPackage data/compare/gpkg/WCT_rear.gpkg: 1190110 segments in 1.7 min.
+Done in 14.0 min.

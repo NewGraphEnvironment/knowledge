@@ -32,14 +32,17 @@
 #     the largest share lost, and the most `default` km; in research/fig/; an interactive page per catalog
 #     group in data/compare/maps/ (ignored). 0298's criteria (small-stream-heavy, interior, coastal) are not
 #     reproduced: they need the visits' hydrologic zones and sea walks per group, which this script does not read.
-#   - Species run in parallel on socket workers, each with its own scratch schema; groups within a
-#     species run in order.
+#   - KEYS IN TURN, GROUPS IN PARALLEL (#87): one species x stage at a time, its groups split across WORKERS
+#     socket workers (knw_compare_rules(workers =)), each with its own connection and scratch schema, so one key
+#     uses as many database cores as there are workers (one key per worker held BT rearing to one core for two
+#     hours). WORKERS is therefore database cores: 6 on the database's host. The GeoPackages are written after
+#     every key, in parallel across keys, from the saved segments (GPKG=FALSE skips them while iterating).
 #
 # INPUT:  data/tune/<sp>_<stage>_{curve.rds,grades.csv} (0320), data/fdis/derived/{visits_link,visits_species}.csv
 #         (0310), the link repository at LINK_REPO at the build's link_sha, the stac_floodplains_bc catalog
 #         (items read from its public bucket), fwapg database (PG* env vars): the run's schema (SCHEMA, default
 #         fresh_default), bcfishobs, whse_basemapping
-# WRITES: schemas knw_cmp_<sp>_<stage> in the fwapg database (scratch; one per job, dropped)
+# WRITES: schemas knw_cmp_<sp>_<stage> and knw_cmp_<sp>_<stage>_w<i> in the fwapg database (scratch; dropped)
 # OUTPUT: data/compare/<key>_{compare,change,checks}.csv, <key>_segments.rds  per job, as it finishes (rds ignored)
 #         data/compare/gpkg/<key>.gpkg  every segment's verdict under each rule and structure, grade, size, distance,
 #                                       and the default branch it lies on (ignored)
@@ -50,9 +53,10 @@
 #         STAGE=maps: data/compare/floodplain.csv  per species x stage x catalog group: ha, graded ha, ha by class
 #                     research/fig/compare_<sp>_<stage>_<wsg>.png, data/compare/maps/*.html (ignored)
 # RUN:    Rscript scripts/0330-compare.R   (from the repo root; SPECIES=CH,BT to restrict, and the combined tables then
-#         compose with the other species' saved per-key tables; WORKERS=4; CONFIG_SHA=<link
+#         compose with the other species' saved per-key tables; WORKERS=6 database cores; CONFIG_SHA=<link
 #         commit> for the configs (default origin/main of LINK_REPO); TUNED_AS=door; GPKG=FALSE skips the GeoPackages;
-#         STAGE=maps draws the floodplain table and the maps from the tables the last full run saved)
+#         STAGE=maps draws the floodplain table and the maps from the tables the last full run saved; STAGE=gpkg writes
+#         the GeoPackages alone from the segments it saved)
 # ---------------------------------------------------------------------------
 suppressMessages({ library(dplyr); library(readr); library(DBI); library(RPostgres) })
 pkgload::load_all(quiet = TRUE)
@@ -66,7 +70,7 @@ only <- Sys.getenv("SPECIES", "")
 stage_only <- Sys.getenv("STAGE", "")
 tuned_as <- Sys.getenv("TUNED_AS", "door")
 gpkg <- !identical(Sys.getenv("GPKG"), "FALSE")
-if (!stage_only %in% c("", "maps")) stop("STAGE must be unset or 'maps', not '", stage_only, "'")
+if (!stage_only %in% c("", "maps", "gpkg")) stop("STAGE must be unset, 'maps' or 'gpkg', not '", stage_only, "'")
 schema <- Sys.getenv("SCHEMA", "fresh_default")  # the run's persist schema, by its current name (renamed after the run, #73)
 catalog_bucket <- "https://stac-floodplains-bc.s3.us-west-2.amazonaws.com"
 catalog_items <- "../stac_floodplains_bc/data/stac"      # the catalog repo's item records
@@ -75,7 +79,7 @@ dir_cat <- file.path(dir_out, "catalog")
 dir_maps <- file.path(dir_out, "maps")
 dir_gpkg <- file.path(dir_out, "gpkg")
 path_log <- file.path("scripts/logs/habitat", paste0(format(Sys.Date(), "%Y%m%d"), "_compare",
-                                                     if (stage_only == "maps") "-maps", ".txt"))
+                                                     if (nzchar(stage_only)) paste0("-", stage_only), ".txt"))
 for (d in c(dir_out, dir_cat, dir_maps, dir_gpkg, "research/fig")) dir.create(d, showWarnings = FALSE, recursive = TRUE)
 log_lines <- character()
 say <- function(...) { log_lines <<- c(log_lines, sprintf(...)); message(sprintf(...)) }
@@ -100,10 +104,14 @@ vs <- read_csv("data/fdis/derived/visits_species.csv", show_col_types = FALSE, g
 
 # link's configs: the baseline is link's current default (CONFIG_SHA, default origin/main as fetched), not the
 # run's commit, which stays the provenance of the schema (#73)
-config_sha <- Sys.getenv("CONFIG_SHA", "")
-if (!nzchar(config_sha)) {
-  config_sha <- suppressWarnings(system2("git", c("-C", link_repo, "rev-parse", "origin/main"), stdout = TRUE, stderr = TRUE))
-  if (!is.null(attr(config_sha, "status")) || !grepl("^[0-9a-f]{40}$", config_sha)) stop("could not resolve origin/main in ", link_repo, "; set CONFIG_SHA")
+# resolved to the full commit, so the tables record one spelling whether CONFIG_SHA was given short, long or not at
+# all (a short one was recorded as given, and the composed-table check compares the strings)
+config_ref <- Sys.getenv("CONFIG_SHA")
+if (!nzchar(config_ref)) config_ref <- "origin/main"
+config_sha <- suppressWarnings(system2("git", c("-C", link_repo, "rev-parse", "--verify", paste0(config_ref, "^{commit}")),
+                                       stdout = TRUE, stderr = TRUE))
+if (!is.null(attr(config_sha, "status")) || length(config_sha) != 1 || !grepl("^[0-9a-f]{40}$", config_sha)) {
+  stop("could not resolve ", config_ref, " to a commit in ", link_repo, "; set CONFIG_SHA")
 }
 link_dir <- file.path(tempdir(), paste0("link_default_", substr(config_sha, 1, 7)))
 dir.create(file.path(link_dir, "overrides"), showWarnings = FALSE, recursive = TRUE)
@@ -142,14 +150,21 @@ gpkg_of <- function(w) {
 
 # ---- compare, per species x stage (species in parallel) ------------------------------------
 conn <- pg()
+# the database's build, checked before any work (#87): a schema built by another run than the evidence's is refused
+rec <- tryCatch(knw_build_record(conn, schema, run_uid = run_uid), error = function(e) {
+  say("%s", conditionMessage(e))
+  writeLines(log_lines, path_log)
+  stop(conditionMessage(e), call. = FALSE)
+})
+say("%s", rec$line)
 groups_sp <- function(sp) dbGetQuery(conn, sprintf("SELECT DISTINCT watershed_group_code w FROM %s.streams_habitat_%s ORDER BY 1", schema, tolower(sp)))$w
 jobs <- lapply(names(fitted), function(k) {
   r <- fitted[[k]]
   list(key = k, species_code = r$species_code, stage = r$stage, pick = r$pick, groups = groups_sp(r$species_code))
 })
 dbDisconnect(conn)
-# largest species first, load-balanced, so the two 158-group BT jobs do not share one worker; named by key,
-# because the results are filtered to the jobs that succeeded and every later lookup goes by key, not position
+# largest species first (a failure in the longest key shows soonest); named by key, because the results are
+# filtered to the jobs that succeeded and every later lookup goes by key, not position
 jobs <- jobs[order(-vapply(jobs, function(j) length(j$groups), integer(1)))]
 names(jobs) <- vapply(jobs, `[[`, character(1), "key")
 # the graded km read the grade tables 0320 wrote; refuse one made before #65 (every segment walked, the reference
@@ -159,6 +174,11 @@ stale <- names(jobs)[!vapply(names(jobs), function(k) {
                        col_types = readr::cols(.default = "c"))
   "ref_population" %in% names(h) && identical(h$ref_population, "stream_branch") &&
     "walk" %in% names(h) && identical(h$walk, "bank") &&
+    # walked by this tree's walk (#87)
+    "walk_md5" %in% names(h) && identical(h$walk_md5, knw_walk_md5()) &&
+    # graded on the flow load the database holds now (#87): a wet reload between 0320 and 0330 moves the flows the
+    # regenerated flags read under grades walked on the old ones
+    "discharge_load" %in% names(h) && identical(h$discharge_load, rec$discharge_load) &&
     # graded under the pick this comparison applies, on this link run and one evidence build (the branch review of
     # 2026-10-25: a 0320 that stopped between scoring and grading leaves a new pick beside an old table)
     identical(h$rule, curves[[k]]$pick$rule) && identical(h$run_uid, run_uid) &&
@@ -167,14 +187,12 @@ stale <- names(jobs)[!vapply(names(jobs), function(k) {
     # review of 2026-10-25: a verdict written by the gate before it compared like with like is not read back)
     all(c("curve_prior_sd", "grade_withheld", "null_heldout_curve") %in% names(h))
 }, logical(1))]
-if (length(stale)) stop("grade tables made before #73's curve prior (no ref_population = stream_branch, a walk not ending at the bank, or no curve_prior_sd, grade_withheld, null_heldout_curve and evidence_md5), or graded under another pick, link run or evidence build than the curve record's; rerun 0320: ",
+if (length(stale)) stop("grade tables made before #73's curve prior (no ref_population = stream_branch, a walk not ending at the bank, or no curve_prior_sd, grade_withheld, null_heldout_curve and evidence_md5), walked by another walk than this tree's (walk_md5, #87) or on another flow load than the database's, or graded under another pick, link run or evidence build than the curve record's; rerun 0320: ",
                         paste(stale, collapse = ", "))
 # each job writes its own tables as it finishes and returns its error rather than raising it, so one failed
-# species cannot discard the others at collection (code-check round 2); the grade table is read with the
-# six columns the comparison needs, not its 25 (RB's is 1.5 GB)
-run_one <- function(job, schema, link_dir, vl, vs, tuned_as, config_sha, gpkg, dir_gpkg) {
-  pkgload::load_all(quiet = TRUE)
-  pg <- function() DBI::dbConnect(RPostgres::Postgres(), bigint = "numeric")
+# species cannot discard the others (code-check round 2); the grade table is read with the six columns the
+# comparison needs, not its 25 (RB's is 1.5 GB)
+run_one <- function(job) {
   t0 <- Sys.time()
   out <- tryCatch({
     gfile <- file.path("data/tune", paste0(job$key, "_grades.csv"))
@@ -186,29 +204,12 @@ run_one <- function(job, schema, link_dir, vl, vs, tuned_as, config_sha, gpkg, d
                                                       grade = "d", grade_class = "c", target_in_group = "l"))
     cmp <- knw_compare_rules(pg, schema, job$species_code, job$stage, job$pick, job$groups, link_dir, grades,
                              visits = vl, visit_species = vs, scratch = paste0("knw_cmp_", tolower(job$key)),
-                             tuned_as = tuned_as, config_sha = config_sha)
+                             tuned_as = tuned_as, config_sha = config_sha, workers = workers)
+    rm(grades)
     readr::write_csv(cmp$compare, file.path("data/compare", paste0(job$key, "_compare.csv")), na = "")
     readr::write_csv(cmp$change, file.path("data/compare", paste0(job$key, "_change.csv")), na = "")
     if (!is.null(cmp$checks)) readr::write_csv(cmp$checks, file.path("data/compare", paste0(job$key, "_checks.csv")), na = "")
     saveRDS(cmp$segments, file.path("data/compare", paste0(job$key, "_segments.rds")))
-    if (gpkg) {
-      # one GeoPackage per species x stage for QGIS (#81): every segment with its verdict under each rule and
-      # structure, written group by group from link's geometry
-      f <- file.path(dir_gpkg, paste0(job$key, ".gpkg"))
-      unlink(f)
-      conn <- pg()
-      t1 <- Sys.time()
-      for (w in sort(unique(cmp$segments$watershed_group_code))) {
-        geom <- sf::st_zm(sf::st_read(conn, quiet = TRUE, query = sprintf(
-          "SELECT id_segment, geom FROM %s.streams WHERE watershed_group_code = '%s'", schema, w)), drop = TRUE)
-        geom$id_segment <- as.numeric(geom$id_segment)
-        sg <- dplyr::inner_join(geom, cmp$segments |> dplyr::filter(watershed_group_code == w), by = "id_segment")
-        sf::st_write(sg, f, layer = "segments", append = file.exists(f), quiet = TRUE)
-      }
-      DBI::dbDisconnect(conn)
-      cmp$log <- c(cmp$log, sprintf("GeoPackage %s: %d segments in %.1f min.", f, nrow(cmp$segments),
-                                    as.numeric(difftime(Sys.time(), t1, units = "mins"))))
-    }
     # the through-wetland quantity link#364 measured, for the write-up: CH rearing on its five groups and on all
     if (job$key == "CH_rear") {
       wl <- cmp$segments |> dplyr::filter(edge_type %in% c(1050L, 1150L))
@@ -225,7 +226,43 @@ run_one <- function(job, schema, link_dir, vl, vs, tuned_as, config_sha, gpkg, d
   }, error = function(e) list(error = conditionMessage(e), compare = NULL, change = NULL, checks = NULL, log = character()))
   out$minutes <- as.numeric(difftime(Sys.time(), t0, units = "mins"))
   out$key <- job$key
+  say("%s: compared in %.1f min%s.", job$key, out$minutes, if (!is.null(out$error)) " (FAILED)" else "")
   out
+}
+# one GeoPackage per species x stage for QGIS (#81): every segment with its verdict under each rule and structure,
+# written group by group from link's geometry and the segments the comparison saved; run on a socket worker per key
+gpkg_one <- function(key, schema, dir_gpkg) {
+  t1 <- Sys.time()
+  tryCatch({
+    seg <- readRDS(file.path("data/compare", paste0(key, "_segments.rds")))
+    f <- file.path(dir_gpkg, paste0(key, ".gpkg"))
+    unlink(f)
+    conn <- DBI::dbConnect(RPostgres::Postgres(), bigint = "numeric")
+    on.exit(DBI::dbDisconnect(conn))
+    for (w in sort(unique(seg$watershed_group_code))) {
+      geom <- sf::st_zm(sf::st_read(conn, quiet = TRUE, query = sprintf(
+        "SELECT id_segment, geom FROM %s.streams WHERE watershed_group_code = '%s'", schema, w)), drop = TRUE)
+      geom$id_segment <- as.numeric(geom$id_segment)
+      sg <- dplyr::inner_join(geom, seg[seg$watershed_group_code == w, , drop = FALSE], by = "id_segment")
+      sf::st_write(sg, f, layer = "segments", append = file.exists(f), quiet = TRUE)
+    }
+    sprintf("GeoPackage %s: %d segments in %.1f min.", f, nrow(seg), as.numeric(difftime(Sys.time(), t1, units = "mins")))
+  }, error = function(e) sprintf("GeoPackage for %s FAILED: %s", key, conditionMessage(e)))
+}
+# the GeoPackages of several keys, one key per socket worker (one writer per file)
+write_gpkgs <- function(keys) {
+  t1 <- Sys.time()
+  gl <- if (workers > 1L && length(keys) > 1L) {
+    cl <- parallel::makeCluster(min(workers, length(keys)))
+    tryCatch(parallel::parLapplyLB(cl, keys, gpkg_one, schema = schema, dir_gpkg = dir_gpkg),
+             finally = parallel::stopCluster(cl))
+  } else {
+    lapply(keys, gpkg_one, schema = schema, dir_gpkg = dir_gpkg)
+  }
+  names(gl) <- keys
+  say("GeoPackages for %d keys in %.1f min on %d workers.", length(keys),
+      as.numeric(difftime(Sys.time(), t1, units = "mins")), min(workers, length(keys)))
+  gl
 }
 t0 <- Sys.time()
 if (stage_only == "maps") {
@@ -249,18 +286,28 @@ if (stage_only == "maps") {
   if (length(old)) stop("STAGE=maps: the saved segments predate their grade tables; run the full compare: ",
                         paste(old, collapse = ", "))
   say("STAGE=maps: floodplain and maps from the saved comparison of %s.", paste(names(res), collapse = " "))
-} else if (workers > 1L && length(jobs) > 1L) {
-  cl <- parallel::makeCluster(min(workers, length(jobs)), outfile = file.path("scripts/logs/habitat", paste0(format(Sys.Date(), "%Y%m%d"), "_compare-workers.out")))
-  res <- tryCatch(parallel::parLapplyLB(cl, jobs, run_one, schema = schema, link_dir = link_dir, vl = vl, vs = vs,
-                                        tuned_as = tuned_as, config_sha = config_sha, gpkg = gpkg, dir_gpkg = dir_gpkg),
-                  finally = parallel::stopCluster(cl))
+} else if (stage_only == "gpkg") {
+  # the GeoPackages alone, from the segments the last full run saved per key, refusing segments older than their
+  # grade table as STAGE=maps does
+  keys <- names(jobs)[file.exists(file.path(dir_out, paste0(names(jobs), "_segments.rds")))]
+  if (!length(keys)) stop("STAGE=gpkg: no saved segments under ", dir_out)
+  old <- keys[file.mtime(file.path(dir_out, paste0(keys, "_segments.rds"))) <
+                file.mtime(file.path("data/tune", paste0(keys, "_grades.csv")))]
+  if (length(old)) stop("STAGE=gpkg: the saved segments predate their grade tables; run the full compare: ",
+                        paste(old, collapse = ", "))
+  gl <- write_gpkgs(keys)
+  for (k in keys) say("  %s", gl[[k]])
 } else {
-  res <- lapply(jobs, run_one, schema = schema, link_dir = link_dir, vl = vl, vs = vs, tuned_as = tuned_as,
-                config_sha = config_sha, gpkg = gpkg, dir_gpkg = dir_gpkg)
+  res <- lapply(jobs, run_one)
+  if (gpkg) {
+    ok <- names(jobs)[vapply(res, function(x) is.null(x$error), logical(1))]
+    gl <- write_gpkgs(ok)
+    for (k in ok) res[[match(k, names(jobs))]]$log <- c(res[[match(k, names(jobs))]]$log, gl[[k]])
+  }
 }
-if (stage_only != "maps") {
+if (stage_only == "") {
   names(res) <- vapply(jobs, `[[`, character(1), "key")
-  say("Compared %d species x stage in %.1f min on %d workers.", length(res), as.numeric(difftime(Sys.time(), t0, units = "mins")), workers)
+  say("Compared %d species x stage in %.1f min, each on %d workers.", length(res), as.numeric(difftime(Sys.time(), t0, units = "mins")), workers)
   failed <- names(res)[vapply(res, function(x) !is.null(x$error), logical(1))]
   for (k in failed) say("%s FAILED after %.1f min: %s", k, res[[k]]$minutes, res[[k]]$error)
   res <- res[setdiff(names(res), failed)]
