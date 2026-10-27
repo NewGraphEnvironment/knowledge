@@ -1,3 +1,5 @@
+# Not New Graph Environment's shared workflow (NewGraphEnvironment/flows): it fails the build when a draft article reaches the site.
+# Its runner is pinned like the shared ones; move it by hand when they move.
 # Workflow derived from https://github.com/r-lib/actions/tree/v2/examples
 # Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
 on:
@@ -14,7 +16,7 @@ permissions: read-all
 
 jobs:
   pkgdown:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     # A stalled setup step (an apt mirror, a package compiling from source) otherwise holds the job for 6 h (#94)
     timeout-minutes: 30
     # Only restrict concurrency for non-PR jobs
