@@ -103,7 +103,9 @@ the repo is public.
 ### Ragnar stores live in S3 through `cred`; a local ingest must be pushed
 
 `.Rprofile` sets `options(cred.store_source = "s3://fresh-bc/rag/")` (committed there so it travels
-with the repo; a project `.Renviron` would replace the user's, see Database access). `cred::crd_store_connect("<store>")` pulls
+with the repo; a project `.Renviron` would replace the user's, see Database access). A project `.Rprofile` replaces
+`~/.Rprofile` the same way, so ours sources it first: on CI that file holds the Posit binary repository `setup-r` writes, and
+without it every package built from CRAN source (#94). `cred::crd_store_connect("<store>")` pulls
 and md5-verifies; `cred::crd_store_push()` uploads and merges the `log.json` manifest. After a
 local write (`0152` ingest, `0156` dedup) the local md5 no longer matches the manifest, and the
 next `verify = TRUE` connect **replaces the local file with the bucket copy**. Push first.
