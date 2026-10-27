@@ -3,7 +3,7 @@
 knowledge's CI installed every R package from CRAN source because the repo's own `.Rprofile` replaced the
 `~/.Rprofile` into which `r-lib/actions/setup-r` writes the Posit binary repository: R reads one user profile, and
 a project one wins. A saved package library hid it on 24.04 until `duckdb` 2.0.0 changed, and 26.04, which had no
-saved library, compiled everything. #94 had blamed first the 26.04 image, then `duckdb`'s binary gap at Posit; both
+saved library, resolved all 143 to source (#88's runs built 110, then `duckdb` failed to compile at 32 min). #94 had blamed first the 26.04 image, then `duckdb`'s binary gap at Posit; both
 were wrong, and the "green" 24.04 run it cited as installing a binary had compiled `duckdb` for 57 min. The fix makes
 `.Rprofile` source `~/.Rprofile` once per session (an option flag, after code-check round 2 found the first guard,
 a `normalizePath()` comparison, recursed when R started outside the checkout). Both workflows are back on
