@@ -10,11 +10,13 @@
 #
 # WHY / DESIGN NOTES (the package functions carry the method; this script carries the order,
 # the gates and the ledger):
-#   - GATE: runs only after 0300 released on the current fresh_default (the settle log's last row
-#     is `released`), and records that run's run_uid and SHAs. The link commit the configs are
-#     read from later is that run's link_sha.
-#   - ONE SCHEMA. fresh_default holds every modelable group, so there is no held-out schema and
-#     no step-5 class; #28's fixed split is not carried (decided 2026-10-17).
+#   - GATE: runs only after 0300 released (the settle log's last row is `released`), and records
+#     that run's run_uid and SHAs. The link commit the configs are read from later is that run's
+#     link_sha. knw_build_record() refuses a SCHEMA built by another run than the released one, and
+#     its line (schema, run, flow load, walk md5, fresh) is ledgered (#91).
+#   - ONE SCHEMA, named by SCHEMA as 0320 and 0330 take it (default fresh_default): one retune names
+#     the schema its evidence was built on. It holds every modelable group, so there is no held-out
+#     schema and no step-5 class; #28's fixed split is not carried (decided 2026-10-17).
 #   - ACCESS gates on streams_access (access_<sp> > 0); the habitat flags are re-gated on it and
 #     the stored flags kept beside them; knw_link_access_check() writes the disagreement per
 #     species on every run (link#349). access_<sp> = 2 stays in the population and is never a
@@ -37,7 +39,8 @@
 # INPUT:  data/fdis/build/{sites,catch,fish}.rds (0230), data/fdis_species_codes.csv, data/fiss_evidence.csv (0250),
 #         data/<wsg>/fiss_step2_fishcoll_<wsg>.csv (0220),
 #         data/fdis_size_breaks.csv, scripts/logs/habitat/<date>_link_settle.csv (0300);
-#         fwapg database (PG* env vars): fresh_default, discharge, cabd, bcfishobs, whse_basemapping;
+#         fwapg database (PG* env vars): SCHEMA (link's persist schema), discharge, cabd, bcfishobs,
+#         whse_basemapping, knw.walk_cache (the walk cache, shared with 0320's grade);
 #         link >= 0.66.0 (lnk_species_pooling); the BC Hydrologic Zones zip
 # OUTPUT: data/fdis/derived/visits_link.csv     one row per placed visit (ignored; 0299 publishes)
 #         data/fdis/derived/visits_species.csv  one row per placed visit x species
@@ -46,14 +49,17 @@
 #         data/fdis/derived/access_check.csv
 #         data/fdis/derived/workbook_{sites,species}.csv  the FISS workbook sites placed on link's segments
 #         scripts/logs/habitat/<date>_evidence_build_ledger.csv
-# RUN:    Rscript scripts/0310-evidence-build.R   (from the repo root; ~15 min, 4 socket workers)
+# RUN:    [SCHEMA=fresh_default_20261017] Rscript scripts/0310-evidence-build.R   (from the repo root; 4 socket
+#         workers; the visit walks are cached from #91, so the first run walks them cold (6.4 min of walks and 16 min
+#         in all from a remote link, 2026-10-27) and a rerun on the same flow load reads them back (0.7 min of walks))
 # ---------------------------------------------------------------------------
 suppressMessages({ library(dplyr); library(readr); library(DBI); library(RPostgres) })
 pkgload::load_all(quiet = TRUE)
 options(warn = 1)
 if (!nzchar(Sys.getenv("PGCONNECT_TIMEOUT"))) Sys.setenv(PGCONNECT_TIMEOUT = "30")
 
-schema <- "fresh_default"
+schema <- Sys.getenv("SCHEMA", "fresh_default")
+walk_cache <- "knw.walk_cache"
 q_grid <- c(1, 3, 5, 10, 20, 30, 50)
 sources <- c("pick", "pcic_routed", "wet_balance")
 n_workers <- 4L
@@ -91,8 +97,8 @@ for (k in c("link_version", "link_sha", "fresh_version", "fresh_sha", "fwapg_sha
   add("info", paste0("run_", k), 0, st[[k]])
 }
 conn <- pg()
-now <- dbGetQuery(conn, sprintf("SELECT string_agg(DISTINCT run_uid, ';') AS u FROM %s.log_recompute", schema))$u
-if (!identical(now, st$run_uid)) stop("fresh_default.log_recompute run_uid is ", now, ", not the released ", st$run_uid)
+rec <- knw_build_record(conn, schema, run_uid = st$run_uid)
+add("info", "build_record", 0, rec$line)
 
 # ---- visits: quality, species -----------------------------------------------------
 build <- "data/fdis/build"
@@ -106,9 +112,15 @@ breaks <- read_csv("data/fdis_size_breaks.csv", col_types = cols(.default = "c")
   mutate(across(c(length_min_mm, length_max_mm), as.numeric))
 for (f in c("sites", "catch", "fish")) add("info", paste0("md5_", f), 0, unname(tools::md5sum(file.path(build, paste0(f, ".rds")))))
 add("info", "fdis_sites_in", nrow(sites))
+# the snap limits 0230 placed with (#91): an environment override leaves no other trace, so readers compare these
+rec0230 <- read_csv(file.path(build, "reconcile.csv"), show_col_types = FALSE)
+for (k in c("snap_limit_m", "snap_limit_code_m")) {
+  if (sum(rec0230$check == k) != 1L) stop(build, "/reconcile.csv has no ", k, ": rerun scripts/0230")
+  add("info", k, rec0230$n[rec0230$check == k], "the limit 0230 placed with (its reconcile.csv)")
+}
 
 q <- knw_fdis_quality(sites)
-ledger <- bind_rows(ledger, q$ledger |> filter(kind == "drop") |> mutate(n = as.numeric(n)))
+ledger <- bind_rows(ledger, q$ledger |> filter(kind %in% c("drop", "info")) |> mutate(n = as.numeric(n)))
 v <- q$kept
 
 # species range and pooling from link's default bundle
@@ -149,7 +161,7 @@ add("info", "species_with_access", length(pl$species_access), paste(pl$species_a
 add("info", "species_with_habitat", length(pl$species_habitat), paste(pl$species_habitat, collapse = ";"))
 n0 <- nrow(v)
 v <- v |> inner_join(pl$placed, by = "site_visit")
-add("drop", "no_link_segment", n0 - nrow(v), "no fresh_default segment on the visit's blue line at its measure")
+add("drop", "no_link_segment", n0 - nrow(v), sprintf("no %s segment on the visit's blue line at its measure", schema))
 add("info", "segment_starts_in_window", sum(v$segment_start_offset_m >= -1 & v$segment_start_offset_m <= 5))
 vs <- vs |> filter(site_visit %in% v$site_visit)
 
@@ -202,10 +214,13 @@ dbDisconnect(conn)
 # ---- walks ------------------------------------------------------------------------
 starts <- v |> distinct(blue_line_key, downstream_route_measure)
 t0 <- Sys.time()
-w <- knw_link_walks(pg, starts, q_grid = q_grid, sources = sources, workers = n_workers)
+w <- knw_link_walks(pg, starts, q_grid = q_grid, sources = sources, workers = n_workers, cache = walk_cache)
 add("info", "walk_starts", nrow(starts),
     sprintf("x %d sources x %d sizes; %.1f min on %d workers", length(sources), length(q_grid),
             as.numeric(difftime(Sys.time(), t0, units = "mins")), n_workers))
+wc <- attr(w, "cache")
+add("info", "walk_cache_hit", wc[["hit"]], sprintf("start-and-source pairs read from %s", walk_cache))
+add("info", "walk_cache_miss", wc[["miss"]], sprintf("start-and-source pairs walked and kept in %s", walk_cache))
 # the walk's convention (#73): to the river's bank, every hop's gap counted; bank_m is what the bank rule took off
 add("info", "walk_convention", 0, "bank: the distance ends at the river's bank and counts every hop's gap (fresh 0.42.0's rule, #73)")
 add("info", "walk_bank_m_positive", sum(w$status == "found" & w$bank_m > 0),

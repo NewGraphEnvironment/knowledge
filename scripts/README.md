@@ -33,7 +33,8 @@ wf_farm_priority.js                          farm priority/crossing tables out o
       (also writes Step 2 life stage and Step 3 individual fish, raw, per group)
 
 --- FDIS electrofishing export (province-wide, not per group) ---
-0230  sync s3://fresh-bc/fdis/, QA, roll passes to site visits, place on FWA   (fwapg database (PG* env vars))
+0230  sync s3://fresh-bc/fdis/, QA, roll passes to site visits, place on FWA with fresh's snap and the 1:50k code
+      (#91; fwapg database (PG* env vars), fresh >= 0.40.0; SNAP_LIMIT / SNAP_LIMIT_CODE override the limits)
 0240  size classes + CH / char evidence + summary vs thresholds -> data/fdis_*.csv
 
 --- FISS individual fish -> size-class evidence (after 0220 on each group, and 0230) ---
@@ -52,7 +53,9 @@ wf_farm_priority.js                          farm priority/crossing tables out o
       rivers of 1-50 m3/s on each source (to the river's bank, counting every hop's gap, fresh's convention; #73),
       hydrologic zone, the bcfishobs match, link#349's access check, the
       workbook sites -> data/fdis/derived/{visits_link,visits_species,walks,bcfishobs_fdis_match,access_check,
-      workbook_sites,workbook_species}.csv (+ ledger; ~20 min, 4 socket workers)
+      workbook_sites,workbook_species}.csv (+ ledger; 4 socket workers). SCHEMA names link's schema (default
+      fresh_default; knw_build_record() refuses one another run built); the visit walks are kept in knw.walk_cache
+      from #91, so the first run walks them cold
 0290  bt_use_visits.csv written from 0310 (BT's rows and the columns 0291-0293 read; no held-out columns)
 0294  ch_mad_visits.csv written from 0310 (+ two database reads: ambiguous placement, barriers without USER_DEFINITE)
 0296  ch_rule_visits.csv and ch_rule_walks.csv written from 0294 and 0310
@@ -239,8 +242,10 @@ and maturity, per-pass effort, measured channel width and gradient, and explicit
 
 - **Grain is the site visit**, not the pass: depletion passes repeat one population.
 - **Abundance comes from `counts`**; `details` is a length subsample (87% of counted CH have no length).
-- **Placement:** `fwa_indexpoint` (500 m radius), checked against FDIS's own 50k watershed code
-  and gazetted name. Snaps over 100 m and code mismatches are flagged, not dropped.
+- **Placement (#91):** `fresh::frs_point_snap()` (500 m radius), to the nearest stream and to each stream
+  FDIS's own 1:50k watershed code names; `knw_fdis_place()` takes the nearest named stream in reach, else the
+  nearest stream. A pick beyond its limit (one for a code-confirmed pick, one for the rest) and a code naming no
+  stream in reach are flagged here and dropped by `knw_fdis_quality()` in `0310`.
 - **CH gives rearing evidence only**; EF caught no adult CH. Char spawner evidence is maturity
   (SP/ST, or M in Aug–Oct), not length.
 - Outputs: `data/fdis_evidence.csv`, `data/fdis_summary_ch_bt.csv`, `data/fdis_size_breaks.csv`,

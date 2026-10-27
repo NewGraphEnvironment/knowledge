@@ -1,0 +1,43 @@
+# Progress — Place FDIS sites with candidate snapping and the 1:50k code, not nearest-then-reject (#91)
+
+## Session 2026-10-27
+
+- Plan-mode exploration (0230, 0310, fdis_quality, link_place, link_walks, the registers and their test,
+  vignette_method.R and test-vignette-data.R, 0240, 0320; fresh 0.43.0's `frs_point_snap()` and
+  `frs_candidates_pick()`; link's stream guards; three read-only database probes) — plan reviewed by a Plan agent
+  (`review-plan.md`; 15 findings, one blocker confirmed and folded in) — approved by Al as a baseline only (`park`)
+- Created branch `91-place-fdis-sites-with-candidate-snapping` off main (at `570c616`, v0.4.12)
+- Scaffolded PWF baseline from issue #91 with the approved phases and gate decisions
+- Next: parked 2026-10-27; resume with the command below, then "start Phase 1". The gate decisions
+  (`task_plan.md`, "Decided at the gate") are confirmed or changed at the resume, before Phase 1.
+
+### Resume
+
+```bash
+cd /Users/airvine/Projects/repo/knowledge && git fetch -q origin && git checkout 91-place-fdis-sites-with-candidate-snapping && git pull --ff-only && git merge origin/main
+```
+
+The approval covered the baseline only: the run-to-PR mandate starts when Al says to resume.
+
+## Session 2026-10-27 (resume)
+
+- Resumed: branch synced with origin and main (nothing had moved); #98 still open, #92 open
+- Al confirmed gate decision 1 (evidence only; the retune is #92's) and 2 (the recommended limit rule)
+- Next: Phase 1, the probe
+- Phase 1: probe committed and run (2.1 min); no_link_segment 1,491 reproduced; hint route covers the codes, no fresh
+  issue; exclusion set c(1425, 6010) stands; unmapped re-snaps checked against the code (no rule needed)
+- Phase 2 code: `knw_fdis_place()` (refuses integer64 rather than passing it through: base `ifelse()` strips the
+  class, so `0230` and `0240` connect with `bigint = "numeric"`), its tests (three planted defects each fail them),
+  `0230` on fresh's snap and the hint, `knw_fdis_quality()` info rows, `0240` columns and header, registers;
+  `0250`'s comments no longer claim to match `0230`
+- 0230 at 500/500 (1.5 min): placed 49,922, confirmed 10,439, moved 785, ws50 mismatch 434, far 0; data/fdis_repeat_surveys.csv came back byte-identical
+- 0310 on the 500 m build (16 min; walks cold 6.4 min, 113,658 pairs walked and cached): kept 47,247, no_link_segment 198
+- Sensitivity (24.8 min, 14 workers): the rule gives 200 m unconfirmed, 500 m confirmed; no region moves between any two cells
+- Limits set: snap_limit 200 (measured), snap_limit_code 500 (measured)
+- Final chain at 200/500: 0230, 0240, 0310 (10 min; walks all cached, 0.7 min): kept 45,523 against 40,552
+- devtools::test(): 1,382 passed, 14 expectations failed, all in the two test-vignette-data.R tests decided at the gate
+- Phase 5 text: research placement section, tuning file's note, README row, CLAUDE.md note. NEWS.md is left to the
+  release commit, as every past entry was (`git log -- NEWS.md` shows only "Release" commits); the PR body carries the line
+- /code-check branch: four rounds; ended by round 4's 44-row enumeration (39 held, 5 prose rows fixed and checked).
+  Round 3 changed the exclusion set to 6010 only, which reran the 500 m build, the sensitivity (same limits) and the
+  final evidence (45,529 kept)

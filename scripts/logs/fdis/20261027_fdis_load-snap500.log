@@ -1,0 +1,66 @@
+Cache verified: 26 files match MANIFEST.md5
+Repeated surveys: 1431 visits dropped from 1308 groups
+Snapping 50550 site visits with fresh::frs_point_snap (tolerance 500 m; 58291 hinted rows from the 1:50k codes)
+# A tibble: 59 × 2
+   check                                      n
+   <chr>                                  <dbl>
+ 1 passes                                 62892
+ 2 site_visits                            51587
+ 3 sites_multi_pass                        5705
+ 4 sites_with_utm                         50550
+ 5 sites_placed                           49928
+ 6 sites_far_snap                             0
+ 7 sites_ws50_checked                     10895
+ 8 sites_ws50_mismatch                      434
+ 9 sites_snap_confirmed                   10439
+10 sites_snap_moved                         785
+11 sites_snap_unconfirmed                 39489
+12 sites_snap_nearest_edge_6010_excluded      3
+13 snap_limit_m                             500
+14 snap_limit_code_m                        500
+15 sites_placed_0_25m                     34041
+16 sites_placed_25_50m                     4901
+17 sites_placed_50_100m                    4659
+18 sites_placed_100_200m                   4126
+19 sites_placed_200_500m                   2201
+20 sites_catch_fish                       29453
+21 sites_catch_zero                       21767
+22 sites_catch_unknown                      367
+23 sites_nfc_conflict                        65
+24 sites_with_habitat                     20859
+25 sites_habitat_conflict                  1857
+26 sites_junk_date                           23
+27 sites_no_area                           7567
+28 fish_rows_in                          341607
+29 fish_rows_out                         338016
+30 fish_nfc_rows                            139
+31 fish_without_visit                     16233
+32 fish_no_length                          5428
+33 sites_effort_sentinel                     88
+34 sites_blocking_ch_absence                559
+35 sites_blocking_char_absence             1029
+36 catch_pairs_count_unknown                 58
+37 counts_fish_total                     981009
+38 counts_sentinel_rows                      71
+39 catch_pairs_counts_lt_measured           465
+40 repeat_groups                           1308
+41 repeat_visits_dropped                   1431
+42 repeat_dropped_fish                      623
+43 repeat_dropped_zero                      623
+44 repeat_dropped_unknown                   185
+45 repeat_passes_dropped                   1504
+46 repeat_fish_rows_dropped                3591
+47 repeat_counted_fish_dropped             9597
+48 repeat_groups_fish_differ                114
+49 repeat_groups_habitat_differ             115
+50 repeat_groups_time_differ                 33
+51 repeat_groups_zero_and_unknown            89
+52 repeat_groups_maturity_coded_lost          0
+53 repeat_habitat_carried_to_kept             5
+54 repeat_coded_fish_not_on_kept              3
+55 repeat_ws50_codes_pooled                 373
+56 repeat_fish_rows_not_on_kept              78
+57 repeat_count_lengths_not_on_kept           3
+58 repeat_groups_one_collection_kept         13
+59 repeat_groups_site_differs_kept           65
+Wrote sites.rds, catch.rds, fish.rds, reconcile.csv to data/fdis/build

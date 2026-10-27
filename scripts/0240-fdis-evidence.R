@@ -17,6 +17,11 @@
 #     is asserted only where the visit has a known catch (fish of other species, or NFC).
 #   - measured_vs_modelled is reported only where the FWA width is MODELLED: FWA's
 #     FIELD_MEASUREMENT widths are these same FISS sites.
+#   - PLACEMENT is 0230's (#91): fdis_sites.csv carries how each visit reached its stream
+#     (snap_method, snap_confirmed, snap_moved, nearest_distance_m). flag_far_snap in
+#     data/fdis_evidence.csv is 0230's limits (snap_limit unconfirmed, snap_limit_code confirmed),
+#     while data/fiss_evidence.csv (0250), which binds with it by row, keeps 100 m on
+#     fwa_indexpoint(): one column, two placements.
 #
 # INPUT:  data/fdis/build/{sites,catch,fish}.rds (from 0230), data/fdis_size_breaks.csv
 #         Size classing is knw_size_class() from the package (shared with 0250).
@@ -56,12 +61,13 @@ thresholds <- tribble(
 )
 
 # ---- major drainage (first FWA watershed-code segment) ----------------------
-conn <- DBI::dbConnect(RPostgres::Postgres())
+# bigint = "numeric": 0230 stores the FWA ids as doubles (#91)
+conn <- DBI::dbConnect(RPostgres::Postgres(), bigint = "numeric")
 lf <- unique(na.omit(sites$linear_feature_id))
 basin <- DBI::dbGetQuery(conn, "SELECT linear_feature_id, left(fwa_watershed_code, 3) AS fwa_basin
                                   FROM whse_basemapping.fwa_stream_networks_sp
                                  WHERE linear_feature_id = ANY($1::bigint[])",
-                         params = list(paste0("{", paste(lf, collapse = ","), "}")))
+                         params = list(paste0("{", paste(format(lf, scientific = FALSE, trim = TRUE), collapse = ","), "}")))
 DBI::dbDisconnect(conn)
 sites <- sites |> left_join(basin, by = "linear_feature_id")
 
@@ -132,7 +138,8 @@ site_out <- sites |>
          across(c(present_CH, present_char), ~ coalesce(.x, FALSE)),
          cw_comparable = channel_width_source == "MODELLED" & !is.na(channel_width_m)) |>
   select(site_visit, watershed_group_code, fwa_basin, blue_line_key, downstream_route_measure,
-         linear_feature_id, distance_to_stream, gnis_name, utm_zone, utm_easting, utm_northing,
+         linear_feature_id, distance_to_stream, snap_method, snap_confirmed, snap_moved, nearest_distance_m,
+         gnis_name, utm_zone, utm_easting, utm_northing,
          date, year, month, n_pass, fishing_time_s, area_m2, fished_length_m, agency, data_set,
          gradient_pct, gradient2_pct, channel_width_m, wetted_width_m, n_cw_measures, bed_dominant,
          water_temp_c, fwa_gradient_pct, stream_order, edge_type, modelled_channel_width_m,
