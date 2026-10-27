@@ -129,7 +129,7 @@ run-to-PR mandate runs from here.
       `snap_edges_excluded` (`script:`); `pipeline.csv` step 2 names
       `fresh::frs_point_snap;knowledge::knw_fdis_place;knowledge::knw_fdis_quality` and its `does` text;
       `test-settings-register.R` passes (`test-vignette-data.R`'s tracked-source test now fails, as decided)
-- [ ] run `SNAP_LIMIT=500 SNAP_LIMIT_CODE=500 Rscript scripts/0230-fdis-load.R 2>&1 | tee scripts/logs/fdis/<date>_fdis_load-snap500.log`
+- [x] run `SNAP_LIMIT=500 SNAP_LIMIT_CODE=500 Rscript scripts/0230-fdis-load.R 2>&1 | tee scripts/logs/fdis/<date>_fdis_load-snap500.log`
       (every placed visit kept, so the sensitivity can apply any smaller limit); `0240` is not run here, and the
       tracked `data/fdis_repeat_surveys.csv` this run rewrites is restored (`git checkout -- data/fdis_repeat_surveys.csv`)
       so only Phase 4's final run is committed

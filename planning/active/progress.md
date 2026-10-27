@@ -30,3 +30,4 @@ The approval covered the baseline only: the run-to-PR mandate starts when Al say
   class, so `0230` and `0240` connect with `bigint = "numeric"`), its tests (three planted defects each fail them),
   `0230` on fresh's snap and the hint, `knw_fdis_quality()` info rows, `0240` columns and header, registers;
   `0250`'s comments no longer claim to match `0230`
+- 0230 at 500/500 (1.5 min): placed 49,922, confirmed 10,439, moved 785, ws50 mismatch 434, far 0; data/fdis_repeat_surveys.csv came back byte-identical
