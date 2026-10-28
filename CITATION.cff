@@ -9,7 +9,7 @@ type: software
 license: MIT
 title: 'knowledge: Fisheries Evidence and Tuned Habitat Thresholds for BC Watershed
   Groups'
-version: 0.4.13
+version: 0.4.14
 abstract: 'Gathers fisheries evidence for British Columbia watershed groups (provincial
   fish sampling records, past reports, cited literature values with their quotes,
   intrinsic-potential models and life-history timing) and tunes from the fish records
@@ -33,8 +33,8 @@ preferred-citation:
     email: al@newgraphenvironment.com
     orcid: https://orcid.org/0000-0002-3495-2128
     affiliation: New Graph Environment Ltd.
-  version: 0.4.13
-  date-released: '2026-10-27'
+  version: 0.4.14
+  date-released: '2026-10-28'
   url: https://newgraphenvironment.github.io/knowledge/
   repository-code: https://github.com/NewGraphEnvironment/knowledge
   license: MIT
@@ -43,7 +43,7 @@ preferred-citation:
     name: New Graph Environment Ltd.
 repository-code: https://github.com/NewGraphEnvironment/knowledge
 url: https://newgraphenvironment.github.io/knowledge/
-date-released: '2026-10-27'
+date-released: '2026-10-28'
 contact:
 - family-names: Irvine
   given-names: Allan
