@@ -55,7 +55,8 @@ wf_farm_priority.js                          farm priority/crossing tables out o
       workbook sites -> data/fdis/derived/{visits_link,visits_species,walks,bcfishobs_fdis_match,access_check,
       workbook_sites,workbook_species}.csv (+ ledger; 4 socket workers). SCHEMA names link's schema (default
       fresh_default; knw_build_record() refuses one another run built); the visit walks are kept in knw.walk_cache
-      from #91, so the first run walks them cold
+      from #91, so the first run walks them cold; knw_db_latency_check() at connect stops a run off the
+      database's host (round trip over 20 ms) unless REMOTE=TRUE (#110)
 0290  bt_use_visits.csv written from 0310 (BT's rows and the columns 0291-0293 read; no held-out columns)
 0294  ch_mad_visits.csv written from 0310 (+ two database reads: ambiguous placement, barriers without USER_DEFINITE)
 0296  ch_rule_visits.csv and ch_rule_walks.csv written from 0294 and 0310
@@ -70,7 +71,7 @@ wf_farm_priority.js                          farm priority/crossing tables out o
       on any machine with the build, WORKERS=14; grading walks 500 segments per query and keeps every walk in
       knw.walk_cache, keyed on the flow load and the walk's md5 (#87): on the database's host a cold regrade of
       every key took 53.4 min and one key regraded with the walks cached 4.1 min, 2026-10-27; CLAUDE.md
-      "Database access")
+      "Database access"; a grading run stops off the database's host unless REMOTE=TRUE, #110)
 0322  #67's record: CH rearing alone on the ladder extended to 30 %, on the evidence build before #73 (the main
       run carries that ladder for every species since #68): the scores -> data/tune/grad_ext/; STAGE=compare
       sets CH_rear_v1's parts at 11, 13, 15 and 30 % beside default and beside CH_rear_v1 -> data/compare/grad_ext/
@@ -88,7 +89,7 @@ wf_farm_priority.js                          farm priority/crossing tables out o
       (data/compare/gpkg/, #81; GPKG=FALSE skips them while iterating, STAGE=gpkg writes them afterwards from the
       saved segments) (+ log; SCHEMA as 0320; on the database's host, keys in turn, each key's groups split across
       WORKERS=6 connections, #87: every key 162.9 min with GPKG=FALSE, BT rearing alone 33.4, the GeoPackages
-      14.0, 2026-10-27). No maps in this run.
+      14.0, 2026-10-27; every STAGE stops off the database's host unless REMOTE=TRUE, #110). No maps in this run.
       STAGE=maps: floodplain ha beside each rule's habitat in the catalog's groups, and the maps, from the saved
       tables -> data/compare/floodplain.csv, research/fig/compare_*.png
       then SCHEMA=... Rscript data-raw/vignette_chinook.R refreshes the chinook article's data (inst/vignette-data/),
