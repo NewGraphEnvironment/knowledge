@@ -117,7 +117,8 @@ out <- list(
   change = rd(src[["change"]]),
   checks = rd(src[["checks"]])
 )
-# the comparison under every structure is kept (#73); `compare` is the structure 0330 reports as tuned, one row per group
+# the comparison keeps a row per structure it ran (#73; the reported one alone unless STRUCTURES=all, #112); `compare` is
+# the structure 0330 reports as tuned, one row per group
 if (!all(c("structure", "tuned_structure") %in% names(out$compare_structures))) stop("the compare table predates #73 (no structure column); rerun 0330")
 out$compare <- out$compare_structures |> filter(structure == tuned_structure)
 if (anyDuplicated(out$compare$watershed_group_code)) {

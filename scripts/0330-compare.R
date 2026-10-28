@@ -2,7 +2,8 @@
 # ---------------------------------------------------------------------------
 # What a tuning changes on the ground: for each fitted species x stage, link's `default` against the
 # recommended rule on link's own segments in every group the species has a habitat table in (km kept,
-# lost and gained; graded km; km by grade class; change by reason), under each rule structure (#73), with
+# lost and gained; graded km; km by grade class; change by reason), under the reported structure (every structure on
+# STRUCTURES=all; #73, #112), with
 # one GeoPackage per species x stage for QGIS (#81); and, as their own step (STAGE=maps), floodplain
 # hectares beside each rule's habitat in the groups the floodplain catalog holds and the maps. Issue #57,
 # phase 4; #73 for the structures and the baseline; #81 for the split. Successor to 0298 (frozen on v2).

@@ -22,3 +22,4 @@
   Gate passed: dropped rules 29–35 % of worker minutes, wall 19–29 % less (contended); reruns on an idle database 29–33 %, wall 24–29 % less. Recorded in research/database_builds.md,
   CLAUDE.md. Tests: 1645 passed, 0 failed, 1 skipped; lint adds only the new data-raw script's sibling-style lines.
 - Reruns on an idle database (23:00–23:36 UTC): CH `-3` 16.6→12.6 min (31 %), WCT `-4` 4.5→3.2 (33 %; its tracked report differs as expected, the host's 2026-10-25 picks)
+- /code-check branch: round 1 clean; round 2 four prose gaps (fixed); round 3 six prose gaps, one inside round 2's fix (fixed), ended by enumeration (14 restatements, 17 numbers)

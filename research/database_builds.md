@@ -13,7 +13,8 @@
 A retune (`0320` grading, then `0330` comparing) now takes about 4 min to regrade the key being tuned and 4 to 37
 min to recompare it, on the database's own host. A cold regrade of every key takes 53 min (191 before) and a
 recompare of every key 2.9 h with its GeoPackages (2.7 h before, for one key fewer: the database's cores were
-already the limit). Grading can now also
+already the limit). Those comparisons ran every through-wetland structure; since #112 a run compares `door` alone,
+whose dropped rules were 29 to 33 % of the worker minutes on three keys (below). Grading can now also
 run from a machine on a remote link: a batched walk cost 12 to 18 ms there, against about 3 ms on the host and 116
 ms one query per walk over the same link. The comparison still belongs on the host, or on a second database that holds the
 same build. `0320` and `0330` refuse a schema built by another run before any work, and refuse or regrade a grade
@@ -114,8 +115,8 @@ the reruns on an idle database (`-2` for BT rearing, which started after it, `-3
 the host's own), so it cannot tell contention from inputs. Applied to #92's minutes for classify, overlay and connect
 (from the remote link), key by key, the shares come to about 46 of its 164, 28 %: CH 31 %, BT rearing's 29 % for RB,
 WCT 33 %, and for CO and ST, which drop two rules like CH but walk to no river, CH's dropped rules' share of its
-minutes without the walks, 47 % (17.6 of 37.1); BT spawning and GR have only `door`. That last share is an assumption
-about two keys not measured. On every key the `door` alone tables equalled the every-structure run's `default` and `door` rows
+minutes without the walks, 47 % (17.6 of 37.1); BT spawning and GR have only `door`. RB, CO and ST borrow another
+key's share, and CH and BT rearing were timed on their 20 largest groups, so the 46 is an estimate on those choices. On every key the `door` alone tables equalled the every-structure run's `default` and `door` rows
 (largest relative difference 9.9e-14, segments' flags identical). WCT rearing's every-structure run also equalled
 #92's tracked tables row for row (1.7e-14), on fresh 0.44.0 where #92 ran 0.43.0, from #92's grade, curve and
 evidence tables staged for the first pass. The reruns read the host's own older tables (2026-10-25's picks), which time

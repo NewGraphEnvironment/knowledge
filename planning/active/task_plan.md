@@ -90,8 +90,8 @@ database's host.
 - [x] Tests pass (`devtools::test()`), `lintr::lint_package()` clean
 - [x] The chinook article renders with the current bundle after installing the branch (`pak::local_install()`,
       then `rmarkdown::render()`), and `test-vignette-data.R` passes unchanged
-- [ ] `/code-check` clean (once over the branch with `/code-check branch`)
-- [ ] PWF checkboxes match landed work
+- [x] `/code-check` clean (once over the branch with `/code-check branch`)
+- [x] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion
 
 Verification of the acceptance: the minutes are in `research/database_builds.md`. A default comparison regenerates two

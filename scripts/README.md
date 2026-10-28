@@ -92,7 +92,7 @@ wf_farm_priority.js                          farm priority/crossing tables out o
       data/compare/candidate/<run>/ (ignored, #111), one GeoPackage per species x stage for QGIS (its gpkg/, #81; GPKG=FALSE skips them while iterating, STAGE=gpkg writes them afterwards from the
       saved segments) (+ log; SCHEMA as 0320; on the database's host, keys in turn, each key's groups split across
       WORKERS=6 connections, #87: every key 162.9 min with GPKG=FALSE, BT rearing alone 33.4, the GeoPackages
-      14.0, 2026-10-27; every STAGE stops off the database's host unless REMOTE=TRUE, #110). No maps in this run.
+      14.0, 2026-10-26, under every structure; door alone drops 29 to 33 % of the worker minutes, #112; every STAGE stops off the database's host unless REMOTE=TRUE, #110). No maps in this run.
       STAGE=maps: floodplain ha beside each rule's habitat in the catalog's groups, and the maps, from the saved
       tables -> the run's floodplain.csv and fig/compare_*.png
 0335  on Al's word: RUN=<run> moves a candidate into data/tune/, data/compare/ and research/fig/ (SPECIES= for some
