@@ -88,7 +88,9 @@
 #'   each stage by name (#110), and `stage_minutes`, a data frame of the
 #'   worker-minutes each rule's classify, overlay, connect and read took, summed
 #'   over the groups, beside the steps the rules share (the scratch copy, the
-#'   near-river walk and the default check), with each one's share (#101).
+#'   near-river walk and the default check), with each one's share, and
+#'   `bin_minutes`, each worker's timed minutes with and without `default`'s own
+#'   steps (#101).
 #' @export
 #' @examples
 #' \dontrun{
@@ -271,6 +273,17 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
   })))
   say("Rules whose predicate reads the near-river table: %s.",
       if (length(near_rules)) paste(near_rules, collapse = ", ") else "none")
+  # the stage's wall time is its slowest bin's, so a saving is projected on the bins, not on the summed minutes: each
+  # bin without default's own steps, and without the walk where only default's predicate reads its table
+  stage_wall <- tm$ticks()[["classify_overlay_connect"]]
+  bin_minutes <- .knw_bin_minutes(lapply(res, `[[`, "secs"), drop_rules = "default",
+                                  drop_walk = all(near_rules %in% "default"))
+  say(paste("Bins: %s timed worker-min (the stage took %.1f wall); without default's own steps%s the slowest bin",
+            "would take %.1f of its %.1f, a projected %.1f min off a rerun that reads default's flags."),
+      paste(sprintf("%.1f", bin_minutes$minutes), collapse = ", "), stage_wall,
+      if (all(near_rules %in% "default") && length(near_rules)) " and the walk" else "",
+      max(bin_minutes$minutes_without), max(bin_minutes$minutes),
+      max(bin_minutes$minutes) - max(bin_minutes$minutes_without))
   wsg_in <- paste0("'", groups, "'", collapse = ",")
   # the default branch each segment lies on, as link's rules name them, and whether a user-habitat reach covers it
   in_uhc_seg <- if (nrow(uhc) && flag %in% names(uhc)) {
@@ -519,7 +532,21 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
   }))
   if (!is.null(checks)) checks$tuned_structure <- tuned_as
   list(compare = compare, change = change, checks = checks, segments = seg, log = log, timing = tm$ticks(),
-       stage_minutes = stage_minutes)
+       stage_minutes = stage_minutes, bin_minutes = bin_minutes)
+}
+
+# Each bin's timed minutes, and its minutes without the steps of `drop_rules` (and without the near-river walk when
+# `drop_walk`): what the bin would take if those rules' flags were read rather than made
+.knw_bin_minutes <- function(secs, drop_rules, drop_walk = FALSE) {
+  secs <- Filter(Negate(is.null), secs)
+  if (!length(secs)) stop("no bin returned its step times", call. = FALSE)
+  out <- lapply(secs, function(x) {
+    rule <- sub("\\|.*$", "", names(x))
+    gone <- rule %in% drop_rules | (drop_walk & names(x) == "shared|walk")
+    c(minutes = sum(x) / 60, minutes_without = sum(x[!gone]) / 60)
+  })
+  data.frame(bin = seq_along(out), minutes = vapply(out, `[[`, numeric(1), "minutes"),
+             minutes_without = vapply(out, `[[`, numeric(1), "minutes_without"))
 }
 
 # The bins' step seconds (.knw_compare_bin()'s `secs`, named `<rule>|<step>`) summed into one row per rule and step:
@@ -575,10 +602,12 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
   # every step's seconds, summed over the groups: the scratch copy with its indexes, the near-river walk and the
   # default check are shared by the rules; each rule's classify (its habitat table), overlay, connect and read are
   # its own
-  steps <- c("shared|copy", "shared|walk", "shared|check",
-             paste(rep(rule_names, each = 4L), c("classify", "overlay", "connect", "read"), sep = "|"))
-  secs <- stats::setNames(numeric(length(steps)), steps)
-  lap <- function(step, t1) secs[[step]] <<- secs[[step]] + as.numeric(difftime(Sys.time(), t1, units = "secs"))
+  bin_steps <- c("shared|copy", "shared|walk", "shared|check",
+                 paste(rep(rule_names, each = 4L), c("classify", "overlay", "connect", "read"), sep = "|"))
+  bin_secs <- stats::setNames(numeric(length(bin_steps)), bin_steps)
+  bin_lap <- function(step, t1) {
+    bin_secs[[step]] <<- bin_secs[[step]] + as.numeric(difftime(Sys.time(), t1, units = "secs"))
+  }
   for (w in groups) {
     err <- tryCatch({
       model <- models[[w]]
@@ -609,14 +638,14 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
                    "(blue_line_key, downstream_route_measure)")) {
         DBI::dbExecute(conn, sprintf("CREATE INDEX ON %s.streams %s", scratch_w, ix))
       }
-      lap("shared|copy", t1)
+      bin_lap("shared|copy", t1)
       if (nrow(specs[[model]])) {
         t1 <- Sys.time()
         sx <- specs[[model]]
         fresh::frs_near_river(conn, paste0(scratch_w, ".streams"), near_tbl, threshold = sx$threshold,
                               distance_max = sx$distance_max, measure = sx$measure, verbose = FALSE)
         walk_s <- walk_s + as.numeric(difftime(Sys.time(), t1, units = "secs"))
-        lap("shared|walk", t1)
+        bin_lap("shared|walk", t1)
       }
       if (assert_default && !nrow(specs[[model]])) {
         t1 <- Sys.time()
@@ -626,7 +655,7 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
         if (as.integer(dif) > 0L) {
           stop("the injected tuned predicate (door) differs from fresh's default on ", dif, " segments", call. = FALSE)
         }
-        lap("shared|check", t1)
+        bin_lap("shared|check", t1)
       }
       for (k in rule_names) {
         h <- paste0(scratch_w, ".habitat_", k)
@@ -646,7 +675,7 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
           FROM %5$s.streams s", h, sp, spawn_sql, rear_sql, scratch_w))
         DBI::dbExecute(conn, sprintf("UPDATE %s SET rearing_pre_connect = rearing, spawning_pre_connect = spawning", h))
         DBI::dbExecute(conn, sprintf("CREATE INDEX ON %s (id_segment)", h))
-        lap(paste0(k, "|classify"), t1)
+        bin_lap(paste0(k, "|classify"), t1)
         t1 <- Sys.time()
         if (length(uhc_types)) {
           # link's user-habitat table carries spawning and rearing; the overlay takes the types it holds
@@ -654,22 +683,22 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
                                      bridge = paste0(scratch_w, ".streams"), species = sp, verbose = FALSE,
                                      habitat_types = uhc_types)
         }
-        lap(paste0(k, "|overlay"), t1)
+        bin_lap(paste0(k, "|overlay"), t1)
         t1 <- Sys.time()
         run_conn(conn, table = paste0(scratch_w, ".streams"), habitat = h, species = sp, params = params,
                  params_fresh = params_fresh, verbose = FALSE)
-        lap(paste0(k, "|connect"), t1)
+        bin_lap(paste0(k, "|connect"), t1)
         t1 <- Sys.time()
         flags[[paste(w, k)]] <- DBI::dbGetQuery(conn, sprintf(
           "SELECT id_segment, watershed_group_code, '%s' AS rule, rearing, spawning, lake_rearing, wetland_rearing,
                   rearing_pre_connect, spawning_pre_connect FROM %s", k, h))
-        lap(paste0(k, "|read"), t1)
+        bin_lap(paste0(k, "|read"), t1)
       }
       NULL
     }, error = function(e) sprintf("group %s: %s", w, conditionMessage(e)))
-    if (!is.null(err)) return(list(flags = NULL, walk_s = walk_s, secs = secs, error = err))
+    if (!is.null(err)) return(list(flags = NULL, walk_s = walk_s, secs = bin_secs, error = err))
   }
-  list(flags = flags, walk_s = walk_s, secs = secs, error = NULL)
+  list(flags = flags, walk_s = walk_s, secs = bin_secs, error = NULL)
 }
 
 # groups into at most `workers` bins balanced by segment count: largest first, each to the lightest bin (ties to the

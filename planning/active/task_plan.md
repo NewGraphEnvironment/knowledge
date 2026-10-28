@@ -26,8 +26,23 @@ Part of that work repeats on every rerun: link's `default` rule is regenerated u
 - CH's near-river pair is on the through-wetland rule only, which the tuned base drops: the tuned predicates never
   read the near-river table (checked on link origin/main, cw and mad). So a `default` cache hit for CH would also skip
   fresh's walk — 58.6 worker-min of CH's 27.1 wall-min classify stage (#87's log). Re-check at run time, not assume.
-- GR's tuned rule is `default`'s (`assert_default` proves the predicates equal), so its `door` regeneration duplicates
-  `default`'s.
+- Where a tuned rule is `default`'s (`assert_default` proves the predicates equal), its `door` regeneration duplicates
+  `default`'s. That depends on the pick: the 2026-10-25 GR pick was `default`'s, #92's (`width>=2|g<=0.0549`) is not
+  (plan review, `review-plan.md`).
+- BT spawning's `default` may reuse BT rearing's (same rearing and spawning SQL; only the stage's waterbody floors in
+  `tmp_knw_wb` differ). Keep the stage in a cache key until that is proven.
+
+## Changed after the plan review (2026-10-28, `review-plan.md`)
+
+- The inputs on this host are 0320's run of 2026-10-25 (#92 graded on another machine), and fresh is 0.44.0 against
+  #92's 0.43.0, so the script holds only the pick-independent columns (accessible, stored and `default` km) to the
+  tracked tables, gated on flow load and fresh. The minutes stand for any pick.
+- The projection is per bin: each worker's timed minutes with and without `default`'s steps (and the walk, where only
+  `default`'s predicate reads its table), the saving being the slowest bin's drop; `knw_compare_rules()` logs it and
+  returns `bin_minutes`. The cross-check is the slowest bin against the stage's wall minutes, not summed minutes against
+  wall × workers.
+- #112's saving measured here is a lower bound: per-structure summaries, the bootstrap and the GeoPackage columns are
+  not timed.
 
 ## Phase 1: Time every rule's stages inside the comparison
 
@@ -44,13 +59,13 @@ Part of that work repeats on every rerun: link's `default` rule is regenerated u
 
 ## Phase 2: Measure CH rearing and BT rearing
 
-- [ ] `data-raw/compare_stage_time.R`: on `SCHEMA` (default `fresh_default_20261017`) and `CONFIG_SHA` (default
+- [x] `data-raw/compare_stage_time.R`: on `SCHEMA` (default `fresh_default_20261017`) and `CONFIG_SHA` (default
       `102762da`), refuse off the host (`knw_db_latency_check()`) and on another run's schema (`knw_build_record()`
       against `knw_run_ledger("data/tune")`); run `knw_compare_rules()` on `KEYS` (default `CH_rear,BT_rear`), every
       group, `WORKERS=6`, from the published `data/tune/` curves and grades; log the per-rule stage table and each
       key's wall minutes to `scripts/logs/habitat/<date>_compare_stage_time.txt`, and which rules' predicates read the
       near-river table
-- [ ] The same script holds each key's compare table to the tracked `data/compare/<key>_compare.csv` (km within a
+- [x] The same script holds each key's compare table to the tracked `data/compare/<key>_compare.csv` (km within a
       relative 1e-9, as `compare_parallel_check.R` does) when the live flow load equals the grade table's
       `discharge_load`, and says so when it does not, so the timing is shown not to have moved the results
 - [ ] Run it on the host (~70 min); commit the log

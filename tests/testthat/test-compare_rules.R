@@ -113,3 +113,14 @@ test_that("the bins' step seconds sum to one row per rule and step, a step that 
   expect_equal(y$minutes, c(2, 2))
   expect_error(.knw_stage_minutes(list(NULL)), "no bin")
 })
+
+test_that("a bin without default's steps keeps the shared ones, and drops the walk only when asked (#101)", {
+  b1 <- c("shared|copy" = 60, "shared|walk" = 120, "default|classify" = 60, "door|classify" = 60)
+  b2 <- c("shared|copy" = 60, "shared|walk" = 0, "default|classify" = 180, "door|classify" = 60)
+  x <- .knw_bin_minutes(list(b1, b2), drop_rules = "default")
+  expect_equal(x$minutes, c(5, 5))
+  expect_equal(x$minutes_without, c(4, 2))
+  y <- .knw_bin_minutes(list(b1, NULL, b2), drop_rules = "default", drop_walk = TRUE)
+  expect_equal(y$minutes_without, c(2, 2))
+  expect_identical(y$bin, 1:2)
+})

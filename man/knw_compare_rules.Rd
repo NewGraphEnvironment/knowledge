@@ -82,7 +82,9 @@ lines, one of them per stage with its minutes, \code{timing}, the minutes of
 each stage by name (#110), and \code{stage_minutes}, a data frame of the
 worker-minutes each rule's classify, overlay, connect and read took, summed
 over the groups, beside the steps the rules share (the scratch copy, the
-near-river walk and the default check), with each one's share (#101).
+near-river walk and the default check), with each one's share, and
+\code{bin_minutes}, each worker's timed minutes with and without \code{default}'s own
+steps (#101).
 }
 \description{
 \code{scripts/0298}'s comparison for any species and stage. Each rule goes through
