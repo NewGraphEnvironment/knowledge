@@ -86,8 +86,8 @@ wf_farm_priority.js                          farm priority/crossing tables out o
       (after the bucket policy of #56)
 0330  link's current default (the configs at CONFIG_SHA, origin/main by default; link >= 0.67.0, whose near-river
       pair is walked on the scratch copy with fresh's walk) against the recommended rule on link's segments for
-      every species x stage and group, under each rule structure for the through-wetland lines and the pair (#73:
-      free | door | door_wetland; `tuned` is TUNED_AS, door by default): km, graded km, km by grade class, change by
+      every species x stage and group, under TUNED_AS (door by default; `tuned`) for the through-wetland lines and the
+      pair, or with STRUCTURES=all under every structure the species has (#73: free | door | door_wetland; #112): km, graded km, km by grade class, change by
       reason, FDIS and bcfishobs checks, of a candidate (TUNE_DIR=data/tune/candidate/<run>, required) ->
       data/compare/candidate/<run>/ (ignored, #111), one GeoPackage per species x stage for QGIS (its gpkg/, #81; GPKG=FALSE skips them while iterating, STAGE=gpkg writes them afterwards from the
       saved segments) (+ log; SCHEMA as 0320; on the database's host, keys in turn, each key's groups split across
