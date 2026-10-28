@@ -14,3 +14,10 @@
   `data/compare/candidate/<run>/`; test that `knw_thresholds_table()` never reads a candidate (red when made recursive)
 - Phase 3: `knw_tune_promote()`, `scripts/0335-promote.R`; fixture tests per refusal, archive and undo, mutation checks
 - Plan review (Plan agent, spawned 18:06 UTC) folded in: see task_plan.md
+- Promotion moves a key's files rather than copying them (the tracked tune and compare trees are ~48 GB with the
+  GeoPackages); logs are copied
+- Round trip on the real run (2026-10-28 18:24-18:35 UTC): a candidate of APFS clones of every tracked and ignored
+  file of data/tune, data/tune/grad_fwa, data/compare, data/compare/gpkg, research/fig/compare_*.png and the 20261027
+  logs; `RUN=roundtrip BUNDLES=FALSE 0335` (359 files, 1 s) left all 542 files byte-identical (md5), then
+  `SPECIES=CH` from the archive it made (48 files) the same; `0325` (local, 7.3 min) wrote `data/thresholds.csv` and
+  `data/thresholds_groups.csv` unchanged. Candidate, archives and promotion logs removed after.

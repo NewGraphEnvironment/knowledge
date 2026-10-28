@@ -45,11 +45,13 @@ bring and was left as it was), invisibly.
 \code{scripts/0320} writes a full run to \verb{data/tune/candidate/<run>/} and
 \code{scripts/0330} compares it into \verb{data/compare/candidate/<run>/}, both
 ignored, so iterating changes nothing tracked (#111). Promotion, on the
-operator's word, copies the run in: every file of each promoted key (its
+operator's word, moves the run in: every file of each promoted key (its
 tables and the ignored grades, curve, score cache, segments and GeoPackage),
 its Atlas-gradient sensitivity, the run's logs, its figures, and its rows of
 the tables that hold every key (\code{compare.csv}, \code{change.csv}, \code{checks.csv},
-\code{floodplain.csv}). A tracked file of a promoted key that the run did not
+\code{floodplain.csv}). A key's files are moved, not copied (its grades and
+GeoPackage run to gigabytes), so a promoted key leaves the run's directory;
+the logs are copied. A tracked file of a promoted key that the run did not
 write is removed, so no key is left half one run and half another. Every
 file replaced or removed is first moved to \verb{candidate/replaced_<stamp>/}
 under the two directories, itself a candidate, so a promotion is undone by

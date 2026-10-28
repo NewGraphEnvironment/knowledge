@@ -64,3 +64,5 @@ Related: #92 (PR #109), #84 (smoke gates first), #81 (GeoPackages opt-in).
 
 | Error | Resolution |
 |-------|------------|
+| `cp: invalid option -- 'c'` cloning the round-trip candidate | GNU coreutils is first on PATH here; `/bin/cp -c` clones |
+| Undo test: an undo in the same second as its promotion archived into the archive it was restoring from | Archive name made unique (`_2`, `_3`) |

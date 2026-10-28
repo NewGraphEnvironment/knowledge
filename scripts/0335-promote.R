@@ -2,8 +2,8 @@
 # ---------------------------------------------------------------------------
 # Promote a candidate run into the tracked tables and the articles, on the operator's word (#111). 0320 writes a full
 # run to data/tune/candidate/<run>/ and 0330 compares it into data/compare/candidate/<run>/, both ignored, so a run
-# changes nothing tracked and no test. This is the one step that does: it copies the run in (knw_tune_promote(), whole
-# or by key), then rebuilds what reads the tracked tables, in order: 0325 (local only: data/thresholds.csv and
+# changes nothing tracked and no test. This is the one step that does: it moves the run in (knw_tune_promote(), whole
+# or by key; the logs are copied), then rebuilds what reads the tracked tables, in order: 0325 (local only: data/thresholds.csv and
 # data/thresholds_groups.csv; PUBLISH stays a separate step), data-raw/vignette_chinook.R (reads the thresholds),
 # data-raw/vignette_method.R (reads the chinook bundle; refuses uncommitted code), data-raw/vignette_bib.R (Zotero
 # running; the software versions come from the run's ledger) and data-raw/readme_figure.R. The articles and their

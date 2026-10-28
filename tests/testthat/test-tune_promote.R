@@ -63,6 +63,9 @@ test_that("a whole run replaces every key's files, keeps no stale one, and bring
   expect_identical(unique(cmp$tag), "new")
   expect_identical(unique(paste(cmp$species_code, cmp$stage)), c("CH rear", "BT rear"))
   expect_true(all(file.exists(p$written)))
+  # a promoted key's files leave the run (moved, not copied); its logs stay with it
+  expect_length(list.files(file.path(fx$tune, "candidate", "r1"), "^CH_rear_"), 0)
+  expect_true(file.exists(file.path(fx$tune, "candidate", "r1", "20261028_tune_run-r1.txt")))
 })
 
 test_that("one key moves alone: the other key's files and rows are untouched, byte for byte", {

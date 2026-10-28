@@ -3,11 +3,13 @@
 #' `scripts/0320` writes a full run to `data/tune/candidate/<run>/` and
 #' `scripts/0330` compares it into `data/compare/candidate/<run>/`, both
 #' ignored, so iterating changes nothing tracked (#111). Promotion, on the
-#' operator's word, copies the run in: every file of each promoted key (its
+#' operator's word, moves the run in: every file of each promoted key (its
 #' tables and the ignored grades, curve, score cache, segments and GeoPackage),
 #' its Atlas-gradient sensitivity, the run's logs, its figures, and its rows of
 #' the tables that hold every key (`compare.csv`, `change.csv`, `checks.csv`,
-#' `floodplain.csv`). A tracked file of a promoted key that the run did not
+#' `floodplain.csv`). A key's files are moved, not copied (its grades and
+#' GeoPackage run to gigabytes), so a promoted key leaves the run's directory;
+#' the logs are copied. A tracked file of a promoted key that the run did not
 #' write is removed, so no key is left half one run and half another. Every
 #' file replaced or removed is first moved to `candidate/replaced_<stamp>/`
 #' under the two directories, itself a candidate, so a promotion is undone by
@@ -168,7 +170,7 @@ knw_tune_promote <- function(run, keys = NULL, live = NULL, tune_dir = "data/tun
         }
         next
       }
-      copies[[length(copies) + 1]] <<- list(from = src, to = file.path(to, basename(src)))
+      copies[[length(copies) + 1]] <<- list(from = src, to = file.path(to, basename(src)), move = TRUE)
       removed <<- c(removed, setdiff(old, file.path(to, basename(src))))
     }
   }
@@ -190,7 +192,9 @@ knw_tune_promote <- function(run, keys = NULL, live = NULL, tune_dir = "data/tun
       stop("a different log is already tracked as ", to, call. = FALSE)
     }
   }
-  if (length(logs)) copies[[length(copies) + 1]] <- list(from = logs, to = file.path(log_dir, basename(logs)))
+  if (length(logs)) {
+    copies[[length(copies) + 1]] <- list(from = logs, to = file.path(log_dir, basename(logs)), move = FALSE)
+  }
   # the tables of every key: each promoted key's rows from the run, in the place its rows held
   merged <- list()
   for (w in c("compare", "change", "checks", "floodplain")) {
@@ -234,8 +238,14 @@ knw_tune_promote <- function(run, keys = NULL, live = NULL, tune_dir = "data/tun
   for (d in unique(c(dirname(written), dirname(arch)))) dir.create(d, showWarnings = FALSE, recursive = TRUE)
   ok <- file.rename(moving, arch)
   if (!all(ok)) stop("could not archive ", paste(moving[!ok], collapse = ", "), call. = FALSE)
+  # a key's files are moved, not copied: its grades and GeoPackage run to gigabytes, and a promoted run is spent. A move
+  # that cannot rename (another filesystem) copies with the dates kept, which 0330's STAGE=maps and gpkg compare
   for (cp in copies) {
-    ok <- file.copy(cp$from, cp$to, overwrite = TRUE, copy.date = TRUE)
+    ok <- if (cp$move) suppressWarnings(file.rename(cp$from, cp$to)) else rep(FALSE, length(cp$from))
+    if (!all(ok)) {
+      ok[!ok] <- file.copy(cp$from[!ok], cp$to[!ok], overwrite = TRUE, copy.date = TRUE)
+      if (cp$move && all(ok)) unlink(cp$from[file.exists(cp$from) & file.exists(cp$to)])
+    }
     if (!all(ok)) {
       stop("could not copy ", paste(cp$from[!ok], collapse = ", "), "; what it replaced is in ", stamp, call. = FALSE)
     }
