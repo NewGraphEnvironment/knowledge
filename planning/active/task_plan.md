@@ -105,13 +105,15 @@ reads link's segment `gradient`, so the curve is fitted on one gradient and grad
       review O3). Also `tested = yes` on `gradient_col`; pipeline.csv steps 5, 7 and 9 (review G6).
 
 ## Phase 3: Retune on #91's evidence (`SCHEMA=fresh_default_20261017`)
-- [ ] (review O2, AC1) First, `DEV=1 SPECIES=CH 0320`: the population matches segment_gradient_check's counts and the
+- [x] (review O2, AC1) First, `DEV=1 SPECIES=CH 0320`: the population matches segment_gradient_check's counts and the
       pick is read on `segment_gradient`. The sensitivity runs apart from the 0320 → 0325 → 0330 chain.
-- [ ] `0320` full run: smoke gates for every key first. The chain stops on any failure, and nothing downstream runs
+- [x] `0320` full run: smoke gates for every key first. The chain stops on any failure, and nothing downstream runs
       until every key passes (#84).
 - [ ] `GRADIENT=fwa_gradient 0320`: the Atlas sensitivity on every key.
-- [ ] `0325` publish, then `0330` compare. `0330` is database-bound: run it here if the timing allows, otherwise hand
-      over the command for the database's host.
+- [ ] `0330` compare, then `0325` publish: `0325` reads each comparison's near-river scope (corrected from the
+      approved order, which had them the other way round). `0330` is database-bound: run it here if the timing allows,
+      otherwise hand over the command for the database's host. `knw_thresholds_table()` now refuses a comparison
+      whose `tuned_rule` is not the pick, so a comparison left from #73's run can no longer supply the scope.
 - [ ] Record the regions under both gradients, per key, in `research/habitat_thresholds_tuned.md` from the tables. Drop
       #91's note above its Evidence paragraph.
 

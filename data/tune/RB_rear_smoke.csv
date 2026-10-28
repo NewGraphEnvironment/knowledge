@@ -1,9 +1,9 @@
 species_code,stage,check,value,limit,pass,table,role,rule,dev_heldout,ddev_null,n_clamp,dev_visit_max,converged,coef_max,coef_max_term,coef_max_fold
-RB,rear,null_ratio,0.9853465426130653,1.25,TRUE,checks,,,,,,,,,,
+RB,rear,null_ratio,0.9874486274551606,1.25,TRUE,checks,,,,,,,,,,
 RB,rear,clamp,0,0,TRUE,checks,,,,,,,,,,
-RB,rear,behind_null,0,12617.358248246639,TRUE,checks,,,,,,,,,,
-RB,rear,coef,1.4069564101466252,5,TRUE,checks,,,,,,,,,,
-RB,rear,,,,,rules,no_rule,none,12617.358248,0,0,12.19576,TRUE,0.710652,era2005on,1
-RB,rear,,,,,rules,default,width>=1.5|g<=0.0849|none,11954.829707,-662.528541,0,11.998315,TRUE,1.119101,rule,3
-RB,rear,,,,,rules,link_tuned,mad>=0.019|g<=0.0849|none,11933.380392,-683.977857,0,11.999936,TRUE,1.091404,rule,3
-RB,rear,,,,,rules,previous,width>=3|g<=0.3|none,11651.897106,-965.461142,0,11.88223,TRUE,1.406956,rule,3
+RB,rear,behind_null,0,13549.884513597308,TRUE,checks,,,,,,,,,,
+RB,rear,coef,1.3143351998092703,5,TRUE,checks,,,,,,,,,,
+RB,rear,,,,,rules,no_rule,none,13549.884514,0,0,12.294239,TRUE,0.824556,era2005on,1
+RB,rear,,,,,rules,default,width>=1.5|g<=0.0849|none,12812.221936,-737.662578,0,12.088486,TRUE,1.056705,rule,3
+RB,rear,,,,,rules,link_tuned,mad>=0.019|g<=0.0849|none,12864.641304,-685.243209,0,12.120598,TRUE,1.053422,rule,3
+RB,rear,,,,,rules,previous,width>=3|g<=0.3|none,12518.841823,-1031.04269,0,11.972028,TRUE,1.314335,rule,2

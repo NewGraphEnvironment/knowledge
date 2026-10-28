@@ -30,3 +30,16 @@
   methodology article's steps 2, 3, 5, the snap section (three examples) and limits; the chinook article's placement
   and gradient sentences, with `snap_limit`/`snap_limit_code`'s `code:` pointers restored (proved by a planted 400 m);
   CLAUDE.md's record section and a gradient note.
+- Phase 3: full 0320 on `segment_gradient` exit 0, 22:13Z-00:24Z (130.3 min; scoring 42.6 min on 12 workers), log
+  `scripts/logs/habitat/20261027_tune_run.txt`; every fitted summary and grade table carries
+  `curve_grad = segment_gradient`. Picks against #73's run (Atlas gradient, older evidence): BT_rear
+  mad>=0.35|g<=0.25 -> mad>=0.1|g<=0.3; BT_spawn gains Q1@D500; CH_rear g<=0.13 -> g<=0.11; CO_rear
+  mad>=0.03|g<=0.04 -> mad>=0.1|g<=0.0549|Q3@D2000; GR_rear width>=1.5|g<=0.0349 -> width>=2|g<=0.0549; RB_rear
+  unchanged (width>=3|g<=0.3); ST_rear gains Q1@D250; WCT_rear g<=0.3 -> g<=0.25.
+- `GRADIENT=fwa_gradient` 0320 launched 00:25Z; 0330 launched 00:31Z alongside it (CONFIG_SHA 102762da, the earlier
+  comparison's baseline; link's default changed since only in config.yaml comments).
+- Found: 0325 reads each comparison's `tuned_structure` without checking `tuned_rule` is the pick, so #73's stale
+  comparisons would have supplied the near-river scope for the new picks. Test written; the fix waits for the runs to
+  release `R/`. vignette_chinook.R checks the comparison's rule too. Chinook article: at 1.96 SE the flow floor no
+  longer rises (0.75 at both), so its guard and three sentences changed; the grad_ext bullet says that run was on the
+  Atlas gradient and older records.
