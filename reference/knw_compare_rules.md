@@ -129,7 +129,8 @@ by an exception whose river lies in another watershed group), `change`
 (FDIS detection on each rule's segments and the bcfishobs lift, per
 structure), `segments` (the per-segment flags under `default` and each
 structure, with `tuned` the `tuned_as` structure, and the `default`
-branch each segment lies on), and `log` lines.
+branch each segment lies on), `log` lines, one of them per stage with
+its minutes, and `timing`, the minutes of each stage by name (#110).
 
 ## Details
 

@@ -48,8 +48,9 @@ vocabularies.
 
 Place site visits on link’s segments with every species’ access and
 habitat flags; read a species’ segments, flow, width, regulated reaches,
-natural barriers downstream and the walks to rivers; and count where
-link’s two access columns disagree.
+natural barriers downstream and the walks to rivers; count where link’s
+two access columns disagree; and check that a database-bound run is on
+the database’s host.
 
 - [`knw_link_place()`](https://newgraphenvironment.github.io/knowledge/reference/knw_link_place.md)
   : Place site visits on link's segments, with access and habitat for
@@ -76,6 +77,10 @@ link’s two access columns disagree.
 - [`knw_build_record()`](https://newgraphenvironment.github.io/knowledge/reference/knw_build_record.md)
   : The database build a run reads, and the check that it is the
   evidence's
+- [`knw_db_latency()`](https://newgraphenvironment.github.io/knowledge/reference/knw_db_latency.md)
+  [`knw_db_latency_check()`](https://newgraphenvironment.github.io/knowledge/reference/knw_db_latency.md)
+  : The database's round trip, and the check that a database-bound run
+  is on its host
 - [`knw_link_access_check()`](https://newgraphenvironment.github.io/knowledge/reference/knw_link_access_check.md)
   : How link's two access columns disagree, per species
 
