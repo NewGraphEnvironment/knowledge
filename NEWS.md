@@ -1,3 +1,7 @@
+# knowledge 0.4.14
+
+* Habitat rules and curves are tuned on the gradient of the link segment a site sits on (`segment_gradient`), the gradient link applies a rule to and the grade reads, instead of the whole Freshwater Atlas line's; `knw_tune_run(cols = )` names the columns, and every grade table, summary and curve records the gradient it was fitted on (`curve_grad`), which `0320`, `0325`, `0330` and the article scripts compare (#92). `GRADIENT=fwa_gradient 0320` scores the Atlas line's gradient as a sensitivity. Every key is retuned on #91's evidence and both articles redrawn. link cuts a segment at a fish record, so 86 % of sites with fish start a segment of their own against 10 % without, and the results are on link 0.66.0's segments, before link changed where it cuts streams.
+
 # knowledge 0.4.13
 
 * FDIS site visits are placed on the stream their own 1:50k watershed code names where one lies within 500 m (`knw_fdis_place()`), otherwise on the nearest stream within 200 m, with `fresh::frs_point_snap()` in place of `fwa_indexpoint()` (#91). The limits were set by measurement. The evidence keeps 45,529 visits against 40,552. `0310` takes `SCHEMA` and caches its walks. The tune tables and the articles still describe the #73 run until #92's retune.
