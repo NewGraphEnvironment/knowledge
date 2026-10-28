@@ -15,3 +15,4 @@
   species' set inside knw_compare_rules()); G3/G4 folded into the check (tracked comparison a report; saving from
   worker minutes); fresh is 0.44.0 here and on the host, #92 ran 0.43.0
 - Phase 2: `0330` reads `STRUCTURES` (default `reported`); register row deferred to #115
+- Phase 3: chinook article drops the free-pass clause and `wl_free` (renders on the current bundle after installing the branch: "about 2,500 km ... median grade of 0.34, against 8,400 km under link's rule. Lakes keep their own condition."); research note on #92's structure figures

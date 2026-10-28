@@ -76,10 +76,10 @@ database's host.
 
 ## Phase 3: Readers and prose
 
-- [ ] `vignettes/chinook_rearing.Rmd`: drop `wl_free` from the setup chunk's `stopifnot()` and the free-pass clause
+- [x] `vignettes/chinook_rearing.Rmd`: drop `wl_free` from the setup chunk's `stopifnot()` and the free-pass clause
       at :336. Keep the door's km and grade against `default`'s.
-- [ ] `data-raw/vignette_chinook.R`: comment only. The wetland table holds the structures the segments carry. Not rerun.
-- [ ] `research/habitat_thresholds_tuned.md`: one sentence where the structures are introduced: #92's run carried
+- [x] `data-raw/vignette_chinook.R`: comment only. The wetland table holds the structures the segments carry. Not rerun.
+- [x] `research/habitat_thresholds_tuned.md`: one sentence where the structures are introduced: #92's run carried
       every structure, and a default `0330` since #112 compares `default` and the reported one (`STRUCTURES=all` for
       the rest).
 - [ ] `CLAUDE.md`: the `0330` timing sentence names that its minutes are every structure's, and adds the measured
@@ -88,7 +88,7 @@ database's host.
 ## Validation
 
 - [ ] Tests pass (`devtools::test()`), `lintr::lint_package()` clean
-- [ ] The chinook article renders with the current bundle after installing the branch (`pak::local_install()`,
+- [x] The chinook article renders with the current bundle after installing the branch (`pak::local_install()`,
       then `rmarkdown::render()`), and `test-vignette-data.R` passes unchanged
 - [ ] `/code-check` clean (once over the branch with `/code-check branch`)
 - [ ] PWF checkboxes match landed work

@@ -286,7 +286,8 @@ out$meta$curve_ref <- list(gradient = grad_ref, dist_cap_m = cr$dist_cap_m, size
 # ---- BULK on link's segments -----------------------------------------------------------------
 seg_all <- readRDS(sprintf("data/compare/%s_segments.rds", key))
 s <- seg_all |> filter(watershed_group_code == wsg)
-# lines through wetlands (link's wetland rule on edge types 1050 and 1150 has no size or gradient test), over every group
+# lines through wetlands (link's wetland rule on edge types 1050 and 1150 has no size or gradient test), over every group,
+# under each structure the segments carry: the tuned one alone unless 0330 ran with STRUCTURES=all (#112)
 wl <- seg_all |> filter(edge_type %in% c(1050, 1150))
 structures <- sub("^rearing_", "", grep("^rearing_(free|door|door_wetland)$", names(wl), value = TRUE))
 out$wetland <- bind_rows(lapply(c("tuned", structures), function(st) {
