@@ -19,3 +19,10 @@
   `fresh_default`, started ~21:34 UTC) holds the database, so the measurement waits for it to exit
 - 22:18 UTC the link pretest exited; found #112's branch and its measurement running on the host (findings, "Collision
   with #112's branch"). Measurement held; asked Al which work survives
+- Al: "#112 first, #101 reads it". Branch pushed and parked until #112 merges; resume with Phase 4 of task_plan.md
+
+### Resume
+
+```bash
+cd ~/Projects/repo/knowledge && git fetch -q origin && git checkout 101-cache-link-s-default-flags-in-the-compar && git pull --ff-only && git merge origin/main
+```

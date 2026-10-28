@@ -44,6 +44,25 @@ Part of that work repeats on every rerun: link's `default` rule is regenerated u
 - #112's saving measured here is a lower bound: per-structure summaries, the bootstrap and the GeoPackage columns are
   not timed.
 
+## Decided mid-run: #112 first, #101 reads it (Al, 2026-10-28 ~22:25 UTC)
+
+#112's branch instruments the same lines and was measuring CH and BT rearing on the host when this branch reached its
+run (findings, "Collision with #112's branch"). Al chose: #101 waits for #112 to merge, takes #112's timing code in place
+of Phase 1's, and works out `default`'s share and the projected cache saving from #112's log, with no second run.
+Phases 1-2 below are superseded where they duplicate #112; Phase 4 is what remains.
+
+## Phase 4: On #112's merge
+- [ ] `git merge origin/main`; resolve `R/compare_rules.R` and its test file to #112's timing (`setup_s`, `walk_s`,
+      `rule_s`, `worker_minutes`), dropping this branch's `bin_*` steps and `.knw_stage_minutes()`
+- [ ] Keep the per-worker projection on #112's per-bin seconds: `.knw_bin_minutes()` reads each bin's setup, walk and
+      `rule_s`, drops `default` (and the walk where only `default`'s predicate reads the near-river table); the log line
+      and the "rules reading the near-river table" line stay; tests follow
+- [ ] Retire `data-raw/compare_stage_time.R` (#112's `compare_structures_check.R` is the run) unless #112's log lacks
+      what #101 needs
+- [ ] From #112's committed log: `default`'s worker-minutes and share for CH and BT rearing, the walk only `default`
+      reads, the projection (on #112's 20 largest groups, scaled to every group only as a stated estimate), into
+      `research/database_builds.md`; then Phase 3's issue-body edits
+
 ## Phase 1: Time every rule's stages inside the comparison
 
 - [x] `.knw_compare_bin()` (`R/compare_rules.R`) records seconds per group for the shared steps (scratch copy with its
