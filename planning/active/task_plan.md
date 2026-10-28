@@ -94,9 +94,9 @@ What exploration found that shapes the breakdown:
 
 ## Phase 4: documentation
 
-- [ ] `CLAUDE.md` "Run the comparison on the database's own host" paragraph: names `knw_db_latency_check()`, the
+- [x] `CLAUDE.md` "Run the comparison on the database's own host" paragraph: names `knw_db_latency_check()`, the
       20 ms limit, `REMOTE=TRUE`, and that every run logs the round trip.
-- [ ] `research/database_builds.md` "The answer": one sentence that the check now enforces it (Verified date bumped).
+- [x] `research/database_builds.md` "The answer": one sentence that the check now enforces it (Verified date bumped).
 - [ ] NEWS entry lands at merge (`/gh-pr-merge`), not on the branch.
 
 ## Owed at the end (reported, done after merge)

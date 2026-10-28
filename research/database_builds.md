@@ -1,6 +1,7 @@
 # Database builds: what a retune reads, where it can run, and what a second database needs
 
-**Verified:** 2026-10-27 · **Issues:** #87 (from #73's run times; #85 and #86 folded in or left open below) ·
+**Verified:** 2026-10-27, and the round-trip check 2026-10-28 · **Issues:** #87 (from #73's run times; #85 and #86
+folded in or left open below), #110 (the round-trip check) ·
 **Produced by:** `data-raw/walk_batch_check.R` (logs `scripts/logs/habitat/20261026_walk_batch_check*`),
 `data-raw/compare_parallel_check.R` (`20261026_compare_parallel_check*`), the timed retune on the database's host
 (`20261026_tune_run.txt`, `20261026_tune_run-warm.txt`, `20261026_compare.txt`, `20261026_compare-gpkg.txt`;
@@ -15,7 +16,9 @@ already the limit). Grading can now also
 run from a machine on a remote link: a batched walk cost 12 to 18 ms there, against about 3 ms on the host and 116
 ms one query per walk over the same link. The comparison still belongs on the host, or on a second database that holds the
 same build. `0320` and `0330` refuse a schema built by another run before any work, and refuse or regrade a grade
-table walked by other code or on another flow load.
+table walked by other code or on another flow load. `0310`, a grading `0320` and `0330` also measure the round trip at
+connect (`knw_db_latency_check()`) and stop over 20 ms unless `REMOTE=TRUE` (#110), so a run off the host, grading
+included, is a choice its log records.
 
 ## Why a query's count matters more than its size
 
