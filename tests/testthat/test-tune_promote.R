@@ -16,6 +16,7 @@ promote_fx <- function(ev = "e1", ch_rule = "mad>=0.5|g<=0.07|none", env = paren
                                 null_heldout_curve = "100.1234", evidence_md5 = ev, curve_grad = "segment_gradient"),
                      file.path(dir_t, paste0(k, "_grades.csv")), row.names = FALSE)
     saveRDS(list(tag = tag), file.path(dir_t, paste0(k, "_curve.rds")))
+    for (w in c("_curves.csv", "_groups.csv", "_seeds.csv", "_honest.csv")) writeLines("x", file.path(dir_t, paste0(k, w)))
     utils::write.csv(data.frame(watershed_group_code = c("BULK", "ALL"), species_code = sp, stage = st, tuned_rule = rule,
                                 km = c(1, 2), tag = tag), file.path(dir_c, paste0(k, "_compare.csv")), row.names = FALSE)
     saveRDS(list(tag = tag), file.path(dir_c, paste0(k, "_segments.rds")))
@@ -25,7 +26,7 @@ promote_fx <- function(ev = "e1", ch_rule = "mad>=0.5|g<=0.07|none", env = paren
   key_files(ct, cc, "CH_rear", ch_rule, ev, "new")
   key_files(ct, cc, "BT_rear", "width>=1|g<=0.2|none", ev, "new")
   # a stale tracked file the run does not write, and a file of another key whose name starts like one
-  writeLines("x", file.path(tn, "CH_rear_honest.csv"))
+  writeLines("x", file.path(tn, "CH_rear_stale.csv"))
   writeLines("x", file.path(tn, "CH_rearing_other.csv"))
   combined <- function(dir_c, tag, order = c("BT_rear", "CH_rear")) {
     x <- do.call(rbind, lapply(order, function(k) utils::read.csv(file.path(dir_c, paste0(k, "_compare.csv")))))
@@ -57,9 +58,9 @@ test_that("a whole run replaces every key's files, keeps no stale one, and bring
   expect_identical(utils::read.csv(file.path(fx$tune, "CH_rear_tune.csv"))$tag, "new")
   expect_identical(readRDS(file.path(fx$tune, "CH_rear_curve.rds"))$tag, "new")
   expect_identical(unique(utils::read.csv(file.path(fx$compare, "CH_rear_compare.csv"))$tag), "new")
-  expect_false(file.exists(file.path(fx$tune, "CH_rear_honest.csv")))
+  expect_false(file.exists(file.path(fx$tune, "CH_rear_stale.csv")))
   expect_true(file.exists(file.path(fx$tune, "CH_rearing_other.csv")))
-  expect_identical(p$removed, file.path(fx$tune, "CH_rear_honest.csv"))
+  expect_identical(p$removed, file.path(fx$tune, "CH_rear_stale.csv"))
   expect_true(all(file.exists(file.path(fx$logs, c("20261028_tune_run-r1.txt", "20261028_compare-r1.txt")))))
   expect_true(all(file.exists(file.path(fx$fig, c("compare_ch_rear_bulk.png", "compare_bt_rear_bulk.png")))))
   # the combined table is the run's rows, each key where its rows stood in the tracked one
@@ -139,7 +140,7 @@ test_that("dry_run lists the plan and writes nothing", {
   p <- promote(fx, dry_run = TRUE)
   expect_identical(tree_md5(fx), before)
   expect_true(file.path(fx$tune, "CH_rear_tune.csv") %in% p$written)
-  expect_identical(p$removed, file.path(fx$tune, "CH_rear_honest.csv"))
+  expect_identical(p$removed, file.path(fx$tune, "CH_rear_stale.csv"))
 })
 
 test_that("promoting a copy of the tracked run changes nothing", {
@@ -238,7 +239,7 @@ test_that("what a promotion replaces is archived as a candidate, and promoting t
   expect_false(file.exists(file.path(fx$fig, "compare_ch_rear_morr.png")))
   a_t <- file.path(fx$tune, "candidate", p$archive); a_c <- file.path(fx$compare, "candidate", p$archive)
   expect_identical(utils::read.csv(file.path(a_t, "CH_rear_tune.csv"))$tag, "old")
-  expect_true(file.exists(file.path(a_t, "CH_rear_honest.csv")))
+  expect_true(file.exists(file.path(a_t, "CH_rear_stale.csv")))
   expect_identical(readLines(file.path(a_c, "gpkg", "CH_rear.gpkg")), "old gpkg")
   expect_true(file.exists(file.path(a_c, "fig", "compare_ch_rear_morr.png")))
   expect_identical(unique(utils::read.csv(file.path(a_c, "compare.csv"))$tag), "old")
@@ -367,4 +368,43 @@ test_that("a fitted key no log of the run says it graded is refused", {
   writeLines(c("tune log", "BT_rear grades: 2 groups, ...", "CH_rear: grades already written under x, kept."),
              file.path(fx$tune, "candidate", "r1", "20261028_tune_run-r1.txt"))
   expect_error(promote(fx), "CH_rear: no log of run r1 says it graded the key")
+})
+
+test_that("a drawing still in progress is never promoted, and a key the run did not draw keeps its floodplain rows (round 5)", {
+  fx <- promote_fx()
+  cc <- file.path(fx$compare, "candidate", "r1")
+  dir.create(file.path(cc, "gpkg")); dir.create(file.path(fx$compare, "gpkg"))
+  writeLines("partial", file.path(cc, "gpkg", "CH_rear.part.gpkg"))
+  writeLines("tracked", file.path(fx$compare, "gpkg", "CH_rear.gpkg"))
+  dir.create(file.path(cc, "fig", ".part_ch_rear"))
+  writeLines("partial", file.path(cc, "fig", ".part_ch_rear", "compare_ch_rear_morr.png"))
+  writeLines(c("species_code,stage,ha", "CH,rear,5", "BT,rear,7"), file.path(fx$compare, "floodplain.csv"))
+  writeLines(c("species_code,stage,ha", "BT,rear,8"), file.path(cc, "floodplain.csv"))
+  p <- promote(fx)
+  expect_identical(readLines(file.path(fx$compare, "gpkg", "CH_rear.gpkg")), "tracked")
+  expect_false(file.exists(file.path(fx$compare, "gpkg", "CH_rear.part.gpkg")))
+  expect_false(file.exists(file.path(fx$fig, "compare_ch_rear_morr.png")))
+  expect_identical(readLines(file.path(fx$compare, "floodplain.csv")), c("species_code,stage,ha", "CH,rear,5", "BT,rear,8"))
+  expect_true(any(grepl("floodplain.csv: CH_rear not drawn by the run", p$notes)))
+})
+
+test_that("a fitted key missing a file its pass writes is refused, and a part file is never taken (round 5)", {
+  fx <- promote_fx()
+  unlink(file.path(fx$tune, "candidate", "r1", "CH_rear_curve.rds"))
+  expect_error(promote(fx), "CH_rear: the run holds no CH_rear_curve.rds")
+  fx <- promote_fx()
+  writeLines("half", file.path(fx$tune, "candidate", "r1", ".part_CH_rear_grades.csv"))
+  p <- promote(fx, dry_run = TRUE)
+  expect_false(any(grepl("\\.part_", p$written)))
+})
+
+test_that(".knw_write_whole leaves the target only when the writer finished", {
+  d <- withr::local_tempdir()
+  f <- file.path(d, "CH_rear_grades.csv")
+  writeLines("old", f)
+  expect_error(.knw_write_whole(f, function(p) { writeLines("half", p); stop("killed") }), "killed")
+  expect_identical(readLines(f), "old")
+  .knw_write_whole(f, function(p) writeLines("new", p))
+  expect_identical(readLines(f), "new")
+  expect_identical(list.files(d, all.files = TRUE, no.. = TRUE), c(".part_CH_rear_grades.csv", "CH_rear_grades.csv")[2])
 })

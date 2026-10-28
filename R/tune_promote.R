@@ -94,6 +94,13 @@ knw_tune_promote <- function(run, keys = NULL, live = NULL, tune_dir = "data/tun
     if (!file.exists(g)) {
       stop(k, ": the run scored a pick but wrote no grades (", g, "): it stopped before grading", call. = FALSE)
     }
+    # everything a full pass writes for a fitted key, so a pass that died between two of its writes is not promoted
+    need <- paste0(k, c("_tune.csv", "_curves.csv", "_groups.csv", "_seeds.csv", "_honest.csv", "_curve.rds"))
+    gone <- need[!file.exists(file.path(run_tune, need))]
+    if (length(gone)) {
+      stop(k, ": the run holds no ", paste(gone, collapse = ", "), ": its last pass did not finish the key; rerun it ",
+           "with RUN=", run, call. = FALSE)
+    }
     g1 <- rd(g, nrows = 1)
     if (!identical(fld(g1, "rule"), rule)) {
       stop(k, ": graded under ", fld(g1, "rule"), ", not the recommended ", rule, call. = FALSE)
@@ -269,7 +276,16 @@ knw_tune_promote <- function(run, keys = NULL, live = NULL, tune_dir = "data/tun
                                 paste(fitted, collapse = ", ")))
     }
     if (!file.exists(f) && !file.exists(to)) next
-    merged[[to]] <- .knw_rows_merge(to, if (file.exists(f)) f else NULL, keys, if (archive) keys else fitted)
+    # a fitted key the run's floodplain table leaves out was compared after its last drawing: its tracked rows stay
+    merged[[to]] <- .knw_rows_merge(to, if (file.exists(f)) f else NULL, keys, if (archive) keys else fitted,
+                                    missing = if (w == "floodplain") "keep" else "refuse")
+    if (w == "floodplain" && file.exists(f) && file.exists(to)) {
+      undrawn <- setdiff(intersect(fitted, .knw_rows_keys(to)), .knw_rows_keys(f))
+      if (length(undrawn)) {
+        notes <- c(notes, sprintf("floodplain.csv: %s not drawn by the run; the tracked rows kept",
+                                  paste(undrawn, collapse = ", ")))
+      }
+    }
   }
 
   written <- c(unlist(lapply(copies, `[[`, "to")), names(merged))
@@ -323,7 +339,8 @@ knw_tune_promote <- function(run, keys = NULL, live = NULL, tune_dir = "data/tun
 # differs is taken from the run only when every key the tracked table holds is promoted. A fitted key the run's table
 # leaves out (0330 composes no key whose pass failed) is refused rather than dropped; an unfitted one loses its rows,
 # whatever the run's table holds of an earlier fit. With no run table (`run_file = NULL`) the fitted keys keep theirs
-.knw_rows_merge <- function(tracked, run_file, keys, fitted = keys) {
+.knw_rows_merge <- function(tracked, run_file, keys, fitted = keys, missing = c("refuse", "keep")) {
+  missing <- match.arg(missing)
   parse <- function(f) {
     ln <- readLines(f, warn = FALSE)
     x <- utils::read.csv(f, colClasses = "character", check.names = FALSE)
@@ -341,6 +358,10 @@ knw_tune_promote <- function(run, keys = NULL, live = NULL, tune_dir = "data/tun
   if (!file.exists(tracked)) return(c(new$header, new$rows[new$key %in% keys]))
   old <- parse(tracked)
   lost <- intersect(intersect(fitted, old$key), setdiff(fitted, new$key))
+  if (missing == "keep") {
+    keys <- setdiff(keys, lost)
+    lost <- character()
+  }
   if (length(lost)) {
     stop(basename(tracked), " in the run leaves out ", paste(lost, collapse = ", "),
          ", which the tracked table holds: ",
@@ -371,3 +392,19 @@ knw_tune_promote <- function(run, keys = NULL, live = NULL, tune_dir = "data/tun
 
 # the statuses knw_tune_run() gives a key it does not fit by design (R/tune_run.R)
 .knw_no_fit <- c("no_stream_rule", "no_response", "too_few_groups")
+
+# the species x stage keys of a table that holds every key
+.knw_rows_keys <- function(f) {
+  x <- utils::read.csv(f, colClasses = "character", check.names = FALSE)
+  unique(paste(x$species_code, x$stage, sep = "_"))
+}
+
+# write `path` whole: `write(p)` writes a hidden sibling (`.part_<name>`, which no key's pattern matches), renamed into
+# place once it is complete, so a process killed mid-write leaves no file that reads as finished (#111)
+.knw_write_whole <- function(path, write) {
+  tmp <- file.path(dirname(path), paste0(".part_", basename(path)))
+  unlink(tmp)
+  write(tmp)
+  if (!file.rename(tmp, path)) stop("could not move ", tmp, " to ", path, call. = FALSE)
+  invisible(path)
+}

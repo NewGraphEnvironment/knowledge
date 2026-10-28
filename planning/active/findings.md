@@ -117,3 +117,27 @@ candidate means "written by the key's last pass". Every file a pass writes per k
 
 Remaining uses of file age: the comparison-after-grades check, inside a candidate only, where 0320 and 0330 are the only
 writers. A dry run of a promotion of a clone of the published run passes every check (2026-10-28 19:27 UTC).
+
+### After round 5: every write into a run directory
+
+Round 5 found the drawings (STAGE=maps, the GeoPackages) and a kill mid-write outside round 4's table. The rule now
+covers every write in `0320`, `0330` and the functions they call (`grep` of write_csv / saveRDS / writeLines / st_write /
+file.rename / saveWidget, 2026-10-28):
+
+| writer | file | how it lands | a pass killed first leaves | promotion |
+|---|---|---|---|---|
+| 0320 | `_smoke.csv` | cleared before the smoke run | old one gone; nothing else touched | taken with a fitted key |
+| 0320 | `_tune`, `_curves`, `_groups`, `_seeds`, `_honest`, `_summary`, `_curve.rds` | cleared after the smoke gate passes | a key with no summary, or one missing a file | refused unless the full set is there (fitted) or only summary + curve record (unfitted) |
+| 0320 | `_score.rds` | cache (`R/tune_run.R`), as before | - | moved with the key |
+| 0320 | `_grades.csv` | keep-check (eleven fields) or written whole (`.knw_write_whole()`); removed for a key with no curve | old grades of another fit | refused unless every keep-check field the summary carries agrees |
+| 0320 | `pick_report.csv`, logs | overwritten / never written over, log after each graded key | - | logs copied; a fitted key needs a grade line |
+| 0330 | `_segments.rds`, `_checks`, `_change`, `_compare` | cleared at the key's job start, each written whole, `_compare` last | no `_compare.csv`: refused | rule; written after the grades (inside a candidate) |
+| 0330 | `gpkg/<key>.gpkg` | `<key>.part.gpkg`, renamed when every group is in | the last complete one, or none | taken whole |
+| 0330 | `fig/compare_<key>_*.png` | drawn into `fig/.part_<key>/`, moved in when the key is drawn | the last complete set | taken whole |
+| 0330 | `compare/change/checks.csv` | cleared at full-pass start, written whole at its end, `compare.csv` last | absent: refused | rows by key |
+| 0330 | `floodplain.csv` | rows of the keys a pass compares or draws replaced (`floodplain_write()`), written whole | other keys' rows intact | a fitted key the run did not draw keeps its tracked rows, noted; an unfitted key's dropped |
+| 0330 | `maps/*.html`, logs | not promoted / numbered | - | - |
+
+File age is read only inside a candidate: the comparison-after-grades check here, and 0330's own STAGE=maps and
+STAGE=gpkg checks that the segments postdate the grades. A dry run of a promotion of a clone of the published run passes
+every check (19:39 UTC).

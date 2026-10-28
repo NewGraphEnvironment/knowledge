@@ -218,10 +218,12 @@ say("Smoke run first%s: previous picks on file for %s.", if (dev) sprintf(" (DEV
 # what a pass writes for a key replaces what an earlier pass of the run wrote, so a key's files in the run are this
 # pass's (#111): clear them first, all but the score cache and the grade table, which are kept only when they pass
 # their checks below (a key this pass does not fit loses its grades after scoring)
+# The smoke tables go before the smoke run, the rest once it has passed, so a refused smoke run leaves the last
+# pass's fit as it was
 pat_keys <- sprintf("^(%s)_(rear|spawn)_", paste(species, collapse = "|"))
 caches <- "_(score\\.rds|grades\\.csv)$"
 old_files <- list.files(dir_out, pat_keys, full.names = TRUE)
-unlink(old_files[!grepl(caches, old_files)])
+unlink(old_files[grepl("_smoke\\.csv$", old_files)])
 t0 <- Sys.time()
 sm <- knw_tune_run(vl, vs, walks, thr, species = species, spawner = spawner, workers = workers, thresholds_extra = thr_tuned, evidence_id = evidence_md5,
                    cols = cols_run,
@@ -245,6 +247,7 @@ if (length(smoke_failed)) {
 }
 
 # ---- score, pick, curve ------------------------------------------------------------------
+unlink(old_files[file.exists(old_files) & !grepl(caches, old_files) & !grepl("_smoke\\.csv$", old_files)])
 t0 <- Sys.time()
 out <- knw_tune_run(vl, vs, walks, thr, species = species, spawner = spawner, workers = workers, cache_dir = dir_out,
                     thresholds_extra = thr_tuned, smoke = FALSE, extra = !main_only, evidence_id = evidence_md5, cols = cols_run)
@@ -438,13 +441,15 @@ for (k in names(out)) {
   if (isTRUE(r$grade_withheld)) g$grades <- g$grades |> mutate(rate = NA_real_, grade = NA_real_, grade_class = NA_character_)
   # ref_population is kept as the name 0325, 0330 and the article read; ref_edge, q_walk, walk and discharge_load
   # are the record (#72), written from what knw_grade_species() returns, not from a literal beside the call
-  write_csv(g$grades |> mutate(species_code = r$species_code, stage = r$stage, rule = r$pick$rule, run_uid = run_uid,
+  # written whole (a sibling renamed into place): a pass killed mid-write leaves no grade table that reads as one
+  .knw_write_whole(file.path(dir_out, paste0(k, "_grades.csv")), function(p) write_csv(
+    g$grades |> mutate(species_code = r$species_code, stage = r$stage, rule = r$pick$rule, run_uid = run_uid,
                                ref_population = "stream_branch", ref_edge = paste(g$ref_edge, collapse = ";"),
                                q_walk = g$q, walk = g$walk, walk_md5 = g$walk_md5, discharge_load = discharge_load,
                                curve_prior_sd = curve_prior_txt, grade_withheld = withheld_txt, null_heldout_curve = nhc_txt,
                                evidence_md5 = evidence_md5, curve_grad = r$curve$cols[["grad"]],
                                across(c(rate, grade), ~ signif(.x, 5))),
-            file.path(dir_out, paste0(k, "_grades.csv")), na = "")
+            p, na = ""))
   say("%s grades: %d groups, %s; reference rate %.4f over edge types %s; walks to %g m3/s, to the bank, %.1f min; %d of %d found rivers lie in another group; total %.1f min.",
       k, length(wsg), paste(names(g$counts), g$counts, sep = "=", collapse = ", "), g$reference,
       paste(g$ref_edge, collapse = ","), g$q, g$walk_minutes, sum(g$grades$target_in_group %in% FALSE),

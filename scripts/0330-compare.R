@@ -96,6 +96,20 @@ path_log <- .knw_free_path(file.path(dir_out, paste0(format(Sys.time(), "%Y%m%d"
                                                      if (nzchar(only)) paste0("-", tolower(gsub(",", "_", only))),
                                                      if (nzchar(stage_only)) paste0("-", stage_only), ".txt")))
 for (d in c(dir_out, dir_cat, dir_maps, dir_gpkg, dir_fig)) dir.create(d, showWarnings = FALSE, recursive = TRUE)
+# the run's floodplain table holds every key a drawing has reached: `drop` takes the given keys' rows out and `new`
+# (a drawing's rows) goes in, written to a sibling and moved over, so a pass never leaves half a table (#111)
+floodplain_write <- function(new, drop) {
+  f <- file.path(dir_out, "floodplain.csv")
+  old <- NULL
+  if (file.exists(f)) old <- read_csv(f, show_col_types = FALSE, col_types = cols(.default = "c"), na = character())
+  if (!is.null(old)) old <- old[!paste(old$species_code, old$stage, sep = "_") %in% drop, , drop = FALSE]
+  if (!is.null(new)) new <- mutate(new, across(everything(), ~ ifelse(is.na(.x), "", as.character(.x))))
+  out <- bind_rows(old, new)
+  if (!nrow(out) && is.null(new)) { unlink(f); return(invisible()) }
+  if (!is.null(new)) out <- out[, names(new)]
+  out <- mutate(out, across(everything(), ~ na_if(.x, "")))
+  .knw_write_whole(f, function(p) write_csv(out, p, na = ""))
+}
 log_lines <- character()
 say <- function(...) { log_lines <<- c(log_lines, sprintf(...)); message(sprintf(...)) }
 pg <- function() {
@@ -229,10 +243,15 @@ run_one <- function(job) {
                              visits = vl, visit_species = vs, scratch = paste0("knw_cmp_", tolower(job$key)),
                              tuned_as = tuned_as, config_sha = config_sha, workers = workers)
     rm(grades)
-    readr::write_csv(cmp$compare, file.path(dir_out, paste0(job$key, "_compare.csv")), na = "")
-    readr::write_csv(cmp$change, file.path(dir_out, paste0(job$key, "_change.csv")), na = "")
-    if (!is.null(cmp$checks)) readr::write_csv(cmp$checks, file.path(dir_out, paste0(job$key, "_checks.csv")), na = "")
-    saveRDS(cmp$segments, file.path(dir_out, paste0(job$key, "_segments.rds")))
+    # each written whole (a sibling renamed into place), the segments first: a job killed part way leaves no table that
+    # reads as complete, and no _compare.csv without the segments it summarises (#111)
+    out_of <- function(what) file.path(dir_out, paste0(job$key, what))
+    .knw_write_whole(out_of("_segments.rds"), function(p) saveRDS(cmp$segments, p))
+    if (!is.null(cmp$checks)) {
+      .knw_write_whole(out_of("_checks.csv"), function(p) readr::write_csv(cmp$checks, p, na = ""))
+    }
+    .knw_write_whole(out_of("_change.csv"), function(p) readr::write_csv(cmp$change, p, na = ""))
+    .knw_write_whole(out_of("_compare.csv"), function(p) readr::write_csv(cmp$compare, p, na = ""))
     # the through-wetland quantity link#364 measured, for the write-up: CH rearing on its five groups and on all
     if (job$key == "CH_rear") {
       wl <- cmp$segments |> dplyr::filter(edge_type %in% c(1050L, 1150L))
@@ -258,8 +277,11 @@ gpkg_one <- function(key, schema, dir_gpkg, dir_seg) {
   t1 <- Sys.time()
   tryCatch({
     seg <- readRDS(file.path(dir_seg, paste0(key, "_segments.rds")))
+    # written as <key>.part.gpkg and renamed when every group is in (#111): a pass killed part way leaves a part file,
+    # never a <key>.gpkg holding some groups, and the last complete one stands until then
     f <- file.path(dir_gpkg, paste0(key, ".gpkg"))
-    unlink(f)
+    f_part <- file.path(dir_gpkg, paste0(key, ".part.gpkg"))
+    unlink(f_part)
     conn <- DBI::dbConnect(RPostgres::Postgres(), bigint = "numeric")
     on.exit(DBI::dbDisconnect(conn))
     for (w in sort(unique(seg$watershed_group_code))) {
@@ -267,12 +289,13 @@ gpkg_one <- function(key, schema, dir_gpkg, dir_seg) {
         "SELECT id_segment, geom FROM %s.streams WHERE watershed_group_code = '%s'", schema, w)), drop = TRUE)
       geom$id_segment <- as.numeric(geom$id_segment)
       sg <- dplyr::inner_join(geom, seg[seg$watershed_group_code == w, , drop = FALSE], by = "id_segment")
-      sf::st_write(sg, f, layer = "segments", append = file.exists(f), quiet = TRUE)
+      sf::st_write(sg, f_part, layer = "segments", append = file.exists(f_part), quiet = TRUE)
     }
+    unlink(f)
+    if (!file.rename(f_part, f)) stop("could not move ", f_part, " to ", f)
     sprintf("GeoPackage %s: %d segments in %.1f min.", f, nrow(seg), as.numeric(difftime(Sys.time(), t1, units = "mins")))
   }, error = function(e) {
-    # a GeoPackage written part way is no GeoPackage of the key: never left to be promoted
-    unlink(file.path(dir_gpkg, paste0(key, ".gpkg")))
+    unlink(file.path(dir_gpkg, paste0(key, ".part.gpkg")))
     sprintf("GeoPackage for %s FAILED: %s", key, conditionMessage(e))
   })
 }
@@ -326,9 +349,10 @@ if (stage_only == "maps") {
   for (k in keys) say("  %s", gl[[k]])
 } else {
   # the tables of every key are written when the pass ends, from every key it and earlier passes saved; until then the
-  # run holds none, so a pass that dies cannot leave the last pass's beside this one's per-key tables (#111). The
-  # floodplain table is redrawn by STAGE=maps
-  unlink(file.path(dir_out, c("compare.csv", "change.csv", "checks.csv", "floodplain.csv")))
+  # run holds none, so a pass that dies cannot leave the last pass's beside this one's per-key tables (#111). The keys
+  # compared here lose their floodplain rows, which STAGE=maps redraws; the other keys keep theirs
+  unlink(file.path(dir_out, c("compare.csv", "change.csv", "checks.csv")))
+  floodplain_write(NULL, drop = names(jobs))
   res <- lapply(jobs, run_one)
   if (gpkg) {
     ok <- names(jobs)[vapply(res, function(x) is.null(x$error), logical(1))]
@@ -418,9 +442,13 @@ if (stage_only == "") {
   compare <- bind_rows(keep("compare"))
   change <- bind_rows(keep("change"))
   checks <- bind_rows(keep("checks"))
-  write_csv(compare |> mutate(across(where(is.numeric), ~ round(.x, 3))), file.path(dir_out, "compare.csv"), na = "")
-  write_csv(change |> mutate(km = round(km, 3)), file.path(dir_out, "change.csv"), na = "")
-  write_csv(checks |> mutate(across(where(is.numeric), ~ round(.x, 4))), file.path(dir_out, "checks.csv"), na = "")
+  # each written whole, compare.csv last: its presence says the pass composed all three (#111)
+  .knw_write_whole(file.path(dir_out, "checks.csv"),
+                   function(p) write_csv(checks |> mutate(across(where(is.numeric), ~ round(.x, 4))), p, na = ""))
+  .knw_write_whole(file.path(dir_out, "change.csv"),
+                   function(p) write_csv(change |> mutate(km = round(km, 3)), p, na = ""))
+  .knw_write_whole(file.path(dir_out, "compare.csv"),
+                   function(p) write_csv(compare |> mutate(across(where(is.numeric), ~ round(.x, 3))), p, na = ""))
 }
 
 # ---- floodplain hectares and maps: their own step (STAGE=maps; #81) ------------------------------
@@ -437,8 +465,11 @@ if (stage_only == "maps") {
     stage <- jobs[[k]]$stage
     flag <- if (stage == "rear") "rearing" else "spawning"
     sp <- jobs[[k]]$species_code
-    # this drawing's figures replace the key's last ones, whose groups may differ (#111)
-    unlink(list.files(dir_fig, paste0("^compare_", tolower(k), "_"), full.names = TRUE))
+    # this drawing's figures replace the key's last ones, whose groups may differ, once every group is drawn: they are
+    # drawn into a part directory and moved in together (#111), so a pass killed part way leaves the last set whole
+    dir_part <- file.path(dir_fig, paste0(".part_", tolower(k)))
+    unlink(dir_part, recursive = TRUE)
+    dir.create(dir_part)
     seg_all <- readRDS(file.path(dir_out, paste0(k, "_segments.rds")))
     per <- r$compare |> filter(watershed_group_code != "ALL", structure == tuned_structure)
     # three groups by the criteria in the header: largest gained share, largest lost share, most default km
@@ -481,17 +512,24 @@ if (stage_only == "maps") {
       }
       title <- sprintf("%s: %s %s, default against %s (%s)", w, sp, flag, r$compare$tuned_rule[1], r$compare$tuned_structure[1])
       tryCatch(knw_compare_map(sg, water_of(w), title,
-                               png = file.path(dir_fig, sprintf("compare_%s_%s.png", tolower(k), tolower(w))),
+                               png = file.path(dir_part, sprintf("compare_%s_%s.png", tolower(k), tolower(w))),
                                html = if (w %in% cat_wsg) file.path(dir_maps, sprintf("compare_%s_%s.html", tolower(k), tolower(w))) else NULL,
                                fp_cells = fp_cells),
                error = function(e) say("  %s %s map: %s", k, w, conditionMessage(e)))
     }
+    unlink(list.files(dir_fig, paste0("^compare_", tolower(k), "_"), full.names = TRUE))
+    drawn <- list.files(dir_part, full.names = TRUE)
+    if (!all(file.rename(drawn, file.path(dir_fig, basename(drawn))))) {
+      stop(k, ": could not move its figures from ", dir_part)
+    }
+    unlink(dir_part, recursive = TRUE)
     say("%s: maps for %s.", k, paste(map_wsg, collapse = " "))
   }
   dbDisconnect(conn)
   fpt <- bind_rows(fp_rows)
   if (nrow(fpt)) {
-    write_csv(fpt |> mutate(across(where(is.numeric), ~ round(.x, 2))), file.path(dir_out, "floodplain.csv"), na = "")
+    # this drawing's keys replace their own rows; a key drawn by another pass keeps its rows (#111)
+    floodplain_write(fpt |> mutate(across(where(is.numeric), ~ round(.x, 2))), drop = names(res))
     tot <- fpt |> group_by(species_code, stage, rule) |> summarise(ha = sum(ha), graded_ha = sum(graded_ha), groups = n(), .groups = "drop")
     for (i in seq_len(nrow(tot))) say("floodplain %s %s %s: %.0f ha, %.0f graded ha over %d groups", tot$species_code[i], tot$stage[i], tot$rule[i], tot$ha[i], tot$graded_ha[i], tot$groups[i])
   }
