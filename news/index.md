@@ -1,5 +1,20 @@
 # Changelog
 
+## knowledge 0.4.15
+
+- A database-bound run checks its connection’s round trip before any
+  work
+  ([\#110](https://github.com/NewGraphEnvironment/knowledge/issues/110)).
+  [`knw_db_latency_check()`](https://newgraphenvironment.github.io/knowledge/reference/knw_db_latency.md)
+  stops `0310`, a grading `0320` and every stage of `0330` over a 20 ms
+  round trip, with the round trip and what a remote link cost
+  [\#92](https://github.com/NewGraphEnvironment/knowledge/issues/92)’s
+  comparison, unless `REMOTE=TRUE`; every run logs the round trip and
+  whether the override acted, and a refused run writes its log to its
+  own file. `0330` also logs each key’s minutes by stage, which
+  [`knw_compare_rules()`](https://newgraphenvironment.github.io/knowledge/reference/knw_compare_rules.md)
+  returns as `timing`.
+
 ## knowledge 0.4.14
 
 - Habitat rules and curves are tuned on the gradient of the link segment
