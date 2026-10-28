@@ -147,8 +147,8 @@ knw_grade_species <- function(connector, schema, species, wsg, curve, pick, stag
 # must have been fitted on and a grade table records as `curve_grad` (#92)
 .knw_grade_grad <- "segment_gradient"
 
-# TRUE when a grade table's first row (read as character) records the curve's gradient as `grad`: every reader of a
-# grade table holds it to this before reading its grades (#92), as it does the walk, the flow load and the evidence
+# TRUE when a grade table's first row (read as character) records the curve's gradient as `grad`: 0320's keep-check,
+# 0325, 0330, data-raw/vignette_chinook.R and data-raw/vignette_method.R hold a grade table to this before reading it (#92)
 .knw_grade_grad_ok <- function(h, grad = .knw_grade_grad) {
   "curve_grad" %in% names(h) && identical(as.character(h$curve_grad[1]), grad)
 }

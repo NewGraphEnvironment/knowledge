@@ -346,10 +346,13 @@ Every `data/tune/<key>_grades.csv` row carries the run that made it: `rule`, `ru
 `discharge_load`, `curve_prior_sd`, `grade_withheld`, `null_heldout_curve` (the gate's own number), `evidence_md5`
 (the md5s of the three derived tables) and `curve_grad` (the gradient the curve was fitted on, #92); the summary and
 `<key>_curve.rds` carry `evidence_md5`, `run_uid` and the gradient, and the score cache its settings (`spec`: fit,
-prior, seed, folds, d_floor, extra, evidence, grad). `0320`'s keep-check, `0325`, `0330` and
-`data-raw/vignette_chinook.R` each compare those fields with the run's own values and refuse a table that does not
-match; `0325` refuses before it writes anything. `data-raw/vignette_method.R` compares only what its article prints from
-them: `curve_grad`, `evidence_md5` against the derived tables, and one flow load. So a change to the gate, the prior, the walk or the evidence
+prior, seed, folds, d_floor, extra, evidence, grad). `0320`'s keep-check compares every one of those fields with the
+run's own values (`null_heldout_curve` by presence). The readers after it compare what they can hold a field to and
+refuse a table that fails: `0325` and `0330` the rule, run, walk, evidence, gradient and flow load (the live table's),
+and `0325` the reference edge types across tables; `data-raw/vignette_chinook.R` the rule, walk, evidence and gradient;
+`data-raw/vignette_method.R` the gradient, the evidence and one flow load. The gate's fields (`curve_prior_sd`,
+`grade_withheld`, `null_heldout_curve`) `0330` and `vignette_chinook.R` check by presence, `0325` all but the prior, and
+`vignette_method.R` not at all. `0325` refuses before it writes anything. So a change to the gate, the prior, the walk or the evidence
 regrades every key (53 min on the database's host with the walks cold, 2026-10-27; minutes for a key whose walks are cached), which is the cost of never publishing a verdict the code
 no longer makes. #73's branch review (five rounds, `planning/archive/2026-10-issue-73-rebuild-evidence-retune-bank/review-round*.md`)
 found four axes where a reader had checked presence alone, one of them the gate itself: it compared the curve's

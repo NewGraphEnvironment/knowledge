@@ -134,8 +134,8 @@ it went to the nearest stream, kept when it lay within 200 m. The site then took
 [@craig_etal2020Flexiblewatershed] on PCIC's own network and carried onto Atlas streams by a crosswalk in New Graph's
 fork of fwapg [@norris_irvine2026NewGraphEnvironmentfwapg], with wet's
 own water balance where that flow does not reach or, on a stream's own line, carries under a fifth of the balance's. A site's gradient is its link segment's, the gradient link applies a rule to,
-worked out from the segment's own ends; link cuts a stream where fish were caught, so a site with chinook usually
-starts a short segment of its own.
+worked out from the segment's own ends; link cuts a stream at a site that caught a species it models, so a site with
+chinook can start a short segment of its own (the methodology article measures how often).
 fresh ran the rules [@irvine2026freshFreshwater]. The province's other fish observations, gathered in bcfishobs
 [@norris2024smnorrisbcfishobs], scored no rule: they record where fish were found, not where they were sought and missed. Sites
 were kept when they were on ordinary stream lines, of a usual fished area, with no barrier to chinook downstream, in a
