@@ -54,6 +54,7 @@ reference:
       - knw_rule_in
       - knw_tune_score
       - knw_tune_repick
+      - knw_tune_pick_report
       - knw_tune_curve
       - knw_grade
       - knw_grade_species
@@ -62,6 +63,7 @@ reference:
   - title: Published results and comparison
     contents:
       - knw_thresholds_table
+      - knw_tune_promote
       - knw_publish
       - knw_compare_rules
       - knw_floodplain_ha

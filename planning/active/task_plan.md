@@ -41,39 +41,54 @@ Al, 2026-10-28, at the plan gate:
 
 ## Phase 1: Pick report in `DEV=1 0320`
 
-- [ ] `R/tune_pick_report.R`: `knw_tune_pick_report(rules, published)`: per key, the new recommended rule and its
+- [x] `R/tune_pick_report.R`: `knw_tune_pick_report(rules, published)`: per key, the new recommended rule and its
   `grad_max`, the published rule and its `grad_max`, whether the published rule is in the new one-SE region (`NA`
   when it is not in the new grid), its `ddev_best` and `se_diff` in the new run beside the published table's, and
   `same_pick`. Tests on fixture tables (`tests/testthat/test-tune_pick_report.R`), including a published rule
   absent from the grid and a key with no published table.
-- [ ] `0320`: under `DEV=1`, write `data/tune/dev/pick_report.csv` and a block in the log; the published side is the
+- [x] `0320`: under `DEV=1`, write `data/tune/dev/pick_report.csv` and a block in the log; the published side is the
   tracked `data/tune/<key>_tune.csv` (already read as `previous`).
-- [ ] `0320`: the `DEV=1` log goes to `data/tune/dev/<date>_tune_run-dev….txt`, not `scripts/logs/habitat/`, so the
+- [x] `0320`: the `DEV=1` log goes to `data/tune/dev/<date>_tune_run-dev….txt`, not `scripts/logs/habitat/`, so the
   tree stays clean.
 
 ## Phase 2: Full runs write to candidates
 
-- [ ] `0320` without `DEV`: `dir_out` is `data/tune/candidate/<run>/` (`RUN=` or the UTC stamp), log
+- [x] `0320` without `DEV`: `dir_out` is `data/tune/candidate/<run>/` (`RUN=` or the UTC stamp), log
   `<run>/<run>_tune_run….txt`; `GRADIENT=fwa_gradient` under `<run>/grad_fwa/`. Nothing written to `data/tune/`.
   The previous pick still comes from tracked `data/tune/`.
-- [ ] `.gitignore`: `data/tune/candidate/`, `data/compare/candidate/`.
-- [ ] `0330`: `TUNE_DIR=` is required and must be under `data/tune/candidate/`; reads curves and grades from it,
+- [x] `.gitignore`: `data/tune/candidate/`, `data/compare/candidate/`.
+- [x] `0330`: `TUNE_DIR=` is required and must be under `data/tune/candidate/`; reads curves and grades from it,
   writes `data/compare/candidate/<basename>/` (its `gpkg/`, `maps/`, `fig/` and log inside it; `research/fig/` only on
   promotion). Shared caches (`data/compare/catalog/`) stay where they are.
-- [ ] Test that a candidate subdirectory is never read by `knw_thresholds_table()` (fixture with a summary under
+- [x] Test that a candidate subdirectory is never read by `knw_thresholds_table()` (fixture with a summary under
   `candidate/x/`), pinning the non-recursive listing `0325` relies on.
 
 ## Phase 3: Promote
 
-- [ ] `R/tune_promote.R`: `knw_tune_promote(run_tune, run_compare, keys, tune_dir, compare_dir, log_dir)` copies each
+- [x] `R/tune_promote.R`: `knw_tune_promote(run_tune, run_compare, keys, tune_dir, compare_dir, log_dir)` copies each
   key's files (tracked and ignored: tables, grades, curve.rds, score.rds, segments.rds), the run's logs into
   `scripts/logs/habitat/`, figures into `research/fig/`, and recomposes `compare.csv`/`change.csv`/`checks.csv` from
   the tracked per-key tables. Refuses, before any copy: a key missing its compare half, a tune/compare pair on
   different rules or evidence, and a by-key promotion whose keys' `evidence_md5`/`run_uid` differ from the kept keys'.
   Returns the files written. Fixture tests for each refusal and for "copies exactly these files".
-- [ ] `scripts/0335-promote.R`: `RUN=<run> [SPECIES=…]`, calls `knw_tune_promote()`, then `0325` (no `PUBLISH`),
+- [x] `scripts/0335-promote.R`: `RUN=<run> [SPECIES=…]`, calls `knw_tune_promote()`, then `0325` (no `PUBLISH`),
   `data-raw/vignette_chinook.R` (when CH rearing was promoted or any `_tune.csv` changed) and
   `data-raw/vignette_method.R` last; `BUNDLES=FALSE` copies only. Needs the database (the bundle scripts read it).
+
+## Plan review folded in (2026-10-28, `review-plan.md`)
+
+- [x] 0330's four per-key writes and two segment reads still named `data/compare`: now the run directory
+- [x] The by-key refusal holds the set to every field the readers check (evidence, link run, gradient, ledger,
+  reference edges, flow load, walk, link config, tuned structure; the Atlas-gradient sensitivity on evidence and run),
+  and to the live evidence, walk and flow load `0335` passes
+- [x] Readers anchored to the run, not the newest file: summaries record `tune_run` and `evidence_ledger`;
+  `knw_run_ledger()` gives 0325, 0330 and the method bundle the run's ledger; the chinook bundle takes its run's own log
+- [x] A promotion archives what it replaces as `candidate/replaced_<stamp>/` (undo = promote it); GeoPackages and
+  figures move by key; a comparison older than its grades is refused; copies keep their dates
+- [x] A resumed candidate's log is numbered, never overwritten; log dates in UTC; run names carry no hyphen
+- [x] The rebuild chain gains `vignette_bib.R` and `readme_figure.R`; the pins a promotion moves are a listed manual step
+- Not taken: seeding a candidate with the published grades (the grading log line the chinook bundle reads would be
+  missing for a kept key)
 
 ## Phase 4: Docs
 

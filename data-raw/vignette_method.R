@@ -29,7 +29,8 @@
 #     bundle, counted by what each stage of the comparison did to them (fresh's predicate, then link's user-habitat
 #     overlay and the connectivity pass together, which the saved flags cannot separate).
 #
-# INPUT:  inst/method/{pipeline,settings}.csv; scripts/logs/habitat/<date>_evidence_build_ledger.csv (the newest);
+# INPUT:  inst/method/{pipeline,settings}.csv; scripts/logs/habitat/<date>_evidence_build_ledger.csv (the one the tables
+#         name, knw_run_ledger());
 #         data/fdis/build/reconcile.csv and data/fdis/derived/{visits_link,visits_species,walks,fdis_sites}.csv
 #         (ignored; 0230, 0310); data/tune/<key>_{summary,tune,grades}.csv; data/tune/grad_fwa/<key>_{summary,tune}.csv
 #         (0320 with GRADIENT=fwa_gradient, the Atlas-gradient sensitivity, #92); data/compare/<key>_compare.csv;
@@ -49,8 +50,8 @@ pkgload::load_all(quiet = TRUE)
 dir_out <- "inst/vignette-data"
 f_pipeline <- "inst/method/pipeline.csv"
 f_settings <- "inst/method/settings.csv"
-ledger <- sort(list.files("scripts/logs/habitat", "_evidence_build_ledger\\.csv$", full.names = TRUE),
-               decreasing = TRUE)[1]
+# the ledger the published tables were scored on, not the newest on disk (#111)
+ledger <- knw_run_ledger("data/tune")
 f_reconcile <- "data/fdis/build/reconcile.csv"
 derived <- c(visits_link = "data/fdis/derived/visits_link.csv", visits_species = "data/fdis/derived/visits_species.csv",
              walks = "data/fdis/derived/walks.csv")

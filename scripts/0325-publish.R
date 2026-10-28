@@ -35,7 +35,9 @@ tune_dir <- "data/tune"
 s3 <- "s3://fresh-bc/"
 evidence_version <- "knowledge/fdis/v3"
 
-ledger_path <- sort(list.files("scripts/logs/habitat", "_evidence_build_ledger\\.csv$", full.names = TRUE), decreasing = TRUE)[1]
+# the ledger the published tables were scored on, not the newest on disk: a build checked and not promoted writes a newer
+# one (#111)
+ledger_path <- knw_run_ledger(tune_dir)
 led <- read_csv(ledger_path, show_col_types = FALSE, col_types = cols(.default = "c"))
 run_uid <- led$note[led$step == "link_run_uid"]
 link_sha <- led$note[led$step == "run_link_sha"]

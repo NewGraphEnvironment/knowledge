@@ -58,6 +58,15 @@ dir_out <- "inst/vignette-data"
 # the newest tuning log that graded this key (a pass over a subset of species names them in its file name, 0320); a
 # superseded log of the same day (the first CH regrade of #65) is older than the one that replaced it
 logs <- sort(list.files("scripts/logs/habitat", "_tune_run.*\\.txt$", full.names = TRUE), decreasing = TRUE)
+# a promoted run names itself in its summary (#111): its own logs, the pass that graded last first, so a log another
+# key's promotion brought in, which may grade this key too, is never taken for this key's run
+tune_run <- readr::read_csv(sprintf("data/tune/%s_summary.csv", key), show_col_types = FALSE, col_types = readr::cols(.default = "c"))$tune_run
+if (length(tune_run) == 1 && !is.na(tune_run)) {
+  logs <- logs[startsWith(sub("^[0-9]{8}_tune_run-", "", basename(logs)), paste0(tune_run, "-")) |
+                 startsWith(sub("^[0-9]{8}_tune_run-", "", basename(logs)), paste0(tune_run, "."))]
+  pass <- suppressWarnings(as.integer(sub("^.*-([0-9]+)\\.txt$", "\\1", basename(logs))))
+  logs <- logs[order(-ifelse(is.na(pass), 1L, pass))]
+}
 # the result line is "<key> grades: <n> groups, …"; a run that kept the table says "<key>: grades already written …"
 logs <- logs[vapply(logs, function(f) any(grepl(sprintf("^%s grades: [0-9]+ groups", key), readLines(f, warn = FALSE))), logical(1))]
 if (!length(logs)) stop("no tuning log in scripts/logs/habitat graded ", key)
