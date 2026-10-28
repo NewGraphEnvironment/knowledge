@@ -114,7 +114,7 @@ reads link's segment `gradient`, so the curve is fitted on one gradient and grad
       approved order, which had them the other way round). `0330` is database-bound: run it here if the timing allows,
       otherwise hand over the command for the database's host. `knw_thresholds_table()` now refuses a comparison
       whose `tuned_rule` is not the pick, so a comparison left from #73's run can no longer supply the scope.
-- [ ] Record the regions under both gradients, per key, in `research/habitat_thresholds_tuned.md` from the tables. Drop
+- [x] Record the regions under both gradients, per key, in `research/habitat_thresholds_tuned.md` from the tables. Drop
       #91's note above its Evidence paragraph.
 
 ## Phase 4: Articles and bundles (owed by #91 and #93)
