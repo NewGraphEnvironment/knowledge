@@ -265,7 +265,7 @@ test_that("a key the run no longer fits leaves none of its last fit behind", {
   ct <- file.path(fx$tune, "candidate", "r1"); cc <- file.path(fx$compare, "candidate", "r1")
   unlink(c(list.files(ct, "^CH_rear_", full.names = TRUE), list.files(cc, "^CH_rear_", full.names = TRUE),
            file.path(cc, "fig", "compare_ch_rear_bulk.png")))
-  utils::write.csv(data.frame(species_code = "CH", stage = "rear", status = "underpowered"),
+  utils::write.csv(data.frame(species_code = "CH", stage = "rear", status = "too_few_groups"),
                    file.path(ct, "CH_rear_summary.csv"), row.names = FALSE)
   x <- utils::read.csv(file.path(cc, "compare.csv"))
   utils::write.csv(x[x$species_code != "CH", ], file.path(cc, "compare.csv"), row.names = FALSE)
@@ -285,4 +285,17 @@ test_that("a log path is never written over: the next pass is numbered", {
   expect_identical(.knw_free_path(f), file.path(d, "20261028_compare-r1-2.txt"))
   writeLines("2", file.path(d, "20261028_compare-r1-2.txt"))
   expect_identical(.knw_free_path(f), file.path(d, "20261028_compare-r1-3.txt"))
+})
+
+test_that("a key whose fit failed is refused, never taken for one the run does not fit (round 2)", {
+  for (st in c("curve_failed", "smoke", "fitted")) {
+    fx <- promote_fx()
+    ct <- file.path(fx$tune, "candidate", "r1")
+    unlink(list.files(ct, "^CH_rear_", full.names = TRUE))
+    utils::write.csv(data.frame(species_code = "CH", stage = "rear", status = st),
+                     file.path(ct, "CH_rear_summary.csv"), row.names = FALSE)
+    before <- tree_md5(fx)
+    expect_error(promote(fx), paste0("CH_rear: status ", st, " with no recommended rule"), info = st)
+    expect_identical(tree_md5(fx), before, info = st)
+  }
 })

@@ -80,7 +80,14 @@ knw_tune_promote <- function(run, keys = NULL, live = NULL, tune_dir = "data/tun
   # ---- each promoted key's own record ----
   for (k in keys) {
     rule <- fld(cand[[k]], "rule_recommended")
-    if (is.na(rule)) next   # not fitted: a summary (and a smoke table) only, nothing graded or compared
+    st <- fld(cand[[k]], "status")
+    # knw_tune_run()'s statuses: three with no fit by design, two fitted; anything else (curve_failed, a smoke-only
+    # key) is a fit that did not happen, never promoted over the last one that did
+    if (st %in% .knw_no_fit && is.na(rule)) next   # a summary (and a smoke table) only, nothing graded or compared
+    if (!st %in% c("fitted", "underpowered") || is.na(rule)) {
+      stop(k, ": status ", st, if (is.na(rule)) " with no recommended rule" else "", ": the run did not fit it; ",
+           "rerun it, or promote without it", call. = FALSE)
+    }
     g <- file.path(run_tune, paste0(k, "_grades.csv"))
     if (!file.exists(g)) {
       stop(k, ": the run scored a pick but wrote no grades (", g, "): it stopped before grading", call. = FALSE)
@@ -178,7 +185,7 @@ knw_tune_promote <- function(run, keys = NULL, live = NULL, tune_dir = "data/tun
       removed <<- c(removed, setdiff(old, file.path(to, basename(src))))
     }
   }
-  fitted <- keys[!is.na(vapply(cand[keys], fld, character(1), "rule_recommended"))]
+  fitted <- keys[!vapply(cand[keys], fld, character(1), "status") %in% .knw_no_fit]
   esc <- function(k) gsub(".", "\\.", k, fixed = TRUE)
   by_key <- function(k) paste0("^", esc(k), "_")
   plan_dir(run_tune, tune_dir, by_key)
@@ -300,3 +307,6 @@ knw_tune_promote <- function(run, keys = NULL, live = NULL, tune_dir = "data/tun
   }
   out
 }
+
+# the statuses knw_tune_run() gives a key it does not fit by design (R/tune_run.R)
+.knw_no_fit <- c("no_stream_rule", "no_response", "too_few_groups")

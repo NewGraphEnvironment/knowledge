@@ -117,7 +117,11 @@ if (nzchar(grad_dirs[[gradient]])) dir_out <- file.path(dir_out, grad_dirs[[grad
 # one log per pass: a pass over a subset of species (SPECIES=) names them, so passes do not overwrite each other. A DEV=1
 # log stays beside its outputs in the ignored data/tune/dev/, and a candidate's in its run directory, named for the run,
 # so a promotion can copy it to scripts/logs/habitat/ beside the others (#111)
-path_log <- file.path(dir_run, paste0(format(Sys.time(), "%Y%m%d", tz = "UTC"), "_tune_run", if (!dev) paste0("-", run) else "",
+# A candidate's passes are numbered across the run (p1, p2, ... whatever the day or species), so the pass that graded
+# a key last is the highest number; data-raw/vignette_chinook.R reads it by that
+pass <- if (dev) NA_integer_ else 1L + length(list.files(dir_run, sprintf("_tune_run-%s-p[0-9]+", run)))
+path_log <- file.path(dir_run, paste0(format(Sys.time(), "%Y%m%d", tz = "UTC"), "_tune_run",
+                                      if (!dev) sprintf("-%s-p%d", run, pass) else "",
                                                      if (nzchar(Sys.getenv("SPECIES"))) paste0("-", tolower(gsub(",", "_", Sys.getenv("SPECIES")))) else "",
                                                      if (dev) "-dev" else "",
                                                      if (nzchar(grad_dirs[[gradient]])) paste0("-", grad_dirs[[gradient]]) else "", ".txt"))

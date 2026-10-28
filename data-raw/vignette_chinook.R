@@ -62,12 +62,14 @@ logs <- sort(list.files("scripts/logs/habitat", "_tune_run.*\\.txt$", full.names
 # key's promotion brought in, which may grade this key too, is never taken for this key's run
 tune_run <- readr::read_csv(sprintf("data/tune/%s_summary.csv", key), show_col_types = FALSE, col_types = readr::cols(.default = "c"))$tune_run
 if (length(tune_run) == 1 && !is.na(tune_run)) {
-  # <date>_tune_run-<run>[-<species>][-<n>].txt, the run a stamp (0320); newest day first, then the highest pass
-  stem <- sprintf("^([0-9]{8})_tune_run-%s(-[a-z_]+)?(-([0-9]+))?\\.txt$", gsub(".", "\\.", tune_run, fixed = TRUE))
+  # <date>_tune_run-<run>-p<pass>[-<species>][-grad_fwa].txt (0320): the passes are numbered across the run, highest last
+  stem <- sprintf("^[0-9]{8}_tune_run-%s-p([0-9]+)(-[a-z_]+)*\\.txt$", gsub(".", "\\.", tune_run, fixed = TRUE))
   logs <- logs[grepl(stem, basename(logs))]
-  day <- sub(stem, "\\1", basename(logs))
-  pass <- suppressWarnings(as.integer(sub(stem, "\\4", basename(logs))))
-  logs <- logs[order(day, ifelse(is.na(pass), 1L, pass), decreasing = TRUE)]
+  logs <- logs[order(as.integer(sub(stem, "\\1", basename(logs))), decreasing = TRUE)]
+} else {
+  # tables from before the record: the newest log that graded the key, as before #111, never a candidate's (a by-key
+  # promotion of other keys brings a run's logs, which may grade this key too)
+  logs <- logs[!grepl("_tune_run-[0-9]{8}_[0-9]{4}", basename(logs))]
 }
 # the result line is "<key> grades: <n> groups, …"; a run that kept the table says "<key>: grades already written …"
 logs <- logs[vapply(logs, function(f) any(grepl(sprintf("^%s grades: [0-9]+ groups", key), readLines(f, warn = FALSE))), logical(1))]

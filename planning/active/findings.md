@@ -66,3 +66,19 @@ Related: #92 (PR #109), #84 (smoke gates first), #81 (GeoPackages opt-in).
 |-------|------------|
 | `cp: invalid option -- 'c'` cloning the round-trip candidate | GNU coreutils is first on PATH here; `/bin/cp -c` clones |
 | Undo test: an undo in the same second as its promotion archived into the archive it was restoring from | Archive name made unique (`_2`, `_3`) |
+
+## Code-check: the mechanism behind rounds 1-2 (2026-10-28)
+
+Both rounds' inside-a-fix defects stood a proxy in for a property: "fitted" read from `rule_recommended` being present
+(caught `curve_failed`), and "latest" read from a file name's sort (a same-day `-ch` pass tied with the all-species one;
+a legacy fallback took a candidate's log). Every choice of the kind in the changed code, after round 2:
+
+| where | chooses | by | verdict |
+|---|---|---|---|
+| `knw_tune_promote()` per-key loop | which keys must carry grades and a comparison | `status` against `knw_tune_run()`'s seven statuses | fixed: no-fit-by-design passes, fitted/underpowered need a rule, the rest refused |
+| `knw_tune_promote()` `fitted` | whose compare-side files and rows may be removed | `status` not in the no-fit set | fixed |
+| `0325` `fitted_keys` | which keys publish values | `status %in% c("fitted", "underpowered")` | unchanged, now the same split |
+| `data-raw/vignette_chinook.R` log | the log of the run that graded CH | the summary's `tune_run`, then the pass number 0320 writes | fixed: passes numbered across a run (`-p<n>`) |
+| same, legacy fallback | the log for tables from before `tune_run` | newest name, candidate logs excluded | fixed |
+| `knw_run_ledger()` fallback | the ledger for tables from before `evidence_ledger` | newest name | as before the branch (only today's tables reach it) |
+| `0320` `ledger_path` | the build a new run scores | newest name | intended: a run is made on the newest build |
