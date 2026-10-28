@@ -21,3 +21,4 @@
   logs; `RUN=roundtrip BUNDLES=FALSE 0335` (359 files, 1 s) left all 542 files byte-identical (md5), then
   `SPECIES=CH` from the archive it made (48 files) the same; `0325` (local, 7.3 min) wrote `data/thresholds.csv` and
   `data/thresholds_groups.csv` unchanged. Candidate, archives and promotion logs removed after.
+- Phase 4: CLAUDE.md (bundles rerun by a promotion; candidates; the pick report; promotion on Al's word) and the run order

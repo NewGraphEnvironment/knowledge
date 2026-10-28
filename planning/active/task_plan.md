@@ -92,16 +92,16 @@ Al, 2026-10-28, at the plan gate:
 
 ## Phase 4: Docs
 
-- [ ] `CLAUDE.md`: bundles rerun after a promotion, not after any `0320`/`0325`/`0330` rerun; the loop is `DEV=1 0320`
+- [x] `CLAUDE.md`: bundles rerun after a promotion, not after any `0320`/`0325`/`0330` rerun; the loop is `DEV=1 0320`
   and its pick report; a full run and a promotion each start on Al's word. Layout lines for `data/tune/candidate/`,
   `data/compare/candidate/`, `data/tune/dev/pick_report.csv`.
-- [ ] `scripts/README.md` run order: `0320` (candidate), `0330 TUNE_DIR=`, `0335` promote; header comments of
+- [x] `scripts/README.md` run order: `0320` (candidate), `0330 TUNE_DIR=`, `0335` promote; header comments of
   `0320`, `0330`.
 
 ## Validation
 
 
-- [ ] Tests pass (`devtools::test()`)
+- [x] Tests pass (`devtools::test()`: 1573 passed, 0 failed, 1 skip already there, 2026-10-28 18:22 UTC)
 - [ ] `/code-check` clean (once over the branch with `/code-check branch`)
 - [ ] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion
