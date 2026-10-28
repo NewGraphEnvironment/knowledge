@@ -82,8 +82,9 @@ st[] <- lapply(st, function(v) if (all(grepl("^-?[0-9.]+$", v))) as.numeric(v) e
 # the choosing beats link's rule
 stopifnot(nrow(st) == 1, st$seeds_same_rec > st$seeds_n / 2, st$seeds_rec_in_region == st$seeds_n,
           st$boot_rec_share < 0.5, st$honest_dev_rec < st$honest_dev_default,
-          # step 2's words: most of the visits dropped at placement are too far from their stream
-          fn("placed on the Atlas") - fn("far_snap") > (fn("FDIS visits") - fn("ws50_mismatch")) / 2)
+          # step 2's words: most of the visits dropped at placement are too far from a stream (none within 500 m, or
+          # past the snap limits)
+          fn("with a usable point") - fn("far_snap") > (fn("FDIS visits") - fn("ws50_mismatch")) / 2)
 lost_all <- fn("FDIS visits") - fn("no_link_segment")
 lost_place <- fn("FDIS visits") - fn("ws50_mismatch")
 stopifnot(fun$n[1] == 51587, nrow(ch) == 1, all(diff(fun$n) <= 0), lost_place / lost_all > 0.5)

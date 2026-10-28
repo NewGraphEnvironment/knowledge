@@ -124,18 +124,18 @@ bundle scripts, then the tests. chinook_rearing.Rmd's `stopifnot` guards encode 
 article against the new tables (review G8). habitat_thresholds.Rmd: step 5 (:185) carries the gradient sentence, and
 limits :334 ("not weighed") is now false (review G9). CLAUDE.md's record section names `curve_grad` and `spec$grad`
 (review G7).
-- [ ] `data-raw/vignette_method.R` bundles the two gradients' regions per key from `data/tune/grad_fwa/`; rerun it,
+- [x] `data-raw/vignette_method.R` bundles the two gradients' regions per key from `data/tune/grad_fwa/`; rerun it,
       `data-raw/vignette_chinook.R`, and `data-raw/vignette_bib.R` (Zotero running).
-- [ ] `vignettes/habitat_thresholds.Rmd`: step 2 (each site takes its segment's gradient, and why), the `#snap` section
+- [x] `vignettes/habitat_thresholds.Rmd`: step 2 (each site takes its segment's gradient, and why), the `#snap` section
       (other streams in reach are now weighed; show `examples$moved`), and the limits' prose (`snap_limit` 200 m
       unconfirmed, `snap_limit_code` 500 m confirmed, `snap_edges_excluded`). Line 336's limit becomes the
       outcome-linked segment length, and the Atlas sensitivity's result goes in a sentence or a small table.
-- [ ] `vignettes/chinook_rearing.Rmd`: the placement sentence ("stream lay within 100 m") and the gradient sentence
+- [x] `vignettes/chinook_rearing.Rmd`: the placement sentence ("stream lay within 100 m") and the gradient sentence
       (line 135). Restore `snap_limit`'s `code:` pointer in `inst/method/settings.csv`.
 - [x] `research/habitat_thresholds_tuned.md`: replace its long Method section with a link to the methodology article.
-- [ ] `test-vignette-data.R`'s "every tracked source" and "every ignored source" tests pass. Build both articles with
+- [x] `test-vignette-data.R`'s "every tracked source" and "every ignored source" tests pass. Build both articles with
       the branch installed and check every inline number renders.
-- [ ] `CLAUDE.md`: drop the "Until #92's retune…" sentence and say the scoring reads link's segment gradient.
+- [x] `CLAUDE.md`: drop the "Until #92's retune…" sentence and say the scoring reads link's segment gradient.
 
 ## Owed at the end (reported, done after merge)
 
@@ -143,7 +143,7 @@ limits :334 ("not weighed") is now false (review G9). CLAUDE.md's record section
 
 ## Validation
 
-- [ ] Tests pass
+- [x] Tests pass
 - [ ] `/code-check` clean (once over the branch, `/code-check branch`, three-round floor)
 - [ ] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion
