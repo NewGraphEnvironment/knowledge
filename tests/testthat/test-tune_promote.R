@@ -249,3 +249,40 @@ test_that("what the run did not bring is kept and noted", {
   expect_true(any(grepl("compare.csv: not in the run", p$notes)))
   expect_true(any(grepl("floodplain.csv: not in the run", p$notes)))
 })
+
+test_that("a fitted key the run's combined table leaves out is refused, never dropped (round 1)", {
+  fx <- promote_fx()
+  f <- file.path(fx$compare, "candidate", "r1", "compare.csv")
+  x <- utils::read.csv(f)
+  utils::write.csv(x[x$species_code != "CH", ], f, row.names = FALSE)
+  before <- tree_md5(fx)
+  expect_error(promote(fx), "compare.csv in the run leaves out CH_rear")
+  expect_identical(tree_md5(fx), before)
+})
+
+test_that("a key the run no longer fits leaves none of its last fit behind", {
+  fx <- promote_fx()
+  ct <- file.path(fx$tune, "candidate", "r1"); cc <- file.path(fx$compare, "candidate", "r1")
+  unlink(c(list.files(ct, "^CH_rear_", full.names = TRUE), list.files(cc, "^CH_rear_", full.names = TRUE),
+           file.path(cc, "fig", "compare_ch_rear_bulk.png")))
+  utils::write.csv(data.frame(species_code = "CH", stage = "rear", status = "underpowered"),
+                   file.path(ct, "CH_rear_summary.csv"), row.names = FALSE)
+  x <- utils::read.csv(file.path(cc, "compare.csv"))
+  utils::write.csv(x[x$species_code != "CH", ], file.path(cc, "compare.csv"), row.names = FALSE)
+  writeLines("old png", file.path(fx$fig, "compare_ch_rear_bulk.png"))
+  p <- promote(fx)
+  expect_identical(list.files(fx$tune, "^CH_rear_"), "CH_rear_summary.csv")
+  expect_length(list.files(fx$compare, "^CH_rear_"), 0)
+  expect_false(file.exists(file.path(fx$fig, "compare_ch_rear_bulk.png")))
+  expect_false("CH" %in% utils::read.csv(file.path(fx$compare, "compare.csv"))$species_code)
+})
+
+test_that("a log path is never written over: the next pass is numbered", {
+  d <- withr::local_tempdir()
+  f <- file.path(d, "20261028_compare-r1.txt")
+  expect_identical(.knw_free_path(f), f)
+  writeLines("1", f)
+  expect_identical(.knw_free_path(f), file.path(d, "20261028_compare-r1-2.txt"))
+  writeLines("2", file.path(d, "20261028_compare-r1-2.txt"))
+  expect_identical(.knw_free_path(f), file.path(d, "20261028_compare-r1-3.txt"))
+})

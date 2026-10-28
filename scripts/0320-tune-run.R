@@ -65,7 +65,7 @@
 #         data/tune/<sp>_<stage>_curve.rds     the fitted curve object (ignored; 0330 reads them)
 #         <date>_tune_run-<run>.txt (the log, in the run directory; promoted to scripts/logs/habitat/)
 # RUN:    Rscript scripts/0320-tune-run.R   (from the repo root; SPECIES=CH,BT to restrict; WORKERS=14; RUN=<name> names
-#         the candidate, a UTC stamp YYYYMMDD_HHMM by default)
+#         the candidate, a UTC stamp YYYYMMDD_HHMM (the default, and the only form taken))
 #         Scored grids (<key>_score.rds) and grade tables already in the run directory are kept, so RUN=<name> resumes
 #         a run, and a run over a subset of species on another host, with the caches copied, grades only what is missing. The cache is keyed on the
 #         population and the grid, not the scorer's code: remove <key>_score.rds after a change to R/tune_score.R.
@@ -76,7 +76,8 @@
 #         (knw_tune_pick_report()), the run to make after a change upstream (a link build, placement, a flow reload).
 #         A candidate writes its own <run>/pick_report.csv, before it grades.
 #         GRADIENT=fwa_gradient scores the Atlas line's gradient on the main fold seed, no grades, into <run>/grad_fwa/
-#         (data/tune/dev/grad_fwa/ with DEV=1; promoted to data/tune/grad_fwa/), its log suffixed -grad_fwa.
+#         (data/tune/dev/grad_fwa/ with DEV=1; promoted to data/tune/grad_fwa/), its log suffixed -grad_fwa. Without
+#         DEV it needs RUN=<the main run's name>, whose candidate it joins and is promoted with.
 # ---------------------------------------------------------------------------
 suppressMessages({ library(dplyr); library(readr); library(DBI); library(RPostgres) })
 pkgload::load_all(quiet = TRUE)
@@ -102,9 +103,15 @@ se_strict <- 1.96   # the stricter reading of the region, in SE, beside the one-
 # only scripts/0335-promote.R writes, on the operator's word. RUN names the run (a UTC stamp at launch by default);
 # giving an existing run's name resumes it on its cached scores and grades
 run <- Sys.getenv("RUN", format(Sys.time(), "%Y%m%d_%H%M", tz = "UTC"))
-# no hyphen: the logs add -<species>, -grad_fwa and a pass number to the run's name, and their readers split on it
-if (!grepl("^[A-Za-z0-9][A-Za-z0-9_.]*$", run)) stop("RUN must be letters, digits, _ and . (no hyphen): ", run)
+# a stamp, so a log name says which run it is and sorts by date: the logs add -<species>, -grad_fwa and a pass number,
+# and data-raw/vignette_chinook.R matches a run's logs by that form
+if (!grepl("^[0-9]{8}_[0-9]{4}([0-9]{2})?$", run)) stop("RUN must be a UTC stamp YYYYMMDD_HHMM, as the default is: ", run)
 dir_run <- if (dev) "data/tune/dev" else file.path("data/tune/candidate", run)
+# the Atlas-gradient sensitivity belongs to a main run, which promotes it with its own tables: name that run
+if (!dev && gradient != "segment_gradient" &&
+      (!nzchar(Sys.getenv("RUN")) || !length(list.files(dir_run, "_summary\\.csv$")))) {
+  stop("GRADIENT=", gradient, " is the sensitivity of a main run: give it RUN=<that run's name> (data/tune/candidate/)")
+}
 dir_out <- dir_run
 if (nzchar(grad_dirs[[gradient]])) dir_out <- file.path(dir_out, grad_dirs[[gradient]])
 # one log per pass: a pass over a subset of species (SPECIES=) names them, so passes do not overwrite each other. A DEV=1
@@ -116,11 +123,7 @@ path_log <- file.path(dir_run, paste0(format(Sys.time(), "%Y%m%d", tz = "UTC"), 
                                                      if (nzchar(grad_dirs[[gradient]])) paste0("-", grad_dirs[[gradient]]) else "", ".txt"))
 # a resumed candidate keeps the log of the pass that graded (data-raw/vignette_chinook.R reads its grade lines): a later
 # pass under the same name is numbered, never written over it
-if (!dev && file.exists(path_log)) {
-  base_log <- path_log
-  i <- 2L
-  while (file.exists(path_log <- sub("\\.txt$", sprintf("-%d.txt", i), base_log))) i <- i + 1L
-}
+if (!dev) path_log <- .knw_free_path(path_log)
 dir.create(dir_out, showWarnings = FALSE, recursive = TRUE)
 log_lines <- character()
 say <- function(...) { log_lines <<- c(log_lines, sprintf(...)); message(sprintf(...)) }

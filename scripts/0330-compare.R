@@ -91,8 +91,10 @@ dir_cat <- "data/compare/catalog"
 dir_maps <- file.path(dir_out, "maps")
 dir_gpkg <- file.path(dir_out, "gpkg")
 dir_fig <- file.path(dir_out, "fig")
-path_log <- file.path(dir_out, paste0(format(Sys.Date(), "%Y%m%d"), "_compare-", run,
-                                      if (nzchar(stage_only)) paste0("-", stage_only), ".txt"))
+# a pass over some species names them, and a second pass of the day is numbered: a log is never written over
+path_log <- .knw_free_path(file.path(dir_out, paste0(format(Sys.time(), "%Y%m%d", tz = "UTC"), "_compare-", run,
+                                                     if (nzchar(only)) paste0("-", tolower(gsub(",", "_", only))),
+                                                     if (nzchar(stage_only)) paste0("-", stage_only), ".txt")))
 for (d in c(dir_out, dir_cat, dir_maps, dir_gpkg, dir_fig)) dir.create(d, showWarnings = FALSE, recursive = TRUE)
 log_lines <- character()
 say <- function(...) { log_lines <<- c(log_lines, sprintf(...)); message(sprintf(...)) }

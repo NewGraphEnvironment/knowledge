@@ -164,7 +164,11 @@ knw_tune_promote <- function(run, keys = NULL, live = NULL, tune_dir = "data/tun
       old <- if (dir.exists(to)) list.files(to, pat, full.names = TRUE) else character()
       old <- old[!dir.exists(old)]
       if (!length(src)) {
-        if (length(old)) {
+        # a key the run no longer fits leaves nothing of its last fit behind; a fitted key keeps what the run did not
+        # redraw (a GeoPackage or figures skipped with GPKG=FALSE or without STAGE=maps), and says so
+        if (length(old) && !k %in% fitted) {
+          removed <<- c(removed, old)
+        } else if (length(old)) {
           notes <<- c(notes, sprintf("%s: the run wrote nothing in %s; %d tracked file(s) in %s kept",
                                      k, from, length(old), to))
         }
@@ -174,6 +178,7 @@ knw_tune_promote <- function(run, keys = NULL, live = NULL, tune_dir = "data/tun
       removed <<- c(removed, setdiff(old, file.path(to, basename(src))))
     }
   }
+  fitted <- keys[!is.na(vapply(cand[keys], fld, character(1), "rule_recommended"))]
   esc <- function(k) gsub(".", "\\.", k, fixed = TRUE)
   by_key <- function(k) paste0("^", esc(k), "_")
   plan_dir(run_tune, tune_dir, by_key)
@@ -205,7 +210,7 @@ knw_tune_promote <- function(run, keys = NULL, live = NULL, tune_dir = "data/tun
       }
       next
     }
-    merged[[file.path(compare_dir, basename(f))]] <- .knw_rows_merge(file.path(compare_dir, basename(f)), f, keys)
+    merged[[file.path(compare_dir, basename(f))]] <- .knw_rows_merge(file.path(compare_dir, basename(f)), f, keys, fitted)
   }
 
   written <- c(unlist(lapply(copies, `[[`, "to")), names(merged))
@@ -256,8 +261,9 @@ knw_tune_promote <- function(run, keys = NULL, live = NULL, tune_dir = "data/tun
 
 # the lines of a table that holds every key, with the promoted keys' rows taken from the run's copy: each key's rows go
 # where its rows stood (kept keys untouched, byte for byte), and a key new to the table goes at the end. A header that
-# differs is taken from the run only when every key the tracked table holds is promoted
-.knw_rows_merge <- function(tracked, run_file, keys) {
+# differs is taken from the run only when every key the tracked table holds is promoted. A fitted key the run's table
+# leaves out (0330 composes no key whose pass failed) is refused rather than dropped; an unfitted one loses its rows
+.knw_rows_merge <- function(tracked, run_file, keys, fitted = keys) {
   parse <- function(f) {
     ln <- readLines(f, warn = FALSE)
     x <- utils::read.csv(f, colClasses = "character", check.names = FALSE)
@@ -267,6 +273,11 @@ knw_tune_promote <- function(run, keys = NULL, live = NULL, tune_dir = "data/tun
   new <- parse(run_file)
   if (!file.exists(tracked)) return(c(new$header, new$rows[new$key %in% keys]))
   old <- parse(tracked)
+  lost <- intersect(intersect(fitted, old$key), setdiff(fitted, new$key))
+  if (length(lost)) {
+    stop(basename(tracked), " in the run leaves out ", paste(lost, collapse = ", "), ", which the tracked table holds: ",
+         "rerun 0330 on the run for them, or promote without them", call. = FALSE)
+  }
   if (!identical(old$header, new$header) && !all(old$key %in% keys)) {
     stop(basename(tracked), "'s columns differ from the run's: promote every key it holds (",
          paste(unique(old$key), collapse = ", "), ")", call. = FALSE)
@@ -276,4 +287,16 @@ knw_tune_promote <- function(run, keys = NULL, live = NULL, tune_dir = "data/tun
   rows <- unlist(lapply(order_keys, function(k) if (k %in% keys) new$rows[new$key == k] else old$rows[old$key == k]),
                  use.names = FALSE)
   c(header, rows)
+}
+
+# the first free one of `path`, `path-2`, `path-3`, ...: a log is never written over, so a second pass of a run on one
+# day (a resume, another SPECIES) keeps the first's, and a promotion can bring both
+.knw_free_path <- function(path) {
+  out <- path
+  i <- 1L
+  while (file.exists(out)) {
+    i <- i + 1L
+    out <- sub("(\\.[A-Za-z]+)$", sprintf("-%d\\1", i), path)
+  }
+  out
 }
