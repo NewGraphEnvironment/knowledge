@@ -9,7 +9,7 @@ repos consume snapshots from here instead of carrying the pipeline.
 ## Repository Context
 
 **Repository:** NewGraphEnvironment/knowledge (#56 prepared it to go public, but `gh repo view` still read
-PRIVATE on 2026-10-19; the pkgdown site, <https://newgraphenvironment.github.io/knowledge/>, is live (answered 200 on
+PRIVATE on 2026-10-28; the pkgdown site, <https://newgraphenvironment.github.io/knowledge/>, is live (answered 200 on
 2026-10-27) though not advertised)
 **Primary Language:** R, with Python (`0153`, `0270`) and workflow JS (`wf_*.js`)
 **Origin:** seeded in September 2026 with history from an earlier fish-passage reporting template.
