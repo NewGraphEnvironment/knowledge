@@ -24,3 +24,6 @@ cd /Users/airvine/Projects/repo/knowledge && git fetch -q origin && git checkout
   segment read, summaries, outside check and scratch drop, and returns `timing`; 0330's `run_one()` adds the grade
   table read (first) and the writes (last), so a key's stage lines account for its "compared in" minutes. A mutated
   timer (no advance of `last`) turns the sum-to-total expectation red.
+- `/code-check branch` round 1: one finding (fragile): a refused 0320 or 0330 wrote its header lines over that day's
+  tracked run log. Fixed: refused runs log to `<date>_tune_refused.txt` and `<date>_compare_refused.txt`, outside
+  the `_tune_run.*\.txt$` pattern 0325 and `data-raw/vignette_chinook.R` read.

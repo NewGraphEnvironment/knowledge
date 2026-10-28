@@ -152,11 +152,13 @@ gpkg_of <- function(w) {
 
 # ---- compare, per species x stage (species in parallel) ------------------------------------
 conn <- pg()
-# the comparison is bound by the database: refuse a connection off its host unless REMOTE=TRUE, at every STAGE (#110)
+# the comparison is bound by the database: refuse a connection off its host unless REMOTE=TRUE, at every STAGE (#110).
+# A refused run's log is <date>_compare_refused.txt, so it does not overwrite the day's run log
 lat <- tryCatch(knw_db_latency_check(conn, remote = remote), error = function(e) {
   say("%s", conditionMessage(e))
-  writeLines(log_lines, path_log)
-  stop(conditionMessage(e), call. = FALSE)
+  path_refused <- file.path("scripts/logs/habitat", paste0(format(Sys.Date(), "%Y%m%d"), "_compare_refused.txt"))
+  writeLines(log_lines, path_refused)
+  stop(conditionMessage(e), " (log ", path_refused, ")", call. = FALSE)
 })
 say("%s", lat$line)
 # the database's build, checked before any work (#87): a schema built by another run than the evidence's is refused

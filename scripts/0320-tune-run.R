@@ -138,9 +138,15 @@ if (!dev) {
   rec <- tryCatch(knw_build_record(conn, schema, run_uid = run_uid), error = function(e) fail("%s", conditionMessage(e)))
   say("%s", rec$line)
   # the grade is bound by the database: refuse a connection off its host unless REMOTE=TRUE (#110). DEV=1 and
-  # GRADIENT=fwa_gradient write no grades, so they are not checked
+  # GRADIENT=fwa_gradient write no grades, so they are not checked. A refused run's log is <date>_tune_refused.txt, so it
+  # neither overwrites the day's run log nor matches the _tune_run*.txt that 0325 and vignette_chinook.R read
   if (!main_only) {
-    lat <- tryCatch(knw_db_latency_check(conn, remote = remote), error = function(e) fail("%s", conditionMessage(e)))
+    lat <- tryCatch(knw_db_latency_check(conn, remote = remote), error = function(e) {
+      say("%s", conditionMessage(e))
+      path_refused <- file.path("scripts/logs/habitat", paste0(format(Sys.Date(), "%Y%m%d"), "_tune_refused.txt"))
+      writeLines(log_lines, path_refused)
+      stop(conditionMessage(e), " (log ", path_refused, ")", call. = FALSE)
+    })
     say("%s", lat$line)
   }
   dbDisconnect(conn)
