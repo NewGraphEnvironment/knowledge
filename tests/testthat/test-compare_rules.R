@@ -98,3 +98,18 @@ test_that("the stage timer records each stage once, in order, and the stages sum
   expect_identical(x[["first"]], a)
   expect_equal(sum(x), tm$total(), tolerance = 1e-9)
 })
+
+test_that("the bins' step seconds sum to one row per rule and step, a step that never ran at zero (#101)", {
+  b1 <- c("shared|copy" = 60, "shared|walk" = 0, "default|classify" = 120, "default|connect" = 30, "door|classify" = 0)
+  b2 <- c("shared|copy" = 60, "shared|walk" = 0, "default|classify" = 60, "default|connect" = 30, "door|classify" = 30)
+  x <- .knw_stage_minutes(list(b1, NULL, b2))
+  expect_identical(x$rule, c("shared", "shared", "default", "default", "door"))
+  expect_identical(x$step, c("copy", "walk", "classify", "connect", "classify"))
+  expect_equal(x$minutes, c(2, 0, 3, 1, 0.5))
+  expect_equal(sum(x$share), 1)
+  expect_equal(x$share[x$rule == "default" & x$step == "classify"], 3 / 6.5)
+  # a step one bin lacks counts as zero there
+  y <- .knw_stage_minutes(list(c("default|read" = 60), c("default|read" = 60, "door|read" = 120)))
+  expect_equal(y$minutes, c(2, 2))
+  expect_error(.knw_stage_minutes(list(NULL)), "no bin")
+})

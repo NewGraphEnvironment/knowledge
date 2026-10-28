@@ -60,7 +60,9 @@
 #         commit> for the configs (default origin/main of LINK_REPO); TUNED_AS=door; GPKG=FALSE skips the GeoPackages;
 #         STAGE=maps draws the floodplain table and the maps from the tables the last full run saved; STAGE=gpkg writes
 #         the GeoPackages alone from the segments it saved). Every STAGE checks the database's round trip at connect
-#         and stops off its host (over 20 ms) unless REMOTE=TRUE (#110).
+#         and stops off its host (over 20 ms) unless REMOTE=TRUE (#110). Each key's log lines give its stages' minutes
+#         (#110) and, under classify, overlay and connect, each rule's worker-minutes by step beside the steps the
+#         rules share, and which rules' predicates read the near-river table (#101).
 # ---------------------------------------------------------------------------
 suppressMessages({ library(dplyr); library(readr); library(DBI); library(RPostgres) })
 pkgload::load_all(quiet = TRUE)

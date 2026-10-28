@@ -31,16 +31,16 @@ Part of that work repeats on every rerun: link's `default` rule is regenerated u
 
 ## Phase 1: Time every rule's stages inside the comparison
 
-- [ ] `.knw_compare_bin()` (`R/compare_rules.R`) records seconds per group for the shared steps (scratch copy with its
+- [x] `.knw_compare_bin()` (`R/compare_rules.R`) records seconds per group for the shared steps (scratch copy with its
       indexes; near-river walk) and per rule for classify (habitat table), overlay and connect, base R only (the worker
       must call no name of this package), and returns them beside `flags` and `walk_s`
-- [ ] A pure helper sums the bins' records into one table per rule × stage (worker-minutes, share of the summed
+- [x] A pure helper sums the bins' records into one table per rule × stage (worker-minutes, share of the summed
       classify-overlay-connect time); `knw_compare_rules()` logs one line per rule and returns the table as
       `stage_minutes`. The existing `walk_s` line stays as written
-- [ ] Tests in `tests/testthat/test-compare_rules.R`: the helper sums bins correctly and keeps every rule and stage
+- [x] Tests in `tests/testthat/test-compare_rules.R`: the helper sums bins correctly and keeps every rule and stage
       (including a rule with zero seconds); the existing "worker function calls no name of this package" test stays
       green
-- [ ] `0330`'s header names the new log lines (#110's stage lines)
+- [x] `0330`'s header names the new log lines (#110's stage lines)
 
 ## Phase 2: Measure CH rearing and BT rearing
 

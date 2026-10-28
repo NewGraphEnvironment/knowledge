@@ -78,8 +78,11 @@ and lost by structure, reason and stream order), \code{checks} (FDIS detection o
 each rule's segments and the bcfishobs lift, per structure), \code{segments} (the
 per-segment flags under \code{default} and each structure, with \code{tuned} the
 \code{tuned_as} structure, and the \code{default} branch each segment lies on), \code{log}
-lines, one of them per stage with its minutes, and \code{timing}, the minutes of
-each stage by name (#110).
+lines, one of them per stage with its minutes, \code{timing}, the minutes of
+each stage by name (#110), and \code{stage_minutes}, a data frame of the
+worker-minutes each rule's classify, overlay, connect and read took, summed
+over the groups, beside the steps the rules share (the scratch copy, the
+near-river walk and the default check), with each one's share (#101).
 }
 \description{
 \code{scripts/0298}'s comparison for any species and stage. Each rule goes through
