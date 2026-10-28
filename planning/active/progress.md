@@ -31,3 +31,8 @@ cd /Users/airvine/Projects/repo/knowledge && git fetch -q origin && git checkout
   median from a sum, max or a single query. Pinned with per-call sleeps (0.2, 0, 0 s) and a call count; `sum`, `max`,
   `mean` and `seq_len(1)` mutations each fail it in a `git archive` copy, the real code passes. `.knw_timer()`'s
   `total()` comment corrected.
+- Round 4: one finding inside round 3's fix: its two fast queries were equal, so `min()` and a warm-up drop still
+  passed. `Sys.sleep()` overshoots 100 ms or more here, so `knw_db_latency()` now reads an internal `.knw_now()` the
+  tests mock as a fake clock (100 / 5 / 10 ms). sum, mean, max, min, first, median-without-first, `/ 1000` and
+  `seq_len(1)` mutations each fail; the real code passes. The loop ends on the enumeration in `review-enumeration.md`
+  (12 candidates, none above its source).

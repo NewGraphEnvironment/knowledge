@@ -42,12 +42,15 @@ knw_db_latency <- function(conn, n = 20) {
   chk::chk_whole_number(n)
   chk::chk_gte(n, 1)
   ms <- vapply(seq_len(n), function(i) {
-    t0 <- Sys.time()
+    t0 <- .knw_now()
     DBI::dbGetQuery(conn, "SELECT 1")
-    as.numeric(difftime(Sys.time(), t0, units = "secs")) * 1000
+    as.numeric(difftime(.knw_now(), t0, units = "secs")) * 1000
   }, numeric(1))
   stats::median(ms)
 }
+
+# the clock knw_db_latency() reads, so a test can give each query an exact time
+.knw_now <- function() Sys.time()
 
 #' @rdname knw_db_latency
 #' @export

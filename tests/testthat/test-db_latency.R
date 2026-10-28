@@ -1,26 +1,31 @@
 # knw_db_latency_check() stops a database-bound run on a remote link unless REMOTE=TRUE (#110)
 
-test_that("the round trip is the median wall time of the queries", {
-  local_mocked_bindings(dbGetQuery = function(conn, sql, ...) {
-    Sys.sleep(0.03)
+# a fake clock: each mocked query advances it by the next of `secs`, so every query takes an exact time
+local_query_times <- function(secs, env = parent.frame()) {
+  clock <- as.POSIXct(0, origin = "1970-01-01", tz = "UTC")   # near 0, so adding ms stays exact
+  calls <- 0L
+  testthat::local_mocked_bindings(.knw_now = function() clock, .env = env)
+  testthat::local_mocked_bindings(dbGetQuery = function(conn, sql, ...) {
+    calls <<- calls + 1L
+    clock <<- clock + secs[[calls]]
     data.frame(x = 1L)
-  }, .package = "DBI")
-  ms <- knw_db_latency(NULL, n = 3)
-  expect_gt(ms, 20)
-  expect_lt(ms, 1000)
+  }, .package = "DBI", .env = env)
+  function() calls
+}
+
+test_that("the round trip is in ms, over every one of the n queries", {
+  n_calls <- local_query_times(rep(0.03, 3))
+  expect_equal(knw_db_latency(NULL, n = 3), 30, tolerance = 1e-6)
+  expect_identical(n_calls(), 3L)
   expect_error(knw_db_latency(NULL, n = 0))
 })
 
-test_that("one slow query does not decide the round trip: the median of all n, not a sum, mean, max or the first", {
-  calls <- 0L
-  local_mocked_bindings(dbGetQuery = function(conn, sql, ...) {
-    calls <<- calls + 1L
-    Sys.sleep(c(0.2, 0, 0)[calls])
-    data.frame(x = 1L)
-  }, .package = "DBI")
-  ms <- knw_db_latency(NULL, n = 3)
-  expect_identical(calls, 3L)
-  expect_lt(ms, 50)   # the median is the fast queries'; a sum or max is ~200 ms, a mean ~67
+test_that("the round trip is the median of all n queries, with no warm-up dropped", {
+  # 100, 5 and 10 ms: the median is 10; the min 5, the mean 38.3, the max and the first 100, the sum 115, and the
+  # median without the first query 7.5
+  n_calls <- local_query_times(c(0.1, 0.005, 0.01))
+  expect_equal(knw_db_latency(NULL, n = 3), 10, tolerance = 1e-6)
+  expect_identical(n_calls(), 3L)
 })
 
 test_that("a slow connection stops with the round trip and the estimate, unless remote", {
