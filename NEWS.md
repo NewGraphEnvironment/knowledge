@@ -1,3 +1,13 @@
+# knowledge 0.4.16
+
+* Retuning no longer touches the tracked tables or the articles until the operator promotes a run (#111). `DEV=1 0320`
+  is the check after a change upstream: minutes, no database, ending in a pick report (`knw_tune_pick_report()`) of
+  each key's pick beside the published one. A full `0320` and `0330 TUNE_DIR=` write ignored candidate runs, and
+  `scripts/0335-promote.R` (`knw_tune_promote()`) moves one in, whole or by key, archiving what it replaces so a
+  promotion can be undone, then reruns `0325` and the article bundles. Before anything moves it refuses a set that
+  `0325` or the bundles would refuse. Summaries record their run and evidence ledger, which the readers take through
+  `knw_run_ledger()` rather than the newest ledger on disk.
+
 # knowledge 0.4.15
 
 * A database-bound run checks its connection's round trip before any work (#110). `knw_db_latency_check()` stops
