@@ -24,11 +24,11 @@ tune_dir_fx <- function(se_default = 60, edit = identity) {
 }
 
 # the comparison's table for the fixture's key, with the structure 0330 reported as tuned
-compare_dir_fx <- function(tuned_structure = "door", key = "CH_rear") {
+compare_dir_fx <- function(tuned_structure = "door", key = "CH_rear", tuned_rule = "mad>=0.75|g<=0.07|Q3@D1000") {
   d <- withr::local_tempdir(.local_envir = parent.frame())
   cmp <- data.frame(watershed_group_code = c("BULK", "MORR", "ALL"), species_code = "CH", stage = "rear",
                     structure = tuned_structure, tuned_structure = tuned_structure, default_km = c(10, 20, 30),
-                    tuned_km = c(8, 18, 26))
+                    tuned_km = c(8, 18, 26), tuned_rule = tuned_rule)
   utils::write.csv(cmp, file.path(d, paste0(key, "_compare.csv")), row.names = FALSE)
   d
 }
@@ -178,6 +178,17 @@ test_that("a pair compared under a structure link has no scope for, or with no c
   empty <- withr::local_tempdir()
   expect_error(knw_thresholds_table(d, "knowledge/fdis/v3", "run1", "abc1234", compare_dir = empty),
                "no CH_rear_compare.csv")
+})
+
+test_that("a comparison of another rule than the pick, or naming none, is refused (#92)", {
+  d <- tune_dir_fx()
+  # a comparison left from an earlier run's pick would otherwise hand its scope to this one
+  expect_error(knw_thresholds_table(d, "knowledge/fdis/v3", "run1", "abc1234",
+                                    compare_dir = compare_dir_fx("door", tuned_rule = "mad>=0.75|g<=0.09|Q3@D1000")),
+               "compared mad>=0.75\\|g<=0.09\\|Q3@D1000, not the pick mad>=0.75\\|g<=0.07\\|Q3@D1000")
+  expect_error(knw_thresholds_table(d, "knowledge/fdis/v3", "run1", "abc1234",
+                                    compare_dir = compare_dir_fx("door", tuned_rule = NA)),
+               "compared NA, not the pick")
 })
 
 test_that("curve_grad is the summary's gradient column, and NA on a summary written before the record (#92)", {

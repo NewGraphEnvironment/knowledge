@@ -131,6 +131,11 @@ if (length(rec) != 1 || !identical(rec, unique(out$thresholds$rule))) {
 # and the grade the comparison read was graded under that rule, on the evidence the summary and the tuning log name (the
 # branch review of 2026-10-25: the log's md5 lines are the three derived tables', in the summary's order)
 if (!identical(g1$rule, rec)) stop("data/tune/", key, "_grades.csv was graded under ", g1$rule, ", not the recommended ", rec, "; rerun 0320")
+# and the comparison ran that rule, not an earlier run's pick (#92)
+if (!identical(unique(out$compare_structures$tuned_rule), rec)) {
+  stop("data/compare/", key, "_compare.csv compared ", paste(unique(out$compare_structures$tuned_rule), collapse = ", "),
+       ", not the recommended ", rec, "; rerun 0330")
+}
 if (!"evidence_md5" %in% names(out$summary) || !identical(g1$evidence_md5, out$summary$evidence_md5)) {
   stop("data/tune/", key, "_grades.csv and _summary.csv name different evidence builds (or the summary predates the record); rerun 0320")
 }

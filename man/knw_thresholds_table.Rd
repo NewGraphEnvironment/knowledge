@@ -26,8 +26,8 @@ to \code{\link[=knw_tune_run]{knw_tune_run()}}, so the 1.96 replay picks as the 
 
 \item{compare_dir}{\code{NULL} or \code{character(1)} the directory \code{scripts/0330} wrote
 (one \verb{<sp>_<stage>_compare.csv} per compared key), read for
-\code{near_river_scope}; a fitted rule with a pair and no comparison there is an
-error.}
+\code{near_river_scope}; a fitted rule with a pair and no comparison there, or a
+comparison of another rule (\code{tuned_rule}), is an error.}
 }
 \value{
 A list: \code{thresholds} and \code{groups} (one row per \code{rule_id} and

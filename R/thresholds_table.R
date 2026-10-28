@@ -42,8 +42,8 @@
 #'   to [knw_tune_run()], so the 1.96 replay picks as the run did.
 #' @param compare_dir `NULL` or `character(1)` the directory `scripts/0330` wrote
 #'   (one `<sp>_<stage>_compare.csv` per compared key), read for
-#'   `near_river_scope`; a fitted rule with a pair and no comparison there is an
-#'   error.
+#'   `near_river_scope`; a fitted rule with a pair and no comparison there, or a
+#'   comparison of another rule (`tuned_rule`), is an error.
 #' @return A list: `thresholds` and `groups` (one row per `rule_id` and
 #'   watershed group the rule was scored on), both `tibble`s.
 #' @export
@@ -127,7 +127,14 @@ knw_thresholds_table <- function(tune_dir, evidence_version, link_run_uid, link_
     if (!is.null(compare_dir) && !is.na(rec$exc_q)) {
       f_cmp <- file.path(compare_dir, paste0(key, "_compare.csv"))
       if (!file.exists(f_cmp)) stop(key, ": no ", basename(f_cmp), " in ", compare_dir, " to read the near-river scope from", call. = FALSE)
-      ts <- unique(utils::read.csv(f_cmp, stringsAsFactors = FALSE)$tuned_structure)
+      cmp <- utils::read.csv(f_cmp, stringsAsFactors = FALSE)
+      # a comparison left from an earlier run's pick would hand its scope to this one (#92)
+      tr <- unique(cmp$tuned_rule)
+      if (!identical(tr, rec$rule)) {
+        stop(key, ": ", basename(f_cmp), " compared ", paste(tr, collapse = ", "), ", not the pick ", rec$rule,
+             "; rerun 0330", call. = FALSE)
+      }
+      ts <- unique(cmp$tuned_structure)
       ts <- ts[!is.na(ts)]
       if (length(ts) != 1L) stop(key, ": the comparison names ", length(ts), " tuned structures, not one", call. = FALSE)
       scopes <- c(door = "both", door_wetland = "wetland_flow")
