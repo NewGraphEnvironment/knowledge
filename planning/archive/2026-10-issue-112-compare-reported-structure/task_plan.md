@@ -92,7 +92,7 @@ database's host.
       then `rmarkdown::render()`), and `test-vignette-data.R` passes unchanged
 - [x] `/code-check` clean (once over the branch with `/code-check branch`)
 - [x] PWF checkboxes match landed work
-- [ ] `/planning-archive` on completion
+- [x] `/planning-archive` on completion
 
 Verification of the acceptance: the minutes are in `research/database_builds.md`. A default comparison regenerates two
 rules per key: `knw_compare_rules(structures = tuned_as)` gives `rule_names = c("default", tuned_as)`. The check
