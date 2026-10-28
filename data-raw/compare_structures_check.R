@@ -83,7 +83,9 @@ head_sha <- substr(system2("git", c("rev-parse", "HEAD"), stdout = TRUE), 1, 7)
 say("compare_structures_check on %s; link configs at %s; %d workers; reported structure %s; knowledge %s; %s",
     schema, substr(config_sha, 1, 8), workers, tuned_as, head_sha, lat$line)
 md5_here <- unname(tools::md5sum(file.path(evidence_dir, c("visits_link.csv", "visits_species.csv"))))
-say("inputs: %s, %s, %s (visits md5 %s); flow load %s", tune_dir, compare_dir, evidence_dir,
+# the input paths as the log names them: a home directory is written ~, so no log carries a machine's user
+home_rel <- function(x) sub(path.expand("~"), "~", x, fixed = TRUE)
+say("inputs: %s, %s, %s (visits md5 %s); flow load %s", home_rel(tune_dir), home_rel(compare_dir), home_rel(evidence_dir),
     paste(substr(md5_here, 1, 8), collapse = " "), load_db)
 
 tbl_keys <- list(compare = c("watershed_group_code", "structure"), change = c("structure", "direction", "reason", "order"),

@@ -37,7 +37,7 @@ Related: #73 (the structures), #101, #81.
   intervals unchanged under the same seed.
 - #92's stage times (`scripts/logs/habitat/20261027_compare.txt`, remote link): classify, overlay and connect sum to
   164.3 min across keys; CH 31.7 min on 4 rules (near-river walks 57.0 min summed over 6 workers).
-- This machine (m4) reaches the database at 63 ms per round trip; schemas `fresh_default` and `fresh_default_20261017`
+- The machine on the remote link reaches the database at 63 ms per round trip; schemas `fresh_default` and `fresh_default_20261017`
   both present (2026-10-28).
 - Readers of non-reported structures: the chinook article (`wl_free`), research prose on #92's run, `settings.csv`'s
   `tuned_as` note. Nothing else.
