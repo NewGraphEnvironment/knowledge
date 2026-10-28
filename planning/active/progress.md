@@ -36,10 +36,15 @@
   mad>=0.35|g<=0.25 -> mad>=0.1|g<=0.3; BT_spawn gains Q1@D500; CH_rear g<=0.13 -> g<=0.11; CO_rear
   mad>=0.03|g<=0.04 -> mad>=0.1|g<=0.0549|Q3@D2000; GR_rear width>=1.5|g<=0.0349 -> width>=2|g<=0.0549; RB_rear
   unchanged (width>=3|g<=0.3); ST_rear gains Q1@D250; WCT_rear g<=0.3 -> g<=0.25.
-- `GRADIENT=fwa_gradient` 0320 launched 00:25Z; 0330 launched 00:31Z alongside it (CONFIG_SHA 102762da, the earlier
+- `GRADIENT=fwa_gradient` 0320 launched 00:24Z; 0330 launched 00:26Z alongside it (CONFIG_SHA 102762da, the earlier
   comparison's baseline; link's default changed since only in config.yaml comments).
 - Found: 0325 reads each comparison's `tuned_structure` without checking `tuned_rule` is the pick, so #73's stale
   comparisons would have supplied the near-river scope for the new picks. Test written; the fix waits for the runs to
   release `R/`. vignette_chinook.R checks the comparison's rule too. Chinook article: at 1.96 SE the flow floor no
   longer rises (0.75 at both), so its guard and three sentences changed; the grad_ext bullet says that run was on the
   Atlas gradient and older records.
+- Atlas sensitivity: exit 0, 00:24Z-00:37Z (scoring 11.8 min, main seed), `data/tune/grad_fwa/`, log
+  `20261027_tune_run-grad_fwa.txt`. Same populations as the main run. Picks differ from the segment gradient's for BT
+  rearing (g<=0.25 vs 0.3), CH (0.15 vs 0.11), CO (0.04 vs 0.0549), GR (width 1.5 vs 2), WCT (0.3 vs 0.25), and drop
+  the exception for BT spawning and ST. Every pick's limit is in the other gradient's one-SE region except CO's
+  segment-gradient 5.49 % (Atlas region 3, 4, 7, 11, 20-30 %).
