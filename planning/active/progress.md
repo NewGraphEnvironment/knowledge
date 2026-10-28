@@ -19,5 +19,6 @@
 - Host run (22:00–22:55 UTC, knowledge 731b21f, `scripts/logs/habitat/20261028_compare_structures_check*`): every
   reported-only table equals the every-structure run's default/door rows on WCT (all 16 groups), CH and BT rearing
   (20 largest each); WCT's every-structure run equals #92's tracked tables row for row (1.7e-14) on fresh 0.44.0.
-  Gate passed: dropped rules 29–35 % of worker minutes, wall 19–29 % less. Recorded in research/database_builds.md,
+  Gate passed: dropped rules 29–35 % of worker minutes, wall 19–29 % less (contended); reruns on an idle database 29–33 %, wall 24–29 % less. Recorded in research/database_builds.md,
   CLAUDE.md. Tests: 1645 passed, 0 failed, 1 skipped; lint adds only the new data-raw script's sibling-style lines.
+- Reruns on an idle database (23:00–23:36 UTC): CH `-3` 16.6→12.6 min (31 %), WCT `-4` 4.5→3.2 (33 %; its tracked report differs as expected, the host's 2026-10-25 picks)

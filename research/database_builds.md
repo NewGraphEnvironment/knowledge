@@ -101,18 +101,22 @@ are shared by every rule. Only `door` is published, so since #112 `0330` regener
 
 | key (groups) | structures | every structure | `door` alone | dropped rules' share of worker minutes |
 |---|---|---|---|---|
-| WCT rearing (all 16) | `free`, `door` | 5.2 min | 4.2 min | 35 % (7.8 of 22.2) |
-| CH rearing (20 largest) | `free`, `door`, `door_wetland` | 17.8 | 13.7 | 31 % (18.5 of 60.6) |
+| WCT rearing (all 16) | `free`, `door` | 4.5 min | 3.2 min | 33 % (6.1 of 18.4) |
+| CH rearing (20 largest) | `free`, `door`, `door_wetland` | 16.6 | 12.6 | 31 % (17.6 of 56.6) |
 | BT rearing (20 largest) | `free`, `door` | 9.9 | 7.0 | 29 % (13.2 of 44.9) |
 
-Each rule cost 6 to 19 worker minutes, against 1.0 to 1.5 for all the groups' copies and indexes, and CH's walks
+Each rule cost 5 to 19 worker minutes, against 0.7 to 1.4 for all the groups' copies and indexes, and CH's walks
 about 20. The `door` alone run went second, on a cache the first had warmed, so its wall times flatter it a little;
-the worker-minute shares come from the every-structure run alone. Applied to #92's minutes for classify, overlay and connect (from the remote link),
+the worker-minute shares come from the every-structure run alone. A first pass (`20261028_compare_structures_check.txt`
+and `-2`) overlapped a link run on the same database until 22:18 UTC for WCT and the start of CH; the rows above are
+the reruns on an idle database (`-2` for BT rearing, which started after it, `-3` and `-4`), and the contended pass
+read the same shares (35, 31 %). Applied to #92's minutes for classify, overlay and connect (from the remote link),
 key by key (CO and ST drop two rules like CH, RB one like BT rearing, and BT spawning and GR have only `door`), they
 come to about 40 of its 164, a quarter. On every key the `door` alone tables equalled the every-structure run's `default` and `door` rows
-(largest relative difference 3.9e-14, segments' flags identical). WCT rearing's every-structure run also equalled
-#92's tracked tables row for row (1.7e-14), on fresh 0.44.0 where #92 ran 0.43.0. CH and BT rearing ran on the
-host's own older grade and evidence tables (2026-10-25), which time the rules as well as #92's would.
+(largest relative difference 9.9e-14, segments' flags identical). WCT rearing's every-structure run also equalled
+#92's tracked tables row for row (1.7e-14), on fresh 0.44.0 where #92 ran 0.43.0, from #92's grade, curve and
+evidence tables staged for the first pass. The reruns read the host's own older tables (2026-10-25's picks), which time
+the rules as well as #92's would, and so differ from the tracked tables as they should (`-4`).
 
 ## What a run reads from the database
 

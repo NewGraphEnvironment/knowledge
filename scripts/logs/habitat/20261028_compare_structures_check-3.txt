@@ -1,0 +1,10 @@
+compare_structures_check on fresh_default_20261017; link configs at 102762da; 6 workers; reported structure door; knowledge 86351fe; database round trip 1.7 ms (median of 20 SELECT 1; limit 20 ms)
+inputs: ~/Projects/repo/knowledge/data/tune, data/compare, ~/Projects/repo/knowledge/data/fdis/derived (visits md5 d3a434e2 bc71243b); flow load wet_db_load(): discharge/fwa/v1/segment_monthly, scenario historical last loaded from https://fresh-bc.s3.us-west-2.amazonaws.com/discharge/fwa/v1/manifest.json (built 2026-10-19T06:08:31Z, wet 94deeb5)
+CH_rear: 20 groups (SETN MORK OWIK INKR UFRA LNAR BULK UNAR HOMA MSKE KNIG TOBA LILL USKE SQAM TATR GRAI LSKE FRCN KISP).
+  every structure (free, door, door_wetland): 16.6 min; classify, overlay and connect 13.7 min; summed over workers: copies and indexes 1.2, walks 19.5, default 9.3, free 10.3, door 9.0, door_wetland 7.3.
+  reported only (door): 12.6 min; classify, overlay and connect 10.2 min; summed over workers: copies and indexes 1.3, walks 20.0, default 9.7, door 9.3.
+  CH_rear: the dropped rules (free, door_wetland) took 17.6 of 56.6 worker minutes (31 %) in the every-structure run; wall time 16.6 min then 12.6 (second, warm).
+  CH_rear reported vs every structure: compare: 21 rows x 35 columns match; largest relative numeric difference 9.94336e-14.
+  CH_rear reported vs every structure: change: 35 rows x 9 columns match; largest relative numeric difference 3.22823e-16.
+  CH_rear reported vs every structure: checks: 7 rows x 12 columns match; largest relative numeric difference 1.72085e-15.
+  CH_rear reported vs every structure: segments: 1829223 rows x 30 columns match; largest relative numeric difference 0.
