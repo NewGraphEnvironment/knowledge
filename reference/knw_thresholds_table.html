@@ -25,7 +25,9 @@ on through-wetland lines alone, is link's wetland_flow. It is NA where the
 rule has no pair, and where compare_dir is NULL. evidence_md5 is the
 identity of the evidence build the rule was scored on, as the summary records
 it (scripts/0320; NA on a summary written before the record), which
-scripts/0325 holds each grade table to. A summary whose rule_recommended
+scripts/0325 holds each grade table to; curve_grad is the visit column
+the rule and its curve read the gradient from (segment_gradient, link's
+segment gradient, from #92; NA on a summary written before the record). A summary whose rule_recommended
 is not its tune table's recommended rule is refused: the two are written at
 different points of a run. A species × stage that
 was not fitted (no stream rule, no response, too few groups) gets one row
@@ -55,7 +57,9 @@ on through-wetland lines alone, is link's wetland_flow. It is NA where the
 rule has no pair, and where compare_dir is NULL. evidence_md5 is the
 identity of the evidence build the rule was scored on, as the summary records
 it (scripts/0320; NA on a summary written before the record), which
-scripts/0325 holds each grade table to. A summary whose rule_recommended
+scripts/0325 holds each grade table to; curve_grad is the visit column
+the rule and its curve read the gradient from (segment_gradient, link's
+segment gradient, from #92; NA on a summary written before the record). A summary whose rule_recommended
 is not its tune table's recommended rule is refused: the two are written at
 different points of a run. A species × stage that
 was not fitted (no stream rule, no response, too few groups) gets one row
@@ -124,7 +128,9 @@ on through-wetland lines alone, is link's <code>wetland_flow</code>. It is <code
 rule has no pair, and where <code>compare_dir</code> is <code>NULL</code>. <code>evidence_md5</code> is the
 identity of the evidence build the rule was scored on, as the summary records
 it (<code>scripts/0320</code>; <code>NA</code> on a summary written before the record), which
-<code>scripts/0325</code> holds each grade table to. A summary whose <code>rule_recommended</code>
+<code>scripts/0325</code> holds each grade table to; <code>curve_grad</code> is the visit column
+the rule and its curve read the gradient from (<code>segment_gradient</code>, link's
+segment gradient, from #92; <code>NA</code> on a summary written before the record). A summary whose <code>rule_recommended</code>
 is not its tune table's recommended rule is refused: the two are written at
 different points of a run. A species × stage that
 was not fitted (no stream rule, no response, too few groups) gets one row
@@ -166,8 +172,8 @@ to <code><a href="knw_tune_run.html">knw_tune_run()</a></code>, so the 1.96 repl
 <dt id="arg-compare-dir">compare_dir<a class="anchor" aria-label="anchor" href="#arg-compare-dir"></a></dt>
 <dd><p><code>NULL</code> or <code>character(1)</code> the directory <code>scripts/0330</code> wrote
 (one <code>&lt;sp&gt;_&lt;stage&gt;_compare.csv</code> per compared key), read for
-<code>near_river_scope</code>; a fitted rule with a pair and no comparison there is an
-error.</p></dd>
+<code>near_river_scope</code>; a fitted rule with a pair and no comparison there, or a
+comparison of another rule (<code>tuned_rule</code>), is an error.</p></dd>
 
 </dl></div>
     <div class="section level2">

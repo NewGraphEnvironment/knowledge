@@ -81,7 +81,8 @@ the pick (<code><a href="knw_tune_curve.html">knw_tune_curve()</a></code>).</p>
 <span>  extra <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  fit <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"fe"</span>, <span class="st">"dense"</span><span class="op">)</span>,</span>
 <span>  prior_sd <span class="op">=</span> <span class="fl">2.5</span>,</span>
-<span>  evidence_id <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  evidence_id <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>grad <span class="op">=</span> <span class="st">"segment_gradient"</span>, width <span class="op">=</span> <span class="st">"cw_deploy"</span>, mad <span class="op">=</span> <span class="st">"mad_pick"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -143,8 +144,9 @@ population has the same number of visits and the grid the same rows, in
 the same order (every <code><a href="knw_tune_grid.html">knw_tune_grid()</a></code> column, so a moved <code>default</code>
 counts), and the settings the score was made with match (<code>fit</code>, <code>prior_sd</code>,
 <code>seed</code>, <code>folds</code>, <code>d_floor</code> and <code>extra</code>, recorded as <code>spec</code> by
-<code><a href="knw_tune_score.html">knw_tune_score()</a></code>); a cache written before the record is read back with a
-message naming the settings it is taken as. <code>n_boot</code>, <code>seed_boot</code> and
+<code><a href="knw_tune_score.html">knw_tune_score()</a></code>, and the gradient column, <code>grad</code>); a cache whose record lacks <code>grad</code> is rescored, and one
+written before any record is rescored unless <code>cols[["grad"]]</code> is <code>fwa_gradient</code>, the gradient every such cache
+was scored on, when it is read back with a message naming the settings it is taken as. <code>n_boot</code>, <code>seed_boot</code> and
 <code>seeds_more</code> are not checked: a cache's bootstrap and extra-seed tables are
 read back whatever the run asked for, so give a run with different ones its
 own directory.</p></dd>
@@ -186,6 +188,14 @@ time; a run that publishes keeps <code>TRUE</code>.</p></dd>
 visits and walks came from (<code>scripts/0320</code> passes the md5s of the three
 derived tables). It joins the cache's settings, so a score made on another
 build of the same visit count is not read back as this one's.</p></dd>
+
+
+<dt id="arg-cols">cols<a class="anchor" aria-label="anchor" href="#arg-cols"></a></dt>
+<dd><p>named <code>character</code>, as in <code><a href="knw_rule_in.html">knw_rule_in()</a></code>: the columns of <code>visits</code>
+carrying <code>grad</code>, <code>width</code> and <code>mad</code>, read by the rules and the curve. The
+gradient is link's segment gradient (<code>segment_gradient</code>), the one link
+applies a rule to (#92); the Freshwater Atlas line's (<code>fwa_gradient</code>) is the
+sensitivity. The gradient column joins the cache's settings.</p></dd>
 
 </dl></div>
     <div class="section level2">

@@ -101,7 +101,9 @@ opens its own).</p></dd>
 
 
 <dt id="arg-curve">curve<a class="anchor" aria-label="anchor" href="#arg-curve"></a></dt>
-<dd><p><code><a href="knw_tune_curve.html">knw_tune_curve()</a></code>'s result for the species and stage.</p></dd>
+<dd><p><code><a href="knw_tune_curve.html">knw_tune_curve()</a></code>'s result for the species and stage. It must
+have been fitted on link's segment gradient (<code>curve$cols[["grad"]]</code> is
+<code>segment_gradient</code>), the gradient the segments are graded on (#92).</p></dd>
 
 
 <dt id="arg-pick">pick<a class="anchor" aria-label="anchor" href="#arg-pick"></a></dt>

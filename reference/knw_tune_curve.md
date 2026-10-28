@@ -26,7 +26,7 @@ knw_tune_curve(
   walks,
   folds,
   resp = "U",
-  cols = c(grad = "fwa_gradient", width = "cw_deploy", mad = "mad_pick"),
+  cols = c(grad = "segment_gradient", width = "cw_deploy", mad = "mad_pick"),
   src = "pick",
   dist_cap_m = 50000,
   q_default = 10,
@@ -101,7 +101,8 @@ degrees of freedom), and `curves`, a `tibble` of marginal curves
 relative to the pick's thresholds, each other variable held at its
 reference; `edge_stream`, as given; `dist_in_model`, `FALSE` when the
 distances were too few to carry a smooth and size stood alone;
-`prior_sd`, as given.
+`prior_sd` and `cols`, as given (`cols[["grad"]]` is the gradient the
+curve was fitted on, which a grade table records, \#92).
 
 ## Details
 

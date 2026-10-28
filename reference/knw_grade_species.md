@@ -52,7 +52,9 @@ knw_grade_species(
 - curve:
 
   [`knw_tune_curve()`](https://newgraphenvironment.github.io/knowledge/reference/knw_tune_curve.md)'s
-  result for the species and stage.
+  result for the species and stage. It must have been fitted on link's
+  segment gradient (`curve$cols[["grad"]]` is `segment_gradient`), the
+  gradient the segments are graded on (#92).
 
 - pick:
 

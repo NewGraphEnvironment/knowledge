@@ -39,7 +39,8 @@ knw_tune_run(
   extra = TRUE,
   fit = c("fe", "dense"),
   prior_sd = 2.5,
-  evidence_id = NULL
+  evidence_id = NULL,
+  cols = c(grad = "segment_gradient", width = "cw_deploy", mad = "mad_pick")
 )
 ```
 
@@ -111,12 +112,14 @@ knw_tune_run(
   column, so a moved `default` counts), and the settings the score was
   made with match (`fit`, `prior_sd`, `seed`, `folds`, `d_floor` and
   `extra`, recorded as `spec` by
-  [`knw_tune_score()`](https://newgraphenvironment.github.io/knowledge/reference/knw_tune_score.md));
-  a cache written before the record is read back with a message naming
-  the settings it is taken as. `n_boot`, `seed_boot` and `seeds_more`
-  are not checked: a cache's bootstrap and extra-seed tables are read
-  back whatever the run asked for, so give a run with different ones its
-  own directory.
+  [`knw_tune_score()`](https://newgraphenvironment.github.io/knowledge/reference/knw_tune_score.md),
+  and the gradient column, `grad`); a cache whose record lacks `grad` is
+  rescored, and one written before any record is rescored unless
+  `cols[["grad"]]` is `fwa_gradient`, the gradient every such cache was
+  scored on, when it is read back with a message naming the settings it
+  is taken as. `n_boot`, `seed_boot` and `seeds_more` are not checked: a
+  cache's bootstrap and extra-seed tables are read back whatever the run
+  asked for, so give a run with different ones its own directory.
 
 - thresholds_extra:
 
@@ -158,6 +161,16 @@ knw_tune_run(
   walks came from (`scripts/0320` passes the md5s of the three derived
   tables). It joins the cache's settings, so a score made on another
   build of the same visit count is not read back as this one's.
+
+- cols:
+
+  named `character`, as in
+  [`knw_rule_in()`](https://newgraphenvironment.github.io/knowledge/reference/knw_rule_in.md):
+  the columns of `visits` carrying `grad`, `width` and `mad`, read by
+  the rules and the curve. The gradient is link's segment gradient
+  (`segment_gradient`), the one link applies a rule to (#92); the
+  Freshwater Atlas line's (`fwa_gradient`) is the sensitivity. The
+  gradient column joins the cache's settings.
 
 ## Value
 

@@ -30,11 +30,14 @@ is link's `wetland_flow`. It is `NA` where the rule has no pair, and
 where `compare_dir` is `NULL`. `evidence_md5` is the identity of the
 evidence build the rule was scored on, as the summary records it
 (`scripts/0320`; `NA` on a summary written before the record), which
-`scripts/0325` holds each grade table to. A summary whose
-`rule_recommended` is not its tune table's recommended rule is refused:
-the two are written at different points of a run. A species × stage that
-was not fitted (no stream rule, no response, too few groups) gets one
-row per stage with `status` saying why and no values.
+`scripts/0325` holds each grade table to; `curve_grad` is the visit
+column the rule and its curve read the gradient from
+(`segment_gradient`, link's segment gradient, from \#92; `NA` on a
+summary written before the record). A summary whose `rule_recommended`
+is not its tune table's recommended rule is refused: the two are written
+at different points of a run. A species × stage that was not fitted (no
+stream rule, no response, too few groups) gets one row per stage with
+`status` saying why and no values.
 
 ## Usage
 
@@ -71,8 +74,8 @@ knw_thresholds_table(
 
   `NULL` or `character(1)` the directory `scripts/0330` wrote (one
   `<sp>_<stage>_compare.csv` per compared key), read for
-  `near_river_scope`; a fitted rule with a pair and no comparison there
-  is an error.
+  `near_river_scope`; a fitted rule with a pair and no comparison there,
+  or a comparison of another rule (`tuned_rule`), is an error.
 
 ## Value
 

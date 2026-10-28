@@ -88,7 +88,7 @@ twice.</p>
 <span>  <span class="va">walks</span>,</span>
 <span>  <span class="va">folds</span>,</span>
 <span>  resp <span class="op">=</span> <span class="st">"U"</span>,</span>
-<span>  cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>grad <span class="op">=</span> <span class="st">"fwa_gradient"</span>, width <span class="op">=</span> <span class="st">"cw_deploy"</span>, mad <span class="op">=</span> <span class="st">"mad_pick"</span><span class="op">)</span>,</span>
+<span>  cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>grad <span class="op">=</span> <span class="st">"segment_gradient"</span>, width <span class="op">=</span> <span class="st">"cw_deploy"</span>, mad <span class="op">=</span> <span class="st">"mad_pick"</span><span class="op">)</span>,</span>
 <span>  src <span class="op">=</span> <span class="st">"pick"</span>,</span>
 <span>  dist_cap_m <span class="op">=</span> <span class="fl">50000</span>,</span>
 <span>  q_default <span class="op">=</span> <span class="fl">10</span>,</span>
@@ -155,7 +155,8 @@ held-out deviance), <code>edf</code> (the smooths' effective degrees of freedom)
 <code>curves</code>, a <code>tibble</code> of marginal curves (<code>curve</code>, <code>x</code>, <code>rate</code>, <code>rel_rate</code>,
 <code>rel_lo</code>, <code>rel_hi</code>, <code>threshold</code>) relative to the pick's thresholds, each
 other variable held at its reference; <code>edge_stream</code>, as given; <code>dist_in_model</code>, <code>FALSE</code> when the
-distances were too few to carry a smooth and size stood alone; <code>prior_sd</code>, as given.</p>
+distances were too few to carry a smooth and size stood alone; <code>prior_sd</code> and <code>cols</code>, as given (<code>cols[["grad"]]</code>
+is the gradient the curve was fitted on, which a grade table records, #92).</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>

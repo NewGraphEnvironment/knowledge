@@ -86,7 +86,7 @@ the literature or set by judgment.</p>
 <p>For chinook rearing, for example, link’s current rule counts a stream
 as habitat if it is at least 1.5 m wide, no steeper than 5.5 %. The fish
 records support a rule where it carries at least 0.75 m³/s, no steeper
-than 13 %; a smaller stream also counts if it passes the slope test and
+than 11 %; a smaller stream also counts if it passes the slope test and
 a river carrying at least 3 m³/s lies within 1 km downstream. We tested
 between 6,100 and 8,400 candidate rules for each of the 7 species and
 life stages with enough records. The <a href="chinook_rearing.html">chinook rearing article</a> works through
@@ -157,8 +157,8 @@ l_fresh
 s2
 </title>
 <g id="a_node11"><a xlink:href="#step-2" xlink:title="step 2" target="_self">
-<path fill="#009e73" stroke="transparent" d="M321,-526.7005C321,-526.7005 143,-526.7005 143,-526.7005 137,-526.7005 131,-520.7005 131,-514.7005 131,-514.7005 131,-502.0995 131,-502.0995 131,-496.0995 137,-490.0995 143,-490.0995 143,-490.0995 321,-490.0995 321,-490.0995 327,-490.0995 333,-496.0995 333,-502.0995 333,-502.0995 333,-514.7005 333,-514.7005 333,-520.7005 327,-526.7005 321,-526.7005"></path><text text-anchor="middle" x="232" y="-512" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#ffffff">2
-Putting sites on the</text><text text-anchor="middle" x="232" y="-497.6" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#ffffff">stream
+<path fill="#e69f00" stroke="transparent" d="M321,-526.7005C321,-526.7005 143,-526.7005 143,-526.7005 137,-526.7005 131,-520.7005 131,-514.7005 131,-514.7005 131,-502.0995 131,-502.0995 131,-496.0995 137,-490.0995 143,-490.0995 143,-490.0995 321,-490.0995 321,-490.0995 327,-490.0995 333,-496.0995 333,-502.0995 333,-502.0995 333,-514.7005 333,-514.7005 333,-520.7005 327,-526.7005 321,-526.7005"></path><text text-anchor="middle" x="232" y="-512" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#000000">2
+Putting sites on the</text><text text-anchor="middle" x="232" y="-497.6" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#000000">stream
 map</text></a> </g></g><!-- s1&#45;&gt;s2 --><g id="edge1" class="edge"><title>
 s1-&gt;s2
 </title>
@@ -269,20 +269,21 @@ Latest visit year kept: 2022
 <div class="section level3">
 <h3 id="step-2">2. Putting sites on the stream map<a class="anchor" aria-label="anchor" href="#step-2"></a>
 </h3>
-<p>Each site’s map point is moved to the nearest stream of the BC
-Freshwater Atlas <span class="citation">(<a href="#ref-flnrord2021FreshwaterAtlasb">FLNRORD 2021</a>)</span>, held
-in a database by <code>fwapg</code> <span class="citation">(<a href="#ref-norris2024smnorrisfwapg">Norris 2024c</a>)</span>. A site is
-kept only if that stream is close (within 100 m) and, where the record
-names the site’s tributary in a form the Atlas can check, is that
-tributary. About 7,900 visits are dropped here, most because the nearest
+<p>Each site’s map point is moved onto a stream of the BC Freshwater
+Atlas <span class="citation">(<a href="#ref-flnrord2021FreshwaterAtlasb">FLNRORD 2021</a>)</span>, held
+in a database by <code>fwapg</code> <span class="citation">(<a href="#ref-norris2024smnorrisfwapg">Norris 2024c</a>)</span>. Where the
+record names the site’s tributary in a form the Atlas can check, the
+site goes to the nearest stream of that tributary, even past a nearer
+stream, if it lies within 500 m. Otherwise it goes to the nearest
+stream, if that lies within 200 m (<a href="#snap">how a site is
+placed</a>). About 4,000 visits are dropped here, most because the
 stream is too far away.</p>
 <details><summary>
 Code and settings
 </summary><ul>
 <li>
-Run by: scripts/0230-fdis-load.R;
-<a href="https://smnorris.github.io/fwapg/03_functions.html#fwa-indexpoint" class="external-link"><code>fwa_indexpoint</code></a>,
-<code><a href="../reference/knw_fdis_quality.html">knw_fdis_quality()</a></code>
+Run by: scripts/0230-fdis-load.R; <code><a href="https://newgraphenvironment.github.io/fresh/reference/frs_point_snap.html" class="external-link">fresh::frs_point_snap()</a></code>,
+<code><a href="../reference/knw_fdis_place.html">knw_fdis_place()</a></code>, <code><a href="../reference/knw_fdis_quality.html">knw_fdis_quality()</a></code>
 </li>
 <li>
 In: FDIS site points; Freshwater Atlas streams; fwa_streams_20k_50k.
@@ -292,7 +293,13 @@ Out: placed visits (blue line and measure)
 Snap search radius: 500 m
 </li>
 <li>
-Snap distance limit: 100 m
+Snap distance limit, unconfirmed pick: 200 m
+</li>
+<li>
+Snap distance limit, code-confirmed pick: 500 m
+</li>
+<li>
+Edge type never snapped to: 6010 edge type
 </li>
 <li>
 1:50k code length the check reads: 45 characters
@@ -300,10 +307,6 @@ Snap distance limit: 100 m
 <li>
 1:50k code digits below the basin that, all zero, mark a code not
 checked: 42 characters
-</li>
-<li>
-Open work:
-<a href="https://github.com/NewGraphEnvironment/knowledge/issues/91" class="external-link">#91</a>
 </li>
 </ul></details>
 </div>
@@ -313,10 +316,12 @@ Open work:
 <p>link <span class="citation">(<a href="#ref-irvine2026linkDevelop">Irvine 2026b</a>)</span> cuts the
 Atlas streams into short segments and records, for each species, whether
 fish can reach each one and what link’s current rules call habitat. It
-also cuts streams where fish have been observed, using
+also cuts streams where the species it models have been observed, using
 <code>bcfishobs</code> <span class="citation">(<a href="#ref-norris2024smnorrisbcfishobs">Norris 2024a</a>)</span>, so
 those observations shape the segments, but they never score a rule: they
-say where fish were seen, not where they were looked for and missed.</p>
+say where fish were seen, not where they were looked for and missed. A
+catch of a species link models can be one of those observations, so most
+stream-line sites that caught fish start a segment of their own.</p>
 <details><summary>
 Code and settings
 </summary><ul>
@@ -340,7 +345,7 @@ PCIC’s modelled streamflow <span class="citation">(<a href="#ref-schnorbus2018
 2026</a>)</span>. Where PCIC’s flow does not reach a stream, or carries
 under a fifth of wet’s estimate on a stream’s own line, it is wet’s own
 water balance, fitted to Water Survey of Canada gauges <span class="citation">(<a href="#ref-environmentandclimatechangecanada2021NationalWater">Environment
-and Climate Change Canada 2021</a>)</span>. About 86 % of the kept sites
+and Climate Change Canada 2021</a>)</span>. About 87 % of the kept sites
 use PCIC’s flow.</p>
 <details><summary>
 Code and settings
@@ -360,22 +365,27 @@ Routed flow kept unless under this share of the balance’s: 0.2 ratio
 <div class="section level3">
 <h3 id="step-5">5. Joining each site to its segment<a class="anchor" aria-label="anchor" href="#step-5"></a>
 </h3>
-<p>Each kept site takes its segment’s flow, width and access, the slope
-of the Atlas stream line it was placed on, and the distance downstream
-to rivers of each size. Sites with no usable date, no fished area or
-time, no known catch, or no segment at their place drop out. About
-41,000 sites remain.</p>
+<p>Each kept site takes its segment’s flow, width, access and slope, and
+the distance downstream to rivers of each size. The slope is the
+segment’s own, the slope link applies a rule to, not that of the whole
+Atlas line the segment was cut from: a line can be gentle at one end and
+steep at the other, and averaging it would score a rule on a slope link
+never tests. Sites with no usable date, no fished area or time, no known
+catch, or no segment at their place drop out. About 46,000 sites
+remain.</p>
 <details><summary>
 Code and settings
 </summary><ul>
 <li>
-Run by: scripts/0310-evidence-build.R; <code><a href="../reference/knw_link_place.html">knw_link_place()</a></code>,
-<code><a href="../reference/knw_fdis_species.html">knw_fdis_species()</a></code>, <code><a href="../reference/knw_link_flow.html">knw_link_flow()</a></code>,
-<code><a href="../reference/knw_link_width.html">knw_link_width()</a></code>, <code><a href="../reference/knw_link_barrier_dnstr.html">knw_link_barrier_dnstr()</a></code>,
-<code><a href="../reference/knw_link_walks.html">knw_link_walks()</a></code>, <code><a href="../reference/knw_bcfishobs_match.html">knw_bcfishobs_match()</a></code>
+Run by: scripts/0310-evidence-build.R; <code><a href="../reference/knw_build_record.html">knw_build_record()</a></code>,
+<code><a href="../reference/knw_link_place.html">knw_link_place()</a></code>, <code><a href="../reference/knw_fdis_species.html">knw_fdis_species()</a></code>,
+<code><a href="../reference/knw_link_flow.html">knw_link_flow()</a></code>, <code><a href="../reference/knw_link_width.html">knw_link_width()</a></code>,
+<code><a href="../reference/knw_link_barrier_dnstr.html">knw_link_barrier_dnstr()</a></code>, <code><a href="../reference/knw_link_walks.html">knw_link_walks()</a></code>,
+<code><a href="../reference/knw_bcfishobs_match.html">knw_bcfishobs_match()</a></code>
 </li>
 <li>
-In: placed visits; fresh_default; discharge.fwa_v1_segment_monthly. Out:
+In: placed visits; link’s schema (SCHEMA, checked by knw_build_record);
+discharge.fwa_v1_segment_monthly. Out:
 data/fdis/derived/visits_link.csv; visits_species.csv; walks.csv
 </li>
 <li>
@@ -484,7 +494,7 @@ Stream edge types scored: 1000, 1100, 2000, 2300 FWA edge type
 Fished area kept: 10, 10000 m2
 </li>
 <li>
-Gradient the rules are scored on: fwa_gradient
+Gradient the rules are scored on: segment_gradient
 </li>
 <li>
 Fold seed: 54
@@ -536,7 +546,7 @@ Era breaks of the nuisance term: 1994, 2004
 </li>
 <li>
 Open work:
-<a href="https://github.com/NewGraphEnvironment/knowledge/issues/92" class="external-link">#92</a>
+<a href="https://github.com/NewGraphEnvironment/knowledge/issues/70" class="external-link">#70</a>
 </li>
 </ul></details>
 </div>
@@ -547,10 +557,10 @@ Open work:
 chance. We choose again three ways: with the groups split 4 other ways;
 leaving out one part of the groups, choosing on the rest and scoring the
 choice on the part left out, for each part in turn; and on 200 random
-redraws of the groups. For chinook rearing the exact rule came back on 0
-of the 4 other splits and in 6 % of the redraws, but it stayed a close
-call on all 4, and choosing this way scored better than link’s rule on
-the parts left out (1,183 against 1,345; lower is better).</p>
+redraws of the groups. For chinook rearing the exact rule came back on 3
+of the 4 other splits but in only 10 % of the redraws. It stayed a close
+call on all 4 splits, and choosing this way scored better than link’s
+rule on the parts left out (1,327 against 1,469; lower is better).</p>
 <details><summary>
 Code and settings
 </summary><ul>
@@ -847,17 +857,22 @@ cmp-&gt;pub
 <div class="section level2">
 <h2 id="snap">How is a site placed?<a class="anchor" aria-label="anchor" href="#snap"></a>
 </h2>
-<p>A site’s point goes to the nearest Atlas stream within 500 m, and the
-site is kept only if that stream is within 100 m. The other streams in
-reach are not weighed.</p>
+<p>A site’s point is matched with every mapped Atlas stream within 500
+m, except the lines that carry a stream across a watershed group’s
+boundary (edge type 6010). Where the site’s record names its tributary,
+the nearest stream of that tributary is taken, kept if it lies within
+500 m, even when another stream is nearer. Otherwise the nearest stream
+is taken, kept if it lies within 200 m. The table shows three sites: one
+kept on its nearest stream, one moved past a nearer stream to the
+tributary its record names, and one dropped for its distance.</p>
 <table class="table">
-<caption>Two BULK sites and every Atlas stream within 500 m of
+<caption>Three BULK sites and every Atlas stream within 500 m of
 each.</caption>
 <colgroup>
 <col width="17%">
 <col width="11%">
 <col width="19%">
-<col width="14%">
+<col width="16%">
 <col width="19%">
 <col width="16%">
 </colgroup>
@@ -871,43 +886,91 @@ each.</caption>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">103957_16_1</td>
+<td align="left">117123_15_1</td>
 <td align="left">kept</td>
-<td align="right">360471389</td>
+<td align="right">360818287</td>
 <td align="left">(unnamed)</td>
-<td align="right">11.9</td>
+<td align="right">10.4</td>
 <td align="left">yes</td>
 </tr>
 <tr class="even">
-<td align="left">103957_16_1</td>
+<td align="left">117123_15_1</td>
 <td align="left">kept</td>
-<td align="right">360443578</td>
+<td align="right">360698223</td>
 <td align="left">(unnamed)</td>
-<td align="right">285.9</td>
+<td align="right">111.7</td>
 <td align="left"></td>
 </tr>
 <tr class="odd">
-<td align="left">103957_16_1</td>
+<td align="left">117123_15_1</td>
 <td align="left">kept</td>
-<td align="right">360430079</td>
+<td align="right">360772213</td>
 <td align="left">(unnamed)</td>
-<td align="right">395.6</td>
+<td align="right">114.1</td>
 <td align="left"></td>
 </tr>
 <tr class="even">
-<td align="left">103957_16_1</td>
+<td align="left">117123_15_1</td>
 <td align="left">kept</td>
-<td align="right">360762625</td>
+<td align="right">360361812</td>
 <td align="left">(unnamed)</td>
-<td align="right">433.6</td>
+<td align="right">160.6</td>
 <td align="left"></td>
 </tr>
 <tr class="odd">
-<td align="left">103957_16_1</td>
+<td align="left">117123_15_1</td>
 <td align="left">kept</td>
-<td align="right">360766426</td>
+<td align="right">360448614</td>
 <td align="left">(unnamed)</td>
-<td align="right">487.5</td>
+<td align="right">299.3</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">117123_15_1</td>
+<td align="left">kept</td>
+<td align="right">360323225</td>
+<td align="left">(unnamed)</td>
+<td align="right">312.4</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">48104_117_1</td>
+<td align="left">moved</td>
+<td align="right">360807112</td>
+<td align="left">(unnamed)</td>
+<td align="right">4.0</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">48104_117_1</td>
+<td align="left">moved</td>
+<td align="right">360830673</td>
+<td align="left">(unnamed)</td>
+<td align="right">37.8</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">48104_117_1</td>
+<td align="left">moved</td>
+<td align="right">360795300</td>
+<td align="left">(unnamed)</td>
+<td align="right">223.1</td>
+<td align="left">yes</td>
+</tr>
+<tr class="even">
+<td align="left">48104_117_1</td>
+<td align="left">moved</td>
+<td align="right">360887296</td>
+<td align="left">Pine Creek</td>
+<td align="right">366.4</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">48104_117_1</td>
+<td align="left">moved</td>
+<td align="right">360752411</td>
+<td align="left">(unnamed)</td>
+<td align="right">492.5</td>
 <td align="left"></td>
 </tr>
 <tr class="even">
@@ -976,61 +1039,69 @@ call, for each species and stage tuned.</caption>
 <tr class="odd">
 <td align="left">bull trout rearing</td>
 <td align="left">is at least 1.5 m wide, no steeper than 10.5 %</td>
-<td align="left">316</td>
-<td align="left">carries at least 0.35 m³/s, no steeper than 25 %</td>
-<td align="left">3,312</td>
-<td align="left">carries at least 0.35 m³/s, no steeper than 10.5 %</td>
+<td align="left">161</td>
+<td align="left">carries at least 0.1 m³/s, no steeper than 30 %</td>
+<td align="left">1,340</td>
+<td align="left">carries at least 0.15 m³/s, no steeper than 10.5 %</td>
 </tr>
 <tr class="even">
 <td align="left">bull trout spawning</td>
 <td align="left">is at least 2 m wide, no steeper than 5.5 %</td>
-<td align="left">333</td>
-<td align="left">is at least 2 m wide, no steeper than 13 %</td>
-<td align="left">5,774</td>
+<td align="left">36</td>
+<td align="left">is at least 2 m wide, no steeper than 13 %; a smaller
+stream also counts if it passes the slope test and a river carrying at
+least 1 m³/s lies within 500 m downstream</td>
+<td align="left">7,051</td>
 <td align="left">is at least 2 m wide, no steeper than 5.5 %</td>
 </tr>
 <tr class="odd">
 <td align="left">chinook rearing</td>
 <td align="left">is at least 1.5 m wide, no steeper than 5.5 %</td>
-<td align="left">84</td>
-<td align="left">carries at least 0.75 m³/s, no steeper than 13 %; a
+<td align="left">164</td>
+<td align="left">carries at least 0.75 m³/s, no steeper than 11 %; a
 smaller stream also counts if it passes the slope test and a river
 carrying at least 3 m³/s lies within 1 km downstream</td>
-<td align="left">2,102</td>
-<td align="left">carries at least 1 m³/s, no steeper than 5.5 %; a
+<td align="left">2,456</td>
+<td align="left">carries at least 0.75 m³/s, no steeper than 5.5 %; a
 smaller stream also counts if it passes the slope test and a river
 carrying at least 3 m³/s lies within 1 km downstream</td>
 </tr>
 <tr class="even">
 <td align="left">coho rearing</td>
 <td align="left">is at least 1.5 m wide, no steeper than 5.5 %</td>
-<td align="left">89</td>
-<td align="left">carries at least 0.03 m³/s, no steeper than 4 %</td>
-<td align="left">1,511</td>
-<td align="left">is at least 1.5 m wide, no steeper than 4 %</td>
+<td align="left">38</td>
+<td align="left">carries at least 0.1 m³/s, no steeper than 5.5 %; a
+smaller stream also counts if it passes the slope test and a river
+carrying at least 3 m³/s lies within 2 km downstream</td>
+<td align="left">1,570</td>
+<td align="left">is at least 1.5 m wide, no steeper than 5.5 %; a
+smaller stream also counts if it passes the slope test and a river
+carrying at least 1 m³/s lies within 1 km downstream</td>
 </tr>
 <tr class="odd">
 <td align="left">grayling rearing</td>
 <td align="left">is at least 1.5 m wide, no steeper than 3.5 %</td>
-<td align="left">1,231</td>
-<td align="left">is at least 1.5 m wide, no steeper than 3.5 %</td>
-<td align="left">7,337</td>
-<td align="left">is at least 1.5 m wide, no steeper than 3.5 %</td>
+<td align="left">1,656</td>
+<td align="left">is at least 2 m wide, no steeper than 5.5 %</td>
+<td align="left">2,612</td>
+<td align="left">is at least 1.5 m wide, no steeper than 5.5 %</td>
 </tr>
 <tr class="even">
 <td align="left">rainbow trout rearing</td>
 <td align="left">is at least 1.5 m wide, no steeper than 8.5 %</td>
-<td align="left">14</td>
+<td align="left">29</td>
 <td align="left">is at least 3 m wide, no steeper than 30 %</td>
-<td align="left">463</td>
-<td align="left">is at least 3 m wide, no steeper than 30 %</td>
+<td align="left">263</td>
+<td align="left">is at least 2 m wide, no steeper than 8.5 %</td>
 </tr>
 <tr class="odd">
 <td align="left">steelhead rearing</td>
 <td align="left">is at least 1.5 m wide, no steeper than 8.5 %</td>
-<td align="left">1,034</td>
-<td align="left">carries at least 1 m³/s, no steeper than 8.5 %</td>
-<td align="left">6,434</td>
+<td align="left">425</td>
+<td align="left">carries at least 1 m³/s, no steeper than 8.5 %; a
+smaller stream also counts if it passes the slope test and a river
+carrying at least 1 m³/s lies within 250 m downstream</td>
+<td align="left">6,627</td>
 <td align="left">is at least 1.5 m wide, no steeper than 8.5 %</td>
 </tr>
 </tbody>
@@ -1039,8 +1110,8 @@ carrying at least 3 m³/s lies within 1 km downstream</td>
 <div class="section level2">
 <h2 id="lost">Where are fish sampling records lost?<a class="anchor" aria-label="anchor" href="#lost"></a>
 </h2>
-<p>Most of the records lost are lost when sites are put on the map (72 %
-of the 11,000 dropped). A site far from any stream, or on the wrong
+<p>Most of the records lost are lost when sites are put on the map (66 %
+of the 6,100 dropped). A site far from any stream, or on the wrong
 tributary, cannot be trusted to sit on the stream that was fished.</p>
 <div class="figure">
 <img src="habitat_thresholds_files/figure-html/funnel-1.png" class="r-plt" alt="Site visits each step drops, in the order the steps run." width="100%"><p class="caption">
@@ -1080,68 +1151,68 @@ not others.</p>
 <tbody>
 <tr class="odd">
 <td align="left">bull trout</td>
-<td align="right">40,552</td>
-<td align="right">29,663</td>
-<td align="right">27,598</td>
-<td align="right">22,892</td>
-<td align="right">22,615</td>
-<td align="right">11,015</td>
-<td align="right">8,717</td>
-<td align="right">75</td>
+<td align="right">45,529</td>
+<td align="right">31,585</td>
+<td align="right">29,335</td>
+<td align="right">24,373</td>
+<td align="right">24,079</td>
+<td align="right">11,805</td>
+<td align="right">9,344</td>
+<td align="right">76</td>
 </tr>
 <tr class="even">
 <td align="left">chinook</td>
-<td align="right">40,552</td>
-<td align="right">29,663</td>
-<td align="right">27,598</td>
-<td align="right">16,403</td>
-<td align="right">16,292</td>
-<td align="right">7,123</td>
-<td align="right">4,490</td>
-<td align="right">43</td>
+<td align="right">45,529</td>
+<td align="right">31,585</td>
+<td align="right">29,335</td>
+<td align="right">17,414</td>
+<td align="right">17,296</td>
+<td align="right">7,659</td>
+<td align="right">4,858</td>
+<td align="right">45</td>
 </tr>
 <tr class="odd">
 <td align="left">coho</td>
-<td align="right">40,552</td>
-<td align="right">29,663</td>
-<td align="right">27,598</td>
-<td align="right">12,960</td>
-<td align="right">12,898</td>
-<td align="right">5,442</td>
-<td align="right">4,263</td>
-<td align="right">62</td>
+<td align="right">45,529</td>
+<td align="right">31,585</td>
+<td align="right">29,335</td>
+<td align="right">13,804</td>
+<td align="right">13,734</td>
+<td align="right">5,895</td>
+<td align="right">4,628</td>
+<td align="right">63</td>
 </tr>
 <tr class="even">
 <td align="left">grayling</td>
-<td align="right">40,552</td>
-<td align="right">29,663</td>
-<td align="right">27,598</td>
-<td align="right">5,356</td>
-<td align="right">5,333</td>
-<td align="right">1,472</td>
-<td align="right">1,230</td>
-<td align="right">26</td>
+<td align="right">45,529</td>
+<td align="right">31,585</td>
+<td align="right">29,335</td>
+<td align="right">5,749</td>
+<td align="right">5,722</td>
+<td align="right">1,580</td>
+<td align="right">1,355</td>
+<td align="right">27</td>
 </tr>
 <tr class="odd">
 <td align="left">rainbow trout</td>
-<td align="right">40,552</td>
-<td align="right">29,663</td>
-<td align="right">27,598</td>
-<td align="right">27,349</td>
-<td align="right">27,100</td>
-<td align="right">13,578</td>
-<td align="right">12,959</td>
-<td align="right">129</td>
+<td align="right">45,529</td>
+<td align="right">31,585</td>
+<td align="right">29,335</td>
+<td align="right">29,059</td>
+<td align="right">28,793</td>
+<td align="right">14,511</td>
+<td align="right">13,869</td>
+<td align="right">132</td>
 </tr>
 <tr class="even">
 <td align="left">steelhead</td>
-<td align="right">40,552</td>
-<td align="right">29,663</td>
-<td align="right">27,598</td>
-<td align="right">9,789</td>
-<td align="right">9,462</td>
-<td align="right">4,798</td>
-<td align="right">1,375</td>
+<td align="right">45,529</td>
+<td align="right">31,585</td>
+<td align="right">29,335</td>
+<td align="right">10,437</td>
+<td align="right">10,096</td>
+<td align="right">5,195</td>
+<td align="right">1,530</td>
 <td align="right">11</td>
 </tr>
 </tbody>
@@ -1151,11 +1222,27 @@ not others.</p>
 <h2 id="limits">Limits<a class="anchor" aria-label="anchor" href="#limits"></a>
 </h2>
 <ul>
-<li>Sites are placed on the nearest stream; a near-equal stream close by
-is not weighed (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/91" class="external-link">#91</a>).</li>
-<li>Rules are scored on the Atlas line’s slope, while link applies a
-rule on its own segments, whose slope it works out again after every cut
-(<a href="https://github.com/NewGraphEnvironment/knowledge/issues/92" class="external-link">#92</a>).</li>
+<li>A site’s tributary code can name several Atlas streams, and the site
+goes to the nearest of them, which need not be the one the crew fished
+(<a href="https://github.com/NewGraphEnvironment/knowledge/issues/91" class="external-link">#91</a>).</li>
+<li>link’s segments are shortest where fish were caught: 86 % of
+stream-line sites that caught fish start a segment of their own, against
+10 % of those that caught none, and the median segment is 113 m long
+against 305 m. So which stretch a site’s slope is worked out over
+depends on what the crew caught. Scored on the whole Atlas line’s slope
+instead, the chosen rule is still a close call for 6 of the 7 species
+and stages (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/92" class="external-link">#92</a>);
+slopes over a fixed length would not depend on where fish were caught
+(<a href="https://github.com/NewGraphEnvironment/knowledge/issues/70" class="external-link">#70</a>).</li>
+<li>The results are on the segments of link’s build of 2026-10-17. link
+has since changed where it cuts streams: at steep sections only at the
+first place, going upstream, that a species present in the group cannot
+get past (<a href="https://github.com/NewGraphEnvironment/link/issues/326" class="external-link">link#326</a>),
+and at fish records only at each species’ highest record on a stream (<a href="https://github.com/NewGraphEnvironment/link/issues/396" class="external-link">link#396</a>).
+The first more than halves the segments in the four groups link measured
+it on, and the second removes a further 1 to 4 % in the five it was
+measured on. The thresholds have not yet been tuned on those
+segments.</li>
 <li>Flows are 30-year averages, so no single dry year is in them.</li>
 </ul>
 </div>
@@ -1170,10 +1257,10 @@ source, a convention set here, a value inherited from link or bcfishpass
 value measured from data. <strong>Tested</strong> says whether the
 result has been compared with another value. The untested rows come
 first: they are the work still to do.</p>
-<p>Of the 67 settings, 7 have been tested and 10 of the untested ones
+<p>Of the 69 settings, 11 have been tested and 8 of the untested ones
 were inherited.</p>
 <details><summary>
-All 67 settings
+All 69 settings
 </summary><table style="width:100%;" class="table">
 <caption>The settings, from inst/method/settings.csv.</caption>
 <colgroup>
@@ -1205,15 +1292,6 @@ All 67 settings
 <td align="right"><a href="https://github.com/NewGraphEnvironment/knowledge/issues/91" class="external-link">#91</a></td>
 </tr>
 <tr class="even">
-<td align="left">Snap distance limit</td>
-<td align="left">100</td>
-<td align="left">m</td>
-<td align="left">2</td>
-<td align="left">inherited</td>
-<td align="left">no</td>
-<td align="right"><a href="https://github.com/NewGraphEnvironment/knowledge/issues/91" class="external-link">#91</a></td>
-</tr>
-<tr class="odd">
 <td align="left">Wetland area making a line a wetland branch</td>
 <td align="left">1</td>
 <td align="left">ha</td>
@@ -1222,7 +1300,7 @@ All 67 settings
 <td align="left">no</td>
 <td align="right"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">Lake area making a line a lake branch</td>
 <td align="left">100</td>
 <td align="left">ha</td>
@@ -1231,7 +1309,7 @@ All 67 settings
 <td align="left">no</td>
 <td align="right"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">Natural barrier classes downstream</td>
 <td align="left">GRADIENT, FALLS, SUBSURFACE_FLOW, USER_DEFINITE</td>
 <td align="left"></td>
@@ -1239,15 +1317,6 @@ All 67 settings
 <td align="left">inherited</td>
 <td align="left">no</td>
 <td align="right"></td>
-</tr>
-<tr class="even">
-<td align="left">Gradient the rules are scored on</td>
-<td align="left">fwa_gradient</td>
-<td align="left"></td>
-<td align="left">7</td>
-<td align="left">inherited</td>
-<td align="left">no</td>
-<td align="right"><a href="https://github.com/NewGraphEnvironment/knowledge/issues/92" class="external-link">#92</a></td>
 </tr>
 <tr class="odd">
 <td align="left">Gradient the grade reads on link’s segments</td>
@@ -1744,6 +1813,33 @@ counts</td>
 <td align="right"></td>
 </tr>
 <tr class="odd">
+<td align="left">Snap distance limit, unconfirmed pick</td>
+<td align="left">200</td>
+<td align="left">m</td>
+<td align="left">2</td>
+<td align="left">measured</td>
+<td align="left">yes</td>
+<td align="right"><a href="https://github.com/NewGraphEnvironment/knowledge/issues/91" class="external-link">#91</a></td>
+</tr>
+<tr class="even">
+<td align="left">Snap distance limit, code-confirmed pick</td>
+<td align="left">500</td>
+<td align="left">m</td>
+<td align="left">2</td>
+<td align="left">measured</td>
+<td align="left">yes</td>
+<td align="right"><a href="https://github.com/NewGraphEnvironment/knowledge/issues/91" class="external-link">#91</a></td>
+</tr>
+<tr class="odd">
+<td align="left">Edge type never snapped to</td>
+<td align="left">6010</td>
+<td align="left">edge type</td>
+<td align="left">2</td>
+<td align="left">measured</td>
+<td align="left">yes</td>
+<td align="right"><a href="https://github.com/NewGraphEnvironment/knowledge/issues/91" class="external-link">#91</a></td>
+</tr>
+<tr class="even">
 <td align="left">Gradient maxima in the grid</td>
 <td align="left">0.03, 0.04, 0.0549, 0.07, 0.09, 0.11, 0.13, 0.15, 0.2,
 0.25, 0.3</td>
@@ -1752,6 +1848,15 @@ counts</td>
 <td align="left">convention</td>
 <td align="left">yes</td>
 <td align="right"><a href="https://github.com/NewGraphEnvironment/knowledge/issues/67" class="external-link">#67</a></td>
+</tr>
+<tr class="odd">
+<td align="left">Gradient the rules are scored on</td>
+<td align="left">segment_gradient</td>
+<td align="left"></td>
+<td align="left">7</td>
+<td align="left">convention</td>
+<td align="left">yes</td>
+<td align="right"><a href="https://github.com/NewGraphEnvironment/knowledge/issues/92" class="external-link">#92</a></td>
 </tr>
 <tr class="even">
 <td align="left">Fold seed</td>
@@ -1820,7 +1925,7 @@ of it, and on the R packages <a href="https://newgraphenvironment.github.io/link
 (flows), <a href="https://newgraphenvironment.github.io/fresh/" class="external-link"><code>fresh</code></a>
 (the habitat tests) and <a href="https://newgraphenvironment.github.io/knowledge/"><code>knowledge</code></a>
 (the evidence and the tuning). This article’s data were written on
-2026-10-27 at commit deb8bf5. To cite this package:</p>
+2026-10-28 at commit 9418f8c. To cite this package:</p>
 <p>Irvine A (2026). <em>knowledge: Fisheries Evidence and Tuned Habitat
 Thresholds for BC Watershed Groups</em>. New Graph Environment
 Ltd. Version 0.4.13, <a href="https://newgraphenvironment.github.io/knowledge/" class="uri">https://newgraphenvironment.github.io/knowledge/</a>.</p>
