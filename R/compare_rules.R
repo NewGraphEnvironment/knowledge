@@ -504,7 +504,7 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
 }
 
 # A stage timer: tick(label) returns the minutes since the last tick (or the start) and records them under label;
-# ticks() returns them in order, named, and total() the minutes since the start
+# ticks() returns them in order, named, and total() the minutes from the start to the last tick
 .knw_timer <- function() {
   t0 <- Sys.time()
   last <- t0

@@ -27,3 +27,7 @@ cd /Users/airvine/Projects/repo/knowledge && git fetch -q origin && git checkout
 - `/code-check branch` round 1: one finding (fragile): a refused 0320 or 0330 wrote its header lines over that day's
   tracked run log. Fixed: refused runs log to `<date>_tune_refused.txt` and `<date>_compare_refused.txt`, outside
   the `_tune_run.*\.txt$` pattern 0325 and `data-raw/vignette_chinook.R` read.
+- Round 2: clean. Round 3: one finding (fragile, in original code, not inside a fix): the latency test could not tell a
+  median from a sum, max or a single query. Pinned with per-call sleeps (0.2, 0, 0 s) and a call count; `sum`, `max`,
+  `mean` and `seq_len(1)` mutations each fail it in a `git archive` copy, the real code passes. `.knw_timer()`'s
+  `total()` comment corrected.

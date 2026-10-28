@@ -11,6 +11,18 @@ test_that("the round trip is the median wall time of the queries", {
   expect_error(knw_db_latency(NULL, n = 0))
 })
 
+test_that("one slow query does not decide the round trip: the median of all n, not a sum, mean, max or the first", {
+  calls <- 0L
+  local_mocked_bindings(dbGetQuery = function(conn, sql, ...) {
+    calls <<- calls + 1L
+    Sys.sleep(c(0.2, 0, 0)[calls])
+    data.frame(x = 1L)
+  }, .package = "DBI")
+  ms <- knw_db_latency(NULL, n = 3)
+  expect_identical(calls, 3L)
+  expect_lt(ms, 50)   # the median is the fast queries'; a sum or max is ~200 ms, a mean ~67
+})
+
 test_that("a slow connection stops with the round trip and the estimate, unless remote", {
   local_mocked_bindings(knw_db_latency = function(conn, n = 20) 105)
   expect_error(knw_db_latency_check(NULL), "round trip 105.0 ms .*limit 20 ms.*not on the database's host")
