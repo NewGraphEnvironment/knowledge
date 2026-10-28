@@ -411,7 +411,8 @@ over the `PG*` variables. Set `PGCONNECT_TIMEOUT`, or an unreachable server hang
 500 segments per query and keeps every walk in `knw.walk_cache`, so a batched walk costs about 3 ms per walk per
 worker on the host and 12 to 18 ms from the remote link, against 116 ms one query per walk; a cold regrade of every key
 took 53.4 min on the host, and one key regraded with its walks cached 4.1 min. `0330` regenerates link's flags group by
-group on 6 connections, one key at a time (BT rearing 33.4 min, every key 162.9 min with `GPKG=FALSE`): it is bound by
+group on 6 connections, one key at a time (BT rearing 33.4 min, every key 162.9 min with `GPKG=FALSE`; from the remote link #92's took 269 min to compare and 197 more to
+write the GeoPackages, which take 14 min on the host, so a run off the host passes `GPKG=FALSE`, #81): it is bound by
 the database's cores, so run it on the host. A second machine helps a database-bound step only with a database of its
 own holding the same build (the schema's run and the flow load named in the table comment; the walk travels with the
 code). `0320` and `0330` refuse a schema built by another run at connect (`knw_build_record()`), and every grade table's
