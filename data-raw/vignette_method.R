@@ -283,8 +283,9 @@ picks <- bind_rows(lapply(keys, function(k) {
          pick_strict = b$rule, close_calls_strict = b$n_region, rules = nrow(t))
 }))
 
-# ---- the segment at a site (#92): link cuts a stream at each catch, so a site with fish usually starts its own -------
-# segment; on the stream-line sites of a usual fished area, as data-raw/segment_gradient_check.R measures them
+# ---- the segment at a site (#92): link cuts a stream at the observations of the species it models, so a site with ----
+# fish usually starts its own segment; on the stream-line sites of a usual fished area, as
+# data-raw/segment_gradient_check.R measures them
 d_sg <- vl[stream & area_ok, ]
 at_site <- d_sg$segment_start_offset_m >= -1 & d_sg$segment_start_offset_m <= 5
 fish <- d_sg$catch_status == "fish"
@@ -301,7 +302,8 @@ f_fwa_tune <- file.path(dir_fwa, paste0(keys, "_tune.csv"))
 f_fwa_summ <- file.path(dir_fwa, paste0(keys, "_summary.csv"))
 miss <- c(f_fwa_tune, f_fwa_summ)[!file.exists(c(f_fwa_tune, f_fwa_summ))]
 if (length(miss)) stop("no Atlas-gradient sensitivity for: ", paste(miss, collapse = ", "), " (GRADIENT=fwa_gradient 0320)")
-if (!all(fitted$curve_grad == "segment_gradient")) stop("the main run's summaries do not all name segment_gradient (#92)")
+# identical() on the unique values: a missing column (NULL) or an NA must refuse, not pass as logical(0) or error
+if (!identical(unique(fitted$curve_grad), "segment_gradient")) stop("the main run's summaries do not all name segment_gradient (#92)")
 gradient_sensitivity <- bind_rows(lapply(seq_along(keys), function(i) {
   s_fwa <- rd(f_fwa_summ[i], col_types = cols(.default = "c"))
   if (!identical(s_fwa$curve_grad, "fwa_gradient") || !identical(s_fwa$evidence_md5, ev)) {

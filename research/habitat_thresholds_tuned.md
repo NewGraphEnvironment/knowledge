@@ -92,15 +92,16 @@ From #92, a visit is scored on its link segment's gradient (`segment_gradient`),
 rather than on its whole Atlas line's (`fwa_gradient`), which is kept as a sensitivity. Al chose it on 2026-10-27,
 after the two measurements below.
 
-- **The segment at a visit depends on the catch.** link breaks streams at bcfishobs observations, and a visit that
-  caught a modelled species is one, so its segment starts at the visit and runs upstream to the next break. On the
+- **The segment at a visit depends on the catch.** link breaks streams at the bcfishobs observations of the species
+  it models in each group, and a visit that caught one of them is usually such an observation, so its segment often
+  starts at the visit and runs upstream to the next break. On the
   tuning's stream branch (29,335 visits), 86.2 % of visits that caught fish sit on such a segment, against 10.2 % of
   empty ones. The median segment is 113 m long for visits that caught fish and 305 m for empty ones. Per species, 80.7 %
   of the visits where chinook were present sit on such a segment, against 44.6 % where they were absent, and 94.2 %
-  against 37.8 % for bull trout. Short segments read noisier gradients. On segments of 10 m or less, 13.5 % read 0 and
-  the median gap from the Atlas line's gradient is 0.015, against 0.0017 on segments over 500 m. The median gap is the
-  same either way (0.0083 for visits with fish and without), so the noise follows segment length, and length follows
-  the outcome. The gradient class at one of `default`'s cut-offs differs between the two gradients on 7.8–12.1 % of
+  against 37.8 % for bull trout. Short segments read gradients further from the Atlas line's: on segments of 10 m or
+  less, 13.5 % read 0 and the median gap is 0.015, against 0.0017 on segments over 500 m. By catch, though, the gap is
+  the same (median 0.0083 for visits with fish and without, SD 0.077 and 0.078): the segment's length follows the
+  outcome, and its gradient's departure from the Atlas line's does not. The gradient class at one of `default`'s cut-offs differs between the two gradients on 7.8–12.1 % of
   visits.
 - **link does not cut at `default`'s cut-offs.** `default` breaks at observations, gradient barriers, falls, definite
   barriers, habitat endpoints and crossings, and its gradient breaks come only from the access classes (15, 20, 25 and

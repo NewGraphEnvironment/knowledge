@@ -205,15 +205,19 @@ From #57, `0310` builds every species' visit table on the province-wide
 `fresh_default` in one pass and `0290`, `0294` and `0296` write their tables from it; `0291`–`0298` are frozen on
 the published v2 tables (`0299 PULL=TRUE VERSION=v2`).
 
-### The tuning scores link's segment gradient, and link cuts a segment at each catch
+### The tuning scores link's segment gradient, and link cuts a segment where its species were caught
 
 From #92, rules and curves read `segment_gradient`, the gradient of the link segment a visit sits on, which is the one
 link applies a rule to and the grade reads; `fwa_gradient` (the whole Atlas line's) is the sensitivity
-(`GRADIENT=fwa_gradient 0320`, main fold seed, `data/tune/grad_fwa/`, never graded or published).
-`knw_grade_species()` refuses a curve fitted on any other gradient. link breaks streams at bcfishobs observations, and
-an FDIS visit that caught a modelled species is one, so the segment, its length and its gradient's noise depend on
-the outcome: on the tuning's stream branch 86 % of visits with fish start a segment of their own against 10 % of empty
-ones (`data-raw/segment_gradient_check.R`). Fixed-window gradients, which would not, are #70's.
+(`GRADIENT=fwa_gradient 0320`, main fold seed, `data/tune/grad_fwa/`, never graded, and read by no publisher: `0325`,
+`0330` and `knw_thresholds_table()` list `data/tune/` without recursing; `data-raw/vignette_method.R` reads it for the
+methodology article's sensitivity sentence).
+`knw_grade_species()` refuses a curve fitted on any other gradient. link breaks streams at the bcfishobs observations
+of the species it models in each group, and an FDIS visit that caught one is usually such an observation, so the
+segment and its length depend on the outcome: on the tuning's stream branch 86 % of visits with fish start a segment of
+their own against 10 % of empty ones, with median lengths of 113 m and 305 m. The gradient's gap from the Atlas line's
+does not (median 0.0083 either way; `data-raw/segment_gradient_check.R`). Fixed-window gradients, whose length would
+not depend on the outcome, are #70's.
 
 ### FISS submission workbooks: editions drift, and most EF fish are already in FDIS
 

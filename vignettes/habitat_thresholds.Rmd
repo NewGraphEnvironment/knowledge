@@ -173,8 +173,8 @@ most because the stream is too far away.
 link [@irvine2026linkDevelop] cuts the Atlas streams into short segments and records, for each species, whether fish
 can reach each one and what link's current rules call habitat. It also cuts streams where fish have been observed, using
 `bcfishobs` [@norris2024smnorrisbcfishobs], so those observations shape the segments, but they never score a rule: they say where
-fish were seen, not where they were looked for and missed. A site that caught a species link models is one of those
-observations, so it usually starts a segment of its own.
+fish were seen, not where they were looked for and missed. A catch of a species link models can be one of those
+observations, so most sites that caught fish start a segment of their own.
 
 `r detail(3)`
 
@@ -258,8 +258,8 @@ svg_inline(x$svg$lineage)
 
 ## How is a site placed? {#snap}
 
-A site's point is matched with every Atlas stream within `r val("snap_search")` m, except the lines that carry a
-stream across a watershed group's boundary (edge type `r val("snap_edges_excluded")`). Where the site's record names its
+A site's point is matched with every mapped Atlas stream within `r val("snap_search")` m, except the lines that carry
+a stream across a watershed group's boundary (edge type `r val("snap_edges_excluded")`). Where the site's record names its
 tributary, the nearest stream of that tributary is taken, kept if it lies within `r val("snap_limit_code")` m, even
 when another stream is nearer. Otherwise the nearest stream is taken, kept if it lies within `r val("snap_limit")` m.
 The table shows three sites: one kept on its nearest stream, one moved past a nearer stream to the tributary its record
@@ -349,10 +349,10 @@ knitr::kable(w[, c("species_code", "kept", "stream_branch", "fished_area", "in_r
 
 - A site's tributary code can name several Atlas streams, and the site goes to the nearest of them, which need not be
   the one the crew fished (`r issue("91")`).
-- A slope worked out over a few metres is less certain than one over a kilometre, and link's segments are shortest
-  where fish were caught: `r pc(sg$at_site_fish)` of stream-line sites that caught fish start a segment of their own,
-  against `r pc(sg$at_site_zero)` of those that caught none, and the median segment is `r n0(sg$len_fish)` m long
-  against `r n0(sg$len_zero)` m. So the slope is less certain at the sites with fish. Scored on the whole Atlas line's
+- link's segments are shortest where fish were caught: `r pc(sg$at_site_fish)` of stream-line sites that caught fish
+  start a segment of their own, against `r pc(sg$at_site_zero)` of those that caught none, and the median segment is
+  `r n0(sg$len_fish)` m long against `r n0(sg$len_zero)` m. So which stretch a site's slope is worked out over depends
+  on what the crew caught. Scored on the whole Atlas line's
   slope instead, the chosen rule is still a close call for `r sum(gs$pick_in_atlas_region)` of the `r nrow(gs)`
   species and stages (`r issue("92")`); slopes over a fixed length would not depend on where fish were caught
   (`r issue("70")`).

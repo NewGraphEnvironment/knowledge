@@ -37,9 +37,10 @@
 #     as a scored candidate (`is_link_tuned`), so the table says how link's own flow floors score.
 #   - GRADIENT (#92): rules and curves read link's segment gradient (`segment_gradient`), the gradient link applies a
 #     rule to and the grade reads, where #57 to #91 read the whole Atlas line's (`fwa_gradient`). link cuts a stream at
-#     each catch, so a visit with fish usually sits on a short segment starting at it (data-raw/segment_gradient_check.R).
-#     GRADIENT=fwa_gradient is the sensitivity: the main fold seed, no grades, outputs under data/tune/grad_fwa/, which
-#     nothing that publishes reads. The column is recorded in the score cache, the summary and every grade table.
+#     the observations of the species it models, so a visit with fish usually sits on a short segment starting at it
+#     (data-raw/segment_gradient_check.R). GRADIENT=fwa_gradient is the sensitivity: the main fold seed, no grades,
+#     outputs under data/tune/grad_fwa/, which 0325, 0330 and knw_thresholds_table() do not read (the methodology
+#     bundle does, for its sensitivity sentence). The column is recorded in the score cache, the summary and every grade table.
 #   - SMOKE RUN FIRST (#84): before any grid is scored, every key that would be fitted scores no rule,
 #     `default`, link's `default_tuned` row and the previous pick (the `recommended` rule of the committed
 #     data/tune/<key>_tune.csv) on the main fold seed, and four checks gate the scorer (knw_tune_smoke()). One
@@ -83,7 +84,7 @@ species <- strsplit(Sys.getenv("SPECIES", paste(knw_species(), collapse = ",")),
 schema <- Sys.getenv("SCHEMA", "fresh_default")  # the run's persist schema, by its current name (renamed after the run, #73)
 dev <- Sys.getenv("DEV", "") %in% c("1", "TRUE", "true")
 # the gradient the rules and the curve read (#92): link's segment gradient, the one link applies a rule to; the Atlas
-# line's is the sensitivity, scored on the main fold seed alone into its own directory and never graded or published
+# line's is the sensitivity, scored on the main fold seed alone into its own directory and never graded
 gradient <- Sys.getenv("GRADIENT", "segment_gradient")
 grad_dirs <- c(segment_gradient = "", fwa_gradient = "grad_fwa")
 if (!gradient %in% names(grad_dirs)) stop("GRADIENT must be one of ", paste(names(grad_dirs), collapse = ", "), ": ", gradient)
@@ -251,7 +252,8 @@ for (k in names(out)) {
       region_n = sum(rules$in_region), patterns = r$score$population[["patterns"]],
       dev_default = dflt$dev_heldout, dev_best = best$dev_heldout, dev_null = best$dev_heldout - best$ddev_null,
       dev_curve = r$curve$heldout, null_heldout_curve = r$null_heldout_curve, curve_prior_sd = r$curve$prior_sd,
-      # the gradient the rule and the curve read (#92), which every grade table records and its readers compare
+      # the gradient the rule and the curve read (#92), which every grade table records and 0320's keep-check, 0325,
+      # 0330 and the two data-raw/vignette_*.R scripts compare
       curve_grad = r$curve$cols[["grad"]],
       grade_withheld = r$grade_withheld,
       # the evidence and the link run the pick was scored on, so a grade can be held to its pick's evidence as well as its

@@ -3,9 +3,9 @@
 # Before the tuning scores visits on link's segment gradient (#92), what is that segment at a visit, and does link cut
 # its streams at `default`'s own gradient cut-offs? Issue #92, steps 1 and 3.
 #
-# STEP 1, the segment at a visit. link breaks streams at bcfishobs observations, and an FDIS visit that caught a
-# modelled species is one, so its segment starts at the visit (0310's `segment_starts_in_window`: the segment's
-# downstream end lies 1 m below to 5 m above the visit). Measured on the tuning's stream-branch population
+# STEP 1, the segment at a visit. link breaks streams at the bcfishobs observations of the species it models, and an
+# FDIS visit that caught one is usually such an observation, so its segment often starts at the visit (0310's
+# `segment_starts_in_window`: the segment's downstream end lies 1 m below to 5 m above the visit). Measured on the tuning's stream-branch population
 # (knw_tune_run()'s `edge_stream` and `area_range`): how many visits sit on such a segment, by catch and by each
 # species' outcome; the segment lengths; and how far the segment's gradient lies from the Atlas line's, by length.
 # STEP 3, link's breaks. `default` cuts gradients only at its access classes; this measures whether segment gradients
