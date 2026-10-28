@@ -535,7 +535,7 @@ at commit 9418f8c. To cite this package:
 
 Irvine A (2026). *knowledge: Fisheries Evidence and Tuned Habitat
 Thresholds for BC Watershed Groups*. New Graph Environment Ltd. Version
-0.4.13, <https://newgraphenvironment.github.io/knowledge/>.
+0.4.14, <https://newgraphenvironment.github.io/knowledge/>.
 
 ## References
 
