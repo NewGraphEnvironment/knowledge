@@ -79,12 +79,12 @@ vl <- read_csv(file.path(evidence_dir, "visits_link.csv"), show_col_types = FALS
                col_types = cols(site_visit = "c", species_caught = "c", blocks_absence_of = "c", hydro_zone = "c"))
 vs <- read_csv(file.path(evidence_dir, "visits_species.csv"), show_col_types = FALSE, guess_max = 1e5,
                col_types = cols(site_visit = "c"))
+head_sha <- substr(system2("git", c("rev-parse", "HEAD"), stdout = TRUE), 1, 7)
 say("compare_structures_check on %s; link configs at %s; %d workers; reported structure %s; knowledge %s; %s",
-    schema, substr(config_sha, 1, 8), workers, tuned_as, substr(system2("git", c("rev-parse", "HEAD"), stdout = TRUE), 1, 7),
-    lat$line)
+    schema, substr(config_sha, 1, 8), workers, tuned_as, head_sha, lat$line)
+md5_here <- unname(tools::md5sum(file.path(evidence_dir, c("visits_link.csv", "visits_species.csv"))))
 say("inputs: %s, %s, %s (visits md5 %s); flow load %s", tune_dir, compare_dir, evidence_dir,
-    paste(substr(tools::md5sum(file.path(evidence_dir, c("visits_link.csv", "visits_species.csv"))), 1, 8), collapse = " "),
-    load_db)
+    paste(substr(md5_here, 1, 8), collapse = " "), load_db)
 
 tbl_keys <- list(compare = c("watershed_group_code", "structure"), change = c("structure", "direction", "reason", "order"),
                  checks = c("check", "rule", "segment"), segments = c("id_segment", "watershed_group_code"))
@@ -99,8 +99,8 @@ compare_tbl <- function(a, b, what, label) {
   a <- sort_on(a, tbl_keys[[what]])
   b <- sort_on(b, tbl_keys[[what]])
   if (!identical(names(a), names(b))) {
-    stop(label, " ", what, ": columns differ (", paste(setdiff(union(names(a), names(b)), intersect(names(a), names(b))),
-                                                       collapse = ", "), ")", call. = FALSE)
+    odd <- setdiff(union(names(a), names(b)), intersect(names(a), names(b)))
+    stop(label, " ", what, ": columns differ (", paste(odd, collapse = ", "), ")", call. = FALSE)
   }
   if (nrow(a) != nrow(b)) stop(label, " ", what, ": ", nrow(a), " rows against ", nrow(b), call. = FALSE)
   worst <- 0
@@ -128,7 +128,8 @@ reported_rows <- function(cmp, others) {
 }
 minutes_line <- function(cmp, label, m) {
   wm <- cmp$worker_minutes
-  say("  %s: %.1f min; classify, overlay and connect %.1f min; summed over workers: copies and indexes %.1f, walks %.1f, %s.",
+  say(paste("  %s: %.1f min; classify, overlay and connect %.1f min;",
+            "summed over workers: copies and indexes %.1f, walks %.1f, %s."),
       label, m, cmp$timing[["classify_overlay_connect"]], wm[["setup"]], wm[["walk"]],
       paste(sprintf("%s %.1f", names(wm)[-(1:2)], wm[-(1:2)]), collapse = ", "))
 }
@@ -172,21 +173,27 @@ tryCatch({
     # the saving, from the every-structure run's own worker minutes: the rules a reported-only run does not regenerate
     wm <- all$worker_minutes
     dropped <- sum(wm[setdiff(structures, tuned_as)])
-    say("  %s: the dropped rules (%s) took %.1f of %.1f worker minutes (%.0f %%) in the every-structure run; wall time %.1f min then %.1f (second, warm).",
-        key, paste(setdiff(structures, tuned_as), collapse = ", "), dropped, sum(wm), 100 * dropped / sum(wm), m_all, m_rep)
+    say(paste("  %s: the dropped rules (%s) took %.1f of %.1f worker minutes (%.0f %%) in the every-structure run;",
+              "wall time %.1f min then %.1f (second, warm)."),
+        key, paste(setdiff(structures, tuned_as), collapse = ", "), dropped, sum(wm), 100 * dropped / sum(wm), m_all,
+        m_rep)
     want <- reported_rows(all, setdiff(structures, tuned_as))
-    for (what in names(tbl_keys)) compare_tbl(two[[what]], want[[what]], what, paste(key, "reported vs every structure:"))
+    for (what in names(tbl_keys)) {
+      compare_tbl(two[[what]], want[[what]], what, paste(key, "reported vs every structure:"))
+    }
     if (key == tracked_key) {
-      md5_here <- paste(unname(tools::md5sum(file.path(evidence_dir, c("visits_link.csv", "visits_species.csv")))),
-                        collapse = ";")
-      rec <- tryCatch(knw_build_record(conn, schema, run_uid = g1$run_uid)$line, error = function(e) conditionMessage(e))
-      say("  %s against the tracked tables (a report): flow load %s; evidence %s; schema %s; fresh %s (#92's comparison ran 0.43.0).",
+      rec <- tryCatch(knw_build_record(conn, schema, run_uid = g1$run_uid)$line,
+                      error = function(e) conditionMessage(e))
+      say(paste("  %s against the tracked tables (a report): flow load %s; evidence %s; schema %s;",
+                "fresh %s (#92's comparison ran 0.43.0)."),
           key, if (identical(g1$discharge_load, load_db)) "the grades'" else "NOT the grades'",
-          if (startsWith(g1$evidence_md5, md5_here)) "the grades'" else "NOT the grades'", rec,
+          if (startsWith(g1$evidence_md5, paste(md5_here, collapse = ";"))) "the grades'" else "NOT the grades'", rec,
           as.character(utils::packageVersion("fresh")))
       # read as 0330 wrote them (na = ""); a column that is all NA reads as logical, which compares as its characters
-      rd <- function(what) read_csv(file.path(compare_dir, paste0(key, "_", what, ".csv")), show_col_types = FALSE,
-                                    guess_max = Inf, col_types = cols(.default = col_guess()))
+      rd <- function(what) {
+        read_csv(file.path(compare_dir, paste0(key, "_", what, ".csv")), show_col_types = FALSE, guess_max = Inf,
+                 col_types = cols(.default = col_guess()))
+      }
       versus <- function(what, b) {
         tryCatch(compare_tbl(all[[what]], b, what, paste(key, "every structure vs tracked:")),
                  error = function(e) say("  DIFFERS: %s", conditionMessage(e)))
