@@ -1,0 +1,66 @@
+# Findings — Iterate on scores privately; promote a run (#111)
+
+## Issue context
+
+## Problem
+
+Every retune rewrites the tracked tables (`data/tune/*.csv`, `data/compare/*.csv`, `data/thresholds.csv`), and
+`tests/testthat/test-vignette-data.R` then fails until both articles' bundles are rebuilt and the prose that quotes them
+is checked again. #92's chain was about 10 h of runs (scoring 43 min, grading about 87, comparison 269, GeoPackages 197)
+and then five review rounds on the article prose, though the scoring alone answered which rule wins.
+
+Retunes are now continuous: link's segmentation (`NewGraphEnvironment/link#326`, `NewGraphEnvironment/link#396`),
+placement and flow changes are queued. So every iteration pays the cost of publishing, and the published state follows
+whichever run happened last: #92's run was made on link 0.66.0's segments, which both link changes replace.
+
+## Proposed
+
+1. **A pick report in `DEV=1 0320`.** Per key: the pick against the published one (`data/tune/<key>_tune.csv`), its
+   gradient limit, whether the published pick is still in the one-SE region, and how far the score moved. In the log and
+   as a CSV under `data/tune/dev/`. This is what runs after a change upstream, on `0310`'s tables for the new build.
+2. **Full runs write to an ignored candidate directory.** `0320` without `DEV` writes `data/tune/candidate/<run>/`
+   (scores, grades, curves, seeds); `0330` takes `TUNE_DIR=` to compare a candidate, into
+   `data/compare/candidate/<run>/`. Nothing tracked changes.
+3. **A promote step, on the operator's word.** It copies one candidate run into the tracked `data/tune/` and
+   `data/compare/`, then runs `0325`, `data-raw/vignette_chinook.R` and `data-raw/vignette_method.R` (method last). The
+   articles and their review follow a promotion, and nothing else.
+4. **`CLAUDE.md`.** The bundle scripts rerun after a promotion, not after any `0320`/`0325`/`0330` rerun. A full retune
+   and a promotion each start on the operator's word, not on an agent's judgement that a change upstream calls for one
+   (Al, 2026-10-28: "We have several updates to make so we will be retuning continuously. We need to dial it so I help
+   decide when we are retuning").
+
+## Where it runs
+
+Scoring (`DEV=1 0320`) is CPU-bound and runs on any machine; `0310`'s visit walks, the grade and `0330` are database-bound and run on the database's host (#110). Scoring reads `data/fdis/derived/` (ignored), so the machine that scores needs the tables `0310` wrote for the build being checked, copied from the host when `0310` ran there. Check them against the run's `evidence_md5` (`data/tune/<key>_summary.csv`: the md5s of `visits_link.csv`, `visits_species.csv` and `walks.csv`) before scoring. On 2026-10-28 the scoring machine for this issue already held #92's tables, md5s matching.
+
+## Acceptance
+
+- `DEV=1 0320` writes the pick report and leaves the tracked tree unchanged (`git status` clean).
+- A full `0320` and `0330` leave the tracked tree unchanged.
+- A promotion moves exactly the tracked tables and bundles, and `devtools::test()` is green after it.
+- `0325`, `0330` and `knw_thresholds_table()` still read only the tracked directories, non-recursively (as they do with
+  `grad_ext/` and `grad_fwa/`), so a candidate is never published by accident.
+
+Related: #92 (PR #109), #84 (smoke gates first), #81 (GeoPackages opt-in).
+
+## Exploration (2026-10-28)
+
+- `0320` writes every output to `dir_out` (`data/tune`, or `data/tune/dev` under `DEV=1`) and its log to
+  `scripts/logs/habitat/` (tracked), so even `DEV=1` leaves a new file in a tracked directory today.
+- `0320` reads the previous pick from tracked `data/tune/*_tune.csv` whatever `dir_out` is (`previous`), which is the
+  published side a pick report needs.
+- `0330` reads `data/tune/*_curve.rds` and `*_grades.csv`, writes `data/compare/` and, under `STAGE=maps`,
+  `research/fig/` (tracked); its combined `compare/change/checks.csv` are composed from the per-key tables on disk.
+- Readers of the tune log: `data-raw/vignette_chinook.R` takes the newest `_tune_run.*\.txt` in `scripts/logs/habitat`
+  that graded its key and pins its md5; `0325` lists every tune log in its provenance. So a promotion must copy the
+  candidate's log there.
+- `0325`, `data-raw/vignette_method.R` read the newest evidence ledger; `vignette_chinook.R` the one the tune log names.
+- `knw_thresholds_table()` lists `tune_dir` non-recursively (`R/thresholds_table.R`).
+- Local evidence md5s equal #92's `evidence_md5` (`1bd35829…;009698d7…;99f499bb…`), so `DEV=1 0320` runs here.
+- Timing: `DEV=1` CH alone 1.7 min on 8 workers (20261027_tune_run-ch-dev.txt); #92's full scoring 42.6 min, whole
+  0320 130.3 min, 0330 466.1 min with GeoPackages (CH rearing compare 44.1 min).
+
+## Errors Encountered
+
+| Error | Resolution |
+|-------|------------|
