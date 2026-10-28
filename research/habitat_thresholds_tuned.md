@@ -101,7 +101,9 @@ after the two measurements below.
   against 37.8 % for bull trout. Short segments read gradients further from the Atlas line's: on segments of 10 m or
   less, 13.5 % read 0 and the median gap is 0.015, against 0.0017 on segments over 500 m. By catch, though, the gap is
   the same (median 0.0083 for visits with fish and without, SD 0.077 and 0.078): the segment's length follows the
-  outcome, and its gradient's departure from the Atlas line's does not. The gradient class at one of `default`'s cut-offs differs between the two gradients on 7.8–12.1 % of
+  outcome, and its gradient's departure from the Atlas line's does not, by any catch. By each species' own outcome it
+  can: the median gap is smaller where the species was present for CO (0.0079 against 0.0115), GR (0.0023 against
+  0.0043), ST (0.0086 against 0.0113) and WCT (0.0076 against 0.0164), and about equal for BT, CH and RB. The gradient class at one of `default`'s cut-offs differs between the two gradients on 7.8–12.1 % of
   visits.
 - **link does not cut at `default`'s cut-offs.** `default` breaks at observations, gradient barriers, falls, definite
   barriers, habitat endpoints and crossings, and its gradient breaks come only from the access classes (15, 20, 25 and

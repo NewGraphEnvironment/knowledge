@@ -79,8 +79,8 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   tables (its catalog cache and interactive maps ignored), `data/publish/` the Parquet sets (ignored).
   `data/tune/grad_ext/` and `data/compare/grad_ext/` hold `0322`'s CH rearing run on a gradient ladder extended to
   30 % (#67, on the evidence build before #73; the main run carries that ladder for every species since #68);
-  nothing that publishes reads them, because `0325`, `0330` and `knw_thresholds_table()` list their directories
-  non-recursively. `data/compare/gpkg/` (ignored) holds one GeoPackage per species × stage from `0330`, the
+  `0325`, `0330` and `knw_thresholds_table()` do not read them, because they list their directories non-recursively;
+  `data-raw/vignette_chinook.R` reads `data/tune/grad_ext/` for the chinook article's sentence on the longer ladder. `data/compare/gpkg/` (ignored) holds one GeoPackage per species × stage from `0330`, the
   comparison's view for QGIS (#81).
 - `data/rag/` — ignored local cache of the ragnar stores. Source of truth is `s3://fresh-bc/rag/` (not public).
 - `data/fdis/` — ignored cache of the FDIS export (`0230` syncs it) and of the visit tables built from it
@@ -215,8 +215,9 @@ methodology article's sensitivity sentence).
 `knw_grade_species()` refuses a curve fitted on any other gradient. link breaks streams at the bcfishobs observations
 of the species it models in each group, and an FDIS visit that caught one is usually such an observation, so the
 segment and its length depend on the outcome: on the tuning's stream branch 86 % of visits with fish start a segment of
-their own against 10 % of empty ones, with median lengths of 113 m and 305 m. The gradient's gap from the Atlas line's
-does not (median 0.0083 either way; `data-raw/segment_gradient_check.R`). Fixed-window gradients, whose length would
+their own against 10 % of empty ones, with median lengths of 113 m and 305 m. By any catch the gradient's gap from the
+Atlas line's does not (median 0.0083 either way), but by each species' own outcome it is smaller where the species was
+present for CO, GR, ST and WCT (WCT 0.0076 against 0.0164; `data-raw/segment_gradient_check.R`). Fixed-window gradients, whose length would
 not depend on the outcome, are #70's.
 
 ### FISS submission workbooks: editions drift, and most EF fish are already in FDIS
@@ -344,7 +345,7 @@ they show:
 - **A decision made before the run is stated as one.** List every check with its direction; do not sort them by
   the side they support.
 
-### A run's record travels with its table, and every reader compares it, not its presence
+### A run's record travels with its table, and its readers compare it, not only its presence
 
 Every `data/tune/<key>_grades.csv` row carries the run that made it: `rule`, `run_uid`, `walk`, `ref_edge`,
 `discharge_load`, `curve_prior_sd`, `grade_withheld`, `null_heldout_curve` (the gate's own number), `evidence_md5`

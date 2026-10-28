@@ -171,10 +171,11 @@ most because the stream is too far away.
 ### 3. `r pipe$label[3]` {#step-3}
 
 link [@irvine2026linkDevelop] cuts the Atlas streams into short segments and records, for each species, whether fish
-can reach each one and what link's current rules call habitat. It also cuts streams where fish have been observed, using
+can reach each one and what link's current rules call habitat. It also cuts streams where the species it models have
+been observed, using
 `bcfishobs` [@norris2024smnorrisbcfishobs], so those observations shape the segments, but they never score a rule: they say where
 fish were seen, not where they were looked for and missed. A catch of a species link models can be one of those
-observations, so most sites that caught fish start a segment of their own.
+observations, so most stream-line sites that caught fish start a segment of their own.
 
 `r detail(3)`
 
