@@ -53,8 +53,9 @@
 #'   the same order (every [knw_tune_grid()] column, so a moved `default`
 #'   counts), and the settings the score was made with match (`fit`, `prior_sd`,
 #'   `seed`, `folds`, `d_floor` and `extra`, recorded as `spec` by
-#'   [knw_tune_score()], and the gradient column, `grad`); a cache written before the record is read back with a
-#'   message naming the settings it is taken as. `n_boot`, `seed_boot` and
+#'   [knw_tune_score()], and the gradient column, `grad`); a cache whose record lacks `grad` is rescored, and one
+#'   written before any record is rescored unless `cols[["grad"]]` is `fwa_gradient`, the gradient every such cache
+#'   was scored on, when it is read back with a message naming the settings it is taken as. `n_boot`, `seed_boot` and
 #'   `seeds_more` are not checked: a cache's bootstrap and extra-seed tables are
 #'   read back whatever the run asked for, so give a run with different ones its
 #'   own directory.

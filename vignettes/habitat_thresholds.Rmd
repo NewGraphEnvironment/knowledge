@@ -87,6 +87,9 @@ stopifnot(nrow(st) == 1, st$seeds_same_rec > st$seeds_n / 2, st$seeds_rec_in_reg
 lost_all <- fn("FDIS visits") - fn("no_link_segment")
 lost_place <- fn("FDIS visits") - fn("ws50_mismatch")
 stopifnot(fun$n[1] == 51587, nrow(ch) == 1, all(diff(fun$n) <= 0), lost_place / lost_all > 0.5)
+# the limits' words: sites with fish start a segment of their own more often and sit on shorter segments, and most
+# picks are still close calls on the Atlas line's slope
+stopifnot(sg$at_site_fish > sg$at_site_zero, sg$len_fish < sg$len_zero, sum(gs$pick_in_atlas_region) > nrow(gs) / 2)
 ```
 
 The R package [`link`](https://newgraphenvironment.github.io/link/) maps where each fish species can live in British

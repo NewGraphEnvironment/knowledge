@@ -69,8 +69,9 @@ population has the same number of visits and the grid the same rows, in
 the same order (every \code{\link[=knw_tune_grid]{knw_tune_grid()}} column, so a moved \code{default}
 counts), and the settings the score was made with match (\code{fit}, \code{prior_sd},
 \code{seed}, \code{folds}, \code{d_floor} and \code{extra}, recorded as \code{spec} by
-\code{\link[=knw_tune_score]{knw_tune_score()}}, and the gradient column, \code{grad}); a cache written before the record is read back with a
-message naming the settings it is taken as. \code{n_boot}, \code{seed_boot} and
+\code{\link[=knw_tune_score]{knw_tune_score()}}, and the gradient column, \code{grad}); a cache whose record lacks \code{grad} is rescored, and one
+written before any record is rescored unless \code{cols[["grad"]]} is \code{fwa_gradient}, the gradient every such cache
+was scored on, when it is read back with a message naming the settings it is taken as. \code{n_boot}, \code{seed_boot} and
 \code{seeds_more} are not checked: a cache's bootstrap and extra-seed tables are
 read back whatever the run asked for, so give a run with different ones its
 own directory.}
