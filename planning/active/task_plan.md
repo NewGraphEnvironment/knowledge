@@ -64,13 +64,15 @@ database's host.
 
 ## Phase 2: `0330` defaults to two rules
 
-- [ ] `.knw_compare_structures_env(x, tuned_as)` in `R/compare_rules.R` maps `STRUCTURES`: unset or `reported` gives
-      `tuned_as`, and `all` gives `NULL` (the species' own set). Anything else is refused. Tests in
+- [x] ~~`.knw_compare_structures_env()`~~ (plan review G1): `structures = "reported"` is resolved inside
+      `knw_compare_rules()` by `.knw_compare_structures(br, tuned, structures, tuned_as)`, held to the species' own set
+      (refused outside it). `0330` maps `STRUCTURES=all` to `NULL`, else `"reported"`. Tests in
       `tests/testthat/test-compare_rules.R`.
-- [ ] `scripts/0330-compare.R`: read `STRUCTURES` and pass `structures =` to `knw_compare_rules()`. Name it in the
+- [x] `scripts/0330-compare.R`: read `STRUCTURES` and pass `structures =` to `knw_compare_rules()`. Name it in the
       run's provenance line and the log. Update the header's THREE STRUCTURES note and its RUN line.
-- [ ] `inst/method/settings.csv`: a `structures` row (`reported`, `script:scripts/0330-compare.R:structures`). Fix the
-      `tuned_as` row's note. `test-settings-register.R` passes.
+- [x] DEFERRED to #115 (plan review B1: `settings.csv` is md5-pinned in `method.rds`; only a promotion rebuilds it).
+      ~~`inst/method/settings.csv`: a `structures` row (`reported`, `script:scripts/0330-compare.R:structures`). Fix the
+      `tuned_as` row's note. `test-settings-register.R` passes.~~
 
 ## Phase 3: Readers and prose
 

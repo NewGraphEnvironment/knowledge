@@ -14,3 +14,4 @@
   register is left for the next bundle rebuild); G1 fixed (`structures = "reported"` resolved and held to the
   species' set inside knw_compare_rules()); G3/G4 folded into the check (tracked comparison a report; saving from
   worker minutes); fresh is 0.44.0 here and on the host, #92 ran 0.43.0
+- Phase 2: `0330` reads `STRUCTURES` (default `reported`); register row deferred to #115

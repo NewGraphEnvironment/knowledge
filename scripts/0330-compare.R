@@ -18,8 +18,11 @@
 #     near-river pair, which knw_compare_rules() walks on the scratch copy with fresh's own walk.
 #   - THREE STRUCTURES (#73, link#364): the tuned rule's through-wetland lines free (link before 0.67.0),
 #     through the door with the pair everywhere (link's `both`), or through the door with the pair on them
-#     only (link's `wetland_flow`); knw_compare_rules() picks which a species runs. `tuned` in the tables and
+#     only (link's `wetland_flow`); knw_compare_rules() picks which a species can run. `tuned` in the tables and
 #     the segments is the `door` structure (TUNED_AS=), the one the maps and the article read.
+#   - THE REPORTED STRUCTURE ALONE BY DEFAULT (#112): every structure is one more rule regenerated on every group, and
+#     nothing published reads any but TUNED_AS, so a run compares `default` and TUNED_AS; STRUCTURES=all adds the
+#     species' other structures (`free`, `door_wetland`), which the research files' structure figures came from (#92).
 #   - NO MAPS IN THE DEFAULT RUN (#81, Al 2026-10-20): comparisons are viewed in QGIS from the GeoPackages
 #     (data/compare/gpkg/, ignored; GPKG=FALSE skips them); the floodplain table and the maps are STAGE=maps.
 #   - FLOODPLAIN AS A UNIT OF MEASURE: the catalog's whole-network floodplain (`<wsg>_all_ff04`) is a
@@ -57,7 +60,8 @@
 #                     research/fig/compare_<sp>_<stage>_<wsg>.png, data/compare/maps/*.html (ignored)
 # RUN:    TUNE_DIR=data/tune/candidate/<run> Rscript scripts/0330-compare.R   (from the repo root; SPECIES=CH,BT to restrict, and the combined tables then
 #         compose with the other species' saved per-key tables; WORKERS=6 database cores; CONFIG_SHA=<link
-#         commit> for the configs (default origin/main of LINK_REPO); TUNED_AS=door; GPKG=FALSE skips the GeoPackages;
+#         commit> for the configs (default origin/main of LINK_REPO); TUNED_AS=door; STRUCTURES=all for every structure
+#         a species has (default: TUNED_AS alone); GPKG=FALSE skips the GeoPackages;
 #         STAGE=maps draws the floodplain table and the maps from the tables the last full run saved; STAGE=gpkg writes
 #         the GeoPackages alone from the segments it saved). Every STAGE checks the database's round trip at connect
 #         and stops off its host (over 20 ms) unless REMOTE=TRUE (#110).
@@ -73,9 +77,11 @@ workers <- as.integer(Sys.getenv("WORKERS", "6"))
 only <- Sys.getenv("SPECIES", "")
 stage_only <- Sys.getenv("STAGE", "")
 tuned_as <- Sys.getenv("TUNED_AS", "door")
+structures <- Sys.getenv("STRUCTURES", "reported")   # "all": every structure the species has, not TUNED_AS alone (#112)
 gpkg <- !identical(Sys.getenv("GPKG"), "FALSE")
 remote <- Sys.getenv("REMOTE") %in% c("1", "TRUE", "true")   # compare off the database's host anyway (#110)
 if (!stage_only %in% c("", "maps", "gpkg")) stop("STAGE must be unset, 'maps' or 'gpkg', not '", stage_only, "'")
+if (!structures %in% c("", "reported", "all")) stop("STRUCTURES must be unset, 'reported' or 'all', not '", structures, "'")
 schema <- Sys.getenv("SCHEMA", "fresh_default")  # the run's persist schema, by its current name (renamed after the run, #73)
 catalog_bucket <- "https://stac-floodplains-bc.s3.us-west-2.amazonaws.com"
 catalog_items <- "../stac_floodplains_bc/data/stac"      # the catalog repo's item records
@@ -157,8 +163,9 @@ if (!file.exists(file.path(link_dir, "parameters_habitat_thresholds.csv")) ||
       !any(grepl("rear_river_distance_max", readLines(file.path(link_dir, "parameters_habitat_thresholds.csv"), n = 1)))) {
   stop("link's thresholds at ", config_sha, " carry no near-river columns: the baseline needs link >= 0.67.0 (#73)")
 }
-say("link configs/default at %s (the baseline; the schema %s's run is at %s) read from %s; fresh %s; tuned reported as %s.",
-    config_sha, schema, link_sha, link_repo, as.character(packageVersion("fresh")), tuned_as)
+say("link configs/default at %s (the baseline; the schema %s's run is at %s) read from %s; fresh %s; tuned reported as %s; %s.",
+    config_sha, schema, link_sha, link_repo, as.character(packageVersion("fresh")), tuned_as,
+    if (structures == "all") "every structure a species has (STRUCTURES=all)" else "compared under it alone")
 
 # the catalog's groups
 items <- list.files(catalog_items, "_all_ff04\\.json$", full.names = TRUE)
@@ -253,7 +260,8 @@ run_one <- function(job) {
     m_read <- as.numeric(difftime(Sys.time(), t0, units = "mins"))
     cmp <- knw_compare_rules(pg, schema, job$species_code, job$stage, job$pick, job$groups, link_dir, grades,
                              visits = vl, visit_species = vs, scratch = paste0("knw_cmp_", tolower(job$key)),
-                             tuned_as = tuned_as, config_sha = config_sha, workers = workers)
+                             tuned_as = tuned_as, structures = if (structures == "all") NULL else "reported",
+                             config_sha = config_sha, workers = workers)
     rm(grades)
     # the key's stage lines (#110): the grade table read here first, then knw_compare_rules()'s, then the writes
     cmp$log <- c(sprintf("Grade table read: %.1f min.", m_read), cmp$log)
