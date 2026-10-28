@@ -16,6 +16,7 @@ promote_fx <- function(ev = "e1", ch_rule = "mad>=0.5|g<=0.07|none", env = paren
     saveRDS(list(tag = tag), file.path(dir_t, paste0(k, "_curve.rds")))
     utils::write.csv(data.frame(watershed_group_code = c("BULK", "ALL"), species_code = sp, stage = st, tuned_rule = rule,
                                 km = c(1, 2), tag = tag), file.path(dir_c, paste0(k, "_compare.csv")), row.names = FALSE)
+    saveRDS(list(tag = tag), file.path(dir_c, paste0(k, "_segments.rds")))
   }
   key_files(tn, cm, "CH_rear", "mad>=0.75|g<=0.09|none", "e1", "old")
   key_files(tn, cm, "BT_rear", "width>=1|g<=0.2|none", "e1", "old")
@@ -31,7 +32,8 @@ promote_fx <- function(ev = "e1", ch_rule = "mad>=0.5|g<=0.07|none", env = paren
   }
   combined(cm, "old", c("CH_rear", "BT_rear"))
   combined(cc, "new")
-  writeLines("tune log", file.path(ct, "20261028_tune_run-r1.txt"))
+  writeLines(c("tune log", "CH_rear grades: 2 groups, ...", "BT_rear grades: 2 groups, ..."),
+             file.path(ct, "20261028_tune_run-r1.txt"))
   writeLines("compare log", file.path(cc, "20261028_compare-r1.txt"))
   writeLines("png", file.path(cc, "fig", "compare_ch_rear_bulk.png"))
   writeLines("png", file.path(cc, "fig", "compare_bt_rear_bulk.png"))
@@ -144,7 +146,9 @@ test_that("promoting a copy of the tracked run changes nothing", {
   unlink(c(ct, cc), recursive = TRUE)
   dir.create(ct); dir.create(cc)
   file.copy(list.files(fx$tune, full.names = TRUE, pattern = "^(CH|BT)_rear_"), ct)
-  file.copy(list.files(fx$compare, full.names = TRUE, pattern = "\\.csv$"), cc)
+  file.copy(list.files(fx$compare, full.names = TRUE, pattern = "\\.(csv|rds)$"), cc)
+  writeLines(c("CH_rear grades: 2 groups", "BT_rear grades: 2 groups"), file.path(ct, "20261027_tune_run.txt"))
+  file.copy(file.path(ct, "20261027_tune_run.txt"), fx$logs)
   before <- tree_md5(fx)
   p <- promote(fx)
   expect_identical(tree_md5(fx), before)
@@ -298,4 +302,45 @@ test_that("a key whose fit failed is refused, never taken for one the run does n
     expect_error(promote(fx), paste0("CH_rear: status ", st, " with no recommended rule"), info = st)
     expect_identical(tree_md5(fx), before, info = st)
   }
+})
+
+test_that("a key a later pass no longer fits takes only what that pass wrote (round 3)", {
+  fx <- promote_fx()
+  ct <- file.path(fx$tune, "candidate", "r1")
+  # the later pass: too few groups, so a summary and a curve record; the earlier pass's fit is still in the run
+  utils::write.csv(data.frame(species_code = "CH", stage = "rear", status = "too_few_groups"),
+                   file.path(ct, "CH_rear_summary.csv"), row.names = FALSE)
+  saveRDS(list(tag = "later"), file.path(ct, "CH_rear_curve.rds"))
+  x <- utils::read.csv(file.path(fx$compare, "candidate", "r1", "compare.csv"))
+  utils::write.csv(x[x$species_code != "CH", ], file.path(fx$compare, "candidate", "r1", "compare.csv"), row.names = FALSE)
+  p <- promote(fx)
+  expect_setequal(list.files(fx$tune, "^CH_rear_"), c("CH_rear_summary.csv", "CH_rear_curve.rds"))
+  expect_identical(readRDS(file.path(fx$tune, "CH_rear_curve.rds"))$tag, "later")
+  expect_length(list.files(fx$compare, "^CH_rear_"), 0)
+  expect_true(any(grepl("CH_rear: left in the run.*CH_rear_tune.csv", p$notes)))
+})
+
+test_that("a GeoPackage, figure or floodplain table drawn before the key's last comparison is not promoted", {
+  fx <- promote_fx()
+  cc <- file.path(fx$compare, "candidate", "r1")
+  dir.create(file.path(fx$compare, "gpkg")); dir.create(file.path(cc, "gpkg"))
+  writeLines("tracked", file.path(fx$compare, "gpkg", "CH_rear.gpkg"))
+  writeLines("stale", g <- file.path(cc, "gpkg", "CH_rear.gpkg"))
+  writeLines("stale", fp <- file.path(cc, "floodplain.csv"))
+  writeLines("species_code,stage,ha", file.path(fx$compare, "floodplain.csv"))
+  for (f in c(g, fp, file.path(cc, "fig", "compare_ch_rear_bulk.png"))) Sys.setFileTime(f, Sys.time() - 3600)
+  p <- promote(fx)
+  expect_identical(readLines(file.path(fx$compare, "gpkg", "CH_rear.gpkg")), "tracked")
+  expect_false(file.exists(file.path(fx$fig, "compare_ch_rear_bulk.png")))
+  expect_true(file.exists(file.path(fx$fig, "compare_bt_rear_bulk.png")))
+  expect_identical(readLines(file.path(fx$compare, "floodplain.csv")), "species_code,stage,ha")
+  expect_true(any(grepl("floodplain.csv: drawn before", p$notes)))
+  expect_true(any(grepl("CH_rear: left in the run.*CH_rear.gpkg", p$notes)))
+})
+
+test_that("a fitted key no log of the run says it graded is refused", {
+  fx <- promote_fx()
+  writeLines(c("tune log", "BT_rear grades: 2 groups, ...", "CH_rear: grades already written under x, kept."),
+             file.path(fx$tune, "candidate", "r1", "20261028_tune_run-r1.txt"))
+  expect_error(promote(fx), "CH_rear: no log of run r1 says it graded the key")
 })

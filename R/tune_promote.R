@@ -163,11 +163,19 @@ knw_tune_promote <- function(run, keys = NULL, live = NULL, tune_dir = "data/tun
   removed <- character()
   copies <- list()
   notes <- character()
-  plan_dir <- function(from, to, pat_of) {
+  # a candidate can be resumed, and no pass deletes what a later pass stops writing, so a key's files in the run are
+  # only what its last pass wrote (`take`): the rest stays in the run, noted
+  plan_dir <- function(from, to, pat_of, take = function(k, src) src) {
     for (k in keys) {
       pat <- pat_of(k)
       src <- if (dir.exists(from)) list.files(from, pat, full.names = TRUE) else character()
       src <- src[!dir.exists(src)]
+      kept_src <- take(k, src)
+      if (length(left <- setdiff(src, kept_src))) {
+        notes <<- c(notes, sprintf("%s: left in the run, from an earlier pass or comparison: %s", k,
+                                   paste(basename(left), collapse = ", ")))
+      }
+      src <- kept_src
       old <- if (dir.exists(to)) list.files(to, pat, full.names = TRUE) else character()
       old <- old[!dir.exists(old)]
       if (!length(src)) {
@@ -188,13 +196,27 @@ knw_tune_promote <- function(run, keys = NULL, live = NULL, tune_dir = "data/tun
   fitted <- keys[!vapply(cand[keys], fld, character(1), "status") %in% .knw_no_fit]
   esc <- function(k) gsub(".", "\\.", k, fixed = TRUE)
   by_key <- function(k) paste0("^", esc(k), "_")
-  plan_dir(run_tune, tune_dir, by_key)
-  plan_dir(run_cmp, compare_dir, by_key)
-  if (dir.exists(file.path(run_tune, "grad_fwa"))) {
-    plan_dir(file.path(run_tune, "grad_fwa"), file.path(tune_dir, "grad_fwa"), by_key)
+  # what 0320 writes for a key it does not fit (R/tune_run.R's three statuses): its summary, its curve record and, when
+  # the smoke run scored it, its smoke table; any other file of the key is an earlier pass's fit
+  unfit_files <- function(k) paste0(k, c("_summary.csv", "_curve.rds", "_smoke.csv"))
+  take_tune <- function(k, src) if (k %in% fitted) src else src[basename(src) %in% unfit_files(k)]
+  take_cmp <- function(k, src) if (k %in% fitted) src else character()
+  # a GeoPackage or figure drawn before the key's last comparison is that comparison's, not this one's: a full 0330
+  # draws no maps, and GPKG=FALSE keeps the last GeoPackage
+  seg_time <- function(k) {
+    f <- file.path(run_cmp, paste0(k, "_segments.rds"))
+    if (file.exists(f)) file.mtime(f) else as.POSIXct(Inf, origin = "1970-01-01")
   }
-  plan_dir(file.path(run_cmp, "gpkg"), file.path(compare_dir, "gpkg"), function(k) paste0("^", esc(k), "\\.gpkg$"))
-  plan_dir(file.path(run_cmp, "fig"), fig_dir, function(k) paste0("^compare_", esc(tolower(k)), "_.*\\.png$"))
+  take_drawn <- function(k, src) if (k %in% fitted) src[file.mtime(src) >= seg_time(k)] else character()
+  plan_dir(run_tune, tune_dir, by_key, take_tune)
+  plan_dir(run_cmp, compare_dir, by_key, take_cmp)
+  if (dir.exists(file.path(run_tune, "grad_fwa"))) {
+    plan_dir(file.path(run_tune, "grad_fwa"), file.path(tune_dir, "grad_fwa"), by_key, take_tune)
+  }
+  plan_dir(file.path(run_cmp, "gpkg"), file.path(compare_dir, "gpkg"), function(k) paste0("^", esc(k), "\\.gpkg$"),
+           take_drawn)
+  plan_dir(file.path(run_cmp, "fig"), fig_dir, function(k) paste0("^compare_", esc(tolower(k)), "_.*\\.png$"),
+           take_drawn)
   # the run's logs, beside the others; an existing log of the same name must be this one
   logs <- c(list.files(run_tune, "_tune_run.*\\.txt$", full.names = TRUE),
             list.files(run_cmp, "_compare.*\\.txt$", full.names = TRUE))
@@ -207,17 +229,36 @@ knw_tune_promote <- function(run, keys = NULL, live = NULL, tune_dir = "data/tun
   if (length(logs)) {
     copies[[length(copies) + 1]] <- list(from = logs, to = file.path(log_dir, basename(logs)), move = FALSE)
   }
+  # every fitted key's grades have a pass of the run that says it made them (the chinook bundle reads that line); an
+  # archive holds no logs, and the tables it restores were graded by a run whose logs are already tracked
+  tune_logs <- logs[grepl("_tune_run", basename(logs))]
+  if (startsWith(run, "replaced_")) {
+    tune_logs <- c(tune_logs, list.files(log_dir, "_tune_run.*\\.txt$", full.names = TRUE))
+  }
+  graded <- unlist(lapply(tune_logs, readLines, warn = FALSE))
+  for (k in fitted) {
+    if (!any(grepl(sprintf("^%s grades: [0-9]+ groups", k), graded))) {
+      stop(k, ": no log of run ", run, " says it graded the key (a pass that died before writing it?): ",
+           "rerun the key with RUN=", run, call. = FALSE)
+    }
+  }
   # the tables of every key: each promoted key's rows from the run, in the place its rows held
   merged <- list()
   for (w in c("compare", "change", "checks", "floodplain")) {
     f <- file.path(run_cmp, paste0(w, ".csv"))
-    if (!file.exists(f)) {
+    # floodplain.csv is drawn by STAGE=maps, after a comparison: one older than a promoted key's last comparison is
+    # an earlier comparison's
+    stale <- w == "floodplain" && file.exists(f) && length(fitted) &&
+      any(file.mtime(f) < do.call(c, lapply(fitted, seg_time)))
+    if (!file.exists(f) || stale) {
       if (file.exists(file.path(compare_dir, basename(f)))) {
-        notes <- c(notes, sprintf("%s: not in the run; the tracked rows kept", basename(f)))
+        notes <- c(notes, sprintf("%s: %s; the tracked rows kept", basename(f),
+                                  if (stale) "drawn before the run's last comparison" else "not in the run"))
       }
       next
     }
-    merged[[file.path(compare_dir, basename(f))]] <- .knw_rows_merge(file.path(compare_dir, basename(f)), f, keys, fitted)
+    to <- file.path(compare_dir, basename(f))
+    merged[[to]] <- .knw_rows_merge(to, f, keys, fitted)
   }
 
   written <- c(unlist(lapply(copies, `[[`, "to")), names(merged))
@@ -282,7 +323,8 @@ knw_tune_promote <- function(run, keys = NULL, live = NULL, tune_dir = "data/tun
   old <- parse(tracked)
   lost <- intersect(intersect(fitted, old$key), setdiff(fitted, new$key))
   if (length(lost)) {
-    stop(basename(tracked), " in the run leaves out ", paste(lost, collapse = ", "), ", which the tracked table holds: ",
+    stop(basename(tracked), " in the run leaves out ", paste(lost, collapse = ", "),
+         ", which the tracked table holds: ",
          "rerun 0330 on the run for them, or promote without them", call. = FALSE)
   }
   if (!identical(old$header, new$header) && !all(old$key %in% keys)) {

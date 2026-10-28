@@ -82,3 +82,18 @@ a legacy fallback took a candidate's log). Every choice of the kind in the chang
 | same, legacy fallback | the log for tables from before `tune_run` | newest name, candidate logs excluded | fixed |
 | `knw_run_ledger()` fallback | the ledger for tables from before `evidence_ledger` | newest name | as before the branch (only today's tables reach it) |
 | `0320` `ledger_path` | the build a new run scores | newest name | intended: a run is made on the newest build |
+
+### After round 3
+
+Round 3 narrowed the mechanism: presence (or sort order) taken as provenance. It reached a place the table above did
+not list, the candidate directory itself: a resumed run keeps what a later pass stopped writing. Rows added:
+
+| where | chooses | by | verdict |
+|---|---|---|---|
+| `knw_tune_promote()` `take_tune` | an unfitted key's files from the run | the three files 0320 writes for one (summary, curve record, smoke) | fixed: the rest stays in the run, noted |
+| `take_cmp` | an unfitted key's comparison files | none taken | fixed |
+| `take_drawn` | a fitted key's GeoPackage and figures | drawn at or after the key's `_segments.rds` | fixed: older ones stay, noted |
+| combined `floodplain.csv` | the run's floodplain rows | drawn after every promoted key's last comparison | fixed |
+| grading-log check | that a fitted key's grades have a pass that says it made them | a `<key> grades:` line in the run's logs (an archive: the tracked logs) | added |
+| `0320` pass name | which pass graded last | UTC start time `p<YYYYMMDDHHMMSS>`, across hosts and days | fixed (round 2's per-directory count collided across hosts) |
+| `0335` evidence check | that the rebuilds can run | the derived tables present when they will | fixed: refused up front |

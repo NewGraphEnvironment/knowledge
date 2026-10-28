@@ -62,10 +62,11 @@ logs <- sort(list.files("scripts/logs/habitat", "_tune_run.*\\.txt$", full.names
 # key's promotion brought in, which may grade this key too, is never taken for this key's run
 tune_run <- readr::read_csv(sprintf("data/tune/%s_summary.csv", key), show_col_types = FALSE, col_types = readr::cols(.default = "c"))$tune_run
 if (length(tune_run) == 1 && !is.na(tune_run)) {
-  # <date>_tune_run-<run>-p<pass>[-<species>][-grad_fwa].txt (0320): the passes are numbered across the run, highest last
-  stem <- sprintf("^[0-9]{8}_tune_run-%s-p([0-9]+)(-[a-z_]+)*\\.txt$", gsub(".", "\\.", tune_run, fixed = TRUE))
+  # <date>_tune_run-<run>-p<UTC start>[-<species>][-grad_fwa][-<n>].txt (0320): the pass that started last first
+  stem <- sprintf("^[0-9]{8}_tune_run-%s-p([0-9]{14})(-[a-z_]+)*(-[0-9]+)?\\.txt$",
+                  gsub(".", "\\.", tune_run, fixed = TRUE))
   logs <- logs[grepl(stem, basename(logs))]
-  logs <- logs[order(as.integer(sub(stem, "\\1", basename(logs))), decreasing = TRUE)]
+  logs <- logs[order(sub(stem, "\\1", basename(logs)), decreasing = TRUE)]
 } else {
   # tables from before the record: the newest log that graded the key, as before #111, never a candidate's (a by-key
   # promotion of other keys brings a run's logs, which may grade this key too)

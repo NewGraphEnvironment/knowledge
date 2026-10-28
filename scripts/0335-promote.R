@@ -61,6 +61,11 @@ if (nzchar(only)) {
 # what the next readers will hold the promoted set to, on this machine and tree
 derived <- file.path("data/fdis/derived", c("visits_link.csv", "visits_species.csv", "walks.csv"))
 live <- if (undo) NULL else list(walk_md5 = knw_walk_md5())
+# the bundles read the evidence, so a machine without it cannot rebuild them: refused before anything moves
+if (!undo && bundles && !all(file.exists(derived))) {
+  stop("no ", paste(derived[!file.exists(derived)], collapse = ", "), ": the rebuilds need the evidence the run was ",
+       "scored on; copy it here, or BUNDLES=FALSE to move the tables only")
+}
 if (!undo && all(file.exists(derived))) live$evidence_md5 <- paste(unname(tools::md5sum(derived)), collapse = ";")
 # a dry run reads the live flow load too, so it refuses what the real run would
 if (bundles) {

@@ -117,11 +117,11 @@ if (nzchar(grad_dirs[[gradient]])) dir_out <- file.path(dir_out, grad_dirs[[grad
 # one log per pass: a pass over a subset of species (SPECIES=) names them, so passes do not overwrite each other. A DEV=1
 # log stays beside its outputs in the ignored data/tune/dev/, and a candidate's in its run directory, named for the run,
 # so a promotion can copy it to scripts/logs/habitat/ beside the others (#111)
-# A candidate's passes are numbered across the run (p1, p2, ... whatever the day or species), so the pass that graded
-# a key last is the highest number; data-raw/vignette_chinook.R reads it by that
-pass <- if (dev) NA_integer_ else 1L + length(list.files(dir_run, sprintf("_tune_run-%s-p[0-9]+", run)))
+# A candidate's passes are named by their UTC start (p<YYYYMMDDHHMMSS>), so the pass that graded a key last sorts last
+# whatever the day, the species or the host it ran on; data-raw/vignette_chinook.R reads it by that
+pass <- format(Sys.time(), "%Y%m%d%H%M%S", tz = "UTC")
 path_log <- file.path(dir_run, paste0(format(Sys.time(), "%Y%m%d", tz = "UTC"), "_tune_run",
-                                      if (!dev) sprintf("-%s-p%d", run, pass) else "",
+                                      if (!dev) sprintf("-%s-p%s", run, pass) else "",
                                                      if (nzchar(Sys.getenv("SPECIES"))) paste0("-", tolower(gsub(",", "_", Sys.getenv("SPECIES")))) else "",
                                                      if (dev) "-dev" else "",
                                                      if (nzchar(grad_dirs[[gradient]])) paste0("-", grad_dirs[[gradient]]) else "", ".txt"))
@@ -443,6 +443,8 @@ for (k in names(out)) {
       sum(!is.na(g$grades$target_in_group)), as.numeric(difftime(Sys.time(), t1, units = "mins")))
   grade_rows[[k]] <- tibble(key = k, groups = length(wsg), reference_rate = g$reference, ref_edge = paste(g$ref_edge, collapse = ";"),
                             q_walk = g$q, target_other_group = sum(g$grades$target_in_group %in% FALSE), as_tibble(as.list(g$counts)))
+  # the log so far, after every key: a pass that dies later still says which grades it made (#111)
+  writeLines(log_lines, path_log)
 }
 dbDisconnect(conn)
 block("grades", bind_rows(grade_rows))
