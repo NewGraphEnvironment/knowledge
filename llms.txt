@@ -255,6 +255,8 @@ run in one call for every species and stage the evidence can speak to.
 - [`knw_tune_repick()`](https://newgraphenvironment.github.io/knowledge/reference/knw_tune_repick.md)
   : Pick a rule again from a tuning table, at another width of the
   region
+- [`knw_tune_pick_report()`](https://newgraphenvironment.github.io/knowledge/reference/knw_tune_pick_report.md)
+  : Set a tuning run's pick beside the published one
 - [`knw_tune_curve()`](https://newgraphenvironment.github.io/knowledge/reference/knw_tune_curve.md)
   : One curve per species and stage: use against size, gradient and
   distance to a river, together
@@ -272,6 +274,12 @@ run in one call for every species and stage the evidence can speak to.
 
 - [`knw_thresholds_table()`](https://newgraphenvironment.github.io/knowledge/reference/knw_thresholds_table.md)
   : The published thresholds table, from a tuning run's outputs
+
+- [`knw_tune_promote()`](https://newgraphenvironment.github.io/knowledge/reference/knw_tune_promote.md)
+  : Promote a candidate tuning run into the tracked tables
+
+- [`knw_run_ledger()`](https://newgraphenvironment.github.io/knowledge/reference/knw_run_ledger.md)
+  : The evidence ledger a set of tuning tables was scored on
 
 - [`knw_publish()`](https://newgraphenvironment.github.io/knowledge/reference/knw_publish.md)
   : Write a set of tables as Parquet with a manifest, and upload them
