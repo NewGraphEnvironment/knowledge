@@ -81,14 +81,14 @@ What exploration found that shapes the breakdown:
 
 ## Phase 3: a timing line per stage in 0330
 
-- [ ] `R/compare_rules.R`: `.knw_timer()` started at :195 (after the local file and parameter reads, which cost no
+- [x] `R/compare_rules.R`: `.knw_timer()` started at :195 (after the local file and parameter reads, which cost no
       database time); ticks after scratch setup, classify/overlay/connect, the segment read, the summaries (from the
       flag join at :283), the outside check; one `say("<stage>: %.1f min")` per stage, except that the existing
       classify line (:249-252, which carries the walk seconds) is that stage's line and the tick replaces its `t0`,
       so no stage carries two timings (review 3, 8); `timing` returned.
-- [ ] `0330` `run_one()`: time the four writes and append their line; the key's `log` carries the stage lines as
+- [x] `0330` `run_one()`: time the four writes and append their line; the key's `log` carries the stage lines as
       now (nothing else in the log moves, so `STAGE=maps`/`gpkg` readers are unaffected).
-- [ ] `tests/testthat/test-compare_rules.R`: `.knw_timer()` ticks are non-negative, named in order, and sum to
+- [x] `tests/testthat/test-compare_rules.R`: `.knw_timer()` ticks are non-negative, named in order, and sum to
       the total within a tolerance (two `Sys.time()` reads; review 6); the worker-function test (:79, "calls no name of this package") still passes, since the timer
       lives in `knw_compare_rules()`, not `.knw_compare_bin()`.
 

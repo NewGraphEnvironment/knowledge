@@ -83,8 +83,9 @@
 #'   and lost by structure, reason and stream order), `checks` (FDIS detection on
 #'   each rule's segments and the bcfishobs lift, per structure), `segments` (the
 #'   per-segment flags under `default` and each structure, with `tuned` the
-#'   `tuned_as` structure, and the `default` branch each segment lies on), and
-#'   `log` lines.
+#'   `tuned_as` structure, and the `default` branch each segment lies on), `log`
+#'   lines, one of them per stage with its minutes, and `timing`, the minutes of
+#'   each stage by name (#110).
 #' @export
 #' @examples
 #' \dontrun{
@@ -192,6 +193,8 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
     isTRUE(all.equal(tuned$grad_max, rng$gradient[2])) && is.na(tuned$exc_q)
   default_rule <- .knw_default_rule_label(rng, specs, dims, sp, stage)
 
+  # one timing line per stage, after the local reads (#110): what a remote link costs each stage
+  tm <- .knw_timer()
   conn <- connector()
   on.exit(try(DBI::dbExecute(conn, sprintf("DROP SCHEMA IF EXISTS %s CASCADE", scratch)), silent = TRUE), add = TRUE)
   on.exit(try(DBI::dbDisconnect(conn), silent = TRUE), add = TRUE)
@@ -206,9 +209,9 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
   DBI::dbExecute(conn, sprintf("CREATE INDEX ON %s.grades (id_segment, watershed_group_code)", scratch))
   say("%s %s: %d groups; link configs at %s; default %s; tuned %s under %s (reported as tuned: %s).", sp, stage,
       length(groups), config_sha, default_rule, tuned$rule, paste(structures, collapse = ", "), tuned_as)
+  say("Scratch setup (waterbodies, user habitat, grades written): %.1f min.", tm$tick("scratch_setup"))
 
   rule_names <- c("default", structures)
-  t0 <- Sys.time()
   # the groups in bins balanced by segment count, one bin per worker, each with its own scratch schema and
   # predicates that read that schema's near-river table
   n_sql <- paste("SELECT watershed_group_code AS w, count(*)::int AS n FROM %s.streams_habitat_%s",
@@ -249,7 +252,7 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
   say(paste("Classify, overlay and connect: %d groups x %d rules on %d worker%s, %.1f min",
             "(near-river walks %.1f min summed over workers)."),
       length(groups), length(rule_names), length(jobs), if (length(jobs) == 1L) "" else "s",
-      as.numeric(difftime(Sys.time(), t0, units = "mins")), walk_s / 60)
+      tm$tick("classify_overlay_connect"), walk_s / 60)
   wsg_in <- paste0("'", groups, "'", collapse = ",")
   # the default branch each segment lies on, as link's rules name them, and whether a user-habitat reach covers it
   in_uhc_seg <- if (nrow(uhc) && flag %in% names(uhc)) {
@@ -280,6 +283,7 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
     LEFT JOIN %3$s.grades g ON g.id_segment = s.id_segment AND g.watershed_group_code = s.watershed_group_code
     WHERE s.watershed_group_code IN (%4$s)",
     schema, s, scratch, wsg_in, paste(edge_stream, collapse = ", "), in_uhc_seg))
+  say("Segment read: %d segments, %.1f min.", nrow(seg), tm$tick("segment_read"))
   fl <- do.call(rbind, flags)
   for (k in rule_names) {
     fk <- fl[fl$rule == k, ]
@@ -413,6 +417,7 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
                                     n_detect = c(sum(vv$present[r]), sum(vv$present[acc & !r])))
     }
   }
+  say("Summaries (km by rule, change by reason, FDIS visits): %.1f min.", tm$tick("summaries"))
   # outside check: bcfishobs records not from FDIS, by lnk_habitat_validate()'s conventions (0298)
   obs <- DBI::dbGetQuery(conn, sprintf("
     SELECT o.observation_key, o.watershed_group_code, o.blue_line_key, o.downstream_route_measure, o.activity_code,
@@ -487,13 +492,31 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
     say(paste("Outside check: %d non-FDIS %s records; %d locations placed (%d inside an overlay reach left out),",
               "%d on accessible stream edges."), n0, sp, nrow(pl) + n_uhc, n_uhc, length(ls))
   }
+  say("Outside check (bcfishobs records): %.1f min.", tm$tick("outside_check"))
   DBI::dbExecute(conn, sprintf("DROP SCHEMA IF EXISTS %s CASCADE", scratch))
+  say("Scratch drop: %.1f min.", tm$tick("scratch_drop"))
   checks <- do.call(rbind, lapply(checks, function(x) {
     for (c in c("km_share", "lift", "lift_lo", "lift_hi")) if (!c %in% names(x)) x[[c]] <- NA_real_
     x
   }))
   if (!is.null(checks)) checks$tuned_structure <- tuned_as
-  list(compare = compare, change = change, checks = checks, segments = seg, log = log)
+  list(compare = compare, change = change, checks = checks, segments = seg, log = log, timing = tm$ticks())
+}
+
+# A stage timer: tick(label) returns the minutes since the last tick (or the start) and records them under label;
+# ticks() returns them in order, named, and total() the minutes since the start
+.knw_timer <- function() {
+  t0 <- Sys.time()
+  last <- t0
+  ticks <- numeric()
+  tick <- function(label) {
+    now <- Sys.time()
+    m <- as.numeric(difftime(now, last, units = "mins"))
+    ticks[[label]] <<- m
+    last <<- now
+    m
+  }
+  list(tick = tick, ticks = function() ticks, total = function() as.numeric(difftime(last, t0, units = "mins")))
 }
 
 # One bin of groups (#87): its own connection and scratch schema `scratch_w`, each group regenerated through the

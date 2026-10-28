@@ -213,14 +213,20 @@ run_one <- function(job) {
     grades <- readr::read_csv(gfile, show_col_types = FALSE, col_select = dplyr::all_of(gcols),
                               col_types = readr::cols(id_segment = "d", watershed_group_code = "c", size = "d", dist_m = "d",
                                                       grade = "d", grade_class = "c", target_in_group = "l"))
+    m_read <- as.numeric(difftime(Sys.time(), t0, units = "mins"))
     cmp <- knw_compare_rules(pg, schema, job$species_code, job$stage, job$pick, job$groups, link_dir, grades,
                              visits = vl, visit_species = vs, scratch = paste0("knw_cmp_", tolower(job$key)),
                              tuned_as = tuned_as, config_sha = config_sha, workers = workers)
     rm(grades)
+    # the key's stage lines (#110): the grade table read here first, then knw_compare_rules()'s, then the writes
+    cmp$log <- c(sprintf("Grade table read: %.1f min.", m_read), cmp$log)
+    t_write <- Sys.time()
     readr::write_csv(cmp$compare, file.path("data/compare", paste0(job$key, "_compare.csv")), na = "")
     readr::write_csv(cmp$change, file.path("data/compare", paste0(job$key, "_change.csv")), na = "")
     if (!is.null(cmp$checks)) readr::write_csv(cmp$checks, file.path("data/compare", paste0(job$key, "_checks.csv")), na = "")
     saveRDS(cmp$segments, file.path("data/compare", paste0(job$key, "_segments.rds")))
+    cmp$log <- c(cmp$log, sprintf("Writes (compare, change, checks, segments): %.1f min.",
+                                  as.numeric(difftime(Sys.time(), t_write, units = "mins"))))
     # the through-wetland quantity link#364 measured, for the write-up: CH rearing on its five groups and on all
     if (job$key == "CH_rear") {
       wl <- cmp$segments |> dplyr::filter(edge_type %in% c(1050L, 1150L))
