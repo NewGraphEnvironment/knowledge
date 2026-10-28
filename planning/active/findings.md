@@ -41,3 +41,22 @@ CPU-bound and runs well from either.
 
 Related: #85 and #87 (batched walks), #101 (`default`'s flags cached), #81 (GeoPackages opt-in).
 
+
+## Review finding 1 corrected on implementation (2026-10-28)
+
+The plan folded review finding 1 as "the check's stop writes the ledger first". 0320, 0325 and 0330 (and four
+`data-raw/` scripts) read the newest `scripts/logs/habitat/*_evidence_build_ledger.csv`, so a refused 0310 that wrote
+its partial ledger there would become the ledger every downstream run reads, or overwrite a good ledger written the
+same day. A refused run writes `<date>_evidence_build_refused.csv` instead, which no reader's pattern matches.
+
+## The live round trip from this machine (2026-10-28)
+
+`knw_db_latency_check()` measured 1.4 ms (median of 5) on a localhost connection here, not the ~100 ms the plan
+expected of a remote link. So the plan's live "from the remote link it stops" cannot be run from this machine; the
+mocked test is that acceptance line's evidence.
+
+## Errors Encountered
+
+| Error | Resolution |
+|-------|------------|
+| `'\.' is an unrecognized escape` from an inline `Rscript -e` check | Run the check from a file in the scratchpad |

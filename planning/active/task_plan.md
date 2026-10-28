@@ -68,16 +68,16 @@ What exploration found that shapes the breakdown:
 
 ## Phase 2: wire the three scripts
 
-- [ ] `0310`: `remote <- Sys.getenv("REMOTE") %in% c("1", "TRUE", "true")` beside `schema`; after `conn <- pg()`
+- [x] `0310`: `remote <- Sys.getenv("REMOTE") %in% c("1", "TRUE", "true")` beside `schema`; after `conn <- pg()`
       (:99), `knw_db_latency_check(conn, remote = remote)`; ledger rows `db_round_trip_ms` (n = ms, note = the line)
       and `db_remote_override` (n = 0/1). 0310 has no `fail()` and writes its ledger only at :316, so the check's
       stop writes the ledger first (review 1), as 0320's `fail()` does. Header `RUN:` names `REMOTE=TRUE`.
-- [ ] `0320`: `remote <- ...` beside `dev` (:85); inside the first connect (:134), gated `if (!main_only)` rather than `if (!dev)` for the check only
+- [x] `0320`: `remote <- ...` beside `dev` (:85); inside the first connect (:134), gated `if (!main_only)` rather than `if (!dev)` for the check only
       (the build record stays as is); a failure goes through `fail()` so the log is written first; `say()` the line.
       Header names `REMOTE=TRUE` and that `DEV=1` and `GRADIENT=` skip it.
-- [ ] `0330`: `remote <- ...` beside `gpkg` (:72); after `conn <- pg()` (:152), before the build record; a failure writes the log as the build-record
+- [x] `0330`: `remote <- ...` beside `gpkg` (:72); after `conn <- pg()` (:152), before the build record; a failure writes the log as the build-record
       failure does; `say()` the line. Header names `REMOTE=TRUE`; `STAGE=gpkg` and `STAGE=maps` covered by the same site.
-- [ ] `scripts/README.md`: the `0310`, `0320`, `0330` entries name the check and the override in a clause each.
+- [x] `scripts/README.md`: the `0310`, `0320`, `0330` entries name the check and the override in a clause each.
 
 ## Phase 3: a timing line per stage in 0330
 

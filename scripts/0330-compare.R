@@ -56,7 +56,8 @@
 #         compose with the other species' saved per-key tables; WORKERS=6 database cores; CONFIG_SHA=<link
 #         commit> for the configs (default origin/main of LINK_REPO); TUNED_AS=door; GPKG=FALSE skips the GeoPackages;
 #         STAGE=maps draws the floodplain table and the maps from the tables the last full run saved; STAGE=gpkg writes
-#         the GeoPackages alone from the segments it saved)
+#         the GeoPackages alone from the segments it saved). Every STAGE checks the database's round trip at connect
+#         and stops off its host (over 20 ms) unless REMOTE=TRUE (#110).
 # ---------------------------------------------------------------------------
 suppressMessages({ library(dplyr); library(readr); library(DBI); library(RPostgres) })
 pkgload::load_all(quiet = TRUE)
@@ -70,6 +71,7 @@ only <- Sys.getenv("SPECIES", "")
 stage_only <- Sys.getenv("STAGE", "")
 tuned_as <- Sys.getenv("TUNED_AS", "door")
 gpkg <- !identical(Sys.getenv("GPKG"), "FALSE")
+remote <- Sys.getenv("REMOTE") %in% c("1", "TRUE", "true")   # compare off the database's host anyway (#110)
 if (!stage_only %in% c("", "maps", "gpkg")) stop("STAGE must be unset, 'maps' or 'gpkg', not '", stage_only, "'")
 schema <- Sys.getenv("SCHEMA", "fresh_default")  # the run's persist schema, by its current name (renamed after the run, #73)
 catalog_bucket <- "https://stac-floodplains-bc.s3.us-west-2.amazonaws.com"
@@ -150,6 +152,13 @@ gpkg_of <- function(w) {
 
 # ---- compare, per species x stage (species in parallel) ------------------------------------
 conn <- pg()
+# the comparison is bound by the database: refuse a connection off its host unless REMOTE=TRUE, at every STAGE (#110)
+lat <- tryCatch(knw_db_latency_check(conn, remote = remote), error = function(e) {
+  say("%s", conditionMessage(e))
+  writeLines(log_lines, path_log)
+  stop(conditionMessage(e), call. = FALSE)
+})
+say("%s", lat$line)
 # the database's build, checked before any work (#87): a schema built by another run than the evidence's is refused
 rec <- tryCatch(knw_build_record(conn, schema, run_uid = run_uid), error = function(e) {
   say("%s", conditionMessage(e))
