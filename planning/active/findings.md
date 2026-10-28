@@ -97,3 +97,23 @@ not list, the candidate directory itself: a resumed run keeps what a later pass 
 | grading-log check | that a fitted key's grades have a pass that says it made them | a `<key> grades:` line in the run's logs (an archive: the tracked logs) | added |
 | `0320` pass name | which pass graded last | UTC start time `p<YYYYMMDDHHMMSS>`, across hosts and days | fixed (round 2's per-directory count collided across hosts) |
 | `0335` evidence check | that the rebuilds can run | the derived tables present when they will | fixed: refused up front |
+
+### After round 4: provenance by construction, not by inference
+
+Round 4 found round 3's fixes had swapped one stand-in for others (file age, "some log graded it", a derived table read
+as its own source). The fix moved provenance to the writers: a pass clears what it will rewrite, so presence in a
+candidate means "written by the key's last pass". Every file a pass writes per key, after round 4:
+
+| writer | file | cleared before the pass writes | if the pass dies first | promotion's check |
+|---|---|---|---|---|
+| 0320 | `_smoke`, `_tune`, `_curves`, `_groups`, `_seeds`, `_honest`, `_summary`, `_curve.rds` | at pass start, for the pass's species | key has no summary: not promotable | - |
+| 0320 | `_score.rds` | kept (cache keyed on population, grid, evidence, settings; not code, as before) | - | - |
+| 0320 | `_grades.csv` | kept only through the keep-check's ten fields; removed after scoring for a key with no curve | old grades beside a new summary | every keep-check field the summary carries (rule, run, evidence, gradient, withheld, prior, null deviance); walk and flow load across the set and live |
+| 0330 | `_compare`, `_change`, `_checks`, `_segments.rds`, `gpkg/<key>.gpkg`, `fig/compare_<key>_*` | at the key's job start | key has no comparison: refused | rule, comparison after grades (inside a candidate; an archive exempt) |
+| 0330 | GeoPackage written part way | removed on its error | - | - |
+| 0330 | `compare/change/checks.csv` | at full-pass start, written at its end | absent: refused | rows by key, a fitted key left out refused, an unfitted key's dropped |
+| 0330 | `floodplain.csv`, figures (STAGE=maps) | at full-pass start; a key's figures before its drawing | absent: tracked rows kept for fitted keys (noted), dropped for unfitted | as above |
+| 0320 / 0330 | logs | never written over (UTC-start pass name, numbered) | 0320's log rewritten after each graded key | a fitted key needs a grade line in the run's logs (an archive: the tracked ones) |
+
+Remaining uses of file age: the comparison-after-grades check, inside a candidate only, where 0320 and 0330 are the only
+writers. A dry run of a promotion of a clone of the published run passes every check (2026-10-28 19:27 UTC).

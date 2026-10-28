@@ -18,8 +18,9 @@
 #     0325, the bundles and a later rerun read; a tracked file of a promoted key the run did not write is removed.
 #     Everything replaced or removed is first moved to data/{tune,compare}/candidate/replaced_<stamp>/, a candidate
 #     itself: RUN=replaced_<stamp> undoes the promotion (the ignored files git cannot restore included).
-#   - CHECKED AGAINST THIS MACHINE before anything moves: the evidence (data/fdis/derived md5s), the walk (this tree's)
-#     and, when the rebuilds run, the live flow load, which 0325 and the bundles hold the grades to.
+#   - CHECKED AGAINST THIS MACHINE before anything moves: the walk (this tree's), the evidence (data/fdis/derived
+#     md5s, where the tables are here; required when the rebuilds run) and, when they run, the live flow load, which
+#     0325 and the bundles hold the grades to.
 #   - NOT DONE HERE: the tests that pin the published run's numbers (tests/testthat/test-tune_repick.R's 1.96 picks,
 #     test-vignette-data.R's key count and funnel, the articles' inline checks) and the research/ prose that quotes it
 #     are revised by hand after a promotion that moves them.

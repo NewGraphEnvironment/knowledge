@@ -8,11 +8,13 @@ promote_fx <- function(ev = "e1", ch_rule = "mad>=0.5|g<=0.07|none", env = paren
   key_files <- function(dir_t, dir_c, k, rule, ev, tag) {
     sp <- sub("_.*", "", k); st <- sub(".*_", "", k)
     utils::write.csv(data.frame(species_code = sp, stage = st, status = "fitted", rule_recommended = rule,
-                                curve_grad = "segment_gradient", evidence_md5 = ev, run_uid = "u1"),
+                                null_heldout_curve = 100.1234, curve_prior_sd = 2.5, curve_grad = "segment_gradient",
+                                grade_withheld = FALSE, evidence_md5 = ev, run_uid = "u1"),
                      file.path(dir_t, paste0(k, "_summary.csv")), row.names = FALSE)
     utils::write.csv(data.frame(rule = rule, tag = tag), file.path(dir_t, paste0(k, "_tune.csv")), row.names = FALSE)
-    utils::write.csv(data.frame(segment = 1:2, rule = rule, evidence_md5 = ev), file.path(dir_t, paste0(k, "_grades.csv")),
-                     row.names = FALSE)
+    utils::write.csv(data.frame(segment = 1:2, rule = rule, run_uid = "u1", curve_prior_sd = "2.5", grade_withheld = "FALSE",
+                                null_heldout_curve = "100.1234", evidence_md5 = ev, curve_grad = "segment_gradient"),
+                     file.path(dir_t, paste0(k, "_grades.csv")), row.names = FALSE)
     saveRDS(list(tag = tag), file.path(dir_t, paste0(k, "_curve.rds")))
     utils::write.csv(data.frame(watershed_group_code = c("BULK", "ALL"), species_code = sp, stage = st, tuned_rule = rule,
                                 km = c(1, 2), tag = tag), file.path(dir_c, paste0(k, "_compare.csv")), row.names = FALSE)
@@ -177,6 +179,11 @@ test_that("every field 0325 and the bundles hold the set to refuses a by-key mix
     where_kept <- if (cs[1] == "compare") "compare" else "tune"
     set_col(fx, where_run, "CH_rear", cs[1], cs[2], "new")
     set_col(fx, where_kept, "BT_rear", cs[1], cs[2], "old")
+    # a field the grades record too moves with the fit, in the run and in the kept key
+    if (cs[1] == "summary" && cs[2] %in% c("run_uid", "curve_grad")) {
+      set_col(fx, where_run, "CH_rear", "grades", cs[2], "new")
+      set_col(fx, where_kept, "BT_rear", "grades", cs[2], "old")
+    }
     before <- tree_md5(fx)
     expect_error(promote(fx, keys = "CH_rear"), paste("would leave BT_rear on another", cs[2]), info = cs[2])
     expect_identical(tree_md5(fx), before, info = cs[2])
@@ -245,15 +252,15 @@ test_that("what a promotion replaces is archived as a candidate, and promoting t
                                                            "compare_bt_rear_bulk.png")))
 })
 
-test_that("what the run did not bring is kept and noted", {
+test_that("a run whose comparison did not finish is refused; one that drew no maps keeps the tracked floodplain rows", {
   fx <- promote_fx()
   unlink(file.path(fx$compare, "candidate", "r1", "compare.csv"))
-  writeLines("x", file.path(fx$compare, "floodplain.csv"))
+  expect_error(promote(fx), "compare.csv is not in .*: its last comparison did not finish")
+  fx <- promote_fx()
+  writeLines(c("species_code,stage,ha", "CH,rear,5", "BT,rear,7"), file.path(fx$compare, "floodplain.csv"))
   p <- promote(fx, dry_run = TRUE)
-  expect_true(any(grepl("compare.csv: not in the run", p$notes)))
-  expect_true(any(grepl("floodplain.csv: not in the run", p$notes)))
+  expect_true(any(grepl("floodplain.csv: not in the run; the tracked rows of BT_rear, CH_rear kept", p$notes)))
 })
-
 test_that("a fitted key the run's combined table leaves out is refused, never dropped (round 1)", {
   fx <- promote_fx()
   f <- file.path(fx$compare, "candidate", "r1", "compare.csv")
@@ -320,24 +327,41 @@ test_that("a key a later pass no longer fits takes only what that pass wrote (ro
   expect_true(any(grepl("CH_rear: left in the run.*CH_rear_tune.csv", p$notes)))
 })
 
-test_that("a GeoPackage, figure or floodplain table drawn before the key's last comparison is not promoted", {
+test_that("an unfitted key keeps no rows in the tables of every key, whatever the run's hold (round 4)", {
   fx <- promote_fx()
-  cc <- file.path(fx$compare, "candidate", "r1")
-  dir.create(file.path(fx$compare, "gpkg")); dir.create(file.path(cc, "gpkg"))
-  writeLines("tracked", file.path(fx$compare, "gpkg", "CH_rear.gpkg"))
-  writeLines("stale", g <- file.path(cc, "gpkg", "CH_rear.gpkg"))
-  writeLines("stale", fp <- file.path(cc, "floodplain.csv"))
-  writeLines("species_code,stage,ha", file.path(fx$compare, "floodplain.csv"))
-  for (f in c(g, fp, file.path(cc, "fig", "compare_ch_rear_bulk.png"))) Sys.setFileTime(f, Sys.time() - 3600)
+  ct <- file.path(fx$tune, "candidate", "r1")
+  utils::write.csv(data.frame(species_code = "CH", stage = "rear", status = "too_few_groups"),
+                   file.path(ct, "CH_rear_summary.csv"), row.names = FALSE)
+  writeLines(c("species_code,stage,ha", "CH,rear,5", "BT,rear,7"), file.path(fx$compare, "floodplain.csv"))
+  # the run's compare.csv still holds CH's rows from an earlier fit
   p <- promote(fx)
-  expect_identical(readLines(file.path(fx$compare, "gpkg", "CH_rear.gpkg")), "tracked")
-  expect_false(file.exists(file.path(fx$fig, "compare_ch_rear_bulk.png")))
-  expect_true(file.exists(file.path(fx$fig, "compare_bt_rear_bulk.png")))
-  expect_identical(readLines(file.path(fx$compare, "floodplain.csv")), "species_code,stage,ha")
-  expect_true(any(grepl("floodplain.csv: drawn before", p$notes)))
-  expect_true(any(grepl("CH_rear: left in the run.*CH_rear.gpkg", p$notes)))
+  expect_false("CH" %in% utils::read.csv(file.path(fx$compare, "compare.csv"))$species_code)
+  expect_identical(readLines(file.path(fx$compare, "floodplain.csv")), c("species_code,stage,ha", "BT,rear,7"))
+  expect_false(file.exists(file.path(fx$tune, "CH_rear_smoke.csv")))
 })
 
+test_that("grades another fit made are refused on every field of the keep-check the summary carries (round 4)", {
+  for (cs in list(c("grade_withheld", "TRUE"), c("curve_prior_sd", "1"), c("null_heldout_curve", "99"),
+                  c("run_uid", "u2"), c("curve_grad", "fwa_gradient"))) {
+    fx <- promote_fx()
+    set_col(fx, "run_tune", "CH_rear", "grades", cs[1], cs[2])
+    expect_error(promote(fx), paste0("CH_rear: the grades carry ", cs[1]), info = cs[1])
+  }
+  fx <- promote_fx()
+  set_col(fx, "run_tune", "CH_rear", "grades", "null_heldout_curve", "100.12340")
+  expect_silent(promote(fx, dry_run = TRUE))
+})
+
+test_that("an undo restores what was replaced whatever the files' ages (round 4)", {
+  fx <- promote_fx()
+  writeLines("tracked png", f <- file.path(fx$fig, "compare_ch_rear_bulk.png"))
+  Sys.setFileTime(f, Sys.time() - 86400)   # a checkout older than everything the run wrote
+  p <- promote(fx)
+  expect_identical(readLines(f), "png")
+  Sys.setFileTime(file.path(fx$compare, "candidate", p$archive, "fig", "compare_ch_rear_bulk.png"), Sys.time() - 86400)
+  q <- knw_tune_promote(p$archive, tune_dir = fx$tune, compare_dir = fx$compare, log_dir = fx$logs, fig_dir = fx$fig)
+  expect_identical(readLines(f), "tracked png")
+})
 test_that("a fitted key no log of the run says it graded is refused", {
   fx <- promote_fx()
   writeLines(c("tune log", "BT_rear grades: 2 groups, ...", "CH_rear: grades already written under x, kept."),

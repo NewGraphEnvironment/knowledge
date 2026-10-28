@@ -212,6 +212,11 @@ if (length(stale)) stop("grade tables made before #73's curve prior (no ref_popu
 # comparison needs, not its 25 (RB's is 1.5 GB)
 run_one <- function(job) {
   t0 <- Sys.time()
+  # a key's comparison replaces an earlier pass's whole, its GeoPackage and figures included (#111): what the run
+  # holds for a key is then this pass's, which is what scripts/0335 promotes
+  unlink(c(file.path(dir_out, paste0(job$key, c("_compare.csv", "_change.csv", "_checks.csv", "_segments.rds"))),
+           file.path(dir_gpkg, paste0(job$key, ".gpkg")),
+           list.files(dir_fig, paste0("^compare_", tolower(job$key), "_"), full.names = TRUE)))
   out <- tryCatch({
     gfile <- file.path(tune_dir, paste0(job$key, "_grades.csv"))
     gcols <- c("id_segment", "watershed_group_code", "size", "dist_m", "grade", "grade_class")
@@ -265,7 +270,11 @@ gpkg_one <- function(key, schema, dir_gpkg, dir_seg) {
       sf::st_write(sg, f, layer = "segments", append = file.exists(f), quiet = TRUE)
     }
     sprintf("GeoPackage %s: %d segments in %.1f min.", f, nrow(seg), as.numeric(difftime(Sys.time(), t1, units = "mins")))
-  }, error = function(e) sprintf("GeoPackage for %s FAILED: %s", key, conditionMessage(e)))
+  }, error = function(e) {
+    # a GeoPackage written part way is no GeoPackage of the key: never left to be promoted
+    unlink(file.path(dir_gpkg, paste0(key, ".gpkg")))
+    sprintf("GeoPackage for %s FAILED: %s", key, conditionMessage(e))
+  })
 }
 # the GeoPackages of several keys, one key per socket worker (one writer per file)
 write_gpkgs <- function(keys) {
@@ -316,6 +325,10 @@ if (stage_only == "maps") {
   gl <- write_gpkgs(keys)
   for (k in keys) say("  %s", gl[[k]])
 } else {
+  # the tables of every key are written when the pass ends, from every key it and earlier passes saved; until then the
+  # run holds none, so a pass that dies cannot leave the last pass's beside this one's per-key tables (#111). The
+  # floodplain table is redrawn by STAGE=maps
+  unlink(file.path(dir_out, c("compare.csv", "change.csv", "checks.csv", "floodplain.csv")))
   res <- lapply(jobs, run_one)
   if (gpkg) {
     ok <- names(jobs)[vapply(res, function(x) is.null(x$error), logical(1))]
@@ -424,6 +437,8 @@ if (stage_only == "maps") {
     stage <- jobs[[k]]$stage
     flag <- if (stage == "rear") "rearing" else "spawning"
     sp <- jobs[[k]]$species_code
+    # this drawing's figures replace the key's last ones, whose groups may differ (#111)
+    unlink(list.files(dir_fig, paste0("^compare_", tolower(k), "_"), full.names = TRUE))
     seg_all <- readRDS(file.path(dir_out, paste0(k, "_segments.rds")))
     per <- r$compare |> filter(watershed_group_code != "ALL", structure == tuned_structure)
     # three groups by the criteria in the header: largest gained share, largest lost share, most default km

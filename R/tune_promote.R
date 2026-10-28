@@ -77,6 +77,8 @@ knw_tune_promote <- function(run, keys = NULL, live = NULL, tune_dir = "data/tun
     if (length(v) == 1) v else if (length(v)) paste(sort(v), collapse = "|") else NA_character_
   }
 
+  archive <- startsWith(run, "replaced_")
+
   # ---- each promoted key's own record ----
   for (k in keys) {
     rule <- fld(cand[[k]], "rule_recommended")
@@ -96,8 +98,21 @@ knw_tune_promote <- function(run, keys = NULL, live = NULL, tune_dir = "data/tun
     if (!identical(fld(g1, "rule"), rule)) {
       stop(k, ": graded under ", fld(g1, "rule"), ", not the recommended ", rule, call. = FALSE)
     }
-    if (!identical(fld(g1, "evidence_md5"), fld(cand[[k]], "evidence_md5"))) {
-      stop(k, ": the grades and the summary name different evidence builds", call. = FALSE)
+    # the grades belong to the fit the summary records: every field of 0320's keep-check the summary carries, so a
+    # resumed pass that refitted a key and died before regrading it leaves a key that is refused, not promoted
+    for (f in c("run_uid", "evidence_md5", "curve_grad", "grade_withheld")) {
+      if (!identical(toupper(fld(g1, f)), toupper(fld(cand[[k]], f)))) {
+        stop(k, ": the grades carry ", f, " ", fld(g1, f), ", the summary ", fld(cand[[k]], f),
+             ": the grades are another fit's; regrade it with RUN=", run, call. = FALSE)
+      }
+    }
+    for (f in c("curve_prior_sd", "null_heldout_curve")) {
+      a <- suppressWarnings(as.numeric(fld(g1, f)))
+      b <- suppressWarnings(as.numeric(fld(cand[[k]], f)))
+      if (is.na(a) || is.na(b) || !isTRUE(all.equal(a, b, tolerance = 1e-4))) {
+        stop(k, ": the grades carry ", f, " ", fld(g1, f), ", the summary ", fld(cand[[k]], f),
+             ": the grades are another fit's; regrade it with RUN=", run, call. = FALSE)
+      }
     }
     cf <- file.path(run_cmp, paste0(k, "_compare.csv"))
     if (!file.exists(cf)) {
@@ -105,7 +120,9 @@ knw_tune_promote <- function(run, keys = NULL, live = NULL, tune_dir = "data/tun
     }
     tr <- one(rd(cf), "tuned_rule")
     if (!identical(tr, rule)) stop(k, ": the comparison is of ", tr, ", not the recommended ", rule, call. = FALSE)
-    if (file.mtime(cf) < file.mtime(g)) {
+    # inside a candidate only 0320 and 0330 write, so a comparison older than its grades is of earlier grades; an
+    # archive's files carry the tracked tree's checkout times, and were one set when they were tracked
+    if (!archive && file.mtime(cf) < file.mtime(g)) {
       stop(k, ": compared before it was last graded: rerun TUNE_DIR=", run_tune, " scripts/0330", call. = FALSE)
     }
   }
@@ -196,18 +213,13 @@ knw_tune_promote <- function(run, keys = NULL, live = NULL, tune_dir = "data/tun
   fitted <- keys[!vapply(cand[keys], fld, character(1), "status") %in% .knw_no_fit]
   esc <- function(k) gsub(".", "\\.", k, fixed = TRUE)
   by_key <- function(k) paste0("^", esc(k), "_")
-  # what 0320 writes for a key it does not fit (R/tune_run.R's three statuses): its summary, its curve record and, when
-  # the smoke run scored it, its smoke table; any other file of the key is an earlier pass's fit
-  unfit_files <- function(k) paste0(k, c("_summary.csv", "_curve.rds", "_smoke.csv"))
-  take_tune <- function(k, src) if (k %in% fitted) src else src[basename(src) %in% unfit_files(k)]
-  take_cmp <- function(k, src) if (k %in% fitted) src else character()
-  # a GeoPackage or figure drawn before the key's last comparison is that comparison's, not this one's: a full 0330
-  # draws no maps, and GPKG=FALSE keeps the last GeoPackage
-  seg_time <- function(k) {
-    f <- file.path(run_cmp, paste0(k, "_segments.rds"))
-    if (file.exists(f)) file.mtime(f) else as.POSIXct(Inf, origin = "1970-01-01")
-  }
-  take_drawn <- function(k, src) if (k %in% fitted) src[file.mtime(src) >= seg_time(k)] else character()
+  # 0320 and 0330 clear a key's files in the run before a pass rewrites them (the score cache and the keep-checked
+  # grades aside), so what the run holds for a key is its last pass's. What 0320 writes for a key it does not fit
+  # (R/tune_run.R's three statuses) is its summary and its curve record; nothing of the comparison belongs to it
+  unfit_files <- function(k) paste0(k, c("_summary.csv", "_curve.rds"))
+  take_tune <- function(k, src) if (archive || k %in% fitted) src else src[basename(src) %in% unfit_files(k)]
+  take_cmp <- function(k, src) if (archive || k %in% fitted) src else character()
+  take_drawn <- take_cmp
   plan_dir(run_tune, tune_dir, by_key, take_tune)
   plan_dir(run_cmp, compare_dir, by_key, take_cmp)
   if (dir.exists(file.path(run_tune, "grad_fwa"))) {
@@ -232,9 +244,7 @@ knw_tune_promote <- function(run, keys = NULL, live = NULL, tune_dir = "data/tun
   # every fitted key's grades have a pass of the run that says it made them (the chinook bundle reads that line); an
   # archive holds no logs, and the tables it restores were graded by a run whose logs are already tracked
   tune_logs <- logs[grepl("_tune_run", basename(logs))]
-  if (startsWith(run, "replaced_")) {
-    tune_logs <- c(tune_logs, list.files(log_dir, "_tune_run.*\\.txt$", full.names = TRUE))
-  }
+  if (archive) tune_logs <- c(tune_logs, list.files(log_dir, "_tune_run.*\\.txt$", full.names = TRUE))
   graded <- unlist(lapply(tune_logs, readLines, warn = FALSE))
   for (k in fitted) {
     if (!any(grepl(sprintf("^%s grades: [0-9]+ groups", k), graded))) {
@@ -242,23 +252,24 @@ knw_tune_promote <- function(run, keys = NULL, live = NULL, tune_dir = "data/tun
            "rerun the key with RUN=", run, call. = FALSE)
     }
   }
-  # the tables of every key: each promoted key's rows from the run, in the place its rows held
+  # the tables of every key: each promoted key's rows from the run, in the place its rows held. 0330 removes the
+  # run's compare, change and checks tables when a pass starts and writes them at its end, and floodplain.csv is
+  # STAGE=maps's: a run without the first three did not finish its comparison; one without floodplain.csv drew no
+  # maps, and the fitted keys' tracked floodplain rows are kept, noted. An unfitted key keeps no rows in any
   merged <- list()
   for (w in c("compare", "change", "checks", "floodplain")) {
     f <- file.path(run_cmp, paste0(w, ".csv"))
-    # floodplain.csv is drawn by STAGE=maps, after a comparison: one older than a promoted key's last comparison is
-    # an earlier comparison's
-    stale <- w == "floodplain" && file.exists(f) && length(fitted) &&
-      any(file.mtime(f) < do.call(c, lapply(fitted, seg_time)))
-    if (!file.exists(f) || stale) {
-      if (file.exists(file.path(compare_dir, basename(f)))) {
-        notes <- c(notes, sprintf("%s: %s; the tracked rows kept", basename(f),
-                                  if (stale) "drawn before the run's last comparison" else "not in the run"))
-      }
-      next
-    }
     to <- file.path(compare_dir, basename(f))
-    merged[[to]] <- .knw_rows_merge(to, f, keys, fitted)
+    if (!file.exists(f) && length(fitted) && w != "floodplain" && !archive && file.exists(to)) {
+      stop(basename(f), " is not in ", run_cmp, ": its last comparison did not finish; rerun TUNE_DIR=", run_tune,
+           " scripts/0330", call. = FALSE)
+    }
+    if (!file.exists(f) && length(fitted) && file.exists(to)) {
+      notes <- c(notes, sprintf("%s: not in the run; the tracked rows of %s kept", basename(f),
+                                paste(fitted, collapse = ", ")))
+    }
+    if (!file.exists(f) && !file.exists(to)) next
+    merged[[to]] <- .knw_rows_merge(to, if (file.exists(f)) f else NULL, keys, if (archive) keys else fitted)
   }
 
   written <- c(unlist(lapply(copies, `[[`, "to")), names(merged))
@@ -310,7 +321,8 @@ knw_tune_promote <- function(run, keys = NULL, live = NULL, tune_dir = "data/tun
 # the lines of a table that holds every key, with the promoted keys' rows taken from the run's copy: each key's rows go
 # where its rows stood (kept keys untouched, byte for byte), and a key new to the table goes at the end. A header that
 # differs is taken from the run only when every key the tracked table holds is promoted. A fitted key the run's table
-# leaves out (0330 composes no key whose pass failed) is refused rather than dropped; an unfitted one loses its rows
+# leaves out (0330 composes no key whose pass failed) is refused rather than dropped; an unfitted one loses its rows,
+# whatever the run's table holds of an earlier fit. With no run table (`run_file = NULL`) the fitted keys keep theirs
 .knw_rows_merge <- function(tracked, run_file, keys, fitted = keys) {
   parse <- function(f) {
     ln <- readLines(f, warn = FALSE)
@@ -318,7 +330,14 @@ knw_tune_promote <- function(run, keys = NULL, live = NULL, tune_dir = "data/tun
     if (length(ln) != nrow(x) + 1) stop(f, ": a field spans lines; cannot merge it by row", call. = FALSE)
     list(header = ln[1], rows = ln[-1], key = paste(x$species_code, x$stage, sep = "_"))
   }
+  unfit <- setdiff(keys, fitted)
+  if (is.null(run_file)) {
+    old <- parse(tracked)
+    return(c(old$header, old$rows[!old$key %in% unfit]))
+  }
   new <- parse(run_file)
+  new$rows <- new$rows[!new$key %in% unfit]
+  new$key <- new$key[!new$key %in% unfit]
   if (!file.exists(tracked)) return(c(new$header, new$rows[new$key %in% keys]))
   old <- parse(tracked)
   lost <- intersect(intersect(fitted, old$key), setdiff(fitted, new$key))

@@ -215,6 +215,13 @@ say("Rules and curves read the gradient from %s%s.", gradient,
     if (main_only && !dev) sprintf(" (the sensitivity: the main seed only, no grades, outputs under %s)", dir_out) else "")
 say("Smoke run first%s: previous picks on file for %s.", if (dev) sprintf(" (DEV=1: the main seed only, no grades, outputs under %s)", dir_out) else "",
     paste(names(previous), collapse = ", "))
+# what a pass writes for a key replaces what an earlier pass of the run wrote, so a key's files in the run are this
+# pass's (#111): clear them first, all but the score cache and the grade table, which are kept only when they pass
+# their checks below (a key this pass does not fit loses its grades after scoring)
+pat_keys <- sprintf("^(%s)_(rear|spawn)_", paste(species, collapse = "|"))
+caches <- "_(score\\.rds|grades\\.csv)$"
+old_files <- list.files(dir_out, pat_keys, full.names = TRUE)
+unlink(old_files[!grepl(caches, old_files)])
 t0 <- Sys.time()
 sm <- knw_tune_run(vl, vs, walks, thr, species = species, spawner = spawner, workers = workers, thresholds_extra = thr_tuned, evidence_id = evidence_md5,
                    cols = cols_run,
@@ -244,6 +251,7 @@ out <- knw_tune_run(vl, vs, walks, thr, species = species, spawner = spawner, wo
 say("Scored %d species x stage in %.1f min on %d workers%s.", length(out), as.numeric(difftime(Sys.time(), t0, units = "mins")), workers,
     if (main_only) " (the main seed only)" else "")
 
+for (k in names(out)) if (is.null(out[[k]]$curve)) unlink(file.path(dir_out, paste0(k, "_grades.csv")))
 summ <- list()
 for (k in names(out)) {
   r <- out[[k]]
