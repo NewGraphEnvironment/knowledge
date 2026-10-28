@@ -1,5 +1,5 @@
 seed,best,pick,recommended,default_in_region,main_rec_in_region,region_n,species_code,stage
-55,mad>=0.1|g<=0.25|none,mad>=0.1|g<=0.25|none,mad>=0.1|g<=0.25|none,FALSE,TRUE,167,BT,rear
-56,mad>=0.5|g<=0.25|none,mad>=0.1|g<=0.1049|none,mad>=0.1|g<=0.1049|none,FALSE,TRUE,434,BT,rear
-57,mad>=0.5|g<=0.3|Q50@D100,mad>=0.1|g<=0.1049|none,mad>=0.1|g<=0.1049|none,FALSE,TRUE,609,BT,rear
-58,mad>=0.35|g<=0.25|none,mad>=0.35|g<=0.25|none,mad>=0.35|g<=0.25|none,FALSE,TRUE,312,BT,rear
+55,mad>=0.1|g<=0.3|none,mad>=0.35|g<=0.1049|none,mad>=0.35|g<=0.1049|none,FALSE,TRUE,345,BT,rear
+56,mad>=0.1|g<=0.3|none,mad>=0.1|g<=0.3|none,mad>=0.1|g<=0.3|none,FALSE,TRUE,196,BT,rear
+57,mad>=0.1|g<=0.3|Q20@D100,mad>=0.1|g<=0.3|none,mad>=0.1|g<=0.3|none,FALSE,TRUE,143,BT,rear
+58,mad>=0.1|g<=0.3|Q20@D100,mad>=0.1|g<=0.3|none,mad>=0.1|g<=0.3|none,FALSE,TRUE,155,BT,rear

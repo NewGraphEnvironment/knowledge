@@ -101,7 +101,9 @@ for (i in seq_len(nrow(cells))) {
   v <- vl[keep_of(vl, u, c), ]
   s <- vs[vs$site_visit %in% v$site_visit, ]
   run <- knw_tune_run(v, s, walks, thr, species = keys, stages = "rear", thresholds_extra = thr_tuned,
-                      smoke = FALSE, extra = FALSE, cache_dir = NULL, workers = workers)
+                      smoke = FALSE, extra = FALSE, cache_dir = NULL, workers = workers,
+                      # the Atlas line's gradient, as #91 measured it, before #92 moved the tuning to link's segments
+                      cols = c(grad = "fwa_gradient", width = "cw_deploy", mad = "mad_pick"))
   for (k in paste0(keys, "_rear")) {
     r <- run[[k]]$score$rules
     regions[[paste(u, c, k)]] <- r$rule[r$in_region %in% TRUE]

@@ -79,8 +79,8 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   tables (its catalog cache and interactive maps ignored), `data/publish/` the Parquet sets (ignored).
   `data/tune/grad_ext/` and `data/compare/grad_ext/` hold `0322`'s CH rearing run on a gradient ladder extended to
   30 % (#67, on the evidence build before #73; the main run carries that ladder for every species since #68);
-  nothing that publishes reads them, because `0325`, `0330` and `knw_thresholds_table()` list their directories
-  non-recursively. `data/compare/gpkg/` (ignored) holds one GeoPackage per species × stage from `0330`, the
+  `0325`, `0330` and `knw_thresholds_table()` do not read them, because they list their directories non-recursively;
+  `data-raw/vignette_chinook.R` reads `data/tune/grad_ext/` for the chinook article's sentence on the longer ladder. `data/compare/gpkg/` (ignored) holds one GeoPackage per species × stage from `0330`, the
   comparison's view for QGIS (#81).
 - `data/rag/` — ignored local cache of the ragnar stores. Source of truth is `s3://fresh-bc/rag/` (not public).
 - `data/fdis/` — ignored cache of the FDIS export (`0230` syncs it) and of the visit tables built from it
@@ -199,14 +199,26 @@ several keys is not necessarily the one the surveyor meant. fresh never snaps to
 the visits `fwa_indexpoint()` put on one, which link's segments lack, now reach a mapped stream. The FISS workbook
 sites (`0250`) still snap with `fwa_indexpoint()` and a 100 m flag, so `flag_far_snap` means two things in the
 bound `fdis_evidence.csv` and `fiss_evidence.csv`. `0310` takes `SCHEMA` and caches its visit walks in
-`knw.walk_cache` from #91. Until #92's retune reruns `data-raw/vignette_method.R`, `test-vignette-data.R`'s
-"every tracked source" test fails on every clone (the register files moved under the methodology bundle) and its
-"every ignored source" test wherever the new derived tables are, and the two articles keep describing the #73 run's
-placement.
+`knw.walk_cache` from #91.
 
 From #57, `0310` builds every species' visit table on the province-wide
 `fresh_default` in one pass and `0290`, `0294` and `0296` write their tables from it; `0291`–`0298` are frozen on
 the published v2 tables (`0299 PULL=TRUE VERSION=v2`).
+
+### The tuning scores link's segment gradient, and link cuts a segment where its species were caught
+
+From #92, rules and curves read `segment_gradient`, the gradient of the link segment a visit sits on, which is the one
+link applies a rule to and the grade reads; `fwa_gradient` (the whole Atlas line's) is the sensitivity
+(`GRADIENT=fwa_gradient 0320`, main fold seed, `data/tune/grad_fwa/`, never graded, and read by no publisher: `0325`,
+`0330` and `knw_thresholds_table()` list `data/tune/` without recursing; `data-raw/vignette_method.R` reads it for the
+methodology article's sensitivity sentence).
+`knw_grade_species()` refuses a curve fitted on any other gradient. link breaks streams at the bcfishobs observations
+of the species it models in each group, and an FDIS visit that caught one is usually such an observation, so the
+segment and its length depend on the outcome: on the tuning's stream branch 86 % of visits with fish start a segment of
+their own against 10 % of empty ones, with median lengths of 113 m and 305 m. By any catch the gradient's gap from the
+Atlas line's does not (median 0.0083 either way), but by each species' own outcome it is smaller where the species was
+present for CO, GR, ST and WCT (WCT 0.0076 against 0.0164; `data-raw/segment_gradient_check.R`). Fixed-window gradients, whose length would
+not depend on the outcome, are #70's.
 
 ### FISS submission workbooks: editions drift, and most EF fish are already in FDIS
 
@@ -333,14 +345,19 @@ they show:
 - **A decision made before the run is stated as one.** List every check with its direction; do not sort them by
   the side they support.
 
-### A run's record travels with its table, and every reader compares it, not its presence
+### A run's record travels with its table, and its readers compare it, not only its presence
 
 Every `data/tune/<key>_grades.csv` row carries the run that made it: `rule`, `run_uid`, `walk`, `ref_edge`,
-`discharge_load`, `curve_prior_sd`, `grade_withheld`, `null_heldout_curve` (the gate's own number) and `evidence_md5`
-(the md5s of the three derived tables); the summary and `<key>_curve.rds` carry `evidence_md5` and `run_uid`, and the
-score cache its settings (`spec`: fit, prior, seed, folds, d_floor, extra, evidence). `0320`'s keep-check, `0325`,
-`0330` and `data-raw/vignette_chinook.R` each compare those fields with the run's own values and refuse a table that
-does not match; `0325` refuses before it writes anything. So a change to the gate, the prior, the walk or the evidence
+`discharge_load`, `curve_prior_sd`, `grade_withheld`, `null_heldout_curve` (the gate's own number), `evidence_md5`
+(the md5s of the three derived tables) and `curve_grad` (the gradient the curve was fitted on, #92); the summary and
+`<key>_curve.rds` carry `evidence_md5`, `run_uid` and the gradient, and the score cache its settings (`spec`: fit,
+prior, seed, folds, d_floor, extra, evidence, grad). `0320`'s keep-check compares every one of those fields with the
+run's own values (`null_heldout_curve` by presence). The readers after it compare what they can hold a field to and
+refuse a table that fails: `0325` and `0330` the rule, run, walk, evidence, gradient and flow load (the live table's),
+and `0325` the reference edge types across tables; `data-raw/vignette_chinook.R` the rule, walk, evidence and gradient;
+`data-raw/vignette_method.R` the gradient, the evidence and one flow load. The gate's fields (`curve_prior_sd`,
+`grade_withheld`, `null_heldout_curve`) `0330` and `vignette_chinook.R` check by presence, `0325` all but the prior, and
+`vignette_method.R` not at all. `0325` refuses before it writes anything. So a change to the gate, the prior, the walk or the evidence
 regrades every key (53 min on the database's host with the walks cold, 2026-10-27; minutes for a key whose walks are cached), which is the cost of never publishing a verdict the code
 no longer makes. #73's branch review (five rounds, `planning/archive/2026-10-issue-73-rebuild-evidence-retune-bank/review-round*.md`)
 found four axes where a reader had checked presence alone, one of them the gate itself: it compared the curve's
@@ -394,7 +411,8 @@ over the `PG*` variables. Set `PGCONNECT_TIMEOUT`, or an unreachable server hang
 500 segments per query and keeps every walk in `knw.walk_cache`, so a batched walk costs about 3 ms per walk per
 worker on the host and 12 to 18 ms from the remote link, against 116 ms one query per walk; a cold regrade of every key
 took 53.4 min on the host, and one key regraded with its walks cached 4.1 min. `0330` regenerates link's flags group by
-group on 6 connections, one key at a time (BT rearing 33.4 min, every key 162.9 min with `GPKG=FALSE`): it is bound by
+group on 6 connections, one key at a time (BT rearing 33.4 min, every key 162.9 min with `GPKG=FALSE`; from the remote link #92's took 269 min to compare and 197 more to
+write the GeoPackages, which take 14 min on the host, so a run off the host passes `GPKG=FALSE`, #81): it is bound by
 the database's cores, so run it on the host. A second machine helps a database-bound step only with a database of its
 own holding the same build (the schema's run and the flow load named in the table comment; the walk travels with the
 code). `0320` and `0330` refuse a schema built by another run at connect (`knw_build_record()`), and every grade table's

@@ -102,7 +102,7 @@ database's cores were the bound both ways: classify, overlay and connect is 115 
 scratch copies, so fresh's version is part of the build. `knw_build_record()` reads the schema's run, the flow load,
 the walk's md5 and fresh's version; `0320` and `0330` refuse a schema whose run is not the evidence ledger's at
 connect (both refused `fresh_default`, rebuilt by another run, on 2026-10-27), and every grade table carries the
-flow load and walk md5 its readers compare.
+flow load and walk md5, which `0320`'s keep-check, `0325` and `0330` compare.
 
 ## A second database
 

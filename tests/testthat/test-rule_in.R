@@ -1,6 +1,6 @@
 vis <- function() {
   data.frame(edge_type = c(1000, 1000, 1000, 1250, 1000), blue_line_key = 1, downstream_route_measure = 1:5,
-             fwa_gradient = c(0.02, 0.02, 0.08, 0.01, NA), cw_deploy = c(2, 1, 2, 50, 3),
+             segment_gradient = c(0.02, 0.02, 0.08, 0.01, NA), cw_deploy = c(2, 1, 2, 50, 3),
              mad_pick = c(0.3, 0.1, 1, 40, 0.5))
 }
 rule <- function(size_var = "width", size_min = 1.5, grad_max = 0.0549, exc_q = NA, exc_d = NA) {

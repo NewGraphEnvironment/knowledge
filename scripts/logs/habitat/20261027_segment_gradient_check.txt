@@ -1,0 +1,82 @@
+Segment gradient check, knowledge#92. Evidence scripts/logs/habitat/20261027_evidence_build_ledger.csv (link run 20261017_004619-3f4c713b, link a17e91773b283b021811f8b5b76b887d5f4c16e4); schema fresh_default_20261017.
+Visits placed: 45529; on the tuning's stream branch (edge types 1000,1100,2000,2300, fished area 10-10000 m2): 29335.
+On a segment that starts at the visit: 22876 of 45529 placed visits; 12905 of 29335 on the stream branch.
+Same Atlas line as the segment: 99.3 % of stream-branch visits.
+
+## by catch (stream branch)
+ catch_status visits at_visit_pct len_median_m gap_abs_median gap_sd
+         fish  13058         86.2          113         0.0083 0.0772
+         zero  16277         10.2          305         0.0083 0.0781
+
+## by species outcome (stream branch, in link's range, present or absent)
+ species_code present visits at_visit_pct len_median_m gap_abs_median gap_sd
+           BT   FALSE  21890         37.8          224         0.0080 0.0713
+           BT    TRUE   2189         94.2          116         0.0083 0.0629
+           CH   FALSE  17027         44.6          206         0.0089 0.0842
+           CH    TRUE    269         80.7           92         0.0086 0.0619
+           CM   FALSE   7615         54.8          112         0.0145 0.1147
+           CM    TRUE     12        100.0            8         0.0067 0.0120
+           CO   FALSE  12413         44.5          186         0.0115 0.0905
+           CO    TRUE   1321         90.5           60         0.0079 0.1222
+           GR   FALSE   5478         38.8          266         0.0043 0.0525
+           GR    TRUE    244         97.1          291         0.0023 0.0206
+           KO   FALSE   1712         39.5          208         0.0104 0.0699
+           KO    TRUE      3        100.0           40         0.0110 0.0164
+           PK   FALSE   9716         50.4          157         0.0115 0.1028
+           PK    TRUE      3        100.0          216         0.0165 0.0504
+           RB   FALSE  22761         30.4          245         0.0083 0.0797
+           RB    TRUE   6032         94.4          105         0.0087 0.0709
+           SK   FALSE  12124         46.1          193         0.0090 0.0799
+           SK    TRUE      2        100.0          299         0.0261 0.0370
+           ST   FALSE   9984         48.7          167         0.0113 0.1016
+           ST    TRUE    112         74.1           43         0.0086 0.0891
+          WCT   FALSE   4401         36.9          167         0.0164 0.0846
+          WCT    TRUE   1166         95.3           72         0.0076 0.0445
+
+## by segment length (stream branch)
+  length_m visits at_visit_pct gap_abs_median gap_abs_p90 seg_zero_pct
+    (0,10]   1545         99.1         0.0153      0.1150         13.5
+   (10,25]   1781         82.9         0.0225      0.1824         10.4
+   (25,50]   2371         67.9         0.0257      0.1746          7.3
+  (50,100]   3608         53.6         0.0200      0.1325          5.7
+ (100,250]   6778         41.3         0.0118      0.0988          4.0
+ (250,500]   5958         30.0         0.0051      0.0649          1.6
+ (500,Inf]   7294         24.2         0.0017      0.0262          0.9
+ seg_over30_pct
+            3.6
+            5.3
+            5.6
+            4.0
+            3.1
+            2.6
+            1.4
+
+## class flips at each of default's cut-offs and the access classes (stream branch)
+    cut flips_pct
+ 0.0249      7.81
+ 0.0349      8.52
+ 0.0449      9.88
+ 0.0549     10.71
+ 0.0649     11.23
+ 0.0849     12.02
+ 0.1049     12.06
+ 0.1500     11.48
+ 0.2000      9.45
+ 0.2500      6.65
+ 0.3000      4.69
+build: schema fresh_default_20261017, run 20261017_004619-3f4c713b; flows wet_db_load(): discharge/fwa/v1/segment_monthly, scenario historical last loaded from https://fresh-bc.s3.us-west-2.amazonaws.com/discharge/fwa/v1/manifest.json (built 2026-10-19T06:08:31Z, wet 94deeb5); walk c3f7bdbecff1d55107f28afa59d7f532; fresh 0.43.0
+Stream-branch segments in fresh_default_20261017: 9,997,708.
+
+## segments in the 0.5-point band below and above each cut-off (fresh_default_20261017's stream branch)
+    cut                   kind below_n above_n below_km above_km ratio_n
+ 0.0249 default rear/spawn max  127572  124706    38269    37220   1.023
+ 0.0349 default rear/spawn max  121657  118482    35736    34460   1.027
+ 0.0449 default rear/spawn max  115421  113766    33236    32097   1.015
+ 0.0549 default rear/spawn max  112607  112263    31404    30251   1.003
+ 0.0649 default rear/spawn max  112834  113018    29447    28668   0.998
+ 0.0849 default rear/spawn max  114693  115843    25161    23866   0.990
+ 0.1049 default rear/spawn max  119390  121136    20131    18800   0.986
+ 0.1500           access class  150764  160299    14173    15168   0.941
+ 0.2000           access class  139325  140683     8181     8700   0.990
+ 0.2500           access class  109329  108290     6515     6692   1.010
+ 0.3000           access class   76625   75653     4433     4385   1.013

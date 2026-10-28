@@ -1,62 +1,62 @@
 direction,reason,order,n_segments,km,structure,species_code,stage,tuned_rule
-gained,connectivity or overlay,1,75,17.463314923174245,free,WCT,rear,mad>=0.03|g<=0.3|none
-lost,connectivity or overlay,1,7,0.8378170626100647,free,WCT,rear,mad>=0.03|g<=0.3|none
-gained,gradient between the two maxima,1,334,52.668115578695506,free,WCT,rear,mad>=0.03|g<=0.3|none
-gained,other (river-polygon branch or mixed),1,16,0.32596691472894035,free,WCT,rear,mad>=0.03|g<=0.3|none
-gained,"size: tuned passes, width fails or NULL",1,3892,858.1690593475025,free,WCT,rear,mad>=0.03|g<=0.3|none
-lost,"size: width passes, tuned fails, no exception",1,306,64.17061696828428,free,WCT,rear,mad>=0.03|g<=0.3|none
-gained,through-wetland line: tuned structure admits,1,657,127.97584978168337,free,WCT,rear,mad>=0.03|g<=0.3|none
-lost,through-wetland line: tuned structure drops,1,8,0.5668266780770517,free,WCT,rear,mad>=0.03|g<=0.3|none
-gained,connectivity or overlay,2,620,145.93745907003694,free,WCT,rear,mad>=0.03|g<=0.3|none
-lost,connectivity or overlay,2,26,6.803467545896795,free,WCT,rear,mad>=0.03|g<=0.3|none
-gained,gradient between the two maxima,2,5725,899.5331536361862,free,WCT,rear,mad>=0.03|g<=0.3|none
-gained,other (river-polygon branch or mixed),2,174,2.6146955475052907,free,WCT,rear,mad>=0.03|g<=0.3|none
-gained,"size: tuned passes, width fails or NULL",2,689,123.87477919125313,free,WCT,rear,mad>=0.03|g<=0.3|none
-lost,"size: width passes, tuned fails, no exception",2,1991,523.8537663701577,free,WCT,rear,mad>=0.03|g<=0.3|none
-gained,through-wetland line: tuned structure admits,2,161,26.39641216130143,free,WCT,rear,mad>=0.03|g<=0.3|none
-lost,through-wetland line: tuned structure drops,2,126,11.649115736621093,free,WCT,rear,mad>=0.03|g<=0.3|none
-gained,connectivity or overlay,3,749,164.08645307728187,free,WCT,rear,mad>=0.03|g<=0.3|none
-lost,connectivity or overlay,3,4,0.5870000000001242,free,WCT,rear,mad>=0.03|g<=0.3|none
-gained,gradient between the two maxima,3,8375,1419.021209345317,free,WCT,rear,mad>=0.03|g<=0.3|none
-gained,other (river-polygon branch or mixed),3,92,3.4127420056282824,free,WCT,rear,mad>=0.03|g<=0.3|none
-gained,"size: tuned passes, width fails or NULL",3,515,119.18356597148515,free,WCT,rear,mad>=0.03|g<=0.3|none
-lost,"size: width passes, tuned fails, no exception",3,805,231.06735233121006,free,WCT,rear,mad>=0.03|g<=0.3|none
-gained,through-wetland line: tuned structure admits,3,40,7.864164964345741,free,WCT,rear,mad>=0.03|g<=0.3|none
-lost,through-wetland line: tuned structure drops,3,124,11.221432895702089,free,WCT,rear,mad>=0.03|g<=0.3|none
-gained,connectivity or overlay,4+,280,57.460382531332705,free,WCT,rear,mad>=0.03|g<=0.3|none
-gained,gradient between the two maxima,4+,4138,713.8833799604703,free,WCT,rear,mad>=0.03|g<=0.3|none
-gained,other (river-polygon branch or mixed),4+,161,9.375789904710375,free,WCT,rear,mad>=0.03|g<=0.3|none
-gained,"size: tuned passes, width fails or NULL",4+,209,56.168134259233355,free,WCT,rear,mad>=0.03|g<=0.3|none
-lost,"size: width passes, tuned fails, no exception",4+,34,7.82509228489254,free,WCT,rear,mad>=0.03|g<=0.3|none
-gained,through-wetland line: tuned structure admits,4+,15,1.9042706665724272,free,WCT,rear,mad>=0.03|g<=0.3|none
-lost,through-wetland line: tuned structure drops,4+,86,8.710993971766456,free,WCT,rear,mad>=0.03|g<=0.3|none
-gained,connectivity or overlay,1,73,16.285989494054256,door,WCT,rear,mad>=0.03|g<=0.3|none
-lost,connectivity or overlay,1,7,0.6409404715458319,door,WCT,rear,mad>=0.03|g<=0.3|none
-gained,gradient between the two maxima,1,334,52.668115578695506,door,WCT,rear,mad>=0.03|g<=0.3|none
-gained,other (river-polygon branch or mixed),1,16,0.32596691472894035,door,WCT,rear,mad>=0.03|g<=0.3|none
-gained,"size: tuned passes, width fails or NULL",1,3923,864.3315437547527,door,WCT,rear,mad>=0.03|g<=0.3|none
-lost,"size: width passes, tuned fails, no exception",1,306,64.17061696828428,door,WCT,rear,mad>=0.03|g<=0.3|none
-gained,through-wetland line: tuned structure admits,1,206,40.3154022607506,door,WCT,rear,mad>=0.03|g<=0.3|none
-lost,through-wetland line: tuned structure drops,1,27,6.232148136246351,door,WCT,rear,mad>=0.03|g<=0.3|none
-gained,connectivity or overlay,2,624,147.1066173394714,door,WCT,rear,mad>=0.03|g<=0.3|none
-lost,connectivity or overlay,2,14,1.8731531480846269,door,WCT,rear,mad>=0.03|g<=0.3|none
-gained,gradient between the two maxima,2,5729,900.0261536361861,door,WCT,rear,mad>=0.03|g<=0.3|none
-gained,other (river-polygon branch or mixed),2,174,2.6146955475052907,door,WCT,rear,mad>=0.03|g<=0.3|none
-gained,"size: tuned passes, width fails or NULL",2,698,125.08740780439156,door,WCT,rear,mad>=0.03|g<=0.3|none
-lost,"size: width passes, tuned fails, no exception",2,1991,523.8537663701577,door,WCT,rear,mad>=0.03|g<=0.3|none
-gained,through-wetland line: tuned structure admits,2,36,5.539974791132834,door,WCT,rear,mad>=0.03|g<=0.3|none
-lost,through-wetland line: tuned structure drops,2,270,50.66839631556423,door,WCT,rear,mad>=0.03|g<=0.3|none
-gained,connectivity or overlay,3,752,164.24651253167542,door,WCT,rear,mad>=0.03|g<=0.3|none
-gained,gradient between the two maxima,3,8393,1423.1678025852361,door,WCT,rear,mad>=0.03|g<=0.3|none
-gained,other (river-polygon branch or mixed),3,92,3.4127420056282824,door,WCT,rear,mad>=0.03|g<=0.3|none
-gained,"size: tuned passes, width fails or NULL",3,515,119.18356597148515,door,WCT,rear,mad>=0.03|g<=0.3|none
-lost,"size: width passes, tuned fails, no exception",3,805,231.06735233121006,door,WCT,rear,mad>=0.03|g<=0.3|none
-gained,through-wetland line: tuned structure admits,3,34,6.656244016459737,door,WCT,rear,mad>=0.03|g<=0.3|none
-lost,through-wetland line: tuned structure drops,3,125,26.327243918619452,door,WCT,rear,mad>=0.03|g<=0.3|none
-gained,connectivity or overlay,4+,280,57.460382531332705,door,WCT,rear,mad>=0.03|g<=0.3|none
-gained,gradient between the two maxima,4+,4138,713.8833799604703,door,WCT,rear,mad>=0.03|g<=0.3|none
-gained,other (river-polygon branch or mixed),4+,161,9.375789904710375,door,WCT,rear,mad>=0.03|g<=0.3|none
-gained,"size: tuned passes, width fails or NULL",4+,209,56.168134259233355,door,WCT,rear,mad>=0.03|g<=0.3|none
-lost,"size: width passes, tuned fails, no exception",4+,34,7.82509228489254,door,WCT,rear,mad>=0.03|g<=0.3|none
-gained,through-wetland line: tuned structure admits,4+,14,1.92952663785109,door,WCT,rear,mad>=0.03|g<=0.3|none
-lost,through-wetland line: tuned structure drops,4+,4,0.7293248843132395,door,WCT,rear,mad>=0.03|g<=0.3|none
+gained,connectivity or overlay,1,63,16.558729663291828,free,WCT,rear,mad>=0.03|g<=0.25|none
+lost,connectivity or overlay,1,7,0.8378170626100647,free,WCT,rear,mad>=0.03|g<=0.25|none
+gained,gradient between the two maxima,1,296,49.58679232869513,free,WCT,rear,mad>=0.03|g<=0.25|none
+gained,other (river-polygon branch or mixed),1,15,0.31439208146800834,free,WCT,rear,mad>=0.03|g<=0.25|none
+gained,"size: tuned passes, width fails or NULL",1,3833,851.6239252403666,free,WCT,rear,mad>=0.03|g<=0.25|none
+lost,"size: width passes, tuned fails, no exception",1,306,64.17061696828429,free,WCT,rear,mad>=0.03|g<=0.25|none
+gained,through-wetland line: tuned structure admits,1,657,127.97584978168337,free,WCT,rear,mad>=0.03|g<=0.25|none
+lost,through-wetland line: tuned structure drops,1,8,0.5668266780770517,free,WCT,rear,mad>=0.03|g<=0.25|none
+gained,connectivity or overlay,2,588,141.1778525957109,free,WCT,rear,mad>=0.03|g<=0.25|none
+lost,connectivity or overlay,2,26,6.803467545896795,free,WCT,rear,mad>=0.03|g<=0.25|none
+gained,gradient between the two maxima,2,5545,879.4340934805796,free,WCT,rear,mad>=0.03|g<=0.25|none
+gained,other (river-polygon branch or mixed),2,164,2.520042702287764,free,WCT,rear,mad>=0.03|g<=0.25|none
+gained,"size: tuned passes, width fails or NULL",2,678,123.10676920557519,free,WCT,rear,mad>=0.03|g<=0.25|none
+lost,"size: width passes, tuned fails, no exception",2,1991,523.8537663701577,free,WCT,rear,mad>=0.03|g<=0.25|none
+gained,through-wetland line: tuned structure admits,2,161,26.39641216130143,free,WCT,rear,mad>=0.03|g<=0.25|none
+lost,through-wetland line: tuned structure drops,2,126,11.649115736621093,free,WCT,rear,mad>=0.03|g<=0.25|none
+gained,connectivity or overlay,3,724,158.30140472576102,free,WCT,rear,mad>=0.03|g<=0.25|none
+lost,connectivity or overlay,3,4,0.5870000000001242,free,WCT,rear,mad>=0.03|g<=0.25|none
+gained,gradient between the two maxima,3,8097,1397.5761512208005,free,WCT,rear,mad>=0.03|g<=0.25|none
+gained,other (river-polygon branch or mixed),3,90,3.39149874695014,free,WCT,rear,mad>=0.03|g<=0.25|none
+gained,"size: tuned passes, width fails or NULL",3,506,118.43129482355856,free,WCT,rear,mad>=0.03|g<=0.25|none
+lost,"size: width passes, tuned fails, no exception",3,805,231.06735233121003,free,WCT,rear,mad>=0.03|g<=0.25|none
+gained,through-wetland line: tuned structure admits,3,40,7.864164964345741,free,WCT,rear,mad>=0.03|g<=0.25|none
+lost,through-wetland line: tuned structure drops,3,124,11.221432895702089,free,WCT,rear,mad>=0.03|g<=0.25|none
+gained,connectivity or overlay,4+,269,56.09000395809652,free,WCT,rear,mad>=0.03|g<=0.25|none
+gained,gradient between the two maxima,4+,3996,706.2597779393463,free,WCT,rear,mad>=0.03|g<=0.25|none
+gained,other (river-polygon branch or mixed),4+,152,9.238891392410746,free,WCT,rear,mad>=0.03|g<=0.25|none
+gained,"size: tuned passes, width fails or NULL",4+,209,56.168134259233355,free,WCT,rear,mad>=0.03|g<=0.25|none
+lost,"size: width passes, tuned fails, no exception",4+,34,7.82509228489254,free,WCT,rear,mad>=0.03|g<=0.25|none
+gained,through-wetland line: tuned structure admits,4+,15,1.9042706665724272,free,WCT,rear,mad>=0.03|g<=0.25|none
+lost,through-wetland line: tuned structure drops,4+,86,8.71099397176646,free,WCT,rear,mad>=0.03|g<=0.25|none
+gained,connectivity or overlay,1,61,15.381404234171839,door,WCT,rear,mad>=0.03|g<=0.25|none
+lost,connectivity or overlay,1,7,0.6409404715458319,door,WCT,rear,mad>=0.03|g<=0.25|none
+gained,gradient between the two maxima,1,296,49.58679232869513,door,WCT,rear,mad>=0.03|g<=0.25|none
+gained,other (river-polygon branch or mixed),1,15,0.31439208146800834,door,WCT,rear,mad>=0.03|g<=0.25|none
+gained,"size: tuned passes, width fails or NULL",1,3864,857.7864096476167,door,WCT,rear,mad>=0.03|g<=0.25|none
+lost,"size: width passes, tuned fails, no exception",1,306,64.17061696828429,door,WCT,rear,mad>=0.03|g<=0.25|none
+gained,through-wetland line: tuned structure admits,1,206,40.3154022607506,door,WCT,rear,mad>=0.03|g<=0.25|none
+lost,through-wetland line: tuned structure drops,1,27,6.232148136246351,door,WCT,rear,mad>=0.03|g<=0.25|none
+gained,connectivity or overlay,2,592,142.3470108651454,door,WCT,rear,mad>=0.03|g<=0.25|none
+lost,connectivity or overlay,2,14,1.8731531480846269,door,WCT,rear,mad>=0.03|g<=0.25|none
+gained,gradient between the two maxima,2,5549,879.9270934805795,door,WCT,rear,mad>=0.03|g<=0.25|none
+gained,other (river-polygon branch or mixed),2,164,2.520042702287764,door,WCT,rear,mad>=0.03|g<=0.25|none
+gained,"size: tuned passes, width fails or NULL",2,687,124.31939781871363,door,WCT,rear,mad>=0.03|g<=0.25|none
+lost,"size: width passes, tuned fails, no exception",2,1991,523.8537663701577,door,WCT,rear,mad>=0.03|g<=0.25|none
+gained,through-wetland line: tuned structure admits,2,36,5.539974791132834,door,WCT,rear,mad>=0.03|g<=0.25|none
+lost,through-wetland line: tuned structure drops,2,270,50.66839631556423,door,WCT,rear,mad>=0.03|g<=0.25|none
+gained,connectivity or overlay,3,727,158.4614641801545,door,WCT,rear,mad>=0.03|g<=0.25|none
+gained,gradient between the two maxima,3,8115,1401.7227444607192,door,WCT,rear,mad>=0.03|g<=0.25|none
+gained,other (river-polygon branch or mixed),3,90,3.39149874695014,door,WCT,rear,mad>=0.03|g<=0.25|none
+gained,"size: tuned passes, width fails or NULL",3,506,118.43129482355856,door,WCT,rear,mad>=0.03|g<=0.25|none
+lost,"size: width passes, tuned fails, no exception",3,805,231.06735233121003,door,WCT,rear,mad>=0.03|g<=0.25|none
+gained,through-wetland line: tuned structure admits,3,33,6.645874012939186,door,WCT,rear,mad>=0.03|g<=0.25|none
+lost,through-wetland line: tuned structure drops,3,125,26.327243918619452,door,WCT,rear,mad>=0.03|g<=0.25|none
+gained,connectivity or overlay,4+,269,56.09000395809652,door,WCT,rear,mad>=0.03|g<=0.25|none
+gained,gradient between the two maxima,4+,3996,706.2597779393463,door,WCT,rear,mad>=0.03|g<=0.25|none
+gained,other (river-polygon branch or mixed),4+,152,9.238891392410746,door,WCT,rear,mad>=0.03|g<=0.25|none
+gained,"size: tuned passes, width fails or NULL",4+,209,56.168134259233355,door,WCT,rear,mad>=0.03|g<=0.25|none
+lost,"size: width passes, tuned fails, no exception",4+,34,7.82509228489254,door,WCT,rear,mad>=0.03|g<=0.25|none
+gained,through-wetland line: tuned structure admits,4+,14,1.92952663785109,door,WCT,rear,mad>=0.03|g<=0.25|none
+lost,through-wetland line: tuned structure drops,4+,4,0.7293248843132395,door,WCT,rear,mad>=0.03|g<=0.25|none

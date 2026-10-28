@@ -37,7 +37,9 @@
 #' @param schema `character(1)` link persist schema.
 #' @param species `character(1)` species code.
 #' @param wsg `character` the species' groups.
-#' @param curve [knw_tune_curve()]'s result for the species and stage.
+#' @param curve [knw_tune_curve()]'s result for the species and stage. It must
+#'   have been fitted on link's segment gradient (`curve$cols[["grad"]]` is
+#'   `segment_gradient`), the gradient the segments are graded on (#92).
 #' @param pick the recommended rule row.
 #' @param stage `"rear"` or `"spawn"`.
 #' @param workers `integer(1)` walk workers.
@@ -71,6 +73,13 @@ knw_grade_species <- function(connector, schema, species, wsg, curve, pick, stag
   chk::chk_function(connector)
   chk::chk_string(species)
   chk::chk_character(wsg)
+  # the segments carry link's segment gradient, so a curve fitted on any other would be read on a gradient it never
+  # saw; a curve from before #92 records none and was fitted on the Atlas line's
+  if (!identical(curve$cols[["grad"]], .knw_grade_grad)) {
+    stop("the curve was fitted on ", if (is.null(curve$cols)) "an unrecorded gradient (the Atlas line's, before #92)"
+         else curve$cols[["grad"]], ", not on ", .knw_grade_grad, ", the gradient the segments are graded on",
+         call. = FALSE)
+  }
   if (is.null(ref_edge)) {
     ref_edge <- if (!is.null(curve$edge_stream)) curve$edge_stream else eval(formals(knw_tune_run)$edge_stream)
   }
@@ -132,4 +141,14 @@ knw_grade_species <- function(connector, schema, species, wsg, curve, pick, stag
                   walk_other = sum(seg$dist_status %in% c("no_parent", "too_many_hops")),
                   graded = sum(!is.na(grades$grade)), g$dropped),
        walk_minutes = as.numeric(difftime(Sys.time(), t0, units = "mins")))
+}
+
+# the visit column that carries the gradient knw_grade_species() grades on (link's segment `gradient`), which a curve
+# must have been fitted on and a grade table records as `curve_grad` (#92)
+.knw_grade_grad <- "segment_gradient"
+
+# TRUE when a grade table's first row (read as character) records the curve's gradient as `grad`: 0320's keep-check,
+# 0325, 0330, data-raw/vignette_chinook.R and data-raw/vignette_method.R hold a grade table to this before reading it (#92)
+.knw_grade_grad_ok <- function(h, grad = .knw_grade_grad) {
+  "curve_grad" %in% names(h) && identical(as.character(h$curve_grad[1]), grad)
 }

@@ -26,8 +26,8 @@ to \code{\link[=knw_tune_run]{knw_tune_run()}}, so the 1.96 replay picks as the 
 
 \item{compare_dir}{\code{NULL} or \code{character(1)} the directory \code{scripts/0330} wrote
 (one \verb{<sp>_<stage>_compare.csv} per compared key), read for
-\code{near_river_scope}; a fitted rule with a pair and no comparison there is an
-error.}
+\code{near_river_scope}; a fitted rule with a pair and no comparison there, or a
+comparison of another rule (\code{tuned_rule}), is an error.}
 }
 \value{
 A list: \code{thresholds} and \code{groups} (one row per \code{rule_id} and
@@ -60,7 +60,9 @@ on through-wetland lines alone, is link's \code{wetland_flow}. It is \code{NA} w
 rule has no pair, and where \code{compare_dir} is \code{NULL}. \code{evidence_md5} is the
 identity of the evidence build the rule was scored on, as the summary records
 it (\code{scripts/0320}; \code{NA} on a summary written before the record), which
-\code{scripts/0325} holds each grade table to. A summary whose \code{rule_recommended}
+\code{scripts/0325} holds each grade table to; \code{curve_grad} is the visit column
+the rule and its curve read the gradient from (\code{segment_gradient}, link's
+segment gradient, from #92; \code{NA} on a summary written before the record). A summary whose \code{rule_recommended}
 is not its tune table's recommended rule is refused: the two are written at
 different points of a run. A species × stage that
 was not fitted (no stream rule, no response, too few groups) gets one row

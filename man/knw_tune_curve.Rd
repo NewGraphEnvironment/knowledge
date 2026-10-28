@@ -10,7 +10,7 @@ knw_tune_curve(
   walks,
   folds,
   resp = "U",
-  cols = c(grad = "fwa_gradient", width = "cw_deploy", mad = "mad_pick"),
+  cols = c(grad = "segment_gradient", width = "cw_deploy", mad = "mad_pick"),
   src = "pick",
   dist_cap_m = 50000,
   q_default = 10,
@@ -56,7 +56,8 @@ held-out deviance), \code{edf} (the smooths' effective degrees of freedom), and
 \code{curves}, a \code{tibble} of marginal curves (\code{curve}, \code{x}, \code{rate}, \code{rel_rate},
 \code{rel_lo}, \code{rel_hi}, \code{threshold}) relative to the pick's thresholds, each
 other variable held at its reference; \code{edge_stream}, as given; \code{dist_in_model}, \code{FALSE} when the
-distances were too few to carry a smooth and size stood alone; \code{prior_sd}, as given.
+distances were too few to carry a smooth and size stood alone; \code{prior_sd} and \code{cols}, as given (\code{cols[["grad"]]}
+is the gradient the curve was fitted on, which a grade table records, #92).
 }
 \description{
 After \code{\link[=knw_tune_score]{knw_tune_score()}} has picked a rule, one GAM fits the rule's variables

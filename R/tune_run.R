@@ -36,6 +36,11 @@
 #'   [knw_tune_smoke()], `prior_sd` to [knw_tune_curve()]).
 #' @param min_wsg,power_wsg `integer(1)` the floors described above.
 #' @param src `character(1)` the flow source the exception reads.
+#' @param cols named `character`, as in [knw_rule_in()]: the columns of `visits`
+#'   carrying `grad`, `width` and `mad`, read by the rules and the curve. The
+#'   gradient is link's segment gradient (`segment_gradient`), the one link
+#'   applies a rule to (#92); the Freshwater Atlas line's (`fwa_gradient`) is the
+#'   sensitivity. The gradient column joins the cache's settings.
 #' @param thresholds_extra `NULL`, or another bundle's
 #'   `parameters_habitat_thresholds.csv` (link's `default_tuned`): each species'
 #'   row joins its grid as the `is_link_tuned` candidate ([knw_tune_grid()]).
@@ -48,8 +53,9 @@
 #'   the same order (every [knw_tune_grid()] column, so a moved `default`
 #'   counts), and the settings the score was made with match (`fit`, `prior_sd`,
 #'   `seed`, `folds`, `d_floor` and `extra`, recorded as `spec` by
-#'   [knw_tune_score()]); a cache written before the record is read back with a
-#'   message naming the settings it is taken as. `n_boot`, `seed_boot` and
+#'   [knw_tune_score()], and the gradient column, `grad`); a cache whose record lacks `grad` is rescored, and one
+#'   written before any record is rescored unless `cols[["grad"]]` is `fwa_gradient`, the gradient every such cache
+#'   was scored on, when it is read back with a message naming the settings it is taken as. `n_boot`, `seed_boot` and
 #'   `seeds_more` are not checked: a cache's bootstrap and extra-seed tables are
 #'   read back whatever the run asked for, so give a run with different ones its
 #'   own directory.
@@ -97,10 +103,13 @@ knw_tune_run <- function(visits, species_tbl, walks, thresholds, species = knw_s
                          min_wsg = 5L, power_wsg = 10L, src = "pick", grid_args = list(), cache_dir = NULL,
                          thresholds_extra = NULL, previous = NULL, smoke = TRUE, smoke_only = FALSE,
                          smoke_args = list(), extra = TRUE, fit = c("fe", "dense"), prior_sd = 2.5,
-                         evidence_id = NULL) {
+                         evidence_id = NULL,
+                         cols = c(grad = "segment_gradient", width = "cw_deploy", mad = "mad_pick")) {
   fit <- match.arg(fit)
   chk::chk_null_or(evidence_id, vld = chk::vld_string)
   chk::chk_data(visits)
+  chk::chk_character(cols)
+  chk::chk_subset(c("grad", "width", "mad"), names(cols))
   chk::chk_list(grid_args)
   chk::chk_list(smoke_args)
   chk::chk_flag(smoke)
@@ -111,7 +120,7 @@ knw_tune_run <- function(visits, species_tbl, walks, thresholds, species = knw_s
   if (!is.null(thresholds_extra)) chk::chk_data(thresholds_extra)
   chk::check_names(visits, c("site_visit", "watershed_group_code", "blue_line_key", "downstream_route_measure",
                              "edge_type", "wb_river", "wb_wetland", "wb_lake", "area_m2", "year", "data_set",
-                             "fwa_gradient", "cw_deploy", "mad_pick"))
+                             unname(cols[c("grad", "width", "mad")])))
   chk::chk_data(species_tbl)
   chk::check_names(species_tbl, c("site_visit", "species_code", "present", "status", "in_range"))
   chk::chk_data(thresholds)
@@ -125,7 +134,7 @@ knw_tune_run <- function(visits, species_tbl, walks, thresholds, species = knw_s
   base$era <- factor(as.character(cut(base$year, c(-Inf, 1994, 2004, Inf), labels = eras)), levels = eras)
   base$data_set <- factor(base$data_set)
   base$wsg <- factor(base$watershed_group_code)
-  rule_in <- function(dd, r) knw_rule_in(dd, r, walks = wi, src = src, edge_stream = edge_stream)
+  rule_in <- function(dd, r) knw_rule_in(dd, r, walks = wi, cols = cols, src = src, edge_stream = edge_stream)
 
   # ---- every key's population and grid, and why a key is not fitted ----
   out <- list()
@@ -214,8 +223,10 @@ knw_tune_run <- function(visits, species_tbl, walks, thresholds, species = knw_s
     rec <- out[[key]]
     # a scored grid is hours of work: keep it beside the run so a later failure does not cost it
     cache <- if (is.null(cache_dir)) NULL else file.path(cache_dir, paste0(key, "_score.rds"))
+    # the gradient joins the settings (#92): a score on the Atlas line's gradient is not one on link's segment
+    # gradient, and a cache from before the record was scored on the Atlas line's, so it is rescored
     spec <- list(fit = fit, prior_sd = prior_sd, seed = seed, folds = folds, d_floor = d_floor, extra = extra,
-                 evidence = if (is.null(evidence_id)) NA_character_ else evidence_id)
+                 evidence = if (is.null(evidence_id)) NA_character_ else evidence_id, grad = cols[["grad"]])
     sc <- NULL
     if (!is.null(cache) && file.exists(cache)) {
       sc <- readRDS(cache)
@@ -224,6 +235,9 @@ knw_tune_run <- function(visits, species_tbl, walks, thresholds, species = knw_s
       # a cache from before a grid column existed (#80's departures_flow, is_link_tuned) is another grid too
       if (!identical(sc$population[["visits_in"]], nrow(d)) || !all(names(grid) %in% names(sc$rules)) ||
             !identical(as.list(sc$rules[names(grid)]), as.list(grid))) {
+        sc <- NULL
+      } else if (is.null(sc$spec) && !identical(spec$grad, "fwa_gradient")) {
+        # a cache from before any record was scored on the Atlas line's gradient, so it is not this run's (#92)
         sc <- NULL
       } else if (is.null(sc$spec)) {
         # the settings a score depends on (the fit, the prior, the folds, the extras) are recorded with it since
@@ -240,12 +254,13 @@ knw_tune_run <- function(visits, species_tbl, walks, thresholds, species = knw_s
                            seeds_more = seeds_more, d_floor = d_floor, workers = workers, extra = extra, fit = fit,
                            prior_sd = prior_sd)
       sc$spec$evidence <- spec$evidence
+      sc$spec$grad <- spec$grad
       if (!is.null(cache)) saveRDS(sc, cache)
     }
     pick <- sc$rules[sc$rules$recommended, , drop = FALSE]
     pick_flow <- sc$rules[sc$rules$recommended_flow %in% TRUE, , drop = FALSE]
-    cv <- tryCatch(knw_tune_curve(d, pick, wi, sc$folds, resp = resp, src = src, edge_stream = edge_stream,
-                                  prior_sd = prior_sd),
+    cv <- tryCatch(knw_tune_curve(d, pick, wi, sc$folds, resp = resp, cols = cols, src = src,
+                                  edge_stream = edge_stream, prior_sd = prior_sd),
                    error = function(e) structure(list(message = conditionMessage(e)), class = "knw_curve_failed"))
     rec$status <- if (inherits(cv, "knw_curve_failed")) "curve_failed" else
       if (p$n_both < power_wsg) "underpowered" else "fitted"
