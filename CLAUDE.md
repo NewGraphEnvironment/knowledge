@@ -218,7 +218,10 @@ segment and its length depend on the outcome: on the tuning's stream branch 86 %
 their own against 10 % of empty ones, with median lengths of 113 m and 305 m. By any catch the gradient's gap from the
 Atlas line's does not (median 0.0083 either way), but by each species' own outcome it is smaller where the species was
 present for CO, GR, ST and WCT (WCT 0.0076 against 0.0164; `data-raw/segment_gradient_check.R`). Fixed-window gradients, whose length would
-not depend on the outcome, are #70's.
+not depend on the outcome, are #70's. These numbers, and #92's tune, are on link 0.66.0's build
+(`fresh_default_20261017`). link has since cut gradient breaks only where a present species' access changes
+(link#326, 0.69.0) and fish records only at each species' highest record per stream (link#396), and no build in the
+database carried either on 2026-10-28.
 
 ### FISS submission workbooks: editions drift, and most EF fish are already in FDIS
 
@@ -422,6 +425,13 @@ Scoring is CPU-bound: the remote machine scored every key in about an hour on 12
 **Never chain tuning and comparison until every key's smoke gates have passed (#84).** Score every key, check, then
 grade, then compare: `0320` runs its four smoke gates for every key first and stops on a failure, and a chain of runs
 must stop at a failed step, so nothing downstream reads a key whose gates failed.
+
+**A full retune starts on Al's word, not an agent's judgement.** After a change upstream (a link build, placement, a
+flow reload), run `0310` on the new build and the score check (`DEV=1 0320`), and report the picks against the
+published ones; a graded `0320`, `0330`, `0325` and the article bundles wait until Al decides a run is retuned and
+published (Al, 2026-10-28: "we will be retuning continuously ... I help decide when we are retuning"). #111 makes the
+pick report and keeps iterations out of the tracked tables. On #92 the scores answered which rule wins in 43 min of a
+~10 h chain.
 
 **Run R from the repo root, and never add a project-level `.Renviron` here.** R loads a
 project `.Renviron` *instead of* `~/.Renviron`, not in addition to it, so one silently empties
