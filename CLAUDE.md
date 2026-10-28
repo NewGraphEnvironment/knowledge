@@ -23,8 +23,9 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   `.rda` files off the top of `data/`, where `pkgload::load_all()` would source or load them.
 - `vignettes/chinook_rearing.Rmd` — the pkgdown article on the chinook rearing threshold (#62). It reads
   `inst/vignette-data/`, which `data-raw/vignette_chinook.R` writes from the tune and compare tables and the
-  database (`SCHEMA` names the run's schema, as `0320` and `0330` take it); rerun that script after any `0320`/`0325`/`0330` rerun, because `tests/testthat/test-vignette-data.R` fails
-  when a tracked source's md5 moves. Every number in its prose is computed inline from those files. Its references
+  database (`SCHEMA` names the run's schema, as `0320` and `0330` take it). A promotion (`0335`) reruns it, and only a
+  promotion changes its sources, because `tests/testthat/test-vignette-data.R` fails when a tracked source's md5 moves
+  (#111). It takes the tuning log of the run its CH rearing summary names (`tune_run`), not the newest. Every number in its prose is computed inline from those files. Its references
   are `vignettes/chinook_rearing.bib`, which `data-raw/vignette_bib.R` writes from the group library through Better
   BibTeX (Zotero must be running): rerun it after any citation change. It refuses a key Zotero does not return, strips
   each entry's local attachment path, and sets software versions from the run's ledger, one token each, because
@@ -36,8 +37,9 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   caught": the reference home for the method and its citations. A species article (the chinook one first, #64) gives
   its own records and result in a sentence or two and links it rather than restating the method. It reads `inst/vignette-data/method.rds`, which `data-raw/vignette_method.R` writes from
   `inst/method/pipeline.csv` (the steps) and `inst/method/settings.csv` (every number that shapes a result, with where
-  its value lives); the script refuses to run with its code or registers uncommitted. Rerun it after any `0230`,
-  `0310`, `0320` or `0330` rerun. `tests/testthat/test-settings-register.R` fails when a register value and the code
+  its value lives); the script refuses to run with its code or registers uncommitted. A promotion reruns it, last; it
+  reads the ledger the published tables name (`knw_run_ledger()`), and refuses on a machine whose `data/fdis/derived`
+  is not that build's evidence. `tests/testthat/test-settings-register.R` fails when a register value and the code
   disagree: change both together, and add a row for any new number that shapes a result (the test cannot see one with
   no row). `method.rds` also pins the md5s of the ignored grade tables (`data/tune/*_grades.csv`) where it was built,
   and `test-vignette-data.R` checks them wherever they exist, so on a machine whose copies differ it fails there and
@@ -81,7 +83,10 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   30 % (#67, on the evidence build before #73; the main run carries that ladder for every species since #68);
   `0325`, `0330` and `knw_thresholds_table()` do not read them, because they list their directories non-recursively;
   `data-raw/vignette_chinook.R` reads `data/tune/grad_ext/` for the chinook article's sentence on the longer ladder. `data/compare/gpkg/` (ignored) holds one GeoPackage per species × stage from `0330`, the
-  comparison's view for QGIS (#81).
+  comparison's view for QGIS (#81). `data/tune/candidate/<run>/` and `data/compare/candidate/<run>/` (ignored, #111)
+  hold the full runs of `0320` and `0330` until `0335` promotes one, and the `replaced_<stamp>/` archive of what each
+  promotion replaced (promoting it undoes the promotion); `data/tune/dev/` (ignored) holds `DEV=1 0320`, its log and
+  its `pick_report.csv`. The tracked tables change only by promotion.
 - `data/rag/` — ignored local cache of the ragnar stores. Source of truth is `s3://fresh-bc/rag/` (not public).
 - `data/fdis/` — ignored cache of the FDIS export (`0230` syncs it) and of the visit tables built from it
   (`data/fdis/derived/`; `0299` builds them as `knowledge/fdis/v3`, which is not yet uploaded (`v2` is the
@@ -429,12 +434,21 @@ Scoring is CPU-bound: the remote machine scored every key in about an hour on 12
 grade, then compare: `0320` runs its four smoke gates for every key first and stops on a failure, and a chain of runs
 must stop at a failed step, so nothing downstream reads a key whose gates failed.
 
-**A full retune starts on Al's word, not an agent's judgement.** After a change upstream (a link build, placement, a
-flow reload), run `0310` on the new build and the score check (`DEV=1 0320`), and report the picks against the
-published ones; a graded `0320`, `0330`, `0325` and the article bundles wait until Al decides a run is retuned and
-published (Al, 2026-10-28: "we will be retuning continuously ... I help decide when we are retuning"). #111 makes the
-pick report and keeps iterations out of the tracked tables. On #92 the scores answered which rule wins in 43 min of a
-~10 h chain.
+**A full retune and a promotion each start on Al's word, not an agent's judgement.** After a change upstream (a link
+build, placement, a flow reload), run `0310` on the new build and `DEV=1 0320`, and report its pick report
+(`data/tune/dev/pick_report.csv`: each key's pick beside the published one, whether the published rule is still in the
+region, and how far behind the best it now sits). All 22 keys took 7.7 min on 14 workers with no database (#111,
+2026-10-28). A full `0320` and `0330 TUNE_DIR=` write ignored candidates and wait for Al's word; so does
+`RUN=<run> 0335`, which moves a candidate into the tracked tables, whole or by key, and reruns `0325` (local),
+both bundles, the bibliography and the README figure (Al, 2026-10-28: "we will be retuning continuously ... I help
+decide when we are retuning"). By key works only onto the kept keys' build: after a new link run or evidence build
+every fitted key moves together. A candidate's provenance is by construction: `0320` and `0330` clear a key's files in
+the run before a pass rewrites them and write the large ones whole (a GeoPackage, a key's figures, the grade and
+comparison tables land only complete), so `0335` trusts what a run holds; never put a file into a candidate by hand
+(#111, five review rounds, `planning/archive/2026-10-issue-111-candidate-runs-promotion/`). A promotion that moves the
+published numbers also moves pins it cannot revise
+(`test-tune_repick.R`'s 1.96 picks, `test-vignette-data.R`'s key count and funnel, the articles' inline checks) and
+the `research/` prose that quotes them: those, and the articles' review, follow it by hand.
 
 **Run R from the repo root, and never add a project-level `.Renviron` here.** R loads a
 project `.Renviron` *instead of* `~/.Renviron`, not in addition to it, so one silently empties

@@ -67,7 +67,10 @@ wf_farm_priority.js                          farm priority/crossing tables out o
       prior, grade every segment of the species' groups, each accessible one at its own walked distance to the bank
       of the pick's river (#65, #73), each grade table recording its reference edges, river size, walk, flow build
       and curve prior (#72); a key whose curve is no better than no rule on held-out groups gets no grade (#73)
-      -> data/tune/ (+ log; SCHEMA names the run's schema, refused when its run is not the evidence's; scoring runs
+      -> data/tune/candidate/<run>/ (ignored; RUN= names it, a UTC stamp by default, and resumes it; + its log;
+      #111). DEV=1: the main seed only, no grades, no database -> data/tune/dev/, ending in pick_report.csv, each
+      key's pick beside the published one: the run to make after a change upstream (all keys 7.7 min on 14 workers).
+      SCHEMA names the run's schema, refused when its run is not the evidence's; scoring runs
       on any machine with the build, WORKERS=14; grading walks 500 segments per query and keeps every walk in
       knw.walk_cache, keyed on the flow load and the walk's md5 (#87): on the database's host a cold regrade of
       every key took 53.4 min and one key regraded with the walks cached 4.1 min, 2026-10-27; CLAUDE.md
@@ -85,15 +88,19 @@ wf_farm_priority.js                          farm priority/crossing tables out o
       pair is walked on the scratch copy with fresh's walk) against the recommended rule on link's segments for
       every species x stage and group, under each rule structure for the through-wetland lines and the pair (#73:
       free | door | door_wetland; `tuned` is TUNED_AS, door by default): km, graded km, km by grade class, change by
-      reason, FDIS and bcfishobs checks -> data/compare/, one GeoPackage per species x stage for QGIS
-      (data/compare/gpkg/, #81; GPKG=FALSE skips them while iterating, STAGE=gpkg writes them afterwards from the
+      reason, FDIS and bcfishobs checks, of a candidate (TUNE_DIR=data/tune/candidate/<run>, required) ->
+      data/compare/candidate/<run>/ (ignored, #111), one GeoPackage per species x stage for QGIS (its gpkg/, #81; GPKG=FALSE skips them while iterating, STAGE=gpkg writes them afterwards from the
       saved segments) (+ log; SCHEMA as 0320; on the database's host, keys in turn, each key's groups split across
       WORKERS=6 connections, #87: every key 162.9 min with GPKG=FALSE, BT rearing alone 33.4, the GeoPackages
       14.0, 2026-10-27; every STAGE stops off the database's host unless REMOTE=TRUE, #110). No maps in this run.
       STAGE=maps: floodplain ha beside each rule's habitat in the catalog's groups, and the maps, from the saved
-      tables -> data/compare/floodplain.csv, research/fig/compare_*.png
-      then SCHEMA=... Rscript data-raw/vignette_chinook.R refreshes the chinook article's data (inst/vignette-data/),
-      after 0325 has rewritten data/thresholds.csv; tests/testthat/test-vignette-data.R fails until it does
+      tables -> the run's floodplain.csv and fig/compare_*.png
+0335  on Al's word: RUN=<run> moves a candidate into data/tune/, data/compare/ and research/fig/ (SPECIES= for some
+      keys; refused unless the result is one build: evidence, link run, gradient, flow load, walk, link config), its
+      logs into scripts/logs/habitat/, archiving what it replaced as candidate run replaced_<stamp>; then 0325
+      (local), SCHEMA=... data-raw/vignette_chinook.R, vignette_method.R, vignette_bib.R (Zotero) and
+      readme_figure.R. DRY=1 lists; BUNDLES=FALSE moves only. Pins and prose that quote the run are revised by hand
+      (#111)
 
 --- Frozen on the published v2 tables (0299 PULL=TRUE VERSION=v2): the one-species analyses #57 superseded ---
 0291  BT use curve (#28)   0292  BT candidate weight   0293  BT spawner evidence (#33)

@@ -203,3 +203,20 @@ test_that("curve_grad is the summary's gradient column, and NA on a summary writ
   expect_identical(unique(t$curve_grad[t$species_code == "CH"]), "segment_gradient")
   expect_true(is.na(t$curve_grad[t$species_code == "KO"]))
 })
+
+test_that("a candidate run under the tuning directory is never read (#111)", {
+  d <- tune_dir_fx()
+  before <- knw_thresholds_table(d, "v", "r", "s")
+  # a candidate of another species and a changed CH pick, where 0320 now writes full runs
+  cand <- file.path(d, "candidate", "20261028_1200")
+  dir.create(cand, recursive = TRUE)
+  for (f in list.files(d, "\\.csv$")) file.copy(file.path(d, f), file.path(cand, f))
+  utils::write.csv(data.frame(species_code = "BT", stage = "rear", response = "U", status = "fitted", visits_in = 10),
+                   file.path(cand, "BT_rear_summary.csv"), row.names = FALSE)
+  tn <- utils::read.csv(file.path(cand, "CH_rear_tune.csv"))
+  tn$recommended <- c(FALSE, FALSE, TRUE, FALSE)
+  utils::write.csv(tn, file.path(cand, "CH_rear_tune.csv"), row.names = FALSE, na = "")
+  after <- knw_thresholds_table(d, "v", "r", "s")
+  expect_identical(after, before)
+  expect_false("BT" %in% after$thresholds$species_code)
+})

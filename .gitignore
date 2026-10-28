@@ -37,3 +37,6 @@ data/publish/
 data/tune/dev/
 data/tune/ref_*/
 data/compare/ref_*/
+# candidate runs of 0320 and 0330 (#111): nothing tracked changes until scripts/0335-promote.R copies one in
+data/tune/candidate/
+data/compare/candidate/
