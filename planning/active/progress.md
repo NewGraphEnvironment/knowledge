@@ -48,3 +48,16 @@
   rearing (g<=0.25 vs 0.3), CH (0.15 vs 0.11), CO (0.04 vs 0.0549), GR (width 1.5 vs 2), WCT (0.3 vs 0.25), and drop
   the exception for BT spawning and ST. Every pick's limit is in the other gradient's one-SE region except CO's
   segment-gradient 5.49 % (Atlas region 3, 4, 7, 11, 20-30 %).
+- `/code-check branch`, four rounds (reviewers unnamed, findings in `planning/active/review-round{1..4}.md`), no code
+  bugs in any round; every finding was a published claim or a guard:
+  | round | findings | fixed | inside previous fix? | commit |
+  |---|---|---|---|---|
+  | 1 | 4 (closed issue as "Open work", unguarded limits, stale cache doc, reader overclaim) | 4 | — | 365771d |
+  | 2 | 3 (the reader overclaim for three more readers; a guard passing on NULL; "where fish were caught") | 3 | yes | e4f14a8 |
+  | 3 | enumeration: 116 claims, 17 false + 1 unguarded (the gradient gap does NOT follow the catch) | 18 | yes | c8d0f96 |
+  | 4 | fact sweep: 47 restatements, 7 false + 1 unguarded (gap scoped by species; older restatements) | 8 | yes | 30fa392 |
+  Ended by enumeration: round 4 confirmed round 3's 18 rows (17 true, H6 rescoped in 30fa392), its 10 false or
+  unguarded rows each map to an edit in 30fa392, and that commit's 9 gap numbers are all in the segment log. The
+  research rewrite and the bundles still to come get their own round before the PR.
+- 0325's comparison-rule check (e988eb6) refuses #73's stale comparisons for BT_spawn, CO_rear and ST_rear, whose new
+  picks carry a near-river pair, so 0325 runs after 0330 as corrected.
