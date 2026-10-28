@@ -101,10 +101,11 @@ Al, 2026-10-28, at the plan gate:
 ## Validation
 
 
-- [x] Tests pass (`devtools::test()`: 1573 passed, 0 failed, 1 skip already there, 2026-10-28 18:22 UTC)
-- [ ] `/code-check` clean (once over the branch with `/code-check branch`)
-- [ ] PWF checkboxes match landed work
-- [ ] `/planning-archive` on completion
+- [x] Tests pass (`devtools::test()`: 1617 passed, 0 failed, 1 skip already there, 2026-10-28 19:42 UTC)
+- [x] `/code-check` clean (once over the branch, five rounds: 7, 3, 4, 5, 4 findings, all fixed; rounds 2-5 each found
+  defects inside the previous fix, ended by the write-by-write enumeration in findings.md)
+- [x] PWF checkboxes match landed work
+- [x] `/planning-archive` on completion
 
 How each change is proved:
 - Pick report: `DEV=1 Rscript scripts/0320-tune-run.R` here on #92's evidence; every key's pick should equal the

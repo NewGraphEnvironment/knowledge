@@ -22,3 +22,9 @@
   `SPECIES=CH` from the archive it made (48 files) the same; `0325` (local, 7.3 min) wrote `data/thresholds.csv` and
   `data/thresholds_groups.csv` unchanged. Candidate, archives and promotion logs removed after.
 - Phase 4: CLAUDE.md (bundles rerun by a promotion; candidates; the pick report; promotion on Al's word) and the run order
+- `/code-check branch`, five rounds (18:38-19:40 UTC; one plan review and five reviewers in all, past the usual five):
+  7, 3, 4, 5 and 4 findings, all fixed (commits 60f8638, 87ddb28, 85daf7d, 69adead, 6b29116). Rounds 2 to 5 each found
+  a defect inside the previous fix; the mechanism was presence, sort order or file age taken as provenance in a
+  candidate a resumed run accumulates into. Ended by moving provenance to the writers (clear before rewrite, write
+  whole) and enumerating every write into a run directory (findings.md, last section).
+- Full suite after round 5: 1617 passed, 0 failed, 1 skip already there.

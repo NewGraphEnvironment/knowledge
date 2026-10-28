@@ -439,7 +439,11 @@ region, and how far behind the best it now sits). All 22 keys took 7.7 min on 14
 `RUN=<run> 0335`, which moves a candidate into the tracked tables, whole or by key, and reruns `0325` (local),
 both bundles, the bibliography and the README figure (Al, 2026-10-28: "we will be retuning continuously ... I help
 decide when we are retuning"). By key works only onto the kept keys' build: after a new link run or evidence build
-every fitted key moves together. A promotion that moves the published numbers also moves pins it cannot revise
+every fitted key moves together. A candidate's provenance is by construction: `0320` and `0330` clear a key's files in
+the run before a pass rewrites them and write the large ones whole (a GeoPackage, a key's figures, the grade and
+comparison tables land only complete), so `0335` trusts what a run holds; never put a file into a candidate by hand
+(#111, five review rounds, `planning/archive/2026-10-issue-111-candidate-runs-promotion/`). A promotion that moves the
+published numbers also moves pins it cannot revise
 (`test-tune_repick.R`'s 1.96 picks, `test-vignette-data.R`'s key count and funnel, the articles' inline checks) and
 the `research/` prose that quotes them: those, and the articles' review, follow it by hand.
 
