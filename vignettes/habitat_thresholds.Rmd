@@ -78,8 +78,9 @@ ch <- pk[pk$key == "CH_rear", ]
 eras <- as.numeric(strsplit(reg$value[reg$key == "era_breaks"], ";", fixed = TRUE)[[1]])
 st <- x$stability[x$stability$species_code == "CH" & x$stability$stage == "rear", ]
 st[] <- lapply(st, function(v) if (all(grepl("^-?[0-9.]+$", v))) as.numeric(v) else v)
-# step 8's words: the exact rule seldom returns, it always stays a close call, and the choosing beats link's rule
-stopifnot(nrow(st) == 1, st$seeds_same_rec < st$seeds_n / 2, st$seeds_rec_in_region == st$seeds_n,
+# step 8's words: the exact rule returns on most other splits but seldom on a redraw, it always stays a close call, and
+# the choosing beats link's rule
+stopifnot(nrow(st) == 1, st$seeds_same_rec > st$seeds_n / 2, st$seeds_rec_in_region == st$seeds_n,
           st$boot_rec_share < 0.5, st$honest_dev_rec < st$honest_dev_default,
           # step 2's words: most of the visits dropped at placement are too far from their stream
           fn("placed on the Atlas") - fn("far_snap") > (fn("FDIS visits") - fn("ws50_mismatch")) / 2)
@@ -214,8 +215,8 @@ the scoring before the full run starts.
 Many rules score almost alike, so the winner could come down to chance. We choose again three ways: with the groups
 split `r st$seeds_n` other ways; leaving out one part of the groups, choosing on the rest and scoring the choice on the
 part left out, for each part in turn; and on `r val("n_boot")` random redraws of the groups. For chinook rearing the
-exact rule came back on `r st$seeds_same_rec` of the `r st$seeds_n` other splits and in `r pc(st$boot_rec_share)` of
-the redraws, but it stayed a close call on all `r st$seeds_rec_in_region`, and choosing this way scored better than
+exact rule came back on `r st$seeds_same_rec` of the `r st$seeds_n` other splits but in only `r pc(st$boot_rec_share)`
+of the redraws. It stayed a close call on all `r st$seeds_rec_in_region` splits, and choosing this way scored better than
 link's rule on the parts left out (`r n0(st$honest_dev_rec)` against `r n0(st$honest_dev_default)`; lower is
 better).
 
