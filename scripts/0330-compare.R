@@ -59,7 +59,8 @@
 #         compose with the other species' saved per-key tables; WORKERS=6 database cores; CONFIG_SHA=<link
 #         commit> for the configs (default origin/main of LINK_REPO); TUNED_AS=door; GPKG=FALSE skips the GeoPackages;
 #         STAGE=maps draws the floodplain table and the maps from the tables the last full run saved; STAGE=gpkg writes
-#         the GeoPackages alone from the segments it saved)
+#         the GeoPackages alone from the segments it saved). Every STAGE checks the database's round trip at connect
+#         and stops off its host (over 20 ms) unless REMOTE=TRUE (#110).
 # ---------------------------------------------------------------------------
 suppressMessages({ library(dplyr); library(readr); library(DBI); library(RPostgres) })
 pkgload::load_all(quiet = TRUE)
@@ -73,6 +74,7 @@ only <- Sys.getenv("SPECIES", "")
 stage_only <- Sys.getenv("STAGE", "")
 tuned_as <- Sys.getenv("TUNED_AS", "door")
 gpkg <- !identical(Sys.getenv("GPKG"), "FALSE")
+remote <- Sys.getenv("REMOTE") %in% c("1", "TRUE", "true")   # compare off the database's host anyway (#110)
 if (!stage_only %in% c("", "maps", "gpkg")) stop("STAGE must be unset, 'maps' or 'gpkg', not '", stage_only, "'")
 schema <- Sys.getenv("SCHEMA", "fresh_default")  # the run's persist schema, by its current name (renamed after the run, #73)
 catalog_bucket <- "https://stac-floodplains-bc.s3.us-west-2.amazonaws.com"
@@ -180,6 +182,15 @@ gpkg_of <- function(w) {
 
 # ---- compare, per species x stage (species in parallel) ------------------------------------
 conn <- pg()
+# the comparison is bound by the database: refuse a connection off its host unless REMOTE=TRUE, at every STAGE (#110).
+# A refused run's log is <date>_compare_refused-<run>…txt in the run's directory, so it does not overwrite the run's log
+lat <- tryCatch(knw_db_latency_check(conn, remote = remote), error = function(e) {
+  say("%s", conditionMessage(e))
+  path_refused <- .knw_free_path(sub("_compare-", "_compare_refused-", path_log, fixed = TRUE))
+  writeLines(log_lines, path_refused)
+  stop(conditionMessage(e), " (log ", path_refused, ")", call. = FALSE)
+})
+say("%s", lat$line)
 # the database's build, checked before any work (#87): a schema built by another run than the evidence's is refused
 rec <- tryCatch(knw_build_record(conn, schema, run_uid = run_uid), error = function(e) {
   say("%s", conditionMessage(e))
@@ -239,10 +250,14 @@ run_one <- function(job) {
     grades <- readr::read_csv(gfile, show_col_types = FALSE, col_select = dplyr::all_of(gcols),
                               col_types = readr::cols(id_segment = "d", watershed_group_code = "c", size = "d", dist_m = "d",
                                                       grade = "d", grade_class = "c", target_in_group = "l"))
+    m_read <- as.numeric(difftime(Sys.time(), t0, units = "mins"))
     cmp <- knw_compare_rules(pg, schema, job$species_code, job$stage, job$pick, job$groups, link_dir, grades,
                              visits = vl, visit_species = vs, scratch = paste0("knw_cmp_", tolower(job$key)),
                              tuned_as = tuned_as, config_sha = config_sha, workers = workers)
     rm(grades)
+    # the key's stage lines (#110): the grade table read here first, then knw_compare_rules()'s, then the writes
+    cmp$log <- c(sprintf("Grade table read: %.1f min.", m_read), cmp$log)
+    t_write <- Sys.time()
     # each written whole (a sibling renamed into place), the segments first: a job killed part way leaves no table that
     # reads as complete, and no _compare.csv without the segments it summarises (#111)
     out_of <- function(what) file.path(dir_out, paste0(job$key, what))
@@ -252,6 +267,8 @@ run_one <- function(job) {
     }
     .knw_write_whole(out_of("_change.csv"), function(p) readr::write_csv(cmp$change, p, na = ""))
     .knw_write_whole(out_of("_compare.csv"), function(p) readr::write_csv(cmp$compare, p, na = ""))
+    cmp$log <- c(cmp$log, sprintf("Writes (segments, checks, change, compare): %.1f min.",
+                                  as.numeric(difftime(Sys.time(), t_write, units = "mins"))))
     # the through-wetland quantity link#364 measured, for the write-up: CH rearing on its five groups and on all
     if (job$key == "CH_rear") {
       wl <- cmp$segments |> dplyr::filter(edge_type %in% c(1050L, 1150L))

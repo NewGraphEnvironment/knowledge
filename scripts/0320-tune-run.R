@@ -78,6 +78,8 @@
 #         GRADIENT=fwa_gradient scores the Atlas line's gradient on the main fold seed, no grades, into <run>/grad_fwa/
 #         (data/tune/dev/grad_fwa/ with DEV=1; promoted to data/tune/grad_fwa/), its log suffixed -grad_fwa. Without
 #         DEV it needs RUN=<the main run's name>, whose candidate it joins and is promoted with.
+#         A grading run checks the database's round trip at connect and stops off its host (over 20 ms) unless
+#         REMOTE=TRUE; DEV=1 and GRADIENT=fwa_gradient grade nothing and skip the check (#110).
 # ---------------------------------------------------------------------------
 suppressMessages({ library(dplyr); library(readr); library(DBI); library(RPostgres) })
 pkgload::load_all(quiet = TRUE)
@@ -90,6 +92,7 @@ workers <- as.integer(Sys.getenv("WORKERS", max(1L, min(14L, parallel::detectCor
 species <- strsplit(Sys.getenv("SPECIES", paste(knw_species(), collapse = ",")), ",")[[1]]
 schema <- Sys.getenv("SCHEMA", "fresh_default")  # the run's persist schema, by its current name (renamed after the run, #73)
 dev <- Sys.getenv("DEV", "") %in% c("1", "TRUE", "true")
+remote <- Sys.getenv("REMOTE") %in% c("1", "TRUE", "true")   # grade off the database's host anyway (#110)
 # the gradient the rules and the curve read (#92): link's segment gradient, the one link applies a rule to; the Atlas
 # line's is the sensitivity, scored on the main fold seed alone into its own directory and never graded
 gradient <- Sys.getenv("GRADIENT", "segment_gradient")
@@ -165,6 +168,19 @@ if (!dev) {
   conn <- pg()
   rec <- tryCatch(knw_build_record(conn, schema, run_uid = run_uid), error = function(e) fail("%s", conditionMessage(e)))
   say("%s", rec$line)
+  # the grade is bound by the database: refuse a connection off its host unless REMOTE=TRUE (#110). DEV=1 and
+  # GRADIENT=fwa_gradient write no grades, so they are not checked. A refused run's log is <date>_tune_refused-<run>…txt
+  # in the run's directory, so it neither overwrites the run's log nor matches the _tune_run*.txt that 0335 promotes and
+  # vignette_chinook.R reads
+  if (!main_only) {
+    lat <- tryCatch(knw_db_latency_check(conn, remote = remote), error = function(e) {
+      say("%s", conditionMessage(e))
+      path_refused <- .knw_free_path(sub("_tune_run", "_tune_refused", path_log, fixed = TRUE))
+      writeLines(log_lines, path_refused)
+      stop(conditionMessage(e), " (log ", path_refused, ")", call. = FALSE)
+    })
+    say("%s", lat$line)
+  }
   dbDisconnect(conn)
 }
 vl <- read_csv("data/fdis/derived/visits_link.csv", show_col_types = FALSE, guess_max = 1e5,

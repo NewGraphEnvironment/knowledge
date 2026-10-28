@@ -77,8 +77,9 @@ exception whose river lies in another watershed group), \code{change} (km gained
 and lost by structure, reason and stream order), \code{checks} (FDIS detection on
 each rule's segments and the bcfishobs lift, per structure), \code{segments} (the
 per-segment flags under \code{default} and each structure, with \code{tuned} the
-\code{tuned_as} structure, and the \code{default} branch each segment lies on), and
-\code{log} lines.
+\code{tuned_as} structure, and the \code{default} branch each segment lies on), \code{log}
+lines, one of them per stage with its minutes, and \code{timing}, the minutes of
+each stage by name (#110).
 }
 \description{
 \code{scripts/0298}'s comparison for any species and stage. Each rule goes through

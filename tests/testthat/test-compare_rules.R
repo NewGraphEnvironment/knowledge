@@ -83,3 +83,18 @@ test_that("the worker function calls no name of this package, so it runs where t
   expect_length(intersect(all.names(body(.knw_compare_bin)), pkg_names), 0L)
   expect_length(intersect(all.names(body(.knw_walk_chunk)), pkg_names), 0L)
 })
+
+test_that("the stage timer records each stage once, in order, and the stages sum to the whole (#110)", {
+  tm <- .knw_timer()
+  Sys.sleep(0.05)
+  a <- tm$tick("first")
+  b <- tm$tick("second")
+  Sys.sleep(0.02)
+  tm$tick("third")
+  x <- tm$ticks()
+  expect_identical(names(x), c("first", "second", "third"))
+  expect_true(all(x >= 0))
+  expect_gt(x[["first"]], 0.04 / 60)
+  expect_identical(x[["first"]], a)
+  expect_equal(sum(x), tm$total(), tolerance = 1e-9)
+})

@@ -35,6 +35,9 @@
 #   - HYDROLOGIC ZONE from the BC catalogue zip, placed by the visit's FWA segment midpoint
 #     (0296's method, unchanged).
 #   - Every drop is a ledger row, and the drops and kept rows partition the input.
+#   - ROUND TRIP: knw_db_latency_check() at connect stops a run off the database's host (over 20 ms) unless
+#     REMOTE=TRUE; the round trip and the override are ledgered, and a refused run's ledger is
+#     <date>_evidence_build_refused.csv (#110).
 #
 # INPUT:  data/fdis/build/{sites,catch,fish}.rds (0230), data/fdis_species_codes.csv, data/fiss_evidence.csv (0250),
 #         data/<wsg>/fiss_step2_fishcoll_<wsg>.csv (0220),
@@ -49,7 +52,7 @@
 #         data/fdis/derived/access_check.csv
 #         data/fdis/derived/workbook_{sites,species}.csv  the FISS workbook sites placed on link's segments
 #         scripts/logs/habitat/<date>_evidence_build_ledger.csv
-# RUN:    [SCHEMA=fresh_default_20261017] Rscript scripts/0310-evidence-build.R   (from the repo root; 4 socket
+# RUN:    [SCHEMA=fresh_default_20261017] [REMOTE=TRUE] Rscript scripts/0310-evidence-build.R   (from the repo root; 4 socket
 #         workers; the visit walks are cached from #91, so the first run walks them cold (6.4 min of walks and 16 min
 #         in all from a remote link, 2026-10-27) and a rerun on the same flow load reads them back (0.7 min of walks))
 # ---------------------------------------------------------------------------
@@ -59,6 +62,7 @@ options(warn = 1)
 if (!nzchar(Sys.getenv("PGCONNECT_TIMEOUT"))) Sys.setenv(PGCONNECT_TIMEOUT = "30")
 
 schema <- Sys.getenv("SCHEMA", "fresh_default")
+remote <- Sys.getenv("REMOTE") %in% c("1", "TRUE", "true")   # run off the database's host anyway
 walk_cache <- "knw.walk_cache"
 q_grid <- c(1, 3, 5, 10, 20, 30, 50)
 sources <- c("pick", "pcic_routed", "wet_balance")
@@ -97,6 +101,18 @@ for (k in c("link_version", "link_sha", "fresh_version", "fresh_sha", "fwapg_sha
   add("info", paste0("run_", k), 0, st[[k]])
 }
 conn <- pg()
+# The visit walks are bound by the database: refuse a connection off its host unless REMOTE=TRUE (#110). A refused
+# run's ledger goes to its own file, because 0320, 0325 and 0330 read the newest *_evidence_build_ledger.csv.
+lat <- tryCatch(knw_db_latency_check(conn, remote = remote), error = function(e) {
+  add("info", "db_round_trip_ms", NA, conditionMessage(e))
+  add("info", "db_remote_override", 0)
+  path_refused <- sub("_ledger\\.csv$", "_refused.csv", path_ledger)
+  write_csv(ledger, path_refused, na = "")
+  stop(conditionMessage(e), " (ledger ", path_refused, ")", call. = FALSE)
+})
+add("info", "db_round_trip_ms", lat$ms, lat$line)
+add("info", "db_remote_override", as.integer(lat$over && lat$remote))
+message(lat$line)
 rec <- knw_build_record(conn, schema, run_uid = st$run_uid)
 add("info", "build_record", 0, rec$line)
 

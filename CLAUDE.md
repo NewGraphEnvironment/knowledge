@@ -421,7 +421,10 @@ worker on the host and 12 to 18 ms from the remote link, against 116 ms one quer
 took 53.4 min on the host, and one key regraded with its walks cached 4.1 min. `0330` regenerates link's flags group by
 group on 6 connections, one key at a time (BT rearing 33.4 min, every key 162.9 min with `GPKG=FALSE`; from the remote link #92's took 269 min to compare and 197 more to
 write the GeoPackages, which take 14 min on the host, so a run off the host passes `GPKG=FALSE`, #81): it is bound by
-the database's cores, so run it on the host. A second machine helps a database-bound step only with a database of its
+the database's cores, so run it on the host. `0310`, a grading `0320` and every `STAGE` of `0330` check this at
+connect with `knw_db_latency_check()`: over a 20 ms round trip they stop with the round trip and what the remote link
+cost #92's comparison, unless `REMOTE=TRUE`, and every run logs the round trip and whether `REMOTE` overrode it (#110).
+`0330` also logs each key's minutes by stage, so a remote run shows which stage the link slows. A second machine helps a database-bound step only with a database of its
 own holding the same build (the schema's run and the flow load named in the table comment; the walk travels with the
 code). `0320` and `0330` refuse a schema built by another run at connect (`knw_build_record()`), and every grade table's
 flow load and walk md5 are compared by its readers; `research/database_builds.md` has the numbers and the load recipe.
