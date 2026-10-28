@@ -54,16 +54,16 @@ What exploration found that shapes the breakdown:
 
 ## Phase 1: the check, as package code with tests
 
-- [ ] `R/db_latency.R`: `knw_db_latency()` and `knw_db_latency_check()` with roxygen (`\dontrun` example, as
+- [x] `R/db_latency.R`: `knw_db_latency()` and `knw_db_latency_check()` with roxygen (`\dontrun` example, as
       `knw_build_record()`), exported; the cost table constant with its provenance line. `knw_db_latency()` times
       `DBI::dbGetQuery(conn, "SELECT 1")` with no `immediate = TRUE`, the path the 1.6 / 104 ms figures were measured
       on, no warm-up, and its roxygen says so (review 5); `knw_db_latency_check()` calls `knw_db_latency()`
       unqualified so the test's mock takes (review 4).
-- [ ] `tests/testthat/test-db_latency.R`: `dbGetQuery` mocked to sleep 30 ms with `n = 3` → `knw_db_latency()` > 20; mocked
+- [x] `tests/testthat/test-db_latency.R`: `dbGetQuery` mocked to sleep 30 ms with `n = 3` → `knw_db_latency()` > 20; mocked
       `knw_db_latency` at 105 → `knw_db_latency_check()` stops naming `105 ms`, the limit and the estimate;
       `remote = TRUE` returns `over = TRUE` and a `line` naming the override; a fast mock passes with `over = FALSE`;
       a live test behind `skip_if_no_pg()` reporting the round trip.
-- [ ] `_pkgdown.yml`: both functions after `knw_build_record` under "Evidence on link's segments", with a clause in
+- [x] `_pkgdown.yml`: both functions after `knw_build_record` under "Evidence on link's segments", with a clause in
       that section's `desc` (review 9); `devtools::document()` then `pkgdown::check_pkgdown()`.
 
 ## Phase 2: wire the three scripts

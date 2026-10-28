@@ -12,3 +12,9 @@
 ```bash
 cd /Users/airvine/Projects/repo/knowledge && git fetch -q origin && git checkout 110-check-the-database-s-round-trip-before-a && git pull --ff-only && git merge origin/main
 ```
+
+## Session 2026-10-28 (resumed)
+
+- Phase 1: `knw_db_latency()` and `knw_db_latency_check()` with tests; restore-the-bug (`limit_ms = Inf`) turns the
+  stop expectation red. Live from this machine: 1.4 ms (median of 5), on a localhost connection, so the plan's
+  "from the remote link it stops" live check cannot be run here; the mocked test is its evidence.
