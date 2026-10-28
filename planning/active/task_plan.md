@@ -144,7 +144,7 @@ limits :334 ("not weighed") is now false (review G9). CLAUDE.md's record section
 ## Validation
 
 - [x] Tests pass
-- [ ] `/code-check` clean (once over the branch, `/code-check branch`, three-round floor)
+- [x] `/code-check` clean (once over the branch, `/code-check branch`, three-round floor)
 - [ ] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion
 

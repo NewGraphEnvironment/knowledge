@@ -40,8 +40,8 @@ streams, an allowance for a river close downstream. It scored every version on h
 kept every version within one standard error of the best (a rule of thumb fixed before the run, not a
 boundary of noise), and recommended the one of those closest to link's current test. Each version was scored on the
 gradient of the link segment a fish was caught on, the one link applies its test to (#92). link's current test is not
-among them for any species. On link's segments the picks draw less rearing habitat than its current test for five of
-the seven rearing keys (from 2 % less for coho to 27 % less for steelhead), more for grayling (3 %) and westslope
+among them for any species. On link's segments, with lines through wetlands put through the same test as streams
+(link's `stream`), the picks draw less rearing habitat than its current test for five of the seven rearing keys (from 2 % less for coho to 27 % less for steelhead), more for grayling (3 %) and westslope
 cutthroat (18 %), and half as much again for bull trout spawning (50 %). A grade from 0 to 1 then gives the use to expect on each segment, read at that
 segment's own distance to a river (#65 corrected a first build that read most segments at the distance cap), and is
 published only where the curve behind it predicts held-out groups better than no rule at all: for coho and westslope
@@ -316,9 +316,10 @@ carry the exception, have a third, `door_wetland`, the exception on through-wetl
    1.82, ST 2.19 → 2.81. It is level for GR (3.56 → 3.64, +0.08, interval −0.01 to +0.22) and falls for BT spawning
    (3.04 → 2.51, −0.53, −0.64 to −0.43) and WCT (1.56 → 1.45, −0.11, −0.15 to −0.07): the km those two rules add hold
    fewer records per km than `default`'s. The ratio rewards a rule for drawing less, so it is not a claim about extent.
-   `free` and `door` read alike on every check. `door_wetland` reads a higher ratio for CH (4.32), CO (2.11) and ST
-   (4.08), as a narrower rule does, and leaves more FDIS detections outside it (CH 2.6 % against `door`'s 1.4, CO 11.7
-   against 10.1, ST 0.6 against 0.3), so the two checks point opposite ways and the structure is link's call.
+   `free` and `door` differ by under 0.01 in the ratio and by under 1 point in either FDIS share for every key.
+   `door_wetland` reads a higher ratio for CH (4.32), CO (2.11) and ST (4.08), as a narrower rule does, and for CH and
+   CO leaves more FDIS detections outside it than that spread (2.6 % against `door`'s 1.4, 11.7 against 10.1; ST 0.6
+   against 0.3, within it), so for those two the checks point opposite ways; the structure is link's call.
 
 **Maps and the floodplain table were not redrawn for #73 or #92** (`0330 STAGE=maps`); both are #65's, on the run's own configs
 and the picks of 2026-10-19 (`width>=3|g<=0.09` for RB, `mad>=0.35|g<=0.1049` for BT rearing, and so on), and are kept
@@ -327,7 +328,7 @@ here as the record of that reading.
 **Maps.** `research/fig/compare_<sp>_<stage>_<wsg>.png` for every floodplain-catalog group the species covers and
 three groups per species chosen by criteria fixed before drawing (largest gained share, largest lost share, most
 `default` km): habitat by rule (kept, lost, gained), grade class, and the floodplain shaded by its segment's grade.
-`data/compare/maps/` holds the interactive pages (ignored). `data/compare/gpkg/<key>.gpkg` (ignored) is #73's view
+`data/compare/maps/` holds the interactive pages (ignored). `data/compare/gpkg/<key>.gpkg` (ignored) is #92's view
 of each comparison for QGIS (#81).
 
 **Floodplain as a unit** (`data/compare/floodplain.csv`, #65). For the 23 groups whose whole-network floodplain the
@@ -355,8 +356,8 @@ rules dropped carried less floodplain per km than the habitat `default` draws. F
 ha are from the regrade, every segment at its own distance and the reference over the stream branch, on the flows wet
 republished that day. The flow republish also moved each MAD rule's habitat by under 0.3 % (BT spawning −231 km, CH
 +34, ST +60, BT rearing −49, CO −9); every moved verdict is a segment whose flow crossed the floor or whose exception
-distance crossed its limit, or a connectivity cascade from one. Width rules did not move.) #73's picks differ from #65's for
-BT rearing, BT spawning, CH, RB and WCT, so those rows no longer describe the recommended rule.
+distance crossed its limit, or a connectivity cascade from one. Width rules did not move.) #92's picks differ from #65's for
+every key, so no row describes the recommended rule.
 
 ## Limits
 
@@ -390,8 +391,8 @@ BT rearing, BT spawning, CH, RB and WCT, so those rows no longer describe the re
   bank rule, 92.6 % of the 2,006 starts both walks found agree within 0.01 m, and the rest are the two walks' entry
   conventions. The correction is positive on 67 % of found starts, median 31.8 m, 90th percentile 66.1 m, largest
   599 m (#65 had estimated the connector at a median of 14–88 m). A distance of 0 still occurs where the segment is
-  itself a river-polygon line or sits at the bank (BT rearing 53,897 graded km, CH 51,257), where the curve is read past
-  its data. #65's measurement of the centreline walk is in its archive (`check_connector_share.txt`).
+  itself a river-polygon line or sits at the bank (within 1 m of it, BT rearing 53,897 km, CH 51,257; at exactly 0, 31,109 and
+  30,027), where the curve is read past its data. #65's measurement of the centreline walk is in its archive (`check_connector_share.txt`).
 - **Width rules leave first-order streams ungraded**; a consumer summing graded km over a width-ruled species
   (GR, RB) sums measured streams only.
 - **One link run, one flow load.** Every grade carries `run_uid 20261017_004619-3f4c713b`; link recomputed UPET twice
