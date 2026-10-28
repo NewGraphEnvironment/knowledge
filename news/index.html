@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">knowledge</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.15</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.16</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,9 +33,13 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/v0.4.16/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.4.16" id="knowledge-0416">knowledge 0.4.16<a class="anchor" aria-label="anchor" href="#knowledge-0416"></a></h2>
+<ul><li>Retuning no longer touches the tracked tables or the articles until the operator promotes a run (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/111" class="external-link">#111</a>). <code>DEV=1 0320</code> is the check after a change upstream: minutes, no database, ending in a pick report (<code><a href="../reference/knw_tune_pick_report.html">knw_tune_pick_report()</a></code>) of each key’s pick beside the published one. A full <code>0320</code> and <code>0330 TUNE_DIR=</code> write ignored candidate runs, and <code>scripts/0335-promote.R</code> (<code><a href="../reference/knw_tune_promote.html">knw_tune_promote()</a></code>) moves one in, whole or by key, archiving what it replaces so a promotion can be undone, then reruns <code>0325</code> and the article bundles. Before anything moves it refuses a set that <code>0325</code> or the bundles would refuse. Summaries record their run and evidence ledger, which the readers take through <code><a href="../reference/knw_run_ledger.html">knw_run_ledger()</a></code> rather than the newest ledger on disk.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.15" id="knowledge-0415">knowledge 0.4.15<a class="anchor" aria-label="anchor" href="#knowledge-0415"></a></h2>
 <ul><li>A database-bound run checks its connection’s round trip before any work (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/110" class="external-link">#110</a>). <code><a href="../reference/knw_db_latency.html">knw_db_latency_check()</a></code> stops <code>0310</code>, a grading <code>0320</code> and every stage of <code>0330</code> over a 20 ms round trip, with the round trip and what a remote link cost <a href="https://github.com/NewGraphEnvironment/knowledge/issues/92" class="external-link">#92</a>’s comparison, unless <code>REMOTE=TRUE</code>; every run logs the round trip and whether the override acted, and a refused run writes its log to its own file. <code>0330</code> also logs each key’s minutes by stage, which <code><a href="../reference/knw_compare_rules.html">knw_compare_rules()</a></code> returns as <code>timing</code>.</li>
