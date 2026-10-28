@@ -17,3 +17,5 @@
   per-bin minutes (`.knw_bin_minutes()`, `bin_minutes`), the worker's names prefixed `bin_`
 - Phase 2: `data-raw/compare_stage_time.R` written. A link pretest from another session (`pretest_run.sh` on
   `fresh_default`, started ~21:34 UTC) holds the database, so the measurement waits for it to exit
+- 22:18 UTC the link pretest exited; found #112's branch and its measurement running on the host (findings, "Collision
+  with #112's branch"). Measurement held; asked Al which work survives

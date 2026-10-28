@@ -27,3 +27,15 @@ Found by #87's Phase 4 measurement (`research/database_builds.md`, "Comparing wi
 
 | Error | Resolution |
 |-------|------------|
+| `test-vignette-data.R:115` fails on 8 ignored `data/tune/*_grades.csv` md5s | Expected on this machine: `method.rds` pins the grade tables of #92's run, graded on another machine, and these copies are 2026-10-25's (CLAUDE.md: fails "there and nowhere else"; CI has no `data/`). Not this branch's; every other test passes (1648) |
+
+## Collision with #112's branch (2026-10-28 22:20 UTC)
+
+A parallel session has `origin/112-compare-only-default-and-the-reported-st` (6 commits). Its e533fb6 instruments
+`.knw_compare_bin()` too: `setup_s` (copy and indexes), `walk_s`, and `rule_s` per rule (classify, overlay, connect and
+read together), logged as "Summed over workers: …" and returned as `worker_minutes`. That is this branch's Phase 1 in
+another shape, in the same lines. Its `data-raw/compare_structures_check.R` was launched on the host at ~21:56 UTC
+(WCT done at 22:06; CH_rear and BT_rear on their 20 largest groups, every structure and reported-only, running from
+22:06). Its per-rule minutes carry `default`'s cost, which is #101's measurement ("run it once").
+This branch's measurement was not run: it would contend with that run on the database's cores. Escalated to Al:
+which body of work survives.
