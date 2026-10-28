@@ -10,3 +10,7 @@
   (`worker_minutes`); `data-raw/compare_structures_check.R` with TUNE_DIR/COMPARE_DIR/EVIDENCE_DIR, because the
   database host's ignored inputs are an older build (visits md5 d3a434e2/bc71243b against #92's 1bd35829/009698d7;
   grade tables of 2026-10-25) while m4 holds #92's
+- Plan review (`planning/active/review-plan.md`): B1 confirmed (settings.csv is md5-pinned in method.rds, so the
+  register is left for the next bundle rebuild); G1 fixed (`structures = "reported"` resolved and held to the
+  species' set inside knw_compare_rules()); G3/G4 folded into the check (tracked comparison a report; saving from
+  worker minutes); fresh is 0.44.0 here and on the host, #92 ran 0.43.0

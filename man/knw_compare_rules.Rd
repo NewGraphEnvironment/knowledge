@@ -54,8 +54,10 @@ tables, for the FDIS detection check (\code{NULL} to skip).}
 
 \item{n_boot, seed_boot}{the bcfishobs lift's bootstrap.}
 
-\item{structures}{\code{NULL} (chosen as above) or a subset of \code{c("free", "door", "door_wetland")}. Each structure is a rule regenerated on every group, so
-\code{scripts/0330-compare.R} passes \code{tuned_as} alone unless \code{STRUCTURES=all}
+\item{structures}{\code{NULL} (chosen as above), \code{"reported"} (\code{tuned_as} alone),
+or a subset of the structures chosen as above; one outside them is refused.
+Each structure is a rule regenerated on every group, so
+\code{scripts/0330-compare.R} passes \code{"reported"} unless \code{STRUCTURES=all}
 (#112).}
 
 \item{tuned_as}{\code{character(1)} the structure reported as \code{tuned}.}

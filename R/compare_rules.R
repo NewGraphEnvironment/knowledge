@@ -64,9 +64,10 @@
 #'   tables, for the FDIS detection check (`NULL` to skip).
 #' @param scratch `character(1)` the scratch schema (dropped at the end).
 #' @param n_boot,seed_boot the bcfishobs lift's bootstrap.
-#' @param structures `NULL` (chosen as above) or a subset of `c("free", "door",
-#'   "door_wetland")`. Each structure is a rule regenerated on every group, so
-#'   `scripts/0330-compare.R` passes `tuned_as` alone unless `STRUCTURES=all`
+#' @param structures `NULL` (chosen as above), `"reported"` (`tuned_as` alone),
+#'   or a subset of the structures chosen as above; one outside them is refused.
+#'   Each structure is a rule regenerated on every group, so
+#'   `scripts/0330-compare.R` passes `"reported"` unless `STRUCTURES=all`
 #'   (#112).
 #' @param tuned_as `character(1)` the structure reported as `tuned`.
 #' @param config_sha `character(1)` the link commit `link_dir` was read at,
@@ -144,7 +145,7 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
   edge_stream <- br$edge_stream
   flag <- if (stage == "rear") "rearing" else "spawning"
   other <- if (stage == "rear") "spawn" else "rear"
-  structures <- .knw_compare_structures(br, tuned, structures)
+  structures <- .knw_compare_structures(br, tuned, structures, tuned_as)
   if (!tuned_as %in% structures) stop("tuned_as must be one of the structures run: ", paste(structures, collapse = ", "), call. = FALSE)
 
   # the near-river pairs default's rules resolve to under each model (fresh's own resolver, so the walk is the
@@ -707,12 +708,19 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
     setequal(as.integer(r[["edge_types_explicit"]]), c(1050L, 1150L))
 }
 
-# which structures a species x rule is compared under (see knw_compare_rules())
-.knw_compare_structures <- function(br, tuned, structures = NULL) {
+# which structures a species x rule is compared under (see knw_compare_rules()): its own set, `tuned_as` alone
+# ("reported", #112), or a subset of its own set; a structure the species x rule is not compared under is refused
+.knw_compare_structures <- function(br, tuned, structures = NULL, tuned_as = "door") {
   all <- c("free", "door", "door_wetland")
   pick <- if (!br$wetland_line) "door" else if (is.na(tuned$exc_q)) c("free", "door") else all
   if (is.null(structures)) return(pick)
+  if (identical(structures, "reported")) structures <- tuned_as
   chk::chk_subset(structures, all)
+  out <- setdiff(structures, pick)
+  if (length(out)) {
+    stop("not a structure this species x rule is compared under (", paste(pick, collapse = ", "), "): ",
+         paste(out, collapse = ", "), call. = FALSE)
+  }
   structures
 }
 
