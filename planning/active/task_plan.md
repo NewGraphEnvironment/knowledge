@@ -42,10 +42,10 @@ database's host.
 
 ## Phase 1: Measure
 
-- [ ] `.knw_compare_bin()` returns seconds per rule (table, overlay, connectivity and flag read, summed by rule name)
+- [x] `.knw_compare_bin()` returns seconds per rule (table, overlay, connectivity and flag read, summed by rule name)
       and the per-group shared setup (copy, indexes), alongside `walk_s`. `knw_compare_rules()` sums them over workers
       and logs one line, so every run's log shows each rule's share.
-- [ ] `data-raw/compare_structures_check.R` (pattern: `data-raw/compare_parallel_check.R`, reusing its sort-and-compare
+- [x] `data-raw/compare_structures_check.R` (pattern: `data-raw/compare_parallel_check.R`, reusing its sort-and-compare
       with a relative 1e-9 on numerics). On `SCHEMA=fresh_default_20261017` and `CONFIG_SHA=102762da` (#92's tracked
       tables) it:
       - runs WCT_rear on every group under every structure and under the reported one alone;

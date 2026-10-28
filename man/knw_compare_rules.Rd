@@ -54,7 +54,9 @@ tables, for the FDIS detection check (\code{NULL} to skip).}
 
 \item{n_boot, seed_boot}{the bcfishobs lift's bootstrap.}
 
-\item{structures}{\code{NULL} (chosen as above) or a subset of \code{c("free", "door", "door_wetland")}.}
+\item{structures}{\code{NULL} (chosen as above) or a subset of \code{c("free", "door", "door_wetland")}. Each structure is a rule regenerated on every group, so
+\code{scripts/0330-compare.R} passes \code{tuned_as} alone unless \code{STRUCTURES=all}
+(#112).}
 
 \item{tuned_as}{\code{character(1)} the structure reported as \code{tuned}.}
 
@@ -78,8 +80,10 @@ and lost by structure, reason and stream order), \code{checks} (FDIS detection o
 each rule's segments and the bcfishobs lift, per structure), \code{segments} (the
 per-segment flags under \code{default} and each structure, with \code{tuned} the
 \code{tuned_as} structure, and the \code{default} branch each segment lies on), \code{log}
-lines, one of them per stage with its minutes, and \code{timing}, the minutes of
-each stage by name (#110).
+lines, one of them per stage with its minutes, \code{timing}, the minutes of
+each stage by name (#110), and \code{worker_minutes}, the minutes summed over
+workers spent copying and indexing the groups (\code{setup}), walking to rivers
+(\code{walk}) and on each rule by name (#112).
 }
 \description{
 \code{scripts/0298}'s comparison for any species and stage. Each rule goes through
