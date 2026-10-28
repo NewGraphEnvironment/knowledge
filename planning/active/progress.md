@@ -61,3 +61,6 @@
   research rewrite and the bundles still to come get their own round before the PR.
 - 0325's comparison-rule check (e988eb6) refuses #73's stale comparisons for BT_spawn, CO_rear and ST_rear, whose new
   picks carry a near-river pair, so 0325 runs after 0330 as corrected.
+
+- 0330 ran from this machine against `fresh_default_20261017` (`WORKERS=6`, GPKG on), 2026-10-28T00:25:52Z to 08:12:16Z, exit 0: 466.1 min, of which the comparison 269.1 min (8 keys) and the GeoPackages 196.9 min, against 14.0 min for them on the database's host (2026-10-26). Log `scripts/logs/habitat/20261027_compare.txt`. No other database holds the build (the local service has only `fresh_default` and another flow load). Task added to #81: GeoPackages opt-in (Al, 2026-10-27).
+- 0325 ran from the per-key comparison tables once every key had compared (exit 0): 46 threshold rows, 8 keys fitted; CO and WCT grades withheld; nothing uploaded.

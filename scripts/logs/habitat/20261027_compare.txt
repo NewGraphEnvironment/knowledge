@@ -1,0 +1,73 @@
+Comparison, knowledge#57: 8 fitted species x stage; link run 20261017_004619-3f4c713b at a17e91773b283b021811f8b5b76b887d5f4c16e4.
+link configs/default at 102762da54d15ef70c0dadef9b1a3e33a256cd7b (the baseline; the schema fresh_default_20261017's run is at a17e91773b283b021811f8b5b76b887d5f4c16e4) read from ../link; fresh 0.43.0; tuned reported as door.
+Floodplain catalog: 0 whole-network groups ().
+build: schema fresh_default_20261017, run 20261017_004619-3f4c713b; flows wet_db_load(): discharge/fwa/v1/segment_monthly, scenario historical last loaded from https://fresh-bc.s3.us-west-2.amazonaws.com/discharge/fwa/v1/manifest.json (built 2026-10-19T06:08:31Z, wet 94deeb5); walk c3f7bdbecff1d55107f28afa59d7f532; fresh 0.43.0
+RB_rear: compared in 38.3 min.
+BT_rear: compared in 56.4 min.
+BT_spawn: compared in 36.3 min.
+CH_rear: compared in 44.1 min.
+CO_rear: compared in 36.2 min.
+GR_rear: compared in 22.0 min.
+ST_rear: compared in 28.6 min.
+WCT_rear: compared in 7.2 min.
+GeoPackages for 8 keys in 196.9 min on 6 workers.
+Compared 8 species x stage in 466.1 min, each on 6 workers.
+RB_rear: 210 groups, 38.3 min; default 219156 km (width>=1.5|g<=0.0849|none).
+  free: tuned 194307 km (-11.3 %); graded km 108312 -> 101209; lost 45037, gained 20189 (0 by the exception, 0 of it through a river in another group).
+  door (= tuned): tuned 180951 km (-17.4 %); graded km 108312 -> 99609; lost 49797, gained 11593 (0 by the exception, 0 of it through a river in another group).
+   RB rear: 210 groups; link configs at 102762da54d15ef70c0dadef9b1a3e33a256cd7b; default width>=1.5|g<=0.0849|none; tuned width>=3|g<=0.3|none under free, door (reported as tuned: door).
+   Classify, overlay and connect: 210 groups x 3 rules on 6 workers, 16.4 min (near-river walks 0.0 min summed over workers).
+   Outside check: 97087 non-FDIS RB records; 11098 locations placed (0 inside an overlay reach left out), 4823 on accessible stream edges.
+   GeoPackage data/compare/gpkg/RB_rear.gpkg: 10331001 segments in 196.9 min.
+BT_rear: 158 groups, 56.4 min; default 244328 km (width>=1.5|g<=0.1049|none).
+  free: tuned 198792 km (-18.6 %); graded km 118421 -> 111755; lost 62558, gained 17023 (0 by the exception, 0 of it through a river in another group).
+  door (= tuned): tuned 186367 km (-23.7 %); graded km 118421 -> 109826; lost 69699, gained 11737 (0 by the exception, 0 of it through a river in another group).
+   BT rear: 158 groups; link configs at 102762da54d15ef70c0dadef9b1a3e33a256cd7b; default width>=1.5|g<=0.1049|none; tuned mad>=0.1|g<=0.3|none under free, door (reported as tuned: door).
+   Classify, overlay and connect: 158 groups x 3 rules on 6 workers, 36.9 min (near-river walks 0.0 min summed over workers).
+   Outside check: 3194 non-FDIS BT records; 2630 locations placed (0 inside an overlay reach left out), 1516 on accessible stream edges.
+   GeoPackage data/compare/gpkg/BT_rear.gpkg: 8406979 segments in 185.3 min.
+BT_spawn: 158 groups, 36.3 min; default 133382 km (width>=2|g<=0.0549|none).
+  door (= tuned): tuned 199364 km (+49.5 %); graded km 76138 -> 103802; lost 0, gained 65982 (29973 by the exception, 41 of it through a river in another group).
+   BT spawn: 158 groups; link configs at 102762da54d15ef70c0dadef9b1a3e33a256cd7b; default width>=2|g<=0.0549|none; tuned width>=2|g<=0.13|Q1@D500 under door (reported as tuned: door).
+   Classify, overlay and connect: 158 groups x 2 rules on 6 workers, 23.9 min (near-river walks 0.0 min summed over workers).
+   Outside check: 3194 non-FDIS BT records; 2630 locations placed (0 inside an overlay reach left out), 1516 on accessible stream edges.
+   GeoPackage data/compare/gpkg/BT_spawn.gpkg: 8406979 segments in 187.8 min.
+CH_rear: 125 groups, 44.1 min; default 99186 km (width>=1.5|g<=0.0549|cw channel_width>=15@D1000; mad discharge>=3@D1000 on wetland_flow).
+  free: tuned 91201 km (-8.1 %); graded km 50081 -> 55929; lost 24818, gained 16832 (12131 by the exception, 4 of it through a river in another group).
+  door (= tuned): tuned 83435 km (-15.9 %); graded km 50081 -> 55654; lost 30477, gained 14726 (12221 by the exception, 4 of it through a river in another group).
+  door_wetland: tuned 66698 km (-32.8 %); graded km 50081 -> 46655; lost 35067, gained 2579 (81 by the exception, 0 of it through a river in another group).
+   CH rear: 125 groups; link configs at 102762da54d15ef70c0dadef9b1a3e33a256cd7b; default width>=1.5|g<=0.0549|cw channel_width>=15@D1000; mad discharge>=3@D1000 on wetland_flow; tuned mad>=0.75|g<=0.11|Q3@D1000 under free, door, door_wetland (reported as tuned: door).
+   Classify, overlay and connect: 125 groups x 4 rules on 6 workers, 31.7 min (near-river walks 57.0 min summed over workers).
+   Outside check: 4290 non-FDIS CH records; 2409 locations placed (4 inside an overlay reach left out), 826 on accessible stream edges.
+   Through-wetland CH km (edge 1050/1150), link#364's five groups | all groups: rearing_default 212.7 | 8422.2; rearing_pre_default 248.6 | 9999.0; rearing_free 234.8 | 10242.8; rearing_pre_free 322.3 | 13669.1; rearing_door 61.7 | 2479.2; rearing_pre_door 63.0 | 2587.3; rearing_door_wetland 58.9 | 2328.3; rearing_pre_door_wetland 63.0 | 2587.3.
+   GeoPackage data/compare/gpkg/CH_rear.gpkg: 5757827 segments in 144.2 min.
+CO_rear: 100 groups, 36.2 min; default 79829 km (width>=1.5|g<=0.0549|none).
+  free: tuned 80949 km (+1.4 %); graded km NA -> NA; lost 7643, gained 8763 (5248 by the exception, 9 of it through a river in another group).
+  door (= tuned): tuned 77964 km (-2.3 %); graded km NA -> NA; lost 9205, gained 7341 (5184 by the exception, 9 of it through a river in another group).
+  door_wetland: tuned 71101 km (-10.9 %); graded km NA -> NA; lost 11171, gained 2443 (289 by the exception, 0 of it through a river in another group).
+   CO rear: 100 groups; link configs at 102762da54d15ef70c0dadef9b1a3e33a256cd7b; default width>=1.5|g<=0.0549|none; tuned mad>=0.1|g<=0.0549|Q3@D2000 under free, door, door_wetland (reported as tuned: door).
+   Classify, overlay and connect: 100 groups x 4 rules on 6 workers, 22.4 min (near-river walks 0.0 min summed over workers).
+   Outside check: 10732 non-FDIS CO records; 6171 locations placed (2 inside an overlay reach left out), 3446 on accessible stream edges.
+   GeoPackage data/compare/gpkg/CO_rear.gpkg: 4919304 segments in 119.0 min.
+GR_rear: 82 groups, 22.0 min; default 77740 km (width>=1.5|g<=0.0349|none).
+  door (= tuned): tuned 80352 km (+3.4 %); graded km 44868 -> 47766; lost 4610, gained 7223 (0 by the exception, 0 of it through a river in another group).
+   GR rear: 82 groups; link configs at 102762da54d15ef70c0dadef9b1a3e33a256cd7b; default width>=1.5|g<=0.0349|none; tuned width>=2|g<=0.0549|none under door (reported as tuned: door).
+   Classify, overlay and connect: 82 groups x 2 rules on 6 workers, 10.1 min (near-river walks 0.0 min summed over workers).
+   Outside check: 1325 non-FDIS GR records; 961 locations placed (0 inside an overlay reach left out), 310 on accessible stream edges.
+   GeoPackage data/compare/gpkg/GR_rear.gpkg: 4214528 segments in 106.2 min.
+ST_rear: 79 groups, 28.6 min; default 70980 km (width>=1.5|g<=0.0849|none).
+  free: tuned 55156 km (-22.3 %); graded km 35925 -> 35094; lost 22100, gained 6276 (5020 by the exception, 1 of it through a river in another group).
+  door (= tuned): tuned 51803 km (-27.0 %); graded km 35925 -> 34619; lost 24556, gained 5379 (5037 by the exception, 1 of it through a river in another group).
+  door_wetland: tuned 41954 km (-40.9 %); graded km 35925 -> 29987; lost 29464, gained 438 (99 by the exception, 0 of it through a river in another group).
+   ST rear: 79 groups; link configs at 102762da54d15ef70c0dadef9b1a3e33a256cd7b; default width>=1.5|g<=0.0849|none; tuned mad>=1|g<=0.0849|Q1@D250 under free, door, door_wetland (reported as tuned: door).
+   Classify, overlay and connect: 79 groups x 4 rules on 6 workers, 18.4 min (near-river walks 0.0 min summed over workers).
+   Outside check: 13798 non-FDIS ST records; 2403 locations placed (0 inside an overlay reach left out), 1066 on accessible stream edges.
+   GeoPackage data/compare/gpkg/ST_rear.gpkg: 4142681 segments in 76.6 min.
+WCT_rear: 16 groups, 7.2 min; default 20632 km (width>=1.5|g<=0.0849|none).
+  free: tuned 24498 km (+18.7 %); graded km NA -> NA; lost 867, gained 4734 (0 by the exception, 0 of it through a river in another group).
+  door (= tuned): tuned 24355 km (+18.0 %); graded km NA -> NA; lost 913, gained 4636 (0 by the exception, 0 of it through a river in another group).
+   WCT rear: 16 groups; link configs at 102762da54d15ef70c0dadef9b1a3e33a256cd7b; default width>=1.5|g<=0.0849|none; tuned mad>=0.03|g<=0.25|none under free, door (reported as tuned: door).
+   Classify, overlay and connect: 16 groups x 3 rules on 6 workers, 4.5 min (near-river walks 0.0 min summed over workers).
+   Outside check: 4298 non-FDIS WCT records; 1912 locations placed (17 inside an overlay reach left out), 1408 on accessible stream edges.
+   GeoPackage data/compare/gpkg/WCT_rear.gpkg: 1190110 segments in 31.0 min.
+Done in 466.1 min.

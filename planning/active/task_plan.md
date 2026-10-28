@@ -110,7 +110,7 @@ reads link's segment `gradient`, so the curve is fitted on one gradient and grad
 - [x] `0320` full run: smoke gates for every key first. The chain stops on any failure, and nothing downstream runs
       until every key passes (#84).
 - [x] `GRADIENT=fwa_gradient 0320`: the Atlas sensitivity on every key.
-- [ ] `0330` compare, then `0325` publish: `0325` reads each comparison's near-river scope (corrected from the
+- [x] `0330` compare, then `0325` publish: `0325` reads each comparison's near-river scope (corrected from the
       approved order, which had them the other way round). `0330` is database-bound: run it here if the timing allows,
       otherwise hand over the command for the database's host. `knw_thresholds_table()` now refuses a comparison
       whose `tuned_rule` is not the pick, so a comparison left from #73's run can no longer supply the scope.
