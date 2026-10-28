@@ -58,3 +58,12 @@ Related: #73 (the structures), #101, #81.
 Per rule 6–19 worker min; groups' copies and indexes 1.0–1.5; CH walks ~20. Estimate on #92's 164 classify minutes:
 about 40 saved. The host's ignored inputs are 2026-10-25's build (visits d3a434e2/bc71243b), so #92's WCT inputs were
 staged outside its repo (`~/knw112/`) and the check ran from a worktree of the branch; CH/BT used the host's own.
+
+## Collision with #101, and a contended measurement
+
+- A parallel session started #101 (cache `default`'s flags) on the database host at 21:50 UTC; its branch instruments
+  the same lines of `.knw_compare_bin()`. Al ruled "#112 first, #101 reads it", and #101 is parked until this merges.
+- Its notes record a link pretest from a third session on the same database from ~21:34 to 22:18 UTC. This branch's
+  first host run (21:58–22:55) overlapped it for both WCT runs and the first ~7 min of CH's every-structure run; BT
+  rearing (both runs after 22:18) is clean. The identity results stand (contention changes minutes, not rows). CH and
+  WCT were rerun on an idle database (checked `pg_stat_activity` at 22:57) for the minutes.
