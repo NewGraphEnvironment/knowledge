@@ -46,3 +46,15 @@ Related: #73 (the structures), #101, #81.
 
 | Error | Resolution |
 |-------|------------|
+
+## Measurement (2026-10-28, database host, 1.4 ms round trip)
+
+| key (groups) | every structure | door alone | dropped share of worker min |
+|---|---|---|---|
+| WCT rearing (16) | 5.2 min | 4.2 | 35 % (7.8 of 22.2) |
+| CH rearing (20 largest) | 17.8 | 13.7 | 31 % (18.5 of 60.6) |
+| BT rearing (20 largest) | 9.9 | 7.0 | 29 % (13.2 of 44.9) |
+
+Per rule 6–19 worker min; groups' copies and indexes 1.0–1.5; CH walks ~20. Estimate on #92's 164 classify minutes:
+about 40 saved. The host's ignored inputs are 2026-10-25's build (visits d3a434e2/bc71243b), so #92's WCT inputs were
+staged outside its repo (`~/knw112/`) and the check ran from a worktree of the branch; CH/BT used the host's own.

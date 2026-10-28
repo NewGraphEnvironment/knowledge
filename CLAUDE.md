@@ -421,7 +421,9 @@ worker on the host and 12 to 18 ms from the remote link, against 116 ms one quer
 took 53.4 min on the host, and one key regraded with its walks cached 4.1 min. `0330` regenerates link's flags group by
 group on 6 connections, one key at a time (BT rearing 33.4 min, every key 162.9 min with `GPKG=FALSE`; from the remote link #92's took 269 min to compare and 197 more to
 write the GeoPackages, which take 14 min on the host, so a run off the host passes `GPKG=FALSE`, #81): it is bound by
-the database's cores, so run it on the host. `0310`, a grading `0320` and every `STAGE` of `0330` check this at
+the database's cores, so run it on the host. Those minutes are every structure's; since #112 `0330` regenerates
+`default` and `door` alone unless `STRUCTURES=all`, which took 19 to 29 % less on three keys, so the research files'
+`free` and `door_wetland` figures (#92's) are refreshed only on that setting. `0310`, a grading `0320` and every `STAGE` of `0330` check this at
 connect with `knw_db_latency_check()`: over a 20 ms round trip they stop with the round trip and what the remote link
 cost #92's comparison, unless `REMOTE=TRUE`, and every run logs the round trip and whether `REMOTE` overrode it (#110). A refused run writes its ledger or log under a `_refused` name (`<date>_evidence_build_refused.csv`, and `_tune_refused-<run>` and `_compare_refused-<run>` logs in the run's directory), outside the patterns later steps read (the newest `*_evidence_build_ledger.csv`, the `_tune_run*.txt` that `0335` promotes and `0325` lists), so a run that stopped never becomes the one they read: any new refusal does the same.
 `0330` also logs each key's minutes by stage, so a remote run shows which stage the link slows. A second machine helps a database-bound step only with a database of its

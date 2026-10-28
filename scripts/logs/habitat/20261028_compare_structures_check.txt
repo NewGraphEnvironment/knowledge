@@ -1,0 +1,15 @@
+compare_structures_check on fresh_default_20261017; link configs at 102762da; 6 workers; reported structure door; knowledge 731b21f; database round trip 1.4 ms (median of 20 SELECT 1; limit 20 ms)
+inputs: /Users/airvine/knw112/tune, /Users/airvine/knw112/compare, /Users/airvine/knw112/derived (visits md5 1bd35829 009698d7); flow load wet_db_load(): discharge/fwa/v1/segment_monthly, scenario historical last loaded from https://fresh-bc.s3.us-west-2.amazonaws.com/discharge/fwa/v1/manifest.json (built 2026-10-19T06:08:31Z, wet 94deeb5)
+WCT_rear: 16 groups (KOTL KETL LARL CLRH ELKR KOTR SMAR KHOR UARL COLR REVL DUNC SLOC USHU SHUL BULL).
+  every structure (free, door): 5.2 min; classify, overlay and connect 4.1 min; summed over workers: copies and indexes 1.2, walks 0.0, default 7.3, free 7.8, door 6.0.
+  reported only (door): 4.2 min; classify, overlay and connect 3.4 min; summed over workers: copies and indexes 1.0, walks 0.0, default 8.9, door 7.7.
+  WCT_rear: the dropped rules (free) took 7.8 of 22.2 worker minutes (35 %) in the every-structure run; wall time 5.2 min then 4.2 (second, warm).
+  WCT_rear reported vs every structure: compare: 17 rows x 35 columns match; largest relative numeric difference 1.63657e-14.
+  WCT_rear reported vs every structure: change: 30 rows x 9 columns match; largest relative numeric difference 7.04984e-16.
+  WCT_rear reported vs every structure: checks: 7 rows x 12 columns match; largest relative numeric difference 1.35501e-15.
+  WCT_rear reported vs every structure: segments: 1190110 rows x 30 columns match; largest relative numeric difference 0.
+  WCT_rear against the tracked tables (a report): flow load the grades'; evidence the grades'; schema build: schema fresh_default_20261017, run 20261017_004619-3f4c713b; flows wet_db_load(): discharge/fwa/v1/segment_monthly, scenario historical last loaded from https://fresh-bc.s3.us-west-2.amazonaws.com/discharge/fwa/v1/manifest.json (built 2026-10-19T06:08:31Z, wet 94deeb5); walk c3f7bdbecff1d55107f28afa59d7f532; fresh 0.44.0; fresh 0.44.0 (#92's comparison ran 0.43.0).
+  WCT_rear every structure vs tracked: compare: 34 rows x 35 columns match; largest relative numeric difference 1.68234e-14.
+  WCT_rear every structure vs tracked: change: 61 rows x 9 columns match; largest relative numeric difference 7.04984e-16.
+  WCT_rear every structure vs tracked: checks: 11 rows x 12 columns match; largest relative numeric difference 2.64451e-15.
+  WCT_rear every structure vs tracked: segments: 1190110 rows x 32 columns match; largest relative numeric difference 0.

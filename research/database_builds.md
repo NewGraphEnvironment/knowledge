@@ -1,9 +1,10 @@
 # Database builds: what a retune reads, where it can run, and what a second database needs
 
-**Verified:** 2026-10-27, and the round-trip check 2026-10-28 · **Issues:** #87 (from #73's run times; #85 and #86
-folded in or left open below), #110 (the round-trip check) ·
+**Verified:** 2026-10-27, and the round-trip check and the structures a comparison runs 2026-10-28 · **Issues:** #87
+(from #73's run times; #85 and #86 folded in or left open below), #110 (the round-trip check), #112 (the structures) ·
 **Produced by:** `data-raw/walk_batch_check.R` (logs `scripts/logs/habitat/20261026_walk_batch_check*`),
-`data-raw/compare_parallel_check.R` (`20261026_compare_parallel_check*`), the timed retune on the database's host
+`data-raw/compare_parallel_check.R` (`20261026_compare_parallel_check*`), `data-raw/compare_structures_check.R`
+(`20261028_compare_structures_check*`), the timed retune on the database's host
 (`20261026_tune_run.txt`, `20261026_tune_run-warm.txt`, `20261026_compare.txt`, `20261026_compare-gpkg.txt`;
 #73's `20261024_*` and `20261025_*` for the before), and the table sizes read from the host's catalog on 2026-10-26.
 
@@ -89,7 +90,29 @@ overstate the change. On the two keys checked against the one-connection code (W
 rearing's 20 largest), every segment's flags were identical and the km sums agreed within 1.04e-13 relative; the
 full run's tables matched the tracked ones within 2.6e-13. The whole recompare did not get faster, because the
 database's cores were the bound both ways: classify, overlay and connect is 115 of its 163 min. Regenerating
-`default`'s flags, unchanged on every rerun, is the next cut (a follow-up issue), not yet measured.
+`default`'s flags, unchanged on every rerun, is the next cut (#101), not yet measured.
+
+## Comparing only the structure that is published
+
+**The principle.** Each through-wetland structure (`free`, `door`, `door_wetland`, #73) is one more rule: link's three
+stages are run again on every group the key covers, while the group's copy and indexes, and chinook's walks to a river,
+are shared by every rule. Only `door` is published, so since #112 `0330` regenerates `default` and `door` alone, and
+`STRUCTURES=all` brings back the others. Dropping a rule saves its own stages and nothing else.
+
+| key (groups) | structures | every structure | `door` alone | dropped rules' share of worker minutes |
+|---|---|---|---|---|
+| WCT rearing (all 16) | `free`, `door` | 5.2 min | 4.2 min | 35 % (7.8 of 22.2) |
+| CH rearing (20 largest) | `free`, `door`, `door_wetland` | 17.8 | 13.7 | 31 % (18.5 of 60.6) |
+| BT rearing (20 largest) | `free`, `door` | 9.9 | 7.0 | 29 % (13.2 of 44.9) |
+
+Each rule cost 6 to 19 worker minutes, against 1.0 to 1.5 for all the groups' copies and indexes, and CH's walks
+about 20. The `door` alone run went second, on a cache the first had warmed, so its wall times flatter it a little;
+the worker-minute shares come from the every-structure run alone. Applied to #92's minutes for classify, overlay and connect (from the remote link),
+key by key (CO and ST drop two rules like CH, RB one like BT rearing, and BT spawning and GR have only `door`), they
+come to about 40 of its 164, a quarter. On every key the `door` alone tables equalled the every-structure run's `default` and `door` rows
+(largest relative difference 3.9e-14, segments' flags identical). WCT rearing's every-structure run also equalled
+#92's tracked tables row for row (1.7e-14), on fresh 0.44.0 where #92 ran 0.43.0. CH and BT rearing ran on the
+host's own older grade and evidence tables (2026-10-25), which time the rules as well as #92's would.
 
 ## What a run reads from the database
 

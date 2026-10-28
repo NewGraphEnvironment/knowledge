@@ -55,10 +55,10 @@ database's host.
       - refuses unless WCT's every-structure run equals the tracked `data/compare/WCT_rear_*` tables row for row;
       - logs per-stage and per-rule minutes both ways.
       It calls `knw_db_latency_check()` at connect, and its log goes to `scripts/logs/habitat/<date>_compare_structures_check.txt`.
-- [ ] Run it on the database's host: over ssh if the host is reachable from here; otherwise hand Al the bare command.
+- [x] Run it on the database's host: over ssh if the host is reachable from here; otherwise hand Al the bare command.
       If the flow load named in the table comment differs from the tracked tables' `discharge_load`, the tracked
       identity is reported as not comparable, not as a failure. The reported-vs-all identity still decides.
-- [ ] Record the minutes in `research/database_builds.md`: per rule, the saving per key, and the estimate for all keys.
+- [x] Record the minutes in `research/database_builds.md`: per rule, the saving per key, and the estimate for all keys.
       **Gate:** if the reported-only run saves under 10 % of CH's and BT rearing's comparison minutes, stop here and
       report: the default stays every structure.
 
@@ -82,12 +82,12 @@ database's host.
 - [x] `research/habitat_thresholds_tuned.md`: one sentence where the structures are introduced: #92's run carried
       every structure, and a default `0330` since #112 compares `default` and the reported one (`STRUCTURES=all` for
       the rest).
-- [ ] `CLAUDE.md`: the `0330` timing sentence names that its minutes are every structure's, and adds the measured
+- [x] `CLAUDE.md`: the `0330` timing sentence names that its minutes are every structure's, and adds the measured
       two-rule figure.
 
 ## Validation
 
-- [ ] Tests pass (`devtools::test()`), `lintr::lint_package()` clean
+- [x] Tests pass (`devtools::test()`), `lintr::lint_package()` clean
 - [x] The chinook article renders with the current bundle after installing the branch (`pak::local_install()`,
       then `rmarkdown::render()`), and `test-vignette-data.R` passes unchanged
 - [ ] `/code-check` clean (once over the branch with `/code-check branch`)
