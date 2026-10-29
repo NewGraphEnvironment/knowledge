@@ -20,7 +20,8 @@ knw_compare_rules(
   seed_boot = 542L,
   structures = NULL,
   tuned_as = "door",
-  config_sha = NA_character_
+  config_sha = NA_character_,
+  workers = 1L
 )
 }
 \arguments{
@@ -53,12 +54,25 @@ tables, for the FDIS detection check (\code{NULL} to skip).}
 
 \item{n_boot, seed_boot}{the bcfishobs lift's bootstrap.}
 
-\item{structures}{\code{NULL} (chosen as above) or a subset of \code{c("free", "door", "door_wetland")}.}
+\item{structures}{\code{NULL} (chosen as above), \code{"reported"} (\code{tuned_as} alone),
+or a subset of the structures chosen as above; one outside them is refused.
+Each structure is a rule regenerated on every group, so
+\code{scripts/0330-compare.R} passes \code{"reported"} unless \code{STRUCTURES=all}
+(#112).}
 
 \item{tuned_as}{\code{character(1)} the structure reported as \code{tuned}.}
 
 \item{config_sha}{\code{character(1)} the link commit \code{link_dir} was read at,
 carried on every output row (\code{NA} when unknown).}
+
+\item{workers}{\code{integer(1)} socket workers for the groups (#87). The groups
+are split into \code{workers} bins balanced by segment count, largest first;
+each bin runs on its own connection in its own scratch schema
+(\verb{<scratch>_w<i>}, dropped when it ends), reading the grades and the
+user-habitat rows this call writes once to \code{scratch}. A group's error
+stops its bin and is raised naming the group. \code{1} runs the one bin in this
+process. \code{connector} and its environment travel to every worker, so build
+it where it holds nothing large.}
 }
 \value{
 A list of \code{tibble}s: \code{compare} (per structure, group and total: km by
@@ -67,8 +81,15 @@ exception whose river lies in another watershed group), \code{change} (km gained
 and lost by structure, reason and stream order), \code{checks} (FDIS detection on
 each rule's segments and the bcfishobs lift, per structure), \code{segments} (the
 per-segment flags under \code{default} and each structure, with \code{tuned} the
-\code{tuned_as} structure, and the \code{default} branch each segment lies on), and
-\code{log} lines.
+\code{tuned_as} structure, and the \code{default} branch each segment lies on), \code{log}
+lines, one of them per stage with its minutes, \code{timing}, the minutes of
+each stage by name (#110), \code{worker_minutes}, the minutes summed over
+workers spent copying and indexing the groups (\code{setup}), walking to rivers
+(\code{walk}) and on each rule by name (#112), and \code{bin_minutes}, each worker's
+timed minutes with and without \code{default}'s own and, where no other
+predicate reads the near-river table (\code{walk_dropped}), without the walk:
+the slowest worker's minutes less the slowest without them is the projected
+saving of reading \code{default}'s flags rather than making them (#101).
 }
 \description{
 \code{scripts/0298}'s comparison for any species and stage. Each rule goes through

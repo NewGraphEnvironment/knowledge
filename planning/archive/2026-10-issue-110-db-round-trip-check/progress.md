@@ -1,0 +1,38 @@
+# Progress — Check the database's round trip before a database-bound run, and time 0330 by stage (#110)
+
+## Session 2026-10-28
+
+- Plan-mode exploration — phases approved by user (parked)
+- Created branch `110-check-the-database-s-round-trip-before-a` off main
+- Scaffolded PWF baseline from issue #110 with approved phases
+- Next: parked 2026-10-28; resume with the command below, then "start Phase 1"
+
+### Resume
+
+```bash
+cd /Users/airvine/Projects/repo/knowledge && git fetch -q origin && git checkout 110-check-the-database-s-round-trip-before-a && git pull --ff-only && git merge origin/main
+```
+
+## Session 2026-10-28 (resumed)
+
+- Phase 1: `knw_db_latency()` and `knw_db_latency_check()` with tests; restore-the-bug (`limit_ms = Inf`) turns the
+  stop expectation red. Live from this machine: 1.4 ms (median of 5), on a localhost connection, so the plan's
+  "from the remote link it stops" live check cannot be run here; the mocked test is its evidence.
+- Phase 2: the check wired into 0310, 0320 (grading runs only) and 0330 (every STAGE); a refused 0310 writes
+  `<date>_evidence_build_refused.csv` (findings, "Review finding 1 corrected").
+- Phase 3: `.knw_timer()`; `knw_compare_rules()` logs scratch setup, classify/overlay/connect (its existing line),
+  segment read, summaries, outside check and scratch drop, and returns `timing`; 0330's `run_one()` adds the grade
+  table read (first) and the writes (last), so a key's stage lines account for its "compared in" minutes. A mutated
+  timer (no advance of `last`) turns the sum-to-total expectation red.
+- `/code-check branch` round 1: one finding (fragile): a refused 0320 or 0330 wrote its header lines over that day's
+  tracked run log. Fixed: refused runs log to `<date>_tune_refused.txt` and `<date>_compare_refused.txt`, outside
+  the `_tune_run.*\.txt$` pattern 0325 and `data-raw/vignette_chinook.R` read.
+- Round 2: clean. Round 3: one finding (fragile, in original code, not inside a fix): the latency test could not tell a
+  median from a sum, max or a single query. Pinned with per-call sleeps (0.2, 0, 0 s) and a call count; `sum`, `max`,
+  `mean` and `seq_len(1)` mutations each fail it in a `git archive` copy, the real code passes. `.knw_timer()`'s
+  `total()` comment corrected.
+- Round 4: one finding inside round 3's fix: its two fast queries were equal, so `min()` and a warm-up drop still
+  passed. `Sys.sleep()` overshoots 100 ms or more here, so `knw_db_latency()` now reads an internal `.knw_now()` the
+  tests mock as a fake clock (100 / 5 / 10 ms). sum, mean, max, min, first, median-without-first, `/ 1000` and
+  `seq_len(1)` mutations each fail; the real code passes. The loop ends on the enumeration in `review-enumeration.md`
+  (12 candidates, none above its source).

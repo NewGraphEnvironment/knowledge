@@ -64,19 +64,37 @@
 #'   tables, for the FDIS detection check (`NULL` to skip).
 #' @param scratch `character(1)` the scratch schema (dropped at the end).
 #' @param n_boot,seed_boot the bcfishobs lift's bootstrap.
-#' @param structures `NULL` (chosen as above) or a subset of `c("free", "door",
-#'   "door_wetland")`.
+#' @param structures `NULL` (chosen as above), `"reported"` (`tuned_as` alone),
+#'   or a subset of the structures chosen as above; one outside them is refused.
+#'   Each structure is a rule regenerated on every group, so
+#'   `scripts/0330-compare.R` passes `"reported"` unless `STRUCTURES=all`
+#'   (#112).
 #' @param tuned_as `character(1)` the structure reported as `tuned`.
 #' @param config_sha `character(1)` the link commit `link_dir` was read at,
 #'   carried on every output row (`NA` when unknown).
+#' @param workers `integer(1)` socket workers for the groups (#87). The groups
+#'   are split into `workers` bins balanced by segment count, largest first;
+#'   each bin runs on its own connection in its own scratch schema
+#'   (`<scratch>_w<i>`, dropped when it ends), reading the grades and the
+#'   user-habitat rows this call writes once to `scratch`. A group's error
+#'   stops its bin and is raised naming the group. `1` runs the one bin in this
+#'   process. `connector` and its environment travel to every worker, so build
+#'   it where it holds nothing large.
 #' @return A list of `tibble`s: `compare` (per structure, group and total: km by
 #'   rule, graded km, km by grade class, gained and lost, and the km gained by an
 #'   exception whose river lies in another watershed group), `change` (km gained
 #'   and lost by structure, reason and stream order), `checks` (FDIS detection on
 #'   each rule's segments and the bcfishobs lift, per structure), `segments` (the
 #'   per-segment flags under `default` and each structure, with `tuned` the
-#'   `tuned_as` structure, and the `default` branch each segment lies on), and
-#'   `log` lines.
+#'   `tuned_as` structure, and the `default` branch each segment lies on), `log`
+#'   lines, one of them per stage with its minutes, `timing`, the minutes of
+#'   each stage by name (#110), `worker_minutes`, the minutes summed over
+#'   workers spent copying and indexing the groups (`setup`), walking to rivers
+#'   (`walk`) and on each rule by name (#112), and `bin_minutes`, each worker's
+#'   timed minutes with and without `default`'s own and, where no other
+#'   predicate reads the near-river table (`walk_dropped`), without the walk:
+#'   the slowest worker's minutes less the slowest without them is the projected
+#'   saving of reading `default`'s flags rather than making them (#101).
 #' @export
 #' @examples
 #' \dontrun{
@@ -88,7 +106,7 @@
 knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, link_dir, grades,
                               visits = NULL, visit_species = NULL, scratch = "knw_compare_scratch",
                               n_boot = 200L, seed_boot = 542L, structures = NULL, tuned_as = "door",
-                              config_sha = NA_character_) {
+                              config_sha = NA_character_, workers = 1L) {
   chk::chk_function(connector)
   chk::chk_string(schema)
   chk::chk_string(species)
@@ -99,6 +117,8 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
   chk::chk_data(grades)
   chk::check_names(grades, c("id_segment", "watershed_group_code", "size", "dist_m", "grade", "grade_class"))
   chk::chk_string(tuned_as)
+  chk::chk_whole_number(workers)
+  chk::chk_gt(workers, 0)
   if (!requireNamespace("fresh", quietly = TRUE)) stop("fresh is needed", call. = FALSE)
   sp <- toupper(species)
   s <- tolower(species)
@@ -129,16 +149,14 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
   edge_stream <- br$edge_stream
   flag <- if (stage == "rear") "rearing" else "spawning"
   other <- if (stage == "rear") "spawn" else "rear"
-  structures <- .knw_compare_structures(br, tuned, structures)
+  structures <- .knw_compare_structures(br, tuned, structures, tuned_as)
   if (!tuned_as %in% structures) stop("tuned_as must be one of the structures run: ", paste(structures, collapse = ", "), call. = FALSE)
 
   # the near-river pairs default's rules resolve to under each model (fresh's own resolver, so the walk is the
   # one frs_habitat_classify() would make), and the pairs' table on the scratch copy
   specs_of <- utils::getFromNamespace(".frs_near_river_specs", "fresh")
-  near_tbl <- paste0(scratch, ".near_river")
   specs <- list(cw = specs_of(params, sp, "cw"), mad = specs_of(params, sp, "mad"))
-  pred_cache <- list()
-  pred_of <- function(ps, model) {
+  pred_of <- function(ps, model, near_tbl) {
     fresh::frs_habitat_predicates(list(species_code = sp, params_sp = ps, spawn_gradient_min = 0,
                                        spawn_gradient_max = ps$ranges$spawn$gradient[2]), model,
                                   near_river_table = if (nrow(specs[[model]])) near_tbl else NULL)
@@ -149,10 +167,9 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
   ps_t$ranges[[stage]]$gradient[2] <- tuned$grad_max
   if (tuned$size_var == "width") ps_t$ranges[[stage]]$channel_width <- c(tuned$size_min, 9999)
   ps_t$rules[[stage]] <- Filter(function(r) !.knw_is_wetland_line_rule(r), ps_t$rules[[stage]])
-  preds_for <- function(model) {
-    if (!is.null(pred_cache[[model]])) return(pred_cache[[model]])
-    p_default <- pred_of(params[[sp]], model)
-    p_tuned_base <- pred_of(ps_t, model)
+  preds_for <- function(model, near_tbl) {
+    p_default <- pred_of(params[[sp]], model, near_tbl)
+    p_tuned_base <- pred_of(ps_t, model, near_tbl)
     size_ok <- if (tuned$size_var == "width") {
       sprintf("coalesce(s.channel_width BETWEEN %s AND 9999, FALSE)", tuned$size_min)
     } else {
@@ -177,7 +194,6 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
                            .knw_stream_branch_sql(br, edge_stream), arms[[st]][["stream"]], arms[[st]][["wetland"]],
                            p_tuned_base[[stage]])
     }
-    pred_cache[[model]] <<- out
     out
   }
   wb_sql <- .knw_wb_sql(br)
@@ -186,13 +202,14 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
     isTRUE(all.equal(tuned$grad_max, rng$gradient[2])) && is.na(tuned$exc_q)
   default_rule <- .knw_default_rule_label(rng, specs, dims, sp, stage)
 
+  # one timing line per stage, after the local reads (#110): what a remote link costs each stage
+  tm <- .knw_timer()
   conn <- connector()
   on.exit(try(DBI::dbExecute(conn, sprintf("DROP SCHEMA IF EXISTS %s CASCADE", scratch)), silent = TRUE), add = TRUE)
   on.exit(try(DBI::dbDisconnect(conn), silent = TRUE), add = TRUE)
   DBI::dbExecute(conn, wb_sql)
   DBI::dbExecute(conn, sprintf("CREATE SCHEMA IF NOT EXISTS %s", scratch))
   DBI::dbWriteTable(conn, DBI::Id(schema = scratch, table = "uhc"), uhc, overwrite = TRUE)
-  run_conn <- utils::getFromNamespace(".frs_run_connectivity", "fresh")
   g_cols <- intersect(c("id_segment", "watershed_group_code", "size", "dist_m", "grade", "grade_class", "target_in_group"),
                       names(grades))
   g_sp <- grades[grades$watershed_group_code %in% groups, g_cols]
@@ -201,87 +218,69 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
   DBI::dbExecute(conn, sprintf("CREATE INDEX ON %s.grades (id_segment, watershed_group_code)", scratch))
   say("%s %s: %d groups; link configs at %s; default %s; tuned %s under %s (reported as tuned: %s).", sp, stage,
       length(groups), config_sha, default_rule, tuned$rule, paste(structures, collapse = ", "), tuned_as)
+  say("Scratch setup (waterbodies, user habitat, grades written): %.1f min.", tm$tick("scratch_setup"))
 
   rule_names <- c("default", structures)
-  flags <- list()
-  t0 <- Sys.time()
-  walk_s <- 0
-  for (w in groups) {
-    model <- model_of(w)
-    preds <- preds_for(model)
-    DBI::dbExecute(conn, sprintf("DROP TABLE IF EXISTS %s.streams", scratch))
-    # wet's pick joins as mad_m3s, the column link's prepare gives the working table and a discharge pair walks on
-    DBI::dbExecute(conn, sprintf("
-      CREATE TABLE %1$s.streams AS
-      SELECT s.*, (h.accessible AND coalesce(a.access_%3$s > 0, FALSE)) AS accessible,
-             h.accessible AS accessible_stored, g.size AS knw_size, g.dist_m AS knw_dist, g.target_in_group,
-             nullif(q.q_m3s, 0) AS mad_m3s
-      FROM %2$s.streams s
-      JOIN %2$s.streams_habitat_%3$s h
-        ON h.id_segment = s.id_segment AND h.watershed_group_code = s.watershed_group_code
-      LEFT JOIN %2$s.streams_access a
-        ON a.id_segment = s.id_segment AND a.watershed_group_code = s.watershed_group_code
-      LEFT JOIN %1$s.grades g ON g.id_segment = s.id_segment AND g.watershed_group_code = s.watershed_group_code
-      LEFT JOIN discharge.fwa_v1_segment_monthly q
-        ON q.linear_feature_id = s.linear_feature_id AND q.scenario = 'historical' AND q.month = 0 AND q.pick
-      WHERE s.watershed_group_code = '%4$s'", scratch, schema, s, w))
-    # link stores one-part MultiLineStrings with Z and M; fresh's walk locates points along a LineString, and nothing
-    # here reads Z or M, so the copy is merged and flattened (a segment of more than one part would refuse the cast,
-    # which is the right failure)
-    DBI::dbExecute(conn, sprintf("ALTER TABLE %s.streams ALTER COLUMN geom TYPE geometry(LineString, 3005) USING ST_Force2D(ST_LineMerge(geom))", scratch))
-    for (ix in c("(id_segment)", "USING gist (geom)", "USING gist (wscode_ltree)", "USING gist (localcode_ltree)",
-                 "(blue_line_key, downstream_route_measure)")) {
-      DBI::dbExecute(conn, sprintf("CREATE INDEX ON %s.streams %s", scratch, ix))
-    }
-    if (nrow(specs[[model]])) {
-      t1 <- Sys.time()
-      sx <- specs[[model]]
-      fresh::frs_near_river(conn, paste0(scratch, ".streams"), near_tbl, threshold = sx$threshold,
-                            distance_max = sx$distance_max, measure = sx$measure, verbose = FALSE)
-      walk_s <- walk_s + as.numeric(difftime(Sys.time(), t1, units = "secs"))
-    }
-    if (is_default_rule && "door" %in% structures && !nrow(specs[[model]])) {
-      dif <- DBI::dbGetQuery(conn, sprintf(
-        "SELECT count(*) FILTER (WHERE (%s) IS DISTINCT FROM (%s)) AS n FROM %s.streams s",
-        preds$default, preds$door, scratch))$n
-      if (as.integer(dif) > 0L) {
-        stop("the injected tuned predicate (door) differs from fresh's default on ", dif, " segments in ", w,
-             call. = FALSE)
-      }
-    }
-    for (k in rule_names) {
-      h <- paste0(scratch, ".habitat_", k)
-      DBI::dbExecute(conn, sprintf("DROP TABLE IF EXISTS %s", h))
-      rear_sql <- if (stage == "rear") preds[[k]] else preds$other
-      spawn_sql <- if (stage == "spawn") preds[[k]] else preds$other
-      DBI::dbExecute(conn, sprintf("
-        CREATE TABLE %1$s AS
-        SELECT s.id_segment, s.watershed_group_code, '%2$s'::text AS species_code, s.accessible,
-               s.accessible AND %3$s AS spawning, s.accessible AND %4$s AS rearing,
-               s.accessible AND coalesce(s.waterbody_key IN (SELECT waterbody_key FROM tmp_knw_wb WHERE t IN ('L','M')),
-                                         FALSE) AS lake_rearing,
-               s.accessible AND coalesce(s.waterbody_key IN (SELECT waterbody_key FROM tmp_knw_wb WHERE t = 'W'), FALSE)
-                 AS wetland_rearing,
-               FALSE AS rearing_pre_connect, FALSE AS spawning_pre_connect
-        FROM %5$s.streams s", h, sp, spawn_sql, rear_sql, scratch))
-      DBI::dbExecute(conn, sprintf("UPDATE %s SET rearing_pre_connect = rearing, spawning_pre_connect = spawning", h))
-      DBI::dbExecute(conn, sprintf("CREATE INDEX ON %s (id_segment)", h))
-      if (nrow(uhc)) {
-        # link's user-habitat table carries spawning and rearing; the overlay takes the types it holds
-        fresh::frs_habitat_overlay(conn, from = paste0(scratch, ".uhc"), to = h, bridge = paste0(scratch, ".streams"),
-                                   species = sp, verbose = FALSE,
-                                   habitat_types = intersect(names(uhc),
-                                                             c("spawning", "rearing", "lake_rearing", "wetland_rearing")))
-      }
-      run_conn(conn, table = paste0(scratch, ".streams"), habitat = h, species = sp, params = params,
-               params_fresh = params_fresh, verbose = FALSE)
-      flags[[paste(w, k)]] <- DBI::dbGetQuery(conn, sprintf(
-        "SELECT id_segment, watershed_group_code, '%s' AS rule, rearing, spawning, lake_rearing, wetland_rearing,
-                rearing_pre_connect, spawning_pre_connect FROM %s", k, h))
-    }
+  # the groups in bins balanced by segment count, one bin per worker, each with its own scratch schema and
+  # predicates that read that schema's near-river table
+  n_sql <- paste("SELECT watershed_group_code AS w, count(*)::int AS n FROM %s.streams_habitat_%s",
+                 "WHERE watershed_group_code IN (%s) GROUP BY 1")
+  n_seg <- DBI::dbGetQuery(conn, sprintf(n_sql, schema, s, paste0("'", groups, "'", collapse = ",")))
+  bins <- .knw_bin_groups(stats::setNames(n_seg$n[match(groups, n_seg$w)], groups), workers)
+  models <- vapply(groups, model_of, character(1))
+  jobs <- lapply(seq_along(bins), function(i) {
+    ws <- sprintf("%s_w%d", scratch, i)
+    near_tbl <- paste0(ws, ".near_river")
+    list(groups = bins[[i]], scratch_w = ws,
+         preds = lapply(c(cw = "cw", mad = "mad"), preds_for, near_tbl = near_tbl))
+  })
+  bin_args <- list(connector = connector, schema = schema, s = s, sp = sp, stage = stage, scratch = scratch,
+                   models = models, specs = specs, wb_sql = wb_sql, rule_names = rule_names,
+                   assert_default = is_default_rule && "door" %in% structures,
+                   uhc_types = if (nrow(uhc)) intersect(names(uhc), c("spawning", "rearing", "lake_rearing",
+                                                                      "wetland_rearing")) else character(),
+                   params = params, params_fresh = params_fresh)
+  # self-contained: it runs on a socket worker, where this package's names resolve to the installed copy or none.
+  # Both functions get the global environment, so serialising them ships neither this package's namespace nor
+  # this call's frame (which holds the whole grade table) to every worker
+  bin_fun <- .knw_compare_bin
+  environment(bin_fun) <- globalenv()
+  run_job <- function(job, bin_fun, bin_args) do.call(bin_fun, c(job, bin_args))
+  environment(run_job) <- globalenv()
+  res <- if (length(jobs) > 1L) {
+    cl <- parallel::makeCluster(length(jobs))
+    tryCatch(parallel::parLapplyLB(cl, jobs, run_job, bin_fun = bin_fun, bin_args = bin_args),
+             finally = parallel::stopCluster(cl))
+  } else {
+    lapply(jobs, run_job, bin_fun = bin_fun, bin_args = bin_args)
   }
-  say("Classify, overlay and connect: %d groups x %d rules, %.1f min (near-river walks %.1f min).", length(groups),
-      length(rule_names), as.numeric(difftime(Sys.time(), t0, units = "mins")), walk_s / 60)
+  err <- Filter(function(r) !is.null(r$error), res)
+  if (length(err)) stop(err[[1]]$error, call. = FALSE)
+  flags <- unlist(lapply(res, `[[`, "flags"), recursive = FALSE)
+  walk_s <- sum(vapply(res, `[[`, numeric(1), "walk_s"))
+  setup_s <- sum(vapply(res, `[[`, numeric(1), "setup_s"))
+  rule_min <- Reduce(`+`, lapply(res, `[[`, "rule_s")) / 60
+  say(paste("Classify, overlay and connect: %d groups x %d rules on %d worker%s, %.1f min",
+            "(near-river walks %.1f min summed over workers)."),
+      length(groups), length(rule_names), length(jobs), if (length(jobs) == 1L) "" else "s",
+      tm$tick("classify_overlay_connect"), walk_s / 60)
+  # what each rule costs against what every rule shares (#112): the groups' copies and indexes, and the walks
+  say("Summed over workers: group copies and indexes %.1f min; by rule %s.", setup_s / 60,
+      paste(sprintf("%s %.1f min", names(rule_min), rule_min), collapse = ", "))
+  # what reading default's flags from an earlier run would spare (#101): its own minutes, and the walk where no other
+  # predicate reads the near-river table. The stage takes its slowest bin's time, so the saving is projected per bin
+  near_rules <- unique(unlist(lapply(jobs[[1]]$preds, function(p) {
+    names(p)[vapply(p, function(x) grepl(".near_river", x, fixed = TRUE), logical(1))]
+  })))
+  say("Rules whose predicate reads the near-river table: %s.",
+      if (length(near_rules)) paste(near_rules, collapse = ", ") else "none")
+  drop_walk <- length(near_rules) > 0L && all(near_rules == "default")
+  bin_minutes <- .knw_bin_minutes(res, drop_rules = "default", drop_walk = drop_walk)
+  say(paste("Bins: %s timed worker-min; without default's own%s the slowest bin would take %.1f where the slowest",
+            "took %.1f, a projected %.1f min off a rerun that reads default's flags."),
+      paste(sprintf("%.1f", bin_minutes$minutes), collapse = ", "), if (drop_walk) " and the walk" else "",
+      max(bin_minutes$minutes_without), max(bin_minutes$minutes),
+      max(bin_minutes$minutes) - max(bin_minutes$minutes_without))
   wsg_in <- paste0("'", groups, "'", collapse = ",")
   # the default branch each segment lies on, as link's rules name them, and whether a user-habitat reach covers it
   in_uhc_seg <- if (nrow(uhc) && flag %in% names(uhc)) {
@@ -312,6 +311,7 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
     LEFT JOIN %3$s.grades g ON g.id_segment = s.id_segment AND g.watershed_group_code = s.watershed_group_code
     WHERE s.watershed_group_code IN (%4$s)",
     schema, s, scratch, wsg_in, paste(edge_stream, collapse = ", "), in_uhc_seg))
+  say("Segment read: %d segments, %.1f min.", nrow(seg), tm$tick("segment_read"))
   fl <- do.call(rbind, flags)
   for (k in rule_names) {
     fk <- fl[fl$rule == k, ]
@@ -445,6 +445,7 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
                                     n_detect = c(sum(vv$present[r]), sum(vv$present[acc & !r])))
     }
   }
+  say("Summaries (km by rule, change by reason, FDIS visits): %.1f min.", tm$tick("summaries"))
   # outside check: bcfishobs records not from FDIS, by lnk_habitat_validate()'s conventions (0298)
   obs <- DBI::dbGetQuery(conn, sprintf("
     SELECT o.observation_key, o.watershed_group_code, o.blue_line_key, o.downstream_route_measure, o.activity_code,
@@ -519,13 +520,167 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
     say(paste("Outside check: %d non-FDIS %s records; %d locations placed (%d inside an overlay reach left out),",
               "%d on accessible stream edges."), n0, sp, nrow(pl) + n_uhc, n_uhc, length(ls))
   }
+  say("Outside check (bcfishobs records): %.1f min.", tm$tick("outside_check"))
   DBI::dbExecute(conn, sprintf("DROP SCHEMA IF EXISTS %s CASCADE", scratch))
+  say("Scratch drop: %.1f min.", tm$tick("scratch_drop"))
   checks <- do.call(rbind, lapply(checks, function(x) {
     for (c in c("km_share", "lift", "lift_lo", "lift_hi")) if (!c %in% names(x)) x[[c]] <- NA_real_
     x
   }))
   if (!is.null(checks)) checks$tuned_structure <- tuned_as
-  list(compare = compare, change = change, checks = checks, segments = seg, log = log)
+  list(compare = compare, change = change, checks = checks, segments = seg, log = log, timing = tm$ticks(),
+       worker_minutes = c(setup = setup_s / 60, walk = walk_s / 60, rule_min), bin_minutes = bin_minutes)
+}
+
+# Each bin's timed minutes (.knw_compare_bin()'s setup, walk and per-rule seconds), and its minutes without the rules
+# in `drop_rules` (and without the walk when `drop_walk`): what the bin would take if those rules' flags were read
+# rather than made (#101)
+.knw_bin_minutes <- function(res, drop_rules, drop_walk = FALSE) {
+  res <- Filter(function(x) !is.null(x$rule_s), res)
+  if (!length(res)) stop("no bin returned its times", call. = FALSE)
+  out <- lapply(res, function(x) {
+    all_s <- x$setup_s + x$walk_s + sum(x$rule_s)
+    c(minutes = all_s / 60,
+      minutes_without = (all_s - sum(x$rule_s[names(x$rule_s) %in% drop_rules]) - if (drop_walk) x$walk_s else 0) / 60)
+  })
+  data.frame(bin = seq_along(out), minutes = vapply(out, `[[`, numeric(1), "minutes"),
+             minutes_without = vapply(out, `[[`, numeric(1), "minutes_without"), walk_dropped = drop_walk)
+}
+
+# A stage timer: tick(label) returns the minutes since the last tick (or the start) and records them under label;
+# ticks() returns them in order, named, and total() the minutes from the start to the last tick
+.knw_timer <- function() {
+  t0 <- Sys.time()
+  last <- t0
+  ticks <- numeric()
+  tick <- function(label) {
+    now <- Sys.time()
+    m <- as.numeric(difftime(now, last, units = "mins"))
+    ticks[[label]] <<- m
+    last <<- now
+    m
+  }
+  list(tick = tick, ticks = function() ticks, total = function() as.numeric(difftime(last, t0, units = "mins")))
+}
+
+# One bin of groups (#87): its own connection and scratch schema `scratch_w`, each group regenerated through the
+# three stages exactly as knw_compare_rules() describes, reading the grades and user-habitat rows the caller wrote to
+# `scratch`. Returns the flags per group and rule, the seconds spent on the near-river walks, on the groups' copies and
+# indexes and on each rule (#112), and the first group's error with its
+# name (the bin stops there). Self-contained: every value is an argument and every call is qualified, because it
+# runs on a socket worker.
+.knw_compare_bin <- function(groups, scratch_w, preds, connector, schema, s, sp, stage, scratch, models, specs, wb_sql,
+                             rule_names, assert_default, uhc_types, params, params_fresh) {
+  conn <- connector()
+  on.exit(try(DBI::dbDisconnect(conn), silent = TRUE), add = TRUE)
+  on.exit(try(DBI::dbExecute(conn, sprintf("DROP SCHEMA IF EXISTS %s CASCADE", scratch_w)), silent = TRUE),
+          add = TRUE, after = FALSE)
+  run_conn <- utils::getFromNamespace(".frs_run_connectivity", "fresh")
+  DBI::dbExecute(conn, wb_sql)
+  DBI::dbExecute(conn, sprintf("DROP SCHEMA IF EXISTS %s CASCADE", scratch_w))
+  DBI::dbExecute(conn, sprintf("CREATE SCHEMA %s", scratch_w))
+  near_tbl <- paste0(scratch_w, ".near_river")
+  flags <- list()
+  walk_s <- 0
+  setup_s <- 0
+  rule_s <- stats::setNames(numeric(length(rule_names)), rule_names)
+  for (w in groups) {
+    err <- tryCatch({
+      t_setup <- Sys.time()
+      model <- models[[w]]
+      pr <- preds[[model]]
+      DBI::dbExecute(conn, sprintf("DROP TABLE IF EXISTS %s.streams", scratch_w))
+      # wet's pick joins as mad_m3s, the column link's prepare gives the working table and a discharge pair walks on
+      DBI::dbExecute(conn, sprintf("
+        CREATE TABLE %1$s.streams AS
+        SELECT s.*, (h.accessible AND coalesce(a.access_%3$s > 0, FALSE)) AS accessible,
+               h.accessible AS accessible_stored, g.size AS knw_size, g.dist_m AS knw_dist, g.target_in_group,
+               nullif(q.q_m3s, 0) AS mad_m3s
+        FROM %2$s.streams s
+        JOIN %2$s.streams_habitat_%3$s h
+          ON h.id_segment = s.id_segment AND h.watershed_group_code = s.watershed_group_code
+        LEFT JOIN %2$s.streams_access a
+          ON a.id_segment = s.id_segment AND a.watershed_group_code = s.watershed_group_code
+        LEFT JOIN %5$s.grades g ON g.id_segment = s.id_segment AND g.watershed_group_code = s.watershed_group_code
+        LEFT JOIN discharge.fwa_v1_segment_monthly q
+          ON q.linear_feature_id = s.linear_feature_id AND q.scenario = 'historical' AND q.month = 0 AND q.pick
+        WHERE s.watershed_group_code = '%4$s'", scratch_w, schema, s, w, scratch))
+      # link stores one-part MultiLineStrings with Z and M; fresh's walk locates points along a LineString, and
+      # nothing here reads Z or M, so the copy is merged and flattened (a segment of more than one part would refuse
+      # the cast, which is the right failure)
+      DBI::dbExecute(conn, sprintf(paste("ALTER TABLE %s.streams ALTER COLUMN geom TYPE geometry(LineString, 3005)",
+                                         "USING ST_Force2D(ST_LineMerge(geom))"), scratch_w))
+      for (ix in c("(id_segment)", "USING gist (geom)", "USING gist (wscode_ltree)", "USING gist (localcode_ltree)",
+                   "(blue_line_key, downstream_route_measure)")) {
+        DBI::dbExecute(conn, sprintf("CREATE INDEX ON %s.streams %s", scratch_w, ix))
+      }
+      setup_s <- setup_s + as.numeric(difftime(Sys.time(), t_setup, units = "secs"))
+      if (nrow(specs[[model]])) {
+        t1 <- Sys.time()
+        sx <- specs[[model]]
+        fresh::frs_near_river(conn, paste0(scratch_w, ".streams"), near_tbl, threshold = sx$threshold,
+                              distance_max = sx$distance_max, measure = sx$measure, verbose = FALSE)
+        walk_s <- walk_s + as.numeric(difftime(Sys.time(), t1, units = "secs"))
+      }
+      if (assert_default && !nrow(specs[[model]])) {
+        dif <- DBI::dbGetQuery(conn, sprintf(
+          "SELECT count(*) FILTER (WHERE (%s) IS DISTINCT FROM (%s)) AS n FROM %s.streams s",
+          pr$default, pr$door, scratch_w))$n
+        if (as.integer(dif) > 0L) {
+          stop("the injected tuned predicate (door) differs from fresh's default on ", dif, " segments", call. = FALSE)
+        }
+      }
+      for (k in rule_names) {
+        t_rule <- Sys.time()
+        h <- paste0(scratch_w, ".habitat_", k)
+        DBI::dbExecute(conn, sprintf("DROP TABLE IF EXISTS %s", h))
+        rear_sql <- if (stage == "rear") pr[[k]] else pr$other
+        spawn_sql <- if (stage == "spawn") pr[[k]] else pr$other
+        DBI::dbExecute(conn, sprintf("
+          CREATE TABLE %1$s AS
+          SELECT s.id_segment, s.watershed_group_code, '%2$s'::text AS species_code, s.accessible,
+                 s.accessible AND %3$s AS spawning, s.accessible AND %4$s AS rearing,
+                 s.accessible AND coalesce(s.waterbody_key IN
+                   (SELECT waterbody_key FROM tmp_knw_wb WHERE t IN ('L','M')), FALSE) AS lake_rearing,
+                 s.accessible AND coalesce(s.waterbody_key IN
+                   (SELECT waterbody_key FROM tmp_knw_wb WHERE t = 'W'), FALSE) AS wetland_rearing,
+                 FALSE AS rearing_pre_connect, FALSE AS spawning_pre_connect
+          FROM %5$s.streams s", h, sp, spawn_sql, rear_sql, scratch_w))
+        DBI::dbExecute(conn, sprintf("UPDATE %s SET rearing_pre_connect = rearing, spawning_pre_connect = spawning", h))
+        DBI::dbExecute(conn, sprintf("CREATE INDEX ON %s (id_segment)", h))
+        if (length(uhc_types)) {
+          # link's user-habitat table carries spawning and rearing; the overlay takes the types it holds
+          fresh::frs_habitat_overlay(conn, from = paste0(scratch, ".uhc"), to = h,
+                                     bridge = paste0(scratch_w, ".streams"), species = sp, verbose = FALSE,
+                                     habitat_types = uhc_types)
+        }
+        run_conn(conn, table = paste0(scratch_w, ".streams"), habitat = h, species = sp, params = params,
+                 params_fresh = params_fresh, verbose = FALSE)
+        flags[[paste(w, k)]] <- DBI::dbGetQuery(conn, sprintf(
+          "SELECT id_segment, watershed_group_code, '%s' AS rule, rearing, spawning, lake_rearing, wetland_rearing,
+                  rearing_pre_connect, spawning_pre_connect FROM %s", k, h))
+        rule_s[[k]] <- rule_s[[k]] + as.numeric(difftime(Sys.time(), t_rule, units = "secs"))
+      }
+      NULL
+    }, error = function(e) sprintf("group %s: %s", w, conditionMessage(e)))
+    if (!is.null(err)) return(list(flags = NULL, walk_s = walk_s, setup_s = setup_s, rule_s = rule_s, error = err))
+  }
+  list(flags = flags, walk_s = walk_s, setup_s = setup_s, rule_s = rule_s, error = NULL)
+}
+
+# groups into at most `workers` bins balanced by segment count: largest first, each to the lightest bin (ties to the
+# lowest bin), so the result depends only on the counts
+.knw_bin_groups <- function(n, workers) {
+  n[is.na(n)] <- 0
+  k <- min(as.integer(workers), length(n))
+  bins <- vector("list", k)
+  load <- numeric(k)
+  for (g in names(n)[order(-n, names(n))]) {
+    i <- which.min(load)
+    bins[[i]] <- c(bins[[i]], g)
+    load[i] <- load[i] + n[[g]]
+  }
+  bins
 }
 
 # A species' branches under one stage of fresh's rules: the stream rule (the rule with no waterbody_type
@@ -586,12 +741,19 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
     setequal(as.integer(r[["edge_types_explicit"]]), c(1050L, 1150L))
 }
 
-# which structures a species x rule is compared under (see knw_compare_rules())
-.knw_compare_structures <- function(br, tuned, structures = NULL) {
+# which structures a species x rule is compared under (see knw_compare_rules()): its own set, `tuned_as` alone
+# ("reported", #112), or a subset of its own set; a structure the species x rule is not compared under is refused
+.knw_compare_structures <- function(br, tuned, structures = NULL, tuned_as = "door") {
   all <- c("free", "door", "door_wetland")
   pick <- if (!br$wetland_line) "door" else if (is.na(tuned$exc_q)) c("free", "door") else all
   if (is.null(structures)) return(pick)
+  if (identical(structures, "reported")) structures <- tuned_as
   chk::chk_subset(structures, all)
+  out <- setdiff(structures, pick)
+  if (length(out)) {
+    stop("not a structure this species x rule is compared under (", paste(pick, collapse = ", "), "): ",
+         paste(out, collapse = ", "), call. = FALSE)
+  }
   structures
 }
 

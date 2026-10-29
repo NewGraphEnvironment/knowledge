@@ -1,0 +1,70 @@
+key,step,label,value,unit,where,source,tested,issue,note
+sentinel_min,1,FDIS sentinel value,9999,,script:scripts/0230-fdis-load.R:sentinel_min,measured,no,,"FDIS's no-value codes for counts, fishing time and fished length, measured field by field in research/fdis_export.md"
+junk_year_min,1,Earliest visit year kept,1950,,code:scripts/0230-fdis-load.R:year < {value} |,convention,no,,
+junk_year_max,1,Latest visit year kept,2022,,"code:scripts/0230-fdis-load.R:year > {value},",convention,no,,the later export's year
+snap_search,2,Snap search radius,500,m,script:scripts/0230-fdis-load.R:snap_search,inherited,no,91,"fresh::frs_point_snap()'s tolerance, for the nearest snap and the 1:50k-code snap alike; a visit with no stream inside it is not placed"
+snap_limit,2,"Snap distance limit, unconfirmed pick",200,m,"script:scripts/0230-fdis-load.R:snap_limit;fn:knw_fdis_place:limit_near;code:vignettes/chinook_rearing.Rmd:nearest stream, kept when it lay within {value} m.",measured,yes,91,"an unconfirmed pick (no 1:50k code names its stream) snapped farther is dropped by knw_fdis_quality(); the widest band whose code-checked disagreement stays under one in three (100-200 m: 126 of 379), with CH and BT rearing's one-SE regions unmoved from 100 to 500 m (data-raw/snap_limit_sensitivity.R)"
+snap_limit_code,2,"Snap distance limit, code-confirmed pick",500,m,script:scripts/0230-fdis-load.R:snap_limit_code;fn:knw_fdis_place:limit_code;code:vignettes/chinook_rearing.Rmd:kept when it lay within {value} m of the point,measured,yes,91,"a pick on a stream the visit's 1:50k code names, snapped farther, is dropped by knw_fdis_quality(); the search radius, since the code names the stream; CH and BT rearing's one-SE regions do not move between 200 and 500 m (data-raw/snap_limit_sensitivity.R)"
+snap_edges_excluded,2,Edge type never snapped to,6010,edge type,script:scripts/0230-fdis-load.R:snap_edges_excluded,measured,yes,91,"the connectors that carry a stream across a watershed-group boundary, which link's streams lack; subsurface flow (1425, fresh's default exclusion) stays a candidate because link's streams carry it, and excluding it kept six fewer visits, two of them placed by link under the old snap (#91); fresh never snaps to an unmapped or placeholder (999) line either"
+ws50_code_length,2,1:50k code length the check reads,45,characters,"code:scripts/0230-fdis-load.R:nchar(watershed_code_50k) == {value},;code:scripts/0230-fdis-load.R:substr(watershed_code_50k, 4, {value}) !=",source,no,91,a 3-digit basin then seven 6-digit levels; an all-zero code below the basin and a code the 20k-50k crosswalk does not know are not checked
+ws50_code_zeros,2,"1:50k code digits below the basin that, all zero, mark a code not checked",42,characters,"code:scripts/0230-fdis-load.R:!= strrep(""0"", {value})",source,no,91,the code's length less its 3-digit basin
+flow_far_low,4,Routed flow kept unless under this share of the balance's,0.2,ratio,ext:wet:scripts/pcic_routed_lib.R:routed_far_low,convention,no,,"wet's default pick, set in wet#57; one cut scored at the calibration gauges"
+cw_agree_min,5,Width model control: least share within 5 %,0.9,share,script:scripts/0310-evidence-build.R:cw_agree_min,measured,no,,0296 measured 96.2 % province-wide
+flow_parent_edges,5,Edge types a parent's flow is never taken from,1100;1150;1300;1350;2300,FWA edge type,code:R/link_flow.R:AND p.edge_type NOT IN ({value}),convention,no,,a segment with no picked flow takes its parent's (11 visits)
+regulated_edges,5,Edge types a dam's regulated reach never follows,1100;1150;1300;1350;2300,FWA edge type,code:R/link_regulated.R:s.edge_type NOT IN ({value}),convention,no,,
+walk_q,5,River sizes walked to,1;3;5;10;20;30;50,m3/s,fn:knw_link_walks:q_grid;script:scripts/0310-evidence-build.R:q_grid,convention,no,,
+place_window,5,Segment start taken as the visit's segment within,5,m,fn:knw_link_place:start_window_m,convention,no,92,
+place_overlap,5,Largest segment overlap tolerated,0.01,m,fn:knw_link_place:overlap_max_m,measured,no,,link segments overlap by up to ~1.4 mm at breaks
+wetland_ha_min,5,Wetland area making a line a wetland branch,1,ha,fn:knw_link_width:wetland_ha_min,inherited,no,,link default's floor
+lake_ha_min,5,Lake area making a line a lake branch,100,ha,fn:knw_link_width:lake_ha_min,inherited,no,,link default's floor
+dam_snap,5,Dam to segment snap,500,m,fn:knw_link_regulated:dam_snap_m,convention,no,,
+regulation_min,5,Degree of regulation that counts a dam without a reservoir,10,%,fn:knw_link_regulated:regulation_min,convention,no,,
+barrier_natural,5,Natural barrier classes downstream,GRADIENT;FALLS;SUBSURFACE_FLOW;USER_DEFINITE,,fn:knw_link_barrier_dnstr:natural,inherited,no,,
+walk_nontarget_edges,5,Edge types a walk never ends on,1100;1150;1300;1350;2300;1400;1450,FWA edge type,code:inst/sql/ch_dist_profile.sql:s.edge_type NOT IN ({value}),convention,no,73,"connectors (1400, 1450) and others; the walk ends at a double-line river's bank"
+walk_hops,5,Most hops a walk takes before it stops,60,hops,code:inst/sql/ch_dist_profile.sql:IF hops > {value} THEN,convention,no,,a stopped walk reads the 50 km cap
+grid_mad,6,MAD floors in the grid,0.1;0.15;0.2;0.28;0.35;0.5;0.75;1,m3/s,fn:knw_tune_grid:grid_mad,convention,no,,the species' own values and link's default_tuned floor join the ladder; the rungs are the alternatives the tuning compares; the ladder's range was not varied
+grid_width,6,Width floors in the grid,1;1.5;2;3;4,m,fn:knw_tune_grid:grid_width,convention,no,,the rungs are the alternatives the tuning compares; the ladder's range was not varied
+grid_grad,6,Gradient maxima in the grid,0.03;0.04;0.0549;0.07;0.09;0.11;0.13;0.15;0.2;0.25;0.3,m/m,fn:knw_tune_grid:grid_grad,convention,yes,67,the ladder extended to 30 % in #67 and carried to every species in #68
+grid_q,6,Exception river sizes,1;3;5;10;20;30;50,m3/s,fn:knw_tune_grid:grid_q,convention,no,,the rungs are the alternatives the tuning compares; the ladder's range was not varied
+grid_d,6,Exception distances,100;250;500;1000;2000;5000,m,fn:knw_tune_grid:grid_d,convention,no,,the rungs are the alternatives the tuning compares; the ladder's range was not varied
+edge_stream,7,Stream edge types scored,1000;1100;2000;2300,FWA edge type,fn:knw_tune_run:edge_stream,convention,no,,"rivers, wetlands and lakes have their own conditions"
+area_range,7,Fished area kept,10;10000,m2,fn:knw_tune_run:area_range,convention,no,,
+cmp_area_min,10,Comparison check: least fished area,10,m2,code:R/compare_rules.R:vv$area_m2 >= {value} &,convention,no,,the comparison's FDIS check restates the tuning's area range; a test holds the two together
+cmp_area_max,10,Comparison check: largest fished area,10000,m2,"code:R/compare_rules.R:vv$area_m2 <= {value},",convention,no,,
+gradient_col,7,Gradient the rules are scored on,segment_gradient,,script:scripts/0320-tune-run.R:gradient;fn:knw_tune_run:cols[grad];fn:knw_rule_in:cols[grad];fn:knw_tune_curve:cols[grad];record:summary$curve_grad,convention,yes,92,"link's segment gradient, the one link applies a rule to (chosen by Al 2026-10-27); the Atlas line's is scored on every key as the sensitivity (data/tune/grad_fwa/). link cuts a stream at the observations of the species it models, so a segment's length follows the outcome; its gradient's gap from the Atlas line's does not by any catch, but is smaller where the species was present for CO, GR, ST and WCT (data-raw/segment_gradient_check.R)"
+seed,7,Fold seed,54,,fn:knw_tune_run:seed;fn:knw_tune_score:seed;fn:knw_tune_smoke:seed,convention,yes,,the pick is repeated on four more fold seeds (seeds_more)
+folds,7,Group folds,5,,fn:knw_tune_run:folds;fn:knw_tune_score:folds;fn:knw_tune_smoke:folds,convention,no,,each watershed group held out once
+fit,7,Group intercepts absorbed,fe,,fn:knw_tune_run:fit[1];fn:knw_tune_score:fit[1],convention,yes,83,fe absorbs the group intercepts; it reproduced the dense fit on six species rule by rule (#73)
+prior_sd,7,Prior SD on data set and era,2.5,cloglog,fn:knw_tune_run:prior_sd;fn:knw_tune_score:prior_sd;fn:knw_tune_smoke:prior_sd;fn:knw_tune_curve:prior_sd;record:summary$curve_prior_sd,convention,yes,84,"compared with no prior (#84), which let separating levels run to hazard ratios in the millions; not compared with another SD; chosen by Al 2026-10-23"
+se_region,7,Region width,1,SE,"fn:knw_tune_repick:se_mult;code:R/thresholds_table.R:identical(knw_tune_repick(tune, se_mult = {value}, d_floor;code:R/thresholds_table.R:rule_flow <- flow_pick({value})",convention,yes,79,"a parsimony rule of thumb fixed before the run; the scorer's own region (.tune_sel) is pinned by test-settings-register.R, and every pick is also read at 1.96 SE"
+se_strict,7,Stricter reading,1.96,SE,"script:scripts/0320-tune-run.R:se_strict;code:R/thresholds_table.R:r196 <- knw_tune_repick(tune, se_mult = {value}, d_floor;code:R/thresholds_table.R:rule_flow_196 <- flow_pick({value});code:vignettes/chinook_rearing.Rmd:se_strict <- {value}  #",convention,yes,79,"read beside the one-SE pick on every key, so each pick is compared at both widths"
+d_floor,7,Exception distance the pick moves off,200,m,fn:knw_tune_run:d_floor;fn:knw_tune_score:d_floor;fn:knw_tune_repick:d_floor;fn:knw_thresholds_table:d_floor,convention,no,,recommended moves off an exception under it
+smoke_tol_null,7,Smoke gate: tolerance on no rule,0.25,deviance,fn:knw_tune_smoke:tol_null,convention,no,84,
+smoke_coef_max,7,Smoke gate: largest nuisance coefficient,5,cloglog,fn:knw_tune_smoke:coef_max,convention,no,84,
+min_wsg,7,Least groups with both outcomes to fit,5,groups,fn:knw_tune_run:min_wsg,convention,no,,
+power_wsg,7,Groups below which a fit is underpowered,10,groups,fn:knw_tune_run:power_wsg,convention,no,,
+spawn_codes,7,Maturity codes that count as spawner evidence,IM;M;MT;SP;ST,,fn:knw_spawner_evidence:coded;script:scripts/0230-fdis-load.R:maturity_coded,source,no,,
+spawn_large,7,Length counted as a large spawner,350,mm,fn:knw_spawner_evidence:large_mm,convention,no,,
+flow_src,7,Flow source the rules read,pick,,fn:knw_tune_run:src;fn:knw_rule_in:src,convention,no,89,wet's default per segment
+lake_target,7,Walk targets on a lake or regulated river excluded,FALSE,,fn:knw_rule_in:no_lake_target;fn:knw_rule_in:no_reg_target,convention,no,,
+era_breaks,7,Era breaks of the nuisance term,1994;2004,,"code:R/tune_run.R:c(-Inf, {value}, Inf)",convention,no,,the era labels in R/tune_run.R and R/tune_curve.R restate the breaks; a change to one needs the other
+seeds_more,8,Extra fold seeds,55;56;57;58,,fn:knw_tune_run:seeds_more,convention,no,,
+n_boot,8,Group bootstrap resamples,200,,fn:knw_tune_run:n_boot;fn:knw_tune_score:n_boot,convention,no,,
+seed_boot,8,Bootstrap seed,541,,fn:knw_tune_score:seed_boot,convention,no,,
+dist_cap,9,Walk cap read by the curve,50000,m,fn:knw_tune_curve:dist_cap_m,convention,no,,a walk that reaches the sea or stops reads the cap
+q_default,9,River size walked to where the pick has no exception,10,m3/s,fn:knw_tune_curve:q_default,convention,no,,
+curve_k,9,"Smooth basis sizes (size, distance, gradient)",6;6;6,,fn:knw_tune_curve:k,convention,no,,
+grade_ref,9,Grade reference quantile,0.95,quantile,fn:knw_grade:ref_quantile,convention,no,,of the rate on accessible stream-branch segments
+grade_classes,9,Grade class breaks,0;0.2;0.4;0.6;0.8;1,,"fn:knw_grade:classes;code:R/floodplain_ha.R:cut(out$grade, c({value}), include.lowest;code:R/compare_map.R:tm_scale_intervals(breaks = c({value}),",convention,no,,fifths
+grad_clamp,9,Gradient ceiling the curve and grade read,0.2,m/m,"code:R/tune_curve.R:pmin(pmax(d[[cols[[""grad""]]]], 0), {value});code:R/grade.R:pmin(pmax(grad[ok], 0), {value});code:R/tune_curve.R:min(pick$grad_max, {value}) / 2;code:R/tune_curve.R:seq(0, {value}, length.out",convention,no,,
+dist_offset,9,Offset before the log of distance,10,m,"code:R/tune_curve.R:dist_cap_m), dist_cap_m) + {value});code:R/tune_curve.R:log(dist_cap_m + {value});code:R/tune_curve.R:log(thr_dist + {value});code:R/tune_curve.R:exp(x) - {value});code:R/grade.R:log(dist[ok] + {value})",convention,no,,
+grade_grad_col,9,Gradient the grade reads on link's segments,gradient,,"code:R/grade_species.R:grad = ""{value}"", dist = ""dist_m""",inherited,no,92,"link's segment gradient, the one the curve is fitted on since #92; knw_grade_species() refuses a curve fitted on another"
+grade_size_mad,9,Flow the grade reads on link's segments under a MAD rule,mad_pick,,"code:R/grade_species.R:""channel_width"" else ""{value}""",convention,no,,
+grade_size_width,9,Width the grade reads on link's segments under a width rule,channel_width,,"code:R/grade_species.R:if (pick$size_var == ""width"") ""{value}"" else",convention,no,,link's segment channel width
+bridge_distance,10,Connectivity bridge distance,10000,m,ext:link:inst/extdata/configs/default/parameters_fresh.csv:cluster_bridge_distance,inherited,no,,a rearing cluster with no spawning within it is dropped
+bridge_gradient,10,Connectivity bridge gradient,0.05,m/m,ext:link:inst/extdata/configs/default/parameters_fresh.csv:cluster_bridge_gradient,inherited,no,,
+cmp_n_boot,10,Comparison bootstrap resamples,200,,fn:knw_compare_rules:n_boot,convention,no,,
+cmp_check_edges,10,Comparison check: edge types of the FDIS visits it counts,1000;1050;1100;1150;2000;2100;2300;1250;1350,FWA edge type,code:R/compare_rules.R:vv$edge_type %in% c({value}) &,convention,no,,
+tuned_as,10,Wetland structure reported as tuned,door,,script:scripts/0330-compare.R:tuned_as;fn:knw_compare_rules:tuned_as,convention,yes,,the comparison runs every through-wetland structure and reports the door as tuned (#73)
+cmp_seed_boot,10,Comparison bootstrap seed,542,,fn:knw_compare_rules:seed_boot,convention,no,,
+link_default_flow,10,discharge_source in link's default bundle,unset,,ext:link:inst/extdata/configs/default/config.yaml:pipeline.discharge_source,inherited,no,89,"unset, so link's default reads fwapg's annual flow table; the evidence, grades and comparison read wet's pick"

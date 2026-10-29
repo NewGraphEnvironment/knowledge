@@ -1,9 +1,9 @@
 #' Drop the FDIS site visits that cannot carry evidence, and count every drop
 #'
 #' The quality drops `scripts/0290` and `0294` applied to `0230`'s site table,
-#' in that order: a visit not placed on the FWA network, a snap over the
-#' placement limit, an FDIS 1:50k watershed code that disagrees with the
-#' placement, a junk date, a sentinel effort or no effort at all (a visit with
+#' in that order: a visit not placed on the FWA network, a pick beyond its
+#' placement limit (see [knw_fdis_place()]), an FDIS 1:50k watershed code that
+#' names no stream within the snap search, a junk date, a sentinel effort or no effort at all (a visit with
 #' only one of area and time is kept, so a model can use either), and a catch
 #' whose status is unknown (neither fish nor an explicit zero). Each drop is one
 #' ledger row, and the drops and the kept rows partition the input, which the
@@ -14,7 +14,11 @@
 #'   `flag_junk_date`, `flag_effort_sentinel`, `flag_no_area`, `flag_no_effort`
 #'   and `catch_status`.
 #' @return A list: `kept`, the visits that pass, and `ledger`, a `tibble` with
-#'   columns `kind` (`in`, `drop`, `kept`), `step`, `n` and `note`.
+#'   columns `kind` (`in`, `drop`, `kept`, `info`), `step`, `n` and `note`.
+#'   Where `sites` carries `0230`'s `snap_confirmed` and `snap_moved`, two
+#'   `info` rows count the kept visits confirmed by their 1:50k code and those
+#'   moved to a named stream that is not the nearest; they are not part of the
+#'   partition.
 #' @export
 #' @examples
 #' sites <- data.frame(
@@ -39,9 +43,10 @@ knw_fdis_quality <- function(sites) {
     x[keep, , drop = FALSE]
   }
   v <- keep_step(sites, !sites$flag_not_placed, "not_placed", "not placed on the FWA network")
-  v <- keep_step(v, !v$flag_far_snap, "far_snap", "snapped beyond the placement limit")
+  v <- keep_step(v, !v$flag_far_snap, "far_snap",
+                 "snapped beyond the placement limit (one limit for a pick the 1:50k code confirms, one for the rest)")
   v <- keep_step(v, !(v$flag_ws50_mismatch %in% TRUE), "ws50_mismatch",
-                 "FDIS 1:50k watershed code disagrees with the placement")
+                 "FDIS 1:50k watershed code names no stream within the snap search")
   v <- keep_step(v, !v$flag_junk_date, "junk_date", "")
   v <- keep_step(v, !v$flag_effort_sentinel & (!v$flag_no_area | !v$flag_no_effort),
                  "effort_sentinel_or_none", "sentinel effort, or neither fished area nor time")
@@ -49,6 +54,16 @@ knw_fdis_quality <- function(sites) {
   ledger <- rbind(ledger, tibble::tibble(kind = "kept", step = "visits_kept", n = nrow(v), note = ""))
   if (sum(ledger$n[ledger$kind %in% c("drop", "kept")]) != nrow(sites)) {
     stop("ledger does not partition the input", call. = FALSE)
+  }
+  # how the kept visits reached their stream, where 0230's placement says (#91)
+  if (all(c("snap_confirmed", "snap_moved") %in% names(v))) {
+    info <- tibble::tibble(
+      kind = "info", step = c("kept_snap_confirmed", "kept_snap_moved"),
+      n = c(sum(v$snap_confirmed %in% TRUE), sum(v$snap_moved %in% TRUE)),
+      note = c("kept on a stream the visit's 1:50k code names",
+               "kept on a named stream that is not the nearest one (moved there)")
+    )
+    ledger <- rbind(ledger, info)
   }
   list(kept = v, ledger = ledger)
 }

@@ -33,7 +33,8 @@ wf_farm_priority.js                          farm priority/crossing tables out o
       (also writes Step 2 life stage and Step 3 individual fish, raw, per group)
 
 --- FDIS electrofishing export (province-wide, not per group) ---
-0230  sync s3://fresh-bc/fdis/, QA, roll passes to site visits, place on FWA   (fwapg database (PG* env vars))
+0230  sync s3://fresh-bc/fdis/, QA, roll passes to site visits, place on FWA with fresh's snap and the 1:50k code
+      (#91; fwapg database (PG* env vars), fresh >= 0.40.0; SNAP_LIMIT / SNAP_LIMIT_CODE override the limits)
 0240  size classes + CH / char evidence + summary vs thresholds -> data/fdis_*.csv
 
 --- FISS individual fish -> size-class evidence (after 0220 on each group, and 0230) ---
@@ -52,7 +53,10 @@ wf_farm_priority.js                          farm priority/crossing tables out o
       rivers of 1-50 m3/s on each source (to the river's bank, counting every hop's gap, fresh's convention; #73),
       hydrologic zone, the bcfishobs match, link#349's access check, the
       workbook sites -> data/fdis/derived/{visits_link,visits_species,walks,bcfishobs_fdis_match,access_check,
-      workbook_sites,workbook_species}.csv (+ ledger; ~20 min, 4 socket workers)
+      workbook_sites,workbook_species}.csv (+ ledger; 4 socket workers). SCHEMA names link's schema (default
+      fresh_default; knw_build_record() refuses one another run built); the visit walks are kept in knw.walk_cache
+      from #91, so the first run walks them cold; knw_db_latency_check() at connect stops a run off the
+      database's host (round trip over 20 ms) unless REMOTE=TRUE (#110)
 0290  bt_use_visits.csv written from 0310 (BT's rows and the columns 0291-0293 read; no held-out columns)
 0294  ch_mad_visits.csv written from 0310 (+ two database reads: ambiguous placement, barriers without USER_DEFINITE)
 0296  ch_rule_visits.csv and ch_rule_walks.csv written from 0294 and 0310
@@ -63,8 +67,14 @@ wf_farm_priority.js                          farm priority/crossing tables out o
       prior, grade every segment of the species' groups, each accessible one at its own walked distance to the bank
       of the pick's river (#65, #73), each grade table recording its reference edges, river size, walk, flow build
       and curve prior (#72); a key whose curve is no better than no rule on held-out groups gets no grade (#73)
-      -> data/tune/ (+ log; SCHEMA names the run's schema; scoring runs on any machine with the build, WORKERS=14;
-      grading sends a query per segment, so it runs on the database's host, CLAUDE.md "Database access")
+      -> data/tune/candidate/<run>/ (ignored; RUN= names it, a UTC stamp by default, and resumes it; + its log;
+      #111). DEV=1: the main seed only, no grades, no database -> data/tune/dev/, ending in pick_report.csv, each
+      key's pick beside the published one: the run to make after a change upstream (all keys 7.7 min on 14 workers).
+      SCHEMA names the run's schema, refused when its run is not the evidence's; scoring runs
+      on any machine with the build, WORKERS=14; grading walks 500 segments per query and keeps every walk in
+      knw.walk_cache, keyed on the flow load and the walk's md5 (#87): on the database's host a cold regrade of
+      every key took 53.4 min and one key regraded with the walks cached 4.1 min, 2026-10-27; CLAUDE.md
+      "Database access"; a grading run stops off the database's host unless REMOTE=TRUE, #110)
 0322  #67's record: CH rearing alone on the ladder extended to 30 %, on the evidence build before #73 (the main
       run carries that ladder for every species since #68): the scores -> data/tune/grad_ext/; STAGE=compare
       sets CH_rear_v1's parts at 11, 13, 15 and 30 % beside default and beside CH_rear_v1 -> data/compare/grad_ext/
@@ -76,15 +86,21 @@ wf_farm_priority.js                          farm priority/crossing tables out o
       (after the bucket policy of #56)
 0330  link's current default (the configs at CONFIG_SHA, origin/main by default; link >= 0.67.0, whose near-river
       pair is walked on the scratch copy with fresh's walk) against the recommended rule on link's segments for
-      every species x stage and group, under each rule structure for the through-wetland lines and the pair (#73:
-      free | door | door_wetland; `tuned` is TUNED_AS, door by default): km, graded km, km by grade class, change by
-      reason, FDIS and bcfishobs checks -> data/compare/, one GeoPackage per species x stage for QGIS
-      (data/compare/gpkg/, #81; GPKG=FALSE skips) (+ log; SCHEMA as 0320; on the database's host, every key in one
-      process: a key's groups run one after another on one connection, #86). No maps in this run.
+      every species x stage and group, under TUNED_AS (door by default; `tuned`) for the through-wetland lines and the
+      pair, or with STRUCTURES=all under every structure the species has (#73: free | door | door_wetland; #112): km, graded km, km by grade class, change by
+      reason, FDIS and bcfishobs checks, of a candidate (TUNE_DIR=data/tune/candidate/<run>, required) ->
+      data/compare/candidate/<run>/ (ignored, #111), one GeoPackage per species x stage for QGIS (its gpkg/, #81; GPKG=FALSE skips them while iterating, STAGE=gpkg writes them afterwards from the
+      saved segments) (+ log; SCHEMA as 0320; on the database's host, keys in turn, each key's groups split across
+      WORKERS=6 connections, #87: every key 162.9 min with GPKG=FALSE, BT rearing alone 33.4, the GeoPackages
+      14.0, 2026-10-26, under every structure; door alone drops 29 to 33 % of the worker minutes, #112; every STAGE stops off the database's host unless REMOTE=TRUE, #110). No maps in this run.
       STAGE=maps: floodplain ha beside each rule's habitat in the catalog's groups, and the maps, from the saved
-      tables -> data/compare/floodplain.csv, research/fig/compare_*.png
-      then SCHEMA=... Rscript data-raw/vignette_chinook.R refreshes the chinook article's data (inst/vignette-data/),
-      after 0325 has rewritten data/thresholds.csv; tests/testthat/test-vignette-data.R fails until it does
+      tables -> the run's floodplain.csv and fig/compare_*.png
+0335  on Al's word: RUN=<run> moves a candidate into data/tune/, data/compare/ and research/fig/ (SPECIES= for some
+      keys; refused unless the result is one build: evidence, link run, gradient, flow load, walk, link config), its
+      logs into scripts/logs/habitat/, archiving what it replaced as candidate run replaced_<stamp>; then 0325
+      (local), SCHEMA=... data-raw/vignette_chinook.R, vignette_method.R, vignette_bib.R (Zotero) and
+      readme_figure.R. DRY=1 lists; BUNDLES=FALSE moves only. Pins and prose that quote the run are revised by hand
+      (#111)
 
 --- Frozen on the published v2 tables (0299 PULL=TRUE VERSION=v2): the one-species analyses #57 superseded ---
 0291  BT use curve (#28)   0292  BT candidate weight   0293  BT spawner evidence (#33)
@@ -234,8 +250,10 @@ and maturity, per-pass effort, measured channel width and gradient, and explicit
 
 - **Grain is the site visit**, not the pass: depletion passes repeat one population.
 - **Abundance comes from `counts`**; `details` is a length subsample (87% of counted CH have no length).
-- **Placement:** `fwa_indexpoint` (500 m radius), checked against FDIS's own 50k watershed code
-  and gazetted name. Snaps over 100 m and code mismatches are flagged, not dropped.
+- **Placement (#91):** `fresh::frs_point_snap()` (500 m radius), to the nearest stream and to each stream
+  FDIS's own 1:50k watershed code names; `knw_fdis_place()` takes the nearest named stream in reach, else the
+  nearest stream. A pick beyond its limit (one for a code-confirmed pick, one for the rest) and a code naming no
+  stream in reach are flagged here and dropped by `knw_fdis_quality()` in `0310`.
 - **CH gives rearing evidence only**; EF caught no adult CH. Char spawner evidence is maturity
   (SP/ST, or M in Aug–Oct), not length.
 - Outputs: `data/fdis_evidence.csv`, `data/fdis_summary_ch_bt.csv`, `data/fdis_size_breaks.csv`,

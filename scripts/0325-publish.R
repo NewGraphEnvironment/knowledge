@@ -35,7 +35,9 @@ tune_dir <- "data/tune"
 s3 <- "s3://fresh-bc/"
 evidence_version <- "knowledge/fdis/v3"
 
-ledger_path <- sort(list.files("scripts/logs/habitat", "_evidence_build_ledger\\.csv$", full.names = TRUE), decreasing = TRUE)[1]
+# the ledger the published tables were scored on, not the newest on disk: a build checked and not promoted writes a newer
+# one (#111)
+ledger_path <- knw_run_ledger(tune_dir)
 led <- read_csv(ledger_path, show_col_types = FALSE, col_types = cols(.default = "c"))
 run_uid <- led$note[led$step == "link_run_uid"]
 link_sha <- led$note[led$step == "run_link_sha"]
@@ -55,11 +57,10 @@ prov <- list(published_from_commit = commit, repository = "https://github.com/Ne
 # (discharge_load, written by 0320 from the table comment at grading); the publish refuses when the live load is
 # another build, because the grade would then describe flows the segments no longer carry.
 pgc <- DBI::dbConnect(RPostgres::Postgres())
-discharge_load <- DBI::dbGetQuery(pgc, "SELECT obj_description('discharge.fwa_v1_segment_monthly'::regclass) AS d")$d
+discharge_load <- knw_discharge_load(pgc)
 DBI::dbDisconnect(pgc)
-if (length(discharge_load) != 1 || is.na(discharge_load) || !nzchar(discharge_load)) {
-  stop("discharge.fwa_v1_segment_monthly carries no load comment; cannot say which flows the grade read")
-}
+# the walk's code (#87): a grade walked by other code than this tree's is regraded, never published
+walk_md5 <- knw_walk_md5()
 
 # ---- the thresholds table, built first because the grade checks hold each table to its row ----------------
 tt <- knw_thresholds_table(tune_dir, evidence_version, run_uid, link_sha, compare_dir = "data/compare")
@@ -73,11 +74,15 @@ if (!length(gfiles)) stop("no grade tables in ", tune_dir)
 heads <- lapply(gfiles, function(f) read_csv(f, n_max = 1, show_col_types = FALSE, col_types = cols(.default = "c")))
 names(heads) <- basename(gfiles)
 stale <- names(heads)[!vapply(heads, function(h) {
-  all(c("ref_population", "ref_edge", "walk", "discharge_load", "grade_withheld", "null_heldout_curve", "evidence_md5",
-        "rule", "run_uid") %in% names(h)) &&
-    identical(h$ref_population, "stream_branch") && identical(h$walk, "bank")
+  all(c("ref_population", "ref_edge", "walk", "walk_md5", "discharge_load", "grade_withheld", "null_heldout_curve",
+        "evidence_md5", "rule", "run_uid") %in% names(h)) &&
+    identical(h$ref_population, "stream_branch") && identical(h$walk, "bank") && identical(h$walk_md5, walk_md5) &&
+    # graded from a curve fitted on link's segment gradient, the one the segments carry (#92)
+    .knw_grade_grad_ok(h)
 }, logical(1))]
-if (length(stale)) stop("grade tables made before #73 (no record of the bank walk, the reference edge types and the flow build), or graded ",
+if (length(stale)) stop("grade tables made before #73 (no record of the bank walk, the reference edge types and the flow build), walked by ",
+                        "another walk than this tree's (walk_md5, #87), graded from a curve fitted on another gradient than link's segment gradient ",
+                        "(no curve_grad = segment_gradient, #92), or graded ",
                         "before the gate scored no rule on the curve's own visits (no null_heldout_curve; the branch review of 2026-10-25); rerun 0320: ",
                         paste(stale, collapse = ", "))
 # the grade is published under the thresholds row's rule_id, so it must have been graded under that row's rule on this
@@ -87,11 +92,13 @@ mispick <- names(heads)[!vapply(names(heads), function(f) {
   row <- tt$thresholds[tt$thresholds$rule_id == paste0(k, "_v1"), , drop = FALSE]
   rule <- unique(row$rule)
   ev <- unique(row$evidence_md5)
+  cg <- unique(row$curve_grad)
   length(rule) == 1L && identical(heads[[f]]$rule, rule) && identical(heads[[f]]$run_uid, run_uid) &&
-    length(ev) == 1L && !is.na(ev) && identical(heads[[f]]$evidence_md5, ev)
+    length(ev) == 1L && !is.na(ev) && identical(heads[[f]]$evidence_md5, ev) &&
+    length(cg) == 1L && !is.na(cg) && identical(heads[[f]]$curve_grad, cg)
 }, logical(1))]
-if (length(mispick)) stop("grade tables graded under another pick, link run or evidence build than the thresholds table's row (or a row ",
-                          "with no evidence record); rerun 0320: ", paste(mispick, collapse = ", "))
+if (length(mispick)) stop("grade tables graded under another pick, link run, evidence build or gradient than the thresholds table's row (or a ",
+                          "row with no evidence or gradient record); rerun 0320: ", paste(mispick, collapse = ", "))
 # and every fitted row has its grade table (a withheld key's table is written too), so a run that stopped between the
 # picks and the grades cannot publish the picks alone
 fitted_keys <- unique(sub("_v1$", "", tt$thresholds$rule_id[tt$thresholds$status %in% c("fitted", "underpowered")]))
@@ -109,7 +116,7 @@ if (!identical(loads, discharge_load)) {
        loads, "\n  live:   ", discharge_load)
 }
 prov_grade <- c(prov, list(discharge_load_at_grade = loads, discharge_load_at_publish = discharge_load, walk = "bank",
-                           evidence_md5 = evidence))
+                           walk_md5 = walk_md5, evidence_md5 = evidence))
 
 # ---- thresholds -------------------------------------------------------------------------
 write_csv(tt$thresholds, "data/thresholds.csv", na = "")
@@ -121,7 +128,7 @@ tables_thr <- data.frame(
   source = c("data/thresholds.csv", "data/thresholds_groups.csv"),
   script = "scripts/0325-publish.R",
   description = c(
-    "One row per species x stage x component (size, gradient, exception_q, exception_d) of the rule recommended by the tuning run (knowledge#57): the value in link's parameter name and unit, the range of values within one SE (a parsimony rule of thumb fixed before the run) on the main reading, the readings the rule holds in, the rule the same pick makes at 1.96 SE (rule_196) and whether it keeps the row's value (holds_196), the same picks from link's flow version of default (rule_flow, rule_flow_196), the scope link applies the near-river pair on as the comparison ran it (near_river_scope: both, or wetland_flow; empty where the rule has no pair), default's value and whether default is inside the region, the visits, detections and groups scored, the power label, and the evidence version and link run the rule was scored on. The grade is expected use, not habitat quality.",
+    "One row per species x stage x component (size, gradient, exception_q, exception_d) of the rule recommended by the tuning run (knowledge#57): the value in link's parameter name and unit, the range of values within one SE (a parsimony rule of thumb fixed before the run) on the main reading, the readings the rule holds in, the rule the same pick makes at 1.96 SE (rule_196) and whether it keeps the row's value (holds_196), the same picks from link's flow version of default (rule_flow, rule_flow_196), the scope link applies the near-river pair on as the comparison ran it (near_river_scope: both, or wetland_flow; empty where the rule has no pair), default's value and whether default is inside the region, the visits, detections and groups scored, the power label, the gradient the rule was scored on (curve_grad: segment_gradient, link's own segment gradient, knowledge#92), and the evidence version and link run the rule was scored on. The grade is expected use, not habitat quality.",
     "The watershed groups each rule_id was scored on (groups with both outcomes), with the fold each held out in."),
   stringsAsFactors = FALSE)
 man_thr <- knw_publish(tables_thr, "data/publish/thresholds_v1", id = "knowledge/thresholds/v1",

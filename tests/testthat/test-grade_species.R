@@ -9,9 +9,9 @@ grade_fixture <- function() {
                   era = factor(sample(c("to1994", "1995-2004", "2005on"), n, TRUE)),
                   blue_line_key = 1, downstream_route_measure = seq_len(n),
                   edge_type = 1000, mad_pick = exp(stats::runif(n, log(0.02), log(20))),
-                  cw_deploy = exp(stats::runif(n, log(0.5), log(20))), fwa_gradient = stats::runif(n, 0, 0.15))
+                  cw_deploy = exp(stats::runif(n, log(0.5), log(20))), segment_gradient = stats::runif(n, 0, 0.15))
   dist <- exp(stats::runif(n, log(20), log(40000)))
-  d$U <- stats::rbinom(n, 1, stats::plogis(-2 + 0.8 * log(d$mad_pick) - 10 * d$fwa_gradient - 0.3 * log(dist)))
+  d$U <- stats::rbinom(n, 1, stats::plogis(-2 + 0.8 * log(d$mad_pick) - 10 * d$segment_gradient - 0.3 * log(dist)))
   w <- data.frame(blue_line_key = 1, downstream_route_measure = seq_len(n), src = "pick", qmin = 3,
                   status = ifelse(dist > 30000, "none", "found"), dist_m = ifelse(dist > 30000, NA, dist))
   pick <- data.frame(rule = "r1", size_var = "mad", size_min = 0.75, grad_max = 0.07, exc_q = 3, exc_d = 1000)
@@ -33,8 +33,9 @@ grade_fixture <- function() {
 
 run_grade <- function(fx, pick = fx$pick, walks_status = function(blk) ifelse(blk == 110, "none", "found")) {
   seen <- new.env()
-  fake_walks <- function(connector, starts, q_grid, sources, workers) {
+  fake_walks <- function(connector, starts, q_grid, sources, workers, ...) {
     seen$starts <- starts
+    seen$dots <- list(...)
     seen$q_grid <- q_grid
     st <- walks_status(starts$blue_line_key)
     tibble::tibble(blue_line_key = starts$blue_line_key, downstream_route_measure = starts$downstream_route_measure,
@@ -57,6 +58,12 @@ test_that("every gradable accessible segment is walked, and nothing else is", {
   expect_setequal(r$seen$starts$blue_line_key, 100 + c(1, 2, 3, 4, 5, 7, 9, 10))
   # the size-passing segment beside a river carries its distance, not the cap
   expect_true(101 %in% r$seen$starts$blue_line_key)
+  # the grade walks through the walk cache and records the walk's code beside the convention's name (#87)
+  expect_identical(r$seen$dots$cache, "knw.walk_cache")
+  expect_identical(r$g$walk, "bank")
+  expect_identical(r$g$walk_md5, knw_walk_md5())
+  expect_true(all(c("walk_cache_hit", "walk_cache_miss") %in% names(r$g$counts)))
+  expect_type(r$g$counts, "integer")    # 0320 pastes them into the line the vignette script reads by pattern
   gr <- r$g$grades
   expect_equal(gr$dist_m[gr$id_segment == 1], 100)
   expect_equal(gr$dist_status[gr$id_segment == 1], "found")
@@ -137,4 +144,20 @@ test_that("the grade records how it was made: the curve's edge types, the river 
   gr <- r2$grades
   stream <- gr$accessible & !is.na(gr$rate) & gr$edge_type %in% c(1000L, 2000L)
   expect_equal(r2$reference, unname(stats::quantile(gr$rate[stream], 0.95)))
+})
+
+test_that("a curve fitted on another gradient than the segments carry is not graded, and the record says which (#92)", {
+  skip_if_not_installed("mgcv")
+  skip_if_not_installed("duckdb")
+  fx <- grade_fixture()
+  expect_identical(fx$curve$cols[["grad"]], "segment_gradient")
+  fx$curve$cols[["grad"]] <- "fwa_gradient"
+  expect_error(run_grade(fx), "fitted on fwa_gradient")
+  fx$curve$cols <- NULL
+  expect_error(run_grade(fx), "unrecorded gradient")
+  # a grade table's first row is held to the gradient by its readers
+  expect_true(.knw_grade_grad_ok(data.frame(curve_grad = "segment_gradient")))
+  expect_false(.knw_grade_grad_ok(data.frame(curve_grad = "fwa_gradient")))
+  expect_false(.knw_grade_grad_ok(data.frame(rule = "r1")))
+  expect_false(.knw_grade_grad_ok(data.frame(curve_grad = NA_character_)))
 })

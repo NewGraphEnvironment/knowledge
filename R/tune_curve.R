@@ -46,7 +46,8 @@
 #'   `curves`, a `tibble` of marginal curves (`curve`, `x`, `rate`, `rel_rate`,
 #'   `rel_lo`, `rel_hi`, `threshold`) relative to the pick's thresholds, each
 #'   other variable held at its reference; `edge_stream`, as given; `dist_in_model`, `FALSE` when the
-#'   distances were too few to carry a smooth and size stood alone; `prior_sd`, as given.
+#'   distances were too few to carry a smooth and size stood alone; `prior_sd` and `cols`, as given (`cols[["grad"]]`
+#'   is the gradient the curve was fitted on, which a grade table records, #92).
 #' @export
 #' @examples
 #' \dontrun{
@@ -55,7 +56,7 @@
 #' cv$heldout; cv$edf
 #' }
 knw_tune_curve <- function(d, pick, walks, folds, resp = "U",
-                           cols = c(grad = "fwa_gradient", width = "cw_deploy", mad = "mad_pick"), src = "pick",
+                           cols = c(grad = "segment_gradient", width = "cw_deploy", mad = "mad_pick"), src = "pick",
                            dist_cap_m = 50000, q_default = 10, k = c(size = 6, dist = 6, grad = 6),
                            edge_stream = NULL, prior_sd = 2.5) {
   chk::chk_data(d)
@@ -179,5 +180,5 @@ knw_tune_curve <- function(d, pick, walks, folds, resp = "U",
   )
   list(model = fit, data = dd, ref = ref, dropped = dropped, capped = capped, heldout = dev, edf = edf, curves = curves,
        size_var = pick$size_var, q = q, dist_cap_m = dist_cap_m, dist_in_model = dist_in_model,
-       edge_stream = if (is.null(edge_stream)) NULL else as.integer(edge_stream), prior_sd = prior_sd)
+       edge_stream = if (is.null(edge_stream)) NULL else as.integer(edge_stream), prior_sd = prior_sd, cols = cols)
 }

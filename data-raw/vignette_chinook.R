@@ -58,6 +58,20 @@ dir_out <- "inst/vignette-data"
 # the newest tuning log that graded this key (a pass over a subset of species names them in its file name, 0320); a
 # superseded log of the same day (the first CH regrade of #65) is older than the one that replaced it
 logs <- sort(list.files("scripts/logs/habitat", "_tune_run.*\\.txt$", full.names = TRUE), decreasing = TRUE)
+# a promoted run names itself in its summary (#111): its own logs, the pass that graded last first, so a log another
+# key's promotion brought in, which may grade this key too, is never taken for this key's run
+tune_run <- readr::read_csv(sprintf("data/tune/%s_summary.csv", key), show_col_types = FALSE, col_types = readr::cols(.default = "c"))$tune_run
+if (length(tune_run) == 1 && !is.na(tune_run)) {
+  # <date>_tune_run-<run>-p<UTC start>[-<species>][-grad_fwa][-<n>].txt (0320): the pass that started last first
+  stem <- sprintf("^[0-9]{8}_tune_run-%s-p([0-9]{14})(-[a-z_]+)*(-[0-9]+)?\\.txt$",
+                  gsub(".", "\\.", tune_run, fixed = TRUE))
+  logs <- logs[grepl(stem, basename(logs))]
+  logs <- logs[order(sub(stem, "\\1", basename(logs)), decreasing = TRUE)]
+} else {
+  # tables from before the record: the newest log that graded the key, as before #111, never a candidate's (a by-key
+  # promotion of other keys brings a run's logs, which may grade this key too)
+  logs <- logs[!grepl("_tune_run-[0-9]{8}_[0-9]{4}", basename(logs))]
+}
 # the result line is "<key> grades: <n> groups, …"; a run that kept the table says "<key>: grades already written …"
 logs <- logs[vapply(logs, function(f) any(grepl(sprintf("^%s grades: [0-9]+ groups", key), readLines(f, warn = FALSE))), logical(1))]
 if (!length(logs)) stop("no tuning log in scripts/logs/habitat graded ", key)
@@ -82,10 +96,14 @@ if (length(missing)) stop("missing inputs: ", paste(missing, collapse = ", "))
 g1 <- rd(sprintf("data/tune/%s_grades.csv", key), n_max = 1, col_types = cols(.default = "c"))
 if (!identical(g1$ref_population, "stream_branch")) stop("data/tune/", key, "_grades.csv was graded before #65; rerun 0320")
 if (!"walk" %in% names(g1) || !identical(g1$walk, "bank")) stop("data/tune/", key, "_grades.csv was walked before #73 (not to the bank); rerun 0320")
+if (!"walk_md5" %in% names(g1) || !identical(g1$walk_md5, knw_walk_md5())) {
+  stop("data/tune/", key, "_grades.csv was walked by another walk than this tree's (walk_md5, #87); rerun 0320")
+}
 # and made by the gate that scores no rule on the curve's own visits, under this pick (the branch review of 2026-10-25)
 if (!all(c("curve_prior_sd", "grade_withheld", "null_heldout_curve", "evidence_md5") %in% names(g1))) {
   stop("data/tune/", key, "_grades.csv predates the gate's record (curve_prior_sd, grade_withheld, null_heldout_curve, evidence_md5); rerun 0320")
 }
+if (!.knw_grade_grad_ok(g1)) stop("data/tune/", key, "_grades.csv was not graded from a curve on link's segment gradient (curve_grad, #92); rerun 0320")
 
 out <- list(
   tune = rd(src[["tune"]]),
@@ -99,7 +117,8 @@ out <- list(
   change = rd(src[["change"]]),
   checks = rd(src[["checks"]])
 )
-# the comparison under every structure is kept (#73); `compare` is the structure 0330 reports as tuned, one row per group
+# the comparison keeps a row per structure it ran (#73; the reported one alone unless STRUCTURES=all, #112); `compare` is
+# the structure 0330 reports as tuned, one row per group
 if (!all(c("structure", "tuned_structure") %in% names(out$compare_structures))) stop("the compare table predates #73 (no structure column); rerun 0330")
 out$compare <- out$compare_structures |> filter(structure == tuned_structure)
 if (anyDuplicated(out$compare$watershed_group_code)) {
@@ -127,8 +146,16 @@ if (length(rec) != 1 || !identical(rec, unique(out$thresholds$rule))) {
 # and the grade the comparison read was graded under that rule, on the evidence the summary and the tuning log name (the
 # branch review of 2026-10-25: the log's md5 lines are the three derived tables', in the summary's order)
 if (!identical(g1$rule, rec)) stop("data/tune/", key, "_grades.csv was graded under ", g1$rule, ", not the recommended ", rec, "; rerun 0320")
+# and the comparison ran that rule, not an earlier run's pick (#92)
+if (!identical(unique(out$compare_structures$tuned_rule), rec)) {
+  stop("data/compare/", key, "_compare.csv compared ", paste(unique(out$compare_structures$tuned_rule), collapse = ", "),
+       ", not the recommended ", rec, "; rerun 0330")
+}
 if (!"evidence_md5" %in% names(out$summary) || !identical(g1$evidence_md5, out$summary$evidence_md5)) {
   stop("data/tune/", key, "_grades.csv and _summary.csv name different evidence builds (or the summary predates the record); rerun 0320")
+}
+if (!identical(out$summary$curve_grad, g1$curve_grad)) {
+  stop("data/tune/", key, "_grades.csv and _summary.csv name different gradients (or the summary predates the record, #92); rerun 0320")
 }
 log_md5 <- sub("^ +[a-z_]+ md5 ", "", grep("^ +(visits_link|visits_species|walks) md5 [0-9a-f]{32}$", readLines(path_log, warn = FALSE), value = TRUE))
 if (length(log_md5) != 3L || !identical(paste(log_md5, collapse = ";"), g1$evidence_md5)) {
@@ -199,7 +226,6 @@ gl <- grep(sprintf("^%s grades: [0-9]+ groups", key), log_txt, value = TRUE)
 if (length(gl) != 1) stop("the tuning log has ", length(gl), " '", key, " grades' lines")
 num_of <- function(pat) as.numeric(sub(pat, "\\1", regmatches(gl, regexpr(pat, gl))))
 fm <- formals(knw_tune_run)
-fr <- formals(knw_rule_in)
 out$meta <- list(
   written = format(Sys.Date()),
   link_run_uid = led$note[led$step == "link_run_uid"],
@@ -209,7 +235,8 @@ out$meta <- list(
                accessible = num_of("accessible=([0-9]+)"), graded = num_of("graded=([0-9]+)"),
                no_size = num_of("no_size=([0-9]+)"), reference_rate = num_of("reference rate ([0-9.]+)"),
                log = path_log),
-  spec = list(cols = eval(fr$cols), src = eval(fm$src), edge_stream = eval(fm$edge_stream),
+  # the gradient is the run's own record (#92), the width and flow columns the runner's defaults
+  spec = list(cols = c(grad = out$summary$curve_grad, eval(fm$cols)[c("width", "mad")]), src = eval(fm$src), edge_stream = eval(fm$edge_stream),
               area_range = eval(fm$area_range), seed = eval(fm$seed), folds = eval(fm$folds),
               seeds_more = eval(fm$seeds_more), n_boot = eval(fm$n_boot), d_floor = eval(fm$d_floor),
               min_wsg = eval(fm$min_wsg), power_wsg = eval(fm$power_wsg)),
@@ -260,7 +287,8 @@ out$meta$curve_ref <- list(gradient = grad_ref, dist_cap_m = cr$dist_cap_m, size
 # ---- BULK on link's segments -----------------------------------------------------------------
 seg_all <- readRDS(sprintf("data/compare/%s_segments.rds", key))
 s <- seg_all |> filter(watershed_group_code == wsg)
-# lines through wetlands (link's wetland rule on edge types 1050 and 1150 has no size or gradient test), over every group
+# lines through wetlands (link's wetland rule on edge types 1050 and 1150 has no size or gradient test), over every group,
+# under each structure the segments carry: the tuned one alone unless 0330 ran with STRUCTURES=all (#112)
 wl <- seg_all |> filter(edge_type %in% c(1050, 1150))
 structures <- sub("^rearing_", "", grep("^rearing_(free|door|door_wetland)$", names(wl), value = TRUE))
 out$wetland <- bind_rows(lapply(c("tuned", structures), function(st) {

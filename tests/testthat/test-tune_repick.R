@@ -68,11 +68,11 @@ test_that("at 1 SE the replay is every saved table's recommended rule", {
   }
 })
 
-test_that("at 1.96 SE the replay gives the table research/habitat_thresholds_tuned.md prints (#79, on #73's tables)", {
+test_that("at 1.96 SE the replay gives the table research/habitat_thresholds_tuned.md prints (#79, on #92's tables)", {
   skip_if_not(length(tune_files) > 0, "no source-tree data/tune (installed package)")
-  want <- c(BT_rear = "mad>=0.35|g<=0.1049|none", BT_spawn = "width>=2|g<=0.0549|none",
-            CH_rear = "mad>=1|g<=0.0549|Q3@D1000", CO_rear = "width>=1.5|g<=0.04|none",
-            GR_rear = "width>=1.5|g<=0.0349|none", RB_rear = "width>=3|g<=0.3|none",
+  want <- c(BT_rear = "mad>=0.15|g<=0.1049|none", BT_spawn = "width>=2|g<=0.0549|none",
+            CH_rear = "mad>=0.75|g<=0.0549|Q3@D1000", CO_rear = "width>=1.5|g<=0.0549|Q1@D1000",
+            GR_rear = "width>=1.5|g<=0.0549|none", RB_rear = "width>=2|g<=0.0849|none",
             ST_rear = "width>=1.5|g<=0.0849|none", WCT_rear = "width>=1.5|g<=0.0849|none")
   got <- vapply(tune_files, function(f) knw_tune_repick(utils::read.csv(f, stringsAsFactors = FALSE), 1.96)$rule, "")
   names(got) <- sub("_tune\\.csv$", "", basename(tune_files))

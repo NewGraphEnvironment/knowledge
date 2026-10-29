@@ -1,9 +1,9 @@
 species_code,stage,check,value,limit,pass,table,role,rule,dev_heldout,ddev_null,n_clamp,dev_visit_max,converged,coef_max,coef_max_term,coef_max_fold
-CO,rear,null_ratio,0.9965973352862059,1.25,TRUE,checks,,,,,,,,,,
+CO,rear,null_ratio,0.9928272441168112,1.25,TRUE,checks,,,,,,,,,,
 CO,rear,clamp,0,0,TRUE,checks,,,,,,,,,,
-CO,rear,behind_null,0,4024.0417944980672,TRUE,checks,,,,,,,,,,
-CO,rear,coef,1.1587429646419498,5,TRUE,checks,,,,,,,,,,
-CO,rear,,,,,rules,no_rule,none,4024.041794,0,0,8.421718,TRUE,1.158743,data_setFDS,5
-CO,rear,,,,,rules,default,width>=1.5|g<=0.0549|none,3967.694195,-56.347599,0,7.786888,TRUE,0.948768,data_setFDS,5
-CO,rear,,,,,rules,link_tuned,mad>=0.03|g<=0.0549|none,3928.399141,-95.642653,0,7.73397,TRUE,0.890672,data_setFDS,5
-CO,rear,,,,,rules,previous,mad>=0.03|g<=0.04|none,3867.64601,-156.395785,0,8.041505,TRUE,0.949632,rule,2
+CO,rear,behind_null,0,4418.291420779845,TRUE,checks,,,,,,,,,,
+CO,rear,coef,0.9262580996975167,5,TRUE,checks,,,,,,,,,,
+CO,rear,,,,,rules,no_rule,none,4418.291421,0,0,8.464413,TRUE,0.903223,data_setFDS,2
+CO,rear,,,,,rules,default,width>=1.5|g<=0.0549|none,4322.11174,-96.17968,0,7.737058,TRUE,0.913239,data_setFDS,5
+CO,rear,,,,,rules,link_tuned,mad>=0.03|g<=0.0549|none,4302.903429,-115.387992,0,7.695629,TRUE,0.908663,data_setFDS,5
+CO,rear,,,,,rules,previous,mad>=0.03|g<=0.04|none,4276.204559,-142.086862,0,7.481567,TRUE,0.926258,data_setFDS,5

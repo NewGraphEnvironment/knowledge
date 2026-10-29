@@ -9,8 +9,8 @@ repos consume snapshots from here instead of carrying the pipeline.
 ## Repository Context
 
 **Repository:** NewGraphEnvironment/knowledge (#56 prepared it to go public, but `gh repo view` still read
-PRIVATE on 2026-10-19, and the pkgdown site, <https://newgraphenvironment.github.io/knowledge/>, answered 404
-although `gh-pages` deploys; check both before citing the site's URL as live)
+PRIVATE on 2026-10-28; the pkgdown site, <https://newgraphenvironment.github.io/knowledge/>, is live (answered 200 on
+2026-10-27) though not advertised)
 **Primary Language:** R, with Python (`0153`, `0270`) and workflow JS (`wf_*.js`)
 **Origin:** seeded in September 2026 with history from an earlier fish-passage reporting template.
 Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` refer to that repo.
@@ -23,8 +23,9 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   `.rda` files off the top of `data/`, where `pkgload::load_all()` would source or load them.
 - `vignettes/chinook_rearing.Rmd` — the pkgdown article on the chinook rearing threshold (#62). It reads
   `inst/vignette-data/`, which `data-raw/vignette_chinook.R` writes from the tune and compare tables and the
-  database (`SCHEMA` names the run's schema, as `0320` and `0330` take it); rerun that script after any `0320`/`0325`/`0330` rerun, because `tests/testthat/test-vignette-data.R` fails
-  when a tracked source's md5 moves. Every number in its prose is computed inline from those files. Its references
+  database (`SCHEMA` names the run's schema, as `0320` and `0330` take it). A promotion (`0335`) reruns it, and only a
+  promotion changes its sources, because `tests/testthat/test-vignette-data.R` fails when a tracked source's md5 moves
+  (#111). It takes the tuning log of the run its CH rearing summary names (`tune_run`), not the newest. Every number in its prose is computed inline from those files. Its references
   are `vignettes/chinook_rearing.bib`, which `data-raw/vignette_bib.R` writes from the group library through Better
   BibTeX (Zotero must be running): rerun it after any citation change. It refuses a key Zotero does not return, strips
   each entry's local attachment path, and sets software versions from the run's ledger, one token each, because
@@ -32,6 +33,19 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   (`IN_PKGDOWN`), on Esri's World Topographic Map. Check a cited
   claim against the PDF's text: cred's `crd_aud_verify_all()` cuts each claim at the Rmd's line breaks and matches
   unrelated passages (#79).
+- `vignettes/habitat_thresholds.Rmd` — the methodology article (#93), "Choosing habitat thresholds from where fish were
+  caught": the reference home for the method and its citations. A species article (the chinook one first, #64) gives
+  its own records and result in a sentence or two and links it rather than restating the method. It reads `inst/vignette-data/method.rds`, which `data-raw/vignette_method.R` writes from
+  `inst/method/pipeline.csv` (the steps) and `inst/method/settings.csv` (every number that shapes a result, with where
+  its value lives); the script refuses to run with its code or registers uncommitted. A promotion reruns it, last; it
+  reads the ledger the published tables name (`knw_run_ledger()`), and refuses on a machine whose `data/fdis/derived`
+  is not that build's evidence. `tests/testthat/test-settings-register.R` fails when a register value and the code
+  disagree: change both together, and add a row for any new number that shapes a result (the test cannot see one with
+  no row). `method.rds` also pins the md5s of the ignored grade tables (`data/tune/*_grades.csv`) where it was built,
+  and `test-vignette-data.R` checks them wherever they exist, so on a machine whose copies differ it fails there and
+  nowhere else (CI has no `data/`). Its references come from `data-raw/vignette_bib.R` with the chinook article's. A draft article is named
+  `vignettes/_<name>.Rmd`: pkgdown skips it, `.Rbuildignore` keeps it out of the tarball, and pkgdown.yaml fails if
+  one reaches `docs/articles/`.
 - `scripts/` — the run order (`scripts/README.md`), calling the package (`pkgload::load_all()` from
   the root) and `cred`. Legacy literals in scripts are fixed forward as they are touched.
 - `data/<wsg>/` — per-group snapshots (csv/md) and small spatial deliverables (gpkg/kml). Tracked.
@@ -67,9 +81,12 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   tables (its catalog cache and interactive maps ignored), `data/publish/` the Parquet sets (ignored).
   `data/tune/grad_ext/` and `data/compare/grad_ext/` hold `0322`'s CH rearing run on a gradient ladder extended to
   30 % (#67, on the evidence build before #73; the main run carries that ladder for every species since #68);
-  nothing that publishes reads them, because `0325`, `0330` and `knw_thresholds_table()` list their directories
-  non-recursively. `data/compare/gpkg/` (ignored) holds one GeoPackage per species × stage from `0330`, the
-  comparison's view for QGIS (#81).
+  `0325`, `0330` and `knw_thresholds_table()` do not read them, because they list their directories non-recursively;
+  `data-raw/vignette_chinook.R` reads `data/tune/grad_ext/` for the chinook article's sentence on the longer ladder. `data/compare/gpkg/` (ignored) holds one GeoPackage per species × stage from `0330`, the
+  comparison's view for QGIS (#81). `data/tune/candidate/<run>/` and `data/compare/candidate/<run>/` (ignored, #111)
+  hold the full runs of `0320` and `0330` until `0335` promotes one, and the `replaced_<stamp>/` archive of what each
+  promotion replaced (promoting it undoes the promotion); `data/tune/dev/` (ignored) holds `DEV=1 0320`, its log and
+  its `pick_report.csv`. The tracked tables change only by promotion.
 - `data/rag/` — ignored local cache of the ragnar stores. Source of truth is `s3://fresh-bc/rag/` (not public).
 - `data/fdis/` — ignored cache of the FDIS export (`0230` syncs it) and of the visit tables built from it
   (`data/fdis/derived/`; `0299` builds them as `knowledge/fdis/v3`, which is not yet uploaded (`v2` is the
@@ -103,7 +120,9 @@ the repo is public.
 ### Ragnar stores live in S3 through `cred`; a local ingest must be pushed
 
 `.Rprofile` sets `options(cred.store_source = "s3://fresh-bc/rag/")` (committed there so it travels
-with the repo; a project `.Renviron` would replace the user's, see Database access). `cred::crd_store_connect("<store>")` pulls
+with the repo; a project `.Renviron` would replace the user's, see Database access). A project `.Rprofile` replaces
+`~/.Rprofile` the same way, so ours sources it first: on CI that file holds the Posit binary repository `setup-r` writes, and
+without it every package built from CRAN source (#94). `cred::crd_store_connect("<store>")` pulls
 and md5-verifies; `cred::crd_store_push()` uploads and merges the `log.json` manifest. After a
 local write (`0152` ingest, `0156` dedup) the local md5 no longer matches the manifest, and the
 next `verify = TRUE` connect **replaces the local file with the bucket copy**. Push first.
@@ -174,9 +193,40 @@ widths are these same sites, so never score the width model against them.
 Some surveys were loaded under two to four collection ids (same UTM, date, per-pass effort and
 catch). `0230` keeps one copy, the one with the most measured fish, because the fish often sit on
 the later id only, and lists the rest in `data/fdis_repeat_surveys.csv` (#35). Downstream scripts
-carry no duplicate logic of their own. From #57, `0310` builds every species' visit table on the province-wide
+carry no duplicate logic of their own.
+
+`0230` places a visit with `fresh::frs_point_snap()` twice (#91): to the nearest stream, and to each 20k stream its
+FDIS 1:50k code names (`fwa_streams_20k_50k`), passed as a per-point hint so that snap lands only on that stream.
+`knw_fdis_place()` takes the nearest named stream in reach ("confirmed", moved past a nearer stream where need be),
+else the nearest one, and holds the two kinds of pick to their own limits (`snap_limit`, `snap_limit_code`;
+`research/fdis_export.md`, "Placement"). "Confirmed" means on some stream the code names, which for a code naming
+several keys is not necessarily the one the surveyor meant. fresh never snaps to an unmapped or placeholder line, so
+the visits `fwa_indexpoint()` put on one, which link's segments lack, now reach a mapped stream. The FISS workbook
+sites (`0250`) still snap with `fwa_indexpoint()` and a 100 m flag, so `flag_far_snap` means two things in the
+bound `fdis_evidence.csv` and `fiss_evidence.csv`. `0310` takes `SCHEMA` and caches its visit walks in
+`knw.walk_cache` from #91.
+
+From #57, `0310` builds every species' visit table on the province-wide
 `fresh_default` in one pass and `0290`, `0294` and `0296` write their tables from it; `0291`–`0298` are frozen on
 the published v2 tables (`0299 PULL=TRUE VERSION=v2`).
+
+### The tuning scores link's segment gradient, and link cuts a segment where its species were caught
+
+From #92, rules and curves read `segment_gradient`, the gradient of the link segment a visit sits on, which is the one
+link applies a rule to and the grade reads; `fwa_gradient` (the whole Atlas line's) is the sensitivity
+(`GRADIENT=fwa_gradient 0320`, main fold seed, `data/tune/grad_fwa/`, never graded, and read by no publisher: `0325`,
+`0330` and `knw_thresholds_table()` list `data/tune/` without recursing; `data-raw/vignette_method.R` reads it for the
+methodology article's sensitivity sentence).
+`knw_grade_species()` refuses a curve fitted on any other gradient. link breaks streams at the bcfishobs observations
+of the species it models in each group, and an FDIS visit that caught one is usually such an observation, so the
+segment and its length depend on the outcome: on the tuning's stream branch 86 % of visits with fish start a segment of
+their own against 10 % of empty ones, with median lengths of 113 m and 305 m. By any catch the gradient's gap from the
+Atlas line's does not (median 0.0083 either way), but by each species' own outcome it is smaller where the species was
+present for CO, GR, ST and WCT (WCT 0.0076 against 0.0164; `data-raw/segment_gradient_check.R`). Fixed-window gradients, whose length would
+not depend on the outcome, are #70's. These numbers, and #92's tune, are on link 0.66.0's build
+(`fresh_default_20261017`). link has since cut gradient breaks only where a present species' access changes
+(link#326, 0.69.0) and fish records only at each species' highest record per stream (link#396), and no build in the
+database carried either on 2026-10-28.
 
 ### FISS submission workbooks: editions drift, and most EF fish are already in FDIS
 
@@ -281,6 +331,14 @@ Width and flow carry two traps (#54):
   flow, and the main lines (1250) of some small double-line rivers carry a small flow of their own. At `default`'s gradient, a 0.75 m³/s
   floor on the river branch drops 636 km of edge 1450, 1250 and 1350 lines in the 31 groups.
 
+### link's parity reference is its `bcfishpass` config, not `default`
+
+`default` is the bundle knowledge tunes against, not a copy of bcfishpass, so never argue for or against changing it on
+parity grounds. `default` reads fwapg's annual flow table (`fwa_stream_networks_discharge`) until `default_tuned`, which
+reads wet (link#331), has been reviewed; moving `default` to MAD in every group is planned and will be done
+deliberately, not as a side effect (Al, 2026-10-27). A MAD `default` must read wet: fwapg's table covers only the
+Fraser, Peace and Columbia and skips order-8+ mainstems (`research/modelled_discharge.md`).
+
 ### Reading the tuning's stability checks: say what each one counts
 
 The checks answer different questions, and #67's article needed four review rounds to stop quoting them past what
@@ -295,15 +353,20 @@ they show:
 - **A decision made before the run is stated as one.** List every check with its direction; do not sort them by
   the side they support.
 
-### A run's record travels with its table, and every reader compares it, not its presence
+### A run's record travels with its table, and its readers compare it, not only its presence
 
 Every `data/tune/<key>_grades.csv` row carries the run that made it: `rule`, `run_uid`, `walk`, `ref_edge`,
-`discharge_load`, `curve_prior_sd`, `grade_withheld`, `null_heldout_curve` (the gate's own number) and `evidence_md5`
-(the md5s of the three derived tables); the summary and `<key>_curve.rds` carry `evidence_md5` and `run_uid`, and the
-score cache its settings (`spec`: fit, prior, seed, folds, d_floor, extra, evidence). `0320`'s keep-check, `0325`,
-`0330` and `data-raw/vignette_chinook.R` each compare those fields with the run's own values and refuse a table that
-does not match; `0325` refuses before it writes anything. So a change to the gate, the prior, the walk or the evidence
-regrades every key (about 190 min on the database's host), which is the cost of never publishing a verdict the code
+`discharge_load`, `curve_prior_sd`, `grade_withheld`, `null_heldout_curve` (the gate's own number), `evidence_md5`
+(the md5s of the three derived tables) and `curve_grad` (the gradient the curve was fitted on, #92); the summary and
+`<key>_curve.rds` carry `evidence_md5`, `run_uid` and the gradient, and the score cache its settings (`spec`: fit,
+prior, seed, folds, d_floor, extra, evidence, grad). `0320`'s keep-check compares every one of those fields with the
+run's own values (`null_heldout_curve` by presence). The readers after it compare what they can hold a field to and
+refuse a table that fails: `0325` and `0330` the rule, run, walk, evidence, gradient and flow load (the live table's),
+and `0325` the reference edge types across tables; `data-raw/vignette_chinook.R` the rule, walk, evidence and gradient;
+`data-raw/vignette_method.R` the gradient, the evidence and one flow load. The gate's fields (`curve_prior_sd`,
+`grade_withheld`, `null_heldout_curve`) `0330` and `vignette_chinook.R` check by presence, `0325` all but the prior, and
+`vignette_method.R` not at all. `0325` refuses before it writes anything. So a change to the gate, the prior, the walk or the evidence
+regrades every key (53 min on the database's host with the walks cold, 2026-10-27; minutes for a key whose walks are cached), which is the cost of never publishing a verdict the code
 no longer makes. #73's branch review (five rounds, `planning/archive/2026-10-issue-73-rebuild-evidence-retune-bank/review-round*.md`)
 found four axes where a reader had checked presence alone, one of them the gate itself: it compared the curve's
 held-out deviance over the visits with a size against no rule's over every modelled visit, so for the width-ruled keys
@@ -318,6 +381,10 @@ Before comparing two runs that read flows, read the table comment
 (`obj_description('discharge.fwa_v1_segment_monthly'::regclass)`, which names the build), and expect a rule-unchanged
 check to fail when it differs. `0325` publishes the comment as `discharge_load_at_publish`; recording it at grading
 time is #72.
+wet writes one comment per table, naming only the scenario loaded last, while the walk and the grade read only
+`historical`, so `knw_discharge_load()` refuses a comment that does not name `scenario historical`: after an ssp load
+the comment no longer identifies the historical rows, and the walk cache would serve walks made on an older load
+(NewGraphEnvironment/wet#88 is the load table that would fix it).
 
 The walk (`inst/sql/ch_dist_profile.sql`) ends at a double-line river's bank, by fresh 0.42.0's rule (#73): a
 connector (edge 1400/1450) is never a target, the connector run and the jump's crossing inside the target's polygon
@@ -347,12 +414,49 @@ R reads `~/.Renviron` at startup and its values **replace** the shell's, so wher
 database there, or select a `~/.pg_service.conf` entry with `PGSERVICE=<entry>`, which libpq takes
 over the `PG*` variables. Set `PGCONNECT_TIMEOUT`, or an unreachable server hangs the script.
 
-**Run a database-bound step on the database's own host, against its own database.** Grading (`0320`'s walks) and
-`0330` send a query per segment or per watershed group, so their time is round trips: a trivial query costs 1.6 ms on
-the host and 104 ms from a machine on a remote link (2026-10-24), and #73's rescore graded from a remote machine for
-7.5 h without finishing what takes about an hour on the host. A second machine helps only with a database of its own
-holding the same build: the schema's run, the flow load named in the table comment and the walk code. Scoring is
-CPU-bound: the remote machine scored every key in about an hour on 12 workers (2026-10-23).
+**Run the comparison on the database's own host, against its own database.** A query's fixed cost is a round trip:
+1.6 ms on the host, 104 to 110 ms from a machine on a remote link (2026-10-24, 2026-10-26). Since #87 grading walks
+500 segments per query and keeps every walk in `knw.walk_cache`, so a batched walk costs about 3 ms per walk per
+worker on the host and 12 to 18 ms from the remote link, against 116 ms one query per walk; a cold regrade of every key
+took 53.4 min on the host, and one key regraded with its walks cached 4.1 min. `0330` regenerates link's flags group by
+group on 6 connections, one key at a time (BT rearing 33.4 min, every key 162.9 min with `GPKG=FALSE`; from the remote link #92's took 269 min to compare and 197 more to
+write the GeoPackages, which take 14 min on the host, so a run off the host passes `GPKG=FALSE`, #81): it is bound by
+the database's cores, so run it on the host. Those minutes are every structure's; since #112 `0330` regenerates
+`default` and `door` alone unless `STRUCTURES=all` (the rules it drops took 29 to 33 % of the worker minutes on three
+keys), so the research files' `free` and `door_wetland` figures (#92's) are refreshed only on that setting. `0310`, a grading `0320` and every `STAGE` of `0330` check this at
+connect with `knw_db_latency_check()`: over a 20 ms round trip they stop with the round trip and what the remote link
+cost #92's comparison, unless `REMOTE=TRUE`, and every run logs the round trip and whether `REMOTE` overrode it (#110). A refused run writes its ledger or log under a `_refused` name (`<date>_evidence_build_refused.csv`, and `_tune_refused-<run>` and `_compare_refused-<run>` logs in the run's directory), outside the patterns later steps read (the newest `*_evidence_build_ledger.csv`, the `_tune_run*.txt` that `0335` promotes and `0325` lists), so a run that stopped never becomes the one they read: any new refusal does the same.
+`0330` also logs each key's minutes by stage, so a remote run shows which stage the link slows. A second machine helps a database-bound step only with a database of its
+own holding the same build (the schema's run and the flow load named in the table comment; the walk travels with the
+code). `0320` and `0330` refuse a schema built by another run at connect (`knw_build_record()`), and every grade table's
+flow load and walk md5 are compared by its readers; `research/database_builds.md` has the numbers and the load recipe.
+Scoring is CPU-bound: the remote machine scored every key in about an hour on 12 workers (2026-10-23).
+The host keeps its own ignored `data/` (grade tables, curves, `data/fdis/derived`), which can be an older build than the
+promoted run: on 2026-10-28 its visits md5s were 2026-10-25's while the promoted grades named #92's. Before a run there
+is held to the tracked tables, compare `data/fdis/derived`'s md5s with the grade table's `evidence_md5`, and stage the
+promoted inputs beside the repo where they differ (`data-raw/compare_structures_check.R` takes `TUNE_DIR`,
+`COMPARE_DIR` and `EVIDENCE_DIR`). And before timing anything on the database, read `pg_stat_activity`: other sessions
+run link builds and comparisons on it, and #112's first timings overlapped one for 20 minutes unnoticed.
+
+**Never chain tuning and comparison until every key's smoke gates have passed (#84).** Score every key, check, then
+grade, then compare: `0320` runs its four smoke gates for every key first and stops on a failure, and a chain of runs
+must stop at a failed step, so nothing downstream reads a key whose gates failed.
+
+**A full retune and a promotion each start on Al's word, not an agent's judgement.** After a change upstream (a link
+build, placement, a flow reload), run `0310` on the new build and `DEV=1 0320`, and report its pick report
+(`data/tune/dev/pick_report.csv`: each key's pick beside the published one, whether the published rule is still in the
+region, and how far behind the best it now sits). All 22 keys took 7.7 min on 14 workers with no database (#111,
+2026-10-28). A full `0320` and `0330 TUNE_DIR=` write ignored candidates and wait for Al's word; so does
+`RUN=<run> 0335`, which moves a candidate into the tracked tables, whole or by key, and reruns `0325` (local),
+both bundles, the bibliography and the README figure (Al, 2026-10-28: "we will be retuning continuously ... I help
+decide when we are retuning"). By key works only onto the kept keys' build: after a new link run or evidence build
+every fitted key moves together. A candidate's provenance is by construction: `0320` and `0330` clear a key's files in
+the run before a pass rewrites them and write the large ones whole (a GeoPackage, a key's figures, the grade and
+comparison tables land only complete), so `0335` trusts what a run holds; never put a file into a candidate by hand
+(#111, five review rounds, `planning/archive/2026-10-issue-111-candidate-runs-promotion/`). A promotion that moves the
+published numbers also moves pins it cannot revise
+(`test-tune_repick.R`'s 1.96 picks, `test-vignette-data.R`'s key count and funnel, the articles' inline checks) and
+the `research/` prose that quotes them: those, and the articles' review, follow it by hand.
 
 **Run R from the repo root, and never add a project-level `.Renviron` here.** R loads a
 project `.Renviron` *instead of* `~/.Renviron`, not in addition to it, so one silently empties
@@ -378,6 +482,12 @@ prior, penalty or gate is doing; then the numbers. Al (2026-10-23, choosing #73'
 through separation, the scale and the prior): "our write up should teach the principles at the same time as it gives
 the results".
 
+**Keep a methods step short.** In a methodology article, explain each step in a few plain sentences, grouping what it
+does, why and how where one sentence carries them, and keep counts and settings out of its way; define each term the
+reader needs once, in its own place. A fixed what/why/how slot per step buries the reader. Al (2026-10-27, on #93's
+article): "burying the reader to meet a format is not the goal. goal is clear methodology and plain language". Read
+`writing.md` in full before drafting public prose, not its index.
+
 ### A pointer to another issue goes in that issue's body, not a comment
 
 Write a dependency, a "blocked by", a "folded into" or an owed step into the target issue's body, as a task or a
@@ -393,8 +503,7 @@ one.
 # Agent Operating Rules
 
 How an agent session works here: clocks and waiting, subagents, evidence, and when to come
-back to the user. Sections 5–8 of `karpathy.md` until 2026-10-11. Worked commands
-and background, under the same headings, are in
+back to the user. Worked commands and background, under the same headings, are in
 soul's `conventions/reference/agent-operations.md`, which no `CLAUDE.md` loads.
 
 Citations sit in `<!-- evidence -->` blocks, which a repo's `CLAUDE.md` omits; the full text
@@ -827,11 +936,35 @@ unpublished.
 
 *4 lines of evidence for this rule are in `conventions/agent-operations.md`.*
 
-### An upstream PR is short, carries no session link, and needs no issue of its own
+### Upstream, we are guests: fork first, offer an issue, disclose AI
 
-Write it for a maintainer who knows the code (about 200 words: bug, repro, change, test table), and keep "Generated with Claude Code" but drop the session link and the commits' `Claude-Session:` trailers, which outsiders cannot open. File no upstream issue beside it: when we have the fix, the PR is the upstream report, and our own issue links it. Leave out the SRED cross-reference too. Posting it still needs the user's word (above).
+We build on other people's work: gratitude and humility in every step that touches it.
+Maintainers may read anything we write about their code, so describe what we saw rather than
+diagnose their design, offer rather than propose, and leave them every road to lead.
 
-*5 lines of evidence for this rule are in `conventions/agent-operations.md`.*
+- **Fix on our fork the same day,** one concern per branch from upstream's default branch,
+  no planning files and no `#N` in its commits, the draft in a fork issue labelled
+  `upstream-draft`. Pin our packages
+  to the fork's integration branch until upstream holds every fix on it, their way.
+- **Upstream gets a short issue that offers:** thanks, a reprex, the options as we see them,
+  and a pull request if it helps. Send one when asked, or first only where the history shows
+  outside pull requests merged routinely. One open item per maintainer, timed around their load.
+- **About 200 words, no session link, no SRED line.** A design change goes in as a question.
+- **Say plainly that Claude Code helped.** Commits keep `Co-Authored-By` and drop
+  `Claude-Session:`, and the pull request offers an `Assisted-by` reword. Where AI-assisted
+  contributions are unwelcome, send no code.
+- **Never ping by accident:** backtick upstream references in issues and pull requests in our repos,
+  and keep them out of commit messages. In a fork checkout `gh` targets upstream, so a write
+  meant for our fork passes `--repo`.
+- **Homework before, notes after:** who contributes, stated policy, AI use, current load,
+  response pace. Keep it in soul's `research/upstream-projects.md`, revised after every reply,
+  merge or silence; steps and wording are in the reference file.
+- Raise upstream only what would help their other users. If a maintainer would rather not
+  hear from us, keep the fork or move on.
+
+Posting still needs the user's word on the exact text (above).
+
+*22 lines of evidence for this rule are in `conventions/agent-operations.md`.*
 
 ### Auto mode refuses a production write whatever the chat says
 
@@ -843,9 +976,18 @@ bare command themselves (below). Do not retry, and do not suggest a restart.
 
 It is not the secret-read clamp (`newgraph.md`, "Reading a secret clamps the rest of the
 session"), which names *earlier conversation content* and needs a restart. This refusal
-names a **category** of action, such as "Production Deploy".
+names a **category** of action, such as "Production Deploy" — and the category need not
+describe a deploy: a plain `git push` of local commits has been refused as "Excess
+Sensitive Detail". In a cloud session "External System Writes" covers a `gh api -X POST`
+issue comment; the `mcp__github__*` write tool makes the same write unprompted.
 
-*10 lines of evidence for this rule are in `conventions/agent-operations.md`.*
+**It classifies the command text, so it also fires on a write the file tools can make
+safely.** Where what was refused is an edit to a tracked file rather than the publish
+itself, take that route first — Read and Edit, which the denial text offers as a safer
+method — and say the classification was wrong. Keep the two routes above for the command
+that really does publish.
+
+*23 lines of evidence for this rule are in `conventions/agent-operations.md`.*
 
 ### Hand the user bare commands
 
@@ -870,6 +1012,13 @@ paths. Full Disk Access for the terminal app removes the block.
 
 *13 lines of evidence for this rule are in `conventions/agent-operations.md`.*
 
+### Read a name for what it sounds like: the user dictates
+
+Messages often arrive by voice, so names come spelled by sound ("maxxam creek" was Maxan
+Creek). Resolve a place name against BC Geographic Names or the Freshwater Atlas before it
+lands in an issue, code or a query, and read an odd phrase for the word it sounds like
+before asking about it.
+
 ### Link every issue and PR you name to the user
 
 When a message to the user names an issue or a PR, make the number a link the user can
@@ -882,7 +1031,7 @@ click: `[repo#12](https://github.com/<owner>/<repo>/issues/12)`,
 - Before sending a report with many numbers, spot-check two or three through `gh`: the ones
   typed from memory or whose type you inferred.
 - Scope is messages to the user, and PR and issue bodies read from outside the repo; commit
-  messages autolink already.
+  messages autolink already. An upstream item in our repos' GitHub text is backticked, never linked.
 
 *7 lines of evidence for this rule are in `conventions/agent-operations.md`.*
 
@@ -895,7 +1044,7 @@ every other consumer. Same instinct as `newgraph.md`'s "install missing packages
 workaround", applied to a *broken* dependency.
 
 **How to apply:** reproduce it minimally, file an issue in the owning repo with the
-repro and the exact lines, report it, and carry on if it is not blocking. The rule is
+repro and the exact lines (a third party's: a fork issue first, above), report it, and carry on if it is not blocking. The rule is
 *do not hide it*, not *do not continue*.
 
 *10 lines of evidence for this rule are in `conventions/agent-operations.md`.*
@@ -954,8 +1103,9 @@ Install: `pak::pak("NewGraphEnvironment/gq")`
 - **Google imagery is a link, never an embed beside our map** — Google Maps Platform terms §3.2.3(e) bar using its services "with or near a non-Google Map", so no Google panel beside an Esri or Sentinel one, key or not. Link per feature instead (template in the `cartography` skill), as an undated look: Google Maps does not date its imagery
 - **A maptiles custom provider URL ends in `.jpg`** — in maptiles 0.11.0, `create_provider()` with an extensionless tile URL fails at `get_tiles()` with `cannot coerce type 'closure' to vector of type 'character'`; `.../MapServer/tile/{z}/{y}/{x}.jpg`, the form its built-in Esri providers use, works and Esri serves the same tiles
 - **Ask Wayback, not the map, for newer Esri imagery** — call `dft_wayback_captures(zoom = z)` once per zoom, 10 to 22, and compare: one call keeps one zoom per feature
+- **Give a web map hex colours, never R colour names** — `grey80` draws in tmap and ggplot2, but MapLibre (mapgl) cannot parse it and drops the whole layer: the console's first error is `Could not parse color from value 'grey80'`, then `Cannot style non-existing layer` when a control touches it. Convert with `m <- grDevices::col2rgb(x, alpha = TRUE); grDevices::rgb(t(m[1:3, ]), alpha = m[4, ], maxColorValue = 255)` or hard-code hex, and check for `NA` before converting: it comes back `#FFFFFF00`, a layer drawn transparent rather than an error
 
-*5 lines of evidence for this rule are in `conventions/cartography.md`.*
+*11 lines of evidence for this rule are in `conventions/cartography.md`.*
 
 ## Self-Review (after every render)
 
@@ -1032,35 +1182,22 @@ drift::dft_map_interactive(classified, aoi = aoi)
 
 # CI Monitoring
 
-When this repo has GitHub Actions workflows, scan recent runs on session start. Catches failed pkgdown deploys, broken vignette builds, and stale citation regenerations that would otherwise linger until the user manually checks.
+When this repo has GitHub Actions workflows, scan recent runs on session start, so a failed deploy, vignette build or citation update does not linger until someone notices.
 
 ## On Session Start
 
 ```bash
 gh run list --limit 5 --json status,conclusion,name,createdAt,databaseId \
-  --jq '.[] | select(.conclusion == "failure")'
+  --jq '.[] | select(.conclusion == "failure" or .conclusion == "cancelled")'
 ```
+
+Keep a `cancelled` row only if its annotations report a timeout ("A timed-out run reads `cancelled`"); say timed out, not failed.
 
 If any failures since the last visit, surface to the user before starting other work:
 
 > Workflow `<name>` failed `<time>` ago (run `<id>`). Investigate with `gh run view <id> --log-failed`. Fix or proceed with current task?
 
-User decides; do not auto-fix.
-
-## Particular Failures Worth Naming
-
-- **pkgdown** — docs site on GitHub Pages broken
-- **R-CMD-check** — package may not install
-- **Vignette / build-vignettes** — vignette docs incomplete
-- **update-citation-cff** — CITATION.cff stale
-
-## Why This Matters
-
-Without this scan, post-merge workflow failures linger until someone (often the user) notices a stale docs site or a missing vignette. The session-start sweep catches them on the first re-entry into the repo.
-
-## Pairs with `/gh-pr-merge`
-
-The skill watches workflows triggered by a fresh merge in real time — that's the targeted catch. This convention is the backstop for failures that landed when no one was watching (merges via web UI, scheduled triggers, manually-triggered workflows).
+User decides; do not auto-fix. `/gh-pr-merge` watches a fresh merge's runs; this scan is the backstop for failures nobody watched (web-UI merges, schedules, dispatches).
 
 ## A green run does not mean the site is current
 
@@ -1073,16 +1210,14 @@ git fetch -q origin gh-pages && git log -1 --format='%s' FETCH_HEAD
 ```
 
 GitHub can create a workflow run minutes after the push that triggered it, and
-out of order with a later push. Observed 2026-08-26 in `fly`: `7a7700c` built and
-deployed at 17:21, then its own *parent* `be77eca` had its run created at 17:22:52
-— twelve minutes after that push — and deployed over it. Both runs green, `gh run
-list` all success, published site one commit stale.
+out of order with a later push, so a parent commit's run can deploy over its child's with
+both runs green and the published site one commit stale.
 
 Things that do **not** fix this, so don't reach for them:
 
-- `cancel-in-progress: true` — cancels an *overlapping* run. Here the runs never
-  overlapped (`created == started` on both, second created after first finished),
-  so there was nothing to cancel.
+- `cancel-in-progress: true` — cancels an *overlapping* run. In the measured case the
+  runs never overlapped (`created == started` on both, second created after first
+  finished), so there was nothing to cancel.
 - A `concurrency:` group — the r-lib pkgdown template already sets one at the job
   level (`group: pkgdown-${{ github.event_name != 'pull_request' || github.run_id }}`).
   Grepping for a top-level `concurrency:` key misses it and invites a redundant
@@ -1094,7 +1229,7 @@ exists. The remedy is detection: check the deploy provenance, and re-dispatch
 commit changed nothing the site publishes — confirm via `.Rbuildignore` / `_pkgdown.yml`
 rather than assuming.
 
-*2 lines of evidence for this rule are in `conventions/ci-monitoring.md`.*
+*5 lines of evidence for this rule are in `conventions/ci-monitoring.md`.*
 
 ## Don't push to the default branch between a merge and its CI settling
 
@@ -1109,14 +1244,13 @@ push: a `CLAUDE.md` drift sync, a typo fix, a `.gitignore` line. `/compact-prep`
 runs `claude_md_drift.sh apply`, which **pushes**, and after `/gh-pr-merge` that lands
 seconds after the merge.
 
-Order them: watch the merge's runs to completion, *then* push anything else. Measured
-2026-09-08 in gq — the merge's pkgdown and R-CMD-check were allowed to finish green and
-the deploy provenance checked before the sync went out, and the sync's own runs then went
-green on their own SHA. Holding it cost about three minutes.
+Order them: watch the merge's runs to completion, *then* push anything else.
 
 Where a push has already gone out and cancelled something, `/gh-pr-merge` step 10 has the
-reading: `cancelled`/`skipped` is `⊘ superseded`, not `✗ failed`, and the thing to confirm
+reading: `cancelled`/`skipped` is `⊘ superseded` unless its annotation reports a timeout, and the thing to confirm
 is that the newest **non-bot** SHA's run passed. Do not re-dispatch the cancelled one.
+
+*3 lines of evidence for this rule are in `conventions/ci-monitoring.md`.*
 
 ## Don't use `gh run watch` to wait
 
@@ -1153,15 +1287,18 @@ If it died in dependency setup, rerun once. If it dies the same way again it is 
 upstream CDN, and the honest move is to say so and stop — not to keep spending runs on
 something no change in the repo can fix.
 
-## A citation run failing "fetch first" beside a green twin lost a push race
-Before reading a red `Update CITATION.cff` as a broken release, find a green run of it on the same or a later SHA (not earlier), then confirm `git show origin/main:CITATION.cff` carries the released version and date.
+## A timed-out run reads `cancelled`
+Read a `cancelled` run's annotations before calling it superseded: its job ids from `gh run view <id> --json jobs --jq '.jobs[].databaseId'`, then `gh api repos/<o>/<r>/check-runs/<job id>/annotations`. A timeout says "The job has exceeded the maximum execution time", and its `--log-failed` is empty.
 
 *5 lines of evidence for this rule are in `conventions/ci-monitoring.md`.*
 
-## A hung setup step holds the concurrency group for six hours
-A run `in_progress` long past its usual duration, with a newer run of it `pending` behind, is a hang: confirm no step moved (`gh run view <id> --json jobs`), then `gh run cancel <id>`; the lasting fix is `timeout-minutes:`.
+## R workflows live in NewGraphEnvironment/flows
+Change a runner, timeout or step there and fast-forward `v1`; a workflow marked at its top as its own is changed in its repo. Re-run all jobs: re-run failed reuses the old copy.
 
-*4 lines of evidence for this rule are in `conventions/ci-monitoring.md`.*
+## A hung setup step holds the concurrency group for six hours
+A run `in_progress` long past its usual duration, with a newer run of it `pending` behind, is a hang: confirm no step moved (`gh run view <id> --json jobs`), then `gh run cancel <id>`; the lasting fix is `timeout-minutes:`. A slow `setup-r-dependencies` may be compiling (`ℹ Building <pkg>`, in the web UI while it runs); sources on `cran.rstudio.com` mean `code-check-r.md`, "pak Behavior".
+
+*9 lines of evidence for this rule are in `conventions/ci-monitoring.md`.*
 
 ## A job-level `concurrency` group must vary with the matrix, or the jobs cancel each other
 
@@ -1187,22 +1324,10 @@ which `/gh-pr-merge` step 10 correctly reads as `⊘ superseded` — so two plat
 never ran look like two platforms that were superseded by a newer push. Nothing is red and
 nothing says the coverage was lost.
 
-The decisive evidence is GitHub's own context-availability table: `matrix` is listed for
-`jobs.<job_id>.concurrency` and **not** for the top-level `concurrency`. If it were not
-evaluated per job, the context could not be in scope there.
-
-```bash
-curl -s https://raw.githubusercontent.com/github/docs/main/content/actions/reference/workflows-and-actions/contexts.md \
-  | grep 'concurrency'
-```
-
-Cheapest confirmation on a live workflow: the first run's job list. Three jobs
-`in_progress` at once is the pass; one running while two read `cancelled` is this.
-
 The entries above concern cancellation **between pushes**, which is the behaviour you
 want. This is cancellation **within one push**, which is never what you want.
 
-*4 lines of evidence for this rule are in `conventions/ci-monitoring.md`.*
+*10 lines of evidence for this rule are in `conventions/ci-monitoring.md`.*
 
 
 ## A push `paths:` filter skips an empty commit, and dispatch and schedule run only from the default branch
@@ -1224,6 +1349,13 @@ With `cancel-in-progress: false`, GitHub keeps one running and one pending run p
 
 ## A deploy commit on `gh-pages` is not yet a served page
 Before telling anyone a Pages URL is live, fetch it and compare the bytes with the source: the deploy commit lands on `gh-pages` before the `pages-build-deployment` run publishes it, and until that run finishes the URL still answers 404.
+
+*1 line of evidence for this rule is in `conventions/ci-monitoring.md`.*
+
+## `gh run list --commit` needs the full SHA, and `--workflow` cannot name the Pages run
+Key a CI waiter on `gh run list --commit "$(git rev-parse <ref>)"` and pick a run by name in `--jq`: a short SHA returns an empty list with exit 0, and `--workflow 'pages build and deployment'` fails, because GitHub's built-in Pages run has no workflow file.
+
+Both fail quietly in a waiter: an empty list reads as "no runs yet", so the loop runs to its cap, and a failed `--workflow` lookup leaves the run id empty.
 
 *1 line of evidence for this rule is in `conventions/ci-monitoring.md`.*
 
@@ -2074,6 +2206,9 @@ Pass `shape = "bbox"` (or a polygon) to `rasterize_terrain()` when the DTM must 
 
 ### A plain difference of two DEMs can hide a half-cell shift between them
 Before calling two DEMs the same surface, regress their difference on the reference's gradient, or difference them at each half-cell shift.
+
+### A nodata value written to PNG comes back from magick as alpha
+Read a PNG that terra or GDAL wrote with `magick::image_convert(magick::image_read(f), matte = FALSE)`: their nodata becomes a tRNS chunk, which magick reads as alpha.
 
 # Code Check Conventions
 Structured checklist for reviewing diffs before commit.
@@ -3209,9 +3344,7 @@ Close function issues via commit messages — see Closing Issues in newgraph con
     reachable, not whether the *service* is behaving, and it calls
     `skip_if_not_installed("curl")`, so add `curl` to Suggests or the guard
     itself is what breaks.
-  - Caught 2026-08 in gq#57 by self-review: a comment claiming "skipped off-CI"
-    sat directly above code that did not skip off-CI. Read the guard, not the
-    comment above it.
+  - Read the guard, not the comment above it.
 
 - **`testthat::test_file()` does NOT set `NOT_CRAN`, so re-running one file to
   diagnose a failure can execute none of it.** The mirror of the rule above, and
@@ -3226,11 +3359,10 @@ Close function issues via commit messages — see Closing Issues in newgraph con
   NOT_CRAN=true testthat::test_file("that.R") -> [ FAIL 0 | PASS 259 ]
   ```
 
-  Only the third line is evidence. Measured twice on 2026-09-01 in rfp, both
-  times while confirming whether a Docker-gated failure was a real regression —
-  which is exactly when a false "it passes now" is most expensive. Prefix
-  `NOT_CRAN=true` on any single-file re-run, or read the SKIP count rather than
-  the FAIL count.
+  Only the third line is evidence. Prefix `NOT_CRAN=true` on any single-file re-run, or
+  read the SKIP count rather than the FAIL count.
+
+*4 lines of evidence for this rule are in `conventions/r-packages.md`.*
 
 - **`local_mocked_bindings(.package = )` needs testthat >= 3.2.0.** A package
   pinned at `testthat (>= 3.0.0)` errors rather than skipping on an older
@@ -3284,10 +3416,6 @@ Instead, separate data generation from presentation:
 3. A comment in the vignette's setup chunk names the script: `# data from data-raw/script.R`
 4. bookdown controls all chunks — figure numbers, cross-refs work
 
-This is the same pattern as test data: `data-raw/` documents how the data
-was produced, committed artifacts make vignettes reproducible without the
-external resource.
-
 Then keep the vignette and its bundle true as both move:
 
 1. **Run the code the vignette shows.** The `data-raw/` script runs each `eval = FALSE`
@@ -3300,10 +3428,13 @@ Then keep the vignette and its bundle true as both move:
    to text, and diff. Only the prose you meant to change differs.
 5. **The bundle carries provenance**, the commit and date it was built at, which the
    vignette prints. A regeneration forced by a script change asserts every other element
-   `identical()` to the old bundle before it is committed; regenerate on the machine that built it when values pass
-   through BLAS.
+   `identical()` to the old bundle; rebuild where it was built when values pass through BLAS.
+6. **Install the branch before building an article whose bundle changed.** pkgdown renders
+   articles against the installed package, so `system.file("vignette-data", …)` reads the
+   installed copy's bundle, while `rmarkdown::render()` after `pkgload::load_all()` reads
+   the source tree's: the same article can pass one way and fail the other.
 
-*10 lines of evidence for this rule are in `conventions/r-packages.md`.*
+*13 lines of evidence for this rule are in `conventions/r-packages.md`.*
 
 ### Test data
 
@@ -3387,10 +3518,10 @@ EOF
 - `usethis::use_mit_license("New Graph Environment Ltd.")`; `Authors@R` as in `/citation-cff`
 - `usethis::use_testthat(edition = 3)`
 - `usethis::use_pkgdown()`
-- `usethis::use_github_action("pkgdown")`, then `timeout-minutes: 90` on its job
 - `usethis::use_directory("dev")` — reproducible setup script
 - `usethis::use_directory("data-raw")` — data generation scripts
 - Hex sticker: copy soul's `templates/make_hexsticker.R` to `data-raw/`
+- CI: copy soul's `templates/R-CMD-check.yaml` and `templates/pkgdown.yaml` (callers of `NewGraphEnvironment/flows`) to `.github/workflows/`
 - Set GitHub Pages to serve from `gh-pages` branch
 
 ### dev/dev.R
@@ -3596,8 +3727,8 @@ If duplicates were created (common with `saveItems` retries):
 ### Bibliography generation
 
 ```yaml
-# index.Rmd — dynamic bib from Zotero via Better BibTeX
-bibliography: "`r rbbt::bbt_write_bib('references.bib', overwrite = TRUE)`"
+# index.Rmd — dynamic bib from Zotero via Better BibTeX; the filter drops local `file` paths
+bibliography: "`r rbbt::bbt_write_bib('references.bib', overwrite = TRUE, filter = function(b) gsub('[[:space:]]+file = [{][^}]*[}],?', '', b))`"
 ```
 
 `rbbt` pulls from BBT, which syncs with Zotero. Edit references in Zotero → rebuild report → bibliography updates.
@@ -3664,7 +3795,7 @@ refuses scripted downloads; govinfo scans are signed, so OCR them with `ocrmypdf
 - NEVER paraphrase equations — copy exact notation and cite page/section
 
 # Writing for the Reader
-A vignette or report answers its reader's questions in their order and carries nothing that served only its authors.
+Anything an outside reader sees answers their questions in their order and carries nothing that served only its authors.
 
 *Index only: each rule's heading and first sentence. The full text is soul's `conventions/writing.md`; read it before writing or reviewing code in its area.*
 
@@ -3680,8 +3811,8 @@ Give a term the article depends on its own short section before its first use, w
 ### Prefer a plain phrase to a term
 Name a quantity by what it does for the reader ("the score; lower is better"), and keep a term only if the article reuses it, giving it its own place.
 
-### A figure or table must say something a sentence can't
-Keep a figure only when a sentence cannot carry its point, and a table only when its rows are parallel items compared on shared columns; otherwise write the sentence.
+### Choose the form that lands with the reader
+Pick a sentence, table, figure or map by which one tells the reader the story fastest, and judge it by its effect on the reader, not by a preference for prose.
 
 ### Cut what serves the authors
 Remove what the authors needed and the reader does not: parity with superseded products, paths to internal research, and how a decision was reached.
@@ -3700,3 +3831,12 @@ Set a software name in code font, link its first mention and say what it is, and
 
 ### Measure the simplification
 Report word and line counts before and after a rewrite, against the forecast, and name what set the floor.
+
+### Lead with what the product does and why it matters
+Open every public piece with what the product does for the reader and why it matters, before anything about how it was made.
+
+### Let visuals carry the story where they land better
+Put the story in a map, figure or table whenever the reader takes it in faster there than from prose, and keep the prose to what the visual cannot say.
+
+### Cut any number or caveat that does not change what the reader understands
+Drop a number, a precision or a caveat that leaves the reader's understanding of the product where it was, because detail the reader does not need walls them off.

@@ -35,6 +35,12 @@
 #   - TWO STARTS (#80): the pick is read from link's width `default` (`recommended`, as before) and from
 #     its flow version (`recommended_flow`), at 1 and 1.96 SE; link's `default_tuned` row joins each grid
 #     as a scored candidate (`is_link_tuned`), so the table says how link's own flow floors score.
+#   - GRADIENT (#92): rules and curves read link's segment gradient (`segment_gradient`), the gradient link applies a
+#     rule to and the grade reads, where #57 to #91 read the whole Atlas line's (`fwa_gradient`). link cuts a stream at
+#     the observations of the species it models, so a visit with fish usually sits on a short segment starting at it
+#     (data-raw/segment_gradient_check.R). GRADIENT=fwa_gradient is the sensitivity: the main fold seed, no grades,
+#     outputs under data/tune/grad_fwa/, which 0325, 0330 and knw_thresholds_table() do not read (the methodology
+#     bundle does, for its sensitivity sentence). The column is recorded in the score cache, the summary and every grade table.
 #   - SMOKE RUN FIRST (#84): before any grid is scored, every key that would be fitted scores no rule,
 #     `default`, link's `default_tuned` row and the previous pick (the `recommended` rule of the committed
 #     data/tune/<key>_tune.csv) on the main fold seed, and four checks gate the scorer (knw_tune_smoke()). One
@@ -44,7 +50,9 @@
 #         (0230), data/fdis_species_codes.csv; the link repository at LINK_REPO at the build's link_sha
 #         (parameters_habitat_thresholds.csv); fwapg database (PG* env vars): the run's schema (SCHEMA, default
 #         fresh_default), discharge; data/tune/<sp>_<stage>_tune.csv where one exists (the previous pick)
-# OUTPUT: data/tune/<sp>_<stage>_smoke.csv     the smoke run's four checks (value, limit, pass) and its rules' scores
+# OUTPUT: every file below is written under data/tune/candidate/<run>/ (ignored; #111), which scripts/0335-promote.R
+#         copies into data/tune/ on the operator's word; the names are the tracked ones it becomes:
+#         data/tune/<sp>_<stage>_smoke.csv     the smoke run's four checks (value, limit, pass) and its rules' scores
 #         data/tune/<sp>_<stage>_tune.csv      every rule's score (the full grid), with pick, recommended, region
 #         data/tune/<sp>_<stage>_curves.csv    the marginal curves at the pick
 #         data/tune/<sp>_<stage>_grades.csv    one row per segment of the species' groups, each graded segment at
@@ -55,14 +63,23 @@
 #         data/tune/<sp>_<stage>_score.rds     the scored grid, read back on a rerun (ignored)
 #         data/tune/<sp>_<stage>_summary.csv   one row: status, population, pick, held-out deviances (0325 binds them)
 #         data/tune/<sp>_<stage>_curve.rds     the fitted curve object (ignored; 0330 reads them)
-#         scripts/logs/habitat/<date>_tune_run.txt
-# RUN:    Rscript scripts/0320-tune-run.R   (from the repo root; SPECIES=CH,BT to restrict; WORKERS=14)
-#         Scored grids (<key>_score.rds) and grade tables already in data/tune/ are kept, so a run over a subset of
-#         species on another host, with the caches copied, grades only what is missing. The cache is keyed on the
+#         <date>_tune_run-<run>.txt (the log, in the run directory; promoted to scripts/logs/habitat/)
+# RUN:    Rscript scripts/0320-tune-run.R   (from the repo root; SPECIES=CH,BT to restrict; WORKERS=14; RUN=<name> names
+#         the candidate, a UTC stamp YYYYMMDD_HHMM (the default, and the only form taken))
+#         Scored grids (<key>_score.rds) and grade tables already in the run directory are kept, so RUN=<name> resumes
+#         a run, and a run over a subset of species on another host, with the caches copied, grades only what is missing. The cache is keyed on the
 #         population and the grid, not the scorer's code: remove <key>_score.rds after a change to R/tune_score.R.
 #         DEV=1 is the development setting (#84): the smoke run and the full grid on the main fold seed only (no
 #         bootstrap, nested selection or extra seeds), the curve and the summary, no grades, every output under
-#         data/tune/dev/ (ignored), so a scorer change is proved on every species before a full run.
+#         data/tune/dev/ (ignored), log included, so a scorer change is proved on every species before a full run.
+#         It ends in the pick report (#111): data/tune/dev/pick_report.csv, each key's pick beside the published one
+#         (knw_tune_pick_report()), the run to make after a change upstream (a link build, placement, a flow reload).
+#         A candidate writes its own <run>/pick_report.csv, before it grades.
+#         GRADIENT=fwa_gradient scores the Atlas line's gradient on the main fold seed, no grades, into <run>/grad_fwa/
+#         (data/tune/dev/grad_fwa/ with DEV=1; promoted to data/tune/grad_fwa/), its log suffixed -grad_fwa. Without
+#         DEV it needs RUN=<the main run's name>, whose candidate it joins and is promoted with.
+#         A grading run checks the database's round trip at connect and stops off its host (over 20 ms) unless
+#         REMOTE=TRUE; DEV=1 and GRADIENT=fwa_gradient grade nothing and skip the check (#110).
 # ---------------------------------------------------------------------------
 suppressMessages({ library(dplyr); library(readr); library(DBI); library(RPostgres) })
 pkgload::load_all(quiet = TRUE)
@@ -75,11 +92,45 @@ workers <- as.integer(Sys.getenv("WORKERS", max(1L, min(14L, parallel::detectCor
 species <- strsplit(Sys.getenv("SPECIES", paste(knw_species(), collapse = ",")), ",")[[1]]
 schema <- Sys.getenv("SCHEMA", "fresh_default")  # the run's persist schema, by its current name (renamed after the run, #73)
 dev <- Sys.getenv("DEV", "") %in% c("1", "TRUE", "true")
-dir_out <- if (dev) "data/tune/dev" else "data/tune"
-# one log per pass: a pass over a subset of species (SPECIES=) names them, so passes do not overwrite each other
-path_log <- file.path("scripts/logs/habitat", paste0(format(Sys.Date(), "%Y%m%d"), "_tune_run",
+remote <- Sys.getenv("REMOTE") %in% c("1", "TRUE", "true")   # grade off the database's host anyway (#110)
+# the gradient the rules and the curve read (#92): link's segment gradient, the one link applies a rule to; the Atlas
+# line's is the sensitivity, scored on the main fold seed alone into its own directory and never graded
+gradient <- Sys.getenv("GRADIENT", "segment_gradient")
+grad_dirs <- c(segment_gradient = "", fwa_gradient = "grad_fwa")
+if (!gradient %in% names(grad_dirs)) stop("GRADIENT must be one of ", paste(names(grad_dirs), collapse = ", "), ": ", gradient)
+cols_run <- c(grad = gradient, width = "cw_deploy", mad = "mad_pick")
+# the main seed alone, no grades: the development setting and the sensitivity
+main_only <- dev || gradient != "segment_gradient"
+se_strict <- 1.96   # the stricter reading of the region, in SE, beside the one-SE pick (#79)
+# a full run is a candidate (#111): it writes data/tune/candidate/<run>/ (ignored), never the tracked data/tune/, which
+# only scripts/0335-promote.R writes, on the operator's word. RUN names the run (a UTC stamp at launch by default);
+# giving an existing run's name resumes it on its cached scores and grades
+run <- Sys.getenv("RUN", format(Sys.time(), "%Y%m%d_%H%M", tz = "UTC"))
+# a stamp, so a log name says which run it is and sorts by date: the logs add -<species>, -grad_fwa and a pass number,
+# and data-raw/vignette_chinook.R matches a run's logs by that form
+if (!grepl("^[0-9]{8}_[0-9]{4}([0-9]{2})?$", run)) stop("RUN must be a UTC stamp YYYYMMDD_HHMM, as the default is: ", run)
+dir_run <- if (dev) "data/tune/dev" else file.path("data/tune/candidate", run)
+# the Atlas-gradient sensitivity belongs to a main run, which promotes it with its own tables: name that run
+if (!dev && gradient != "segment_gradient" &&
+      (!nzchar(Sys.getenv("RUN")) || !length(list.files(dir_run, "_summary\\.csv$")))) {
+  stop("GRADIENT=", gradient, " is the sensitivity of a main run: give it RUN=<that run's name> (data/tune/candidate/)")
+}
+dir_out <- dir_run
+if (nzchar(grad_dirs[[gradient]])) dir_out <- file.path(dir_out, grad_dirs[[gradient]])
+# one log per pass: a pass over a subset of species (SPECIES=) names them, so passes do not overwrite each other. A DEV=1
+# log stays beside its outputs in the ignored data/tune/dev/, and a candidate's in its run directory, named for the run,
+# so a promotion can copy it to scripts/logs/habitat/ beside the others (#111)
+# A candidate's passes are named by their UTC start (p<YYYYMMDDHHMMSS>), so the pass that graded a key last sorts last
+# whatever the day, the species or the host it ran on; data-raw/vignette_chinook.R reads it by that
+pass <- format(Sys.time(), "%Y%m%d%H%M%S", tz = "UTC")
+path_log <- file.path(dir_run, paste0(format(Sys.time(), "%Y%m%d", tz = "UTC"), "_tune_run",
+                                      if (!dev) sprintf("-%s-p%s", run, pass) else "",
                                                      if (nzchar(Sys.getenv("SPECIES"))) paste0("-", tolower(gsub(",", "_", Sys.getenv("SPECIES")))) else "",
-                                                     if (dev) "-dev" else "", ".txt"))
+                                                     if (dev) "-dev" else "",
+                                                     if (nzchar(grad_dirs[[gradient]])) paste0("-", grad_dirs[[gradient]]) else "", ".txt"))
+# a resumed candidate keeps the log of the pass that graded (data-raw/vignette_chinook.R reads its grade lines): a later
+# pass under the same name is numbered, never written over it
+if (!dev) path_log <- .knw_free_path(path_log)
 dir.create(dir_out, showWarnings = FALSE, recursive = TRUE)
 log_lines <- character()
 say <- function(...) { log_lines <<- c(log_lines, sprintf(...)); message(sprintf(...)) }
@@ -100,6 +151,8 @@ led <- read_csv(ledger_path, show_col_types = FALSE, col_types = cols(.default =
 run_uid <- led$note[led$step == "link_run_uid"]
 link_sha <- led$note[led$step == "run_link_sha"]
 say("Tuning run, knowledge#57. Evidence build %s on link run %s (link %s), schema %s.", ledger_path, run_uid, link_sha, schema)
+say("%s: outputs under %s (ignored)%s.", if (dev) "DEV=1" else paste("Candidate run", run), dir_out,
+    if (dev) "" else sprintf("; compare it with TUNE_DIR=%s scripts/0330, promote it with RUN=%s scripts/0335", dir_run, run))
 # the evidence's identity: the md5 of each derived table, logged, carried into the score cache's settings and written
 # on every grade table, so a rebuilt evidence of the same visit count is neither read back from the cache nor kept as
 # a grade (the branch review of 2026-10-25)
@@ -108,6 +161,28 @@ evidence_md5s <- vapply(c("visits_link", "visits_species", "walks"), function(f)
 }, character(1))
 for (f in names(evidence_md5s)) say("  %s md5 %s", f, evidence_md5s[[f]])
 evidence_md5 <- paste(unname(evidence_md5s), collapse = ";")
+# the database's build, checked before any work (#87): a schema built by another run than the evidence's is refused
+# here, not after the scoring, so the same command runs on any machine whose database holds the build. DEV=1 grades
+# nothing and needs no database
+if (!dev) {
+  conn <- pg()
+  rec <- tryCatch(knw_build_record(conn, schema, run_uid = run_uid), error = function(e) fail("%s", conditionMessage(e)))
+  say("%s", rec$line)
+  # the grade is bound by the database: refuse a connection off its host unless REMOTE=TRUE (#110). DEV=1 and
+  # GRADIENT=fwa_gradient write no grades, so they are not checked. A refused run's log is <date>_tune_refused-<run>…txt
+  # in the run's directory, so it neither overwrites the run's log nor matches the _tune_run*.txt that 0335 promotes and
+  # vignette_chinook.R reads
+  if (!main_only) {
+    lat <- tryCatch(knw_db_latency_check(conn, remote = remote), error = function(e) {
+      say("%s", conditionMessage(e))
+      path_refused <- .knw_free_path(sub("_tune_run", "_tune_refused", path_log, fixed = TRUE))
+      writeLines(log_lines, path_refused)
+      stop(conditionMessage(e), " (log ", path_refused, ")", call. = FALSE)
+    })
+    say("%s", lat$line)
+  }
+  dbDisconnect(conn)
+}
 vl <- read_csv("data/fdis/derived/visits_link.csv", show_col_types = FALSE, guess_max = 1e5,
                col_types = cols(site_visit = "c", species_caught = "c", blocks_absence_of = "c", hydro_zone = "c"))
 vs <- read_csv("data/fdis/derived/visits_species.csv", show_col_types = FALSE, guess_max = 1e5, col_types = cols(site_visit = "c"))
@@ -151,11 +226,23 @@ for (f in list.files("data/tune", "_tune\\.csv$", full.names = TRUE)) {
   }
 }
 say("Fit: group intercepts absorbed (#83); normal prior SD %s on the data_set and era coefficients, cloglog scale (#84).",
-    format(formals(knw_tune_score)$prior_sd))
-say("Smoke run first%s: previous picks on file for %s.", if (dev) " (DEV=1: the main seed only, no grades, outputs under data/tune/dev)" else "",
+    format(formals(knw_tune_run)$prior_sd))   # knw_tune_run's default is what runs: it is not passed below
+say("Rules and curves read the gradient from %s%s.", gradient,
+    if (main_only && !dev) sprintf(" (the sensitivity: the main seed only, no grades, outputs under %s)", dir_out) else "")
+say("Smoke run first%s: previous picks on file for %s.", if (dev) sprintf(" (DEV=1: the main seed only, no grades, outputs under %s)", dir_out) else "",
     paste(names(previous), collapse = ", "))
+# what a pass writes for a key replaces what an earlier pass of the run wrote, so a key's files in the run are this
+# pass's (#111): clear them first, all but the score cache and the grade table, which are kept only when they pass
+# their checks below (a key this pass does not fit loses its grades after scoring)
+# The smoke tables go before the smoke run, the rest once it has passed, so a refused smoke run leaves the last
+# pass's fit as it was
+pat_keys <- sprintf("^(%s)_(rear|spawn)_", paste(species, collapse = "|"))
+caches <- "_(score\\.rds|grades\\.csv)$"
+old_files <- list.files(dir_out, pat_keys, full.names = TRUE)
+unlink(old_files[grepl("_smoke\\.csv$", old_files)])
 t0 <- Sys.time()
 sm <- knw_tune_run(vl, vs, walks, thr, species = species, spawner = spawner, workers = workers, thresholds_extra = thr_tuned, evidence_id = evidence_md5,
+                   cols = cols_run,
                    previous = if (length(previous)) previous else NULL, smoke_only = TRUE)
 smoke_failed <- character()
 for (k in names(sm)) {
@@ -176,12 +263,14 @@ if (length(smoke_failed)) {
 }
 
 # ---- score, pick, curve ------------------------------------------------------------------
+unlink(old_files[file.exists(old_files) & !grepl(caches, old_files) & !grepl("_smoke\\.csv$", old_files)])
 t0 <- Sys.time()
 out <- knw_tune_run(vl, vs, walks, thr, species = species, spawner = spawner, workers = workers, cache_dir = dir_out,
-                    thresholds_extra = thr_tuned, smoke = FALSE, extra = !dev, evidence_id = evidence_md5)
+                    thresholds_extra = thr_tuned, smoke = FALSE, extra = !main_only, evidence_id = evidence_md5, cols = cols_run)
 say("Scored %d species x stage in %.1f min on %d workers%s.", length(out), as.numeric(difftime(Sys.time(), t0, units = "mins")), workers,
-    if (dev) " (DEV=1: the main seed only)" else "")
+    if (main_only) " (the main seed only)" else "")
 
+for (k in names(out)) if (is.null(out[[k]]$curve)) unlink(file.path(dir_out, paste0(k, "_grades.csv")))
 summ <- list()
 for (k in names(out)) {
   r <- out[[k]]
@@ -198,7 +287,7 @@ for (k in names(out)) {
     write_csv(tibble(species_code = r$species_code, stage = r$stage, watershed_group_code = names(r$score$folds),
                      fold = as.integer(r$score$folds)), file.path(dir_out, paste0(k, "_groups.csv")), na = "")
     # the stability tables the score object holds, so a reader of the tables needs no rds (#62)
-    if (!dev) {
+    if (!main_only) {
       write_csv(as_tibble(r$score$seeds) |> mutate(species_code = r$species_code, stage = r$stage),
                 file.path(dir_out, paste0(k, "_seeds.csv")), na = "")
       write_csv(as_tibble(r$score$honest) |> mutate(across(where(is.double), ~ round(.x, 6)),
@@ -211,9 +300,9 @@ for (k in names(out)) {
     rep_of <- function(se, start) tryCatch(knw_tune_repick(rules, se_mult = se, start = start)$rule, error = function(e) NA_character_)
     row <- row |> mutate(
       rule_recommended = r$pick$rule, rule_pick = rules$rule[rules$pick], rule_best = best$rule,
-      rule_recommended_196 = rep_of(1.96, "default"),
+      rule_recommended_196 = rep_of(se_strict, "default"),
       rule_recommended_flow = if (is.null(r$pick_flow)) NA_character_ else r$pick_flow$rule,
-      rule_recommended_flow_196 = rep_of(1.96, "flow"),
+      rule_recommended_flow_196 = rep_of(se_strict, "flow"),
       rule_link_tuned = if (nrow(ltn)) ltn$rule else NA_character_,
       link_tuned_ddev = if (nrow(ltn)) ltn$ddev_best else NA_real_, link_tuned_se = if (nrow(ltn)) ltn$se_diff else NA_real_,
       link_tuned_in_region = if (nrow(ltn)) ltn$in_region else NA,
@@ -221,21 +310,27 @@ for (k in names(out)) {
       region_n = sum(rules$in_region), patterns = r$score$population[["patterns"]],
       dev_default = dflt$dev_heldout, dev_best = best$dev_heldout, dev_null = best$dev_heldout - best$ddev_null,
       dev_curve = r$curve$heldout, null_heldout_curve = r$null_heldout_curve, curve_prior_sd = r$curve$prior_sd,
+      # the gradient the rule and the curve read (#92), which every grade table records and 0320's keep-check, 0325,
+      # 0330 and the two data-raw/vignette_*.R scripts compare
+      curve_grad = r$curve$cols[["grad"]],
       grade_withheld = r$grade_withheld,
       # the evidence and the link run the pick was scored on, so a grade can be held to its pick's evidence as well as its
       # rule (the branch review of 2026-10-25)
       evidence_md5 = evidence_md5, run_uid = run_uid,
+      # the candidate run and the evidence ledger it read (#111): a promoted table names the log that graded it and the
+      # build it was scored on, so its readers take them rather than the newest on disk
+      tune_run = if (dev) NA_character_ else run, evidence_ledger = ledger_path,
       curve_dist_in_model = r$curve$dist_in_model,
       curve_edf = paste(sprintf("%s=%.2f", names(r$curve$edf), r$curve$edf), collapse = "; "),
-      # NA under DEV=1, which runs the main seed alone
-      honest_dev_rec = if (dev) NA_real_ else sum(r$score$honest$dev_rec),
-      honest_dev_default = if (dev) NA_real_ else sum(r$score$honest$dev_default),
-      honest_dev_null = if (dev) NA_real_ else sum(r$score$honest$dev_null),
-      seeds_same_rec = if (dev) NA_integer_ else sum(r$score$seeds$recommended == r$pick$rule),
-      seeds_default_in_region = if (dev) NA_integer_ else sum(r$score$seeds$default_in_region),
-      seeds_rec_in_region = if (dev) NA_integer_ else sum(r$score$seeds$main_rec_in_region),
-      seeds_n = if (dev) 0L else nrow(r$score$seeds),
-      boot_rec_share = if (dev) NA_real_ else rules$boot_rec_share[rules$recommended])
+      # NA under DEV=1 and on the sensitivity, which run the main seed alone
+      honest_dev_rec = if (main_only) NA_real_ else sum(r$score$honest$dev_rec),
+      honest_dev_default = if (main_only) NA_real_ else sum(r$score$honest$dev_default),
+      honest_dev_null = if (main_only) NA_real_ else sum(r$score$honest$dev_null),
+      seeds_same_rec = if (main_only) NA_integer_ else sum(r$score$seeds$recommended == r$pick$rule),
+      seeds_default_in_region = if (main_only) NA_integer_ else sum(r$score$seeds$default_in_region),
+      seeds_rec_in_region = if (main_only) NA_integer_ else sum(r$score$seeds$main_rec_in_region),
+      seeds_n = if (main_only) 0L else nrow(r$score$seeds),
+      boot_rec_share = if (main_only) NA_real_ else rules$boot_rec_share[rules$recommended])
     say("%s: %s. %d visits (%d detections) in %d groups (%d both). Recommended %s; default %s the region (+%.1f, SE %.1f). Curve held-out %.1f vs grid best %.1f.",
         k, r$status, row$visits_in, row$detections, row$groups, row$groups_both, r$pick$rule,
         if (dflt$in_region) "in" else "outside", dflt$ddev_best, dflt$se_diff, r$curve$heldout, best$dev_heldout)
@@ -246,12 +341,12 @@ for (k in names(out)) {
       say("%s: grades withheld: the curve's held-out %.1f is no better than no rule's %.1f on the curve's own visits.", k,
           r$curve$heldout, r$null_heldout_curve)
     }
-    say("%s: from the flow start %s (1.96 SE: %s); from the width start at 1.96 SE %s; link's default_tuned rule %s %s.",
-        k, row$rule_recommended_flow, row$rule_recommended_flow_196, row$rule_recommended_196,
+    say("%s: from the flow start %s (%s SE: %s); from the width start at %s SE %s; link's default_tuned rule %s %s.",
+        k, row$rule_recommended_flow, se_strict, row$rule_recommended_flow_196, se_strict, row$rule_recommended_196,
         row$rule_link_tuned, if (nrow(ltn)) sprintf("%s the region (+%.1f, SE %.1f)", if (ltn$in_region) "in" else "outside", ltn$ddev_best, ltn$se_diff) else "(none)")
     block(paste(k, "region"), rules |> filter(in_region) |> arrange(ddev_best) |>
             select(rule, departures, ddev_best, se_diff, n_wsg_varies, n_in, n_detect_in, raw_rate_in, raw_rate_out, any_of("boot_region_share")))
-    if (!dev) {
+    if (!main_only) {
       block(paste(k, "nested selection"), r$score$honest)
       block(paste(k, "more seeds"), r$score$seeds)
     }
@@ -272,9 +367,31 @@ for (k in names(out)) {
                              names(out[[k]]))], file.path(dir_out, paste0(k, "_curve.rds")))
 }
 
+# ---- the pick report (#111): the run's pick beside the published one, per key ------------------------------
+# what a DEV=1 run after a change upstream is for, and what a candidate is promoted on: the published side is the
+# tracked table dir_out stands in for (data/tune, or data/tune/grad_fwa for the sensitivity), never another run's
+dir_pub <- sub("^data/tune/(dev|candidate/[^/]+)", "data/tune", dir_out)
+pr <- bind_rows(lapply(names(out), function(k) {
+  r <- out[[k]]
+  if (is.null(r$score)) return(NULL)
+  f <- file.path(dir_pub, paste0(k, "_tune.csv"))
+  pub <- if (file.exists(f)) read_csv(f, show_col_types = FALSE, col_types = cols(.default = "c")) else NULL
+  tibble(key = k, species_code = r$species_code, stage = r$stage, status = r$status,
+         knw_tune_pick_report(r$score$rules, pub))
+}))
+if (nrow(pr)) {
+  write_csv(pr |> mutate(across(where(is.double), ~ round(.x, 4))), file.path(dir_out, "pick_report.csv"), na = "")
+  moved <- pr$key[pr$same_pick %in% FALSE]
+  say("Pick report against %s: %d of %d keys keep the published pick%s; written to %s.", dir_pub,
+      sum(pr$same_pick %in% TRUE), nrow(pr),
+      if (length(moved)) sprintf(" (moved: %s)", paste(moved, collapse = ", ")) else "", file.path(dir_out, "pick_report.csv"))
+  block("pick report", pr |> select(key, rule_run, rule_published, same_pick, published_in_region, published_ddev,
+                                    published_se, published_ddev_was, n_visits_run, n_visits_published))
+}
+
 # ---- grade every segment of each fitted species' groups ----------------------------------
-if (dev) {
-  say("DEV=1: no grades. Done in %.1f min.", as.numeric(difftime(Sys.time(), t0, units = "mins")))
+if (main_only) {
+  say("%s: no grades. Done in %.1f min.", if (dev) "DEV=1" else paste("GRADIENT", gradient), as.numeric(difftime(Sys.time(), t0, units = "mins")))
   writeLines(log_lines, path_log)
   quit(save = "no", status = 0)
 }
@@ -283,9 +400,10 @@ groups_sp <- function(sp) dbGetQuery(conn, sprintf("SELECT DISTINCT watershed_gr
 # the flow build the grade reads (#72): wet can reload discharge.fwa_v1_segment_monthly between runs (wet#103 did on
 # 2026-10-19, after #57 tuned), so the table's comment, which names the build, goes into every grade table and 0325
 # refuses to publish a grade whose build is not the live one
-discharge_load <- dbGetQuery(conn, "SELECT obj_description('discharge.fwa_v1_segment_monthly'::regclass) AS d")$d
-if (length(discharge_load) != 1 || is.na(discharge_load) || !nzchar(discharge_load)) stop("discharge.fwa_v1_segment_monthly carries no load comment")
-say("Grading on the flow build: %s", discharge_load)
+discharge_load <- knw_discharge_load(conn)
+# the walk's code (#87): the walk cache keys every row on it, and a grade walked by other code is regraded
+walk_md5 <- knw_walk_md5()
+say("Grading on the flow build: %s; walk %s, cached in knw.walk_cache.", discharge_load, walk_md5)
 grade_rows <- list()
 for (k in names(out)) {
   r <- out[[k]]
@@ -308,21 +426,25 @@ for (k in names(out)) {
     head1 <- readr::read_csv(gpath, n_max = 1, show_col_types = FALSE, col_types = readr::cols(.default = "c"))
     same <- identical(head1$rule, r$pick$rule) && identical(head1$run_uid, run_uid) &&
       "walk" %in% names(head1) && identical(head1$walk, "bank") &&
+      "walk_md5" %in% names(head1) && identical(head1$walk_md5, walk_md5) &&
       "ref_edge" %in% names(head1) && identical(head1$ref_edge, ref_edge_txt) &&
       "discharge_load" %in% names(head1) && identical(head1$discharge_load, discharge_load) &&
       "curve_prior_sd" %in% names(head1) && identical(head1$curve_prior_sd, curve_prior_txt) &&
       "grade_withheld" %in% names(head1) && identical(head1$grade_withheld, withheld_txt) &&
       "null_heldout_curve" %in% names(head1) &&
-      "evidence_md5" %in% names(head1) && identical(head1$evidence_md5, evidence_md5)
+      "evidence_md5" %in% names(head1) && identical(head1$evidence_md5, evidence_md5) &&
+      # graded from a curve fitted on the gradient the segments carry (#92); a table from before the record was not
+      .knw_grade_grad_ok(head1, r$curve$cols[["grad"]])
     if (same) {
       # not "<key> grades: <n> groups", the result line data-raw/vignette_chinook.R reads
       say("%s: grades already written under %s on %s, kept.", k, r$pick$rule, run_uid)
       next
     }
     # not "<key> grades:", which data-raw/vignette_chinook.R reads as the one result line
-    say("%s: grades on file for %s / %s (walk %s, reference over %s, flows %s, curve prior %s), regraded for %s / %s.",
+    say("%s: grades on file for %s / %s (walk %s %s, reference over %s, flows %s, curve prior %s), regraded for %s / %s.",
         k, head1$rule,
         head1$run_uid, if ("walk" %in% names(head1)) head1$walk else "centreline",
+        if ("walk_md5" %in% names(head1)) head1$walk_md5 else "unrecorded",
         if ("ref_edge" %in% names(head1)) head1$ref_edge else if ("ref_population" %in% names(head1)) head1$ref_population else "every accessible segment",
         if ("discharge_load" %in% names(head1)) head1$discharge_load else "unrecorded",
         if ("curve_prior_sd" %in% names(head1)) head1$curve_prior_sd else "none recorded", r$pick$rule, run_uid)
@@ -331,22 +453,27 @@ for (k in names(out)) {
   t1 <- Sys.time()
   g <- knw_grade_species(pg, schema, r$species_code, wsg, r$curve, r$pick, stage = r$stage, workers = min(workers, 8L))
   if (!identical(as.integer(g$ref_edge), as.integer(ref_edge_curve))) stop(k, ": the grade's reference edge types are not the curve's")
+  if (!identical(g$walk_md5, walk_md5)) stop(k, ": the grade was walked by another walk than this run's")
   if (isTRUE(r$grade_withheld)) g$grades <- g$grades |> mutate(rate = NA_real_, grade = NA_real_, grade_class = NA_character_)
   # ref_population is kept as the name 0325, 0330 and the article read; ref_edge, q_walk, walk and discharge_load
   # are the record (#72), written from what knw_grade_species() returns, not from a literal beside the call
-  write_csv(g$grades |> mutate(species_code = r$species_code, stage = r$stage, rule = r$pick$rule, run_uid = run_uid,
+  # written whole (a sibling renamed into place): a pass killed mid-write leaves no grade table that reads as one
+  .knw_write_whole(file.path(dir_out, paste0(k, "_grades.csv")), function(p) write_csv(
+    g$grades |> mutate(species_code = r$species_code, stage = r$stage, rule = r$pick$rule, run_uid = run_uid,
                                ref_population = "stream_branch", ref_edge = paste(g$ref_edge, collapse = ";"),
-                               q_walk = g$q, walk = g$walk, discharge_load = discharge_load,
+                               q_walk = g$q, walk = g$walk, walk_md5 = g$walk_md5, discharge_load = discharge_load,
                                curve_prior_sd = curve_prior_txt, grade_withheld = withheld_txt, null_heldout_curve = nhc_txt,
-                               evidence_md5 = evidence_md5,
+                               evidence_md5 = evidence_md5, curve_grad = r$curve$cols[["grad"]],
                                across(c(rate, grade), ~ signif(.x, 5))),
-            file.path(dir_out, paste0(k, "_grades.csv")), na = "")
+            p, na = ""))
   say("%s grades: %d groups, %s; reference rate %.4f over edge types %s; walks to %g m3/s, to the bank, %.1f min; %d of %d found rivers lie in another group; total %.1f min.",
       k, length(wsg), paste(names(g$counts), g$counts, sep = "=", collapse = ", "), g$reference,
       paste(g$ref_edge, collapse = ","), g$q, g$walk_minutes, sum(g$grades$target_in_group %in% FALSE),
       sum(!is.na(g$grades$target_in_group)), as.numeric(difftime(Sys.time(), t1, units = "mins")))
   grade_rows[[k]] <- tibble(key = k, groups = length(wsg), reference_rate = g$reference, ref_edge = paste(g$ref_edge, collapse = ";"),
                             q_walk = g$q, target_other_group = sum(g$grades$target_in_group %in% FALSE), as_tibble(as.list(g$counts)))
+  # the log so far, after every key: a pass that dies later still says which grades it made (#111)
+  writeLines(log_lines, path_log)
 }
 dbDisconnect(conn)
 block("grades", bind_rows(grade_rows))

@@ -1,3 +1,75 @@
+# knowledge 0.4.18
+
+* `knw_compare_rules()` logs which rules' predicates read the near-river table and returns `bin_minutes`, each worker's
+  timed minutes with and without `default`'s own (and without the walk where no other predicate reads that table), so
+  a run projects what reading `default`'s flags instead of regenerating them would save (#101). On #112's runs
+  `default` took 51 to 74 % of a two-rule key's classify, overlay and connect worker minutes. The cache is parked until
+  link's reworked stream layers are built (`research/database_builds.md`).
+
+# knowledge 0.4.17
+
+* `scripts/0330-compare.R` compares link's `default` and the reported structure (`door`) alone unless `STRUCTURES=all`
+  (#112): the rules it no longer regenerates took 29 to 33 % of the worker minutes on three keys. A reported-only run
+  matches the every-structure run's `default` and `door` rows (`data-raw/compare_structures_check.R`).
+  `knw_compare_rules(structures = "reported")` resolves the structure, refuses one outside the species x rule's own
+  set, and returns each rule's minutes (`worker_minutes`). The chinook article no longer quotes the `free` structure.
+
+# knowledge 0.4.16
+
+* Retuning no longer touches the tracked tables or the articles until the operator promotes a run (#111). `DEV=1 0320`
+  is the check after a change upstream: minutes, no database, ending in a pick report (`knw_tune_pick_report()`) of
+  each key's pick beside the published one. A full `0320` and `0330 TUNE_DIR=` write ignored candidate runs, and
+  `scripts/0335-promote.R` (`knw_tune_promote()`) moves one in, whole or by key, archiving what it replaces so a
+  promotion can be undone, then reruns `0325` and the article bundles. Before anything moves it refuses a set that
+  `0325` or the bundles would refuse. Summaries record their run and evidence ledger, which the readers take through
+  `knw_run_ledger()` rather than the newest ledger on disk.
+
+# knowledge 0.4.15
+
+* A database-bound run checks its connection's round trip before any work (#110). `knw_db_latency_check()` stops
+  `0310`, a grading `0320` and every stage of `0330` over a 20 ms round trip, with the round trip and what a remote link
+  cost #92's comparison, unless `REMOTE=TRUE`; every run logs the round trip and whether the override acted, and a
+  refused run writes its log to its own file. `0330` also logs each key's minutes by stage, which
+  `knw_compare_rules()` returns as `timing`.
+
+# knowledge 0.4.14
+
+* Habitat rules and curves are tuned on the gradient of the link segment a site sits on (`segment_gradient`), the gradient link applies a rule to and the grade reads, instead of the whole Freshwater Atlas line's; `knw_tune_run(cols = )` names the columns, and every grade table, summary and curve records the gradient it was fitted on (`curve_grad`), which `0320`, `0325`, `0330` and the article scripts compare (#92). `GRADIENT=fwa_gradient 0320` scores the Atlas line's gradient as a sensitivity. Every key is retuned on #91's evidence and both articles redrawn. link cuts a segment at a fish record, so 86 % of sites with fish start a segment of their own against 10 % without, and the results are on link 0.66.0's segments, before link changed where it cuts streams.
+
+# knowledge 0.4.13
+
+* FDIS site visits are placed on the stream their own 1:50k watershed code names where one lies within 500 m (`knw_fdis_place()`), otherwise on the nearest stream within 200 m, with `fresh::frs_point_snap()` in place of `fwa_indexpoint()` (#91). The limits were set by measurement. The evidence keeps 45,529 visits against 40,552. `0310` takes `SCHEMA` and caches its walks. The tune tables and the articles still describe the #73 run until #92's retune.
+
+# knowledge 0.4.12
+
+* The methodology article, "Choosing habitat thresholds from where fish were caught", now runs from what a threshold
+  is straight to the flow chart and the eleven steps; how rules are told apart and where the fish sampling records are
+  lost follow the worked snap example, before the limits.
+
+# knowledge 0.4.11
+
+* A retune is fast enough to iterate on the database's host (#87). Grading walks 500 segments per query
+  (`knw_link_walks(batch =)`) and keeps every walk in `knw.walk_cache` (`cache =`), keyed on the flow load
+  (`knw_discharge_load()`) and the walk's code (`knw_walk_md5()`), so one key regrades in about 4 min with its walks
+  cached, and a cold regrade of every key took 53 min, against 191. `knw_compare_rules(workers =)` spreads a key's
+  watershed groups over several connections, so one key recompares in 4.5 to 37 min (BT rearing 33, against 143);
+  the full recompare is still about 2.9 h, bound by the database's cores (#101). Every grade table records its
+  `walk_md5`, which `0320`, `0325`, `0330` and `data-raw/vignette_chinook.R` compare, and `0320` and `0330` refuse a
+  schema built by another run at connect (`knw_build_record()`). `knw_discharge_load()` refuses a flow comment that
+  does not name the historical load the walk reads. `research/database_builds.md` covers what a run reads and what a
+  second database needs.
+
+# knowledge 0.4.10
+
+* A methodology article, "Choosing habitat thresholds from where fish were caught" (`vignettes/habitat_thresholds.Rmd`),
+  walks the pipeline from the FDIS records to the published thresholds in plain language: what a threshold and a tuned
+  threshold are, how rules are scored and chosen (the standard error, and 1 against 1.96 SE), each of the eleven steps
+  with its code and settings, where the fish sampling records are lost, and every setting that shapes a result, with
+  where it came from and whether it has been tested (#93). The settings are `inst/method/settings.csv`, each naming
+  where its value is held, and `test-settings-register.R` fails when the register and the code disagree. The chinook
+  article now says how sites reach the network, where segment flows come from and which gradient was scored, and
+  cites PCIC's VIC-GL, Raven and the fwapg fork (#89).
+
 # knowledge 0.4.9
 
 * Every species' threshold is retuned on rebuilt evidence (#73): FDIS visits on wet's 2026-10-19 flows, the walk to a

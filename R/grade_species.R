@@ -37,7 +37,9 @@
 #' @param schema `character(1)` link persist schema.
 #' @param species `character(1)` species code.
 #' @param wsg `character` the species' groups.
-#' @param curve [knw_tune_curve()]'s result for the species and stage.
+#' @param curve [knw_tune_curve()]'s result for the species and stage. It must
+#'   have been fitted on link's segment gradient (`curve$cols[["grad"]]` is
+#'   `segment_gradient`), the gradient the segments are graded on (#92).
 #' @param pick the recommended rule row.
 #' @param stage `"rear"` or `"spawn"`.
 #' @param workers `integer(1)` walk workers.
@@ -46,6 +48,8 @@
 #'   types the reference rate is taken over. `NULL` takes the curve's own
 #'   `edge_stream`, the edge types of the visits it was fitted on (#72), and a
 #'   curve that carries none takes [knw_tune_run()]'s default `edge_stream`.
+#' @param cache the walk cache [knw_link_walks()] reads and keeps walks in
+#'   (`"knw.walk_cache"`), or `FALSE` to walk every start.
 #' @return A list: `grades`, one row per segment with the segment's keys,
 #'   `length_metre`, `access`, `accessible`, the stage's flag, `size`, `dist_m`,
 #'   `dist_status`, `target_in_group` (`TRUE` where the river the walk found
@@ -54,9 +58,10 @@
 #'   where no river was found), `rate`, `grade`, `grade_class`; `reference`;
 #'   `ref_edge`, the edge types the reference was taken over; `q`, the river
 #'   size walked to; `walk`, the walk's convention (`"bank"`: the distance ends
-#'   at the river's bank, #73); `counts` (segments, accessible, walked starts,
-#'   segments whose walk was found, none or other, graded, no size, no
-#'   gradient); `walk_minutes`.
+#'   at the river's bank, #73); `walk_md5`, the walk's code ([knw_walk_md5()],
+#'   #87); `counts` (segments, accessible, walked starts, starts read from the
+#'   walk cache and walked, segments whose walk was found, none or other,
+#'   graded, no size, no gradient); `walk_minutes`.
 #' @export
 #' @examples
 #' \dontrun{
@@ -64,10 +69,17 @@
 #' g <- knw_grade_species(pg, "fresh_default", "CH", c("BULK", "MORR"), out$CH_rear$curve, out$CH_rear$pick)
 #' }
 knw_grade_species <- function(connector, schema, species, wsg, curve, pick, stage = "rear",
-                              workers = 4L, src = "pick", ref_edge = NULL) {
+                              workers = 4L, src = "pick", ref_edge = NULL, cache = "knw.walk_cache") {
   chk::chk_function(connector)
   chk::chk_string(species)
   chk::chk_character(wsg)
+  # the segments carry link's segment gradient, so a curve fitted on any other would be read on a gradient it never
+  # saw; a curve from before #92 records none and was fitted on the Atlas line's
+  if (!identical(curve$cols[["grad"]], .knw_grade_grad)) {
+    stop("the curve was fitted on ", if (is.null(curve$cols)) "an unrecorded gradient (the Atlas line's, before #92)"
+         else curve$cols[["grad"]], ", not on ", .knw_grade_grad, ", the gradient the segments are graded on",
+         call. = FALSE)
+  }
   if (is.null(ref_edge)) {
     ref_edge <- if (!is.null(curve$edge_stream)) curve$edge_stream else eval(formals(knw_tune_run)$edge_stream)
   }
@@ -87,8 +99,12 @@ knw_grade_species <- function(connector, schema, species, wsg, curve, pick, stag
   starts <- unique(seg[cand, c("blue_line_key", "downstream_route_measure")])
   walked <- nrow(starts)
   q_walk <- if (is.na(pick$exc_q)) curve$q else pick$exc_q
+  # integers: 0320 prints the counts with paste(), which writes a whole double such as 300000 as 3e+05, and the
+  # vignette data script reads them back by pattern
+  cache_n <- c(walk_cache_hit = 0L, walk_cache_miss = if (isFALSE(cache)) as.integer(walked) else 0L)
   if (walked) {
-    w <- knw_link_walks(connector, starts, q_grid = q_walk, sources = src, workers = workers)
+    w <- knw_link_walks(connector, starts, q_grid = q_walk, sources = src, workers = workers, cache = cache)
+    if (!is.null(attr(w, "cache"))) cache_n[] <- as.integer(attr(w, "cache")[c("hit", "miss")])
     i <- match(paste(seg$blue_line_key, seg$downstream_route_measure),
                paste(w$blue_line_key, w$downstream_route_measure))
     hit <- cand & !is.na(i)
@@ -119,9 +135,20 @@ knw_grade_species <- function(connector, schema, species, wsg, curve, pick, stag
   grades$grade <- ifelse(grades$accessible, g$grades$grade, NA_real_)
   grades$grade_class <- ifelse(grades$accessible, g$grades$grade_class, NA_character_)
   list(grades = grades, reference = g$reference, ref_edge = ref_edge, q = q_walk, walk = "bank",
-       counts = c(segments = nrow(seg), accessible = sum(seg$accessible %in% TRUE), walked = walked,
+       walk_md5 = knw_walk_md5(),
+       counts = c(segments = nrow(seg), accessible = sum(seg$accessible %in% TRUE), walked = walked, cache_n,
                   walk_found = sum(seg$dist_status == "found"), walk_none = sum(seg$dist_status == "none"),
                   walk_other = sum(seg$dist_status %in% c("no_parent", "too_many_hops")),
                   graded = sum(!is.na(grades$grade)), g$dropped),
        walk_minutes = as.numeric(difftime(Sys.time(), t0, units = "mins")))
+}
+
+# the visit column that carries the gradient knw_grade_species() grades on (link's segment `gradient`), which a curve
+# must have been fitted on and a grade table records as `curve_grad` (#92)
+.knw_grade_grad <- "segment_gradient"
+
+# TRUE when a grade table's first row (read as character) records the curve's gradient as `grad`: 0320's keep-check,
+# 0325, 0330, data-raw/vignette_chinook.R and data-raw/vignette_method.R hold a grade table to this before reading it (#92)
+.knw_grade_grad_ok <- function(h, grad = .knw_grade_grad) {
+  "curve_grad" %in% names(h) && identical(as.character(h$curve_grad[1]), grad)
 }

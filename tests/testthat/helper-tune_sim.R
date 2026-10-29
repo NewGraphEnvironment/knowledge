@@ -7,11 +7,14 @@ sim_build <- function(seed = 11, n_wsg = 8, per = 50) {
     site_visit = sprintf("v%04d", seq_len(n)), watershed_group_code = wsg, blue_line_key = 1,
     downstream_route_measure = seq_len(n), edge_type = 1000L, wb_river = FALSE, wb_wetland = FALSE, wb_lake = FALSE,
     area_m2 = stats::runif(n, 20, 400), year = sample(1985:2015, n, TRUE), data_set = sample(c("FDS", "FDIS"), n, TRUE),
-    fwa_gradient = stats::runif(n, 0, 0.12), cw_deploy = exp(stats::runif(n, log(0.5), log(15))),
+    segment_gradient = stats::runif(n, 0, 0.12), fwa_gradient = stats::runif(n, 0, 0.12),
+    cw_deploy = exp(stats::runif(n, log(0.5), log(15))),
     mad_pick = exp(stats::runif(n, log(0.02), log(20))), barrier_dnstr_ch = FALSE, barrier_dnstr_ko = FALSE,
     barrier_dnstr_bt = FALSE, stringsAsFactors = FALSE
   )
-  p <- stats::plogis(-2.5 + 1.2 * log(v$mad_pick) - 12 * v$fwa_gradient)
+  # use follows link's segment gradient, the one scored since #92; the Atlas line's is unrelated noise here, so a
+  # run that reads the wrong column scores differently
+  p <- stats::plogis(-2.5 + 1.2 * log(v$mad_pick) - 12 * v$segment_gradient)
   present_ch <- stats::rbinom(n, 1, p) == 1
   sp <- rbind(
     data.frame(site_visit = v$site_visit, species_code = "CH", present = present_ch,

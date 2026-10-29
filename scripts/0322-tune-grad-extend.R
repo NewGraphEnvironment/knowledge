@@ -10,9 +10,10 @@
 # thresholds table list data/tune/ and data/compare/ non-recursively, so nothing that publishes does.
 #
 # WHY / DESIGN NOTES:
-#   - SAME SPEC AS 0320 except the ladder: the same evidence build, link's thresholds at the ledger's
+#   - SAME SPEC AS 0320 OF #67 except the ladder: the same evidence build, link's thresholds at the ledger's
 #     commit, knw_tune_run()'s defaults for seed (54), folds (5), bootstrap (200), more seeds (55-58)
-#     and d_floor (200). Folds and the bootstrap depend on the visits and the seeds, not on the grid, so
+#     and d_floor (200), on the Atlas line's gradient (`fwa_gradient`), which 0320 read until #92 moved it to
+#     link's segment gradient; the call names it, so the record reproduces. Folds and the bootstrap depend on the visits and the seeds, not on the grid, so
 #     the 2,795 rules the two grids share must score the same; the log checks it.
 #   - EVERY SPECIES IS TUNED ON ONE SHARED LADDER (knw_tune_grid()), so this run measures and records:
 #     it writes no thresholds and changes no published rule (#67's plan gate, 2026-10-18).
@@ -140,7 +141,8 @@ if (stage_run == "score") {
   walks <- read_csv("data/fdis/derived/walks.csv", show_col_types = FALSE)
   t0 <- Sys.time()
   out <- knw_tune_run(vl, vs, walks, thr, species = "CH", stages = "rear", workers = workers,
-                      grid_args = list(grid_grad = grid_grad), cache_dir = dir_tune)
+                      grid_args = list(grid_grad = grid_grad), cache_dir = dir_tune,
+                      cols = c(grad = "fwa_gradient", width = "cw_deploy", mad = "mad_pick"))
   r <- out[[key]]
   say("Scored %s in %.1f min on %d workers: %s, %d rules, %s.", key, as.numeric(difftime(Sys.time(), t0, units = "mins")),
       workers, r$status, nrow(r$score$rules), paste(names(r$score$population), r$score$population, sep = "=", collapse = ", "))

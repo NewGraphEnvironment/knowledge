@@ -1,3 +1,5 @@
+# Not New Graph Environment's shared workflow (NewGraphEnvironment/flows): it fails the build when a draft article reaches the site.
+# Its runner is pinned like the shared ones; move it by hand when they move.
 # Workflow derived from https://github.com/r-lib/actions/tree/v2/examples
 # Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
 on:
@@ -14,9 +16,9 @@ permissions: read-all
 
 jobs:
   pkgdown:
-    # ubuntu-24.04, not ubuntu-latest: on 26.04 (latest from October 2026) the runs built every package from source
-    # and duckdb 2.0.0 failed to compile; unpin when packages install as binaries there again (#94)
     runs-on: ubuntu-24.04
+    # A stalled setup step (an apt mirror, a package compiling from source) otherwise holds the job for 6 h (#94)
+    timeout-minutes: 30
     # Only restrict concurrency for non-PR jobs
     concurrency:
       group: pkgdown-${{ github.event_name != 'pull_request' || github.run_id }}
@@ -79,6 +81,25 @@ jobs:
             exit 1
           fi
           echo "no unexpected top-level pages"
+
+      # A draft article is named vignettes/_<name>.Rmd, which pkgdown skips,
+      # until its counts are the ones it should publish (#93). Assert the skip:
+      # nothing pkgdown would render from a draft may reach docs/articles/.
+      - name: Fail if a draft article reached the site
+        run: |
+          drafts=""
+          for f in vignettes/_*.Rmd; do
+            [ -e "$f" ] || continue
+            b=$(basename "$f" .Rmd)
+            for g in "docs/articles/$b.html" "docs/articles/${b#_}.html"; do
+              [ -e "$g" ] && drafts="$drafts $g"
+            done
+          done
+          if [ -n "$drafts" ]; then
+            echo "Draft article(s) on the site:$drafts"
+            exit 1
+          fi
+          echo "no draft articles on the site"
 
       - name: Deploy to GitHub pages 🚀
         if: github.event_name != 'pull_request'

@@ -1,0 +1,5 @@
+walk_batch_check CHECK on fresh_default_20261017 BULK; 8 workers, batch 500; knowledge 9c7850f
+CH q 3: 16686 starts walked in 36.5 s, 17.51 ms per walk per worker
+  CH q 3: 16686 rows identical to the reference on all 14 columns.
+BT q 10: 32342 starts walked in 47.5 s, 11.74 ms per walk per worker
+  BT q 10: 32342 rows identical to the reference on all 14 columns.
