@@ -431,6 +431,12 @@ own holding the same build (the schema's run and the flow load named in the tabl
 code). `0320` and `0330` refuse a schema built by another run at connect (`knw_build_record()`), and every grade table's
 flow load and walk md5 are compared by its readers; `research/database_builds.md` has the numbers and the load recipe.
 Scoring is CPU-bound: the remote machine scored every key in about an hour on 12 workers (2026-10-23).
+The host keeps its own ignored `data/` (grade tables, curves, `data/fdis/derived`), which can be an older build than the
+promoted run: on 2026-10-28 its visits md5s were 2026-10-25's while the promoted grades named #92's. Before a run there
+is held to the tracked tables, compare `data/fdis/derived`'s md5s with the grade table's `evidence_md5`, and stage the
+promoted inputs beside the repo where they differ (`data-raw/compare_structures_check.R` takes `TUNE_DIR`,
+`COMPARE_DIR` and `EVIDENCE_DIR`). And before timing anything on the database, read `pg_stat_activity`: other sessions
+run link builds and comparisons on it, and #112's first timings overlapped one for 20 minutes unnoticed.
 
 **Never chain tuning and comparison until every key's smoke gates have passed (#84).** Score every key, check, then
 grade, then compare: `0320` runs its four smoke gates for every key first and stops on a failure, and a chain of runs
