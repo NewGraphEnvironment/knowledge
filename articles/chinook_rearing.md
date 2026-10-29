@@ -209,9 +209,7 @@ was chosen to do, not that it predicts new places.
   them through the same test as a stream line, and so does the
   comparison here, which leaves about 2,500 km of them as chinook
   rearing under the recommended rule, with a median grade of 0.34,
-  against 8,400 km under link’s rule; let through untested, as link once
-  did, they would be about 10,200 km at a median grade of 0.03. Lakes
-  keep their own condition.
+  against 8,400 km under link’s rule. Lakes keep their own condition.
 - **The cut-offs are a judgment call.** Chinook get gradually less
   common as streams get smaller and steeper; there is no flow or slope
   where they stop. At one standard error, flow floors of 0.1 to 1 m³/s

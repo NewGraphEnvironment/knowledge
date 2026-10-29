@@ -97,8 +97,11 @@ knw_compare_rules(
 
 - structures:
 
-  `NULL` (chosen as above) or a subset of
-  `c("free", "door", "door_wetland")`.
+  `NULL` (chosen as above), `"reported"` (`tuned_as` alone), or a subset
+  of the structures chosen as above; one outside them is refused. Each
+  structure is a rule regenerated on every group, so
+  `scripts/0330-compare.R` passes `"reported"` unless `STRUCTURES=all`
+  (#112).
 
 - tuned_as:
 
@@ -130,7 +133,10 @@ by an exception whose river lies in another watershed group), `change`
 structure), `segments` (the per-segment flags under `default` and each
 structure, with `tuned` the `tuned_as` structure, and the `default`
 branch each segment lies on), `log` lines, one of them per stage with
-its minutes, and `timing`, the minutes of each stage by name (#110).
+its minutes, `timing`, the minutes of each stage by name (#110), and
+`worker_minutes`, the minutes summed over workers spent copying and
+indexing the groups (`setup`), walking to rivers (`walk`) and on each
+rule by name (#112).
 
 ## Details
 

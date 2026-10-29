@@ -150,7 +150,11 @@ tables, for the FDIS detection check (<code>NULL</code> to skip).</p></dd>
 
 
 <dt id="arg-structures">structures<a class="anchor" aria-label="anchor" href="#arg-structures"></a></dt>
-<dd><p><code>NULL</code> (chosen as above) or a subset of <code>c("free", "door", "door_wetland")</code>.</p></dd>
+<dd><p><code>NULL</code> (chosen as above), <code>"reported"</code> (<code>tuned_as</code> alone),
+or a subset of the structures chosen as above; one outside them is refused.
+Each structure is a rule regenerated on every group, so
+<code>scripts/0330-compare.R</code> passes <code>"reported"</code> unless <code>STRUCTURES=all</code>
+(#112).</p></dd>
 
 
 <dt id="arg-tuned-as">tuned_as<a class="anchor" aria-label="anchor" href="#arg-tuned-as"></a></dt>
@@ -182,8 +186,10 @@ and lost by structure, reason and stream order), <code>checks</code> (FDIS detec
 each rule's segments and the bcfishobs lift, per structure), <code>segments</code> (the
 per-segment flags under <code>default</code> and each structure, with <code>tuned</code> the
 <code>tuned_as</code> structure, and the <code>default</code> branch each segment lies on), <code>log</code>
-lines, one of them per stage with its minutes, and <code>timing</code>, the minutes of
-each stage by name (#110).</p>
+lines, one of them per stage with its minutes, <code>timing</code>, the minutes of
+each stage by name (#110), and <code>worker_minutes</code>, the minutes summed over
+workers spent copying and indexing the groups (<code>setup</code>), walking to rivers
+(<code>walk</code>) and on each rule by name (#112).</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
