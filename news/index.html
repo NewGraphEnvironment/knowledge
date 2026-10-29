@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">knowledge</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.16</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.17</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,6 +36,11 @@
       <small>Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.4.17" id="knowledge-0417">knowledge 0.4.17<a class="anchor" aria-label="anchor" href="#knowledge-0417"></a></h2>
+<ul><li>
+<code>scripts/0330-compare.R</code> compares link’s <code>default</code> and the reported structure (<code>door</code>) alone unless <code>STRUCTURES=all</code> (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/112" class="external-link">#112</a>): the rules it no longer regenerates took 29 to 33 % of the worker minutes on three keys. A reported-only run matches the every-structure run’s <code>default</code> and <code>door</code> rows (<code>data-raw/compare_structures_check.R</code>). <code>knw_compare_rules(structures = "reported")</code> resolves the structure, refuses one outside the species x rule’s own set, and returns each rule’s minutes (<code>worker_minutes</code>). The chinook article no longer quotes the <code>free</code> structure.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.16" id="knowledge-0416">knowledge 0.4.16<a class="anchor" aria-label="anchor" href="#knowledge-0416"></a></h2>
 <ul><li>Retuning no longer touches the tracked tables or the articles until the operator promotes a run (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/111" class="external-link">#111</a>). <code>DEV=1 0320</code> is the check after a change upstream: minutes, no database, ending in a pick report (<code><a href="../reference/knw_tune_pick_report.html">knw_tune_pick_report()</a></code>) of each key’s pick beside the published one. A full <code>0320</code> and <code>0330 TUNE_DIR=</code> write ignored candidate runs, and <code>scripts/0335-promote.R</code> (<code><a href="../reference/knw_tune_promote.html">knw_tune_promote()</a></code>) moves one in, whole or by key, archiving what it replaces so a promotion can be undone, then reruns <code>0325</code> and the article bundles. Before anything moves it refuses a set that <code>0325</code> or the bundles would refuse. Summaries record their run and evidence ledger, which the readers take through <code><a href="../reference/knw_run_ledger.html">knw_run_ledger()</a></code> rather than the newest ledger on disk.</li>
