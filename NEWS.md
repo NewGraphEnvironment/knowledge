@@ -1,3 +1,10 @@
+# knowledge 0.4.19
+
+* R CMD check runs on every pull request and push to `main` through New Graph Environment's shared workflows
+  (NewGraphEnvironment/flows), so a broken example, test or documentation page shows on the pull request (#98, #99).
+  Its first runs cleared one warning and two notes: `knw_tune_smoke()` documents `folds`, the fixed-effects fit calls
+  `stats::.lm.fit()`, and seven examples are wrapped under R CMD check's Rd line width. No change in behaviour.
+
 # knowledge 0.4.18
 
 * `knw_compare_rules()` logs which rules' predicates read the near-river table and returns `bin_minutes`, each worker's
