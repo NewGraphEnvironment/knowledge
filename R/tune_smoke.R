@@ -30,6 +30,7 @@
 #'
 #' @inheritParams knw_tune_score
 #' @param fit,prior_sd passed to the fits, as in [knw_tune_score()].
+#' @param folds `integer(1)` the number of groups-out folds, as in [knw_tune_score()].
 #' @param previous `NULL`, or `character(1)` the rule string of the previous
 #'   pick, which must be in `grid`.
 #' @param tol_null `numeric(1)` check 1's tolerance.
@@ -50,7 +51,8 @@
 #' grid <- data.frame(rule = c("default", "tuned"), size_var = "mad", size_min = c(0.1, 0.5),
 #'                    grad_max = 0.05, exc_q = NA, exc_d = NA, departures = c(0L, 1L),
 #'                    is_default = c(TRUE, FALSE))
-#' sm <- knw_tune_smoke(d, function(d, r) d$size >= r$size_min, grid, "U", previous = "tuned", seed = 1)
+#' sm <- knw_tune_smoke(d, function(d, r) d$size >= r$size_min, grid, "U",
+#'                      previous = "tuned", seed = 1)
 #' sm$checks
 #' cat(sm$lines, sep = "\n")
 knw_tune_smoke <- function(d, rule_in, grid, resp = "U", previous = NULL, seed = 54L, folds = 5L,

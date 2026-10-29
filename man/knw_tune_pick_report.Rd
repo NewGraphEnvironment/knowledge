@@ -35,7 +35,8 @@ run: a rebuilt evidence changes the visits, so raw held-out deviances of the
 two runs are not on one scale.
 }
 \examples{
-pub <- data.frame(rule = c("mad>=0.5|g<=0.07|none", "mad>=0.75|g<=0.09|none"), grad_max = c(0.07, 0.09),
+pub <- data.frame(rule = c("mad>=0.5|g<=0.07|none", "mad>=0.75|g<=0.09|none"),
+                  grad_max = c(0.07, 0.09),
                   recommended = c(FALSE, TRUE), in_region = c(TRUE, TRUE), ddev_best = c(4, 0),
                   se_diff = c(6, 0), n_visits = 4858)
 run <- transform(pub, recommended = c(TRUE, FALSE), ddev_best = c(0, 9), se_diff = c(0, 5))

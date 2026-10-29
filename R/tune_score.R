@@ -341,7 +341,7 @@ knw_tune_score <- function(d, rule_in, grid, resp = "U", seed = 54L, folds = 5L,
       Xd <- rbind(Xd, R)
       zd <- c(zd, z0)
     }
-    ls <- .lm.fit(Xd, zd, tol = 1e-11)
+    ls <- stats::.lm.fit(Xd, zd, tol = 1e-11)
     b <- numeric(p)
     b[ls$pivot[seq_len(ls$rank)]] <- ls$coefficients[seq_len(ls$rank)]
     if (ls$rank < p) dropped[ls$pivot[-seq_len(ls$rank)]] <- TRUE

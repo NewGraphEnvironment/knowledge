@@ -48,7 +48,8 @@ spawning response the export can give.
 \examples{
 fish <- data.frame(site_visit = c("v1", "v1", "v2", "v3"), species_code = c("BT", "BT", "DV", "BT"),
                    maturity_code = c("IM", "M", "SP", NA), length_mm = c(90, 410, 300, 500))
-visits <- data.frame(site_visit = c("v1", "v2", "v3"), month = c(9, 6, 9), pooling = c("BT", "BT+DV", "BT"))
+visits <- data.frame(site_visit = c("v1", "v2", "v3"), month = c(9, 6, 9),
+                     pooling = c("BT", "BT+DV", "BT"))
 codes <- data.frame(code = c("BT", "DV"), species_group = "char")
 knw_spawner_evidence(fish, visits, codes)
 }

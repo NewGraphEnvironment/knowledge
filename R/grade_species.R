@@ -66,7 +66,8 @@
 #' @examples
 #' \dontrun{
 #' pg <- function() DBI::dbConnect(RPostgres::Postgres(), bigint = "numeric")
-#' g <- knw_grade_species(pg, "fresh_default", "CH", c("BULK", "MORR"), out$CH_rear$curve, out$CH_rear$pick)
+#' g <- knw_grade_species(pg, "fresh_default", "CH", c("BULK", "MORR"),
+#'                        out$CH_rear$curve, out$CH_rear$pick)
 #' }
 knw_grade_species <- function(connector, schema, species, wsg, curve, pick, stage = "rear",
                               workers = 4L, src = "pick", ref_edge = NULL, cache = "knw.walk_cache") {

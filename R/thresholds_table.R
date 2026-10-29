@@ -49,8 +49,8 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' t <- knw_thresholds_table("data/tune", "knowledge/fdis/v3", "20261017_004619-3f4c713b", "a17e9177", "default",
-#'                           compare_dir = "data/compare")
+#' t <- knw_thresholds_table("data/tune", "knowledge/fdis/v3", "20261017_004619-3f4c713b",
+#'                           "a17e9177", "default", compare_dir = "data/compare")
 #' t$thresholds
 #' }
 knw_thresholds_table <- function(tune_dir, evidence_version, link_run_uid, link_sha, config = "default",
