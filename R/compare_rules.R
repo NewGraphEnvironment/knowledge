@@ -64,8 +64,11 @@
 #'   tables, for the FDIS detection check (`NULL` to skip).
 #' @param scratch `character(1)` the scratch schema (dropped at the end).
 #' @param n_boot,seed_boot the bcfishobs lift's bootstrap.
-#' @param structures `NULL` (chosen as above) or a subset of `c("free", "door",
-#'   "door_wetland")`.
+#' @param structures `NULL` (chosen as above), `"reported"` (`tuned_as` alone),
+#'   or a subset of the structures chosen as above; one outside them is refused.
+#'   Each structure is a rule regenerated on every group, so
+#'   `scripts/0330-compare.R` passes `"reported"` unless `STRUCTURES=all`
+#'   (#112).
 #' @param tuned_as `character(1)` the structure reported as `tuned`.
 #' @param config_sha `character(1)` the link commit `link_dir` was read at,
 #'   carried on every output row (`NA` when unknown).
@@ -84,8 +87,10 @@
 #'   each rule's segments and the bcfishobs lift, per structure), `segments` (the
 #'   per-segment flags under `default` and each structure, with `tuned` the
 #'   `tuned_as` structure, and the `default` branch each segment lies on), `log`
-#'   lines, one of them per stage with its minutes, and `timing`, the minutes of
-#'   each stage by name (#110).
+#'   lines, one of them per stage with its minutes, `timing`, the minutes of
+#'   each stage by name (#110), and `worker_minutes`, the minutes summed over
+#'   workers spent copying and indexing the groups (`setup`), walking to rivers
+#'   (`walk`) and on each rule by name (#112).
 #' @export
 #' @examples
 #' \dontrun{
@@ -140,7 +145,7 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
   edge_stream <- br$edge_stream
   flag <- if (stage == "rear") "rearing" else "spawning"
   other <- if (stage == "rear") "spawn" else "rear"
-  structures <- .knw_compare_structures(br, tuned, structures)
+  structures <- .knw_compare_structures(br, tuned, structures, tuned_as)
   if (!tuned_as %in% structures) stop("tuned_as must be one of the structures run: ", paste(structures, collapse = ", "), call. = FALSE)
 
   # the near-river pairs default's rules resolve to under each model (fresh's own resolver, so the walk is the
@@ -249,10 +254,15 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
   if (length(err)) stop(err[[1]]$error, call. = FALSE)
   flags <- unlist(lapply(res, `[[`, "flags"), recursive = FALSE)
   walk_s <- sum(vapply(res, `[[`, numeric(1), "walk_s"))
+  setup_s <- sum(vapply(res, `[[`, numeric(1), "setup_s"))
+  rule_min <- Reduce(`+`, lapply(res, `[[`, "rule_s")) / 60
   say(paste("Classify, overlay and connect: %d groups x %d rules on %d worker%s, %.1f min",
             "(near-river walks %.1f min summed over workers)."),
       length(groups), length(rule_names), length(jobs), if (length(jobs) == 1L) "" else "s",
       tm$tick("classify_overlay_connect"), walk_s / 60)
+  # what each rule costs against what every rule shares (#112): the groups' copies and indexes, and the walks
+  say("Summed over workers: group copies and indexes %.1f min; by rule %s.", setup_s / 60,
+      paste(sprintf("%s %.1f min", names(rule_min), rule_min), collapse = ", "))
   wsg_in <- paste0("'", groups, "'", collapse = ",")
   # the default branch each segment lies on, as link's rules name them, and whether a user-habitat reach covers it
   in_uhc_seg <- if (nrow(uhc) && flag %in% names(uhc)) {
@@ -500,7 +510,8 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
     x
   }))
   if (!is.null(checks)) checks$tuned_structure <- tuned_as
-  list(compare = compare, change = change, checks = checks, segments = seg, log = log, timing = tm$ticks())
+  list(compare = compare, change = change, checks = checks, segments = seg, log = log, timing = tm$ticks(),
+       worker_minutes = c(setup = setup_s / 60, walk = walk_s / 60, rule_min))
 }
 
 # A stage timer: tick(label) returns the minutes since the last tick (or the start) and records them under label;
@@ -521,7 +532,8 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
 
 # One bin of groups (#87): its own connection and scratch schema `scratch_w`, each group regenerated through the
 # three stages exactly as knw_compare_rules() describes, reading the grades and user-habitat rows the caller wrote to
-# `scratch`. Returns the flags per group and rule, the near-river walk time, and the first group's error with its
+# `scratch`. Returns the flags per group and rule, the seconds spent on the near-river walks, on the groups' copies and
+# indexes and on each rule (#112), and the first group's error with its
 # name (the bin stops there). Self-contained: every value is an argument and every call is qualified, because it
 # runs on a socket worker.
 .knw_compare_bin <- function(groups, scratch_w, preds, connector, schema, s, sp, stage, scratch, models, specs, wb_sql,
@@ -537,8 +549,11 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
   near_tbl <- paste0(scratch_w, ".near_river")
   flags <- list()
   walk_s <- 0
+  setup_s <- 0
+  rule_s <- stats::setNames(numeric(length(rule_names)), rule_names)
   for (w in groups) {
     err <- tryCatch({
+      t_setup <- Sys.time()
       model <- models[[w]]
       pr <- preds[[model]]
       DBI::dbExecute(conn, sprintf("DROP TABLE IF EXISTS %s.streams", scratch_w))
@@ -566,6 +581,7 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
                    "(blue_line_key, downstream_route_measure)")) {
         DBI::dbExecute(conn, sprintf("CREATE INDEX ON %s.streams %s", scratch_w, ix))
       }
+      setup_s <- setup_s + as.numeric(difftime(Sys.time(), t_setup, units = "secs"))
       if (nrow(specs[[model]])) {
         t1 <- Sys.time()
         sx <- specs[[model]]
@@ -582,6 +598,7 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
         }
       }
       for (k in rule_names) {
+        t_rule <- Sys.time()
         h <- paste0(scratch_w, ".habitat_", k)
         DBI::dbExecute(conn, sprintf("DROP TABLE IF EXISTS %s", h))
         rear_sql <- if (stage == "rear") pr[[k]] else pr$other
@@ -609,12 +626,13 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
         flags[[paste(w, k)]] <- DBI::dbGetQuery(conn, sprintf(
           "SELECT id_segment, watershed_group_code, '%s' AS rule, rearing, spawning, lake_rearing, wetland_rearing,
                   rearing_pre_connect, spawning_pre_connect FROM %s", k, h))
+        rule_s[[k]] <- rule_s[[k]] + as.numeric(difftime(Sys.time(), t_rule, units = "secs"))
       }
       NULL
     }, error = function(e) sprintf("group %s: %s", w, conditionMessage(e)))
-    if (!is.null(err)) return(list(flags = NULL, walk_s = walk_s, error = err))
+    if (!is.null(err)) return(list(flags = NULL, walk_s = walk_s, setup_s = setup_s, rule_s = rule_s, error = err))
   }
-  list(flags = flags, walk_s = walk_s, error = NULL)
+  list(flags = flags, walk_s = walk_s, setup_s = setup_s, rule_s = rule_s, error = NULL)
 }
 
 # groups into at most `workers` bins balanced by segment count: largest first, each to the lightest bin (ties to the
@@ -690,12 +708,19 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
     setequal(as.integer(r[["edge_types_explicit"]]), c(1050L, 1150L))
 }
 
-# which structures a species x rule is compared under (see knw_compare_rules())
-.knw_compare_structures <- function(br, tuned, structures = NULL) {
+# which structures a species x rule is compared under (see knw_compare_rules()): its own set, `tuned_as` alone
+# ("reported", #112), or a subset of its own set; a structure the species x rule is not compared under is refused
+.knw_compare_structures <- function(br, tuned, structures = NULL, tuned_as = "door") {
   all <- c("free", "door", "door_wetland")
   pick <- if (!br$wetland_line) "door" else if (is.na(tuned$exc_q)) c("free", "door") else all
   if (is.null(structures)) return(pick)
+  if (identical(structures, "reported")) structures <- tuned_as
   chk::chk_subset(structures, all)
+  out <- setdiff(structures, pick)
+  if (length(out)) {
+    stop("not a structure this species x rule is compared under (", paste(pick, collapse = ", "), "): ",
+         paste(out, collapse = ", "), call. = FALSE)
+  }
   structures
 }
 

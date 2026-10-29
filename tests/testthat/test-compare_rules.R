@@ -46,6 +46,13 @@ test_that("the structures follow the species' rules and the tuned rule's excepti
   expect_identical(knowledge:::.knw_compare_structures(bg, exc), "door")
   expect_identical(knowledge:::.knw_compare_structures(b, exc, "door"), "door")
   expect_error(knowledge:::.knw_compare_structures(b, exc, "doors"))
+  # reported alone (#112): tuned_as, held to the species x rule's own set
+  expect_identical(knowledge:::.knw_compare_structures(b, exc, "reported", "door"), "door")
+  expect_identical(knowledge:::.knw_compare_structures(b, exc, "reported", "door_wetland"), "door_wetland")
+  expect_identical(knowledge:::.knw_compare_structures(bg, exc, "reported", "door"), "door")
+  expect_error(knowledge:::.knw_compare_structures(bg, exc, "reported", "free"), "not a structure")
+  expect_error(knowledge:::.knw_compare_structures(b, none, "reported", "door_wetland"), "not a structure")
+  expect_error(knowledge:::.knw_compare_structures(b, none, c("door", "door_wetland")), "not a structure")
 })
 
 test_that("default's label carries the pair it resolves to and the scope the dimensions give it", {

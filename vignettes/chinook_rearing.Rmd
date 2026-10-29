@@ -91,12 +91,10 @@ boot_mad <- sum(tune$boot_rec_share[tune$size_var == "mad"])
 boot_grad <- sum(tune$boot_rec_share[tune$grad_max == rec$grad_max])
 stopifnot(boot_mad > 0.9, boot_grad < 0.5)
 
-# lines through wetlands: one row per structure the comparison ran; `wl` is the one reported as tuned (the door, link's
-# own test for them since 0.67.0) and `wl_free` the free pass link gave them before
+# lines through wetlands: `wl` is the structure reported as tuned (the door, link's own test for them since 0.67.0);
+# the comparison runs the others only on STRUCTURES=all (#112), so the article reads this one alone
 wl <- x$wetland[x$wetland$as_tuned, ]
-wl_free <- x$wetland[x$wetland$structure == "free" & !x$wetland$as_tuned, ]
-stopifnot(nrow(wl) == 1, nrow(wl_free) == 1, wl$structure == "door", wl$km_tuned < wl$km_default,
-          wl_free$km_tuned > wl$km_default, wl$grade_median_tuned > 0.2, wl_free$grade_median_tuned < 0.05)
+stopifnot(nrow(wl) == 1, wl$structure == "door", wl$km_tuned < wl$km_default, wl$grade_median_tuned > 0.2)
 
 link_site <- "https://www.newgraphenvironment.com/link/"
 link_default <- sprintf("https://github.com/NewGraphEnvironment/link/tree/%s/inst/extdata/configs/default", meta$link_sha)
@@ -333,9 +331,7 @@ rule does what it was chosen to do, not that it predicts new places.
   records: link now puts them through the same test as a stream line, and so does the comparison here, which leaves
   about `r n0(round(wl$km_tuned, -2))` km of them as chinook rearing under the recommended rule, with a median grade
   of `r formatC(wl$grade_median_tuned, format = "f", digits = 2)`, against `r n0(round(wl$km_default, -2))` km under
-  link's rule; let through untested, as link once did, they would be about `r n0(round(wl_free$km_tuned, -2))` km at
-  a median grade of `r formatC(wl_free$grade_median_tuned, format = "f", digits = 2)`. Lakes keep their own
-  condition.
+  link's rule. Lakes keep their own condition.
 - **The cut-offs are a judgment call.** Chinook get gradually less common as streams get smaller and steeper; there is
   no flow or slope where they stop. At one standard error, flow floors of `r min(region$size_min)` to
   `r max(region$size_min)` m³/s fit almost as well; at `r se_strict` the choice is `r ch196$size_min` m³/s at link's slope
