@@ -35,6 +35,8 @@ pick, which must be in \code{grid}.}
 
 \item{seed}{\code{integer(1)} fold seed.}
 
+\item{folds}{\code{integer(1)} the number of groups-out folds, as in \code{\link[=knw_tune_score]{knw_tune_score()}}.}
+
 \item{tol_null}{\code{numeric(1)} check 1's tolerance.}
 
 \item{coef_max}{\code{numeric(1)} check 4's limit.}
@@ -90,7 +92,8 @@ d$U <- rbinom(240, 1, plogis(-3 + 1.5 * (d$size > 0.5)))
 grid <- data.frame(rule = c("default", "tuned"), size_var = "mad", size_min = c(0.1, 0.5),
                    grad_max = 0.05, exc_q = NA, exc_d = NA, departures = c(0L, 1L),
                    is_default = c(TRUE, FALSE))
-sm <- knw_tune_smoke(d, function(d, r) d$size >= r$size_min, grid, "U", previous = "tuned", seed = 1)
+sm <- knw_tune_smoke(d, function(d, r) d$size >= r$size_min, grid, "U",
+                     previous = "tuned", seed = 1)
 sm$checks
 cat(sm$lines, sep = "\n")
 }

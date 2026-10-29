@@ -55,7 +55,8 @@ knw_walk_index <- function(walks) {
 #' @export
 #' @examples
 #' d <- data.frame(edge_type = c(1000, 1000, 1250), blue_line_key = 1, downstream_route_measure = 1:3,
-#'                 segment_gradient = c(0.02, 0.02, 0.01), cw_deploy = c(2, 1, 50), mad_pick = c(0.3, 0.1, 40))
+#'                 segment_gradient = c(0.02, 0.02, 0.01), cw_deploy = c(2, 1, 50),
+#'                 mad_pick = c(0.3, 0.1, 40))
 #' r <- data.frame(size_var = "width", size_min = 1.5, grad_max = 0.0549, exc_q = NA, exc_d = NA)
 #' knw_rule_in(d, r)
 knw_rule_in <- function(d, rule, walks = NULL,

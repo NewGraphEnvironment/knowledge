@@ -70,8 +70,8 @@ per stage with \code{status} saying why and no values.
 }
 \examples{
 \dontrun{
-t <- knw_thresholds_table("data/tune", "knowledge/fdis/v3", "20261017_004619-3f4c713b", "a17e9177", "default",
-                          compare_dir = "data/compare")
+t <- knw_thresholds_table("data/tune", "knowledge/fdis/v3", "20261017_004619-3f4c713b",
+                          "a17e9177", "default", compare_dir = "data/compare")
 t$thresholds
 }
 }

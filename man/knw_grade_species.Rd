@@ -99,6 +99,7 @@ or with no gradient).
 \examples{
 \dontrun{
 pg <- function() DBI::dbConnect(RPostgres::Postgres(), bigint = "numeric")
-g <- knw_grade_species(pg, "fresh_default", "CH", c("BULK", "MORR"), out$CH_rear$curve, out$CH_rear$pick)
+g <- knw_grade_species(pg, "fresh_default", "CH", c("BULK", "MORR"),
+                       out$CH_rear$curve, out$CH_rear$pick)
 }
 }
