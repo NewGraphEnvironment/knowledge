@@ -88,9 +88,13 @@
 #'   per-segment flags under `default` and each structure, with `tuned` the
 #'   `tuned_as` structure, and the `default` branch each segment lies on), `log`
 #'   lines, one of them per stage with its minutes, `timing`, the minutes of
-#'   each stage by name (#110), and `worker_minutes`, the minutes summed over
+#'   each stage by name (#110), `worker_minutes`, the minutes summed over
 #'   workers spent copying and indexing the groups (`setup`), walking to rivers
-#'   (`walk`) and on each rule by name (#112).
+#'   (`walk`) and on each rule by name (#112), and `bin_minutes`, each worker's
+#'   timed minutes with and without `default`'s own and, where no other
+#'   predicate reads the near-river table (`walk_dropped`), without the walk:
+#'   the slowest worker's minutes less the slowest without them is the projected
+#'   saving of reading `default`'s flags rather than making them (#101).
 #' @export
 #' @examples
 #' \dontrun{
@@ -263,6 +267,20 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
   # what each rule costs against what every rule shares (#112): the groups' copies and indexes, and the walks
   say("Summed over workers: group copies and indexes %.1f min; by rule %s.", setup_s / 60,
       paste(sprintf("%s %.1f min", names(rule_min), rule_min), collapse = ", "))
+  # what reading default's flags from an earlier run would spare (#101): its own minutes, and the walk where no other
+  # predicate reads the near-river table. The stage takes its slowest bin's time, so the saving is projected per bin
+  near_rules <- unique(unlist(lapply(jobs[[1]]$preds, function(p) {
+    names(p)[vapply(p, function(x) grepl(".near_river", x, fixed = TRUE), logical(1))]
+  })))
+  say("Rules whose predicate reads the near-river table: %s.",
+      if (length(near_rules)) paste(near_rules, collapse = ", ") else "none")
+  drop_walk <- length(near_rules) > 0L && all(near_rules == "default")
+  bin_minutes <- .knw_bin_minutes(res, drop_rules = "default", drop_walk = drop_walk)
+  say(paste("Bins: %s timed worker-min; without default's own%s the slowest bin would take %.1f where the slowest",
+            "took %.1f, a projected %.1f min off a rerun that reads default's flags."),
+      paste(sprintf("%.1f", bin_minutes$minutes), collapse = ", "), if (drop_walk) " and the walk" else "",
+      max(bin_minutes$minutes_without), max(bin_minutes$minutes),
+      max(bin_minutes$minutes) - max(bin_minutes$minutes_without))
   wsg_in <- paste0("'", groups, "'", collapse = ",")
   # the default branch each segment lies on, as link's rules name them, and whether a user-habitat reach covers it
   in_uhc_seg <- if (nrow(uhc) && flag %in% names(uhc)) {
@@ -511,7 +529,22 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
   }))
   if (!is.null(checks)) checks$tuned_structure <- tuned_as
   list(compare = compare, change = change, checks = checks, segments = seg, log = log, timing = tm$ticks(),
-       worker_minutes = c(setup = setup_s / 60, walk = walk_s / 60, rule_min))
+       worker_minutes = c(setup = setup_s / 60, walk = walk_s / 60, rule_min), bin_minutes = bin_minutes)
+}
+
+# Each bin's timed minutes (.knw_compare_bin()'s setup, walk and per-rule seconds), and its minutes without the rules
+# in `drop_rules` (and without the walk when `drop_walk`): what the bin would take if those rules' flags were read
+# rather than made (#101)
+.knw_bin_minutes <- function(res, drop_rules, drop_walk = FALSE) {
+  res <- Filter(function(x) !is.null(x$rule_s), res)
+  if (!length(res)) stop("no bin returned its times", call. = FALSE)
+  out <- lapply(res, function(x) {
+    all_s <- x$setup_s + x$walk_s + sum(x$rule_s)
+    c(minutes = all_s / 60,
+      minutes_without = (all_s - sum(x$rule_s[names(x$rule_s) %in% drop_rules]) - if (drop_walk) x$walk_s else 0) / 60)
+  })
+  data.frame(bin = seq_along(out), minutes = vapply(out, `[[`, numeric(1), "minutes"),
+             minutes_without = vapply(out, `[[`, numeric(1), "minutes_without"), walk_dropped = drop_walk)
 }
 
 # A stage timer: tick(label) returns the minutes since the last tick (or the start) and records them under label;

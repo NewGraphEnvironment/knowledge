@@ -1,7 +1,8 @@
 # Database builds: what a retune reads, where it can run, and what a second database needs
 
-**Verified:** 2026-10-27, and the round-trip check and the structures a comparison runs 2026-10-28 · **Issues:** #87
-(from #73's run times; #85 and #86 folded in or left open below), #110 (the round-trip check), #112 (the structures) ·
+**Verified:** 2026-10-27, and the round-trip check, the structures a comparison runs and `default`'s cost 2026-10-28 ·
+**Issues:** #87 (from #73's run times; #85 and #86 folded in or left open below), #110 (the round-trip check), #112 (the
+structures), #101 (`default`'s cost) ·
 **Produced by:** `data-raw/walk_batch_check.R` (logs `scripts/logs/habitat/20261026_walk_batch_check*`),
 `data-raw/compare_parallel_check.R` (`20261026_compare_parallel_check*`), `data-raw/compare_structures_check.R`
 (`20261028_compare_structures_check*`), the timed retune on the database's host
@@ -91,7 +92,7 @@ overstate the change. On the two keys checked against the one-connection code (W
 rearing's 20 largest), every segment's flags were identical and the km sums agreed within 1.04e-13 relative; the
 full run's tables matched the tracked ones within 2.6e-13. The whole recompare did not get faster, because the
 database's cores were the bound both ways: classify, overlay and connect is 115 of its 163 min. Regenerating
-`default`'s flags, unchanged on every rerun, is the next cut (#101), not yet measured.
+`default`'s flags, unchanged on every rerun, is the next cut (#101; below, measured but not built).
 
 ## Comparing only the structure that is published
 
@@ -121,6 +122,45 @@ key's share, and CH and BT rearing were timed on their 20 largest groups, so the
 #92's tracked tables row for row (1.7e-14), on fresh 0.44.0 where #92 ran 0.43.0, from #92's grade, curve and
 evidence tables staged for the first pass. The reruns read the host's own older tables (2026-10-25's picks), which time
 the rules as well as #92's would, and so differ from the tracked tables as they should (`-4`).
+
+## Reading `default`'s flags instead of making them (measured, not built)
+
+**The principle.** `default` is link's own rule, and its flags depend on nothing a retune changes: not the grades, not
+the tuned pick, only link's configs, the build, the flow load, fresh and the regeneration code. So a rerun could read
+them from the last run that shared all of those, and spend the database's cores on the tuned rule alone. Chinook gains
+twice, because `default` is its only rule that reads the near-river table: under link configs `102762da` (fresh
+0.44.0) CH rearing's `default` predicate reads it on both flow models, and neither the tuned rule's base nor spawning's
+predicate does (built from the configs on 2026-10-28; `0330` logs the rules that read it on every run), so reading
+`default`'s flags would skip the walk that fills the table as well. No other species' `default` walks to a river.
+
+What `default` costs, from #112's worker minutes on an idle database (the every-structure run, with the structures
+`0330` no longer runs taken out, so the rest is what a run since #112 does; the `door` alone run gives the same shares
+within 4 points):
+
+| key (groups) | copies and indexes | walks | `default` | `door` | `default`'s share (with the walk) |
+|---|---|---|---|---|---|
+| CH rearing (20 largest) | 1.2 | 19.5 | 9.3 | 9.0 | 74 % (28.8 of 39.0) |
+| BT rearing (20 largest) | 1.4 | 0 | 19.2 | 11.2 | 60 % (19.2 of 31.8) |
+| WCT rearing (all 16) | 0.8 | 0 | 6.3 | 5.3 | 51 % (6.3 of 12.4) |
+
+Projected onto #87's host run (115.2 min of classify, overlay and connect, less what #112 dropped: about 89 min, with
+#87's CO and ST dropping `free` alone at BT's 29 %), key by key, these shares come to about 27 min on the three measured
+keys, and 25 to 29 more on the other five (RB, CO, ST, BT spawning and GR, none of which walks), which borrow BT's and
+WCT's 51 to 60 %: about 52 to 56 of the 89, so a full `0330`
+of about 2.5 h since #112 would take about 1.6. It is an estimate three ways: CH and BT were timed on their 20 largest
+groups, five keys borrow a share, and a stage's wall time is its slowest worker's, so a share of summed worker minutes
+is its share of the wall time only when the bins are balanced. `0330` now logs each worker's minutes with and without
+`default`'s own (and without the walk where only `default` reads the near-river table), and projects the saving as
+the slowest worker's minutes less the slowest worker's without them (not necessarily the same worker).
+
+**Not built (Al, 2026-10-28):** link's stream layers are being reworked, and a cache keyed on today's build would be
+dropped at the next one before it paid. When it is built, its key is species, stage, link's `config_sha`, the schema's
+run, fresh's version, the flow load (`knw_discharge_load()`) and the regeneration code; it is per species and stage
+(BT spawning's `default` may equal BT rearing's, but the waterbody floors differ by stage, so stage stays in the key
+until shown otherwise); it skips the walk only where `0330`'s "Rules whose predicate reads the near-river table" line
+names `default` alone; and its proof is the one `data-raw/compare_parallel_check.R` and
+`data-raw/compare_structures_check.R` make, a run reading the cache returning the same tables as one regenerating
+`default`.
 
 ## What a run reads from the database
 

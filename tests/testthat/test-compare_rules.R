@@ -105,3 +105,18 @@ test_that("the stage timer records each stage once, in order, and the stages sum
   expect_identical(x[["first"]], a)
   expect_equal(sum(x), tm$total(), tolerance = 1e-9)
 })
+
+test_that("a bin without default's own minutes keeps the shared ones, and drops the walk only when asked (#101)", {
+  b1 <- list(setup_s = 60, walk_s = 120, rule_s = c(default = 60, door = 60))
+  b2 <- list(setup_s = 60, walk_s = 0, rule_s = c(default = 180, door = 60))
+  x <- .knw_bin_minutes(list(b1, b2), drop_rules = "default")
+  expect_equal(x$minutes, c(5, 5))
+  expect_equal(x$minutes_without, c(4, 2))
+  expect_false(any(x$walk_dropped))
+  # a bin that stopped before its times (NULL) is skipped, and the walk goes only when asked
+  y <- .knw_bin_minutes(list(b1, list(flags = NULL), b2), drop_rules = "default", drop_walk = TRUE)
+  expect_equal(y$minutes_without, c(2, 2))
+  expect_true(all(y$walk_dropped))
+  expect_identical(y$bin, 1:2)
+  expect_error(.knw_bin_minutes(list(list(flags = NULL)), "default"), "no bin")
+})
