@@ -112,9 +112,11 @@ test_that("a bin without default's own minutes keeps the shared ones, and drops 
   x <- .knw_bin_minutes(list(b1, b2), drop_rules = "default")
   expect_equal(x$minutes, c(5, 5))
   expect_equal(x$minutes_without, c(4, 2))
+  expect_false(any(x$walk_dropped))
   # a bin that stopped before its times (NULL) is skipped, and the walk goes only when asked
   y <- .knw_bin_minutes(list(b1, list(flags = NULL), b2), drop_rules = "default", drop_walk = TRUE)
   expect_equal(y$minutes_without, c(2, 2))
+  expect_true(all(y$walk_dropped))
   expect_identical(y$bin, 1:2)
   expect_error(.knw_bin_minutes(list(list(flags = NULL)), "default"), "no bin")
 })

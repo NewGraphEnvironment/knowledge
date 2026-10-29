@@ -38,7 +38,7 @@ Part of that work repeats on every rerun: link's `default` rule is regenerated u
   #92's 0.43.0, so the script holds only the pick-independent columns (accessible, stored and `default` km) to the
   tracked tables, gated on flow load and fresh. The minutes stand for any pick.
 - The projection is per bin: each worker's timed minutes with and without `default`'s steps (and the walk, where only
-  `default`'s predicate reads its table), the saving being the slowest bin's drop; `knw_compare_rules()` logs it and
+  `default`'s predicate reads its table), the saving being the slowest bin's minutes less the slowest without them (as landed); `knw_compare_rules()` logs it and
   returns `bin_minutes`. The cross-check is the slowest bin against the stage's wall minutes, not summed minutes against
   wall × workers.
 - #112's saving measured here is a lower bound: per-structure summaries, the bootstrap and the GeoPackage columns are
@@ -92,7 +92,7 @@ Phases 1-2 below are superseded where they duplicate #112; Phase 4 is what remai
 ## Phase 3: Record and park
 
 - [x] `research/database_builds.md` (a section of its own, "Reading `default`'s flags instead of making them", the old sentence pointing to it): the measured per-rule minutes for
-      both keys, `default`'s share of the classify stage and of each key's wall time, the walk that only `default`
+      both keys, `default`'s share of the classify stage's worker minutes (as landed; no wall-time share, which needs balanced bins), the walk that only `default`
       needs, and the projected saving of a `default` cache on a full rerun (measured shares × the published per-key
       times, stated as a projection); replace "not yet measured"
 - [x] ~~`data-raw/README.md`: a line for `compare_stage_time.R`~~ superseded: the script is retired

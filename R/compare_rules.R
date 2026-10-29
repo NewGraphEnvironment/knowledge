@@ -91,7 +91,10 @@
 #'   each stage by name (#110), `worker_minutes`, the minutes summed over
 #'   workers spent copying and indexing the groups (`setup`), walking to rivers
 #'   (`walk`) and on each rule by name (#112), and `bin_minutes`, each worker's
-#'   timed minutes with and without `default`'s own (#101).
+#'   timed minutes with and without `default`'s own and, where no other
+#'   predicate reads the near-river table (`walk_dropped`), without the walk:
+#'   the slowest worker's minutes less the slowest without them is the projected
+#'   saving of reading `default`'s flags rather than making them (#101).
 #' @export
 #' @examples
 #' \dontrun{
@@ -541,7 +544,7 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
       minutes_without = (all_s - sum(x$rule_s[names(x$rule_s) %in% drop_rules]) - if (drop_walk) x$walk_s else 0) / 60)
   })
   data.frame(bin = seq_along(out), minutes = vapply(out, `[[`, numeric(1), "minutes"),
-             minutes_without = vapply(out, `[[`, numeric(1), "minutes_without"))
+             minutes_without = vapply(out, `[[`, numeric(1), "minutes_without"), walk_dropped = drop_walk)
 }
 
 # A stage timer: tick(label) returns the minutes since the last tick (or the start) and records them under label;

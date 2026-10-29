@@ -67,9 +67,8 @@
 #         the GeoPackages alone from the segments it saved). Every STAGE checks the database's round trip at connect
 #         and stops off its host (over 20 ms) unless REMOTE=TRUE (#110). Each key's log lines give its stages' minutes
 #         (#110) and, under classify, overlay and connect, the worker-minutes of each rule beside the copies and walks
-#         the rules share (#112), which rules' predicates read the near-river table, and each worker's minutes with
-#         and without default's own, the slowest bin's minutes less the slowest without them being what reading
-#         default's flags would save (#101).
+#         the rules share (#112), which rules' predicates read the near-river table, and the projected saving of
+#         reading default's flags rather than making them (#101; `bin_minutes` in ?knw_compare_rules says how).
 # ---------------------------------------------------------------------------
 suppressMessages({ library(dplyr); library(readr); library(DBI); library(RPostgres) })
 pkgload::load_all(quiet = TRUE)

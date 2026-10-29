@@ -150,8 +150,8 @@ WCT's 51 to 60 %: about 52 to 56 of the 89, so a full `0330`
 of about 2.5 h since #112 would take about 1.6. It is an estimate three ways: CH and BT were timed on their 20 largest
 groups, five keys borrow a share, and a stage's wall time is its slowest worker's, so a share of summed worker minutes
 is its share of the wall time only when the bins are balanced. `0330` now logs each worker's minutes with and without
-`default`'s own, and projects the saving as the slowest worker's minutes less the slowest worker's without them
-(not necessarily the same worker).
+`default`'s own (and without the walk where only `default` reads the near-river table), and projects the saving as
+the slowest worker's minutes less the slowest worker's without them (not necessarily the same worker).
 
 **Not built (Al, 2026-10-28):** link's stream layers are being reworked, and a cache keyed on today's build would be
 dropped at the next one before it paid. When it is built, its key is species, stage, link's `config_sha`, the schema's

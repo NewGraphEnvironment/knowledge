@@ -86,7 +86,10 @@ lines, one of them per stage with its minutes, \code{timing}, the minutes of
 each stage by name (#110), \code{worker_minutes}, the minutes summed over
 workers spent copying and indexing the groups (\code{setup}), walking to rivers
 (\code{walk}) and on each rule by name (#112), and \code{bin_minutes}, each worker's
-timed minutes with and without \code{default}'s own (#101).
+timed minutes with and without \code{default}'s own and, where no other
+predicate reads the near-river table (\code{walk_dropped}), without the walk:
+the slowest worker's minutes less the slowest without them is the projected
+saving of reading \code{default}'s flags rather than making them (#101).
 }
 \description{
 \code{scripts/0298}'s comparison for any species and stage. Each rule goes through
