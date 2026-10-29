@@ -145,7 +145,7 @@ within 4 points):
 
 Projected onto #87's host run (115.2 min of classify, overlay and connect, less what #112 dropped: about 89 min, with
 #87's CO and ST dropping `free` alone at BT's 29 %), key by key, these shares come to about 27 min on the three measured
-keys, and 25 to 30 more on the other five (RB, CO, ST, BT spawning and GR, none of which walks), which borrow BT's and
+keys, and 25 to 29 more on the other five (RB, CO, ST, BT spawning and GR, none of which walks), which borrow BT's and
 WCT's 51 to 60 %: about 52 to 56 of the 89, so a full `0330`
 of about 2.5 h since #112 would take about 1.6. It is an estimate three ways: CH and BT were timed on their 20 largest
 groups, five keys borrow a share, and a stage's wall time is its slowest worker's, so a share of summed worker minutes
