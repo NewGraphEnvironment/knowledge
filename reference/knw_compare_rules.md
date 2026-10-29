@@ -133,10 +133,14 @@ by an exception whose river lies in another watershed group), `change`
 structure), `segments` (the per-segment flags under `default` and each
 structure, with `tuned` the `tuned_as` structure, and the `default`
 branch each segment lies on), `log` lines, one of them per stage with
-its minutes, `timing`, the minutes of each stage by name (#110), and
+its minutes, `timing`, the minutes of each stage by name (#110),
 `worker_minutes`, the minutes summed over workers spent copying and
 indexing the groups (`setup`), walking to rivers (`walk`) and on each
-rule by name (#112).
+rule by name (#112), and `bin_minutes`, each worker's timed minutes with
+and without `default`'s own and, where no other predicate reads the
+near-river table (`walk_dropped`), without the walk: the slowest
+worker's minutes less the slowest without them is the projected saving
+of reading `default`'s flags rather than making them (#101).
 
 ## Details
 
