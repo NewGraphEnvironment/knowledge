@@ -1,5 +1,20 @@
 # Changelog
 
+## knowledge 0.4.18
+
+- [`knw_compare_rules()`](https://newgraphenvironment.github.io/knowledge/reference/knw_compare_rules.md)
+  logs which rules’ predicates read the near-river table and returns
+  `bin_minutes`, each worker’s timed minutes with and without
+  `default`’s own (and without the walk where no other predicate reads
+  that table), so a run projects what reading `default`’s flags instead
+  of regenerating them would save
+  ([\#101](https://github.com/NewGraphEnvironment/knowledge/issues/101)).
+  On
+  [\#112](https://github.com/NewGraphEnvironment/knowledge/issues/112)’s
+  runs `default` took 51 to 74 % of a two-rule key’s classify, overlay
+  and connect worker minutes. The cache is parked until link’s reworked
+  stream layers are built (`research/database_builds.md`).
+
 ## knowledge 0.4.17
 
 - `scripts/0330-compare.R` compares link’s `default` and the reported
