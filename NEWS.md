@@ -1,3 +1,11 @@
+# knowledge 0.4.17
+
+* `scripts/0330-compare.R` compares link's `default` and the reported structure (`door`) alone unless `STRUCTURES=all`
+  (#112): the rules it no longer regenerates took 29 to 33 % of the worker minutes on three keys. A reported-only run
+  matches the every-structure run's `default` and `door` rows (`data-raw/compare_structures_check.R`).
+  `knw_compare_rules(structures = "reported")` resolves the structure, refuses one outside the species x rule's own
+  set, and returns each rule's minutes (`worker_minutes`). The chinook article no longer quotes the `free` structure.
+
 # knowledge 0.4.16
 
 * Retuning no longer touches the tracked tables or the articles until the operator promotes a run (#111). `DEV=1 0320`
