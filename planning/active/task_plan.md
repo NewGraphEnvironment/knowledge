@@ -108,9 +108,9 @@ Phases 1-2 below are superseded where they duplicate #112; Phase 4 is what remai
 
 ## Validation
 
-- [ ] Tests pass (`devtools::test()`), lintr clean on the changed files
-- [ ] `/code-check` clean (once over the branch with `/code-check branch`)
-- [ ] PWF checkboxes match landed work
+- [x] Tests pass (`devtools::test()`: 1650 pass; the 12 failures are the machine-local md5 block, findings), lintr counts equal main's on the changed files
+- [x] `/code-check` clean (once over the branch with `/code-check branch`): three rounds and an enumeration
+- [x] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion; archive README carries `## Measurement` and `## Evidence`
       (`scripts/logs/habitat/20261028_compare_structures_check*`, `20261026_compare.txt`)
 

@@ -27,7 +27,8 @@ Found by #87's Phase 4 measurement (`research/database_builds.md`, "Comparing wi
 
 | Error | Resolution |
 |-------|------------|
-| `test-vignette-data.R:115` fails on 8 ignored `data/tune/*_grades.csv` md5s | Expected on this machine: `method.rds` pins the grade tables of #92's run, graded on another machine, and these copies are 2026-10-25's (CLAUDE.md: fails "there and nowhere else"; CI has no `data/`). Not this branch's; every other test passes (1648) |
+| `test-vignette-data.R:115` fails: one test block, 12 expectations (first counted as 8) | Expected on this machine: `method.rds` pins the md5s of #92's ignored inputs, and this host's 7 `data/tune/*_grades.csv`, `data/fdis/build/reconcile.csv` and 4 `data/fdis/derived/*.csv` are an older build (#112's archive found the same). CLAUDE.md: fails "there and nowhere else"; CI has no `data/`. Not this branch's; every other expectation passes (1648) |
+| A `python3 - <<EOF` (unquoted) with Markdown backticks in its body ran each backticked word as a command | Nothing existed under those names and the first assertion stopped the script before any write; reran with `<<'EOF'` and the path through the environment |
 
 ## Collision with #112's branch (2026-10-28 22:20 UTC)
 
@@ -39,3 +40,12 @@ another shape, in the same lines. Its `data-raw/compare_structures_check.R` was 
 22:06). Its per-rule minutes carry `default`'s cost, which is #101's measurement ("run it once").
 This branch's measurement was not run: it would contend with that run on the database's cores. Escalated to Al:
 which body of work survives.
+
+## Resolution: #112 first (2026-10-29 00:13 UTC, PR #116)
+
+Merged origin/main; #112's timing stands, this branch keeps `.knw_bin_minutes()` (with `walk_dropped`) and the
+near-river line on it. `default`'s cost was read from #112's committed logs, not a second run. Checked at link
+configs 102762da with fresh 0.44.0 by building every fitted species' predicates: only CH rearing's `default` reads the
+near-river table, on both models. The branch review's round 3 named the mechanism behind rounds 1 and 2's prose
+defects (one computation restated by hand in six places, each re-derived alone); the fix makes the roxygen the one
+definition, and an enumeration of the nine restatements that remain closed the loop.
