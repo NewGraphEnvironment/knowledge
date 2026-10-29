@@ -11,7 +11,7 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/NewGraphEnvironment/knowledge/blob/main/inst/CITATION)
+[`inst/CITATION`](https://github.com/NewGraphEnvironment/knowledge/blob/v0.4.17/inst/CITATION)
 
 Irvine A (2026). *knowledge: Fisheries Evidence and Tuned Habitat
 Thresholds for BC Watershed Groups*. New Graph Environment Ltd. Version
