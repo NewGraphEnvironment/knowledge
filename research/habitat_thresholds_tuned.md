@@ -7,7 +7,7 @@ era terms; graded with the curve's prior under a gate; recompared under link's t
 tuned 2026-10-17 (#57); regraded 2026-10-19 (#65); the one-SE wording and the picks at 1.96 SE 2026-10-20 (#79) ·
 **Issues:** #57 (this; replaced #59), #65, #79, #73 (folding #68, #80 and #81's run-time pieces; #83 and #84 are its
 scorer work; #85, #86 and #87 the speed work it spawned), #91 (the evidence's placement) and #92 (the segment
-gradient, and the retune on #91's evidence); the one-species tunings it supersedes are #28
+gradient, and the retune on #91's evidence), #112 (the structures a comparison runs); the one-species tunings it supersedes are #28
 (`habitat_weights.md`), #33 (`bt_spawning.md`), #52 (`chinook_stream_size.md`) and #54 (`chinook_rearing_tuned.md`);
 link reads the result through NewGraphEnvironment/link#346 · **Produced by:**
 - `scripts/0300`: the wait for link's province-wide `default` run (`scripts/logs/habitat/20261017_link_settle.csv`);
@@ -273,7 +273,9 @@ lines through the gradient and size test. The free pass, the structure the rules
 every rule that has a size floor (BT rearing 198,792 km, CH 91,201, CO 80,949, RB 194,307, ST 55,156, WCT 24,498; GR
 and BT spawning, whose `default` has no through-wetland rule, have one structure). CH, CO and ST, whose tuned rules
 carry the exception, have a third, `door_wetland`, the exception on through-wetland lines only (CH 66,698 km, CO
-71,101, ST 41,954).
+71,101, ST 41,954). The figures for `free` and `door_wetland` here and in the species files are #92's, which ran every
+structure; since #112 `0330` compares `default` and `door` alone unless `STRUCTURES=all`, so a later run refreshes them
+only on that setting.
 
 | species × stage | accessible km | `default` km | tuned km | change | lost | gained | graded km, `default` → tuned |
 |---|---|---|---|---|---|---|---|

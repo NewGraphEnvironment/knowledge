@@ -46,6 +46,13 @@ test_that("the structures follow the species' rules and the tuned rule's excepti
   expect_identical(knowledge:::.knw_compare_structures(bg, exc), "door")
   expect_identical(knowledge:::.knw_compare_structures(b, exc, "door"), "door")
   expect_error(knowledge:::.knw_compare_structures(b, exc, "doors"))
+  # reported alone (#112): tuned_as, held to the species x rule's own set
+  expect_identical(knowledge:::.knw_compare_structures(b, exc, "reported", "door"), "door")
+  expect_identical(knowledge:::.knw_compare_structures(b, exc, "reported", "door_wetland"), "door_wetland")
+  expect_identical(knowledge:::.knw_compare_structures(bg, exc, "reported", "door"), "door")
+  expect_error(knowledge:::.knw_compare_structures(bg, exc, "reported", "free"), "not a structure")
+  expect_error(knowledge:::.knw_compare_structures(b, none, "reported", "door_wetland"), "not a structure")
+  expect_error(knowledge:::.knw_compare_structures(b, none, c("door", "door_wetland")), "not a structure")
 })
 
 test_that("default's label carries the pair it resolves to and the scope the dimensions give it", {
@@ -99,28 +106,15 @@ test_that("the stage timer records each stage once, in order, and the stages sum
   expect_equal(sum(x), tm$total(), tolerance = 1e-9)
 })
 
-test_that("the bins' step seconds sum to one row per rule and step, a step that never ran at zero (#101)", {
-  b1 <- c("shared|copy" = 60, "shared|walk" = 0, "default|classify" = 120, "default|connect" = 30, "door|classify" = 0)
-  b2 <- c("shared|copy" = 60, "shared|walk" = 0, "default|classify" = 60, "default|connect" = 30, "door|classify" = 30)
-  x <- .knw_stage_minutes(list(b1, NULL, b2))
-  expect_identical(x$rule, c("shared", "shared", "default", "default", "door"))
-  expect_identical(x$step, c("copy", "walk", "classify", "connect", "classify"))
-  expect_equal(x$minutes, c(2, 0, 3, 1, 0.5))
-  expect_equal(sum(x$share), 1)
-  expect_equal(x$share[x$rule == "default" & x$step == "classify"], 3 / 6.5)
-  # a step one bin lacks counts as zero there
-  y <- .knw_stage_minutes(list(c("default|read" = 60), c("default|read" = 60, "door|read" = 120)))
-  expect_equal(y$minutes, c(2, 2))
-  expect_error(.knw_stage_minutes(list(NULL)), "no bin")
-})
-
-test_that("a bin without default's steps keeps the shared ones, and drops the walk only when asked (#101)", {
-  b1 <- c("shared|copy" = 60, "shared|walk" = 120, "default|classify" = 60, "door|classify" = 60)
-  b2 <- c("shared|copy" = 60, "shared|walk" = 0, "default|classify" = 180, "door|classify" = 60)
+test_that("a bin without default's own minutes keeps the shared ones, and drops the walk only when asked (#101)", {
+  b1 <- list(setup_s = 60, walk_s = 120, rule_s = c(default = 60, door = 60))
+  b2 <- list(setup_s = 60, walk_s = 0, rule_s = c(default = 180, door = 60))
   x <- .knw_bin_minutes(list(b1, b2), drop_rules = "default")
   expect_equal(x$minutes, c(5, 5))
   expect_equal(x$minutes_without, c(4, 2))
-  y <- .knw_bin_minutes(list(b1, NULL, b2), drop_rules = "default", drop_walk = TRUE)
+  # a bin that stopped before its times (NULL) is skipped, and the walk goes only when asked
+  y <- .knw_bin_minutes(list(b1, list(flags = NULL), b2), drop_rules = "default", drop_walk = TRUE)
   expect_equal(y$minutes_without, c(2, 2))
   expect_identical(y$bin, 1:2)
+  expect_error(.knw_bin_minutes(list(list(flags = NULL)), "default"), "no bin")
 })
