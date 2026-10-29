@@ -273,8 +273,8 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
       if (length(near_rules)) paste(near_rules, collapse = ", ") else "none")
   drop_walk <- length(near_rules) > 0L && all(near_rules == "default")
   bin_minutes <- .knw_bin_minutes(res, drop_rules = "default", drop_walk = drop_walk)
-  say(paste("Bins: %s timed worker-min; without default's own%s the slowest would take %.1f of its %.1f,",
-            "a projected %.1f min off a rerun that reads default's flags."),
+  say(paste("Bins: %s timed worker-min; without default's own%s the slowest bin would take %.1f where the slowest",
+            "took %.1f, a projected %.1f min off a rerun that reads default's flags."),
       paste(sprintf("%.1f", bin_minutes$minutes), collapse = ", "), if (drop_walk) " and the walk" else "",
       max(bin_minutes$minutes_without), max(bin_minutes$minutes),
       max(bin_minutes$minutes) - max(bin_minutes$minutes_without))

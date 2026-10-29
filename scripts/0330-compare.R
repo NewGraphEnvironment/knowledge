@@ -68,7 +68,8 @@
 #         and stops off its host (over 20 ms) unless REMOTE=TRUE (#110). Each key's log lines give its stages' minutes
 #         (#110) and, under classify, overlay and connect, the worker-minutes of each rule beside the copies and walks
 #         the rules share (#112), which rules' predicates read the near-river table, and each worker's minutes with
-#         and without default's own, the slowest bin's difference being what reading default's flags would save (#101).
+#         and without default's own, the slowest bin's minutes less the slowest without them being what reading
+#         default's flags would save (#101).
 # ---------------------------------------------------------------------------
 suppressMessages({ library(dplyr); library(readr); library(DBI); library(RPostgres) })
 pkgload::load_all(quiet = TRUE)

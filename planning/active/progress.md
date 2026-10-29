@@ -24,7 +24,7 @@
 ### Resume
 
 ```bash
-cd ~/Projects/repo/knowledge && git fetch -q origin && git checkout 101-cache-link-s-default-flags-in-the-compar && git pull --ff-only && git merge origin/main
+cd <repo root> && git fetch -q origin && git checkout 101-cache-link-s-default-flags-in-the-compar && git pull --ff-only && git merge origin/main
 ```
 
 ## Session 2026-10-29 (UTC)
@@ -38,6 +38,7 @@ cd ~/Projects/repo/knowledge && git fetch -q origin && git checkout 101-cache-li
   a rearing key does.
 - From #112's logs (`-2` BT, `-3` CH, `-4` WCT; every-structure runs less the dropped structures): `default`'s share
   CH 74 % with the walk, BT 60 %, WCT 51 %; the `door` alone runs agree within 4 points. Projected onto #87's host
-  minutes less #112's drop (85 of 115): ~50 min saved, full `0330` ~2.5 h -> ~1.6 h, an estimate.
+  minutes less #112's drop (89 of 115; round 1 of the review corrected 85, which gave CO and ST #92's two-rule drop):
+  ~52-56 min saved, full `0330` ~2.5 h -> ~1.6 h, an estimate.
 - Wrote `research/database_builds.md`'s new section; edited #101's body (measured, parked, design) and #112's Outcome.
 - Next: full test suite, `/code-check branch`, archive, PR.

@@ -143,13 +143,15 @@ within 4 points):
 | BT rearing (20 largest) | 1.4 | 0 | 19.2 | 11.2 | 60 % (19.2 of 31.8) |
 | WCT rearing (all 16) | 0.8 | 0 | 6.3 | 5.3 | 51 % (6.3 of 12.4) |
 
-Projected onto #87's host run (115.2 min of classify, overlay and connect, less what #112 dropped: about 85 min), key
-by key, these shares come to about 27 min on the three measured keys, and 23 to 27 more on the other five (RB, CO, ST,
-BT spawning and GR, none of which walks), which borrow BT's and WCT's 51 to 60 %: about 50 of the 85, so a full `0330`
+Projected onto #87's host run (115.2 min of classify, overlay and connect, less what #112 dropped: about 89 min, with
+#87's CO and ST dropping `free` alone at BT's 29 %), key by key, these shares come to about 27 min on the three measured
+keys, and 25 to 30 more on the other five (RB, CO, ST, BT spawning and GR, none of which walks), which borrow BT's and
+WCT's 51 to 60 %: about 52 to 56 of the 89, so a full `0330`
 of about 2.5 h since #112 would take about 1.6. It is an estimate three ways: CH and BT were timed on their 20 largest
 groups, five keys borrow a share, and a stage's wall time is its slowest worker's, so a share of summed worker minutes
 is its share of the wall time only when the bins are balanced. `0330` now logs each worker's minutes with and without
-`default`'s own, and the slowest worker's difference is the saving it projects for that run.
+`default`'s own, and projects the saving as the slowest worker's minutes less the slowest worker's without them
+(not necessarily the same worker).
 
 **Not built (Al, 2026-10-28):** link's stream layers are being reworked, and a cache keyed on today's build would be
 dropped at the next one before it paid. When it is built, its key is species, stage, link's `config_sha`, the schema's

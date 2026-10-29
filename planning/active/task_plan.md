@@ -112,9 +112,9 @@ Phases 1-2 below are superseded where they duplicate #112; Phase 4 is what remai
 - [ ] `/code-check` clean (once over the branch with `/code-check branch`)
 - [ ] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion; archive README carries `## Measurement` and `## Evidence`
-      (`scripts/logs/habitat/*_compare_stage_time*`)
+      (`scripts/logs/habitat/20261028_compare_structures_check*`, `20261026_compare.txt`)
 
-**Verification:** the helper's unit tests; the measurement run's compare tables identical (within 1e-9 relative) to
+**Verification (as planned, before #112 measured instead):** the helper's unit tests; the measurement run's compare tables identical (within 1e-9 relative) to
 the tracked ones where the flow load matches, proving the instrumentation changed nothing; the per-rule minutes sum to
 within a few percent of the logged classify-overlay-connect stage × workers (the stages not timed are the gap, stated).
 
