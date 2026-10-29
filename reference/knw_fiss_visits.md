@@ -41,11 +41,14 @@ A `tibble`, one row per site, species and method: `site_visit` (the
 ## Examples
 
 ``` r
-ev <- data.frame(site_visit = "17491:1", species_code = c("BT", "BT"), size_class = c("fry", "adult"),
-                 n = c(2, 1), n_caught = 3, watershed_group_code = "COTR", blue_line_key = 1,
-                 downstream_route_measure = 10, month = 8, year = 2015, method = "electrofishing")
+ev <- data.frame(site_visit = "17491:1", species_code = c("BT", "BT"),
+                 size_class = c("fry", "adult"), n = c(2, 1), n_caught = 3,
+                 watershed_group_code = "COTR", blue_line_key = 1,
+                 downstream_route_measure = 10, month = 8, year = 2015,
+                 method = "electrofishing")
 s2 <- data.frame(site_key = "17491:1", sampling_method = "EF", haul_pass = c(1, 2),
-                 ef_seconds = c(300, 250), length_m = 50, width_m = 2, ef_length_m = NA, ef_width_m = NA)
+                 ef_seconds = c(300, 250), length_m = 50, width_m = 2,
+                 ef_length_m = NA, ef_width_m = NA)
 knw_fiss_visits(ev, s2)
 #> # A tibble: 1 × 14
 #>   site_visit watershed_group_code blue_line_key downstream_route_measure  year

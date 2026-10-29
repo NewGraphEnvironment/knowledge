@@ -97,7 +97,7 @@ per stage with status saying why and no values."><meta property="og:image" conte
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>The published thresholds table, from a tuning run's outputs</h1>
-      <small class="dont-index">Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/v0.4.18/R/thresholds_table.R" class="external-link"><code>R/thresholds_table.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/R/thresholds_table.R" class="external-link"><code>R/thresholds_table.R</code></a></small>
       <div class="d-none name"><code>knw_thresholds_table.Rd</code></div>
     </div>
 
@@ -185,8 +185,8 @@ watershed group the rule was scored on), both <code>tibble</code>s.</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
-<span class="r-in"><span><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu">knw_thresholds_table</span><span class="op">(</span><span class="st">"data/tune"</span>, <span class="st">"knowledge/fdis/v3"</span>, <span class="st">"20261017_004619-3f4c713b"</span>, <span class="st">"a17e9177"</span>, <span class="st">"default"</span>,</span></span>
-<span class="r-in"><span>                          compare_dir <span class="op">=</span> <span class="st">"data/compare"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu">knw_thresholds_table</span><span class="op">(</span><span class="st">"data/tune"</span>, <span class="st">"knowledge/fdis/v3"</span>, <span class="st">"20261017_004619-3f4c713b"</span>,</span></span>
+<span class="r-in"><span>                          <span class="st">"a17e9177"</span>, <span class="st">"default"</span>, compare_dir <span class="op">=</span> <span class="st">"data/compare"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">t</span><span class="op">$</span><span class="va">thresholds</span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 </code></pre></div>

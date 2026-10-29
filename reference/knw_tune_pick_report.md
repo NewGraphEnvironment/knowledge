@@ -44,7 +44,8 @@ standard error, in this run), `published_ddev_was` and
 ## Examples
 
 ``` r
-pub <- data.frame(rule = c("mad>=0.5|g<=0.07|none", "mad>=0.75|g<=0.09|none"), grad_max = c(0.07, 0.09),
+pub <- data.frame(rule = c("mad>=0.5|g<=0.07|none", "mad>=0.75|g<=0.09|none"),
+                  grad_max = c(0.07, 0.09),
                   recommended = c(FALSE, TRUE), in_region = c(TRUE, TRUE), ddev_best = c(4, 0),
                   se_diff = c(6, 0), n_visits = 4858)
 run <- transform(pub, recommended = c(TRUE, FALSE), ddev_best = c(0, 9), se_diff = c(0, 5))

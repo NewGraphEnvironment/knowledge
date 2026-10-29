@@ -45,7 +45,7 @@ knw_tune_run():"><meta property="og:image" content="https://newgraphenvironment.
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Score a handful of rules and gate the scorer before a full tuning run</h1>
-      <small class="dont-index">Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/v0.4.18/R/tune_smoke.R" class="external-link"><code>R/tune_smoke.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/R/tune_smoke.R" class="external-link"><code>R/tune_smoke.R</code></a></small>
       <div class="d-none name"><code>knw_tune_smoke.Rd</code></div>
     </div>
 
@@ -108,6 +108,10 @@ pick, which must be in <code>grid</code>.</p></dd>
 <dd><p><code>integer(1)</code> fold seed.</p></dd>
 
 
+<dt id="arg-folds">folds<a class="anchor" aria-label="anchor" href="#arg-folds"></a></dt>
+<dd><p><code>integer(1)</code> the number of groups-out folds, as in <code><a href="knw_tune_score.html">knw_tune_score()</a></code>.</p></dd>
+
+
 <dt id="arg-tol-null">tol_null<a class="anchor" aria-label="anchor" href="#arg-tol-null"></a></dt>
 <dd><p><code>numeric(1)</code> check 1's tolerance.</p></dd>
 
@@ -163,7 +167,8 @@ sets or eras is separation, not a measured effect.</p></li>
 <span class="r-in"><span><span class="va">grid</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>rule <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"default"</span>, <span class="st">"tuned"</span><span class="op">)</span>, size_var <span class="op">=</span> <span class="st">"mad"</span>, size_min <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.5</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                   grad_max <span class="op">=</span> <span class="fl">0.05</span>, exc_q <span class="op">=</span> <span class="cn">NA</span>, exc_d <span class="op">=</span> <span class="cn">NA</span>, departures <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0L</span>, <span class="fl">1L</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                   is_default <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">sm</span> <span class="op">&lt;-</span> <span class="fu">knw_tune_smoke</span><span class="op">(</span><span class="va">d</span>, <span class="kw">function</span><span class="op">(</span><span class="va">d</span>, <span class="va">r</span><span class="op">)</span> <span class="va">d</span><span class="op">$</span><span class="va">size</span> <span class="op">&gt;=</span> <span class="va">r</span><span class="op">$</span><span class="va">size_min</span>, <span class="va">grid</span>, <span class="st">"U"</span>, previous <span class="op">=</span> <span class="st">"tuned"</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">sm</span> <span class="op">&lt;-</span> <span class="fu">knw_tune_smoke</span><span class="op">(</span><span class="va">d</span>, <span class="kw">function</span><span class="op">(</span><span class="va">d</span>, <span class="va">r</span><span class="op">)</span> <span class="va">d</span><span class="op">$</span><span class="va">size</span> <span class="op">&gt;=</span> <span class="va">r</span><span class="op">$</span><span class="va">size_min</span>, <span class="va">grid</span>, <span class="st">"U"</span>,</span></span>
+<span class="r-in"><span>                     previous <span class="op">=</span> <span class="st">"tuned"</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">sm</span><span class="op">$</span><span class="va">checks</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 4 × 4</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   check       value  limit pass </span>

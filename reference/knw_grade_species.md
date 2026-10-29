@@ -139,6 +139,7 @@ segment outside the walk set (not accessible, or with no gradient).
 ``` r
 if (FALSE) { # \dontrun{
 pg <- function() DBI::dbConnect(RPostgres::Postgres(), bigint = "numeric")
-g <- knw_grade_species(pg, "fresh_default", "CH", c("BULK", "MORR"), out$CH_rear$curve, out$CH_rear$pick)
+g <- knw_grade_species(pg, "fresh_default", "CH", c("BULK", "MORR"),
+                       out$CH_rear$curve, out$CH_rear$pick)
 } # }
 ```

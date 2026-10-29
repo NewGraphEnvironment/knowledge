@@ -60,6 +60,11 @@ knw_tune_smoke(
 
   `integer(1)` fold seed.
 
+- folds:
+
+  `integer(1)` the number of groups-out folds, as in
+  [`knw_tune_score()`](https://newgraphenvironment.github.io/knowledge/reference/knw_tune_score.md).
+
 - tol_null:
 
   `numeric(1)` check 1's tolerance.
@@ -120,7 +125,8 @@ d$U <- rbinom(240, 1, plogis(-3 + 1.5 * (d$size > 0.5)))
 grid <- data.frame(rule = c("default", "tuned"), size_var = "mad", size_min = c(0.1, 0.5),
                    grad_max = 0.05, exc_q = NA, exc_d = NA, departures = c(0L, 1L),
                    is_default = c(TRUE, FALSE))
-sm <- knw_tune_smoke(d, function(d, r) d$size >= r$size_min, grid, "U", previous = "tuned", seed = 1)
+sm <- knw_tune_smoke(d, function(d, r) d$size >= r$size_min, grid, "U",
+                     previous = "tuned", seed = 1)
 sm$checks
 #> # A tibble: 4 × 4
 #>   check       value  limit pass 
