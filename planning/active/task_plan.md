@@ -52,14 +52,14 @@ of Phase 1's, and works out `default`'s share and the projected cache saving fro
 Phases 1-2 below are superseded where they duplicate #112; Phase 4 is what remains.
 
 ## Phase 4: On #112's merge
-- [ ] `git merge origin/main`; resolve `R/compare_rules.R` and its test file to #112's timing (`setup_s`, `walk_s`,
+- [x] `git merge origin/main`; resolve `R/compare_rules.R` and its test file to #112's timing (`setup_s`, `walk_s`,
       `rule_s`, `worker_minutes`), dropping this branch's `bin_*` steps and `.knw_stage_minutes()`
-- [ ] Keep the per-worker projection on #112's per-bin seconds: `.knw_bin_minutes()` reads each bin's setup, walk and
+- [x] Keep the per-worker projection on #112's per-bin seconds: `.knw_bin_minutes()` reads each bin's setup, walk and
       `rule_s`, drops `default` (and the walk where only `default`'s predicate reads the near-river table); the log line
       and the "rules reading the near-river table" line stay; tests follow
-- [ ] Retire `data-raw/compare_stage_time.R` (#112's `compare_structures_check.R` is the run) unless #112's log lacks
+- [x] Retire `data-raw/compare_stage_time.R` (#112's `compare_structures_check.R` is the run) unless #112's log lacks
       what #101 needs
-- [ ] From #112's committed log: `default`'s worker-minutes and share for CH and BT rearing, the walk only `default`
+- [x] From #112's committed log: `default`'s worker-minutes and share for CH and BT rearing, the walk only `default`
       reads, the projection (on #112's 20 largest groups, scaled to every group only as a stated estimate), into
       `research/database_builds.md`; then Phase 3's issue-body edits
 
@@ -87,20 +87,20 @@ Phases 1-2 below are superseded where they duplicate #112; Phase 4 is what remai
 - [x] The same script holds each key's compare table to the tracked `data/compare/<key>_compare.csv` (km within a
       relative 1e-9, as `compare_parallel_check.R` does) when the live flow load equals the grade table's
       `discharge_load`, and says so when it does not, so the timing is shown not to have moved the results
-- [ ] Run it on the host (~70 min); commit the log
+- [x] ~~Run it on the host (~70 min); commit the log~~ superseded: #112's run is the measurement (Al, 2026-10-28)
 
 ## Phase 3: Record and park
 
-- [ ] `research/database_builds.md`, "Comparing with a key's groups in parallel": the measured per-rule minutes for
+- [x] `research/database_builds.md` (a section of its own, "Reading `default`'s flags instead of making them", the old sentence pointing to it): the measured per-rule minutes for
       both keys, `default`'s share of the classify stage and of each key's wall time, the walk that only `default`
       needs, and the projected saving of a `default` cache on a full rerun (measured shares × the published per-key
       times, stated as a projection); replace "not yet measured"
-- [ ] `data-raw/README.md`: a line for `compare_stage_time.R`
-- [ ] #101's body: Phase 1 done with the numbers and the research link; the cache design above (key, per species ×
+- [x] ~~`data-raw/README.md`: a line for `compare_stage_time.R`~~ superseded: the script is retired
+- [x] #101's body: Phase 1 done with the numbers and the research link; the cache design above (key, per species ×
       stage, walk skip where no tuned predicate reads the near-river table, GR's duplicate, the
       `compare_parallel_check.R`-style identity check); parked until link's reworked stream layers are built
       (Al, 2026-10-28)
-- [ ] #112's body: its step 1 is this measurement, with the numbers and link; its step 2 decision now has them
+- [x] #112's body (closed by PR #116; a line in its Outcome): its step 1 is this measurement, with the numbers and link; its step 2 decision now has them
 
 ## Owed at the end (reported, done after merge)
 

@@ -26,3 +26,18 @@
 ```bash
 cd ~/Projects/repo/knowledge && git fetch -q origin && git checkout 101-cache-link-s-default-flags-in-the-compar && git pull --ff-only && git merge origin/main
 ```
+
+## Session 2026-10-29 (UTC)
+
+- #112 merged as PR #116 at 00:13 UTC; the waiter saw it at 00:21.
+- Merged origin/main (e81a4d5): took #112's `R/compare_rules.R`, re-added `.knw_bin_minutes()` on its `setup_s`,
+  `walk_s` and `rule_s`, the near-river line and the bins line; retired `data-raw/compare_stage_time.R` and
+  `.knw_stage_minutes()`. `test-compare_rules.R` passes; lint counts equal main's (13 and 4).
+- Checked the near-river claim at link configs 102762da with fresh 0.44.0 (a scratch script building every species'
+  predicates): only CH rearing's `default` reads the table, on both models; no tuned base or other-stage predicate of
+  a rearing key does.
+- From #112's logs (`-2` BT, `-3` CH, `-4` WCT; every-structure runs less the dropped structures): `default`'s share
+  CH 74 % with the walk, BT 60 %, WCT 51 %; the `door` alone runs agree within 4 points. Projected onto #87's host
+  minutes less #112's drop (85 of 115): ~50 min saved, full `0330` ~2.5 h -> ~1.6 h, an estimate.
+- Wrote `research/database_builds.md`'s new section; edited #101's body (measured, parked, design) and #112's Outcome.
+- Next: full test suite, `/code-check branch`, archive, PR.
