@@ -261,7 +261,7 @@ Site-visit counts, measured site gradient, against the thresholds link runs now:
 - **CH is rearing-only here.** EF caught 2 CH ≥ 150 mm in the whole export.
 - **Size is not maturity for char.** A third of SP/ST-coded char are 80–200 mm, so a length break alone cannot separate spawners; spawner evidence uses maturity plus month.
 - **Measured vs modelled width** is comparable at only 3,637 sites after #35 (3,820 when written), where the FWA width is `MODELLED`. FWA's `FIELD_MEASURMENT` widths are these same FISS sites (69 % identical). There the log correlation is 0.54 (also after #35) and the p10–p90 ratio 0.44–2.58 (as written on 2026-09-26).
-- **Site gradient is a point measure**; model thresholds apply to a segment's average. Before any of these shares move a threshold, link#284 has to compare against the segment gradient the model actually uses.
+- **Site gradient is a point measure**; model thresholds apply to a segment's average. Before any of these shares move a threshold, they have to be compared against the segment gradient the model actually uses; link#284 closed without that comparison, which is #121.
 
 ## Supplement: Fish Data Submission workbooks (#21)
 
