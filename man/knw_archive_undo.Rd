@@ -7,7 +7,8 @@
 knw_archive_undo(
   keys,
   tune_dir = "data/tune",
-  index = "data/archive_index.csv"
+  index = "data/archive_index.csv",
+  bucket = .knw_archive_bucket
 )
 }
 \arguments{
@@ -16,6 +17,8 @@ knw_archive_undo(
 \item{tune_dir}{where their restored records are.}
 
 \item{index}{the index path.}
+
+\item{bucket}{the bucket.}
 }
 \value{
 The rows appended, invisibly.
@@ -25,4 +28,9 @@ The rows appended, invisibly.
 archive, which sends nothing new to the bucket. This appends, per key, an
 \code{undone} event for the run that was promoted and a \code{promoted} event for the
 run the restored record names, so the index says which run is published.
+Where the run's folder is shared (a tokened setup), the promotion being
+undone made the restored run's objects previous versions, which the
+bucket expires; each is copied back over its key (server side, from its
+indexed version) so it is current again, and the copy's version is
+recorded as an \code{archived} row.
 }

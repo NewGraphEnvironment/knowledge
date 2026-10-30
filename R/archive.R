@@ -194,6 +194,18 @@ knw_archive_index_read <- function(path = "data/archive_index.csv") {
   invisible(x)
 }
 
+# the key's published run and its setup, replayed from the promotion events in order: `promoted` publishes a run,
+# `superseded` or `undone` of the published run unpublishes it. NULL when none is published
+.knw_archive_published <- function(index, key) {
+  ev <- index[index$key %in% key & index$event %in% c("promoted", "superseded", "undone"), ]
+  cur <- NULL
+  for (i in seq_len(nrow(ev))) {
+    if (ev$event[i] == "promoted") cur <- ev[i, c("tune_run", "setup")]
+    else if (!is.null(cur) && identical(ev$tune_run[i], cur$tune_run)) cur <- NULL
+  }
+  cur
+}
+
 # the run's key is promoted when its last promotion event is `promoted`
 .knw_archive_promoted <- function(index, key, tune_run) {
   ev <- index[index$key %in% key & index$tune_run %in% tune_run &
@@ -225,15 +237,15 @@ knw_archive_put <- function(plan, index = "data/archive_index.csv", promoted = F
   chk::chk_flag(promoted)
   chk::chk_flag(dry_run)
   idx <- knw_archive_index_read(index)
-  # an unpromoted run never overwrites a promoted one's current objects (the folder of a tokened setup is shared)
+  # an unpromoted run never overwrites the published run's objects (the folder of a tokened setup is shared): the
+  # published run is read from the promotion events, not from which run was archived last (round 1 of the review)
   tune <- plan[plan$kind == "tune", ]
   if (!promoted) {
     for (k in unique(tune$key)) {
-      prev <- idx[idx$event == "archived" & idx$key %in% k & idx$setup %in% tune$setup[tune$key == k], ]
-      if (!nrow(prev)) next
-      last_run <- utils::tail(prev$tune_run, 1)
-      if (!identical(last_run, tune$tune_run[tune$key == k][1]) && .knw_archive_promoted(idx, k, last_run)) {
-        stop(k, ": ", tune$setup[tune$key == k][1], " holds promoted run ", last_run,
+      pub <- .knw_archive_published(idx, k)
+      if (!is.null(pub) && identical(pub$setup, tune$setup[tune$key == k][1]) &&
+            !identical(pub$tune_run, tune$tune_run[tune$key == k][1])) {
+        stop(k, ": ", pub$setup, " holds published run ", pub$tune_run,
              "; an unpromoted run would overwrite it", call. = FALSE)
       }
     }
@@ -408,11 +420,14 @@ knw_archive_pull <- function(keys, dest = ".", grades = FALSE, index = "data/arc
     if (!file.rename(part, target)) stop("could not move ", part, " to ", target, call. = FALSE)
     got <- c(got, target)
   }
-  # a restored grade table is the one its record describes
+  # a restored grade table is the one its record describes; its segments, restored or kept from an earlier pull, are
+  # made later than it, since scripts/0330 refuses segments older than their grades
   for (k in keys) {
     g <- file.path(dest, "data", "tune", paste0(k, "_grades.csv"))
+    sg <- file.path(dest, "data", "compare", paste0(k, "_segments.rds"))
     if (file.exists(g)) {
       knw_grade_record_check(knw_grade_record_read(file.path(dest, "data", "tune", paste0(k, "_grades_record.csv"))), g)
+      if (file.exists(sg) && file.mtime(sg) <= file.mtime(g)) Sys.setFileTime(sg, file.mtime(g) + 1)
     }
   }
   invisible(got)
@@ -424,22 +439,44 @@ knw_archive_pull <- function(keys, dest = ".", grades = FALSE, index = "data/arc
 #' archive, which sends nothing new to the bucket. This appends, per key, an
 #' `undone` event for the run that was promoted and a `promoted` event for the
 #' run the restored record names, so the index says which run is published.
+#' Where the run's folder is shared (a tokened setup), the promotion being
+#' undone made the restored run's objects previous versions, which the
+#' bucket expires; each is copied back over its key (server side, from its
+#' indexed version) so it is current again, and the copy's version is
+#' recorded as an `archived` row.
 #'
 #' @param keys the keys moved back.
 #' @param tune_dir where their restored records are.
 #' @param index the index path.
+#' @param bucket the bucket.
 #' @return The rows appended, invisibly.
 #' @export
-knw_archive_undo <- function(keys, tune_dir = "data/tune", index = "data/archive_index.csv") {
+knw_archive_undo <- function(keys, tune_dir = "data/tune", index = "data/archive_index.csv",
+                             bucket = .knw_archive_bucket) {
   chk::chk_character(keys)
   idx <- knw_archive_index_read(index)
+  now <- format(Sys.time(), "%Y-%m-%dT%H:%M:%SZ", tz = "UTC")
+  copies <- list()
   runs <- do.call(rbind, lapply(keys, function(k) {
     rec <- knw_grade_record_read(file.path(tune_dir, paste0(k, "_grades_record.csv")))
     a <- idx[idx$event == "archived" & idx$key %in% k & idx$tune_run %in% rec$tune_run, ]
+    a <- a[!duplicated(a$object, fromLast = TRUE), ]
+    for (i in seq_len(nrow(a))) {
+      r <- a[i, ]
+      head <- .knw_aws(c("s3api", "head-object", "--bucket", bucket, "--key", r$object, "--query", "Metadata.md5",
+                         "--output", "text"))
+      if (identical(trimws(head[length(head)]), r$object_md5)) next
+      vid <- .knw_aws(c("s3api", "copy-object", "--bucket", bucket, "--key", r$object, "--copy-source",
+                        sprintf("%s/%s?versionId=%s", bucket, r$object, r$version_id), "--query", "VersionId",
+                        "--output", "text"))
+      r$version_id <- trimws(vid[length(vid)])
+      r$date <- now
+      copies[[length(copies) + 1]] <<- r
+    }
     data.frame(key = k, setup = if (nrow(a)) a$setup[1] else NA_character_, tune_run = rec$tune_run,
                run_uid = rec$run_uid, stringsAsFactors = FALSE)
   }))
-  rows <- .knw_archive_events(idx, runs, format(Sys.time(), "%Y-%m-%dT%H:%M:%SZ", tz = "UTC"), old_event = "undone")
+  rows <- rbind(do.call(rbind, copies), .knw_archive_events(idx, runs, now, old_event = "undone"))
   .knw_archive_index_append(index, rows)
   invisible(rows)
 }

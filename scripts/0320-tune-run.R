@@ -239,7 +239,7 @@ say("Smoke run first%s: previous picks on file for %s.", if (dev) sprintf(" (DEV
 # The smoke tables go before the smoke run, the rest once it has passed, so a refused smoke run leaves the last
 # pass's fit as it was
 pat_keys <- sprintf("^(%s)_(rear|spawn)_", paste(species, collapse = "|"))
-caches <- "_(score\\.rds|grades\\.csv)$"
+caches <- "_(score\\.rds|grades\\.csv|grades_record\\.csv)$"   # a kept grade table keeps its record (#119)
 old_files <- list.files(dir_out, pat_keys, full.names = TRUE)
 unlink(old_files[grepl("_smoke\\.csv$", old_files)])
 t0 <- Sys.time()

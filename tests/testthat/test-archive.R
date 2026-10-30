@@ -27,6 +27,16 @@ mock_bucket <- function(env = parent.frame(), versioning = "Enabled") {
       v <- if (length(vid <- arg(args, "--version-id"))) Filter(function(x) x$vid == vid, vs)[[1]] else vs[[length(vs)]]
       return(if (grepl("VersionId", arg(args, "--query"))) paste(v$md5, v$vid, sep = "\t") else v$md5)
     }
+    if (op == "copy-object") {
+      src <- arg(args, "--copy-source")
+      from <- Filter(function(x) x$vid == sub("^.*versionId=", "", src), vs)[[1]]
+      store$puts <- store$puts + 1L
+      vid <- sprintf("v%03d", store$puts)
+      copy <- file.path(store$dir, vid)
+      file.copy(from$path, copy)
+      store$objects[[key]] <- c(vs, list(list(vid = vid, path = copy, md5 = from$md5)))
+      return(vid)
+    }
     if (op == "get-object") {
       v <- Filter(function(x) x$vid == arg(args, "--version-id"), vs)[[1]]
       file.copy(v$path, args[length(args)], overwrite = TRUE)
@@ -131,7 +141,7 @@ test_that("an archive stores every object once with its version id, and refuses 
   expect_identical(rows2$version_id, rows$version_id)
 })
 
-test_that("an unpromoted run never overwrites a promoted one's setup, and promotion events supersede", {
+test_that("an unpromoted run never overwrites the published run's setup, and promotion events supersede", {
   root <- withr::local_tempdir()
   tok <- c(cut = "cut-full-top", acc = "acc-v1", grad = "grad-seg", flow = "q-wet-fill")
   x <- run_fx(root, run = "20261101_0000", tokens = tok)
@@ -142,7 +152,7 @@ test_that("an unpromoted run never overwrites a promoted one's setup, and promot
   expect_identical(i$event[i$event != "archived"], "promoted")
   x <- run_fx(root, run = "20261102_0000", tokens = tok, grade = 0.2)
   expect_error(knw_archive_put(plan_of(x), idx),
-               "holds promoted run 20261101_0000; an unpromoted run would overwrite it")
+               "holds published run 20261101_0000; an unpromoted run would overwrite it")
   knw_archive_put(plan_of(x), idx, promoted = TRUE)
   i <- knw_archive_index_read(idx)
   ev <- i[i$event != "archived", c("event", "tune_run")]
@@ -202,4 +212,43 @@ test_that("a restored object whose bytes are not the index's is refused and leav
                "CH_rear_curve.rds \\(version v[0-9]+\\) arrived with another md5")
   expect_false(file.exists(file.path(dest, "data", "tune", "CH_rear_curve.rds")))
   expect_false(any(grepl("^\\.part_", list.files(dest, recursive = TRUE, all.files = TRUE))))
+})
+
+test_that("an undo makes the published run current in a shared folder, and no unpromoted run then overwrites it", {
+  root <- withr::local_tempdir()
+  tok <- c(cut = "cut-full-top", acc = "acc-v1", grad = "grad-seg", flow = "q-wet-fill")
+  idx <- file.path(root, "index.csv")
+  b <- mock_bucket()
+  x <- run_fx(root, run = "20261101_0000", tokens = tok)
+  knw_archive_put(plan_of(x), idx, promoted = TRUE)
+  curve_obj <- "archive/knowledge/tune/CH_rear/cut-full-top.acc-v1.grad-seg.q-wet-fill/CH_rear_curve.rds"
+  x1_md5 <- utils::tail(b$objects[[curve_obj]], 1)[[1]]$md5
+  x <- run_fx(root, run = "20261102_0000", tokens = tok, grade = 0.2)
+  knw_archive_put(plan_of(x), idx, promoted = TRUE)
+  expect_false(identical(utils::tail(b$objects[[curve_obj]], 1)[[1]]$md5, x1_md5))
+  # undone: the first run's record is back, and its objects are made current again
+  x <- run_fx(root, run = "20261101_0000", tokens = tok)
+  knw_archive_undo("CH_rear", x$tune, idx)
+  expect_identical(utils::tail(b$objects[[curve_obj]], 1)[[1]]$md5, x1_md5)
+  i <- knw_archive_index_read(idx)
+  expect_identical(utils::tail(i$event, 2), c("undone", "promoted"))
+  # a candidate in the same setup is refused over the published run, whichever run was archived last
+  x <- run_fx(root, run = "20261103_0000", tokens = tok, grade = 0.3)
+  expect_error(knw_archive_put(plan_of(x), idx), "holds published run 20261101_0000")
+})
+
+test_that("a restore in two steps leaves the segments later than their grade table", {
+  root <- withr::local_tempdir()
+  x <- run_fx(root)
+  idx <- file.path(root, "index.csv")
+  b <- mock_bucket()
+  knw_archive_put(plan_of(x), idx)
+  dest <- withr::local_tempdir()
+  dir.create(file.path(dest, "data", "tune"), recursive = TRUE)
+  file.copy(file.path(x$tune, "CH_rear_grades_record.csv"), file.path(dest, "data", "tune"))
+  knw_archive_pull("CH_rear", dest, index = idx)
+  Sys.setFileTime(file.path(dest, "data", "compare", "CH_rear_segments.rds"), Sys.time() - 3600)
+  knw_archive_pull("CH_rear", dest, grades = TRUE, index = idx)
+  expect_gt(file.mtime(file.path(dest, "data", "compare", "CH_rear_segments.rds")),
+            file.mtime(file.path(dest, "data", "tune", "CH_rear_grades.csv")))
 })

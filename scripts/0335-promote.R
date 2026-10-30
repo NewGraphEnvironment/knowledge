@@ -71,7 +71,7 @@ live <- if (undo) NULL else list(walk_md5 = knw_walk_md5())
 # the bundles read the evidence, so a machine without it cannot rebuild them: refused before anything moves
 if (!undo && bundles && !all(file.exists(derived))) {
   stop("no ", paste(derived[!file.exists(derived)], collapse = ", "), ": the rebuilds need the evidence the run was ",
-       "scored on; copy it here, or BUNDLES=FALSE to move the tables only")
+       "scored on; copy it here, or BUNDLES=FALSE to move the tables only (unarchived: 0336 archives them later)")
 }
 if (!undo && all(file.exists(derived))) live$evidence_md5 <- paste(unname(tools::md5sum(derived)), collapse = ";")
 # a dry run reads the live flow load too, so it refuses what the real run would
@@ -82,14 +82,21 @@ if (bundles) {
 }
 # the archive (#119): the promoted keys' grade tables, curves and segments, and their evidence, go to the bucket's
 # versioned archive once moved. Checked before anything moves (credentials, versioning, every file against its record
-# and the evidence), so a promotion that could not be archived is refused, not half done. An undo sends nothing: it
-# records in the index which run is published again
+# and the evidence), so a promotion that could not be archived is refused, not half done. An undo uploads nothing: it
+# records in the index which run is published again, and makes that run's objects current where a shared folder holds
+# them (knw_archive_undo())
 build_dir <- "data/fdis/build"
 archive_keys <- function(dir_t) {
   k <- sub("_grades_record\\.csv$", "", list.files(dir_t, "_grades_record\\.csv$"))
   if (is.null(keys)) k else intersect(k, keys)
 }
-if (!undo) {
+# the archive needs the evidence the run was graded on; with BUNDLES=FALSE on a machine without it the tables move
+# unarchived, and the 0336 command that archives them where the evidence is is named (round 1 of the review)
+ev_here <- all(file.exists(c(file.path("data/fdis/derived", c("visits_link.csv", "visits_species.csv", "walks.csv",
+                                                               "fdis_sites.csv")),
+                             file.path(build_dir, c("reconcile.csv", "sites.rds")))))
+archive_now <- undo || ev_here || bundles
+if (!undo && archive_now) {
   ak <- archive_keys(file.path("data/tune/candidate", run))
   if (length(ak)) {
     ver <- tryCatch(.knw_aws(c("s3api", "get-bucket-versioning", "--bucket", .knw_archive_bucket, "--query", "Status",
@@ -116,8 +123,15 @@ writeLines(lines, path_log)
 ak <- archive_keys("data/tune")
 ak <- intersect(ak, p$keys)
 if (length(ak) && undo) {
-  knw_archive_undo(ak)
+  tryCatch(knw_archive_undo(ak), error = function(e) {
+    stop("the tables are moved back but the archive does not yet say so (", conditionMessage(e), "): rerun ",
+         "Rscript -e 'pkgload::load_all(); knw_archive_undo(c(\"", paste(ak, collapse = "\", \""), "\"))'",
+         call. = FALSE)
+  })
   message("Recorded in data/archive_index.csv: ", paste(ak, collapse = ", "), " published again from run ", run, ".")
+} else if (length(ak) && !archive_now) {
+  message("BUNDLES=FALSE without the evidence here: ", paste(ak, collapse = ", "), " moved but NOT archived. Where the ",
+          "evidence is, run KEYS=", paste(ak, collapse = ","), " PROMOTED=TRUE Rscript scripts/0336-archive.R.")
 } else if (length(ak)) {
   tryCatch({
     knw_archive_put(knw_archive_plan(ak, "data/tune", "data/compare", "data/fdis/derived", build_dir), promoted = TRUE)
