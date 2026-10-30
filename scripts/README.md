@@ -117,6 +117,7 @@ wf_farm_priority.js                          farm priority/crossing tables out o
 0270  build the group's Fisheries/habitat_modelling collection   --dry-run first, then live
       (--collection temperature: Fisheries/temperature, from data/temperature_members.csv)
       (--collection flow: Fisheries/flow, from data/flow_members.csv and data/flow_additions.csv)
+      (--parent <key> for a collection under another parent: --collection grayling --parent 9U54XAND is species/grayling)
 0150  ACTION=build STORE=habitat_modelling COLLECTIONS="U9ZCZ6RN,chinook,bull_trout,..."  then ACTION=push
 0150  ACTION=build STORE=temperature COLLECTIONS=SW2RXUJC                                  then ACTION=push
 0150  ACTION=build STORE=flow COLLECTIONS=FWTJDD8Z                                         then ACTION=push
@@ -390,7 +391,9 @@ The cited basis for CH and BT habitat thresholds (#19). Not per watershed group.
   (`data/habitat_modelling_additions.csv`: CrossRef by DOI, or grey-literature metadata, with a PDF URL or a
   standalone group attachment). `--collection <name>` builds another collection under Fisheries the same
   way, from `data/<name>_members.csv` (and `_additions.csv` if present); `Fisheries/temperature`
-  (`SW2RXUJC`, #38) and `Fisheries/flow` (`FWTJDD8Z`, #44) are built that way. An additions `pdf` may also
+  (`SW2RXUJC`, #38) and `Fisheries/flow` (`FWTJDD8Z`, #44) are built that way. `--parent <key>` builds one under another parent: the species
+  collections sit under `species` (`9U54XAND`), and a name found elsewhere in the group without `--parent` is
+  refused rather than created twice (#122). An additions `pdf` may also
   be a path from the repo root, for a PDF only a browser can fetch; such copies sit in the ignored
   `data/rag/pdf/flow/`. A member row may give a `pdf` (a URL, or a path from the repo root)
   for an item no local library holds a PDF of, such as an analytic appendix printed from the web.

@@ -28,8 +28,10 @@ Approved by Al, 2026-10-30, with the plan:
    `main` has no `R/` change since; ragnar 0.3.0 installed, 0.3.1 on CRAN, upgraded before any build.
 
 ## Phase 1: `0270` targets a collection under any parent
-- [ ] `--parent` argument (default `TRXPJHQE`), used by `find_collection()`; header and `scripts/README.md` say so
-- [ ] `--dry-run` against `--collection habitat_modelling` unchanged (all `member`/`pdf present`): no regression
+- [x] `--parent` argument (default `TRXPJHQE`), used by `find_collection()`; header and `scripts/README.md` say so
+- [x] A name missing under the parent but present elsewhere in the group is refused, with its key (plan review):
+      without `--parent`, `--collection grayling` would otherwise create a second `grayling` under Fisheries
+- [x] `--dry-run` against `--collection habitat_modelling` unchanged (all `member`/`pdf present`): no regression
 
 ## Phase 2: clean `species/bull_trout` and `species/grayling`
 - [ ] Find a PDF for every no-PDF member (URL must return `%PDF`; ACAT/EcoCat for Williamson & Zimmerman 2005);
