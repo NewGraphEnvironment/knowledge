@@ -74,8 +74,8 @@ Approved by Al, 2026-10-30, with the plan:
 - [ ] `scripts/README.md`: the build line with grayling, a line for the new store
 
 ## Phase 6: docs (lands before the cred tag, except the README build lines in Phase 5)
-- [ ] CLAUDE.md: `ACTION=query` works under cred ≥ 0.4.0 (cred#27); drop the "broken" note and the draft-issue pointer
-- [ ] `0150` header/README: cred 0.4.0 floor for query (and a version check in the script's query branch)
+- [x] CLAUDE.md: `ACTION=query` works under cred ≥ 0.4.0 (cred#27); drop the "broken" note and the draft-issue pointer
+- [x] `0150` header/README: cred 0.4.0 floor for query (and a version check in the script's query branch)
 - [ ] Issue #122 body: correct the trash-inflated counts and the Hagen & Weber state
 
 Phases 1–3 run to a commit now. If the cred tag is not out when they are done, the branch is pushed and parked with a

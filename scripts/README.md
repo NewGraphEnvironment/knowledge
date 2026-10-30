@@ -221,7 +221,8 @@ A report is reachable from more than one place; using only one axis misses repor
   pull rather than rebuild. The `rag/` prefix stays **private permanently**: these stores accumulate
   unpublished reports, at-risk-species and culturally-important-site locations
 - Semantic search is weak on proper nouns — for a specific creek name, grep the PDFs
-- Replaced `0150`/`0151` (build), `0155` (query) and `0157` (sync) in September 2026; `cred` 0.3.0
+- Replaced `0150`/`0151` (build), `0155` (query) and `0157` (sync) in September 2026; `cred` 0.3.0. `ACTION=query` needs `cred`
+  0.4.0 or later (0.3.0's `crd_search()` failed under ragnar 0.3.0, cred#27), and refuses an older one
 
 ## wf_farm_priority.js
 - One agent per report PDF; lifts priority / crossing / habitat-reach tables into structured rows

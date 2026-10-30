@@ -8,6 +8,7 @@
 #   (COLLECTIONS takes names or 8-character Zotero keys, resolved in the NGE group
 #    library only; GROUP_ID= for another group. An ambiguous name is refused.)
 #   ACTION=query STORE=fraser QUERY="beaver dam culvert" TOPK=5           Rscript scripts/0150-store.R
+#   (query needs cred >= 0.4.0, the first whose crd_search() works under ragnar 0.3)
 #   (query opens an existing local store unverified; VERIFY=TRUE re-checks it
 #    against the manifest and REPLACES it if the md5 differs. Set AWS_PROFILE
 #    if your bucket credentials live under a named profile.)
@@ -138,6 +139,11 @@ if (action == "build") {
                   overwrite = identical(Sys.getenv("OVERWRITE"), "TRUE"))
   message("Built ", store_path, ". It is not in the bucket until ACTION=push.")
 } else if (action == "query") {
+  # cred 0.3.0's crd_search() fails on every store under ragnar 0.3.0 (cred#27).
+  if (utils::packageVersion("cred") < "0.4.0") {
+    stop("ACTION=query needs cred >= 0.4.0, not ", utils::packageVersion("cred"),
+         ": pak::pak(\"NewGraphEnvironment/cred\")")
+  }
   # A verified connect replaces a local file whose md5 differs from the manifest.
   # That is the state after build / 0152 / 0156, so an existing local store is
   # opened UNVERIFIED unless VERIFY=TRUE; a missing one is always downloaded.

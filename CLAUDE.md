@@ -148,9 +148,10 @@ immutable: build only once Zotero has finished syncing. Citation keys are not un
 libraries (the same key names different papers in the personal and group libraries), so
 resolve a key inside the group (`groups.groupID = 4733734`), never across the whole database.
 
-`cred` 0.3.0's `crd_search()` fails on every store under ragnar 0.3.0 (`cosine_distance` is a
-list column), so `0150 ACTION=query` is broken until cred is fixed; `ragnar::ragnar_retrieve()`
-works directly. Draft issue in the #19 archive's `cred-issue-draft.md`.
+`0150 ACTION=query` needs cred 0.4.0 or later: 0.3.0's `crd_search()` failed on every store under ragnar 0.3.0
+(NewGraphEnvironment/cred#27); under 0.4.0 it returns hybrid results (2026-10-30), and `0150` refuses an older cred.
+A build still takes, for each key, the newest PDF from any library, trash included (`crd_zot_src_lookup()`,
+NewGraphEnvironment/cred#40), so wait for that fix before rebuilding a store, and check where each document came from.
 
 ### An EcoCat report is several documents
 

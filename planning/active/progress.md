@@ -24,3 +24,12 @@
   habitat_modelling, temperature and flow members (byte-level replace; line endings kept).
 - `0280`: 1,145 rows (649 text, 288 table, 145 OCR, 6 abstract, 57 none rows), registry 81 rows / 117 quotes, all
   verified; coverage, thermal and flow grids full. 13.4 min. Logs `scripts/logs/habitat/20261030_literature_verify*.csv`.
+
+### Phases 2, 3 and 6 (2026-10-30)
+
+- Phase 2 cleanup live 22:27 UTC; re-run a no-op; re-measured (findings.md, "Phase 2: the cleanup"). Three PDFs wait on
+  Al's browser (COSEWIC 2012, Carr et al. 2020, the Metolius report).
+- Phase 3: `0150` names what a build leaves out (findings.md). Al is working cred#40 in a cred session; the cred#35
+  re-check on ragnar 0.3.1 is for that session, since ragnar moves here only with the cred tag.
+- Phase 6: `ACTION=query STORE=pine` returns hybrid results under cred 0.4.0 (22:32 UTC); CLAUDE.md note rewritten
+  (cred#27 fixed, cred#40 open); `0150` refuses `ACTION=query` below cred 0.4.0 (fires with the floor raised to 0.5.0).
