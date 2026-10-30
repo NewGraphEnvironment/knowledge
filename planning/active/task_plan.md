@@ -36,21 +36,29 @@ Approved by Al, 2026-10-30, with the plan:
 ## Phase 2: clean `species/bull_trout` and `species/grayling`
 - [ ] Find a PDF for every no-PDF member (URL must return `%PDF`; ACAT/EcoCat for Williamson & Zimmerman 2005);
       record each miss and why (web page, paywalled) in findings
-- [ ] `data/bull_trout_members.csv` (+ `hagen_weber2019Limitingfactors`), `data/grayling_members.csv`
-      (+ `beaudry2014Assessmentassignment`), additions CSVs for the four standalones (metadata from the PDFs' title pages)
-- [ ] `0270 --dry-run` for both, then live; wait for sync
+- [ ] Rekey `hagen_weber2019Limitingfactorsa` -> `hagen_weber2019Limitingfactors` (today's merge re-keyed the survivor
+      `YC3EQ8T8`): 22 rows of `literature_evidence.csv`, the habitat_modelling, temperature and flow members; `0280` passes
+- [ ] `data/bull_trout_members.csv` (+ `hagen_weber2019Limitingfactors`, + `gill2006Bulltrout`, the guide's existing
+      parent), `data/grayling_members.csv` (+ `beaudry2014Assessmentassignment`), `data/grayling_additions.csv` for the
+      three grayling standalones (metadata from the PDFs' title pages); no `pdf` URL that returns HTML
+- [ ] Every `exists` / `copy exists` gkey in the dry run checked against the intended item before the live run
+- [ ] `0270 --dry-run` for both, then live; wait for sync; a second dry run is the no-op proof (no `would*`, exit 0)
 - [ ] `YQVI79FL` removal from grayling (decision 3), recorded in findings
-- [ ] Re-measure from a guarded copy: members, keyed, PDF on disk; confirm the new items got BBT keys
+- [ ] Re-measure from a guarded copy: members, keyed, PDF on disk (check Zotero downloads group files at sync);
+      confirm the new items got BBT keys
 - [ ] CLAUDE.md layout line for the new CSVs
 
 ## Phase 3: cred, upstream (decision 4)
-- [ ] File the cred issue: cross-library key, trashed attachment, newest-of-several; reprex on the three keys
+- [x] File the cred issue: cross-library key, trashed attachment, newest-of-several; reprex on the three keys
+      (cred#40, filed 2026-10-30 at Al's request; he works it)
 - [ ] Re-run cred#35's reprex on ragnar 0.3.1 and note the result on cred#35
 - [ ] #122's body: the builds are blocked by the cred issue (a task in its plan, not a comment)
-- [ ] Upgrade ragnar to 0.3.1 here (`pak::pak("ragnar")`, CRAN), and cred from GitHub once the fix is tagged
+- [ ] With the cred tag, not before (cred 0.4.0 is unproven on ragnar 0.3.1's mirai ingest): upgrade ragnar to 0.3.1
+      (`pak::pak("ragnar")`, CRAN) and cred from GitHub
       (`pak::pak("NewGraphEnvironment/cred")`; cred is not on CRAN, so "latest" is its GitHub tag and `main`)
-- [ ] If cred does not take "members left out" reporting: `0150 collection_keys()` prints each member it drops
-      (no key, no PDF, standalone attachment)
+- [ ] `0150 collection_keys()` prints each member it drops (no key, no PDF, standalone attachment; a standalone
+      whose PDF a keyed parent also holds marked as covered). Unconditional: 0150 hands cred keys, so cred never sees
+      a keyless or PDF-less member (plan review)
 
 ## Phase 4 (after the cred tag): build and push `bull_trout_grayling`
 - [ ] `ACTION=build STORE=bull_trout_grayling COLLECTIONS="VHWEK6RE,GELFSUTU"`; read the left-out and origin reports
@@ -59,11 +67,12 @@ Approved by Al, 2026-10-30, with the plan:
 
 ## Phase 5 (after the cred tag): rebuild and push `habitat_modelling` with grayling
 - [ ] `ACTION=build STORE=habitat_modelling OVERWRITE=TRUE COLLECTIONS="U9ZCZ6RN,RXNFPBPH,VHWEK6RE,GELFSUTU,9U54XAND,SW2RXUJC,DQP29KU7,X29BX4U8,W4425VK5,545K8HP4"`
-      (the recorded set by key, plus grayling); document count against the manifest's 222
+      (the recorded set by key, plus grayling); pull the current store first and diff document origins against the
+      rebuild, each added or removed origin accounted for (grayling, the cleanup, cred#40's picks)
 - [ ] Query check; push dry run, then `CONFIRM=TRUE`
 - [ ] `scripts/README.md`: the build line with grayling, a line for the new store
 
-## Phase 6: docs
+## Phase 6: docs (lands before the cred tag, except the README build lines in Phase 5)
 - [ ] CLAUDE.md: `ACTION=query` works under cred ≥ 0.4.0 (cred#27); drop the "broken" note and the draft-issue pointer
 - [ ] `0150` header/README: cred 0.4.0 floor for query (and a version check in the script's query branch)
 - [ ] Issue #122 body: correct the trash-inflated counts and the Hagen & Weber state
@@ -73,7 +82,7 @@ resume block; Phases 4–6 resume on it after the tag, and the PR opens then.
 
 ## Validation
 
-- [ ] Tests pass (`devtools::test()`; no `R/` change, `test-data-dir.R` covers the new `data/` files)
+- [ ] Tests pass (`devtools::test()`; no `R/` change)
 - [ ] `/code-check branch` clean (three-round floor)
 - [ ] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion

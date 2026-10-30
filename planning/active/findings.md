@@ -40,8 +40,10 @@ X29BX4U8; `salmon` W4425VK5 (species) and 545K8HP4 (aquatic).
   has one; `TUPPMGTM` (`…d`, references) none.
 - Standalone PDFs (no parent, so no key): `NNS8U574` McPherson 2020 MSc (U Alberta, Little Nahanni grayling habitat),
   `GGDPSJFE` House 2021 MSc (TRU, grayling spawning behaviour), `QPMK23EN` Tack, ADF&G annual performance report
-  (grayling migrations, interior and Arctic Alaska), `P3TMRWQX` Gill 2006 bull trout guide (Forsite). `KXDGTBTA` is an
-  empty, keyless parent titled `bulltroutguide.pdf` in no collection.
+  (grayling migrations, interior and Arctic Alaska), `P3TMRWQX` Gill 2006 bull trout guide (Forsite). **Corrected by the
+  plan review:** Gill already has a keyed parent, `8B95AXD2` `gill2006Bulltrout` (from
+  `habitat_modelling_additions.csv` row 9, `zotero:P3TMRWQX`), whose stored PDF is `KXDGTBTA`; I misread that attachment
+  as an empty parent. So three standalones need a parent, all in grayling.
 - No-PDF members with a public PDF URL on the item: COSEWIC 2012 (publications.gc.ca), Cannings & Ptolemy 1998
   (for.gov.bc.ca), NW Council brochure, Metolius migration report (ODFW), Whyte et al. 1997 (for.gov.bc.ca), Finlay
   genetics 2012 (ACAT), Carr et al. 2020 (PMC). Web pages: species registry, BC species explorer (two).
@@ -60,6 +62,24 @@ X29BX4U8; `salmon` W4425VK5 (species) and 545K8HP4 (aquatic).
 `crd_store_build()` 0.4.0 calls `ragnar::ragnar_store_ingest(store, src$src_path, progress = TRUE)` with default
 chunking, so cred#35 still applies. ragnar: 0.3.0 installed from CRAN, 0.3.1 on CRAN (ingest moved to mirai's new
 `race_mirai()` API), 0.3.1.9000 on GitHub `main`.
+
+## Today's merge re-keyed Hagen & Weber (2019)
+
+The keyed survivor `YC3EQ8T8` carried `hagen_weber2019Limitingfactorsa` while `PT7KYXRX` held the unsuffixed key; with
+`PT7KYXRX` merged into it and trashed, Better BibTeX re-derived the survivor as `hagen_weber2019Limitingfactors`
+(both now read that key in the local database). The repo cites the old key in 22 rows of `literature_evidence.csv`
+and in `habitat_modelling_members.csv`, `temperature_members.csv` and `flow_members.csv`; `0270 --dry-run` reports it
+`MISSING` (identically before and after Phase 1's change). No vignette, `research/` or `R/` file cites it.
+
+## Plan review (Plan agent, 2026-10-30; full text in `review-plan.md`)
+
+Taken: Gill is a member, not an addition (verified: `KXDGTBTA`'s parent is `8B95AXD2`, `gill2006Bulltrout`); a
+`--parent` guard against a second collection (done in Phase 1); check every `exists` gkey before the live run;
+`0150`'s left-out report is unconditional, because 0150 passes keys and cred never sees a keyless member; ragnar moves
+with the cred tag; Phase 6 lands now; Phase 5 diffs document origins against the pulled store; `test-data-dir.R`
+does not cover CSVs, so that claim is dropped. Noted: `0270` tags created items with the collection name, beside the
+human tags `Arctic grayling` / `bull trout`; no script reads Zotero tags. Unpinned auto keys (`App78_…`,
+`selong_etal…`, the Metolius key) change if their metadata is edited: Phase 2 edits no metadata.
 
 ## Errors Encountered
 
