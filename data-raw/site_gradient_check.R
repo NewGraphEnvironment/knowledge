@@ -18,8 +18,8 @@
 # (knw_tune_run()), in the groups that hold both outcomes (knw_tune_score()), held to the key's tracked `n_visits`
 # for rearing (a spawning key's population also needs the spawner evidence, which is not read here, so its counts are
 # before that filter and before the groups filter). Flips: a visit flips at a limit when
-# its measured and modelled gradients lie on opposite sides of it; counted at every published gradient limit in
-# data/thresholds.csv, over the key's population and within the band of modelled gradients one step either side of
+# its measured and modelled gradients lie on opposite sides of it; counted at every gradient limit with a value in
+# data/thresholds.csv (fitted or underpowered), over the key's population and within the band of modelled gradients one step either side of
 # the limit on the key's own ladder (the gradient maxima of its tracked tune table: the fixed ladder plus its
 # defaults). Negative segment gradients: knw_rule_in() tests `0 <= gradient <= grad_max`, so a negative one fails
 # every rule's gradient test; each rule in a key's tracked tune table is tested at those visits as they are and with
@@ -67,8 +67,13 @@ git_out <- function(args) {
   out
 }
 head_sha <- substr(git_out(c("rev-parse", "HEAD")), 1, 7)
-dirty <- git_out(c("status", "--porcelain", "--", "data-raw/site_gradient_check.R", "R", "data/thresholds.csv", tune_dir))
+# the tune tables are stamped only where they are the tracked ones; elsewhere (outside the repo, or an ignored
+# candidate run) the log names the directory and says the stamp does not cover it
+tune_tracked <- identical(normalizePath(tune_dir, mustWork = TRUE), normalizePath("data/tune", mustWork = TRUE))
+dirty <- git_out(c("status", "--porcelain", "--", "data-raw/site_gradient_check.R", "R", "data/thresholds.csv",
+                   if (tune_tracked) "data/tune"))
 if (length(dirty)) head_sha <- paste0(head_sha, " with uncommitted changes to ", paste(trimws(dirty), collapse = ", "))
+if (!tune_tracked) head_sha <- paste0(head_sha, " (tune tables outside the tracked data/tune, not covered by it)")
 say(paste("Site gradient check, knowledge#121, knowledge %s. Evidence %s (visits_link, visits_species, walks md5 %s);",
           "tune tables %s."),
     head_sha, home_rel(evidence_dir), paste(substr(md5_here, 1, 8), collapse = " "), home_rel(tune_dir))
@@ -160,7 +165,7 @@ block("every visit with a measured gradient, by where it sits (the stream branch
 
 # ---- the keys and their published limits ---------------------------------------------------------------------------
 lim <- thr |>
-  filter(status == "fitted", component == "gradient") |>
+  filter(component == "gradient", !is.na(value)) |>   # every gradient limit the table publishes, whatever its status
   transmute(species_code, stage, key = paste(species_code, stage, sep = "_"), limit = as.numeric(value),
             n_visits = as.integer(n_visits))
 pop <- function(sp, stage) {
