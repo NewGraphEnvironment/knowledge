@@ -21,7 +21,9 @@
                                           dir = c("derived", "derived", "derived", "derived", "build", "build"),
                                           stringsAsFactors = FALSE)
 
-.knw_cols_archive_index <- c("event", "date", "key", "setup", "tune_run", "run_uid", "evidence_id", "object",
+# `batch` names one archive call: a run is identified by what it holds, not by its name, which a resumed run reuses
+# (round 3 of the review), so a restore or an undo finds the batch whose record is the checkout's
+.knw_cols_archive_index <- c("event", "date", "batch", "key", "setup", "tune_run", "run_uid", "evidence_id", "object",
                              "source", "source_md5", "object_md5", "bytes", "version_id")
 
 # the two external programs, one wrapper each, so tests mock them and a failure always stops
@@ -206,23 +208,27 @@ knw_archive_index_read <- function(path = "data/archive_index.csv") {
   invisible(x)
 }
 
-# the key's published run and its setup, replayed from the promotion events in order: `promoted` publishes a run,
-# `superseded` or `undone` of the published run unpublishes it. NULL when none is published
+# the key's published batch, replayed from the promotion events in order: `promoted` publishes a batch, `superseded`
+# or `undone` of the published batch unpublishes it. NULL when none is published
 .knw_archive_published <- function(index, key) {
   ev <- index[index$key %in% key & index$event %in% c("promoted", "superseded", "undone"), ]
   cur <- NULL
   for (i in seq_len(nrow(ev))) {
-    if (ev$event[i] == "promoted") cur <- ev[i, c("tune_run", "setup")]
-    else if (!is.null(cur) && identical(ev$tune_run[i], cur$tune_run)) cur <- NULL
+    if (ev$event[i] == "promoted") cur <- ev[i, c("tune_run", "setup", "batch", "run_uid")]
+    else if (!is.null(cur) && identical(ev$batch[i], cur$batch)) cur <- NULL
   }
   cur
 }
 
-# the run's key is promoted when its last promotion event is `promoted`
-.knw_archive_promoted <- function(index, key, tune_run) {
-  ev <- index[index$key %in% key & index$tune_run %in% tune_run &
-                index$event %in% c("promoted", "superseded", "undone"), ]
-  nrow(ev) > 0 && utils::tail(ev$event, 1) == "promoted"
+# the objects of the batch that archived this record (its md5), each at its last row (an undo's copy keeps the batch):
+# the run a checkout's record describes, whatever runs have reused its name since
+.knw_archive_batch_rows <- function(index, key, record_md5) {
+  r <- index[index$event == "archived" & index$key %in% key & grepl("_grades_record\\.csv$", index$source) &
+               index$source_md5 %in% record_md5, ]
+  if (!nrow(r)) stop(key, ": the index holds no archive whose record is this one (md5 ", record_md5, ")", call. = FALSE)
+  b <- utils::tail(r$batch, 1)
+  a <- index[index$event == "archived" & index$key %in% key & index$batch %in% b, ]
+  a[!duplicated(a$object, fromLast = TRUE), ]
 }
 
 #' Store a run in the archive, and record where
@@ -249,16 +255,23 @@ knw_archive_put <- function(plan, index = "data/archive_index.csv", promoted = F
   chk::chk_flag(promoted)
   chk::chk_flag(dry_run)
   idx <- knw_archive_index_read(index)
-  # an unpromoted run never overwrites the published run's objects (the folder of a tokened setup is shared): the
-  # published run is read from the promotion events, not from which run was archived last (round 1 of the review)
+  # an unpromoted run never overwrites a published object with other content (the folder of a tokened setup is
+  # shared): the published batch is read from the promotion events (round 1 of the review), and each object compared
+  # by content, since a resumed run reuses its name (round 3)
   tune <- plan[plan$kind == "tune", ]
   if (!promoted) {
     for (k in unique(tune$key)) {
       pub <- .knw_archive_published(idx, k)
-      if (!is.null(pub) && identical(pub$setup, tune$setup[tune$key == k][1]) &&
-            !identical(pub$tune_run, tune$tune_run[tune$key == k][1])) {
-        stop(k, ": ", pub$setup, " holds published run ", pub$tune_run,
-             "; an unpromoted run would overwrite it", call. = FALSE)
+      if (is.null(pub) || !identical(pub$setup, tune$setup[tune$key == k][1])) next
+      pa <- idx[idx$event == "archived" & idx$key %in% k & idx$batch %in% pub$batch, ]
+      pa <- pa[!duplicated(pa$object, fromLast = TRUE), ]
+      tk <- tune[tune$key == k, ]
+      i <- match(tk$object, pa$object)
+      hit <- !is.na(i)
+      off <- tk$target[hit][tk$source_md5[hit] != pa$source_md5[i[hit]]]
+      if (length(off)) {
+        stop(k, ": ", pub$setup, " holds published run ", pub$tune_run, "; an unpromoted run would overwrite its ",
+             paste(basename(off), collapse = ", "), call. = FALSE)
       }
     }
   }
@@ -281,6 +294,7 @@ knw_archive_put <- function(plan, index = "data/archive_index.csv", promoted = F
   ev$source_md5 <- unname(tools::md5sum(man))
   plan <- rbind(plan, ev)
   now <- format(Sys.time(), "%Y-%m-%dT%H:%M:%SZ", tz = "UTC")
+  batch <- .knw_archive_batch_id(now, plan)
   out <- vector("list", nrow(plan))
   for (i in seq_len(nrow(plan))) {
     p <- plan[i, ]
@@ -317,45 +331,58 @@ knw_archive_put <- function(plan, index = "data/archive_index.csv", promoted = F
       stop(p$object, ": no version id (", vid, "): is versioning on?", call. = FALSE)
     }
     if (p$compress) unlink(body)
-    out[[i]] <- data.frame(event = "archived", date = now, key = p$key, setup = p$setup, tune_run = p$tune_run,
+    out[[i]] <- data.frame(event = "archived", date = now, batch = batch, key = p$key, setup = p$setup, tune_run = p$tune_run,
                            run_uid = p$run_uid, evidence_id = p$evidence_id, object = p$object,
                            source = p$target,
                            source_md5 = p$source_md5, object_md5 = md5, bytes = bytes, version_id = vid,
                            stringsAsFactors = FALSE)
   }
   rows <- do.call(rbind, out)
-  if (promoted) rows <- rbind(rows, .knw_archive_events(idx, unique(tune[c("key", "setup", "tune_run", "run_uid")]),
-                                                        now))
+  if (promoted) {
+    runs <- unique(tune[c("key", "setup", "tune_run", "run_uid")])
+    runs$batch <- batch
+    recs <- tune[grepl("_grades_record\\.csv$", tune$target), ]
+    runs$record_md5 <- recs$source_md5[match(runs$key, recs$key)]
+    rows <- rbind(rows, .knw_archive_events(idx, runs, now))
+  }
   .knw_archive_index_append(index, rows)
   invisible(rows)
 }
 
-# `promoted` for each key's new run, and `superseded` (or `undone`, when a promotion is undone) for the run it replaces
-# where that one was promoted
+# `promoted` for each key's new batch (its record's md5 as source_md5), and `superseded` (or `undone`, when a
+# promotion is undone) for the batch it replaces where that one was published
 .knw_archive_events <- function(idx, runs, now, old_event = "superseded") {
   out <- list()
   for (i in seq_len(nrow(runs))) {
     r <- runs[i, ]
-    prior <- idx[idx$key %in% r$key & idx$event == "promoted" & !idx$tune_run %in% r$tune_run, ]
-    for (old in unique(prior$tune_run)) {
-      if (.knw_archive_promoted(idx, r$key, old)) {
-        out[[length(out) + 1]] <- .knw_archive_event_row(old_event, now, r$key, NA, old, NA)
-      }
+    cur <- .knw_archive_published(idx, r$key)
+    if (!is.null(cur) && !identical(cur$batch, r$batch)) {
+      out[[length(out) + 1]] <- .knw_archive_event_row(old_event, now, cur$batch, r$key, cur$setup, cur$tune_run,
+                                                       cur$run_uid, NA_character_)
     }
-    out[[length(out) + 1]] <- .knw_archive_event_row("promoted", now, r$key, r$setup, r$tune_run, r$run_uid)
+    out[[length(out) + 1]] <- .knw_archive_event_row("promoted", now, r$batch, r$key, r$setup, r$tune_run, r$run_uid,
+                                                     r$record_md5)
   }
   do.call(rbind, out)
 }
-.knw_archive_event_row <- function(event, now, key, setup, tune_run, run_uid) {
+.knw_archive_event_row <- function(event, now, batch, key, setup, tune_run, run_uid, record_md5) {
   x <- as.data.frame(stats::setNames(as.list(rep(NA_character_, length(.knw_cols_archive_index))),
                                      .knw_cols_archive_index), stringsAsFactors = FALSE)
   x$event <- event
   x$date <- now
+  x$batch <- batch
   x$key <- key
   x$setup <- setup
   x$tune_run <- tune_run
   x$run_uid <- run_uid
+  x$source_md5 <- record_md5
   x
+}
+
+# one archive call's name: its UTC time and a digest of what it stores
+.knw_archive_batch_id <- function(now, plan) {
+  paste0(gsub("[-:]", "", now), "-",
+         substr(.knw_md5_text(paste(c(now, plan$object, plan$source_md5), collapse = "\n")), 1, 8))
 }
 
 #' Restore a run from the archive into a tree's ignored data/
@@ -387,11 +414,10 @@ knw_archive_pull <- function(keys, dest = ".", grades = FALSE, index = "data/arc
   rows <- list()
   ev_ids <- character()
   for (k in keys) {
-    rec <- knw_grade_record_read(file.path(dest, "data", "tune", paste0(k, "_grades_record.csv")))
-    a <- idx[idx$event == "archived" & idx$key %in% k & idx$tune_run %in% rec$tune_run, ]
-    if (!nrow(a)) stop(k, ": the index holds no archive of run ", rec$tune_run, call. = FALSE)
-    # the last archive of each object of that run
-    a <- a[!duplicated(a$object, fromLast = TRUE), ]
+    # the batch whose record is this checkout's, by content: a run's name can be reused by a resumed run (round 3)
+    f_rec <- file.path(dest, "data", "tune", paste0(k, "_grades_record.csv"))
+    knw_grade_record_read(f_rec)
+    a <- .knw_archive_batch_rows(idx, k, unname(tools::md5sum(f_rec)))
     if (!grades) a <- a[!grepl("_grades\\.csv$", a$source), ]
     # grades first, segments last (0330 refuses segments older than the grades)
     a <- a[order(!grepl("_grades\\.csv$", a$source), grepl("_segments\\.rds$", a$source)), ]
@@ -469,9 +495,11 @@ knw_archive_undo <- function(keys, tune_dir = "data/tune", index = "data/archive
   idx <- knw_archive_index_read(index)
   now <- format(Sys.time(), "%Y-%m-%dT%H:%M:%SZ", tz = "UTC")
   runs <- do.call(rbind, lapply(keys, function(k) {
-    rec <- knw_grade_record_read(file.path(tune_dir, paste0(k, "_grades_record.csv")))
-    a <- idx[idx$event == "archived" & idx$key %in% k & idx$tune_run %in% rec$tune_run, ]
-    a <- a[!duplicated(a$object, fromLast = TRUE), ]
+    f_rec <- file.path(tune_dir, paste0(k, "_grades_record.csv"))
+    rec <- knw_grade_record_read(f_rec)
+    rec_md5 <- unname(tools::md5sum(f_rec))
+    # the batch whose record is the restored one, by content (round 3 of the review)
+    a <- .knw_archive_batch_rows(idx, k, rec_md5)
     for (i in seq_len(nrow(a))) {
       r <- a[i, ]
       head <- .knw_aws(c("s3api", "head-object", "--bucket", bucket, "--key", r$object, "--query",
@@ -493,8 +521,8 @@ knw_archive_undo <- function(keys, tune_dir = "data/tune", index = "data/archive
       # appended as made, so an undo that stops partway leaves the index pointing at every copy it made
       .knw_archive_index_append(index, r)
     }
-    data.frame(key = k, setup = if (nrow(a)) a$setup[1] else NA_character_, tune_run = rec$tune_run,
-               run_uid = rec$run_uid, stringsAsFactors = FALSE)
+    data.frame(key = k, setup = a$setup[1], tune_run = rec$tune_run, run_uid = rec$run_uid, batch = a$batch[1],
+               record_md5 = rec_md5, stringsAsFactors = FALSE)
   }))
   rows <- .knw_archive_events(idx, runs, now, old_event = "undone")
   .knw_archive_index_append(index, rows)

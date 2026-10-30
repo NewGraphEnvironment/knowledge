@@ -312,3 +312,36 @@ test_that("a copy an undo made but did not record is recorded on the rerun", {
   current <- vapply(a$object, function(o) utils::tail(b$objects[[o]], 1)[[1]]$vid, "")
   expect_identical(unname(current), a$version_id)
 })
+
+test_that("a run's name reused with new content is refused over the published run, and pull and undo find it by content", {
+  root <- withr::local_tempdir()
+  tok <- c(cut = "cut-full-top", acc = "acc-v1", grad = "grad-seg", flow = "q-wet-fill")
+  idx <- file.path(root, "index.csv")
+  b <- mock_bucket()
+  x <- run_fx(root, run = "20261101_0000", tokens = tok)
+  rec1 <- readLines(file.path(x$tune, "CH_rear_grades_record.csv"))
+  g1 <- unname(tools::md5sum(file.path(x$tune, "CH_rear_grades.csv")))
+  knw_archive_put(plan_of(x), idx, promoted = TRUE)
+  # the same run resumed and regraded: same name, other content
+  x <- run_fx(root, run = "20261101_0000", tokens = tok, grade = 0.4)
+  expect_error(knw_archive_put(plan_of(x), idx), "holds published run 20261101_0000; an unpromoted run would overwrite")
+  # promoted again under the same name, then undone: the first content is published and current again
+  knw_archive_put(plan_of(x), idx, promoted = TRUE)
+  grades_obj <- "archive/knowledge/tune/CH_rear/cut-full-top.acc-v1.grad-seg.q-wet-fill/CH_rear_grades.csv.zst"
+  writeLines(rec1, file.path(x$tune, "CH_rear_grades_record.csv"))
+  knw_archive_undo("CH_rear", x$tune, idx)
+  i <- knw_archive_index_read(idx)
+  first <- i$batch[i$event == "archived"][1]
+  expect_identical(.knw_archive_published(i, "CH_rear")$batch, first)
+  cur <- utils::tail(b$objects[[grades_obj]], 1)[[1]]
+  expect_identical(cur$md5, i$object_md5[i$batch == first & i$object == grades_obj][1])
+  # a checkout whose record is the first content restores the first content
+  dest <- withr::local_tempdir()
+  dir.create(file.path(dest, "data", "tune"), recursive = TRUE)
+  writeLines(rec1, file.path(dest, "data", "tune", "CH_rear_grades_record.csv"))
+  knw_archive_pull("CH_rear", dest, grades = TRUE, index = idx)
+  expect_identical(unname(tools::md5sum(file.path(dest, "data", "tune", "CH_rear_grades.csv"))), g1)
+  # a record no archive holds is refused
+  writeLines(c(rec1[1], sub("20261101_0000", "20261199_0000", rec1[2])), file.path(dest, "data", "tune", "CH_rear_grades_record.csv"))
+  expect_error(knw_archive_pull("CH_rear", dest, index = idx), "no archive whose record is this one")
+})
