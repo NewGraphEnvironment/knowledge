@@ -33,3 +33,27 @@
   re-check on ragnar 0.3.1 is for that session, since ragnar moves here only with the cred tag.
 - Phase 6: `ACTION=query STORE=pine` returns hybrid results under cred 0.4.0 (22:32 UTC); CLAUDE.md note rewritten
   (cred#27 fixed, cred#40 open); `0150` refuses `ACTION=query` below cred 0.4.0 (fires with the floor raised to 0.5.0).
+
+### Resume
+
+Waiting on: Al's three browser PDFs (paths in task_plan.md, Phase 2) and the cred#40 tag (Phases 4-5).
+
+```
+Continue knowledge#122 mid-run. Repo ~/Projects/repo/knowledge, branch `122-arctic-grayling-and-bull-trout-store-cle`, last commit dab028c
+on 2026-10-30.
+Run these in order, and stop at the first that fails; each failure means what it says:
+
+cd ~/Projects/repo/knowledge && git fetch -q origin
+git worktree list | grep -F '[122-arctic-grayling-and-bull-trout-store-cle]' || echo none   # a path printed: that tree holds the branch; cd to it and skip the checkout
+git branch --show-current; git status --porcelain --untracked-files=no   # another branch with changes, or one another session may be on: do not check out here; git worktree add ../knowledge-122 122-arctic-grayling-and-bull-trout-store-cle and cd there
+git checkout 122-arctic-grayling-and-bull-trout-store-cle   # fails: the branch is not on origin
+git pull --ff-only   # fails: this machine has commits origin lacks; resume where they were made
+git merge origin/main   # a conflict: main moved meanwhile; resolve it, commit, and go on
+git merge-base --is-ancestor dab028c HEAD && echo RESUME-OK   # no RESUME-OK: dab028c was never pushed; resume on the machine that made it
+
+Then read planning/active/task_plan.md, findings.md, progress.md and review-plan.md if present.
+The gate decisions, the measurements and the Plan-agent review are already folded in:
+do not re-plan and do not re-ask them.
+Continue at the first unticked task in task_plan.md; the run-to-PR mandate is already
+running. The merge stays with me.
+```
