@@ -1,9 +1,9 @@
-Site gradient check, knowledge#121, knowledge 51f46b1. Evidence ~/Projects/repo_aside/knowledge_published_inputs_20261028/data/fdis/derived (visits_link, visits_species, walks md5 1bd35829 009698d7 99f499bb).
+Site gradient check, knowledge#121, knowledge e07f8ce. Evidence ~/Projects/repo_aside/knowledge_published_inputs_20261028/data/fdis/derived (visits_link, visits_species, walks md5 1bd35829 009698d7 99f499bb).
 The evidence is the build data/thresholds.csv names (knowledge/fdis/v3; not uploaded, so held on the machines that built it).
 Visits placed: 45529. With a measured gradient: 18759 (a second reading: 9397; both: 9389). On the tuning's stream branch (edge types 1000,1100,2000,2300, fished area 10-10000 m2): 29335 placed, 16279 with a measured gradient.
 Missing modelled gradient among them: segment 0, Atlas line 0.
 
-## yardstick: the second reading against the first, at the same site (every visit with both)
+## yardstick: the first reading against the second, at the same site (every visit with both; ratio first/second)
  pairs zero_pairs spearman log_r ratio_p10 ratio_p50 ratio_p90 absdiff_p50
   9389        185      0.9 0.886       0.6         1      1.58        0.01
  absdiff_p90 second_higher_pct
@@ -227,22 +227,22 @@ Missing modelled gradient among them: segment 0, Atlas line 0.
            RB  rear  RB_rear 0.3000    13869      13869          6665
            ST  rear  ST_rear 0.0849     1530       1530           247
 
-## flips at each key's published limit, over the key's population (a reading on the limit is in, as the rule's <= has it; band: modelled gradient one ladder step either side, mirrored at the ladder's top; meas_band: the same window on the measured gradient)
-      key  limit          against visits flips_pct             band band_visits
-  BT_rear 0.3000 segment_gradient   4427       0.8     (0.25, 0.35]          15
-  BT_rear 0.3000     fwa_gradient   4427       2.4     (0.25, 0.35]         101
- BT_spawn 0.1300 segment_gradient   5660       8.5     (0.11, 0.15]         446
- BT_spawn 0.1300     fwa_gradient   5660      12.1     (0.11, 0.15]         510
-  CH_rear 0.1100 segment_gradient   2453       6.4     (0.09, 0.13]         218
-  CH_rear 0.1100     fwa_gradient   2453      11.6     (0.09, 0.13]         201
-  CO_rear 0.0549 segment_gradient   1609      25.8     (0.04, 0.07]         462
-  CO_rear 0.0549     fwa_gradient   1609      28.7     (0.04, 0.07]         428
-  GR_rear 0.0549 segment_gradient    711      11.7     (0.04, 0.07]         113
-  GR_rear 0.0549     fwa_gradient    711      12.4     (0.04, 0.07]         123
-  RB_rear 0.3000 segment_gradient   6665       0.7     (0.25, 0.35]          17
-  RB_rear 0.3000     fwa_gradient   6665       2.4     (0.25, 0.35]         149
-  ST_rear 0.0849 segment_gradient    247      17.0 (0.0749, 0.0949]          25
-  ST_rear 0.0849     fwa_gradient    247      19.0 (0.0749, 0.0949]          18
+## flips at each key's published limit, over the key's population (a reading on the limit is in, as the rule's <= has it; band: modelled gradient one step of the key's own ladder either side, mirrored at its top; meas_band: the same window on the measured gradient)
+      key  limit          against visits flips_pct         band band_visits
+  BT_rear 0.3000 segment_gradient   4427       0.8 (0.25, 0.35]          15
+  BT_rear 0.3000     fwa_gradient   4427       2.4 (0.25, 0.35]         101
+ BT_spawn 0.1300 segment_gradient   5660       8.5 (0.11, 0.15]         446
+ BT_spawn 0.1300     fwa_gradient   5660      12.1 (0.11, 0.15]         510
+  CH_rear 0.1100 segment_gradient   2453       6.4 (0.09, 0.13]         218
+  CH_rear 0.1100     fwa_gradient   2453      11.6 (0.09, 0.13]         201
+  CO_rear 0.0549 segment_gradient   1609      25.8 (0.04, 0.07]         462
+  CO_rear 0.0549     fwa_gradient   1609      28.7 (0.04, 0.07]         428
+  GR_rear 0.0549 segment_gradient    711      11.7 (0.04, 0.07]         113
+  GR_rear 0.0549     fwa_gradient    711      12.4 (0.04, 0.07]         123
+  RB_rear 0.3000 segment_gradient   6665       0.7 (0.25, 0.35]          17
+  RB_rear 0.3000     fwa_gradient   6665       2.4 (0.25, 0.35]         149
+  ST_rear 0.0849 segment_gradient    247      17.0 (0.07, 0.09]          33
+  ST_rear 0.0849     fwa_gradient    247      19.0 (0.07, 0.09]          23
  band_flips_pct meas_band_visits meas_band_flips_pct meas_on_limit
            40.0               46                21.7             1
            35.6               46                21.7             1
@@ -256,8 +256,8 @@ Missing modelled gradient among them: segment 0, Atlas line 0.
            36.6               80                46.2             0
            35.3               69                26.1             4
            34.9               69                29.0             4
-           48.0               11                18.2             0
-           16.7               11                18.2             0
+           42.4               11                18.2             0
+           26.1               11                18.2             0
  meas_above_model_below meas_below_model_above
                      20                     14
                      20                     86
@@ -304,24 +304,24 @@ Missing modelled gradient among them: segment 0, Atlas line 0.
            4           25.0
           13           38.5
            1          100.0
-          24           45.8
+          32           40.6
 
 Negative segment gradients: 55 placed visits (0 on the stream branch, 7 with a measured gradient); values -0.136 to -1e-04; segment lengths (m) 1/62.4/863; Atlas-line gradient at them -0.136/0.0015/0.0223; on the same Atlas line as the visit: 52.
 
-## negative segment gradients in each key's population: rules in the tracked tune table whose in/out at those visits changes when the gradient is 0
+## negative segment gradients in each key's population: rules in the tracked tune table whose in/out at those visits changes when the gradient is 0 (NA: no negative in the population, so nothing to test)
       key negative_visits present rules rules_moved in_region_moved
-  BT_rear               0       0  8385           0               0
- BT_spawn               0       0  7095           0               0
-  CH_rear               0       0  6149           0               0
-  CO_rear               0       0  6622           0               0
-  GR_rear               0       0  7740           0               0
-  RB_rear               0       0  7740           0               0
-  ST_rear               0       0  7224           0               0
+  BT_rear               0       0  8385          NA              NA
+ BT_spawn               0       0  7095          NA              NA
+  CH_rear               0       0  6149          NA              NA
+  CO_rear               0       0  6622          NA              NA
+  GR_rear               0       0  7740          NA              NA
+  RB_rear               0       0  7740          NA              NA
+  ST_rear               0       0  7224          NA              NA
  recommended_moved_visits most_moved_visits
-                        0                 0
-                        0                 0
-                        0                 0
-                        0                 0
-                        0                 0
-                        0                 0
-                        0                 0
+                       NA                NA
+                       NA                NA
+                       NA                NA
+                       NA                NA
+                       NA                NA
+                       NA                NA
+                       NA                NA

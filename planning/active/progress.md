@@ -15,3 +15,12 @@
 - Phase 3: answered from the code (rule test `g >= 0`; curve and grade clamp to [0, 0.2]).
 - Phase 4: "Measured vs modelled gradient" section in `research/fdis_export.md` (header's Verified, Issues and
   Produced by lines revised; the #121 pointer bullet now points to it); `data-raw/README.md` entry.
+- `/code-check branch` round 1 (`review-round1.md`): 9 findings. Fixed: ST's band on the default ladder (now each
+  key's own ladder from its tune table; only ST's row moved, 48.0 → 42.4 %), the yardstick ratio's direction in the
+  prose, the catch paragraph (one statistic carried the claim), "a third to two fifths" (34 to 42 %), the BT spawning
+  population wording, "67 %" (zero sites now named), "tested on every rule" (the test had no visits; the log now says
+  NA), the population refusal's log name (`_refused`), the stamp (now names uncommitted changes). Accepted: the
+  log's `~` path, as the house checks write it (`home_rel()`).
+- Tests: 298, one failure, `test-vignette-data.R` "every ignored source of the methodology article, where present, is
+  unchanged": this checkout's ignored `data/fdis/derived` is the 2026-10-25 build (CLAUDE.md: it fails on a machine
+  whose copies differ). Unrelated to the branch.
