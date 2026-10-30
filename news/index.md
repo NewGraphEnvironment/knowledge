@@ -1,5 +1,34 @@
 # Changelog
 
+## knowledge 0.4.20
+
+- A published article bundle can be rebuilt on any machine
+  ([\#119](https://github.com/NewGraphEnvironment/knowledge/issues/119)).
+  `scripts/0320` writes a tracked record beside each grade table
+  (`<key>_grades_record.csv`, read with
+  [`knw_grade_record_read()`](https://newgraphenvironment.github.io/knowledge/reference/knw_grade_record_write.md)),
+  which the bundles pin instead of the gigabyte tables, and
+  [`knw_tune_promote()`](https://newgraphenvironment.github.io/knowledge/reference/knw_tune_promote.md)
+  refuses a key whose record is missing or describes another table. A
+  run’s grade tables, records, curves and segments, and its evidence
+  build once, are kept in a private, versioned archive
+  ([`knw_archive_plan()`](https://newgraphenvironment.github.io/knowledge/reference/knw_archive_plan.md),
+  [`knw_archive_put()`](https://newgraphenvironment.github.io/knowledge/reference/knw_archive_put.md),
+  `scripts/0336-archive.R`), indexed by version id in
+  `data/archive_index.csv`; `PULL=TRUE`
+  ([`knw_archive_pull()`](https://newgraphenvironment.github.io/knowledge/reference/knw_archive_pull.md))
+  restores the run a checkout’s records name, md5-checked, and
+  `scripts/0335` archives each promotion.
+  [`knw_build_record()`](https://newgraphenvironment.github.io/knowledge/reference/knw_build_record.md)
+  reads link’s output-vocabulary tokens. The methodology article’s
+  limits carry the measured site gradient against link’s segment
+  gradient
+  ([\#121](https://github.com/NewGraphEnvironment/knowledge/issues/121)),
+  computed by
+  [`knw_site_gradient_visits()`](https://newgraphenvironment.github.io/knowledge/reference/knw_site_gradient_visits.md)
+  and
+  [`knw_gradient_flips()`](https://newgraphenvironment.github.io/knowledge/reference/knw_site_gradient_visits.md).
+
 ## knowledge 0.4.19
 
 - R CMD check runs on every pull request and push to `main` through New
