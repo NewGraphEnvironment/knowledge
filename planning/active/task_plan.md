@@ -85,16 +85,17 @@ Approved by Al at plan approval, 2026-10-30, as recommended:
       can, count the visits involved per key and report, without retuning (a retune is Al's call).
 
 ## Phase 4: Write it up
-- [ ] `research/fdis_export.md`: replace the "#121" line in "What the evidence says so far" with a "Measured vs
+- [x] `research/fdis_export.md`: replace the "#121" line in "What the evidence says so far" with a "Measured vs
       modelled gradient" section beside the width comparison: plain-language lead (what a point measure and a segment
       average are, then the numbers), the band result, the catch difference, the negatives; a `Verified` line naming
       the script, log and evidence md5.
-- [ ] `data-raw/README.md`: one sentence for the new check.
+- [x] `data-raw/README.md`: one sentence for the new check.
 - [ ] `/code-check branch`, then archive and open the PR.
 
 ## Owed at the end (reported, done after merge)
 - [ ] The sentence in `vignettes/habitat_thresholds.Rmd`'s limits, carried through `data-raw/vignette_method.R`, at the
-      next `method.rds` rebuild (#119 or the next promotion); written into #119's body as a task.
+      next `method.rds` rebuild (#119 or the next promotion); written into #119's body as a task, with the note that
+      `vignette_method.R` must compute it as `data-raw/site_gradient_check.R` does (plan review).
 - [ ] #120's body gains the rerun: `EVIDENCE_CHECK=FALSE EVIDENCE_DIR=<minimal network's build> Rscript
       data-raw/site_gradient_check.R`.
 

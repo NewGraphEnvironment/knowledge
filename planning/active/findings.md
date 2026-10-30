@@ -86,7 +86,8 @@ without it was refused by the script's own guard.
   0.64 vs 0.41): link's cut at a catch makes a short segment that fits the site. Per species, sites where the species
   was present flip less at its limit than where absent (CH 4.1 vs 6.5 %, CO 18.1 vs 27.4 %, GR 2.2 vs 15.0 %).
 - **Negative segment gradients:** 55 placed visits, values −0.136 to −0.0001, 52 on the visit's own Atlas line, none
-  on the stream branch (all on river, wetland or lake segments or outside the fished-area range), so no key
+  on the stream branch (all on edge types 1200, 1400, 1410 and 1425, which the stream branch excludes; 34 in
+  wetlands, none on a river or lake), so no key
   population holds one: 0 of 6,149–8,385 rules per key move when they are set to 0. `knw_rule_in()` fails a negative
   under every rule (`g >= 0`), while the curve and the grade clamp it to 0 (`R/tune_curve.R:81`, `R/grade.R:59`); the
   two treatments differ, but on this build it reaches nothing.

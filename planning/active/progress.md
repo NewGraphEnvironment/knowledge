@@ -13,3 +13,5 @@
 - Phase 2: `data-raw/site_gradient_check.R` written; the evidence guard refused the 2026-10-25 build in this checkout
   (refused log not kept); the population guard caught a missing groups filter on the first published run.
 - Phase 3: answered from the code (rule test `g >= 0`; curve and grade clamp to [0, 0.2]).
+- Phase 4: "Measured vs modelled gradient" section in `research/fdis_export.md` (header's Verified, Issues and
+  Produced by lines revised; the #121 pointer bullet now points to it); `data-raw/README.md` entry.
