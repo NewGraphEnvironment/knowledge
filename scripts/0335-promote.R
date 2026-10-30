@@ -25,7 +25,8 @@
 #     to the bucket's versioned archive (knw_archive_put(), as scripts/0336-archive.R runs it) after the move and before
 #     the rebuilds; whether it can is checked before anything moves (bucket credentials, versioning on, every file
 #     against its record and the evidence). A failure stops the chain and names the 0336 command that finishes it. An
-#     undo sends nothing and appends the index's undone/promoted events.
+#     undo uploads nothing new: it appends the index's undone/promoted events and copies the restored run's indexed
+#     versions back over a shared folder, so it too needs bucket credentials, checked before anything moves back.
 #   - NOT DONE HERE: the tests that pin the published run's numbers (tests/testthat/test-tune_repick.R's 1.96 picks,
 #     test-vignette-data.R's key count and funnel, the articles' inline checks) and the research/ prose that quotes it
 #     are revised by hand after a promotion that moves them.
@@ -82,9 +83,9 @@ if (bundles) {
 }
 # the archive (#119): the promoted keys' grade tables, curves and segments, and their evidence, go to the bucket's
 # versioned archive once moved. Checked before anything moves (credentials, versioning, every file against its record
-# and the evidence), so a promotion that could not be archived is refused, not half done. An undo uploads nothing: it
-# records in the index which run is published again, and makes that run's objects current where a shared folder holds
-# them (knw_archive_undo())
+# and the evidence), so a promotion that could not be archived is refused, not half done. An undo uploads nothing new:
+# it records in the index which run is published again, and makes that run's objects current where a shared folder
+# holds them (knw_archive_undo()), so it needs the bucket too and is checked before moving back
 build_dir <- "data/fdis/build"
 archive_keys <- function(dir_t) {
   k <- sub("_grades_record\\.csv$", "", list.files(dir_t, "_grades_record\\.csv$"))
@@ -96,14 +97,20 @@ ev_here <- all(file.exists(c(file.path("data/fdis/derived", c("visits_link.csv",
                                                                "fdis_sites.csv")),
                              file.path(build_dir, c("reconcile.csv", "sites.rds")))))
 archive_now <- undo || ev_here || bundles
+bucket_ready <- function() {
+  ver <- tryCatch(.knw_aws(c("s3api", "get-bucket-versioning", "--bucket", .knw_archive_bucket, "--query", "Status",
+                             "--output", "text")), error = function(e) conditionMessage(e))
+  if (!identical(trimws(ver[length(ver)]), "Enabled")) {
+    stop("the archive cannot take this ", if (undo) "undo" else "promotion",
+         " (bucket credentials and versioning; #119): ", paste(ver, collapse = " "))
+  }
+}
+# an undo touches the bucket too (it makes the restored run's objects current), so it is checked before moving back
+if (undo && length(archive_keys(file.path("data/tune/candidate", run)))) bucket_ready()
 if (!undo && archive_now) {
   ak <- archive_keys(file.path("data/tune/candidate", run))
   if (length(ak)) {
-    ver <- tryCatch(.knw_aws(c("s3api", "get-bucket-versioning", "--bucket", .knw_archive_bucket, "--query", "Status",
-                               "--output", "text")), error = function(e) conditionMessage(e))
-    if (!identical(trimws(ver[length(ver)]), "Enabled")) {
-      stop("the archive cannot take this promotion (bucket credentials and versioning; #119): ", paste(ver, collapse = " "))
-    }
+    bucket_ready()
     knw_archive_plan(ak, file.path("data/tune/candidate", run), file.path("data/compare/candidate", run),
                      "data/fdis/derived", build_dir)
   }
@@ -130,8 +137,9 @@ if (length(ak) && undo) {
   })
   message("Recorded in data/archive_index.csv: ", paste(ak, collapse = ", "), " published again from run ", run, ".")
 } else if (length(ak) && !archive_now) {
-  message("BUNDLES=FALSE without the evidence here: ", paste(ak, collapse = ", "), " moved but NOT archived. Where the ",
-          "evidence is, run KEYS=", paste(ak, collapse = ","), " PROMOTED=TRUE Rscript scripts/0336-archive.R.")
+  message("BUNDLES=FALSE without the evidence here: ", paste(ak, collapse = ", "), " moved but NOT archived. On this ",
+          "machine (it alone holds their grade tables), with a copy of the run's evidence: KEYS=", paste(ak, collapse = ","),
+          " PROMOTED=TRUE EVIDENCE_DIR=<its derived/> BUILD_DIR=<its build/> Rscript scripts/0336-archive.R.")
 } else if (length(ak)) {
   tryCatch({
     knw_archive_put(knw_archive_plan(ak, "data/tune", "data/compare", "data/fdis/derived", build_dir), promoted = TRUE)

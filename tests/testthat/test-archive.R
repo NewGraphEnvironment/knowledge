@@ -74,7 +74,11 @@ run_fx <- function(root, run = "20261027_0000", tokens = c(cut = NA, acc = NA, g
                               walk = "bank", walk_md5 = "w", discharge_load = "wet load", curve_prior_sd = "2.5",
                               grade_withheld = "FALSE", null_heldout_curve = "100.1", evidence_md5 = ev,
                               curve_grad = "segment_gradient"), g, row.names = FALSE)
-  knw_grade_record_write(g, tune_run = run, evidence_ledger = "ledger.csv", knowledge_commit = "abc",
+  # the run's evidence ledger records the build's sites.rds, which the plan holds the build directory to
+  ledger <- file.path(root, "ledger.csv")
+  utils::write.csv(data.frame(kind = "info", step = "md5_sites", n = 0,
+                              note = unname(tools::md5sum(file.path(db, "sites.rds")))), ledger, row.names = FALSE)
+  knw_grade_record_write(g, tune_run = run, evidence_ledger = ledger, knowledge_commit = "abc",
                          link = c(version = "0.66.0", sha = "def"), tokens = tokens, rows = 2)
   saveRDS(list(curve = run), file.path(tn, "CH_rear_curve.rds"))
   saveRDS(list(segments = run), file.path(cm, "CH_rear_segments.rds"))
@@ -251,4 +255,60 @@ test_that("a restore in two steps leaves the segments later than their grade tab
   knw_archive_pull("CH_rear", dest, grades = TRUE, index = idx)
   expect_gt(file.mtime(file.path(dest, "data", "compare", "CH_rear_segments.rds")),
             file.mtime(file.path(dest, "data", "tune", "CH_rear_grades.csv")))
+})
+
+test_that("a build directory that is not the run's ledger's is refused", {
+  root <- withr::local_tempdir()
+  x <- run_fx(root)
+  saveRDS(list(sites = "another build"), file.path(x$build, "sites.rds"))
+  expect_error(plan_of(x), "sites.rds is not the one .*ledger.csv records")
+})
+
+test_that("an undo that stops partway leaves the index pointing at every copy it made", {
+  root <- withr::local_tempdir()
+  tok <- c(cut = "cut-full-top", acc = "acc-v1", grad = "grad-seg", flow = "q-wet-fill")
+  idx <- file.path(root, "index.csv")
+  b <- mock_bucket()
+  x <- run_fx(root, run = "20261101_0000", tokens = tok)
+  knw_archive_put(plan_of(x), idx, promoted = TRUE)
+  x <- run_fx(root, run = "20261102_0000", tokens = tok, grade = 0.2)
+  knw_archive_put(plan_of(x), idx, promoted = TRUE)
+  x <- run_fx(root, run = "20261101_0000", tokens = tok)
+  # the second copy fails, then the undo is rerun
+  real <- .knw_aws
+  n <- 0L
+  local_mocked_bindings(.knw_aws = function(args) {
+    if (args[2] == "copy-object" && (n <<- n + 1L) == 2L) stop("aws s3api copy-object failed: network")
+    real(args)
+  })
+  expect_error(knw_archive_undo("CH_rear", x$tune, idx), "network")
+  knw_archive_undo("CH_rear", x$tune, idx)
+  i <- knw_archive_index_read(idx)
+  a <- i[i$event == "archived" & i$tune_run %in% "20261101_0000", ]
+  a <- a[!duplicated(a$object, fromLast = TRUE), ]
+  current <- vapply(a$object, function(o) utils::tail(b$objects[[o]], 1)[[1]]$vid, "")
+  expect_identical(unname(current), a$version_id)
+})
+
+test_that("a copy an undo made but did not record is recorded on the rerun", {
+  root <- withr::local_tempdir()
+  tok <- c(cut = "cut-full-top", acc = "acc-v1", grad = "grad-seg", flow = "q-wet-fill")
+  idx <- file.path(root, "index.csv")
+  b <- mock_bucket()
+  x <- run_fx(root, run = "20261101_0000", tokens = tok)
+  knw_archive_put(plan_of(x), idx, promoted = TRUE)
+  x <- run_fx(root, run = "20261102_0000", tokens = tok, grade = 0.2)
+  knw_archive_put(plan_of(x), idx, promoted = TRUE)
+  x <- run_fx(root, run = "20261101_0000", tokens = tok)
+  # the first copy lands in the bucket, and the index write after it fails
+  real <- .knw_archive_index_append
+  local_mocked_bindings(.knw_archive_index_append = function(path, rows) stop("disk full"))
+  expect_error(knw_archive_undo("CH_rear", x$tune, idx), "disk full")
+  local_mocked_bindings(.knw_archive_index_append = real)
+  knw_archive_undo("CH_rear", x$tune, idx)
+  i <- knw_archive_index_read(idx)
+  a <- i[i$event == "archived" & i$tune_run %in% "20261101_0000", ]
+  a <- a[!duplicated(a$object, fromLast = TRUE), ]
+  current <- vapply(a$object, function(o) utils::tail(b$objects[[o]], 1)[[1]]$vid, "")
+  expect_identical(unname(current), a$version_id)
 })

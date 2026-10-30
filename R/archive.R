@@ -127,6 +127,18 @@ knw_archive_plan <- function(keys, tune_dir, compare_dir, evidence_dir, build_di
     rec <- knw_grade_record_read(f$source[2])
     tryCatch(knw_grade_record_check(rec, f$source[1]),
              error = function(e) stop(k, ": ", conditionMessage(e), call. = FALSE))
+    # the build directory is 0230's: its sites.rds is the one the run's evidence ledger records (round 2 of the
+    # review: a BUILD_DIR left at another build's would archive a mixed evidence build)
+    if (file.exists(rec$evidence_ledger)) {
+      led <- utils::read.csv(rec$evidence_ledger, colClasses = "character")
+      sites_md5 <- ev$source_md5[ev$file == "sites.rds"]
+      if (!identical(led$note[led$step == "md5_sites"], sites_md5)) {
+        stop(k, ": ", build_dir, "/sites.rds is not the one ", rec$evidence_ledger, " records", call. = FALSE)
+      }
+    } else {
+      stop(k, ": the run's evidence ledger ", rec$evidence_ledger, " is not here to hold the evidence to",
+           call. = FALSE)
+    }
     if (!identical(rec$evidence_md5, ev_md5)) {
       stop(k, ": graded on evidence ", rec$evidence_md5, ", not the build in ", evidence_dir, " (", ev_md5, ")",
            call. = FALSE)
@@ -456,27 +468,35 @@ knw_archive_undo <- function(keys, tune_dir = "data/tune", index = "data/archive
   chk::chk_character(keys)
   idx <- knw_archive_index_read(index)
   now <- format(Sys.time(), "%Y-%m-%dT%H:%M:%SZ", tz = "UTC")
-  copies <- list()
   runs <- do.call(rbind, lapply(keys, function(k) {
     rec <- knw_grade_record_read(file.path(tune_dir, paste0(k, "_grades_record.csv")))
     a <- idx[idx$event == "archived" & idx$key %in% k & idx$tune_run %in% rec$tune_run, ]
     a <- a[!duplicated(a$object, fromLast = TRUE), ]
     for (i in seq_len(nrow(a))) {
       r <- a[i, ]
-      head <- .knw_aws(c("s3api", "head-object", "--bucket", bucket, "--key", r$object, "--query", "Metadata.md5",
-                         "--output", "text"))
-      if (identical(trimws(head[length(head)]), r$object_md5)) next
-      vid <- .knw_aws(c("s3api", "copy-object", "--bucket", bucket, "--key", r$object, "--copy-source",
-                        sprintf("%s/%s?versionId=%s", bucket, r$object, r$version_id), "--query", "VersionId",
-                        "--output", "text"))
-      r$version_id <- trimws(vid[length(vid)])
+      head <- .knw_aws(c("s3api", "head-object", "--bucket", bucket, "--key", r$object, "--query",
+                         "[Metadata.md5, VersionId]", "--output", "text"))
+      have <- strsplit(trimws(head[length(head)]), "\t")[[1]]
+      if (length(have) == 2 && identical(have[1], r$object_md5)) {
+        # current already: a copy an earlier, interrupted undo made, which the index must point at, since the version
+        # it names is now a previous one and expires (round 2 of the review)
+        if (identical(have[2], r$version_id)) next
+        vid <- have[2]
+      } else {
+        vid <- .knw_aws(c("s3api", "copy-object", "--bucket", bucket, "--key", r$object, "--copy-source",
+                          sprintf("%s/%s?versionId=%s", bucket, r$object, r$version_id), "--query", "VersionId",
+                          "--output", "text"))
+        vid <- trimws(vid[length(vid)])
+      }
+      r$version_id <- vid
       r$date <- now
-      copies[[length(copies) + 1]] <<- r
+      # appended as made, so an undo that stops partway leaves the index pointing at every copy it made
+      .knw_archive_index_append(index, r)
     }
     data.frame(key = k, setup = if (nrow(a)) a$setup[1] else NA_character_, tune_run = rec$tune_run,
                run_uid = rec$run_uid, stringsAsFactors = FALSE)
   }))
-  rows <- rbind(do.call(rbind, copies), .knw_archive_events(idx, runs, now, old_event = "undone"))
+  rows <- .knw_archive_events(idx, runs, now, old_event = "undone")
   .knw_archive_index_append(index, rows)
   invisible(rows)
 }

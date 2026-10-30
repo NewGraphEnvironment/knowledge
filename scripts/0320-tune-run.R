@@ -146,6 +146,13 @@ pg <- function() {
            error = function(e) stop("database unreachable (PG* environment variables): ", conditionMessage(e)))
 }
 
+# the commit the run ran at, read at its start, for each grade record (#119): +dirty when a tracked file of the package
+# or a script differs from it (untracked files, such as the ledger 0310 has just written, do not count)
+git1 <- function(...) suppressWarnings(system2("git", c(...), stdout = TRUE, stderr = FALSE))
+knowledge_commit <- paste0(git1("rev-parse", "--short", "HEAD")[1],
+                           if (length(git1("status", "--porcelain", "--untracked-files=no", "--", "R", "scripts", "inst")))
+                             "+dirty" else "")
+
 # ---- inputs and their provenance ------------------------------------------------------
 ledger_path <- sort(list.files("scripts/logs/habitat", "_evidence_build_ledger\\.csv$", full.names = TRUE), decreasing = TRUE)[1]
 if (is.na(ledger_path)) stop("no evidence build ledger: run scripts/0310 first")
@@ -272,7 +279,7 @@ out <- knw_tune_run(vl, vs, walks, thr, species = species, spawner = spawner, wo
 say("Scored %d species x stage in %.1f min on %d workers%s.", length(out), as.numeric(difftime(Sys.time(), t0, units = "mins")), workers,
     if (main_only) " (the main seed only)" else "")
 
-for (k in names(out)) if (is.null(out[[k]]$curve)) unlink(file.path(dir_out, paste0(k, "_grades.csv")))
+for (k in names(out)) if (is.null(out[[k]]$curve)) unlink(file.path(dir_out, paste0(k, c("_grades.csv", "_grades_record.csv"))))
 summ <- list()
 for (k in names(out)) {
   r <- out[[k]]
@@ -408,10 +415,7 @@ walk_md5 <- knw_walk_md5()
 say("Grading on the flow build: %s; walk %s, cached in knw.walk_cache.", discharge_load, walk_md5)
 # each grade table's record (#119): its constant columns, md5 and size beside the run, the evidence ledger, this commit
 # and link's build, tracked, so the bundles pin it rather than the table and the archive restores the table against it.
-# The commit is marked +dirty when the package or a script differs from it
-git1 <- function(...) suppressWarnings(system2("git", c(...), stdout = TRUE, stderr = FALSE))
-knowledge_commit <- paste0(git1("rev-parse", "--short", "HEAD")[1],
-                           if (length(git1("status", "--porcelain", "--", "R", "scripts", "inst"))) "+dirty" else "")
+# The commit (knowledge_commit) is read at the run's start
 write_record <- function(gpath, rows) {
   knw_grade_record_write(gpath, tune_run = run, evidence_ledger = ledger_path, knowledge_commit = knowledge_commit,
                          link = c(version = led$note[led$step == "run_link_version"], sha = link_sha),
