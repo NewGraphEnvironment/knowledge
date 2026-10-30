@@ -81,7 +81,41 @@ does not cover CSVs, so that claim is dropped. Noted: `0270` tags created items 
 human tags `Arctic grayling` / `bull trout`; no script reads Zotero tags. Unpinned auto keys (`App78_…`,
 `selong_etal…`, the Metolius key) change if their metadata is edited: Phase 2 edits no metadata.
 
+## Phase 2: the cleanup (2026-10-30)
+
+`0270 --collection bull_trout|grayling --parent 9U54XAND` live at 22:27 UTC, then a second dry run of each with no
+`would` step (exit 0).
+
+- bull_trout: added `hagen_weber2019Limitingfactors` (`YC3EQ8T8`) and `gill2006Bulltrout` (`8B95AXD2`); uploaded
+  Cannings & Ptolemy 1998 (BC forests library) and the NW Council brochure.
+- grayling: added `beaudry2014Assessmentassignment` (`IWJYZFS6`); uploaded the Finlay genetics report (ACAT) and
+  Whyte et al. 1997, chapter 5 only: pp. 81-93 of `Slaney_PA1997_A.pdf` (the item's URL, 313 pp., chapters 1-15 of the
+  book), cut with qpdf to `data/rag/pdf/grayling/whyte_etal1997_ch5.pdf` (ignored). Created parents for the three
+  standalones: `mcpherson2020Habitatuse` (`BQKF3I37`), `house2021Interdisciplinaryapproaches` (`VGBXX55C`),
+  `tack1980Migrationsdistributions` (`B27KD9SC`; ADF&G F-9-12, vol. 21, study R-I, the 1971-1980 completion report).
+  The standalones stay in the collection, as 0270 leaves them.
+- Out of grayling by collection PATCH (204), not trashed: `YQVI79FL` (Beaudry 2014 without its PDF; now in no
+  collection) and `WVTFGPUT` (`fishandwildlifecompensationprogram2017ArcticGrayling`, imported 2026-07-11: the same FWCP
+  2017 synthesis as `stamford_etal2017FWCPArctic`, same title, authors, 148 pp. and creation date; still in `B5XW948R`).
+  Neither key is cited in the repo. Both are library-level duplicates a Zotero merge could fold.
+
+| | items (not standalones) | keyed | keyed, PDF on disk |
+|---|---|---|---|
+| bull_trout before | 15 | 15 | 6 |
+| bull_trout after | 16 | 16 | 10 |
+| grayling before | 24 | 24 | 19 |
+| grayling after | 24 | 24 | 22 |
+
+Still without a PDF, and why: COSEWIC 2012 (publications.gc.ca answers a scripted request with 202/HTML; canada.ca has
+it as HTML chapters) and Carr et al. 2020 (PMC and the publisher 403): browser, with Al. The Metolius adult migration
+report: the item's ODFW URL is 404 and no other copy found. McMahon et al. 2007: paywalled; Unpaywall's "open" copy is an
+Intermountain Journal of Sciences conference abstract, not the paper. Williamson & Zimmerman 2005: no copy found; ACAT's
+PWFWCP report 337 is Ballard & Shrimpton (2009), an Omineca grayling synopsis, a candidate addition. Three web pages
+(species registry, BC species explorer twice).
+
 ## Errors Encountered
 
 | Error | Resolution |
 |-------|------------|
+| `habitat_modelling_members.csv` rewritten whole (CRLF lost) by a text-mode replace | Byte-level replace (`rb`/`wb`) |
+| `sed -i ''` on this Mac's GNU sed takes `''` as a file | Edit CSVs with Python's csv module |
