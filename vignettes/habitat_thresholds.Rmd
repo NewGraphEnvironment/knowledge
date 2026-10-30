@@ -96,6 +96,14 @@ stopifnot(!is.null(sg), !is.null(gs), nrow(gs) > 0, sg$at_site_fish > 0.5, sg$at
 # the limits' words name the segments of link's 2026-10-17 build (link 0.66.0, before link#326 and link#396), which
 # this ledger records; a bundle written on another build must revise them
 stopifnot(identical(unname(x$meta$md5[x$meta$ledger]), "90a98a2ca24955c8e993d36ec42b6355"))
+# the limits' words on the slope crews measured (#121): the segment's slope orders sites as the crews' readings do, less
+# well than a second reading, and differs from the site by a few points; near every published limit a quarter or more
+# of the sites sit on the other side
+sgm <- x$site_gradient
+sgl <- sgm$limits
+stopifnot(!is.null(sgm), nrow(sgl) > 0, sgm$segment$spearman > 0.5, sgm$segment$spearman < sgm$yardstick$spearman,
+          sgm$segment$absdiff_p50 > 0.01, sgm$segment$absdiff_p50 < 0.05, min(sgl$band_flips_pct) > 25,
+          max(sgl$band_flips_pct) < 50)
 ```
 
 The R package [`link`](https://newgraphenvironment.github.io/link/) maps where each fish species can live in British
@@ -368,6 +376,14 @@ knitr::kable(w[, c("species_code", "kept", "stream_branch", "fished_area", "in_r
   halves the segments in the four groups link measured it on, and the second removes a further 1 to 4 % in the five it
   was measured on. The thresholds have
   not yet been tuned on those segments.
+- Crews measured the slope of the channel at `r n0(sgm$measured)` of the `r n0(sgm$placed)` placed sites. On the
+  stretches the rules score, link's segment slope puts those sites in much the same order as the crews' readings (a
+  rank correlation of `r sgm$segment$spearman`, where 1 is the same order and a second reading at the same site gives
+  `r sgm$yardstick$spearman`), but differs from the site's by a median of
+  `r round(100 * sgm$segment$absdiff_p50, 1)` percentage points. So a tuned slope limit sorts sites well taken
+  together, but reads as a slope on the ground only to within a few points: of the sites within one step of a species'
+  limit, `r round(min(sgl$band_flips_pct))` to `r round(max(sgl$band_flips_pct))` % sit on the other side of it as the
+  crews measured it (`r issue("121")`).
 - Flows are 30-year averages, so no single dry year is in them.
 
 ## Which numbers shape the result, and which have been tested? {#settings}

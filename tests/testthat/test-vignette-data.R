@@ -137,3 +137,13 @@ test_that("the methodology bundle's funnel adds up and every register row was re
   expect_identical(f$n[1], 51587)
   expect_setequal(unique(x$resolved$key), x$settings$key)
 })
+
+test_that("the methodology bundle's site-gradient check covers every published gradient limit (#121)", {
+  skip_if_not(has_src, "no source-tree data/ (installed package)")
+  x <- readRDS(vd("method.rds"))
+  thr <- utils::read.csv(file.path(root, "data", "thresholds.csv"), stringsAsFactors = FALSE)
+  g <- thr[thr$component == "gradient" & !is.na(thr$value), ]
+  expect_setequal(x$site_gradient$limits$key, paste(g$species_code, g$stage, sep = "_"))
+  expect_true(all(x$site_gradient$limits$against == "segment_gradient"))
+  expect_lt(x$site_gradient$segment$spearman, x$site_gradient$yardstick$spearman)
+})

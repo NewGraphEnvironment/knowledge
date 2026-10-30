@@ -97,11 +97,9 @@ vs <- read_csv(file.path(evidence_dir, "visits_species.csv"), show_col_types = F
                col_types = cols(site_visit = "c"))
 walks <- read_csv(file.path(evidence_dir, "walks.csv"), show_col_types = FALSE)
 stopifnot(!anyDuplicated(vl$site_visit))
-v_all <- vl |>
-  mutate(meas = gradient_pct / 100, meas2 = gradient2_pct / 100,
-         at_visit = segment_start_offset_m >= -1 & segment_start_offset_m <= 5,
-         stream_branch = edge_type %in% edge_stream & !(wb_river %in% TRUE) & !(wb_wetland %in% TRUE) &
-           !(wb_lake %in% TRUE) & !is.na(area_m2) & area_m2 >= area_range[1] & area_m2 <= area_range[2])
+# the measured gradient on the rules' scale, and the tuning's stream branch (knw_site_gradient_visits(), which the
+# methodology bundle reads through too)
+v_all <- knw_site_gradient_visits(vl)
 v <- filter(v_all, !is.na(meas))
 sb <- filter(v, stream_branch)
 say(paste("Visits placed: %d. With a measured gradient: %d (a second reading: %d; both: %d). On the tuning's stream",
@@ -112,19 +110,7 @@ say("Missing modelled gradient among them: segment %d, Atlas line %d.", sum(is.n
     sum(is.na(v$fwa_gradient)))
 
 # ---- agreement -------------------------------------------------------------------------------------------------------
-agree <- function(m, g) {
-  ok <- !is.na(m) & !is.na(g)
-  m <- m[ok]
-  g <- g[ok]
-  pos <- m > 0 & g > 0
-  r <- m[pos] / g[pos]
-  q <- if (length(r)) quantile(r, c(0.1, 0.5, 0.9), names = FALSE) else rep(NA_real_, 3)
-  tibble(pairs = length(m), zero_pairs = sum(!pos), spearman = round(suppressWarnings(cor(m, g, method = "spearman")), 3),
-         log_r = round(if (sum(pos) > 2) cor(log(m[pos]), log(g[pos])) else NA_real_, 3),
-         ratio_p10 = round(q[1], 2), ratio_p50 = round(q[2], 2), ratio_p90 = round(q[3], 2),
-         absdiff_p50 = round(median(abs(m - g)), 4), absdiff_p90 = round(quantile(abs(m - g), 0.9, names = FALSE), 4),
-         model_higher_pct = round(100 * mean(g > m), 1))
-}
+agree <- knw_gradient_agree
 both_ways <- function(x, grp = NULL) {
   f <- function(d) bind_rows(segment = agree(d$meas, d$segment_gradient), atlas_line = agree(d$meas, d$fwa_gradient),
                              .id = "against")
@@ -168,18 +154,8 @@ lim <- thr |>
   filter(component == "gradient", !is.na(value)) |>   # every gradient limit the table publishes, whatever its status
   transmute(species_code, stage, key = paste(species_code, stage, sep = "_"), limit = as.numeric(value),
             n_visits = as.integer(n_visits))
-pop <- function(sp, stage) {
-  st <- vs[vs$species_code == sp, c("site_visit", "present", "status", "in_range")]
-  d <- merge(v_all[v_all$stream_branch, , drop = FALSE], st, by = "site_visit")
-  d <- d[d$in_range %in% TRUE & d$status != "blocked", , drop = FALSE]
-  bcol <- paste0("barrier_dnstr_", tolower(sp))
-  if (bcol %in% names(d)) d <- d[d[[bcol]] %in% FALSE, , drop = FALSE]
-  if (stage != "rear") return(d)
-  # knw_tune_score() scores the groups that hold both outcomes
-  d$wsg <- factor(d$watershed_group_code)
-  d$U <- as.integer(d$present)
-  .tune_modelled(d, "U")
-}
+# knw_tune_score() scores the groups that hold both outcomes (knw_site_gradient_population())
+pop <- function(sp, stage) knw_site_gradient_population(v_all, vs, sp, stage)
 pops <- lapply(setNames(seq_len(nrow(lim)), lim$key), function(i) pop(lim$species_code[i], lim$stage[i]))
 lim$population <- vapply(pops, nrow, integer(1))
 lim$with_measured <- vapply(pops, function(d) sum(!is.na(d$meas)), integer(1))
@@ -197,26 +173,7 @@ tunes <- lapply(setNames(lim$key, lim$key), function(k) {
   read_csv(file.path(tune_dir, paste0(k, "_tune.csv")), show_col_types = FALSE)
 })
 # a key's ladder is the gradient maxima its grid held: the fixed ladder plus its own defaults (knw_tune_grid())
-band_of <- function(t, lad) {
-  i <- match(TRUE, abs(lad - t) < 1e-9)
-  if (is.na(i)) stop("limit ", t, " is not on its key's ladder", call. = FALSE)
-  lo <- if (i == 1L) t - (lad[2] - lad[1]) else lad[i - 1L]
-  hi <- if (i == length(lad)) t + (t - lo) else lad[i + 1L]
-  c(lo, hi)
-}
-flip_tbl <- function(d, t, against, lad) {
-  g <- d[[against]]
-  ok <- !is.na(d$meas) & !is.na(g)
-  b <- band_of(t, lad)
-  inb <- ok & g > b[1] & g <= b[2]
-  inm <- ok & d$meas > b[1] & d$meas <= b[2]
-  fl <- (d$meas <= t) != (g <= t)
-  tibble(against = against, visits = sum(ok), flips_pct = round(100 * mean(fl[ok]), 1),
-         band = sprintf("(%g, %g]", b[1], b[2]), band_visits = sum(inb), band_flips_pct = round(100 * mean(fl[inb]), 1),
-         meas_band_visits = sum(inm), meas_band_flips_pct = round(100 * mean(fl[inm]), 1),
-         meas_on_limit = sum(ok & abs(d$meas - t) < 1e-9),
-         meas_above_model_below = sum(ok & d$meas > t & g <= t), meas_below_model_above = sum(ok & d$meas <= t & g > t))
-}
+flip_tbl <- knw_gradient_flips
 flips <- bind_rows(lapply(seq_len(nrow(lim)), function(i) {
   d <- pops[[i]]
   lad <- sort(unique(tunes[[i]]$grad_max))

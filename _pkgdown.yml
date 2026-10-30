@@ -74,6 +74,7 @@ reference:
       - knw_archive_pull
       - knw_archive_undo
       - knw_archive_index_read
+      - knw_site_gradient_visits
       - knw_run_ledger
       - knw_publish
       - knw_compare_rules
