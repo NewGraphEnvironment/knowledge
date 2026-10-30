@@ -19,10 +19,11 @@
 # for rearing (a spawning key's population also needs the spawner evidence, which is not read here, so its counts are
 # before that filter and before the groups filter). Flips: a visit flips at a limit when
 # its measured and modelled gradients lie on opposite sides of it; counted at every published gradient limit in
-# data/thresholds.csv, over the key's population and within the band of modelled gradients one step of the tuning's
-# ladder either side of the limit. Negative segment gradients: knw_rule_in() tests `0 <= gradient <= grad_max`, so a
-# negative one fails every rule's gradient test; each rule in a key's tracked tune table is tested at those visits as
-# they are and with the gradient set to 0.
+# data/thresholds.csv, over the key's population and within the band of modelled gradients one step either side of
+# the limit on the key's own ladder (the gradient maxima of its tracked tune table: the fixed ladder plus its
+# defaults). Negative segment gradients: knw_rule_in() tests `0 <= gradient <= grad_max`, so a negative one fails
+# every rule's gradient test; each rule in a key's tracked tune table is tested at those visits as they are and with
+# the gradient set to 0, where the key's population holds any.
 #
 # INPUT:  EVIDENCE_DIR/{visits_link,visits_species,walks}.csv (default data/fdis/derived; 0310's tables), held to the
 #         md5s data/thresholds.csv names unless EVIDENCE_CHECK=FALSE; TUNE_DIR/<key>_tune.csv (default data/tune, the
@@ -59,6 +60,9 @@ pub_md5 <- unique(na.omit(thr$evidence_md5))
 md5_here <- unname(tools::md5sum(file.path(evidence_dir, c("visits_link.csv", "visits_species.csv", "walks.csv"))))
 here <- paste(md5_here, collapse = ";")
 head_sha <- substr(system2("git", c("rev-parse", "HEAD"), stdout = TRUE), 1, 7)
+# the stamp names a commit only when the code that ran is that commit's
+dirty <- system2("git", c("status", "--porcelain", "--", "data-raw/site_gradient_check.R", "R"), stdout = TRUE)
+if (length(dirty)) head_sha <- paste0(head_sha, " with uncommitted changes to ", paste(trimws(dirty), collapse = ", "))
 say("Site gradient check, knowledge#121, knowledge %s. Evidence %s (visits_link, visits_species, walks md5 %s).",
     head_sha, home_rel(evidence_dir), paste(substr(md5_here, 1, 8), collapse = " "))
 published <- length(pub_md5) == 1L && identical(here, pub_md5)
@@ -116,7 +120,7 @@ both_ways <- function(x, grp = NULL) {
   x |> group_by(across(all_of(grp))) |> group_modify(~ f(.x)) |> ungroup()
 }
 two <- filter(v_all, !is.na(meas), !is.na(meas2))
-block("yardstick: the second reading against the first, at the same site (every visit with both)",
+block("yardstick: the first reading against the second, at the same site (every visit with both; ratio first/second)",
       agree(two$meas, two$meas2) |> rename(second_higher_pct = model_higher_pct))
 block("measured (first reading) against the modelled gradients, every visit with a measured gradient", both_ways(v))
 block("the same, on the tuning's stream branch", both_ways(sb))
@@ -170,23 +174,28 @@ lim$with_measured <- vapply(pops, function(d) sum(!is.na(d$meas)), integer(1))
 rear_mismatch <- lim$stage == "rear" & lim$population != lim$n_visits
 if (published && any(rear_mismatch)) {
   block("rearing populations against the tracked n_visits", lim[rear_mismatch, ])
-  writeLines(log_lines, path_txt)
+  writeLines(log_lines, sub("\\.txt$", "_refused.txt", path_txt))
   stop("a rearing key's population is not the tuning's: ", paste(lim$key[rear_mismatch], collapse = ", "),
        call. = FALSE)
 }
 block(paste("the published gradient limits and each key's population (rearing held to the tracked n_visits; a",
             "spawning key's is before the spawner and groups filters)"), lim)
 
-band_of <- function(t) {
-  i <- match(TRUE, abs(ladder - t) < 1e-9)
-  lo <- if (is.na(i) || i == 1L) t - (ladder[2] - ladder[1]) else ladder[i - 1L]
-  hi <- if (is.na(i) || i == length(ladder)) t + (t - lo) else ladder[i + 1L]
+tunes <- lapply(setNames(lim$key, lim$key), function(k) {
+  read_csv(file.path(tune_dir, paste0(k, "_tune.csv")), show_col_types = FALSE)
+})
+# a key's ladder is the gradient maxima its grid held: the fixed ladder plus its own defaults (knw_tune_grid())
+band_of <- function(t, lad) {
+  i <- match(TRUE, abs(lad - t) < 1e-9)
+  if (is.na(i)) stop("limit ", t, " is not on its key's ladder", call. = FALSE)
+  lo <- if (i == 1L) t - (lad[2] - lad[1]) else lad[i - 1L]
+  hi <- if (i == length(lad)) t + (t - lo) else lad[i + 1L]
   c(lo, hi)
 }
-flip_tbl <- function(d, t, against) {
+flip_tbl <- function(d, t, against, lad) {
   g <- d[[against]]
   ok <- !is.na(d$meas) & !is.na(g)
-  b <- band_of(t)
+  b <- band_of(t, lad)
   inb <- ok & g > b[1] & g <= b[2]
   inm <- ok & d$meas > b[1] & d$meas <= b[2]
   fl <- (d$meas <= t) != (g <= t)
@@ -198,11 +207,12 @@ flip_tbl <- function(d, t, against) {
 }
 flips <- bind_rows(lapply(seq_len(nrow(lim)), function(i) {
   d <- pops[[i]]
-  bind_rows(flip_tbl(d, lim$limit[i], "segment_gradient"), flip_tbl(d, lim$limit[i], "fwa_gradient")) |>
+  lad <- sort(unique(tunes[[i]]$grad_max))
+  bind_rows(flip_tbl(d, lim$limit[i], "segment_gradient", lad), flip_tbl(d, lim$limit[i], "fwa_gradient", lad)) |>
     mutate(key = lim$key[i], limit = lim$limit[i], .before = 1)
 }))
 block(paste("flips at each key's published limit, over the key's population (a reading on the limit is in, as the",
-            "rule's <= has it; band: modelled gradient one ladder step either side, mirrored at the ladder's top;",
+            "rule's <= has it; band: modelled gradient one step of the key's own ladder either side, mirrored at its top;",
             "meas_band: the same window on the measured gradient)"), flips)
 
 by_outcome <- bind_rows(lapply(seq_len(nrow(lim)), function(i) {
@@ -211,7 +221,8 @@ by_outcome <- bind_rows(lapply(seq_len(nrow(lim)), function(i) {
     dd <- d[d$present %in% p, , drop = FALSE]
     cbind(tibble(key = lim$key[i], present = p),
           agree(dd$meas, dd$segment_gradient) |> select(pairs, spearman, log_r, ratio_p10, ratio_p50, ratio_p90),
-          flip_tbl(dd, lim$limit[i], "segment_gradient") |> select(flips_pct, band_visits, band_flips_pct))
+          flip_tbl(dd, lim$limit[i], "segment_gradient", sort(unique(tunes[[i]]$grad_max))) |>
+            select(flips_pct, band_visits, band_flips_pct))
   }))
 }))
 block("by the species' outcome, against the segment gradient (each key's population)", by_outcome)
@@ -230,9 +241,12 @@ wi <- knw_walk_index(walks)
 neg_keys <- bind_rows(lapply(seq_len(nrow(lim)), function(i) {
   d <- pops[[i]]
   dn <- d[d$segment_gradient < 0, , drop = FALSE]
-  tune <- read_csv(file.path(tune_dir, paste0(lim$key[i], "_tune.csv")), show_col_types = FALSE)
+  tune <- tunes[[i]]
+  if (!nrow(dn)) {
+    return(tibble(key = lim$key[i], negative_visits = 0L, present = 0L, rules = nrow(tune), rules_moved = NA_integer_,
+                  in_region_moved = NA_integer_, recommended_moved_visits = NA_integer_, most_moved_visits = NA_integer_))
+  }
   rule_flips <- vapply(seq_len(nrow(tune)), function(j) {
-    if (!nrow(dn)) return(0L)
     r <- as.data.frame(tune[j, c("size_var", "size_min", "grad_max", "exc_q", "exc_d")])
     a <- knw_rule_in(dn, r, walks = wi)
     z <- dn
@@ -247,7 +261,8 @@ neg_keys <- bind_rows(lapply(seq_len(nrow(lim)), function(i) {
          most_moved_visits = max(c(0L, rule_flips)))
 }))
 block(paste("negative segment gradients in each key's population: rules in the tracked tune table whose in/out at",
-            "those visits changes when the gradient is 0"), neg_keys)
+            "those visits changes when the gradient is 0 (NA: no negative in the population, so nothing to test)"),
+      neg_keys)
 
 writeLines(log_lines, path_txt)
 message("Written ", path_txt)
