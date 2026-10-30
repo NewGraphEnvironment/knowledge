@@ -305,10 +305,11 @@ share of each species' scored visits whose measured and modelled gradients lie o
 - **At the limits.** Over each species' scored visits that carry a measured gradient, the share on the other side on
   the ground: CH rearing at 11 %, 6.4 % of 2,453; BT rearing at 30 %, 0.8 % of 4,427; CO and GR at 5.49 %, 25.8 % and
   11.7 %. BT spawning's scored visits need the spawner evidence, which the check does not read, so its figure is over
-  every BT rearing-range visit before that filter: at 13 %, 8.5 % of 5,660. Within one step of each species' own
-  ladder either side of its limit, 34 to 42 % of visits flip (CH 34 % of 218, BT spawning 34 % of 446): near a limit,
-  the modelled gradient says little about which side the site is on. A limit can still sort sites well in bulk,
-  because most sites are far from it, but read one as a slope on the ground only to within a few points.
+  every BT visit in the species' range before that filter and the groups filter (5,660 with a measured gradient,
+  against the 513 visits the tuning scored): at 13 %, 8.5 %. Within one step of each species' own ladder either side
+  of its limit, 34 to 42 % of visits flip (CH 34 % of 218, BT spawning 34 % of 446): near a limit, the modelled
+  gradient says little about which side the site is on. A limit can still sort sites well in bulk, because most sites
+  are far from it, but read one as a slope on the ground only to within a few points.
 - **With and without a catch.** Sites with fish are off by less in absolute terms (median 1.7 against 2.6 points), but
   mostly because they are gentler: within classes of measured gradient the gap nearly closes (1.2 against 1.6 points
   at 3 % or less, 6.2 against 6.0 above 13 %). On the scale-free measures they agree no better (rank r 0.64 against
@@ -333,10 +334,10 @@ and this measures how far apart they are.
 build `data/thresholds.csv` names), log `scripts/logs/habitat/20261030_site_gradient_check.txt`. Measured percent ÷ 100;
 stream branch is `knw_tune_run()`'s edge types and fished area with no river, wetland or lake (29,335 placed visits, as
 #92's check counts); each rearing key's population is held to its tracked `n_visits`. Log and ratio statistics use pairs
-where both are above 0 (487 of 16,279 are not). A reading exactly on a limit counts as in, as the rule's `<=` does (45
-visits at 13 %, 22 at 11 %). The band is the modelled gradient within one step either side of the limit on the species'
-own ladder (the gradient maxima of its tracked tune table), mirrored at the top; the log also gives the band on the
-measured gradient.
+where both are above 0 (against the segment gradient 487 of 16,279 are not, against the Atlas line 337). A reading
+exactly on a limit counts as in, as the rule's `<=` does (45 visits at 13 %, 22 at 11 %). The band is the modelled
+gradient within one step either side of the limit on the species' own ladder (the gradient maxima of its tracked tune
+table), mirrored at the top; the log also gives the band on the measured gradient.
 
 ## Supplement: Fish Data Submission workbooks (#21)
 

@@ -24,3 +24,8 @@
 - Tests: 298, one failure, `test-vignette-data.R` "every ignored source of the methodology article, where present, is
   unchanged": this checkout's ignored `data/fdis/derived` is the 2026-10-25 build (CLAUDE.md: it fails on a machine
   whose copies differ). Unrelated to the branch.
+- `/code-check branch` round 2 (`review-round2.md`): 8 fragile, 0 bugs; three inside round 1's fixes (the BT spawning
+  wording still named one filter; the stamp missed the tune tables and data/thresholds.csv and read a failed git as
+  clean; the `_refused` name was not freed). All fixed: git calls checked, TUNE_DIR logged, refused names through
+  `.knw_free_path()`, negatives subset NA-safe, the edge-type tabulation now in the log, the outcome block rearing
+  only, the zero-pair count per row.
