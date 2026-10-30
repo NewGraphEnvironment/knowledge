@@ -52,8 +52,9 @@ Approved by Al, 2026-10-30, with the plan:
 ## Phase 3: cred, upstream (decision 4)
 - [x] File the cred issue: cross-library key, trashed attachment, newest-of-several; reprex on the three keys
       (cred#40, filed 2026-10-30 at Al's request; he works it)
-- [ ] Re-run cred#35's reprex on ragnar 0.3.1 and note the result on cred#35
-- [ ] #122's body: the builds are blocked by the cred issue (a task in its plan, not a comment)
+- [x] Re-run cred#35's reprex on ragnar 0.3.1: handed to Al's cred session (2026-10-30); ragnar moves here only with
+      the cred tag
+- [x] #122's body: the builds are blocked by the cred issue (a task in its plan, not a comment)
 - [ ] With the cred tag, not before (cred 0.4.0 is unproven on ragnar 0.3.1's mirai ingest): upgrade ragnar to 0.3.1
       (`pak::pak("ragnar")`, CRAN) and cred from GitHub
       (`pak::pak("NewGraphEnvironment/cred")`; cred is not on CRAN, so "latest" is its GitHub tag and `main`)
@@ -76,7 +77,7 @@ Approved by Al, 2026-10-30, with the plan:
 ## Phase 6: docs (lands before the cred tag, except the README build lines in Phase 5)
 - [x] CLAUDE.md: `ACTION=query` works under cred ≥ 0.4.0 (cred#27); drop the "broken" note and the draft-issue pointer
 - [x] `0150` header/README: cred 0.4.0 floor for query (and a version check in the script's query branch)
-- [ ] Issue #122 body: correct the trash-inflated counts and the Hagen & Weber state
+- [x] Issue #122 body: correct the trash-inflated counts and the Hagen & Weber state
 
 Phases 1–3 run to a commit now. If the cred tag is not out when they are done, the branch is pushed and parked with a
 resume block; Phases 4–6 resume on it after the tag, and the PR opens then.
