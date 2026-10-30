@@ -144,10 +144,10 @@ with two additions from that gate: a link issue for the tokens the published bui
 - [x] commit the rebuilt bundle(s)
 
 ## Phase 5: #121 in the methodology article
-- [ ] Move `data-raw/site_gradient_check.R`'s flip and agreement computation into a package function both it and
+- [x] Move `data-raw/site_gradient_check.R`'s flip and agreement computation into a package function both it and
       `vignette_method.R` call, over every published gradient limit (underpowered included; `vignette_method.R`'s
       `"fitted"`-only filter would drop WCT rearing)
-- [ ] The limits section of `vignettes/habitat_thresholds.Rmd`: a tuned gradient limit sorts sites well in bulk but
+- [x] The limits section of `vignettes/habitat_thresholds.Rmd`: a tuned gradient limit sorts sites well in bulk but
       reads as a slope on the ground only to within a few points (`research/fdis_export.md`, "Measured vs modelled
       gradient"); numbers inline with `stopifnot()`; rebuild `method.rds` (after Phase 4's comparison), revise pins and
       the settings register where they move

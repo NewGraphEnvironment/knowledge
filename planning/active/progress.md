@@ -37,3 +37,8 @@ cd /Users/airvine/Projects/repo/knowledge && git fetch -q origin && git checkout
 - Phase 4 done: seed from m4 (8 keys), backfilled records (3d647a4), archive (1e7dbb8: 39 objects, 3.2 GB), proof in
   two worktrees (identical; published differs only in the four meta fields named in advance), tests 1752 pass in the
   restored worktree; rebuilt `method.rds` committed; chinook bundle kept (last-bit BLAS difference only).
+- Phase 5 done: `R/site_gradient.R` carries #121's computation (site_gradient_check.R's 344-line log identical
+  before and after on the published evidence); `vignette_method.R` adds `site_gradient`; rebuilt in the restored
+  worktree at 7d45bed (only `site_gradient` and meta's `commit`/`md5` move; md5 gains thresholds.csv and
+  WCT_rear_tune.csv); tests 1775 pass there; the article renders "rank correlation 0.69 … 0.90 … median of 2.2 points
+  … 1,307 in all, 37 %". The range 33–42 % was dropped for the pooled share: its ends rested on bands of 3 and 15 sites.
