@@ -118,4 +118,4 @@ PWFWCP report 337 is Ballard & Shrimpton (2009), an Omineca grayling synopsis, a
 | Error | Resolution |
 |-------|------------|
 | `habitat_modelling_members.csv` rewritten whole (CRLF lost) by a text-mode replace | Byte-level replace (`rb`/`wb`) |
-| `sed -i ''` on this Mac's GNU sed takes `''` as a file | Edit CSVs with Python's csv module |
+| `sed -i` failed (`extra characters at the end of p command`): the shell's `sed` is BSD, and `-i` takes a suffix; a later `sed -i ''` ran but missed a CSV-quoted field | Edit planning files and CSVs with Python (csv module for CSVs) |
