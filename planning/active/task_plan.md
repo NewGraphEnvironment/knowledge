@@ -50,11 +50,11 @@ Approved by Al at plan approval, 2026-10-30, as recommended:
    p10–p90 over pairs where both are above 0 (the width comparison's measures), with the count of zero pairs beside.
 
 ## Phase 1: What the two gradient fields measure
-- [ ] Find the RISC site card field guide (Zotero group library first, then the BC government's RISC pages) and read
+- [x] Find the RISC site card field guide (Zotero group library first, then the BC government's RISC pages) and read
       its definition of the two gradient slots and their method codes; record source and page in `findings.md`.
-- [ ] Measure how `gradient2_pct` stands against `gradient_pct` where both exist (count, median difference, share
+- [x] Measure how `gradient2_pct` stands against `gradient_pct` where both exist (count, median difference, share
       higher), to test 0230's "runs higher".
-- [ ] Decide from the two whether `gradient2_pct` is reported as a second comparison or left out, and write why.
+- [x] Decide from the two whether `gradient2_pct` is reported as a second comparison or left out, and write why.
 
 ## Phase 2: The check script, `data-raw/site_gradient_check.R`
 - [ ] Header in the house form (question, METHOD, INPUT, OUTPUT, RUN); reads `EVIDENCE_DIR` (default

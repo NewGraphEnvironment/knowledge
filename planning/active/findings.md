@@ -29,6 +29,32 @@ Taken from link's issue on observation points (`NewGraphEnvironment/link#294`, i
 
 
 
+## What the form's two gradient fields measure (Phase 1, 2026-10-30)
+
+- **The card.** RISC, *Reconnaissance (1:20,000) Fish and Fish Habitat Inventory: Site Card Field Guide*, Version 2.0,
+  April 2008 (www2.gov.bc.ca `.../risc/sitecard20.pdf`), p. 13, "Gradient %": "Definition: The slope, or rate of
+  vertical drop per unit of length, of the channel bed. Method: Measure at a minimum of two sites along the sample site
+  over as long a distance as possible." Recording: "Record the method code to the nearest 0.5%" with codes GE (ground
+  estimate), C (clinometer), AL (Abney type level), MAP, S (surveying equipment), GIS, O, NS. Elaboration: keep the
+  channel length as long as possible, upstream and downstream; on shorter sections sight between similar habitat units
+  (riffle crest to riffle crest). The card front (`scf.pdf`) has a GRADIENT % box of two rows of two cells with a method
+  column.
+- **The database.** `FDIS_SITE_SURVEYS` carries `GRADNT1_MTH_CODE` and `GRADNT2_MTH_CODE` (one method code per row of
+  the box); the values sit in `FDIS_SITE_MEASUREMENTS` (`MEASURE_TP_CODE`, `SEQUENCE_NUMBER`, `MEASUREMENT`). So
+  `GRADIENT<t><s>` in the export reads as measurement type t (gradient 1 or 2, each with its own method) and sequence s
+  (the two places along the site). The export carries neither method code, so which method a value came from is not
+  known: a GIS or map reading recorded as gradient 1 cannot be told from a clinometer reading.
+  `0230` takes `gradient_pct` as the mean of `GRADIENT11/12`, `gradient2_pct` of `21/22`.
+- **The two against each other** (published build `1bd35829`): 18,759 visits have `gradient_pct`, 9,397
+  `gradient2_pct`, 9,389 both, 8 the second alone; 55 have a negative `segment_gradient`, none an NA one (the issue's
+  counts, reproduced). Where both exist: median difference 0 (p10 −3, p90 +3.5 points), second higher at 47 %, equal at
+  12 %, lower at 42 %; Spearman 0.90; median 5.5 % each; ratio second/first p10 0.63, median 1, p90 1.67.
+  0230's comment that the second "runs higher" does not hold on this build as a typical difference.
+- **Decision.** `gradient_pct` is the measured gradient compared. `gradient2_pct` is reported in one block as a second
+  comparison, and the first-against-second spread (ratio p10–p90 0.63–1.67) is reported as the yardstick: how far two
+  readings at the same site, by possibly different methods, already disagree. A modelled gradient cannot be expected to
+  agree with a reading better than two readings agree with each other.
+
 ## Errors Encountered
 
 | Error | Resolution |
