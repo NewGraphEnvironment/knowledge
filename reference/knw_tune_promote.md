@@ -4,17 +4,18 @@
 `scripts/0330` compares it into `data/compare/candidate/<run>/`, both
 ignored, so iterating changes nothing tracked (#111). Promotion, on the
 operator's word, moves the run in: every file of each promoted key (its
-tables and the ignored grades, curve, score cache, segments and
-GeoPackage), its Atlas-gradient sensitivity, the run's logs, its
-figures, and its rows of the tables that hold every key (`compare.csv`,
-`change.csv`, `checks.csv`, `floodplain.csv`). A key's files are moved,
-not copied (its grades and GeoPackage run to gigabytes), so a promoted
-key leaves the run's directory; the logs are copied. A tracked file of a
-promoted key that the run did not write is removed, so no key is left
-half one run and half another. Every file replaced or removed is first
-moved to `candidate/replaced_<stamp>/` under the two directories, itself
-a candidate, so a promotion is undone by promoting that (the logs it
-added, and files it added where none stood, then stay).
+tables, the grade tables' records, and the ignored grades, curve, score
+cache, segments and GeoPackage), its Atlas-gradient sensitivity, the
+run's logs, its figures, and its rows of the tables that hold every key
+(`compare.csv`, `change.csv`, `checks.csv`, `floodplain.csv`). A key's
+files are moved, not copied (its grades and GeoPackage run to
+gigabytes), so a promoted key leaves the run's directory; the logs are
+copied. A tracked file of a promoted key that the run did not write is
+removed, so no key is left half one run and half another. Every file
+replaced or removed is first moved to `candidate/replaced_<stamp>/`
+under the two directories, itself a candidate, so a promotion is undone
+by promoting that (the logs it added, and files it added where none
+stood, then stay).
 
 ## Usage
 
@@ -80,6 +81,10 @@ tuned structure across every key, so a promotion that would leave two is
 refused before anything moves, naming the field and the kept keys that
 would have to come along. After a change upstream (a new link run or
 evidence build) that means every fitted key moves together. Each
+promoted key's grades must carry their record
+([`knw_grade_record_write()`](https://newgraphenvironment.github.io/knowledge/reference/knw_grade_record_write.md))
+and match it (md5 and size; a `replaced_*` archive may lack one), and
+kept keys are read from their records where the tables are absent. Each
 promoted key's grades must be of its recommended rule on its own
 evidence, and its comparison of the same rule and made after its grades.
 

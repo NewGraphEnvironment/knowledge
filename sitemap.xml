@@ -9,6 +9,12 @@
 <url><loc>https://newgraphenvironment.github.io/knowledge/news/index.html</loc></url>
 <url><loc>https://newgraphenvironment.github.io/knowledge/reference/index.html</loc></url>
 <url><loc>https://newgraphenvironment.github.io/knowledge/reference/knowledge-package.html</loc></url>
+<url><loc>https://newgraphenvironment.github.io/knowledge/reference/knw_archive_index_read.html</loc></url>
+<url><loc>https://newgraphenvironment.github.io/knowledge/reference/knw_archive_plan.html</loc></url>
+<url><loc>https://newgraphenvironment.github.io/knowledge/reference/knw_archive_pull.html</loc></url>
+<url><loc>https://newgraphenvironment.github.io/knowledge/reference/knw_archive_put.html</loc></url>
+<url><loc>https://newgraphenvironment.github.io/knowledge/reference/knw_archive_setup.html</loc></url>
+<url><loc>https://newgraphenvironment.github.io/knowledge/reference/knw_archive_undo.html</loc></url>
 <url><loc>https://newgraphenvironment.github.io/knowledge/reference/knw_bcfishobs_match.html</loc></url>
 <url><loc>https://newgraphenvironment.github.io/knowledge/reference/knw_build_record.html</loc></url>
 <url><loc>https://newgraphenvironment.github.io/knowledge/reference/knw_compare_map.html</loc></url>
@@ -23,6 +29,7 @@
 <url><loc>https://newgraphenvironment.github.io/knowledge/reference/knw_floodplain_ha.html</loc></url>
 <url><loc>https://newgraphenvironment.github.io/knowledge/reference/knw_gnis_collisions.html</loc></url>
 <url><loc>https://newgraphenvironment.github.io/knowledge/reference/knw_grade.html</loc></url>
+<url><loc>https://newgraphenvironment.github.io/knowledge/reference/knw_grade_record_write.html</loc></url>
 <url><loc>https://newgraphenvironment.github.io/knowledge/reference/knw_grade_species.html</loc></url>
 <url><loc>https://newgraphenvironment.github.io/knowledge/reference/knw_ip_read.html</loc></url>
 <url><loc>https://newgraphenvironment.github.io/knowledge/reference/knw_ip_vocab.html</loc></url>
@@ -43,6 +50,7 @@
 <url><loc>https://newgraphenvironment.github.io/knowledge/reference/knw_publish.html</loc></url>
 <url><loc>https://newgraphenvironment.github.io/knowledge/reference/knw_rule_in.html</loc></url>
 <url><loc>https://newgraphenvironment.github.io/knowledge/reference/knw_run_ledger.html</loc></url>
+<url><loc>https://newgraphenvironment.github.io/knowledge/reference/knw_site_gradient_visits.html</loc></url>
 <url><loc>https://newgraphenvironment.github.io/knowledge/reference/knw_size_class.html</loc></url>
 <url><loc>https://newgraphenvironment.github.io/knowledge/reference/knw_spawner_evidence.html</loc></url>
 <url><loc>https://newgraphenvironment.github.io/knowledge/reference/knw_species.html</loc></url>

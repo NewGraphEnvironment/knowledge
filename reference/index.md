@@ -126,6 +126,35 @@ run in one call for every species and stage the evidence can speak to.
 - [`knw_tune_promote()`](https://newgraphenvironment.github.io/knowledge/reference/knw_tune_promote.md)
   : Promote a candidate tuning run into the tracked tables
 
+- [`knw_grade_record_write()`](https://newgraphenvironment.github.io/knowledge/reference/knw_grade_record_write.md)
+  [`knw_grade_record_read()`](https://newgraphenvironment.github.io/knowledge/reference/knw_grade_record_write.md)
+  [`knw_grade_record_check()`](https://newgraphenvironment.github.io/knowledge/reference/knw_grade_record_write.md)
+  : A grade table's record: what the run made, in one tracked row
+
+- [`knw_archive_setup()`](https://newgraphenvironment.github.io/knowledge/reference/knw_archive_setup.md)
+  : Where the archive keeps a run: its setup folder
+
+- [`knw_archive_plan()`](https://newgraphenvironment.github.io/knowledge/reference/knw_archive_plan.md)
+  : What the archive stores for a run, and where
+
+- [`knw_archive_put()`](https://newgraphenvironment.github.io/knowledge/reference/knw_archive_put.md)
+  : Store a run in the archive, and record where
+
+- [`knw_archive_pull()`](https://newgraphenvironment.github.io/knowledge/reference/knw_archive_pull.md)
+  : Restore a run from the archive into a tree's ignored data/
+
+- [`knw_archive_undo()`](https://newgraphenvironment.github.io/knowledge/reference/knw_archive_undo.md)
+  : Record an undone promotion in the archive's index
+
+- [`knw_archive_index_read()`](https://newgraphenvironment.github.io/knowledge/reference/knw_archive_index_read.md)
+  : The archive's index: what is stored where
+
+- [`knw_site_gradient_visits()`](https://newgraphenvironment.github.io/knowledge/reference/knw_site_gradient_visits.md)
+  [`knw_site_gradient_population()`](https://newgraphenvironment.github.io/knowledge/reference/knw_site_gradient_visits.md)
+  [`knw_gradient_agree()`](https://newgraphenvironment.github.io/knowledge/reference/knw_site_gradient_visits.md)
+  [`knw_gradient_flips()`](https://newgraphenvironment.github.io/knowledge/reference/knw_site_gradient_visits.md)
+  : How a measured site gradient compares with a modelled one
+
 - [`knw_run_ledger()`](https://newgraphenvironment.github.io/knowledge/reference/knw_run_ledger.md)
   : The evidence ledger a set of tuning tables was scored on
 

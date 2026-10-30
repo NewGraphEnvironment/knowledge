@@ -3,7 +3,8 @@
 scripts/0330 compares it into data/compare/candidate/&amp;lt;run&amp;gt;/, both
 ignored, so iterating changes nothing tracked (#111). Promotion, on the
 operator's word, moves the run in: every file of each promoted key (its
-tables and the ignored grades, curve, score cache, segments and GeoPackage),
+tables, the grade tables' records, and the ignored grades, curve, score
+cache, segments and GeoPackage),
 its Atlas-gradient sensitivity, the run's logs, its figures, and its rows of
 the tables that hold every key (compare.csv, change.csv, checks.csv,
 floodplain.csv). A key's files are moved, not copied (its grades and
@@ -17,7 +18,8 @@ stay)."><meta property="og:description" content="scripts/0320 writes a full run 
 scripts/0330 compares it into data/compare/candidate/&amp;lt;run&amp;gt;/, both
 ignored, so iterating changes nothing tracked (#111). Promotion, on the
 operator's word, moves the run in: every file of each promoted key (its
-tables and the ignored grades, curve, score cache, segments and GeoPackage),
+tables, the grade tables' records, and the ignored grades, curve, score
+cache, segments and GeoPackage),
 its Atlas-gradient sensitivity, the run's logs, its figures, and its rows of
 the tables that hold every key (compare.csv, change.csv, checks.csv,
 floodplain.csv). A key's files are moved, not copied (its grades and
@@ -70,7 +72,8 @@ stay)."><meta property="og:image" content="https://newgraphenvironment.github.io
 <code>scripts/0330</code> compares it into <code>data/compare/candidate/&lt;run&gt;/</code>, both
 ignored, so iterating changes nothing tracked (#111). Promotion, on the
 operator's word, moves the run in: every file of each promoted key (its
-tables and the ignored grades, curve, score cache, segments and GeoPackage),
+tables, the grade tables' records, and the ignored grades, curve, score
+cache, segments and GeoPackage),
 its Atlas-gradient sensitivity, the run's logs, its figures, and its rows of
 the tables that hold every key (<code>compare.csv</code>, <code>change.csv</code>, <code>checks.csv</code>,
 <code>floodplain.csv</code>). A key's files are moved, not copied (its grades and
@@ -149,7 +152,10 @@ gradient, reference edges, flow load, walk, link config and tuned structure
 across every key, so a promotion that would leave two is refused before
 anything moves, naming the field and the kept keys that would have to come
 along. After a change upstream (a new link run or evidence build) that means
-every fitted key moves together. Each promoted key's grades must be of its
+every fitted key moves together. Each promoted key's grades must carry their
+record (<code><a href="knw_grade_record_write.html">knw_grade_record_write()</a></code>) and match it (md5 and size; a
+<code>replaced_*</code> archive may lack one), and kept keys are read from their
+records where the tables are absent. Each promoted key's grades must be of its
 recommended rule on its own evidence, and its comparison of the same rule and
 made after its grades.</p>
     </div>

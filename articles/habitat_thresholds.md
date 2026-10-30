@@ -427,6 +427,17 @@ style="width:100%;"}
   measured it on, and the second removes a further 1 to 4 % in the five
   it was measured on. The thresholds have not yet been tuned on those
   segments.
+- Crews measured the slope of the channel at 18,759 of the 45,529 placed
+  sites. On the stretches the rules score, link’s segment slope puts
+  those sites in much the same order as the crews’ readings (a rank
+  correlation of 0.69, where 1 is the same order and a second reading at
+  the same site gives 0.90), but differs from the site’s by a median of
+  2.2 percentage points. So a tuned slope limit sorts sites well taken
+  together, but reads as a slope on the ground only to within a few
+  points: counting each species’ sites within one step of its own limit
+  (1,307 in all), 37 % sit on the other side of it as the crews measured
+  it
+  ([\#121](https://github.com/NewGraphEnvironment/knowledge/issues/121)).
 - Flows are 30-year averages, so no single dry year is in them.
 
 ## Which numbers shape the result, and which have been tested?
@@ -530,8 +541,8 @@ packages [`link`](https://newgraphenvironment.github.io/link/)
 [`fresh`](https://newgraphenvironment.github.io/fresh/) (the habitat
 tests) and
 [`knowledge`](https://newgraphenvironment.github.io/knowledge/) (the
-evidence and the tuning). This article’s data were written on 2026-10-28
-at commit 9418f8c. To cite this package:
+evidence and the tuning). This article’s data were written on 2026-10-30
+at commit 7d45bed. To cite this package:
 
 Irvine A (2026). *knowledge: Fisheries Evidence and Tuned Habitat
 Thresholds for BC Watershed Groups*. New Graph Environment Ltd. Version

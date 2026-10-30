@@ -94,8 +94,11 @@ several, is refused.</p></dd>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A list: <code>schema</code>, <code>run_uid</code> (the schema's runs, <code>;</code>-joined),
-<code>discharge_load</code>, <code>walk_md5</code>, <code>fresh_version</code>, and <code>line</code>, the record as one
-line for a log.</p>
+<code>discharge_load</code>, <code>walk_md5</code>, <code>fresh_version</code>, <code>tokens</code> (link's output
+vocabulary, <code>c(cut =, acc =, grad =, flow =)</code>, each <code>NA</code> where the schema's
+run log predates link 0.70.0 and carries none), and <code>line</code>, the record as
+one line for a log. A schema whose runs logged two values on one axis is
+refused.</p>
     </div>
 
     <div class="section level2">

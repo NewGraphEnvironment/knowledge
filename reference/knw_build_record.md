@@ -38,8 +38,11 @@ knw_build_record(conn, schema, run_uid = NULL)
 ## Value
 
 A list: `schema`, `run_uid` (the schema's runs, `;`-joined),
-`discharge_load`, `walk_md5`, `fresh_version`, and `line`, the record as
-one line for a log.
+`discharge_load`, `walk_md5`, `fresh_version`, `tokens` (link's output
+vocabulary, `c(cut =, acc =, grad =, flow =)`, each `NA` where the
+schema's run log predates link 0.70.0 and carries none), and `line`, the
+record as one line for a log. A schema whose runs logged two values on
+one axis is refused.
 
 ## Examples
 
