@@ -57,28 +57,30 @@ Approved by Al at plan approval, 2026-10-30, as recommended:
 - [x] Decide from the two whether `gradient2_pct` is reported as a second comparison or left out, and write why.
 
 ## Phase 2: The check script, `data-raw/site_gradient_check.R`
-- [ ] Header in the house form (question, METHOD, INPUT, OUTPUT, RUN); reads `EVIDENCE_DIR` (default
+- [x] Header in the house form (question, METHOD, INPUT, OUTPUT, RUN); reads `EVIDENCE_DIR` (default
       `data/fdis/derived`), logs the md5s and whether they are the published build's, refuses a mismatch unless
       `EVIDENCE_CHECK=FALSE`; writes `scripts/logs/habitat/<yyyymmdd>_site_gradient_check.txt` via
       `.knw_free_path()`, refused runs as `_refused`.
-- [ ] Populations: every placed visit with a measured gradient, and the tuning's stream branch (edge types and fished
+- [x] Populations: every placed visit with a measured gradient, and the tuning's stream branch (edge types and fished
       area from `knw_tune_run()`'s formals, as `segment_gradient_check.R` does). Counts at each filter.
-- [ ] Agreement against `segment_gradient` and `fwa_gradient` (Decision 3), overall and by segment length
+- [x] Agreement against `segment_gradient` and `fwa_gradient` (Decision 3), overall and by segment length
       (`len_breaks`), stream order, and the measured value's class on the tuning ladder.
-- [ ] The band: for each published gradient limit in `data/thresholds.csv` (CH rearing, BT rearing, BT spawning,
+- [x] The band: for each published gradient limit in `data/thresholds.csv` (CH rearing, BT rearing, BT spawning,
       and the rest for completeness), the share of visits whose measured and modelled gradients fall on opposite
       sides of it, over all visits and within the ladder steps either side of the limit (CH 0.09–0.13, BT rearing
       0.25–0.30, BT spawning 0.11–0.15).
-- [ ] By catch: the error and the flip shares by `catch_status`, and by species outcome (in range, present or
+- [x] By catch: the error and the flip shares by `catch_status`, and by species outcome (in range, present or
       absent) for the tuned keys, and by whether the segment starts at the visit (`segment_start_offset_m` −1 to 5 m).
-- [ ] Negative `segment_gradient`: count, values, segment lengths and Atlas lines; which tuned keys' populations hold
+- [x] Negative `segment_gradient`: count, values, segment lengths and Atlas lines; which tuned keys' populations hold
       them; whether any rule's in/out at those visits changes if they were 0 (every ladder value is ≥ 0.03, so this
       is expected to be none, and the script states it from the data, not by assertion).
-- [ ] Run it on the published build (`EVIDENCE_DIR=` the copy of the published inputs);
+      Corrected by the plan review: a negative gradient fails every rule (`R/rule_in.R:71`), so at 0 a visit can
+      move in; on the published build none of the 55 is in any key's population, so none moves.
+- [x] Run it on the published build (`EVIDENCE_DIR=` the copy of the published inputs);
       commit the log.
 
 ## Phase 3: Whether a negative gradient reaches a pick through the curves
-- [ ] Read `R/tune_curve.R` and `R/tune_run.R` for where `segment_gradient` enters other than the rule's
+- [x] Read `R/tune_curve.R` and `R/tune_run.R` for where `segment_gradient` enters other than the rule's
       threshold (the GAM curve and its prior), and record whether a negative value can move a curve or a pick; if it
       can, count the visits involved per key and report, without retuning (a retune is Al's call).
 
