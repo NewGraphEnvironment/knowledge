@@ -59,17 +59,24 @@ thr <- read_csv("data/thresholds.csv", show_col_types = FALSE, col_types = cols(
 pub_md5 <- unique(na.omit(thr$evidence_md5))
 md5_here <- unname(tools::md5sum(file.path(evidence_dir, c("visits_link.csv", "visits_species.csv", "walks.csv"))))
 here <- paste(md5_here, collapse = ";")
-head_sha <- substr(system2("git", c("rev-parse", "HEAD"), stdout = TRUE), 1, 7)
-# the stamp names a commit only when the code that ran is that commit's
-dirty <- system2("git", c("status", "--porcelain", "--", "data-raw/site_gradient_check.R", "R"), stdout = TRUE)
+# the stamp names a commit only when the code and tracked inputs that ran are that commit's; a git that fails stops
+# the run rather than reading as clean (system2() only warns)
+git_out <- function(args) {
+  out <- suppressWarnings(system2("git", args, stdout = TRUE))
+  if (!is.null(attr(out, "status"))) stop("git ", paste(args, collapse = " "), " failed", call. = FALSE)
+  out
+}
+head_sha <- substr(git_out(c("rev-parse", "HEAD")), 1, 7)
+dirty <- git_out(c("status", "--porcelain", "--", "data-raw/site_gradient_check.R", "R", "data/thresholds.csv", tune_dir))
 if (length(dirty)) head_sha <- paste0(head_sha, " with uncommitted changes to ", paste(trimws(dirty), collapse = ", "))
-say("Site gradient check, knowledge#121, knowledge %s. Evidence %s (visits_link, visits_species, walks md5 %s).",
-    head_sha, home_rel(evidence_dir), paste(substr(md5_here, 1, 8), collapse = " "))
+say(paste("Site gradient check, knowledge#121, knowledge %s. Evidence %s (visits_link, visits_species, walks md5 %s);",
+          "tune tables %s."),
+    head_sha, home_rel(evidence_dir), paste(substr(md5_here, 1, 8), collapse = " "), home_rel(tune_dir))
 published <- length(pub_md5) == 1L && identical(here, pub_md5)
 if (!published) {
   say("NOT the published build: data/thresholds.csv names %s.", paste(substr(pub_md5, 1, 8), collapse = ", "))
   if (evidence_check) {
-    writeLines(log_lines, sub("\\.txt$", "_refused.txt", path_txt))
+    writeLines(log_lines, .knw_free_path(sub("\\.txt$", "_refused.txt", path_txt)))
     stop("evidence is not the published build; set EVIDENCE_DIR to it, or EVIDENCE_CHECK=FALSE to run on this one",
          call. = FALSE)
   }
@@ -174,7 +181,7 @@ lim$with_measured <- vapply(pops, function(d) sum(!is.na(d$meas)), integer(1))
 rear_mismatch <- lim$stage == "rear" & lim$population != lim$n_visits
 if (published && any(rear_mismatch)) {
   block("rearing populations against the tracked n_visits", lim[rear_mismatch, ])
-  writeLines(log_lines, sub("\\.txt$", "_refused.txt", path_txt))
+  writeLines(log_lines, .knw_free_path(sub("\\.txt$", "_refused.txt", path_txt)))
   stop("a rearing key's population is not the tuning's: ", paste(lim$key[rear_mismatch], collapse = ", "),
        call. = FALSE)
 }
@@ -215,7 +222,8 @@ block(paste("flips at each key's published limit, over the key's population (a r
             "rule's <= has it; band: modelled gradient one step of the key's own ladder either side, mirrored at its top;",
             "meas_band: the same window on the measured gradient)"), flips)
 
-by_outcome <- bind_rows(lapply(seq_len(nrow(lim)), function(i) {
+# rearing keys only: a spawning key's outcome is spawner evidence, which is not read here
+by_outcome <- bind_rows(lapply(which(lim$stage == "rear"), function(i) {
   d <- pops[[i]]
   bind_rows(lapply(c(TRUE, FALSE), function(p) {
     dd <- d[d$present %in% p, , drop = FALSE]
@@ -225,7 +233,8 @@ by_outcome <- bind_rows(lapply(seq_len(nrow(lim)), function(i) {
             select(flips_pct, band_visits, band_flips_pct))
   }))
 }))
-block("by the species' outcome, against the segment gradient (each key's population)", by_outcome)
+block("by the species' outcome (caught or not), against the segment gradient (each rearing key's population)",
+      by_outcome)
 
 # ---- negative segment gradients --------------------------------------------------------------------------------------
 neg <- filter(v_all, segment_gradient < 0)
@@ -237,10 +246,13 @@ say(paste("Negative segment gradients: %d placed visits (%d on the stream branch
     paste(round(quantile(neg$segment_length_m, c(0, 0.5, 1), names = FALSE), 1), collapse = "/"),
     paste(signif(quantile(neg$fwa_gradient, c(0, 0.5, 1), names = FALSE), 3), collapse = "/"),
     sum(neg$linear_feature_id == neg$segment_linear_feature_id, na.rm = TRUE))
+block("negative segment gradients by edge type and waterbody",
+      count(neg, edge_type, stream_branch, wb_river = wb_river %in% TRUE, wb_wetland = wb_wetland %in% TRUE,
+            wb_lake = wb_lake %in% TRUE))
 wi <- knw_walk_index(walks)
 neg_keys <- bind_rows(lapply(seq_len(nrow(lim)), function(i) {
   d <- pops[[i]]
-  dn <- d[d$segment_gradient < 0, , drop = FALSE]
+  dn <- d[(d$segment_gradient < 0) %in% TRUE, , drop = FALSE]   # a missing gradient is not a negative one
   tune <- tunes[[i]]
   if (!nrow(dn)) {
     return(tibble(key = lim$key[i], negative_visits = 0L, present = 0L, rules = nrow(tune), rules_moved = NA_integer_,
