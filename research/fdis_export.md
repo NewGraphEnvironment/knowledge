@@ -303,13 +303,14 @@ share of each species' scored visits whose measured and modelled gradients lie o
   site reads steeper than the segment (median ratio 1.24 and 2.05). On river, wetland and lake segments, which the
   tuning does not score, it barely agrees (rank r 0.37, 0.21, 0.33).
 - **At the limits.** Over each species' scored visits that carry a measured gradient, the share on the other side on
-  the ground: CH rearing at 11 %, 6.4 % of 2,453; BT rearing at 30 %, 0.8 % of 4,427; CO and GR at 5.49 %, 25.8 % and
-  11.7 %. BT spawning's scored visits need the spawner evidence, which the check does not read, so its figure is over
-  every BT visit in the species' range before that filter and the groups filter (5,660 with a measured gradient,
-  against the 513 visits the tuning scored): at 13 %, 8.5 %. Within one step of each species' own ladder either side
-  of its limit, 34 to 42 % of visits flip (CH 34 % of 218, BT spawning 34 % of 446): near a limit, the modelled
-  gradient says little about which side the site is on. A limit can still sort sites well in bulk, because most sites
-  are far from it, but read one as a slope on the ground only to within a few points.
+  the ground: CH rearing at 11 %, 6.4 % of 2,453; BT rearing at 30 %, 0.8 % of 4,427; WCT rearing at 25 %, 0.7 % of
+  461; CO and GR at 5.49 %, 25.8 % and 11.7 %. BT spawning's scored visits need the spawner evidence, which the check
+  does not read, so its figure is over the BT visits that pass every other filter of the tuning's (stream branch, in
+  range, not blocked, no barrier downstream; 11,805 visits, 5,660 with a measured gradient) but not the spawner and
+  groups filters, against the 513 visits the tuning scored: at 13 %, 8.5 %. Within one step of each species' own
+  ladder either side of its limit, 33 to 42 % of visits flip (CH 34 % of 218, BT spawning 34 % of 446): near a limit,
+  the modelled gradient says little about which side the site is on. A limit can still sort sites well in bulk,
+  because most sites are far from it, but read one as a slope on the ground only to within a few points.
 - **With and without a catch.** Sites with fish are off by less in absolute terms (median 1.7 against 2.6 points), but
   mostly because they are gentler: within classes of measured gradient the gap nearly closes (1.2 against 1.6 points
   at 3 % or less, 6.2 against 6.0 above 13 %). On the scale-free measures they agree no better (rank r 0.64 against
