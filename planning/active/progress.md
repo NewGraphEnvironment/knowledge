@@ -30,3 +30,7 @@ cd /Users/airvine/Projects/repo/knowledge && git fetch -q origin && git checkout
   and `zstd` mocked; mutations (promoted-run guard, restore md5 check) each turn a test red.
   Deviation from the plan text: the evidence id is the MANIFEST's full md5, and the index's `source` is the file's
   path in a checkout (`data/...`), so a candidate's files restore to where the tracked tables expect them.
+- Phase 3 done 2026-10-30: lifecycle (Standard-IA kept; abort multipart 7 d; noncurrent 180 d on archive/knowledge/,
+  30 d on each other top-level prefix and archive child: 15 rules) then versioning Enabled, both read back. Before
+  it: 0 noncurrent versions, 41 delete markers, so nothing existing was expired. Real round trip under
+  archive/knowledge/_test/ (11 objects; second put sent nothing; restore md5-identical), its 11 versions deleted.

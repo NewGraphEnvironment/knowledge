@@ -115,12 +115,12 @@ with two additions from that gate: a link issue for the tokens the published bui
       the archive (including: a new top-level prefix has no noncurrent expiry until it gets a rule)
 
 ## Phase 3: The bucket (Al runs or approves each command)
-- [ ] `put-bucket-versioning Status=Enabled`; `put-bucket-lifecycle-configuration` keeping the Standard-IA rule and
+- [x] `put-bucket-versioning Status=Enabled`; `put-bucket-lifecycle-configuration` keeping the Standard-IA rule and
       adding noncurrent expiry per prefix: 180 days on `archive/knowledge/`, 30 days on each other top-level prefix
       (`bcfishpass/ bcgw/ discharge/ fdis/ fwapg/ hydat/ knowledge/ rag/ snapshots/`) and each other `archive/` child
       (`dropbox_new_graph/ fdis/`, the tarball), since a bucket-wide rule would override the 180 (B4); abort
       incomplete multipart uploads after 7 days; read both back; bare commands handed over if auto mode refuses
-- [ ] Phase 2's real round trip on one small key under a scratch prefix (`archive/knowledge/_test/`), deleted after (O3)
+- [x] Phase 2's real round trip on one small key under a scratch prefix (`archive/knowledge/_test/`), deleted after (O3)
 
 ## Phase 4: Seed and prove
 - [ ] m4 first (O4): compress the seven published grade tables (zstd -3), and copy them, the seven `<key>_curve.rds`

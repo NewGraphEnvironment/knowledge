@@ -2,7 +2,7 @@
 
 **Verified:** 2026-10-30 · **Issues:** #119 (built here), #111 (promotion), NewGraphEnvironment/link#420 (tokens for
 older builds) · **Produced by:** `R/archive.R`, `scripts/0336-archive.R`; sizes and costs from #119's measurements of
-2026-10-29 · **Status:** code and tests landed; bucket configuration and the first entry (the published run) pending
+2026-10-29 · **Status:** bucket configured 2026-10-30; first entry (the published run) pending
 
 ## Why a run needs keeping
 
@@ -48,7 +48,10 @@ old copies of the `rag/` stores. Lifecycle filters have no "everything except", 
 would also cover `archive/knowledge/` (the shorter expiry wins). So previous versions expire by prefix: 180 days under
 `archive/knowledge/`, and 30 days under each other top-level prefix and each other child of `archive/`. **A new
 top-level prefix has no noncurrent expiry until it gets its own rule.** The existing rule (Standard-IA after 30 days,
-whole bucket) stays.
+whole bucket) stays, beside a rule that aborts incomplete multipart uploads after 7 days. Configured 2026-10-30
+(15 rules, read back); when versioning was turned on the bucket held no previous versions, only 41 delete markers, so
+the rules removed nothing. A real round trip through S3 and zstd under a scratch prefix restored every file
+md5-identical, and a second archive of the same files sent nothing.
 
 ## Cost
 
