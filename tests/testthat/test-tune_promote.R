@@ -1,5 +1,24 @@
+# the record 0320 writes beside a grade table (#119), from the fixture's table as it now stands
+fx_record <- function(g) {
+  knw_grade_record_write(g, tune_run = "r1", evidence_ledger = "ledger.csv", knowledge_commit = "abc1234",
+                         link = c(version = "0.66.0", sha = "def"), tokens = c(cut = NA, acc = NA, grad = NA, flow = NA),
+                         rows = 2)
+}
+
 # a tracked tune/compare pair holding two keys (CH_rear, BT_rear) on build "e1", and a candidate run r1 of both on
 # build `ev`, with CH's pick moved
+set_col <- function(fx, where, k, what, col, value) {
+  d <- switch(where, run_tune = file.path(fx$tune, "candidate", "r1"), run_cmp = file.path(fx$compare, "candidate", "r1"),
+              tune = fx$tune, compare = fx$compare)
+  f <- file.path(d, paste0(k, "_", what, ".csv"))
+  x <- utils::read.csv(f, colClasses = "character")
+  x[[col]] <- value
+  t0 <- file.mtime(f)
+  utils::write.csv(x, f, row.names = FALSE, na = "")
+  Sys.setFileTime(f, t0)   # keep the grade/comparison order the fixture set
+  if (what == "grades") fx_record(f)   # as 0320 writes a table and its record together
+}
+
 promote_fx <- function(ev = "e1", ch_rule = "mad>=0.5|g<=0.07|none", env = parent.frame()) {
   d <- withr::local_tempdir(.local_envir = env)
   tn <- file.path(d, "tune"); cm <- file.path(d, "compare")
@@ -12,9 +31,13 @@ promote_fx <- function(ev = "e1", ch_rule = "mad>=0.5|g<=0.07|none", env = paren
                                 grade_withheld = FALSE, evidence_md5 = ev, run_uid = "u1"),
                      file.path(dir_t, paste0(k, "_summary.csv")), row.names = FALSE)
     utils::write.csv(data.frame(rule = rule, tag = tag), file.path(dir_t, paste0(k, "_tune.csv")), row.names = FALSE)
-    utils::write.csv(data.frame(segment = 1:2, rule = rule, run_uid = "u1", curve_prior_sd = "2.5", grade_withheld = "FALSE",
-                                null_heldout_curve = "100.1234", evidence_md5 = ev, curve_grad = "segment_gradient"),
+    utils::write.csv(data.frame(segment = 1:2, species_code = sp, stage = st, rule = rule, run_uid = "u1",
+                                ref_population = "stream_branch", ref_edge = "1000;1100", q_walk = "0.75", walk = "bank",
+                                walk_md5 = "w0", discharge_load = "wet load", curve_prior_sd = "2.5",
+                                grade_withheld = "FALSE", null_heldout_curve = "100.1234", evidence_md5 = ev,
+                                curve_grad = "segment_gradient"),
                      file.path(dir_t, paste0(k, "_grades.csv")), row.names = FALSE)
+    fx_record(file.path(dir_t, paste0(k, "_grades.csv")))
     saveRDS(list(tag = tag), file.path(dir_t, paste0(k, "_curve.rds")))
     for (w in c("_curves.csv", "_groups.csv", "_seeds.csv", "_honest.csv")) writeLines("x", file.path(dir_t, paste0(k, w)))
     utils::write.csv(data.frame(watershed_group_code = c("BULK", "ALL"), species_code = sp, stage = st, tuned_rule = rule,
@@ -103,8 +126,7 @@ test_that("a key with no comparison, or grades or a comparison of another rule, 
   unlink(file.path(fx$compare, "candidate", "r1", "CH_rear_compare.csv"))
   expect_error(promote(fx), "CH_rear: no comparison")
   fx <- promote_fx()
-  utils::write.csv(data.frame(segment = 1, rule = "other", evidence_md5 = "e1"),
-                   file.path(fx$tune, "candidate", "r1", "CH_rear_grades.csv"), row.names = FALSE)
+  set_col(fx, "run_tune", "CH_rear", "grades", "rule", "other")
   expect_error(promote(fx), "CH_rear: graded under other")
   fx <- promote_fx()
   utils::write.csv(data.frame(species_code = "CH", stage = "rear", tuned_rule = "other"),
@@ -159,16 +181,6 @@ test_that("promoting a copy of the tracked run changes nothing", {
 })
 
 # set one column of one candidate or tracked table of a key
-set_col <- function(fx, where, k, what, col, value) {
-  d <- switch(where, run_tune = file.path(fx$tune, "candidate", "r1"), run_cmp = file.path(fx$compare, "candidate", "r1"),
-              tune = fx$tune, compare = fx$compare)
-  f <- file.path(d, paste0(k, "_", what, ".csv"))
-  x <- utils::read.csv(f, colClasses = "character")
-  x[[col]] <- value
-  t0 <- file.mtime(f)
-  utils::write.csv(x, f, row.names = FALSE, na = "")
-  Sys.setFileTime(f, t0)   # keep the grade/comparison order the fixture set
-}
 
 test_that("every field 0325 and the bundles hold the set to refuses a by-key mix (#111 review)", {
   cases <- list(c("summary", "run_uid"), c("summary", "curve_grad"), c("summary", "evidence_ledger"),
@@ -407,4 +419,33 @@ test_that(".knw_write_whole leaves the target only when the writer finished", {
   .knw_write_whole(f, function(p) writeLines("new", p))
   expect_identical(readLines(f), "new")
   expect_identical(list.files(d, all.files = TRUE, no.. = TRUE), c(".part_CH_rear_grades.csv", "CH_rear_grades.csv")[2])
+})
+
+test_that("a grade table travels with its record: none, or one of another table, is refused (#119)", {
+  fx <- promote_fx()
+  ct <- file.path(fx$tune, "candidate", "r1")
+  unlink(file.path(ct, "CH_rear_grades_record.csv"))
+  expect_error(promote(fx), "CH_rear: the run wrote no record of its grades")
+  fx <- promote_fx()
+  ct <- file.path(fx$tune, "candidate", "r1")
+  # a regraded table whose record was not rewritten: same size, another md5
+  g <- file.path(ct, "CH_rear_grades.csv")
+  x <- readLines(g)
+  x[2] <- sub("^1,", "3,", x[2])
+  writeLines(x, g)
+  expect_error(promote(fx), "CH_rear: .*CH_rear_grades.csv has md5 .*not the table the record describes")
+  fx <- promote_fx()
+  p <- promote(fx)
+  expect_true(file.path(fx$tune, "CH_rear_grades_record.csv") %in% p$written)
+  expect_identical(knw_grade_record_read(file.path(fx$tune, "CH_rear_grades_record.csv"))$grades_md5,
+                   unname(tools::md5sum(file.path(fx$tune, "CH_rear_grades.csv"))))
+})
+
+test_that("a kept key is held to the set by its record where its grade table is absent (#119)", {
+  fx <- promote_fx()
+  set_col(fx, "run_tune", "CH_rear", "grades", "walk_md5", "w1")
+  set_col(fx, "run_tune", "BT_rear", "grades", "walk_md5", "w1")
+  set_col(fx, "tune", "BT_rear", "grades", "walk_md5", "w0")
+  unlink(file.path(fx$tune, "BT_rear_grades.csv"))   # a machine with the tracked tables only
+  expect_error(promote(fx, keys = "CH_rear"), "would leave BT_rear on another walk_md5")
 })

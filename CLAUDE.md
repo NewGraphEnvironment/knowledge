@@ -41,9 +41,10 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   reads the ledger the published tables name (`knw_run_ledger()`), and refuses on a machine whose `data/fdis/derived`
   is not that build's evidence. `tests/testthat/test-settings-register.R` fails when a register value and the code
   disagree: change both together, and add a row for any new number that shapes a result (the test cannot see one with
-  no row). `method.rds` also pins the md5s of the ignored grade tables (`data/tune/*_grades.csv`) where it was built,
-  and `test-vignette-data.R` checks them wherever they exist, so on a machine whose copies differ it fails there and
-  nowhere else (CI has no `data/`). Its references come from `data-raw/vignette_bib.R` with the chinook article's. A draft article is named
+  no row). `method.rds` pins each grade table's tracked record (`data/tune/<key>_grades_record.csv`), not the table
+  (#119), and the md5s of the ignored evidence it was built from, which `test-vignette-data.R` checks wherever they
+  exist, so on a machine whose copies differ it fails there and nowhere else (CI has no `data/`). A checkout without
+  them restores them with `PULL=TRUE scripts/0336-archive.R`, the run its records name. Its references come from `data-raw/vignette_bib.R` with the chinook article's. A draft article is named
   `vignettes/_<name>.Rmd`: pkgdown skips it, `.Rbuildignore` keeps it out of the tarball, and pkgdown.yaml fails if
   one reaches `docs/articles/`.
 - `scripts/` — the run order (`scripts/README.md`), calling the package (`pkgload::load_all()` from
@@ -77,7 +78,9 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   `thresholds.csv` and `thresholds_groups.csv` (the tuned thresholds per species × stage × component in link's
   parameter names, with the near-river pair's scope where a rule has one (`near_river_scope`, from the comparison's
   tuned structure), and the groups each rule was scored on; `0325`, #57, #73). `data/tune/` holds the tuning run's
-  per-rule scores and curves (its grade tables and fitted curves are ignored), `data/compare/` the comparison
+  per-rule scores and curves (its grade tables and fitted curves are ignored; each grade table's record,
+  `<key>_grades_record.csv`, is tracked, and `0336` keeps the tables in the bucket's private `archive/knowledge/`, with
+  `data/archive_index.csv` saying where, #119, `research/run_archive.md`), `data/compare/` the comparison
   tables (its catalog cache and interactive maps ignored), `data/publish/` the Parquet sets (ignored).
   `data/tune/grad_ext/` and `data/compare/grad_ext/` hold `0322`'s CH rearing run on a gradient ladder extended to
   30 % (#67, on the evidence build before #73; the main run carries that ladder for every species since #68);
@@ -372,6 +375,8 @@ found four axes where a reader had checked presence alone, one of them the gate 
 held-out deviance over the visits with a size against no rule's over every modelled visit, so for the width-ruled keys
 it favoured publishing, and bull trout spawning's grade rested on it. Compare two deviances only when they are summed
 over the same rows (`null_heldout_curve` is no rule scored on the curve's own visits).
+
+The grade tables are ignored and run to gigabytes, so `0320` writes each one's record beside it, `<key>_grades_record.csv` (tracked, #119): the table's constant columns exactly as written, its md5, size and rows, the run, its evidence ledger, the knowledge commit and link's build (version, commit and output-vocabulary tokens, blank before link 0.70.0). `knw_tune_promote()` refuses a promoted key whose record is missing or describes another table, and reads kept keys from their records; the article bundles read and pin the record, and check a table present against it (`KNW_CHECK_GRADES=TRUE` makes `test-vignette-data.R` do the same).
 
 ### The segment flows can change under a run; the table comment names the build
 

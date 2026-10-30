@@ -19,7 +19,8 @@ data/fdis/
 data/*/reports_pdf/
 # pkgdown site, built by .github/workflows/pkgdown.yaml
 docs/
-# Tuning run (scripts/0320): the per-segment grade tables and fitted curves are large; 0325 publishes the grades
+# Tuning run (scripts/0320): the per-segment grade tables and fitted curves are large; 0325 publishes the grades.
+# Each table's record (<key>_grades_record.csv) is tracked, and the archive (scripts/0336) keeps the tables (#119)
 data/tune/**/*_grades.csv
 data/tune/curves.rds
 data/tune/**/*_score.rds

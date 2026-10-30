@@ -31,7 +31,8 @@
 #
 # INPUT:  data/tune/<sp>_<stage>_tune.csv for every fitted species x stage, data/tune/CH_rear_{summary,curves,groups}.csv, data/tune/grad_ext/CH_rear_{by_grad,summary,seeds}.csv
 #         (0322, #67), data/tune/CH_rear_{seeds,honest}.csv or
-#         data/tune/CH_rear_score.rds (ignored), data/thresholds.csv,
+#         data/tune/CH_rear_score.rds (ignored), data/tune/CH_rear_grades_record.csv (the grade table's record, #119;
+#         the ignored table is checked against it where present), data/thresholds.csv,
 #         data/compare/CH_rear_{compare,change,checks}.csv, data/compare/CH_rear_segments.rds (ignored;
 #         0330), data/tune/CH_rear_curve.rds (ignored; 0320), the tuning log and the evidence build ledger in
 #         scripts/logs/habitat/, fwapg database (PG* env vars): <SCHEMA>.streams (SCHEMA names the run's schema,
@@ -93,7 +94,13 @@ src <- c(src, ledger = ledger)
 missing <- src[!file.exists(src)]
 if (length(missing)) stop("missing inputs: ", paste(missing, collapse = ", "))
 # the grade the compare tables read must be the one #65 made (ref_population), not #57's or the first CH regrade's
-g1 <- rd(sprintf("data/tune/%s_grades.csv", key), n_max = 1, col_types = cols(.default = "c"))
+# the grade table's record (#119), tracked, not the ignored table: the bundle pins the record, and a table that is here
+# must be the one it describes
+f_record <- sprintf("data/tune/%s_grades_record.csv", key)
+g1 <- knw_grade_record_read(f_record)
+if (file.exists(f_grades <- sprintf("data/tune/%s_grades.csv", key))) knw_grade_record_check(g1, f_grades)
+if (!identical(g1$evidence_ledger, ledger)) stop(f_record, " names the ledger ", g1$evidence_ledger, ", the tuning log ", ledger)
+src <- c(src, record = f_record)
 if (!identical(g1$ref_population, "stream_branch")) stop("data/tune/", key, "_grades.csv was graded before #65; rerun 0320")
 if (!"walk" %in% names(g1) || !identical(g1$walk, "bank")) stop("data/tune/", key, "_grades.csv was walked before #73 (not to the bank); rerun 0320")
 if (!"walk_md5" %in% names(g1) || !identical(g1$walk_md5, knw_walk_md5())) {
