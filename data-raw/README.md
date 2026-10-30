@@ -19,3 +19,8 @@ rows for `default` and that structure, and times the rules both ways, on three k
 `compare_parallel_check.R` take
 their references with `REF=1` from the code as it stood before #87 and refuse to run that mode on newer code; run
 the last three on the database's host.
+
+`site_gradient_check.R` is a measurement rather than a check of one path against another: it compares the gradient
+crews measured at FDIS sites with link's segment gradient and the Atlas line's, and counts how often a site lies on
+the other side of a published limit (#121; `research/fdis_export.md`). It needs no database, refuses evidence that is
+not the build `data/thresholds.csv` names unless `EVIDENCE_CHECK=FALSE`, and takes it from `EVIDENCE_DIR`.
