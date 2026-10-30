@@ -19,7 +19,7 @@ Reviewed at HEAD 72a2107 (tree clean). Verdict: **Clean**. Nothing sits above it
 ## How this round checked
 
 - Ran a copy of the current script (output path redirected to the scratchpad, run from the repo root) on the published
-  evidence (`~/Projects/repo_aside/knowledge_published_inputs_20261028/data/fdis/derived`). Its log body is
+  evidence (`<published-inputs copy>/data/fdis/derived`). Its log body is
   **byte-identical** to `scripts/logs/habitat/20261030_site_gradient_check.txt` from line 2 on; line 1 differs only in
   the stamp (72a2107, clean, against 28f61a3 in the committed log; the script is unchanged since). `git status` clean
   after.
