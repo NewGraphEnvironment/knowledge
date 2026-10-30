@@ -1,9 +1,10 @@
 # FDIS electrofishing export: contents, defects, and what it adds
 
-**Verified:** 2026-09-26 (Provenance: 2026-10-16; Where it lives, Repeated surveys and the evidence table: 2026-10-17; Placement: 2026-10-27) · **Issues:** #18 (built from), #56 (published), #35 (repeated surveys), #91 (placement), NewGraphEnvironment/link#284 (consumer) ·
+**Verified:** 2026-09-26 (Provenance: 2026-10-16; Where it lives, Repeated surveys and the evidence table: 2026-10-17; Placement: 2026-10-27; Measured vs modelled gradient: 2026-10-30) · **Issues:** #18 (built from), #56 (published), #35 (repeated surveys), #91 (placement), #121 (gradient), NewGraphEnvironment/link#284 (consumer) ·
 **Produced by:** direct reads of `s3://fresh-bc/fdis/` and the public BCGW layers (WFS
 `DescribeFeatureType`, local `whse_fish`); placement by `data-raw/snap_candidate_check.R` and
-`data-raw/snap_limit_sensitivity.R` (`scripts/logs/fdis/20261027_snap_*`) · **Status:** evidence built (`scripts/0230`, `scripts/0240`); first calibration read below.
+`data-raw/snap_limit_sensitivity.R` (`scripts/logs/fdis/20261027_snap_*`); gradient by `data-raw/site_gradient_check.R`
+(`scripts/logs/habitat/20261030_site_gradient_check.txt`) · **Status:** evidence built (`scripts/0230`, `scripts/0240`); first calibration read below.
 
 ## Provenance
 
@@ -261,7 +262,83 @@ Site-visit counts, measured site gradient, against the thresholds link runs now:
 - **CH is rearing-only here.** EF caught 2 CH ≥ 150 mm in the whole export.
 - **Size is not maturity for char.** A third of SP/ST-coded char are 80–200 mm, so a length break alone cannot separate spawners; spawner evidence uses maturity plus month.
 - **Measured vs modelled width** is comparable at only 3,637 sites after #35 (3,820 when written), where the FWA width is `MODELLED`. FWA's `FIELD_MEASURMENT` widths are these same FISS sites (69 % identical). There the log correlation is 0.54 (also after #35) and the p10–p90 ratio 0.44–2.58 (as written on 2026-09-26).
-- **Site gradient is a point measure**; model thresholds apply to a segment's average. Before any of these shares move a threshold, they have to be compared against the segment gradient the model actually uses; link#284 closed without that comparison, which is #121.
+- **Site gradient is a point measure**; model thresholds apply to a segment's average. The shares above are on the measured value; the next section compares it with the segment gradient the rules read (#121).
+
+## Measured vs modelled gradient (#121, 2026-10-30)
+
+**What was asked.** Every gradient limit the tuning publishes is a limit on link's segment gradient, a Freshwater Atlas
+slope averaged over the segment a site sits on. Crews measured gradient at 18,759 of the 45,529 placed visits. How
+closely do the two agree, and how often does a site sit on the other side of a published limit on the ground from where
+the model puts it?
+
+**What the two numbers are.** The site card asks for the slope of the channel bed, measured at two or more places along
+the site over as long a distance as possible, recorded to the nearest 0.5 % with a method code (ground estimate,
+clinometer, Abney level, map, survey, GIS; RISC *Site Card Field Guide*, 2008, p. 13). The card has two rows, each with
+its own method; `gradient_pct` is the first row's mean and `gradient2_pct` the second's. The export carries neither
+method code, so some "measured" values may themselves be map or GIS readings, and a site whose two readings were 0 and 4
+% reads 2 % (the 644 half-zero rows above). The model's number is a mean over tens to hundreds of metres. The two are
+different quantities: a riffle, a step or a culvert outfall moves the site's slope and not the segment's. So the
+yardstick is not perfect agreement but how well two readings at the same site agree with each other: rank correlation
+0.90 over the 9,389 sites with both, and the first reading within 0.60 to 1.58 times the second at 80 % of the 9,204
+where both are above 0. A model cannot be expected to do better than that.
+
+**How it was judged.** On the tuning's stream branch (16,279 visits with a measured gradient), as the width comparison
+above: the rank and log correlations, and the spread of the measured/modelled ratio. Then, at each published limit, the
+share of each species' scored visits whose measured and modelled gradients lie on opposite sides of it.
+
+| against | rank r | log r | ratio p10–p50–p90 | median abs. difference | model higher |
+|---|---:|---:|---|---:|---:|
+| second reading at the same site | 0.90 | 0.89 | 0.60–1.00–1.58 | 1.0 point | (second higher, 46.5 %) |
+| link's segment gradient | 0.69 | 0.64 | 0.33–0.90–2.22 | 2.2 points | 56 % |
+| the whole Atlas line's | 0.65 | 0.62 | 0.26–0.83–1.94 | 2.5 points | 61 % |
+
+**What it shows.**
+- The segment gradient follows the site better than the whole line does: higher rank and log correlations, a median
+  ratio nearer 1, a narrower ratio spread on the log scale and a smaller large error (p90 9.3 against 13.0 points),
+  which is what #92 moved the tuning to it for. It agrees with the site about as well as modelled width does (log r
+  0.64 against width's 0.54), and well short of a second reading.
+- The model pulls toward the middle: it reads higher than the site at 87 % of sites measured at 0 and 67 % of those
+  above 0 up to 3 %, and at only 23 % of those measured above 30 %. Agreement is best on segments 50 to 250 m long and
+  on orders 2 to 4 (rank r 0.70 to 0.73), worst on segments of 10 m or less (0.53) and on orders 5 and 6, where the
+  site reads steeper than the segment (median ratio 1.24 and 2.05). On river, wetland and lake segments, which the
+  tuning does not score, it barely agrees (rank r 0.37, 0.21, 0.33).
+- **At the limits.** Over each species' scored visits that carry a measured gradient, the share on the other side on
+  the ground: CH rearing at 11 %, 6.4 % of 2,453; BT rearing at 30 %, 0.8 % of 4,427; WCT rearing at 25 %, 0.7 % of
+  461; CO and GR at 5.49 %, 25.8 % and 11.7 %. BT spawning's scored visits need the spawner evidence, which the check
+  does not read, so its figure is over the BT visits that pass every other filter of the tuning's (stream branch, in
+  range, not blocked, no barrier downstream; 11,805 visits, 5,660 with a measured gradient) but not the spawner and
+  groups filters, against the 513 visits the tuning scored: at 13 %, 8.5 %. Within one step of each species' own
+  ladder either side of its limit, 33 to 42 % of visits flip (CH 34 % of 218, BT spawning 34 % of 446): near a limit,
+  the modelled gradient says little about which side the site is on. A limit can still sort sites well in bulk,
+  because most sites are far from it, but read one as a slope on the ground only to within a few points.
+- **With and without a catch.** Sites with fish are off by less in absolute terms (median 1.7 against 2.6 points), but
+  mostly because they are gentler: within classes of measured gradient the gap nearly closes (1.2 against 1.6 points
+  at 3 % or less, 6.2 against 6.0 above 13 %). On the scale-free measures they agree no better (rank r 0.64 against
+  0.68, and a wider ratio spread). Within segment-length classes the absolute gap persists (2.4 against 6.6 points on
+  segments of 50 m or less, 1.7 against 3.4 on 50 to 250 m), and on the shortest segments rank r favours sites with
+  fish (0.64 against 0.41); those classes are not split by gradient, so part of that is again gentler ground. It is
+  what link cutting a segment at a catch would produce, a short segment drawn around a fish site, but this check
+  cannot separate the two. Per species, visits where it was caught flip at its limit less often than visits where it
+  was not (CH 4.1 against 6.5 %, CO 18.1 against 27.4 %, GR 2.2 against 15.0 %). #120 reruns this on link's minimal
+  network, where segments are not cut at catches.
+- **Negative segment gradients.** 55 placed visits have one (−13.6 % to −0.01 %), 52 of them on the visit's own Atlas
+  line, all on edge types the stream branch excludes (1200, 1400, 1410, 1425; 34 in wetlands). No species' scored
+  population holds one, so no pick depends on one; on a build where one does, the check tests every rule of the key at
+  it, as it is and set to 0. The two code paths treat one differently, though: `knw_rule_in()` keeps a gradient only
+  from 0 up, so a negative fails every rule, while the curve and the grade clamp it to 0 (`R/tune_curve.R`,
+  `R/grade.R`).
+
+**What this is not.** No change to the gradient a rule reads: a point and a segment average are different quantities,
+and this measures how far apart they are.
+
+**Specification.** `data-raw/site_gradient_check.R` on evidence `1bd35829 009698d7 99f499bb` (`knowledge/fdis/v3`, the
+build `data/thresholds.csv` names), log `scripts/logs/habitat/20261030_site_gradient_check.txt`. Measured percent ÷ 100;
+stream branch is `knw_tune_run()`'s edge types and fished area with no river, wetland or lake (29,335 placed visits, as
+#92's check counts); each rearing key's population is held to its tracked `n_visits`. Log and ratio statistics use pairs
+where both are above 0 (against the segment gradient 487 of 16,279 are not, against the Atlas line 337). A reading
+exactly on a limit counts as in, as the rule's `<=` does (45 visits at 13 %, 22 at 11 %). The band is the modelled
+gradient within one step either side of the limit on the species' own ladder (the gradient maxima of its tracked tune
+table), mirrored at the top; the log also gives the band on the measured gradient.
 
 ## Supplement: Fish Data Submission workbooks (#21)
 
