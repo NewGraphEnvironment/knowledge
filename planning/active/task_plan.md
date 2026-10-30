@@ -44,7 +44,8 @@ Approved by Al, 2026-10-30, with the plan:
 - [x] Every `exists` / `copy exists` gkey in the dry run checked against the intended item before the live run
 - [x] `0270 --dry-run` for both, then live; wait for sync; a second dry run is the no-op proof (no `would*`, exit 0)
 - [x] `YQVI79FL` removal from grayling (decision 3), recorded in findings; also `WVTFGPUT`, a second copy of the FWCP 2017 synthesis
-- [ ] Al's browser downloads (COSEWIC 2012, Carr et al. 2020, the Metolius report): set each `pdf` path, re-run `0270`
+- [x] Al's browser downloads (COSEWIC 2012, Carr et al. 2020; the Metolius report not found): set each `pdf` path, re-run `0270`
+- [x] Ballard & Shrimpton (2009), PWFWCP report 337, added to grayling (Al, 2026-10-30)
 - [x] Re-measure from a guarded copy: members, keyed, PDF on disk (check Zotero downloads group files at sync);
       confirm the new items got BBT keys
 - [x] CLAUDE.md layout line for the new CSVs

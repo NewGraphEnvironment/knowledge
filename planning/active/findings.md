@@ -113,6 +113,13 @@ Intermountain Journal of Sciences conference abstract, not the paper. Williamson
 PWFWCP report 337 is Ballard & Shrimpton (2009), an Omineca grayling synopsis, a candidate addition. Three web pages
 (species registry, BC species explorer twice).
 
+### Browser PDFs and Ballard & Shrimpton (2009), 22:59 UTC
+
+Al saved COSEWIC 2012 (`CW69-14-659-2013-eng.pdf`, 125 pp.) and Carr et al. 2020 (`ees.2019.0146.pdf`, the
+publisher's 20 pp.) by browser; moved to `data/rag/pdf/{bull_trout,grayling}/<key>.pdf` (ignored) and named in the
+members files. The Metolius report was not found. Ballard & Shrimpton (2009), PWFWCP report 337, added to grayling from
+ACAT (`XXGHCASA`; Al's word). `0270` live then a no-op dry run: bull_trout 11 of 16 with a PDF, grayling 24 of 25.
+
 ## Phase 3: `0150` names what a build leaves out
 
 `collection_keys()` lists every live, non-note member it does not hand cred: no citation key, no live PDF, or a
