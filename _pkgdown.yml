@@ -67,6 +67,13 @@ reference:
     contents:
       - knw_thresholds_table
       - knw_tune_promote
+      - knw_grade_record_write
+      - knw_archive_setup
+      - knw_archive_plan
+      - knw_archive_put
+      - knw_archive_pull
+      - knw_archive_undo
+      - knw_archive_index_read
       - knw_run_ledger
       - knw_publish
       - knw_compare_rules

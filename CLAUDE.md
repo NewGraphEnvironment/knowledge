@@ -77,7 +77,9 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   `thresholds.csv` and `thresholds_groups.csv` (the tuned thresholds per species × stage × component in link's
   parameter names, with the near-river pair's scope where a rule has one (`near_river_scope`, from the comparison's
   tuned structure), and the groups each rule was scored on; `0325`, #57, #73). `data/tune/` holds the tuning run's
-  per-rule scores and curves (its grade tables and fitted curves are ignored), `data/compare/` the comparison
+  per-rule scores and curves (its grade tables and fitted curves are ignored; each grade table's record,
+  `<key>_grades_record.csv`, is tracked, and `0336` keeps the tables in the bucket's private `archive/knowledge/`, with
+  `data/archive_index.csv` saying where, #119, `research/run_archive.md`), `data/compare/` the comparison
   tables (its catalog cache and interactive maps ignored), `data/publish/` the Parquet sets (ignored).
   `data/tune/grad_ext/` and `data/compare/grad_ext/` hold `0322`'s CH rearing run on a gradient ladder extended to
   30 % (#67, on the evidence build before #73; the main run carries that ladder for every species since #68);

@@ -86,10 +86,10 @@ with two additions from that gate: a link issue for the tokens the published bui
       fixtures write records and `set_col()` rewrites them (G2)
 
 ## Phase 2: Archive and restore
-- [ ] File a link issue for tokens describing the pre-0.70 default network (the published run's 0.66.0 build) and the
+- [x] File a link issue for tokens describing the pre-0.70 default network (the published run's 0.66.0 build) and the
       whole-Atlas-line gradient, and to settle which axis names the tuning's wet flow read; write the dependency into
       #119's body. An untokened run's folder is never renamed when tokens arrive: its index rows gain them
-- [ ] `R/archive.R`: `knw_archive_plan()` over source dirs (`TUNE_DIR`, `COMPARE_DIR`, `EVIDENCE_DIR`, as
+- [x] `R/archive.R`: `knw_archive_plan()` over source dirs (`TUNE_DIR`, `COMPARE_DIR`, `EVIDENCE_DIR`, as
       `data-raw/compare_structures_check.R`; B3) lists what goes where under `s3://fresh-bc/archive/knowledge/`:
       `tune/<key>/<setup>/` holding `<key>_grades.csv.zst` (zstd -3), `<key>_curve.rds`, `<key>_grades_record.csv`,
       `<key>_segments.rds` (every fitted key's: the chinook bundle reads CH's, and species articles follow; not
@@ -97,21 +97,21 @@ with two additions from that gate: a link issue for the tokens the published bui
       and `MANIFEST` (G6). `<setup>` is `<cut>.<acc>.<grad>.<flow>` checked against link's `vocabulary.csv` at the
       link checkout's sha, or `untokened/<run id>` where `<run id>` is the record's `tune_run` (the published run's
       is `published_20261028`), never link's shared `run_uid` (G8)
-- [ ] `data/archive_index.csv` (tracked) and `knw_archive_index_read()`: one row per archived object (tune files and
+- [x] `data/archive_index.csv` (tracked) and `knw_archive_index_read()`: one row per archived object (tune files and
       evidence), with key, setup, run id, link run_uid, the object's md5 (the stored bytes; the record holds the
       table's), the source md5, S3 version id, and event rows (`archived`, `promoted`, `superseded`, `undone`; G10)
-- [ ] `scripts/0336-archive.R`: checks every file against its record, the MANIFEST and, for the published run, the
+- [x] `scripts/0336-archive.R`: checks every file against its record, the MANIFEST and, for the published run, the
       bundle pins before uploading (B3); uploads with `--metadata md5=`, reads version id and md5 back with
       `head-object`, skips an object whose md5 already matches (G9); refuses with versioning off, a different
       MANIFEST in an existing evidence folder (G6), or an unpromoted run over a promoted run's current objects (G8);
       prints the record against the live `knw_build_record()`: can the database still recreate the run (G13)
-- [ ] `PULL=TRUE`: restores by the index (version ids) into a target `data/` (default this tree's), evidence and the
+- [x] `PULL=TRUE`: restores by the index (version ids) into a target `data/` (default this tree's), evidence and the
       bundles' ignored files by default, grade tables only with `GRADES=TRUE` or `KEYS=` (G5); grades before segments,
       mtimes set (G12); every md5 checked; refuses to overwrite a present file whose md5 differs
-- [ ] `0335`: preflight before `knw_tune_promote()` (credentials, versioning, the archive plan, evidence present or
+- [x] `0335`: preflight before `knw_tune_promote()` (credentials, versioning, the archive plan, evidence present or
       archived; O1), also under `DRY=1`; 0336 runs between the promote log and `if (!bundles) quit` (so
       `BUNDLES=FALSE` archives, undo appends an `undone` event and uploads nothing; O2); a failure names the rerun
-- [ ] tests with `aws` mocked to fail by default; scripts/README run order, CLAUDE.md layout entry, `research/` note on
+- [x] tests with `aws` mocked to fail by default; scripts/README run order, CLAUDE.md layout entry, `research/` note on
       the archive (including: a new top-level prefix has no noncurrent expiry until it gets a rule)
 
 ## Phase 3: The bucket (Al runs or approves each command)

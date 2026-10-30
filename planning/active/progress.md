@@ -24,3 +24,9 @@ cd /Users/airvine/Projects/repo/knowledge && git fetch -q origin && git checkout
   2026-10-30: no `token_*` columns yet), 0320 writes records, promote reads and checks them, both bundle scripts read
   records; 173 tests pass; mutation (promote's md5 check removed) turns `test-tune_promote.R` red. The
   `md5_local` failures in `test-vignette-data.R` are the existing ones (this checkout holds the 2026-10-25 build, A3).
+- Phase 2 landed: filed NewGraphEnvironment/link#420 (tokens for pre-0.70 builds, the Atlas-line gradient, the
+  tuning's flow read) and wrote it into #119's body; `R/archive.R` (setup, plan, put, pull, undo, index),
+  `scripts/0336-archive.R`, 0335's preflight and archive step, `research/run_archive.md`; 214 tests pass with `aws`
+  and `zstd` mocked; mutations (promoted-run guard, restore md5 check) each turn a test red.
+  Deviation from the plan text: the evidence id is the MANIFEST's full md5, and the index's `source` is the file's
+  path in a checkout (`data/...`), so a candidate's files restore to where the tracked tables expect them.

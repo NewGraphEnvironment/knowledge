@@ -21,6 +21,11 @@
 #   - CHECKED AGAINST THIS MACHINE before anything moves: the walk (this tree's), the evidence (data/fdis/derived
 #     md5s, where the tables are here; required when the rebuilds run) and, when they run, the live flow load, which
 #     0325 and the bundles hold the grades to.
+#   - ARCHIVED (#119): the promoted keys' grade tables, curves and segments, and the evidence they were graded on, go
+#     to the bucket's versioned archive (knw_archive_put(), as scripts/0336-archive.R runs it) after the move and before
+#     the rebuilds; whether it can is checked before anything moves (bucket credentials, versioning on, every file
+#     against its record and the evidence). A failure stops the chain and names the 0336 command that finishes it. An
+#     undo sends nothing and appends the index's undone/promoted events.
 #   - NOT DONE HERE: the tests that pin the published run's numbers (tests/testthat/test-tune_repick.R's 1.96 picks,
 #     test-vignette-data.R's key count and funnel, the articles' inline checks) and the research/ prose that quotes it
 #     are revised by hand after a promotion that moves them.
@@ -30,7 +35,8 @@
 #         take them, and Zotero running for vignette_bib.R
 # OUTPUT: data/tune/<key>_*, data/tune/grad_fwa/<key>_*, data/compare/<key>_*, the rows of data/compare/{compare,change,
 #         checks,floodplain}.csv, research/fig/compare_<key>_*.png, the run's logs in scripts/logs/habitat/, then
-#         0325's and the bundles' outputs; scripts/logs/habitat/<date>_promote-<run>.txt
+#         0325's and the bundles' outputs; scripts/logs/habitat/<date>_promote-<run>.txt; the archive's objects under
+#         s3://fresh-bc/archive/knowledge/ and rows of data/archive_index.csv (#119; AWS credentials for the bucket)
 # RUN:    RUN=<run> Rscript scripts/0335-promote.R   (from the repo root; SPECIES=CH,BT to promote those species' keys;
 #         DRY=1 lists what would be moved and removed and writes nothing; BUNDLES=FALSE moves and stops;
 #         RUN=replaced_<stamp> undoes a promotion: moves back only, unchecked against this machine's evidence)
@@ -74,6 +80,27 @@ if (bundles) {
   live$discharge_load <- knw_discharge_load(conn)
   DBI::dbDisconnect(conn)
 }
+# the archive (#119): the promoted keys' grade tables, curves and segments, and their evidence, go to the bucket's
+# versioned archive once moved. Checked before anything moves (credentials, versioning, every file against its record
+# and the evidence), so a promotion that could not be archived is refused, not half done. An undo sends nothing: it
+# records in the index which run is published again
+build_dir <- "data/fdis/build"
+archive_keys <- function(dir_t) {
+  k <- sub("_grades_record\\.csv$", "", list.files(dir_t, "_grades_record\\.csv$"))
+  if (is.null(keys)) k else intersect(k, keys)
+}
+if (!undo) {
+  ak <- archive_keys(file.path("data/tune/candidate", run))
+  if (length(ak)) {
+    ver <- tryCatch(.knw_aws(c("s3api", "get-bucket-versioning", "--bucket", .knw_archive_bucket, "--query", "Status",
+                               "--output", "text")), error = function(e) conditionMessage(e))
+    if (!identical(trimws(ver[length(ver)]), "Enabled")) {
+      stop("the archive cannot take this promotion (bucket credentials and versioning; #119): ", paste(ver, collapse = " "))
+    }
+    knw_archive_plan(ak, file.path("data/tune/candidate", run), file.path("data/compare/candidate", run),
+                     "data/fdis/derived", build_dir)
+  }
+}
 p <- knw_tune_promote(run, keys, live = live, dry_run = dry)
 lines <- c(sprintf("Promotion of candidate run %s%s: %s.", run, if (dry) " (DRY=1: nothing written)" else "",
                    paste(p$keys, collapse = ", ")),
@@ -86,6 +113,20 @@ if (dry) quit(save = "no", status = 0)
 path_log <- .knw_free_path(file.path("scripts/logs/habitat",
                                      paste0(format(Sys.time(), "%Y%m%d", tz = "UTC"), "_promote-", run, ".txt")))
 writeLines(lines, path_log)
+ak <- archive_keys("data/tune")
+ak <- intersect(ak, p$keys)
+if (length(ak) && undo) {
+  knw_archive_undo(ak)
+  message("Recorded in data/archive_index.csv: ", paste(ak, collapse = ", "), " published again from run ", run, ".")
+} else if (length(ak)) {
+  tryCatch({
+    knw_archive_put(knw_archive_plan(ak, "data/tune", "data/compare", "data/fdis/derived", build_dir), promoted = TRUE)
+  }, error = function(e) {
+    stop("the tables are promoted but not archived (", conditionMessage(e), "): rerun KEYS=",
+         paste(ak, collapse = ","), " PROMOTED=TRUE Rscript scripts/0336-archive.R before anything else", call. = FALSE)
+  })
+  message("Archived ", paste(ak, collapse = ", "), " and their evidence; data/archive_index.csv appended.")
+}
 if (!bundles) {
   message("BUNDLES=FALSE: moved only. Rerun 0325, data-raw/vignette_chinook.R and data-raw/vignette_method.R before ",
           "committing, or tests/testthat/test-vignette-data.R fails.")
@@ -100,5 +141,6 @@ for (s in c("scripts/0325-publish.R", "data-raw/vignette_chinook.R", "data-raw/v
   if (!identical(st, 0L)) stop(s, " failed (exit ", st, "): the tables are promoted, the rebuilds after it are not run")
 }
 message("Promoted ", run, ". Run devtools::test(), revise the pins and research/ prose that quote the published run, ",
-        "review the articles against the new bundles, then commit with the run's evidence ledger (",
+        "review the articles against the new bundles, then commit with the run's evidence ledger and ",
+        "data/archive_index.csv (",
         knw_run_ledger("data/tune"), ").")
