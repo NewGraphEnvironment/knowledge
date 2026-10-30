@@ -1,4 +1,4 @@
-Site gradient check, knowledge#121, knowledge 3967605. Evidence ~/Projects/repo_aside/knowledge_published_inputs_20261028/data/fdis/derived (visits_link, visits_species, walks md5 1bd35829 009698d7 99f499bb); tune tables data/tune.
+Site gradient check, knowledge#121, knowledge 28f61a3. Evidence ~/Projects/repo_aside/knowledge_published_inputs_20261028/data/fdis/derived (visits_link, visits_species, walks md5 1bd35829 009698d7 99f499bb); tune tables data/tune.
 The evidence is the build data/thresholds.csv names (knowledge/fdis/v3; not uploaded, so held on the machines that built it).
 Visits placed: 45529. With a measured gradient: 18759 (a second reading: 9397; both: 9389). On the tuning's stream branch (edge types 1000,1100,2000,2300, fished area 10-10000 m2): 29335 placed, 16279 with a measured gradient.
 Missing modelled gradient among them: segment 0, Atlas line 0.
@@ -226,6 +226,7 @@ Missing modelled gradient among them: segment 0, Atlas line 0.
            GR  rear  GR_rear 0.0549     1355       1355           711
            RB  rear  RB_rear 0.3000    13869      13869          6665
            ST  rear  ST_rear 0.0849     1530       1530           247
+          WCT  rear WCT_rear 0.2500     1238       1238           461
 
 ## flips at each key's published limit, over the key's population (a reading on the limit is in, as the rule's <= has it; band: modelled gradient one step of the key's own ladder either side, mirrored at its top; meas_band: the same window on the measured gradient)
       key  limit          against visits flips_pct         band band_visits
@@ -243,6 +244,8 @@ Missing modelled gradient among them: segment 0, Atlas line 0.
   RB_rear 0.3000     fwa_gradient   6665       2.4 (0.25, 0.35]         149
   ST_rear 0.0849 segment_gradient    247      17.0 (0.07, 0.09]          33
   ST_rear 0.0849     fwa_gradient    247      19.0 (0.07, 0.09]          23
+ WCT_rear 0.2500 segment_gradient    461       0.7   (0.2, 0.3]           3
+ WCT_rear 0.2500     fwa_gradient    461       3.3   (0.2, 0.3]          15
  band_flips_pct meas_band_visits meas_band_flips_pct meas_on_limit
            40.0               46                21.7             1
            35.6               46                21.7             1
@@ -258,6 +261,8 @@ Missing modelled gradient among them: segment 0, Atlas line 0.
            34.9               69                29.0             4
            42.4               11                18.2             0
            26.1               11                18.2             0
+           33.3                8                37.5             1
+           46.7                8                25.0             1
  meas_above_model_below meas_below_model_above
                      20                     14
                      20                     86
@@ -273,21 +278,25 @@ Missing modelled gradient among them: segment 0, Atlas line 0.
                      31                    132
                      19                     23
                      13                     34
+                      2                      1
+                      2                     13
 
 ## by the species' outcome (caught or not), against the segment gradient (each rearing key's population)
-     key present pairs spearman log_r ratio_p10 ratio_p50 ratio_p90 flips_pct
- BT_rear    TRUE   588    0.635 0.572      0.41      0.93      2.12       0.5
- BT_rear   FALSE  3839    0.689 0.635      0.38      0.94      2.27       0.8
- CH_rear    TRUE    73    0.505 0.538      0.39      1.11      5.36       4.1
- CH_rear   FALSE  2380    0.558 0.494      0.36      0.97      2.60       6.5
- CO_rear    TRUE   282    0.457 0.420      0.29      0.88      3.50      18.1
- CO_rear   FALSE  1327    0.566 0.500      0.33      0.88      2.31      27.4
- GR_rear    TRUE   186    0.445 0.431      0.40      0.94      2.62       2.2
- GR_rear   FALSE   525    0.590 0.563      0.33      0.87      2.42      15.0
- RB_rear    TRUE  1726    0.643 0.586      0.42      1.01      2.86       0.2
- RB_rear   FALSE  4939    0.671 0.619      0.35      0.92      2.23       0.9
- ST_rear    TRUE     8    0.843 0.971      0.53      0.82      0.99      12.5
- ST_rear   FALSE   239    0.641 0.624      0.41      0.98      2.33      17.2
+      key present pairs spearman log_r ratio_p10 ratio_p50 ratio_p90 flips_pct
+  BT_rear    TRUE   588    0.635 0.572      0.41      0.93      2.12       0.5
+  BT_rear   FALSE  3839    0.689 0.635      0.38      0.94      2.27       0.8
+  CH_rear    TRUE    73    0.505 0.538      0.39      1.11      5.36       4.1
+  CH_rear   FALSE  2380    0.558 0.494      0.36      0.97      2.60       6.5
+  CO_rear    TRUE   282    0.457 0.420      0.29      0.88      3.50      18.1
+  CO_rear   FALSE  1327    0.566 0.500      0.33      0.88      2.31      27.4
+  GR_rear    TRUE   186    0.445 0.431      0.40      0.94      2.62       2.2
+  GR_rear   FALSE   525    0.590 0.563      0.33      0.87      2.42      15.0
+  RB_rear    TRUE  1726    0.643 0.586      0.42      1.01      2.86       0.2
+  RB_rear   FALSE  4939    0.671 0.619      0.35      0.92      2.23       0.9
+  ST_rear    TRUE     8    0.843 0.971      0.53      0.82      0.99      12.5
+  ST_rear   FALSE   239    0.641 0.624      0.41      0.98      2.33      17.2
+ WCT_rear    TRUE   189    0.720 0.639      0.45      0.86      2.25       0.5
+ WCT_rear   FALSE   272    0.632 0.607      0.44      0.94      2.24       0.7
  band_visits band_flips_pct
            3           33.3
           12           41.7
@@ -301,6 +310,8 @@ Missing modelled gradient among them: segment 0, Atlas line 0.
           13           38.5
            1          100.0
           32           40.6
+           2           50.0
+           1            0.0
 
 Negative segment gradients: 55 placed visits (0 on the stream branch, 7 with a measured gradient); values -0.136 to -1e-04; segment lengths (m) 1/62.4/863; Atlas-line gradient at them -0.136/0.0015/0.0223; on the same Atlas line as the visit: 52.
 
@@ -321,7 +332,9 @@ Negative segment gradients: 55 placed visits (0 on the stream branch, 7 with a m
   GR_rear               0       0  7740          NA              NA
   RB_rear               0       0  7740          NA              NA
   ST_rear               0       0  7224          NA              NA
+ WCT_rear               0       0  7224          NA              NA
  recommended_moved_visits most_moved_visits
+                       NA                NA
                        NA                NA
                        NA                NA
                        NA                NA

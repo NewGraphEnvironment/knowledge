@@ -29,3 +29,10 @@
   clean; the `_refused` name was not freed). All fixed: git calls checked, TUNE_DIR logged, refused names through
   `.knw_free_path()`, negatives subset NA-safe, the edge-type tabulation now in the log, the outcome block rearing
   only, the zero-pair count per row.
+- `/code-check branch` round 3 (`review-round3.md`), asked for the mechanism: every definition and number is written
+  twice by hand (script against the tuning, prose against the log), and only `n_visits` and the md5s compare a copy
+  with its source. It enumerated 34 prose claims and 13 restated definitions. Three findings fixed: the key set read
+  `status == "fitted"` and dropped WCT rearing (`underpowered`, published at 0.25); it now takes every gradient row
+  with a value from the table itself. The BT spawning population sentence (now the filters it passes, 11,805). The
+  stamp's `git status` on a TUNE_DIR outside the repo (now stamped only when it is the tracked `data/tune`, named
+  otherwise; tested on a copy). WCT adds a row; the band range is now 33 to 42 %.
