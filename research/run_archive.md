@@ -40,6 +40,22 @@ The bundles read and pin the record, so rebuilding them needs the evidence (abou
 record is written once and never changes; where a run is stored lives in the index. A restore fetches the run that a
 checkout's records name, by version id, and checks each file against its md5.
 
+## Which archive is "the run": by content, not by name
+
+A run's name is not its identity: `0320` resumes and regrades a named run, and a key can be promoted, superseded and
+promoted again. So each archive call is a **batch** (`batch` in the index), and a run is found by what it holds:
+
+- A restore takes the batch whose stored record is the checkout's record (by md5). The record pins only the grade
+  table, so batches sharing a record are narrowed by the curve and segments the checkout holds. Where they still differ,
+  the published batch is taken; otherwise the restore refuses and asks for `BATCH=<key>=<batch>`.
+- An undo takes the batch the index says the undone promotion unpublished (the latest `superseded` or `undone` batch
+  whose record is the restored one). It copies that batch's versions back over a shared folder, and reports restored
+  files that differ rather than refusing, because a machine's ignored files can be another build's.
+- An unpromoted archive is refused where it would overwrite a published object with other content.
+
+Five review rounds on #119 found each of these one step at a time, each inside the previous fix (the archive README
+for #119 has the rounds).
+
 ## Overwrite with versioning
 
 A re-run of one setup overwrites its folder, and the bucket keeps the previous objects as versions. An unpromoted run

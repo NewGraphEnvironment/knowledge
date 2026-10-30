@@ -280,7 +280,8 @@ knw_archive_index_read <- function(path = "data/archive_index.csv") {
 # the md5s of the key's files a checkout holds besides its record, named by their path in a checkout
 .knw_archive_local <- function(key, tune_dir, compare_dir) {
   f <- c(file.path(tune_dir, paste0(key, "_curve.rds")), file.path(compare_dir, paste0(key, "_segments.rds")))
-  names(f) <- c(file.path("data/tune", paste0(key, "_curve.rds")), file.path("data/compare", paste0(key, "_segments.rds")))
+  names(f) <- c(file.path("data/tune", paste0(key, "_curve.rds")),
+                file.path("data/compare", paste0(key, "_segments.rds")))
   f <- f[file.exists(f)]
   stats::setNames(unname(tools::md5sum(f)), names(f))
 }
@@ -385,7 +386,8 @@ knw_archive_put <- function(plan, index = "data/archive_index.csv", promoted = F
       stop(p$object, ": no version id (", vid, "): is versioning on?", call. = FALSE)
     }
     if (p$compress) unlink(body)
-    out[[i]] <- data.frame(event = "archived", date = now, batch = batch, key = p$key, setup = p$setup, tune_run = p$tune_run,
+    out[[i]] <- data.frame(event = "archived", date = now, batch = batch, key = p$key, setup = p$setup,
+                           tune_run = p$tune_run,
                            run_uid = p$run_uid, evidence_id = p$evidence_id, object = p$object,
                            source = p$target,
                            source_md5 = p$source_md5, object_md5 = md5, bytes = bytes, version_id = vid,
@@ -475,7 +477,8 @@ knw_archive_pull <- function(keys, dest = ".", grades = FALSE, index = "data/arc
     f_rec <- file.path(dest, "data", "tune", paste0(k, "_grades_record.csv"))
     knw_grade_record_read(f_rec)
     a <- .knw_archive_batch_rows(idx, k, unname(tools::md5sum(f_rec)),
-                                 local = .knw_archive_local(k, file.path(dest, "data/tune"), file.path(dest, "data/compare")),
+                                 local = .knw_archive_local(k, file.path(dest, "data/tune"),
+                                                            file.path(dest, "data/compare")),
                                  batch = if (k %in% names(batch)) batch[[k]] else NULL)
     if (!grades) a <- a[!grepl("_grades\\.csv$", a$source), ]
     # grades first, segments last (0330 refuses segments older than the grades)
@@ -567,12 +570,13 @@ knw_archive_undo <- function(keys, tune_dir = "data/tune", index = "data/archive
     # review). The restored curve and segments only confirm it: a machine's ignored files can be another build's, and
     # the archive's copies are the ones published again
     b <- if (!is.null(batch) && k %in% names(batch)) batch[[k]] else .knw_archive_undo_batch(idx, k, rec_md5)
-    a <- if (!is.null(b)) .knw_archive_batch_rows(idx, k, rec_md5, batch = b) else .knw_archive_batch_rows(idx, k, rec_md5)
+    a <- .knw_archive_batch_rows(idx, k, rec_md5, batch = b)
     loc <- .knw_archive_local(k, tune_dir, compare_dir)
     i <- match(names(loc), a$source)
     off <- names(loc)[is.na(i) | a$source_md5[i] != loc]
     if (length(off)) {
-      message(k, ": the restored ", paste(basename(off), collapse = ", "), " are not the archived run's; the archive's ",
+      message(k, ": the restored ", paste(basename(off), collapse = ", "),
+              " are not the archived run's; the archive's ",
               "copies are published again (PULL=TRUE restores them here)")
     }
     for (i in seq_len(nrow(a))) {
