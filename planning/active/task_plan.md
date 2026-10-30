@@ -61,7 +61,7 @@ with two additions from that gate: a link issue for the tokens the published bui
 (Phase 5).
 
 ## Phase 1: The per-key grade record
-- [ ] `R/grade_record.R`: the record is exactly the grade table's constant columns (one `cols_grade_record` list
+- [x] `R/grade_record.R`: the record is exactly the grade table's constant columns (one `cols_grade_record` list
       shared with 0320's write: species_code, stage, rule, run_uid, ref_population, ref_edge, q_walk, walk, walk_md5,
       discharge_load, curve_prior_sd, grade_withheld, null_heldout_curve, evidence_md5, curve_grad), plus the table's
       md5, size and rows (rows informational), `tune_run`, `evidence_ledger`, the knowledge commit, link's version and
@@ -69,20 +69,20 @@ with two additions from that gate: a link issue for the tokens the published bui
       No curve md5 (0320 rewrites curves every pass; the index holds it, review G3).
       `knw_grade_record_write(grades_path, ...)`, `knw_grade_record_read()` (the one-row head the readers take),
       `knw_grade_record_check(record, grades_path)` (md5 and size)
-- [ ] `knw_build_record()` reads `token_cut/acc/grad/flow` where `log_recompute` has them, one distinct value per axis
+- [x] `knw_build_record()` reads `token_cut/acc/grad/flow` where `log_recompute` has them, one distinct value per axis
       or a refusal; `test-build_record.R`'s mock answers the token query (G11)
-- [ ] `0320` writes the record whole after each grade table; a kept table with no record gets one written from the
+- [x] `0320` writes the record whole after each grade table; a kept table with no record gets one written from the
       table, and a record that does not match its table is regraded (G4); no new top-level `gradient`/`se_strict`
       assignment (`R/settings_register.R:50-53`)
-- [ ] `knw_tune_promote()`: `record()` reads kept keys' fields from the record before the table, so a machine without
+- [x] `knw_tune_promote()`: `record()` reads kept keys' fields from the record before the table, so a machine without
       the tables still checks them (G2); a fitted key with no record or a mismatching one is refused, except a missing
       record in a `replaced_*` archive (O5); md5 and size, not rows (26 GB)
-- [ ] `vignette_method.R` and `vignette_chinook.R` read records and `evidence_ledger` from them, not grade tables; the
+- [x] `vignette_method.R` and `vignette_chinook.R` read records and `evidence_ledger` from them, not grade tables; the
       tracked record lands in `meta$md5`
-- [ ] `test-vignette-data.R`: where a grade table is present, its record matches it, behind an opt-in
+- [x] `test-vignette-data.R`: where a grade table is present, its record matches it, behind an opt-in
       (`KNW_CHECK_GRADES=TRUE`) because it md5s up to 26 GB (A3)
-- [ ] `.gitignore` comment and CLAUDE.md "A run's record travels with its table" name the record
-- [ ] tests: `test-grade_record.R` (round trip, a changed table refused, restore-the-bug); `test-tune_promote.R`
+- [x] `.gitignore` comment and CLAUDE.md "A run's record travels with its table" name the record
+- [x] tests: `test-grade_record.R` (round trip, a changed table refused, restore-the-bug); `test-tune_promote.R`
       fixtures write records and `set_col()` rewrites them (G2)
 
 ## Phase 2: Archive and restore

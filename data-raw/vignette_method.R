@@ -32,7 +32,8 @@
 # INPUT:  inst/method/{pipeline,settings}.csv; scripts/logs/habitat/<date>_evidence_build_ledger.csv (the one the tables
 #         name, knw_run_ledger());
 #         data/fdis/build/reconcile.csv and data/fdis/derived/{visits_link,visits_species,walks,fdis_sites}.csv
-#         (ignored; 0230, 0310); data/tune/<key>_{summary,tune,grades}.csv; data/tune/grad_fwa/<key>_{summary,tune}.csv
+#         (ignored; 0230, 0310); data/tune/<key>_{summary,tune,grades_record}.csv (a grade table's record, #119; the
+#         table itself, ignored, is checked against it where present); data/tune/grad_fwa/<key>_{summary,tune}.csv
 #         (0320 with GRADIENT=fwa_gradient, the Atlas-gradient sensitivity, #92); data/compare/<key>_compare.csv;
 #         inst/vignette-data/bulk_segments.rds; ../link and ../wet checkouts holding the run's commits; the fwapg
 #         database (PG* environment variables) for the snap example.
@@ -83,8 +84,16 @@ fitted <- summ |> filter(status == "fitted")
 keys <- paste(fitted$species_code, fitted$stage, sep = "_")
 f_tune <- file.path("data/tune", paste0(keys, "_tune.csv"))
 f_grades <- file.path("data/tune", paste0(keys, "_grades.csv"))
+f_records <- file.path("data/tune", paste0(keys, "_grades_record.csv"))
 f_compare <- sort(list.files("data/compare", "_compare\\.csv$", full.names = TRUE))
-g1 <- lapply(f_grades, rd, n_max = 1, col_types = cols(.default = "c"))
+# each grade table's record (#119), tracked, not the ignored table: the bundle pins the record, so it rebuilds where the
+# tables are not. A table that is here must be the one its record describes
+g1 <- lapply(f_records, knw_grade_record_read)
+for (i in which(file.exists(f_grades))) knw_grade_record_check(g1[[i]], f_grades[i])
+rec_ledger <- unique(vapply(g1, function(g) g$evidence_ledger, ""))
+if (!identical(rec_ledger, ledger)) {
+  stop("the grade records name the ledger ", paste(rec_ledger, collapse = ", "), ", the summaries ", ledger)
+}
 # graded from curves on link's segment gradient, the gradient the article says the rules were scored on (#92)
 off_grad <- f_grades[!vapply(g1, .knw_grade_grad_ok, logical(1))]
 if (length(off_grad)) stop("not graded from a curve on link's segment gradient (curve_grad, #92); rerun 0320: ", paste(off_grad, collapse = ", "))
@@ -452,7 +461,7 @@ svg <- list(flow = svg_of(dot_flow), lineage = svg_of(dot_lin))
 
 # ---- write ------------------------------------------------------------------------------------------------
 # git, not a list here, says which sources a clone has: an ignored one is checked only where it is present
-sources <- c(f_pipeline, f_settings, ledger, f_tune, f_grades, f_compare,
+sources <- c(f_pipeline, f_settings, ledger, f_tune, f_records, f_compare,
              file.path("data/tune", paste0(keys, "_summary.csv")), f_fwa_tune, f_fwa_summ,
              file.path(dir_out, "bulk_segments.rds"),
              f_reconcile, unname(derived), f_sites)

@@ -17,8 +17,11 @@ several, is refused.}
 }
 \value{
 A list: \code{schema}, \code{run_uid} (the schema's runs, \verb{;}-joined),
-\code{discharge_load}, \code{walk_md5}, \code{fresh_version}, and \code{line}, the record as one
-line for a log.
+\code{discharge_load}, \code{walk_md5}, \code{fresh_version}, \code{tokens} (link's output
+vocabulary, \code{c(cut =, acc =, grad =, flow =)}, each \code{NA} where the schema's
+run log predates link 0.70.0 and carries none), and \code{line}, the record as
+one line for a log. A schema whose runs logged two values on one axis is
+refused.
 }
 \description{
 A grade or a comparison reads four things from the database besides the

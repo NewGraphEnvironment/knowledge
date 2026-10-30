@@ -373,6 +373,8 @@ held-out deviance over the visits with a size against no rule's over every model
 it favoured publishing, and bull trout spawning's grade rested on it. Compare two deviances only when they are summed
 over the same rows (`null_heldout_curve` is no rule scored on the curve's own visits).
 
+The grade tables are ignored and run to gigabytes, so `0320` writes each one's record beside it, `<key>_grades_record.csv` (tracked, #119): the table's constant columns exactly as written, its md5, size and rows, the run, its evidence ledger, the knowledge commit and link's build (version, commit and output-vocabulary tokens, blank before link 0.70.0). `knw_tune_promote()` refuses a promoted key whose record is missing or describes another table, and reads kept keys from their records; the article bundles read and pin the record, and check a table present against it (`KNW_CHECK_GRADES=TRUE` makes `test-vignette-data.R` do the same).
+
 ### The segment flows can change under a run; the table comment names the build
 
 `discharge.fwa_v1_segment_monthly` is wet's database load, and wet can reload it between two runs: NewGraphEnvironment/wet#103

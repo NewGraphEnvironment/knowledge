@@ -20,3 +20,7 @@ cd /Users/airvine/Projects/repo/knowledge && git fetch -q origin && git checkout
 - A second `/planning-init 119` gate missed this branch and was answered differently; Al chose to resume this parked
   plan, adding the link token issue (Phase 2) and #121's article item (Phase 5). Merged origin/main (ef6d75f).
 - Next: Phase 1
+- Phase 1 landed: `R/grade_record.R` (write, read, check), `knw_build_record()` tokens (none in any schema on
+  2026-10-30: no `token_*` columns yet), 0320 writes records, promote reads and checks them, both bundle scripts read
+  records; 173 tests pass; mutation (promote's md5 check removed) turns `test-tune_promote.R` red. The
+  `md5_local` failures in `test-vignette-data.R` are the existing ones (this checkout holds the 2026-10-25 build, A3).

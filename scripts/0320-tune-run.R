@@ -57,6 +57,8 @@
 #         data/tune/<sp>_<stage>_curves.csv    the marginal curves at the pick
 #         data/tune/<sp>_<stage>_grades.csv    one row per segment of the species' groups, each graded segment at
 #                                              its own walked distance, with dist_status (ignored; 0325 publishes)
+#         data/tune/<sp>_<stage>_grades_record.csv  the grade table's record: its run columns, md5, size and rows, the
+#                                              run, ledger, commit and link build (tracked; the bundles pin it, #119)
 #         data/tune/<sp>_<stage>_groups.csv    the groups modelled, with their fold
 #         data/tune/<sp>_<stage>_seeds.csv     the four more fold seeds' best, pick and recommended rules
 #         data/tune/<sp>_<stage>_honest.csv    nested selection: each fold's pick and its held-out deviance
@@ -404,6 +406,17 @@ discharge_load <- knw_discharge_load(conn)
 # the walk's code (#87): the walk cache keys every row on it, and a grade walked by other code is regraded
 walk_md5 <- knw_walk_md5()
 say("Grading on the flow build: %s; walk %s, cached in knw.walk_cache.", discharge_load, walk_md5)
+# each grade table's record (#119): its constant columns, md5 and size beside the run, the evidence ledger, this commit
+# and link's build, tracked, so the bundles pin it rather than the table and the archive restores the table against it.
+# The commit is marked +dirty when the package or a script differs from it
+git1 <- function(...) suppressWarnings(system2("git", c(...), stdout = TRUE, stderr = FALSE))
+knowledge_commit <- paste0(git1("rev-parse", "--short", "HEAD")[1],
+                           if (length(git1("status", "--porcelain", "--", "R", "scripts", "inst"))) "+dirty" else "")
+write_record <- function(gpath, rows) {
+  knw_grade_record_write(gpath, tune_run = run, evidence_ledger = ledger_path, knowledge_commit = knowledge_commit,
+                         link = c(version = led$note[led$step == "run_link_version"], sha = link_sha),
+                         tokens = rec$tokens, rows = rows)
+}
 grade_rows <- list()
 for (k in names(out)) {
   r <- out[[k]]
@@ -435,7 +448,14 @@ for (k in names(out)) {
       "evidence_md5" %in% names(head1) && identical(head1$evidence_md5, evidence_md5) &&
       # graded from a curve fitted on the gradient the segments carry (#92); a table from before the record was not
       .knw_grade_grad_ok(head1, r$curve$cols[["grad"]])
-    if (same) {
+    # its record (#119): a kept table with none gets one written from the table; one that describes another table is
+    # regraded, so a record and its table are never two runs'
+    grec <- .knw_grade_record_path(gpath)
+    grec_ok <- !file.exists(grec) ||
+      isTRUE(tryCatch(knw_grade_record_check(knw_grade_record_read(grec), gpath), error = function(e) FALSE))
+    if (same && !grec_ok) say("%s: the grade table's record describes another table; regraded.", k)
+    if (same && grec_ok) {
+      if (!file.exists(grec)) write_record(gpath, rows = NA)
       # not "<key> grades: <n> groups", the result line data-raw/vignette_chinook.R reads
       say("%s: grades already written under %s on %s, kept.", k, r$pick$rule, run_uid)
       next
@@ -466,6 +486,7 @@ for (k in names(out)) {
                                evidence_md5 = evidence_md5, curve_grad = r$curve$cols[["grad"]],
                                across(c(rate, grade), ~ signif(.x, 5))),
             p, na = ""))
+  write_record(gpath, rows = nrow(g$grades))
   say("%s grades: %d groups, %s; reference rate %.4f over edge types %s; walks to %g m3/s, to the bank, %.1f min; %d of %d found rivers lie in another group; total %.1f min.",
       k, length(wsg), paste(names(g$counts), g$counts, sep = "=", collapse = ", "), g$reference,
       paste(g$ref_edge, collapse = ","), g$q, g$walk_minutes, sum(g$grades$target_in_group %in% FALSE),

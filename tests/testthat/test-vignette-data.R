@@ -117,6 +117,19 @@ test_that("every ignored source of the methodology article, where present, is un
   }
 })
 
+# a grade table's record is tracked and the bundles pin it (#119); the ignored table it describes is checked against it
+# where present. Opt-in: the published tables are up to 26 GB to md5
+test_that("every grade table present is the one its tracked record describes", {
+  skip_if_not(has_src, "no source-tree data/ (installed package)")
+  skip_if_not(identical(Sys.getenv("KNW_CHECK_GRADES"), "TRUE"), "KNW_CHECK_GRADES=TRUE md5s the grade tables")
+  recs <- list.files(file.path(root, "data", "tune"), "_grades_record\\.csv$", full.names = TRUE)
+  expect_gt(length(recs), 0)
+  for (r in recs) {
+    g <- sub("_grades_record\\.csv$", "_grades.csv", r)
+    if (file.exists(g)) expect_true(knw_grade_record_check(knw_grade_record_read(r), g), info = basename(g))
+  }
+})
+
 test_that("the methodology bundle's funnel adds up and every register row was resolved", {
   x <- readRDS(vd("method.rds"))
   f <- x$funnel
