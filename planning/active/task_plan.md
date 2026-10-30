@@ -154,14 +154,14 @@ with two additions from that gate: a link issue for the tokens the published bui
 
 ## Owed at the end (reported, done after merge)
 - [ ] when link has tokens for the published build, add them to its index rows (its folder is not renamed)
-- [ ] delete m4's spare copies and `~/Projects/repo_aside/knowledge_published_inputs_20261028/`, on Al's word only
+- [ ] delete the spare copies, on Al's word only: m4's and m1's `~/Projects/repo_aside/knowledge_seed_119/` (zst and staged tables, about 30 GB on m1), m1's `~/Projects/repo_aside/knowledge_published_inputs_20261028/`
 - [ ] the next promotion archives through `0335` on whichever machine promotes (it needs bucket credentials; m4 has
       none yet)
 
 ## Validation
-- [ ] Tests pass (in the restored worktree)
-- [ ] `/code-check` clean (once over the branch with `/code-check branch`)
-- [ ] PWF checkboxes match landed work
+- [x] Tests pass (in the restored worktree)
+- [x] `/code-check` clean (once over the branch with `/code-check branch`)
+- [x] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion
 
 Verification: Phase 1 by tests (the bundles are rebuilt in Phase 4, once their inputs are staged; A4); Phase 2 by a

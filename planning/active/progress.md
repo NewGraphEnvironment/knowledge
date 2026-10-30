@@ -42,3 +42,7 @@ cd /Users/airvine/Projects/repo/knowledge && git fetch -q origin && git checkout
   worktree at 7d45bed (only `site_gradient` and meta's `commit`/`md5` move; md5 gains thresholds.csv and
   WCT_rear_tune.csv); tests 1775 pass there; the article renders "rank correlation 0.69 … 0.90 … median of 2.2 points
   … 1,307 in all, 37 %". The range 33–42 % was dropped for the pooled share: its ends rested on bands of 3 and 15 sites.
+- `/code-check branch`: five reviewer rounds (findings 4, 6, 1, 1, 2; rounds 2–5 each inside the previous fix),
+  every finding fixed with a test that fails under its mutation; ended on the enumeration in findings.md (undo's
+  selection, cases a–f). Full suite in the restored worktree at 4880b8d: 1802 pass, 0 fail, 1 skip; examples run.
+  Proof worktrees removed; the m1 staging copy (`~/Projects/repo_aside/knowledge_seed_119/`) kept for Al's word.
