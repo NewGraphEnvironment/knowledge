@@ -54,6 +54,12 @@ per evidence build with a manifest; archive at promotion by `0335`, which refuse
 - **Seed grades from m4, compressed there:** zstd -3 on m4, copied here, md5-checked through decompression, uploaded
   from here; m4 needs no AWS credentials.
 
+Resumed 2026-10-30 (Al): a second plan gate the same day, which had missed this parked branch, was answered
+differently (one bucket-wide 180-day expiry; `link-<run_uid>` folders). Al chose this parked, reviewed plan over it,
+with two additions from that gate: a link issue for the tokens the published build and the Atlas-line gradient lack
+(and which axis names the tuning's wet flow read), and the #121 item added to #119's body after this baseline
+(Phase 5).
+
 ## Phase 1: The per-key grade record
 - [ ] `R/grade_record.R`: the record is exactly the grade table's constant columns (one `cols_grade_record` list
       shared with 0320's write: species_code, stage, rule, run_uid, ref_population, ref_edge, q_walk, walk, walk_md5,
@@ -80,6 +86,9 @@ per evidence build with a manifest; archive at promotion by `0335`, which refuse
       fixtures write records and `set_col()` rewrites them (G2)
 
 ## Phase 2: Archive and restore
+- [ ] File a link issue for tokens describing the pre-0.70 default network (the published run's 0.66.0 build) and the
+      whole-Atlas-line gradient, and to settle which axis names the tuning's wet flow read; write the dependency into
+      #119's body. An untokened run's folder is never renamed when tokens arrive: its index rows gain them
 - [ ] `R/archive.R`: `knw_archive_plan()` over source dirs (`TUNE_DIR`, `COMPARE_DIR`, `EVIDENCE_DIR`, as
       `data-raw/compare_structures_check.R`; B3) lists what goes where under `s3://fresh-bc/archive/knowledge/`:
       `tune/<key>/<setup>/` holding `<key>_grades.csv.zst` (zstd -3), `<key>_curve.rds`, `<key>_grades_record.csv`,
@@ -134,7 +143,18 @@ per evidence build with a manifest; archive at promotion by `0335`, which refuse
       the schema `fresh_default_20261017` confirmed present first
 - [ ] commit the rebuilt bundle(s)
 
+## Phase 5: #121 in the methodology article
+- [ ] Move `data-raw/site_gradient_check.R`'s flip and agreement computation into a package function both it and
+      `vignette_method.R` call, over every published gradient limit (underpowered included; `vignette_method.R`'s
+      `"fitted"`-only filter would drop WCT rearing)
+- [ ] The limits section of `vignettes/habitat_thresholds.Rmd`: a tuned gradient limit sorts sites well in bulk but
+      reads as a slope on the ground only to within a few points (`research/fdis_export.md`, "Measured vs modelled
+      gradient"); numbers inline with `stopifnot()`; rebuild `method.rds` (after Phase 4's comparison), revise pins and
+      the settings register where they move
+
 ## Owed at the end (reported, done after merge)
+- [ ] when link has tokens for the published build, add them to its index rows (its folder is not renamed)
+- [ ] delete m4's spare copies and `~/Projects/repo_aside/knowledge_published_inputs_20261028/`, on Al's word only
 - [ ] the next promotion archives through `0335` on whichever machine promotes (it needs bucket credentials; m4 has
       none yet)
 

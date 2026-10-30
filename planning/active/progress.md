@@ -14,3 +14,9 @@
 ```bash
 cd /Users/airvine/Projects/repo/knowledge && git fetch -q origin && git checkout 119-keep-the-inputs-a-published-article-bund && git pull --ff-only && git merge origin/main
 ```
+
+## Session 2026-10-30 (resumed)
+
+- A second `/planning-init 119` gate missed this branch and was answered differently; Al chose to resume this parked
+  plan, adding the link token issue (Phase 2) and #121's article item (Phase 5). Merged origin/main (ef6d75f).
+- Next: Phase 1
