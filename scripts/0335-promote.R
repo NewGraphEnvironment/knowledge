@@ -133,6 +133,7 @@ if (length(ak) && undo) {
   tryCatch(knw_archive_undo(ak), error = function(e) {
     stop("the tables are moved back but the archive does not yet say so (", conditionMessage(e), "): rerun ",
          "Rscript -e 'pkgload::load_all(); knw_archive_undo(c(\"", paste(ak, collapse = "\", \""), "\"))'",
+         " (where it asks for a batch, add batch = c(<key> = \"<batch>\") from data/archive_index.csv)",
          call. = FALSE)
   })
   message("Recorded in data/archive_index.csv: ", paste(ak, collapse = ", "), " published again from run ", run, ".")

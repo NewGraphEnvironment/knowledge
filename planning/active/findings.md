@@ -80,3 +80,23 @@ Relates to #111 (promotion), #118 (the rename that met this), #76 (licences befo
   most 1.2e-16, a last-bit difference through the curve's prediction (BLAS). Not committed: the bundle pins no grade
   table, so nothing #119 needs moves, and r-packages.md rebuilds a BLAS-touched bundle where it was built. It reads
   the record at its next rebuild (a promotion).
+
+## Code-check: the batch an undo restores, enumerated after round 5's fix (2026-10-30)
+
+Rounds 2 to 5 each found a defect inside the previous fix, all on one axis: which archived batch is "the run" a
+checkout or the published state means. Round 5 enumerated `.knw_archive_batch_rows()` over 36 cases and round 4's
+27 write paths plus 5 new ones; its only wrong cells were undo's selection and pull's `batch[[k]]`. After the fix,
+undo selects by the index (`.knw_archive_undo_batch()`): the latest batch unpublished by a `superseded` or `undone`
+event, other than the batch being undone, whose archived record is the restored record. Every case of it:
+
+| case | index state | restored files here | selects | right? | test |
+|---|---|---|---|---|---|
+| a | restored run superseded by the undone promotion, unique record | any (stale reported, not vetoed) | the superseded batch | yes | "an undo makes the published run current…", "…superseded, whatever the files restored here" |
+| b | restored and undone batches share a record (byte-identical regrade, other curve) | stale | the superseded batch (the undone one excluded) | yes | "…whatever the files restored here" |
+| c | undo of an undo, shared record | the twice-promoted run's | the batch the first undo unpublished (`undone` event) | yes | same test, second half |
+| d | same name reused with new content, undone | the first content's record | the superseded batch whose record matches | yes | "a run's name reused with new content…" |
+| e | restored run never unpublished by any event (not archived when published) | — | falls back to the record's batches; several differing, refuses and asks for `batch =` | yes: the index cannot name it | "…name one" (pull path, same helper) |
+| f | interrupted undo, rerun | — | the same batch; copies made are recorded (round 2) | yes | "an undo that stops partway…", "a copy an undo made but did not record…" |
+
+Pull's selection is unchanged by round 5 except a `batch` naming other keys (tested). The review ends on this
+enumeration, after five reviewer rounds (over the five-agent bound for one task; see the round summary).

@@ -389,3 +389,47 @@ test_that("batches sharing a record but not its curve or segments are told apart
   knw_archive_pull("CH_rear", dest2, index = idx2, batch = c(CH_rear = b1))
   expect_identical(unname(tools::md5sum(file.path(dest2, "data", "compare", "CH_rear_segments.rds"))), s1)
 })
+
+test_that("an undo restores the batch the undone promotion superseded, whatever the files restored here", {
+  root <- withr::local_tempdir()
+  tok <- c(cut = "cut-full-top", acc = "acc-v1", grad = "grad-seg", flow = "q-wet-fill")
+  idx <- file.path(root, "index.csv")
+  b <- mock_bucket()
+  curve_obj <- "archive/knowledge/tune/CH_rear/cut-full-top.acc-v1.grad-seg.q-wet-fill/CH_rear_curve.rds"
+  x <- run_fx(root, run = "20261101_0000", tokens = tok)
+  knw_archive_put(plan_of(x), idx, promoted = TRUE)
+  b1 <- knw_archive_index_read(idx)$batch[1]
+  # the same record promoted again with another curve (a byte-identical regrade at one commit)
+  saveRDS(list(curve = "refit"), file.path(x$tune, "CH_rear_curve.rds"))
+  knw_archive_put(plan_of(x), idx, promoted = TRUE)
+  # undone with this machine's curve and segments from another build
+  saveRDS(list(curve = "stale"), file.path(x$tune, "CH_rear_curve.rds"))
+  saveRDS(list(segments = "stale"), file.path(x$compare, "CH_rear_segments.rds"))
+  expect_message(knw_archive_undo("CH_rear", x$tune, idx, compare_dir = x$compare),
+                 "are not the archived run's; the archive's copies are published again")
+  i <- knw_archive_index_read(idx)
+  expect_identical(.knw_archive_published(i, "CH_rear")$batch, b1)
+  expect_identical(utils::tail(i$event, 2), c("undone", "promoted"))
+  expect_identical(utils::tail(b$objects[[curve_obj]], 1)[[1]]$md5,
+                   i$object_md5[i$batch == b1 & i$object == curve_obj][1])
+  # the undo undone (the second promotion's tables moved back): the second batch is published and current again
+  b2 <- i$batch[i$event == "promoted"][2]
+  saveRDS(list(curve = "refit"), file.path(x$tune, "CH_rear_curve.rds"))
+  knw_archive_undo("CH_rear", x$tune, idx, compare_dir = x$compare)
+  i <- knw_archive_index_read(idx)
+  expect_identical(.knw_archive_published(i, "CH_rear")$batch, b2)
+  expect_identical(utils::tail(b$objects[[curve_obj]], 1)[[1]]$md5,
+                   i$object_md5[i$batch == b2 & i$object == curve_obj][1])
+})
+
+test_that("a batch named for another key leaves this key's choice to its files", {
+  root <- withr::local_tempdir()
+  x <- run_fx(root)
+  idx <- file.path(root, "index.csv")
+  b <- mock_bucket()
+  knw_archive_put(plan_of(x), idx)
+  dest <- withr::local_tempdir()
+  dir.create(file.path(dest, "data", "tune"), recursive = TRUE)
+  file.copy(file.path(x$tune, "CH_rear_grades_record.csv"), file.path(dest, "data", "tune"))
+  expect_no_error(knw_archive_pull("CH_rear", dest, index = idx, batch = c(BT_rear = "x")))
+})

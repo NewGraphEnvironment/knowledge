@@ -9,7 +9,8 @@ knw_archive_undo(
   tune_dir = "data/tune",
   index = "data/archive_index.csv",
   bucket = .knw_archive_bucket,
-  compare_dir = "data/compare"
+  compare_dir = "data/compare",
+  batch = NULL
 )
 }
 \arguments{
@@ -21,8 +22,13 @@ knw_archive_undo(
 
 \item{bucket}{the bucket.}
 
-\item{compare_dir}{where their restored segments are: the batch is the one
-whose record, curve and segments are these.}
+\item{compare_dir}{where their restored segments are. The batch restored is
+the one the undone promotion superseded whose record is the restored one;
+restored curves and segments that differ from it are reported, and the
+archive's copies are published.}
+
+\item{batch}{\code{NULL}, or a named character vector of batch ids by key, where
+the index cannot name the batch.}
 }
 \value{
 The rows appended, invisibly.

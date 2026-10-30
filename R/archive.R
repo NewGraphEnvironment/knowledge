@@ -262,6 +262,21 @@ knw_archive_index_read <- function(path = "data/archive_index.csv") {
   rows_of(utils::tail(cands, 1))
 }
 
+# the batch an undo restores: the latest one a promotion or an undo unpublished (other than the published batch, the
+# one being undone) whose record is the restored record, so an undo of an undo restores the batch the first undid.
+# NULL when none is
+.knw_archive_undo_batch <- function(index, key, record_md5) {
+  cur <- .knw_archive_published(index, key)
+  sup <- rev(index$batch[index$key %in% key & index$event %in% c("superseded", "undone") &
+                           !index$batch %in% cur$batch])
+  for (b in unique(sup)) {
+    r <- index[index$event == "archived" & index$key %in% key & index$batch %in% b &
+                 grepl("_grades_record\\.csv$", index$source), ]
+    if (nrow(r) && utils::tail(r$source_md5, 1) %in% record_md5) return(b)
+  }
+  NULL
+}
+
 # the md5s of the key's files a checkout holds besides its record, named by their path in a checkout
 .knw_archive_local <- function(key, tune_dir, compare_dir) {
   f <- c(file.path(tune_dir, paste0(key, "_curve.rds")), file.path(compare_dir, paste0(key, "_segments.rds")))
@@ -461,7 +476,7 @@ knw_archive_pull <- function(keys, dest = ".", grades = FALSE, index = "data/arc
     knw_grade_record_read(f_rec)
     a <- .knw_archive_batch_rows(idx, k, unname(tools::md5sum(f_rec)),
                                  local = .knw_archive_local(k, file.path(dest, "data/tune"), file.path(dest, "data/compare")),
-                                 batch = if (is.null(batch)) NULL else batch[[k]])
+                                 batch = if (k %in% names(batch)) batch[[k]] else NULL)
     if (!grades) a <- a[!grepl("_grades\\.csv$", a$source), ]
     # grades first, segments last (0330 refuses segments older than the grades)
     a <- a[order(!grepl("_grades\\.csv$", a$source), grepl("_segments\\.rds$", a$source)), ]
@@ -529,14 +544,18 @@ knw_archive_pull <- function(keys, dest = ".", grades = FALSE, index = "data/arc
 #'
 #' @param keys the keys moved back.
 #' @param tune_dir where their restored records (and curves) are.
-#' @param compare_dir where their restored segments are: the batch is the one
-#'   whose record, curve and segments are these.
+#' @param compare_dir where their restored segments are. The batch restored is
+#'   the one the undone promotion superseded whose record is the restored one;
+#'   restored curves and segments that differ from it are reported, and the
+#'   archive's copies are published.
+#' @param batch `NULL`, or a named character vector of batch ids by key, where
+#'   the index cannot name the batch.
 #' @param index the index path.
 #' @param bucket the bucket.
 #' @return The rows appended, invisibly.
 #' @export
 knw_archive_undo <- function(keys, tune_dir = "data/tune", index = "data/archive_index.csv",
-                             bucket = .knw_archive_bucket, compare_dir = "data/compare") {
+                             bucket = .knw_archive_bucket, compare_dir = "data/compare", batch = NULL) {
   chk::chk_character(keys)
   idx <- knw_archive_index_read(index)
   now <- format(Sys.time(), "%Y-%m-%dT%H:%M:%SZ", tz = "UTC")
@@ -544,8 +563,18 @@ knw_archive_undo <- function(keys, tune_dir = "data/tune", index = "data/archive
     f_rec <- file.path(tune_dir, paste0(k, "_grades_record.csv"))
     rec <- knw_grade_record_read(f_rec)
     rec_md5 <- unname(tools::md5sum(f_rec))
-    # the batch whose record is the restored one, by content (round 3 of the review)
-    a <- .knw_archive_batch_rows(idx, k, rec_md5, local = .knw_archive_local(k, tune_dir, compare_dir))
+    # the batch the undone promotion superseded, whose record is the restored one: the index names it (round 5 of the
+    # review). The restored curve and segments only confirm it: a machine's ignored files can be another build's, and
+    # the archive's copies are the ones published again
+    b <- if (!is.null(batch) && k %in% names(batch)) batch[[k]] else .knw_archive_undo_batch(idx, k, rec_md5)
+    a <- if (!is.null(b)) .knw_archive_batch_rows(idx, k, rec_md5, batch = b) else .knw_archive_batch_rows(idx, k, rec_md5)
+    loc <- .knw_archive_local(k, tune_dir, compare_dir)
+    i <- match(names(loc), a$source)
+    off <- names(loc)[is.na(i) | a$source_md5[i] != loc]
+    if (length(off)) {
+      message(k, ": the restored ", paste(basename(off), collapse = ", "), " are not the archived run's; the archive's ",
+              "copies are published again (PULL=TRUE restores them here)")
+    }
     for (i in seq_len(nrow(a))) {
       r <- a[i, ]
       head <- .knw_aws(c("s3api", "head-object", "--bucket", bucket, "--key", r$object, "--query",

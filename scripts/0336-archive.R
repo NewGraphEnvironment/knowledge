@@ -76,7 +76,9 @@ if (nzchar(schema)) {
 if (pull) {
   # BATCH=CH_rear=<batch>,BT_rear=<batch>: for a record several archives hold with other curves or segments
   bt <- if (nzchar(Sys.getenv("BATCH"))) strsplit(strsplit(Sys.getenv("BATCH"), ",")[[1]], "=") else list()
+  if (!all(lengths(bt) == 2) || any(!nzchar(unlist(bt)))) stop("BATCH takes <key>=<batch>[,<key>=<batch>]")
   batch <- if (length(bt)) stats::setNames(vapply(bt, `[`, "", 2), vapply(bt, `[`, "", 1)) else NULL
+  if (length(setdiff(names(batch), keys))) stop("BATCH names keys not restored: ", paste(setdiff(names(batch), keys), collapse = ", "))
   got <- knw_archive_pull(keys, dest = dest, grades = flag("GRADES"), index = index, batch = batch)
   message("Restored or kept ", length(got), " files into ", normalizePath(dest), ":\n  ",
           paste(sub(paste0("^", dest, "/"), "", got), collapse = "\n  "))
