@@ -17,3 +17,10 @@
   `hagen_weber2019Limitingfactorsa`: today's merge re-keyed the survivor (Phase 2 rekeys the repo's rows).
 - Filed cred#40 (the three attachment-pick defects), at Al's request.
 - Plan review (Plan agent) landed; findings folded in, see findings.md "Plan review".
+
+### Phase 2: the Hagen & Weber rekey (2026-10-30)
+
+- `hagen_weber2019Limitingfactorsa` -> `hagen_weber2019Limitingfactors` in 22 rows of `literature_evidence.csv` and the
+  habitat_modelling, temperature and flow members (byte-level replace; line endings kept).
+- `0280`: 1,145 rows (649 text, 288 table, 145 OCR, 6 abstract, 57 none rows), registry 81 rows / 117 quotes, all
+  verified; coverage, thermal and flow grids full. 13.4 min. Logs `scripts/logs/habitat/20261030_literature_verify*.csv`.

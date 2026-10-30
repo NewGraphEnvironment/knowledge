@@ -36,7 +36,7 @@ Approved by Al, 2026-10-30, with the plan:
 ## Phase 2: clean `species/bull_trout` and `species/grayling`
 - [ ] Find a PDF for every no-PDF member (URL must return `%PDF`; ACAT/EcoCat for Williamson & Zimmerman 2005);
       record each miss and why (web page, paywalled) in findings
-- [ ] Rekey `hagen_weber2019Limitingfactorsa` -> `hagen_weber2019Limitingfactors` (today's merge re-keyed the survivor
+- [x] Rekey `hagen_weber2019Limitingfactorsa` -> `hagen_weber2019Limitingfactors` (today's merge re-keyed the survivor
       `YC3EQ8T8`): 22 rows of `literature_evidence.csv`, the habitat_modelling, temperature and flow members; `0280` passes
 - [ ] `data/bull_trout_members.csv` (+ `hagen_weber2019Limitingfactors`, + `gill2006Bulltrout`, the guide's existing
       parent), `data/grayling_members.csv` (+ `beaudry2014Assessmentassignment`), `data/grayling_additions.csv` for the
