@@ -113,6 +113,17 @@ Intermountain Journal of Sciences conference abstract, not the paper. Williamson
 PWFWCP report 337 is Ballard & Shrimpton (2009), an Omineca grayling synopsis, a candidate addition. Three web pages
 (species registry, BC species explorer twice).
 
+## Phase 3: `0150` names what a build leaves out
+
+`collection_keys()` lists every live, non-note member it does not hand cred: no citation key, no live PDF, or a
+standalone PDF whose `storageHash` no live PDF of a keyed item in the library shares (0270's parents carry the
+standalone's bytes, so their hashes pair). Measured 2026-10-30 from the local database:
+
+- `VHWEK6RE,GELFSUTU`: 32 keys; 8 of 44 members left out, all `no live PDF` (the misses above). The four
+  standalones are covered and not listed. Mutation: with the covered check replaced by an empty set, the four appear.
+- The `habitat_modelling` set (10 collections, grayling added): 260 keys; 88 of 353 members left out, 82 with no live
+  PDF and 6 standalone PDFs no keyed item holds.
+
 ## Errors Encountered
 
 | Error | Resolution |

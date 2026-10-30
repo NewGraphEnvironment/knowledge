@@ -57,7 +57,7 @@ Approved by Al, 2026-10-30, with the plan:
 - [ ] With the cred tag, not before (cred 0.4.0 is unproven on ragnar 0.3.1's mirai ingest): upgrade ragnar to 0.3.1
       (`pak::pak("ragnar")`, CRAN) and cred from GitHub
       (`pak::pak("NewGraphEnvironment/cred")`; cred is not on CRAN, so "latest" is its GitHub tag and `main`)
-- [ ] `0150 collection_keys()` prints each member it drops (no key, no PDF, standalone attachment; a standalone
+- [x] `0150 collection_keys()` prints each member it drops (no key, no PDF, standalone attachment; a standalone
       whose PDF a keyed parent also holds marked as covered). Unconditional: 0150 hands cred keys, so cred never sees
       a keyless or PDF-less member (plan review)
 

@@ -22,7 +22,8 @@
 #   - A cred-built store is named by Better BibTeX citation key, not by
 #     `<EXTENT>__<reportId>.pdf`. It has no watershed-group attribution and
 #     needs data/zotero_key_map.csv to join the farm (0154, 0161). Items with
-#     no citation key or no PDF attachment are silently absent. Prefer the
+#     no citation key or no PDF attachment are absent; build names each one
+#     (a standalone PDF a keyed item also holds is not listed, #122). Prefer the
 #     harvest path (wf_report_harvest.js -> 0152) for anything group-scoped.
 #   - The source of truth is s3://fresh-bc/rag/ (options(cred.store_source) in
 #     .Rprofile). Pull with cred::crd_store_connect("<store>"); a local write
@@ -83,6 +84,46 @@ collection_keys <- function(collections, zotero_dir = "~/Zotero",
       AND dd.itemID IS NULL AND da.itemID IS NULL
       AND ci.collectionID IN (%s)", paste(ids, collapse = ", "))
   res <- DBI::dbGetQuery(con, sql)
+  # Every live member the build leaves out, and why. cred is handed keys, so it never
+  # sees a member with no key or no PDF; this is the only place they can be named. A
+  # standalone PDF whose bytes a keyed item also holds (0270 gives a standalone a parent
+  # and leaves it in its collection) is covered, and is not listed.
+  mem <- DBI::dbGetQuery(con, sprintf("
+    SELECT DISTINCT i.itemID, i.key AS item_key, it.typeName AS item_type, sa.storageHash AS standalone_hash,
+      (SELECT idv.value FROM itemData id JOIN itemDataValues idv ON idv.valueID = id.valueID
+         JOIN fields f ON f.fieldID = id.fieldID
+       WHERE id.itemID = i.itemID AND f.fieldName = 'citationKey') AS citation_key,
+      (SELECT idv.value FROM itemData id JOIN itemDataValues idv ON idv.valueID = id.valueID
+         JOIN fields f ON f.fieldID = id.fieldID
+       WHERE id.itemID = i.itemID AND f.fieldName = 'title') AS title
+    FROM collectionItems ci
+    JOIN items      i  ON i.itemID      = ci.itemID
+    JOIN itemTypes  it ON it.itemTypeID = i.itemTypeID
+    LEFT JOIN itemAttachments sa ON sa.itemID = i.itemID AND sa.parentItemID IS NULL
+    LEFT JOIN deletedItems    d  ON d.itemID  = i.itemID
+    WHERE d.itemID IS NULL AND it.typeName <> 'note' AND ci.collectionID IN (%s)
+    ORDER BY i.key", paste(ids, collapse = ", ")))
+  held <- DBI::dbGetQuery(con, "
+    SELECT DISTINCT ia.storageHash
+    FROM itemAttachments ia
+    JOIN items     p  ON p.itemID  = ia.parentItemID
+    JOIN itemData  id ON id.itemID = p.itemID
+    JOIN fields    f  ON f.fieldID = id.fieldID AND f.fieldName = 'citationKey'
+    LEFT JOIN deletedItems dp ON dp.itemID = p.itemID
+    LEFT JOIN deletedItems da ON da.itemID = ia.itemID
+    WHERE p.libraryID = ? AND ia.contentType = 'application/pdf' AND ia.storageHash IS NOT NULL
+      AND dp.itemID IS NULL AND da.itemID IS NULL", params = list(lib))$storageHash
+  standalone <- mem$item_type == "attachment"
+  why <- ifelse(standalone,
+    ifelse(!is.na(mem$standalone_hash) & mem$standalone_hash %in% held, NA,
+           "standalone attachment, no keyed item holds its file"),
+    ifelse(is.na(mem$citation_key), "no citation key",
+           ifelse(mem$citation_key %in% res$citation_key, NA, "no live PDF")))
+  out <- mem[!is.na(why), ]
+  if (nrow(out)) message(sprintf("%d of %d members left out:\n%s", nrow(out), nrow(mem),
+    paste(sprintf("  %s  %s  (%s)", out$item_key,
+                  ifelse(is.na(out$citation_key), substr(out$title, 1, 60), out$citation_key),
+                  why[!is.na(why)]), collapse = "\n")))
   missing <- collections[!ids %in% res$collectionID]
   if (length(missing)) stop("No keyed PDF items in collection(s): ", paste(missing, collapse = ", "))
   message(sprintf("%d keys across %d collections", length(unique(res$citation_key)), length(collections)))
