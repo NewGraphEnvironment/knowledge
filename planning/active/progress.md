@@ -36,3 +36,6 @@
   with a value from the table itself. The BT spawning population sentence (now the filters it passes, 11,805). The
   stamp's `git status` on a TUNE_DIR outside the repo (now stamped only when it is the tracked `data/tune`, named
   otherwise; tested on a copy). WCT adds a row; the band range is now 33 to 42 %.
+- `/code-check branch` round 4 (`review-round4.md`): Clean, on two enumerations of the current files (41 prose
+  claims, 13 restated definitions), each against its source; a copy of the script reproduced the committed log from
+  line 2 on. The loop ended by enumeration after four rounds (plus the plan review: five reviewer agents).

@@ -90,7 +90,7 @@ Approved by Al at plan approval, 2026-10-30, as recommended:
       average are, then the numbers), the band result, the catch difference, the negatives; a `Verified` line naming
       the script, log and evidence md5.
 - [x] `data-raw/README.md`: one sentence for the new check.
-- [ ] `/code-check branch`, then archive and open the PR.
+- [x] `/code-check branch`, then archive and open the PR.
 
 ## Owed at the end (reported, done after merge)
 - [ ] The sentence in `vignettes/habitat_thresholds.Rmd`'s limits, carried through `data-raw/vignette_method.R`, at the
@@ -100,9 +100,11 @@ Approved by Al at plan approval, 2026-10-30, as recommended:
       data-raw/site_gradient_check.R`.
 
 ## Validation
-- [ ] Tests pass (`devtools::test()`; the script adds no package code, so this guards against an accidental change)
-- [ ] `/code-check` clean (once over the branch with `/code-check branch`)
-- [ ] PWF checkboxes match landed work
+- [x] Tests pass (`devtools::test()`; the script adds no package code, so this guards against an accidental change):
+      298 tests, one failure, `test-vignette-data.R`'s check of the ignored evidence files, because this checkout holds
+      the 2026-10-25 build (CLAUDE.md names that failure); the branch changes nothing it reads
+- [x] `/code-check` clean (once over the branch with `/code-check branch`)
+- [x] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion
 
 Verification: the log's counts are held to the issue's (18,759 of 45,529 with `gradient_pct`, 9,397 with
