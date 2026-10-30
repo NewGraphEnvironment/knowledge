@@ -41,9 +41,10 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   reads the ledger the published tables name (`knw_run_ledger()`), and refuses on a machine whose `data/fdis/derived`
   is not that build's evidence. `tests/testthat/test-settings-register.R` fails when a register value and the code
   disagree: change both together, and add a row for any new number that shapes a result (the test cannot see one with
-  no row). `method.rds` also pins the md5s of the ignored grade tables (`data/tune/*_grades.csv`) where it was built,
-  and `test-vignette-data.R` checks them wherever they exist, so on a machine whose copies differ it fails there and
-  nowhere else (CI has no `data/`). Its references come from `data-raw/vignette_bib.R` with the chinook article's. A draft article is named
+  no row). `method.rds` pins each grade table's tracked record (`data/tune/<key>_grades_record.csv`), not the table
+  (#119), and the md5s of the ignored evidence it was built from, which `test-vignette-data.R` checks wherever they
+  exist, so on a machine whose copies differ it fails there and nowhere else (CI has no `data/`). A checkout without
+  them restores them with `PULL=TRUE scripts/0336-archive.R`, the run its records name. Its references come from `data-raw/vignette_bib.R` with the chinook article's. A draft article is named
   `vignettes/_<name>.Rmd`: pkgdown skips it, `.Rbuildignore` keeps it out of the tarball, and pkgdown.yaml fails if
   one reaches `docs/articles/`.
 - `scripts/` — the run order (`scripts/README.md`), calling the package (`pkgload::load_all()` from
