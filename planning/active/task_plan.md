@@ -123,25 +123,25 @@ with two additions from that gate: a link issue for the tokens the published bui
 - [x] Phase 2's real round trip on one small key under a scratch prefix (`archive/knowledge/_test/`), deleted after (O3)
 
 ## Phase 4: Seed and prove
-- [ ] m4 first (O4): compress the seven published grade tables (zstd -3), and copy them, the seven `<key>_curve.rds`
+- [x] m4 first (O4): compress the seven published grade tables (zstd -3), and copy them, the seven `<key>_curve.rds`
       and every key's `<key>_segments.rds` here into a staging tree outside the repo (G1), checked against the md5s
       `method.rds` and `chinook_rearing.rds` pin, through decompression (`/sbin/md5`, `/opt/homebrew/bin/zstd`); m4's
       checkout is only read, and this checkout's ignored `data/` is never written (B1)
-- [ ] `data-raw/archive_seed.R`: backfilled records with `knw_grade_record_write()` on the staged tables
+- [x] `data-raw/archive_seed.R`: backfilled records with `knw_grade_record_write()` on the staged tables
       (`record_source = backfill`, `tune_run = published_20261028`, the 2026-10-27 ledger), cross-checked against the
       rescued first rows; commit the records (B2)
-- [ ] `0336` on the staged published run and its evidence (bare command handed over if auto mode refuses the upload);
+- [x] `0336` on the staged published run and its evidence (bare command handed over if auto mode refuses the upload);
       commit `data/archive_index.csv` (B2)
-- [ ] a staging worktree detached at that commit, beside `../link` and `../wet` (or `LINK_REPO`/`WET_REPO`), filled by
+- [x] a staging worktree detached at that commit, beside `../link` and `../wet` (or `LINK_REPO`/`WET_REPO`), filled by
       hand from the staged copies; `vignette_method.R` there is the reference R. A second fresh worktree at the same
       commit, `PULL=TRUE` (no grade tables), then `vignette_method.R`: identical to R except `meta$written`, compared
       by name (A1). R against the published bundle: differences named in advance (`written`, `commit`, `md5` gains the
       seven records, `md5_local` loses the seven tables), package versions recorded on both machines; anything else
       explained or a failure (A2)
-- [ ] `devtools::test()` in the restored worktree, not the main checkout (A3); the chinook bundle rebuilt only after
+- [x] `devtools::test()` in the restored worktree, not the main checkout (A3); the chinook bundle rebuilt only after
       the comparison, with `bulk_segments.rds` checked byte-identical or the method bundle rebuilt after it (O6), and
       the schema `fresh_default_20261017` confirmed present first
-- [ ] commit the rebuilt bundle(s)
+- [x] commit the rebuilt bundle(s)
 
 ## Phase 5: #121 in the methodology article
 - [ ] Move `data-raw/site_gradient_check.R`'s flip and agreement computation into a package function both it and

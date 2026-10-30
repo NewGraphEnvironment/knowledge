@@ -34,3 +34,6 @@ cd /Users/airvine/Projects/repo/knowledge && git fetch -q origin && git checkout
   30 d on each other top-level prefix and archive child: 15 rules) then versioning Enabled, both read back. Before
   it: 0 noncurrent versions, 41 delete markers, so nothing existing was expired. Real round trip under
   archive/knowledge/_test/ (11 objects; second put sent nothing; restore md5-identical), its 11 versions deleted.
+- Phase 4 done: seed from m4 (8 keys), backfilled records (3d647a4), archive (1e7dbb8: 39 objects, 3.2 GB), proof in
+  two worktrees (identical; published differs only in the four meta fields named in advance), tests 1752 pass in the
+  restored worktree; rebuilt `method.rds` committed; chinook bundle kept (last-bit BLAS difference only).

@@ -56,3 +56,27 @@ Relates to #111 (promotion), #118 (the rename that met this), #76 (licences befo
 
 
 
+
+## Seed and proof (2026-10-30)
+
+- **Seed.** m4 held all eight published grade tables (the seven `method.rds` pins plus underpowered WCT rearing);
+  each matched its pin. zstd -3 on m4 with a decompress-and-md5 round trip: 28.1 GB to 1.54 GB, about 2 min on m4.
+  Copied to m1 staging (`~/Projects/repo_aside/knowledge_seed_119/`, outside the repo), decompressed, every md5 equal
+  to m4's. CH rearing's curve (`54ff646b…`) and segments (`1112dd31…`) matched `chinook_rearing.rds`'s pins.
+  `data-raw/archive_seed.R` wrote eight `record_source = backfill` records (run `published_20261028`), each staged first
+  row identical to the row rescued on 2026-10-29. The rescued evidence matched every pin (`sites.rds` against the
+  ledger's `md5_sites`).
+- **Archive.** `0336` from staging, `PROMOTED=TRUE`: 39 objects (8 keys × 4; 6 evidence files and the MANIFEST),
+  3,213 MB stored (segments are not compressed: about 1.3 GB of it), evidence folder
+  `63aa65a8404c7a212077828f559f9fef`, about 9 min over this link. Index: 39 `archived` and 8 `promoted` rows.
+- **Proof (A1, A2).** Two worktrees at `1e7dbb8`: R filled by hand from staging (grade tables as hard links), W by
+  `PULL=TRUE 0336` alone (no grade tables). `vignette_method.R` in each: **R and W identical in every element**. R
+  against the published bundle (written 2026-10-28 at `9418f8c`): only `meta` differs, in exactly the four fields
+  named in advance: `written`, `commit`, `md5` (gains the seven records; every shared entry equal), `md5_local` (loses
+  the seven grade tables; every shared entry equal). `ledger`, `flow_load`, `wet_sha`, `link_config_sha` equal.
+- **Tests in W** (restored evidence, no grade tables, the rebuilt `method.rds`): `[ FAIL 0 | WARN 0 | SKIP 1 | PASS 1752 ]`.
+- **Chinook bundle in W** (`SCHEMA=fresh_default_20261017`): `bulk_segments.rds` and `bulk_water.rds` byte-identical;
+  `chinook_rearing.rds` differs in `meta` (`written`; `md5` gains the CH rearing record) and in `surface$rate` by at
+  most 1.2e-16, a last-bit difference through the curve's prediction (BLAS). Not committed: the bundle pins no grade
+  table, so nothing #119 needs moves, and r-packages.md rebuilds a BLAS-touched bundle where it was built. It reads
+  the record at its next rebuild (a promotion).
