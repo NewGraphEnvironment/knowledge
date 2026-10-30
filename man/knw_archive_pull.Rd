@@ -9,7 +9,8 @@ knw_archive_pull(
   dest = ".",
   grades = FALSE,
   index = "data/archive_index.csv",
-  bucket = .knw_archive_bucket
+  bucket = .knw_archive_bucket,
+  batch = NULL
 )
 }
 \arguments{
@@ -22,6 +23,10 @@ knw_archive_pull(
 \item{index}{the index path.}
 
 \item{bucket}{the bucket.}
+
+\item{batch}{\code{NULL}, or a named character vector of batch ids by key, for a
+record that several archives hold with other curves or segments (the
+checkout's own files, and then the published batch, decide otherwise).}
 }
 \value{
 The restored and kept files' paths, invisibly.

@@ -8,17 +8,21 @@ knw_archive_undo(
   keys,
   tune_dir = "data/tune",
   index = "data/archive_index.csv",
-  bucket = .knw_archive_bucket
+  bucket = .knw_archive_bucket,
+  compare_dir = "data/compare"
 )
 }
 \arguments{
 \item{keys}{the keys moved back.}
 
-\item{tune_dir}{where their restored records are.}
+\item{tune_dir}{where their restored records (and curves) are.}
 
 \item{index}{the index path.}
 
 \item{bucket}{the bucket.}
+
+\item{compare_dir}{where their restored segments are: the batch is the one
+whose record, curve and segments are these.}
 }
 \value{
 The rows appended, invisibly.

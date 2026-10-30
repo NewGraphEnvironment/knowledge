@@ -220,15 +220,54 @@ knw_archive_index_read <- function(path = "data/archive_index.csv") {
   cur
 }
 
-# the objects of the batch that archived this record (its md5), each at its last row (an undo's copy keeps the batch):
-# the run a checkout's record describes, whatever runs have reused its name since
-.knw_archive_batch_rows <- function(index, key, record_md5) {
+# the objects of the batch a checkout's files describe, each at its last row (an undo's copy keeps the batch),
+# whatever runs have reused its name since (round 3). The record pins the grade table only, so batches sharing a record
+# can differ in the curve or the segments (round 4): the candidates are narrowed by every file the checkout holds
+# (`local`, md5s named by their path in a checkout); where they still differ, the published one is taken, else a
+# `batch` must be named
+.knw_archive_batch_rows <- function(index, key, record_md5, local = character(), batch = NULL) {
   r <- index[index$event == "archived" & index$key %in% key & grepl("_grades_record\\.csv$", index$source) &
                index$source_md5 %in% record_md5, ]
   if (!nrow(r)) stop(key, ": the index holds no archive whose record is this one (md5 ", record_md5, ")", call. = FALSE)
-  b <- utils::tail(r$batch, 1)
-  a <- index[index$event == "archived" & index$key %in% key & index$batch %in% b, ]
-  a[!duplicated(a$object, fromLast = TRUE), ]
+  rows_of <- function(b) {
+    a <- index[index$event == "archived" & index$key %in% key & index$batch %in% b, ]
+    a[!duplicated(a$object, fromLast = TRUE), ]
+  }
+  cands <- unique(r$batch)
+  if (!is.null(batch)) {
+    if (!batch %in% cands) stop(key, ": batch ", batch, " does not hold this record", call. = FALSE)
+    return(rows_of(batch))
+  }
+  if (length(local)) {
+    cands <- Filter(function(b) {
+      a <- rows_of(b)
+      i <- match(names(local), a$source)
+      all(!is.na(i)) && all(a$source_md5[i] == local)
+    }, cands)
+    if (!length(cands)) {
+      stop(key, ": no archive holds this record with the ", paste(basename(names(local)), collapse = ", "),
+           " here", call. = FALSE)
+    }
+  }
+  sets <- vapply(cands, function(b) {
+    a <- rows_of(b)
+    paste(sort(paste(a$object, a$source_md5)), collapse = "\n")
+  }, character(1))
+  if (length(unique(sets)) > 1) {
+    pub <- .knw_archive_published(index, key)
+    if (!is.null(pub) && pub$batch %in% cands) return(rows_of(pub$batch))
+    stop(key, ": archives ", paste(cands, collapse = ", "), " hold this record with other files; name one (BATCH=)",
+         call. = FALSE)
+  }
+  rows_of(utils::tail(cands, 1))
+}
+
+# the md5s of the key's files a checkout holds besides its record, named by their path in a checkout
+.knw_archive_local <- function(key, tune_dir, compare_dir) {
+  f <- c(file.path(tune_dir, paste0(key, "_curve.rds")), file.path(compare_dir, paste0(key, "_segments.rds")))
+  names(f) <- c(file.path("data/tune", paste0(key, "_curve.rds")), file.path("data/compare", paste0(key, "_segments.rds")))
+  f <- f[file.exists(f)]
+  stats::setNames(unname(tools::md5sum(f)), names(f))
 }
 
 #' Store a run in the archive, and record where
@@ -403,10 +442,13 @@ knw_archive_put <- function(plan, index = "data/archive_index.csv", promoted = F
 #' @param grades `TRUE` to restore the grade tables too.
 #' @param index the index path.
 #' @param bucket the bucket.
+#' @param batch `NULL`, or a named character vector of batch ids by key, for a
+#'   record that several archives hold with other curves or segments (the
+#'   checkout's own files, and then the published batch, decide otherwise).
 #' @return The restored and kept files' paths, invisibly.
 #' @export
 knw_archive_pull <- function(keys, dest = ".", grades = FALSE, index = "data/archive_index.csv",
-                             bucket = .knw_archive_bucket) {
+                             bucket = .knw_archive_bucket, batch = NULL) {
   chk::chk_character(keys)
   chk::chk_flag(grades)
   idx <- knw_archive_index_read(index)
@@ -417,7 +459,9 @@ knw_archive_pull <- function(keys, dest = ".", grades = FALSE, index = "data/arc
     # the batch whose record is this checkout's, by content: a run's name can be reused by a resumed run (round 3)
     f_rec <- file.path(dest, "data", "tune", paste0(k, "_grades_record.csv"))
     knw_grade_record_read(f_rec)
-    a <- .knw_archive_batch_rows(idx, k, unname(tools::md5sum(f_rec)))
+    a <- .knw_archive_batch_rows(idx, k, unname(tools::md5sum(f_rec)),
+                                 local = .knw_archive_local(k, file.path(dest, "data/tune"), file.path(dest, "data/compare")),
+                                 batch = if (is.null(batch)) NULL else batch[[k]])
     if (!grades) a <- a[!grepl("_grades\\.csv$", a$source), ]
     # grades first, segments last (0330 refuses segments older than the grades)
     a <- a[order(!grepl("_grades\\.csv$", a$source), grepl("_segments\\.rds$", a$source)), ]
@@ -484,13 +528,15 @@ knw_archive_pull <- function(keys, dest = ".", grades = FALSE, index = "data/arc
 #' recorded as an `archived` row.
 #'
 #' @param keys the keys moved back.
-#' @param tune_dir where their restored records are.
+#' @param tune_dir where their restored records (and curves) are.
+#' @param compare_dir where their restored segments are: the batch is the one
+#'   whose record, curve and segments are these.
 #' @param index the index path.
 #' @param bucket the bucket.
 #' @return The rows appended, invisibly.
 #' @export
 knw_archive_undo <- function(keys, tune_dir = "data/tune", index = "data/archive_index.csv",
-                             bucket = .knw_archive_bucket) {
+                             bucket = .knw_archive_bucket, compare_dir = "data/compare") {
   chk::chk_character(keys)
   idx <- knw_archive_index_read(index)
   now <- format(Sys.time(), "%Y-%m-%dT%H:%M:%SZ", tz = "UTC")
@@ -499,7 +545,7 @@ knw_archive_undo <- function(keys, tune_dir = "data/tune", index = "data/archive
     rec <- knw_grade_record_read(f_rec)
     rec_md5 <- unname(tools::md5sum(f_rec))
     # the batch whose record is the restored one, by content (round 3 of the review)
-    a <- .knw_archive_batch_rows(idx, k, rec_md5)
+    a <- .knw_archive_batch_rows(idx, k, rec_md5, local = .knw_archive_local(k, tune_dir, compare_dir))
     for (i in seq_len(nrow(a))) {
       r <- a[i, ]
       head <- .knw_aws(c("s3api", "head-object", "--bucket", bucket, "--key", r$object, "--query",

@@ -30,7 +30,9 @@
 #                                                          record; KEYS=CH_rear,BT_rear for some; DRY=1 lists)
 #         RUN=<run> Rscript scripts/0336-archive.R        (a candidate under data/{tune,compare}/candidate/<run>/)
 #         TUNE_DIR=… COMPARE_DIR=… EVIDENCE_DIR=… BUILD_DIR=… Rscript scripts/0336-archive.R   (a staged copy)
-#         PULL=TRUE [GRADES=TRUE] [KEYS=…] [DEST=<checkout>] Rscript scripts/0336-archive.R
+#         PULL=TRUE [GRADES=TRUE] [KEYS=…] [DEST=<checkout>] [BATCH=<key>=<batch>,…] Rscript scripts/0336-archive.R
+#                                                         (BATCH: only where several archives hold one record with
+#                                                          other curves or segments, which the restore names)
 #         SCHEMA=<schema> with either: says whether the database still holds the run's build (run, flows, walk)
 # ---------------------------------------------------------------------------
 pkgload::load_all(quiet = TRUE)
@@ -72,7 +74,10 @@ if (nzchar(schema)) {
 }
 
 if (pull) {
-  got <- knw_archive_pull(keys, dest = dest, grades = flag("GRADES"), index = index)
+  # BATCH=CH_rear=<batch>,BT_rear=<batch>: for a record several archives hold with other curves or segments
+  bt <- if (nzchar(Sys.getenv("BATCH"))) strsplit(strsplit(Sys.getenv("BATCH"), ",")[[1]], "=") else list()
+  batch <- if (length(bt)) stats::setNames(vapply(bt, `[`, "", 2), vapply(bt, `[`, "", 1)) else NULL
+  got <- knw_archive_pull(keys, dest = dest, grades = flag("GRADES"), index = index, batch = batch)
   message("Restored or kept ", length(got), " files into ", normalizePath(dest), ":\n  ",
           paste(sub(paste0("^", dest, "/"), "", got), collapse = "\n  "))
   quit(save = "no", status = 0)

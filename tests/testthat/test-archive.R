@@ -345,3 +345,47 @@ test_that("a run's name reused with new content is refused over the published ru
   writeLines(c(rec1[1], sub("20261101_0000", "20261199_0000", rec1[2])), file.path(dest, "data", "tune", "CH_rear_grades_record.csv"))
   expect_error(knw_archive_pull("CH_rear", dest, index = idx), "no archive whose record is this one")
 })
+
+test_that("batches sharing a record but not its curve or segments are told apart by the files here, then by publication", {
+  root <- withr::local_tempdir()
+  # untokened: one folder per run, so a superseded run's folder takes an unpromoted copy of it (a tokened folder's
+  # published run refuses one)
+  tok <- c(cut = NA, acc = NA, grad = NA, flow = NA)
+  idx <- file.path(root, "index.csv")
+  b <- mock_bucket()
+  seg_obj <- "archive/knowledge/tune/CH_rear/untokened/20261101_0000/CH_rear_segments.rds"
+  x <- run_fx(root, run = "20261101_0000", tokens = tok)
+  rec1 <- readLines(file.path(x$tune, "CH_rear_grades_record.csv"))
+  s1 <- unname(tools::md5sum(file.path(x$compare, "CH_rear_segments.rds")))
+  knw_archive_put(plan_of(x), idx, promoted = TRUE)
+  x <- run_fx(root, run = "20261102_0000", tokens = tok, grade = 0.2)
+  knw_archive_put(plan_of(x), idx, promoted = TRUE)
+  # the first run again, with other segments, archived unpromoted (the published batch is now the second's)
+  x <- run_fx(root, run = "20261101_0000", tokens = tok)
+  saveRDS(list(segments = "s0"), file.path(x$compare, "CH_rear_segments.rds"))
+  knw_archive_put(plan_of(x), idx)
+  i <- knw_archive_index_read(idx)
+  b1 <- i$batch[i$event == "archived"][1]
+  # undo of the second promotion, with the first run's own segments back on disk, restores and publishes the first batch
+  x <- run_fx(root, run = "20261101_0000", tokens = tok)
+  knw_archive_undo("CH_rear", x$tune, idx, compare_dir = x$compare)
+  i <- knw_archive_index_read(idx)
+  expect_identical(.knw_archive_published(i, "CH_rear")$batch, b1)
+  expect_identical(utils::tail(b$objects[[seg_obj]], 1)[[1]]$md5,
+                   i$object_md5[i$batch == b1 & i$object == seg_obj][1])
+  # a checkout with the record only: two archives hold it with other segments, and the published one is restored
+  dest <- withr::local_tempdir()
+  dir.create(file.path(dest, "data", "tune"), recursive = TRUE)
+  writeLines(rec1, file.path(dest, "data", "tune", "CH_rear_grades_record.csv"))
+  knw_archive_pull("CH_rear", dest, index = idx)
+  expect_identical(unname(tools::md5sum(file.path(dest, "data", "compare", "CH_rear_segments.rds"))), s1)
+  # with neither published, the restore asks for a batch by name
+  i2 <- i[!i$event %in% c("promoted", "superseded", "undone"), ]
+  utils::write.csv(i2, idx2 <- file.path(root, "index2.csv"), row.names = FALSE, na = "")
+  dest2 <- withr::local_tempdir()
+  dir.create(file.path(dest2, "data", "tune"), recursive = TRUE)
+  writeLines(rec1, file.path(dest2, "data", "tune", "CH_rear_grades_record.csv"))
+  expect_error(knw_archive_pull("CH_rear", dest2, index = idx2), "hold this record with other files; name one")
+  knw_archive_pull("CH_rear", dest2, index = idx2, batch = c(CH_rear = b1))
+  expect_identical(unname(tools::md5sum(file.path(dest2, "data", "compare", "CH_rear_segments.rds"))), s1)
+})
