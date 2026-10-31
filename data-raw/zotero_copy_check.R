@@ -20,6 +20,7 @@
 # LIVE: the same reads of ~/Zotero/zotero.sqlite (items and the newest clientDateModified), when it
 #   exists and LIVE is not FALSE. Reads only: the copies go to a tempdir.
 # INPUT:  RSQLite; ~/Zotero/zotero.sqlite for the live table
+# GUARDS: each script's guarded copy, run on each fixture, must read its rows; the script stops if not.
 # WRITES: nothing outside tempdir()
 # RUN:    Rscript data-raw/zotero_copy_check.R          (from the repo root; LIVE=FALSE skips the live table)
 # ---------------------------------------------------------------------------
@@ -96,6 +97,36 @@ tab <- do.call(rbind, lapply(names(fx), function(k) {
 tab$newest <- NULL
 print(tab, row.names = FALSE)
 
+# --- the guards, as the scripts define them ---------------------------------
+# Each is taken from its script by parse(), never retyped, and run once on each fixture: it must
+# return a connection whose items hold the fixture's rows.
+fn_from <- function(file, name) {
+  for (e in parse(file, keep.source = FALSE)) {
+    if (is.call(e) && identical(e[[1]], as.name("<-")) && identical(e[[2]], as.name(name))) {
+      env <- new.env()
+      eval(e, env)
+      return(env[[name]])
+    }
+  }
+  stop(name, "() not found in ", file)
+}
+r_guard <- function(file) {
+  f <- fn_from(file, "snapshot")
+  function(db) {
+    con <- f(live = db, tries = 1, wait = 0)
+    on.exit(DBI::dbDisconnect(con))
+    DBI::dbGetQuery(con, "SELECT count(*) FROM items")[[1]]
+  }
+}
+guards <- list(`0280 snapshot()` = r_guard("scripts/0280-literature-verify.R"))
+gt <- do.call(rbind, lapply(names(guards), function(g) do.call(rbind, lapply(names(fx), function(k) {
+  n <- tryCatch(guards[[g]](file.path(fx[[k]], "zotero.sqlite")), error = function(e) NA_integer_)
+  data.frame(guard = g, fixture = k, rows = n, expected = expect_rows[[k]])
+}))))
+gt$ok <- !is.na(gt$rows) & gt$rows == gt$expected
+cat("\n== guards\n")
+print(gt, row.names = FALSE)
+
 if (!identical(Sys.getenv("LIVE"), "FALSE") && file.exists(path.expand("~/Zotero/zotero.sqlite"))) {
   live <- path.expand("~/Zotero")
   files <- file.path(live, c("zotero.sqlite", "zotero.sqlite-wal", "zotero.sqlite-shm"))
@@ -108,3 +139,5 @@ if (!identical(Sys.getenv("LIVE"), "FALSE") && file.exists(path.expand("~/Zotero
   if (!identical(file.info(files)$mtime, info$mtime)) cat("(a live file changed during the reads)\n")
 }
 unlink(root, recursive = TRUE)
+if (!all(gt$ok)) stop(sum(!gt$ok), " guard run(s) did not read the fixture's rows")
+cat("\nPASS: every guard read every fixture's rows\n")

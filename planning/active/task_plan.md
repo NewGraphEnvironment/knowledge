@@ -60,16 +60,16 @@ measures this before anything is fixed.
 
 ## Phase 2: `0280` `snapshot()`, WAL-aware
 
-- [ ] `snapshot(live = path.expand("~/Zotero/zotero.sqlite"), ...)`. The argument exists so the check can point it at
+- [x] `snapshot(live = path.expand("~/Zotero/zotero.sqlite"), ...)`. The argument exists so the check can point it at
   the fixture.
-- [ ] `state()` holds the mtime and size of the main file and of the `-wal` (`NA` when absent), the mode bytes 18-19,
+- [x] `state()` holds the mtime and size of the main file and of the `-wal` (`NA` when absent), the mode bytes 18-19,
   and the rollback-journal flag.
-- [ ] Each try deletes the copy's `-wal` and `-shm` before copying. Otherwise, if Zotero quits between tries and its
+- [x] Each try deletes the copy's `-wal` and `-shm` before copying. Otherwise, if Zotero quits between tries and its
   `-wal` disappears, a stale `-wal` from the previous try would sit beside a new main file. Then copy the main file,
   then the `-wal` if it exists. Accept the pair only when `state()` is identical before and after, no journal
   transaction is open, and `quick_check` returns `ok`.
-- [ ] Rewrite the comment above it: the WAL replaces the journal as the thing a copy can miss.
-- [ ] The check script passes `0280`'s `snapshot()` (taken from the script by `parse()`, never retyped) on all three
+- [x] Rewrite the comment above it: the WAL replaces the journal as the thing a copy can miss.
+- [x] The check script passes `0280`'s `snapshot()` (taken from the script by `parse()`, never retyped) on all three
   fixtures.
 
 ## Phase 3: `0270` `db()`, the same in Python
