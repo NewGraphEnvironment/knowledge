@@ -51,48 +51,63 @@ Exploration moved some premises (immutable read of `zotero.sqlite`, 2026-10-31, 
    the 2023–24 one already keyed.
 
 ## Phase 1: inventory, PDFs and the two CSVs (no Zotero writes; runs now)
-- [ ] Federal documents: find each PDF (SAR registry, publications.gc.ca, DFO library). #122 found that
-      publications.gc.ca answers a scripted request with 202/HTML, so a PDF only a browser can fetch goes to Al, is
-      saved under the ignored `data/rag/pdf/`, and its row takes that path
-- [ ] NWSRI: the recovery plan, plus every technical report with a PDF (curl, check the body starts `%PDF`). For each
-      journal-article row with no PDF there (McAdam 2005 and the others), add it by DOI through CrossRef with an OA
-      PDF where Unpaywall has one, otherwise `pdf = none`, listed in findings. Antill 2013 is already keyed: no duplicate
-- [ ] Rood & Neill 1987 and Hay & Company 2000: search ACAT/EcoCat, NWSRI and the DFO library. Record each find or
-      miss and why
-- [ ] Dedupe every addition against the group by title and DOI, trashed copies included (CLAUDE.md's
-      duplicate-item note). The UFFCA personal PDF against `levy_nicklin2018ChinookSockeye`'s, and Ferrington
-      `PPMDY4K7` against `farrington_lance2014`'s, by md5
-- [ ] Personal standalones `Chronology-NFCP.pdf` and the 2016 Nechako Watershed Strategy: additions rows with
-      metadata from their title pages, the PDF copied to `data/rag/pdf/`
-- [ ] `data/sturgeon_members.csv`: the three current members, Antill 2013, Pfleger 2016, Farrington & Lance 2014, the
-      curated Nechako items (decision 2), and `PH5REA3P` with its PDF URL. Each row gives `source` as `#124: <why>`
-- [ ] `data/sturgeon_additions.csv`: one row per new work, with metadata from the page and checked against the title
-      page (authors, year, institution, report number), `pdf` as a URL, path, `zotero:` or `none`, and `why`. No
-      `pdf` URL may return HTML
+- [x] NWSRI: the recovery plan (2004) and every technical report linked to a PDF. Of 63 links, 61 return `%PDF`
+      (168 MB). Triton's "3812 Sturgeon Report Final" is a 404, and the CSAS 2007 link points at a URL DFO moved
+- [x] Metadata for each report from its title page or its own "should be cited as" line, not from the page listing,
+      which misattributes some (findings)
+- [x] Antill 2013 and French 2005 are on the page and already keyed in the group: members, not additions
+- [x] CSAS SAR 2007/014 from DFO's library (`328792.pdf`)
+- [x] Rood & Neill 1987: no copy of the cited "A study of some aspects of the geomorphology of the Nechako River".
+      Added instead DFO's court-action volume 7 (1987), which holds Rood's and Neill's geomorphology expert reports
+- [x] Hay & Company 2000 ("Options for passing flows through the Cheslatta Fan", MENV-022) from NEEF's library. The
+      copy is a scan, so it is OCRed (`ocrmypdf`) into the ignored `data/rag/pdf/sturgeon/`
+- [x] Dedupe every addition by title against the group and personal libraries, trash included (an `immutable` read,
+      which never invents rows): no copy exists. The UFFCA personal PDF has the same 77 pages and text as
+      `levy_nicklin2018ChinookSockeye`, so that key is the member and `levy_nicklinreportprepared` is never used
+      (plan review). `PPMDY4K7` is a second copy of Farrington & Lance 2014: nothing to do
+- [x] Personal standalones: the 2016 Nechako Watershed Strategy goes in as `zotero:733T5ZJV`. `Chronology-NFCP.pdf`
+      is a one-page timeline with no title page or date: left out, recorded
+- [x] `data/sturgeon_members.csv` (15) and `data/sturgeon_additions.csv` (64)
+- [ ] Al's browser downloads, saved to `data/rag/pdf/sturgeon/` with a row each: the amended recovery strategy (2023,
+      En3-4/181-2023E-PDF), the action plan (2024, CW69-21/75-2024E-PDF) and the 2014–2020 progress report
+      (En3-4/181-1-2022E-PDF). publications.gc.ca serves scripts an archive notice, not the PDF
+- [ ] Journal articles linked from the NWSRI page with no PDF there (McAdam et al. 2005 `10.1577/t04-199.1`, Smith et al. 2002,
+      French & Chambers 1996, 1997) and Babey's 2022 UNBC thesis: in only if Al fetches a PDF (decision 3; a
+      `pdf = none` row without a CrossRef abstract fails `0270`, plan review). Otherwise listed in the gap
+- [x] #124's body: corrected premises, and "blocked by #127" as a task in its plan (plan review: now, not Phase 4)
 
 ## Phase 2 (after #127 merges): file the collection through `0270`
-- [ ] `git merge origin/main`. Confirm `0270`'s `db()` and `0150` read the WAL (or follow whatever #127 settled for
-      cred)
+- [ ] `git merge origin/main`. **Hard gate:** `0270`'s `db()` and `0150` read the WAL, and cred's build does too (a
+      released fix), or the WAL is confirmed checkpointed (Zotero quit, `-wal` absent or empty) before each read
+- [ ] Ask Al to confirm the group's file storage has room for about 200 MB (plan review: a full quota fails each
+      upload with 413)
+- [ ] Re-run the `%PDF` check on every addition URL (a dry run does not fetch them)
 - [ ] `0270 --collection sturgeon --parent 9U54XAND --dry-run`. Check every `exists` / `copy exists` gkey against the
-      intended item before going live
-- [ ] Live run, then wait for Zotero to sync. A second dry run with no `would*` lines and exit 0 is the no-op proof
-- [ ] Re-measure from a WAL-inclusive guarded copy: members, keyed, PDF on disk, and BBT keys on the new items. Merge
-      any duplicate the dry run exposes through the Web API (CLAUDE.md recipe)
+      intended item before going live (generic titles under one corporate author)
+- [ ] Live run, then wait for Zotero to sync. A second dry run with no `would*` lines and exit 0 is the no-op proof.
+      A transient `ERROR` (no 429 handling in `0153`'s `api`) is cleared by a re-run
+- [ ] A hit on a trashed copy is restored (PATCH `deleted: 0`) and made a member, not created again
+- [ ] Re-measure from a WAL-inclusive guarded copy: members, keyed, PDF on disk, BBT keys on the new items. Before
+      and after table (live items, items with a PDF, MB uploaded)
 
 ## Phase 3 (after Phase 2): build, query, push `sturgeon`
 - [ ] cred ≥ 0.5.0 and ragnar 0.3.1 installed (check latest first)
-- [ ] `ACTION=build STORE=sturgeon COLLECTIONS=WEUFTSDC`, logged to `scripts/logs/rag/<date>_build_sturgeon.log`. The
-      left-out list must equal Phase 1's no-PDF list. Map every document origin to a live group attachment
-- [ ] Three `ACTION=query` checks: side-channel loss near Vanderhoof; habitat use at the Fraser–Nechako confluence;
-      recruitment-failure hypotheses. Record each one's top citation keys in the build log
+- [ ] `ACTION=build STORE=sturgeon COLLECTIONS=WEUFTSDC`, logged to `scripts/logs/rag/<date>_build_sturgeon.log`, home
+      paths written as `~/` and the #56 `local_path` pattern run over the logs by hand (the sweep skips
+      `scripts/logs/`). The left-out list must equal the recorded gap. Map every origin to a live group attachment
+- [ ] Three `ACTION=query` checks, each with keys it must return in its top 5:
+      side-channel loss near Vanderhoof (an NHC geomorphic, sediment or substrate report, or the Rood/Neill volume);
+      habitat use at the Fraser–Nechako confluence (a Lheidli T'enneh critical habitat report, or Williamson et al.
+      2021); recruitment-failure hypotheses (Antill 2013, Korman & Walters 2001, or an NHC substrate report).
+      Record each one's top keys in the build log
 - [ ] `ACTION=push` dry run, then `CONFIRM=TRUE`. The push log keeps only this store's manifest entry (#122 round 2)
 
 ## Phase 4: docs and issue
 - [ ] `scripts/README.md`: the `0150 ACTION=build STORE=sturgeon COLLECTIONS=WEUFTSDC` line beside temperature,
       flow and bull_trout_grayling, and the `0270 --collection sturgeon --parent 9U54XAND` line
 - [ ] CLAUDE.md layout: `sturgeon_{members,additions}.csv` beside the grayling and bull_trout ones
-- [ ] #124 body: correct the premises above, put "blocked by #127" in the plan as a task, and list the gap of
-      documents with no PDF anywhere
+- [ ] #124 body: the gap of documents with no PDF anywhere, and the outcome
+- [ ] Say in `scripts/README.md` that `WEUFTSDC` does not feed the `habitat_modelling` build (plan review)
 
 ## Owed at the end (reported, done after merge)
 
