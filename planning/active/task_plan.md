@@ -41,13 +41,16 @@ measures this before anything is fixed.
 - **Both journal modes** (a conventional default, so stated rather than asked): the guard reads the header's mode
   bytes. In WAL mode it copies the `-wal` when one exists; in rollback mode it keeps today's journal check. The mode
   changed once without warning, so it can change again.
+  *Corrected after the plan review:* as built, the guard copies any `-wal` that exists, always checks the journal,
+  and holds the mode bytes only as part of the stability state. SQLite opens any `-wal` it finds, whatever the
+  header says (`pagerOpenWalIfPresent()`), so no branch is needed.
 - **`-shm` is not copied**: SQLite rebuilds the wal-index when it opens a pair that no other process holds. soul#590
   suggests copying all three files, so Phase 1 measures that a pair without the `-shm` reads the WAL's frames.
 
 ## Phase 1: Reproduce and measure, before any fix
 
 - [x] `data-raw/zotero_copy_check.R`. A fixture built in a tempdir with RSQLite: a WAL database with
-  `wal_autocheckpoint = 0`, rows committed after the copy point, and the main file and `-wal` copied while the writer
+  `wal_autocheckpoint = 0`, rows committed after a checkpoint (corrected after the plan review; the gate said "after the copy point"), and the main file and `-wal` copied while the writer
   is still open. So the main file lacks the rows and the `-wal` holds them. Also a rollback-mode fixture, and a
   WAL-mode database with no `-wal` (as after Zotero quits).
 - [x] On the fixture, measure a main-only copy opened read-write (opens? `quick_check`? row count) against a main-only
@@ -98,11 +101,15 @@ measures this before anything is fixed.
 
 ## Phase 6: Issues
 
-- [x] File a cred issue: `immutable=1` reads miss a WAL database's uncheckpointed commits. A general reprex built from
+- [x] (Filed before Phase 4, so the docs could cite cred#45.) File a cred issue: `immutable=1` reads miss a WAL database's uncheckpointed commits. A general reprex built from
   the fixture (cred is public, so no machine names), and the offer that cred own a guarded copy.
 - [x] Edit the #127 body: the cause is Zotero 10.0.7 (soul#590), the plan ticked as landed, and the cred issue linked.
 - [x] Edit the soul#590 body, item 7: what Phase 1 measured about the `-shm`, and that knowledge's readers are fixed
   (the soul side stays soul#590's).
+
+## Plan review (folded in, `review-plan.md`)
+
+- [x] G1 build warning, G2 docs, G3 fixtures, G4 connect retried, A1/A2 comments, AC2 precondition, AC3 stress, AC4 live guards
 
 ## Owed at the end (reported, done after merge)
 
@@ -121,5 +128,8 @@ How each change is proved:
 - **Restore the bug:** in a scratch copy of each script, drop the `-wal` copy line and show the check fails.
 - **Live:** `0280` runs end to end against the running Zotero, and `0270 --dry-run` runs (reads only, no writes).
   Both report the item count Phase 1 read from the main file plus `-wal`.
+  *Corrected after the plan review (AC4):* neither script prints an item count, and the count moves. So the check
+  runs each guard on the live database beside a pair read taken at the same moment. `0270`'s `db()` is exercised
+  that way rather than through `--dry-run`, which also needs the API key.
 - **Not covered:** a file changing in the middle of a copy can't be fixed in a fixture, so the stability guard is held
   by reading it, as today.

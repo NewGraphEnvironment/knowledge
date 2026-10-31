@@ -43,16 +43,19 @@ stopifnot("STORE=<name> is required" = nzchar(store))
 store_path <- file.path("data", "rag", paste0(store, ".duckdb"))
 dir.create(dirname(store_path), recursive = TRUE, showWarnings = FALSE)
 
-# Zotero 10 runs the database in WAL mode, where a commit sits in zotero.sqlite-wal until a
-# checkpoint folds it into the main file, so the copy takes the -wal with the main file: the
-# main file alone opens, passes quick_check and silently misses those commits (#127,
-# data-raw/zotero_copy_check.R). The -shm is not copied; SQLite rebuilds it. Each try clears
-# the copy's -wal first, so one left by an earlier try never sits beside a newer main file.
-# Keep a copy only when nothing wrote meanwhile: both files' mtime and size and the header's
-# journal mode are unchanged across the copy, no rollback-journal transaction is open (journal
-# absent or its header zeroed, before and after), and the copy passes quick_check. Zotero runs
-# in exclusive locking mode, where SQLite does not bump the header change counter per commit,
-# so that counter is no guard (same rule as 0270's db()).
+# Reads go to a copy, never the live file: under its old rollback journal Zotero held the file
+# in exclusive locking mode, so a read-only connection blocked and an immutable one could see a
+# sync half-written. Zotero 10 runs the database in WAL mode (a plain read-only connection did
+# not block on 2026-10-31), where a commit sits in zotero.sqlite-wal until a checkpoint folds it
+# into the main file, so the copy takes the -wal with the main file: the main file alone opens,
+# passes quick_check and silently misses those commits (#127, data-raw/zotero_copy_check.R).
+# The -shm is not copied; SQLite rebuilds it. Each try clears the copy's -wal first, so one
+# left by an earlier try never sits beside a newer main file. Keep a copy only when nothing
+# wrote meanwhile: both files' mtime and size and the header's journal mode are unchanged across
+# the copy, no rollback-journal transaction is open (journal absent or its header zeroed, before
+# and after), and the copy opens and passes quick_check. The header change counter is no guard:
+# SQLite did not bump it per commit in Zotero's exclusive mode, and need not in WAL mode (same
+# rule as 0270's db()).
 # The same function as 0280's snapshot(), byte for byte; data-raw/zotero_copy_check.R checks they agree.
 snapshot <- function(live = path.expand("~/Zotero/zotero.sqlite"), tries = 6, wait = 15) {
   wal <- paste0(live, "-wal")
@@ -73,11 +76,11 @@ snapshot <- function(live = path.expand("~/Zotero/zotero.sqlite"), tries = 6, wa
       Sys.sleep(wait)
       next
     }
-    con <- DBI::dbConnect(RSQLite::SQLite(), snap)
-    ok <- tryCatch(DBI::dbGetQuery(con, "PRAGMA quick_check")[[1]][1] == "ok",
-                   error = function(e) FALSE)
+    con <- tryCatch(DBI::dbConnect(RSQLite::SQLite(), snap), error = function(e) NULL)
+    ok <- !is.null(con) && tryCatch(DBI::dbGetQuery(con, "PRAGMA quick_check")[[1]][1] == "ok",
+                                    error = function(e) FALSE)
     if (ok) return(con)
-    DBI::dbDisconnect(con)
+    if (!is.null(con)) DBI::dbDisconnect(con)
     Sys.sleep(wait)
   }
   stop("no consistent copy of zotero.sqlite after ", tries, " tries; is Zotero mid-sync?")
@@ -189,6 +192,14 @@ if (action == "build") {
          ": pak::pak(\"NewGraphEnvironment/cred\")")
   }
   keys <- collection_keys(colls)
+  # cred reads the live file immutable, which skips Zotero's -wal (cred#45, #127). Zotero truncates
+  # the -wal at a checkpoint, so one that holds anything may hold commits the build cannot see,
+  # though collection_keys() above read them.
+  wal <- path.expand("~/Zotero/zotero.sqlite-wal")
+  if (file.exists(wal) && file.size(wal) > 0) {
+    warning("zotero.sqlite-wal holds ", file.size(wal), " bytes, which cred reads past (cred#45): the store ",
+            "may lack what Zotero has synced since its last checkpoint", call. = FALSE)
+  }
   crd_store_build(store_path, citation_keys = keys,
                   library = as.integer(Sys.getenv("GROUP_ID", "4733734")),
                   overwrite = identical(Sys.getenv("OVERWRITE"), "TRUE"))

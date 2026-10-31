@@ -141,18 +141,20 @@ manifest entry says so.
 
 ### Read `zotero.sqlite` from a guarded copy while Zotero runs
 
-Zotero holds the file in exclusive locking mode, so a normal read-only connection blocks and an
-`immutable=1` read taken during a sync can fail with "database disk image is malformed" or see
-half a transaction (hit on every member right after `0270`'s own writes started a sync). Since
-Zotero 10 the file is in WAL mode (header bytes 18-19 `02 02`): a commit sits in
+Under its old rollback journal Zotero held the file in exclusive locking mode, so a normal
+read-only connection blocked and an `immutable=1` read taken during a sync could fail with
+"database disk image is malformed" or see half a transaction (hit on every member right after
+`0270`'s own writes started a sync). Since Zotero 10 the file is in WAL mode (header bytes 18-19
+`02 02`; a plain read-only connection did not block on 2026-10-31, but the readers still copy,
+which keeps them off the live files in either mode): a commit sits in
 `zotero.sqlite-wal` until a checkpoint folds it into the main file, so a copy of the main file
 alone, like an `immutable=1` read, opens, passes `quick_check` and silently misses it, and a sync
 moves the `-wal`'s mtime while the main file's stays put (#127). `0270`'s `db()`, `0280`'s
 `snapshot()` and `0150`'s copy of it (read by `collection_keys()`) copy the main file with its
 `-wal` (not the `-shm`, which SQLite rebuilds) and keep the pair only when both files' mtime and
 size and the header's journal mode are unchanged across the copy, no rollback journal is open,
-and the copy passes `quick_check`. In exclusive mode SQLite does not bump the header change
-counter per commit, so that is no guard. `data-raw/zotero_copy_check.R` runs the three on
+and the copy opens and passes `quick_check`. The header change counter is no guard: SQLite did
+not bump it per commit in Zotero's exclusive mode, and need not in WAL mode. `data-raw/zotero_copy_check.R` runs the three on
 fixtures whose `-wal` holds rows the main file lacks. cred still reads immutable
 (NewGraphEnvironment/cred#45), so an `0150 ACTION=build` can miss what Zotero has not yet
 checkpointed. Citation keys are not unique across libraries (the same key names different
@@ -188,7 +190,8 @@ and no key. `0153` and `0270` write to the group library through the Web API wit
 `ZOTERO_API_KEY`, and exit at once when it is unset or empty, because an empty key otherwise
 reads as a JSON parse error three calls later. Items `0270` creates through the Web API sync and
 get Better BibTeX keys without a Zotero restart (measured 2026-10-02), so `0270` → `0150` build →
-`0280` runs end to end in one sitting.
+`0280` runs end to end in one sitting, except that the build's cred reads miss what Zotero has not
+checkpointed (NewGraphEnvironment/cred#45): `0150` warns when the `-wal` is not empty.
 
 A build's "Skipping missing file" for a key can mean its attachment never got a file while a
 duplicate item (same DOI) holds the PDF: Opperman et al. 2010 sat that way through two builds. Search

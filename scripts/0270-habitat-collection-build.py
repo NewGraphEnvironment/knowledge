@@ -65,21 +65,22 @@ SKIP_FIELDS = {"citationKey"}
 def db(live=os.path.join(ZDIR, "zotero.sqlite"), tries=6, wait=15):
     """A consistent snapshot of the local Zotero database.
 
-    Zotero holds an exclusive lock while it runs, so a normal read-only connection
-    blocks, and an `immutable=1` read of the live file sees pages mid-write while a
-    sync is in progress ("database disk image is malformed" on every member, measured
-    right after this script's own writes started a sync). So copy the file. Zotero 10
-    runs it in WAL mode, where a commit sits in zotero.sqlite-wal until a checkpoint
-    folds it into the main file, so the copy takes the -wal with the main file: the
-    main file alone opens, passes quick_check and silently misses those commits (#127,
-    data-raw/zotero_copy_check.R). The -shm is not copied; SQLite rebuilds it. Each
+    Reads go to a copy, never the live file: under its old rollback journal Zotero
+    held an exclusive lock, so a normal read-only connection blocked, and an
+    `immutable=1` read of the live file saw pages mid-write while a sync was in
+    progress ("database disk image is malformed" on every member, measured right
+    after this script's own writes started a sync). Zotero 10 runs it in WAL mode
+    (a plain read-only connection did not block on 2026-10-31), where a commit sits
+    in zotero.sqlite-wal until a checkpoint folds it into the main file, so the copy
+    takes the -wal with the main file: the main file alone opens, passes quick_check
+    and silently misses those commits (#127, data-raw/zotero_copy_check.R). The -shm is not copied; SQLite rebuilds it. Each
     try clears the copy's -wal first, so one left by an earlier try never sits beside
     a newer main file. Keep the copy only when nothing wrote meanwhile: both files'
     mtime and size and the header's journal mode are unchanged across the copy, no
     rollback-journal transaction is open (the journal is absent or its header zeroed,
-    before and after), and the copy passes quick_check. The header change counter is
-    no guard here: in Zotero's exclusive locking mode SQLite does not bump it per
-    commit (measured: five commits, counter unchanged).
+    before and after), and the copy opens and passes quick_check. The header change
+    counter is no guard: in Zotero's exclusive locking mode SQLite did not bump it per
+    commit (measured: five commits, counter unchanged), and in WAL mode it need not.
     """
     import atexit, shutil, tempfile, time
     wal = live + "-wal"
@@ -116,13 +117,15 @@ def db(live=os.path.join(ZDIR, "zotero.sqlite"), tries=6, wait=15):
             pass                                  # no -wal: rollback mode, or WAL fully checkpointed
         after = state()
         if before == after and not before[3]:
-            con = sqlite3.connect(tmp)
+            con = None
             try:
+                con = sqlite3.connect(tmp)
                 if con.execute("PRAGMA quick_check").fetchone()[0] == "ok":
                     return con
             except sqlite3.DatabaseError:
                 pass
-            con.close()
+            if con is not None:
+                con.close()
         time.sleep(wait)
     sys.exit(f"no consistent copy of zotero.sqlite after {tries} tries; is Zotero mid-sync?")
 

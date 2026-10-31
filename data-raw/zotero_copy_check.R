@@ -6,11 +6,16 @@
 # fixtures where the answer is known and on the live database.
 #
 # FIXTURES (a tempdir; each `live/` holds what Zotero's data directory would):
-#   wal_pending  WAL mode; N_MAIN rows checkpointed into the main file, then N_WAL more committed
-#                with autocheckpoint off, and the main file and -wal copied while the writer is
-#                still open. The main file lacks the N_WAL rows; the -wal holds them.
-#   wal_closed   WAL mode, closed cleanly: the -wal is folded in and deleted (as after Zotero quits).
-#   rollback     rollback-journal mode, as Zotero ran before version 10.
+#   wal_pending   WAL mode; N_MAIN rows checkpointed into the main file, then N_WAL more committed
+#                 with autocheckpoint off, and the main file and -wal copied while the writer is
+#                 still open. The main file lacks the N_WAL rows; the -wal holds them.
+#   wal_exclusive the same, with the writer in exclusive locking mode (its wal-index in memory, no -shm)
+#   wal_empty     WAL mode, the -wal checkpointed and truncated to 0 bytes with the writer open (the
+#                 state Zotero 10 leaves after a checkpoint)
+#   wal_closed    WAL mode, closed cleanly: the -wal is folded in and deleted (as after Zotero quits).
+#   rollback      rollback-journal mode, as Zotero ran before version 10.
+#   The check stops unless each fixture still separates the reads: the main file alone and
+#   immutable=1 read N_MAIN rows, the pair reads the fixture's rows.
 # READS, each on a fresh copy in its own directory (opened? quick_check? rows):
 #   main_rw      the main file alone, opened read-write
 #   main_ro      the main file alone, opened mode=ro
@@ -21,8 +26,12 @@
 #   exists and LIVE is not FALSE. Reads only: the copies go to a tempdir.
 # INPUT:  RSQLite; ~/Zotero/zotero.sqlite for the live table
 # GUARDS: each script's guarded copy, run on each fixture, must read its rows; the script stops if not.
+# STRESS: a writer commits one row per transaction, in bursts, for STRESS_SECS, with checkpoints every
+#   few pages, while each guard copies its files again and again; every copy a guard accepts must be a state
+#   the writer committed (rows = the largest itemID). STRESS_SECS=0 skips it.
+# LIVE GUARDS: each guard on the live database, beside a pair read taken at the same moment.
 # WRITES: nothing outside tempdir()
-# RUN:    Rscript data-raw/zotero_copy_check.R          (from the repo root; LIVE=FALSE skips the live table)
+# RUN:    Rscript data-raw/zotero_copy_check.R    (from the repo root; LIVE=FALSE skips the live tables)
 # ---------------------------------------------------------------------------
 
 N_MAIN <- 5L
@@ -30,20 +39,22 @@ N_WAL <- 3L
 
 sql_exec <- function(con, sql) invisible(DBI::dbExecute(con, sql))
 
-# -> the fixture's live/ directory; its zotero.sqlite should hold `expect` rows in table items
+# -> the fixture's live/ directory; its zotero.sqlite holds expect_rows[[kind]] rows in table items
 fixture <- function(root, kind) {
   dir.create(src <- file.path(root, kind, "src"), recursive = TRUE)
   dir.create(live <- file.path(root, kind, "live"))
   f <- file.path(src, "zotero.sqlite")
   con <- DBI::dbConnect(RSQLite::SQLite(), f)
-  mode <- if (kind == "rollback") "DELETE" else "WAL"
-  DBI::dbGetQuery(con, paste0("PRAGMA journal_mode = ", mode))
+  if (kind == "wal_exclusive") DBI::dbGetQuery(con, "PRAGMA locking_mode = EXCLUSIVE")
+  DBI::dbGetQuery(con, paste0("PRAGMA journal_mode = ", if (kind == "rollback") "DELETE" else "WAL"))
   DBI::dbGetQuery(con, "PRAGMA wal_autocheckpoint = 0")
   sql_exec(con, "CREATE TABLE items (itemID INTEGER PRIMARY KEY, v TEXT)")
   for (i in seq_len(N_MAIN)) sql_exec(con, sprintf("INSERT INTO items (v) VALUES ('main %d')", i))
-  if (kind == "wal_pending") {
+  if (kind %in% c("wal_pending", "wal_exclusive", "wal_empty")) {
     DBI::dbGetQuery(con, "PRAGMA wal_checkpoint(TRUNCATE)")
-    for (i in seq_len(N_WAL)) sql_exec(con, sprintf("INSERT INTO items (v) VALUES ('wal %d')", i))
+    if (kind != "wal_empty") {
+      for (i in seq_len(N_WAL)) sql_exec(con, sprintf("INSERT INTO items (v) VALUES ('wal %d')", i))
+    }
     # the writer is still open, so nothing has folded the -wal into the main file
     stopifnot(file.copy(f, live), file.copy(paste0(f, "-wal"), live))
     DBI::dbDisconnect(con)
@@ -54,7 +65,8 @@ fixture <- function(root, kind) {
   live
 }
 
-expect_rows <- c(wal_pending = N_MAIN + N_WAL, wal_closed = N_MAIN, rollback = N_MAIN)
+expect_rows <- c(wal_pending = N_MAIN + N_WAL, wal_exclusive = N_MAIN + N_WAL, wal_empty = N_MAIN,
+                 wal_closed = N_MAIN, rollback = N_MAIN)
 
 # One read of `live` (a data directory) the way `how` names. -> opened, quick_check, n, newest
 read_way <- function(live, how, sql) {
@@ -96,6 +108,10 @@ tab <- do.call(rbind, lapply(names(fx), function(k) {
 }))
 tab$newest <- NULL
 print(tab, row.names = FALSE)
+# the fixtures must still reproduce the bug, or every guard below would pass without testing anything
+tab$want <- ifelse(startsWith(tab$way, "pair"), expect_rows[tab$fixture], N_MAIN)
+stopifnot("a fixture no longer separates the reads" = all(tab$opened & tab$quick_check == "ok" & tab$n == tab$want),
+          "wal_empty's -wal is not 0 bytes" = file.size(file.path(fx[["wal_empty"]], "zotero.sqlite-wal")) == 0)
 
 # --- the guards, as the scripts define them ---------------------------------
 # Each is taken from its script by parse(), never retyped, and run once on each fixture: it must
@@ -110,12 +126,14 @@ fn_from <- function(file, name) {
   }
   stop(name, "() not found in ", file)
 }
+# Each guard returns c(rows, largest itemID) from the copy it accepted.
+count_sql <- "SELECT count(*), max(itemID) FROM items"
 r_guard <- function(file) {
   f <- fn_from(file, "snapshot")
-  function(db) {
-    con <- f(live = db, tries = 1, wait = 0)
+  function(db, tries = 1, wait = 0) {
+    con <- f(live = db, tries = tries, wait = wait)
     on.exit(DBI::dbDisconnect(con))
-    DBI::dbGetQuery(con, "SELECT count(*) FROM items")[[1]]
+    unlist(DBI::dbGetQuery(con, count_sql), use.names = FALSE)
   }
 }
 # 0270 is loaded as 0270 loads 0153; importing it imports 0153, which exits without ZOTERO_API_KEY,
@@ -125,13 +143,15 @@ py_guard <- function(file) {
             sprintf("spec = importlib.util.spec_from_file_location('z0270', %s)", shQuote(file)),
             "m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)",
             "try:",
-            "    print(m.db(live=sys.argv[1], tries=1, wait=0).execute('SELECT count(*) FROM items').fetchone()[0])",
+            sprintf("    r = m.db(live=sys.argv[1], tries=int(sys.argv[2]), wait=float(sys.argv[3])).execute(%s).fetchone()",
+                    shQuote(count_sql, type = "sh")),
+            "    print(r[0], r[1])",
             "except SystemExit as e:",
-            "    print('NA'); print(e, file=sys.stderr)")
-  function(db) {
-    out <- system2("python3", c("-c", shQuote(paste(code, collapse = "\n")), shQuote(db)),
+            "    print('NA NA'); print(e, file=sys.stderr)")
+  function(db, tries = 1, wait = 0) {
+    out <- system2("python3", c("-c", shQuote(paste(code, collapse = "\n")), shQuote(db), tries, wait),
                    stdout = TRUE, env = "ZOTERO_API_KEY=check-only")
-    as.integer(utils::tail(out, 1))
+    suppressWarnings(as.integer(strsplit(utils::tail(out, 1), " ")[[1]]))
   }
 }
 guards <- list(`0280 snapshot()` = r_guard("scripts/0280-literature-verify.R"),
@@ -141,12 +161,60 @@ guards <- list(`0280 snapshot()` = r_guard("scripts/0280-literature-verify.R"),
 stopifnot("0150's snapshot() differs from 0280's" = identical(
   deparse(fn_from("scripts/0150-store.R", "snapshot")), deparse(fn_from("scripts/0280-literature-verify.R", "snapshot"))))
 gt <- do.call(rbind, lapply(names(guards), function(g) do.call(rbind, lapply(names(fx), function(k) {
-  n <- tryCatch(guards[[g]](file.path(fx[[k]], "zotero.sqlite")), error = function(e) NA_integer_)
+  n <- tryCatch(guards[[g]](file.path(fx[[k]], "zotero.sqlite"))[1], error = function(e) NA_integer_)
   data.frame(guard = g, fixture = k, rows = n, expected = expect_rows[[k]])
 }))))
 gt$ok <- !is.na(gt$rows) & gt$rows == gt$expected
 cat("\n== guards\n")
 print(gt, row.names = FALSE)
+
+# --- stress: copies taken while a writer commits and checkpoints --------------------------------
+stress_secs <- as.numeric(Sys.getenv("STRESS_SECS", "20"))
+st <- NULL
+if (stress_secs > 0) {
+  dir.create(sdir <- file.path(root, "stress"))
+  sdb <- file.path(sdir, "zotero.sqlite")
+  stop_file <- file.path(sdir, "stop")
+  done_file <- file.path(sdir, "done")
+  writer <- sprintf(paste(
+    "con <- DBI::dbConnect(RSQLite::SQLite(), %s)",
+    "invisible(DBI::dbGetQuery(con, 'PRAGMA journal_mode = WAL'))",
+    "invisible(DBI::dbGetQuery(con, 'PRAGMA wal_autocheckpoint = 8'))",
+    "invisible(DBI::dbExecute(con, 'CREATE TABLE items (itemID INTEGER PRIMARY KEY, v BLOB)'))",
+    "t0 <- Sys.time()",
+    "while (!file.exists(%s) && difftime(Sys.time(), t0, units = 'secs') < %d) {",
+    "  for (i in 1:20) invisible(DBI::dbExecute(con, 'INSERT INTO items (v) VALUES (randomblob(1000))'))",
+    "  Sys.sleep(stats::runif(1, 0, 0.2))",
+    "}",
+    "DBI::dbDisconnect(con); file.create(%s)", sep = "\n"),
+    deparse(sdb), deparse(stop_file), as.integer(stress_secs) + 30L, deparse(done_file))
+  system2("Rscript", c("-e", shQuote(writer)), wait = FALSE, stdout = FALSE, stderr = FALSE)
+  t0 <- Sys.time()
+  while (!(file.exists(paste0(sdb, "-wal")) && file.size(paste0(sdb, "-wal")) > 0)) {
+    if (difftime(Sys.time(), t0, units = "secs") > 30) stop("the stress writer did not start")
+    Sys.sleep(0.1)
+  }
+  st <- list()
+  t0 <- Sys.time()
+  while (difftime(Sys.time(), t0, units = "secs") < stress_secs) {
+    for (g in names(guards)) {
+      n <- tryCatch(guards[[g]](sdb, tries = 500, wait = 0.005), error = function(e) c(NA, NA))
+      st[[length(st) + 1]] <- data.frame(guard = g, rows = n[1], max_id = n[2])
+    }
+  }
+  file.create(stop_file)
+  t0 <- Sys.time()
+  while (!file.exists(done_file) && difftime(Sys.time(), t0, units = "secs") < 60) Sys.sleep(0.1)
+  st <- do.call(rbind, st)
+  # a guard that gives up (NA) has accepted nothing; one that accepts a copy must hold a committed state
+  st$ok <- is.na(st$rows) | (st$rows > 0 & st$rows == st$max_id)
+  cat("\n== stress (", stress_secs, " s of copies against a writer committing in bursts)\n", sep = "")
+  print(do.call(rbind, lapply(split(st, st$guard), function(d) {
+    data.frame(guard = d$guard[1], calls = nrow(d), gave_up = sum(is.na(d$rows)), accepted = sum(!is.na(d$rows)),
+               not_committed = sum(!d$ok), min_rows = min(d$rows, na.rm = TRUE), max_rows = max(d$rows, na.rm = TRUE))
+  })), row.names = FALSE)
+  if (all(is.na(st$rows))) stop("no guard accepted any stress copy, so the stress tested nothing")
+}
 
 if (!identical(Sys.getenv("LIVE"), "FALSE") && file.exists(path.expand("~/Zotero/zotero.sqlite"))) {
   live <- path.expand("~/Zotero")
@@ -157,8 +225,17 @@ if (!identical(Sys.getenv("LIVE"), "FALSE") && file.exists(path.expand("~/Zotero
   sql <- "SELECT count(*), max(clientDateModified) FROM items"
   lt <- do.call(rbind, lapply(ways, function(w) cbind(way = w, read_way(live, w, sql))))
   print(lt, row.names = FALSE)
+  # each guard beside a pair read taken just before it; the live database can move between them
+  lg <- do.call(rbind, lapply(names(guards), function(g) {
+    pair <- read_way(live, "pair_rw", "SELECT count(*) FROM items")$n
+    n <- tryCatch(guards[[g]](files[1], tries = 3, wait = 1)[1], error = function(e) NA_integer_)
+    data.frame(guard = g, pair_rows = pair, guard_rows = n)
+  }))
+  cat("\n== live guards\n")
+  print(lg, row.names = FALSE)
   if (!identical(file.info(files)$mtime, info$mtime)) cat("(a live file changed during the reads)\n")
 }
 unlink(root, recursive = TRUE)
 if (!all(gt$ok)) stop(sum(!gt$ok), " guard run(s) did not read the fixture's rows")
-cat("\nPASS: every guard read every fixture's rows\n")
+if (!is.null(st) && !all(st$ok)) stop(sum(!st$ok), " stress cop(ies) a guard accepted are not a committed state")
+cat("\nPASS: every guard read every fixture's rows", if (!is.null(st)) ", and every stress copy it accepted was committed", "\n", sep = "")
