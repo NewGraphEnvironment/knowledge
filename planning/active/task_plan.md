@@ -66,16 +66,16 @@ Approved by Al, 2026-10-30, with the plan:
       a keyless or PDF-less member (plan review)
 
 ## Phase 4 (after the cred tag): build and push `bull_trout_grayling`
-- [ ] `ACTION=build STORE=bull_trout_grayling COLLECTIONS="VHWEK6RE,GELFSUTU"`; read the left-out and origin reports
-- [ ] `ACTION=query` on it (Williston spawning question returns Hagen & Weber 2019 / Hagen et al. 2020)
-- [ ] `ACTION=push` dry run, then `CONFIRM=TRUE`; manifest entry checked
+- [x] `ACTION=build STORE=bull_trout_grayling COLLECTIONS="VHWEK6RE,GELFSUTU"`; read the left-out and origin reports
+- [x] `ACTION=query` on it (Williston spawning question returns Hagen & Weber 2019 / Hagen et al. 2020)
+- [x] `ACTION=push` dry run, then `CONFIRM=TRUE`; manifest entry checked
 
 ## Phase 5 (after the cred tag): rebuild and push `habitat_modelling` with grayling
 - [ ] `ACTION=build STORE=habitat_modelling OVERWRITE=TRUE COLLECTIONS="U9ZCZ6RN,RXNFPBPH,VHWEK6RE,GELFSUTU,9U54XAND,SW2RXUJC,DQP29KU7,X29BX4U8,W4425VK5,545K8HP4"`
       (the recorded set by key, plus grayling); pull the current store first and diff document origins against the
       rebuild, each added or removed origin accounted for (grayling, the cleanup, cred#40's picks)
 - [ ] Query check; push dry run, then `CONFIRM=TRUE`
-- [ ] `scripts/README.md`: the build line with grayling, a line for the new store
+- [x] `scripts/README.md`: the build line with grayling, a line for the new store
 
 ## Phase 6: docs (lands before the cred tag, except the README build lines in Phase 5)
 - [x] CLAUDE.md: `ACTION=query` works under cred ≥ 0.4.0 (cred#27); drop the "broken" note and the draft-issue pointer

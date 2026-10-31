@@ -118,7 +118,10 @@ wf_farm_priority.js                          farm priority/crossing tables out o
       (--collection temperature: Fisheries/temperature, from data/temperature_members.csv)
       (--collection flow: Fisheries/flow, from data/flow_members.csv and data/flow_additions.csv)
       (--parent <key> for a collection under another parent: --collection grayling --parent 9U54XAND is species/grayling)
-0150  ACTION=build STORE=habitat_modelling COLLECTIONS="U9ZCZ6RN,chinook,bull_trout,..."  then ACTION=push
+0150  ACTION=build STORE=habitat_modelling COLLECTIONS="U9ZCZ6RN,RXNFPBPH,VHWEK6RE,GELFSUTU,9U54XAND,SW2RXUJC,DQP29KU7,X29BX4U8,W4425VK5,545K8HP4"
+      (habitat_modelling, chinook, bull_trout, grayling, species, temperature, wedzin_kwa_chinook, hydrology and the
+      two salmon collections, by key)                                                    then ACTION=push
+0150  ACTION=build STORE=bull_trout_grayling COLLECTIONS="VHWEK6RE,GELFSUTU"               then ACTION=push
 0150  ACTION=build STORE=temperature COLLECTIONS=SW2RXUJC                                  then ACTION=push
 0150  ACTION=build STORE=flow COLLECTIONS=FWTJDD8Z                                         then ACTION=push
       (a rebuild over an existing local store needs OVERWRITE=TRUE; ACTION=push needs CONFIRM=TRUE to upload)

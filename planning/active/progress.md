@@ -65,3 +65,9 @@ running. The merge stays with me.
 - Re-measure on `VHWEK6RE,GELFSUTU`: 6 of 45 left out (the expected six), 35 keys; `XXGHCASA` keyed
   `ballard_shrimpton2009Summaryreport`.
 - cred 0.5.0 tagged (cred#40 closed 2026-10-31 00:57 UTC); upgraded with ragnar 0.3.1. cred#35 still open.
+- `bull_trout_grayling` built (2026-10-31 17:36-17:39 UTC): 36 documents (35 keys; Bottoms 2023's report and appendix),
+  5,534 chunks; cred left nothing out. Every origin is a live group attachment (`origins.R` against a WAL-inclusive copy).
+  Query "bull trout spawning habitat in Williston Reservoir tributaries" returns Hagen & Weber 2019, Hagen et al. 2020,
+  Hagen & Sary 2023. Pushed; manifest md5 `28c4bc8b…` matches. Logs: `scripts/logs/rag/20261031_*bull_trout_grayling*`.
+- Current `habitat_modelling` (2026-10-11, 222 docs) holds one trashed attachment: `HKTCPDVJ` for
+  `martins_etal2022SpatialEcology` (the cred#40 defect). Rebuild started 17:42 UTC.
