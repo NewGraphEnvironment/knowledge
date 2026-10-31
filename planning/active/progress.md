@@ -11,8 +11,8 @@
 - Phase 1: 61 NWSRI PDFs, the recovery plan, CSAS 2007/014, DFO's 1987 geomorphology volume and Hay & Co 2000
   (OCRed) gathered. `data/sturgeon_members.csv` (15, every key one live group item) and
   `data/sturgeon_additions.csv` (64). #124's body corrected, with "blocked by #127" in its plan
-- Waiting on: Al's browser downloads (three publications.gc.ca PDFs; optionally McAdam 2005 and Babey 2022), and #127
-- Next: parked 2026-10-31 on Al's three browser downloads and #127; paste the block under ### Resume into a fresh session
+- Al's downloads (the action plan, McAdam 2005, Babey 2022) and two registry-HTML prints added: 69 additions. Waiting on #127 only
+- Next: parked 2026-10-31 on #127; paste the block under ### Resume into a fresh session
 
 ### Resume
 
@@ -31,7 +31,7 @@ git merge origin/main   # a conflict: main moved meanwhile; resolve it, commit, 
 Then read planning/active/task_plan.md, findings.md, progress.md and review-plan.md if present.
 The gate decisions, the measurements and the Plan-agent review are already folded in:
 do not re-plan and do not re-ask them.
-Phase 1 is done except the rows for Al's browser downloads (saved in data/rag/pdf/sturgeon/).
+Phase 1 is done. Its local PDFs sit in data/rag/pdf/sturgeon/ (git-ignored) in ~/Projects/repo/knowledge: run 0270 there, or copy them.
 Phases 2-3 start only once #127 has merged and the Phase 2 gate holds; if it has not merged, stop and say so.
 Otherwise run every phase to the PR (/code-check branch, /planning-archive,
 /gh-pr-push). This message is the resume instruction that starts the run-to-PR
