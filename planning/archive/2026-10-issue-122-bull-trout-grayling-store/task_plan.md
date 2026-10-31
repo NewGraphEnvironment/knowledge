@@ -90,7 +90,7 @@ resume block; Phases 4–6 resume on it after the tag, and the PR opens then.
 - [x] Tests pass (`devtools::test()`; no `R/` change): 2026-10-31, FAIL 0, SKIP 1, PASS 1650
 - [x] `/code-check branch` (three rounds; ended on an enumeration of the mechanism over the diff and the #56 sweep: `review-round{1,2,3}.md`)
 - [x] PWF checkboxes match landed work
-- [ ] `/planning-archive` on completion
+- [x] `/planning-archive` on completion
 
 How each change is proved: `0270` by its dry run on an unchanged collection and a no-op re-run after the live run; the
 cleanup by the guarded-copy re-measure (counts before/after in findings); the cred fix by the three keys resolving to
