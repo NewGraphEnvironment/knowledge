@@ -48,6 +48,28 @@ Every read opened and every `quick_check` returned `ok`.
 - `0270` imports `0153`, which exits at import without `ZOTERO_API_KEY`; the check's Python leg sets a dummy key for
   the import alone (no API call), so no sibling `.py` is needed.
 
+## Stress and interference (2026-10-31)
+
+Stress (`STRESS_SECS=90`, a writer committing 20 one-row transactions per burst with random gaps up to 0.2 s, and a
+checkpoint every 8 pages; frozen copies in a scratch dir):
+
+| run | copies accepted | not a committed state |
+|---|---|---|
+| guarded | 2,493 | 0 |
+| stability check removed | 2,862 | 6 |
+
+Every bad copy passed `quick_check`. At the unguarded rate (0.21 %) about 5 bad copies were expected in the guarded
+run; seeing none by chance has odds of about 0.6 %. So the stability guard, not `quick_check`, is what rejects torn
+pairs. But at that rate a 20 s stress run usually passes without the guard (code-check round 1 saw 204 of 204
+accepted with it removed), so the stress measures rather than pins.
+
+Interference (deterministic; each guard's file copies hooked):
+- A write to the main file or to the `-wal` during a copy: every guard refuses the try. With the stability check
+  removed, every guard accepts it (9 of 9 cases fail).
+- A checkpoint between two tries (the main file replaced by a later 10-row state, the `-wal` deleted): every guard
+  reads 10. With the clearing of the earlier try's `-wal` removed, every guard reads **8**. The stale `-wal`
+  replays old pages over the newer main file, passes `quick_check`, and reads silently stale.
+
 ## cred
 
 cred#45 filed 2026-10-31: `immutable=1` (`R/zotero.R:24`, `:439`) misses commits still in the `-wal`; reprex reads 1

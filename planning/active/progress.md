@@ -15,3 +15,5 @@
 - Phase 6: cred#45 filed (earlier); #127 body: cause Zotero 10.0.7, plan ticked, measurements; soul#590 item 7: -shm not needed (measured), immutable bullet, knowledge#127 and cred#45 named
 - Live: 0280 end to end in 52 s, both logs byte-identical to 2026-10-30's (deleted, nothing new); 0150 collection_keys(temperature, flow) -> 85 keys
 - Plan review folded in (review-plan.md): build warning, docs, two fixtures, connect retried, comments (a plain ro read did not block), precondition asserts, stress test, live guards; fixtures 15/15, stress 630/630 committed, live guards 6781 = pair; stability check removed -> 1 of 984 accepted copies not committed
+- 90 s stress: guarded 0 of 2,493 bad, unguarded 6 of 2,862
+- code-check round 1 (review-round1.md): the stress cannot pin the stability guard. Fixed with deterministic interference cases (touch main, touch -wal, checkpoint between tries) through a hooked file copy; restoring each bug fails them (stability removed 9/9; clearing removed: the checkpoint case reads 8 of 10); per-guard stress liveness

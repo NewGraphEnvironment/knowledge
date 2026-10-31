@@ -26,9 +26,14 @@
 #   exists and LIVE is not FALSE. Reads only: the copies go to a tempdir.
 # INPUT:  RSQLite; ~/Zotero/zotero.sqlite for the live table
 # GUARDS: each script's guarded copy, run on each fixture, must read its rows; the script stops if not.
+# INTERFERENCE: each guard's file copies are hooked to write a live file mid-copy, or to checkpoint it
+#   between tries; the guard must refuse the torn try and read the later state. These pin the
+#   stability check and the clearing of an earlier try's -wal, which the fixtures cannot reach.
 # STRESS: a writer commits one row per transaction, in bursts, for STRESS_SECS, with checkpoints every
 #   few pages, while each guard copies its files again and again; every copy a guard accepts must be a state
-#   the writer committed (rows = the largest itemID). STRESS_SECS=0 skips it.
+#   the writer committed (rows = the largest itemID). It measures, it does not pin: with the stability
+#   check removed, 6 of 2,862 accepted copies were not committed in 90 s, so a short run usually passes
+#   without it. STRESS_SECS=0 skips it.
 # LIVE GUARDS: each guard on the live database, beside a pair read taken at the same moment.
 # WRITES: nothing outside tempdir()
 # RUN:    Rscript data-raw/zotero_copy_check.R    (from the repo root; LIVE=FALSE skips the live tables)
@@ -128,13 +133,34 @@ fn_from <- function(file, name) {
 }
 # Each guard returns c(rows, largest itemID) from the copy it accepted.
 count_sql <- "SELECT count(*), max(itemID) FROM items"
+# `event` (see INTERFERENCE) runs after the guard's `on`-th file copy, through a file.copy() the
+# guard finds before base's.
 r_guard <- function(file) {
   f <- fn_from(file, "snapshot")
-  function(db, tries = 1, wait = 0) {
-    con <- f(live = db, tries = tries, wait = wait)
+  function(db, tries = 1, wait = 0, event = "none", on = 0L, other = "") {
+    g <- f
+    if (event != "none") {
+      e <- new.env(parent = environment(f))
+      n <- 0L
+      e$file.copy <- function(...) {
+        r <- base::file.copy(...)
+        n <<- n + 1L
+        if (n == on) interfere(event, db, other)
+        r
+      }
+      environment(g) <- e
+    }
+    con <- g(live = db, tries = tries, wait = wait)
     on.exit(DBI::dbDisconnect(con))
     unlist(DBI::dbGetQuery(con, count_sql), use.names = FALSE)
   }
+}
+# What Zotero might do to its files while a guard copies them
+interfere <- function(event, db, other) {
+  switch(event,
+         touch_main = Sys.setFileTime(db, file.mtime(db) + 10),
+         touch_wal = Sys.setFileTime(paste0(db, "-wal"), file.mtime(paste0(db, "-wal")) + 10),
+         checkpoint = { stopifnot(file.copy(other, db, overwrite = TRUE)); unlink(paste0(db, "-wal")) })
 }
 # 0270 is loaded as 0270 loads 0153; importing it imports 0153, which exits without ZOTERO_API_KEY,
 # so the child gets a placeholder key. db() makes no API call.
@@ -142,14 +168,28 @@ py_guard <- function(file) {
   code <- c("import importlib.util, sys",
             sprintf("spec = importlib.util.spec_from_file_location('z0270', %s)", shQuote(file)),
             "m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)",
+            "import os, shutil",
+            "db, event, on, other = sys.argv[1], sys.argv[4], int(sys.argv[5]), sys.argv[6]",
+            "orig, n = shutil.copyfile, [0]",
+            "def touch(p):",
+            "    st = os.stat(p); os.utime(p, ns=(st.st_atime_ns, st.st_mtime_ns + 10**10))",
+            "def hooked(src, dst, *a, **k):",
+            "    r = orig(src, dst, *a, **k); n[0] += 1",
+            "    if n[0] == on:",
+            "        if event == 'touch_main': touch(db)",
+            "        elif event == 'touch_wal': touch(db + '-wal')",
+            "        elif event == 'checkpoint': orig(other, db); os.remove(db + '-wal')",
+            "    return r",
+            "if event != 'none': shutil.copyfile = hooked",
             "try:",
             sprintf("    r = m.db(live=sys.argv[1], tries=int(sys.argv[2]), wait=float(sys.argv[3])).execute(%s).fetchone()",
                     shQuote(count_sql, type = "sh")),
             "    print(r[0], r[1])",
             "except SystemExit as e:",
             "    print('NA NA'); print(e, file=sys.stderr)")
-  function(db, tries = 1, wait = 0) {
-    out <- system2("python3", c("-c", shQuote(paste(code, collapse = "\n")), shQuote(db), tries, wait),
+  function(db, tries = 1, wait = 0, event = "none", on = 0L, other = "") {
+    out <- system2("python3", c("-c", shQuote(paste(code, collapse = "\n")), shQuote(db), tries, wait,
+                                event, on, shQuote(other)),
                    stdout = TRUE, env = "ZOTERO_API_KEY=check-only")
     suppressWarnings(as.integer(strsplit(utils::tail(out, 1), " ")[[1]]))
   }
@@ -167,6 +207,35 @@ gt <- do.call(rbind, lapply(names(guards), function(g) do.call(rbind, lapply(nam
 gt$ok <- !is.na(gt$rows) & gt$rows == gt$expected
 cat("\n== guards\n")
 print(gt, row.names = FALSE)
+
+# --- interference: Zotero writes during a copy, or checkpoints between tries ---------------------
+# Each case starts from a fresh copy of wal_pending (8 rows, 3 of them in the -wal).
+#   touch_main  the main file is written after the guard copied it: the try must be refused
+#   touch_wal   the -wal is written after the main file was copied: likewise
+#   checkpoint  after the first try copied the -wal, Zotero checkpoints into a main file of N_LATER
+#               rows and deletes the -wal; the second try must read N_LATER rows, with no -wal of
+#               the first try's left beside the new main file
+N_LATER <- 10L
+later <- file.path(root, "later.sqlite")
+local({
+  con <- DBI::dbConnect(RSQLite::SQLite(), later)
+  on.exit(DBI::dbDisconnect(con))
+  DBI::dbGetQuery(con, "PRAGMA journal_mode = WAL")
+  sql_exec(con, "CREATE TABLE items (itemID INTEGER PRIMARY KEY, v TEXT)")
+  for (i in seq_len(N_LATER)) sql_exec(con, sprintf("INSERT INTO items (v) VALUES ('later %d')", i))
+})
+cases <- data.frame(event = c("touch_main", "touch_wal", "checkpoint"), on = c(1L, 1L, 2L),
+                    tries = c(1L, 1L, 2L), expected = c(NA, NA, N_LATER))
+it <- do.call(rbind, lapply(names(guards), function(g) do.call(rbind, lapply(seq_len(nrow(cases)), function(i) {
+  dir.create(d <- tempfile("interfere_", tmpdir = root))
+  stopifnot(file.copy(list.files(fx[["wal_pending"]], full.names = TRUE), d))
+  n <- tryCatch(guards[[g]](file.path(d, "zotero.sqlite"), tries = cases$tries[i], wait = 0, event = cases$event[i],
+                            on = cases$on[i], other = later)[1], error = function(e) NA_integer_)
+  data.frame(guard = g, event = cases$event[i], rows = n, expected = cases$expected[i])
+}))))
+it$ok <- (is.na(it$expected) & is.na(it$rows)) | (!is.na(it$rows) & !is.na(it$expected) & it$rows == it$expected)
+cat("\n== interference (NA: the guard refused every try, as it must)\n")
+print(it, row.names = FALSE)
 
 # --- stress: copies taken while a writer commits and checkpoints --------------------------------
 stress_secs <- as.numeric(Sys.getenv("STRESS_SECS", "20"))
@@ -213,7 +282,8 @@ if (stress_secs > 0) {
     data.frame(guard = d$guard[1], calls = nrow(d), gave_up = sum(is.na(d$rows)), accepted = sum(!is.na(d$rows)),
                not_committed = sum(!d$ok), min_rows = min(d$rows, na.rm = TRUE), max_rows = max(d$rows, na.rm = TRUE))
   })), row.names = FALSE)
-  if (all(is.na(st$rows))) stop("no guard accepted any stress copy, so the stress tested nothing")
+  idle <- names(which(tapply(!is.na(st$rows), st$guard, sum) == 0))
+  if (length(idle)) stop("no stress copy accepted by ", paste(idle, collapse = ", "), ", so the stress tested nothing there")
 }
 
 if (!identical(Sys.getenv("LIVE"), "FALSE") && file.exists(path.expand("~/Zotero/zotero.sqlite"))) {
@@ -237,5 +307,6 @@ if (!identical(Sys.getenv("LIVE"), "FALSE") && file.exists(path.expand("~/Zotero
 }
 unlink(root, recursive = TRUE)
 if (!all(gt$ok)) stop(sum(!gt$ok), " guard run(s) did not read the fixture's rows")
+if (!all(it$ok)) stop(sum(!it$ok), " interference case(s) a guard got wrong")
 if (!is.null(st) && !all(st$ok)) stop(sum(!st$ok), " stress cop(ies) a guard accepted are not a committed state")
-cat("\nPASS: every guard read every fixture's rows", if (!is.null(st)) ", and every stress copy it accepted was committed", "\n", sep = "")
+cat("\nPASS: every guard read every fixture's rows and handled every interference case", if (!is.null(st)) ", and every stress copy it accepted was committed", "\n", sep = "")
