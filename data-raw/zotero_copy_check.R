@@ -135,7 +135,11 @@ py_guard <- function(file) {
   }
 }
 guards <- list(`0280 snapshot()` = r_guard("scripts/0280-literature-verify.R"),
+               `0150 snapshot()` = r_guard("scripts/0150-store.R"),
                `0270 db()` = py_guard("scripts/0270-habitat-collection-build.py"))
+# 0150 carries 0280's function; a fix to one that misses the other fails here
+stopifnot("0150's snapshot() differs from 0280's" = identical(
+  deparse(fn_from("scripts/0150-store.R", "snapshot")), deparse(fn_from("scripts/0280-literature-verify.R", "snapshot"))))
 gt <- do.call(rbind, lapply(names(guards), function(g) do.call(rbind, lapply(names(fx), function(k) {
   n <- tryCatch(guards[[g]](file.path(fx[[k]], "zotero.sqlite")), error = function(e) NA_integer_)
   data.frame(guard = g, fixture = k, rows = n, expected = expect_rows[[k]])

@@ -48,6 +48,12 @@ Every read opened and every `quick_check` returned `ok`.
 - `0270` imports `0153`, which exits at import without `ZOTERO_API_KEY`; the check's Python leg sets a dummy key for
   the import alone (no API call), so no sibling `.py` is needed.
 
+## cred
+
+cred#45 filed 2026-10-31: `immutable=1` (`R/zotero.R:24`, `:439`) misses commits still in the `-wal`; reprex reads 1
+row where 2 are committed. knowledge is private, so the issue names no knowledge issue; it offers a guarded copy for
+cred to own. "Zotero checkpoints when it closes" is stated there as not yet measured.
+
 ## Errors Encountered
 
 | Error | Resolution |

@@ -81,11 +81,11 @@ measures this before anything is fixed.
 
 ## Phase 4: `0150` `collection_keys()` reads a guarded copy
 
-- [ ] Add `0280`'s `snapshot()` to `0150` and have `collection_keys()` read from it instead of `immutable=1`
+- [x] Add `0280`'s `snapshot()` to `0150` and have `collection_keys()` read from it instead of `immutable=1`
   (`zotero_dir` builds `live`).
-- [ ] Fix the header comment at line 19: cred still reads the live file immutable, so `ACTION=build` misses writes
+- [x] Fix the header comment at line 19: cred still reads the live file immutable, so `ACTION=build` misses writes
   that have not been checkpointed until cred is fixed.
-- [ ] The check script runs `0150`'s `snapshot()` on the fixtures, the same way as `0280`'s.
+- [x] The check script runs `0150`'s `snapshot()` on the fixtures, the same way as `0280`'s.
 
 ## Phase 5: Docs
 

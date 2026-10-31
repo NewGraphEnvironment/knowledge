@@ -18,6 +18,9 @@
 # What changed from 0151, and why it matters downstream:
 #   - cred reads the LOCAL ~/Zotero/zotero.sqlite (read-only), not the Web API.
 #     No API key, no `op`. The Zotero data dir must be synced on this machine.
+#     cred opens the live file `immutable=1`, which misses commits Zotero 10 still holds
+#     in zotero.sqlite-wal (cred#45, #127): collection_keys() reads a guarded copy, but
+#     cred's own reads in a build do not, so a build soon after a sync can miss them.
 #   - cred takes ONE collection or a vector of citation keys. The old build
 #     unioned several collections, so `build` here resolves each named
 #     collection to its citation keys and passes the union.
@@ -40,6 +43,46 @@ stopifnot("STORE=<name> is required" = nzchar(store))
 store_path <- file.path("data", "rag", paste0(store, ".duckdb"))
 dir.create(dirname(store_path), recursive = TRUE, showWarnings = FALSE)
 
+# Zotero 10 runs the database in WAL mode, where a commit sits in zotero.sqlite-wal until a
+# checkpoint folds it into the main file, so the copy takes the -wal with the main file: the
+# main file alone opens, passes quick_check and silently misses those commits (#127,
+# data-raw/zotero_copy_check.R). The -shm is not copied; SQLite rebuilds it. Each try clears
+# the copy's -wal first, so one left by an earlier try never sits beside a newer main file.
+# Keep a copy only when nothing wrote meanwhile: both files' mtime and size and the header's
+# journal mode are unchanged across the copy, no rollback-journal transaction is open (journal
+# absent or its header zeroed, before and after), and the copy passes quick_check. Zotero runs
+# in exclusive locking mode, where SQLite does not bump the header change counter per commit,
+# so that counter is no guard (same rule as 0270's db()).
+# The same function as 0280's snapshot(), byte for byte; data-raw/zotero_copy_check.R checks they agree.
+snapshot <- function(live = path.expand("~/Zotero/zotero.sqlite"), tries = 6, wait = 15) {
+  wal <- paste0(live, "-wal")
+  journal <- paste0(live, "-journal")
+  snap <- tempfile(fileext = ".sqlite")
+  state <- function() {
+    info <- file.info(c(live, wal))
+    open_txn <- file.exists(journal) && file.size(journal) >= 8 &&
+      any(readBin(journal, "raw", 8) != as.raw(0))
+    list(mtime = as.numeric(info$mtime), size = info$size,
+         mode = readBin(live, "raw", 20)[19:20], open_txn = open_txn)
+  }
+  for (i in seq_len(tries)) {
+    before <- state()
+    unlink(paste0(snap, c("", "-wal", "-shm")))
+    copied <- file.copy(live, snap) && (!file.exists(wal) || file.copy(wal, paste0(snap, "-wal")))
+    if (!copied || !identical(state(), before) || before$open_txn) {
+      Sys.sleep(wait)
+      next
+    }
+    con <- DBI::dbConnect(RSQLite::SQLite(), snap)
+    ok <- tryCatch(DBI::dbGetQuery(con, "PRAGMA quick_check")[[1]][1] == "ok",
+                   error = function(e) FALSE)
+    if (ok) return(con)
+    DBI::dbDisconnect(con)
+    Sys.sleep(wait)
+  }
+  stop("no consistent copy of zotero.sqlite after ", tries, " tries; is Zotero mid-sync?")
+}
+
 # Citation keys of every item with a PDF attachment in the given collections,
 # from the local Zotero database. Collections are resolved inside ONE library
 # (the NGE group by default; GROUP_ID= to change it), by name or by their
@@ -52,7 +95,7 @@ collection_keys <- function(collections, zotero_dir = "~/Zotero",
                             group_id = Sys.getenv("GROUP_ID", "4733734")) {
   db <- file.path(path.expand(zotero_dir), "zotero.sqlite")
   stopifnot("zotero.sqlite not found; sync Zotero on this machine" = file.exists(db))
-  con <- DBI::dbConnect(RSQLite::SQLite(), paste0("file:", db, "?mode=ro&immutable=1"))
+  con <- snapshot(live = db)
   on.exit(DBI::dbDisconnect(con), add = TRUE)
   lib <- DBI::dbGetQuery(con, "SELECT libraryID FROM groups WHERE groupID = ?",
                          params = list(as.integer(group_id)))$libraryID
