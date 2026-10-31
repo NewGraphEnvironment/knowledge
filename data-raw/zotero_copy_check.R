@@ -118,7 +118,24 @@ r_guard <- function(file) {
     DBI::dbGetQuery(con, "SELECT count(*) FROM items")[[1]]
   }
 }
-guards <- list(`0280 snapshot()` = r_guard("scripts/0280-literature-verify.R"))
+# 0270 is loaded as 0270 loads 0153; importing it imports 0153, which exits without ZOTERO_API_KEY,
+# so the child gets a placeholder key. db() makes no API call.
+py_guard <- function(file) {
+  code <- c("import importlib.util, sys",
+            sprintf("spec = importlib.util.spec_from_file_location('z0270', %s)", shQuote(file)),
+            "m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)",
+            "try:",
+            "    print(m.db(live=sys.argv[1], tries=1, wait=0).execute('SELECT count(*) FROM items').fetchone()[0])",
+            "except SystemExit as e:",
+            "    print('NA'); print(e, file=sys.stderr)")
+  function(db) {
+    out <- system2("python3", c("-c", shQuote(paste(code, collapse = "\n")), shQuote(db)),
+                   stdout = TRUE, env = "ZOTERO_API_KEY=check-only")
+    as.integer(utils::tail(out, 1))
+  }
+}
+guards <- list(`0280 snapshot()` = r_guard("scripts/0280-literature-verify.R"),
+               `0270 db()` = py_guard("scripts/0270-habitat-collection-build.py"))
 gt <- do.call(rbind, lapply(names(guards), function(g) do.call(rbind, lapply(names(fx), function(k) {
   n <- tryCatch(guards[[g]](file.path(fx[[k]], "zotero.sqlite")), error = function(e) NA_integer_)
   data.frame(guard = g, fixture = k, rows = n, expected = expect_rows[[k]])

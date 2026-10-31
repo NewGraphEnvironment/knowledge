@@ -62,39 +62,60 @@ ZDIR = os.path.expanduser("~/Zotero")
 SKIP_FIELDS = {"citationKey"}
 
 
-def db(tries=6, wait=15):
+def db(live=os.path.join(ZDIR, "zotero.sqlite"), tries=6, wait=15):
     """A consistent snapshot of the local Zotero database.
 
     Zotero holds an exclusive lock while it runs, so a normal read-only connection
     blocks, and an `immutable=1` read of the live file sees pages mid-write while a
     sync is in progress ("database disk image is malformed" on every member, measured
-    right after this script's own writes started a sync). So copy the file, and keep
-    the copy only when nothing wrote to it meanwhile: the live file's mtime and size
-    are unchanged across the copy, no transaction is open (the rollback journal is
-    absent or its header zeroed, before and after), and the copy passes quick_check.
-    The header change counter is no guard here: in Zotero's exclusive locking mode
-    SQLite does not bump it per commit (measured: five commits, counter unchanged).
+    right after this script's own writes started a sync). So copy the file. Zotero 10
+    runs it in WAL mode, where a commit sits in zotero.sqlite-wal until a checkpoint
+    folds it into the main file, so the copy takes the -wal with the main file: the
+    main file alone opens, passes quick_check and silently misses those commits (#127,
+    data-raw/zotero_copy_check.R). The -shm is not copied; SQLite rebuilds it. Each
+    try clears the copy's -wal first, so one left by an earlier try never sits beside
+    a newer main file. Keep the copy only when nothing wrote meanwhile: both files'
+    mtime and size and the header's journal mode are unchanged across the copy, no
+    rollback-journal transaction is open (the journal is absent or its header zeroed,
+    before and after), and the copy passes quick_check. The header change counter is
+    no guard here: in Zotero's exclusive locking mode SQLite does not bump it per
+    commit (measured: five commits, counter unchanged).
     """
     import atexit, shutil, tempfile, time
-    live = os.path.join(ZDIR, "zotero.sqlite")
+    wal = live + "-wal"
     journal = live + "-journal"
     tmpdir = tempfile.mkdtemp(prefix="zotero_snap_")
     atexit.register(shutil.rmtree, tmpdir, True)
     tmp = os.path.join(tmpdir, "zotero.sqlite")
 
+    def stat(path):
+        try:
+            st = os.stat(path)
+            return st.st_mtime_ns, st.st_size
+        except FileNotFoundError:
+            return None
+
     def state():
-        st = os.stat(live)
         try:
             with open(journal, "rb") as f:
                 open_txn = f.read(8).strip(b"\0") != b""
         except FileNotFoundError:
             open_txn = False
-        return st.st_mtime_ns, st.st_size, open_txn
+        with open(live, "rb") as f:
+            mode = f.read(20)[18:20]
+        return stat(live), stat(wal), mode, open_txn
     for i in range(tries):
         before = state()
+        for p in (tmp + "-wal", tmp + "-shm"):
+            if os.path.exists(p):
+                os.remove(p)
         shutil.copyfile(live, tmp)
+        try:
+            shutil.copyfile(wal, tmp + "-wal")
+        except FileNotFoundError:
+            pass                                  # no -wal: rollback mode, or WAL fully checkpointed
         after = state()
-        if before == after and not before[2]:
+        if before == after and not before[3]:
             con = sqlite3.connect(tmp)
             try:
                 if con.execute("PRAGMA quick_check").fetchone()[0] == "ok":

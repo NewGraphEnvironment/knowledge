@@ -74,9 +74,9 @@ measures this before anything is fixed.
 
 ## Phase 3: `0270` `db()`, the same in Python
 
-- [ ] The same state, deletion, copy order and acceptance as Phase 2; `live` is an argument defaulting to
+- [x] The same state, deletion, copy order and acceptance as Phase 2; `live` is an argument defaulting to
   `os.path.join(ZDIR, "zotero.sqlite")`. Rewrite the docstring.
-- [ ] The check script runs `db()` on the three fixtures through `python3`, loading 0270 with `importlib`. If importing
+- [x] The check script runs `db()` on the three fixtures through `python3`, loading 0270 with `importlib`. If importing
   it has side effects (the API-key exit), that leg moves to a sibling `data-raw/zotero_copy_check.py`.
 
 ## Phase 4: `0150` `collection_keys()` reads a guarded copy
