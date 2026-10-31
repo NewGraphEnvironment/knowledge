@@ -75,6 +75,9 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   `temperature_{members,additions}.csv` (what `0270 --collection temperature` puts in `Fisheries/temperature`, the sole
   input of the `temperature` store), and `flow_{members,additions}.csv` (what `0270 --collection flow` puts in
   `Fisheries/flow`, the sole input of the `flow` store; #44, `research/flow_requirements.md`), and
+  `bull_trout_members.csv`, `grayling_{members,additions}.csv` (what `0270 --collection <name> --parent 9U54XAND`
+  puts in `species/bull_trout` and `species/grayling`, the inputs of the `bull_trout_grayling` store; hand-curated
+  collections, so the files list what the cleanup ensured, and 0270 never removes a member; #122), and
   `thresholds.csv` and `thresholds_groups.csv` (the tuned thresholds per species × stage × component in link's
   parameter names, with the near-river pair's scope where a rule has one (`near_river_scope`, from the comparison's
   tuned structure), and the groups each rule was scored on; `0325`, #57, #73). `data/tune/` holds the tuning run's
@@ -148,9 +151,11 @@ immutable: build only once Zotero has finished syncing. Citation keys are not un
 libraries (the same key names different papers in the personal and group libraries), so
 resolve a key inside the group (`groups.groupID = 4733734`), never across the whole database.
 
-`cred` 0.3.0's `crd_search()` fails on every store under ragnar 0.3.0 (`cosine_distance` is a
-list column), so `0150 ACTION=query` is broken until cred is fixed; `ragnar::ragnar_retrieve()`
-works directly. Draft issue in the #19 archive's `cred-issue-draft.md`.
+`0150 ACTION=query` needs cred 0.4.0 or later: 0.3.0's `crd_search()` failed on every store under ragnar 0.3.0
+(NewGraphEnvironment/cred#27); under 0.4.0 it returns hybrid results (2026-10-30), and `0150` refuses an older cred.
+`ACTION=build` needs cred 0.5.0, the first that resolves a key inside one library, skips the trash and ingests every
+live PDF of an item (NewGraphEnvironment/cred#40); `0150` passes the group as `library` and refuses an older cred. Zotero's
+database is in WAL mode since about 2026-10-30, which the guarded copies and `immutable=1` reads do not yet handle (#127).
 
 ### An EcoCat report is several documents
 

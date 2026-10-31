@@ -122,7 +122,11 @@ wf_farm_priority.js                          farm priority/crossing tables out o
 0270  build the group's Fisheries/habitat_modelling collection   --dry-run first, then live
       (--collection temperature: Fisheries/temperature, from data/temperature_members.csv)
       (--collection flow: Fisheries/flow, from data/flow_members.csv and data/flow_additions.csv)
-0150  ACTION=build STORE=habitat_modelling COLLECTIONS="U9ZCZ6RN,chinook,bull_trout,..."  then ACTION=push
+      (--parent <key> for a collection under another parent: --collection grayling --parent 9U54XAND is species/grayling)
+0150  ACTION=build STORE=habitat_modelling COLLECTIONS="U9ZCZ6RN,RXNFPBPH,VHWEK6RE,GELFSUTU,9U54XAND,SW2RXUJC,DQP29KU7,X29BX4U8,W4425VK5,545K8HP4"
+      (habitat_modelling, chinook, bull_trout, grayling, species, temperature, wedzin_kwa_chinook, hydrology and the
+      two salmon collections, by key)                                                    then ACTION=push
+0150  ACTION=build STORE=bull_trout_grayling COLLECTIONS="VHWEK6RE,GELFSUTU"               then ACTION=push
 0150  ACTION=build STORE=temperature COLLECTIONS=SW2RXUJC                                  then ACTION=push
 0150  ACTION=build STORE=flow COLLECTIONS=FWTJDD8Z                                         then ACTION=push
       (a rebuild over an existing local store needs OVERWRITE=TRUE; ACTION=push needs CONFIRM=TRUE to upload)
@@ -216,7 +220,8 @@ A report is reachable from more than one place; using only one axis misses repor
   the group (`hydrology`, `salmon`) is refused and its keys are printed; pass a key. A name that exists only
   in a personal library no longer resolves (it used to, and a name in both was refused).
 - `ACTION=build STORE=<name> COLLECTIONS="<zotero collection>[,...]"` builds a **citation-key-named**
-  store from the local `~/Zotero` (no API key). That naming carries no watershed group and no
+  store from the local `~/Zotero` (no API key). It names every member it leaves out (no citation key, no live PDF, a
+  standalone PDF no keyed item of the build holds), because cred is handed keys and never sees those members (#122). That naming carries no watershed group and no
   reportId; it needs `data/zotero_key_map.csv` to join the farm. Group-scoped work goes through the
   harvest (`wf_report_harvest.js` → `0152`), which names documents `<EXTENT>__<reportId>.pdf`
 - The manifest records document/chunk counts, **embedding model + size**, bytes, md5 and the
@@ -224,7 +229,9 @@ A report is reachable from more than one place; using only one axis misses repor
   pull rather than rebuild. The `rag/` prefix stays **private permanently**: these stores accumulate
   unpublished reports, at-risk-species and culturally-important-site locations
 - Semantic search is weak on proper nouns — for a specific creek name, grep the PDFs
-- Replaced `0150`/`0151` (build), `0155` (query) and `0157` (sync) in September 2026; `cred` 0.3.0
+- Replaced `0150`/`0151` (build), `0155` (query) and `0157` (sync) in September 2026; `cred` 0.3.0. `ACTION=query` needs `cred`
+  0.4.0 or later (0.3.0's `crd_search()` failed under ragnar 0.3.0, cred#27), and `ACTION=build` 0.5.0 (cred#40: a key
+  resolved across libraries, to the trash and to the newest of several PDFs); each refuses an older cred
 
 ## wf_farm_priority.js
 - One agent per report PDF; lifts priority / crossing / habitat-reach tables into structured rows
@@ -395,7 +402,9 @@ The cited basis for CH and BT habitat thresholds (#19). Not per watershed group.
   (`data/habitat_modelling_additions.csv`: CrossRef by DOI, or grey-literature metadata, with a PDF URL or a
   standalone group attachment). `--collection <name>` builds another collection under Fisheries the same
   way, from `data/<name>_members.csv` (and `_additions.csv` if present); `Fisheries/temperature`
-  (`SW2RXUJC`, #38) and `Fisheries/flow` (`FWTJDD8Z`, #44) are built that way. An additions `pdf` may also
+  (`SW2RXUJC`, #38) and `Fisheries/flow` (`FWTJDD8Z`, #44) are built that way. `--parent <key>` builds one under another parent: the species
+  collections sit under `species` (`9U54XAND`), and a name found elsewhere in the group without `--parent` is
+  refused rather than created twice (#122). An additions `pdf` may also
   be a path from the repo root, for a PDF only a browser can fetch; such copies sit in the ignored
   `data/rag/pdf/flow/`. A member row may give a `pdf` (a URL, or a path from the repo root)
   for an item no local library holds a PDF of, such as an analytic appendix printed from the web.

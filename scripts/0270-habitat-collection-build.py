@@ -3,7 +3,8 @@
 scripts/0270-habitat-collection-build.py
 ---------------------------------------------------------------------------
 Build a group-library collection under Fisheries (habitat_modelling by default,
---collection for another) from a curated key list, so the ragnar store of the same
+--collection for another; --parent for a collection under another parent, such as
+the species collections under species) from a curated key list, so the ragnar store of the same
 name (0150 ACTION=build) can be rebuilt from the group library alone, on any
 machine synced to it.
 
@@ -54,7 +55,7 @@ z = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(z)          # 0153 has a __main__ guard; this only defines helpers
 
 COLLECTION = "habitat_modelling"     # the collection name and the tag on created items; --collection
-PARENT = "TRXPJHQE"                  # Fisheries, group library
+PARENT = "TRXPJHQE"                  # Fisheries, group library; --parent (species is 9U54XAND)
 ZDIR = os.path.expanduser("~/Zotero")
 # Fields the Web API must not receive on a copy: identity, sync state, and the
 # citation key (BBT derives it; a hand-set key breaks the key formula).
@@ -213,6 +214,20 @@ def find_collection(dry):
     for c in get_json(f"{z.BASE}/collections/{PARENT}/collections?limit=100"):
         if c["data"]["name"] == COLLECTION:
             return c["key"], "exists"
+    # Not under PARENT. A collection of that name elsewhere in the group is almost always the
+    # one meant with --parent forgotten (species/grayling run without --parent 9U54XAND), and
+    # creating a second one would fill it from the same members file.
+    elsewhere, start = [], 0
+    while True:
+        page = get_json(f"{z.BASE}/collections?limit=100&start={start}")
+        elsewhere += [f"{c['key']} (under {c['data'].get('parentCollection') or 'top level'})"
+                      for c in page if c["data"]["name"] == COLLECTION and not c["data"].get("deleted")]
+        if len(page) < 100:
+            break
+        start += 100
+    if elsewhere:
+        sys.exit(f"no collection {COLLECTION} under {PARENT}, but the group has {', '.join(elsewhere)}: "
+                 "pass --parent with that parent's key")
     if dry:
         return None, "would create"
     st, bd = z.api("POST", f"{z.BASE}/collections",
@@ -443,14 +458,15 @@ def do_addition(row, coll, dry):
 
 
 def main():
-    global COLLECTION
+    global COLLECTION, PARENT
     p = argparse.ArgumentParser()
     p.add_argument("--collection", default=COLLECTION)
+    p.add_argument("--parent", default=PARENT, help="key of the collection it sits under (default Fisheries)")
     p.add_argument("--members", help="default data/<collection>_members.csv")
     p.add_argument("--additions", help="default data/<collection>_additions.csv, when it exists")
     p.add_argument("--dry-run", action="store_true")
     a = p.parse_args()
-    COLLECTION = a.collection
+    COLLECTION, PARENT = a.collection, a.parent
     data_dir = os.path.join(HERE, "..", "data")
     if not a.members:
         a.members = os.path.join(data_dir, f"{COLLECTION}_members.csv")

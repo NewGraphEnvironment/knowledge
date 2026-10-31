@@ -1,0 +1,27 @@
+[dry run] would upload data/rag/bull_trout_grayling.duckdb -> s3://fresh-bc/rag/bull_trout_grayling.duckdb
+[dry run] merged manifest would hold: fraser, vca_refs, peace, pine, habitat_modelling, temperature, flow, bull_trout_grayling
+(manifest trimmed to this store's entry)
+{
+  "date_updated": "2026-10-31T17:39:42Z",
+  "manifest_note": "Provenance is per store. Push must merge into this file, never replace it.",
+  "chunking": "ragnar defaults (ragnar_store_ingest)",
+  "generating_script": "cred::crd_store_push()",
+  "stores": {
+    "bull_trout_grayling": {
+      "documents": 36,
+      "chunks": 5534,
+      "embedding_size": 768,
+      "embedding_model": "nomic-embed-text",
+      "store_name": "store_001",
+      "bytes": 78917632,
+      "md5": "28c4bc8bdc9cf4b643f1905ab8f72b35",
+      "repo": "NewGraphEnvironment/knowledge",
+      "branch": "122-arctic-grayling-and-bull-trout-store-cle",
+      "head_sha": "49f99a01e2a5791a27ab9e3f99692e92d6bc8955",
+      "built_by": "cred::crd_store_push()",
+      "date_completed": "2026-10-31T17:39:42Z"
+    }
+  }
+}
+Uploading bull_trout_grayling.duckdb (75 MB)
+Manifest updated — now holds: fraser, vca_refs, peace, pine, habitat_modelling, temperature, flow, bull_trout_grayling
