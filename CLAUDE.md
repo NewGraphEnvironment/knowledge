@@ -183,6 +183,14 @@ reads as a JSON parse error three calls later. Items `0270` creates through the 
 get Better BibTeX keys without a Zotero restart (measured 2026-10-02), so `0270` → `0150` build →
 `0280` runs end to end in one sitting.
 
+A build's "Skipping missing file" for a key can mean its attachment never got a file while a
+duplicate item (same DOI) holds the PDF: Opperman et al. 2010 sat that way through two builds. Search
+the group by DOI before chasing the paper; the Web API's `/items` omits trashed items, so a trashed
+copy shows only as a parent key. Merge through the Web API (PATCH the attachment's `parentItem`, the
+kept item's `collections` and `relations: {"dc:replaces": [...]}`, then `deleted: 1` on the duplicate
+and the empty attachment). The document joins a store only at its next full build until cred can
+update one in place (NewGraphEnvironment/cred#44).
+
 ### The FDIS electrofishing export: public as received, and richer than the public layers
 
 `s3://fresh-bc/fdis/` holds province-wide FDIS extracts the Province supplied for the 2021–22
