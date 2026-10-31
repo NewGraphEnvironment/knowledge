@@ -9,65 +9,100 @@
 Ingesting several PDFs for 1 item(s): bottoms_etal2023Criticalhabitats (2)
 Ingesting 36 PDF(s) into data/rag/bull_trout_grayling.duckdb
 Launching 8 parallel workers.
-ℹ ingested: /Users/airvine/Zotero/storage/HYSNCHBC/distribution,_life_history,_abundance,_harvest,_habitat,_and_limiting_factors.pdf
+ℹ ingested: ~/Zotero/storage/HYSNCHBC/distribution,_life_history,_abundance,_harvest,_habitat,_and_limiting_factors.pdf
 Ingesting ■■                                 3% | ETA:  3m
-ℹ ingested: /Users/airvine/Zotero/storage/N2IJDSIN/Bib77170.pdf
-Ingesting ■■                                 3% | ETA:  3mℹ ingested: /Users/airvine/Zotero/storage/R8QMFQ3Q/App78_BC_Bulltrout_Broch.pdf
-Ingesting ■■                                 3% | ETA:  3mℹ ingested: /Users/airvine/Zotero/storage/DNU7KCE3/Report_354_genetics_FINLAY_2012_1379342627570_8b8d61b276b6c14fafa324fc1ca4d94fbc220e61d679b29499ff964066a3acdb.pdf
-Ingesting ■■                                 3% | ETA:  3mIngesting ■■■■                              11% | ETA:  1m
-ℹ ingested: /Users/airvine/Zotero/storage/4HFRQDA5/whyte_etal1997_ch5.pdf
-Ingesting ■■■■                              11% | ETA:  1mIngesting ■■■■■                             14% | ETA:  1m
-ℹ ingested: /Users/airvine/Zotero/storage/QERTFNGQ/shrimpton,_j.m._et_al_2012_genetic_analysis_of_arctic_grayling_population_structure_in_the_williston.pdf
-Ingesting ■■■■■                             14% | ETA:  1mIngesting ■■■■■■                            17% | ETA:  1m
-ℹ ingested: /Users/airvine/Zotero/storage/WISRRBL2/swales_levings_1989_role_of_off-channel_ponds_in_the_life_cycle_of_coho_salmon_(_oncorhynchus.pdf
-Ingesting ■■■■■■                            17% | ETA:  1mℹ ingested: /Users/airvine/Zotero/storage/WF6H9H5T/selong_et_al_effect_of_temperature_on_growth_and_survival_of_bull_trout,_with_application_of.pdf
-Ingesting ■■■■■■                            17% | ETA:  1mIngesting ■■■■■■■■                          22% | ETA:  1m
-ℹ ingested: /Users/airvine/Zotero/storage/8GW7GFR9/carr_etal2020ImpactsVarying.pdf
-Ingesting ■■■■■■■■                          22% | ETA:  1mIngesting ■■■■■■■■■                         25% | ETA:  1m
-ℹ ingested: /Users/airvine/Zotero/storage/V6CSVK29/hagen_et_al_2020_critical_spawning_habitats_and_abundance_of_bull_trout_in_the_williston.pdf
-Ingesting ■■■■■■■■■                         25% | ETA:  1mIngesting ■■■■■■■■■                         28% | ETA:  1m
-ℹ ingested: /Users/airvine/Zotero/storage/T6K5U9YQ/cutting_et_al_2018_linking_beaver_dam_affected_flow_dynamics_to_upstream_passage_of_arctic_grayling.pdf
-Ingesting ■■■■■■■■■                         28% | ETA:  1mIngesting ■■■■■■■■■■                        31% | ETA:  1m
-ℹ ingested: /Users/airvine/Zotero/storage/P3VZT5YQ/martins_et_al_2020_spatial_ecology_of_arctic_grayling_in_the_parsnip_core_area.pdf
-Ingesting ■■■■■■■■■■                        31% | ETA:  1mIngesting ■■■■■■■■■■■                       33% | ETA:  1m
-ℹ ingested: /Users/airvine/Zotero/storage/GJXWIECX/stewart_et_al_2007_fish_life_history_and_habitat_use_in_the_northwest_territories_-_arctic_grayling.pdf
-Ingesting ■■■■■■■■■■■                       33% | ETA:  1mIngesting ■■■■■■■■■■■■                      36% | ETA:  2m
-ℹ ingested: /Users/airvine/Zotero/storage/6CRKS44D/t._silva_et_al_2017_the_future_of_fish_passage_science,_engineering,_and_practice.pdf
-Ingesting ■■■■■■■■■■■■                      36% | ETA:  2mIngesting ■■■■■■■■■■■■■                     39% | ETA:  1m
-ℹ ingested: /Users/airvine/Zotero/storage/78C3PSF7/hagen_et_al_2019_trend_in_abundance_of_arctic_grayling_(thymallus_arcticus)_in_index_sites_of.pdf
-Ingesting ■■■■■■■■■■■■■                     39% | ETA:  1mIngesting ■■■■■■■■■■■■■                     42% | ETA:  1m
-ℹ ingested: /Users/airvine/Zotero/storage/NS6LCSCQ/hagen_gantner_2020_abundance_and_trend_of_arctic_grayling_(thymallus_arcticus)_in_index_sites_of.pdf
-Ingesting ■■■■■■■■■■■■■                     42% | ETA:  1mℹ ingested: /Users/airvine/Zotero/storage/XX9MEVAV/beaudry_2014_assessment_and_assignment_of_sensitivity_ratings_to_sub-basins_of_the_table.pdf
-Ingesting ■■■■■■■■■■■■■                     42% | ETA:  1mIngesting ■■■■■■■■■■■■■■■                   47% | ETA:  1m
-ℹ ingested: /Users/airvine/Zotero/storage/KZU26QII/martins_et_al_2022_spatial_ecology_of_arctic_grayling_in_the_parsnip_core_area.pdf
-Ingesting ■■■■■■■■■■■■■■■                   47% | ETA:  1mℹ ingested: /Users/airvine/Zotero/storage/YJZLRJ5I/PEA_F23_F_3652_Appendix_1_1706805993310_705DB12CA1.pdf
-Ingesting ■■■■■■■■■■■■■■■                   47% | ETA:  1mIngesting ■■■■■■■■■■■■■■■■■                 53% | ETA:  1m
-ℹ ingested: /Users/airvine/Zotero/storage/BP3WQUDY/willson_variation_in_salmonid_life_histories_-_patterns_and_perspectives.pdf
-Ingesting ■■■■■■■■■■■■■■■■■                 53% | ETA:  1mℹ ingested: /Users/airvine/Zotero/storage/XDKIU3UA/stuart_chislett_1979_grayling_sukunka.pdf
-Ingesting ■■■■■■■■■■■■■■■■■                 53% | ETA:  1mℹ ingested: /Users/airvine/Zotero/storage/CXEGWCBR/culling_1999_burnt_river_grayling.pdf
-Ingesting ■■■■■■■■■■■■■■■■■                 53% | ETA:  1mIngesting ■■■■■■■■■■■■■■■■■■■               61% | ETA: 46s
-ℹ ingested: /Users/airvine/Zotero/storage/KXDGTBTA/bulltroutguide.pdf
-Ingesting ■■■■■■■■■■■■■■■■■■■               61% | ETA: 46sIngesting ■■■■■■■■■■■■■■■■■■■■              64% | ETA: 46s
-ℹ ingested: /Users/airvine/Zotero/storage/SH9U4438/post_etal2012COSEWICassessment.pdf
-Ingesting ■■■■■■■■■■■■■■■■■■■■              64% | ETA: 46sIngesting ■■■■■■■■■■■■■■■■■■■■■             67% | ETA: 44s
-ℹ ingested: /Users/airvine/Zotero/storage/SWCCAHMU/2026_Arctic_Grayling_Summary_1784659177582_5C8FC7930F.pdf
-Ingesting ■■■■■■■■■■■■■■■■■■■■■             67% | ETA: 44sIngesting ■■■■■■■■■■■■■■■■■■■■■■            69% | ETA: 41s
-ℹ ingested: /Users/airvine/Zotero/storage/6SKHWJ27/stamford_et_al_2017_fwcp_arctic_grayling_synthesis_report.pdf
-Ingesting ■■■■■■■■■■■■■■■■■■■■■■            69% | ETA: 41sIngesting ■■■■■■■■■■■■■■■■■■■■■■■           72% | ETA: 38s
-ℹ ingested: /Users/airvine/Zotero/storage/4CPVMLBZ/hagen_and_sary_2023-bull_trout_habitat_i.pdf
-Ingesting ■■■■■■■■■■■■■■■■■■■■■■■           72% | ETA: 38sℹ ingested: /Users/airvine/Zotero/storage/EPPHL4VG/bottoms_et_al_2023_critical_habitats_of_arctic_grayling_in_parsnip_tributaries.pdf
-Ingesting ■■■■■■■■■■■■■■■■■■■■■■■           72% | ETA: 38sIngesting ■■■■■■■■■■■■■■■■■■■■■■■■          78% | ETA: 30s
-ℹ ingested: /Users/airvine/Zotero/storage/49CJN2M4/hagen_stamford_2023_parsnip_arctic_grayling_abundance_and_critical_habitats_2018-2022_final_report.pdf
-Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■          78% | ETA: 30sℹ ingested: /Users/airvine/Zotero/storage/SW7W68DV/fredf-9-12(21)R-I.pdf
-Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■          78% | ETA: 30sIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■■        83% | ETA: 24s
-ℹ ingested: /Users/airvine/Zotero/storage/B6DIT3MZ/2023 - Management Plan for Bull Trout (Salvelinus conflue.pdf
-Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■        83% | ETA: 24sℹ ingested: /Users/airvine/Zotero/storage/N8GBTAK9/2026_Arctic_Grayling_Synthesis_Report_1784660439212_5C8FC7930F.pdf
-Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■        83% | ETA: 24sIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■      89% | ETA: 18s
-ℹ ingested: /Users/airvine/Zotero/storage/PRRRZKPI/Patricia_House_thesis55763.pdf
-Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■      89% | ETA: 18sIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     92% | ETA: 13s
-ℹ ingested: /Users/airvine/Zotero/storage/JDJ4IKR9/McPherson_Morag_D_202008_MSc.pdf
-Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     92% | ETA: 13sℹ ingested: /Users/airvine/Zotero/storage/JQPBUZAS/hagen_and_weber_limiting_factors_en.pdf
-Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     92% | ETA: 13sℹ ingested: /Users/airvine/Zotero/storage/XQNJAC2D/pwfwcp_report_no_337_1385592636452_5584970005.pdf
-Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     92% | ETA: 13sIngesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  100% | ETA:  0s
+ℹ ingested: ~/Zotero/storage/N2IJDSIN/Bib77170.pdf
+Ingesting ■■                                 3% | ETA:  3m
+ℹ ingested: ~/Zotero/storage/R8QMFQ3Q/App78_BC_Bulltrout_Broch.pdf
+Ingesting ■■                                 3% | ETA:  3m
+ℹ ingested: ~/Zotero/storage/DNU7KCE3/Report_354_genetics_FINLAY_2012_1379342627570_8b8d61b276b6c14fafa324fc1ca4d94fbc220e61d679b29499ff964066a3acdb.pdf
+Ingesting ■■                                 3% | ETA:  3m
+Ingesting ■■■■                              11% | ETA:  1m
+ℹ ingested: ~/Zotero/storage/4HFRQDA5/whyte_etal1997_ch5.pdf
+Ingesting ■■■■                              11% | ETA:  1m
+Ingesting ■■■■■                             14% | ETA:  1m
+ℹ ingested: ~/Zotero/storage/QERTFNGQ/shrimpton,_j.m._et_al_2012_genetic_analysis_of_arctic_grayling_population_structure_in_the_williston.pdf
+Ingesting ■■■■■                             14% | ETA:  1m
+Ingesting ■■■■■■                            17% | ETA:  1m
+ℹ ingested: ~/Zotero/storage/WISRRBL2/swales_levings_1989_role_of_off-channel_ponds_in_the_life_cycle_of_coho_salmon_(_oncorhynchus.pdf
+Ingesting ■■■■■■                            17% | ETA:  1m
+ℹ ingested: ~/Zotero/storage/WF6H9H5T/selong_et_al_effect_of_temperature_on_growth_and_survival_of_bull_trout,_with_application_of.pdf
+Ingesting ■■■■■■                            17% | ETA:  1m
+Ingesting ■■■■■■■■                          22% | ETA:  1m
+ℹ ingested: ~/Zotero/storage/8GW7GFR9/carr_etal2020ImpactsVarying.pdf
+Ingesting ■■■■■■■■                          22% | ETA:  1m
+Ingesting ■■■■■■■■■                         25% | ETA:  1m
+ℹ ingested: ~/Zotero/storage/V6CSVK29/hagen_et_al_2020_critical_spawning_habitats_and_abundance_of_bull_trout_in_the_williston.pdf
+Ingesting ■■■■■■■■■                         25% | ETA:  1m
+Ingesting ■■■■■■■■■                         28% | ETA:  1m
+ℹ ingested: ~/Zotero/storage/T6K5U9YQ/cutting_et_al_2018_linking_beaver_dam_affected_flow_dynamics_to_upstream_passage_of_arctic_grayling.pdf
+Ingesting ■■■■■■■■■                         28% | ETA:  1m
+Ingesting ■■■■■■■■■■                        31% | ETA:  1m
+ℹ ingested: ~/Zotero/storage/P3VZT5YQ/martins_et_al_2020_spatial_ecology_of_arctic_grayling_in_the_parsnip_core_area.pdf
+Ingesting ■■■■■■■■■■                        31% | ETA:  1m
+Ingesting ■■■■■■■■■■■                       33% | ETA:  1m
+ℹ ingested: ~/Zotero/storage/GJXWIECX/stewart_et_al_2007_fish_life_history_and_habitat_use_in_the_northwest_territories_-_arctic_grayling.pdf
+Ingesting ■■■■■■■■■■■                       33% | ETA:  1m
+Ingesting ■■■■■■■■■■■■                      36% | ETA:  2m
+ℹ ingested: ~/Zotero/storage/6CRKS44D/t._silva_et_al_2017_the_future_of_fish_passage_science,_engineering,_and_practice.pdf
+Ingesting ■■■■■■■■■■■■                      36% | ETA:  2m
+Ingesting ■■■■■■■■■■■■■                     39% | ETA:  1m
+ℹ ingested: ~/Zotero/storage/78C3PSF7/hagen_et_al_2019_trend_in_abundance_of_arctic_grayling_(thymallus_arcticus)_in_index_sites_of.pdf
+Ingesting ■■■■■■■■■■■■■                     39% | ETA:  1m
+Ingesting ■■■■■■■■■■■■■                     42% | ETA:  1m
+ℹ ingested: ~/Zotero/storage/NS6LCSCQ/hagen_gantner_2020_abundance_and_trend_of_arctic_grayling_(thymallus_arcticus)_in_index_sites_of.pdf
+Ingesting ■■■■■■■■■■■■■                     42% | ETA:  1m
+ℹ ingested: ~/Zotero/storage/XX9MEVAV/beaudry_2014_assessment_and_assignment_of_sensitivity_ratings_to_sub-basins_of_the_table.pdf
+Ingesting ■■■■■■■■■■■■■                     42% | ETA:  1m
+Ingesting ■■■■■■■■■■■■■■■                   47% | ETA:  1m
+ℹ ingested: ~/Zotero/storage/KZU26QII/martins_et_al_2022_spatial_ecology_of_arctic_grayling_in_the_parsnip_core_area.pdf
+Ingesting ■■■■■■■■■■■■■■■                   47% | ETA:  1m
+ℹ ingested: ~/Zotero/storage/YJZLRJ5I/PEA_F23_F_3652_Appendix_1_1706805993310_705DB12CA1.pdf
+Ingesting ■■■■■■■■■■■■■■■                   47% | ETA:  1m
+Ingesting ■■■■■■■■■■■■■■■■■                 53% | ETA:  1m
+ℹ ingested: ~/Zotero/storage/BP3WQUDY/willson_variation_in_salmonid_life_histories_-_patterns_and_perspectives.pdf
+Ingesting ■■■■■■■■■■■■■■■■■                 53% | ETA:  1m
+ℹ ingested: ~/Zotero/storage/XDKIU3UA/stuart_chislett_1979_grayling_sukunka.pdf
+Ingesting ■■■■■■■■■■■■■■■■■                 53% | ETA:  1m
+ℹ ingested: ~/Zotero/storage/CXEGWCBR/culling_1999_burnt_river_grayling.pdf
+Ingesting ■■■■■■■■■■■■■■■■■                 53% | ETA:  1m
+Ingesting ■■■■■■■■■■■■■■■■■■■               61% | ETA: 46s
+ℹ ingested: ~/Zotero/storage/KXDGTBTA/bulltroutguide.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■               61% | ETA: 46s
+Ingesting ■■■■■■■■■■■■■■■■■■■■              64% | ETA: 46s
+ℹ ingested: ~/Zotero/storage/SH9U4438/post_etal2012COSEWICassessment.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■              64% | ETA: 46s
+Ingesting ■■■■■■■■■■■■■■■■■■■■■             67% | ETA: 44s
+ℹ ingested: ~/Zotero/storage/SWCCAHMU/2026_Arctic_Grayling_Summary_1784659177582_5C8FC7930F.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■             67% | ETA: 44s
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■            69% | ETA: 41s
+ℹ ingested: ~/Zotero/storage/6SKHWJ27/stamford_et_al_2017_fwcp_arctic_grayling_synthesis_report.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■            69% | ETA: 41s
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■           72% | ETA: 38s
+ℹ ingested: ~/Zotero/storage/4CPVMLBZ/hagen_and_sary_2023-bull_trout_habitat_i.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■           72% | ETA: 38s
+ℹ ingested: ~/Zotero/storage/EPPHL4VG/bottoms_et_al_2023_critical_habitats_of_arctic_grayling_in_parsnip_tributaries.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■           72% | ETA: 38s
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■          78% | ETA: 30s
+ℹ ingested: ~/Zotero/storage/49CJN2M4/hagen_stamford_2023_parsnip_arctic_grayling_abundance_and_critical_habitats_2018-2022_final_report.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■          78% | ETA: 30s
+ℹ ingested: ~/Zotero/storage/SW7W68DV/fredf-9-12(21)R-I.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■          78% | ETA: 30s
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■        83% | ETA: 24s
+ℹ ingested: ~/Zotero/storage/B6DIT3MZ/2023 - Management Plan for Bull Trout (Salvelinus conflue.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■        83% | ETA: 24s
+ℹ ingested: ~/Zotero/storage/N8GBTAK9/2026_Arctic_Grayling_Synthesis_Report_1784660439212_5C8FC7930F.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■        83% | ETA: 24s
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■      89% | ETA: 18s
+ℹ ingested: ~/Zotero/storage/PRRRZKPI/Patricia_House_thesis55763.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■      89% | ETA: 18s
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     92% | ETA: 13s
+ℹ ingested: ~/Zotero/storage/JDJ4IKR9/McPherson_Morag_D_202008_MSc.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     92% | ETA: 13s
+ℹ ingested: ~/Zotero/storage/JQPBUZAS/hagen_and_weber_limiting_factors_en.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     92% | ETA: 13s
+ℹ ingested: ~/Zotero/storage/XQNJAC2D/pwfwcp_report_no_337_1385592636452_5584970005.pdf
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■     92% | ETA: 13s
+Ingesting ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  100% | ETA:  0s
 Store built: data/rag/bull_trout_grayling.duckdb | docs: 36 | chunks: 5534 | model: nomic-embed-text
 Built data/rag/bull_trout_grayling.duckdb. It is not in the bucket until ACTION=push.

@@ -25,7 +25,7 @@
 #     `<EXTENT>__<reportId>.pdf`. It has no watershed-group attribution and
 #     needs data/zotero_key_map.csv to join the farm (0154, 0161). Items with
 #     no citation key or no PDF attachment are absent; build names each one
-#     (a standalone PDF a keyed item also holds is not listed, #122). Prefer the
+#     (a standalone PDF a keyed item of the build also holds is not listed, #122). Prefer the
 #     harvest path (wf_report_harvest.js -> 0152) for anything group-scoped.
 #   - The source of truth is s3://fresh-bc/rag/ (options(cred.store_source) in
 #     .Rprofile). Pull with cred::crd_store_connect("<store>"); a local write
@@ -88,8 +88,8 @@ collection_keys <- function(collections, zotero_dir = "~/Zotero",
   res <- DBI::dbGetQuery(con, sql)
   # Every live member the build leaves out, and why. cred is handed keys, so it never
   # sees a member with no key or no PDF; this is the only place they can be named. A
-  # standalone PDF whose bytes a keyed item also holds (0270 gives a standalone a parent
-  # and leaves it in its collection) is covered, and is not listed.
+  # standalone PDF whose bytes a keyed item of this build also holds (0270 gives a standalone
+  # a parent and leaves it in its collection) is covered, and is not listed.
   mem <- DBI::dbGetQuery(con, sprintf("
     SELECT DISTINCT i.itemID, i.key AS item_key, it.typeName AS item_type, sa.storageHash AS standalone_hash,
       (SELECT idv.value FROM itemData id JOIN itemDataValues idv ON idv.valueID = id.valueID
@@ -105,20 +105,24 @@ collection_keys <- function(collections, zotero_dir = "~/Zotero",
     LEFT JOIN deletedItems    d  ON d.itemID  = i.itemID
     WHERE d.itemID IS NULL AND it.typeName <> 'note' AND ci.collectionID IN (%s)
     ORDER BY i.key", paste(ids, collapse = ", ")))
+  # Only a keyed item this build ingests covers a standalone: one outside the named
+  # collections holds the file but never reaches the store.
   held <- DBI::dbGetQuery(con, "
-    SELECT DISTINCT ia.storageHash
+    SELECT DISTINCT ia.storageHash, idv.value AS citation_key
     FROM itemAttachments ia
     JOIN items     p  ON p.itemID  = ia.parentItemID
     JOIN itemData  id ON id.itemID = p.itemID
     JOIN fields    f  ON f.fieldID = id.fieldID AND f.fieldName = 'citationKey'
+    JOIN itemDataValues idv ON idv.valueID = id.valueID
     LEFT JOIN deletedItems dp ON dp.itemID = p.itemID
     LEFT JOIN deletedItems da ON da.itemID = ia.itemID
     WHERE p.libraryID = ? AND ia.contentType = 'application/pdf' AND ia.storageHash IS NOT NULL
-      AND dp.itemID IS NULL AND da.itemID IS NULL", params = list(lib))$storageHash
+      AND dp.itemID IS NULL AND da.itemID IS NULL", params = list(lib))
+  held <- held$storageHash[held$citation_key %in% res$citation_key]
   standalone <- mem$item_type == "attachment"
   why <- ifelse(standalone,
     ifelse(!is.na(mem$standalone_hash) & mem$standalone_hash %in% held, NA,
-           "standalone attachment, no keyed item holds its file"),
+           "standalone attachment, no keyed item in this build holds its file"),
     ifelse(is.na(mem$citation_key), "no citation key",
            ifelse(mem$citation_key %in% res$citation_key, NA, "no live PDF")))
   out <- mem[!is.na(why), ]

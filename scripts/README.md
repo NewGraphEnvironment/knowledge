@@ -221,7 +221,7 @@ A report is reachable from more than one place; using only one axis misses repor
   in a personal library no longer resolves (it used to, and a name in both was refused).
 - `ACTION=build STORE=<name> COLLECTIONS="<zotero collection>[,...]"` builds a **citation-key-named**
   store from the local `~/Zotero` (no API key). It names every member it leaves out (no citation key, no live PDF, a
-  standalone PDF no keyed item holds), because cred is handed keys and never sees those members (#122). That naming carries no watershed group and no
+  standalone PDF no keyed item of the build holds), because cred is handed keys and never sees those members (#122). That naming carries no watershed group and no
   reportId; it needs `data/zotero_key_map.csv` to join the farm. Group-scoped work goes through the
   harvest (`wf_report_harvest.js` → `0152`), which names documents `<EXTENT>__<reportId>.pdf`
 - The manifest records document/chunk counts, **embedding model + size**, bytes, md5 and the
