@@ -414,8 +414,9 @@ The cited basis for CH and BT habitat thresholds (#19). Not per watershed group.
     `baseAttachmentPath`;
   - a PDF counts only when the server has its md5.
 
-  Live state is read from the Web API. The local database is read from a **checked copy**, because Zotero
-  locks the live file and an `immutable` read during a sync sees half-written pages. Re-runs are no-ops.
+  Live state is read from the Web API. The local database is read from a **checked copy** of the file and its
+  `-wal`, because Zotero locks the live file, an `immutable` read during a sync sees half-written pages, and
+  in Zotero 10's WAL mode the main file alone lacks commits not yet checkpointed (#127). Re-runs are no-ops.
 - The store is built from that collection plus the species, temperature, hydrology and Wedzin Kwa collections,
   by `0150`. Wait for Zotero to sync `0270`'s writes, and check that the files are on disk, before building.
   The `temperature` store is built from `Fisheries/temperature` alone (`COLLECTIONS=SW2RXUJC`), and the `flow`

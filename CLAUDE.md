@@ -143,19 +143,26 @@ manifest entry says so.
 
 Zotero holds the file in exclusive locking mode, so a normal read-only connection blocks and an
 `immutable=1` read taken during a sync can fail with "database disk image is malformed" or see
-half a transaction (hit on every member right after `0270`'s own writes started a sync). In
-exclusive mode SQLite does not bump the header change counter per commit, so that is no guard.
-`0270`'s `db()` and `0280`'s `snapshot()` copy the file and keep the copy only when mtime and
-size are unchanged across the copy and no journal is open. `0150` and `cred` still read
-immutable: build only once Zotero has finished syncing. Citation keys are not unique across
-libraries (the same key names different papers in the personal and group libraries), so
-resolve a key inside the group (`groups.groupID = 4733734`), never across the whole database.
+half a transaction (hit on every member right after `0270`'s own writes started a sync). Since
+Zotero 10 the file is in WAL mode (header bytes 18-19 `02 02`): a commit sits in
+`zotero.sqlite-wal` until a checkpoint folds it into the main file, so a copy of the main file
+alone, like an `immutable=1` read, opens, passes `quick_check` and silently misses it, and a sync
+moves the `-wal`'s mtime while the main file's stays put (#127). `0270`'s `db()`, `0280`'s
+`snapshot()` and `0150`'s copy of it (read by `collection_keys()`) copy the main file with its
+`-wal` (not the `-shm`, which SQLite rebuilds) and keep the pair only when both files' mtime and
+size and the header's journal mode are unchanged across the copy, no rollback journal is open,
+and the copy passes `quick_check`. In exclusive mode SQLite does not bump the header change
+counter per commit, so that is no guard. `data-raw/zotero_copy_check.R` runs the three on
+fixtures whose `-wal` holds rows the main file lacks. cred still reads immutable
+(NewGraphEnvironment/cred#45), so an `0150 ACTION=build` can miss what Zotero has not yet
+checkpointed. Citation keys are not unique across libraries (the same key names different
+papers in the personal and group libraries), so resolve a key inside the group
+(`groups.groupID = 4733734`), never across the whole database.
 
 `0150 ACTION=query` needs cred 0.4.0 or later: 0.3.0's `crd_search()` failed on every store under ragnar 0.3.0
 (NewGraphEnvironment/cred#27); under 0.4.0 it returns hybrid results (2026-10-30), and `0150` refuses an older cred.
 `ACTION=build` needs cred 0.5.0, the first that resolves a key inside one library, skips the trash and ingests every
-live PDF of an item (NewGraphEnvironment/cred#40); `0150` passes the group as `library` and refuses an older cred. Zotero's
-database is in WAL mode since about 2026-10-30, which the guarded copies and `immutable=1` reads do not yet handle (#127).
+live PDF of an item (NewGraphEnvironment/cred#40); `0150` passes the group as `library` and refuses an older cred.
 
 ### An EcoCat report is several documents
 

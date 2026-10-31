@@ -11,3 +11,4 @@
 - Phase 3: 0270 db() the same in Python; check passes 3/3, restored bug fails wal_pending 5 of 8; the import leg sets a placeholder ZOTERO_API_KEY
 - Filed cred#45 (immutable=1 misses WAL commits; reprex 1 vs 2 rows) ahead of Phase 4, so 0150's comment cites a real number
 - Phase 4: 0150 carries 0280's snapshot(); collection_keys() reads it (live: temperature + flow -> 85 keys); the check also stops when the two copies differ (proved with a drifted copy)
+- Phase 5: CLAUDE.md guarded-copy section rewritten (WAL since Zotero 10, the pair, cred#45) and the #127 line dropped; scripts/README.md 418; grep for -journal/immutable/rollback left only reader code and the unrelated GeoPackage rule

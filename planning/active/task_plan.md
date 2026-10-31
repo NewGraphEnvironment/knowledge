@@ -89,11 +89,11 @@ measures this before anything is fixed.
 
 ## Phase 5: Docs
 
-- [ ] Rewrite CLAUDE.md, "Read `zotero.sqlite` from a guarded copy while Zotero runs": WAL since Zotero 10, what the
+- [x] Rewrite CLAUDE.md, "Read `zotero.sqlite` from a guarded copy while Zotero runs": WAL since Zotero 10, what the
   guard holds, and that `0150 ACTION=build` through cred is blind to the WAL until the cred issue lands. Also rewrite
   the "Zotero's database is in WAL mode since about 2026-10-30 … (#127)" line under it.
-- [ ] `scripts/README.md` line 418, the "checked copy" sentence.
-- [ ] After the edits, grep tracked files outside the archive for `-journal`, `immutable` and `rollback`, and fix
+- [x] `scripts/README.md` line 418, the "checked copy" sentence.
+- [x] After the edits, grep tracked files outside the archive for `-journal`, `immutable` and `rollback`, and fix
   every hit that describes a reader.
 
 ## Phase 6: Issues
