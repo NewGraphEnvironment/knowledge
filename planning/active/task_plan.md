@@ -56,9 +56,11 @@ Approved by Al, 2026-10-30, with the plan:
 - [x] Re-run cred#35's reprex on ragnar 0.3.1: handed to Al's cred session (2026-10-30); ragnar moves here only with
       the cred tag
 - [x] #122's body: the builds are blocked by the cred issue (a task in its plan, not a comment)
-- [ ] With the cred tag, not before (cred 0.4.0 is unproven on ragnar 0.3.1's mirai ingest): upgrade ragnar to 0.3.1
+- [x] With the cred tag, not before (cred 0.4.0 is unproven on ragnar 0.3.1's mirai ingest): upgrade ragnar to 0.3.1
       (`pak::pak("ragnar")`, CRAN) and cred from GitHub
-      (`pak::pak("NewGraphEnvironment/cred")`; cred is not on CRAN, so "latest" is its GitHub tag and `main`)
+      (`pak::pak("NewGraphEnvironment/cred")`; cred is not on CRAN, so "latest" is its GitHub tag and `main`).
+      Done 2026-10-31: cred 0.5.0 (main `df959f9`, two commits past the tag, no `R/` change), ragnar 0.3.1; `0150`
+      build passes `library` (the group) and refuses cred < 0.5.0
 - [x] `0150 collection_keys()` prints each member it drops (no key, no PDF, standalone attachment; a standalone
       whose PDF a keyed parent also holds marked as covered). Unconditional: 0150 hands cred keys, so cred never sees
       a keyless or PDF-less member (plan review)

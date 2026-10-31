@@ -57,3 +57,11 @@ do not re-plan and do not re-ask them.
 Continue at the first unticked task in task_plan.md; the run-to-PR mandate is already
 running. The merge stays with me.
 ```
+
+## Session 2026-10-31
+
+- Zotero had synced at 2026-10-30 23:00 UTC; the "stalled" reading watched the main file's mtime, but the database is
+  now WAL (writes land in `-wal`). Filed #127 for the guarded copies and `immutable=1` reads.
+- Re-measure on `VHWEK6RE,GELFSUTU`: 6 of 45 left out (the expected six), 35 keys; `XXGHCASA` keyed
+  `ballard_shrimpton2009Summaryreport`.
+- cred 0.5.0 tagged (cred#40 closed 2026-10-31 00:57 UTC); upgraded with ragnar 0.3.1. cred#35 still open.

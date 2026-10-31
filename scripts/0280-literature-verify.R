@@ -12,8 +12,9 @@
 #   - it reads through knw_literature_read() (schema and vocabularies);
 #   - its citation key names exactly one live item in the group library, with a
 #     PDF on disk. The key is resolved HERE, inside the group, rather than through
-#     cred::crd_zot_src_lookup(): that takes the newest attachment for a key from
-#     any library, and one citation key names different papers in two libraries;
+#     cred::crd_zot_src_lookup(): before cred 0.5.0 that took the newest attachment
+#     for a key from any library (cred#40), and one citation key names different
+#     papers in two libraries;
 #   - its quote is found in that PDF, compared token by token (see "text" below).
 #     How depends on `quote_source`:
 #       text  - the quote's tokens occur contiguously in the text (fragments split

@@ -6,7 +6,8 @@
 #
 #   ACTION=build STORE=peace COLLECTIONS="pine - PINE,peace arm - PCEA"  Rscript scripts/0150-store.R
 #   (COLLECTIONS takes names or 8-character Zotero keys, resolved in the NGE group
-#    library only; GROUP_ID= for another group. An ambiguous name is refused.)
+#    library only; GROUP_ID= for another group. An ambiguous name is refused.
+#    build needs cred >= 0.5.0, the first that resolves a key inside one library, cred#40)
 #   ACTION=query STORE=fraser QUERY="beaver dam culvert" TOPK=5           Rscript scripts/0150-store.R
 #   (query needs cred >= 0.4.0, the first whose crd_search() works under ragnar 0.3)
 #   (query opens an existing local store unverified; VERIFY=TRUE re-checks it
@@ -134,8 +135,15 @@ collection_keys <- function(collections, zotero_dir = "~/Zotero",
 if (action == "build") {
   colls <- trimws(strsplit(Sys.getenv("COLLECTIONS"), ",")[[1]])
   stopifnot("COLLECTIONS=<name>[,<name>] is required for build" = length(colls) > 0 && all(nzchar(colls)))
+  # Below cred 0.5.0 a key resolved across libraries, to trashed attachments, and to the
+  # newest of several PDFs (cred#40). The library is named because a key is unique only in one.
+  if (utils::packageVersion("cred") < "0.5.0") {
+    stop("ACTION=build needs cred >= 0.5.0, not ", utils::packageVersion("cred"),
+         ": pak::pak(\"NewGraphEnvironment/cred\")")
+  }
   keys <- collection_keys(colls)
   crd_store_build(store_path, citation_keys = keys,
+                  library = as.integer(Sys.getenv("GROUP_ID", "4733734")),
                   overwrite = identical(Sys.getenv("OVERWRITE"), "TRUE"))
   message("Built ", store_path, ". It is not in the bucket until ACTION=push.")
 } else if (action == "query") {

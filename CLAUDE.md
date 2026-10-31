@@ -150,8 +150,9 @@ resolve a key inside the group (`groups.groupID = 4733734`), never across the wh
 
 `0150 ACTION=query` needs cred 0.4.0 or later: 0.3.0's `crd_search()` failed on every store under ragnar 0.3.0
 (NewGraphEnvironment/cred#27); under 0.4.0 it returns hybrid results (2026-10-30), and `0150` refuses an older cred.
-A build still takes, for each key, the newest PDF from any library, trash included (`crd_zot_src_lookup()`,
-NewGraphEnvironment/cred#40), so wait for that fix before rebuilding a store, and check where each document came from.
+`ACTION=build` needs cred 0.5.0, the first that resolves a key inside one library, skips the trash and ingests every
+live PDF of an item (NewGraphEnvironment/cred#40); `0150` passes the group as `library` and refuses an older cred. Zotero's
+database is in WAL mode since about 2026-10-30, which the guarded copies and `immutable=1` reads do not yet handle (#127).
 
 ### An EcoCat report is several documents
 
