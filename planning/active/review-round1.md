@@ -27,7 +27,7 @@
 
 ## Observation outside the brief's scope (not a finding)
 
-The new committed logs scripts/logs/rag/20261031_build_bull_trout_grayling.log (36 lines) and 20261031_build_habitat_modelling.log (263 lines) print absolute home paths (`/Users/<user>/Zotero/storage/...`) for each ingested PDF. CLAUDE.md exempts scripts/logs only for logs written before 2026-10-16. But origin/main already carries three later logs with home paths (20261017_compare-maps.out, 20261017_compare.out, 20261019_compare.out), and public_sweep.py skips scripts/logs. The brief excluded scripts/logs, so this is recorded here and not raised as a finding.
+The new committed logs scripts/logs/rag/20261031_build_bull_trout_grayling.log (36 lines) and 20261031_build_habitat_modelling.log (263 lines) print absolute home paths (`<home>/Zotero/storage/...`) for each ingested PDF. CLAUDE.md exempts scripts/logs only for logs written before 2026-10-16. But origin/main already carries three later logs with home paths (20261017_compare-maps.out, 20261017_compare.out, 20261019_compare.out), and public_sweep.py skips scripts/logs. The brief excluded scripts/logs, so this is recorded here and not raised as a finding.
 
 ## Disposition (main session)
 

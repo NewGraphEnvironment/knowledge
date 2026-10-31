@@ -39,11 +39,11 @@
 Waiting on: Al's three browser PDFs (paths in task_plan.md, Phase 2) and the cred#40 tag (Phases 4-5).
 
 ```
-Continue knowledge#122 mid-run. Repo ~/Projects/repo/knowledge, branch `122-arctic-grayling-and-bull-trout-store-cle`, last commit dab028c
+Continue knowledge#122 mid-run. Repo knowledge (its checkout root), branch `122-arctic-grayling-and-bull-trout-store-cle`, last commit dab028c
 on 2026-10-30.
 Run these in order, and stop at the first that fails; each failure means what it says:
 
-cd ~/Projects/repo/knowledge && git fetch -q origin
+cd <repo root> && git fetch -q origin
 git worktree list | grep -F '[122-arctic-grayling-and-bull-trout-store-cle]' || echo none   # a path printed: that tree holds the branch; cd to it and skip the checkout
 git branch --show-current; git status --porcelain --untracked-files=no   # another branch with changes, or one another session may be on: do not check out here; git worktree add ../knowledge-122 122-arctic-grayling-and-bull-trout-store-cle and cd there
 git checkout 122-arctic-grayling-and-bull-trout-store-cle   # fails: the branch is not on origin
