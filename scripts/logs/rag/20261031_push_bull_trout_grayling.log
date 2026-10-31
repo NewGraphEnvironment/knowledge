@@ -1,135 +1,12 @@
 [dry run] would upload data/rag/bull_trout_grayling.duckdb -> s3://fresh-bc/rag/bull_trout_grayling.duckdb
 [dry run] merged manifest would hold: fraser, vca_refs, peace, pine, habitat_modelling, temperature, flow, bull_trout_grayling
+(manifest trimmed to this store's entry)
 {
   "date_updated": "2026-10-31T17:39:42Z",
   "manifest_note": "Provenance is per store. Push must merge into this file, never replace it.",
   "chunking": "ragnar defaults (ragnar_store_ingest)",
   "generating_script": "cred::crd_store_push()",
   "stores": {
-    "fraser": {
-      "documents": 283,
-      "chunks": 22883,
-      "embedding_size": 768,
-      "embedding_model": "nomic-embed-text (ollama)",
-      "store_name": "store_001",
-      "watershed_groups": {
-        "FRAS": 1,
-        "TABR": 3,
-        "UFRA": 5,
-        "WILL": 11,
-        "LCHL": 18,
-        "NECR": 18,
-        "MCGR": 19,
-        "fraser": 20,
-        "BOWR": 32,
-        "COTR": 48,
-        "FRAN": 80
-      },
-      "docs_without_group": 28,
-      "bytes": 734015488,
-      "md5": "642d874e42b3f7a07dd8b202ec0ecfb5",
-      "repo": "NewGraphEnvironment/fish_passage_template_reporting",
-      "branch": "rag-dedup-presync",
-      "head_sha": "dcc19ae8d925dc0050e02b9fa68e1ac2a7f9fe5d",
-      "built_by": [
-        "scripts/04_planning/0152-rag-add-harvest.R",
-        "scripts/04_planning/0151-rag-build-from-zotero.R"
-      ],
-      "date_completed": "2026-07-30T18:32:27Z"
-    },
-    "vca_refs": {
-      "documents": 15,
-      "chunks": 2464,
-      "embedding_size": 768,
-      "embedding_model": "nomic-embed-text (ollama)",
-      "store_name": "store_001",
-      "docs_without_group": 15,
-      "bytes": 46411776,
-      "md5": "34ff806cd9a55b18a25b9fadce294592",
-      "repo": "NewGraphEnvironment/restoration_wedzin_kwa_2024",
-      "branch": "main",
-      "head_sha": "90a5db619b0bc1e03071ebcf8507e09e959c8579",
-      "built_by": "scripts/rag_build.R",
-      "date_completed": "2026-08-31T21:02:28Z",
-      "notes": "VCA/floodplain reference set: 15 Zotero PDFs, no watershed-group attribution. Backs flooded inst/research/vca_parameter_rationale.md."
-    },
-    "peace": {
-      "documents": 117,
-      "chunks": 13632,
-      "embedding_size": 768,
-      "embedding_model": "nomic-embed-text",
-      "store_name": "store_001",
-      "bytes": 226766848,
-      "md5": "970dc5caa87d3681728099fc93375d23",
-      "repo": "NewGraphEnvironment/knowledge",
-      "branch": "main",
-      "head_sha": "86481e85793df0eea13e01ddda815a29fbc50a44",
-      "built_by": [
-        "scripts/0151-rag-build-from-zotero.R",
-        "scripts/0152-rag-add-harvest.R",
-        "note: Zotero-key-named (113/117 documents, no watershed-group attribution) and never deduped; see NewGraphEnvironment/fish_passage_template_reporting#208"
-      ],
-      "date_completed": "2026-09-03T00:15:32Z"
-    },
-    "pine": {
-      "documents": 5,
-      "chunks": 1795,
-      "embedding_size": 768,
-      "embedding_model": "nomic-embed-text",
-      "store_name": "store_001",
-      "bytes": 28585984,
-      "md5": "f8356685bc0104f952353cd52daf9e26",
-      "repo": "NewGraphEnvironment/knowledge",
-      "branch": "main",
-      "head_sha": "779bf82c63de1fc1ea24bd4626bac50e2531944b",
-      "built_by": [
-        "scripts/0151-rag-build-from-zotero.R",
-        "scripts/0152-rag-add-harvest.R"
-      ],
-      "date_completed": "2026-09-03T00:15:56Z"
-    },
-    "habitat_modelling": {
-      "documents": 222,
-      "chunks": 38653,
-      "embedding_size": 768,
-      "embedding_model": "nomic-embed-text",
-      "store_name": "store_001",
-      "bytes": 524300288,
-      "md5": "99ba81c08ace2aa44ed7e28713b5050a",
-      "repo": "NewGraphEnvironment/knowledge",
-      "branch": "40-get-the-bear-et-al-2005-and-2007-wct-the",
-      "head_sha": "5c040cded4a23acef8623de20271c5078b6ac43c",
-      "built_by": "cred::crd_store_push()",
-      "date_completed": "2026-10-11T19:22:56Z"
-    },
-    "temperature": {
-      "documents": 52,
-      "chunks": 11350,
-      "embedding_size": 768,
-      "embedding_model": "nomic-embed-text",
-      "store_name": "store_001",
-      "bytes": 157036544,
-      "md5": "e2548e3c7b9b70e08f71ba89f1415d43",
-      "repo": "NewGraphEnvironment/knowledge",
-      "branch": "48-first-winter-size-rows-abstracts",
-      "head_sha": "62c921412fbc8ef7570276dbedcff4cd0eaf34cb",
-      "built_by": "cred::crd_store_push()",
-      "date_completed": "2026-10-15T16:21:07Z"
-    },
-    "flow": {
-      "documents": 40,
-      "chunks": 8971,
-      "embedding_size": 768,
-      "embedding_model": "nomic-embed-text",
-      "store_name": "store_001",
-      "bytes": 125054976,
-      "md5": "d4463b104ccf5427abbb7763247d1907",
-      "repo": "NewGraphEnvironment/knowledge",
-      "branch": "44-flow-needs-by-species-and-life-stage-lit",
-      "head_sha": "1fad955b421b5967b79c0c285ab404541275c648",
-      "built_by": "cred::crd_store_push()",
-      "date_completed": "2026-10-09T15:07:35Z"
-    },
     "bull_trout_grayling": {
       "documents": 36,
       "chunks": 5534,
@@ -145,6 +22,6 @@
       "date_completed": "2026-10-31T17:39:42Z"
     }
   }
-} 
+}
 Uploading bull_trout_grayling.duckdb (75 MB)
 Manifest updated — now holds: fraser, vca_refs, peace, pine, habitat_modelling, temperature, flow, bull_trout_grayling
