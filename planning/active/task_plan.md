@@ -105,7 +105,7 @@ Exploration moved some premises (immutable read of `zotero.sqlite`, 2026-10-31, 
 ## Phase 4: docs and issue
 - [ ] `scripts/README.md`: the `0150 ACTION=build STORE=sturgeon COLLECTIONS=WEUFTSDC` line beside temperature,
       flow and bull_trout_grayling, and the `0270 --collection sturgeon --parent 9U54XAND` line
-- [ ] CLAUDE.md layout: `sturgeon_{members,additions}.csv` beside the grayling and bull_trout ones
+- [x] CLAUDE.md layout: `sturgeon_{members,additions}.csv` beside the grayling and bull_trout ones
 - [ ] #124 body: the gap of documents with no PDF anywhere, and the outcome
 - [ ] Say in `scripts/README.md` that `WEUFTSDC` does not feed the `habitat_modelling` build (plan review)
 
