@@ -121,6 +121,26 @@ NEEF's library has much more Nechako material, the Cheslatta Fan series among it
 `immutable`, which can miss recent writes but never invents rows. The only matches are webpage items and unrelated
 Nechako reports, so no addition exists yet. Phase 2's dry run repeats the check live against the group through the Web API.
 
+## The federal PDFs (2026-10-31, later)
+
+Al downloaded the 2024 action plan (`CW69-21-75-2024-eng.pdf`, 51 pages, ISBN 978-0-660-70376-3), McAdam et al.
+2005 (TAFS 134:1448–1456) and Babey 2022 (UNBC MSc, March 2022). publications.gc.ca served no PDF for the amended
+strategy or the progress report, even to his browser.
+
+So both are built from the registry's HTML. canada.ca serves those pages to scripts normally.
+
+**The amended strategy.** The main page's table of contents links only chapters 1, 2, 7 and 8, but chapters 1–8 all
+exist; a probe shows chapter 9 and appendix F are 404. Twelve pages in order: the main page, chapters 1–8, and
+appendices A, B and C–E. Each page's `<main>` was joined into one HTML and printed with headless Chrome: 233 pages,
+571,486 characters. Printing whole pages gave 584 pages, mostly site navigation, against the official 255.
+
+**The progress report.** One page, 80 pages printed.
+
+**Checks.** Each page's opening and closing words were looked for in the PDF text. The two `MISSING` results are
+artefacts of the check: a space before `)`, and `pdftotext` dropping a hyphen at a line break.
+
+The two files are named `*_from_html.pdf`, and each row's `why` says how it was made.
+
 ## Plan review (`review-plan.md`): how each finding was handled
 
 The review's claims were checked before acting on them:

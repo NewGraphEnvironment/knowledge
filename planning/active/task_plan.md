@@ -68,12 +68,12 @@ Exploration moved some premises (immutable read of `zotero.sqlite`, 2026-10-31, 
 - [x] Personal standalones: the 2016 Nechako Watershed Strategy goes in as `zotero:733T5ZJV`. `Chronology-NFCP.pdf`
       is a one-page timeline with no title page or date: left out, recorded
 - [x] `data/sturgeon_members.csv` (15) and `data/sturgeon_additions.csv` (64)
-- [ ] Al's browser downloads, saved to `data/rag/pdf/sturgeon/` with a row each: the amended recovery strategy (2023,
-      En3-4/181-2023E-PDF), the action plan (2024, CW69-21/75-2024E-PDF) and the 2014–2020 progress report
-      (En3-4/181-1-2022E-PDF). publications.gc.ca serves scripts an archive notice, not the PDF
-- [ ] Journal articles linked from the NWSRI page with no PDF there (McAdam et al. 2005 `10.1577/t04-199.1`, Smith et al. 2002,
-      French & Chambers 1996, 1997) and Babey's 2022 UNBC thesis: in only if Al fetches a PDF (decision 3; a
-      `pdf = none` row without a CrossRef abstract fails `0270`, plan review). Otherwise listed in the gap
+- [x] The federal set: Al downloaded the 2024 action plan (the official PDF). publications.gc.ca served no PDF for
+      the amended strategy or the 2014–2020 progress report, even to a browser, so both are printed to PDF from the
+      registry's HTML (main content only; the strategy's twelve pages in order), each page's opening and closing text
+      checked present in the PDF. The rows name the catalogue numbers and the registry URLs
+- [x] McAdam et al. 2005 (DOI row) and Babey 2022 (thesis row), both downloaded by Al. Smith et al. 2002 and French &
+      Chambers 1996, 1997 have no PDF: they go to the gap list (decision 3)
 - [x] #124's body: corrected premises, and "blocked by #127" as a task in its plan (plan review: now, not Phase 4)
 
 ## Phase 2 (after #127 merges): file the collection through `0270`
