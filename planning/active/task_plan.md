@@ -46,16 +46,16 @@ measures this before anything is fixed.
 
 ## Phase 1: Reproduce and measure, before any fix
 
-- [ ] `data-raw/zotero_copy_check.R`. A fixture built in a tempdir with RSQLite: a WAL database with
+- [x] `data-raw/zotero_copy_check.R`. A fixture built in a tempdir with RSQLite: a WAL database with
   `wal_autocheckpoint = 0`, rows committed after the copy point, and the main file and `-wal` copied while the writer
   is still open. So the main file lacks the rows and the `-wal` holds them. Also a rollback-mode fixture, and a
   WAL-mode database with no `-wal` (as after Zotero quits).
-- [ ] On the fixture, measure a main-only copy opened read-write (opens? `quick_check`? row count) against a main-only
+- [x] On the fixture, measure a main-only copy opened read-write (opens? `quick_check`? row count) against a main-only
   copy opened `mode=ro`, and against the main file plus `-wal` with no `-shm`. This tests the hypothesis above and the
   `-shm` decision.
-- [ ] On the live database, the same three reads plus `immutable=1` on the live file: item count and
+- [x] On the live database, the same three reads plus `immutable=1` on the live file: item count and
   `max(clientDateModified)` from each. Record whether today's WAL holds writes the main file lacks.
-- [ ] Record everything in `findings.md`. If the live comparison shows no difference, say so; the fixture is what the
+- [x] Record everything in `findings.md`. If the live comparison shows no difference, say so; the fixture is what the
   guards are tested on.
 
 ## Phase 2: `0280` `snapshot()`, WAL-aware
