@@ -4,7 +4,8 @@
 #' `scripts/0330` compares it into `data/compare/candidate/<run>/`, both
 #' ignored, so iterating changes nothing tracked (#111). Promotion, on the
 #' operator's word, moves the run in: every file of each promoted key (its
-#' tables and the ignored grades, curve, score cache, segments and GeoPackage),
+#' tables, the grade tables' records, and the ignored grades, curve, score
+#' cache, segments and GeoPackage),
 #' its Atlas-gradient sensitivity, the run's logs, its figures, and its rows of
 #' the tables that hold every key (`compare.csv`, `change.csv`, `checks.csv`,
 #' `floodplain.csv`). A key's files are moved, not copied (its grades and
@@ -22,7 +23,10 @@
 #' across every key, so a promotion that would leave two is refused before
 #' anything moves, naming the field and the kept keys that would have to come
 #' along. After a change upstream (a new link run or evidence build) that means
-#' every fitted key moves together. Each promoted key's grades must be of its
+#' every fitted key moves together. Each promoted key's grades must carry their
+#' record ([knw_grade_record_write()]) and match it (md5 and size; a
+#' `replaced_*` archive may lack one), and kept keys are read from their
+#' records where the tables are absent. Each promoted key's grades must be of its
 #' recommended rule on its own evidence, and its comparison of the same rule and
 #' made after its grades.
 #'
@@ -101,7 +105,19 @@ knw_tune_promote <- function(run, keys = NULL, live = NULL, tune_dir = "data/tun
       stop(k, ": the run holds no ", paste(gone, collapse = ", "), ": its last pass did not finish the key; rerun it ",
            "with RUN=", run, call. = FALSE)
     }
-    g1 <- rd(g, nrows = 1)
+    # the grade table's record (#119): written with it, and moved with it, so a record that describes another table is
+    # never promoted. A replaced_* archive may hold a table from before the record, read from its first row instead
+    gr <- .knw_grade_record_path(g)
+    if (file.exists(gr)) {
+      g1 <- knw_grade_record_read(gr)
+      tryCatch(knw_grade_record_check(g1, g), error = function(e) {
+        stop(k, ": ", conditionMessage(e), "; regrade it with RUN=", run, call. = FALSE)
+      })
+    } else if (archive) {
+      g1 <- rd(g, nrows = 1)
+    } else {
+      stop(k, ": the run wrote no record of its grades (", gr, "): regrade it with RUN=", run, call. = FALSE)
+    }
     if (!identical(fld(g1, "rule"), rule)) {
       stop(k, ": graded under ", fld(g1, "rule"), ", not the recommended ", rule, call. = FALSE)
     }
@@ -140,7 +156,9 @@ knw_tune_promote <- function(run, keys = NULL, live = NULL, tune_dir = "data/tun
   record <- function(dt, dc, k, s) {
     g <- file.path(dt, paste0(k, "_grades.csv"))
     cf <- file.path(dc, paste0(k, "_compare.csv"))
-    g1 <- if (file.exists(g)) rd(g, nrows = 1) else NULL
+    # the record before the table (#119): a machine without the ignored tables still holds every key to the set
+    gr <- .knw_grade_record_path(g)
+    g1 <- if (file.exists(gr)) knw_grade_record_read(gr) else if (file.exists(g)) rd(g, nrows = 1) else NULL
     cmp <- if (file.exists(cf)) rd(cf) else NULL
     c(vapply(fields[1:4], function(f) fld(s, f), character(1)),
       vapply(fields[5:7], function(f) fld(g1, f), character(1)),

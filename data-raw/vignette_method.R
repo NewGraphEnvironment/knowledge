@@ -32,12 +32,15 @@
 # INPUT:  inst/method/{pipeline,settings}.csv; scripts/logs/habitat/<date>_evidence_build_ledger.csv (the one the tables
 #         name, knw_run_ledger());
 #         data/fdis/build/reconcile.csv and data/fdis/derived/{visits_link,visits_species,walks,fdis_sites}.csv
-#         (ignored; 0230, 0310); data/tune/<key>_{summary,tune,grades}.csv; data/tune/grad_fwa/<key>_{summary,tune}.csv
+#         (ignored; 0230, 0310); data/thresholds.csv (#121's limits); data/tune/<key>_{summary,tune,grades_record}.csv (a grade table's record, #119; the
+#         table itself, ignored, is checked against it where present); data/tune/grad_fwa/<key>_{summary,tune}.csv
 #         (0320 with GRADIENT=fwa_gradient, the Atlas-gradient sensitivity, #92); data/compare/<key>_compare.csv;
 #         inst/vignette-data/bulk_segments.rds; ../link and ../wet checkouts holding the run's commits; the fwapg
 #         database (PG* environment variables) for the snap example.
 # OUTPUT: inst/vignette-data/method.rds   one named list: pipeline, settings (with each where's resolved value),
-#         funnel, funnel_species, steps, picks, gradient_sensitivity, segment_at_site, examples, svg (flow, lineage), meta (md5 of every source, written date, commit)
+#         funnel, funnel_species, steps, picks, gradient_sensitivity, segment_at_site, site_gradient (#121: the measured
+#         site gradient against link's segment gradient, and the flips at every published gradient limit), examples,
+#         svg (flow, lineage), meta (md5 of every source, written date, commit)
 # RUN:    Rscript data-raw/vignette_method.R   (from the repo root, after any rerun of 0230, 0310, 0320 or 0330, and
 #         after any change to the registers)
 # ---------------------------------------------------------------------------
@@ -83,8 +86,16 @@ fitted <- summ |> filter(status == "fitted")
 keys <- paste(fitted$species_code, fitted$stage, sep = "_")
 f_tune <- file.path("data/tune", paste0(keys, "_tune.csv"))
 f_grades <- file.path("data/tune", paste0(keys, "_grades.csv"))
+f_records <- file.path("data/tune", paste0(keys, "_grades_record.csv"))
 f_compare <- sort(list.files("data/compare", "_compare\\.csv$", full.names = TRUE))
-g1 <- lapply(f_grades, rd, n_max = 1, col_types = cols(.default = "c"))
+# each grade table's record (#119), tracked, not the ignored table: the bundle pins the record, so it rebuilds where the
+# tables are not. A table that is here must be the one its record describes
+g1 <- lapply(f_records, knw_grade_record_read)
+for (i in which(file.exists(f_grades))) knw_grade_record_check(g1[[i]], f_grades[i])
+rec_ledger <- unique(vapply(g1, function(g) g$evidence_ledger, ""))
+if (!identical(rec_ledger, ledger)) {
+  stop("the grade records name the ledger ", paste(rec_ledger, collapse = ", "), ", the summaries ", ledger)
+}
 # graded from curves on link's segment gradient, the gradient the article says the rules were scored on (#92)
 off_grad <- f_grades[!vapply(g1, .knw_grade_grad_ok, logical(1))]
 if (length(off_grad)) stop("not graded from a curve on link's segment gradient (curve_grad, #92); rerun 0320: ", paste(off_grad, collapse = ", "))
@@ -322,6 +333,33 @@ gradient_sensitivity <- bind_rows(lapply(seq_along(keys), function(i) {
          atlas_pick_in_region = rec_alt %in% main$rule[main$in_region %in% TRUE])
 }))
 
+# ---- the measured site gradient against link's segment gradient (#121) ------------------------------------------------
+# as data-raw/site_gradient_check.R computes it, through the same functions: every gradient limit data/thresholds.csv
+# publishes (fitted or underpowered, so WCT rearing is in), over each key's scored visits on the stream branch, each
+# rearing key's population held to its tracked n_visits. The yardstick is two readings at one site
+f_thr <- "data/thresholds.csv"
+v_sg <- knw_site_gradient_visits(vl)
+sb_sg <- v_sg[v_sg$stream_branch, ]
+two_sg <- v_sg[!is.na(v_sg$meas) & !is.na(v_sg$meas2), ]
+lim_sg <- rd(f_thr, col_types = cols(.default = "c")) |>
+  filter(component == "gradient", !is.na(value)) |>
+  transmute(species_code, stage, key = paste(species_code, stage, sep = "_"), limit = as.numeric(value),
+            n_visits = as.integer(n_visits))
+site_gradient_limits <- bind_rows(lapply(seq_len(nrow(lim_sg)), function(i) {
+  d <- knw_site_gradient_population(v_sg, vs, lim_sg$species_code[i], lim_sg$stage[i])
+  if (lim_sg$stage[i] == "rear" && nrow(d) != lim_sg$n_visits[i]) {
+    stop(lim_sg$key[i], ": ", nrow(d), " visits, not the tuning's ", lim_sg$n_visits[i])
+  }
+  lad <- utils::read.csv(file.path("data/tune", paste0(lim_sg$key[i], "_tune.csv")))$grad_max
+  cbind(lim_sg[i, c("key", "limit")], population = nrow(d),
+        knw_gradient_flips(d, lim_sg$limit[i], "segment_gradient", lad))
+}))
+site_gradient <- list(placed = nrow(v_sg), measured = sum(!is.na(v_sg$meas)),
+                      stream_branch_measured = sum(!is.na(sb_sg$meas)),
+                      yardstick = knw_gradient_agree(two_sg$meas, two_sg$meas2),
+                      segment = knw_gradient_agree(sb_sg$meas, sb_sg$segment_gradient),
+                      limits = site_gradient_limits)
+
 # ---- worked examples ----------------------------------------------------------------------------------
 conn <- DBI::dbConnect(RPostgres::Postgres(), bigint = "numeric")
 near <- function(s) {
@@ -452,7 +490,8 @@ svg <- list(flow = svg_of(dot_flow), lineage = svg_of(dot_lin))
 
 # ---- write ------------------------------------------------------------------------------------------------
 # git, not a list here, says which sources a clone has: an ignored one is checked only where it is present
-sources <- c(f_pipeline, f_settings, ledger, f_tune, f_grades, f_compare,
+sources <- c(f_pipeline, f_settings, ledger, f_tune, f_records, f_compare, f_thr,
+             file.path("data/tune", paste0(setdiff(lim_sg$key, keys), "_tune.csv")),
              file.path("data/tune", paste0(keys, "_summary.csv")), f_fwa_tune, f_fwa_summ,
              file.path(dir_out, "bulk_segments.rds"),
              f_reconcile, unname(derived), f_sites)
@@ -465,6 +504,7 @@ local <- sources[!is_tracked]
 out <- list(
   pipeline = pipeline, settings = settings, resolved = resolved, funnel = funnel, funnel_species = funnel_species,
   steps = steps, picks = picks, gradient_sensitivity = gradient_sensitivity, segment_at_site = segment_at_site,
+  site_gradient = site_gradient,
   stability = fitted[, c("species_code", "stage", "seeds_n", "seeds_same_rec", "seeds_rec_in_region",
                          "honest_dev_rec", "honest_dev_default", "boot_rec_share")],
   examples = list(kept = ex_kept, moved = ex_moved, far = ex_far, wsg = example_wsg, stages = stages),

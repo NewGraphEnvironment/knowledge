@@ -100,7 +100,12 @@ wf_farm_priority.js                          farm priority/crossing tables out o
       logs into scripts/logs/habitat/, archiving what it replaced as candidate run replaced_<stamp>; then 0325
       (local), SCHEMA=... data-raw/vignette_chinook.R, vignette_method.R, vignette_bib.R (Zotero) and
       readme_figure.R. DRY=1 lists; BUNDLES=FALSE moves only. Pins and prose that quote the run are revised by hand
-      (#111)
+      (#111). Archives the promoted keys first (as 0336; bucket credentials), and refuses before moving if it cannot
+0336  the archive (#119): a run's grade tables (zstd -3), records, curves and segments, and the evidence build they
+      name, to s3://fresh-bc/archive/knowledge/ (private, versioned) -> rows of data/archive_index.csv (tracked).
+      RUN=<run> for a candidate, TUNE_DIR/COMPARE_DIR/EVIDENCE_DIR/BUILD_DIR for a staged copy, DRY=1 lists.
+      PULL=TRUE restores into a checkout's ignored data/ the run its records name, by version id, md5-checked
+      (evidence, curves, segments; GRADES=TRUE adds the grade tables)
 
 --- Frozen on the published v2 tables (0299 PULL=TRUE VERSION=v2): the one-species analyses #57 superseded ---
 0291  BT use curve (#28)   0292  BT candidate weight   0293  BT spawner evidence (#33)

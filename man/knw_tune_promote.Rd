@@ -46,7 +46,8 @@ bring and was left as it was), invisibly.
 \code{scripts/0330} compares it into \verb{data/compare/candidate/<run>/}, both
 ignored, so iterating changes nothing tracked (#111). Promotion, on the
 operator's word, moves the run in: every file of each promoted key (its
-tables and the ignored grades, curve, score cache, segments and GeoPackage),
+tables, the grade tables' records, and the ignored grades, curve, score
+cache, segments and GeoPackage),
 its Atlas-gradient sensitivity, the run's logs, its figures, and its rows of
 the tables that hold every key (\code{compare.csv}, \code{change.csv}, \code{checks.csv},
 \code{floodplain.csv}). A key's files are moved, not copied (its grades and
@@ -65,7 +66,10 @@ gradient, reference edges, flow load, walk, link config and tuned structure
 across every key, so a promotion that would leave two is refused before
 anything moves, naming the field and the kept keys that would have to come
 along. After a change upstream (a new link run or evidence build) that means
-every fitted key moves together. Each promoted key's grades must be of its
+every fitted key moves together. Each promoted key's grades must carry their
+record (\code{\link[=knw_grade_record_write]{knw_grade_record_write()}}) and match it (md5 and size; a
+\verb{replaced_*} archive may lack one), and kept keys are read from their
+records where the tables are absent. Each promoted key's grades must be of its
 recommended rule on its own evidence, and its comparison of the same rule and
 made after its grades.
 }
