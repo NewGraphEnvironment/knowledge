@@ -71,10 +71,10 @@ Approved by Al, 2026-10-30, with the plan:
 - [x] `ACTION=push` dry run, then `CONFIRM=TRUE`; manifest entry checked
 
 ## Phase 5 (after the cred tag): rebuild and push `habitat_modelling` with grayling
-- [ ] `ACTION=build STORE=habitat_modelling OVERWRITE=TRUE COLLECTIONS="U9ZCZ6RN,RXNFPBPH,VHWEK6RE,GELFSUTU,9U54XAND,SW2RXUJC,DQP29KU7,X29BX4U8,W4425VK5,545K8HP4"`
+- [x] `ACTION=build STORE=habitat_modelling OVERWRITE=TRUE COLLECTIONS="U9ZCZ6RN,RXNFPBPH,VHWEK6RE,GELFSUTU,9U54XAND,SW2RXUJC,DQP29KU7,X29BX4U8,W4425VK5,545K8HP4"`
       (the recorded set by key, plus grayling); pull the current store first and diff document origins against the
       rebuild, each added or removed origin accounted for (grayling, the cleanup, cred#40's picks)
-- [ ] Query check; push dry run, then `CONFIRM=TRUE`
+- [x] Query check; push dry run, then `CONFIRM=TRUE`
 - [x] `scripts/README.md`: the build line with grayling, a line for the new store
 
 ## Phase 6: docs (lands before the cred tag, except the README build lines in Phase 5)
@@ -87,7 +87,7 @@ resume block; Phases 4–6 resume on it after the tag, and the PR opens then.
 
 ## Validation
 
-- [ ] Tests pass (`devtools::test()`; no `R/` change)
+- [x] Tests pass (`devtools::test()`; no `R/` change): 2026-10-31, FAIL 0, SKIP 1, PASS 1650
 - [ ] `/code-check branch` clean (three-round floor)
 - [ ] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion

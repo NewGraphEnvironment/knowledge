@@ -137,3 +137,27 @@ standalone's bytes, so their hashes pair). Measured 2026-10-30 from the local da
 |-------|------------|
 | `habitat_modelling_members.csv` rewritten whole (CRLF lost) by a text-mode replace | Byte-level replace (`rb`/`wb`) |
 | `sed -i` failed (`extra characters at the end of p command`): the shell's `sed` is BSD, and `-i` takes a suffix; a later `sed -i ''` ran but missed a CSV-quoted field | Edit planning files and CSVs with Python (csv module for CSVs) |
+
+## habitat_modelling rebuild against the 2026-10-11 store (2026-10-31)
+
+Old (pulled from the bucket, built 2026-10-11 on cred 0.3/0.4): 222 documents, 222 keys, 38,653 chunks. New (cred
+0.5.0, ragnar 0.3.1, the recorded ten collections by key): 263 documents, 262 keys, 46,600 chunks; 0150 left out 86 of
+354 members (80 no live PDF, 6 standalone attachments no keyed item holds). Built 17:41-18:07 UTC. Every origin of
+both stores was mapped to its attachment in a WAL-inclusive copy of `zotero.sqlite` (`origins.R`, scratch).
+
+- No key was lost. One key changed attachment: `martins_etal2022SpatialEcology`, `HKTCPDVJ` (in the trash) to
+  `KZU26QII` (live): cred#40's trash defect, fixed.
+- 40 keys are new:
+  - 23 from grayling, the collection the rebuild adds (5 of them created or given PDFs by this branch's cleanup);
+  - 3 from bull_trout, whose PDFs this branch uploaded (COSEWIC 2012, Cannings & Ptolemy 1998, the NW Council brochure);
+  - 12 from temperature, which joined it on 2026-10-13 and -15 (`ec61843`, `aee59ec`), after the old build;
+  - 2 from hydrology (`nagel_etal2014LandscapeScale`, `rapp_abbe2003FrameworkDelineating`), each with two attachments of
+    one file, of which only one is on disk (Nagel's other is in the trash). The old cred took one attachment per key
+    and its pick had no file, so the key was skipped; 0.5.0 takes every live PDF and finds the one on disk.
+- One key gained a document: `bottoms_etal2023Criticalhabitats`, report and Appendix 1 (0.5.0 ingests every live PDF).
+- Still missing for want of a file on disk (cred warns, "Skipping 3 missing file(s)"): `opperman_etal2010EcologicallyFunctional`
+  (its one PDF, `2453UI7A`, is not in local storage; absent from both stores), and the second copies of Sloat 2017 and
+  Rapp & Abbe 2003 (each key is in the store through its other copy). Not chased here.
+
+Query "Arctic grayling spawning migration timing in the Parsnip River" returns Stamford 2017, Hagen 2015, Stewart 2007,
+Martins 2020 and 2022, House 2021 and Tack 1980. Pushed: manifest 263 documents, md5 `08781d01…`, matching the local file.

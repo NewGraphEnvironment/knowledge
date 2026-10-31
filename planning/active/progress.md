@@ -71,3 +71,6 @@ running. The merge stays with me.
   Hagen & Sary 2023. Pushed; manifest md5 `28c4bc8b…` matches. Logs: `scripts/logs/rag/20261031_*bull_trout_grayling*`.
 - Current `habitat_modelling` (2026-10-11, 222 docs) holds one trashed attachment: `HKTCPDVJ` for
   `martins_etal2022SpatialEcology` (the cred#40 defect). Rebuild started 17:42 UTC.
+- `habitat_modelling` rebuilt (17:41-18:07 UTC): 263 documents, 46,600 chunks; every origin a live group attachment;
+  diff against the 2026-10-11 store accounted for in findings. Pushed (manifest md5 `08781d01…`). Tests: FAIL 0 | SKIP 1 | PASS 1650.
+- Next: `/code-check branch`, `/planning-archive`, `/gh-pr-push`.
