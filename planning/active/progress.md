@@ -12,3 +12,5 @@
 - Filed cred#45 (immutable=1 misses WAL commits; reprex 1 vs 2 rows) ahead of Phase 4, so 0150's comment cites a real number
 - Phase 4: 0150 carries 0280's snapshot(); collection_keys() reads it (live: temperature + flow -> 85 keys); the check also stops when the two copies differ (proved with a drifted copy)
 - Phase 5: CLAUDE.md guarded-copy section rewritten (WAL since Zotero 10, the pair, cred#45) and the #127 line dropped; scripts/README.md 418; grep for -journal/immutable/rollback left only reader code and the unrelated GeoPackage rule
+- Phase 6: cred#45 filed (earlier); #127 body: cause Zotero 10.0.7, plan ticked, measurements; soul#590 item 7: -shm not needed (measured), immutable bullet, knowledge#127 and cred#45 named
+- Live: 0280 end to end in 52 s, both logs byte-identical to 2026-10-30's (deleted, nothing new); 0150 collection_keys(temperature, flow) -> 85 keys

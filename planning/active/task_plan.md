@@ -98,10 +98,10 @@ measures this before anything is fixed.
 
 ## Phase 6: Issues
 
-- [ ] File a cred issue: `immutable=1` reads miss a WAL database's uncheckpointed commits. A general reprex built from
+- [x] File a cred issue: `immutable=1` reads miss a WAL database's uncheckpointed commits. A general reprex built from
   the fixture (cred is public, so no machine names), and the offer that cred own a guarded copy.
-- [ ] Edit the #127 body: the cause is Zotero 10.0.7 (soul#590), the plan ticked as landed, and the cred issue linked.
-- [ ] Edit the soul#590 body, item 7: what Phase 1 measured about the `-shm`, and that knowledge's readers are fixed
+- [x] Edit the #127 body: the cause is Zotero 10.0.7 (soul#590), the plan ticked as landed, and the cred issue linked.
+- [x] Edit the soul#590 body, item 7: what Phase 1 measured about the `-shm`, and that knowledge's readers are fixed
   (the soul side stays soul#590's).
 
 ## Owed at the end (reported, done after merge)
