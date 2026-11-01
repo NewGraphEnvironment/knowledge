@@ -117,9 +117,9 @@ Its patterns are a list, not the class: a new kind of identifier needs a new pat
 Tracked data from other sources carries their terms, and `inst/NOTICE.md` lists each source with its files (it
 installs with the package because `inst/vignette-data/` ships Freshwater Atlas geometry). A new tracked source
 gets its row there, its licence read from the source's own catalogue record; one whose terms are unconfirmed goes
-to an issue instead. The PSCIS layers are "Access Only" in the BC Data Catalogue, and they, the EcoCat-derived
-tables and the bcfishpass-derived files (bcfishpass's database is ODbL, share-alike) are #76, to settle before
-the repo is public.
+to an issue instead. The PSCIS snapshots stay tracked as incidental copies of an "Access Only" catalogue layer,
+with the README pointing to the catalogue (Al, 2026-11-01); the EcoCat-derived tables and the bcfishpass-derived
+files (bcfishpass's database is ODbL, share-alike) are #76, to settle before the repo is public.
 
 ## Working notes
 
