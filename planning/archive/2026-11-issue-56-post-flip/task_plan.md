@@ -79,11 +79,11 @@ This branch is the post-flip remainder: the repo went public on 2026-11-01 and t
 
 ## Validation
 
-- [ ] Tests pass: `devtools::test()`. Most test files do not read README or CLAUDE.md, but the test count still
+- [x] Tests pass: `devtools::test()`. Most test files do not read README or CLAUDE.md, but the test count still
       checks the tree
-- [ ] `/code-check branch` clean (three-round floor)
-- [ ] PWF checkboxes match landed work
-- [ ] `/planning-archive` on completion, then `/gh-pr-push` with `Fixes #56` and the SRED cross-reference
+- [x] `/code-check branch` clean (three-round floor)
+- [x] PWF checkboxes match landed work
+- [x] `/planning-archive` on completion, then `/gh-pr-push` with `Fixes #56` and the SRED cross-reference
 
 Verification:
 - Every link changed in README is fetched with `curl -L` and returns 200.
