@@ -154,8 +154,10 @@ moves the `-wal`'s mtime while the main file's stays put (#127). `0270`'s `db()`
 `-wal` (not the `-shm`, which SQLite rebuilds) and keep the pair only when both files' mtime and
 size and the header's journal mode are unchanged across the copy, no rollback journal is open,
 and the copy opens and passes `quick_check`. The header change counter is no guard: SQLite did
-not bump it per commit in Zotero's exclusive mode, and need not in WAL mode. `data-raw/zotero_copy_check.R` runs the three on
-fixtures whose `-wal` holds rows the main file lacks. cred still reads immutable
+not bump it per commit in Zotero's exclusive mode, and need not in WAL mode.
+`data-raw/zotero_copy_check.R` runs the three on fixtures whose `-wal` holds rows the main file
+lacks; what each piece of the guard is for, measured by removing it, is
+`research/zotero_database.md`. cred still reads immutable
 (NewGraphEnvironment/cred#45), so an `0150 ACTION=build` can miss what Zotero has not yet
 checkpointed. Citation keys are not unique across libraries (the same key names different
 papers in the personal and group libraries), so resolve a key inside the group
