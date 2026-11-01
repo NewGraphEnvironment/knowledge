@@ -37,3 +37,14 @@ Otherwise run every phase to the PR (/code-check branch, /planning-archive,
 /gh-pr-push). This message is the resume instruction that starts the run-to-PR
 mandate; the merge stays with me.
 ```
+
+## Session 2026-11-01
+
+- #127 merged (PR #129); `git merge origin/main` (8a12013). `0270`'s `db()` and `0150`'s `collection_keys()` now
+  copy the `-wal`; cred still reads immutable (cred#45 open), so the Phase 3 build runs with Zotero quit and the
+  `-wal` absent or empty.
+- First dry run: 25 of 69 addition lookups failed with 429 (`0153`'s `api` had no retry). Added a 429/503 retry on
+  Retry-After and a Backoff pause to `api`; second dry run exit 0: the collection exists, 3 members, 12 would add
+  (one with an upload, PH5REA3P), 69 would create, no `exists`/`copy exists` line.
+- `%PDF` check: 70 of 70 sources (URLs, paths, `zotero:`) are PDFs, 222.8 MB.
+- Next: Al confirms the group's storage has room for ~223 MB, then the live run.

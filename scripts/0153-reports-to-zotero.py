@@ -82,16 +82,32 @@ def select_docs(docs, all_docs=False):
     return chosen, [d for d in docs if d not in chosen]
 
 
-def api(method, url, data=None, headers=None, raw=False):
+def api(method, url, data=None, headers=None, raw=False, tries=6):
+    """One Web API call -> (status, body).
+
+    A 429 or 503 is retried after the server's Retry-After (the API sends one with
+    each; 10 s when absent): the request was not processed, so a retried POST
+    creates nothing twice. A Backoff header on a success asks for a pause before
+    the next request, so it is honoured before returning (a 69-row dry run of
+    0270 hit 429 on 25 titles in a row without it, 2026-11-01).
+    """
     h = {"Zotero-API-Key": API}
     if headers:
         h.update(headers)
     body = data if raw else (json.dumps(data).encode() if data is not None else None)
-    try:
-        r = urllib.request.urlopen(urllib.request.Request(url, data=body, headers=h, method=method))
-        return r.status, r.read()
-    except urllib.error.HTTPError as e:
-        return e.code, e.read()
+    for i in range(tries):
+        try:
+            r = urllib.request.urlopen(urllib.request.Request(url, data=body, headers=h, method=method))
+            st, bd, wait = r.status, r.read(), r.headers.get("Backoff")
+        except urllib.error.HTTPError as e:
+            st, bd = e.code, e.read()
+            if st in (429, 503) and i < tries - 1:
+                time.sleep(float(e.headers.get("Retry-After") or 10))
+                continue
+            wait = e.headers.get("Backoff")
+        if wait:
+            time.sleep(float(wait))
+        return st, bd
 
 
 def tok():

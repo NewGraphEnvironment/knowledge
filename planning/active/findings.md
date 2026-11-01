@@ -161,7 +161,16 @@ The review's claims were checked before acting on them:
 
 | Error | Resolution |
 |-------|------------|
+| `0270 --dry-run`: 25 lookups `429 Request rate limit exceeded` | `0153`'s `api` retries a 429/503 after `Retry-After` |
 | GNU `stat -f %z` (coreutils first on PATH) printed filesystem info into the download log | Sizes recomputed in Python; the `stat` fallback is never used |
 | `ls` is aliased with colour codes, so `$(ls dir/*.pdf)` passed escape bytes into paths | Plain globs (`for f in dir/*.pdf`) |
 | `ocrmypdf` failed with tesseract's `image file not found: PNG` | `TMPDIR` set to a scratch directory |
 | publications.gc.ca answers a script with an archive notice | Browser download by Al. A cookie retry was refused as bot-check circumvention and not pursued |
+
+## Phase 2 dry runs (2026-11-01)
+
+The first `0270 --dry-run` after the merge hit HTTP 429 on 25 of 69 title lookups (`group_copy`'s
+`/items/top?q=...`), in runs of consecutive rows: the Web API's rate limit, which `0153`'s `api` returned as a status
+and `0270` tallied as `ERROR`. Zotero sends `Retry-After` with a 429 and may send `Backoff` on a success; `api` now
+sleeps for the first and retries (a 429 is not processed, so a retried POST creates nothing twice) and honours the
+second. The rerun took 86 s and exited 0 with no `ERROR`.
