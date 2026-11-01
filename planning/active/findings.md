@@ -70,6 +70,39 @@ Interference (deterministic; each guard's file copies hooked):
   reads 10. With the clearing of the earlier try's `-wal` removed, every guard reads **8**. The stale `-wal`
   replays old pages over the newer main file, passes `quick_check`, and reads silently stale.
 
+## Branch review: how it ended (2026-11-01)
+
+Rounds 2 and 3 each found a defect inside the previous round's fix, so the loop ended on an enumeration, not on a
+quiet round. The mechanism (round 3's naming): **the check scored a value without establishing its cause, and the
+value had more than one cause.** In round 1 a stress PASS came from a working guard or from rare tears. In round 2,
+NA came from the guard refusing or from any error on the hooked path. In round 3, a substring sentinel matched a
+"hook never fired" message that quoted the child's REFUSED line.
+
+The candidate set is every place the check or a guard turns an outcome into a scored value: `grep -nE
+"tryCatch|try:|except|grepl|startsWith|is\.na|%in%|stop\(|sys\.exit|return con"` over the check, 0280, 0150's
+`snapshot()` and 0270's `db()`. Each site now has one cause, or fails toward fail:
+- **`read_way()`'s catch:** feeds the fixture precondition (opened, `quick_check` ok, rows as expected). The live
+  table only prints.
+- **`r_guard`:** a non-refusal error re-raises. A refusal counts only when its message starts "no consistent copy",
+  and only once the hook has fired.
+- **`py_guard`:** FIRED is checked first, and its message is not a refusal under the anchored match. REFUSED counts only
+  when SystemExit's text starts with the sentinel. The result is an exact `ROWS n m` line, or the check stops.
+- **`guard_rows()`:** the anchored match; anything else stops.
+- **`gt$ok`, `it$ok`, `st$ok` and the final stops:** NA fails `gt` and `it` unless refusal is expected. In `st` a
+  refusal is ok by design, and each guard must accept at least one copy. The stops run before PASS.
+- **The guards:** `return(con)` / `return con` only after a stable state and `quick_check` = ok. An NA
+  `quick_check` aborts (`if (NA)`).
+- **Residual:** an NA-expected interference case cannot tell a refusal the interference caused from one an
+  environmental failure caused at the same moment (a failed copy). The restore-the-bug runs show the stability
+  check is what refuses under normal conditions.
+- **Outside the set:** 0270's other `try`/`except` blocks predate the branch and are not in the diff.
+
+Round 3 also found that each R guard call left its tempfile copy behind, about 249 MB in a 15 s stress. A full disk
+would have turned copies into refusals that the stress scores ok. `r_guard` now deletes each copy once read.
+
+The live `-wal` grew to 20,632 B at 00:05:29 UTC. Every read still gave 6,781 items with the same newest
+`clientDateModified`, so that write held no item change the reads could see.
+
 ## cred
 
 cred#45 filed 2026-10-31: `immutable=1` (`R/zotero.R:24`, `:439`) misses commits still in the `-wal`; reprex reads 1

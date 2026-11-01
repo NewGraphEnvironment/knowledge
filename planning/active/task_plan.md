@@ -117,8 +117,8 @@ measures this before anything is fixed.
 
 ## Validation
 
-- [ ] Tests pass (`devtools::test()`; the scripts have no testthat tests, so the check script is the test)
-- [ ] `/code-check` clean, once over the branch with `/code-check branch`
+- [x] Tests pass (`devtools::test()`; the scripts have no testthat tests, so the check script is the test)
+- [x] `/code-check` clean, once over the branch with `/code-check branch` (three rounds; ended on an enumeration, findings.md)
 - [ ] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion
 

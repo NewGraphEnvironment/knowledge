@@ -156,10 +156,15 @@ r_guard <- function(file) {
     }
     con <- tryCatch(g(live = db, tries = tries, wait = wait), error = function(e) e)
     # the guard's own refusal is reported only once the hook is known to have fired
-    if (inherits(con, "error") && !grepl("no consistent copy", conditionMessage(con), fixed = TRUE)) stop(con)
+    if (inherits(con, "error") && !startsWith(conditionMessage(con), "no consistent copy")) stop(con)
     if (event != "none" && !fired) stop("the ", event, " hook never fired")
     if (inherits(con, "error")) stop(con)
-    on.exit(DBI::dbDisconnect(con))
+    copy <- DBI::dbGetInfo(con)$dbname
+    # the guard's copy is a tempfile; the stress makes hundreds, so each is removed once read
+    on.exit({
+      DBI::dbDisconnect(con)
+      unlink(paste0(copy, c("", "-wal", "-shm")))
+    })
     unlist(DBI::dbGetQuery(con, count_sql), use.names = FALSE)
   }
 }
@@ -213,11 +218,12 @@ py_guard <- function(file) {
 guards <- list(`0280 snapshot()` = r_guard("scripts/0280-literature-verify.R"),
                `0150 snapshot()` = r_guard("scripts/0150-store.R"),
                `0270 db()` = py_guard("scripts/0270-habitat-collection-build.py"))
-# A guard's own refusal ("no consistent copy") is NA; any other error stops the check, so a broken
-# hook or a broken guard can never read as a refusal.
+# A guard's own refusal (a message that starts "no consistent copy") is NA; any other error stops the
+# check, so a broken hook or a broken guard can never read as a refusal. The match is anchored: an
+# error that quotes a refusal in its text (the child's output) is not one.
 guard_rows <- function(g, ...) {
   tryCatch(guards[[g]](...), error = function(e) {
-    if (!grepl("no consistent copy", conditionMessage(e), fixed = TRUE)) stop(g, ": ", conditionMessage(e), call. = FALSE)
+    if (!startsWith(conditionMessage(e), "no consistent copy")) stop(g, ": ", conditionMessage(e), call. = FALSE)
     c(NA_integer_, NA_integer_)
   })
 }
