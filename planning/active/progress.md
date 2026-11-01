@@ -12,3 +12,4 @@
 - soul PR 636 open (peer list and the private-repo floor; four clean code-check rounds; soul tests pass); Refs #438, which closes after propagation
 - code-check round 1 (knowledge): CLAUDE.md collided with open PR #133; repository line taken from #133 verbatim, licence sentence left to it; owed after #133 merges
 - code-check round 2: scripts/README.md 0325 row, #56 licence item tail, #76 owed task; enumeration of pre-flip wording: 254 files, 10 hits, 9 correct, 1 owed in #76
+- code-check round 3: open-source list anchored to NOTICE in #56 and #76, flows task added to #76; second enumeration (six places)

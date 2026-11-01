@@ -128,6 +128,17 @@ The in-repo items #56 still has open are these:
   against a pattern for pre-flip visibility wording. 254 files, 10 hits: nine describe things that are private
   (rag store, run archive, Skeena model code, the reporting template, pkgdown.yaml's general reason, the discipline
   sentence), one is CLAUDE.md's licence sentence, owed in #76 after #133 merges.
+- Round 3 (mechanism): one fact, which sources remain unsettled, restated by hand in several places and edited
+  separately; round 2's enumeration walked tracked files only. The restatements said "EcoCat and bcfishpass" and
+  dropped NOTICE's modelled-flows row (PCIC's, installed with the package). Inside round 2's fix (#76's CLAUDE.md
+  task), so enumerated again. Places stating the open sources: `inst/NOTICE.md` "Terms not yet settled" (the source:
+  EcoCat submissions, EcoCat report text, bcfishpass, modelled flows, and PSCIS until #133 moves it); CLAUDE.md:118-120
+  (no flows; owed in #76's task, which now says so); #56's licence item and #76's closing line (now point at NOTICE's
+  section and name all three); #76's Problem (all rows) and a new flows task; PR #133's body ("EcoCat and bcfishpass
+  rows stay open": a parallel session's PR, reported, not edited); link#346 (states none). Six places, none left
+  disagreeing with NOTICE except the two named as owed or reported.
+- Accepted: the README's site links use the www form (as its Ecosystem table does); DESCRIPTION, `_pkgdown.yml` and
+  the vignettes use github.io, which 301s there. Both resolve.
 
 ## Errors Encountered
 
