@@ -8,3 +8,4 @@
 - Next: start Phase 1
 - Phase 1: README Learn more and NEWS links on the site; methodology article added; citation URLs resolve
 - Phase 2: pre-flip wording cleared in CLAUDE.md, 0325, 0299 (plan review) and research/fdis_export.md; plan review in review-plan.md
+- Phase 3: link#346, #76, #56 and soul#438 bodies edited; soul change code-checked (three clean rounds on the peer line); leak floor added after round 2

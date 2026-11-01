@@ -101,6 +101,20 @@ The in-repo items #56 still has open are these:
 - Every changed README link fetched with `curl -L`: 200 (news, both articles, reference index). DESCRIPTION's first
   URL, which `citation("knowledge")` takes, is the github.io site: 200 after the 301. `CITATION.cff` `url` is the same.
 
+## Phase 3 (2026-11-01)
+
+- The public sweep (`planning/archive/2026-10-issue-56-public-flip/public_sweep.py all`) over the tree: only false
+  positives (bytes inside four `research/fig/*.png`, `m1`/`m2` model variables in `test-tune_score.R`). Over GitHub
+  text it found private-repo pointers in #56's own Status line (an infrastructure issue, removed in this edit; the
+  earlier revision stays in the edit history, the class Al accepted), and pre-existing ones in #62, #75, PR #66 and PR
+  #78 (soul), and #108 (the reporting template's name). Those five predate this branch and are reported, not edited.
+- #56's body names no private repo: the peer-list item says only that the change is open where the list lives.
+- soul's code-check of the peer-list change found (round 2) that `PUBLIC_LEAK_PRIVATE_REPOS` in soul's
+  `skills/_shared/filter_conventions.sh` still names knowledge, and its floor test requires every member to be PRIVATE
+  on GitHub: red since the flip. Measured: knowledge is not among the 71 private repos. Removing it passes all three
+  directions (every member a row, every member private, every private row a member). Folded into the soul PR and
+  soul#438's body.
+
 ## Errors Encountered
 
 | Error | Resolution |

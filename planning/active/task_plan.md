@@ -52,15 +52,15 @@ This branch is the post-flip remainder: the repo went public on 2026-11-01 and t
       nothing that describes knowledge as private or not yet public
 
 ## Phase 3: cross-repo bodies and soul#438
-- [ ] link#346 body: replace "a private repository" with `NewGraphEnvironment/knowledge`, linked to its #57.
+- [x] link#346 body: replace "a private repository" with `NewGraphEnvironment/knowledge`, linked to its #57.
       "That evidence repository is moving to public" becomes "is public (2026-11-01)". Part 2's heading drops
       "(once the evidence repo is public)"
-- [ ] #76 body: its last task becomes "flipped with EcoCat and bcfishpass open, on Al's word (2026-11-01)". The
+- [x] #76 body: its last task becomes "flipped with EcoCat and bcfishpass open, on Al's word (2026-11-01)". The
       task is no longer a gate before the flip
 - [ ] soul: a branch from origin/main that removes `- knowledge` from `conventions/comms_peers.md`.
       Run `/code-check` (convention edit, through its issue) and open a PR that closes soul#438.
       The PR text and the commits name no private detail. No merge
-- [ ] #56 body: tick what landed. Each item it leaves open names its home:
+- [x] #56 body: tick what landed. Each item it leaves open names its home:
   - the peer list → the soul PR;
   - the licences → #76;
   - the post → new_graphiti#8;
