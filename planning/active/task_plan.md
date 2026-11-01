@@ -57,7 +57,7 @@ This branch is the post-flip remainder: the repo went public on 2026-11-01 and t
       "(once the evidence repo is public)"
 - [x] #76 body: its last task becomes "flipped with EcoCat and bcfishpass open, on Al's word (2026-11-01)". The
       task is no longer a gate before the flip
-- [ ] soul: a branch from origin/main that removes `- knowledge` from `conventions/comms_peers.md`.
+- [x] soul: a branch from origin/main that removes `- knowledge` from `conventions/comms_peers.md`.
       Run `/code-check` (convention edit, through its issue) and open a PR that closes soul#438.
       The PR text and the commits name no private detail. No merge
 - [x] #56 body: tick what landed. Each item it leaves open names its home:
