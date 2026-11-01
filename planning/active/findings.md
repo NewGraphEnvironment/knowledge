@@ -115,6 +115,20 @@ The in-repo items #56 still has open are these:
   directions (every member a row, every member private, every private row a member). Folded into the soul PR and
   soul#438's body.
 
+## Code-check (knowledge branch)
+
+- Round 1: CLAUDE.md's two pre-flip hunks collided with open PR #133 (#76's PSCIS notice, a parallel session's,
+  opened 21:53Z). This branch's repository line now matches #133's byte for byte (`git merge-tree` exits 0 in both
+  orders); the licence sentence is left to #133.
+- Round 2 (inside round 1's fix): the restored sentence's "to settle before the repo is public" contradicts line 11,
+  and its follow-up lived only in this PWF. Now a task in #76's body. Also `scripts/README.md:86` "(after the bucket
+  policy of #56)", which the plan's grep missed, and #56's licence item keeping its old "before the flip" tail.
+- Enumeration (ends the loop, since round 2 found a defect inside a fix): every tracked text file outside
+  `planning/`, `scripts/logs/`, `data/` and `NEWS.md`, with line wraps joined (the grep missed a wrapped sentence),
+  against a pattern for pre-flip visibility wording. 254 files, 10 hits: nine describe things that are private
+  (rag store, run archive, Skeena model code, the reporting template, pkgdown.yaml's general reason, the discipline
+  sentence), one is CLAUDE.md's licence sentence, owed in #76 after #133 merges.
+
 ## Errors Encountered
 
 | Error | Resolution |
