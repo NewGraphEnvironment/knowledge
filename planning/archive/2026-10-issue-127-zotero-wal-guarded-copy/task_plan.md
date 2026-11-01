@@ -119,8 +119,8 @@ measures this before anything is fixed.
 
 - [x] Tests pass (`devtools::test()`; the scripts have no testthat tests, so the check script is the test)
 - [x] `/code-check` clean, once over the branch with `/code-check branch` (three rounds; ended on an enumeration, findings.md)
-- [ ] PWF checkboxes match landed work
-- [ ] `/planning-archive` on completion
+- [x] PWF checkboxes match landed work
+- [x] `/planning-archive` on completion
 
 How each change is proved:
 - **The check script is the test.** Each guard returns the fixture's full row count, and in WAL mode the guard's
