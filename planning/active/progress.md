@@ -6,3 +6,4 @@
 - Created branch `56-clean-up-and-make-the-repo-public-packag` off origin/main
 - Scaffolded PWF baseline from issue #56 with approved phases
 - Next: start Phase 1
+- Phase 1: README Learn more and NEWS links on the site; methodology article added; citation URLs resolve

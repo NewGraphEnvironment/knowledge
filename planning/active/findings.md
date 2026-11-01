@@ -93,6 +93,14 @@ The in-repo items #56 still has open are these:
   open to remove knowledge from soul's comms peer list (`- knowledge` sits at `conventions/comms_peers.md:47` on
   soul origin/main). The new_graphiti post is now its own issue (new_graphiti#8).
 
+## Phase 1 (2026-11-01)
+
+- The plan said the chinook article links the methodology article; it does not (no `habitat_thresholds` or
+  "Choosing habitat" in `vignettes/chinook_rearing.Rmd`). The README adds the link on its own merit: the site carries
+  the article, and it has a Limits section, which the README line names.
+- Every changed README link fetched with `curl -L`: 200 (news, both articles, reference index). DESCRIPTION's first
+  URL, which `citation("knowledge")` takes, is the github.io site: 200 after the 301. `CITATION.cff` `url` is the same.
+
 ## Errors Encountered
 
 | Error | Resolution |

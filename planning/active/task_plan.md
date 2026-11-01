@@ -29,13 +29,13 @@ This branch is the post-flip remainder: the repo went public on 2026-11-01 and t
   - README links use the `www.newgraphenvironment.com/<pkg>/` form that the README's Ecosystem table already uses.
 
 ## Phase 1: README points at the public site
-- [ ] Learn more: change the chinook article link to `https://www.newgraphenvironment.com/knowledge/articles/chinook_rearing.html`,
+- [x] Learn more: change the chinook article link to `https://www.newgraphenvironment.com/knowledge/articles/chinook_rearing.html`,
       and the function reference link to `.../knowledge/reference/index.html`
-- [ ] Learn more: add the methodology article (`.../articles/habitat_thresholds.html`, "Choosing habitat thresholds
+- [x] Learn more: add the methodology article (`.../articles/habitat_thresholds.html`, "Choosing habitat thresholds
       from where fish were caught"), which the site now carries and the chinook article links
-- [ ] Change the NEWS link (README:30) to the site's `news/index.html`. Keep `scripts/README.md`, `research/README.md`,
+- [x] Change the NEWS link (README:30) to the site's `news/index.html`. Keep `scripts/README.md`, `research/README.md`,
       `LICENSE` and `inst/NOTICE.md` on GitHub, because the site does not render them
-- [ ] Confirm that DESCRIPTION `URL`, `inst/CITATION` (`citation("knowledge")` takes the first URL) and `CITATION.cff`
+- [x] Confirm that DESCRIPTION `URL`, `inst/CITATION` (`citation("knowledge")` takes the first URL) and `CITATION.cff`
       `url` resolve (curl -L, 200). No edit unless one fails
 
 ## Phase 2: clear the pre-flip wording
