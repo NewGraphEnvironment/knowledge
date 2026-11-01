@@ -9,7 +9,7 @@ repos consume snapshots from here instead of carrying the pipeline.
 ## Repository Context
 
 **Repository:** NewGraphEnvironment/knowledge, public since 2026-11-01 (#56); the pkgdown site is
-<https://www.newgraphenvironment.com/knowledge/>, where newgraphenvironment.github.io/knowledge/ redirects
+<https://newgraphenvironment.github.io/knowledge/>
 **Primary Language:** R, with Python (`0153`, `0270`) and workflow JS (`wf_*.js`)
 **Origin:** seeded in September 2026 with history from an earlier fish-passage reporting template.
 Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` refer to that repo.
@@ -116,9 +116,9 @@ Its patterns are a list, not the class: a new kind of identifier needs a new pat
 Tracked data from other sources carries their terms, and `inst/NOTICE.md` lists each source with its files (it
 installs with the package because `inst/vignette-data/` ships Freshwater Atlas geometry). A new tracked source
 gets its row there, its licence read from the source's own catalogue record; one whose terms are unconfirmed goes
-to an issue instead. The PSCIS layers are "Access Only" in the BC Data Catalogue; their snapshots stay tracked as
-incidental working copies (Al, 2026-11-01). The EcoCat-derived tables and the bcfishpass-derived files (bcfishpass's
-database is ODbL, share-alike) are still #76: the repo went public with them open, on Al's word (2026-11-01).
+to an issue instead. The PSCIS layers are "Access Only" in the BC Data Catalogue, and they, the EcoCat-derived
+tables and the bcfishpass-derived files (bcfishpass's database is ODbL, share-alike) are #76, to settle before
+the repo is public.
 
 ## Working notes
 

@@ -43,6 +43,9 @@ This branch is the post-flip remainder: the repo went public on 2026-11-01 and t
       "PRIVATE"/"not advertised" clause removed
 - [x] `CLAUDE.md:122`: the flip went ahead with #76's EcoCat and bcfishpass rows still open (Al, 2026-11-01), and #76
       is still where they settle
+      — **withdrawn by code-check round 1:** open PR #133 (#76's PSCIS notice) rewrites this sentence and the
+      repository line. This branch takes #133's repository line verbatim (git merges identical hunks) and leaves the
+      licence sentence to #133
 - [x] `scripts/0325-publish.R:16-17`: the prefix is public, so `PUBLISH=TRUE` makes a version readable by anyone on
       upload (fresh-bc's `PublicReadPrefixes` grants `knowledge/*`)
 - [x] `research/fdis_export.md:32`: both prefixes are readable without credentials (anonymous GET 200, measured
@@ -71,6 +74,8 @@ This branch is the post-flip remainder: the repo went public on 2026-11-01 and t
 - [ ] After this PR merges, confirm that the site's home page (built from README) carries the new Learn more links
       by fetching the page, not by reading the run status
 - [ ] soul PR for #438 merged (Al)
+- [ ] After #133 merges: merge origin/main here (or follow up), and drop CLAUDE.md's "to settle before the repo is
+      public" clause, which #133 keeps: the repo went public with the EcoCat and bcfishpass rows open (Al, 2026-11-01)
 
 ## Validation
 
@@ -84,5 +89,5 @@ Verification:
 - Every link changed in README is fetched with `curl -L` and returns 200.
 - The flip-wording grep returns nothing that describes knowledge as pre-flip.
 - `gh issue view` re-reads each edited body (link#346, #76, #56) after the edit.
-- The soul PR's diff is one line.
+- The soul PR's diff is two lines: the peer list and the private-repo floor (the floor added after its round 2).
 - `public_sweep.py` from #58's archive runs over the tree and the edited bodies before the PR.
