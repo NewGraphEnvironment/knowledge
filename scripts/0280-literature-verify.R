@@ -48,7 +48,7 @@
 #
 # INPUT   data/literature_evidence.csv, data/ip_model_registry.csv,
 #         data/life_history_timing.csv,
-#         ~/Zotero/zotero.sqlite (a checked copy; Zotero locks the live file)
+#         ~/Zotero/zotero.sqlite (a checked copy of the file and its -wal)
 # OUTPUT  scripts/logs/habitat/<yyyymmdd>_literature_verify.csv, one row per
 #         evidence row (status, PDF file, every PDF page the quote matches), and
 #         <yyyymmdd>_literature_verify_ip_registry.csv, one row per registry quote;
@@ -110,33 +110,43 @@ ev <- knw_literature_read(evidence_path)
 reg <- knw_ip_read(registry_path)
 
 # --- Zotero: a whole copy of the database -----------------------------------
-# Keep a copy only when nothing wrote to the live file meanwhile: mtime and size are
-# unchanged across the copy, no transaction is open (rollback journal absent or its
-# header zeroed, before and after), and the copy passes quick_check. Zotero runs in
-# exclusive locking mode, where SQLite does not bump the header change counter per
-# commit, so that counter is no guard (same rule as 0270's db()).
-snapshot <- function(tries = 6, wait = 15) {
-  live <- path.expand("~/Zotero/zotero.sqlite")
+# Reads go to a copy, never the live file: under its old rollback journal Zotero held the file
+# in exclusive locking mode, so a read-only connection blocked and an immutable one could see a
+# sync half-written. Zotero 10 runs the database in WAL mode (a plain read-only connection did
+# not block on 2026-10-31), where a commit sits in zotero.sqlite-wal until a checkpoint folds it
+# into the main file, so the copy takes the -wal with the main file: the main file alone opens,
+# passes quick_check and silently misses those commits (#127, data-raw/zotero_copy_check.R).
+# The -shm is not copied; SQLite rebuilds it. Each try clears the copy's -wal first, so one
+# left by an earlier try never sits beside a newer main file. Keep a copy only when nothing
+# wrote meanwhile: both files' mtime and size and the header's journal mode are unchanged across
+# the copy, no rollback-journal transaction is open (journal absent or its header zeroed, before
+# and after), and the copy opens and passes quick_check. The header change counter is no guard:
+# SQLite did not bump it per commit in Zotero's exclusive mode, and need not in WAL mode (same
+# rule as 0270's db()).
+snapshot <- function(live = path.expand("~/Zotero/zotero.sqlite"), tries = 6, wait = 15) {
+  wal <- paste0(live, "-wal")
   journal <- paste0(live, "-journal")
   snap <- tempfile(fileext = ".sqlite")
   state <- function() {
-    info <- file.info(live)
+    info <- file.info(c(live, wal))
     open_txn <- file.exists(journal) && file.size(journal) >= 8 &&
       any(readBin(journal, "raw", 8) != as.raw(0))
-    list(mtime = as.numeric(info$mtime), size = info$size, open_txn = open_txn)
+    list(mtime = as.numeric(info$mtime), size = info$size,
+         mode = readBin(live, "raw", 20)[19:20], open_txn = open_txn)
   }
   for (i in seq_len(tries)) {
     before <- state()
-    file.copy(live, snap, overwrite = TRUE)
-    if (!identical(state(), before) || before$open_txn) {
+    unlink(paste0(snap, c("", "-wal", "-shm")))
+    copied <- file.copy(live, snap) && (!file.exists(wal) || file.copy(wal, paste0(snap, "-wal")))
+    if (!copied || !identical(state(), before) || before$open_txn) {
       Sys.sleep(wait)
       next
     }
-    con <- DBI::dbConnect(RSQLite::SQLite(), snap)
-    ok <- tryCatch(DBI::dbGetQuery(con, "PRAGMA quick_check")[[1]][1] == "ok",
-                   error = function(e) FALSE)
+    con <- tryCatch(DBI::dbConnect(RSQLite::SQLite(), snap), error = function(e) NULL)
+    ok <- !is.null(con) && tryCatch(DBI::dbGetQuery(con, "PRAGMA quick_check")[[1]][1] == "ok",
+                                    error = function(e) FALSE)
     if (ok) return(con)
-    DBI::dbDisconnect(con)
+    if (!is.null(con)) DBI::dbDisconnect(con)
     Sys.sleep(wait)
   }
   stop("no consistent copy of zotero.sqlite after ", tries, " tries; is Zotero mid-sync?")
