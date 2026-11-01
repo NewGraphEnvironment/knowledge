@@ -220,7 +220,8 @@ A report is reachable from more than one place; using only one axis misses repor
   the group (`hydrology`, `salmon`) is refused and its keys are printed; pass a key. A name that exists only
   in a personal library no longer resolves (it used to, and a name in both was refused).
 - `ACTION=build STORE=<name> COLLECTIONS="<zotero collection>[,...]"` builds a **citation-key-named**
-  store from the local `~/Zotero` (no API key). It names every member it leaves out (no citation key, no live PDF, a
+  store from the local `~/Zotero` (no API key; cred reads it immutable, so it warns when Zotero's `-wal` holds
+  commits not yet checkpointed, cred#45). It names every member it leaves out (no citation key, no live PDF, a
   standalone PDF no keyed item of the build holds), because cred is handed keys and never sees those members (#122). That naming carries no watershed group and no
   reportId; it needs `data/zotero_key_map.csv` to join the farm. Group-scoped work goes through the
   harvest (`wf_report_harvest.js` → `0152`), which names documents `<EXTENT>__<reportId>.pdf`
@@ -414,8 +415,9 @@ The cited basis for CH and BT habitat thresholds (#19). Not per watershed group.
     `baseAttachmentPath`;
   - a PDF counts only when the server has its md5.
 
-  Live state is read from the Web API. The local database is read from a **checked copy**, because Zotero
-  locks the live file and an `immutable` read during a sync sees half-written pages. Re-runs are no-ops.
+  Live state is read from the Web API. The local database is read from a **checked copy** of the file and its
+  `-wal`, because Zotero locks the live file, an `immutable` read during a sync sees half-written pages, and
+  in Zotero 10's WAL mode the main file alone lacks commits not yet checkpointed (#127). Re-runs are no-ops.
 - The store is built from that collection plus the species, temperature, hydrology and Wedzin Kwa collections,
   by `0150`. Wait for Zotero to sync `0270`'s writes, and check that the files are on disk, before building.
   The `temperature` store is built from `Fisheries/temperature` alone (`COLLECTIONS=SW2RXUJC`), and the `flow`
