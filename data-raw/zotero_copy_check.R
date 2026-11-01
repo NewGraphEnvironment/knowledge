@@ -139,18 +139,26 @@ r_guard <- function(file) {
   f <- fn_from(file, "snapshot")
   function(db, tries = 1, wait = 0, event = "none", on = 0L, other = "") {
     g <- f
+    fired <- FALSE
     if (event != "none") {
       e <- new.env(parent = environment(f))
       n <- 0L
       e$file.copy <- function(...) {
         r <- base::file.copy(...)
         n <<- n + 1L
-        if (n == on) interfere(event, db, other)
+        if (n == on) {
+          interfere(event, db, other)
+          fired <<- TRUE
+        }
         r
       }
       environment(g) <- e
     }
-    con <- g(live = db, tries = tries, wait = wait)
+    con <- tryCatch(g(live = db, tries = tries, wait = wait), error = function(e) e)
+    # the guard's own refusal is reported only once the hook is known to have fired
+    if (inherits(con, "error") && !grepl("no consistent copy", conditionMessage(con), fixed = TRUE)) stop(con)
+    if (event != "none" && !fired) stop("the ", event, " hook never fired")
+    if (inherits(con, "error")) stop(con)
     on.exit(DBI::dbDisconnect(con))
     unlist(DBI::dbGetQuery(con, count_sql), use.names = FALSE)
   }
@@ -179,29 +187,45 @@ py_guard <- function(file) {
             "        if event == 'touch_main': touch(db)",
             "        elif event == 'touch_wal': touch(db + '-wal')",
             "        elif event == 'checkpoint': orig(other, db); os.remove(db + '-wal')",
+            "        else: raise ValueError('unknown event ' + event)",
+            "        print('FIRED', flush=True)",
             "    return r",
             "if event != 'none': shutil.copyfile = hooked",
             "try:",
             sprintf("    r = m.db(live=sys.argv[1], tries=int(sys.argv[2]), wait=float(sys.argv[3])).execute(%s).fetchone()",
                     shQuote(count_sql, type = "sh")),
-            "    print(r[0], r[1])",
+            "    print('ROWS', r[0], r[1])",
             "except SystemExit as e:",
-            "    print('NA NA'); print(e, file=sys.stderr)")
+            "    if not str(e).startswith('no consistent copy'): raise",
+            "    print('REFUSED', e)")
   function(db, tries = 1, wait = 0, event = "none", on = 0L, other = "") {
-    out <- system2("python3", c("-c", shQuote(paste(code, collapse = "\n")), shQuote(db), tries, wait,
-                                event, on, shQuote(other)),
-                   stdout = TRUE, env = "ZOTERO_API_KEY=check-only")
-    suppressWarnings(as.integer(strsplit(utils::tail(out, 1), " ")[[1]]))
+    out <- suppressWarnings(system2("python3", c("-c", shQuote(paste(code, collapse = "\n")), shQuote(db), tries,
+                                                 wait, event, on, shQuote(other)),
+                                    stdout = TRUE, stderr = TRUE, env = "ZOTERO_API_KEY=check-only"))
+    if (event != "none" && !any(out == "FIRED")) stop("the ", event, " hook never fired: ", paste(out, collapse = " | "))
+    refused <- grep("^REFUSED ", out, value = TRUE)
+    if (length(refused)) stop(sub("^REFUSED ", "", refused[1]))
+    rows <- grep("^ROWS [0-9]+ [0-9]+$", out, value = TRUE)
+    if (length(rows) != 1) stop("0270's db() gave no result: ", paste(out, collapse = " | "))
+    as.integer(strsplit(rows, " ")[[1]][2:3])
   }
 }
 guards <- list(`0280 snapshot()` = r_guard("scripts/0280-literature-verify.R"),
                `0150 snapshot()` = r_guard("scripts/0150-store.R"),
                `0270 db()` = py_guard("scripts/0270-habitat-collection-build.py"))
+# A guard's own refusal ("no consistent copy") is NA; any other error stops the check, so a broken
+# hook or a broken guard can never read as a refusal.
+guard_rows <- function(g, ...) {
+  tryCatch(guards[[g]](...), error = function(e) {
+    if (!grepl("no consistent copy", conditionMessage(e), fixed = TRUE)) stop(g, ": ", conditionMessage(e), call. = FALSE)
+    c(NA_integer_, NA_integer_)
+  })
+}
 # 0150 carries 0280's function; a fix to one that misses the other fails here
 stopifnot("0150's snapshot() differs from 0280's" = identical(
   deparse(fn_from("scripts/0150-store.R", "snapshot")), deparse(fn_from("scripts/0280-literature-verify.R", "snapshot"))))
 gt <- do.call(rbind, lapply(names(guards), function(g) do.call(rbind, lapply(names(fx), function(k) {
-  n <- tryCatch(guards[[g]](file.path(fx[[k]], "zotero.sqlite"))[1], error = function(e) NA_integer_)
+  n <- guard_rows(g, file.path(fx[[k]], "zotero.sqlite"))[1]
   data.frame(guard = g, fixture = k, rows = n, expected = expect_rows[[k]])
 }))))
 gt$ok <- !is.na(gt$rows) & gt$rows == gt$expected
@@ -229,8 +253,8 @@ cases <- data.frame(event = c("touch_main", "touch_wal", "checkpoint"), on = c(1
 it <- do.call(rbind, lapply(names(guards), function(g) do.call(rbind, lapply(seq_len(nrow(cases)), function(i) {
   dir.create(d <- tempfile("interfere_", tmpdir = root))
   stopifnot(file.copy(list.files(fx[["wal_pending"]], full.names = TRUE), d))
-  n <- tryCatch(guards[[g]](file.path(d, "zotero.sqlite"), tries = cases$tries[i], wait = 0, event = cases$event[i],
-                            on = cases$on[i], other = later)[1], error = function(e) NA_integer_)
+  n <- guard_rows(g, file.path(d, "zotero.sqlite"), tries = cases$tries[i], wait = 0, event = cases$event[i],
+                  on = cases$on[i], other = later)[1]
   data.frame(guard = g, event = cases$event[i], rows = n, expected = cases$expected[i])
 }))))
 it$ok <- (is.na(it$expected) & is.na(it$rows)) | (!is.na(it$rows) & !is.na(it$expected) & it$rows == it$expected)
@@ -267,7 +291,7 @@ if (stress_secs > 0) {
   t0 <- Sys.time()
   while (difftime(Sys.time(), t0, units = "secs") < stress_secs) {
     for (g in names(guards)) {
-      n <- tryCatch(guards[[g]](sdb, tries = 500, wait = 0.005), error = function(e) c(NA, NA))
+      n <- guard_rows(g, sdb, tries = 500, wait = 0.005)
       st[[length(st) + 1]] <- data.frame(guard = g, rows = n[1], max_id = n[2])
     }
   }
@@ -298,7 +322,7 @@ if (!identical(Sys.getenv("LIVE"), "FALSE") && file.exists(path.expand("~/Zotero
   # each guard beside a pair read taken just before it; the live database can move between them
   lg <- do.call(rbind, lapply(names(guards), function(g) {
     pair <- read_way(live, "pair_rw", "SELECT count(*) FROM items")$n
-    n <- tryCatch(guards[[g]](files[1], tries = 3, wait = 1)[1], error = function(e) NA_integer_)
+    n <- guard_rows(g, files[1], tries = 3, wait = 1)[1]
     data.frame(guard = g, pair_rows = pair, guard_rows = n)
   }))
   cat("\n== live guards\n")
