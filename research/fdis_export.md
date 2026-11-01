@@ -1,6 +1,6 @@
 # FDIS electrofishing export: contents, defects, and what it adds
 
-**Verified:** 2026-09-26 (Provenance: 2026-10-16; Where it lives, Repeated surveys and the evidence table: 2026-10-17; Placement: 2026-10-27; Measured vs modelled gradient: 2026-10-30) · **Issues:** #18 (built from), #56 (published), #35 (repeated surveys), #91 (placement), #121 (gradient), NewGraphEnvironment/link#284 (consumer) ·
+**Verified:** 2026-09-26 (Provenance: 2026-10-16; Where it lives: 2026-11-01; Repeated surveys and the evidence table: 2026-10-17; Placement: 2026-10-27; Measured vs modelled gradient: 2026-10-30) · **Issues:** #18 (built from), #56 (published), #35 (repeated surveys), #91 (placement), #121 (gradient), NewGraphEnvironment/link#284 (consumer) ·
 **Produced by:** direct reads of `s3://fresh-bc/fdis/` and the public BCGW layers (WFS
 `DescribeFeatureType`, local `whse_fish`); placement by `data-raw/snap_candidate_check.R` and
 `data-raw/snap_limit_sensitivity.R` (`scripts/logs/fdis/20261027_snap_*`); gradient by `data-raw/site_gradient_check.R`
@@ -29,8 +29,9 @@ when and from where it was received (#56).
   published from, and the version it supersedes. `scripts/0299` writes them, and with `PULL=TRUE`
   restores `data/fdis/derived/` from them. `v1/` is the release before #35: it counts repeated surveys
   once per copy, and `fdis_repeat_surveys` maps its `site_visit` ids to v2's.
-- Both prefixes are readable without credentials once the bucket policy grants them; the bucket does not
-  list, so start from the manifest.
+- Both prefixes are readable without credentials (fresh-bc's bucket policy grants `fdis/*` and `knowledge/*`;
+  anonymous reads of `fdis/README.md` and the v2 manifest answered 200 on 2026-11-01). The bucket does not list,
+  so start from the manifest.
 
 ## Contents and join structure
 

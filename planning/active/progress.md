@@ -7,3 +7,4 @@
 - Scaffolded PWF baseline from issue #56 with approved phases
 - Next: start Phase 1
 - Phase 1: README Learn more and NEWS links on the site; methodology article added; citation URLs resolve
+- Phase 2: pre-flip wording cleared in CLAUDE.md, 0325, 0299 (plan review) and research/fdis_export.md; plan review in review-plan.md

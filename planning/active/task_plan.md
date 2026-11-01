@@ -39,15 +39,16 @@ This branch is the post-flip remainder: the repo went public on 2026-11-01 and t
       `url` resolve (curl -L, 200). No edit unless one fails
 
 ## Phase 2: clear the pre-flip wording
-- [ ] `CLAUDE.md:11-13`: the repo is public (2026-11-01, #56), with the site at its URL, and the stale
+- [x] `CLAUDE.md:11-13`: the repo is public (2026-11-01, #56), with the site at its URL, and the stale
       "PRIVATE"/"not advertised" clause removed
-- [ ] `CLAUDE.md:122`: the flip went ahead with #76's EcoCat and bcfishpass rows still open (Al, 2026-11-01), and #76
+- [x] `CLAUDE.md:122`: the flip went ahead with #76's EcoCat and bcfishpass rows still open (Al, 2026-11-01), and #76
       is still where they settle
-- [ ] `scripts/0325-publish.R:16-17`: the prefix is public, so `PUBLISH=TRUE` makes a version readable by anyone on
+- [x] `scripts/0325-publish.R:16-17`: the prefix is public, so `PUBLISH=TRUE` makes a version readable by anyone on
       upload (fresh-bc's `PublicReadPrefixes` grants `knowledge/*`)
-- [ ] `research/fdis_export.md:32`: both prefixes are readable without credentials (anonymous GET 200, measured
+- [x] `research/fdis_export.md:32`: both prefixes are readable without credentials (anonymous GET 200, measured
       2026-11-01), and the bucket still does not list. Update the file's Verified line
-- [ ] Re-run the grep for flip wording over the tree, outside `planning/archive/` and `scripts/logs/`, and expect
+- [x] `scripts/0299-fdis-publish.R:35`: `NO_SIGN=TRUE` reads without credentials, the prefix is public (found by the plan review)
+- [x] Re-run the grep for flip wording over the tree, outside `planning/archive/` and `scripts/logs/`, and expect
       nothing that describes knowledge as private or not yet public
 
 ## Phase 3: cross-repo bodies and soul#438
