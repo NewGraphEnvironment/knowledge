@@ -8,7 +8,7 @@ parent_fx <- function() {
 
 test_that("each visit takes its own group's parent, in the visits' order", {
   v <- data.frame(site_visit = c("c", "a", "b"), watershed_group_code = c("SETN", "BULK", "BULK"),
-                  id_segment = c(10, 10, 12))
+                  id_segment = c(10, 10, 12), segment_length_m = c(50, 120, 400))
   j <- knw_parent_join(v, parent_fx())
   expect_identical(j$site_visit, c("c", "a", "b"))
   expect_identical(j$parent_id_segment, c(9, 4, 5))
@@ -21,7 +21,7 @@ test_that("each visit takes its own group's parent, in the visits' order", {
 })
 
 test_that("a visit with no parent, or a segment with two, stops the join", {
-  v <- data.frame(site_visit = "x", watershed_group_code = "MORK", id_segment = 10)
+  v <- data.frame(site_visit = "x", watershed_group_code = "MORK", id_segment = 10, segment_length_m = 50)
   expect_error(knw_parent_join(v, parent_fx()), "1 placed visits have no parent row \\(groups MORK\\)")
   p <- rbind(parent_fx(), parent_fx()[1, ])
   expect_error(knw_parent_join(v, p), "1 full segments have two parent rows")
@@ -38,4 +38,10 @@ test_that("a parent table of another build of the same group is caught by its le
   # within a centimetre is the same segment
   v$segment_length_m[2] <- 315.004
   expect_identical(nrow(knw_parent_join(v, parent_fx())), 2L)
+  # a missing length fails, and so does a table or visits without the lengths
+  v$segment_length_m[2] <- NA
+  expect_error(knw_parent_join(v, parent_fx()), "1 placed visits sit on a segment whose length")
+  v$segment_length_m[2] <- 315
+  expect_error(knw_parent_join(v, parent_fx()[, names(parent_fx()) != "overlap_m"]))
+  expect_error(knw_parent_join(v[, names(v) != "segment_length_m"], parent_fx()))
 })

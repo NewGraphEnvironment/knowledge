@@ -16,30 +16,31 @@
 #' minimal network, so there the two setups read different gradients. A placed
 #' visit whose segment has no parent row is an error. link numbers each group's
 #' segments from 1, so a parent table of another build covers the same ids:
-#' where `visits` carries `segment_length_m` and `parent` `overlap_m`, each
-#' visit's segment must be as long as its parent row's `overlap_m +
-#' straddle_m` (within 1 cm), or the join stops as another network's table.
+#' each visit's segment must be as long as its parent row's `overlap_m +
+#' straddle_m` (within 1 cm; a missing length fails), or the join stops as
+#' another network's table.
 #'
 #' @param visits `data.frame` of placed visits with `site_visit`,
-#'   `watershed_group_code` and `id_segment` (the full network's segment, as
-#'   [knw_link_place()] returns it).
+#'   `watershed_group_code`, `id_segment` and `segment_length_m` (the full
+#'   network's segment, as [knw_link_place()] returns it).
 #' @param parent `data.frame` with one row per full segment: `id_segment`,
-#'   `wsg`, `id_segment_minimal`, `gradient_minimal`, `length_minimal` and
-#'   `straddle_m`, as link's `data-raw/logs/minimal_breaks_415/parent_<wsg>.csv.gz`
+#'   `wsg`, `id_segment_minimal`, `gradient_minimal`, `length_minimal`,
+#'   `overlap_m` and `straddle_m`, as link's `data-raw/logs/minimal_breaks_415/parent_<wsg>.csv.gz`
 #'   holds them.
 #' @return `visits` with `parent_id_segment`, `parent_gradient`,
 #'   `parent_length_m` and `parent_straddle_m`, in the same rows and order.
 #' @export
 #' @examples
-#' v <- data.frame(site_visit = c("a", "b"), watershed_group_code = "BULK", id_segment = c(10, 11))
+#' v <- data.frame(site_visit = c("a", "b"), watershed_group_code = "BULK", id_segment = c(10, 11),
+#'                 segment_length_m = c(120, 315))
 #' p <- data.frame(id_segment = c(10, 11, 12), wsg = "BULK", id_segment_minimal = c(4, 4, 5),
 #'                 gradient_minimal = c(0.012, 0.012, 0.031), length_minimal = c(900, 900, 400),
 #'                 overlap_m = c(120, 300, 400), straddle_m = c(0, 15, 0))
 #' knw_parent_join(v, p)
 knw_parent_join <- function(visits, parent) {
-  chk::check_names(visits, c("site_visit", "watershed_group_code", "id_segment"))
+  chk::check_names(visits, c("site_visit", "watershed_group_code", "id_segment", "segment_length_m"))
   chk::check_names(parent, c("id_segment", "wsg", "id_segment_minimal", "gradient_minimal", "length_minimal",
-                             "straddle_m"))
+                             "overlap_m", "straddle_m"))
   key_p <- sprintf("%s %.0f", parent$wsg, as.numeric(parent$id_segment))
   if (anyDuplicated(key_p)) {
     stop(sum(duplicated(key_p)), " full segments have two parent rows: one parent per segment", call. = FALSE)
@@ -52,12 +53,13 @@ knw_parent_join <- function(visits, parent) {
          "): the parent table is not this network's", call. = FALSE)
   }
   # the ids alone cannot tell two builds of one group apart: their lengths can
-  if ("segment_length_m" %in% names(visits) && "overlap_m" %in% names(parent)) {
-    off <- abs(as.numeric(parent$overlap_m[i]) + as.numeric(parent$straddle_m[i]) - as.numeric(visits$segment_length_m)) > 0.01
-    if (any(off %in% TRUE)) {
-      stop(sum(off %in% TRUE), " placed visits sit on a segment whose length is not its parent row's overlap and ",
-           "straddle: the parent table is another build's", call. = FALSE)
-    }
+  # a missing length on either side is a mismatch, not a pass
+  ok <- abs(as.numeric(parent$overlap_m[i]) + as.numeric(parent$straddle_m[i]) -
+              as.numeric(visits$segment_length_m)) <= 0.01
+  off <- !(ok %in% TRUE)
+  if (any(off)) {
+    stop(sum(off), " placed visits sit on a segment whose length is not its parent row's overlap and ",
+         "straddle: the parent table is another build's", call. = FALSE)
   }
   visits$parent_id_segment <- as.numeric(parent$id_segment_minimal[i])
   visits$parent_gradient <- as.numeric(parent$gradient_minimal[i])

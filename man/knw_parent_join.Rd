@@ -8,12 +8,12 @@ knw_parent_join(visits, parent)
 }
 \arguments{
 \item{visits}{\code{data.frame} of placed visits with \code{site_visit},
-\code{watershed_group_code} and \code{id_segment} (the full network's segment, as
-\code{\link[=knw_link_place]{knw_link_place()}} returns it).}
+\code{watershed_group_code}, \code{id_segment} and \code{segment_length_m} (the full
+network's segment, as \code{\link[=knw_link_place]{knw_link_place()}} returns it).}
 
 \item{parent}{\code{data.frame} with one row per full segment: \code{id_segment},
-\code{wsg}, \code{id_segment_minimal}, \code{gradient_minimal}, \code{length_minimal} and
-\code{straddle_m}, as link's \verb{data-raw/logs/minimal_breaks_415/parent_<wsg>.csv.gz}
+\code{wsg}, \code{id_segment_minimal}, \code{gradient_minimal}, \code{length_minimal},
+\code{overlap_m} and \code{straddle_m}, as link's \verb{data-raw/logs/minimal_breaks_415/parent_<wsg>.csv.gz}
 holds them.}
 }
 \value{
@@ -38,11 +38,12 @@ minimal segment: a visit on that stretch sits on the other segment on the
 minimal network, so there the two setups read different gradients. A placed
 visit whose segment has no parent row is an error. link numbers each group's
 segments from 1, so a parent table of another build covers the same ids:
-where \code{visits} carries \code{segment_length_m} and \code{parent} \code{overlap_m}, each
-visit's segment must be as long as its parent row's \code{overlap_m + straddle_m} (within 1 cm), or the join stops as another network's table.
+each visit's segment must be as long as its parent row's \code{overlap_m + straddle_m} (within 1 cm; a missing length fails), or the join stops as
+another network's table.
 }
 \examples{
-v <- data.frame(site_visit = c("a", "b"), watershed_group_code = "BULK", id_segment = c(10, 11))
+v <- data.frame(site_visit = c("a", "b"), watershed_group_code = "BULK", id_segment = c(10, 11),
+                segment_length_m = c(120, 315))
 p <- data.frame(id_segment = c(10, 11, 12), wsg = "BULK", id_segment_minimal = c(4, 4, 5),
                 gradient_minimal = c(0.012, 0.012, 0.031), length_minimal = c(900, 900, 400),
                 overlap_m = c(120, 300, 400), straddle_m = c(0, 15, 0))

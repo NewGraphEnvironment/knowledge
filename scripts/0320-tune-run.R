@@ -137,6 +137,7 @@ if (dev && !grepl("^dev(_[A-Za-z0-9][A-Za-z0-9_.]*)?$", basename(dev_dir)) ||
       dev && !identical(.knw_path_key(dirname(dev_dir)), .knw_path_key("data/tune"))) {
   stop("DEV_DIR must be data/tune/dev or data/tune/dev_<name> (ignored): ", dev_dir)
 }
+dev_dir <- .knw_path_rel(dev_dir)   # written into the log: relative, never a home path
 dir_run <- if (dev) dev_dir else file.path("data/tune/candidate", run)
 # the Atlas-gradient sensitivity belongs to a main run, which promotes it with its own tables: name that run
 if (!dev && gradient != "segment_gradient" &&
