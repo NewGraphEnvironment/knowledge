@@ -187,7 +187,7 @@ link_sha <- led$note[led$step == "run_link_sha"]
 # the first line's shape is read by data-raw/vignette_chinook.R ("Evidence build <ledger> on link run"): keep the
 # ledger path directly before " on link run"
 say("Tuning run, knowledge#57. Evidence build %s on link run %s (link %s), schema %s; evidence directory %s.", ledger_path,
-    run_uid, link_sha, schema, evidence_dir)
+    run_uid, link_sha, schema, .knw_path_rel(evidence_dir))
 say("%s: outputs under %s (ignored)%s.", if (dev) "DEV=1" else paste("Candidate run", run), dir_out,
     if (dev) "" else sprintf("; compare it with TUNE_DIR=%s scripts/0330, promote it with RUN=%s scripts/0335", dir_run, run))
 # the evidence's identity: the md5 of each derived table, logged, carried into the score cache's settings and written
@@ -368,7 +368,7 @@ for (k in names(out)) {
       # build it was scored on, so its readers take them rather than the newest on disk
       tune_run = if (dev) NA_character_ else run, evidence_ledger = ledger_path,
       # the directory those tables were read from (#120); the summary only, since a grade record must keep its columns
-      evidence_dir = evidence_dir,
+      evidence_dir = .knw_path_rel(evidence_dir),
       curve_dist_in_model = r$curve$dist_in_model,
       curve_edf = paste(sprintf("%s=%.2f", names(r$curve$edf), r$curve$edf), collapse = "; "),
       # NA under DEV=1 and on the sensitivity, which run the main seed alone

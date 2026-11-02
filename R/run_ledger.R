@@ -51,10 +51,22 @@ knw_run_ledger <- function(tune_dir, log_dir = "scripts/logs/habitat") {
 # a directory as an absolute path with no `.`, doubled or trailing separators, without resolving links, so the default
 # given as `data/fdis/derived`, `./data/fdis/derived/` or its absolute path is one directory
 .knw_path_key <- function(x) {
+  x <- path.expand(x)
   if (!startsWith(x, "/")) x <- file.path(getwd(), x)
   x <- gsub("/+", "/", x)
   while (grepl("/\\./", x)) x <- gsub("/\\./", "/", x)
   sub("(.)/(\\.)?$", "\\1", x)
+}
+
+# a path as it is written into a ledger, a summary or a log, all of which become tracked files: relative to the working
+# directory (the repo root) when it lies inside it, else with the home directory as `~`, so no home path is published
+.knw_path_rel <- function(x) {
+  k <- .knw_path_key(x)
+  root <- paste0(.knw_path_key(getwd()), "/")
+  if (startsWith(k, root)) return(substring(k, nchar(root) + 1L))
+  home <- .knw_path_key(path.expand("~"))
+  if (identical(k, home) || startsWith(k, paste0(home, "/"))) return(paste0("~", substring(k, nchar(home) + 1L)))
+  k
 }
 
 # "" for the default directory, else "-<base name>"

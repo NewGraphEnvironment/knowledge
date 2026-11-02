@@ -64,3 +64,13 @@ test_that("a build's ledger is named by its evidence directory, and found by it 
   unlink(file.path(l, "20261102_evidence_build_ledger.csv"))
   expect_identical(basename(.knw_evidence_ledger("data/fdis/derived", l)), "20261027_evidence_build_ledger.csv")
 })
+
+test_that("a path written into a tracked file is the repo's relative one, or under ~, never a home path (#120 review)", {
+  expect_identical(.knw_path_rel("data/fdis/derived_x"), "data/fdis/derived_x")
+  expect_identical(.knw_path_rel(file.path(getwd(), "data/fdis/derived_x/")), "data/fdis/derived_x")
+  expect_identical(.knw_path_rel(file.path(path.expand("~"), "elsewhere", "derived")), "~/elsewhere/derived")
+  expect_identical(.knw_path_rel("~/elsewhere/derived"), "~/elsewhere/derived")
+  expect_identical(.knw_path_rel("/opt/x"), "/opt/x")
+  # the default written as relative and given as absolute is one directory
+  expect_identical(.knw_evidence_tag(.knw_path_rel(file.path(getwd(), "data/fdis/derived"))), "")
+})

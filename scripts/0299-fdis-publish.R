@@ -187,6 +187,11 @@ for (i in seq_len(nrow(tables))) {
   src <- tables$source[i]
   dst <- file.path(dir_out, paste0(tb, ".parquet"))
   x <- arrow::read_csv_arrow(src, as_data_frame = FALSE)
+  # v3 describes access_check per species and group (#120): a table built before that has no group column
+  if (tb == "access_check" && !"watershed_group_code" %in% names(x)) {
+    stop(src, " has no watershed_group_code: it was built before #120, so rerun scripts/0310 before publishing",
+         call. = FALSE)
+  }
   # arrow reads a zero-padded code ("08", a hydrologic zone) as a number; keep such columns as text
   raw <- utils::read.csv(src, colClasses = "character", na.strings = character(), check.names = FALSE)
   for (nm in names(raw)[vapply(raw, function(a) any(grepl("^[-+]?0[0-9]", a)), logical(1))]) {

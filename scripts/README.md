@@ -105,7 +105,7 @@ wf_farm_priority.js                          farm priority/crossing tables out o
       14.0, 2026-10-26, under every structure; door alone drops 29 to 33 % of the worker minutes, #112; every STAGE stops off the database's host unless REMOTE=TRUE, #110). No maps in this run.
       STAGE=maps: floodplain ha beside each rule's habitat in the catalog's groups, and the maps, from the saved
       tables -> the run's floodplain.csv and fig/compare_*.png. Reads the evidence directory the run's summaries
-      name (EVIDENCE_DIR overrides, never to another), refused unless its tables' md5s are the curves' (#120)
+      name (EVIDENCE_DIR overrides it, for a staged copy), refused unless its tables' md5s are the curves' (#120)
 0335  on Al's word: RUN=<run> moves a candidate into data/tune/, data/compare/ and research/fig/ (SPECIES= for some
       keys; refused unless the result is one build: evidence, link run, gradient, flow load, walk, link config), its
       logs into scripts/logs/habitat/, archiving what it replaced as candidate run replaced_<stamp>; then 0325

@@ -87,8 +87,10 @@ are four groups, so the 52 % here is not compared with it.
   every row and refuses a schema whose rows mix a token with none; the run check stays on `log_recompute`, whose run
   id can differ from the build's (`415_recompute_minimal` against `415_minimal`).
 - **A build's evidence directory.** `0310` takes `EVIDENCE_DIR`; a directory other than `data/fdis/derived` tags its
-  ledger with the directory's base name, outside the name the default readers take. `0320` (with `DEV_DIR`),
-  `0330` and the checks read the directory and find its ledger by it.
+  ledger with the directory's base name, outside the name the default readers take. `0320` (with `DEV_DIR`)
+  and the checks read the directory and find its ledger by it; `0330` reads the directory and ledger the run's
+  summaries name, and holds the tables to the curves' md5s. `0310` refuses the default directory to a build settled
+  on another schema's log.
 - **The settle log** takes `SCHEMA` and `POLL_MIN` and records both; `0310` takes it with `SETTLE=` and gates on its
   run id, never its schema.
 - **The parent.** `0310` joins link's `parent_<wsg>.csv.gz` with `PARENT_DIR` (`knw_parent_join()`), adding

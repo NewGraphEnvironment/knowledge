@@ -79,7 +79,9 @@ hz_url <- paste0("https://catalogue.data.gov.bc.ca/dataset/f1f86c41-ae83-49d5-92
                  "resource/fc209bd0-26ab-4f8b-9415-8f34081a3c0e/download/bc_hydrologic_zones.zip")
 # the build's directory (#120): the default is the one every reader takes; another directory (a test build on another
 # schema) tags its ledger with the directory's base name, outside the pattern the default readers match, so it never
-# becomes their build. 0320, 0330 and the checks take the same EVIDENCE_DIR and find this ledger by it
+# becomes their build. A build on another settle log than fresh_default's (SETTLE=, or a log naming another schema) is
+# refused the default directory below. 0320 and the checks take the same EVIDENCE_DIR and find this ledger by it; 0330
+# reads the directory and the ledger its summaries name
 dir_out <- Sys.getenv("EVIDENCE_DIR", .knw_evidence_dir_default)
 stamp <- format(Sys.Date(), "%Y%m%d")
 path_ledger <- .knw_ledger_path(dir_out, stamp)
@@ -92,7 +94,7 @@ ledger <- tibble(kind = character(), step = character(), n = numeric(), note = c
 add <- function(kind, step, n, note = "") {
   ledger <<- bind_rows(ledger, tibble(kind = kind, step = step, n = as.numeric(n), note = note))
 }
-add("info", "evidence_dir", 0, dir_out)
+add("info", "evidence_dir", 0, .knw_path_rel(dir_out))
 dir.create(dir_out, showWarnings = FALSE, recursive = TRUE)
 pg <- function() {
   tryCatch(DBI::dbConnect(RPostgres::Postgres(), bigint = "numeric"),
@@ -111,10 +113,17 @@ if (!length(settle) || !file.exists(settle[1])) stop("no settle log", if (settle
 st <- read_csv(settle[1], show_col_types = FALSE, col_types = cols(.default = "c"))
 st <- st[nrow(st), ]
 if (!identical(st$status, "released")) stop(settle[1], " did not release (status ", st$status, ")")
-add("info", "settle_log", 0, settle[1])
+add("info", "settle_log", 0, .knw_path_rel(settle[1]))
 add("info", "settle_override", as.integer(settle_given), if (settle_given) "SETTLE= named the log" else "the newest default log")
 # a log from before #120 carries no schema column: 0300 watched fresh_default alone then
-add("info", "settle_schema", 0, if ("schema" %in% names(st)) st$schema else "fresh_default")
+settle_schema <- if ("schema" %in% names(st)) st$schema else "fresh_default"
+add("info", "settle_schema", 0, settle_schema)
+# a test build never writes the default directory, whose ledger name every default reader takes: the schema it was
+# settled on, or a log named by hand, is not fresh_default's provincial run
+if ((settle_given || !identical(settle_schema, "fresh_default")) && !nzchar(.knw_evidence_tag(dir_out))) {
+  stop("a build settled on ", settle_schema, if (settle_given) paste0(" (SETTLE=", settle[1], ")") else "",
+       " writes its own EVIDENCE_DIR (data/fdis/derived_<name>), never the default ", dir_out)
+}
 add("info", "link_run_uid", 0, st$run_uid)
 for (k in c("link_version", "link_sha", "fresh_version", "fresh_sha", "fwapg_sha", "config_hash")) {
   add("info", paste0("run_", k), 0, st[[k]])
@@ -218,7 +227,7 @@ if (nzchar(parent_dir)) {
   if (!length(pf)) stop("PARENT_DIR=", parent_dir, " holds no parent_<wsg>.csv.gz")
   parent <- bind_rows(lapply(pf, read_csv, show_col_types = FALSE, col_types = cols(wsg = "c", .default = "d")))
   v <- knw_parent_join(v, parent)
-  add("info", "parent_dir", length(pf), sprintf("%s: %s; md5 %s", parent_dir, paste(basename(pf), collapse = ";"),
+  add("info", "parent_dir", length(pf), sprintf("%s: %s; md5 %s", .knw_path_rel(parent_dir), paste(basename(pf), collapse = ";"),
                                                 paste(unname(tools::md5sum(pf)), collapse = ";")))
   add("info", "parent_joined", nrow(v), sprintf("of %d full segments in the parent tables", nrow(parent)))
   add("info", "parent_straddle", sum(v$parent_straddle_m > 0),
