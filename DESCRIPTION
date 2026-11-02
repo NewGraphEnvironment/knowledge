@@ -1,6 +1,6 @@
 Package: knowledge
 Title: Fisheries Evidence and Tuned Habitat Thresholds for BC Watershed Groups
-Version: 0.4.21
+Version: 0.4.22
 Date: 2026-11-02
 Authors@R: c(
     person("Allan", "Irvine", , "al@newgraphenvironment.com", role = c("aut", "cre"),

@@ -1,3 +1,9 @@
+# knowledge 0.4.22
+
+* `inst/NOTICE.md` gives the PSCIS snapshots under `data/<wsg>/` their own section: incidental working copies of an
+  "Access Only" catalogue layer, not a distribution of PSCIS (#76). EcoCat, bcfishpass and the modelled flows stay
+  under "Terms not yet settled". No code change.
+
 # knowledge 0.4.21
 
 * The repository is public (#56). The README's Learn more links point at the published site: the chinook rearing
