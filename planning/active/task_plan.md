@@ -156,18 +156,18 @@ and fresh 0.52.0 installed first (D3).
 
 - [ ] Phases 5 and 6 on their own branch when link#441 / link#444 land (carried in the issue body); before them,
       wet's current build loaded on m4 so the published and minimal setups share one flow load
-- [ ] Memory `db-host-runs-from-worktree` revised: this issue's database is m4's local fwapg
+- [x] Memory `db-host-runs-from-worktree` revised: this issue's database is m4's local fwapg
       (`PGSERVICE=fresh_local`); m1 is not reached
 
 ## Validation
 
-- [ ] Tests pass (`devtools::test()`: build record by table, ledger finder, settle schema and override, parent
+- [x] Tests pass (`devtools::test()`: build record by table, ledger finder, settle schema and override, parent
       join, `GRADIENT` value, floors refused by promotion, access check by group); `lintr::lint_package()`;
       `R CMD check` in CI
-- [ ] Mutations: the `log_recompute` token query put back fails `test-build_record.R`; a summary with `folds = 4`
+- [x] Mutations: the `log_recompute` token query put back fails `test-build_record.R`; a summary with `folds = 4`
       fails `test-tune_promote.R`
-- [ ] Phase 3's artefacts: ledgers and check logs under `scripts/logs/habitat/` (committed), DEV tables and
+- [x] Phase 3's artefacts: ledgers and check logs under `scripts/logs/habitat/` (committed), DEV tables and
       candidates (ignored) listed in `progress.md` with md5s; every acceptance line names the floor it ran under
-- [ ] `/code-check` clean (once over the branch with `/code-check branch`)
-- [ ] PWF checkboxes match landed work
+- [x] `/code-check` clean (once over the branch with `/code-check branch`)
+- [x] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion

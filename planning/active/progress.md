@@ -88,3 +88,13 @@ mandate; the merge stays with me.
 - Issue #120's body revised (each "clear first" item and check answered; the province steps and the chinook check
   moved to a second branch; the gate decisions recorded without machine names); link#444's acceptance line answered
   in words (checked on the prototype, open until `streams_parent`)
+- Validation: `devtools::test()` 1,853 pass, 0 fail; lintr clean on the changed R files; `pkgdown::check_pkgdown()`
+  clean; `R CMD check` runs in CI on the PR. Mutations: the `log_recompute` token read (4 failures), the floors guard
+  (3), the grad_fwa floors (3), the parent length check (1)
+- `/code-check branch`: five reviewer rounds plus the session's enumeration (`review-round1.md` … `review-round5.md`,
+  `review-enumeration.md`). Rounds 3, 4 and 5 each found a defect inside an earlier fix (the 0299 description; the path
+  helper missing two callers and the default-directory check taking a spelling; the parent check's silent skip and
+  `DEV_DIR`), so the loop ended on the enumeration of every path written and every guard added
+- Owed after merge (in the issue body): the province and chinook on every setup when link#441 and link#444 land; link
+  0.78.1 on the other machine was not installed (no step here needed it). link's proof README line about dropping the
+  schemas is stale (link's fix)
