@@ -72,7 +72,7 @@
 </h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"NewGraphEnvironment/knowledge"</span><span class="op">)</span></span></code></pre></div>
-<p>knowledge is under active development and its functions change between releases (see <a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/NEWS.md" class="external-link">NEWS</a>). Pin a release for reproducible work: <code>pak::pak("NewGraphEnvironment/knowledge@vX.Y.Z")</code>.</p>
+<p>knowledge is under active development and its functions change between releases (see <a href="https://www.newgraphenvironment.com/knowledge/news/index.html" class="external-link">NEWS</a>). Pin a release for reproducible work: <code>pak::pak("NewGraphEnvironment/knowledge@vX.Y.Z")</code>.</p>
 <p>The evidence tables live in the repository, not the package, so most work happens in a clone with the package loaded from the source tree (<code><a href="https://pkgload.r-lib.org/reference/load_all.html" class="external-link">pkgload::load_all()</a></code>). The scripts that build them run in the order of <a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/scripts/README.md" class="external-link"><code>scripts/README.md</code></a>. Many read a PostgreSQL database holding the BC Freshwater Atlas through fwapg, found by the standard <code>PG*</code> environment variables, and the tuning also reads link’s province-wide run and wet’s flows there. Others need other databases, tools and credentials, among them a bcfishpass database, a synced Zotero library and Web API key, Ollama, AWS credentials and Python.</p>
 <p>The FDIS electrofishing extract is public as the Province supplied it, under <code>s3://fresh-bc/fdis/</code>, and so are the visit tables built from it, as Parquet under <code>s3://fresh-bc/knowledge/fdis/</code>. The bucket does not list: start from the extract’s <a href="https://fresh-bc.s3.us-west-2.amazonaws.com/fdis/README.md" class="external-link">provenance note</a>, which links the published tables’ manifest.</p>
 </div>
@@ -96,10 +96,12 @@
 </h2>
 <ul>
 <li>
-<a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/vignettes/chinook_rearing.Rmd" class="external-link">How the chinook rearing threshold was chosen and what it draws</a>: the tuning told in plain language, with the map above and what changes on the ground.</li>
+<a href="https://www.newgraphenvironment.com/knowledge/articles/chinook_rearing.html" class="external-link">How the chinook rearing threshold was chosen and what it draws</a>: the tuning told in plain language, with the map above and what changes on the ground.</li>
+<li>
+<a href="https://www.newgraphenvironment.com/knowledge/articles/habitat_thresholds.html" class="external-link">Choosing habitat thresholds from where fish were caught</a>: the method every species’ rule is chosen by, and its limits.</li>
 <li>
 <a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/research/README.md" class="external-link">What is known</a>: one file per topic, from the FDIS export and the cited literature to the tuned rules.</li>
-<li><a href="https://github.com/NewGraphEnvironment/knowledge/tree/main/man" class="external-link">Function reference</a></li>
+<li><a href="https://www.newgraphenvironment.com/knowledge/reference/index.html" class="external-link">Function reference</a></li>
 </ul>
 </div>
 <div class="section level2">
