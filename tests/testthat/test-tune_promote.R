@@ -465,3 +465,16 @@ test_that("a key scored under other floors than the tuning's is a test, never pr
   set_col(fx, "run_tune", "CH_rear", "summary", "min_wsg", "5")
   expect_silent(promote(fx, keys = "CH_rear", dry_run = TRUE))
 })
+
+test_that("an Atlas-gradient sensitivity scored under other floors is refused with its run (#120 review)", {
+  fx <- promote_fx()
+  dir.create(g <- file.path(fx$tune, "candidate", "r1", "grad_fwa"))
+  utils::write.csv(data.frame(species_code = "CH", stage = "rear", evidence_md5 = "e1", run_uid = "u1",
+                              min_wsg = 4, folds = 4), file.path(g, "CH_rear_summary.csv"), row.names = FALSE)
+  before <- tree_md5(fx)
+  expect_error(promote(fx), "grad_fwa/CH_rear: scored with min_wsg = 4")
+  expect_identical(tree_md5(fx), before)
+  utils::write.csv(data.frame(species_code = "CH", stage = "rear", evidence_md5 = "e1", run_uid = "u1",
+                              min_wsg = 5, folds = 5), file.path(g, "CH_rear_summary.csv"), row.names = FALSE)
+  expect_silent(promote(fx, dry_run = TRUE))
+})

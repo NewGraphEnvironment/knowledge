@@ -184,8 +184,10 @@ ledger_path <- .knw_evidence_ledger(evidence_dir)
 led <- read_csv(ledger_path, show_col_types = FALSE, col_types = cols(.default = "c"))
 run_uid <- led$note[led$step == "link_run_uid"]
 link_sha <- led$note[led$step == "run_link_sha"]
-say("Tuning run, knowledge#57. Evidence build %s (%s) on link run %s (link %s), schema %s.", ledger_path, evidence_dir,
-    run_uid, link_sha, schema)
+# the first line's shape is read by data-raw/vignette_chinook.R ("Evidence build <ledger> on link run"): keep the
+# ledger path directly before " on link run"
+say("Tuning run, knowledge#57. Evidence build %s on link run %s (link %s), schema %s; evidence directory %s.", ledger_path,
+    run_uid, link_sha, schema, evidence_dir)
 say("%s: outputs under %s (ignored)%s.", if (dev) "DEV=1" else paste("Candidate run", run), dir_out,
     if (dev) "" else sprintf("; compare it with TUNE_DIR=%s scripts/0330, promote it with RUN=%s scripts/0335", dir_run, run))
 # the evidence's identity: the md5 of each derived table, logged, carried into the score cache's settings and written

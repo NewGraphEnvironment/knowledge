@@ -94,7 +94,7 @@ tables_v3 <- rbind(
       "One row per placed visit and species: fish caught, measured per size class, presence, whether an absence is blocked by a code that could hide the species, DV pooling for BT, and whether the group is in link's range for the species (#57).",
       "Downstream walks from every placed visit to the first river of 1-50 m3/s on each flow source, with the target's lake and regulated flags (#57); since #73 the distance ends at the river's bank with every hop's gap counted (fresh's convention), beside the centreline distance (dist_centre_m) and what the bank rule took off (bank_m).",
       "bcfishobs records matched to the FDIS visit they came from by collection, species and date, with the match class (#57, #23).",
-      "link#349's cross-tabulation of streams_habitat_<sp>.accessible against streams_access.access_<sp> per species, on the build's link run (#57)."),
+      "link#349's cross-tabulation of streams_habitat_<sp>.accessible against streams_access.access_<sp> per species and watershed group (#57, #120), on the build's link run."),
     stringsAsFactors = FALSE),
   tables_v2[tables_v2$table %in% c("bt_use_visits", "ch_mad_visits", "ch_rule_visits", "ch_rule_walks"), ])
 tables_v3$description[tables_v3$table %in% c("bt_use_visits", "ch_mad_visits", "ch_rule_visits", "ch_rule_walks")] <-

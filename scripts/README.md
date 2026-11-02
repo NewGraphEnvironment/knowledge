@@ -43,7 +43,7 @@ wf_farm_priority.js                          farm priority/crossing tables out o
 --- Life-history timing (independent; re-run only when the template's Gantt CSV changes) ---
 0260  reshape the template's Gantt CSV -> data/life_history_timing.csv   (read with knw_timing_read())
 
---- One evidence build and one tuning run for every species (#57; needs link >= 0.66.0, fresh, wet's flow,
+--- One evidence build and one tuning run for every species (#57; needs link >= 0.78.1 for 0310 since #120, fresh, wet's flow,
     fresh_default province-wide, and the link repo at LINK_REPO) ---
 0300  wait until link's run has settled in fresh_default (log_recompute ended for every group, churn
       unchanged over three polls, no active session) -> scripts/logs/habitat/<date>_link_settle.csv (released row).

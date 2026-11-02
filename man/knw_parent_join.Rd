@@ -31,11 +31,13 @@ read the parent's gradient there (\code{GRADIENT=parent_gradient} in
 \code{scripts/0320}, #120).
 }
 \details{
-A full segment's parent is the minimal segment it overlaps most; where a full
-segment straddles a minimal break, \code{straddle_m} is the length that lies on
-another minimal segment, so a visit on that stretch reads the other segment's
-gradient. A placed visit whose segment has no parent row is an error: the
-parent table is not the full network's.
+A full segment's parent is the minimal segment it overlaps most, and every
+visit on the full segment takes that parent's gradient. Where a full segment
+straddles a minimal break, \code{straddle_m} is the length that lies on another
+minimal segment: a visit on that stretch sits on the other segment on the
+minimal network, so there the two setups read different gradients. A placed
+visit whose segment has no parent row is an error: the parent table is not
+the full network's.
 }
 \examples{
 v <- data.frame(site_visit = c("a", "b"), watershed_group_code = "BULK", id_segment = c(10, 11))

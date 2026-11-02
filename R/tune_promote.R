@@ -85,16 +85,20 @@ knw_tune_promote <- function(run, keys = NULL, live = NULL, tune_dir = "data/tun
   archive <- startsWith(run, "replaced_")
 
   # ---- each promoted key's own record ----
-  for (k in keys) {
-    # a run scored under other floors than the tuning's (MIN_WSG, FOLDS: #120) is a test of mechanics on a few groups;
-    # a summary from before the record was scored under the defaults
+  # a run scored under other floors than the tuning's (MIN_WSG, FOLDS: #120) is a test of mechanics on a few groups,
+  # never promoted, whether a main summary or its Atlas-gradient sensitivity's; a summary from before the record was
+  # scored under the defaults
+  floors_check <- function(k, x) {
     for (f in c("min_wsg", "folds")) {
-      v <- fld(cand[[k]], f)
+      v <- fld(x, f)
       if (!is.na(v) && !identical(as.integer(v), as.integer(eval(formals(knw_tune_run)[[f]])))) {
         stop(k, ": scored with ", f, " = ", v, ", not the tuning's ", eval(formals(knw_tune_run)[[f]]),
              ": a test run, never promoted", call. = FALSE)
       }
     }
+  }
+  for (k in keys) {
+    floors_check(k, cand[[k]])
     rule <- fld(cand[[k]], "rule_recommended")
     st <- fld(cand[[k]], "status")
     # knw_tune_run()'s statuses: three with no fit by design, two fitted; anything else (curve_failed, a smoke-only
@@ -180,6 +184,7 @@ knw_tune_promote <- function(run, keys = NULL, live = NULL, tune_dir = "data/tun
             lapply(stats::setNames(names(kept), names(kept)), function(k) record(tune_dir, compare_dir, k, kept[[k]])))
   # the Atlas-gradient sensitivity is read with the main tables (the methodology bundle), so it is held to their build
   fwa_cand <- summaries(file.path(run_tune, "grad_fwa"))
+  for (k in intersect(keys, names(fwa_cand))) floors_check(paste0("grad_fwa/", k), fwa_cand[[k]])
   fwa_kept <- summaries(file.path(tune_dir, "grad_fwa"))
   fwa_from <- c(lapply(intersect(keys, names(fwa_cand)), function(k) list(k, fwa_cand[[k]])),
                 lapply(setdiff(names(fwa_kept), intersect(keys, names(fwa_cand))), function(k) list(k, fwa_kept[[k]])))
