@@ -413,6 +413,14 @@ the curves' `evidence_md5`. link's output tokens are on `<schema>.log`, one row 
 `log_recompute`: `knw_build_record()` reads them over every `log` row, because a build's `log` and its recompute's
 `log_recompute` can carry different run ids (link's four-group proofs do).
 
+A test on a few groups of another schema (#120, `research/minimal_network_tuning.md`): `0300` takes `SCHEMA` and
+`POLL_MIN` and writes both on every row of its log (`<date>_link_settle-<schema>.csv`), and `0310` takes that log with
+`SETTLE=`; the gate stays the log's `run_uid`, never its schema, because a provincial schema is renamed after its run.
+`0320` takes `MIN_WSG` and `FOLDS` (the tuning's are 5 and 5); each summary records them and `knw_tune_promote()`
+refuses any other. On link's four proof groups only bull trout rearing has four groups with both outcomes, and the
+smoke gate refuses chinook rearing on three folds (separation), so a test of grading and the comparison runs on a key
+the groups can fit.
+
 ### The segment flows can change under a run; the table comment names the build
 
 `discharge.fwa_v1_segment_monthly` is wet's database load, and wet can reload it between two runs: NewGraphEnvironment/wet#103

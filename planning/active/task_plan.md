@@ -131,10 +131,10 @@ and fresh 0.52.0 installed first (D3).
 
 ## Phase 4: Write-up of the test, and the issue body
 
-- [ ] `research/minimal_network_tuning.md` (new; `research/README.md` row): each check's result with its log
+- [x] `research/minimal_network_tuning.md` (new; `research/README.md` row): each check's result with its log
       prefix, in the order they were run, including the ones that found nothing; what four groups cannot show;
       the setups table with which this branch scored and what each other waits on; the floors used
-- [ ] `data-raw/README.md` rows; `CLAUDE.md` working notes: tokens on `log`, a build names its evidence directory,
+- [x] `data-raw/README.md` rows; `CLAUDE.md` working notes: tokens on `log`, a build names its evidence directory,
       the settle log names its schema, the floors are the test's, m4's local database through `PGSERVICE`
 - [ ] Issue #120 body: "clear first" items ticked with what was found, Phases 5–6 kept as checkboxes, D1–D4 recorded;
       link#444's acceptance line answered in link#444's body in words

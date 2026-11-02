@@ -18,11 +18,11 @@
 ### Resume
 
 ```
-Continue knowledge#120 from its parked PWF baseline. Repo ~/Projects/repo/knowledge, branch `120-tune-chinook-rearing-on-minimal-segments`,
+Continue knowledge#120 from its parked PWF baseline. Repo: the knowledge checkout, branch `120-tune-chinook-rearing-on-minimal-segments`,
 parked 2026-11-02 by `/planning-init knowledge#120 park`, branched from origin/main at 6b7c31d.
 Run these in order, and stop at the first that fails; each failure means what it says:
 
-cd ~/Projects/repo/knowledge && git fetch -q origin
+cd <the knowledge checkout> && git fetch -q origin
 git worktree list | grep -F '[120-tune-chinook-rearing-on-minimal-segments]' || echo none   # a path printed: that tree holds the branch; cd to it and skip the checkout
 git branch --show-current; git status --porcelain --untracked-files=no   # another branch with changes, or one another session may be on: do not check out here; git worktree add ../knowledge-120 120-tune-chinook-rearing-on-minimal-segments and cd there
 git checkout 120-tune-chinook-rearing-on-minimal-segments   # fails: the branch is not on origin
@@ -79,3 +79,9 @@ mandate; the merge stays with me.
     8c2b6fd8 / a1a7f466, compare 59c6ee45 / da8c2c3e, GeoPackages ce62dfa1 / c9decbd8. Logs copied to
     `scripts/logs/habitat/minimal_network_120/`
   - `.gitignore` gains `data/tune/dev_*/`; `0320`'s `DEV_DIR` takes `data/tune/dev` or `data/tune/dev_<name>` only
+- Phase 4: `research/minimal_network_tuning.md` (answer, setups, each check in order with its log, what four groups
+  cannot show, the mechanics), its `research/README.md` row, `data-raw/README.md` paragraph, `CLAUDE.md` notes (tokens
+  and evidence directory in Phase 1's paragraph; the settle log, the floors and the chinook smoke refusal here). The
+  public sweep found a machine name in two commit messages (`cf0d1b1`, pushed by the parking session and left
+  for Al, since rewording it needs a force-push; and this session's commit that built both networks, reworded before
+  its first push) and a home path in this file's resume block (replaced)
