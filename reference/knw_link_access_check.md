@@ -10,7 +10,7 @@ runs shows.
 ## Usage
 
 ``` r
-knw_link_access_check(conn, schema, species = knw_species())
+knw_link_access_check(conn, schema, species = knw_species(), by_group = FALSE)
 ```
 
 ## Arguments
@@ -28,11 +28,18 @@ knw_link_access_check(conn, schema, species = knw_species())
   `character` species with a habitat table and an access column in the
   schema; a species lacking either is skipped and named in `skipped`.
 
+- by_group:
+
+  `logical(1)`: one row per watershed group as well, so two builds of
+  the same groups (link's full and minimal networks, \#120) can be set
+  beside each other where their km differ.
+
 ## Value
 
 A list: `check`, a `tibble` with one row per species and cell
 (`habitat_accessible`, `access_gt0`, `n_segments`, `n_rearing`,
-`n_spawning`, `km`), and `skipped`, the species not checked.
+`n_spawning`, `km`; with `by_group`, per `watershed_group_code` too),
+and `skipped`, the species not checked.
 
 ## Examples
 

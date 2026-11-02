@@ -49,12 +49,15 @@ vocabularies.
 Place site visits on link’s segments with every species’ access and
 habitat flags; read a species’ segments, flow, width, regulated reaches,
 natural barriers downstream and the walks to rivers; count where link’s
-two access columns disagree; and check that a database-bound run is on
-the database’s host.
+two access columns disagree; carry each segment’s minimal-network
+parent; and check that a database-bound run is on the database’s host.
 
 - [`knw_link_place()`](https://newgraphenvironment.github.io/knowledge/reference/knw_link_place.md)
   : Place site visits on link's segments, with access and habitat for
   every species
+- [`knw_parent_join()`](https://newgraphenvironment.github.io/knowledge/reference/knw_parent_join.md)
+  : Carry each visit's minimal-network parent onto its full-network
+  segment
 - [`knw_link_segments()`](https://newgraphenvironment.github.io/knowledge/reference/knw_link_segments.md)
   : link's segments for one species in a set of groups, with flow and
   access, for grading

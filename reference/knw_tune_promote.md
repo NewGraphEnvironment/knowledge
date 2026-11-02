@@ -84,9 +84,11 @@ evidence build) that means every fitted key moves together. Each
 promoted key's grades must carry their record
 ([`knw_grade_record_write()`](https://newgraphenvironment.github.io/knowledge/reference/knw_grade_record_write.md))
 and match it (md5 and size; a `replaced_*` archive may lack one), and
-kept keys are read from their records where the tables are absent. Each
-promoted key's grades must be of its recommended rule on its own
-evidence, and its comparison of the same rule and made after its grades.
+kept keys are read from their records where the tables are absent. A key
+scored under other floors than the tuning's (`min_wsg`, `folds` in its
+summary, \#120) is refused. Each promoted key's grades must be of its
+recommended rule on its own evidence, and its comparison of the same
+rule and made after its grades.
 
 ## Examples
 

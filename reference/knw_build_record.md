@@ -2,7 +2,8 @@
 
 A grade or a comparison reads four things from the database besides the
 FWA tables: link's persist schema, the run that built it
-(`<schema>.log_recompute`), wet's flow load (the table comment,
+(`<schema>.log_recompute`'s `run_uid`), wet's flow load (the table
+comment,
 [`knw_discharge_load()`](https://newgraphenvironment.github.io/knowledge/reference/knw_discharge_load.md))
 and the walk installed from this package
 ([`knw_walk_md5()`](https://newgraphenvironment.github.io/knowledge/reference/knw_walk_md5.md));
@@ -39,10 +40,14 @@ knw_build_record(conn, schema, run_uid = NULL)
 
 A list: `schema`, `run_uid` (the schema's runs, `;`-joined),
 `discharge_load`, `walk_md5`, `fresh_version`, `tokens` (link's output
-vocabulary, `c(cut =, acc =, grad =, flow =)`, each `NA` where the
-schema's run log predates link 0.70.0 and carries none), and `line`, the
-record as one line for a log. A schema whose runs logged two values on
-one axis is refused.
+vocabulary, `c(cut =, acc =, grad =, flow =)`, read from every row of
+`<schema>.log`, where link writes them; each `NA` where that log
+predates link 0.70.0 and carries none), and `line`, the record as one
+line for a log. A schema whose log holds two values on one axis, or rows
+with a token beside rows without one, is refused: it is not one build.
+The tokens are read over every `log` row, not keyed on the run, because
+a build's `log` and its recompute's `log_recompute` can carry different
+run ids.
 
 ## Examples
 
