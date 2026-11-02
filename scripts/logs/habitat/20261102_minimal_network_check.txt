@@ -96,3 +96,40 @@ Minimal network check, knowledge#120. Full: data/fdis/derived_zz415_default (scr
  catch_status visits full_vs_parent_differ parent_vs_min_differ
          fish   1007                   670                    0
          zero   1075                   505                    0
+5. STORED: link's stored habitat km per species x group on zz415_default and zz415_minimal (minimal - full).
+
+## stored rearing and spawning km
+ species_code watershed_group_code rear_km_full rear_km_minimal spawn_km_full
+           BT                 BULK       3111.2          3160.4        1853.9
+           BT                 COTR       2399.5          2431.8        1475.4
+           BT                 MORK       3060.1          3078.6        2147.9
+           BT                 SETN       1716.4          1721.3         850.4
+           CH                 BULK       2101.0          2205.2        1266.3
+           CH                 COTR       1321.7          1419.0         702.5
+           CH                 MORK       2468.2          2527.6        1577.7
+           CH                 SETN       1011.9          1017.8         543.0
+           CO                 BULK       2451.5          2472.0        1815.7
+           CO                 COTR       1626.4          1675.7        1082.3
+           CO                 SETN       1061.0          1064.4         630.6
+           SK                 BULK         64.6            64.6          81.8
+           SK                 MORK         16.2            16.2          28.2
+           SK                 SETN        352.5           352.5         196.7
+           ST                 BULK       2634.0          2756.1        1297.6
+           ST                 SETN       1301.5          1309.0         635.3
+ spawn_km_minimal rear_diff spawn_diff
+           1850.1      49.2       -3.8
+           1479.5      32.3        4.1
+           2142.4      18.5       -5.5
+            852.2       4.9        1.8
+           1269.1     104.2        2.8
+            698.7      97.3       -3.8
+           1576.5      59.4       -1.2
+            540.3       5.9       -2.7
+           1806.7      20.5       -9.0
+           1089.1      49.3        6.8
+            630.9       3.4        0.3
+             81.6       0.0       -0.2
+             28.6       0.0        0.4
+            194.9       0.0       -1.8
+           1299.4     122.1        1.8
+            630.4       7.5       -4.9

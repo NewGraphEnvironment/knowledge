@@ -104,24 +104,29 @@ baseline on 2026-11-02; the resume block is in `progress.md`.
 `PGSERVICE=fresh_local`, `SPECIES=BT,CH,CM,CO,GR,PK,SK,ST,WCT`, `MIN_WSG=4 FOLDS=4`; every log says so. link 0.78.1
 and fresh 0.52.0 installed first (D3).
 
-- [ ] Before anything: `pg_stat_activity` quiet; both schemas' `log_recompute.date_end` set on all four groups
+- [x] Before anything: `pg_stat_activity` quiet; both schemas' `log_recompute.date_end` set on all four groups
       (they are, 2026-11-02); the installed link is 0.78.1
-- [ ] `SCHEMA=zz415_default` then `zz415_minimal` through `POLL_MIN=1 0300` → `0310`
+- [x] `SCHEMA=zz415_default` then `zz415_minimal` through `POLL_MIN=1 0300` → `0310`
       (`EVIDENCE_DIR=data/fdis/derived_zz415_{default,minimal}`, `PARENT_DIR` on the full one); ledgers committed
-- [ ] Placement: `data-raw/minimal_network_check.R` (new) reads both `visits_link.csv`: every visit on both
+- [x] Placement: `data-raw/minimal_network_check.R` (new) reads both `visits_link.csv`: every visit on both
       networks at one `blue_line_key` and measure, only `id_segment` differing; `walks.csv` identical rows
       (the walk reads FWA and discharge only); the per-group access tables beside each other; visits on straddling
       full segments counted → `scripts/logs/habitat/<date>_minimal_network_check.txt`
-- [ ] The premise: `segment_gradient_check.R` on both builds; the 86 % / 10 % gap must close on the minimal
+- [x] The premise: `segment_gradient_check.R` on both builds; the 86 % / 10 % gap must close on the minimal
       network; if it does not, stop here and report
-- [ ] `DEV=1 0320` on each build (`DEV_DIR=data/tune/dev_zz415_{default,minimal}`): four smoke gates pass for every
+- [x] `DEV=1 0320` on each build (`DEV_DIR=data/tune/dev_zz415_{default,minimal}`): four smoke gates pass for every
       key, a key with no records says `too_few_groups`, minutes per key logged; `GRADIENT=parent_gradient` and
       `GRADIENT=fwa_gradient` on the full build: the picks of four setups side by side, "minimal" against
       "full, parent gradient" with the straddling visits named
-- [ ] `RUN=<stamp> SPECIES=CH 0320` (grades) then `0330 TUNE_DIR=… SPECIES=CH` on each schema:
+- [x] `RUN=<stamp> SPECIES=CH 0320` (grades) then `0330 TUNE_DIR=… SPECIES=CH` on each schema:
       `CH_rear_compare.csv`'s `stored_km` against the issue's figures (BULK 2,205, COTR 1,419, MORK 2,528,
       SETN 1,018) and `stored_vs_default_differ_km`; the GeoPackages for QGIS
-- [ ] `EVIDENCE_CHECK=FALSE EVIDENCE_DIR=… data-raw/site_gradient_check.R` on the minimal build beside
+      **Done otherwise (2026-11-02):** CH rearing has both outcomes in 3 groups, so it is `too_few_groups` at
+      `MIN_WSG=4`, and at `MIN_WSG=3 FOLDS=3` the smoke gate refuses it (the previous pick's rule coefficient 20.0 on
+      one fold, limit 5: separation). Grading and `0330` ran on BT rearing (4 groups, `MIN_WSG=4 FOLDS=4`) on both
+      schemas: stored and regenerated `default` differ by 0 km in every group. The issue's CH figures are the minimal
+      schema's stored rearing (`minimal_network_check.R` step 5); the full schema stores 6–104 km less per group
+- [x] `EVIDENCE_CHECK=FALSE EVIDENCE_DIR=… data-raw/site_gradient_check.R` on the minimal build beside
       `scripts/logs/habitat/20261030_site_gradient_check.txt`
 
 ## Phase 4: Write-up of the test, and the issue body

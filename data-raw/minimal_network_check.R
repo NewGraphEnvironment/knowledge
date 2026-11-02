@@ -10,11 +10,14 @@
 #   4. PARENT: on the full build (0310's PARENT_DIR), each visit's minimal parent against the minimal build's own
 #      segment at that visit: the same segment and the same gradient, and the visits on a full segment that straddles
 #      a minimal break, which read the other minimal segment's gradient on part of their segment.
+#   5. STORED (STORED=TRUE, reads the database): link's stored rearing and spawning km per species x group on the two
+#      schemas the ledgers name.
 #
 # INPUT:  FULL_DIR and MIN_DIR (0310's EVIDENCE_DIR for each build; default data/fdis/derived_zz415_default and
 #         data/fdis/derived_zz415_minimal) and their ledgers (the newest each directory wrote)
 # OUTPUT: scripts/logs/habitat/<yyyymmdd>_minimal_network_check[-<n>].txt
-# RUN:    [FULL_DIR=…] [MIN_DIR=…] Rscript data-raw/minimal_network_check.R   (from the repo root; no database)
+# RUN:    [FULL_DIR=…] [MIN_DIR=…] [STORED=TRUE] Rscript data-raw/minimal_network_check.R   (from the repo root; the
+#         database only with STORED=TRUE, through PG* or PGSERVICE)
 # ---------------------------------------------------------------------------
 suppressMessages({ library(dplyr); library(readr) })
 pkgload::load_all(quiet = TRUE)
@@ -133,6 +136,34 @@ if (all(c("parent_id_segment", "parent_gradient") %in% names(vf))) {
                     parent_vs_min_differ = sum(!same_gradient, na.rm = TRUE), .groups = "drop"))
 } else {
   say("4. PARENT: the full build has no parent columns (0310 without PARENT_DIR); not checked.")
+}
+# ---- 5. link's stored habitat on each schema ----------------------------------------------------
+# what link stored (stage 1-3 of its build, before any knowledge rule) per species x group, rearing and spawning, on
+# the two schemas the ledgers name; the database is read only when STORED=TRUE (PG* or PGSERVICE)
+if (Sys.getenv("STORED") %in% c("1", "TRUE", "true")) {
+  conn <- DBI::dbConnect(RPostgres::Postgres(), bigint = "numeric")
+  stored <- bind_rows(lapply(c(full = lf$schema, minimal = lm$schema), function(s) {
+    hab <- DBI::dbGetQuery(conn, "SELECT table_name FROM information_schema.tables
+                                  WHERE table_schema = $1 AND table_name LIKE 'streams_habitat_%'", params = list(s))$table_name
+    hab <- hab[grepl("^streams_habitat_[a-z]{2,3}$", hab)]   # the species tables, not link's long view
+    bind_rows(lapply(sort(hab), function(t) {
+      DBI::dbGetQuery(conn, sprintf("
+        SELECT %3$s AS species_code, h.watershed_group_code,
+               sum(st.length_metre) FILTER (WHERE h.rearing) / 1000 AS rear_km,
+               sum(st.length_metre) FILTER (WHERE h.spawning) / 1000 AS spawn_km
+        FROM %1$s.%2$s h JOIN %1$s.streams st USING (id_segment, watershed_group_code)
+        GROUP BY 2", s, t, DBI::dbQuoteString(conn, toupper(sub("^streams_habitat_", "", t)))))
+    })) |> mutate(schema = s)
+  }), .id = "network")
+  DBI::dbDisconnect(conn)
+  wide <- stored |> select(-schema) |>
+    tidyr::pivot_wider(names_from = network, values_from = c(rear_km, spawn_km), values_fill = 0) |>
+    mutate(across(where(is.numeric), ~ round(.x, 1)), rear_diff = rear_km_minimal - rear_km_full,
+           spawn_diff = spawn_km_minimal - spawn_km_full) |>
+    filter(rear_km_full + rear_km_minimal + spawn_km_full + spawn_km_minimal > 0) |>
+    arrange(species_code, watershed_group_code)
+  say("5. STORED: link's stored habitat km per species x group on %s and %s (minimal - full).", lf$schema, lm$schema)
+  block("stored rearing and spawning km", wide)
 }
 writeLines(log_lines, path_log)
 message("Written ", path_log)

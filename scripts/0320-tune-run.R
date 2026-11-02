@@ -132,11 +132,10 @@ if (!grepl("^[0-9]{8}_[0-9]{4}([0-9]{2})?$", run)) stop("RUN must be a UTC stamp
 evidence_dir <- Sys.getenv("EVIDENCE_DIR", .knw_evidence_dir_default)
 dev_dir <- Sys.getenv("DEV_DIR", "data/tune/dev")
 if (nzchar(Sys.getenv("DEV_DIR")) && !dev) stop("DEV_DIR names a DEV=1 run's directory: give DEV=1 with it")
-if (dev && (!startsWith(.knw_path_key(dev_dir), paste0(.knw_path_key("data/tune"), "/")) ||
-              startsWith(.knw_path_key(dev_dir), paste0(.knw_path_key("data/tune/candidate"), "/")) ||
-              identical(.knw_path_key(dev_dir), .knw_path_key("data/tune/candidate")) ||
-              identical(.knw_path_key(dev_dir), .knw_path_key("data/tune/grad_fwa")))) {
-  stop("DEV_DIR must be a directory of its own under data/tune (ignored), not a tracked or candidate one: ", dev_dir)
+# data/tune/dev or data/tune/dev_<name>, the two forms .gitignore keeps out of the tracked tables
+if (dev && !grepl("^dev(_[A-Za-z0-9][A-Za-z0-9_.]*)?$", basename(dev_dir)) ||
+      dev && !identical(.knw_path_key(dirname(dev_dir)), .knw_path_key("data/tune"))) {
+  stop("DEV_DIR must be data/tune/dev or data/tune/dev_<name> (ignored): ", dev_dir)
 }
 dir_run <- if (dev) dev_dir else file.path("data/tune/candidate", run)
 # the Atlas-gradient sensitivity belongs to a main run, which promotes it with its own tables: name that run

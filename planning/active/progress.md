@@ -55,3 +55,27 @@ mandate; the merge stays with me.
   `GRADIENT=parent_gradient` (`grad_parent/`), `MIN_WSG`/`FOLDS` in the summary; `knw_tune_promote()` refuses other
   floors (mutation: guard removed fails 3 expectations). link 0.78.1 installed here from `../link` fast-forwarded to
   origin/main `552f43d6`
+- Phase 3 (m4, `PGSERVICE=fresh_local`, link 0.78.1 installed, fresh 0.52.0; 16:46–17:25 UTC):
+  - `POLL_MIN=1 0300` released both schemas (runs `415_recompute_default`, `415_recompute_minimal`; link 0.78.0
+    `6bf9ca06`); `0310` on each (`EVIDENCE_DIR=data/fdis/derived_zz415_{default,minimal}`, `PARENT_DIR` on the full):
+    2,082 visits placed on both, 43,625 dropped as outside the four groups; walks 0.4 min cold, then 5,724 of 5,724
+    pairs from the cache
+  - `minimal_network_check.R`: same visits, line and measure; walks and species tables byte-identical; access km equal
+    per group; access codes differ only 1 → 2 (never across zero); every visit's parent is its minimal segment, none
+    on a straddling full segment; 1,175 visits read a different gradient on the full network
+  - premise (`segment_gradient_check.R`, stream branch): full 52.0 % of fish visits start a segment against 5.8 % of
+    empty ones, minimal 2.8 % against 1.5 %; median lengths 298/458 m against 742/742 m
+  - `DEV=1 0320`, `MIN_WSG=4 FOLDS=4`, nine species, 0.2 min each: BT_rear the one fitted key (underpowered, 4
+    groups); every other key `too_few_groups`, `no_response` or `no_stream_rule`; minimal and full-parent BT_rear
+    tables and curves byte-identical; full picks the same rule from a narrower region; Atlas line picks g<=0.20
+  - CH grading refused by the smoke gate at `MIN_WSG=3 FOLDS=3` (coef 20.0, limit 5); BT_rear graded and compared
+    on both schemas (4.3 and 4.1 min; 0330 0.6 and 0.7 min): stored vs regenerated default 0 km in every group
+  - `site_gradient_check.R` on both four-group builds: Spearman 0.696 on both; CH flips at 0.11 on 8.5 % (minimal)
+    against 8.7 % (full)
+  - Ignored artefacts (md5): derived_zz415_default visits_link c8b7248d, visits_species 9e19cc57, walks 0c21cba6,
+    access_check 7345cf6e; derived_zz415_minimal visits_link b265204d, visits_species 9e19cc57, walks 0c21cba6,
+    access_check 6c5fbd35; BT_rear_tune.csv dev_zz415_minimal ba760b83, dev_zz415_default f4306afe, grad_parent
+    ba760b83, grad_fwa 9fa8cfc2; candidates 20261102_172001/2 (CH, refused smoke), 20261102_173001/2 (BT): grades
+    8c2b6fd8 / a1a7f466, compare 59c6ee45 / da8c2c3e, GeoPackages ce62dfa1 / c9decbd8. Logs copied to
+    `scripts/logs/habitat/minimal_network_120/`
+  - `.gitignore` gains `data/tune/dev_*/`; `0320`'s `DEV_DIR` takes `data/tune/dev` or `data/tune/dev_<name>` only

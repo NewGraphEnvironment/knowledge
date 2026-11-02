@@ -1,0 +1,23 @@
+Tuning run, knowledge#57. Evidence build scripts/logs/habitat/20261102_evidence_build_ledger-derived_zz415_minimal.csv (data/fdis/derived_zz415_minimal) on link run 415_recompute_minimal (link 6bf9ca06ddd457d312f38e515bef4dda9be46cb2), schema zz415_minimal.
+Candidate run 20261102_172001: outputs under data/tune/candidate/20261102_172001 (ignored); compare it with TUNE_DIR=data/tune/candidate/20261102_172001 scripts/0330, promote it with RUN=20261102_172001 scripts/0335.
+  visits_link md5 b265204dcf9233eb37f8e5e0aadb1424
+  visits_species md5 9e19cc57c271a936ee0d9f0f10487621
+  walks md5 0c21cba64dbbf0562f85487583bf0946
+build: schema zz415_minimal, run 415_recompute_minimal; flows wet_db_load(): discharge/fwa/v1/segment_monthly, scenario historical last loaded from https://fresh-bc.s3.us-west-2.amazonaws.com/discharge/fwa/v1/manifest.json (built 2026-10-15T02:06:57Z, wet acb820f); walk c3f7bdbecff1d55107f28afa59d7f532; fresh 0.52.0; tokens cut-min.acc-v5.grad-seg.q-fwapg
+database round trip 1.0 ms (median of 20 SELECT 1; limit 20 ms)
+Spawner evidence: 77 BT visits with a coded fish, 5 with evidence.
+link default thresholds at 6bf9ca06ddd457d312f38e515bef4dda9be46cb2 (same at ): 11 species; default_tuned: 11 species (its MAD floors join the grids).
+Fit: group intercepts absorbed (#83); normal prior SD 2.5 on the data_set and era coefficients, cloglog scale (#84).
+Floors: MIN_WSG 3, FOLDS 3 (a test: the tuning's are 5 and 5; never promoted).
+Rules and curves read the gradient from segment_gradient.
+Smoke run first: previous picks on file for BT_rear, BT_spawn, CH_rear, CO_rear, GR_rear, RB_rear, ST_rear, WCT_rear.
+CH_rear smoke: 523 visits (55 detections) in 3 groups with both outcomes; 4 rules, 4 fits.
+    null_ratio: no rule 378.3 held-out against 329.7 in-sample, ratio 1.147 (limit 1.25): pass
+    clamp: 0 visits at 55.26 over 4 rules (limit 0): pass
+    behind_null: no_rule (none) is +0.0 against no rule (limit 378.3): pass
+    coef: rule 20.04 on fold 2 of previous (mad>=0.75|g<=0.11|Q3@D1000) (limit 5.0): FAIL
+    default: width>=1.5|g<=0.0549|none held-out 371.8 (-6.5 against no rule), converged TRUE
+    link_tuned: mad>=0.28|g<=0.0549|none held-out 295.0 (-83.3 against no rule), converged TRUE
+    previous: mad>=0.75|g<=0.11|Q3@D1000 held-out 248.8 (-129.5 against no rule), converged TRUE
+Smoke run over 1 keys in 0.0 min.
+The smoke run failed on CH_rear; nothing is scored. Each key's checks are above and in data/tune/candidate/20261102_172001/<key>_smoke.csv.
