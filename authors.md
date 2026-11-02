@@ -11,18 +11,18 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/NewGraphEnvironment/knowledge/blob/main/inst/CITATION)
+[`inst/CITATION`](https://github.com/NewGraphEnvironment/knowledge/blob/v0.4.23/inst/CITATION)
 
 Irvine A (2026). *knowledge: Fisheries Evidence and Tuned Habitat
 Thresholds for BC Watershed Groups*. New Graph Environment Ltd. Version
-0.4.22, <https://newgraphenvironment.github.io/knowledge/>.
+0.4.23, <https://newgraphenvironment.github.io/knowledge/>.
 
     @Manual{knowledge,
       title = {knowledge: Fisheries Evidence and Tuned Habitat Thresholds for BC Watershed Groups},
       author = {Allan Irvine},
       organization = {New Graph Environment Ltd.},
       year = {2026},
-      version = {0.4.22},
-      note = {Version 0.4.22},
+      version = {0.4.23},
+      note = {Version 0.4.23},
       url = {https://newgraphenvironment.github.io/knowledge/},
     }

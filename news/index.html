@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">knowledge</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.22</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.23</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,9 +33,13 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/v0.4.23/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.4.23" id="knowledge-0423">knowledge 0.4.23<a class="anchor" aria-label="anchor" href="#knowledge-0423"></a></h2>
+<ul><li>The tuning runs on a second link build beside the published one (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/120" class="external-link">#120</a>). <code>0310</code> writes a build of another schema into its own <code>EVIDENCE_DIR</code>, with a tagged ledger, and refuses the default directory to it; <code>0300</code> takes <code>SCHEMA</code> and <code>POLL_MIN</code>, and <code>0310</code> takes <code>SETTLE=</code> and <code>PARENT_DIR</code>, joining each visit’s minimal-network parent through the new <code><a href="../reference/knw_parent_join.html">knw_parent_join()</a></code>. <code>0320</code> takes <code>DEV_DIR</code>, <code>GRADIENT=parent_gradient</code> and test floors (<code>MIN_WSG</code>, <code>FOLDS</code>), which <code><a href="../reference/knw_tune_promote.html">knw_tune_promote()</a></code> refuses; <code>knw_link_access_check(by_group = TRUE)</code> gives the check per group. <code><a href="../reference/knw_build_record.html">knw_build_record()</a></code> reads link’s output tokens from <code>&lt;schema&gt;.log</code>, where link writes them, so a tokened build no longer records none. The four-group test on link’s minimal network is <code>research/minimal_network_tuning.md</code>.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.22" id="knowledge-0422">knowledge 0.4.22<a class="anchor" aria-label="anchor" href="#knowledge-0422"></a></h2>
 <ul><li>
