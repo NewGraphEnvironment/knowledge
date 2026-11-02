@@ -10,7 +10,8 @@
 #
 # WHY / DESIGN NOTES (the package functions carry the method; this script carries the order,
 # the gates and the ledger):
-#   - GATE: runs only after 0300 released (the settle log's last row is `released`), and records
+#   - GATE: runs only after 0300 released (the settle log's last row is `released`; SETTLE=<path> names a log other
+#     than the newest fresh_default one, and the log's schema is ledgered as a record, #120), and records
 #     that run's run_uid and SHAs. The link commit the configs are read from later is that run's
 #     link_sha. knw_build_record() refuses a SCHEMA built by another run than the released one, and
 #     its line (schema, run, flow load, walk md5, fresh) is ledgered (#91).
@@ -44,17 +45,19 @@
 #         data/fdis_size_breaks.csv, scripts/logs/habitat/<date>_link_settle.csv (0300);
 #         fwapg database (PG* env vars): SCHEMA (link's persist schema), discharge, cabd, bcfishobs,
 #         whse_basemapping, knw.walk_cache (the walk cache, shared with 0320's grade);
-#         link >= 0.66.0 (lnk_species_pooling); the BC Hydrologic Zones zip
+#         link >= 0.78.1 (lnk_species_pooling; the minimal build's tokens); the BC Hydrologic Zones zip;
+#         PARENT_DIR (optional, #120): link's parent_<wsg>.csv.gz, each full segment's minimal parent
 # OUTPUT: under EVIDENCE_DIR (default data/fdis/derived; all ignored; 0299 publishes the default's):
 #         visits_link.csv     one row per placed visit
 #         visits_species.csv  one row per placed visit x species
 #         walks.csv           one row per start x source x river size
 #         bcfishobs_fdis_match.csv
-#         access_check.csv
+#         access_check.csv    per species x group (#120)
 #         workbook_{sites,species}.csv  the FISS workbook sites placed on link's segments
 #         scripts/logs/habitat/<date>_evidence_build_ledger.csv, or <date>_evidence_build_ledger-<base name>.csv for
 #         another EVIDENCE_DIR (#120); its first row names the directory
-# RUN:    [SCHEMA=fresh_default_20261017] [EVIDENCE_DIR=data/fdis/derived_<name>] [REMOTE=TRUE] Rscript scripts/0310-evidence-build.R   (from the repo root; 4 socket
+# RUN:    [SCHEMA=fresh_default_20261017] [EVIDENCE_DIR=data/fdis/derived_<name>] [SETTLE=<settle log>] [PARENT_DIR=<dir>]
+#         [REMOTE=TRUE] Rscript scripts/0310-evidence-build.R   (from the repo root; 4 socket
 #         workers; the visit walks are cached from #91, so the first run walks them cold (6.4 min of walks and 16 min
 #         in all from a remote link, 2026-10-27) and a rerun on the same flow load reads them back (0.7 min of walks))
 # ---------------------------------------------------------------------------
@@ -69,7 +72,7 @@ walk_cache <- "knw.walk_cache"
 q_grid <- c(1, 3, 5, 10, 20, 30, 50)
 sources <- c("pick", "pcic_routed", "wet_balance")
 n_workers <- 4L
-link_min <- "0.66.0"
+link_min <- "0.78.1"   # the minimal build's species_modelled.csv and its tokens (#120); lnk_species_pooling since 0.66.0
 cw_agree_min <- 0.9    # 0296 measured 96.2 % province-wide; a two-group sample gave 88 %. The control
                        # is for a formula or input change, which collapses agreement, not for regional drift.
 hz_url <- paste0("https://catalogue.data.gov.bc.ca/dataset/f1f86c41-ae83-49d5-92e1-526897b99fa2/",
@@ -97,12 +100,21 @@ pg <- function() {
 }
 
 # ---- gate: 0300 released on this schema -----------------------------------------
-settle <- sort(list.files("scripts/logs/habitat", "_link_settle\\.csv$", full.names = TRUE), decreasing = TRUE)
-if (!length(settle)) stop("no settle log: run scripts/0300-link-settle-wait.R first")
+# SETTLE=<path> names the settle log (#120; default the newest <date>_link_settle.csv, fresh_default's): a test build
+# on another schema has its own, <date>_link_settle-<schema>.csv. The gate is the log's run_uid, which
+# knw_build_record() holds the schema to below, never the schema the log names: a provincial schema is renamed after
+# its run (#73), so the published build ran SCHEMA=fresh_default_20261017 on fresh_default's settle log
+settle_given <- nzchar(Sys.getenv("SETTLE"))
+settle <- if (settle_given) Sys.getenv("SETTLE") else
+  sort(list.files("scripts/logs/habitat", "_link_settle\\.csv$", full.names = TRUE), decreasing = TRUE)
+if (!length(settle) || !file.exists(settle[1])) stop("no settle log", if (settle_given) paste0(" at ", settle), ": run scripts/0300-link-settle-wait.R first")
 st <- read_csv(settle[1], show_col_types = FALSE, col_types = cols(.default = "c"))
 st <- st[nrow(st), ]
 if (!identical(st$status, "released")) stop(settle[1], " did not release (status ", st$status, ")")
 add("info", "settle_log", 0, settle[1])
+add("info", "settle_override", as.integer(settle_given), if (settle_given) "SETTLE= named the log" else "the newest default log")
+# a log from before #120 carries no schema column: 0300 watched fresh_default alone then
+add("info", "settle_schema", 0, if ("schema" %in% names(st)) st$schema else "fresh_default")
 add("info", "link_run_uid", 0, st$run_uid)
 for (k in c("link_version", "link_sha", "fresh_version", "fresh_sha", "fwapg_sha", "config_hash")) {
   add("info", paste0("run_", k), 0, st[[k]])
@@ -122,6 +134,16 @@ add("info", "db_remote_override", as.integer(lat$over && lat$remote))
 message(lat$line)
 rec <- knw_build_record(conn, schema, run_uid = st$run_uid)
 add("info", "build_record", 0, rec$line)
+# the species the schema's run modelled, per group (link writes them on its log), beside the ones this build carries
+if ("species" %in% dbGetQuery(conn, "SELECT column_name FROM information_schema.columns
+                                     WHERE table_schema = $1 AND table_name = 'log'", params = list(schema))$column_name) {
+  sp_log <- dbGetQuery(conn, sprintf("SELECT watershed_group_code AS w, array_to_string(species, ';') AS s FROM %s.log
+                                      ORDER BY 1, 2", schema))
+  sp_all <- sort(unique(unlist(strsplit(sp_log$s, ";", fixed = TRUE))))
+  add("info", "schema_species", length(sp_all), sprintf("the run modelled %s; this build carries %s; per group %s",
+      paste(sp_all, collapse = ";"), paste(species, collapse = ";"),
+      paste(unique(paste0(sp_log$w, "=", sp_log$s)), collapse = " ")))
+}
 
 # ---- visits: quality, species -----------------------------------------------------
 build <- "data/fdis/build"
@@ -186,6 +208,23 @@ n0 <- nrow(v)
 v <- v |> inner_join(pl$placed, by = "site_visit")
 add("drop", "no_link_segment", n0 - nrow(v), sprintf("no %s segment on the visit's blue line at its measure", schema))
 add("info", "segment_starts_in_window", sum(v$segment_start_offset_m >= -1 & v$segment_start_offset_m <= 5))
+# the minimal parent of each full segment (#120): PARENT_DIR holds link's parent_<wsg>.csv.gz (link#415's proof, later
+# link#444's export); each placed visit gains its parent's gradient, length and straddle, and one with no parent stops
+# the build. Without PARENT_DIR the columns are absent, and 0320 refuses GRADIENT=parent_gradient
+parent_dir <- Sys.getenv("PARENT_DIR")
+if (nzchar(parent_dir)) {
+  pf <- list.files(parent_dir, "^parent_[a-z]{4}\\.csv(\\.gz)?$", full.names = TRUE)
+  if (!length(pf)) stop("PARENT_DIR=", parent_dir, " holds no parent_<wsg>.csv.gz")
+  parent <- bind_rows(lapply(pf, read_csv, show_col_types = FALSE, col_types = cols(wsg = "c", .default = "d")))
+  v <- knw_parent_join(v, parent)
+  add("info", "parent_dir", length(pf), sprintf("%s: %s; md5 %s", parent_dir, paste(basename(pf), collapse = ";"),
+                                                paste(unname(tools::md5sum(pf)), collapse = ";")))
+  add("info", "parent_joined", nrow(v), sprintf("of %d full segments in the parent tables", nrow(parent)))
+  add("info", "parent_straddle", sum(v$parent_straddle_m > 0),
+      "visits on a full segment that straddles a minimal break: part of it lies on another minimal segment")
+  add("info", "parent_gradient_differs", sum(abs(v$parent_gradient - v$segment_gradient) > 1e-9, na.rm = TRUE),
+      "visits whose parent's gradient is not their own segment's")
+}
 vs <- vs |> filter(site_visit %in% v$site_visit)
 
 # ---- flow, width, regulated, barriers ---------------------------------------------
@@ -225,9 +264,11 @@ for (sp in species) add("info", paste0("barrier_dnstr_", sp), sum(v[[paste0("bar
 add("info", "barrier_unknown_codes", sum(is.na(v$wscode) | is.na(v$localcode)), "no watershed code even from a parent")
 
 # ---- access check (link#349) -------------------------------------------------------
-ac <- knw_link_access_check(conn, schema, species)
+# per group (#120), so two builds of the same groups can be set beside each other; the ledger sums each species
+ac <- knw_link_access_check(conn, schema, species, by_group = TRUE)
 add("info", "access_check_skipped", length(ac$skipped), paste(ac$skipped, collapse = ";"))
-dis <- ac$check |> filter(habitat_accessible, !access_gt0)
+dis <- ac$check |> filter(habitat_accessible, !access_gt0) |> group_by(species_code) |>
+  summarise(across(c(n_segments, n_rearing, n_spawning, km), sum), .groups = "drop")
 for (i in seq_len(nrow(dis))) {
   add("info", paste0("access_disagree_", dis$species_code[i]), dis$n_segments[i],
       sprintf("habitat accessible, access = 0: %d rearing, %d spawning, %.0f km", dis$n_rearing[i], dis$n_spawning[i], dis$km[i]))

@@ -46,7 +46,9 @@ wf_farm_priority.js                          farm priority/crossing tables out o
 --- One evidence build and one tuning run for every species (#57; needs link >= 0.66.0, fresh, wet's flow,
     fresh_default province-wide, and the link repo at LINK_REPO) ---
 0300  wait until link's run has settled in fresh_default (log_recompute ended for every group, churn
-      unchanged over three polls, no active session) -> scripts/logs/habitat/<date>_link_settle.csv (released row)
+      unchanged over three polls, no active session) -> scripts/logs/habitat/<date>_link_settle.csv (released row).
+      SCHEMA= watches another schema, its log <date>_link_settle-<schema>.csv; POLL_MIN= (default 10) the minutes
+      between polls; every row names both (#120)
 0310  one evidence build: quality-passed FDIS visits x every species (catch, size classes, presence, blocked
       absence, DV pooling), placed on link's segments with every species' access and re-gated habitat flags,
       wet's flow by source, cw_deploy, regulated reach, natural barriers downstream per species, walks to
@@ -58,7 +60,9 @@ wf_farm_priority.js                          farm priority/crossing tables out o
       from #91, so the first run walks them cold; knw_db_latency_check() at connect stops a run off the
       database's host (round trip over 20 ms) unless REMOTE=TRUE (#110). EVIDENCE_DIR=data/fdis/derived_<name>
       writes a build of another schema there, its ledger tagged <date>_evidence_build_ledger-<name>.csv, outside the
-      name the default readers take (#120)
+      name the default readers take; SETTLE=<settle log> names that schema's settle log (the gate stays its run_uid);
+      PARENT_DIR=<link's parent_<wsg>.csv.gz> adds each visit's minimal parent (parent_gradient, parent_length_m,
+      parent_straddle_m); access_check.csv is per species x group; needs link >= 0.78.1 (#120)
 0290  bt_use_visits.csv written from 0310 (BT's rows and the columns 0291-0293 read; no held-out columns)
 0294  ch_mad_visits.csv written from 0310 (+ two database reads: ambiguous placement, barriers without USER_DEFINITE)
 0296  ch_rule_visits.csv and ch_rule_walks.csv written from 0294 and 0310
@@ -73,7 +77,9 @@ wf_farm_priority.js                          farm priority/crossing tables out o
       #111). DEV=1: the main seed only, no grades, no database -> data/tune/dev/, ending in pick_report.csv, each
       key's pick beside the published one: the run to make after a change upstream (all keys 7.7 min on 14 workers).
       EVIDENCE_DIR scores the build 0310 wrote there, with its own ledger; DEV_DIR (with DEV=1) writes another
-      directory under data/tune; each summary names its evidence_dir (#120).
+      directory under data/tune; each summary names its evidence_dir; GRADIENT=parent_gradient scores the minimal
+      parent's gradient into grad_parent/ (never promoted); MIN_WSG= and FOLDS= (default 5 and 5) lower the floors
+      for a test on a few groups, written in each summary and refused by 0335 (#120).
       SCHEMA names the run's schema, refused when its run is not the evidence's; scoring runs
       on any machine with the build, WORKERS=14; grading walks 500 segments per query and keeps every walk in
       knw.walk_cache, keyed on the flow load and the walk's md5 (#87): on the database's host a cold regrade of

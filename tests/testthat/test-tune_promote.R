@@ -449,3 +449,19 @@ test_that("a kept key is held to the set by its record where its grade table is 
   unlink(file.path(fx$tune, "BT_rear_grades.csv"))   # a machine with the tracked tables only
   expect_error(promote(fx, keys = "CH_rear"), "would leave BT_rear on another walk_md5")
 })
+
+test_that("a key scored under other floors than the tuning's is a test, never promoted (#120)", {
+  fx <- promote_fx(ch_rule = "mad>=0.5|g<=0.07|none")
+  set_col(fx, "run_tune", "CH_rear", "summary", "folds", "4")
+  before <- tree_md5(fx)
+  expect_error(promote(fx), "CH_rear: scored with folds = 4, not the tuning's 5: a test run, never promoted")
+  expect_identical(tree_md5(fx), before)
+  fx <- promote_fx()
+  set_col(fx, "run_tune", "BT_rear", "summary", "min_wsg", "4")
+  expect_error(promote(fx, keys = "BT_rear"), "BT_rear: scored with min_wsg = 4")
+  # the tuning's floors written out, and a summary from before the record, both promote
+  fx <- promote_fx()
+  set_col(fx, "run_tune", "CH_rear", "summary", "folds", "5")
+  set_col(fx, "run_tune", "CH_rear", "summary", "min_wsg", "5")
+  expect_silent(promote(fx, keys = "CH_rear", dry_run = TRUE))
+})

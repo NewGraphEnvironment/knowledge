@@ -82,6 +82,10 @@
 #         GRADIENT=fwa_gradient scores the Atlas line's gradient on the main fold seed, no grades, into <run>/grad_fwa/
 #         (data/tune/dev/grad_fwa/ with DEV=1; promoted to data/tune/grad_fwa/), its log suffixed -grad_fwa. Without
 #         DEV it needs RUN=<the main run's name>, whose candidate it joins and is promoted with.
+#         GRADIENT=parent_gradient (#120) does the same with the minimal parent's gradient on a full segment (0310's
+#         PARENT_DIR) into grad_parent/, which is never promoted.
+#         MIN_WSG= and FOLDS= (default 5 and 5, the tuning's floors) lower them for a test on a few groups (#120): named
+#         in the log and each summary, and refused by knw_tune_promote().
 #         A grading run checks the database's round trip at connect and stops off its host (over 20 ms) unless
 #         REMOTE=TRUE; DEV=1 and GRADIENT=fwa_gradient grade nothing and skip the check (#110).
 # ---------------------------------------------------------------------------
@@ -100,9 +104,19 @@ remote <- Sys.getenv("REMOTE") %in% c("1", "TRUE", "true")   # grade off the dat
 # the gradient the rules and the curve read (#92): link's segment gradient, the one link applies a rule to; the Atlas
 # line's is the sensitivity, scored on the main fold seed alone into its own directory and never graded
 gradient <- Sys.getenv("GRADIENT", "segment_gradient")
-grad_dirs <- c(segment_gradient = "", fwa_gradient = "grad_fwa")
+# parent_gradient (#120) is the minimal parent's gradient on a full segment, which 0310 joins with PARENT_DIR: scored as
+# the Atlas line's is, into grad_parent/, and never promoted (knw_tune_promote() moves grad_fwa/ alone)
+grad_dirs <- c(segment_gradient = "", fwa_gradient = "grad_fwa", parent_gradient = "grad_parent")
 if (!gradient %in% names(grad_dirs)) stop("GRADIENT must be one of ", paste(names(grad_dirs), collapse = ", "), ": ", gradient)
 cols_run <- c(grad = gradient, width = "cw_deploy", mad = "mad_pick")
+# the floors (#120): a key is fitted with at least max(MIN_WSG, FOLDS) groups having both outcomes, on FOLDS folds.
+# The tuning's are 5 and 5 (knw_tune_run()'s defaults); a test on fewer groups lowers them, and every log line and
+# summary says so, and knw_tune_promote() refuses a summary scored on any other
+floor_default <- c(min_wsg = eval(formals(knw_tune_run)$min_wsg), folds = eval(formals(knw_tune_run)$folds))
+min_wsg <- as.integer(Sys.getenv("MIN_WSG", floor_default[["min_wsg"]]))
+folds <- as.integer(Sys.getenv("FOLDS", floor_default[["folds"]]))
+if (is.na(min_wsg) || is.na(folds) || min_wsg < 2L || folds < 2L) stop("MIN_WSG and FOLDS must be integers of 2 or more")
+floors_test <- min_wsg != floor_default[["min_wsg"]] || folds != floor_default[["folds"]]
 # the main seed alone, no grades: the development setting and the sensitivity
 main_only <- dev || gradient != "segment_gradient"
 se_strict <- 1.96   # the stricter reading of the region, in SE, beside the one-SE pick (#79)
@@ -209,6 +223,10 @@ vl <- read_csv(file.path(evidence_dir, "visits_link.csv"), show_col_types = FALS
                col_types = cols(site_visit = "c", species_caught = "c", blocks_absence_of = "c", hydro_zone = "c"))
 vs <- read_csv(file.path(evidence_dir, "visits_species.csv"), show_col_types = FALSE, guess_max = 1e5, col_types = cols(site_visit = "c"))
 walks <- read_csv(file.path(evidence_dir, "walks.csv"), show_col_types = FALSE)
+if (!gradient %in% names(vl)) {
+  stop("GRADIENT=", gradient, ": ", evidence_dir, "/visits_link.csv has no such column",
+       if (gradient == "parent_gradient") " (0310 joins it with PARENT_DIR)" else "")
+}
 codes <- read_csv("data/fdis_species_codes.csv", col_types = cols(.default = "c"), na = "")
 fish <- readRDS("data/fdis/build/fish.rds")
 spawner <- knw_spawner_evidence(fish, vl |> inner_join(vs |> filter(species_code == "BT") |> select(site_visit, pooling), by = "site_visit") |>
@@ -249,6 +267,9 @@ for (f in list.files("data/tune", "_tune\\.csv$", full.names = TRUE)) {
 }
 say("Fit: group intercepts absorbed (#83); normal prior SD %s on the data_set and era coefficients, cloglog scale (#84).",
     format(formals(knw_tune_run)$prior_sd))   # knw_tune_run's default is what runs: it is not passed below
+say("Floors: MIN_WSG %d, FOLDS %d%s.", min_wsg, folds,
+    if (floors_test) sprintf(" (a test: the tuning's are %d and %d; never promoted)", floor_default[["min_wsg"]],
+                             floor_default[["folds"]]) else " (the tuning's)")
 say("Rules and curves read the gradient from %s%s.", gradient,
     if (main_only && !dev) sprintf(" (the sensitivity: the main seed only, no grades, outputs under %s)", dir_out) else "")
 say("Smoke run first%s: previous picks on file for %s.", if (dev) sprintf(" (DEV=1: the main seed only, no grades, outputs under %s)", dir_out) else "",
@@ -264,7 +285,7 @@ old_files <- list.files(dir_out, pat_keys, full.names = TRUE)
 unlink(old_files[grepl("_smoke\\.csv$", old_files)])
 t0 <- Sys.time()
 sm <- knw_tune_run(vl, vs, walks, thr, species = species, spawner = spawner, workers = workers, thresholds_extra = thr_tuned, evidence_id = evidence_md5,
-                   cols = cols_run,
+                   cols = cols_run, min_wsg = min_wsg, folds = folds,
                    previous = if (length(previous)) previous else NULL, smoke_only = TRUE)
 smoke_failed <- character()
 for (k in names(sm)) {
@@ -288,7 +309,8 @@ if (length(smoke_failed)) {
 unlink(old_files[file.exists(old_files) & !grepl(caches, old_files) & !grepl("_smoke\\.csv$", old_files)])
 t0 <- Sys.time()
 out <- knw_tune_run(vl, vs, walks, thr, species = species, spawner = spawner, workers = workers, cache_dir = dir_out,
-                    thresholds_extra = thr_tuned, smoke = FALSE, extra = !main_only, evidence_id = evidence_md5, cols = cols_run)
+                    thresholds_extra = thr_tuned, smoke = FALSE, extra = !main_only, evidence_id = evidence_md5, cols = cols_run,
+                    min_wsg = min_wsg, folds = folds)
 say("Scored %d species x stage in %.1f min on %d workers%s.", length(out), as.numeric(difftime(Sys.time(), t0, units = "mins")), workers,
     if (main_only) " (the main seed only)" else "")
 
@@ -298,7 +320,9 @@ for (k in names(out)) {
   r <- out[[k]]
   row <- tibble(species_code = r$species_code, stage = r$stage, response = r$response, status = r$status,
                 visits_in = r$population[["visits_in"]], detections = r$population["detections"],
-                groups = r$population["groups"], groups_both = r$population["groups_both"])
+                groups = r$population["groups"], groups_both = r$population["groups_both"],
+                # the floors it was scored under (#120): knw_tune_promote() refuses any but the tuning's
+                min_wsg = min_wsg, folds = folds)
   if (!is.null(r$score) && is.null(r$curve)) say("%s: curve failed: %s", k, r$curve_error)
   if (!is.null(r$score) && !is.null(r$curve)) {
     rules <- r$score$rules |> mutate(species_code = r$species_code, stage = r$stage, response = r$response, status = r$status)

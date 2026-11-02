@@ -80,24 +80,24 @@ baseline on 2026-11-02; the resume block is in `progress.md`.
 
 ## Phase 2: The settle gate, the floors, and the gradient reads the setups need
 
-- [ ] `0300` takes `SCHEMA` (default `fresh_default`) and `POLL_MIN=` (default 10, logged), writes a `schema`
+- [x] `0300` takes `SCHEMA` (default `fresh_default`) and `POLL_MIN=` (default 10, logged), writes a `schema`
       column, names its log `<date>_link_settle-<schema>.csv` when not the default
-- [ ] `0310` takes `SETTLE=<path>` (default the newest `_link_settle.csv`), ledgers the path, the settle log's
+- [x] `0310` takes `SETTLE=<path>` (default the newest `_link_settle.csv`), ledgers the path, the settle log's
       `schema` (a log without the column is `fresh_default`'s) and whether it was overridden; the gate stays
       `run_uid` (`knw_build_record()`), never the schema name (the rename path); link floor 0.78.1
-- [ ] `0310` ledgers the schema's own species (`log.species`) beside `knw_species()`
-- [ ] `knw_link_access_check(by_group = )`: the cross-tabulation per group, so two networks' km can be set beside
+- [x] `0310` ledgers the schema's own species (`log.species`) beside `knw_species()`
+- [x] `knw_link_access_check(by_group = )`: the cross-tabulation per group, so two networks' km can be set beside
       each other where they differ; `0310` writes the per-group table to `access_check.csv` (+ test)
-- [ ] `0310` takes `PARENT_DIR=` (link's `data-raw/logs/minimal_breaks_415/`, later link#444's export): joins
+- [x] `0310` takes `PARENT_DIR=` (link's `data-raw/logs/minimal_breaks_415/`, later link#444's export): joins
       `parent_<wsg>.csv.gz` on `id_segment` + `wsg` to add `parent_gradient`, `parent_length_m` and
       `parent_straddle_m` to `visits_link.csv`; a placed visit with no parent row stops the run; counts ledgered.
       Pure `knw_parent_join(visits, parent)` + test. Without `PARENT_DIR` the columns are absent
-- [ ] `0320`: `GRADIENT=parent_gradient` joins `grad_dirs` as `grad_parent` (main seed only, no grades, like
+- [x] `0320`: `GRADIENT=parent_gradient` joins `grad_dirs` as `grad_parent` (main seed only, no grades, like
       `grad_fwa`; never promoted, said in the header); refused when the evidence has no such column
-- [ ] `0320`: `MIN_WSG=` and `FOLDS=` (defaults 5), passed to `knw_tune_run()`, named in the log and written to the
+- [x] `0320`: `MIN_WSG=` and `FOLDS=` (defaults 5), passed to `knw_tune_run()`, named in the log and written to the
       summary; `knw_tune_promote()` refuses a summary whose floors are not the defaults (+ test)
-- [ ] `data-raw/segment_gradient_check.R`: `EVIDENCE_DIR`, and its log name through `.knw_free_path()`
-- [ ] `scripts/README.md` rows for `0300`, `0310`, `0320`
+- [x] `data-raw/segment_gradient_check.R`: `EVIDENCE_DIR`, and its log name through `.knw_free_path()`
+- [x] `scripts/README.md` rows for `0300`, `0310`, `0320`
 
 ## Phase 3: The four-group test on m4 (`zz415_minimal` against `zz415_default`)
 

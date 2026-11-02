@@ -49,3 +49,9 @@ mandate; the merge stays with me.
   now named, not derived by a regex that `DEV_DIR=data/tune/dev_<x>` would have mangled), `0330` (the summaries'
   directory, refused unless its md5s are the curves'), `segment_gradient_check.R` (tagged, never overwritten log);
   internal `.knw_ledger_path()`/`.knw_evidence_ledger()` in `R/run_ledger.R` with tests
+- Phase 2: `0300` `SCHEMA`/`POLL_MIN` (schema and poll interval on every row, tagged log name); `0310` `SETTLE=`,
+  `settle_schema`/`settle_override` ledger rows, link floor 0.78.1, `schema_species` from `<schema>.log.species`,
+  `access_check.csv` per group, `PARENT_DIR` through `knw_parent_join()` (new, exported, tested); `0320`
+  `GRADIENT=parent_gradient` (`grad_parent/`), `MIN_WSG`/`FOLDS` in the summary; `knw_tune_promote()` refuses other
+  floors (mutation: guard removed fails 3 expectations). link 0.78.1 installed here from `../link` fast-forwarded to
+  origin/main `552f43d6`

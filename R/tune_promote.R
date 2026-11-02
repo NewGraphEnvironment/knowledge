@@ -26,7 +26,8 @@
 #' every fitted key moves together. Each promoted key's grades must carry their
 #' record ([knw_grade_record_write()]) and match it (md5 and size; a
 #' `replaced_*` archive may lack one), and kept keys are read from their
-#' records where the tables are absent. Each promoted key's grades must be of its
+#' records where the tables are absent. A key scored under other floors than
+#' the tuning's (`min_wsg`, `folds` in its summary, #120) is refused. Each promoted key's grades must be of its
 #' recommended rule on its own evidence, and its comparison of the same rule and
 #' made after its grades.
 #'
@@ -85,6 +86,15 @@ knw_tune_promote <- function(run, keys = NULL, live = NULL, tune_dir = "data/tun
 
   # ---- each promoted key's own record ----
   for (k in keys) {
+    # a run scored under other floors than the tuning's (MIN_WSG, FOLDS: #120) is a test of mechanics on a few groups;
+    # a summary from before the record was scored under the defaults
+    for (f in c("min_wsg", "folds")) {
+      v <- fld(cand[[k]], f)
+      if (!is.na(v) && !identical(as.integer(v), as.integer(eval(formals(knw_tune_run)[[f]])))) {
+        stop(k, ": scored with ", f, " = ", v, ", not the tuning's ", eval(formals(knw_tune_run)[[f]]),
+             ": a test run, never promoted", call. = FALSE)
+      }
+    }
     rule <- fld(cand[[k]], "rule_recommended")
     st <- fld(cand[[k]], "status")
     # knw_tune_run()'s statuses: three with no fit by design, two fitted; anything else (curve_failed, a smoke-only
