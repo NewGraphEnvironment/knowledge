@@ -170,4 +170,4 @@ and fresh 0.52.0 installed first (D3).
       candidates (ignored) listed in `progress.md` with md5s; every acceptance line names the floor it ran under
 - [x] `/code-check` clean (once over the branch with `/code-check branch`)
 - [x] PWF checkboxes match landed work
-- [ ] `/planning-archive` on completion
+- [x] `/planning-archive` on completion
