@@ -1,0 +1,73 @@
+Segment gradient check, knowledge#92. Evidence data/fdis/derived_zz415_default, scripts/logs/habitat/20261102_evidence_build_ledger-derived_zz415_default.csv (link run 415_recompute_default, link 6bf9ca06ddd457d312f38e515bef4dda9be46cb2); schema zz415_default.
+Visits placed: 2082; on the tuning's stream branch (edge types 1000,1100,2000,2300, fished area 10-10000 m2): 1694.
+On a segment that starts at the visit: 507 of 2082 placed visits; 432 of 1694 on the stream branch.
+Same Atlas line as the segment: 99.6 % of stream-branch visits.
+
+## by catch (stream branch)
+ catch_status visits at_visit_pct len_median_m gap_abs_median gap_sd
+         fish    723         52.0          298         0.0047 0.0317
+         zero    971          5.8          458         0.0031 0.0378
+
+## by species outcome (stream branch, in link's range, present or absent)
+ species_code present visits at_visit_pct len_median_m gap_abs_median gap_sd
+           BT   FALSE   1563         21.5          402         0.0036 0.0340
+           BT    TRUE    122         76.2          261         0.0094 0.0497
+           CH   FALSE   1619         25.1          407         0.0041 0.0359
+           CH    TRUE     70         35.7          196         0.0020 0.0162
+           CM   FALSE    783         24.0          328         0.0041 0.0400
+           CO   FALSE   1449         25.7          394         0.0042 0.0362
+           CO    TRUE     58         34.5          183         0.0013 0.0093
+           PK   FALSE   1507         26.0          377         0.0041 0.0356
+           RB   FALSE   1155         13.0          419         0.0034 0.0383
+           RB    TRUE    532         52.6          320         0.0045 0.0280
+           SK   FALSE    965         23.5          353         0.0040 0.0389
+           ST   FALSE    727         24.3          356         0.0042 0.0414
+           ST    TRUE     51         17.6           47         0.0013 0.0086
+
+## by segment length (stream branch)
+  length_m visits at_visit_pct gap_abs_median gap_abs_p90 seg_zero_pct
+    (0,10]     12        100.0         0.0145      0.0694          8.3
+   (10,25]     26         80.8         0.0095      0.0731         11.5
+   (25,50]     86         60.5         0.0184      0.0711          8.1
+  (50,100]    114         49.1         0.0128      0.1039          5.3
+ (100,250]    334         27.5         0.0066      0.0653          1.8
+ (250,500]    435         19.3         0.0030      0.0424          0.5
+ (500,Inf]    687         16.7         0.0018      0.0278          0.4
+ seg_over30_pct
+            0.0
+            3.8
+           22.1
+            0.0
+            1.8
+            1.6
+            2.2
+
+## class flips at each of default's cut-offs and the access classes (stream branch)
+    cut flips_pct
+ 0.0249      4.13
+ 0.0349      6.08
+ 0.0449      6.73
+ 0.0549      8.32
+ 0.0649      9.03
+ 0.0849      9.98
+ 0.1049      8.50
+ 0.1500      6.79
+ 0.2000      3.90
+ 0.2500      1.95
+ 0.3000      1.00
+build: schema zz415_default, run 415_recompute_default; flows wet_db_load(): discharge/fwa/v1/segment_monthly, scenario historical last loaded from https://fresh-bc.s3.us-west-2.amazonaws.com/discharge/fwa/v1/manifest.json (built 2026-10-15T02:06:57Z, wet acb820f); walk c3f7bdbecff1d55107f28afa59d7f532; fresh 0.52.0; tokens cut-full-top.acc-v5.grad-seg.q-fwapg
+Stream-branch segments in zz415_default: 167,327.
+
+## segments in the 0.5-point band below and above each cut-off (zz415_default's stream branch)
+    cut                   kind below_n above_n below_km above_km ratio_n
+ 0.0249 default rear/spawn max    4038    4002     1336     1324   1.009
+ 0.0349 default rear/spawn max    3836    3533     1274     1146   1.086
+ 0.0449 default rear/spawn max    3424    3237     1183     1029   1.058
+ 0.0549 default rear/spawn max    2969    2841      984      922   1.045
+ 0.0649 default rear/spawn max    2740    2643      860      848   1.037
+ 0.0849 default rear/spawn max    2440    2137      748      600   1.142
+ 0.1049 default rear/spawn max    1954    1964      559      569   0.995
+ 0.1500           access class    1627    1672      460      454   0.973
+ 0.2000           access class    1210    1250      360      398   0.968
+ 0.2500           access class     862     900      315      345   0.958
+ 0.3000           access class     732     731      359      334   1.001

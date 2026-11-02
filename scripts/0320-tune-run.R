@@ -46,7 +46,8 @@
 #     data/tune/<key>_tune.csv) on the main fold seed, and four checks gate the scorer (knw_tune_smoke()). One
 #     failed check on any key ends the run with every key's report in the log, and nothing is scored.
 #
-# INPUT:  data/fdis/derived/{visits_link,visits_species,walks}.csv (0310), data/fdis/build/fish.rds
+# INPUT:  EVIDENCE_DIR/{visits_link,visits_species,walks}.csv (0310; default data/fdis/derived) and the newest ledger 0310
+#         wrote for that directory (#120), data/fdis/build/fish.rds
 #         (0230), data/fdis_species_codes.csv; the link repository at LINK_REPO at the build's link_sha
 #         (parameters_habitat_thresholds.csv); fwapg database (PG* env vars): the run's schema (SCHEMA, default
 #         fresh_default), discharge; data/tune/<sp>_<stage>_tune.csv where one exists (the previous pick)
@@ -73,13 +74,18 @@
 #         population and the grid, not the scorer's code: remove <key>_score.rds after a change to R/tune_score.R.
 #         DEV=1 is the development setting (#84): the smoke run and the full grid on the main fold seed only (no
 #         bootstrap, nested selection or extra seeds), the curve and the summary, no grades, every output under
-#         data/tune/dev/ (ignored), log included, so a scorer change is proved on every species before a full run.
+#         DEV_DIR (default data/tune/dev/; ignored), log included, so a scorer change is proved on every species before a
+#         full run. EVIDENCE_DIR=data/fdis/derived_<name> DEV_DIR=data/tune/dev_<name> scores a test build (#120).
 #         It ends in the pick report (#111): data/tune/dev/pick_report.csv, each key's pick beside the published one
 #         (knw_tune_pick_report()), the run to make after a change upstream (a link build, placement, a flow reload).
 #         A candidate writes its own <run>/pick_report.csv, before it grades.
 #         GRADIENT=fwa_gradient scores the Atlas line's gradient on the main fold seed, no grades, into <run>/grad_fwa/
 #         (data/tune/dev/grad_fwa/ with DEV=1; promoted to data/tune/grad_fwa/), its log suffixed -grad_fwa. Without
 #         DEV it needs RUN=<the main run's name>, whose candidate it joins and is promoted with.
+#         GRADIENT=parent_gradient (#120) does the same with the minimal parent's gradient on a full segment (0310's
+#         PARENT_DIR) into grad_parent/, which is never promoted.
+#         MIN_WSG= and FOLDS= (default 5 and 5, the tuning's floors) lower them for a test on a few groups (#120): named
+#         in the log and each summary, and refused by knw_tune_promote().
 #         A grading run checks the database's round trip at connect and stops off its host (over 20 ms) unless
 #         REMOTE=TRUE; DEV=1 and GRADIENT=fwa_gradient grade nothing and skip the check (#110).
 # ---------------------------------------------------------------------------
@@ -98,9 +104,19 @@ remote <- Sys.getenv("REMOTE") %in% c("1", "TRUE", "true")   # grade off the dat
 # the gradient the rules and the curve read (#92): link's segment gradient, the one link applies a rule to; the Atlas
 # line's is the sensitivity, scored on the main fold seed alone into its own directory and never graded
 gradient <- Sys.getenv("GRADIENT", "segment_gradient")
-grad_dirs <- c(segment_gradient = "", fwa_gradient = "grad_fwa")
+# parent_gradient (#120) is the minimal parent's gradient on a full segment, which 0310 joins with PARENT_DIR: scored as
+# the Atlas line's is, into grad_parent/, and never promoted (knw_tune_promote() moves grad_fwa/ alone)
+grad_dirs <- c(segment_gradient = "", fwa_gradient = "grad_fwa", parent_gradient = "grad_parent")
 if (!gradient %in% names(grad_dirs)) stop("GRADIENT must be one of ", paste(names(grad_dirs), collapse = ", "), ": ", gradient)
 cols_run <- c(grad = gradient, width = "cw_deploy", mad = "mad_pick")
+# the floors (#120): a key is fitted with at least max(MIN_WSG, FOLDS) groups having both outcomes, on FOLDS folds.
+# The tuning's are 5 and 5 (knw_tune_run()'s defaults); a test on fewer groups lowers them, and every log line and
+# summary says so, and knw_tune_promote() refuses a summary scored on any other
+floor_default <- c(min_wsg = eval(formals(knw_tune_run)$min_wsg), folds = eval(formals(knw_tune_run)$folds))
+min_wsg <- as.integer(Sys.getenv("MIN_WSG", floor_default[["min_wsg"]]))
+folds <- as.integer(Sys.getenv("FOLDS", floor_default[["folds"]]))
+if (is.na(min_wsg) || is.na(folds) || min_wsg < 2L || folds < 2L) stop("MIN_WSG and FOLDS must be integers of 2 or more")
+floors_test <- min_wsg != floor_default[["min_wsg"]] || folds != floor_default[["folds"]]
 # the main seed alone, no grades: the development setting and the sensitivity
 main_only <- dev || gradient != "segment_gradient"
 se_strict <- 1.96   # the stricter reading of the region, in SE, beside the one-SE pick (#79)
@@ -111,7 +127,18 @@ run <- Sys.getenv("RUN", format(Sys.time(), "%Y%m%d_%H%M", tz = "UTC"))
 # a stamp, so a log name says which run it is and sorts by date: the logs add -<species>, -grad_fwa and a pass number,
 # and data-raw/vignette_chinook.R matches a run's logs by that form
 if (!grepl("^[0-9]{8}_[0-9]{4}([0-9]{2})?$", run)) stop("RUN must be a UTC stamp YYYYMMDD_HHMM, as the default is: ", run)
-dir_run <- if (dev) "data/tune/dev" else file.path("data/tune/candidate", run)
+# the build the run scores (#120): EVIDENCE_DIR, as 0310 wrote it, found with its own ledger; a DEV=1 run writes
+# DEV_DIR (default data/tune/dev), so two DEV runs on two builds keep their tables
+evidence_dir <- Sys.getenv("EVIDENCE_DIR", .knw_evidence_dir_default)
+dev_dir <- Sys.getenv("DEV_DIR", "data/tune/dev")
+if (nzchar(Sys.getenv("DEV_DIR")) && !dev) stop("DEV_DIR names a DEV=1 run's directory: give DEV=1 with it")
+# data/tune/dev or data/tune/dev_<name>, the two forms .gitignore keeps out of the tracked tables
+if (dev && !grepl("^dev(_[A-Za-z0-9][A-Za-z0-9_.]*)?$", basename(dev_dir)) ||
+      dev && !identical(.knw_path_key(dirname(dev_dir)), .knw_path_key("data/tune"))) {
+  stop("DEV_DIR must be data/tune/dev or data/tune/dev_<name> (ignored): ", dev_dir)
+}
+dev_dir <- .knw_path_rel(dev_dir)   # written into the log: relative, never a home path
+dir_run <- if (dev) dev_dir else file.path("data/tune/candidate", run)
 # the Atlas-gradient sensitivity belongs to a main run, which promotes it with its own tables: name that run
 if (!dev && gradient != "segment_gradient" &&
       (!nzchar(Sys.getenv("RUN")) || !length(list.files(dir_run, "_summary\\.csv$")))) {
@@ -154,19 +181,21 @@ knowledge_commit <- paste0(git1("rev-parse", "--short", "HEAD")[1],
                              "+dirty" else "")
 
 # ---- inputs and their provenance ------------------------------------------------------
-ledger_path <- sort(list.files("scripts/logs/habitat", "_evidence_build_ledger\\.csv$", full.names = TRUE), decreasing = TRUE)[1]
-if (is.na(ledger_path)) stop("no evidence build ledger: run scripts/0310 first")
+ledger_path <- .knw_evidence_ledger(evidence_dir)
 led <- read_csv(ledger_path, show_col_types = FALSE, col_types = cols(.default = "c"))
 run_uid <- led$note[led$step == "link_run_uid"]
 link_sha <- led$note[led$step == "run_link_sha"]
-say("Tuning run, knowledge#57. Evidence build %s on link run %s (link %s), schema %s.", ledger_path, run_uid, link_sha, schema)
+# the first line's shape is read by data-raw/vignette_chinook.R ("Evidence build <ledger> on link run"): keep the
+# ledger path directly before " on link run"
+say("Tuning run, knowledge#57. Evidence build %s on link run %s (link %s), schema %s; evidence directory %s.", ledger_path,
+    run_uid, link_sha, schema, .knw_path_rel(evidence_dir))
 say("%s: outputs under %s (ignored)%s.", if (dev) "DEV=1" else paste("Candidate run", run), dir_out,
     if (dev) "" else sprintf("; compare it with TUNE_DIR=%s scripts/0330, promote it with RUN=%s scripts/0335", dir_run, run))
 # the evidence's identity: the md5 of each derived table, logged, carried into the score cache's settings and written
 # on every grade table, so a rebuilt evidence of the same visit count is neither read back from the cache nor kept as
 # a grade (the branch review of 2026-10-25)
 evidence_md5s <- vapply(c("visits_link", "visits_species", "walks"), function(f) {
-  unname(tools::md5sum(file.path("data/fdis/derived", paste0(f, ".csv"))))
+  unname(tools::md5sum(file.path(evidence_dir, paste0(f, ".csv"))))
 }, character(1))
 for (f in names(evidence_md5s)) say("  %s md5 %s", f, evidence_md5s[[f]])
 evidence_md5 <- paste(unname(evidence_md5s), collapse = ";")
@@ -192,10 +221,14 @@ if (!dev) {
   }
   dbDisconnect(conn)
 }
-vl <- read_csv("data/fdis/derived/visits_link.csv", show_col_types = FALSE, guess_max = 1e5,
+vl <- read_csv(file.path(evidence_dir, "visits_link.csv"), show_col_types = FALSE, guess_max = 1e5,
                col_types = cols(site_visit = "c", species_caught = "c", blocks_absence_of = "c", hydro_zone = "c"))
-vs <- read_csv("data/fdis/derived/visits_species.csv", show_col_types = FALSE, guess_max = 1e5, col_types = cols(site_visit = "c"))
-walks <- read_csv("data/fdis/derived/walks.csv", show_col_types = FALSE)
+vs <- read_csv(file.path(evidence_dir, "visits_species.csv"), show_col_types = FALSE, guess_max = 1e5, col_types = cols(site_visit = "c"))
+walks <- read_csv(file.path(evidence_dir, "walks.csv"), show_col_types = FALSE)
+if (!gradient %in% names(vl)) {
+  stop("GRADIENT=", gradient, ": ", evidence_dir, "/visits_link.csv has no such column",
+       if (gradient == "parent_gradient") " (0310 joins it with PARENT_DIR)" else "")
+}
 codes <- read_csv("data/fdis_species_codes.csv", col_types = cols(.default = "c"), na = "")
 fish <- readRDS("data/fdis/build/fish.rds")
 spawner <- knw_spawner_evidence(fish, vl |> inner_join(vs |> filter(species_code == "BT") |> select(site_visit, pooling), by = "site_visit") |>
@@ -236,6 +269,9 @@ for (f in list.files("data/tune", "_tune\\.csv$", full.names = TRUE)) {
 }
 say("Fit: group intercepts absorbed (#83); normal prior SD %s on the data_set and era coefficients, cloglog scale (#84).",
     format(formals(knw_tune_run)$prior_sd))   # knw_tune_run's default is what runs: it is not passed below
+say("Floors: MIN_WSG %d, FOLDS %d%s.", min_wsg, folds,
+    if (floors_test) sprintf(" (a test: the tuning's are %d and %d; never promoted)", floor_default[["min_wsg"]],
+                             floor_default[["folds"]]) else " (the tuning's)")
 say("Rules and curves read the gradient from %s%s.", gradient,
     if (main_only && !dev) sprintf(" (the sensitivity: the main seed only, no grades, outputs under %s)", dir_out) else "")
 say("Smoke run first%s: previous picks on file for %s.", if (dev) sprintf(" (DEV=1: the main seed only, no grades, outputs under %s)", dir_out) else "",
@@ -251,7 +287,7 @@ old_files <- list.files(dir_out, pat_keys, full.names = TRUE)
 unlink(old_files[grepl("_smoke\\.csv$", old_files)])
 t0 <- Sys.time()
 sm <- knw_tune_run(vl, vs, walks, thr, species = species, spawner = spawner, workers = workers, thresholds_extra = thr_tuned, evidence_id = evidence_md5,
-                   cols = cols_run,
+                   cols = cols_run, min_wsg = min_wsg, folds = folds,
                    previous = if (length(previous)) previous else NULL, smoke_only = TRUE)
 smoke_failed <- character()
 for (k in names(sm)) {
@@ -275,7 +311,8 @@ if (length(smoke_failed)) {
 unlink(old_files[file.exists(old_files) & !grepl(caches, old_files) & !grepl("_smoke\\.csv$", old_files)])
 t0 <- Sys.time()
 out <- knw_tune_run(vl, vs, walks, thr, species = species, spawner = spawner, workers = workers, cache_dir = dir_out,
-                    thresholds_extra = thr_tuned, smoke = FALSE, extra = !main_only, evidence_id = evidence_md5, cols = cols_run)
+                    thresholds_extra = thr_tuned, smoke = FALSE, extra = !main_only, evidence_id = evidence_md5, cols = cols_run,
+                    min_wsg = min_wsg, folds = folds)
 say("Scored %d species x stage in %.1f min on %d workers%s.", length(out), as.numeric(difftime(Sys.time(), t0, units = "mins")), workers,
     if (main_only) " (the main seed only)" else "")
 
@@ -285,7 +322,9 @@ for (k in names(out)) {
   r <- out[[k]]
   row <- tibble(species_code = r$species_code, stage = r$stage, response = r$response, status = r$status,
                 visits_in = r$population[["visits_in"]], detections = r$population["detections"],
-                groups = r$population["groups"], groups_both = r$population["groups_both"])
+                groups = r$population["groups"], groups_both = r$population["groups_both"],
+                # the floors it was scored under (#120): knw_tune_promote() refuses any but the tuning's
+                min_wsg = min_wsg, folds = folds)
   if (!is.null(r$score) && is.null(r$curve)) say("%s: curve failed: %s", k, r$curve_error)
   if (!is.null(r$score) && !is.null(r$curve)) {
     rules <- r$score$rules |> mutate(species_code = r$species_code, stage = r$stage, response = r$response, status = r$status)
@@ -329,6 +368,8 @@ for (k in names(out)) {
       # the candidate run and the evidence ledger it read (#111): a promoted table names the log that graded it and the
       # build it was scored on, so its readers take them rather than the newest on disk
       tune_run = if (dev) NA_character_ else run, evidence_ledger = ledger_path,
+      # the directory those tables were read from (#120); the summary only, since a grade record must keep its columns
+      evidence_dir = .knw_path_rel(evidence_dir),
       curve_dist_in_model = r$curve$dist_in_model,
       curve_edf = paste(sprintf("%s=%.2f", names(r$curve$edf), r$curve$edf), collapse = "; "),
       # NA under DEV=1 and on the sensitivity, which run the main seed alone
@@ -379,7 +420,7 @@ for (k in names(out)) {
 # ---- the pick report (#111): the run's pick beside the published one, per key ------------------------------
 # what a DEV=1 run after a change upstream is for, and what a candidate is promoted on: the published side is the
 # tracked table dir_out stands in for (data/tune, or data/tune/grad_fwa for the sensitivity), never another run's
-dir_pub <- sub("^data/tune/(dev|candidate/[^/]+)", "data/tune", dir_out)
+dir_pub <- if (nzchar(grad_dirs[[gradient]])) file.path("data/tune", grad_dirs[[gradient]]) else "data/tune"
 pr <- bind_rows(lapply(names(out), function(k) {
   r <- out[[k]]
   if (is.null(r$score)) return(NULL)

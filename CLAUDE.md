@@ -403,6 +403,26 @@ over the same rows (`null_heldout_curve` is no rule scored on the curve's own vi
 
 The grade tables are ignored and run to gigabytes, so `0320` writes each one's record beside it, `<key>_grades_record.csv` (tracked, #119): the table's constant columns exactly as written, its md5, size and rows, the run, its evidence ledger, the knowledge commit and link's build (version, commit and output-vocabulary tokens, blank before link 0.70.0). `knw_tune_promote()` refuses a promoted key whose record is missing or describes another table, and reads kept keys from their records; the article bundles read and pin the record, and check a table present against it (`KNW_CHECK_GRADES=TRUE` makes `test-vignette-data.R` do the same).
 
+A build names its evidence directory (#120). `0310` writes `EVIDENCE_DIR` (default `data/fdis/derived`) and a ledger
+whose first row names it; a directory other than the default tags the ledger with its base name
+(`<date>_evidence_build_ledger-<base>.csv`), outside the name `knw_run_ledger()` falls back to, and `0310` refuses the
+default directory to a build settled on another schema's log (or on a log named with `SETTLE=`), so a test build never
+becomes the build a default reader takes. `0320` and `data-raw/segment_gradient_check.R` take the same `EVIDENCE_DIR`
+and find that ledger by it; each summary names its `evidence_dir` (the grade record does not, so the tracked records
+keep their columns); `0330` reads the directory the summaries name, or `EVIDENCE_DIR` for a staged copy, and refuses
+tables whose md5s are not the curves' `evidence_md5`. The evidence, settle, parent and DEV directories these scripts write into
+ledgers, summaries and logs are relative to the repo root, or under `~`, never a home path (`.knw_path_rel()`). link's output tokens are on `<schema>.log`, one row per pipeline call and group, never on
+`log_recompute`: `knw_build_record()` reads them over every `log` row, because a build's `log` and its recompute's
+`log_recompute` can carry different run ids (link's four-group proofs do).
+
+A test on a few groups of another schema (#120, `research/minimal_network_tuning.md`): `0300` takes `SCHEMA` and
+`POLL_MIN` and writes both on every row of its log (`<date>_link_settle-<schema>.csv`), and `0310` takes that log with
+`SETTLE=`; the gate stays the log's `run_uid`, never its schema, because a provincial schema is renamed after its run.
+`0320` takes `MIN_WSG` and `FOLDS` (the tuning's are 5 and 5); each summary records them and `knw_tune_promote()`
+refuses any other. On link's four proof groups only bull trout rearing has four groups with both outcomes, and the
+smoke gate refuses chinook rearing on three folds (separation), so a test of grading and the comparison runs on a key
+the groups can fit.
+
 ### The segment flows can change under a run; the table comment names the build
 
 `discharge.fwa_v1_segment_monthly` is wet's database load, and wet can reload it between two runs: NewGraphEnvironment/wet#103

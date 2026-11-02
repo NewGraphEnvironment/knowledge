@@ -43,10 +43,12 @@ wf_farm_priority.js                          farm priority/crossing tables out o
 --- Life-history timing (independent; re-run only when the template's Gantt CSV changes) ---
 0260  reshape the template's Gantt CSV -> data/life_history_timing.csv   (read with knw_timing_read())
 
---- One evidence build and one tuning run for every species (#57; needs link >= 0.66.0, fresh, wet's flow,
+--- One evidence build and one tuning run for every species (#57; needs link >= 0.78.1 for 0310 since #120, fresh, wet's flow,
     fresh_default province-wide, and the link repo at LINK_REPO) ---
 0300  wait until link's run has settled in fresh_default (log_recompute ended for every group, churn
-      unchanged over three polls, no active session) -> scripts/logs/habitat/<date>_link_settle.csv (released row)
+      unchanged over three polls, no active session) -> scripts/logs/habitat/<date>_link_settle.csv (released row).
+      SCHEMA= watches another schema, its log <date>_link_settle-<schema>.csv; POLL_MIN= (default 10) the minutes
+      between polls; every row names both (#120)
 0310  one evidence build: quality-passed FDIS visits x every species (catch, size classes, presence, blocked
       absence, DV pooling), placed on link's segments with every species' access and re-gated habitat flags,
       wet's flow by source, cw_deploy, regulated reach, natural barriers downstream per species, walks to
@@ -56,7 +58,11 @@ wf_farm_priority.js                          farm priority/crossing tables out o
       workbook_sites,workbook_species}.csv (+ ledger; 4 socket workers). SCHEMA names link's schema (default
       fresh_default; knw_build_record() refuses one another run built); the visit walks are kept in knw.walk_cache
       from #91, so the first run walks them cold; knw_db_latency_check() at connect stops a run off the
-      database's host (round trip over 20 ms) unless REMOTE=TRUE (#110)
+      database's host (round trip over 20 ms) unless REMOTE=TRUE (#110). EVIDENCE_DIR=data/fdis/derived_<name>
+      writes a build of another schema there, its ledger tagged <date>_evidence_build_ledger-<name>.csv, outside the
+      name the default readers take; SETTLE=<settle log> names that schema's settle log (the gate stays its run_uid);
+      PARENT_DIR=<the directory holding link's parent_<wsg>.csv.gz> adds each visit's minimal parent (parent_gradient, parent_length_m,
+      parent_straddle_m); access_check.csv is per species x group; needs link >= 0.78.1 (#120)
 0290  bt_use_visits.csv written from 0310 (BT's rows and the columns 0291-0293 read; no held-out columns)
 0294  ch_mad_visits.csv written from 0310 (+ two database reads: ambiguous placement, barriers without USER_DEFINITE)
 0296  ch_rule_visits.csv and ch_rule_walks.csv written from 0294 and 0310
@@ -70,6 +76,10 @@ wf_farm_priority.js                          farm priority/crossing tables out o
       -> data/tune/candidate/<run>/ (ignored; RUN= names it, a UTC stamp by default, and resumes it; + its log;
       #111). DEV=1: the main seed only, no grades, no database -> data/tune/dev/, ending in pick_report.csv, each
       key's pick beside the published one: the run to make after a change upstream (all keys 7.7 min on 14 workers).
+      EVIDENCE_DIR scores the build 0310 wrote there, with its own ledger; DEV_DIR (with DEV=1) writes another
+      directory under data/tune; each summary names its evidence_dir; GRADIENT=parent_gradient scores the minimal
+      parent's gradient into grad_parent/ (never promoted); MIN_WSG= and FOLDS= (default 5 and 5) lower the floors
+      for a test on a few groups, written in each summary and refused by 0335 (#120).
       SCHEMA names the run's schema, refused when its run is not the evidence's; scoring runs
       on any machine with the build, WORKERS=14; grading walks 500 segments per query and keeps every walk in
       knw.walk_cache, keyed on the flow load and the walk's md5 (#87): on the database's host a cold regrade of
@@ -94,7 +104,8 @@ wf_farm_priority.js                          farm priority/crossing tables out o
       WORKERS=6 connections, #87: every key 162.9 min with GPKG=FALSE, BT rearing alone 33.4, the GeoPackages
       14.0, 2026-10-26, under every structure; door alone drops 29 to 33 % of the worker minutes, #112; every STAGE stops off the database's host unless REMOTE=TRUE, #110). No maps in this run.
       STAGE=maps: floodplain ha beside each rule's habitat in the catalog's groups, and the maps, from the saved
-      tables -> the run's floodplain.csv and fig/compare_*.png
+      tables -> the run's floodplain.csv and fig/compare_*.png. Reads the evidence directory the run's summaries
+      name (EVIDENCE_DIR overrides it, for a staged copy), refused unless its tables' md5s are the curves' (#120)
 0335  on Al's word: RUN=<run> moves a candidate into data/tune/, data/compare/ and research/fig/ (SPECIES= for some
       keys; refused unless the result is one build: evidence, link run, gradient, flow load, walk, link config), its
       logs into scripts/logs/habitat/, archiving what it replaced as candidate run replaced_<stamp>; then 0325

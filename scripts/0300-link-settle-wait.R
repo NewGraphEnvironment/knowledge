@@ -1,6 +1,6 @@
 # scripts/0300-link-settle-wait.R
 # ---------------------------------------------------------------------------
-# Waits until link's province-wide `default` run has settled in `fresh_default`, then releases.
+# Waits until link's province-wide `default` run has settled in `fresh_default` (or SCHEMA), then releases.
 # Issue #57, phase 0. The evidence build (0310) reads `streams_access`, which the run recomputes
 # last, so nothing downstream starts until all three hold on the same poll:
 #   1. every group in fresh_default.streams has a log_recompute row with date_end set;
@@ -12,19 +12,28 @@
 # fresh_default.log. After `max_hours` without a release it stops with status `timeout` and a
 # non-zero exit, so a waiter on this process reads the file, not the exit alone.
 #
-# INPUT:  fwapg database (PG* env vars): fresh_default.{streams,log_recompute,log},
+# INPUT:  fwapg database (PG* env vars): SCHEMA.{streams,log_recompute,log},
 #         pg_stat_user_tables, pg_stat_activity
-# OUTPUT: scripts/logs/habitat/<date>_link_settle.csv   one row per poll, the last row the verdict
-# RUN:    Rscript scripts/0300-link-settle-wait.R   (from the repo root; blocks until released)
+# OUTPUT: scripts/logs/habitat/<date>_link_settle.csv   one row per poll, the last row the verdict, each naming the
+#         schema and the poll interval (#120); <date>_link_settle-<schema>.csv for a SCHEMA other than fresh_default
+# RUN:    [SCHEMA=zz415_minimal] [POLL_MIN=1] Rscript scripts/0300-link-settle-wait.R   (from the repo root; blocks until
+#         released; POLL_MIN, default 10, is the minutes between polls, and three equal polls release)
 # ---------------------------------------------------------------------------
 suppressMessages({ library(DBI); library(RPostgres) })
 
-poll_min <- 10
+# SCHEMA and POLL_MIN (#120): a test build in a scratch schema is static, so it need not wait 10 min x 3. The settle
+# log records both on every row; its schema is a record, never 0310's gate (the run_uid is: a provincial schema is
+# renamed after its run, so the evidence is built on a name the settle log never saw, #73)
+poll_min <- as.numeric(Sys.getenv("POLL_MIN", "10"))
+if (!is.finite(poll_min) || poll_min <= 0) stop("POLL_MIN must be a positive number of minutes: ", Sys.getenv("POLL_MIN"))
 polls_stable <- 3
 max_hours <- 24
-schema <- "fresh_default"
+schema <- Sys.getenv("SCHEMA", "fresh_default")
+if (!grepl("^[a-z_][a-z0-9_]*$", schema)) stop("SCHEMA must be a lower-case identifier: ", schema)
+# the default schema's log keeps the name 0310 takes by default; another is tagged, and 0310 takes it with SETTLE=
 path_log <- file.path("scripts/logs/habitat",
-                      paste0(format(Sys.Date(), "%Y%m%d"), "_link_settle.csv"))
+                      paste0(format(Sys.Date(), "%Y%m%d"), "_link_settle",
+                             if (schema == "fresh_default") "" else paste0("-", schema), ".csv"))
 
 pg <- function() {
   tryCatch(dbConnect(Postgres()),
@@ -50,7 +59,7 @@ poll <- function() {
     WHERE state <> 'idle' AND pid <> pg_backend_pid() AND query ILIKE $1",
     params = list(paste0("%", schema, "%")))
   # counts come back as integer64 / numeric, so each is made a plain integer before formatting
-  data.frame(at_utc = format(Sys.time(), "%Y-%m-%dT%H:%M:%SZ", tz = "UTC"),
+  data.frame(at_utc = format(Sys.time(), "%Y-%m-%dT%H:%M:%SZ", tz = "UTC"), schema = schema, poll_min = poll_min,
              n_wsg = as.integer(cov$n_wsg), n_ended = as.integer(cov$n_ended),
              n_recompute_rows = as.integer(lr$n_rows), n_runs = as.integer(lr$n_runs),
              run_uid = lr$run_uid, last_end = format(lr$last_end, "%Y-%m-%dT%H:%M:%SZ", tz = "UTC"),

@@ -1,0 +1,230 @@
+Tuning run, knowledge#57. Evidence build scripts/logs/habitat/20261102_evidence_build_ledger-derived_zz415_default.csv (data/fdis/derived_zz415_default) on link run 415_recompute_default (link 6bf9ca06ddd457d312f38e515bef4dda9be46cb2), schema fresh_default.
+DEV=1: outputs under data/tune/dev_zz415_default (ignored).
+  visits_link md5 c8b7248d3cf6744265886a893c3145d6
+  visits_species md5 9e19cc57c271a936ee0d9f0f10487621
+  walks md5 0c21cba64dbbf0562f85487583bf0946
+Spawner evidence: 77 BT visits with a coded fish, 5 with evidence.
+link default thresholds at 6bf9ca06ddd457d312f38e515bef4dda9be46cb2 (same at ): 11 species; default_tuned: 11 species (its MAD floors join the grids).
+Fit: group intercepts absorbed (#83); normal prior SD 2.5 on the data_set and era coefficients, cloglog scale (#84).
+Floors: MIN_WSG 4, FOLDS 4 (a test: the tuning's are 5 and 5; never promoted).
+Rules and curves read the gradient from segment_gradient.
+Smoke run first (DEV=1: the main seed only, no grades, outputs under data/tune/dev_zz415_default): previous picks on file for BT_rear, BT_spawn, CH_rear, CO_rear, GR_rear, RB_rear, ST_rear, WCT_rear.
+BT_rear smoke: 1173 visits (115 detections) in 4 groups with both outcomes; 4 rules, 4 fits.
+    null_ratio: no rule 709.0 held-out against 733.2 in-sample, ratio 0.967 (limit 1.25): pass
+    clamp: 0 visits at 55.26 over 4 rules (limit 0): pass
+    behind_null: default (width>=1.5|g<=0.1049|none) is +23.2 against no rule (limit 709.0): pass
+    coef: data_setFDS 2.52 on fold 2 of no_rule (none) (limit 5.0): pass
+    default: width>=1.5|g<=0.1049|none held-out 732.2 (+23.2 against no rule), converged TRUE
+    link_tuned: mad>=0.043|g<=0.1349|none held-out 703.4 (-5.6 against no rule), converged TRUE
+    previous: mad>=0.1|g<=0.3|none held-out 681.2 (-27.7 against no rule), converged TRUE
+Smoke run over 1 keys in 0.0 min.
+Scored 18 species x stage in 0.2 min on 14 workers (the main seed only).
+BT_rear: underpowered. 1173 visits (115 detections) in 4 groups (4 both). Recommended mad>=0.021|g<=0.25|none; default outside the region (+62.5, SE 32.6). Curve held-out 1071.7 vs grid best 669.7.
+BT_rear: no rule scores 709.0 held-out on the grid's 1173 visits and 708.1 on the curve's 1172; the curve 1071.7, so grades are withheld.
+BT_rear: grades withheld: the curve's held-out 1071.7 is no better than no rule's 708.1 on the curve's own visits.
+BT_rear: from the flow start mad>=0.021|g<=0.25|none (1.96 SE: mad>=0.021|g<=0.1049|none); from the width start at 1.96 SE width>=1.5|g<=0.1049|none; link's default_tuned rule mad>=0.043|g<=0.1349|none outside the region (+33.6, SE 25.8).
+
+## BT_rear region
+                         rule departures   ddev_best    se_diff n_wsg_varies
+      mad>=0.021|g<=0.25|none          2  0.00000000  0.0000000            4
+       mad>=0.021|g<=0.3|none          2  0.00000000  0.0000000            4
+       mad>=0.021|g<=0.2|none          2  0.02084046  4.8097861            4
+  mad>=0.021|g<=0.25|Q10@D100          3  0.10545509  0.1686923            4
+   mad>=0.021|g<=0.3|Q10@D100          3  0.10545509  0.1686923            4
+  mad>=0.021|g<=0.25|Q20@D100          3  0.10545509  0.1686923            4
+   mad>=0.021|g<=0.3|Q20@D100          3  0.10545509  0.1686923            4
+  mad>=0.021|g<=0.25|Q30@D100          3  0.10545509  0.1686923            4
+   mad>=0.021|g<=0.3|Q30@D100          3  0.10545509  0.1686923            4
+   mad>=0.021|g<=0.2|Q10@D100          3  0.14613408  4.9273665            4
+   mad>=0.021|g<=0.2|Q20@D100          3  0.14613408  4.9273665            4
+   mad>=0.021|g<=0.2|Q30@D100          3  0.14613408  4.9273665            4
+  mad>=0.021|g<=0.25|Q50@D100          3  0.14902239  0.1541673            4
+   mad>=0.021|g<=0.3|Q50@D100          3  0.14902239  0.1541673            4
+   mad>=0.021|g<=0.2|Q50@D100          3  0.17528320  4.8564708            4
+    mad>=0.021|g<=0.2|Q5@D100          3  0.37327749  4.9371919            4
+  mad>=0.021|g<=0.25|Q5@D5000          3  0.50452898  5.5385014            4
+   mad>=0.021|g<=0.3|Q5@D5000          3  0.50452898  5.5385014            4
+   mad>=0.021|g<=0.2|Q30@D250          3  0.63472247  4.9283403            4
+   mad>=0.021|g<=0.2|Q30@D500          3  0.63472247  4.9283403            4
+  mad>=0.021|g<=0.2|Q30@D1000          3  0.63472247  4.9283403            4
+   mad>=0.021|g<=0.2|Q50@D250          3  0.66415763  4.8620105            4
+   mad>=0.021|g<=0.2|Q50@D500          3  0.66415763  4.8620105            4
+  mad>=0.021|g<=0.2|Q50@D1000          3  0.66415763  4.8620105            4
+   mad>=0.021|g<=0.2|Q20@D250          3  0.78411364  5.0008620            4
+   mad>=0.021|g<=0.2|Q20@D500          3  0.78411364  5.0008620            4
+  mad>=0.021|g<=0.2|Q20@D1000          3  0.78411364  5.0008620            4
+   mad>=0.021|g<=0.2|Q10@D250          3  0.84273907  4.9561365            4
+   mad>=0.021|g<=0.2|Q10@D500          3  0.90054708  4.9145688            4
+  mad>=0.021|g<=0.2|Q10@D1000          3  1.09884453  5.1436682            4
+  mad>=0.021|g<=0.25|Q5@D2000          3  1.16136299  3.5144561            4
+   mad>=0.021|g<=0.3|Q5@D2000          3  1.16136299  3.5144561            4
+    mad>=0.021|g<=0.2|Q1@D500          3  1.47135831  6.2271984            4
+    mad>=0.021|g<=0.2|Q3@D100          3  1.91549285  4.5200578            4
+    mad>=0.021|g<=0.2|Q5@D250          3  2.23943666  4.7007490            4
+    mad>=0.1|g<=0.25|Q1@D5000          3  2.25677774 12.7172842            4
+     mad>=0.1|g<=0.3|Q1@D5000          3  2.25677774 12.7172842            4
+    mad>=0.021|g<=0.2|Q3@D250          3  2.37123120  5.0216525            4
+   mad>=0.021|g<=0.25|Q1@D500          3  2.40395820  4.4525698            4
+    mad>=0.021|g<=0.3|Q1@D500          3  2.40395820  4.4525698            4
+  mad>=0.021|g<=0.2|Q30@D2000          3  2.51961722  4.1265130            4
+  mad>=0.021|g<=0.2|Q50@D2000          3  2.51961722  4.1265130            4
+    mad>=0.021|g<=0.2|Q1@D100          3  2.54698813  5.5552821            4
+  mad>=0.021|g<=0.2|Q20@D2000          3  2.66507273  4.1993775            4
+    mad>=0.021|g<=0.2|Q5@D500          3  2.92009312  4.1851999            4
+   mad>=0.15|g<=0.25|Q1@D5000          3  2.98984231 18.6985495            4
+    mad>=0.15|g<=0.3|Q1@D5000          3  2.98984231 18.6985495            4
+    mad>=0.1|g<=0.25|Q5@D5000          3  2.99513917 18.7747891            4
+     mad>=0.1|g<=0.3|Q5@D5000          3  2.99513917 18.7747891            4
+    mad>=0.021|g<=0.2|Q3@D500          3  3.00047137  5.3059334            4
+  mad>=0.021|g<=0.2|Q10@D2000          3  3.71555211  4.9197925            4
+    mad>=0.021|g<=0.2|Q1@D250          3  4.83801993  4.9922138            4
+   mad>=0.021|g<=0.25|Q3@D250          3  4.85308362  9.0194229            4
+    mad>=0.021|g<=0.3|Q3@D250          3  4.85308362  9.0194229            4
+   mad>=0.021|g<=0.25|Q3@D500          3  5.50630414  9.4154765            4
+    mad>=0.021|g<=0.3|Q3@D500          3  5.50630414  9.4154765            4
+   mad>=0.021|g<=0.2|Q3@D1000          3  5.71140377  6.3693488            4
+  mad>=0.1|g<=0.1349|Q5@D5000          3  5.80338951 14.5758759            4
+  mad>=0.021|g<=0.25|Q3@D2000          3  6.51684503  7.6844639            4
+   mad>=0.021|g<=0.3|Q3@D2000          3  6.51684503  7.6844639            4
+    mad>=0.1|g<=0.15|Q5@D5000          3  6.85006704 14.7986113            4
+    mad>=0.15|g<=0.2|Q1@D5000          3  7.17702569 16.9936942            4
+     mad>=0.1|g<=0.2|Q1@D5000          3  7.23836658 11.7115366            4
+     mad>=0.1|g<=0.2|Q5@D5000          3  7.28860445 17.4357079            4
+   mad>=0.021|g<=0.25|Q1@D250          3  7.31226477  8.2158696            4
+    mad>=0.021|g<=0.3|Q1@D250          3  7.31226477  8.2158696            4
+ mad>=0.15|g<=0.1349|Q1@D5000          3  7.31916676  8.9817632            4
+   mad>=0.15|g<=0.15|Q1@D5000          3  7.72051743 10.0971812            4
+  mad>=0.021|g<=0.25|Q3@D1000          3  8.24960275 10.3838164            4
+   mad>=0.021|g<=0.3|Q3@D1000          3  8.24960275 10.3838164            4
+    width>=3|g<=0.25|Q1@D5000          3  9.29269647 14.0256312            4
+     width>=3|g<=0.3|Q1@D5000          3  9.29269647 14.0256312            4
+   mad>=0.1|g<=0.25|Q10@D5000          3  9.29364443 13.3789228            4
+    mad>=0.1|g<=0.3|Q10@D5000          3  9.29364443 13.3789228            4
+    mad>=0.1|g<=0.13|Q5@D5000          3 10.01824474 15.4032941            4
+    mad>=0.1|g<=0.2|Q10@D5000          3 10.65541465 14.0280127            4
+  mad>=0.2|g<=0.1349|Q1@D5000          3 12.63115116 15.4227065            4
+    mad>=0.2|g<=0.25|Q1@D5000          3 13.07323525 21.8105812            4
+     mad>=0.2|g<=0.3|Q1@D5000          3 13.07323525 21.8105812            4
+    mad>=0.2|g<=0.15|Q1@D5000          3 13.66180641 15.8232326            4
+     mad>=0.2|g<=0.2|Q1@D5000          3 16.13651954 20.4926189            4
+    mad>=0.5|g<=0.25|Q1@D5000          3 16.70518520 17.8551595            4
+     mad>=0.5|g<=0.3|Q1@D5000          3 16.70518520 17.8551595            4
+    width>=3|g<=0.25|Q5@D5000          3 17.20523488 20.0615445            4
+     width>=3|g<=0.3|Q5@D5000          3 17.20523488 20.0615445            4
+    width>=4|g<=0.25|Q1@D5000          3 20.10545414 20.4321279            4
+     width>=4|g<=0.3|Q1@D5000          3 20.10545414 20.4321279            4
+ n_in n_detect_in raw_rate_in raw_rate_out
+  718         108   0.1504178   0.01538462
+  718         108   0.1504178   0.01538462
+  713         107   0.1500701   0.01739130
+  720         108   0.1500000   0.01545254
+  720         108   0.1500000   0.01545254
+  720         108   0.1500000   0.01545254
+  720         108   0.1500000   0.01545254
+  720         108   0.1500000   0.01545254
+  720         108   0.1500000   0.01545254
+  715         107   0.1496503   0.01746725
+  715         107   0.1496503   0.01746725
+  715         107   0.1496503   0.01746725
+  719         108   0.1502086   0.01541850
+  719         108   0.1502086   0.01541850
+  714         107   0.1498599   0.01742919
+  716         107   0.1494413   0.01750547
+  777         110   0.1415701   0.01262626
+  777         110   0.1415701   0.01262626
+  717         107   0.1492329   0.01754386
+  717         107   0.1492329   0.01754386
+  717         107   0.1492329   0.01754386
+  716         107   0.1494413   0.01750547
+  716         107   0.1494413   0.01750547
+  716         107   0.1494413   0.01750547
+  718         107   0.1490251   0.01758242
+  718         107   0.1490251   0.01758242
+  718         107   0.1490251   0.01758242
+  719         107   0.1488178   0.01762115
+  720         107   0.1486111   0.01766004
+  722         107   0.1481994   0.01773836
+  753         109   0.1447543   0.01428571
+  753         109   0.1447543   0.01428571
+  762         109   0.1430446   0.01459854
+  725         107   0.1475862   0.01785714
+  724         107   0.1477901   0.01781737
+  733         105   0.1432469   0.02272727
+  733         105   0.1432469   0.02272727
+  735         108   0.1469388   0.01598174
+  767         110   0.1434159   0.01231527
+  767         110   0.1434159   0.01231527
+  722         107   0.1481994   0.01773836
+  722         107   0.1481994   0.01773836
+  732         107   0.1461749   0.01814059
+  723         107   0.1479945   0.01777778
+  729         107   0.1467764   0.01801802
+  707         102   0.1442716   0.02789700
+  707         102   0.1442716   0.02789700
+  473          83   0.1754757   0.04571429
+  473          83   0.1754757   0.04571429
+  739         108   0.1461434   0.01612903
+  733         107   0.1459754   0.01818182
+  749         108   0.1441923   0.01650943
+  740         109   0.1472973   0.01385681
+  740         109   0.1472973   0.01385681
+  744         109   0.1465054   0.01398601
+  744         109   0.1465054   0.01398601
+  747         108   0.1445783   0.01643192
+  449          79   0.1759465   0.04972376
+  773         110   0.1423027   0.01250000
+  773         110   0.1423027   0.01250000
+  453          79   0.1743929   0.05000000
+  699         100   0.1430615   0.03164557
+  725         103   0.1420690   0.02678571
+  470          81   0.1723404   0.04836415
+  754         109   0.1445623   0.01431981
+  754         109   0.1445623   0.01431981
+  650          96   0.1476923   0.03632887
+  665          97   0.1458647   0.03543307
+  752         109   0.1449468   0.01425178
+  752         109   0.1449468   0.01425178
+  772         105   0.1360104   0.02493766
+  772         105   0.1360104   0.02493766
+  432          77   0.1782407   0.05128205
+  432          77   0.1782407   0.05128205
+  447          77   0.1722595   0.05234160
+  430          76   0.1767442   0.05248991
+  637          92   0.1444270   0.04291045
+  694          98   0.1412104   0.03549061
+  694          98   0.1412104   0.03549061
+  652          93   0.1426380   0.04222649
+  686          96   0.1399417   0.03901437
+  662          92   0.1389728   0.04500978
+  662          92   0.1389728   0.04500978
+  512          81   0.1582031   0.05143722
+  512          81   0.1582031   0.05143722
+  711          97   0.1364276   0.03896104
+  711          97   0.1364276   0.03896104
+BT_spawn: too_few_groups (visits_in=50, detections=3, groups=4, groups_both=1).
+CH_rear: too_few_groups (visits_in=836, detections=55, groups=4, groups_both=3).
+CH_spawn: no_response (visits_in=836).
+CM_rear: no_stream_rule (visits_in=0).
+CM_spawn: no_response (visits_in=395).
+CO_rear: too_few_groups (visits_in=757, detections=47, groups=3, groups_both=2).
+CO_spawn: no_response (visits_in=757).
+GR_rear: too_few_groups (visits_in=0, detections=0, groups=0, groups_both=0).
+GR_spawn: no_response (visits_in=0).
+PK_rear: no_stream_rule (visits_in=0).
+PK_spawn: no_response (visits_in=757).
+SK_rear: no_stream_rule (visits_in=0).
+SK_spawn: no_response (visits_in=474).
+ST_rear: too_few_groups (visits_in=483, detections=34, groups=2, groups_both=1).
+ST_spawn: no_response (visits_in=483).
+WCT_rear: too_few_groups (visits_in=0, detections=0, groups=0, groups_both=0).
+WCT_spawn: no_response (visits_in=0).
+Pick report against data/tune: 0 of 1 keys keep the published pick (moved: BT_rear); written to data/tune/dev_zz415_default/pick_report.csv.
+
+## pick report
+     key                rule_run       rule_published same_pick
+ BT_rear mad>=0.021|g<=0.25|none mad>=0.1|g<=0.3|none     FALSE
+ published_in_region published_ddev published_se published_ddev_was
+               FALSE       11.50756     11.43416           0.598307
+ n_visits_run n_visits_published
+         1173               9344
+DEV=1: no grades. Done in 0.2 min.

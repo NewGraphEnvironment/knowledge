@@ -4,7 +4,7 @@
 \alias{knw_link_access_check}
 \title{How link's two access columns disagree, per species}
 \usage{
-knw_link_access_check(conn, schema, species = knw_species())
+knw_link_access_check(conn, schema, species = knw_species(), by_group = FALSE)
 }
 \arguments{
 \item{conn}{a \code{DBI} connection to a database holding \code{schema}.}
@@ -13,11 +13,16 @@ knw_link_access_check(conn, schema, species = knw_species())
 
 \item{species}{\code{character} species with a habitat table and an access column
 in the schema; a species lacking either is skipped and named in \code{skipped}.}
+
+\item{by_group}{\code{logical(1)}: one row per watershed group as well, so two
+builds of the same groups (link's full and minimal networks, #120) can be
+set beside each other where their km differ.}
 }
 \value{
 A list: \code{check}, a \code{tibble} with one row per species and cell
 (\code{habitat_accessible}, \code{access_gt0}, \code{n_segments}, \code{n_rearing},
-\code{n_spawning}, \code{km}), and \code{skipped}, the species not checked.
+\code{n_spawning}, \code{km}; with \code{by_group}, per \code{watershed_group_code} too), and
+\code{skipped}, the species not checked.
 }
 \description{
 In a link \code{default} build, \verb{streams_habitat_<sp>.accessible} and
