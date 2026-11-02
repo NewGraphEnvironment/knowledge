@@ -66,16 +66,16 @@ baseline on 2026-11-02; the resume block is in `progress.md`.
       `log_recompute`; roxygen names which table carries what
 - [x] `test-build_record.R`: the mock answers by table name for both the column query and the token query, so a
       reader asking `log_recompute` gets nothing; restore the defect and show the test goes red
-- [ ] `EVIDENCE_DIR` on `0310` (default `data/fdis/derived`): the ledger gains an `evidence_dir` info row and is
+- [x] `EVIDENCE_DIR` on `0310` (default `data/fdis/derived`): the ledger gains an `evidence_dir` info row and is
       named `<date>_evidence_build_ledger.csv` for the default directory and
       `<date>_evidence_build_ledger-<basename>.csv` otherwise (the `_refused.csv` pattern), outside today's
       readers' pattern; its `_refused` twin follows
-- [ ] `.knw_evidence_ledger(evidence_dir)` (internal): the newest ledger by that pattern; `0320`, `0330` and
+- [x] `.knw_evidence_ledger(evidence_dir)` (internal): the newest ledger by that pattern; `0320`, `0330` and
       `data-raw/segment_gradient_check.R` take `EVIDENCE_DIR` and find their ledger through it; `0320` writes
       `evidence_dir` into each key's summary (no grade-record column: `knw_grade_record_read()` would refuse the 8
       tracked records); `knw_run_ledger()` unchanged
-- [ ] `DEV_DIR=` on `0320` (default `data/tune/dev`), so two DEV runs on two schemas keep their tables
-- [ ] Tests on fixtures: the ledger finder (two ledgers one day, tagged and plain); `scripts/README.md` rows; the
+- [x] `DEV_DIR=` on `0320` (default `data/tune/dev`), so two DEV runs on two schemas keep their tables
+- [x] Tests on fixtures: the ledger finder (two ledgers one day, tagged and plain); `scripts/README.md` rows; the
       `CLAUDE.md` paragraph "A run's record travels with its table"
 
 ## Phase 2: The settle gate, the floors, and the gradient reads the setups need

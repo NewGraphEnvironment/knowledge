@@ -45,14 +45,16 @@
 #         fwapg database (PG* env vars): SCHEMA (link's persist schema), discharge, cabd, bcfishobs,
 #         whse_basemapping, knw.walk_cache (the walk cache, shared with 0320's grade);
 #         link >= 0.66.0 (lnk_species_pooling); the BC Hydrologic Zones zip
-# OUTPUT: data/fdis/derived/visits_link.csv     one row per placed visit (ignored; 0299 publishes)
-#         data/fdis/derived/visits_species.csv  one row per placed visit x species
-#         data/fdis/derived/walks.csv           one row per start x source x river size
-#         data/fdis/derived/bcfishobs_fdis_match.csv
-#         data/fdis/derived/access_check.csv
-#         data/fdis/derived/workbook_{sites,species}.csv  the FISS workbook sites placed on link's segments
-#         scripts/logs/habitat/<date>_evidence_build_ledger.csv
-# RUN:    [SCHEMA=fresh_default_20261017] [REMOTE=TRUE] Rscript scripts/0310-evidence-build.R   (from the repo root; 4 socket
+# OUTPUT: under EVIDENCE_DIR (default data/fdis/derived; all ignored; 0299 publishes the default's):
+#         visits_link.csv     one row per placed visit
+#         visits_species.csv  one row per placed visit x species
+#         walks.csv           one row per start x source x river size
+#         bcfishobs_fdis_match.csv
+#         access_check.csv
+#         workbook_{sites,species}.csv  the FISS workbook sites placed on link's segments
+#         scripts/logs/habitat/<date>_evidence_build_ledger.csv, or <date>_evidence_build_ledger-<base name>.csv for
+#         another EVIDENCE_DIR (#120); its first row names the directory
+# RUN:    [SCHEMA=fresh_default_20261017] [EVIDENCE_DIR=data/fdis/derived_<name>] [REMOTE=TRUE] Rscript scripts/0310-evidence-build.R   (from the repo root; 4 socket
 #         workers; the visit walks are cached from #91, so the first run walks them cold (6.4 min of walks and 16 min
 #         in all from a remote link, 2026-10-27) and a rerun on the same flow load reads them back (0.7 min of walks))
 # ---------------------------------------------------------------------------
@@ -72,9 +74,12 @@ cw_agree_min <- 0.9    # 0296 measured 96.2 % province-wide; a two-group sample 
                        # is for a formula or input change, which collapses agreement, not for regional drift.
 hz_url <- paste0("https://catalogue.data.gov.bc.ca/dataset/f1f86c41-ae83-49d5-92e1-526897b99fa2/",
                  "resource/fc209bd0-26ab-4f8b-9415-8f34081a3c0e/download/bc_hydrologic_zones.zip")
-dir_out <- "data/fdis/derived"
+# the build's directory (#120): the default is the one every reader takes; another directory (a test build on another
+# schema) tags its ledger with the directory's base name, outside the pattern the default readers match, so it never
+# becomes their build. 0320, 0330 and the checks take the same EVIDENCE_DIR and find this ledger by it
+dir_out <- Sys.getenv("EVIDENCE_DIR", .knw_evidence_dir_default)
 stamp <- format(Sys.Date(), "%Y%m%d")
-path_ledger <- file.path("scripts/logs/habitat", paste0(stamp, "_evidence_build_ledger.csv"))
+path_ledger <- .knw_ledger_path(dir_out, stamp)
 species <- knw_species()
 
 if (!requireNamespace("link", quietly = TRUE) || packageVersion("link") < link_min) {
@@ -84,6 +89,8 @@ ledger <- tibble(kind = character(), step = character(), n = numeric(), note = c
 add <- function(kind, step, n, note = "") {
   ledger <<- bind_rows(ledger, tibble(kind = kind, step = step, n = as.numeric(n), note = note))
 }
+add("info", "evidence_dir", 0, dir_out)
+dir.create(dir_out, showWarnings = FALSE, recursive = TRUE)
 pg <- function() {
   tryCatch(DBI::dbConnect(RPostgres::Postgres(), bigint = "numeric"),
            error = function(e) stop("database unreachable (PG* environment variables): ", conditionMessage(e)))
@@ -102,11 +109,11 @@ for (k in c("link_version", "link_sha", "fresh_version", "fresh_sha", "fwapg_sha
 }
 conn <- pg()
 # The visit walks are bound by the database: refuse a connection off its host unless REMOTE=TRUE (#110). A refused
-# run's ledger goes to its own file, because 0320, 0325 and 0330 read the newest *_evidence_build_ledger.csv.
+# run's ledger goes to its own file, because 0320, 0325 and 0330 read the newest *_evidence_build_ledger*.csv.
 lat <- tryCatch(knw_db_latency_check(conn, remote = remote), error = function(e) {
   add("info", "db_round_trip_ms", NA, conditionMessage(e))
   add("info", "db_remote_override", 0)
-  path_refused <- sub("_ledger\\.csv$", "_refused.csv", path_ledger)
+  path_refused <- .knw_ledger_path(dir_out, stamp, refused = TRUE)
   write_csv(ledger, path_refused, na = "")
   stop(conditionMessage(e), " (ledger ", path_refused, ")", call. = FALSE)
 })

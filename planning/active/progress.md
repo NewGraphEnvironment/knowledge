@@ -44,3 +44,8 @@ mandate; the merge stays with me.
   Mutation: the `log_recompute` read put back fails 4 expectations of `test-build_record.R`. Live on m4:
   `zz415_default` reads `cut-full-top.acc-v5.grad-seg.q-fwapg`, `zz415_minimal` `cut-min.acc-v5.grad-seg.q-fwapg`,
   m4's `fresh_default` (0.68.6) none
+- Phase 1: `EVIDENCE_DIR` on `0310` (tagged ledger `<date>_evidence_build_ledger-<base>.csv`, `evidence_dir` first row,
+  refused twin tagged alike), `0320` (+ `DEV_DIR`, summary `evidence_dir`; the pick report's published directory is
+  now named, not derived by a regex that `DEV_DIR=data/tune/dev_<x>` would have mangled), `0330` (the summaries'
+  directory, refused unless its md5s are the curves'), `segment_gradient_check.R` (tagged, never overwritten log);
+  internal `.knw_ledger_path()`/`.knw_evidence_ledger()` in `R/run_ledger.R` with tests

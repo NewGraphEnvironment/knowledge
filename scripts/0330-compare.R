@@ -43,8 +43,8 @@
 #     every key, in parallel across keys, from the saved segments (GPKG=FALSE skips them while iterating).
 #
 # INPUT:  TUNE_DIR/<sp>_<stage>_{curve.rds,grades.csv} (0320's candidate run),
-#         data/fdis/derived/{visits_link,visits_species}.csv
-#         (0310), the link repository at LINK_REPO at the build's link_sha, the stac_floodplains_bc catalog
+#         EVIDENCE_DIR/{visits_link,visits_species,walks}.csv (0310; default the directory the run's summaries name, else
+#         data/fdis/derived; refused unless their md5s are the curves' evidence_md5, #120), the link repository at LINK_REPO at the build's link_sha, the stac_floodplains_bc catalog
 #         (items read from its public bucket), fwapg database (PG* env vars): the run's schema (SCHEMA, default
 #         fresh_default), bcfishobs, whse_basemapping
 # WRITES: schemas knw_cmp_<sp>_<stage> and knw_cmp_<sp>_<stage>_w<i> in the fwapg database (scratch; dropped)
@@ -140,9 +140,28 @@ fitted <- Filter(function(r) !is.null(r$pick) && !is.null(r$curve), curves)
 if (nzchar(only)) fitted <- fitted[vapply(fitted, function(r) r$species_code %in% strsplit(only, ",")[[1]], logical(1))]
 say("Comparison, knowledge#57: %d fitted species x stage; link run %s at %s.", length(fitted), run_uid, link_sha)
 say("Candidate run %s: read from %s, written under %s (ignored); promote it with RUN=%s scripts/0335.", run, tune_dir, dir_out, run)
-vl <- read_csv("data/fdis/derived/visits_link.csv", show_col_types = FALSE, guess_max = 1e5,
+# the build the run was scored on (#120): EVIDENCE_DIR, else the directory the run's summaries name (0320 writes it
+# from #120), else the default; its tables must be the ones the curves were fitted on
+sum_dirs <- unique(stats::na.omit(unlist(lapply(list.files(tune_dir, "_summary\\.csv$", full.names = TRUE), function(f) {
+  x <- read_csv(f, show_col_types = FALSE, col_types = cols(.default = "c"))
+  if ("evidence_dir" %in% names(x)) x$evidence_dir else NA_character_
+}))))
+if (length(sum_dirs) > 1) stop(tune_dir, "'s summaries name ", length(sum_dirs), " evidence directories: ", paste(sum_dirs, collapse = ", "))
+evidence_dir <- Sys.getenv("EVIDENCE_DIR", if (length(sum_dirs)) sum_dirs else .knw_evidence_dir_default)
+if (length(sum_dirs) && !identical(.knw_path_key(evidence_dir), .knw_path_key(sum_dirs))) {
+  stop("EVIDENCE_DIR=", evidence_dir, " is not the directory ", tune_dir, "'s summaries were scored on (", sum_dirs, ")")
+}
+ev_md5 <- paste(unname(tools::md5sum(file.path(evidence_dir, paste0(c("visits_link", "visits_species", "walks"), ".csv")))),
+                collapse = ";")
+fit_md5 <- unique(vapply(fitted, function(r) if (is.null(r$evidence_md5)) NA_character_ else r$evidence_md5, character(1)))
+if (length(fitted) && !identical(fit_md5, ev_md5)) {
+  stop(evidence_dir, "'s tables (md5 ", ev_md5, ") are not the evidence the curves were fitted on (",
+       paste(fit_md5, collapse = ", "), "): set EVIDENCE_DIR to that build's directory")
+}
+say("Evidence %s (%s), the curves' own.", evidence_dir, ledger_path)
+vl <- read_csv(file.path(evidence_dir, "visits_link.csv"), show_col_types = FALSE, guess_max = 1e5,
                col_types = cols(site_visit = "c", species_caught = "c", blocks_absence_of = "c", hydro_zone = "c"))
-vs <- read_csv("data/fdis/derived/visits_species.csv", show_col_types = FALSE, guess_max = 1e5, col_types = cols(site_visit = "c"))
+vs <- read_csv(file.path(evidence_dir, "visits_species.csv"), show_col_types = FALSE, guess_max = 1e5, col_types = cols(site_visit = "c"))
 
 # link's configs: the baseline is link's current default (CONFIG_SHA, default origin/main as fetched), not the
 # run's commit, which stays the provenance of the schema (#73)

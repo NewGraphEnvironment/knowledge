@@ -46,7 +46,8 @@
 #     data/tune/<key>_tune.csv) on the main fold seed, and four checks gate the scorer (knw_tune_smoke()). One
 #     failed check on any key ends the run with every key's report in the log, and nothing is scored.
 #
-# INPUT:  data/fdis/derived/{visits_link,visits_species,walks}.csv (0310), data/fdis/build/fish.rds
+# INPUT:  EVIDENCE_DIR/{visits_link,visits_species,walks}.csv (0310; default data/fdis/derived) and the newest ledger 0310
+#         wrote for that directory (#120), data/fdis/build/fish.rds
 #         (0230), data/fdis_species_codes.csv; the link repository at LINK_REPO at the build's link_sha
 #         (parameters_habitat_thresholds.csv); fwapg database (PG* env vars): the run's schema (SCHEMA, default
 #         fresh_default), discharge; data/tune/<sp>_<stage>_tune.csv where one exists (the previous pick)
@@ -73,7 +74,8 @@
 #         population and the grid, not the scorer's code: remove <key>_score.rds after a change to R/tune_score.R.
 #         DEV=1 is the development setting (#84): the smoke run and the full grid on the main fold seed only (no
 #         bootstrap, nested selection or extra seeds), the curve and the summary, no grades, every output under
-#         data/tune/dev/ (ignored), log included, so a scorer change is proved on every species before a full run.
+#         DEV_DIR (default data/tune/dev/; ignored), log included, so a scorer change is proved on every species before a
+#         full run. EVIDENCE_DIR=data/fdis/derived_<name> DEV_DIR=data/tune/dev_<name> scores a test build (#120).
 #         It ends in the pick report (#111): data/tune/dev/pick_report.csv, each key's pick beside the published one
 #         (knw_tune_pick_report()), the run to make after a change upstream (a link build, placement, a flow reload).
 #         A candidate writes its own <run>/pick_report.csv, before it grades.
@@ -111,7 +113,18 @@ run <- Sys.getenv("RUN", format(Sys.time(), "%Y%m%d_%H%M", tz = "UTC"))
 # a stamp, so a log name says which run it is and sorts by date: the logs add -<species>, -grad_fwa and a pass number,
 # and data-raw/vignette_chinook.R matches a run's logs by that form
 if (!grepl("^[0-9]{8}_[0-9]{4}([0-9]{2})?$", run)) stop("RUN must be a UTC stamp YYYYMMDD_HHMM, as the default is: ", run)
-dir_run <- if (dev) "data/tune/dev" else file.path("data/tune/candidate", run)
+# the build the run scores (#120): EVIDENCE_DIR, as 0310 wrote it, found with its own ledger; a DEV=1 run writes
+# DEV_DIR (default data/tune/dev), so two DEV runs on two builds keep their tables
+evidence_dir <- Sys.getenv("EVIDENCE_DIR", .knw_evidence_dir_default)
+dev_dir <- Sys.getenv("DEV_DIR", "data/tune/dev")
+if (nzchar(Sys.getenv("DEV_DIR")) && !dev) stop("DEV_DIR names a DEV=1 run's directory: give DEV=1 with it")
+if (dev && (!startsWith(.knw_path_key(dev_dir), paste0(.knw_path_key("data/tune"), "/")) ||
+              startsWith(.knw_path_key(dev_dir), paste0(.knw_path_key("data/tune/candidate"), "/")) ||
+              identical(.knw_path_key(dev_dir), .knw_path_key("data/tune/candidate")) ||
+              identical(.knw_path_key(dev_dir), .knw_path_key("data/tune/grad_fwa")))) {
+  stop("DEV_DIR must be a directory of its own under data/tune (ignored), not a tracked or candidate one: ", dev_dir)
+}
+dir_run <- if (dev) dev_dir else file.path("data/tune/candidate", run)
 # the Atlas-gradient sensitivity belongs to a main run, which promotes it with its own tables: name that run
 if (!dev && gradient != "segment_gradient" &&
       (!nzchar(Sys.getenv("RUN")) || !length(list.files(dir_run, "_summary\\.csv$")))) {
@@ -154,19 +167,19 @@ knowledge_commit <- paste0(git1("rev-parse", "--short", "HEAD")[1],
                              "+dirty" else "")
 
 # ---- inputs and their provenance ------------------------------------------------------
-ledger_path <- sort(list.files("scripts/logs/habitat", "_evidence_build_ledger\\.csv$", full.names = TRUE), decreasing = TRUE)[1]
-if (is.na(ledger_path)) stop("no evidence build ledger: run scripts/0310 first")
+ledger_path <- .knw_evidence_ledger(evidence_dir)
 led <- read_csv(ledger_path, show_col_types = FALSE, col_types = cols(.default = "c"))
 run_uid <- led$note[led$step == "link_run_uid"]
 link_sha <- led$note[led$step == "run_link_sha"]
-say("Tuning run, knowledge#57. Evidence build %s on link run %s (link %s), schema %s.", ledger_path, run_uid, link_sha, schema)
+say("Tuning run, knowledge#57. Evidence build %s (%s) on link run %s (link %s), schema %s.", ledger_path, evidence_dir,
+    run_uid, link_sha, schema)
 say("%s: outputs under %s (ignored)%s.", if (dev) "DEV=1" else paste("Candidate run", run), dir_out,
     if (dev) "" else sprintf("; compare it with TUNE_DIR=%s scripts/0330, promote it with RUN=%s scripts/0335", dir_run, run))
 # the evidence's identity: the md5 of each derived table, logged, carried into the score cache's settings and written
 # on every grade table, so a rebuilt evidence of the same visit count is neither read back from the cache nor kept as
 # a grade (the branch review of 2026-10-25)
 evidence_md5s <- vapply(c("visits_link", "visits_species", "walks"), function(f) {
-  unname(tools::md5sum(file.path("data/fdis/derived", paste0(f, ".csv"))))
+  unname(tools::md5sum(file.path(evidence_dir, paste0(f, ".csv"))))
 }, character(1))
 for (f in names(evidence_md5s)) say("  %s md5 %s", f, evidence_md5s[[f]])
 evidence_md5 <- paste(unname(evidence_md5s), collapse = ";")
@@ -192,10 +205,10 @@ if (!dev) {
   }
   dbDisconnect(conn)
 }
-vl <- read_csv("data/fdis/derived/visits_link.csv", show_col_types = FALSE, guess_max = 1e5,
+vl <- read_csv(file.path(evidence_dir, "visits_link.csv"), show_col_types = FALSE, guess_max = 1e5,
                col_types = cols(site_visit = "c", species_caught = "c", blocks_absence_of = "c", hydro_zone = "c"))
-vs <- read_csv("data/fdis/derived/visits_species.csv", show_col_types = FALSE, guess_max = 1e5, col_types = cols(site_visit = "c"))
-walks <- read_csv("data/fdis/derived/walks.csv", show_col_types = FALSE)
+vs <- read_csv(file.path(evidence_dir, "visits_species.csv"), show_col_types = FALSE, guess_max = 1e5, col_types = cols(site_visit = "c"))
+walks <- read_csv(file.path(evidence_dir, "walks.csv"), show_col_types = FALSE)
 codes <- read_csv("data/fdis_species_codes.csv", col_types = cols(.default = "c"), na = "")
 fish <- readRDS("data/fdis/build/fish.rds")
 spawner <- knw_spawner_evidence(fish, vl |> inner_join(vs |> filter(species_code == "BT") |> select(site_visit, pooling), by = "site_visit") |>
@@ -329,6 +342,8 @@ for (k in names(out)) {
       # the candidate run and the evidence ledger it read (#111): a promoted table names the log that graded it and the
       # build it was scored on, so its readers take them rather than the newest on disk
       tune_run = if (dev) NA_character_ else run, evidence_ledger = ledger_path,
+      # the directory those tables were read from (#120); the summary only, since a grade record must keep its columns
+      evidence_dir = evidence_dir,
       curve_dist_in_model = r$curve$dist_in_model,
       curve_edf = paste(sprintf("%s=%.2f", names(r$curve$edf), r$curve$edf), collapse = "; "),
       # NA under DEV=1 and on the sensitivity, which run the main seed alone
@@ -379,7 +394,7 @@ for (k in names(out)) {
 # ---- the pick report (#111): the run's pick beside the published one, per key ------------------------------
 # what a DEV=1 run after a change upstream is for, and what a candidate is promoted on: the published side is the
 # tracked table dir_out stands in for (data/tune, or data/tune/grad_fwa for the sensitivity), never another run's
-dir_pub <- sub("^data/tune/(dev|candidate/[^/]+)", "data/tune", dir_out)
+dir_pub <- if (nzchar(grad_dirs[[gradient]])) file.path("data/tune", grad_dirs[[gradient]]) else "data/tune"
 pr <- bind_rows(lapply(names(out), function(k) {
   r <- out[[k]]
   if (is.null(r$score)) return(NULL)
