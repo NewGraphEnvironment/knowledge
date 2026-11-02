@@ -60,6 +60,17 @@ Minimal network check, knowledge#120. Full: data/fdis/derived_zz415_default (scr
 [7] km_diff             
 <0 rows> (or 0-length row.names)
 
+## access codes that differ at a visit, per species (full, minimal)
+ species code_full code_minimal visits
+      BT         1            2     63
+      CH         1            2     38
+      CM         1            2      7
+      CO         1            2     26
+      PK         1            2      1
+      SK         1            2      1
+      ST         1            2      5
+   Access codes differ at 141 visit x species pairs; across zero at 0.
+
 ## access km per species, access > 0 (both builds)
  species_code watershed_group_code km_full km_min km_diff
            BT                 BULK  7661.1 7661.1       0

@@ -121,7 +121,8 @@ for (k in c("link_version", "link_sha", "fresh_version", "fresh_sha", "fwapg_sha
 }
 conn <- pg()
 # The visit walks are bound by the database: refuse a connection off its host unless REMOTE=TRUE (#110). A refused
-# run's ledger goes to its own file, because 0320, 0325 and 0330 read the newest *_evidence_build_ledger*.csv.
+# run's ledger goes to its own file, outside the names 0320 (by its evidence directory, .knw_evidence_ledger()) and
+# 0325 and 0330 (the ledger the summaries name, else the newest <date>_evidence_build_ledger.csv) read.
 lat <- tryCatch(knw_db_latency_check(conn, remote = remote), error = function(e) {
   add("info", "db_round_trip_ms", NA, conditionMessage(e))
   add("info", "db_remote_override", 0)

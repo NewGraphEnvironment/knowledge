@@ -1,7 +1,8 @@
 # data-raw/minimal_network_check.R
 # ---------------------------------------------------------------------------
 # Before tuning on link's minimal network (#120): does a build on it place the same visits as a build on the full
-# network of the same groups, with only the segment differing? Four checks, on two evidence builds 0310 wrote:
+# network of the same groups, with only the segment differing? Four checks on two evidence builds 0310 wrote, and a
+# fifth on the database:
 #   1. PLACEMENT: the same visits placed on both, at one blue line and measure and on one Atlas line; which segment
 #      columns, access codes and habitat flags differ, and on how many visits.
 #   2. WALKS: walks.csv the same rows on both (the walk reads FWA and the flows, never link's segments), and
@@ -110,6 +111,21 @@ ac <- full_join(af |> select(all_of(by), km_full = km), am |> select(all_of(by),
 say("3. ACCESS: %d species x group x cell rows; km differ by more than 0.01 on %d.", nrow(ac), sum(abs(ac$km_diff) > 0.01))
 block("access km per species x group x cell where the two builds differ (minimal - full)",
       ac |> filter(abs(km_diff) > 0.01) |> arrange(species_code, watershed_group_code, desc(abs(km_diff))))
+# the access codes at each visit: which pairs of codes differ, and whether any crosses zero (access > 0 is the gate)
+acc_sp <- sub("^access_", "", grep("^access_", intersect(names(vf), names(vm)), value = TRUE))
+acc_pairs <- bind_rows(lapply(acc_sp, function(sp) {
+  a <- j[[paste0("access_", sp, ".f")]]
+  b <- j[[paste0("access_", sp, ".m")]]
+  d <- !is.na(a) & !is.na(b) & a != b
+  if (!any(d)) return(NULL)
+  tibble(species = toupper(sp), code_full = a[d], code_minimal = b[d])
+}))
+if (nrow(acc_pairs)) {
+  block("access codes that differ at a visit, per species (full, minimal)",
+        acc_pairs |> count(species, code_full, code_minimal, name = "visits"))
+}
+say("   Access codes differ at %d visit x species pairs; across zero at %d.", nrow(acc_pairs),
+    sum((acc_pairs$code_full > 0) != (acc_pairs$code_minimal > 0)))
 block("access km per species, access > 0 (both builds)",
       ac |> filter(access_gt0) |> group_by(species_code, watershed_group_code) |>
         summarise(km_full = sum(km_full), km_min = sum(km_min), .groups = "drop") |> mutate(km_diff = km_min - km_full))

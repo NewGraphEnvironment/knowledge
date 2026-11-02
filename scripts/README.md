@@ -61,7 +61,7 @@ wf_farm_priority.js                          farm priority/crossing tables out o
       database's host (round trip over 20 ms) unless REMOTE=TRUE (#110). EVIDENCE_DIR=data/fdis/derived_<name>
       writes a build of another schema there, its ledger tagged <date>_evidence_build_ledger-<name>.csv, outside the
       name the default readers take; SETTLE=<settle log> names that schema's settle log (the gate stays its run_uid);
-      PARENT_DIR=<link's parent_<wsg>.csv.gz> adds each visit's minimal parent (parent_gradient, parent_length_m,
+      PARENT_DIR=<the directory holding link's parent_<wsg>.csv.gz> adds each visit's minimal parent (parent_gradient, parent_length_m,
       parent_straddle_m); access_check.csv is per species x group; needs link >= 0.78.1 (#120)
 0290  bt_use_visits.csv written from 0310 (BT's rows and the columns 0291-0293 read; no held-out columns)
 0294  ch_mad_visits.csv written from 0310 (+ two database reads: ambiguous placement, barriers without USER_DEFINITE)
