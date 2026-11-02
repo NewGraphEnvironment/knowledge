@@ -96,6 +96,20 @@ add <- function(kind, step, n, note = "") {
 }
 add("info", "evidence_dir", 0, .knw_path_rel(dir_out))
 dir.create(dir_out, showWarnings = FALSE, recursive = TRUE)
+# whether dir_out IS the default directory, asked of the filesystem, not of the spelling: on a case-insensitive disk
+# data/fdis/DERIVED, and through a symlink or `..` any other name, is the same directory. A sentinel written into one
+# shows in the other
+is_default_dir <- local({
+  s <- tempfile("knw_dir_probe_", tmpdir = dir_out)
+  file.create(s)
+  on.exit(unlink(s))
+  file.exists(file.path(.knw_evidence_dir_default, basename(s)))
+})
+# the ledger is named by the spelling, so a default directory reached by another name would write the default tables
+# under a tagged ledger: refused
+if (is_default_dir && nzchar(.knw_evidence_tag(dir_out))) {
+  stop("EVIDENCE_DIR=", dir_out, " is the default directory by another name: write it as ", .knw_evidence_dir_default)
+}
 pg <- function() {
   tryCatch(DBI::dbConnect(RPostgres::Postgres(), bigint = "numeric"),
            error = function(e) stop("database unreachable (PG* environment variables): ", conditionMessage(e)))
@@ -120,7 +134,7 @@ settle_schema <- if ("schema" %in% names(st)) st$schema else "fresh_default"
 add("info", "settle_schema", 0, settle_schema)
 # a test build never writes the default directory, whose ledger name every default reader takes: the schema it was
 # settled on, or a log named by hand, is not fresh_default's provincial run
-if ((settle_given || !identical(settle_schema, "fresh_default")) && !nzchar(.knw_evidence_tag(dir_out))) {
+if ((settle_given || !identical(settle_schema, "fresh_default")) && is_default_dir) {
   stop("a build settled on ", settle_schema, if (settle_given) paste0(" (SETTLE=", settle[1], ")") else "",
        " writes its own EVIDENCE_DIR (data/fdis/derived_<name>), never the default ", dir_out)
 }

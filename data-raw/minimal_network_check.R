@@ -42,7 +42,8 @@ led_of <- function(d) {
 }
 lf <- led_of(full_dir)
 lm <- led_of(min_dir)
-say("Minimal network check, knowledge#120. Full: %s (%s). Minimal: %s (%s).", full_dir, lf$path, min_dir, lm$path)
+say("Minimal network check, knowledge#120. Full: %s (%s). Minimal: %s (%s).", .knw_path_rel(full_dir), lf$path,
+    .knw_path_rel(min_dir), lm$path)
 say("  %s", lf$record)
 say("  %s", lm$record)
 

@@ -45,7 +45,8 @@ ledger_path <- .knw_evidence_ledger(evidence_dir)
 led <- read_csv(ledger_path, show_col_types = FALSE, col_types = cols(.default = "c"))
 run_uid <- led$note[led$step == "link_run_uid"]
 link_sha <- strsplit(led$note[led$step == "run_link_sha"], ";", fixed = TRUE)[[1]][1]
-say("Segment gradient check, knowledge#92. Evidence %s, %s (link run %s, link %s); schema %s.", evidence_dir, ledger_path,
+say("Segment gradient check, knowledge#92. Evidence %s, %s (link run %s, link %s); schema %s.", .knw_path_rel(evidence_dir),
+    ledger_path,
     run_uid, link_sha, schema)
 
 thr_file <- tempfile(fileext = ".csv")

@@ -14,8 +14,11 @@
 #' straddles a minimal break, `straddle_m` is the length that lies on another
 #' minimal segment: a visit on that stretch sits on the other segment on the
 #' minimal network, so there the two setups read different gradients. A placed
-#' visit whose segment has no parent row is an error: the parent table is not
-#' the full network's.
+#' visit whose segment has no parent row is an error. link numbers each group's
+#' segments from 1, so a parent table of another build covers the same ids:
+#' where `visits` carries `segment_length_m` and `parent` `overlap_m`, each
+#' visit's segment must be as long as its parent row's `overlap_m +
+#' straddle_m` (within 1 cm), or the join stops as another network's table.
 #'
 #' @param visits `data.frame` of placed visits with `site_visit`,
 #'   `watershed_group_code` and `id_segment` (the full network's segment, as
@@ -47,6 +50,14 @@ knw_parent_join <- function(visits, parent) {
     stop(nrow(miss), " placed visits have no parent row (groups ",
          paste(sort(unique(miss$watershed_group_code)), collapse = ", "),
          "): the parent table is not this network's", call. = FALSE)
+  }
+  # the ids alone cannot tell two builds of one group apart: their lengths can
+  if ("segment_length_m" %in% names(visits) && "overlap_m" %in% names(parent)) {
+    off <- abs(as.numeric(parent$overlap_m[i]) + as.numeric(parent$straddle_m[i]) - as.numeric(visits$segment_length_m)) > 0.01
+    if (any(off %in% TRUE)) {
+      stop(sum(off %in% TRUE), " placed visits sit on a segment whose length is not its parent row's overlap and ",
+           "straddle: the parent table is another build's", call. = FALSE)
+    }
   }
   visits$parent_id_segment <- as.numeric(parent$id_segment_minimal[i])
   visits$parent_gradient <- as.numeric(parent$gradient_minimal[i])

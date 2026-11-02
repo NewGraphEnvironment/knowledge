@@ -36,8 +36,10 @@ visit on the full segment takes that parent's gradient. Where a full segment
 straddles a minimal break, \code{straddle_m} is the length that lies on another
 minimal segment: a visit on that stretch sits on the other segment on the
 minimal network, so there the two setups read different gradients. A placed
-visit whose segment has no parent row is an error: the parent table is not
-the full network's.
+visit whose segment has no parent row is an error. link numbers each group's
+segments from 1, so a parent table of another build covers the same ids:
+where \code{visits} carries \code{segment_length_m} and \code{parent} \code{overlap_m}, each
+visit's segment must be as long as its parent row's \code{overlap_m + straddle_m} (within 1 cm), or the join stops as another network's table.
 }
 \examples{
 v <- data.frame(site_visit = c("a", "b"), watershed_group_code = "BULK", id_segment = c(10, 11))

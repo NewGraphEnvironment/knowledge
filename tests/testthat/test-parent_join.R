@@ -27,3 +27,15 @@ test_that("a visit with no parent, or a segment with two, stops the join", {
   expect_error(knw_parent_join(v, p), "1 full segments have two parent rows")
   expect_error(knw_parent_join(v[, 1:2], parent_fx()))
 })
+
+test_that("a parent table of another build of the same group is caught by its lengths (#120 review)", {
+  # link numbers each group's segments from 1, so another build's table covers the same ids
+  v <- data.frame(site_visit = c("a", "b"), watershed_group_code = "BULK", id_segment = c(10, 11),
+                  segment_length_m = c(120, 315))
+  expect_identical(knw_parent_join(v, parent_fx())$parent_gradient, c(0.012, 0.012))
+  v$segment_length_m[2] <- 290
+  expect_error(knw_parent_join(v, parent_fx()), "1 placed visits sit on a segment whose length is not its parent row's")
+  # within a centimetre is the same segment
+  v$segment_length_m[2] <- 315.004
+  expect_identical(nrow(knw_parent_join(v, parent_fx())), 2L)
+})
