@@ -1,5 +1,13 @@
 # Changelog
 
+## knowledge 0.4.21
+
+- The repository is public
+  ([\#56](https://github.com/NewGraphEnvironment/knowledge/issues/56)).
+  The README’s Learn more links point at the published site: the chinook
+  rearing article, the methodology article (newly linked), the function
+  reference and the news page. No code change.
+
 ## knowledge 0.4.20
 
 - A published article bundle can be rebuilt on any machine

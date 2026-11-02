@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">knowledge</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.20</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.21</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,9 +33,13 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/v0.4.21/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.4.21" id="knowledge-0421">knowledge 0.4.21<a class="anchor" aria-label="anchor" href="#knowledge-0421"></a></h2>
+<ul><li>The repository is public (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/56" class="external-link">#56</a>). The README’s Learn more links point at the published site: the chinook rearing article, the methodology article (newly linked), the function reference and the news page. No code change.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.20" id="knowledge-0420">knowledge 0.4.20<a class="anchor" aria-label="anchor" href="#knowledge-0420"></a></h2>
 <ul><li>A published article bundle can be rebuilt on any machine (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/119" class="external-link">#119</a>). <code>scripts/0320</code> writes a tracked record beside each grade table (<code>&lt;key&gt;_grades_record.csv</code>, read with <code><a href="../reference/knw_grade_record_write.html">knw_grade_record_read()</a></code>), which the bundles pin instead of the gigabyte tables, and <code><a href="../reference/knw_tune_promote.html">knw_tune_promote()</a></code> refuses a key whose record is missing or describes another table. A run’s grade tables, records, curves and segments, and its evidence build once, are kept in a private, versioned archive (<code><a href="../reference/knw_archive_plan.html">knw_archive_plan()</a></code>, <code><a href="../reference/knw_archive_put.html">knw_archive_put()</a></code>, <code>scripts/0336-archive.R</code>), indexed by version id in <code>data/archive_index.csv</code>; <code>PULL=TRUE</code> (<code><a href="../reference/knw_archive_pull.html">knw_archive_pull()</a></code>) restores the run a checkout’s records name, md5-checked, and <code>scripts/0335</code> archives each promotion. <code><a href="../reference/knw_build_record.html">knw_build_record()</a></code> reads link’s output-vocabulary tokens. The methodology article’s limits carry the measured site gradient against link’s segment gradient (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/121" class="external-link">#121</a>), computed by <code><a href="../reference/knw_site_gradient_visits.html">knw_site_gradient_visits()</a></code> and <code><a href="../reference/knw_site_gradient_visits.html">knw_gradient_flips()</a></code>.</li>
