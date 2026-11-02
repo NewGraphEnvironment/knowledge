@@ -1,0 +1,38 @@
+# Progress — Tune chinook rearing on minimal segments and map how the cuts move the result (#120)
+
+## Session 2026-11-02
+
+- Plan-mode exploration — phases approved by user (parked)
+- Created branch `120-tune-chinook-rearing-on-minimal-segments` off origin/main (`6b7c31d`, v0.4.22)
+- Scaffolded PWF baseline from issue #120 with approved phases; the Plan review ran in plan mode and its findings
+  are folded in (`review-plan.md`)
+- Probes (read-only, 2026-11-02 ~15:10–15:50 UTC): m1's database (51 ms from here) holds `fresh_default`
+  (run 20261023, link 0.68.0), `fresh_default_20261017` and `knw`, no `zz415_*`; m4's local fwapg
+  (`PGSERVICE=fresh_local`, 2.6 ms) holds `zz415_default` and `zz415_minimal` (4 groups each, `date_end` set,
+  tokens on `log`: `cut-full-top`/`cut-min`, `acc-v5`, `grad-seg`, `q-fwapg`, none NULL), `fresh_default_minimal`
+  (empty), `fresh_pretest_default_minimal`, wet's flows (2026-10-15 build, `scenario historical` comment), cabd,
+  bcfishobs, no `knw.walk_cache`; the local `data/fdis/derived` md5s equal the published grade record's
+  `evidence_md5`
+- Next: parked 2026-11-02; paste the block under ### Resume into a fresh session
+
+### Resume
+
+```
+Continue knowledge#120 from its parked PWF baseline. Repo ~/Projects/repo/knowledge, branch `120-tune-chinook-rearing-on-minimal-segments`,
+parked 2026-11-02 by `/planning-init knowledge#120 park`, branched from origin/main at 6b7c31d.
+Run these in order, and stop at the first that fails; each failure means what it says:
+
+cd ~/Projects/repo/knowledge && git fetch -q origin
+git worktree list | grep -F '[120-tune-chinook-rearing-on-minimal-segments]' || echo none   # a path printed: that tree holds the branch; cd to it and skip the checkout
+git branch --show-current; git status --porcelain --untracked-files=no   # another branch with changes, or one another session may be on: do not check out here; git worktree add ../knowledge-120 120-tune-chinook-rearing-on-minimal-segments and cd there
+git checkout 120-tune-chinook-rearing-on-minimal-segments   # fails: the branch is not on origin
+git pull --ff-only   # fails: this machine has commits origin lacks; resume where they were made
+git merge origin/main   # a conflict: main moved meanwhile; resolve it, commit, and go on
+
+Then read planning/active/task_plan.md, findings.md, progress.md and review-plan.md if present.
+The gate decisions, the measurements and the Plan-agent review are already folded in:
+do not re-plan and do not re-ask them.
+Start Phase 1 and run every phase to the PR (/code-check branch, /planning-archive,
+/gh-pr-push). This message is the resume instruction that starts the run-to-PR
+mandate; the merge stays with me.
+```
