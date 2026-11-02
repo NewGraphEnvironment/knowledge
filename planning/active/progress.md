@@ -85,3 +85,6 @@ mandate; the merge stays with me.
   public sweep found a machine name in two commit messages (`cf0d1b1`, pushed by the parking session and left
   for Al, since rewording it needs a force-push; and this session's commit that built both networks, reworded before
   its first push) and a home path in this file's resume block (replaced)
+- Issue #120's body revised (each "clear first" item and check answered; the province steps and the chinook check
+  moved to a second branch; the gate decisions recorded without machine names); link#444's acceptance line answered
+  in words (checked on the prototype, open until `streams_parent`)

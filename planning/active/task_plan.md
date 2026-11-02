@@ -136,7 +136,7 @@ and fresh 0.52.0 installed first (D3).
       the setups table with which this branch scored and what each other waits on; the floors used
 - [x] `data-raw/README.md` rows; `CLAUDE.md` working notes: tokens on `log`, a build names its evidence directory,
       the settle log names its schema, the floors are the test's, m4's local database through `PGSERVICE`
-- [ ] Issue #120 body: "clear first" items ticked with what was found, Phases 5–6 kept as checkboxes, D1–D4 recorded;
+- [x] Issue #120 body: "clear first" items ticked with what was found, Phases 5–6 kept as checkboxes, D1–D4 recorded;
       link#444's acceptance line answered in link#444's body in words
 
 ## Phase 5 (second branch of #120, after link#441): the province
