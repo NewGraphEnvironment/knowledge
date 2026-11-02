@@ -118,7 +118,7 @@ installs with the package because `inst/vignette-data/` ships Freshwater Atlas g
 gets its row there, its licence read from the source's own catalogue record; one whose terms are unconfirmed goes
 to an issue instead. The PSCIS snapshots stay tracked as incidental copies of an "Access Only" catalogue layer,
 with the README pointing to the catalogue (Al, 2026-11-01). The sources NOTICE lists under "Terms not yet settled"
-(the EcoCat-derived files, the bcfishpass-derived files, whose database is ODbL and share-alike, and the modelled
+(the EcoCat-derived files, the files derived from bcfishpass, whose database is ODbL and share-alike, and the modelled
 flows on the segments in `inst/vignette-data/`) are #76: the repo went public on 2026-11-01 with them still open.
 
 ## Working notes
