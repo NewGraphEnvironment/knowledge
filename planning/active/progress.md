@@ -36,3 +36,11 @@ Start Phase 1 and run every phase to the PR (/code-check branch, /planning-archi
 /gh-pr-push). This message is the resume instruction that starts the run-to-PR
 mandate; the merge stays with me.
 ```
+
+## Session 2026-11-02 (resumed)
+
+- Resumed from the parked baseline; branch current with origin/main
+- Phase 1: `knw_build_record()` reads link's tokens from `<schema>.log` (every row; a NULL beside a value refused).
+  Mutation: the `log_recompute` read put back fails 4 expectations of `test-build_record.R`. Live on m4:
+  `zz415_default` reads `cut-full-top.acc-v5.grad-seg.q-fwapg`, `zz415_minimal` `cut-min.acc-v5.grad-seg.q-fwapg`,
+  m4's `fresh_default` (0.68.6) none

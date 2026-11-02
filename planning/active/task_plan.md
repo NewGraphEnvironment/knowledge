@@ -60,11 +60,11 @@ baseline on 2026-11-02; the resume block is in `progress.md`.
 
 ## Phase 1: Read link's tokens from `log`, and name a build's evidence directory
 
-- [ ] `knw_build_record()` reads `token_cut/acc/grad/flow` from `<schema>.log`: one distinct value per axis over
+- [x] `knw_build_record()` reads `token_cut/acc/grad/flow` from `<schema>.log`: one distinct value per axis over
       every row; two values refused; a mix of NULL and valued rows refused ("n of m rows carry no cut token: not
       one build"); a `log` without the columns gives `NA` (before link 0.70.0); the run check stays on
       `log_recompute`; roxygen names which table carries what
-- [ ] `test-build_record.R`: the mock answers by table name for both the column query and the token query, so a
+- [x] `test-build_record.R`: the mock answers by table name for both the column query and the token query, so a
       reader asking `log_recompute` gets nothing; restore the defect and show the test goes red
 - [ ] `EVIDENCE_DIR` on `0310` (default `data/fdis/derived`): the ledger gains an `evidence_dir` info row and is
       named `<date>_evidence_build_ledger.csv` for the default directory and

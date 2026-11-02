@@ -2,7 +2,7 @@
 #'
 #' A grade or a comparison reads four things from the database besides the
 #' FWA tables: link's persist schema, the run that built it
-#' (`<schema>.log_recompute`), wet's flow load (the table comment,
+#' (`<schema>.log_recompute`'s `run_uid`), wet's flow load (the table comment,
 #' [knw_discharge_load()]) and the walk installed from this package
 #' ([knw_walk_md5()]); fresh's version decides the comparison's regeneration.
 #' `0320` and `0330` read this record at connect and refuse a schema whose run
@@ -18,10 +18,13 @@
 #'   several, is refused.
 #' @return A list: `schema`, `run_uid` (the schema's runs, `;`-joined),
 #'   `discharge_load`, `walk_md5`, `fresh_version`, `tokens` (link's output
-#'   vocabulary, `c(cut =, acc =, grad =, flow =)`, each `NA` where the schema's
-#'   run log predates link 0.70.0 and carries none), and `line`, the record as
-#'   one line for a log. A schema whose runs logged two values on one axis is
-#'   refused.
+#'   vocabulary, `c(cut =, acc =, grad =, flow =)`, read from every row of
+#'   `<schema>.log`, where link writes them; each `NA` where that log predates
+#'   link 0.70.0 and carries none), and `line`, the record as one line for a
+#'   log. A schema whose log holds two values on one axis, or rows with a token
+#'   beside rows without one, is refused: it is not one build. The tokens are
+#'   read over every `log` row, not keyed on the run, because a build's `log`
+#'   and its recompute's `log_recompute` can carry different run ids.
 #' @export
 #' @examples
 #' \dontrun{
@@ -38,21 +41,29 @@ knw_build_record <- function(conn, schema, run_uid = NULL) {
   runs <- DBI::dbGetQuery(conn, sprintf(runs_sql, schema))$u
   fresh_v <- NA_character_
   if (requireNamespace("fresh", quietly = TRUE)) fresh_v <- as.character(utils::packageVersion("fresh"))
-  # link's output vocabulary (link 0.70.0): one token per axis in the run log, absent from a build before it
+  # link's output vocabulary (link 0.70.0): one token per axis on every row of the run log `<schema>.log`, which
+  # link writes per pipeline call and group; `log_recompute` carries none. A build before 0.70.0 has no columns.
   axes <- c("cut", "acc", "grad", "flow")
   tokens <- stats::setNames(rep(NA_character_, length(axes)), axes)
   sql_tok <- sprintf("SELECT column_name FROM information_schema.columns
-                       WHERE table_schema = $1 AND table_name = 'log_recompute' AND column_name IN (%s)",
+                       WHERE table_schema = $1 AND table_name = 'log' AND column_name IN (%s)",
                      paste0("'token_", axes, "'", collapse = ", "))
   has_tok <- DBI::dbGetQuery(conn, sql_tok, params = list(schema))$column_name
   for (a in intersect(axes, sub("^token_", "", has_tok))) {
-    v <- DBI::dbGetQuery(conn, sprintf("SELECT DISTINCT token_%s AS v FROM %s.log_recompute WHERE token_%s IS NOT NULL
-                                         ORDER BY 1", a, schema, a))$v
+    tk <- DBI::dbGetQuery(conn, sprintf("SELECT count(*)::int AS n, count(token_%s)::int AS n_val,
+                                           string_agg(DISTINCT token_%s, ';' ORDER BY token_%s) AS v
+                                         FROM %s.log", a, a, a, schema))
+    if (tk$n_val == 0) next
+    if (tk$n_val < tk$n) {
+      stop("schema ", schema, ": ", tk$n - tk$n_val, " of ", tk$n, " log rows carry no ", a,
+           " token: not one build", call. = FALSE)
+    }
+    v <- strsplit(tk$v, ";", fixed = TRUE)[[1]]
     if (length(v) > 1) {
       stop("schema ", schema, " logged ", length(v), " ", a, " tokens (", paste(v, collapse = ", "),
            "): not one build", call. = FALSE)
     }
-    if (length(v)) tokens[[a]] <- v
+    tokens[[a]] <- v
   }
   rec <- list(schema = schema, run_uid = runs, discharge_load = knw_discharge_load(conn), walk_md5 = knw_walk_md5(),
               fresh_version = fresh_v, tokens = tokens)
