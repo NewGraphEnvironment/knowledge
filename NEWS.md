@@ -1,3 +1,13 @@
+# knowledge 0.4.23
+
+* The tuning runs on a second link build beside the published one (#120). `0310` writes a build of another schema
+  into its own `EVIDENCE_DIR`, with a tagged ledger, and refuses the default directory to it; `0300` takes `SCHEMA`
+  and `POLL_MIN`, and `0310` takes `SETTLE=` and `PARENT_DIR`, joining each visit's minimal-network parent through the
+  new `knw_parent_join()`. `0320` takes `DEV_DIR`, `GRADIENT=parent_gradient` and test floors (`MIN_WSG`, `FOLDS`),
+  which `knw_tune_promote()` refuses; `knw_link_access_check(by_group = TRUE)` gives the check per group.
+  `knw_build_record()` reads link's output tokens from `<schema>.log`, where link writes them, so a tokened build no
+  longer records none. The four-group test on link's minimal network is `research/minimal_network_tuning.md`.
+
 # knowledge 0.4.22
 
 * `inst/NOTICE.md` gives the PSCIS snapshots under `data/<wsg>/` their own section: incidental working copies of an
