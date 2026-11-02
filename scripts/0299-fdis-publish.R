@@ -32,7 +32,7 @@
 #     needs a clean working tree.
 #   - PULL=TRUE is the way back: a machine without the CSVs (0230 no longer syncs them) fetches
 #     the Parquet, checks each sha256 against the manifest, and writes data/fdis/derived/*.csv
-#     for 0291-0298. NO_SIGN=TRUE reads without AWS credentials once the prefix is public.
+#     for 0291-0298. NO_SIGN=TRUE reads without AWS credentials: the prefix is public.
 #
 # INPUT:  data/fdis/derived/{fdis_sites,bt_use_visits,ch_mad_visits,ch_rule_visits,ch_rule_walks}.csv
 #         (scripts/0240, 0290, 0294, 0296), data/fdis_README.md

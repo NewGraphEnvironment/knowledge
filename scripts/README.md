@@ -83,7 +83,7 @@ wf_farm_priority.js                          farm priority/crossing tables out o
       starts), the groups each rule was scored on, and the grade table as Parquet + manifest
       -> data/publish/{thresholds_v1,habitat_grade_v1}/, data/thresholds*.csv; refuses a grade graded on another
       flow build than the live one; PUBLISH=TRUE uploads to s3://fresh-bc/knowledge/{thresholds,habitat_grade}/v1/
-      (after the bucket policy of #56)
+      (public on upload)
 0330  link's current default (the configs at CONFIG_SHA, origin/main by default; link >= 0.67.0, whose near-river
       pair is walked on the scratch copy with fresh's walk) against the recommended rule on link's segments for
       every species x stage and group, under TUNED_AS (door by default; `tuned`) for the through-wetland lines and the
