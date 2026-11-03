@@ -110,6 +110,46 @@ Relates to #70 (fixed-window gradients), #92 (segment gradient), #121 (measured 
   Log `scripts/logs/habitat/20261102_link_settle-fresh_default_minimal.csv` (named by m4's local date).
 - Baseline tests before any run: 1,853 pass, 0 fail, 1 skip.
 
+## Phase 2: evidence on `fresh_default_minimal` (2026-11-03 UTC)
+
+- `0310` 08:09 to 08:32 UTC (23 min), round trip 0.9 ms. Ledger
+  `scripts/logs/habitat/20261103_evidence_build_ledger-derived_minimal.csv`; console
+  `minimal_network_120/20261103_evidence_build.log`. Build record: schema `fresh_default_minimal`, run
+  `20261102_203300-60ab009d`, flows wet 2026-10-24 (`b4bbc50`), walk `c3f7bdbe…` (the published build's walk md5),
+  installed fresh 0.53.0 (the build ran on 0.52.0), tokens `cut-min.acc-v5.grad-seg.q-fwapg`. `schema_species`:
+  the run modelled 9, this build carries 11 (KO, RB paused; expected).
+- 45,529 visits placed (the published build's count); walks 36,928 starts × 3 sources × 7 sizes, all cold on the new
+  load (110,784 pairs walked, 4.7 min on 4 workers); `walks.csv` 775,488 rows, the published count.
+- **Placement** (`minimal_network_check.R`, steps 1-2 from the console,
+  `minimal_network_120/20261103_minimal_network_check_console.log`; it stops at step 3 as planned):
+  - the same 45,529 visits, every one at the same blue line, measure and own Atlas line (`linear_feature_id`).
+  - 172 visits (BABL 22, UPCE 13, LPCE 12, …) sit on a minimal segment whose `segment_linear_feature_id` is another
+    Atlas line: a minimal segment that runs across Atlas lines keeps one line's id. On the full build all 172 carry
+    their own. The visit's flow, width and walks read the visit's own line (0310:265, 271, 346), so nothing the
+    tuning reads moves; only the FISS workbook sites' flow reads the segment's line (0310:380), and the workbook
+    sites are not scored.
+  - outside the segment, access and habitat columns only `mad_pick` differs: the flow load.
+  - `walks.csv`: same row count, 470,799 rows differ: the flow load (2026-10-19 against 2026-10-24) moves which
+    river each size reaches and where; the walk md5 is the same.
+  - `visits_species.csv`: only `in_range` differs, on 12,083 rows. Not the network: range comes from the installed
+    link `default` bundle's presence table (`lnk_load_overrides()`, 0310:194-215), which link's presence review
+    (`link#402`, 2026-10-30 to 11-01) changed after the published build's link 0.66.0. Gained: PK 24 groups, SK 25,
+    ST 14, CH 10, CO 10, CM 5; lost: UDEN for CH, CM, CO, PK, SK, ST (34 visits each), BULL for GR (128 visits).
+    In range on the minimal build against the published: CH 25,128 / 24,496, CO 20,090 / 19,502, PK 17,693 / 13,623.
+    **So the pick report's differences from the published picks mix three changes: the network, the flow load and
+    species range.** Only the published-vs-minimal comparison is confounded; a run on tomorrow's full `default`
+    build with this evidence's flows and range separates the network from the rest.
+  - steps 3 to 5 (access per group, the parent, stored habitat) need the published evidence rebuilt per group and the
+    published schema, both on m1: not run here.
+- **Premise** (`scripts/logs/habitat/20261103_segment_gradient_check-derived_minimal.txt`): on the stream branch
+  (29,335 visits) 3.4 % of visits with fish start a segment of their own against 3.0 % of empty ones; median segment
+  717 m against 699 m. Published build (link 0.66.0, every observation a break): 86 % against 10 %, 113 m against
+  305 m. By species outcome the share is 0 to 5.6 % either way. 3,648,510 stream-branch segments.
+- **Measured gradient** (`scripts/logs/habitat/20261103_site_gradient_check.txt` beside `20261030_…`): 16,279
+  stream-branch visits with a measured gradient; segment gradient's rank correlation with it 0.678 (published full
+  0.690; Atlas line 0.653 on both); chinook rearing's 11 % limit flips 5.9 % of its 2,453 visits (published 6.4 %;
+  Atlas line 11.6 %); BT 0.6 % (0.8), CO 25.5 % (25.8), GR 11.4 % (11.7).
+
 ## Errors Encountered
 
 | Error | Resolution |

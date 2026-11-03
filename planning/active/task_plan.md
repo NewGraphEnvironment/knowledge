@@ -53,24 +53,24 @@ build exists.
 
 - [x] `PGSERVICE=fresh_local SCHEMA=fresh_default_minimal POLL_MIN=1 Rscript scripts/0300-link-settle-wait.R` →
       `scripts/logs/habitat/<date>_link_settle-fresh_default_minimal.csv`, released on run `20261102_203300-60ab009d`
-- [ ] `PGSERVICE=fresh_local SCHEMA=fresh_default_minimal EVIDENCE_DIR=data/fdis/derived_minimal
+- [x] `PGSERVICE=fresh_local SCHEMA=fresh_default_minimal EVIDENCE_DIR=data/fdis/derived_minimal
       SETTLE=scripts/logs/habitat/<date>_link_settle-fresh_default_minimal.csv Rscript scripts/0310-evidence-build.R`
       (`SETTLE=` is the exact path: 0310's default pattern `_link_settle\.csv$` never matches a tagged log; no
       `PARENT_DIR`: link#444 is open) → `data/fdis/derived_minimal/` and `<date>_evidence_build_ledger-derived_minimal.csv`;
       the ledger's build record names the run and the four tokens `cut-min.acc-v5.grad-seg.q-fwapg`, the new flow load
       and the round trip. Its `schema_species` row shows 11 species built on 9 access columns (KO and RB paused):
       that is the four-group test's state too, not an error
-- [ ] Placement against the published build: `FULL_DIR=data/fdis/derived MIN_DIR=data/fdis/derived_minimal
+- [x] Placement against the published build: `FULL_DIR=data/fdis/derived MIN_DIR=data/fdis/derived_minimal
       Rscript data-raw/minimal_network_check.R` (`data/fdis/derived` here is the published evidence, md5s equal to
       `data/thresholds.csv`'s). It stops at step 3, because the published `access_check.csv` predates #120's per-group
       columns, and writes its log only at the end, so steps 1 and 2 (the same visits on both at one stream and
       measure; the walks, which differ by flow load) are read from the console and recorded in `findings.md`. Steps
       3 to 5 (access per group, stored habitat) need the published evidence rebuilt per group and the published
       schema, both on m1: say so in the write-up, do not run them here
-- [ ] The premise on the province: `PGSERVICE=fresh_local SCHEMA=fresh_default_minimal
+- [x] The premise on the province: `PGSERVICE=fresh_local SCHEMA=fresh_default_minimal
       EVIDENCE_DIR=data/fdis/derived_minimal Rscript data-raw/segment_gradient_check.R` — the share of stream-branch
       visits with a catch that start their own segment, beside the published build's 2026-10-27 figure
-- [ ] #121's measured-gradient check on the minimal build: `EVIDENCE_CHECK=FALSE EVIDENCE_DIR=data/fdis/derived_minimal
+- [x] #121's measured-gradient check on the minimal build: `EVIDENCE_CHECK=FALSE EVIDENCE_DIR=data/fdis/derived_minimal
       Rscript data-raw/site_gradient_check.R`, beside `scripts/logs/habitat/20261030_site_gradient_check.txt`
 
 ## Phase 3: DEV tuning, every species — the pick report
