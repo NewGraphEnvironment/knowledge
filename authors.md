@@ -15,14 +15,14 @@ Source:
 
 Irvine A (2026). *knowledge: Fisheries Evidence and Tuned Habitat
 Thresholds for BC Watershed Groups*. New Graph Environment Ltd. Version
-0.4.23, <https://newgraphenvironment.github.io/knowledge/>.
+0.4.24, <https://newgraphenvironment.github.io/knowledge/>.
 
     @Manual{knowledge,
       title = {knowledge: Fisheries Evidence and Tuned Habitat Thresholds for BC Watershed Groups},
       author = {Allan Irvine},
       organization = {New Graph Environment Ltd.},
       year = {2026},
-      version = {0.4.23},
-      note = {Version 0.4.23},
+      version = {0.4.24},
+      note = {Version 0.4.24},
       url = {https://newgraphenvironment.github.io/knowledge/},
     }
