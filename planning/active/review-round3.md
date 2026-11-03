@@ -1,6 +1,6 @@
 # Review round 3: minimal-network province write-up (#120)
 
-Branch `120-minimal-network-province`, base de9924c, HEAD 86fa36d. Read-only review: no R, no database.
+Branch `120-minimal-network-province`, base de9924c, HEAD 7b84bbd. Read-only review: no R, no database.
 
 ## Checklist read
 

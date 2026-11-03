@@ -259,6 +259,14 @@ Graded km, default → tuned: BT_rear 108,826 → 74,699; BT_spawn 79,026 → 11
 promoted path by design, and its md5s are the candidate's (BT_rear grades `3bacfaa8…`, the candidate record's; the
 published table's is `4b6fe521…`). Console `minimal_network_120/20261103_archive_console.log`.
 
+## Commit IDs moved by the message rewrite (2026-11-03)
+
+Two commit messages named a machine; Al chose to reword them. `git filter-branch --msg-filter` over `de9924c..HEAD`,
+trees identical. Old → new: 8d14576 → 3e4d0e6, a366a14 → ab815f9, c5caacb → 6ecb13c, c711ee8 → ca23e8c,
+2f65e75 → a71feb8, 8f20816 → 764fafb, 7604e4e → 6f99782, a848c35 → faf01a6, 10250d1 → cdafec5, c22ae73 → 526e6f9,
+86fa36d → 7b84bbd, 3729c6a → eaa7b98, ed8809b → dfdb9b4. Candidate `20261103_0838`'s grade records name `c5caacb`
+(`knowledge_commit`, read at the run's start), now `6ecb13c`; its R/ and scripts/ equal `de9924c`'s.
+
 ## Errors Encountered
 
 | Error | Resolution |

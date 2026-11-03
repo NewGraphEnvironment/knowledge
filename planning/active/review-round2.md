@@ -1,4 +1,4 @@
-# Review round 2: branch `120-minimal-network-province` (de9924c...a848c35)
+# Review round 2: branch `120-minimal-network-province` (de9924c...faf01a6)
 
 ## Checklist read
 
@@ -17,7 +17,7 @@
 
 ## Method
 
-**Round 1's fixes (a848c35).** I re-derived each one from the data:
+**Round 1's fixes (faf01a6).** I re-derived each one from the data:
 
 - **Step counts.** I took them from the candidate `<key>_tune.csv` rule ladders, and they hold:
   - BT rearing: gradient 0.3 → 0.1049, seven steps (0.25, 0.2, 0.15, 0.1349, 0.13, 0.11, 0.1049); MAD 0.1 → 0.35,

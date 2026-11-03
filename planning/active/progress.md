@@ -31,19 +31,21 @@ mandate; the merge stays with me.
 
 ## Session 2026-11-03 (resume, run to the PR)
 
-- Phase 1: wet's 2026-10-24 build loaded into the minimal build's database (43.5 min); `a366a14`
+- Phase 1: wet's 2026-10-24 build loaded into the minimal build's database (43.5 min); `ab815f9`
 - Phase 2: `0300` settled `fresh_default_minimal`; `0310` built `data/fdis/derived_minimal`; placement, premise and
-  measured-gradient checks; `c5caacb`
-- Phase 3: `DEV=1 0320`, every smoke gate passed, pick report in findings and the issue body; `c711ee8`
-- Phase 4: full `0320` (run `20261103_0838`, 70.9 min), the DEV picks; `2f65e75`. `0330` launched 09:51 UTC
-- Phase 5: CLAUDE.md paragraph `8f20816`; research province section drafted (km row pending `0330`)
+  measured-gradient checks; `6ecb13c`
+- Phase 3: `DEV=1 0320`, every smoke gate passed, pick report in findings and the issue body; `ca23e8c`
+- Phase 4: full `0320` (run `20261103_0838`, 70.9 min), the DEV picks; `a71feb8`. `0330` launched 09:51 UTC
+- Phase 5: CLAUDE.md paragraph `764fafb`; research province section drafted (km row pending `0330`)
 - `/code-check branch` round 1 spawned 09:53 UTC, read-only while `0330` runs
 - Phase 4: `0330` done in 43.5 min (09:51 to about 10:35 UTC); regenerated `default` within 0.011 % of link's stored km
   per key, residue all in the connectivity stage, cause not established (findings); km per key in research and the
-  issue; `a848c35`. Archive: 35 objects, 1,755 MB; `10250d1`
-- Review: round 1 four findings (fixed `a848c35`), round 2 two (one inside round 1's fix; fixed `c22ae73`), round 3
+  issue; `faf01a6`. Archive: 35 objects, 1,755 MB; `cdafec5`
+- Review: round 1 four findings (fixed `faf01a6`), round 2 two (one inside round 1's fix; fixed `526e6f9`), round 3
   spawned 12:47 UTC with an enumeration of every quantified claim
 - Tests 1,853 pass, 0 fail, 1 skip
-- Al chose (2026-11-03): reword the two commit messages that name a machine (`8d14576`, pushed; `a366a14`) and
-  force-push the branch; the candidate's grade records name `c5caacb` as `knowledge_commit`, whose code equals
-  `de9924c` (the branch changes no code)
+- Al chose (2026-11-03): reword the two commit messages that named a machine and force-push the branch. Done with a
+  message-only `git filter-branch` over `de9924c..HEAD` (trees identical): `8d14576` is now `3e4d0e6` (pushed before,
+  so the branch is force-pushed), `a366a14` is `ab815f9`, and every later commit moved with them (old → new in the
+  archive README). The candidate's grade records name `c5caacb` as `knowledge_commit`; it is now `6ecb13c`, and its code
+  equals `de9924c`'s (the branch changes no code)

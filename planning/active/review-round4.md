@@ -1,6 +1,6 @@
 # Review round 4: minimal-network province write-up (#120)
 
-Branch `120-minimal-network-province`, base de9924c, HEAD 3729c6a. Read-only review: no R, no database. Scope: round 3's
+Branch `120-minimal-network-province`, base de9924c, HEAD eaa7b98. Read-only review: no R, no database. Scope: round 3's
 four fixed rows (`round3_fix.diff`), the live issue body's edited sentence, every new claim the fixes introduced, and a
 re-walk of round 3's table for verdicts the fixes could have moved.
 

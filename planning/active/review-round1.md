@@ -1,4 +1,4 @@
-# Review round 1: branch `120-minimal-network-province` (de9924c...7604e4e)
+# Review round 1: branch `120-minimal-network-province` (de9924c...6f99782)
 
 ## Checklist read
 
