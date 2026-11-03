@@ -223,7 +223,9 @@ The published comparison differs by hundreds to thousands of km per key (its sto
 - Segment level (`<key>_segments.rds`): 154 differing segments over six keys; 150 are stored rearing that the
   regeneration drops, 4 (CO) the other way; `rearing_pre_default` is TRUE on all, `user_habitat` FALSE on all, so the
   difference is in `.frs_run_connectivity()` (rearing clusters need spawning within 10 km, `cluster_direction = both`).
-  TESR's CH and GR segments are lake edges (1200, 1450); elsewhere mostly 1000.
+  TESR: CH 42 segments, GR 41, 41 shared; 37 of CH's are construction lines (1200 main flow, 1450 connection) inside
+  lake polygons (waterbody key in `fwa_lakes_poly`), 5 single-line (1000); elsewhere mostly 1000. Round 2 read 1450 as a
+  river connector: in the FWA it is any construction-line connection, here inside lakes.
 - Ruled out: stored spawning upstream in another group (0 rows, DB query on wscode/localcode); stored spawning on a
   segment the access gate blocks (0, and `access_gate_differ_km` 0); user habitat; fresh's version (`frs_cluster.R`
   and `.frs_run_connectivity()` unchanged from 0.52.0 to 0.53.0; 0.53.0's diff is the `to_streams` persist); link runs

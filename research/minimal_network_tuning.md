@@ -5,8 +5,8 @@ NewGraphEnvironment/link#415, link#441, link#444) · **Produced by:** `scripts/0
 provincial minimal build `fresh_default_minimal` and on link's four-group proof schemas, and
 `data-raw/minimal_network_check.R`, `segment_gradient_check.R`, `site_gradient_check.R`; logs
 `scripts/logs/habitat/2026110[23]_*` and `scripts/logs/habitat/minimal_network_120/` · **Status:** the nine species link models
-on the minimal build tuned, graded and compared on it as an unpromoted candidate (run `20261103_0838`; rainbow trout
-and kokanee are paused there); separating
+on the minimal build tuned on it, and the seven keys with a stream rule (six species; chum, pink and sockeye have none)
+graded and compared, as an unpromoted candidate (run `20261103_0838`; rainbow trout and kokanee are paused there); separating
 the network from the flow load and species range waits on the next full `default` build, and the transfer to link's
 full network on its parent table (link#444).
 
@@ -90,7 +90,8 @@ The residue between regenerated `default` and link's stored flags: 0 km for bull
 the other keys (chinook 9.3 km of 104,751, 8.5 km of it in TESR), in one to nine groups each. Almost every differing
 segment is one link stores as rearing and the regeneration drops; the regenerated predicate passes every one, so the difference is
 in the last stage, which drops rearing with no spawning within 10 km. In TESR chinook and grayling differ on the same
-lake segments (edge types 1200 and 1450). Ruled out: spawning upstream in another group, the access gate (0 km
+segments, 41 of chinook's 42 there; 37 of the 42 are construction lines inside lake polygons (edge types 1200 and
+1450, by waterbody key) and 5 are single-line streams. Ruled out: spawning upstream in another group, the access gate (0 km
 differ), user habitat, and fresh's version (the connectivity code is the same in 0.52.0, which built the schema, and
 0.53.0, which regenerated it); link runs that stage one group at a time, as the comparison does. The cause is not
 established. It does not touch the comparison above, which regenerates both rules the same way.
