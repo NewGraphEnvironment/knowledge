@@ -1,3 +1,11 @@
+# knowledge 0.4.24
+
+* Every species was tuned on link's provincial minimal network (#120). That network rejects none of the published
+  rules: each stays within one standard error of the best rule. Where a pick moves, it moves because the pick is the
+  rule closest to link's `default`, so each tuned rule is only as good as its starting point; recording what each
+  baseline rests on is #139, and grayling's first (#140). The results are `research/minimal_network_tuning.md`, and
+  the candidate run's tables are archived (`data/archive_index.csv`), not promoted. No code change.
+
 # knowledge 0.4.23
 
 * The tuning runs on a second link build beside the published one (#120). `0310` writes a build of another schema
