@@ -1,0 +1,36 @@
+Archiving 35 objects (BT_rear cut-min.acc-v5.grad-seg.q-fwapg, BT_spawn cut-min.acc-v5.grad-seg.q-fwapg, CH_rear cut-min.acc-v5.grad-seg.q-fwapg, CO_rear cut-min.acc-v5.grad-seg.q-fwapg, GR_rear cut-min.acc-v5.grad-seg.q-fwapg, ST_rear cut-min.acc-v5.grad-seg.q-fwapg, WCT_rear cut-min.acc-v5.grad-seg.q-fwapg; evidence build 3d907629ee200b4a7beb05cdd560fc0b):
+  archive/knowledge/tune/BT_rear/cut-min.acc-v5.grad-seg.q-fwapg/BT_rear_grades.csv.zst
+  archive/knowledge/tune/BT_rear/cut-min.acc-v5.grad-seg.q-fwapg/BT_rear_grades_record.csv
+  archive/knowledge/tune/BT_rear/cut-min.acc-v5.grad-seg.q-fwapg/BT_rear_curve.rds
+  archive/knowledge/tune/BT_rear/cut-min.acc-v5.grad-seg.q-fwapg/BT_rear_segments.rds
+  archive/knowledge/tune/BT_spawn/cut-min.acc-v5.grad-seg.q-fwapg/BT_spawn_grades.csv.zst
+  archive/knowledge/tune/BT_spawn/cut-min.acc-v5.grad-seg.q-fwapg/BT_spawn_grades_record.csv
+  archive/knowledge/tune/BT_spawn/cut-min.acc-v5.grad-seg.q-fwapg/BT_spawn_curve.rds
+  archive/knowledge/tune/BT_spawn/cut-min.acc-v5.grad-seg.q-fwapg/BT_spawn_segments.rds
+  archive/knowledge/tune/CH_rear/cut-min.acc-v5.grad-seg.q-fwapg/CH_rear_grades.csv.zst
+  archive/knowledge/tune/CH_rear/cut-min.acc-v5.grad-seg.q-fwapg/CH_rear_grades_record.csv
+  archive/knowledge/tune/CH_rear/cut-min.acc-v5.grad-seg.q-fwapg/CH_rear_curve.rds
+  archive/knowledge/tune/CH_rear/cut-min.acc-v5.grad-seg.q-fwapg/CH_rear_segments.rds
+  archive/knowledge/tune/CO_rear/cut-min.acc-v5.grad-seg.q-fwapg/CO_rear_grades.csv.zst
+  archive/knowledge/tune/CO_rear/cut-min.acc-v5.grad-seg.q-fwapg/CO_rear_grades_record.csv
+  archive/knowledge/tune/CO_rear/cut-min.acc-v5.grad-seg.q-fwapg/CO_rear_curve.rds
+  archive/knowledge/tune/CO_rear/cut-min.acc-v5.grad-seg.q-fwapg/CO_rear_segments.rds
+  archive/knowledge/tune/GR_rear/cut-min.acc-v5.grad-seg.q-fwapg/GR_rear_grades.csv.zst
+  archive/knowledge/tune/GR_rear/cut-min.acc-v5.grad-seg.q-fwapg/GR_rear_grades_record.csv
+  archive/knowledge/tune/GR_rear/cut-min.acc-v5.grad-seg.q-fwapg/GR_rear_curve.rds
+  archive/knowledge/tune/GR_rear/cut-min.acc-v5.grad-seg.q-fwapg/GR_rear_segments.rds
+  archive/knowledge/tune/ST_rear/cut-min.acc-v5.grad-seg.q-fwapg/ST_rear_grades.csv.zst
+  archive/knowledge/tune/ST_rear/cut-min.acc-v5.grad-seg.q-fwapg/ST_rear_grades_record.csv
+  archive/knowledge/tune/ST_rear/cut-min.acc-v5.grad-seg.q-fwapg/ST_rear_curve.rds
+  archive/knowledge/tune/ST_rear/cut-min.acc-v5.grad-seg.q-fwapg/ST_rear_segments.rds
+  archive/knowledge/tune/WCT_rear/cut-min.acc-v5.grad-seg.q-fwapg/WCT_rear_grades.csv.zst
+  archive/knowledge/tune/WCT_rear/cut-min.acc-v5.grad-seg.q-fwapg/WCT_rear_grades_record.csv
+  archive/knowledge/tune/WCT_rear/cut-min.acc-v5.grad-seg.q-fwapg/WCT_rear_curve.rds
+  archive/knowledge/tune/WCT_rear/cut-min.acc-v5.grad-seg.q-fwapg/WCT_rear_segments.rds
+  archive/knowledge/evidence/3d907629ee200b4a7beb05cdd560fc0b/visits_link.csv
+  archive/knowledge/evidence/3d907629ee200b4a7beb05cdd560fc0b/visits_species.csv
+  archive/knowledge/evidence/3d907629ee200b4a7beb05cdd560fc0b/walks.csv
+  archive/knowledge/evidence/3d907629ee200b4a7beb05cdd560fc0b/fdis_sites.csv
+  archive/knowledge/evidence/3d907629ee200b4a7beb05cdd560fc0b/reconcile.csv
+  archive/knowledge/evidence/3d907629ee200b4a7beb05cdd560fc0b/sites.rds
+Archived 35 objects (1755 MB stored); 35 appended to data/archive_index.csv. Commit it with the run.

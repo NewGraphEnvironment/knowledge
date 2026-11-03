@@ -1,0 +1,9 @@
+Site gradient check, knowledge#121, knowledge a366a14. Evidence data/fdis/derived_minimal (visits_link, visits_species, walks md5 c746c582 6a2e28f1 2e0f0f41); tune tables data/tune.
+NOT the published build: data/thresholds.csv names 1bd35829.
+EVIDENCE_CHECK=FALSE: run on this build anyway; the key populations are not held to the tracked tables.
+Visits placed: 45529. With a measured gradient: 18759 (a second reading: 9397; both: 9389). On the tuning's stream branch (edge types 1000,1100,2000,2300, fished area 10-10000 m2): 29335 placed, 16279 with a measured gradient.
+Missing modelled gradient among them: segment 0, Atlas line 0.
+
+Negative segment gradients: 24 placed visits (0 on the stream branch, 7 with a measured gradient); values -0.136 to -5e-04; segment lengths (m) 9.2/107/863; Atlas-line gradient at them -0.136/-0.0152/5e-04; on the same Atlas line as the visit: 22.
+Written scripts/logs/habitat/20261103_site_gradient_check.txt
+SITE RC=0
