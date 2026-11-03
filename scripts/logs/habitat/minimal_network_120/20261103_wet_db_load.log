@@ -1,0 +1,97 @@
+start 2026-11-03 06:53:38 
+NOTICE:  schema "discharge" already exists, skipping
+
+                                                                                        key
+1     segment_monthly/scenario=historical/forcing=climr/source=wet_balance/part-100.parquet
+2     segment_monthly/scenario=historical/forcing=climr/source=wet_balance/part-200.parquet
+3     segment_monthly/scenario=historical/forcing=climr/source=wet_balance/part-300.parquet
+4     segment_monthly/scenario=historical/forcing=climr/source=wet_balance/part-400.parquet
+5     segment_monthly/scenario=historical/forcing=climr/source=wet_balance/part-500.parquet
+6     segment_monthly/scenario=historical/forcing=climr/source=wet_balance/part-600.parquet
+7     segment_monthly/scenario=historical/forcing=climr/source=wet_balance/part-700.parquet
+8     segment_monthly/scenario=historical/forcing=climr/source=wet_balance/part-800.parquet
+9     segment_monthly/scenario=historical/forcing=climr/source=wet_balance/part-900.parquet
+10    segment_monthly/scenario=historical/forcing=climr/source=wet_balance/part-905.parquet
+11    segment_monthly/scenario=historical/forcing=climr/source=wet_balance/part-910.parquet
+12    segment_monthly/scenario=historical/forcing=climr/source=wet_balance/part-915.parquet
+13    segment_monthly/scenario=historical/forcing=climr/source=wet_balance/part-920.parquet
+14    segment_monthly/scenario=historical/forcing=climr/source=wet_balance/part-925.parquet
+15    segment_monthly/scenario=historical/forcing=climr/source=wet_balance/part-930.parquet
+16    segment_monthly/scenario=historical/forcing=climr/source=wet_balance/part-935.parquet
+17    segment_monthly/scenario=historical/forcing=climr/source=wet_balance/part-940.parquet
+18    segment_monthly/scenario=historical/forcing=climr/source=wet_balance/part-945.parquet
+19    segment_monthly/scenario=historical/forcing=climr/source=wet_balance/part-950.parquet
+20    segment_monthly/scenario=historical/forcing=climr/source=wet_balance/part-955.parquet
+21    segment_monthly/scenario=historical/forcing=climr/source=wet_balance/part-960.parquet
+22    segment_monthly/scenario=historical/forcing=climr/source=wet_balance/part-970.parquet
+23    segment_monthly/scenario=historical/forcing=climr/source=wet_balance/part-990.parquet
+24 segment_monthly/scenario=historical/forcing=PNWNAmet/source=pcic_routed/part-100.parquet
+25 segment_monthly/scenario=historical/forcing=PNWNAmet/source=pcic_routed/part-200.parquet
+26 segment_monthly/scenario=historical/forcing=PNWNAmet/source=pcic_routed/part-300.parquet
+27 segment_monthly/scenario=historical/forcing=PNWNAmet/source=pcic_routed/part-400.parquet
+28 segment_monthly/scenario=historical/forcing=PNWNAmet/source=pcic_routed/part-500.parquet
+29 segment_monthly/scenario=historical/forcing=PNWNAmet/source=pcic_routed/part-600.parquet
+30 segment_monthly/scenario=historical/forcing=PNWNAmet/source=pcic_routed/part-700.parquet
+31 segment_monthly/scenario=historical/forcing=PNWNAmet/source=pcic_routed/part-900.parquet
+32 segment_monthly/scenario=historical/forcing=PNWNAmet/source=pcic_routed/part-905.parquet
+33 segment_monthly/scenario=historical/forcing=PNWNAmet/source=pcic_routed/part-910.parquet
+34 segment_monthly/scenario=historical/forcing=PNWNAmet/source=pcic_routed/part-915.parquet
+35 segment_monthly/scenario=historical/forcing=PNWNAmet/source=pcic_routed/part-920.parquet
+36 segment_monthly/scenario=historical/forcing=PNWNAmet/source=pcic_routed/part-925.parquet
+37 segment_monthly/scenario=historical/forcing=PNWNAmet/source=pcic_routed/part-930.parquet
+38 segment_monthly/scenario=historical/forcing=PNWNAmet/source=pcic_routed/part-935.parquet
+39 segment_monthly/scenario=historical/forcing=PNWNAmet/source=pcic_routed/part-940.parquet
+40 segment_monthly/scenario=historical/forcing=PNWNAmet/source=pcic_routed/part-950.parquet
+41 segment_monthly/scenario=historical/forcing=PNWNAmet/source=pcic_routed/part-955.parquet
+42 segment_monthly/scenario=historical/forcing=PNWNAmet/source=pcic_routed/part-960.parquet
+43 segment_monthly/scenario=historical/forcing=PNWNAmet/source=pcic_routed/part-970.parquet
+       rows
+1  13157092
+2  17578132
+3   4934813
+4   3420196
+5   1680835
+6   3646487
+7   1343784
+8   1803802
+9   2484508
+10   108875
+11  3851991
+12  1356706
+13   861666
+14     5213
+15  1093768
+16    37128
+17   410020
+18     4316
+19   201240
+20    45630
+21   394511
+22    92638
+23   375856
+24 13140088
+25  7851909
+26  4779385
+27  3420157
+28  1680744
+29  3622515
+30  1339559
+31  2115490
+32    19942
+33  3307317
+34   353990
+35   786006
+36      858
+37   905476
+38    10725
+39   270231
+40    47567
+41     9217
+42   240292
+43       13
+minutes 43.5 
+[1] "wet_db_load(): discharge/fwa/v1/segment_monthly, scenario historical last loaded from https://fresh-bc.s3.us-west-2.amazonaws.com/discharge/fwa/v1/manifest.json (built 2026-10-24T12:23:01Z, wet b4bbc50)"
+    scenario      source        n
+1 historical pcic_routed 43901481
+2 historical wet_balance 58889207
+WETLOAD_DONE

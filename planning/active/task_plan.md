@@ -44,14 +44,14 @@ build exists.
 
 ## Phase 1: Flow load on m4
 
-- [ ] `PGSERVICE=fresh_local Rscript -e 'wet::wet_db_load(DBI::dbConnect(RPostgres::Postgres()), wet::wet_catalog())'`
+- [x] `PGSERVICE=fresh_local Rscript -e 'wet::wet_db_load(DBI::dbConnect(RPostgres::Postgres()), wet::wet_catalog())'`
       from the repo root; before it, read the table comment and `pg_stat_activity`; after it, `knw_discharge_load()`
       returns a comment naming `scenario historical` and `built 2026-10-24T12:23:01Z`
-- [ ] Record the load (before/after comment, rows per source, minutes) in `findings.md`
+- [x] Record the load (before/after comment, rows per source, minutes) in `findings.md`
 
 ## Phase 2: Settle and evidence on `fresh_default_minimal`
 
-- [ ] `PGSERVICE=fresh_local SCHEMA=fresh_default_minimal POLL_MIN=1 Rscript scripts/0300-link-settle-wait.R` →
+- [x] `PGSERVICE=fresh_local SCHEMA=fresh_default_minimal POLL_MIN=1 Rscript scripts/0300-link-settle-wait.R` →
       `scripts/logs/habitat/<date>_link_settle-fresh_default_minimal.csv`, released on run `20261102_203300-60ab009d`
 - [ ] `PGSERVICE=fresh_local SCHEMA=fresh_default_minimal EVIDENCE_DIR=data/fdis/derived_minimal
       SETTLE=scripts/logs/habitat/<date>_link_settle-fresh_default_minimal.csv Rscript scripts/0310-evidence-build.R`

@@ -93,6 +93,23 @@ Relates to #70 (fixed-window gradients), #92 (segment gradient), #121 (measured 
 - Stale first-party installs (`check_pkg_stale.sh`): link 0.78.1 → 0.78.2, knowledge 0.4.20 → 0.4.23, cred 0.1.0 →
   0.7.0, fly, mc, ngr, spacehakr, xciter. None of them bears on this branch's scripts (`pkgload::load_all()`).
 
+## Phase 1: wet's 2026-10-24 build loaded on m4 (2026-11-03 UTC)
+
+- Before: `pg_stat_activity` empty on m4's database; comment `… (built 2026-10-15T02:06:57Z, wet acb820f)`.
+- `wet::wet_db_load(con, wet::wet_catalog())` (wet 0.4.33), 06:53:38 to 07:37 UTC, **43.5 min**; 43 parquet parts
+  (23 wet_balance, 20 pcic_routed). Log: `scripts/logs/habitat/minimal_network_120/20261103_wet_db_load.log`.
+- After: comment `wet_db_load(): discharge/fwa/v1/segment_monthly, scenario historical last loaded from …/manifest.json
+  (built 2026-10-24T12:23:01Z, wet b4bbc50)`; `knw_discharge_load()` returns it. Rows per source are the same counts
+  before and after (pcic_routed 43,901,481; wet_balance 58,889,207): the build moved values, not coverage.
+- Autovacuum ran `VACUUM ANALYZE` on the table right after the load; 0310 waited for it.
+
+## Phase 2: settle
+
+- `0300` released at 06:55:55 UTC after three one-minute polls: run `20261102_203300-60ab009d`, 241 of 241 groups
+  ended, churn 70,537,175, link 0.78.1 `193cb8aa`, fresh 0.52.0 `245c8d8d`, fwapg `9a62b0c2`.
+  Log `scripts/logs/habitat/20261102_link_settle-fresh_default_minimal.csv` (named by m4's local date).
+- Baseline tests before any run: 1,853 pass, 0 fail, 1 skip.
+
 ## Errors Encountered
 
 | Error | Resolution |
