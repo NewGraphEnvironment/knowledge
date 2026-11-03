@@ -95,17 +95,17 @@ tomorrow's full `default` run launches from m4 only after `0330` has exited.
       the new load, about an hour for every key on the published run's host; the walks run on at most 8 workers
       whatever `WORKERS` says); its log names the minutes per key. The smoke gate scores the committed
       `data/tune/<key>_tune.csv` picks on the new evidence; a failed gate ends the run before anything is scored
-- [ ] `PGSERVICE=fresh_local SCHEMA=fresh_default_minimal TUNE_DIR=data/tune/candidate/<run> CONFIG_SHA=193cb8aa
+- [x] `PGSERVICE=fresh_local SCHEMA=fresh_default_minimal TUNE_DIR=data/tune/candidate/<run> CONFIG_SHA=193cb8aa
       GPKG=FALSE WORKERS=6 Rscript scripts/0330-compare.R` → `data/compare/candidate/<run>/` (per key `compare`,
       `change`, `checks`, `segments.rds`; the combined tables); about 2.7 h for every key on the published run's host.
       `CONFIG_SHA` pins `default`'s configs to the build's link commit (0.78.1) rather than `../link`'s `origin/main`
       (0.78.2, records only; the two commits' `configs/default/` are identical, so only the recorded baseline differs).
       It reads the evidence directory the summaries name and refuses one whose md5s are not the curves'; no wet
       reload between `0320` and `0330`, or every grade table reads stale
-- [ ] The issue's check: regenerated `default` equals link's stored km in every group for chinook rearing
+- [x] The issue's check: regenerated `default` equals link's stored km in every group for chinook rearing (**not exactly**: within 0.011 % per key, all in the connectivity stage, cause not established; findings, Phase 4)
       (`stored_vs_default_differ_km` in `CH_rear_compare.csv`, 0 in every group), and the same read for every other
       key; where it does not, know why before anything else
-- [ ] km drawn and graded under `default` and the tuned rule, per key, group and total, from the candidate's
+- [x] km drawn and graded under `default` and the tuned rule, per key, group and total, from the candidate's
       `compare.csv`. The published `data/compare/compare.csv` is another network, build (link 0.66.0's cuts) and flow
       load, so the like-for-like figure is each run's own `default` against its tuned rule; the published numbers
       are shown beside it only with that bracket

@@ -28,3 +28,13 @@ Start Phase 1 and run every phase to the PR (/code-check branch, /planning-archi
 /gh-pr-push). This message is the resume instruction that starts the run-to-PR
 mandate; the merge stays with me.
 ```
+
+## Session 2026-11-03 (resume, run to the PR)
+
+- Phase 1: wet's 2026-10-24 build loaded into the minimal build's database (43.5 min); `a366a14`
+- Phase 2: `0300` settled `fresh_default_minimal`; `0310` built `data/fdis/derived_minimal`; placement, premise and
+  measured-gradient checks; `c5caacb`
+- Phase 3: `DEV=1 0320`, every smoke gate passed, pick report in findings and the issue body; `c711ee8`
+- Phase 4: full `0320` (run `20261103_0838`, 70.9 min), the DEV picks; `2f65e75`. `0330` launched 09:51 UTC
+- Phase 5: CLAUDE.md paragraph `8f20816`; research province section drafted (km row pending `0330`)
+- `/code-check branch` round 1 spawned 09:53 UTC, read-only while `0330` runs

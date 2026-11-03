@@ -173,7 +173,10 @@ visits_species `6a2e28f1…`, walks `2e0f0f41…`.
 - Every key's visit count equals the published one: the range change (Phase 2) adds visits only in groups that do
   not hold both outcomes for the key.
 - Every published rule stays in its key's region, each less than one standard error behind the minimal run's best.
-  Two keys pick the same rule; five move one or two steps.
+  Two keys pick the same rule. CH, GR and ST move one or two steps on one part; BT rearing moves seven gradient steps
+  (0.3 to 0.1049) and four MAD steps (0.1 to 0.35), BT spawning three gradient steps (0.13 to 0.25); counted on the
+  run's own ladders (round-1 review corrected "five move one or two steps"). RB rearing has a published rule and is
+  paused on this build, so it was not tested.
 - Chinook rearing on three setups, one evidence count (4,858 visits): published (full, own segment) g ≤ 11 %, 164
   rules in region; minimal g ≤ 9 %, 102; Atlas line (`data/tune/grad_fwa/CH_rear_tune.csv`, tracked) g ≤ 15 %, 117.
   The flow floor (MAD ≥ 0.75) and near-river part (Q3@D1000) hold on all three.
@@ -203,6 +206,47 @@ Log `minimal_network_120/20261103_tune_run-20261103_0838-p20261103083846-bt_ch_c
   `c3f7bdbe…`, gradient `segment_gradient`, tokens `cut-min acc-v5 grad-seg q-fwapg`, link 0.78.1 `193cb8aa`.
 - `0330` launched 09:51 UTC with `pg_stat_activity` idle (no client backend active), round trip 0.8 ms, the table
   comment unchanged since `0320`.
+
+## Phase 4: comparison on the minimal build (2026-11-03 UTC)
+
+`0330 … TUNE_DIR=data/tune/candidate/20261103_0838 CONFIG_SHA=193cb8aa GPKG=FALSE WORKERS=6`, 09:51 to about 10:35 UTC,
+"Done in 43.5 min" (planned about 2.7 h: that figure was every structure's on the full network; since #112 only
+`default` and `door`, and the minimal network has about half the segments). Exit 0, no `_refused` log. Console
+`minimal_network_120/20261103_compare_console.log`; run log `data/compare/candidate/20261103_0838/20261103_compare-20261103_0838.txt`.
+
+Per key minutes: BT_rear 6.8, BT_spawn 6.0, CH_rear 12.7, CO_rear 10.3, ST_rear 4.0, GR_rear 2.9, WCT_rear 0.8.
+
+**`default` regenerated against link's stored km** (`stored_vs_default_differ_km`, all groups): BT_spawn 0; BT_rear
+5.98 km (9 groups, max FROG 3.30), CH_rear 9.30 (KITL, LNIC, MSKE, TESR 8.50), CO_rear 2.26 (LNIC, NBNK), GR_rear 8.43
+(FINL, PINE, TESR 7.90, UKEC), ST_rear 3.45 (INKR, NASC, TSAY), WCT_rear 0.05 (DUNC). At most 0.011 % of a key's km.
+The published comparison differs by hundreds to thousands of km per key (its stored flags are not regenerable, CLAUDE.md).
+- Segment level (`<key>_segments.rds`): 154 differing segments over six keys; 150 are stored rearing that the
+  regeneration drops, 4 (CO) the other way; `rearing_pre_default` is TRUE on all, `user_habitat` FALSE on all, so the
+  difference is in `.frs_run_connectivity()` (rearing clusters need spawning within 10 km, `cluster_direction = both`).
+  TESR's CH and GR segments are lake edges (1200, 1450); elsewhere mostly 1000.
+- Ruled out: stored spawning upstream in another group (0 rows, DB query on wscode/localcode); stored spawning on a
+  segment the access gate blocks (0, and `access_gate_differ_km` 0); user habitat; fresh's version (`frs_cluster.R`
+  and `.frs_run_connectivity()` unchanged from 0.52.0 to 0.53.0; 0.53.0's diff is the `to_streams` persist); link runs
+  `.frs_run_connectivity()` per AOI on its working schema (`lnk_pipeline_connect()`), as the comparison does per group.
+  A downstream test by wscode ancestry is too coarse (it reaches the whole mainstem) and TESR has no BC group
+  downstream. Cause not established; it does not touch `default` against tuned, both regenerated the same way.
+  Candidate next probe: link's own pipeline for TESR into a scratch schema, comparing its working `streams` at the
+  connect step with the persisted minimal segments.
+
+**km per key, `default` against tuned on the minimal build** (`compare.csv`, `ALL`):
+
+| key | default km | tuned km | change | gained / lost km | published change (other network, build, load, range) |
+|---|---|---|---|---|---|
+| BT_rear | 248,016 | 141,049 | −43.1 % | 1,340 / 108,307 | −23.7 % |
+| BT_spawn | 134,200 | 221,448 | +65.0 % | 87,248 / 0 | +49.5 % |
+| CH_rear | 104,751 | 87,606 | −16.4 % | 14,643 / 31,788 | −15.9 % |
+| CO_rear | 90,350 | 88,006 | −2.6 % | 8,586 / 10,929 | −2.3 % |
+| ST_rear | 84,880 | 70,007 | −17.5 % | 7,320 / 22,192 | −27.0 % |
+| GR_rear | 78,208 | 87,066 | +11.3 % | 9,170 / 312 | +3.4 % |
+| WCT_rear | 20,613 | 24,416 | +18.4 % | 4,762 / 960 | +18.0 % |
+
+Graded km, default → tuned: BT_rear 108,826 → 74,699; BT_spawn 79,026 → 117,982; CH_rear 52,369 → 58,350; ST_rear
+43,632 → 46,069; GR_rear 45,024 → 49,684 (CO and WCT withheld).
 
 ## Errors Encountered
 
