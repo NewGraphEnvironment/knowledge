@@ -53,4 +53,4 @@ province run", "What each break source does"). The issue body carries the result
 - "Minimal, other access classes" (#132) and "fixed window" (#70): their own issues
 - The cause of the `default` residue (findings, Phase 4), with the follow-up
 
-Closed by: the PR from branch `120-minimal-network-province`
+Closed by: PR #138
