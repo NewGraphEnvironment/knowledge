@@ -1,17 +1,94 @@
 # Tuning on link's minimal network
 
-**Verified:** 2026-11-02 · **Issues:** #120 (link's side: NewGraphEnvironment/link#415, link#441, link#444) ·
-**Produced by:** `scripts/0300`, `0310`, `0320`, `0330` on link's four-group proof schemas, and
+**Verified:** 2026-11-03 (province), 2026-11-02 (four groups) · **Issues:** #120 (link's side:
+NewGraphEnvironment/link#415, link#441, link#444) · **Produced by:** `scripts/0300`, `0310`, `0320`, `0330` on the
+provincial minimal build `fresh_default_minimal` and on link's four-group proof schemas, and
 `data-raw/minimal_network_check.R`, `segment_gradient_check.R`, `site_gradient_check.R`; logs
-`scripts/logs/habitat/20261102_*` and `scripts/logs/habitat/minimal_network_120/` · **Status:** the four-group test of
-mechanics is done; the province waits on link's provincial minimal run (link#441) and its parent table (link#444).
+`scripts/logs/habitat/2026110[23]_*` and `scripts/logs/habitat/minimal_network_120/` · **Status:** every species tuned,
+graded and compared on the province's minimal network as an unpromoted candidate (run `20261103_0838`); separating
+the network from the flow load and species range waits on the next full `default` build, and the transfer to link's
+full network on its parent table (link#444).
 
 ## The answer
 
 link cuts its streams at the fish records of the species it models, so on its full network a site where fish were
 caught usually starts a segment of its own, and the gradient a rule reads there is averaged over a stretch that begins
-at the catch. link's minimal network is cut only at barriers and access gradients. On link's four proof groups (BULK,
-SETN, MORK and COTR), the minimal network removes the catch from the segment:
+at the catch. A rule could then be credited for where fish were caught rather than for the stream's form. link's
+minimal network (`fresh_default_minimal`, link#441, run `20261102_203300-60ab009d`) is cut only at barriers and access
+gradients. On all 241 watershed groups it takes the catch out of the segment:
+
+| network | stream-branch visits with fish starting their own segment | empty visits starting one | median segment length, fish / empty |
+|---|---|---|---|
+| published full network (link 0.66.0, every observation a break) | 86 % | 10 % | 113 m / 305 m |
+| minimal network (link 0.78.1, `cut-min`) | 3.4 % | 3.0 % | 717 m / 699 m |
+
+The thresholds the tuning picks on it stay close to the published ones. A rule's score is how well it predicts fish
+in groups held out of the fit; the tuning picks the simplest of the rules the data cannot rank apart from the best
+(within one standard error of it, the rule's "region"). Every published rule is inside its key's region on the minimal
+network, so the minimal network does not reject any of them; five keys pick a rule one or two steps away:
+
+| key | minimal network's pick | published pick | published rule behind the minimal network's best (deviance / its standard error) |
+|---|---|---|---|
+| bull trout rearing | `mad>=0.35\|g<=0.1049\|none` | `mad>=0.1\|g<=0.3\|none` | 2.71 / 11.17 |
+| bull trout spawning | `width>=2\|g<=0.25\|Q1@D500` | `width>=2\|g<=0.13\|Q1@D500` | 1.41 / 4.04 |
+| chinook rearing | `mad>=0.75\|g<=0.09\|Q3@D1000` | `mad>=0.75\|g<=0.11\|Q3@D1000` | 4.55 / 7.97 |
+| coho rearing | the same | `mad>=0.1\|g<=0.0549\|Q3@D2000` | 11.68 / 30.48 |
+| grayling rearing | `width>=1.5\|g<=0.0549\|none` | `width>=2\|g<=0.0549\|none` | 3.92 / 5.25 |
+| steelhead rearing | `mad>=0.5\|g<=0.0849\|Q1@D250` | `mad>=1\|g<=0.0849\|Q1@D250` | 16.91 / 19.30 |
+| westslope cutthroat rearing (underpowered) | the same | `mad>=0.03\|g<=0.25\|none` | 0 |
+
+These picks differ from the published ones in three ways at once, not only the network. The minimal build reads wet's
+flow load of 2026-10-24, the published grades its load of 2026-10-19; and `0310` takes each species' range from the
+installed link's presence table, which link's presence review (link#402) changed after the published build's link
+0.66.0 (12,083 visit × species rows moved, `in_range` only). A tuning on the next full `default` build with this
+evidence's flows and range separates the network from the other two. Until then, the table says the minimal network
+leaves every published rule standing, not that it moves any.
+
+Chinook rearing's gradient limit reads three ways, each on 4,858 visits: 11 % on the published full network (164
+rules in region), 9 % on the minimal network (102), and 15 % on the whole Atlas line (117, `data/tune/grad_fwa/`, on
+the published evidence). The flow floor (MAD ≥ 0.75 m³/s) and the near-river exception (a stream below the floor
+still counts where a river of at least 3 m³/s lies within 1 km downstream) hold on all three.
+
+## The province run
+
+All on 2026-11-03 UTC, on the database the minimal build lives in, through `PGSERVICE` (round trip 0.8 to 0.9 ms),
+link 0.78.1 (`193cb8aa`), fresh 0.53.0 installed (the build ran on 0.52.0), and wet's flow load of 2026-10-24
+(`b4bbc50`), loaded for this run because that database held an older one. The published build's database keeps the
+2026-10-19 load its grades name, and wet keeps no older manifest, so the two loads now live one per database.
+
+| step | result | log |
+|---|---|---|
+| Settle (`0300`, `POLL_MIN=1`) | released after three equal polls: 241 of 241 groups | `20261102_link_settle-fresh_default_minimal.csv` |
+| Evidence (`0310`, `EVIDENCE_DIR=data/fdis/derived_minimal`) | 23 min; 45,529 visits placed, the published build's count; every walk cold on the new load (110,784 start-and-source pairs, 4.7 min) | `20261103_evidence_build_ledger-derived_minimal.csv`, `minimal_network_120/20261103_evidence_build.log` |
+| Placement (`minimal_network_check.R`, steps 1 and 2) | every visit at the same blue line, measure and Atlas line as on the published build. 172 sit on a minimal segment that runs across Atlas lines and keeps another line's id; the visit's flow, width and walks read the visit's own line, so nothing the tuning reads moves | `minimal_network_120/20261103_minimal_network_check_console.log` |
+| Premise (`segment_gradient_check.R`) | the table above; by each species' own outcome the share is 0 to 5.6 % either way | `20261103_segment_gradient_check-derived_minimal.txt` |
+| Measured gradient (#121's check) | on 16,279 stream-branch visits with a gradient measured on site, the minimal segment's gradient ranks them with a correlation of 0.678 (published full network 0.690; the Atlas line 0.653 on both). Chinook rearing's 11 % limit puts 5.9 % of its 2,453 visits on the other side of their measured gradient (published 6.4 %, Atlas line 11.6 %); bull trout 0.6 % (0.8), coho 25.5 % (25.8), grayling 11.4 % (11.7) | `20261103_site_gradient_check.txt` beside `20261030_site_gradient_check.txt` |
+| Tuning (`DEV=1 0320`, nine species) | 5.4 min on 14 workers; every smoke gate passed; the pick table above | `minimal_network_120/20261103_tune_run-*-dev.txt`, `20261103_dev_minimal_pick_report.csv` |
+| Grading (`0320`, run `20261103_0838`) | 70.9 min; the same picks; grades withheld for coho and westslope cutthroat rearing, as on the published run. The minimal network has 52 to 67 % fewer segments per key (chinook 2.65 million against 5.76 million) | `minimal_network_120/20261103_tune_run-20261103_0838-*.txt` |
+| Comparison (`0330`, `GPKG=FALSE`) | KM_PENDING | `minimal_network_120/20261103_compare_console.log` |
+
+Steps 3 to 5 of `minimal_network_check.R` (access per group, the parent, stored habitat) need the published evidence
+rebuilt per group, which the published build predates; they wait on the next full `default` build.
+
+## What each break source does, as far as these runs show
+
+- **Fish records.** On the full network they put a catch at the start of its segment (86 % against 10 %); the
+  minimal network takes that away (3.4 % against 3.0 %). The segment gradient's agreement with gradients measured on
+  site barely moves (0.678 against 0.690), so the cut at the catch was not making the gradient much better or worse as
+  a measure of the site; it was making the segment's length, and so its gradient, depend on the outcome.
+- **Crossings and habitat end points.** The minimal network drops these with the fish records, so these runs cannot
+  tell their effect apart.
+- **Access gradients.** The minimal network still cuts at them, at the classes of the species link models (0.15,
+  0.20, 0.25). Cutting at another set is "minimal, other access classes" (#132).
+- **Transfer.** link deploys a rule on its full network. A full segment given its minimal parent's gradient reads the
+  minimal network's gradient at every visit (shown on four groups below); the habitat km that transfer draws needs
+  link's parent table on the full network (link#444).
+
+## The four-group test (2026-11-02)
+
+Before the province, the mechanics ran on link's four proof groups (BULK, SETN, MORK and COTR), each network built
+from one link commit, so the network was the only difference. There too the minimal network removes the catch from the
+segment:
 
 | network | stream-branch visits with fish starting their own segment | empty visits starting one | median segment length, fish / empty |
 |---|---|---|---|
@@ -26,7 +103,7 @@ on bull trout rearing, the one key four groups can fit, the two setups give byte
 
 These are four groups and a test of the mechanics. No threshold rests on them.
 
-## The setups
+### The setups
 
 Each setup holds the evidence, the flows and the walks fixed and changes only the segments or the gradient read.
 
@@ -41,7 +118,7 @@ Each setup holds the evidence, the flows and the walks fixed and changes only th
 
 "Published" is the full setup on the province-wide build; on these four groups the full setup stands in for it.
 
-## Each check, in the order it ran
+### Each check, in the order it ran
 
 All on 2026-11-02, on the database link's proof schemas live in, through `PGSERVICE` (round trip 1.0 ms), with link
 0.78.1 and fresh 0.52.0 installed and link's build at 0.78.0 (`6bf9ca06`). The flows are wet's load of 2026-10-15,
@@ -67,7 +144,7 @@ On link 0.66.0's province-wide build, 86 % of stream-branch visits with fish sta
 10 % of empty ones (#92). link has changed which records it cuts at since then (link#396), and these
 are four groups, so the 52 % here is not compared with it.
 
-## What four groups cannot show
+### What four groups cannot show
 
 - **A threshold.** Only bull trout rearing has four groups holding both outcomes, and its curve is no better than no
   rule. Chinook rearing has three, and the smoke gate refuses its fit there.
