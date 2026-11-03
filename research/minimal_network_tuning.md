@@ -27,7 +27,8 @@ A rule's score is how well it predicts fish in groups held out of the fit. Many 
 of the best, and the data cannot rank those apart (the rule's "region"). From the region the tuning picks the rule that
 changes the fewest parts of link's `default` (a size test, a gradient limit and a near-river exception, one departure
 each), ties going to the better score. The pick therefore starts from `default` and stays as close to it as the
-evidence allows, so it is only as good a starting point as `default` itself.
+evidence allows, so it is only as good a starting point as `default` itself (what each baseline rests on, and
+how much it steers the pick, is #139).
 
 On both networks the verdict is the same for all seven keys fitted on the minimal network: link's `default` is outside
 the region, and the published rule is inside it. What moves is which of the near-equal rules is simplest, in two ways:
