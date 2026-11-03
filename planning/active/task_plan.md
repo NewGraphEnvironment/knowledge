@@ -149,9 +149,9 @@ four gaps and the assumptions above, each verified in the code and folded into t
 ## Validation
 
 - [x] Tests pass (`devtools::test()`; no package code is planned, so this is the floor): 1,853 pass, 0 fail, 1 skip (2026-11-03, after the archive's index rows)
-- [ ] `/code-check branch` clean once over the branch (scripts untouched unless a run exposes a defect; the research
+- [x] `/code-check branch` clean once over the branch (four rounds: 4, 2, 4, 0 findings; rounds 2 and 3 each found one inside the previous fix; ended on round 3's enumeration of every quantified claim, re-verified by round 4) (scripts untouched unless a run exposes a defect; the research
       and CLAUDE.md prose reviewed)
-- [ ] PWF checkboxes match landed work
+- [x] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion
 
 How each change is proved: every run's log and ledger is committed and quoted by path; the build record on the

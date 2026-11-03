@@ -151,7 +151,7 @@ Each setup holds the evidence, the flows and the walks fixed and changes only th
 
 ### Each check, in the order it ran
 
-All on 2026-11-02, on the database link's proof schemas live in, through `PGSERVICE` (round trip 1.0 ms), with link
+All on 2026-11-02, on the database link's proof schemas live in, through `PGSERVICE` (round trip 0.8 to 1.0 ms), with link
 0.78.1 and fresh 0.52.0 installed and link's build at 0.78.0 (`6bf9ca06`). The flows are wet's load of 2026-10-15,
 not the 2026-10-19 load the published grades name, so nothing here is compared with a published number.
 
