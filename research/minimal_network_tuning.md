@@ -23,14 +23,30 @@ gradients. On all 241 watershed groups it takes the catch out of the segment:
 | published full network (link 0.66.0, every observation a break) | 86 % | 10 % | 113 m / 305 m |
 | minimal network (link 0.78.1, `cut-min`) | 3.4 % | 3.0 % | 717 m / 699 m |
 
-A rule's score is how well it predicts fish in groups held out of the fit; the tuning picks the simplest of the rules
-the data cannot rank apart from the best (within one standard error of it, the rule's "region"). Of the seven keys
-fitted on the minimal network, every published rule is inside its key's region, so the minimal network rejects none
-of them. Two keys pick the published rule again. Chinook, grayling and steelhead rearing move one or two steps on one
-part of the rule. Bull trout moves further: rearing goes from no working gradient limit (30 %) to 10.5 %, seven steps
-down the gradient ladder, with a MAD floor four steps up (0.1 to 0.35 m³/s), and spawning's limit goes from 13 % to
-25 %, three steps. Rainbow trout rearing has a published rule but is paused on this build (link models nine species
-there), so it was not tested.
+A rule's score is how well it predicts fish in groups held out of the fit. Many rules score within one standard error
+of the best, and the data cannot rank those apart (the rule's "region"). From the region the tuning picks the rule that
+changes the fewest parts of link's `default` (a size test, a gradient limit and a near-river exception, one departure
+each), ties going to the better score. The pick therefore starts from `default` and stays as close to it as the
+evidence allows, so it is only as good a starting point as `default` itself.
+
+On both networks the verdict is the same for all seven keys fitted on the minimal network: link's `default` is outside
+the region, and the published rule is inside it. What moves is which of the near-equal rules is simplest, in two ways:
+
+- **The scores reshuffle among rules with the same departures.** Chinook rearing's region holds only three-departure
+  rules on both networks; `g<=0.11` led `g<=0.09` by 1.5 (standard error 10.2) on the full network, and `g<=0.09` leads
+  by 4.6 (8.0) on the minimal one. Steelhead rearing's MAD floor of 1 and of 0.5 m³/s swap the same way, and bull
+  trout spawning's 13 % and 25 % gradient limits lie within 2.2 of each other on both networks (standard error about
+  4), each leading on one.
+- **A rule with fewer departures crosses into the region.** Bull trout rearing's `mad>=0.35|g<=0.1049|none` keeps
+  `default`'s 10.5 % gradient and changes only the size test. It was just outside the region on the full network (87
+  behind the best, standard error 69) and is just inside on the minimal one (65, 74), so it displaces the published
+  two-departure rule (no working gradient limit), which still scores better (2.7 behind). Grayling rearing's
+  `width>=1.5|g<=0.0549|none` does the same against the published `width>=2` (9.3 behind, standard error 10.9; the
+  published rule 3.9). Both picks sit at the edge of their region, and a small change in the data would move either
+  back.
+
+So the minimal network contradicts no published rule; two keys pick it again. Rainbow trout rearing has a published
+rule but is paused on this build (link models nine species there), so it was not tested.
 
 | key | minimal network's pick | published pick | published rule behind the minimal network's best (deviance / its standard error) |
 |---|---|---|---|
