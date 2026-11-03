@@ -118,16 +118,16 @@ tomorrow's full `default` run launches from m4 only after `0330` has exited.
 
 ## Phase 5: Write-up
 
-- [ ] `research/minimal_network_tuning.md`: a province section (the answer first: the pick table; the premise and
+- [x] `research/minimal_network_tuning.md`: a province section (the answer first: the pick table; the premise and
       measured-gradient figures on 241 groups; km per key, each run's own `default` against its tuned rule, the
       published run bracketed as another network, build and load; which of `minimal_network_check.R`'s steps ran
       here and which wait on m1; what each break source does, stated as the checks show it; what waits on
       link#444), header revised, status line
-- [ ] Issue #120 body: the province checkboxes ticked with their results, the every-setup table marked per row
+- [x] Issue #120 body: the province checkboxes ticked with their results, the every-setup table marked per row
       (done / waits on link#444 / #132 / #70), the follow-up issue named once filed
 - [x] `CLAUDE.md` working notes: where `fresh_default_minimal` lives and the flow loads per database, one paragraph;
       `scripts/README.md` only if a switch changed
-- [ ] Logs under `scripts/logs/habitat/` (the settle log, the tagged ledger, the checks) and
+- [x] Logs under `scripts/logs/habitat/` (the settle log, the tagged ledger, the checks) and
       `scripts/logs/habitat/minimal_network_120/` (the DEV, grade and compare logs), committed
 
 ## Owed at the end (reported, done after merge)
@@ -148,7 +148,7 @@ four gaps and the assumptions above, each verified in the code and folded into t
 
 ## Validation
 
-- [ ] Tests pass (`devtools::test()`; no package code is planned, so this is the floor)
+- [x] Tests pass (`devtools::test()`; no package code is planned, so this is the floor): 1,853 pass, 0 fail, 1 skip (2026-11-03, after the archive's index rows)
 - [ ] `/code-check branch` clean once over the branch (scripts untouched unless a run exposes a defect; the research
       and CLAUDE.md prose reviewed)
 - [ ] PWF checkboxes match landed work

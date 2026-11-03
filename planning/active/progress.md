@@ -38,3 +38,12 @@ mandate; the merge stays with me.
 - Phase 4: full `0320` (run `20261103_0838`, 70.9 min), the DEV picks; `2f65e75`. `0330` launched 09:51 UTC
 - Phase 5: CLAUDE.md paragraph `8f20816`; research province section drafted (km row pending `0330`)
 - `/code-check branch` round 1 spawned 09:53 UTC, read-only while `0330` runs
+- Phase 4: `0330` done in 43.5 min (09:51 to about 10:35 UTC); regenerated `default` within 0.011 % of link's stored km
+  per key, residue all in the connectivity stage, cause not established (findings); km per key in research and the
+  issue; `a848c35`. Archive: 35 objects, 1,755 MB; `10250d1`
+- Review: round 1 four findings (fixed `a848c35`), round 2 two (one inside round 1's fix; fixed `c22ae73`), round 3
+  spawned 12:47 UTC with an enumeration of every quantified claim
+- Tests 1,853 pass, 0 fail, 1 skip
+- Al chose (2026-11-03): reword the two commit messages that name a machine (`8d14576`, pushed; `a366a14`) and
+  force-push the branch; the candidate's grade records name `c5caacb` as `knowledge_commit`, whose code equals
+  `de9924c` (the branch changes no code)
