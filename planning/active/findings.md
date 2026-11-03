@@ -179,6 +179,31 @@ visits_species `6a2e28f1…`, walks `2e0f0f41…`.
   The flow floor (MAD ≥ 0.75) and near-river part (Q3@D1000) hold on all three.
 - The ddev columns are in each run's own units, as `knw_tune_pick_report()` computes them.
 
+## Phase 4: grading on the minimal build (2026-11-03 UTC)
+
+`RUN=20261103_0838 … WORKERS=14 0320`, 08:38:46 to 09:49:52 UTC (70.9 min), exit 0, no `_refused` log. Smoke gates
+passed for every key; the picks are the DEV run's, key for key (`data/tune/candidate/20261103_0838/pick_report.csv`).
+Log `minimal_network_120/20261103_tune_run-20261103_0838-p20261103083846-bt_ch_cm_co_gr_pk_sk_st_wct.txt`, console
+`minimal_network_120/20261103_tune_run_console.log`.
+
+| key | grade minutes | groups | segments | walk cache hits / misses | grade withheld (published) |
+|---|---|---|---|---|---|
+| BT_rear | 17.3 | 158 | 3,617,470 | 161 / 1,920,860 | no (no) |
+| BT_spawn | 11.5 | 158 | 3,617,470 | 161 / 1,920,860 | no (no) |
+| CH_rear | 7.1 | 136 | 2,653,426 | 73 / 761,479 | no (no) |
+| CO_rear | 3.9 | 113 | 2,250,212 | 545,184 / 31,301 | yes (yes) |
+| GR_rear | 5.2 | 81 | 1,962,275 | 559,059 / 240,867 | no (no) |
+| ST_rear | 4.6 | 93 | 1,990,611 | 381,522 / 289,836 | no (no) |
+| WCT_rear | 3.3 | 16 | 394,925 | 89,519 / 21,458 | yes (yes) |
+
+- The minimal network has 52 to 67 % fewer segments per key than the published full network (BT 3.62 M against
+  8.41 M, CH 2.65 M against 5.76 M).
+- The walks were cold on the new flow load: the first keys walked nearly every segment end; later keys reused the
+  earlier keys' walks. Every record carries run `20261102_203300-60ab009d`, flows 2026-10-24 (`b4bbc50`), walk
+  `c3f7bdbe…`, gradient `segment_gradient`, tokens `cut-min acc-v5 grad-seg q-fwapg`, link 0.78.1 `193cb8aa`.
+- `0330` launched 09:51 UTC with `pg_stat_activity` idle (no client backend active), round trip 0.8 ms, the table
+  comment unchanged since `0320`.
+
 ## Errors Encountered
 
 | Error | Resolution |

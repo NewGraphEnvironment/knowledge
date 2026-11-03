@@ -89,7 +89,7 @@ build exists.
 Runs only after Phase 3's pick report is read and every key's gates passed. `pg_stat_activity` idle at launch;
 tomorrow's full `default` run launches from m4 only after `0330` has exited.
 
-- [ ] `PGSERVICE=fresh_local SCHEMA=fresh_default_minimal EVIDENCE_DIR=data/fdis/derived_minimal
+- [x] `PGSERVICE=fresh_local SCHEMA=fresh_default_minimal EVIDENCE_DIR=data/fdis/derived_minimal
       SPECIES=BT,CH,CM,CO,GR,PK,SK,ST,WCT RUN=<UTC stamp> WORKERS=14 Rscript scripts/0320-tune-run.R` →
       `data/tune/candidate/<run>/` (every key's tune, curves, summary, grades and grade record; the grade walks cold on
       the new load, about an hour for every key on the published run's host; the walks run on at most 8 workers
