@@ -125,7 +125,7 @@ tomorrow's full `default` run launches from m4 only after `0330` has exited.
       link#444), header revised, status line
 - [ ] Issue #120 body: the province checkboxes ticked with their results, the every-setup table marked per row
       (done / waits on link#444 / #132 / #70), the follow-up issue named once filed
-- [ ] `CLAUDE.md` working notes: where `fresh_default_minimal` lives and the flow loads per database, one paragraph;
+- [x] `CLAUDE.md` working notes: where `fresh_default_minimal` lives and the flow loads per database, one paragraph;
       `scripts/README.md` only if a switch changed
 - [ ] Logs under `scripts/logs/habitat/` (the settle log, the tagged ledger, the checks) and
       `scripts/logs/habitat/minimal_network_120/` (the DEV, grade and compare logs), committed

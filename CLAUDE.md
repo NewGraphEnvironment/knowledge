@@ -423,6 +423,16 @@ refuses any other. On link's four proof groups only bull trout rearing has four 
 smoke gate refuses chinook rearing on three folds (separation), so a test of grading and the comparison runs on a key
 the groups can fit.
 
+The provincial minimal build (`fresh_default_minimal`, link#441, run `20261102_203300-60ab009d`) lives in a database
+other than the published builds', reached with a `~/.pg_service.conf` entry and `PGSERVICE=`; the published database
+holds a `fresh_default_minimal` with no segments. Each database keeps its own flow load and walk cache: the minimal
+build's reads wet's 2026-10-24 build (#120's second branch loaded it), the published grades wet's 2026-10-19 load, and
+wet's public prefix keeps no older manifest, so the older load exists only where it was loaded. Its evidence is
+`data/fdis/derived_minimal` (ledger tagged `-derived_minimal`). `0310` reads each species' range from the installed
+link's `default` presence table (`lnk_load_overrides()`), not from the schema, so a build on a newer link moves
+`in_range` even on the same network: link#402's review moved 12,083 visit × species rows between link 0.66.0 and
+0.78.1. Compare two builds' picks knowing which of network, flow load and range changed.
+
 ### The segment flows can change under a run; the table comment names the build
 
 `discharge.fwa_v1_segment_monthly` is wet's database load, and wet can reload it between two runs: NewGraphEnvironment/wet#103
