@@ -152,7 +152,7 @@ four gaps and the assumptions above, each verified in the code and folded into t
 - [x] `/code-check branch` clean once over the branch (four rounds: 4, 2, 4, 0 findings; rounds 2 and 3 each found one inside the previous fix; ended on round 3's enumeration of every quantified claim, re-verified by round 4) (scripts untouched unless a run exposes a defect; the research
       and CLAUDE.md prose reviewed)
 - [x] PWF checkboxes match landed work
-- [ ] `/planning-archive` on completion
+- [x] `/planning-archive` on completion
 
 How each change is proved: every run's log and ledger is committed and quoted by path; the build record on the
 ledger names the schema, run, tokens, flow load and walk md5; `0320`'s smoke gates and `0330`'s `default`-equals-stored
