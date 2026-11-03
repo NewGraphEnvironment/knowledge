@@ -75,12 +75,12 @@ build exists.
 
 ## Phase 3: DEV tuning, every species — the pick report
 
-- [ ] `DEV=1 SCHEMA=fresh_default_minimal EVIDENCE_DIR=data/fdis/derived_minimal DEV_DIR=data/tune/dev_minimal
+- [x] `DEV=1 SCHEMA=fresh_default_minimal EVIDENCE_DIR=data/fdis/derived_minimal DEV_DIR=data/tune/dev_minimal
       SPECIES=BT,CH,CM,CO,GR,PK,SK,ST,WCT WORKERS=14 Rscript scripts/0320-tune-run.R` (floors 5 and 5; no database:
       `SCHEMA` is only echoed in the log under `DEV=1`) → `data/tune/dev_minimal/pick_report.csv` and the log
-- [ ] Every key's four smoke gates pass or the key says `too_few_groups` / `no_response` / `no_stream_rule`; a
+- [x] Every key's four smoke gates pass or the key says `too_few_groups` / `no_response` / `no_stream_rule`; a
       failed gate stops here (CLAUDE.md: never chain past a failed gate)
-- [ ] The pick report, one row per key, in `findings.md` and the issue body: the run's pick beside the published
+- [x] The pick report, one row per key, in `findings.md` and the issue body: the run's pick beside the published
       one, whether the published rule is still in the region, how far behind the best it sits, and the number of
       visits; the Atlas-line setup is the tracked `data/tune/grad_fwa/CH_rear_tune.csv`, no new run
 

@@ -150,6 +150,35 @@ Relates to #70 (fixed-window gradients), #92 (segment gradient), #121 (measured 
   0.690; Atlas line 0.653 on both); chinook rearing's 11 % limit flips 5.9 % of its 2,453 visits (published 6.4 %;
   Atlas line 11.6 %); BT 0.6 % (0.8), CO 25.5 % (25.8), GR 11.4 % (11.7).
 
+## Phase 3: DEV tuning on the minimal build (2026-11-03 UTC)
+
+`DEV=1 … SPECIES=BT,CH,CM,CO,GR,PK,SK,ST,WCT WORKERS=14 0320`, 08:32:53 to 08:38:19 UTC (5.4 min; 18 keys scored in
+5.1 min on 14 workers, smoke 0.1 min). Floors 5 and 5. Every smoke gate passed on the seven keys with a previous pick
+(null ratio, clamp, behind null, coefficient); the other eleven are `no_response` (every spawning key but BT's) or
+`no_stream_rule` (CM, PK, SK rearing), as on the published run. Log
+`minimal_network_120/20261103_tune_run-bt_ch_cm_co_gr_pk_sk_st_wct-dev.txt`, report
+`minimal_network_120/20261103_dev_minimal_pick_report.csv`. Evidence md5s: visits_link `c746c582…`,
+visits_species `6a2e28f1…`, walks `2e0f0f41…`.
+
+| key | minimal pick | published pick | published in region | published behind best (ddev / se) | visits |
+|---|---|---|---|---|---|
+| BT_rear | `mad>=0.35\|g<=0.1049\|none` | `mad>=0.1\|g<=0.3\|none` | yes | 2.71 / 11.17 | 9,344 |
+| BT_spawn | `width>=2\|g<=0.25\|Q1@D500` | `width>=2\|g<=0.13\|Q1@D500` | yes | 1.41 / 4.04 | 513 |
+| CH_rear | `mad>=0.75\|g<=0.09\|Q3@D1000` | `mad>=0.75\|g<=0.11\|Q3@D1000` | yes | 4.55 / 7.97 | 4,858 |
+| CO_rear | `mad>=0.1\|g<=0.0549\|Q3@D2000` | the same | yes | 11.68 / 30.48 | 4,628 |
+| GR_rear | `width>=1.5\|g<=0.0549\|none` | `width>=2\|g<=0.0549\|none` | yes | 3.92 / 5.25 | 1,355 |
+| ST_rear | `mad>=0.5\|g<=0.0849\|Q1@D250` | `mad>=1\|g<=0.0849\|Q1@D250` | yes | 16.91 / 19.30 | 1,530 |
+| WCT_rear (underpowered) | `mad>=0.03\|g<=0.25\|none` | the same | yes | 0 | 1,238 |
+
+- Every key's visit count equals the published one: the range change (Phase 2) adds visits only in groups that do
+  not hold both outcomes for the key.
+- Every published rule stays in its key's region, each less than one standard error behind the minimal run's best.
+  Two keys pick the same rule; five move one or two steps.
+- Chinook rearing on three setups, one evidence count (4,858 visits): published (full, own segment) g ≤ 11 %, 164
+  rules in region; minimal g ≤ 9 %, 102; Atlas line (`data/tune/grad_fwa/CH_rear_tune.csv`, tracked) g ≤ 15 %, 117.
+  The flow floor (MAD ≥ 0.75) and near-river part (Q3@D1000) hold on all three.
+- The ddev columns are in each run's own units, as `knw_tune_pick_report()` computes them.
+
 ## Errors Encountered
 
 | Error | Resolution |
