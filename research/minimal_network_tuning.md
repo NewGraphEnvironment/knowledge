@@ -5,7 +5,7 @@ NewGraphEnvironment/link#415, link#441, link#444) · **Produced by:** `scripts/0
 provincial minimal build `fresh_default_minimal` and on link's four-group proof schemas, and
 `data-raw/minimal_network_check.R`, `segment_gradient_check.R`, `site_gradient_check.R`; logs
 `scripts/logs/habitat/2026110[23]_*` and `scripts/logs/habitat/minimal_network_120/` · **Status:** the nine species link models
-on the minimal build tuned on it, and the seven keys with a stream rule (six species; chum, pink and sockeye have none)
+on the minimal build tuned on it, and the seven keys fitted (six species; the other eleven keys have no response or no stream rule)
 graded and compared, as an unpromoted candidate (run `20261103_0838`; rainbow trout and kokanee are paused there); separating
 the network from the flow load and species range waits on the next full `default` build, and the transfer to link's
 full network on its parent table (link#444).
@@ -56,7 +56,7 @@ still counts where a river of at least 3 m³/s lies within 1 km downstream) hold
 
 ## The province run
 
-All on 2026-11-03 UTC, on the database the minimal build lives in, through `PGSERVICE` (round trip 0.8 to 0.9 ms),
+All on 2026-11-03 UTC, on the database the minimal build lives in, through `PGSERVICE` (round trip 0.8 to 1.1 ms),
 link 0.78.1 (`193cb8aa`), fresh 0.53.0 installed (the build ran on 0.52.0), and wet's flow load of 2026-10-24
 (`b4bbc50`), loaded for this run because that database held an older one. The published build's database keeps the
 2026-10-19 load its grades name, and wet keeps no older manifest, so the two loads now live one per database.
@@ -67,7 +67,7 @@ link 0.78.1 (`193cb8aa`), fresh 0.53.0 installed (the build ran on 0.52.0), and 
 | Evidence (`0310`, `EVIDENCE_DIR=data/fdis/derived_minimal`) | 23 min; 45,529 visits placed, the published build's count; every walk cold on the new load (110,784 start-and-source pairs, 4.7 min) | `20261103_evidence_build_ledger-derived_minimal.csv`, `minimal_network_120/20261103_evidence_build.log` |
 | Placement (`minimal_network_check.R`, steps 1 and 2) | every visit at the same blue line, measure and Atlas line as on the published build. 172 sit on a minimal segment that runs across Atlas lines and keeps another line's id; the visit's flow, width and walks read the visit's own line, so nothing the tuning reads moves | `minimal_network_120/20261103_minimal_network_check_console.log` |
 | Premise (`segment_gradient_check.R`) | the table above; by each species' own outcome the share is 0 to 5.6 % either way | `20261103_segment_gradient_check-derived_minimal.txt` |
-| Measured gradient (#121's check) | on 16,279 stream-branch visits with a gradient measured on site, the minimal segment's gradient ranks them with a correlation of 0.678 (published full network 0.690; the Atlas line 0.653 on both). Chinook rearing's 11 % limit puts 5.9 % of its 2,453 visits on the other side of their measured gradient (published 6.4 %, Atlas line 11.6 %); bull trout 0.6 % (0.8), coho 25.5 % (25.8), grayling 11.4 % (11.7) | `20261103_site_gradient_check.txt` beside `20261030_site_gradient_check.txt` |
+| Measured gradient (#121's check) | on 16,279 stream-branch visits with a gradient measured on site, the minimal segment's gradient ranks them with a correlation of 0.678 (published full network 0.690; the Atlas line 0.653 on both). Chinook rearing's 11 % limit puts 5.9 % of its 2,453 visits on the other side of their measured gradient (published 6.4 %, Atlas line 11.6 %). Each published limit, minimal network against full: bull trout rearing 0.6 % (0.8), steelhead rearing 14.2 % (17.0), coho rearing 25.5 % (25.8), grayling rearing 11.4 % (11.7), westslope cutthroat rearing 0.7 % (0.7), and two the other way, bull trout spawning 8.7 % (8.5) and rainbow trout rearing 0.8 % (0.7) | `20261103_site_gradient_check.txt` beside `20261030_site_gradient_check.txt` |
 | Tuning (`DEV=1 0320`, nine species) | 5.4 min on 14 workers; every smoke gate passed; the pick table above | `minimal_network_120/20261103_tune_run-*-dev.txt`, `minimal_network_120/20261103_dev_minimal_pick_report.csv` |
 | Grading (`0320`, run `20261103_0838`) | 70.9 min; the same picks; grades withheld for coho and westslope cutthroat rearing, as on the published run. The minimal network has 52 to 67 % fewer segments per key (chinook 2.65 million against 5.76 million) | `minimal_network_120/20261103_tune_run-20261103_0838-*.txt` |
 | Comparison (`0330`, `GPKG=FALSE`, `default` and the tuned rule only) | 43.5 min on 6 connections; km below. `default` regenerated through all three stages reproduces link's stored km to within 0.02 % per key (residue below) | `minimal_network_120/20261103_compare_console.log` |
@@ -109,8 +109,8 @@ rebuilt per group, which the published build predates; they wait on the next ful
   carries.
 - **Crossings and habitat end points.** The minimal network drops these with the fish records, so these runs cannot
   tell their effect apart.
-- **Access gradients.** The minimal network still cuts at them, at the classes of the species link models (0.15,
-  0.20, 0.25). Cutting at another set is "minimal, other access classes" (#132).
+- **Access gradients.** The minimal network still cuts at them: for each species link models, at every class
+  (0.15, 0.20, 0.25, 0.30) at or above the steepest gradient that species passes (`.lnk_pipeline_prep_minimal()`). Cutting at another set is "minimal, other access classes" (#132).
 - **Transfer.** link deploys a rule on its full network. A full segment given its minimal parent's gradient reads the
   minimal network's gradient at every visit (shown on four groups below); the habitat km that transfer draws needs
   link's parent table on the full network (link#444).
