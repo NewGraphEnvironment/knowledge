@@ -248,6 +248,15 @@ The published comparison differs by hundreds to thousands of km per key (its sto
 Graded km, default → tuned: BT_rear 108,826 → 74,699; BT_spawn 79,026 → 117,982; CH_rear 52,369 → 58,350; ST_rear
 43,632 → 46,069; GR_rear 45,024 → 49,684 (CO and WCT withheld).
 
+## Phase 4: archive (2026-11-03 UTC)
+
+`fdis_sites.csv` copied into `data/fdis/derived_minimal/`; the dry run listed 35 objects under
+`tune/<key>/cut-min.acc-v5.grad-seg.q-fwapg/` and `evidence/3d907629ee200b4a7beb05cdd560fc0b/` (`reconcile.csv` and
+`sites.rds` from `data/fdis/build/`, md5-checked against the ledger). The archive itself: 35 objects, 1,755 MB stored,
+35 rows appended to `data/archive_index.csv` (batch `20261103T123953Z-2ce302a3`); its `source` column names the
+promoted path by design, and its md5s are the candidate's (BT_rear grades `3bacfaa8…`, the candidate record's; the
+published table's is `4b6fe521…`). Console `minimal_network_120/20261103_archive_console.log`.
+
 ## Errors Encountered
 
 | Error | Resolution |

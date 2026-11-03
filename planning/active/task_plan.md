@@ -109,7 +109,7 @@ tomorrow's full `default` run launches from m4 only after `0330` has exited.
       `compare.csv`. The published `data/compare/compare.csv` is another network, build (link 0.66.0's cuts) and flow
       load, so the like-for-like figure is each run's own `default` against its tuned rule; the published numbers
       are shown beside it only with that bracket
-- [ ] `cp data/fdis/derived/fdis_sites.csv data/fdis/derived_minimal/` first: the archive stores 0240's placement table
+- [x] `cp data/fdis/derived/fdis_sites.csv data/fdis/derived_minimal/` first: the archive stores 0240's placement table
       beside an evidence build, 0310 does not write it to a tagged directory, and it is build-independent (0230's
       placement of the visits on the Atlas); then `RUN=<run> EVIDENCE_DIR=data/fdis/derived_minimal DRY=1 Rscript
       scripts/0336-archive.R` lists `tune/<key>/cut-min.acc-v5.grad-seg.q-fwapg/` per key and the evidence under
