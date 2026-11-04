@@ -23,7 +23,7 @@ promote." The build is run `20261103_163715-269b585a` (link 0.78.2) in the datab
 - [x] Tests, document, lint; commit.
 
 ## Phase 2: the build's evidence as the default
-- [ ] `0300` untagged on `fresh_default` (released), then a plain `0310` into `data/fdis/derived`; md5s equal the
+- [x] `0300` untagged on `fresh_default` (released), then a plain `0310` into `data/fdis/derived`; md5s equal the
       tagged build's (same build, same code).
 
 ## Phase 3: the candidate

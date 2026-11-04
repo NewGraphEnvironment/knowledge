@@ -1,0 +1,4 @@
+"at_utc","schema","poll_min","n_wsg","n_ended","n_recompute_rows","n_runs","run_uid","last_end","churn","n_tables","n_active","status","log_run_uid","link_version","link_sha","fresh_version","fresh_sha","fwapg_sha","config_hash","n_log_rows","log_runs_aside"
+"2026-11-04T05:23:20Z","fresh_default",1,241,241,241,1,"20261103_163715-269b585a","2026-11-03T20:26:09Z","82547986",25,0,"polling",,,,,,,,,
+"2026-11-04T05:24:21Z","fresh_default",1,241,241,241,1,"20261103_163715-269b585a","2026-11-03T20:26:09Z","82547986",25,0,"polling",,,,,,,,,
+"2026-11-04T05:25:22Z","fresh_default",1,241,241,241,1,"20261103_163715-269b585a","2026-11-03T20:26:09Z","82547986",25,0,"released","20261103_163715-269b585a","0.78.2","4dfbfa4980eb259e2f6a3e9b198c54014315d0ce","0.52.0","245c8d8db60b446f1fedb72340f55faa25f32f24","9a62b0c24b4fa19fe5f084a2cb0075986f588360","sha256:b2d2f5619841e892ef809b6950473423e4626be8a148a6260296d968820f8e8b",241,"20261023_074321-24d85e8c"
