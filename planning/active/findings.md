@@ -68,3 +68,10 @@ This takes the chinook article's structure and tone from #118 (renaming the arti
 
 | Error | Resolution |
 |-------|------------|
+| Better BibTeX gave no reply on localhost:23119 (curl exit 52, connector ping too) though the Zotero process had run 4 days; `ZOTERO_API_KEY` unset in the shell and R | Bib regeneration waits on a Zotero restart. Recommend citing the Data Catalogue record by link only (background, not data the article uses), so no Web API item is needed |
+
+## Measurements
+
+- Chinook prose (outside chunks, after the setup): 1,683 -> 1,236 words. The methods table at the end (moved, not cut) sets the floor.
+- Pinned links (bcfishpass x3 at 3bd2824, Data Catalogue record): all HTTP 200, 2026-11-04.
+- Methods article render: only the five moved statistics keys unresolved until `vignette_bib.R` runs.
