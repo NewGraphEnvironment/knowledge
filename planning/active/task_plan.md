@@ -41,29 +41,29 @@ The change is to prose only. Every figure and table below reads elements already
       sentences.
 
 ## Phase 2: Chinook article rewritten (`vignettes/chinook_rearing.Rmd`)
-- [ ] 1. Opening: the answer, no company name; link and bcfishpass cited at first mention; numbers inline from `dflt`,
+- [x] 1. Opening: the answer, no company name; link and bcfishpass cited at first mention; numbers inline from `dflt`,
       `rec`, `all_row`; ends with a link to the methods article.
-- [ ] 2. The map straight after (static and site versions, chunks as now); its caption says how to read orange and green,
+- [x] 2. The map straight after (static and site versions, chunks as now); its caption says how to read orange and green,
       absorbing the map paragraph.
-- [ ] 3. "What changes?": one before/after table (dials, km across the province, catch rate on and off the habitat from
+- [x] 3. "What changes?": one before/after table (dials, km across the province, catch rate on and off the habitat from
       `checks`), with the overlap caveat as a table note. Replaces "What does link do now?" and "A check".
-- [ ] 4. "Why does a nearby river matter?": opens with bcfishpass's order-5 rule (pinned SQL link) and link `default`
+- [x] 4. "Why does a nearby river matter?": opens with bcfishpass's order-5 rule (pinned SQL link) and link `default`
       having it off; a figure from `x$surface`: x distance to a river ≥ 3 m³/s (log, 100 m to 50 km), y fitted chance of a
       catch, one line per flow, dashed line at `rec$exc_d`, lines below `rec$size_min` grey beyond it. One sentence beside it,
       guarded (lines within a few points near the river, spread past 1 km).
-- [ ] 5. "How sure are we?": the principle in plain words, linked to the methods article; the dial profile figure as now;
+- [x] 5. "How sure are we?": the principle in plain words, linked to the methods article; the dial profile figure as now;
       the stricter-bar table rebuilt (rows: dials; columns: link now, 1 SE, 1.96 SE; short cells; changed cells bold; smaller
       font; close-call counts in a note); "Two other checks" as a three-row table with each check's direction.
-- [ ] 6. "Before you use it": same bullets, shorter; drop the earlier longer-ladder history; add the order-5 gap (the tuning
+- [x] 6. "Before you use it": same bullets, shorter; drop the earlier longer-ladder history; add the order-5 gap (the tuning
       never scored bcfishpass's exception, so the result beats link's `default`, not bcfishpass's rule).
-- [ ] 7. "How was this done?": a literal markdown table (records, placement keeping the register phrases, flow, slope,
+- [x] 7. "How was this done?": a literal markdown table (records, placement keeping the register phrases, flow, slope,
       candidate dials, scoring, tie-break, what was left out), each row linking the methods article; every tool cited here.
-- [ ] 8. References, and a "Software and citation" section.
-- [ ] Keep `se_strict <- 1.96  #` and every existing `stopifnot()` whose sentence survives; drop guards only with their
+- [x] 8. References, and a "Software and citation" section.
+- [x] Keep `se_strict <- 1.96  #` and every existing `stopifnot()` whose sentence survives; drop guards only with their
       sentences (the `ge`/`grad_ext` ones if the history goes); add guards for each new sentence.
 
 ## Phase 3: Dependencies, references, render
-- [ ] Add `kableExtra` to `Suggests`.
+- [x] Add `kableExtra` to `Suggests`.
 - [ ] Add the BC Data Catalogue record to the Zotero group library (Web API), then `Rscript data-raw/vignette_bib.R` with
       Zotero running; both `.bib` files rewritten.
 - [ ] Install the branch (`R CMD INSTALL .`) and render both articles; read each rendered page, figures included at their
