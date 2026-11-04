@@ -1,3 +1,13 @@
+# knowledge 0.4.25
+
+* `knw_tune_anchor()` sets each tuned key's pick, from link's `default` and from its flow version, beside the rule the
+  data score best: how far behind it sits, in deviance and SE, and how many parts (size test, gradient, exception)
+  apart (#141). It also measures each pick against the best rule a pick may be (in the region, with no exception under
+  `d_floor`), since a best a pick may not be can never be picked. `scripts/0320` writes these columns into every
+  summary and `pick_report.csv`, and `data-raw/tune_anchor_check.R` reads saved tables. On the published tables the
+  starting point steers grayling, steelhead and coho rearing, and on the minimal network bull trout rearing too
+  (`research/baseline_anchoring.md`, with grayling rearing's "before" for #140).
+
 # knowledge 0.4.24
 
 * Every species was tuned on link's provincial minimal network (#120). That network rejects none of the published
