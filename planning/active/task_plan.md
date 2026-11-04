@@ -28,7 +28,7 @@ promote." The build is run `20261103_163715-269b585a` (link 0.78.2) in the datab
 
 ## Phase 3: the candidate
 - [x] Full `0320` (all species; smoke gates, grades) on this host: run `20261104_0543`, 51.7 min.
-- [ ] `0330 TUNE_DIR=data/tune/candidate/<run>` on this host.
+- [x] `0330 TUNE_DIR=data/tune/candidate/<run>` on this host: 50.9 min; then `GRADIENT=fwa_gradient` into the run (5.4 min), which the promotion requires.
 
 ## Phase 4: promote
 - [ ] `RUN=<run> DRY=1 0335`, then `RUN=<run> 0335` (Zotero running for the bibliography).

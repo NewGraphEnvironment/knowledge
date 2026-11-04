@@ -12,3 +12,8 @@
   `not_modelled`; seven keys fitted, picks identical to the `DEV=1` run's. Grades withheld for BT_spawn (new: the
   published run graded it), CO_rear and WCT_rear (as published).
 - `0330 TUNE_DIR=data/tune/candidate/20261104_0543` started 06:36Z on this host.
+- `0330`, 06:35 to 07:26Z (50.9 min, with GeoPackages). Tuned km against regenerated `default`: BT_rear −23.5 %,
+  BT_spawn +23.8 %, CH_rear −14.1 %, CO_rear −3.2 %, ST_rear −24.6 %, GR_rear +11.1 %, WCT_rear +19.1 %.
+- The first `DRY=1 0335` refused: `grad_fwa/` (the Atlas-gradient sensitivity) on the old evidence. `GRADIENT=fwa_gradient
+  RUN=20261104_0543 0320` (5.4 min): all seven keys keep the published pick on the Atlas line. The second dry run:
+  228 files written, 43 removed (RB_rear's tables, comparison, GeoPackage and 24 maps).
