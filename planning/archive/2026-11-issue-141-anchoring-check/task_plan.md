@@ -44,7 +44,7 @@ Measured today from the tables (rule, + ddev / SE behind the best):
 - [x] Tests pass (`devtools::test()`), lintr clean
 - [x] `/code-check` clean (once over the branch with `/code-check branch`)
 - [x] PWF checkboxes match landed work
-- [ ] `/planning-archive` on completion
+- [x] `/planning-archive` on completion
 
 How each change is proved:
 - The function: fixtures above, plus a mutation check (break the tie handling and the parts count; the tests go red).
