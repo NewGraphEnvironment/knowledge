@@ -193,8 +193,8 @@ knitr::kable(chg, format = "html", align = "lrr",
     "comparison ran, each rule run ",
     "through all of link's steps. Both totals include lines through wetlands, which the two rules test differently ",
     "(below). ",
-    "Sites are the ", n0(sum(fv$n[fv$rule == "default"])), " electrofishing sites on ",
-    "reachable streams in those groups. They overlap the sites the rule was chosen on, so the rates show the rule ",
+    "Sites are the ", n0(sum(fv$n[fv$rule == "default"])), " electrofishing sites of a usual fished area on ",
+    "reachable stream, river and wetland lines in those groups, a wider set than the one the rule was chosen on. They overlap the sites the rule was chosen on, so the rates show the rule ",
     "does what it was chosen to do, not that it predicts new places."))
 ```
 
@@ -366,8 +366,8 @@ knitr::kable(oc, format = "html", align = "lll") |>
 
 | Step | For chinook rearing |
 |:--|:--------|
-| Records | The Fisheries Data Information System's electrofishing sites [@provinceofbritishcolumbia2022FisheriesData]: where crews fished, and whether they caught chinook. `r n0(summ$visits_in)` sites in `r summ$groups` watershed groups where link expects chinook; the tests use the `r summ$groups_both` groups where chinook were caught at some sites and not others, **`r n0(dflt$n_visits)` sites, `r n0(dflt$n_detect)` with chinook**. ([More](habitat_thresholds.html#steps)) |
-| Placement | Each site went onto the BC Freshwater Atlas, loaded by fwapg [@norris2024smnorrisfwapg]: to the nearest stream its 1:50k tributary code names, kept when it lay within 500 m of the point; otherwise to the nearest stream, kept when it lay within 200 m. ([More](habitat_thresholds.html#snap)) |
+| Records | The Fisheries Data Information System's electrofishing sites [@provinceofbritishcolumbia2022FisheriesData]: where crews fished, and whether they caught chinook. `r n0(summ$visits_in)` sites on ordinary stream lines, of a usual fished area, with no barrier to chinook downstream, in the `r summ$groups` watershed groups where link expected chinook when the tuning ran; the tests use the `r summ$groups_both` groups where chinook were caught at some sites and not others, **`r n0(dflt$n_visits)` sites, `r n0(dflt$n_detect)` with chinook**. ([More](habitat_thresholds.html#steps)) |
+| Placement | Each site went onto the BC Freshwater Atlas, loaded by fwapg [@norris2024smnorrisfwapg]. A site whose 1:50k tributary code the Atlas's crosswalk knows went to the nearest stream that code names, kept when it lay within 500 m of the point, and was dropped otherwise; a site with no such code went to the nearest stream, kept when it lay within 200 m. ([More](habitat_thresholds.html#snap)) |
 | Flow | wet's modelled average flow [@irvine2026wetStream]: PCIC's VIC-GL runoff [@schnorbus2018VICGlacierVICGL] routed with Raven [@craig_etal2020Flexiblewatershed] and carried onto Atlas streams by a crosswalk in New Graph's fork of fwapg [@norris_irvine2026NewGraphEnvironmentfwapg], with wet's own water balance where that flow does not reach or, on a stream's own line, carries under a fifth of the balance's. |
 | Slope | The slope of the link segment a site sits on, the one link applies a rule to. link can cut a stream at a site that caught a species it models, so a site with chinook can start a short segment of its own. |
 | Candidates | `r n0(nrow(tune))` rules, link's among them, from three dials: the smallest stream (an average flow of `r lst(sort(unique(tune$size_min[tune$size_var == "mad"])), "or")` m³/s, or a channel width of `r lst(sort(unique(tune$size_min[tune$size_var == "width"])), "or")` m); the steepest slope (`r lst(grad(sort(unique(tune$grad_max))), "or")`); and a near-a-river allowance (none, or a river of `r lst(sort(unique(na.omit(tune$exc_q))), "or")` m³/s within `r lst(format(sort(unique(na.omit(tune$exc_d))), big.mark = ",", trim = TRUE), "or")` m downstream). |

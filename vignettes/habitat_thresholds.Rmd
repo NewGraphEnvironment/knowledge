@@ -111,12 +111,13 @@ stopifnot(!is.null(sgm), nrow(sgl) > 0, sgm$segment$spearman > 0.5, sgm$segment$
 ```
 
 Maps of where salmon and trout can spawn and rear in British Columbia's streams have so far been built for screening.
-bcfishpass [@norris2024smnorrisbcfishpass] models which streams fish can reach past natural barriers, the road and
-rail crossings and dams below them, and which streams could hold spawning or rearing from their slope and size, so
+bcfishpass [@norris2024smnorrisbcfishpass] models which streams fish can reach below natural barriers such as falls
+and steep slopes, the road and rail crossings and dams on those streams, and which streams could hold spawning or
+rearing from their slope and size, so
 that crews can choose where to look first among more than half a million mapped crossings and dams. The Province
 publishes its access model as the
 [Freshwater Fish Habitat Accessibility Model: Pacific Salmon and Steelhead](https://catalogue.data.gov.bc.ca/dataset/freshwater-fish-habitat-accessibility-model-pacific-salmon-and-steelhead).
-The spawning and rearing thresholds sit in bcfishpass's repository, one set for each group that runs it:
+The spawning and rearing thresholds sit in bcfishpass's repository as parameter sets:
 [New Graph's](https://github.com/smnorris/bcfishpass/blob/3bd2824c300c5f9c0c041380d412a52987df1ebb/parameters/example_newgraph/parameters_habitat_thresholds.csv)
 and
 [other organizations'](https://github.com/smnorris/bcfishpass/tree/3bd2824c300c5f9c0c041380d412a52987df1ebb/parameters).
