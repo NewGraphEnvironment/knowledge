@@ -32,11 +32,11 @@ The change is to prose only. Every figure and table below reads elements already
   record needs an item in the group library (Web API, `ZOTERO_API_KEY`).
 
 ## Phase 1: Methods article opens simply (`vignettes/habitat_thresholds.Rmd`)
-- [ ] Replace the opening paragraph with three short ones: what the map was for (bcfishpass ranks where fieldwork goes among
+- [x] Replace the opening paragraph with three short ones: what the map was for (bcfishpass ranks where fieldwork goes among
       >500,000 crossings and dams; the Province publishes its access model; its habitat thresholds are in its repository,
       New Graph's and CWF's files pinned; set to screen sites), what tuning adds (link and fresh hold each rule as a config
       row; tuning scores rules against where crews caught fish, with room for the biology), what the article covers.
-- [ ] Move the one-SE and cross-validation citations (Breiman et al. 1984 as cited in Chen & Yang 2021, Hastie et al. 2009,
+- [x] Move the one-SE and cross-validation citations (Breiman et al. 1984 as cited in Chen & Yang 2021, Hastie et al. 2009,
       Chen & Yang 2021, Bengio & Grandvalet 2004, Bates et al. 2024) into "How are two rules told apart?", in a few plain
       sentences.
 

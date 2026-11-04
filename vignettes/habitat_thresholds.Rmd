@@ -110,12 +110,28 @@ stopifnot(!is.null(sgm), nrow(sgl) > 0, sgm$segment$spearman > 0.5, sgm$segment$
           band_flip < 0.5)
 ```
 
-The R package [`link`](https://newgraphenvironment.github.io/link/) maps where each fish species can live in British
-Columbia's streams. For every stretch of stream it asks a few plain questions: is it big enough, is it too steep, and
-can fish get to it? Each question has a cut-off. This article describes how we are testing those cut-offs against
-evidence: the places crews have electrofished, and whether they caught the species there. We try many possible
-cut-offs and keep the ones that best tell the two kinds of site apart, then check that they hold on parts of the
-province they were not chosen from. The steps run in order, from the fish records to values link can read.
+Maps of where salmon and trout can spawn and rear in British Columbia's streams have so far been built for screening.
+bcfishpass [@norris2024smnorrisbcfishpass] models which streams fish can reach past natural barriers, the road and
+rail crossings and dams below them, and which streams could hold spawning or rearing from their slope and size, so
+that crews can choose where to look first among more than half a million mapped crossings and dams. The Province
+publishes its access model as the
+[Freshwater Fish Habitat Accessibility Model: Pacific Salmon and Steelhead](https://catalogue.data.gov.bc.ca/dataset/freshwater-fish-habitat-accessibility-model-pacific-salmon-and-steelhead).
+The spawning and rearing thresholds sit in bcfishpass's repository, one set for each group that runs it, among them
+[New Graph's](https://github.com/smnorris/bcfishpass/blob/3bd2824c300c5f9c0c041380d412a52987df1ebb/parameters/example_newgraph/parameters_habitat_thresholds.csv)
+and the
+[Canadian Wildlife Federation's](https://github.com/smnorris/bcfishpass/blob/3bd2824c300c5f9c0c041380d412a52987df1ebb/parameters/example_cwf/parameters_habitat_thresholds.csv).
+To choose where to look first, a fair guess at where fish spawn and rear is enough.
+
+The R package [`link`](https://newgraphenvironment.github.io/link/) [@irvine2026linkDevelop] builds on bcfishpass, and
+[`fresh`](https://github.com/NewGraphEnvironment/fresh) [@irvine2026freshFreshwater] runs its rules on the BC Freshwater
+Atlas. For every stretch of stream link asks a few plain questions: is it big enough, is it too steep, and can fish get
+to it? Each question has a cut-off, and each cut-off is a row in a config, so a rule can be changed and run beside
+another. That makes the cut-offs testable against evidence: the places crews have electrofished, and whether they
+caught the species there. We try many possible rules, keep the ones that best tell the two kinds of site apart, and
+check that they hold on parts of the province they were not chosen from. A rule can also carry the biology, such as
+young chinook using small streams close to a large river, so the map points to where fish are most likely to be.
+
+This article describes that test. The steps run in order, from the fish records to values link can read.
 
 ## What is a threshold, and what does "tuned" mean? {#thresholds}
 
@@ -305,8 +321,17 @@ says how far that difference would move with a different set of watershed groups
 `r val("se_region")` SE of the best are **close calls**: the records cannot rank them. From the close calls we take
 the one that changes link's current rule least.
 
-One SE is a rule of thumb, fixed before the run. `r val("se_strict")` SE is the stricter reading, about the width of a
-95 % interval: more rules become close calls, and the choice can stay nearer link's rule. Both are reported.
+One SE is a rule of thumb, fixed before the run. It began with pruning classification trees
+[@breiman_etal1984ClassificationRegression; as cited in @chen_yang2021OneStandard] and is now a common way to prefer
+the simpler of close models [@hastie_etal2009ElementsStatistical]. It is a convention, not a line below which rules are
+equal: there is no evidence it consistently beats taking the best score, though it often picks fewer variables
+[@chen_yang2021OneStandard]. The standard error it rests on has no unbiased estimate
+[@bengio_grandvalet2004NoUnbiased], and the usual estimate is often too small
+[@bengio_grandvalet2004NoUnbiased; @bates_etal2024CrossValidationWhat], though it can also be too large
+[@chen_yang2021OneStandard].
+
+`r val("se_strict")` SE is the stricter reading, about the width of a 95 % interval: more rules become close calls, and
+the choice can stay nearer link's rule. Both are reported.
 
 ```{r picks}
 knitr::kable(data.frame(
