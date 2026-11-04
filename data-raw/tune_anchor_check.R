@@ -54,7 +54,9 @@ rows <- rows |>
   relocate(rec_se_behind, .after = recommended_se) |>
   relocate(flow_se_behind, .after = recommended_flow_se)
 
-dirty <- length(system2("git", c("status", "--porcelain", "--untracked-files=no"), stdout = TRUE)) > 0
+# dirty when the code that computes the numbers differs from the commit (as 0320's stamp), not when a log does
+dirty <- length(system2("git", c("status", "--porcelain", "--untracked-files=no", "--", "R", "data-raw", "inst",
+                                 "DESCRIPTION"), stdout = TRUE)) > 0
 say("Anchoring check (#141) on %s (%s): %d keys, at knowledge %s%s.", tune_dir, label, nrow(rows),
     system2("git", c("rev-parse", "--short", "HEAD"), stdout = TRUE), if (dirty) " (uncommitted changes)" else "")
 runs <- distinct(rows, run_uid, tune_run, evidence_md5, curve_grad)
