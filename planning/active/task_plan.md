@@ -90,9 +90,9 @@ Approved by Al at the plan gate, 2026-11-04 (UTC).
       walk first (what changed between the two builds, what moved, what that says the network does), the three-way
       table, then the placement and stored-km checks; header and status line revised. `research/README.md` row if its
       description moves.
-- [ ] Issue #145's body: tick what landed, link the research section; #120's body gets the pointer its chinook row
+- [x] Issue #145's body: tick what landed, link the research section; #120's body gets the pointer its chinook row
       reads ("published row from #145's run").
-- [ ] File the link issue on the two-run `log` (own repo; backticked cross-repo numbers).
+- [x] File the link issue on the two-run `log` (own repo; backticked cross-repo numbers): NewGraphEnvironment/link#458.
 
 - [x] `CLAUDE.md`, `scripts/README.md` and the roxygen describe the scoped `log` read and `SETTLE_TAG=`.
 - [x] `segment_gradient_check.R` on the new evidence, for the catch-start table's new full-network row.
