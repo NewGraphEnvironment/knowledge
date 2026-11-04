@@ -1,3 +1,62 @@
+# knowledge 0.4.27
+
+* Every species is retuned, graded and compared on link's new provincial `default` build, and that run is promoted
+  into the published tables (#145). The build models neither rainbow trout nor kokanee, so `knw_tune_run(modelled =)`
+  writes `not_modelled` for a species with no access value in the evidence, and rainbow trout rearing's published rule
+  is retired. Against the previous run, bull trout spawning, chinook rearing (11 to 13 %) and grayling rearing move
+  outside its region, and bull trout rearing's move is a reshuffle among near-equal rules
+  (`research/habitat_thresholds_tuned.md`). `knw_build_record()` and `0300` read only the rows of link's run log that
+  belong to the build, since a provincial run leaves the previous run's rows in place, and `0300` takes `SETTLE_TAG=`
+  for a build compared before it is promoted. Both articles follow the new run.
+
+# knowledge 0.4.26
+
+* The chinook rearing article leads with the answer and the Bulkley map, then one before/after table, a figure of why a
+  nearby river matters (the fitted chance of a catch by distance to a river, per stream flow), how sure the choice is,
+  and how it was done in a table that links the methods article (#143). The methods article opens with what
+  bcfishpass's map was for and what tuning adds, and now holds the one-SE and cross-validation citations. Several
+  statements are now exact where the old prose was loose: the Bulkley map's three causes of change, a coded site out of
+  reach is dropped, and each site and group count names its population. No code change.
+
+# knowledge 0.4.25
+
+* `knw_tune_anchor()` sets each tuned key's pick, from link's `default` and from its flow version, beside the rule the
+  data score best: how far behind it sits, in deviance and SE, and how many parts (size test, gradient, exception)
+  apart (#141). It also measures each pick against the best rule a pick may be (in the region, with no exception under
+  `d_floor`), since a best a pick may not be can never be picked. `scripts/0320` writes these columns into every
+  summary and `pick_report.csv`, and `data-raw/tune_anchor_check.R` reads saved tables. On the published tables the
+  starting point steers grayling, steelhead and coho rearing, and on the minimal network bull trout rearing too
+  (`research/baseline_anchoring.md`, with grayling rearing's "before" for #140).
+
+# knowledge 0.4.24
+
+* Every species was tuned on link's provincial minimal network (#120). That network rejects none of the published
+  rules: each stays within one standard error of the best rule. Where a pick moves, it moves because the pick is the
+  rule closest to link's `default`, so each tuned rule is only as good as its starting point; recording what each
+  baseline rests on is #139, and grayling's first (#140). The results are `research/minimal_network_tuning.md`, and
+  the candidate run's tables are archived (`data/archive_index.csv`), not promoted. No code change.
+
+# knowledge 0.4.23
+
+* The tuning runs on a second link build beside the published one (#120). `0310` writes a build of another schema
+  into its own `EVIDENCE_DIR`, with a tagged ledger, and refuses the default directory to it; `0300` takes `SCHEMA`
+  and `POLL_MIN`, and `0310` takes `SETTLE=` and `PARENT_DIR`, joining each visit's minimal-network parent through the
+  new `knw_parent_join()`. `0320` takes `DEV_DIR`, `GRADIENT=parent_gradient` and test floors (`MIN_WSG`, `FOLDS`),
+  which `knw_tune_promote()` refuses; `knw_link_access_check(by_group = TRUE)` gives the check per group.
+  `knw_build_record()` reads link's output tokens from `<schema>.log`, where link writes them, so a tokened build no
+  longer records none. The four-group test on link's minimal network is `research/minimal_network_tuning.md`.
+
+# knowledge 0.4.22
+
+* `inst/NOTICE.md` gives the PSCIS snapshots under `data/<wsg>/` their own section: incidental working copies of an
+  "Access Only" catalogue layer, not a distribution of PSCIS (#76). EcoCat, bcfishpass and the modelled flows stay
+  under "Terms not yet settled". No code change.
+
+# knowledge 0.4.21
+
+* The repository is public (#56). The README's Learn more links point at the published site: the chinook rearing
+  article, the methodology article (newly linked), the function reference and the news page. No code change.
+
 # knowledge 0.4.20
 
 * A published article bundle can be rebuilt on any machine (#119). `scripts/0320` writes a tracked record beside each

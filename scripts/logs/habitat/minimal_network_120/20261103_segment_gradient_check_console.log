@@ -1,0 +1,8 @@
+Segment gradient check, knowledge#92. Evidence data/fdis/derived_minimal, scripts/logs/habitat/20261103_evidence_build_ledger-derived_minimal.csv (link run 20261102_203300-60ab009d, link 193cb8aa401376d4278b6c5ee5b24cb57deab8e3); schema fresh_default_minimal.
+Visits placed: 45529; on the tuning's stream branch (edge types 1000,1100,2000,2300, fished area 10-10000 m2): 29335.
+On a segment that starts at the visit: 1744 of 45529 placed visits; 927 of 29335 on the stream branch.
+Same Atlas line as the segment: 99.1 % of stream-branch visits.
+build: schema fresh_default_minimal, run 20261102_203300-60ab009d; flows wet_db_load(): discharge/fwa/v1/segment_monthly, scenario historical last loaded from https://fresh-bc.s3.us-west-2.amazonaws.com/discharge/fwa/v1/manifest.json (built 2026-10-24T12:23:01Z, wet b4bbc50); walk c3f7bdbecff1d55107f28afa59d7f532; fresh 0.53.0; tokens cut-min.acc-v5.grad-seg.q-fwapg
+Stream-branch segments in fresh_default_minimal: 3,648,510.
+Written scripts/logs/habitat/20261103_segment_gradient_check-derived_minimal.txt
+SGC RC=0

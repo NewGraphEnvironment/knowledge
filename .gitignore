@@ -36,6 +36,7 @@ data/publish/
 
 # a development run of 0320 (DEV=1): its own directory, nothing published
 data/tune/dev/
+data/tune/dev_*/
 data/tune/ref_*/
 data/compare/ref_*/
 # candidate runs of 0320 and 0330 (#111): nothing tracked changes until scripts/0335-promote.R copies one in

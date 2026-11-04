@@ -60,7 +60,7 @@ tune_files <- Sys.glob(file.path(root, "data", "tune", "*_tune.csv"))
 
 test_that("at 1 SE the replay is every saved table's recommended rule", {
   skip_if_not(length(tune_files) > 0, "no source-tree data/tune (installed package)")
-  expect_length(tune_files, 8)
+  expect_length(tune_files, 7)
   for (f in tune_files) {
     t <- utils::read.csv(f, stringsAsFactors = FALSE)
     expect_identical(t$in_region, t$converged & t$ddev_best <= t$se_diff, info = basename(f))
@@ -68,12 +68,12 @@ test_that("at 1 SE the replay is every saved table's recommended rule", {
   }
 })
 
-test_that("at 1.96 SE the replay gives the table research/habitat_thresholds_tuned.md prints (#79, on #92's tables)", {
+test_that("at 1.96 SE the replay gives the table research/habitat_thresholds_tuned.md prints (#79, on #145's tables)", {
   skip_if_not(length(tune_files) > 0, "no source-tree data/tune (installed package)")
-  want <- c(BT_rear = "mad>=0.15|g<=0.1049|none", BT_spawn = "width>=2|g<=0.0549|none",
-            CH_rear = "mad>=0.75|g<=0.0549|Q3@D1000", CO_rear = "width>=1.5|g<=0.0549|Q1@D1000",
-            GR_rear = "width>=1.5|g<=0.0549|none", RB_rear = "width>=2|g<=0.0849|none",
-            ST_rear = "width>=1.5|g<=0.0849|none", WCT_rear = "width>=1.5|g<=0.0849|none")
+  want <- c(BT_rear = "mad>=0.1|g<=0.1049|none", BT_spawn = "width>=2|g<=0.0549|none",
+            CH_rear = "mad>=0.75|g<=0.13|Q3@D1000", CO_rear = "width>=1.5|g<=0.0549|Q1@D500",
+            GR_rear = "width>=1.5|g<=0.0349|none", ST_rear = "width>=1.5|g<=0.0849|none",
+            WCT_rear = "width>=1.5|g<=0.0849|none")
   got <- vapply(tune_files, function(f) knw_tune_repick(utils::read.csv(f, stringsAsFactors = FALSE), 1.96)$rule, "")
   names(got) <- sub("_tune\\.csv$", "", basename(tune_files))
   expect_identical(got[names(want)], want)

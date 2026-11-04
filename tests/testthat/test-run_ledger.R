@@ -33,3 +33,44 @@ test_that("two ledgers, a missing one, or none at all are refused", {
   unlink(list.files(fx$l, full.names = TRUE))
   expect_error(knw_run_ledger(fx$d, fx$l), "no evidence build ledger")
 })
+
+test_that("a build's ledger is named by its evidence directory, and found by it (#120)", {
+  l <- withr::local_tempdir()
+  # the default directory keeps the plain name the readers since #57 take; another directory is tagged outside it
+  expect_identical(.knw_ledger_path("data/fdis/derived", "20261102", l), file.path(l, "20261102_evidence_build_ledger.csv"))
+  expect_identical(.knw_ledger_path("./data/fdis/derived/", "20261102", l), file.path(l, "20261102_evidence_build_ledger.csv"))
+  expect_identical(.knw_ledger_path(file.path(getwd(), "data/fdis/derived"), "20261102", l),
+                   file.path(l, "20261102_evidence_build_ledger.csv"))
+  expect_identical(basename(.knw_ledger_path("data/fdis/derived_zz415_minimal", "20261102", l)),
+                   "20261102_evidence_build_ledger-derived_zz415_minimal.csv")
+  expect_identical(basename(.knw_ledger_path("data/fdis/derived_zz415_minimal", "20261102", l, refused = TRUE)),
+                   "20261102_evidence_build_refused-derived_zz415_minimal.csv")
+  expect_error(.knw_ledger_path("data/fdis/derived zz", "20261102", l), "letters, digits")
+  # two ledgers one day, tagged and plain, and an older plain one: each directory finds its own
+  w <- function(f, dir) utils::write.csv(data.frame(kind = "info", step = "evidence_dir", n = 0, note = dir),
+                                         file.path(l, f), row.names = FALSE)
+  writeLines("kind,step,n,note", file.path(l, "20261027_evidence_build_ledger.csv"))   # before #120: no evidence_dir row
+  w("20261102_evidence_build_ledger.csv", "data/fdis/derived")
+  w("20261102_evidence_build_ledger-derived_zz415_minimal.csv", "data/fdis/derived_zz415_minimal")
+  expect_identical(basename(.knw_evidence_ledger("data/fdis/derived", l)), "20261102_evidence_build_ledger.csv")
+  expect_identical(basename(.knw_evidence_ledger("data/fdis/derived_zz415_minimal", l)),
+                   "20261102_evidence_build_ledger-derived_zz415_minimal.csv")
+  # the tagged ledger is outside the pattern knw_run_ledger() falls back to
+  d <- withr::local_tempdir()
+  expect_identical(basename(knw_run_ledger(d, l)), "20261102_evidence_build_ledger.csv")
+  expect_error(.knw_evidence_ledger("data/fdis/derived_zz415_default", l), "no evidence build ledger for")
+  # another directory of the same base name is refused
+  expect_error(.knw_evidence_ledger("elsewhere/derived_zz415_minimal", l), "share a base name")
+  unlink(file.path(l, "20261102_evidence_build_ledger.csv"))
+  expect_identical(basename(.knw_evidence_ledger("data/fdis/derived", l)), "20261027_evidence_build_ledger.csv")
+})
+
+test_that("a path written into a tracked file is the repo's relative one, or under ~, never a home path (#120 review)", {
+  expect_identical(.knw_path_rel("data/fdis/derived_x"), "data/fdis/derived_x")
+  expect_identical(.knw_path_rel(file.path(getwd(), "data/fdis/derived_x/")), "data/fdis/derived_x")
+  expect_identical(.knw_path_rel(file.path(path.expand("~"), "elsewhere", "derived")), "~/elsewhere/derived")
+  expect_identical(.knw_path_rel("~/elsewhere/derived"), "~/elsewhere/derived")
+  expect_identical(.knw_path_rel("/opt/x"), "/opt/x")
+  # the default written as relative and given as absolute is one directory
+  expect_identical(.knw_evidence_tag(.knw_path_rel(file.path(getwd(), "data/fdis/derived"))), "")
+})

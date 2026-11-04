@@ -1,5 +1,5 @@
 seed,best,pick,recommended,default_in_region,main_rec_in_region,region_n,species_code,stage
-55,width>=2|g<=0.13|Q1@D500,width>=2|g<=0.13|Q1@D500,width>=2|g<=0.13|Q1@D500,FALSE,TRUE,35,BT,spawn
-56,width>=2|g<=0.25|Q1@D500,width>=2|g<=0.25|Q1@D500,width>=2|g<=0.25|Q1@D500,FALSE,TRUE,350,BT,spawn
-57,width>=2|g<=0.25|Q1@D500,width>=2|g<=0.13|none,width>=2|g<=0.13|none,FALSE,TRUE,199,BT,spawn
-58,width>=2|g<=0.13|Q1@D500,width>=2|g<=0.13|Q1@D500,width>=2|g<=0.13|Q1@D500,FALSE,TRUE,53,BT,spawn
+55,width>=2|g<=0.3|Q1@D500,width>=2|g<=0.15|none,width>=2|g<=0.15|none,FALSE,TRUE,377,BT,spawn
+56,width>=2|g<=0.3|Q1@D2000,width>=2|g<=0.3|Q1@D2000,width>=2|g<=0.3|Q1@D2000,FALSE,FALSE,238,BT,spawn
+57,width>=2|g<=0.3|Q1@D2000,width>=2|g<=0.15|none,width>=2|g<=0.15|none,FALSE,FALSE,163,BT,spawn
+58,width>=2|g<=0.15|Q1@D500,width>=2|g<=0.15|Q1@D500,width>=2|g<=0.15|Q1@D500,FALSE,FALSE,27,BT,spawn

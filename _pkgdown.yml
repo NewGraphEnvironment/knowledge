@@ -30,10 +30,11 @@ reference:
     desc: >
       Place site visits on link's segments with every species' access and habitat flags; read a
       species' segments, flow, width, regulated reaches, natural barriers downstream and the walks to
-      rivers; count where link's two access columns disagree; and check that a database-bound run is on
-      the database's host.
+      rivers; count where link's two access columns disagree; carry each segment's minimal-network parent;
+      and check that a database-bound run is on the database's host.
     contents:
       - knw_link_place
+      - knw_parent_join
       - knw_link_segments
       - knw_link_flow
       - knw_link_width
@@ -58,6 +59,7 @@ reference:
       - knw_tune_score
       - knw_tune_repick
       - knw_tune_pick_report
+      - knw_tune_anchor
       - knw_tune_curve
       - knw_grade
       - knw_grade_species

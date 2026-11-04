@@ -26,7 +26,8 @@
 #' every fitted key moves together. Each promoted key's grades must carry their
 #' record ([knw_grade_record_write()]) and match it (md5 and size; a
 #' `replaced_*` archive may lack one), and kept keys are read from their
-#' records where the tables are absent. Each promoted key's grades must be of its
+#' records where the tables are absent. A key scored under other floors than
+#' the tuning's (`min_wsg`, `folds` in its summary, #120) is refused. Each promoted key's grades must be of its
 #' recommended rule on its own evidence, and its comparison of the same rule and
 #' made after its grades.
 #'
@@ -84,10 +85,23 @@ knw_tune_promote <- function(run, keys = NULL, live = NULL, tune_dir = "data/tun
   archive <- startsWith(run, "replaced_")
 
   # ---- each promoted key's own record ----
+  # a run scored under other floors than the tuning's (MIN_WSG, FOLDS: #120) is a test of mechanics on a few groups,
+  # never promoted, whether a main summary or its Atlas-gradient sensitivity's; a summary from before the record was
+  # scored under the defaults
+  floors_check <- function(k, x) {
+    for (f in c("min_wsg", "folds")) {
+      v <- fld(x, f)
+      if (!is.na(v) && !identical(as.integer(v), as.integer(eval(formals(knw_tune_run)[[f]])))) {
+        stop(k, ": scored with ", f, " = ", v, ", not the tuning's ", eval(formals(knw_tune_run)[[f]]),
+             ": a test run, never promoted", call. = FALSE)
+      }
+    }
+  }
   for (k in keys) {
+    floors_check(k, cand[[k]])
     rule <- fld(cand[[k]], "rule_recommended")
     st <- fld(cand[[k]], "status")
-    # knw_tune_run()'s statuses: three with no fit by design, two fitted; anything else (curve_failed, a smoke-only
+    # knw_tune_run()'s statuses: four with no fit by design (.knw_no_fit), two fitted; anything else (curve_failed, a smoke-only
     # key) is a fit that did not happen, never promoted over the last one that did
     if (st %in% .knw_no_fit && is.na(rule)) next   # a summary (and a smoke table) only, nothing graded or compared
     if (!st %in% c("fitted", "underpowered") || is.na(rule)) {
@@ -170,6 +184,7 @@ knw_tune_promote <- function(run, keys = NULL, live = NULL, tune_dir = "data/tun
             lapply(stats::setNames(names(kept), names(kept)), function(k) record(tune_dir, compare_dir, k, kept[[k]])))
   # the Atlas-gradient sensitivity is read with the main tables (the methodology bundle), so it is held to their build
   fwa_cand <- summaries(file.path(run_tune, "grad_fwa"))
+  for (k in intersect(keys, names(fwa_cand))) floors_check(paste0("grad_fwa/", k), fwa_cand[[k]])
   fwa_kept <- summaries(file.path(tune_dir, "grad_fwa"))
   fwa_from <- c(lapply(intersect(keys, names(fwa_cand)), function(k) list(k, fwa_cand[[k]])),
                 lapply(setdiff(names(fwa_kept), intersect(keys, names(fwa_cand))), function(k) list(k, fwa_kept[[k]])))
@@ -240,7 +255,7 @@ knw_tune_promote <- function(run, keys = NULL, live = NULL, tune_dir = "data/tun
   by_key <- function(k) paste0("^", esc(k), "_")
   # 0320 and 0330 clear a key's files in the run before a pass rewrites them (the score cache and the keep-checked
   # grades aside), so what the run holds for a key is its last pass's. What 0320 writes for a key it does not fit
-  # (R/tune_run.R's three statuses) is its summary and its curve record; nothing of the comparison belongs to it
+  # (R/tune_run.R's statuses in .knw_no_fit) is its summary and its curve record; nothing of the comparison belongs to it
   unfit_files <- function(k) paste0(k, c("_summary.csv", "_curve.rds"))
   take_tune <- function(k, src) if (archive || k %in% fitted) src else src[basename(src) %in% unfit_files(k)]
   take_cmp <- function(k, src) if (archive || k %in% fitted) src else character()
@@ -409,7 +424,7 @@ knw_tune_promote <- function(run, keys = NULL, live = NULL, tune_dir = "data/tun
 }
 
 # the statuses knw_tune_run() gives a key it does not fit by design (R/tune_run.R)
-.knw_no_fit <- c("no_stream_rule", "no_response", "too_few_groups")
+.knw_no_fit <- c("no_stream_rule", "not_modelled", "no_response", "too_few_groups")
 
 # the species x stage keys of a table that holds every key
 .knw_rows_keys <- function(f) {

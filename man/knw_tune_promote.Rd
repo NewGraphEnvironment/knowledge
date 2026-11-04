@@ -69,7 +69,8 @@ along. After a change upstream (a new link run or evidence build) that means
 every fitted key moves together. Each promoted key's grades must carry their
 record (\code{\link[=knw_grade_record_write]{knw_grade_record_write()}}) and match it (md5 and size; a
 \verb{replaced_*} archive may lack one), and kept keys are read from their
-records where the tables are absent. Each promoted key's grades must be of its
+records where the tables are absent. A key scored under other floors than
+the tuning's (\code{min_wsg}, \code{folds} in its summary, #120) is refused. Each promoted key's grades must be of its
 recommended rule on its own evidence, and its comparison of the same rule and
 made after its grades.
 }

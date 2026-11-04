@@ -1,0 +1,13 @@
+Minimal network check, knowledge#120. Full: data/fdis/derived (scripts/logs/habitat/20261027_evidence_build_ledger.csv). Minimal: data/fdis/derived_minimal (scripts/logs/habitat/20261103_evidence_build_ledger-derived_minimal.csv).
+  build: schema fresh_default_20261017, run 20261017_004619-3f4c713b; flows wet_db_load(): discharge/fwa/v1/segment_monthly, scenario historical last loaded from https://fresh-bc.s3.us-west-2.amazonaws.com/discharge/fwa/v1/manifest.json (built 2026-10-19T06:08:31Z, wet 94deeb5); walk c3f7bdbecff1d55107f28afa59d7f532; fresh 0.43.0
+  build: schema fresh_default_minimal, run 20261102_203300-60ab009d; flows wet_db_load(): discharge/fwa/v1/segment_monthly, scenario historical last loaded from https://fresh-bc.s3.us-west-2.amazonaws.com/discharge/fwa/v1/manifest.json (built 2026-10-24T12:23:01Z, wet b4bbc50); walk c3f7bdbecff1d55107f28afa59d7f532; fresh 0.53.0; tokens cut-min.acc-v5.grad-seg.q-fwapg
+1. PLACEMENT. Visits placed: full 45529, minimal 45529; on the full alone 0, on the minimal alone 0.
+   On both at one blue line and measure and on one Atlas line: 45357 of 45529.
+   Columns that differ: 126 of 227 compared; outside the segment, access and habitat columns: mad_pick.
+2. walks.csv: full 775488 rows, minimal 775488; the same rows: FALSE (md5 99f499bb14e4a53fe2506f118670a83f, 2e0f0f419022da0f5ac51a3869486a80).
+   rows in one alone: full 470799, minimal 470799.
+2. visits_species.csv: full 500819 rows, minimal 500819; the same rows: FALSE (md5 009698d73afd855c3e8db1235ad96c05, 6a2e28f1afb46a02c357ac044f8d09e3).
+   rows in one alone: full 12083, minimal 12083.
+Error: access_check.csv has no group column: rebuild with 0310 from #120
+Execution halted
+MNC RC=1

@@ -12,11 +12,13 @@
 # bunch at a cut-off: the segments (count and length) in the half-point band below each of `default`'s rearing and
 # spawning gradient maxima and each access class, against the band above, over every stream-branch segment of SCHEMA.
 #
-# INPUT:  data/fdis/derived/{visits_link,visits_species}.csv (0310); the newest evidence build ledger; link's repo at
+# INPUT:  EVIDENCE_DIR/{visits_link,visits_species}.csv (0310; default data/fdis/derived) and the newest ledger 0310 wrote
+#         for it (#120); link's repo at
 #         LINK_REPO (default ../link) for `default`'s thresholds at the build's link_sha; the database (PG* env vars):
 #         SCHEMA (default fresh_default), checked against the ledger's run with knw_build_record()
-# OUTPUT: scripts/logs/habitat/<yyyymmdd>_segment_gradient_check.txt
-# RUN:    SCHEMA=fresh_default_20261017 Rscript data-raw/segment_gradient_check.R   (from the repo root)
+# OUTPUT: scripts/logs/habitat/<yyyymmdd>_segment_gradient_check[-<evidence directory's base name>][-<n>].txt
+# RUN:    SCHEMA=fresh_default_20261017 [EVIDENCE_DIR=data/fdis/derived_<name>] Rscript data-raw/segment_gradient_check.R
+#         (from the repo root)
 # ---------------------------------------------------------------------------
 suppressMessages({ library(dplyr); library(readr); library(DBI); library(RPostgres) })
 pkgload::load_all(quiet = TRUE)
@@ -28,20 +30,24 @@ schema <- Sys.getenv("SCHEMA", "fresh_default")
 band_w <- 0.005                          # the half-point band either side of a cut-off
 len_breaks <- c(0, 10, 25, 50, 100, 250, 500, Inf)
 access_classes <- c(0.15, 0.20, 0.25, 0.30)   # link's default gradient_classes (lnk_pipeline_prepare.R)
-path_log <- file.path("scripts/logs/habitat", paste0(format(Sys.Date(), "%Y%m%d"), "_segment_gradient_check.txt"))
+# the build (#120): EVIDENCE_DIR, as 0310 wrote it, with its own ledger; the log is tagged as the ledger is and never
+# written over (a second build checked the same day gets its own file)
+evidence_dir <- Sys.getenv("EVIDENCE_DIR", .knw_evidence_dir_default)
+path_log <- .knw_free_path(file.path("scripts/logs/habitat", paste0(format(Sys.Date(), "%Y%m%d"), "_segment_gradient_check",
+                                                                   .knw_evidence_tag(evidence_dir), ".txt")))
 log_lines <- character()
 say <- function(...) { log_lines <<- c(log_lines, sprintf(...)); message(sprintf(...)) }
 block <- function(title, x) {
   log_lines <<- c(log_lines, "", paste("##", title), capture.output(print(as.data.frame(x), row.names = FALSE)))
 }
 
-ledger_path <- sort(list.files("scripts/logs/habitat", "_evidence_build_ledger\\.csv$", full.names = TRUE),
-                    decreasing = TRUE)[1]
+ledger_path <- .knw_evidence_ledger(evidence_dir)
 led <- read_csv(ledger_path, show_col_types = FALSE, col_types = cols(.default = "c"))
 run_uid <- led$note[led$step == "link_run_uid"]
 link_sha <- strsplit(led$note[led$step == "run_link_sha"], ";", fixed = TRUE)[[1]][1]
-say("Segment gradient check, knowledge#92. Evidence %s (link run %s, link %s); schema %s.", ledger_path, run_uid,
-    link_sha, schema)
+say("Segment gradient check, knowledge#92. Evidence %s, %s (link run %s, link %s); schema %s.", .knw_path_rel(evidence_dir),
+    ledger_path,
+    run_uid, link_sha, schema)
 
 thr_file <- tempfile(fileext = ".csv")
 st <- system2("git", c("-C", link_repo, "show",
@@ -55,9 +61,9 @@ cuts <- sort(unique(na.omit(c(thr$rear_gradient_max, thr$spawn_gradient_max))))
 fm <- formals(knw_tune_run)
 edge_stream <- eval(fm$edge_stream)
 area_range <- eval(fm$area_range)
-vl <- read_csv("data/fdis/derived/visits_link.csv", show_col_types = FALSE, guess_max = 1e5,
+vl <- read_csv(file.path(evidence_dir, "visits_link.csv"), show_col_types = FALSE, guess_max = 1e5,
                col_types = cols(site_visit = "c", species_caught = "c", blocks_absence_of = "c", hydro_zone = "c"))
-vs <- read_csv("data/fdis/derived/visits_species.csv", show_col_types = FALSE, guess_max = 1e5,
+vs <- read_csv(file.path(evidence_dir, "visits_species.csv"), show_col_types = FALSE, guess_max = 1e5,
                col_types = cols(site_visit = "c"))
 v <- vl |>
   filter(edge_type %in% edge_stream, !(wb_river %in% TRUE), !(wb_wetland %in% TRUE), !(wb_lake %in% TRUE),

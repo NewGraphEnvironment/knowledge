@@ -8,9 +8,8 @@ repos consume snapshots from here instead of carrying the pipeline.
 
 ## Repository Context
 
-**Repository:** NewGraphEnvironment/knowledge (#56 prepared it to go public, but `gh repo view` still read
-PRIVATE on 2026-10-28; the pkgdown site, <https://newgraphenvironment.github.io/knowledge/>, is live (answered 200 on
-2026-10-27) though not advertised)
+**Repository:** NewGraphEnvironment/knowledge, public since 2026-11-01 (#56); the pkgdown site is
+<https://newgraphenvironment.github.io/knowledge/>
 **Primary Language:** R, with Python (`0153`, `0270`) and workflow JS (`wf_*.js`)
 **Origin:** seeded in September 2026 with history from an earlier fish-passage reporting template.
 Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` refer to that repo.
@@ -32,7 +31,11 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   citeproc prints a version with a space as "Versions …". Its map is interactive only when pkgdown builds the site
   (`IN_PKGDOWN`), on Esri's World Topographic Map. Check a cited
   claim against the PDF's text: cred's `crd_aud_verify_all()` cuts each claim at the Rmd's line breaks and matches
-  unrelated passages (#79).
+  unrelated passages (#79). Its numbers come from two link builds: the tuning's (`meta$link_sha`), which scored link's
+  rule at sites, and the comparison's (`config_sha` in its tables), which regenerated the habitat totals and the map.
+  They agree on stream lines and differ on lines through wetlands, so a sentence about link's near-river handling, and
+  every site or group count, names the build and population it holds for (#143). The register's `code:` phrases in
+  it are matched one line at a time and must each stay whole on one line.
 - `vignettes/habitat_thresholds.Rmd` — the methodology article (#93), "Choosing habitat thresholds from where fish were
   caught": the reference home for the method and its citations. A species article (the chinook one first, #64) gives
   its own records and result in a sentence or two and links it rather than restating the method. It reads `inst/vignette-data/method.rds`, which `data-raw/vignette_method.R` writes from
@@ -90,7 +93,8 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   `data/tune/grad_ext/` and `data/compare/grad_ext/` hold `0322`'s CH rearing run on a gradient ladder extended to
   30 % (#67, on the evidence build before #73; the main run carries that ladder for every species since #68);
   `0325`, `0330` and `knw_thresholds_table()` do not read them, because they list their directories non-recursively;
-  `data-raw/vignette_chinook.R` reads `data/tune/grad_ext/` for the chinook article's sentence on the longer ladder. `data/compare/gpkg/` (ignored) holds one GeoPackage per species × stage from `0330`, the
+  `data-raw/vignette_chinook.R` reads `data/tune/grad_ext/` into the chinook bundle, whose article no longer quotes it
+  (#143). `data/compare/gpkg/` (ignored) holds one GeoPackage per species × stage from `0330`, the
   comparison's view for QGIS (#81). `data/tune/candidate/<run>/` and `data/compare/candidate/<run>/` (ignored, #111)
   hold the full runs of `0320` and `0330` until `0335` promotes one, and the `replaced_<stamp>/` archive of what each
   promotion replaced (promoting it undoes the promotion); `data/tune/dev/` (ignored) holds `DEV=1 0320`, its log and
@@ -119,9 +123,10 @@ Its patterns are a list, not the class: a new kind of identifier needs a new pat
 Tracked data from other sources carries their terms, and `inst/NOTICE.md` lists each source with its files (it
 installs with the package because `inst/vignette-data/` ships Freshwater Atlas geometry). A new tracked source
 gets its row there, its licence read from the source's own catalogue record; one whose terms are unconfirmed goes
-to an issue instead. The PSCIS layers are "Access Only" in the BC Data Catalogue, and they, the EcoCat-derived
-tables and the bcfishpass-derived files (bcfishpass's database is ODbL, share-alike) are #76, to settle before
-the repo is public.
+to an issue instead. The PSCIS snapshots stay tracked as incidental copies of an "Access Only" catalogue layer,
+with the README pointing to the catalogue (Al, 2026-11-01). The sources NOTICE lists under "Terms not yet settled"
+(the EcoCat-derived files, the files derived from bcfishpass, whose database is ODbL and share-alike, and the modelled
+flows on the segments in `inst/vignette-data/`) are #76: the repo went public on 2026-11-01 with them still open.
 
 ## Working notes
 
@@ -255,8 +260,10 @@ Atlas line's does not (median 0.0083 either way), but by each species' own outco
 present for CO, GR, ST and WCT (WCT 0.0076 against 0.0164; `data-raw/segment_gradient_check.R`). Fixed-window gradients, whose length would
 not depend on the outcome, are #70's. These numbers, and #92's tune, are on link 0.66.0's build
 (`fresh_default_20261017`). link has since cut gradient breaks only where a present species' access changes
-(link#326, 0.69.0) and fish records only at each species' highest record per stream (link#396), and no build in the
-database carried either on 2026-10-28.
+(link#326, 0.69.0) and fish records only at each species' highest record per stream (link#396). The build promoted by
+#145 (link 0.78.2, run `20261103_163715-269b585a`) carries both: 44.2 % of stream-branch visits with fish start a
+segment of their own against 6.6 % of empty ones, medians 305 m and 466 m
+(`scripts/logs/habitat/20261103_segment_gradient_check-derived_default_20261103.txt`).
 
 ### FISS submission workbooks: editions drift, and most EF fish are already in FDIS
 
@@ -382,6 +389,10 @@ they show:
   overall because its picks swung between 11, 15 and 30 %, while its three 15 % picks beat `default`.
 - **A decision made before the run is stated as one.** List every check with its direction; do not sort them by
   the side they support.
+- **How far the start moved a pick is read against the best rule a pick may be.** The best is the lowest score over
+  every rule, converged or not, and may carry an exception under `d_floor`; a pick is a region rule clear of the floor.
+  `knw_tune_anchor()` reports both distances; #141's first definition missed the region, then convergence
+  (`research/baseline_anchoring.md`).
 
 ### A run's record travels with its table, and its readers compare it, not only its presence
 
@@ -404,6 +415,41 @@ it favoured publishing, and bull trout spawning's grade rested on it. Compare tw
 over the same rows (`null_heldout_curve` is no rule scored on the curve's own visits).
 
 The grade tables are ignored and run to gigabytes, so `0320` writes each one's record beside it, `<key>_grades_record.csv` (tracked, #119): the table's constant columns exactly as written, its md5, size and rows, the run, its evidence ledger, the knowledge commit and link's build (version, commit and output-vocabulary tokens, blank before link 0.70.0). `knw_tune_promote()` refuses a promoted key whose record is missing or describes another table, and reads kept keys from their records; the article bundles read and pin the record, and check a table present against it (`KNW_CHECK_GRADES=TRUE` makes `test-vignette-data.R` do the same).
+
+A build names its evidence directory (#120). `0310` writes `EVIDENCE_DIR` (default `data/fdis/derived`) and a ledger
+whose first row names it; a directory other than the default tags the ledger with its base name
+(`<date>_evidence_build_ledger-<base>.csv`), outside the name `knw_run_ledger()` falls back to, and `0310` refuses the
+default directory to a build settled on another schema's log (or on a log named with `SETTLE=`), so a test build never
+becomes the build a default reader takes. `0320` and `data-raw/segment_gradient_check.R` take the same `EVIDENCE_DIR`
+and find that ledger by it; each summary names its `evidence_dir` (the grade record does not, so the tracked records
+keep their columns); `0330` reads the directory the summaries name, or `EVIDENCE_DIR` for a staged copy, and refuses
+tables whose md5s are not the curves' `evidence_md5`. The evidence, settle, parent and DEV directories these scripts write into
+ledgers, summaries and logs are relative to the repo root, or under `~`, never a home path (`.knw_path_rel()`). link's output tokens are on `<schema>.log`, one row per pipeline call and group, never on
+`log_recompute`. A provincial run leaves the previous run's rows in `log` (link#458), so `knw_build_record()`, `0300`'s
+record and `0310` read the rows of the runs `log_recompute` names, and every row only where none of those runs is in
+`log` and `log` holds one run (link's four-group proofs log their build and recompute under different run ids); a run
+set aside that was logged after the build is refused (#145).
+
+A test on a few groups of another schema (#120, `research/minimal_network_tuning.md`): `0300` takes `SCHEMA` and
+`POLL_MIN` and writes both on every row of its log (`<date>_link_settle-<schema>.csv`), and `0310` takes that log with
+`SETTLE=`; the gate stays the log's `run_uid`, never its schema, because a provincial schema is renamed after its run.
+A `fresh_default` build to be compared before it is promoted settles with `SETTLE_TAG=<tag>`
+(`<date>_link_settle-<tag>.csv`), so a plain `0310` never takes it (#145).
+`0320` takes `MIN_WSG` and `FOLDS` (the tuning's are 5 and 5); each summary records them and `knw_tune_promote()`
+refuses any other. On link's four proof groups only bull trout rearing has four groups with both outcomes, and the
+smoke gate refuses chinook rearing on three folds (separation), so a test of grading and the comparison runs on a key
+the groups can fit.
+
+The provincial minimal build (`fresh_default_minimal`, link#441, run `20261102_203300-60ab009d`) and, since #145, the
+published build (`fresh_default`, run `20261103_163715-269b585a`) live in a database other than the one holding #92's
+build (`fresh_default_20261017`), reached with a `~/.pg_service.conf` entry and `PGSERVICE=`; that older database holds a
+`fresh_default_minimal` with no segments. Each database keeps its own flow load and walk cache: the minimal and the
+published builds read wet's 2026-10-24 build (#120's second branch loaded it), #92's grades wet's 2026-10-19 load, and
+wet's public prefix keeps no older manifest, so the older load exists only where it was loaded. Its evidence is
+`data/fdis/derived_minimal` (ledger tagged `-derived_minimal`). `0310` reads each species' range from the installed
+link's `default` presence table (`lnk_load_overrides()`), not from the schema, so a build on a newer link moves
+`in_range` even on the same network: link#402's review moved 12,083 visit × species rows between link 0.66.0 and
+0.78.1. Compare two builds' picks knowing which of network, flow load and range changed.
 
 ### The segment flows can change under a run; the table comment names the build
 
@@ -528,6 +574,17 @@ line in its plan, and delete a pointer comment once its content is in the body. 
 **Why:** comments get missed (Al, 2026-10-20). This is stricter than the shared convention ("Issue bodies get edited,
 not appended"), which still allows a comment for a cross-repo pointer. A pointer from a public repo names no private
 one.
+
+### An issue is one plan-init's worth of work; an umbrella keeps the order
+
+Size each issue so one `/planning-init` takes it start to finish to a PR. When a proposed issue lists steps that would
+each be their own PR (a code check, then per-species reviews, then reporting), file the first piece on its own and make
+the parent an umbrella (`umbrella` and `track:<name>` labels, a `## Members` table holding the order), with the pieces
+not yet reached under "To file when reached", filed when reached. No epic whose body holds every step.
+
+**Why:** Al, 2026-11-03, on #139: "we want to plan init pieces and get through start to finish when possible. we can
+have umbrella issues to keep track but we dont need super epics." #139 (`track:baselines`) with #141 and #140 as
+members is the worked case.
 
 <!-- BEGIN SOUL CONVENTIONS — DO NOT EDIT BELOW THIS LINE -->
 
@@ -683,8 +740,7 @@ blocking is explicit and visible.
 
 ### Don't trust status
 
-**Never report an agent as stalled, or as still working, on status alone.** Agent
-status and `TaskList` have both been observed to be wrong, and a subagent's
+**Never report an agent as stalled, or as still working, on status alone.** A subagent's
 `tasks/<id>.output` is a symlink that `ls -l` reports as frozen; `ls -lL` follows it.
 Never read the transcript itself, it overflows the context. Even a growing transcript shows
 activity, not that a report will arrive. So decide nothing on it; wait for the event,
@@ -760,11 +816,16 @@ anything git-backed, `git fetch` first: reading a local clone and reporting it a
 with a longer fuse. **And before hand-rolling a parser for a probe, check whether the code
 already has one**: a bespoke parser silently narrows the population it can see.
 
-**A host that times out from one machine is not blocked until the local link is ruled out**:
-ping the gateway (`ping -c 30 -i 0.2 <gateway>`) and try a second machine. A lossy link passes
-short exchanges and kills long ones, which mimics a selective block.
+**It also carries the artifact it was taken from, so two measurements that contradict are
+usually two artifacts rather than one wrong number.** A schema and a migrated database, a
+changelog and the code, a freshly built table and the persisted one it writes into: each
+answers differently, and a rule written from one is wrong about the other. Name the artifact
+each was taken from, and which one the claim is about, before calling either wrong.
 
-*15 lines of evidence for this rule are in `conventions/agent-operations.md`.*
+**A host that times out from one machine is not blocked until the local link is ruled out**:
+ping the gateway (`ping -c 30 -i 0.2 <gateway>`) and try a second machine.
+
+*23 lines of evidence for this rule are in `conventions/agent-operations.md`.*
 
 ### A share is not robust to an unresolved definition until you measure the spread
 
@@ -981,8 +1042,8 @@ diagnose their design, offer rather than propose, and leave them every road to l
   requests are routinely merged. One open item per maintainer, timed around their load.
 - **About 200 words, no SRED line.** A design change goes in as a question.
 - **Say plainly that Claude Code helped,** in a sentence from the `upstream-draft` on, and offer
-  an `Assisted-by` reword in the pull request. Where AI-assisted contributions are unwelcome,
-  send no code.
+  an `Assisted-by` reword in the pull request unless the maintainer has already merged a Claude
+  co-authored commit (check their log). Where AI-assisted contributions are unwelcome, send no code.
 - **Never ping by accident:** in our repos' issues and pull requests an upstream item is
   backticked, never a URL, link or bare `#N` (a fork's reached upstream's once), unless the user
   wants the ping; commit messages name none, even backticked. An edit cannot take a ping
@@ -1004,17 +1065,13 @@ bodies with "Generated with Claude Code", and issues with no Claude line bar an
 ### Auto mode refuses a production write whatever the chat says
 
 Auto mode's classifier can refuse a command as a production write: a live store rewritten,
-a deploy, a publish. When it does, approval given in chat does not reach it, and in the
-recorded case a restart did not clear it either. On the **first** such refusal, say so once and offer two routes:
+a deploy, a publish. When it does, approval given in chat does not reach it. On the **first** such refusal, say so once and offer two routes:
 the user leaves auto mode for that step (Shift+Tab) and approves the prompt, or runs the
 bare command themselves (below). Do not retry, and do not suggest a restart.
 
 It is not the secret-read clamp (`newgraph.md`, "Reading a secret clamps the rest of the
 session"), which names *earlier conversation content* and needs a restart. This refusal
-names a **category** of action, such as "Production Deploy" — and the category need not
-describe a deploy: a plain `git push` of local commits has been refused as "Excess
-Sensitive Detail". In a cloud session "External System Writes" covers a `gh api -X POST`
-issue comment; the `mcp__github__*` write tool makes the same write unprompted.
+names a **category** of action, such as "Production Deploy", and the category need not describe the command.
 
 **It classifies the command text, so it also fires on a write the file tools can make
 safely.** Where what was refused is an edit to a tracked file rather than the publish
@@ -1039,8 +1096,7 @@ not run, or runs from `$HOME`.
   error: join them with `&&` or a `for` loop over the list, still short enough not to wrap;
   past that, hand one per turn.
 
-**A file under `~/Downloads` may be unreadable by the agent process** (macOS folder
-protection, per app and per machine). Probe with
+**A file under `~/Downloads` may be unreadable by the agent process.** Probe with
 `ls ~/Downloads >/dev/null 2>&1 && echo readable || echo blocked`; Desktop and Documents are
 granted separately, so probe each. If blocked, ask for one copy into the repo, with absolute
 paths. Full Disk Access for the terminal app removes the block.
@@ -1283,8 +1339,9 @@ something the next person has to go read a log about — and the log does not ex
 
 The routine follow-up is the one that bites, because it is the one nobody counts as a
 push: a typo fix, a `.gitignore` line, an untagged `CLAUDE.md` drift sync. `/compact-prep`
-step 6 runs `claude_md_drift.sh apply`, which **pushes**, and after `/gh-pr-merge` that
-lands seconds after the merge. A housekeeping push carries `[skip ci]`, starts no run and
+step 6 runs `claude_md_drift.sh apply`, which **pushes**. Run by hand after `/gh-pr-merge`,
+that lands seconds after the merge; `/gh-pr-merge` step 12, which runs it for you, waits for
+step 10's watch to read green first. A housekeeping push carries `[skip ci]`, starts no run and
 cancels nothing only where soul's `ci_skip.sh` admits it: every commit touches only
 `CLAUDE.md`, `comms/`, `planning/`, `research/` or `.claude/`, in an R package whose shape
 it admits. Anywhere else the sync pushes untagged, and this rule holds.
@@ -1480,7 +1537,7 @@ A lint warning of `no visible binding` for a constant added on this branch is us
 `expect_snapshot()` **skips on CRAN**, and `testthat` treats a non-interactive run as CRAN by default.
 
 ### testthat counts an uncaught error under `error`, not `failed`
-Count `r$failed > 0 | r$error` over `r <- as.data.frame(testthat::test_file(f))`, never `failed` alone.
+Count `r$failed > 0 | r$error` over `r <- as.data.frame(testthat::test_file(f))`, never `failed` alone, and count skips from a `ProgressReporter`'s `n_skip`, never from the frame.
 
 ### A `skip_if_not()` skips only its own `test_that()` block
 Before blaming a failure, or its absence, on a skip, find the `test_that()` block the skip sits in.
@@ -1555,7 +1612,7 @@ Keep `drop = FALSE` on the scale and give the layer a named `show.legend` that a
 Leading empties survive and trailing ones do not, which is what makes it hard to reason about from memory.
 
 ### `identical()` on two reader results tests the reader, not the file
-`identical(read_csv(f), read_csv(f))` can be **FALSE** for the same unchanged bytes: readr tibbles carry a `problems` attribute — an external pointer — that differs between reads (readr 2.2.0; `spec` is identical, measured).
+Compare the file itself (`tools::md5sum()`) to show it was not modified, never two reader results.
 
 ### Under `R CMD check`, tests run from a temp dir against the INSTALLED package
 Two shapes, both green under `devtools::test()` and broken under `R CMD check`, `devtools::check()`, a tarball check, or an installed-tests run — the direction that costs the most time.
@@ -1570,7 +1627,7 @@ SQLite creates a database on connect.
 - "checking for portable file names" fails on any file in the built package whose name has a space.
 
 ### `sort()` and `order()` collate by `LC_COLLATE`, so a canonical form is locale-dependent
-Character sorting in R is locale-sensitive by default, which makes any *canonical* string built by sorting — an XML node with its attributes ordered, a joined key, a manifest — a function of the session's locale rather than of the data:
+Sort with `method = "radix"` wherever the order builds a canonical string.
 
 ### A library call that dispatches on a global option is not a pure function
 A function whose *units* or *algorithm* are chosen by a session-wide setting behaves differently depending on what the caller did before reaching your code.
@@ -1603,13 +1660,13 @@ A ~600-character free-text field in a `kable` cell wedged `pagedown::chrome_prin
 All three measured on R 4.5, all three met inside one 800-line script (drift#67).
 
 ### `stats::mad()` is already scaled to an SD
-Use `stats::mad(x)` itself as the robust standard deviation, or `mad(x, constant = 1)` for the raw median absolute deviation: the default `constant = 1.4826` already scales it, so multiplying by 1.4826 again inflates the SD by half.
+Use `stats::mad(x)` itself as the robust standard deviation: its default `constant = 1.4826` already scales it, so multiplying by 1.4826 again inflates the SD by half.
 
 ### `deparse(body(f))` excludes formal defaults, so a body scan cannot see a default
 A guard that scans function bodies for a forbidden literal is blind to that literal in a **signature**.
 
 ### `deparse()` re-encodes non-ASCII, so it answers about itself rather than the file
-Scan R source for non-ASCII the way `R CMD check` does (`tools:::.check_package_ASCII_code()`: raw lines, comments skipped), not through `parse()` and `deparse()`, which turn `\uXXXX` escapes into literal characters and back.
+Scan R source for non-ASCII with `tools:::.check_package_ASCII_code()`, as `R CMD check` does, never through `parse()` and `deparse()`.
 
 ### `package_version()` errors on a pre-release version string
 `package_version("3.9.0beta1")` raises rather than returning `NA`, so strip a pre-release suffix before asserting a version floor.
@@ -1627,7 +1684,7 @@ Record a flag in the `withCallingHandlers()` handler, `invokeRestart("muffleWarn
 testthat 3e captures the first message the expression emits and matches the regexp against **that one**.
 
 ### `pak` refuses to install a package that needs no compiler
-Install a pure-R package with `R CMD INSTALL <checkout>` when `pak::pak()` reports missing build tools: on macOS its check fails whenever `xcode-select -p` names Xcode.app and only the Command Line Tools are installed.
+Install a pure-R package with `R CMD INSTALL <checkout>` when `pak::pak()` reports missing build tools.
 
 ### `as.integer("NaN")` is `0`, and `as.integer(NaN)` is `NA`
 The string round trip is the bug.
@@ -1675,25 +1732,25 @@ End every `ORDER BY` on a unique key, order any fetch whose rows are summed, and
 A numeric formatter such as `sprintf("%.10g", x)` has no SQL form for non-finite values.
 
 ### Verify a float-formatting fix in its consumer, not through `as.numeric()`
-Compare where the literal is parsed (in Postgres, `SELECT <literal>::float8 = <stored>`) or compare IEEE 754 bytes: R's `as.numeric()` is not correctly rounded, so a correct `%.17g` string can fail to round-trip through R.
+Compare where the literal is parsed, or compare IEEE 754 bytes, never through `as.numeric()`.
 
 ### An `information_schema` lookup by the literal table name misses what Postgres resolves
 `WHERE table_schema = 's' AND table_name = 'T'` compares the text you passed.
 
 ### Rscript reads a script as it runs, so never edit a script while a run of it is in flight
-Copy the script and run the copy (`cp scripts/x.R "${TMPDIR:-/tmp}/x_frozen.R" && Rscript "${TMPDIR:-/tmp}/x_frozen.R"`) for anything long-running, or leave the file alone until the run exits.
+Run a copy of the script for anything long-running, or leave the file alone until the run exits.
 
 ### A range total taken as the difference of two large running totals loses the small ranges
 Sum a range directly (segment tree, per-range `sum()`, or grouped sums) rather than as `cumsum[hi] - cumsum[lo]` when ranges are small relative to the running total.
 
 ### A `pkg::` call in a test passes `devtools::test()` and fails `R CMD check` if `pkg` is undeclared
-`R CMD check` warns "'::' or ':::' import not declared from" for any package a test reaches with `::` that `DESCRIPTION` does not list, and under `error-on: "warning"` that reddens every runner.
+List every package a test reaches with `::` in `DESCRIPTION`, and run `tools:::.check_packages_used_in_tests` on the source tree before pushing.
 
 ### Inside a dplyr verb, a column named like a local variable wins
 Inject a local value into a data-masked verb with `!!x` or `.env$x`, never a bare `x`.
 
 ### `earthdatalogin`'s search and download calls overwrite the netrc when they find no Earthdata entry
-Call NASA's CMR search with `curl` and download with `curl` given the netrc directly (`netrc = 1, netrc_file = <path>, cookiefile = ""` follows the URS redirect), or check `earthdatalogin:::has_edl_netrc()` yourself first.
+Search NASA's CMR and download with `curl` given the netrc directly, or check `earthdatalogin:::has_edl_netrc()` yourself first.
 
 ### A fetcher's test helper must make the network fail, not just mock the reader
 When a test mocks a downloader's reader and supplies fixture files, also mock the search and download functions to `stop()` by default, and re-mock them only in the tests that exercise that path.
@@ -1734,6 +1791,9 @@ Read a TSV you wrote unquoted with `quote = "", na.strings = character(), commen
 ### duckdb in R: the query that autoloads `icu` binds unreliably, so `LOAD icu` before it
 Run `LOAD icu` on the connection before any query that needs it (`epoch()`, `year()`, a cast to `DATE` on a `TIMESTAMPTZ`), or use a function that needs no extension (`epoch_ms()`).
 
+### duckdb refuses a parent delete in the transaction that deleted its children
+Delete rows a foreign key still points at as separate autocommit statements, children first, never inside one `DBI::dbWithTransaction()`.
+
 ### `fs::path()` collapses the `//` after a URL scheme, so it cannot build URLs
 Join a URL with `paste(base, key, sep = "/")` or `file.path()`, never `fs::path()`.
 
@@ -1744,7 +1804,7 @@ Set a user-agent on every R fetch of a `canada.ca` page, because R's default fai
 Keep only the observed series (`DATASET == "<obs_ts_dataset>"`, four-digit `PERIOD`) before averaging climr output over years.
 
 ### A `function(...)` mock hides arguments the real callee no longer accepts
-Stubbing a callee with `function(...) invisible("mock")` accepts any argument name, so a wrapper still passing a parameter the callee dropped stays green while every real call errors with `unused argument`.
+Assert a `function(...)` mock's argument names against the real callee's `formals()`.
 
 ### `expect_message(regexp = "...$")` never matches, because `message()` appends `"\n"`
 The condition message carries the trailing newline, so an end anchor fails and the test reports "did not throw a message" even though the message printed.
@@ -3564,14 +3624,26 @@ linters: linters_with_defaults(
     commented_code_linter = NULL
   )
 exclusions: list(
-    "renv" = list(linters = "all")
+    "renv"
   )
 ```
 
 - 120 char line length (default 80 is too strict for data pipelines)
 - Allow dotted.case (common in base R and legacy code)
 - Suppress commented code lints (exploratory R scripts often have commented alternatives)
-- Exclude renv directory entirely
+- Exclude renv directory entirely: an **unnamed** entry excludes a file or directory whole.
+  A **named** entry's value must be line numbers or `Inf`, never a string: lintr's
+  `validate_named_exclusion()` aborts `lint_package()` in `read_settings()`, before any file is
+  read, so a `.lintr` carrying `"renv" = list(linters = "all")` lints nothing at all (lintr
+  3.3.0.1, measured 2026-11-01; the snippet matched no documented form at any version). The named form is
+  for excluding particular linters from particular files:
+
+  ```r
+  exclusions: list(
+      "renv",
+      "R/legacy.R" = list(pipe_consistency_linter = Inf)
+    )
+  ```
 
 ## Dependencies
 
@@ -3707,7 +3779,22 @@ Ten items created with hand-set keys in one lit review (cd#58, 2026-05-05) had t
 PATCHed clean after the user caught it.
 
 A key is unique within one library, not across them: 12 of 327 keys shared between
-libraries named different works, so resolve a key within its library. Key timing, the corporate-author guard and the BBT/Zotero version pairing are in
+libraries named different works, so resolve a key within its library.
+
+**A key a committed document cites never moves, and never changes meaning.** Better BibTeX
+keeps an item's key once set, and gives a new item that would collide a suffix, unless
+"Regenerate citation key when item changes" is ticked in its preferences (`resetKeyOnChange`; off by
+default, and kept off) or someone refreshes a key by hand. Its offer to migrate keys from its old database would
+rewrite keys in use, so it is declined with "Discard all" and "Once set, keep the citation key
+unchanged". A cited key that vanishes stops an `update_bib` build, because rbbt fails on a key
+Zotero does not return. A normal build does not stop: pandoc warns `citation <key> not found`,
+prints the key with a question mark and exits 0, so read the render log for that line before
+publishing. Nor does a build catch a key that now names a different work: when
+regenerating, check that each key the committed `.bib` and the new one share keeps its title, year
+and DOI, and treat keys added or dropped as the document's own citation changes.
+
+**A reference item carries its own `url` or `DOI`.** An attachment's URL is not exported, so an
+item whose only link sits on its PDF prints in the References with no link at all. Key timing, the corporate-author guard and the BBT/Zotero version pairing are in
 `/zotero-api` section 0. Our own reports are the one exception: they are not Zotero items, and
 their key is the repository name (below).
 
@@ -3716,11 +3803,18 @@ their key is the repository name (below).
 ### Bibliography generation
 
 ```yaml
-# index.Rmd — dynamic bib from Zotero via Better BibTeX; the filter drops local `file` paths
-bibliography: "`r rbbt::bbt_write_bib('references.bib', overwrite = TRUE, filter = function(b) gsub('[[:space:]]+file = [{][^}]*[}],?', '', b))`"
+# index.Rmd — the committed references.bib, rewritten from Zotero via Better BibTeX only when
+# update_bib is TRUE; the filter drops local `file` paths
+params:
+  update_bib: FALSE
+bibliography: "`r if (isTRUE(params$update_bib)) rbbt::bbt_write_bib('references.bib', overwrite = TRUE, filter = function(b) gsub('[[:space:]]+file = [{][^}]*[}],?', '', b)) else 'references.bib'`"
 ```
 
-`rbbt` pulls from BBT, which syncs with Zotero. Edit references in Zotero → rebuild report → bibliography updates.
+`rbbt` pulls from BBT, which syncs with Zotero. **The `.bib` is committed, and a normal build reads
+it**, so a report renders on a machine with no Zotero, and the same commit cites the same keys
+wherever it is built. Edit references in Zotero, then build once with `update_bib: TRUE` and
+commit the `.bib` it writes. Package vignettes do the same with a `data-raw/` script and a
+committed `.bib` (`writing.md`, "Name, link and cite the software").
 
 **Library targeting:** rbbt must know which Zotero library to search. This is set globally in `~/.Rprofile`:
 
@@ -3729,7 +3823,7 @@ bibliography: "`r rbbt::bbt_write_bib('references.bib', overwrite = TRUE, filter
 options(rbbt.default.library_id = 9)
 ```
 
-Without this option, rbbt searches only the personal library (libraryID 1) and won't find group library references. The library IDs map to Zotero's internal numbering — use `/zotero-lookup` with `SELECT DISTINCT libraryID FROM citationkey` against the BBT database to discover available libraries.
+Without this option, rbbt searches only the personal library (libraryID 1) and won't find group library references. The library IDs map to Zotero's internal numbering, which can differ between machines: read this machine's from `zotero.sqlite`, `SELECT groupID, libraryID, name FROM groups` (`/zotero-lookup`).
 
 Set `options(cred.zotero_library = "NewGraphEnvironment")` in the same `~/.Rprofile`, so cred's audit and store builds read the library the bibliography cites. Without it, a key present in two libraries warns and resolves to nothing. cred takes the group name rather than a libraryID because the internal number can differ between machines (cred#40).
 
@@ -3753,6 +3847,7 @@ Both `@smith2003` and `@doctor2022` go in the `.bib` file. The reader can then t
 **Check what a source says before citing it:**
 - NEVER write abstracts manually — if CrossRef has no abstract, leave blank
 - NEVER cite specific numbers without verifying from the source PDF via ragnar search
+- A search that fell back to keywords did not verify anything: a hybrid `cred::crd_search()` row whose `method` is `"bm25"` is a failed search, so restore the embedding service and search again (`/lit-search`)
 - NEVER paraphrase equations — copy exact notation and cite page/section
 
 ## In articles (pkgdown)
@@ -3850,6 +3945,9 @@ Open every public piece with what the product does for the reader and why it mat
 
 ### Let visuals carry the story where they land better
 Put the story in a map, figure or table whenever the reader takes it in faster there than from prose, and keep the prose to what the visual cannot say.
+
+### Review a rendered article where the reader will read it
+Offer the rendered page in a form that opens on a phone, before the merge, without being asked.
 
 ### Cut any number or caveat that does not change what the reader understands
 Drop a number, a precision or a caveat that leaves the reader's understanding of the product where it was, because detail the reader does not need walls them off.

@@ -75,7 +75,9 @@ Ten units of deviance sounds like something, so it is compared with its own nois
 the difference between two rules would move if a different set of groups had been sampled, with the group as the unit.
 `default` is 10.8 behind with an SE of 12.0, which is 0.90 SE. A decision rule fixed before the run puts every rule
 within one SE of the best into a **region** (rules the data cannot tell apart from the best) and recommends the region
-rule with the fewest departures from `default`; here that is `default` itself, with none.
+rule with the fewest departures from `default`; here that is `default` itself, with none. (On the tables published
+since #92 the pick is `width>=2|g<=0.0549|none`, two parts from the best-scoring rule; how far each starting point moved
+it is `baseline_anchoring.md`, #141.)
 
 The region holds 1,231 of the 7,740 rules (15.9 %): 35 with no exception and 1,196 with one. It spans every width on
 the ladder (1, 1.5, 2, 3 and 4 m), every gradient limit from 3 to 30 %, and no flow (MAD) rule: the 5,160 rules with a

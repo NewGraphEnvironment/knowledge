@@ -33,13 +33,20 @@ tables, and `data/thresholds*.csv`) are New Graph Environment's work under this 
 `data/literature_evidence.csv` and `data/ip_model_registry.csv` quote short passages from the papers and reports
 each row cites, so that every value can be checked against its source. The quoted text remains its authors'.
 
+## Provincial Stream Crossing Information System (PSCIS)
+
+`data/<wsg>/pscis_<wsg>.gpkg` and the tables built from them (`data/<wsg>/crossings.csv`, `reports.csv` and
+`gnis_seed.csv`) are working copies of the Province's
+[PSCIS](https://catalogue.data.gov.bc.ca/dataset/pscis-assessments) layers, clipped to a watershed group when the
+report-corpus scripts ran (`scripts/0100`). They are incidental, not a distribution of PSCIS: its BC Data Catalogue
+licence is "Access Only", and the current layers come from the catalogue. The package does not ship them, and
+`knw_pscis_pull()` reads PSCIS from the user's own database.
+
 ## Terms not yet settled
 
 The terms for redistributing these files are open in
 [#76](https://github.com/NewGraphEnvironment/knowledge/issues/76), and this notice does not cover them:
 
-- **PSCIS** crossing layers, whose BC Data Catalogue licence is "Access Only": `data/<wsg>/pscis_<wsg>.gpkg`
-  and the tables built from them, `data/<wsg>/crossings.csv`, `reports.csv` and `gnis_seed.csv`.
 - **EcoCat fish data submissions**: `data/<wsg>/fiss_*` and the tables built from them, `data/fiss_*.csv`.
 - **EcoCat report text**: the `priority_*` files, `data/priority_farmed_all.csv`, `data/rag_priorities.*`,
   `data/corpus_tags.csv`, the `context_*.md` files and `data/pine/reports_found.md`.

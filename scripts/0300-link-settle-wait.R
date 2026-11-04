@@ -1,6 +1,6 @@
 # scripts/0300-link-settle-wait.R
 # ---------------------------------------------------------------------------
-# Waits until link's province-wide `default` run has settled in `fresh_default`, then releases.
+# Waits until link's province-wide `default` run has settled in `fresh_default` (or SCHEMA), then releases.
 # Issue #57, phase 0. The evidence build (0310) reads `streams_access`, which the run recomputes
 # last, so nothing downstream starts until all three hold on the same poll:
 #   1. every group in fresh_default.streams has a log_recompute row with date_end set;
@@ -9,22 +9,43 @@
 #   3. no non-idle session's query names fresh_default (this session excluded).
 # Each poll is one row of the log. On release the record carries the run_uid, the log_recompute
 # count, the churn value and the release time, and the link, fresh and fwapg SHAs from
-# fresh_default.log. After `max_hours` without a release it stops with status `timeout` and a
+# fresh_default.log, over the rows of the runs log_recompute names (#145: the previous run's rows stay in `log`;
+# log_runs_aside names them). A log the record cannot attribute to one build ends with status `refused` and the
+# reason, written as <name>_refused.csv, and a non-zero exit. After `max_hours` without a release it stops with status `timeout` and a
 # non-zero exit, so a waiter on this process reads the file, not the exit alone.
 #
-# INPUT:  fwapg database (PG* env vars): fresh_default.{streams,log_recompute,log},
+# INPUT:  fwapg database (PG* env vars): SCHEMA.{streams,log_recompute,log},
 #         pg_stat_user_tables, pg_stat_activity
-# OUTPUT: scripts/logs/habitat/<date>_link_settle.csv   one row per poll, the last row the verdict
-# RUN:    Rscript scripts/0300-link-settle-wait.R   (from the repo root; blocks until released)
+# OUTPUT: scripts/logs/habitat/<date>_link_settle.csv   one row per poll, the last row the verdict, each naming the
+#         schema and the poll interval (#120); <date>_link_settle-<schema>.csv for a SCHEMA other than fresh_default,
+#         and <date>_link_settle-<SETTLE_TAG>.csv when SETTLE_TAG is given (#145: a build that is not yet the published
+#         one, settled on fresh_default, stays out of the name a plain 0310 takes)
+# RUN:    [SCHEMA=zz415_minimal] [POLL_MIN=1] [SETTLE_TAG=default_20261103] Rscript scripts/0300-link-settle-wait.R
+#         (from the repo root; blocks until released; POLL_MIN, default 10, is the minutes between polls, and three
+#         equal polls release)
 # ---------------------------------------------------------------------------
 suppressMessages({ library(DBI); library(RPostgres) })
+pkgload::load_all(quiet = TRUE)   # .knw_build_log_runs(): which `log` rows are the run's (#145)
 
-poll_min <- 10
+# SCHEMA and POLL_MIN (#120): a test build in a scratch schema is static, so it need not wait 10 min x 3. The settle
+# log records both on every row; its schema is a record, never 0310's gate (the run_uid is: a provincial schema is
+# renamed after its run, so the evidence is built on a name the settle log never saw, #73)
+poll_min <- as.numeric(Sys.getenv("POLL_MIN", "10"))
+if (!is.finite(poll_min) || poll_min <= 0) stop("POLL_MIN must be a positive number of minutes: ", Sys.getenv("POLL_MIN"))
 polls_stable <- 3
 max_hours <- 24
-schema <- "fresh_default"
+schema <- Sys.getenv("SCHEMA", "fresh_default")
+if (!grepl("^[a-z_][a-z0-9_]*$", schema)) stop("SCHEMA must be a lower-case identifier: ", schema)
+# the default schema's log keeps the name 0310 takes by default; another is tagged, and 0310 takes it with SETTLE=.
+# SETTLE_TAG tags a fresh_default log too, for a build to be compared before it is promoted (#145)
+tag <- Sys.getenv("SETTLE_TAG")
+if (nzchar(tag) && !grepl("^[a-z0-9][a-z0-9_]*$", tag)) {
+  stop("SETTLE_TAG must be lower-case letters, digits and _: ", tag)
+}
+if (!nzchar(tag) && schema != "fresh_default") tag <- schema
 path_log <- file.path("scripts/logs/habitat",
-                      paste0(format(Sys.Date(), "%Y%m%d"), "_link_settle.csv"))
+                      paste0(format(Sys.Date(), "%Y%m%d"), "_link_settle", if (nzchar(tag)) paste0("-", tag) else "",
+                             ".csv"))
 
 pg <- function() {
   tryCatch(dbConnect(Postgres()),
@@ -50,7 +71,7 @@ poll <- function() {
     WHERE state <> 'idle' AND pid <> pg_backend_pid() AND query ILIKE $1",
     params = list(paste0("%", schema, "%")))
   # counts come back as integer64 / numeric, so each is made a plain integer before formatting
-  data.frame(at_utc = format(Sys.time(), "%Y-%m-%dT%H:%M:%SZ", tz = "UTC"),
+  data.frame(at_utc = format(Sys.time(), "%Y-%m-%dT%H:%M:%SZ", tz = "UTC"), schema = schema, poll_min = poll_min,
              n_wsg = as.integer(cov$n_wsg), n_ended = as.integer(cov$n_ended),
              n_recompute_rows = as.integer(lr$n_rows), n_runs = as.integer(lr$n_runs),
              run_uid = lr$run_uid, last_end = format(lr$last_end, "%Y-%m-%dT%H:%M:%SZ", tz = "UTC"),
@@ -60,12 +81,17 @@ poll <- function() {
 shas <- function() {
   conn <- pg()
   on.exit(dbDisconnect(conn))
-  dbGetQuery(conn, sprintf("
+  # the run's own rows: a provincial run leaves the previous run's `log` rows in place, which would put that run's link
+  # commit and version beside this one's in the record every later step carries (#145)
+  lr <- .knw_build_log_runs(conn, schema)
+  s <- dbGetQuery(conn, sprintf("
     SELECT string_agg(DISTINCT run_uid, ';') AS log_run_uid, string_agg(DISTINCT link_version, ';') AS link_version,
            string_agg(DISTINCT link_sha, ';') AS link_sha, string_agg(DISTINCT fresh_version, ';') AS fresh_version,
            string_agg(DISTINCT fresh_sha, ';') AS fresh_sha, string_agg(DISTINCT fwapg_sha, ';') AS fwapg_sha,
            string_agg(DISTINCT config_hash, ';') AS config_hash, count(*)::integer AS n_log_rows
-    FROM %s.log", schema))
+    FROM %s.log%s", schema, lr$where), params = lr$params)
+  s$log_runs_aside <- paste(lr$aside, collapse = ";")
+  s
 }
 
 dir.create(dirname(path_log), showWarnings = FALSE, recursive = TRUE)
@@ -88,7 +114,19 @@ repeat {
   message(sprintf("%s  ended %d/%d  runs %d  churn %s  active %d  stable %s",
                   r$at_utc, r$n_ended, r$n_wsg, r$n_runs, r$churn, r$n_active, stable))
   if (complete && quiet && stable) {
-    s <- shas()
+    # the record refuses a log it cannot attribute to one build (#145): the last row then says so, under a _refused
+    # name outside the pattern 0310 takes, and the poll file is removed
+    s <- tryCatch(shas(), error = function(e) e)
+    if (inherits(s, "error")) {
+      rows[[n]]$status <- "refused"
+      rows[[n]]$note <- conditionMessage(s)
+      path_refused <- sub("\\.csv$", "_refused.csv", path_log)
+      path_log <- path_refused
+      write_log()
+      unlink(sub("_refused\\.csv$", ".csv", path_refused))
+      message("REFUSED ", r$at_utc, ": ", conditionMessage(s), " (log ", path_refused, ")")
+      quit(status = 3)
+    }
     rows[[n]]$status <- "released"
     rows[[n]] <- cbind(rows[[n]], s)
     write_log()

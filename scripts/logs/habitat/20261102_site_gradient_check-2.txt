@@ -1,0 +1,337 @@
+Site gradient check, knowledge#121, knowledge 3cfd8ce. Evidence data/fdis/derived_zz415_default (visits_link, visits_species, walks md5 c8b7248d 9e19cc57 0c21cba6); tune tables data/tune.
+NOT the published build: data/thresholds.csv names 1bd35829.
+EVIDENCE_CHECK=FALSE: run on this build anyway; the key populations are not held to the tracked tables.
+Visits placed: 2082. With a measured gradient: 1290 (a second reading: 761; both: 761). On the tuning's stream branch (edge types 1000,1100,2000,2300, fished area 10-10000 m2): 1694 placed, 1178 with a measured gradient.
+Missing modelled gradient among them: segment 0, Atlas line 0.
+
+## yardstick: the first reading against the second, at the same site (every visit with both; ratio first/second)
+ pairs zero_pairs spearman log_r ratio_p10 ratio_p50 ratio_p90 absdiff_p50
+   761         11    0.911 0.891      0.64         1       1.5        0.01
+ absdiff_p90 second_higher_pct
+       0.055              42.6
+
+## measured (first reading) against the modelled gradients, every visit with a measured gradient
+    against pairs zero_pairs spearman log_r ratio_p10 ratio_p50 ratio_p90
+    segment  1290         57    0.716 0.664      0.37      0.89      2.20
+ atlas_line  1290         51    0.707 0.654      0.35      0.86      2.06
+ absdiff_p50 absdiff_p90 model_higher_pct
+      0.0207      0.0941             56.3
+      0.0218      0.0958             59.6
+
+## the same, on the tuning's stream branch
+    against pairs zero_pairs spearman log_r ratio_p10 ratio_p50 ratio_p90
+    segment  1178         23    0.696 0.651      0.37      0.87      2.05
+ atlas_line  1178         19    0.681 0.636      0.34      0.84      1.96
+ absdiff_p50 absdiff_p90 model_higher_pct
+      0.0225      0.0975             58.9
+      0.0238      0.0993             62.5
+
+## the second reading against the modelled gradients, on the tuning's stream branch
+    against pairs zero_pairs spearman log_r ratio_p10 ratio_p50 ratio_p90
+    segment   707         13    0.669 0.633      0.34      0.90      2.06
+ atlas_line   707         11    0.649 0.597      0.29      0.88      2.03
+ absdiff_p50 absdiff_p90 model_higher_pct
+      0.0259      0.1035             55.6
+      0.0278      0.1110             58.0
+
+## stream branch, by segment length (m)
+  length_m    against pairs zero_pairs spearman log_r ratio_p10 ratio_p50
+    (0,10]    segment     6          0    0.886 0.721      0.58      1.31
+    (0,10] atlas_line     6          0    0.943 0.935      0.62      0.77
+   (10,25]    segment    12          1    0.520 0.426      0.19      0.78
+   (10,25] atlas_line    12          1    0.685 0.634      0.38      0.91
+   (25,50]    segment    32          3    0.607 0.674      0.55      1.01
+   (25,50] atlas_line    32          3    0.746 0.816      0.58      1.06
+  (50,100]    segment    83          3    0.644 0.560      0.29      0.92
+  (50,100] atlas_line    83          2    0.631 0.583      0.36      0.85
+ (100,250]    segment   234          7    0.760 0.704      0.41      0.88
+ (100,250] atlas_line   234          5    0.691 0.664      0.30      0.81
+ (250,500]    segment   306          3    0.671 0.671      0.34      0.87
+ (250,500] atlas_line   306          2    0.673 0.641      0.33      0.85
+ (500,Inf]    segment   505          6    0.692 0.627      0.38      0.86
+ (500,Inf] atlas_line   505          6    0.680 0.615      0.37      0.84
+ ratio_p90 absdiff_p50 absdiff_p90 model_higher_pct
+      1.52      0.0197      0.0631             33.3
+      0.90      0.0123      0.0509            100.0
+      1.72      0.0210      0.1796             66.7
+      1.07      0.0110      0.0681             75.0
+      2.34      0.0247      0.1140             43.8
+      1.84      0.0204      0.0851             43.8
+      3.06      0.0290      0.1057             51.8
+      2.40      0.0257      0.1400             56.6
+      2.00      0.0206      0.0751             59.0
+      1.94      0.0245      0.1088             67.1
+      2.15      0.0201      0.0965             58.8
+      1.97      0.0229      0.0893             62.4
+      1.95      0.0240      0.1004             61.2
+      1.89      0.0249      0.1006             61.8
+
+## stream branch, by the segment's stream order
+ segment_stream_order    against pairs zero_pairs spearman log_r ratio_p10
+                    1    segment   315          9    0.637 0.602      0.33
+                    1 atlas_line   315          7    0.587 0.546      0.26
+                    2    segment   396          4    0.728 0.681      0.36
+                    2 atlas_line   396          4    0.705 0.673      0.37
+                    3    segment   283          5    0.704 0.651      0.40
+                    3 atlas_line   283          4    0.699 0.653      0.37
+                    4    segment   141          2    0.705 0.728      0.51
+                    4 atlas_line   141          2    0.712 0.728      0.44
+                    5    segment    38          3    0.520 0.332      0.59
+                    5 atlas_line    38          2    0.543 0.399      0.49
+                    6    segment     5          0    0.369 0.455      0.74
+                    6 atlas_line     5          0    0.369 0.338      0.72
+ ratio_p50 ratio_p90 absdiff_p50 absdiff_p90 model_higher_pct
+      0.79      1.90      0.0302      0.1226             61.6
+      0.73      1.81      0.0380      0.1439             68.6
+      0.80      1.81      0.0229      0.0785             65.2
+      0.82      1.77      0.0239      0.0806             65.7
+      0.91      2.15      0.0201      0.0788             56.5
+      0.88      2.00      0.0178      0.0803             59.4
+      1.06      2.29      0.0156      0.0689             46.1
+      0.98      2.30      0.0156      0.0689             51.8
+      1.14      4.36      0.0141      0.0648             42.1
+      1.04      4.23      0.0118      0.0488             47.4
+      1.49      4.66      0.0288      0.0382             20.0
+      1.09      4.66      0.0288      0.0382             20.0
+
+## stream branch, by the measured gradient's step on the tuning's ladder
+      measured    against pairs zero_pairs spearman  log_r ratio_p10 ratio_p50
+      (-Inf,0]    segment     8          8       NA     NA        NA        NA
+      (-Inf,0] atlas_line     8          8       NA     NA        NA        NA
+      (0,0.03]    segment   368         11    0.245  0.178      0.22      0.59
+      (0,0.03] atlas_line   368          8    0.253  0.183      0.20      0.55
+   (0.03,0.04]    segment   109          1    0.181  0.179      0.38      0.81
+   (0.03,0.04] atlas_line   109          1    0.128  0.124      0.38      0.85
+ (0.04,0.0549]    segment   122          0    0.128  0.161      0.42      0.77
+ (0.04,0.0549] atlas_line   122          0    0.064  0.080      0.38      0.78
+ (0.0549,0.07]    segment   142          0    0.145  0.155      0.44      0.84
+ (0.0549,0.07] atlas_line   142          0    0.164  0.174      0.41      0.85
+   (0.07,0.09]    segment   125          1    0.095  0.078      0.50      0.96
+   (0.07,0.09] atlas_line   125          1    0.090  0.051      0.48      0.88
+   (0.09,0.11]    segment    79          1    0.264  0.200      0.62      0.94
+   (0.09,0.11] atlas_line    79          1    0.275  0.289      0.60      0.92
+   (0.11,0.13]    segment    53          1   -0.196 -0.145      0.71      1.21
+   (0.11,0.13] atlas_line    53          0   -0.090 -0.162      0.62      1.28
+   (0.13,0.15]    segment    31          0    0.025  0.016      0.72      1.09
+   (0.13,0.15] atlas_line    31          0   -0.160 -0.217      0.61      1.06
+    (0.15,0.2]    segment    68          0    0.116  0.159      0.56      1.15
+    (0.15,0.2] atlas_line    68          0    0.175  0.204      0.63      1.19
+    (0.2,0.25]    segment    36          0    0.164  0.157      0.86      1.17
+    (0.2,0.25] atlas_line    36          0   -0.014  0.086      0.83      1.17
+    (0.25,0.3]    segment    17          0   -0.104 -0.113      0.92      1.58
+    (0.25,0.3] atlas_line    17          0   -0.339 -0.325      1.05      1.75
+    (0.3, Inf]    segment    20          0    0.031 -0.110      1.07      1.67
+    (0.3, Inf] atlas_line    20          0   -0.044 -0.032      1.03      1.52
+ ratio_p90 absdiff_p50 absdiff_p90 model_higher_pct
+        NA      0.0217      0.1091             87.5
+        NA      0.0217      0.1159             87.5
+      1.73      0.0148      0.0476             73.1
+      1.52      0.0158      0.0568             78.3
+      2.25      0.0184      0.0627             62.4
+      2.09      0.0182      0.0595             61.5
+      2.03      0.0237      0.0628             63.1
+      2.02      0.0236      0.0726             64.8
+      1.82      0.0229      0.0705             64.8
+      1.72      0.0259      0.0854             64.8
+      1.72      0.0248      0.0869             52.0
+      1.63      0.0245      0.0911             60.8
+      2.01      0.0243      0.0939             55.7
+      1.69      0.0271      0.0846             62.0
+      2.84      0.0389      0.1222             34.0
+      3.12      0.0461      0.1222             37.7
+      2.48      0.0335      0.1074             38.7
+      1.96      0.0332      0.0997             48.4
+      2.92      0.0719      0.1497             39.7
+      2.60      0.0625      0.1308             42.6
+      1.89      0.0516      0.1165             27.8
+      2.30      0.0504      0.1344             27.8
+      3.24      0.0945      0.1897             23.5
+      3.89      0.1090      0.2081             11.8
+      2.62      0.1351      0.2553              5.0
+      2.62      0.1346      0.2510             10.0
+
+## stream branch, by whether the segment starts at the visit (link cut it there; -1 to 5 m)
+ at_visit    against pairs zero_pairs spearman log_r ratio_p10 ratio_p50
+    FALSE    segment   878         18    0.700 0.649      0.36      0.87
+    FALSE atlas_line   878         15    0.679 0.636      0.32      0.84
+     TRUE    segment   300          5    0.673 0.661      0.41      0.88
+     TRUE atlas_line   300          4    0.681 0.635      0.39      0.87
+ ratio_p90 absdiff_p50 absdiff_p90 model_higher_pct
+      2.06      0.0232      0.1046             59.0
+      2.00      0.0256      0.1076             62.3
+      2.03      0.0215      0.0727             58.7
+      1.82      0.0180      0.0779             63.0
+
+## stream branch, by catch
+ catch_status    against pairs zero_pairs spearman log_r ratio_p10 ratio_p50
+         fish    segment   459         13    0.645 0.599      0.39      0.91
+         fish atlas_line   459         10    0.650 0.575      0.37      0.89
+         zero    segment   719         10    0.695 0.661      0.37      0.84
+         zero atlas_line   719          9    0.671 0.648      0.32      0.82
+ ratio_p90 absdiff_p50 absdiff_p90 model_higher_pct
+      2.26      0.0187      0.0610             56.2
+      2.01      0.0172      0.0687             59.0
+      1.92      0.0256      0.1101             60.6
+      1.88      0.0290      0.1154             64.7
+
+## stream branch, by catch within the measured gradient's class, against the segment gradient
+    measured catch_status pairs spearman ratio_p10 ratio_p90 absdiff_p50
+ (-Inf,0.03]         fish   181    0.215      0.27      2.25      0.0141
+ (-Inf,0.03]         zero   195    0.263      0.19      1.52      0.0158
+ (0.03,0.07]         fish   163    0.458      0.55      2.24      0.0202
+ (0.03,0.07]         zero   210    0.261      0.38      1.76      0.0244
+ (0.07,0.13]         fish    88    0.045      0.70      2.16      0.0288
+ (0.07,0.13]         zero   169    0.243      0.49      1.84      0.0267
+ (0.13, Inf]         fish    27    0.525      0.74      2.73      0.0726
+ (0.13, Inf]         zero   145    0.299      0.67      2.58      0.0649
+
+## stream branch, by catch within the segment's length class (m), against the segment gradient
+  length_m catch_status pairs spearman ratio_p10 ratio_p90 absdiff_p50
+    (0,50]         fish    40    0.652      0.35      1.92      0.0217
+    (0,50]         zero    10    0.418      0.54      3.59      0.0756
+  (50,250]         fish   141    0.728      0.44      2.51      0.0206
+  (50,250]         zero   176    0.713      0.35      1.99      0.0251
+ (250,Inf]         fish   278    0.592      0.38      2.25      0.0175
+ (250,Inf]         zero   533    0.694      0.37      1.85      0.0256
+
+## every visit with a measured gradient, by where it sits (the stream branch, or a river, wetland or lake segment)
+                             sits    against pairs zero_pairs spearman log_r
+ other (edge type or fished area)    segment    11          4    0.751 0.791
+ other (edge type or fished area) atlas_line    11          4    0.751 0.772
+                            river    segment    20          5    0.491 0.594
+                            river atlas_line    20          4    0.470 0.653
+                    stream branch    segment  1178         23    0.696 0.651
+                    stream branch atlas_line  1178         19    0.681 0.636
+                          wetland    segment    81         25    0.352 0.272
+                          wetland atlas_line    81         24    0.384 0.321
+ ratio_p10 ratio_p50 ratio_p90 absdiff_p50 absdiff_p90 model_higher_pct
+      0.63      0.85      3.25      0.0156      0.0385             36.4
+      0.61      0.76      4.00      0.0150      0.0400             36.4
+      1.02      1.75      8.15      0.0112      0.0254             10.0
+      1.13      1.90      9.17      0.0097      0.0254             10.0
+      0.37      0.87      2.05      0.0225      0.0975             58.9
+      0.34      0.84      1.96      0.0238      0.0993             62.5
+      0.27      1.17      6.20      0.0100      0.0470             32.1
+      0.40      1.14      5.36      0.0092      0.0458             33.3
+
+## the published gradient limits and each key's population (rearing held to the tracked n_visits; a spawning key's is before the spawner and groups filters)
+ species_code stage      key  limit n_visits population with_measured
+           BT  rear  BT_rear 0.3000     9344       1173           775
+           BT spawn BT_spawn 0.1300      513       1173           775
+           CH  rear  CH_rear 0.1100     4858        523           366
+           CO  rear  CO_rear 0.0549     4628        395           236
+           GR  rear  GR_rear 0.0549     1355          0             0
+           RB  rear  RB_rear 0.3000    13869       1174           775
+           ST  rear  ST_rear 0.0849     1530         98            56
+          WCT  rear WCT_rear 0.2500     1238          0             0
+
+## flips at each key's published limit, over the key's population (a reading on the limit is in, as the rule's <= has it; band: modelled gradient one step of the key's own ladder either side, mirrored at its top; meas_band: the same window on the measured gradient)
+      key  limit          against visits flips_pct         band band_visits
+  BT_rear 0.3000 segment_gradient    775       0.4 (0.25, 0.35]           0
+  BT_rear 0.3000     fwa_gradient    775       0.9 (0.25, 0.35]           7
+ BT_spawn 0.1300 segment_gradient    775       8.4 (0.11, 0.15]          63
+ BT_spawn 0.1300     fwa_gradient    775      11.6 (0.11, 0.15]          69
+  CH_rear 0.1100 segment_gradient    366       8.7 (0.09, 0.13]          33
+  CH_rear 0.1100     fwa_gradient    366      10.1 (0.09, 0.13]          34
+  CO_rear 0.0549 segment_gradient    236      25.8 (0.04, 0.07]          78
+  CO_rear 0.0549     fwa_gradient    236      24.2 (0.04, 0.07]          70
+  GR_rear 0.0549 segment_gradient      0       NaN (0.04, 0.07]           0
+  GR_rear 0.0549     fwa_gradient      0       NaN (0.04, 0.07]           0
+  RB_rear 0.3000 segment_gradient    775       0.4 (0.25, 0.35]           0
+  RB_rear 0.3000     fwa_gradient    775       0.9 (0.25, 0.35]           7
+  ST_rear 0.0849 segment_gradient     56      19.6 (0.07, 0.09]           7
+  ST_rear 0.0849     fwa_gradient     56      21.4 (0.07, 0.09]           4
+ WCT_rear 0.2500 segment_gradient      0       NaN   (0.2, 0.3]           0
+ WCT_rear 0.2500     fwa_gradient      0       NaN   (0.2, 0.3]           0
+ band_flips_pct meas_band_visits meas_band_flips_pct meas_on_limit
+            NaN                9                22.2             0
+           71.4                9                22.2             0
+           30.2               52                32.7             9
+           44.9               52                40.4             9
+           36.4               32                46.9             0
+           29.4               32                50.0             0
+           42.3               66                39.4             0
+           34.3               66                33.3             0
+            NaN                0                 NaN             0
+            NaN                0                 NaN             0
+            NaN                9                22.2             0
+           71.4                9                22.2             0
+           42.9                0                 NaN             0
+            0.0                0                 NaN             0
+            NaN                0                 NaN             0
+            NaN                0                 NaN             0
+ meas_above_model_below meas_below_model_above
+                      3                      0
+                      3                      4
+                     38                     27
+                     40                     50
+                     24                      8
+                     21                     16
+                     24                     37
+                     17                     40
+                      0                      0
+                      0                      0
+                      3                      0
+                      3                      4
+                      8                      3
+                      3                      9
+                      0                      0
+                      0                      0
+
+## by the species' outcome (caught or not), against the segment gradient (each rearing key's population)
+      key present pairs spearman  log_r ratio_p10 ratio_p50 ratio_p90 flips_pct
+  BT_rear    TRUE    87    0.546  0.512      0.30      0.90      2.01       0.0
+  BT_rear   FALSE   688    0.660  0.590      0.38      0.90      2.21       0.4
+  CH_rear    TRUE    20    0.312  0.457      0.47      1.03      4.05       5.0
+  CH_rear   FALSE   346    0.545  0.476      0.38      0.99      2.46       9.0
+  CO_rear    TRUE     7   -0.775 -0.836      0.64      1.47      2.76      14.3
+  CO_rear   FALSE   229    0.597  0.543      0.36      0.83      2.14      26.2
+  GR_rear    TRUE     0       NA     NA        NA        NA        NA       NaN
+  GR_rear   FALSE     0       NA     NA        NA        NA        NA       NaN
+  RB_rear    TRUE   274    0.658  0.590      0.43      0.99      2.37       0.4
+  RB_rear   FALSE   501    0.634  0.576      0.37      0.84      2.01       0.4
+  ST_rear    TRUE     0       NA     NA        NA        NA        NA       NaN
+  ST_rear   FALSE    56    0.572  0.420      0.47      0.98      3.32      19.6
+ WCT_rear    TRUE     0       NA     NA        NA        NA        NA       NaN
+ WCT_rear   FALSE     0       NA     NA        NA        NA        NA       NaN
+ band_visits band_flips_pct
+           0            NaN
+           0            NaN
+           2            0.0
+          31           38.7
+           1            0.0
+          77           42.9
+           0            NaN
+           0            NaN
+           0            NaN
+           0            NaN
+           0            NaN
+           7           42.9
+           0            NaN
+           0            NaN
+
+Negative segment gradients: 1 placed visits (0 on the stream branch, 0 with a measured gradient); values -0.0352 to -0.0352; segment lengths (m) 56.6/56.6/56.6; Atlas-line gradient at them -0.0352/-0.0352/-0.0352; on the same Atlas line as the visit: 1.
+
+## negative segment gradients by edge type and waterbody
+ edge_type stream_branch wb_river wb_wetland wb_lake n
+      1200         FALSE    FALSE      FALSE   FALSE 1
+
+## negative segment gradients in each key's population: rules in the tracked tune table whose in/out at those visits changes when the gradient is 0 (NA: no negative in the population, so nothing to test)
+      key negative_visits present rules rules_moved in_region_moved
+  BT_rear               0       0  8385          NA              NA
+ BT_spawn               0       0  7095          NA              NA
+  CH_rear               0       0  6149          NA              NA
+  CO_rear               0       0  6622          NA              NA
+  GR_rear               0       0  7740          NA              NA
+  RB_rear               0       0  7740          NA              NA
+  ST_rear               0       0  7224          NA              NA
+ WCT_rear               0       0  7224          NA              NA
+ recommended_moved_visits most_moved_visits
+                       NA                NA
+                       NA                NA
+                       NA                NA
+                       NA                NA
+                       NA                NA
+                       NA                NA
+                       NA                NA
+                       NA                NA

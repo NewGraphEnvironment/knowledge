@@ -1,0 +1,146 @@
+Minimal network check, knowledge#120. Full: data/fdis/derived_zz415_default (scripts/logs/habitat/20261102_evidence_build_ledger-derived_zz415_default.csv). Minimal: data/fdis/derived_zz415_minimal (scripts/logs/habitat/20261102_evidence_build_ledger-derived_zz415_minimal.csv).
+  build: schema zz415_default, run 415_recompute_default; flows wet_db_load(): discharge/fwa/v1/segment_monthly, scenario historical last loaded from https://fresh-bc.s3.us-west-2.amazonaws.com/discharge/fwa/v1/manifest.json (built 2026-10-15T02:06:57Z, wet acb820f); walk c3f7bdbecff1d55107f28afa59d7f532; fresh 0.52.0; tokens cut-full-top.acc-v5.grad-seg.q-fwapg
+  build: schema zz415_minimal, run 415_recompute_minimal; flows wet_db_load(): discharge/fwa/v1/segment_monthly, scenario historical last loaded from https://fresh-bc.s3.us-west-2.amazonaws.com/discharge/fwa/v1/manifest.json (built 2026-10-15T02:06:57Z, wet acb820f); walk c3f7bdbecff1d55107f28afa59d7f532; fresh 0.52.0; tokens cut-min.acc-v5.grad-seg.q-fwapg
+1. PLACEMENT. Visits placed: full 2082, minimal 2082; on the full alone 0, on the minimal alone 0.
+   On both at one blue line and measure and on one Atlas line: 2082 of 2082.
+
+## columns that differ between the two builds, visits on both
+                 column visits_differ
+             id_segment          2082
+       segment_length_m          1209
+       segment_gradient          1175
+            elevation_m          1159
+ segment_start_offset_m           819
+   segment_downstream_m           819
+     segment_upstream_m           692
+              access_bt            63
+             ch_rearing            49
+      ch_rearing_stored            49
+            bt_spawning            40
+     bt_spawning_stored            40
+              access_ch            38
+             st_rearing            33
+      st_rearing_stored            33
+             bt_rearing            32
+      bt_rearing_stored            32
+              access_co            26
+             co_rearing            22
+      co_rearing_stored            22
+            co_spawning            17
+     co_spawning_stored            17
+            pk_spawning            15
+     pk_spawning_stored            15
+            sk_spawning            10
+     sk_spawning_stored            10
+            ch_spawning             9
+     ch_spawning_stored             9
+              access_cm             7
+            cm_spawning             7
+     cm_spawning_stored             7
+            st_spawning             6
+     st_spawning_stored             6
+              access_st             5
+              access_pk             1
+              access_sk             1
+   Columns that differ: 36 of 227 compared; outside the segment, access and habitat columns: .
+
+## segments at visits, by catch: share starting at the visit and median length
+ network catch_status visits at_visit_pct len_median_m
+    full         fish   1007         43.9          298
+    full         zero   1075          6.0          438
+ minimal         fish   1007          3.8          626
+ minimal         zero   1075          2.0          711
+2. walks.csv: full 40068 rows, minimal 40068; the same rows: TRUE (md5 0c21cba64dbbf0562f85487583bf0946, 0c21cba64dbbf0562f85487583bf0946).
+2. visits_species.csv: full 22902 rows, minimal 22902; the same rows: TRUE (md5 9e19cc57c271a936ee0d9f0f10487621, 9e19cc57c271a936ee0d9f0f10487621).
+3. ACCESS: 54 species x group x cell rows; km differ by more than 0.01 on 0.
+
+## access km per species x group x cell where the two builds differ (minimal - full)
+[1] species_code         watershed_group_code habitat_accessible  
+[4] access_gt0           km_full              km_min              
+[7] km_diff             
+<0 rows> (or 0-length row.names)
+
+## access codes that differ at a visit, per species (full, minimal)
+ species code_full code_minimal visits
+      BT         1            2     63
+      CH         1            2     38
+      CM         1            2      7
+      CO         1            2     26
+      PK         1            2      1
+      SK         1            2      1
+      ST         1            2      5
+   Access codes differ at 141 visit x species pairs; across zero at 0.
+
+## access km per species, access > 0 (both builds)
+ species_code watershed_group_code km_full km_min km_diff
+           BT                 BULK  7661.1 7661.1       0
+           BT                 COTR  6844.4 6844.4       0
+           BT                 MORK  7199.3 7199.3       0
+           BT                 SETN  3072.8 3072.8       0
+           CH                 BULK  5164.5 5164.5       0
+           CH                 COTR  4142.5 4142.5       0
+           CH                 MORK  5744.4 5744.4       0
+           CH                 SETN  1495.2 1495.2       0
+           CM                 BULK  5164.5 5164.5       0
+           CM                 SETN  1495.2 1495.2       0
+           CO                 BULK  5164.5 5164.5       0
+           CO                 COTR  4142.5 4142.5       0
+           CO                 SETN  1495.2 1495.2       0
+           PK                 BULK  5164.5 5164.5       0
+           PK                 COTR  4142.5 4142.5       0
+           PK                 SETN  1495.2 1495.2       0
+           SK                 BULK  5164.5 5164.5       0
+           SK                 MORK  5744.4 5744.4       0
+           SK                 SETN  1495.2 1495.2       0
+           ST                 BULK  6553.5 6553.5       0
+           ST                 SETN  2067.6 2067.6       0
+4. PARENT: 2082 visits on both; the full segment's parent is the minimal build's segment at the visit on 2082, with its gradient on 2082.
+   Visits on a full segment that straddles a minimal break: 0 (of them, 0 where the parent is not the visit's minimal segment).
+
+## visits whose parent is not the minimal segment they sit on
+ [1] site_visit        catch_status      id_segment        parent_id_segment
+ [5] min_id_segment    segment_gradient  parent_gradient   min_gradient     
+ [9] parent_straddle_m segment_length_m  min_length_m     
+<0 rows> (or 0-length row.names)
+
+## gradient each setup reads at a visit, by catch: full segment, its parent, the minimal segment
+ catch_status visits full_vs_parent_differ parent_vs_min_differ
+         fish   1007                   670                    0
+         zero   1075                   505                    0
+5. STORED: link's stored habitat km per species x group on zz415_default and zz415_minimal (minimal - full).
+
+## stored rearing and spawning km
+ species_code watershed_group_code rear_km_full rear_km_minimal spawn_km_full
+           BT                 BULK       3111.2          3160.4        1853.9
+           BT                 COTR       2399.5          2431.8        1475.4
+           BT                 MORK       3060.1          3078.6        2147.9
+           BT                 SETN       1716.4          1721.3         850.4
+           CH                 BULK       2101.0          2205.2        1266.3
+           CH                 COTR       1321.7          1419.0         702.5
+           CH                 MORK       2468.2          2527.6        1577.7
+           CH                 SETN       1011.9          1017.8         543.0
+           CO                 BULK       2451.5          2472.0        1815.7
+           CO                 COTR       1626.4          1675.7        1082.3
+           CO                 SETN       1061.0          1064.4         630.6
+           SK                 BULK         64.6            64.6          81.8
+           SK                 MORK         16.2            16.2          28.2
+           SK                 SETN        352.5           352.5         196.7
+           ST                 BULK       2634.0          2756.1        1297.6
+           ST                 SETN       1301.5          1309.0         635.3
+ spawn_km_minimal rear_diff spawn_diff
+           1850.1      49.2       -3.8
+           1479.5      32.3        4.1
+           2142.4      18.5       -5.5
+            852.2       4.9        1.8
+           1269.1     104.2        2.8
+            698.7      97.3       -3.8
+           1576.5      59.4       -1.2
+            540.3       5.9       -2.7
+           1806.7      20.5       -9.0
+           1089.1      49.3        6.8
+            630.9       3.4        0.3
+             81.6       0.0       -0.2
+             28.6       0.0        0.4
+            194.9       0.0       -1.8
+           1299.4     122.1        1.8
+            630.4       7.5       -4.9

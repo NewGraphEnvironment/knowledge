@@ -1,0 +1,8 @@
+key,species_code,stage,status,rule_run,grad_max_run,rule_published,grad_max_published,same_pick,published_in_grid,published_in_region,published_ddev,published_se,published_ddev_was,published_se_was,n_visits_run,n_visits_published
+BT_rear,BT,rear,fitted,mad>=0.35|g<=0.1049|none,0.1049,mad>=0.1|g<=0.3|none,0.3,FALSE,TRUE,TRUE,2.7114,11.1676,0.5983,9.8503,9344,9344
+BT_spawn,BT,spawn,fitted,width>=2|g<=0.25|Q1@D500,0.25,width>=2|g<=0.13|Q1@D500,0.13,FALSE,TRUE,TRUE,1.4096,4.0378,0,0,513,513
+CH_rear,CH,rear,fitted,mad>=0.75|g<=0.09|Q3@D1000,0.09,mad>=0.75|g<=0.11|Q3@D1000,0.11,FALSE,TRUE,TRUE,4.5542,7.9685,0,0,4858,4858
+CO_rear,CO,rear,fitted,mad>=0.1|g<=0.0549|Q3@D2000,0.0549,mad>=0.1|g<=0.0549|Q3@D2000,0.0549,TRUE,TRUE,TRUE,11.6768,30.4786,7.7246,29.8609,4628,4628
+GR_rear,GR,rear,fitted,width>=1.5|g<=0.0549|none,0.0549,width>=2|g<=0.0549|none,0.0549,FALSE,TRUE,TRUE,3.9223,5.2549,5.6633,10.3784,1355,1355
+ST_rear,ST,rear,fitted,mad>=0.5|g<=0.0849|Q1@D250,0.0849,mad>=1|g<=0.0849|Q1@D250,0.0849,FALSE,TRUE,TRUE,16.907,19.3016,7.2429,17.9004,1530,1530
+WCT_rear,WCT,rear,underpowered,mad>=0.03|g<=0.25|none,0.25,mad>=0.03|g<=0.25|none,0.25,TRUE,TRUE,TRUE,0,0,0,0,1238,1238

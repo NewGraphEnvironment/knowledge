@@ -27,7 +27,7 @@ pak::pak("NewGraphEnvironment/knowledge")
 ```
 
 knowledge is under active development and its functions change between releases (see
-[NEWS](https://github.com/NewGraphEnvironment/knowledge/blob/main/NEWS.md)). Pin a release for
+[NEWS](https://www.newgraphenvironment.com/knowledge/news/index.html)). Pin a release for
 reproducible work: `pak::pak("NewGraphEnvironment/knowledge@vX.Y.Z")`.
 
 The evidence tables live in the repository, not the package, so most work happens in a clone with the
@@ -65,11 +65,13 @@ Access and link's other steps then apply as they do to `default`.
 
 ## Learn more
 
-- [How the chinook rearing threshold was chosen and what it draws](https://github.com/NewGraphEnvironment/knowledge/blob/main/vignettes/chinook_rearing.Rmd): the
-  tuning told in plain language, with the map above and what changes on the ground.
+- [How the chinook rearing threshold was chosen and what it draws](https://www.newgraphenvironment.com/knowledge/articles/chinook_rearing.html): the
+  answer and the map first, why a nearby river matters, how sure we are, and how it was done.
+- [Choosing habitat thresholds from where fish were caught](https://www.newgraphenvironment.com/knowledge/articles/habitat_thresholds.html): the
+  method every species' rule is chosen by, and its limits.
 - [What is known](https://github.com/NewGraphEnvironment/knowledge/blob/main/research/README.md): one file per topic, from the FDIS export and the cited literature
   to the tuned rules.
-- [Function reference](https://github.com/NewGraphEnvironment/knowledge/tree/main/man)
+- [Function reference](https://www.newgraphenvironment.com/knowledge/reference/index.html)
 
 ## Ecosystem
 

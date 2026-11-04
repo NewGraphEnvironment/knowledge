@@ -1,0 +1,69 @@
+Segment gradient check, knowledge#92. Evidence data/fdis/derived_zz415_minimal, scripts/logs/habitat/20261102_evidence_build_ledger-derived_zz415_minimal.csv (link run 415_recompute_minimal, link 6bf9ca06ddd457d312f38e515bef4dda9be46cb2); schema zz415_minimal.
+Visits placed: 2082; on the tuning's stream branch (edge types 1000,1100,2000,2300, fished area 10-10000 m2): 1694.
+On a segment that starts at the visit: 59 of 2082 placed visits; 35 of 1694 on the stream branch.
+Same Atlas line as the segment: 99.6 % of stream-branch visits.
+
+## by catch (stream branch)
+ catch_status visits at_visit_pct len_median_m gap_abs_median gap_sd
+         fish    723          2.8          742              0 0.0257
+         zero    971          1.5          742              0 0.0327
+
+## by species outcome (stream branch, in link's range, present or absent)
+ species_code present visits at_visit_pct len_median_m gap_abs_median gap_sd
+           BT   FALSE   1563          1.9          736              0 0.0284
+           BT    TRUE    122          3.3          758              0 0.0451
+           CH   FALSE   1619          1.9          750              0 0.0305
+           CH    TRUE     70          5.7          457              0 0.0123
+           CM   FALSE    783          1.5          588              0 0.0348
+           CO   FALSE   1449          2.3          736              0 0.0301
+           CO    TRUE     58          0.0          322              0 0.0025
+           PK   FALSE   1507          2.3          723              0 0.0295
+           RB   FALSE   1155          1.9          708              0 0.0333
+           RB    TRUE    532          2.3          824              0 0.0207
+           SK   FALSE    965          1.3          649              0 0.0346
+           ST   FALSE    727          1.5          651              0 0.0361
+           ST    TRUE     51          0.0          298              0 0.0030
+
+## by segment length (stream branch)
+  length_m visits at_visit_pct gap_abs_median gap_abs_p90 seg_zero_pct
+   (25,50]     10         30.0          0.004      0.1023         30.0
+  (50,100]     46         13.0          0.000      0.1095          8.7
+ (100,250]    190          1.6          0.000      0.0785          3.7
+ (250,500]    354          2.3          0.000      0.0300          0.3
+ (500,Inf]   1094          1.4          0.000      0.0168          0.3
+ seg_over30_pct
+            0.0
+            0.0
+            2.1
+            6.8
+            1.5
+
+## class flips at each of default's cut-offs and the access classes (stream branch)
+    cut flips_pct
+ 0.0249      0.24
+ 0.0349      0.53
+ 0.0449      1.06
+ 0.0549      2.48
+ 0.0649      3.13
+ 0.0849      4.96
+ 0.1049      4.66
+ 0.1500      5.25
+ 0.2000      3.13
+ 0.2500      1.42
+ 0.3000      0.77
+build: schema zz415_minimal, run 415_recompute_minimal; flows wet_db_load(): discharge/fwa/v1/segment_monthly, scenario historical last loaded from https://fresh-bc.s3.us-west-2.amazonaws.com/discharge/fwa/v1/manifest.json (built 2026-10-15T02:06:57Z, wet acb820f); walk c3f7bdbecff1d55107f28afa59d7f532; fresh 0.52.0; tokens cut-min.acc-v5.grad-seg.q-fwapg
+Stream-branch segments in zz415_minimal: 140,969.
+
+## segments in the 0.5-point band below and above each cut-off (zz415_minimal's stream branch)
+    cut                   kind below_n above_n below_km above_km ratio_n
+ 0.0249 default rear/spawn max    3127    3069     1316     1267   1.019
+ 0.0349 default rear/spawn max    3001    2781     1286     1188   1.079
+ 0.0449 default rear/spawn max    2721    2472     1247     1032   1.101
+ 0.0549 default rear/spawn max    2409    2256     1067      986   1.068
+ 0.0649 default rear/spawn max    2220    2127      879      920   1.044
+ 0.0849 default rear/spawn max    1915    1702      737      596   1.125
+ 0.1049 default rear/spawn max    1544    1545      529      543   0.999
+ 0.1500           access class    1336    1426      454      453   0.937
+ 0.2000           access class    1026    1054      364      389   0.973
+ 0.2500           access class     677     734      314      338   0.922
+ 0.3000           access class     629     620      353      341   1.015

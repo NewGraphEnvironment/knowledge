@@ -24,3 +24,12 @@ the last three on the database's host.
 crews measured at FDIS sites with link's segment gradient and the Atlas line's, and counts how often a site lies on
 the other side of a published limit (#121; `research/fdis_export.md`). It needs no database, refuses evidence that is
 not the build `data/thresholds.csv` names unless `EVIDENCE_CHECK=FALSE`, and takes it from `EVIDENCE_DIR`.
+
+`tune_anchor_check.R` is a measurement too: it reads every saved tuning table in `TUNE_DIR` and sets each key's pick
+from link's `default` and from its flow version beside the best-scoring rule, with how far behind and how many parts
+apart (`knw_tune_anchor()`; #141, `research/baseline_anchoring.md`). It needs no database and rescores nothing.
+
+`minimal_network_check.R` sets two evidence builds of the same groups beside each other, one on link's full network and
+one on its minimal network (#120; `research/minimal_network_tuning.md`): the visits placed, the columns that differ,
+the walks and outcomes, access per group, each visit's minimal parent, and with `STORED=TRUE` link's stored habitat km
+per group from the database. `segment_gradient_check.R` takes `EVIDENCE_DIR` as well, and tags its log by it.

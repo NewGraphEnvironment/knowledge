@@ -1,0 +1,73 @@
+Spherical geometry (s2) switched off
+Comparison, knowledge#57: 7 fitted species x stage; link run 20261102_203300-60ab009d at 193cb8aa401376d4278b6c5ee5b24cb57deab8e3.
+Candidate run 20261103_0838: read from data/tune/candidate/20261103_0838, written under data/compare/candidate/20261103_0838 (ignored); promote it with RUN=20261103_0838 scripts/0335.
+Evidence data/fdis/derived_minimal (scripts/logs/habitat/20261103_evidence_build_ledger-derived_minimal.csv), the curves' own.
+link configs/default at 193cb8aa401376d4278b6c5ee5b24cb57deab8e3 (the baseline; the schema fresh_default_minimal's run is at 193cb8aa401376d4278b6c5ee5b24cb57deab8e3) read from ../link; fresh 0.53.0; tuned reported as door; compared under it alone.
+Floodplain catalog: 0 whole-network groups ().
+database round trip 0.8 ms (median of 20 SELECT 1; limit 20 ms)
+build: schema fresh_default_minimal, run 20261102_203300-60ab009d; flows wet_db_load(): discharge/fwa/v1/segment_monthly, scenario historical last loaded from https://fresh-bc.s3.us-west-2.amazonaws.com/discharge/fwa/v1/manifest.json (built 2026-10-24T12:23:01Z, wet b4bbc50); walk c3f7bdbecff1d55107f28afa59d7f532; fresh 0.53.0; tokens cut-min.acc-v5.grad-seg.q-fwapg
+NOTICE:  drop cascades to 2 other objects
+DETAIL:  drop cascades to table knw_cmp_bt_rear.uhc
+drop cascades to table knw_cmp_bt_rear.grades
+
+NOTICE:  schema "knw_cmp_bt_rear" does not exist, skipping
+
+BT_rear: compared in 6.8 min.
+NOTICE:  drop cascades to 2 other objects
+DETAIL:  drop cascades to table knw_cmp_bt_spawn.uhc
+drop cascades to table knw_cmp_bt_spawn.grades
+
+NOTICE:  schema "knw_cmp_bt_spawn" does not exist, skipping
+
+BT_spawn: compared in 6.0 min.
+NOTICE:  drop cascades to 2 other objects
+DETAIL:  drop cascades to table knw_cmp_ch_rear.uhc
+drop cascades to table knw_cmp_ch_rear.grades
+
+NOTICE:  schema "knw_cmp_ch_rear" does not exist, skipping
+
+CH_rear: compared in 12.7 min.
+NOTICE:  drop cascades to 2 other objects
+DETAIL:  drop cascades to table knw_cmp_co_rear.uhc
+drop cascades to table knw_cmp_co_rear.grades
+
+NOTICE:  schema "knw_cmp_co_rear" does not exist, skipping
+
+CO_rear: compared in 10.3 min.
+NOTICE:  drop cascades to 2 other objects
+DETAIL:  drop cascades to table knw_cmp_st_rear.uhc
+drop cascades to table knw_cmp_st_rear.grades
+
+NOTICE:  schema "knw_cmp_st_rear" does not exist, skipping
+
+ST_rear: compared in 4.0 min.
+NOTICE:  drop cascades to 2 other objects
+DETAIL:  drop cascades to table knw_cmp_gr_rear.uhc
+drop cascades to table knw_cmp_gr_rear.grades
+
+NOTICE:  schema "knw_cmp_gr_rear" does not exist, skipping
+
+GR_rear: compared in 2.9 min.
+NOTICE:  drop cascades to 2 other objects
+DETAIL:  drop cascades to table knw_cmp_wct_rear.uhc
+drop cascades to table knw_cmp_wct_rear.grades
+
+NOTICE:  schema "knw_cmp_wct_rear" does not exist, skipping
+
+WCT_rear: compared in 0.8 min.
+Compared 7 species x stage in 43.5 min, each on 6 workers.
+BT_rear: 158 groups, 6.8 min; default 248016 km (width>=1.5|g<=0.1049|none).
+  door (= tuned): tuned 141049 km (-43.1 %); graded km 108826 -> 74699; lost 108307, gained 1340 (0 by the exception, 0 of it through a river in another group).
+BT_spawn: 158 groups, 6.0 min; default 134200 km (width>=2|g<=0.0549|none).
+  door (= tuned): tuned 221448 km (+65.0 %); graded km 79026 -> 117982; lost 0, gained 87248 (41390 by the exception, 53 of it through a river in another group).
+CH_rear: 136 groups, 12.7 min; default 104751 km (width>=1.5|g<=0.0549|cw channel_width>=15@D1000; mad discharge>=3@D1000 on wetland_flow).
+  door (= tuned): tuned 87606 km (-16.4 %); graded km 52369 -> 58350; lost 31788, gained 14643 (12262 by the exception, 6 of it through a river in another group).
+CO_rear: 113 groups, 10.3 min; default 90350 km (width>=1.5|g<=0.0549|none).
+  door (= tuned): tuned 88006 km (-2.6 %); graded km NA -> NA; lost 10929, gained 8586 (6192 by the exception, 10 of it through a river in another group).
+ST_rear: 93 groups, 4.0 min; default 84880 km (width>=1.5|g<=0.0849|none).
+  door (= tuned): tuned 70007 km (-17.5 %); graded km 43632 -> 46069; lost 22192, gained 7320 (6642 by the exception, 1 of it through a river in another group).
+GR_rear: 81 groups, 2.9 min; default 78208 km (width>=1.5|g<=0.0349|none).
+  door (= tuned): tuned 87066 km (+11.3 %); graded km 45024 -> 49684; lost 312, gained 9170 (0 by the exception, 0 of it through a river in another group).
+WCT_rear: 16 groups, 0.8 min; default 20613 km (width>=1.5|g<=0.0849|none).
+  door (= tuned): tuned 24416 km (+18.4 %); graded km NA -> NA; lost 960, gained 4762 (0 by the exception, 0 of it through a river in another group).
+Done in 43.5 min.

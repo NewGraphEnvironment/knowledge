@@ -13,8 +13,8 @@
 #   - Every row carries the evidence version (the fdis v3 manifest), the link run_uid and link_sha
 #     the segments and configs came from, and the config name.
 #   - Built locally on every run. PUBLISH=TRUE uploads, and refuses to overwrite a published
-#     version whose tables, schemas or contents differ (knw_publish()). The prefix is public only once
-#     the bucket policy of #56 is applied; until then a reader needs credentials.
+#     version whose tables, schemas or contents differ (knw_publish()). The prefix is public (fresh-bc's
+#     bucket policy grants knowledge/*, #56), so an upload is readable by anyone at once.
 #
 # INPUT:  data/tune/ (0320), data/compare/<key>_compare.csv (0330; the tuned structure, for near_river_scope),
 #         the evidence build ledger (0310), data/fdis/publish/manifest.json (0299, v3)

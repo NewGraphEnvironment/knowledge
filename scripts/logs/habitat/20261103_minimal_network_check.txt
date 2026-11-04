@@ -1,0 +1,2884 @@
+Minimal network check, knowledge#120. Full: data/fdis/derived_default_20261103 (scripts/logs/habitat/20261103_evidence_build_ledger-derived_default_20261103.csv). Minimal: data/fdis/derived_minimal (scripts/logs/habitat/20261103_evidence_build_ledger-derived_minimal.csv).
+  build: schema fresh_default, run 20261103_163715-269b585a; flows wet_db_load(): discharge/fwa/v1/segment_monthly, scenario historical last loaded from https://fresh-bc.s3.us-west-2.amazonaws.com/discharge/fwa/v1/manifest.json (built 2026-10-24T12:23:01Z, wet b4bbc50); walk c3f7bdbecff1d55107f28afa59d7f532; fresh 0.52.0; tokens cut-full-top.acc-v5.grad-seg.q-fwapg; log rows of run 20261023_074321-24d85e8c set aside (not in log_recompute)
+  build: schema fresh_default_minimal, run 20261102_203300-60ab009d; flows wet_db_load(): discharge/fwa/v1/segment_monthly, scenario historical last loaded from https://fresh-bc.s3.us-west-2.amazonaws.com/discharge/fwa/v1/manifest.json (built 2026-10-24T12:23:01Z, wet b4bbc50); walk c3f7bdbecff1d55107f28afa59d7f532; fresh 0.53.0; tokens cut-min.acc-v5.grad-seg.q-fwapg
+1. PLACEMENT. Visits placed: full 45529, minimal 45529; on the full alone 0, on the minimal alone 0.
+   On both at one blue line and measure and on one Atlas line: 45463 of 45529.
+
+## columns that differ between the two builds, visits on both
+                    column visits_differ
+                id_segment         45495
+          segment_length_m         23413
+          segment_gradient         21817
+               elevation_m         21804
+    segment_start_offset_m         16219
+      segment_downstream_m         16219
+        segment_upstream_m         13049
+                 access_bt          1425
+               bt_spawning           798
+        bt_spawning_stored           798
+                 access_co           746
+                ch_rearing           645
+         ch_rearing_stored           645
+                bt_rearing           619
+         bt_rearing_stored           619
+                 access_ch           496
+                co_rearing           475
+         co_rearing_stored           475
+                st_rearing           429
+         st_rearing_stored           429
+        ch_spawning_stored           423
+               ch_spawning           422
+        co_spawning_stored           412
+               co_spawning           401
+               st_spawning           382
+        st_spawning_stored           382
+                 access_gr           372
+        pk_spawning_stored           360
+               pk_spawning           356
+                access_wct           309
+        cm_spawning_stored           289
+               cm_spawning           284
+                 access_cm           273
+              wct_spawning           246
+       wct_spawning_stored           246
+               wct_rearing           236
+        wct_rearing_stored           236
+                 access_pk           201
+                 access_sk           170
+        sk_spawning_stored           166
+                 access_st           164
+               sk_spawning           164
+                gr_rearing           164
+         gr_rearing_stored           164
+               gr_spawning           113
+        gr_spawning_stored           113
+ segment_linear_feature_id            66
+     segment_waterbody_key            34
+         segment_edge_type            32
+     segment_channel_width            29
+         segment_cw_source            19
+             bt_accessible            13
+      bt_accessible_stored            13
+             gr_accessible            11
+      gr_accessible_stored            11
+      segment_stream_order             8
+             ch_accessible             7
+             sk_accessible             7
+      ch_accessible_stored             7
+      sk_accessible_stored             7
+             co_accessible             6
+           co_lake_rearing             6
+             pk_accessible             6
+      co_accessible_stored             6
+    co_lake_rearing_stored             6
+      pk_accessible_stored             6
+           bt_lake_rearing             5
+           ch_lake_rearing             5
+                sk_rearing             5
+           sk_lake_rearing             5
+    bt_lake_rearing_stored             5
+    ch_lake_rearing_stored             5
+         sk_rearing_stored             5
+    sk_lake_rearing_stored             5
+        bt_wetland_rearing             4
+             cm_accessible             4
+           st_lake_rearing             4
+ bt_wetland_rearing_stored             4
+      cm_accessible_stored             4
+    st_lake_rearing_stored             4
+        ch_wetland_rearing             2
+        co_wetland_rearing             2
+             st_accessible             2
+            wct_accessible             2
+ ch_wetland_rearing_stored             2
+ co_wetland_rearing_stored             2
+      st_accessible_stored             2
+     wct_accessible_stored             2
+        st_wetland_rearing             1
+ st_wetland_rearing_stored             1
+   Columns that differ: 90 of 227 compared; outside the segment, access and habitat columns: .
+
+## segments at visits, by catch: share starting at the visit and median length
+ network catch_status visits at_visit_pct len_median_m
+    full         fish  25748         31.4          344
+    full         zero  19781          7.4          432
+ minimal         fish  25748          3.9          638
+ minimal         zero  19781          3.7          643
+2. walks.csv: full 775488 rows, minimal 775488; the same rows: TRUE (md5 2e0f0f419022da0f5ac51a3869486a80, 2e0f0f419022da0f5ac51a3869486a80).
+2. visits_species.csv: full 500819 rows, minimal 500819; the same rows: TRUE (md5 6a2e28f1afb46a02c357ac044f8d09e3, 6a2e28f1afb46a02c357ac044f8d09e3).
+3. ACCESS: 2193 species x group x cell rows; km differ by more than 0.01 on 84.
+
+## access km per species x group x cell where the two builds differ (minimal - full)
+ species_code watershed_group_code habitat_accessible access_gt0 km_full
+           BT                 CANO              FALSE      FALSE  4577.9
+           BT                 CANO               TRUE       TRUE   937.4
+           BT                 COWN              FALSE      FALSE  2953.3
+           BT                 COWN               TRUE       TRUE  1988.7
+           BT                 FRCN              FALSE      FALSE  9047.8
+           BT                 FRCN               TRUE       TRUE  1430.8
+           BT                 KISP              FALSE      FALSE  6559.9
+           BT                 KISP               TRUE       TRUE  4522.8
+           BT                 LARL              FALSE      FALSE 10047.6
+           BT                 LARL               TRUE       TRUE  2239.8
+           BT                 MSKE              FALSE      FALSE  8304.1
+           BT                 MSKE               TRUE       TRUE  2675.1
+           BT                 OKAN              FALSE      FALSE  6683.3
+           BT                 OKAN               TRUE       TRUE  4845.8
+           BT                 PINE              FALSE      FALSE  9276.6
+           BT                 PINE               TRUE       TRUE  5537.9
+           BT                 UNTH              FALSE      FALSE  8630.6
+           BT                 UNTH               TRUE       TRUE  1123.9
+           CH                 COWN              FALSE      FALSE  3499.1
+           CH                 COWN               TRUE       TRUE  1442.9
+           CH                 KISP              FALSE      FALSE  8242.3
+           CH                 KISP               TRUE       TRUE  2840.5
+           CH                 LNTH              FALSE      FALSE  8082.2
+           CH                 LNTH               TRUE       TRUE  1179.7
+           CH                 SANJ              FALSE      FALSE  6048.5
+           CH                 SANJ               TRUE       TRUE  1227.1
+           CH                 TSIT              FALSE      FALSE  3837.0
+           CH                 TSIT               TRUE       TRUE   393.5
+           CH                 WILL              FALSE      FALSE  1674.9
+           CH                 WILL               TRUE       TRUE  3600.0
+           CM                 COWN              FALSE      FALSE  3499.1
+           CM                 COWN               TRUE       TRUE  1442.9
+           CM                 KISP              FALSE      FALSE  8242.3
+           CM                 KISP               TRUE       TRUE  2840.5
+           CM                 SANJ              FALSE      FALSE  6048.5
+           CM                 SANJ               TRUE       TRUE  1227.1
+           CM                 TSIT              FALSE      FALSE  3837.0
+           CM                 TSIT               TRUE       TRUE   393.5
+           CO                 COWN              FALSE      FALSE  3499.1
+           CO                 COWN               TRUE       TRUE  1442.9
+           CO                 KISP              FALSE      FALSE  8242.3
+           CO                 KISP               TRUE       TRUE  2840.5
+           CO                 LNTH              FALSE      FALSE  8082.2
+           CO                 LNTH               TRUE       TRUE  1179.7
+           CO                 SANJ               TRUE       TRUE  1227.1
+           CO                 SANJ              FALSE      FALSE  6048.5
+           CO                 TSIT              FALSE      FALSE  3837.0
+           CO                 TSIT               TRUE       TRUE   393.5
+           CO                 WILL              FALSE      FALSE  1674.9
+           CO                 WILL               TRUE       TRUE  3600.0
+           PK                 COWN              FALSE      FALSE  3499.1
+           PK                 COWN               TRUE       TRUE  1442.9
+           PK                 KISP              FALSE      FALSE  8242.3
+           PK                 KISP               TRUE       TRUE  2840.5
+           PK                 LNTH              FALSE      FALSE  8082.2
+           PK                 LNTH               TRUE       TRUE  1179.7
+           PK                 SANJ              FALSE      FALSE  6048.5
+           PK                 SANJ               TRUE       TRUE  1227.1
+           PK                 TSIT              FALSE      FALSE  3837.0
+           PK                 TSIT               TRUE       TRUE   393.5
+           SK                 KISP              FALSE      FALSE  8242.3
+           SK                 KISP               TRUE       TRUE  2840.5
+           SK                 LNTH              FALSE      FALSE  8082.2
+           SK                 LNTH               TRUE       TRUE  1179.7
+           SK                 SANJ              FALSE      FALSE  6048.5
+           SK                 SANJ               TRUE       TRUE  1227.1
+           SK                 TSIT              FALSE      FALSE  3837.0
+           SK                 TSIT               TRUE       TRUE   393.5
+           ST                 COWN              FALSE      FALSE  3212.5
+           ST                 COWN               TRUE       TRUE  1729.6
+           ST                 KISP              FALSE      FALSE  7441.5
+           ST                 KISP               TRUE       TRUE  3641.3
+           ST                 LNTH              FALSE      FALSE  7396.5
+           ST                 LNTH               TRUE       TRUE  1865.3
+           ST                 MSKE              FALSE      FALSE  9053.3
+           ST                 MSKE               TRUE       TRUE  1928.3
+           ST                 NASC              FALSE      FALSE  9137.5
+           ST                 NASC               TRUE       TRUE  1165.4
+           ST                 SANJ              FALSE      FALSE  5353.6
+           ST                 SANJ               TRUE       TRUE  1922.0
+           ST                 TSIT              FALSE      FALSE  3414.0
+           ST                 TSIT               TRUE       TRUE   816.5
+          WCT                 UARL              FALSE      FALSE 10508.1
+          WCT                 UARL               TRUE       TRUE  1474.8
+  km_min km_diff
+  4577.6   -0.27
+   937.7    0.27
+  2953.8    0.46
+  1988.3   -0.46
+  9046.8   -0.94
+  1431.7    0.94
+  6560.0    0.02
+  4522.8   -0.02
+ 10049.1    1.48
+  2238.3   -1.48
+  8304.8    0.67
+  2674.5   -0.67
+  6680.7   -2.63
+  4848.4    2.63
+  9275.1   -1.56
+  5539.5    1.56
+  8633.5    2.98
+  1120.9   -2.98
+  3499.6    0.46
+  1442.5   -0.46
+  8242.3    0.02
+  2840.5   -0.02
+  8081.1   -1.05
+  1180.7    1.05
+  6048.7    0.21
+  1226.9   -0.21
+  3837.1    0.06
+   393.4   -0.06
+  1674.7   -0.15
+  3600.1    0.15
+  3499.6    0.46
+  1442.5   -0.46
+  8242.3    0.02
+  2840.5   -0.02
+  6048.7    0.21
+  1226.9   -0.21
+  3837.1    0.06
+   393.4   -0.06
+  3499.6    0.46
+  1442.5   -0.46
+  8242.3    0.02
+  2840.5   -0.02
+  8081.1   -1.05
+  1180.7    1.05
+  1226.9   -0.22
+  6048.7    0.21
+  3837.1    0.06
+   393.4   -0.06
+  1674.7   -0.15
+  3600.1    0.15
+  3499.6    0.46
+  1442.5   -0.46
+  8242.3    0.02
+  2840.5   -0.02
+  8081.1   -1.05
+  1180.7    1.05
+  6048.7    0.22
+  1226.9   -0.21
+  3837.1    0.06
+   393.4   -0.06
+  8242.3    0.02
+  2840.5   -0.02
+  8081.1   -1.05
+  1180.7    1.05
+  6048.7    0.21
+  1226.9   -0.21
+  3837.1    0.06
+   393.4   -0.06
+  3213.0    0.46
+  1729.1   -0.46
+  7441.5    0.02
+  3641.3   -0.02
+  7396.4   -0.11
+  1865.4    0.11
+  9054.0    0.67
+  1927.6   -0.67
+  9137.7    0.19
+  1165.2   -0.19
+  5353.8    0.22
+  1921.8   -0.22
+  3414.1    0.06
+   816.5   -0.06
+ 10509.0    0.93
+  1473.8   -0.93
+
+## access codes that differ at a visit, per species (full, minimal)
+ species code_full code_minimal visits
+      BT         1            0     13
+      BT         1            2   1412
+      CH         1            0      7
+      CH         1            2    488
+      CH         2            1      1
+      CM         1            0      4
+      CM         1            2    269
+      CO         1            0      6
+      CO         1            2    740
+      GR         1            0     11
+      GR         1            2    361
+      PK         1            0      6
+      PK         1            2    195
+      SK         1            0      7
+      SK         1            2    163
+      ST         1            0      2
+      ST         1            2    162
+     WCT         1            0      2
+     WCT         1            2    307
+   Access codes differ at 4156 visit x species pairs; across zero at 58.
+
+## access km per species, access > 0 (both builds)
+ species_code watershed_group_code km_full km_min km_diff
+           BT                 ADMS  1226.6 1226.6     0.0
+           BT                 BABL  7192.6 7192.6     0.0
+           BT                 BABR  4190.7 4190.7     0.0
+           BT                 BARR  1405.0 1405.0     0.0
+           BT                 BBAR  1666.6 1666.6     0.0
+           BT                 BEAV  9108.4 9108.4     0.0
+           BT                 BIGC  1870.9 1870.9     0.0
+           BT                 BLAR  4773.5 4773.5     0.0
+           BT                 BLUR  2109.6 2109.6     0.0
+           BT                 BONP  2730.8 2730.8     0.0
+           BT                 BOWR  3749.7 3749.7     0.0
+           BT                 BRKS  1767.9 1767.9     0.0
+           BT                 BULK  7661.1 7661.1     0.0
+           BT                 BULL  2695.3 2695.3     0.0
+           BT                 CANO   943.2  943.5     0.3
+           BT                 CARP  4420.0 4420.0     0.0
+           BT                 CARR  1849.0 1849.0     0.0
+           BT                 CHES  2828.3 2828.3     0.0
+           BT                 CHIR  3113.1 3113.1     0.0
+           BT                 CHWK   780.4  780.4     0.0
+           BT                 CLRH  2118.0 2118.0     0.0
+           BT                 COAL  7146.2 7146.2     0.0
+           BT                 COLR  2083.0 2083.0     0.0
+           BT                 COTR  6844.4 6844.4     0.0
+           BT                 COWN  1988.9 1988.5    -0.4
+           BT                 CRKD  5114.9 5114.9     0.0
+           BT                 DEAD   889.5  889.5     0.0
+           BT                 DEAL  5757.6 5757.6     0.0
+           BT                 DEAR  3376.9 3376.9     0.0
+           BT                 DOGC  1258.3 1258.3     0.0
+           BT                 DRIR  1837.0 1837.0     0.0
+           BT                 DUNC  1406.4 1406.4     0.0
+           BT                 DUNE  2871.1 2871.1     0.0
+           BT                 ELKR  4320.7 4320.7     0.0
+           BT                 EUCL  4050.7 4050.7     0.0
+           BT                 FINA  6388.2 6388.2     0.0
+           BT                 FINL  4512.8 4512.8     0.0
+           BT                 FIRE  5884.5 5884.5     0.0
+           BT                 FONT  5141.0 5141.0     0.0
+           BT                 FOXR  3389.1 3389.1     0.0
+           BT                 FRAN  9065.0 9065.0     0.0
+           BT                 FRCN  1430.9 1431.8     0.9
+           BT                 FROG  3403.9 3403.9     0.0
+           BT                 GATA  2661.9 2661.9     0.0
+           BT                 GUIC  1957.8 1957.8     0.0
+           BT                 HARR  1546.0 1546.0     0.0
+           BT                 HERR  2102.0 2102.0     0.0
+           BT                 HOMA  2642.3 2642.3     0.0
+           BT                 HORS  1518.9 1518.9     0.0
+           BT                 INGR  3924.1 3924.1     0.0
+           BT                 INKR  2613.7 2613.7     0.0
+           BT                 ISKR  1763.1 1763.1     0.0
+           BT                 JERV  1676.1 1676.1     0.0
+           BT                 KHOR  3148.2 3148.2     0.0
+           BT                 KINR  1122.0 1122.0     0.0
+           BT                 KISK  5105.7 5105.7     0.0
+           BT                 KISP  4522.8 4522.8     0.0
+           BT                 KITR  1966.3 1966.3     0.0
+           BT                 KLAR  2830.7 2830.7     0.0
+           BT                 KLIN  3645.9 3645.9     0.0
+           BT                 KLUM  2068.0 2068.0     0.0
+           BT                 KOTL  3618.5 3618.5     0.0
+           BT                 KOTR  2550.6 2550.6     0.0
+           BT                 LARL  2241.9 2240.4    -1.5
+           BT                 LBIR  1876.2 1876.2     0.0
+           BT                 LBTN  9061.4 9061.4     0.0
+           BT                 LCHL  5533.6 5533.6     0.0
+           BT                 LCHR  4522.9 4522.9     0.0
+           BT                 LDEN  1830.3 1830.3     0.0
+           BT                 LFRA  3381.4 3381.4     0.0
+           BT                 LHAF  7612.4 7612.4     0.0
+           BT                 LIAR  9874.8 9874.8     0.0
+           BT                 LILL  1647.9 1647.9     0.0
+           BT                 LISR  1006.3 1006.3     0.0
+           BT                 LKEL   405.0  405.0     0.0
+           BT                 LMUS  7616.8 7616.8     0.0
+           BT                 LNAR  3208.7 3208.7     0.0
+           BT                 LNIC  1901.0 1901.0     0.0
+           BT                 LNTH  3125.8 3125.8     0.0
+           BT                 LOMI  3639.4 3639.4     0.0
+           BT                 LPCE  3571.1 3571.1     0.0
+           BT                 LPRO  2808.9 2808.9     0.0
+           BT                 LRAN  3423.1 3423.1     0.0
+           BT                 LSKE  2914.2 2914.2     0.0
+           BT                 LTRE  2962.1 2962.1     0.0
+           BT                 MAHD  2996.9 2996.9     0.0
+           BT                 MCGR  3880.1 3880.1     0.0
+           BT                 MDEA  4475.3 4475.3     0.0
+           BT                 MESI  2735.0 2735.0     0.0
+           BT                 MIDR  1193.3 1193.3     0.0
+           BT                 MMUS  4524.6 4524.6     0.0
+           BT                 MORK  7199.3 7199.3     0.0
+           BT                 MORR  4826.1 4826.1     0.0
+           BT                 MPRO  4781.1 4781.1     0.0
+           BT                 MSKE  2686.2 2685.6    -0.6
+           BT                 MSTR  6323.5 6323.5     0.0
+           BT                 MURR  6109.8 6109.8     0.0
+           BT                 NARC  4337.0 4337.0     0.0
+           BT                 NASR  2130.4 2130.4     0.0
+           BT                 NATR  9719.6 9719.6     0.0
+           BT                 NECR  6328.5 6328.5     0.0
+           BT                 OKAN  4851.9 4854.5     2.6
+           BT                 OSPK  1882.0 1882.0     0.0
+           BT                 PARA  4399.6 4399.6     0.0
+           BT                 PARK   776.9  776.9     0.0
+           BT                 PARS  6882.1 6882.1     0.0
+           BT                 PCEA  5052.8 5052.8     0.0
+           BT                 PINE  5537.9 5539.5     1.6
+           BT                 QUES  4586.6 4586.6     0.0
+           BT                 REVL  1130.5 1130.5     0.0
+           BT                 SETN  3072.8 3072.8     0.0
+           BT                 SHUL  1714.2 1714.2     0.0
+           BT                 SIML  4622.9 4622.9     0.0
+           BT                 SKGT   499.4  499.4     0.0
+           BT                 SLOC  1116.6 1116.6     0.0
+           BT                 SMAR  4005.3 4005.3     0.0
+           BT                 SMOK  6430.8 6430.8     0.0
+           BT                 SPAT  4022.5 4022.5     0.0
+           BT                 SQAM  1611.7 1611.7     0.0
+           BT                 STHM  2196.6 2196.6     0.0
+           BT                 STUR  3619.6 3619.6     0.0
+           BT                 SUST  3821.9 3821.9     0.0
+           BT                 SWIR  4415.8 4415.8     0.0
+           BT                 TABR  3402.3 3402.3     0.0
+           BT                 TAHR  1603.7 1603.7     0.0
+           BT                 TAKL  5413.2 5413.2     0.0
+           BT                 TASR  1992.0 1992.0     0.0
+           BT                 TAYR   919.1  919.1     0.0
+           BT                 THOM  2144.6 2144.6     0.0
+           BT                 TOAD  5851.1 5851.1     0.0
+           BT                 TOOD  4652.0 4652.0     0.0
+           BT                 TURN  6473.7 6473.7     0.0
+           BT                 TUYR  7213.5 7213.5     0.0
+           BT                 TWAC  1059.6 1059.6     0.0
+           BT                 UARL  1910.7 1910.7     0.0
+           BT                 UBIR  1013.3 1013.3     0.0
+           BT                 UBTN  8292.3 8292.3     0.0
+           BT                 UCHR  5394.6 5394.6     0.0
+           BT                 UDEN  5324.2 5324.2     0.0
+           BT                 UEUT  6469.1 6469.1     0.0
+           BT                 UFRA  2221.1 2221.1     0.0
+           BT                 UHAF  5891.7 5891.7     0.0
+           BT                 UKEC  3558.2 3558.2     0.0
+           BT                 ULRD  8609.5 8609.5     0.0
+           BT                 UMUS  4864.7 4864.7     0.0
+           BT                 UNAR  2804.5 2804.5     0.0
+           BT                 UNRS  6671.0 6671.0     0.0
+           BT                 UNTH  1123.9 1120.9    -3.0
+           BT                 UNUR   663.5  663.5     0.0
+           BT                 UOMI  3662.0 3662.0     0.0
+           BT                 UPCE  5578.7 5578.7     0.0
+           BT                 UPRO  4472.6 4472.6     0.0
+           BT                 USHU  2126.6 2126.6     0.0
+           BT                 USIK  6589.0 6589.0     0.0
+           BT                 USKE  2967.1 2967.1     0.0
+           BT                 UTRE  1872.5 1872.5     0.0
+           BT                 WILL  4562.4 4562.4     0.0
+           BT                 ZYMO  1976.4 1976.4     0.0
+           CH                 ADMS   789.7  789.7     0.0
+           CH                 ALBN  1863.6 1863.6     0.0
+           CH                 ATNA   889.6  889.6     0.0
+           CH                 BABL  5110.5 5110.5     0.0
+           CH                 BABR  2176.0 2176.0     0.0
+           CH                 BARR   816.7  816.7     0.0
+           CH                 BBAR   270.4  270.4     0.0
+           CH                 BELA   405.5  405.5     0.0
+           CH                 BLAR  3274.0 3274.0     0.0
+           CH                 BONP   634.0  634.0     0.0
+           CH                 BOWR  2548.4 2548.4     0.0
+           CH                 BRKS  1185.6 1185.6     0.0
+           CH                 BULK  5164.5 5164.5     0.0
+           CH                 CAMB   243.5  243.5     0.0
+           CH                 CARR   400.8  400.8     0.0
+           CH                 CHES   780.5  780.5     0.0
+           CH                 CHIL  2180.0 2180.0     0.0
+           CH                 CHIR  2111.8 2111.8     0.0
+           CH                 CHWK   693.1  693.1     0.0
+           CH                 CLAY  1216.5 1216.5     0.0
+           CH                 CLWR   310.8  310.8     0.0
+           CH                 COMX   969.1  969.1     0.0
+           CH                 COTR  4142.5 4142.5     0.0
+           CH                 COWN  1443.1 1442.7    -0.4
+           CH                 DEAD   459.5  459.5     0.0
+           CH                 DOGC   356.9  356.9     0.0
+           CH                 DRIR  1616.7 1616.7     0.0
+           CH                 EUCH  2018.8 2018.8     0.0
+           CH                 EUCL  1482.8 1482.8     0.0
+           CH                 FRAN  7309.5 7309.5     0.0
+           CH                 FRCN   717.8  717.8     0.0
+           CH                 GLAR  2821.9 2821.9     0.0
+           CH                 GOLD   783.5  783.5     0.0
+           CH                 GRAI  7439.5 7439.5     0.0
+           CH                 GUIC  1072.6 1072.6     0.0
+           CH                 HARR  1143.6 1143.6     0.0
+           CH                 HERR   477.9  477.9     0.0
+           CH                 HOLB  1276.1 1276.1     0.0
+           CH                 HOMA  1873.6 1873.6     0.0
+           CH                 HORS  1087.7 1087.7     0.0
+           CH                 INKR  1542.7 1542.7     0.0
+           CH                 JENR  2286.5 2286.5     0.0
+           CH                 JERV   601.9  601.9     0.0
+           CH                 KHTZ   439.6  439.6     0.0
+           CH                 KINR   684.8  684.8     0.0
+           CH                 KISP  2840.5 2840.5     0.0
+           CH                 KITL  1065.5 1065.5     0.0
+           CH                 KITR  1362.0 1362.0     0.0
+           CH                 KLIN  1030.3 1030.3     0.0
+           CH                 KLUM  1496.3 1496.3     0.0
+           CH                 KNIG  1329.6 1329.6     0.0
+           CH                 KSHR   537.4  537.4     0.0
+           CH                 KTSU  1909.7 1909.7     0.0
+           CH                 KUMR  2180.7 2180.7     0.0
+           CH                 LBIR  1082.9 1082.9     0.0
+           CH                 LCHL  4353.8 4353.8     0.0
+           CH                 LCHR  2678.7 2678.7     0.0
+           CH                 LDEN   978.4  978.4     0.0
+           CH                 LFRA  2957.7 2957.7     0.0
+           CH                 LILL  1034.7 1034.7     0.0
+           CH                 LISR   740.5  740.5     0.0
+           CH                 LKEL   332.0  332.0     0.0
+           CH                 LNAR  2136.8 2136.8     0.0
+           CH                 LNIC  1026.6 1026.6     0.0
+           CH                 LNTH  1179.7 1180.7     1.0
+           CH                 LRDO   832.5  832.5     0.0
+           CH                 LSAL  3029.1 3029.1     0.0
+           CH                 LSKE  2089.7 2089.7     0.0
+           CH                 LSTR  1332.6 1332.6     0.0
+           CH                 LTRE  2705.4 2705.4     0.0
+           CH                 MAHD     3.4    3.4     0.0
+           CH                 MCGR  2531.9 2531.9     0.0
+           CH                 MESC    12.4   12.4     0.0
+           CH                 MFRA   275.3  275.3     0.0
+           CH                 MIDR   924.2  924.2     0.0
+           CH                 MORI  1799.5 1799.5     0.0
+           CH                 MORK  5744.4 5744.4     0.0
+           CH                 MORR  3337.4 3337.4     0.0
+           CH                 MSKE  1509.5 1509.5     0.0
+           CH                 MUSK  1274.8 1274.8     0.0
+           CH                 NAHR  4259.7 4259.7     0.0
+           CH                 NAKR   738.9  738.9     0.0
+           CH                 NARC  3560.1 3560.1     0.0
+           CH                 NASC   781.0  781.1     0.1
+           CH                 NASR  1293.1 1293.1     0.0
+           CH                 NAZR  2252.9 2252.9     0.0
+           CH                 NECL  1395.0 1395.0     0.0
+           CH                 NECR  5604.1 5604.1     0.0
+           CH                 NICL  1920.4 1920.4     0.0
+           CH                 NIEL  1233.0 1233.0     0.0
+           CH                 NIMP  1382.3 1382.3     0.0
+           CH                 OKAN  2312.3 2312.3     0.0
+           CH                 OWIK  1591.7 1591.7     0.0
+           CH                 PARK   574.1  574.1     0.0
+           CH                 PORI   813.1  813.1     0.0
+           CH                 QUES  3870.8 3870.8     0.0
+           CH                 SALM   878.5  878.5     0.0
+           CH                 SALR  3113.4 3113.4     0.0
+           CH                 SANJ  1227.1 1226.9    -0.2
+           CH                 SETN  1495.2 1495.2     0.0
+           CH                 SEYM  1290.9 1290.9     0.0
+           CH                 SHER  1213.0 1213.0     0.0
+           CH                 SHUL  1104.9 1104.9     0.0
+           CH                 SQAM   760.3  760.3     0.0
+           CH                 STHM  1149.6 1149.6     0.0
+           CH                 STIR   607.4  607.4     0.0
+           CH                 STUL  2507.6 2507.6     0.0
+           CH                 STUR  3129.8 3129.8     0.0
+           CH                 SUST  2461.1 2461.1     0.0
+           CH                 SWIR  3095.1 3095.1     0.0
+           CH                 TABR  2633.5 2633.5     0.0
+           CH                 TAHR   750.7  750.7     0.0
+           CH                 TAHS   481.1  481.1     0.0
+           CH                 TAKL  3241.7 3241.7     0.0
+           CH                 TASR  1013.9 1013.9     0.0
+           CH                 TATR  3219.5 3219.5     0.0
+           CH                 TESR  4144.8 4144.8     0.0
+           CH                 THOM   574.9  574.9     0.0
+           CH                 TOBA   609.4  609.4     0.0
+           CH                 TSAY   480.1  480.1     0.0
+           CH                 TSIT   393.8  393.7    -0.1
+           CH                 TUYR     3.4    3.4     0.0
+           CH                 TWAC   705.8  705.8     0.0
+           CH                 UBIR   601.8  601.8     0.0
+           CH                 UCHR  4730.1 4730.1     0.0
+           CH                 UFRA  1330.6 1330.6     0.0
+           CH                 UJER  2808.4 2808.4     0.0
+           CH                 UNAR  1437.3 1437.3     0.0
+           CH                 UNTH   772.3  772.3     0.0
+           CH                 UNUR   287.1  287.1     0.0
+           CH                 USHU  1038.4 1038.4     0.0
+           CH                 USKE  1526.4 1526.4     0.0
+           CH                 VICT   367.2  367.2     0.0
+           CH                 WILL  3600.0 3600.1     0.1
+           CH                 WORC  1425.3 1425.3     0.0
+           CH                 ZYMO  1210.0 1210.0     0.0
+           CM                 ALBN  1863.6 1863.6     0.0
+           CM                 ATNA   889.6  889.6     0.0
+           CM                 BARR   816.7  816.7     0.0
+           CM                 BELA   405.5  405.5     0.0
+           CM                 BRKS  1185.6 1185.6     0.0
+           CM                 BULK  5164.5 5164.5     0.0
+           CM                 CAMB   243.5  243.5     0.0
+           CM                 CHWK   693.1  693.1     0.0
+           CM                 CLAY  1216.5 1216.5     0.0
+           CM                 COMX   969.1  969.1     0.0
+           CM                 COWN  1443.1 1442.7    -0.4
+           CM                 FRCN   717.8  717.8     0.0
+           CM                 GOLD   783.5  783.5     0.0
+           CM                 GRAI  7439.5 7439.5     0.0
+           CM                 HARR  1143.6 1143.6     0.0
+           CM                 HOLB  1276.1 1276.1     0.0
+           CM                 HOMA  1873.6 1873.6     0.0
+           CM                 INKR  1542.7 1542.7     0.0
+           CM                 JERV   601.9  601.9     0.0
+           CM                 KEEC  1464.6 1464.6     0.0
+           CM                 KHTZ   439.6  439.6     0.0
+           CM                 KISP  2840.5 2840.5     0.0
+           CM                 KITL  1065.5 1065.5     0.0
+           CM                 KITR  1362.0 1362.0     0.0
+           CM                 KLIN  1030.3 1030.3     0.0
+           CM                 KLUM  1496.3 1496.3     0.0
+           CM                 KNIG  1329.6 1329.6     0.0
+           CM                 KSHR   537.4  537.4     0.0
+           CM                 KTSU  1909.7 1909.7     0.0
+           CM                 KUMR  2180.7 2180.7     0.0
+           CM                 LDEN   978.4  978.4     0.0
+           CM                 LFRA  2957.7 2957.7     0.0
+           CM                 LILL  1034.7 1034.7     0.0
+           CM                 LISR   740.5  740.5     0.0
+           CM                 LKEL   332.0  332.0     0.0
+           CM                 LNAR  2136.8 2136.8     0.0
+           CM                 LRDO   832.5  832.5     0.0
+           CM                 LSKE  2089.7 2089.7     0.0
+           CM                 LSTR  1332.6 1332.6     0.0
+           CM                 MBNK   941.5  941.5     0.0
+           CM                 MORI  1799.5 1799.5     0.0
+           CM                 NASC   781.0  781.1     0.1
+           CM                 NBNK   452.3  452.3     0.0
+           CM                 NECL  1395.0 1395.0     0.0
+           CM                 NEVI  1238.7 1238.7     0.0
+           CM                 NIEL  1233.0 1233.0     0.0
+           CM                 NIMP  1382.3 1382.3     0.0
+           CM                 OWIK  1591.7 1591.7     0.0
+           CM                 PARK   574.1  574.1     0.0
+           CM                 PORI   813.1  813.1     0.0
+           CM                 SALM   878.5  878.5     0.0
+           CM                 SANJ  1227.1 1226.9    -0.2
+           CM                 SETN  1495.2 1495.2     0.0
+           CM                 SEYM  1290.9 1290.9     0.0
+           CM                 SQAM   760.3  760.3     0.0
+           CM                 SUST  2461.1 2461.1     0.0
+           CM                 TAHS   481.1  481.1     0.0
+           CM                 TOBA   609.4  609.4     0.0
+           CM                 TSAY   480.1  480.1     0.0
+           CM                 TSIT   393.8  393.7    -0.1
+           CM                 UNUR   287.1  287.1     0.0
+           CM                 VICT   367.2  367.2     0.0
+           CM                 WORC  1425.3 1425.3     0.0
+           CO                 ADMS   789.7  789.7     0.0
+           CO                 ALBN  1863.6 1863.6     0.0
+           CO                 ATNA   889.6  889.6     0.0
+           CO                 BABL  5110.5 5110.5     0.0
+           CO                 BABR  2176.0 2176.0     0.0
+           CO                 BARR   816.7  816.7     0.0
+           CO                 BBAR   270.4  270.4     0.0
+           CO                 BELA   405.5  405.5     0.0
+           CO                 BLAR  3274.0 3274.0     0.0
+           CO                 BONP   634.0  634.0     0.0
+           CO                 BOWR  2548.4 2548.4     0.0
+           CO                 BRKS  1185.6 1185.6     0.0
+           CO                 BULK  5164.5 5164.5     0.0
+           CO                 CAMB   243.5  243.5     0.0
+           CO                 CARR   400.8  400.8     0.0
+           CO                 CHIR  2111.8 2111.8     0.0
+           CO                 CHWK   693.1  693.1     0.0
+           CO                 CLAY  1216.5 1216.5     0.0
+           CO                 CLWR   310.8  310.8     0.0
+           CO                 COMX   969.1  969.1     0.0
+           CO                 COTR  4142.5 4142.5     0.0
+           CO                 COWN  1443.1 1442.7    -0.4
+           CO                 DEAD   459.5  459.5     0.0
+           CO                 DOGC   356.9  356.9     0.0
+           CO                 FRCN   717.8  717.8     0.0
+           CO                 GOLD   783.5  783.5     0.0
+           CO                 GRAI  7439.5 7439.5     0.0
+           CO                 GUIC  1072.6 1072.6     0.0
+           CO                 HARR  1143.6 1143.6     0.0
+           CO                 HOLB  1276.1 1276.1     0.0
+           CO                 HOMA  1873.6 1873.6     0.0
+           CO                 HORS  1087.7 1087.7     0.0
+           CO                 INKR  1542.7 1542.7     0.0
+           CO                 JERV   601.9  601.9     0.0
+           CO                 KAKC  1168.9 1168.9     0.0
+           CO                 KEEC  1464.6 1464.6     0.0
+           CO                 KHTZ   439.6  439.6     0.0
+           CO                 KINR   684.8  684.8     0.0
+           CO                 KISP  2840.5 2840.5     0.0
+           CO                 KITL  1065.5 1065.5     0.0
+           CO                 KITR  1362.0 1362.0     0.0
+           CO                 KLIN  1030.3 1030.3     0.0
+           CO                 KLUM  1496.3 1496.3     0.0
+           CO                 KNIG  1329.6 1329.6     0.0
+           CO                 KSHR   537.4  537.4     0.0
+           CO                 KTSU  1909.7 1909.7     0.0
+           CO                 KUMR  2180.7 2180.7     0.0
+           CO                 LBIR  1082.9 1082.9     0.0
+           CO                 LCHL  4353.8 4353.8     0.0
+           CO                 LCHR  2678.7 2678.7     0.0
+           CO                 LDEN   978.4  978.4     0.0
+           CO                 LFRA  2957.7 2957.7     0.0
+           CO                 LILL  1034.7 1034.7     0.0
+           CO                 LISR   740.5  740.5     0.0
+           CO                 LKEL   332.0  332.0     0.0
+           CO                 LNAR  2136.8 2136.8     0.0
+           CO                 LNIC  1026.6 1026.6     0.0
+           CO                 LNTH  1179.7 1180.7     1.0
+           CO                 LRDO   832.5  832.5     0.0
+           CO                 LSKE  2089.7 2089.7     0.0
+           CO                 LSTR  1332.6 1332.6     0.0
+           CO                 MBNK   941.5  941.5     0.0
+           CO                 MFRA   275.3  275.3     0.0
+           CO                 MORI  1799.5 1799.5     0.0
+           CO                 MORR  3337.4 3337.4     0.0
+           CO                 MSKE  1509.5 1509.5     0.0
+           CO                 NAHR  4259.7 4259.7     0.0
+           CO                 NAKR   738.9  738.9     0.0
+           CO                 NARC  3560.1 3560.1     0.0
+           CO                 NASC   781.0  781.1     0.1
+           CO                 NASR  1293.1 1293.1     0.0
+           CO                 NBNK   452.3  452.3     0.0
+           CO                 NECL  1395.0 1395.0     0.0
+           CO                 NECR  5604.1 5604.1     0.0
+           CO                 NEVI  1238.7 1238.7     0.0
+           CO                 NICL  1920.4 1920.4     0.0
+           CO                 NIEL  1233.0 1233.0     0.0
+           CO                 NIMP  1382.3 1382.3     0.0
+           CO                 OWIK  1591.7 1591.7     0.0
+           CO                 PARK   574.1  574.1     0.0
+           CO                 PORI   813.1  813.1     0.0
+           CO                 QUES  3870.8 3870.8     0.0
+           CO                 SAJR  1675.4 1675.4     0.0
+           CO                 SALM   878.5  878.5     0.0
+           CO                 SANJ  1227.1 1226.9    -0.2
+           CO                 SETN  1495.2 1495.2     0.0
+           CO                 SEYM  1290.9 1290.9     0.0
+           CO                 SHER  1213.0 1213.0     0.0
+           CO                 SHUL  1104.9 1104.9     0.0
+           CO                 SQAM   760.3  760.3     0.0
+           CO                 STHM  1149.6 1149.6     0.0
+           CO                 STIR   607.4  607.4     0.0
+           CO                 SUST  2461.1 2461.1     0.0
+           CO                 TAHR   750.7  750.7     0.0
+           CO                 TAHS   481.1  481.1     0.0
+           CO                 TASR  1013.9 1013.9     0.0
+           CO                 TATR  3219.5 3219.5     0.0
+           CO                 THOM   574.9  574.9     0.0
+           CO                 TOBA   609.4  609.4     0.0
+           CO                 TSAY   480.1  480.1     0.0
+           CO                 TSIT   393.8  393.7    -0.1
+           CO                 TUYR     3.4    3.4     0.0
+           CO                 TWAC   705.8  705.8     0.0
+           CO                 UBIR   601.8  601.8     0.0
+           CO                 UNAR  1437.3 1437.3     0.0
+           CO                 UNTH   772.3  772.3     0.0
+           CO                 UNUR   287.1  287.1     0.0
+           CO                 USHU  1038.4 1038.4     0.0
+           CO                 USKE  1526.4 1526.4     0.0
+           CO                 VICT   367.2  367.2     0.0
+           CO                 WILL  3600.0 3600.1     0.1
+           CO                 WORC  1425.3 1425.3     0.0
+           CO                 ZYMO  1210.0 1210.0     0.0
+           GR                 ATLL  5030.0 5030.0     0.0
+           GR                 BEAV  6368.1 6368.1     0.0
+           GR                 BLUR  1355.7 1355.7     0.0
+           GR                 CAMB   168.5  168.5     0.0
+           GR                 COAL  4357.6 4357.6     0.0
+           GR                 CRYL  1135.8 1135.8     0.0
+           GR                 DEAL  3086.0 3086.0     0.0
+           GR                 DEAR  2487.4 2487.4     0.0
+           GR                 DUNE  6856.8 6856.8     0.0
+           GR                 FINA  4526.2 4526.2     0.0
+           GR                 FINL  2610.1 2610.1     0.0
+           GR                 FIRE  2070.9 2070.9     0.0
+           GR                 FONT  4941.3 4941.3     0.0
+           GR                 FOXR  2019.3 2019.3     0.0
+           GR                 FROG  1884.3 1884.3     0.0
+           GR                 GATA  1602.0 1602.0     0.0
+           GR                 GLAR  2821.9 2821.9     0.0
+           GR                 INGR  2138.5 2138.5     0.0
+           GR                 INKR  1538.0 1538.0     0.0
+           GR                 JENR  2286.5 2286.5     0.0
+           GR                 KAHN  4667.4 4667.4     0.0
+           GR                 KISK  4520.4 4520.4     0.0
+           GR                 KLAR  1672.3 1672.3     0.0
+           GR                 KUSR  1337.8 1337.8     0.0
+           GR                 LBTN  8337.2 8337.2     0.0
+           GR                 LFRT  5302.4 5302.4     0.0
+           GR                 LHAF  4916.6 4916.6     0.0
+           GR                 LIAR  2005.5 2005.5     0.0
+           GR                 LISR   740.5  740.5     0.0
+           GR                 LKEC  3118.7 3118.7     0.0
+           GR                 LMUS  6427.5 6427.5     0.0
+           GR                 LOMI  2303.7 2303.7     0.0
+           GR                 LPCE  3213.6 3213.6     0.0
+           GR                 LPET  3525.1 3525.1     0.0
+           GR                 LPRO  2449.6 2449.6     0.0
+           GR                 LRAN  2524.2 2524.2     0.0
+           GR                 LSIK  6384.6 6384.6     0.0
+           GR                 MDEA  2763.7 2763.7     0.0
+           GR                 MESI  1475.5 1475.5     0.0
+           GR                 MFRT  3652.4 3652.4     0.0
+           GR                 MILL  3149.4 3149.4     0.0
+           GR                 MMUS  2392.5 2392.5     0.0
+           GR                 MPRO  3806.5 3806.5     0.0
+           GR                 MSKE  1491.4 1491.4     0.0
+           GR                 MSTR  3676.7 3676.7     0.0
+           GR                 MURR  3298.5 3298.5     0.0
+           GR                 NAHR  4259.0 4259.0     0.0
+           GR                 NAKR  1933.9 1933.9     0.0
+           GR                 NATR  7150.9 7150.9     0.0
+           GR                 OSPK  1024.3 1024.3     0.0
+           GR                 PARA  3214.8 3214.8     0.0
+           GR                 PARS  4441.9 4441.9     0.0
+           GR                 PCEA  2837.6 2837.6     0.0
+           GR                 PINE  2620.5 2620.5     0.0
+           GR                 SAHD  1909.4 1909.4     0.0
+           GR                 SMOK  3659.6 3659.6     0.0
+           GR                 SPAT  2349.0 2349.0     0.0
+           GR                 STIR   590.3  590.3     0.0
+           GR                 SWIR  3095.1 3095.1     0.0
+           GR                 TATR  3176.8 3176.8     0.0
+           GR                 TESR  4144.8 4144.8     0.0
+           GR                 TOAD  2648.3 2648.3     0.0
+           GR                 TOOD  2411.1 2411.1     0.0
+           GR                 TSEA  3936.0 3936.0     0.0
+           GR                 TUTR  2776.1 2776.1     0.0
+           GR                 TUYR     3.4    3.4     0.0
+           GR                 UBTN  7388.7 7388.7     0.0
+           GR                 UFRT  5105.4 5105.4     0.0
+           GR                 UHAF  3763.1 3763.1     0.0
+           GR                 UJER  2808.4 2808.4     0.0
+           GR                 UKEC  2298.1 2298.1     0.0
+           GR                 ULRD  7069.0 7069.0     0.0
+           GR                 UMUS  3291.5 3291.5     0.0
+           GR                 UOMI  1953.4 1953.4     0.0
+           GR                 UPCE  3973.5 3973.5     0.0
+           GR                 UPET  2195.1 2195.1     0.0
+           GR                 UPRO  3359.9 3359.9     0.0
+           GR                 USIK  5959.4 5959.4     0.0
+           GR                 USTK  2797.3 2797.3     0.0
+           PK                 ADMS   789.7  789.7     0.0
+           PK                 ALBN  1863.6 1863.6     0.0
+           PK                 ATNA   889.6  889.6     0.0
+           PK                 BABL  5110.5 5110.5     0.0
+           PK                 BABR  2176.0 2176.0     0.0
+           PK                 BARR   816.7  816.7     0.0
+           PK                 BELA   405.5  405.5     0.0
+           PK                 BONP   634.0  634.0     0.0
+           PK                 BRKS  1185.6 1185.6     0.0
+           PK                 BULK  5164.5 5164.5     0.0
+           PK                 CAMB   243.5  243.5     0.0
+           PK                 CHWK   693.1  693.1     0.0
+           PK                 CLAY  1216.5 1216.5     0.0
+           PK                 COMX   969.1  969.1     0.0
+           PK                 COTR  4142.5 4142.5     0.0
+           PK                 COWN  1443.1 1442.7    -0.4
+           PK                 DEAD   459.5  459.5     0.0
+           PK                 DOGC   356.9  356.9     0.0
+           PK                 FRCN   717.8  717.8     0.0
+           PK                 GOLD   783.5  783.5     0.0
+           PK                 GRAI  7439.5 7439.5     0.0
+           PK                 HARR  1143.6 1143.6     0.0
+           PK                 HOLB  1276.1 1276.1     0.0
+           PK                 HOMA  1873.6 1873.6     0.0
+           PK                 INKR  1542.7 1542.7     0.0
+           PK                 JERV   601.9  601.9     0.0
+           PK                 KEEC  1464.6 1464.6     0.0
+           PK                 KHTZ   439.6  439.6     0.0
+           PK                 KINR   684.8  684.8     0.0
+           PK                 KISP  2840.5 2840.5     0.0
+           PK                 KITL  1065.5 1065.5     0.0
+           PK                 KITR  1362.0 1362.0     0.0
+           PK                 KLIN  1030.3 1030.3     0.0
+           PK                 KLUM  1496.3 1496.3     0.0
+           PK                 KNIG  1329.6 1329.6     0.0
+           PK                 KSHR   537.4  537.4     0.0
+           PK                 KTSU  1909.7 1909.7     0.0
+           PK                 KUMR  2180.7 2180.7     0.0
+           PK                 LCHL  4353.8 4353.8     0.0
+           PK                 LDEN   978.4  978.4     0.0
+           PK                 LFRA  2957.7 2957.7     0.0
+           PK                 LILL  1034.7 1034.7     0.0
+           PK                 LISR   740.5  740.5     0.0
+           PK                 LKEL   332.0  332.0     0.0
+           PK                 LNAR  2136.8 2136.8     0.0
+           PK                 LNIC  1026.6 1026.6     0.0
+           PK                 LNTH  1179.7 1180.7     1.0
+           PK                 LRDO   832.5  832.5     0.0
+           PK                 LSKE  2089.7 2089.7     0.0
+           PK                 LSTR  1332.6 1332.6     0.0
+           PK                 MBNK   941.5  941.5     0.0
+           PK                 MORI  1799.5 1799.5     0.0
+           PK                 MORR  3337.4 3337.4     0.0
+           PK                 MSKE  1509.5 1509.5     0.0
+           PK                 NAHR  4259.7 4259.7     0.0
+           PK                 NAKR   738.9  738.9     0.0
+           PK                 NARC  3560.1 3560.1     0.0
+           PK                 NASC   781.0  781.1     0.1
+           PK                 NASR  1293.1 1293.1     0.0
+           PK                 NBNK   452.3  452.3     0.0
+           PK                 NECL  1395.0 1395.0     0.0
+           PK                 NEVI  1238.7 1238.7     0.0
+           PK                 NIEL  1233.0 1233.0     0.0
+           PK                 NIMP  1382.3 1382.3     0.0
+           PK                 OWIK  1591.7 1591.7     0.0
+           PK                 PARK   574.1  574.1     0.0
+           PK                 PORI   813.1  813.1     0.0
+           PK                 QUES  3870.8 3870.8     0.0
+           PK                 SAJR  1675.4 1675.4     0.0
+           PK                 SALM   878.5  878.5     0.0
+           PK                 SANJ  1227.1 1226.9    -0.2
+           PK                 SETN  1495.2 1495.2     0.0
+           PK                 SEYM  1290.9 1290.9     0.0
+           PK                 SHUL  1104.9 1104.9     0.0
+           PK                 SQAM   760.3  760.3     0.0
+           PK                 STHM  1149.6 1149.6     0.0
+           PK                 STIR   607.4  607.4     0.0
+           PK                 SUST  2461.1 2461.1     0.0
+           PK                 TAHR   750.7  750.7     0.0
+           PK                 TAHS   481.1  481.1     0.0
+           PK                 THOM   574.9  574.9     0.0
+           PK                 TOBA   609.4  609.4     0.0
+           PK                 TSAY   480.1  480.1     0.0
+           PK                 TSIT   393.8  393.7    -0.1
+           PK                 UNUR   287.1  287.1     0.0
+           PK                 USHU  1038.4 1038.4     0.0
+           PK                 VICT   367.2  367.2     0.0
+           PK                 WORC  1425.3 1425.3     0.0
+           PK                 ZYMO  1210.0 1210.0     0.0
+           SK                 ADMS   789.7  789.7     0.0
+           SK                 ALBN  1863.6 1863.6     0.0
+           SK                 ATNA   889.6  889.6     0.0
+           SK                 BABL  5110.5 5110.5     0.0
+           SK                 BABR  2176.0 2176.0     0.0
+           SK                 BARR   816.7  816.7     0.0
+           SK                 BBAR   270.4  270.4     0.0
+           SK                 BELA   405.5  405.5     0.0
+           SK                 BLAR  3274.0 3274.0     0.0
+           SK                 BOWR  2548.4 2548.4     0.0
+           SK                 BRKS  1185.6 1185.6     0.0
+           SK                 BULK  5164.5 5164.5     0.0
+           SK                 CAMB   243.5  243.5     0.0
+           SK                 CARR   400.8  400.8     0.0
+           SK                 CHES   780.5  780.5     0.0
+           SK                 CHIR  2111.8 2111.8     0.0
+           SK                 CHWK   693.1  693.1     0.0
+           SK                 CLAY  1216.5 1216.5     0.0
+           SK                 COMX   969.1  969.1     0.0
+           SK                 DEAD   459.5  459.5     0.0
+           SK                 DOGC   356.9  356.9     0.0
+           SK                 DRIR  1616.7 1616.7     0.0
+           SK                 FRAN  7309.5 7309.5     0.0
+           SK                 FRCN   717.8  717.8     0.0
+           SK                 GOLD   783.5  783.5     0.0
+           SK                 GRAI  7439.5 7439.5     0.0
+           SK                 HARR  1143.6 1143.6     0.0
+           SK                 HOLB  1276.1 1276.1     0.0
+           SK                 HOMA  1873.6 1873.6     0.0
+           SK                 HORS  1087.7 1087.7     0.0
+           SK                 INKR  1542.7 1542.7     0.0
+           SK                 ISKR   911.7  911.7     0.0
+           SK                 JERV   601.9  601.9     0.0
+           SK                 KAKC  1168.9 1168.9     0.0
+           SK                 KEEC  1464.6 1464.6     0.0
+           SK                 KHTZ   439.6  439.6     0.0
+           SK                 KINR   684.8  684.8     0.0
+           SK                 KISP  2840.5 2840.5     0.0
+           SK                 KITL  1065.5 1065.5     0.0
+           SK                 KITR  1362.0 1362.0     0.0
+           SK                 KLIN  1030.3 1030.3     0.0
+           SK                 KLUM  1496.3 1496.3     0.0
+           SK                 KNIG  1329.6 1329.6     0.0
+           SK                 KSHR   537.4  537.4     0.0
+           SK                 KTSU  1909.7 1909.7     0.0
+           SK                 KUMR  2180.7 2180.7     0.0
+           SK                 LBIR  1082.9 1082.9     0.0
+           SK                 LCHL  4353.8 4353.8     0.0
+           SK                 LCHR  2678.7 2678.7     0.0
+           SK                 LDEN   978.4  978.4     0.0
+           SK                 LFRA  2957.7 2957.7     0.0
+           SK                 LILL  1034.7 1034.7     0.0
+           SK                 LISR   740.5  740.5     0.0
+           SK                 LKEL   332.0  332.0     0.0
+           SK                 LNAR  2136.8 2136.8     0.0
+           SK                 LNTH  1179.7 1180.7     1.0
+           SK                 LRDO   832.5  832.5     0.0
+           SK                 LSKE  2089.7 2089.7     0.0
+           SK                 LSTR  1332.6 1332.6     0.0
+           SK                 LTRE  2705.4 2705.4     0.0
+           SK                 MBNK   941.5  941.5     0.0
+           SK                 MCGR  2531.9 2531.9     0.0
+           SK                 MIDR   924.2  924.2     0.0
+           SK                 MORI  1799.5 1799.5     0.0
+           SK                 MORK  5744.4 5744.4     0.0
+           SK                 MORR  3337.4 3337.4     0.0
+           SK                 MSKE  1509.5 1509.5     0.0
+           SK                 NAHR  4259.7 4259.7     0.0
+           SK                 NAKR   738.9  738.9     0.0
+           SK                 NASC   781.0  781.1     0.1
+           SK                 NASR  1293.1 1293.1     0.0
+           SK                 NBNK   452.3  452.3     0.0
+           SK                 NECL  1395.0 1395.0     0.0
+           SK                 NECR  5604.1 5604.1     0.0
+           SK                 NEVI  1238.7 1238.7     0.0
+           SK                 NIEL  1233.0 1233.0     0.0
+           SK                 NIMP  1382.3 1382.3     0.0
+           SK                 OKAN  2312.3 2312.3     0.0
+           SK                 OWIK  1591.7 1591.7     0.0
+           SK                 PARK   574.1  574.1     0.0
+           SK                 QUES  3870.8 3870.8     0.0
+           SK                 SAJR  1675.4 1675.4     0.0
+           SK                 SALM   878.5  878.5     0.0
+           SK                 SANJ  1227.1 1226.9    -0.2
+           SK                 SETN  1495.2 1495.2     0.0
+           SK                 SEYM  1290.9 1290.9     0.0
+           SK                 SHER  1213.0 1213.0     0.0
+           SK                 SHUL  1104.9 1104.9     0.0
+           SK                 SQAM   760.3  760.3     0.0
+           SK                 STHM  1149.6 1149.6     0.0
+           SK                 STIR   607.4  607.4     0.0
+           SK                 STUL  2507.6 2507.6     0.0
+           SK                 STUR  3129.8 3129.8     0.0
+           SK                 SUST  2461.1 2461.1     0.0
+           SK                 TAHR   750.7  750.7     0.0
+           SK                 TAHS   481.1  481.1     0.0
+           SK                 TAKL  3241.7 3241.7     0.0
+           SK                 TASR  1013.9 1013.9     0.0
+           SK                 TATR  3219.5 3219.5     0.0
+           SK                 THOM   574.9  574.9     0.0
+           SK                 TOBA   609.4  609.4     0.0
+           SK                 TSAY   480.1  480.1     0.0
+           SK                 TSIT   393.8  393.7    -0.1
+           SK                 TUYR     3.4    3.4     0.0
+           SK                 UFRA  1330.6 1330.6     0.0
+           SK                 UNAR  1437.3 1437.3     0.0
+           SK                 UNTH   772.3  772.3     0.0
+           SK                 UNUR   287.1  287.1     0.0
+           SK                 USHU  1038.4 1038.4     0.0
+           SK                 USKE  1526.4 1526.4     0.0
+           SK                 USTK  2797.3 2797.3     0.0
+           SK                 UTRE  1445.4 1445.4     0.0
+           SK                 WORC  1425.3 1425.3     0.0
+           SK                 ZYMO  1210.0 1210.0     0.0
+           ST                 ALBN  2283.2 2283.2     0.0
+           ST                 ATNA  1531.4 1531.4     0.0
+           ST                 BABL  6008.3 6008.3     0.0
+           ST                 BABR  3048.9 3048.9     0.0
+           ST                 BBAR   800.6  800.6     0.0
+           ST                 BELA   467.4  467.4     0.0
+           ST                 BONP  1773.5 1773.5     0.0
+           ST                 BRKS  1542.8 1542.8     0.0
+           ST                 BULK  6553.5 6553.5     0.0
+           ST                 CAMB   280.7  280.7     0.0
+           ST                 CHIR  2716.9 2716.9     0.0
+           ST                 CHWK   731.2  731.2     0.0
+           ST                 CLAY  1493.4 1493.4     0.0
+           ST                 COMX  1243.9 1243.9     0.0
+           ST                 COWN  1729.8 1729.3    -0.5
+           ST                 DEAD   644.5  644.5     0.0
+           ST                 FRCN   987.1  987.1     0.0
+           ST                 GOLD  1046.6 1046.6     0.0
+           ST                 GRAI  8419.0 8419.0     0.0
+           ST                 GUIC  1571.0 1571.0     0.0
+           ST                 HARR  1234.5 1234.5     0.0
+           ST                 HOLB  1561.0 1561.0     0.0
+           ST                 HOMA  2235.3 2235.3     0.0
+           ST                 HORS  1339.2 1339.2     0.0
+           ST                 INKR  2054.3 2054.3     0.0
+           ST                 ISKR  1298.9 1298.9     0.0
+           ST                 JERV   847.5  847.5     0.0
+           ST                 KHTZ   611.7  611.7     0.0
+           ST                 KINR  1307.9 1307.9     0.0
+           ST                 KISP  3641.3 3641.3     0.0
+           ST                 KITL  1250.9 1250.9     0.0
+           ST                 KITR  1639.8 1639.8     0.0
+           ST                 KLIN  1429.0 1429.0     0.0
+           ST                 KLUM  1708.7 1708.7     0.0
+           ST                 KNIG  1810.0 1810.0     0.0
+           ST                 KSHR   733.0  733.0     0.0
+           ST                 KTSU  2148.0 2148.0     0.0
+           ST                 KUMR  2808.8 2808.8     0.0
+           ST                 LBIR  1468.6 1468.6     0.0
+           ST                 LCHR  3240.0 3240.0     0.0
+           ST                 LDEN  1439.6 1439.6     0.0
+           ST                 LFRA  3165.8 3165.8     0.0
+           ST                 LILL  1235.7 1235.7     0.0
+           ST                 LISR   852.8  852.8     0.0
+           ST                 LKEL   370.2  370.2     0.0
+           ST                 LNAR  2541.0 2541.0     0.0
+           ST                 LNIC  1453.8 1453.8     0.0
+           ST                 LNTH  1865.3 1865.4     0.1
+           ST                 LRDO  1258.7 1258.7     0.0
+           ST                 LSKE  2409.5 2409.5     0.0
+           ST                 MESC   926.9  926.9     0.0
+           ST                 MORI  2430.7 2430.7     0.0
+           ST                 MORR  4075.2 4075.2     0.0
+           ST                 MSKE  1937.0 1936.3    -0.7
+           ST                 MSTR  5179.0 5179.0     0.0
+           ST                 NAHR  5128.5 5128.5     0.0
+           ST                 NASC  1165.4 1165.2    -0.2
+           ST                 NASR  1756.9 1756.9     0.0
+           ST                 NECL  1881.6 1881.6     0.0
+           ST                 NEVI  1629.1 1629.1     0.0
+           ST                 NIEL  1638.6 1638.6     0.0
+           ST                 NIMP  1570.8 1570.8     0.0
+           ST                 OWIK  2049.8 2049.8     0.0
+           ST                 PARK   874.1  874.1     0.0
+           ST                 PORI  1036.1 1036.1     0.0
+           ST                 QUES  4287.9 4287.9     0.0
+           ST                 SALM  1180.5 1180.5     0.0
+           ST                 SANJ  1922.0 1921.8    -0.2
+           ST                 SETN  2067.6 2067.6     0.0
+           ST                 SEYM  1811.8 1811.8     0.0
+           ST                 SHER  1780.3 1780.3     0.0
+           ST                 SHUL  1365.1 1365.1     0.0
+           ST                 SQAM  1147.2 1147.2     0.0
+           ST                 STHM  1610.4 1610.4     0.0
+           ST                 STIR   985.6  985.6     0.0
+           ST                 SUST  3135.4 3135.4     0.0
+           ST                 TAHR  1143.2 1143.2     0.0
+           ST                 TAHS   620.6  620.6     0.0
+           ST                 TASR  1484.7 1484.7     0.0
+           ST                 TATR  3947.9 3947.9     0.0
+           ST                 TAYR   684.4  684.4     0.0
+           ST                 THOM  1255.9 1255.9     0.0
+           ST                 TOBA   866.9  866.9     0.0
+           ST                 TSAY   596.4  596.4     0.0
+           ST                 TSIT   816.8  816.8     0.0
+           ST                 UBIR   764.3  764.3     0.0
+           ST                 UCHR  5083.5 5083.5     0.0
+           ST                 UNAR  2001.8 2001.8     0.0
+           ST                 USKE  2622.3 2622.3     0.0
+           ST                 USTK  3942.9 3942.9     0.0
+           ST                 VICT   453.4  453.4     0.0
+           ST                 WORC  1939.6 1939.6     0.0
+           ST                 ZYMO  1524.5 1524.5     0.0
+          WCT                 BULL  2333.4 2333.4     0.0
+          WCT                 CLRH  1745.3 1745.3     0.0
+          WCT                 COLR  2169.9 2169.9     0.0
+          WCT                 DUNC  1121.2 1121.2     0.0
+          WCT                 ELKR  3760.3 3760.3     0.0
+          WCT                 KETL  4194.3 4194.3     0.0
+          WCT                 KHOR  2046.3 2046.3     0.0
+          WCT                 KOTL  3673.5 3673.5     0.0
+          WCT                 KOTR  2346.6 2346.6     0.0
+          WCT                 LARL  1788.1 1788.1     0.0
+          WCT                 REVL   988.1  988.1     0.0
+          WCT                 SHUL  1316.8 1316.8     0.0
+          WCT                 SLOC   882.5  882.5     0.0
+          WCT                 SMAR  3767.2 3767.2     0.0
+          WCT                 UARL  1477.7 1476.7    -1.0
+          WCT                 USHU  1659.8 1659.8     0.0
+
+## access km per species, access > 0, the province
+ species_code  km_full   km_min km_diff pct
+           BT 583353.0 583352.9    -0.1   0
+           CH 233773.9 233774.4     0.5   0
+           CM  82719.9  82719.3    -0.6   0
+           CO 168214.9 168215.4     0.5   0
+           GR 258584.2 258584.2     0.0   0
+           PK 130314.7 130315.1     0.4   0
+           SK 187030.6 187031.4     0.8   0
+           ST 180157.1 180155.6    -1.5   0
+          WCT  35271.0  35270.0    -1.0   0
+4. PARENT: the full build has no parent columns (0310 without PARENT_DIR); not checked.
+5. STORED: link's stored habitat km per species x group on fresh_default and fresh_default_minimal (minimal - full).
+
+## stored rearing and spawning km
+ species_code watershed_group_code rear_km_full rear_km_minimal spawn_km_full
+           BT                 ADMS        777.0           776.4         361.0
+           BT                 BABL       3040.1          3064.9        1043.2
+           BT                 BABR       1731.0          1737.4         997.2
+           BT                 BARR        756.5           756.5         539.9
+           BT                 BBAR        609.0           614.8         329.6
+           BT                 BEAV       3137.5          3138.8        2104.5
+           BT                 BIGC        878.6           881.4         442.2
+           BT                 BLAR       1872.0          1872.3         974.1
+           BT                 BLUR        739.8           739.8         456.7
+           BT                 BONP        825.0           846.8         417.4
+           BT                 BOWR       1693.7          1701.3        1047.9
+           BT                 BRKS        894.4           904.9         515.9
+           BT                 BULK       3111.2          3160.4        1853.9
+           BT                 BULL       1233.7          1264.3         713.7
+           BT                 CANO        697.5           696.3         290.2
+           BT                 CARP       1439.9          1444.1         502.4
+           BT                 CARR       1030.8          1046.5         536.2
+           BT                 CHES       1030.2          1037.2         377.3
+           BT                 CHIR       1820.7          1820.5         448.8
+           BT                 CHWK        430.5           431.9         309.7
+           BT                 CLRH       1579.6          1580.8         721.9
+           BT                 COAL       2322.8          2323.5        1219.0
+           BT                 COLR       1056.3          1061.8         634.7
+           BT                 COTR       2399.5          2431.8        1475.4
+           BT                 COWN       1133.2          1139.1         657.4
+           BT                 CRKD       1574.4          1577.9         695.7
+           BT                 DEAD        293.9           293.2         160.1
+           BT                 DEAL       1839.2          1842.8         981.6
+           BT                 DEAR       1187.5          1190.9         532.4
+           BT                 DOGC        497.4           499.3         286.9
+           BT                 DRIR        715.0           717.8         348.6
+           BT                 DUNC       1006.0          1004.9         540.6
+           BT                 DUNE       1247.8          1253.8         781.2
+           BT                 ELKR       2125.6          2163.5        1534.2
+           BT                 EUCL       1731.5          1734.2         708.1
+           BT                 FINA       3387.7          3410.8        1333.9
+           BT                 FINL       2120.9          2127.4        1364.3
+           BT                 FIRE       2254.9          2258.8        1016.6
+           BT                 FONT       2799.6          2802.1         875.3
+           BT                 FOXR       1594.1          1594.0         929.2
+           BT                 FRAN       3349.6          3402.7        1120.0
+           BT                 FRCN        934.0           944.8         666.1
+           BT                 FROG       1590.8          1590.8         943.8
+           BT                 GATA       1278.5          1278.6         822.6
+           BT                 GUIC        537.7           541.3         217.5
+           BT                 HARR       1153.5          1162.5         471.1
+           BT                 HERR        820.5           825.8         577.8
+           BT                 HOMA       1288.9          1293.6         849.7
+           BT                 HORS        715.1           723.9         288.4
+           BT                 INGR       1802.7          1810.1        1111.2
+           BT                 INKR       1261.5          1261.2         811.1
+           BT                 ISKR        859.0           858.2         588.2
+           BT                 JERV        874.4           899.5         401.7
+           BT                 KHOR       1661.5          1685.3        1107.4
+           BT                 KINR        513.8           514.2         217.2
+           BT                 KISK       1982.7          1988.1        1421.1
+           BT                 KISP       2037.5          2057.4        1257.6
+           BT                 KITR       1113.4          1118.8         823.7
+           BT                 KLAR       1212.4          1215.0         760.6
+           BT                 KLIN       1485.2          1497.1         853.5
+           BT                 KLUM       1260.6          1268.6         931.1
+           BT                 KOTL       2166.7          2181.0        1027.0
+           BT                 KOTR       1299.5          1321.8         889.6
+           BT                 LARL       1260.3          1270.7         559.8
+           BT                 LBIR        936.2           942.1         546.2
+           BT                 LBTN       2805.8          2829.7        2027.7
+           BT                 LCHL       1704.8          1717.3         908.5
+           BT                 LCHR       1703.6          1709.4         720.8
+           BT                 LDEN        853.2           853.6         485.4
+           BT                 LFRA       1898.7          1909.9        1245.2
+           BT                 LHAF       2679.8          2690.0        1879.9
+           BT                 LIAR       3066.8          3080.4        1802.5
+           BT                 LILL       1005.3          1017.0         667.5
+           BT                 LISR        645.2           644.9         469.7
+           BT                 LKEL        244.9           245.6         144.6
+           BT                 LMUS       2004.8          2007.0        1297.9
+           BT                 LNAR       1807.3          1812.8        1318.5
+           BT                 LNIC        729.7           736.5         456.4
+           BT                 LNTH       1325.5          1335.5         778.7
+           BT                 LOMI       1608.9          1628.3        1002.5
+           BT                 LPCE       1379.7          1388.9        1000.4
+           BT                 LPRO        905.2           906.8         587.2
+           BT                 LRAN       1261.1          1261.1         585.7
+           BT                 LSKE       1834.1          1831.1        1327.1
+           BT                 LTRE       1175.1          1178.3         323.3
+           BT                 MAHD       1244.3          1255.6         394.3
+           BT                 MCGR       1613.6          1629.4        1060.5
+           BT                 MDEA       1669.1          1671.0         931.9
+           BT                 MESI       1140.6          1150.6         691.2
+           BT                 MIDR        431.2           441.8         201.4
+           BT                 MMUS       1549.8          1550.2        1070.9
+           BT                 MORK       3060.1          3078.6        2147.9
+           BT                 MORR       2155.9          2169.5         962.1
+           BT                 MPRO       1711.7          1715.3        1084.7
+           BT                 MSKE       1423.8          1427.1         922.1
+           BT                 MSTR       2328.2          2325.7        1387.3
+           BT                 MURR       2470.1          2486.9        1666.5
+           BT                 NARC       1706.6          1721.2         872.0
+           BT                 NASR        927.2           915.5         489.2
+           BT                 NATR       3853.7          3872.1        1793.1
+           BT                 NECR       2031.6          2046.1         991.4
+           BT                 OKAN       2414.0          2443.3        1056.2
+           BT                 OSPK        870.9           872.9         595.0
+           BT                 PARA       2056.0          2072.2         719.9
+           BT                 PARK        405.6           404.3         333.2
+           BT                 PARS       2664.4          2691.0        1682.7
+           BT                 PCEA       2819.4          2822.2         922.8
+           BT                 PINE       2388.6          2413.7        1639.6
+           BT                 QUES       3523.4          3532.9         483.2
+           BT                 REVL        807.1           808.1         406.4
+           BT                 SETN       1716.4          1721.3         850.4
+           BT                 SHUL       1158.3          1171.0         454.4
+           BT                 SIML       1910.6          1921.6        1179.6
+           BT                 SKGT        284.0           282.3         170.5
+           BT                 SLOC        685.2           691.9         388.5
+           BT                 SMAR       1872.2          1879.0        1323.3
+           BT                 SMOK       2472.2          2475.0        1525.2
+           BT                 SPAT       1616.8          1616.8         915.8
+           BT                 SQAM        935.3           943.6         656.5
+           BT                 STHM        748.8           757.3         455.4
+           BT                 STUR       1175.0          1176.3         519.6
+           BT                 SUST       1571.3          1577.0         904.6
+           BT                 SWIR       1478.6          1480.9         697.8
+           BT                 TABR       1047.7          1059.7         676.9
+           BT                 TAHR        652.1           660.4         338.5
+           BT                 TAKL       2930.5          2944.8         700.7
+           BT                 TASR        962.8           967.2         459.9
+           BT                 TAYR        441.0           440.8         275.5
+           BT                 THOM        717.3           735.7         351.8
+           BT                 TOAD       2443.3          2446.0        1682.5
+           BT                 TOOD       1935.0          1937.8        1127.3
+           BT                 TURN       2597.7          2599.4        1462.3
+           BT                 TUYR       2216.8          2216.9        1140.3
+           BT                 TWAC        425.9           435.1         227.4
+           BT                 UARL       1247.4          1255.1         517.6
+           BT                 UBIR        527.1           528.6         321.1
+           BT                 UBTN       2917.1          2925.4        2049.2
+           BT                 UCHR       2159.6          2159.3         913.8
+           BT                 UDEN       2366.8          2374.3        1116.2
+           BT                 UEUT       3153.4          3159.9         937.4
+           BT                 UFRA       1283.8          1290.7         951.6
+           BT                 UHAF       2090.6          2103.4        1351.1
+           BT                 UKEC       1496.1          1498.0         748.2
+           BT                 ULRD       2203.4          2208.3         970.1
+           BT                 UMUS       1756.4          1758.8        1233.2
+           BT                 UNAR       1258.0          1258.0         741.6
+           BT                 UNRS       3210.8          3215.7         645.4
+           BT                 UNTH        742.0           746.0         555.2
+           BT                 UNUR        347.8           347.9         241.2
+           BT                 UOMI       1485.5          1502.0         911.5
+           BT                 UPCE       2412.4          2428.5        1682.3
+           BT                 UPRO       1915.2          1916.8        1171.5
+           BT                 USHU       1239.0          1241.4         742.5
+           BT                 USIK       2268.7          2270.4        1627.3
+           BT                 USKE       1264.3          1266.2         739.7
+           BT                 UTRE        767.3           776.8         204.8
+           BT                 WILL       1768.6          1798.5        1056.5
+           BT                 ZYMO        951.5           955.3         594.1
+           CH                 ADMS        588.3           591.5         277.8
+           CH                 ALBN       1114.8          1130.5         605.2
+           CH                 ATNA        401.3           402.1         120.1
+           CH                 BABL       2031.6          2136.9         352.4
+           CH                 BABR        890.0           910.7         541.2
+           CH                 BARR        504.3           504.3         364.1
+           CH                 BBAR        168.9           171.7         160.1
+           CH                 BELA        267.0           268.3         228.5
+           CH                 BLAR       1174.8          1205.4         484.3
+           CH                 BONP        250.3           251.5         202.0
+           CH                 BOWR       1186.1          1211.1         669.6
+           CH                 BRKS        614.1           625.6         363.7
+           CH                 BULK       2101.0          2205.2        1266.3
+           CH                 CAMB        116.8           125.0          66.4
+           CH                 CARR        232.7           231.7         177.5
+           CH                 CHES        268.6           280.3          88.3
+           CH                 CHIL        675.1           701.0         195.5
+           CH                 CHIR       1395.5          1399.9         228.9
+           CH                 CHWK        374.5           374.8         256.8
+           CH                 CLAY        666.9           672.7         408.5
+           CH                 CLWR        162.1           162.5         109.9
+           CH                 COMX        456.7           468.3         292.0
+           CH                 COTR       1321.7          1419.0         702.5
+           CH                 COWN        854.8           869.0         479.9
+           CH                 DEAD        152.5           158.2         109.3
+           CH                 DOGC        195.8           196.6         162.0
+           CH                 DRIR        573.6           587.7         217.5
+           CH                 EUCH        588.6           607.7         110.3
+           CH                 EUCL        623.5           624.5         120.4
+           CH                 FRAN       2537.1          2668.0         597.4
+           CH                 FRCN        501.4           501.8         451.1
+           CH                 GLAR        882.4           882.2         279.7
+           CH                 GOLD        449.7           451.7         350.9
+           CH                 GRAI       3038.1          3078.0        1548.8
+           CH                 GUIC        277.1           296.4         103.7
+           CH                 HARR        932.7           936.1         329.0
+           CH                 HERR        233.5           235.7         181.1
+           CH                 HOLB        508.2           527.6         297.6
+           CH                 HOMA        923.4           929.1         629.4
+           CH                 HORS        514.8           518.4         180.4
+           CH                 INKR        821.8           821.6         653.9
+           CH                 JENR        689.9           689.8         330.7
+           CH                 JERV        274.9           284.7         172.0
+           CH                 KHTZ        250.6           248.9         206.7
+           CH                 KINR        340.6           340.4         116.4
+           CH                 KISP       1266.1          1306.0         862.9
+           CH                 KITL        753.0           765.5         534.8
+           CH                 KITR        814.5           819.3         619.9
+           CH                 KLIN        529.7           529.5         403.8
+           CH                 KLUM        931.3           944.5         709.2
+           CH                 KNIG        714.5           720.2         476.1
+           CH                 KSHR        342.8           342.5         284.3
+           CH                 KTSU        370.2           371.9         141.7
+           CH                 KUMR       1012.9          1030.5         273.7
+           CH                 LBIR        649.1           652.6         396.5
+           CH                 LCHL       1244.7          1310.4         468.5
+           CH                 LCHR        902.3           964.4         349.8
+           CH                 LDEN        446.8           449.5         289.6
+           CH                 LFRA       1614.1          1653.7         827.9
+           CH                 LILL        644.3           638.0         464.6
+           CH                 LISR        502.7           503.8         395.9
+           CH                 LKEL        190.3           200.3         106.9
+           CH                 LNAR       1241.4          1250.3         977.0
+           CH                 LNIC        517.1           524.4         375.4
+           CH                 LNTH        647.9           653.1         473.2
+           CH                 LRDO        378.8           376.2         162.0
+           CH                 LSAL       1029.9          1032.5         317.7
+           CH                 LSKE       1384.4          1385.7        1052.8
+           CH                 LSTR        790.2           788.7         575.3
+           CH                 LTRE        940.5           964.3         154.9
+           CH                 MAHD          2.9             2.9           2.7
+           CH                 MCGR       1077.5          1089.9         711.6
+           CH                 MESC         11.3            11.3          11.3
+           CH                 MFRA        120.5           120.9         100.9
+           CH                 MIDR        314.9           318.7         131.5
+           CH                 MORI        674.9           708.2         357.8
+           CH                 MORK       2468.2          2527.6        1577.7
+           CH                 MORR       1596.1          1620.5         646.6
+           CH                 MSKE        860.1           862.1         675.6
+           CH                 MUSK        329.1           331.9          66.4
+           CH                 NAHR       1332.1          1332.8         642.3
+           CH                 NAKR        332.8           333.0         239.4
+           CH                 NARC       1274.3          1332.2         506.4
+           CH                 NASC        255.6           255.8         142.2
+           CH                 NASR        552.4           556.7         327.0
+           CH                 NAZR        811.7           826.2         281.9
+           CH                 NECL        257.7           226.8         129.3
+           CH                 NECR       1698.7          1770.5         516.7
+           CH                 NICL        566.2           593.0         272.3
+           CH                 NIEL        556.2           557.5         231.6
+           CH                 NIMP        722.4           754.7         402.6
+           CH                 OKAN       1426.6          1449.7         468.5
+           CH                 OWIK       1084.9          1094.3         519.3
+           CH                 PARK        283.4           299.5         235.5
+           CH                 PORI        162.3           164.6          73.2
+           CH                 QUES       3218.0          3204.7         314.2
+           CH                 SALM        471.6           473.8         343.8
+           CH                 SALR       1060.0          1073.0         234.9
+           CH                 SANJ        677.6           685.2         482.1
+           CH                 SETN       1011.9          1017.8         543.0
+           CH                 SEYM        509.3           525.4         245.0
+           CH                 SHER        748.2           748.1         465.6
+           CH                 SHUL        852.7           862.3         272.5
+           CH                 SQAM        468.1           464.1         400.5
+           CH                 STHM        445.5           457.6         287.9
+           CH                 STIR        319.7           319.2         268.1
+           CH                 STUL       1075.4          1096.5         138.8
+           CH                 STUR        830.7           871.2         311.1
+           CH                 SUST       1075.8          1088.8         602.4
+           CH                 SWIR        948.8           962.8         422.3
+           CH                 TABR        754.6           792.6         409.3
+           CH                 TAHR        316.3           316.3         216.3
+           CH                 TAHS        255.2           259.3         203.2
+           CH                 TAKL       1983.6          2012.9         281.4
+           CH                 TASR        563.3           568.6         270.9
+           CH                 TATR       1294.5          1297.6         980.1
+           CH                 TESR       1438.8          1438.8         438.1
+           CH                 THOM        371.6           373.9         204.4
+           CH                 TOBA        405.5           409.7         333.5
+           CH                 TSAY        321.1           322.9         280.1
+           CH                 TSIT        247.4           246.2         158.0
+           CH                 TUYR          2.7             2.6           2.6
+           CH                 TWAC        231.7           244.0         144.4
+           CH                 UBIR        348.6           348.2         265.3
+           CH                 UCHR       1796.1          1814.2         453.1
+           CH                 UFRA        813.1           804.0         644.7
+           CH                 UJER        787.9           787.9         278.0
+           CH                 UNAR        760.7           760.7         561.4
+           CH                 UNTH        537.5           539.8         430.9
+           CH                 UNUR        194.4           196.7         162.8
+           CH                 USHU        641.8           643.1         426.6
+           CH                 USKE        733.2           734.4         498.8
+           CH                 VICT        121.6           134.5          59.3
+           CH                 WILL       1377.8          1428.6         640.5
+           CH                 WORC        549.6           558.7         300.8
+           CH                 ZYMO        637.7           650.2         465.1
+           CM                 ALBN          0.0             0.0         822.9
+           CM                 ATNA          0.0             0.0         177.2
+           CM                 BARR          0.0             0.0         427.6
+           CM                 BELA          0.0             0.0         265.9
+           CM                 BRKS          0.0             0.0         515.6
+           CM                 BULK          0.0             0.0        1861.8
+           CM                 CAMB          0.0             0.0          94.7
+           CM                 CHWK          0.0             0.0         328.1
+           CM                 CLAY          0.0             0.0         537.0
+           CM                 COMX          0.0             0.0         414.4
+           CM                 COWN          0.0             0.0         669.0
+           CM                 FRCN          0.0             0.0         495.9
+           CM                 GOLD          0.0             0.0         456.4
+           CM                 GRAI          0.0             0.0        2647.5
+           CM                 HARR          0.0             0.0         399.8
+           CM                 HOLB          0.0             0.0         545.8
+           CM                 HOMA          0.0             0.0         783.6
+           CM                 INKR          0.0             0.0         741.0
+           CM                 JERV          0.0             0.0         274.7
+           CM                 KEEC          0.0             0.0         226.7
+           CM                 KHTZ          0.0             0.0         251.6
+           CM                 KISP          0.0             0.0        1173.3
+           CM                 KITL          0.0             0.0         622.4
+           CM                 KITR          0.0             0.0         775.2
+           CM                 KLIN          0.0             0.0         472.5
+           CM                 KLUM          0.0             0.0         869.5
+           CM                 KNIG          0.0             0.0         656.5
+           CM                 KSHR          0.0             0.0         354.1
+           CM                 KTSU          0.0             0.0         351.1
+           CM                 KUMR          0.0             0.0         477.5
+           CM                 LDEN          0.0             0.0         363.3
+           CM                 LFRA          0.0             0.0        1176.7
+           CM                 LILL          0.0             0.0         529.8
+           CM                 LISR          0.0             0.0         451.8
+           CM                 LKEL          0.0             0.0         142.8
+           CM                 LNAR          0.0             0.0        1141.7
+           CM                 LRDO          0.0             0.0         244.8
+           CM                 LSKE          0.0             0.0        1190.6
+           CM                 LSTR          0.0             0.0         653.6
+           CM                 MBNK          0.0             0.0         116.4
+           CM                 MORI          0.0             0.0         705.5
+           CM                 NASC          0.0             0.0         245.2
+           CM                 NBNK          0.0             0.0          53.1
+           CM                 NECL          0.0             0.0         244.0
+           CM                 NEVI          0.0             0.0         423.6
+           CM                 NIEL          0.0             0.0         333.2
+           CM                 NIMP          0.0             0.0         574.6
+           CM                 OWIK          0.0             0.0         646.2
+           CM                 PARK          0.0             0.0         309.3
+           CM                 PORI          0.0             0.0         160.2
+           CM                 SALM          0.0             0.0         466.1
+           CM                 SANJ          0.0             0.0         691.4
+           CM                 SETN          0.0             0.0         669.4
+           CM                 SEYM          0.0             0.0         367.6
+           CM                 SQAM          0.0             0.0         474.8
+           CM                 SUST          0.0             0.0         906.3
+           CM                 TAHS          0.0             0.0         274.7
+           CM                 TOBA          0.0             0.0         386.2
+           CM                 TSAY          0.0             0.0         321.9
+           CM                 TSIT          0.0             0.0         201.6
+           CM                 UNUR          0.0             0.0         203.0
+           CM                 VICT          0.0             0.0         130.4
+           CM                 WORC          0.0             0.0         463.7
+           CO                 ADMS        608.7           609.7         314.3
+           CO                 ALBN       1202.9          1214.1         777.0
+           CO                 ATNA        482.1           482.5         160.0
+           CO                 BABL       2404.0          2444.4         812.9
+           CO                 BABR       1027.4          1035.8         750.7
+           CO                 BARR        521.9           521.9         411.0
+           CO                 BBAR        177.7           179.4         169.8
+           CO                 BELA        271.8           272.3         263.8
+           CO                 BLAR       1469.2          1478.3         784.9
+           CO                 BONP        277.4           273.0         233.4
+           CO                 BOWR       1356.7          1365.9         933.1
+           CO                 BRKS        675.1           680.6         497.4
+           CO                 BULK       2451.5          2472.0        1815.7
+           CO                 CAMB        139.4           144.8          94.3
+           CO                 CARR        252.5           250.7         186.6
+           CO                 CHIR       1522.4          1524.2         323.8
+           CO                 CHWK        409.1           409.5         325.6
+           CO                 CLAY        723.8           722.5         532.7
+           CO                 CLWR        175.6           172.3         132.6
+           CO                 COMX        527.8           530.8         401.5
+           CO                 COTR       1626.4          1675.7        1082.3
+           CO                 COWN        917.9           921.6         613.9
+           CO                 DEAD        176.2           177.9         128.9
+           CO                 DOGC        210.9           211.1         191.5
+           CO                 FRCN        523.7           523.0         481.4
+           CO                 GOLD        483.8           487.3         428.5
+           CO                 GRAI       3339.6          3348.4        2642.5
+           CO                 GUIC        360.3           367.0         182.1
+           CO                 HARR        968.9           969.3         386.4
+           CO                 HOLB        597.7           602.3         511.2
+           CO                 HOMA        961.8           965.4         744.8
+           CO                 HORS        628.9           628.9         278.8
+           CO                 INKR        896.6           896.4         706.5
+           CO                 JERV        330.9           324.9         241.9
+           CO                 KAKC        545.5           545.1         287.5
+           CO                 KEEC        597.4           598.6         221.6
+           CO                 KHTZ        285.3           285.0         249.1
+           CO                 KINR        369.7           370.0         178.1
+           CO                 KISP       1494.2          1513.6        1127.3
+           CO                 KITL        800.7           801.0         603.4
+           CO                 KITR        852.2           854.1         752.4
+           CO                 KLIN        556.8           556.7         453.9
+           CO                 KLUM        990.5           989.1         847.7
+           CO                 KNIG        803.4           808.9         626.0
+           CO                 KSHR        365.0           364.2         336.3
+           CO                 KTSU        839.8           841.1         364.4
+           CO                 KUMR       1376.7          1381.1         466.0
+           CO                 LBIR        702.6           705.1         485.6
+           CO                 LCHL       1597.2          1627.9         839.3
+           CO                 LCHR       1148.5          1166.1         507.3
+           CO                 LDEN        509.3           509.7         352.8
+           CO                 LFRA       1726.9          1741.6        1223.4
+           CO                 LILL        660.5           654.6         550.6
+           CO                 LISR        530.9           529.7         445.7
+           CO                 LKEL        214.8           216.9         152.0
+           CO                 LNAR       1277.6          1281.7        1119.5
+           CO                 LNIC        557.1           561.7         471.9
+           CO                 LNTH        701.7           704.3         561.2
+           CO                 LRDO        557.8           555.6         253.1
+           CO                 LSKE       1472.9          1472.0        1164.1
+           CO                 LSTR        830.2           829.4         645.2
+           CO                 MBNK        426.0           426.5         115.3
+           CO                 MFRA        144.1           144.6         108.7
+           CO                 MORI        809.3           816.7         650.7
+           CO                 MORR       1801.3          1817.7         942.6
+           CO                 MSKE        917.7           916.8         789.5
+           CO                 NAHR       1799.1          1799.4        1034.5
+           CO                 NAKR        378.4           378.5         286.5
+           CO                 NARC       1609.0          1644.2         839.1
+           CO                 NASC        396.7           395.2         233.7
+           CO                 NASR        692.1           696.4         429.7
+           CO                 NBNK        197.1           188.6          55.0
+           CO                 NECL        567.3           555.3         229.8
+           CO                 NECR       2034.1          2059.7         973.3
+           CO                 NEVI        549.3           554.3         407.0
+           CO                 NICL        721.5           731.6         408.5
+           CO                 NIEL        707.7           707.8         341.7
+           CO                 NIMP        822.3           831.0         559.3
+           CO                 OWIK       1168.7          1173.5         622.8
+           CO                 PARK        327.0           338.0         296.4
+           CO                 PORI        267.3           267.4         156.1
+           CO                 QUES       3317.7          3316.2         440.9
+           CO                 SAJR        822.4           852.7         356.8
+           CO                 SALM        532.5           536.6         448.0
+           CO                 SANJ        724.5           728.3         626.5
+           CO                 SETN       1061.0          1064.4         630.6
+           CO                 SEYM        708.9           718.3         349.5
+           CO                 SHER        799.0           798.9         515.8
+           CO                 SHUL        879.7           880.9         335.7
+           CO                 SQAM        489.3           484.4         455.4
+           CO                 STHM        513.7           511.0         381.1
+           CO                 STIR        327.6           327.7         291.5
+           CO                 SUST       1215.2          1220.4         855.4
+           CO                 TAHR        371.0           371.1         282.4
+           CO                 TAHS        278.7           279.5         257.4
+           CO                 TASR        640.7           643.3         330.6
+           CO                 TATR       1398.5          1399.3        1157.3
+           CO                 THOM        377.4           378.9         213.3
+           CO                 TOBA        436.9           438.9         369.5
+           CO                 TSAY        336.3           337.0         314.2
+           CO                 TSIT        257.8           254.7         193.8
+           CO                 TUYR          2.7             2.7           2.7
+           CO                 TWAC        333.1           334.0         197.3
+           CO                 UBIR        384.1           382.1         302.9
+           CO                 UNAR        815.2           815.2         685.6
+           CO                 UNTH        566.5           564.8         487.3
+           CO                 UNUR        203.1           204.0         191.8
+           CO                 USHU        685.1           679.9         541.0
+           CO                 USKE        830.6           830.3         615.9
+           CO                 VICT        175.3           178.5         131.2
+           CO                 WILL       1625.2          1640.6        1037.5
+           CO                 WORC        688.3           691.7         449.3
+           CO                 ZYMO        688.1           693.3         541.5
+           GR                 ATLL       2232.0          2231.5         259.2
+           GR                 BEAV       1750.1          1765.4        1131.3
+           GR                 BLUR        376.3           375.3         261.4
+           GR                 CAMB         76.8            78.8          52.4
+           GR                 COAL        964.6           964.8         687.0
+           GR                 CRYL        398.9           398.9         205.4
+           GR                 DEAL        857.3           856.9         437.4
+           GR                 DEAR        524.7           528.5         304.3
+           GR                 DUNE       1820.8          1819.8        1101.5
+           GR                 FINA       2090.8          2094.7         619.3
+           GR                 FINL       1063.8          1069.3         801.6
+           GR                 FIRE        617.7           617.6         327.2
+           GR                 FONT       1183.8          1193.0         633.0
+           GR                 FOXR        725.8           726.2         513.0
+           GR                 FROG        720.5           720.5         552.6
+           GR                 GATA        622.9           622.9         441.5
+           GR                 GLAR        648.5           648.9         188.4
+           GR                 INGR        844.5           846.2         611.7
+           GR                 INKR        666.0           665.8         535.9
+           GR                 JENR        538.5           538.4         270.0
+           GR                 KAHN       1321.2          1339.5         733.6
+           GR                 KISK       1417.9          1441.4         891.4
+           GR                 KLAR        581.5           580.5         461.2
+           GR                 KUSR        542.8           544.1         236.3
+           GR                 LBTN       2152.3          2170.8        1297.5
+           GR                 LFRT       1559.6          1558.3         805.1
+           GR                 LHAF       1498.4          1521.6         988.1
+           GR                 LIAR        655.6           655.7         468.7
+           GR                 LISR        431.8           431.6         337.4
+           GR                 LKEC        817.6           817.5         489.0
+           GR                 LMUS       1309.7          1325.2         771.9
+           GR                 LOMI        830.7           830.6         551.7
+           GR                 LPCE        985.5          1024.3         574.5
+           GR                 LPET       1228.4          1236.0         641.4
+           GR                 LPRO        604.2           604.7         366.8
+           GR                 LRAN        565.2           564.7         345.6
+           GR                 LSIK       1772.2          1788.6         984.3
+           GR                 MDEA        756.2           756.9         495.7
+           GR                 MESI        489.3           490.5         341.2
+           GR                 MFRT       1032.8          1041.9         522.6
+           GR                 MILL        881.4           895.5         475.3
+           GR                 MMUS        857.3           859.0         617.8
+           GR                 MPRO       1087.3          1098.4         672.0
+           GR                 MSKE        667.3           667.9         530.6
+           GR                 MSTR       1060.8          1059.0         746.6
+           GR                 MURR       1156.9          1147.5         800.2
+           GR                 NAHR        931.7           931.6         489.4
+           GR                 NAKR        474.5           474.4         302.6
+           GR                 NATR       1754.2          1777.8         779.4
+           GR                 OSPK        420.9           421.2         339.3
+           GR                 PARA       1247.9          1246.5         331.5
+           GR                 PARS       1428.2          1437.2         983.8
+           GR                 PCEA       1818.7          1819.2         375.7
+           GR                 PINE       1000.4          1006.0         752.2
+           GR                 SAHD        572.7           604.6         216.9
+           GR                 SMOK       1058.4          1060.1         652.2
+           GR                 SPAT        680.5           680.4         435.4
+           GR                 STIR        265.2           265.4         209.5
+           GR                 SWIR        730.3           733.9         382.0
+           GR                 TATR       1085.7          1088.7         807.4
+           GR                 TESR       1197.8          1200.1         389.9
+           GR                 TOAD       1043.9          1042.8         789.6
+           GR                 TOOD        883.9           884.2         628.8
+           GR                 TSEA       1324.4          1344.2         536.3
+           GR                 TUTR       1139.6          1140.9         187.8
+           GR                 TUYR          2.6             2.6           2.2
+           GR                 UBTN       2096.3          2127.7        1254.7
+           GR                 UFRT       1248.8          1249.5         570.8
+           GR                 UHAF       1023.6          1035.2         710.1
+           GR                 UJER        583.6           583.6         254.4
+           GR                 UKEC        693.9           699.4         411.7
+           GR                 ULRD        939.3           938.1         599.3
+           GR                 UMUS       1000.2          1009.2         689.0
+           GR                 UOMI        609.9           608.3         465.0
+           GR                 UPCE       1451.5          1467.4         917.8
+           GR                 UPET        510.3           511.4         142.4
+           GR                 UPRO       1046.6          1050.1         714.1
+           GR                 USIK       1807.8          1826.7        1205.6
+           GR                 USTK        732.6           732.6         479.1
+           PK                 ADMS          0.0             0.0         326.6
+           PK                 ALBN          0.0             0.0         819.7
+           PK                 ATNA          0.0             0.0         177.6
+           PK                 BABL          0.0             0.0         829.7
+           PK                 BABR          0.0             0.0         779.3
+           PK                 BARR          0.0             0.0         427.6
+           PK                 BELA          0.0             0.0         266.5
+           PK                 BONP          0.0             0.0         259.2
+           PK                 BRKS          0.0             0.0         507.2
+           PK                 BULK          0.0             0.0        1864.0
+           PK                 CAMB          0.0             0.0          94.7
+           PK                 CHWK          0.0             0.0         320.3
+           PK                 CLAY          0.0             0.0         531.5
+           PK                 COMX          0.0             0.0         399.3
+           PK                 COTR          0.0             0.0        1088.8
+           PK                 COWN          0.0             0.0         624.2
+           PK                 DEAD          0.0             0.0         130.2
+           PK                 DOGC          0.0             0.0         200.1
+           PK                 FRCN          0.0             0.0         497.1
+           PK                 GOLD          0.0             0.0         450.8
+           PK                 GRAI          0.0             0.0        2647.3
+           PK                 HARR          0.0             0.0         392.1
+           PK                 HOLB          0.0             0.0         537.6
+           PK                 HOMA          0.0             0.0         783.5
+           PK                 INKR          0.0             0.0         740.9
+           PK                 JERV          0.0             0.0         257.4
+           PK                 KEEC          0.0             0.0         226.3
+           PK                 KHTZ          0.0             0.0         252.0
+           PK                 KINR          0.0             0.0         159.6
+           PK                 KISP          0.0             0.0        1177.5
+           PK                 KITL          0.0             0.0         623.0
+           PK                 KITR          0.0             0.0         780.8
+           PK                 KLIN          0.0             0.0         470.2
+           PK                 KLUM          0.0             0.0         870.6
+           PK                 KNIG          0.0             0.0         663.0
+           PK                 KSHR          0.0             0.0         352.0
+           PK                 KTSU          0.0             0.0         351.2
+           PK                 KUMR          0.0             0.0         486.1
+           PK                 LCHL          0.0             0.0         801.2
+           PK                 LDEN          0.0             0.0         363.3
+           PK                 LFRA          0.0             0.0        1169.2
+           PK                 LILL          0.0             0.0         537.6
+           PK                 LISR          0.0             0.0         451.7
+           PK                 LKEL          0.0             0.0         144.5
+           PK                 LNAR          0.0             0.0        1145.1
+           PK                 LNIC          0.0             0.0         451.2
+           PK                 LNTH          0.0             0.0         582.7
+           PK                 LRDO          0.0             0.0         247.8
+           PK                 LSKE          0.0             0.0        1193.3
+           PK                 LSTR          0.0             0.0         653.6
+           PK                 MBNK          0.0             0.0         115.8
+           PK                 MORI          0.0             0.0         704.6
+           PK                 MORR          0.0             0.0         971.7
+           PK                 MSKE          0.0             0.0         844.7
+           PK                 NAHR          0.0             0.0        1041.3
+           PK                 NAKR          0.0             0.0         306.1
+           PK                 NARC          0.0             0.0         828.6
+           PK                 NASC          0.0             0.0         242.8
+           PK                 NASR          0.0             0.0         433.9
+           PK                 NBNK          0.0             0.0          52.1
+           PK                 NECL          0.0             0.0         245.7
+           PK                 NEVI          0.0             0.0         427.0
+           PK                 NIEL          0.0             0.0         336.6
+           PK                 NIMP          0.0             0.0         575.6
+           PK                 OWIK          0.0             0.0         649.9
+           PK                 PARK          0.0             0.0         302.5
+           PK                 PORI          0.0             0.0         161.7
+           PK                 QUES          0.0             0.0         454.7
+           PK                 SAJR          0.0             0.0         359.9
+           PK                 SALM          0.0             0.0         465.9
+           PK                 SANJ          0.0             0.0         658.0
+           PK                 SETN          0.0             0.0         669.6
+           PK                 SEYM          0.0             0.0         359.7
+           PK                 SHUL          0.0             0.0         343.4
+           PK                 SQAM          0.0             0.0         469.6
+           PK                 STHM          0.0             0.0         385.3
+           PK                 STIR          0.0             0.0         307.5
+           PK                 SUST          0.0             0.0         906.3
+           PK                 TAHR          0.0             0.0         310.0
+           PK                 TAHS          0.0             0.0         271.4
+           PK                 THOM          0.0             0.0         218.0
+           PK                 TOBA          0.0             0.0         385.9
+           PK                 TSAY          0.0             0.0         322.9
+           PK                 TSIT          0.0             0.0         201.6
+           PK                 UNUR          0.0             0.0         203.0
+           PK                 USHU          0.0             0.0         557.3
+           PK                 VICT          0.0             0.0         126.4
+           PK                 WORC          0.0             0.0         465.9
+           PK                 ZYMO          0.0             0.0         567.2
+           SK                 ADMS        229.9           229.9         219.8
+           SK                 ALBN        320.6           320.6         141.3
+           SK                 ATNA        181.8           181.8          66.8
+           SK                 BABL        941.6           941.6         458.0
+           SK                 BARR         57.8            57.8          23.1
+           SK                 BLAR         21.3            21.3          41.0
+           SK                 BOWR         82.4            82.4          69.7
+           SK                 BRKS        109.4           109.4          46.1
+           SK                 BULK         64.6            64.6          81.8
+           SK                 CAMB         12.4            12.4           2.4
+           SK                 CARR         41.1            41.1          93.7
+           SK                 CHES         10.2            10.2          12.6
+           SK                 CHIR       1014.6          1014.6          97.3
+           SK                 CHWK         62.9            62.9           9.0
+           SK                 CLAY        145.2           145.2         112.5
+           SK                 COMX         48.8            48.8          58.9
+           SK                 FRAN        880.9           880.9         714.5
+           SK                 GOLD         25.5            25.5          50.5
+           SK                 GRAI        123.1           123.1         133.0
+           SK                 HARR        546.1           546.1          54.1
+           SK                 HOMA         93.5            93.5          86.4
+           SK                 HORS        189.5           189.5          68.4
+           SK                 INKR          7.4             7.4           1.6
+           SK                 JERV         57.0            57.0          11.8
+           SK                 KAKC         48.9            48.9          20.1
+           SK                 KEEC        104.3           104.3          26.4
+           SK                 KINR        135.4           135.4          96.3
+           SK                 KISP         98.4            98.4          41.1
+           SK                 KITL        101.7           101.7          91.3
+           SK                 KITR         11.8            11.8           8.3
+           SK                 KLIN         25.4            25.4           6.5
+           SK                 KLUM         32.3            32.3         245.8
+           SK                 KNIG         84.9            84.9          39.0
+           SK                 KUMR        439.1           439.1          41.8
+           SK                 LBIR        104.8           104.8         107.6
+           SK                 LCHL        147.0           147.0          93.0
+           SK                 LCHR        100.4           100.4          43.9
+           SK                 LFRA        349.8           349.8         204.2
+           SK                 LILL         97.0            97.0         342.5
+           SK                 LKEL         30.3            30.3          57.5
+           SK                 LNAR         29.9            29.9          32.7
+           SK                 LNTH         42.6            42.6          68.6
+           SK                 LRDO        121.0           121.0          24.7
+           SK                 LSKE         56.9            56.9          19.1
+           SK                 LSTR         35.4            35.4           7.6
+           SK                 LTRE        146.3           146.3         174.6
+           SK                 MBNK         44.0            44.0          28.8
+           SK                 MIDR         79.7            79.7          62.5
+           SK                 MORI         69.0            69.0          46.7
+           SK                 MORK         16.2            16.2          28.2
+           SK                 MORR        442.3           442.3         221.1
+           SK                 MSKE         11.2            11.2          12.4
+           SK                 NAHR         23.9            23.9           3.8
+           SK                 NAKR         14.6            14.6           3.0
+           SK                 NASC         15.0            15.0          12.4
+           SK                 NASR         57.5            57.5          25.8
+           SK                 NECL         50.5            50.5           8.6
+           SK                 NECR        161.8           161.8         188.8
+           SK                 NEVI         44.8            44.8          27.1
+           SK                 NIEL        178.0           178.0          37.9
+           SK                 NIMP        159.9           159.9         254.2
+           SK                 OKAN        762.3           762.3         391.4
+           SK                 OWIK        435.8           435.8         234.5
+           SK                 QUES       2758.5          2741.4         260.1
+           SK                 SAJR         59.4            59.4         249.0
+           SK                 SALM          7.9             7.9           4.0
+           SK                 SANJ         64.6            64.6         107.0
+           SK                 SETN        352.5           352.5         196.7
+           SK                 SEYM        147.4           147.4           9.7
+           SK                 SHER        106.9           106.9          25.7
+           SK                 SHUL        501.0           500.7         274.1
+           SK                 SQAM         11.2            11.2          23.9
+           SK                 STHM         28.0            28.0         217.6
+           SK                 STIR         14.3            14.3          23.6
+           SK                 STUL        529.8           529.8         223.7
+           SK                 STUR         41.5            41.5          56.3
+           SK                 SUST         79.9            79.9          45.2
+           SK                 TAHR         20.5            20.5           4.2
+           SK                 TAKL       1446.9          1445.9         294.5
+           SK                 TASR        132.7           132.7          75.4
+           SK                 TATR         53.0            53.0          18.9
+           SK                 THOM        158.7           158.7          59.4
+           SK                 TOBA          8.6             8.6          44.3
+           SK                 TSIT         38.3            38.3           5.5
+           SK                 UFRA         39.6            39.6          41.5
+           SK                 UNTH         10.3            10.3          21.2
+           SK                 USHU        105.4           105.4         229.1
+           SK                 USTK         48.7            48.7         115.4
+           SK                 UTRE        248.2           248.2         130.5
+           SK                 WORC         60.0            60.0          13.1
+           SK                 ZYMO         33.4            33.4          51.1
+           ST                 ALBN       1303.0          1335.3         647.8
+           ST                 ATNA        624.7           630.0         171.0
+           ST                 BABL       2383.3          2484.5         353.0
+           ST                 BABR       1202.9          1220.2         573.1
+           ST                 BBAR        304.7           305.0         191.1
+           ST                 BELA        296.6           299.9         236.9
+           ST                 BONP        496.4           530.8         258.4
+           ST                 BRKS        792.5           809.1         391.2
+           ST                 BULK       2634.0          2756.1        1297.6
+           ST                 CAMB        134.1           139.4          66.4
+           ST                 CHIR       1613.0          1631.3         286.2
+           ST                 CHWK        395.7           405.1         264.2
+           ST                 CLAY        819.4           825.8         426.7
+           ST                 COMX        590.9           607.3         338.7
+           ST                 COWN       1006.2          1017.9         491.9
+           ST                 DEAD        182.1           193.2         114.3
+           ST                 FRCN        678.9           686.2         484.7
+           ST                 GOLD        592.6           603.6         384.3
+           ST                 GRAI       3429.1          3477.5        1565.5
+           ST                 GUIC        362.7           386.2         105.8
+           ST                 HARR        978.8           982.8         335.5
+           ST                 HOLB        638.9           685.7         304.4
+           ST                 HOMA       1121.3          1129.3         674.2
+           ST                 HORS        583.4           590.4         172.1
+           ST                 INKR       1031.0          1043.9         698.3
+           ST                 ISKR        675.8           674.5         436.5
+           ST                 JERV        379.7           411.1         199.2
+           ST                 KHTZ        328.5           345.6         236.2
+           ST                 KINR        631.4           633.4         251.1
+           ST                 KISP       1558.0          1619.7         907.5
+           ST                 KITL        872.2           884.2         547.4
+           ST                 KITR        964.0           969.9         649.7
+           ST                 KLIN        671.7           673.4         444.0
+           ST                 KLUM       1073.5          1098.6         729.2
+           ST                 KNIG        948.5           966.5         545.4
+           ST                 KSHR        466.1           468.2         311.1
+           ST                 KTSU        432.8           432.2         148.9
+           ST                 KUMR       1288.3          1299.9         293.4
+           ST                 LBIR        780.6           785.0         415.5
+           ST                 LCHR       1042.1          1081.8         320.5
+           ST                 LDEN        662.7           663.5         343.6
+           ST                 LFRA       1739.8          1766.2         850.9
+           ST                 LILL        764.8           767.2         481.3
+           ST                 LISR        571.4           571.6         404.2
+           ST                 LKEL        216.4           222.0         111.1
+           ST                 LNAR       1471.6          1483.8        1019.3
+           ST                 LNIC        573.7           588.3         369.8
+           ST                 LNTH        888.5           901.4         527.8
+           ST                 LRDO        586.9           591.4         196.9
+           ST                 LSKE       1559.7          1559.2        1087.7
+           ST                 MESC        501.7           502.6         303.5
+           ST                 MORI        959.9          1002.1         371.5
+           ST                 MORR       1878.8          1897.7         664.1
+           ST                 MSKE       1072.9          1077.9         697.0
+           ST                 MSTR       1854.5          1867.3         957.1
+           ST                 NAHR       1628.1          1628.3         640.9
+           ST                 NASC        443.4           453.7         189.9
+           ST                 NASR        689.2           699.5         340.1
+           ST                 NECL        366.9           366.7         137.3
+           ST                 NEVI        579.1           595.1         252.0
+           ST                 NIEL        704.5           709.4         261.8
+           ST                 NIMP        838.4           861.9         405.1
+           ST                 OWIK       1317.9          1327.7         598.6
+           ST                 PARK        454.5           475.2         322.4
+           ST                 PORI        199.0           205.4          74.3
+           ST                 QUES       3376.4          3356.8         331.9
+           ST                 SALM        622.9           635.8         364.3
+           ST                 SANJ       1022.0          1050.5         598.6
+           ST                 SETN       1301.5          1309.0         635.3
+           ST                 SEYM        681.1           694.8         268.7
+           ST                 SHER        926.8           926.9         503.3
+           ST                 SHUL        963.8          1005.2         301.3
+           ST                 SQAM        721.0           732.1         490.1
+           ST                 STHM        543.2           562.2         298.8
+           ST                 STIR        487.9           483.3         312.4
+           ST                 SUST       1335.7          1343.9         610.5
+           ST                 TAHR        442.2           442.2         226.2
+           ST                 TAHS        323.2           325.3         211.2
+           ST                 TASR        740.5           755.9         320.1
+           ST                 TATR       1542.1          1544.5        1004.8
+           ST                 TAYR        341.5           344.5         215.4
+           ST                 THOM        496.5           501.3         230.7
+           ST                 TOBA        561.6           569.3         395.5
+           ST                 TSAY        391.4           393.9         304.2
+           ST                 TSIT        472.3           483.1         283.0
+           ST                 UBIR        425.7           428.1         263.3
+           ST                 UCHR       1896.1          1908.2         424.9
+           ST                 UNAR        939.2           939.2         560.3
+           ST                 USKE       1157.5          1160.5         634.2
+           ST                 USTK       1402.3          1402.3         631.5
+           ST                 VICT        145.9           161.1          63.1
+           ST                 WORC        714.2           724.2         337.0
+           ST                 ZYMO        783.3           793.9         469.9
+          WCT                 BULL       1161.5          1175.7         718.5
+          WCT                 CLRH       1380.2          1379.5         633.4
+          WCT                 COLR       1135.0          1146.4         729.9
+          WCT                 DUNC        856.4           856.1         472.9
+          WCT                 ELKR       2042.2          2045.7        1595.0
+          WCT                 KETL       1946.9          1973.4        1377.1
+          WCT                 KHOR       1094.2          1098.0         756.0
+          WCT                 KOTL       2186.5          2179.0        1134.8
+          WCT                 KOTR       1280.6          1298.5         965.7
+          WCT                 LARL       1105.7          1113.8         557.9
+          WCT                 REVL        744.3           747.0         393.5
+          WCT                 SHUL        981.0           995.6         384.2
+          WCT                 SLOC        584.9           587.3         337.8
+          WCT                 SMAR       1808.6          1839.1        1359.4
+          WCT                 UARL       1083.5          1088.8         470.8
+          WCT                 USHU       1086.4          1089.1         696.6
+ spawn_km_minimal rear_diff spawn_diff
+            361.1      -0.6        0.1
+           1042.5      24.8       -0.7
+            999.0       6.4        1.8
+            540.0       0.0        0.1
+            328.8       5.8       -0.8
+           2105.8       1.3        1.3
+            445.5       2.8        3.3
+            979.8       0.3        5.7
+            458.7       0.0        2.0
+            415.5      21.8       -1.9
+           1052.1       7.6        4.2
+            515.2      10.5       -0.7
+           1850.1      49.2       -3.8
+            713.8      30.6        0.1
+            286.1      -1.2       -4.1
+            503.5       4.2        1.1
+            530.6      15.7       -5.6
+            382.8       7.0        5.5
+            448.5      -0.2       -0.3
+            309.1       1.4       -0.6
+            715.0       1.2       -6.9
+           1218.8       0.7       -0.2
+            624.4       5.5      -10.3
+           1479.5      32.3        4.1
+            656.1       5.9       -1.3
+            697.1       3.5        1.4
+            160.1      -0.7        0.0
+            978.8       3.6       -2.8
+            531.9       3.4       -0.5
+            283.7       1.9       -3.2
+            351.0       2.8        2.4
+            537.9      -1.1       -2.7
+            783.5       6.0        2.3
+           1529.2      37.9       -5.0
+            708.3       2.7        0.2
+           1336.2      23.1        2.3
+           1360.0       6.5       -4.3
+           1014.5       3.9       -2.1
+            875.1       2.5       -0.2
+            929.1      -0.1       -0.1
+           1123.4      53.1        3.4
+            660.2      10.8       -5.9
+            943.8       0.0        0.0
+            822.4       0.1       -0.2
+            220.3       3.6        2.8
+            467.5       9.0       -3.6
+            578.0       5.3        0.2
+            852.9       4.7        3.2
+            285.3       8.8       -3.1
+           1111.2       7.4        0.0
+            810.6      -0.3       -0.5
+            588.5      -0.8        0.3
+            391.8      25.1       -9.9
+           1090.0      23.8      -17.4
+            215.8       0.4       -1.4
+           1422.6       5.4        1.5
+           1248.7      19.9       -8.9
+            823.9       5.4        0.2
+            761.5       2.6        0.9
+            855.3      11.9        1.8
+            926.6       8.0       -4.5
+           1010.9      14.3      -16.1
+            877.6      22.3      -12.0
+            545.1      10.4      -14.7
+            547.5       5.9        1.3
+           2032.1      23.9        4.4
+            911.2      12.5        2.7
+            727.5       5.8        6.7
+            485.6       0.4        0.2
+           1244.9      11.2       -0.3
+           1879.7      10.2       -0.2
+           1801.2      13.6       -1.3
+            658.5      11.7       -9.0
+            469.7      -0.3        0.0
+            145.3       0.7        0.7
+           1299.6       2.2        1.7
+           1323.5       5.5        5.0
+            455.1       6.8       -1.3
+            779.4      10.0        0.7
+           1000.8      19.4       -1.7
+           1001.4       9.2        1.0
+            588.7       1.6        1.5
+            585.7       0.0        0.0
+           1325.0      -3.0       -2.1
+            323.5       3.2        0.2
+            382.2      11.3      -12.1
+           1056.1      15.8       -4.4
+            931.1       1.9       -0.8
+            687.3      10.0       -3.9
+            202.1      10.6        0.7
+           1071.9       0.4        1.0
+           2142.4      18.5       -5.5
+            959.9      13.6       -2.2
+           1085.7       3.6        1.0
+            921.1       3.3       -1.0
+           1390.4      -2.5        3.1
+           1667.0      16.8        0.5
+            877.3      14.6        5.3
+            488.4     -11.7       -0.8
+           1790.0      18.4       -3.1
+            993.6      14.5        2.2
+           1052.7      29.3       -3.5
+            592.5       2.0       -2.5
+            724.4      16.2        4.5
+            335.6      -1.3        2.4
+           1675.8      26.6       -6.9
+            918.0       2.8       -4.8
+           1638.0      25.1       -1.6
+            484.9       9.5        1.7
+            405.1       1.0       -1.3
+            852.2       4.9        1.8
+            450.5      12.7       -3.9
+           1161.1      11.0      -18.5
+            168.7      -1.7       -1.8
+            386.9       6.7       -1.6
+           1329.3       6.8        6.0
+           1525.4       2.8        0.2
+            916.0       0.0        0.2
+            647.3       8.3       -9.2
+            451.0       8.5       -4.4
+            520.9       1.3        1.3
+            910.9       5.7        6.3
+            703.9       2.3        6.1
+            680.0      12.0        3.1
+            338.3       8.3       -0.2
+            701.4      14.3        0.7
+            459.0       4.4       -0.9
+            275.5      -0.2        0.0
+            346.5      18.4       -5.3
+           1682.8       2.7        0.3
+           1126.8       2.8       -0.5
+           1463.8       1.7        1.5
+           1140.3       0.1        0.0
+            226.4       9.2       -1.0
+            510.3       7.7       -7.3
+            319.7       1.5       -1.4
+           2049.4       8.3        0.2
+            919.2      -0.3        5.4
+           1115.4       7.5       -0.8
+            936.8       6.5       -0.6
+            942.6       6.9       -9.0
+           1354.7      12.8        3.6
+            749.1       1.9        0.9
+            971.0       4.9        0.9
+           1234.5       2.4        1.3
+            741.6       0.0        0.0
+            644.7       4.9       -0.7
+            556.8       4.0        1.6
+            242.2       0.1        1.0
+            909.0      16.5       -2.5
+           1682.4      16.1        0.1
+           1171.8       1.6        0.3
+            732.3       2.4      -10.2
+           1628.0       1.7        0.7
+            738.9       1.9       -0.8
+            203.7       9.5       -1.1
+           1053.2      29.9       -3.3
+            596.0       3.8        1.9
+            277.2       3.2       -0.6
+            605.6      15.7        0.4
+            120.4       0.8        0.3
+            350.1     105.3       -2.3
+            541.5      20.7        0.3
+            364.0       0.0       -0.1
+            159.6       2.8       -0.5
+            227.3       1.3       -1.2
+            484.9      30.6        0.6
+            199.8       1.2       -2.2
+            671.0      25.0        1.4
+            364.6      11.5        0.9
+           1269.1     104.2        2.8
+             66.9       8.2        0.5
+            174.4      -1.0       -3.1
+             88.3      11.7        0.0
+            196.1      25.9        0.6
+            230.9       4.4        2.0
+            259.9       0.3        3.1
+            405.8       5.8       -2.7
+            111.9       0.4        2.0
+            292.7      11.6        0.7
+            698.7      97.3       -3.8
+            483.6      14.2        3.7
+            109.3       5.7        0.0
+            162.1       0.8        0.1
+            220.0      14.1        2.5
+            111.3      19.1        1.0
+            120.3       1.0       -0.1
+            598.6     130.9        1.2
+            447.1       0.4       -4.0
+            279.5      -0.2       -0.2
+            347.1       2.0       -3.8
+           1556.7      39.9        7.9
+            105.0      19.3        1.3
+            326.0       3.4       -3.0
+            181.7       2.2        0.6
+            297.2      19.4       -0.4
+            626.8       5.7       -2.6
+            180.1       3.6       -0.3
+            653.7      -0.2       -0.2
+            330.7      -0.1        0.0
+            167.5       9.8       -4.5
+            206.8      -1.7        0.1
+            117.4      -0.2        1.0
+            858.8      39.9       -4.1
+            533.8      12.5       -1.0
+            618.9       4.8       -1.0
+            402.7      -0.2       -1.1
+            706.4      13.2       -2.8
+            474.4       5.7       -1.7
+            284.4      -0.3        0.1
+            141.8       1.7        0.1
+            272.1      17.6       -1.6
+            395.5       3.5       -1.0
+            467.6      65.7       -0.9
+            345.6      62.1       -4.2
+            289.4       2.7       -0.2
+            830.6      39.6        2.7
+            466.0      -6.3        1.4
+            394.0       1.1       -1.9
+            107.6      10.0        0.7
+            975.3       8.9       -1.7
+            371.9       7.3       -3.5
+            470.4       5.2       -2.8
+            159.7      -2.6       -2.3
+            315.5       2.6       -2.2
+           1050.1       1.3       -2.7
+            574.4      -1.5       -0.9
+            154.9      23.8        0.0
+              2.7       0.0        0.0
+            708.6      12.4       -3.0
+             11.3       0.0        0.0
+            101.3       0.4        0.4
+            130.3       3.8       -1.2
+            358.4      33.3        0.6
+           1576.5      59.4       -1.2
+            646.1      24.4       -0.5
+            676.5       2.0        0.9
+             66.4       2.8        0.0
+            641.2       0.7       -1.1
+            238.9       0.2       -0.5
+            506.9      57.9        0.5
+            144.8       0.2        2.6
+            327.4       4.3        0.4
+            281.3      14.5       -0.6
+            127.4     -30.9       -1.9
+            518.7      71.8        2.0
+            274.4      26.8        2.1
+            230.2       1.3       -1.4
+            403.3      32.3        0.7
+            472.9      23.1        4.4
+            518.6       9.4       -0.7
+            232.9      16.1       -2.6
+             74.9       2.3        1.7
+            312.9     -13.3       -1.3
+            346.1       2.2        2.3
+            234.9      13.0        0.0
+            483.1       7.6        1.0
+            540.3       5.9       -2.7
+            242.4      16.1       -2.6
+            465.5      -0.1       -0.1
+            272.5       9.6        0.0
+            399.1      -4.0       -1.4
+            288.6      12.1        0.7
+            263.2      -0.5       -4.9
+            136.2      21.1       -2.6
+            310.8      40.5       -0.3
+            600.3      13.0       -2.1
+            422.3      14.0        0.0
+            409.8      38.0        0.5
+            216.3       0.0        0.0
+            205.0       4.1        1.8
+            283.9      29.3        2.5
+            273.6       5.3        2.7
+            980.6       3.1        0.5
+            438.1       0.0        0.0
+            203.5       2.3       -0.9
+            334.4       4.2        0.9
+            280.3       1.8        0.2
+            154.9      -1.2       -3.1
+              2.6      -0.1        0.0
+            144.6      12.3        0.2
+            263.7      -0.4       -1.6
+            451.5      18.1       -1.6
+            646.1      -9.1        1.4
+            278.0       0.0        0.0
+            560.2       0.0       -1.2
+            427.3       2.3       -3.6
+            161.7       2.3       -1.1
+            427.7       1.3        1.1
+            498.8       1.2        0.0
+             59.9      12.9        0.6
+            644.0      50.8        3.5
+            301.9       9.1        1.1
+            460.8      12.5       -4.3
+            827.6       0.0        4.7
+            179.7       0.0        2.5
+            427.6       0.0        0.0
+            263.1       0.0       -2.8
+            513.9       0.0       -1.7
+           1870.1       0.0        8.3
+             94.9       0.0        0.2
+            323.1       0.0       -5.0
+            536.1       0.0       -0.9
+            415.6       0.0        1.2
+            670.1       0.0        1.1
+            495.9       0.0        0.0
+            461.4       0.0        5.0
+           2646.3       0.0       -1.2
+            397.2       0.0       -2.6
+            546.6       0.0        0.8
+            790.1       0.0        6.5
+            741.0       0.0        0.0
+            270.8       0.0       -3.9
+            226.9       0.0        0.2
+            252.1       0.0        0.5
+           1174.9       0.0        1.6
+            622.6       0.0        0.2
+            775.9       0.0        0.7
+            472.5       0.0        0.0
+            874.4       0.0        4.9
+            659.8       0.0        3.3
+            353.6       0.0       -0.5
+            351.1       0.0        0.0
+            476.8       0.0       -0.7
+            362.9       0.0       -0.4
+           1179.8       0.0        3.1
+            527.7       0.0       -2.1
+            453.3       0.0        1.5
+            144.8       0.0        2.0
+           1145.1       0.0        3.4
+            239.6       0.0       -5.2
+           1189.0       0.0       -1.6
+            653.3       0.0       -0.3
+            116.0       0.0       -0.4
+            708.8       0.0        3.3
+            239.9       0.0       -5.3
+             52.9       0.0       -0.2
+            241.3       0.0       -2.7
+            423.8       0.0        0.2
+            334.9       0.0        1.7
+            574.4       0.0       -0.2
+            645.8       0.0       -0.4
+            313.6       0.0        4.3
+            160.8       0.0        0.6
+            474.8       0.0        8.7
+            695.4       0.0        4.0
+            669.4       0.0        0.0
+            370.5       0.0        2.9
+            471.4       0.0       -3.4
+            906.2       0.0       -0.1
+            277.9       0.0        3.2
+            388.7       0.0        2.5
+            320.9       0.0       -1.0
+            202.3       0.0        0.7
+            203.1       0.0        0.1
+            131.0       0.0        0.6
+            462.6       0.0       -1.1
+            313.6       1.0       -0.7
+            780.3      11.2        3.3
+            159.9       0.4       -0.1
+            814.3      40.4        1.4
+            751.6       8.4        0.9
+            411.0       0.0        0.0
+            170.3       1.7        0.5
+            261.4       0.5       -2.4
+            789.0       9.1        4.1
+            229.5      -4.4       -3.9
+            936.3       9.2        3.2
+            497.7       5.5        0.3
+           1806.7      20.5       -9.0
+             95.3       5.4        1.0
+            184.6      -1.8       -2.0
+            324.6       1.8        0.8
+            317.1       0.4       -8.5
+            524.8      -1.3       -7.9
+            132.0      -3.3       -0.6
+            396.4       3.0       -5.1
+           1089.1      49.3        6.8
+            607.6       3.7       -6.3
+            129.0       1.7        0.1
+            191.9       0.2        0.4
+            479.9      -0.7       -1.5
+            421.3       3.5       -7.2
+           2636.5       8.8       -6.0
+            184.6       6.7        2.5
+            383.7       0.4       -2.7
+            509.5       4.6       -1.7
+            747.7       3.6        2.9
+            273.7       0.0       -5.1
+            705.9      -0.2       -0.6
+            232.7      -6.0       -9.2
+            287.0      -0.4       -0.5
+            220.2       1.2       -1.4
+            246.1      -0.3       -3.0
+            176.2       0.3       -1.9
+           1122.4      19.4       -4.9
+            602.7       0.3       -0.7
+            749.4       1.9       -3.0
+            453.4      -0.1       -0.5
+            843.0      -1.4       -4.7
+            622.5       5.5       -3.5
+            333.9      -0.8       -2.4
+            359.4       1.3       -5.0
+            460.1       4.4       -5.9
+            485.8       2.5        0.2
+            842.8      30.7        3.5
+            512.8      17.6        5.5
+            352.9       0.4        0.1
+           1197.6      14.7      -25.8
+            543.9      -5.9       -6.7
+            444.8      -1.2       -0.9
+            149.3       2.1       -2.7
+           1116.7       4.1       -2.8
+            472.7       4.6        0.8
+            563.9       2.6        2.7
+            239.4      -2.2      -13.7
+           1161.7      -0.9       -2.4
+            643.5      -0.8       -1.7
+            114.7       0.5       -0.6
+            108.8       0.5        0.1
+            650.4       7.4       -0.3
+            942.1      16.4       -0.5
+            787.6      -0.9       -1.9
+           1034.3       0.3       -0.2
+            286.5       0.1        0.0
+            843.9      35.2        4.8
+            229.4      -1.5       -4.3
+            428.7       4.3       -1.0
+             54.7      -8.5       -0.3
+            226.8     -12.0       -3.0
+            975.6      25.6        2.3
+            407.4       5.0        0.4
+            409.0      10.1        0.5
+            339.1       0.1       -2.6
+            564.0       8.7        4.7
+            623.9       4.8        1.1
+            303.1      11.0        6.7
+            154.4       0.1       -1.7
+            439.5      -1.5       -1.4
+            359.1      30.3        2.3
+            446.7       4.1       -1.3
+            624.6       3.8       -1.9
+            630.9       3.4        0.3
+            346.4       9.4       -3.1
+            515.7      -0.1       -0.1
+            336.3       1.2        0.6
+            446.7      -4.9       -8.7
+            379.7      -2.7       -1.4
+            289.8       0.1       -1.7
+            861.2       5.2        5.8
+            282.4       0.1        0.0
+            257.4       0.8        0.0
+            331.5       2.6        0.9
+           1157.9       0.8        0.6
+            213.3       1.5        0.0
+            370.8       2.0        1.3
+            312.5       0.7       -1.7
+            191.1      -3.1       -2.7
+              2.7       0.0        0.0
+            195.9       0.9       -1.4
+            299.6      -2.0       -3.3
+            685.3       0.0       -0.3
+            486.0      -1.7       -1.3
+            192.7       0.9        0.9
+            536.3      -5.2       -4.7
+            615.1      -0.3       -0.8
+            132.0       3.2        0.8
+           1035.7      15.4       -1.8
+            449.9       3.4        0.6
+            541.7       5.2        0.2
+            257.2      -0.5       -2.0
+           1131.5      15.3        0.2
+            262.2      -1.0        0.8
+             52.5       2.0        0.1
+            687.0       0.2        0.0
+            205.4       0.0        0.0
+            437.6      -0.4        0.2
+            304.4       3.8        0.1
+           1101.0      -1.0       -0.5
+            615.6       3.9       -3.7
+            801.1       5.5       -0.5
+            327.2      -0.1        0.0
+            633.3       9.2        0.3
+            513.0       0.4        0.0
+            552.6       0.0        0.0
+            441.6       0.0        0.1
+            188.6       0.4        0.2
+            614.5       1.7        2.8
+            535.9      -0.2        0.0
+            270.0      -0.1        0.0
+            733.7      18.3        0.1
+            892.5      23.5        1.1
+            461.0      -1.0       -0.2
+            236.1       1.3       -0.2
+           1296.0      18.5       -1.5
+            805.1      -1.3        0.0
+            986.9      23.2       -1.2
+            467.3       0.1       -1.4
+            337.7      -0.2        0.3
+            489.0      -0.1        0.0
+            772.7      15.5        0.8
+            551.8      -0.1        0.1
+            575.0      38.8        0.5
+            642.1       7.6        0.7
+            366.7       0.5       -0.1
+            346.3      -0.5        0.7
+            984.3      16.4        0.0
+            499.4       0.7        3.7
+            342.4       1.2        1.2
+            523.7       9.1        1.1
+            475.5      14.1        0.2
+            617.8       1.7        0.0
+            672.5      11.1        0.5
+            530.6       0.6        0.0
+            746.3      -1.8       -0.3
+            795.0      -9.4       -5.2
+            489.3      -0.1       -0.1
+            302.6      -0.1        0.0
+            780.7      23.6        1.3
+            339.4       0.3        0.1
+            333.0      -1.4        1.5
+            983.9       9.0        0.1
+            375.1       0.5       -0.6
+            750.8       5.6       -1.4
+            216.4      31.9       -0.5
+            651.5       1.7       -0.7
+            435.3      -0.1       -0.1
+            210.1       0.2        0.6
+            381.8       3.6       -0.2
+            806.4       3.0       -1.0
+            389.9       2.3        0.0
+            787.8      -1.1       -1.8
+            628.9       0.3        0.1
+            536.5      19.8        0.2
+            187.5       1.3       -0.3
+              2.2       0.0        0.0
+           1255.8      31.4        1.1
+            571.0       0.7        0.2
+            712.2      11.6        2.1
+            254.4       0.0        0.0
+            410.1       5.5       -1.6
+            599.8      -1.2        0.5
+            689.4       9.0        0.4
+            463.3      -1.6       -1.7
+            918.2      15.9        0.4
+            142.2       1.1       -0.2
+            713.9       3.5       -0.2
+           1205.2      18.9       -0.4
+            479.1       0.0        0.0
+            328.0       0.0        1.4
+            826.8       0.0        7.1
+            179.9       0.0        2.3
+            836.0       0.0        6.3
+            785.9       0.0        6.6
+            427.6       0.0        0.0
+            263.6       0.0       -2.9
+            260.0       0.0        0.8
+            506.4       0.0       -0.8
+           1872.2       0.0        8.2
+             94.9       0.0        0.2
+            318.3       0.0       -2.0
+            534.0       0.0        2.5
+            401.2       0.0        1.9
+           1087.7       0.0       -1.1
+            629.1       0.0        4.9
+            130.1       0.0       -0.1
+            201.1       0.0        1.0
+            496.9       0.0       -0.2
+            457.1       0.0        6.3
+           2646.3       0.0       -1.0
+            392.4       0.0        0.3
+            537.3       0.0       -0.3
+            790.1       0.0        6.6
+            741.0       0.0        0.1
+            259.6       0.0        2.2
+            226.2       0.0       -0.1
+            251.5       0.0       -0.5
+            160.0       0.0        0.4
+           1177.5       0.0        0.0
+            622.7       0.0       -0.3
+            780.0       0.0       -0.8
+            470.2       0.0        0.0
+            875.2       0.0        4.6
+            666.4       0.0        3.4
+            351.4       0.0       -0.6
+            351.3       0.0        0.1
+            481.0       0.0       -5.1
+            803.3       0.0        2.1
+            362.9       0.0       -0.4
+           1176.5       0.0        7.3
+            535.5       0.0       -2.1
+            453.3       0.0        1.6
+            146.0       0.0        1.5
+           1147.1       0.0        2.0
+            450.9       0.0       -0.3
+            580.7       0.0       -2.0
+            241.7       0.0       -6.1
+           1191.6       0.0       -1.7
+            653.3       0.0       -0.3
+            115.6       0.0       -0.2
+            708.8       0.0        4.2
+            974.6       0.0        2.9
+            844.6       0.0       -0.1
+           1041.2       0.0       -0.1
+            306.3       0.0        0.2
+            832.8       0.0        4.2
+            237.5       0.0       -5.3
+            432.7       0.0       -1.2
+             52.1       0.0        0.0
+            243.4       0.0       -2.3
+            426.1       0.0       -0.9
+            337.0       0.0        0.4
+            574.7       0.0       -0.9
+            647.7       0.0       -2.2
+            309.5       0.0        7.0
+            160.8       0.0       -0.9
+            458.8       0.0        4.1
+            363.5       0.0        3.6
+            474.9       0.0        9.0
+            662.5       0.0        4.5
+            669.5       0.0       -0.1
+            362.5       0.0        2.8
+            342.9       0.0       -0.5
+            468.2       0.0       -1.4
+            391.3       0.0        6.0
+            307.3       0.0       -0.2
+            906.2       0.0       -0.1
+            310.0       0.0        0.0
+            274.8       0.0        3.4
+            219.0       0.0        1.0
+            387.9       0.0        2.0
+            319.6       0.0       -3.3
+            202.3       0.0        0.7
+            203.1       0.0        0.1
+            566.3       0.0        9.0
+            129.1       0.0        2.7
+            462.7       0.0       -3.2
+            569.5       0.0        2.3
+            216.5       0.0       -3.3
+            138.5       0.0       -2.8
+             65.9       0.0       -0.9
+            431.7       0.0      -26.3
+             23.0       0.0       -0.1
+             40.0       0.0       -1.0
+             66.5       0.0       -3.2
+             43.9       0.0       -2.2
+             81.6       0.0       -0.2
+              3.5       0.0        1.1
+             91.9       0.0       -1.8
+             12.3       0.0       -0.3
+             90.0       0.0       -7.3
+             11.1       0.0        2.1
+            106.2       0.0       -6.3
+             62.7       0.0        3.8
+            703.5       0.0      -11.0
+             49.9       0.0       -0.6
+            130.5       0.0       -2.5
+             51.7       0.0       -2.4
+             85.0       0.0       -1.4
+             66.4       0.0       -2.0
+              0.5       0.0       -1.1
+             11.2       0.0       -0.6
+             19.0       0.0       -1.1
+             26.2       0.0       -0.2
+             91.6       0.0       -4.7
+             36.0       0.0       -5.1
+             90.5       0.0       -0.8
+              8.1       0.0       -0.2
+              6.5       0.0        0.0
+            242.6       0.0       -3.2
+             37.3       0.0       -1.7
+             45.0       0.0        3.2
+            106.6       0.0       -1.0
+             92.4       0.0       -0.6
+             41.5       0.0       -2.4
+            199.6       0.0       -4.6
+            337.0       0.0       -5.5
+             51.2       0.0       -6.3
+             30.9       0.0       -1.8
+             67.8       0.0       -0.8
+             25.1       0.0        0.4
+             17.6       0.0       -1.5
+              7.6       0.0        0.0
+            176.2       0.0        1.6
+             27.6       0.0       -1.2
+             59.7       0.0       -2.8
+             42.2       0.0       -4.5
+             28.6       0.0        0.4
+            218.8       0.0       -2.3
+             11.3       0.0       -1.1
+              3.8       0.0        0.0
+              3.0       0.0        0.0
+             13.2       0.0        0.8
+             23.8       0.0       -2.0
+             10.5       0.0        1.9
+            187.2       0.0       -1.6
+             27.1       0.0        0.0
+             36.8       0.0       -1.1
+            249.6       0.0       -4.6
+            379.3       0.0      -12.1
+            226.3       0.0       -8.2
+            212.9     -17.1      -47.2
+            250.3       0.0        1.3
+              4.3       0.0        0.3
+            106.8       0.0       -0.2
+            194.9       0.0       -1.8
+              9.1       0.0       -0.6
+             29.3       0.0        3.6
+            256.1      -0.3      -18.0
+             23.7       0.0       -0.2
+            210.6       0.0       -7.0
+             23.6       0.0        0.0
+            219.8       0.0       -3.9
+             56.8       0.0        0.5
+             38.0       0.0       -7.2
+              4.0       0.0       -0.2
+            280.6      -1.0      -13.9
+             77.9       0.0        2.5
+             18.9       0.0        0.0
+             56.8       0.0       -2.6
+             43.6       0.0       -0.7
+              5.0       0.0       -0.5
+             41.3       0.0       -0.2
+             21.2       0.0        0.0
+            228.8       0.0       -0.3
+            115.4       0.0        0.0
+            126.9       0.0       -3.6
+             13.6       0.0        0.5
+             49.5       0.0       -1.6
+            646.0      32.3       -1.8
+            170.1       5.3       -0.9
+            350.5     101.2       -2.5
+            573.5      17.3        0.4
+            190.9       0.3       -0.2
+            234.2       3.3       -2.7
+            253.0      34.4       -5.4
+            390.4      16.6       -0.8
+           1299.4     122.1        1.8
+             66.9       5.3        0.5
+            287.3      18.3        1.1
+            265.7       9.4        1.5
+            425.3       6.4       -1.4
+            340.2      16.4        1.5
+            494.7      11.7        2.8
+            113.6      11.1       -0.7
+            481.0       7.3       -3.7
+            382.5      11.0       -1.8
+           1572.7      48.4        7.2
+            107.0      23.5        1.2
+            332.0       4.0       -3.5
+            303.9      46.8       -0.5
+            671.1       8.0       -3.1
+            173.0       7.0        0.9
+            698.1      12.9       -0.2
+            434.8      -1.3       -1.7
+            187.9      31.4      -11.3
+            237.8      17.1        1.6
+            252.1       2.0        1.0
+            903.4      61.7       -4.1
+            547.5      12.0        0.1
+            650.3       5.9        0.6
+            443.9       1.7       -0.1
+            724.0      25.1       -5.2
+            545.9      18.0        0.5
+            312.2       2.1        1.1
+            148.9      -0.6        0.0
+            291.7      11.6       -1.7
+            414.5       4.4       -1.0
+            319.4      39.7       -1.1
+            343.8       0.8        0.2
+            851.1      26.4        0.2
+            482.7       2.4        1.4
+            402.6       0.2       -1.6
+            111.3       5.6        0.2
+           1017.8      12.2       -1.5
+            363.0      14.6       -6.8
+            525.1      12.9       -2.7
+            194.5       4.5       -2.4
+           1086.2      -0.5       -1.5
+            303.5       0.9        0.0
+            371.6      42.2        0.1
+            662.4      18.9       -1.7
+            698.3       5.0        1.3
+            958.0      12.8        0.9
+            640.8       0.2       -0.1
+            191.9      10.3        2.0
+            340.3      10.3        0.2
+            135.2      -0.2       -2.1
+            253.3      16.0        1.3
+            260.3       4.9       -1.5
+            406.0      23.5        0.9
+            599.1       9.8        0.5
+            318.8      20.7       -3.6
+             76.0       6.4        1.7
+            330.8     -19.6       -1.1
+            366.3      12.9        2.0
+            595.0      28.5       -3.6
+            630.4       7.5       -4.9
+            264.3      13.7       -4.4
+            503.3       0.1        0.0
+            299.4      41.4       -1.9
+            487.0      11.1       -3.1
+            298.6      19.0       -0.2
+            310.7      -4.6       -1.7
+            609.0       8.2       -1.5
+            226.2       0.0        0.0
+            212.8       2.1        1.6
+            322.5      15.4        2.4
+           1005.5       2.4        0.7
+            215.4       3.0        0.0
+            229.1       4.8       -1.6
+            397.2       7.7        1.7
+            304.5       2.5        0.3
+            277.3      10.8       -5.7
+            262.0       2.4       -1.3
+            424.8      12.1       -0.1
+            560.3       0.0        0.0
+            634.2       3.0        0.0
+            631.5       0.0        0.0
+             63.8      15.2        0.7
+            337.1      10.0        0.1
+            465.3      10.6       -4.6
+            717.8      14.2       -0.7
+            626.8      -0.7       -6.6
+            721.5      11.4       -8.4
+            470.5      -0.3       -2.4
+           1584.4       3.5      -10.6
+           1363.6      26.5      -13.5
+            742.9       3.8      -13.1
+           1112.5      -7.5      -22.3
+            955.6      17.9      -10.1
+            548.0       8.1       -9.9
+            397.9       2.7        4.4
+            382.1      14.6       -2.1
+            337.0       2.4       -0.8
+           1366.6      30.5        7.2
+            463.0       5.3       -7.8
+            686.6       2.7      -10.0
+
+## stored rearing and spawning km, the province
+ species_code rear_km_full rear_km_minimal spawn_km_full spawn_km_minimal
+           BT     246746.0        248022.4      134365.7         134200.2
+           CH     102960.0        104760.1       51196.3          51150.3
+           CM          0.0             0.0       33952.8          33993.6
+           CO      89887.9         90351.5       57297.1          57144.4
+           GR      77794.1         78216.1       44086.5          44083.3
+           PK          0.0             0.0       47356.8          47457.0
+           SK      17284.9         17266.5        8854.8           8608.8
+           ST      83591.5         84883.6       40167.6          40095.2
+          WCT      20477.9         20613.0       12583.5          12476.8
+ rear_pct spawn_pct
+     0.52     -0.12
+     1.75     -0.09
+       NA      0.12
+     0.52     -0.27
+     0.54     -0.01
+       NA      0.21
+    -0.11     -2.78
+     1.55     -0.18
+     0.66     -0.85
