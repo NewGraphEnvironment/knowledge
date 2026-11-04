@@ -108,7 +108,7 @@ province's electrofishing records.
 **The answer.** The records support a different rule from link's current one: **`r words(rec)`**. link now asks
 for `r words(dflt)`. The new rule draws `r n1(-all_row$change_pct)` % less habitat across the province, and
 chinook are caught far more often inside it than outside. Its cut-offs are a judgment call, though: many nearby rules
-fit almost as well, and the slope limit is the least steady part (below).
+fit almost as well (below).
 
 ## What does link do now?
 

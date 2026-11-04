@@ -130,7 +130,7 @@ new full one.
 
 **#92's rules stand.** Each of the seven picks #92 published that both tunings scored lies in both new tunings' regions. Grayling rearing's move to
 `width>=1.5` therefore comes from the flows, the range or link's build, not the network: both new builds pick it.
-Rainbow trout rearing is modelled by neither build and stays paused.
+Rainbow trout rearing is modelled by neither build, and the promotion of the full-network run retired it (#145).
 
 The table is `pick_network_compare.R`'s (`20261104_pick_network_compare.{csv,txt}`, from each tuning's
 `tune_anchor_check.R` table and `<key>_tune.csv`). The tuning's log and pick report are in

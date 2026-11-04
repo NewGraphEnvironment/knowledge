@@ -237,11 +237,15 @@ if (!gradient %in% names(vl)) {
        if (gradient == "parent_gradient") " (0310 joins it with PARENT_DIR)" else "")
 }
 # the species link models on the build: those with any access value at a visit. link writes an access column for a
-# species it does not model and leaves it empty, so a rule for it could be neither graded nor applied (#145)
-modelled <- species[vapply(species, function(sp) {
-  col <- paste0("access_", tolower(sp))
-  col %in% names(vl) && any(!is.na(vl[[col]]))
-}, logical(1))]
+# species it does not model and leaves it empty, so a rule for it could be neither graded nor applied (#145). A
+# missing column is an evidence build that did not read the species, not a species link left out: refused, since its
+# keys would otherwise be not_modelled and a promotion would retire their published rules
+no_col <- species[!paste0("access_", tolower(species)) %in% names(vl)]
+if (length(no_col)) {
+  stop(evidence_dir, "/visits_link.csv has no access column for ", paste(no_col, collapse = ", "),
+       ": rebuild the evidence with 0310, or restrict SPECIES")
+}
+modelled <- species[vapply(species, function(sp) any(!is.na(vl[[paste0("access_", tolower(sp))]])), logical(1))]
 if (length(setdiff(species, modelled))) {
   say("Not modelled on this build (no access value at any visit): %s; their keys are not_modelled.",
       paste(setdiff(species, modelled), collapse = ", "))

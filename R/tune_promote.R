@@ -101,7 +101,7 @@ knw_tune_promote <- function(run, keys = NULL, live = NULL, tune_dir = "data/tun
     floors_check(k, cand[[k]])
     rule <- fld(cand[[k]], "rule_recommended")
     st <- fld(cand[[k]], "status")
-    # knw_tune_run()'s statuses: three with no fit by design, two fitted; anything else (curve_failed, a smoke-only
+    # knw_tune_run()'s statuses: four with no fit by design (.knw_no_fit), two fitted; anything else (curve_failed, a smoke-only
     # key) is a fit that did not happen, never promoted over the last one that did
     if (st %in% .knw_no_fit && is.na(rule)) next   # a summary (and a smoke table) only, nothing graded or compared
     if (!st %in% c("fitted", "underpowered") || is.na(rule)) {

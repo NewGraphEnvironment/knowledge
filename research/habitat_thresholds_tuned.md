@@ -139,8 +139,9 @@ segments and each species' range) and the flow load. The network's share alone i
 kept as that reading's record.
 
 **Rainbow trout rearing is retired on this build.** link models neither rainbow trout nor kokanee here: their access
-columns are empty on every segment, so no rule for them could be graded or applied. Their keys are `not_modelled` (no
-fit, no grade), and rainbow trout rearing's tables, comparison and maps left the published set. Its last rule,
+columns are empty on every segment, so no rule for them could be graded or applied. Rainbow trout's keys and kokanee
+spawning are `not_modelled` (no fit, no grade; kokanee rearing keeps `no_stream_rule`), and rainbow trout rearing's
+tables, comparison and maps left the published set. Its last rule,
 `width>=3|g<=0.3|none`, is in git history and the bucket's archive.
 
 **How to read a pick.** Each key keeps every rule within one standard error of the best (its region) and recommends
@@ -157,17 +158,22 @@ reshuffle of near-equal rules, not a new finding.
 | ST rearing | 1,530 (90), 11 | MAD ≥ 1, ≤ 8.49 %, a ≥ 1 m³/s river within 250 m | 265: MAD 0.15–1 or width 4, 3–30 % | out, +45.8 (SE 26.9) | 2 of 5 | the same |
 | WCT rearing | 1,238 (577), 6 | MAD ≥ 0.03, ≤ 25 %, none | 56: MAD 0.03, 20–30 % | out, +50.9 (SE 33.5) | 5 of 5 | the same (underpowered) |
 | RB rearing and spawning, KO spawning | — | — | — | — | — | not modelled on this build |
-| CH, CO, GR, ST, WCT, SK, PK spawning | — | — | — | — | — | no electrofishing response |
-| KO, SK, CM rearing | — | — | — | — | — | no stream rule in `default` |
+| CH, CM, CO, GR, PK, SK, ST, WCT spawning | — | — | — | — | — | no electrofishing response |
+| CM, KO, PK, SK rearing | — | — | — | — | — | no stream rule in `default` |
 
-- **Four picks moved, all within the gradient limit or the size floor:** bull trout rearing (30 to 25 %), bull trout
-  spawning (13 to 11 %, and it drops the near-river exception), chinook rearing (11 to 13 %) and grayling rearing
-  (width 2 to 1.5 m). Coho, steelhead and westslope cutthroat keep #92's rule. On the Atlas line's gradient
-  (`data/tune/grad_fwa/`, never graded), all seven keys pick #92's sensitivity picks again.
+- **Four picks moved, and three of the moves are more than a reshuffle.** Bull trout rearing's (limit 30 to 25 %) lies
+  in #92's region (2.8 behind #92's best, SE 10.6), so the two runs cannot tell those rules apart. The other three new
+  picks lie outside #92's region, so the runs disagree: bull trout spawning (limit 13 to 11 %, and the near-river
+  exception dropped; 4.8 behind, SE 2.9), chinook rearing (11 to 13 %; 8.3 behind, SE 4.3) and grayling rearing
+  (width 2 to 1.5 m; 10.0 behind, SE 5.5). Coho, steelhead and westslope cutthroat keep #92's rule. On the Atlas line's
+  gradient (`data/tune/grad_fwa/`, never graded), all seven keys pick #92's sensitivity picks again, so these moves
+  come with link's segments, not the scored visits.
 - **`default` is still outside every region**, grayling's by the narrowest margin (1.16 SEs, against 2.87 on #92's).
 - **Nested selection** (pick on four folds, score the fifth) beats `default` for BT rearing, CH and CO, and loses to
-  it for GR (915.3 against 902.2) and ST (427.9 against 399.0), as on #92's. Bull trout spawning's choosing now beats no
-  rule (420.8 against 424.6), where #92's did not.
+  it for GR (915.3 against 902.2) and ST (427.9 against 399.0), as on #92's. Two keys flip: bull trout spawning's
+  choosing now beats no rule (420.8 against 424.6), where #92's did not, and westslope cutthroat's now loses to both
+  `default` and no rule (1,446.5 against 1,442.6 and 1,431.3), where #92's beat both (1,428.1 against 1,444.9 and
+  1,431.3).
 
 ### At 1.96 SE
 
