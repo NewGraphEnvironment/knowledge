@@ -566,6 +566,17 @@ line in its plan, and delete a pointer comment once its content is in the body. 
 not appended"), which still allows a comment for a cross-repo pointer. A pointer from a public repo names no private
 one.
 
+### An issue is one plan-init's worth of work; an umbrella keeps the order
+
+Size each issue so one `/planning-init` takes it start to finish to a PR. When a proposed issue lists steps that would
+each be their own PR (a code check, then per-species reviews, then reporting), file the first piece on its own and make
+the parent an umbrella (`umbrella` and `track:<name>` labels, a `## Members` table holding the order), with the pieces
+not yet reached under "To file when reached", filed when reached. No epic whose body holds every step.
+
+**Why:** Al, 2026-11-03, on #139: "we want to plan init pieces and get through start to finish when possible. we can
+have umbrella issues to keep track but we dont need super epics." #139 (`track:baselines`) with #141 and #140 as
+members is the worked case.
+
 <!-- BEGIN SOUL CONVENTIONS — DO NOT EDIT BELOW THIS LINE -->
 
 
