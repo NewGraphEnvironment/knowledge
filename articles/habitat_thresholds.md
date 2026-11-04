@@ -1,15 +1,40 @@
 # Choosing habitat thresholds from where fish were caught
 
-The R package [`link`](https://newgraphenvironment.github.io/link/) maps
-where each fish species can live in British Columbia’s streams. For
-every stretch of stream it asks a few plain questions: is it big enough,
-is it too steep, and can fish get to it? Each question has a cut-off.
-This article describes how we are testing those cut-offs against
-evidence: the places crews have electrofished, and whether they caught
-the species there. We try many possible cut-offs and keep the ones that
-best tell the two kinds of site apart, then check that they hold on
-parts of the province they were not chosen from. The steps run in order,
-from the fish records to values link can read.
+Maps of where salmon and trout can spawn and rear in British Columbia’s
+streams have so far been built for screening. bcfishpass ([Norris
+2024b](#ref-norris2024smnorrisbcfishpass)) models which streams fish can
+reach below natural barriers such as falls and steep slopes, the road
+and rail crossings and dams on those streams, and which streams could
+hold spawning or rearing from their slope and size, so that crews can
+choose where to look first among more than half a million mapped
+crossings and dams. The Province publishes its access model as the
+[Freshwater Fish Habitat Accessibility Model: Pacific Salmon and
+Steelhead](https://catalogue.data.gov.bc.ca/dataset/freshwater-fish-habitat-accessibility-model-pacific-salmon-and-steelhead).
+The spawning and rearing thresholds sit in bcfishpass’s repository as
+parameter sets: [New
+Graph’s](https://github.com/smnorris/bcfishpass/blob/3bd2824c300c5f9c0c041380d412a52987df1ebb/parameters/example_newgraph/parameters_habitat_thresholds.csv)
+and [other
+organizations’](https://github.com/smnorris/bcfishpass/tree/3bd2824c300c5f9c0c041380d412a52987df1ebb/parameters).
+To choose where to look first, a fair guess at where fish spawn and rear
+is enough.
+
+The R package [`link`](https://newgraphenvironment.github.io/link/)
+([Irvine 2026b](#ref-irvine2026linkDevelop)) builds on bcfishpass, and
+[`fresh`](https://github.com/NewGraphEnvironment/fresh) ([Irvine
+2026a](#ref-irvine2026freshFreshwater)) runs its rules on the BC
+Freshwater Atlas. For every stretch of stream link asks a few plain
+questions: is it big enough, is it too steep, and can fish get to it?
+Each question has a cut-off, and each cut-off is a row in a config, so a
+rule can be changed and run beside another. That makes the cut-offs
+testable against evidence: the places crews have electrofished, and
+whether they caught the species there. We try many possible rules, keep
+the ones that best tell the two kinds of site apart, and check that they
+hold on parts of the province they were not chosen from. A rule can also
+carry the biology, such as young chinook using small streams close to a
+large river, so the map points to where fish are most likely to be.
+
+This article describes that test. The steps run in order, from the fish
+records to values link can read.
 
 ## What is a threshold, and what does “tuned” mean?
 
@@ -59,9 +84,10 @@ Each site’s map point is moved onto a stream of the BC Freshwater Atlas
 by `fwapg` ([Norris 2024c](#ref-norris2024smnorrisfwapg)). Where the
 record names the site’s tributary in a form the Atlas can check, the
 site goes to the nearest stream of that tributary, even past a nearer
-stream, if it lies within 500 m. Otherwise it goes to the nearest
-stream, if that lies within 200 m ([how a site is placed](#snap)). About
-4,000 visits are dropped here, most because the stream is too far away.
+stream, if it lies within 500 m, and is dropped if none does. A site
+with no such record goes to the nearest stream, if that lies within 200
+m ([how a site is placed](#snap)). About 4,000 visits are dropped here,
+most because the stream is too far away.
 
 Code and settings
 
@@ -315,12 +341,14 @@ Code and settings
 
 A site’s point is matched with every mapped Atlas stream within 500 m,
 except the lines that carry a stream across a watershed group’s boundary
-(edge type 6010). Where the site’s record names its tributary, the
-nearest stream of that tributary is taken, kept if it lies within 500 m,
-even when another stream is nearer. Otherwise the nearest stream is
-taken, kept if it lies within 200 m. The table shows three sites: one
-kept on its nearest stream, one moved past a nearer stream to the
-tributary its record names, and one dropped for its distance.
+(edge type 6010). Where the site’s record names its tributary in a form
+the Atlas can check, the nearest stream of that tributary is taken, kept
+if it lies within 500 m, even when another stream is nearer; with none
+of its streams that close, the site is dropped. A site with no such
+record takes the nearest stream, kept if it lies within 200 m. The table
+shows three sites: one kept on its nearest stream, one moved past a
+nearer stream to the tributary its record names, and one dropped for its
+distance.
 
 | site visit  | fate    | Atlas stream | name       | distance (m) | snapped to |
 |:------------|:--------|-------------:|:-----------|-------------:|:-----------|
@@ -354,9 +382,25 @@ whose scores are within 1 SE of the best are **close calls**: the
 records cannot rank them. From the close calls we take the one that
 changes link’s current rule least.
 
-One SE is a rule of thumb, fixed before the run. 1.96 SE is the stricter
-reading, about the width of a 95 % interval: more rules become close
-calls, and the choice can stay nearer link’s rule. Both are reported.
+One SE is a rule of thumb, fixed before the run. It began with pruning
+classification trees ([Breiman et al.
+1984](#ref-breiman_etal1984ClassificationRegression); as cited in [Chen
+and Yang 2021](#ref-chen_yang2021OneStandard)) and is now a common way
+to prefer the simpler of close models ([Hastie et al.
+2009](#ref-hastie_etal2009ElementsStatistical)). It is a convention, not
+a line below which rules are equal: there is no evidence it consistently
+beats taking the best score, though it often picks fewer variables
+([Chen and Yang 2021](#ref-chen_yang2021OneStandard)). The standard
+error it rests on has no unbiased estimate ([Bengio and Grandvalet
+2004](#ref-bengio_grandvalet2004NoUnbiased)), and the usual estimate is
+often too small ([Bengio and Grandvalet
+2004](#ref-bengio_grandvalet2004NoUnbiased); [Bates et al.
+2024](#ref-bates_etal2024CrossValidationWhat)), though it can also be
+too large ([Chen and Yang 2021](#ref-chen_yang2021OneStandard)).
+
+1.96 SE is the stricter reading, about the width of a 95 % interval:
+more rules become close calls, and the choice can stay nearer link’s
+rule. Both are reported.
 
 | species and stage | link’s rule | close calls at 1 SE | chosen at 1 SE | close calls at 1.96 SE | chosen at 1.96 SE |
 |:---|:---|:---|:---|:---|:---|
@@ -550,6 +594,23 @@ Thresholds for BC Watershed Groups*. New Graph Environment Ltd. Version
 
 ## References
 
+Bates, Stephen, Trevor Hastie, and Robert Tibshirani. 2024.
+“Cross-Validation: What Does It Estimate and How Well Does It Do It?”
+*Journal of the American Statistical Association* 119 (546): 1434–45.
+<https://doi.org/10.1080/01621459.2023.2197686>.
+
+Bengio, Yoshua, and Yves Grandvalet. 2004. “No Unbiased Estimator of the
+Variance of K-Fold Cross-Validation.” *Journal of Machine Learning
+Research* 5: 1089–105. <https://jmlr.org/papers/v5/grandvalet04a.html>.
+
+Breiman, Leo, Jerome H. Friedman, Richard A. Olshen, and Charles J.
+Stone. 1984. *Classification and Regression Trees*. The Wadsworth
+Statistics/Probability Series. Wadsworth International Group.
+
+Chen, Yuchen, and Yuhong Yang. 2021. “The One Standard Error Rule for
+Model Selection: Does It Work?” *Stats* 4 (4): 868–92.
+<https://doi.org/10.3390/stats4040051>.
+
 Craig, James R., Genevieve Brown, Robert Chlumsky, et al. 2020.
 “Flexible Watershed Simulation with the Raven Hydrological Modelling
 Framework.” *Environmental Modelling & Software* 129 (July): 104728.
@@ -564,6 +625,11 @@ FLNRORD. 2021. “Freshwater Atlas Stream Network - Data Catalogue.”
 Published by Ministry of Forests, Lands, Natural Resource Operations and
 Rural Development.
 <https://catalogue.data.gov.bc.ca/dataset/freshwater-atlas-stream-network>.
+
+Hastie, Trevor, Robert Tibshirani, and Jerome Friedman. 2009. *The
+Elements of Statistical Learning: Data Mining, Inference, and
+Prediction*. 2nd ed. Springer Series in Statistics. Springer.
+<https://doi.org/10.1007/978-0-387-84858-7>.
 
 Irvine, Allan. 2026a. *fresh: Freshwater Referenced Spatial Hydrology*.
 Version 0.39.0. New Graph Environment Ltd.

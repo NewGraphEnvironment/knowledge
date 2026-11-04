@@ -59,22 +59,44 @@
       <img src="../logo.png" class="logo" alt=""><h1>Choosing habitat thresholds from where fish were caught</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/v0.4.25/vignettes/habitat_thresholds.Rmd" class="external-link"><code>vignettes/habitat_thresholds.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/vignettes/habitat_thresholds.Rmd" class="external-link"><code>vignettes/habitat_thresholds.Rmd</code></a></small>
       <div class="d-none name"><code>habitat_thresholds.Rmd</code></div>
     </div>
 
     
     
+<p>Maps of where salmon and trout can spawn and rear in British
+Columbia’s streams have so far been built for screening. bcfishpass
+<span class="citation">(<a href="#ref-norris2024smnorrisbcfishpass">Norris 2024b</a>)</span> models
+which streams fish can reach below natural barriers such as falls and
+steep slopes, the road and rail crossings and dams on those streams, and
+which streams could hold spawning or rearing from their slope and size,
+so that crews can choose where to look first among more than half a
+million mapped crossings and dams. The Province publishes its access
+model as the <a href="https://catalogue.data.gov.bc.ca/dataset/freshwater-fish-habitat-accessibility-model-pacific-salmon-and-steelhead" class="external-link">Freshwater
+Fish Habitat Accessibility Model: Pacific Salmon and Steelhead</a>. The
+spawning and rearing thresholds sit in bcfishpass’s repository as
+parameter sets: <a href="https://github.com/smnorris/bcfishpass/blob/3bd2824c300c5f9c0c041380d412a52987df1ebb/parameters/example_newgraph/parameters_habitat_thresholds.csv" class="external-link">New
+Graph’s</a> and <a href="https://github.com/smnorris/bcfishpass/tree/3bd2824c300c5f9c0c041380d412a52987df1ebb/parameters" class="external-link">other
+organizations’</a>. To choose where to look first, a fair guess at where
+fish spawn and rear is enough.</p>
 <p>The R package <a href="https://newgraphenvironment.github.io/link/" class="external-link"><code>link</code></a>
-maps where each fish species can live in British Columbia’s streams. For
-every stretch of stream it asks a few plain questions: is it big enough,
-is it too steep, and can fish get to it? Each question has a cut-off.
-This article describes how we are testing those cut-offs against
-evidence: the places crews have electrofished, and whether they caught
-the species there. We try many possible cut-offs and keep the ones that
-best tell the two kinds of site apart, then check that they hold on
-parts of the province they were not chosen from. The steps run in order,
-from the fish records to values link can read.</p>
+<span class="citation">(<a href="#ref-irvine2026linkDevelop">Irvine
+2026b</a>)</span> builds on bcfishpass, and <a href="https://github.com/NewGraphEnvironment/fresh" class="external-link"><code>fresh</code></a>
+<span class="citation">(<a href="#ref-irvine2026freshFreshwater">Irvine
+2026a</a>)</span> runs its rules on the BC Freshwater Atlas. For every
+stretch of stream link asks a few plain questions: is it big enough, is
+it too steep, and can fish get to it? Each question has a cut-off, and
+each cut-off is a row in a config, so a rule can be changed and run
+beside another. That makes the cut-offs testable against evidence: the
+places crews have electrofished, and whether they caught the species
+there. We try many possible rules, keep the ones that best tell the two
+kinds of site apart, and check that they hold on parts of the province
+they were not chosen from. A rule can also carry the biology, such as
+young chinook using small streams close to a large river, so the map
+points to where fish are most likely to be.</p>
+<p>This article describes that test. The steps run in order, from the
+fish records to values link can read.</p>
 <div class="section level2">
 <h2 id="thresholds">What is a threshold, and what does “tuned” mean?<a class="anchor" aria-label="anchor" href="#thresholds"></a>
 </h2>
@@ -274,10 +296,10 @@ Atlas <span class="citation">(<a href="#ref-flnrord2021FreshwaterAtlasb">FLNRORD
 in a database by <code>fwapg</code> <span class="citation">(<a href="#ref-norris2024smnorrisfwapg">Norris 2024c</a>)</span>. Where the
 record names the site’s tributary in a form the Atlas can check, the
 site goes to the nearest stream of that tributary, even past a nearer
-stream, if it lies within 500 m. Otherwise it goes to the nearest
-stream, if that lies within 200 m (<a href="#snap">how a site is
-placed</a>). About 4,000 visits are dropped here, most because the
-stream is too far away.</p>
+stream, if it lies within 500 m, and is dropped if none does. A site
+with no such record goes to the nearest stream, if that lies within 200
+m (<a href="#snap">how a site is placed</a>). About 4,000 visits are
+dropped here, most because the stream is too far away.</p>
 <details><summary>
 Code and settings
 </summary><ul>
@@ -859,12 +881,14 @@ cmp-&gt;pub
 </h2>
 <p>A site’s point is matched with every mapped Atlas stream within 500
 m, except the lines that carry a stream across a watershed group’s
-boundary (edge type 6010). Where the site’s record names its tributary,
-the nearest stream of that tributary is taken, kept if it lies within
-500 m, even when another stream is nearer. Otherwise the nearest stream
-is taken, kept if it lies within 200 m. The table shows three sites: one
-kept on its nearest stream, one moved past a nearer stream to the
-tributary its record names, and one dropped for its distance.</p>
+boundary (edge type 6010). Where the site’s record names its tributary
+in a form the Atlas can check, the nearest stream of that tributary is
+taken, kept if it lies within 500 m, even when another stream is nearer;
+with none of its streams that close, the site is dropped. A site with no
+such record takes the nearest stream, kept if it lies within 200 m. The
+table shows three sites: one kept on its nearest stream, one moved past
+a nearer stream to the tributary its record names, and one dropped for
+its distance.</p>
 <table class="table">
 <caption>Three BULK sites and every Atlas stream within 500 m of
 each.</caption>
@@ -1012,10 +1036,23 @@ far that difference would move with a different set of watershed groups.
 Rules whose scores are within 1 SE of the best are <strong>close
 calls</strong>: the records cannot rank them. From the close calls we
 take the one that changes link’s current rule least.</p>
-<p>One SE is a rule of thumb, fixed before the run. 1.96 SE is the
-stricter reading, about the width of a 95 % interval: more rules become
-close calls, and the choice can stay nearer link’s rule. Both are
-reported.</p>
+<p>One SE is a rule of thumb, fixed before the run. It began with
+pruning classification trees <span class="citation">(<a href="#ref-breiman_etal1984ClassificationRegression">Breiman et al.
+1984</a>; as cited in <a href="#ref-chen_yang2021OneStandard">Chen and
+Yang 2021</a>)</span> and is now a common way to prefer the simpler of
+close models <span class="citation">(<a href="#ref-hastie_etal2009ElementsStatistical">Hastie et al.
+2009</a>)</span>. It is a convention, not a line below which rules are
+equal: there is no evidence it consistently beats taking the best score,
+though it often picks fewer variables <span class="citation">(<a href="#ref-chen_yang2021OneStandard">Chen and Yang 2021</a>)</span>. The
+standard error it rests on has no unbiased estimate <span class="citation">(<a href="#ref-bengio_grandvalet2004NoUnbiased">Bengio
+and Grandvalet 2004</a>)</span>, and the usual estimate is often too
+small <span class="citation">(<a href="#ref-bengio_grandvalet2004NoUnbiased">Bengio and Grandvalet
+2004</a>; <a href="#ref-bates_etal2024CrossValidationWhat">Bates et al.
+2024</a>)</span>, though it can also be too large <span class="citation">(<a href="#ref-chen_yang2021OneStandard">Chen and Yang
+2021</a>)</span>.</p>
+<p>1.96 SE is the stricter reading, about the width of a 95 % interval:
+more rules become close calls, and the choice can stay nearer link’s
+rule. Both are reported.</p>
 <table class="table">
 <caption>link’s current rule and the rule chosen at each width of close
 call, for each species and stage tuned.</caption>
@@ -1944,6 +1981,29 @@ Ltd. Version 0.4.25, <a href="https://newgraphenvironment.github.io/knowledge/"
 <h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
 <div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-bates_etal2024CrossValidationWhat" class="csl-entry">
+Bates, Stephen, Trevor Hastie, and Robert Tibshirani. 2024.
+<span>“Cross-<span>Validation</span>: <span>What Does It Estimate</span>
+and <span>How Well Does It Do It</span>?”</span> <em>Journal of the
+American Statistical Association</em> 119 (546): 1434–45. <a href="https://doi.org/10.1080/01621459.2023.2197686" class="external-link">https://doi.org/10.1080/01621459.2023.2197686</a>.
+</div>
+<div id="ref-bengio_grandvalet2004NoUnbiased" class="csl-entry">
+Bengio, Yoshua, and Yves Grandvalet. 2004. <span>“No <span>Unbiased
+Estimator</span> of the <span>Variance</span> of <span>K-Fold
+Cross-Validation</span>.”</span> <em>Journal of Machine Learning
+Research</em> 5: 1089–105. <a href="https://jmlr.org/papers/v5/grandvalet04a.html" class="external-link">https://jmlr.org/papers/v5/grandvalet04a.html</a>.
+</div>
+<div id="ref-breiman_etal1984ClassificationRegression" class="csl-entry">
+Breiman, Leo, Jerome H. Friedman, Richard A. Olshen, and Charles J.
+Stone. 1984. <em>Classification and <span>Regression Trees</span></em>.
+The <span>Wadsworth Statistics</span>/<span>Probability Series</span>.
+Wadsworth International Group.
+</div>
+<div id="ref-chen_yang2021OneStandard" class="csl-entry">
+Chen, Yuchen, and Yuhong Yang. 2021. <span>“The <span>One Standard Error
+Rule</span> for <span>Model Selection</span>: <span>Does It
+Work</span>?”</span> <em>Stats</em> 4 (4): 868–92. <a href="https://doi.org/10.3390/stats4040051" class="external-link">https://doi.org/10.3390/stats4040051</a>.
+</div>
 <div id="ref-craig_etal2020Flexiblewatershed" class="csl-entry">
 Craig, James R., Genevieve Brown, Robert Chlumsky, et al. 2020.
 <span>“Flexible Watershed Simulation with the <span>Raven</span>
@@ -1959,6 +2019,13 @@ Data Archive</span>: <span>HYDAT</span>.”</span> Service description.
 FLNRORD. 2021. <span>“Freshwater <span>Atlas Stream Network</span> -
 <span>Data Catalogue</span>.”</span> Published by Ministry of Forests,
 Lands, Natural Resource Operations and Rural Development. <a href="https://catalogue.data.gov.bc.ca/dataset/freshwater-atlas-stream-network" class="external-link">https://catalogue.data.gov.bc.ca/dataset/freshwater-atlas-stream-network</a>.
+</div>
+<div id="ref-hastie_etal2009ElementsStatistical" class="csl-entry">
+Hastie, Trevor, Robert Tibshirani, and Jerome Friedman. 2009. <em>The
+<span>Elements</span> of <span>Statistical Learning</span>: <span>Data
+Mining</span>, <span>Inference</span>, and <span>Prediction</span></em>.
+2nd ed. Springer <span>Series</span> in <span>Statistics</span>.
+Springer. <a href="https://doi.org/10.1007/978-0-387-84858-7" class="external-link">https://doi.org/10.1007/978-0-387-84858-7</a>.
 </div>
 <div id="ref-irvine2026freshFreshwater" class="csl-entry">
 Irvine, Allan. 2026a. <em><span class="nocase">fresh</span>:
