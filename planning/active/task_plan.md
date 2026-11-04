@@ -32,8 +32,8 @@ Measured today from the tables (rule, + ddev / SE behind the best):
 - [x] Header: an `ANCHORING (#141)` bullet in the spec and the new columns under OUTPUT.
 
 ## Phase 3: run it on the published tables and the current candidate
-- [ ] `data-raw/tune_anchor_check.R` (`TUNE_DIR`, `LABEL`): every `<key>_tune.csv` in the directory (not recursed) through `knw_tune_anchor()`, written to `scripts/logs/habitat/<date>_tune_anchor_check-<label>.csv` with a short `.txt` naming the tables' run (`run_uid`, `tune_run`, `evidence_md5` from each summary).
-- [ ] Run on `data/tune` (published, #92) and `data/tune/candidate/20261103_0838` (minimal network, #120); commit both logs.
+- [x] `data-raw/tune_anchor_check.R` (`TUNE_DIR`, `LABEL`): every `<key>_tune.csv` in the directory (not recursed) through `knw_tune_anchor()`, written to `scripts/logs/habitat/<date>_tune_anchor_check-<label>.csv` with a short `.txt` naming the tables' run (`run_uid`, `tune_run`, `evidence_md5` from each summary).
+- [x] Run on `data/tune` (published, #92) and `data/tune/candidate/20261103_0838` (minimal network, #120); commit both logs.
 
 ## Phase 4: record it
 - [ ] `research/baseline_anchoring.md`: plain-language walk (what anchoring is, why the pick is near `default` by construction), both readings side by side, keys ordered by how much the start steers, grayling rearing's "before" for #140 stated explicitly; row in `research/README.md`.
