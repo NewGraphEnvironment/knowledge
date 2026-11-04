@@ -15,8 +15,9 @@
 #
 # INPUT:  PUBLISHED, MINIMAL and FULL: tune_anchor_check.R's csv for each tuning (defaults: the newest
 #         scripts/logs/habitat/*_tune_anchor_check-published.csv and *-minimal-20261103_0838.csv; FULL has none);
-#         TUNE_PUBLISHED, TUNE_MINIMAL and TUNE_FULL: each tuning's <key>_tune.csv directory (defaults data/tune and
-#         data/tune/candidate/20261103_0838, both ignored but for the published tables; TUNE_FULL has none)
+#         TUNE_MINIMAL and TUNE_FULL: the two new tunings' <key>_tune.csv directories (default for the minimal one
+#         data/tune/candidate/20261103_0838, ignored; TUNE_FULL has none). Each table read must be the one its anchor
+#         csv was computed from (its tune_md5), or the script stops: an ignored directory can be rewritten by a later run
 # OUTPUT: scripts/logs/habitat/<yyyymmdd>_pick_network_compare.csv (one row per key) and .txt (the inputs' md5s, the
 #         knowledge commit and the rows; a second run of the day numbered)
 # RUN:    FULL=<anchor csv> TUNE_FULL=<dir> [PUBLISHED=…] [MINIMAL=…] [TUNE_PUBLISHED=…] [TUNE_MINIMAL=…]
@@ -35,8 +36,7 @@ paths <- c(published = Sys.getenv("PUBLISHED", newest("_tune_anchor_check-publis
            full = Sys.getenv("FULL"))
 miss <- names(paths)[!nzchar(paths) | !file.exists(paths)]
 if (length(miss)) stop("no anchor-check table for ", paste(miss, collapse = ", "), ": give its path", call. = FALSE)
-dirs <- c(published = Sys.getenv("TUNE_PUBLISHED", "data/tune"),
-          minimal = Sys.getenv("TUNE_MINIMAL", "data/tune/candidate/20261103_0838"), full = Sys.getenv("TUNE_FULL"))
+dirs <- c(minimal = Sys.getenv("TUNE_MINIMAL", "data/tune/candidate/20261103_0838"), full = Sys.getenv("TUNE_FULL"))
 miss <- names(dirs)[!nzchar(dirs) | !dir.exists(dirs)]
 if (length(miss)) stop("no tune directory for ", paste(miss, collapse = ", "), ": give its path", call. = FALSE)
 path_csv <- .knw_free_path(file.path("scripts/logs/habitat",
@@ -49,7 +49,7 @@ block <- function(title, x) {
 }
 
 cols_side <- c("status", "n_visits", "rule_recommended", "recommended_ddev", "recommended_se", "rule_best",
-               "rec_moved_parts", "run_uid", "evidence_md5")
+               "rec_moved_parts", "run_uid", "evidence_md5", "tune_md5")
 side <- function(nm) {
   a <- read_csv(paths[[nm]], show_col_types = FALSE, col_types = cols(.default = "c"))
   stopifnot(!anyDuplicated(a$key), all(cols_side %in% names(a)))
@@ -68,10 +68,15 @@ parts_apart <- function(x, y) {
     if (length(d)) paste(d, collapse = "+") else "same"
   }, character(1))
 }
-# a rule's place in another tuning's table: in its region, and its deviance behind that tuning's best (and the SE)
-place <- function(nm, key, rule) {
+# a rule's place in another tuning's table: in its region, and its deviance behind that tuning's best (and the SE).
+# The table must be the one the anchor csv for that tuning read (its md5), so picks and regions come from one run
+place <- function(nm, key, rule, md5_anchor) {
   f <- file.path(dirs[[nm]], paste0(key, "_tune.csv"))
-  if (is.na(rule) || !file.exists(f)) return(c(in_region = NA_character_, behind = NA_character_))
+  if (is.na(rule) || is.na(md5_anchor)) return(c(in_region = NA_character_, behind = NA_character_))
+  if (!file.exists(f) || !identical(unname(tools::md5sum(f)), md5_anchor)) {
+    stop(f, " is not the table the ", nm, " anchor csv read (tune_md5 ", md5_anchor, "): rerun tune_anchor_check.R on ",
+         dirs[[nm]], " or point TUNE_", toupper(nm), " at the run it read", call. = FALSE)
+  }
   t <- read_csv(f, show_col_types = FALSE, col_types = cols(.default = "c"))
   i <- match(rule, t$rule)
   if (is.na(i)) return(c(in_region = "not in grid", behind = NA_character_))
@@ -84,7 +89,8 @@ rows <- side("published") |>
          build_moved = parts_apart(rule_recommended_full, rule_recommended_published)) |>
   arrange(key)
 for (pr in list(c("minimal", "full"), c("full", "minimal"), c("published", "minimal"), c("published", "full"))) {
-  pl <- t(mapply(function(k, r) place(pr[2], k, r), rows$key, rows[[paste0("rule_recommended_", pr[1])]]))
+  pl <- t(mapply(function(k, r, m) place(pr[2], k, r, m), rows$key, rows[[paste0("rule_recommended_", pr[1])]],
+                 rows[[paste0("tune_md5_", pr[2])]]))
   rows[[sprintf("%s_pick_in_%s_region", pr[1], pr[2])]] <- unname(pl[, "in_region"])
   rows[[sprintf("%s_pick_behind_%s_best", pr[1], pr[2])]] <- unname(pl[, "behind"])
 }
@@ -119,7 +125,7 @@ block("each pick in the other tunings' regions (TRUE = in the one-SE region; dev
 block("the published pick in the two new tunings' regions", rows |>
         select(key, published_pick_in_minimal_region, published_pick_behind_minimal_best,
                published_pick_in_full_region, published_pick_behind_full_best))
-for (nm in names(dirs)) say("tune tables (%s): %s", nm, dirs[[nm]])
+for (nm in names(dirs)) say("tune tables (%s): %s, each the table its anchor csv read (tune_md5)", nm, dirs[[nm]])
 block("visits scored and status", rows |>
         select(key, n_visits_published, n_visits_minimal, n_visits_full, status_published, status_minimal, status_full))
 write_csv(rows, path_csv, na = "")

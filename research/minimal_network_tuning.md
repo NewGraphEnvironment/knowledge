@@ -127,7 +127,7 @@ So on the minimal network, which cuts at none of fish records, crossings or habi
 argue against the steeper limits the full network allows. Chinook's gradient limit now reads 9 % on the minimal network, 11 % on the published network and 13 % on the
 new full one.
 
-**The published rules stand.** Every published pick lies in both new tunings' regions. Grayling rearing's move to
+**The published rules stand.** Each of the seven published picks both tunings scored lies in both new tunings' regions. Grayling rearing's move to
 `width>=1.5` therefore comes from the flows, the range or link's build, not the network: both new builds pick it.
 Rainbow trout rearing is modelled by neither build and stays paused.
 
