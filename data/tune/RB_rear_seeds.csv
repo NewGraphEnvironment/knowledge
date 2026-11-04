@@ -1,5 +1,0 @@
-seed,best,pick,recommended,default_in_region,main_rec_in_region,region_n,species_code,stage
-55,width>=3|g<=0.3|none,width>=3|g<=0.3|none,width>=3|g<=0.3|none,FALSE,TRUE,35,RB,rear
-56,width>=3|g<=0.3|none,width>=3|g<=0.3|none,width>=3|g<=0.3|none,FALSE,TRUE,20,RB,rear
-57,width>=3|g<=0.3|none,width>=3|g<=0.3|none,width>=3|g<=0.3|none,FALSE,TRUE,32,RB,rear
-58,width>=3|g<=0.3|none,width>=3|g<=0.3|none,width>=3|g<=0.3|none,FALSE,TRUE,64,RB,rear

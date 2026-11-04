@@ -1,15 +1,21 @@
 # Habitat thresholds tuned for every species and life stage in one run
 
-**Verified:** 2026-10-27 (#92: every key retuned and regraded on #91's evidence, each visit scored on the gradient of
+**Verified:** 2026-11-04 (#145: every key retuned, regraded and recompared on link's 2026-11-03 build and wet's
+2026-10-24 flows, promoted as run `20261104_0543`; its section opens the results, and the sections after it are #92's);
+2026-10-27 (#92: every key retuned and regraded on #91's evidence, each visit scored on the gradient of
 the link segment it sits on, with the Atlas line's gradient scored as a sensitivity); 2026-10-25 (#73: every key retuned on the evidence rebuilt on wet's 2026-10-19 flows with the walk ending at
 the river's bank, on a gradient ladder to 30 %, with the grid's fit absorbing the groups and a prior on its data-set and
 era terms; graded with the curve's prior under a gate; recompared under link's through-wetland structures); first
 tuned 2026-10-17 (#57); regraded 2026-10-19 (#65); the one-SE wording and the picks at 1.96 SE 2026-10-20 (#79) ·
 **Issues:** #57 (this; replaced #59), #65, #79, #73 (folding #68, #80 and #81's run-time pieces; #83 and #84 are its
 scorer work; #85, #86 and #87 the speed work it spawned), #91 (the evidence's placement) and #92 (the segment
-gradient, and the retune on #91's evidence), #112 (the structures a comparison runs); the one-species tunings it supersedes are #28
+gradient, and the retune on #91's evidence), #112 (the structures a comparison runs), #145 (the retune on link's
+2026-11-03 build); the one-species tunings it supersedes are #28
 (`habitat_weights.md`), #33 (`bt_spawning.md`), #52 (`chinook_stream_size.md`) and #54 (`chinook_rearing_tuned.md`);
 link reads the result through NewGraphEnvironment/link#346 · **Produced by:**
+- #145's run: `scripts/logs/habitat/20261103_link_settle.csv`, `20261103_evidence_build_ledger.csv`,
+  `20261104_tune_run-20261104_0543-*.txt` (with its `-grad_fwa` sensitivity), `20261104_compare-20261104_0543.txt`
+  and `20261104_promote-20261104_0543.txt`; the tables in `data/tune/` and `data/compare/` are its own;
 - `scripts/0300`: the wait for link's province-wide `default` run (`scripts/logs/habitat/20261017_link_settle.csv`);
 - `scripts/0310`: the evidence build (`scripts/logs/habitat/20261027_evidence_build_ledger.csv`, #91's; #73's was `20261022_…`; tables built as
   `knowledge/fdis/v3`, not yet uploaded);
@@ -17,17 +23,18 @@ link reads the result through NewGraphEnvironment/link#346 · **Produced by:**
   run `scripts/logs/habitat/20261027_tune_run.txt`, and its Atlas-gradient sensitivity `20261027_tune_run-grad_fwa.txt`
   into `data/tune/grad_fwa/`; #73's rescore's grading `20261023_tune_run.txt`, its regrade with the curve's prior and
   the grade gate `20261024_tune_run.txt`; #57's `20261017_tune_run-*` and #65's `20261019_tune_run.{txt,out}` are the earlier runs);
-- `scripts/0325`: `data/thresholds.csv` and `data/thresholds_groups.csv` (rewritten from #92's tables); the Parquet sets
-  `knowledge/thresholds/v1` and `knowledge/habitat_grade/v1` are still #73's (published from the database's host on
-  2026-10-25, commit `bf41ebd`, with BT spawning and CO, ST and WCT rearing left out of the grade set) until #92's
-  tables are published;
+- `scripts/0325`: `data/thresholds.csv` and `data/thresholds_groups.csv` (rewritten from #145's tables by its
+  promotion); the Parquet sets `knowledge/thresholds/v1` and `knowledge/habitat_grade/v1` are still #73's (published
+  from the database's host on 2026-10-25, commit `bf41ebd`, with BT spawning and CO, ST and WCT rearing left out of the
+  grade set) until #145's tables are published;
 - `planning/archive/2026-10-issue-65-grade-walks-every-segment/check_{off_branch,connector_share}.R`: the grade off
   the stream branch and the connector's share of the walked distance (Limits; #65's measurement);
 - `scripts/0330`: `data/compare/*.csv` (`compare`, `change` and `checks`, composed over every key; log
   `scripts/logs/habitat/20261027_compare.txt`); `floodplain.csv` and `research/fig/compare_*.png` are #65's.
 
 **Status:** measured; nothing applied in link. One file per species holds the species' reading of #73's run, which
-#92 did not revise, so where a pick or grade below differs from a species file, this file is the current one:
+neither #92 nor #145 revised, so where a pick or grade below differs from a species file, this file is the current one,
+and its #145 section the newest:
 `bull_trout_tuned.md`, `chinook_rearing_tuned.md` (#54's file, with the province-wide rescoring at its head),
 `coho_rearing_tuned.md`, `grayling_rearing_tuned.md`, `rainbow_rearing_tuned.md`, `steelhead_rearing_tuned.md`,
 `westslope_cutthroat_rearing_tuned.md`.
@@ -40,12 +47,14 @@ streams, an allowance for a river close downstream. It scored every version on h
 kept every version within one standard error of the best (a rule of thumb fixed before the run, not a
 boundary of noise), and recommended the one of those closest to link's current test. Each version was scored on the
 gradient of the link segment a fish was caught on, the one link applies its test to (#92). link's current test is not
-among them for any species. On link's segments, with lines through wetlands put through the same test as streams
-(link's `stream`), the picks draw less rearing habitat than its current test for five of the seven rearing keys (from 2 % less for coho to 27 % less for steelhead), more for grayling (3 %) and westslope
-cutthroat (18 %), and half as much again for bull trout spawning (50 %). A grade from 0 to 1 then gives the use to expect on each segment, read at that
-segment's own distance to a river (#65 corrected a first build that read most segments at the distance cap), and is
-published only where the curve behind it predicts held-out groups better than no rule at all: for coho and westslope
-cutthroat it does not, so they carry a rule and no grade. The package article on chinook rearing
+among them for any species. On link's segments of its 2026-11-03 build (#145), with lines through wetlands put through
+the same test as streams (link's `stream`), the picks draw less rearing habitat than its current test for four of the six
+rearing keys (from 3 % less for coho to 25 % less for steelhead), more for grayling (11 %) and westslope cutthroat
+(19 %), and a quarter more for bull trout spawning (24 %). Rainbow trout, which that build does not model, is retired. A
+grade from 0 to 1 then gives the use to expect on each segment, read at that segment's own distance to a river (#65
+corrected a first build that read most segments at the distance cap), and is published only where the curve behind it
+predicts held-out groups better than no rule at all: for coho, westslope cutthroat and bull trout spawning it does not,
+so they carry a rule and no grade. The package article on chinook rearing
 (https://newgraphenvironment.github.io/knowledge/articles/chinook_rearing.html) walks through one species from the
 question to the map; the specification below is the record.
 
@@ -120,7 +129,110 @@ value lives and whether it has been tested. It replaced the specification that s
 keeps the analysis spec beside the code. The parts each issue settled are named in that header and in the register's
 `issue` column. From #92 the rules and curves read link's segment gradient ("Which gradient is scored", above).
 
-## Results
+## The run promoted on 2026-11-04 (#145)
+
+**What changed.** link built a new provincial `default` network (run `20261103_163715-269b585a`, link 0.78.2, all 241
+groups). Every key was retuned, graded and compared on it with wet's 2026-10-24 flows, and the run (`20261104_0543`)
+was promoted. Each key scores the same visits as on #92's run (the same count, detections and groups for all seven), so
+what moved is what those visits read: link's segments and the flow load. The network's share alone is measured against link's minimal network in
+`minimal_network_tuning.md` ("The full network on the same flows and range"). The sections after this one are #92's run,
+kept as that reading's record.
+
+**Rainbow trout rearing is retired on this build.** link models neither rainbow trout nor kokanee here: their access
+columns are empty on every segment, so no rule for them could be graded or applied. Rainbow trout's keys and kokanee
+spawning are `not_modelled` (no fit, no grade; kokanee rearing keeps `no_stream_rule`), and rainbow trout rearing's
+tables, comparison and maps left the published set. Its last rule,
+`width>=3|g<=0.3|none`, is in git history and the bucket's archive.
+
+**How to read a pick.** Each key keeps every rule within one standard error of the best (its region) and recommends
+the one closest to link's `default`. A pick that moved from #92's to a rule both runs count in their regions is a
+reshuffle of near-equal rules, not a new finding.
+
+| species × stage | visits (detections), groups | recommended rule | region | `default` | pick holds in | #92's pick |
+|---|---|---|---|---|---|---|
+| BT rearing | 9,344 (1,281), 76 | MAD ≥ 0.1, ≤ 25 %, none | 176 rules: MAD 0.1–0.5, 11–30 % | out, +218.8 (SE 75.1) | 3 of 5 seeds | ≤ 30 % |
+| BT spawning | 513 (108), 22 | width ≥ 2, ≤ 11 %, none | 140: width 1–3 or MAD 1, 11–30 % | out, +12.3 (SE 8.0) | 1 of 5 | ≤ 13 %, a ≥ 1 m³/s river within 500 m |
+| CH rearing | 4,858 (234), 45 | MAD ≥ 0.75, ≤ 13 %, a ≥ 3 m³/s river within 1 km | 169: MAD 0.1–1, 7–30 %, every one with the exception | out, +252.6 (SE 96.7) | 5 of 5 | ≤ 11 % |
+| CO rearing | 4,628 (1,211), 63 | MAD ≥ 0.1, ≤ 5.49 %, a ≥ 3 m³/s river within 2 km | 54: MAD 0.03–0.35, 3–9 % | out, +118.8 (SE 44.2) | 5 of 5 | the same |
+| GR rearing | 1,355 (229), 27 | width ≥ 1.5, ≤ 5.49 %, none | 1,189: width 1–4, 3–30 % | out, +15.7 (SE 13.5) | 2 of 5 | width ≥ 2 |
+| ST rearing | 1,530 (90), 11 | MAD ≥ 1, ≤ 8.49 %, a ≥ 1 m³/s river within 250 m | 265: MAD 0.15–1 or width 4, 3–30 % | out, +45.8 (SE 26.9) | 2 of 5 | the same |
+| WCT rearing | 1,238 (577), 6 | MAD ≥ 0.03, ≤ 25 %, none | 56: MAD 0.03, 20–30 % | out, +50.9 (SE 33.5) | 5 of 5 | the same (underpowered) |
+| RB rearing and spawning, KO spawning | — | — | — | — | — | not modelled on this build |
+| CH, CM, CO, GR, PK, SK, ST, WCT spawning | — | — | — | — | — | no electrofishing response |
+| CM, KO, PK, SK rearing | — | — | — | — | — | no stream rule in `default` |
+
+- **Four picks moved, and three of the moves are more than a reshuffle.** Bull trout rearing's (limit 30 to 25 %) lies
+  in #92's region (2.8 behind #92's best, SE 10.6), so the two runs cannot tell those rules apart. The other three new
+  picks lie outside #92's region, so the runs disagree: bull trout spawning (limit 13 to 11 %, and the near-river
+  exception dropped; 4.8 behind, SE 2.9), chinook rearing (11 to 13 %; 8.3 behind, SE 4.3) and grayling rearing
+  (width 2 to 1.5 m; 10.0 behind, SE 5.5). Coho, steelhead and westslope cutthroat keep #92's rule. On the Atlas line's
+  gradient (`data/tune/grad_fwa/`, never graded), all seven keys pick #92's sensitivity picks again.
+- **`default` is still outside every region**, grayling's by the narrowest margin (1.16 SEs, against 2.87 on #92's).
+- **Nested selection** (pick on four folds, score the fifth) beats `default` for BT rearing, CH and CO, and loses to
+  it for GR (915.3 against 902.2) and ST (427.9 against 399.0), as on #92's; bull trout spawning's beats `default` on
+  both runs (420.8 against 425.1; #92's 424.8 against 425.2). Two keys flip against the other references: bull trout spawning's
+  choosing now beats no rule (420.8 against 424.6), where #92's did not, and westslope cutthroat's now loses to both
+  `default` and no rule (1,446.5 against 1,442.6 and 1,431.3), where #92's beat both (1,428.1 against 1,444.9 and
+  1,431.3).
+
+### At 1.96 SE
+
+| species × stage | `default` behind the best, in SEs | pick at 1 SE | pick at 1.96 SE | from link's flow start, at 1.96 SE | rules within 1 SE → 1.96 SE, of |
+|---|---|---|---|---|---|
+| BT rearing | 2.91 | MAD ≥ 0.1, ≤ 25 % | MAD ≥ 0.1, ≤ 10.49 % | the same as from the width start | 176 → 1,446, of 8,385 |
+| BT spawning | 1.53 | width ≥ 2, ≤ 11 % | `default` | MAD ≥ 0.041, ≤ 5.49 % | 140 → 7,021, of 7,095 |
+| CH rearing | 2.61 | MAD ≥ 0.75, ≤ 13 %, Q3 within 1 km | the same as at 1 SE | MAD ≥ 0.28, ≤ 13 %, the same exception | 169 → 2,297, of 6,149 |
+| CO rearing | 2.69 | MAD ≥ 0.1, ≤ 5.49 %, Q3 within 2 km | width ≥ 1.5, ≤ 5.49 %, Q1 within 500 m | MAD ≥ 0.03, ≤ 3 % | 54 → 1,296, of 6,622 |
+| GR rearing | 1.16 | width ≥ 1.5, ≤ 5.49 % | `default` (width ≥ 1.5, ≤ 3.49 %) | MAD ≥ 0.021, ≤ 3.49 % | 1,189 → 6,680, of 7,740 |
+| ST rearing | 1.70 | MAD ≥ 1, ≤ 8.49 %, Q1 within 250 m | `default` | MAD ≥ 0.02, ≤ 8.49 % | 265 → 6,678, of 7,224 |
+| WCT rearing | 1.52 | MAD ≥ 0.03, ≤ 25 % | `default` | MAD ≥ 0.03, ≤ 8.49 % | 56 → 7,211, of 7,224 |
+
+Four of seven keep `default` at 1.96 (BT spawning, GR, ST and WCT), each with a 1.96 region holding most of the grid,
+so the stricter bar cannot separate the rules there. Chinook's pick does not move at 1.96; bull trout rearing's goes
+back to `default`'s 10.49 % limit with its flow floor, and coho's to `default`'s width and limit with a nearer
+exception. `knw_tune_repick()` on `data/tune/<key>_tune.csv` gives every cell; the run writes the picks to each
+summary as `rule_recommended_196` and `rule_recommended_flow_196`.
+
+### Grades
+
+The grade is published only where the curve behind it predicts held-out groups better than no rule at all. Four keys
+pass that gate: BT rearing (the curve 6,039.3 against 6,414.8 for no rule, on the curve's own visits), CH (1,159.9
+against 1,502.6), GR (808.3 against 822.6) and ST (398.7 against 432.7). Three carry a rule and no grade: CO (4,474.9
+against 4,416.8) and WCT (1,536.7 against 1,430.4), as on #92's, and now BT spawning (404.4 against 403.9; #92's passed
+by 8.0). Each key's grade log is in `scripts/logs/habitat/20261104_tune_run-20261104_0543-p20261104054300.txt`.
+
+### On link's segments
+
+Both rules regenerated through link's steps on every group the species' habitat table covers (`data/compare/`, the
+`door` structure for lines through wetlands; log `scripts/logs/habitat/20261104_compare-20261104_0543.txt`):
+
+| species × stage | accessible km | `default` km | tuned km | change | lost | gained (by the exception) | graded km, `default` → tuned |
+|---|---|---|---|---|---|---|---|
+| BT rearing | 583,183 | 246,739 | 188,769 | −23.5 % | 70,439 | 12,469 (0) | 113,589 → 105,988 |
+| BT spawning | 583,183 | 134,366 | 166,401 | +23.8 % | 0 | 32,035 (0) | no grade |
+| CH rearing | 233,629 | 102,951 | 88,458 | −14.1 % | 30,698 | 16,205 (13,383) | 52,727 → 58,905 |
+| CO rearing | 168,080 | 89,887 | 87,009 | −3.2 % | 10,790 | 7,912 (5,615) | no grade |
+| GR rearing | 258,519 | 77,786 | 86,398 | +11.1 % | 325 | 8,937 (0) | 44,907 → 49,445 |
+| ST rearing | 180,033 | 83,588 | 63,015 | −24.6 % | 26,809 | 6,236 (5,817) | 42,943 → 41,967 |
+| WCT rearing | 35,246 | 20,478 | 24,398 | +19.1 % | 907 | 4,827 (0) | no grade |
+
+- **Bull trout spawning now draws a quarter more, not half as much again** (+23.8 % against #92's +49.5 %): its
+  limit fell from 13 to 11 % and it lost the exception. Chinook draws 14.1 % less (−15.9 % on #92's). Grayling's rule
+  adds 11.1 % through its slope limit (5.49 % against `default`'s 3.49 %, with the same 1.5 m width); #92's added 3.4 %
+  with a 2 m width floor.
+- **FDIS detection** on each rule's habitat against accessible stream outside it, `default` then tuned: BT rearing
+  16.9 % against 6.5 %, then 19.8 against 5.6; CH 14.4 against 2.3, then 17.6 against 1.3; CO 29.4 against 11.9, then
+  33.2 against 8.9; GR 15.1 against 5.2, then 14.8 against 4.2; ST 4.6 against 0.5, then 6.7 against 0.3; WCT 31.6
+  against 24.3, then 30.9 against 19.0. These visits overlap the ones scored, so this is consistency, not a test.
+- **The bcfishobs records FDIS does not hold** (never scored), as records per km of each rule's habitat over its share
+  of accessible km, rise under the tuned rules for BT rearing (2.45 → 3.88), CH (2.48 → 3.09), CO (1.78 → 1.88) and ST
+  (2.22 → 2.83); are level for BT spawning (3.04 → 3.05); and fall for GR (3.54 → 3.22) and WCT (1.55 → 1.47), whose
+  rules add km that hold fewer records per km. The ratio rewards a rule for drawing less, so it is not a claim about
+  extent (`data/compare/checks.csv`).
+- The maps and the floodplain table were not redrawn, as for #73 and #92 (#65's, below); the promotion removed
+  rainbow trout rearing's maps and rows.
+
+## Results (#92's run, 2026-10-27)
 
 | species × stage | visits (detections), groups | recommended rule | region | `default` | pick holds in | power |
 |---|---|---|---|---|---|---|
@@ -164,7 +276,7 @@ Four readings across the table:
    worse on the fifth than `default` does. Their picks stand as the grid's reading; what each can claim is in its
    species file, which is #73's.
 
-### Which gradient: the regions under the Atlas line's (#92)
+### Which gradient: the regions under the Atlas line's (#92's run)
 
 `GRADIENT=fwa_gradient` reruns the scoring on the main fold seed with each visit read on its whole Atlas line's
 gradient, as #73 did (`data/tune/grad_fwa/`, log `scripts/logs/habitat/20261027_tune_run-grad_fwa.txt`; no grades).
@@ -189,7 +301,7 @@ without), and both picks are without it. So the gradient read moves
 which neighbour is picked and leaves the regions overlapping; it does not move a floor, except grayling's between
 1.5 and 2 m, both inside each other's region.
 
-### At 1.96 SE (#79, 2026-10-20; replayed on #92's tables 2026-10-27)
+### At 1.96 SE (#79, 2026-10-20; replayed on #92's tables 2026-10-27; #145's table is above)
 
 One standard error is a rule of thumb, not a test. Its sources are Breiman et al. 1984, who proposed it for pruning trees, as cited in Chen & Yang 2021, §1.3, since no copy is held; Hastie, Tibshirani & Friedman 2009, pp. 61 and 244, whose only rationale is that the curve "is estimated with error, and hence takes a conservative approach". Chen & Yang (2021, §6) find "no evidence
 confirming that the 1se rule can consistently outperform the regular CV", with an SE that can be off by 100 % either
@@ -225,7 +337,7 @@ each key's summary as `rule_recommended_196`, and from link's flow start as `rul
 **CH's open floor (#54) stays at 0.75 m³/s**, the best rule's and the pick's at 1 and 1.96 SE, with the region's
 floors running from 0.1 to 1.
 
-## Grades
+## Grades (#92's run)
 
 | species × stage | segments (groups) | accessible km | graded km | grade-weighted km | reference rate | km under 0.2 | km at 0.8–1 |
 |---|---|---|---|---|---|---|---|
@@ -259,7 +371,7 @@ reference is the stream branch's 95th percentile. The regrade also read the flow
 2026-10-19 (NewGraphEnvironment/wet#103, about ±5 % on most segments), after the thresholds had been tuned on the load
 before it; #73 retuned on them.
 
-## What each rule changes on link's segments
+## What each rule changes on link's segments (#92's run)
 
 `scripts/0330` regenerates `default` and the tuned rule through fresh's predicate, the user-habitat overlay and
 connectivity on scratch copies of every group the species' habitat table covers (`knw_compare_rules()`; the

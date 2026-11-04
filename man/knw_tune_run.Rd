@@ -34,6 +34,7 @@ knw_tune_run(
   fit = c("fe", "dense"),
   prior_sd = 2.5,
   evidence_id = NULL,
+  modelled = NULL,
   cols = c(grad = "segment_gradient", width = "cw_deploy", mad = "mad_pick")
 )
 }
@@ -100,6 +101,12 @@ visits and walks came from (\code{scripts/0320} passes the md5s of the three
 derived tables). It joins the cache's settings, so a score made on another
 build of the same visit count is not read back as this one's.}
 
+\item{modelled}{\code{NULL}, or the species codes link models on the build the
+visits were placed on (\code{scripts/0320} passes those with any access value in
+the evidence). Every stage of another species is \code{not_modelled}: link draws
+no access or habitat for it, so a rule could be neither graded nor applied
+(#145). \code{NULL} is every species.}
+
 \item{cols}{named \code{character}, as in \code{\link[=knw_rule_in]{knw_rule_in()}}: the columns of \code{visits}
 carrying \code{grad}, \code{width} and \code{mad}, read by the rules and the curve. The
 gradient is link's segment gradient (\code{segment_gradient}), the one link
@@ -109,8 +116,8 @@ sensitivity. The gradient column joins the cache's settings.}
 \value{
 A list with one element per species × stage (\code{"<sp>_<stage>"}): a
 list with \code{species_code}, \code{stage}, \code{response}, \code{status} (\code{fitted},
-\code{underpowered}, \code{no_stream_rule}, \code{no_response}, \code{too_few_groups},
-\code{curve_failed}; \code{smoke} with \code{smoke_only}), \code{population}, and when scored
+\code{underpowered}, \code{no_stream_rule}, \code{not_modelled}, \code{no_response},
+\code{too_few_groups}, \code{curve_failed}; \code{smoke} with \code{smoke_only}), \code{population}, and when scored
 \code{smoke} (\code{\link[=knw_tune_smoke]{knw_tune_smoke()}}'s result, with \code{smoke}), \code{score}
 (\code{\link[=knw_tune_score]{knw_tune_score()}}'s result), \code{pick} (the recommended rule row) and \code{curve}
 (\code{\link[=knw_tune_curve]{knw_tune_curve()}}'s; \code{NULL} with \code{curve_error} when its fit failed);

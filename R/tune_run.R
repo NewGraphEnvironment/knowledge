@@ -59,6 +59,11 @@
 #'   `seeds_more` are not checked: a cache's bootstrap and extra-seed tables are
 #'   read back whatever the run asked for, so give a run with different ones its
 #'   own directory.
+#' @param modelled `NULL`, or the species codes link models on the build the
+#'   visits were placed on (`scripts/0320` passes those with any access value in
+#'   the evidence). Every stage of another species is `not_modelled`: link draws
+#'   no access or habitat for it, so a rule could be neither graded nor applied
+#'   (#145). `NULL` is every species.
 #' @param evidence_id `NULL`, or `character(1)` naming the evidence build the
 #'   visits and walks came from (`scripts/0320` passes the md5s of the three
 #'   derived tables). It joins the cache's settings, so a score made on another
@@ -75,8 +80,8 @@
 #'   time; a run that publishes keeps `TRUE`.
 #' @return A list with one element per species × stage (`"<sp>_<stage>"`): a
 #'   list with `species_code`, `stage`, `response`, `status` (`fitted`,
-#'   `underpowered`, `no_stream_rule`, `no_response`, `too_few_groups`,
-#'   `curve_failed`; `smoke` with `smoke_only`), `population`, and when scored
+#'   `underpowered`, `no_stream_rule`, `not_modelled`, `no_response`,
+#'   `too_few_groups`, `curve_failed`; `smoke` with `smoke_only`), `population`, and when scored
 #'   `smoke` ([knw_tune_smoke()]'s result, with `smoke`), `score`
 #'   ([knw_tune_score()]'s result), `pick` (the recommended rule row) and `curve`
 #'   ([knw_tune_curve()]'s; `NULL` with `curve_error` when its fit failed);
@@ -103,10 +108,11 @@ knw_tune_run <- function(visits, species_tbl, walks, thresholds, species = knw_s
                          min_wsg = 5L, power_wsg = 10L, src = "pick", grid_args = list(), cache_dir = NULL,
                          thresholds_extra = NULL, previous = NULL, smoke = TRUE, smoke_only = FALSE,
                          smoke_args = list(), extra = TRUE, fit = c("fe", "dense"), prior_sd = 2.5,
-                         evidence_id = NULL,
+                         evidence_id = NULL, modelled = NULL,
                          cols = c(grad = "segment_gradient", width = "cw_deploy", mad = "mad_pick")) {
   fit <- match.arg(fit)
   chk::chk_null_or(evidence_id, vld = chk::vld_string)
+  chk::chk_null_or(modelled, vld = chk::vld_character)
   chk::chk_data(visits)
   chk::chk_character(cols)
   chk::chk_subset(c("grad", "width", "mad"), names(cols))
@@ -153,6 +159,12 @@ knw_tune_run <- function(visits, species_tbl, walks, thresholds, species = knw_s
       grid <- if (nrow(thr) == 1L) tune_grid(thr) else tune_grid(thr[0, ])[0, ]
       if (nrow(thr) != 1L || !nrow(grid)) {
         rec$status <- "no_stream_rule"
+        rec$population <- c(visits_in = 0L)
+        out[[key]] <- rec
+        next
+      }
+      if (!is.null(modelled) && !sp %in% modelled) {
+        rec$status <- "not_modelled"
         rec$population <- c(visits_in = 0L)
         out[[key]] <- rec
         next

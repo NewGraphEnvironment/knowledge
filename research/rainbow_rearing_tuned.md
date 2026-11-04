@@ -8,8 +8,11 @@ NewGraphEnvironment/link#343 · **Produced by:** `scripts/0310` (evidence build,
 `scripts/logs/habitat/20261022_evidence_build_ledger.csv`), `scripts/0320` (`data/tune/RB_rear_*`, log
 `scripts/logs/habitat/20261024_tune_run.txt`), `scripts/0330` (`data/compare/RB_rear_*`, log
 `scripts/logs/habitat/20261024_compare.txt`), `data/literature_evidence.csv` and `data/ip_model_registry.csv` (rows
-cited), and the visit tables in `data/fdis/derived/` (the descriptive counts below) · **Status:** measured; nothing
-applied in link (`data/thresholds.csv` carries this rule as `RB_rear_v1` since `0325`'s run of 2026-10-25).
+cited), and the visit tables in `data/fdis/derived/` (the descriptive counts below) · **Status:** retired on link's
+2026-11-03 build (#145). link does not model rainbow trout there (its access column is empty on every segment), so no
+rule for it can be graded or applied, and the promotion of run `20261104_0543` replaced this rule: `data/thresholds.csv`
+carries `RB_rear_v1` as `not_modelled`, with no values. This file is the record of #73's reading; the rule's tables
+and comparison are in git history and the bucket's archive.
 The method and the cross-species table are `habitat_thresholds_tuned.md`.
 
 ## In plain words
@@ -214,4 +217,5 @@ no grade, and two more (TOOD, UNRS) draw no km under `default`: 25 groups draw n
 gated on `streams_access` until link settles which column is meant (NewGraphEnvironment/link#349).
 
 The floodplain table (`data/compare/floodplain.csv`) and the maps (`research/fig/compare_rb_rear_*.png`) were not redrawn
-for #73 (`0330 STAGE=maps`): they show #65's `width>=3|g<=0.09|none` rule on the 23 catalog groups, not this one.
+for #73 (`0330 STAGE=maps`): they showed #65's `width>=3|g<=0.09|none` rule on the 23 catalog groups, not this one, and
+#145's promotion removed both.

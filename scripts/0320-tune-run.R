@@ -236,6 +236,20 @@ if (!gradient %in% names(vl)) {
   stop("GRADIENT=", gradient, ": ", evidence_dir, "/visits_link.csv has no such column",
        if (gradient == "parent_gradient") " (0310 joins it with PARENT_DIR)" else "")
 }
+# the species link models on the build: those with any access value at a visit. link writes an access column for a
+# species it does not model and leaves it empty, so a rule for it could be neither graded nor applied (#145). A
+# missing column is an evidence build that did not read the species, not a species link left out: refused, since its
+# keys would otherwise be not_modelled and a promotion would retire their published rules
+no_col <- species[!paste0("access_", tolower(species)) %in% names(vl)]
+if (length(no_col)) {
+  stop(evidence_dir, "/visits_link.csv has no access column for ", paste(no_col, collapse = ", "),
+       ": rebuild the evidence with 0310, or restrict SPECIES")
+}
+modelled <- species[vapply(species, function(sp) any(!is.na(vl[[paste0("access_", tolower(sp))]])), logical(1))]
+if (length(setdiff(species, modelled))) {
+  say("Not modelled on this build (no access value at any visit): %s; their keys are not_modelled.",
+      paste(setdiff(species, modelled), collapse = ", "))
+}
 codes <- read_csv("data/fdis_species_codes.csv", col_types = cols(.default = "c"), na = "")
 fish <- readRDS("data/fdis/build/fish.rds")
 spawner <- knw_spawner_evidence(fish, vl |> inner_join(vs |> filter(species_code == "BT") |> select(site_visit, pooling), by = "site_visit") |>
@@ -295,7 +309,7 @@ unlink(old_files[grepl("_smoke\\.csv$", old_files)])
 t0 <- Sys.time()
 sm <- knw_tune_run(vl, vs, walks, thr, species = species, spawner = spawner, workers = workers, thresholds_extra = thr_tuned, evidence_id = evidence_md5,
                    cols = cols_run, min_wsg = min_wsg, folds = folds,
-                   previous = if (length(previous)) previous else NULL, smoke_only = TRUE)
+                   previous = if (length(previous)) previous else NULL, smoke_only = TRUE, modelled = modelled)
 smoke_failed <- character()
 for (k in names(sm)) {
   s <- sm[[k]]$smoke
@@ -319,7 +333,7 @@ unlink(old_files[file.exists(old_files) & !grepl(caches, old_files) & !grepl("_s
 t0 <- Sys.time()
 out <- knw_tune_run(vl, vs, walks, thr, species = species, spawner = spawner, workers = workers, cache_dir = dir_out,
                     thresholds_extra = thr_tuned, smoke = FALSE, extra = !main_only, evidence_id = evidence_md5, cols = cols_run,
-                    min_wsg = min_wsg, folds = folds)
+                    min_wsg = min_wsg, folds = folds, modelled = modelled)
 say("Scored %d species x stage in %.1f min on %d workers%s.", length(out), as.numeric(difftime(Sys.time(), t0, units = "mins")), workers,
     if (main_only) " (the main seed only)" else "")
 

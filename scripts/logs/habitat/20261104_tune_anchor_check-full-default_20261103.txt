@@ -1,0 +1,76 @@
+Anchoring check (#141) on data/tune/dev_default_20261103 (full-default_20261103): 7 keys, at knowledge 2f01980.
+  link run 20261103_163715-269b585a, tuning run NA, evidence db5ca99a659b242bede926db1bca4c0a;6a2e28f1afb46a02c357ac044f8d09e3;2e0f0f419022da0f5ac51a3869486a80, gradient segment_gradient
+Picks at the best from default: 2 of 7; from the flow start: 1 of 7 with one; the two starts agree on 4.
+Keys whose best is not a rule a pick may be (an exception under d_floor, or not converged): BT_rear.
+
+## each start's pick beside the best
+      key            rule_recommended recommended_ddev recommended_se rec_moved
+  GR_rear   width>=1.5|g<=0.0549|none        10.026426      12.603286         3
+ BT_spawn       width>=2|g<=0.11|none         4.584007       5.123424         2
+  ST_rear    mad>=1|g<=0.0849|Q1@D250         5.390721      15.675843         2
+  CO_rear mad>=0.1|g<=0.0549|Q3@D2000         0.329508      38.971918         1
+  BT_rear       mad>=0.1|g<=0.25|none         1.343614       9.825973         1
+  CH_rear  mad>=0.75|g<=0.13|Q3@D1000         0.000000       0.000000         0
+ WCT_rear      mad>=0.03|g<=0.25|none         0.000000       0.000000         0
+         rec_moved_parts                  rule_best best_n
+ size+gradient+exception  width>=1|g<=0.11|Q20@D500      1
+      gradient+exception   width>=2|g<=0.15|Q1@D500      2
+           size+gradient   mad>=0.5|g<=0.11|Q1@D250      1
+                gradient  mad>=0.1|g<=0.03|Q3@D2000      1
+               exception  mad>=0.1|g<=0.25|Q20@D100      1
+                    none mad>=0.75|g<=0.13|Q3@D1000      1
+                    none     mad>=0.03|g<=0.25|none      1
+
+## beside the best a pick may be (in the region, clear of d_floor)
+      key best_is_allowed          rule_best_allowed best_allowed_ddev
+  GR_rear            TRUE  width>=1|g<=0.11|Q20@D500          0.000000
+ BT_spawn            TRUE   width>=2|g<=0.15|Q1@D500          0.000000
+  ST_rear            TRUE   mad>=0.5|g<=0.11|Q1@D250          0.000000
+  CO_rear            TRUE  mad>=0.1|g<=0.03|Q3@D2000          0.000000
+  BT_rear           FALSE      mad>=0.1|g<=0.25|none          1.343614
+  CH_rear            TRUE mad>=0.75|g<=0.13|Q3@D1000          0.000000
+ WCT_rear            TRUE     mad>=0.03|g<=0.25|none          0.000000
+ rec_moved_allowed rec_moved_allowed_parts flow_moved_allowed
+                 3 size+gradient+exception                  3
+                 2      gradient+exception                  3
+                 2           size+gradient                  2
+                 1                gradient                  1
+                 0                    none                  0
+                 0                    none                  1
+                 0                    none                  0
+ flow_moved_allowed_parts
+  size+gradient+exception
+  size+gradient+exception
+            size+gradient
+                 gradient
+                     none
+                     size
+                     none
+
+## the flow start
+      key       rule_recommended_flow recommended_flow_ddev recommended_flow_se
+  GR_rear       width>=3|g<=0.04|none              4.425058            8.768821
+ BT_spawn     width>=1.5|g<=0.11|none              3.200616            5.034771
+  ST_rear    mad>=1|g<=0.0849|Q1@D250              5.390721           15.675843
+  CO_rear mad>=0.1|g<=0.0549|Q3@D2000              0.329508           38.971918
+  BT_rear       mad>=0.1|g<=0.25|none              1.343614            9.825973
+  CH_rear  mad>=0.28|g<=0.13|Q3@D1000             25.376679           27.016687
+ WCT_rear      mad>=0.03|g<=0.25|none              0.000000            0.000000
+ flow_moved        flow_moved_parts starts_apart starts_apart_parts
+          3 size+gradient+exception            2      size+gradient
+          3 size+gradient+exception            1               size
+          2           size+gradient            0               none
+          1                gradient            0               none
+          1               exception            0               none
+          1                    size            1               size
+          0                    none            0               none
+
+## the tables read
+      key                         tune_md5
+  GR_rear 4aba64811acca13689006c69804e9af2
+ BT_spawn 9aa7053f7d076cf4e9b16b486cfe93b7
+  ST_rear 8fb3296c3287878e765571f33144206a
+  CO_rear 602610b4065d50f2e3be3f41f213bec5
+  BT_rear 30316a7ae6d1d2e17ba98ea495590f1b
+  CH_rear 5840ab754881e06afaf242f1239cbcd8
+ WCT_rear c4f28a9d97e938d11d0b69d4a70e44c3
