@@ -1,7 +1,7 @@
 published: scripts/logs/habitat/20261104_tune_anchor_check-published.csv (md5 a653277d69c701e55c0403defd9ed697), link run 20261017_004619-3f4c713b
 minimal: scripts/logs/habitat/20261104_tune_anchor_check-minimal-20261103_0838.csv (md5 dd7062f67f79907a901bdb29bd6aa990), link run 20261102_203300-60ab009d
 full: scripts/logs/habitat/20261104_tune_anchor_check-full-default_20261103.csv (md5 1bed0655d58067e179c0fe6cd92f69f8), link run 20261103_163715-269b585a
-Picks per key on three tunings (#145), at knowledge a950b3d.
+Picks per key on three tunings (#145), at knowledge 81ff466.
 Minimal against new full network (the network alone): 3 of 7 keys tuned on both pick the same rule.
 New full against published (link build, flows and range): 3 of 7 keys pick the same rule.
 
@@ -84,9 +84,8 @@ New full against published (link build, flows and range): 3 of 7 keys pick the s
                           <NA>                            <NA>
                           TRUE                    5.39 / 15.68
                           TRUE                     0.00 / 0.00
-tune tables (published): data/tune
-tune tables (minimal): data/tune/candidate/20261103_0838
-tune tables (full): data/tune/dev_default_20261103
+tune tables (minimal): data/tune/candidate/20261103_0838, each the table its anchor csv read (tune_md5)
+tune tables (full): data/tune/dev_default_20261103, each the table its anchor csv read (tune_md5)
 
 ## visits scored and status
       key n_visits_published n_visits_minimal n_visits_full status_published
