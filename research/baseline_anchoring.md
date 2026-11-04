@@ -29,7 +29,8 @@ One limit is not the start's. No pick may carry a near-river exception closer th
 catch on a mainstem snapped to a tributary's mouth cannot be told from one in the tributary), but the best-scoring rule
 may. Where it does, no start could reach it, so each pick is also measured against the **best allowed** rule, the
 best-scoring rule a pick may be: in the region, and with no exception or one at 200 m or more (`rec_moved_allowed`,
-`flow_moved_allowed`). It is the best itself wherever the best's exception is 200 m or more, or it has none.
+`flow_moved_allowed`). It is the best itself wherever the best is such a rule (on all fifteen tables read here, every
+rule converged, so the floor is the only reason it is not).
 
 A pick 0 parts from the best is the best: the start chose nothing. A pick several parts away is a rule the data accept
 but did not choose; the parts it kept from `default` are there because `default` had them.

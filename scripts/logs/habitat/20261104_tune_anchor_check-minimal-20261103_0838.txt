@@ -1,7 +1,7 @@
-Anchoring check (#141) on data/tune/candidate/20261103_0838 (minimal-20261103_0838): 7 keys, at knowledge 22b8d88.
+Anchoring check (#141) on data/tune/candidate/20261103_0838 (minimal-20261103_0838): 7 keys, at knowledge 7bb9111.
   link run 20261102_203300-60ab009d, tuning run 20261103_0838, evidence c746c5829c605fb7711feba0ec9d4d93;6a2e28f1afb46a02c357ac044f8d09e3;2e0f0f419022da0f5ac51a3869486a80, gradient segment_gradient
 Picks at the best from default: 3 of 7; from the flow start: 1 of 7 with one; the two starts agree on 4.
-Keys whose best carries an exception under d_floor, which no pick may: BT_rear.
+Keys whose best is not a rule a pick may be (an exception under d_floor, or not converged): BT_rear.
 
 ## each start's pick beside the best
       key            rule_recommended recommended_ddev recommended_se rec_moved
@@ -22,14 +22,14 @@ Keys whose best carries an exception under d_floor, which no pick may: BT_rear.
                     none      mad>=0.03|g<=0.25|none      1
 
 ## beside the best a pick may be (d_floor)
-      key best_floor_ok           rule_best_allowed best_allowed_ddev
-  BT_rear         FALSE        mad>=0.1|g<=0.2|none          0.725626
-  GR_rear          TRUE width>=2|g<=0.0549|Q50@D500          0.000000
-  ST_rear          TRUE  mad>=0.5|g<=0.0549|Q1@D250          0.000000
-  CO_rear          TRUE   mad>=0.1|g<=0.04|Q3@D2000          0.000000
- BT_spawn          TRUE    width>=2|g<=0.25|Q1@D500          0.000000
-  CH_rear          TRUE  mad>=0.75|g<=0.09|Q3@D1000          0.000000
- WCT_rear          TRUE      mad>=0.03|g<=0.25|none          0.000000
+      key best_is_allowed           rule_best_allowed best_allowed_ddev
+  BT_rear           FALSE        mad>=0.1|g<=0.2|none          0.725626
+  GR_rear            TRUE width>=2|g<=0.0549|Q50@D500          0.000000
+  ST_rear            TRUE  mad>=0.5|g<=0.0549|Q1@D250          0.000000
+  CO_rear            TRUE   mad>=0.1|g<=0.04|Q3@D2000          0.000000
+ BT_spawn            TRUE    width>=2|g<=0.25|Q1@D500          0.000000
+  CH_rear            TRUE  mad>=0.75|g<=0.09|Q3@D1000          0.000000
+ WCT_rear            TRUE      mad>=0.03|g<=0.25|none          0.000000
  rec_moved_allowed rec_moved_allowed_parts flow_moved_allowed
                  2           size+gradient                  2
                  2          size+exception                  1
