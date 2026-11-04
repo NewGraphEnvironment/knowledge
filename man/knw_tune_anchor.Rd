@@ -4,25 +4,32 @@
 \alias{knw_tune_anchor}
 \title{How far each starting point moved the pick from the best-scoring rule}
 \usage{
-knw_tune_anchor(tune)
+knw_tune_anchor(tune, d_floor = formals(knw_tune_score)$d_floor)
 }
 \arguments{
 \item{tune}{a tuning table as \code{\link[=knw_tune_score]{knw_tune_score()}} returns it or
 \code{scripts/0320} saves it (\verb{<sp>_<stage>_tune.csv}, read as text or typed):
 \code{rule}, \code{size_var}, \code{size_min}, \code{grad_max}, \code{exc_q}, \code{exc_d},
-\code{recommended}, \code{ddev_best} and \code{se_diff}, and \code{recommended_flow} where the
-table has a flow start.}
+\code{recommended}, \code{ddev_best} and \code{se_diff}; and \code{departures_flow} with
+\code{recommended_flow} where the table has a flow start (a table from before
+#80, or a species with no flow start, has none).}
+
+\item{d_floor}{\code{numeric(1)} the shortest exception distance (m) a pick may
+carry; \code{\link[=knw_tune_score]{knw_tune_score()}}'s own by default, so the register's one value
+(\code{inst/method/settings.csv}) holds for both.}
 }
 \value{
 One row: \code{rule_recommended}, \code{recommended_ddev} and \code{recommended_se}
 (the pick from \code{default}, its distance behind the best and that distance's
 SE); the same for the flow start (\code{rule_recommended_flow},
 \code{recommended_flow_ddev}, \code{recommended_flow_se}; \code{NA} with no flow start);
-\code{rule_best} and \code{best_n}; \code{rec_moved} and \code{flow_moved} (each pick's
-departures from the best, 0 to 3) and \code{starts_apart} (between the two
-picks), each with its parts (\code{rec_moved_parts} and so on: \code{size},
-\code{gradient} and \code{exception} joined by \code{+}, or \code{none}); \code{rec_is_best},
-\code{flow_is_best} and \code{starts_agree}.
+\code{rule_best} and \code{best_n}; \code{rule_best_allowed}, \code{best_allowed_ddev} and
+\code{best_floor_ok}; \code{rec_moved} and \code{flow_moved} (each pick's departures from
+the best, 0 to 3), \code{rec_moved_allowed} and \code{flow_moved_allowed} (from the
+best allowed) and \code{starts_apart} (between the two picks), each with its
+parts (\code{rec_moved_parts} and so on: \code{size}, \code{gradient} and \code{exception}
+joined by \code{+}, or \code{none}); \code{rec_is_best}, \code{flow_is_best} (the pick is tied
+at the best) and \code{starts_agree}.
 }
 \description{
 The pick is the one-SE region's rule with the fewest departures from a
@@ -38,10 +45,17 @@ The picks are the \code{recommended} rules, the ones published: from link's
 #80). The best is every rule at \code{ddev_best == 0}: rules with the same in/out
 on every visit are one fit and tie, so \code{rule_best} is the first of them in
 grid order (as \code{scripts/0320}'s summary names it), \code{best_n} counts them, and a
-pick's distance to the best is its fewest departures from any of them. Two
-rules depart in the three parts the grid counts (\code{\link[=knw_tune_grid]{knw_tune_grid()}}): the size
-test (its variable or floor), the gradient maximum and the exception (its
-river size or distance, or one having it and the other not).
+pick's distance to the best is its fewest departures from any of them, the
+first such rule in grid order naming the parts. Two rules depart in the three
+parts the grid counts (\code{\link[=knw_tune_grid]{knw_tune_grid()}}): the size test (its variable or
+floor), the gradient maximum and the exception (its river size or distance,
+or one having it and the other not).
+
+No pick may carry an exception closer than \code{d_floor}, but the best may, and
+then no start could reach it: part of the distance is the floor's, not the
+start's. So each pick is also measured against the \strong{best allowed} rule, the
+lowest-scoring rule with no exception or one at \code{d_floor} or more (ties as
+above); it is the best itself wherever \code{best_floor_ok}.
 }
 \examples{
 tune <- data.frame(
@@ -49,6 +63,7 @@ tune <- data.frame(
            "width>=1|g<=0.0549|Q50@D500"),
   size_var = c("width", "width", "mad", "width"), size_min = c(1.5, 2, 0.5, 1), grad_max = 0.0549,
   exc_q = c(NA, NA, NA, 50), exc_d = c(NA, NA, NA, 500),
+  departures_flow = c(1L, 1L, 0L, 2L),
   recommended = c(FALSE, TRUE, FALSE, FALSE), recommended_flow = c(FALSE, FALSE, TRUE, FALSE),
   ddev_best = c(20, 5.7, 11.6, 0), se_diff = c(9, 10.4, 13.9, 0)
 )

@@ -6,13 +6,15 @@
 # best-scoring rule (knw_tune_anchor()): each one's distance behind the best in deviance and SE, and the parts (size
 # test, gradient, exception) that separate them. No retune: the scores are in the tables.
 #
-# Keys are listed in the order a baseline review would take them: the parts the default pick moved from the best, then
-# its distance behind the best in SEs, then whether the two starts disagree.
+# Keys are listed in the order a baseline review would take them: the parts the default pick moved from the best rule a
+# pick may be (the best itself unless the best carries an exception under d_floor, which no pick may), then its distance
+# behind the best in SEs, then whether the two starts disagree. The pick and the best are read at knw_tune_score()'s
+# d_floor, the tuning's (the tables do not record it).
 #
 # INPUT:  TUNE_DIR/<key>_tune.csv and <key>_summary.csv (default data/tune, the published tables; not recursed). No
 #         database.
-# OUTPUT: scripts/logs/habitat/<yyyymmdd>_tune_anchor_check-<label>.csv (one row per key) and .txt (the tables' run
-#         and the same rows; a second run of the day numbered)
+# OUTPUT: scripts/logs/habitat/<yyyymmdd>_tune_anchor_check-<label>.csv (one row per key, with its table's md5) and
+#         .txt (the knowledge commit, the tables' run and the same rows; a second run of the day numbered)
 # RUN:    TUNE_DIR=<dir> LABEL=<label> Rscript data-raw/tune_anchor_check.R   (from the repo root; LABEL defaults to
 #         `published` for data/tune, else the directory's name)
 # ---------------------------------------------------------------------------
@@ -43,16 +45,18 @@ rows <- bind_rows(lapply(files, function(f) {
   tibble(key = key, status = tune$status[1], n_visits = as.numeric(tune$n_visits[1]),
          region_n = sum(tune$in_region %in% "TRUE"), knw_tune_anchor(tune),
          run_uid = run("run_uid"), tune_run = run("tune_run"), evidence_md5 = run("evidence_md5"),
-         curve_grad = run("curve_grad"))
+         curve_grad = run("curve_grad"), tune_md5 = unname(tools::md5sum(f)))
 }))
 rows <- rows |>
   mutate(rec_se_behind = if_else(recommended_se > 0, recommended_ddev / recommended_se, 0),
          flow_se_behind = if_else(recommended_flow_se > 0, recommended_flow_ddev / recommended_flow_se, 0)) |>
-  arrange(desc(rec_moved), desc(rec_se_behind), starts_agree %in% TRUE) |>
+  arrange(desc(rec_moved_allowed), desc(rec_se_behind), starts_agree %in% TRUE) |>
   relocate(rec_se_behind, .after = recommended_se) |>
   relocate(flow_se_behind, .after = recommended_flow_se)
 
-say("Anchoring check (#141) on %s (%s): %d keys.", tune_dir, label, nrow(rows))
+dirty <- length(system2("git", c("status", "--porcelain", "--untracked-files=no"), stdout = TRUE)) > 0
+say("Anchoring check (#141) on %s (%s): %d keys, at knowledge %s%s.", tune_dir, label, nrow(rows),
+    system2("git", c("rev-parse", "--short", "HEAD"), stdout = TRUE), if (dirty) " (uncommitted changes)" else "")
 runs <- distinct(rows, run_uid, tune_run, evidence_md5, curve_grad)
 for (i in seq_len(nrow(runs))) {
   say("  link run %s, tuning run %s, evidence %s, gradient %s", runs$run_uid[i], runs$tune_run[i],
@@ -61,11 +65,17 @@ for (i in seq_len(nrow(runs))) {
 say("Picks at the best from default: %d of %d; from the flow start: %d of %d with one; the two starts agree on %d.",
     sum(rows$rec_is_best), nrow(rows), sum(rows$flow_is_best %in% TRUE), sum(!is.na(rows$flow_is_best)),
     sum(rows$starts_agree %in% TRUE))
+say("Keys whose best carries an exception under d_floor, which no pick may: %s.",
+    if (any(!rows$best_floor_ok)) paste(rows$key[!rows$best_floor_ok], collapse = ", ") else "none")
 block("each start's pick beside the best", rows |>
         select(key, rule_recommended, recommended_ddev, recommended_se, rec_moved, rec_moved_parts, rule_best, best_n))
+block("beside the best a pick may be (d_floor)", rows |>
+        select(key, best_floor_ok, rule_best_allowed, best_allowed_ddev, rec_moved_allowed, rec_moved_allowed_parts,
+               flow_moved_allowed, flow_moved_allowed_parts))
 block("the flow start", rows |>
         select(key, rule_recommended_flow, recommended_flow_ddev, recommended_flow_se, flow_moved, flow_moved_parts,
                starts_apart, starts_apart_parts))
+block("the tables read", rows |> select(key, tune_md5))
 write_csv(rows |> mutate(across(where(is.double), ~ round(.x, 4))), path_csv, na = "")
 writeLines(log_lines, path_txt)
 message("Wrote ", path_csv, " and ", path_txt)

@@ -7,6 +7,7 @@ anchor_fx <- function() {
     size_var = c("width", "width", "mad", "width", "width", "width"),
     size_min = c(1.5, 2, 0.021, 1, 1, 1), grad_max = c(0.0549, 0.0549, 0.0549, 0.0549, 0.0549, 0.09),
     exc_q = c(NA, NA, NA, 50, 50, NA), exc_d = c(NA, NA, NA, 500, 1000, NA),
+    departures_flow = c(1L, 1L, 0L, 2L, 2L, 2L),
     recommended = c(FALSE, TRUE, FALSE, FALSE, FALSE, FALSE),
     recommended_flow = c(FALSE, FALSE, TRUE, FALSE, FALSE, FALSE),
     ddev_best = c(20, 5.7, 11.6, 0, 0, 30), se_diff = c(9, 10.4, 13.9, 0, 0, 12),
@@ -81,13 +82,44 @@ test_that("a pick nearest one tied best rule counts the nearest, not the first",
 
 test_that("a table with no flow start leaves the flow columns NA", {
   t <- anchor_fx()
+  t$departures_flow <- NA
   t$recommended_flow <- NA
   a <- knw_tune_anchor(t)
   expect_true(all(is.na(a[c("rule_recommended_flow", "recommended_flow_ddev", "flow_moved", "flow_moved_parts",
-                            "starts_apart", "starts_apart_parts", "flow_is_best", "starts_agree")])))
+                            "flow_moved_allowed", "starts_apart", "starts_apart_parts", "flow_is_best",
+                            "starts_agree")])))
   expect_identical(a$rec_moved, 2L)
-  t$recommended_flow <- NULL
+  # a table from before #80 has neither column
+  t$departures_flow <- t$recommended_flow <- NULL
   expect_identical(knw_tune_anchor(t), a)
+})
+
+test_that("a best under d_floor, which no pick may be, is measured beside the best a pick may be", {
+  t <- anchor_fx()
+  t$exc_d[4:5] <- 100
+  t$exc_q[5] <- 30
+  t$rule[4:5] <- c("width>=1|g<=0.0549|Q50@D100", "width>=1|g<=0.0549|Q30@D100")
+  t$ddev_best[2] <- 4
+  a <- knw_tune_anchor(t)
+  expect_false(a$best_floor_ok)
+  expect_identical(a$rule_best_allowed, "width>=2|g<=0.0549|none")
+  expect_equal(a$best_allowed_ddev, 4)
+  expect_identical(c(a$rec_moved, a$rec_moved_allowed), c(2L, 0L))
+  expect_identical(a$rec_moved_allowed_parts, "none")
+  expect_identical(c(a$flow_moved_allowed, a$starts_apart), c(1L, 1L))
+  # the floor is the scorer's: at 50 m the best is allowed
+  expect_true(knw_tune_anchor(t, d_floor = 50)$best_floor_ok)
+  expect_true(knw_tune_anchor(anchor_fx())$best_floor_ok)
+  expect_identical(knw_tune_anchor(anchor_fx())$rule_best_allowed, knw_tune_anchor(anchor_fx())$rule_best)
+})
+
+test_that("the pick read is the recommended rule, not a pick d_floor moved it off", {
+  t <- anchor_fx()
+  t$exc_d[5] <- 100
+  t$pick <- c(FALSE, FALSE, FALSE, FALSE, TRUE, FALSE)
+  a <- knw_tune_anchor(t)
+  expect_identical(a$rule_recommended, "width>=2|g<=0.0549|none")
+  expect_identical(a$rec_moved, 2L)
 })
 
 test_that("a table read back as text gives the same row (the saved csv)", {
@@ -97,6 +129,18 @@ test_that("a table read back as text gives the same row (the saved csv)", {
   expect_identical(knw_tune_anchor(txt), knw_tune_anchor(anchor_fx()))
 })
 
+test_that("the parts count departures as knw_tune_grid() does, from both starts", {
+  thr <- data.frame(species_code = "GR", rear_gradient_max = 0.0349, rear_channel_width_min = 1.5, rear_mad_min = 0.021)
+  g <- knw_tune_grid(thr, "rear", grid_mad = c(0.021, 0.5), grid_width = c(1, 1.5), grid_grad = c(0.0349, 0.09),
+                     grid_q = c(5, 50), grid_d = c(500, 1000))
+  d0 <- which(g$is_default)
+  f0 <- which(g$departures_flow == 0L)
+  expect_length(f0, 1)
+  expect_identical(vapply(seq_len(nrow(g)), function(i) as.integer(sum(.knw_rule_parts(g, i, d0))), 1L), g$departures)
+  expect_identical(vapply(seq_len(nrow(g)), function(i) as.integer(sum(.knw_rule_parts(g, i, f0))), 1L),
+                   g$departures_flow)
+})
+
 test_that("a table without one recommended rule, or with two flow picks or no best, is refused", {
   t <- anchor_fx()
   t$recommended <- FALSE
@@ -104,6 +148,11 @@ test_that("a table without one recommended rule, or with two flow picks or no be
   t <- anchor_fx()
   t$recommended_flow[1] <- TRUE
   expect_error(knw_tune_anchor(t), "2 recommended_flow rules")
+  # a flow start that names no pick is refused, not read as no flow start
+  t$recommended_flow <- FALSE
+  expect_error(knw_tune_anchor(t), "flow start and 0 recommended_flow")
+  t$recommended_flow <- NULL
+  expect_error(knw_tune_anchor(t), "flow start and 0 recommended_flow")
   t <- anchor_fx()
   t$ddev_best[4:5] <- 1
   expect_error(knw_tune_anchor(t), "no rule at ddev_best 0")
