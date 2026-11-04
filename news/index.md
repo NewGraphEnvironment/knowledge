@@ -1,5 +1,20 @@
 # Changelog
 
+## knowledge 0.4.26
+
+- The chinook rearing article leads with the answer and the Bulkley map,
+  then one before/after table, a figure of why a nearby river matters
+  (the fitted chance of a catch by distance to a river, per stream
+  flow), how sure the choice is, and how it was done in a table that
+  links the methods article
+  ([\#143](https://github.com/NewGraphEnvironment/knowledge/issues/143)).
+  The methods article opens with what bcfishpass’s map was for and what
+  tuning adds, and now holds the one-SE and cross-validation citations.
+  Several statements are now exact where the old prose was loose: the
+  Bulkley map’s three causes of change, a coded site out of reach is
+  dropped, and each site and group count names its population. No code
+  change.
+
 ## knowledge 0.4.25
 
 - [`knw_tune_anchor()`](https://newgraphenvironment.github.io/knowledge/reference/knw_tune_anchor.md)
