@@ -27,9 +27,9 @@ Measured today from the tables (rule, + ddev / SE behind the best):
 - [x] `_pkgdown.yml` reference entry beside `knw_tune_pick_report`; `devtools::document()`, `pkgdown::check_pkgdown()`.
 
 ## Phase 2: every run reports it (`scripts/0320-tune-run.R`)
-- [ ] Summary: bind the anchor's distance, departure and flag columns; stop if its `rule_recommended`, `rule_best`, `rule_recommended_flow` differ from the summary's own (one fact derived twice gets a guard).
-- [ ] `pick_report.csv`: the run's anchor columns beside the published comparison (without restating `rule_run`), and the log's pick-report block shows `rec_moved`, `flow_moved`, `starts_apart`.
-- [ ] Header: an `ANCHORING (#141)` bullet in the spec and the new columns under OUTPUT.
+- [x] Summary: bind the anchor's distance, departure and flag columns; stop if its `rule_recommended`, `rule_best`, `rule_recommended_flow` differ from the summary's own (one fact derived twice gets a guard).
+- [x] `pick_report.csv`: the run's anchor columns beside the published comparison (without restating `rule_run`), and the log's pick-report block shows `rec_moved`, `flow_moved`, `starts_apart`.
+- [x] Header: an `ANCHORING (#141)` bullet in the spec and the new columns under OUTPUT.
 
 ## Phase 3: run it on the published tables and the current candidate
 - [ ] `data-raw/tune_anchor_check.R` (`TUNE_DIR`, `LABEL`): every `<key>_tune.csv` in the directory (not recursed) through `knw_tune_anchor()`, written to `scripts/logs/habitat/<date>_tune_anchor_check-<label>.csv` with a short `.txt` naming the tables' run (`run_uid`, `tune_run`, `evidence_md5` from each summary).

@@ -35,6 +35,10 @@
 #   - TWO STARTS (#80): the pick is read from link's width `default` (`recommended`, as before) and from
 #     its flow version (`recommended_flow`), at 1 and 1.96 SE; link's `default_tuned` row joins each grid
 #     as a scored candidate (`is_link_tuned`), so the table says how link's own flow floors score.
+#   - ANCHORING (#141): each start's recommended rule beside the best-scoring one (knw_tune_anchor()): how far each sits
+#     behind the best, in deviance and SE, and how many parts (size test, gradient, exception) separate the two picks
+#     from the best and from each other, so how much a baseline chose the pick is a number. Rules tied at the best are
+#     one fit, and a pick's distance is to the nearest of them. In each summary and the pick report.
 #   - GRADIENT (#92): rules and curves read link's segment gradient (`segment_gradient`), the gradient link applies a
 #     rule to and the grade reads, where #57 to #91 read the whole Atlas line's (`fwa_gradient`). link cuts a stream at
 #     the observations of the species it models, so a visit with fish usually sits on a short segment starting at it
@@ -64,7 +68,8 @@
 #         data/tune/<sp>_<stage>_seeds.csv     the four more fold seeds' best, pick and recommended rules
 #         data/tune/<sp>_<stage>_honest.csv    nested selection: each fold's pick and its held-out deviance
 #         data/tune/<sp>_<stage>_score.rds     the scored grid, read back on a rerun (ignored)
-#         data/tune/<sp>_<stage>_summary.csv   one row: status, population, pick, held-out deviances (0325 binds them)
+#         data/tune/<sp>_<stage>_summary.csv   one row: status, population, pick, held-out deviances, how far each
+#                                              start moved the pick from the best (#141) (0325 binds them)
 #         data/tune/<sp>_<stage>_curve.rds     the fitted curve object (ignored; 0330 reads them)
 #         <date>_tune_run-<run>.txt (the log, in the run directory; promoted to scripts/logs/habitat/)
 # RUN:    Rscript scripts/0320-tune-run.R   (from the repo root; SPECIES=CH,BT to restrict; WORKERS=14; RUN=<name> names
@@ -381,6 +386,16 @@ for (k in names(out)) {
       seeds_rec_in_region = if (main_only) NA_integer_ else sum(r$score$seeds$main_rec_in_region),
       seeds_n = if (main_only) 0L else nrow(r$score$seeds),
       boot_rec_share = if (main_only) NA_real_ else rules$boot_rec_share[rules$recommended])
+    # how far each start moved the pick from the best (#141); the anchor's rule names are the summary's, held to them
+    anc <- knw_tune_anchor(rules)
+    if (!identical(c(anc$rule_recommended, anc$rule_best, anc$rule_recommended_flow),
+                   c(row$rule_recommended, row$rule_best, row$rule_recommended_flow))) {
+      # a code fault, not a refusal: no log is written under the name 0335 promotes
+      stop(sprintf("%s: knw_tune_anchor() names %s / %s / %s where the summary names %s / %s / %s %s",
+                   k, anc$rule_recommended, anc$rule_best, anc$rule_recommended_flow, row$rule_recommended,
+                   row$rule_best, row$rule_recommended_flow, "(recommended, best, flow)"), call. = FALSE)
+    }
+    row <- bind_cols(row, select(anc, -c(rule_recommended, rule_best, rule_recommended_flow)))
     say("%s: %s. %d visits (%d detections) in %d groups (%d both). Recommended %s; default %s the region (+%.1f, SE %.1f). Curve held-out %.1f vs grid best %.1f.",
         k, r$status, row$visits_in, row$detections, row$groups, row$groups_both, r$pick$rule,
         if (dflt$in_region) "in" else "outside", dflt$ddev_best, dflt$se_diff, r$curve$heldout, best$dev_heldout)
@@ -427,7 +442,9 @@ pr <- bind_rows(lapply(names(out), function(k) {
   f <- file.path(dir_pub, paste0(k, "_tune.csv"))
   pub <- if (file.exists(f)) read_csv(f, show_col_types = FALSE, col_types = cols(.default = "c")) else NULL
   tibble(key = k, species_code = r$species_code, stage = r$stage, status = r$status,
-         knw_tune_pick_report(r$score$rules, pub))
+         knw_tune_pick_report(r$score$rules, pub),
+         # the run's anchoring (#141); its default pick is rule_run
+         select(knw_tune_anchor(r$score$rules), -rule_recommended))
 }))
 if (nrow(pr)) {
   write_csv(pr |> mutate(across(where(is.double), ~ round(.x, 4))), file.path(dir_out, "pick_report.csv"), na = "")
@@ -437,6 +454,8 @@ if (nrow(pr)) {
       if (length(moved)) sprintf(" (moved: %s)", paste(moved, collapse = ", ")) else "", file.path(dir_out, "pick_report.csv"))
   block("pick report", pr |> select(key, rule_run, rule_published, same_pick, published_in_region, published_ddev,
                                     published_se, published_ddev_was, n_visits_run, n_visits_published))
+  block("anchoring (#141)", pr |> select(key, rule_run, recommended_ddev, recommended_se, rec_moved, rec_moved_parts,
+                                         rule_recommended_flow, flow_moved, starts_apart, rule_best, best_n))
 }
 
 # ---- grade every segment of each fitted species' groups ----------------------------------
