@@ -64,7 +64,7 @@ The change is to prose only. Every figure and table below reads elements already
 
 ## Phase 3: Dependencies, references, render
 - [x] Add `kableExtra` to `Suggests`.
-- [ ] `Rscript data-raw/vignette_bib.R` with Zotero running; both `.bib` files rewritten. The Data Catalogue record stays a
+- [x] `Rscript data-raw/vignette_bib.R` with Zotero running; both `.bib` files rewritten. The Data Catalogue record stays a
       link, not a citation (Al, 2026-11-04), so no Zotero item is added.
 - [ ] Install the branch (`R CMD INSTALL .`) and render both articles; read each rendered page, figures included at their
       published width.

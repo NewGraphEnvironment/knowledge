@@ -83,3 +83,4 @@ This takes the chinook article's structure and tone from #118 (renaming the arti
 ## Unrelated test error
 
 `test-link_place.R:39` errors (data.frame of 1 and 0 rows): its query found no BULK bull trout rearing segment in the live `fresh_default` during the provincial run on 2026-11-04. This branch touches nothing under `R/` or `tests/`; the other 1,901 expectations pass.
+| After the restart, Zotero 10.0.7 listened on 127.0.0.1:23119 and answered a raw `nc` request 200, yet `curl` probes got an empty reply (exit 52) on most attempts, whatever the user agent or `Connection` header | Not chased: `rbbt` from R reached Better BibTeX on the first try and `vignette_bib.R` ran clean. The probe, not Zotero, was the unreliable part after the restart |
