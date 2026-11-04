@@ -10,7 +10,8 @@
 # Each poll is one row of the log. On release the record carries the run_uid, the log_recompute
 # count, the churn value and the release time, and the link, fresh and fwapg SHAs from
 # fresh_default.log, over the rows of the runs log_recompute names (#145: the previous run's rows stay in `log`;
-# log_runs_aside names them). After `max_hours` without a release it stops with status `timeout` and a
+# log_runs_aside names them). A log the record cannot attribute to one build ends with status `refused` and the
+# reason, written as <name>_refused.csv, and a non-zero exit. After `max_hours` without a release it stops with status `timeout` and a
 # non-zero exit, so a waiter on this process reads the file, not the exit alone.
 #
 # INPUT:  fwapg database (PG* env vars): SCHEMA.{streams,log_recompute,log},
@@ -113,7 +114,19 @@ repeat {
   message(sprintf("%s  ended %d/%d  runs %d  churn %s  active %d  stable %s",
                   r$at_utc, r$n_ended, r$n_wsg, r$n_runs, r$churn, r$n_active, stable))
   if (complete && quiet && stable) {
-    s <- shas()
+    # the record refuses a log it cannot attribute to one build (#145): the last row then says so, under a _refused
+    # name outside the pattern 0310 takes, and the poll file is removed
+    s <- tryCatch(shas(), error = function(e) e)
+    if (inherits(s, "error")) {
+      rows[[n]]$status <- "refused"
+      rows[[n]]$note <- conditionMessage(s)
+      path_refused <- sub("\\.csv$", "_refused.csv", path_log)
+      path_log <- path_refused
+      write_log()
+      unlink(sub("_refused\\.csv$", ".csv", path_refused))
+      message("REFUSED ", r$at_utc, ": ", conditionMessage(s), " (log ", path_refused, ")")
+      quit(status = 3)
+    }
     rows[[n]]$status <- "released"
     rows[[n]] <- cbind(rows[[n]], s)
     write_log()

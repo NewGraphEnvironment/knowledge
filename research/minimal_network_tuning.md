@@ -178,7 +178,7 @@ differ), user habitat, and fresh's version (the connectivity code is the same in
 established. It does not touch the comparison above, which regenerates both rules the same way.
 
 Steps 3 and 5 of `minimal_network_check.R` (access per group, stored habitat) ran against the new full `default` build
-in the next section; step 4 (the parent) is #120's, on link's parent table.
+("The full network on the same flows and range", above); step 4 (the parent) is #120's, on link's parent table.
 
 ## What each break source does, as far as these runs show
 

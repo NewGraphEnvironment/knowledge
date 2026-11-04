@@ -93,7 +93,8 @@ for (nm in names(paths)) {
   say("%s: %s (md5 %s), link run %s", nm, paths[[nm]], unname(tools::md5sum(paths[[nm]])),
       paste(u[!is.na(u)], collapse = ", "))
 }
-dirty <- length(system2("git", c("status", "--porcelain", "--untracked-files=no", "--", "R", "data-raw"),
+# untracked files count: this script itself is code the numbers depend on
+dirty <- length(system2("git", c("status", "--porcelain", "--", "R", "data-raw/pick_network_compare.R"),
                         stdout = TRUE)) > 0
 say("Picks per key on three tunings (#145), at knowledge %s%s.",
     system2("git", c("rev-parse", "--short", "HEAD"), stdout = TRUE), if (dirty) " (uncommitted changes)" else "")
