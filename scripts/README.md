@@ -47,8 +47,10 @@ wf_farm_priority.js                          farm priority/crossing tables out o
     fresh_default province-wide, and the link repo at LINK_REPO) ---
 0300  wait until link's run has settled in fresh_default (log_recompute ended for every group, churn
       unchanged over three polls, no active session) -> scripts/logs/habitat/<date>_link_settle.csv (released row).
-      SCHEMA= watches another schema, its log <date>_link_settle-<schema>.csv; POLL_MIN= (default 10) the minutes
-      between polls; every row names both (#120)
+      SCHEMA= watches another schema, its log <date>_link_settle-<schema>.csv; SETTLE_TAG= tags the log instead
+      (<date>_link_settle-<tag>.csv: a fresh_default build compared before it is promoted, #145); POLL_MIN= (default
+      10) the minutes between polls; every row names both (#120). The SHAs come from the log rows of the runs
+      log_recompute names (#145)
 0310  one evidence build: quality-passed FDIS visits x every species (catch, size classes, presence, blocked
       absence, DV pooling), placed on link's segments with every species' access and re-gated habitat flags,
       wet's flow by source, cw_deploy, regulated reach, natural barriers downstream per species, walks to

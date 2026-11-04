@@ -18,8 +18,8 @@ several, is refused.}
 \value{
 A list: \code{schema}, \code{run_uid} (the schema's runs, \verb{;}-joined),
 \code{discharge_load}, \code{walk_md5}, \code{fresh_version}, \code{tokens} (link's output
-vocabulary, \code{c(cut =, acc =, grad =, flow =)}, read from every row of
-\verb{<schema>.log}, where link writes them; each \code{NA} where that log predates
+vocabulary, \code{c(cut =, acc =, grad =, flow =)}, read from the build's rows
+of \verb{<schema>.log}, where link writes them; each \code{NA} where that log predates
 link 0.70.0 and carries none), \code{log_run_uid} (the runs whose \code{log} rows
 were read, \verb{;}-joined), \code{log} (which rows those are, as a clause a reader
 of \code{log} appends) and \code{line}, the record as one line for a log. A

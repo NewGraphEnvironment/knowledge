@@ -416,12 +416,16 @@ and find that ledger by it; each summary names its `evidence_dir` (the grade rec
 keep their columns); `0330` reads the directory the summaries name, or `EVIDENCE_DIR` for a staged copy, and refuses
 tables whose md5s are not the curves' `evidence_md5`. The evidence, settle, parent and DEV directories these scripts write into
 ledgers, summaries and logs are relative to the repo root, or under `~`, never a home path (`.knw_path_rel()`). link's output tokens are on `<schema>.log`, one row per pipeline call and group, never on
-`log_recompute`: `knw_build_record()` reads them over every `log` row, because a build's `log` and its recompute's
-`log_recompute` can carry different run ids (link's four-group proofs do).
+`log_recompute`. A provincial run leaves the previous run's rows in `log` (link#458), so `knw_build_record()`, `0300`'s
+record and `0310` read the rows of the runs `log_recompute` names, and every row only where none of those runs is in
+`log` and `log` holds one run (link's four-group proofs log their build and recompute under different run ids); a run
+set aside that was logged after the build is refused (#145).
 
 A test on a few groups of another schema (#120, `research/minimal_network_tuning.md`): `0300` takes `SCHEMA` and
 `POLL_MIN` and writes both on every row of its log (`<date>_link_settle-<schema>.csv`), and `0310` takes that log with
 `SETTLE=`; the gate stays the log's `run_uid`, never its schema, because a provincial schema is renamed after its run.
+A `fresh_default` build to be compared before it is promoted settles with `SETTLE_TAG=<tag>`
+(`<date>_link_settle-<tag>.csv`), so a plain `0310` never takes it (#145).
 `0320` takes `MIN_WSG` and `FOLDS` (the tuning's are 5 and 5); each summary records them and `knw_tune_promote()`
 refuses any other. On link's four proof groups only bull trout rearing has four groups with both outcomes, and the
 smoke gate refuses chinook rearing on three folds (separation), so a test of grading and the comparison runs on a key

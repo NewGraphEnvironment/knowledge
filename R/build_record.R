@@ -18,8 +18,8 @@
 #'   several, is refused.
 #' @return A list: `schema`, `run_uid` (the schema's runs, `;`-joined),
 #'   `discharge_load`, `walk_md5`, `fresh_version`, `tokens` (link's output
-#'   vocabulary, `c(cut =, acc =, grad =, flow =)`, read from every row of
-#'   `<schema>.log`, where link writes them; each `NA` where that log predates
+#'   vocabulary, `c(cut =, acc =, grad =, flow =)`, read from the build's rows
+#'   of `<schema>.log`, where link writes them; each `NA` where that log predates
 #'   link 0.70.0 and carries none), `log_run_uid` (the runs whose `log` rows
 #'   were read, `;`-joined), `log` (which rows those are, as a clause a reader
 #'   of `log` appends) and `line`, the record as one line for a log. A

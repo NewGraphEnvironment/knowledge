@@ -86,13 +86,16 @@ Approved by Al at the plan gate, 2026-11-04 (UTC).
       `scripts/logs/habitat/<date>_pick_network_compare.{csv,txt}`.
 
 ## Phase 4: Report
-- [ ] `research/minimal_network_tuning.md`: a section "The full network on the same flows and range" — plain-language
+- [x] `research/minimal_network_tuning.md`: a section "The full network on the same flows and range" — plain-language
       walk first (what changed between the two builds, what moved, what that says the network does), the three-way
       table, then the placement and stored-km checks; header and status line revised. `research/README.md` row if its
       description moves.
 - [ ] Issue #145's body: tick what landed, link the research section; #120's body gets the pointer its chinook row
       reads ("published row from #145's run").
 - [ ] File the link issue on the two-run `log` (own repo; backticked cross-repo numbers).
+
+- [x] `CLAUDE.md`, `scripts/README.md` and the roxygen describe the scoped `log` read and `SETTLE_TAG=`.
+- [x] `segment_gradient_check.R` on the new evidence, for the catch-start table's new full-network row.
 
 ## Owed at the end (reported, done after merge)
 - [ ] On Al's word: the full candidate `0320` (grades) and `0330 TUNE_DIR=` on the database's host, then
