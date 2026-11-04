@@ -380,6 +380,10 @@ they show:
   overall because its picks swung between 11, 15 and 30 %, while its three 15 % picks beat `default`.
 - **A decision made before the run is stated as one.** List every check with its direction; do not sort them by
   the side they support.
+- **How far the start moved a pick is read against the best rule a pick may be.** The best is the lowest score over
+  every rule, converged or not, and may carry an exception under `d_floor`; a pick is a region rule clear of the floor.
+  `knw_tune_anchor()` reports both distances; #141's first definition missed the region, then convergence
+  (`research/baseline_anchoring.md`).
 
 ### A run's record travels with its table, and its readers compare it, not only its presence
 

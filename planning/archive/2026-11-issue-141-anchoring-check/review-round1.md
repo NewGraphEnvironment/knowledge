@@ -1,0 +1,20 @@
+# Review round 1 (#141)
+
+## Checklist read
+
+- code-check-python.md: in full.
+- code-check.md: the prose of all 14 H3s under `## Mechanisms` (tables and evidence skipped). No "Rules that stand alone", Security or Spreadsheets heading applies to this diff (19 not read).
+- code-check-r.md: read "`$` on a list partial-matches, so a longer sibling key answers for a missing one", "`system2(stdout = TRUE)` warns on a non-zero exit instead of raising…", "`identical()` on two reader results tests the reader, not the file", "`match()` treats NA as a matchable VALUE…", "Inside a dplyr verb, a column named like a local variable wins", "A `data-raw/` script must load the source tree, not the installed package", "`data.frame()` recycles a scalar against a zero-length column" (7). The other headings name tools or shapes the diff does not use (index lines read; about 110 sections not read).
+- code-check-shell.md: index only; the diff has no shell code (0 sections read).
+- code-check-spatial.md: index only; the diff has no spatial code (0 sections read).
+
+## Findings
+
+- **[severity: bug]** R/tune_anchor.R:83-84 — the "best allowed" rule is the lowest-scoring rule with no exception or one at `d_floor` or more, but it is not limited to the region (`in_region`, which already carries convergence). A pick can only be a region rule (`.tune_pick`: `rr <- which(s$region[col] & conv[col])`), and the region is per rule (`ddev <= se_diff`), so a rule with a lower `ddev_best` can sit outside it while one with a higher `ddev_best` sits inside. That happens on the published steelhead rearing table: the function's best allowed rule, `mad>=0.28|g<=0.25|Q1@D250` (ddev 3.01), has `in_region = FALSE`, so no start could pick it. The best rule a pick may be is `mad>=1|g<=0.07|Q1@D250` (ddev 3.45, in the region, converged). The pick `mad>=1|g<=0.0849|Q1@D250` is 1 part from that rule (gradient), not 2, and the flow pick is also 1, not 2. I measured this by rerunning `knw_tune_anchor()` on `data/tune/*_tune.csv` and on the candidate `20261103_0838` with the allowed set narrowed to `in_region == TRUE`. Steelhead on the published tables is the only key of the 15 that changes; every other key matches. So these published statements are wrong:
+  - research/baseline_anchoring.md:30-31 and :84 define the measure as "the best-scoring rule a pick may be". The data-raw header, data-raw/tune_anchor_check.R:72's block title and scripts/0320-tune-run.R:42 say the same. The code does not compute that.
+  - research/baseline_anchoring.md:54-55 says "Steelhead rearing's best allowed rule is `mad>=0.28|g<=0.25|Q1@D250` (3.0 behind the best), and its pick is two parts from it (size and gradient), not three". That rule is outside the region. The rule a pick may be is 1 part away (gradient).
+  - research/baseline_anchoring.md:87 lists "steelhead rearing (2, 0.40)". It should be (1, 0.40). With 1 part, steelhead would still sort above coho on SE, but the bullet's parts count, and the claim that the start chose its size floor, are wrong.
+  - The same column (`rec_moved_allowed`, `flow_moved_allowed`, `rule_best_allowed`, `best_allowed_ddev`, `best_floor_ok`) goes into every future 0320 summary and pick_report.csv, so the error will carry forward. For the fix, intersect `allowed` with `is_true(tune$in_region)` (add `in_region` to `check_names`), rerun the check script, and revise the steelhead sentences. A fixture whose lower-ddev allowed rule has `in_region = FALSE` would pin it.
+  - **Rule:** code-check.md "A proxy is not the property" ; code-check.md "A fixture that cannot reach the failure mode"
+
+I checked every other number in research/baseline_anchoring.md against `scripts/logs/habitat/20261104_tune_anchor_check-*.csv` and, for grayling's `default` row, against `data/tune` and the candidate's `GR_rear_tune.csv`. All of them match: the picks, bests, deviances and SEs, parts, tie counts (6 of 15 tables, 2 to 4 rules), starts agreeing (6 of 8 and 4 of 7), SE-behind values, and grayling's default (19.3/6.7 and 14.4/11.8). The logs were made at 9a54e43, and `R/` and `data-raw/` have not changed since.
