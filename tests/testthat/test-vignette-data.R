@@ -62,7 +62,7 @@ test_that("every species' tune table is saved, and replays to its recommended ru
   x <- readRDS(vd("chinook_rearing.rds"))
   ta <- x$tune_all
   keys <- unique(paste(ta$species_code, ta$stage))
-  expect_length(keys, 8)
+  expect_length(keys, 7)   # rainbow trout rearing is not modelled on #145's build
   expect_true("CH rear" %in% keys)
   for (k in keys) {
     t <- ta[paste(ta$species_code, ta$stage) == k, ]

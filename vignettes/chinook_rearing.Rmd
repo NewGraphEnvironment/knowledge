@@ -76,10 +76,8 @@ se_strict <- 1.96  # the register's se_strict
 tune$in_196 <- tune$converged %in% TRUE & tune$ddev_best <= se_strict * tune$se_diff
 ch196 <- knw_tune_repick(tune, se_mult = se_strict)
 lab_strict <- paste("only at", se_strict, "SE")
-# at 1.96 the slope goes back to link's, the flow floor and the near-a-river allowance stay as they were, and link's
-# rule stays out
-stopifnot(ch196$size_var == "mad", ch196$size_min == rec$size_min, ch196$grad_max == dflt$grad_max, !is.na(ch196$exc_q),
-          ch196$exc_q == rec$exc_q, ch196$exc_d == rec$exc_d,
+# at 1.96 the choice is the same rule (flow floor, slope limit and near-a-river allowance), and link's rule stays out
+stopifnot(ch196$rule == rec$rule, ch196$n_region > nrow(region),
           ch196$rule != dflt$rule, !tune$in_196[tune$is_default], sum(tune$in_196) == ch196$n_region,
           all(tune$in_196[tune$in_region]))
 
@@ -109,8 +107,8 @@ province's electrofishing records.
 
 **The answer.** The records support a different rule from link's current one: **`r words(rec)`**. link now asks
 for `r words(dflt)`. The new rule draws `r n1(-all_row$change_pct)` % less habitat across the province, and
-chinook are caught far more often inside it than outside. Its cut-offs are a judgment call, though: under a stricter
-bar the slope limit goes back to link's (below).
+chinook are caught far more often inside it than outside. Its cut-offs are a judgment call, though: many nearby rules
+fit almost as well, and the slope limit is the least steady part (below).
 
 ## What does link do now?
 
@@ -223,7 +221,7 @@ The flow floors near the best are close calls at one standard error and no width
 flat from `r grad(min(region$grad_max))` up.
 
 **A stricter bar.** Widen the close calls to `r se_strict` standard errors and `r n0(ch196$n_region)` rules are close calls
-instead of `r nrow(region)`. The same choice then changes:
+instead of `r nrow(region)`. The choice stays the same:
 
 ```{r strict}
 cell <- function(r) {
@@ -243,8 +241,7 @@ knitr::kable(tab, align = "lrlll",
              caption = "The chinook rule chosen from the close calls at each bar, beside link's current rule.")
 ```
 
-The slope limit goes back to link's `r grad(dflt$grad_max)`, and the flow floor and the near-a-river allowance stay as
-they were. link's own rule is still not a close call.
+The flow floor, the slope limit and the near-a-river allowance all hold. link's own rule is still not a close call.
 link's thresholds table gives the choice at `r se_strict` for every species tuned (`rule_196`).
 
 **Two other checks.** Split into sets again with `r nrow(seeds)` other random draws, the recommended rule is a close
@@ -334,8 +331,7 @@ rule does what it was chosen to do, not that it predicts new places.
   link's rule. Lakes keep their own condition.
 - **The cut-offs are a judgment call.** Chinook get gradually less common as streams get smaller and steeper; there is
   no flow or slope where they stop. At one standard error, flow floors of `r min(region$size_min)` to
-  `r max(region$size_min)` m³/s fit almost as well; at `r se_strict` the choice is `r ch196$size_min` m³/s at link's slope
-  limit, with the allowance kept.
+  `r max(region$size_min)` m³/s fit almost as well, and at `r se_strict` standard errors the choice is the same rule.
 - **Steeper slopes fit nearly as well.** The close calls run from `r grad(min(region$grad_max))` to
   `r grad(max(region$grad_max))`, the top of the list, and `r grad(rec$grad_max)` is the best scorer among them, not a
   slope at which chinook stop. The list was lengthened to `r grad(max(tune$grad_max))` after an earlier run of chinook
