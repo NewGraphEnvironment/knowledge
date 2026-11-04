@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">knowledge</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.24</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.25</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,9 +33,14 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/v0.4.25/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.4.25" id="knowledge-0425">knowledge 0.4.25<a class="anchor" aria-label="anchor" href="#knowledge-0425"></a></h2>
+<ul><li>
+<code><a href="../reference/knw_tune_anchor.html">knw_tune_anchor()</a></code> sets each tuned key’s pick, from link’s <code>default</code> and from its flow version, beside the rule the data score best: how far behind it sits, in deviance and SE, and how many parts (size test, gradient, exception) apart (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/141" class="external-link">#141</a>). It also measures each pick against the best rule a pick may be (in the region, with no exception under <code>d_floor</code>), since a best a pick may not be can never be picked. <code>scripts/0320</code> writes these columns into every summary and <code>pick_report.csv</code>, and <code>data-raw/tune_anchor_check.R</code> reads saved tables. On the published tables the starting point steers grayling, steelhead and coho rearing, and on the minimal network bull trout rearing too (<code>research/baseline_anchoring.md</code>, with grayling rearing’s “before” for <a href="https://github.com/NewGraphEnvironment/knowledge/issues/140" class="external-link">#140</a>).</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.24" id="knowledge-0424">knowledge 0.4.24<a class="anchor" aria-label="anchor" href="#knowledge-0424"></a></h2>
 <ul><li>Every species was tuned on link’s provincial minimal network (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/120" class="external-link">#120</a>). That network rejects none of the published rules: each stays within one standard error of the best rule. Where a pick moves, it moves because the pick is the rule closest to link’s <code>default</code>, so each tuned rule is only as good as its starting point; recording what each baseline rests on is <a href="https://github.com/NewGraphEnvironment/knowledge/issues/139" class="external-link">#139</a>, and grayling’s first (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/140" class="external-link">#140</a>). The results are <code>research/minimal_network_tuning.md</code>, and the candidate run’s tables are archived (<code>data/archive_index.csv</code>), not promoted. No code change.</li>
