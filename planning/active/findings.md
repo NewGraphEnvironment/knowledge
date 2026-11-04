@@ -44,6 +44,22 @@ names 5 rows with no run id (2026-08-06 to 2026-10-12) as set aside, tokens none
 (`432_clear` logged after the build) and `fresh_default_dev_20261103` (two `log` runs, neither the recompute's).
 Mutation check: disabling either new refusal turns its test red (lines 105 and 113).
 
+## Phase 2: settle, evidence and placement (2026-11-04 UTC)
+
+- Settle: released 03:12:53Z after three equal polls, 241/241 groups, one `link_sha` (`4dfbfa49`, v0.78.2), fresh
+  0.52.0 (`245c8d8`), fwapg `9a62b0c`. Log `20261103_link_settle-default_20261103.csv` (file dates are local, PDT).
+- Evidence (`0310`, 03:13 to 03:32Z, 19 min): 45,529 visits, `species_pooling_md5` `31ca5df…` and `visits_kept` as
+  the minimal ledger; build record names run `20261103_163715-269b585a`, the 2026-10-24 load, walk `c3f7bdbe…`,
+  tokens `cut-full-top.acc-v5.grad-seg.q-fwapg`, the 0.68.0 run set aside. fresh 0.52.0 against the minimal ledger's
+  0.53.0: 0310 calls no fresh function.
+- Placement (`minimal_network_check.R`): the same 45,529 visits on both; 45,463 at one blue line, measure and Atlas
+  line (66 sit on a segment carrying another line's id). `walks.csv` and `visits_species.csv` byte-identical.
+  Segments starting at the visit: full 31.4 % of visits with fish against 7.4 % of empty ones (medians 344 m and
+  432 m); minimal 3.9 % against 3.7 % (638 m, 643 m).
+- Access codes differ at 4,156 visit x species pairs, almost all full 1 against minimal 2 (an observation upstream
+  on the minimal network); 58 cross zero. Province access km match to within 1.5 km per species.
+- Stored km, minimal against full: rearing +0.5 to +1.8 % (chinook +1.75 %), spawning −0.1 to −2.8 %.
+
 ## Errors Encountered
 
 | Error | Resolution |

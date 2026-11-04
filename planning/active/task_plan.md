@@ -64,16 +64,16 @@ Approved by Al at the plan gate, 2026-11-04 (UTC).
       run's settle log is not the default name a plain `0310` takes.
 
 ## Phase 2: Settle and evidence on the new build (m4, local database)
-- [ ] `PGSERVICE=fresh_local SCHEMA=fresh_default SETTLE_TAG=default_20261103 POLL_MIN=1 Rscript scripts/0300-link-settle-wait.R`: released, one
+- [x] `PGSERVICE=fresh_local SCHEMA=fresh_default SETTLE_TAG=default_20261103 POLL_MIN=1 Rscript scripts/0300-link-settle-wait.R`: released, one
       `link_sha` and `link_version 0.78.2` in the record.
-- [ ] `PGSERVICE=fresh_local SCHEMA=fresh_default EVIDENCE_DIR=data/fdis/derived_default_20261103 SETTLE=<that log>
+- [x] `PGSERVICE=fresh_local SCHEMA=fresh_default EVIDENCE_DIR=data/fdis/derived_default_20261103 SETTLE=<that log>
       Rscript scripts/0310-evidence-build.R`: the build record names run `20261103_163715-269b585a`, the 2026-10-24
       load and tokens `cut-full-top.acc-v5.grad-seg.q-fwapg`; visits placed beside the minimal build's 45,529; `visits_kept`
       and `species_pooling_md5` beside the minimal ledger's.
-- [ ] `FULL_DIR=data/fdis/derived_default_20261103 MIN_DIR=data/fdis/derived_minimal STORED=TRUE PGSERVICE=fresh_local
+- [x] `FULL_DIR=data/fdis/derived_default_20261103 MIN_DIR=data/fdis/derived_minimal STORED=TRUE PGSERVICE=fresh_local
       Rscript data-raw/minimal_network_check.R`: steps 1–3 and 5 (placement, walks and species, access per group,
       stored km); step 4 (parent) is #120's and reports "not checked".
-- [ ] Commit the logs (settle, ledger, check) under `scripts/logs/habitat/`.
+- [x] Commit the logs (settle, ledger, check) under `scripts/logs/habitat/`.
 
 ## Phase 3: The DEV tuning and the three-way pick table
 - [ ] `PGSERVICE=fresh_local SCHEMA=fresh_default EVIDENCE_DIR=data/fdis/derived_default_20261103 DEV=1

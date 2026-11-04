@@ -130,6 +130,11 @@ say("   Access codes differ at %d visit x species pairs; across zero at %d.", nr
 block("access km per species, access > 0 (both builds)",
       ac |> filter(access_gt0) |> group_by(species_code, watershed_group_code) |>
         summarise(km_full = sum(km_full), km_min = sum(km_min), .groups = "drop") |> mutate(km_diff = km_min - km_full))
+# the province per species (#145): the sum of the rows above
+block("access km per species, access > 0, the province",
+      ac |> filter(access_gt0) |> group_by(species_code) |>
+        summarise(km_full = sum(km_full), km_min = sum(km_min), .groups = "drop") |>
+        mutate(km_diff = km_min - km_full, pct = round(100 * km_diff / km_full, 2)))
 
 # ---- 4. the minimal parent at each visit -------------------------------------------------------
 if (all(c("parent_id_segment", "parent_gradient") %in% names(vf))) {
@@ -181,6 +186,11 @@ if (Sys.getenv("STORED") %in% c("1", "TRUE", "true")) {
     arrange(species_code, watershed_group_code)
   say("5. STORED: link's stored habitat km per species x group on %s and %s (minimal - full).", lf$schema, lm$schema)
   block("stored rearing and spawning km", wide)
+  # the province per species (#145): the sum of the rows above
+  block("stored rearing and spawning km, the province", wide |> group_by(species_code) |>
+          summarise(across(c(rear_km_full, rear_km_minimal, spawn_km_full, spawn_km_minimal), sum), .groups = "drop") |>
+          mutate(rear_pct = round(100 * (rear_km_minimal - rear_km_full) / rear_km_full, 2),
+                 spawn_pct = round(100 * (spawn_km_minimal - spawn_km_full) / spawn_km_full, 2)))
 }
 writeLines(log_lines, path_log)
 message("Written ", path_log)
