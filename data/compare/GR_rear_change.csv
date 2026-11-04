@@ -1,21 +1,17 @@
 direction,reason,order,n_segments,km,structure,species_code,stage,tuned_rule
-gained,connectivity or overlay,1,44,12.173694557864927,door,GR,rear,width>=2|g<=0.0549|none
-lost,connectivity or overlay,1,49,22.301518731287086,door,GR,rear,width>=2|g<=0.0549|none
-gained,gradient between the two maxima,1,36,14.40855826613741,door,GR,rear,width>=2|g<=0.0549|none
-gained,other (river-polygon branch or mixed),1,22,0.5489882530662885,door,GR,rear,width>=2|g<=0.0549|none
-lost,"size: width passes, tuned fails, no exception",1,58,18.375671791077163,door,GR,rear,width>=2|g<=0.0549|none
-gained,connectivity or overlay,2,272,102.60054263283497,door,GR,rear,width>=2|g<=0.0549|none
-lost,connectivity or overlay,2,156,67.00084899676739,door,GR,rear,width>=2|g<=0.0549|none
-gained,gradient between the two maxima,2,1985,1096.0738855677532,door,GR,rear,width>=2|g<=0.0549|none
-gained,other (river-polygon branch or mixed),2,905,20.865488701155602,door,GR,rear,width>=2|g<=0.0549|none
-lost,"size: width passes, tuned fails, no exception",2,8715,3415.979542574884,door,GR,rear,width>=2|g<=0.0549|none
-gained,connectivity or overlay,3,622,198.38504220946632,door,GR,rear,width>=2|g<=0.0549|none
-lost,connectivity or overlay,3,200,83.41400197784769,door,GR,rear,width>=2|g<=0.0549|none
-gained,gradient between the two maxima,3,5284,2624.0066163168485,door,GR,rear,width>=2|g<=0.0549|none
-gained,other (river-polygon branch or mixed),3,475,36.86849723982335,door,GR,rear,width>=2|g<=0.0549|none
-lost,"size: width passes, tuned fails, no exception",3,2891,881.7090944507316,door,GR,rear,width>=2|g<=0.0549|none
-gained,connectivity or overlay,4+,286,80.3685720326585,door,GR,rear,width>=2|g<=0.0549|none
-lost,connectivity or overlay,4+,242,86.11517331859248,door,GR,rear,width>=2|g<=0.0549|none
-gained,gradient between the two maxima,4+,7283,2793.218013314487,door,GR,rear,width>=2|g<=0.0549|none
-gained,other (river-polygon branch or mixed),4+,1878,243.0212976738074,door,GR,rear,width>=2|g<=0.0549|none
-lost,"size: width passes, tuned fails, no exception",4+,96,35.3034177399106,door,GR,rear,width>=2|g<=0.0549|none
+gained,connectivity or overlay,1,45,12.297024724983974,door,GR,rear,width>=1.5|g<=0.0549|none
+lost,connectivity or overlay,1,48,23.184464768594648,door,GR,rear,width>=1.5|g<=0.0549|none
+gained,gradient between the two maxima,1,67,33.44065561971774,door,GR,rear,width>=1.5|g<=0.0549|none
+gained,other (river-polygon branch or mixed),1,22,0.5489882530662885,door,GR,rear,width>=1.5|g<=0.0549|none
+gained,connectivity or overlay,2,524,199.75210682400134,door,GR,rear,width>=1.5|g<=0.0549|none
+lost,connectivity or overlay,2,268,124.52890723790235,door,GR,rear,width>=1.5|g<=0.0549|none
+gained,gradient between the two maxima,2,4242,2262.9950690297624,door,GR,rear,width>=1.5|g<=0.0549|none
+gained,other (river-polygon branch or mixed),2,905,20.865488701155567,door,GR,rear,width>=1.5|g<=0.0549|none
+gained,connectivity or overlay,3,720,235.20704075213803,door,GR,rear,width>=1.5|g<=0.0549|none
+lost,connectivity or overlay,3,232,92.10710949773234,door,GR,rear,width>=1.5|g<=0.0549|none
+gained,gradient between the two maxima,3,6231,3000.8595559399514,door,GR,rear,width>=1.5|g<=0.0549|none
+gained,other (river-polygon branch or mixed),3,475,36.86849723982331,door,GR,rear,width>=1.5|g<=0.0549|none
+gained,connectivity or overlay,4+,285,79.84770914384595,door,GR,rear,width>=1.5|g<=0.0549|none
+lost,connectivity or overlay,4+,240,85.3442556990448,door,GR,rear,width>=1.5|g<=0.0549|none
+gained,gradient between the two maxima,4+,7237,2811.044235208628,door,GR,rear,width>=1.5|g<=0.0549|none
+gained,other (river-polygon branch or mixed),4+,1868,243.75551851843025,door,GR,rear,width>=1.5|g<=0.0549|none

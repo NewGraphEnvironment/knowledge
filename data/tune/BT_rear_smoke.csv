@@ -2,8 +2,8 @@ species_code,stage,check,value,limit,pass,table,role,rule,dev_heldout,ddev_null,
 BT,rear,null_ratio,1.0007632481595023,1.25,TRUE,checks,,,,,,,,,,
 BT,rear,clamp,0,0,TRUE,checks,,,,,,,,,,
 BT,rear,behind_null,0,6421.211619543505,TRUE,checks,,,,,,,,,,
-BT,rear,coef,1.3733210842626207,5,TRUE,checks,,,,,,,,,,
+BT,rear,coef,1.4173950620877063,5,TRUE,checks,,,,,,,,,,
 BT,rear,,,,,rules,no_rule,none,6421.21162,0,0,9.573829,TRUE,0.474737,data_setFDS,1
-BT,rear,,,,,rules,default,width>=1.5|g<=0.1049|none,6304.652825,-116.558795,0,9.359181,TRUE,0.838283,rule,4
-BT,rear,,,,,rules,link_tuned,mad>=0.043|g<=0.1349|none,6185.194746,-236.016873,0,10.063925,TRUE,1.186329,rule,3
-BT,rear,,,,,rules,previous,mad>=0.35|g<=0.25|none,6110.193544,-311.018075,0,10.363977,TRUE,1.373321,rule,4
+BT,rear,,,,,rules,default,width>=1.5|g<=0.1049|none,6290.638959,-130.57266,0,9.344501,TRUE,0.896687,rule,4
+BT,rear,,,,,rules,link_tuned,mad>=0.043|g<=0.1349|none,6189.011529,-232.200091,0,10.069857,TRUE,1.221625,rule,5
+BT,rear,,,,,rules,previous,mad>=0.1|g<=0.3|none,6076.304895,-344.906724,0,10.019752,TRUE,1.417395,rule,4

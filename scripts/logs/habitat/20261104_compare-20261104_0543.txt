@@ -1,0 +1,130 @@
+Comparison, knowledge#57: 7 fitted species x stage; link run 20261103_163715-269b585a at 4dfbfa4980eb259e2f6a3e9b198c54014315d0ce.
+Candidate run 20261104_0543: read from data/tune/candidate/20261104_0543, written under data/compare/candidate/20261104_0543 (ignored); promote it with RUN=20261104_0543 scripts/0335.
+Evidence data/fdis/derived (scripts/logs/habitat/20261103_evidence_build_ledger.csv), the curves' own.
+link configs/default at e2a85938cdb5e8ec55df3d2b293ed0da5597428f (the baseline; the schema fresh_default's run is at 4dfbfa4980eb259e2f6a3e9b198c54014315d0ce) read from ../link; fresh 0.52.0; tuned reported as door; compared under it alone.
+Floodplain catalog: 0 whole-network groups ().
+database round trip 1.0 ms (median of 20 SELECT 1; limit 20 ms)
+build: schema fresh_default, run 20261103_163715-269b585a; flows wet_db_load(): discharge/fwa/v1/segment_monthly, scenario historical last loaded from https://fresh-bc.s3.us-west-2.amazonaws.com/discharge/fwa/v1/manifest.json (built 2026-10-24T12:23:01Z, wet b4bbc50); walk c3f7bdbecff1d55107f28afa59d7f532; fresh 0.52.0; tokens cut-full-top.acc-v5.grad-seg.q-fwapg; log rows of run 20261023_074321-24d85e8c set aside (not in log_recompute)
+BT_rear: compared in 7.5 min.
+BT_spawn: compared in 6.4 min.
+CH_rear: compared in 14.0 min.
+CO_rear: compared in 10.8 min.
+ST_rear: compared in 4.3 min.
+GR_rear: compared in 2.9 min.
+WCT_rear: compared in 1.0 min.
+GeoPackages for 7 keys in 3.9 min on 6 workers.
+Compared 7 species x stage in 50.9 min, each on 6 workers.
+BT_rear: 158 groups, 7.5 min; default 246739 km (width>=1.5|g<=0.1049|none).
+  door (= tuned): tuned 188769 km (-23.5 %); graded km 113589 -> 105988; lost 70439, gained 12469 (0 by the exception, 0 of it through a river in another group).
+   Grade table read: 0.0 min.
+   BT rear: 158 groups; link configs at e2a85938cdb5e8ec55df3d2b293ed0da5597428f; default width>=1.5|g<=0.1049|none; tuned mad>=0.1|g<=0.25|none under door (reported as tuned: door).
+   Scratch setup (waterbodies, user habitat, grades written): 0.5 min.
+   Classify, overlay and connect: 158 groups x 2 rules on 6 workers, 5.6 min (near-river walks 0.0 min summed over workers).
+   Summed over workers: group copies and indexes 10.9 min; by rule default 11.0 min, door 9.6 min.
+   Rules whose predicate reads the near-river table: none.
+   Bins: 5.3, 5.2, 5.3, 5.2, 5.1, 5.5 timed worker-min; without default's own the slowest bin would take 3.5 where the slowest took 5.5, a projected 2.0 min off a rerun that reads default's flags.
+   Segment read: 4033543 segments, 0.2 min.
+   Summaries (km by rule, change by reason, FDIS visits): 0.4 min.
+   Outside check: 3194 non-FDIS BT records; 2630 locations placed (0 inside an overlay reach left out), 1523 on accessible stream edges.
+   Outside check (bcfishobs records): 0.5 min.
+   Scratch drop: 0.0 min.
+   Writes (segments, checks, change, compare): 0.2 min.
+   GeoPackage data/compare/candidate/20261104_0543/gpkg/BT_rear.gpkg: 4033543 segments in 3.9 min.
+BT_spawn: 158 groups, 6.4 min; default 134366 km (width>=2|g<=0.0549|none).
+  door (= tuned): tuned 166401 km (+23.8 %); graded km NA -> NA; lost 0, gained 32035 (0 by the exception, 0 of it through a river in another group).
+   Grade table read: 0.0 min.
+   BT spawn: 158 groups; link configs at e2a85938cdb5e8ec55df3d2b293ed0da5597428f; default width>=2|g<=0.0549|none; tuned width>=2|g<=0.11|none under door (reported as tuned: door).
+   Scratch setup (waterbodies, user habitat, grades written): 0.4 min.
+   Classify, overlay and connect: 158 groups x 2 rules on 6 workers, 4.8 min (near-river walks 0.0 min summed over workers).
+   Summed over workers: group copies and indexes 10.8 min; by rule default 8.5 min, door 8.2 min.
+   Rules whose predicate reads the near-river table: none.
+   Bins: 4.6, 4.5, 4.5, 4.6, 4.4, 4.8 timed worker-min; without default's own the slowest bin would take 3.3 where the slowest took 4.8, a projected 1.5 min off a rerun that reads default's flags.
+   Segment read: 4033543 segments, 0.2 min.
+   Summaries (km by rule, change by reason, FDIS visits): 0.3 min.
+   Outside check: 3194 non-FDIS BT records; 2630 locations placed (0 inside an overlay reach left out), 1523 on accessible stream edges.
+   Outside check (bcfishobs records): 0.5 min.
+   Scratch drop: 0.0 min.
+   Writes (segments, checks, change, compare): 0.2 min.
+   GeoPackage data/compare/candidate/20261104_0543/gpkg/BT_spawn.gpkg: 4033543 segments in 3.9 min.
+CH_rear: 136 groups, 14.0 min; default 102951 km (width>=1.5|g<=0.0549|cw channel_width>=15@D1000; mad discharge>=3@D1000 on wetland_flow).
+  door (= tuned): tuned 88458 km (-14.1 %); graded km 52727 -> 58905; lost 30698, gained 16205 (13383 by the exception, 4 of it through a river in another group).
+   Grade table read: 0.0 min.
+   CH rear: 136 groups; link configs at e2a85938cdb5e8ec55df3d2b293ed0da5597428f; default width>=1.5|g<=0.0549|cw channel_width>=15@D1000; mad discharge>=3@D1000 on wetland_flow; tuned mad>=0.75|g<=0.13|Q3@D1000 under door (reported as tuned: door).
+   Scratch setup (waterbodies, user habitat, grades written): 0.3 min.
+   Classify, overlay and connect: 136 groups x 2 rules on 6 workers, 10.8 min (near-river walks 24.5 min summed over workers).
+   Summed over workers: group copies and indexes 6.4 min; by rule default 7.4 min, door 7.1 min.
+   Rules whose predicate reads the near-river table: default.
+   Bins: 6.7, 10.7, 6.4, 5.5, 7.2, 9.0 timed worker-min; without default's own and the walk the slowest bin would take 2.6 where the slowest took 10.7, a projected 8.1 min off a rerun that reads default's flags.
+   Segment read: 3016042 segments, 2.1 min.
+   Summaries (km by rule, change by reason, FDIS visits): 0.3 min.
+   Outside check: 4373 non-FDIS CH records; 2462 locations placed (4 inside an overlay reach left out), 840 on accessible stream edges.
+   Outside check (bcfishobs records): 0.4 min.
+   Scratch drop: 0.0 min.
+   Writes (segments, checks, change, compare): 0.2 min.
+   Through-wetland CH km (edge 1050/1150), link#364's five groups | all groups: rearing_default 212.0 | 8211.8; rearing_pre_default 248.6 | 9728.1; rearing_door 61.7 | 2548.3; rearing_pre_door 63.0 | 2646.9.
+   GeoPackage data/compare/candidate/20261104_0543/gpkg/CH_rear.gpkg: 3016042 segments in 2.9 min.
+CO_rear: 113 groups, 10.8 min; default 89887 km (width>=1.5|g<=0.0549|none).
+  door (= tuned): tuned 87009 km (-3.2 %); graded km NA -> NA; lost 10790, gained 7912 (5615 by the exception, 9 of it through a river in another group).
+   Grade table read: 0.0 min.
+   CO rear: 113 groups; link configs at e2a85938cdb5e8ec55df3d2b293ed0da5597428f; default width>=1.5|g<=0.0549|none; tuned mad>=0.1|g<=0.0549|Q3@D2000 under door (reported as tuned: door).
+   Scratch setup (waterbodies, user habitat, grades written): 0.3 min.
+   Classify, overlay and connect: 113 groups x 2 rules on 6 workers, 6.2 min (near-river walks 0.0 min summed over workers).
+   Summed over workers: group copies and indexes 5.1 min; by rule default 5.4 min, door 23.1 min.
+   Rules whose predicate reads the near-river table: none.
+   Bins: 5.6, 6.2, 5.5, 5.7, 5.5, 5.2 timed worker-min; without default's own the slowest bin would take 5.2 where the slowest took 6.2, a projected 0.9 min off a rerun that reads default's flags.
+   Segment read: 2555125 segments, 3.7 min.
+   Summaries (km by rule, change by reason, FDIS visits): 0.2 min.
+   Outside check: 10824 non-FDIS CO records; 6225 locations placed (2 inside an overlay reach left out), 3465 on accessible stream edges.
+   Outside check (bcfishobs records): 0.3 min.
+   Scratch drop: 0.0 min.
+   Writes (segments, checks, change, compare): 0.1 min.
+   GeoPackage data/compare/candidate/20261104_0543/gpkg/CO_rear.gpkg: 2555125 segments in 2.4 min.
+ST_rear: 93 groups, 4.3 min; default 83588 km (width>=1.5|g<=0.0849|none).
+  door (= tuned): tuned 63015 km (-24.6 %); graded km 42943 -> 41967; lost 26809, gained 6236 (5817 by the exception, 1 of it through a river in another group).
+   Grade table read: 0.0 min.
+   ST rear: 93 groups; link configs at e2a85938cdb5e8ec55df3d2b293ed0da5597428f; default width>=1.5|g<=0.0849|none; tuned mad>=1|g<=0.0849|Q1@D250 under door (reported as tuned: door).
+   Scratch setup (waterbodies, user habitat, grades written): 0.2 min.
+   Classify, overlay and connect: 93 groups x 2 rules on 6 workers, 2.5 min (near-river walks 0.0 min summed over workers).
+   Summed over workers: group copies and indexes 5.4 min; by rule default 4.2 min, door 4.2 min.
+   Rules whose predicate reads the near-river table: none.
+   Bins: 2.3, 2.3, 2.4, 2.3, 2.3, 2.3 timed worker-min; without default's own the slowest bin would take 1.7 where the slowest took 2.4, a projected 0.7 min off a rerun that reads default's flags.
+   Segment read: 2239258 segments, 1.0 min.
+   Summaries (km by rule, change by reason, FDIS visits): 0.2 min.
+   Outside check: 13910 non-FDIS ST records; 2443 locations placed (0 inside an overlay reach left out), 1077 on accessible stream edges.
+   Outside check (bcfishobs records): 0.3 min.
+   Scratch drop: 0.0 min.
+   Writes (segments, checks, change, compare): 0.1 min.
+   GeoPackage data/compare/candidate/20261104_0543/gpkg/ST_rear.gpkg: 2239258 segments in 2.2 min.
+GR_rear: 81 groups, 2.9 min; default 77786 km (width>=1.5|g<=0.0349|none).
+  door (= tuned): tuned 86398 km (+11.1 %); graded km 44907 -> 49445; lost 325, gained 8937 (0 by the exception, 0 of it through a river in another group).
+   Grade table read: 0.0 min.
+   GR rear: 81 groups; link configs at e2a85938cdb5e8ec55df3d2b293ed0da5597428f; default width>=1.5|g<=0.0349|none; tuned width>=1.5|g<=0.0549|none under door (reported as tuned: door).
+   Scratch setup (waterbodies, user habitat, grades written): 0.2 min.
+   Classify, overlay and connect: 81 groups x 2 rules on 6 workers, 2.1 min (near-river walks 0.0 min summed over workers).
+   Summed over workers: group copies and indexes 5.8 min; by rule default 3.2 min, door 3.0 min.
+   Rules whose predicate reads the near-river table: none.
+   Bins: 2.1, 2.1, 1.9, 2.1, 1.9, 2.0 timed worker-min; without default's own the slowest bin would take 1.5 where the slowest took 2.1, a projected 0.6 min off a rerun that reads default's flags.
+   Segment read: 2058710 segments, 0.1 min.
+   Summaries (km by rule, change by reason, FDIS visits): 0.2 min.
+   Outside check: 1324 non-FDIS GR records; 961 locations placed (0 inside an overlay reach left out), 311 on accessible stream edges.
+   Outside check (bcfishobs records): 0.2 min.
+   Scratch drop: 0.0 min.
+   Writes (segments, checks, change, compare): 0.1 min.
+   GeoPackage data/compare/candidate/20261104_0543/gpkg/GR_rear.gpkg: 2058710 segments in 1.9 min.
+WCT_rear: 16 groups, 1.0 min; default 20478 km (width>=1.5|g<=0.0849|none).
+  door (= tuned): tuned 24398 km (+19.1 %); graded km NA -> NA; lost 907, gained 4827 (0 by the exception, 0 of it through a river in another group).
+   Grade table read: 0.0 min.
+   WCT rear: 16 groups; link configs at e2a85938cdb5e8ec55df3d2b293ed0da5597428f; default width>=1.5|g<=0.0849|none; tuned mad>=0.03|g<=0.25|none under door (reported as tuned: door).
+   Scratch setup (waterbodies, user habitat, grades written): 0.1 min.
+   Classify, overlay and connect: 16 groups x 2 rules on 6 workers, 0.7 min (near-river walks 0.0 min summed over workers).
+   Summed over workers: group copies and indexes 2.0 min; by rule default 0.8 min, door 0.7 min.
+   Rules whose predicate reads the near-river table: none.
+   Bins: 0.6, 0.6, 0.6, 0.6, 0.6, 0.5 timed worker-min; without default's own the slowest bin would take 0.5 where the slowest took 0.6, a projected 0.1 min off a rerun that reads default's flags.
+   Segment read: 482797 segments, 0.1 min.
+   Summaries (km by rule, change by reason, FDIS visits): 0.0 min.
+   Outside check: 4298 non-FDIS WCT records; 1912 locations placed (17 inside an overlay reach left out), 1408 on accessible stream edges.
+   Outside check (bcfishobs records): 0.1 min.
+   Scratch drop: 0.0 min.
+   Writes (segments, checks, change, compare): 0.0 min.
+   GeoPackage data/compare/candidate/20261104_0543/gpkg/WCT_rear.gpkg: 482797 segments in 0.5 min.
+Done in 50.9 min.
