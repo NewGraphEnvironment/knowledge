@@ -122,6 +122,8 @@ test_that("a schema whose `log` keeps an earlier run reads the tokens of the run
   expect_identical(r$log_run_uid, "proof")
   expect_identical(r$tokens[["cut"]], "cut-full-top")
   expect_false(grepl("set aside", r$line))
+  # and the line says the tokens are another run's than the one log_recompute names
+  expect_match(r$line, "; tokens from log run proof \\(log_recompute names proof_recompute\\)$")
   expect_identical(.knw_build_log_runs(NULL, "fresh_default")$aside, character())
   # and there a row without a token is refused over the whole log, as before
   lg$token_cut[1] <- NA

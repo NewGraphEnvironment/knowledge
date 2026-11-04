@@ -59,7 +59,8 @@ Mutation check: disabling either new refusal turns its test red (lines 105 and 1
 - Access codes differ at 4,156 visit x species pairs, almost all full 1 against minimal 2 (an observation upstream
   on the minimal network); 58 cross zero. Province access km match to within 1.5 km per species.
 - Stored km, minimal against full: rearing +0.5 to +1.8 % for six species (chinook +1.75 %) and −0.1 % for sockeye;
-  spawning −0.01 to −2.8 % (sockeye the most).
+  spawning −0.01 to −2.8 % for seven (sockeye the most) and +0.12 % chum, +0.21 % pink (first omitted: code-check
+  round 4 found the province block dropped species x group rows with a NULL sum; fixed with coalesce).
 
 ## Phase 3: the DEV tuning on the full network (2026-11-04 UTC)
 

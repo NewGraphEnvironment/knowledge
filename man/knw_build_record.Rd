@@ -31,7 +31,7 @@ row where none of those runs is in \code{log}, because a build's \code{log} and 
 recompute's \code{log_recompute} can carry different run ids (link's four-group
 proofs), where it must hold one run. A run set aside that was logged after
 the build began is refused. The line names any run whose rows were set
-aside.
+aside, and, where every row was read, the \code{log} run the tokens came from.
 }
 \description{
 A grade or a comparison reads four things from the database besides the

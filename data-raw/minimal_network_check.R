@@ -171,8 +171,8 @@ if (Sys.getenv("STORED") %in% c("1", "TRUE", "true")) {
     bind_rows(lapply(sort(hab), function(t) {
       DBI::dbGetQuery(conn, sprintf("
         SELECT %3$s AS species_code, h.watershed_group_code,
-               sum(st.length_metre) FILTER (WHERE h.rearing) / 1000 AS rear_km,
-               sum(st.length_metre) FILTER (WHERE h.spawning) / 1000 AS spawn_km
+               coalesce(sum(st.length_metre) FILTER (WHERE h.rearing), 0) / 1000 AS rear_km,
+               coalesce(sum(st.length_metre) FILTER (WHERE h.spawning), 0) / 1000 AS spawn_km
         FROM %1$s.%2$s h JOIN %1$s.streams st USING (id_segment, watershed_group_code)
         GROUP BY 2", s, t, DBI::dbQuoteString(conn, toupper(sub("^streams_habitat_", "", t)))))
     })) |> mutate(schema = s)
@@ -189,7 +189,8 @@ if (Sys.getenv("STORED") %in% c("1", "TRUE", "true")) {
   # the province per species (#145): the sum of the rows above
   block("stored rearing and spawning km, the province", wide |> group_by(species_code) |>
           summarise(across(c(rear_km_full, rear_km_minimal, spawn_km_full, spawn_km_minimal), sum), .groups = "drop") |>
-          mutate(rear_pct = round(100 * (rear_km_minimal - rear_km_full) / rear_km_full, 2),
+          mutate(rear_pct = if_else(rear_km_full > 0, round(100 * (rear_km_minimal - rear_km_full) / rear_km_full, 2),
+                                    NA_real_),
                  spawn_pct = round(100 * (spawn_km_minimal - spawn_km_full) / spawn_km_full, 2)))
 }
 writeLines(log_lines, path_log)

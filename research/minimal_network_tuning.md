@@ -91,7 +91,8 @@ two builds). The walks and each visit's species, outcome and range are byte-iden
 km agree within 1.5 km over the province. Access codes differ at 4,156 visit × species pairs. Almost all of them read
 1 on the full network and 2 on the minimal one (an observation upstream). Code 2 is never a covariate, and only 58
 pairs cross zero, which is the gate. link's stored rearing is 0.5 to 1.8 % longer on the minimal network for six
-species and 0.1 % shorter for sockeye; spawning is 0.01 to 2.8 % shorter.
+species and 0.1 % shorter for sockeye; spawning is 0.01 to 2.8 % shorter for seven species and 0.1 to 0.2 % longer
+for chum and pink, which have no stored rearing on either network.
 `minimal_network_check.R`'s log is `20261103_minimal_network_check.txt`. The two ledgers record fresh 0.52.0 against
 0.53.0; `0310` calls no fresh function.
 

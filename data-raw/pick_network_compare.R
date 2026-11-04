@@ -20,19 +20,20 @@
 #         csv was computed from (its tune_md5), or the script stops: an ignored directory can be rewritten by a later run
 # OUTPUT: scripts/logs/habitat/<yyyymmdd>_pick_network_compare.csv (one row per key) and .txt (the inputs' md5s, the
 #         knowledge commit and the rows; a second run of the day numbered)
-# RUN:    FULL=<anchor csv> TUNE_FULL=<dir> [PUBLISHED=…] [MINIMAL=…] [TUNE_PUBLISHED=…] [TUNE_MINIMAL=…]
+# RUN:    FULL=<anchor csv> TUNE_FULL=<dir> [PUBLISHED=…] [MINIMAL=…] [TUNE_MINIMAL=…]
 #         Rscript data-raw/pick_network_compare.R   (from the repo root)
 # ---------------------------------------------------------------------------
 suppressMessages({ library(dplyr); library(readr) })
 pkgload::load_all(quiet = TRUE)
 options(warn = 1)
 
+# the newest by modification time: a second run of a day is numbered (-2), which sorts before the first by name
 newest <- function(pattern) {
-  f <- sort(list.files("scripts/logs/habitat", pattern, full.names = TRUE), decreasing = TRUE)
-  if (length(f)) f[1] else ""
+  f <- list.files("scripts/logs/habitat", pattern, full.names = TRUE)
+  if (length(f)) f[which.max(file.mtime(f))] else ""
 }
-paths <- c(published = Sys.getenv("PUBLISHED", newest("_tune_anchor_check-published\\.csv$")),
-           minimal = Sys.getenv("MINIMAL", newest("_tune_anchor_check-minimal-20261103_0838\\.csv$")),
+paths <- c(published = Sys.getenv("PUBLISHED", newest("_tune_anchor_check-published(-[0-9]+)?\\.csv$")),
+           minimal = Sys.getenv("MINIMAL", newest("_tune_anchor_check-minimal-20261103_0838(-[0-9]+)?\\.csv$")),
            full = Sys.getenv("FULL"))
 miss <- names(paths)[!nzchar(paths) | !file.exists(paths)]
 if (length(miss)) stop("no anchor-check table for ", paste(miss, collapse = ", "), ": give its path", call. = FALSE)
