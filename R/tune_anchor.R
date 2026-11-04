@@ -21,9 +21,11 @@
 #' No pick may carry an exception closer than `d_floor`, but the best may, and
 #' then no start could reach it: part of the distance is the floor's, not the
 #' start's. So each pick is also measured against the **best allowed** rule, the
-#' best-scoring rule a pick may be: the lowest-scoring rule in the region with no
-#' exception or one at `d_floor` or more (ties as above). It is the best itself
-#' wherever `best_floor_ok`.
+#' best-scoring rule a pick may be: the lowest-scoring rule in the region (which
+#' holds converged rules only) with no exception or one at `d_floor` or more
+#' (ties as above). It is the best itself wherever `best_is_allowed`; the best is
+#' not allowed when its exception is under the floor, or when it did not
+#' converge (the best is the lowest score over every rule).
 #'
 #' @param tune a tuning table as [knw_tune_score()] returns it or
 #'   `scripts/0320` saves it (`<sp>_<stage>_tune.csv`, read as text or typed):
@@ -39,7 +41,7 @@
 #'   SE); the same for the flow start (`rule_recommended_flow`,
 #'   `recommended_flow_ddev`, `recommended_flow_se`; `NA` with no flow start);
 #'   `rule_best` and `best_n`; `rule_best_allowed`, `best_allowed_ddev` and
-#'   `best_floor_ok`; `rec_moved` and `flow_moved` (each pick's departures from
+#'   `best_is_allowed`; `rec_moved` and `flow_moved` (each pick's departures from
 #'   the best, 0 to 3), `rec_moved_allowed` and `flow_moved_allowed` (from the
 #'   best allowed) and `starts_apart` (between the two picks), each with its
 #'   parts (`rec_moved_parts` and so on: `size`, `gradient` and `exception`
@@ -101,7 +103,7 @@ knw_tune_anchor <- function(tune, d_floor = formals(knw_tune_score)$d_floor) {
                     recommended_flow_se = NA_real_,
                     rule_best = tune$rule[best[1]], best_n = length(best),
                     rule_best_allowed = tune$rule[allowed[1]], best_allowed_ddev = ddev[allowed[1]],
-                    best_floor_ok = ddev[allowed[1]] == 0,
+                    best_is_allowed = ddev[allowed[1]] == 0,
                     rec_moved = rb$n, rec_moved_parts = rb$parts,
                     rec_moved_allowed = ra$n, rec_moved_allowed_parts = ra$parts,
                     flow_moved = NA_integer_, flow_moved_parts = NA_character_,

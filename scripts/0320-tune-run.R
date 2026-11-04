@@ -462,7 +462,7 @@ if (nrow(pr)) {
                                     published_se, published_ddev_was, n_visits_run, n_visits_published))
   block("anchoring (#141)", pr |> select(key, rule_run, recommended_ddev, recommended_se, rec_moved, rec_moved_allowed,
                                          rule_recommended_flow, flow_moved, flow_moved_allowed, starts_apart, rule_best,
-                                         best_floor_ok))
+                                         best_is_allowed))
 }
 
 # ---- grade every segment of each fitted species' groups ----------------------------------

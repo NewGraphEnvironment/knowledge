@@ -103,15 +103,25 @@ test_that("a best under d_floor, which no pick may be, is measured beside the be
   t$rule[4:5] <- c("width>=1|g<=0.0549|Q50@D100", "width>=1|g<=0.0549|Q30@D100")
   t$ddev_best[2] <- 4
   a <- knw_tune_anchor(t)
-  expect_false(a$best_floor_ok)
+  expect_false(a$best_is_allowed)
   expect_identical(a$rule_best_allowed, "width>=2|g<=0.0549|none")
   expect_equal(a$best_allowed_ddev, 4)
   expect_identical(c(a$rec_moved, a$rec_moved_allowed), c(2L, 0L))
   expect_identical(a$rec_moved_allowed_parts, "none")
   expect_identical(c(a$flow_moved_allowed, a$starts_apart), c(1L, 1L))
   # the floor is the scorer's: at 50 m the best is allowed
-  expect_true(knw_tune_anchor(t, d_floor = 50)$best_floor_ok)
-  expect_true(knw_tune_anchor(anchor_fx())$best_floor_ok)
+  expect_true(knw_tune_anchor(t, d_floor = 50)$best_is_allowed)
+  expect_true(knw_tune_anchor(anchor_fx())$best_is_allowed)
+})
+
+test_that("a best that did not converge is not allowed either, though it carries no exception", {
+  t <- anchor_fx()
+  t$in_region[4:5] <- FALSE
+  t$ddev_best[2] <- 2
+  a <- knw_tune_anchor(t)
+  expect_false(a$best_is_allowed)
+  expect_identical(a$rule_best, "width>=1|g<=0.0549|Q50@D500")
+  expect_identical(a$rule_best_allowed, "width>=2|g<=0.0549|none")
   expect_identical(knw_tune_anchor(anchor_fx())$rule_best_allowed, knw_tune_anchor(anchor_fx())$rule_best)
 })
 

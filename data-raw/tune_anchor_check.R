@@ -7,7 +7,7 @@
 # test, gradient, exception) that separate them. No retune: the scores are in the tables.
 #
 # Keys are listed in the order a baseline review would take them: the parts the default pick moved from the best rule a
-# pick may be (the best itself unless the best carries an exception under d_floor, which no pick may), then its distance
+# pick may be (the best itself unless its exception is under d_floor or it did not converge), then its distance
 # behind the best in SEs, then whether the two starts disagree. The pick and the best are read at knw_tune_score()'s
 # d_floor, the tuning's (the tables do not record it).
 #
@@ -27,7 +27,8 @@ label <- Sys.getenv("LABEL", if (tune_dir == "data/tune") "published" else basen
 if (!grepl("^[A-Za-z0-9_.-]+$", label)) stop("LABEL must be letters, digits, '_', '.' or '-': ", label, call. = FALSE)
 files <- list.files(tune_dir, "_tune\\.csv$", full.names = TRUE)
 if (!length(files)) stop("no <key>_tune.csv in ", tune_dir, call. = FALSE)
-stem <- file.path("scripts/logs/habitat", paste0(format(Sys.time(), "%Y%m%d", tz = "UTC"), "_tune_anchor_check-", label))
+stem <- file.path("scripts/logs/habitat",
+                  paste0(format(Sys.time(), "%Y%m%d", tz = "UTC"), "_tune_anchor_check-", label))
 path_csv <- .knw_free_path(paste0(stem, ".csv"))
 path_txt <- sub("\\.csv$", ".txt", path_csv)
 log_lines <- character()
@@ -67,12 +68,12 @@ for (i in seq_len(nrow(runs))) {
 say("Picks at the best from default: %d of %d; from the flow start: %d of %d with one; the two starts agree on %d.",
     sum(rows$rec_is_best), nrow(rows), sum(rows$flow_is_best %in% TRUE), sum(!is.na(rows$flow_is_best)),
     sum(rows$starts_agree %in% TRUE))
-say("Keys whose best carries an exception under d_floor, which no pick may: %s.",
-    if (any(!rows$best_floor_ok)) paste(rows$key[!rows$best_floor_ok], collapse = ", ") else "none")
+say("Keys whose best is not a rule a pick may be (an exception under d_floor, or not converged): %s.",
+    if (any(!rows$best_is_allowed)) paste(rows$key[!rows$best_is_allowed], collapse = ", ") else "none")
 block("each start's pick beside the best", rows |>
         select(key, rule_recommended, recommended_ddev, recommended_se, rec_moved, rec_moved_parts, rule_best, best_n))
 block("beside the best a pick may be (d_floor)", rows |>
-        select(key, best_floor_ok, rule_best_allowed, best_allowed_ddev, rec_moved_allowed, rec_moved_allowed_parts,
+        select(key, best_is_allowed, rule_best_allowed, best_allowed_ddev, rec_moved_allowed, rec_moved_allowed_parts,
                flow_moved_allowed, flow_moved_allowed_parts))
 block("the flow start", rows |>
         select(key, rule_recommended_flow, recommended_flow_ddev, recommended_flow_se, flow_moved, flow_moved_parts,
