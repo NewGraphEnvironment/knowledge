@@ -28,8 +28,8 @@ the rule the data score best, and counts:
 One limit is not the start's. No pick may carry a near-river exception closer than 200 m (`d_floor`: at that distance a
 catch on a mainstem snapped to a tributary's mouth cannot be told from one in the tributary), but the best-scoring rule
 may. Where it does, no start could reach it, so each pick is also measured against the **best allowed** rule, the
-best-scoring rule a pick may be (`rec_moved_allowed`, `flow_moved_allowed`). It is the best itself wherever the best's
-exception is 200 m or more, or it has none.
+best-scoring rule a pick may be: in the region, and with no exception or one at 200 m or more (`rec_moved_allowed`,
+`flow_moved_allowed`). It is the best itself wherever the best's exception is 200 m or more, or it has none.
 
 A pick 0 parts from the best is the best: the start chose nothing. A pick several parts away is a rule the data accept
 but did not choose; the parts it kept from `default` are there because `default` had them.
@@ -52,7 +52,8 @@ bull trout spawning, rainbow trout rearing, westslope cutthroat rearing). The ot
 
 Two of those bests carry an exception at 100 m, which no pick may. Bull trout rearing's pick is the best rule a pick
 may be (0.6 behind the best), so its start chose nothing. Steelhead rearing's best allowed rule is
-`mad>=0.28|g<=0.25|Q1@D250` (3.0 behind the best), and its pick is two parts from it (size and gradient), not three.
+`mad>=1|g<=0.07|Q1@D250` (3.5 behind the best; two rules that score better clear of the floor are outside the region),
+and its pick is one part from it (the gradient), not three.
 
 The two starts pick the same rule on six of eight keys. They differ on chinook rearing, where the flow start keeps
 `default`'s MAD floor of 0.28 m³/s (24.8 behind, SE 26.9) and the width start reaches the best's 0.75, and on grayling
@@ -84,7 +85,7 @@ so a key's change between them is not the network's alone.
 Ordered by the parts the `default` pick sits from the best rule a pick may be, then by how near the region's edge it
 sits (its distance behind the best in SEs), then by whether the two starts disagree:
 
-- **Published:** grayling rearing (2 parts, 0.55 SE), steelhead rearing (2, 0.40), coho rearing (1, 0.26). Bull trout
+- **Published:** grayling rearing (2 parts, 0.55 SE), steelhead rearing (1, 0.40), coho rearing (1, 0.26). Bull trout
   rearing's and the other four keys' picks are the best a pick may be.
 - **Minimal network:** bull trout rearing (2, 0.89), grayling rearing (2, 0.85), steelhead rearing (1, 0.62), coho
   rearing (1, 0.38).

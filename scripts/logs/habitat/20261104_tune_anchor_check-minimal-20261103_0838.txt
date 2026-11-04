@@ -1,4 +1,4 @@
-Anchoring check (#141) on data/tune/candidate/20261103_0838 (minimal-20261103_0838): 7 keys, at knowledge 9a54e43.
+Anchoring check (#141) on data/tune/candidate/20261103_0838 (minimal-20261103_0838): 7 keys, at knowledge 22b8d88.
   link run 20261102_203300-60ab009d, tuning run 20261103_0838, evidence c746c5829c605fb7711feba0ec9d4d93;6a2e28f1afb46a02c357ac044f8d09e3;2e0f0f419022da0f5ac51a3869486a80, gradient segment_gradient
 Picks at the best from default: 3 of 7; from the flow start: 1 of 7 with one; the two starts agree on 4.
 Keys whose best carries an exception under d_floor, which no pick may: BT_rear.

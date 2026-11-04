@@ -1,4 +1,4 @@
-Anchoring check (#141) on data/tune (published): 8 keys, at knowledge 9a54e43.
+Anchoring check (#141) on data/tune (published): 8 keys, at knowledge 22b8d88.
   link run 20261017_004619-3f4c713b, tuning run NA, evidence 1bd35829d07ca92f0b0faa565db65280;009698d73afd855c3e8db1235ad96c05;99f499bb14e4a53fe2506f118670a83f, gradient segment_gradient
 Picks at the best from default: 4 of 8; from the flow start: 3 of 8 with one; the two starts agree on 6.
 Keys whose best carries an exception under d_floor, which no pick may: ST_rear, BT_rear.
@@ -26,7 +26,7 @@ Keys whose best carries an exception under d_floor, which no pick may: ST_rear, 
 ## beside the best a pick may be (d_floor)
       key best_floor_ok           rule_best_allowed best_allowed_ddev
   GR_rear          TRUE width>=1|g<=0.0549|Q50@D500          0.000000
-  ST_rear         FALSE   mad>=0.28|g<=0.25|Q1@D250          3.008880
+  ST_rear         FALSE      mad>=1|g<=0.07|Q1@D250          3.454609
   CO_rear          TRUE   mad>=0.1|g<=0.04|Q3@D2000          0.000000
   BT_rear         FALSE        mad>=0.1|g<=0.3|none          0.598307
   CH_rear          TRUE  mad>=0.75|g<=0.11|Q3@D1000          0.000000
@@ -35,7 +35,7 @@ Keys whose best carries an exception under d_floor, which no pick may: ST_rear, 
  WCT_rear          TRUE      mad>=0.03|g<=0.25|none          0.000000
  rec_moved_allowed rec_moved_allowed_parts flow_moved_allowed
                  2          size+exception                  2
-                 2           size+gradient                  2
+                 1                gradient                  1
                  1                gradient                  1
                  0                    none                  0
                  0                    none                  1
@@ -44,7 +44,7 @@ Keys whose best carries an exception under d_floor, which no pick may: ST_rear, 
                  0                    none                  0
  flow_moved_allowed_parts
            size+exception
-            size+gradient
+                 gradient
                  gradient
                      none
                      size
