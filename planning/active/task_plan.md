@@ -27,7 +27,7 @@ promote." The build is run `20261103_163715-269b585a` (link 0.78.2) in the datab
       tagged build's (same build, same code).
 
 ## Phase 3: the candidate
-- [ ] Full `0320` (all species; smoke gates, grades) on this host.
+- [x] Full `0320` (all species; smoke gates, grades) on this host: run `20261104_0543`, 51.7 min.
 - [ ] `0330 TUNE_DIR=data/tune/candidate/<run>` on this host.
 
 ## Phase 4: promote
