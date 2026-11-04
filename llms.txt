@@ -263,6 +263,9 @@ run in one call for every species and stage the evidence can speak to.
   region
 - [`knw_tune_pick_report()`](https://newgraphenvironment.github.io/knowledge/reference/knw_tune_pick_report.md)
   : Set a tuning run's pick beside the published one
+- [`knw_tune_anchor()`](https://newgraphenvironment.github.io/knowledge/reference/knw_tune_anchor.md)
+  : How far each starting point moved the pick from the best-scoring
+  rule
 - [`knw_tune_curve()`](https://newgraphenvironment.github.io/knowledge/reference/knw_tune_curve.md)
   : One curve per species and stage: use against size, gradient and
   distance to a river, together
