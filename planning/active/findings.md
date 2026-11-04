@@ -58,9 +58,26 @@ Mutation check: disabling either new refusal turns its test red (lines 105 and 1
   432 m); minimal 3.9 % against 3.7 % (638 m, 643 m).
 - Access codes differ at 4,156 visit x species pairs, almost all full 1 against minimal 2 (an observation upstream
   on the minimal network); 58 cross zero. Province access km match to within 1.5 km per species.
-- Stored km, minimal against full: rearing +0.5 to +1.8 % (chinook +1.75 %), spawning −0.1 to −2.8 %.
+- Stored km, minimal against full: rearing +0.5 to +1.8 % for six species (chinook +1.75 %) and −0.1 % for sockeye;
+  spawning −0.01 to −2.8 % (sockeye the most).
+
+## Phase 3: the DEV tuning on the full network (2026-11-04 UTC)
+
+- `DEV=1 0320` first ran every species (9.8 min) and scored rainbow trout rearing too: the evidence has no
+  `access_rb` (link does not model RB in either build), so that row had no access gate. Rerun with
+  `SPECIES=BT,CH,CM,CO,GR,PK,SK,ST,WCT`, the minimal run's set (5.3 min, 14 workers); every column of the seven
+  shared keys identical to the first run. Every smoke gate passed.
+- Picks: full network `BT_rear mad>=0.1|g<=0.25|none`, `BT_spawn width>=2|g<=0.11|none`,
+  `CH_rear mad>=0.75|g<=0.13|Q3@D1000`, `GR_rear width>=1.5|g<=0.0549|none`; CO, ST, WCT the published rule.
+- Network alone (minimal against the new full): 3 of 7 keys the same pick; BT_rear differs in size and gradient,
+  BT_spawn in gradient and exception, CH_rear in gradient (9 % against 13 %), ST_rear in size (0.5 against 1).
+- Every published pick is in both new tunings' regions. The minimal network's BT_rear pick is outside the full
+  network's region (80.8 behind, SE 73.2); the full network's BT_spawn (7.1 / 5.1) and CH_rear (10.4 / 7.3) picks are
+  outside the minimal network's.
+- `data-raw/pick_network_compare.R` writes the table: `scripts/logs/habitat/20261104_pick_network_compare.{csv,txt}`.
 
 ## Errors Encountered
 
 | Error | Resolution |
 |-------|------------|
+| `DEV=1 0320` without `SPECIES=` scored RB rearing with no access column | Rerun on the minimal run's nine species |

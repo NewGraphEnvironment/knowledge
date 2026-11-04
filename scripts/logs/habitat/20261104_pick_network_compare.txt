@@ -1,0 +1,109 @@
+published: scripts/logs/habitat/20261104_tune_anchor_check-published.csv (md5 a653277d69c701e55c0403defd9ed697), link run 20261017_004619-3f4c713b
+minimal: scripts/logs/habitat/20261104_tune_anchor_check-minimal-20261103_0838.csv (md5 dd7062f67f79907a901bdb29bd6aa990), link run 20261102_203300-60ab009d
+full: scripts/logs/habitat/20261104_tune_anchor_check-full-default_20261103.csv (md5 1bed0655d58067e179c0fe6cd92f69f8), link run 20261103_163715-269b585a
+Picks per key on three tunings (#145), at knowledge 2f01980.
+Minimal against new full network (the network alone): 3 of 7 keys tuned on both pick the same rule.
+New full against published (link build, flows and range): 3 of 7 keys pick the same rule.
+
+## each tuning's pick
+      key  rule_recommended_published    rule_recommended_minimal
+  BT_rear        mad>=0.1|g<=0.3|none    mad>=0.35|g<=0.1049|none
+ BT_spawn    width>=2|g<=0.13|Q1@D500    width>=2|g<=0.25|Q1@D500
+  CH_rear  mad>=0.75|g<=0.11|Q3@D1000  mad>=0.75|g<=0.09|Q3@D1000
+  CO_rear mad>=0.1|g<=0.0549|Q3@D2000 mad>=0.1|g<=0.0549|Q3@D2000
+  GR_rear     width>=2|g<=0.0549|none   width>=1.5|g<=0.0549|none
+  RB_rear        width>=3|g<=0.3|none                        <NA>
+  ST_rear    mad>=1|g<=0.0849|Q1@D250  mad>=0.5|g<=0.0849|Q1@D250
+ WCT_rear      mad>=0.03|g<=0.25|none      mad>=0.03|g<=0.25|none
+       rule_recommended_full      network_moved        build_moved
+       mad>=0.1|g<=0.25|none      size+gradient           gradient
+       width>=2|g<=0.11|none gradient+exception gradient+exception
+  mad>=0.75|g<=0.13|Q3@D1000           gradient           gradient
+ mad>=0.1|g<=0.0549|Q3@D2000               same               same
+   width>=1.5|g<=0.0549|none               same               size
+                        <NA>               <NA>               <NA>
+    mad>=1|g<=0.0849|Q1@D250               size               same
+      mad>=0.03|g<=0.25|none               same               same
+
+## behind each tuning's best (deviance / SE)
+      key        published           minimal              full
+  BT_rear  0.5983 / 9.8503 65.3068 / 73.6936    1.3436 / 9.826
+ BT_spawn            0 / 0             0 / 0    4.584 / 5.1234
+  CH_rear            0 / 0             0 / 0             0 / 0
+  CO_rear 7.7246 / 29.8609 11.6768 / 30.4786  0.3295 / 38.9719
+  GR_rear 5.6633 / 10.3784   9.342 / 10.9429 10.0264 / 12.6033
+  RB_rear            0 / 0           NA / NA           NA / NA
+  ST_rear 7.2429 / 17.9004 11.6549 / 18.8789  5.3907 / 15.6758
+ WCT_rear            0 / 0             0 / 0             0 / 0
+           rule_best_minimal             rule_best_full
+    mad>=0.1|g<=0.2|Q20@D100  mad>=0.1|g<=0.25|Q20@D100
+    width>=2|g<=0.25|Q1@D500   width>=2|g<=0.15|Q1@D500
+  mad>=0.75|g<=0.09|Q3@D1000 mad>=0.75|g<=0.13|Q3@D1000
+   mad>=0.1|g<=0.04|Q3@D2000  mad>=0.1|g<=0.03|Q3@D2000
+ width>=2|g<=0.0549|Q50@D500  width>=1|g<=0.11|Q20@D500
+                        <NA>                       <NA>
+  mad>=0.5|g<=0.0549|Q1@D250   mad>=0.5|g<=0.11|Q1@D250
+      mad>=0.03|g<=0.25|none     mad>=0.03|g<=0.25|none
+
+## each pick in the other tunings' regions (TRUE = in the one-SE region; deviance / SE behind their best)
+      key minimal_pick_in_full_region minimal_pick_behind_full_best
+  BT_rear                       FALSE                 80.81 / 73.24
+ BT_spawn                        TRUE                   3.21 / 3.58
+  CH_rear                        TRUE                  4.80 / 10.83
+  CO_rear                        TRUE                  0.33 / 38.97
+  GR_rear                        TRUE                 10.03 / 12.60
+  RB_rear                        <NA>                          <NA>
+  ST_rear                        TRUE                   7.16 / 8.28
+ WCT_rear                        TRUE                   0.00 / 0.00
+ full_pick_in_minimal_region full_pick_behind_minimal_best
+                        TRUE                  1.30 / 11.41
+                       FALSE                   7.07 / 5.13
+                       FALSE                  10.37 / 7.34
+                        TRUE                 11.68 / 30.48
+                        TRUE                  9.34 / 10.94
+                        <NA>                          <NA>
+                        TRUE                 16.91 / 19.30
+                        TRUE                   0.00 / 0.00
+
+## the published pick in the two new tunings' regions
+      key published_pick_in_minimal_region published_pick_behind_minimal_best
+  BT_rear                             TRUE                       2.71 / 11.17
+ BT_spawn                             TRUE                        1.41 / 4.04
+  CH_rear                             TRUE                        4.55 / 7.97
+  CO_rear                             TRUE                      11.68 / 30.48
+  GR_rear                             TRUE                        3.92 / 5.25
+  RB_rear                             <NA>                               <NA>
+  ST_rear                             TRUE                      16.91 / 19.30
+ WCT_rear                             TRUE                        0.00 / 0.00
+ published_pick_in_full_region published_pick_behind_full_best
+                          TRUE                     4.43 / 9.63
+                          TRUE                     1.93 / 3.00
+                          TRUE                     1.08 / 6.46
+                          TRUE                    0.33 / 38.97
+                          TRUE                     5.67 / 8.41
+                          <NA>                            <NA>
+                          TRUE                    5.39 / 15.68
+                          TRUE                     0.00 / 0.00
+tune tables (published): data/tune
+tune tables (minimal): data/tune/candidate/20261103_0838
+tune tables (full): data/tune/dev_default_20261103
+
+## visits scored and status
+      key n_visits_published n_visits_minimal n_visits_full status_published
+  BT_rear               9344             9344          9344           fitted
+ BT_spawn                513              513           513           fitted
+  CH_rear               4858             4858          4858           fitted
+  CO_rear               4628             4628          4628           fitted
+  GR_rear               1355             1355          1355           fitted
+  RB_rear              13869             <NA>          <NA>           fitted
+  ST_rear               1530             1530          1530           fitted
+ WCT_rear               1238             1238          1238     underpowered
+ status_minimal  status_full
+         fitted       fitted
+         fitted       fitted
+         fitted       fitted
+         fitted       fitted
+         fitted       fitted
+           <NA>         <NA>
+         fitted       fitted
+   underpowered underpowered

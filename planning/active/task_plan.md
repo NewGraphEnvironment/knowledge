@@ -76,12 +76,12 @@ Approved by Al at the plan gate, 2026-11-04 (UTC).
 - [x] Commit the logs (settle, ledger, check) under `scripts/logs/habitat/`.
 
 ## Phase 3: The DEV tuning and the three-way pick table
-- [ ] `PGSERVICE=fresh_local SCHEMA=fresh_default EVIDENCE_DIR=data/fdis/derived_default_20261103 DEV=1
+- [x] `PGSERVICE=fresh_local SCHEMA=fresh_default EVIDENCE_DIR=data/fdis/derived_default_20261103 DEV=1
       DEV_DIR=data/tune/dev_default_20261103 Rscript scripts/0320-tune-run.R`: smoke gates, picks, `pick_report.csv`
       (published side and #141's anchoring columns). Copy the pick report to `scripts/logs/habitat/`.
-- [ ] `TUNE_DIR=data/tune/dev_default_20261103 Rscript data-raw/tune_anchor_check.R`, beside #141's published and
+- [x] `TUNE_DIR=data/tune/dev_default_20261103 Rscript data-raw/tune_anchor_check.R`, beside #141's published and
       minimal logs (`scripts/logs/habitat/20261104_tune_anchor_check-*`).
-- [ ] `data-raw/pick_network_compare.R` (new, no database): per key, the published pick, the minimal network's
+- [x] `data-raw/pick_network_compare.R` (new, no database): per key, the published pick, the minimal network's
       (candidate `20261103_0838`) and the full network's (this run), each one's anchoring, `n_visits` on each; writes
       `scripts/logs/habitat/<date>_pick_network_compare.{csv,txt}`.
 
