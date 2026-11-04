@@ -66,9 +66,9 @@ The change is to prose only. Every figure and table below reads elements already
 - [x] Add `kableExtra` to `Suggests`.
 - [x] `Rscript data-raw/vignette_bib.R` with Zotero running; both `.bib` files rewritten. The Data Catalogue record stays a
       link, not a citation (Al, 2026-11-04), so no Zotero item is added.
-- [ ] Install the branch (`R CMD INSTALL .`) and render both articles; read each rendered page, figures included at their
+- [x] Install the branch (`R CMD INSTALL .`) and render both articles; read each rendered page, figures included at their
       published width.
-- [ ] Word counts before and after, of the rendered text minus references (review 11), recorded in `findings.md`.
+- [x] Word counts before and after, of the rendered text minus references (review 11), recorded in `findings.md`.
 
 - [x] Fold in the plan review (`review-plan.md`): wording on bcfishpass's exception and New Graph's set, "none on stream
       lines", the unjoined cap point, a guard, and README's stale gradient and Learn-more line.

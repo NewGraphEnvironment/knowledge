@@ -73,6 +73,7 @@ This takes the chinook article's structure and tone from #118 (renaming the arti
 ## Measurements
 
 - Chinook prose (outside chunks, after the setup): 1,683 -> 1,236 words. The methods table at the end (moved, not cut) sets the floor.
+- Rendered text minus the reference list (review 11's count; `scratchpad/count.R` over renders of 3140693 and the branch, 2026-11-04): chinook 2,053 -> 1,800 words (-12 %); methods 4,452 -> 4,746 (+294: the new opening and the moved citations). The forecast was about half: most of the detail moved into tables and a figure rather than out of the page, as Al asked ("in a table at the end", "easier to digest"), and the source count fell further because table cells and notes are written in R strings.
 - Pinned links (bcfishpass x3 at 3bd2824, Data Catalogue record): all HTTP 200, 2026-11-04.
 - Methods article render: only the five moved statistics keys unresolved until `vignette_bib.R` runs.
 

@@ -118,6 +118,9 @@ stopifnot(length(near) == length(unique(sf_$size)), max(near) / min(near) < 1.5,
 # the comparison runs the others only on STRUCTURES=all (#112), so the article reads this one alone
 wl <- x$wetland[x$wetland$as_tuned, ]
 stopifnot(nrow(wl) == 1, wl$structure == "door", wl$km_tuned < wl$km_default, wl$grade_median_tuned > 0.2)
+# "in the comparison, link's rule counts them by their size or by a near-a-river pair": the comparison's link rule
+# carries its pair on wetland-flow lines only
+stopifnot(grepl("@D[0-9]+ on wetland_flow$", all_row$default_rule), !grepl("|Q", all_row$default_rule, fixed = TRUE))
 
 link_site <- "https://www.newgraphenvironment.com/link/"
 link_default <- sprintf("https://github.com/NewGraphEnvironment/link/tree/%s/inst/extdata/configs/default", meta$link_sha)
@@ -172,8 +175,8 @@ knitr::kable(chg, format = "html", align = "lrr",
   kableExtra::kable_styling(full_width = FALSE) |>
   kableExtra::footnote(general_title = "", general = paste0(
     "Habitat is summed over the ", nrow(per_group), " watershed groups link classifies for chinook, each rule run ",
-    "through all of link's steps. link's current rule applies a near-a-river pair only to lines through wetlands, ",
-    "which both totals include (below). ",
+    "through all of link's steps. Both totals include lines through wetlands, which the two rules test differently ",
+    "(below). ",
     "Sites are the ", n0(sum(fv$n[fv$rule == "default"])), " electrofishing sites on ",
     "reachable streams in those groups. They overlap the sites the rule was chosen on, so the rates show the rule ",
     "does what it was chosen to do, not that it predicts new places."))
@@ -325,7 +328,8 @@ knitr::kable(oc, format = "html", align = "lll") |>
 - **It is about young chinook in streams.** It was fitted to juvenile chinook caught by electrofishing in streams and
   says nothing about spawning. River polygons share the stream slope limit, so they get `r grad(rec$grad_max)` too,
   though no site in one was scored. Lines drawn through wetlands of 1 ha or more were tested by neither rule's
-  records: link puts them through the same test as a stream line, which leaves about
+  records. In the comparison, link's rule counts them by their size or by a near-a-river pair, and the recommended
+  rule puts them through the same test as a stream line, which leaves about
   `r n0(round(wl$km_tuned, -2))` km of them as chinook rearing under the recommended rule, with a median grade of
   `r formatC(wl$grade_median_tuned, format = "f", digits = 2)`, against `r n0(round(wl$km_default, -2))` km under
   link's rule. Lakes keep their own condition.
