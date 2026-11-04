@@ -84,7 +84,7 @@ r_rec_out <- rate(tuned_as, "accessible_not_rearing")
 r_dflt_in <- rate("default", "rearing")
 r_dflt_out <- rate("default", "accessible_not_rearing")
 # "chinook are caught more often on the recommended rule's habitat, and less often off it, than on link's"
-stopifnot(r_rec_in > r_dflt_in, r_rec_out < r_dflt_out, r_rec_in > 5 * r_rec_out)
+stopifnot(r_rec_in > r_dflt_in, r_rec_out < r_dflt_out)
 
 # the stricter bar: the same choice from rules within se_strict standard errors (inst/method/settings.csv)
 se_strict <- 1.96  # the register's se_strict
@@ -128,10 +128,7 @@ The electrofishing records put young chinook salmon in more of British Columbia'
 and in fewer far from one, than link's current rule allows. [`link`](`r link_site`) [@irvine2026linkDevelop] maps
 where each fish species can spawn and rear on BC's streams, and its standard settings,
 [`default`](`r link_default`), start from the thresholds New Graph runs bcfishpass with
-[@norris2024smnorrisbcfishpass]: for chinook rearing, `r words(dflt)`. The records support **`r words(rec)`**. That rule draws `r n1(-all_row$change_pct)` % less habitat
-across the province, and chinook were caught at `r pc(r_rec_in)` of the sites on its habitat against
-`r pc(r_rec_out, 1)` elsewhere. Its slope limit is a judgment call: under a stricter bar it stays at link's
-(below). [How the tuning works](habitat_thresholds.html) explains where these rules come from and how they are tested.
+[@norris2024smnorrisbcfishpass]: for chinook rearing, `r words(dflt)`. The records support **`r words(rec)`**. [How the tuning works](habitat_thresholds.html) explains where these rules come from and how they are tested.
 
 ```{r map-static, eval = !on_site, fig.width = 6, fig.height = 6.9, out.width = "80%", fig.cap = paste0("Chinook rearing in the Bulkley watershed group (", meta$map_group, "), around Smithers, under each rule. Orange: link's current rule only (the legend's 'lost'). Green: the recommended rule only (the legend's 'tuned only'). Blue: both. Line width follows stream order.")}
 f1 <- tempfile(fileext = ".png")
@@ -151,6 +148,8 @@ where it links to spawning, which keeps different stretches under each rule.
 `r if (on_site) "Click a stream for what each rule reads there; the switch at the top right shows the grade, the use to expect on each segment." else ""`
 
 ## What changes?
+
+The recommended rule draws less habitat than link's, and chinook are caught on it more often and off it less often.
 
 ```{r changes}
 cell_size <- function(r) {

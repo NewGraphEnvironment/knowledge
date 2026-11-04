@@ -116,10 +116,10 @@ rail crossings and dams below them, and which streams could hold spawning or rea
 that crews can choose where to look first among more than half a million mapped crossings and dams. The Province
 publishes its access model as the
 [Freshwater Fish Habitat Accessibility Model: Pacific Salmon and Steelhead](https://catalogue.data.gov.bc.ca/dataset/freshwater-fish-habitat-accessibility-model-pacific-salmon-and-steelhead).
-The spawning and rearing thresholds sit in bcfishpass's repository, one set for each group that runs it, among them
+The spawning and rearing thresholds sit in bcfishpass's repository, one set for each group that runs it:
 [New Graph's](https://github.com/smnorris/bcfishpass/blob/3bd2824c300c5f9c0c041380d412a52987df1ebb/parameters/example_newgraph/parameters_habitat_thresholds.csv)
-and the
-[Canadian Wildlife Federation's](https://github.com/smnorris/bcfishpass/blob/3bd2824c300c5f9c0c041380d412a52987df1ebb/parameters/example_cwf/parameters_habitat_thresholds.csv).
+and
+[other organizations'](https://github.com/smnorris/bcfishpass/tree/3bd2824c300c5f9c0c041380d412a52987df1ebb/parameters).
 To choose where to look first, a fair guess at where fish spawn and rear is enough.
 
 The R package [`link`](https://newgraphenvironment.github.io/link/) [@irvine2026linkDevelop] builds on bcfishpass, and
