@@ -105,7 +105,7 @@ Approved by Al at the plan gate, 2026-11-04 (UTC).
 - [x] Tests pass
 - [x] `/code-check` clean (once over the branch with `/code-check branch`): five rounds, ended by round 5's enumeration of every record the branch writes (`review-round1..5.md`)
 - [x] PWF checkboxes match landed work
-- [ ] `/planning-archive` on completion
+- [x] `/planning-archive` on completion
 
 How each change is proved: the new tests fail on `main`'s `knw_build_record()` and pass after (restore the every-row
 read and watch them go red); the live record on `fresh_default` names one run and the 0.78.2 tokens; the settle record
