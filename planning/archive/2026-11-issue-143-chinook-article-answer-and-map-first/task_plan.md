@@ -77,13 +77,13 @@ The change is to prose only. Every figure and table below reads elements already
 - [x] `devtools::test()` (register, vignette-data), `pkgdown::check_pkgdown()`, a local `pkgdown::build_articles()`; no
       `footnote-ref` without a footnotes section.
 - [x] `/code-check branch`.
-- [ ] `/planning-archive`, `/gh-pr-push` (SRED cross-reference per memory).
+- [x] `/planning-archive`, `/gh-pr-push` (SRED cross-reference per memory).
 
 ## Validation
 - [x] Tests pass
 - [x] `/code-check` clean (once over the branch with `/code-check branch`)
-- [ ] PWF checkboxes match landed work
-- [ ] `/planning-archive` on completion
+- [x] PWF checkboxes match landed work
+- [x] `/planning-archive` on completion
 
 **How each change is proved:** every inline number and every pattern a sentence states is a `stopifnot()` in the chunk that
 computes it, so the render fails if the bundle stops supporting it; `test-settings-register.R` proves the three register
