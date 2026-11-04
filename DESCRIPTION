@@ -50,6 +50,7 @@ Suggests:
     gq,
     htmlwidgets,
     jsonlite,
+    kableExtra,
     knitr,
     mapgl,
     mgcv,

@@ -87,7 +87,8 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   `data/tune/grad_ext/` and `data/compare/grad_ext/` hold `0322`'s CH rearing run on a gradient ladder extended to
   30 % (#67, on the evidence build before #73; the main run carries that ladder for every species since #68);
   `0325`, `0330` and `knw_thresholds_table()` do not read them, because they list their directories non-recursively;
-  `data-raw/vignette_chinook.R` reads `data/tune/grad_ext/` for the chinook article's sentence on the longer ladder. `data/compare/gpkg/` (ignored) holds one GeoPackage per species × stage from `0330`, the
+  `data-raw/vignette_chinook.R` reads `data/tune/grad_ext/` into the chinook bundle, whose article no longer quotes it
+  (#143). `data/compare/gpkg/` (ignored) holds one GeoPackage per species × stage from `0330`, the
   comparison's view for QGIS (#81). `data/tune/candidate/<run>/` and `data/compare/candidate/<run>/` (ignored, #111)
   hold the full runs of `0320` and `0330` until `0335` promotes one, and the `replaced_<stamp>/` archive of what each
   promotion replaced (promoting it undoes the promotion); `data/tune/dev/` (ignored) holds `DEV=1 0320`, its log and
