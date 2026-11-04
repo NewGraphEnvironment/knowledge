@@ -23,6 +23,18 @@ One thing stops the chain today: `knw_build_record()` refuses the schema, `schem
 Relates to #120 (the minimal-network tuning), #139 and #141 (the baselines and the anchoring check, whose "after" this gives on the full network), #119 (archiving the run).
 
 
+## Phase 1: the scoped `log` read, live (2026-11-04 UTC, m4's database)
+
+- `fresh_default`: `log_recompute` names run `20261103_163715-269b585a`; the record reads its 241 `log` rows, tokens
+  `cut-full-top.acc-v5.grad-seg.q-fwapg`, and its line names `20261023_074321-24d85e8c` as set aside.
+- `fresh_default_minimal`: one run in both tables, nothing set aside, `cut-min.acc-v5.grad-seg.q-fwapg`.
+- `zz415_default`, `zz415_minimal` (link's proofs): `log_recompute` runs `415_recompute_*`, `log` runs `415_*`, so
+  the fallback reads every row; tokens as before.
+- The only readers of `<schema>.log` in `R/`, `scripts/`, `data-raw/` are `knw_build_record()`, `0300`'s `shas()` and
+  `0310`'s species note; all three use `.knw_build_log_runs()`.
+- `tests/testthat/test-link_place.R:39` (a live test against the `PG*` database's `fresh_default`) fails on `main`
+  as on the branch: that schema has no BULK bull trout rearing segment longer than 20 m now. Unrelated to #145.
+
 ## Errors Encountered
 
 | Error | Resolution |

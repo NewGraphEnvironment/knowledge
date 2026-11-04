@@ -49,15 +49,15 @@ Approved by Al at the plan gate, 2026-11-04 (UTC).
 - **The full candidate (`0320` grades, `0330`) and `0335` wait on Al's word** and are not in this PR (CLAUDE.md).
 
 ## Phase 1: Which `log` rows describe the build
-- [ ] Failing tests in `tests/testthat/test-build_record.R`: a two-run `log` (an earlier run with no tokens beside
+- [x] Failing tests in `tests/testthat/test-build_record.R`: a two-run `log` (an earlier run with no tokens beside
       the recompute's run with tokens) reads the recompute run's tokens; the proofs' case (no `log_recompute` run in
       `log`) still reads every row; a recompute run whose own rows are mixed is still refused. Mock with rows by run.
-- [ ] `R/build_record.R`: a helper `.knw_build_log_runs(conn, schema)` returning the runs whose `log` rows describe
+- [x] `R/build_record.R`: a helper `.knw_build_log_runs(conn, schema)` returning the runs whose `log` rows describe
       the build. `knw_build_record()` reads the tokens over those rows only (`WHERE run_uid = ANY($1)`), returns them as
       `log_run_uid`, and its line names any runs set aside. Roxygen updated (the "every row" sentence).
-- [ ] `scripts/0300-link-settle-wait.R`'s `shas()` and `0310`'s `schema_species` read the same rows (load the package
+- [x] `scripts/0300-link-settle-wait.R`'s `shas()` and `0310`'s `schema_species` read the same rows (load the package
       in 0300); grep every other `FROM %s.log` reader in `R/`, `scripts/` and `data-raw/` and decide each.
-- [ ] `devtools::document()`, tests, lintr.
+- [x] `devtools::document()`, tests, lintr.
 
 ## Phase 2: Settle and evidence on the new build (m4, local database)
 - [ ] `PGSERVICE=fresh_local SCHEMA=fresh_default POLL_MIN=1 Rscript scripts/0300-link-settle-wait.R`: released, one

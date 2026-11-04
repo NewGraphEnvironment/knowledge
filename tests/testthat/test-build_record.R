@@ -58,6 +58,62 @@ test_that("a build's tokens are read from `log`, one per axis, and two on one ax
   expect_identical(knw_build_record(NULL, "fresh_default")$tokens[["flow"]], NA_character_)
 })
 
+test_that("a schema whose `log` keeps an earlier run reads the tokens of the runs `log_recompute` names (#145)", {
+  # a provincial run leaves the previous run's `log` rows in place: link 0.68.0's rows, with no tokens, beside the new
+  # run's. The mock holds the rows and answers every query from them, so the reader is held to which rows it filters
+  lg <- data.frame(run_uid = c(rep("old", 3), rep("new", 2)), token_cut = c(NA, NA, NA, "cut-full-top", "cut-full-top"),
+                   token_acc = c(NA, NA, NA, "acc-v5", "acc-v5"), stringsAsFactors = FALSE)
+  rec_runs <- "new"
+  local_mocked_bindings(dbGetQuery = function(conn, sql, ...) {
+    p <- list(...)$params
+    if (grepl("to_regclass", sql)) return(data.frame(ok = TRUE))
+    if (grepl("information_schema", sql)) return(data.frame(column_name = c("token_cut", "token_acc")))
+    if (grepl("string_agg\\(DISTINCT run_uid", sql)) return(data.frame(u = paste(sort(rec_runs), collapse = ";")))
+    if (grepl("FROM \\S+\\.log_recompute", sql)) return(data.frame(run_uid = rec_runs))
+    rows <- lg
+    if (grepl("ANY(", sql, fixed = TRUE)) {
+      rows <- rows[rows$run_uid %in% strsplit(gsub('[{}"]', "", p[[1]]), ",")[[1]], ]
+    }
+    if (grepl("GROUP BY run_uid", sql)) {
+      n <- table(rows$run_uid)
+      return(data.frame(run_uid = names(n), n = as.integer(n)))
+    }
+    a <- regmatches(sql, regexpr("(?<=count\\(token_)[a-z]+", sql, perl = TRUE))
+    x <- rows[[paste0("token_", a)]]
+    v <- sort(unique(x[!is.na(x)]))
+    data.frame(n = nrow(rows), n_val = sum(!is.na(x)), v = if (length(v)) paste(v, collapse = ";") else NA_character_)
+  }, .package = "DBI")
+  local_mocked_bindings(knw_discharge_load = function(conn) "wet load")
+  r <- knw_build_record(NULL, "fresh_default", run_uid = "new")
+  expect_identical(r$tokens, c(cut = "cut-full-top", acc = "acc-v5", grad = NA_character_, flow = NA_character_))
+  expect_identical(r$log_run_uid, "new")
+  expect_match(r$line, "; log rows of run old set aside \\(not in log_recompute\\)$")
+  b <- .knw_build_log_runs(NULL, "fresh_default")
+  expect_identical(b$runs, "new")
+  expect_identical(b$aside, "old")
+  # the recompute run's own rows still have to be one build: one of them without a token is refused
+  lg$token_cut[5] <- NA
+  expect_error(knw_build_record(NULL, "fresh_default"), "1 of 2 log rows carry no cut token: not one build")
+  lg$token_cut[5] <- "cut-full-top"
+  # link's four-group proofs: `log` and `log_recompute` carry different run ids, so every `log` row is read and none
+  # is set aside
+  lg$run_uid <- c(rep("proof", 5))
+  lg$token_cut[1:3] <- "cut-full-top"
+  lg$token_acc[1:3] <- "acc-v5"
+  r <- knw_build_record(NULL, "fresh_default")
+  expect_identical(r$log_run_uid, "proof")
+  expect_identical(r$tokens[["cut"]], "cut-full-top")
+  expect_false(grepl("set aside", r$line))
+  expect_identical(.knw_build_log_runs(NULL, "fresh_default")$aside, character())
+  # and there a row without a token is refused over the whole log, as before
+  lg$token_cut[1] <- NA
+  expect_error(knw_build_record(NULL, "fresh_default"), "1 of 5 log rows carry no cut token")
+  # a run id that is not an identifier never reaches the array literal
+  lg$run_uid <- c(rep("new", 4), "x\",y")
+  rec_runs <- c("new", "x\",y")
+  expect_error(.knw_build_log_runs(NULL, "fresh_default"), "not a run id")
+})
+
 test_that("a schema with no run log is refused", {
   local_mocked_bindings(dbGetQuery = function(conn, sql, ...) data.frame(ok = FALSE), .package = "DBI")
   expect_error(knw_build_record(NULL, "public"), "no log_recompute table")

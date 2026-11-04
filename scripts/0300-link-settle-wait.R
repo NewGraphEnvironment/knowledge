@@ -9,7 +9,8 @@
 #   3. no non-idle session's query names fresh_default (this session excluded).
 # Each poll is one row of the log. On release the record carries the run_uid, the log_recompute
 # count, the churn value and the release time, and the link, fresh and fwapg SHAs from
-# fresh_default.log. After `max_hours` without a release it stops with status `timeout` and a
+# fresh_default.log, over the rows of the runs log_recompute names (#145: the previous run's rows stay in `log`;
+# log_runs_aside names them). After `max_hours` without a release it stops with status `timeout` and a
 # non-zero exit, so a waiter on this process reads the file, not the exit alone.
 #
 # INPUT:  fwapg database (PG* env vars): SCHEMA.{streams,log_recompute,log},
@@ -20,6 +21,7 @@
 #         released; POLL_MIN, default 10, is the minutes between polls, and three equal polls release)
 # ---------------------------------------------------------------------------
 suppressMessages({ library(DBI); library(RPostgres) })
+pkgload::load_all(quiet = TRUE)   # .knw_build_log_runs(): which `log` rows are the run's (#145)
 
 # SCHEMA and POLL_MIN (#120): a test build in a scratch schema is static, so it need not wait 10 min x 3. The settle
 # log records both on every row; its schema is a record, never 0310's gate (the run_uid is: a provincial schema is
@@ -69,12 +71,17 @@ poll <- function() {
 shas <- function() {
   conn <- pg()
   on.exit(dbDisconnect(conn))
-  dbGetQuery(conn, sprintf("
+  # the run's own rows: a provincial run leaves the previous run's `log` rows in place, whose link_sha 0320 would
+  # otherwise read the configs at (#145)
+  lr <- .knw_build_log_runs(conn, schema)
+  s <- dbGetQuery(conn, sprintf("
     SELECT string_agg(DISTINCT run_uid, ';') AS log_run_uid, string_agg(DISTINCT link_version, ';') AS link_version,
            string_agg(DISTINCT link_sha, ';') AS link_sha, string_agg(DISTINCT fresh_version, ';') AS fresh_version,
            string_agg(DISTINCT fresh_sha, ';') AS fresh_sha, string_agg(DISTINCT fwapg_sha, ';') AS fwapg_sha,
            string_agg(DISTINCT config_hash, ';') AS config_hash, count(*)::integer AS n_log_rows
-    FROM %s.log", schema))
+    FROM %s.log%s", schema, lr$where), params = lr$params)
+  s$log_runs_aside <- paste(lr$aside, collapse = ";")
+  s
 }
 
 dir.create(dirname(path_log), showWarnings = FALSE, recursive = TRUE)

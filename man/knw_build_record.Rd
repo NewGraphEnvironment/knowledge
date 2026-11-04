@@ -20,11 +20,15 @@ A list: \code{schema}, \code{run_uid} (the schema's runs, \verb{;}-joined),
 \code{discharge_load}, \code{walk_md5}, \code{fresh_version}, \code{tokens} (link's output
 vocabulary, \code{c(cut =, acc =, grad =, flow =)}, read from every row of
 \verb{<schema>.log}, where link writes them; each \code{NA} where that log predates
-link 0.70.0 and carries none), and \code{line}, the record as one line for a
-log. A schema whose log holds two values on one axis, or rows with a token
-beside rows without one, is refused: it is not one build. The tokens are
-read over every \code{log} row, not keyed on the run, because a build's \code{log}
-and its recompute's \code{log_recompute} can carry different run ids.
+link 0.70.0 and carries none), \code{log_run_uid} (the runs whose \code{log} rows
+were read, \verb{;}-joined) and \code{line}, the record as one line for a log. A
+schema whose log holds two values on one axis, or rows with a token beside
+rows without one, is refused: it is not one build. The tokens are read over
+the \code{log} rows of the runs \code{log_recompute} names, because a provincial run
+leaves the previous run's \code{log} rows in place (#145), and over every \code{log}
+row where none of those runs is in \code{log}, because a build's \code{log} and its
+recompute's \code{log_recompute} can carry different run ids (link's four-group
+proofs). The line names any run whose rows were set aside.
 }
 \description{
 A grade or a comparison reads four things from the database besides the
