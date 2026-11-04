@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">knowledge</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.26</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.27</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,9 +33,13 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/v0.4.27/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.4.27" id="knowledge-0427">knowledge 0.4.27<a class="anchor" aria-label="anchor" href="#knowledge-0427"></a></h2>
+<ul><li>Every species is retuned, graded and compared on link’s new provincial <code>default</code> build, and that run is promoted into the published tables (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/145" class="external-link">#145</a>). The build models neither rainbow trout nor kokanee, so <code>knw_tune_run(modelled =)</code> writes <code>not_modelled</code> for a species with no access value in the evidence, and rainbow trout rearing’s published rule is retired. Against the previous run, bull trout spawning, chinook rearing (11 to 13 %) and grayling rearing move outside its region, and bull trout rearing’s move is a reshuffle among near-equal rules (<code>research/habitat_thresholds_tuned.md</code>). <code><a href="../reference/knw_build_record.html">knw_build_record()</a></code> and <code>0300</code> read only the rows of link’s run log that belong to the build, since a provincial run leaves the previous run’s rows in place, and <code>0300</code> takes <code>SETTLE_TAG=</code> for a build compared before it is promoted. Both articles follow the new run.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.26" id="knowledge-0426">knowledge 0.4.26<a class="anchor" aria-label="anchor" href="#knowledge-0426"></a></h2>
 <ul><li>The chinook rearing article leads with the answer and the Bulkley map, then one before/after table, a figure of why a nearby river matters (the fitted chance of a catch by distance to a river, per stream flow), how sure the choice is, and how it was done in a table that links the methods article (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/143" class="external-link">#143</a>). The methods article opens with what bcfishpass’s map was for and what tuning adds, and now holds the one-SE and cross-validation citations. Several statements are now exact where the old prose was loose: the Bulkley map’s three causes of change, a coded site out of reach is dropped, and each site and group count names its population. No code change.</li>

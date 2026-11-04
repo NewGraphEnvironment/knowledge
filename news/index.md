@@ -1,5 +1,23 @@
 # Changelog
 
+## knowledge 0.4.27
+
+- Every species is retuned, graded and compared on link’s new provincial
+  `default` build, and that run is promoted into the published tables
+  ([\#145](https://github.com/NewGraphEnvironment/knowledge/issues/145)).
+  The build models neither rainbow trout nor kokanee, so
+  `knw_tune_run(modelled =)` writes `not_modelled` for a species with no
+  access value in the evidence, and rainbow trout rearing’s published
+  rule is retired. Against the previous run, bull trout spawning,
+  chinook rearing (11 to 13 %) and grayling rearing move outside its
+  region, and bull trout rearing’s move is a reshuffle among near-equal
+  rules (`research/habitat_thresholds_tuned.md`).
+  [`knw_build_record()`](https://newgraphenvironment.github.io/knowledge/reference/knw_build_record.md)
+  and `0300` read only the rows of link’s run log that belong to the
+  build, since a provincial run leaves the previous run’s rows in place,
+  and `0300` takes `SETTLE_TAG=` for a build compared before it is
+  promoted. Both articles follow the new run.
+
 ## knowledge 0.4.26
 
 - The chinook rearing article leads with the answer and the Bulkley map,
