@@ -3,7 +3,7 @@
 **Verified:** 2026-11-04 · **Issues:** #141 (this measure), for #139 (the baseline review) and #140 (grayling's
 baseline, read against the "before" below); the second start is #80, where the anchoring showed is #120 ·
 **Produced by:** `data-raw/tune_anchor_check.R` over the saved tuning tables, through `knw_tune_anchor()`; logs
-`scripts/logs/habitat/20261104_tune_anchor_check-*` · **Status:** measured on the published tables and on the
+`scripts/logs/habitat/20261104_tune_anchor_check-*` · **Status:** measured on #92's published tables (published until #145's promotion of 2026-11-04) and on the
 minimal-network candidate; every later run of `scripts/0320` writes the same columns into each summary and its pick
 report.
 
@@ -41,7 +41,7 @@ to the nearest of them.
 
 ## What the tables say
 
-On the published tables (link's full network, #92), four of eight picks are the best-scoring rule (chinook rearing,
+On #92's published tables (link's full network), four of eight picks are the best-scoring rule (chinook rearing,
 bull trout spawning, rainbow trout rearing, westslope cutthroat rearing). The other four are not:
 
 | key | pick from `default` | best-scoring rule | pick behind the best (deviance / SE) | parts apart | flow start picks |
@@ -92,18 +92,18 @@ sits (its distance behind the best in SEs), then by whether the two starts disag
   rearing (1, 0.38).
 
 Grayling rearing is in the first two on both readings, two parts from the best both times, and the only key whose two
-starts pick different kinds of size test (a MAD floor and a width floor on the published tables). Bull trout rearing,
-next in #139's order, is steered on the minimal network and not on the published tables, so it is the key whose
+starts pick different kinds of size test (a MAD floor and a width floor on #92's tables). Bull trout rearing,
+next in #139's order, is steered on the minimal network and not on #92's tables, so it is the key whose
 reading moves most with the build; its pick on the minimal network is the furthest of any from its best in deviance.
 
 ## Grayling rearing: the "before" for #140
 
-`default` is `width>=1.5|g<=0.0349|none` on both readings, outside the region (19.3 behind, SE 6.7, published; 14.4,
+`default` is `width>=1.5|g<=0.0349|none` on both readings, outside the region (19.3 behind, SE 6.7, on #92's tables; 14.4,
 SE 11.8, minimal).
 
 | reading | best-scoring rule (tied) | pick from `default` | parts from the best | pick from the flow start | parts from the best |
 |---|---|---|---|---|---|
-| published | `width>=1\|g<=0.0549\|Q50@D500` (2) | `width>=2\|g<=0.0549\|none`, 5.7 behind (SE 10.4) | size, exception | `mad>=0.021\|g<=0.0549\|none`, 11.6 behind (SE 13.9) | size, exception |
+| #92's published tables | `width>=1\|g<=0.0549\|Q50@D500` (2) | `width>=2\|g<=0.0549\|none`, 5.7 behind (SE 10.4) | size, exception | `mad>=0.021\|g<=0.0549\|none`, 11.6 behind (SE 13.9) | size, exception |
 | minimal network | `width>=2\|g<=0.0549\|Q50@D500` (2) | `width>=1.5\|g<=0.0549\|none`, 9.3 behind (SE 10.9) | size, exception | `width>=2\|g<=0.0549\|none`, 3.9 behind (SE 5.3) | exception |
 
 Both readings move `default`'s gradient limit to 5.49 % and leave the near-river exception the best carries (a river of

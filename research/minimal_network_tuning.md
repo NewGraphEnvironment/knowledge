@@ -13,6 +13,8 @@ species tuned (`DEV=1`, no grades) on the new full `default` build on the same f
 network from the other two (#145). That full-network run was then graded, compared and promoted (run `20261104_0543`,
 2026-11-04; `habitat_thresholds_tuned.md`); the transfer to link's full network on its parent table waits on link#444.
 
+In this file, "published" names #92's run, the published one until #145's promotion of 2026-11-04.
+
 ## The answer
 
 link cuts its streams at the fish records of the species it models, so on its full network a site where fish were
@@ -129,7 +131,8 @@ argue against the steeper limits the full network allows. Chinook's gradient lim
 new full one.
 
 **#92's rules stand.** Each of the seven picks #92 published that both tunings scored lies in both new tunings' regions. Grayling rearing's move to
-`width>=1.5` therefore comes from the flows, the range or link's build, not the network: both new builds pick it.
+`width>=1.5` therefore comes from what changed between #92's build and the two new ones (the flow load and link's cuts
+since 0.66.0), not from the minimal network against the full: both new builds pick it, on the same visits #92 scored.
 Rainbow trout rearing is modelled by neither build, and the promotion of the full-network run retired it (#145).
 
 The table is `pick_network_compare.R`'s (`20261104_pick_network_compare.{csv,txt}`, from each tuning's

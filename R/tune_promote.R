@@ -255,7 +255,7 @@ knw_tune_promote <- function(run, keys = NULL, live = NULL, tune_dir = "data/tun
   by_key <- function(k) paste0("^", esc(k), "_")
   # 0320 and 0330 clear a key's files in the run before a pass rewrites them (the score cache and the keep-checked
   # grades aside), so what the run holds for a key is its last pass's. What 0320 writes for a key it does not fit
-  # (R/tune_run.R's three statuses) is its summary and its curve record; nothing of the comparison belongs to it
+  # (R/tune_run.R's statuses in .knw_no_fit) is its summary and its curve record; nothing of the comparison belongs to it
   unfit_files <- function(k) paste0(k, c("_summary.csv", "_curve.rds"))
   take_tune <- function(k, src) if (archive || k %in% fitted) src else src[basename(src) %in% unfit_files(k)]
   take_cmp <- function(k, src) if (archive || k %in% fitted) src else character()

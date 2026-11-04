@@ -23,10 +23,10 @@ link reads the result through NewGraphEnvironment/link#346 · **Produced by:**
   run `scripts/logs/habitat/20261027_tune_run.txt`, and its Atlas-gradient sensitivity `20261027_tune_run-grad_fwa.txt`
   into `data/tune/grad_fwa/`; #73's rescore's grading `20261023_tune_run.txt`, its regrade with the curve's prior and
   the grade gate `20261024_tune_run.txt`; #57's `20261017_tune_run-*` and #65's `20261019_tune_run.{txt,out}` are the earlier runs);
-- `scripts/0325`: `data/thresholds.csv` and `data/thresholds_groups.csv` (rewritten from #92's tables); the Parquet sets
-  `knowledge/thresholds/v1` and `knowledge/habitat_grade/v1` are still #73's (published from the database's host on
-  2026-10-25, commit `bf41ebd`, with BT spawning and CO, ST and WCT rearing left out of the grade set) until #92's
-  tables are published;
+- `scripts/0325`: `data/thresholds.csv` and `data/thresholds_groups.csv` (rewritten from #145's tables by its
+  promotion); the Parquet sets `knowledge/thresholds/v1` and `knowledge/habitat_grade/v1` are still #73's (published
+  from the database's host on 2026-10-25, commit `bf41ebd`, with BT spawning and CO, ST and WCT rearing left out of the
+  grade set) until #145's tables are published;
 - `planning/archive/2026-10-issue-65-grade-walks-every-segment/check_{off_branch,connector_share}.R`: the grade off
   the stream branch and the connector's share of the walked distance (Limits; #65's measurement);
 - `scripts/0330`: `data/compare/*.csv` (`compare`, `change` and `checks`, composed over every key; log
@@ -133,8 +133,8 @@ keeps the analysis spec beside the code. The parts each issue settled are named 
 
 **What changed.** link built a new provincial `default` network (run `20261103_163715-269b585a`, link 0.78.2, all 241
 groups). Every key was retuned, graded and compared on it with wet's 2026-10-24 flows, and the run (`20261104_0543`)
-was promoted. Each key scores as many visits as on #92's run; what the visits read moved with link's build (its
-segments and each species' range) and the flow load. The network's share alone is measured against link's minimal network in
+was promoted. Each key scores the same visits as on #92's run (the same count, detections and groups for all seven), so
+what moved is what those visits read: link's segments and the flow load. The network's share alone is measured against link's minimal network in
 `minimal_network_tuning.md` ("The full network on the same flows and range"). The sections after this one are #92's run,
 kept as that reading's record.
 
@@ -166,11 +166,11 @@ reshuffle of near-equal rules, not a new finding.
   picks lie outside #92's region, so the runs disagree: bull trout spawning (limit 13 to 11 %, and the near-river
   exception dropped; 4.8 behind, SE 2.9), chinook rearing (11 to 13 %; 8.3 behind, SE 4.3) and grayling rearing
   (width 2 to 1.5 m; 10.0 behind, SE 5.5). Coho, steelhead and westslope cutthroat keep #92's rule. On the Atlas line's
-  gradient (`data/tune/grad_fwa/`, never graded), all seven keys pick #92's sensitivity picks again, so these moves
-  come with link's segments, not the scored visits.
+  gradient (`data/tune/grad_fwa/`, never graded), all seven keys pick #92's sensitivity picks again.
 - **`default` is still outside every region**, grayling's by the narrowest margin (1.16 SEs, against 2.87 on #92's).
 - **Nested selection** (pick on four folds, score the fifth) beats `default` for BT rearing, CH and CO, and loses to
-  it for GR (915.3 against 902.2) and ST (427.9 against 399.0), as on #92's. Two keys flip: bull trout spawning's
+  it for GR (915.3 against 902.2) and ST (427.9 against 399.0), as on #92's; bull trout spawning's beats `default` on
+  both runs (420.8 against 425.1; #92's 424.8 against 425.2). Two keys flip against the other references: bull trout spawning's
   choosing now beats no rule (420.8 against 424.6), where #92's did not, and westslope cutthroat's now loses to both
   `default` and no rule (1,446.5 against 1,442.6 and 1,431.3), where #92's beat both (1,428.1 against 1,444.9 and
   1,431.3).
@@ -217,8 +217,9 @@ Both rules regenerated through link's steps on every group the species' habitat 
 | WCT rearing | 35,246 | 20,478 | 24,398 | +19.1 % | 907 | 4,827 (0) | no grade |
 
 - **Bull trout spawning now draws a quarter more, not half as much again** (+23.8 % against #92's +49.5 %): its
-  limit fell from 13 to 11 % and it lost the exception. Chinook draws 14.1 % less (−15.9 % on #92's); grayling's lower
-  width floor adds 11.1 % (+3.4 %).
+  limit fell from 13 to 11 % and it lost the exception. Chinook draws 14.1 % less (−15.9 % on #92's). Grayling's rule
+  adds 11.1 % through its slope limit (5.49 % against `default`'s 3.49 %, with the same 1.5 m width); #92's added 3.4 %
+  with a 2 m width floor.
 - **FDIS detection** on each rule's habitat against accessible stream outside it, `default` then tuned: BT rearing
   16.9 % against 6.5 %, then 19.8 against 5.6; CH 14.4 against 2.3, then 17.6 against 1.3; CO 29.4 against 11.9, then
   33.2 against 8.9; GR 15.1 against 5.2, then 14.8 against 4.2; ST 4.6 against 0.5, then 6.7 against 0.3; WCT 31.6
