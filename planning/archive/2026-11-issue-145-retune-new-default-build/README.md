@@ -45,6 +45,7 @@ and the promotion wait on Al's word.
 ## Owed
 
 - On Al's word: the full candidate `0320` (grades) and `0330 TUNE_DIR=` on the database's host, then
-      `RUN=<run> 0335`, the bundles and articles after it, as CLAUDE.md describes.
+      `RUN=<run> 0335`, the bundles and articles after it, as CLAUDE.md describes. **Done 2026-11-04 on Al's word:**
+      run `20261104_0543` promoted; `planning/archive/2026-11-issue-145-promote-retune/`.
 
-Closed by: the PR from branch `145-retune-every-species-on-link-s-new-provi` (#145 stays open for the owed item)
+Closed by: PR #146 (closes #145)

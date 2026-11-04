@@ -31,9 +31,9 @@ promote." The build is run `20261103_163715-269b585a` (link 0.78.2) in the datab
 - [x] `0330 TUNE_DIR=data/tune/candidate/<run>` on this host: 50.9 min; then `GRADIENT=fwa_gradient` into the run (5.4 min), which the promotion requires.
 
 ## Phase 4: promote
-- [ ] `RUN=<run> DRY=1 0335`, then `RUN=<run> 0335` (Zotero running for the bibliography).
-- [ ] The pins and prose a promotion moves, by hand: `test-tune_repick.R`, `test-vignette-data.R`, the articles'
+- [x] `RUN=<run> DRY=1 0335`, then `RUN=<run> 0335` (Zotero running for the bibliography): promoted 91ae2f5.
+- [x] The pins and prose a promotion moves, by hand: `test-tune_repick.R`, `test-vignette-data.R`, the articles'
       inline checks, `research/` prose that quotes the published run; full test suite.
 
 ## Phase 5: review and close
-- [ ] `/code-check branch` over the new commits; archive; PR #146 body updated to close #145.
+- [x] `/code-check branch` over the new commits (two rounds, ended by round 2's per-claim enumeration and a sweep of "published" in `research/`); archive; PR #146 body updated to close #145.

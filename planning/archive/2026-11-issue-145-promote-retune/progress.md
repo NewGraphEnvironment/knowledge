@@ -17,3 +17,7 @@
 - The first `DRY=1 0335` refused: `grad_fwa/` (the Atlas-gradient sensitivity) on the old evidence. `GRADIENT=fwa_gradient
   RUN=20261104_0543 0320` (5.4 min): all seven keys keep the published pick on the Atlas line. The second dry run:
   228 files written, 43 removed (RB_rear's tables, comparison, GeoPackage and 24 maps).
+- `0335`, 07:34 to 07:44Z: promoted (91ae2f5). Articles' three failed checks revised (fc02fd1), research and CLAUDE.md
+  prose (9756e6e, 5d3a746). Code-check: round 1 nine findings (8c14181), round 2 six, four inside round 1's fixes
+  (d047635); ended on round 2's per-claim enumeration, the "published" sweep and a check of the numbers its fixes added.
+  Full suite: 1914 pass, 1 failure (`test-link_place.R:39`, fails on main too).
