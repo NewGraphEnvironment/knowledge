@@ -74,14 +74,14 @@ The change is to prose only. Every figure and table below reads elements already
       lines", the unjoined cap point, a guard, and README's stale gradient and Learn-more line.
 
 ## Phase 4: Checks and PR
-- [ ] `devtools::test()` (register, vignette-data), `pkgdown::check_pkgdown()`, a local `pkgdown::build_articles()`; no
+- [x] `devtools::test()` (register, vignette-data), `pkgdown::check_pkgdown()`, a local `pkgdown::build_articles()`; no
       `footnote-ref` without a footnotes section.
-- [ ] `/code-check branch`.
+- [x] `/code-check branch`.
 - [ ] `/planning-archive`, `/gh-pr-push` (SRED cross-reference per memory).
 
 ## Validation
-- [ ] Tests pass
-- [ ] `/code-check` clean (once over the branch with `/code-check branch`)
+- [x] Tests pass
+- [x] `/code-check` clean (once over the branch with `/code-check branch`)
 - [ ] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion
 

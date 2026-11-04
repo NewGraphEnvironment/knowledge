@@ -95,3 +95,15 @@ Bulkley map sentence (round 2): of 1,128.6 km changed, 868.0 km are drops below 
 ## Review mechanism, revised (round 3)
 
 Round 3 widened it: the rewrite compressed qualified prose into short sentences and cells and dropped the clause saying which build, population or condition a statement holds for, and each survived because its two possible sources agree on most members (two link builds; two placement paths; the tuning's 7,659-site population against the comparison's 11,532 sites). My enumeration covered only the near-river dial and wrongly called totals and counts build-independent. Round 3's own table (`review-round3.md`, 39 rows: every sentence, caption, cell and footnote naming link, `default`, bcfishpass or the comparison on both pages, plus the README lines changed) holds except four, all fixed: the placement cell restores main's condition (a code-named stream beyond 500 m drops the site); the records cell restores its filters and puts link's chinook groups at the tuning's build; the table note says what its 11,532 sites are; the methods opening says fish reach streams below natural barriers and that bcfishpass's parameter folders are sets, not one per group.
+
+## Code-check close (branch mode, 2026-11-04)
+
+| Round | Findings | Fixed | Accepted | Inside previous fix? |
+|-------|----------|-------|----------|----------------------|
+| 1 | 1 | 1 | 0 | — |
+| 2 | 5 | 5 | 0 | y (round 1's guard had a half that could not fire) |
+| 3 | 4 | 4 | 0 | n (named the mechanism; 39-item enumeration) |
+| 4 | 2 | 2 | 0 | y (the records cell put 105 on link's range) |
+| 5 | 1 | 1 | 0 | n (47-item enumeration: 45 held, 2 cells from one finding) |
+
+Ended by enumeration: round 5's 47 items (every statement on both pages naming link, `default`, bcfishpass, the comparison, a site or group count, a habitat total or a placement rule, plus the README lines changed) all hold after its one fix, the hidden-catch condition in the Records and Left out cells (`R/tune_run.R:161`, worded as the methods article words it). Five reviewer rounds, the per-task bound; three of the eleven findings (the Bulkley sentence, the methods article's placement fallback, the hidden-catch condition) were on main before this branch.
