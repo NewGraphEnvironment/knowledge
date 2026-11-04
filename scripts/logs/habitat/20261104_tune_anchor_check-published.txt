@@ -1,4 +1,4 @@
-Anchoring check (#141) on data/tune (published): 8 keys, at knowledge 7bb9111.
+Anchoring check (#141) on data/tune (published): 8 keys, at knowledge c4edd60.
   link run 20261017_004619-3f4c713b, tuning run NA, evidence 1bd35829d07ca92f0b0faa565db65280;009698d73afd855c3e8db1235ad96c05;99f499bb14e4a53fe2506f118670a83f, gradient segment_gradient
 Picks at the best from default: 4 of 8; from the flow start: 3 of 8 with one; the two starts agree on 6.
 Keys whose best is not a rule a pick may be (an exception under d_floor, or not converged): ST_rear, BT_rear.
@@ -23,7 +23,7 @@ Keys whose best is not a rule a pick may be (an exception under d_floor, or not 
                     none        width>=3|g<=0.3|none      1
                     none      mad>=0.03|g<=0.25|none      2
 
-## beside the best a pick may be (d_floor)
+## beside the best a pick may be (in the region, clear of d_floor)
       key best_is_allowed           rule_best_allowed best_allowed_ddev
   GR_rear            TRUE width>=1|g<=0.0549|Q50@D500          0.000000
   ST_rear           FALSE      mad>=1|g<=0.07|Q1@D250          3.454609
