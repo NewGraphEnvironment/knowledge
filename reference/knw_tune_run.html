@@ -82,6 +82,7 @@ the pick (<code><a href="knw_tune_curve.html">knw_tune_curve()</a></code>).</p>
 <span>  fit <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"fe"</span>, <span class="st">"dense"</span><span class="op">)</span>,</span>
 <span>  prior_sd <span class="op">=</span> <span class="fl">2.5</span>,</span>
 <span>  evidence_id <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  modelled <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>grad <span class="op">=</span> <span class="st">"segment_gradient"</span>, width <span class="op">=</span> <span class="st">"cw_deploy"</span>, mad <span class="op">=</span> <span class="st">"mad_pick"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -190,6 +191,14 @@ derived tables). It joins the cache's settings, so a score made on another
 build of the same visit count is not read back as this one's.</p></dd>
 
 
+<dt id="arg-modelled">modelled<a class="anchor" aria-label="anchor" href="#arg-modelled"></a></dt>
+<dd><p><code>NULL</code>, or the species codes link models on the build the
+visits were placed on (<code>scripts/0320</code> passes those with any access value in
+the evidence). Every stage of another species is <code>not_modelled</code>: link draws
+no access or habitat for it, so a rule could be neither graded nor applied
+(#145). <code>NULL</code> is every species.</p></dd>
+
+
 <dt id="arg-cols">cols<a class="anchor" aria-label="anchor" href="#arg-cols"></a></dt>
 <dd><p>named <code>character</code>, as in <code><a href="knw_rule_in.html">knw_rule_in()</a></code>: the columns of <code>visits</code>
 carrying <code>grad</code>, <code>width</code> and <code>mad</code>, read by the rules and the curve. The
@@ -202,8 +211,8 @@ sensitivity. The gradient column joins the cache's settings.</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A list with one element per species × stage (<code>"&lt;sp&gt;_&lt;stage&gt;"</code>): a
 list with <code>species_code</code>, <code>stage</code>, <code>response</code>, <code>status</code> (<code>fitted</code>,
-<code>underpowered</code>, <code>no_stream_rule</code>, <code>no_response</code>, <code>too_few_groups</code>,
-<code>curve_failed</code>; <code>smoke</code> with <code>smoke_only</code>), <code>population</code>, and when scored
+<code>underpowered</code>, <code>no_stream_rule</code>, <code>not_modelled</code>, <code>no_response</code>,
+<code>too_few_groups</code>, <code>curve_failed</code>; <code>smoke</code> with <code>smoke_only</code>), <code>population</code>, and when scored
 <code>smoke</code> (<code><a href="knw_tune_smoke.html">knw_tune_smoke()</a></code>'s result, with <code>smoke</code>), <code>score</code>
 (<code><a href="knw_tune_score.html">knw_tune_score()</a></code>'s result), <code>pick</code> (the recommended rule row) and <code>curve</code>
 (<code><a href="knw_tune_curve.html">knw_tune_curve()</a></code>'s; <code>NULL</code> with <code>curve_error</code> when its fit failed);

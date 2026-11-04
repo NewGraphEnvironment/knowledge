@@ -6,18 +6,18 @@ than link’s current rule allows.
 [`link`](https://www.newgraphenvironment.com/link/) ([Irvine
 2026b](#ref-irvine2026linkDevelop)) maps where each fish species can
 spawn and rear on BC’s streams, and its standard settings,
-[`default`](https://github.com/NewGraphEnvironment/link/tree/a17e91773b283b021811f8b5b76b887d5f4c16e4/inst/extdata/configs/default),
+[`default`](https://github.com/NewGraphEnvironment/link/tree/4dfbfa4980eb259e2f6a3e9b198c54014315d0ce/inst/extdata/configs/default),
 start from the thresholds New Graph runs bcfishpass with ([Norris
 2024b](#ref-norris2024smnorrisbcfishpass)): for chinook rearing, a slope
 of at most 5.49 %, and a channel at least 1.5 m wide. The records
-support **a slope of at most 11 %, and either an average flow of at
+support **a slope of at most 13 %, and either an average flow of at
 least 0.75 m³/s or a river of at least 3 m³/s within 1 km downstream**.
 [How the tuning
 works](https://newgraphenvironment.github.io/knowledge/articles/habitat_thresholds.md)
 explains where these rules come from and how they are tested.
 
 In the Bulkley watershed group, around Smithers, the recommended rule
-draws 1,482 km of rearing habitat against 2,096 under link’s. What it
+draws 1,494 km of rearing habitat against 2,101 under link’s. What it
 drops (orange) is mostly the upper reaches of tributaries, where flow
 falls below its floor more than 1 km from a river. What it adds (green)
 is short reaches of small streams beside a river. The rest comes from
@@ -35,12 +35,12 @@ caught on it more often and off it less often.
 |  | link now | Recommended |
 |:---|---:|---:|
 | Smallest stream | 1.5 m channel width | 0.75 m³/s average flow |
-| Steepest slope | 5.49 % | 11 % |
+| Steepest slope | 5.49 % | 13 % |
 | Near a river | none on stream lines | smaller streams within 1 km of a 3 m³/s river |
-| Rearing habitat | 99,186 km | 83,435 km |
-| Sites with chinook, on the habitat | 15 % | 18 % |
-| Sites with chinook, elsewhere | 2.2 % | 1.4 % |
-|  Habitat is summed over the 125 watershed groups link classified for chinook when the comparison ran, each rule run through all of link’s steps. Both totals include lines through wetlands, which the two rules test differently (below). Sites are the 11,532 electrofishing sites of a usual fished area on reachable stream, river and wetland lines in those groups, a wider set than the one the rule was chosen on. They overlap the sites the rule was chosen on, so the rates show the rule does what it was chosen to do, not that it predicts new places. |  |  |
+| Rearing habitat | 102,951 km | 88,458 km |
+| Sites with chinook, on the habitat | 14 % | 18 % |
+| Sites with chinook, elsewhere | 2.3 % | 1.3 % |
+|  Habitat is summed over the 136 watershed groups link classified for chinook when the comparison ran, each rule run through all of link’s steps. Both totals include lines through wetlands, which the two rules test differently (below). Sites are the 11,762 electrofishing sites of a usual fished area on reachable stream, river and wetland lines in those groups, a wider set than the one the rule was chosen on. They overlap the sites the rule was chosen on, so the rates show the rule does what it was chosen to do, not that it predicts new places. |  |  |
 
 Chinook rearing under link’s current rule and the recommended one.
 {.table .table
@@ -59,7 +59,7 @@ choice shows the same idea in the records, with a distance on it:
 
 ![The fitted chance of catching chinook on one standard visit, by
 distance downstream to a river of at least 3 m³/s, for four stream
-flows, at a slope of 5.5 %. The dashed line is the recommended rule's 1
+flows, at a slope of 6.5 %. The dashed line is the recommended rule's 1
 km allowance: beyond it, streams below its 0.75 m³/s floor no longer
 count (grey). The fit is shown at six distances; the last stands for 50
 km or more, or no such river, and is not
@@ -67,14 +67,14 @@ joined.](chinook_rearing_files/figure-html/river-1.png)
 
 The fitted chance of catching chinook on one standard visit, by distance
 downstream to a river of at least 3 m³/s, for four stream flows, at a
-slope of 5.5 %. The dashed line is the recommended rule’s 1 km
+slope of 6.5 %. The dashed line is the recommended rule’s 1 km
 allowance: beyond it, streams below its 0.75 m³/s floor no longer count
 (grey). The fit is shown at six distances; the last stands for 50 km or
 more, or no such river, and is not joined.
 
 Within 100 m of a river the chance is about the same whatever the
-stream’s flow, 10.2 % to 11.4 %. Ten kilometres away it rises with flow,
-from 0.3 % to 2.9 %. That is the shape the recommended rule draws:
+stream’s flow, 11.4 % to 12.5 %. Ten kilometres away it rises with flow,
+from 0.3 % to 3.1 %. That is the shape the recommended rule draws:
 beside a river a small stream counts, away from one only a larger stream
 does.
 
@@ -85,11 +85,11 @@ differently. So the tuning treats every rule within one standard error
 of the best as a close call, a convention fixed before the run ([how two
 rules are told
 apart](https://newgraphenvironment.github.io/knowledge/articles/habitat_thresholds.html#se)).
-For chinook, 164 of 6,149 rules are close calls, all with a flow floor
+For chinook, 169 of 6,149 rules are close calls, all with a flow floor
 of 0.1 to 1 m³/s, the near-a-river allowance, and a slope limit of 7 %
 or more. The rule fixed in advance takes the close call nearest link’s;
 all differ from link’s stream-line rule in every dial, so it is the best
-scorer. link’s rule is 2.5 standard errors behind it.
+scorer. link’s rule is 2.6 standard errors behind it.
 
 ![How close the best rule using each value of each dial comes to the
 best rule overall, as score above the best (lower is better). Dark blue:
@@ -108,15 +108,14 @@ The flow floors near the best are close calls at one standard error and
 no width floor is; the slope limit is flat from 7 % up.
 
 **A stricter bar.** At 1.96 standard errors, about the width of a 95 %
-interval, more rules are close calls, and the same choice moves only its
-slope limit, back to link’s:
+interval, more rules are close calls, and the same choice holds:
 
 |  | link now | Chosen at 1 SE | Chosen at 1.96 SE |
 |:---|:---|:---|:---|
 | Smallest stream | 1.5 m channel width | **0.75 m³/s average flow** | **0.75 m³/s average flow** |
-| Steepest slope | 5.49 % | **11 %** | 5.49 % |
+| Steepest slope | 5.49 % | **13 %** | **13 %** |
 | Near a river | none on stream lines | **smaller streams within 1 km of a 3 m³/s river** | **smaller streams within 1 km of a 3 m³/s river** |
-|  Bold: differs from link’s rule. Close calls: 164 rules at one standard error, 2,456 at 1.96; link’s rule is a close call at neither. This package’s thresholds table (data/thresholds.csv, column rule_196) gives the choice at 1.96 for every species tuned. |  |  |  |
+|  Bold: differs from link’s rule. Close calls: 169 rules at one standard error, 2,297 at 1.96; link’s rule is a close call at neither. This package’s thresholds table (data/thresholds.csv, column rule_196) gives the choice at 1.96 for every species tuned. |  |  |  |
 
 The chinook rule chosen from the close calls at each bar, beside link’s
 current rule. {.table .table
@@ -128,27 +127,27 @@ style="font-size: 13px; width: auto !important; margin-left: auto; margin-right:
 |:---|:---|:---|
 | 4 other random splits into sets | the recommended rule is a close call on 4 of 4; link’s on 0 | the recommended rule |
 | Chosen on four sets, scored on the fifth | the chosen rule beats link’s on 4 of 5 and beats it overall | choosing from the records |
-| 200 redraws of the groups | a flow floor is chosen in 99.5 % of draws; the recommended slope limit in 46 % | a steady shape; an unsettled slope limit |
+| 200 redraws of the groups | a flow floor is chosen in every draw; the recommended slope limit in 40 % | a steady shape; an unsettled slope limit |
 
 ## Before you use it
 
 - **It is about young chinook in streams.** It was fitted to juvenile
   chinook caught by electrofishing in streams and says nothing about
-  spawning. River polygons share the stream slope limit, so they get 11
+  spawning. River polygons share the stream slope limit, so they get 13
   % too, though no site in one was scored. Lines drawn through wetlands
   of 1 ha or more were tested by neither rule’s records. In the
   comparison, link’s rule counts them by their size or by a near-a-river
   pair, and the recommended rule puts them through the same test as a
   stream line, which leaves about 2,500 km of them as chinook rearing
-  under the recommended rule, with a median grade of 0.34, against 8,400
+  under the recommended rule, with a median grade of 0.38, against 8,200
   km under link’s rule. Lakes keep their own condition.
 - **The cut-offs are a judgment call.** Chinook get gradually less
   common as streams get smaller and steeper; there is no flow or slope
   where they stop. At one standard error, flow floors of 0.1 to 1 m³/s
-  fit almost as well; at 1.96 the choice is 0.75 m³/s at link’s slope
-  limit, with the allowance kept.
+  fit almost as well, and at 1.96 standard errors the choice is the same
+  rule.
 - **Steeper slopes fit nearly as well.** The close calls run from 7 % to
-  30 %, the top of the list, and 11 % is the best scorer among them, not
+  30 %, the top of the list, and 13 % is the best scorer among them, not
   a slope at which chinook stop.
 - **It was not tested against bcfishpass’s own exception.** The
   candidates never included the stream-order rule above, so the records
@@ -164,7 +163,7 @@ style="font-size: 13px; width: auto !important; margin-left: auto; margin-right:
 
 | Step | For chinook rearing |
 |:---|:---|
-| Records | The Fisheries Data Information System’s electrofishing sites ([Province of British Columbia 2022](#ref-provinceofbritishcolumbia2022FisheriesData)): where crews fished, and whether they caught chinook. 7,659 sites in 105 watershed groups: those on ordinary stream lines, of a usual fished area, with no code in the catch that could hide chinook and no barrier to chinook downstream, in groups where link expected chinook when the tuning ran; the tests use the 45 groups where chinook were caught at some sites and not others, **4,858 sites, 234 with chinook**. ([More](https://newgraphenvironment.github.io/knowledge/articles/habitat_thresholds.html#steps)) |
+| Records | The Fisheries Data Information System’s electrofishing sites ([Province of British Columbia 2022](#ref-provinceofbritishcolumbia2022FisheriesData)): where crews fished, and whether they caught chinook. 7,823 sites in 111 watershed groups: those on ordinary stream lines, of a usual fished area, with no code in the catch that could hide chinook and no barrier to chinook downstream, in groups where link expected chinook when the tuning ran; the tests use the 45 groups where chinook were caught at some sites and not others, **4,858 sites, 234 with chinook**. ([More](https://newgraphenvironment.github.io/knowledge/articles/habitat_thresholds.html#steps)) |
 | Placement | Each site went onto the BC Freshwater Atlas, loaded by fwapg ([Norris 2024c](#ref-norris2024smnorrisfwapg)). A site whose 1:50k tributary code the Atlas’s crosswalk knows went to the nearest stream that code names, kept when it lay within 500 m of the point, and was dropped otherwise; a site with no such code went to the nearest stream, kept when it lay within 200 m. ([More](https://newgraphenvironment.github.io/knowledge/articles/habitat_thresholds.html#snap)) |
 | Flow | wet’s modelled average flow ([Irvine 2026c](#ref-irvine2026wetStream)): PCIC’s VIC-GL runoff ([Schnorbus 2018](#ref-schnorbus2018VICGlacierVICGL)) routed with Raven ([Craig et al. 2020](#ref-craig_etal2020Flexiblewatershed)) and carried onto Atlas streams by a crosswalk in New Graph’s fork of fwapg ([Norris and Irvine 2026](#ref-norris_irvine2026NewGraphEnvironmentfwapg)), with wet’s own water balance where that flow does not reach or, on a stream’s own line, carries under a fifth of the balance’s. |
 | Slope | The slope of the link segment a site sits on, the one link applies a rule to. link can cut a stream at a site that caught a species it models, so a site with chinook can start a short segment of its own. |
@@ -192,12 +191,12 @@ Framework.” *Environmental Modelling & Software* 129 (July): 104728.
 <https://doi.org/10.1016/j.envsoft.2020.104728>.
 
 Irvine, Allan. 2026a. *fresh: Freshwater Referenced Spatial Hydrology*.
-Version 0.39.0. New Graph Environment Ltd.
+Version 0.52.0. New Graph Environment Ltd.
 <https://github.com/NewGraphEnvironment/fresh>.
 
 Irvine, Allan. 2026b. *link: Develop, Test and Communicate Intrinsic
 Habitat and Connectivity Models for the BC Freshwater Atlas Stream
-Network*. Version 0.66.0. New Graph Environment Ltd.
+Network*. Version 0.78.2. New Graph Environment Ltd.
 <https://doi.org/10.5281/zenodo.23264990>.
 
 Irvine, Allan. 2026c. *wet: Stream Flow and Water Temperature for the BC
@@ -210,7 +209,7 @@ Norris, Simon. 2024a. *bcfishobs*.
 Norris, Simon. 2024b. *bcfishpass*.
 <https://github.com/smnorris/bcfishpass>.
 
-Norris, Simon. 2024c. *fwapg*. Version f9718cb.
+Norris, Simon. 2024c. *fwapg*. Version 9a62b0c.
 <https://github.com/smnorris/fwapg>.
 
 Norris, Simon, and Allan Irvine. 2026. *fwapg, New Graph Environment’s

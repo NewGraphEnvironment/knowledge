@@ -40,14 +40,21 @@ knw_build_record(conn, schema, run_uid = NULL)
 
 A list: `schema`, `run_uid` (the schema's runs, `;`-joined),
 `discharge_load`, `walk_md5`, `fresh_version`, `tokens` (link's output
-vocabulary, `c(cut =, acc =, grad =, flow =)`, read from every row of
-`<schema>.log`, where link writes them; each `NA` where that log
-predates link 0.70.0 and carries none), and `line`, the record as one
-line for a log. A schema whose log holds two values on one axis, or rows
-with a token beside rows without one, is refused: it is not one build.
-The tokens are read over every `log` row, not keyed on the run, because
-a build's `log` and its recompute's `log_recompute` can carry different
-run ids.
+vocabulary, `c(cut =, acc =, grad =, flow =)`, read from the build's
+rows of `<schema>.log`, where link writes them; each `NA` where that log
+predates link 0.70.0 and carries none), `log_run_uid` (the runs whose
+`log` rows were read, `;`-joined), `log` (which rows those are, as a
+clause a reader of `log` appends) and `line`, the record as one line for
+a log. A schema whose log holds two values on one axis, or rows with a
+token beside rows without one, is refused: it is not one build. The
+tokens are read over the `log` rows of the runs `log_recompute` names,
+because a provincial run leaves the previous run's `log` rows in place
+(#145), and over every `log` row where none of those runs is in `log`,
+because a build's `log` and its recompute's `log_recompute` can carry
+different run ids (link's four-group proofs), where it must hold one
+run. A run set aside that was logged after the build began is refused.
+The line names any run whose rows were set aside, and, where every row
+was read, the `log` run the tokens came from.
 
 ## Examples
 

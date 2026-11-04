@@ -108,9 +108,9 @@ the literature or set by judgment.</p>
 <p>For chinook rearing, for example, link’s current rule counts a stream
 as habitat if it is at least 1.5 m wide, no steeper than 5.5 %. The fish
 records support a rule where it carries at least 0.75 m³/s, no steeper
-than 11 %; a smaller stream also counts if it passes the slope test and
+than 13 %; a smaller stream also counts if it passes the slope test and
 a river carrying at least 3 m³/s lies within 1 km downstream. We tested
-between 6,100 and 8,400 candidate rules for each of the 7 species and
+between 6,100 and 8,400 candidate rules for each of the 6 species and
 life stages with enough records. The <a href="chinook_rearing.html">chinook rearing article</a> works through
 one of them in full.</p>
 </div>
@@ -342,8 +342,9 @@ also cuts streams where the species it models have been observed, using
 <code>bcfishobs</code> <span class="citation">(<a href="#ref-norris2024smnorrisbcfishobs">Norris 2024a</a>)</span>, so
 those observations shape the segments, but they never score a rule: they
 say where fish were seen, not where they were looked for and missed. A
-catch of a species link models can be one of those observations, so most
-stream-line sites that caught fish start a segment of their own.</p>
+catch of a species link models can be one of those observations, so a
+stream-line site that caught fish is far more likely than one that
+caught none to start a segment of its own.</p>
 <details><summary>
 Code and settings
 </summary><ul>
@@ -579,10 +580,10 @@ Open work:
 chance. We choose again three ways: with the groups split 4 other ways;
 leaving out one part of the groups, choosing on the rest and scoring the
 choice on the part left out, for each part in turn; and on 200 random
-redraws of the groups. For chinook rearing the exact rule came back on 3
-of the 4 other splits but in only 10 % of the redraws. It stayed a close
+redraws of the groups. For chinook rearing the exact rule came back on 4
+of the 4 other splits but in only 4 % of the redraws. It stayed a close
 call on all 4 splits, and choosing this way scored better than link’s
-rule on the parts left out (1,327 against 1,469; lower is better).</p>
+rule on the parts left out (1,328 against 1,481; lower is better).</p>
 <details><summary>
 Code and settings
 </summary><ul>
@@ -661,8 +662,8 @@ channel_width
 <p>link’s current rule and the chosen rule both go through the steps
 link itself uses, run by <code>fresh</code> <span class="citation">(<a href="#ref-irvine2026freshFreshwater">Irvine 2026a</a>)</span>: the
 rule’s test, link’s hand-entered habitat, and dropping rearing that has
-no spawning nearby. On the Bulkley, those last two steps removed 999 of
-the 7,699 segments link’s rule passed, so we compare whole runs, not the
+no spawning nearby. On the Bulkley, those last two steps removed 976 of
+the 7,273 segments link’s rule passed, so we compare whole runs, not the
 test alone.</p>
 <details><summary>
 Code and settings
@@ -1076,69 +1077,59 @@ call, for each species and stage tuned.</caption>
 <tr class="odd">
 <td align="left">bull trout rearing</td>
 <td align="left">is at least 1.5 m wide, no steeper than 10.5 %</td>
-<td align="left">161</td>
-<td align="left">carries at least 0.1 m³/s, no steeper than 30 %</td>
-<td align="left">1,340</td>
-<td align="left">carries at least 0.15 m³/s, no steeper than 10.5 %</td>
+<td align="left">176</td>
+<td align="left">carries at least 0.1 m³/s, no steeper than 25 %</td>
+<td align="left">1,446</td>
+<td align="left">carries at least 0.1 m³/s, no steeper than 10.5 %</td>
 </tr>
 <tr class="even">
 <td align="left">bull trout spawning</td>
 <td align="left">is at least 2 m wide, no steeper than 5.5 %</td>
-<td align="left">36</td>
-<td align="left">is at least 2 m wide, no steeper than 13 %; a smaller
-stream also counts if it passes the slope test and a river carrying at
-least 1 m³/s lies within 500 m downstream</td>
-<td align="left">7,051</td>
+<td align="left">140</td>
+<td align="left">is at least 2 m wide, no steeper than 11 %</td>
+<td align="left">7,021</td>
 <td align="left">is at least 2 m wide, no steeper than 5.5 %</td>
 </tr>
 <tr class="odd">
 <td align="left">chinook rearing</td>
 <td align="left">is at least 1.5 m wide, no steeper than 5.5 %</td>
-<td align="left">164</td>
-<td align="left">carries at least 0.75 m³/s, no steeper than 11 %; a
+<td align="left">169</td>
+<td align="left">carries at least 0.75 m³/s, no steeper than 13 %; a
 smaller stream also counts if it passes the slope test and a river
 carrying at least 3 m³/s lies within 1 km downstream</td>
-<td align="left">2,456</td>
-<td align="left">carries at least 0.75 m³/s, no steeper than 5.5 %; a
+<td align="left">2,297</td>
+<td align="left">carries at least 0.75 m³/s, no steeper than 13 %; a
 smaller stream also counts if it passes the slope test and a river
 carrying at least 3 m³/s lies within 1 km downstream</td>
 </tr>
 <tr class="even">
 <td align="left">coho rearing</td>
 <td align="left">is at least 1.5 m wide, no steeper than 5.5 %</td>
-<td align="left">38</td>
+<td align="left">54</td>
 <td align="left">carries at least 0.1 m³/s, no steeper than 5.5 %; a
 smaller stream also counts if it passes the slope test and a river
 carrying at least 3 m³/s lies within 2 km downstream</td>
-<td align="left">1,570</td>
+<td align="left">1,296</td>
 <td align="left">is at least 1.5 m wide, no steeper than 5.5 %; a
 smaller stream also counts if it passes the slope test and a river
-carrying at least 1 m³/s lies within 1 km downstream</td>
+carrying at least 1 m³/s lies within 500 m downstream</td>
 </tr>
 <tr class="odd">
 <td align="left">grayling rearing</td>
 <td align="left">is at least 1.5 m wide, no steeper than 3.5 %</td>
-<td align="left">1,656</td>
-<td align="left">is at least 2 m wide, no steeper than 5.5 %</td>
-<td align="left">2,612</td>
+<td align="left">1,189</td>
 <td align="left">is at least 1.5 m wide, no steeper than 5.5 %</td>
+<td align="left">6,680</td>
+<td align="left">is at least 1.5 m wide, no steeper than 3.5 %</td>
 </tr>
 <tr class="even">
-<td align="left">rainbow trout rearing</td>
-<td align="left">is at least 1.5 m wide, no steeper than 8.5 %</td>
-<td align="left">29</td>
-<td align="left">is at least 3 m wide, no steeper than 30 %</td>
-<td align="left">263</td>
-<td align="left">is at least 2 m wide, no steeper than 8.5 %</td>
-</tr>
-<tr class="odd">
 <td align="left">steelhead rearing</td>
 <td align="left">is at least 1.5 m wide, no steeper than 8.5 %</td>
-<td align="left">425</td>
+<td align="left">265</td>
 <td align="left">carries at least 1 m³/s, no steeper than 8.5 %; a
 smaller stream also counts if it passes the slope test and a river
 carrying at least 1 m³/s lies within 250 m downstream</td>
-<td align="left">6,627</td>
+<td align="left">6,678</td>
 <td align="left">is at least 1.5 m wide, no steeper than 8.5 %</td>
 </tr>
 </tbody>
@@ -1164,15 +1155,15 @@ not others.</p>
 <table style="width:100%;" class="table">
 <caption>Rearing site visits per species after each filter.</caption>
 <colgroup>
-<col width="13%">
-<col width="6%">
+<col width="11%">
+<col width="7%">
+<col width="12%">
+<col width="12%">
+<col width="15%">
 <col width="11%">
 <col width="11%">
+<col width="7%">
 <col width="14%">
-<col width="10%">
-<col width="10%">
-<col width="6%">
-<col width="13%">
 </colgroup>
 <thead><tr class="header">
 <th align="left">species</th>
@@ -1202,9 +1193,9 @@ not others.</p>
 <td align="right">45,529</td>
 <td align="right">31,585</td>
 <td align="right">29,335</td>
-<td align="right">17,414</td>
-<td align="right">17,296</td>
-<td align="right">7,659</td>
+<td align="right">17,942</td>
+<td align="right">17,812</td>
+<td align="right">7,823</td>
 <td align="right">4,858</td>
 <td align="right">45</td>
 </tr>
@@ -1213,9 +1204,9 @@ not others.</p>
 <td align="right">45,529</td>
 <td align="right">31,585</td>
 <td align="right">29,335</td>
-<td align="right">13,804</td>
-<td align="right">13,734</td>
-<td align="right">5,895</td>
+<td align="right">14,289</td>
+<td align="right">14,218</td>
+<td align="right">6,184</td>
 <td align="right">4,628</td>
 <td align="right">63</td>
 </tr>
@@ -1224,31 +1215,20 @@ not others.</p>
 <td align="right">45,529</td>
 <td align="right">31,585</td>
 <td align="right">29,335</td>
-<td align="right">5,749</td>
-<td align="right">5,722</td>
+<td align="right">5,650</td>
+<td align="right">5,625</td>
 <td align="right">1,580</td>
 <td align="right">1,355</td>
 <td align="right">27</td>
 </tr>
 <tr class="odd">
-<td align="left">rainbow trout</td>
-<td align="right">45,529</td>
-<td align="right">31,585</td>
-<td align="right">29,335</td>
-<td align="right">29,059</td>
-<td align="right">28,793</td>
-<td align="right">14,511</td>
-<td align="right">13,869</td>
-<td align="right">132</td>
-</tr>
-<tr class="even">
 <td align="left">steelhead</td>
 <td align="right">45,529</td>
 <td align="right">31,585</td>
 <td align="right">29,335</td>
-<td align="right">10,437</td>
-<td align="right">10,096</td>
-<td align="right">5,195</td>
+<td align="right">11,633</td>
+<td align="right">11,288</td>
+<td align="right">5,663</td>
 <td align="right">1,530</td>
 <td align="right">11</td>
 </tr>
@@ -1262,33 +1242,28 @@ not others.</p>
 <li>A site’s tributary code can name several Atlas streams, and the site
 goes to the nearest of them, which need not be the one the crew fished
 (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/91" class="external-link">#91</a>).</li>
-<li>link’s segments are shortest where fish were caught: 86 % of
+<li>link’s segments are shortest where fish were caught: 44 % of
 stream-line sites that caught fish start a segment of their own, against
-10 % of those that caught none, and the median segment is 113 m long
-against 305 m. So which stretch a site’s slope is worked out over
+7 % of those that caught none, and the median segment is 305 m long
+against 466 m. So which stretch a site’s slope is worked out over
 depends on what the crew caught. Scored on the whole Atlas line’s slope
-instead, the chosen rule is still a close call for 6 of the 7 species
+instead, the chosen rule is still a close call for 4 of the 6 species
 and stages (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/92" class="external-link">#92</a>);
 slopes over a fixed length would not depend on where fish were caught
 (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/70" class="external-link">#70</a>).</li>
-<li>The results are on the segments of link’s build of 2026-10-17. link
-has since changed where it cuts streams: at steep sections only at the
-first place, going upstream, that a species present in the group cannot
-get past (<a href="https://github.com/NewGraphEnvironment/link/issues/326" class="external-link">link#326</a>),
-and at fish records only at each species’ highest record on a stream (<a href="https://github.com/NewGraphEnvironment/link/issues/396" class="external-link">link#396</a>).
-The first more than halves the segments in the four groups link measured
-it on, and the second removes a further 1 to 4 % in the five it was
-measured on. The thresholds have not yet been tuned on those
-segments.</li>
+<li>The results are on the segments of link’s build of 2026-11-03. That
+build cuts streams at steep sections only at the first place, going
+upstream, that a species present in the group cannot get past (<a href="https://github.com/NewGraphEnvironment/link/issues/326" class="external-link">link#326</a>),
+and at fish records only at each species’ highest record on a stream (<a href="https://github.com/NewGraphEnvironment/link/issues/396" class="external-link">link#396</a>).</li>
 <li>Crews measured the slope of the channel at 18,759 of the 45,529
 placed sites. On the stretches the rules score, link’s segment slope
 puts those sites in much the same order as the crews’ readings (a rank
-correlation of 0.69, where 1 is the same order and a second reading at
+correlation of 0.68, where 1 is the same order and a second reading at
 the same site gives 0.90), but differs from the site’s by a median of
-2.2 percentage points. So a tuned slope limit sorts sites well taken
+2.3 percentage points. So a tuned slope limit sorts sites well taken
 together, but reads as a slope on the ground only to within a few
 points: counting each species’ sites within one step of its own limit
-(1,307 in all), 37 % sit on the other side of it as the crews measured
+(1,496 in all), 39 % sit on the other side of it as the crews measured
 it (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/121" class="external-link">#121</a>).</li>
 <li>Flows are 30-year averages, so no single dry year is in them.</li>
 </ul>
@@ -1972,7 +1947,7 @@ of it, and on the R packages <a href="https://newgraphenvironment.github.io/link
 (flows), <a href="https://newgraphenvironment.github.io/fresh/" class="external-link"><code>fresh</code></a>
 (the habitat tests) and <a href="https://newgraphenvironment.github.io/knowledge/"><code>knowledge</code></a>
 (the evidence and the tuning). This article’s data were written on
-2026-10-30 at commit 7d45bed. To cite this package:</p>
+2026-11-04 at commit f6b6d0a. To cite this package:</p>
 <p>Irvine A (2026). <em>knowledge: Fisheries Evidence and Tuned Habitat
 Thresholds for BC Watershed Groups</em>. New Graph Environment
 Ltd. Version 0.4.26, <a href="https://newgraphenvironment.github.io/knowledge/" class="uri">https://newgraphenvironment.github.io/knowledge/</a>.</p>
@@ -2030,13 +2005,13 @@ Springer. <a href="https://doi.org/10.1007/978-0-387-84858-7" class="external-li
 <div id="ref-irvine2026freshFreshwater" class="csl-entry">
 Irvine, Allan. 2026a. <em><span class="nocase">fresh</span>:
 <span>Freshwater Referenced Spatial Hydrology</span></em>. Version
-0.39.0. <span>New Graph Environment Ltd.</span> <a href="https://github.com/NewGraphEnvironment/fresh" class="external-link">https://github.com/NewGraphEnvironment/fresh</a>.
+0.52.0. <span>New Graph Environment Ltd.</span> <a href="https://github.com/NewGraphEnvironment/fresh" class="external-link">https://github.com/NewGraphEnvironment/fresh</a>.
 </div>
 <div id="ref-irvine2026linkDevelop" class="csl-entry">
 Irvine, Allan. 2026b. <em><span class="nocase">link</span>:
 <span>Develop</span>, <span>Test</span> and <span>Communicate Intrinsic
 Habitat</span> and <span>Connectivity Models</span> for the <span>BC
-Freshwater Atlas Stream Network</span></em>. Version 0.66.0. <span>New
+Freshwater Atlas Stream Network</span></em>. Version 0.78.2. <span>New
 Graph Environment Ltd.</span> <a href="https://doi.org/10.5281/zenodo.23264990" class="external-link">https://doi.org/10.5281/zenodo.23264990</a>.
 </div>
 <div id="ref-irvine2026wetStream" class="csl-entry">
@@ -2054,7 +2029,7 @@ Norris, Simon. 2024b. <em><span class="nocase">bcfishpass</span></em>.
 </div>
 <div id="ref-norris2024smnorrisfwapg" class="csl-entry">
 Norris, Simon. 2024c. <em><span class="nocase">fwapg</span></em>.
-Version f9718cb. <a href="https://github.com/smnorris/fwapg" class="external-link">https://github.com/smnorris/fwapg</a>.
+Version 9a62b0c. <a href="https://github.com/smnorris/fwapg" class="external-link">https://github.com/smnorris/fwapg</a>.
 </div>
 <div id="ref-norris_irvine2026NewGraphEnvironmentfwapg" class="csl-entry">
 Norris, Simon, and Allan Irvine. 2026. <em><span class="nocase">fwapg,

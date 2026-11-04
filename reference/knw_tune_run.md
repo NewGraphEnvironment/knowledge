@@ -40,6 +40,7 @@ knw_tune_run(
   fit = c("fe", "dense"),
   prior_sd = 2.5,
   evidence_id = NULL,
+  modelled = NULL,
   cols = c(grad = "segment_gradient", width = "cw_deploy", mad = "mad_pick")
 )
 ```
@@ -162,6 +163,14 @@ knw_tune_run(
   tables). It joins the cache's settings, so a score made on another
   build of the same visit count is not read back as this one's.
 
+- modelled:
+
+  `NULL`, or the species codes link models on the build the visits were
+  placed on (`scripts/0320` passes those with any access value in the
+  evidence). Every stage of another species is `not_modelled`: link
+  draws no access or habitat for it, so a rule could be neither graded
+  nor applied (#145). `NULL` is every species.
+
 - cols:
 
   named `character`, as in
@@ -176,9 +185,9 @@ knw_tune_run(
 
 A list with one element per species × stage (`"<sp>_<stage>"`): a list
 with `species_code`, `stage`, `response`, `status` (`fitted`,
-`underpowered`, `no_stream_rule`, `no_response`, `too_few_groups`,
-`curve_failed`; `smoke` with `smoke_only`), `population`, and when
-scored `smoke`
+`underpowered`, `no_stream_rule`, `not_modelled`, `no_response`,
+`too_few_groups`, `curve_failed`; `smoke` with `smoke_only`),
+`population`, and when scored `smoke`
 ([`knw_tune_smoke()`](https://newgraphenvironment.github.io/knowledge/reference/knw_tune_smoke.md)'s
 result, with `smoke`), `score`
 ([`knw_tune_score()`](https://newgraphenvironment.github.io/knowledge/reference/knw_tune_score.md)'s

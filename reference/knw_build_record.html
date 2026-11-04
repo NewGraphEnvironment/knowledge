@@ -95,13 +95,20 @@ several, is refused.</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A list: <code>schema</code>, <code>run_uid</code> (the schema's runs, <code>;</code>-joined),
 <code>discharge_load</code>, <code>walk_md5</code>, <code>fresh_version</code>, <code>tokens</code> (link's output
-vocabulary, <code>c(cut =, acc =, grad =, flow =)</code>, read from every row of
-<code>&lt;schema&gt;.log</code>, where link writes them; each <code>NA</code> where that log predates
-link 0.70.0 and carries none), and <code>line</code>, the record as one line for a
-log. A schema whose log holds two values on one axis, or rows with a token
-beside rows without one, is refused: it is not one build. The tokens are
-read over every <code>log</code> row, not keyed on the run, because a build's <code>log</code>
-and its recompute's <code>log_recompute</code> can carry different run ids.</p>
+vocabulary, <code>c(cut =, acc =, grad =, flow =)</code>, read from the build's rows
+of <code>&lt;schema&gt;.log</code>, where link writes them; each <code>NA</code> where that log predates
+link 0.70.0 and carries none), <code>log_run_uid</code> (the runs whose <code>log</code> rows
+were read, <code>;</code>-joined), <code>log</code> (which rows those are, as a clause a reader
+of <code>log</code> appends) and <code>line</code>, the record as one line for a log. A
+schema whose log holds two values on one axis, or rows with a token beside
+rows without one, is refused: it is not one build. The tokens are read over
+the <code>log</code> rows of the runs <code>log_recompute</code> names, because a provincial run
+leaves the previous run's <code>log</code> rows in place (#145), and over every <code>log</code>
+row where none of those runs is in <code>log</code>, because a build's <code>log</code> and its
+recompute's <code>log_recompute</code> can carry different run ids (link's four-group
+proofs), where it must hold one run. A run set aside that was logged after
+the build began is refused. The line names any run whose rows were set
+aside, and, where every row was read, the <code>log</code> run the tokens came from.</p>
     </div>
 
     <div class="section level2">
