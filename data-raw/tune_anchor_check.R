@@ -72,7 +72,7 @@ say("Keys whose best is not a rule a pick may be (an exception under d_floor, or
     if (any(!rows$best_is_allowed)) paste(rows$key[!rows$best_is_allowed], collapse = ", ") else "none")
 block("each start's pick beside the best", rows |>
         select(key, rule_recommended, recommended_ddev, recommended_se, rec_moved, rec_moved_parts, rule_best, best_n))
-block("beside the best a pick may be (d_floor)", rows |>
+block("beside the best a pick may be (in the region, clear of d_floor)", rows |>
         select(key, best_is_allowed, rule_best_allowed, best_allowed_ddev, rec_moved_allowed, rec_moved_allowed_parts,
                flow_moved_allowed, flow_moved_allowed_parts))
 block("the flow start", rows |>

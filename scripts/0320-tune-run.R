@@ -38,8 +38,9 @@
 #   - ANCHORING (#141): each start's recommended rule beside the best-scoring one (knw_tune_anchor()): how far each sits
 #     behind the best, in deviance and SE, and how many parts (size test, gradient, exception) separate the two picks
 #     from the best and from each other, so how much a baseline chose the pick is a number. Rules tied at the best are
-#     one fit, and a pick's distance is to the nearest of them; where the best carries an exception under d_floor, which
-#     no pick may, each pick is also read against the best rule a pick may be. In each summary and the pick report.
+#     one fit, and a pick's distance is to the nearest of them. Each pick is also read against the best rule a pick may
+#     be, which is not the best where the best's exception is under d_floor or it did not converge. In each summary and
+#     the pick report.
 #   - GRADIENT (#92): rules and curves read link's segment gradient (`segment_gradient`), the gradient link applies a
 #     rule to and the grade reads, where #57 to #91 read the whole Atlas line's (`fwa_gradient`). link cuts a stream at
 #     the observations of the species it models, so a visit with fish usually sits on a short segment starting at it
