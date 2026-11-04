@@ -37,11 +37,11 @@ Measured today from the tables (rule, + ddev / SE behind the best):
 
 ## Phase 4: record it
 - [x] `research/baseline_anchoring.md`: plain-language walk (what anchoring is, why the pick is near `default` by construction), both readings side by side, keys ordered by how much the start steers, grayling rearing's "before" for #140 stated explicitly; row in `research/README.md`.
-- [ ] #140's body: the grayling "before" line and a link to the research file; #139's body: tick or note #141's result in its members table.
+- [x] #140's body: the grayling "before" line and a link to the research file; #139's body: tick or note #141's result in its members table.
 - [x] `research/grayling_rearing_tuned.md` and `minimal_network_tuning.md`: one pointer each where they discuss the pick's anchoring (grep first).
 
 ## Validation
-- [ ] Tests pass (`devtools::test()`), lintr clean
+- [x] Tests pass (`devtools::test()`), lintr clean
 - [ ] `/code-check` clean (once over the branch with `/code-check branch`)
 - [ ] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion
