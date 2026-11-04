@@ -8,6 +8,7 @@ anchor_fx <- function() {
     size_min = c(1.5, 2, 0.021, 1, 1, 1), grad_max = c(0.0549, 0.0549, 0.0549, 0.0549, 0.0549, 0.09),
     exc_q = c(NA, NA, NA, 50, 50, NA), exc_d = c(NA, NA, NA, 500, 1000, NA),
     departures_flow = c(1L, 1L, 0L, 2L, 2L, 2L),
+    in_region = c(FALSE, TRUE, TRUE, TRUE, TRUE, FALSE),
     recommended = c(FALSE, TRUE, FALSE, FALSE, FALSE, FALSE),
     recommended_flow = c(FALSE, FALSE, TRUE, FALSE, FALSE, FALSE),
     ddev_best = c(20, 5.7, 11.6, 0, 0, 30), se_diff = c(9, 10.4, 13.9, 0, 0, 12),
@@ -68,6 +69,7 @@ test_that("rules that differ only in the exception's distance depart in the exce
 test_that("a pick nearest one tied best rule counts the nearest, not the first", {
   t <- anchor_fx()
   t$ddev_best[6] <- 0
+  t$in_region[c(1, 6)] <- TRUE
   t$recommended <- c(TRUE, FALSE, FALSE, FALSE, FALSE, FALSE)
   # width>=1.5|g<=0.0549|none is two parts from every best: size and exception, or size and gradient
   a <- knw_tune_anchor(t)
@@ -111,6 +113,22 @@ test_that("a best under d_floor, which no pick may be, is measured beside the be
   expect_true(knw_tune_anchor(t, d_floor = 50)$best_floor_ok)
   expect_true(knw_tune_anchor(anchor_fx())$best_floor_ok)
   expect_identical(knw_tune_anchor(anchor_fx())$rule_best_allowed, knw_tune_anchor(anchor_fx())$rule_best)
+})
+
+test_that("the best a pick may be is a region rule, not a lower score outside the region", {
+  # steelhead rearing's shape on the published tables: the lowest-scoring rules clear of the floor are outside the
+  # region (their SE is small), so the best a pick may be scores worse than they do
+  t <- anchor_fx()
+  t$exc_d[4:5] <- 100
+  t$ddev_best[1] <- 3
+  t$se_diff[1] <- 1
+  t$ddev_best[2] <- 4
+  a <- knw_tune_anchor(t)
+  expect_identical(a$rule_best_allowed, "width>=2|g<=0.0549|none")
+  expect_identical(a$rec_moved_allowed, 0L)
+  # a table whose recommended rule a pick could not be is refused
+  t$in_region[2] <- FALSE
+  expect_error(knw_tune_anchor(t), "outside the region or under d_floor")
 })
 
 test_that("the pick read is the recommended rule, not a pick d_floor moved it off", {

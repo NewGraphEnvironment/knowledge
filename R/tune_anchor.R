@@ -21,13 +21,14 @@
 #' No pick may carry an exception closer than `d_floor`, but the best may, and
 #' then no start could reach it: part of the distance is the floor's, not the
 #' start's. So each pick is also measured against the **best allowed** rule, the
-#' lowest-scoring rule with no exception or one at `d_floor` or more (ties as
-#' above); it is the best itself wherever `best_floor_ok`.
+#' best-scoring rule a pick may be: the lowest-scoring rule in the region with no
+#' exception or one at `d_floor` or more (ties as above). It is the best itself
+#' wherever `best_floor_ok`.
 #'
 #' @param tune a tuning table as [knw_tune_score()] returns it or
 #'   `scripts/0320` saves it (`<sp>_<stage>_tune.csv`, read as text or typed):
 #'   `rule`, `size_var`, `size_min`, `grad_max`, `exc_q`, `exc_d`,
-#'   `recommended`, `ddev_best` and `se_diff`; and `departures_flow` with
+#'   `in_region`, `recommended`, `ddev_best` and `se_diff`; and `departures_flow` with
 #'   `recommended_flow` where the table has a flow start (a table from before
 #'   #80, or a species with no flow start, has none).
 #' @param d_floor `numeric(1)` the shortest exception distance (m) a pick may
@@ -51,7 +52,7 @@
 #'            "width>=1|g<=0.0549|Q50@D500"),
 #'   size_var = c("width", "width", "mad", "width"), size_min = c(1.5, 2, 0.5, 1), grad_max = 0.0549,
 #'   exc_q = c(NA, NA, NA, 50), exc_d = c(NA, NA, NA, 500),
-#'   departures_flow = c(1L, 1L, 0L, 2L),
+#'   departures_flow = c(1L, 1L, 0L, 2L), in_region = c(FALSE, TRUE, TRUE, TRUE),
 #'   recommended = c(FALSE, TRUE, FALSE, FALSE), recommended_flow = c(FALSE, FALSE, TRUE, FALSE),
 #'   ddev_best = c(20, 5.7, 11.6, 0), se_diff = c(9, 10.4, 13.9, 0)
 #' )
@@ -61,7 +62,7 @@
 #'                           "starts_apart", "starts_apart_parts")]
 knw_tune_anchor <- function(tune, d_floor = formals(knw_tune_score)$d_floor) {
   chk::chk_data(tune)
-  chk::check_names(tune, c("rule", "size_var", "size_min", "grad_max", "exc_q", "exc_d", "recommended",
+  chk::check_names(tune, c("rule", "size_var", "size_min", "grad_max", "exc_q", "exc_d", "in_region", "recommended",
                            "ddev_best", "se_diff"))
   chk::chk_number(d_floor)
   # a saved table read as text carries "TRUE"; a scored one carries TRUE
@@ -80,7 +81,10 @@ knw_tune_anchor <- function(tune, d_floor = formals(knw_tune_score)$d_floor) {
   best <- which(ddev %in% 0)
   if (!length(best)) stop("tune has no rule at ddev_best 0", call. = FALSE)
   exc_d <- num(tune$exc_d)
-  allowed <- which(is.na(exc_d) | exc_d >= d_floor)
+  # the rules a pick may be (.tune_pick()): in the region (which carries convergence) and clear of the floor; the
+  # recommended rule is always one, so the set is never empty
+  allowed <- which(is_true(tune$in_region) & (is.na(exc_d) | exc_d >= d_floor))
+  if (!rec %in% allowed) stop("tune's recommended rule is outside the region or under d_floor", call. = FALSE)
   allowed <- allowed[ddev[allowed] %in% min(ddev[allowed])]
   label <- function(p) if (any(p)) paste(names(p)[p], collapse = "+") else "none"
   # fewest departures from any rule of a tied set, the first such rule in grid order naming the parts
