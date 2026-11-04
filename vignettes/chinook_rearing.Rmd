@@ -120,7 +120,21 @@ wl <- x$wetland[x$wetland$as_tuned, ]
 stopifnot(nrow(wl) == 1, wl$structure == "door", wl$km_tuned < wl$km_default, wl$grade_median_tuned > 0.2)
 # "in the comparison, link's rule counts them by their size or by a near-a-river pair": the comparison's link rule
 # carries its pair on wetland-flow lines only
-stopifnot(grepl("@D[0-9]+ on wetland_flow$", all_row$default_rule), !grepl("|Q", all_row$default_rule, fixed = TRUE))
+stopifnot(grepl("@D[0-9]+ on wetland_flow$", all_row$default_rule))
+
+# the Bulkley map's words: what changes is mostly the drops far from a river and the gains beside one; the rest is
+# both the other limits (the rules' predicates differ) and the spawning-connection step (the predicates agree)
+bk <- as.data.frame(seg)[c("accessible", "flag_default", "flag_tuned", "pre_default", "pre_tuned", "mad", "dist_m",
+                           "length_metre")]
+bk <- bk[bk$accessible %in% TRUE & bk$flag_default != bk$flag_tuned, ]
+below <- is.na(bk$mad) | bk$mad < rec$size_min
+near_gain <- bk$pre_tuned & !bk$pre_default & below & !is.na(bk$dist_m) & bk$dist_m <= rec$exc_d
+far_drop <- bk$pre_default & !bk$pre_tuned & below & (is.na(bk$dist_m) | bk$dist_m > rec$exc_d)
+other_dial <- bk$pre_default != bk$pre_tuned & !near_gain & !far_drop
+connect <- bk$pre_default == bk$pre_tuned
+km_of <- function(i) sum(bk$length_metre[i])
+stopifnot(km_of(far_drop) > km_of(!bk$flag_tuned) / 2, km_of(near_gain) > km_of(bk$flag_tuned) / 2,
+          km_of(other_dial) > 0, km_of(connect) > 0)
 
 link_site <- "https://www.newgraphenvironment.com/link/"
 link_default <- sprintf("https://github.com/NewGraphEnvironment/link/tree/%s/inst/extdata/configs/default", meta$link_sha)
@@ -146,8 +160,9 @@ knw_compare_mapgl(seg, water, title = "Habitat by rule", background = "esri_topo
 In the Bulkley watershed group, around Smithers, the recommended rule draws `r n0(map_row$tuned_km)` km of rearing
 habitat against `r n0(map_row$default_km)` under link's. What it drops (orange) is mostly the upper reaches of
 tributaries, where flow falls below its floor more than `r km_d(rec$exc_d)` from a river. What it adds (green) is
-short reaches of small streams beside a river. The rest of the change comes from link's step that keeps rearing only
-where it links to spawning, which keeps different stretches under each rule.
+short reaches of small streams beside a river. The rest comes from the two rules' slope and flow limits themselves,
+and from link's step that keeps rearing only where it links to spawning, which keeps different stretches under each
+rule.
 `r if (on_site) "Click a stream for what each rule reads there; the switch at the top right shows the grade, the use to expect on each segment." else ""`
 
 ## What changes?
@@ -174,7 +189,8 @@ knitr::kable(chg, format = "html", align = "lrr",
              caption = "Chinook rearing under link's current rule and the recommended one.") |>
   kableExtra::kable_styling(full_width = FALSE) |>
   kableExtra::footnote(general_title = "", general = paste0(
-    "Habitat is summed over the ", nrow(per_group), " watershed groups link classifies for chinook, each rule run ",
+    "Habitat is summed over the ", nrow(per_group), " watershed groups link classified for chinook when the ",
+    "comparison ran, each rule run ",
     "through all of link's steps. Both totals include lines through wetlands, which the two rules test differently ",
     "(below). ",
     "Sites are the ", n0(sum(fv$n[fv$rule == "default"])), " electrofishing sites on ",
@@ -228,10 +244,10 @@ within one standard error of the best as a close call, a convention fixed before
 ([how two rules are told apart](habitat_thresholds.html#se)). For chinook, `r nrow(region)` of `r n0(nrow(tune))`
 rules are close calls, all with a flow floor of `r min(region$size_min)` to `r max(region$size_min)` m³/s, the
 near-a-river allowance, and a slope limit of `r grad(min(region$grad_max))` or more. The rule fixed in advance takes
-the close call nearest link's; all differ from link's in every dial, so it is the best scorer. link's rule is
+the close call nearest link's; all differ from link's stream-line rule in every dial, so it is the best scorer. link's rule is
 `r n1(dflt$ddev_best / dflt$se_diff)` standard errors behind it.
 
-```{r profile, fig.height = 5.2, fig.cap = paste0("How close the best rule using each value of each dial comes to the best rule overall, as score above the best (lower is better). Dark blue: at least one rule with that value is a close call at one standard error; light blue: only at ", se_strict, " standard errors; white: neither. The orange ring marks link's current value.")}
+```{r profile, fig.height = 5.2, fig.cap = paste0("How close the best rule using each value of each dial comes to the best rule overall, as score above the best (lower is better). Dark blue: at least one rule with that value is a close call at one standard error; light blue: only at ", se_strict, " standard errors; white: neither. The orange ring marks the value of link's rule on stream lines.")}
 dial <- function(lab, v, key) {
   tune |>
     mutate(value = v) |>
@@ -296,8 +312,8 @@ knitr::kable(st, format = "html", escape = FALSE, align = "llll",
   kableExtra::kable_styling(full_width = FALSE, font_size = 13) |>
   kableExtra::footnote(general_title = "", general = paste0(
     "Bold: differs from link's rule. Close calls: ", nrow(region), " rules at one standard error, ",
-    n0(ch196$n_region), " at ", se_strict, "; link's rule is a close call at neither. link's thresholds table gives ",
-    "the choice at ", se_strict, " for every species tuned (rule_196)."))
+    n0(ch196$n_region), " at ", se_strict, "; link's rule is a close call at neither. This package's thresholds table (data/thresholds.csv, column ",
+    "rule_196) gives the choice at ", se_strict, " for every species tuned."))
 ```
 
 **Three other checks.**
