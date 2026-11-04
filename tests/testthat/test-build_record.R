@@ -5,6 +5,8 @@ test_that("the build record names the schema's run, the flows and the walk, and 
   local_mocked_bindings(dbGetQuery = function(conn, sql, ...) {
     if (grepl("to_regclass", sql)) data.frame(ok = TRUE)
     else if (grepl("information_schema", sql)) data.frame(column_name = character())
+    else if (grepl("GROUP BY run_uid", sql)) data.frame(run_uid = strsplit(runs, ";")[[1]], n = 1L, a = 1, b = 1)
+    else if (grepl("SELECT DISTINCT run_uid", sql)) data.frame(run_uid = strsplit(runs, ";")[[1]])
     else data.frame(u = runs)
   }, .package = "DBI")
   local_mocked_bindings(knw_discharge_load = function(conn) "wet load 2026-10-19")
@@ -37,9 +39,11 @@ test_that("a build's tokens are read from `log`, one per axis, and two on one ax
     }
     a <- regmatches(sql, regexpr("(?<=count\\(token_)[a-z]+", sql, perl = TRUE))
     if (length(a)) {
-      if (!grepl("\\.log\\s*$", sql)) return(data.frame(n = 0L, n_val = 0L, v = NA_character_))
+      if (!grepl("\\.log(\\s|$)", sql)) return(data.frame(n = 0L, n_val = 0L, v = NA_character_))
       return(data.frame(n = n_rows, n_val = n_val[[a]], v = paste(sort(tok[[a]]), collapse = ";")))
     }
+    if (grepl("GROUP BY run_uid", sql)) return(data.frame(run_uid = "r1", n = n_rows, a = 1, b = 1))
+    if (grepl("SELECT DISTINCT run_uid", sql)) return(data.frame(run_uid = "r1"))
     data.frame(u = "r1")
   }, .package = "DBI")
   local_mocked_bindings(knw_discharge_load = function(conn) "wet load")
@@ -62,7 +66,7 @@ test_that("a schema whose `log` keeps an earlier run reads the tokens of the run
   # a provincial run leaves the previous run's `log` rows in place: link 0.68.0's rows, with no tokens, beside the new
   # run's. The mock holds the rows and answers every query from them, so the reader is held to which rows it filters
   lg <- data.frame(run_uid = c(rep("old", 3), rep("new", 2)), token_cut = c(NA, NA, NA, "cut-full-top", "cut-full-top"),
-                   token_acc = c(NA, NA, NA, "acc-v5", "acc-v5"), stringsAsFactors = FALSE)
+                   token_acc = c(NA, NA, NA, "acc-v5", "acc-v5"), t = c(1, 2, 3, 10, 11), stringsAsFactors = FALSE)
   rec_runs <- "new"
   local_mocked_bindings(dbGetQuery = function(conn, sql, ...) {
     p <- list(...)$params
@@ -75,8 +79,9 @@ test_that("a schema whose `log` keeps an earlier run reads the tokens of the run
       rows <- rows[rows$run_uid %in% strsplit(gsub('[{}"]', "", p[[1]]), ",")[[1]], ]
     }
     if (grepl("GROUP BY run_uid", sql)) {
-      n <- table(rows$run_uid)
-      return(data.frame(run_uid = names(n), n = as.integer(n)))
+      g <- split(rows$t, factor(rows$run_uid, exclude = NULL))
+      return(data.frame(run_uid = names(g), n = lengths(g), a = vapply(g, min, 0), b = vapply(g, max, 0),
+                        row.names = NULL, stringsAsFactors = FALSE))
     }
     a <- regmatches(sql, regexpr("(?<=count\\(token_)[a-z]+", sql, perl = TRUE))
     x <- rows[[paste0("token_", a)]]
@@ -95,8 +100,21 @@ test_that("a schema whose `log` keeps an earlier run reads the tokens of the run
   lg$token_cut[5] <- NA
   expect_error(knw_build_record(NULL, "fresh_default"), "1 of 2 log rows carry no cut token: not one build")
   lg$token_cut[5] <- "cut-full-top"
+  # a set-aside run that started after the kept one began is link writing after the build: refused, not set aside
+  lg$t[1] <- 12
+  expect_error(knw_build_record(NULL, "fresh_default"), "run old logged at or after the run log_recompute names")
+  lg$t[1] <- 1
+  # rows with no run id are set aside under that name
+  lg$run_uid[1:3] <- NA
+  expect_match(knw_build_record(NULL, "fresh_default")$line, "log rows of run \\(no run id\\) set aside")
+  lg$run_uid[1:3] <- "old"
+  # no run log_recompute names is in `log`, and `log` holds two runs: which one is the build is not known, so refused
+  rec_runs <- "recompute_id"
+  expect_error(knw_build_record(NULL, "fresh_default"), "log holds runs new, old: not one build")
+  rec_runs <- "new"
   # link's four-group proofs: `log` and `log_recompute` carry different run ids, so every `log` row is read and none
   # is set aside
+  rec_runs <- "proof_recompute"
   lg$run_uid <- c(rep("proof", 5))
   lg$token_cut[1:3] <- "cut-full-top"
   lg$token_acc[1:3] <- "acc-v5"
@@ -110,6 +128,7 @@ test_that("a schema whose `log` keeps an earlier run reads the tokens of the run
   expect_error(knw_build_record(NULL, "fresh_default"), "1 of 5 log rows carry no cut token")
   # a run id that is not an identifier never reaches the array literal
   lg$run_uid <- c(rep("new", 4), "x\",y")
+  lg$t <- 1:5
   rec_runs <- c("new", "x\",y")
   expect_error(.knw_build_log_runs(NULL, "fresh_default"), "not a run id")
 })

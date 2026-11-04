@@ -161,10 +161,9 @@ add("info", "build_record", 0, rec$line)
 # the species the schema's run modelled, per group (link writes them on its log), beside the ones this build carries
 if ("species" %in% dbGetQuery(conn, "SELECT column_name FROM information_schema.columns
                                      WHERE table_schema = $1 AND table_name = 'log'", params = list(schema))$column_name) {
-  # the rows of the run the record read (#145: `log` keeps the previous run's rows)
-  lr <- .knw_build_log_runs(conn, schema)
+  # the rows the record read (#145: `log` keeps the previous run's rows)
   sp_log <- dbGetQuery(conn, sprintf("SELECT watershed_group_code AS w, array_to_string(species, ';') AS s FROM %s.log%s
-                                      ORDER BY 1, 2", schema, lr$where), params = lr$params)
+                                      ORDER BY 1, 2", schema, rec$log$where), params = rec$log$params)
   sp_all <- sort(unique(unlist(strsplit(sp_log$s, ";", fixed = TRUE))))
   add("info", "schema_species", length(sp_all), sprintf("the run modelled %s; this build carries %s; per group %s",
       paste(sp_all, collapse = ";"), paste(species, collapse = ";"),

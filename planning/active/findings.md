@@ -35,6 +35,15 @@ Relates to #120 (the minimal-network tuning), #139 and #141 (the baselines and t
 - `tests/testthat/test-link_place.R:39` (a live test against the `PG*` database's `fresh_default`) fails on `main`
   as on the branch: that schema has no BULK bull trout rearing segment longer than 20 m now. Unrelated to #145.
 
+## The tightened rule, on every link schema (2026-11-04 UTC)
+
+Probed every schema holding both `log` and `log_recompute` on both databases (records by `knw_build_record()`):
+`fresh_default` reads run `20261103_163715-269b585a` and sets the 0.68.0 run aside; `fresh_default_minimal`,
+`zz415_*`, `zz440_default` read as before; the published `fresh_default_20261017` (m1) reads its run's 241 rows and
+names 5 rows with no run id (2026-08-06 to 2026-10-12) as set aside, tokens none, as before. Refused: `zz432_pre`
+(`432_clear` logged after the build) and `fresh_default_dev_20261103` (two `log` runs, neither the recompute's).
+Mutation check: disabling either new refusal turns its test red (lines 105 and 113).
+
 ## Errors Encountered
 
 | Error | Resolution |

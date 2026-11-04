@@ -26,8 +26,9 @@ Measured on m4 (`PGSERVICE=fresh_local`, 2026-11-04 03:00 UTC):
 **The block reaches further than the issue says.** Three readers take every `log` row:
 1. `knw_build_record()` (`R/build_record.R`): the token read refuses the schema (the issue's error).
 2. `0300`'s `shas()` (`scripts/0300-link-settle-wait.R`): the settle record would carry `link_version` `0.68.0;0.78.2`
-   and two `link_sha`s. `0320` (lines 248–264) then compares link's thresholds between both commits and reads the
-   configs at `shas[1]`, the first in alphabetical order, which can be the 0.68.0 commit. `0330` takes the first too.
+   and two `link_sha`s. (Corrected by the plan review: `0320` reads link's thresholds at every commit and stops unless
+   they agree, so it refuses or reads identical text; the foreign commit and version would land in the grade records,
+   `knw_thresholds_table()` and `data-raw/segment_gradient_check.R`'s unchecked read at `shas[1]`.)
 3. `0310`'s `schema_species` record (a ledger note only, but mixed).
 
 ## Decided at the gate
@@ -58,13 +59,17 @@ Approved by Al at the plan gate, 2026-11-04 (UTC).
 - [x] `scripts/0300-link-settle-wait.R`'s `shas()` and `0310`'s `schema_species` read the same rows (load the package
       in 0300); grep every other `FROM %s.log` reader in `R/`, `scripts/` and `data-raw/` and decide each.
 - [x] `devtools::document()`, tests, lintr.
+- [x] Plan review (`review-plan.md`) folded in: the fallback only over a one-run `log`; a set-aside run logged after
+      the build refused; rows with no run id named; `0310` reads the record's rows; `0300` takes `SETTLE_TAG=` so this
+      run's settle log is not the default name a plain `0310` takes.
 
 ## Phase 2: Settle and evidence on the new build (m4, local database)
-- [ ] `PGSERVICE=fresh_local SCHEMA=fresh_default POLL_MIN=1 Rscript scripts/0300-link-settle-wait.R`: released, one
+- [ ] `PGSERVICE=fresh_local SCHEMA=fresh_default SETTLE_TAG=default_20261103 POLL_MIN=1 Rscript scripts/0300-link-settle-wait.R`: released, one
       `link_sha` and `link_version 0.78.2` in the record.
 - [ ] `PGSERVICE=fresh_local SCHEMA=fresh_default EVIDENCE_DIR=data/fdis/derived_default_20261103 SETTLE=<that log>
       Rscript scripts/0310-evidence-build.R`: the build record names run `20261103_163715-269b585a`, the 2026-10-24
-      load and tokens `cut-full-top.acc-v5.grad-seg.q-fwapg`; visits placed beside the minimal build's 45,529.
+      load and tokens `cut-full-top.acc-v5.grad-seg.q-fwapg`; visits placed beside the minimal build's 45,529; `visits_kept`
+      and `species_pooling_md5` beside the minimal ledger's.
 - [ ] `FULL_DIR=data/fdis/derived_default_20261103 MIN_DIR=data/fdis/derived_minimal STORED=TRUE PGSERVICE=fresh_local
       Rscript data-raw/minimal_network_check.R`: steps 1–3 and 5 (placement, walks and species, access per group,
       stored km); step 4 (parent) is #120's and reports "not checked".

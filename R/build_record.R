@@ -21,14 +21,17 @@
 #'   vocabulary, `c(cut =, acc =, grad =, flow =)`, read from every row of
 #'   `<schema>.log`, where link writes them; each `NA` where that log predates
 #'   link 0.70.0 and carries none), `log_run_uid` (the runs whose `log` rows
-#'   were read, `;`-joined) and `line`, the record as one line for a log. A
+#'   were read, `;`-joined), `log` (which rows those are, as a clause a reader
+#'   of `log` appends) and `line`, the record as one line for a log. A
 #'   schema whose log holds two values on one axis, or rows with a token beside
 #'   rows without one, is refused: it is not one build. The tokens are read over
 #'   the `log` rows of the runs `log_recompute` names, because a provincial run
 #'   leaves the previous run's `log` rows in place (#145), and over every `log`
 #'   row where none of those runs is in `log`, because a build's `log` and its
 #'   recompute's `log_recompute` can carry different run ids (link's four-group
-#'   proofs). The line names any run whose rows were set aside.
+#'   proofs), where it must hold one run. A run set aside that was logged after
+#'   the build began is refused. The line names any run whose rows were set
+#'   aside.
 #' @export
 #' @examples
 #' \dontrun{
@@ -71,7 +74,7 @@ knw_build_record <- function(conn, schema, run_uid = NULL) {
     tokens[[a]] <- v
   }
   rec <- list(schema = schema, run_uid = runs, discharge_load = knw_discharge_load(conn), walk_md5 = knw_walk_md5(),
-              fresh_version = fresh_v, tokens = tokens, log_run_uid = paste(lr$runs, collapse = ";"))
+              fresh_version = fresh_v, tokens = tokens, log_run_uid = paste(lr$runs, collapse = ";"), log = lr)
   rec$line <- sprintf("build: schema %s, run %s; flows %s; walk %s; fresh %s; tokens %s%s", schema, runs,
                       rec$discharge_load, rec$walk_md5, fresh_v,
                       if (all(is.na(tokens))) "none (before link 0.70.0)" else paste(tokens, collapse = "."),
@@ -89,27 +92,45 @@ knw_build_record <- function(conn, schema, run_uid = NULL) {
 #' `<schema>.log` gains a row per pipeline call and group on every run, and a
 #' provincial run leaves the previous run's rows in place, while
 #' `log_recompute` holds the run that built the schema (#145). The build's rows
-#' are those of the runs `log_recompute` names; where none of those runs is in
-#' `log` (link's four-group proofs log their build and recompute under
-#' different run ids), every row is.
+#' are those of the runs `log_recompute` names; a run set aside must have
+#' started before them, or link wrote to the schema after its build. Where none
+#' of those runs is in `log` (link's four-group proofs log their build and
+#' recompute under different run ids), the build is every row, and `log` must
+#' hold one run.
 #'
 #' @param conn a `DBI` connection.
 #' @param schema `character(1)` link's persist schema, already checked.
 #' @return A list: `runs` (the runs whose rows are read), `aside` (the runs
-#'   whose rows are not), and `where` and `params`, the clause and parameters
-#'   that select those rows (`""` and `NULL` when every row is read).
+#'   whose rows are not, "(no run id)" for rows without one), and `where` and
+#'   `params`, the clause and parameters that select those rows (`""` and
+#'   `NULL` when every row is read).
 #' @noRd
 .knw_build_log_runs <- function(conn, schema) {
+  has <- DBI::dbGetQuery(conn, "SELECT to_regclass($1) IS NOT NULL AS ok", params = list(paste0(schema, ".log")))$ok
+  if (!isTRUE(has)) stop("schema ", schema, " has no log table: not a link persist schema", call. = FALSE)
   rec <- DBI::dbGetQuery(conn, sprintf("SELECT DISTINCT run_uid FROM %s.log_recompute ORDER BY run_uid",
                                        schema))$run_uid
-  lg <- DBI::dbGetQuery(conn, sprintf("SELECT run_uid, count(*)::int AS n FROM %s.log
-                                       GROUP BY run_uid ORDER BY run_uid", schema))$run_uid
-  keep <- intersect(lg, rec)
-  if (!length(keep)) return(list(runs = lg, aside = character(), where = "", params = NULL))
+  lg <- DBI::dbGetQuery(conn, sprintf("SELECT run_uid, count(*)::int AS n, min(date_start) AS a, max(date_start) AS b
+                                       FROM %s.log GROUP BY run_uid ORDER BY run_uid", schema))
+  lab <- ifelse(is.na(lg$run_uid), "(no run id)", lg$run_uid)
+  kept <- !is.na(lg$run_uid) & lg$run_uid %in% rec
+  if (!any(kept)) {
+    if (nrow(lg) > 1) {
+      stop("schema ", schema, ": log_recompute names run ", paste(rec, collapse = ", "), ", none of them in log, and ",
+           "log holds runs ", paste(lab, collapse = ", "), ": not one build", call. = FALSE)
+    }
+    return(list(runs = lab, aside = character(), where = "", params = NULL))
+  }
+  # a run logged after the build began wrote to the schema the recompute describes
+  late <- !kept & !is.na(lg$b) & lg$b >= min(lg$a[kept])
+  if (any(late)) {
+    stop("schema ", schema, ": run ", paste(lab[late], collapse = ", "), " logged at or after the run log_recompute ",
+         "names (", paste(lab[kept], collapse = ", "), "): not one build", call. = FALSE)
+  }
+  keep <- lg$run_uid[kept]
   # the runs go into a text-array literal: refuse anything but a run id's characters rather than quote it
-  bad <- keep[is.na(keep) | !grepl("^[A-Za-z0-9_.:-]+$", keep)]
+  bad <- keep[!grepl("^[A-Za-z0-9_.:-]+$", keep)]
   if (length(bad)) stop("schema ", schema, ": log_recompute names ", bad[1], ", not a run id", call. = FALSE)
-  aside <- setdiff(lg, keep)
-  list(runs = keep, aside = ifelse(is.na(aside), "NA", aside), where = " WHERE run_uid = ANY($1::text[])",
+  list(runs = keep, aside = lab[!kept], where = " WHERE run_uid = ANY($1::text[])",
        params = list(paste0("{", paste(keep, collapse = ","), "}")))
 }
