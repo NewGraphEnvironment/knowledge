@@ -195,3 +195,20 @@ test_that("the gradient the rules and the curve read is link's segment gradient 
   v2$segment_gradient <- NULL
   expect_error(knw_tune_run(v2, s$sp, s$walks, s$thr, species = "CH", stages = "rear"), "segment_gradient")
 })
+
+test_that("a species link does not model on the build is not_modelled at every stage, after no_stream_rule (#145)", {
+  s <- sim_build()
+  out <- knw_tune_run(s$v, s$sp, s$walks, s$thr, species = c("CH", "KO"), modelled = "BT", smoke_only = TRUE,
+                      workers = 1L)
+  expect_equal(out$CH_rear$status, "not_modelled")
+  expect_equal(out$CH_spawn$status, "not_modelled")
+  expect_equal(unname(out$CH_rear$population[["visits_in"]]), 0)
+  expect_null(out$CH_rear$smoke)
+  # a species with no stream rule keeps that, the reason that holds on every build
+  expect_equal(out$KO_rear$status, "no_stream_rule")
+  # NULL is every species modelled, as before
+  out <- knw_tune_run(s$v, s$sp, s$walks, s$thr, species = "CH", stages = "spawn", smoke_only = TRUE, workers = 1L)
+  expect_equal(out$CH_spawn$status, "no_response")
+  expect_error(knw_tune_run(s$v, s$sp, s$walks, s$thr, species = "CH", modelled = 1), "modelled")
+  expect_true("not_modelled" %in% .knw_no_fit)
+})

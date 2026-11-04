@@ -424,7 +424,7 @@ knw_tune_promote <- function(run, keys = NULL, live = NULL, tune_dir = "data/tun
 }
 
 # the statuses knw_tune_run() gives a key it does not fit by design (R/tune_run.R)
-.knw_no_fit <- c("no_stream_rule", "no_response", "too_few_groups")
+.knw_no_fit <- c("no_stream_rule", "not_modelled", "no_response", "too_few_groups")
 
 # the species x stage keys of a table that holds every key
 .knw_rows_keys <- function(f) {

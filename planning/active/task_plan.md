@@ -17,10 +17,10 @@ promote." The build is run `20261103_163715-269b585a` (link 0.78.2) in the datab
 - Work continues on the #145 branch (PR #146); the PR then closes #145.
 
 ## Phase 1: not_modelled
-- [ ] Failing test: `knw_tune_run(modelled = )` writes `not_modelled` for both stages of a species outside it.
-- [ ] `knw_tune_run()` takes `modelled`; `.knw_no_fit` gains `not_modelled`; 0320 passes the species with any
+- [x] Failing test: `knw_tune_run(modelled = )` writes `not_modelled` for both stages of a species outside it.
+- [x] `knw_tune_run()` takes `modelled`; `.knw_no_fit` gains `not_modelled`; 0320 passes the species with any
       access value in the evidence; docs (roxygen, 0320 header).
-- [ ] Tests, document, lint; commit.
+- [x] Tests, document, lint; commit.
 
 ## Phase 2: the build's evidence as the default
 - [ ] `0300` untagged on `fresh_default` (released), then a plain `0310` into `data/fdis/derived`; md5s equal the
