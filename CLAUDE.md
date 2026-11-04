@@ -253,8 +253,10 @@ Atlas line's does not (median 0.0083 either way), but by each species' own outco
 present for CO, GR, ST and WCT (WCT 0.0076 against 0.0164; `data-raw/segment_gradient_check.R`). Fixed-window gradients, whose length would
 not depend on the outcome, are #70's. These numbers, and #92's tune, are on link 0.66.0's build
 (`fresh_default_20261017`). link has since cut gradient breaks only where a present species' access changes
-(link#326, 0.69.0) and fish records only at each species' highest record per stream (link#396), and no build in the
-database carried either on 2026-10-28.
+(link#326, 0.69.0) and fish records only at each species' highest record per stream (link#396). The build promoted by
+#145 (link 0.78.2, run `20261103_163715-269b585a`) carries both: 44.2 % of stream-branch visits with fish start a
+segment of their own against 6.6 % of empty ones, medians 305 m and 466 m
+(`scripts/logs/habitat/20261103_segment_gradient_check-derived_default_20261103.txt`).
 
 ### FISS submission workbooks: editions drift, and most EF fish are already in FDIS
 
@@ -431,10 +433,11 @@ refuses any other. On link's four proof groups only bull trout rearing has four 
 smoke gate refuses chinook rearing on three folds (separation), so a test of grading and the comparison runs on a key
 the groups can fit.
 
-The provincial minimal build (`fresh_default_minimal`, link#441, run `20261102_203300-60ab009d`) lives in a database
-other than the published builds', reached with a `~/.pg_service.conf` entry and `PGSERVICE=`; the published database
-holds a `fresh_default_minimal` with no segments. Each database keeps its own flow load and walk cache: the minimal
-build's reads wet's 2026-10-24 build (#120's second branch loaded it), the published grades wet's 2026-10-19 load, and
+The provincial minimal build (`fresh_default_minimal`, link#441, run `20261102_203300-60ab009d`) and, since #145, the
+published build (`fresh_default`, run `20261103_163715-269b585a`) live in a database other than the one holding #92's
+build (`fresh_default_20261017`), reached with a `~/.pg_service.conf` entry and `PGSERVICE=`; that older database holds a
+`fresh_default_minimal` with no segments. Each database keeps its own flow load and walk cache: the minimal and the
+published builds read wet's 2026-10-24 build (#120's second branch loaded it), #92's grades wet's 2026-10-19 load, and
 wet's public prefix keeps no older manifest, so the older load exists only where it was loaded. Its evidence is
 `data/fdis/derived_minimal` (ledger tagged `-derived_minimal`). `0310` reads each species' range from the installed
 link's `default` presence table (`lnk_load_overrides()`), not from the schema, so a build on a newer link moves
