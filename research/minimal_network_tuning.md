@@ -10,8 +10,8 @@ link's new full `default` build and on link's four-group proof schemas, and `dat
 it, and the seven keys fitted (six species; the other eleven keys have no response or no stream rule) graded and
 compared, as an unpromoted candidate (run `20261103_0838`; rainbow trout and kokanee are paused there). The same nine
 species tuned (`DEV=1`, no grades) on the new full `default` build on the same flows and range, which separates the
-network from the other two (#145); its grades and comparison wait on Al's word, and the transfer to link's full
-network on its parent table (link#444).
+network from the other two (#145). That full-network run was then graded, compared and promoted (run `20261104_0543`,
+2026-11-04; `habitat_thresholds_tuned.md`); the transfer to link's full network on its parent table waits on link#444.
 
 ## The answer
 
@@ -105,7 +105,7 @@ falls outside the other tuning's region.
 picks on (the other seeds are its stability checks). On three of seven keys the two networks pick the same rule (coho, grayling and westslope
 cutthroat rearing). On four they do not:
 
-| key | published pick | minimal network | full network (this run) | parts the network moved |
+| key | #92's pick (published until 2026-11-04) | minimal network | full network (this run) | parts the network moved |
 |---|---|---|---|---|
 | bull trout rearing | `mad>=0.1\|g<=0.3\|none` | `mad>=0.35\|g<=0.1049\|none` | `mad>=0.1\|g<=0.25\|none` | size, gradient |
 | bull trout spawning | `width>=2\|g<=0.13\|Q1@D500` | `width>=2\|g<=0.25\|Q1@D500` | `width>=2\|g<=0.11\|none` | gradient, exception |
@@ -125,10 +125,10 @@ cutthroat rearing). On four they do not:
   limit is 10.4 behind (7.3), while the minimal network's 9 % is inside the full network's region (4.8, 10.8).
 
 So on the minimal network, which cuts at none of fish records, crossings or habitat end points, chinook rearing's data
-argue against the steeper limits the full network allows. Chinook's gradient limit now reads 9 % on the minimal network, 11 % on the published network and 13 % on the
+argue against the steeper limits the full network allows. Chinook's gradient limit now reads 9 % on the minimal network, 11 % on #92's published network and 13 % on the
 new full one.
 
-**The published rules stand.** Each of the seven published picks both tunings scored lies in both new tunings' regions. Grayling rearing's move to
+**#92's rules stand.** Each of the seven picks #92 published that both tunings scored lies in both new tunings' regions. Grayling rearing's move to
 `width>=1.5` therefore comes from the flows, the range or link's build, not the network: both new builds pick it.
 Rainbow trout rearing is modelled by neither build and stays paused.
 
