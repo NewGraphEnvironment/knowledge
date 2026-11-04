@@ -1,7 +1,7 @@
 published: scripts/logs/habitat/20261104_tune_anchor_check-published.csv (md5 a653277d69c701e55c0403defd9ed697), link run 20261017_004619-3f4c713b
 minimal: scripts/logs/habitat/20261104_tune_anchor_check-minimal-20261103_0838.csv (md5 dd7062f67f79907a901bdb29bd6aa990), link run 20261102_203300-60ab009d
 full: scripts/logs/habitat/20261104_tune_anchor_check-full-default_20261103.csv (md5 1bed0655d58067e179c0fe6cd92f69f8), link run 20261103_163715-269b585a
-Picks per key on three tunings (#145), at knowledge 2f01980.
+Picks per key on three tunings (#145), at knowledge a950b3d.
 Minimal against new full network (the network alone): 3 of 7 keys tuned on both pick the same rule.
 New full against published (link build, flows and range): 3 of 7 keys pick the same rule.
 
