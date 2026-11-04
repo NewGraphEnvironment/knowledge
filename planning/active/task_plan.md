@@ -43,8 +43,8 @@ The change is to prose only. Every figure and table below reads elements already
 ## Phase 2: Chinook article rewritten (`vignettes/chinook_rearing.Rmd`)
 - [x] 1. Opening: the answer, no company name; link and bcfishpass cited at first mention; numbers inline from `dflt`,
       `rec`, `all_row`; ends with a link to the methods article.
-- [x] 2. The map straight after (static and site versions, chunks as now); its caption says how to read orange and green,
-      absorbing the map paragraph.
+- [x] 2. The map straight after (static and site versions, chunks as now); its caption says how to read orange and green; the
+      paragraph stays, because the site's interactive map has no caption (review 8).
 - [x] 3. "What changes?": one before/after table (dials, km across the province, catch rate on and off the habitat from
       `checks`), with the overlap caveat as a table note. Replaces "What does link do now?" and "A check".
 - [x] 4. "Why does a nearby river matter?": opens with bcfishpass's order-5 rule (pinned SQL link) and link `default`
@@ -64,11 +64,14 @@ The change is to prose only. Every figure and table below reads elements already
 
 ## Phase 3: Dependencies, references, render
 - [x] Add `kableExtra` to `Suggests`.
-- [ ] Add the BC Data Catalogue record to the Zotero group library (Web API), then `Rscript data-raw/vignette_bib.R` with
-      Zotero running; both `.bib` files rewritten.
+- [ ] `Rscript data-raw/vignette_bib.R` with Zotero running; both `.bib` files rewritten. The Data Catalogue record stays a
+      link, not a citation (Al, 2026-11-04), so no Zotero item is added.
 - [ ] Install the branch (`R CMD INSTALL .`) and render both articles; read each rendered page, figures included at their
       published width.
-- [ ] Word counts before and after (chinook prose ~1,680 now; target about half), recorded in `findings.md`.
+- [ ] Word counts before and after, of the rendered text minus references (review 11), recorded in `findings.md`.
+
+- [x] Fold in the plan review (`review-plan.md`): wording on bcfishpass's exception and New Graph's set, "none on stream
+      lines", the unjoined cap point, a guard, and README's stale gradient and Learn-more line.
 
 ## Phase 4: Checks and PR
 - [ ] `devtools::test()` (register, vignette-data), `pkgdown::check_pkgdown()`, a local `pkgdown::build_articles()`; no

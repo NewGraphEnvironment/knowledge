@@ -67,7 +67,7 @@ words <- function(r) {
 # habitat than link's, losing more than it gains; the sentences below say so
 stopifnot(all(region$size_var == "mad"), all(!is.na(region$exc_q)), dflt$ddev_best > dflt$se_diff,
           all(region$departures == 3), is.na(dflt$exc_q), dflt$size_var == "width", all_row$change_pct < 0,
-          all_row$lost_km > all_row$gained_km)
+          all_row$lost_km > all_row$gained_km, all_row$gained_exception_km > 0)
 
 # catch rates at the electrofishing sites in the groups the comparison ran; the checks table names each structure the
 # comparison ran (#73), and the recommended rule's row is the tuned structure's
@@ -127,8 +127,8 @@ bfp <- "https://github.com/smnorris/bcfishpass/blob/3bd2824c300c5f9c0c041380d412
 The electrofishing records put young chinook salmon in more of British Columbia's small streams near large rivers,
 and in fewer far from one, than link's current rule allows. [`link`](`r link_site`) [@irvine2026linkDevelop] maps
 where each fish species can spawn and rear on BC's streams, and its standard settings,
-[`default`](`r link_default`), start from bcfishpass's thresholds [@norris2024smnorrisbcfishpass]: for chinook rearing,
-`r words(dflt)`. The records support **`r words(rec)`**. That rule draws `r n1(-all_row$change_pct)` % less habitat
+[`default`](`r link_default`), start from the thresholds New Graph runs bcfishpass with
+[@norris2024smnorrisbcfishpass]: for chinook rearing, `r words(dflt)`. The records support **`r words(rec)`**. That rule draws `r n1(-all_row$change_pct)` % less habitat
 across the province, and chinook were caught at `r pc(r_rec_in)` of the sites on its habitat against
 `r pc(r_rec_out, 1)` elsewhere. Its slope limit is a judgment call: under a stricter bar it stays at link's
 (below). [How the tuning works](habitat_thresholds.html) explains where these rules come from and how they are tested.
@@ -158,7 +158,7 @@ cell_size <- function(r) {
   else paste(format(r$size_min, trim = TRUE), "m channel width")
 }
 cell_near <- function(r) {
-  if (is.na(r$exc_q)) "none" else paste0("smaller streams within ", km_d(r$exc_d), " of a ", r$exc_q, " m³/s river")
+  if (is.na(r$exc_q)) "none on stream lines" else paste0("smaller streams within ", km_d(r$exc_d), " of a ", r$exc_q, " m³/s river")
 }
 chg <- data.frame(
   ` ` = c("Smallest stream", "Steepest slope", "Near a river", "Rearing habitat",
@@ -173,7 +173,9 @@ knitr::kable(chg, format = "html", align = "lrr",
   kableExtra::kable_styling(full_width = FALSE) |>
   kableExtra::footnote(general_title = "", general = paste0(
     "Habitat is summed over the ", nrow(per_group), " watershed groups link classifies for chinook, each rule run ",
-    "through all of link's steps. Sites are the ", n0(sum(fv$n[fv$rule == "default"])), " electrofishing sites on ",
+    "through all of link's steps. link's current rule applies a near-a-river pair only to lines through wetlands, ",
+    "which both totals include (below). ",
+    "Sites are the ", n0(sum(fv$n[fv$rule == "default"])), " electrofishing sites on ",
     "reachable streams in those groups. They overlap the sites the rule was chosen on, so the rates show the rule ",
     "does what it was chosen to do, not that it predicts new places."))
 ```
@@ -181,23 +183,27 @@ knitr::kable(chg, format = "html", align = "lrr",
 ## Why does a nearby river matter?
 
 Young chinook move up from large rivers into small streams close by. bcfishpass writes that idea with stream order:
-where streams are sized by width, a first-order stream whose parent is order 5 or more counts as rearing whatever its
-width, along its whole length ([its chinook model](`r bfp`/model/02_habitat_linear/sql/load_habitat_linear_ch.sql)).
+where streams are sized by width, a first-order stream whose parent is order 5 or more counts as rearing below the
+minimum width, if its width is mapped, along its whole length ([its chinook model](`r bfp`/model/02_habitat_linear/sql/load_habitat_linear_ch.sql)).
 link's `default` leaves that exception off. A model fitted after the choice shows the same idea in the records, with a
 distance on it:
 
-```{r river, fig.height = 4, fig.cap = paste0("The fitted chance of catching chinook on one standard visit, by distance downstream to a river of at least ", meta$curve_ref$q, " m³/s, for four stream flows, at a slope of ", grad(meta$curve_ref$gradient), ". The dashed line is the recommended rule's ", km_d(rec$exc_d), " allowance: beyond it, streams below its ", rec$size_min, " m³/s floor no longer count (grey).")}
+```{r river, fig.height = 4, fig.cap = paste0("The fitted chance of catching chinook on one standard visit, by distance downstream to a river of at least ", meta$curve_ref$q, " m³/s, for four stream flows, at a slope of ", grad(meta$curve_ref$gradient), ". The dashed line is the recommended rule's ", km_d(rec$exc_d), " allowance: beyond it, streams below its ", rec$size_min, " m³/s floor no longer count (grey). The fit is shown at six distances; the last stands for ", km_d(meta$curve_ref$dist_cap_m), " or more, or no such river, and is not joined.")}
 rv <- sf_ |>
   mutate(flow = factor(format(size, trim = TRUE, drop0trailing = TRUE),
                        levels = format(sort(unique(size)), trim = TRUE, drop0trailing = TRUE)))
 counted <- rv |> filter(size >= rec$size_min | dist_m <= rec$exc_d)
 dropped <- rv |> filter(size < rec$size_min, dist_m >= rec$exc_d)
+# the cap stands for "that far or more, or no such river", so it is drawn as a point, not joined to the curve
+cap <- meta$curve_ref$dist_cap_m
+stopifnot(max(rv$dist_m) == cap)
 brk <- sort(unique(rv$dist_m))
 lab <- vapply(brk, function(d) if (d >= meta$curve_ref$dist_cap_m) paste(km_d(d), "+") else km_d(d), "")
 ggplot(rv, aes(dist_m, rate)) +
   geom_vline(xintercept = rec$exc_d, linetype = "dashed", colour = "grey40") +
-  geom_line(data = dropped, aes(group = flow), colour = "grey75", linewidth = 0.8) +
-  geom_line(data = counted, aes(colour = flow, group = flow), linewidth = 0.9) +
+  geom_line(data = filter(dropped, dist_m < cap), aes(group = flow), colour = "grey75", linewidth = 0.8) +
+  geom_point(data = filter(dropped, dist_m == cap), colour = "grey75", size = 1.6) +
+  geom_line(data = filter(counted, dist_m < cap), aes(colour = flow, group = flow), linewidth = 0.9) +
   geom_point(data = counted, aes(colour = flow), size = 1.6) +
   scale_x_log10(breaks = brk, labels = lab) +
   scale_y_continuous(labels = function(v) paste0(round(100 * v), " %")) +

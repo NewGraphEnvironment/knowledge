@@ -75,3 +75,11 @@ This takes the chinook article's structure and tone from #118 (renaming the arti
 - Chinook prose (outside chunks, after the setup): 1,683 -> 1,236 words. The methods table at the end (moved, not cut) sets the floor.
 - Pinned links (bcfishpass x3 at 3bd2824, Data Catalogue record): all HTTP 200, 2026-11-04.
 - Methods article render: only the five moved statistics keys unresolved until `vignette_bib.R` runs.
+
+## Standing constraint: the register's phrases in the chinook article
+
+`R/settings_register.R` matches each `code:` entry per line with a lazy `(.+?)`, skips lines starting with `#`, and needs every match to equal the value. In the methods table's placement row the 500 m phrase must come first and the 200 m phrase must end "200 m." with its full stop; a second use of either phrase anywhere, even with an inline value, fails `test-settings-register.R` (plan review 7).
+
+## Unrelated test error
+
+`test-link_place.R:39` errors (data.frame of 1 and 0 rows): its query found no BULK bull trout rearing segment in the live `fresh_default` during the provincial run on 2026-11-04. This branch touches nothing under `R/` or `tests/`; the other 1,901 expectations pass.
