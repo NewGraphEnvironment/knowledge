@@ -31,7 +31,11 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   citeproc prints a version with a space as "Versions …". Its map is interactive only when pkgdown builds the site
   (`IN_PKGDOWN`), on Esri's World Topographic Map. Check a cited
   claim against the PDF's text: cred's `crd_aud_verify_all()` cuts each claim at the Rmd's line breaks and matches
-  unrelated passages (#79).
+  unrelated passages (#79). Its numbers come from two link builds: the tuning's (`meta$link_sha`), which scored link's
+  rule at sites, and the comparison's (`config_sha` in its tables), which regenerated the habitat totals and the map.
+  They agree on stream lines and differ on lines through wetlands, so a sentence about link's near-river handling, and
+  every site or group count, names the build and population it holds for (#143). The register's `code:` phrases in
+  it are matched one line at a time and must each stay whole on one line.
 - `vignettes/habitat_thresholds.Rmd` — the methodology article (#93), "Choosing habitat thresholds from where fish were
   caught": the reference home for the method and its citations. A species article (the chinook one first, #64) gives
   its own records and result in a sentence or two and links it rather than restating the method. It reads `inst/vignette-data/method.rds`, which `data-raw/vignette_method.R` writes from
