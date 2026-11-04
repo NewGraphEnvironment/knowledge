@@ -102,9 +102,9 @@ Approved by Al at the plan gate, 2026-11-04 (UTC).
       `RUN=<run> 0335`, the bundles and articles after it, as CLAUDE.md describes.
 
 ## Validation
-- [ ] Tests pass
-- [ ] `/code-check` clean (once over the branch with `/code-check branch`)
-- [ ] PWF checkboxes match landed work
+- [x] Tests pass
+- [x] `/code-check` clean (once over the branch with `/code-check branch`): five rounds, ended by round 5's enumeration of every record the branch writes (`review-round1..5.md`)
+- [x] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion
 
 How each change is proved: the new tests fail on `main`'s `knw_build_record()` and pass after (restore the every-row

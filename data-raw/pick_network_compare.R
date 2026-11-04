@@ -27,13 +27,19 @@ suppressMessages({ library(dplyr); library(readr) })
 pkgload::load_all(quiet = TRUE)
 options(warn = 1)
 
-# the newest by modification time: a second run of a day is numbered (-2), which sorts before the first by name
-newest <- function(pattern) {
-  f <- list.files("scripts/logs/habitat", pattern, full.names = TRUE)
-  if (length(f)) f[which.max(file.mtime(f))] else ""
+# the newest by what the name encodes, as .knw_free_path() writes it: the yyyymmdd prefix, then the day's run number
+# (none is the first, -2 the second). Not by name order, where -2 sorts before the first, nor by modification time,
+# which git does not keep
+newest <- function(label) {
+  rx <- paste0("^([0-9]{8})_tune_anchor_check-", label, "(-([0-9]+))?\\.csv$")
+  f <- list.files("scripts/logs/habitat", rx)
+  if (!length(f)) return("")
+  n <- sub(rx, "\\3", f)
+  n <- ifelse(nzchar(n), as.integer(n), 1L)
+  file.path("scripts/logs/habitat", f[order(sub(rx, "\\1", f), n, decreasing = TRUE)[1]])
 }
-paths <- c(published = Sys.getenv("PUBLISHED", newest("_tune_anchor_check-published(-[0-9]+)?\\.csv$")),
-           minimal = Sys.getenv("MINIMAL", newest("_tune_anchor_check-minimal-20261103_0838(-[0-9]+)?\\.csv$")),
+paths <- c(published = Sys.getenv("PUBLISHED", newest("published")),
+           minimal = Sys.getenv("MINIMAL", newest("minimal-20261103_0838")),
            full = Sys.getenv("FULL"))
 miss <- names(paths)[!nzchar(paths) | !file.exists(paths)]
 if (length(miss)) stop("no anchor-check table for ", paste(miss, collapse = ", "), ": give its path", call. = FALSE)
