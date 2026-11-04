@@ -59,6 +59,7 @@ reference:
       - knw_tune_score
       - knw_tune_repick
       - knw_tune_pick_report
+      - knw_tune_anchor
       - knw_tune_curve
       - knw_grade
       - knw_grade_species
