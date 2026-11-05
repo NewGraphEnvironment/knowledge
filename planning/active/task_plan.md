@@ -78,6 +78,13 @@ All four read wet's 2026-10-24 flow load and link 0.78.1's range, on m4's databa
       to "the curve's gradient is one grading supports", and passes it to `knw_compare_rules()`.
 - [ ] Refusal tests: `knw_tune_promote()`, `0325` and the article bundles refuse `curve_grad` other than
       `segment_gradient`, shown by restoring the bug. Add a settings-register row if a new number shapes a result.
+      (Review G1: promotion has no such guard today; it is added, not kept.)
+- [ ] `0320 SETUP=1` (review G2, Q3): writes the run root (not `grad_fwa/`), runs every seed and check, needs no
+      `RUN=`, logs as `-setup_<parent|fwa>`; refused over a run whose summaries name another `curve_grad`, and the
+      sensitivity (`GRADIENT=… RUN=`) refused on a SETUP run. `token_grad` from a fixed map of `curve_grad`
+      (`grad-parent`; `grad-fwa`, the name the link issue proposes), checked against it (review G3).
+- [ ] File the link issue for the Atlas-line `grad` token now (review ordering), proposing `grad-fwa`.
+- [ ] `data/compare/setups/` in `.gitignore` (review G5).
 
 ## Phase 3: the two chinook-rearing runs (m4)
 
@@ -100,10 +107,10 @@ All four read wet's 2026-10-24 flow load and link 0.78.1's range, on m4's databa
 
 ## Phase 5: archive
 
-- [ ] `RUN=<parent run> 0336` →
+- [ ] `RUN=<parent run> EVIDENCE_DIR=data/fdis/derived_parent 0336` →
       `archive/knowledge/tune/CH_rear/cut-full-top.acc-v5.grad-parent.q-fwapg/`, with the `derived_parent` evidence.
       Commit the `data/archive_index.csv` rows.
-- [ ] File the link issue for the Atlas-line `grad` token. The Atlas run is archived when it is minted (owed below).
+- [ ] The Atlas run is archived when link mints its token (owed below); `knw_archive_setup()` refuses it until then.
 
 ## Phase 6: write-up
 
@@ -126,9 +133,17 @@ All four read wet's 2026-10-24 flow load and link 0.78.1's range, on m4's databa
 - [ ] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion
 
+Acceptance criteria fixed before the runs (review): "the parent and minimal picks agree" means each pick lies in
+the other's one-SE region, the exact same rule being the stronger result; `visits_link.csv` is compared column by
+column (0310 inserts the parent columns mid-table); `stored_vs_default_differ_km` is nonzero on the parent and Atlas
+setups by design, since link stores the segment gradient's flags; the parent run's grade record must read
+`curve_grad = parent_gradient`, `token_grad = grad-parent`, `run_uid = 20261103_163715-269b585a`, and the Atlas run's
+`fwa_gradient` / `grad-fwa`. The evidence's Atlas gradient is the visit's own `linear_feature_id`'s and grading reads
+the segment's: count the visits where the two ids differ.
+
 How each change is proved: the parent reader by fixture tests of each refusal with the bug restored. The swap by the
 segment source reproducing today's grades and comparison exactly (a regression test on a fixture, and the published
-CH grade table's md5 unchanged by a rerun of `knw_link_segments(gradient = "segment")` on one group). The evidence by
+CH grade table's rows for one group reproduced by a regrade of that group with `gradient = "segment"`). The evidence by
 byte comparison with `data/fdis/derived`. The mechanics by step 4's counts. The parent setup by its DEV pick against
 the minimal pick. Each run by its smoke gates and its grade record's fields.
 
