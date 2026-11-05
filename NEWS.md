@@ -1,3 +1,14 @@
+# knowledge 0.4.29
+
+* A new article, "Splitting streams at fish records shifts the steepest slope mapped as habitat"
+  (`vignettes/stream_splits.Rmd`, #149), shows on our own records how where link cuts a stream changes the slope a fish
+  habitat definition is tested on: chinook rearing's steepest slope is 13 % on link's full network and 9 % on its
+  minimal network, which leaves out the cuts at fish records, crossings and hand-mapped habitat. Its data come from
+  `data-raw/cut_points_stage.R`, `data-raw/vignette_cut_points.R` and `data-raw/vignette_cut_points_places.R`, and the
+  methodology article gains a short section that answers the question and links it. All three articles now cite
+  `link`, `fresh` and `wet` from their own `citation()`, with their concept DOIs (`data-raw/vignette_bib.R`). Nothing
+  published moves.
+
 # knowledge 0.4.28
 
 * Chinook rearing is scored, graded and compared on every setup that exists, on one flow load, range and evidence, so
