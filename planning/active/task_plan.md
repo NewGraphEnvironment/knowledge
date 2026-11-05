@@ -49,14 +49,14 @@ All four read wet's 2026-10-24 flow load and link 0.78.1's range, on m4's databa
 - [x] `0310`: `PARENT=TRUE` (with `PARENT_MINIMAL`, default `fresh_default_minimal`) joins the table.
       `PARENT_DIR` stays for link's four-group proof schemas, which have no table. Ledger rows as for `PARENT_DIR`,
       plus the table's provenance.
-- [ ] Run `SCHEMA=fresh_default PARENT=TRUE EVIDENCE_DIR=data/fdis/derived_parent 0310` on m4. Check:
+- [x] Run `SCHEMA=fresh_default PARENT=TRUE EVIDENCE_DIR=data/fdis/derived_parent 0310` on m4. Check:
       `visits_species.csv` and `walks.csv` are byte-identical to `data/fdis/derived`, and `visits_link.csv` equals it
       apart from the four parent columns.
-- [ ] Mechanics on the table: `minimal_network_check.R` step 4, `derived_parent` against `derived_minimal`,
+- [x] Mechanics on the table: `minimal_network_check.R` step 4, `derived_parent` against `derived_minimal`,
       province-wide. Every visit's parent should be the minimal segment it sits on, with that segment's gradient,
       apart from straddles. Then tick #120's line and link#444's first acceptance line, with the result written into
       link#444's body.
-- [ ] `DEV=1 GRADIENT=parent_gradient SPECIES=CH EVIDENCE_DIR=data/fdis/derived_parent DEV_DIR=data/tune/dev_parent 0320`:
+- [x] `DEV=1 GRADIENT=parent_gradient SPECIES=CH EVIDENCE_DIR=data/fdis/derived_parent DEV_DIR=data/tune/dev_parent 0320`:
       the parent setup's pick against the minimal network's (`mad>=0.75|g<=0.09|Q3@D1000`). These should agree, as
       they did on the four groups.
 

@@ -146,8 +146,36 @@ Not this branch's, for a follow-up: the visit's flow and width (`mad_pick`, `cw_
 (`knw_link_flow(v$linear_feature_id)`), while the grade and link read the segment's, on every run including the
 published one; the 732 visits are where they can differ.
 
+## Mechanics on link's parent table, province-wide (2026-11-05, `20261104_minimal_network_check.txt`)
+
+`FULL_DIR=data/fdis/derived_parent MIN_DIR=data/fdis/derived_minimal data-raw/minimal_network_check.R`, the rebuilt
+parent evidence (with `segment_fwa_gradient`) against the minimal build's:
+- every one of the 45,529 visits is placed on both networks, 45,463 at one blue line, measure and Atlas line (the 66 are
+  the Atlas-id difference #145 found); every visit's full segment joins a parent row;
+- the parent is the minimal segment the visit sits on for 45,450 visits, with its gradient for 45,452;
+- 12 visits sit on a full segment straddling a minimal break, and for all 12 the parent is still the visit's minimal
+  segment;
+- the other 79 (0.17 %, all with fish) are one pattern: the same blue line and measure on both networks, each within
+  5 m of the start of both its full and its minimal segment, and the parent is the minimal segment just below the one
+  the visit lands on. Placement prefers a segment starting in a short window above the visit: on the full network
+  that is the short piece cut at the catch itself, whose parent lies below the break, and on the minimal network the
+  segment starting at the break above. There the parent setup and the minimal network read different gradients
+  (median difference 0.041, at most 0.33). It is placement's window meeting two cuts a few metres apart, not the
+  parent table; four groups held none.
+
+link#444's acceptance line ("every visit lands on a segment on both networks, segment ids join, and the
+parent-gradient setup reads its parent's value") holds on the table.
+
+## The parent setup's DEV pick (2026-11-05 04:34Z, 1.0 min scoring)
+
+`DEV=1 GRADIENT=parent_gradient SPECIES=CH EVIDENCE_DIR=data/fdis/derived_parent DEV_DIR=data/tune/dev_parent 0320`:
+chinook rearing picks `mad>=0.75|g<=0.09|Q3@D1000`, the minimal network's pick, on 4,858 visits (7,823 with any size,
+45 groups with both outcomes); `default` outside the region (+238.3, SE 95.0). The stronger of the two criteria fixed
+before the run (the same rule) holds.
+
 ## Errors Encountered
 
 | Error | Resolution |
 |-------|------------|
+| A `until ! pgrep -f "0310_run.R"` waiter never exits: the pattern matches the waiter's own command line (code-check-shell's trap) | Stopped both waiters; waited on the background task's own notification |
 | `/planning-init`'s `gh_rest.sh` fails to parse under macOS `/bin/bash` 3.2 (line 300, `case` inside `$( )`) | Ran the skill's blocks under Homebrew bash; filed soul#725 |
