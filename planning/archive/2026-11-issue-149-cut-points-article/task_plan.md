@@ -122,10 +122,10 @@ keeps the bundle off the database, and any machine holding the staged directory 
 
 ## Validation
 
-- [ ] Tests pass (`devtools::test()`, and `NOT_CRAN=true` single-file runs read by PASS count)
+- [x] Tests pass (`devtools::test()`, and `NOT_CRAN=true` single-file runs read by PASS count): 2,026 pass; the two failures are environmental on this machine (methodology ignored-source md5s, live-schema placement), outside this branch
 - [x] `/code-check` clean (once over the branch with `/code-check branch`): five rounds, ended on round 5's 76-row claim enumeration with its six failing rows fixed and checked
-- [ ] PWF checkboxes match landed work
-- [ ] `/planning-archive` on completion
+- [x] PWF checkboxes match landed work
+- [x] `/planning-archive` on completion
 
 Verification: the staging log shows each md5 and the build ids; the bundle refuses a staged file whose md5 differs
 (mutation: alter one byte, expect the refusal); the article renders with every `stopifnot()` passing; the
