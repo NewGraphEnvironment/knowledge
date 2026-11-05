@@ -459,26 +459,25 @@ How often does it happen? If link cut visits with fish and visits without alike,
 same footing at both. On the full network it does not: a visit that caught fish starts a segment of its own far more
 often than one that caught none. The minimal network takes that difference away.
 
-```{r premise}
-lab_pm <- c(published_92 = "An earlier full network, cut at every record",
-            published_145 = "The full network used here, cut at each species' highest record on a stream",
-            minimal = "The minimal network, with no cuts at records, crossings or mapped habitat")
-tb <- data.frame(Network = unname(lab_pm[c("published_92", "published_145", "minimal")]),
-                 `Visits with fish` = pc(c(pm_at("published_92", "fish"), pm_at("published_145", "fish"),
-                                          pm_at("minimal", "fish")), 1),
-                 `Visits without` = pc(c(pm_at("published_92", "zero"), pm_at("published_145", "zero"),
-                                        pm_at("minimal", "zero")), 1),
-                 check.names = FALSE)
-knitr::kable(tb, format = "html", align = "lrr",
-             caption = "Electrofishing visits that start a segment of their own, on three of link's networks.") |>
-  kableExtra::kable_styling(full_width = FALSE) |>
-  kableExtra::footnote(general_title = "", general = paste0(
-    "The same ", n0(sum(pm$visits[pm$network == "minimal"])), " electrofishing visits on each network are those with a ",
-    "fished area in the usual range, on the stream lines the tuning scores: ", n0(pm$visits[pm$network == "minimal" & pm$catch_status == "fish"]),
-    " where fish of any species were caught and ", n0(pm$visits[pm$network == "minimal" & pm$catch_status == "zero"]),
-    " where none were. A visit starts its own segment when the segment begins between 1 m below it and 5 m above it. ",
-    "The networks are link ", paste(unique(pm$link[pm$network == "published_92"])), "'s, link ",
-    paste(unique(pm$link[pm$network == "published_145"])), "'s and link ", paste(unique(pm$link[pm$network == "minimal"])), "'s."))
+```{r premise, fig.height = 2.6, fig.cap = paste0("Electrofishing visits that start a segment of their own, on three of link's networks: dark, visits where fish of any species were caught; light, visits where none were. A visit starts its own segment when the segment begins between 1 m below it and 5 m above it. The same ", n0(sum(pm$visits[pm$network == "minimal"])), " visits are counted on each network (", n0(pm$visits[pm$network == "minimal" & pm$catch_status == "fish"]), " with fish, ", n0(pm$visits[pm$network == "minimal" & pm$catch_status == "zero"]), " without): those with a fished area in the usual range, on the stream lines the tuning scores. The networks are link ", unique(pm$link[pm$network == "published_92"]), "'s, link ", unique(pm$link[pm$network == "published_145"]), "'s and link ", unique(pm$link[pm$network == "minimal"]), "'s.")}
+lab_pm <- c(published_92 = "An earlier full network,\ncut at every record",
+            published_145 = "The full network used here, cut at each\nspecies' highest record on a stream",
+            minimal = "The minimal network, no cuts at\nrecords, crossings or mapped habitat")
+cols_catch <- c("Visits with fish" = "#2f3b45", "Visits without" = "#c4c8cc")  # neutral until the palette is chosen
+bars <- data.frame(net = factor(unname(lab_pm[pm$network]), levels = rev(unname(lab_pm))),
+                   who = factor(ifelse(pm$catch_status == "fish", "Visits with fish", "Visits without"),
+                                levels = names(cols_catch)),
+                   share = pm$at_site_pct / 100)
+ggplot(bars, aes(share, net, fill = who)) +
+  geom_col(position = position_dodge2(width = 0.75, reverse = TRUE), width = 0.7) +
+  geom_text(aes(label = pc(share, 1)), position = position_dodge2(width = 0.75, reverse = TRUE), hjust = -0.15,
+            size = 2.7, colour = "grey25") +
+  scale_fill_manual(values = cols_catch, name = NULL) +
+  scale_x_continuous(limits = c(0, 1), expand = c(0, 0), labels = NULL) +
+  labs(x = NULL, y = NULL) +
+  theme_minimal(base_size = 9.5) +
+  theme(panel.grid = element_blank(), legend.position = "bottom", legend.key.size = grid::unit(0.6, "lines"),
+        axis.text.y = element_text(colour = "grey25", lineheight = 0.9))
 ```
 
 Visits without chinook move too. Of the roughly `r n0(round(n_sites, -2))` visits in chinook's range that the tuning
