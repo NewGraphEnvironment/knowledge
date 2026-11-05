@@ -7,8 +7,8 @@ other sources, each under its own terms. Paths are the repository's.
 
 Contains information licensed under the
 [Open Government Licence - British Columbia](https://www2.gov.bc.ca/gov/content/data/policy-standards/open-data/open-government-licence-bc):
-the **BC Freshwater Atlas** lakes, rivers and stream network in `inst/vignette-data/bulk_water.rds` and
-`inst/vignette-data/bulk_segments.rds` (both installed with the package), and the Atlas's streams, lakes and
+the **BC Freshwater Atlas** lakes, rivers and stream network in `inst/vignette-data/bulk_water.rds`,
+`inst/vignette-data/bulk_segments.rds` and `inst/vignette-data/cut_points.rds` (all installed with the package), and the Atlas's streams, lakes and
 rivers drawn in `man/figures/readme-bulk.png` and the maps in `research/fig/`.
 
 ## Floodplains (CC BY 4.0)
@@ -26,7 +26,8 @@ The Province of British Columbia supplied FDIS electrofishing extracts (exported
 and agreed on 2026-10-16 to their publication with a note of when and from where they were received:
 [`fdis/README.md`](https://fresh-bc.s3.us-west-2.amazonaws.com/fdis/README.md), whose source is
 `data/fdis_README.md`. The tables built from those visits (`data/fdis_*.csv`, the use, tuning and comparison
-tables, and `data/thresholds*.csv`) are New Graph Environment's work under this repository's licence.
+tables, `data/thresholds*.csv`, and the site visits in `inst/vignette-data/cut_points.rds`) are New Graph Environment's
+work under this repository's licence.
 
 ## Quotes from published sources
 

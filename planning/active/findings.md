@@ -58,7 +58,22 @@ fish sites cross. The strongest: UFRA `101349_1_1` starts a 90 m full segment at
 3.4 %, with its Atlas line at 15.8 %. So the effect on a pick comes mostly from the many empty sites that cross, not
 the few fish sites; the article has to say so.
 
+## The bundle (2026-11-05)
+
+- The crossing used for the examples is the full segment's gradient against its minimal parent's at 9 or 13 %: 407
+  population sites cross, 7 of them with chinook caught. The stage's wider criterion (any two of four setups, 9, 11 or
+  13 %) counts 1,215 and 24.
+- Concept stream, UFRA `101349_1_1` (blue line 356358218, no GNIS name): the full network cuts at 489 m and 494 m
+  (the catch) and 584 m, so the site reads 10.8 % over 90 m; the minimal network reads 3.4 % over 14–584 m; the
+  Atlas line 15.8 % over 3 km. Above 584 m both networks agree (17.4–19 %).
+- One example window (LSKE) has no lake or river within it; its water layer is empty.
+- Phase 4's tests should cover the plan review's C1/C2: the premise, setups, transfer and other-keys counts as the
+  bundle holds them, and the staged md5s where the stage exists.
+
 ## Errors Encountered
 
 | Error | Resolution |
 |-------|------------|
+| `GEOS does not support XYM or XYZM geometries` at `st_buffer()` on staged Atlas lines | `st_zm()` before the buffer |
+| `pick_network_compare.csv` refused: 8 rows (rainbow trout empty) and `same`, not `none` | read the rows both networks fitted; moved is `!= "same"` |
+| `id_segment` missing on Atlas lines in the profile | a common `id` (segment id or linear feature id) |

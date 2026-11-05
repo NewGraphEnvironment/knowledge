@@ -60,7 +60,7 @@ keeps the bundle off the database, and any machine holding the staged directory 
 
 ## Phase 2: The bundle
 
-- [ ] `data-raw/vignette_cut_points.R` → `inst/vignette-data/cut_points.rds` (one named list, geometry simplified,
+- [x] `data-raw/vignette_cut_points.R` → `inst/vignette-data/cut_points.rds` (one named list, geometry simplified,
   EPSG:3005). Reads only the staged directory (held to its manifest md5s) and tracked tables (`data/tune/<key>_tune.csv`,
   `data/compare/compare.csv`, `20261105_setup_compare-ch_rear.csv`, the `segment_gradient_check` logs). Holds:
   - the premise table (sites starting their own segment, fish / empty, on #92's, #145's and the minimal network);
