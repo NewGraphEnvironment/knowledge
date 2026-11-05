@@ -46,7 +46,9 @@
 #         fwapg database (PG* env vars): SCHEMA (link's persist schema), discharge, cabd, bcfishobs,
 #         whse_basemapping, knw.walk_cache (the walk cache, shared with 0320's grade);
 #         link >= 0.78.1 (lnk_species_pooling; the minimal build's tokens); the BC Hydrologic Zones zip;
-#         PARENT_DIR (optional, #120): link's parent_<wsg>.csv.gz, each full segment's minimal parent
+#         PARENT_DIR (optional, #120): link's parent_<wsg>.csv.gz, each full segment's minimal parent;
+#         PARENT=TRUE (optional, #120): the same from <SCHEMA>.streams_parent (link#444), held to SCHEMA's build and
+#         PARENT_MINIMAL's (default fresh_default_minimal) by knw_parent_read()
 # OUTPUT: under EVIDENCE_DIR (default data/fdis/derived; all ignored; 0299 publishes the default's):
 #         visits_link.csv     one row per placed visit
 #         visits_species.csv  one row per placed visit x species
@@ -56,7 +58,7 @@
 #         workbook_{sites,species}.csv  the FISS workbook sites placed on link's segments
 #         scripts/logs/habitat/<date>_evidence_build_ledger.csv, or <date>_evidence_build_ledger-<base name>.csv for
 #         another EVIDENCE_DIR (#120); its first row names the directory
-# RUN:    [SCHEMA=fresh_default_20261017] [EVIDENCE_DIR=data/fdis/derived_<name>] [SETTLE=<settle log>] [PARENT_DIR=<dir>]
+# RUN:    [SCHEMA=fresh_default_20261017] [EVIDENCE_DIR=data/fdis/derived_<name>] [SETTLE=<settle log>] [PARENT_DIR=<dir> | PARENT=TRUE]
 #         [REMOTE=TRUE] Rscript scripts/0310-evidence-build.R   (from the repo root; 4 socket
 #         workers; the visit walks are cached from #91, so the first run walks them cold (6.4 min of walks and 16 min
 #         in all from a remote link, 2026-10-27) and a rerun on the same flow load reads them back (0.7 min of walks))
@@ -233,18 +235,32 @@ n0 <- nrow(v)
 v <- v |> inner_join(pl$placed, by = "site_visit")
 add("drop", "no_link_segment", n0 - nrow(v), sprintf("no %s segment on the visit's blue line at its measure", schema))
 add("info", "segment_starts_in_window", sum(v$segment_start_offset_m >= -1 & v$segment_start_offset_m <= 5))
-# the minimal parent of each full segment (#120): PARENT_DIR holds link's parent_<wsg>.csv.gz (link#415's proof, later
-# link#444's export); each placed visit gains its parent's gradient, length and straddle, and one with no parent stops
-# the build. Without PARENT_DIR the columns are absent, and 0320 refuses GRADIENT=parent_gradient
+# the minimal parent of each full segment (#120): PARENT=TRUE reads link#444's <SCHEMA>.streams_parent, held to SCHEMA's
+# build and PARENT_MINIMAL's by knw_parent_read(); PARENT_DIR holds link#415's prototype parent_<wsg>.csv.gz, for the
+# four-group proof schemas, which have no table. Each placed visit gains its parent's gradient, length and straddle, and
+# one with no parent stops the build. Without either the columns are absent, and 0320 refuses GRADIENT=parent_gradient
 parent_dir <- Sys.getenv("PARENT_DIR")
-if (nzchar(parent_dir)) {
-  pf <- list.files(parent_dir, "^parent_[a-z]{4}\\.csv(\\.gz)?$", full.names = TRUE)
-  if (!length(pf)) stop("PARENT_DIR=", parent_dir, " holds no parent_<wsg>.csv.gz")
-  parent <- bind_rows(lapply(pf, read_csv, show_col_types = FALSE, col_types = cols(wsg = "c", .default = "d")))
+parent_table <- Sys.getenv("PARENT") %in% c("1", "TRUE", "true")
+if (parent_table && nzchar(parent_dir)) stop("PARENT=TRUE and PARENT_DIR name two parent sources: give one")
+if (parent_table || nzchar(parent_dir)) {
+  if (parent_table) {
+    parent_min <- Sys.getenv("PARENT_MINIMAL", "fresh_default_minimal")
+    parent <- knw_parent_read(conn, schema, parent_min, keys = v)
+    pv <- attr(parent, "provenance")
+    add("info", "parent_table", pv$rows, sprintf("%s.streams_parent: built %s; full run %s, minimal %s run %s at link %s, %s",
+                                                 schema, pv$built_at, pv$run_uid_full, pv$minimal_schema,
+                                                 pv$run_uid_minimal, pv$link_sha_minimal, pv$config_hash_minimal))
+  } else {
+    pf <- list.files(parent_dir, "^parent_[a-z]{4}\\.csv(\\.gz)?$", full.names = TRUE)
+    if (!length(pf)) stop("PARENT_DIR=", parent_dir, " holds no parent_<wsg>.csv.gz")
+    parent <- bind_rows(lapply(pf, read_csv, show_col_types = FALSE, col_types = cols(wsg = "c", .default = "d")))
+    add("info", "parent_dir", length(pf), sprintf("%s: %s; md5 %s", .knw_path_rel(parent_dir),
+                                                  paste(basename(pf), collapse = ";"),
+                                                  paste(unname(tools::md5sum(pf)), collapse = ";")))
+  }
   v <- knw_parent_join(v, parent)
-  add("info", "parent_dir", length(pf), sprintf("%s: %s; md5 %s", .knw_path_rel(parent_dir), paste(basename(pf), collapse = ";"),
-                                                paste(unname(tools::md5sum(pf)), collapse = ";")))
-  add("info", "parent_joined", nrow(v), sprintf("of %d full segments in the parent tables", nrow(parent)))
+  add("info", "parent_joined", nrow(v), sprintf("of %d full segments read from the parent %s", nrow(parent),
+                                                if (parent_table) "table" else "files"))
   add("info", "parent_straddle", sum(v$parent_straddle_m > 0),
       "visits on a full segment that straddles a minimal break: part of it lies on another minimal segment")
   add("info", "parent_gradient_differs", sum(abs(v$parent_gradient - v$segment_gradient) > 1e-9, na.rm = TRUE),

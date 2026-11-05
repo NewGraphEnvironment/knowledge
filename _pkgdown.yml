@@ -35,6 +35,7 @@ reference:
     contents:
       - knw_link_place
       - knw_parent_join
+      - knw_parent_read
       - knw_link_segments
       - knw_link_flow
       - knw_link_width

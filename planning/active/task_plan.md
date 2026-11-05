@@ -41,12 +41,12 @@ All four read wet's 2026-10-24 flow load and link 0.78.1's range, on m4's databa
 
 ## Phase 1: the parent from link's table
 
-- [ ] `knw_parent_read(conn, schema, minimal_schema)`: reads `<schema>.streams_parent` and maps
+- [x] `knw_parent_read(conn, schema, minimal_schema)`: reads `<schema>.streams_parent` and maps
       `watershed_group_code` to `knw_parent_join()`'s `wsg`. Refuses a table whose `run_id_full` values are not runs
       `knw_build_record(conn, schema)` names, or whose `run_uid_minimal` is not `minimal_schema`'s build. That closes
       #120 round 4's "a parent table of another run joins silently" through the table's own provenance, beside the
       existing length check. Tests: fixtures for each refusal, with each guard shown to fire by restoring the bug.
-- [ ] `0310`: `PARENT=TRUE` (with `PARENT_MINIMAL`, default `fresh_default_minimal`) joins the table.
+- [x] `0310`: `PARENT=TRUE` (with `PARENT_MINIMAL`, default `fresh_default_minimal`) joins the table.
       `PARENT_DIR` stays for link's four-group proof schemas, which have no table. Ledger rows as for `PARENT_DIR`,
       plus the table's provenance.
 - [ ] Run `SCHEMA=fresh_default PARENT=TRUE EVIDENCE_DIR=data/fdis/derived_parent 0310` on m4. Check:
