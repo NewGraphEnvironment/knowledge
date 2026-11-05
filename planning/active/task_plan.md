@@ -115,7 +115,7 @@ None: the collection, the store and its push all land before the PR.
 
 ## Validation
 
-- [ ] Tests pass (`devtools::test()`; no `R/` change expected)
+- [x] Tests pass (`devtools::test()`; no `R/` change expected) (6 machine-state failures, none from this branch: findings, Validation)
 - [ ] `/code-check branch` (three-round floor; ends on an enumeration), plus the #56 `public_sweep.py`
 - [ ] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion

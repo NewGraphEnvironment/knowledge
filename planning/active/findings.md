@@ -187,3 +187,17 @@ second. The rerun took 86 s and exited 0 with no `ERROR`.
 A Zotero upload authorization answers `exists` when the storage server already holds a file with that md5, so 27
 of the created items' PDFs were registered without a transfer. The local md5 check found a group copy for only one
 of them (the watershed strategy, `VS4P4TG6`), so `exists` is not evidence of a duplicate item.
+
+## Validation (2026-11-05)
+
+`devtools::test()`: FAIL 6, PASS 1909, SKIP 1. None touches this branch, which changes no `R/`, `tests/` or
+`data-raw/` file:
+- `test-vignette-data.R:115` (×5): this machine's ignored `data/fdis/derived/{visits_link,visits_species,walks,
+  fdis_sites}.csv` and `data/fdis/build/reconcile.csv` differ from the md5s `method.rds` pins (the build #145
+  promoted). CLAUDE.md: the test "fails there and nowhere else"; `PULL=TRUE scripts/0336-archive.R` restores them.
+- `test-link_place.R:39`: the live `fresh_default` returns no BULK BT rearing segment over 20 m, so the test's
+  `data.frame()` gets a zero-row column (database state, not code).
+
+Public sweep: `tree` hits outside the 27 pre-existing `host` false positives were the resume block's home paths
+(fixed) and two `project_repo` matches on canada.ca registry URL slugs (`...-white-sturgeon-2024`,
+`...-2014`), false positives. `github` hits sit on other issues only; `commits` none.

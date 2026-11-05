@@ -17,11 +17,11 @@
 ### Resume
 
 ```
-Continue knowledge#124 from its parked PWF baseline. Repo ~/Projects/repo/knowledge, branch `124-white-sturgeon-store-gather-the-recovery`,
+Continue knowledge#124 from its parked PWF baseline. Repo knowledge (the main checkout, not a worktree), branch `124-white-sturgeon-store-gather-the-recovery`,
 parked 2026-10-31 after Phase 1, waiting on #127, branched from origin/main at 9e10a19.
 Run these in order, and stop at the first that fails; each failure means what it says:
 
-cd ~/Projects/repo/knowledge && git fetch -q origin
+cd <the knowledge checkout> && git fetch -q origin
 git worktree list | grep -F '[124-white-sturgeon-store-gather-the-recovery]' || echo none   # a path printed: that tree holds the branch; cd to it and skip the checkout
 git branch --show-current; git status --porcelain --untracked-files=no   # another branch with changes, or one another session may be on: do not check out here; git worktree add ../knowledge-124 124-white-sturgeon-store-gather-the-recovery and cd there
 git checkout 124-white-sturgeon-store-gather-the-recovery   # fails: the branch is not on origin
@@ -31,7 +31,7 @@ git merge origin/main   # a conflict: main moved meanwhile; resolve it, commit, 
 Then read planning/active/task_plan.md, findings.md, progress.md and review-plan.md if present.
 The gate decisions, the measurements and the Plan-agent review are already folded in:
 do not re-plan and do not re-ask them.
-Phase 1 is done. Its local PDFs sit in data/rag/pdf/sturgeon/ (git-ignored) in ~/Projects/repo/knowledge: run 0270 there, or copy them.
+Phase 1 is done. Its local PDFs sit in data/rag/pdf/sturgeon/ (git-ignored) in the main checkout: run 0270 there, or copy them.
 Phases 2-3 start only once #127 has merged and the Phase 2 gate holds; if it has not merged, stop and say so.
 Otherwise run every phase to the PR (/code-check branch, /planning-archive,
 /gh-pr-push). This message is the resume instruction that starts the run-to-PR
