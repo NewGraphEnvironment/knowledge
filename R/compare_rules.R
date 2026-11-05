@@ -72,6 +72,11 @@
 #' @param tuned_as `character(1)` the structure reported as `tuned`.
 #' @param config_sha `character(1)` the link commit `link_dir` was read at,
 #'   carried on every output row (`NA` when unknown).
+#' @param gradient `character(1)` where every segment's gradient comes from
+#'   (#120), as [knw_link_segments()] reads it: `"segment"` (link's own),
+#'   `"parent"` (the minimal parent's) or `"fwa"` (the Atlas segment's). The
+#'   scratch copies carry it, so `default`, the tuned rule, the other stage and
+#'   the connectivity pass all read it, as a build with that `grad` token would.
 #' @param workers `integer(1)` socket workers for the groups (#87). The groups
 #'   are split into `workers` bins balanced by segment count, largest first;
 #'   each bin runs on its own connection in its own scratch schema
@@ -106,7 +111,7 @@
 knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, link_dir, grades,
                               visits = NULL, visit_species = NULL, scratch = "knw_compare_scratch",
                               n_boot = 200L, seed_boot = 542L, structures = NULL, tuned_as = "door",
-                              config_sha = NA_character_, workers = 1L) {
+                              config_sha = NA_character_, workers = 1L, gradient = "segment") {
   chk::chk_function(connector)
   chk::chk_string(schema)
   chk::chk_string(species)
@@ -207,6 +212,8 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
   conn <- connector()
   on.exit(try(DBI::dbExecute(conn, sprintf("DROP SCHEMA IF EXISTS %s CASCADE", scratch)), silent = TRUE), add = TRUE)
   on.exit(try(DBI::dbDisconnect(conn), silent = TRUE), add = TRUE)
+  grad_sql <- .knw_seg_grad(gradient, schema)
+  .knw_seg_grad_check(conn, gradient, schema, groups)
   DBI::dbExecute(conn, wb_sql)
   DBI::dbExecute(conn, sprintf("CREATE SCHEMA IF NOT EXISTS %s", scratch))
   DBI::dbWriteTable(conn, DBI::Id(schema = scratch, table = "uhc"), uhc, overwrite = TRUE)
@@ -216,8 +223,9 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
   if (!"target_in_group" %in% names(g_sp)) g_sp$target_in_group <- NA
   DBI::dbWriteTable(conn, DBI::Id(schema = scratch, table = "grades"), as.data.frame(g_sp), overwrite = TRUE)
   DBI::dbExecute(conn, sprintf("CREATE INDEX ON %s.grades (id_segment, watershed_group_code)", scratch))
-  say("%s %s: %d groups; link configs at %s; default %s; tuned %s under %s (reported as tuned: %s).", sp, stage,
-      length(groups), config_sha, default_rule, tuned$rule, paste(structures, collapse = ", "), tuned_as)
+  say("%s %s: %d groups; link configs at %s; default %s; tuned %s under %s (reported as tuned: %s); gradient %s.",
+      sp, stage, length(groups), config_sha, default_rule, tuned$rule, paste(structures, collapse = ", "), tuned_as,
+      gradient)
   say("Scratch setup (waterbodies, user habitat, grades written): %.1f min.", tm$tick("scratch_setup"))
 
   rule_names <- c("default", structures)
@@ -235,6 +243,7 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
          preds = lapply(c(cw = "cw", mad = "mad"), preds_for, near_tbl = near_tbl))
   })
   bin_args <- list(connector = connector, schema = schema, s = s, sp = sp, stage = stage, scratch = scratch,
+                   grad_sql = grad_sql,
                    models = models, specs = specs, wb_sql = wb_sql, rule_names = rule_names,
                    assert_default = is_default_rule && "door" %in% structures,
                    uhc_types = if (nrow(uhc)) intersect(names(uhc), c("spawning", "rearing", "lake_rearing",
@@ -293,7 +302,7 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
   }
   seg <- DBI::dbGetQuery(conn, sprintf("
     SELECT s.id_segment, s.watershed_group_code, s.linear_feature_id, s.blue_line_key, s.downstream_route_measure,
-           s.upstream_route_measure, s.edge_type, s.stream_order, s.length_metre, s.gradient, s.channel_width,
+           s.upstream_route_measure, s.edge_type, s.stream_order, s.length_metre, %7$s AS gradient, s.channel_width,
            (h.accessible AND coalesce(a.access_%2$s > 0, FALSE)) AS accessible, h.accessible AS accessible_stored,
            h.rearing AS rearing_stored, h.spawning AS spawning_stored,
            g.size AS knw_size, g.dist_m AS knw_dist, g.grade, g.grade_class, g.target_in_group,
@@ -309,8 +318,9 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
     JOIN %1$s.streams_habitat_%2$s h ON h.id_segment = s.id_segment AND h.watershed_group_code = s.watershed_group_code
     LEFT JOIN %1$s.streams_access a ON a.id_segment = s.id_segment AND a.watershed_group_code = s.watershed_group_code
     LEFT JOIN %3$s.grades g ON g.id_segment = s.id_segment AND g.watershed_group_code = s.watershed_group_code
+    %8$s
     WHERE s.watershed_group_code IN (%4$s)",
-    schema, s, scratch, wsg_in, paste(edge_stream, collapse = ", "), in_uhc_seg))
+    schema, s, scratch, wsg_in, paste(edge_stream, collapse = ", "), in_uhc_seg, grad_sql$col, grad_sql$join))
   say("Segment read: %d segments, %.1f min.", nrow(seg), tm$tick("segment_read"))
   fl <- do.call(rbind, flags)
   for (k in rule_names) {
@@ -570,7 +580,8 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
 # name (the bin stops there). Self-contained: every value is an argument and every call is qualified, because it
 # runs on a socket worker.
 .knw_compare_bin <- function(groups, scratch_w, preds, connector, schema, s, sp, stage, scratch, models, specs, wb_sql,
-                             rule_names, assert_default, uhc_types, params, params_fresh) {
+                             rule_names, assert_default, uhc_types, params, params_fresh,
+                             grad_sql = list(col = "s.gradient", join = "")) {
   conn <- connector()
   on.exit(try(DBI::dbDisconnect(conn), silent = TRUE), add = TRUE)
   on.exit(try(DBI::dbExecute(conn, sprintf("DROP SCHEMA IF EXISTS %s CASCADE", scratch_w)), silent = TRUE),
@@ -605,6 +616,14 @@ knw_compare_rules <- function(connector, schema, species, stage, tuned, groups, 
         LEFT JOIN discharge.fwa_v1_segment_monthly q
           ON q.linear_feature_id = s.linear_feature_id AND q.scenario = 'historical' AND q.month = 0 AND q.pick
         WHERE s.watershed_group_code = '%4$s'", scratch_w, schema, s, w, scratch))
+      # the gradient a setup reads in place of the segment's own (#120): every rule and stage reads the copy's
+      if (nzchar(grad_sql$join)) {
+        DBI::dbExecute(conn, sprintf("
+          UPDATE %1$s.streams t SET gradient = %2$s
+          FROM %3$s.streams s %4$s
+          WHERE s.watershed_group_code = '%5$s' AND s.id_segment = t.id_segment
+            AND s.watershed_group_code = t.watershed_group_code", scratch_w, grad_sql$col, schema, grad_sql$join, w))
+      }
       # link stores one-part MultiLineStrings with Z and M; fresh's walk locates points along a LineString, and
       # nothing here reads Z or M, so the copy is merged and flattened (a segment of more than one part would refuse
       # the cast, which is the right failure)

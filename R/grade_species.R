@@ -37,9 +37,13 @@
 #' @param schema `character(1)` link persist schema.
 #' @param species `character(1)` species code.
 #' @param wsg `character` the species' groups.
-#' @param curve [knw_tune_curve()]'s result for the species and stage. It must
-#'   have been fitted on link's segment gradient (`curve$cols[["grad"]]` is
-#'   `segment_gradient`), the gradient the segments are graded on (#92).
+#' @param curve [knw_tune_curve()]'s result for the species and stage. The
+#'   segments are graded on the gradient it was fitted on
+#'   (`curve$cols[["grad"]]`): link's segment gradient (`segment_gradient`, #92,
+#'   the published tuning's), or for a setup of #120 the segment's minimal
+#'   parent's (`parent_gradient`) or its Freshwater Atlas segment's
+#'   (`fwa_gradient`), each read from the source [knw_link_segments()] names.
+#'   A curve that records none, or another, is refused.
 #' @param pick the recommended rule row.
 #' @param stage `"rear"` or `"spawn"`.
 #' @param workers `integer(1)` walk workers.
@@ -74,19 +78,20 @@ knw_grade_species <- function(connector, schema, species, wsg, curve, pick, stag
   chk::chk_function(connector)
   chk::chk_string(species)
   chk::chk_character(wsg)
-  # the segments carry link's segment gradient, so a curve fitted on any other would be read on a gradient it never
-  # saw; a curve from before #92 records none and was fitted on the Atlas line's
-  if (!identical(curve$cols[["grad"]], .knw_grade_grad)) {
-    stop("the curve was fitted on ", if (is.null(curve$cols)) "an unrecorded gradient (the Atlas line's, before #92)"
-         else curve$cols[["grad"]], ", not on ", .knw_grade_grad, ", the gradient the segments are graded on",
-         call. = FALSE)
+  # the segments are read with the gradient the curve was fitted on (#120), never another; a curve from before #92
+  # records none and was fitted on the Atlas line's whole-line gradient of that time
+  grad <- if (is.null(curve$cols)) NULL else curve$cols[["grad"]]
+  if (is.null(grad) || !grad %in% names(.knw_grade_grads)) {
+    stop("the curve was fitted on ", if (is.null(grad)) "an unrecorded gradient (the Atlas line's, before #92)"
+         else grad, ", not on a gradient the segments can be graded on (",
+         paste(names(.knw_grade_grads), collapse = ", "), ")", call. = FALSE)
   }
   if (is.null(ref_edge)) {
     ref_edge <- if (!is.null(curve$edge_stream)) curve$edge_stream else eval(formals(knw_tune_run)$edge_stream)
   }
   ref_edge <- as.integer(ref_edge)
   conn <- connector()
-  seg <- knw_link_segments(conn, schema, species, wsg)
+  seg <- knw_link_segments(conn, schema, species, wsg, gradient = .knw_grade_grads[[grad]])
   DBI::dbDisconnect(conn)
   size_col <- if (pick$size_var == "width") "channel_width" else "mad_pick"
   seg$size <- seg[[size_col]]
@@ -144,9 +149,18 @@ knw_grade_species <- function(connector, schema, species, wsg, curve, pick, stag
        walk_minutes = as.numeric(difftime(Sys.time(), t0, units = "mins")))
 }
 
-# the visit column that carries the gradient knw_grade_species() grades on (link's segment `gradient`), which a curve
-# must have been fitted on and a grade table records as `curve_grad` (#92)
+# the visit column that carries the gradient the published tuning grades on (link's segment `gradient`), which a curve
+# must have been fitted on and a grade table records as `curve_grad` (#92); 0325, the article bundles and promotion
+# hold a table to it
 .knw_grade_grad <- "segment_gradient"
+# every visit gradient a curve can be graded on, and the segment source knw_link_segments() reads it from (#120): the
+# segment's own, its minimal parent's and its Freshwater Atlas segment's. A run on either of the last two is a setup,
+# graded and compared but never published
+.knw_grade_grads <- c(segment_gradient = "segment", parent_gradient = "parent", fwa_gradient = "fwa")
+# the grad token a setup's grade records carry in place of the build's own (#120, link#414's vocabulary): grad-parent is
+# link's (0.79.0); grad-fwa is the name proposed to link for the Atlas segment's gradient, refused by the archive until
+# link's vocabulary holds it
+.knw_grade_grad_tokens <- c(parent_gradient = "grad-parent", fwa_gradient = "grad-fwa")
 
 # TRUE when a grade table's first row (read as character) records the curve's gradient as `grad`: 0320's keep-check,
 # 0325, 0330, data-raw/vignette_chinook.R and data-raw/vignette_method.R hold a grade table to this before reading it (#92)

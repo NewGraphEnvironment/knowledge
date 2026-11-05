@@ -190,11 +190,13 @@ test_that("every field 0325 and the bundles hold the set to refuses a by-key mix
     fx <- promote_fx()
     where_run <- if (cs[1] == "compare") "run_cmp" else "run_tune"
     where_kept <- if (cs[1] == "compare") "compare" else "tune"
-    set_col(fx, where_run, "CH_rear", cs[1], cs[2], "new")
+    # a promoted key is on the segment's own gradient, or it is refused before the mix (#120): the kept one moves
+    new <- if (cs[2] == "curve_grad") "segment_gradient" else "new"
+    set_col(fx, where_run, "CH_rear", cs[1], cs[2], new)
     set_col(fx, where_kept, "BT_rear", cs[1], cs[2], "old")
     # a field the grades record too moves with the fit, in the run and in the kept key
     if (cs[1] == "summary" && cs[2] %in% c("run_uid", "curve_grad")) {
-      set_col(fx, where_run, "CH_rear", "grades", cs[2], "new")
+      set_col(fx, where_run, "CH_rear", "grades", cs[2], new)
       set_col(fx, where_kept, "BT_rear", "grades", cs[2], "old")
     }
     before <- tree_md5(fx)
@@ -363,6 +365,15 @@ test_that("grades another fit made are refused on every field of the keep-check 
   fx <- promote_fx()
   set_col(fx, "run_tune", "CH_rear", "grades", "null_heldout_curve", "100.12340")
   expect_silent(promote(fx, dry_run = TRUE))
+})
+
+test_that("a setup run, tuned on another gradient than the segment's own, is never promoted (#120)", {
+  for (g in c("parent_gradient", "fwa_gradient")) {
+    fx <- promote_fx()
+    set_col(fx, "run_tune", "CH_rear", "summary", "curve_grad", g)
+    set_col(fx, "run_tune", "CH_rear", "grades", "curve_grad", g)
+    expect_error(promote(fx), paste0("CH_rear: tuned on ", g, ", not segment_gradient: a setup run"), info = g)
+  }
 })
 
 test_that("an undo restores what was replaced whatever the files' ages (round 4)", {

@@ -62,29 +62,29 @@ All four read wet's 2026-10-24 flow load and link 0.78.1's range, on m4's databa
 
 ## Phase 2: grading and the comparison on a chosen gradient
 
-- [ ] `knw_link_segments(conn, schema, species, wsg, gradient = "segment")`: `"parent"` reads
+- [x] `knw_link_segments(conn, schema, species, wsg, gradient = "segment")`: `"parent"` reads
       `p.gradient_minimal` from `<schema>.streams_parent` (an inner join that refuses a segment with no row); `"fwa"`
       reads `whse_basemapping.fwa_stream_networks_sp.gradient` on `linear_feature_id` (no link segment crosses an FWA
       segment, link#444).
-- [ ] `.knw_grade_grad` becomes a lookup (`segment_gradient` → segment, `parent_gradient` → parent, `fwa_gradient` →
+- [x] (kept `.knw_grade_grad` as the publishable value; `.knw_grade_grads` is the lookup) `.knw_grade_grad` becomes a lookup (`segment_gradient` → segment, `parent_gradient` → parent, `fwa_gradient` →
       fwa). `knw_grade_species()` grades with the curve's own gradient read from that source, and refuses any other.
-- [ ] `knw_compare_rules(gradient =)`: the scratch copy's `gradient` comes from that source, so `default`, the tuned
+- [x] `knw_compare_rules(gradient =)`: the scratch copy's `gradient` comes from that source, so `default`, the tuned
       rule, the other stage and the connectivity pass all read it, as a `grad-parent` build would.
-- [ ] `0320`: `SETUP=1` with `GRADIENT=parent_gradient|fwa_gradient` makes a graded candidate of its own (every seed
+- [x] `0320`: `SETUP=1` with `GRADIENT=parent_gradient|fwa_gradient` makes a graded candidate of its own (every seed
       and check), separate from the main run's sensitivity (`GRADIENT=fwa_gradient RUN=<main>` is unchanged). Its
       grade record carries the setup's `token_grad` (`grad-parent`, or link's Atlas token) in place of the build's
       `grad-seg`.
-- [ ] `0330`: takes the gradient from the curves' `curve_grad` (all keys of a run must agree), relaxes its stale check
+- [x] `0330`: takes the gradient from the curves' `curve_grad` (all keys of a run must agree), relaxes its stale check
       to "the curve's gradient is one grading supports", and passes it to `knw_compare_rules()`.
-- [ ] Refusal tests: `knw_tune_promote()`, `0325` and the article bundles refuse `curve_grad` other than
+- [x] Refusal tests: `knw_tune_promote()`, `0325` and the article bundles refuse `curve_grad` other than
       `segment_gradient`, shown by restoring the bug. Add a settings-register row if a new number shapes a result.
       (Review G1: promotion has no such guard today; it is added, not kept.)
-- [ ] `0320 SETUP=1` (review G2, Q3): writes the run root (not `grad_fwa/`), runs every seed and check, needs no
+- [x] `0320 SETUP=1` (review G2, Q3): writes the run root (not `grad_fwa/`), runs every seed and check, needs no
       `RUN=`, logs as `-setup_<parent|fwa>`; refused over a run whose summaries name another `curve_grad`, and the
       sensitivity (`GRADIENT=… RUN=`) refused on a SETUP run. `token_grad` from a fixed map of `curve_grad`
       (`grad-parent`; `grad-fwa`, the name the link issue proposes), checked against it (review G3).
-- [ ] File the link issue for the Atlas-line `grad` token now (review ordering), proposing `grad-fwa`.
-- [ ] `data/compare/setups/` in `.gitignore` (review G5).
+- [x] File the link issue for the Atlas-line `grad` token now (review ordering), proposing `grad-fwa`: link#460.
+- [x] `data/compare/setups/` in `.gitignore` (review G5).
 
 ## Phase 3: the two chinook-rearing runs (m4)
 

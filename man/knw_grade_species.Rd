@@ -28,9 +28,13 @@ opens its own).}
 
 \item{wsg}{\code{character} the species' groups.}
 
-\item{curve}{\code{\link[=knw_tune_curve]{knw_tune_curve()}}'s result for the species and stage. It must
-have been fitted on link's segment gradient (\code{curve$cols[["grad"]]} is
-\code{segment_gradient}), the gradient the segments are graded on (#92).}
+\item{curve}{\code{\link[=knw_tune_curve]{knw_tune_curve()}}'s result for the species and stage. The
+segments are graded on the gradient it was fitted on
+(\code{curve$cols[["grad"]]}): link's segment gradient (\code{segment_gradient}, #92,
+the published tuning's), or for a setup of #120 the segment's minimal
+parent's (\code{parent_gradient}) or its Freshwater Atlas segment's
+(\code{fwa_gradient}), each read from the source \code{\link[=knw_link_segments]{knw_link_segments()}} names.
+A curve that records none, or another, is refused.}
 
 \item{pick}{the recommended rule row.}
 

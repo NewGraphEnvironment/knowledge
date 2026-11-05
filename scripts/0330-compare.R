@@ -13,6 +13,10 @@
 #   - BOTH RULES REGENERATED THE SAME WAY (0298): fresh's predicate behind stored access, link's
 #     user-habitat overlay, fresh's connectivity pass, on scratch copies; both stages together.
 #     knw_compare_rules() carries the method.
+#   - ON THE RUN'S GRADIENT (#120): the scratch copies read the gradient the run's curves were fitted on, link's segment
+#     gradient for a main run, or a setup's (0320 SETUP=1: the minimal parent's or the Atlas segment's), so `default`
+#     and the tuned rule are both drawn as a build reading that gradient would draw them. Its stored-against-default
+#     residue is then the gradient's doing, not a regression; a setup's comparison is never promoted.
 #   - THE BASELINE IS LINK'S CURRENT `default` (#73): the configs are read at CONFIG_SHA (default: LINK_REPO's
 #     origin/main, as fetched), not at the run's commit, because that is the rule link draws now; the schema's
 #     run and its link_sha stay the provenance of the segments and access. Since link 0.67.0 a rule can carry a
@@ -140,6 +144,19 @@ curves <- setNames(lapply(cf, readRDS), sub("_curve\\.rds$", "", basename(cf)))
 fitted <- Filter(function(r) !is.null(r$pick) && !is.null(r$curve), curves)
 if (nzchar(only)) fitted <- fitted[vapply(fitted, function(r) r$species_code %in% strsplit(only, ",")[[1]], logical(1))]
 say("Comparison, knowledge#57: %d fitted species x stage; link run %s at %s.", length(fitted), run_uid, link_sha)
+# the gradient the run's curves were fitted on, which the segments are compared on (#120): link's segment gradient for a
+# main run, or a setup's (0320 SETUP=1: the minimal parent's, the Atlas segment's), read by every rule and stage alike
+run_grad <- unique(vapply(fitted, function(r) {
+  g <- if (is.null(r$curve$cols)) NA_character_ else r$curve$cols[["grad"]]
+  if (is.null(g)) NA_character_ else g
+}, character(1)))
+if (length(fitted) && (length(run_grad) != 1L || !run_grad %in% names(.knw_grade_grads))) {
+  stop(tune_dir, "'s curves were fitted on ", paste(run_grad, collapse = ", "), ": one of ",
+       paste(names(.knw_grade_grads), collapse = ", "), " per run")
+}
+if (!length(fitted)) run_grad <- .knw_grade_grad
+say("Segments read with the gradient the curves were fitted on: %s (%s)%s.", run_grad, .knw_grade_grads[[run_grad]],
+    if (!identical(run_grad, .knw_grade_grad)) "; a setup of #120, never promoted" else "")
 say("Candidate run %s: read from %s, written under %s (ignored); promote it with RUN=%s scripts/0335.", run, tune_dir, dir_out, run)
 # the build the run was scored on (#120): EVIDENCE_DIR (a staged copy on another machine), else the directory the run's
 # summaries name (0320 writes it from #120), else the default. Its tables must be the ones the curves were fitted on,
@@ -258,10 +275,10 @@ stale <- names(jobs)[!vapply(names(jobs), function(k) {
     # graded from a curve with the prior, the withheld-grade record (#73, Phase 7) and the gate's own number (the branch
     # review of 2026-10-25: a verdict written by the gate before it compared like with like is not read back)
     all(c("curve_prior_sd", "grade_withheld", "null_heldout_curve") %in% names(h)) &&
-    # graded from a curve fitted on link's segment gradient, the curve this comparison reads (#92)
-    .knw_grade_grad_ok(h) && identical(curves[[k]]$curve$cols[["grad"]], h$curve_grad)
+    # graded from a curve fitted on the run's gradient, the curve this comparison reads (#92, #120)
+    .knw_grade_grad_ok(h, run_grad) && identical(curves[[k]]$curve$cols[["grad"]], h$curve_grad)
 }, logical(1))]
-if (length(stale)) stop("grade tables made before #73's curve prior (no ref_population = stream_branch, a walk not ending at the bank, or no curve_prior_sd, grade_withheld, null_heldout_curve and evidence_md5), graded from a curve on another gradient than link's segment gradient (curve_grad, #92), walked by another walk than this tree's (walk_md5, #87) or on another flow load than the database's, or graded under another pick, link run or evidence build than the curve record's; rerun 0320: ",
+if (length(stale)) stop("grade tables made before #73's curve prior (no ref_population = stream_branch, a walk not ending at the bank, or no curve_prior_sd, grade_withheld, null_heldout_curve and evidence_md5), graded from a curve on another gradient than the run's (curve_grad, #92, #120), walked by another walk than this tree's (walk_md5, #87) or on another flow load than the database's, or graded under another pick, link run or evidence build than the curve record's; rerun 0320: ",
                         paste(stale, collapse = ", "))
 # each job writes its own tables as it finishes and returns its error rather than raising it, so one failed
 # species cannot discard the others (code-check round 2); the grade table is read with the six columns the
@@ -285,7 +302,7 @@ run_one <- function(job) {
     cmp <- knw_compare_rules(pg, schema, job$species_code, job$stage, job$pick, job$groups, link_dir, grades,
                              visits = vl, visit_species = vs, scratch = paste0("knw_cmp_", tolower(job$key)),
                              tuned_as = tuned_as, structures = if (structures == "all") NULL else "reported",
-                             config_sha = config_sha, workers = workers)
+                             config_sha = config_sha, workers = workers, gradient = .knw_grade_grads[[run_grad]])
     rm(grades)
     # the key's stage lines (#110): the grade table read here first, then knw_compare_rules()'s, then the writes
     cmp$log <- c(sprintf("Grade table read: %.1f min.", m_read), cmp$log)
