@@ -24,6 +24,9 @@ knitr::opts_chunk$set(
 library(dplyr)
 library(ggplot2)
 sf::sf_use_s2(FALSE)
+# the figures' palette: the mark's black and greys with one steel-blue accent (Al, 2026-11-05); it moves to gq's palette
+# registry when that exists
+pal <- c(ink = "#1a1a1a", mid = "#8c8c8c", light = "#d9d9d9", soft = "#bdbdbd", accent = "#3a6b8c", grey = "#9a9a9a")
 ```
 
 ```{r load}
@@ -208,8 +211,9 @@ lab_over <- streams[streams$stream_order >= 6 & streams$km >= 20, ]
 stopifnot("Fraser River" %in% lab_over$gnis_name, nrow(lab_over) >= 3)
 ```
 
-```{r map, fig.height = round(over_h + zoom_h, 2), fig.cap = paste0("Chinook rearing habitat in the ", mrow$gnis_name, " watershed group, around the ", mrow$joins, " ", n0(mrow$town_km), " km ", mrow$compass, " of ", mrow$town, ", under two habitat definitions, both run on link's full network. Navy: drawn by both. Orange: drawn only by the definition tuned on each segment's own slope (a ", lim(s_of("published")$grad_max), " limit). Pink: drawn only by the definition tuned on the minimal network, reading each segment's minimal-network slope (", lim(s_of("parent")$grad_max), "). Line width follows stream order. The lower panel enlarges the box outlined above; between its dashed lines is the ", cell / 1000, " km square holding the most km drawn by one definition and not the other. Stream names are the Freshwater Atlas's. Basemap: Esri World Topographic Map and World Shaded Relief.")}
-cols_map <- stats::setNames(c("#253494", "#f76707", "#d6336c"), lv)
+```{r map, fig.height = round(over_h + zoom_h, 2), fig.cap = paste0("Chinook rearing habitat in the ", mrow$gnis_name, " watershed group, around the ", mrow$joins, " ", n0(mrow$town_km), " km ", mrow$compass, " of ", mrow$town, ", under two habitat definitions, both run on link's full network. Grey: drawn by both. Black: drawn only by the definition tuned on each segment's own slope (a ", lim(s_of("published")$grad_max), " limit). Steel blue: drawn only by the definition tuned on the minimal network, reading each segment's minimal-network slope (", lim(s_of("parent")$grad_max), "). Line width follows stream order. The lower panel enlarges the box outlined above; between its dashed lines is the ", cell / 1000, " km square holding the most km drawn by one definition and not the other. Stream names are the Freshwater Atlas's. Basemap: Esri World Topographic Map and World Shaded Relief.")}
+# on the relief basemap the shared habitat is quiet and the two differences carry the map, each over a thin white casing
+cols_map <- stats::setNames(unname(pal[c("mid", "ink", "accent")]), lv)
 lab_col <- gq::gq_reg_main()$layers$stream_labels$label
 # Esri's topographic map blended with its shaded relief, warped to BC Albers (as New Graph's habitat-rules post draws
 # its maps); fetched when the article builds
@@ -218,7 +222,8 @@ basemap <- function(b, zoom_level) {
   topo <- gq::gq_basemap_tiles(g, provider = "Esri.WorldTopoMap", zoom = zoom_level, pad = 0, crs = 3005)
   relief <- gq::gq_basemap_tiles(g, provider = "Esri.WorldShadedRelief", zoom = zoom_level, pad = 0, crs = 3005)
   if (is.null(topo) || is.null(relief)) stop("the basemap tiles did not fetch")
-  gq::gq_basemap_blend(topo, relief, method = "gamma", gamma = 1)
+  # faded toward white so the mark's black, greys and steel blue read over it
+  gq::gq_basemap_blend(topo, relief, method = "gamma", gamma = 1) * 0.5 + 255 * 0.5
 }
 # one label per stream, on the straightest stretch of its longest run inside the panel, turned to its angle and set
 # just off the channel (after the habitat-rules post)
@@ -262,6 +267,8 @@ draw <- function(b, zoom_level, scale_km, lwd_add, labs, frame_box = NULL, legen
     tmap::tm_shape(both) + tmap::tm_lines(col = cols_map[[1]], lwd = "lwd",
                                           lwd.scale = tmap::tm_scale_continuous(values.scale = 1),
                                           lwd.legend = tmap::tm_legend_hide()) +
+    tmap::tm_shape(dd) + tmap::tm_lines(col = "white", lwd = "lwd", lwd.scale = tmap::tm_scale_continuous(values.scale = 2.6),
+                                        lwd.legend = tmap::tm_legend_hide()) +
     tmap::tm_shape(dd) +
     tmap::tm_lines(col = "cls", col.scale = tmap::tm_scale_categorical(values = cols_map, levels.drop = FALSE),
                    col.legend = if (legend) tmap::tm_legend(title = "Chinook rearing drawn by") else tmap::tm_legend_hide(),
@@ -309,7 +316,7 @@ sg <- cc$segments
 xmax <- 700
 pr <- cc$atlas_profile[cc$atlas_profile$measure <= xmax + 50, ]
 lab_net <- c(full = "Full network", minimal = "Minimal network", atlas = "Atlas line")
-cols_net <- c("Full network" = "#d95f02", "Minimal network" = "#1b6ca8", "Atlas line" = "grey40")
+cols_net <- c("Full network" = unname(pal["ink"]), "Minimal network" = unname(pal["accent"]), "Atlas line" = unname(pal["grey"]))
 sg$net <- factor(lab_net[sg$network], levels = lab_net)
 site_seg <- sg[sg$from_m <= cc$site$measure & sg$to_m > cc$site$measure, ]
 stopifnot(nrow(site_seg) == 3, setequal(site_seg$network, names(lab_net)))
@@ -342,12 +349,12 @@ there is worked out from the visit upstream. On the stream below, the visit that
 `r grad(seg_at("full")$gradient)` on the full network, over the `r n0(seg_at("full")$length_metre)` m above it, and
 `r grad(seg_at("minimal")$gradient)` on the minimal network, whose segment runs from near the mouth past the visit.
 
-```{r profile, fig.height = 3.6, fig.cap = paste0("One stream cut two ways: ", where(list(place = "concept", site_visit = cc$site$site_visit)), ". The thin grey line is the stream's elevation along its Atlas line. Each coloured line is a segment drawn as the straight slope tested on it, with ticks at the ends of the full and minimal networks' segments: orange the full network's, blue the minimal network's, dark grey the whole Atlas line's, which runs on past the top of the figure. The black dot is a visit where chinook were caught; the open circle, on the same full-network segment, a visit where none were. The labels give the slope each version reads at the black dot. Elevation is stretched several times so the slopes can be seen.")}
+```{r profile, fig.height = 3.6, fig.cap = paste0("One stream cut two ways: ", where(list(place = "concept", site_visit = cc$site$site_visit)), ". The thin grey line is the stream's elevation along its Atlas line. Each coloured line is a segment drawn as the straight slope tested on it, with ticks at the ends of the full and minimal networks' segments: black the full network's, steel blue the minimal network's, grey the whole Atlas line's, which runs on past the top of the figure. The black dot is a visit where chinook were caught; the open circle, on the same full-network segment, a visit where none were. The labels give the slope each version reads at the black dot. Elevation is stretched several times so the slopes can be seen.")}
 lab_pos <- data.frame(net = site_seg$net, lab = site_seg$lab,
                       x = c(full = 440, minimal = 330, atlas = 300)[site_seg$network],
                       y = c(full = 994.5, minimal = 1016, atlas = 1036)[site_seg$network])
 ggplot() +
-  geom_line(data = pr, aes(measure, z), colour = "grey60", linewidth = 0.35) +
+  geom_line(data = pr, aes(measure, z), colour = "grey78", linewidth = 0.35) +
   geom_segment(data = sg, aes(x = from_m, xend = to_m, y = z_dn, yend = z_up, colour = net), linewidth = 0.55) +
   geom_point(data = sg[sg$network != "atlas", ], aes(x = from_m, y = z_dn, colour = net), shape = 124, size = 2.2,
              show.legend = FALSE) +
@@ -369,7 +376,7 @@ ggplot() +
 cls_lab <- c(paste(lim(crit$limits[["minimal"]]), "or less"),
              paste("over", lim(crit$limits[["minimal"]]), "to", lim(crit$limits[["published"]])),
              paste("over", lim(crit$limits[["published"]])))
-cols_cls <- stats::setNames(c("#8ecae6", "#ffb703", "#e85d04"), cls_lab)
+cols_cls <- stats::setNames(unname(pal[c("light", "mid", "ink")]), cls_lab)
 half <- 600
 ex <- x$examples
 stopifnot(length(ex) == crit$n_examples)
@@ -463,7 +470,7 @@ often than one that caught none. The minimal network takes that difference away.
 lab_pm <- c(published_92 = "An earlier full network,\ncut at every record",
             published_145 = "The full network used here, cut at each\nspecies' highest record on a stream",
             minimal = "The minimal network, no cuts at\nrecords, crossings or mapped habitat")
-cols_catch <- c("Visits with fish" = "#2f3b45", "Visits without" = "#c4c8cc")  # neutral until the palette is chosen
+cols_catch <- c("Visits with fish" = unname(pal["ink"]), "Visits without" = unname(pal["soft"]))
 bars <- data.frame(net = factor(unname(lab_pm[pm$network]), levels = rev(unname(lab_pm))),
                    who = factor(ifelse(pm$catch_status == "fish", "Visits with fish", "Visits without"),
                                 levels = names(cols_catch)),
