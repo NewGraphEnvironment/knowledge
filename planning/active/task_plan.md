@@ -80,7 +80,7 @@ keeps the bundle off the database, and any machine holding the staged directory 
 
 ## Phase 3: The article (draft) — on the other machine
 
-- [ ] `vignettes/_cut_points.Rmd`, `bookdown::html_vignette2`, headings as the reader's questions, answer first:
+- [x] `vignettes/_cut_points.Rmd`, `bookdown::html_vignette2`, headings as the reader's questions, answer first:
   1. What does link's cut do to the slope at a fish site? (concept profile figure; premise table)
   2. Where does it bite on our own data? (example sites, side-by-side maps per setup; MORK map)
   3. How far did the tuned rules move? (chinook rearing on four setups: pick, region verdicts, km; one sentence on
@@ -90,8 +90,12 @@ keeps the bundle off the database, and any machine holding the staged directory 
   5. Limits.
   - Every number inline from the bundle, each checked by `stopifnot()`; a caption names every mark; species in
     lower case; packages cited at first mention.
-- [ ] References: `data-raw/vignette_bib.R` writes `vignettes/cut_points.bib` if the article cites a work or package
+- [x] References: `data-raw/vignette_bib.R` writes `vignettes/cut_points.bib` if the article cites a work or package
   (Zotero must be running; if it is not on this machine, the article cites packages only through `citation()`).
+
+- [x] Each place oriented by computation (`writing.md`): `data-raw/vignette_cut_points_places.R` →
+  `inst/vignette-data/cut_points_places.rds` (receiving stream from the Atlas watershed code, nearest incorporated
+  place from BC Geographical Names, pinned to the bundle's md5); NOTICE row (the layer is Access Only: names only).
 
 ## Phase 4: Tests and pins
 

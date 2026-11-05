@@ -1,0 +1,462 @@
+---
+title: "How link's cut points move a tuned slope limit"
+output:
+  bookdown::html_vignette2
+bibliography: cut_points.bib
+link-citations: true
+vignette: >
+  %\VignetteIndexEntry{How link's cut points move a tuned slope limit}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  echo = FALSE,
+  fig.width = 7,
+  fig.height = 4.5,
+  dpi = 150,
+  message = FALSE,
+  warning = FALSE
+)
+library(dplyr)
+library(ggplot2)
+sf::sf_use_s2(FALSE)
+```
+
+```{r load}
+# data from data-raw/vignette_cut_points.R and data-raw/vignette_cut_points_places.R
+vd <- function(f) system.file("vignette-data", f, package = "knowledge", mustWork = TRUE)
+x <- readRDS(vd("cut_points.rds"))
+pl <- readRDS(vd("cut_points_places.rds"))
+# the places were measured on this bundle
+stopifnot(identical(pl$meta$bundle_md5, unname(tools::md5sum(vd("cut_points.rds")))))
+places <- pl$places
+
+# formatting
+n0 <- function(v) format(round(v), big.mark = ",", scientific = FALSE, trim = TRUE)
+pc <- function(v, d = 0) paste0(formatC(100 * v, format = "f", digits = d), " %")
+grad <- function(g, d = 1) paste0(formatC(100 * g, format = "f", digits = d), " %")
+lim <- function(g) paste0(signif(100 * g, 3), " %")
+link_site <- "https://www.newgraphenvironment.com/link/"
+research <- "https://github.com/NewGraphEnvironment/knowledge/blob/main/research/minimal_network_tuning.md"
+where <- function(p) {
+  r <- places[places$place == p$place & places$site_visit %in% p$site_visit, ]
+  stopifnot(nrow(r) == 1)
+  nm <- if (is.na(r$gnis_name)) "an unnamed stream" else r$gnis_name
+  via <- if (r$joins_direct) "flowing into" else "draining to"
+  sprintf("%s %s the %s, %s km %s of %s", nm, via, r$joins, n0(r$town_km), r$compass, r$town)
+}
+
+# ---- the premise: sites that start a segment of their own ----------------------------------------------------------
+pm <- x$premise
+pm_at <- function(n, cs) pm$at_site_pct[pm$network == n & pm$catch_status == cs] / 100
+stopifnot(nrow(pm) == 6, all(c("published_92", "published_145", "minimal") %in% pm$network))
+# the sentences: on both full networks a site with fish starts its own segment far more often than one without; on
+# the minimal network the two are close
+stopifnot(pm_at("published_145", "fish") > 5 * pm_at("published_145", "zero"),
+          pm_at("published_92", "fish") > 5 * pm_at("published_92", "zero"),
+          abs(pm_at("minimal", "fish") - pm_at("minimal", "zero")) < 0.01,
+          pm_at("published_145", "fish") / pm_at("published_92", "fish") > 0.4,
+          pm_at("published_145", "fish") / pm_at("published_92", "fish") < 0.6)
+
+# ---- the setups --------------------------------------------------------------------------------------------------
+su <- x$setups
+s_of <- function(s) su[su$setup == s, ]
+stopifnot(identical(su$setup, c("published", "minimal", "parent", "atlas")), length(unique(su$n_visits)) == 1)
+in_reg <- function(pick_of, region_of) {
+  t <- x$tune[[region_of]]
+  v <- t$in_region[t$rule == s_of(pick_of)$pick]
+  stopifnot(length(v) == 1)
+  v == "TRUE"
+}
+# the opening's words: 13 % on the full network, 9 % on the minimal, the 13 % no close call on the minimal network's
+# records and the 9 % a close call on the full network's; the parent setup picks the minimal network's rule exactly,
+# the Atlas line a steeper limit; every pick keeps the flow floor and the near-a-river allowance
+stopifnot(s_of("published")$grad_max == 0.13, s_of("minimal")$grad_max == 0.09,
+          !in_reg("published", "minimal"), in_reg("minimal", "published"),
+          s_of("parent")$pick == s_of("minimal")$pick, s_of("atlas")$grad_max > s_of("published")$grad_max,
+          !in_reg("atlas", "published"), !in_reg("atlas", "minimal"),
+          length(unique(sub("\\|g<=[0-9.]+\\|", "|", su$pick))) == 1)
+d_on <- as.Date(substr(s_of("published")$tune_run, 1, 8), "%Y%m%d")
+tuned_on <- paste(as.integer(format(d_on, "%d")), format(d_on, "%B %Y"))
+tr <- x$transfer
+transfer_pct <- tr$minimal_only_km / tr$minimal_km
+stopifnot(abs(tr$parent_km - s_of("parent")$tuned_km) < 0.05, transfer_pct < 0.02, tr$parent_only_km < tr$minimal_only_km)
+
+# ---- the other keys ---------------------------------------------------------------------------------------------
+ok <- x$other_keys
+n_moved <- sum(ok$network_moved != "same")
+n_out <- sum(!ok$minimal_in_full_region | !ok$full_in_minimal_region)
+stopifnot(nrow(ok) == 7, n_moved == 4, n_out == 3, "CH_rear" %in% ok$key[ok$network_moved != "same"])
+
+# ---- the sites that change side ------------------------------------------------------------------------------------
+st <- x$sites
+crit <- x$criteria
+st$d <- st$full_gradient - st$parent_gradient
+n_sites <- nrow(st)
+n_fish <- sum(st$present)
+cr <- st[st$crosses, ]
+steep <- function(g, present) mean(g[st$present == present] > crit$limits[["minimal"]])
+# the tuning's sites: those in groups where chinook were caught at some sites and not others
+both_out <- ave(st$present, st$watershed_group_code, FUN = function(p) any(p) && !all(p))
+stopifnot(sum(both_out) == su$n_visits[1])
+stopifnot(sum(cr$present) < 10, sum(cr$d > 0) > 2 * sum(cr$d < 0),
+          steep(st$full_gradient, FALSE) > steep(st$parent_gradient, FALSE),
+          steep(st$full_gradient, TRUE) > steep(st$parent_gradient, TRUE))
+```
+
+[`link`](`r link_site`) [@irvine2026linkDevelop], an R package, maps where each fish species can spawn and rear on
+British Columbia's streams. It cuts the streams of the BC Freshwater Atlas [@flnrord2021FreshwaterAtlasb] into
+segments and tests each segment against a few thresholds, one of them a steepest slope. Some of its cuts fall where
+fish were caught, so at a site that caught fish the slope a rule reads is often worked out over a short stretch that
+starts at the catch. That moves the thresholds this package tunes from the same catches. On link's full network,
+chinook rearing's slope limit is **`r lim(s_of("published")$grad_max)`**; on its minimal network, which is cut only
+at natural barriers and at the steep sections fish cannot pass, it is **`r lim(s_of("minimal")$grad_max)`**, and on the minimal network's records the
+`r lim(s_of("published")$grad_max)` limit fits measurably worse. Read on the full network with each segment taking its
+minimal-network slope, the records choose `r lim(s_of("parent")$grad_max)` again.
+
+```{r profile-data}
+cc <- x$concept
+sg <- cc$segments
+xmax <- 700
+pr <- cc$atlas_profile[cc$atlas_profile$measure <= xmax + 50, ]
+lab_net <- c(full = "Full network", minimal = "Minimal network", atlas = "Atlas line")
+cols_net <- c("Full network" = "#d95f02", "Minimal network" = "#1b6ca8", "Atlas line" = "grey40")
+sg$net <- factor(lab_net[sg$network], levels = lab_net)
+site_seg <- sg[sg$from_m <= cc$site$measure & sg$to_m > cc$site$measure, ]
+stopifnot(nrow(site_seg) == 3, setequal(site_seg$network, names(lab_net)))
+seg_at <- function(n) site_seg[site_seg$network == n, ]
+# the profile's words: the full network cuts at the catch, so the site starts a segment of its own, steeper than its
+# minimal segment and gentler than the whole Atlas line
+stopifnot(abs(seg_at("full")$from_m - cc$site$measure) < 1, cc$site$present,
+          abs(seg_at("full")$gradient - cc$site$full_gradient) < 1e-4,
+          abs(seg_at("minimal")$gradient - cc$site$minimal_gradient) < 1e-4,
+          seg_at("full")$gradient > crit$limits[["minimal"]], seg_at("minimal")$gradient < crit$limits[["minimal"]],
+          seg_at("atlas")$gradient > crit$limits[["published"]], seg_at("minimal")$from_m < 50)
+cc_sites <- cc$sites
+cc_sites$z <- stats::approx(pr$measure, pr$z, cc_sites$measure)$y
+site_seg$lab <- sprintf("%s: %s over %s", site_seg$net, grad(site_seg$gradient),
+                        ifelse(site_seg$length_metre >= 1000, paste(formatC(site_seg$length_metre / 1000, format = "f", digits = 1), "km"),
+                               paste(n0(site_seg$length_metre), "m")))
+```
+
+```{r profile, fig.height = 4.2, fig.cap = paste0("One stream cut two ways: ", where(list(place = "concept", site_visit = cc$site$site_visit)), ". The grey band is the stream's elevation along its Atlas line. Each coloured line is a segment drawn as the straight slope a rule reads on it, with ticks at the segment ends: orange the full network's, blue the minimal network's, dark grey the whole Atlas line's, which runs on past the top of the figure. The black dot is a site where chinook were caught, the open circle one where none were. The labels give the slope each version reads at the black dot. Elevation is stretched several times so the slopes can be seen.")}
+lab_pos <- data.frame(net = site_seg$net, lab = site_seg$lab,
+                      x = c(full = 440, minimal = 330, atlas = 300)[site_seg$network],
+                      y = c(full = 994.5, minimal = 1016, atlas = 1036)[site_seg$network])
+ggplot() +
+  geom_line(data = pr, aes(measure, z), colour = "grey82", linewidth = 2.4) +
+  geom_segment(data = sg, aes(x = from_m, xend = to_m, y = z_dn, yend = z_up, colour = net), linewidth = 0.9) +
+  geom_point(data = sg[sg$network != "atlas", ], aes(x = from_m, y = z_dn, colour = net), shape = 124, size = 4,
+             show.legend = FALSE) +
+  geom_point(data = cc_sites, aes(measure, z, shape = present), size = 2.6, fill = "white", show.legend = FALSE) +
+  geom_label(data = lab_pos, aes(x, y, label = lab, colour = net), size = 3, hjust = 0, label.size = 0,
+             fill = "white", alpha = 0.85, show.legend = FALSE) +
+  scale_shape_manual(values = c(`TRUE` = 16, `FALSE` = 21)) +
+  scale_colour_manual(values = cols_net, name = NULL) +
+  coord_cartesian(xlim = c(0, xmax), ylim = c(990, 1040)) +
+  labs(x = "Distance upstream from the stream's mouth (m)", y = "Elevation (m)") +
+  theme_minimal(base_size = 10) +
+  theme(legend.position = "bottom", panel.grid.minor = element_blank())
+```
+
+## What does a cut do to the slope at a fish site?
+
+A segment's slope is its drop over its length, so where a segment starts and ends decides the slope a rule reads.
+link's full network cuts a stream at natural barriers and at the steep sections a species cannot pass, and also at
+road and rail crossings, at the ends of stretches whose habitat has been mapped by hand, and at fish records: in the
+build used here, each species' highest record on each stream, drawn from bcfishobs [@norris2024smnorrisbcfishobs].
+An electrofishing site that caught fish is often such a record, so the cut lands at the site, and the slope a rule
+reads there is worked out from the site upstream. On the stream above, the site that caught chinook reads
+`r grad(seg_at("full")$gradient)` on the full network, over the `r n0(seg_at("full")$length_metre)` m above it, and
+`r grad(seg_at("minimal")$gradient)` on the minimal network, whose segment runs from near the mouth past the site.
+
+link's minimal network keeps only the first kind of cut: natural barriers and steep sections. So it shows what the
+slopes would be if no catch decided where a segment begins. The table counts the electrofishing sites in the
+Fisheries Data Information System [@provinceofbritishcolumbia2022FisheriesData] that start a segment of their own,
+meaning the segment begins within a few metres of the site:
+
+```{r premise}
+lab_pm <- c(published_92 = "link 0.66.0, full network (every fish record a cut)",
+            published_145 = "link 0.78.2, full network (each species' highest record a cut)",
+            minimal = "link 0.78.1, minimal network (barriers and steep sections only)")
+tb <- data.frame(Network = unname(lab_pm[c("published_92", "published_145", "minimal")]),
+                 `Sites with fish` = pc(c(pm_at("published_92", "fish"), pm_at("published_145", "fish"),
+                                          pm_at("minimal", "fish")), 1),
+                 `Sites without` = pc(c(pm_at("published_92", "zero"), pm_at("published_145", "zero"),
+                                        pm_at("minimal", "zero")), 1),
+                 check.names = FALSE)
+knitr::kable(tb, format = "html", align = "lrr",
+             caption = "Electrofishing sites that start a segment of their own, on three of link's networks.") |>
+  kableExtra::kable_styling(full_width = FALSE) |>
+  kableExtra::footnote(general_title = "", general = paste0(
+    "Sites are the ", n0(sum(pm$visits[pm$network == "minimal"])), " electrofishing sites of a usual fished area on ",
+    "ordinary stream lines (not lines through rivers, lakes or wetlands): ", n0(pm$visits[pm$network == "minimal" & pm$catch_status == "fish"]),
+    " where fish of any species were caught and ", n0(pm$visits[pm$network == "minimal" & pm$catch_status == "zero"]),
+    " where none were. A site starts its own segment when the segment begins between 1 m below it and 5 m above it."))
+```
+
+On both full networks a site that caught fish is far more likely to start a segment of its own than one that caught
+none. The newer full network cuts at fewer fish records and halves the share; the minimal network takes the
+difference away.
+
+## Where does it bite on our own data?
+
+The tuning for chinook rearing starts from `r n0(n_sites)` electrofishing sites on stream lines in chinook's range
+with nothing downstream that chinook cannot pass, `r n0(n_fish)` of them where chinook were caught. On the full
+network, `r pc(steep(st$full_gradient, FALSE))` of the sites without chinook read a slope over
+`r lim(crit$limits[["minimal"]])`, against `r pc(steep(st$parent_gradient, FALSE))` on the minimal network's
+segments; at the sites with chinook, `r pc(steep(st$full_gradient, TRUE), 1)` against
+`r pc(steep(st$parent_gradient, TRUE), 1)`. At `r n0(nrow(cr))` sites the two networks put the slope on opposite
+sides of `r lim(crit$limits[["minimal"]])` or `r lim(crit$limits[["published"]])`, the two limits the tuning
+chose. Only `r sum(cr$present)` of them caught chinook, and at `r n0(sum(cr$d > 0))` the full network reads the
+steeper slope. So the cuts move the slope at many more sites than those where fish were caught: road crossings, the
+ends of hand-mapped habitat and other species' records shorten segments too.
+
+```{r strip-data}
+cls_lab <- c(paste(lim(crit$limits[["minimal"]]), "or less"),
+             paste("over", lim(crit$limits[["minimal"]]), "to", lim(crit$limits[["published"]])),
+             paste("over", lim(crit$limits[["published"]])))
+cols_cls <- stats::setNames(c("#c6dbef", "#fdae6b", "#d7301f"), cls_lab)
+half <- 600
+ex <- x$examples
+stopifnot(length(ex) == crit$n_examples)
+# each example meets the criteria the bundle chose it by: chinook caught, a full segment of at least min_len_m, its
+# slope and its minimal parent's on opposite sides of a tuned limit, one per group
+for (e in ex) {
+  stopifnot(e$site$present, e$site$crosses, e$site$full_length_m >= crit$min_len_m)
+}
+stopifnot(length(unique(vapply(ex, function(e) e$site$watershed_group_code, ""))) == length(ex))
+ex_lab <- vapply(ex, function(e) {
+  w <- where(list(place = "example", site_visit = e$site$site_visit))
+  paste0(toupper(substr(w, 1, 1)), substr(w, 2, nchar(w)))
+}, "")
+strip <- bind_rows(lapply(seq_along(ex), function(i) {
+  e <- ex[[i]]
+  s <- sf::st_drop_geometry(e$segments)
+  s |> transmute(ex = ex_lab[[i]],
+                 net = c(full = "Full network", minimal = "Minimal network")[network],
+                 from = downstream_route_measure - e$site$measure, to = from + length_metre, gradient)
+}))
+strip <- strip |>
+  filter(to > -half, from < half) |>
+  mutate(at_site = from <= 0 & to > 0,
+         from = pmax(from, -half), to = pmin(to, half),
+         cls = factor(cut(gradient, c(-Inf, crit$limits[["minimal"]], crit$limits[["published"]], Inf), labels = cls_lab),
+                      levels = cls_lab),
+         y = ifelse(net == "Full network", 2, 1),
+         lab = ifelse(to - from > 90 | at_site, grad(gradient), ""),
+         ex = factor(ex, levels = unname(ex_lab)))
+# the slope each network reads at the site is the one the site's record holds
+for (i in seq_along(ex)) {
+  s <- strip[strip$ex %in% ex_lab[[i]] & strip$at_site, ]
+  stopifnot(nrow(s) == 2,
+            abs(s$gradient[s$net == "Full network"] - ex[[i]]$site$full_gradient) < 1e-4,
+            abs(s$gradient[s$net == "Minimal network"] - ex[[i]]$site$minimal_gradient) < 1e-4)
+}
+```
+
+Three of the sites with chinook show it. They were chosen by a rule fixed before drawing: among the sites with
+chinook whose full-network slope and minimal-network slope sit on opposite sides of a tuned limit, on a full-network
+segment at least `r crit$min_len_m` m long, the largest gap between the two in each watershed group, from the
+`r crit$n_examples` groups with the largest gaps.
+
+```{r strip, fig.height = 4.8, fig.cap = paste0("The segments around three sites where chinook were caught, as each network cuts them, drawn along the stream from ", half, " m below the site to ", half, " m above it (a bar that stops short of the left edge stops at the stream's mouth). Each box is a segment, coloured by the slope a rule reads on it and labelled with it where there is room; the black line is the site. The panel titles name each stream, what it flows into and the nearest town.")}
+ggplot(strip) +
+  geom_rect(aes(xmin = from, xmax = to, ymin = y - 0.38, ymax = y + 0.38, fill = cls), colour = "grey30",
+            linewidth = 0.3) +
+  geom_label(data = function(d) d[nzchar(d$lab), ], aes(x = (from + to) / 2, y = y, label = lab), size = 2.5,
+             label.size = 0, label.padding = grid::unit(0.1, "lines"), fill = "white") +
+  geom_vline(xintercept = 0, linewidth = 0.7) +
+  scale_y_continuous(breaks = 1:2, labels = c("Minimal network", "Full network")) +
+  scale_fill_manual(values = cols_cls, drop = FALSE, name = "Slope a rule reads") +
+  facet_wrap(~ex, ncol = 1) +
+  labs(x = "Distance upstream of the site (m)", y = NULL) +
+  theme_minimal(base_size = 10) +
+  theme(legend.position = "bottom", panel.grid = element_blank(), strip.text = element_text(hjust = 0))
+```
+
+```{r strip-words}
+# the paragraph below: two of the three read steeper on the full network; on the third the full segment ends above the
+# site, below steeper water that the minimal segment averages in
+steeper <- vapply(ex, function(e) e$site$full_gradient > e$site$minimal_gradient, TRUE)
+stopifnot(sum(steeper) == 2)
+g3 <- ex[[which(!steeper)]]
+s3 <- sf::st_drop_geometry(g3$segments)
+top3 <- g3$site$full_offset_m + g3$site$full_length_m
+above3 <- s3[s3$network == "full" & abs(s3$downstream_route_measure - (g3$site$measure + top3)) < 1, ]
+stopifnot(nrow(above3) == 1, above3$gradient > g3$site$minimal_gradient,
+          g3$site$minimal_offset_m + g3$site$minimal_length_m > top3 + above3$length_metre / 2)
+```
+
+The shorter segment does not always read the steeper slope. On two of the three it does. On the third, the full
+network's segment ends `r n0(top3)` m above the site, and the steeper water above it, which the minimal network's
+segment averages in, is read on its own.
+
+## What do the rules choose on each network?
+
+The tuning scores each candidate rule by how well it predicts where chinook were caught in watershed groups held out
+of the fit; lower is better. A score carries error, so every rule within one standard error of the best is a
+**close call**: the records cannot rank the close calls apart. Of the close calls, the tuning chooses the one that
+changes the fewest of link's standard thresholds ([how the tuning works](habitat_thresholds.html)). Two networks
+disagree only when one network's choice is not a close call on the other's records.
+
+Chinook rearing was tuned four ways on the same `r n0(su$n_visits[1])` sites (those of the
+`r n0(n_sites)` in watershed groups where chinook were caught at some sites and not others), the same modelled flows and the same
+species range, so that the segments and the slope a rule reads are the only differences. Two of the four read slopes
+from another source on the full network's segments: each segment's **minimal parent**, the minimal-network segment it
+lies within, and the Atlas line it lies on, which is often several kilometres long.
+
+```{r setups}
+lab_su <- c(published = "Full network", minimal = "Minimal network",
+            parent = "Full network", atlas = "Full network")
+lab_gr <- c(published = "its own", minimal = "its own", parent = "its minimal parent's", atlas = "its Atlas line's")
+yn <- function(v) ifelse(v, "yes", "no")
+tb <- data.frame(Segments = unname(lab_su[su$setup]),
+                 `Slope a rule reads` = unname(lab_gr[su$setup]),
+                 `Slope limit chosen` = lim(su$grad_max),
+                 `A close call on the full network?` = yn(vapply(su$setup, in_reg, TRUE, region_of = "published")),
+                 `A close call on the minimal network?` = yn(vapply(su$setup, in_reg, TRUE, region_of = "minimal")),
+                 `Rearing habitat (km)` = n0(su$tuned_km),
+                 `Against link's rule` = paste0(formatC(su$change_pct, format = "f", digits = 1), " %"),
+                 check.names = FALSE)
+knitr::kable(tb, format = "html", align = "llrccrr", row.names = FALSE,
+             caption = "The chinook rearing rule chosen on each network and slope.") |>
+  kableExtra::kable_styling(full_width = FALSE, font_size = 13) |>
+  kableExtra::footnote(general_title = "", general = paste0(
+    "Every rule chosen keeps the same flow floor and the same allowance for small streams near a large river; ",
+    "only the slope limit differs. Habitat is each rule run through all of link's steps on the segments it was ",
+    "tuned on, over the watershed groups link classified for chinook, and the last column compares it with link's ",
+    "standard rule run on the same segments and slopes."))
+```
+
+The full network's own slopes take the limit to `r lim(s_of("published")$grad_max)`, which is not a close call on the
+minimal network's records; the minimal network's `r lim(s_of("minimal")$grad_max)` is a close call on the full
+network's records too. Given each segment's minimal parent's slope, the full network chooses
+`r lim(s_of("parent")$grad_max)` exactly as the minimal network does. The Atlas line's slopes choose
+`r lim(s_of("atlas")$grad_max)`, a close call on neither network's records; these runs do not show why.
+
+The network moves other species' rules as well. Tuned on the same flows and range, the full and minimal networks
+choose different rules for `r n_moved` of the `r nrow(ok)` species and stages both could fit, and for `r n_out` of
+them one network's choice is not a close call on the other's records ([the research notes](`r research`), "The full
+network on the same flows and range").
+
+## Where does the habitat drawn differ?
+
+```{r map-data}
+mp <- x$map
+mrow <- places[places$place == "map", ]
+d <- mp$drawn
+lv <- c("Both rules", paste("Own slope,", lim(s_of("published")$grad_max), "limit only"),
+        paste("Minimal parent's slope,", lim(s_of("parent")$grad_max), "limit only"))
+d$cls <- factor(dplyr::case_when(d$published & d$parent ~ lv[1], d$published ~ lv[2], d$parent ~ lv[3]), levels = lv)
+d <- d[!is.na(d$cls), ]
+km_cls <- tapply(d$length_metre, d$cls, sum) / 1000
+small <- tapply(seq_len(nrow(d)), d$cls, function(i) sum(d$length_metre[i][d$stream_order[i] <= 3]) / sum(d$length_metre[i]))
+# the words: each rule's own km is mostly on small streams (order 3 or less), the shared habitat under half
+stopifnot(km_cls[[2]] > 2 * km_cls[[3]], km_cls[[1]] > 10 * (km_cls[[2]] + km_cls[[3]]),
+          small[[2]] > 0.75, small[[3]] > 0.75, small[[1]] < 0.5)
+d$lwd <- pmin(pmax(d$stream_order, 1), 6) / 3
+# the zoom: the 15 km square, on a grid from the group's south-west corner, holding the most km drawn by one rule and
+# not the other
+cell <- 15000
+bb <- sf::st_bbox(mp$background)
+dif <- d[d$cls != lv[1], ]
+mid <- sf::st_coordinates(sf::st_centroid(sf::st_geometry(dif)))
+key <- paste(floor((mid[, "X"] - bb[["xmin"]]) / cell), floor((mid[, "Y"] - bb[["ymin"]]) / cell))
+best <- names(which.max(tapply(dif$length_metre, key, sum)))
+ij <- as.numeric(strsplit(best, " ")[[1]])
+zoom <- sf::st_bbox(c(xmin = bb[["xmin"]] + ij[1] * cell, ymin = bb[["ymin"]] + ij[2] * cell,
+                      xmax = bb[["xmin"]] + (ij[1] + 1) * cell, ymax = bb[["ymin"]] + (ij[2] + 1) * cell),
+                    crs = sf::st_crs(mp$background))
+km_zoom <- sum(dif$length_metre[key == best]) / 1000
+```
+
+In the `r mrow$gnis_name` watershed group, around the `r mrow$joins` `r n0(mrow$town_km)` km `r mrow$compass` of
+`r mrow$town`, the two rules a user could run on link's full network draw
+`r n0(km_cls[[1]])` km of chinook rearing habitat alike. The rule tuned on each segment's own slope adds
+`r n0(km_cls[[2]])` km; the rule tuned on the minimal network and read on each segment's minimal parent adds
+`r n0(km_cls[[3]])` km. Most of each difference lies on small streams, of stream order 3 or less
+(`r pc(small[[2]])` and `r pc(small[[3]])`), against `r pc(small[[1]])` of the habitat both draw.
+The group was chosen before drawing as the one with the most km where the four tunings disagree.
+
+```{r map, fig.height = 7.6, fig.cap = paste0("Chinook rearing habitat in the ", mrow$gnis_name, " watershed group under two rules run on link's full network. Pale blue: drawn by both. Orange: drawn only by the rule tuned on each segment's own slope (a ", lim(s_of("published")$grad_max), " limit). Dark blue: drawn only by the rule tuned on the minimal network, reading each segment's minimal parent's slope (", lim(s_of("parent")$grad_max), "). Grey: other streams chinook can reach. Lakes of 10 ha or more and river polygons are shaded. The lower panel is the ", cell / 1000, " km square outlined above, the one holding the most km drawn by one rule and not the other (", n0(km_zoom), " km). Line width follows stream order.")}
+reg <- gq::gq_reg_main()
+cols_map <- stats::setNames(c("#c6dbef", "#d95f02", "#08519c"), lv)
+draw <- function(bbox, scale_km, lwd_add, frame_box = NULL, legend = TRUE) {
+  both <- d[d$cls == lv[1], ]
+  dd <- d[d$cls != lv[1], ]
+  dd$lwd <- dd$lwd + lwd_add
+  m <- tmap::tm_shape(mp$background, bbox = bbox) + tmap::tm_lines(col = "grey85", lwd = 0.3) +
+    tmap::tm_shape(mp$water) + do.call(tmap::tm_polygons, gq::gq_tmap_style(reg$layers$lake)) +
+    tmap::tm_shape(both) + tmap::tm_lines(col = cols_map[[1]], lwd = "lwd",
+                                          lwd.scale = tmap::tm_scale_continuous(values.scale = 1),
+                                          lwd.legend = tmap::tm_legend_hide()) +
+    tmap::tm_shape(dd) +
+    tmap::tm_lines(col = "cls", col.scale = tmap::tm_scale_categorical(values = cols_map, levels.drop = FALSE),
+                   col.legend = if (legend) tmap::tm_legend(title = "Chinook rearing drawn by") else tmap::tm_legend_hide(),
+                   lwd = "lwd", lwd.scale = tmap::tm_scale_continuous(values.scale = 1.6),
+                   lwd.legend = tmap::tm_legend_hide())
+  if (!is.null(frame_box)) {
+    m <- m + tmap::tm_shape(sf::st_as_sfc(frame_box)) + tmap::tm_borders(col = "black", lwd = 1.2)
+  }
+  m + tmap::tm_scalebar(breaks = c(0, scale_km / 2, scale_km), position = tmap::tm_pos_in("right", "bottom")) +
+    tmap::tm_layout(frame = TRUE, inner.margins = 0.01, legend.position = tmap::tm_pos_in("left", "bottom"))
+}
+f_map <- tempfile(fileext = ".png")
+tmap::tmap_save(tmap::tmap_arrange(draw(bb, 20, 1.2, zoom), draw(zoom, 4, 2, legend = FALSE), ncol = 1),
+                f_map, width = 7, height = 7.6, dpi = 150)
+grid::grid.raster(png::readPNG(f_map))
+```
+
+## What does it mean for someone using the thresholds?
+
+The thresholds this package tuned on `r tuned_on` were tuned on link's full network, each segment reading its own
+slope, which is how link applies a rule. Each is a property of that pairing as well as of the fish: on another
+network, or with slopes read another way, the same records choose another rule. For chinook rearing the slope limit
+reads `r lim(s_of("published")$grad_max)` on the full network's own slopes,
+`r lim(s_of("minimal")$grad_max)` on the minimal network's and `r lim(s_of("atlas")$grad_max)` on the Atlas line's,
+while the flow floor and the allowance near large rivers hold on all four.
+
+A rule tuned on the minimal network can still be run on the full one, by giving each full segment its minimal
+parent's slope. For chinook rearing it then draws `r n0(tr$parent_km)` km against the `r n0(tr$minimal_km)` km it
+draws on the minimal network itself: `r n0(tr$minimal_only_km)` km, `r pc(transfer_pct, 1)`, is drawn on the
+minimal network alone. The difference comes from the allowance for small streams near a large river, whose distance
+is measured from a segment's downstream end: a long minimal segment that starts near a river counts along its whole
+length, while its full-network pieces start farther up ([measured in the research notes](`r research`), "Chinook
+rearing on every setup").
+
+## Limits
+
+- Chinook rearing is the only species and stage tuned on all four; the others were tuned on the full and minimal
+  networks only.
+- The minimal network drops the cuts at fish records, at crossings and at the ends of hand-mapped habitat together,
+  so these runs cannot say which of the three moved the limit.
+- Few sites carry the difference: `r sum(cr$present)` of the `r n0(nrow(cr))` sites whose slope changes side of a
+  chosen limit caught chinook. The runs show that the network moves the choice, not which sites move it.
+- Slopes taken over a fixed length of stream, which would not depend on where fish were caught, were not tested.
+
+## How was this done?
+
+The numbers were bundled on `r x$meta$written` from the tuning runs and link builds the [research
+notes](`r research`) describe (link's full network, run `r x$meta$link_run_full`; its minimal network, run
+`r x$meta$link_run_minimal`), and each was checked when the bundle was written against the run logs that first
+reported it. The sites are the Fisheries Data Information System's electrofishing records, placed on the Freshwater
+Atlas; rules are run through fresh [@irvine2026freshFreshwater] for link. [How the tuning
+works](habitat_thresholds.html) describes the records, the candidates and the scoring.
+
+## Software and citation
+
+Each tool is cited where it is first used. To cite this package, `citation("knowledge")` gives:
+
+```{r cite, results = "asis"}
+cat(format(utils::citation("knowledge"), style = "text"), sep = "\n\n")
+```
+
+## References
+
+::: {#refs}
+:::

@@ -8,8 +8,18 @@ other sources, each under its own terms. Paths are the repository's.
 Contains information licensed under the
 [Open Government Licence - British Columbia](https://www2.gov.bc.ca/gov/content/data/policy-standards/open-data/open-government-licence-bc):
 the **BC Freshwater Atlas** lakes, rivers and stream network in `inst/vignette-data/bulk_water.rds`,
-`inst/vignette-data/bulk_segments.rds` and `inst/vignette-data/cut_points.rds` (all installed with the package), and the Atlas's streams, lakes and
+`inst/vignette-data/bulk_segments.rds`, `inst/vignette-data/cut_points.rds` and the stream names in
+`inst/vignette-data/cut_points_places.rds` (all installed with the package), and the Atlas's streams, lakes and
 rivers drawn in `man/figures/readme-bulk.png` and the maps in `research/fig/`.
+
+## BC Geographical Names
+
+`inst/vignette-data/cut_points_places.rds` names, for each place the cut-points article describes, the nearest
+incorporated city, town, village or district municipality in the Province's
+[BC Geographical Names](https://catalogue.data.gov.bc.ca/dataset/bc-geographical-names), with the distance and
+direction measured to it. The layer's BC Data Catalogue licence is "Access Only"; the file keeps each town's name and
+nothing else from it, and `data-raw/vignette_cut_points_places.R` reads the layer from the catalogue. The streams it
+names come from the Freshwater Atlas (above).
 
 ## Floodplains (CC BY 4.0)
 

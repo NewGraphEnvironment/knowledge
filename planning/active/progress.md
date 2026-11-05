@@ -45,3 +45,17 @@ do not re-plan and do not re-ask them.
 Continue at the first unticked task in task_plan.md; the run-to-PR mandate is already
 running. The merge stays with me.
 ```
+
+## Session 2026-11-05 (second machine, phases 3–5)
+
+- Resumed from the Resume block (RESUME-OK at b4f50a2); merged origin/main (PR #152) cleanly.
+- Phase 3: `vignettes/_cut_points.Rmd` drafted from the bundle, every prose number inline and guarded. Forms tried
+  at page width: the side-by-side example maps failed the look-alike test (the cut pieces are tens of metres at river
+  mouths, invisible in a 1.5 km window), so the examples are a strip diagram of each network's segments along the
+  stream; the group map is two rules on link's full network (own slope at 13 % against minimal parent's at 9 %, which
+  differ only in the slope read) with a zoom on the 15 km square holding most disagreement.
+- Places computed, not dictated: `data-raw/vignette_cut_points_places.R` (Taylor Creek joins the Skeena, not the Kalum
+  its group is named for). BC Geographical Names is Access Only in the catalogue, so the file keeps town names only.
+- `vignettes/cut_points.bib` written by `data-raw/vignette_bib.R` (Zotero launched here; the other two `.bib` files
+  came back unchanged).
+
