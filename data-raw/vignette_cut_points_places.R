@@ -20,7 +20,7 @@
 # OUTPUT: inst/vignette-data/cut_points_places.rds   one tibble and its meta
 # RUN:    Rscript data-raw/vignette_cut_points_places.R   (from the repo root)
 # ---------------------------------------------------------------------------
-suppressMessages({ library(dplyr) })
+suppressMessages(library(dplyr))
 options(warn = 1)
 sf::sf_use_s2(FALSE)
 
@@ -82,7 +82,8 @@ compass <- function(from, to) {
   xy <- function(g) sf::st_coordinates(sf::st_zm(g, drop = TRUE))[, c("X", "Y"), drop = FALSE]
   d <- xy(to) - xy(from)
   az <- (atan2(d[, "X"], d[, "Y"]) * 180 / pi) %% 360
-  c("north", "north-east", "east", "south-east", "south", "south-west", "west", "north-west")[floor((az + 22.5) / 45) %% 8 + 1]
+  words <- c("north", "north-east", "east", "south-east", "south", "south-west", "west", "north-west")
+  words[floor((az + 22.5) / 45) %% 8 + 1]
 }
 nearest_town <- function(pt) {
   i <- sf::st_nearest_feature(pt, towns)
@@ -102,12 +103,14 @@ out <- bind_rows(lapply(seq_len(nrow(places)), function(i) {
 # the map group: its name, its largest named stream (highest order, then longest) and the town nearest the point on it
 # closest to the group's centre
 wsg <- x$map$wsg
-grp <- q("SELECT watershed_group_name FROM whse_basemapping.fwa_watershed_groups_poly WHERE watershed_group_code = $1", wsg)
+grp <- q("SELECT watershed_group_name FROM whse_basemapping.fwa_watershed_groups_poly
+          WHERE watershed_group_code = $1", wsg)
 main <- q("SELECT gnis_name FROM whse_basemapping.fwa_stream_networks_sp
            WHERE watershed_group_code = $1 AND gnis_name IS NOT NULL
            GROUP BY gnis_name ORDER BY max(stream_order) DESC, sum(length_metre) DESC, gnis_name LIMIT 1", wsg)
 pt <- sf::st_read(con, quiet = TRUE, query = sprintf("
-  WITH c AS (SELECT ST_Centroid(geom) AS g FROM whse_basemapping.fwa_watershed_groups_poly WHERE watershed_group_code = '%1$s')
+  WITH c AS (SELECT ST_Centroid(geom) AS g FROM whse_basemapping.fwa_watershed_groups_poly
+             WHERE watershed_group_code = '%1$s')
   SELECT ST_ClosestPoint(s.geom, c.g) AS geom
   FROM whse_basemapping.fwa_stream_networks_sp s, c
   WHERE s.watershed_group_code = '%1$s' AND s.gnis_name = '%2$s'

@@ -262,4 +262,3 @@ test_that("the cut-points examples meet the criteria the bundle states", {
     expect_equal(nrow(e$sites[e$sites$site_visit == e$site$site_visit, ]), 1, info = e$site$site_visit)
   }
 })
-
