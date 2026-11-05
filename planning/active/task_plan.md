@@ -110,7 +110,7 @@ All four read wet's 2026-10-24 flow load and link 0.78.1's range, on m4's databa
 - [x] `RUN=<parent run> EVIDENCE_DIR=data/fdis/derived_parent 0336` →
       `archive/knowledge/tune/CH_rear/cut-full-top.acc-v5.grad-parent.q-fwapg/`, with the `derived_parent` evidence.
       Commit the `data/archive_index.csv` rows.
-- [ ] The Atlas run is archived when link mints its token (owed below); `knw_archive_setup()` refuses it until then.
+- [x] (deferred to the owed item below; the refusal is verified: `DRY=1 RUN=20261105_0437 0336` stops on `grad-fwa`) The Atlas run is archived when link mints its token (owed below); `knw_archive_setup()` refuses it until then.
 
 ## Phase 6: write-up
 
@@ -128,9 +128,9 @@ All four read wet's 2026-10-24 flow load and link 0.78.1's range, on m4's databa
 
 ## Validation
 
-- [ ] Tests pass (`devtools::test()`), lintr clean, `devtools::document()`
-- [ ] `/code-check branch` clean, three-round floor
-- [ ] PWF checkboxes match landed work
+- [x] Tests pass (`devtools::test()`: 1,976 expectations, 0 failed, 0 errors, 2 skipped, on m4's database), lintr clean on the changed lines, `devtools::document()`
+- [x] `/code-check branch` clean, three-round floor (four rounds; ended on an enumeration, findings)
+- [x] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion
 
 Acceptance criteria fixed before the runs (review): "the parent and minimal picks agree" means each pick lies in

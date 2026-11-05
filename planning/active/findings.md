@@ -185,6 +185,23 @@ The map's classes were revised after the first figure (they had put the two larg
 the group (MORK) is the one the rule fixed before drawing chose. The research section is
 `research/minimal_network_tuning.md`, "Chinook rearing on every setup".
 
+## Branch review (`/code-check branch`, 2026-11-05, four rounds)
+
+| Round | Findings | Fixed | Accepted | Inside previous fix? |
+|-------|----------|-------|----------|----------------------|
+| 1 | 5 (1 bug, 4 fragile) | 5 | 0 | — |
+| 2 | 2 | 2 | 0 | y (setup identity read from summaries a no-fit key leaves empty) |
+| 3 | 3 | 3 | 0 | n (the round-1 parent finding in a third reader; a sibling caller; late checks) |
+| 4 | 0 | 0 | 0 | n |
+
+The loop ended on an enumeration, as the inside-a-fix finding of round 2 requires: round 3 named the mechanism (a
+run-level property, setup status, gradient and parent table, inferred from signals only some paths produce) and listed
+every reader of it; its three gaps were fixed; this session checked the callers by grep (the frozen 0322 and
+`compare_parallel_check.R` read only tracked main curves; `walk_batch_check.R` only walks; 0335 plans the archive, which
+writes nothing, before promotion refuses), and round 4 re-verified every row at `2fb8221`. Four reviewer agents, past
+the two-or-three working default, each finding real defects until the last. Round 4 also caught three October console
+captures a broad `git add` had swept into a commit; untracked again in `ebda176`.
+
 ## Errors Encountered
 
 | Error | Resolution |
