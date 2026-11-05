@@ -52,7 +52,7 @@ mandate; the merge stays with me.
 ## Session 2026-11-04 (UTC 2026-11-05)
 
 - Synced: `git merge origin/main` (4c34c33, 128 commits, no conflict; none touch `0150`, `0153`, `0270` or the
-  sturgeon CSVs). The Zotero key moved to `~/.config/newgraph/`; storage is unlimited (Al).
+  sturgeon CSVs). The Zotero key file moved; storage is unlimited (Al).
 - Phase 4's `scripts/README.md` lines (ecfbc50).
 - Live `0270` (04:57–05:07 UTC): exit 0, added 12, created 69, 84 members; 43 PDFs uploaded, 27 `exists` (the
   server already held a file with that md5), 14 present. Second dry run exit 0, no `would` line: the no-op proof.
@@ -89,3 +89,4 @@ mandate; the merge stays with me.
   bucket object is 151,531,520 bytes with ETag `16a21400…-19`, equal to the local file's 8 MiB multipart md5. Log
   `scripts/logs/rag/20261105_push_sturgeon.log`, its manifest trimmed to this store's entry.
 - #124 body updated (outcome, gap list, query result); filed #151 for the two Zotero writes left to Al (Tredger 1984 OCR, the watershed strategy duplicate).
+- Code-check round 3: two additions rows wrong against their title pages (the 2008 Lheidli T'enneh title copied from the 2007 row; the HSP report dated 2006-03, cover April 2006), fixed in the CSV; the filed items KSCZP9JS and QPIC5D8X need PATCHes, added to #151 with a warning not to re-run 0270 before the title is fixed. A credential directory named in this file removed; the NWSRI size corrected to 174.5 MB.

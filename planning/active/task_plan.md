@@ -52,7 +52,7 @@ Exploration moved some premises (immutable read of `zotero.sqlite`, 2026-10-31, 
 
 ## Phase 1: inventory, PDFs and the two CSVs (no Zotero writes; runs now)
 - [x] NWSRI: the recovery plan (2004) and every technical report linked to a PDF. Of 63 links, 61 return `%PDF`
-      (168 MB). Triton's "3812 Sturgeon Report Final" is a 404, and the CSAS 2007 link points at a URL DFO moved
+      (174.5 MB). Triton's "3812 Sturgeon Report Final" is a 404, and the CSAS 2007 link points at a URL DFO moved
 - [x] Metadata for each report from its title page or its own "should be cited as" line, not from the page listing,
       which misattributes some (findings)
 - [x] Antill 2013 and French 2005 are on the page and already keyed in the group: members, not additions

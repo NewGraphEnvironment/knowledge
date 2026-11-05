@@ -57,8 +57,8 @@ Read from `zotero.sqlite` with `immutable=1`, so writes not yet checkpointed out
 
 ## Phase 1: what was gathered (2026-10-31)
 
-**NWSRI.** The Technical Reports page has 71 paragraphs. 63 link a PDF; 61 of those return `%PDF` (174 MB with the
-recovery plan). The two misses:
+**NWSRI.** The Technical Reports page has 71 paragraphs. 63 link a PDF; 61 of those return `%PDF` (174.5 MB; 175.4 MB with
+the recovery plan, measured from the filed copies in code-check round 3). The two misses:
 - Triton's "3812 Sturgeon Report Final" (2007) answers 404.
 - CSAS SAR 2007/014 points at `dfo-mpo.gc.ca/csas/...`, which DFO moved. It is now
   `waves-vagues.dfo-mpo.gc.ca/library-bibliotheque/328792.pdf`, and is in.
