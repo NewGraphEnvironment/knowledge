@@ -142,7 +142,8 @@ the steepest slope a species uses. The stretches that pass are the species' **ha
 article belongs to, chooses link's thresholds from fish records: for each species and life stage with enough records, it tests many rules
 against where electrofishing crews caught the fish and where they did not, and of the rules that predict about as well
 as the best, keeps the one closest to link's standard settings ([how the tuning works](habitat_thresholds.html)). Chinook
-rearing is the worked example here; [the research notes](`r research`) carry every species tuned.
+rearing is the worked example here; [the research notes](`r research`) hold every species tuned, each run behind this
+article and its checks.
 
 link tests a rule on **segments**, the pieces it cuts the streams of the BC Freshwater Atlas
 [@flnrord2021FreshwaterAtlasb] into, and a segment's slope is its drop over its whole length. So where link cuts a
@@ -533,15 +534,14 @@ tuned on, and the published `r lim(s_of("published")$grad_max)` was tuned on the
 A rule tuned on the minimal network can still be run on the full one, by giving each full segment its minimal parent's
 slope. For chinook rearing it then draws `r pc(transfer_net, 1)` less habitat than on the minimal network itself. The
 stretches only the minimal network draws are small streams near large rivers, because the allowance measures its
-distance from a segment's downstream end
-([the research notes](`r research`), "Chinook rearing on every setup").
+distance from a segment's downstream end.
 
 ## Limits
 
 - These runs tuned chinook rearing all four ways, and the `r nrow(ok6)` other species and stages both networks could
   fit on the two networks' own slopes and, in a separate check, on the Atlas line each visit lies on
   ([the methodology article's limits](habitat_thresholds.html#limits)). The network moved the rule for some of those
-  too ([the research notes](`r research`), "The full network on the same flows and range").
+  too.
 - The minimal network leaves out the cuts at fish records, at crossings and at hand-mapped habitat together, so these
   runs cannot say which of the three moved the limit. Builds that each leave out one kind of cut would.
 - Few visits carry the difference: of the roughly `r n0(round(su$n_visits[1], -2))` visits the tunings scored,
@@ -552,8 +552,8 @@ distance from a segment's downstream end
 
 ## How was this done?
 
-The numbers were bundled on `r x$meta$written` from the tuning runs and link builds the [research
-notes](`r research`) describe. When it was written, the share of visits starting their own segment, the four tunings'
+The numbers were bundled on `r x$meta$written` from the tuning runs and link builds the research notes
+describe. When it was written, the share of visits starting their own segment, the four tunings'
 choices and habitat, and the other species' choices were checked against the logs that report them there. The visits are the
 Fisheries Data Information System's electrofishing records [@provinceofbritishcolumbia2022FisheriesData], placed on
 the Freshwater Atlas; rules are run through fresh [@fresh] for link. The maps' basemap is Esri's World Topographic Map
