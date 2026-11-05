@@ -137,6 +137,7 @@ wf_farm_priority.js                          farm priority/crossing tables out o
       (--collection flow: Fisheries/flow, from data/flow_members.csv and data/flow_additions.csv)
       (--parent <key> for a collection under another parent: --collection grayling --parent 9U54XAND is species/grayling)
       (--collection sturgeon --parent 9U54XAND: species/sturgeon, from data/sturgeon_members.csv and _additions.csv)
+      (not live until #151 has retitled KSCZP9JS: until then its dry run prints one `would create`, the 2008 report again)
 0150  ACTION=build STORE=habitat_modelling COLLECTIONS="U9ZCZ6RN,RXNFPBPH,VHWEK6RE,GELFSUTU,9U54XAND,SW2RXUJC,DQP29KU7,X29BX4U8,W4425VK5,545K8HP4"
       (habitat_modelling, chinook, bull_trout, grayling, species, temperature, wedzin_kwa_chinook, hydrology and the
       two salmon collections, by key)                                                    then ACTION=push
