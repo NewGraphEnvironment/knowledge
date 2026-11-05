@@ -9,8 +9,8 @@
 #     file whose md5 is not the manifest's. The tracked inputs are logs written once (the segment gradient checks,
 #     setup_compare.R's and pick_network_compare.R's), so a promotion moves none of them and the article stays a
 #     snapshot of the runs they describe.
-#   - EACH NUMBER A LOG PUBLISHED IS HELD TO THAT LOG. The premise (fish sites starting a segment of their own)
-#     is recomputed on #92's, #145's and the minimal network's evidence and must equal the three segment gradient
+#   - THE PREMISE, THE SETUPS AND THE OTHER KEYS ARE HELD TO THEIR LOGS. The premise (fish sites starting a segment of
+#     their own) is recomputed on #92's, #145's and the minimal network's evidence and must equal the three segment gradient
 #     check logs; each setup's pick and km must equal setup_compare.R's csv; the transfer, recomputed from the setups'
 #     GeoPackage, must equal the minimal and parent setups' km in that csv.
 #   - THE EXAMPLES ARE CHOSEN HERE, BY RULES FIXED BEFORE DRAWING. The population is the tuning's before its model
