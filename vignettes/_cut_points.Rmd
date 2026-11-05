@@ -140,8 +140,9 @@ stopifnot(sum(cr$present) < 10, sum(cr$d > 0) > 2 * sum(cr$d < 0),
 The R package [`link`](`r link_site`) [@link] maps where each fish species can spawn and rear on British Columbia's
 streams. It tests each stretch of stream against a **rule**: a handful of thresholds, such as the smallest stream and
 the steepest slope a species uses. The stretches that pass are the species' **habitat**. `knowledge`, the package this
-article belongs to, chooses link's thresholds from fish records: for each species and life stage, it finds the rule that best predicts where
-electrofishing crews caught the fish and where they did not ([how the tuning works](habitat_thresholds.html)). Chinook
+article belongs to, chooses link's thresholds from fish records: for each species and life stage, it tests many rules
+against where electrofishing crews caught the fish and where they did not, and of the rules that predict about as well
+as the best, keeps the one closest to link's standard settings ([how the tuning works](habitat_thresholds.html)). Chinook
 rearing is the worked example here; [the research notes](`r research`) carry every species tuned.
 
 link tests a rule on **segments**, the pieces it cuts the streams of the BC Freshwater Atlas
@@ -408,6 +409,8 @@ opposite sides of a tuned limit, picked by a rule set before drawing:
 
 ```{r strip, fig.height = 3.4, fig.cap = paste0("The segments around three visits where chinook were caught, as each network cuts them, from ", half, " m below the visit to ", half, " m above it (a bar that stops short of the left edge stops at the stream's mouth). Each bar is a segment, coloured by the slope a rule reads on it; the line marks the visit, and the slope each network reads there is labelled beside it. The panel titles name each stream, the river it flows or drains into and the nearest town. The rule: among visits with chinook whose full-network slope and the slope of the minimal-network segment it lies within sit on opposite sides of a tuned limit, on a full-network segment at least ", crit$min_len_m, " m long and outside the watershed group of the stream in the figure above, the largest gap in each group, from the ", crit$n_examples, " groups with the largest gaps.")}
 at_site <- strip[strip$at_site, ]
+# each printed slope (two decimals) falls on the same side of each limit as its bar's colour
+stopifnot(all(vapply(crit$limits, function(t) all((round(at_site$gradient, 4) <= t) == (at_site$gradient <= t)), TRUE)))
 ggplot(strip) +
   geom_rect(aes(xmin = from, xmax = to, ymin = y - 0.22, ymax = y + 0.22, fill = cls), colour = "white",
             linewidth = 0.8) +
