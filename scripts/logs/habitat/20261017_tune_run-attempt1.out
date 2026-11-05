@@ -1,0 +1,24 @@
+Tuning run, knowledge#57. Evidence build scripts/logs/habitat/20261017_evidence_build_ledger.csv on link run 20261017_004619-3f4c713b (link a17e91773b283b021811f8b5b76b887d5f4c16e4;ee21eb1371cbc4d7a2d598f8bbeeaeb0534d7994).
+  visits_link md5 5954951fd7ab147b41c9299e82042d58
+  visits_species md5 bc71243b0a4eb2e360e1e8410db34125
+  walks md5 403c2b4200898f30e00a3f65a879e19c
+Spawner evidence: 1069 BT visits with a coded fish, 194 with evidence.
+link default thresholds at a17e91773b283b021811f8b5b76b887d5f4c16e4 (same at ee21eb1371cbc4d7a2d598f8bbeeaeb0534d7994): 11 species.
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,  :
+  Fitting terminated with step failure - check results carefully
+Warning in mgcv::predict.gam(mk, newdata = ho, type = "link", exclude = "s(wsg)",  :
+  factor levels to1994 not in original fit
+Error in X[, pstart[i] - 1 + 1:object$nsdf[i]] <- Xp : 
+  number of items to replace is not a multiple of replacement length
+Calls: knw_tune_run -> knw_tune_curve -> <Anonymous>
+Execution halted

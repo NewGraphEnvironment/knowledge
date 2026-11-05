@@ -1,11 +1,12 @@
 Spherical geometry (s2) switched off
-CH_rear on every setup (#120), at knowledge 95205a3.
+CH_rear on every setup (#120), at knowledge 218eada.
 One flow load (wet_db_load(): discharge/fwa/v1/segment_monthly, scenario historical last loaded from https://fresh-bc.s3.us-west-2.amazonaws.com/discharge/fwa/v1/manifest.json (built 2026-10-24T12:23:01Z, wet b4bbc50)), one access and flow token (acc-v5, q-fwapg), one visit and walk build (visits_species;walks md5 6a2e28f1afb46a02c357ac044f8d09e3;2e0f0f419022da0f5ac51a3869486a80).
   published: full network, its own gradient (published); tune run 20261104_0543, link run 20261103_163715-269b585a; tokens cut-full-top.acc-v5.grad-seg.q-fwapg; curve on segment_gradient.
   minimal: minimal network, its own gradient; tune run 20261103_0838, link run 20261102_203300-60ab009d; tokens cut-min.acc-v5.grad-seg.q-fwapg; curve on segment_gradient.
   parent: full network, its minimal parent's gradient; tune run 20261105_0436, link run 20261103_163715-269b585a; tokens cut-full-top.acc-v5.grad-parent.q-fwapg; curve on parent_gradient.
   atlas: full network, the Atlas gradient of its segment's line; tune run 20261105_0437, link run 20261103_163715-269b585a; tokens cut-full-top.acc-v5.grad-fwa.q-fwapg; curve on segment_fwa_gradient.
 Parent table: schema fresh_default; minimal_schema fresh_default_minimal; run_uid_full 20261103_163715-269b585a; run_uid_minimal 20261102_203300-60ab009d; link_sha_minimal 193cb8aa401376d4278b6c5ee5b24cb57deab8e3; config_hash_minimal sha256:ee91aa65f1fd275d77fa5a97f7c26c16c03d3bb84929ad163257f5f5bccfeebb; built_at 2026-11-03 23:06:01.990442+00; rows 5546370
+Parent table held to the parent setup's evidence: fresh_default.streams_parent: built 2026-11-03 23:06:01.990442+00; full run 20261103_163715-269b585a, minimal fresh_default_minimal run 20261102_203300-60ab009d at link 193cb8aa401376d4278b6c5ee5b24cb57deab8e3, sha256:ee91aa65f1fd275d77fa5a97f7c26c16c03d3bb84929ad163257f5f5bccfeebb
 
 Each setup's pick, its standing in its own tuning, and the km it draws on its own network and gradient:
 
