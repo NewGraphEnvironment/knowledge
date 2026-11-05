@@ -1,0 +1,34 @@
+Cut-points staging (#149), at knowledge 8efc641; window 3000 m either side of a site.
+Evidence held to its runs: #92's to its tune tables' md5s, the others to their grade records.
+database round trip 0.9 ms (median of 20 SELECT 1; limit 20 ms)
+build: schema fresh_default, run 20261103_163715-269b585a; flows wet_db_load(): discharge/fwa/v1/segment_monthly, scenario historical last loaded from https://fresh-bc.s3.us-west-2.amazonaws.com/discharge/fwa/v1/manifest.json (built 2026-10-24T12:23:01Z, wet b4bbc50); walk c3f7bdbecff1d55107f28afa59d7f532; fresh 0.52.0; tokens cut-full-top.acc-v5.grad-seg.q-fwapg; log rows of run 20261023_074321-24d85e8c set aside (not in log_recompute)
+build: schema fresh_default_minimal, run 20261102_203300-60ab009d; flows wet_db_load(): discharge/fwa/v1/segment_monthly, scenario historical last loaded from https://fresh-bc.s3.us-west-2.amazonaws.com/discharge/fwa/v1/manifest.json (built 2026-10-24T12:23:01Z, wet b4bbc50); walk c3f7bdbecff1d55107f28afa59d7f532; fresh 0.52.0; tokens cut-min.acc-v5.grad-seg.q-fwapg
+streams_parent joins full run 20261103_163715-269b585a and minimal run 20261102_203300-60ab009d (built 2026-11-03 23:06:01.990442+00).
+Population: 7823 chinook sites, 235 with fish; 1215 sites cross a limit (0.09, 0.11, 0.13) between two setups, 24 of them with fish,
+  on 22 blue lines in 14 groups: those lines are staged.
+Map group (most km where the setups disagree, from data/compare/setups/CH_rear_setups.gpkg): MORK; 21204 accessible segments, 705 lake and river polygons.
+Staged lines: 253 full segments, 179 minimal, 135 Atlas lines, 60 sites.
+
+Staged 22 files in data/stage/cut_points (552 MB):
+  1bd35829d07ca92f0b0faa565db65280 evidence/published_92/visits_link.csv <- data/fdis/derived_published_20261017/visits_link.csv
+  009698d73afd855c3e8db1235ad96c05 evidence/published_92/visits_species.csv <- data/fdis/derived_published_20261017/visits_species.csv
+  db5ca99a659b242bede926db1bca4c0a evidence/published_145/visits_link.csv <- data/fdis/derived/visits_link.csv
+  6a2e28f1afb46a02c357ac044f8d09e3 evidence/published_145/visits_species.csv <- data/fdis/derived/visits_species.csv
+  c746c5829c605fb7711feba0ec9d4d93 evidence/minimal/visits_link.csv <- data/fdis/derived_minimal/visits_link.csv
+  6a2e28f1afb46a02c357ac044f8d09e3 evidence/minimal/visits_species.csv <- data/fdis/derived_minimal/visits_species.csv
+  53ff44d74b2adc85f4ec6caf7be9bb20 evidence/parent/visits_link.csv <- data/fdis/derived_parent/visits_link.csv
+  6a2e28f1afb46a02c357ac044f8d09e3 evidence/parent/visits_species.csv <- data/fdis/derived_parent/visits_species.csv
+  5d9d11e535ed2ff0f49e65e6088c9292 runs/published/CH_rear_tune.csv <- data/tune/CH_rear_tune.csv
+  c46340da559be38f0b0c49590555abb4 runs/published/CH_rear_grades_record.csv <- data/tune/CH_rear_grades_record.csv
+  697326bedf8d26da80d1176ad4b24d1a runs/published/CH_rear_compare.csv <- data/compare/CH_rear_compare.csv
+  a2ef73eb0b4272b8ee4e1558dc294f0a runs/minimal/CH_rear_tune.csv <- data/tune/candidate/20261103_0838/CH_rear_tune.csv
+  cafd6bb7d571ab427ac871f7c6a3db88 runs/minimal/CH_rear_grades_record.csv <- data/tune/candidate/20261103_0838/CH_rear_grades_record.csv
+  f6fa2cdbf1b2fc5cc8e53561f479961f runs/minimal/CH_rear_compare.csv <- data/compare/candidate/20261103_0838/CH_rear_compare.csv
+  d7ac169bece7e97fc0f75bda878c2f45 runs/parent/CH_rear_tune.csv <- data/tune/candidate/20261105_0436/CH_rear_tune.csv
+  731d878b4cd4023367553de1d443661e runs/parent/CH_rear_grades_record.csv <- data/tune/candidate/20261105_0436/CH_rear_grades_record.csv
+  6a7f05d246f76782a857e747a4d824ff runs/parent/CH_rear_compare.csv <- data/compare/candidate/20261105_0436/CH_rear_compare.csv
+  070cf1638bfcf98ad9fbf4b14833cb8c runs/atlas/CH_rear_tune.csv <- data/tune/candidate/20261105_0437/CH_rear_tune.csv
+  4940b8ad01b40d0e8e2c6e897c03729a runs/atlas/CH_rear_grades_record.csv <- data/tune/candidate/20261105_0437/CH_rear_grades_record.csv
+  0ed9d944948f670d0586a7800ae3c546 runs/atlas/CH_rear_compare.csv <- data/compare/candidate/20261105_0437/CH_rear_compare.csv
+  6476e15333b6643eb4bcb03d105ff92a setups/CH_rear_setups.gpkg <- data/compare/setups/CH_rear_setups.gpkg
+  20e9cfc5ef23768efdf28884c5241cc9 lines.gpkg <- database: fresh_default, fresh_default_minimal, whse_basemapping

@@ -43,3 +43,5 @@ data/compare/ref_*/
 data/tune/candidate/
 data/compare/candidate/
 data/compare/setups/
+# the cut-points article's staged inputs (#149, data-raw/cut_points_stage.R): copies of ignored evidence and runs
+data/stage/

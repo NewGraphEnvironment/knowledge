@@ -123,8 +123,8 @@ and
 [other organizations'](https://github.com/smnorris/bcfishpass/tree/3bd2824c300c5f9c0c041380d412a52987df1ebb/parameters).
 To choose where to look first, a fair guess at where fish spawn and rear is enough.
 
-The R package [`link`](https://newgraphenvironment.github.io/link/) [@irvine2026linkDevelop] builds on bcfishpass, and
-[`fresh`](https://github.com/NewGraphEnvironment/fresh) [@irvine2026freshFreshwater] runs its rules on the BC Freshwater
+The R package [`link`](https://newgraphenvironment.github.io/link/) [@link] builds on bcfishpass, and
+[`fresh`](https://github.com/NewGraphEnvironment/fresh) [@fresh] runs its rules on the BC Freshwater
 Atlas. For every stretch of stream link asks a few plain questions: is it big enough, is it too steep, and can fish get
 to it? Each question has a cut-off, and each cut-off is a row in a config, so a rule can be changed and run beside
 another. That makes the cut-offs testable against evidence: the places crews have electrofished, and whether they
@@ -203,7 +203,7 @@ most because the stream is too far away.
 
 ### 3. `r pipe$label[3]` {#step-3}
 
-link [@irvine2026linkDevelop] cuts the Atlas streams into short segments and records, for each species, whether fish
+link [@link] cuts the Atlas streams into short segments and records, for each species, whether fish
 can reach each one and what link's current rules call habitat. It also cuts streams where the species it models have
 been observed, using
 `bcfishobs` [@norris2024smnorrisbcfishobs], so those observations shape the segments, but they never score a rule: they say where
@@ -215,7 +215,7 @@ its own.
 
 ### 4. `r pipe$label[4]` {#step-4}
 
-Flows come from `wet` [@irvine2026wetStream]. Mostly that is PCIC's modelled streamflow
+Flows come from `wet` [@wet]. Mostly that is PCIC's modelled streamflow
 [@schnorbus2018VICGlacierVICGL; @craig_etal2020Flexiblewatershed], carried onto Atlas streams by New Graph's fork of
 `fwapg` [@norris_irvine2026NewGraphEnvironmentfwapg]. Where PCIC's flow does not reach a stream, or carries under a
 fifth of wet's estimate on a stream's own line, it is wet's own water balance, fitted to Water Survey of Canada gauges
@@ -273,7 +273,7 @@ all gets no grade.
 ### 10. `r pipe$label[10]` {#step-10}
 
 link's current rule and the chosen rule both go through the steps link itself uses, run by `fresh`
-[@irvine2026freshFreshwater]: the rule's test, link's hand-entered habitat, and dropping rearing that has no spawning
+[@fresh]: the rule's test, link's hand-entered habitat, and dropping rearing that has no spawning
 nearby. On the Bulkley, those last two steps removed `r n0(ex$stages$dropped_default)` of the
 `r n0(ex$stages$pre_default)` segments link's rule passed, so we compare whole runs, not the test alone.
 
@@ -390,6 +390,34 @@ knitr::kable(w[, c("species_code", "kept", "stream_branch", "fished_area", "in_r
              align = "lrrrrrrrr", row.names = FALSE)
 ```
 
+## Does where link cuts a stream change the rules? {#cuts}
+
+```{r cuts}
+# from data-raw/vignette_cut_points.R, the bundle of the article this section links
+cp <- readRDS(vd("cut_points.rds"))
+cp_lim <- function(s) {
+  v <- cp$setups$grad_max[cp$setups$setup == s]
+  stopifnot(length(v) == 1)
+  v
+}
+cp_moved <- cp$other_keys[cp$other_keys$key != "CH_rear" & cp$other_keys$network_moved != "same", ]
+gs_ch <- x$gradient_sensitivity$pick[x$gradient_sensitivity$key == "CH_rear"]
+# the words: chinook rearing's slope limit differs between the two networks; the network moved the rules of other
+# species and stages too (plural); and the bundle's full-network pick is this article's own, so a promotion that moves
+# chinook rearing stops the build here until data-raw/vignette_cut_points.R is rerun
+stopifnot(cp_lim("published") > cp_lim("minimal"), nrow(cp_moved) >= 2,
+          length(unique(sub("_.*$", "", cp_moved$key))) >= 2,
+          length(gs_ch) == 1, identical(gs_ch, cp$setups$pick[cp$setups$setup == "published"]))
+```
+
+It can. A rule's slope test reads each segment's own slope, and link's full network cuts some streams at fish records, so
+a site that caught fish often starts a short segment whose slope is worked out from the catch upstream. Tuned on link's
+minimal network, which leaves out those cuts, chinook rearing's steepest slope is `r paste0(signif(100 * cp_lim("minimal"), 3), " %")`
+rather than `r paste0(signif(100 * cp_lim("published"), 3), " %")`, and the network moves the rules of some other species and
+stages too. [Splitting streams at fish records shifts the steepest slope mapped as habitat](stream_splits.html) shows it
+on our own records; these figures come from that article's data, written on `r cp$meta$written` at commit
+`r cp$meta$commit`.
+
 ## Limits {#limits}
 
 - A site's tributary code can name several Atlas streams, and the site goes to the nearest of them, which need not be
@@ -400,7 +428,7 @@ knitr::kable(w[, c("species_code", "kept", "stream_branch", "fished_area", "in_r
   on what the crew caught. Scored on the whole Atlas line's
   slope instead, the chosen rule is still a close call for `r sum(gs$pick_in_atlas_region)` of the `r nrow(gs)`
   species and stages (`r issue("92")`); slopes over a fixed length would not depend on where fish were caught
-  (`r issue("70")`).
+  (`r issue("70")`). How far the cuts move the rules is [above](#cuts).
 - The results are on the segments of link's build of 2026-11-03. That build cuts streams at steep sections only at the
   first place, going upstream, that a species present in the group cannot get past
   ([link#326](https://github.com/NewGraphEnvironment/link/issues/326)), and at fish records only at each species'
