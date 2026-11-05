@@ -98,7 +98,10 @@ n_lim <- function(region_of, g) {
 stopifnot(n_lim("minimal", s_of("published")$grad_max) > 0)
 tr <- x$transfer
 transfer_pct <- tr$minimal_only_km / tr$minimal_km
-stopifnot(abs(tr$parent_km - s_of("parent")$tuned_km) < 0.05, transfer_pct < 0.02, tr$parent_only_km < tr$minimal_only_km)
+# the net: the transferred rule's habitat against the minimal network's own
+transfer_net <- 1 - tr$parent_km / tr$minimal_km
+stopifnot(abs(tr$parent_km - s_of("parent")$tuned_km) < 0.05, transfer_pct < 0.02, tr$parent_only_km < tr$minimal_only_km,
+          transfer_net > 0, transfer_net < transfer_pct)
 
 # ---- the other keys ---------------------------------------------------------------------------------------------
 ok <- x$other_keys
@@ -409,7 +412,7 @@ ggplot(strip) +
   geom_rect(aes(xmin = from, xmax = to, ymin = y - 0.22, ymax = y + 0.22, fill = cls), colour = "white",
             linewidth = 0.8) +
   geom_vline(xintercept = 0, linewidth = 0.4, colour = "grey25") +
-  geom_label(data = at_site, aes(x = 16, y = y, label = grad(gradient)), hjust = 0, size = 2.7, colour = "grey15",
+  geom_label(data = at_site, aes(x = 16, y = y, label = grad(gradient, 2)), hjust = 0, size = 2.7, colour = "grey15",
              fill = "white", label.size = 0, label.padding = grid::unit(0.12, "lines"), alpha = 0.9) +
   scale_y_continuous(breaks = 1:2, labels = c("Minimal network", "Full network"), limits = c(0.7, 2.3)) +
   scale_fill_manual(values = cols_cls, drop = FALSE, name = "Slope a rule reads") +
@@ -526,8 +529,9 @@ rivers hold on all four. The records do not make one limit right everywhere: eac
 tuned on, and the published `r lim(s_of("published")$grad_max)` was tuned on the slopes link applies it to.
 
 A rule tuned on the minimal network can still be run on the full one, by giving each full segment its minimal parent's
-slope. For chinook rearing it then draws `r pc(transfer_pct, 1)` less habitat than on the minimal network itself, all
-of it small streams near large rivers, because the allowance measures its distance from a segment's downstream end
+slope. For chinook rearing it then draws `r pc(transfer_net, 1)` less habitat than on the minimal network itself. The
+stretches only the minimal network draws are small streams near large rivers, because the allowance measures its
+distance from a segment's downstream end
 ([the research notes](`r research`), "Chinook rearing on every setup").
 
 ## Limits
