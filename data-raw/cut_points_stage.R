@@ -9,9 +9,10 @@
 #     #145's (link 0.78.2, data/fdis/derived), the minimal network's (data/fdis/derived_minimal), and the parent and
 #     Atlas setups' (data/fdis/derived_parent, #145's visits with each segment's minimal parent and Atlas-line gradient);
 #     visits_link.csv and visits_species.csv of each, each held to the md5 its tune run's grade record names;
-#   - the tune and comparison tables of the four chinook rearing setups (#120: published 20261104_0543, minimal
-#     20261103_0838, parent 20261105_0436, Atlas line 20261105_0437) and, for the article's one sentence on the other
-#     keys, the minimal run's tables for every key it fitted; the published run's tables are tracked and read in place;
+#   - the tune, grade-record and comparison tables of the four chinook rearing setups (#120: published 20261104_0543,
+#     read from data/tune and data/compare, minimal 20261103_0838, parent 20261105_0436, Atlas line 20261105_0437),
+#     each held to the md5 data-raw/setup_compare.R logged for it (SETUP_LOG), so the article is a fixed snapshot of
+#     the runs that log describes, which a later promotion cannot move;
 #   - data/compare/setups/CH_rear_setups.gpkg (every full-network segment any setup draws, with each setup's verdict;
 #     data-raw/setup_compare.R);
 #   - from the database, on every blue line holding a chinook site with fish whose gradient lies on opposite sides of a
@@ -19,7 +20,10 @@
 #     within WINDOW_M of each such site, with their elevations (Z) and measures (M), and every chinook site of the
 #     tuning's population on those lines, placed on its Atlas line at its measure; and the lakes (10 ha or more) and
 #     river polygons near those lines and in the map's group (setup_compare.R's criterion: the most km where the
-#     setups' verdicts differ). The bundle chooses its examples from these lines and refuses one outside them.
+#     setups' verdicts differ), with that group's full-network segments accessible to chinook (from the published
+#     comparison's segments, held to the same log) as the map's background. Segment and Atlas-line ends carry their
+#     elevations (z_dn, z_up) as columns as well as in the geometry. The bundle chooses its examples from these lines
+#     and refuses one outside them.
 #
 # The population is the tuning's before its model filters (knw_tune_run()'s visits_in for CH rearing): stream branch,
 # fished area in range, chinook in range, absence not blocked, no barrier to chinook downstream.
@@ -27,7 +31,8 @@
 # Refuses unless the database holds the builds the grade records name (knw_build_record() on both schemas, and
 # knw_parent_read()'s provenance), and on a connection off the database's host (knw_db_latency_check()).
 #
-# INPUT:  the files above; the database holding the full and minimal builds (PGSERVICE)
+# INPUT:  the files above; scripts/logs/habitat/20261105_setup_compare-ch_rear.txt (SETUP_LOG); the database holding
+#         the full and minimal builds (PGSERVICE)
 # OUTPUT: data/stage/cut_points/ (ignored): MANIFEST.csv (path, source, md5, bytes, rows) and the staged files;
 #         scripts/logs/habitat/<yyyymmdd>_cut_points_stage.txt
 # RUN:    PGSERVICE=<entry> Rscript data-raw/cut_points_stage.R   (from the repo root; WINDOW_M=3000)
@@ -44,6 +49,7 @@ schema_min <- "fresh_default_minimal"
 window_m <- as.numeric(Sys.getenv("WINDOW_M", "3000"))
 limits <- c(0.09, 0.11, 0.13)   # the tuned chinook rearing limits: minimal and parent, #92's, #145's (and its region)
 dir_out <- "data/stage/cut_points"
+setup_log <- Sys.getenv("SETUP_LOG", "scripts/logs/habitat/20261105_setup_compare-ch_rear.txt")
 # the setups' runs, as data-raw/setup_compare.R names them
 runs <- c(published = "", minimal = "20261103_0838", parent = "20261105_0436", atlas = "20261105_0437")
 dir_t <- function(r) if (nzchar(r)) file.path("data/tune/candidate", r) else "data/tune"
@@ -60,6 +66,7 @@ evidence <- tibble(
 md5_92 <- c(visits_link = "1bd35829d07ca92f0b0faa565db65280", visits_species = "009698d73afd855c3e8db1235ad96c05")
 
 stamp <- format(Sys.time(), "%Y%m%d", tz = "UTC")
+md5_of <- function(f) unname(tools::md5sum(f))
 path_log <- .knw_free_path(file.path("scripts/logs/habitat", sprintf("%s_cut_points_stage.txt", stamp)))
 log_lines <- character()
 say <- function(...) { log_lines <<- c(log_lines, sprintf(...)); message(sprintf(...)) }
@@ -67,12 +74,22 @@ dirty <- length(system2("git", c("status", "--porcelain", "--", "R", "data-raw/c
 commit <- system2("git", c("rev-parse", "--short", "HEAD"), stdout = TRUE)
 say("Cut-points staging (#149), at knowledge %s%s; window %g m either side of a site.", commit,
     if (dirty) " (uncommitted changes)" else "", window_m)
+# the inputs setup_compare.R read, by the md5s it logged: the stage copies exactly those files
+sl <- readLines(setup_log)
+sl <- sl[seq(grep("^Inputs \\(md5\\):$", sl), length(sl))]
+sl <- regmatches(sl, regexec("^  ([0-9a-f]{32}) (\\S+)$", sl))
+md5_setup <- stats::setNames(vapply(Filter(length, sl), `[`, "", 2), vapply(Filter(length, sl), `[`, "", 3))
+if (length(md5_setup) != 16) stop(setup_log, " lists ", length(md5_setup), " inputs, not 16")
+held <- function(f) {
+  if (!f %in% names(md5_setup)) stop(f, " is not an input of ", setup_log)
+  if (!identical(md5_of(f), md5_setup[[f]])) stop(f, " has moved since ", setup_log, " read it (md5 ", md5_of(f), ")")
+  f
+}
 
 # ---- the runs' records, and the evidence held to them -------------------------------------------------------
 recs <- lapply(stats::setNames(names(runs), names(runs)), function(s) {
   knw_grade_record_read(file.path(dir_t(runs[[s]]), paste0(key, "_grades_record.csv")))
 })
-md5_of <- function(f) unname(tools::md5sum(f))
 for (i in seq_len(nrow(evidence))) {
   want <- if (is.na(evidence$record[i])) md5_92 else {
     m <- strsplit(knw_grade_record_read(evidence$record[i])$evidence_md5, ";", fixed = TRUE)[[1]]
@@ -137,7 +154,9 @@ win_sql <- paste(sprintf("(%d, %.3f, %.3f)", as.integer(win$blue_line_key), win$
 q_seg <- function(s) sprintf("
   WITH w(blue_line_key, lo, hi) AS (VALUES %s)
   SELECT s.id_segment, s.watershed_group_code, s.blue_line_key, s.linear_feature_id, s.edge_type, s.gnis_name,
-         s.stream_order, s.gradient, s.downstream_route_measure, s.upstream_route_measure, s.length_metre, s.geom
+         s.stream_order, s.gradient, s.downstream_route_measure, s.upstream_route_measure, s.length_metre,
+         ST_Z(ST_StartPoint(ST_GeometryN(s.geom, 1))) AS z_dn,
+         ST_Z(ST_EndPoint(ST_GeometryN(s.geom, ST_NumGeometries(s.geom)))) AS z_up, s.geom
   FROM %s.streams s JOIN w ON s.blue_line_key = w.blue_line_key
   WHERE s.upstream_route_measure > w.lo AND s.downstream_route_measure < w.hi
   ORDER BY s.blue_line_key, s.downstream_route_measure, s.id_segment", win_sql, s)
@@ -151,7 +170,8 @@ seg_full$parent_gradient <- par$gradient_minimal[i]
 fwa <- sf::st_read(conn, quiet = TRUE, query = sprintf("
   WITH w(blue_line_key, lo, hi) AS (VALUES %s)
   SELECT f.linear_feature_id, f.watershed_group_code, f.blue_line_key, f.edge_type, f.gnis_name, f.stream_order,
-         f.gradient, f.downstream_route_measure, f.upstream_route_measure, f.length_metre, f.geom
+         f.gradient, f.downstream_route_measure, f.upstream_route_measure, f.length_metre,
+         ST_Z(ST_StartPoint(f.geom)) AS z_dn, ST_Z(ST_EndPoint(f.geom)) AS z_up, f.geom
   FROM whse_basemapping.fwa_stream_networks_sp f JOIN w ON f.blue_line_key = w.blue_line_key
   WHERE f.upstream_route_measure > w.lo AND f.downstream_route_measure < w.hi
   ORDER BY f.blue_line_key, f.downstream_route_measure", win_sql))
@@ -170,7 +190,7 @@ wsg_map <- sf::st_read(f_setups, quiet = TRUE, query = "
   SELECT watershed_group_code, sum(length_metre) AS m FROM segments WHERE pattern NOT IN ('every setup', 'none')
   GROUP BY watershed_group_code ORDER BY m DESC, watershed_group_code LIMIT 1")$watershed_group_code
 # lakes of 10 ha or more and river polygons for the maps: within 2 km of each staged line's window, and the map's group
-ext <- lapply(split(fwa, fwa$blue_line_key), function(x) sf::st_bbox(sf::st_buffer(sf::st_union(x), 2000)))
+ext <- lapply(split(fwa, fwa$blue_line_key), function(x) sf::st_bbox(sf::st_buffer(sf::st_union(sf::st_zm(x)), 2000)))
 env <- paste(vapply(ext, function(b) sprintf("ST_MakeEnvelope(%.1f, %.1f, %.1f, %.1f, 3005)", b[["xmin"]], b[["ymin"]],
                                              b[["xmax"]], b[["ymax"]]), ""), collapse = ", ")
 q_water <- function(tbl, extra) sprintf("
@@ -179,8 +199,16 @@ q_water <- function(tbl, extra) sprintf("
 water <- sf::st_read(conn, quiet = TRUE, query = paste(q_water("fwa_lakes_poly", " AND area_ha >= 10"), "UNION ALL",
                                                        q_water("fwa_rivers_poly", ""), "ORDER BY 1, 2"))
 water$kind <- sub("^fwa_(lakes|rivers)_poly$", "\\1", water$kind)
-say("Map group (most km where the setups disagree, from %s): %s; %d lake and river polygons staged.", f_setups, wsg_map,
-    nrow(water))
+# the map's background: the group's full-network segments accessible to chinook, by the published comparison
+acc <- readRDS(held("data/compare/CH_rear_segments.rds"))
+acc <- acc[acc$watershed_group_code == wsg_map & acc$accessible %in% TRUE, c("watershed_group_code", "id_segment")]
+map_seg <- sf::st_zm(sf::st_read(conn, quiet = TRUE, query = sprintf("
+  SELECT id_segment, watershed_group_code, blue_line_key, stream_order, length_metre, geom FROM %s.streams
+  WHERE watershed_group_code = '%s' ORDER BY id_segment", schema, wsg_map)), drop = TRUE)
+map_seg <- map_seg[map_seg$id_segment %in% acc$id_segment, ]
+if (nrow(map_seg) != nrow(acc)) stop(nrow(acc) - nrow(map_seg), " accessible ", wsg_map, " segments are not in ", schema)
+say("Map group (most km where the setups disagree, from %s): %s; %d accessible segments, %d lake and river polygons.",
+    f_setups, wsg_map, nrow(map_seg), nrow(water))
 DBI::dbDisconnect(conn)
 if (nrow(sites) != nrow(on_lines) || any(sf::st_is_empty(sites))) stop("not every site on the staged lines was placed")
 say("Staged lines: %d full segments, %d minimal, %d Atlas lines, %d sites.", nrow(seg_full), nrow(seg_min), nrow(fwa),
@@ -201,13 +229,10 @@ for (i in seq_len(nrow(evidence))) {
     staged[[length(staged) + 1]] <- put(file.path(evidence$dir[i], f), file.path("evidence", evidence$name[i], f))
   }
 }
-for (s in names(runs)[nzchar(runs)]) {
-  keys_s <- if (s == "minimal") sub("_tune\\.csv$", "", list.files(dir_t(runs[[s]]), "_tune\\.csv$")) else key
-  for (k in keys_s) {
-    for (f in c(file.path(dir_t(runs[[s]]), paste0(k, c("_tune.csv", "_grades_record.csv"))),
-                file.path(dir_c(runs[[s]]), paste0(k, "_compare.csv")))) {
-      if (file.exists(f)) staged[[length(staged) + 1]] <- put(f, file.path("runs", runs[[s]], basename(f)))
-    }
+for (s in names(runs)) {
+  for (f in c(file.path(dir_t(runs[[s]]), paste0(key, c("_tune.csv", "_grades_record.csv"))),
+              file.path(dir_c(runs[[s]]), paste0(key, "_compare.csv")))) {
+    staged[[length(staged) + 1]] <- put(held(f), file.path("runs", s, basename(f)))
   }
 }
 staged[[length(staged) + 1]] <- put(f_setups, "setups/CH_rear_setups.gpkg")
@@ -217,6 +242,7 @@ sf::st_write(seg_min, f_lines, layer = "minimal_segments", quiet = TRUE, append 
 sf::st_write(fwa, f_lines, layer = "fwa_lines", quiet = TRUE, append = TRUE)
 sf::st_write(sites, f_lines, layer = "sites", quiet = TRUE, append = TRUE)
 sf::st_write(water, f_lines, layer = "water", quiet = TRUE, append = TRUE)
+sf::st_write(map_seg, f_lines, layer = "map_segments", quiet = TRUE, append = TRUE)
 staged[[length(staged) + 1]] <- tibble(path = "lines.gpkg", source = sprintf("database: %s, %s, whse_basemapping", schema, schema_min))
 man <- bind_rows(staged)
 man$md5 <- unname(tools::md5sum(file.path(dir_part, man$path)))
