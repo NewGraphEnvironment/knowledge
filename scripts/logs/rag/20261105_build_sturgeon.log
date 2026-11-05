@@ -1,0 +1,107 @@
+84 keys across 1 collections
+Ingesting 84 PDF(s) into data/rag/sturgeon.duckdb
+Downloading pandas (10.7MiB)
+Downloading pandas (10.7MiB)
+Downloading pandas (10.7MiB)
+Downloading pandas (10.7MiB)
+Downloading pandas (10.7MiB)
+Downloading pandas (10.7MiB)
+Downloading pandas (10.7MiB)
+Downloading pandas (10.7MiB)
+ Downloaded pandas
+ Downloaded pandas
+ Downloaded pandas
+Installed 49 packages in 346ms
+Installed 49 packages in 447ms
+Installed 49 packages in 353ms
+ Downloaded pandas
+ Downloaded pandas
+ Downloaded pandas
+ Downloaded pandas
+ Downloaded pandas
+Installed 49 packages in 493ms
+Installed 49 packages in 592ms
+Installed 49 packages in 544ms
+Installed 49 packages in 432ms
+Installed 49 packages in 443ms
+The PDF <_io.BytesIO object at 0x11106e8e0> contains a metadata field indicating that it should not allow text extraction. Ignoring this field and proceeding. Use the check_extractable if you want to raise an error in this case
+The PDF <_io.BytesIO object at 0x322eccc70> contains a metadata field indicating that it should not allow text extraction. Ignoring this field and proceeding. Use the check_extractable if you want to raise an error in this case
+Read with pdftools, because markitdown could not:
+  bcwatersurveysunitandcanada-bcfloodplainmappingprogram1984NechakoRiver (5531-1_1103306139644_4a67a6b1399f4baf9c70f4c646254263.pdf): no text
+Store built: data/rag/sturgeon.duckdb | docs: 83 | chunks: 10964 | model: nomic-embed-text
+Built data/rag/sturgeon.duckdb. It is not in the bucket until ACTION=push.
+Warning message:
+Skipped 1 PDF(s):
+  tredger_etal1984NechakoRiver (tredger_et_al_1984_nechako_river_reconnaissance.pdf): no text (markdown reader: no text; pdftools: no text) 
+
+## QUERY: loss of side channels and channel narrowing on the Nechako River near Vanderhoof after flow regulation
+Opening data/rag/sturgeon.duckdb unverified (verify = FALSE).
+# A tibble: 9 × 9
+  citation_key           origin chunk_id  start    end text  score metric method
+  <chr>                  <chr>     <int>  <int>  <int> <chr> <dbl> <chr>  <chr> 
+1 m_milesandassociatesl… /User…    10481  14623  15999 "The… 9.60  bm25   hybrid
+2 rood_neill1987Nechako… /User…     7312   7187   8815 "whi… 0.263 cosin… hybrid
+3 rood_neill1987Nechako… /User…     7347  35211  36784 "pub… 0.293 cosin… hybrid
+4 rood_neill1987Nechako… /User…     7351  38430  39996 "riv… 0.296 cosin… hybrid
+5 rood_neill1987Nechako… /User…     7357  43237  44794 "of … 0.280 cosin… hybrid
+6 northwesthydrauliccon… /User…     7395  11991  13560 "Roo… 8.80  bm25   hybrid
+7 northwesthydrauliccon… /User…     1821 115836 117475 "The… 8.83  bm25   hybrid
+8 northwesthydrauliccon… /User…     5769  17604  19175 "Pre… 8.60  bm25   hybrid
+9 mcadam_etal2005Linkag… /User…     7708  23886  25744 "whe… 9.83  bm25   hybrid
+
+## QUERY: white sturgeon habitat use at the confluence of the Nechako and Fraser rivers
+Opening data/rag/sturgeon.duckdb unverified (verify = FALSE).
+# A tibble: 8 × 9
+  citation_key           origin chunk_id  start    end text  score metric method
+  <chr>                  <chr>     <int>  <int>  <int> <chr> <dbl> <chr>  <chr> 
+1 tritonenvironmentalco… /User…     4973  15076  17649 "In … 6.24  bm25   hybrid
+2 liebe_etal2007Adultwh… /User…     4542 156001 157599 "70\… 5.60  bm25   hybrid
+3 fisheriesandoceanscan… /User…     9792  35758  37675 "In … 0.144 cosin… hybrid
+4 fisheriesandoceanscan… /User…     9795  38376  40218 "dis… 0.155 cosin… hybrid
+5 fisheriesandoceanscan… /User…    10029 225590 227994 "Fig… 5.76  bm25   hybrid
+6 rllenvironmentalservi… /User…     9094 168818 170404 "not… 0.154 cosin… hybrid
+7 rllenvironmentalservi… /User…     9096 170405 172044 "rec… 0.147 cosin… hybrid
+8 rllenvironmentalservi… /User…     9154 216807 218370 "con… 0.154 cosin… hybrid
+
+## QUERY: causes of white sturgeon recruitment failure in the Nechako River
+Opening data/rag/sturgeon.duckdb unverified (verify = FALSE).
+# A tibble: 6 × 9
+  citation_key            origin chunk_id start    end text  score metric method
+  <chr>                   <chr>     <int> <int>  <int> <chr> <dbl> <chr>  <chr> 
+1 nechakowhitesturgeonre… /User…     1975 87988  89487 "Res… 6.28  bm25   hybrid
+2 liebe_etal2004Adultwhi… /User…     6851 11941  14449 "App… 6.22  bm25   hybrid
+3 fisheriesandoceanscana… /User…     9870 98392 100099 "Par… 6.40  bm25   hybrid
+4 courtier20102009Nechako /User…     4722 13610  15950 "dam… 0.120 cosin… hybrid
+5 korman_walters2001Nech… /User…     7512 60205  61637 "23\… 6.28  bm25   hybrid
+6 mcadam_etal2005Linkage… /User…     7678     1   2649 "Tra… 0.126 cosin… hybrid
+
+## Top keys per query (TOPK=5; hybrid, so up to 2x5 rows)
+
+loss of side channels and channel narrowing on the Nechako River near Vanderhoof after flow regulation:
+  m_milesandassociatesltd_2013Specificgauge (bm25)
+  rood_neill1987NechakoRiver (cosine_distance)
+  rood_neill1987NechakoRiver (cosine_distance)
+  rood_neill1987NechakoRiver (cosine_distance)
+  rood_neill1987NechakoRiver (cosine_distance)
+  northwesthydraulicconsultantsltd_2003NechakoRivera (bm25)
+  northwesthydraulicconsultantsltd_2022Nechakowhite (bm25)
+  northwesthydraulicconsultantsltd_2003NechakoRiver (bm25)
+  mcadam_etal2005LinkagesWhite (bm25)
+
+white sturgeon habitat use at the confluence of the Nechako and Fraser rivers:
+  tritonenvironmentalconsultantsltd_2010InvestigationNechako (bm25)
+  liebe_etal2007Adultwhite (bm25)
+  fisheriesandoceanscanada2023Amendedrecovery (cosine_distance)
+  fisheriesandoceanscanada2023Amendedrecovery (cosine_distance)
+  fisheriesandoceanscanada2023Amendedrecovery (bm25)
+  rllenvironmentalservicesltd_2000FraserRiver (cosine_distance)
+  rllenvironmentalservicesltd_2000FraserRiver (cosine_distance)
+  rllenvironmentalservicesltd_2000FraserRiver (cosine_distance)
+
+causes of white sturgeon recruitment failure in the Nechako River:
+  nechakowhitesturgeonrecoveryinitiative2004Recoveryplan (bm25)
+  liebe_etal2004Adultwhite (bm25)
+  fisheriesandoceanscanada2023Amendedrecovery (bm25)
+  courtier20102009Nechako (cosine_distance)
+  korman_walters2001NechakoRiver (bm25)
+  mcadam_etal2005LinkagesWhite (cosine_distance)

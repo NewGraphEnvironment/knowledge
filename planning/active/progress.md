@@ -66,3 +66,22 @@ mandate; the merge stays with me.
   `Nechako - NECR`, `dc:replaces`, trash `VS4P4TG6`) was refused by auto mode as an external write: left for Al.
 - cred upgraded 0.5.0 -> 0.7.0 (0.6.0: one unreadable PDF or refused chunk no longer loses the build).
 - Next: Zotero quit (cred#45: cred reads immutable and the `-wal` held 1.5 MB after the run), then the build.
+
+## Session 2026-11-05
+
+- Zotero quit; `-wal` 0 bytes, so cred's immutable read saw every write (cred#45 gate).
+- Build (07:10–07:19 UTC, cred 0.7.0, ragnar 0.3.1): 84 keys, no member left out for want of a PDF; 83
+  documents, 10,964 chunks, nomic-embed-text, 151.5 MB, md5 `7c8359e5…`. Log
+  `scripts/logs/rag/20261105_build_sturgeon.log`, home paths as `~/`.
+- Skipped: Tredger et al. 1984 (`AHE9BFQQ`), a 49-page DigiPath scan with no text layer. `ocrmypdf --deskew` gives
+  7,531 readable words (`data/rag/pdf/sturgeon/tredger1984_nechako_reconnaissance_ocr.pdf`, ignored). Getting it in
+  needs the OCR copy attached to the group item (a Web API write, left for Al), then `crd_store_update()` and a push.
+- The 1984 Vanderhoof floodplain map read through pdftools: 2 chunks (a map sheet, little text).
+- Every one of the 83 origins maps to one live group attachment of a live `WEUFTSDC` member.
+- Queries (top keys in the log):
+  - side channels near Vanderhoof: Rood & Neill 1987 (×4) and three NHC reports. **Pass.**
+  - Fraser–Nechako confluence: Triton 2010, Liebe 2007, DFO 2023, RLL 2000. **Miss** against the keys fixed in
+    advance (a Lheidli T'enneh critical-habitat report or Williamson et al. 2021). All three are in the store; the
+    confluence is named in many reports (`nechako%confluence` hits 46 chunks of the 2007 database summary, 45 of
+    the DFO strategy, none of the Lheidli reports in the top eight), so the expectation was a guess about ranking.
+  - recruitment failure: Korman & Walters 2001, McAdam 2005, the 2004 recovery plan. **Pass.**

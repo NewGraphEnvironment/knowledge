@@ -91,11 +91,11 @@ Exploration moved some premises (immutable read of `zotero.sqlite`, 2026-10-31, 
       and after table (live items, items with a PDF, MB uploaded)
 
 ## Phase 3 (after Phase 2): build, query, push `sturgeon`
-- [ ] cred ≥ 0.5.0 and ragnar 0.3.1 installed (check latest first)
-- [ ] `ACTION=build STORE=sturgeon COLLECTIONS=WEUFTSDC`, logged to `scripts/logs/rag/<date>_build_sturgeon.log`, home
+- [x] cred ≥ 0.5.0 and ragnar 0.3.1 installed (check latest first)
+- [x] `ACTION=build STORE=sturgeon COLLECTIONS=WEUFTSDC`, logged to `scripts/logs/rag/<date>_build_sturgeon.log`, home
       paths written as `~/` and the #56 `local_path` pattern run over the logs by hand (the sweep skips
       `scripts/logs/`). The left-out list must equal the recorded gap. Map every origin to a live group attachment
-- [ ] Three `ACTION=query` checks, each with keys it must return in its top 5:
+- [x] Three `ACTION=query` checks, each with keys it must return in its top 5:
       side-channel loss near Vanderhoof (an NHC geomorphic, sediment or substrate report, or the Rood/Neill volume);
       habitat use at the Fraser–Nechako confluence (a Lheidli T'enneh critical habitat report, or Williamson et al.
       2021); recruitment-failure hypotheses (Antill 2013, Korman & Walters 2001, or an NHC substrate report).
