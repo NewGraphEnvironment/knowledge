@@ -99,10 +99,10 @@ keeps the bundle off the database, and any machine holding the staged directory 
 
 ## Phase 4: Tests and pins
 
-- [ ] `tests/testthat/test-vignette-data.R`: the bundle ships; tracked sources unchanged since it was saved; staged
+- [x] `tests/testthat/test-vignette-data.R`: the bundle ships; tracked sources unchanged since it was saved; staged
   inputs unchanged where present; the examples meet their stated criteria; chinook's table has its four setups, and
   the other-keys sentence's counts come from seven keys.
-- [ ] `CLAUDE.md` Layout: one entry for the article, its bundle and its staging script; `data-raw/README.md` row;
+- [x] `CLAUDE.md` Layout: one entry for the article, its bundle and its staging script; `data-raw/README.md` row;
   `research/minimal_network_tuning.md` links the article.
 
 ## Phase 5: Render, review, publish

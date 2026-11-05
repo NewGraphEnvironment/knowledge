@@ -58,4 +58,9 @@ running. The merge stays with me.
   its group is named for). BC Geographical Names is Access Only in the catalogue, so the file keeps town names only.
 - `vignettes/cut_points.bib` written by `data-raw/vignette_bib.R` (Zotero launched here; the other two `.bib` files
   came back unchanged).
+- Phase 4: six tests in `test-vignette-data.R` (both rds ship; tracked logs and staged inputs unchanged; places on this
+  bundle; premise equals the three segment gradient logs; setups, transfer and other keys equal their logs; examples
+  meet the stated criteria). Restore-the-bug: one byte changed in the setup_compare csv failed the tracked-source and
+  C2 tests, then restored. The methodology article's ignored-source test fails on this machine's older `data/fdis`
+  (pre-existing, not this branch). CLAUDE.md, `data-raw/README.md` and the research file name the article.
 
