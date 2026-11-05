@@ -19,7 +19,10 @@ rewrites that had dropped a qualifier. The lessons are soul#745; knowledge's own
 
 ## Evidence
 
-`review-round*.md` in this directory (round 3 carries the 57-claim enumeration).
+`review-round*.md` in this directory (round 3 carries the 57-claim enumeration). After Al's further edits (the approved link and knowledge paragraphs, "habitat definition" for "rule", the bar
+graph, the black-and-white palette on every figure, a faded basemap), `review-final-round1.md` found a count broken by
+the "rule" swap ("three parameters" for "three parts") and `review-final-round2.md` ended clean on a 64-claim
+enumeration.
 
 ## Owed
 
