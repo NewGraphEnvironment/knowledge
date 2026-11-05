@@ -136,28 +136,35 @@ stopifnot(sum(cr$present) < 10, sum(cr$d > 0) > 2 * sum(cr$d < 0),
           steep(st$full_gradient, TRUE) > steep(st$minimal_gradient, TRUE))
 ```
 
-The R package [`link`](`r link_site`) [@link] maps where each fish species can spawn and rear on British Columbia's
-streams. It tests each stretch of stream against a **rule**: a handful of thresholds, such as the smallest stream and
-the steepest slope a species uses. The stretches that pass are the species' **habitat**. `knowledge`, the package this
-article belongs to, chooses link's thresholds from fish records: for each species and life stage with enough records, it tests many rules
-against where electrofishing crews caught the fish and where they did not, and of the rules that predict about as well
-as the best, keeps the one closest to link's standard settings ([how the tuning works](habitat_thresholds.html)). Chinook
-rearing is the worked example here; [the research notes](`r research`) hold every species tuned, each run behind this
-article and its checks.
+The R package [`link`](`r link_site`) [@link] holds the recipes that turn what is known about each fish species' life
+history into habitat on British Columbia's stream network. A recipe is a config, and every rule and threshold in it is
+a row in a table. For each species and life stage it sets a **habitat definition**: the smallest stream the species
+uses, the steepest slope it holds in, how close a large river must be for a smaller stream to likely be used as
+habitat. It also defines what counts as an obstacle to fish passage, from falls and steep sections to the road and rail
+crossings and dams below them. [`fresh`](https://github.com/NewGraphEnvironment/fresh) [@fresh], our stream network
+modelling engine, runs the recipe: it cuts the streams of the BC Freshwater Atlas [@flnrord2021FreshwaterAtlasb] into
+**segments**, works out which segments each species can reach, and classifies their habitat. So a model can be
+changed, run beside another and traced back to the rules that produced it.
 
-link tests a rule on **segments**, the pieces it cuts the streams of the BC Freshwater Atlas
-[@flnrord2021FreshwaterAtlasb] into, and a segment's slope is its drop over its whole length. So where link cuts a
-stream decides the slope a rule reads, and some of its cuts fall exactly where fish were caught. Change the cuts and the
-rule chosen from those catches can change. Chinook rearing's slope limit is **`r lim(s_of("published")$grad_max)`** on link's full
-network and **`r lim(s_of("minimal")$grad_max)`** on its minimal network, which leaves out the cuts at fish records,
-at crossings and at hand-mapped habitat. Yet the two rules draw much the same habitat; on the map they differ in short
-pieces of small streams:
+`knowledge`, the package this article belongs to, helps choose the parameters in link's habitat definitions. It
+gathers what is known about each species: its life history, the habitat literature, and records of where fish sampling
+caught it and where sampling did not. For each species and life stage with enough records, it scores candidate
+parameters against those records and keeps the smallest change to link's standard settings that fits about as well as
+the best ([how the tuning works](habitat_thresholds.html)). Chinook rearing is the worked example here;
+[the research notes](`r research`) hold every species tuned, each run behind this article and its checks.
+
+A segment's slope is its drop over its whole length, so where a stream is cut decides the slope a habitat definition is
+tested on, and some cuts fall exactly where fish were caught. Change the cuts and the definition chosen from those
+catches can change. Chinook rearing's slope limit is **`r lim(s_of("published")$grad_max)`** on link's full network and
+**`r lim(s_of("minimal")$grad_max)`** on its minimal network, which leaves out the cuts at fish records, at crossings
+and at hand-mapped habitat. Yet the two definitions draw much the same habitat; on the map they differ in short pieces
+of small streams:
 
 ```{r map-data}
 mp <- x$map
 mrow <- places[places$place == "map", ]
 d <- mp$drawn
-lv <- c("Both rules", paste0("Full network's own slope (", lim(s_of("published")$grad_max), ") only"),
+lv <- c("Both definitions", paste0("Full network's own slope (", lim(s_of("published")$grad_max), ") only"),
         paste0("Minimal network's slope (", lim(s_of("parent")$grad_max), ") only"))
 d$cls <- factor(dplyr::case_when(d$published & d$parent ~ lv[1], d$published ~ lv[2], d$parent ~ lv[3]), levels = lv)
 d <- d[!is.na(d$cls), ]
@@ -201,7 +208,7 @@ lab_over <- streams[streams$stream_order >= 6 & streams$km >= 20, ]
 stopifnot("Fraser River" %in% lab_over$gnis_name, nrow(lab_over) >= 3)
 ```
 
-```{r map, fig.height = round(over_h + zoom_h, 2), fig.cap = paste0("Chinook rearing habitat in the ", mrow$gnis_name, " watershed group, around the ", mrow$joins, " ", n0(mrow$town_km), " km ", mrow$compass, " of ", mrow$town, ", under two rules, both run on link's full network. Navy: drawn by both. Orange: drawn only by the rule tuned on each segment's own slope (a ", lim(s_of("published")$grad_max), " limit). Pink: drawn only by the rule tuned on the minimal network, reading each segment's minimal-network slope (", lim(s_of("parent")$grad_max), "). Line width follows stream order. The lower panel enlarges the box outlined above; between its dashed lines is the ", cell / 1000, " km square holding the most km drawn by one rule and not the other. Stream names are the Freshwater Atlas's. Basemap: Esri World Topographic Map and World Shaded Relief.")}
+```{r map, fig.height = round(over_h + zoom_h, 2), fig.cap = paste0("Chinook rearing habitat in the ", mrow$gnis_name, " watershed group, around the ", mrow$joins, " ", n0(mrow$town_km), " km ", mrow$compass, " of ", mrow$town, ", under two habitat definitions, both run on link's full network. Navy: drawn by both. Orange: drawn only by the definition tuned on each segment's own slope (a ", lim(s_of("published")$grad_max), " limit). Pink: drawn only by the definition tuned on the minimal network, reading each segment's minimal-network slope (", lim(s_of("parent")$grad_max), "). Line width follows stream order. The lower panel enlarges the box outlined above; between its dashed lines is the ", cell / 1000, " km square holding the most km drawn by one definition and not the other. Stream names are the Freshwater Atlas's. Basemap: Esri World Topographic Map and World Shaded Relief.")}
 cols_map <- stats::setNames(c("#253494", "#f76707", "#d6336c"), lv)
 lab_col <- gq::gq_reg_main()$layers$stream_labels$label
 # Esri's topographic map blended with its shaded relief, warped to BC Albers (as New Graph's habitat-rules post draws
@@ -288,8 +295,8 @@ grid::grid.raster(png::readPNG(f_over), vp = grid::viewport(layout.pos.row = 1))
 grid::grid.raster(png::readPNG(f_zoom), vp = grid::viewport(layout.pos.row = 2))
 ```
 
-In the `r mrow$gnis_name` watershed group the two rules draw `r n0(km_cls[[1]])` km of chinook rearing habitat alike.
-The rule tuned on each segment's own slope adds `r n0(km_cls[[2]])` km, and the rule tuned on the minimal network adds
+In the `r mrow$gnis_name` watershed group the two definitions draw `r n0(km_cls[[1]])` km of chinook rearing habitat alike.
+The definition tuned on each segment's own slope adds `r n0(km_cls[[2]])` km, and the one tuned on the minimal network adds
 `r n0(km_cls[[3]])` km. Most of each difference lies on small streams, of stream order 3 or less, against under half
 of the habitat both draw. The group was chosen before drawing as the one where the tunings compared in this article
 disagree over the most km.
@@ -327,14 +334,15 @@ a species cannot pass. The full network adds cuts the minimal network does not m
 stretches whose habitat has been mapped by hand, and records of the species link models in each watershed group (in the
 build used here, each such species' highest record on each stream, drawn from bcfishobs
 [@norris2024smnorrisbcfishobs]). link cuts at those records so that a segment can say whether the species has been
-seen at or above it, as bcfishpass [@norris2024smnorrisbcfishpass] does. Every rule then reads the slope of the shorter segment.
+seen at or above it, as bcfishpass [@norris2024smnorrisbcfishpass] does. Every habitat definition is then tested on the
+slope of the shorter segment.
 
-An electrofishing visit that caught fish is often such a record, so the cut lands at the visit, and the slope a rule
-reads there is worked out from the visit upstream. On the stream below, the visit that caught chinook reads
+An electrofishing visit that caught fish is often such a record, so the cut lands at the visit, and the slope tested
+there is worked out from the visit upstream. On the stream below, the visit that caught chinook reads
 `r grad(seg_at("full")$gradient)` on the full network, over the `r n0(seg_at("full")$length_metre)` m above it, and
 `r grad(seg_at("minimal")$gradient)` on the minimal network, whose segment runs from near the mouth past the visit.
 
-```{r profile, fig.height = 3.6, fig.cap = paste0("One stream cut two ways: ", where(list(place = "concept", site_visit = cc$site$site_visit)), ". The thin grey line is the stream's elevation along its Atlas line. Each coloured line is a segment drawn as the straight slope a rule reads on it, with ticks at the ends of the full and minimal networks' segments: orange the full network's, blue the minimal network's, dark grey the whole Atlas line's, which runs on past the top of the figure. The black dot is a visit where chinook were caught; the open circle, on the same full-network segment, a visit where none were. The labels give the slope each version reads at the black dot. Elevation is stretched several times so the slopes can be seen.")}
+```{r profile, fig.height = 3.6, fig.cap = paste0("One stream cut two ways: ", where(list(place = "concept", site_visit = cc$site$site_visit)), ". The thin grey line is the stream's elevation along its Atlas line. Each coloured line is a segment drawn as the straight slope tested on it, with ticks at the ends of the full and minimal networks' segments: orange the full network's, blue the minimal network's, dark grey the whole Atlas line's, which runs on past the top of the figure. The black dot is a visit where chinook were caught; the open circle, on the same full-network segment, a visit where none were. The labels give the slope each version reads at the black dot. Elevation is stretched several times so the slopes can be seen.")}
 lab_pos <- data.frame(net = site_seg$net, lab = site_seg$lab,
                       x = c(full = 440, minimal = 330, atlas = 300)[site_seg$network],
                       y = c(full = 994.5, minimal = 1016, atlas = 1036)[site_seg$network])
@@ -406,11 +414,11 @@ for (i in seq_along(ex)) {
 }
 ```
 
-The same happens elsewhere. Three more visits with chinook show how far the cut can move the slope a rule reads. In
+The same happens elsewhere. Three more visits with chinook show how far the cut can move the slope tested. In
 each of three watershed groups, they are the visit where the two networks' slopes differ most while sitting on
-opposite sides of a tuned limit, picked by a rule set before drawing:
+opposite sides of a tuned limit, picked by criteria set before drawing:
 
-```{r strip, fig.height = 3.4, fig.cap = paste0("The segments around three visits where chinook were caught, as each network cuts them, from ", half, " m below the visit to ", half, " m above it (a bar that stops short of the left edge stops at the stream's mouth). Each bar is a segment, coloured by the slope a rule reads on it; the line marks the visit, and the slope each network reads there is labelled beside it. The panel titles name each stream, the river it flows or drains into and the nearest town. The rule: among visits with chinook whose full-network slope and the slope of the minimal-network segment it lies within sit on opposite sides of a tuned limit, on a full-network segment at least ", crit$min_len_m, " m long and outside the watershed group of the stream in the figure above, the largest gap in each group, from the ", crit$n_examples, " groups with the largest gaps.")}
+```{r strip, fig.height = 3.4, fig.cap = paste0("The segments around three visits where chinook were caught, as each network cuts them, from ", half, " m below the visit to ", half, " m above it (a bar that stops short of the left edge stops at the stream's mouth). Each bar is a segment, coloured by the slope tested on it; the line marks the visit, and the slope each network reads there is labelled beside it. The panel titles name each stream, the river it flows or drains into and the nearest town. The criteria: among visits with chinook whose full-network slope and the slope of the minimal-network segment it lies within sit on opposite sides of a tuned limit, on a full-network segment at least ", crit$min_len_m, " m long and outside the watershed group of the stream in the figure above, the largest gap in each group, from the ", crit$n_examples, " groups with the largest gaps.")}
 at_site <- strip[strip$at_site, ]
 # each printed slope (two decimals) falls on the same side of each limit as its bar's colour
 stopifnot(all(vapply(crit$limits, function(t) all((round(at_site$gradient, 4) <= t) == (at_site$gradient <= t)), TRUE)))
@@ -421,7 +429,7 @@ ggplot(strip) +
   geom_label(data = at_site, aes(x = 16, y = y, label = grad(gradient, 2)), hjust = 0, size = 2.7, colour = "grey15",
              fill = "white", label.size = 0, label.padding = grid::unit(0.12, "lines"), alpha = 0.9) +
   scale_y_continuous(breaks = 1:2, labels = c("Minimal network", "Full network"), limits = c(0.7, 2.3)) +
-  scale_fill_manual(values = cols_cls, drop = FALSE, name = "Slope a rule reads") +
+  scale_fill_manual(values = cols_cls, drop = FALSE, name = "Slope tested") +
   facet_wrap(~ex, ncol = 1) +
   labs(x = "Distance upstream of the visit (m)", y = NULL) +
   theme_minimal(base_size = 9.5) +
@@ -478,21 +486,21 @@ starts from, the two networks put the slope on opposite sides of `r lim(crit$lim
 `r lim(crit$limits[["published"]])` at about `r n0(r_cross)`, and only `r sum(cr$present)` of those caught chinook. These runs do not say which of the full network's
 cuts move them.
 
-## How does the tuning choose a rule?
+## How does the tuning choose a habitat definition?
 
-A rule decides how much habitat link draws, so it should be the one the fish records support. The tuning tries many
-candidate rules and scores each by how well it predicts where chinook were caught in watershed groups left out of the
+A habitat definition decides how much habitat link draws, so it should be one the fish records support. The tuning
+tries many candidate definitions, each a different set of parameters, and scores each by how well it predicts where chinook were caught in watershed groups left out of the
 fit; lower is better. For chinook rearing it scored about `r n0(round(su$n_visits[1], -2))` visits in
-`r n_groups` watershed groups. A score carries error, so every rule within one standard error of the best is a
-**close call**: the records cannot rank close calls apart. A rule has three parts: the smallest stream, the steepest
-slope, and an allowance that lets a smaller stream count when a large river is close downstream. Of the close calls the
+`r n_groups` watershed groups. A score carries error, so every candidate within one standard error of the best is a
+**close call**: the records cannot rank close calls apart. For chinook rearing the tuning varies three parameters: the smallest
+stream, the steepest slope, and how close a large river must be for a smaller stream to count. Of the close calls the
 tuning chooses the one closest to link's standard settings for the species, and among equals the best scorer; for
-chinook rearing every close call differs from the standard rule in all three parts, so the choice is the best scorer.
+chinook rearing every close call changes all three of link's standard settings, so the choice is the best scorer.
 
 ## What does each network choose?
 
-Chinook rearing was tuned four ways, on the same visits, flows and species range, so that the segments and the slope a
-rule reads are the only differences. Two of the four read a slope from somewhere else onto the full network's segments:
+Chinook rearing was tuned four ways, on the same visits, flows and species range, so that the segments and the slope tested are
+the only differences. Two of the four read a slope from somewhere else onto the full network's segments:
 each segment's **minimal parent**, the minimal-network segment it lies within, and the whole Atlas line it lies on.
 
 ```{r setups}
@@ -507,34 +515,34 @@ tb <- data.frame(`Segments and slope` = unname(how[su$setup]),
                  `On the minimal network's?` = yn(vapply(su$setup, in_reg, TRUE, region_of = "minimal")),
                  check.names = FALSE)
 knitr::kable(tb, format = "html", align = "lrcc", row.names = FALSE,
-             caption = "The chinook rearing rule chosen on each network and slope.") |>
+             caption = "The chinook rearing habitat definition chosen on each network and slope.") |>
   kableExtra::kable_styling(full_width = FALSE, font_size = 13) |>
   kableExtra::footnote(general_title = "", general = paste0(
-    "Every rule chosen keeps the same flow floor and the same allowance for small streams near a large river; only the ",
-    "slope limit differs. A verdict is on the rule chosen, not on its limit alone: on the minimal network's records, ",
-    n_lim("minimal", s_of("published")$grad_max), " other rules with a ", lim(s_of("published")$grad_max),
+    "Every definition chosen keeps the same flow floor and the same allowance for small streams near a large river; only the ",
+    "slope limit differs. A verdict is on the definition chosen, not on its limit alone: on the minimal network's records, ",
+    n_lim("minimal", s_of("published")$grad_max), " other candidates with a ", lim(s_of("published")$grad_max),
     " limit, differing in their flow floor or their allowance, are close calls."))
 ```
 
 Without the full network's extra cuts, the records argue for the gentler limit. Read on the full network's own slopes,
 they choose
-`r lim(s_of("published")$grad_max)`, and that rule is not a close call on the minimal network's records. Without those
+`r lim(s_of("published")$grad_max)`, and that definition is not a close call on the minimal network's records. Without those
 cuts they choose `r lim(s_of("minimal")$grad_max)`, which is a close call on the full network's records as well. Given
-each segment's minimal parent's slope, the full network chooses the minimal network's rule exactly. The Atlas line's
-slopes choose `r lim(s_of("atlas")$grad_max)`, in a rule that is a close call on neither network's records; these
-runs do not show why. The habitat each rule draws, run through all of link's steps on the segments it was tuned on,
+each segment's minimal parent's slope, the full network chooses the minimal network's definition exactly. The Atlas line's
+slopes choose `r lim(s_of("atlas")$grad_max)`, in a definition that is a close call on neither network's records; these
+runs do not show why. The habitat each definition draws, run through all of link's steps on the segments it was tuned on,
 differs by under `r pc(ceiling(100 * hab_spread) / 100)` across the four.
 
 ## What does it mean for someone using the thresholds?
 
 This package's chinook rearing thresholds, tuned on `r tuned_on`, were tuned on link's full network, each segment
-reading its own slope, which is how link applies a rule. On another network, or with slopes read another way, the same
-chinook records choose another rule: the slope limit reads `r lim(s_of("published")$grad_max)`,
+reading its own slope, which is how link applies a habitat definition. On another network, or with slopes read another way, the same
+chinook records choose another definition: the slope limit reads `r lim(s_of("published")$grad_max)`,
 `r lim(s_of("minimal")$grad_max)` or `r lim(s_of("atlas")$grad_max)`, while the flow floor and the allowance near large
 rivers hold on all four. The records do not make one limit right everywhere: each is the best fit for the slopes it was
 tuned on, and the published `r lim(s_of("published")$grad_max)` was tuned on the slopes link applies it to.
 
-A rule tuned on the minimal network can still be run on the full one, by giving each full segment its minimal parent's
+A definition tuned on the minimal network can still be run on the full one, by giving each full segment its minimal parent's
 slope. For chinook rearing it then draws `r pc(transfer_net, 1)` less habitat than on the minimal network itself. The
 stretches only the minimal network draws are small streams near large rivers, because the allowance measures its
 distance from a segment's downstream end.
@@ -543,7 +551,7 @@ distance from a segment's downstream end.
 
 - These runs tuned chinook rearing all four ways, and the `r nrow(ok6)` other species and stages both networks could
   fit on the two networks' own slopes and, in a separate check, on the Atlas line each visit lies on
-  ([the methodology article's limits](habitat_thresholds.html#limits)). The network moved the rule for some of those
+  ([the methodology article's limits](habitat_thresholds.html#limits)). The network moved the definition for some of those
   too.
 - The minimal network leaves out the cuts at fish records, at crossings and at hand-mapped habitat together, so these
   runs cannot say which of the three moved the limit. Builds that each leave out one kind of cut would.
@@ -559,7 +567,7 @@ The numbers were bundled on `r x$meta$written` from the tuning runs and link bui
 describe. When it was written, the share of visits starting their own segment, the four tunings'
 choices and habitat, and the other species' choices were checked against the logs that report them there. The visits are the
 Fisheries Data Information System's electrofishing records [@provinceofbritishcolumbia2022FisheriesData], placed on
-the Freshwater Atlas; rules are run through fresh [@fresh] for link. The maps' basemap is Esri's World Topographic Map
+the Freshwater Atlas; fresh runs link's habitat definitions. The maps' basemap is Esri's World Topographic Map
 blended with its World Shaded Relief.
 
 ## Software and citation
