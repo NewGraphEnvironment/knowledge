@@ -12,18 +12,18 @@ Al reviewed the rendered draft (2026-11-05) and asked for all of it to be done o
 - [x] `data-raw/vignette_cut_points_places.R` also carries the map group's named streams (Freshwater Atlas), for labels
 
 ## Phase 3: The article, revised
-- [ ] Why before how: what knowledge does with link, why thresholds are tuned from fish records, why a cut at a catch
+- [x] Why before how: what knowledge does with link, why thresholds are tuned from fish records, why a cut at a catch
   matters; chinook as the worked example of a multi-species tuning, research notes linked early
-- [ ] The map earlier, on Esri World Topographic Map blended with World Shaded Relief (`gq::gq_basemap_tiles()`), with
+- [x] The map earlier, on Esri World Topographic Map blended with World Shaded Relief (`gq::gq_basemap_tiles()`), with
   river names on both panels
-- [ ] The example figure before the frequency table, sleeker, in a pleasing palette; the table's lead-in says why it
+- [x] The example figure before the frequency table, sleeker, in a pleasing palette; the table's lead-in says why it
   matters
-- [ ] The four tunings as a table with plain definitions; rule against habitat defined; the tuning's purpose before its
+- [x] The four tunings as a table with plain definitions; rule against habitat defined; the tuning's purpose before its
   mechanics; fewer exact counts; the other-species paragraph cut; no sentence that dates; Limits say what would
   separate the cut sources
 
 ## Phase 4: Check and publish
-- [ ] Render, check every figure at page width, republish the review copy
+- [x] Render, check every figure at page width, republish the review copy
 - [ ] A blind reader's pass for what the article is for and what a reader takes away, before the accuracy review
 - [ ] `/code-check branch` on the revision
 - [ ] soul issue: the lessons for `writing.md` and `cartography.md`
