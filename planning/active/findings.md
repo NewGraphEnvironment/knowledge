@@ -112,6 +112,19 @@ schema exists but has held no segments since #145's promotion moved the publishe
 row to place and errors instead of skipping. Environmental, and not in code this branch touched; with
 `PGSERVICE=fresh_local` the file passes (18 expectations), and the guard's gap (a schema present but empty) is the test's own.
 
+## Regression: the gradient swap on the segment's own gradient reproduces the published run (MFRA, 2026-11-05)
+
+On MFRA (8,771 chinook segments), with the published curve and pick on m4's `fresh_default`:
+- `knw_grade_species()` (now reading `gradient = "segment"` through the source map) reproduces the published grade
+  table's rows exactly: the same segment ids, size, distance, accessibility and rearing flags, and rates to 0 at five
+  significant figures (the walk cache served all 1,449 starts).
+- `knw_compare_rules(gradient = "segment")`, with link's configs at the published comparison's `e2a85938`, reproduces
+  the promoted `CH_rear_segments.rds` rows exactly (`rearing_default`, `_tuned`, `_pre_tuned`, `_door`, `gradient`,
+  `grade`, `knw_dist`, `link_branch`).
+- `gradient = "parent"` on the same group: the gradient differs on 2,609 segments; the tuned rule's rearing on 0 of
+  them and `default`'s on 4 (`stored_vs_default_differ_km` 0.442), at 121 km `default` and 98.6 km tuned. The log
+  line names the gradient.
+
 ## Errors Encountered
 
 | Error | Resolution |
