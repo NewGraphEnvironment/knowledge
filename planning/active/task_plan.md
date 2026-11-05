@@ -24,7 +24,7 @@ Al reviewed the rendered draft (2026-11-05) and asked for all of it to be done o
 
 ## Phase 4: Check and publish
 - [x] Render, check every figure at page width, republish the review copy
-- [ ] A blind reader's pass for what the article is for and what a reader takes away, before the accuracy review
+- [x] A blind reader's pass for what the article is for and what a reader takes away, before the accuracy review
 - [ ] `/code-check branch` on the revision
-- [ ] soul issue: the lessons for `writing.md` and `cartography.md`
+- [x] soul issue (soul#745): the lessons for `writing.md` and `cartography.md`
 - [ ] `/planning-archive`, push, report
