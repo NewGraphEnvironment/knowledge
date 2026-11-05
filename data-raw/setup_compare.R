@@ -212,18 +212,23 @@ if (gpkg) {
   if (!file.rename(f_part, f)) stop("could not move ", f_part, " to ", f)
   message("Wrote ", f, " (", nrow(drawn), " segments drawn by default or a setup)")
 }
-# the classes, fixed here: every setup; the published run's own gradient alone or with the Atlas line (what the cuts
-# at catches and crossings add); the minimal-gradient setups (minimal and parent) without the published; the rest
+# the classes: each disagreement the province holds over 100 km of, by which setups draw the segment (revised after the
+# first figure, which had fixed them before seeing the patterns and put the two largest into "other"); agreement is
+# drawn muted and thin, so the differences carry the figure
 cls <- function(p) {
   dplyr::case_when(p == "every setup" ~ "Every setup",
-                   p %in% c("published", "published + atlas") ~ "Full network's own gradient (and Atlas) only",
-                   grepl("minimal", p) & grepl("parent", p) & !grepl("published", p) ~ "Minimal and parent gradient, not published",
-                   p == "atlas" ~ "Atlas segment's gradient only",
+                   p == "published + minimal + parent" ~ "Every setup but the Atlas line",
+                   p == "published + atlas" ~ "Full network's own and Atlas gradients only",
+                   p == "minimal" ~ "Minimal network only (lost in the transfer)",
+                   p == "published" ~ "Published only",
+                   p == "minimal + parent + atlas" ~ "Every setup but the published",
+                   p == "atlas" ~ "Atlas line only",
                    TRUE ~ "Other combinations")
 }
-cols_cls <- c("Every setup" = "#2b8cbe", "Full network's own gradient (and Atlas) only" = "#e6550d",
-              "Minimal and parent gradient, not published" = "#31a354", "Atlas segment's gradient only" = "#756bb1",
-              "Other combinations" = "#969696")
+cols_cls <- c("Every setup" = "#c6dbef", "Every setup but the Atlas line" = "#3182bd",
+              "Full network's own and Atlas gradients only" = "#e6550d",
+              "Minimal network only (lost in the transfer)" = "#31a354", "Published only" = "#fdae6b",
+              "Every setup but the published" = "#756bb1", "Atlas line only" = "#bcbddc", "Other combinations" = "#636363")
 sg <- inner_join(geom_of(wsg_fig), full[full$watershed_group_code == wsg_fig & full$accessible %in% TRUE, ],
                  by = "id_segment")
 sg$class <- factor(ifelse(sg$pattern == "none", NA, cls(sg$pattern)), levels = names(cols_cls))
@@ -234,12 +239,18 @@ water <- sf::st_zm(sf::st_read(conn, quiet = TRUE, query = sprintf("
   wsg_fig)), drop = TRUE)
 DBI::dbDisconnect(conn)
 reg <- gq::gq_reg_main()
-m <- tmap::tm_shape(sg) + tmap::tm_lines(col = "grey85", lwd = 0.3) +
+agree <- sg[sg$class %in% "Every setup", ]
+differ <- sg[!is.na(sg$class) & !sg$class %in% "Every setup", ]
+differ$lwd <- differ$lwd + 1.2
+m <- tmap::tm_shape(sg) + tmap::tm_lines(col = "grey88", lwd = 0.3) +
   tmap::tm_shape(water) + do.call(tmap::tm_polygons, gq::gq_tmap_style(reg$layers$lake)) +
-  tmap::tm_shape(sg[!is.na(sg$class), ]) +
+  tmap::tm_shape(agree) + tmap::tm_lines(col = cols_cls[["Every setup"]], lwd = "lwd",
+                                         lwd.scale = tmap::tm_scale_continuous(values.scale = 1),
+                                         lwd.legend = tmap::tm_legend_hide()) +
+  tmap::tm_shape(differ) +
   tmap::tm_lines(col = "class", col.scale = tmap::tm_scale_categorical(values = cols_cls, levels.drop = FALSE),
                  col.legend = tmap::tm_legend(title = "Chinook rearing drawn by"),
-                 lwd = "lwd", lwd.scale = tmap::tm_scale_continuous(values.scale = 1.4), lwd.legend = tmap::tm_legend_hide()) +
+                 lwd = "lwd", lwd.scale = tmap::tm_scale_continuous(values.scale = 1.6), lwd.legend = tmap::tm_legend_hide()) +
   tmap::tm_scalebar(position = tmap::tm_pos_in("right", "bottom")) +
   tmap::tm_layout(frame = FALSE, inner.margins = 0, legend.position = tmap::tm_pos_in("left", "bottom"))
 f_fig <- file.path("research/fig", sprintf("setups_%s_%s.png", tolower(key), tolower(wsg_fig)))
