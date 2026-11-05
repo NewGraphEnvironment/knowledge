@@ -181,7 +181,7 @@ Each tool is cited where it is first used. To cite this package,
 
 Irvine A (2026). *knowledge: Fisheries Evidence and Tuned Habitat
 Thresholds for BC Watershed Groups*. New Graph Environment Ltd. Version
-0.4.28, <https://newgraphenvironment.github.io/knowledge/>.
+0.4.29, <https://newgraphenvironment.github.io/knowledge/>.
 
 ## References
 

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">knowledge</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.28</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.29</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,9 +34,13 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/v0.4.29/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.4.29" id="knowledge-0429">knowledge 0.4.29<a class="anchor" aria-label="anchor" href="#knowledge-0429"></a></h2>
+<ul><li>A new article, “Splitting streams at fish records shifts the steepest slope mapped as habitat” (<code>vignettes/stream_splits.Rmd</code>, <a href="https://github.com/NewGraphEnvironment/knowledge/issues/149" class="external-link">#149</a>), shows on our own records how where link cuts a stream changes the slope a fish habitat definition is tested on: chinook rearing’s steepest slope is 13 % on link’s full network and 9 % on its minimal network, which leaves out the cuts at fish records, crossings and hand-mapped habitat. Its data come from <code>data-raw/cut_points_stage.R</code>, <code>data-raw/vignette_cut_points.R</code> and <code>data-raw/vignette_cut_points_places.R</code>, and the methodology article gains a short section that answers the question and links it. All three articles now cite <code>link</code>, <code>fresh</code> and <code>wet</code> from their own <code><a href="https://rdrr.io/r/utils/citation.html" class="external-link">citation()</a></code>, with their concept DOIs (<code>data-raw/vignette_bib.R</code>). Nothing published moves.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.28" id="knowledge-0428">knowledge 0.4.28<a class="anchor" aria-label="anchor" href="#knowledge-0428"></a></h2>
 <ul><li>Chinook rearing is scored, graded and compared on every setup that exists, on one flow load, range and evidence, so the network and the gradient are the only differences (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/120" class="external-link">#120</a>). <code><a href="../reference/knw_parent_read.html">knw_parent_read()</a></code> reads link’s <code>streams_parent</code> and holds it to both builds, and <code>scripts/0310</code> joins it with <code>PARENT=TRUE</code>. <code>knw_link_segments(gradient =)</code>, grading, <code><a href="../reference/knw_compare_rules.html">knw_compare_rules()</a></code> and the archive take a gradient source (the segment’s own, its minimal parent’s, or its Atlas line’s). <code>scripts/0320</code> makes a graded setup with <code>SETUP=1</code>, and promotion refuses any run tuned on another gradient than the segment’s own. The full network reading the parent’s gradient picks the minimal network’s rule (a 9 % limit) exactly. The published 13 % lies outside that region, and applying the minimal rule on the full network loses 1,042 of 87,606 km through the near-river exception’s distance, which the parent table does not carry (<code>research/minimal_network_tuning.md</code>). Nothing published moves.</li>
