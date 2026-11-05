@@ -21,7 +21,8 @@ knw_compare_rules(
   structures = NULL,
   tuned_as = "door",
   config_sha = NA_character_,
-  workers = 1L
+  workers = 1L,
+  gradient = "segment"
 )
 }
 \arguments{
@@ -73,6 +74,12 @@ user-habitat rows this call writes once to \code{scratch}. A group's error
 stops its bin and is raised naming the group. \code{1} runs the one bin in this
 process. \code{connector} and its environment travel to every worker, so build
 it where it holds nothing large.}
+
+\item{gradient}{\code{character(1)} where every segment's gradient comes from
+(#120), as \code{\link[=knw_link_segments]{knw_link_segments()}} reads it: \code{"segment"} (link's own),
+\code{"parent"} (the minimal parent's) or \code{"fwa"} (the Atlas segment's). The
+scratch copies carry it, so \code{default}, the tuned rule, the other stage and
+the connectivity pass all read it, as a build with that \code{grad} token would.}
 }
 \value{
 A list of \code{tibble}s: \code{compare} (per structure, group and total: km by

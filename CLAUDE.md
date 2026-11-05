@@ -265,6 +265,15 @@ not depend on the outcome, are #70's. These numbers, and #92's tune, are on link
 segment of their own against 6.6 % of empty ones, medians 305 m and 466 m
 (`scripts/logs/habitat/20261103_segment_gradient_check-derived_default_20261103.txt`).
 
+A setup (#120) is a run on another gradient than the segment's own, graded and compared on it and never promoted:
+`0320 SETUP=1 GRADIENT=parent_gradient` (each full segment reads its minimal parent's, from link#444's
+`fresh_default.streams_parent`, joined by `0310 PARENT=TRUE` through `knw_parent_read()`) or `segment_fwa_gradient` (the
+Atlas line of the segment a visit sits on; `fwa_gradient` is the visit's own line, #92's sensitivity, and differs at 732
+visits). `knw_link_segments(gradient =)` reads the segments with the curve's gradient for the grade and `0330`'s
+regeneration; the grade record carries the setup's `grad` token (`grad-parent`, `grad-fwa`, link#460), which the
+archive checks against `curve_grad`; `knw_tune_promote()` refuses any `curve_grad` but `segment_gradient`. Chinook
+rearing on every setup: `research/minimal_network_tuning.md`, `data-raw/setup_compare.R`.
+
 ### FISS submission workbooks: editions drift, and most EF fish are already in FDIS
 
 Template editions before 2016 name columns differently (`species_code`, `method`,

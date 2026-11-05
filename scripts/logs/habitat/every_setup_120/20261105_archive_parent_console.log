@@ -1,0 +1,12 @@
+Archiving 11 objects (CH_rear cut-full-top.acc-v5.grad-parent.q-fwapg; evidence build 9978ec269c7c6f0200bba75a7c194fea):
+  archive/knowledge/tune/CH_rear/cut-full-top.acc-v5.grad-parent.q-fwapg/CH_rear_grades.csv.zst
+  archive/knowledge/tune/CH_rear/cut-full-top.acc-v5.grad-parent.q-fwapg/CH_rear_grades_record.csv
+  archive/knowledge/tune/CH_rear/cut-full-top.acc-v5.grad-parent.q-fwapg/CH_rear_curve.rds
+  archive/knowledge/tune/CH_rear/cut-full-top.acc-v5.grad-parent.q-fwapg/CH_rear_segments.rds
+  archive/knowledge/evidence/9978ec269c7c6f0200bba75a7c194fea/visits_link.csv
+  archive/knowledge/evidence/9978ec269c7c6f0200bba75a7c194fea/visits_species.csv
+  archive/knowledge/evidence/9978ec269c7c6f0200bba75a7c194fea/walks.csv
+  archive/knowledge/evidence/9978ec269c7c6f0200bba75a7c194fea/fdis_sites.csv
+  archive/knowledge/evidence/9978ec269c7c6f0200bba75a7c194fea/reconcile.csv
+  archive/knowledge/evidence/9978ec269c7c6f0200bba75a7c194fea/sites.rds
+Archived 11 objects (486 MB stored); 11 appended to data/archive_index.csv. Commit it with the run.

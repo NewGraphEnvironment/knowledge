@@ -41,7 +41,10 @@ run_grade <- function(fx, pick = fx$pick, walks_status = function(blk) ifelse(bl
     tibble::tibble(blue_line_key = starts$blue_line_key, downstream_route_measure = starts$downstream_route_measure,
                    src = sources, qmin = q_grid, status = st, dist_m = ifelse(st == "found", 100, NA_real_))
   }
-  testthat::local_mocked_bindings(knw_link_segments = function(conn, schema, species, wsg, ...) fx$seg,
+  testthat::local_mocked_bindings(knw_link_segments = function(conn, schema, species, wsg, ...) {
+    seen$gradient <- list(...)$gradient
+    fx$seg
+  },
                                   knw_link_walks = fake_walks, .package = "knowledge")
   conn <- function() DBI::dbConnect(duckdb::duckdb())
   g <- knw_grade_species(conn, "s", "CH", "W01", fx$curve, pick, workers = 1L)
@@ -146,13 +149,22 @@ test_that("the grade records how it was made: the curve's edge types, the river 
   expect_equal(r2$reference, unname(stats::quantile(gr$rate[stream], 0.95)))
 })
 
-test_that("a curve fitted on another gradient than the segments carry is not graded, and the record says which (#92)", {
+test_that("the segments are read with the gradient the curve was fitted on, and no other (#92, #120)", {
   skip_if_not_installed("mgcv")
   skip_if_not_installed("duckdb")
   fx <- grade_fixture()
   expect_identical(fx$curve$cols[["grad"]], "segment_gradient")
+  expect_identical(run_grade(fx)$seen$gradient, "segment")
+  # a setup's curve (#120) reads its own source: the minimal parent's gradient, or the Atlas segment's
+  fx$curve$cols[["grad"]] <- "parent_gradient"
+  expect_identical(run_grade(fx)$seen$gradient, "parent")
+  fx$curve$cols[["grad"]] <- "segment_fwa_gradient"
+  expect_identical(run_grade(fx)$seen$gradient, "fwa")
+  # the visit's own Atlas line (#92's sensitivity) is not what a segment reads, so it is not graded
   fx$curve$cols[["grad"]] <- "fwa_gradient"
-  expect_error(run_grade(fx), "fitted on fwa_gradient")
+  expect_error(run_grade(fx), "fitted on fwa_gradient, not on a gradient the segments can be graded on")
+  fx$curve$cols[["grad"]] <- "measured_gradient"
+  expect_error(run_grade(fx), "fitted on measured_gradient, not on a gradient the segments can be graded on")
   fx$curve$cols <- NULL
   expect_error(run_grade(fx), "unrecorded gradient")
   # a grade table's first row is held to the gradient by its readers

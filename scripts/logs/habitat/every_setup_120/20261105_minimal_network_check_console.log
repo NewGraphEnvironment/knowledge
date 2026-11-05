@@ -1,0 +1,13 @@
+Minimal network check, knowledge#120. Full: data/fdis/derived_parent (scripts/logs/habitat/20261104_evidence_build_ledger-derived_parent.csv). Minimal: data/fdis/derived_minimal (scripts/logs/habitat/20261103_evidence_build_ledger-derived_minimal.csv).
+  build: schema fresh_default, run 20261103_163715-269b585a; flows wet_db_load(): discharge/fwa/v1/segment_monthly, scenario historical last loaded from https://fresh-bc.s3.us-west-2.amazonaws.com/discharge/fwa/v1/manifest.json (built 2026-10-24T12:23:01Z, wet b4bbc50); walk c3f7bdbecff1d55107f28afa59d7f532; fresh 0.52.0; tokens cut-full-top.acc-v5.grad-seg.q-fwapg; log rows of run 20261023_074321-24d85e8c set aside (not in log_recompute)
+  build: schema fresh_default_minimal, run 20261102_203300-60ab009d; flows wet_db_load(): discharge/fwa/v1/segment_monthly, scenario historical last loaded from https://fresh-bc.s3.us-west-2.amazonaws.com/discharge/fwa/v1/manifest.json (built 2026-10-24T12:23:01Z, wet b4bbc50); walk c3f7bdbecff1d55107f28afa59d7f532; fresh 0.53.0; tokens cut-min.acc-v5.grad-seg.q-fwapg
+1. PLACEMENT. Visits placed: full 45529, minimal 45529; on the full alone 0, on the minimal alone 0.
+   On both at one blue line and measure and on one Atlas line: 45463 of 45529.
+   Columns that differ: 90 of 227 compared; outside the segment, access and habitat columns: .
+2. walks.csv: full 775488 rows, minimal 775488; the same rows: TRUE (md5 2e0f0f419022da0f5ac51a3869486a80, 2e0f0f419022da0f5ac51a3869486a80).
+2. visits_species.csv: full 500819 rows, minimal 500819; the same rows: TRUE (md5 6a2e28f1afb46a02c357ac044f8d09e3, 6a2e28f1afb46a02c357ac044f8d09e3).
+3. ACCESS: 2193 species x group x cell rows; km differ by more than 0.01 on 84.
+   Access codes differ at 4156 visit x species pairs; across zero at 58.
+4. PARENT: 45529 visits on both; the full segment's parent is the minimal build's segment at the visit on 45450, with its gradient on 45452.
+   Visits on a full segment that straddles a minimal break: 12 (of them, 0 where the parent is not the visit's minimal segment).
+Written scripts/logs/habitat/20261104_minimal_network_check.txt

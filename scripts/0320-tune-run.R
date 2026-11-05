@@ -90,7 +90,11 @@
 #         (data/tune/dev/grad_fwa/ with DEV=1; promoted to data/tune/grad_fwa/), its log suffixed -grad_fwa. Without
 #         DEV it needs RUN=<the main run's name>, whose candidate it joins and is promoted with.
 #         GRADIENT=parent_gradient (#120) does the same with the minimal parent's gradient on a full segment (0310's
-#         PARENT_DIR) into grad_parent/, which is never promoted.
+#         PARENT_DIR or PARENT=TRUE) into grad_parent/, which is never promoted.
+#         SETUP=1 GRADIENT=parent_gradient|segment_fwa_gradient (#120) makes a setup: a full candidate of its own on that
+#         gradient (every seed and check, graded, the segments read with the same gradient by knw_grade_species()),
+#         written to the run's root (marked with setup.txt) with a -setup_<parent|fwa> log, its grade records carrying the setup's grad token
+#         (grad-parent, grad-fwa) in place of the build's. 0330 compares it; promotion refuses it.
 #         MIN_WSG= and FOLDS= (default 5 and 5, the tuning's floors) lower them for a test on a few groups (#120): named
 #         in the log and each summary, and refused by knw_tune_promote().
 #         A grading run checks the database's round trip at connect and stops off its host (over 20 ms) unless
@@ -113,7 +117,9 @@ remote <- Sys.getenv("REMOTE") %in% c("1", "TRUE", "true")   # grade off the dat
 gradient <- Sys.getenv("GRADIENT", "segment_gradient")
 # parent_gradient (#120) is the minimal parent's gradient on a full segment, which 0310 joins with PARENT_DIR: scored as
 # the Atlas line's is, into grad_parent/, and never promoted (knw_tune_promote() moves grad_fwa/ alone)
-grad_dirs <- c(segment_gradient = "", fwa_gradient = "grad_fwa", parent_gradient = "grad_parent")
+# segment_fwa_gradient (#120) is the Atlas gradient of the line the visit's segment lies on, which a setup grades on
+grad_dirs <- c(segment_gradient = "", fwa_gradient = "grad_fwa", parent_gradient = "grad_parent",
+               segment_fwa_gradient = "grad_fwa_seg")
 if (!gradient %in% names(grad_dirs)) stop("GRADIENT must be one of ", paste(names(grad_dirs), collapse = ", "), ": ", gradient)
 cols_run <- c(grad = gradient, width = "cw_deploy", mad = "mad_pick")
 # the floors (#120): a key is fitted with at least max(MIN_WSG, FOLDS) groups having both outcomes, on FOLDS folds.
@@ -125,7 +131,15 @@ folds <- as.integer(Sys.getenv("FOLDS", floor_default[["folds"]]))
 if (is.na(min_wsg) || is.na(folds) || min_wsg < 2L || folds < 2L) stop("MIN_WSG and FOLDS must be integers of 2 or more")
 floors_test <- min_wsg != floor_default[["min_wsg"]] || folds != floor_default[["folds"]]
 # the main seed alone, no grades: the development setting and the sensitivity
-main_only <- dev || gradient != "segment_gradient"
+# a setup (#120): a graded candidate on another gradient than the segment's own, compared beside the published run and
+# never promoted; its grade records carry the setup's own grad token
+setup <- Sys.getenv("SETUP") %in% c("1", "TRUE", "true")
+setup_tokens <- .knw_grade_grad_tokens
+setup_names <- c(parent_gradient = "parent", segment_fwa_gradient = "fwa")   # the log's -setup_<name>
+if (setup && (dev || !gradient %in% names(setup_tokens))) {
+  stop("SETUP=1 is a graded candidate on GRADIENT=", paste(names(setup_tokens), collapse = " or "), ", without DEV=1")
+}
+main_only <- dev || (gradient != "segment_gradient" && !setup)
 se_strict <- 1.96   # the stricter reading of the region, in SE, beside the one-SE pick (#79)
 # a full run is a candidate (#111): it writes data/tune/candidate/<run>/ (ignored), never the tracked data/tune/, which
 # only scripts/0335-promote.R writes, on the operator's word. RUN names the run (a UTC stamp at launch by default);
@@ -146,13 +160,36 @@ if (dev && !grepl("^dev(_[A-Za-z0-9][A-Za-z0-9_.]*)?$", basename(dev_dir)) ||
 }
 dev_dir <- .knw_path_rel(dev_dir)   # written into the log: relative, never a home path
 dir_run <- if (dev) dev_dir else file.path("data/tune/candidate", run)
+# the gradient a run's summaries were scored on: a setup and a main run never share a directory (#120), so a setup is not
+# resumed over a main run, nor a main run's sensitivity scored inside a setup
+# a key with no fit records no gradient on its summary, so a setup also marks its run with setup.txt, naming the gradient,
+# before any key is scored; promotion and these guards read both (round 2 of the branch review)
+f_setup <- file.path(dir_run, .knw_setup_marker)
+run_grads <- unique(c(if (file.exists(f_setup)) readLines(f_setup, n = 1),
+                      unlist(lapply(list.files(dir_run, "_summary\\.csv$", full.names = TRUE), function(f) {
+                        x <- read_csv(f, show_col_types = FALSE, col_types = cols(.default = "c"))
+                        if ("curve_grad" %in% names(x)) x$curve_grad else NA_character_
+                      }))))
+# a key with no fit records no gradient (NA), in a setup and a main run alike
+if (setup && length(setdiff(run_grads, c(gradient, NA)))) {
+  stop("RUN=", run, " holds summaries scored on ", paste(setdiff(run_grads, c(gradient, NA)), collapse = ", "),
+       ": a setup on ", gradient, " needs a run of its own")
+}
+if (!dev && !setup && gradient == "segment_gradient" && length(setdiff(run_grads, c("segment_gradient", NA)))) {
+  stop("RUN=", run, " is a setup on ", paste(setdiff(run_grads, c("segment_gradient", NA)), collapse = ", "),
+       " (#120): a main run needs a run of its own")
+}
 # the Atlas-gradient sensitivity belongs to a main run, which promotes it with its own tables: name that run
-if (!dev && gradient != "segment_gradient" &&
+if (!dev && !setup && gradient != "segment_gradient" &&
       (!nzchar(Sys.getenv("RUN")) || !length(list.files(dir_run, "_summary\\.csv$")))) {
   stop("GRADIENT=", gradient, " is the sensitivity of a main run: give it RUN=<that run's name> (data/tune/candidate/)")
 }
+if (!dev && !setup && gradient != "segment_gradient" && length(setdiff(run_grads, c("segment_gradient", NA)))) {
+  stop("RUN=", run, " is a setup on ", paste(setdiff(run_grads, c("segment_gradient", NA)), collapse = ", "),
+       " (#120), not a main run: its sensitivity is not scored")
+}
 dir_out <- dir_run
-if (nzchar(grad_dirs[[gradient]])) dir_out <- file.path(dir_out, grad_dirs[[gradient]])
+if (nzchar(grad_dirs[[gradient]]) && !setup) dir_out <- file.path(dir_out, grad_dirs[[gradient]])
 # one log per pass: a pass over a subset of species (SPECIES=) names them, so passes do not overwrite each other. A DEV=1
 # log stays beside its outputs in the ignored data/tune/dev/, and a candidate's in its run directory, named for the run,
 # so a promotion can copy it to scripts/logs/habitat/ beside the others (#111)
@@ -163,11 +200,14 @@ path_log <- file.path(dir_run, paste0(format(Sys.time(), "%Y%m%d", tz = "UTC"), 
                                       if (!dev) sprintf("-%s-p%s", run, pass) else "",
                                                      if (nzchar(Sys.getenv("SPECIES"))) paste0("-", tolower(gsub(",", "_", Sys.getenv("SPECIES")))) else "",
                                                      if (dev) "-dev" else "",
-                                                     if (nzchar(grad_dirs[[gradient]])) paste0("-", grad_dirs[[gradient]]) else "", ".txt"))
+                                                     if (setup) paste0("-setup_", setup_names[[gradient]])
+                                                     else if (nzchar(grad_dirs[[gradient]])) paste0("-", grad_dirs[[gradient]])
+                                                     else "", ".txt"))
 # a resumed candidate keeps the log of the pass that graded (data-raw/vignette_chinook.R reads its grade lines): a later
 # pass under the same name is numbered, never written over it
 if (!dev) path_log <- .knw_free_path(path_log)
 dir.create(dir_out, showWarnings = FALSE, recursive = TRUE)
+if (setup) writeLines(gradient, f_setup)
 log_lines <- character()
 say <- function(...) { log_lines <<- c(log_lines, sprintf(...)); message(sprintf(...)) }
 block <- function(title, x) {
@@ -213,6 +253,23 @@ if (!dev) {
   conn <- pg()
   rec <- tryCatch(knw_build_record(conn, schema, run_uid = run_uid), error = function(e) fail("%s", conditionMessage(e)))
   say("%s", rec$line)
+  # a setup's run-level preconditions, before any scoring (#120; round 3 of the branch review): it re-reads the gradient
+  # of a build whose own is grad-seg, and a setup on the parent's gradient grades on the parent table the evidence
+  # recorded. A refusal writes <date>_tune_refused-<run>…txt, as the latency check's does
+  refuse <- function(msg) {
+    say("%s", msg)
+    path_refused <- .knw_free_path(sub("_tune_run", "_tune_refused", path_log, fixed = TRUE))
+    writeLines(log_lines, path_refused)
+    stop(msg, " (log ", path_refused, ")", call. = FALSE)
+  }
+  if (setup && (anyNA(rec$tokens) || !identical(rec$tokens[["grad"]], "grad-seg"))) {
+    refuse(paste0("a setup re-reads the gradient of a build whose own is grad-seg; this build's tokens are ",
+                  paste(rec$tokens, collapse = ".")))
+  }
+  if (setup && gradient == "parent_gradient") {
+    held <- tryCatch(.knw_parent_held(conn, schema, led), error = function(e) refuse(conditionMessage(e)))
+    say("Parent table held to the evidence's: %s", held)
+  }
   # the grade is bound by the database: refuse a connection off its host unless REMOTE=TRUE (#110). DEV=1 and
   # GRADIENT=fwa_gradient write no grades, so they are not checked. A refused run's log is <date>_tune_refused-<run>…txt
   # in the run's directory, so it neither overwrites the run's log nor matches the _tune_run*.txt that 0335 promotes and
@@ -294,7 +351,8 @@ say("Floors: MIN_WSG %d, FOLDS %d%s.", min_wsg, folds,
     if (floors_test) sprintf(" (a test: the tuning's are %d and %d; never promoted)", floor_default[["min_wsg"]],
                              floor_default[["folds"]]) else " (the tuning's)")
 say("Rules and curves read the gradient from %s%s.", gradient,
-    if (main_only && !dev) sprintf(" (the sensitivity: the main seed only, no grades, outputs under %s)", dir_out) else "")
+    if (setup) sprintf(" (a setup, #120: graded on the same gradient, compared and archived, never promoted; outputs under %s)", dir_out)
+    else if (main_only && !dev) sprintf(" (the sensitivity: the main seed only, no grades, outputs under %s)", dir_out) else "")
 say("Smoke run first%s: previous picks on file for %s.", if (dev) sprintf(" (DEV=1: the main seed only, no grades, outputs under %s)", dir_out) else "",
     paste(names(previous), collapse = ", "))
 # what a pass writes for a key replaces what an earlier pass of the run wrote, so a key's files in the run are this
@@ -456,7 +514,7 @@ for (k in names(out)) {
 # ---- the pick report (#111): the run's pick beside the published one, per key ------------------------------
 # what a DEV=1 run after a change upstream is for, and what a candidate is promoted on: the published side is the
 # tracked table dir_out stands in for (data/tune, or data/tune/grad_fwa for the sensitivity), never another run's
-dir_pub <- if (nzchar(grad_dirs[[gradient]])) file.path("data/tune", grad_dirs[[gradient]]) else "data/tune"
+dir_pub <- if (nzchar(grad_dirs[[gradient]]) && !setup) file.path("data/tune", grad_dirs[[gradient]]) else "data/tune"
 pr <- bind_rows(lapply(names(out), function(k) {
   r <- out[[k]]
   if (is.null(r$score)) return(NULL)
@@ -498,10 +556,14 @@ say("Grading on the flow build: %s; walk %s, cached in knw.walk_cache.", dischar
 # each grade table's record (#119): its constant columns, md5 and size beside the run, the evidence ledger, this commit
 # and link's build, tracked, so the bundles pin it rather than the table and the archive restores the table against it.
 # The commit (knowledge_commit) is read at the run's start
+# a setup's grades read another gradient than the build's own (#120): its records carry the setup's grad token, so the
+# archive files it under the setup it is (tune/<key>/<cut>.<acc>.grad-parent.<flow>/), on a build that names its own
+tokens_rec <- rec$tokens
+if (setup) tokens_rec[["grad"]] <- setup_tokens[[gradient]]   # the build's own grad-seg, checked at connect
 write_record <- function(gpath, rows) {
   knw_grade_record_write(gpath, tune_run = run, evidence_ledger = ledger_path, knowledge_commit = knowledge_commit,
                          link = c(version = led$note[led$step == "run_link_version"], sha = link_sha),
-                         tokens = rec$tokens, rows = rows)
+                         tokens = tokens_rec, rows = rows)
 }
 grade_rows <- list()
 for (k in names(out)) {

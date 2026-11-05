@@ -1,0 +1,35 @@
+Tuning run, knowledge#57. Evidence build scripts/logs/habitat/20261104_evidence_build_ledger-derived_parent.csv on link run 20261103_163715-269b585a (link 4dfbfa4980eb259e2f6a3e9b198c54014315d0ce), schema fresh_default; evidence directory data/fdis/derived_parent.
+DEV=1: outputs under data/tune/dev_parent/grad_parent (ignored).
+  visits_link md5 53ff44d74b2adc85f4ec6caf7be9bb20
+  visits_species md5 6a2e28f1afb46a02c357ac044f8d09e3
+  walks md5 2e0f0f419022da0f5ac51a3869486a80
+Spawner evidence: 1234 BT visits with a coded fish, 226 with evidence.
+link default thresholds at 4dfbfa4980eb259e2f6a3e9b198c54014315d0ce (same at ): 11 species; default_tuned: 11 species (its MAD floors join the grids).
+Fit: group intercepts absorbed (#83); normal prior SD 2.5 on the data_set and era coefficients, cloglog scale (#84).
+Floors: MIN_WSG 5, FOLDS 5 (the tuning's).
+Rules and curves read the gradient from parent_gradient.
+Smoke run first (DEV=1: the main seed only, no grades, outputs under data/tune/dev_parent/grad_parent): previous picks on file for BT_rear, BT_spawn, CH_rear, CO_rear, GR_rear, ST_rear, WCT_rear.
+CH_rear smoke: 4858 visits (234 detections) in 45 groups with both outcomes; 4 rules, 4 fits.
+    null_ratio: no rule 1509.3 held-out against 1516.7 in-sample, ratio 0.995 (limit 1.25): pass
+    clamp: 0 visits at 55.26 over 4 rules (limit 0): pass
+    behind_null: no_rule (none) is +0.0 against no rule (limit 1509.3): pass
+    coef: rule 3.12 on fold 4 of previous (mad>=0.75|g<=0.13|Q3@D1000) (limit 5.0): pass
+    default: width>=1.5|g<=0.0549|none held-out 1460.4 (-48.8 against no rule), converged TRUE
+    link_tuned: mad>=0.28|g<=0.0549|none held-out 1421.4 (-87.8 against no rule), converged TRUE
+    previous: mad>=0.75|g<=0.13|Q3@D1000 held-out 1232.5 (-276.7 against no rule), converged TRUE
+CH_rear smoke: 4858 visits (234 detections) in 45 groups with both outcomes; 4 rules, 4 fits.
+    null_ratio: no rule 1509.3 held-out against 1516.7 in-sample, ratio 0.995 (limit 1.25): pass
+    clamp: 0 visits at 55.26 over 4 rules (limit 0): pass
+    behind_null: no_rule (none) is +0.0 against no rule (limit 1509.3): pass
+    coef: rule 3.12 on fold 4 of previous (mad>=0.75|g<=0.13|Q3@D1000) (limit 5.0): pass
+    default: width>=1.5|g<=0.0549|none held-out 1460.4 (-48.8 against no rule), converged TRUE
+    link_tuned: mad>=0.28|g<=0.0549|none held-out 1421.4 (-87.8 against no rule), converged TRUE
+    previous: mad>=0.75|g<=0.13|Q3@D1000 held-out 1232.5 (-276.7 against no rule), converged TRUE
+Smoke run over 1 keys in 0.0 min.
+Scored 2 species x stage in 1.0 min on 14 workers (the main seed only).
+CH_rear: fitted. 7823 visits (235 detections) in 111 groups (45 both). Recommended mad>=0.75|g<=0.09|Q3@D1000; default outside the region (+238.3, SE 95.0). Curve held-out 1167.6 vs grid best 1222.2.
+CH_rear: no rule scores 1509.3 held-out on the grid's 4858 visits and 1502.6 on the curve's 4855; the curve 1167.6, so grades are published.
+CH_rear: from the flow start mad>=0.28|g<=0.09|Q3@D1000 (1.96 SE: mad>=0.28|g<=0.0549|Q3@D1000); from the width start at 1.96 SE mad>=1|g<=0.0549|Q3@D1000; link's default_tuned rule mad>=0.28|g<=0.0549|none outside the region (+199.3, SE 84.8).
+CH_spawn: no_response (visits_in=7823).
+Pick report against data/tune/grad_parent: 0 of 1 keys keep the published pick; written to data/tune/dev_parent/grad_parent/pick_report.csv.
+DEV=1: no grades. Done in 1.0 min.

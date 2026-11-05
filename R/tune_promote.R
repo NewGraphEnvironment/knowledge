@@ -97,6 +97,17 @@ knw_tune_promote <- function(run, keys = NULL, live = NULL, tune_dir = "data/tun
       }
     }
   }
+  # a setup of #120 (0320 SETUP=1) tunes and grades on another gradient than the segment's own, which link applies a
+  # rule to: compared beside the published run, never promoted in its place. Asked of every summary the run holds, not
+  # only the keys promoted, because a key with no fit records no gradient and would pass alone; and of the marker 0320
+  # writes into a setup's run, which a run whose every key went unfitted carries alone
+  f_setup <- file.path(run_tune, .knw_setup_marker)
+  run_grads <- unique(stats::na.omit(c(if (file.exists(f_setup)) readLines(f_setup, n = 1),
+                                       vapply(cand, function(x) fld(x, "curve_grad"), character(1)))))
+  if (length(setdiff(run_grads, .knw_grade_grad))) {
+    stop(run, " was tuned on ", paste(setdiff(run_grads, .knw_grade_grad), collapse = ", "), ", not ", .knw_grade_grad,
+         ": a setup run (#120), never promoted", call. = FALSE)
+  }
   for (k in keys) {
     floors_check(k, cand[[k]])
     rule <- fld(cand[[k]], "rule_recommended")

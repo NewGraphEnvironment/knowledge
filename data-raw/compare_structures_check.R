@@ -145,6 +145,11 @@ fail <- function(e) {
 tryCatch({
   for (key in keys) {
     r <- readRDS(file.path(tune_dir, paste0(key, "_curve.rds")))
+    # the structures are compared on link's segment gradient; a setup's curve (#120) reads another and is 0330's to draw
+    if (!identical(r$curve$cols[["grad"]], .knw_grade_grad)) {
+      stop(key, ": its curve was fitted on ", r$curve$cols[["grad"]], ", not ", .knw_grade_grad,
+           ": a setup run (#120) is compared by 0330")
+    }
     sp <- r$species_code
     groups <- dbGetQuery(conn, sprintf(
       "SELECT watershed_group_code w, count(*) n FROM %s.streams_habitat_%s GROUP BY 1 ORDER BY 2 DESC, 1", schema,
