@@ -4,7 +4,7 @@ Al reviewed the rendered draft (2026-11-05) and asked for all of it to be done o
 #149's body, "Review of the draft". The first pass's record is `planning/archive/2026-11-issue-149-cut-points-article/`.
 
 ## Phase 1: Citations by convention
-- [ ] `data-raw/vignette_bib.R`: our packages (`link`, `fresh`, `wet`) from their own `citation()`, keyed by package name
+- [x] `data-raw/vignette_bib.R`: our packages (`link`, `fresh`, `wet`) from their own `citation()`, keyed by package name
   with the concept DOI (soul `writing.md`, "Name, link and cite the software"), the version still from the run; every
   article's keys moved to `@link`, `@fresh`, `@wet`; all three `.bib` files rewritten
 

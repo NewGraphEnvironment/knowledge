@@ -6,11 +6,15 @@
 # (pkgdown in CI). Issue #79.
 #
 # WHY / DESIGN NOTES:
-#   - THE KEYS ARE THE ARTICLE'S. rbbt reads the citation keys out of the Rmd (code chunks and inline R skipped) and
-#     Better BibTeX exports exactly those from the group library (Zotero's local library 9, group 4733734). A key
-#     Zotero does not return stops the script, so the article cannot build with a reference missing.
-#   - VERSIONS COME FROM THE RUN, NOT FROM ZOTERO. One Zotero item serves every report that cites the tool, so it
-#     carries no version; the article's copy gets the version the tuning ran on, from the evidence build ledger as
+#   - THE KEYS ARE THE ARTICLE'S. rbbt reads the citation keys out of the Rmd (code chunks and inline R skipped). A key
+#     that names an installed package (`link`, `fresh`, `wet`) is that package's own first citation() entry, with the
+#     concept DOI its inst/CITATION takes from Config/DOI (soul's writing.md, "Name, link and cite the software";
+#     soul#40); data-raw/vignette_bib.R in wet is the pattern. Every other key Better BibTeX exports from the group
+#     library (Zotero's local library 9, group 4733734). A key neither returns stops the script, so the article cannot
+#     build with a reference missing.
+#   - VERSIONS COME FROM THE RUN, NOT FROM ZOTERO OR THE INSTALLED PACKAGE. One Zotero item serves every report that
+#     cites the tool, and the installed copy can be another release, so the article's copy gets the version the tuning
+#     ran on, from the evidence build ledger as
 #     data-raw/vignette_chinook.R saved it (`meta$versions`); a tool whose version the run did not record is given
 #     none rather than a borrowed one.
 #   - A VERSIONED ENTRY IS @misc. pandoc's default style prints a @software entry's version as "V. 0.66.0. Released.",
@@ -29,16 +33,44 @@
 # ---------------------------------------------------------------------------
 library_id <- 9   # Zotero's local id of the NewGraphEnvironment group library (group 4733734)
 
+# one of our packages, from its own first citation() entry: keyed by its name, @misc (pandoc prints a @misc's version as
+# "Version 0.66.0."), the name braced in lower case before the title, the installed version and note dropped and the
+# run's version set
+bib_package <- function(key, version) {
+  e <- utils::toBibtex(utils::citation(key)[[1]])
+  e <- unlist(strsplit(paste(e, collapse = "\n"), "\n(?=  [a-z]+ = |\\})", perl = TRUE))
+  e <- gsub("\\s*\\n\\s*", " ", e)
+  e[1] <- paste0("@misc{", key, ",")
+  e <- e[!grepl("^\\s*(version|note) = ", e)]
+  at <- grep("^\\s*title = \\{", e)
+  if (length(at) != 1) stop(key, ": expected one title line")
+  t <- sub("^\\s*title = \\{(.*)\\},?$", "\\1", e[at])
+  t <- if (grepl(paste0("^", key, ": "), t)) sub(paste0("^", key, ": "), paste0("{", key, "}: "), t) else paste0("{", t, "}")
+  if (grepl("\\s", version)) stop(key, ": a version with a space prints as 'Versions'")
+  e[at] <- sprintf("  title = {%s},\n  version = {%s},", t, version)
+  if (!any(grepl("^\\s*doi = \\{10\\.", e))) stop(key, ": its citation() carries no DOI; check its Config/DOI")
+  e <- sub("^(\\s*organization = \\{)([^{}]*)(\\},?)$", "\\1{\\2}\\3", e)
+  paste(sub(",?$", ",", e[-length(e)]) |> c(e[length(e)]), collapse = "\n")
+}
+
 bib_write <- function(rmd, out, all_tools) {
 
-  keys <- sort(unique(rbbt::bbt_detect_citations(rmd)))
+  keys <- sort(unique(rbbt::bbt_detect_citations(rmd)), method = "radix")
   if (!length(keys)) stop("no citation in ", rmd)
   if (any(grepl("^TODOKEY", keys))) stop("placeholder keys in ", rmd, ": ", paste(grep("^TODOKEY", keys, value = TRUE), collapse = ", "))
-  bib <- paste(rbbt::bbt_bib(keys, translator = "biblatex", library_id = library_id), collapse = "\n")
+  # our packages, cited from their own citation(); the run's version for each
+  run_ver <- list(link = v$link, fresh = v$fresh, wet = sub(" .*$", "", v$wet))
+  is_pkg <- keys %in% names(run_ver)
+  if (all_tools && !all(names(run_ver) %in% keys)) {
+    stop(rmd, " must cite ", paste(setdiff(names(run_ver), keys), collapse = ", "))
+  }
+  pkg <- vapply(keys[is_pkg], function(k) bib_package(k, run_ver[[k]]), "")
+  bib <- paste(rbbt::bbt_bib(keys[!is_pkg], translator = "biblatex", library_id = library_id), collapse = "\n")
   entries <- regmatches(bib, gregexpr("(?s)@[a-zA-Z]+\\{[^,]+,.*?\\n\\}", bib, perl = TRUE))[[1]]
   got <- sub("^@[a-zA-Z]+\\{([^,]+),.*$", "\\1", sub("\n.*", "", entries))
-  if (!setequal(got, keys)) {
-    stop("Zotero returned ", paste(setdiff(got, keys), collapse = ", "), " and not ", paste(setdiff(keys, got), collapse = ", "))
+  if (!setequal(got, keys[!is_pkg])) {
+    stop("Zotero returned ", paste(setdiff(got, keys[!is_pkg]), collapse = ", "), " and not ",
+         paste(setdiff(keys[!is_pkg], got), collapse = ", "))
   }
   names(entries) <- got
   entries <- gsub("\n  (file|abstract|keywords|urldate|origdate) = \\{[^\n]*\\},?(?=\n)", "", entries, perl = TRUE)
@@ -63,10 +95,7 @@ bib_write <- function(rmd, out, all_tools) {
     # the fork's crosswalk built the routed flows the evidence read: the commit wet's routed report names (#89)
     list(key = key_for("^\\{*NewGraphEnvironment\\}*/fwapg", required = FALSE), title = "fwapg, New Graph Environment's fork", version = fork_sha),
     list(key = key_for("^(smnorris/)?bcfishpass", required = all_tools), title = "bcfishpass", version = NULL),
-    list(key = key_for("^(smnorris/)?bcfishobs", required = all_tools), title = "bcfishobs", version = NULL),
-    list(key = key_for("^\\{*link\\}*:", required = all_tools), title = "link", version = v$link),
-    list(key = key_for("^\\{*fresh\\}*:", required = all_tools), title = "fresh", version = v$fresh),
-    list(key = key_for("^\\{*wet\\}*:", required = all_tools), title = "wet", version = sub(" .*$", "", v$wet))
+    list(key = key_for("^(smnorris/)?bcfishobs", required = all_tools), title = "bcfishobs", version = NULL)
   )
   for (x in Filter(function(x) !is.na(x$key), ver)) {
     e <- entries[[x$key]]
@@ -84,8 +113,10 @@ bib_write <- function(rmd, out, all_tools) {
     entries[[x$key]] <- e
   }
 
-  writeLines(c(paste0("% written by data-raw/vignette_bib.R from Zotero (group library) for ", rmd, "; do not edit"),
-               "", paste0(entries[sort(names(entries))], "\n")), out)
+  entries <- c(entries, pkg)
+  writeLines(c(paste0("% written by data-raw/vignette_bib.R from the packages' citation() and Zotero (group library) for ",
+                      rmd, "; do not edit"),
+               "", paste0(entries[sort(names(entries), method = "radix")], "\n")), out)
   message(sprintf("%s: %d entries (%s)", out, length(entries), paste(sort(names(entries)), collapse = ", ")))
 }
 

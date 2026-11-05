@@ -123,8 +123,8 @@ and
 [other organizations'](https://github.com/smnorris/bcfishpass/tree/3bd2824c300c5f9c0c041380d412a52987df1ebb/parameters).
 To choose where to look first, a fair guess at where fish spawn and rear is enough.
 
-The R package [`link`](https://newgraphenvironment.github.io/link/) [@irvine2026linkDevelop] builds on bcfishpass, and
-[`fresh`](https://github.com/NewGraphEnvironment/fresh) [@irvine2026freshFreshwater] runs its rules on the BC Freshwater
+The R package [`link`](https://newgraphenvironment.github.io/link/) [@link] builds on bcfishpass, and
+[`fresh`](https://github.com/NewGraphEnvironment/fresh) [@fresh] runs its rules on the BC Freshwater
 Atlas. For every stretch of stream link asks a few plain questions: is it big enough, is it too steep, and can fish get
 to it? Each question has a cut-off, and each cut-off is a row in a config, so a rule can be changed and run beside
 another. That makes the cut-offs testable against evidence: the places crews have electrofished, and whether they
@@ -203,7 +203,7 @@ most because the stream is too far away.
 
 ### 3. `r pipe$label[3]` {#step-3}
 
-link [@irvine2026linkDevelop] cuts the Atlas streams into short segments and records, for each species, whether fish
+link [@link] cuts the Atlas streams into short segments and records, for each species, whether fish
 can reach each one and what link's current rules call habitat. It also cuts streams where the species it models have
 been observed, using
 `bcfishobs` [@norris2024smnorrisbcfishobs], so those observations shape the segments, but they never score a rule: they say where
@@ -215,7 +215,7 @@ its own.
 
 ### 4. `r pipe$label[4]` {#step-4}
 
-Flows come from `wet` [@irvine2026wetStream]. Mostly that is PCIC's modelled streamflow
+Flows come from `wet` [@wet]. Mostly that is PCIC's modelled streamflow
 [@schnorbus2018VICGlacierVICGL; @craig_etal2020Flexiblewatershed], carried onto Atlas streams by New Graph's fork of
 `fwapg` [@norris_irvine2026NewGraphEnvironmentfwapg]. Where PCIC's flow does not reach a stream, or carries under a
 fifth of wet's estimate on a stream's own line, it is wet's own water balance, fitted to Water Survey of Canada gauges
@@ -273,7 +273,7 @@ all gets no grade.
 ### 10. `r pipe$label[10]` {#step-10}
 
 link's current rule and the chosen rule both go through the steps link itself uses, run by `fresh`
-[@irvine2026freshFreshwater]: the rule's test, link's hand-entered habitat, and dropping rearing that has no spawning
+[@fresh]: the rule's test, link's hand-entered habitat, and dropping rearing that has no spawning
 nearby. On the Bulkley, those last two steps removed `r n0(ex$stages$dropped_default)` of the
 `r n0(ex$stages$pre_default)` segments link's rule passed, so we compare whole runs, not the test alone.
 

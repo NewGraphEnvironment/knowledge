@@ -128,7 +128,7 @@ stopifnot(sum(cr$present) < 10, sum(cr$d > 0) > 2 * sum(cr$d < 0),
           steep(st$full_gradient, TRUE) > steep(st$minimal_gradient, TRUE))
 ```
 
-[`link`](`r link_site`) [@irvine2026linkDevelop], an R package, maps where each fish species can spawn and rear on
+[`link`](`r link_site`) [@link], an R package, maps where each fish species can spawn and rear on
 British Columbia's streams. It cuts the streams of the BC Freshwater Atlas [@flnrord2021FreshwaterAtlasb] into
 segments and tests each segment against a few thresholds, one of them a steepest slope. Some of its cuts fall where
 fish were caught, so at a site that caught fish the slope a rule reads is often worked out over a short stretch that
@@ -506,7 +506,7 @@ notes](`r research`) describe (link's full network, run `r x$meta$link_run_full`
 network). When the bundle was written, the share of visits starting their own segment, the four
 tunings' choices and habitat, and the other species' counts were each checked against the logs that report them in
 the research notes. The sites are the Fisheries Data Information System's electrofishing records, placed on the Freshwater
-Atlas; rules are run through fresh [@irvine2026freshFreshwater] for link. [How the tuning
+Atlas; rules are run through fresh [@fresh] for link. [How the tuning
 works](habitat_thresholds.html) describes the records, the candidates and the scoring.
 
 ## Software and citation
