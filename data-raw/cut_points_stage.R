@@ -17,8 +17,9 @@
 #   - from the database, on every blue line holding a chinook site with fish whose gradient lies on opposite sides of a
 #     tuned limit (9, 11 or 13 %) between any two setups: the full and minimal networks' segments and the Atlas lines
 #     within WINDOW_M of each such site, with their elevations (Z) and measures (M), and every chinook site of the
-#     tuning's population on those lines, placed on its Atlas line at its measure. The bundle chooses its examples
-#     from these lines and refuses one outside them.
+#     tuning's population on those lines, placed on its Atlas line at its measure; and the lakes (10 ha or more) and
+#     river polygons near those lines and in the map's group (setup_compare.R's criterion: the most km where the
+#     setups' verdicts differ). The bundle chooses its examples from these lines and refuses one outside them.
 #
 # The population is the tuning's before its model filters (knw_tune_run()'s visits_in for CH rearing): stream branch,
 # fished area in range, chinook in range, absence not blocked, no barrier to chinook downstream.
@@ -162,6 +163,24 @@ sites <- sf::st_read(conn, quiet = TRUE, query = sprintf("
   WITH v(site_visit, blue_line_key, measure) AS (VALUES %s)
   SELECT v.site_visit, v.blue_line_key, v.measure, whse_basemapping.fwa_locatealong(v.blue_line_key, v.measure) AS geom
   FROM v ORDER BY v.site_visit", pts_sql))
+# the map's group, by setup_compare.R's criterion (the most km where the four setups' verdicts are not the same), read
+# from its GeoPackage
+f_setups <- "data/compare/setups/CH_rear_setups.gpkg"
+wsg_map <- sf::st_read(f_setups, quiet = TRUE, query = "
+  SELECT watershed_group_code, sum(length_metre) AS m FROM segments WHERE pattern NOT IN ('every setup', 'none')
+  GROUP BY watershed_group_code ORDER BY m DESC, watershed_group_code LIMIT 1")$watershed_group_code
+# lakes of 10 ha or more and river polygons for the maps: within 2 km of each staged line's window, and the map's group
+ext <- lapply(split(fwa, fwa$blue_line_key), function(x) sf::st_bbox(sf::st_buffer(sf::st_union(x), 2000)))
+env <- paste(vapply(ext, function(b) sprintf("ST_MakeEnvelope(%.1f, %.1f, %.1f, %.1f, 3005)", b[["xmin"]], b[["ymin"]],
+                                             b[["xmax"]], b[["ymax"]]), ""), collapse = ", ")
+q_water <- function(tbl, extra) sprintf("
+  SELECT '%1$s' AS kind, waterbody_key, area_ha, geom FROM whse_basemapping.%1$s
+  WHERE (geom && ANY(ARRAY[%2$s]) OR watershed_group_code = '%3$s')%4$s", tbl, env, wsg_map, extra)
+water <- sf::st_read(conn, quiet = TRUE, query = paste(q_water("fwa_lakes_poly", " AND area_ha >= 10"), "UNION ALL",
+                                                       q_water("fwa_rivers_poly", ""), "ORDER BY 1, 2"))
+water$kind <- sub("^fwa_(lakes|rivers)_poly$", "\\1", water$kind)
+say("Map group (most km where the setups disagree, from %s): %s; %d lake and river polygons staged.", f_setups, wsg_map,
+    nrow(water))
 DBI::dbDisconnect(conn)
 if (nrow(sites) != nrow(on_lines) || any(sf::st_is_empty(sites))) stop("not every site on the staged lines was placed")
 say("Staged lines: %d full segments, %d minimal, %d Atlas lines, %d sites.", nrow(seg_full), nrow(seg_min), nrow(fwa),
@@ -191,12 +210,13 @@ for (s in names(runs)[nzchar(runs)]) {
     }
   }
 }
-staged[[length(staged) + 1]] <- put("data/compare/setups/CH_rear_setups.gpkg", "setups/CH_rear_setups.gpkg")
+staged[[length(staged) + 1]] <- put(f_setups, "setups/CH_rear_setups.gpkg")
 f_lines <- file.path(dir_part, "lines.gpkg")
 sf::st_write(seg_full, f_lines, layer = "full_segments", quiet = TRUE)
 sf::st_write(seg_min, f_lines, layer = "minimal_segments", quiet = TRUE, append = TRUE)
 sf::st_write(fwa, f_lines, layer = "fwa_lines", quiet = TRUE, append = TRUE)
 sf::st_write(sites, f_lines, layer = "sites", quiet = TRUE, append = TRUE)
+sf::st_write(water, f_lines, layer = "water", quiet = TRUE, append = TRUE)
 staged[[length(staged) + 1]] <- tibble(path = "lines.gpkg", source = sprintf("database: %s, %s, whse_basemapping", schema, schema_min))
 man <- bind_rows(staged)
 man$md5 <- unname(tools::md5sum(file.path(dir_part, man$path)))
