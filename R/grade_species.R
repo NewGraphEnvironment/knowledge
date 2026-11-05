@@ -42,7 +42,9 @@
 #'   (`curve$cols[["grad"]]`): link's segment gradient (`segment_gradient`, #92,
 #'   the published tuning's), or for a setup of #120 the segment's minimal
 #'   parent's (`parent_gradient`) or its Freshwater Atlas segment's
-#'   (`fwa_gradient`), each read from the source [knw_link_segments()] names.
+#'   (`segment_fwa_gradient`, the Atlas line of the segment a visit sits on;
+#'   `fwa_gradient`, the visit's own line, is #92's sensitivity and is not
+#'   graded), each read from the source [knw_link_segments()] names.
 #'   A curve that records none, or another, is refused.
 #' @param pick the recommended rule row.
 #' @param stage `"rear"` or `"spawn"`.
@@ -156,11 +158,11 @@ knw_grade_species <- function(connector, schema, species, wsg, curve, pick, stag
 # every visit gradient a curve can be graded on, and the segment source knw_link_segments() reads it from (#120): the
 # segment's own, its minimal parent's and its Freshwater Atlas segment's. A run on either of the last two is a setup,
 # graded and compared but never published
-.knw_grade_grads <- c(segment_gradient = "segment", parent_gradient = "parent", fwa_gradient = "fwa")
+.knw_grade_grads <- c(segment_gradient = "segment", parent_gradient = "parent", segment_fwa_gradient = "fwa")
 # the grad token a setup's grade records carry in place of the build's own (#120, link#414's vocabulary): grad-parent is
 # link's (0.79.0); grad-fwa is the name proposed to link for the Atlas segment's gradient, refused by the archive until
 # link's vocabulary holds it
-.knw_grade_grad_tokens <- c(parent_gradient = "grad-parent", fwa_gradient = "grad-fwa")
+.knw_grade_grad_tokens <- c(parent_gradient = "grad-parent", segment_fwa_gradient = "grad-fwa")
 
 # TRUE when a grade table's first row (read as character) records the curve's gradient as `grad`: 0320's keep-check,
 # 0325, 0330, data-raw/vignette_chinook.R and data-raw/vignette_method.R hold a grade table to this before reading it (#92)

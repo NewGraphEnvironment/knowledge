@@ -91,7 +91,7 @@
 #         DEV it needs RUN=<the main run's name>, whose candidate it joins and is promoted with.
 #         GRADIENT=parent_gradient (#120) does the same with the minimal parent's gradient on a full segment (0310's
 #         PARENT_DIR or PARENT=TRUE) into grad_parent/, which is never promoted.
-#         SETUP=1 GRADIENT=parent_gradient|fwa_gradient (#120) makes a setup: a full candidate of its own on that
+#         SETUP=1 GRADIENT=parent_gradient|segment_fwa_gradient (#120) makes a setup: a full candidate of its own on that
 #         gradient (every seed and check, graded, the segments read with the same gradient by knw_grade_species()),
 #         written to the run's root with a -setup_<parent|fwa> log, its grade records carrying the setup's grad token
 #         (grad-parent, grad-fwa) in place of the build's. 0330 compares it; promotion refuses it.
@@ -117,7 +117,9 @@ remote <- Sys.getenv("REMOTE") %in% c("1", "TRUE", "true")   # grade off the dat
 gradient <- Sys.getenv("GRADIENT", "segment_gradient")
 # parent_gradient (#120) is the minimal parent's gradient on a full segment, which 0310 joins with PARENT_DIR: scored as
 # the Atlas line's is, into grad_parent/, and never promoted (knw_tune_promote() moves grad_fwa/ alone)
-grad_dirs <- c(segment_gradient = "", fwa_gradient = "grad_fwa", parent_gradient = "grad_parent")
+# segment_fwa_gradient (#120) is the Atlas gradient of the line the visit's segment lies on, which a setup grades on
+grad_dirs <- c(segment_gradient = "", fwa_gradient = "grad_fwa", parent_gradient = "grad_parent",
+               segment_fwa_gradient = "grad_fwa_seg")
 if (!gradient %in% names(grad_dirs)) stop("GRADIENT must be one of ", paste(names(grad_dirs), collapse = ", "), ": ", gradient)
 cols_run <- c(grad = gradient, width = "cw_deploy", mad = "mad_pick")
 # the floors (#120): a key is fitted with at least max(MIN_WSG, FOLDS) groups having both outcomes, on FOLDS folds.

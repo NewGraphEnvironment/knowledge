@@ -33,7 +33,9 @@ segments are graded on the gradient it was fitted on
 (\code{curve$cols[["grad"]]}): link's segment gradient (\code{segment_gradient}, #92,
 the published tuning's), or for a setup of #120 the segment's minimal
 parent's (\code{parent_gradient}) or its Freshwater Atlas segment's
-(\code{fwa_gradient}), each read from the source \code{\link[=knw_link_segments]{knw_link_segments()}} names.
+(\code{segment_fwa_gradient}, the Atlas line of the segment a visit sits on;
+\code{fwa_gradient}, the visit's own line, is #92's sensitivity and is not
+graded), each read from the source \code{\link[=knw_link_segments]{knw_link_segments()}} names.
 A curve that records none, or another, is refused.}
 
 \item{pick}{the recommended rule row.}

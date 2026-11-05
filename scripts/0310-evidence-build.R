@@ -281,6 +281,19 @@ for (i in seq_len(nrow(picked))) {
 }
 fl <- knw_link_flow(conn, unique(v$linear_feature_id))
 v <- v |> left_join(fl, by = "linear_feature_id")
+# the Atlas gradient of the line the visit's link segment lies on (#120): what a build reading each segment's Atlas
+# segment gradient applies a rule to, as knw_link_segments(gradient = "fwa") reads it for the grade. fwa_gradient above
+# is the visit's own line's, the sensitivity #92 kept; the two differ where placement put a visit on the segment that
+# starts just past its own line's end
+sfg <- dbGetQuery(conn, sprintf("SELECT linear_feature_id, gradient FROM whse_basemapping.fwa_stream_networks_sp
+                                 WHERE linear_feature_id = ANY('{%s}'::bigint[])",
+                                paste(format(unique(v$segment_linear_feature_id), scientific = FALSE, trim = TRUE),
+                                      collapse = ",")))
+v$segment_fwa_gradient <- as.numeric(sfg$gradient)[match(as.numeric(v$segment_linear_feature_id),
+                                                         as.numeric(sfg$linear_feature_id))]
+add("info", "segment_fwa_gradient_missing", sum(is.na(v$segment_fwa_gradient)))
+add("info", "segment_line_not_own", sum(v$segment_linear_feature_id != v$linear_feature_id, na.rm = TRUE),
+    "visits placed on a link segment of another Atlas line than their own")
 add("info", "flow_from_parent", sum(v$flow_from %in% "parent"))
 add("info", "flow_missing", sum(is.na(v$mad_pick)), "no picked flow on the segment or a parent")
 add("info", "code_from_parent", sum(v$code_from_parent %in% TRUE))

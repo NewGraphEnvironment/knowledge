@@ -125,6 +125,27 @@ On MFRA (8,771 chinook segments), with the published curve and pick on m4's `fre
   them and `default`'s on 4 (`stored_vs_default_differ_km` 0.442), at 121 km `default` and 98.6 km tuned. The log
   line names the gradient.
 
+## The parent evidence (first build, 2026-11-05 04:09Z) and the Atlas line a visit reads
+
+`0310 PARENT=TRUE EVIDENCE_DIR=data/fdis/derived_parent` (19 min, walks all cached): 45,529 visits placed, as the
+published build. `visits_species.csv`, `walks.csv`, `bcfishobs_fdis_match.csv` and the workbook tables are
+byte-identical to `data/fdis/derived`; `visits_link.csv` matches it cell for cell in every shared column and adds the four
+parent columns; `access_check.csv` differs only by float summation order (at most 9.8e-11 km, as #145 found). The parent
+table joined 45,529 visits on 30,847 full segments; 12 visits sit on a full segment straddling a minimal break, and
+21,784 read a parent gradient other than their own segment's.
+
+The review's Q5 point is real: 732 visits (1.6 %; 393 with fish, 339 without) were placed on a link segment of another
+Atlas line than their own (placement prefers the segment starting just past the visit, so a visit near a line's end
+lands on the next line). `fwa_gradient` is the visit's own line's; the segment's line differs in gradient on 637 of
+them (median 0.022, 90th percentile 0.17), and 136 cross a 13 % limit (122 an 11 % one). A rule applied to a segment
+reads the segment's line, so the Atlas setup tunes and grades on a new visit column, `segment_fwa_gradient` (`0310`),
+mapped to the `fwa` source; `fwa_gradient` stays #92's sensitivity and is not gradable. The parent evidence was rebuilt
+with it.
+
+Not this branch's, for a follow-up: the visit's flow and width (`mad_pick`, `cw_deploy`) are also its own line's
+(`knw_link_flow(v$linear_feature_id)`), while the grade and link read the segment's, on every run including the
+published one; the 732 visits are where they can differ.
+
 ## Errors Encountered
 
 | Error | Resolution |

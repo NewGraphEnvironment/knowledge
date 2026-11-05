@@ -368,7 +368,7 @@ test_that("grades another fit made are refused on every field of the keep-check 
 })
 
 test_that("a setup run, tuned on another gradient than the segment's own, is never promoted (#120)", {
-  for (g in c("parent_gradient", "fwa_gradient")) {
+  for (g in c("parent_gradient", "segment_fwa_gradient")) {
     fx <- promote_fx()
     set_col(fx, "run_tune", "CH_rear", "summary", "curve_grad", g)
     set_col(fx, "run_tune", "CH_rear", "grades", "curve_grad", g)

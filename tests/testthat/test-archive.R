@@ -108,11 +108,11 @@ test_that("a setup's record is filed under the grad token of the gradient it was
                     axis = c("cut", "acc", "grad", "grad", "flow"))
   expect_identical(knw_archive_setup(r, voc), "cut-full-top.acc-v5.grad-parent.q-fwapg")
   # the Atlas setup waits for link to mint its token
-  r[c("token_grad", "curve_grad")] <- list("grad-fwa", "fwa_gradient")
+  r[c("token_grad", "curve_grad")] <- list("grad-fwa", "segment_fwa_gradient")
   expect_error(knw_archive_setup(r, voc), "token grad-fwa is not a grad token")
   # a token that does not name the gradient graded on, either way
   r$token_grad <- "grad-seg"
-  expect_error(knw_archive_setup(r), "graded on fwa_gradient but filed under grad-seg, not grad-fwa")
+  expect_error(knw_archive_setup(r), "graded on segment_fwa_gradient but filed under grad-seg, not grad-fwa")
   r[c("token_grad", "curve_grad")] <- list("grad-parent", "segment_gradient")
   expect_error(knw_archive_setup(r), "graded on segment_gradient but filed under the setup token grad-parent")
   r$token_grad <- "grad-seg"

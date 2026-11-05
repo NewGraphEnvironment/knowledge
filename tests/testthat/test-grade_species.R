@@ -158,8 +158,11 @@ test_that("the segments are read with the gradient the curve was fitted on, and 
   # a setup's curve (#120) reads its own source: the minimal parent's gradient, or the Atlas segment's
   fx$curve$cols[["grad"]] <- "parent_gradient"
   expect_identical(run_grade(fx)$seen$gradient, "parent")
-  fx$curve$cols[["grad"]] <- "fwa_gradient"
+  fx$curve$cols[["grad"]] <- "segment_fwa_gradient"
   expect_identical(run_grade(fx)$seen$gradient, "fwa")
+  # the visit's own Atlas line (#92's sensitivity) is not what a segment reads, so it is not graded
+  fx$curve$cols[["grad"]] <- "fwa_gradient"
+  expect_error(run_grade(fx), "fitted on fwa_gradient, not on a gradient the segments can be graded on")
   fx$curve$cols[["grad"]] <- "measured_gradient"
   expect_error(run_grade(fx), "fitted on measured_gradient, not on a gradient the segments can be graded on")
   fx$curve$cols <- NULL
