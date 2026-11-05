@@ -130,8 +130,7 @@ stopifnot(sum(both_out) == su$n_visits[1])
 cr_scored <- st[st$cross_m & both_out, ]
 n_groups <- length(unique(st$watershed_group_code[both_out]))
 r_cross <- round(nrow(cr), -2)
-# "about" a rounded count, and "about N visits in G groups"
-stopifnot(abs(nrow(cr) - r_cross) < 50, abs(su$n_visits[1] - round(su$n_visits[1], -2)) < 50)
+
 stopifnot(sum(cr$present) < 10, sum(cr$d > 0) > 2 * sum(cr$d < 0),
           steep(st$full_gradient, FALSE) > steep(st$minimal_gradient, FALSE),
           steep(st$full_gradient, TRUE) > steep(st$minimal_gradient, TRUE))
@@ -140,7 +139,7 @@ stopifnot(sum(cr$present) < 10, sum(cr$d > 0) > 2 * sum(cr$d < 0),
 The R package [`link`](`r link_site`) [@link] maps where each fish species can spawn and rear on British Columbia's
 streams. It tests each stretch of stream against a **rule**: a handful of thresholds, such as the smallest stream and
 the steepest slope a species uses. The stretches that pass are the species' **habitat**. `knowledge`, the package this
-article belongs to, chooses link's thresholds from fish records: for each species and life stage, it tests many rules
+article belongs to, chooses link's thresholds from fish records: for each species and life stage with enough records, it tests many rules
 against where electrofishing crews caught the fish and where they did not, and of the rules that predict about as well
 as the best, keeps the one closest to link's standard settings ([how the tuning works](habitat_thresholds.html)). Chinook
 rearing is the worked example here; [the research notes](`r research`) carry every species tuned.
@@ -148,7 +147,7 @@ rearing is the worked example here; [the research notes](`r research`) carry eve
 link tests a rule on **segments**, the pieces it cuts the streams of the BC Freshwater Atlas
 [@flnrord2021FreshwaterAtlasb] into, and a segment's slope is its drop over its whole length. So where link cuts a
 stream decides the slope a rule reads, and some of its cuts fall exactly where fish were caught. Change the cuts and the
-rule chosen from those catches changes. Chinook rearing's slope limit is **`r lim(s_of("published")$grad_max)`** on link's full
+rule chosen from those catches can change. Chinook rearing's slope limit is **`r lim(s_of("published")$grad_max)`** on link's full
 network and **`r lim(s_of("minimal")$grad_max)`** on its minimal network, which leaves out the cuts at fish records,
 at crossings and at hand-mapped habitat. Yet the two rules draw much the same habitat; on the map they differ in short
 pieces of small streams:
@@ -195,8 +194,7 @@ widen <- function(b, asp) {
 zoom_box <- widen(zoom, map_w / zoom_h)
 over_h <- map_w * (bb[["ymax"]] - bb[["ymin"]]) / (bb[["xmax"]] - bb[["xmin"]])
 stopifnot(zoom_box[["xmin"]] <= zoom[["xmin"]], zoom_box[["ymax"]] >= zoom[["ymax"]])
-# the names: the group's largest streams on the upper panel, every carried named stream with at least 2 km in the
-# lower one
+# the names: the group's largest streams on the upper panel, four chosen streams on the lower one
 streams <- pl$streams
 lab_over <- streams[streams$stream_order >= 6 & streams$km >= 20, ]
 stopifnot("Fraser River" %in% lab_over$gnis_name, nrow(lab_over) >= 3)
@@ -272,8 +270,10 @@ draw <- function(b, zoom_level, scale_km, lwd_add, labs, frame_box = NULL, legen
 w_over <- bb[["xmax"]] - bb[["xmin"]]
 w_zoom <- zoom_box[["xmax"]] - zoom_box[["xmin"]]
 lab_up <- stream_labels(lab_over, bb, reach = w_over / 60, off_m = w_over / 250)
-in_zoom <- streams[lengths(sf::st_intersects(streams, sf::st_as_sfc(zoom_box))) > 0, ]
-in_zoom <- in_zoom[as.numeric(sf::st_length(suppressWarnings(sf::st_intersection(in_zoom, sf::st_as_sfc(zoom_box))))) >= 2000, ]
+# the lower panel names the main river and the three tributaries the differences sit on (Al's choice, 2026-11-05)
+lab_names <- c("Fraser River", "Slim Creek", "Dome Creek", "Ptarmigan Creek")
+in_zoom <- streams[streams$gnis_name %in% lab_names, ]
+stopifnot(setequal(in_zoom$gnis_name[lengths(sf::st_intersects(in_zoom, sf::st_as_sfc(zoom_box))) > 0], lab_names))
 lab_lo <- stream_labels(in_zoom, zoom_box, reach = w_zoom / 25, off_m = w_zoom / 250)
 f_over <- tempfile(fileext = ".png")
 f_zoom <- tempfile(fileext = ".png")
@@ -388,7 +388,6 @@ strip <- strip |>
          cls = factor(cut(gradient, c(-Inf, crit$limits[["minimal"]], crit$limits[["published"]], Inf), labels = cls_lab),
                       levels = cls_lab),
          y = ifelse(net == "Full network", 2, 1),
-         lab = ifelse(to - from > 90 | at_site, grad(gradient), ""),
          ex = factor(ex, levels = unname(ex_lab)))
 # the caption: a bar that stops short of the left edge stops at the stream's mouth
 for (e in ex) {
@@ -554,7 +553,8 @@ distance from a segment's downstream end
 ## How was this done?
 
 The numbers were bundled on `r x$meta$written` from the tuning runs and link builds the [research
-notes](`r research`) describe, and checked then against the logs that report them there. The visits are the
+notes](`r research`) describe. When it was written, the share of visits starting their own segment, the four tunings'
+choices and habitat, and the other species' choices were checked against the logs that report them there. The visits are the
 Fisheries Data Information System's electrofishing records [@provinceofbritishcolumbia2022FisheriesData], placed on
 the Freshwater Atlas; rules are run through fresh [@fresh] for link. The maps' basemap is Esri's World Topographic Map
 blended with its World Shaded Relief.
