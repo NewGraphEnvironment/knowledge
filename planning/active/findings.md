@@ -173,6 +173,18 @@ chinook rearing picks `mad>=0.75|g<=0.09|Q3@D1000`, the minimal network's pick, 
 45 groups with both outcomes); `default` outside the region (+238.3, SE 95.0). The stronger of the two criteria fixed
 before the run (the same rule) holds.
 
+## Chinook rearing on every setup (2026-11-05, `20261105_setup_compare-ch_rear.txt`)
+
+Parent run `20261105_0436` (0320 8.2 min after the smoke run, 0330 18.9 min) and Atlas run `20261105_0437` (8.5, 18.8),
+both on `derived_parent`, both graded with the walk cache fully warm. Picks: published 13 %, minimal and parent 9 %
+(the same 102 rules in region), Atlas line 15 %; the parent and Atlas grade records carry the expected fields. The
+transfer loses 1,042 km of the minimal network's 87,606 km and gains 44: all of the 1,042 km fails the flow floor and
+passed on the minimal network only by the near-river exception, whose distance is walked from the segment's
+downstream end (minimal median 507 m, the full network's pieces 1,326 m); 0.4 km is connectivity. Filed as link#462.
+The map's classes were revised after the first figure (they had put the two largest disagreements in "other");
+the group (MORK) is the one the rule fixed before drawing chose. The research section is
+`research/minimal_network_tuning.md`, "Chinook rearing on every setup".
+
 ## Errors Encountered
 
 | Error | Resolution |
