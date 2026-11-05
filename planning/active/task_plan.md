@@ -47,7 +47,7 @@ keeps the bundle off the database, and any machine holding the staged directory 
 
 ## Phase 1: Stage the inputs (on the host)
 
-- [ ] `data-raw/cut_points_stage.R`: writes `data/stage/cut_points/` with `MANIFEST.csv` (path, source, md5, bytes,
+- [x] `data-raw/cut_points_stage.R`: writes `data/stage/cut_points/` with `MANIFEST.csv` (path, source, md5, bytes,
   rows, the link run ids and knowledge commit). Copies: `CH_rear_setups.gpkg`; `visits_link.csv` from
   `derived_parent` (all four gradients per site) and `derived_minimal`; `visits_species.csv` (byte-identical across
   the three builds; checked); each candidate run's `<key>_tune.csv` and `<key>_compare.csv` for the seven keys
@@ -55,8 +55,8 @@ keeps the bundle off the database, and any machine holding the staged directory 
   gradient, length, measures, parent id) on every blue line holding a stream-branch chinook-in-range site whose slope
   sits on opposite sides of 9 % or 13 % between any two setups. Refuses unless both builds are the runs the grade
   records name (`knw_build_record()`, `knw_parent_read()` provenance) and `knw_db_latency_check()` passes.
-- [ ] `.gitignore` gains `data/stage/`; a test pins it ignored.
-- [ ] Run it; log to `scripts/logs/habitat/<date>_cut_points_stage.txt`.
+- [x] `.gitignore` gains `data/stage/`; a test pins it ignored.
+- [x] Run it; log to `scripts/logs/habitat/<date>_cut_points_stage.txt`.
 
 ## Phase 2: The bundle
 

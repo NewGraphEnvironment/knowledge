@@ -49,6 +49,15 @@ Settle at the plan gate: the article's per-key table. Only chinook rearing has a
 
 Relates to #120, #145.
 
+## The sites where the cut moves the slope across a limit (2026-11-05, m4)
+
+On the tuning's chinook rearing population before its model filters (knw_tune_run()'s visits_in: 7,823 sites, 235
+with fish), 1,215 sites read gradients on opposite sides of 9, 11 or 13 % on two of the four setups; 24 of them caught
+chinook, on 22 blue lines in 14 groups. Between the full network's own gradient and its minimal parent's alone, 7
+fish sites cross. The strongest: UFRA `101349_1_1` starts a 90 m full segment at 10.8 % on a 570 m minimal parent at
+3.4 %, with its Atlas line at 15.8 %. So the effect on a pick comes mostly from the many empty sites that cross, not
+the few fish sites; the article has to say so.
+
 ## Errors Encountered
 
 | Error | Resolution |
