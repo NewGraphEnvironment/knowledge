@@ -8,8 +8,8 @@ other sources, each under its own terms. Paths are the repository's.
 Contains information licensed under the
 [Open Government Licence - British Columbia](https://www2.gov.bc.ca/gov/content/data/policy-standards/open-data/open-government-licence-bc):
 the **BC Freshwater Atlas** lakes, rivers and stream network in `inst/vignette-data/bulk_water.rds`,
-`inst/vignette-data/bulk_segments.rds`, `inst/vignette-data/cut_points.rds` and the stream names in
-`inst/vignette-data/cut_points_places.rds` (all installed with the package), and the Atlas's streams, lakes and
+`inst/vignette-data/bulk_segments.rds`, `inst/vignette-data/cut_points.rds` and the stream names and named
+streams in `inst/vignette-data/cut_points_places.rds` (all installed with the package), and the Atlas's streams, lakes and
 rivers drawn in `man/figures/readme-bulk.png` and the maps in `research/fig/`.
 
 ## BC Geographical Names

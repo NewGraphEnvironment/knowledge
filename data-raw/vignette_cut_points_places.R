@@ -15,9 +15,12 @@
 #     Geographical Names, measured from the stream's mouth (its downstream end on the Atlas), or, for the map group,
 #     from the point on its largest named stream nearest the group's centre. That layer's catalogue licence is Access
 #     Only, so this file keeps each town's name and nothing else from it (inst/NOTICE.md).
+#   - THE MAP GROUP'S NAMED STREAMS, for the map's labels: every Atlas stream with a name, of stream order min_order or
+#     more and at least min_km long in the group, merged by name and simplified at simplify_m. The article chooses
+#     which to label in each panel.
 #
 # INPUT:  inst/vignette-data/cut_points.rds; an fwapg database (PG* or PGSERVICE); the BC Data Catalogue (bcdata)
-# OUTPUT: inst/vignette-data/cut_points_places.rds   one tibble and its meta
+# OUTPUT: inst/vignette-data/cut_points_places.rds   the places, the map group's named streams (sf, EPSG:3005), meta
 # RUN:    Rscript data-raw/vignette_cut_points_places.R   (from the repo root)
 # ---------------------------------------------------------------------------
 suppressMessages(library(dplyr))
@@ -27,6 +30,9 @@ sf::sf_use_s2(FALSE)
 f_bundle <- "inst/vignette-data/cut_points.rds"
 f_out <- "inst/vignette-data/cut_points_places.rds"
 town_category <- "Incorporated"
+min_order <- 3        # the smallest named stream carried for the map's labels
+min_km <- 2           # and its least length in the group
+simplify_m <- 25
 
 git <- function(...) {
   out <- suppressWarnings(system2("git", c(...), stdout = TRUE, stderr = TRUE))
@@ -115,16 +121,26 @@ pt <- sf::st_read(con, quiet = TRUE, query = sprintf("
   FROM whse_basemapping.fwa_stream_networks_sp s, c
   WHERE s.watershed_group_code = '%1$s' AND s.gnis_name = '%2$s'
   ORDER BY s.geom <-> c.g LIMIT 1", wsg, gsub("'", "''", main$gnis_name)))
+streams <- sf::st_read(con, quiet = TRUE, query = sprintf("
+  SELECT gnis_name, max(stream_order) AS stream_order, sum(length_metre) / 1000 AS km,
+         ST_Simplify(ST_LineMerge(ST_Union(ST_Force2D(geom))), %3$s) AS geom
+  FROM whse_basemapping.fwa_stream_networks_sp
+  WHERE watershed_group_code = '%1$s' AND gnis_name IS NOT NULL AND stream_order >= %2$s
+    AND edge_type IN (1000, 1050, 1100, 1150, 1200, 1250, 1450)
+  GROUP BY gnis_name HAVING sum(length_metre) / 1000 >= %4$s
+  ORDER BY max(stream_order) DESC, sum(length_metre) DESC, gnis_name", wsg, min_order, simplify_m, min_km))
 DBI::dbDisconnect(con)
+if (!nrow(streams) || !"Fraser River" %in% streams$gnis_name) stop("the map group's named streams did not come back")
 t <- nearest_town(pt)
 out <- bind_rows(out, tibble(place = "map", site_visit = NA_character_, blue_line_key = NA_real_,
                              gnis_name = grp$watershed_group_name, joins = main$gnis_name, joins_direct = NA,
                              town = t$town, town_km = t$km, compass = t$compass))
 if (anyNA(out$town) || anyNA(out$joins)) stop("a place has no town or no named stream downstream")
 
-res <- list(places = out,
+res <- list(places = out, streams = streams,
             meta = list(written = format(Sys.Date()), commit = git("rev-parse", "--short", "HEAD"),
-                        bundle_md5 = unname(tools::md5sum(f_bundle)), town_category = town_category))
+                        bundle_md5 = unname(tools::md5sum(f_bundle)), town_category = town_category,
+                        min_order = min_order, min_km = min_km, simplify_m = simplify_m))
 saveRDS(res, f_out, compress = "xz")
 print(as.data.frame(out))
 message("Wrote ", f_out)
