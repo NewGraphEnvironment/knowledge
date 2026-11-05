@@ -377,9 +377,17 @@ test_that("a setup run, tuned on another gradient than the segment's own, is nev
     expect_error(promote(fx, keys = "BT_rear"), "a setup run", info = g)
     utils::write.csv(data.frame(species_code = "CH", stage = "spawn", status = "no_response", rule_recommended = NA,
                                 curve_grad = NA),
-                     file.path(fx$tune, "candidate", "r1", "CH_spawn_summary.csv"), row.names = FALSE)
+                     file.path(fx$tune, "candidate", "r1", "CH_spawn_summary.csv"), row.names = FALSE, na = "")
     expect_error(promote(fx, keys = "CH_spawn"), "a setup run", info = g)
   }
+  # a setup whose every key went unfitted records no gradient on any summary: its marker names it (round 2)
+  fx <- promote_fx()
+  ct <- file.path(fx$tune, "candidate", "r1")
+  utils::write.csv(data.frame(species_code = "KO", stage = "rear", status = "not_modelled", rule_recommended = NA,
+                              curve_grad = NA), file.path(ct, "KO_rear_summary.csv"), row.names = FALSE, na = "")
+  expect_silent(promote(fx, keys = "KO_rear", dry_run = TRUE))
+  writeLines("parent_gradient", file.path(ct, .knw_setup_marker))
+  expect_error(promote(fx, keys = "KO_rear", dry_run = TRUE), "r1 was tuned on parent_gradient")
 })
 
 test_that("an undo restores what was replaced whatever the files' ages (round 4)", {

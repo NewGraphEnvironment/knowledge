@@ -93,7 +93,7 @@
 #         PARENT_DIR or PARENT=TRUE) into grad_parent/, which is never promoted.
 #         SETUP=1 GRADIENT=parent_gradient|segment_fwa_gradient (#120) makes a setup: a full candidate of its own on that
 #         gradient (every seed and check, graded, the segments read with the same gradient by knw_grade_species()),
-#         written to the run's root with a -setup_<parent|fwa> log, its grade records carrying the setup's grad token
+#         written to the run's root (marked with setup.txt) with a -setup_<parent|fwa> log, its grade records carrying the setup's grad token
 #         (grad-parent, grad-fwa) in place of the build's. 0330 compares it; promotion refuses it.
 #         MIN_WSG= and FOLDS= (default 5 and 5, the tuning's floors) lower them for a test on a few groups (#120): named
 #         in the log and each summary, and refused by knw_tune_promote().
@@ -135,6 +135,7 @@ floors_test <- min_wsg != floor_default[["min_wsg"]] || folds != floor_default[[
 # never promoted; its grade records carry the setup's own grad token
 setup <- Sys.getenv("SETUP") %in% c("1", "TRUE", "true")
 setup_tokens <- .knw_grade_grad_tokens
+setup_names <- c(parent_gradient = "parent", segment_fwa_gradient = "fwa")   # the log's -setup_<name>
 if (setup && (dev || !gradient %in% names(setup_tokens))) {
   stop("SETUP=1 is a graded candidate on GRADIENT=", paste(names(setup_tokens), collapse = " or "), ", without DEV=1")
 }
@@ -161,10 +162,14 @@ dev_dir <- .knw_path_rel(dev_dir)   # written into the log: relative, never a ho
 dir_run <- if (dev) dev_dir else file.path("data/tune/candidate", run)
 # the gradient a run's summaries were scored on: a setup and a main run never share a directory (#120), so a setup is not
 # resumed over a main run, nor a main run's sensitivity scored inside a setup
-run_grads <- unique(unlist(lapply(list.files(dir_run, "_summary\\.csv$", full.names = TRUE), function(f) {
-  x <- read_csv(f, show_col_types = FALSE, col_types = cols(.default = "c"))
-  if ("curve_grad" %in% names(x)) x$curve_grad else NA_character_
-})))
+# a key with no fit records no gradient on its summary, so a setup also marks its run with setup.txt, naming the gradient,
+# before any key is scored; promotion and these guards read both (round 2 of the branch review)
+f_setup <- file.path(dir_run, .knw_setup_marker)
+run_grads <- unique(c(if (file.exists(f_setup)) readLines(f_setup, n = 1),
+                      unlist(lapply(list.files(dir_run, "_summary\\.csv$", full.names = TRUE), function(f) {
+                        x <- read_csv(f, show_col_types = FALSE, col_types = cols(.default = "c"))
+                        if ("curve_grad" %in% names(x)) x$curve_grad else NA_character_
+                      }))))
 # a key with no fit records no gradient (NA), in a setup and a main run alike
 if (setup && length(setdiff(run_grads, c(gradient, NA)))) {
   stop("RUN=", run, " holds summaries scored on ", paste(setdiff(run_grads, c(gradient, NA)), collapse = ", "),
@@ -195,13 +200,14 @@ path_log <- file.path(dir_run, paste0(format(Sys.time(), "%Y%m%d", tz = "UTC"), 
                                       if (!dev) sprintf("-%s-p%s", run, pass) else "",
                                                      if (nzchar(Sys.getenv("SPECIES"))) paste0("-", tolower(gsub(",", "_", Sys.getenv("SPECIES")))) else "",
                                                      if (dev) "-dev" else "",
-                                                     if (setup) paste0("-setup_", sub("_gradient$", "", gradient))
+                                                     if (setup) paste0("-setup_", setup_names[[gradient]])
                                                      else if (nzchar(grad_dirs[[gradient]])) paste0("-", grad_dirs[[gradient]])
                                                      else "", ".txt"))
 # a resumed candidate keeps the log of the pass that graded (data-raw/vignette_chinook.R reads its grade lines): a later
 # pass under the same name is numbered, never written over it
 if (!dev) path_log <- .knw_free_path(path_log)
 dir.create(dir_out, showWarnings = FALSE, recursive = TRUE)
+if (setup) writeLines(gradient, f_setup)
 log_lines <- character()
 say <- function(...) { log_lines <<- c(log_lines, sprintf(...)); message(sprintf(...)) }
 block <- function(title, x) {

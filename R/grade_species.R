@@ -163,6 +163,9 @@ knw_grade_species <- function(connector, schema, species, wsg, curve, pick, stag
 # link's (0.79.0); grad-fwa is the name proposed to link for the Atlas segment's gradient, refused by the archive until
 # link's vocabulary holds it
 .knw_grade_grad_tokens <- c(parent_gradient = "grad-parent", segment_fwa_gradient = "grad-fwa")
+# the file 0320 writes into a setup's run directory, naming its gradient, before any key is scored: a key with no fit
+# records no gradient on its summary, so a run of no-fit keys is still known as a setup (round 2 of #120's review)
+.knw_setup_marker <- "setup.txt"
 
 # TRUE when a grade table's first row (read as character) records the curve's gradient as `grad`: 0320's keep-check,
 # 0325, 0330, data-raw/vignette_chinook.R and data-raw/vignette_method.R hold a grade table to this before reading it (#92)
