@@ -52,9 +52,15 @@ knw_grade_species(
 - curve:
 
   [`knw_tune_curve()`](https://newgraphenvironment.github.io/knowledge/reference/knw_tune_curve.md)'s
-  result for the species and stage. It must have been fitted on link's
-  segment gradient (`curve$cols[["grad"]]` is `segment_gradient`), the
-  gradient the segments are graded on (#92).
+  result for the species and stage. The segments are graded on the
+  gradient it was fitted on (`curve$cols[["grad"]]`): link's segment
+  gradient (`segment_gradient`, \#92, the published tuning's), or for a
+  setup of \#120 the segment's minimal parent's (`parent_gradient`) or
+  its Freshwater Atlas segment's (`segment_fwa_gradient`, the Atlas line
+  of the segment a visit sits on; `fwa_gradient`, the visit's own line,
+  is \#92's sensitivity and is not graded), each read from the source
+  [`knw_link_segments()`](https://newgraphenvironment.github.io/knowledge/reference/knw_link_segments.md)
+  names. A curve that records none, or another, is refused.
 
 - pick:
 

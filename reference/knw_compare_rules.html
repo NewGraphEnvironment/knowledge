@@ -53,7 +53,7 @@ default is reported against the stored flags, never compared to them."><meta pro
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Set a tuned rule beside link's <code>default</code> on link's own segments</h1>
-      <small class="dont-index">Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/v0.4.27/R/compare_rules.R" class="external-link"><code>R/compare_rules.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/R/compare_rules.R" class="external-link"><code>R/compare_rules.R</code></a></small>
       <div class="d-none name"><code>knw_compare_rules.Rd</code></div>
     </div>
 
@@ -90,7 +90,8 @@ spawning together, because the connectivity pass reads spawning. Regenerated
 <span>  structures <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  tuned_as <span class="op">=</span> <span class="st">"door"</span>,</span>
 <span>  config_sha <span class="op">=</span> <span class="cn">NA_character_</span>,</span>
-<span>  workers <span class="op">=</span> <span class="fl">1L</span></span>
+<span>  workers <span class="op">=</span> <span class="fl">1L</span>,</span>
+<span>  gradient <span class="op">=</span> <span class="st">"segment"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -175,6 +176,14 @@ user-habitat rows this call writes once to <code>scratch</code>. A group's error
 stops its bin and is raised naming the group. <code>1</code> runs the one bin in this
 process. <code>connector</code> and its environment travel to every worker, so build
 it where it holds nothing large.</p></dd>
+
+
+<dt id="arg-gradient">gradient<a class="anchor" aria-label="anchor" href="#arg-gradient"></a></dt>
+<dd><p><code>character(1)</code> where every segment's gradient comes from
+(#120), as <code><a href="knw_link_segments.html">knw_link_segments()</a></code> reads it: <code>"segment"</code> (link's own),
+<code>"parent"</code> (the minimal parent's) or <code>"fwa"</code> (the Atlas segment's). The
+scratch copies carry it, so <code>default</code>, the tuned rule, the other stage and
+the connectivity pass all read it, as a build with that <code>grad</code> token would.</p></dd>
 
 </dl></div>
     <div class="section level2">

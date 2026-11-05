@@ -12,7 +12,14 @@ millions of segments read in one pass.
 ## Usage
 
 ``` r
-knw_link_segments(conn, schema, species, wsg, parent_fallback = TRUE)
+knw_link_segments(
+  conn,
+  schema,
+  species,
+  wsg,
+  parent_fallback = TRUE,
+  gradient = "segment"
+)
 ```
 
 ## Arguments
@@ -37,6 +44,18 @@ knw_link_segments(conn, schema, species, wsg, parent_fallback = TRUE)
 
   `logical(1)` run the parent fallback for segments with no own picked
   flow.
+
+- gradient:
+
+  `character(1)` where `gradient` comes from (#120): `"segment"`, the
+  segment's own (link's `gradient`, token `grad-seg`); `"parent"`, its
+  minimal-network parent's, from `<schema>.streams_parent` (link#444,
+  `grad-parent`), checked by
+  [`knw_parent_read()`](https://newgraphenvironment.github.io/knowledge/reference/knw_parent_read.md)
+  first; `"fwa"`, its Freshwater Atlas segment's
+  (`fwa_stream_networks_sp.gradient` on `linear_feature_id`; no link
+  segment crosses an Atlas segment, link#444). A segment with no row in
+  the source stops the read.
 
 ## Value
 

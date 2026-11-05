@@ -35,7 +35,8 @@ knw_compare_rules(
   structures = NULL,
   tuned_as = "door",
   config_sha = NA_character_,
-  workers = 1L
+  workers = 1L,
+  gradient = "segment"
 )
 ```
 
@@ -122,6 +123,15 @@ knw_compare_rules(
   stops its bin and is raised naming the group. `1` runs the one bin in
   this process. `connector` and its environment travel to every worker,
   so build it where it holds nothing large.
+
+- gradient:
+
+  `character(1)` where every segment's gradient comes from (#120), as
+  [`knw_link_segments()`](https://newgraphenvironment.github.io/knowledge/reference/knw_link_segments.md)
+  reads it: `"segment"` (link's own), `"parent"` (the minimal parent's)
+  or `"fwa"` (the Atlas segment's). The scratch copies carry it, so
+  `default`, the tuned rule, the other stage and the connectivity pass
+  all read it, as a build with that `grad` token would.
 
 ## Value
 

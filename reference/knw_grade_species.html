@@ -47,7 +47,7 @@ fitted on, the two rivers are the same."><meta property="og:image" content="http
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Grade every segment of a species' groups by its tuned curve</h1>
-      <small class="dont-index">Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/v0.4.27/R/grade_species.R" class="external-link"><code>R/grade_species.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/R/grade_species.R" class="external-link"><code>R/grade_species.R</code></a></small>
       <div class="d-none name"><code>knw_grade_species.Rd</code></div>
     </div>
 
@@ -101,9 +101,15 @@ opens its own).</p></dd>
 
 
 <dt id="arg-curve">curve<a class="anchor" aria-label="anchor" href="#arg-curve"></a></dt>
-<dd><p><code><a href="knw_tune_curve.html">knw_tune_curve()</a></code>'s result for the species and stage. It must
-have been fitted on link's segment gradient (<code>curve$cols[["grad"]]</code> is
-<code>segment_gradient</code>), the gradient the segments are graded on (#92).</p></dd>
+<dd><p><code><a href="knw_tune_curve.html">knw_tune_curve()</a></code>'s result for the species and stage. The
+segments are graded on the gradient it was fitted on
+(<code>curve$cols[["grad"]]</code>): link's segment gradient (<code>segment_gradient</code>, #92,
+the published tuning's), or for a setup of #120 the segment's minimal
+parent's (<code>parent_gradient</code>) or its Freshwater Atlas segment's
+(<code>segment_fwa_gradient</code>, the Atlas line of the segment a visit sits on;
+<code>fwa_gradient</code>, the visit's own line, is #92's sensitivity and is not
+graded), each read from the source <code><a href="knw_link_segments.html">knw_link_segments()</a></code> names.
+A curve that records none, or another, is refused.</p></dd>
 
 
 <dt id="arg-pick">pick<a class="anchor" aria-label="anchor" href="#arg-pick"></a></dt>

@@ -58,6 +58,8 @@ parent; and check that a database-bound run is on the database’s host.
 - [`knw_parent_join()`](https://newgraphenvironment.github.io/knowledge/reference/knw_parent_join.md)
   : Carry each visit's minimal-network parent onto its full-network
   segment
+- [`knw_parent_read()`](https://newgraphenvironment.github.io/knowledge/reference/knw_parent_read.md)
+  : Read link's parent table, held to the two builds it joins
 - [`knw_link_segments()`](https://newgraphenvironment.github.io/knowledge/reference/knw_link_segments.md)
   : link's segments for one species in a set of groups, with flow and
   access, for grading
