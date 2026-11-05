@@ -79,7 +79,8 @@ towns <- bcdata::bcdc_query_geodata("WHSE_BASEMAPPING.GNS_GEOGRAPHICAL_NAMES_SP"
 towns <- sf::st_transform(towns[, "GEOGRAPHICAL_NAME"], 3005)
 if (nrow(towns) < 100) stop("only ", nrow(towns), " incorporated places came back from BC Geographical Names")
 compass <- function(from, to) {
-  d <- sf::st_coordinates(to) - sf::st_coordinates(from)
+  xy <- function(g) sf::st_coordinates(sf::st_zm(g, drop = TRUE))[, c("X", "Y"), drop = FALSE]
+  d <- xy(to) - xy(from)
   az <- (atan2(d[, "X"], d[, "Y"]) * 180 / pi) %% 360
   c("north", "north-east", "east", "south-east", "south", "south-west", "west", "north-west")[floor((az + 22.5) / 45) %% 8 + 1]
 }
