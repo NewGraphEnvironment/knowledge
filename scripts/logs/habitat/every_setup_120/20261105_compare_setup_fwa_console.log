@@ -1,0 +1,21 @@
+Spherical geometry (s2) switched off
+Comparison, knowledge#57: 1 fitted species x stage; link run 20261103_163715-269b585a at 4dfbfa4980eb259e2f6a3e9b198c54014315d0ce.
+Segments read with the gradient the curves were fitted on: segment_fwa_gradient (fwa); a setup of #120, never promoted.
+Candidate run 20261105_0437: read from data/tune/candidate/20261105_0437, written under data/compare/candidate/20261105_0437 (ignored); promote it with RUN=20261105_0437 scripts/0335.
+Evidence data/fdis/derived_parent (scripts/logs/habitat/20261104_evidence_build_ledger-derived_parent.csv), the curves' own.
+link configs/default at e2a85938cdb5e8ec55df3d2b293ed0da5597428f (the baseline; the schema fresh_default's run is at 4dfbfa4980eb259e2f6a3e9b198c54014315d0ce) read from ../link; fresh 0.52.0; tuned reported as door; compared under it alone.
+Floodplain catalog: 0 whole-network groups ().
+database round trip 1.0 ms (median of 20 SELECT 1; limit 20 ms)
+build: schema fresh_default, run 20261103_163715-269b585a; flows wet_db_load(): discharge/fwa/v1/segment_monthly, scenario historical last loaded from https://fresh-bc.s3.us-west-2.amazonaws.com/discharge/fwa/v1/manifest.json (built 2026-10-24T12:23:01Z, wet b4bbc50); walk c3f7bdbecff1d55107f28afa59d7f532; fresh 0.52.0; tokens cut-full-top.acc-v5.grad-seg.q-fwapg; log rows of run 20261023_074321-24d85e8c set aside (not in log_recompute)
+NOTICE:  drop cascades to 2 other objects
+DETAIL:  drop cascades to table knw_cmp_ch_rear.uhc
+drop cascades to table knw_cmp_ch_rear.grades
+
+NOTICE:  schema "knw_cmp_ch_rear" does not exist, skipping
+
+CH_rear: compared in 16.2 min.
+GeoPackages for 1 keys in 2.6 min on 1 workers.
+Compared 1 species x stage in 18.8 min, each on 6 workers.
+CH_rear: 136 groups, 16.2 min; default 103246 km (width>=1.5|g<=0.0549|cw channel_width>=15@D1000; mad discharge>=3@D1000 on wetland_flow).
+  door (= tuned): tuned 85962 km (-16.7 %); graded km 53417 -> 58583; lost 31467, gained 14183 (11209 by the exception, 4 of it through a river in another group).
+Done in 18.8 min.

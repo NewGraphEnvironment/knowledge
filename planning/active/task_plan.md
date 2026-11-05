@@ -88,26 +88,26 @@ All four read wet's 2026-10-24 flow load and link 0.78.1's range, on m4's databa
 
 ## Phase 3: the two chinook-rearing runs (m4)
 
-- [ ] `SETUP=1 GRADIENT=parent_gradient SPECIES=CH EVIDENCE_DIR=data/fdis/derived_parent 0320` →
+- [x] `SETUP=1 GRADIENT=parent_gradient SPECIES=CH EVIDENCE_DIR=data/fdis/derived_parent 0320` →
       `0330 TUNE_DIR=<run> SPECIES=CH` (GeoPackage on).
-- [ ] `SETUP=1 GRADIENT=fwa_gradient SPECIES=CH 0320` (published evidence) → `0330`.
-- [ ] Read `pg_stat_activity` before timing anything. Each run's log and minutes go to
+- [x] (run as `GRADIENT=segment_fwa_gradient` on `derived_parent`, findings) `SETUP=1 GRADIENT=fwa_gradient SPECIES=CH 0320` (published evidence) → `0330`.
+- [x] Read `pg_stat_activity` before timing anything. Each run's log and minutes go to
       `scripts/logs/habitat/every_setup_120/`.
 
 ## Phase 4: the every-setup report and the map
 
-- [ ] `data-raw/setup_compare.R` (no database): for each of the four setups, its pick, whether every other setup's pick
+- [x] (it reads the database for the parent map and geometry) `data-raw/setup_compare.R` (no database): for each of the four setups, its pick, whether every other setup's pick
       lies in its region (from each `CH_rear_tune.csv`), how far behind its best each sits (deviance / SE), and km
       drawn (`default` and tuned) and graded. The transfer cost is the minimal setup's km against the parent setup's.
       Writes `scripts/logs/habitat/<date>_setup_compare.{csv,txt}`, holding input md5s and the commit.
-- [ ] The map: on the full network's segments, each setup's tuned verdict, with the minimal network's carried through
+- [x] The map: on the full network's segments, each setup's tuned verdict, with the minimal network's carried through
       `streams_parent`. Write `data/compare/setups/CH_rear_setups.gpkg` (ignored) for QGIS, and one static figure in
       `research/fig/` (tmap and gq, per the cartography conventions) for the group chosen by a criterion stated before
       drawing: the most km where the setups' tuned verdicts disagree, among groups with chinook `default` rearing.
 
 ## Phase 5: archive
 
-- [ ] `RUN=<parent run> EVIDENCE_DIR=data/fdis/derived_parent 0336` →
+- [x] `RUN=<parent run> EVIDENCE_DIR=data/fdis/derived_parent 0336` →
       `archive/knowledge/tune/CH_rear/cut-full-top.acc-v5.grad-parent.q-fwapg/`, with the `derived_parent` evidence.
       Commit the `data/archive_index.csv` rows.
 - [ ] The Atlas run is archived when link mints its token (owed below); `knw_archive_setup()` refuses it until then.

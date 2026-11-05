@@ -1,0 +1,36 @@
+Spherical geometry (s2) switched off
+CH_rear on every setup (#120), at knowledge 95205a3.
+One flow load (wet_db_load(): discharge/fwa/v1/segment_monthly, scenario historical last loaded from https://fresh-bc.s3.us-west-2.amazonaws.com/discharge/fwa/v1/manifest.json (built 2026-10-24T12:23:01Z, wet b4bbc50)), one access and flow token (acc-v5, q-fwapg), one visit and walk build (visits_species;walks md5 6a2e28f1afb46a02c357ac044f8d09e3;2e0f0f419022da0f5ac51a3869486a80).
+  published: full network, its own gradient (published); tune run 20261104_0543, link run 20261103_163715-269b585a; tokens cut-full-top.acc-v5.grad-seg.q-fwapg; curve on segment_gradient.
+  minimal: minimal network, its own gradient; tune run 20261103_0838, link run 20261102_203300-60ab009d; tokens cut-min.acc-v5.grad-seg.q-fwapg; curve on segment_gradient.
+  parent: full network, its minimal parent's gradient; tune run 20261105_0436, link run 20261103_163715-269b585a; tokens cut-full-top.acc-v5.grad-parent.q-fwapg; curve on parent_gradient.
+  atlas: full network, the Atlas gradient of its segment's line; tune run 20261105_0437, link run 20261103_163715-269b585a; tokens cut-full-top.acc-v5.grad-fwa.q-fwapg; curve on segment_fwa_gradient.
+Parent table: schema fresh_default; minimal_schema fresh_default_minimal; run_uid_full 20261103_163715-269b585a; run_uid_minimal 20261102_203300-60ab009d; link_sha_minimal 193cb8aa401376d4278b6c5ee5b24cb57deab8e3; config_hash_minimal sha256:ee91aa65f1fd275d77fa5a97f7c26c16c03d3bb84929ad163257f5f5bccfeebb; built_at 2026-11-03 23:06:01.990442+00; rows 5546370
+
+Each setup's pick, its standing in its own tuning, and the km it draws on its own network and gradient:
+
+The transfer: the minimal network's verdicts carried onto the full network's 3016042 segments through fresh_default.streams_parent,
+against the parent-gradient setup's verdicts on them (km), and 76 segments straddling a minimal break (by at most 1 m).
+Figure group (most km where the verdicts disagree): MORK.
+
+Inputs (md5):
+  5d9d11e535ed2ff0f49e65e6088c9292 data/tune/CH_rear_tune.csv
+  c46340da559be38f0b0c49590555abb4 data/tune/CH_rear_grades_record.csv
+  697326bedf8d26da80d1176ad4b24d1a data/compare/CH_rear_compare.csv
+  89ed6b88d558b981a247ee7cd2a3ac67 data/compare/CH_rear_segments.rds
+  a2ef73eb0b4272b8ee4e1558dc294f0a data/tune/candidate/20261103_0838/CH_rear_tune.csv
+  cafd6bb7d571ab427ac871f7c6a3db88 data/tune/candidate/20261103_0838/CH_rear_grades_record.csv
+  f6fa2cdbf1b2fc5cc8e53561f479961f data/compare/candidate/20261103_0838/CH_rear_compare.csv
+  ffe592065f2547ced7cbfc87e4bc8bf6 data/compare/candidate/20261103_0838/CH_rear_segments.rds
+  d7ac169bece7e97fc0f75bda878c2f45 data/tune/candidate/20261105_0436/CH_rear_tune.csv
+  731d878b4cd4023367553de1d443661e data/tune/candidate/20261105_0436/CH_rear_grades_record.csv
+  6a7f05d246f76782a857e747a4d824ff data/compare/candidate/20261105_0436/CH_rear_compare.csv
+  2d1b9e0fab6dbbd117098909e64bf4e5 data/compare/candidate/20261105_0436/CH_rear_segments.rds
+  070cf1638bfcf98ad9fbf4b14833cb8c data/tune/candidate/20261105_0437/CH_rear_tune.csv
+  4940b8ad01b40d0e8e2c6e897c03729a data/tune/candidate/20261105_0437/CH_rear_grades_record.csv
+  0ed9d944948f670d0586a7800ae3c546 data/compare/candidate/20261105_0437/CH_rear_compare.csv
+  6d881da0e8d446934885aab1d6c58425 data/compare/candidate/20261105_0437/CH_rear_segments.rds
+Map saved to research/fig/setups_ch_rear_mork.png
+Resolution: 1050 by 1050 pixels
+Size: 7 by 7 inches (150 dpi)
+Wrote scripts/logs/habitat/20261105_setup_compare-ch_rear.csv, scripts/logs/habitat/20261105_setup_compare-ch_rear.txt and research/fig/setups_ch_rear_mork.png

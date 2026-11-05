@@ -1,0 +1,29 @@
+Comparison, knowledge#57: 1 fitted species x stage; link run 20261103_163715-269b585a at 4dfbfa4980eb259e2f6a3e9b198c54014315d0ce.
+Segments read with the gradient the curves were fitted on: parent_gradient (parent); a setup of #120, never promoted.
+Candidate run 20261105_0436: read from data/tune/candidate/20261105_0436, written under data/compare/candidate/20261105_0436 (ignored); promote it with RUN=20261105_0436 scripts/0335.
+Evidence data/fdis/derived_parent (scripts/logs/habitat/20261104_evidence_build_ledger-derived_parent.csv), the curves' own.
+link configs/default at e2a85938cdb5e8ec55df3d2b293ed0da5597428f (the baseline; the schema fresh_default's run is at 4dfbfa4980eb259e2f6a3e9b198c54014315d0ce) read from ../link; fresh 0.52.0; tuned reported as door; compared under it alone.
+Floodplain catalog: 0 whole-network groups ().
+database round trip 1.0 ms (median of 20 SELECT 1; limit 20 ms)
+build: schema fresh_default, run 20261103_163715-269b585a; flows wet_db_load(): discharge/fwa/v1/segment_monthly, scenario historical last loaded from https://fresh-bc.s3.us-west-2.amazonaws.com/discharge/fwa/v1/manifest.json (built 2026-10-24T12:23:01Z, wet b4bbc50); walk c3f7bdbecff1d55107f28afa59d7f532; fresh 0.52.0; tokens cut-full-top.acc-v5.grad-seg.q-fwapg; log rows of run 20261023_074321-24d85e8c set aside (not in log_recompute)
+CH_rear: compared in 16.2 min.
+GeoPackages for 1 keys in 2.7 min on 1 workers.
+Compared 1 species x stage in 18.9 min, each on 6 workers.
+CH_rear: 136 groups, 16.2 min; default 104852 km (width>=1.5|g<=0.0549|cw channel_width>=15@D1000; mad discharge>=3@D1000 on wetland_flow).
+  door (= tuned): tuned 86608 km (-17.4 %); graded km 52873 -> 58000; lost 32242, gained 13998 (11618 by the exception, 4 of it through a river in another group).
+   Grade table read: 0.0 min.
+   CH rear: 136 groups; link configs at e2a85938cdb5e8ec55df3d2b293ed0da5597428f; default width>=1.5|g<=0.0549|cw channel_width>=15@D1000; mad discharge>=3@D1000 on wetland_flow; tuned mad>=0.75|g<=0.09|Q3@D1000 under door (reported as tuned: door); gradient parent.
+   Scratch setup (waterbodies, user habitat, grades written): 0.5 min.
+   Classify, overlay and connect: 136 groups x 2 rules on 6 workers, 12.7 min (near-river walks 27.6 min summed over workers).
+   Summed over workers: group copies and indexes 13.3 min; by rule default 8.3 min, door 8.0 min.
+   Rules whose predicate reads the near-river table: default.
+   Bins: 8.6, 12.6, 8.4, 7.5, 9.3, 10.7 timed worker-min; without default's own and the walk the slowest bin would take 4.0 where the slowest took 12.6, a projected 8.6 min off a rerun that reads default's flags.
+   Segment read: 3016042 segments, 2.1 min.
+   Summaries (km by rule, change by reason, FDIS visits): 0.3 min.
+   Outside check: 4373 non-FDIS CH records; 2462 locations placed (4 inside an overlay reach left out), 840 on accessible stream edges.
+   Outside check (bcfishobs records): 0.4 min.
+   Scratch drop: 0.0 min.
+   Writes (segments, checks, change, compare): 0.2 min.
+   Through-wetland CH km (edge 1050/1150), link#364's five groups | all groups: rearing_default 223.4 | 8393.2; rearing_pre_default 248.6 | 9728.6; rearing_door 61.5 | 2521.4; rearing_pre_door 63.0 | 2644.3.
+   GeoPackage data/compare/candidate/20261105_0436/gpkg/CH_rear.gpkg: 3016042 segments in 2.7 min.
+Done in 18.9 min.
