@@ -8,8 +8,8 @@
 # WHY / DESIGN NOTES:
 #   - THE KEYS ARE THE ARTICLE'S. rbbt reads the citation keys out of the Rmd (code chunks and inline R skipped). A key
 #     that names an installed package (`link`, `fresh`, `wet`) is that package's own first citation() entry, with the
-#     concept DOI its inst/CITATION takes from Config/DOI (soul's writing.md, "Name, link and cite the software";
-#     soul#40); data-raw/vignette_bib.R in wet is the pattern. Every other key Better BibTeX exports from the group
+#     concept DOI its inst/CITATION takes from Config/DOI (soul's writing.md, "Name, link and cite the software",
+#     decided 2026-10-20); data-raw/vignette_bib.R in wet is the pattern. Every other key Better BibTeX exports from the group
 #     library (Zotero's local library 9, group 4733734). A key neither returns stops the script, so the article cannot
 #     build with a reference missing.
 #   - VERSIONS COME FROM THE RUN, NOT FROM ZOTERO OR THE INSTALLED PACKAGE. One Zotero item serves every report that

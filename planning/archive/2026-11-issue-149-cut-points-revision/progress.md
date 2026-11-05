@@ -21,6 +21,6 @@
   "with enough records", "changes" for "can change", and the provenance sentence widened. Mechanism (round 3): a plain
   rewrite drops a qualifier and the shorter phrase names a larger set.
 - Al: fewer labels on the inset, only Fraser River, Slim, Dome and Ptarmigan creeks; done, guarded.
-- soul#745 filed with the writing and map lessons; knowledge#155 filed for Zenodo (knowledge has no concept DOI
+- The writing and map lessons filed as a convention issue; knowledge#155 filed for Zenodo (knowledge has no concept DOI
   because Zenodo has never archived it; not a citation() limitation).
 

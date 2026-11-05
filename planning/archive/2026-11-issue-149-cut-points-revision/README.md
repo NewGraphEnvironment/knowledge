@@ -5,10 +5,10 @@ the article now opens with what `knowledge` does with link and why a cut at a ca
 second on Esri's topographic map blended with shaded relief (fetched at build through `gq::gq_basemap_tiles()`) with
 Freshwater Atlas stream names, puts the example strip before the table of how often a visit starts its own segment,
 lays the four tunings out in a table with plain definitions, and states fewer, rounded counts. Our packages are now
-cited from their own `citation()` with their concept DOIs in all three articles (`data-raw/vignette_bib.R`, soul#40's
+cited from their own `citation()` with their concept DOIs in all three articles (`data-raw/vignette_bib.R`, the 2026-10-20 citation
 convention, which the script had predated). What was learned: a blind reader before the accuracy rounds found what
 five accuracy rounds had not (the page did not say what it was for), and the accuracy rounds then caught plain
-rewrites that had dropped a qualifier. The lessons are soul#745; knowledge's own missing DOI is #155.
+rewrites that had dropped a qualifier. The lessons went to a writing-convention issue; knowledge's own missing DOI is #155.
 
 ## Measurement
 
