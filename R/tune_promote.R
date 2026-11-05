@@ -97,14 +97,16 @@ knw_tune_promote <- function(run, keys = NULL, live = NULL, tune_dir = "data/tun
       }
     }
   }
+  # a setup of #120 (0320 SETUP=1) tunes and grades on another gradient than the segment's own, which link applies a
+  # rule to: compared beside the published run, never promoted in its place. Asked of every summary the run holds, not
+  # only the keys promoted, because a key with no fit records no gradient and would pass alone
+  run_grads <- unique(stats::na.omit(vapply(cand, function(x) fld(x, "curve_grad"), character(1))))
+  if (length(setdiff(run_grads, .knw_grade_grad))) {
+    stop(run, " was tuned on ", paste(setdiff(run_grads, .knw_grade_grad), collapse = ", "), ", not ", .knw_grade_grad,
+         ": a setup run (#120), never promoted", call. = FALSE)
+  }
   for (k in keys) {
     floors_check(k, cand[[k]])
-    # a setup of #120 (0320 SETUP=1) tunes and grades on another gradient than the segment's own, which link applies a
-    # rule to: compared beside the published run, never promoted in its place
-    cg <- fld(cand[[k]], "curve_grad")
-    if (!is.na(cg) && !identical(cg, .knw_grade_grad)) {
-      stop(k, ": tuned on ", cg, ", not ", .knw_grade_grad, ": a setup run (#120), never promoted", call. = FALSE)
-    }
     rule <- fld(cand[[k]], "rule_recommended")
     st <- fld(cand[[k]], "status")
     # knw_tune_run()'s statuses: four with no fit by design (.knw_no_fit), two fitted; anything else (curve_failed, a smoke-only

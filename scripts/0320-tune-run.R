@@ -165,9 +165,14 @@ run_grads <- unique(unlist(lapply(list.files(dir_run, "_summary\\.csv$", full.na
   x <- read_csv(f, show_col_types = FALSE, col_types = cols(.default = "c"))
   if ("curve_grad" %in% names(x)) x$curve_grad else NA_character_
 })))
-if (setup && length(setdiff(run_grads, gradient))) {
-  stop("RUN=", run, " holds summaries scored on ", paste(setdiff(run_grads, gradient), collapse = ", "),
+# a key with no fit records no gradient (NA), in a setup and a main run alike
+if (setup && length(setdiff(run_grads, c(gradient, NA)))) {
+  stop("RUN=", run, " holds summaries scored on ", paste(setdiff(run_grads, c(gradient, NA)), collapse = ", "),
        ": a setup on ", gradient, " needs a run of its own")
+}
+if (!dev && !setup && gradient == "segment_gradient" && length(setdiff(run_grads, c("segment_gradient", NA)))) {
+  stop("RUN=", run, " is a setup on ", paste(setdiff(run_grads, c("segment_gradient", NA)), collapse = ", "),
+       " (#120): a main run needs a run of its own")
 }
 # the Atlas-gradient sensitivity belongs to a main run, which promotes it with its own tables: name that run
 if (!dev && !setup && gradient != "segment_gradient" &&
@@ -522,6 +527,8 @@ groups_sp <- function(sp) dbGetQuery(conn, sprintf("SELECT DISTINCT watershed_gr
 # 2026-10-19, after #57 tuned), so the table's comment, which names the build, goes into every grade table and 0325
 # refuses to publish a grade whose build is not the live one
 discharge_load <- knw_discharge_load(conn)
+# a setup on the parent's gradient grades on link's parent table: the one the evidence recorded, or none (#120)
+if (gradient == "parent_gradient") say("Parent table held to the evidence's: %s", .knw_parent_held(conn, schema, led))
 # the walk's code (#87): the walk cache keys every row on it, and a grade walked by other code is regraded
 walk_md5 <- knw_walk_md5()
 say("Grading on the flow build: %s; walk %s, cached in knw.walk_cache.", discharge_load, walk_md5)

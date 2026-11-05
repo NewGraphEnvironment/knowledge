@@ -82,7 +82,7 @@ knw_parent_read <- function(conn, schema, minimal_schema = NULL, keys = NULL) {
   # one row per segment of the full build, each as long as its segment
   cov <- q(sprintf("SELECT count(*) FILTER (WHERE p.n IS NULL)::int AS missing,
                            count(*) FILTER (WHERE p.n > 1)::int AS doubled,
-                           count(*) FILTER (WHERE p.n = 1 AND NOT abs(p.len - s.length_metre) <= 0.01)::int AS off,
+                           count(*) FILTER (WHERE p.n = 1 AND NOT coalesce(abs(p.len - s.length_metre) <= 0.01, FALSE))::int AS off,
                            (SELECT count(*) FROM %2$s)::int AS rows,
                            (SELECT max(built_at) FROM %2$s)::text AS built_at
                     FROM %1$s.streams s
@@ -117,4 +117,26 @@ knw_parent_read <- function(conn, schema, minimal_schema = NULL, keys = NULL) {
                                         config_hash_minimal = mb$config_hash_minimal, built_at = cov$built_at,
                                         rows = cov$rows, stringsAsFactors = FALSE)
   out
+}
+
+# the parent table's provenance as one line: 0310 writes it on the evidence ledger (`parent_table`), and 0320 and 0330
+# hold the table they read at grade and compare time to it, so a parent table rebuilt after the evidence (a new minimal
+# run beside an unchanged full one) is refused rather than read under the curve fitted on the old one (#120)
+.knw_parent_note <- function(pv) {
+  sprintf("%s.streams_parent: built %s; full run %s, minimal %s run %s at link %s, %s", pv$schema, pv$built_at,
+          pv$run_uid_full, pv$minimal_schema, pv$run_uid_minimal, pv$link_sha_minimal, pv$config_hash_minimal)
+}
+
+# refuse a parent table other than the one an evidence ledger recorded: `led` is the ledger as read (step, note)
+.knw_parent_held <- function(conn, schema, led) {
+  was <- led$note[led$step == "parent_table"]
+  if (length(was) != 1L) stop("the evidence ledger records no parent table (0310 PARENT=TRUE)", call. = FALSE)
+  now <- .knw_parent_note(attr(knw_parent_read(conn, schema, keys = data.frame(watershed_group_code = character(),
+                                                                                id_segment = integer())),
+                               "provenance"))
+  if (!identical(now, was)) {
+    stop("the parent table now reads \"", now, "\", not the evidence's \"", was, "\": rebuild the evidence (0310 PARENT=TRUE)",
+         call. = FALSE)
+  }
+  invisible(now)
 }

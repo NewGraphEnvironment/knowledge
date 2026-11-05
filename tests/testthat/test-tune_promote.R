@@ -372,7 +372,13 @@ test_that("a setup run, tuned on another gradient than the segment's own, is nev
     fx <- promote_fx()
     set_col(fx, "run_tune", "CH_rear", "summary", "curve_grad", g)
     set_col(fx, "run_tune", "CH_rear", "grades", "curve_grad", g)
-    expect_error(promote(fx), paste0("CH_rear: tuned on ", g, ", not segment_gradient: a setup run"), info = g)
+    expect_error(promote(fx), paste0("r1 was tuned on ", g, ", not segment_gradient: a setup run"), info = g)
+    # nor any key of it alone, a key with no fit included, whose summary records no gradient (round 1 of the review)
+    expect_error(promote(fx, keys = "BT_rear"), "a setup run", info = g)
+    utils::write.csv(data.frame(species_code = "CH", stage = "spawn", status = "no_response", rule_recommended = NA,
+                                curve_grad = NA),
+                     file.path(fx$tune, "candidate", "r1", "CH_spawn_summary.csv"), row.names = FALSE)
+    expect_error(promote(fx, keys = "CH_spawn"), "a setup run", info = g)
   }
 })
 

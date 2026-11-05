@@ -86,3 +86,17 @@ test_that("a table of another build, or a stale one, is refused", {
   }
   expect_no_error(knw_parent_read(NULL, "fresh_default"))
 })
+
+test_that("a parent table other than the one the evidence recorded is refused at grade and compare time (#120)", {
+  pv <- data.frame(schema = "fresh_default", minimal_schema = "fresh_default_minimal", run_uid_full = "f1",
+                   run_uid_minimal = "m1", link_sha_minimal = "abc", config_hash_minimal = "sha256:x",
+                   built_at = "2026-11-03 23:06:01+00", rows = 3L)
+  local_mocked_bindings(knw_parent_read = function(...) structure(data.frame(), provenance = pv))
+  led <- data.frame(step = c("evidence_dir", "parent_table"), note = c("data/fdis/derived_parent", .knw_parent_note(pv)))
+  expect_match(.knw_parent_note(pv), "^fresh_default.streams_parent: built 2026-11-03 23:06:01\\+00; full run f1, ")
+  expect_identical(.knw_parent_held(NULL, "fresh_default", led), .knw_parent_note(pv))
+  # the minimal network rebuilt and the table with it, the full build unchanged
+  pv$run_uid_minimal <- "m2"
+  expect_error(.knw_parent_held(NULL, "fresh_default", led), "not the evidence's .*rebuild the evidence")
+  expect_error(.knw_parent_held(NULL, "fresh_default", led[1, ]), "records no parent table")
+})

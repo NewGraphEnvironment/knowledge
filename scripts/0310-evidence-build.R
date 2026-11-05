@@ -247,9 +247,7 @@ if (parent_table || nzchar(parent_dir)) {
     parent_min <- Sys.getenv("PARENT_MINIMAL", "fresh_default_minimal")
     parent <- knw_parent_read(conn, schema, parent_min, keys = v)
     pv <- attr(parent, "provenance")
-    add("info", "parent_table", pv$rows, sprintf("%s.streams_parent: built %s; full run %s, minimal %s run %s at link %s, %s",
-                                                 schema, pv$built_at, pv$run_uid_full, pv$minimal_schema,
-                                                 pv$run_uid_minimal, pv$link_sha_minimal, pv$config_hash_minimal))
+    add("info", "parent_table", pv$rows, .knw_parent_note(pv))
   } else {
     pf <- list.files(parent_dir, "^parent_[a-z]{4}\\.csv(\\.gz)?$", full.names = TRUE)
     if (!length(pf)) stop("PARENT_DIR=", parent_dir, " holds no parent_<wsg>.csv.gz")

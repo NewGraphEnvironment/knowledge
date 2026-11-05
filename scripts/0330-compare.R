@@ -246,6 +246,8 @@ rec <- tryCatch(knw_build_record(conn, schema, run_uid = run_uid), error = funct
   stop(conditionMessage(e), call. = FALSE)
 })
 say("%s", rec$line)
+# a setup on the parent's gradient is compared on link's parent table: the one the evidence recorded, or none (#120)
+if (identical(run_grad, "parent_gradient")) say("Parent table held to the evidence's: %s", .knw_parent_held(conn, schema, led))
 groups_sp <- function(sp) dbGetQuery(conn, sprintf("SELECT DISTINCT watershed_group_code w FROM %s.streams_habitat_%s ORDER BY 1", schema, tolower(sp)))$w
 jobs <- lapply(names(fitted), function(k) {
   r <- fitted[[k]]
