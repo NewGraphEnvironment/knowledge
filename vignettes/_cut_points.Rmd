@@ -503,10 +503,12 @@ A habitat definition decides how much habitat link draws, so it should be one th
 tries many candidate definitions, each a different set of parameters, and scores each by how well it predicts where chinook were caught in watershed groups left out of the
 fit; lower is better. For chinook rearing it scored about `r n0(round(su$n_visits[1], -2))` visits in
 `r n_groups` watershed groups. A score carries error, so every candidate within one standard error of the best is a
-**close call**: the records cannot rank close calls apart. For chinook rearing the tuning varies three parameters: the smallest
-stream, the steepest slope, and how close a large river must be for a smaller stream to count. Of the close calls the
+**close call**: the records cannot rank close calls apart. For chinook rearing the tuning varies the three parts of the definition:
+the smallest stream (by flow or by channel width), the steepest slope, and the allowance near a large river (how large
+the river, and how close). Of the close calls the
 tuning chooses the one closest to link's standard settings for the species, and among equals the best scorer; for
-chinook rearing every close call changes all three of link's standard settings, so the choice is the best scorer.
+chinook rearing every close call differs from link's standard settings in all three parts, so the choice is the best
+scorer.
 
 ## What does each network choose?
 
@@ -515,7 +517,7 @@ the only differences. Two of the four read a slope from somewhere else onto the 
 each segment's **minimal parent**, the minimal-network segment it lies within, and the whole Atlas line it lies on.
 
 ```{r setups}
-how <- c(published = "link's full network, each segment reading its own slope (how link applies a rule)",
+how <- c(published = "link's full network, each segment reading its own slope (how link applies a habitat definition)",
          minimal = "link's minimal network, without the cuts at fish records, crossings and hand-mapped habitat",
          parent = "The full network's segments, each reading its minimal parent's slope",
          atlas = "The full network's segments, each reading the slope of the whole Atlas line it lies on")
