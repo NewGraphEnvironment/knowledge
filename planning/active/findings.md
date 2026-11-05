@@ -174,3 +174,16 @@ The first `0270 --dry-run` after the merge hit HTTP 429 on 25 of 69 title lookup
 and `0270` tallied as `ERROR`. Zotero sends `Retry-After` with a 429 and may send `Backoff` on a success; `api` now
 sleeps for the first and retries (a 429 is not processed, so a retried POST creates nothing twice) and honours the
 second. The rerun took 86 s and exited 0 with no `ERROR`.
+
+## Phase 2 live run and re-measure (2026-11-05 UTC)
+
+| | before | after |
+|---|---|---|
+| live items in `species/sturgeon` (`WEUFTSDC`) | 3 | 84 |
+| keyed (BBT) | 3 | 84 |
+| PDF on disk | 3 | 84 |
+| PDFs uploaded by `0270` | | 43 (+27 the server already held by md5) |
+
+A Zotero upload authorization answers `exists` when the storage server already holds a file with that md5, so 27
+of the created items' PDFs were registered without a transfer. The local md5 check found a group copy for only one
+of them (the watershed strategy, `VS4P4TG6`), so `exists` is not evidence of a duplicate item.

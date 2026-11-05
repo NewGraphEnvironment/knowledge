@@ -48,3 +48,21 @@ mandate; the merge stays with me.
   (one with an upload, PH5REA3P), 69 would create, no `exists`/`copy exists` line.
 - `%PDF` check: 70 of 70 sources (URLs, paths, `zotero:`) are PDFs, 222.8 MB.
 - Next: Al confirms the group's storage has room for ~223 MB, then the live run.
+
+## Session 2026-11-04 (UTC 2026-11-05)
+
+- Synced: `git merge origin/main` (4c34c33, 128 commits, no conflict; none touch `0150`, `0153`, `0270` or the
+  sturgeon CSVs). The Zotero key moved to `~/.config/newgraph/`; storage is unlimited (Al).
+- Phase 4's `scripts/README.md` lines (ecfbc50).
+- Live `0270` (04:57–05:07 UTC): exit 0, added 12, created 69, 84 members; 43 PDFs uploaded, 27 `exists` (the
+  server already held a file with that md5), 14 present. Second dry run exit 0, no `would` line: the no-op proof.
+- Re-measure from a WAL-inclusive guarded copy: 84 live items, 84 keyed, 84 with a PDF on disk (319.0 MB). Two
+  trashed 2024 entries (`J7V2YWA7`, an older Challenger 2021 copy, and its `.bib` attachment) sit in the
+  collection, as before this branch; the build skips them.
+- md5 check of every member's PDF against every other attachment: Helm 1980, Tredger 1984 and Albers 2015 match
+  their personal-library copies (expected); NFCP 2023 matches a trashed group standalone; the 2016 watershed
+  strategy (`B2UZ32FE`) matches the personal standalone it came from and a live group standalone, `VS4P4TG6`
+  (2023, in `Nechako - NECR`, no parent, so Phase 1's title dedupe could not see it). A merge (add `B2UZ32FE` to
+  `Nechako - NECR`, `dc:replaces`, trash `VS4P4TG6`) was refused by auto mode as an external write: left for Al.
+- cred upgraded 0.5.0 -> 0.7.0 (0.6.0: one unreadable PDF or refused chunk no longer loses the build).
+- Next: Zotero quit (cred#45: cred reads immutable and the `-wal` held 1.5 MB after the run), then the build.

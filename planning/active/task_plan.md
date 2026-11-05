@@ -84,10 +84,10 @@ Exploration moved some premises (immutable read of `zotero.sqlite`, 2026-10-31, 
 - [x] Re-run the `%PDF` check on every addition URL (a dry run does not fetch them): 70 of 70 `%PDF`, 222.8 MB
 - [x] `0270 --collection sturgeon --parent 9U54XAND --dry-run`. Check every `exists` / `copy exists` gkey against the
       intended item before going live (generic titles under one corporate author)
-- [ ] Live run, then wait for Zotero to sync. A second dry run with no `would*` lines and exit 0 is the no-op proof.
+- [x] Live run, then wait for Zotero to sync. A second dry run with no `would*` lines and exit 0 is the no-op proof.
       (`0153`'s `api` retries a 429/503 after Retry-After since 2026-11-01)
-- [ ] A hit on a trashed copy is restored (PATCH `deleted: 0`) and made a member, not created again
-- [ ] Re-measure from a WAL-inclusive guarded copy: members, keyed, PDF on disk, BBT keys on the new items. Before
+- [x] A hit on a trashed copy is restored (PATCH `deleted: 0`) and made a member, not created again
+- [x] Re-measure from a WAL-inclusive guarded copy: members, keyed, PDF on disk, BBT keys on the new items. Before
       and after table (live items, items with a PDF, MB uploaded)
 
 ## Phase 3 (after Phase 2): build, query, push `sturgeon`
