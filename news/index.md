@@ -1,5 +1,26 @@
 # Changelog
 
+## knowledge 0.4.28
+
+- Chinook rearing is scored, graded and compared on every setup that
+  exists, on one flow load, range and evidence, so the network and the
+  gradient are the only differences
+  ([\#120](https://github.com/NewGraphEnvironment/knowledge/issues/120)).
+  [`knw_parent_read()`](https://newgraphenvironment.github.io/knowledge/reference/knw_parent_read.md)
+  reads link’s `streams_parent` and holds it to both builds, and
+  `scripts/0310` joins it with `PARENT=TRUE`.
+  `knw_link_segments(gradient =)`, grading,
+  [`knw_compare_rules()`](https://newgraphenvironment.github.io/knowledge/reference/knw_compare_rules.md)
+  and the archive take a gradient source (the segment’s own, its minimal
+  parent’s, or its Atlas line’s). `scripts/0320` makes a graded setup
+  with `SETUP=1`, and promotion refuses any run tuned on another
+  gradient than the segment’s own. The full network reading the parent’s
+  gradient picks the minimal network’s rule (a 9 % limit) exactly. The
+  published 13 % lies outside that region, and applying the minimal rule
+  on the full network loses 1,042 of 87,606 km through the near-river
+  exception’s distance, which the parent table does not carry
+  (`research/minimal_network_tuning.md`). Nothing published moves.
+
 ## knowledge 0.4.27
 
 - Every species is retuned, graded and compared on link’s new provincial

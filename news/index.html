@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">knowledge</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.27</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.28</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,9 +33,13 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/v0.4.28/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.4.28" id="knowledge-0428">knowledge 0.4.28<a class="anchor" aria-label="anchor" href="#knowledge-0428"></a></h2>
+<ul><li>Chinook rearing is scored, graded and compared on every setup that exists, on one flow load, range and evidence, so the network and the gradient are the only differences (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/120" class="external-link">#120</a>). <code><a href="../reference/knw_parent_read.html">knw_parent_read()</a></code> reads link’s <code>streams_parent</code> and holds it to both builds, and <code>scripts/0310</code> joins it with <code>PARENT=TRUE</code>. <code>knw_link_segments(gradient =)</code>, grading, <code><a href="../reference/knw_compare_rules.html">knw_compare_rules()</a></code> and the archive take a gradient source (the segment’s own, its minimal parent’s, or its Atlas line’s). <code>scripts/0320</code> makes a graded setup with <code>SETUP=1</code>, and promotion refuses any run tuned on another gradient than the segment’s own. The full network reading the parent’s gradient picks the minimal network’s rule (a 9 % limit) exactly. The published 13 % lies outside that region, and applying the minimal rule on the full network loses 1,042 of 87,606 km through the near-river exception’s distance, which the parent table does not carry (<code>research/minimal_network_tuning.md</code>). Nothing published moves.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.27" id="knowledge-0427">knowledge 0.4.27<a class="anchor" aria-label="anchor" href="#knowledge-0427"></a></h2>
 <ul><li>Every species is retuned, graded and compared on link’s new provincial <code>default</code> build, and that run is promoted into the published tables (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/145" class="external-link">#145</a>). The build models neither rainbow trout nor kokanee, so <code>knw_tune_run(modelled =)</code> writes <code>not_modelled</code> for a species with no access value in the evidence, and rainbow trout rearing’s published rule is retired. Against the previous run, bull trout spawning, chinook rearing (11 to 13 %) and grayling rearing move outside its region, and bull trout rearing’s move is a reshuffle among near-equal rules (<code>research/habitat_thresholds_tuned.md</code>). <code><a href="../reference/knw_build_record.html">knw_build_record()</a></code> and <code>0300</code> read only the rows of link’s run log that belong to the build, since a provincial run leaves the previous run’s rows in place, and <code>0300</code> takes <code>SETTLE_TAG=</code> for a build compared before it is promoted. Both articles follow the new run.</li>
