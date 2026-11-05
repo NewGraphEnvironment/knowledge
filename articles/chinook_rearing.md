@@ -4,8 +4,8 @@ The electrofishing records put young chinook salmon in more of British
 Columbia’s small streams near large rivers, and in fewer far from one,
 than link’s current rule allows.
 [`link`](https://www.newgraphenvironment.com/link/) ([Irvine
-2026b](#ref-irvine2026linkDevelop)) maps where each fish species can
-spawn and rear on BC’s streams, and its standard settings,
+2026b](#ref-link)) maps where each fish species can spawn and rear on
+BC’s streams, and its standard settings,
 [`default`](https://github.com/NewGraphEnvironment/link/tree/4dfbfa4980eb259e2f6a3e9b198c54014315d0ce/inst/extdata/configs/default),
 start from the thresholds New Graph runs bcfishpass with ([Norris
 2024b](#ref-norris2024smnorrisbcfishpass)): for chinook rearing, a slope
@@ -165,11 +165,11 @@ style="font-size: 13px; width: auto !important; margin-left: auto; margin-right:
 |:---|:---|
 | Records | The Fisheries Data Information System’s electrofishing sites ([Province of British Columbia 2022](#ref-provinceofbritishcolumbia2022FisheriesData)): where crews fished, and whether they caught chinook. 7,823 sites in 111 watershed groups: those on ordinary stream lines, of a usual fished area, with no code in the catch that could hide chinook and no barrier to chinook downstream, in groups where link expected chinook when the tuning ran; the tests use the 45 groups where chinook were caught at some sites and not others, **4,858 sites, 234 with chinook**. ([More](https://newgraphenvironment.github.io/knowledge/articles/habitat_thresholds.html#steps)) |
 | Placement | Each site went onto the BC Freshwater Atlas, loaded by fwapg ([Norris 2024c](#ref-norris2024smnorrisfwapg)). A site whose 1:50k tributary code the Atlas’s crosswalk knows went to the nearest stream that code names, kept when it lay within 500 m of the point, and was dropped otherwise; a site with no such code went to the nearest stream, kept when it lay within 200 m. ([More](https://newgraphenvironment.github.io/knowledge/articles/habitat_thresholds.html#snap)) |
-| Flow | wet’s modelled average flow ([Irvine 2026c](#ref-irvine2026wetStream)): PCIC’s VIC-GL runoff ([Schnorbus 2018](#ref-schnorbus2018VICGlacierVICGL)) routed with Raven ([Craig et al. 2020](#ref-craig_etal2020Flexiblewatershed)) and carried onto Atlas streams by a crosswalk in New Graph’s fork of fwapg ([Norris and Irvine 2026](#ref-norris_irvine2026NewGraphEnvironmentfwapg)), with wet’s own water balance where that flow does not reach or, on a stream’s own line, carries under a fifth of the balance’s. |
+| Flow | wet’s modelled average flow ([Irvine 2026c](#ref-wet)): PCIC’s VIC-GL runoff ([Schnorbus 2018](#ref-schnorbus2018VICGlacierVICGL)) routed with Raven ([Craig et al. 2020](#ref-craig_etal2020Flexiblewatershed)) and carried onto Atlas streams by a crosswalk in New Graph’s fork of fwapg ([Norris and Irvine 2026](#ref-norris_irvine2026NewGraphEnvironmentfwapg)), with wet’s own water balance where that flow does not reach or, on a stream’s own line, carries under a fifth of the balance’s. |
 | Slope | The slope of the link segment a site sits on, the one link applies a rule to. link can cut a stream at a site that caught a species it models, so a site with chinook can start a short segment of its own. |
 | Candidates | 6,149 rules, link’s among them, from three dials: the smallest stream (an average flow of 0.1, 0.15, 0.2, 0.28, 0.35, 0.5, 0.75 or 1 m³/s, or a channel width of 1, 1.5, 2, 3 or 4 m); the steepest slope (3 %, 4 %, 5.49 %, 7 %, 9 %, 11 %, 13 %, 15 %, 20 %, 25 % or 30 %); and a near-a-river allowance (none, or a river of 1, 3, 5, 10, 20, 30 or 50 m³/s within 100, 250, 500, 1,000, 2,000 or 5,000 m downstream). |
 | Scoring | The groups were split into 5 sets, and each set was predicted by a model fitted to the others. The score adds up how far each prediction was from what the crew found; lower is better. ([More](https://newgraphenvironment.github.io/knowledge/articles/habitat_thresholds.html#se)) |
-| Rules run by | fresh ([Irvine 2026a](#ref-irvine2026freshFreshwater)), through all of link’s steps for the map and the habitat totals. |
+| Rules run by | fresh ([Irvine 2026a](#ref-fresh)), through all of link’s steps for the map and the habitat totals. |
 | Left out | The province’s other fish observations, gathered in bcfishobs ([Norris 2024a](#ref-norris2024smnorrisbcfishobs)): they record where fish were found, not where they were sought and missed. Sites off ordinary stream lines, of an unusual fished area, with a code in the catch that could hide chinook, or with a barrier to chinook downstream. ([More](https://newgraphenvironment.github.io/knowledge/articles/habitat_thresholds.html#lost)) |
 
 How the chinook rearing rule was tested. {.table}
@@ -192,7 +192,7 @@ Framework.” *Environmental Modelling & Software* 129 (July): 104728.
 
 Irvine, Allan. 2026a. *fresh: Freshwater Referenced Spatial Hydrology*.
 Version 0.52.0. New Graph Environment Ltd.
-<https://github.com/NewGraphEnvironment/fresh>.
+<https://doi.org/10.5281/zenodo.23524744>.
 
 Irvine, Allan. 2026b. *link: Develop, Test and Communicate Intrinsic
 Habitat and Connectivity Models for the BC Freshwater Atlas Stream

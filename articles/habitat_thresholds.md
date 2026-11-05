@@ -19,19 +19,19 @@ To choose where to look first, a fair guess at where fish spawn and rear
 is enough.
 
 The R package [`link`](https://newgraphenvironment.github.io/link/)
-([Irvine 2026b](#ref-irvine2026linkDevelop)) builds on bcfishpass, and
+([Irvine 2026b](#ref-link)) builds on bcfishpass, and
 [`fresh`](https://github.com/NewGraphEnvironment/fresh) ([Irvine
-2026a](#ref-irvine2026freshFreshwater)) runs its rules on the BC
-Freshwater Atlas. For every stretch of stream link asks a few plain
-questions: is it big enough, is it too steep, and can fish get to it?
-Each question has a cut-off, and each cut-off is a row in a config, so a
-rule can be changed and run beside another. That makes the cut-offs
-testable against evidence: the places crews have electrofished, and
-whether they caught the species there. We try many possible rules, keep
-the ones that best tell the two kinds of site apart, and check that they
-hold on parts of the province they were not chosen from. A rule can also
-carry the biology, such as young chinook using small streams close to a
-large river, so the map points to where fish are most likely to be.
+2026a](#ref-fresh)) runs its rules on the BC Freshwater Atlas. For every
+stretch of stream link asks a few plain questions: is it big enough, is
+it too steep, and can fish get to it? Each question has a cut-off, and
+each cut-off is a row in a config, so a rule can be changed and run
+beside another. That makes the cut-offs testable against evidence: the
+places crews have electrofished, and whether they caught the species
+there. We try many possible rules, keep the ones that best tell the two
+kinds of site apart, and check that they hold on parts of the province
+they were not chosen from. A rule can also carry the biology, such as
+young chinook using small streams close to a large river, so the map
+points to where fish are most likely to be.
 
 This article describes that test. The steps run in order, from the fish
 records to values link can read.
@@ -107,16 +107,16 @@ Code and settings
 
 ### 3. link’s stream segments
 
-link ([Irvine 2026b](#ref-irvine2026linkDevelop)) cuts the Atlas streams
-into short segments and records, for each species, whether fish can
-reach each one and what link’s current rules call habitat. It also cuts
-streams where the species it models have been observed, using
-`bcfishobs` ([Norris 2024a](#ref-norris2024smnorrisbcfishobs)), so those
-observations shape the segments, but they never score a rule: they say
-where fish were seen, not where they were looked for and missed. A catch
-of a species link models can be one of those observations, so a
-stream-line site that caught fish is far more likely than one that
-caught none to start a segment of its own.
+link ([Irvine 2026b](#ref-link)) cuts the Atlas streams into short
+segments and records, for each species, whether fish can reach each one
+and what link’s current rules call habitat. It also cuts streams where
+the species it models have been observed, using `bcfishobs` ([Norris
+2024a](#ref-norris2024smnorrisbcfishobs)), so those observations shape
+the segments, but they never score a rule: they say where fish were
+seen, not where they were looked for and missed. A catch of a species
+link models can be one of those observations, so a stream-line site that
+caught fish is far more likely than one that caught none to start a
+segment of its own.
 
 Code and settings
 
@@ -127,8 +127,8 @@ Code and settings
 
 ### 4. How much water each stream carries
 
-Flows come from `wet` ([Irvine 2026c](#ref-irvine2026wetStream)). Mostly
-that is PCIC’s modelled streamflow ([Schnorbus
+Flows come from `wet` ([Irvine 2026c](#ref-wet)). Mostly that is PCIC’s
+modelled streamflow ([Schnorbus
 2018](#ref-schnorbus2018VICGlacierVICGL); [Craig et al.
 2020](#ref-craig_etal2020Flexiblewatershed)), carried onto Atlas streams
 by New Graph’s fork of `fwapg` ([Norris and Irvine
@@ -297,11 +297,11 @@ Code and settings
 ### 10. Running the rule on link’s streams
 
 link’s current rule and the chosen rule both go through the steps link
-itself uses, run by `fresh` ([Irvine
-2026a](#ref-irvine2026freshFreshwater)): the rule’s test, link’s
-hand-entered habitat, and dropping rearing that has no spawning nearby.
-On the Bulkley, those last two steps removed 976 of the 7,273 segments
-link’s rule passed, so we compare whole runs, not the test alone.
+itself uses, run by `fresh` ([Irvine 2026a](#ref-fresh)): the rule’s
+test, link’s hand-entered habitat, and dropping rearing that has no
+spawning nearby. On the Bulkley, those last two steps removed 976 of the
+7,273 segments link’s rule passed, so we compare whole runs, not the
+test alone.
 
 Code and settings
 
@@ -444,6 +444,19 @@ not others.
 Rearing site visits per species after each filter. {.table
 style="width:100%;"}
 
+## Does where link cuts a stream change the rules?
+
+It can. A rule’s slope test reads each segment’s own slope, and link’s
+full network cuts some streams at fish records, so a site that caught
+fish often starts a short segment whose slope is worked out from the
+catch upstream. Tuned on link’s minimal network, which leaves out those
+cuts, chinook rearing’s steepest slope is 9 % rather than 13 %, and the
+network moves the rules of some other species and stages too. [Splitting
+streams at fish records shifts the steepest slope mapped as
+habitat](https://newgraphenvironment.github.io/knowledge/articles/stream_splits.md)
+shows it on our own records; these figures come from that article’s
+data, written on 2026-11-05 at commit 4590e2f.
+
 ## Limits
 
 - A site’s tributary code can name several Atlas streams, and the site
@@ -459,6 +472,7 @@ style="width:100%;"}
   ([\#92](https://github.com/NewGraphEnvironment/knowledge/issues/92));
   slopes over a fixed length would not depend on where fish were caught
   ([\#70](https://github.com/NewGraphEnvironment/knowledge/issues/70)).
+  How far the cuts move the rules is [above](#cuts).
 - The results are on the segments of link’s build of 2026-11-03. That
   build cuts streams at steep sections only at the first place, going
   upstream, that a species present in the group cannot get past
@@ -627,7 +641,7 @@ Prediction*. 2nd ed. Springer Series in Statistics. Springer.
 
 Irvine, Allan. 2026a. *fresh: Freshwater Referenced Spatial Hydrology*.
 Version 0.52.0. New Graph Environment Ltd.
-<https://github.com/NewGraphEnvironment/fresh>.
+<https://doi.org/10.5281/zenodo.23524744>.
 
 Irvine, Allan. 2026b. *link: Develop, Test and Communicate Intrinsic
 Habitat and Connectivity Models for the BC Freshwater Atlas Stream

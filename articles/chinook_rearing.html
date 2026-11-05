@@ -35,6 +35,7 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="../articles/chinook_rearing.html">Chinook rearing: choosing link's thresholds from fish records</a></li>
     <li><a class="dropdown-item" href="../articles/habitat_thresholds.html">Choosing habitat thresholds from where fish were caught</a></li>
+    <li><a class="dropdown-item" href="../articles/stream_splits.html">Splitting streams at fish records shifts the steepest slope mapped as habitat</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -76,9 +77,9 @@
 <p>The electrofishing records put young chinook salmon in more of
 British Columbia’s small streams near large rivers, and in fewer far
 from one, than link’s current rule allows. <a href="https://www.newgraphenvironment.com/link/" class="external-link"><code>link</code></a>
-<span class="citation">(<a href="#ref-irvine2026linkDevelop">Irvine
-2026b</a>)</span> maps where each fish species can spawn and rear on
-BC’s streams, and its standard settings, <a href="https://github.com/NewGraphEnvironment/link/tree/4dfbfa4980eb259e2f6a3e9b198c54014315d0ce/inst/extdata/configs/default" class="external-link"><code>default</code></a>,
+<span class="citation">(<a href="#ref-link">Irvine 2026b</a>)</span>
+maps where each fish species can spawn and rear on BC’s streams, and its
+standard settings, <a href="https://github.com/NewGraphEnvironment/link/tree/4dfbfa4980eb259e2f6a3e9b198c54014315d0ce/inst/extdata/configs/default" class="external-link"><code>default</code></a>,
 start from the thresholds New Graph runs bcfishpass with <span class="citation">(<a href="#ref-norris2024smnorrisbcfishpass">Norris
 2024b</a>)</span>: for chinook rearing, a slope of at most 5.49 %, and a
 channel at least 1.5 m wide. The records support <strong>a slope of at
@@ -447,9 +448,8 @@ nearest stream, kept when it lay within 200 m. (<a href="habitat_thresholds.html
 </tr>
 <tr class="odd">
 <td align="left">Flow</td>
-<td align="left">wet’s modelled average flow <span class="citation">(<a href="#ref-irvine2026wetStream">Irvine 2026c</a>)</span>: PCIC’s VIC-GL
-runoff <span class="citation">(<a href="#ref-schnorbus2018VICGlacierVICGL">Schnorbus 2018</a>)</span>
-routed with Raven <span class="citation">(<a href="#ref-craig_etal2020Flexiblewatershed">Craig et al.
+<td align="left">wet’s modelled average flow <span class="citation">(<a href="#ref-wet">Irvine 2026c</a>)</span>: PCIC’s VIC-GL runoff <span class="citation">(<a href="#ref-schnorbus2018VICGlacierVICGL">Schnorbus
+2018</a>)</span> routed with Raven <span class="citation">(<a href="#ref-craig_etal2020Flexiblewatershed">Craig et al.
 2020</a>)</span> and carried onto Atlas streams by a crosswalk in New
 Graph’s fork of fwapg <span class="citation">(<a href="#ref-norris_irvine2026NewGraphEnvironmentfwapg">Norris and Irvine
 2026</a>)</span>, with wet’s own water balance where that flow does not
@@ -481,8 +481,8 @@ each prediction was from what the crew found; lower is better. (<a href="habitat
 </tr>
 <tr class="odd">
 <td align="left">Rules run by</td>
-<td align="left">fresh <span class="citation">(<a href="#ref-irvine2026freshFreshwater">Irvine 2026a</a>)</span>, through
-all of link’s steps for the map and the habitat totals.</td>
+<td align="left">fresh <span class="citation">(<a href="#ref-fresh">Irvine 2026a</a>)</span>, through all of link’s steps
+for the map and the habitat totals.</td>
 </tr>
 <tr class="even">
 <td align="left">Left out</td>
@@ -515,23 +515,21 @@ Craig, James R., Genevieve Brown, Robert Chlumsky, et al. 2020.
 Hydrological Modelling Framework.”</span> <em>Environmental Modelling
 &amp; Software</em> 129 (July): 104728. <a href="https://doi.org/10.1016/j.envsoft.2020.104728" class="external-link">https://doi.org/10.1016/j.envsoft.2020.104728</a>.
 </div>
-<div id="ref-irvine2026freshFreshwater" class="csl-entry">
-Irvine, Allan. 2026a. <em><span class="nocase">fresh</span>:
-<span>Freshwater Referenced Spatial Hydrology</span></em>. Version
-0.52.0. <span>New Graph Environment Ltd.</span> <a href="https://github.com/NewGraphEnvironment/fresh" class="external-link">https://github.com/NewGraphEnvironment/fresh</a>.
+<div id="ref-fresh" class="csl-entry">
+Irvine, Allan. 2026a. <em><span class="nocase">fresh</span>: Freshwater
+Referenced Spatial Hydrology</em>. Version 0.52.0. <span>New Graph
+Environment Ltd.</span> <a href="https://doi.org/10.5281/zenodo.23524744" class="external-link">https://doi.org/10.5281/zenodo.23524744</a>.
 </div>
-<div id="ref-irvine2026linkDevelop" class="csl-entry">
-Irvine, Allan. 2026b. <em><span class="nocase">link</span>:
-<span>Develop</span>, <span>Test</span> and <span>Communicate Intrinsic
-Habitat</span> and <span>Connectivity Models</span> for the <span>BC
-Freshwater Atlas Stream Network</span></em>. Version 0.78.2. <span>New
-Graph Environment Ltd.</span> <a href="https://doi.org/10.5281/zenodo.23264990" class="external-link">https://doi.org/10.5281/zenodo.23264990</a>.
+<div id="ref-link" class="csl-entry">
+Irvine, Allan. 2026b. <em><span class="nocase">link</span>: Develop,
+Test and Communicate Intrinsic Habitat and Connectivity Models for the
+BC Freshwater Atlas Stream Network</em>. Version 0.78.2. <span>New Graph
+Environment Ltd.</span> <a href="https://doi.org/10.5281/zenodo.23264990" class="external-link">https://doi.org/10.5281/zenodo.23264990</a>.
 </div>
-<div id="ref-irvine2026wetStream" class="csl-entry">
-Irvine, Allan. 2026c. <em><span class="nocase">wet</span>: <span>Stream
-Flow</span> and <span>Water Temperature</span> for the <span>BC
-Freshwater Atlas</span></em>. Version discharge/fwa/v1. <span>New Graph
-Environment Ltd.</span> <a href="https://doi.org/10.5281/zenodo.23305781" class="external-link">https://doi.org/10.5281/zenodo.23305781</a>.
+<div id="ref-wet" class="csl-entry">
+Irvine, Allan. 2026c. <em><span class="nocase">wet</span>: Stream Flow
+and Water Temperature for the BC Freshwater Atlas</em>. Version
+discharge/fwa/v1. <span>New Graph Environment Ltd.</span> <a href="https://doi.org/10.5281/zenodo.23305781" class="external-link">https://doi.org/10.5281/zenodo.23305781</a>.
 </div>
 <div id="ref-norris2024smnorrisbcfishobs" class="csl-entry">
 Norris, Simon. 2024a. <em><span class="nocase">bcfishobs</span></em>. <a href="https://github.com/smnorris/bcfishobs" class="external-link">https://github.com/smnorris/bcfishobs</a>.
