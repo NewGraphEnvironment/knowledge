@@ -104,6 +104,14 @@ Relates to #70 (fixed-window gradients), #92 (segment gradient), #121 (measured 
   0.78.1 and fresh 0.52.0 installed. The minimal candidate's `CH_rear_segments.rds` exists
   (`data/compare/candidate/20261103_0838/`).
 
+## Full test suite after `bd2c7d0` (2026-11-05)
+
+1,961 expectations, 0 failed, 1 error, 1 skipped. The error is `test-link_place.R:39`, "placement runs against a live
+schema": `skip_if_no_pg("fresh_default")` connects with `~/.Renviron`'s `PG*`, which reach m1, whose `fresh_default`
+schema exists but has held no segments since #145's promotion moved the published build to m4. The test then finds no
+row to place and errors instead of skipping. Environmental, and not in code this branch touched; with
+`PGSERVICE=fresh_local` the file passes (18 expectations), and the guard's gap (a schema present but empty) is the test's own.
+
 ## Errors Encountered
 
 | Error | Resolution |
