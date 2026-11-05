@@ -75,7 +75,7 @@ keeps the bundle off the database, and any machine holding the staged directory 
   - `meta`: md5s of tracked sources (`md5`) and of staged inputs (`md5_local`), commit, date, run ids.
   - Refuses with uncommitted code or registers, as `vignette_method.R` does.
 
-- [ ] Commit, push the branch, append the `### Resume` block to `progress.md` (the run-to-PR mandate for phases 3–5
+- [x] Commit, push the branch, append the `### Resume` block to `progress.md` (the run-to-PR mandate for phases 3–5
   restarts when the block is pasted on the other machine).
 
 ## Phase 3: The article (draft) — on the other machine

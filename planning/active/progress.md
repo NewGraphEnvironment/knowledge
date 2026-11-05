@@ -19,3 +19,29 @@
   setup_compare's csv, the transfer equals the minimal and parent km, four of seven keys moved and three sit outside.
   Concept: UFRA `101349_1_1`; examples KLUM `48274_602_1` (Taylor Creek), LNAR `40144_1_1`, LSKE `142532_2_1`; map MORK.
   `inst/NOTICE.md` names the new rds.
+- Stopped after phase 2 as decided at the gate: phases 3–5 (the draft article, tests and pins, render and review) run
+  on the other machine from `inst/vignette-data/cut_points.rds`, which needs no database and no `data/`. The stage
+  stays on the database's host; a figure needing anything outside the bundle means rerunning phases 1–2 there.
+- Next: Phase 3, `vignettes/_cut_points.Rmd`
+
+### Resume
+
+```
+Continue knowledge#149 mid-run. Repo ~/Projects/repo/knowledge, branch `149-an-article-on-how-link-s-cut-points-move`, last commit b4f50a2
+on 2026-11-05.
+Run these in order, and stop at the first that fails; each failure means what it says:
+
+cd ~/Projects/repo/knowledge && git fetch -q origin
+git worktree list | grep -F '[149-an-article-on-how-link-s-cut-points-move]' || echo none   # a path printed: that tree holds the branch; cd to it and skip the checkout
+git branch --show-current; git status --porcelain --untracked-files=no   # another branch with changes, or one another session may be on: do not check out here; git worktree add ../knowledge-149 149-an-article-on-how-link-s-cut-points-move and cd there
+git checkout 149-an-article-on-how-link-s-cut-points-move   # fails: the branch is not on origin
+git pull --ff-only   # fails: this machine has commits origin lacks; resume where they were made
+git merge origin/main   # a conflict: main moved meanwhile; resolve it, commit, and go on
+git merge-base --is-ancestor b4f50a2 HEAD && echo RESUME-OK   # no RESUME-OK: b4f50a2 was never pushed; resume on the machine that made it
+
+Then read planning/active/task_plan.md, findings.md, progress.md and review-plan.md if present.
+The gate decisions, the measurements and the Plan-agent review are already folded in:
+do not re-plan and do not re-ask them.
+Continue at the first unticked task in task_plan.md; the run-to-PR mandate is already
+running. The merge stays with me.
+```
