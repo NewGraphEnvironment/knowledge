@@ -1,11 +1,11 @@
 ---
-title: "How cutting streams into segments moves a tuned slope limit"
+title: "Splitting streams at fish records shifts the steepest slope mapped as habitat"
 output:
   bookdown::html_vignette2
 bibliography: cut_points.bib
 link-citations: true
 vignette: >
-  %\VignetteIndexEntry{How cutting streams into segments moves a tuned slope limit}
+  %\VignetteIndexEntry{Splitting streams at fish records shifts the steepest slope mapped as habitat}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
