@@ -136,10 +136,12 @@ wf_farm_priority.js                          farm priority/crossing tables out o
       (--collection temperature: Fisheries/temperature, from data/temperature_members.csv)
       (--collection flow: Fisheries/flow, from data/flow_members.csv and data/flow_additions.csv)
       (--parent <key> for a collection under another parent: --collection grayling --parent 9U54XAND is species/grayling)
+      (--collection sturgeon --parent 9U54XAND: species/sturgeon, from data/sturgeon_members.csv and _additions.csv)
 0150  ACTION=build STORE=habitat_modelling COLLECTIONS="U9ZCZ6RN,RXNFPBPH,VHWEK6RE,GELFSUTU,9U54XAND,SW2RXUJC,DQP29KU7,X29BX4U8,W4425VK5,545K8HP4"
       (habitat_modelling, chinook, bull_trout, grayling, species, temperature, wedzin_kwa_chinook, hydrology and the
       two salmon collections, by key)                                                    then ACTION=push
 0150  ACTION=build STORE=bull_trout_grayling COLLECTIONS="VHWEK6RE,GELFSUTU"               then ACTION=push
+0150  ACTION=build STORE=sturgeon COLLECTIONS=WEUFTSDC                                     then ACTION=push
 0150  ACTION=build STORE=temperature COLLECTIONS=SW2RXUJC                                  then ACTION=push
 0150  ACTION=build STORE=flow COLLECTIONS=FWTJDD8Z                                         then ACTION=push
       (a rebuild over an existing local store needs OVERWRITE=TRUE; ACTION=push needs CONFIRM=TRUE to upload)
@@ -436,6 +438,10 @@ The cited basis for CH and BT habitat thresholds (#19). Not per watershed group.
   The `temperature` store is built from `Fisheries/temperature` alone (`COLLECTIONS=SW2RXUJC`), and the `flow`
   store from `Fisheries/flow` alone (`COLLECTIONS=FWTJDD8Z`). `Fisheries/flow` does not feed `habitat_modelling`
   (the temperature collection does).
+  The `sturgeon` store is built from `species/sturgeon` alone (`COLLECTIONS=WEUFTSDC`, #124): the White Sturgeon
+  recovery documents, the NWSRI's reports and curated Nechako mainstem history. `0150` reads only the items filed
+  directly in each collection it is given, so `species` (`9U54XAND`) does not bring `species/sturgeon` into
+  `habitat_modelling`.
 - `data/literature_evidence.csv` has one row per value a source gives: species, stage, form, variable, the
   model parameter it bears on, bound, value, unit, `metric`, kind, region, key, page, verbatim quote,
   `quote_source`, scale, cited source and `model_id`. `kind = none` records a search that found nothing.

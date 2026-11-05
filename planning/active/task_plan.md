@@ -79,7 +79,7 @@ Exploration moved some premises (immutable read of `zotero.sqlite`, 2026-10-31, 
 ## Phase 2 (after #127 merges): file the collection through `0270`
 - [x] `git merge origin/main`. **Hard gate:** `0270`'s `db()` and `0150` read the WAL, and cred's build does too (a
       released fix), or the WAL is confirmed checkpointed (Zotero quit, `-wal` absent or empty) before each read
-- [ ] Ask Al to confirm the group's file storage has room for about 200 MB (plan review: a full quota fails each
+- [x] Ask Al to confirm the group's file storage has room for about 200 MB (Al, 2026-11-04: unlimited) (plan review: a full quota fails each
       upload with 413)
 - [x] Re-run the `%PDF` check on every addition URL (a dry run does not fetch them): 70 of 70 `%PDF`, 222.8 MB
 - [x] `0270 --collection sturgeon --parent 9U54XAND --dry-run`. Check every `exists` / `copy exists` gkey against the
@@ -103,11 +103,11 @@ Exploration moved some premises (immutable read of `zotero.sqlite`, 2026-10-31, 
 - [ ] `ACTION=push` dry run, then `CONFIRM=TRUE`. The push log keeps only this store's manifest entry (#122 round 2)
 
 ## Phase 4: docs and issue
-- [ ] `scripts/README.md`: the `0150 ACTION=build STORE=sturgeon COLLECTIONS=WEUFTSDC` line beside temperature,
+- [x] `scripts/README.md`: the `0150 ACTION=build STORE=sturgeon COLLECTIONS=WEUFTSDC` line beside temperature,
       flow and bull_trout_grayling, and the `0270 --collection sturgeon --parent 9U54XAND` line
 - [x] CLAUDE.md layout: `sturgeon_{members,additions}.csv` beside the grayling and bull_trout ones
 - [ ] #124 body: the gap of documents with no PDF anywhere, and the outcome
-- [ ] Say in `scripts/README.md` that `WEUFTSDC` does not feed the `habitat_modelling` build (plan review)
+- [x] Say in `scripts/README.md` that `WEUFTSDC` does not feed the `habitat_modelling` build (plan review)
 
 ## Owed at the end (reported, done after merge)
 
