@@ -1,17 +1,19 @@
 # Tuning on link's minimal network
 
-**Verified:** 2026-11-04 (the full network on the same flows and range), 2026-11-03 (province), 2026-11-02 (four
+**Verified:** 2026-11-05 (chinook rearing on every setup), 2026-11-04 (the full network on the same flows and range), 2026-11-03 (province), 2026-11-02 (four
 groups) · **Issues:** #120, #145 (link's side: NewGraphEnvironment/link#415, link#441, link#444, link#458) ·
 **Produced by:** `scripts/0300`, `0310`, `0320`, `0330` on the provincial minimal build `fresh_default_minimal`, on
 link's new full `default` build and on link's four-group proof schemas, and `data-raw/minimal_network_check.R`,
-`segment_gradient_check.R`, `site_gradient_check.R`, `tune_anchor_check.R`, `pick_network_compare.R`; logs
-`scripts/logs/habitat/2026110[234]_*`, `scripts/logs/habitat/minimal_network_120/` and
+`segment_gradient_check.R`, `site_gradient_check.R`, `tune_anchor_check.R`, `pick_network_compare.R`,
+`setup_compare.R`; logs `scripts/logs/habitat/2026110[2345]_*`, `scripts/logs/habitat/every_setup_120/`, `scripts/logs/habitat/minimal_network_120/` and
 `scripts/logs/habitat/default_build_145/` · **Status:** the nine species link models on the minimal build tuned on
 it, and the seven keys fitted (six species; the other eleven keys have no response or no stream rule) graded and
 compared, as an unpromoted candidate (run `20261103_0838`; rainbow trout and kokanee are paused there). The same nine
 species tuned (`DEV=1`, no grades) on the new full `default` build on the same flows and range, which separates the
 network from the other two (#145). That full-network run was then graded, compared and promoted (run `20261104_0543`,
-2026-11-04; `habitat_thresholds_tuned.md`); the transfer to link's full network on its parent table waits on link#444.
+2026-11-04; `habitat_thresholds_tuned.md`). Chinook rearing was then scored on every setup that exists, the full
+network reading its minimal parent's gradient and its Atlas line's among them (2026-11-05, candidates `20261105_0436`
+and `20261105_0437`, never promoted).
 
 In this file, "published" names #92's run, the published one until #145's promotion of 2026-11-04.
 
@@ -139,6 +141,84 @@ The table is `pick_network_compare.R`'s (`20261104_pick_network_compare.{csv,txt
 `tune_anchor_check.R` table and `<key>_tune.csv`). The tuning's log and pick report are in
 `scripts/logs/habitat/default_build_145/`.
 
+## Chinook rearing on every setup (2026-11-05)
+
+**What was asked.** link applies a rule on its full network, whose segments are cut at catches. A rule tuned on the
+minimal network transfers only if each full segment reads its minimal parent's gradient, which link#444's
+`streams_parent` now provides. So chinook rearing was scored on four setups that share one flow load, one species
+range and one set of visits and walks, so that the network and the gradient a rule reads are the only differences:
+
+| setup | segments | gradient a rule reads | run |
+|---|---|---|---|
+| published | full (`cut-full-top`) | the segment's own (`grad-seg`) | `20261104_0543`, promoted (#145) |
+| minimal | minimal (`cut-min`) | the segment's own | `20261103_0838`, candidate |
+| parent | full | the minimal parent's (`grad-parent`) | `20261105_0436`, candidate |
+| Atlas line | full | the Atlas line the segment lies on (`grad-fwa`, link#460) | `20261105_0437`, candidate |
+
+Each setup is tuned, graded and drawn on its own gradient: `0320 SETUP=1` grades the segments with the gradient its
+curve was fitted on, and `0330` draws `default` and the pick with it, through every stage. Neither setup run can be
+promoted.
+
+**How it was judged.** The same as every tuning here: a setup's region holds the rules within one standard error of
+its best, and its pick is the region's rule nearest `default`. Two picks disagree only where one lies outside the
+other's region; otherwise the data cannot tell them apart.
+
+**What came back.**
+
+| setup | pick | rules in region | `default` km | pick's km | change | graded km, `default` → pick |
+|---|---|---|---|---|---|---|
+| published | `mad>=0.75\|g<=0.13\|Q3@D1000` | 169 | 102,951 | 88,458 | −14.1 % | 52,727 → 58,905 |
+| minimal | `mad>=0.75\|g<=0.09\|Q3@D1000` | 102 | 104,751 | 87,606 | −16.4 % | 52,369 → 58,350 |
+| parent | `mad>=0.75\|g<=0.09\|Q3@D1000` | 102 | 104,852 | 86,608 | −17.4 % | 52,873 → 58,000 |
+| Atlas line | `mad>=0.75\|g<=0.15\|Q3@D1000` | 117 | 103,246 | 85,962 | −16.7 % | 53,417 → 58,583 |
+
+- **The parent setup picks the minimal network's rule exactly.** They read the same gradient at all but 79 of the
+  45,529 visits, and both regions hold the same 102 rules.
+- **The minimal network's 9 % lies in the published region** (4.8 behind its best, standard error 10.8). **The
+  published 13 % lies outside the minimal and parent regions** (10.4, standard error 7.3). So the cuts at catches,
+  crossings and habitat end points are what let the full network's tuning reach 13 %; without them the data argue for
+  9 %.
+- **The Atlas line picks 15 %,** outside the minimal and parent regions (11.2 behind, 7.4) and, narrowly, outside the
+  published one (1.4 behind, standard error 0.5); the published 13 % lies in the Atlas line's region. These runs
+  do not say why the Atlas line's gradient allows the steeper limit.
+- The flow floor (MAD ≥ 0.75 m³/s) and the near-river exception (a 3 m³/s river within 1 km) hold on every setup.
+
+**The transfer.** Carried onto the full network's 3,016,042 chinook segments through `streams_parent`, the minimal
+network's verdicts draw 87,606 km; the parent setup draws 86,608 km. 1,042 km is drawn by the minimal network alone,
+and 44 km by the parent setup alone. All of the 1,042 km fails the flow floor and passes on the minimal network only
+by the near-river exception: its distance is walked from a segment's downstream end, so a long minimal segment that
+starts within 1 km of the river (3,311 of 3,312 such full segments; median 507 m) credits its whole length, while
+its full-network pieces start farther up (median 1,326 m, none within 1 km). 0.4 km is the connectivity stage. The
+parent table carries gradient alone, so under `grad-parent` the exception's distance does not transfer
+(link#462). That is the transfer cost: 1.2 % of the rule's habitat, all of it in small streams near large rivers.
+
+**Where the setups disagree.** On the full network's segments 83,726 km is drawn by every setup. The largest
+disagreements: 2,438 km drawn by all but the Atlas line, 1,581 km by the published and Atlas setups alone (what the
+steeper limits add), 1,042 km by the minimal network alone (the transfer above), 671 km by the published setup alone,
+370 km by all but the published, and 242 km by the Atlas line alone. MORK holds the most km of disagreement (236 km of
+2,468 km `default`), chosen by that rule before drawing:
+
+![Chinook rearing drawn by each setup in MORK](fig/setups_ch_rear_mork.png)
+
+Every setup's verdict on every full-network segment is in `data/compare/setups/CH_rear_setups.gpkg` (ignored; written by
+`data-raw/setup_compare.R`, which also writes `scripts/logs/habitat/20261105_setup_compare-ch_rear.{csv,txt}`).
+
+**What it is not.** Neither setup run is promoted, and neither changes a published rule. The Atlas line is a
+sensitivity link does not build; its token is requested (link#460) and its run is archived when link mints it. The
+parent setup is archived under `tune/CH_rear/cut-full-top.acc-v5.grad-parent.q-fwapg/`. Other species follow one at a
+time, and "minimal, other access classes" (#132) and "fixed window" (#70) wait on their issues.
+
+**The checks behind it.** Link's parent table, read through `knw_parent_read()` (held to both builds' run ids and to
+one row per full segment of its length), joins every one of the 45,529 visits. The parent is the minimal segment the
+visit sits on for 45,450 of them, the 12 visits on a straddling segment included. The other 79, all with fish, sit
+within 5 m of the start of both their full and their minimal segment: placement takes the short piece cut at the catch
+on the full network, whose parent lies below the break, and the segment starting at the break on the minimal one
+(`20261104_minimal_network_check.txt`). The evidence for the parent and Atlas setups (`data/fdis/derived_parent`) has
+the published build's visits and walks byte for byte. The Atlas setup reads `segment_fwa_gradient`, the Atlas line of
+the segment a visit sits on, not `fwa_gradient`, the visit's own line (#92's sensitivity): 732 visits sit on a segment
+of another line, 136 of them across a 13 % limit. On one group (MFRA) the gradient source reading the segment's own
+gradient reproduces the published grades and comparison exactly.
+
 ## The province run
 
 All on 2026-11-03 UTC, on the database the minimal build lives in, through `PGSERVICE` (round trip 0.8 to 1.1 ms),
@@ -197,8 +277,9 @@ Steps 3 and 5 of `minimal_network_check.R` (access per group, stored habitat) ra
 - **Access gradients.** The minimal network still cuts at them: for each species link models, at every class
   (0.15, 0.20, 0.25, 0.30) at or above the steepest gradient that species passes (`.lnk_pipeline_prep_minimal()`). Cutting at another set is "minimal, other access classes" (#132).
 - **Transfer.** link deploys a rule on its full network. A full segment given its minimal parent's gradient reads the
-  minimal network's gradient at every visit (shown on four groups below); the habitat km that transfer draws needs
-  link's parent table on the full network (link#444).
+  minimal network's gradient at all but 79 of 45,529 visits, and chinook rearing picks the same rule there; the habitat
+  it draws loses 1,042 km of the minimal network's 87,606 km, all through the near-river exception's distance, which
+  the parent table does not carry ("Chinook rearing on every setup", link#462).
 
 ## The four-group test (2026-11-02)
 

@@ -1,0 +1,46 @@
+Tuning run, knowledge#57. Evidence build scripts/logs/habitat/20261104_evidence_build_ledger-derived_parent.csv on link run 20261103_163715-269b585a (link 4dfbfa4980eb259e2f6a3e9b198c54014315d0ce), schema fresh_default; evidence directory data/fdis/derived_parent.
+Candidate run 20261105_0437: outputs under data/tune/candidate/20261105_0437 (ignored); compare it with TUNE_DIR=data/tune/candidate/20261105_0437 scripts/0330, promote it with RUN=20261105_0437 scripts/0335.
+  visits_link md5 53ff44d74b2adc85f4ec6caf7be9bb20
+  visits_species md5 6a2e28f1afb46a02c357ac044f8d09e3
+  walks md5 2e0f0f419022da0f5ac51a3869486a80
+build: schema fresh_default, run 20261103_163715-269b585a; flows wet_db_load(): discharge/fwa/v1/segment_monthly, scenario historical last loaded from https://fresh-bc.s3.us-west-2.amazonaws.com/discharge/fwa/v1/manifest.json (built 2026-10-24T12:23:01Z, wet b4bbc50); walk c3f7bdbecff1d55107f28afa59d7f532; fresh 0.52.0; tokens cut-full-top.acc-v5.grad-seg.q-fwapg; log rows of run 20261023_074321-24d85e8c set aside (not in log_recompute)
+database round trip 0.9 ms (median of 20 SELECT 1; limit 20 ms)
+Spawner evidence: 1234 BT visits with a coded fish, 226 with evidence.
+link default thresholds at 4dfbfa4980eb259e2f6a3e9b198c54014315d0ce (same at ): 11 species; default_tuned: 11 species (its MAD floors join the grids).
+Fit: group intercepts absorbed (#83); normal prior SD 2.5 on the data_set and era coefficients, cloglog scale (#84).
+Floors: MIN_WSG 5, FOLDS 5 (the tuning's).
+Rules and curves read the gradient from segment_fwa_gradient (a setup, #120: graded on the same gradient, compared and archived, never promoted; outputs under data/tune/candidate/20261105_0437).
+Smoke run first: previous picks on file for BT_rear, BT_spawn, CH_rear, CO_rear, GR_rear, ST_rear, WCT_rear.
+CH_rear smoke: 4858 visits (234 detections) in 45 groups with both outcomes; 4 rules, 4 fits.
+    null_ratio: no rule 1509.3 held-out against 1516.7 in-sample, ratio 0.995 (limit 1.25): pass
+    clamp: 0 visits at 55.26 over 4 rules (limit 0): pass
+    behind_null: no_rule (none) is +0.0 against no rule (limit 1509.3): pass
+    coef: rule 2.96 on fold 4 of previous (mad>=0.75|g<=0.13|Q3@D1000) (limit 5.0): pass
+    default: width>=1.5|g<=0.0549|none held-out 1470.5 (-38.8 against no rule), converged TRUE
+    link_tuned: mad>=0.28|g<=0.0549|none held-out 1434.3 (-75.0 against no rule), converged TRUE
+    previous: mad>=0.75|g<=0.13|Q3@D1000 held-out 1234.3 (-275.0 against no rule), converged TRUE
+CH_rear smoke: 4858 visits (234 detections) in 45 groups with both outcomes; 4 rules, 4 fits.
+    null_ratio: no rule 1509.3 held-out against 1516.7 in-sample, ratio 0.995 (limit 1.25): pass
+    clamp: 0 visits at 55.26 over 4 rules (limit 0): pass
+    behind_null: no_rule (none) is +0.0 against no rule (limit 1509.3): pass
+    coef: rule 2.96 on fold 4 of previous (mad>=0.75|g<=0.13|Q3@D1000) (limit 5.0): pass
+    default: width>=1.5|g<=0.0549|none held-out 1470.5 (-38.8 against no rule), converged TRUE
+    link_tuned: mad>=0.28|g<=0.0549|none held-out 1434.3 (-75.0 against no rule), converged TRUE
+    previous: mad>=0.75|g<=0.13|Q3@D1000 held-out 1234.3 (-275.0 against no rule), converged TRUE
+Smoke run over 1 keys in 0.0 min.
+Scored 2 species x stage in 4.2 min on 14 workers.
+CH_rear: fitted. 7823 visits (235 detections) in 111 groups (45 both). Recommended mad>=0.75|g<=0.15|Q3@D1000; default outside the region (+244.1, SE 93.9). Curve held-out 1176.4 vs grid best 1226.4.
+CH_rear: no rule scores 1509.3 held-out on the grid's 4858 visits and 1502.6 on the curve's 4855; the curve 1176.4, so grades are published.
+CH_rear: from the flow start mad>=0.28|g<=0.15|Q3@D1000 (1.96 SE: mad>=0.28|g<=0.0549|Q3@D1000); from the width start at 1.96 SE mad>=1|g<=0.0549|Q3@D1000; link's default_tuned rule mad>=0.28|g<=0.0549|none outside the region (+207.9, SE 84.3).
+CH_spawn: no_response (visits_in=7823).
+Pick report against data/tune: 0 of 1 keys keep the published pick (moved: CH_rear); written to data/tune/candidate/20261105_0437/pick_report.csv.
+Grading on the flow build: wet_db_load(): discharge/fwa/v1/segment_monthly, scenario historical last loaded from https://fresh-bc.s3.us-west-2.amazonaws.com/discharge/fwa/v1/manifest.json (built 2026-10-24T12:23:01Z, wet b4bbc50); walk c3f7bdbecff1d55107f28afa59d7f532, cached in knw.walk_cache.
+NOTICE:  schema "knw" already exists, skipping
+
+NOTICE:  relation "walk_cache" already exists, skipping
+
+NOTICE:  relation "walk_cache_load" already exists, skipping
+
+walk cache knw.walk_cache: 876268 of 876268 start-and-source pairs read, 0 to walk
+CH_rear grades: 136 groups, segments=3016042, accessible=876268, walked=876268, walk_cache_hit=876268, walk_cache_miss=0, walk_found=805286, walk_none=70981, walk_other=1, graded=872418, no_size=5332, no_gradient=0; reference rate 0.1328 over edge types 1000,1100,2000,2300; walks to 3 m3/s, to the bank, 0.6 min; 9060 of 805286 found rivers lie in another group; total 4.3 min.
+Done in 8.5 min.

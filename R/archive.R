@@ -73,6 +73,16 @@ knw_archive_setup <- function(record, vocabulary = NULL) {
   }
   if (anyNA(tok)) stop("the record carries tokens on some axes only: ", paste(axes[is.na(tok)], collapse = ", "),
                        call. = FALSE)
+  # a setup's grades read another gradient than the build's own (#120): its grad token names that gradient, and a
+  # record of the segment's own gradient never carries a setup's token
+  cg <- if ("curve_grad" %in% names(record)) as.character(record$curve_grad[1]) else NA_character_
+  want <- if (!is.na(cg) && cg %in% names(.knw_grade_grad_tokens)) .knw_grade_grad_tokens[[cg]] else NA_character_
+  if (!is.na(want) && !identical(tok[["grad"]], want)) {
+    stop("graded on ", cg, " but filed under ", tok[["grad"]], ", not ", want, call. = FALSE)
+  }
+  if (is.na(want) && tok[["grad"]] %in% .knw_grade_grad_tokens) {
+    stop("graded on ", cg, " but filed under the setup token ", tok[["grad"]], call. = FALSE)
+  }
   if (!is.null(vocabulary)) {
     for (a in axes) {
       if (!any(vocabulary$token == tok[[a]] & vocabulary$axis == a)) {

@@ -4,7 +4,14 @@
 \alias{knw_link_segments}
 \title{link's segments for one species in a set of groups, with flow and access, for grading}
 \usage{
-knw_link_segments(conn, schema, species, wsg, parent_fallback = TRUE)
+knw_link_segments(
+  conn,
+  schema,
+  species,
+  wsg,
+  parent_fallback = TRUE,
+  gradient = "segment"
+)
 }
 \arguments{
 \item{conn}{a \code{DBI} connection to a database holding \code{schema} and \code{discharge}.}
@@ -17,6 +24,14 @@ knw_link_segments(conn, schema, species, wsg, parent_fallback = TRUE)
 
 \item{parent_fallback}{\code{logical(1)} run the parent fallback for segments with
 no own picked flow.}
+
+\item{gradient}{\code{character(1)} where \code{gradient} comes from (#120):
+\code{"segment"}, the segment's own (link's \code{gradient}, token \code{grad-seg});
+\code{"parent"}, its minimal-network parent's, from \verb{<schema>.streams_parent}
+(link#444, \code{grad-parent}), checked by \code{\link[=knw_parent_read]{knw_parent_read()}} first; \code{"fwa"},
+its Freshwater Atlas segment's (\code{fwa_stream_networks_sp.gradient} on
+\code{linear_feature_id}; no link segment crosses an Atlas segment, link#444).
+A segment with no row in the source stops the read.}
 }
 \value{
 A \code{tibble}, one row per segment: \code{id_segment}, \code{watershed_group_code},

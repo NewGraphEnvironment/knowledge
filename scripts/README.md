@@ -63,8 +63,12 @@ wf_farm_priority.js                          farm priority/crossing tables out o
       database's host (round trip over 20 ms) unless REMOTE=TRUE (#110). EVIDENCE_DIR=data/fdis/derived_<name>
       writes a build of another schema there, its ledger tagged <date>_evidence_build_ledger-<name>.csv, outside the
       name the default readers take; SETTLE=<settle log> names that schema's settle log (the gate stays its run_uid);
-      PARENT_DIR=<the directory holding link's parent_<wsg>.csv.gz> adds each visit's minimal parent (parent_gradient, parent_length_m,
-      parent_straddle_m); access_check.csv is per species x group; needs link >= 0.78.1 (#120)
+      PARENT=TRUE adds each visit's minimal parent (parent_gradient, parent_length_m, parent_straddle_m) from
+      <SCHEMA>.streams_parent (link#444), held to SCHEMA's build and PARENT_MINIMAL's (default fresh_default_minimal)
+      by knw_parent_read(); PARENT_DIR=<the directory holding link's parent_<wsg>.csv.gz> does the same from link#415's
+      prototype for the four-group proof schemas; segment_fwa_gradient is the Atlas gradient of the line the visit's
+      segment lies on (fwa_gradient is the visit's own line's); access_check.csv is per species x group; needs link
+      >= 0.78.1 (#120)
 0290  bt_use_visits.csv written from 0310 (BT's rows and the columns 0291-0293 read; no held-out columns)
 0294  ch_mad_visits.csv written from 0310 (+ two database reads: ambiguous placement, barriers without USER_DEFINITE)
 0296  ch_rule_visits.csv and ch_rule_walks.csv written from 0294 and 0310
@@ -81,7 +85,10 @@ wf_farm_priority.js                          farm priority/crossing tables out o
       EVIDENCE_DIR scores the build 0310 wrote there, with its own ledger; DEV_DIR (with DEV=1) writes another
       directory under data/tune; each summary names its evidence_dir; GRADIENT=parent_gradient scores the minimal
       parent's gradient into grad_parent/ (never promoted); MIN_WSG= and FOLDS= (default 5 and 5) lower the floors
-      for a test on a few groups, written in each summary and refused by 0335 (#120).
+      for a test on a few groups, written in each summary and refused by 0335 (#120). SETUP=1
+      GRADIENT=parent_gradient|segment_fwa_gradient is a setup (#120): a full candidate of its own on the parent's or
+      the segment's Atlas line's gradient, graded on the same gradient, its grade records carrying grad-parent or
+      grad-fwa; 0330 compares it on that gradient and promotion refuses it.
       SCHEMA names the run's schema, refused when its run is not the evidence's; scoring runs
       on any machine with the build, WORKERS=14; grading walks 500 segments per query and keeps every walk in
       knw.walk_cache, keyed on the flow load and the walk's md5 (#87): on the database's host a cold regrade of
@@ -107,9 +114,12 @@ wf_farm_priority.js                          farm priority/crossing tables out o
       14.0, 2026-10-26, under every structure; door alone drops 29 to 33 % of the worker minutes, #112; every STAGE stops off the database's host unless REMOTE=TRUE, #110). No maps in this run.
       STAGE=maps: floodplain ha beside each rule's habitat in the catalog's groups, and the maps, from the saved
       tables -> the run's floodplain.csv and fig/compare_*.png. Reads the evidence directory the run's summaries
-      name (EVIDENCE_DIR overrides it, for a staged copy), refused unless its tables' md5s are the curves' (#120)
+      name (EVIDENCE_DIR overrides it, for a staged copy), refused unless its tables' md5s are the curves' (#120).
+      Segments are read with the gradient the run's curves were fitted on: a setup's (0320 SETUP=1) is the parent's
+      or the Atlas line's, for every rule and stage (#120)
 0335  on Al's word: RUN=<run> moves a candidate into data/tune/, data/compare/ and research/fig/ (SPECIES= for some
-      keys; refused unless the result is one build: evidence, link run, gradient, flow load, walk, link config), its
+      keys; refused unless the result is one build: evidence, link run, gradient, flow load, walk, link config; a
+      setup, tuned on another gradient than the segment's own, is refused, #120), its
       logs into scripts/logs/habitat/, archiving what it replaced as candidate run replaced_<stamp>; then 0325
       (local), SCHEMA=... data-raw/vignette_chinook.R, vignette_method.R, vignette_bib.R (Zotero) and
       readme_figure.R. DRY=1 lists; BUNDLES=FALSE moves only. Pins and prose that quote the run are revised by hand
