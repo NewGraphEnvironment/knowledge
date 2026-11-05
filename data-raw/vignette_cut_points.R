@@ -151,12 +151,14 @@ for (s in c("minimal", "parent")) {
 }
 
 # ---- the other keys, on the full and minimal networks (#145's DEV tuning, the issue's four of seven) ----------
+# the keys both networks fitted (rainbow trout rearing is on neither build); a key the network did not move reads "same"
 pk <- rd_c(logs[["picks"]])
+pk <- pk[!is.na(pk$rule_recommended_minimal) & !is.na(pk$rule_recommended_full), ]
 other_keys <- tibble(key = pk$key, pick_minimal = pk$rule_recommended_minimal, pick_full = pk$rule_recommended_full,
                      network_moved = pk$network_moved,
                      minimal_in_full_region = pk$minimal_pick_in_full_region == "TRUE",
                      full_in_minimal_region = pk$full_pick_in_minimal_region == "TRUE")
-if (nrow(other_keys) != 7 || sum(other_keys$network_moved != "none") != 4 ||
+if (nrow(other_keys) != 7 || sum(other_keys$network_moved != "same") != 4 ||
     sum(!other_keys$minimal_in_full_region | !other_keys$full_in_minimal_region) != 3) {
   stop(logs[["picks"]], " no longer reads four of seven keys moved, three outside the other's region")
 }
