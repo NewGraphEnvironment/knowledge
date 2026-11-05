@@ -92,7 +92,8 @@ test_that("a parent table other than the one the evidence recorded is refused at
                    run_uid_minimal = "m1", link_sha_minimal = "abc", config_hash_minimal = "sha256:x",
                    built_at = "2026-11-03 23:06:01+00", rows = 3L)
   local_mocked_bindings(knw_parent_read = function(...) structure(data.frame(), provenance = pv))
-  led <- data.frame(step = c("evidence_dir", "parent_table"), note = c("data/fdis/derived_parent", .knw_parent_note(pv)))
+  led <- data.frame(step = c("evidence_dir", "parent_table"),
+                    note = c("data/fdis/derived_parent", .knw_parent_note(pv)))
   expect_match(.knw_parent_note(pv), "^fresh_default.streams_parent: built 2026-11-03 23:06:01\\+00; full run f1, ")
   expect_identical(.knw_parent_held(NULL, "fresh_default", led), .knw_parent_note(pv))
   # the minimal network rebuilt and the table with it, the full build unchanged

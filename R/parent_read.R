@@ -82,7 +82,8 @@ knw_parent_read <- function(conn, schema, minimal_schema = NULL, keys = NULL) {
   # one row per segment of the full build, each as long as its segment
   cov <- q(sprintf("SELECT count(*) FILTER (WHERE p.n IS NULL)::int AS missing,
                            count(*) FILTER (WHERE p.n > 1)::int AS doubled,
-                           count(*) FILTER (WHERE p.n = 1 AND NOT coalesce(abs(p.len - s.length_metre) <= 0.01, FALSE))::int AS off,
+                           count(*) FILTER (WHERE p.n = 1
+                                            AND NOT coalesce(abs(p.len - s.length_metre) <= 0.01, FALSE))::int AS off,
                            (SELECT count(*) FROM %2$s)::int AS rows,
                            (SELECT max(built_at) FROM %2$s)::text AS built_at
                     FROM %1$s.streams s
@@ -131,12 +132,11 @@ knw_parent_read <- function(conn, schema, minimal_schema = NULL, keys = NULL) {
 .knw_parent_held <- function(conn, schema, led) {
   was <- led$note[led$step == "parent_table"]
   if (length(was) != 1L) stop("the evidence ledger records no parent table (0310 PARENT=TRUE)", call. = FALSE)
-  now <- .knw_parent_note(attr(knw_parent_read(conn, schema, keys = data.frame(watershed_group_code = character(),
-                                                                                id_segment = integer())),
-                               "provenance"))
+  none <- data.frame(watershed_group_code = character(), id_segment = integer())
+  now <- .knw_parent_note(attr(knw_parent_read(conn, schema, keys = none), "provenance"))
   if (!identical(now, was)) {
-    stop("the parent table now reads \"", now, "\", not the evidence's \"", was, "\": rebuild the evidence (0310 PARENT=TRUE)",
-         call. = FALSE)
+    stop("the parent table now reads \"", now, "\", not the evidence's \"", was,
+         "\": rebuild the evidence (0310 PARENT=TRUE)", call. = FALSE)
   }
   invisible(now)
 }
