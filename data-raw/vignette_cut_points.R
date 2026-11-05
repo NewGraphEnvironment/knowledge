@@ -205,8 +205,10 @@ if (!all(c(concept_site$blue_line_key, ex_sites$blue_line_key) %in% staged_lines
 # the concept stream's profile: each network's segments as (measure, elevation) at their ends, and the Atlas line's
 # vertices
 prof_seg <- function(x, net) {
-  sf::st_drop_geometry(x[x$blue_line_key == concept_site$blue_line_key, ]) |>
-    transmute(network = net, id_segment, from_m = downstream_route_measure, to_m = upstream_route_measure,
+  x <- sf::st_drop_geometry(x[x$blue_line_key == concept_site$blue_line_key, ])
+  # a link segment's id, or an Atlas line's
+  x$id <- if ("id_segment" %in% names(x)) x$id_segment else x$linear_feature_id
+  x |> transmute(network = net, id, from_m = downstream_route_measure, to_m = upstream_route_measure,
               length_metre, gradient, z_dn, z_up)
 }
 xyzm <- sf::st_coordinates(fwa[fwa$blue_line_key == concept_site$blue_line_key, ])
