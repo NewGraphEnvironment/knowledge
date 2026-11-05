@@ -216,7 +216,7 @@ lab_over <- streams[streams$stream_order >= 6 & streams$km >= 20, ]
 stopifnot("Fraser River" %in% lab_over$gnis_name, nrow(lab_over) >= 3)
 ```
 
-```{r map, fig.height = round(over_h + zoom_h, 2), fig.cap = paste0("Chinook rearing habitat in the ", mrow$gnis_name, " watershed group, around the ", mrow$joins, " ", n0(mrow$town_km), " km ", mrow$compass, " of ", mrow$town, ", under two habitat definitions, both run on link's full network. Grey: drawn by both. Black: drawn only by the definition tuned on each segment's own slope (a ", lim(s_of("published")$grad_max), " limit). Steel blue: drawn only by the definition tuned on the minimal network, reading each segment's minimal-network slope (", lim(s_of("parent")$grad_max), "). Line width follows stream order. The lower panel enlarges the box outlined above; between its dashed lines is the ", cell / 1000, " km square holding the most km drawn by one definition and not the other. Stream names are the Freshwater Atlas's. Basemap: Esri World Topographic Map and World Shaded Relief.")}
+```{r map, fig.height = round(over_h + zoom_h, 2), fig.cap = paste0("Chinook rearing habitat in the ", mrow$gnis_name, " watershed group, around the ", mrow$joins, " ", n0(mrow$town_km), " km ", mrow$compass, " of ", mrow$town, ", under two habitat definitions, both run on link's full network. Grey: drawn by both. Black: drawn only by the definition tuned on each segment's own slope (a ", lim(s_of("published")$grad_max), " limit). Steel blue: drawn only by the definition tuned on the minimal network, reading each segment's minimal-network slope (", lim(s_of("parent")$grad_max), "). Line width follows stream order. The lower panel enlarges the box outlined above. Stream names are the Freshwater Atlas's. Basemap: Esri World Topographic Map and World Shaded Relief.")}
 # on the relief basemap the shared habitat is quiet and the two differences carry the map, each over a thin white casing
 cols_map <- stats::setNames(unname(pal[c("mid", "ink", "accent")]), lv)
 lab_col <- gq::gq_reg_main()$layers$stream_labels$label
@@ -264,7 +264,7 @@ halo_text <- function(m, lab, size) {
   }
   m + tmap::tm_text("name", size = size, angle = "ang", fontface = "italic", col = lab_col$color)
 }
-draw <- function(b, zoom_level, scale_km, lwd_add, labs, frame_box = NULL, legend = TRUE, dash_box = NULL) {
+draw <- function(b, zoom_level, scale_km, lwd_add, labs, frame_box = NULL, legend = TRUE) {
   both <- d[d$cls == lv[1], ]
   dd <- d[d$cls != lv[1], ]
   dd$lwd <- dd$lwd + lwd_add
@@ -280,7 +280,6 @@ draw <- function(b, zoom_level, scale_km, lwd_add, labs, frame_box = NULL, legen
                    lwd = "lwd", lwd.scale = tmap::tm_scale_continuous(values.scale = 1.6),
                    lwd.legend = tmap::tm_legend_hide())
   if (!is.null(frame_box)) m <- m + tmap::tm_shape(sf::st_as_sfc(frame_box)) + tmap::tm_borders(col = "black", lwd = 1.2)
-  if (!is.null(dash_box)) m <- m + tmap::tm_shape(sf::st_as_sfc(dash_box)) + tmap::tm_borders(col = "black", lwd = 1, lty = "dashed")
   m <- halo_text(m, labs, 0.7)
   m + tmap::tm_scalebar(breaks = c(0, scale_km / 2, scale_km), position = tmap::tm_pos_in("right", "bottom"),
                         bg.color = "white", bg.alpha = 0.8) +
@@ -298,7 +297,7 @@ lab_lo <- stream_labels(in_zoom, zoom_box, reach = w_zoom / 25, off_m = w_zoom /
 f_over <- tempfile(fileext = ".png")
 f_zoom <- tempfile(fileext = ".png")
 tmap::tmap_save(draw(bb, 9, 20, 1.2, lab_up, frame_box = zoom_box), f_over, width = map_w, height = over_h, dpi = 150)
-tmap::tmap_save(draw(zoom_box, 12, 4, 2, lab_lo, legend = FALSE, dash_box = zoom), f_zoom, width = map_w,
+tmap::tmap_save(draw(zoom_box, 12, 4, 2, lab_lo, legend = FALSE), f_zoom, width = map_w,
                 height = zoom_h, dpi = 150)
 grid::grid.newpage()
 lay <- grid::grid.layout(2, 1, heights = grid::unit(c(over_h, zoom_h), "null"))
