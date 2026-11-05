@@ -115,6 +115,7 @@ steep <- function(g, present) mean(g[st$present == present] > crit$limits[["mini
 # the tuning's sites: those in groups where chinook were caught at some sites and not others
 both_out <- ave(st$present, st$watershed_group_code, FUN = function(p) any(p) && !all(p))
 stopifnot(sum(both_out) == su$n_visits[1])
+cr_scored <- st[st$cross_m & both_out, ]
 stopifnot(sum(cr$present) < 10, sum(cr$d > 0) > 2 * sum(cr$d < 0),
           steep(st$full_gradient, FALSE) > steep(st$minimal_gradient, FALSE),
           steep(st$full_gradient, TRUE) > steep(st$minimal_gradient, TRUE))
@@ -124,7 +125,7 @@ stopifnot(sum(cr$present) < 10, sum(cr$d > 0) > 2 * sum(cr$d < 0),
 British Columbia's streams. It cuts the streams of the BC Freshwater Atlas [@flnrord2021FreshwaterAtlasb] into
 segments and tests each segment against a few thresholds, one of them a steepest slope. Some of its cuts fall where
 fish were caught, so at a site that caught fish the slope a rule reads is often worked out over a short stretch that
-starts at the catch. That moves the thresholds this package tunes from the same catches. On link's full network,
+starts at the catch. That can move the thresholds this package tunes from the same catches. On link's full network,
 chinook rearing's slope limit is **`r lim(s_of("published")$grad_max)`**; on its minimal network, which is cut only
 at natural barriers and at the steep sections fish cannot pass, it is **`r lim(s_of("minimal")$grad_max)`**, and on the minimal network's records the
 full network's rule is not a close call. Read on the full network with each segment taking its
@@ -187,28 +188,28 @@ reads there is worked out from the site upstream. On the stream above, the site 
 `r grad(seg_at("minimal")$gradient)` on the minimal network, whose segment runs from near the mouth past the site.
 
 link's minimal network keeps only the first kind of cut: natural barriers and steep sections. So it shows what the
-slopes would be if no catch decided where a segment begins. The table counts the electrofishing sites in the
-Fisheries Data Information System [@provinceofbritishcolumbia2022FisheriesData] that start a segment of their own,
-meaning the segment begins within a few metres of the site:
+slopes would be if no catch decided where a segment begins. The table counts the electrofishing visits (a site
+fished on one occasion) in the Fisheries Data Information System [@provinceofbritishcolumbia2022FisheriesData] that
+start a segment of their own, meaning the segment begins within a few metres of the site:
 
 ```{r premise}
 lab_pm <- c(published_92 = "link 0.66.0, full network (every fish record a cut)",
             published_145 = "link 0.78.2, full network (each species' highest record a cut)",
             minimal = "link 0.78.1, minimal network (barriers and steep sections only)")
 tb <- data.frame(Network = unname(lab_pm[c("published_92", "published_145", "minimal")]),
-                 `Sites with fish` = pc(c(pm_at("published_92", "fish"), pm_at("published_145", "fish"),
+                 `Visits with fish` = pc(c(pm_at("published_92", "fish"), pm_at("published_145", "fish"),
                                           pm_at("minimal", "fish")), 1),
-                 `Sites without` = pc(c(pm_at("published_92", "zero"), pm_at("published_145", "zero"),
+                 `Visits without` = pc(c(pm_at("published_92", "zero"), pm_at("published_145", "zero"),
                                         pm_at("minimal", "zero")), 1),
                  check.names = FALSE)
 knitr::kable(tb, format = "html", align = "lrr",
-             caption = "Electrofishing sites that start a segment of their own, on three of link's networks.") |>
+             caption = "Electrofishing visits that start a segment of their own, on three of link's networks.") |>
   kableExtra::kable_styling(full_width = FALSE) |>
   kableExtra::footnote(general_title = "", general = paste0(
-    "Sites are the ", n0(sum(pm$visits[pm$network == "minimal"])), " electrofishing sites of a usual fished area on ",
+    "The ", n0(sum(pm$visits[pm$network == "minimal"])), " electrofishing visits are those of a usual fished area on ",
     "ordinary stream lines (not lines through rivers, lakes or wetlands): ", n0(pm$visits[pm$network == "minimal" & pm$catch_status == "fish"]),
     " where fish of any species were caught and ", n0(pm$visits[pm$network == "minimal" & pm$catch_status == "zero"]),
-    " where none were. A site starts its own segment when the segment begins between 1 m below it and 5 m above it."))
+    " where none were. A visit starts its own segment when the segment begins between 1 m below it and 5 m above it."))
 ```
 
 On both full networks a site that caught fish is far more likely to start a segment of its own than one that caught
@@ -217,15 +218,15 @@ difference away.
 
 ## Where does it bite on our own data?
 
-The tuning for chinook rearing starts from `r n0(n_sites)` electrofishing sites on stream lines in chinook's range
+The tuning for chinook rearing starts from `r n0(n_sites)` electrofishing visits on stream lines in chinook's range
 with nothing downstream that chinook cannot pass, `r n0(n_fish)` of them where chinook were caught. On the full
-network, `r pc(steep(st$full_gradient, FALSE))` of the sites without chinook read a slope over
+network, `r pc(steep(st$full_gradient, FALSE))` of the visits without chinook read a slope over
 `r lim(crit$limits[["minimal"]])`, against `r pc(steep(st$minimal_gradient, FALSE))` on the minimal network's
-segments; at the sites with chinook, `r pc(steep(st$full_gradient, TRUE), 1)` against
-`r pc(steep(st$minimal_gradient, TRUE), 1)`. At `r n0(nrow(cr))` sites the two networks put the slope on opposite
+segments; at the visits with chinook, `r pc(steep(st$full_gradient, TRUE), 1)` against
+`r pc(steep(st$minimal_gradient, TRUE), 1)`. At `r n0(nrow(cr))` visits the two networks put the slope on opposite
 sides of `r lim(crit$limits[["minimal"]])` or `r lim(crit$limits[["published"]])`, the two limits the tuning
 chose. Only `r sum(cr$present)` of them caught chinook, and at `r n0(sum(cr$d > 0))` the full network reads the
-steeper slope. So the full network's cuts move the slope at many more sites than those where chinook were caught;
+steeper slope. So the full network's cuts move the slope at many more visits than those where chinook were caught;
 these runs do not say which of its cuts move them.
 
 ```{r strip-data}
@@ -273,7 +274,7 @@ for (i in seq_along(ex)) {
 }
 ```
 
-Three of the sites with chinook show it. They were chosen by a rule fixed before drawing: among the sites with
+Three of the visits with chinook show it. They were chosen by a rule fixed before drawing: among the visits with
 chinook whose full-network slope and its minimal parent's sit on opposite sides of a tuned limit, on a full-network
 segment at least `r crit$min_len_m` m long and outside the watershed group of the stream drawn above, the largest gap
 between the two in each group, from the `r crit$n_examples` groups with the largest gaps.
@@ -320,8 +321,8 @@ For chinook rearing every close call changes all three of the rule's parts on ev
 choice is the best scorer. Two networks disagree only when one network's choice is not a close call on the other's
 records.
 
-Chinook rearing was tuned four ways on the same `r n0(su$n_visits[1])` sites (those of the
-`r n0(n_sites)` in watershed groups where chinook were caught at some sites and not others), the same modelled flows and the same
+Chinook rearing was tuned four ways on the same `r n0(su$n_visits[1])` visits (those of the
+`r n0(n_sites)` in watershed groups where chinook were caught on some visits and not others), the same modelled flows and the same
 species range, so that the segments and the slope a rule reads are the only differences. Two of the four read slopes
 from another source on the full network's segments: each segment's **minimal parent**, the minimal-network segment it
 lies within, and the whole Atlas line it lies on.
@@ -434,9 +435,8 @@ grid::grid.raster(png::readPNG(f_map))
 ## What does it mean for someone using the thresholds?
 
 The thresholds this package tuned on `r tuned_on` were tuned on link's full network, each segment reading its own
-slope, which is how link applies a rule. Each is a property of that pairing as well as of the fish: on another
-network, or with slopes read another way, the same records choose another rule. For chinook rearing the slope limit
-reads `r lim(s_of("published")$grad_max)` on the full network's own slopes,
+slope, which is how link applies a rule. For chinook rearing the same records choose another rule on another
+network or with slopes read another way: its slope limit reads `r lim(s_of("published")$grad_max)` on the full network's own slopes,
 `r lim(s_of("minimal")$grad_max)` on the minimal network's and `r lim(s_of("atlas")$grad_max)` on the Atlas line's,
 while the flow floor and the allowance near large rivers hold on all four.
 
@@ -450,19 +450,21 @@ rearing on every setup").
 
 ## Limits
 
-- Chinook rearing is the only species and stage tuned on all four; the others were tuned on the full and minimal
-  networks only.
+- Chinook rearing is the only species and stage tuned on all four of the ways above. The others were tuned on the
+  two networks' own slopes and, in a separate check, on the Atlas line each visit lies on ([the methodology
+  article's limits](habitat_thresholds.html#limits)), but not on the minimal parent's slope.
 - The minimal network drops the cuts at fish records, at crossings and at the ends of hand-mapped habitat together,
   so these runs cannot say which of the three moved the limit.
-- Few sites carry the difference: `r sum(cr$present)` of the `r n0(nrow(cr))` sites whose slope changes side of a
-  chosen limit caught chinook. The runs show that the network moves the choice, not which sites move it.
+- Few visits carry the difference: of the `r n0(su$n_visits[1])` visits the tunings scored, `r n0(nrow(cr_scored))`
+  read a slope on opposite sides of a chosen limit on the two networks, and `r sum(cr_scored$present)` of those caught
+  chinook. The runs show that the network moves the choice, not which visits move it.
 - Slopes taken over a fixed length of stream, which would not depend on where fish were caught, were not tested.
 
 ## How was this done?
 
 The numbers were bundled on `r x$meta$written` from the tuning runs and link builds the [research
 notes](`r research`) describe (link's full network, run `r x$meta$link_run_full`; its minimal network, run
-`r x$meta$link_run_minimal`). When the bundle was written, the share of sites starting their own segment, the four
+`r x$meta$link_run_minimal`). When the bundle was written, the share of visits starting their own segment, the four
 tunings' choices and habitat, and the other species' counts were each checked against the run log that first
 reported them. The sites are the Fisheries Data Information System's electrofishing records, placed on the Freshwater
 Atlas; rules are run through fresh [@irvine2026freshFreshwater] for link. [How the tuning
