@@ -88,3 +88,4 @@ mandate; the merge stays with me.
 - Push (07:23 UTC): dry run, then `CONFIRM=TRUE`; the manifest now holds nine stores, `sturgeon` among them. The
   bucket object is 151,531,520 bytes with ETag `16a21400…-19`, equal to the local file's 8 MiB multipart md5. Log
   `scripts/logs/rag/20261105_push_sturgeon.log`, its manifest trimmed to this store's entry.
+- #124 body updated (outcome, gap list, query result); filed #151 for the two Zotero writes left to Al (Tredger 1984 OCR, the watershed strategy duplicate).
