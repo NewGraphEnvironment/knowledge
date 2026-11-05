@@ -85,3 +85,6 @@ mandate; the merge stays with me.
     confluence is named in many reports (`nechako%confluence` hits 46 chunks of the 2007 database summary, 45 of
     the DFO strategy, none of the Lheidli reports in the top eight), so the expectation was a guess about ranking.
   - recruitment failure: Korman & Walters 2001, McAdam 2005, the 2004 recovery plan. **Pass.**
+- Push (07:23 UTC): dry run, then `CONFIRM=TRUE`; the manifest now holds nine stores, `sturgeon` among them. The
+  bucket object is 151,531,520 bytes with ETag `16a21400…-19`, equal to the local file's 8 MiB multipart md5. Log
+  `scripts/logs/rag/20261105_push_sturgeon.log`, its manifest trimmed to this store's entry.

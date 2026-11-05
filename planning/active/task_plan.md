@@ -100,7 +100,7 @@ Exploration moved some premises (immutable read of `zotero.sqlite`, 2026-10-31, 
       habitat use at the Fraser–Nechako confluence (a Lheidli T'enneh critical habitat report, or Williamson et al.
       2021); recruitment-failure hypotheses (Antill 2013, Korman & Walters 2001, or an NHC substrate report).
       Record each one's top keys in the build log
-- [ ] `ACTION=push` dry run, then `CONFIRM=TRUE`. The push log keeps only this store's manifest entry (#122 round 2)
+- [x] `ACTION=push` dry run, then `CONFIRM=TRUE`. The push log keeps only this store's manifest entry (#122 round 2)
 
 ## Phase 4: docs and issue
 - [x] `scripts/README.md`: the `0150 ACTION=build STORE=sturgeon COLLECTIONS=WEUFTSDC` line beside temperature,
