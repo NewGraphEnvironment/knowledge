@@ -253,6 +253,23 @@ if (!dev) {
   conn <- pg()
   rec <- tryCatch(knw_build_record(conn, schema, run_uid = run_uid), error = function(e) fail("%s", conditionMessage(e)))
   say("%s", rec$line)
+  # a setup's run-level preconditions, before any scoring (#120; round 3 of the branch review): it re-reads the gradient
+  # of a build whose own is grad-seg, and a setup on the parent's gradient grades on the parent table the evidence
+  # recorded. A refusal writes <date>_tune_refused-<run>…txt, as the latency check's does
+  refuse <- function(msg) {
+    say("%s", msg)
+    path_refused <- .knw_free_path(sub("_tune_run", "_tune_refused", path_log, fixed = TRUE))
+    writeLines(log_lines, path_refused)
+    stop(msg, " (log ", path_refused, ")", call. = FALSE)
+  }
+  if (setup && (anyNA(rec$tokens) || !identical(rec$tokens[["grad"]], "grad-seg"))) {
+    refuse(paste0("a setup re-reads the gradient of a build whose own is grad-seg; this build's tokens are ",
+                  paste(rec$tokens, collapse = ".")))
+  }
+  if (setup && gradient == "parent_gradient") {
+    held <- tryCatch(.knw_parent_held(conn, schema, led), error = function(e) refuse(conditionMessage(e)))
+    say("Parent table held to the evidence's: %s", held)
+  }
   # the grade is bound by the database: refuse a connection off its host unless REMOTE=TRUE (#110). DEV=1 and
   # GRADIENT=fwa_gradient write no grades, so they are not checked. A refused run's log is <date>_tune_refused-<run>…txt
   # in the run's directory, so it neither overwrites the run's log nor matches the _tune_run*.txt that 0335 promotes and
@@ -533,8 +550,6 @@ groups_sp <- function(sp) dbGetQuery(conn, sprintf("SELECT DISTINCT watershed_gr
 # 2026-10-19, after #57 tuned), so the table's comment, which names the build, goes into every grade table and 0325
 # refuses to publish a grade whose build is not the live one
 discharge_load <- knw_discharge_load(conn)
-# a setup on the parent's gradient grades on link's parent table: the one the evidence recorded, or none (#120)
-if (gradient == "parent_gradient") say("Parent table held to the evidence's: %s", .knw_parent_held(conn, schema, led))
 # the walk's code (#87): the walk cache keys every row on it, and a grade walked by other code is regraded
 walk_md5 <- knw_walk_md5()
 say("Grading on the flow build: %s; walk %s, cached in knw.walk_cache.", discharge_load, walk_md5)
@@ -544,13 +559,7 @@ say("Grading on the flow build: %s; walk %s, cached in knw.walk_cache.", dischar
 # a setup's grades read another gradient than the build's own (#120): its records carry the setup's grad token, so the
 # archive files it under the setup it is (tune/<key>/<cut>.<acc>.grad-parent.<flow>/), on a build that names its own
 tokens_rec <- rec$tokens
-if (setup) {
-  if (anyNA(tokens_rec) || !identical(tokens_rec[["grad"]], "grad-seg")) {
-    stop("a setup re-reads the gradient of a build whose own is grad-seg; this build's tokens are ",
-         paste(tokens_rec, collapse = "."))
-  }
-  tokens_rec[["grad"]] <- setup_tokens[[gradient]]
-}
+if (setup) tokens_rec[["grad"]] <- setup_tokens[[gradient]]   # the build's own grad-seg, checked at connect
 write_record <- function(gpath, rows) {
   knw_grade_record_write(gpath, tune_run = run, evidence_ledger = ledger_path, knowledge_commit = knowledge_commit,
                          link = c(version = led$note[led$step == "run_link_version"], sha = link_sha),

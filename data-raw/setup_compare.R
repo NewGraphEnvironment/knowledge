@@ -144,6 +144,16 @@ if (!identical(attr(par, "provenance")$run_uid_minimal, recs$minimal$run_uid)) {
   stop("the parent table joins minimal run ", attr(par, "provenance")$run_uid_minimal, ", not the minimal setup's ",
        recs$minimal$run_uid)
 }
+# the full network's three setups are one build, the one the parent table and the database hold now, and the parent
+# table is the one the parent setup was graded on (round 3 of #120's review): the saved segments join the database's
+# parent rows and geometry by id, which a rebuild would reuse
+full_runs <- unique(vapply(recs[c("published", "parent", "atlas")], function(r) as.character(r$run_uid), character(1)))
+if (length(full_runs) != 1 || !identical(full_runs, attr(par, "provenance")$run_uid_full)) {
+  stop("the full-network setups name link runs ", paste(full_runs, collapse = ", "), "; the parent table and ", schema,
+       " hold ", attr(par, "provenance")$run_uid_full)
+}
+led_parent <- read_csv(recs$parent$evidence_ledger, show_col_types = FALSE, col_types = cols(.default = "c"))
+say("Parent table held to the parent setup's evidence: %s", .knw_parent_held(conn, schema, led_parent))
 i <- match(k_of(full), paste(par$wsg, par$id_segment))
 if (anyNA(i)) stop(sum(is.na(i)), " full segments have no parent row")
 mk <- paste(full$watershed_group_code, par$id_segment_minimal[i])
