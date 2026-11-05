@@ -9,7 +9,7 @@ Al reviewed the rendered draft (2026-11-05) and asked for all of it to be done o
   article's keys moved to `@link`, `@fresh`, `@wet`; all three `.bib` files rewritten
 
 ## Phase 2: Map data
-- [ ] `data-raw/vignette_cut_points_places.R` also carries the map group's named streams (Freshwater Atlas), for labels
+- [x] `data-raw/vignette_cut_points_places.R` also carries the map group's named streams (Freshwater Atlas), for labels
 
 ## Phase 3: The article, revised
 - [ ] Why before how: what knowledge does with link, why thresholds are tuned from fish records, why a cut at a catch
