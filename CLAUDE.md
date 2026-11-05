@@ -50,13 +50,15 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   them restores them with `PULL=TRUE scripts/0336-archive.R`, the run its records name. Its references come from `data-raw/vignette_bib.R` with the chinook article's. A draft article is named
   `vignettes/_<name>.Rmd`: pkgdown skips it, `.Rbuildignore` keeps it out of the tarball, and pkgdown.yaml fails if
   one reaches `docs/articles/`.
-- `vignettes/_cut_points.Rmd` — the draft article on how link's cut points move a tuned slope limit (#149): the share
+- `vignettes/stream_splits.Rmd` — "Splitting streams at fish records shifts the steepest slope mapped as habitat" (#149): the share
   of sites starting their own segment on three networks, three example sites, chinook rearing on four setups and a
   group map. It reads `inst/vignette-data/cut_points.rds`, which `data-raw/vignette_cut_points.R` writes from a stage
   that `data-raw/cut_points_stage.R` copies on the database's host into the ignored `data/stage/` (both builds, the
   setup runs, the evidence), and `cut_points_places.rds` (`data-raw/vignette_cut_points_places.R`). The stage stays on
-  that host; the bundle needs nothing else, and the staged md5s are tested only where the stage exists. It becomes
-  `vignettes/cut_points.Rmd`, with a short section in the methodology article, on Al's approval of the rendered page.
+  that host; the bundle needs nothing else, and the staged md5s are tested only where the stage exists. The methodology
+  article's "Does where link cuts a stream change the habitat definitions?" (`#cuts`) answers it in brief and links it.
+  Its maps fetch Esri tiles when it builds, so a build needs network. Internal names (bundles, scripts, tests) keep
+  `cut_points`.
 - `scripts/` — the run order (`scripts/README.md`), calling the package (`pkgload::load_all()` from
   the root) and `cred`. Legacy literals in scripts are fixed forward as they are touched.
 - `data/<wsg>/` — per-group snapshots (csv/md) and small spatial deliverables (gpkg/kml). Tracked.

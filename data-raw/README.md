@@ -35,7 +35,7 @@ the walks and outcomes, access per group, each visit's minimal parent, and with 
 per group from the database. `segment_gradient_check.R` takes `EVIDENCE_DIR` as well, and tags its log by it.
 
 `cut_points_stage.R`, `vignette_cut_points.R` and `vignette_cut_points_places.R` write the data for the cut-points
-article (`vignettes/_cut_points.Rmd` while it is a draft; #149). The first runs on the database's host: it copies the
+article (`vignettes/stream_splits.Rmd`; #149). The first runs on the database's host: it copies the
 evidence of three networks, chinook rearing's four setup runs and the geometry of the streams the article draws into
 the ignored `data/stage/cut_points/`, each file held to its run, with a manifest. The second reads only that stage and
 logs written once, holds the premise, the setups and the other species' counts to the logs that report them and the

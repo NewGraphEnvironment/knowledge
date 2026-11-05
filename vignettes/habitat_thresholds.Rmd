@@ -390,6 +390,23 @@ knitr::kable(w[, c("species_code", "kept", "stream_branch", "fished_area", "in_r
              align = "lrrrrrrrr", row.names = FALSE)
 ```
 
+## Does where link cuts a stream change the rules? {#cuts}
+
+```{r cuts}
+# from data-raw/vignette_cut_points.R, the bundle of the article this section links
+cp <- readRDS(vd("cut_points.rds"))
+cp_lim <- function(s) cp$setups$grad_max[cp$setups$setup == s]
+# the words: chinook rearing's slope limit differs between the two networks, and the network moved other keys' rules too
+stopifnot(cp_lim("published") > cp_lim("minimal"), any(cp$other_keys$network_moved[cp$other_keys$key != "CH_rear"] != "same"))
+```
+
+It can. A rule's slope test reads each segment's own slope, and link's full network cuts some streams at fish records, so
+a site that caught fish often starts a short segment whose slope is worked out from the catch upstream. Tuned on link's
+minimal network, which leaves out those cuts, chinook rearing's steepest slope is `r paste0(signif(100 * cp_lim("minimal"), 3), " %")`
+rather than `r paste0(signif(100 * cp_lim("published"), 3), " %")`, and the network moves the rules of some other species and
+stages too. [Splitting streams at fish records shifts the steepest slope mapped as habitat](stream_splits.html) shows it
+on our own records.
+
 ## Limits {#limits}
 
 - A site's tributary code can name several Atlas streams, and the site goes to the nearest of them, which need not be
@@ -400,7 +417,7 @@ knitr::kable(w[, c("species_code", "kept", "stream_branch", "fished_area", "in_r
   on what the crew caught. Scored on the whole Atlas line's
   slope instead, the chosen rule is still a close call for `r sum(gs$pick_in_atlas_region)` of the `r nrow(gs)`
   species and stages (`r issue("92")`); slopes over a fixed length would not depend on where fish were caught
-  (`r issue("70")`).
+  (`r issue("70")`). How far the cuts move the rules is [above](#cuts).
 - The results are on the segments of link's build of 2026-11-03. That build cuts streams at steep sections only at the
   first place, going upstream, that a species present in the group cannot get past
   ([link#326](https://github.com/NewGraphEnvironment/link/issues/326)), and at fish records only at each species'

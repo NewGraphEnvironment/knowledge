@@ -1,7 +1,7 @@
 # data-raw/vignette_bib.R
 # ---------------------------------------------------------------------------
 # The references of `vignettes/chinook_rearing.Rmd`, `vignettes/habitat_thresholds.Rmd` (#93) and the draft
-# `vignettes/_cut_points.Rmd` (#149), written from Zotero so
+# `vignettes/stream_splits.Rmd` (#149), written from Zotero so
 # each article builds where Zotero is not
 # (pkgdown in CI). Issue #79.
 #
@@ -28,7 +28,7 @@
 #
 # INPUT:  the three articles, inst/vignette-data/chinook_rearing.rds (meta$versions), and Zotero running
 #         with Better BibTeX, synced with the group library
-# OUTPUT: vignettes/chinook_rearing.bib, vignettes/habitat_thresholds.bib, vignettes/cut_points.bib
+# OUTPUT: vignettes/chinook_rearing.bib, vignettes/habitat_thresholds.bib, vignettes/stream_splits.bib
 # RUN:    Rscript data-raw/vignette_bib.R   (from the repo root, after any change to the article's citations)
 # ---------------------------------------------------------------------------
 library_id <- 9   # Zotero's local id of the NewGraphEnvironment group library (group 4733734)
@@ -138,5 +138,5 @@ if (length(fork_sha) != 1) stop("wet ", m$wet_sha, "'s reports name ", length(fo
 # all_tools: the article must cite fwapg, bcfishpass, bcfishobs, link, fresh and wet (the chinook article does)
 bib_write("vignettes/chinook_rearing.Rmd", "vignettes/chinook_rearing.bib", all_tools = TRUE)
 bib_write("vignettes/habitat_thresholds.Rmd", "vignettes/habitat_thresholds.bib", all_tools = FALSE)
-# the cut-points article (#149) is a draft until its review; its .bib takes the published name it will have
-bib_write("vignettes/_cut_points.Rmd", "vignettes/cut_points.bib", all_tools = FALSE)
+# the stream-splits article (#149)
+bib_write("vignettes/stream_splits.Rmd", "vignettes/stream_splits.bib", all_tools = FALSE)
