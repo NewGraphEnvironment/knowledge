@@ -81,6 +81,8 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   `bull_trout_members.csv`, `grayling_{members,additions}.csv` (what `0270 --collection <name> --parent 9U54XAND`
   puts in `species/bull_trout` and `species/grayling`, the inputs of the `bull_trout_grayling` store; hand-curated
   collections, so the files list what the cleanup ensured, and 0270 never removes a member; #122), and
+  `sturgeon_{members,additions}.csv` (the same for `species/sturgeon`, the sole input of the `sturgeon` store: the
+  White Sturgeon recovery documents, the NWSRI's reports and curated Nechako mainstem history; #124), and
   `thresholds.csv` and `thresholds_groups.csv` (the tuned thresholds per species × stage × component in link's
   parameter names, with the near-river pair's scope where a rule has one (`near_river_scope`, from the comparison's
   tuned structure), and the groups each rule was scored on; `0325`, #57, #73). `data/tune/` holds the tuning run's

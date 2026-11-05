@@ -1,0 +1,27 @@
+[dry run] would upload data/rag/sturgeon.duckdb -> s3://fresh-bc/rag/sturgeon.duckdb
+[dry run] merged manifest would hold: fraser, vca_refs, peace, pine, habitat_modelling, temperature, flow, bull_trout_grayling, sturgeon
+(manifest trimmed to this store's entry)
+{
+  "date_updated": "2026-11-05T07:23:16Z",
+  "manifest_note": "Provenance is per store. Push must merge into this file, never replace it.",
+  "chunking": "ragnar defaults (ragnar_store_ingest)",
+  "generating_script": "cred::crd_store_push()",
+  "stores": {
+    "sturgeon": {
+      "documents": 83,
+      "chunks": 10964,
+      "embedding_size": 768,
+      "embedding_model": "nomic-embed-text",
+      "store_name": "store_001",
+      "bytes": 151531520,
+      "md5": "7c8359e567a21ca899a5dbec9959a972",
+      "repo": "NewGraphEnvironment/knowledge",
+      "branch": "124-white-sturgeon-store-gather-the-recovery",
+      "head_sha": "6c6ceeff2d6fc78e31eb0684557863b672c3e266",
+      "built_by": "cred::crd_store_push()",
+      "date_completed": "2026-11-05T07:23:16Z"
+    }
+  }
+}
+Uploading sturgeon.duckdb (145 MB)
+Manifest updated — now holds: fraser, vca_refs, peace, pine, habitat_modelling, temperature, flow, bull_trout_grayling, sturgeon
