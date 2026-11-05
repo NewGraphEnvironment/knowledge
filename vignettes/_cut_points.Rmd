@@ -82,6 +82,14 @@ stopifnot(s_of("published")$grad_max == 0.13, s_of("minimal")$grad_max == 0.09,
           length(unique(sub("\\|g<=[0-9.]+\\|", "|", su$pick))) == 1)
 d_on <- as.Date(substr(s_of("published")$tune_run, 1, 8), "%Y%m%d")
 tuned_on <- paste(as.integer(format(d_on, "%d")), format(d_on, "%B %Y"))
+# every close call changes all three parts of link's rule, on every setup
+stopifnot(all(vapply(x$tune, function(t) all(t$departures[t$in_region == "TRUE"] == "3"), TRUE)))
+# rules other than the chosen one with a given limit that are close calls on a setup's records
+n_lim <- function(region_of, g) {
+  t <- x$tune[[region_of]]
+  sum(t$in_region == "TRUE" & as.numeric(t$grad_max) == g & t$rule != s_of("published")$pick)
+}
+stopifnot(n_lim("minimal", s_of("published")$grad_max) > 0)
 tr <- x$transfer
 transfer_pct <- tr$minimal_only_km / tr$minimal_km
 stopifnot(abs(tr$parent_km - s_of("parent")$tuned_km) < 0.05, transfer_pct < 0.02, tr$parent_only_km < tr$minimal_only_km)
@@ -95,17 +103,21 @@ stopifnot(nrow(ok) == 7, n_moved == 4, n_out == 3, "CH_rear" %in% ok$key[ok$netw
 # ---- the sites that change side ------------------------------------------------------------------------------------
 st <- x$sites
 crit <- x$criteria
-st$d <- st$full_gradient - st$parent_gradient
 n_sites <- nrow(st)
 n_fish <- sum(st$present)
-cr <- st[st$crosses, ]
+# the two networks' own slopes (a full segment's minimal parent reads another slope at a few sites); the examples
+# below are chosen on the parent's, as the bundle chose them
+side <- function(g, t) g <= t
+st$cross_m <- Reduce(`|`, lapply(crit$limits, function(t) side(st$full_gradient, t) != side(st$minimal_gradient, t)))
+st$d <- st$full_gradient - st$minimal_gradient
+cr <- st[st$cross_m, ]
 steep <- function(g, present) mean(g[st$present == present] > crit$limits[["minimal"]])
 # the tuning's sites: those in groups where chinook were caught at some sites and not others
 both_out <- ave(st$present, st$watershed_group_code, FUN = function(p) any(p) && !all(p))
 stopifnot(sum(both_out) == su$n_visits[1])
 stopifnot(sum(cr$present) < 10, sum(cr$d > 0) > 2 * sum(cr$d < 0),
-          steep(st$full_gradient, FALSE) > steep(st$parent_gradient, FALSE),
-          steep(st$full_gradient, TRUE) > steep(st$parent_gradient, TRUE))
+          steep(st$full_gradient, FALSE) > steep(st$minimal_gradient, FALSE),
+          steep(st$full_gradient, TRUE) > steep(st$minimal_gradient, TRUE))
 ```
 
 [`link`](`r link_site`) [@irvine2026linkDevelop], an R package, maps where each fish species can spawn and rear on
@@ -115,7 +127,7 @@ fish were caught, so at a site that caught fish the slope a rule reads is often 
 starts at the catch. That moves the thresholds this package tunes from the same catches. On link's full network,
 chinook rearing's slope limit is **`r lim(s_of("published")$grad_max)`**; on its minimal network, which is cut only
 at natural barriers and at the steep sections fish cannot pass, it is **`r lim(s_of("minimal")$grad_max)`**, and on the minimal network's records the
-`r lim(s_of("published")$grad_max)` limit fits measurably worse. Read on the full network with each segment taking its
+full network's rule is not a close call. Read on the full network with each segment taking its
 minimal-network slope, the records choose `r lim(s_of("parent")$grad_max)` again.
 
 ```{r profile-data}
@@ -208,13 +220,13 @@ difference away.
 The tuning for chinook rearing starts from `r n0(n_sites)` electrofishing sites on stream lines in chinook's range
 with nothing downstream that chinook cannot pass, `r n0(n_fish)` of them where chinook were caught. On the full
 network, `r pc(steep(st$full_gradient, FALSE))` of the sites without chinook read a slope over
-`r lim(crit$limits[["minimal"]])`, against `r pc(steep(st$parent_gradient, FALSE))` on the minimal network's
+`r lim(crit$limits[["minimal"]])`, against `r pc(steep(st$minimal_gradient, FALSE))` on the minimal network's
 segments; at the sites with chinook, `r pc(steep(st$full_gradient, TRUE), 1)` against
-`r pc(steep(st$parent_gradient, TRUE), 1)`. At `r n0(nrow(cr))` sites the two networks put the slope on opposite
+`r pc(steep(st$minimal_gradient, TRUE), 1)`. At `r n0(nrow(cr))` sites the two networks put the slope on opposite
 sides of `r lim(crit$limits[["minimal"]])` or `r lim(crit$limits[["published"]])`, the two limits the tuning
 chose. Only `r sum(cr$present)` of them caught chinook, and at `r n0(sum(cr$d > 0))` the full network reads the
-steeper slope. So the cuts move the slope at many more sites than those where fish were caught: road crossings, the
-ends of hand-mapped habitat and other species' records shorten segments too.
+steeper slope. So the full network's cuts move the slope at many more sites than those where chinook were caught;
+these runs do not say which of its cuts move them.
 
 ```{r strip-data}
 cls_lab <- c(paste(lim(crit$limits[["minimal"]]), "or less"),
@@ -227,7 +239,9 @@ stopifnot(length(ex) == crit$n_examples)
 # each example meets the criteria the bundle chose it by: chinook caught, a full segment of at least min_len_m, its
 # slope and its minimal parent's on opposite sides of a tuned limit, one per group
 for (e in ex) {
-  stopifnot(e$site$present, e$site$crosses, e$site$full_length_m >= crit$min_len_m)
+  stopifnot(e$site$present, e$site$crosses, e$site$full_length_m >= crit$min_len_m,
+            e$site$watershed_group_code != cc$site$watershed_group_code,
+            abs(e$site$parent_gradient - e$site$minimal_gradient) < 1e-4)
 }
 stopifnot(length(unique(vapply(ex, function(e) e$site$watershed_group_code, ""))) == length(ex))
 ex_lab <- vapply(ex, function(e) {
@@ -260,9 +274,9 @@ for (i in seq_along(ex)) {
 ```
 
 Three of the sites with chinook show it. They were chosen by a rule fixed before drawing: among the sites with
-chinook whose full-network slope and minimal-network slope sit on opposite sides of a tuned limit, on a full-network
-segment at least `r crit$min_len_m` m long, the largest gap between the two in each watershed group, from the
-`r crit$n_examples` groups with the largest gaps.
+chinook whose full-network slope and its minimal parent's sit on opposite sides of a tuned limit, on a full-network
+segment at least `r crit$min_len_m` m long and outside the watershed group of the stream drawn above, the largest gap
+between the two in each group, from the `r crit$n_examples` groups with the largest gaps.
 
 ```{r strip, fig.height = 4.8, fig.cap = paste0("The segments around three sites where chinook were caught, as each network cuts them, drawn along the stream from ", half, " m below the site to ", half, " m above it (a bar that stops short of the left edge stops at the stream's mouth). Each box is a segment, coloured by the slope a rule reads on it and labelled with it where there is room; the black line is the site. The panel titles name each stream, what it flows into and the nearest town.")}
 ggplot(strip) +
@@ -301,14 +315,16 @@ segment averages in, is read on its own.
 The tuning scores each candidate rule by how well it predicts where chinook were caught in watershed groups held out
 of the fit; lower is better. A score carries error, so every rule within one standard error of the best is a
 **close call**: the records cannot rank the close calls apart. Of the close calls, the tuning chooses the one that
-changes the fewest of link's standard thresholds ([how the tuning works](habitat_thresholds.html)). Two networks
-disagree only when one network's choice is not a close call on the other's records.
+changes link's standard rule least, and among equals the best scorer ([how the tuning works](habitat_thresholds.html)).
+For chinook rearing every close call changes all three of the rule's parts on every network and slope below, so the
+choice is the best scorer. Two networks disagree only when one network's choice is not a close call on the other's
+records.
 
 Chinook rearing was tuned four ways on the same `r n0(su$n_visits[1])` sites (those of the
 `r n0(n_sites)` in watershed groups where chinook were caught at some sites and not others), the same modelled flows and the same
 species range, so that the segments and the slope a rule reads are the only differences. Two of the four read slopes
 from another source on the full network's segments: each segment's **minimal parent**, the minimal-network segment it
-lies within, and the Atlas line it lies on, which is often several kilometres long.
+lies within, and the whole Atlas line it lies on.
 
 ```{r setups}
 lab_su <- c(published = "Full network", minimal = "Minimal network",
@@ -333,11 +349,14 @@ knitr::kable(tb, format = "html", align = "llrccrr", row.names = FALSE,
     "standard rule run on the same segments and slopes."))
 ```
 
-The full network's own slopes take the limit to `r lim(s_of("published")$grad_max)`, which is not a close call on the
-minimal network's records; the minimal network's `r lim(s_of("minimal")$grad_max)` is a close call on the full
-network's records too. Given each segment's minimal parent's slope, the full network chooses
-`r lim(s_of("parent")$grad_max)` exactly as the minimal network does. The Atlas line's slopes choose
-`r lim(s_of("atlas")$grad_max)`, a close call on neither network's records; these runs do not show why.
+On the full network's own slopes the rule chosen has a `r lim(s_of("published")$grad_max)` limit, and that rule is not
+a close call on the minimal network's records; the minimal network's rule, with `r lim(s_of("minimal")$grad_max)`, is a
+close call on the full network's records too. Given each segment's minimal parent's slope, the full network chooses
+the minimal network's rule exactly. The Atlas line's slopes choose a `r lim(s_of("atlas")$grad_max)` limit, in a rule
+that is a close call on neither network's records; these runs do not show why. The verdicts are on the rules chosen,
+not on a limit alone: on the minimal network's records, `r n_lim("minimal", s_of("published")$grad_max)` other rules
+with a `r lim(s_of("published")$grad_max)` limit, differing in their flow floor or their allowance near a river, are
+close calls.
 
 The network moves other species' rules as well. Tuned on the same flows and range, the full and minimal networks
 choose different rules for `r n_moved` of the `r nrow(ok)` species and stages both could fit, and for `r n_out` of
@@ -443,8 +462,9 @@ rearing on every setup").
 
 The numbers were bundled on `r x$meta$written` from the tuning runs and link builds the [research
 notes](`r research`) describe (link's full network, run `r x$meta$link_run_full`; its minimal network, run
-`r x$meta$link_run_minimal`), and each was checked when the bundle was written against the run logs that first
-reported it. The sites are the Fisheries Data Information System's electrofishing records, placed on the Freshwater
+`r x$meta$link_run_minimal`). When the bundle was written, the share of sites starting their own segment, the four
+tunings' choices and habitat, and the other species' counts were each checked against the run log that first
+reported them. The sites are the Fisheries Data Information System's electrofishing records, placed on the Freshwater
 Atlas; rules are run through fresh [@irvine2026freshFreshwater] for link. [How the tuning
 works](habitat_thresholds.html) describes the records, the candidates and the scoring.
 

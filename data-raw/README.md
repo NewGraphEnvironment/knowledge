@@ -38,7 +38,8 @@ per group from the database. `segment_gradient_check.R` takes `EVIDENCE_DIR` as 
 article (`vignettes/_cut_points.Rmd` while it is a draft; #149). The first runs on the database's host: it copies the
 evidence of three networks, chinook rearing's four setup runs and the geometry of the streams the article draws into
 the ignored `data/stage/cut_points/`, each file held to its run, with a manifest. The second reads only that stage and
-logs written once, holds every number to the log that first reported it, chooses the examples by rules fixed in the
+logs written once, holds each number a log first reported (the premise, the setups, the transfer, the other
+species' counts) to that log, chooses the examples by rules fixed in the
 script, and writes `inst/vignette-data/cut_points.rds`. The third names the stream each place's stream flows into and
 the nearest town (Freshwater Atlas, BC Geographical Names), pinned to that bundle's md5.
 
