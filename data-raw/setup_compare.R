@@ -42,8 +42,9 @@ if (!nzchar(runs[["parent"]]) || !nzchar(runs[["atlas"]])) stop("give PARENT_RUN
 # what each setup is, by its record: the gradient its curve read and the tokens its grades are filed under
 expect <- tibble(setup = names(runs),
                  label = c("full network, its own gradient (published)", "minimal network, its own gradient",
-                           "full network, its minimal parent's gradient", "full network, its Atlas segment's gradient"),
-                 curve_grad = c("segment_gradient", "segment_gradient", "parent_gradient", "fwa_gradient"),
+                           "full network, its minimal parent's gradient",
+                           "full network, the Atlas gradient of its segment's line"),
+                 curve_grad = c("segment_gradient", "segment_gradient", "parent_gradient", "segment_fwa_gradient"),
                  token_cut = c("cut-full-top", "cut-min", "cut-full-top", "cut-full-top"),
                  token_grad = c("grad-seg", "grad-seg", "grad-parent", "grad-fwa"))
 dir_t <- function(r) if (nzchar(r)) file.path("data/tune/candidate", r) else "data/tune"
