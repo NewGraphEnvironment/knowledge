@@ -117,7 +117,7 @@ All four read wet's 2026-10-24 flow load and link 0.78.1's range, on m4's databa
 - [x] `research/minimal_network_tuning.md`: a section "Chinook rearing on every setup" (a plain-language walk, then the
       table and the transfer cost), its header and "What each break source does"; `research/README.md` if needed.
 - [x] `scripts/README.md` and `CLAUDE.md`: `PARENT=TRUE`, `SETUP=1`, and grading on a chosen gradient.
-- [ ] #120 body: tick the lines, set each row's status in the setup table; #149 body: unblocked, with the run's names.
+- [x] #120 body: tick the lines, set each row's status in the setup table; #149 body: unblocked, with the run's names.
 
 ## Owed at the end (reported, done after merge)
 
