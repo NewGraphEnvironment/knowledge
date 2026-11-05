@@ -395,9 +395,19 @@ knitr::kable(w[, c("species_code", "kept", "stream_branch", "fished_area", "in_r
 ```{r cuts}
 # from data-raw/vignette_cut_points.R, the bundle of the article this section links
 cp <- readRDS(vd("cut_points.rds"))
-cp_lim <- function(s) cp$setups$grad_max[cp$setups$setup == s]
-# the words: chinook rearing's slope limit differs between the two networks, and the network moved other keys' rules too
-stopifnot(cp_lim("published") > cp_lim("minimal"), any(cp$other_keys$network_moved[cp$other_keys$key != "CH_rear"] != "same"))
+cp_lim <- function(s) {
+  v <- cp$setups$grad_max[cp$setups$setup == s]
+  stopifnot(length(v) == 1)
+  v
+}
+cp_moved <- cp$other_keys[cp$other_keys$key != "CH_rear" & cp$other_keys$network_moved != "same", ]
+gs_ch <- x$gradient_sensitivity$pick[x$gradient_sensitivity$key == "CH_rear"]
+# the words: chinook rearing's slope limit differs between the two networks; the network moved the rules of other
+# species and stages too (plural); and the bundle's full-network pick is this article's own, so a promotion that moves
+# chinook rearing stops the build here until data-raw/vignette_cut_points.R is rerun
+stopifnot(cp_lim("published") > cp_lim("minimal"), nrow(cp_moved) >= 2,
+          length(unique(sub("_.*$", "", cp_moved$key))) >= 2,
+          length(gs_ch) == 1, identical(gs_ch, cp$setups$pick[cp$setups$setup == "published"]))
 ```
 
 It can. A rule's slope test reads each segment's own slope, and link's full network cuts some streams at fish records, so
@@ -405,7 +415,8 @@ a site that caught fish often starts a short segment whose slope is worked out f
 minimal network, which leaves out those cuts, chinook rearing's steepest slope is `r paste0(signif(100 * cp_lim("minimal"), 3), " %")`
 rather than `r paste0(signif(100 * cp_lim("published"), 3), " %")`, and the network moves the rules of some other species and
 stages too. [Splitting streams at fish records shifts the steepest slope mapped as habitat](stream_splits.html) shows it
-on our own records.
+on our own records; these figures come from that article's data, written on `r cp$meta$written` at commit
+`r cp$meta$commit`.
 
 ## Limits {#limits}
 

@@ -22,7 +22,9 @@ rewrites that had dropped a qualifier. The lessons are soul#745; knowledge's own
 `review-round*.md` in this directory (round 3 carries the 57-claim enumeration). After Al's further edits (the approved link and knowledge paragraphs, "habitat definition" for "rule", the bar
 graph, the black-and-white palette on every figure, a faded basemap), `review-final-round1.md` found a count broken by
 the "rule" swap ("three parameters" for "three parts") and `review-final-round2.md` ended clean on a 64-claim
-enumeration.
+enumeration. On Al's approval the article was published as `vignettes/stream_splits.Rmd` with a section in the methodology
+article (`#cuts`); `review-final-round3.md` (a 20-claim enumeration of that delta) found the section dated by the
+wrong bundle, a guard narrower than its plural, and two `CLAUDE.md` lines; all fixed.
 
 ## Owed
 

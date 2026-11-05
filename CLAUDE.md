@@ -38,7 +38,7 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   it are matched one line at a time and must each stay whole on one line.
 - `vignettes/habitat_thresholds.Rmd` — the methodology article (#93), "Choosing habitat thresholds from where fish were
   caught": the reference home for the method and its citations. A species article (the chinook one first, #64) gives
-  its own records and result in a sentence or two and links it rather than restating the method. It reads `inst/vignette-data/method.rds`, which `data-raw/vignette_method.R` writes from
+  its own records and result in a sentence or two and links it rather than restating the method. It reads `inst/vignette-data/method.rds` (and, for its `#cuts` section, `cut_points.rds`), which `data-raw/vignette_method.R` writes from
   `inst/method/pipeline.csv` (the steps) and `inst/method/settings.csv` (every number that shapes a result, with where
   its value lives); the script refuses to run with its code or registers uncommitted. A promotion reruns it, last; it
   reads the ledger the published tables name (`knw_run_ledger()`), and refuses on a machine whose `data/fdis/derived`
@@ -56,7 +56,9 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   that `data-raw/cut_points_stage.R` copies on the database's host into the ignored `data/stage/` (both builds, the
   setup runs, the evidence), and `cut_points_places.rds` (`data-raw/vignette_cut_points_places.R`). The stage stays on
   that host; the bundle needs nothing else, and the staged md5s are tested only where the stage exists. The methodology
-  article's "Does where link cuts a stream change the habitat definitions?" (`#cuts`) answers it in brief and links it.
+  article's "Does where link cuts a stream change the rules?" (`#cuts`) answers it in brief and links it, reading
+  `cut_points.rds` for its two numbers; a promotion does not rebuild that bundle, so the section's guard stops the build
+  when the methodology bundle's chinook rearing pick no longer matches it.
   Its maps fetch Esri tiles when it builds, so a build needs network. Internal names (bundles, scripts, tests) keep
   `cut_points`.
 - `scripts/` — the run order (`scripts/README.md`), calling the package (`pkgload::load_all()` from
