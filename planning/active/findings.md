@@ -70,6 +70,14 @@ the few fish sites; the article has to say so.
 - Phase 4's tests should cover the plan review's C1/C2: the premise, setups, transfer and other-keys counts as the
   bundle holds them, and the staged md5s where the stage exists.
 
+## The branch review (2026-11-05)
+
+Every finding of five rounds was in the article's words, not the scripts' code. The cause: claims written from the
+research notes and guarded on the number they quote, not on the words that scope it. What ended it was cutting
+restated detail (cut-source lists, population filters) in favour of links to the methodology article and "among
+them" lists, then enumerating every claim. tmap pads a panel whose box is another shape than its canvas, and the scale
+bar then reads short: draw each panel on a canvas of its own box's shape.
+
 ## Errors Encountered
 
 | Error | Resolution |
@@ -77,3 +85,7 @@ the few fish sites; the article has to say so.
 | `GEOS does not support XYM or XYZM geometries` at `st_buffer()` on staged Atlas lines | `st_zm()` before the buffer |
 | `pick_network_compare.csv` refused: 8 rows (rainbow trout empty) and `same`, not `none` | read the rows both networks fitted; moved is `!= "same"` |
 | `id_segment` missing on Atlas lines in the profile | a common `id` (segment id or linear feature id) |
+| `%-d` in `format()` printed "-d" in the rendered date | build the day with `as.integer(format(d, "%d"))` |
+| `expect_equal(..., scale = 1)` warned "Unused arguments" under testthat 3e | `expect_lt(abs(a - b), tol)` |
+| `read.csv()` read an empty cell as `""`, so a key no network fitted counted | `na.strings = c("", "NA")`, as `read_csv` reads it |
+| tmap scale bars read short on the group map | each panel on a canvas of its own box's shape |

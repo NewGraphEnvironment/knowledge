@@ -72,4 +72,14 @@ running. The merge stays with me.
 - Full suite: 2,026 pass; failures are environmental and outside this branch's files' logic: the methodology
   article's ignored-source md5s (this machine's older `data/fdis`) and `test-link_place.R`'s live-schema test (no rows
   in this machine's database). `pkgdown::check_pkgdown()` clean; lint clean on the changed files.
+- `/code-check branch`, five rounds (`review-round1.md` to `review-round5.md`); every finding was in the article's
+  claims or captions, none in the scripts' code paths. Mechanism (round 3): sentences written from the research notes,
+  each guarded on the number it quotes but not on the words that scope it (sites/visits, fish/chinook, a limit/a rule,
+  7,823/4,858 visits, lists read as complete). Rounds 3, 4 and 5 each found defects inside an earlier round's fix, so
+  only an enumeration could end it; round 4 changed approach (fewer restated details, a link to the methodology
+  article instead of a population list). Round 5 enumerated 76 claims, six failing: the group map's panels were drawn
+  on canvases of another shape, so tmap padded them and both scale bars were wrong (fixed by drawing each panel on a
+  canvas of its own box's shape; measured on the render: 20 km bar 123 px at 6.17 px/km, outlined box 29.2 km, dashed
+  15 km square 540 of 1,050 px, 4 km bar 143 px at 36 px/km), a link to `#steps` where `#lost` names the filters,
+  "the only" without "across the province", and a caption that missed "drains into".
 

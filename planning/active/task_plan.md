@@ -123,7 +123,7 @@ keeps the bundle off the database, and any machine holding the staged directory 
 ## Validation
 
 - [ ] Tests pass (`devtools::test()`, and `NOT_CRAN=true` single-file runs read by PASS count)
-- [ ] `/code-check` clean (once over the branch with `/code-check branch`)
+- [x] `/code-check` clean (once over the branch with `/code-check branch`): five rounds, ended on round 5's 76-row claim enumeration with its six failing rows fixed and checked
 - [ ] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion
 

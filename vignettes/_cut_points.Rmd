@@ -228,7 +228,7 @@ difference away.
 ## Where does it bite on our own data?
 
 The tuning for chinook rearing starts from `r n0(n_sites)` of those visits, the ones in chinook's range that pass its
-other filters ([which visits](habitat_thresholds.html#steps)), `r n0(n_fish)` of them where chinook were caught. On the full
+other filters ([which visits](habitat_thresholds.html#lost)), `r n0(n_fish)` of them where chinook were caught. On the full
 network, `r pc(steep(st$full_gradient, FALSE))` of the visits without chinook read a slope over
 `r lim(crit$limits[["minimal"]])`, against `r pc(steep(st$minimal_gradient, FALSE))` on the minimal network's
 segments; at the visits with chinook, `r pc(steep(st$full_gradient, TRUE), 1)` against
@@ -293,7 +293,7 @@ chinook whose full-network slope and its minimal parent's sit on opposite sides 
 segment at least `r crit$min_len_m` m long and outside the watershed group of the stream drawn above, the largest gap
 between the two in each group, from the `r crit$n_examples` groups with the largest gaps.
 
-```{r strip, fig.height = 4.8, fig.cap = paste0("The segments around three sites where chinook were caught, as each network cuts them, drawn along the stream from ", half, " m below the site to ", half, " m above it (a bar that stops short of the left edge stops at the stream's mouth). Each box is a segment, coloured by the slope a rule reads on it and labelled with it where there is room; the black line is the site. The panel titles name each stream, what it flows into and the nearest town.")}
+```{r strip, fig.height = 4.8, fig.cap = paste0("The segments around three sites where chinook were caught, as each network cuts them, drawn along the stream from ", half, " m below the site to ", half, " m above it (a bar that stops short of the left edge stops at the stream's mouth). Each box is a segment, coloured by the slope a rule reads on it and labelled with it where there is room; the black line is the site. The panel titles name each stream, the river it flows or drains into and the nearest town.")}
 ggplot(strip) +
   geom_rect(aes(xmin = from, xmax = to, ymin = y - 0.38, ymax = y + 0.38, fill = cls), colour = "grey30",
             linewidth = 0.3) +
@@ -407,6 +407,20 @@ zoom <- sf::st_bbox(c(xmin = bb[["xmin"]] + ij[1] * cell, ymin = bb[["ymin"]] + 
                       xmax = bb[["xmin"]] + (ij[1] + 1) * cell, ymax = bb[["ymin"]] + (ij[2] + 1) * cell),
                     crs = sf::st_crs(mp$background))
 km_zoom <- sum(dif$length_metre[key == best]) / 1000
+# each panel is drawn on a canvas of its own box's shape, so tmap pads nothing and the scale bars hold: the group's
+# extent as it is, and the cell widened about its centre to the zoom panel's shape
+map_w <- 7
+zoom_h <- 3.6
+widen <- function(b, asp) {
+  cx <- (b[["xmin"]] + b[["xmax"]]) / 2
+  half_w <- max(b[["xmax"]] - b[["xmin"]], asp * (b[["ymax"]] - b[["ymin"]])) / 2
+  half_h <- half_w / asp
+  cy <- (b[["ymin"]] + b[["ymax"]]) / 2
+  sf::st_bbox(c(xmin = cx - half_w, ymin = cy - half_h, xmax = cx + half_w, ymax = cy + half_h), crs = sf::st_crs(b))
+}
+zoom_box <- widen(zoom, map_w / zoom_h)
+over_h <- map_w * (bb[["ymax"]] - bb[["ymin"]]) / (bb[["xmax"]] - bb[["xmin"]])
+stopifnot(zoom_box[["xmin"]] <= zoom[["xmin"]], zoom_box[["ymax"]] >= zoom[["ymax"]])
 ```
 
 In the `r mrow$gnis_name` watershed group, around the `r mrow$joins` `r n0(mrow$town_km)` km `r mrow$compass` of
@@ -417,10 +431,10 @@ In the `r mrow$gnis_name` watershed group, around the `r mrow$joins` `r n0(mrow$
 (`r pc(small[[2]])` and `r pc(small[[3]])`), against `r pc(small[[1]])` of the habitat both draw.
 The group was chosen before drawing as the one with the most km where the four tunings disagree.
 
-```{r map, fig.height = 7.6, fig.cap = paste0("Chinook rearing habitat in the ", mrow$gnis_name, " watershed group under two rules run on link's full network. Pale blue: drawn by both. Orange: drawn only by the rule tuned on each segment's own slope (a ", lim(s_of("published")$grad_max), " limit). Dark blue: drawn only by the rule tuned on the minimal network, reading each segment's minimal parent's slope (", lim(s_of("parent")$grad_max), "). Grey: other streams chinook can reach. Lakes of 10 ha or more and river polygons are shaded. The lower panel is the square outlined above: of a ", cell / 1000, " km grid laid from the map's south-west corner, the cell holding the most km drawn by one rule and not the other, counting each segment in the cell that holds its middle (", n0(km_zoom), " km). Line width follows stream order.")}
+```{r map, fig.height = round(over_h + zoom_h, 2), fig.cap = paste0("Chinook rearing habitat in the ", mrow$gnis_name, " watershed group under two rules run on link's full network. Pale blue: drawn by both. Orange: drawn only by the rule tuned on each segment's own slope (a ", lim(s_of("published")$grad_max), " limit). Dark blue: drawn only by the rule tuned on the minimal network, reading each segment's minimal parent's slope (", lim(s_of("parent")$grad_max), "). Grey: other streams chinook can reach. Lakes of 10 ha or more and river polygons are shaded. The lower panel is the box outlined above, centred on the dashed square: of a ", cell / 1000, " km grid laid from the south-west corner of the upper panel, the cell holding the most km drawn by one rule and not the other, counting each segment in the cell that holds its middle (", n0(km_zoom), " km). Line width follows stream order.")}
 reg <- gq::gq_reg_main()
 cols_map <- stats::setNames(c("#c6dbef", "#d95f02", "#08519c"), lv)
-draw <- function(bbox, scale_km, lwd_add, frame_box = NULL, legend = TRUE) {
+draw <- function(bbox, scale_km, lwd_add, frame_box = NULL, legend = TRUE, dash_box = NULL) {
   both <- d[d$cls == lv[1], ]
   dd <- d[d$cls != lv[1], ]
   dd$lwd <- dd$lwd + lwd_add
@@ -437,13 +451,22 @@ draw <- function(bbox, scale_km, lwd_add, frame_box = NULL, legend = TRUE) {
   if (!is.null(frame_box)) {
     m <- m + tmap::tm_shape(sf::st_as_sfc(frame_box)) + tmap::tm_borders(col = "black", lwd = 1.2)
   }
+  if (!is.null(dash_box)) {
+    m <- m + tmap::tm_shape(sf::st_as_sfc(dash_box)) + tmap::tm_borders(col = "black", lwd = 1, lty = "dashed")
+  }
   m + tmap::tm_scalebar(breaks = c(0, scale_km / 2, scale_km), position = tmap::tm_pos_in("right", "bottom")) +
-    tmap::tm_layout(frame = TRUE, inner.margins = 0.01, legend.position = tmap::tm_pos_in("left", "bottom"))
+    tmap::tm_layout(frame = TRUE, inner.margins = 0, outer.margins = 0,
+                    legend.position = tmap::tm_pos_in("left", "bottom"))
 }
-f_map <- tempfile(fileext = ".png")
-tmap::tmap_save(tmap::tmap_arrange(draw(bb, 20, 1.2, zoom), draw(zoom, 4, 2, legend = FALSE), ncol = 1),
-                f_map, width = 7, height = 7.6, dpi = 150)
-grid::grid.raster(png::readPNG(f_map))
+f_over <- tempfile(fileext = ".png")
+f_zoom <- tempfile(fileext = ".png")
+tmap::tmap_save(draw(bb, 20, 1.2, zoom_box), f_over, width = map_w, height = over_h, dpi = 150)
+tmap::tmap_save(draw(zoom_box, 4, 2, legend = FALSE, dash_box = zoom), f_zoom, width = map_w, height = zoom_h, dpi = 150)
+grid::grid.newpage()
+lay <- grid::grid.layout(2, 1, heights = grid::unit(c(over_h, zoom_h), "null"))
+grid::pushViewport(grid::viewport(layout = lay))
+grid::grid.raster(png::readPNG(f_over), vp = grid::viewport(layout.pos.row = 1))
+grid::grid.raster(png::readPNG(f_zoom), vp = grid::viewport(layout.pos.row = 2))
 ```
 
 ## What does it mean for someone using the thresholds?
@@ -464,7 +487,7 @@ rearing on every setup").
 
 ## Limits
 
-- Chinook rearing is the only species and stage tuned on all four of the ways above. The `r nrow(ok6)` others both
+- Across the province, chinook rearing is the only species and stage tuned on all four of the ways above. The `r nrow(ok6)` others both
   networks could fit were tuned on the two networks' own slopes and, in a separate check, on the Atlas line each visit
   lies on ([the methodology article's limits](habitat_thresholds.html#limits)), but not on the minimal parent's slope
   or on the Atlas line of the segment.
