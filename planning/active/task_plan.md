@@ -107,9 +107,9 @@ keeps the bundle off the database, and any machine holding the staged directory 
 
 ## Phase 5: Render, review, publish
 
-- [ ] Install the branch, render the draft and the methodology article; check figures at their published width
+- [x] Install the branch, render the draft and the methodology article; check figures at their published width
   (cartography self-review), the footnote/cross-ref traps, word count.
-- [ ] Publish the rendered draft as a private Artifact and offer Al the link, before the merge.
+- [x] Publish the rendered draft as a private Artifact and offer Al the link, before the merge.
 - [ ] On Al's approval: rename to `vignettes/cut_points.Rmd`, add the methodology article's short section
   ("Does where link cuts a stream move the rules?", two or three sentences, linking the article; the article links
   back), and the Limits bullet on segments points to it. Without approval by PR time, both stay owed.

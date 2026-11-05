@@ -63,4 +63,13 @@ running. The merge stays with me.
   meet the stated criteria). Restore-the-bug: one byte changed in the setup_compare csv failed the tracked-source and
   C2 tests, then restored. The methodology article's ignored-source test fails on this machine's older `data/fdis`
   (pre-existing, not this branch). CLAUDE.md, `data-raw/README.md` and the research file name the article.
+- Phase 5: branch installed, draft rendered with every `stopifnot()` passing; no pandoc footnote markers, no
+  unresolved `\@ref` or citation, figures and tables numbered once (3 and 2). Body prose 1,503 words, file 462 lines
+  (no forecast was set; the five reader questions and their guards set it). Figures checked at page width: profile
+  labels moved off the lines, strip labels on a white backing, group map with its zoom. Review copy published as a
+  private Artifact (converted by soul's `article_review_copy.py`). The rename and the methodology section wait on
+  Al's approval of the rendered page.
+- Full suite: 2,026 pass; failures are environmental and outside this branch's files' logic: the methodology
+  article's ignored-source md5s (this machine's older `data/fdis`) and `test-link_place.R`'s live-schema test (no rows
+  in this machine's database). `pkgdown::check_pkgdown()` clean; lint clean on the changed files.
 
