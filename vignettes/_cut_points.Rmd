@@ -149,12 +149,17 @@ modelling engine, runs the recipe: it cuts the streams of the BC Freshwater Atla
 **segments**, works out which segments each species can reach, and classifies their habitat. So a model can be
 changed, run beside another and traced back to the rules that produced it.
 
-`knowledge`, the package this article belongs to, helps choose the parameters in link's habitat definitions. It
-gathers what is known about each species: its life history, the habitat literature, and records of where fish sampling
-caught it and where sampling did not. For each species and life stage with enough records, it scores candidate
-parameters against those records and keeps the smallest change to link's standard settings that fits about as well as
-the best ([how the tuning works](habitat_thresholds.html)). Chinook rearing is the worked example here;
-[the research notes](`r research`) hold every species tuned, each run behind this article and its checks.
+`knowledge`, the package this article belongs to, is our evidence tool for link's habitat definitions. It starts from
+what is known about each species' life history, from the published literature and past reports, and the biology sets
+the shape of a definition, such as young chinook rearing in small streams close to a large river. Where the Province's
+fish sampling records are rich enough, they tune its values: knowledge scores candidate values against where sampling
+caught the species and where it did not, keeps the smallest change to link's standard settings that fits about as well
+as the best, and checks it on parts of the province it was not chosen from ([how the tuning
+works](habitat_thresholds.html)). A habitat map steers where restoration and conservation effort goes, and one tuned
+this way rests on where fish have actually been found.
+
+Chinook rearing is the worked example here; [the research notes](`r research`) hold every species tuned, each run
+behind this article and its checks.
 
 A segment's slope is its drop over its whole length, so where a stream is cut decides the slope a habitat definition is
 tested on, and some cuts fall exactly where fish were caught. Change the cuts and the definition chosen from those
