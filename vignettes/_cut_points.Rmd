@@ -334,24 +334,27 @@ reads there is worked out from the visit upstream. On the stream below, the visi
 `r grad(seg_at("full")$gradient)` on the full network, over the `r n0(seg_at("full")$length_metre)` m above it, and
 `r grad(seg_at("minimal")$gradient)` on the minimal network, whose segment runs from near the mouth past the visit.
 
-```{r profile, fig.height = 4.2, fig.cap = paste0("One stream cut two ways: ", where(list(place = "concept", site_visit = cc$site$site_visit)), ". The grey band is the stream's elevation along its Atlas line. Each coloured line is a segment drawn as the straight slope a rule reads on it, with ticks at the ends of the full and minimal networks' segments: orange the full network's, blue the minimal network's, dark grey the whole Atlas line's, which runs on past the top of the figure. The black dot is a visit where chinook were caught; the open circle, on the same full-network segment, a visit where none were. The labels give the slope each version reads at the black dot. Elevation is stretched several times so the slopes can be seen.")}
+```{r profile, fig.height = 3.6, fig.cap = paste0("One stream cut two ways: ", where(list(place = "concept", site_visit = cc$site$site_visit)), ". The thin grey line is the stream's elevation along its Atlas line. Each coloured line is a segment drawn as the straight slope a rule reads on it, with ticks at the ends of the full and minimal networks' segments: orange the full network's, blue the minimal network's, dark grey the whole Atlas line's, which runs on past the top of the figure. The black dot is a visit where chinook were caught; the open circle, on the same full-network segment, a visit where none were. The labels give the slope each version reads at the black dot. Elevation is stretched several times so the slopes can be seen.")}
 lab_pos <- data.frame(net = site_seg$net, lab = site_seg$lab,
                       x = c(full = 440, minimal = 330, atlas = 300)[site_seg$network],
                       y = c(full = 994.5, minimal = 1016, atlas = 1036)[site_seg$network])
 ggplot() +
-  geom_line(data = pr, aes(measure, z), colour = "grey82", linewidth = 2.4) +
-  geom_segment(data = sg, aes(x = from_m, xend = to_m, y = z_dn, yend = z_up, colour = net), linewidth = 0.9) +
-  geom_point(data = sg[sg$network != "atlas", ], aes(x = from_m, y = z_dn, colour = net), shape = 124, size = 4,
+  geom_line(data = pr, aes(measure, z), colour = "grey60", linewidth = 0.35) +
+  geom_segment(data = sg, aes(x = from_m, xend = to_m, y = z_dn, yend = z_up, colour = net), linewidth = 0.55) +
+  geom_point(data = sg[sg$network != "atlas", ], aes(x = from_m, y = z_dn, colour = net), shape = 124, size = 2.2,
              show.legend = FALSE) +
-  geom_point(data = cc_sites, aes(measure, z, shape = present), size = 2.6, fill = "white", show.legend = FALSE) +
-  geom_label(data = lab_pos, aes(x, y, label = lab, colour = net), size = 3, hjust = 0, label.size = 0,
-             fill = "white", alpha = 0.85, show.legend = FALSE) +
+  geom_point(data = cc_sites, aes(measure, z, shape = present), size = 1.8, stroke = 0.5, fill = "white",
+             show.legend = FALSE) +
+  geom_text(data = lab_pos, aes(x, y, label = lab, colour = net), size = 2.8, hjust = 0, show.legend = FALSE) +
   scale_shape_manual(values = c(`TRUE` = 16, `FALSE` = 21)) +
   scale_colour_manual(values = cols_net, name = NULL) +
-  coord_cartesian(xlim = c(0, xmax), ylim = c(990, 1040)) +
+  coord_cartesian(xlim = c(0, xmax), ylim = c(990, 1040), expand = FALSE) +
   labs(x = "Distance upstream from the stream's mouth (m)", y = "Elevation (m)") +
-  theme_minimal(base_size = 10) +
-  theme(legend.position = "bottom", panel.grid.minor = element_blank())
+  theme_minimal(base_size = 9.5) +
+  theme(legend.position = "bottom", legend.key.height = grid::unit(0.6, "lines"), panel.grid.minor = element_blank(),
+        panel.grid.major = element_line(colour = "grey92", linewidth = 0.25),
+        axis.line = element_line(colour = "grey40", linewidth = 0.3), axis.ticks = element_line(colour = "grey40", linewidth = 0.3),
+        axis.title = element_text(colour = "grey25"), axis.text = element_text(colour = "grey35"))
 ```
 
 ```{r strip-data}
