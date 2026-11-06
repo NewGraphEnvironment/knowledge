@@ -25,7 +25,7 @@ written nowhere as a rule.
 
 - [x] File a crate issue (NewGraphEnvironment/crate#47): `crt_receipt_write(file = "receipt.json")`, for producers whose outputs share a directory
       (knowledge's grade tables, 7 promoted today, flat in `data/tune/`); `crt_receipt_read()` already takes a path
-- [ ] Branch in `~/Projects/repo/crate` off main once #44 has merged: the argument (a bare filename ending `.json`,
+- [x] Branch in `~/Projects/repo/crate` off main once #44 has merged: the argument (a bare filename ending `.json`,
       no path separators, refused where it resolves to a file the receipt hashes), a test and the docs (NEWS is the
       release step's); `/code-check`, open the PR. Merging and releasing it needs your word
 - [ ] Until it is released, knowledge's branch builds against it through `Remotes: NewGraphEnvironment/crate@<branch>`;
@@ -65,15 +65,15 @@ written nowhere as a rule.
       record, the evidence directory and the run's spec, writes `<key>_grades_receipt.json` through
       `crt_receipt_write(file =, keys = knw_receipt_keys("grade"), publish = TRUE)`; refuses a table, evidence or
       walk that is not the record's; carries the record's `grades_md5` in its context
-- [ ] `scripts/0320-tune-run.R`: the full commit read at the start beside `knowledge_commit`; the written grades
+- [x] `scripts/0320-tune-run.R`: the full commit read at the start beside `knowledge_commit`; the written grades
       frame built once and passed to the receipt after the record; the receipt in `caches` and in the unfit unlink;
       the keep path keeps a receipt naming the checked record's md5 and writes one from the table's two columns
       when missing (review G1, G2)
-- [ ] Promotion (`knw_tune_promote()`) moves it with the key's files (its `^<key>_` pattern takes it) and checks a
+- [x] Promotion (`knw_tune_promote()`) moves it with the key's files (its `^<key>_` pattern takes it) and checks a
       present receipt names the record's `grades_md5`; the archive takes it when present, appended last
       (`.knw_archive_tune_files()`, review G5), so the archived copy is the reference a rebuild is compared against,
       and `PULL=TRUE 0336` restores it
-- [ ] Tests on the grade-record fixture: written, `crt_receipt_validate()` passes, compared with itself `identical`,
+- [x] Tests on the grade-record fixture: written, `crt_receipt_validate()` passes, compared with itself `identical`,
       a summary moved within its rounding `equivalent`, past it `different`; promotion and archive carry the file
 
 ## Phase 4: the published sets' receipts

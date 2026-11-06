@@ -68,7 +68,9 @@ anything moves, naming the field and the kept keys that would have to come
 along. After a change upstream (a new link run or evidence build) that means
 every fitted key moves together. Each promoted key's grades must carry their
 record (\code{\link[=knw_grade_record_write]{knw_grade_record_write()}}) and match it (md5 and size; a
-\verb{replaced_*} archive may lack one), and kept keys are read from their
+\verb{replaced_*} archive may lack one); a grade table's receipt
+(\code{\link[=knw_grade_receipt_write]{knw_grade_receipt_write()}}, #154), where the run wrote one, moves with it
+and must name the record's md5. Kept keys are read from their
 records where the tables are absent. A key scored under other floors than
 the tuning's (\code{min_wsg}, \code{folds} in its summary, #120) is refused. Each promoted key's grades must be of its
 recommended rule on its own evidence, and its comparison of the same rule and

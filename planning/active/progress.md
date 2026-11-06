@@ -15,3 +15,8 @@
   overwrote it) and round 2 (the string guard missed `.//`; config files and lockfile unguarded) fixed by a
   resolved-path check over every hashed file; round 3 running
 - Phase 2 declarations and helpers, and the grade receipt writer, with tests (installed crate from the branch)
+- crate round 3 (a symlink at the target name; NFC/NFD folding) fixed by resolving the target through the filesystem;
+  the loop ended on an enumeration (`receipt_file_sha256()`'s three callers, all guarded); crate PR #48 opened
+  (merge and release need Al's word)
+- Phase 3: 0320 writes each grade table's receipt (fresh and kept paths), promotion checks and carries it, the
+  archive takes it when present; tests with mutation checks on the promotion guard

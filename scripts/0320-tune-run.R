@@ -66,6 +66,8 @@
 #                                              its own walked distance, with dist_status (ignored; 0325 publishes)
 #         data/tune/<sp>_<stage>_grades_record.csv  the grade table's record: its run columns, md5, size and rows, the
 #                                              run, ledger, commit and link build (tracked; the bundles pin it, #119)
+#         data/tune/<sp>_<stage>_grades_receipt.json  its provenance receipt in crate's shape (#154): the recipe, the
+#                                              pick and the table's summaries, compared with a rebuild's (tracked)
 #         data/tune/<sp>_<stage>_groups.csv    the groups modelled, with their fold
 #         data/tune/<sp>_<stage>_seeds.csv     the four more fold seeds' best, pick and recommended rules
 #         data/tune/<sp>_<stage>_honest.csv    nested selection: each fold's pick and its held-out deviance
@@ -226,6 +228,8 @@ git1 <- function(...) suppressWarnings(system2("git", c(...), stdout = TRUE, std
 knowledge_commit <- paste0(git1("rev-parse", "--short", "HEAD")[1],
                            if (length(git1("status", "--porcelain", "--untracked-files=no", "--", "R", "scripts", "inst")))
                              "+dirty" else "")
+# the same state in full, for each grade table's receipt (#154): crate names code by its 40-character commit
+knowledge_git <- .knw_git_state()
 
 # ---- inputs and their provenance ------------------------------------------------------
 ledger_path <- .knw_evidence_ledger(evidence_dir)
@@ -361,7 +365,8 @@ say("Smoke run first%s: previous picks on file for %s.", if (dev) sprintf(" (DEV
 # The smoke tables go before the smoke run, the rest once it has passed, so a refused smoke run leaves the last
 # pass's fit as it was
 pat_keys <- sprintf("^(%s)_(rear|spawn)_", paste(species, collapse = "|"))
-caches <- "_(score\\.rds|grades\\.csv|grades_record\\.csv)$"   # a kept grade table keeps its record (#119)
+# a kept grade table keeps its record (#119) and its receipt (#154)
+caches <- "_(score\\.rds|grades\\.csv|grades_record\\.csv|grades_receipt\\.json)$"
 old_files <- list.files(dir_out, pat_keys, full.names = TRUE)
 unlink(old_files[grepl("_smoke\\.csv$", old_files)])
 t0 <- Sys.time()
@@ -395,7 +400,9 @@ out <- knw_tune_run(vl, vs, walks, thr, species = species, spawner = spawner, wo
 say("Scored %d species x stage in %.1f min on %d workers%s.", length(out), as.numeric(difftime(Sys.time(), t0, units = "mins")), workers,
     if (main_only) " (the main seed only)" else "")
 
-for (k in names(out)) if (is.null(out[[k]]$curve)) unlink(file.path(dir_out, paste0(k, c("_grades.csv", "_grades_record.csv"))))
+for (k in names(out)) if (is.null(out[[k]]$curve)) {
+  unlink(file.path(dir_out, paste0(k, c("_grades.csv", "_grades_record.csv", "_grades_receipt.json"))))
+}
 summ <- list()
 # the d_floor a key was scored at (#141's anchoring reads its picks at it): a score cache from before the settings were
 # recorded, which only GRADIENT=fwa_gradient reads back, was scored at knw_tune_run()'s default
@@ -565,6 +572,13 @@ write_record <- function(gpath, rows) {
                          link = c(version = led$note[led$step == "run_link_version"], sha = link_sha),
                          tokens = tokens_rec, rows = rows)
 }
+# and its receipt (#154), written after the record and read from it: how the table was made (this commit, the run's
+# settings and fold seed, link's build, the flow load, the evidence) and what came out (the pick, the rows, graded
+# km and grade sum of the table as written), with no host
+write_receipt <- function(gpath, grades, r) {
+  knw_grade_receipt_write(gpath, grades, spec = r$score$spec, min_wsg = min_wsg, evidence_dir = evidence_dir,
+                          knowledge = knowledge_git)
+}
 grade_rows <- list()
 for (k in names(out)) {
   r <- out[[k]]
@@ -604,6 +618,17 @@ for (k in names(out)) {
     if (same && !grec_ok) say("%s: the grade table's record describes another table; regraded.", k)
     if (same && grec_ok) {
       if (!file.exists(grec)) write_record(gpath, rows = NA)
+      # its receipt names the record's md5, checked against the table above; one that names another, or none, is
+      # written from the table's two columns the summaries need
+      grcp <- file.path(dir_out, .knw_grade_receipt_name(gpath))
+      grcp_ok <- file.exists(grcp) && identical(
+        tryCatch(crate::crt_receipt_read(grcp)$context$run$grades_md5, error = function(e) NULL),
+        knw_grade_record_read(grec)$grades_md5)
+      if (!grcp_ok) {
+        write_receipt(gpath, readr::read_csv(gpath, col_select = c("length_metre", "grade"), show_col_types = FALSE,
+                                             col_types = readr::cols(.default = "d")), r)
+        say("%s: the kept grade table's receipt written from the table.", k)
+      }
       # not "<key> grades: <n> groups", the result line data-raw/vignette_chinook.R reads
       say("%s: grades already written under %s on %s, kept.", k, r$pick$rule, run_uid)
       next
@@ -626,15 +651,16 @@ for (k in names(out)) {
   # ref_population is kept as the name 0325, 0330 and the article read; ref_edge, q_walk, walk and discharge_load
   # are the record (#72), written from what knw_grade_species() returns, not from a literal beside the call
   # written whole (a sibling renamed into place): a pass killed mid-write leaves no grade table that reads as one
-  .knw_write_whole(file.path(dir_out, paste0(k, "_grades.csv")), function(p) write_csv(
-    g$grades |> mutate(species_code = r$species_code, stage = r$stage, rule = r$pick$rule, run_uid = run_uid,
+  # the frame as written, built once: the receipt's summaries describe the table on disk, rounding included
+  g_written <- g$grades |> mutate(species_code = r$species_code, stage = r$stage, rule = r$pick$rule, run_uid = run_uid,
                                ref_population = "stream_branch", ref_edge = paste(g$ref_edge, collapse = ";"),
                                q_walk = g$q, walk = g$walk, walk_md5 = g$walk_md5, discharge_load = discharge_load,
                                curve_prior_sd = curve_prior_txt, grade_withheld = withheld_txt, null_heldout_curve = nhc_txt,
                                evidence_md5 = evidence_md5, curve_grad = r$curve$cols[["grad"]],
-                               across(c(rate, grade), ~ signif(.x, 5))),
-            p, na = ""))
+                               across(c(rate, grade), ~ signif(.x, 5)))
+  .knw_write_whole(file.path(dir_out, paste0(k, "_grades.csv")), function(p) write_csv(g_written, p, na = ""))
   write_record(gpath, rows = nrow(g$grades))
+  write_receipt(gpath, g_written, r)
   say("%s grades: %d groups, %s; reference rate %.4f over edge types %s; walks to %g m3/s, to the bank, %.1f min; %d of %d found rivers lie in another group; total %.1f min.",
       k, length(wsg), paste(names(g$counts), g$counts, sep = "=", collapse = ", "), g$reference,
       paste(g$ref_edge, collapse = ","), g$q, g$walk_minutes, sum(g$grades$target_in_group %in% FALSE),

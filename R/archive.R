@@ -96,8 +96,9 @@ knw_archive_setup <- function(record, vocabulary = NULL) {
 #' What the archive stores for a run, and where
 #'
 #' Lists every file one archive of a run sends to the bucket: per key the
-#' grade table (stored compressed), its record, the curve and the
-#' comparison's segments, under `tune/<key>/<setup>/`; and the evidence build
+#' grade table (stored compressed), its record, the curve, the
+#' comparison's segments and, where the run wrote one, the grade table's
+#' receipt (#154), under `tune/<key>/<setup>/`; and the evidence build
 #' the grades name, under `evidence/<id>/` with a `MANIFEST` (one line per
 #' file, its md5 and name), `<id>` being the MANIFEST's md5. Each grade table
 #' is checked against its record and the evidence against the grades'
@@ -134,6 +135,13 @@ knw_archive_plan <- function(keys, tune_dir, compare_dir, evidence_dir, build_di
   for (k in keys) {
     f <- .knw_archive_tune_files(k)
     f$source <- file.path(ifelse(f$dir == "tune", tune_dir, compare_dir), f$file)
+    # the grade table's receipt (#154) where the run wrote one, last, so the md5s below stay in order; a run from
+    # before receipts is archived without
+    rcp <- file.path(tune_dir, paste0(k, "_grades_receipt.json"))
+    if (file.exists(rcp)) {
+      f <- rbind(f, data.frame(file = basename(rcp), dir = "tune", compress = FALSE, source = rcp,
+                               stringsAsFactors = FALSE))
+    }
     gone <- f$source[!file.exists(f$source)]
     if (length(gone)) stop(k, ": the run lacks ", paste(gone, collapse = ", "), call. = FALSE)
     rec <- knw_grade_record_read(f$source[2])

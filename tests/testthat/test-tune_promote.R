@@ -466,6 +466,29 @@ test_that("a grade table travels with its record: none, or one of another table,
                    unname(tools::md5sum(file.path(fx$tune, "CH_rear_grades.csv"))))
 })
 
+# a grade table's receipt (#154) naming `md5` as its table's, as knw_grade_receipt_write() names the record's
+fx_receipt <- function(g, md5 = knw_grade_record_read(.knw_grade_record_path(g))$grades_md5) {
+  crate::crt_receipt_write(dirname(g), output = list(name = "grade"),
+                           recipe = list(code = list(knowledge = list(commit = strrep("a", 40), dirty = FALSE))),
+                           result = list(parts = basename(g)), context = list(run = list(grades_md5 = md5)),
+                           lockfile = NULL, publish = TRUE, file = .knw_grade_receipt_name(g))
+}
+
+test_that("a grade table's receipt travels with it, and one naming another table is refused (#154)", {
+  fx <- promote_fx()
+  g <- file.path(fx$tune, "candidate", "r1", "CH_rear_grades.csv")
+  fx_receipt(g)
+  p <- promote(fx)
+  expect_true(file.path(fx$tune, "CH_rear_grades_receipt.json") %in% p$written)
+  expect_identical(crate::crt_receipt_read(file.path(fx$tune, "CH_rear_grades_receipt.json"))$context$run$grades_md5,
+                   unname(tools::md5sum(file.path(fx$tune, "CH_rear_grades.csv"))))
+  # one left by an earlier pass names that pass's table
+  fx <- promote_fx()
+  g <- file.path(fx$tune, "candidate", "r1", "CH_rear_grades.csv")
+  fx_receipt(g, md5 = strrep("0", 32))
+  expect_error(promote(fx), "CH_rear: the grade table's receipt .* does not name the table its record describes")
+})
+
 test_that("a kept key is held to the set by its record where its grade table is absent (#119)", {
   fx <- promote_fx()
   set_col(fx, "run_tune", "CH_rear", "grades", "walk_md5", "w1")
