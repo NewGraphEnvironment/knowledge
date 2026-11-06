@@ -102,7 +102,7 @@ The reference is the published run `20261104_0543`: tracked `data/tune/*` and `d
 - [ ] `pak::pak("NewGraphEnvironment/crate", ask = FALSE)`, then write receipts for the reference and new outputs through `crt_receipt_write()`
       with the tolerances recorded by hand. Check that `crt_receipt_compare()`'s verdict on each output matches the hand-recorded one, and record
       any disagreement. Disagreements go to a crate issue, not a workaround (drafted for crate, which is our repo)
-- [ ] Tick the issue's provenance task. In #154's body, propose each tolerance used as the declaration beside its writer, and each identical
+- [ ] Tick the issue's provenance task (the tolerance half is done: #154's body carries the table). In #154's body, propose each tolerance used as the declaration beside its writer, and each identical
       table as exact
 
 ## Phase 5: Record
@@ -111,7 +111,7 @@ The reference is the published run `20261104_0543`: tracked `data/tune/*` and `d
 - [x] `research/database_builds.md`, "A second database": the measured load (about 71 GB moved as 8 GB of dumps plus one 14-minute flow load,
       66 min of moving, 2026-11-05), what was reproduced and with which verdicts, the minutes per step against the host's, and that a run there
       is now ordinary. Update the header's Verified/Issues/Produced-by line
-- [ ] Edit #158's body: `DEV=1` replaced by the full candidate run, the cold walk check added, and each task ticked with its verdict
+- [x] Edit #158's body: `DEV=1` replaced by the full candidate run, the cold walk check added, and each task ticked with its verdict
 - [x] CLAUDE.md "Database access": one line that a second database holding the build has been proved (no host names)
 
 ## Out of scope (review G5)
