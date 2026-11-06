@@ -96,8 +96,10 @@ knw_receipt_keys <- function(output) {
   if (is.numeric(x) && any(!is.finite(x) & !is.na(x))) format(x) else x
 }
 
-# The evidence a build read, as receipt inputs: each derived table's sha256, after its md5 is checked against the
-# md5s the run recorded (`evidence_md5`, `;`-joined in this order), so a receipt never names another build's evidence
+# The evidence a build read, as the receipt input `evidence`, after the visit tables' md5s are checked against the md5s
+# the run recorded (`evidence_md5`, `;`-joined in this order), so a receipt never names another build's evidence: the
+# build's receipt's recipe_id where 0310 wrote one (#160), so an evidence rebuild that came out equivalent is the same
+# input, else the md5s as a version id, as 0325 names it, for a build from before evidence receipts
 .knw_receipt_evidence <- function(evidence_dir, evidence_md5) {
   tbl <- c("visits_link", "visits_species", "walks")
   f <- file.path(evidence_dir, paste0(tbl, ".csv"))
@@ -109,7 +111,8 @@ knw_receipt_keys <- function(output) {
     stop("the evidence in ", evidence_dir, " is not the build the run read (md5 ", md5, ", recorded ",
          evidence_md5, ")", call. = FALSE)
   }
-  stats::setNames(lapply(f, function(p) list(sha256 = .knw_sha256(p))), tbl)
+  id <- .knw_evidence_recipe_id(evidence_dir)
+  list(evidence = if (is.null(id)) list(version_id = evidence_md5) else list(recipe_id = id))
 }
 
 # The tables a receipt fingerprints, read from their CSVs as text, so each value is held as written: a column the

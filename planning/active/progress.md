@@ -16,3 +16,7 @@
   and writes the receipt after `access_check`, ledgering its recipe_id. The receipt block was smoke-run from the script's
   own lines on fixtures (scratchpad `smoke0310.R`); a real build is phase 7. test-evidence_receipt passes, and its
   array check goes red with the `I()` wrap removed.
+- Phase 3: `.knw_receipt_evidence()` returns one `evidence` input: `.knw_evidence_recipe_id()` reads the build's
+  receipt and refuses one whose visit-table sha256 are not the files' (proved by removing the check: the refusal
+  test goes red); no receipt falls back to `version_id = evidence_md5`. No reader in R/, scripts/, data-raw/ or the
+  vignettes read grade receipt inputs by the old names.

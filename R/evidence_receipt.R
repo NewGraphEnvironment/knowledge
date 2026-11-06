@@ -92,3 +92,25 @@ knw_evidence_receipt_write <- function(evidence_dir, settings, inputs, knowledge
   writeLines(paste(vapply(paths, .knw_sha256, character(1)), paths, sep = "  "), man, useBytes = TRUE)
   .knw_sha256(man)
 }
+
+# An evidence build's recipe_id, from the receipt 0310 wrote in its directory, or NULL where there is none (a build
+# from before #160). A receipt that does not describe the visit tables in the directory is refused, never passed over
+# for the md5 fallback: it is another build's, or the tables were replaced after it was written
+.knw_evidence_recipe_id <- function(evidence_dir) {
+  path <- file.path(evidence_dir, .knw_evidence_receipt_file)
+  if (!file.exists(path)) return(NULL)
+  r <- crate::crt_receipt_read(path)
+  if (!identical(r$output$name, "evidence")) stop(path, " is not an evidence build's receipt", call. = FALSE)
+  for (tb in c("visits_link", "visits_species", "walks")) {
+    f <- paste0(tb, ".csv")
+    held <- r$result$parts[[f]]$sha256
+    if (is.null(held) || !identical(held, .knw_sha256(file.path(evidence_dir, f)))) {
+      stop(path, " does not describe ", file.path(evidence_dir, f), ": the receipt is another build's, or the table ",
+           "was replaced after it; rebuild the evidence (scripts/0310)", call. = FALSE)
+    }
+  }
+  if (!is.character(r$recipe$recipe_id) || !grepl("^[0-9a-f]{64}$", r$recipe$recipe_id)) {
+    stop(path, " names no recipe_id", call. = FALSE)
+  }
+  r$recipe$recipe_id
+}

@@ -77,11 +77,11 @@ as another recipe for every grade downstream. The issue has no comments.
 
 ## Phase 3: Grade receipts name the evidence by its recipe
 
-- [ ] `.knw_receipt_evidence()` keeps its md5 check against the record. It then returns
+- [x] `.knw_receipt_evidence()` keeps its md5 check against the record. It then returns
   `evidence = list(recipe_id = …)` when `evidence_receipt.json` is present and its parts' sha256 for the three visit
   tables match the files', and `list(version_id = evidence_md5)` when there is no receipt. A receipt present that
   describes other tables is refused, never passed over. The context keeps `evidence_md5`.
-- [ ] `knw_grade_receipt_write()`'s docs, plus `tests/testthat/test-grade_receipt.R`: one test for each of the three
+- [x] `knw_grade_receipt_write()`'s docs, plus `tests/testthat/test-grade_receipt.R`: one test for each of the three
   cases above, and the existing input assertions updated.
 
 ## Phase 4: 0299 publishes through knw_publish(receipt =)
