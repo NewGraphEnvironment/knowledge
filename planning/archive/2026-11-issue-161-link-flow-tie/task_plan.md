@@ -90,7 +90,7 @@ None. The next evidence build happens on Al's word, as CLAUDE.md requires.
 - [x] Tests pass
 - [x] `/code-check` clean (once over the branch with `/code-check branch`)
 - [x] PWF checkboxes match landed work
-- [ ] `/planning-archive` on completion
+- [x] `/planning-archive` on completion
 
 How each change is proved:
 
