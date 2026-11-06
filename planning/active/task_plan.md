@@ -131,8 +131,8 @@ as another recipe for every grade downstream. The issue has no comments.
 
 - [x] Tests pass (`devtools::test()`), including `test-vignette-data.R`, untouched
 - [x] `lintr::lint_package()`, `devtools::document()`, and `pkgdown::check_pkgdown()` for the new export
-- [ ] `/code-check` clean, once over the branch with `/code-check branch`
-- [ ] PWF checkboxes match landed work
+- [x] `/code-check` clean, once over the branch with `/code-check branch`
+- [x] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion
 
 How each change is proved:

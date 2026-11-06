@@ -46,3 +46,10 @@
   `equivalent` alone and re-read; a grade receipt against build a names its recipe_id. The tagged ledgers were moved
   into `scripts/logs/habitat/evidence_receipt_160/` (their receipts' context names the original path). The two
   directories (202 MB each, ignored) stay until the merge.
+- `/code-check branch`: three rounds (13:14, 13:20, 13:29 UTC), plus the plan review, four spawns in all. Round 1: 2
+  findings, both fixed (link configs hashed by absolute path; the keep-check kept a grade naming stale evidence).
+  Round 2: 2, both fixed (the archive id moved with the receipt's bytes; a stray receipt survived a restore). Round 3:
+  3, 2 fixed (schema names in the parent setting; 0299's pull, the other caller of round 2's fix), 1 accepted (the
+  species tables are not tied to the evidence build, as before). Round 3's inside-a-fix finding meant the loop ended on
+  an enumeration (review-round3.md): writers, restores, readers and recipe inputs around the receipt, all holding.
+- Final suite 13:41 UTC: 0 failed, 0 errors, 3 skipped, 2,244 passed.
