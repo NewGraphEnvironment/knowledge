@@ -101,3 +101,10 @@ What separated the causes, in order:
    `ORDER BY s.geom <-> mouth.pt LIMIT 1` (`inst/sql/ch_dist_profile.sql:140`), resolved by each database's plan inside the function (#162).
 
 A run that reads `knw.walk_cache` is unaffected: the second database's `0310` read the host's walks and wrote an identical `walks.csv`.
+
+## crate's comparison on the evidence (2026-11-06, trial)
+
+`data-raw/database_receipts.R` on the evidence verdicts: 6 of 7 agree. crate answers `different` on every output because the receipts
+state each run's real code commit (recipe), as its rules require; the check reads its result-side fields. The one disagreement is a
+difference of definition: crate fingerprints a double rounded to its tolerance, so access_check (6.0e-11 under 1e-6) is identical to
+crate and equivalent by hand. crate refuses data.table's `IDate` (a `Date` subclass): converted in the check, filed as crate#49.
