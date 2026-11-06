@@ -96,9 +96,9 @@ as another recipe for every grade downstream. The issue has no comments.
 
 ## Phase 5: The archive keeps the evidence receipt
 
-- [ ] `R/archive.R`: `knw_archive_plan()` adds `evidence_receipt.json` to the evidence files and the MANIFEST where it
+- [x] `R/archive.R`: `knw_archive_plan()` adds `evidence_receipt.json` to the evidence files and the MANIFEST where it
   exists. A restore brings it back through the index, as it does the other files.
-- [ ] `tests/testthat/test-archive.R`: the receipt is archived and restored when present, and a build without one
+- [x] `tests/testthat/test-archive.R`: the receipt is archived and restored when present, and a build without one
   keeps its row count (11) and its id.
 
 ## Phase 6: Documentation and the owed issue line

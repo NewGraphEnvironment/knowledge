@@ -502,3 +502,50 @@ test_that("a batch named for another key leaves this key's choice to its files",
   file.copy(file.path(x$tune, "CH_rear_grades_record.csv"), file.path(dest, "data", "tune"))
   expect_no_error(knw_archive_pull("CH_rear", dest, index = idx, batch = c(BT_rear = "x")))
 })
+
+# the rest of an evidence build beside the fixture's tables, and the receipt 0310 writes for it (#160)
+evidence_receipt_of <- function(ev) {
+  for (f in c("bcfishobs_fdis_match", "workbook_sites", "workbook_species")) {
+    writeLines("site_visit", file.path(ev, paste0(f, ".csv")))
+  }
+  writeLines(c("species_code,km", "BT,1.5"), file.path(ev, "access_check.csv"))
+  inputs <- lapply(stats::setNames(nm = knw_receipt_keys("evidence")$inputs), function(i) list(version_id = "v"))
+  knw_evidence_receipt_write(ev, list(species = "BT", q_grid = 1, sources = "pick", snap_limit_m = 100,
+                                      snap_limit_code_m = 150, parent = "none"),
+                             inputs, knowledge = list(commit = strrep("a", 40), dirty = FALSE))
+}
+
+test_that("the evidence build's receipt is archived with it and restored, and a build without one keeps its id", {
+  root <- withr::local_tempdir()
+  x <- run_fx(root)
+  id_before <- plan_of(x)$evidence_id[1]
+  evidence_receipt_of(x$evidence)
+  p <- plan_of(x)
+  expect_identical(sum(p$kind == "evidence"), 7L)
+  expect_match(attr(p, "manifest"), "  evidence_receipt.json\n$")
+  expect_false(identical(p$evidence_id[1], id_before))
+  expect_identical(p$target[p$kind == "evidence"][7], "data/fdis/derived/evidence_receipt.json")
+  # the receipt is the one beside these tables, or the archive refuses
+  other <- withr::local_tempdir()
+  for (f in c("visits_link", "visits_species", "walks")) {
+    writeLines(paste("another", f), file.path(other, paste0(f, ".csv")))
+  }
+  evidence_receipt_of(other)
+  file.copy(file.path(other, "evidence_receipt.json"), x$evidence, overwrite = TRUE)
+  expect_error(plan_of(x), "does not describe")
+  # archived and restored as the build's other files are
+  evidence_receipt_of(x$evidence)
+  idx <- file.path(root, "index.csv")
+  b <- mock_bucket()
+  rows <- knw_archive_put(plan_of(x), idx)
+  expect_identical(nrow(rows), 12L)   # four tune objects, six evidence files, the receipt and the MANIFEST
+  dest <- withr::local_tempdir()
+  dir.create(file.path(dest, "data", "tune"), recursive = TRUE)
+  file.copy(file.path(x$tune, "CH_rear_grades_record.csv"), file.path(dest, "data", "tune"))
+  knw_archive_pull("CH_rear", dest, index = idx)
+  expect_identical(unname(tools::md5sum(file.path(dest, "data", "fdis", "derived", "evidence_receipt.json"))),
+                   unname(tools::md5sum(file.path(x$evidence, "evidence_receipt.json"))))
+  # without its receipt the build is the one archived before, under its id
+  unlink(file.path(x$evidence, "evidence_receipt.json"))
+  expect_identical(plan_of(x)$evidence_id[1], id_before)
+})

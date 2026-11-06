@@ -26,3 +26,6 @@
   `receipt.json` naming the evidence recipe_id; no evidence receipt, or one whose `walks.csv` moved, is refused;
   `VERSION=v2` writes none and removes the earlier one. The full-tree clean rule for `PUBLISH` is kept.
   The fdis test's last-place move is `equivalent`, not `identical`: the Parquet's bytes move with the value.
+- Phase 5: `knw_archive_plan()` appends `evidence_receipt.json` to the evidence files and MANIFEST where it exists,
+  after holding it to the build's tables; a restore brings it back through the index. A build without one keeps its
+  MANIFEST and id (tested).

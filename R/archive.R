@@ -99,8 +99,9 @@ knw_archive_setup <- function(record, vocabulary = NULL) {
 #' grade table (stored compressed), its record, the curve, the
 #' comparison's segments and, where the run wrote one, the grade table's
 #' receipt (#154), under `tune/<key>/<setup>/`; and the evidence build
-#' the grades name, under `evidence/<id>/` with a `MANIFEST` (one line per
-#' file, its md5 and name), `<id>` being the MANIFEST's md5. Each grade table
+#' the grades name, with its receipt where `0310` wrote one (#160), under
+#' `evidence/<id>/` with a `MANIFEST` (one line per file, its md5 and name),
+#' `<id>` being the MANIFEST's md5. Each grade table
 #' is checked against its record and the evidence against the grades'
 #' `evidence_md5` before anything is listed, so an archive never stores a
 #' table its record does not describe.
@@ -125,6 +126,14 @@ knw_archive_plan <- function(keys, tune_dir, compare_dir, evidence_dir, build_di
   ev$source <- file.path(ifelse(ev$dir == "derived", evidence_dir, build_dir), ev$file)
   gone <- ev$source[!file.exists(ev$source)]
   if (length(gone)) stop("the evidence build lacks ", paste(gone, collapse = ", "), call. = FALSE)
+  # the build's receipt (#160) where 0310 wrote one, last, so a build from before receipts keeps the MANIFEST, and the
+  # id, it was archived under; one that does not describe the build's tables is refused
+  rcp_ev <- file.path(evidence_dir, .knw_evidence_receipt_file)
+  if (file.exists(rcp_ev)) {
+    .knw_evidence_recipe_id(evidence_dir)
+    ev <- rbind(ev, data.frame(file = .knw_evidence_receipt_file, dir = "derived", source = rcp_ev,
+                               stringsAsFactors = FALSE))
+  }
   ev$source_md5 <- unname(tools::md5sum(ev$source))
   manifest <- paste0(paste(ev$source_md5, ev$file, sep = "  "), collapse = "\n")
   manifest <- paste0(manifest, "\n")

@@ -36,8 +36,9 @@ Lists every file one archive of a run sends to the bucket: per key the
 grade table (stored compressed), its record, the curve, the
 comparison's segments and, where the run wrote one, the grade table's
 receipt (#154), under \verb{tune/<key>/<setup>/}; and the evidence build
-the grades name, under \verb{evidence/<id>/} with a \code{MANIFEST} (one line per
-file, its md5 and name), \verb{<id>} being the MANIFEST's md5. Each grade table
+the grades name, with its receipt where \code{0310} wrote one (#160), under
+\verb{evidence/<id>/} with a \code{MANIFEST} (one line per file, its md5 and name),
+\verb{<id>} being the MANIFEST's md5. Each grade table
 is checked against its record and the evidence against the grades'
 \code{evidence_md5} before anything is listed, so an archive never stores a
 table its record does not describe.
