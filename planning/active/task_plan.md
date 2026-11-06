@@ -78,15 +78,15 @@ The reference is the published run `20261104_0543`: tracked `data/tune/*` and `d
       `data/fdis/derived` (visits, placements, walks, flows), and its ledger against the published one, line by line, context aside
 - [x] Cold walk check (`data-raw/database_walk_check.R`): every visit start, uncached, against the host's `walks.csv`; and 20,000 sampled CH grade
       starts (fixed seed), uncached, against the cache. Write the verdict rows and the minutes
-- [ ] `SPECIES=CH RUN=<stamp> EVIDENCE_DIR=data/fdis/derived_second Rscript scripts/0320-tune-run.R`. Compare the smoke results, tune, seeds,
+- [x] `SPECIES=CH RUN=<stamp> EVIDENCE_DIR=data/fdis/derived_second Rscript scripts/0320-tune-run.R`. Compare the smoke results, tune, seeds,
       honest, curves, summary and pick (`mad>=0.75|g<=0.13|Q3@D1000`) against `data/tune/CH_rear_*`. Compare the grade record, and the grade
       table by md5 first and by content where the md5 differs, against the restored `CH_rear_grades.csv`
 - [ ] `TUNE_DIR=data/tune/candidate/<stamp> SPECIES=CH CONFIG_SHA=e2a85938… GPKG=FALSE Rscript scripts/0330-compare.R`. Compare km drawn and graded, plus change,
       checks and compare, against `data/compare/CH_rear_*`
-- [ ] Machine control (review G4): `SPECIES=CH RUN=<stamp2> WORKERS=8 Rscript scripts/0320-tune-run.R` on the restored host evidence
+- [x] ~~Machine control (review G4)~~ not run: tune, seeds, honest and curves came out byte-identical, so the machine does not move scoring, and the grade differences trace to segment sizes (#161), which the evidence does not set. Was: `SPECIES=CH RUN=<stamp2> WORKERS=8 Rscript scripts/0320-tune-run.R` on the restored host evidence
       (default `data/fdis/derived`). Its tables test the machine; its grade table differs from the published one only through this
       database, with `evidence_md5` equal
-- [ ] Copy pass 1's CH outputs aside before Phase 3 (review O3), and record each step's `sessionInfo()`, workers and grade cache counts
+- [x] Copy pass 1's CH outputs aside before Phase 3 (review O3), and record each step's `sessionInfo()`, workers and grade cache counts
 - [ ] A `different` in something a decision reads stops the run. Rerun that step at `2aacd1f` and record which cause it was
 
 ## Phase 3: Every key
