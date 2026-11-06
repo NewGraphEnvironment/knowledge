@@ -16,8 +16,8 @@
 #
 # What the hand comparison set aside is set aside here too, so the two judge the same cells: the columns the current
 # code adds (#120's segment_fwa_gradient) and each table's context columns are dropped from both sides before the
-# fingerprint. The hand tolerances map to crate's, which must be powers of ten: 0 is exact (no tolerance), 0.005 m (a
-# distance stored to the centimetre) is 1e-2, and 1e-6 and 1e-9 are themselves, on every double column of the table.
+# fingerprint. The hand tolerances map to crate's, which must be powers of ten, rounded up: 0 is exact (no tolerance),
+# 0.005 m (the walks' chosen tolerance) is 1e-2, 1e-3, 1e-5 and 1e-6 are themselves, on every double column of the table.
 #
 # INPUT:  VERDICTS, the hand-verdict CSVs (default every scripts/logs/habitat/database_second/*_database_compare-*.csv
 #         but -walks and -receipts); for each row, the reference and new files named in PAIRS below

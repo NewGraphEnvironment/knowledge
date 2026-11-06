@@ -15,8 +15,11 @@
 #
 # KEYS AND TOLERANCES: the `spec` table below, one row per output family, matched on the file name. `key` is the
 # columns a row is identified by (blank: sort on every column the two sides share, for small tables whose rows
-# carry no float a database could sum differently); `tol` the absolute tolerance on numeric columns (0: exact);
-# (walks.csv stores distances rounded to the centimetre, so a fresh walk is held to 0.005 m);
+# carry no float a database could sum differently); `tol` the absolute tolerance on numeric columns (0: exact), never
+# finer than what the table stores (a value that rounds the other way at the stored precision moves by one unit of it,
+# and a difference is held to the tolerance with a relative allowance of 1e-9, so one unit passes); walks are held to
+# 0.005 m, a chosen tolerance: a walk sums segment lengths in the order the database returns them, and a cold walk on a
+# second database moved distances by up to 3.5 mm where nothing else moved (#158);
 # `context` columns reported and never compared; `added` columns the current code writes and the reference predates
 # (#120 added segment_fwa_gradient to visits_link after the published run), noted and never compared. A file no row
 # matches is compared exactly, keyed on every column.
@@ -50,7 +53,7 @@ spec <- data.table::rbindlist(list(
   # the tuning (0320): the grade record's run columns are compared, its provenance is context
   list("_grades_record\\.csv$",      "species_code;stage",                                  0,
        "grades_md5;grades_bytes;tune_run;evidence_ledger;knowledge_commit;record_source;evidence_md5", TRUE, ""),
-  # the grade table writes rates to 5 significant digits, so a rate near 1 is held only to 1e-5
+  # the grade table writes rates and grades to 5 significant digits, so a value near 1 is held only to 1e-5
   list("_grades\\.csv$",             "watershed_group_code;id_segment",                     1e-5, "evidence_md5", TRUE, ""),
   list("_tune\\.csv$",               "rule",                                                1e-6, "",  TRUE, ""),
   list("_summary\\.csv$",            "species_code;stage",                                  1e-6,
@@ -61,9 +64,10 @@ spec <- data.table::rbindlist(list(
   list("_smoke\\.csv$",              "check;role;rule",                                     1e-6, "",  FALSE, ""),
   list("_groups\\.csv$",             "watershed_group_code",                                0,    "",  FALSE, ""),
   list("^pick_report\\.csv$",        "species_code;stage",                                  1e-6, "",  TRUE, ""),
-  # the comparison (0330): km sums take a rounding; the bound tables every key composes carry the key in their key
-  list("^compare\\.csv$",            "species_code;stage;watershed_group_code;structure",   1e-6, "",  TRUE, ""),
-  list("^change\\.csv$",             "species_code;stage;direction;reason;order;structure", 1e-6, "",  TRUE, ""),
+  # the comparison (0330): km sums take a rounding; the bound tables every key composes carry the key in their key, and
+  # compare.csv and change.csv store km to 3 decimals (checks.csv and each key's tables carry full precision)
+  list("^compare\\.csv$",            "species_code;stage;watershed_group_code;structure",   1e-3, "",  TRUE, ""),
+  list("^change\\.csv$",             "species_code;stage;direction;reason;order;structure", 1e-3, "",  TRUE, ""),
   list("^checks\\.csv$",             "species_code;stage;check;rule;segment;tuned_structure", 1e-6, "", FALSE, ""),
   list("_compare\\.csv$",            "watershed_group_code;structure",                      1e-6, "",  TRUE, ""),
   list("_change\\.csv$",             "direction;reason;order;structure",                    1e-6, "",  TRUE, ""),
@@ -145,6 +149,8 @@ compare_tables <- function(a, b, name, key = character(), tol = 0, context = cha
                                                  length(setdiff(ka, kb)), length(setdiff(kb, ka)))),
                                 collapse = "; ")))
   }
+  over <- function(d) d > tol * (1 + 1e-9)  # one unit at the stored precision passes; its float noise is no difference
+  diff_of <- function(xv, yv) ifelse(xv == yv, 0, abs(xv - yv))  # the same Inf on both sides is 0; Inf - Inf alone is NaN
   worst <- 0; worst_col <- NA_character_; bad <- character()
   n_bad <- integer()  # rows differing per column: past the tolerance, or a value or NA that does not match
   for (cn in setdiff(cols, key)) {
@@ -155,30 +161,32 @@ compare_tables <- function(a, b, name, key = character(), tol = 0, context = cha
     if (any(miss(x) != miss(y))) {
       bad <- c(bad, cn)
       both <- !nax & !nay
-      n_bad[cn] <- sum(miss(x) != miss(y)) + if (cn %in% num) sum(abs(as.numeric(x[both]) - as.numeric(y[both])) > tol) else
-        sum(as.character(x[both]) != as.character(y[both]))
+      n_bad[cn] <- sum(miss(x) != miss(y)) + if (cn %in% num) {
+        d <- diff_of(as.numeric(x[both]), as.numeric(y[both])); sum(!is.finite(d) | over(d))
+      } else sum(as.character(x[both]) != as.character(y[both]))
       next
     }
     if (cn %in% num) {
       xv <- as.numeric(x[!nax]); yv <- as.numeric(y[!nay])
-      d <- ifelse(xv == yv, 0, abs(xv - yv))  # the same Inf on both sides is no difference; Inf - Inf alone is NaN
-      m <- if (length(d)) max(d) else 0
-      if (!is.finite(m)) { bad <- c(bad, cn); n_bad[cn] <- sum(!is.finite(d)); next }  # an Inf against a number or -Inf
+      d <- diff_of(xv, yv)
+      fin <- is.finite(d)
+      m <- if (any(fin)) max(d[fin]) else 0
       if (m > worst) { worst <- m; worst_col <- cn }
-      if (m > tol) n_bad[cn] <- sum(d > tol)
+      if (!all(fin)) { bad <- c(bad, cn); n_bad[cn] <- sum(!fin | over(d)); next }  # an Inf against a number or -Inf
+      if (over(m)) n_bad[cn] <- sum(over(d))
     } else if (!identical(as.character(x[!nax]), as.character(y[!nay]))) {
       bad <- c(bad, cn); n_bad[cn] <- sum(as.character(x[!nax]) != as.character(y[!nay]))
     }
   }
   if (length(n_bad)) notes <- c(notes, paste0("rows differing: ", paste(names(n_bad), n_bad, sep = " ", collapse = ", ")))
   note <- paste(notes, collapse = "; ")
-  if (length(bad))
-    return(row_out(name, "different", bytes_match, na, nb, column = paste(bad, collapse = ","), tol = tol,
-                   decision_read = decision_read,
+  if (length(bad))  # column names every column that moved, not only those that failed outright
+    return(row_out(name, "different", bytes_match, na, nb, max_diff = if (worst > 0) worst else NA_real_,
+                   column = paste(names(n_bad), collapse = ","), tol = tol, decision_read = decision_read,
                    note = paste(c(notes, "values differ (non-numeric, NA placement or non-finite)"), collapse = "; ")))
   if (worst == 0) return(row_out(name, "identical", bytes_match, na, nb, 0, NA_character_, tol, decision_read, note))
-  if (worst <= tol) return(row_out(name, "equivalent", bytes_match, na, nb, worst, worst_col, tol, decision_read, note))
-  row_out(name, "different", bytes_match, na, nb, worst, worst_col, tol, decision_read,
+  if (!over(worst)) return(row_out(name, "equivalent", bytes_match, na, nb, worst, worst_col, tol, decision_read, note))
+  row_out(name, "different", bytes_match, na, nb, worst, paste(names(n_bad), collapse = ","), tol, decision_read,
           paste(c(notes, "numeric difference past the tolerance"), collapse = "; "))
 }
 
@@ -227,6 +235,11 @@ self_test <- function() {
   a <- ref()[, run := "x"]; b <- ref()[, run := "y"]
   got <- c(got, compare_tables(a, b, "context differs", key = "id", context = "run")$verdict)
   want <- c(want, "identical")
+  # a value that rounds the other way at the stored precision (5 significant digits) passes a tolerance of one unit
+  flip <- data.table::data.table(id = 1:2, r = c(0.10003, 0.10006))  # each 1.000000000001e-5 from its flip in float
+  got <- c(got, compare_tables(flip, data.table::copy(flip)[, r := c(0.10004, 0.10007)][], "one-unit flip", key = "id",
+                               tol = 1e-5)$verdict)
+  want <- c(want, "equivalent")
   # the same Inf on both sides is no difference; NaN against NA is
   inf <- function() ref()[, km := c(1.5, Inf, 3, 4.125)][]
   got <- c(got, compare_tables(inf(), inf()[c(4, 3, 2, 1)], "same Inf", key = "id")$verdict,

@@ -8,7 +8,8 @@
 #           that table (the 14 columns the walk returns; 0310 adds target_lake and target_regulated after it)
 #   grade   N_GRADE segment starts drawn at random (SEED) from a grade table's walked segments (dist_status not no_walk), at its record's
 #           river size on wet's pick, against the table's dist_status and dist_m
-# Distances are held to 0.005 m: the stored tables round them to the centimetre. Nothing is written to the database:
+# Distances are held to 0.005 m, a chosen tolerance: a walk sums segment lengths in the order the database returns them,
+# and the first run of this check moved distances by up to 3.5 mm where nothing else moved. Nothing is written to the database:
 # cache = FALSE neither reads nor keeps a walk.
 #
 # INPUT:  REF_WALKS (default data/fdis/derived/walks.csv); GRADES (default data/tune/CH_rear_grades.csv) and its

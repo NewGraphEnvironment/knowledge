@@ -125,3 +125,4 @@ No output flips between same and different. crate 0.12.0 was installed before th
 | A declared key that repeats pairs rows by position: access_check is one row per group since #120, keyed without the group | `compare_tables()` refuses a repeating key; access_check keyed with `watershed_group_code` (still equivalent at 6.0e-11) |
 | The bound `compare.csv`/`change.csv`/`checks.csv` matched no spec row (patterns needed a key prefix), so they were compared exact and not decision-read | Spec rows of their own, keyed with species and stage |
 | A file list built with `ls` carried the colour codes of its alias, so every file read as missing | List files from R (`list.files()`) |
+| Read walks.csv as stored to the centimetre from a data.table print that truncated 1967.241 to 1967.24 | Print with `format(x, digits = 15)`; walks.csv carries full doubles, so the cold walk's sub-5 mm moves are real summation-order differences and 0.005 m is a chosen tolerance |
