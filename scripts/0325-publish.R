@@ -123,6 +123,13 @@ prov_grade <- c(prov, list(discharge_load_at_grade = loads, discharge_load_at_pu
 # records name, link's build, the flow load the grades were checked against and the evidence they were graded on.
 # The summaries are each set's own, added where the set is built
 recs <- lapply(sub("_grades\\.csv$", "_grades_record.csv", gfiles), knw_grade_record_read)
+# the grade tables are ignored and the records tracked, so a machine's tables can be another promotion's: each is
+# held to its record (size, then md5) before the receipt names the records' run as the tables' (the branch review of
+# #154, round 2)
+off <- gfiles[!mapply(function(g, r) isTRUE(tryCatch(knw_grade_record_check(r, g), error = function(e) FALSE)),
+                      gfiles, recs)]
+if (length(off)) stop("grade tables that are not the tables their tracked records describe: ",
+                      paste(basename(off), collapse = ", "), "; restore the records' run (PULL=TRUE scripts/0336)")
 tune_runs <- paste(sort(unique(vapply(recs, function(r) r$tune_run, character(1))), method = "radix"), collapse = ";")
 recipe_pub <- list(code = .knw_receipt_code(.knw_git_state()),
                    config = list(files = .knw_receipt_config_files("settings"), settings = list(tune_run = tune_runs)),

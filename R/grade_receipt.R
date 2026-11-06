@@ -30,8 +30,9 @@
 #' @param evidence_dir `character(1)` the evidence directory the run read.
 #' @param knowledge `list(commit, dirty)`: knowledge's full commit and whether
 #'   its tracked package files or scripts differed from it, read at the run's
-#'   start; with `version` where it is not the installed package's (a kept
-#'   table's receipt names the commit its record names).
+#'   start. The receipt is written by the pass that graded the table: every
+#'   value it records is that pass's, so 0320 regrades a kept table whose
+#'   receipt is missing rather than writing one later.
 #' @return The receipt, as a list, invisibly.
 #' @export
 #' @examples

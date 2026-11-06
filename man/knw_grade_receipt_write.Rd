@@ -28,8 +28,9 @@ grades in hand when 0320 writes them, or those two columns read back.}
 
 \item{knowledge}{\code{list(commit, dirty)}: knowledge's full commit and whether
 its tracked package files or scripts differed from it, read at the run's
-start; with \code{version} where it is not the installed package's (a kept
-table's receipt names the commit its record names).}
+start. The receipt is written by the pass that graded the table: every
+value it records is that pass's, so 0320 regrades a kept table whose
+receipt is missing rather than writing one later.}
 }
 \value{
 The receipt, as a list, invisibly.

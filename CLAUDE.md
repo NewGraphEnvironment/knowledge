@@ -446,8 +446,10 @@ declared roundings, or different. What each output is judged on, and its roundin
 earlier receipts compare `different` unless the comparison softens `result.tolerance.*`. A grade table is judged on its
 pick and totals, its bytes only listed, so for a grade `identical` does not mean the same bytes
 (`research/run_archive.md`, "The receipt says whether a rebuild came out the same"). A receipt names no host: always
-`publish = TRUE`. Promotion refuses a receipt that does not name its record's `grades_md5`, and the archive stores it
-where a run wrote one.
+`publish = TRUE`. A receipt is written only by the pass that graded its table: `0320` regrades a kept table whose
+receipt does not name its record's `grades_md5`, since the run's settings, seed and code it records cannot be
+recovered later. Promotion and the archive refuse such a receipt, the archive stores one where a run wrote one, and
+`0325` holds each grade table to its record before its receipts name the records' run.
 
 A build names its evidence directory (#120). `0310` writes `EVIDENCE_DIR` (default `data/fdis/derived`) and a ledger
 whose first row names it; a directory other than the default tags the ledger with its base name

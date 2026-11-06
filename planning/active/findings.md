@@ -69,3 +69,25 @@ Relates to #119, #2, NewGraphEnvironment/crate#43, #158
 
 | Error | Resolution |
 |-------|------------|
+
+## Branch review round 2: a receipt value from another moment than its table (2026-11-06)
+
+Round 2 found a defect inside round 1's fix: the kept path wrote a receipt pairing the record's commit with today's
+`settings.csv` and this pass's score spec. The mechanism is a receipt drawing a value from a different moment than
+the table it describes. The fix is that a receipt is written only by the pass that graded its table (0320 regrades a
+kept table whose receipt does not name its record). The enumeration that ends the review, every receipt field and its
+source:
+
+| writer | field | source | same pass as the table? |
+|---|---|---|---|
+| grade | `recipe.code` | `.knw_git_state()` at 0320's start (as `knowledge_commit`) | yes |
+| grade | config `settings.csv` | the tree at write time | yes, unless edited mid-run (accepted: the rule against editing files a run reads) |
+| grade | config walk SQL | installed file, refused unless its md5 is the record's `walk_md5` | yes |
+| grade | settings, seed | this pass's `r$score$spec` (made the pick that graded), `min_wsg`; gradient refused unless the record's | yes |
+| grade | inputs | the record written seconds before; evidence sha256 after its md5s are the record's | yes |
+| grade | pick, context | the record | yes |
+| grade | summary, parts | the frame just written; size refused unless the record's | yes |
+| published | code, config | 0325's own state (0325 produces the set) | yes |
+| published | `tune_run` | the records, each held to its table (size, then md5) | yes, after the check |
+| published | inputs | ledger run uid, live flow load, grades' evidence md5 (all checked against the grade heads) | yes |
+| published | summary, tables, parts | the tables just written | yes |

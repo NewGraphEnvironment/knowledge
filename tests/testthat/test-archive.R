@@ -214,8 +214,15 @@ test_that("a grade table's receipt is archived after its other files where the r
   knw_archive_pull("CH_rear", dest, index = idx)
   expect_identical(unname(tools::md5sum(file.path(dest, "data", "tune", "CH_rear_grades_receipt.json"))),
                    tune$source_md5[5])
+  # one naming another table is refused
+  rcp <- file.path(x$tune, "CH_rear_grades_receipt.json")
+  crate::crt_receipt_write(x$tune, output = list(name = "grade"),
+                           recipe = list(code = list(knowledge = list(commit = strrep("a", 40), dirty = FALSE))),
+                           result = list(parts = basename(g)), lockfile = NULL, publish = TRUE,
+                           context = list(run = list(grades_md5 = strrep("0", 32))), file = basename(rcp))
+  expect_error(plan_of(x), "CH_rear: the grade table's receipt .* does not name the table its record describes")
   # a run from before receipts is archived with four files, as before
-  unlink(file.path(x$tune, "CH_rear_grades_receipt.json"))
+  unlink(rcp)
   expect_identical(sum(plan_of(x)$kind == "tune"), 4L)
 })
 

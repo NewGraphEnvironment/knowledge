@@ -47,36 +47,14 @@ knw_receipt_keys <- function(output) {
                                "inst")) > 0)
 }
 
-# The state a grade record names (its `knowledge_commit`, a short commit with "+dirty" where the tree differed), in
-# full, with the package version at that commit: a kept grade table's receipt names the code that graded it, not the
-# code of the pass that kept it. Refuses a commit this checkout does not hold.
-.knw_git_state_at <- function(recorded, root = ".") {
-  if (length(recorded) != 1L || is.na(recorded) || !grepl("^[0-9a-f]{7,40}(\\+dirty)?$", recorded)) {
-    stop("no commit to resolve in `", recorded, "`", call. = FALSE)
-  }
-  short <- sub("\\+dirty$", "", recorded)
-  commit <- tryCatch(.knw_git(root, "rev-parse", "--verify", "--quiet", paste0(short, "^{commit}")),
-                     error = function(e) character())
-  if (length(commit) != 1L || !grepl("^[0-9a-f]{40}$", commit)) {
-    stop("this checkout holds no commit ", short, call. = FALSE)
-  }
-  desc <- .knw_git(root, "show", paste0(commit, ":DESCRIPTION"))
-  version <- sub("^Version:\\s*", "", grep("^Version:", desc, value = TRUE))
-  if (length(version) != 1L) stop("no Version in DESCRIPTION at ", commit, call. = FALSE)
-  list(commit = commit, dirty = grepl("\\+dirty$", recorded), version = version)
-}
-
 # recipe$code for a receipt: knowledge only. link takes part through its build, an input identified by the run that
-# built it (`link_build`), whose code that run fixed; its version and commit go in the receipt's context. The version
-# is the installed package's unless the state names its own (.knw_git_state_at()).
+# built it (`link_build`), whose code that run fixed; its version and commit go in the receipt's context.
 .knw_receipt_code <- function(knowledge) {
-  shaped <- is.list(knowledge) && all(c("commit", "dirty") %in% names(knowledge)) &&
-    all(names(knowledge) %in% c("commit", "dirty", "version"))
-  if (!shaped) {
-    stop("knowledge names commit and dirty, and optionally version (.knw_git_state())", call. = FALSE)
+  if (!is.list(knowledge) || !setequal(names(knowledge), c("commit", "dirty"))) {
+    stop("knowledge names commit and dirty (.knw_git_state())", call. = FALSE)
   }
-  version <- if (is.null(knowledge$version)) as.character(utils::packageVersion("knowledge")) else knowledge$version
-  list(knowledge = list(commit = knowledge$commit, version = version, dirty = knowledge$dirty))
+  list(knowledge = list(commit = knowledge$commit, version = as.character(utils::packageVersion("knowledge")),
+                        dirty = knowledge$dirty))
 }
 
 # crate writes a receipt under a name of knowledge's choosing only from the release that added `file =` (crate#47);
