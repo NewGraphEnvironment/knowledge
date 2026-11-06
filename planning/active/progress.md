@@ -7,3 +7,5 @@
 - Scaffolded PWF baseline from issue #158 with approved phases
 - Owner, mid-planning: crate PR #44 merging; install it once merged and run the provenance task in this run (Phase 4)
 - Next: start Phase 1
+- link 0.78.1 installed (fresh 0.52.0 kept). Restored evidence md5s match the ledger (visits_link, visits_species, walks, sites.rds); fish/catch copied (md5s match); the archive lacks bcfishobs_fdis_match, access_check and workbook_*, copied from the host's checkout of the published build
+- `data-raw/database_compare.R`: verdict per output; self-test of 15 fixtures, three planted defects each turn it red

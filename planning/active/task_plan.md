@@ -59,16 +59,17 @@ The reference is the published run `20261104_0543`: tracked `data/tune/*` and `d
 
 ## Phase 1: Inputs and reference
 
-- [ ] Install link `v0.78.1`. Confirm `packageVersion("link") == "0.78.1"` and fresh 0.52.0
+- [x] Install link `v0.78.1`. Confirm `packageVersion("link") == "0.78.1"` and fresh 0.52.0
 - [ ] `PULL=TRUE GRADES=TRUE Rscript scripts/0336-archive.R` into this worktree. Check every md5 against the records and the published ledger
       (`visits_link` db5ca99a…, `visits_species` 6a2e28f1…, `walks` 2e0f0f41…; `sites.rds` 39f751b1…)
-- [ ] Copy `fish.rds` and `catch.rds` from the main checkout's `data/fdis/build/`, after checking their md5s against the ledger
+- [x] Copy `fish.rds` and `catch.rds` from the main checkout's `data/fdis/build/`, after checking their md5s against the ledger
+- [x] The archive holds 4 of the 8 evidence tables; the other four (`bcfishobs_fdis_match`, `access_check`, `workbook_sites`, `workbook_species`) copied from the host's checkout, whose 3 archived tables match the ledger md5s and were written with them (2026-11-03 22:42)
 - [ ] `SCHEMA=fresh_default Rscript scripts/0336-archive.R` (read-only mode): does this database still hold the run's build, flows and walk?
 - [ ] Read `pg_stat_activity` before each timed step
 
 ## Phase 2: The comparison tool, then chinook rearing
 
-- [ ] `data-raw/database_compare.R`: given a reference and a candidate (directories or files), write one row per output in the receipt shape:
+- [x] `data-raw/database_compare.R`: given a reference and a candidate (directories or files), write one row per output in the receipt shape:
       `output, verdict (identical|equivalent|different), bytes_match, rows_ref, rows_new, max_diff, column, tolerance, decision_read, note`.
       Content is compared after sorting rows on each table's key and matching columns by name, with floats compared to a declared tolerance.
       Context (paths, timestamps, ledger lines naming the host or the time, `knowledge_commit`) is reported and never fails the comparison.
