@@ -117,3 +117,29 @@ test_that("the declared tolerances are the ones written down, so changing one ch
   expect_null(tol("thresholds"))
   expect_identical(knw_receipt_keys("thresholds")$tables, c("thresholds", "thresholds_groups"))
 })
+
+test_that("a failed git call stops, rather than reading as a clean tree", {
+  expect_error(.knw_git(withr::local_tempdir(), "status", "--porcelain"), "git status --porcelain failed")
+})
+
+test_that("a record's commit resolves to the full commit, its dirty flag and the version at it", {
+  root <- normalizePath(testthat::test_path("..", ".."), mustWork = FALSE)
+  skip_if_not(file.exists(file.path(root, ".git")), "not a checkout")
+  head <- .knw_git(root, "rev-parse", "HEAD")
+  short <- substr(head, 1, 7)
+  s <- .knw_git_state_at(short, root)
+  expect_identical(s$commit, head)
+  expect_false(s$dirty)
+  desc <- .knw_git(root, "show", "HEAD:DESCRIPTION")
+  expect_identical(s$version, sub("^Version:\\s*", "", grep("^Version:", desc, value = TRUE)))
+  expect_true(.knw_git_state_at(paste0(short, "+dirty"), root)$dirty)
+  expect_identical(.knw_receipt_code(s)$knowledge$version, s$version)
+  expect_error(.knw_git_state_at("0000000", root), "holds no commit 0000000")
+  expect_error(.knw_git_state_at(NA_character_, root), "no commit to resolve")
+  expect_error(.knw_git_state_at("abc1234; rm -rf", root), "no commit to resolve")
+})
+
+test_that("a crate that cannot name a receipt's file is refused before anything is written", {
+  local_mocked_bindings(crt_receipt_write = function(dir, output, recipe) NULL, .package = "crate")
+  expect_error(.knw_receipt_crate_check(), "cannot name a receipt's file")
+})

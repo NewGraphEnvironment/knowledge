@@ -30,7 +30,8 @@
 #' @param evidence_dir `character(1)` the evidence directory the run read.
 #' @param knowledge `list(commit, dirty)`: knowledge's full commit and whether
 #'   its tracked package files or scripts differed from it, read at the run's
-#'   start.
+#'   start; with `version` where it is not the installed package's (a kept
+#'   table's receipt names the commit its record names).
 #' @return The receipt, as a list, invisibly.
 #' @export
 #' @examples
@@ -56,6 +57,7 @@
 #'                              knowledge = list(commit = strrep("a", 40), dirty = FALSE))
 #' r$result$summary$km_graded
 knw_grade_receipt_write <- function(grades_path, grades, spec, min_wsg, evidence_dir, knowledge) {
+  .knw_receipt_crate_check()
   chk::chk_file(grades_path)
   chk::chk_data(grades)
   chk::chk_whole_number(min_wsg)

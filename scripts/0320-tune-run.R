@@ -228,8 +228,10 @@ git1 <- function(...) suppressWarnings(system2("git", c(...), stdout = TRUE, std
 knowledge_commit <- paste0(git1("rev-parse", "--short", "HEAD")[1],
                            if (length(git1("status", "--porcelain", "--untracked-files=no", "--", "R", "scripts", "inst")))
                              "+dirty" else "")
-# the same state in full, for each grade table's receipt (#154): crate names code by its 40-character commit
+# the same state in full, for each grade table's receipt (#154): crate names code by its 40-character commit. And the
+# crate that writes the receipts must name their files, checked before hours of scoring rather than at the first grade
 knowledge_git <- .knw_git_state()
+.knw_receipt_crate_check()
 
 # ---- inputs and their provenance ------------------------------------------------------
 ledger_path <- .knw_evidence_ledger(evidence_dir)
@@ -575,9 +577,9 @@ write_record <- function(gpath, rows) {
 # and its receipt (#154), written after the record and read from it: how the table was made (this commit, the run's
 # settings and fold seed, link's build, the flow load, the evidence) and what came out (the pick, the rows, graded
 # km and grade sum of the table as written), with no host
-write_receipt <- function(gpath, grades, r) {
+write_receipt <- function(gpath, grades, r, knowledge = knowledge_git) {
   knw_grade_receipt_write(gpath, grades, spec = r$score$spec, min_wsg = min_wsg, evidence_dir = evidence_dir,
-                          knowledge = knowledge_git)
+                          knowledge = knowledge)
 }
 grade_rows <- list()
 for (k in names(out)) {
@@ -625,9 +627,20 @@ for (k in names(out)) {
         tryCatch(crate::crt_receipt_read(grcp)$context$run$grades_md5, error = function(e) NULL),
         knw_grade_record_read(grec)$grades_md5)
       if (!grcp_ok) {
-        write_receipt(gpath, readr::read_csv(gpath, col_select = c("length_metre", "grade"), show_col_types = FALSE,
-                                             col_types = readr::cols(.default = "d")), r)
-        say("%s: the kept grade table's receipt written from the table.", k)
+        # the code that graded it is the commit its record names, which a resumed pass after a code change is not;
+        # one this checkout cannot resolve gets no receipt rather than a receipt naming other code
+        kc <- knw_grade_record_read(grec)$knowledge_commit
+        kgit <- if (identical(kc, knowledge_commit)) knowledge_git else
+          tryCatch(.knw_git_state_at(kc), error = function(e) e)
+        if (inherits(kgit, "error")) {
+          unlink(grcp)
+          say("%s: the kept grade table was graded at %s, which this checkout cannot resolve (%s); no receipt written.",
+              k, kc, conditionMessage(kgit))
+        } else {
+          write_receipt(gpath, readr::read_csv(gpath, col_select = c("length_metre", "grade"), show_col_types = FALSE,
+                                               col_types = readr::cols(.default = "d")), r, knowledge = kgit)
+          say("%s: the kept grade table's receipt written from the table, at the commit its record names (%s).", k, kc)
+        }
       }
       # not "<key> grades: <n> groups", the result line data-raw/vignette_chinook.R reads
       say("%s: grades already written under %s on %s, kept.", k, r$pick$rule, run_uid)

@@ -23,3 +23,4 @@
 - Phase 4: `knw_publish(receipt =)` writes and uploads each set's receipt (tables, receipt, manifest), aws calls through mockable wrappers; 0325 passes both sets' recipes and summaries
 - Phase 5 test: each declaration's overrides name crate register fields, each tolerance holds within and refuses past, the declared values pinned
 - Docs: CLAUDE.md paragraph and research/run_archive.md section on receipts; pkgdown index; follow-up #160 filed for the evidence build and the published visit tables
+- Branch /code-check round 1: crate floor admits a crate without `file =` (capability check added at 0320's start and in the writer); a kept table's receipt named the current commit (now the record's, resolved, or none); a failed `git status` read as clean (now stops)
