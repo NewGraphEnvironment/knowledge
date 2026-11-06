@@ -238,8 +238,11 @@ Every other `different` traces to one of two ties, neither of them a fault in th
   (`data-raw/link_flow_tie_check.R`, logs `scripts/logs/habitat/database_second/20261106_link_flow_tie_check*`) read
   every line whose flow or codes come from a parent: 2,831 lines, 1,800 of them with two parents within 1e-6 m. Under
   the old code the two databases differed on 614 of those lines and on 2 dams. Under the new code they were
-  identical, and no slower. The published evidence and grades were made with the old code, so the change reaches
-  them only with the next build: about 630 parent-flow lines move on either database, all of them tied.
+  identical, and no slower. The published evidence and grades were made with the old code. The change reaches the
+  visits at the next `0310`, and the grades at their next grading on any build, because grading reads each segment's
+  parent flow live (`knw_link_segments()`): about 630 parent-flow lines move on either database, all of them tied.
+  `0320`'s keep-check records nothing that names the tie rule, so a candidate graded before 0.4.32 is regraded, not
+  resumed with `RUN=`.
 - **The walk's landing (#162).** A tributary's mouth usually sits on a vertex two main-line segments share, so both are
   at 0 m from it. Where one of the two has no flow row, the walk either stops at once or walks that segment's length
   down to the next. The host's own cold walk reproduces its cache exactly, so the two databases walk differently. A run
@@ -257,7 +260,7 @@ What a run costs on each:
 | cold walk, every visit start | 2.3 min on 8 workers | (not run) |
 
 Scoring is CPU work and ran at about the speed its worker count predicts. The comparison, bound by the database, ran
-within a minute of the host's on every key but coho, which took 4 minutes longer. From here on a run on the second database is an ordinary run. Until #162 is fixed, and until a build made with
-knowledge 0.4.32 or later replaces the published one (#161), its grades and any cold walk can differ from the host's
-on the tied segments, so a promotion takes all its keys from one database.
+within a minute of the host's on every key but coho, which took 4 minutes longer. From here on a run on the second database is an ordinary run. Until #162 is fixed, its cold walks can differ from the
+host's, and grades made before knowledge 0.4.32 can differ on the tied segments (#161), so a promotion takes all its
+keys from one database.
 

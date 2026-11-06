@@ -10,3 +10,4 @@
 - Phase 2: ORDER BY gains the id in both lookups, roxygen says so; the three tests pass on m1
 - Phase 3: two-database check; new code identical on both (0 rows, md5 equal), old differs on 614 tied lines and 2 dams; no slowdown (findings)
 - Phase 4: research/database_builds.md and CLAUDE.md say #161 is fixed from 0.4.32; #161 body ticked with the decision; NEWS left to the release commit
+- Code-check round 2: one finding (prose said the fix reaches grades only with a new build; grading reads the parent flow live). Fixed in research and CLAUDE.md
