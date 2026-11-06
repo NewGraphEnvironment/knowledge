@@ -47,9 +47,10 @@ test_that("the receipt is written beside the table and its record, and validates
   expect_identical(back$recipe$seed, 54L)
   expect_identical(back$recipe$inputs$link_build$version_id, "20261103_163715-269b585a")
   expect_identical(back$recipe$inputs$flow$version_id, "wet load")
-  for (f in tables_ev) {
-    expect_identical(back$recipe$inputs[[f]]$sha256, .knw_sha256(file.path(fx$ev, paste0(f, ".csv"))), info = f)
-  }
+  # a build from before evidence receipts is named by its visit tables' md5s (#160)
+  expect_setequal(names(back$recipe$inputs), c("link_build", "flow", "evidence"))
+  expect_identical(back$recipe$inputs$evidence$version_id,
+                   paste(unname(tools::md5sum(file.path(fx$ev, paste0(tables_ev, ".csv")))), collapse = ";"))
   expect_identical(back$recipe$code$knowledge$commit, strrep("a", 40))
   expect_setequal(names(back$recipe$config$files), c("inst/method/settings.csv", "inst/sql/ch_dist_profile.sql"))
   expect_identical(back$result$summary$rows, 3L)
@@ -124,4 +125,74 @@ test_that("an Inf curve prior is written as a setting JSON can hold", {
   fx <- receipt_fx()
   r <- write_receipt(fx, spec = utils::modifyList(spec_fx, list(prior_sd = Inf)))
   expect_identical(crate::crt_receipt_read(path_receipt(fx))$recipe$config$settings$prior_sd, "Inf")
+})
+
+# the rest of an evidence build beside the fixture's visit tables, and its receipt (#160)
+evidence_receipt_fx <- function(ev) {
+  for (f in c("bcfishobs_fdis_match", "workbook_sites", "workbook_species")) {
+    writeLines(paste("evidence", f), file.path(ev, paste0(f, ".csv")))
+  }
+  writeLines(c("species_code,km", "BT,1.5"), file.path(ev, "access_check.csv"))
+  inputs <- lapply(stats::setNames(nm = knw_receipt_keys("evidence")$inputs), function(i) list(version_id = "v"))
+  knw_evidence_receipt_write(ev, list(species = "BT", q_grid = 1, sources = "pick", snap_limit_m = 100,
+                                      snap_limit_code_m = 150, parent = "none"),
+                             inputs, knowledge = git_fx)
+}
+
+test_that("a build with an evidence receipt is named by its recipe_id (#160)", {
+  fx <- receipt_fx()
+  ev_r <- evidence_receipt_fx(fx$ev)
+  r <- write_receipt(fx)
+  expect_identical(r$recipe$inputs$evidence, list(recipe_id = ev_r$recipe$recipe_id))
+  expect_identical(crate::crt_receipt_read(path_receipt(fx))$recipe$inputs$evidence$recipe_id, ev_r$recipe$recipe_id)
+  # the same evidence named two ways is two recipes: the id is what makes an equivalent evidence rebuild one input
+  unlink(file.path(fx$ev, "evidence_receipt.json"))
+  r2 <- write_receipt(fx)
+  expect_false(identical(r$recipe$recipe_id, r2$recipe$recipe_id))
+})
+
+test_that("an evidence receipt that describes other tables is refused, not passed over", {
+  fx <- receipt_fx()
+  other <- withr::local_tempdir()
+  for (f in tables_ev) writeLines(paste("another build", f), file.path(other, paste0(f, ".csv")))
+  evidence_receipt_fx(other)
+  file.copy(file.path(other, "evidence_receipt.json"), fx$ev)
+  expect_error(write_receipt(fx), "does not describe .*visits_link.csv")
+  expect_false(file.exists(path_receipt(fx)))
+  writeLines('{"output": {"name": "grade"}}', file.path(fx$ev, "evidence_receipt.json"))
+  expect_error(write_receipt(fx))
+})
+
+test_that("a build whose ledger names a receipt is not read as a build from before receipts", {
+  fx <- receipt_fx()
+  ev_r <- evidence_receipt_fx(fx$ev)
+  # the record's evidence ledger, here, names the receipt the build wrote
+  rp <- sub("_grades\\.csv$", "_grades_record.csv", fx$g)
+  r <- utils::read.csv(rp, colClasses = "character", na.strings = "")
+  led <- file.path(dirname(fx$g), "ledger.csv")
+  r$evidence_ledger <- led
+  utils::write.csv(r, rp, row.names = FALSE, na = "")
+  utils::write.csv(data.frame(kind = "info", step = "evidence_receipt", n = 0,
+                              note = paste("evidence_receipt.json recipe", ev_r$recipe$recipe_id)),
+                   led, row.names = FALSE)
+  expect_identical(write_receipt(fx)$recipe$inputs$evidence$recipe_id, ev_r$recipe$recipe_id)
+  # the receipt removed: refused, not named by the md5s
+  unlink(file.path(fx$ev, "evidence_receipt.json"))
+  expect_error(write_receipt(fx), "names the evidence receipt .* holds none")
+  # a ledger with no receipt row (a build from before receipts) falls back
+  utils::write.csv(data.frame(kind = "info", step = "zone_zip", n = 1, note = "md5 x"), led, row.names = FALSE)
+  expect_named(write_receipt(fx)$recipe$inputs$evidence, "version_id")
+})
+
+test_that("a receipt read back names the evidence exactly as it is named now, which 0320's keep-check compares", {
+  fx <- receipt_fx()
+  ev_md5 <- paste(unname(tools::md5sum(file.path(fx$ev, paste0(tables_ev, ".csv")))), collapse = ";")
+  now <- function() .knw_receipt_evidence(fx$ev, ev_md5)$evidence
+  write_receipt(fx)
+  expect_identical(crate::crt_receipt_read(path_receipt(fx))$recipe$inputs$evidence, now())
+  # the evidence rebuilt with a receipt, its tables unchanged: the kept receipt no longer names it
+  evidence_receipt_fx(fx$ev)
+  expect_false(identical(crate::crt_receipt_read(path_receipt(fx))$recipe$inputs$evidence, now()))
+  write_receipt(fx)
+  expect_identical(crate::crt_receipt_read(path_receipt(fx))$recipe$inputs$evidence, now())
 })

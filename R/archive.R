@@ -100,7 +100,9 @@ knw_archive_setup <- function(record, vocabulary = NULL) {
 #' comparison's segments and, where the run wrote one, the grade table's
 #' receipt (#154), under `tune/<key>/<setup>/`; and the evidence build
 #' the grades name, under `evidence/<id>/` with a `MANIFEST` (one line per
-#' file, its md5 and name), `<id>` being the MANIFEST's md5. Each grade table
+#' file, its md5 and name), `<id>` being the MANIFEST's md5, and the build's
+#' receipt where `0310` wrote one (#160), stored in the folder but outside the
+#' MANIFEST, so a rebuild with the same tables keeps its id. Each grade table
 #' is checked against its record and the evidence against the grades'
 #' `evidence_md5` before anything is listed, so an archive never stores a
 #' table its record does not describe.
@@ -129,6 +131,15 @@ knw_archive_plan <- function(keys, tune_dir, compare_dir, evidence_dir, build_di
   manifest <- paste0(paste(ev$source_md5, ev$file, sep = "  "), collapse = "\n")
   manifest <- paste0(manifest, "\n")
   ev_id <- .knw_md5_text(manifest)
+  # the build's receipt (#160) where 0310 wrote one, stored in the build's folder but outside its MANIFEST: the id is
+  # the tables', which a rebuild that came out byte-identical keeps, while a receipt's bytes carry its write time. One
+  # that does not describe the build's tables is refused
+  rcp_ev <- file.path(evidence_dir, .knw_evidence_receipt_file)
+  if (file.exists(rcp_ev)) {
+    .knw_evidence_recipe_id(evidence_dir)
+    ev <- rbind(ev, data.frame(file = .knw_evidence_receipt_file, dir = "derived", source = rcp_ev,
+                               source_md5 = unname(tools::md5sum(rcp_ev)), stringsAsFactors = FALSE))
+  }
   ev_md5 <- paste(ev$source_md5[match(c("visits_link.csv", "visits_species.csv", "walks.csv"), ev$file)],
                   collapse = ";")
   rows <- list()
@@ -527,6 +538,13 @@ knw_archive_pull <- function(keys, dest = ".", grades = FALSE, index = "data/arc
   e <- idx[idx$event == "archived" & idx$evidence_id %in% ev_ids & is.na(idx$key) & !grepl("MANIFEST$", idx$object), ]
   e <- e[!duplicated(e$object, fromLast = TRUE), ]
   if (!nrow(e)) stop("the index holds no archive of evidence build ", ev_ids, call. = FALSE)
+  # a build archived without a receipt (#160) restores none, so a receipt already in the target is another build's,
+  # which every reader of the restored build would refuse: refused here, before anything is written
+  rcp_t <- file.path(dest, "data", "fdis", "derived", .knw_evidence_receipt_file)
+  if (!any(basename(e$source) == .knw_evidence_receipt_file) && file.exists(rcp_t)) {
+    stop(rcp_t, " is here, and the archived evidence build has no receipt: it is another build's, so move it aside ",
+         "to restore", call. = FALSE)
+  }
   todo <- rbind(e, do.call(rbind, rows))
   for (i in seq_len(nrow(todo))) {
     r <- todo[i, ]

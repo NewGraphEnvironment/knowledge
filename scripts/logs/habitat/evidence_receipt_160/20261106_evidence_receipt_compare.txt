@@ -1,0 +1,28 @@
+recipe a bb815863f2c9a3c08ba73daf196679eb06cb1825c55426dd24d30b6a00c26441 
+recipe b bb815863f2c9a3c08ba73daf196679eb06cb1825c55426dd24d30b6a00c26441 
+same recipe: TRUE 
+receipts alone: equivalent 
+tables re-read: equivalent (mode bytes ) 0.9 mins 
+  side    field                                 action
+1 result  result.parts[access_check.csv].bytes  within
+2 result  result.parts[access_check.csv].sha256 within
+3 result  result.summary[access_km]             within
+4 context context.run                           record
+5 context context.time                          record
+  detail                                                                                                                                                              
+1 160520 vs 160477; table access_check agrees                                                                                                                         
+2 "7dc5fc8f8b7bed1940131064bd8db5cd27e330daf6cd354c22c1d8996c6c1b9d" vs "3e0348e38a1a4b5cc108248cbfda38ff392f0dbefdeba0d78aa10145aedc38ad"; table access_check agrees 
+3 6937234.135052782 vs 6937234.135052781; within 0.001                                                                                                                
+4 {"evidence_dir":"data/fdis/derived_receipt_a","ledger":"scripts/logs/habitat/... vs {"evidence_dir":"data/fdis/derived_receipt_b","ledger":"scripts/logs/habitat/...
+5 "2026-11-06T13:00:19Z" vs "2026-11-06T13:11:56Z"                                                                                                                    
+visits_link            bytes TRUE
+visits_species         bytes TRUE
+walks                  bytes TRUE
+bcfishobs_fdis_match   bytes TRUE
+access_check           bytes FALSE
+workbook_sites         bytes TRUE
+workbook_species       bytes TRUE
+access_check rows 2193 matched 2193 max |km diff| 1.018634e-10 
+summary a: 6937234 45529  b: 6937234 45529 
+grade evidence input: bb815863f2c9a3c08ba73daf196679eb06cb1825c55426dd24d30b6a00c26441 
+names build a's recipe: TRUE 

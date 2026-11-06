@@ -112,3 +112,42 @@ test_that("the upload sends the tables, then the receipt, then the manifest", {
   knw_publish(fx$tables, file.path(fx$tmp, "out"), id = "knowledge/thresholds/v1", note = "n", s3 = "s3://b/")
   expect_identical(sent, c("thresholds.parquet", "thresholds_groups.parquet", "manifest.json"))
 })
+
+test_that("the published visit set's receipt holds access_check's km to its rounding and every other table exact", {
+  skip_if_not_installed("arrow")
+  skip_if_not_installed("jsonlite")
+  keys <- knw_receipt_keys("fdis")
+  # one small table per declared table; access_check carries the km the evidence build writes (#160)
+  fx_dir <- function(km, sites = c("a", "b")) {
+    d <- withr::local_tempdir(.local_envir = parent.frame())
+    for (tb in setdiff(keys$tables, "access_check")) {
+      utils::write.csv(data.frame(site_visit = sites, zone = c("08", "10")), file.path(d, paste0(tb, ".csv")),
+                       row.names = FALSE)
+    }
+    writeLines(c("species_code,km", paste0("BT,", format(km, digits = 17))), file.path(d, "access_check.csv"))
+    data.frame(table = keys$tables, source = file.path(d, paste0(keys$tables, ".csv")), script = "s",
+               description = "d", stringsAsFactors = FALSE)
+  }
+  rcp <- list(output = "fdis",
+              recipe = list(code = list(knowledge = list(commit = strrep("a", 40), dirty = FALSE)),
+                            config = list(settings = list(version = "v3")),
+                            inputs = list(evidence = list(recipe_id = strrep("e", 64)),
+                                          fdis_export = list(sha256 = strrep("f", 64)))),
+              summary = list(visits = 2L))
+  pub <- function(tables) {
+    out <- withr::local_tempdir(.local_envir = parent.frame())
+    knw_publish(tables, out, id = "knowledge/fdis/v3", note = "n", receipt = rcp)
+    file.path(out, "receipt.json")
+  }
+  cmp <- function(a, b) crate::crt_receipt_compare(a, b, keys = keys)$verdict
+  a <- pub(fx_dir(787407.1195799585))
+  r <- crate::crt_receipt_read(a)
+  expect_identical(r$output$name, "fdis")
+  expect_identical(r$recipe$inputs$evidence$recipe_id, strrep("e", 64))
+  expect_setequal(names(r$result$fingerprint), keys$tables)
+  # the Parquet's bytes move with the value, and each names its table, which agrees within the rounding
+  expect_identical(cmp(a, pub(fx_dir(787407.1195799585 + 1e-10))), "equivalent")
+  expect_identical(cmp(a, pub(fx_dir(787407.1195799585 + 1e-3))), "different")
+  # a zero-padded code is text, held exactly
+  expect_identical(cmp(a, pub(fx_dir(787407.1195799585, sites = c("a", "c")))), "different")
+})

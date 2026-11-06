@@ -252,6 +252,12 @@ evidence_md5s <- vapply(c("visits_link", "visits_species", "walks"), function(f)
 }, character(1))
 for (f in names(evidence_md5s)) say("  %s md5 %s", f, evidence_md5s[[f]])
 evidence_md5 <- paste(unname(evidence_md5s), collapse = ";")
+# the evidence as a grade receipt names it (#160): the build's receipt's recipe_id, or the md5s for a build from before
+# receipts. Read here, before any work, so a receipt that does not describe the tables, or one the ledger names and
+# the directory lacks, stops the run; and a kept grade whose receipt names other evidence is regraded below
+evidence_input <- tryCatch(.knw_receipt_evidence(evidence_dir, evidence_md5, ledger = ledger_path)$evidence,
+                           error = function(e) fail("%s", conditionMessage(e)))
+say("  evidence named in grade receipts by %s %s", names(evidence_input), evidence_input[[1]])
 # the database's build, checked before any work (#87): a schema built by another run than the evidence's is refused
 # here, not after the scoring, so the same command runs on any machine whose database holds the build. DEV=1 grades
 # nothing and needs no database
@@ -621,11 +627,16 @@ for (k in names(out)) {
     grec_ok <- file.exists(grec) &&
       isTRUE(tryCatch(knw_grade_record_check(knw_grade_record_read(grec), gpath), error = function(e) FALSE))
     grcp <- file.path(dir_out, .knw_grade_receipt_name(gpath))
-    grcp_ok <- grec_ok && file.exists(grcp) && identical(
-      tryCatch(crate::crt_receipt_read(grcp)$context$run$grades_md5, error = function(e) NULL),
-      knw_grade_record_read(grec)$grades_md5)
+    grcp_r <- if (grec_ok && file.exists(grcp)) tryCatch(crate::crt_receipt_read(grcp), error = function(e) NULL)
+    grcp_ok <- !is.null(grcp_r) && identical(grcp_r$context$run$grades_md5, knw_grade_record_read(grec)$grades_md5)
+    # and it names the evidence as a receipt written now would (#160): the md5s alone keep a table whose receipt names
+    # an evidence build since rebuilt at another commit, or one from before evidence receipts
+    grcp_ev_ok <- grcp_ok && identical(grcp_r$recipe$inputs$evidence, evidence_input)
     if (same && !grec_ok) say("%s: the grade table has no record, or one that describes another table; regraded.", k)
     if (same && grec_ok && !grcp_ok) say("%s: the grade table has no receipt naming its record; regraded.", k)
+    if (same && grcp_ok && !grcp_ev_ok) say("%s: the grade table's receipt names other evidence than %s; regraded.", k,
+                                            evidence_input[[1]])
+    grcp_ok <- grcp_ev_ok
     if (same && grcp_ok) {
       # not "<key> grades: <n> groups", the result line data-raw/vignette_chinook.R reads
       say("%s: grades already written under %s on %s, kept.", k, r$pick$rule, run_uid)

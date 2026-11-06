@@ -12,9 +12,10 @@
 # the gates and the ledger):
 #   - GATE: runs only after 0300 released (the settle log's last row is `released`; SETTLE=<path> names a log other
 #     than the newest fresh_default one, and the log's schema is ledgered as a record, #120), and records
-#     that run's run_uid and SHAs. The link commit the configs are read from later is that run's
-#     link_sha. knw_build_record() refuses a SCHEMA built by another run than the released one, and
-#     its line (schema, run, flow load, walk md5, fresh) is ledgered (#91).
+#     that run's run_uid and SHAs (each species' range and pooling come from the installed link's
+#     default bundle, which the receipt names by its files' sha256). knw_build_record() refuses a
+#     SCHEMA built by another run than the released one, and its line (schema, run, flow load, walk
+#     md5, fresh) is ledgered (#91).
 #   - ONE SCHEMA, named by SCHEMA as 0320 and 0330 take it (default fresh_default): one retune names
 #     the schema its evidence was built on. It holds every modelable group, so there is no held-out
 #     schema and no step-5 class; #28's fixed split is not carried (decided 2026-10-17).
@@ -36,6 +37,11 @@
 #   - HYDROLOGIC ZONE from the BC catalogue zip, placed by the visit's FWA segment midpoint
 #     (0296's method, unchanged).
 #   - Every drop is a ledger row, and the drops and kept rows partition the input.
+#   - RECEIPT (#160): the build's receipt, knw_evidence_receipt_write(), says how the tables were made (this commit in
+#     full, read at the start, the method register and the walk, the species, river sizes, sources, placement limits
+#     and parent source, link's build and installed configs, the flow load, the FDIS extract and its load, the tracked
+#     tables read, the hydrologic zones zip) and what came out: every table, read back as written, held exact but
+#     access_check's km (rounded to 1e-6 km). Its recipe_id is ledgered, and the grade receipts name the build by it.
 #   - ROUND TRIP: knw_db_latency_check() at connect stops a run off the database's host (over 20 ms) unless
 #     REMOTE=TRUE; the round trip and the override are ledgered, and a refused run's ledger is
 #     <date>_evidence_build_refused.csv (#110).
@@ -56,6 +62,8 @@
 #         bcfishobs_fdis_match.csv
 #         access_check.csv    per species x group (#120)
 #         workbook_{sites,species}.csv  the FISS workbook sites placed on link's segments
+#         evidence_receipt.json  the build's provenance receipt in crate's shape (#160), held to
+#                             inst/receipt/evidence.yaml; written last, and removed before the first table is
 #         scripts/logs/habitat/<date>_evidence_build_ledger.csv, or <date>_evidence_build_ledger-<base name>.csv for
 #         another EVIDENCE_DIR (#120); its first row names the directory
 # RUN:    [SCHEMA=fresh_default_20261017] [EVIDENCE_DIR=data/fdis/derived_<name>] [SETTLE=<settle log>] [PARENT_DIR=<dir> | PARENT=TRUE]
@@ -92,6 +100,14 @@ species <- knw_species()
 if (!requireNamespace("link", quietly = TRUE) || packageVersion("link") < link_min) {
   stop("needs link >= ", link_min, ": pak::pak(\"NewGraphEnvironment/link\")")
 }
+# the build's receipt (#160) records this checkout's state as it was at the start, and the crate that writes it must
+# name its file: both checked before minutes of work. The FDIS extract it names is the one 0230 synced, by its manifest
+.knw_receipt_crate_check()
+knowledge_git <- .knw_git_state()
+fdis_manifest <- "data/fdis/MANIFEST.md5"
+if (!file.exists(fdis_manifest)) stop("no ", fdis_manifest, ": it names the FDIS extract 0230 loaded (rerun 0230)")
+# each file the receipt names is hashed as it is read, so a file replaced during the build is never named for it
+rcp_sha <- list(fdis_export = .knw_sha256(fdis_manifest))
 ledger <- tibble(kind = character(), step = character(), n = numeric(), note = character())
 add <- function(kind, step, n, note = "") {
   ledger <<- bind_rows(ledger, tibble(kind = kind, step = step, n = as.numeric(n), note = note))
@@ -183,6 +199,9 @@ codes <- read_csv("data/fdis_species_codes.csv", col_types = cols(.default = "c"
 breaks <- read_csv("data/fdis_size_breaks.csv", col_types = cols(.default = "c")) |>
   mutate(across(c(length_min_mm, length_max_mm), as.numeric))
 for (f in c("sites", "catch", "fish")) add("info", paste0("md5_", f), 0, unname(tools::md5sum(file.path(build, paste0(f, ".rds")))))
+for (f in c("sites", "catch", "fish")) rcp_sha[[paste0("fdis_", f)]] <- .knw_sha256(file.path(build, paste0(f, ".rds")))
+rcp_sha$fdis_species_codes <- .knw_sha256("data/fdis_species_codes.csv")
+rcp_sha$fdis_size_breaks <- .knw_sha256("data/fdis_size_breaks.csv")
 add("info", "fdis_sites_in", nrow(sites))
 # the snap limits 0230 placed with (#91): an environment override leaves no other trace, so readers compare these
 rec0230 <- read_csv(file.path(build, "reconcile.csv"), show_col_types = FALSE)
@@ -197,6 +216,11 @@ v <- q$kept
 
 # species range and pooling from link's default bundle
 cfg <- link::lnk_config("default")
+# the installed link's default bundle, which decides each species' range and pooling, as the receipt names it: its
+# files' sha256, so a link installed from a local checkout is named as well as one from GitHub
+link_cfg_dir <- system.file("extdata/configs/default", package = "link", mustWork = TRUE)
+rcp_sha$link_configs <- .knw_sha256_files(list.files(link_cfg_dir, recursive = TRUE, full.names = TRUE),
+                                          root = link_cfg_dir)
 loaded <- suppressWarnings(link::lnk_load_overrides(cfg))
 aoi <- sort(unique(v$watershed_group_code))
 pool <- bind_rows(lapply(species, function(sp) {
@@ -241,6 +265,7 @@ add("info", "segment_starts_in_window", sum(v$segment_start_offset_m >= -1 & v$s
 # one with no parent stops the build. Without either the columns are absent, and 0320 refuses GRADIENT=parent_gradient
 parent_dir <- Sys.getenv("PARENT_DIR")
 parent_table <- Sys.getenv("PARENT") %in% c("1", "TRUE", "true")
+parent_setting <- "none"   # the receipt's `parent` setting: the parent table's provenance line, or the files' md5s
 if (parent_table && nzchar(parent_dir)) stop("PARENT=TRUE and PARENT_DIR name two parent sources: give one")
 if (parent_table || nzchar(parent_dir)) {
   if (parent_table) {
@@ -248,6 +273,10 @@ if (parent_table || nzchar(parent_dir)) {
     parent <- knw_parent_read(conn, schema, parent_min, keys = v)
     pv <- attr(parent, "provenance")
     add("info", "parent_table", pv$rows, .knw_parent_note(pv))
+    # the receipt names the parent table by its builds' runs and link's, not by schema names, which a provincial run
+    # renames afterwards and another database may spell otherwise
+    parent_setting <- sprintf("streams_parent built %s; full run %s, minimal run %s at link %s, %s", pv$built_at,
+                              pv$run_uid_full, pv$run_uid_minimal, pv$link_sha_minimal, pv$config_hash_minimal)
   } else {
     pf <- list.files(parent_dir, "^parent_[a-z]{4}\\.csv(\\.gz)?$", full.names = TRUE)
     if (!length(pf)) stop("PARENT_DIR=", parent_dir, " holds no parent_<wsg>.csv.gz")
@@ -255,6 +284,8 @@ if (parent_table || nzchar(parent_dir)) {
     add("info", "parent_dir", length(pf), sprintf("%s: %s; md5 %s", .knw_path_rel(parent_dir),
                                                   paste(basename(pf), collapse = ";"),
                                                   paste(unname(tools::md5sum(pf)), collapse = ";")))
+    parent_setting <- sprintf("parent files %s; md5 %s", paste(basename(pf), collapse = ";"),
+                              paste(unname(tools::md5sum(pf)), collapse = ";"))
   }
   v <- knw_parent_join(v, parent)
   add("info", "parent_joined", nrow(v), sprintf("of %d full segments read from the parent %s", nrow(parent),
@@ -365,6 +396,7 @@ hz_zip <- tempfile(fileext = ".zip")
 h <- curl::curl_fetch_disk(hz_url, hz_zip, handle = curl::new_handle(timeout = 300, followlocation = TRUE))
 if (h$status_code != 200) stop("hydrologic zones download returned HTTP ", h$status_code)
 add("info", "zone_zip", file.size(hz_zip), paste("md5", unname(tools::md5sum(hz_zip)), hz_url))
+hz_sha256 <- .knw_sha256(hz_zip)
 hz_dir <- tempfile("hydz")
 utils::unzip(hz_zip, exdir = hz_dir)
 hz_shp <- list.files(hz_dir, "\\.shp$", full.names = TRUE, recursive = TRUE)
@@ -389,7 +421,9 @@ add("info", "zone_unmatched", sum(is.na(v$hydro_zone)))
 # A site scores only with an electrofishing effort; the rest are presence-only. They are placed on
 # link's segments and written beside the FDIS visits, keyed by site_key and flagged by data_set.
 ev <- read_csv("data/fiss_evidence.csv", show_col_types = FALSE, col_types = cols(site_visit = "c"), guess_max = 1e5)
+rcp_sha$fiss_evidence <- .knw_sha256("data/fiss_evidence.csv")
 s2_files <- list.files("data", "^fiss_step2_fishcoll_.*\\.csv$", recursive = TRUE, full.names = TRUE)
+if (length(s2_files)) rcp_sha$fiss_workbooks <- .knw_sha256_files(s2_files)
 s2 <- if (length(s2_files)) bind_rows(lapply(s2_files, read_csv, show_col_types = FALSE, col_types = cols(.default = "c"))) else NULL
 fw <- knw_fiss_visits(ev, s2)
 add("info", "workbook_species_rows", nrow(fw), sprintf("%d sites; %d rows score (electrofishing with effort)",
@@ -408,6 +442,9 @@ if (nrow(fw_sites)) {
   fw_fl <- knw_link_flow(conn, unique(fw_sites$linear_feature_id <- fw_sites$segment_linear_feature_id))
   fw_sites <- fw_sites |> left_join(fw_fl, by = "linear_feature_id")
 }
+# an earlier build's receipt goes before this build's first table, so a build that stops partway leaves none rather
+# than one describing tables it has begun to replace
+unlink(file.path(dir_out, .knw_evidence_receipt_file))
 write_csv(fw |> inner_join(fw_sites |> select(site_visit, id_segment), by = "site_visit"),
           file.path(dir_out, "workbook_species.csv"), na = "")
 write_csv(fw_sites, file.path(dir_out, "workbook_sites.csv"), na = "")
@@ -429,6 +466,39 @@ write_csv(vs, file.path(dir_out, "visits_species.csv"), na = "")
 write_csv(w, file.path(dir_out, "walks.csv"), na = "")
 write_csv(bm$matched, file.path(dir_out, "bcfishobs_fdis_match.csv"), na = "")
 write_csv(ac$check |> mutate(run_uid = st$run_uid), file.path(dir_out, "access_check.csv"), na = "")
+# the build's receipt (#160), read back from the tables as written: how they were made and what came out, held to
+# inst/receipt/evidence.yaml (every table exact but access_check's km). A grade graded on this build names it by the
+# receipt's recipe_id, and the archive keeps it with the build
+link_desc <- utils::packageDescription("link")
+sha_in <- function(nm) list(sha256 = rcp_sha[[nm]])
+rcp <- tryCatch(knw_evidence_receipt_write(
+  dir_out,
+  settings = list(species = species, q_grid = q_grid, sources = sources,
+                  snap_limit_m = rec0230$n[rec0230$check == "snap_limit_m"],
+                  snap_limit_code_m = rec0230$n[rec0230$check == "snap_limit_code_m"], parent = parent_setting),
+  inputs = list(
+    link_build = list(version_id = st$run_uid), flow = list(version_id = rec$discharge_load),
+    link_configs = sha_in("link_configs"), fdis_export = sha_in("fdis_export"), fdis_sites = sha_in("fdis_sites"),
+    fdis_catch = sha_in("fdis_catch"), fdis_fish = sha_in("fdis_fish"),
+    fdis_species_codes = sha_in("fdis_species_codes"), fdis_size_breaks = sha_in("fdis_size_breaks"),
+    fiss_evidence = sha_in("fiss_evidence"),
+    fiss_workbooks = if (is.null(rcp_sha$fiss_workbooks)) list(none = "no workbooks") else sha_in("fiss_workbooks"),
+    hydrologic_zones = list(sha256 = hz_sha256),
+    bcfishobs = list(none = "read from the database at the build; bcfishobs carries no version to name")),
+  knowledge = knowledge_git,
+  context = list(run = list(run_uid = st$run_uid, schema = schema, evidence_dir = .knw_path_rel(dir_out),
+                            ledger = .knw_path_rel(path_ledger)),
+                 inputs = list(link = list(version = st$link_version, commit = st$link_sha,
+                                           installed = paste(link_desc$Version, link_desc$RemoteSha)),
+                               hydrologic_zones = hz_url))
+), error = function(e) {
+  # the tables are written but have no receipt: the ledger goes under the refused name, outside the ones readers take
+  add("info", "evidence_receipt_refused", 0, conditionMessage(e))
+  path_refused <- .knw_ledger_path(dir_out, stamp, refused = TRUE)
+  write_csv(ledger, path_refused, na = "")
+  stop("the build's receipt was refused: ", conditionMessage(e), " (ledger ", path_refused, ")", call. = FALSE)
+})
+add("info", "evidence_receipt", 0, paste(.knw_evidence_receipt_file, "recipe", rcp$recipe$recipe_id))
 write_csv(ledger, path_ledger, na = "")
 print(ledger, n = Inf)
 message(sprintf("%d visits placed; %d walk rows; ledger %s", nrow(v), nrow(w), path_ledger))

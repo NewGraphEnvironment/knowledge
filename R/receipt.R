@@ -9,8 +9,9 @@
 #' The declarations are `inst/receipt/<output>.yaml`.
 #'
 #' @param output `character(1)`: `"grade"` (a grade table,
-#'   [knw_grade_receipt_write()]), `"thresholds"` or `"habitat_grade"` (the
-#'   published sets, [knw_publish()]).
+#'   [knw_grade_receipt_write()]), `"evidence"` (an evidence build,
+#'   [knw_evidence_receipt_write()], #160), `"thresholds"`, `"habitat_grade"`
+#'   or `"fdis"` (the published sets, [knw_publish()]).
 #' @return A `crt_receipt_keys` list, as [crate::crt_receipt_keys()] returns.
 #' @export
 #' @examples
@@ -95,9 +96,13 @@ knw_receipt_keys <- function(output) {
   if (is.numeric(x) && any(!is.finite(x) & !is.na(x))) format(x) else x
 }
 
-# The evidence a build read, as receipt inputs: each derived table's sha256, after its md5 is checked against the
-# md5s the run recorded (`evidence_md5`, `;`-joined in this order), so a receipt never names another build's evidence
-.knw_receipt_evidence <- function(evidence_dir, evidence_md5) {
+# The evidence a build read, as the receipt input `evidence`, after the visit tables' md5s are checked against the md5s
+# the run recorded (`evidence_md5`, `;`-joined in this order), so a receipt never names another build's evidence: the
+# build's receipt's recipe_id where 0310 wrote one (#160), so an evidence rebuild that came out equivalent is the same
+# input, else the md5s as a version id, as 0325 names it, for a build from before evidence receipts. Where the build's
+# ledger is here and names a receipt (0310 ledgers its recipe_id), that receipt must be present and be the one named:
+# a build that stopped after its tables, or a receipt removed, is not read as a build from before receipts
+.knw_receipt_evidence <- function(evidence_dir, evidence_md5, ledger = NULL) {
   tbl <- c("visits_link", "visits_species", "walks")
   f <- file.path(evidence_dir, paste0(tbl, ".csv"))
   if (!all(file.exists(f))) {
@@ -108,5 +113,39 @@ knw_receipt_keys <- function(output) {
     stop("the evidence in ", evidence_dir, " is not the build the run read (md5 ", md5, ", recorded ",
          evidence_md5, ")", call. = FALSE)
   }
-  stats::setNames(lapply(f, function(p) list(sha256 = .knw_sha256(p))), tbl)
+  id <- .knw_evidence_recipe_id(evidence_dir)
+  if (!is.null(ledger) && length(ledger) == 1L && !is.na(ledger) && file.exists(ledger)) {
+    led <- utils::read.csv(ledger, colClasses = "character", na.strings = "")
+    named <- sub("^.* recipe ", "", led$note[led$step %in% "evidence_receipt"])
+    if (length(named) && !identical(id, named[length(named)])) {
+      stop(ledger, " names the evidence receipt ", named[length(named)], ", but ", evidence_dir, " holds ",
+           if (is.null(id)) "none" else paste("receipt", id), ": rebuild the evidence (scripts/0310)", call. = FALSE)
+    }
+  }
+  list(evidence = if (is.null(id)) list(version_id = evidence_md5) else list(recipe_id = id))
+}
+
+# The tables a receipt fingerprints, read from their CSVs as text, so each value is held as written: a column the
+# declaration gives a tolerance is read as a number, which is how crate rounds it (#160: access_check's km). An empty
+# cell is NA either way, and "NA" in a tolerance column too; a cell there that is not a number is refused rather than
+# fingerprinted as NA
+.knw_receipt_csv_tables <- function(sources, keys) {
+  if (is.null(names(sources)) || !all(keys$tables %in% names(sources))) {
+    stop("the receipt fingerprints ", paste(setdiff(keys$tables, names(sources)), collapse = ", "),
+         ", with no source CSV", call. = FALSE)
+  }
+  lapply(stats::setNames(keys$tables, keys$tables), function(tb) {
+    x <- utils::read.csv(sources[[tb]], colClasses = "character", na.strings = "", check.names = FALSE)
+    for (cl in names(keys$tolerance$tables[[tb]])) {
+      if (!cl %in% names(x)) stop(sources[[tb]], " has no column ", cl, ", which the declaration rounds", call. = FALSE)
+      a <- x[[cl]]
+      a[a %in% "NA"] <- NA
+      v <- suppressWarnings(as.numeric(a))
+      bad <- !is.na(a) & is.na(v)
+      if (any(bad)) stop(sources[[tb]], ": ", cl, " holds ", sum(bad), " values that are not numbers (",
+                         a[bad][1], ")", call. = FALSE)
+      x[[cl]] <- v
+    }
+    x
+  })
 }

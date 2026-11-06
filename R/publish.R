@@ -32,11 +32,13 @@
 #' @param hive_keys `character` the Hive key columns.
 #' @param receipt `NULL` (no receipt), or a list for the set's provenance
 #'   receipt in crate's shape (#154): `output`, the declaration it is held to
-#'   ([knw_receipt_keys()], `"thresholds"` or `"habitat_grade"`); `recipe`,
-#'   crate's recipe block (`code`, `config`, `inputs`, `seed`); and `summary`,
-#'   the named numbers the declaration lists. The tables the declaration
-#'   fingerprints are read from their source CSVs as text, so they are held
-#'   exact; the Parquet files are the parts, each flat one named by its table.
+#'   ([knw_receipt_keys()], `"thresholds"`, `"habitat_grade"` or `"fdis"`);
+#'   `recipe`, crate's recipe block (`code`, `config`, `inputs`, `seed`); and
+#'   `summary`, the named numbers the declaration lists. The tables the
+#'   declaration fingerprints are read from their source CSVs as text, so they
+#'   are held exact, except a column the declaration gives a tolerance, which
+#'   is read as a number (`"fdis"`'s `access_check` km); the Parquet files are
+#'   the parts, each flat one named by its table.
 #'   `receipt.json` is written beside the manifest with no host, and uploaded
 #'   after the tables and before the manifest.
 #' @return The manifest, invisibly.
@@ -188,16 +190,14 @@ knw_publish <- function(tables, dir_out, id, note, provenance = list(), supersed
 }
 
 # A published set's receipt (#154): the declaration's tables fingerprinted from their source CSVs, read as text so
-# they are held exact; the Parquet files as parts, a flat table's named by it so a rewrite of the same values is
-# equivalent; no host, since the set is public
+# they are held exact (a column the declaration rounds is read as a number, #160); the Parquet files as parts, a flat
+# table's named by it so a rewrite of the same values is equivalent; no host, since the set is public
 .knw_publish_receipt <- function(receipt, tables, files, dir_out) {
   keys <- knw_receipt_keys(receipt$output)
   missing_t <- setdiff(keys$tables, tables$table)
   if (length(missing_t)) stop("the receipt fingerprints ", paste(missing_t, collapse = ", "), ", not in tables",
                               call. = FALSE)
-  fp <- lapply(stats::setNames(keys$tables, keys$tables), function(tb) {
-    utils::read.csv(tables$source[tables$table == tb], colClasses = "character", na.strings = "", check.names = FALSE)
-  })
+  fp <- .knw_receipt_csv_tables(stats::setNames(tables$source, tables$table), keys)
   parts <- unlist(lapply(files, function(f) {
     if (is.null(f$parts)) stats::setNames(f$path, if (f$table %in% keys$tables) f$table else "")
     else stats::setNames(vapply(f$parts, `[[`, character(1), "path"), rep("", length(f$parts)))

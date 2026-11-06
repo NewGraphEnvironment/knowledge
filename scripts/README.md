@@ -57,7 +57,8 @@ wf_farm_priority.js                          farm priority/crossing tables out o
       rivers of 1-50 m3/s on each source (to the river's bank, counting every hop's gap, fresh's convention; #73),
       hydrologic zone, the bcfishobs match, link#349's access check, the
       workbook sites -> data/fdis/derived/{visits_link,visits_species,walks,bcfishobs_fdis_match,access_check,
-      workbook_sites,workbook_species}.csv (+ ledger; 4 socket workers). SCHEMA names link's schema (default
+      workbook_sites,workbook_species}.csv (+ ledger, and evidence_receipt.json, the build's receipt held to
+      inst/receipt/evidence.yaml, #160; 4 socket workers). SCHEMA names link's schema (default
       fresh_default; knw_build_record() refuses one another run built); the visit walks are kept in knw.walk_cache
       from #91, so the first run walks them cold; knw_db_latency_check() at connect stops a run off the
       database's host (round trip over 20 ms) unless REMOTE=TRUE (#110). EVIDENCE_DIR=data/fdis/derived_<name>
@@ -136,7 +137,8 @@ wf_farm_priority.js                          farm priority/crossing tables out o
       They read the v2 bt_use_visits / ch_mad_visits / ch_rule_* tables and are not run on v3's.
 
 --- Publish the FDIS visit tables (after any of 0240, 0290, 0294, 0296 changes its table) ---
-0299  data/fdis/derived/*.csv -> Parquet + manifest.json in data/fdis/publish/; with PUBLISH=TRUE (clean
+0299  data/fdis/derived/*.csv -> Parquet + manifest.json (+ receipt.json for v3, naming the evidence build by its
+      evidence_receipt.json, #160) in data/fdis/publish/ through knw_publish(); with PUBLISH=TRUE (clean
       tree) uploads them to s3://fresh-bc/knowledge/fdis/<VERSION>/ (default v3; v2 is the pre-#57 set) and
       data/fdis_README.md to s3://fresh-bc/fdis/README.md
       PULL=TRUE [VERSION=v2] restores data/fdis/derived/*.csv from the published Parquet (NO_SIGN=TRUE: no credentials)
