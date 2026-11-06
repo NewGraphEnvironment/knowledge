@@ -20,3 +20,9 @@
   receipt and refuses one whose visit-table sha256 are not the files' (proved by removing the check: the refusal
   test goes red); no receipt falls back to `version_id = evidence_md5`. No reader in R/, scripts/, data-raw/ or the
   vignettes read grade receipt inputs by the old names.
+- Phase 4: `0299` publishes through `knw_publish()`; v3 carries a receipt (summary `visits`, renamed from `rows` in
+  `fdis.yaml`), v2 none. Published manifests v1 and v2 carry `schema` on every file (read 2026-11-06), so
+  `knw_publish()`'s prior check matches 0299's. Smoke-run in a scratch clone on fixture tables: v3 writes
+  `receipt.json` naming the evidence recipe_id; no evidence receipt, or one whose `walks.csv` moved, is refused;
+  `VERSION=v2` writes none and removes the earlier one. The full-tree clean rule for `PUBLISH` is kept.
+  The fdis test's last-place move is `equivalent`, not `identical`: the Parquet's bytes move with the value.

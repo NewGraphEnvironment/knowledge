@@ -86,12 +86,12 @@ as another recipe for every grade downstream. The issue has no comments.
 
 ## Phase 4: 0299 publishes through knw_publish(receipt =)
 
-- [ ] `scripts/0299`: keep `PULL`, the `access_check` guard, the clean-tree rule for `PUBLISH` and the README upload.
+- [x] `scripts/0299`: keep `PULL`, the `access_check` guard, the clean-tree rule for `PUBLISH` and the README upload.
   The manifest, the Parquet check and the upload move to `knw_publish()`. For v3 it passes
   `receipt = list(output = "fdis", recipe = …, summary = …)`, whose recipe names the evidence by its receipt's
   `recipe_id`, read from `data/fdis/derived/evidence_receipt.json`. v3 refuses to publish without that receipt; v2 is
   published with no receipt.
-- [ ] `tests/testthat/test-publish.R`: a fixture set held to `fdis.yaml` writes `receipt.json`. `access_check` km
+- [x] `tests/testthat/test-publish.R`: a fixture set held to `fdis.yaml` writes `receipt.json`. `access_check` km
   read as a number is `equivalent` within 1e-6.
 
 ## Phase 5: The archive keeps the evidence receipt
