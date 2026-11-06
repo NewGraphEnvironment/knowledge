@@ -113,8 +113,9 @@ knw_evidence_receipt_write <- function(evidence_dir, settings, inputs, knowledge
     f <- paste0(tb, ".csv")
     held <- r$result$parts[[f]]$sha256
     if (is.null(held) || !identical(held, .knw_sha256(file.path(evidence_dir, f)))) {
-      stop(path, " does not describe ", file.path(evidence_dir, f), ": the receipt is another build's, or the table ",
-           "was replaced after it; rebuild the evidence (scripts/0310)", call. = FALSE)
+      stop(path, " does not describe ", file.path(evidence_dir, f), ": either the receipt is another build's (left ",
+           "beside tables restored or copied in: move it aside) or the table was replaced after it (rebuild the ",
+           "evidence, scripts/0310)", call. = FALSE)
     }
   }
   if (!is.character(r$recipe$recipe_id) || !grepl("^[0-9a-f]{64}$", r$recipe$recipe_id)) {

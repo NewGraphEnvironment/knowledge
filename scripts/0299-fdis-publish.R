@@ -32,7 +32,10 @@
 #     inst/receipt/fdis.yaml: this commit, the evidence build by the recipe_id of the receipt 0310
 #     wrote beside the tables (refused where there is none, or one describing other tables), and the
 #     FDIS extract by its MANIFEST.md5; every table fingerprinted as written, exact but access_check's
-#     km, rounded as the evidence build's. v2 is published and frozen, and carries none.
+#     km, rounded as the evidence build's. v2 is published and frozen, and carries none. The receipt
+#     holds the evidence recipe to 0310's tables only: nothing here ties the species tables (0290,
+#     0294, 0296) or fdis_sites (0240) to that build, so rerun them after a 0310 rebuild before
+#     publishing, as before #160.
 #   - The CSVs were built by earlier runs, so the manifest records each source CSV's sha256 and
 #     modification time, and the commit it was published from (`published_from_commit`), which
 #     needs a clean working tree.
@@ -130,6 +133,14 @@ if (pull) {
   path_manifest <- file.path(dir_out, "manifest.json")
   aws("s3", "cp", paste0(s3_tables, "manifest.json"), path_manifest, "--only-show-errors")
   man <- jsonlite::read_json(path_manifest)
+  # an evidence build's receipt (#160) left in the directory describes the tables 0310 wrote, not the ones pulled, and
+  # every reader would refuse it beside them: refused here, before anything is written (the package is not loaded in a
+  # pull, so the receipt's name and its tables are written out)
+  ev_tables <- c("visits_link", "visits_species", "walks", "bcfishobs_fdis_match", "access_check")
+  ev_receipt <- file.path(dir_in, "evidence_receipt.json")
+  if (file.exists(ev_receipt) && any(vapply(man$files, `[[`, "", "table") %in% ev_tables)) {
+    stop(ev_receipt, " describes an evidence build, not the tables pulled: move it aside to pull", call. = FALSE)
+  }
   for (f in man$files) {
     dst <- file.path(dir_out, f$path)
     aws("s3", "cp", paste0(s3_tables, f$path), dst, "--only-show-errors")

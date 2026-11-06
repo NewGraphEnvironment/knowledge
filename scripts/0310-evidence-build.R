@@ -273,7 +273,10 @@ if (parent_table || nzchar(parent_dir)) {
     parent <- knw_parent_read(conn, schema, parent_min, keys = v)
     pv <- attr(parent, "provenance")
     add("info", "parent_table", pv$rows, .knw_parent_note(pv))
-    parent_setting <- .knw_parent_note(pv)
+    # the receipt names the parent table by its builds' runs and link's, not by schema names, which a provincial run
+    # renames afterwards and another database may spell otherwise
+    parent_setting <- sprintf("streams_parent built %s; full run %s, minimal run %s at link %s, %s", pv$built_at,
+                              pv$run_uid_full, pv$run_uid_minimal, pv$link_sha_minimal, pv$config_hash_minimal)
   } else {
     pf <- list.files(parent_dir, "^parent_[a-z]{4}\\.csv(\\.gz)?$", full.names = TRUE)
     if (!length(pf)) stop("PARENT_DIR=", parent_dir, " holds no parent_<wsg>.csv.gz")
