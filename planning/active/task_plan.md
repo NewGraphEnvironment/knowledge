@@ -63,16 +63,16 @@ as another recipe for every grade downstream. The issue has no comments.
 
 ## Phase 2: The evidence receipt, written by 0310
 
-- [ ] `R/evidence_receipt.R`: `knw_evidence_receipt_write(evidence_dir, recipe, knowledge)` (exported, with a runnable
+- [x] `R/evidence_receipt.R`: `knw_evidence_receipt_write(evidence_dir, recipe, knowledge)` (exported, with a runnable
   example) writes `evidence_receipt.json` in the evidence directory. Its parts are the seven tables, each named by its
   table. It checks that every declared table exists, writes no host (`publish = TRUE`) and reads the tables through
   `.knw_receipt_csv_tables()`.
-- [ ] `scripts/0310`:
+- [x] `scripts/0310`:
   - at the start: `.knw_receipt_crate_check()` and `.knw_git_state()`, run before minutes of work;
   - before writing: unlink any receipt left by an earlier pass, so a pass that stops leaves no stale one;
   - after the tables and before the ledger: write the receipt, then add a ledger row naming its `recipe_id`;
   - the header's OUTPUT and DESIGN notes say so.
-- [ ] `tests/testthat/test-evidence_receipt.R`: fixture tables round-trip, a missing table is refused, and an
+- [x] `tests/testthat/test-evidence_receipt.R`: fixture tables round-trip, a missing table is refused, and an
   `access_check` km moved by 1e-9 between two receipts is `equivalent` while one moved by 1e-3 is `different`.
 
 ## Phase 3: Grade receipts name the evidence by its recipe

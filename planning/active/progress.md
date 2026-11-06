@@ -11,3 +11,8 @@
   `.knw_receipt_csv_tables()` reads a receipt's tables as text with only a rounded column numeric, and
   `knw_publish()` uses it. crate refuses `config_files: []`, so `fdis.yaml` omits the key (it reads as none).
   test-receipt and test-publish pass.
+- Phase 2: `knw_evidence_receipt_write()` (R/evidence_receipt.R) writes `evidence_receipt.json`; `0310` checks crate and
+  reads the commit state and `data/fdis/MANIFEST.md5` at the start, removes an earlier receipt before its first table,
+  and writes the receipt after `access_check`, ledgering its recipe_id. The receipt block was smoke-run from the script's
+  own lines on fixtures (scratchpad `smoke0310.R`); a real build is phase 7. test-evidence_receipt passes, and its
+  array check goes red with the `I()` wrap removed.
