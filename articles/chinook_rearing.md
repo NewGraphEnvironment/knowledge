@@ -180,8 +180,9 @@ Each tool is cited where it is first used. To cite this package,
 `citation("knowledge")` gives:
 
 Irvine A (2026). *knowledge: Fisheries Evidence and Tuned Habitat
-Thresholds for BC Watershed Groups*. New Graph Environment Ltd. Version
-0.4.29, <https://newgraphenvironment.github.io/knowledge/>.
+Thresholds for BC Watershed Groups*. New Graph Environment Ltd.
+<doi:10.5281/zenodo.23990335> <https://doi.org/10.5281/zenodo.23990335>.
+Version 0.4.30, <https://newgraphenvironment.github.io/knowledge/>.
 
 ## References
 

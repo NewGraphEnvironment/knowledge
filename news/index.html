@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">knowledge</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.29</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.30</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,9 +34,14 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/v0.4.29/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/v0.4.30/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.4.30" id="knowledge-0430">knowledge 0.4.30<a class="anchor" aria-label="anchor" href="#knowledge-0430"></a></h2>
+<ul><li>
+<code>DESCRIPTION</code> carries knowledge’s concept DOI (<code>Config/DOI: 10.5281/zenodo.23990335</code>), minted when Zenodo archived v0.4.29, so <code>citation("knowledge")</code> and each article’s software citation print it (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/155" class="external-link">#155</a>).</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.29" id="knowledge-0429">knowledge 0.4.29<a class="anchor" aria-label="anchor" href="#knowledge-0429"></a></h2>
 <ul><li>A new article, “Splitting streams at fish records shifts the steepest slope mapped as habitat” (<code>vignettes/stream_splits.Rmd</code>, <a href="https://github.com/NewGraphEnvironment/knowledge/issues/149" class="external-link">#149</a>), shows on our own records how where link cuts a stream changes the slope a fish habitat definition is tested on: chinook rearing’s steepest slope is 13 % on link’s full network and 9 % on its minimal network, which leaves out the cuts at fish records, crossings and hand-mapped habitat. Its data come from <code>data-raw/cut_points_stage.R</code>, <code>data-raw/vignette_cut_points.R</code> and <code>data-raw/vignette_cut_points_places.R</code>, and the methodology article gains a short section that answers the question and links it. All three articles now cite <code>link</code>, <code>fresh</code> and <code>wet</code> from their own <code><a href="https://rdrr.io/r/utils/citation.html" class="external-link">citation()</a></code>, with their concept DOIs (<code>data-raw/vignette_bib.R</code>). Nothing published moves.</li>

@@ -1,5 +1,13 @@
 # Changelog
 
+## knowledge 0.4.30
+
+- `DESCRIPTION` carries knowledge’s concept DOI
+  (`Config/DOI: 10.5281/zenodo.23990335`), minted when Zenodo archived
+  v0.4.29, so `citation("knowledge")` and each article’s software
+  citation print it
+  ([\#155](https://github.com/NewGraphEnvironment/knowledge/issues/155)).
+
 ## knowledge 0.4.29
 
 - A new article, “Splitting streams at fish records shifts the steepest
