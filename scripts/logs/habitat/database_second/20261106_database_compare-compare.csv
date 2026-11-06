@@ -1,0 +1,4 @@
+label,output,verdict,bytes_match,rows_ref,rows_new,max_diff,column,tolerance,decision_read,note
+"compare","CH_rear_compare.csv","different",FALSE,137,137,0.0495173176630033,"default_graded_km",1e-06,TRUE,"rows differing: default_graded_km 24, tuned_graded_km 28, default_km_0-0.2 2, tuned_km_0-0.2 2, default_km_0.2-0.4 2, tuned_km_0.2-0.4 2, default_km_0.6-0.8 2, tuned_km_0.6-0.8 2, default_km_0.8-1 2, tuned_km_0.8-1 2; numeric difference past the tolerance; only graded-km columns move (max 0.0495 km): the 50 grades #161 moved; km drawn (default 102951, tuned 88458, lost 30698, gained 16205) equal"
+"compare","CH_rear_change.csv","equivalent",FALSE,36,36,7.27595761418343e-12,"km",1e-06,TRUE,""
+"compare","CH_rear_checks.csv","equivalent",FALSE,7,7,2.08721928629529e-14,"lift_hi",1e-06,FALSE,""
