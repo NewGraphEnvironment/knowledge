@@ -99,10 +99,10 @@ The reference is the published run `20261104_0543`: tracked `data/tune/*` and `d
 ## Phase 4: crate's comparison (once crate PR #44 merges)
 
 - [x] Check that PR #44 has merged (merged 2026-11-06 02:30 UTC; crate 0.12.0 with `crt_receipt_compare()` already installed)
-- [ ] `pak::pak("NewGraphEnvironment/crate", ask = FALSE)`, then write receipts for the reference and new outputs through `crt_receipt_write()`
+- [x] `pak::pak("NewGraphEnvironment/crate", ask = FALSE)`, then write receipts for the reference and new outputs through `crt_receipt_write()`
       with the tolerances recorded by hand. Check that `crt_receipt_compare()`'s verdict on each output matches the hand-recorded one, and record
       any disagreement. Disagreements go to a crate issue, not a workaround (drafted for crate, which is our repo)
-- [ ] Tick the issue's provenance task (the tolerance half is done: #154's body carries the table). In #154's body, propose each tolerance used as the declaration beside its writer, and each identical
+- [x] Tick the issue's provenance task (the tolerance half is done: #154's body carries the table). In #154's body, propose each tolerance used as the declaration beside its writer, and each identical
       table as exact
 
 ## Phase 5: Record

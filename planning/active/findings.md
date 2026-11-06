@@ -108,3 +108,12 @@ A run that reads `knw.walk_cache` is unaffected: the second database's `0310` re
 state each run's real code commit (recipe), as its rules require; the check reads its result-side fields. The one disagreement is a
 difference of definition: crate fingerprints a double rounded to its tolerance, so access_check (6.0e-11 under 1e-6) is identical to
 crate and equivalent by hand. crate refuses data.table's `IDate` (a `Date` subclass): converted in the check, filed as crate#49.
+
+## crate's comparison over every output (2026-11-06)
+
+`scripts/logs/habitat/database_second/20261106_database_compare-receipts.csv`, 43 min. 109 outputs: identical 71 and different 14
+agree with the hand verdicts; 22 equivalent by hand are identical to crate (it fingerprints a double rounded to its tolerance, so a
+difference under the rounding never reaches the fingerprint; the hand comparison calls exact equality identical); 2 errors, the
+4,033,543-row BT grade tables, whose canonical JSON passes R's 2^31-1-byte string limit (crate#50; CH's 3,016,042 rows went through).
+No output flips between same and different. crate 0.12.0 was installed before this session reached Phase 4 (crate PR #44 merged
+02:30 UTC).
