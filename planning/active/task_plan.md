@@ -60,15 +60,15 @@ line with two parents at the same distance. Measured in planning (m1, PG 17.5, P
 
 ## Phase 3: Measure on both databases
 
-- [ ] `data-raw/link_flow_tie_check.R` writes `knw_link_flow()` for the parent-fallback population and
+- [x] `data-raw/link_flow_tie_check.R` writes `knw_link_flow()` for the parent-fallback population and
       `knw_link_regulated()$dams`, each sorted, to CSV, with timing. The population is every `fresh_default.streams`
       line with no picked flow or no watershed codes, plus #158's three visit lines. The script sources the
       `link_flow.R` and `link_regulated.R` that it is given, so on m4 it runs from a scratch copy with
       `PGSERVICE=fresh_local`, and m4's checkout is not touched.
-- [ ] Run it on m1 and on m4, with the old code and the new code. Expected: the old code differs between the two
+- [x] Run it on m1 and on m4, with the old code and the new code. Expected: the old code differs between the two
       databases on the tied lines (reproducing #158), and the new code is identical on both (md5 of the sorted CSV).
       Wall time stays about the same: PG 17 adds an incremental sort after the index scan.
-- [ ] Commit the logs under `scripts/logs/habitat/database_second/` with #158's naming
+- [x] Commit the logs under `scripts/logs/habitat/database_second/` with #158's naming
       (`<date>_link_flow_tie_check-<db>-<code>.csv`).
 
 ## Phase 4: Documentation

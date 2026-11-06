@@ -49,8 +49,10 @@ if (mode == "read") {
   t_dam <- numeric()
   for (k in 1:2) t_dam[k] <- system.time(dm <- fn$knw_link_regulated(conn, pts)$dams)[["elapsed"]]
   dm <- dm[order(dm$cabd_id), , drop = FALSE]
-  # the lines a tie can reach: the two nearest parents the lookup may take, within 1e-6 m of each other
-  DBI::dbWriteTable(conn, "tmp_knw_tie_lines", data.frame(linear_feature_id = lines), temporary = TRUE,
+  # the lines a tie can reach: those whose parent lookup runs (a flow or a code taken from a parent), where the two
+  # nearest parents the lookup may take are within 1e-6 m of each other
+  par <- fl$linear_feature_id[fl$flow_from %in% "parent" | fl$code_from_parent %in% TRUE]
+  DBI::dbWriteTable(conn, "tmp_knw_tie_lines", data.frame(linear_feature_id = par), temporary = TRUE,
                     overwrite = TRUE)
   tied <- DBI::dbGetQuery(conn, "
     SELECT t.linear_feature_id, x.d[1] AS d1, x.d[2] AS d2
@@ -74,7 +76,8 @@ if (mode == "read") {
   utils::write.csv(num17(as.data.frame(dm)), f("dams"), row.names = FALSE, na = "")
   utils::write.csv(num17(tied), f("tied"), row.names = FALSE, na = "")
   utils::write.csv(data.frame(
-    label = label, flow_load = load, n_lines = length(lines), n_flow_rows = nrow(fl), n_dams = nrow(dm),
+    label = label, flow_load = load, n_lines = length(lines), n_flow_rows = nrow(fl), n_parent = length(par),
+    n_dams = nrow(dm),
     n_tied = nrow(tied), n_tied_exact = sum(tied$d1 == tied$d2),
     flow_md5 = unname(tools::md5sum(f("flow"))), dams_md5 = unname(tools::md5sum(f("dams"))),
     flow_s_1 = t_flow[1], flow_s_2 = t_flow[2], dams_s_1 = t_dam[1], dams_s_2 = t_dam[2]
@@ -84,7 +87,15 @@ if (mode == "read") {
   labels <- strsplit(env("LABELS"), ",", fixed = TRUE)[[1]]
   rd <- function(l, x) utils::read.csv(file.path(out_dir, paste0(l, "_", x, ".csv")), colClasses = "character")
   meta <- do.call(rbind, lapply(labels, rd, x = "meta"))
-  tied <- unique(unlist(lapply(labels, function(l) rd(l, "tied")$linear_feature_id)))
+  # a tie can move only a line whose parent lookup ran (runs before the tie query was limited to those lines listed
+  # every line, so the limit is applied here too)
+  par <- unique(unlist(lapply(labels, function(l) {
+    f <- rd(l, "flow")
+    f$linear_feature_id[f$flow_from %in% "parent" | f$code_from_parent %in% "TRUE"]
+  })))
+  tied <- intersect(unique(unlist(lapply(labels, function(l) rd(l, "tied")$linear_feature_id))), par)
+  meta$n_parent_lines <- length(par)
+  meta$n_tied_parent_lines <- length(tied)
   # rows that differ between two runs, by key, over every column
   diff_keys <- function(a, b, key) {
     stopifnot(identical(a[[key]], b[[key]]), identical(names(a), names(b)))
@@ -101,7 +112,7 @@ if (mode == "read") {
   utils::write.csv(out, env("LOG"), row.names = FALSE)
   utils::write.csv(meta, sub("\\.csv$", "-meta.csv", env("LOG")), row.names = FALSE)
   print(out[, c("a", "b", "flow_rows_differ", "flow_differ_all_tied", "dam_rows_differ")])
-  print(meta[, c("label", "n_lines", "n_tied", "n_tied_exact", "flow_md5", "flow_s_1", "flow_s_2", "dams_s_1",
+  print(meta[, c("label", "n_lines", "n_parent_lines", "n_tied_parent_lines", "flow_md5", "flow_s_1", "flow_s_2", "dams_s_1",
                  "dams_s_2")])
 } else {
   stop("MODE must be read or compare", call. = FALSE)

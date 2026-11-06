@@ -45,7 +45,32 @@ Run before the fix, with `.knw_link_flow_sql()` carrying the old `ORDER BY p.geo
 - Live dam snap: on m1 both tied dams took the higher-id segment (measures 18319.28380 and 1651.96479 against the lower
   id's 18319.28361 and 1651.96526).
 
+## Two databases, old code against new (2026-11-06)
+
+`data-raw/link_flow_tie_check.R` on the host (m4, `PGSERVICE=fresh_local`, run from a scratch copy) and the second
+database (m1). Both hold the flow load built 2026-10-24T12:23:01Z (wet b4bbc50). There are 34,812 lines: the 8,167
+flow-less `fresh_default.streams` lines, plus every visit line in `visits_link.csv` and #158's two tied visit lines.
+2,831 of them take a parent's flow or codes, and on 1,800 of those the two nearest eligible parents are within 1e-6 m
+(all but one exactly). Logs: `scripts/logs/habitat/database_second/20261106_link_flow_tie_check*`.
+
+| pair | flow rows differing | all among tied lines | dams differing |
+|---|---|---|---|
+| host old, second old | 614 (includes 104084643 and 105073914) | yes | 2 |
+| host new, second new | 0 (md5 equal) | | 0 (md5 equal) |
+| host old, host new | 632 | yes | 0 |
+| second old, second new | 636 | yes | 2 |
+
+- Wall time, first and second call: host 228 / 183 s old against 178 / 176 s new; second database 47 / 16 s old
+  against 46 / 14 s new. The dam snap took under 0.2 s everywhere. The extra sort key costs nothing measurable. The
+  host was slower on both versions, so the cause is the database, not the code.
+- Both reads ran an earlier tie query that scanned every line, so each run's meta reports 26,072 tied lines: lines with
+  flow of their own touch their neighbours at 0 m, and their lookup never runs. The script now limits the tie query to
+  parent lines, and `MODE=compare` applies the same limit, so these runs' comparison uses the 1,800.
+- Plan review finding 3 (one parent with two picked rows) declined: wet's `pick` is one row per segment, and the probe
+  found 0 duplicates.
+
 ## Errors Encountered
 
 | Error | Resolution |
 |-------|------------|
+| Tie query flagged 26,072 of 34,812 lines | It scanned lines with flow of their own; limited to lines whose parent lookup runs (script and compare) |
