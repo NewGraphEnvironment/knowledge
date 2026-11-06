@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">knowledge</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.30</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.31</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,9 +34,13 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/v0.4.31/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.4.31" id="knowledge-0431">knowledge 0.4.31<a class="anchor" aria-label="anchor" href="#knowledge-0431"></a></h2>
+<ul><li>Each grade table and each published set now carries a provenance receipt in crate’s shared shape (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/154" class="external-link">#154</a>), so a rebuild can be compared with the archived copy and answered identical, equivalent within a declared rounding, or different. <code>scripts/0320</code> writes <code>&lt;key&gt;_grades_receipt.json</code> beside each grade table and its record (<code><a href="../reference/knw_grade_receipt_write.html">knw_grade_receipt_write()</a></code>), and <code>knw_publish(receipt =)</code> writes <code>receipt.json</code> beside each set’s manifest from <code>scripts/0325</code>. What each output is judged on, and its roundings, are declared in <code>inst/receipt/&lt;output&gt;.yaml</code> (<code><a href="../reference/knw_receipt_keys.html">knw_receipt_keys()</a></code>); they are provisional until <a href="https://github.com/NewGraphEnvironment/knowledge/issues/158" class="external-link">#158</a>’s measurements revise them. Promotion and the archive check and carry a grade receipt, and a resumed <code>0320</code> regrades a kept table whose receipt does not name its record. knowledge now imports crate (&gt;= 0.13.0). Nothing published moves: the first receipts arrive with the next retune.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.30" id="knowledge-0430">knowledge 0.4.30<a class="anchor" aria-label="anchor" href="#knowledge-0430"></a></h2>
 <ul><li>
