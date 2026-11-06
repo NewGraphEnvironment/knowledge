@@ -126,3 +126,14 @@ No output flips between same and different. crate 0.12.0 was installed before th
 | The bound `compare.csv`/`change.csv`/`checks.csv` matched no spec row (patterns needed a key prefix), so they were compared exact and not decision-read | Spec rows of their own, keyed with species and stage |
 | A file list built with `ls` carried the colour codes of its alias, so every file read as missing | List files from R (`list.files()`) |
 | Read walks.csv as stored to the centimetre from a data.table print that truncated 1967.241 to 1967.24 | Print with `format(x, digits = 15)`; walks.csv carries full doubles, so the cold walk's sub-5 mm moves are real summation-order differences and 0.005 m is a chosen tolerance |
+
+## Review enumeration (2026-11-06, ends the /code-check loop)
+
+Mechanism (round 3): facts about the data taken on belief, not read from what produced it: which values are the same, which
+spec row a file takes, a table's stored precision, a column's meaning. Enumerated against the writers (`scripts/0320-tune-run.R`,
+`scripts/0330-compare.R`): every table family's tolerance is its writer's rounding (`_tune`, `_honest`, `_smoke` rules 6 dp;
+`_summary`, `pick_report`, bound `checks.csv` 4 dp; bound `change.csv`, `compare.csv` 3 dp; `_curves` 5 significant digits;
+grades' rate and grade 5 significant digits, under 1). A one-unit flip on every rounded cell of every reference table
+(`flip.R` in the session scratch; 34 tables with cells to flip) reads equivalent under the fixed code; the smoke tables' check
+rows (`value`, `limit`) are written unrounded, so no flip applies to them; WCT and BT spawning withhold their grades (empty
+`rate` and `grade`). Every key declared is unique on both sides of every compared table (the guard runs on each comparison).

@@ -9,7 +9,7 @@ label,output,verdict,bytes_match,rows_ref,rows_new,max_diff,column,tolerance,dec
 "compare","CH_rear_checks.csv","equivalent",FALSE,7,7,2.08721928629529e-14,"lift_hi",1e-06,FALSE,""
 "compare","CH_rear_compare.csv","different",FALSE,137,137,0.0495173176630033,"default_graded_km,tuned_graded_km,default_km_0-0.2,tuned_km_0-0.2,default_km_0.2-0.4,tuned_km_0.2-0.4,default_km_0.6-0.8,tuned_km_0.6-0.8,default_km_0.8-1,tuned_km_0.8-1",1e-06,TRUE,"rows differing: default_graded_km 24, tuned_graded_km 28, default_km_0-0.2 2, tuned_km_0-0.2 2, default_km_0.2-0.4 2, tuned_km_0.2-0.4 2, default_km_0.6-0.8 2, tuned_km_0.6-0.8 2, default_km_0.8-1 2, tuned_km_0.8-1 2; numeric difference past the tolerance; only graded-km columns move (km by grade class and graded km): the grades #161 moved; every km drawn, lost and gained equal"
 "compare","change.csv","identical",FALSE,177,177,0,NA,0.001,TRUE,""
-"compare","checks.csv","identical",FALSE,45,45,0,NA,1e-06,FALSE,""
+"compare","checks.csv","identical",FALSE,45,45,0,NA,1e-04,FALSE,""
 "compare","CO_rear_change.csv","equivalent",FALSE,27,27,1.81898940354586e-12,"km",1e-06,TRUE,""
 "compare","CO_rear_checks.csv","equivalent",FALSE,7,7,2.88657986402541e-15,"lift_lo",1e-06,FALSE,""
 "compare","CO_rear_compare.csv","equivalent",FALSE,114,114,2.91038304567337e-10,"accessible_km",1e-06,TRUE,""
