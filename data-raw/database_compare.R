@@ -16,6 +16,7 @@
 # KEYS AND TOLERANCES: the `spec` table below, one row per output family, matched on the file name. `key` is the
 # columns a row is identified by (blank: sort on every column the two sides share, for small tables whose rows
 # carry no float a database could sum differently); `tol` the absolute tolerance on numeric columns (0: exact);
+# (walks.csv stores distances rounded to the centimetre, so a fresh walk is held to 0.005 m);
 # `context` columns reported and never compared; `added` columns the current code writes and the reference predates
 # (#120 added segment_fwa_gradient to visits_link after the published run), noted and never compared. A file no row
 # matches is compared exactly, keyed on every column.
@@ -41,7 +42,7 @@ spec <- data.table::rbindlist(list(
   # the evidence build (0310)
   list("^visits_link\\.csv$",        "site_visit",                                          0,    "",  TRUE, "segment_fwa_gradient"),
   list("^visits_species\\.csv$",     "site_visit;species_code",                             0,    "",  TRUE, ""),
-  list("^walks\\.csv$",              "blue_line_key;downstream_route_measure;src;qmin",     1e-6, "",  TRUE, ""),
+  list("^walks\\.csv$",              "blue_line_key;downstream_route_measure;src;qmin",     0.005, "",  TRUE, ""),
   list("^bcfishobs_fdis_match\\.csv$", "",                                                  0,    "",  FALSE, ""),
   list("^access_check\\.csv$",       "species_code;habitat_accessible;access_gt0",          1e-6, "",  FALSE, ""),
   list("^workbook_sites\\.csv$",     "site_visit",                                          1e-6, "",  FALSE, ""),
@@ -134,17 +135,28 @@ compare_tables <- function(a, b, name, key = character(), tol = 0, context = cha
                                 collapse = "; ")))
   }
   worst <- 0; worst_col <- NA_character_; bad <- character()
+  n_bad <- integer()  # rows differing per column: past the tolerance, or a value or NA that does not match
   for (cn in setdiff(cols, key)) {
     x <- a[[cn]]; y <- b[[cn]]
     nax <- is.na(x); nay <- is.na(y)
-    if (any(nax != nay)) { bad <- c(bad, cn); next }
+    if (any(nax != nay)) {
+      bad <- c(bad, cn)
+      both <- !nax & !nay
+      n_bad[cn] <- sum(nax != nay) + if (cn %in% num) sum(abs(as.numeric(x[both]) - as.numeric(y[both])) > tol) else
+        sum(as.character(x[both]) != as.character(y[both]))
+      next
+    }
     if (cn %in% num) {
       d <- abs(as.numeric(x[!nax]) - as.numeric(y[!nay]))
       m <- if (length(d)) max(d) else 0
-      if (!is.finite(m)) { bad <- c(bad, cn); next }  # Inf against a number
+      if (!is.finite(m)) { bad <- c(bad, cn); n_bad[cn] <- sum(!is.finite(d)); next }  # Inf against a number
       if (m > worst) { worst <- m; worst_col <- cn }
-    } else if (!identical(as.character(x[!nax]), as.character(y[!nay]))) bad <- c(bad, cn)
+      if (m > tol) n_bad[cn] <- sum(d > tol)
+    } else if (!identical(as.character(x[!nax]), as.character(y[!nay]))) {
+      bad <- c(bad, cn); n_bad[cn] <- sum(as.character(x[!nax]) != as.character(y[!nay]))
+    }
   }
+  if (length(n_bad)) notes <- c(notes, paste0("rows differing: ", paste(names(n_bad), n_bad, sep = " ", collapse = ", ")))
   note <- paste(notes, collapse = "; ")
   if (length(bad))
     return(row_out(name, "different", bytes_match, na, nb, column = paste(bad, collapse = ","), tol = tol,

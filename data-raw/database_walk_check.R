@@ -8,7 +8,8 @@
 #           that table (the 14 columns the walk returns; 0310 adds target_lake and target_regulated after it)
 #   grade   N_GRADE segment starts drawn at random (SEED) from a grade table's walked segments (dist_status not no_walk), at its record's
 #           river size on wet's pick, against the table's dist_status and dist_m
-# Nothing is written to the database: cache = FALSE neither reads nor keeps a walk.
+# Distances are held to 0.005 m: the stored tables round them to the centimetre. Nothing is written to the database:
+# cache = FALSE neither reads nor keeps a walk.
 #
 # INPUT:  REF_WALKS (default data/fdis/derived/walks.csv); GRADES (default data/tune/CH_rear_grades.csv) and its
 #         record (<key>_grades_record.csv beside it, for q_walk); N_GRADE (20000), SEED (158), WORKERS (8);
@@ -49,7 +50,7 @@ if (part %in% c("visits", "both")) {
   w <- as.data.table(w)
   cols <- intersect(names(w), names(ref))
   r <- compare_tables(ref[, cols, with = FALSE], w[, cols, with = FALSE], "walks.csv (visit starts, uncached)",
-                      key = c("blue_line_key", "downstream_route_measure", "src", "qmin"), tol = 1e-6,
+                      key = c("blue_line_key", "downstream_route_measure", "src", "qmin"), tol = 0.005,
                       decision_read = TRUE)
   r$note <- paste(c(if (nzchar(r$note)) r$note, sprintf("%d starts x 3 sources x 7 sizes walked cold in %.1f min on %d workers",
                                                        nrow(starts), mins, workers)), collapse = "; ")
@@ -73,7 +74,7 @@ if (part %in% c("grade", "both")) {
   w <- w[, .(blue_line_key, downstream_route_measure, dist_status = status,
              dist_m = ifelse(status == "found", dist_m, NA_real_))]
   r <- compare_tables(s, w, sprintf("%s (%d sampled grade starts, uncached)", basename(grades_path), nrow(s)),
-                      key = c("blue_line_key", "downstream_route_measure"), tol = 1e-6, decision_read = TRUE)
+                      key = c("blue_line_key", "downstream_route_measure"), tol = 0.005, decision_read = TRUE)
   r$note <- paste(c(if (nzchar(r$note)) r$note, sprintf("seed %d; q %s on pick; walked cold in %.1f min on %d workers",
                                                        seed, rec$q_walk, mins, workers)), collapse = "; ")
   print(r)

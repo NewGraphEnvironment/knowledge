@@ -76,7 +76,7 @@ The reference is the published run `20261104_0543`: tracked `data/tune/*` and `d
       Tests: identical, equivalent and different on fixtures, and a planted 1e-6 km change goes `different` at a 1e-9 tolerance
 - [x] `EVIDENCE_DIR=data/fdis/derived_second Rscript scripts/0310-evidence-build.R`, logging its wall time. Compare against the restored
       `data/fdis/derived` (visits, placements, walks, flows), and its ledger against the published one, line by line, context aside
-- [ ] Cold walk check (`data-raw/database_walk_check.R`): every visit start, uncached, against the host's `walks.csv`; and 20,000 sampled CH grade
+- [x] Cold walk check (`data-raw/database_walk_check.R`): every visit start, uncached, against the host's `walks.csv`; and 20,000 sampled CH grade
       starts (fixed seed), uncached, against the cache. Write the verdict rows and the minutes
 - [ ] `SPECIES=CH RUN=<stamp> EVIDENCE_DIR=data/fdis/derived_second Rscript scripts/0320-tune-run.R`. Compare the smoke results, tune, seeds,
       honest, curves, summary and pick (`mad>=0.75|g<=0.13|Q3@D1000`) against `data/tune/CH_rear_*`. Compare the grade record, and the grade

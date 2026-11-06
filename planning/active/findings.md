@@ -82,3 +82,22 @@ Relates to #145 (the run reproduced), #154 (receipts for published tables and gr
 `mad_pick` on 3 visits: each sits on an Atlas line with no flow of its own and two parent lines at distance 0, and
 `knw_link_flow()`'s `ORDER BY p.geom <-> s.geom LIMIT 1` has no tiebreak (#161). The host took 70.277205 and 8.526702 m³/s, this
 database 70.278863 and 8.523775. Not a database difference: the function is unchanged since 2aacd1f.
+
+## Cold walk verdicts (2026-11-06)
+
+`scripts/logs/habitat/database_second/20261106_database_compare-walks.csv`. Walked cold here and compared with the host's tables:
+visit starts (775,488 rows, 2.3 min on 8 workers) differ in the target line on 98,007 rows, the distance on 412 and the status on 98;
+chinook grade starts (20,000, 0.2 min) differ in distance on 23 (44 to 529 m, five target lines), status on none.
+
+What separated the causes, in order:
+1. The host's own cold walk of the 23 starts reproduces its cache exactly (`PGSERVICE` on the host, same run uid and flow comment), so
+   neither a stale cache nor the code moved: the two databases walk differently.
+2. FWA rows (ids, keys, codes, geometry md5), the flow rows and PostGIS 3.5.2 are identical on both databases for the segments involved.
+3. Wrong turn: the pairs of target lines are 44.58 to 528.54 m apart, exactly the distance gaps, which read at first as a non-nearest
+   landing. The isolated landing query, with the bitmap plan and forced onto the GiST index, returns the same order on both databases.
+4. The walk's diagnostics for one start (360884000 @ 3861.28): the same hops, gap 0 on both; the host's `dist_centre_m` is 44.58 m longer.
+   Its mouth sits on the vertex shared by 203023736 (downstream, no flow row on either database) and 203023836 (14.08 m³/s). Here the
+   walk lands on 203023836 and stops; the host lands on 203023736 and walks down to 203023706. A tie at distance 0 in the landing's
+   `ORDER BY s.geom <-> mouth.pt LIMIT 1` (`inst/sql/ch_dist_profile.sql:140`), resolved by each database's plan inside the function (#162).
+
+A run that reads `knw.walk_cache` is unaffected: the second database's `0310` read the host's walks and wrote an identical `walks.csv`.
