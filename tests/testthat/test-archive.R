@@ -189,6 +189,56 @@ test_that("an unpromoted run never overwrites the published run's setup, and pro
   expect_identical(utils::tail(i$tune_run, 2), c("20261102_0000", "20261101_0000"))
 })
 
+test_that("a grade table's receipt is archived after its other files where the run wrote one, and restored (#154)", {
+  root <- withr::local_tempdir()
+  tok <- c(cut = "cut-full-top", acc = "acc-v1", grad = "grad-seg", flow = "q-wet-fill")
+  x <- run_fx(root, run = "20261106_0000", tokens = tok)
+  g <- file.path(x$tune, "CH_rear_grades.csv")
+  crate::crt_receipt_write(x$tune, output = list(name = "grade"),
+                           recipe = list(code = list(knowledge = list(commit = strrep("a", 40), dirty = FALSE))),
+                           result = list(parts = basename(g)), lockfile = NULL, publish = TRUE,
+                           context = list(run = list(grades_md5 = unname(tools::md5sum(g)))),
+                           file = "CH_rear_grades_receipt.json")
+  p <- plan_of(x)
+  tune <- p[p$kind == "tune", ]
+  expect_identical(tune$target[5], "data/tune/CH_rear_grades_receipt.json")
+  # the md5s stay with their files: the grades' is its record's, every other its own
+  expect_identical(tune$source_md5[1], knw_grade_record_read(file.path(x$tune, "CH_rear_grades_record.csv"))$grades_md5)
+  expect_identical(tune$source_md5[-1], unname(tools::md5sum(tune$source[-1])))
+  idx <- file.path(root, "index.csv")
+  b <- mock_bucket()
+  knw_archive_put(p, idx, promoted = TRUE)
+  dest <- withr::local_tempdir()
+  dir.create(file.path(dest, "data", "tune"), recursive = TRUE)
+  file.copy(file.path(x$tune, "CH_rear_grades_record.csv"), file.path(dest, "data", "tune"))
+  knw_archive_pull("CH_rear", dest, index = idx)
+  expect_identical(unname(tools::md5sum(file.path(dest, "data", "tune", "CH_rear_grades_receipt.json"))),
+                   tune$source_md5[5])
+  # one naming another table is refused
+  rcp <- file.path(x$tune, "CH_rear_grades_receipt.json")
+  crate::crt_receipt_write(x$tune, output = list(name = "grade"),
+                           recipe = list(code = list(knowledge = list(commit = strrep("a", 40), dirty = FALSE))),
+                           result = list(parts = basename(g)), lockfile = NULL, publish = TRUE,
+                           context = list(run = list(grades_md5 = strrep("0", 32))), file = basename(rcp))
+  expect_error(plan_of(x), "CH_rear: the grade table's receipt .* does not name the table its record describes")
+  # a run from before receipts is archived with four files, as before
+  unlink(rcp)
+  expect_identical(sum(plan_of(x)$kind == "tune"), 4L)
+  # but a record graded by code that writes receipts, with none beside it, is a pass that stopped: refused
+  root <- normalizePath(testthat::test_path("..", ".."), mustWork = FALSE)
+  if (file.exists(file.path(root, ".git"))) {
+    head7 <- substr(.knw_git(root, "rev-parse", "HEAD"), 1, 7)
+    rp <- file.path(x$tune, "CH_rear_grades_record.csv")
+    r <- utils::read.csv(rp, colClasses = "character", na.strings = "")
+    r$knowledge_commit <- head7
+    utils::write.csv(r, rp, row.names = FALSE, na = "")
+    withr::with_dir(root, expect_error(plan_of(x), "CH_rear: the run holds no receipt of its grades though the code"))
+    r$knowledge_commit <- "abc"
+    utils::write.csv(r, rp, row.names = FALSE, na = "")
+  }
+  expect_identical(sum(plan_of(x)$kind == "tune"), 4L)
+})
+
 test_that("a restore fetches the record's run by version, checks every md5, and leaves grade tables unless asked", {
   root <- withr::local_tempdir()
   tok <- c(cut = "cut-full-top", acc = "acc-v1", grad = "grad-seg", flow = "q-wet-fill")

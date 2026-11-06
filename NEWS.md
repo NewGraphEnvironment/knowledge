@@ -1,3 +1,7 @@
+# knowledge 0.4.31
+
+* Each grade table and each published set now carries a provenance receipt in crate's shared shape (#154), so a rebuild can be compared with the archived copy and answered identical, equivalent within a declared rounding, or different. `scripts/0320` writes `<key>_grades_receipt.json` beside each grade table and its record (`knw_grade_receipt_write()`), and `knw_publish(receipt =)` writes `receipt.json` beside each set's manifest from `scripts/0325`. What each output is judged on, and its roundings, are declared in `inst/receipt/<output>.yaml` (`knw_receipt_keys()`); they are provisional until #158's measurements revise them. Promotion and the archive check and carry a grade receipt, and a resumed `0320` regrades a kept table whose receipt does not name its record. knowledge now imports crate (>= 0.13.0). Nothing published moves: the first receipts arrive with the next retune.
+
 # knowledge 0.4.30
 
 * `DESCRIPTION` carries knowledge's concept DOI (`Config/DOI: 10.5281/zenodo.23990335`), minted when Zenodo archived

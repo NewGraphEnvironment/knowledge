@@ -1,0 +1,37 @@
+# The receipt declaration for a grade table, data/tune/<key>_grades.csv (#154), read by crate::crt_receipt_keys()
+# through knw_receipt_keys("grade"). knw_grade_receipt_write() supplies exactly these names; crate computes the ids.
+#
+# The tolerances are provisional: declared from the one rebuild measured so far (the same build's evidence built
+# twice, three tables byte-identical and a fourth differing at 9.5e-11 km per value, because the database summed in
+# another order). #158 reruns the published retune on a second database and records each output's verdict; these are
+# revised from it. crate's tolerances are absolute, so a sum over millions of segments gets a rounding that size of
+# sum needs, not the per-value one.
+receipt_keys: 1
+output: grade
+recipe:
+  # the walk the grade reads (knw_walk_md5() hashes the same file) and the method's register
+  config_files: [inst/method/settings.csv, inst/sql/ch_dist_profile.sql]
+  # the run's resolved settings: the key, the score's settings (R/tune_run.R's `spec`, less its seed and evidence,
+  # which are the recipe's seed and inputs) and the floors
+  settings: [species_code, stage, fit, prior_sd, folds, min_wsg, d_floor, extra, gradient]
+  # link's build (the run log_recompute names), wet's flow load (the table comment) and the evidence tables
+  inputs: [link_build, flow, visits_link, visits_species, walks]
+  seed: true
+result:
+  tables:
+    # what the fit and the grade decided, from the record's constant columns: the pick, the reference edges, the
+    # walk's river size, the gate's verdict and its number (written to four decimals)
+    pick:
+      tolerance: {null_heldout_curve: 1.0e-4}
+  summary:
+    rows: {}
+    graded_rows: {}
+    # km of graded segments and the sum of their grades (each grade written to five significant figures)
+    km_graded: {tolerance: 1.0e-3}
+    grade_sum: {tolerance: 1.0e-3}
+register:
+  # the grade table is 0.7 to 5.6 GB, too large to fingerprint, so the verdict rests on the pick and the summaries: a
+  # rebuild that sums in another order moves the bytes and nothing a reader decides on. A moved table is listed as a
+  # warning, and the verdict stays identical when the pick and summaries agree exactly
+  result.parts.*.bytes: warn
+  result.parts.*.sha256: warn

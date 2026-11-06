@@ -96,8 +96,9 @@ knw_archive_setup <- function(record, vocabulary = NULL) {
 #' What the archive stores for a run, and where
 #'
 #' Lists every file one archive of a run sends to the bucket: per key the
-#' grade table (stored compressed), its record, the curve and the
-#' comparison's segments, under `tune/<key>/<setup>/`; and the evidence build
+#' grade table (stored compressed), its record, the curve, the
+#' comparison's segments and, where the run wrote one, the grade table's
+#' receipt (#154), under `tune/<key>/<setup>/`; and the evidence build
 #' the grades name, under `evidence/<id>/` with a `MANIFEST` (one line per
 #' file, its md5 and name), `<id>` being the MANIFEST's md5. Each grade table
 #' is checked against its record and the evidence against the grades'
@@ -134,11 +135,34 @@ knw_archive_plan <- function(keys, tune_dir, compare_dir, evidence_dir, build_di
   for (k in keys) {
     f <- .knw_archive_tune_files(k)
     f$source <- file.path(ifelse(f$dir == "tune", tune_dir, compare_dir), f$file)
+    # the grade table's receipt (#154) where the run wrote one, last, so the md5s below stay in order; a run from
+    # before receipts is archived without
+    rcp <- file.path(tune_dir, paste0(k, "_grades_receipt.json"))
+    if (file.exists(rcp)) {
+      f <- rbind(f, data.frame(file = basename(rcp), dir = "tune", compress = FALSE, source = rcp,
+                               stringsAsFactors = FALSE))
+    }
     gone <- f$source[!file.exists(f$source)]
     if (length(gone)) stop(k, ": the run lacks ", paste(gone, collapse = ", "), call. = FALSE)
     rec <- knw_grade_record_read(f$source[2])
     tryCatch(knw_grade_record_check(rec, f$source[1]),
              error = function(e) stop(k, ": ", conditionMessage(e), call. = FALSE))
+    # a receipt stored beside the record names its table, as promotion holds it (the branch review of #154, round 2);
+    # none is refused where promotion would refuse it (round 3)
+    if (!file.exists(rcp)) {
+      due <- .knw_receipt_due(rec)
+      others <- setdiff(keys[file.exists(file.path(tune_dir, paste0(keys, "_grades_receipt.json")))], k)
+      if (isTRUE(due) || (is.na(due) && length(others))) {
+        why <- if (isTRUE(due)) "the code that graded them writes one" else
+          paste0(paste(others, collapse = ", "), " has one")
+        stop(k, ": the run holds no receipt of its grades though ", why, call. = FALSE)
+      }
+    } else {
+      md5_rcp <- tryCatch(crate::crt_receipt_read(rcp)$context$run$grades_md5, error = function(e) NULL)
+      if (!identical(md5_rcp, rec$grades_md5)) {
+        stop(k, ": the grade table's receipt (", rcp, ") does not name the table its record describes", call. = FALSE)
+      }
+    }
     # the build directory is 0230's: its sites.rds is the one the run's evidence ledger records (round 2 of the
     # review: a BUILD_DIR left at another build's would archive a mixed evidence build)
     if (file.exists(rec$evidence_ledger)) {
@@ -289,8 +313,10 @@ knw_archive_index_read <- function(path = "data/archive_index.csv") {
 
 # the md5s of the key's files a checkout holds besides its record, named by their path in a checkout
 .knw_archive_local <- function(key, tune_dir, compare_dir) {
-  f <- c(file.path(tune_dir, paste0(key, "_curve.rds")), file.path(compare_dir, paste0(key, "_segments.rds")))
-  names(f) <- c(file.path("data/tune", paste0(key, "_curve.rds")),
+  # the grade receipt is tracked (#154): a checkout holding one restores the batch that stored it
+  f <- c(file.path(tune_dir, paste0(key, c("_curve.rds", "_grades_receipt.json"))),
+         file.path(compare_dir, paste0(key, "_segments.rds")))
+  names(f) <- c(file.path("data/tune", paste0(key, c("_curve.rds", "_grades_receipt.json"))),
                 file.path("data/compare", paste0(key, "_segments.rds")))
   f <- f[file.exists(f)]
   stats::setNames(unname(tools::md5sum(f)), names(f))

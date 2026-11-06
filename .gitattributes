@@ -1,0 +1,4 @@
+# Files a provenance receipt hashes as config (#154): crate hashes their bytes as checked out, so a CRLF checkout
+# would be another recipe
+inst/method/*.csv text eol=lf
+inst/sql/*.sql text eol=lf

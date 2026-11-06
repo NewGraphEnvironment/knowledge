@@ -1,0 +1,19 @@
+# The receipt declaration for the published thresholds set, knowledge/thresholds/v<n> (#154), read by
+# crate::crt_receipt_keys() through knw_receipt_keys("thresholds"). Both tables are small and fingerprinted exact:
+# every value in them is a pick or a count, which an equivalent rebuild reproduces. Provisional until #158.
+receipt_keys: 1
+output: thresholds
+recipe:
+  config_files: [inst/method/settings.csv]
+  # the tuning run the tables were read from
+  settings: [tune_run]
+  # link's build (its run uid), wet's flow load (the table comment) and the evidence the grades were graded on (their
+  # evidence_md5, as a version id: 0325 holds the grade tables, not the evidence files)
+  inputs: [link_build, flow, evidence]
+  seed: false
+result:
+  tables:
+    thresholds: {}
+    thresholds_groups: {}
+  summary:
+    rows: {}

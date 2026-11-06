@@ -1,6 +1,6 @@
 Package: knowledge
 Title: Fisheries Evidence and Tuned Habitat Thresholds for BC Watershed Groups
-Version: 0.4.30
+Version: 0.4.31
 Date: 2026-11-06
 Authors@R: c(
     person("Allan", "Irvine", , "al@newgraphenvironment.com", role = c("aut", "cre"),
@@ -29,6 +29,7 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
 Imports:
     chk,
+    crate (>= 0.13.0),
     DBI,
     dplyr,
     lubridate,
@@ -50,6 +51,7 @@ Suggests:
     gq,
     htmlwidgets,
     jsonlite,
+    jsonvalidate,
     kableExtra,
     knitr,
     mapgl,
@@ -63,6 +65,7 @@ Suggests:
     withr
 VignetteBuilder: knitr
 Remotes:
+    NewGraphEnvironment/crate,
     NewGraphEnvironment/flooded,
     NewGraphEnvironment/fresh,
     NewGraphEnvironment/gq
