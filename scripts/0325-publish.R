@@ -21,6 +21,8 @@
 #         and the fwapg database (PG* env vars): the discharge load's comment, for the grade's provenance
 # OUTPUT: data/publish/thresholds_v1/{thresholds,thresholds_groups}.parquet + manifest.json (ignored)
 #         data/publish/habitat_grade_v1/habitat_grade/species_code=<sp>/stage=<stage>/part.parquet + manifest.json
+#         each set's receipt.json beside its manifest (#154): crate's provenance receipt, held to
+#         inst/receipt/{thresholds,habitat_grade}.yaml
 #         data/thresholds.csv, data/thresholds_groups.csv   (tracked copies of the small tables)
 #         with PUBLISH=TRUE also: s3://fresh-bc/knowledge/thresholds/v1/ and s3://fresh-bc/knowledge/habitat_grade/v1/
 # RUN:    Rscript scripts/0325-publish.R              (from the repo root; local only)
@@ -117,6 +119,15 @@ if (!identical(loads, discharge_load)) {
 }
 prov_grade <- c(prov, list(discharge_load_at_grade = loads, discharge_load_at_publish = discharge_load, walk = "bank",
                            walk_md5 = walk_md5, evidence_md5 = evidence))
+# each set's provenance receipt (#154), in crate's shape: this commit in full, the tuning run(s) the grade tables'
+# records name, link's build, the flow load the grades were checked against and the evidence they were graded on.
+# The summaries are each set's own, added where the set is built
+recs <- lapply(sub("_grades\\.csv$", "_grades_record.csv", gfiles), knw_grade_record_read)
+tune_runs <- paste(sort(unique(vapply(recs, function(r) r$tune_run, character(1))), method = "radix"), collapse = ";")
+recipe_pub <- list(code = .knw_receipt_code(.knw_git_state()),
+                   config = list(files = .knw_receipt_config_files("settings"), settings = list(tune_run = tune_runs)),
+                   inputs = list(link_build = list(version_id = run_uid), flow = list(version_id = discharge_load),
+                                 evidence = list(version_id = evidence)))
 
 # ---- thresholds -------------------------------------------------------------------------
 write_csv(tt$thresholds, "data/thresholds.csv", na = "")
@@ -133,7 +144,8 @@ tables_thr <- data.frame(
   stringsAsFactors = FALSE)
 man_thr <- knw_publish(tables_thr, "data/publish/thresholds_v1", id = "knowledge/thresholds/v1",
                   note = "First tuned thresholds for every species and stage the electrofishing evidence can speak to, on link's province-wide default run (knowledge#57).",
-                  provenance = prov, s3 = if (publish) s3 else NULL, republish = republish)
+                  provenance = prov, s3 = if (publish) s3 else NULL, republish = republish,
+                  receipt = list(output = "thresholds", recipe = recipe_pub, summary = list(rows = nrow(tt$thresholds))))
 
 # ---- grades ----------------------------------------------------------------------------
 # a key whose curve was no better than no rule on held-out groups has its grades withheld (0320, #73): its table
@@ -163,5 +175,9 @@ tables_gr <- data.frame(
   stringsAsFactors = FALSE)
 man_grade <- knw_publish(tables_gr, "data/publish/habitat_grade_v1", id = "knowledge/habitat_grade/v1",
                   note = "Expected-use grades for every segment of each tuned species' groups on link's province-wide default run (knowledge#57). Hive-partitioned by species_code and stage.",
-                  provenance = prov_grade, s3 = if (publish) s3 else NULL, republish = republish, hive = "habitat_grade")
+                  provenance = prov_grade, s3 = if (publish) s3 else NULL, republish = republish, hive = "habitat_grade",
+                  receipt = list(output = "habitat_grade", recipe = recipe_pub,
+                                 summary = list(rows = nrow(grades), graded_rows = sum(!is.na(grades$grade)),
+                                                km_graded = sum(grades$length_metre[!is.na(grades$grade)]) / 1000,
+                                                grade_sum = sum(grades$grade, na.rm = TRUE))))
 message("wrote data/publish/{thresholds_v1,habitat_grade_v1} at ", commit, if (!publish) " (PUBLISH is not TRUE: nothing uploaded)")

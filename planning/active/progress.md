@@ -20,3 +20,4 @@
   (merge and release need Al's word)
 - Phase 3: 0320 writes each grade table's receipt (fresh and kept paths), promotion checks and carries it, the
   archive takes it when present; tests with mutation checks on the promotion guard
+- Phase 4: `knw_publish(receipt =)` writes and uploads each set's receipt (tables, receipt, manifest), aws calls through mockable wrappers; 0325 passes both sets' recipes and summaries

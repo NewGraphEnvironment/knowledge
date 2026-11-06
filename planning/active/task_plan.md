@@ -78,12 +78,13 @@ written nowhere as a rule.
 
 ## Phase 4: the published sets' receipts
 
-- [ ] `knw_publish()` gains `recipe` and `keys` (default `NULL`: no receipt, callers and the example unchanged):
+- [x] `knw_publish()` gains `receipt` (a list of `output`, `recipe` and `summary`; default `NULL`: no receipt,
+      callers and the example unchanged; the set's summaries are the caller's, so one argument, not `recipe` and `keys`):
       writes `receipt.json` beside `manifest.json` with the tables fingerprinted as declared, `publish = TRUE` (no
       host), and uploads it before the manifest, its `aws` calls routed through `.knw_aws()` so the order is
       testable (review G7)
-- [ ] `scripts/0325-publish.R` passes each set's recipe from the provenance it already builds (`prov`, `prov_grade`)
-- [ ] `tests/testthat/test-publish.R`: the receipt is written, its fingerprints match `crt_table_fingerprint()` of
+- [x] `scripts/0325-publish.R` passes each set's recipe from the provenance it already builds (`prov`, `prov_grade`)
+- [x] `tests/testthat/test-publish.R`: the receipt is written, its fingerprints match `crt_table_fingerprint()` of
       the source tables, and the upload order puts it before the manifest
 
 ## Phase 5: the register test, docs

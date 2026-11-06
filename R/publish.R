@@ -30,6 +30,15 @@
 #'   under a Hive path `<table>/<key>=<value>/part.parquet` from the columns
 #'   `hive_keys` (one part per distinct key combination).
 #' @param hive_keys `character` the Hive key columns.
+#' @param receipt `NULL` (no receipt), or a list for the set's provenance
+#'   receipt in crate's shape (#154): `output`, the declaration it is held to
+#'   ([knw_receipt_keys()], `"thresholds"` or `"habitat_grade"`); `recipe`,
+#'   crate's recipe block (`code`, `config`, `inputs`, `seed`); and `summary`,
+#'   the named numbers the declaration lists. The tables the declaration
+#'   fingerprints are read from their source CSVs as text, so they are held
+#'   exact; the Parquet files are the parts, each flat one named by its table.
+#'   `receipt.json` is written beside the manifest with no host, and uploaded
+#'   after the tables and before the manifest.
 #' @return The manifest, invisibly.
 #' @export
 #' @examples
@@ -42,7 +51,8 @@
 #'                  provenance = list(commit = "none"))
 #' m$files[[1]]$rows
 knw_publish <- function(tables, dir_out, id, note, provenance = list(), supersedes = NULL, s3 = NULL,
-                        republish = FALSE, no_sign = FALSE, hive = NULL, hive_keys = c("species_code", "stage")) {
+                        republish = FALSE, no_sign = FALSE, hive = NULL, hive_keys = c("species_code", "stage"),
+                        receipt = NULL) {
   chk::chk_data(tables)
   chk::check_names(tables, c("table", "source", "script", "description"))
   chk::chk_string(dir_out)
@@ -51,6 +61,10 @@ knw_publish <- function(tables, dir_out, id, note, provenance = list(), supersed
   chk::chk_list(provenance)
   chk::chk_null_or(s3, vld = chk::vld_string)
   chk::chk_null_or(hive, vld = chk::vld_character)
+  chk::chk_null_or(receipt, vld = chk::vld_list)
+  if (!is.null(receipt) && !setequal(names(receipt), c("output", "recipe", "summary"))) {
+    stop("receipt names output, recipe and summary", call. = FALSE)
+  }
   if (!requireNamespace("arrow", quietly = TRUE) || !requireNamespace("jsonlite", quietly = TRUE)) {
     stop("arrow and jsonlite are needed", call. = FALSE)
   }
@@ -114,19 +128,14 @@ knw_publish <- function(tables, dir_out, id, note, provenance = list(), supersed
                    built = format(Sys.time(), "%Y-%m-%dT%H:%M:%SZ", tz = "UTC"), provenance = provenance, files = files)
   path_manifest <- file.path(dir_out, "manifest.json")
   jsonlite::write_json(manifest, path_manifest, auto_unbox = TRUE, pretty = TRUE, null = "null", na = "null")
+  path_receipt <- file.path(dir_out, "receipt.json")
+  unlink(path_receipt)
+  if (!is.null(receipt)) .knw_publish_receipt(receipt, tables, files, dir_out)
   if (is.null(s3)) return(invisible(manifest))
 
   s3_prefix <- paste0(sub("/$", "", s3), "/", id, "/")
-  aws <- function(...) {
-    args <- c(..., if (no_sign) "--no-sign-request")
-    rc <- system2("aws", shQuote(args))
-    if (rc != 0) stop("aws ", paste(args, collapse = " "), " failed (exit ", rc, ")", call. = FALSE)
-  }
-  listed <- suppressWarnings(system2("aws", shQuote(c("s3", "ls", paste0(s3_prefix, "manifest.json"),
-                                                      if (no_sign) "--no-sign-request")), stdout = TRUE, stderr = TRUE))
-  if (!is.null(attr(listed, "status")) && length(listed)) {
-    stop("could not check the published manifest: ", paste(listed, collapse = " "), call. = FALSE)
-  }
+  aws <- function(...) .knw_aws(c(..., if (no_sign) "--no-sign-request"))
+  listed <- .knw_aws_ls(c("s3", "ls", paste0(s3_prefix, "manifest.json"), if (no_sign) "--no-sign-request"))
   if (length(listed)) {
     prior_path <- file.path(dir_out, "manifest_published.json")
     aws("s3", "cp", paste0(s3_prefix, "manifest.json"), prior_path, "--only-show-errors")
@@ -156,10 +165,46 @@ knw_publish <- function(tables, dir_out, id, note, provenance = list(), supersed
     paths <- if (is.null(f$parts)) f$path else vapply(f$parts, `[[`, character(1), "path")
     for (p in paths) aws("s3", "cp", file.path(dir_out, p), paste0(s3_prefix, p), "--only-show-errors")
   }
+  # the receipt before the manifest, which goes last: a reader who finds the manifest finds what it describes
+  if (file.exists(path_receipt)) {
+    aws("s3", "cp", path_receipt, paste0(s3_prefix, "receipt.json"), "--content-type", "application/json",
+        "--only-show-errors")
+  }
   aws("s3", "cp", path_manifest, paste0(s3_prefix, "manifest.json"), "--content-type", "application/json",
       "--only-show-errors")
-  message("uploaded ", length(files), " tables and manifest.json to ", s3_prefix)
+  message("uploaded ", length(files), " tables", if (file.exists(path_receipt)) ", receipt.json" else "",
+          " and manifest.json to ", s3_prefix)
   invisible(manifest)
+}
+
+# `aws s3 ls` of a key that is not there exits 1 with no output, which is the answer "not published", not a failure:
+# a failure is a non-zero exit that says something. One wrapper, so tests mock it as they mock .knw_aws()
+.knw_aws_ls <- function(args) {
+  out <- suppressWarnings(system2("aws", shQuote(args), stdout = TRUE, stderr = TRUE))
+  if (!is.null(attr(out, "status")) && length(out)) {
+    stop("could not check the published manifest: ", paste(out, collapse = " "), call. = FALSE)
+  }
+  out
+}
+
+# A published set's receipt (#154): the declaration's tables fingerprinted from their source CSVs, read as text so
+# they are held exact; the Parquet files as parts, a flat table's named by it so a rewrite of the same values is
+# equivalent; no host, since the set is public
+.knw_publish_receipt <- function(receipt, tables, files, dir_out) {
+  keys <- knw_receipt_keys(receipt$output)
+  missing_t <- setdiff(keys$tables, tables$table)
+  if (length(missing_t)) stop("the receipt fingerprints ", paste(missing_t, collapse = ", "), ", not in tables",
+                              call. = FALSE)
+  fp <- lapply(stats::setNames(keys$tables, keys$tables), function(tb) {
+    utils::read.csv(tables$source[tables$table == tb], colClasses = "character", na.strings = "", check.names = FALSE)
+  })
+  parts <- unlist(lapply(files, function(f) {
+    if (is.null(f$parts)) stats::setNames(f$path, if (f$table %in% keys$tables) f$table else "")
+    else stats::setNames(vapply(f$parts, `[[`, character(1), "path"), rep("", length(f$parts)))
+  }))
+  crate::crt_receipt_write(dir_out, output = list(name = receipt$output), recipe = receipt$recipe,
+                           result = list(tables = fp, parts = parts, summary = receipt$summary),
+                           keys = keys, lockfile = NULL, publish = TRUE)
 }
 
 .knw_sha256 <- function(path) {
