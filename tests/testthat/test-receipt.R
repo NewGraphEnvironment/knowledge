@@ -126,3 +126,16 @@ test_that("a crate that cannot name a receipt's file is refused before anything 
   local_mocked_bindings(crt_receipt_write = function(dir, output, recipe) NULL, .package = "crate")
   expect_error(.knw_receipt_crate_check(), "cannot name a receipt's file")
 })
+
+test_that("whether a record's table owes a receipt is asked of the commit that graded it", {
+  root <- normalizePath(testthat::test_path("..", ".."), mustWork = FALSE)
+  skip_if_not(file.exists(file.path(root, ".git")), "not a checkout")
+  first <- .knw_git(root, "log", "--diff-filter=A", "--format=%H", "--", "R/grade_receipt.R")
+  skip_if_not(length(first) == 1L, "R/grade_receipt.R has no single adding commit here")
+  before <- .knw_git(root, "rev-parse", paste0(first, "^"))
+  expect_true(.knw_receipt_due(list(knowledge_commit = substr(first, 1, 7)), root))
+  expect_true(.knw_receipt_due(list(knowledge_commit = paste0(substr(first, 1, 7), "+dirty")), root))
+  expect_false(.knw_receipt_due(list(knowledge_commit = substr(before, 1, 7)), root))
+  expect_true(is.na(.knw_receipt_due(list(knowledge_commit = "0000000"), root)))
+  expect_true(is.na(.knw_receipt_due(list(knowledge_commit = NA_character_), root)))
+})

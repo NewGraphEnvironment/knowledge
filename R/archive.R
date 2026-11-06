@@ -147,8 +147,17 @@ knw_archive_plan <- function(keys, tune_dir, compare_dir, evidence_dir, build_di
     rec <- knw_grade_record_read(f$source[2])
     tryCatch(knw_grade_record_check(rec, f$source[1]),
              error = function(e) stop(k, ": ", conditionMessage(e), call. = FALSE))
-    # a receipt stored beside the record names its table, as promotion holds it (the branch review of #154, round 2)
-    if (file.exists(rcp)) {
+    # a receipt stored beside the record names its table, as promotion holds it (the branch review of #154, round 2);
+    # none is refused where promotion would refuse it (round 3)
+    if (!file.exists(rcp)) {
+      due <- .knw_receipt_due(rec)
+      others <- setdiff(keys[file.exists(file.path(tune_dir, paste0(keys, "_grades_receipt.json")))], k)
+      if (isTRUE(due) || (is.na(due) && length(others))) {
+        why <- if (isTRUE(due)) "the code that graded them writes one" else
+          paste0(paste(others, collapse = ", "), " has one")
+        stop(k, ": the run holds no receipt of its grades though ", why, call. = FALSE)
+      }
+    } else {
       md5_rcp <- tryCatch(crate::crt_receipt_read(rcp)$context$run$grades_md5, error = function(e) NULL)
       if (!identical(md5_rcp, rec$grades_md5)) {
         stop(k, ": the grade table's receipt (", rcp, ") does not name the table its record describes", call. = FALSE)
@@ -304,8 +313,10 @@ knw_archive_index_read <- function(path = "data/archive_index.csv") {
 
 # the md5s of the key's files a checkout holds besides its record, named by their path in a checkout
 .knw_archive_local <- function(key, tune_dir, compare_dir) {
-  f <- c(file.path(tune_dir, paste0(key, "_curve.rds")), file.path(compare_dir, paste0(key, "_segments.rds")))
-  names(f) <- c(file.path("data/tune", paste0(key, "_curve.rds")),
+  # the grade receipt is tracked (#154): a checkout holding one restores the batch that stored it
+  f <- c(file.path(tune_dir, paste0(key, c("_curve.rds", "_grades_receipt.json"))),
+         file.path(compare_dir, paste0(key, "_segments.rds")))
+  names(f) <- c(file.path("data/tune", paste0(key, c("_curve.rds", "_grades_receipt.json"))),
                 file.path("data/compare", paste0(key, "_segments.rds")))
   f <- f[file.exists(f)]
   stats::setNames(unname(tools::md5sum(f)), names(f))

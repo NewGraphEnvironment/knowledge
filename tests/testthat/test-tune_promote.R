@@ -478,6 +478,9 @@ test_that("a grade table's receipt travels with it, and one naming another table
   fx <- promote_fx()
   g <- file.path(fx$tune, "candidate", "r1", "CH_rear_grades.csv")
   fx_receipt(g)
+  # a key with none, where another key of the run has one, is a pass that stopped before its receipt
+  expect_error(promote(fx), "BT_rear: the run wrote no receipt of its grades .* though CH_rear has one")
+  fx_receipt(file.path(fx$tune, "candidate", "r1", "BT_rear_grades.csv"))
   p <- promote(fx)
   expect_true(file.path(fx$tune, "CH_rear_grades_receipt.json") %in% p$written)
   expect_identical(crate::crt_receipt_read(file.path(fx$tune, "CH_rear_grades_receipt.json"))$context$run$grades_md5,
@@ -486,6 +489,7 @@ test_that("a grade table's receipt travels with it, and one naming another table
   fx <- promote_fx()
   g <- file.path(fx$tune, "candidate", "r1", "CH_rear_grades.csv")
   fx_receipt(g, md5 = strrep("0", 32))
+  fx_receipt(file.path(fx$tune, "candidate", "r1", "BT_rear_grades.csv"))
   expect_error(promote(fx), "CH_rear: the grade table's receipt .* does not name the table its record describes")
 })
 

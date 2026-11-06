@@ -224,6 +224,19 @@ test_that("a grade table's receipt is archived after its other files where the r
   # a run from before receipts is archived with four files, as before
   unlink(rcp)
   expect_identical(sum(plan_of(x)$kind == "tune"), 4L)
+  # but a record graded by code that writes receipts, with none beside it, is a pass that stopped: refused
+  root <- normalizePath(testthat::test_path("..", ".."), mustWork = FALSE)
+  if (file.exists(file.path(root, ".git"))) {
+    head7 <- substr(.knw_git(root, "rev-parse", "HEAD"), 1, 7)
+    rp <- file.path(x$tune, "CH_rear_grades_record.csv")
+    r <- utils::read.csv(rp, colClasses = "character", na.strings = "")
+    r$knowledge_commit <- head7
+    utils::write.csv(r, rp, row.names = FALSE, na = "")
+    withr::with_dir(root, expect_error(plan_of(x), "CH_rear: the run holds no receipt of its grades though the code"))
+    r$knowledge_commit <- "abc"
+    utils::write.csv(r, rp, row.names = FALSE, na = "")
+  }
+  expect_identical(sum(plan_of(x)$kind == "tune"), 4L)
 })
 
 test_that("a restore fetches the record's run by version, checks every md5, and leaves grade tables unless asked", {

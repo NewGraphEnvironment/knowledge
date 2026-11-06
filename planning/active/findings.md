@@ -91,3 +91,25 @@ source:
 | published | `tune_run` | the records, each held to its table (size, then md5) | yes, after the check |
 | published | inputs | ledger run uid, live flow load, grades' evidence md5 (all checked against the grade heads) | yes |
 | published | summary, tables, parts | the tables just written | yes |
+
+## Branch review round 3: the pairing fails in two directions (2026-11-06)
+
+Round 3 named the class more fully: a receipt is paired with its table, and the pairing fails both ways. Round 2's
+table covered a receipt describing another table; round 3 found readers accepting a table whose receipt is missing,
+reading absence as "a run from before receipts" while 0320 reads it as "a pass that stopped". Absence is now decided
+from the run (`.knw_receipt_due()`: the record's commit holds `R/grade_receipt.R`, or, where this checkout cannot say,
+another key of the run has a receipt). Every place a receipt meets its table, both directions:
+
+| place | receipt describes another table | table accepted with its receipt missing |
+|---|---|---|
+| 0320 fresh path | written from this pass; a stale one unlinked before the table is written | n/a (writer) |
+| 0320 keep path | kept only when it names the checked record's md5 | regraded |
+| promotion | refused (md5) | refused when due, or when another key of the run has one; else a pre-receipt run |
+| archive plan | refused (md5) | the same rule as promotion |
+| archive pull | restored by batch with its md5 checked; a tracked receipt narrows the batch | a checkout without one restores the batch's |
+| 0325 | its own receipts, from tables just written and held to their records; one recipe per set, over the keys it publishes | does not read grade receipts |
+| `knw_publish()` | written beside the manifest; a stale one unlinked first | n/a (writer) |
+| article bundles, `test-vignette-data.R` | do not read receipts | do not read receipts |
+
+Accepted residual: a single-key run that stopped between its record and its receipt, checked on a machine that does
+not hold the grading commit, is read as a run from before receipts.

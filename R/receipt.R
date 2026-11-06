@@ -57,6 +57,20 @@ knw_receipt_keys <- function(output) {
                         dirty = knowledge$dirty))
 }
 
+# Was a grade record's table graded by code that writes receipts (#154)? Its commit answers where this checkout holds
+# it: TRUE when R/grade_receipt.R is in that commit, FALSE when the commit is here without it, NA when the record names
+# no commit or one this checkout does not hold, and the caller decides from the rest of the run. A missing receipt is
+# then a pass that stopped (refused), never read as a run from before receipts by the file's absence alone.
+.knw_receipt_due <- function(record, root = ".") {
+  kc <- sub("\\+dirty$", "", record$knowledge_commit)
+  if (length(kc) != 1L || is.na(kc) || !grepl("^[0-9a-f]{7,40}$", kc)) return(NA)
+  has <- function(obj) {
+    isTRUE(tryCatch(length(.knw_git(root, "cat-file", "-e", obj)) >= 0L, error = function(e) FALSE))
+  }
+  if (has(paste0(kc, ":R/grade_receipt.R"))) return(TRUE)
+  if (has(paste0(kc, "^{commit}"))) FALSE else NA
+}
+
 # crate writes a receipt under a name of knowledge's choosing only from the release that added `file =` (crate#47);
 # asked of the function, not its version, since a crate from its main branch can carry the floor's version without it
 .knw_receipt_crate_check <- function() {

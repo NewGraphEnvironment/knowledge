@@ -130,11 +130,18 @@ off <- gfiles[!mapply(function(g, r) isTRUE(tryCatch(knw_grade_record_check(r, g
                       gfiles, recs)]
 if (length(off)) stop("grade tables that are not the tables their tracked records describe: ",
                       paste(basename(off), collapse = ", "), "; restore the records' run (PULL=TRUE scripts/0336)")
-tune_runs <- paste(sort(unique(vapply(recs, function(r) r$tune_run, character(1))), method = "radix"), collapse = ";")
-recipe_pub <- list(code = .knw_receipt_code(.knw_git_state()),
-                   config = list(files = .knw_receipt_config_files("settings"), settings = list(tune_run = tune_runs)),
-                   inputs = list(link_build = list(version_id = run_uid), flow = list(version_id = discharge_load),
-                                 evidence = list(version_id = evidence)))
+names(recs) <- basename(gfiles)
+# one recipe per set, each naming the tuning run(s) of the grade tables it was made from: the thresholds read every
+# key, the grade set only those it publishes (a withheld key is left out of it below)
+recipe_of <- function(f) {
+  runs <- paste(sort(unique(vapply(recs[basename(f)], function(r) r$tune_run, character(1))), method = "radix"),
+                collapse = ";")
+  list(code = .knw_receipt_code(knowledge_git),
+       config = list(files = .knw_receipt_config_files("settings"), settings = list(tune_run = runs)),
+       inputs = list(link_build = list(version_id = run_uid), flow = list(version_id = discharge_load),
+                     evidence = list(version_id = evidence)))
+}
+knowledge_git <- .knw_git_state()
 
 # ---- thresholds -------------------------------------------------------------------------
 write_csv(tt$thresholds, "data/thresholds.csv", na = "")
@@ -152,7 +159,7 @@ tables_thr <- data.frame(
 man_thr <- knw_publish(tables_thr, "data/publish/thresholds_v1", id = "knowledge/thresholds/v1",
                   note = "First tuned thresholds for every species and stage the electrofishing evidence can speak to, on link's province-wide default run (knowledge#57).",
                   provenance = prov, s3 = if (publish) s3 else NULL, republish = republish,
-                  receipt = list(output = "thresholds", recipe = recipe_pub, summary = list(rows = nrow(tt$thresholds))))
+                  receipt = list(output = "thresholds", recipe = recipe_of(gfiles), summary = list(rows = nrow(tt$thresholds))))
 
 # ---- grades ----------------------------------------------------------------------------
 # a key whose curve was no better than no rule on held-out groups has its grades withheld (0320, #73): its table
@@ -183,7 +190,7 @@ tables_gr <- data.frame(
 man_grade <- knw_publish(tables_gr, "data/publish/habitat_grade_v1", id = "knowledge/habitat_grade/v1",
                   note = "Expected-use grades for every segment of each tuned species' groups on link's province-wide default run (knowledge#57). Hive-partitioned by species_code and stage.",
                   provenance = prov_grade, s3 = if (publish) s3 else NULL, republish = republish, hive = "habitat_grade",
-                  receipt = list(output = "habitat_grade", recipe = recipe_pub,
+                  receipt = list(output = "habitat_grade", recipe = recipe_of(gfiles),
                                  summary = list(rows = nrow(grades), graded_rows = sum(!is.na(grades$grade)),
                                                 km_graded = sum(grades$length_metre[!is.na(grades$grade)]) / 1000,
                                                 grade_sum = sum(grades$grade, na.rm = TRUE))))
