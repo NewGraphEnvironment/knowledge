@@ -102,9 +102,10 @@ A grade names the evidence by the build's receipt's `recipe_id`, so an evidence 
 same input to every grade downstream; a build from before receipts is named by its visit tables' md5s. The cost is the
 other direction: two builds of one recipe whose results differ (#161's tie) are also one input, so the evidence's own
 comparison is where that difference shows, and each grade keeps `evidence_md5` in its context. The archive stores the
-receipt with its build. A receipt carries its write time, so every build archived with one has its own `evidence_id`,
-and a restore refuses an `evidence_receipt.json` present with other bytes rather than write one build's receipt over
-another's.
+receipt in its build's folder but outside the MANIFEST, because a receipt carries its write time: a rebuild whose
+tables came out byte-identical keeps its `evidence_id`, and a restore takes the receipt last archived for it. A restore
+refuses an `evidence_receipt.json` present with other bytes rather than write one build's receipt over another's, and
+refuses one present where the archived build has none, which every reader of the restored build would refuse.
 
 A receipt names no host, since the grade receipts are tracked in a public repository and the published ones sit on a
 public prefix. link enters as its build, the run that made it, not as code: the evidence ledger records link's commit

@@ -522,8 +522,15 @@ test_that("the evidence build's receipt is archived with it and restored, and a 
   evidence_receipt_of(x$evidence)
   p <- plan_of(x)
   expect_identical(sum(p$kind == "evidence"), 7L)
-  expect_match(attr(p, "manifest"), "  evidence_receipt.json\n$")
-  expect_false(identical(p$evidence_id[1], id_before))
+  # stored in the build's folder, outside its MANIFEST: the id is the tables', and a receipt rewritten over the same
+  # tables (its write time moves its bytes) keeps it
+  expect_false(grepl("evidence_receipt", attr(p, "manifest")))
+  expect_identical(p$evidence_id[1], id_before)
+  expect_identical(p$object[p$kind == "evidence"][7],
+                   paste("archive/knowledge/evidence", id_before, "evidence_receipt.json", sep = "/"))
+  Sys.sleep(1.1)
+  evidence_receipt_of(x$evidence)
+  expect_identical(plan_of(x)$evidence_id[1], id_before)
   expect_identical(p$target[p$kind == "evidence"][7], "data/fdis/derived/evidence_receipt.json")
   # the receipt is the one beside these tables, or the archive refuses
   other <- withr::local_tempdir()
@@ -548,4 +555,21 @@ test_that("the evidence build's receipt is archived with it and restored, and a 
   # without its receipt the build is the one archived before, under its id
   unlink(file.path(x$evidence, "evidence_receipt.json"))
   expect_identical(plan_of(x)$evidence_id[1], id_before)
+})
+
+test_that("a restore of a build archived without a receipt refuses a receipt already in the target", {
+  root <- withr::local_tempdir()
+  x <- run_fx(root)
+  idx <- file.path(root, "index.csv")
+  b <- mock_bucket()
+  knw_archive_put(plan_of(x), idx)
+  dest <- withr::local_tempdir()
+  dir.create(file.path(dest, "data", "tune"), recursive = TRUE)
+  file.copy(file.path(x$tune, "CH_rear_grades_record.csv"), file.path(dest, "data", "tune"))
+  dir.create(file.path(dest, "data", "fdis", "derived"), recursive = TRUE)
+  writeLines("{}", file.path(dest, "data", "fdis", "derived", "evidence_receipt.json"))
+  expect_error(knw_archive_pull("CH_rear", dest, index = idx), "archived evidence build has no receipt")
+  expect_false(file.exists(file.path(dest, "data", "fdis", "derived", "walks.csv")))
+  unlink(file.path(dest, "data", "fdis", "derived", "evidence_receipt.json"))
+  expect_no_error(knw_archive_pull("CH_rear", dest, index = idx))
 })

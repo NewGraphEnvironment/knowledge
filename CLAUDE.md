@@ -459,8 +459,9 @@ receipt names the evidence as one input, `evidence`: the build's receipt's `reci
 is the same input, or the visit tables' md5s for a build from before receipts; a receipt that does not describe the
 tables, or a ledger naming a receipt that is gone, is refused. `0299` publishes through `knw_publish()`, and v3 carries
 a receipt (`inst/receipt/fdis.yaml`) naming the evidence by that `recipe_id`; v2 carries none. The archive stores the
-evidence receipt with its build, so every build archived with one has its own `evidence_id`, and a restore refuses an
-`evidence_receipt.json` present with other bytes, as it does any file. crate rounds a value to its tolerance's
+evidence receipt in its build's folder, outside the MANIFEST, so the `evidence_id` stays the tables' (a receipt's bytes
+carry its write time); a restore refuses an `evidence_receipt.json` present with other bytes, as it does any file, and
+one present where the archived build has none. crate rounds a value to its tolerance's
 decimals, so judge an evidence or fdis rebuild with the tables re-read (`crt_receipt_compare(tables =)`): receipts alone
 can read a value either side of a rounding edge as different.
 
