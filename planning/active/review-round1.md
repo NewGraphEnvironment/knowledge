@@ -1,0 +1,33 @@
+# Code-check round 1 (#158): data-raw/database_compare.R, database_walk_check.R, database_receipts.R, CLAUDE.md, research/database_builds.md
+
+## Checklist read
+
+- code-check-python.md: in full (none of it applies; the diff has no Python).
+- code-check-r.md: read by heading: "`identical()` on two reader results tests the reader, not the file", "Postgres row order is never fixed unless the query fixes it...", "`sort()` and `order()` collate by `LC_COLLATE`...", "CSV whitespace: `trim_ws` and `strip.white`...", "`$` on a list partial-matches...", "`match()` treats NA as a matchable VALUE...". I did not read the other ~180 headings; none names a tool or pattern this diff uses beyond these.
+- code-check-shell.md: 0 headings read. The diff has no shell; `system2("git", ...)` is the only subprocess.
+- code-check-spatial.md: 0 headings read. The diff has no spatial code.
+- code-check.md: the opening prose of every H3 under `## Mechanisms` (tables skipped). No headings read under "Rules that stand alone".
+
+## Findings
+
+- **[severity: bug]** data-raw/database_compare.R:151-153: the same infinite value on both sides gives a false `different`. `d <- abs(x - y)` is `NaN` for `Inf - Inf`. `max(d)` is then non-finite, so the column lands in `bad` as "non-finite". Proved on a copy: `compare_tables(data.table(id=1:3, x=c(1,Inf,2)), <same rows reordered>, key="id")` returns `different` with "rows differing: x 1". No table compared in #158 holds `Inf` outside a byte-identical file (checked: the smoke, summary, record and compare tables, plus visits_link, access_check and workbook_sites), so this run's verdicts are unaffected. The defect is latent for the next table that carries an unbounded limit. The comment on line 153 says "Inf against a number", but the test also catches Inf against Inf.
+  - **Rule:** code-check.md "A proxy is not the property"
+
+- **[severity: bug]** data-raw/database_compare.R:142-143: `NaN` on one side against `NA` on the other gives a false `identical`. `is.na()` is TRUE for both, so `nax == nay` holds, and both cells drop out of every later comparison. Proved on a copy: `x = c(1, NaN)` against `x = c(1, NA)` returns `identical`. fread reads a written `NaN` back as `NaN`, so a fit that starts writing `NaN` where the reference wrote `NA` (or the reverse) would pass as identical. Latent; no table here is affected.
+  - **Rule:** code-check.md "A proxy is not the property"
+
+- **[severity: fragile]** data-raw/database_compare.R:65-67, 265-267: the bound comparison tables never reach STOP. The spec patterns `_compare\.csv$`, `_change\.csv$` and `_checks\.csv$` need a prefix, so `data/compare/compare.csv`, `change.csv` and `checks.csv` match no row. They fall back to `decision_read = NA` and tolerance 0. `stop_on` filters on `decision_read %in% TRUE`, so when `compare.csv` (km drawn for every key) is `different`, the STOP line does not name it. In the committed `20261106_database_compare-compare.csv` it is exactly that: `compare.csv,different,...,0,NA`. The verdict itself is right (the graded km really moved), but the decision flag is wrong, and the gate's escape is silent. Separately, STOP is only a `cat()`: the script exits 0 whatever differs. Yet the header says a decision-read `different` "is what stops a run", and CLAUDE.md requires a chain to stop at a failed step.
+  - **Rule:** code-check.md "A guard that fails toward pass"
+
+- **[severity: fragile]** CLAUDE.md (Database access paragraph, +1 line) and research/database_builds.md (the "grade tables" row of the #158 table): the counts quoted do not match the CSVs the section cites. The prose says "up to 443 segments per key another size, moving up to 309 grades" and "segment size on 40 to 443 segments ... 0 to 309 grades". `scripts/logs/habitat/database_second/20261106_database_compare-tune.csv` says BT_rear `size 441, ... grade 282`. I recounted from data/tune and candidate 20261106_0423 (keyed on group and segment, no duplicate keys). BT_rear has 443 sizes and 309 grades differing at tolerance 0, but 441 and 282 past the table's declared 1e-5. CH_rear's rate is 292 at 0 against 287 in the CSV. So the prose counts any difference, while its cited source counts past the tolerance, and a reader checking the CSV cannot find 443 or 309. Either say "at any precision", or quote 441 and 282. The other figures checked out against the CSVs: 12.6 % (98,007/775,488), 0.05 % (412/775,488), 0.12 % (23/20,000), 0.41 km, 3.3e-9 km, 3 of 45,529 visits (re-run on a copy: `mad_pick 3`), 0 to 9 grade classes and 7 of 7 picks.
+  - **Rule:** none
+
+- **[severity: fragile]** data-raw/database_receipts.R:25-26, 75-77, 91, 96: `crate_bytes_match` does not test the bytes of the outputs, though the header presents it as standing for the hand comparison's `bytes_match`. The part crate hashes is the table re-written by `fwrite()` after `fread()` and the column drops. fwrite keeps 15 significant digits, so differences in the last bits vanish. The committed receipts CSV shows the disagreement: CO_rear_change.csv, ST_rear_change.csv and CO_rear_smoke.csv have hand `bytes_match = FALSE` and `crate_bytes_match = TRUE`. The column is not used for `agree`, so no verdict is wrong. It is a round trip through the script's own writer, reported as a comparison of the outputs.
+  - **Rule:** code-check.md "Verification that reads its own output"
+
+## Notes (data, not code; no action needed unless the CSVs are meant to be reproducible)
+
+- `20261106_database_compare-evidence.csv` was written by an earlier version of the script. Its `walks.csv` row records tolerance `1e-06` where the spec now says 0.005, and its `visits_link.csv` note lacks the "rows differing" count the current code writes. Its `evidence_build_ledger.csv` row is hand-written as `identical` with rows 142 against 144, which the script's own definitions call `different` (rows added). The note explains the two added rows, and `database_receipts.R` skips ledgers. A rerun would not reproduce these rows.
+- The two crate errors ("result would exceed 2^31-1 bytes" on BT_rear_grades and BT_spawn_grades) count as `agree = FALSE`. The commit subject's "on every table it reads" is accurate only if those two count as not read.
+
+Checked and clean: key uniqueness on the grade tables (0 duplicate group/segment keys on WCT, CH and BT); the walk-check key (36,928 starts x 3 sources x 7 sizes = 775,488 rows, which is unique); `crate_tol()` (1e-5, 1e-6 and 1e-9 map to themselves, 0.005 to 1e-2); `source()` of database_compare.R skips its run block (`sys.nframe() != 0`); crate's fingerprint does not depend on row order (`?crt_table_fingerprint`), so unsorted tables are fine; and data.table's `setorderv` sorts characters in C collation on both sides.

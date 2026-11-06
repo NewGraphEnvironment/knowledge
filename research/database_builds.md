@@ -220,12 +220,14 @@ equivalent within a tolerance, or different).
 | evidence: visits per species, walks, bcfishobs match, workbook tables | identical (walks read from the cache) |
 | evidence: access check; change and checks tables; comparison tables of the keys with no moved grade | equivalent, at most 3.3e-9 km (summing order) |
 | evidence: `visits_link` | different in `mad_pick` on 3 of 45,529 visits, at most 0.0029 m³/s (#161) |
-| grade tables | different in segment size on 40 to 443 segments per key; 0 to 309 grades and 0 to 9 grade classes move (#161) |
+| grade tables | different in segment size on 40 to 441 segments per key; 0 to 282 grades and 0 to 9 grade classes move past 1e-5 (#161) |
 | graded km in the comparison | different by up to 0.41 km per group (the moved grades) |
 | a cold walk of every visit start and of 20,000 chinook grade starts | different: the target line on 12.6 % of visit rows, the distance on 0.05 % of them and on 0.12 % of grade starts (#162) |
 
-Every `different` traces to one of two ties, neither of them a fault in the load (the FWA and flow rows and PostGIS
-3.5.2 are identical on both databases):
+Three kinds of `different` were expected before the run: each smoke table's `previous` row, which reads the pick the
+published run itself promoted; the pick report, which the published run did not keep; and the evidence ledger's context
+rows and the two rows current code adds. Every other `different` traces to one of two ties, neither of them a fault in
+the load (the FWA and flow rows and PostGIS 3.5.2 are identical on both databases):
 
 - **`knw_link_flow()`'s parent flow (#161).** A segment with no flow of its own takes its nearest parent's, and where two
   parents are equally near (almost always both at 0 m) the database chooses. That moves the three visits' flow and,

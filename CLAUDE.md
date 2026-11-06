@@ -529,8 +529,8 @@ own holding the same build (the schema's run and the flow load named in the tabl
 code). `0320` and `0330` refuse a schema built by another run at connect (`knw_build_record()`), and every grade table's
 flow load and walk md5 are compared by its readers; `research/database_builds.md` has the numbers and the load recipe.
 One such database reproduced the published retune (#158): every pick, score and km drawn agreed, but two nearest-row
-lookups with no tiebreak (#161's parent flow, #162's walk landing) gave up to 443 segments per key another size, moving
-up to 309 grades, and moved about one cold walk's distance in a thousand, so until they are fixed a promotion takes all
+lookups with no tiebreak (#161's parent flow, #162's walk landing) gave up to 441 segments per key another size, moving
+up to 282 grades, and moved about one cold walk's distance in a thousand, so until they are fixed a promotion takes all
 its keys from one database.
 Scoring is CPU-bound: the remote machine scored every key in about an hour on 12 workers (2026-10-23).
 The host keeps its own ignored `data/` (grade tables, curves, `data/fdis/derived`), which can be an older build than the

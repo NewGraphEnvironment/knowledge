@@ -117,3 +117,11 @@ difference under the rounding never reaches the fingerprint; the hand comparison
 4,033,543-row BT grade tables, whose canonical JSON passes R's 2^31-1-byte string limit (crate#50; CH's 3,016,042 rows went through).
 No output flips between same and different. crate 0.12.0 was installed before this session reached Phase 4 (crate PR #44 merged
 02:30 UTC).
+
+## Errors Encountered (review round 1)
+
+| Error | Resolution |
+|-------|------------|
+| A declared key that repeats pairs rows by position: access_check is one row per group since #120, keyed without the group | `compare_tables()` refuses a repeating key; access_check keyed with `watershed_group_code` (still equivalent at 6.0e-11) |
+| The bound `compare.csv`/`change.csv`/`checks.csv` matched no spec row (patterns needed a key prefix), so they were compared exact and not decision-read | Spec rows of their own, keyed with species and stage |
+| A file list built with `ls` carried the colour codes of its alias, so every file read as missing | List files from R (`list.files()`) |

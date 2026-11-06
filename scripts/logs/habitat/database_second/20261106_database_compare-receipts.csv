@@ -1,4 +1,4 @@
-label,output,hand_verdict,crate_verdict,crate_mode,crate_result_verdict,agree,crate_bytes_match,recipe_fields,result_fields
+label,output,hand_verdict,crate_verdict,crate_mode,crate_result_verdict,agree,crate_rewritten_bytes_match,recipe_fields,result_fields
 "compare","BT_rear_change.csv","equivalent","different","bytes","identical",FALSE,FALSE,"recipe.code[knowledge].commit;recipe.recipe_id",""
 "compare","BT_rear_checks.csv","equivalent","different","bytes","identical",FALSE,FALSE,"recipe.code[knowledge].commit;recipe.recipe_id",""
 "compare","BT_rear_compare.csv","different","different","bytes","different",TRUE,FALSE,"recipe.code[knowledge].commit;recipe.recipe_id","result.fingerprint[BT_rear_compare].sha256=refuse"
@@ -32,7 +32,7 @@ label,output,hand_verdict,crate_verdict,crate_mode,crate_result_verdict,agree,cr
 "evidence","workbook_species.csv","identical","different","bytes","identical",TRUE,TRUE,"recipe.code[knowledge].commit;recipe.recipe_id",""
 "tune","BT_rear_curves.csv","identical","different","bytes","identical",TRUE,TRUE,"recipe.code[knowledge].commit;recipe.recipe_id",""
 "tune","BT_rear_grades_record.csv","identical","different","bytes","identical",TRUE,TRUE,"recipe.code[knowledge].commit;recipe.recipe_id",""
-"tune","BT_rear_grades.csv","different","error",NA,NA,FALSE,NA,"","result would exceed 2^31-1 bytes"
+"tune","BT_rear_grades.csv","different","error",NA,NA,NA,NA,"","result would exceed 2^31-1 bytes"
 "tune","BT_rear_groups.csv","identical","different","bytes","identical",TRUE,TRUE,"recipe.code[knowledge].commit;recipe.recipe_id",""
 "tune","BT_rear_honest.csv","identical","different","bytes","identical",TRUE,TRUE,"recipe.code[knowledge].commit;recipe.recipe_id",""
 "tune","BT_rear_seeds.csv","identical","different","bytes","identical",TRUE,TRUE,"recipe.code[knowledge].commit;recipe.recipe_id",""
@@ -41,7 +41,7 @@ label,output,hand_verdict,crate_verdict,crate_mode,crate_result_verdict,agree,cr
 "tune","BT_rear_tune.csv","identical","different","bytes","identical",TRUE,TRUE,"recipe.code[knowledge].commit;recipe.recipe_id",""
 "tune","BT_spawn_curves.csv","identical","different","bytes","identical",TRUE,TRUE,"recipe.code[knowledge].commit;recipe.recipe_id",""
 "tune","BT_spawn_grades_record.csv","identical","different","bytes","identical",TRUE,TRUE,"recipe.code[knowledge].commit;recipe.recipe_id",""
-"tune","BT_spawn_grades.csv","identical","error",NA,NA,FALSE,NA,"","result would exceed 2^31-1 bytes"
+"tune","BT_spawn_grades.csv","identical","error",NA,NA,NA,NA,"","result would exceed 2^31-1 bytes"
 "tune","BT_spawn_groups.csv","identical","different","bytes","identical",TRUE,TRUE,"recipe.code[knowledge].commit;recipe.recipe_id",""
 "tune","BT_spawn_honest.csv","identical","different","bytes","identical",TRUE,TRUE,"recipe.code[knowledge].commit;recipe.recipe_id",""
 "tune","BT_spawn_seeds.csv","identical","different","bytes","identical",TRUE,TRUE,"recipe.code[knowledge].commit;recipe.recipe_id",""

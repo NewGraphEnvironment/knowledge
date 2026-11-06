@@ -22,8 +22,10 @@
 # INPUT:  VERDICTS, the hand-verdict CSVs (default every scripts/logs/habitat/database_second/*_database_compare-*.csv
 #         but -walks and -receipts); for each row, the reference and new files named in PAIRS below
 # OUTPUT: OUT (default scripts/logs/habitat/database_second/<date>_database_compare-receipts.csv): one row per output:
-#         output, hand_verdict, crate_verdict, crate_mode, crate_result_verdict, agree, crate_bytes_match, recipe_fields,
-#         result_fields (the result fields other than a part's bytes, which are the hand comparison's bytes_match)
+#         output, hand_verdict, crate_verdict, crate_mode, crate_result_verdict, agree (NA where crate could not write the
+#         receipt), crate_rewritten_bytes_match (whether the two copies this script rewrote, after its column drops, share
+#         their bytes; not the outputs' own bytes, which the hand comparison's bytes_match records), recipe_fields,
+#         result_fields (the result fields other than a part's bytes)
 # RUN:    Rscript data-raw/database_receipts.R   (from the repo root; crate >= 0.12.0; ONLY=<regex> or SKIP=<regex> on
 #         the output names)
 # ---------------------------------------------------------------------------
@@ -93,7 +95,7 @@ one <- function(label, output, hand) {
   result_verdict <- if (!nrow(res)) "identical" else if (all(res$action %in% c("within", "record", "warn"))) "equivalent" else "different"
   data.table(label = label, output = output, hand_verdict = hand, crate_verdict = cmp$verdict, crate_mode = cmp$mode,
              crate_result_verdict = result_verdict, agree = result_verdict == hand,
-             crate_bytes_match = !nrow(parts),
+             crate_rewritten_bytes_match = !nrow(parts),
              recipe_fields = paste(unique(dif[side == "recipe"]$field), collapse = ";"),
              result_fields = paste(sprintf("%s=%s", res$field, res$action), collapse = ";"))
 }
@@ -106,11 +108,12 @@ out <- rbindlist(lapply(seq_len(nrow(hand)), function(i) {
   r <- tryCatch(one(hand$label[i], hand$output[i], hand$verdict[i]),
                 error = function(e) data.table(label = hand$label[i], output = hand$output[i], hand_verdict = hand$verdict[i],
                                                crate_verdict = "error", crate_mode = NA, crate_result_verdict = NA,
-                                               agree = FALSE, recipe_fields = "", result_fields = conditionMessage(e)))
+                                               agree = NA, recipe_fields = "", result_fields = conditionMessage(e)))
   if (!is.null(r)) cat(sprintf("%-10s %-32s hand %-10s crate %-9s (%s) result %-10s agree %s %s\n", r$label, r$output,
                                r$hand_verdict, r$crate_verdict, r$crate_mode, r$crate_result_verdict, r$agree,
                                substr(r$result_fields, 1, 120)))
   r
 }), fill = TRUE)
 fwrite(out, dest, na = "NA")
-cat(sprintf("%d outputs, %d agree. Written to %s\n", nrow(out), sum(out$agree %in% TRUE), dest))
+cat(sprintf("%d outputs: %d agree, %d disagree, %d not read by crate. Written to %s\n", nrow(out), sum(out$agree %in% TRUE),
+            sum(out$agree %in% FALSE), sum(is.na(out$agree)), dest))
