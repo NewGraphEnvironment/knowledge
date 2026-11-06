@@ -66,4 +66,5 @@ Remotes:
     NewGraphEnvironment/flooded,
     NewGraphEnvironment/fresh,
     NewGraphEnvironment/gq
+Config/DOI: 10.5281/zenodo.23990335
 Config/testthat/edition: 3
