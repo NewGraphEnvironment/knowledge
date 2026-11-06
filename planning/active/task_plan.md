@@ -65,7 +65,7 @@ The reference is the published run `20261104_0543`: tracked `data/tune/*` and `d
 - [x] Copy `fish.rds` and `catch.rds` from the main checkout's `data/fdis/build/`, after checking their md5s against the ledger
 - [x] The archive holds 4 of the 8 evidence tables; the other four (`bcfishobs_fdis_match`, `access_check`, `workbook_sites`, `workbook_species`) copied from the host's checkout, whose 3 archived tables match the ledger md5s and were written with them (2026-11-03 22:42)
 - [x] `SCHEMA=fresh_default Rscript scripts/0336-archive.R` (read-only mode): does this database still hold the run's build, flows and walk?
-- [ ] Read `pg_stat_activity` before each timed step
+- [x] Read `pg_stat_activity` before each timed step (empty before 0310, 0320 and 0330)
 
 ## Phase 2: The comparison tool, then chinook rearing
 
@@ -107,7 +107,7 @@ The reference is the published run `20261104_0543`: tracked `data/tune/*` and `d
 
 ## Phase 5: Record
 
-- [ ] Commit the logs under `scripts/logs/habitat/database_second/` (review G8: 0325 lists `_tune_run*.txt` at the top of `scripts/logs/habitat/`), the 0310 ledger where 0310 writes it, the verdict CSVs
+- [x] Commit the logs under `scripts/logs/habitat/database_second/` (review G8: 0325 lists `_tune_run*.txt` at the top of `scripts/logs/habitat/`), the 0310 ledger where 0310 writes it, the verdict CSVs
 - [x] `research/database_builds.md`, "A second database": the measured load (about 71 GB moved as 8 GB of dumps plus one 14-minute flow load,
       66 min of moving, 2026-11-05), what was reproduced and with which verdicts, the minutes per step against the host's, and that a run there
       is now ordinary. Update the header's Verified/Issues/Produced-by line
@@ -126,9 +126,9 @@ reproduced. Expected differences, not stops: visits_link's added `segment_fwa_gr
 
 ## Validation
 
-- [ ] Tests pass (`devtools::test()`, including the new comparison script's fixtures)
-- [ ] `/code-check branch` clean
-- [ ] PWF checkboxes match landed work
+- [x] Tests pass (`devtools::test()`, including the new comparison script's fixtures)
+- [x] `/code-check branch` clean
+- [x] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion, with Measurement and Evidence sections
 
 **Verification:** each published output gets a verdict row from `database_compare.R`, and the tool is proved on planted differences before it
