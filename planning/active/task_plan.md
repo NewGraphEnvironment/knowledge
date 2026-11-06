@@ -93,13 +93,14 @@ written nowhere as a rule.
       field of crate's register, and for each tolerance a receipt pair moved within it is `equivalent` and past it
       `different`, so a declaration change that no test exercises fails (crate tests every field of its own
       register; review S1)
-- [ ] `CLAUDE.md` ("A run's record travels with its table") and `research/run_archive.md`: what each receipt
+- [x] `CLAUDE.md` ("A run's record travels with its table") and `research/run_archive.md`: what each receipt
       holds, which tolerances are declared and why, that they are provisional until #158, that a revision makes
       earlier receipts compare `different` unless a `keys` override softens the tolerance fields, and that for a
       grade `identical` means the pick and summaries agree, its bytes listed when they move
-- [ ] File the follow-up for the outputs this branch does not cover (review S2): 0310's evidence build (the
-      9.5e-11 km `access_check` case) and 0299's published visit tables; name it in the PR
-- [ ] `NEWS.md`; `lintr`, `devtools::document()`, `pkgdown::check_pkgdown()` for the new exports
+- [x] File the follow-up for the outputs this branch does not cover (review S2): 0310's evidence build (the
+      9.5e-11 km `access_check` case) and 0299's published visit tables; name it in the PR (filed as #160)
+- [x] `lintr`, `devtools::document()`, `pkgdown::check_pkgdown()` for the new exports (NEWS is written by
+      `/gh-pr-merge`'s release step, as for every version here)
 
 ## Owed at the end (reported, done after merge)
 

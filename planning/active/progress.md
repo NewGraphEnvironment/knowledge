@@ -22,3 +22,4 @@
   archive takes it when present; tests with mutation checks on the promotion guard
 - Phase 4: `knw_publish(receipt =)` writes and uploads each set's receipt (tables, receipt, manifest), aws calls through mockable wrappers; 0325 passes both sets' recipes and summaries
 - Phase 5 test: each declaration's overrides name crate register fields, each tolerance holds within and refuses past, the declared values pinned
+- Docs: CLAUDE.md paragraph and research/run_archive.md section on receipts; pkgdown index; follow-up #160 filed for the evidence build and the published visit tables

@@ -1,8 +1,10 @@
 # Keeping a tuning run: the archive
 
-**Verified:** 2026-10-30 · **Issues:** #119 (built here), #111 (promotion), NewGraphEnvironment/link#420 (tokens for
-older builds) · **Produced by:** `R/archive.R`, `scripts/0336-archive.R`; sizes and costs from #119's measurements of
-2026-10-29 · **Status:** bucket configured 2026-10-30; first entry (the published run) pending
+**Verified:** 2026-10-30; receipts 2026-11-06 · **Issues:** #119 (built here), #111 (promotion),
+NewGraphEnvironment/link#420 (tokens for older builds), #154 (receipts), #158 (the first rebuild compared) ·
+**Produced by:** `R/archive.R`, `scripts/0336-archive.R`, `R/grade_receipt.R`, `inst/receipt/`; sizes and costs from
+#119's measurements of 2026-10-29 · **Status:** bucket configured 2026-10-30; first entry (the published run) pending;
+the first receipts arrive with the next retune
 
 ## Why a run needs keeping
 
@@ -17,7 +19,8 @@ load. wet reloads its flow table in place, so often it cannot.
 Everything is under `s3://fresh-bc/archive/knowledge/`, which is private:
 
 - `tune/<key>/<setup>/` holds a run's files for one key: `<key>_grades.csv.zst` (zstd -3, about 17× smaller), the
-  grade record, `<key>_curve.rds` and the comparison's `<key>_segments.rds`. `<setup>` is the build's four link
+  grade record, `<key>_curve.rds`, the comparison's `<key>_segments.rds` and, for a run made since #154, the grade
+  table's receipt. `<setup>` is the build's four link
   output-vocabulary tokens, `<cut>.<acc>.<grad>.<flow>`. A build older than the vocabulary (link 0.70.0) logged no
   tokens, so it goes under `untokened/<tune run>`; its folder keeps that name after link#420 names its tokens, and its
   index rows gain them instead.
@@ -39,6 +42,41 @@ exactly as written, its md5, size and rows, the tuning run, the evidence ledger,
 The bundles read and pin the record, so rebuilding them needs the evidence (about 200 MB), not 26 GB of tables. The
 record is written once and never changes; where a run is stored lives in the index. A restore fetches the run that a
 checkout's records name, by version id, and checks each file against its md5.
+
+## The receipt says whether a rebuild came out the same
+
+The record says which run made a table. It cannot say whether a rebuild of that run made the same table, because a
+rebuild can come out slightly different and still be right: the same build's evidence, built twice, once gave three
+byte-identical tables and a fourth that differed at 9.5e-11 km per value, because the database summed in another
+order. So since #154 each grade table and each published set also carries a receipt in crate's shared shape
+(NewGraphEnvironment/crate#43), which separates two questions. Was it made the same way? That is the recipe: the
+knowledge commit, the walk's SQL and the method register, the run's settings and fold seed, link's build, wet's flow
+load and the evidence. Did it come out the same? That is the result: what was decided and a few totals. Comparing a
+rebuild's receipt with the archived one answers `identical`, `equivalent` (every result within its declared rounding)
+or `different`, naming each field that moved.
+
+What each output holds as its result, and the rounding it is allowed, is declared beside its writer in
+`inst/receipt/<output>.yaml`:
+
+| output | judged on | rounding |
+|---|---|---|
+| grade table (`<key>_grades_receipt.json`, tracked) | the pick (rule, reference edges, walk river size, the gate's verdict and number); rows, graded rows, graded km, grade sum | gate number 1e-4 (written to four decimals); graded km and grade sum 1e-3 |
+| thresholds set (`receipt.json` beside its manifest) | both tables, read as text | none: exact |
+| grade set (`receipt.json` beside its manifest) | rows, graded rows, graded km, grade sum | graded km and grade sum 1e-3 |
+
+The roundings are absolute, so a sum over millions of segments gets the rounding a sum that size needs (about a metre
+of graded km), not the per-value one. A grade table is 0.7 to 5.6 GB, too large to fingerprint, so its bytes are
+listed when they move and the verdict rests on the pick and the totals: for a grade, `identical` means those agree
+exactly, not that the bytes do.
+
+These roundings are provisional. #158 reruns the published retune on a second database and records each output's
+verdict by hand; the roundings are revised from it (an output found identical becomes exact). crate refuses two
+receipts that declare different roundings, so a receipt written before a revision compares with one after it only
+with a `keys` register override that softens `result.tolerance.*`.
+
+A receipt names no host, since the grade receipts are tracked in a public repository and the published ones sit on a
+public prefix. link enters as its build, the run that made it, not as code: the evidence ledger records link's commit
+but not whether its tree was clean.
 
 ## Which archive is "the run": by content, not by name
 

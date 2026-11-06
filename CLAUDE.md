@@ -436,6 +436,19 @@ over the same rows (`null_heldout_curve` is no rule scored on the curve's own vi
 
 The grade tables are ignored and run to gigabytes, so `0320` writes each one's record beside it, `<key>_grades_record.csv` (tracked, #119): the table's constant columns exactly as written, its md5, size and rows, the run, its evidence ledger, the knowledge commit and link's build (version, commit and output-vocabulary tokens, blank before link 0.70.0). `knw_tune_promote()` refuses a promoted key whose record is missing or describes another table, and reads kept keys from their records; the article bundles read and pin the record, and check a table present against it (`KNW_CHECK_GRADES=TRUE` makes `test-vignette-data.R` do the same).
 
+Beside the record, `0320` writes the grade table's receipt, `<key>_grades_receipt.json` (tracked, #154), and `0325`
+writes one beside each published set's manifest: crate's provenance receipt (`crate::crt_receipt_write()`), which says
+how the output was made (the full knowledge commit, the walk's SQL and the method register, the run's settings and
+fold seed, link's build as its run uid, the flow load, the evidence) and what came out, so a rebuild compared with the
+archived receipt (`crate::crt_receipt_compare(keys = knw_receipt_keys(<output>))`) is identical, equivalent within the
+declared roundings, or different. What each output is judged on, and its roundings, are declared in
+`inst/receipt/<output>.yaml`, and `test-receipt.R` pins them; they are provisional until #158, and a revision makes
+earlier receipts compare `different` unless the comparison softens `result.tolerance.*`. A grade table is judged on its
+pick and totals, its bytes only listed, so for a grade `identical` does not mean the same bytes
+(`research/run_archive.md`, "The receipt says whether a rebuild came out the same"). A receipt names no host: always
+`publish = TRUE`. Promotion refuses a receipt that does not name its record's `grades_md5`, and the archive stores it
+where a run wrote one.
+
 A build names its evidence directory (#120). `0310` writes `EVIDENCE_DIR` (default `data/fdis/derived`) and a ledger
 whose first row names it; a directory other than the default tags the ledger with its base name
 (`<date>_evidence_build_ledger-<base>.csv`), outside the name `knw_run_ledger()` falls back to, and `0310` refuses the

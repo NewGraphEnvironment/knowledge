@@ -71,6 +71,8 @@ reference:
       - knw_thresholds_table
       - knw_tune_promote
       - knw_grade_record_write
+      - knw_grade_receipt_write
+      - knw_receipt_keys
       - knw_archive_setup
       - knw_archive_plan
       - knw_archive_put
