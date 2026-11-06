@@ -37,3 +37,12 @@
 - Phase 6 (part): CLAUDE.md's receipt paragraph and `scripts/README.md` (0299, 0310) revised; #161's body carries the
   owed comparison. The research file waits for phase 7's verdict. Phase 7 is held: at 12:28 UTC another session was
   running #161's tie checks on this database (four active queries), and two evidence builds would load it under them.
+- Full suite at 12:33 UTC: 0 failed, 0 errors, 4 skipped, 2,231 passed. Lint clean on the new files; check_pkgdown
+  clean once the export was indexed.
+- Phase 7 (12:48 to 13:12 UTC, after the other session's #161 check left this database): staged the published FDIS
+  build in this worktree's ignored `data/fdis` (sites.rds and reconcile.csv from the 2026-10-28 staging, catch/fish and
+  MANIFEST.md5 from the main checkout, md5s equal to the published ledger), ran `0310` into `derived_receipt_a` and `_b`
+  (11.9 and 11.6 min). One recipe_id; six tables byte-identical; access_check at most 1.0e-10 km apart; verdict
+  `equivalent` alone and re-read; a grade receipt against build a names its recipe_id. The tagged ledgers were moved
+  into `scripts/logs/habitat/evidence_receipt_160/` (their receipts' context names the original path). The two
+  directories (202 MB each, ignored) stay until the merge.

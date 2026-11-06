@@ -106,21 +106,21 @@ as another recipe for every grade downstream. The issue has no comments.
 
 - [x] `CLAUDE.md`'s receipt paragraph (under "A run's record travels with its table"): the evidence build's receipt
   and its declaration, the grade's `evidence` input, `0299`'s receipt, and that the archive keeps the evidence receipt.
-- [ ] `research/run_archive.md`, "The receipt says whether a rebuild came out the same": the rounding and why it is
+- [x] `research/run_archive.md`, "The receipt says whether a rebuild came out the same": the rounding and why it is
   1e-6, `visits_link` exact pending #161, and phase 7's verdict.
 - [x] #161's body gets a task: its fix is what makes the evidence receipt's `visits_link` compare `identical`.
 
 ## Phase 7: Verify on the database's host
 
-- [ ] On the host that holds the published build (m4 or m1), with the branch checked out and `pg_stat_activity`
+- [x] On the host that holds the published build (m4 or m1), with the branch checked out and `pg_stat_activity`
   quiet: run two `0310` builds into tagged directories (`EVIDENCE_DIR=data/fdis/derived_receipt_a` and `_b`), so the
   default directory and its ledger are untouched. The walks are cached, so the second run is the faster one. Then
   compare: `crate::crt_receipt_compare(a, b, tables = <both re-read>, keys = knw_receipt_keys("evidence"))`. Expected:
   the same recipe, with `identical` or `equivalent` (`access_check`), and `different` only if #161's tie fires on
   `visits_link`.
-- [ ] Write a grade receipt in a scratch directory against build `a` and check that its `evidence` input is build
+- [x] Write a grade receipt in a scratch directory against build `a` and check that its `evidence` input is build
   `a`'s `recipe_id`.
-- [ ] Commit the log under `scripts/logs/habitat/evidence_receipt_160/`, and the verdict in research and the archive
+- [x] Commit the log under `scripts/logs/habitat/evidence_receipt_160/`, and the verdict in research and the archive
   README.
 
 ## Owed at the end (reported, done after merge)
@@ -129,8 +129,8 @@ as another recipe for every grade downstream. The issue has no comments.
 
 ## Validation
 
-- [ ] Tests pass (`devtools::test()`), including `test-vignette-data.R`, untouched
-- [ ] `lintr::lint_package()`, `devtools::document()`, and `pkgdown::check_pkgdown()` for the new export
+- [x] Tests pass (`devtools::test()`), including `test-vignette-data.R`, untouched
+- [x] `lintr::lint_package()`, `devtools::document()`, and `pkgdown::check_pkgdown()` for the new export
 - [ ] `/code-check` clean, once over the branch with `/code-check branch`
 - [ ] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion

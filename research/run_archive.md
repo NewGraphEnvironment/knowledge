@@ -1,8 +1,9 @@
 # Keeping a tuning run: the archive
 
 **Verified:** 2026-10-30; receipts 2026-11-06 · **Issues:** #119 (built here), #111 (promotion),
-NewGraphEnvironment/link#420 (tokens for older builds), #154 (receipts), #158 (the first rebuild compared) ·
-**Produced by:** `R/archive.R`, `scripts/0336-archive.R`, `R/grade_receipt.R`, `inst/receipt/`; sizes and costs from
+NewGraphEnvironment/link#420 (tokens for older builds), #154 (receipts), #158 (the first rebuild compared), #160 (the
+evidence build's and the published visit set's receipts) ·
+**Produced by:** `R/archive.R`, `scripts/0336-archive.R`, `R/grade_receipt.R`, `R/evidence_receipt.R`, `inst/receipt/`; sizes and costs from
 #119's measurements of 2026-10-29 · **Status:** bucket configured 2026-10-30; first entry (the published run) pending;
 the first receipts arrive with the next retune
 
@@ -63,6 +64,8 @@ What each output holds as its result, and the rounding it is allowed, is declare
 | grade table (`<key>_grades_receipt.json`, tracked) | the pick (rule, reference edges, walk river size, the gate's verdict and number); rows, graded rows, graded km, grade sum | gate number 1e-4 (written to four decimals); graded km and grade sum 1e-3 |
 | thresholds set (`receipt.json` beside its manifest) | both tables, read as text | none: exact |
 | grade set (`receipt.json` beside its manifest) | rows, graded rows, graded km, grade sum | graded km and grade sum 1e-3 |
+| evidence build (`evidence_receipt.json` in the evidence directory, #160) | every table `0310` writes, read back as text; placed visits; `access_check`'s km summed | `access_check`'s km 1e-6 per value, its sum 1e-3; every other table exact |
+| published visit set v3 (`receipt.json` beside its manifest, #160) | all 11 tables, read as text | `access_check`'s km 1e-6; every other table exact |
 
 The roundings are absolute, so a sum over millions of segments gets the rounding a sum that size needs (about a metre
 of graded km), not the per-value one. A grade table is 0.7 to 5.6 GB, too large to fingerprint, so its bytes are
@@ -73,6 +76,35 @@ These roundings are provisional. #158 reruns the published retune on a second da
 verdict by hand; the roundings are revised from it (an output found identical becomes exact). crate refuses two
 receipts that declare different roundings, so a receipt written before a revision compares with one after it only
 with a `keys` register override that softens `result.tolerance.*`.
+
+### The evidence build: every table exact but `access_check`'s km
+
+The evidence build's receipt (#160) writes down the rule this track began from. The two measured rebuilds moved
+`access_check`'s km by 9.5e-11 and 6.0e-11 km per value (#158's second database), because each value is a sum over up to
+millions of segments that a database may take in another order; every other table came back with the same values. So
+`access_check`'s km is rounded to 1e-6 km (1 mm, the tolerance #158's hand comparison used) and the rest is exact.
+`visits_link` is declared exact although #158 found its `mad_pick` moving on 3 of 45,529 visits: that is #161's
+unordered parent-flow tie, so a rebuild on another database reads `different` until #161 lands, and that is true.
+
+Measured on #160's branch (2026-11-06, `data-raw/evidence_receipt_compare.R`,
+`scripts/logs/habitat/evidence_receipt_160/`): two `0310` builds of the published build into tagged directories on one
+database, 11.9 and 11.6 min, gave one `recipe_id`; six tables byte-identical, `access_check` differing at 1.0e-10 km at
+most over 2,193 rows; verdict `equivalent`, on the receipts alone and with the tables re-read (0.9 min). A grade receipt
+written against the first build named its `recipe_id`. Both builds ran on one database, so #161's tie, which breaks by
+each database's plan, did not fire.
+
+crate rounds a value to its tolerance's decimals rather than allowing a band, so two receipts alone can put values a
+hair apart on either side of a rounding edge and read `different`. Judge an evidence or visit-set rebuild with both
+builds' tables re-read (`crt_receipt_compare(tables =)`, the tables as `.knw_receipt_csv_tables()` reads them), which
+compares cells within the tolerance.
+
+A grade names the evidence by the build's receipt's `recipe_id`, so an evidence rebuild that came out equivalent is the
+same input to every grade downstream; a build from before receipts is named by its visit tables' md5s. The cost is the
+other direction: two builds of one recipe whose results differ (#161's tie) are also one input, so the evidence's own
+comparison is where that difference shows, and each grade keeps `evidence_md5` in its context. The archive stores the
+receipt with its build. A receipt carries its write time, so every build archived with one has its own `evidence_id`,
+and a restore refuses an `evidence_receipt.json` present with other bytes rather than write one build's receipt over
+another's.
 
 A receipt names no host, since the grade receipts are tracked in a public repository and the published ones sit on a
 public prefix. link enters as its build, the run that made it, not as code: the evidence ledger records link's commit
