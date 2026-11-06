@@ -55,7 +55,6 @@
 #         v3 (#57) adds 0310's tables and rebuilds the species tables from them.
 # ---------------------------------------------------------------------------
 suppressMessages({ library(arrow) })
-pkgload::load_all(quiet = TRUE)
 
 publish <- identical(Sys.getenv("PUBLISH"), "TRUE")
 pull <- identical(Sys.getenv("PULL"), "TRUE")
@@ -149,6 +148,8 @@ if (pull) {
   quit(save = "no", status = 0)
 }
 
+# the package after the pull, which needs only arrow and jsonlite
+pkgload::load_all(quiet = TRUE)
 missing_in <- tables$source[!file.exists(tables$source)]
 if (length(missing_in)) stop("missing input: ", paste(missing_in, collapse = ", "), call. = FALSE)
 if (!file.exists(path_readme)) stop("missing ", path_readme, call. = FALSE)
@@ -171,7 +172,8 @@ commit <- substr(knowledge_git$commit, 1, 7)
 # extract as received. Every table fingerprinted as written but access_check's km, rounded as the evidence build's
 receipt <- NULL
 if (version == "v3") {
-  ev_id <- .knw_evidence_recipe_id(dir_in)
+  # held to every table of 0310's this set publishes, not only the three a grade reads
+  ev_id <- .knw_evidence_recipe_id(dir_in, tables = intersect(tables$table, knw_receipt_keys("evidence")$tables))
   if (is.null(ev_id)) {
     stop(dir_in, " has no ", .knw_evidence_receipt_file, ": v3 names the evidence build by its receipt, so rebuild ",
          "the evidence with scripts/0310 before publishing it", call. = FALSE)

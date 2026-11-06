@@ -20,9 +20,10 @@ as another recipe for every grade downstream. The issue has no comments.
 - **The evidence receipt is archived with its evidence build**: `knw_archive_plan()` stores it under `evidence/<id>/`
   where one exists. A build without one archives under the id it has now.
 - (Agent, on the evidence; stated here, not asked.) **`access_check`'s km gets a rounding of `1.0e-6` km (1 mm).**
-  Its values reach 787,407 km, where one unit in the last place of a double is about 1.2e-10. So 9.5e-11 and 6.0e-11
-  are one ulp apart, and a sum over millions of segments, taken in another order, can move further. 1e-6 is the
-  tolerance #158's hand comparison used, and is far below anything a reader could see. It stays provisional, as
+  Each value is a sum over up to millions of segments that a database may take in another order; the measured moves
+  were 9.5e-11 and 6.0e-11 km (the plan review corrected an earlier "one ulp" reading, which held only for the
+  pre-#120 province-wide table). 1e-6 is the tolerance #158's hand comparison used, and is far below anything a
+  reader could see. It stays provisional, as
   #154's declarations are.
 - (Agent.) Every other table `0310` writes (`bcfishobs_fdis_match`, `workbook_sites`, `workbook_species`) is
   fingerprinted exact as well. All of them came back value-identical in #158. A part that names no table would compare

@@ -96,7 +96,7 @@ knw_grade_receipt_write <- function(grades_path, grades, spec, min_wsg, evidence
                           folds = spec$folds, min_wsg = min_wsg, d_floor = spec$d_floor, extra = spec$extra,
                           gradient = spec$grad), .knw_receipt_setting)
   inputs <- c(list(link_build = list(version_id = rec$run_uid), flow = list(version_id = rec$discharge_load)),
-              .knw_receipt_evidence(evidence_dir, rec$evidence_md5))
+              .knw_receipt_evidence(evidence_dir, rec$evidence_md5, ledger = rec$evidence_ledger))
   crate::crt_receipt_write(
     dirname(grades_path),
     output = list(name = "grade", scope = paste(rec$species_code, rec$stage, sep = "_")),

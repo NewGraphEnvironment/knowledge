@@ -87,3 +87,15 @@ test_that("several files hash as one input, in path order", {
   expect_error(.knw_sha256_files(file.path(d, "nope.csv")), "missing")
   expect_error(.knw_sha256_files(character()), "no files")
 })
+
+test_that("the recipe_id is read only from a receipt describing every table the caller reads", {
+  ev <- evidence_fixture()
+  r <- write_ev(ev)
+  expect_null(.knw_evidence_recipe_id(withr::local_tempdir()))
+  expect_identical(.knw_evidence_recipe_id(ev), r$recipe$recipe_id)
+  # access_check rewritten after the receipt: a grade, which reads the visit tables, still names the build; a
+  # publisher of access_check does not
+  writeLines(c("species_code,km", "BT,1"), file.path(ev, "access_check.csv"))
+  expect_identical(.knw_evidence_recipe_id(ev), r$recipe$recipe_id)
+  expect_error(.knw_evidence_recipe_id(ev, tables = c("visits_link", "access_check")), "does not describe .*access_check")
+})

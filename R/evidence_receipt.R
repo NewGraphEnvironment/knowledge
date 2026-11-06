@@ -94,14 +94,15 @@ knw_evidence_receipt_write <- function(evidence_dir, settings, inputs, knowledge
 }
 
 # An evidence build's recipe_id, from the receipt 0310 wrote in its directory, or NULL where there is none (a build
-# from before #160). A receipt that does not describe the visit tables in the directory is refused, never passed over
-# for the md5 fallback: it is another build's, or the tables were replaced after it was written
-.knw_evidence_recipe_id <- function(evidence_dir) {
+# from before #160). A receipt that does not describe the tables in the directory is refused, never passed over for the
+# md5 fallback: it is another build's, or the tables were replaced after it was written. `tables` are the ones the
+# caller reads: a grade the three visit tables, 0299 every evidence table it publishes
+.knw_evidence_recipe_id <- function(evidence_dir, tables = c("visits_link", "visits_species", "walks")) {
   path <- file.path(evidence_dir, .knw_evidence_receipt_file)
   if (!file.exists(path)) return(NULL)
   r <- crate::crt_receipt_read(path)
   if (!identical(r$output$name, "evidence")) stop(path, " is not an evidence build's receipt", call. = FALSE)
-  for (tb in c("visits_link", "visits_species", "walks")) {
+  for (tb in tables) {
     f <- paste0(tb, ".csv")
     held <- r$result$parts[[f]]$sha256
     if (is.null(held) || !identical(held, .knw_sha256(file.path(evidence_dir, f)))) {

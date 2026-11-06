@@ -29,3 +29,8 @@
 - Phase 5: `knw_archive_plan()` appends `evidence_receipt.json` to the evidence files and MANIFEST where it exists,
   after holding it to the build's tables; a restore brings it back through the index. A build without one keeps its
   MANIFEST and id (tested).
+- Plan review returned (spawned 12:13 UTC, at phase 4): no blockers; findings and what was done in
+  `planning/active/review-plan.md`. Fixed: 0299 holds the evidence receipt to every evidence table it publishes; a
+  ledger that names a receipt requires it (guard proved by removal); 0310 hashes inputs as read, names link's configs
+  by their files' sha256, and writes a refused ledger when the receipt fails; 0299 loads the package after PULL; the
+  "one ulp" claim is corrected. Kept: restore refuses a receipt present with other bytes (two builds).

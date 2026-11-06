@@ -99,8 +99,10 @@ knw_receipt_keys <- function(output) {
 # The evidence a build read, as the receipt input `evidence`, after the visit tables' md5s are checked against the md5s
 # the run recorded (`evidence_md5`, `;`-joined in this order), so a receipt never names another build's evidence: the
 # build's receipt's recipe_id where 0310 wrote one (#160), so an evidence rebuild that came out equivalent is the same
-# input, else the md5s as a version id, as 0325 names it, for a build from before evidence receipts
-.knw_receipt_evidence <- function(evidence_dir, evidence_md5) {
+# input, else the md5s as a version id, as 0325 names it, for a build from before evidence receipts. Where the build's
+# ledger is here and names a receipt (0310 ledgers its recipe_id), that receipt must be present and be the one named:
+# a build that stopped after its tables, or a receipt removed, is not read as a build from before receipts
+.knw_receipt_evidence <- function(evidence_dir, evidence_md5, ledger = NULL) {
   tbl <- c("visits_link", "visits_species", "walks")
   f <- file.path(evidence_dir, paste0(tbl, ".csv"))
   if (!all(file.exists(f))) {
@@ -112,6 +114,14 @@ knw_receipt_keys <- function(output) {
          evidence_md5, ")", call. = FALSE)
   }
   id <- .knw_evidence_recipe_id(evidence_dir)
+  if (!is.null(ledger) && length(ledger) == 1L && !is.na(ledger) && file.exists(ledger)) {
+    led <- utils::read.csv(ledger, colClasses = "character", na.strings = "")
+    named <- sub("^.* recipe ", "", led$note[led$step %in% "evidence_receipt"])
+    if (length(named) && !identical(id, named[length(named)])) {
+      stop(ledger, " names the evidence receipt ", named[length(named)], ", but ", evidence_dir, " holds ",
+           if (is.null(id)) "none" else paste("receipt", id), ": rebuild the evidence (scripts/0310)", call. = FALSE)
+    }
+  }
   list(evidence = if (is.null(id)) list(version_id = evidence_md5) else list(recipe_id = id))
 }
 

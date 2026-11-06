@@ -162,3 +162,24 @@ test_that("an evidence receipt that describes other tables is refused, not passe
   writeLines('{"output": {"name": "grade"}}', file.path(fx$ev, "evidence_receipt.json"))
   expect_error(write_receipt(fx))
 })
+
+test_that("a build whose ledger names a receipt is not read as a build from before receipts", {
+  fx <- receipt_fx()
+  ev_r <- evidence_receipt_fx(fx$ev)
+  # the record's evidence ledger, here, names the receipt the build wrote
+  rp <- sub("_grades\\.csv$", "_grades_record.csv", fx$g)
+  r <- utils::read.csv(rp, colClasses = "character", na.strings = "")
+  led <- file.path(dirname(fx$g), "ledger.csv")
+  r$evidence_ledger <- led
+  utils::write.csv(r, rp, row.names = FALSE, na = "")
+  utils::write.csv(data.frame(kind = "info", step = "evidence_receipt", n = 0,
+                              note = paste("evidence_receipt.json recipe", ev_r$recipe$recipe_id)),
+                   led, row.names = FALSE)
+  expect_identical(write_receipt(fx)$recipe$inputs$evidence$recipe_id, ev_r$recipe$recipe_id)
+  # the receipt removed: refused, not named by the md5s
+  unlink(file.path(fx$ev, "evidence_receipt.json"))
+  expect_error(write_receipt(fx), "names the evidence receipt .* holds none")
+  # a ledger with no receipt row (a build from before receipts) falls back
+  utils::write.csv(data.frame(kind = "info", step = "zone_zip", n = 1, note = "md5 x"), led, row.names = FALSE)
+  expect_named(write_receipt(fx)$recipe$inputs$evidence, "version_id")
+})

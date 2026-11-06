@@ -5,9 +5,11 @@
 # This is the rule the provenance track started from, written down: every table must come back exactly, except
 # access_check's km, which may move by a rounding. One rebuild of the same build's evidence gave three byte-identical
 # tables and access_check differing at 9.5e-11 km per value, because the database summed in another order; #158's
-# second database gave 6.0e-11 km. access_check's km reach 787,407 km, where one unit in the last place of a double is
-# about 1.2e-10, so both are one ulp, and a sum over millions of segments taken in another order can move further:
-# the rounding is 1e-6 km (1 mm), the tolerance #158's hand comparison used, far below anything a reader sees.
+# second database gave 6.0e-11 km on the per-group table. Each value is a sum over up to millions of segments, which a
+# database may take in another order: the rounding is 1e-6 km (1 mm), the tolerance #158's hand comparison used, four
+# orders above both moves and far below anything a reader sees. crate rounds a value to the tolerance's decimals, so a
+# comparison of receipts alone can read a value on either side of a rounding edge as different; compare with the
+# tables re-read (crt_receipt_compare(tables =)) for the verdict.
 # visits_link is exact although #158 found mad_pick moving on 3 visits: that is knowledge#161's unordered parent-flow
 # tie, and a rebuild reads `different` until it is fixed, which is true. Provisional, as #154's declarations are.
 receipt_keys: 1
