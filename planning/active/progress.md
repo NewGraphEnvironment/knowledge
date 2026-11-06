@@ -27,3 +27,5 @@
 - Branch /code-check round 2: the kept-path receipt mixed the record's commit with today's settings and spec (now: a kept table without a receipt naming its record is regraded; the commit resolver is gone); the crate check ran on runs that do not grade; 0325 did not hold tables to records; the archive stored a receipt naming another table. All fixed; the field-by-field enumeration is in findings.md
 - Branch /code-check round 3: a missing receipt read two ways (now decided from the run: the grading commit, else another key's receipt) in promotion and the archive; the archive did not narrow batches by the tracked receipt; the grade set's recipe counted withheld keys. Fixed; the loop ends on the two-direction enumeration in findings.md
 - crate PR #48 merged and released as v0.13.0 (R-CMD-check first failed on a case-folding test assumption, fixed); knowledge's floor is now `crate (>= 0.13.0)`, the branch pin removed
+- Session capture (2026-11-06): all phases committed, branch review closed; next is `/planning-archive`, then
+  `/gh-pr-push` (the PR names #160 for the deferred outputs and the R&D line)

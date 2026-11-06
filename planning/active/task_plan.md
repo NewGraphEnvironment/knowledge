@@ -112,9 +112,9 @@ written nowhere as a rule.
 
 ## Validation
 
-- [ ] Tests pass
-- [ ] `/code-check` clean (once over the branch with `/code-check branch`)
-- [ ] PWF checkboxes match landed work
+- [x] Tests pass (2151, 0 failures, 2026-11-06)
+- [x] `/code-check` clean (once over the branch with `/code-check branch`): three rounds, ended on the enumeration in findings.md
+- [x] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion
 
 How it is proved: fixtures run every writer and comparison in `devtools::test()`; mutation checks (restore a
