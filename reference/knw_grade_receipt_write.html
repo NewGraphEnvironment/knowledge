@@ -4,7 +4,9 @@
 (crate::crt_receipt_write(), #154): how the table was made (knowledge's
 commit, the method register and the walk's SQL, the run's resolved
 settings and fold seed, link's build, wet's flow load and the evidence
-tables' sha256) and what came out (the pick, fingerprinted, and the table's
+build, by its receipt's recipe_id (knw_evidence_receipt_write(), #160)
+or, for a build from before evidence receipts, by its visit tables' md5s)
+and what came out (the pick, fingerprinted, and the table's
 rows, graded rows, graded km and grade sum). A rebuild's receipt compared
 with this one (crate::crt_receipt_compare(), with
 knw_receipt_keys()(&quot;grade&quot;)) answers identical, equivalent within the
@@ -16,7 +18,9 @@ repository."><meta property="og:description" content="Writes &amp;lt;key&amp;gt;
 (crate::crt_receipt_write(), #154): how the table was made (knowledge's
 commit, the method register and the walk's SQL, the run's resolved
 settings and fold seed, link's build, wet's flow load and the evidence
-tables' sha256) and what came out (the pick, fingerprinted, and the table's
+build, by its receipt's recipe_id (knw_evidence_receipt_write(), #160)
+or, for a build from before evidence receipts, by its visit tables' md5s)
+and what came out (the pick, fingerprinted, and the table's
 rows, graded rows, graded km and grade sum). A rebuild's receipt compared
 with this one (crate::crt_receipt_compare(), with
 knw_receipt_keys()(&quot;grade&quot;)) answers identical, equivalent within the
@@ -31,7 +35,7 @@ repository."><meta property="og:image" content="https://newgraphenvironment.gith
 
     <a class="navbar-brand me-2" href="../index.html">knowledge</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.31</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.33</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -58,7 +62,7 @@ repository."><meta property="og:image" content="https://newgraphenvironment.gith
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>A grade table's provenance receipt</h1>
-      <small class="dont-index">Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/R/grade_receipt.R" class="external-link"><code>R/grade_receipt.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/v0.4.33/R/grade_receipt.R" class="external-link"><code>R/grade_receipt.R</code></a></small>
       <div class="d-none name"><code>knw_grade_receipt_write.Rd</code></div>
     </div>
 
@@ -68,7 +72,9 @@ repository."><meta property="og:image" content="https://newgraphenvironment.gith
 (<code><a href="https://newgraphenvironment.github.io/crate/reference/crt_receipt_write.html" class="external-link">crate::crt_receipt_write()</a></code>, #154): how the table was made (knowledge's
 commit, the method register and the walk's SQL, the run's resolved
 settings and fold seed, link's build, wet's flow load and the evidence
-tables' sha256) and what came out (the pick, fingerprinted, and the table's
+build, by its receipt's <code>recipe_id</code> (<code><a href="knw_evidence_receipt_write.html">knw_evidence_receipt_write()</a></code>, #160)
+or, for a build from before evidence receipts, by its visit tables' md5s)
+and what came out (the pick, fingerprinted, and the table's
 rows, graded rows, graded km and grade sum). A rebuild's receipt compared
 with this one (<code><a href="https://newgraphenvironment.github.io/crate/reference/crt_receipt_compare.html" class="external-link">crate::crt_receipt_compare()</a></code>, with
 <code><a href="knw_receipt_keys.html">knw_receipt_keys()</a></code><code>("grade")</code>) answers identical, equivalent within the
@@ -132,7 +138,8 @@ receipt is missing rather than writing one later.</p></dd>
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>The record is written first and read here, so the two describe one table:
 the receipt refuses a table whose size is not the record's, evidence whose
-md5s are not the record's, and a walk other than the one the record names,
+md5s are not the record's, an evidence receipt that does not describe the
+evidence tables, and a walk other than the one the record names,
 and carries the record's <code>grades_md5</code> in its context, which is how 0320's
 keep-check and promotion tie a receipt to a checked table without hashing
 it again.</p>

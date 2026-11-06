@@ -19,7 +19,7 @@ not list, so a reader starts from the manifest."><meta property="og:image" conte
 
     <a class="navbar-brand me-2" href="../index.html">knowledge</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.31</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.33</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -46,7 +46,7 @@ not list, so a reader starts from the manifest."><meta property="og:image" conte
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Write a set of tables as Parquet with a manifest, and upload them</h1>
-      <small class="dont-index">Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/R/publish.R" class="external-link"><code>R/publish.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/v0.4.33/R/publish.R" class="external-link"><code>R/publish.R</code></a></small>
       <div class="d-none name"><code>knw_publish.Rd</code></div>
     </div>
 
@@ -133,11 +133,13 @@ under a Hive path <code>&lt;table&gt;/&lt;key&gt;=&lt;value&gt;/part.parquet</co
 <dt id="arg-receipt">receipt<a class="anchor" aria-label="anchor" href="#arg-receipt"></a></dt>
 <dd><p><code>NULL</code> (no receipt), or a list for the set's provenance
 receipt in crate's shape (#154): <code>output</code>, the declaration it is held to
-(<code><a href="knw_receipt_keys.html">knw_receipt_keys()</a></code>, <code>"thresholds"</code> or <code>"habitat_grade"</code>); <code>recipe</code>,
-crate's recipe block (<code>code</code>, <code>config</code>, <code>inputs</code>, <code>seed</code>); and <code>summary</code>,
-the named numbers the declaration lists. The tables the declaration
-fingerprints are read from their source CSVs as text, so they are held
-exact; the Parquet files are the parts, each flat one named by its table.
+(<code><a href="knw_receipt_keys.html">knw_receipt_keys()</a></code>, <code>"thresholds"</code>, <code>"habitat_grade"</code> or <code>"fdis"</code>);
+<code>recipe</code>, crate's recipe block (<code>code</code>, <code>config</code>, <code>inputs</code>, <code>seed</code>); and
+<code>summary</code>, the named numbers the declaration lists. The tables the
+declaration fingerprints are read from their source CSVs as text, so they
+are held exact, except a column the declaration gives a tolerance, which
+is read as a number (<code>"fdis"</code>'s <code>access_check</code> km); the Parquet files are
+the parts, each flat one named by its table.
 <code>receipt.json</code> is written beside the manifest with no host, and uploaded
 after the tables and before the manifest.</p></dd>
 

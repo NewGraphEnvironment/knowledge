@@ -1,5 +1,40 @@
 # Changelog
 
+## knowledge 0.4.33
+
+- The evidence build and the published visit tables now carry provenance
+  receipts
+  ([\#160](https://github.com/NewGraphEnvironment/knowledge/issues/160)).
+  `scripts/0310` writes `evidence_receipt.json` beside its tables
+  ([`knw_evidence_receipt_write()`](https://newgraphenvironment.github.io/knowledge/reference/knw_evidence_receipt_write.md)),
+  held to `inst/receipt/evidence.yaml`: every table exact but
+  `access_check`‘s km, rounded to 1e-6 km, which a database summing in
+  another order moves in the last place. A grade receipt names the
+  evidence as one input, the build’s receipt’s `recipe_id` (or its visit
+  tables’ md5s for a build from before receipts), so an equivalent
+  evidence rebuild is the same input to every grade, and `0320` regrades
+  a kept table whose receipt names other evidence. `scripts/0299`
+  publishes through
+  [`knw_publish()`](https://newgraphenvironment.github.io/knowledge/reference/knw_publish.md),
+  and v3 carries a receipt naming the evidence build
+  (`inst/receipt/fdis.yaml`). The archive keeps the evidence receipt
+  with its build, outside its MANIFEST. Two evidence builds of the
+  published build on one database compared `equivalent`. Nothing
+  published moves.
+
+## knowledge 0.4.32
+
+- [`knw_link_flow()`](https://newgraphenvironment.github.io/knowledge/reference/knw_link_flow.md)‘s
+  parent flow and
+  [`knw_link_regulated()`](https://newgraphenvironment.github.io/knowledge/reference/knw_link_regulated.md)’s
+  dam snap give an equidistant tie to the lower `linear_feature_id`, so
+  two databases holding one build read them identically
+  ([\#161](https://github.com/NewGraphEnvironment/knowledge/issues/161)).
+  Grading reads the parent flow live, so the next grading moves the size
+  of about 630 tied segments on any build; the next evidence build moves
+  the flow on the tied visits and the two tied dams’ placement. Nothing
+  published moves until the next retune.
+
 ## knowledge 0.4.31
 
 - Each grade table and each published set now carries a provenance

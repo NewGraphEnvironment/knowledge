@@ -21,7 +21,10 @@ knw_receipt_keys(output)
 
   `character(1)`: `"grade"` (a grade table,
   [`knw_grade_receipt_write()`](https://newgraphenvironment.github.io/knowledge/reference/knw_grade_receipt_write.md)),
-  `"thresholds"` or `"habitat_grade"` (the published sets,
+  `"evidence"` (an evidence build,
+  [`knw_evidence_receipt_write()`](https://newgraphenvironment.github.io/knowledge/reference/knw_evidence_receipt_write.md),
+  \#160), `"thresholds"`, `"habitat_grade"` or `"fdis"` (the published
+  sets,
   [`knw_publish()`](https://newgraphenvironment.github.io/knowledge/reference/knw_publish.md)).
 
 ## Value
@@ -35,8 +38,7 @@ returns.
 ``` r
 k <- knw_receipt_keys("grade")
 k$inputs
-#> [1] "link_build"     "flow"           "visits_link"    "visits_species"
-#> [5] "walks"         
+#> [1] "link_build" "flow"       "evidence"  
 k$tolerance$summary
 #> $km_graded
 #> [1] 0.001

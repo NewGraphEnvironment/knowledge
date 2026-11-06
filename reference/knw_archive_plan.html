@@ -4,7 +4,9 @@ grade table (stored compressed), its record, the curve, the
 comparison's segments and, where the run wrote one, the grade table's
 receipt (#154), under tune/&amp;lt;key&amp;gt;/&amp;lt;setup&amp;gt;/; and the evidence build
 the grades name, under evidence/&amp;lt;id&amp;gt;/ with a MANIFEST (one line per
-file, its md5 and name), &amp;lt;id&amp;gt; being the MANIFEST's md5. Each grade table
+file, its md5 and name), &amp;lt;id&amp;gt; being the MANIFEST's md5, and the build's
+receipt where 0310 wrote one (#160), stored in the folder but outside the
+MANIFEST, so a rebuild with the same tables keeps its id. Each grade table
 is checked against its record and the evidence against the grades'
 evidence_md5 before anything is listed, so an archive never stores a
 table its record does not describe."><meta property="og:description" content="Lists every file one archive of a run sends to the bucket: per key the
@@ -12,7 +14,9 @@ grade table (stored compressed), its record, the curve, the
 comparison's segments and, where the run wrote one, the grade table's
 receipt (#154), under tune/&amp;lt;key&amp;gt;/&amp;lt;setup&amp;gt;/; and the evidence build
 the grades name, under evidence/&amp;lt;id&amp;gt;/ with a MANIFEST (one line per
-file, its md5 and name), &amp;lt;id&amp;gt; being the MANIFEST's md5. Each grade table
+file, its md5 and name), &amp;lt;id&amp;gt; being the MANIFEST's md5, and the build's
+receipt where 0310 wrote one (#160), stored in the folder but outside the
+MANIFEST, so a rebuild with the same tables keeps its id. Each grade table
 is checked against its record and the evidence against the grades'
 evidence_md5 before anything is listed, so an archive never stores a
 table its record does not describe."><meta property="og:image" content="https://newgraphenvironment.github.io/knowledge/logo.png"></head><body>
@@ -23,7 +27,7 @@ table its record does not describe."><meta property="og:image" content="https://
 
     <a class="navbar-brand me-2" href="../index.html">knowledge</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.31</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.33</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -50,7 +54,7 @@ table its record does not describe."><meta property="og:image" content="https://
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>What the archive stores for a run, and where</h1>
-      <small class="dont-index">Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/R/archive.R" class="external-link"><code>R/archive.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/v0.4.33/R/archive.R" class="external-link"><code>R/archive.R</code></a></small>
       <div class="d-none name"><code>knw_archive_plan.Rd</code></div>
     </div>
 
@@ -60,7 +64,9 @@ grade table (stored compressed), its record, the curve, the
 comparison's segments and, where the run wrote one, the grade table's
 receipt (#154), under <code>tune/&lt;key&gt;/&lt;setup&gt;/</code>; and the evidence build
 the grades name, under <code>evidence/&lt;id&gt;/</code> with a <code>MANIFEST</code> (one line per
-file, its md5 and name), <code>&lt;id&gt;</code> being the MANIFEST's md5. Each grade table
+file, its md5 and name), <code>&lt;id&gt;</code> being the MANIFEST's md5, and the build's
+receipt where <code>0310</code> wrote one (#160), stored in the folder but outside the
+MANIFEST, so a rebuild with the same tables keeps its id. Each grade table
 is checked against its record and the evidence against the grades'
 <code>evidence_md5</code> before anything is listed, so an archive never stores a
 table its record does not describe.</p>

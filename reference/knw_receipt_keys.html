@@ -19,7 +19,7 @@ The declarations are inst/receipt/&amp;lt;output&amp;gt;.yaml."><meta property="
 
     <a class="navbar-brand me-2" href="../index.html">knowledge</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.31</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.33</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -46,7 +46,7 @@ The declarations are inst/receipt/&amp;lt;output&amp;gt;.yaml."><meta property="
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>A receipt declaration knowledge ships</h1>
-      <small class="dont-index">Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/R/receipt.R" class="external-link"><code>R/receipt.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/v0.4.33/R/receipt.R" class="external-link"><code>R/receipt.R</code></a></small>
       <div class="d-none name"><code>knw_receipt_keys.Rd</code></div>
     </div>
 
@@ -71,8 +71,9 @@ The declarations are <code>inst/receipt/&lt;output&gt;.yaml</code>.</p>
 
 <dl><dt id="arg-output">output<a class="anchor" aria-label="anchor" href="#arg-output"></a></dt>
 <dd><p><code>character(1)</code>: <code>"grade"</code> (a grade table,
-<code><a href="knw_grade_receipt_write.html">knw_grade_receipt_write()</a></code>), <code>"thresholds"</code> or <code>"habitat_grade"</code> (the
-published sets, <code><a href="knw_publish.html">knw_publish()</a></code>).</p></dd>
+<code><a href="knw_grade_receipt_write.html">knw_grade_receipt_write()</a></code>), <code>"evidence"</code> (an evidence build,
+<code><a href="knw_evidence_receipt_write.html">knw_evidence_receipt_write()</a></code>, #160), <code>"thresholds"</code>, <code>"habitat_grade"</code>
+or <code>"fdis"</code> (the published sets, <code><a href="knw_publish.html">knw_publish()</a></code>).</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -84,8 +85,7 @@ published sets, <code><a href="knw_publish.html">knw_publish()</a></code>).</p><
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">k</span> <span class="op">&lt;-</span> <span class="fu">knw_receipt_keys</span><span class="op">(</span><span class="st">"grade"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">k</span><span class="op">$</span><span class="va">inputs</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "link_build"     "flow"           "visits_link"    "visits_species"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [5] "walks"         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "link_build" "flow"       "evidence"  </span>
 <span class="r-in"><span><span class="va">k</span><span class="op">$</span><span class="va">tolerance</span><span class="op">$</span><span class="va">summary</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $km_graded</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.001</span>

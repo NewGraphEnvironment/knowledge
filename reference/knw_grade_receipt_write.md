@@ -6,9 +6,13 @@ in crate's shared receipt shape
 ([`crate::crt_receipt_write()`](https://newgraphenvironment.github.io/crate/reference/crt_receipt_write.html),
 \#154): how the table was made (knowledge's commit, the method register
 and the walk's SQL, the run's resolved settings and fold seed, link's
-build, wet's flow load and the evidence tables' sha256) and what came
-out (the pick, fingerprinted, and the table's rows, graded rows, graded
-km and grade sum). A rebuild's receipt compared with this one
+build, wet's flow load and the evidence build, by its receipt's
+`recipe_id`
+([`knw_evidence_receipt_write()`](https://newgraphenvironment.github.io/knowledge/reference/knw_evidence_receipt_write.md),
+\#160) or, for a build from before evidence receipts, by its visit
+tables' md5s) and what came out (the pick, fingerprinted, and the
+table's rows, graded rows, graded km and grade sum). A rebuild's receipt
+compared with this one
 ([`crate::crt_receipt_compare()`](https://newgraphenvironment.github.io/crate/reference/crt_receipt_compare.html),
 with
 [`knw_receipt_keys()`](https://newgraphenvironment.github.io/knowledge/reference/knw_receipt_keys.md)`("grade")`)
@@ -72,8 +76,9 @@ The receipt, as a list, invisibly.
 
 The record is written first and read here, so the two describe one
 table: the receipt refuses a table whose size is not the record's,
-evidence whose md5s are not the record's, and a walk other than the one
-the record names, and carries the record's `grades_md5` in its context,
+evidence whose md5s are not the record's, an evidence receipt that does
+not describe the evidence tables, and a walk other than the one the
+record names, and carries the record's `grades_md5` in its context,
 which is how 0320's keep-check and promotion tie a receipt to a checked
 table without hashing it again.
 
