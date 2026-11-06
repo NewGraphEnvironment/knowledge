@@ -129,7 +129,7 @@ reproduced. Expected differences, not stops: visits_link's added `segment_fwa_gr
 - [x] Tests pass (`devtools::test()`, including the new comparison script's fixtures)
 - [x] `/code-check branch` clean
 - [x] PWF checkboxes match landed work
-- [ ] `/planning-archive` on completion, with Measurement and Evidence sections
+- [x] `/planning-archive` on completion, with Measurement and Evidence sections
 
 **Verification:** each published output gets a verdict row from `database_compare.R`, and the tool is proved on planted differences before it
 is trusted. The cold walk check runs the walk itself on this database. If a `different` appears, the rerun at `2aacd1f` attributes it to code or
