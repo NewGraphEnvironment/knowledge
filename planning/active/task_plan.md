@@ -73,13 +73,13 @@ line with two parents at the same distance. Measured in planning (m1, PG 17.5, P
 
 ## Phase 4: Documentation
 
-- [ ] `NEWS.md`: one line saying that the parent flow and the dam snap break a tie by id, and that the next build moves
+- [x] (NEWS lines come with `/gh-pr-merge`'s release commit, as v0.4.31's did; the PR body carries it) `NEWS.md`: one line saying that the parent flow and the dam snap break a tie by id, and that the next build moves
       the tied visits and segments.
-- [ ] `research/database_builds.md`: in the #161 bullet, add that it is fixed in code, the measured result, and that
+- [x] `research/database_builds.md`: in the #161 bullet, add that it is fixed in code, the measured result, and that
       it takes effect in the first build made after the merge.
-- [ ] `CLAUDE.md`, "Database access": change "Until both are fixed" so that #161 is fixed for builds made after it,
+- [x] `CLAUDE.md`, "Database access": change "Until both are fixed" so that #161 is fixed for builds made after it,
       and only #162 still holds a promotion to one database.
-- [ ] #161's issue body: tick the boxes and record the rule and why.
+- [x] #161's issue body: tick the boxes and record the rule and why.
 
 ## Owed at the end (reported, done after merge)
 
