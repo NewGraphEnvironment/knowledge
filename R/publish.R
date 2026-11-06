@@ -190,8 +190,8 @@ knw_publish <- function(tables, dir_out, id, note, provenance = list(), supersed
 }
 
 # A published set's receipt (#154): the declaration's tables fingerprinted from their source CSVs, read as text so
-# they are held exact (a column the declaration rounds is read as a number, #160); the Parquet files as parts, a flat table's named by it so a rewrite of the same values is
-# equivalent; no host, since the set is public
+# they are held exact (a column the declaration rounds is read as a number, #160); the Parquet files as parts, a flat
+# table's named by it so a rewrite of the same values is equivalent; no host, since the set is public
 .knw_publish_receipt <- function(receipt, tables, files, dir_out) {
   keys <- knw_receipt_keys(receipt$output)
   missing_t <- setdiff(keys$tables, tables$table)

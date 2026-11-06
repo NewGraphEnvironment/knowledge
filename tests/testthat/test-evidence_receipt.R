@@ -97,5 +97,6 @@ test_that("the recipe_id is read only from a receipt describing every table the 
   # publisher of access_check does not
   writeLines(c("species_code,km", "BT,1"), file.path(ev, "access_check.csv"))
   expect_identical(.knw_evidence_recipe_id(ev), r$recipe$recipe_id)
-  expect_error(.knw_evidence_recipe_id(ev, tables = c("visits_link", "access_check")), "does not describe .*access_check")
+  expect_error(.knw_evidence_recipe_id(ev, tables = c("visits_link", "access_check")),
+               "does not describe .*access_check")
 })

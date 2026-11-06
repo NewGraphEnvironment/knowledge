@@ -84,8 +84,9 @@ knw_evidence_receipt_write <- function(evidence_dir, settings, inputs, knowledge
 # The sha256 of several files as one input (#160: the FISS workbooks 0310 reads): the sha256 of a manifest, one line
 # per file, its sha256 and its path, in path order, so the same files at the same paths give the same value
 .knw_sha256_files <- function(paths) {
-  if (!length(paths) || !all(file.exists(paths))) stop("no files, or a file missing, to hash: ",
-                                                       paste(paths[!file.exists(paths)], collapse = ", "), call. = FALSE)
+  if (!length(paths) || !all(file.exists(paths))) {
+    stop("no files, or a file missing, to hash: ", paste(paths[!file.exists(paths)], collapse = ", "), call. = FALSE)
+  }
   paths <- sort(paths, method = "radix")
   man <- tempfile(fileext = ".txt")
   on.exit(unlink(man))
