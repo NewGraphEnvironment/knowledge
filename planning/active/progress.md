@@ -6,3 +6,4 @@
 - Created branch `161-knw-link-flow-picks-a-parent-flow-by-dis` off origin/main
 - Scaffolded PWF baseline from issue #161 with approved phases
 - Next: start Phase 1
+- Phase 1: SQL moved to `.knw_link_flow_sql()`; `tests/testthat/test-link_flow.R` (fixture, live flow, live dam snap) fails on the old ORDER BY, each as expected (findings)

@@ -35,6 +35,16 @@ Found by #158.
 - 8,167 distinct fresh_default.streams lines have no picked flow of their own.
 - 2 of 101 regulating dams (reservoir or >= 10 % regulation) are equidistant from their two nearest main-flow segments, both within 500 m.
 
+## Restore check: the new tests on the old ORDER BY (m1, 2026-11-06)
+
+Run before the fix, with `.knw_link_flow_sql()` carrying the old `ORDER BY p.geom <-> s.geom`:
+
+- Fixture: insertion order 20, 30 took 20 (5); order 30, 20 took 30 (7). The scan order decides, so the test can fail.
+- Live flow: m1 gave 70.278863 (104084627, the lower id) and 8.523775 (105073915, the higher id), so it fails on the
+  second line. m4 took the other parent of each pair (#158), so it would fail on the first.
+- Live dam snap: on m1 both tied dams took the higher-id segment (measures 18319.28380 and 1651.96479 against the lower
+  id's 18319.28361 and 1651.96526).
+
 ## Errors Encountered
 
 | Error | Resolution |

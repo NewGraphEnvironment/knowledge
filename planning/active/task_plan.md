@@ -34,18 +34,18 @@ line with two parents at the same distance. Measured in planning (m1, PG 17.5, P
 
 ## Phase 1: Tests that fail on the old ORDER BY
 
-- [ ] Move the query into an internal `.knw_link_flow_sql(tmp, fwa = "whse_basemapping.fwa_stream_networks_sp",
+- [x] Move the query into an internal `.knw_link_flow_sql(tmp, fwa = "whse_basemapping.fwa_stream_networks_sp",
       q = "discharge.fwa_v1_segment_monthly")` that `knw_link_flow()` calls unchanged. The table names become
       arguments so that a fixture can stand in for them.
-- [ ] `tests/testthat/test-link_flow.R`, fixture test: build `pg_temp` tables, one flow-less segment and two parents
+- [x] `tests/testthat/test-link_flow.R`, fixture test: build `pg_temp` tables, one flow-less segment and two parents
       at distance 0 with codes and picked flows. Insert the parents in both orders and run the SQL. Both orders take
       the lower-id parent. It skips without Postgres, and without the `postgis` and `ltree` extensions.
-- [ ] Live test (`skip_if_no_pg("discharge")`): `knw_link_flow(conn, c(104084643, 105073914))` returns, for each
+- [x] Live test (`skip_if_no_pg("discharge")`): `knw_link_flow(conn, c(104084643, 105073914))` returns, for each
       line, the flow of the lower-id parent among those at the minimum distance, computed in the test from the
       database. Pinning no flow value keeps the test valid across a wet reload.
-- [ ] Live test for `knw_link_regulated()`: for each regulating dam equidistant from two segments (found in the
+- [x] Live test for `knw_link_regulated()`: for each regulating dam equidistant from two segments (found in the
       test), `$dams` carries the lower-id segment's `blue_line_key` and measure.
-- [ ] Restore the bug: with the old ORDER BY on m1, the live tests fail, and the fixture test fails in at least one
+- [x] Restore the bug: with the old ORDER BY on m1, the live tests fail, and the fixture test fails in at least one
       insertion order. Record the result in findings. If the fixture cannot fail on the old code, say so, and let the
       live test carry the proof.
 
