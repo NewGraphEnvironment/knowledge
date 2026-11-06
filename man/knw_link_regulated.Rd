@@ -30,7 +30,8 @@ degree of regulation of \code{regulation_min} percent or more, is placed on the
 nearest main-flow FWA segment within \code{dam_snap_m}; a point is regulated when
 such a dam lies upstream of it (\code{fwa_downstream()} with the roles swapped).
 wet's flow is natural flow, so on a regulated river it is not the flow the
-fish meet.
+fish meet. A dam equally near two segments is placed on the one with the
+lower \code{linear_feature_id}, so every database places it alike (#161).
 }
 \examples{
 \dontrun{

@@ -1,9 +1,9 @@
 # Database builds: what a retune reads, where it can run, and what a second database needs
 
 **Verified:** 2026-10-27, the round-trip check, the structures a comparison runs and `default`'s cost 2026-10-28, and
-"A second database" 2026-11-06 ·
+"A second database" 2026-11-06 (#161's fix measured the same day) ·
 **Issues:** #87 (from #73's run times; #85 and #86 folded in or left open below), #110 (the round-trip check), #112 (the
-structures), #101 (`default`'s cost), #158 (a retune reproduced on a second database; it spawned #161 and #162) ·
+structures), #101 (`default`'s cost), #158 (a retune reproduced on a second database; it spawned #161, fixed, and #162) ·
 **Produced by:** `data-raw/walk_batch_check.R` (logs `scripts/logs/habitat/20261026_walk_batch_check*`),
 `data-raw/compare_parallel_check.R` (`20261026_compare_parallel_check*`), `data-raw/compare_structures_check.R`
 (`20261028_compare_structures_check*`), `data-raw/database_compare.R`, `data-raw/database_walk_check.R` and
@@ -233,7 +233,16 @@ Every other `different` traces to one of two ties, neither of them a fault in th
 
 - **`knw_link_flow()`'s parent flow (#161).** A segment with no flow of its own takes its nearest parent's, and where two
   parents are equally near (almost always both at 0 m) the database chooses. That moves the three visits' flow and,
-  through each segment's size, the grades.
+  through each segment's size, the grades. Fixed in knowledge 0.4.32: the lower `linear_feature_id` takes a tie, in
+  the parent lookup and in `knw_link_regulated()`'s dam snap, which had the same gap. The check
+  (`data-raw/link_flow_tie_check.R`, logs `scripts/logs/habitat/database_second/20261106_link_flow_tie_check*`) read
+  every line whose flow or codes come from a parent: 2,831 lines, 1,800 of them with two parents within 1e-6 m. Under
+  the old code the two databases differed on 614 of those lines and on 2 dams. Under the new code they were
+  identical, and no slower. The published evidence and grades were made with the old code. The change reaches the
+  visits at the next `0310`, and the grades at their next grading on any build, because grading reads each segment's
+  parent flow live (`knw_link_segments()`): about 630 parent-flow lines move on either database, all of them tied.
+  `0320`'s keep-check does not compare the knowledge commit a grade record carries, so a candidate graded before 0.4.32 is regraded, not
+  resumed with `RUN=`.
 - **The walk's landing (#162).** A tributary's mouth usually sits on a vertex two main-line segments share, so both are
   at 0 m from it. Where one of the two has no flow row, the walk either stops at once or walks that segment's length
   down to the next. The host's own cold walk reproduces its cache exactly, so the two databases walk differently. A run
@@ -251,7 +260,7 @@ What a run costs on each:
 | cold walk, every visit start | 2.3 min on 8 workers | (not run) |
 
 Scoring is CPU work and ran at about the speed its worker count predicts. The comparison, bound by the database, ran
-within a minute of the host's on every key but coho, which took 4 minutes longer. From here on a run on the second database is an ordinary run; until #161 and #162 are fixed, its
-grades and any cold walk can differ from the host's on the tied segments, so a promotion takes all its keys from one
-database.
+within a minute of the host's on every key but coho, which took 4 minutes longer. From here on a run on the second database is an ordinary run. Until #162 is fixed, its cold walks can differ from the
+host's, and grades made before knowledge 0.4.32 can differ on the tied segments (#161), so a promotion takes all its
+keys from one database.
 

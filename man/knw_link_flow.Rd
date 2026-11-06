@@ -28,6 +28,9 @@ with no watershed lut row), is not dropped: it takes the picked flow of the
 nearest primary-flow segment on its main line (\code{watershed_key}) or its own
 line, and \code{flow_from} says which (\code{own}, \code{parent}, or \code{NA} for neither); such
 a segment takes that segment's watershed codes too (\code{code_from_parent}).
+Where two such segments are equally near, the one with the lower
+\code{linear_feature_id} gives the flow: an arbitrary but fixed choice, so every
+database holding the build takes the same one (#161).
 }
 \examples{
 \dontrun{

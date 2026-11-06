@@ -9,6 +9,9 @@
 #' nearest primary-flow segment on its main line (`watershed_key`) or its own
 #' line, and `flow_from` says which (`own`, `parent`, or `NA` for neither); such
 #' a segment takes that segment's watershed codes too (`code_from_parent`).
+#' Where two such segments are equally near, the one with the lower
+#' `linear_feature_id` gives the flow: an arbitrary but fixed choice, so every
+#' database holding the build takes the same one (#161).
 #'
 #' @param conn a `DBI` connection to a database holding `discharge` and
 #'   `whse_basemapping`.
@@ -30,39 +33,7 @@ knw_link_flow <- function(conn, linear_feature_id) {
   DBI::dbWriteTable(conn, tmp, data.frame(linear_feature_id = unique(linear_feature_id)),
                     temporary = TRUE, overwrite = TRUE)
   on.exit(try(DBI::dbExecute(conn, paste("DROP TABLE IF EXISTS", tmp)), silent = TRUE), add = TRUE)
-  seg <- DBI::dbGetQuery(conn, sprintf("
-    SELECT t.linear_feature_id,
-           s.blue_line_key <> s.watershed_key AS side_channel,
-           s.gradient AS fwa_gradient,
-           coalesce(s.wscode_ltree, par.wscode)::text AS wscode,
-           coalesce(s.localcode_ltree, par.localcode)::text AS localcode,
-           (s.wscode_ltree IS NULL OR s.localcode_ltree IS NULL) AS code_from_parent, s.waterbody_key,
-           own.mad_pick AS own_mad, own.pick_source AS own_source, own.mad_routed, own.mad_balance,
-           par.q_m3s AS parent_mad, par.source AS parent_source, par.d AS parent_dist_m
-    FROM %s t
-    JOIN whse_basemapping.fwa_stream_networks_sp s ON s.linear_feature_id = t.linear_feature_id
-    LEFT JOIN LATERAL (
-      SELECT max(q.q_m3s) FILTER (WHERE q.pick) AS mad_pick,
-             max(q.source) FILTER (WHERE q.pick) AS pick_source,
-             max(q.q_m3s) FILTER (WHERE q.source = 'pcic_routed') AS mad_routed,
-             max(q.q_m3s) FILTER (WHERE q.source = 'wet_balance') AS mad_balance
-      FROM discharge.fwa_v1_segment_monthly q
-      WHERE q.linear_feature_id = s.linear_feature_id AND q.scenario = 'historical' AND q.month = 0
-    ) own ON true
-    LEFT JOIN LATERAL (
-      SELECT q.q_m3s, q.source, ST_Distance(p.geom, s.geom) AS d,
-             p.wscode_ltree AS wscode, p.localcode_ltree AS localcode
-      FROM whse_basemapping.fwa_stream_networks_sp p
-      JOIN discharge.fwa_v1_segment_monthly q
-        ON q.linear_feature_id = p.linear_feature_id AND q.scenario = 'historical'
-       AND q.month = 0 AND q.pick
-      WHERE (own.mad_pick IS NULL OR s.wscode_ltree IS NULL OR s.localcode_ltree IS NULL)
-        AND p.blue_line_key IN (s.watershed_key, s.blue_line_key)
-        AND p.wscode_ltree IS NOT NULL AND p.localcode_ltree IS NOT NULL
-        AND p.edge_type NOT IN (1100, 1150, 1300, 1350, 2300)
-      ORDER BY p.geom <-> s.geom
-      LIMIT 1
-    ) par ON true", tmp))
+  seg <- DBI::dbGetQuery(conn, .knw_link_flow_sql(tmp))
   if (anyDuplicated(seg$linear_feature_id)) stop("a segment matched twice", call. = FALSE)
   own <- !is.na(seg$own_mad)
   out <- tibble::tibble(
@@ -76,4 +47,43 @@ knw_link_flow <- function(conn, linear_feature_id) {
     parent_dist_m = as.numeric(ifelse(own, NA, seg$parent_dist_m))
   )
   out[order(out$linear_feature_id), , drop = FALSE]
+}
+
+# knw_link_flow()'s query on the segment ids in `tmp`; the FWA and flow tables are arguments so that a test can put
+# fixtures in their place
+.knw_link_flow_sql <- function(tmp, fwa = "whse_basemapping.fwa_stream_networks_sp",
+                               q = "discharge.fwa_v1_segment_monthly") {
+  sprintf("
+    SELECT t.linear_feature_id,
+           s.blue_line_key <> s.watershed_key AS side_channel,
+           s.gradient AS fwa_gradient,
+           coalesce(s.wscode_ltree, par.wscode)::text AS wscode,
+           coalesce(s.localcode_ltree, par.localcode)::text AS localcode,
+           (s.wscode_ltree IS NULL OR s.localcode_ltree IS NULL) AS code_from_parent, s.waterbody_key,
+           own.mad_pick AS own_mad, own.pick_source AS own_source, own.mad_routed, own.mad_balance,
+           par.q_m3s AS parent_mad, par.source AS parent_source, par.d AS parent_dist_m
+    FROM %1$s t
+    JOIN %2$s s ON s.linear_feature_id = t.linear_feature_id
+    LEFT JOIN LATERAL (
+      SELECT max(q.q_m3s) FILTER (WHERE q.pick) AS mad_pick,
+             max(q.source) FILTER (WHERE q.pick) AS pick_source,
+             max(q.q_m3s) FILTER (WHERE q.source = 'pcic_routed') AS mad_routed,
+             max(q.q_m3s) FILTER (WHERE q.source = 'wet_balance') AS mad_balance
+      FROM %3$s q
+      WHERE q.linear_feature_id = s.linear_feature_id AND q.scenario = 'historical' AND q.month = 0
+    ) own ON true
+    LEFT JOIN LATERAL (
+      SELECT q.q_m3s, q.source, ST_Distance(p.geom, s.geom) AS d,
+             p.wscode_ltree AS wscode, p.localcode_ltree AS localcode
+      FROM %2$s p
+      JOIN %3$s q
+        ON q.linear_feature_id = p.linear_feature_id AND q.scenario = 'historical'
+       AND q.month = 0 AND q.pick
+      WHERE (own.mad_pick IS NULL OR s.wscode_ltree IS NULL OR s.localcode_ltree IS NULL)
+        AND p.blue_line_key IN (s.watershed_key, s.blue_line_key)
+        AND p.wscode_ltree IS NOT NULL AND p.localcode_ltree IS NOT NULL
+        AND p.edge_type NOT IN (1100, 1150, 1300, 1350, 2300)
+      ORDER BY p.geom <-> s.geom, p.linear_feature_id
+      LIMIT 1
+    ) par ON true", tmp, fwa, q)
 }
