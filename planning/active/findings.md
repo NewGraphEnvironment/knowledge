@@ -74,3 +74,11 @@ Relates to #145 (the run reproduced), #154 (receipts for published tables and gr
 | Error | Resolution |
 |-------|------------|
 | `SCHEMA=fresh_default 0336` without `PULL` or `DRY` runs archive mode (it would send to the bucket); it stopped at `token acc-v5 is not a acc token in link's vocabulary` before sending anything (archive_index unchanged, no new objects) | Use `DRY=1` with `SCHEMA` for the build check. The token error was the stale local `../link`; fast-forwarded to origin/main |
+
+## Evidence build verdicts (2026-11-06)
+
+`scripts/logs/habitat/database_second/20261106_database_compare-evidence.csv`. Five tables identical, access_check equivalent at
+6.0e-11 km (the database summing in another order, as #154's precedent), the ledger identical but context. visits_link differs only in
+`mad_pick` on 3 visits: each sits on an Atlas line with no flow of its own and two parent lines at distance 0, and
+`knw_link_flow()`'s `ORDER BY p.geom <-> s.geom LIMIT 1` has no tiebreak (#161). The host took 70.277205 and 8.526702 m³/s, this
+database 70.278863 and 8.523775. Not a database difference: the function is unchanged since 2aacd1f.

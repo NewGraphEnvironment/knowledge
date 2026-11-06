@@ -74,7 +74,7 @@ The reference is the published run `20261104_0543`: tracked `data/tune/*` and `d
       Content is compared after sorting rows on each table's key and matching columns by name, with floats compared to a declared tolerance.
       Context (paths, timestamps, ledger lines naming the host or the time, `knowledge_commit`) is reported and never fails the comparison.
       Tests: identical, equivalent and different on fixtures, and a planted 1e-6 km change goes `different` at a 1e-9 tolerance
-- [ ] `EVIDENCE_DIR=data/fdis/derived_second Rscript scripts/0310-evidence-build.R`, logging its wall time. Compare against the restored
+- [x] `EVIDENCE_DIR=data/fdis/derived_second Rscript scripts/0310-evidence-build.R`, logging its wall time. Compare against the restored
       `data/fdis/derived` (visits, placements, walks, flows), and its ledger against the published one, line by line, context aside
 - [ ] Cold walk check (`data-raw/database_walk_check.R`): every visit start, uncached, against the host's `walks.csv`; and 20,000 sampled CH grade
       starts (fixed seed), uncached, against the cache. Write the verdict rows and the minutes
