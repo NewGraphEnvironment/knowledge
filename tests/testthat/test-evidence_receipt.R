@@ -100,3 +100,21 @@ test_that("the recipe_id is read only from a receipt describing every table the 
   expect_error(.knw_evidence_recipe_id(ev, tables = c("visits_link", "access_check")),
                "does not describe .*access_check")
 })
+
+test_that("files hashed under a root give the same value wherever the root sits", {
+  one <- withr::local_tempdir()
+  two <- withr::local_tempdir()
+  for (d in c(one, two)) {
+    dir.create(file.path(d, "overrides"))
+    writeLines("a", file.path(d, "rules.yaml"))
+    writeLines("b", file.path(d, "overrides", "x.csv"))
+  }
+  h <- function(d) .knw_sha256_files(list.files(d, recursive = TRUE, full.names = TRUE), root = d)
+  expect_identical(h(one), h(two))
+  writeLines("c", file.path(two, "overrides", "x.csv"))
+  expect_false(identical(h(one), h(two)))
+  # without a root the paths themselves are hashed, so the two places differ
+  expect_false(identical(.knw_sha256_files(file.path(one, "rules.yaml")),
+                         .knw_sha256_files(file.path(two, "rules.yaml"))))
+  expect_error(.knw_sha256_files(file.path(one, "rules.yaml"), root = two), "not under")
+})

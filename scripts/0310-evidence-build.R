@@ -218,8 +218,9 @@ v <- q$kept
 cfg <- link::lnk_config("default")
 # the installed link's default bundle, which decides each species' range and pooling, as the receipt names it: its
 # files' sha256, so a link installed from a local checkout is named as well as one from GitHub
-rcp_sha$link_configs <- .knw_sha256_files(list.files(system.file("extdata/configs/default", package = "link"),
-                                                     recursive = TRUE, full.names = TRUE))
+link_cfg_dir <- system.file("extdata/configs/default", package = "link", mustWork = TRUE)
+rcp_sha$link_configs <- .knw_sha256_files(list.files(link_cfg_dir, recursive = TRUE, full.names = TRUE),
+                                          root = link_cfg_dir)
 loaded <- suppressWarnings(link::lnk_load_overrides(cfg))
 aoi <- sort(unique(v$watershed_group_code))
 pool <- bind_rows(lapply(species, function(sp) {

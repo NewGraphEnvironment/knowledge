@@ -183,3 +183,16 @@ test_that("a build whose ledger names a receipt is not read as a build from befo
   utils::write.csv(data.frame(kind = "info", step = "zone_zip", n = 1, note = "md5 x"), led, row.names = FALSE)
   expect_named(write_receipt(fx)$recipe$inputs$evidence, "version_id")
 })
+
+test_that("a receipt read back names the evidence exactly as it is named now, which 0320's keep-check compares", {
+  fx <- receipt_fx()
+  ev_md5 <- paste(unname(tools::md5sum(file.path(fx$ev, paste0(tables_ev, ".csv")))), collapse = ";")
+  now <- function() .knw_receipt_evidence(fx$ev, ev_md5)$evidence
+  write_receipt(fx)
+  expect_identical(crate::crt_receipt_read(path_receipt(fx))$recipe$inputs$evidence, now())
+  # the evidence rebuilt with a receipt, its tables unchanged: the kept receipt no longer names it
+  evidence_receipt_fx(fx$ev)
+  expect_false(identical(crate::crt_receipt_read(path_receipt(fx))$recipe$inputs$evidence, now()))
+  write_receipt(fx)
+  expect_identical(crate::crt_receipt_read(path_receipt(fx))$recipe$inputs$evidence, now())
+})

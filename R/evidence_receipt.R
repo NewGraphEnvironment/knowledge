@@ -81,16 +81,22 @@ knw_evidence_receipt_write <- function(evidence_dir, settings, inputs, knowledge
 # recipe_id, and the archive stores it with the build
 .knw_evidence_receipt_file <- "evidence_receipt.json"
 
-# The sha256 of several files as one input (#160: the FISS workbooks 0310 reads): the sha256 of a manifest, one line
-# per file, its sha256 and its path, in path order, so the same files at the same paths give the same value
-.knw_sha256_files <- function(paths) {
+# The sha256 of several files as one input (#160: the FISS workbooks 0310 reads, link's default configs): the sha256
+# of a manifest, one line per file, its sha256 and its path relative to `root`, in that path's order, so the same files
+# at the same relative paths give the same value wherever they sit (a package's library path is not the configs)
+.knw_sha256_files <- function(paths, root = NULL) {
   if (!length(paths) || !all(file.exists(paths))) {
     stop("no files, or a file missing, to hash: ", paste(paths[!file.exists(paths)], collapse = ", "), call. = FALSE)
   }
-  paths <- sort(paths, method = "radix")
+  rel <- if (is.null(root)) paths else {
+    pre <- paste0(sub("/+$", "", root), "/")
+    if (!all(startsWith(paths, pre))) stop("a file to hash is not under ", root, call. = FALSE)
+    substring(paths, nchar(pre) + 1L)
+  }
+  o <- order(rel, method = "radix")
   man <- tempfile(fileext = ".txt")
   on.exit(unlink(man))
-  writeLines(paste(vapply(paths, .knw_sha256, character(1)), paths, sep = "  "), man, useBytes = TRUE)
+  writeLines(paste(vapply(paths[o], .knw_sha256, character(1)), rel[o], sep = "  "), man, useBytes = TRUE)
   .knw_sha256(man)
 }
 
