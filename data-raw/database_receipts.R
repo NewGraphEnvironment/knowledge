@@ -24,7 +24,8 @@
 # OUTPUT: OUT (default scripts/logs/habitat/database_second/<date>_database_compare-receipts.csv): one row per output:
 #         output, hand_verdict, crate_verdict, crate_mode, crate_result_verdict, agree, crate_bytes_match, recipe_fields,
 #         result_fields (the result fields other than a part's bytes, which are the hand comparison's bytes_match)
-# RUN:    Rscript data-raw/database_receipts.R   (from the repo root; crate >= 0.12.0)
+# RUN:    Rscript data-raw/database_receipts.R   (from the repo root; crate >= 0.12.0; ONLY=<regex> or SKIP=<regex> on
+#         the output names)
 # ---------------------------------------------------------------------------
 suppressMessages({ library(data.table) })
 options(warn = 1)
@@ -99,6 +100,8 @@ one <- function(label, output, hand) {
 
 hand <- rbindlist(lapply(verdict_files, fread, na.strings = "NA"), fill = TRUE)
 hand <- hand[grepl("\\.csv$", output) & !grepl("ledger", output)]
+if (nzchar(Sys.getenv("ONLY"))) hand <- hand[grepl(Sys.getenv("ONLY"), output)]
+if (nzchar(Sys.getenv("SKIP"))) hand <- hand[!grepl(Sys.getenv("SKIP"), output)]
 out <- rbindlist(lapply(seq_len(nrow(hand)), function(i) {
   r <- tryCatch(one(hand$label[i], hand$output[i], hand$verdict[i]),
                 error = function(e) data.table(label = hand$label[i], output = hand$output[i], hand_verdict = hand$verdict[i],
