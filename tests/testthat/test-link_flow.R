@@ -45,13 +45,15 @@ test_that("on the Atlas lines #158 found tied, the flow is the lower-id parent's
   conn <- skip_if_no_pg("discharge")
   # each visit line, and the two parent lines that meet it at 0 m (#161's table)
   tie <- data.frame(line = c(104084643, 105073914), lo = c(104084627, 105073883), hi = c(104084784, 105073915))
-  q <- do.call(rbind, lapply(seq_len(nrow(tie)), function(i) DBI::dbGetQuery(conn, sprintf("
+  q <- do.call(rbind, lapply(seq_len(nrow(tie)), function(i) {
+    DBI::dbGetQuery(conn, sprintf("
     SELECT p.linear_feature_id, ST_Distance(p.geom, s.geom) AS d, q.q_m3s
     FROM whse_basemapping.fwa_stream_networks_sp p
     JOIN whse_basemapping.fwa_stream_networks_sp s ON s.linear_feature_id = %s
     JOIN discharge.fwa_v1_segment_monthly q ON q.linear_feature_id = p.linear_feature_id
      AND q.scenario = 'historical' AND q.month = 0 AND q.pick
-    WHERE p.linear_feature_id IN (%s, %s)", tie$line[i], tie$lo[i], tie$hi[i]))))
+    WHERE p.linear_feature_id IN (%s, %s)", tie$line[i], tie$lo[i], tie$hi[i]))
+  }))
   q$linear_feature_id <- as.numeric(q$linear_feature_id)
   # the tie this test stands on: both parents of each line at one distance, with different flows
   for (i in seq_len(nrow(tie))) {

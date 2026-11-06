@@ -9,6 +9,9 @@
 #' nearest primary-flow segment on its main line (`watershed_key`) or its own
 #' line, and `flow_from` says which (`own`, `parent`, or `NA` for neither); such
 #' a segment takes that segment's watershed codes too (`code_from_parent`).
+#' Where two such segments are equally near, the one with the lower
+#' `linear_feature_id` gives the flow: an arbitrary but fixed choice, so every
+#' database holding the build takes the same one (#161).
 #'
 #' @param conn a `DBI` connection to a database holding `discharge` and
 #'   `whse_basemapping`.
@@ -80,7 +83,7 @@ knw_link_flow <- function(conn, linear_feature_id) {
         AND p.blue_line_key IN (s.watershed_key, s.blue_line_key)
         AND p.wscode_ltree IS NOT NULL AND p.localcode_ltree IS NOT NULL
         AND p.edge_type NOT IN (1100, 1150, 1300, 1350, 2300)
-      ORDER BY p.geom <-> s.geom
+      ORDER BY p.geom <-> s.geom, p.linear_feature_id
       LIMIT 1
     ) par ON true", tmp, fwa, q)
 }

@@ -7,3 +7,4 @@
 - Scaffolded PWF baseline from issue #161 with approved phases
 - Next: start Phase 1
 - Phase 1: SQL moved to `.knw_link_flow_sql()`; `tests/testthat/test-link_flow.R` (fixture, live flow, live dam snap) fails on the old ORDER BY, each as expected (findings)
+- Phase 2: ORDER BY gains the id in both lookups, roxygen says so; the three tests pass on m1

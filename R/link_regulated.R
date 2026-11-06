@@ -5,7 +5,8 @@
 #' nearest main-flow FWA segment within `dam_snap_m`; a point is regulated when
 #' such a dam lies upstream of it (`fwa_downstream()` with the roles swapped).
 #' wet's flow is natural flow, so on a regulated river it is not the flow the
-#' fish meet.
+#' fish meet. A dam equally near two segments is placed on the one with the
+#' lower `linear_feature_id`, so every database places it alike (#161).
 #'
 #' @param conn a `DBI` connection to a database holding `cabd` and
 #'   `whse_basemapping`.
@@ -44,7 +45,7 @@ knw_link_regulated <- function(conn, pts, dam_snap_m = 500, regulation_min = 10)
     CROSS JOIN LATERAL (
       SELECT * FROM whse_basemapping.fwa_stream_networks_sp s
       WHERE s.blue_line_key = s.watershed_key AND s.edge_type NOT IN (1100, 1150, 1300, 1350, 2300)
-      ORDER BY s.geom <-> p.pt LIMIT 1) s
+      ORDER BY s.geom <-> p.pt, s.linear_feature_id LIMIT 1) s
     WHERE (d.reservoir_present OR d.degree_of_regulation_pc >= %s)
       AND ST_Distance(s.geom, p.pt) <= %s", regulation_min, dam_snap_m))
   tmp_d <- "tmp_knw_reg_dams"

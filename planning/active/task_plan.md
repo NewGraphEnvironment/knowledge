@@ -51,10 +51,10 @@ line with two parents at the same distance. Measured in planning (m1, PG 17.5, P
 
 ## Phase 2: The fix
 
-- [ ] `R/link_flow.R`: change to `ORDER BY p.geom <-> s.geom, p.linear_feature_id`. Add a roxygen sentence: where two
+- [x] `R/link_flow.R`: change to `ORDER BY p.geom <-> s.geom, p.linear_feature_id`. Add a roxygen sentence: where two
       parents are equally near, the lower `linear_feature_id` gives the flow, an arbitrary but fixed choice, so every
       database holding the build picks the same one (#161).
-- [ ] `R/link_regulated.R`: change to `ORDER BY s.geom <-> p.pt, s.linear_feature_id`, with the same roxygen sentence
+- [x] `R/link_regulated.R`: change to `ORDER BY s.geom <-> p.pt, s.linear_feature_id`, with the same roxygen sentence
       for the dam's segment.
 - [ ] `devtools::document()`, `lintr::lint_package()`, and the full `devtools::test()`.
 
