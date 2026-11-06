@@ -1,0 +1,9 @@
+label,output,verdict,bytes_match,rows_ref,rows_new,max_diff,column,tolerance,decision_read,note
+"evidence","visits_link.csv","different",FALSE,45529,45529,0.00292666245736761,"mad_pick",0,TRUE,"added by the current code: segment_fwa_gradient; rows differing: mad_pick 3; numeric difference past the tolerance; cause: an unordered tie in knw_link_flow()'s parent lookup on 3 of 45,529 visits (two parents at distance 0), not the database (knowledge#161); R/link_flow.R unchanged since 2aacd1f, so no rerun there"
+"evidence","visits_species.csv","identical",TRUE,500819,500819,0,NA,0,TRUE,""
+"evidence","walks.csv","identical",TRUE,775488,775488,0,NA,0.005,TRUE,""
+"evidence","bcfishobs_fdis_match.csv","identical",TRUE,212680,212680,0,NA,0,FALSE,""
+"evidence","access_check.csv","equivalent",FALSE,2193,2193,6.00266503170133e-11,"km",1e-06,FALSE,""
+"evidence","workbook_sites.csv","identical",FALSE,871,871,0,NA,1e-06,FALSE,""
+"evidence","workbook_species.csv","identical",TRUE,882,882,0,NA,1e-06,FALSE,""
+"evidence","evidence_build_ledger.csv","different",FALSE,142,144,NA,"step",0,FALSE,"compared by hand on kind and step: every row equal but context (db_round_trip_ms, evidence_dir) and two rows the current code adds (segment_fwa_gradient_missing, segment_line_not_own, #120); zone_zip md5 f369d684 and wet_loaded_build equal"

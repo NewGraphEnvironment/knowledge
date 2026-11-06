@@ -1,11 +1,13 @@
 # Database builds: what a retune reads, where it can run, and what a second database needs
 
-**Verified:** 2026-10-27, and the round-trip check, the structures a comparison runs and `default`'s cost 2026-10-28 ·
+**Verified:** 2026-10-27, the round-trip check, the structures a comparison runs and `default`'s cost 2026-10-28, and
+"A second database" 2026-11-06 ·
 **Issues:** #87 (from #73's run times; #85 and #86 folded in or left open below), #110 (the round-trip check), #112 (the
-structures), #101 (`default`'s cost) ·
+structures), #101 (`default`'s cost), #158 (a retune reproduced on a second database; it spawned #161 and #162) ·
 **Produced by:** `data-raw/walk_batch_check.R` (logs `scripts/logs/habitat/20261026_walk_batch_check*`),
 `data-raw/compare_parallel_check.R` (`20261026_compare_parallel_check*`), `data-raw/compare_structures_check.R`
-(`20261028_compare_structures_check*`), the timed retune on the database's host
+(`20261028_compare_structures_check*`), `data-raw/database_compare.R`, `data-raw/database_walk_check.R` and
+`data-raw/database_receipts.R` (`scripts/logs/habitat/database_second/`, #158), the timed retune on the database's host
 (`20261026_tune_run.txt`, `20261026_tune_run-warm.txt`, `20261026_compare.txt`, `20261026_compare-gpkg.txt`;
 #73's `20261024_*` and `20261025_*` for the before), and the table sizes read from the host's catalog on 2026-10-26.
 
@@ -191,8 +193,65 @@ it: every connection creates it from this package's `inst/sql/ch_dist_profile.sq
 3. fwapg's `whse_basemapping` load, and `bcfishobs` for the outside check.
 4. Optionally the walk cache, dumped and restored, under the same flow load.
 
-That is about 110 GB of tables to move or rebuild before the first run, against a database that serves other work.
-The load time was not measured. Scoring needs none of it (it is CPU work on the visit tables: about an hour for
+The first one (2026-11-05) moved about 71 GB as 8 GB of dumps plus one 14-minute flow load, in 66 minutes of moving.
+Scoring needs none of it (it is CPU work on the visit tables: about an hour for
 every key on 12 workers of a remote machine, 2026-10-23), and grading from a remote link now costs about 12 to 18
 ms per walk where it cost 116, so a second database pays off only for the comparison or for runs at the same time
 as the host's.
+
+### The published retune, reproduced there (#158)
+
+**The principle.** The same code run on the same build should give the same answer on any database, but only if
+every choice it makes is decided by the data. A query that asks for "the nearest" row and stops at one leaves a tie to
+the database: two rows at the same distance come back in whatever order that database's plan reads them, and two
+databases built separately read them differently. So a second database is a test of the code as much as of the load.
+
+The published run (`20261104_0543`) was rerun there at main (4060cb2) on 2026-11-06: `0310` into
+`data/fdis/derived_second`, `0320` for chinook rearing and then every key (candidate `20261106_0423`, 8 workers), `0330`
+for every key (`GPKG=FALSE`, `CONFIG_SHA` the published run's), and every output compared with the archived and tracked
+copies (`scripts/logs/habitat/database_second/20261106_database_compare-*.csv`, one verdict per output: identical,
+equivalent within a tolerance, or different).
+
+| what | verdict |
+|---|---|
+| every key's pick | the published one, 7 of 7 |
+| tuning scores, fold seeds, nested selection, curves, groups | byte-identical for every key |
+| km drawn, lost and gained by every rule | equal to the host's |
+| evidence: visits per species, walks, bcfishobs match, workbook tables | identical (walks read from the cache) |
+| evidence: access check; change and checks tables; comparison tables of the keys with no moved grade | equivalent, at most 3.3e-9 km (summing order) |
+| evidence: `visits_link` | different in `mad_pick` on 3 of 45,529 visits, at most 0.0029 m³/s (#161) |
+| grade tables | BT spawning identical; GR equivalent (one rate on a rounding edge); the other five different in segment size on 40 to 441 segments each, moving 0 to 276 grades and 0 to 9 grade classes past 1e-5 (#161) |
+| graded km in the comparison | different by up to 0.41 km per group (the moved grades) |
+| a cold walk of every visit start and of 20,000 chinook grade starts | different: the target line on 12.6 % of visit rows, the distance by more than 5 mm on 0.05 % of them and on 0.12 % of grade starts (#162) |
+
+Three kinds of `different` were expected before the run: each smoke table's `previous` row, which reads the pick the
+published run itself promoted; the pick report, which the published run did not keep; and the evidence ledger's context
+rows and the two rows current code adds. One was not: steelhead's smoke table names a different term for its largest
+coefficient on the no-rule fit, two terms tied at 2.127217, which `0320`'s report breaks by order and no decision reads.
+Every other `different` traces to one of two ties, neither of them a fault in the load (the FWA and flow rows and PostGIS
+3.5.2 are identical on both databases):
+
+- **`knw_link_flow()`'s parent flow (#161).** A segment with no flow of its own takes its nearest parent's, and where two
+  parents are equally near (almost always both at 0 m) the database chooses. That moves the three visits' flow and,
+  through each segment's size, the grades.
+- **The walk's landing (#162).** A tributary's mouth usually sits on a vertex two main-line segments share, so both are
+  at 0 m from it. Where one of the two has no flow row, the walk either stops at once or walks that segment's length
+  down to the next. The host's own cold walk reproduces its cache exactly, so the two databases walk differently. A run
+  that reads the walk cache never shows it: every walk in this run came from the cache (0 misses).
+
+What a run costs on each:
+
+| step | second database | host |
+|---|---|---|
+| `0310` | 11.5 min wall (4 workers, walks from the cache) | walks 0.1 min; wall not recorded |
+| `0320`, chinook rearing alone | 11.0 min (scoring 9.0 on 8 workers, grading 1.9) | (not run alone) |
+| `0320`, every key (CH's score cache reused) | 50.1 min (scoring 40.0 on 8 workers) | 51.7 min (scoring 17.8 on 14) |
+| `0330`, chinook rearing | 13.8 min on 6 workers | 14.0 min |
+| `0330`, the other six keys | 36.2 min summed per key (CO 14.8) | 32.9 min summed per key (CO 10.8) |
+| cold walk, every visit start | 2.3 min on 8 workers | (not run) |
+
+Scoring is CPU work and ran at about the speed its worker count predicts. The comparison, bound by the database, ran
+within a minute of the host's on every key but coho, which took 4 minutes longer. From here on a run on the second database is an ordinary run; until #161 and #162 are fixed, its
+grades and any cold walk can differ from the host's on the tied segments, so a promotion takes all its keys from one
+database.
+

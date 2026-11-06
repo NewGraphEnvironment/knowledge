@@ -1,0 +1,338 @@
+# data-raw/database_compare.R
+# ---------------------------------------------------------------------------
+# Compare a run's outputs with a reference copy, one verdict per output (#158). The same recipe run on a second
+# database should give an equivalent result, not the same bytes: row order, a float summed in another order and
+# the lines naming the run, the machine or the time are context. Each output gets one of three verdicts, in the
+# shape crate's receipt comparison returns (NewGraphEnvironment/crate#43; knowledge#154):
+#   identical   the same content: every column equal once rows are sorted on the table's key and columns
+#               matched by name (bytes_match says whether the files were also byte for byte the same)
+#   equivalent  the same rows and columns, every non-numeric value equal, and every numeric difference within
+#               the tolerance declared for that table (max_diff and its column say how far)
+#   different   anything else: rows or columns missing or added, a key on one side only, a non-numeric value
+#               changed, or a numeric difference past the tolerance
+# A `different` where `decision_read` is TRUE (visits placed, a pick, a grade, km drawn) ends the script with exit status
+# 1 once every verdict is written, so a chain stops there; any other `different` is noted and carried past.
+#
+# KEYS AND TOLERANCES: the `spec` table below, one row per output family, matched on the file name. `key` is the
+# columns a row is identified by (blank: sort on every column the two sides share, for small tables whose rows
+# carry no float a database could sum differently); `tol` the absolute tolerance on numeric columns (0: exact), set to the
+# precision the table's writer rounds to (a value that rounds the other way moves by one unit of it, and one unit
+# passes); `sig` for a writer that rounds with signif(), held to one unit in that digit row by row; walks are held to
+# 0.005 m, a chosen tolerance: a walk sums segment lengths in the order the database returns them, and a cold walk on a
+# second database moved distances by up to 3.5 mm where nothing else moved (#158);
+# `context` columns reported and never compared; `added` columns the current code writes and the reference predates
+# (#120 added segment_fwa_gradient to visits_link after the published run), noted and never compared. A file no row
+# matches is compared exactly, keyed on every column.
+#
+# SELF-TEST: every run first proves the comparison on fixtures whose verdicts are known (identical in another row
+# order, equivalent under a tolerance, different past it, a planted 1e-6 change against a 1e-9 tolerance, a row
+# missing, a column renamed, a changed label, NA against a value) and stops if any verdict is wrong.
+#
+# INPUT:  REF and NEW, two directories (or two files); FILES=a,b,c to compare only those names (default: every
+#         .csv in REF that NEW also holds, and every one REF holds that NEW lacks, reported as missing);
+#         LABEL names the step in the output (evidence, tune, compare, walks)
+# OUTPUT: OUT (default scripts/logs/habitat/<date>_database_compare-<LABEL>.csv), one row per output:
+#         label, output, verdict, bytes_match, rows_ref, rows_new, max_diff, column, tolerance, decision_read, note
+# RUN:    REF=data/fdis/derived NEW=data/fdis/derived_second LABEL=evidence Rscript data-raw/database_compare.R
+#         SELFTEST_ONLY=TRUE Rscript data-raw/database_compare.R
+# ---------------------------------------------------------------------------
+suppressMessages({ library(data.table) })
+options(warn = 1)
+
+# ---- what each output is keyed on, held to, and read for -------------------------------------------------------
+# pattern: a regex on the file name. First match wins, so the specific rows come first.
+spec <- data.table::rbindlist(list(
+  # the evidence build (0310)
+  list("^visits_link\\.csv$",        "site_visit",                                          0,    "",  TRUE, "segment_fwa_gradient"),
+  list("^visits_species\\.csv$",     "site_visit;species_code",                             0,    "",  TRUE, ""),
+  list("^walks\\.csv$",              "blue_line_key;downstream_route_measure;src;qmin",     0.005, "",  TRUE, ""),
+  list("^bcfishobs_fdis_match\\.csv$", "",                                                  0,    "",  FALSE, ""),
+  list("^access_check\\.csv$",       "species_code;watershed_group_code;habitat_accessible;access_gt0", 1e-6, "", FALSE, ""),
+  list("^workbook_sites\\.csv$",     "site_visit",                                          1e-6, "",  FALSE, ""),
+  list("^workbook_species\\.csv$",   "",                                                    1e-6, "",  FALSE, ""),
+  # the tuning (0320): the grade record's run columns are compared, its provenance is context
+  list("_grades_record\\.csv$",      "species_code;stage",                                  0,
+       "grades_md5;grades_bytes;tune_run;evidence_ledger;knowledge_commit;record_source;evidence_md5", TRUE, ""),
+  # the grade table writes rates and grades to 5 significant digits, so a value near 1 is held only to 1e-5
+  list("_grades\\.csv$",             "watershed_group_code;id_segment",                     1e-5, "evidence_md5", TRUE, ""),
+  list("_tune\\.csv$",               "rule",                                                1e-6, "",  TRUE, ""),
+  # every tolerance below is the precision its writer rounds to (scripts/0320-tune-run.R, scripts/0330-compare.R)
+  list("_summary\\.csv$",            "species_code;stage",                                  1e-4,
+       "evidence_md5;tune_run;evidence_ledger;evidence_dir", TRUE, ""),
+  list("_curves\\.csv$",             "curve;x",                                             1e-6, "",  FALSE, ""),
+  list("_seeds\\.csv$",              "seed",                                                0,    "",  TRUE, ""),
+  list("_honest\\.csv$",             "fold",                                                1e-6, "",  FALSE, ""),
+  list("_smoke\\.csv$",              "check;role;rule",                                     1e-6, "",  FALSE, ""),
+  list("_groups\\.csv$",             "watershed_group_code",                                0,    "",  FALSE, ""),
+  list("^pick_report\\.csv$",        "species_code;stage",                                  1e-4, "",  TRUE, ""),
+  # the comparison (0330): km sums take a rounding; the bound tables every key composes carry the key in their key, and
+  # compare.csv and change.csv store km to 3 decimals and checks.csv to 4 (each key's own tables carry full precision)
+  list("^compare\\.csv$",            "species_code;stage;watershed_group_code;structure",   1e-3, "",  TRUE, ""),
+  list("^change\\.csv$",             "species_code;stage;direction;reason;order;structure", 1e-3, "",  TRUE, ""),
+  list("^checks\\.csv$",             "species_code;stage;check;rule;segment;tuned_structure", 1e-4, "", FALSE, ""),
+  list("_compare\\.csv$",            "watershed_group_code;structure",                      1e-6, "",  TRUE, ""),
+  list("_change\\.csv$",             "direction;reason;order;structure",                    1e-6, "",  TRUE, ""),
+  list("_checks\\.csv$",             "check;rule;segment;tuned_structure",                  1e-6, "",  FALSE, "")
+))
+data.table::setnames(spec, c("pattern", "key", "tol", "context", "decision_read", "added"))
+# sig: a table whose writer rounds with signif() is held to one unit in that significant digit, row by row
+spec[, sig := ifelse(pattern == "_curves\\.csv$", 5L, 0L)]
+
+spec_for <- function(name) {
+  hit <- which(vapply(spec$pattern, grepl, logical(1), x = name))
+  if (length(hit) == 0) return(list(key = character(), tol = 0, context = character(), decision_read = NA,
+                                    added = character(), sig = 0L))
+  s <- spec[hit[1]]
+  split <- function(x) if (nzchar(x)) strsplit(x, ";", fixed = TRUE)[[1]] else character()
+  list(key = split(s$key), tol = s$tol, context = split(s$context), decision_read = s$decision_read,
+       added = split(s$added), sig = s$sig)
+}
+
+# ---- one comparison --------------------------------------------------------------------------------------------
+row_out <- function(output, verdict, bytes_match, rows_ref, rows_new, max_diff = NA_real_, column = NA_character_,
+                    tol = NA_real_, decision_read = NA, note = "") {
+  data.table::data.table(output = output, verdict = verdict, bytes_match = bytes_match, rows_ref = rows_ref,
+                         rows_new = rows_new, max_diff = max_diff, column = column, tolerance = tol,
+                         decision_read = decision_read, note = note)
+}
+
+# compare two data.tables already read; `name` labels the row
+compare_tables <- function(a, b, name, key = character(), tol = 0, context = character(), decision_read = NA,
+                           bytes_match = NA, added = character(), sig = 0) {
+  na <- nrow(a); nb <- nrow(b)
+  notes <- character()
+  ctx <- intersect(context, union(names(a), names(b)))
+  if (length(ctx)) {
+    moved <- ctx[vapply(ctx, function(cn) !(cn %in% names(a) && cn %in% names(b) &&
+                                              identical(as.character(a[[cn]]), as.character(b[[cn]]))), logical(1))]
+    if (length(moved)) notes <- c(notes, paste0("context differs: ", paste(moved, collapse = ",")))
+  }
+  # a column the current code adds, which the reference predates: noted, never compared
+  add_new <- intersect(setdiff(added, names(a)), names(b))
+  if (length(add_new)) notes <- c(notes, paste0("added by the current code: ", paste(add_new, collapse = ",")))
+  b <- b[, setdiff(names(b), add_new), with = FALSE]
+  a <- a[, setdiff(names(a), ctx), with = FALSE]
+  b <- b[, setdiff(names(b), ctx), with = FALSE]
+  only_a <- setdiff(names(a), names(b)); only_b <- setdiff(names(b), names(a))
+  if (length(only_a) || length(only_b))
+    return(row_out(name, "different", bytes_match, na, nb, column = paste(c(only_a, only_b), collapse = ","),
+                   tol = tol, decision_read = decision_read,
+                   note = paste(c(notes, sprintf("columns only in reference: %s; only in new: %s",
+                                                 paste(only_a, collapse = ","), paste(only_b, collapse = ","))),
+                                collapse = "; ")))
+  if (na != nb)
+    return(row_out(name, "different", bytes_match, na, nb, tol = tol, decision_read = decision_read,
+                   note = paste(c(notes, "row counts differ"), collapse = "; ")))
+  cols <- names(a)
+  num <- cols[vapply(cols, function(cn) is.numeric(a[[cn]]) && is.numeric(b[[cn]]), logical(1))]
+  # a key must identify rows on both sides; blank: every column that is not a non-integer number
+  if (!length(key)) key <- setdiff(cols, num[vapply(num, function(cn) !is.integer(a[[cn]]) ||
+                                                       !is.integer(b[[cn]]), logical(1))])
+  if (!length(key)) key <- cols
+  if (!all(key %in% cols))
+    return(row_out(name, "different", bytes_match, na, nb, column = paste(setdiff(key, cols), collapse = ","),
+                   tol = tol, decision_read = decision_read,
+                   note = paste(c(notes, "key column missing"), collapse = "; ")))
+  # a key that repeats would pair rows by position within the repeat, so it is refused, never compared
+  dup <- c(reference = anyDuplicated(a, by = key) > 0, new = anyDuplicated(b, by = key) > 0)
+  if (any(dup))
+    return(row_out(name, "different", bytes_match, na, nb, column = paste(key, collapse = ";"), tol = tol,
+                   decision_read = decision_read,
+                   note = paste(c(notes, sprintf("key does not identify rows in %s: declare a longer key",
+                                                 paste(names(dup)[dup], collapse = " and "))), collapse = "; ")))
+  data.table::setorderv(a, key, na.last = TRUE); data.table::setorderv(b, key, na.last = TRUE)
+  key_eq <- all(vapply(key, function(cn) isTRUE(all.equal(a[[cn]], b[[cn]], check.attributes = FALSE,
+                                                          tolerance = 0)), logical(1)))
+  if (!key_eq) {
+    ka <- do.call(paste, c(lapply(key, function(cn) as.character(a[[cn]])), sep = "\r"))
+    kb <- do.call(paste, c(lapply(key, function(cn) as.character(b[[cn]])), sep = "\r"))
+    return(row_out(name, "different", bytes_match, na, nb, column = paste(key, collapse = ";"), tol = tol,
+                   decision_read = decision_read,
+                   note = paste(c(notes, sprintf("keys on one side only: %d in reference, %d in new",
+                                                 length(setdiff(ka, kb)), length(setdiff(kb, ka)))),
+                                collapse = "; ")))
+  }
+  # past the tolerance, row by row. With `sig` the tolerance is one unit in the sig-th significant digit of the larger
+  # value (a writer that rounds with signif()); otherwise `tol`. One unit at the stored precision passes: the allowance
+  # covers the float error of a difference, which grows with the values' size (1e-9 of the tolerance, and 8 ulps of
+  # the larger value)
+  over <- function(d, mag) {
+    t <- if (sig > 0) ifelse(mag > 0, 10^(floor(log10(mag)) - (sig - 1)), 0) else tol
+    d > t * (1 + 1e-9) + 8 * .Machine$double.eps * mag
+  }
+  diff_of <- function(xv, yv) ifelse(xv == yv, 0, abs(xv - yv))  # the same Inf on both sides is 0; Inf - Inf alone is NaN
+  worst <- 0; worst_col <- NA_character_; bad <- character()
+  n_bad <- integer()  # rows differing per column: past the tolerance, or a value or NA that does not match
+  for (cn in setdiff(cols, key)) {
+    x <- a[[cn]]; y <- b[[cn]]
+    # which kind of missing a cell holds: NaN and NA are both is.na(), and a NaN where the reference wrote NA is a change
+    miss <- function(v) ifelse(is.nan(suppressWarnings(as.numeric(v))) & is.numeric(v), 2L, as.integer(is.na(v)))
+    nax <- is.na(x); nay <- is.na(y)
+    if (any(miss(x) != miss(y))) {
+      bad <- c(bad, cn)
+      both <- !nax & !nay
+      n_bad[cn] <- sum(miss(x) != miss(y)) + if (cn %in% num) {
+        xv <- as.numeric(x[both]); yv <- as.numeric(y[both]); d <- diff_of(xv, yv)
+        sum(!is.finite(d) | over(d, pmax(abs(xv), abs(yv))))
+      } else sum(as.character(x[both]) != as.character(y[both]))
+      next
+    }
+    if (cn %in% num) {
+      xv <- as.numeric(x[!nax]); yv <- as.numeric(y[!nay])
+      d <- diff_of(xv, yv)
+      fin <- is.finite(d)
+      m <- if (any(fin)) max(d[fin]) else 0
+      if (m > worst) { worst <- m; worst_col <- cn }
+      past <- !fin | over(d, pmax(abs(xv), abs(yv)))
+      past[is.na(past)] <- TRUE
+      if (!all(fin)) bad <- c(bad, cn)  # an Inf against a number or -Inf
+      if (any(past)) n_bad[cn] <- sum(past)
+    } else if (!identical(as.character(x[!nax]), as.character(y[!nay]))) {
+      bad <- c(bad, cn); n_bad[cn] <- sum(as.character(x[!nax]) != as.character(y[!nay]))
+    }
+  }
+  if (length(n_bad)) notes <- c(notes, paste0("rows differing: ", paste(names(n_bad), n_bad, sep = " ", collapse = ", ")))
+  note <- paste(notes, collapse = "; ")
+  if (length(bad))  # column names every column that moved, not only those that failed outright
+    return(row_out(name, "different", bytes_match, na, nb, max_diff = if (worst > 0) worst else NA_real_,
+                   column = paste(names(n_bad), collapse = ","), tol = tol, decision_read = decision_read,
+                   note = paste(c(notes, "values differ (non-numeric, NA placement or non-finite)"), collapse = "; ")))
+  if (worst == 0) return(row_out(name, "identical", bytes_match, na, nb, 0, NA_character_, tol, decision_read, note))
+  if (!length(n_bad)) return(row_out(name, "equivalent", bytes_match, na, nb, worst, worst_col, tol, decision_read, note))
+  row_out(name, "different", bytes_match, na, nb, worst, paste(names(n_bad), collapse = ","), tol, decision_read,
+          paste(c(notes, "numeric difference past the tolerance"), collapse = "; "))
+}
+
+read_tbl <- function(path) data.table::fread(path, na.strings = c("", "NA"), showProgress = FALSE,
+                                             integer64 = "double")
+
+compare_files <- function(ref, new, name = basename(ref)) {
+  s <- spec_for(name)
+  if (!file.exists(new)) return(row_out(name, "different", FALSE, NA_integer_, NA_integer_,
+                                        decision_read = s$decision_read, note = "missing from new"))
+  bm <- unname(tools::md5sum(ref)) == unname(tools::md5sum(new))
+  if (bm) {
+    n <- if (grepl("\\.csv$", name)) nrow(read_tbl(ref)) else NA_integer_
+    return(row_out(name, "identical", TRUE, n, n, 0, NA_character_, s$tol, s$decision_read, ""))
+  }
+  if (!grepl("\\.csv$", name)) return(row_out(name, "different", FALSE, NA_integer_, NA_integer_,
+                                              decision_read = s$decision_read,
+                                              note = "not a csv and the bytes differ: compare by hand"))
+  compare_tables(read_tbl(ref), read_tbl(new), name, s$key, s$tol, s$context, s$decision_read, bytes_match = FALSE,
+                 added = s$added, sig = s$sig)
+}
+
+# ---- self-test: the verdicts on fixtures whose answers are known -------------------------------------------------
+self_test <- function() {
+  ref <- function() data.table::data.table(id = 1:4, lab = c("a", "b", "c", "d"), km = c(1.5, 2.25, 3, 4.125),
+                                           n = c(10L, 20L, 30L, NA))
+  # each case starts from a fresh copy, so one planted change never rides into another case
+  cases <- list(
+    list("same rows, other order",   ref()[c(3, 1, 4, 2)],                                 0,    "identical"),
+    list("float within tolerance",   ref()[, km := km + c(0, 9.5e-11, 0, 0)][],             1e-9, "equivalent"),
+    list("planted 1e-6 at 1e-9",     ref()[, km := km + c(0, 0, 1e-6, 0)][],                1e-9, "different"),
+    list("float past tolerance 0",   ref()[, km := km + c(0, 9.5e-11, 0, 0)][],             0,    "different"),
+    list("row missing",              ref()[-2],                                            0,    "different"),
+    list("column renamed",           data.table::setnames(ref(), "n", "count"),             0,    "different"),
+    list("label changed",            ref()[, lab := c("a", "b", "x", "d")][],               0,    "different"),
+    list("NA against a value",       ref()[, n := c(10L, 20L, 30L, 40L)][],                 0,    "different"),
+    list("NA moved to another row",  ref()[, n := c(10L, 20L, NA, 30L)][],                  0,    "different"),
+    list("key on one side only",     ref()[, id := c(1L, 2L, 3L, 5L)][],                    0,    "different")
+  )
+  got <- vapply(cases, function(k) compare_tables(ref(), data.table::copy(k[[2]]), k[[1]], key = "id",
+                                                  tol = k[[3]])$verdict, character(1))
+  want <- vapply(cases, `[[`, character(1), 4)
+  # the unkeyed path: rows reordered with no key declared must still be identical
+  got <- c(got, compare_tables(ref(), ref()[c(4, 2, 3, 1)], "unkeyed reorder")$verdict); want <- c(want, "identical")
+  # context columns never fail a comparison
+  a <- ref()[, run := "x"]; b <- ref()[, run := "y"]
+  got <- c(got, compare_tables(a, b, "context differs", key = "id", context = "run")$verdict)
+  want <- c(want, "identical")
+  # a value that rounds the other way at the stored precision (5 significant digits) passes a tolerance of one unit
+  flip <- data.table::data.table(id = 1:2, r = c(0.10003, 0.10006))  # each 1.000000000001e-5 from its flip in float
+  got <- c(got, compare_tables(flip, data.table::copy(flip)[, r := c(0.10004, 0.10007)][], "one-unit flip", key = "id",
+                               tol = 1e-5)$verdict)
+  want <- c(want, "equivalent")
+  # the same flip at a larger magnitude, where the float error of the difference is larger
+  big <- data.table::data.table(id = 1:2, r = c(1433.494917, 583183.397))
+  got <- c(got, compare_tables(big, data.table::copy(big)[, r := c(1433.494918, 583183.398)][], "one-unit flip at size",
+                               key = "id", tol = 1e-3)$verdict,
+           compare_tables(big[1], data.table::copy(big[1])[, r := 1433.494918][], "one-unit flip at 1e-6", key = "id",
+                          tol = 1e-6)$verdict)
+  want <- c(want, "equivalent", "equivalent")
+  # significant digits: one unit in the fifth passes at any size, two units do not
+  sg <- data.table::data.table(id = 1:3, r = c(12345, 0.0012345, 1.2345))
+  got <- c(got, compare_tables(sg, data.table::copy(sg)[, r := c(12346, 0.0012346, 1.2346)][], "sig one unit", key = "id",
+                               sig = 5L)$verdict,
+           compare_tables(sg, data.table::copy(sg)[, r := c(12345, 0.0012347, 1.2345)][], "sig two units", key = "id",
+                          sig = 5L)$verdict)
+  want <- c(want, "equivalent", "different")
+  # the same Inf on both sides is no difference; NaN against NA is
+  inf <- function() ref()[, km := c(1.5, Inf, 3, 4.125)][]
+  got <- c(got, compare_tables(inf(), inf()[c(4, 3, 2, 1)], "same Inf", key = "id")$verdict,
+           compare_tables(ref()[, km := c(1.5, NA, 3, 4.125)][], ref()[, km := c(1.5, NaN, 3, 4.125)][], "NA against NaN",
+                          key = "id")$verdict,
+           compare_tables(inf(), ref()[, km := c(1.5, -Inf, 3, 4.125)][], "Inf against -Inf", key = "id")$verdict)
+  want <- c(want, "identical", "different", "different")
+  # the bound tables 0330 composes take their family's spec (decision-read), not the exact fallback
+  if (!isTRUE(spec_for("compare.csv")$decision_read) || !isTRUE(spec_for("BT_rear_compare.csv")$decision_read) ||
+      !("species_code" %in% spec_for("compare.csv")$key))
+    stop("self-test failed: the bound compare.csv takes no spec row, or one keyed without the species")
+  # a key that repeats is refused rather than paired by position
+  got <- c(got, compare_tables(ref()[, id := c(1L, 1L, 2L, 3L)][], ref()[, id := c(1L, 1L, 2L, 3L)][], "repeated key",
+                               key = "id")$verdict)
+  want <- c(want, "different")
+  # a column the code adds is noted and never fails; the same column undeclared is different
+  got <- c(got, compare_tables(ref(), ref()[, extra := 1], "declared added column", key = "id", added = "extra")$verdict,
+           compare_tables(ref(), ref()[, extra := 1], "undeclared added column", key = "id")$verdict)
+  want <- c(want, "identical", "different")
+  # the file path: identical bytes, and a file missing from new
+  d <- tempfile("dbc_"); dir.create(d)
+  data.table::fwrite(ref(), file.path(d, "a.csv")); data.table::fwrite(ref(), file.path(d, "b.csv"))
+  data.table::fwrite(ref()[c(2, 1, 3, 4)], file.path(d, "c.csv"))
+  got <- c(got, compare_files(file.path(d, "a.csv"), file.path(d, "b.csv"))$verdict,
+           compare_files(file.path(d, "a.csv"), file.path(d, "c.csv"), "x.csv")$verdict,
+           compare_files(file.path(d, "a.csv"), file.path(d, "none.csv"))$verdict)
+  want <- c(want, "identical", "identical", "different")
+  unlink(d, recursive = TRUE)
+  if (!identical(got, want))
+    stop("self-test failed: ", paste(sprintf("%s got %s, want %s", seq_along(got), got, want)[got != want],
+                                     collapse = "; "))
+  cat(sprintf("Self-test: %d verdicts as expected.\n", length(got)))
+  invisible(TRUE)
+}
+
+# ---- run -------------------------------------------------------------------------------------------------------
+if (sys.nframe() == 0L) {
+  self_test()
+  if (Sys.getenv("SELFTEST_ONLY") %in% c("1", "TRUE", "true")) quit(save = "no")
+  ref <- Sys.getenv("REF"); new <- Sys.getenv("NEW"); label <- Sys.getenv("LABEL", "run")
+  if (!nzchar(ref) || !nzchar(new)) stop("set REF and NEW")
+  if (dir.exists(ref)) {
+    files <- if (nzchar(Sys.getenv("FILES"))) strsplit(Sys.getenv("FILES"), ",")[[1]] else
+      sort(union(list.files(ref, "\\.csv$"), list.files(new, "\\.csv$")))
+    pairs <- lapply(files, function(f) c(file.path(ref, f), file.path(new, f), f))
+  } else pairs <- list(c(ref, new, basename(ref)))
+  out <- data.table::rbindlist(lapply(pairs, function(p) {
+    if (!file.exists(p[1])) return(row_out(p[3], "different", FALSE, NA_integer_, NA_integer_,
+                                           decision_read = spec_for(p[3])$decision_read,
+                                           note = "missing from reference"))
+    t0 <- Sys.time(); r <- compare_files(p[1], p[2], p[3])
+    cat(sprintf("%-40s %-10s bytes_match=%s rows %s/%s max_diff=%s %s (%.1f s)\n", p[3], r$verdict, r$bytes_match,
+                r$rows_ref, r$rows_new, format(r$max_diff, digits = 3), r$note,
+                as.numeric(difftime(Sys.time(), t0, units = "secs"))))
+    r
+  }))
+  out <- cbind(data.table::data.table(label = label), out)
+  dest <- Sys.getenv("OUT", file.path("scripts/logs/habitat",
+                                      sprintf("%s_database_compare-%s.csv", format(Sys.time(), "%Y%m%d", tz = "UTC"),
+                                              label)))
+  data.table::fwrite(out, dest, na = "NA")
+  cat(sprintf("%d outputs: %s. Written to %s\n", nrow(out),
+              paste(names(table(out$verdict)), table(out$verdict), sep = " ", collapse = ", "), dest))
+  stop_on <- out[verdict == "different" & decision_read %in% TRUE]
+  if (nrow(stop_on)) {
+    cat(sprintf("STOP: %d decision-read outputs differ: %s\n", nrow(stop_on), paste(stop_on$output, collapse = ", ")))
+    quit(save = "no", status = 1)  # so a chain stops here (CLAUDE.md); the verdicts are already written
+  }
+}
