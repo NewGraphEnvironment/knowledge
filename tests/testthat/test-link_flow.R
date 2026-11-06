@@ -72,19 +72,21 @@ test_that("a dam equidistant from two segments snaps to the lower-id one", {
   # every regulating dam whose two nearest main-flow segments are equally near, with the lower-id segment's position
   want <- DBI::dbGetQuery(conn, "
     WITH c AS (
-      SELECT d.cabd_id, x.linear_feature_id, x.blue_line_key, x.measure, x.d,
+      SELECT d.cabd_id, x.linear_feature_id, x.blue_line_key, x.wscode, x.localcode, x.measure, x.d,
              rank() OVER (PARTITION BY d.cabd_id ORDER BY x.d) AS rk
       FROM cabd.dams d
       CROSS JOIN LATERAL (SELECT ST_Transform(d.geom, 3005) AS pt) p
       CROSS JOIN LATERAL (
-        SELECT s.linear_feature_id, s.blue_line_key, ST_Distance(s.geom, p.pt) AS d,
+        SELECT s.linear_feature_id, s.blue_line_key, s.wscode_ltree::text AS wscode,
+               s.localcode_ltree::text AS localcode, ST_Distance(s.geom, p.pt) AS d,
                s.downstream_route_measure + ST_LineLocatePoint(ST_Force2D(s.geom), ST_Force2D(p.pt))
                  * (s.upstream_route_measure - s.downstream_route_measure) AS measure
         FROM whse_basemapping.fwa_stream_networks_sp s
         WHERE s.blue_line_key = s.watershed_key AND s.edge_type NOT IN (1100, 1150, 1300, 1350, 2300)
         ORDER BY s.geom <-> p.pt LIMIT 3) x
       WHERE (d.reservoir_present OR d.degree_of_regulation_pc >= 10) AND x.d <= 500)
-    SELECT DISTINCT ON (cabd_id) cabd_id, blue_line_key, measure, count(*) OVER (PARTITION BY cabd_id) AS n_tied
+    SELECT DISTINCT ON (cabd_id) cabd_id, blue_line_key, wscode, localcode, measure,
+           count(*) OVER (PARTITION BY cabd_id) AS n_tied
     FROM c WHERE rk = 1
     ORDER BY cabd_id, linear_feature_id")
   want <- want[want$n_tied > 1, ]
@@ -94,5 +96,7 @@ test_that("a dam equidistant from two segments snaps to the lower-id one", {
   got <- knw_link_regulated(conn, pts)$dams
   got <- got[match(want$cabd_id, got$cabd_id), ]
   expect_identical(as.numeric(got$blue_line_key), as.numeric(want$blue_line_key))
+  expect_identical(got$wscode, want$wscode)
+  expect_identical(got$localcode, want$localcode)
   expect_identical(got$measure, want$measure)
 })
