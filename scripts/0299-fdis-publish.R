@@ -24,9 +24,15 @@
 #     accident, including by a change of meaning that keeps the schema.
 #   - Only fdis_sites.csv is taken of 0240's two forms: the gpkg is the same rows with a
 #     geometry, and a CSV-to-Parquet copy keeps one reading of each table.
-#   - Each table is read with arrow's CSV reader and written as Parquet. The Parquet is then
-#     compared column by column with an all-character read of the CSV (numbers within 1e-12), so
-#     a type arrow inferred wrongly (an id losing leading zeros, a misread date) stops the run.
+#   - knw_publish() writes the set (#160; this script carried its own copy of the code before): each
+#     table is read with arrow's CSV reader and written as Parquet, then compared column by column
+#     with an all-character read of the CSV (numbers within 1e-12), so a type arrow inferred wrongly
+#     (an id losing leading zeros, a misread date) stops the run.
+#   - v3 carries a receipt.json beside its manifest (#160), crate's provenance receipt held to
+#     inst/receipt/fdis.yaml: this commit, the evidence build by the recipe_id of the receipt 0310
+#     wrote beside the tables (refused where there is none, or one describing other tables), and the
+#     FDIS extract by its MANIFEST.md5; every table fingerprinted as written, exact but access_check's
+#     km, rounded as the evidence build's. v2 is published and frozen, and carries none.
 #   - The CSVs were built by earlier runs, so the manifest records each source CSV's sha256 and
 #     modification time, and the commit it was published from (`published_from_commit`), which
 #     needs a clean working tree.
@@ -35,9 +41,10 @@
 #     for 0291-0298. NO_SIGN=TRUE reads without AWS credentials: the prefix is public.
 #
 # INPUT:  data/fdis/derived/{fdis_sites,bt_use_visits,ch_mad_visits,ch_rule_visits,ch_rule_walks}.csv
-#         (scripts/0240, 0290, 0294, 0296), data/fdis_README.md
-# OUTPUT: data/fdis/publish/ (ignored): <table>.parquet, manifest.json
-#         with PUBLISH=TRUE also: s3://fresh-bc/knowledge/fdis/v2/ (the Parquet and manifest.json)
+#         (scripts/0240, 0290, 0294, 0296), data/fdis_README.md; for v3 also 0310's tables and its
+#         evidence_receipt.json, and data/fdis/MANIFEST.md5 (0230)
+# OUTPUT: data/fdis/publish/ (ignored): <table>.parquet, manifest.json, and for v3 receipt.json
+#         with PUBLISH=TRUE also: s3://fresh-bc/knowledge/fdis/<version>/ (the Parquet, receipt and manifest)
 #         and s3://fresh-bc/fdis/README.md
 #         with PULL=TRUE instead: data/fdis/derived/<table>.csv from the published Parquet
 # RUN:    Rscript scripts/0299-fdis-publish.R              (from the repo root; local only; VERSION=v3)
@@ -48,6 +55,7 @@
 #         v3 (#57) adds 0310's tables and rebuilds the species tables from them.
 # ---------------------------------------------------------------------------
 suppressMessages({ library(arrow) })
+pkgload::load_all(quiet = TRUE)
 
 publish <- identical(Sys.getenv("PUBLISH"), "TRUE")
 pull <- identical(Sys.getenv("PULL"), "TRUE")
@@ -144,82 +152,46 @@ if (pull) {
 missing_in <- tables$source[!file.exists(tables$source)]
 if (length(missing_in)) stop("missing input: ", paste(missing_in, collapse = ", "), call. = FALSE)
 if (!file.exists(path_readme)) stop("missing ", path_readme, call. = FALSE)
-
-git <- function(...) {
-  out <- suppressWarnings(system2("git", c(...), stdout = TRUE, stderr = TRUE))
-  if (!is.null(attr(out, "status"))) stop("git ", paste(c(...), collapse = " "), " failed", call. = FALSE)
-  out
+# v3 describes access_check per species and group (#120): a table built before that has no group column
+if ("access_check" %in% tables$table &&
+    !"watershed_group_code" %in% names(utils::read.csv(tables$source[tables$table == "access_check"], nrows = 1))) {
+  stop(tables$source[tables$table == "access_check"], " has no watershed_group_code: it was built before #120, so ",
+       "rerun scripts/0310 before publishing", call. = FALSE)
 }
-dirty <- git("status", "--porcelain", "--untracked-files=no")
+
+# a publish needs a clean tree, every tracked file (a source CSV like data/fdis_repeat_surveys.csv included); the
+# receipt records the package and scripts' state, as every receipt does
+dirty <- .knw_git(".", "status", "--porcelain", "--untracked-files=no")
 if (length(dirty) && publish) stop("working tree has uncommitted changes; commit before PUBLISH=TRUE", call. = FALSE)
-commit <- git("rev-parse", "--short=7", "HEAD")
+knowledge_git <- .knw_git_state()
+commit <- substr(knowledge_git$commit, 1, 7)
 
-# Each column of the Parquet against an all-character read of the CSV: text equal, numbers
-# within 1e-12 relative and not zero-padded, an empty or "NA" cell null on both sides.
-# Returns the failing columns.
-values_differ <- function(src, dst) {
-  raw <- utils::read.csv(src, colClasses = "character", na.strings = character(), check.names = FALSE)
-  pq <- as.data.frame(arrow::read_parquet(dst))
-  if (!identical(names(raw), names(pq)) || nrow(raw) != nrow(pq)) return("<names or rows>")
-  bad <- character()
-  for (nm in names(raw)) {
-    a <- raw[[nm]]
-    v <- pq[[nm]]
-    na_tok <- a %in% c("", "NA")
-    ok <- if (is.numeric(v)) {
-      x <- suppressWarnings(as.numeric(a))
-      # a zero-padded code ("007") reads back as the same number, so its text is a failure
-      (na_tok & is.na(v)) | (!is.na(x) & !is.na(v) & abs(x - v) <= 1e-12 * pmax(1, abs(x)) &
-                               !grepl("^[-+]?0[0-9]", a))
-    } else {
-      b <- if (is.logical(v)) ifelse(v, "TRUE", "FALSE") else as.character(v)
-      (na_tok & is.na(v)) | (!is.na(b) & a == b)
-    }
-    if (!all(ok)) bad <- c(bad, sprintf("%s (%d rows)", nm, sum(!ok)))
+# v3's receipt (#160), held to inst/receipt/fdis.yaml: this commit in full, the evidence build the tables are, by the
+# receipt 0310 wrote beside them (refused where there is none, or where it does not describe them), and the FDIS
+# extract as received. Every table fingerprinted as written but access_check's km, rounded as the evidence build's
+receipt <- NULL
+if (version == "v3") {
+  ev_id <- .knw_evidence_recipe_id(dir_in)
+  if (is.null(ev_id)) {
+    stop(dir_in, " has no ", .knw_evidence_receipt_file, ": v3 names the evidence build by its receipt, so rebuild ",
+         "the evidence with scripts/0310 before publishing it", call. = FALSE)
   }
-  bad
+  fdis_manifest <- "data/fdis/MANIFEST.md5"
+  if (!file.exists(fdis_manifest)) stop("no ", fdis_manifest, ": it names the FDIS extract (rerun 0230)", call. = FALSE)
+  inputs <- list(evidence = list(recipe_id = ev_id), fdis_export = list(sha256 = .knw_sha256(fdis_manifest)))
+  visits <- arrow::read_csv_arrow(file.path(dir_in, "visits_link.csv"), as_data_frame = FALSE)$num_rows
+  receipt <- list(output = "fdis",
+                  recipe = list(code = .knw_receipt_code(knowledge_git),
+                                config = list(settings = list(version = version)), inputs = inputs, seed = NULL),
+                  summary = list(visits = visits))
 }
 
-dir.create(dir_out, recursive = TRUE, showWarnings = FALSE)
-files <- vector("list", nrow(tables))
-for (i in seq_len(nrow(tables))) {
-  tb <- tables$table[i]
-  src <- tables$source[i]
-  dst <- file.path(dir_out, paste0(tb, ".parquet"))
-  x <- arrow::read_csv_arrow(src, as_data_frame = FALSE)
-  # v3 describes access_check per species and group (#120): a table built before that has no group column
-  if (tb == "access_check" && !"watershed_group_code" %in% names(x)) {
-    stop(src, " has no watershed_group_code: it was built before #120, so rerun scripts/0310 before publishing",
-         call. = FALSE)
-  }
-  # arrow reads a zero-padded code ("08", a hydrologic zone) as a number; keep such columns as text
-  raw <- utils::read.csv(src, colClasses = "character", na.strings = character(), check.names = FALSE)
-  for (nm in names(raw)[vapply(raw, function(a) any(grepl("^[-+]?0[0-9]", a)), logical(1))]) {
-    if (inherits(x[[nm]]$type, "StringType")) next
-    a <- raw[[nm]]
-    a[a %in% c("", "NA")] <- NA
-    x[[nm]] <- arrow::Array$create(a, type = arrow::string())
-    message("  ", tb, ".", nm, ": zero-padded codes, kept as text")
-  }
-  arrow::write_parquet(x, dst, compression = "zstd")
-  bad <- values_differ(src, dst)
-  if (length(bad)) stop(tb, ": Parquet values differ from the CSV in ", paste(bad, collapse = ", "), call. = FALSE)
-  message(sprintf("%-15s %8d rows %3d cols  %6.1f MB csv -> %5.1f MB parquet", tb, x$num_rows,
-                  x$num_columns, file.size(src) / 1e6, file.size(dst) / 1e6))
-  files[[i]] <- list(
-    path = basename(dst), table = tb, description = tables$description[i],
-    producing_script = tables$script[i], rows = x$num_rows, columns = x$num_columns,
-    bytes = file.size(dst), sha256 = sha256(dst),
-    schema = stats::setNames(lapply(x$schema$fields, function(fl) fl$type$ToString()),
-                             vapply(x$schema$fields, function(fl) fl$name, character(1))),
-    source_csv = list(path = src, sha256 = sha256(src),
-                      modified = format(file.mtime(src), "%Y-%m-%dT%H:%M:%SZ", tz = "UTC")))
-}
-
-manifest <- list(
-  manifest_version = 1L,
-  id = s3_id,
-  supersedes = s3_supersedes,
+# knw_publish() writes each table as Parquet, checks it column by column against an all-character read of its CSV,
+# writes the manifest (each file's rows, columns, bytes, sha256 and schema, the source CSV's sha256 and modification
+# time) and the receipt, and with PUBLISH=TRUE refuses a published version with other tables or schemas, or other
+# contents unless REPUBLISH=TRUE, before it uploads the Parquet, then the receipt, then the manifest
+manifest <- knw_publish(
+  tables, dir_out, id = s3_id,
   note = if (version == "v2") {
     paste("v2 keeps one copy of an FDIS survey loaded under several collection ids (knowledge#35);",
           "fdis_repeat_surveys maps each v1 site_visit that left to the copy kept.")
@@ -228,7 +200,6 @@ manifest <- list(
           "visits_link, visits_species, walks, bcfishobs_fdis_match and access_check are new, and the four",
           "species tables are written from visits_link. v2 stays as published for the scripts frozen on it.")
   },
-  built = format(Sys.time(), "%Y-%m-%dT%H:%M:%SZ", tz = "UTC"),
   provenance = list(
     published_from_commit = commit,
     repository = "https://github.com/NewGraphEnvironment/knowledge",
@@ -236,49 +207,18 @@ manifest <- list(
       "Built from the Province of British Columbia's FDIS electrofishing extract (exports of ",
       "2020-11-16 and 2022-03-22), published as received under s3://fresh-bc/fdis/ with its ",
       "provenance note (README.md there).")),
-  files = files)
-path_manifest <- file.path(dir_out, "manifest.json")
-jsonlite::write_json(manifest, path_manifest, auto_unbox = TRUE, pretty = TRUE)
-message("wrote ", dir_out, "/ (", nrow(tables), " tables + manifest.json) at ", commit,
-        if (length(dirty)) " (working tree dirty: local only)")
+  supersedes = s3_supersedes, s3 = if (publish) "s3://fresh-bc/" else NULL, republish = republish,
+  no_sign = no_sign, receipt = receipt)
+for (f in manifest$files) {
+  message(sprintf("%-20s %8d rows %3d cols  %5.1f MB parquet", f$table, f$rows, f$columns, f$bytes / 1e6))
+}
+message("wrote ", dir_out, "/ (", nrow(tables), " tables, manifest.json", if (!is.null(receipt)) ", receipt.json",
+        ") at ", commit, if (length(dirty)) " (working tree dirty: local only)")
 
 if (!publish) {
   message("PUBLISH is not TRUE: nothing uploaded")
   quit(save = "no", status = 0)
 }
-
-# ---- refuse to change a published version's tables or schemas ----------------------
-prior_path <- file.path(dir_out, "manifest_published.json")
-unlink(prior_path)
-listed <- suppressWarnings(system2("aws", shQuote(c("s3", "ls", paste0(s3_tables, "manifest.json"))),
-                                   stdout = TRUE, stderr = TRUE))
-if (!is.null(attr(listed, "status")) && length(listed))
-  stop("could not check the published manifest: ", paste(listed, collapse = " "), call. = FALSE)
-if (length(listed)) {
-  aws("s3", "cp", paste0(s3_tables, "manifest.json"), prior_path, "--only-show-errors")
-  prior <- jsonlite::read_json(prior_path)
-  key <- function(fs) vapply(fs, function(f) f$table, character(1))
-  now_t <- key(files)
-  was_t <- key(prior$files)
-  changed <- union(setdiff(now_t, was_t), setdiff(was_t, now_t))
-  for (f in files) {
-    p <- prior$files[[match(f$table, was_t)]]
-    if (is.null(p)) next
-    same <- if (is.null(p$schema)) identical(as.integer(p$columns), as.integer(f$columns)) else
-      identical(lapply(p$schema, as.character), lapply(f$schema, as.character))
-    if (!same) changed <- c(changed, f$table)
-    if (same && !republish && (!identical(p$sha256, f$sha256) || !identical(as.integer(p$rows), as.integer(f$rows))))
-      stop(s3_id, " is published with different contents in ", f$table,
-           ": set REPUBLISH=TRUE to replace them, or publish to a new version", call. = FALSE)
-  }
-  if (length(changed))
-    stop(s3_id, " is published with different tables or schemas (", paste(unique(changed), collapse = ", "),
-         "): publish to a new version (bump s3_id), never over this one", call. = FALSE)
-}
-
-# Parquet first, manifest last, so a reader never finds a manifest naming a file not yet there.
-for (f in files) aws("s3", "cp", file.path(dir_out, f$path), paste0(s3_tables, f$path), "--only-show-errors")
-aws("s3", "cp", path_manifest, paste0(s3_tables, "manifest.json"),
-    "--content-type", "application/json", "--only-show-errors")
+# the extract's provenance note, last: the tables built from it are up
 aws("s3", "cp", path_readme, s3_readme, "--content-type", "text/markdown; charset=utf-8", "--only-show-errors")
-message("uploaded to ", s3_tables, " and ", s3_readme)
+message("uploaded ", s3_readme)

@@ -27,4 +27,4 @@ result:
     ch_rule_visits: {}
     ch_rule_walks: {}
   summary:
-    rows: {}
+    visits: {}
