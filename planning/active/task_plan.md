@@ -28,12 +28,12 @@ written nowhere as a rule.
 - [x] Branch in `~/Projects/repo/crate` off main once #44 has merged: the argument (a bare filename ending `.json`,
       no path separators, refused where it resolves to a file the receipt hashes), a test and the docs (NEWS is the
       release step's); `/code-check`, open the PR. Merging and releasing it needs your word
-- [ ] Until it is released, knowledge's branch builds against it through `Remotes: NewGraphEnvironment/crate@<branch>`;
-      knowledge's PR does not merge until the floor is a release
+- [x] Until it is released, knowledge's branch builds against it through `Remotes: NewGraphEnvironment/crate@<branch>`;
+      knowledge's PR does not merge until the floor is a release (crate v0.13.0, released 2026-11-06)
 
 ## Phase 2: the dependency and the declarations
 
-- [ ] `DESCRIPTION`: `crate (>= <release with file =>)` in Imports, `NewGraphEnvironment/crate` in Remotes (the
+- [x] `DESCRIPTION`: `crate (>= <release with file =>)` in Imports, `NewGraphEnvironment/crate` in Remotes (the
       branch until released); `jsonvalidate` in Suggests (crate's validator needs it)
 - [x] `.gitattributes`: `eol=lf` for the files a receipt hashes as config (`inst/method/*.csv`, `inst/sql/*.sql`),
       since crate hashes their bytes as checked out
