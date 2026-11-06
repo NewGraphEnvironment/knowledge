@@ -35,9 +35,9 @@ written nowhere as a rule.
 
 - [ ] `DESCRIPTION`: `crate (>= <release with file =>)` in Imports, `NewGraphEnvironment/crate` in Remotes (the
       branch until released); `jsonvalidate` in Suggests (crate's validator needs it)
-- [ ] `.gitattributes`: `eol=lf` for the files a receipt hashes as config (`inst/method/*.csv`, `inst/sql/*.sql`),
+- [x] `.gitattributes`: `eol=lf` for the files a receipt hashes as config (`inst/method/*.csv`, `inst/sql/*.sql`),
       since crate hashes their bytes as checked out
-- [ ] `inst/receipt/{grade,thresholds,habitat_grade}.yaml`, read by `crt_receipt_keys()`: each output's recipe
+- [x] `inst/receipt/{grade,thresholds,habitat_grade}.yaml`, read by `crt_receipt_keys()`: each output's recipe
       inputs, settings, config files, fingerprinted tables, summary values, tolerances and register overrides:
   - `grade`: inputs `link_build` (run uid as `version_id`), `flow` (the table comment as `version_id`),
     `visits_link`, `visits_species`, `walks` (sha256); config files `inst/method/settings.csv` and
@@ -53,15 +53,15 @@ written nowhere as a rule.
   - `habitat_grade`: summary values per published set (rows, km, grade sum), parts warned, as for `grade`
   - both published sets: inputs `link_build`, `flow`, `evidence` (the grades' `evidence_md5` as `version_id`: 0325
     holds no evidence files), setting `tune_run`
-- [ ] `R/receipt.R`: `knw_receipt_keys(output)` (reads the installed declaration) and the shared pieces each writer
+- [x] `R/receipt.R`: `knw_receipt_keys(output)` (reads the installed declaration) and the shared pieces each writer
       needs: knowledge's full commit and dirty flag (`.knw_git_state()`, 0320's dirty scope), named config files, a
       non-finite setting as a string, the evidence tables' sha256 checked against the recorded md5s
-- [ ] `tests/testthat/test-receipt.R`: every declaration parses and names its output; every config file it declares
+- [x] `tests/testthat/test-receipt.R`: every declaration parses and names its output; every config file it declares
       is installed
 
 ## Phase 3: the grade table's receipt
 
-- [ ] `knw_grade_receipt_write()` (`R/grade_receipt.R`, one function one file): from the grade table as written, its
+- [x] `knw_grade_receipt_write()` (`R/grade_receipt.R`, one function one file): from the grade table as written, its
       record, the evidence directory and the run's spec, writes `<key>_grades_receipt.json` through
       `crt_receipt_write(file =, keys = knw_receipt_keys("grade"), publish = TRUE)`; refuses a table, evidence or
       walk that is not the record's; carries the record's `grades_md5` in its context

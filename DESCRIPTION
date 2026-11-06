@@ -29,6 +29,7 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
 Imports:
     chk,
+    crate (>= 0.12.0),
     DBI,
     dplyr,
     lubridate,
@@ -50,6 +51,7 @@ Suggests:
     gq,
     htmlwidgets,
     jsonlite,
+    jsonvalidate,
     kableExtra,
     knitr,
     mapgl,
@@ -63,6 +65,7 @@ Suggests:
     withr
 VignetteBuilder: knitr
 Remotes:
+    NewGraphEnvironment/crate@47-receipt-file-name,
     NewGraphEnvironment/flooded,
     NewGraphEnvironment/fresh,
     NewGraphEnvironment/gq
