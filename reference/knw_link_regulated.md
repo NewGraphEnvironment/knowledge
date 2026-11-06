@@ -5,7 +5,9 @@ degree of regulation of `regulation_min` percent or more, is placed on
 the nearest main-flow FWA segment within `dam_snap_m`; a point is
 regulated when such a dam lies upstream of it (`fwa_downstream()` with
 the roles swapped). wet's flow is natural flow, so on a regulated river
-it is not the flow the fish meet.
+it is not the flow the fish meet. A dam equally near two segments is
+placed on the one with the lower `linear_feature_id`, so every database
+places it alike (#161).
 
 ## Usage
 

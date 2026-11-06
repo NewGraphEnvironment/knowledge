@@ -9,7 +9,10 @@ beside it. A segment with no picked flow, or with no watershed code
 dropped: it takes the picked flow of the nearest primary-flow segment on
 its main line (`watershed_key`) or its own line, and `flow_from` says
 which (`own`, `parent`, or `NA` for neither); such a segment takes that
-segment's watershed codes too (`code_from_parent`).
+segment's watershed codes too (`code_from_parent`). Where two such
+segments are equally near, the one with the lower `linear_feature_id`
+gives the flow: an arbitrary but fixed choice, so every database holding
+the build takes the same one (#161).
 
 ## Usage
 
