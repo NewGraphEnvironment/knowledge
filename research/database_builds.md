@@ -241,7 +241,7 @@ Every other `different` traces to one of two ties, neither of them a fault in th
   identical, and no slower. The published evidence and grades were made with the old code. The change reaches the
   visits at the next `0310`, and the grades at their next grading on any build, because grading reads each segment's
   parent flow live (`knw_link_segments()`): about 630 parent-flow lines move on either database, all of them tied.
-  `0320`'s keep-check records nothing that names the tie rule, so a candidate graded before 0.4.32 is regraded, not
+  `0320`'s keep-check does not compare the knowledge commit a grade record carries, so a candidate graded before 0.4.32 is regraded, not
   resumed with `RUN=`.
 - **The walk's landing (#162).** A tributary's mouth usually sits on a vertex two main-line segments share, so both are
   at 0 m from it. Where one of the two has no flow row, the walk either stops at once or walks that segment's length

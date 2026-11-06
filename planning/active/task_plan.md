@@ -56,7 +56,7 @@ line with two parents at the same distance. Measured in planning (m1, PG 17.5, P
       database holding the build picks the same one (#161).
 - [x] `R/link_regulated.R`: change to `ORDER BY s.geom <-> p.pt, s.linear_feature_id`, with the same roxygen sentence
       for the dam's segment.
-- [ ] `devtools::document()`, `lintr::lint_package()`, and the full `devtools::test()`.
+- [x] `devtools::document()`, `lintr::lint_package()`, and the full `devtools::test()`.
 
 ## Phase 3: Measure on both databases
 
@@ -87,9 +87,9 @@ None. The next evidence build happens on Al's word, as CLAUDE.md requires.
 
 ## Validation
 
-- [ ] Tests pass
-- [ ] `/code-check` clean (once over the branch with `/code-check branch`)
-- [ ] PWF checkboxes match landed work
+- [x] Tests pass
+- [x] `/code-check` clean (once over the branch with `/code-check branch`)
+- [x] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion
 
 How each change is proved:

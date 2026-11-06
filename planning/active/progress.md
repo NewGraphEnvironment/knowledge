@@ -11,3 +11,6 @@
 - Phase 3: two-database check; new code identical on both (0 rows, md5 equal), old differs on 614 tied lines and 2 dams; no slowdown (findings)
 - Phase 4: research/database_builds.md and CLAUDE.md say #161 is fixed from 0.4.32; #161 body ticked with the decision; NEWS left to the release commit
 - Code-check round 2: one finding (prose said the fix reaches grades only with a new build; grading reads the parent flow live). Fixed in research and CLAUDE.md
+- Code-check branch: round 1 clean; round 2 one finding (fixed, 6a60545); round 3 clean with the mechanism's consumers enumerated (live: knw_link_segments via grading; stored: every 0310 output). Loop ended on a clean round 3 with no inside-a-fix finding. Round 3's loose "records nothing" tightened to "does not compare the knowledge commit"
+- The final script, run once on the second database with the new code: 2,831 parent lines, 1,800 tied (1,799 exactly), flow md5 edb4e53c… and dams md5 25bf5a6a…, equal to the committed runs
+- Full suite before review: 0 failed, 4 skipped, 383 tests
