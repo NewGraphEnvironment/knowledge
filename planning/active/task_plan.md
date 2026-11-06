@@ -35,7 +35,7 @@ as another recipe for every grade downstream. The issue has no comments.
 
 ## Phase 1: Declarations and one table reader
 
-- [ ] `inst/receipt/evidence.yaml`, with output `evidence`:
+- [x] `inst/receipt/evidence.yaml`, with output `evidence`:
   - config files: `inst/method/settings.csv` and `inst/sql/ch_dist_profile.sql` (the walk).
   - settings: `species`, `q_grid`, `sources`, `snap_limit_m`, `snap_limit_code_m` (the placement limits from
     0230's reconcile.csv) and `parent` (which parent source was used, or `none`).
@@ -50,14 +50,14 @@ as another recipe for every grade downstream. The issue has no comments.
   - seed: false.
   - tables: all seven exact, except `access_check` with `km: 1.0e-6`.
   - summary: `visits` (rows of visits_link) and `access_km` (`1.0e-3`).
-- [ ] `inst/receipt/fdis.yaml`, the published visit set v3: settings `[version]`, inputs `[evidence, fdis_export]`,
+- [x] `inst/receipt/fdis.yaml`, the published visit set v3: settings `[version]`, inputs `[evidence, fdis_export]`,
   every one of its 11 tables fingerprinted, with `access_check.km` at `1.0e-6`, and summary `rows`.
-- [ ] `inst/receipt/grade.yaml`: the inputs become `[link_build, flow, evidence]`, and the header says why.
-- [ ] `R/receipt.R`: a shared `.knw_receipt_csv_tables(sources, keys)` that reads each fingerprinted CSV as text
+- [x] `inst/receipt/grade.yaml`: the inputs become `[link_build, flow, evidence]`, and the header says why.
+- [x] `R/receipt.R`: a shared `.knw_receipt_csv_tables(sources, keys)` that reads each fingerprinted CSV as text
   (`na.strings = ""`) and converts to numbers only the columns the declaration gives a tolerance. `knw_publish()`'s
   `.knw_publish_receipt()` switches to it, which is the only change to `0325`'s receipts (they declare no table
   tolerance, so they are unaffected).
-- [ ] `tests/testthat/test-receipt.R`: the list of declarations, the config-file loop and the tolerance pins grow to
+- [x] `tests/testthat/test-receipt.R`: the list of declarations, the config-file loop and the tolerance pins grow to
   cover `evidence` and `fdis`. The existing within/past test holds each new rounding, and a helper test shows a
   tolerance column read as a number and every other column kept as text.
 

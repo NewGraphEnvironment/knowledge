@@ -14,8 +14,11 @@ recipe:
   # the run's resolved settings: the key, the score's settings (R/tune_run.R's `spec`, less its seed and evidence,
   # which are the recipe's seed and inputs) and the floors
   settings: [species_code, stage, fit, prior_sd, folds, min_wsg, d_floor, extra, gradient]
-  # link's build (the run log_recompute names), wet's flow load (the table comment) and the evidence tables
-  inputs: [link_build, flow, visits_link, visits_species, walks]
+  # link's build (the run log_recompute names), wet's flow load (the table comment) and the evidence build: its
+  # receipt's recipe_id (#160), so an evidence rebuild that came out equivalent is the same input, or the visit tables'
+  # md5s (evidence_md5) as a version id for a build from before evidence receipts. Receipts written before #160 named
+  # the three visit tables by their sha256 instead
+  inputs: [link_build, flow, evidence]
   seed: true
 result:
   tables:

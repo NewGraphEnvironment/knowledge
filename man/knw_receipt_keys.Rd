@@ -8,8 +8,9 @@ knw_receipt_keys(output)
 }
 \arguments{
 \item{output}{\code{character(1)}: \code{"grade"} (a grade table,
-\code{\link[=knw_grade_receipt_write]{knw_grade_receipt_write()}}), \code{"thresholds"} or \code{"habitat_grade"} (the
-published sets, \code{\link[=knw_publish]{knw_publish()}}).}
+\code{\link[=knw_grade_receipt_write]{knw_grade_receipt_write()}}), \code{"evidence"} (an evidence build,
+\code{\link[=knw_evidence_receipt_write]{knw_evidence_receipt_write()}}, #160), \code{"thresholds"}, \code{"habitat_grade"}
+or \code{"fdis"} (the published sets, \code{\link[=knw_publish]{knw_publish()}}).}
 }
 \value{
 A \code{crt_receipt_keys} list, as \code{\link[crate:crt_receipt_keys]{crate::crt_receipt_keys()}} returns.

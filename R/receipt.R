@@ -9,8 +9,9 @@
 #' The declarations are `inst/receipt/<output>.yaml`.
 #'
 #' @param output `character(1)`: `"grade"` (a grade table,
-#'   [knw_grade_receipt_write()]), `"thresholds"` or `"habitat_grade"` (the
-#'   published sets, [knw_publish()]).
+#'   [knw_grade_receipt_write()]), `"evidence"` (an evidence build,
+#'   [knw_evidence_receipt_write()], #160), `"thresholds"`, `"habitat_grade"`
+#'   or `"fdis"` (the published sets, [knw_publish()]).
 #' @return A `crt_receipt_keys` list, as [crate::crt_receipt_keys()] returns.
 #' @export
 #' @examples
@@ -109,4 +110,29 @@ knw_receipt_keys <- function(output) {
          evidence_md5, ")", call. = FALSE)
   }
   stats::setNames(lapply(f, function(p) list(sha256 = .knw_sha256(p))), tbl)
+}
+
+# The tables a receipt fingerprints, read from their CSVs as text, so each value is held as written: a column the
+# declaration gives a tolerance is read as a number, which is how crate rounds it (#160: access_check's km). An empty
+# cell is NA either way, and "NA" in a tolerance column too; a cell there that is not a number is refused rather than
+# fingerprinted as NA
+.knw_receipt_csv_tables <- function(sources, keys) {
+  if (is.null(names(sources)) || !all(keys$tables %in% names(sources))) {
+    stop("the receipt fingerprints ", paste(setdiff(keys$tables, names(sources)), collapse = ", "),
+         ", with no source CSV", call. = FALSE)
+  }
+  lapply(stats::setNames(keys$tables, keys$tables), function(tb) {
+    x <- utils::read.csv(sources[[tb]], colClasses = "character", na.strings = "", check.names = FALSE)
+    for (cl in names(keys$tolerance$tables[[tb]])) {
+      if (!cl %in% names(x)) stop(sources[[tb]], " has no column ", cl, ", which the declaration rounds", call. = FALSE)
+      a <- x[[cl]]
+      a[a %in% "NA"] <- NA
+      v <- suppressWarnings(as.numeric(a))
+      bad <- !is.na(a) & is.na(v)
+      if (any(bad)) stop(sources[[tb]], ": ", cl, " holds ", sum(bad), " values that are not numbers (",
+                         a[bad][1], ")", call. = FALSE)
+      x[[cl]] <- v
+    }
+    x
+  })
 }

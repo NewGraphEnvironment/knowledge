@@ -1,0 +1,30 @@
+# The receipt declaration for the published visit set, knowledge/fdis/v3 (#160), read by crate::crt_receipt_keys()
+# through knw_receipt_keys("fdis"); scripts/0299 writes it through knw_publish(receipt =). v2 is published and frozen,
+# with other tables, and carries none. Every table is fingerprinted from its CSV as text, so held exact, except
+# access_check's km, read as a number and held to the evidence build's rounding (inst/receipt/evidence.yaml says why).
+# Provisional, as #154's declarations are.
+receipt_keys: 1
+output: fdis
+recipe:
+  # the dataset version published
+  settings: [version]
+  # the evidence build the tables are (its receipt's recipe_id), and the FDIS extract as received (its MANIFEST.md5),
+  # which fdis_sites is built from
+  inputs: [evidence, fdis_export]
+  seed: false
+result:
+  tables:
+    fdis_sites: {}
+    fdis_repeat_surveys: {}
+    visits_link: {}
+    visits_species: {}
+    walks: {}
+    bcfishobs_fdis_match: {}
+    access_check:
+      tolerance: {km: 1.0e-6}
+    bt_use_visits: {}
+    ch_mad_visits: {}
+    ch_rule_visits: {}
+    ch_rule_walks: {}
+  summary:
+    rows: {}

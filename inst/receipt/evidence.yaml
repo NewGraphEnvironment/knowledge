@@ -1,0 +1,54 @@
+# The receipt declaration for an evidence build, the tables scripts/0310 writes into its evidence directory (#160),
+# read by crate::crt_receipt_keys() through knw_receipt_keys("evidence"). knw_evidence_receipt_write() supplies exactly
+# these names; crate computes the ids.
+#
+# This is the rule the provenance track started from, written down: every table must come back exactly, except
+# access_check's km, which may move by a rounding. One rebuild of the same build's evidence gave three byte-identical
+# tables and access_check differing at 9.5e-11 km per value, because the database summed in another order; #158's
+# second database gave 6.0e-11 km. access_check's km reach 787,407 km, where one unit in the last place of a double is
+# about 1.2e-10, so both are one ulp, and a sum over millions of segments taken in another order can move further:
+# the rounding is 1e-6 km (1 mm), the tolerance #158's hand comparison used, far below anything a reader sees.
+# visits_link is exact although #158 found mad_pick moving on 3 visits: that is knowledge#161's unordered parent-flow
+# tie, and a rebuild reads `different` until it is fixed, which is true. Provisional, as #154's declarations are.
+receipt_keys: 1
+output: evidence
+recipe:
+  # the method's register and the walk every visit's walks were made with
+  config_files: [inst/method/settings.csv, inst/sql/ch_dist_profile.sql]
+  # the species built, the walks' river sizes and flow sources, the placement limits 0230 placed with (its
+  # reconcile.csv) and the parent source the flows fell back on (PARENT=TRUE, PARENT_DIR=, or none)
+  settings: [species, q_grid, sources, snap_limit_m, snap_limit_code_m, parent]
+  inputs:
+    # link's build (the run log_recompute names), wet's flow load (the table comment), and the installed link whose
+    # default bundle decides each species' range and pooling
+    - link_build
+    - flow
+    - link_configs
+    # the FDIS extract as received (its MANIFEST.md5) and 0230's load and placement of it, which 0310 reads
+    - fdis_export
+    - fdis_sites
+    - fdis_catch
+    - fdis_fish
+    # the tracked tables 0310 reads: species codes, size classes, the FISS workbook evidence and its workbooks
+    - fdis_species_codes
+    - fdis_size_breaks
+    - fiss_evidence
+    - fiss_workbooks
+    # the hydrologic zones as downloaded, and bcfishobs, read live from the database with no version to name
+    - hydrologic_zones
+    - bcfishobs
+  seed: false
+result:
+  tables:
+    visits_link: {}
+    visits_species: {}
+    walks: {}
+    bcfishobs_fdis_match: {}
+    access_check:
+      tolerance: {km: 1.0e-6}
+    workbook_sites: {}
+    workbook_species: {}
+  summary:
+    # placed visits, and access_check's km summed
+    visits: {}
+    access_km: {tolerance: 1.0e-3}

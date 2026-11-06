@@ -7,3 +7,7 @@
 - Created branch `160-write-receipts-for-the-evidence-build-an` off origin/main (dcb7870)
 - Scaffolded PWF baseline from issue #160 with approved phases
 - Next: start Phase 1
+- Phase 1: `evidence.yaml` and `fdis.yaml` declared; `grade.yaml`'s inputs are `[link_build, flow, evidence]`;
+  `.knw_receipt_csv_tables()` reads a receipt's tables as text with only a rounded column numeric, and
+  `knw_publish()` uses it. crate refuses `config_files: []`, so `fdis.yaml` omits the key (it reads as none).
+  test-receipt and test-publish pass.

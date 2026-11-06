@@ -1,8 +1,10 @@
-# the receipt declarations knowledge ships (#154)
+# the receipt declarations knowledge ships (#154, #160)
+
+outputs <- c("grade", "evidence", "thresholds", "habitat_grade", "fdis")
 
 test_that("every declaration parses and names its own output", {
   files <- list.files(system.file("receipt", package = "knowledge"), "\\.yaml$")
-  expect_setequal(sub("\\.yaml$", "", files), c("grade", "thresholds", "habitat_grade"))
+  expect_setequal(sub("\\.yaml$", "", files), outputs)
   for (f in sub("\\.yaml$", "", files)) {
     k <- knw_receipt_keys(f)
     expect_s3_class(k, "crt_receipt_keys")
@@ -12,7 +14,7 @@ test_that("every declaration parses and names its own output", {
 })
 
 test_that("every declared config file is one the package installs", {
-  for (f in c("grade", "thresholds", "habitat_grade")) {
+  for (f in outputs) {
     k <- knw_receipt_keys(f)
     for (cf in k$config_files) {
       expect_true(startsWith(cf, "inst/"), info = cf)
@@ -63,7 +65,7 @@ compare_of <- function(output, ...) {
 
 test_that("every override a declaration makes names a field of crate's register, outside the recipe", {
   reg <- utils::read.csv(system.file("extdata", "receipt", "register.csv", package = "crate"))
-  for (f in c("grade", "thresholds", "habitat_grade")) {
+  for (f in outputs) {
     k <- knw_receipt_keys(f)
     expect_true(all(k$register$field %in% reg$field), info = f)
     expect_false(any(startsWith(k$register$field, "recipe.")), info = f)
@@ -71,7 +73,7 @@ test_that("every override a declaration makes names a field of crate's register,
 })
 
 test_that("each declared tolerance holds a value moved within it and refuses one moved past it", {
-  for (f in c("grade", "thresholds", "habitat_grade")) {
+  for (f in outputs) {
     k <- knw_receipt_keys(f)
     expect_identical(compare_of(f), "identical", info = f)
     for (nm in k$summary) {
@@ -116,6 +118,31 @@ test_that("the declared tolerances are the ones written down, so changing one ch
   expect_equal(tol("habitat_grade"), c(km_graded = 1e-3, grade_sum = 1e-3))
   expect_null(tol("thresholds"))
   expect_identical(knw_receipt_keys("thresholds")$tables, c("thresholds", "thresholds_groups"))
+  # the evidence build (#160): every table exact but access_check's km, at 1 mm
+  expect_equal(tol("evidence"), c(access_km = 1e-3, access_check.km = 1e-6))
+  expect_identical(knw_receipt_keys("evidence")$tables,
+                   c("visits_link", "visits_species", "walks", "bcfishobs_fdis_match", "access_check",
+                     "workbook_sites", "workbook_species"))
+  expect_equal(tol("fdis"), c(access_check.km = 1e-6))
+  expect_length(knw_receipt_keys("fdis")$tables, 11L)
+  # a grade names the evidence build as one input (#160)
+  expect_identical(knw_receipt_keys("grade")$inputs, c("link_build", "flow", "evidence"))
+})
+
+test_that("a receipt's tables are read as text, with only a rounded column read as a number", {
+  d <- withr::local_tempdir()
+  utils::write.csv(data.frame(code = c("08", "10"), km = c("787407.1195799585", ""), n = c("1", "NA")),
+                   file.path(d, "access_check.csv"), row.names = FALSE)
+  keys <- list(tables = "access_check", tolerance = list(tables = list(access_check = list(km = 1e-6))))
+  x <- .knw_receipt_csv_tables(c(access_check = file.path(d, "access_check.csv")), keys)$access_check
+  expect_identical(x$code, c("08", "10"))
+  expect_identical(x$n, c("1", "NA"))
+  expect_identical(x$km, c(787407.1195799585, NA))
+  expect_error(.knw_receipt_csv_tables(c(other = file.path(d, "access_check.csv")), keys), "no source CSV")
+  utils::write.csv(data.frame(km = c("1.5", "x")), file.path(d, "bad.csv"), row.names = FALSE)
+  expect_error(.knw_receipt_csv_tables(c(access_check = file.path(d, "bad.csv")), keys), "not numbers \\(x\\)")
+  utils::write.csv(data.frame(m = "1"), file.path(d, "nokm.csv"), row.names = FALSE)
+  expect_error(.knw_receipt_csv_tables(c(access_check = file.path(d, "nokm.csv")), keys), "has no column km")
 })
 
 test_that("a failed git call stops, rather than reading as a clean tree", {
