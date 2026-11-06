@@ -91,10 +91,10 @@ The reference is the published run `20261104_0543`: tracked `data/tune/*` and `d
 
 ## Phase 3: Every key
 
-- [ ] `RUN=<stamp> WORKERS=8 EVIDENCE_DIR=data/fdis/derived_second Rscript scripts/0320-tune-run.R` (every species); CH's pass-2 outputs against pass 1 are a free repeat check. Each key's pick, tables and grades
+- [x] `RUN=<stamp> WORKERS=8 EVIDENCE_DIR=data/fdis/derived_second Rscript scripts/0320-tune-run.R` (every species); CH's pass-2 outputs against pass 1 are a free repeat check. Each key's pick, tables and grades
       compared against run `20261104_0543`
-- [ ] `TUNE_DIR=data/tune/candidate/<stamp> SPECIES=BT,CO,GR,ST,WCT CONFIG_SHA=e2a85938… GPKG=FALSE Rscript scripts/0330-compare.R`, compared against `data/compare/`
-- [ ] Minutes per step beside the host's (from `20261103_evidence_build_ledger.csv`, `20261104_tune_run-…txt` and `20261104_compare-…txt`)
+- [x] `TUNE_DIR=data/tune/candidate/<stamp> SPECIES=BT,CO,GR,ST,WCT CONFIG_SHA=e2a85938… GPKG=FALSE Rscript scripts/0330-compare.R`, compared against `data/compare/`
+- [x] Minutes per step beside the host's (from `20261103_evidence_build_ledger.csv`, `20261104_tune_run-…txt` and `20261104_compare-…txt`)
 
 ## Phase 4: crate's comparison (once crate PR #44 merges)
 
