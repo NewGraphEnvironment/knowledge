@@ -25,7 +25,9 @@
 #' along. After a change upstream (a new link run or evidence build) that means
 #' every fitted key moves together. Each promoted key's grades must carry their
 #' record ([knw_grade_record_write()]) and match it (md5 and size; a
-#' `replaced_*` archive may lack one), and kept keys are read from their
+#' `replaced_*` archive may lack one); a grade table's receipt
+#' ([knw_grade_receipt_write()], #154), where the run wrote one, moves with it
+#' and must name the record's md5. Kept keys are read from their
 #' records where the tables are absent. A key scored under other floors than
 #' the tuning's (`min_wsg`, `folds` in its summary, #120) is refused. Each promoted key's grades must be of its
 #' recommended rule on its own evidence, and its comparison of the same rule and
@@ -108,6 +110,9 @@ knw_tune_promote <- function(run, keys = NULL, live = NULL, tune_dir = "data/tun
     stop(run, " was tuned on ", paste(setdiff(run_grads, .knw_grade_grad), collapse = ", "), ", not ", .knw_grade_grad,
          ": a setup run (#120), never promoted", call. = FALSE)
   }
+  # the keys whose grades carry a receipt (#154), which tell a pass that stopped before its receipt from a run made
+  # before receipts where a record's commit cannot
+  with_receipt <- sub("_grades_receipt\\.json$", "", list.files(run_tune, "_grades_receipt\\.json$"))
   for (k in keys) {
     floors_check(k, cand[[k]])
     rule <- fld(cand[[k]], "rule_recommended")
@@ -138,6 +143,25 @@ knw_tune_promote <- function(run, keys = NULL, live = NULL, tune_dir = "data/tun
       tryCatch(knw_grade_record_check(g1, g), error = function(e) {
         stop(k, ": ", conditionMessage(e), "; regrade it with RUN=", run, call. = FALSE)
       })
+      # its receipt (#154) names the record's table: one left by an earlier pass is refused. None is refused where the
+      # code that graded it writes receipts, or, where this checkout cannot say, where another key of the run has one:
+      # a pass that stopped between its record and its receipt. A run from before receipts is promoted without
+      gc <- file.path(run_tune, .knw_grade_receipt_name(g))
+      if (!file.exists(gc)) {
+        due <- .knw_receipt_due(g1)
+        if (isTRUE(due) || (is.na(due) && length(with_receipt))) {
+          stop(k, ": the run wrote no receipt of its grades (", gc, ") though ",
+               if (isTRUE(due)) "the code that graded them writes one" else
+                 paste0(paste(with_receipt, collapse = ", "), " has one"),
+               "; regrade it with RUN=", run, call. = FALSE)
+        }
+      } else {
+        md5_gc <- tryCatch(crate::crt_receipt_read(gc)$context$run$grades_md5, error = function(e) NULL)
+        if (!identical(md5_gc, g1$grades_md5)) {
+          stop(k, ": the grade table's receipt (", gc, ") does not name the table its record describes; regrade it ",
+               "with RUN=", run, call. = FALSE)
+        }
+      }
     } else if (archive) {
       g1 <- rd(g, nrows = 1)
     } else {

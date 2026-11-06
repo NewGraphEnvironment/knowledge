@@ -33,8 +33,9 @@ file), \code{target} (where a restore puts it: its path in a checkout's
 }
 \description{
 Lists every file one archive of a run sends to the bucket: per key the
-grade table (stored compressed), its record, the curve and the
-comparison's segments, under \verb{tune/<key>/<setup>/}; and the evidence build
+grade table (stored compressed), its record, the curve, the
+comparison's segments and, where the run wrote one, the grade table's
+receipt (#154), under \verb{tune/<key>/<setup>/}; and the evidence build
 the grades name, under \verb{evidence/<id>/} with a \code{MANIFEST} (one line per
 file, its md5 and name), \verb{<id>} being the MANIFEST's md5. Each grade table
 is checked against its record and the evidence against the grades'
