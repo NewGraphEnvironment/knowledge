@@ -34,3 +34,6 @@
   ledger that names a receipt requires it (guard proved by removal); 0310 hashes inputs as read, names link's configs
   by their files' sha256, and writes a refused ledger when the receipt fails; 0299 loads the package after PULL; the
   "one ulp" claim is corrected. Kept: restore refuses a receipt present with other bytes (two builds).
+- Phase 6 (part): CLAUDE.md's receipt paragraph and `scripts/README.md` (0299, 0310) revised; #161's body carries the
+  owed comparison. The research file waits for phase 7's verdict. Phase 7 is held: at 12:28 UTC another session was
+  running #161's tie checks on this database (four active queries), and two evidence builds would load it under them.

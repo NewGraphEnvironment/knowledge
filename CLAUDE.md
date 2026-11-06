@@ -451,6 +451,19 @@ receipt does not name its record's `grades_md5`, since the run's settings, seed 
 recovered later. Promotion and the archive refuse such a receipt, the archive stores one where a run wrote one, and
 `0325` holds each grade table to its record before its receipts name the records' run.
 
+`0310` writes the evidence build's receipt, `evidence_receipt.json` in the evidence directory (#160,
+`knw_evidence_receipt_write()`, held to `inst/receipt/evidence.yaml`): every table it writes exact but `access_check`'s
+km, rounded to 1e-6 km, which is the rule the receipts started from. It hashes each input as it reads it, removes an
+earlier receipt before its first table, and on a refused receipt writes its ledger under the `_refused` name. A grade
+receipt names the evidence as one input, `evidence`: the build's receipt's `recipe_id`, so an equivalent evidence rebuild
+is the same input, or the visit tables' md5s for a build from before receipts; a receipt that does not describe the
+tables, or a ledger naming a receipt that is gone, is refused. `0299` publishes through `knw_publish()`, and v3 carries
+a receipt (`inst/receipt/fdis.yaml`) naming the evidence by that `recipe_id`; v2 carries none. The archive stores the
+evidence receipt with its build, so every build archived with one has its own `evidence_id`, and a restore refuses an
+`evidence_receipt.json` present with other bytes, as it does any file. crate rounds a value to its tolerance's
+decimals, so judge an evidence or fdis rebuild with the tables re-read (`crt_receipt_compare(tables =)`): receipts alone
+can read a value either side of a rounding edge as different.
+
 A build names its evidence directory (#120). `0310` writes `EVIDENCE_DIR` (default `data/fdis/derived`) and a ledger
 whose first row names it; a directory other than the default tags the ledger with its base name
 (`<date>_evidence_build_ledger-<base>.csv`), outside the name `knw_run_ledger()` falls back to, and `0310` refuses the

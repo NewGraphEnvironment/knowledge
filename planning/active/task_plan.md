@@ -104,11 +104,11 @@ as another recipe for every grade downstream. The issue has no comments.
 
 ## Phase 6: Documentation and the owed issue line
 
-- [ ] `CLAUDE.md`'s receipt paragraph (under "A run's record travels with its table"): the evidence build's receipt
+- [x] `CLAUDE.md`'s receipt paragraph (under "A run's record travels with its table"): the evidence build's receipt
   and its declaration, the grade's `evidence` input, `0299`'s receipt, and that the archive keeps the evidence receipt.
 - [ ] `research/run_archive.md`, "The receipt says whether a rebuild came out the same": the rounding and why it is
   1e-6, `visits_link` exact pending #161, and phase 7's verdict.
-- [ ] #161's body gets a task: its fix is what makes the evidence receipt's `visits_link` compare `identical`.
+- [x] #161's body gets a task: its fix is what makes the evidence receipt's `visits_link` compare `identical`.
 
 ## Phase 7: Verify on the database's host
 
