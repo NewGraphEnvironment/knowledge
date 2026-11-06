@@ -50,7 +50,8 @@ spec <- data.table::rbindlist(list(
   # the tuning (0320): the grade record's run columns are compared, its provenance is context
   list("_grades_record\\.csv$",      "species_code;stage",                                  0,
        "grades_md5;grades_bytes;tune_run;evidence_ledger;knowledge_commit;record_source;evidence_md5", TRUE, ""),
-  list("_grades\\.csv$",             "watershed_group_code;id_segment",                     1e-9, "evidence_md5", TRUE, ""),
+  # the grade table writes rates to 5 significant digits, so a rate near 1 is held only to 1e-5
+  list("_grades\\.csv$",             "watershed_group_code;id_segment",                     1e-5, "evidence_md5", TRUE, ""),
   list("_tune\\.csv$",               "rule",                                                1e-6, "",  TRUE, ""),
   list("_summary\\.csv$",            "species_code;stage",                                  1e-6,
        "evidence_md5;tune_run;evidence_ledger;evidence_dir", TRUE, ""),
