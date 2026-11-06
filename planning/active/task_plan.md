@@ -89,7 +89,7 @@ written nowhere as a rule.
 
 ## Phase 5: the register test, docs
 
-- [ ] `test-receipt.R`: knowledge's own register overrides and tolerances, per declaration: each override names a
+- [x] `test-receipt.R`: knowledge's own register overrides and tolerances, per declaration: each override names a
       field of crate's register, and for each tolerance a receipt pair moved within it is `equivalent` and past it
       `different`, so a declaration change that no test exercises fails (crate tests every field of its own
       register; review S1)
