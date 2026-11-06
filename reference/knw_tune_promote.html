@@ -64,7 +64,7 @@ stay)."><meta property="og:image" content="https://newgraphenvironment.github.io
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Promote a candidate tuning run into the tracked tables</h1>
-      <small class="dont-index">Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/v0.4.30/R/tune_promote.R" class="external-link"><code>R/tune_promote.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/R/tune_promote.R" class="external-link"><code>R/tune_promote.R</code></a></small>
       <div class="d-none name"><code>knw_tune_promote.Rd</code></div>
     </div>
 
@@ -155,7 +155,9 @@ anything moves, naming the field and the kept keys that would have to come
 along. After a change upstream (a new link run or evidence build) that means
 every fitted key moves together. Each promoted key's grades must carry their
 record (<code><a href="knw_grade_record_write.html">knw_grade_record_write()</a></code>) and match it (md5 and size; a
-<code>replaced_*</code> archive may lack one), and kept keys are read from their
+<code>replaced_*</code> archive may lack one); a grade table's receipt
+(<code><a href="knw_grade_receipt_write.html">knw_grade_receipt_write()</a></code>, #154), where the run wrote one, moves with it
+and must name the record's md5. Kept keys are read from their
 records where the tables are absent. A key scored under other floors than
 the tuning's (<code>min_wsg</code>, <code>folds</code> in its summary, #120) is refused. Each promoted key's grades must be of its
 recommended rule on its own evidence, and its comparison of the same rule and

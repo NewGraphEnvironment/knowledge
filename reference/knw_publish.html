@@ -46,7 +46,7 @@ not list, so a reader starts from the manifest."><meta property="og:image" conte
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Write a set of tables as Parquet with a manifest, and upload them</h1>
-      <small class="dont-index">Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/v0.4.30/R/publish.R" class="external-link"><code>R/publish.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/R/publish.R" class="external-link"><code>R/publish.R</code></a></small>
       <div class="d-none name"><code>knw_publish.Rd</code></div>
     </div>
 
@@ -73,7 +73,8 @@ not list, so a reader starts from the manifest.</p>
 <span>  republish <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  no_sign <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  hive <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  hive_keys <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"species_code"</span>, <span class="st">"stage"</span><span class="op">)</span></span>
+<span>  hive_keys <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"species_code"</span>, <span class="st">"stage"</span><span class="op">)</span>,</span>
+<span>  receipt <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -127,6 +128,18 @@ under a Hive path <code>&lt;table&gt;/&lt;key&gt;=&lt;value&gt;/part.parquet</co
 
 <dt id="arg-hive-keys">hive_keys<a class="anchor" aria-label="anchor" href="#arg-hive-keys"></a></dt>
 <dd><p><code>character</code> the Hive key columns.</p></dd>
+
+
+<dt id="arg-receipt">receipt<a class="anchor" aria-label="anchor" href="#arg-receipt"></a></dt>
+<dd><p><code>NULL</code> (no receipt), or a list for the set's provenance
+receipt in crate's shape (#154): <code>output</code>, the declaration it is held to
+(<code><a href="knw_receipt_keys.html">knw_receipt_keys()</a></code>, <code>"thresholds"</code> or <code>"habitat_grade"</code>); <code>recipe</code>,
+crate's recipe block (<code>code</code>, <code>config</code>, <code>inputs</code>, <code>seed</code>); and <code>summary</code>,
+the named numbers the declaration lists. The tables the declaration
+fingerprints are read from their source CSVs as text, so they are held
+exact; the Parquet files are the parts, each flat one named by its table.
+<code>receipt.json</code> is written beside the manifest with no host, and uploaded
+after the tables and before the manifest.</p></dd>
 
 </dl></div>
     <div class="section level2">

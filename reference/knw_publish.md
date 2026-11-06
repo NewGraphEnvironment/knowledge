@@ -22,7 +22,8 @@ knw_publish(
   republish = FALSE,
   no_sign = FALSE,
   hive = NULL,
-  hive_keys = c("species_code", "stage")
+  hive_keys = c("species_code", "stage"),
+  receipt = NULL
 )
 ```
 
@@ -75,6 +76,19 @@ knw_publish(
 - hive_keys:
 
   `character` the Hive key columns.
+
+- receipt:
+
+  `NULL` (no receipt), or a list for the set's provenance receipt in
+  crate's shape (#154): `output`, the declaration it is held to
+  ([`knw_receipt_keys()`](https://newgraphenvironment.github.io/knowledge/reference/knw_receipt_keys.md),
+  `"thresholds"` or `"habitat_grade"`); `recipe`, crate's recipe block
+  (`code`, `config`, `inputs`, `seed`); and `summary`, the named numbers
+  the declaration lists. The tables the declaration fingerprints are
+  read from their source CSVs as text, so they are held exact; the
+  Parquet files are the parts, each flat one named by its table.
+  `receipt.json` is written beside the manifest with no host, and
+  uploaded after the tables and before the manifest.
 
 ## Value
 

@@ -139,6 +139,12 @@ run in one call for every species and stage the evidence can speak to.
   [`knw_grade_record_check()`](https://newgraphenvironment.github.io/knowledge/reference/knw_grade_record_write.md)
   : A grade table's record: what the run made, in one tracked row
 
+- [`knw_grade_receipt_write()`](https://newgraphenvironment.github.io/knowledge/reference/knw_grade_receipt_write.md)
+  : A grade table's provenance receipt
+
+- [`knw_receipt_keys()`](https://newgraphenvironment.github.io/knowledge/reference/knw_receipt_keys.md)
+  : A receipt declaration knowledge ships
+
 - [`knw_archive_setup()`](https://newgraphenvironment.github.io/knowledge/reference/knw_archive_setup.md)
   : Where the archive keeps a run: its setup folder
 
