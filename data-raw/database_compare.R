@@ -47,7 +47,7 @@ spec <- data.table::rbindlist(list(
   # the tuning (0320): the grade record's run columns are compared, its provenance is context
   list("_grades_record\\.csv$",      "species_code;stage",                                  0,
        "grades_md5;grades_bytes;tune_run;evidence_ledger;knowledge_commit;record_source", TRUE),
-  list("_grades\\.csv$",             "id_segment",                                          1e-9, "",  TRUE),
+  list("_grades\\.csv$",             "watershed_group_code;id_segment",                                          1e-9, "",  TRUE),
   list("_tune\\.csv$",               "rule",                                                1e-6, "",  TRUE),
   list("_summary\\.csv$",            "species_code;stage",                                  1e-6, "",  TRUE),
   list("_curves\\.csv$",             "curve;x",                                             1e-6, "",  FALSE),

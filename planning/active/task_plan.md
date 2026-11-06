@@ -60,11 +60,11 @@ The reference is the published run `20261104_0543`: tracked `data/tune/*` and `d
 ## Phase 1: Inputs and reference
 
 - [x] Install link `v0.78.1`. Confirm `packageVersion("link") == "0.78.1"` and fresh 0.52.0
-- [ ] `PULL=TRUE GRADES=TRUE Rscript scripts/0336-archive.R` into this worktree. Check every md5 against the records and the published ledger
+- [x] `PULL=TRUE GRADES=TRUE Rscript scripts/0336-archive.R` into this worktree. Check every md5 against the records and the published ledger
       (`visits_link` db5ca99a…, `visits_species` 6a2e28f1…, `walks` 2e0f0f41…; `sites.rds` 39f751b1…)
 - [x] Copy `fish.rds` and `catch.rds` from the main checkout's `data/fdis/build/`, after checking their md5s against the ledger
 - [x] The archive holds 4 of the 8 evidence tables; the other four (`bcfishobs_fdis_match`, `access_check`, `workbook_sites`, `workbook_species`) copied from the host's checkout, whose 3 archived tables match the ledger md5s and were written with them (2026-11-03 22:42)
-- [ ] `SCHEMA=fresh_default Rscript scripts/0336-archive.R` (read-only mode): does this database still hold the run's build, flows and walk?
+- [x] `SCHEMA=fresh_default Rscript scripts/0336-archive.R` (read-only mode): does this database still hold the run's build, flows and walk?
 - [ ] Read `pg_stat_activity` before each timed step
 
 ## Phase 2: The comparison tool, then chinook rearing

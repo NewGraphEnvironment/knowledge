@@ -63,7 +63,14 @@ Relates to #145 (the run reproduced), #154 (receipts for published tables and gr
 - Main checkout data/fdis/build: catch.rds and fish.rds md5s match the published ledger; sites.rds does not (98d4d6dd vs 39f751b1).
 - DEV=1 0320 grades nothing; knw_link_walks(cache = FALSE) walks uncached.
 
+## Phase 1 (2026-11-06)
+
+- `SCHEMA=fresh_default 0336`: the database still holds the run's build for all 7 keys.
+- The grade tables key on `watershed_group_code` + `id_segment` (`id_segment` repeats across groups: 80,538 distinct over 3,016,042 CH rows). `dist_status` is `no_walk` on inaccessible segments, never NA.
+- Local `../link` main was stale (2026-11-01) while origin/main is `e2a85938`, the commit the published `0330` read link's configs at; fast-forwarded. `0330` runs with `CONFIG_SHA=e2a85938…` pinned.
+
 ## Errors Encountered
 
 | Error | Resolution |
 |-------|------------|
+| `SCHEMA=fresh_default 0336` without `PULL` or `DRY` runs archive mode (it would send to the bucket); it stopped at `token acc-v5 is not a acc token in link's vocabulary` before sending anything (archive_index unchanged, no new objects) | Use `DRY=1` with `SCHEMA` for the build check. The token error was the stale local `../link`; fast-forwarded to origin/main |
