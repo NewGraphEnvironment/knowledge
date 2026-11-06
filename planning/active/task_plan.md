@@ -81,20 +81,24 @@ The reference is the published run `20261104_0543`: tracked `data/tune/*` and `d
 - [ ] `SPECIES=CH RUN=<stamp> EVIDENCE_DIR=data/fdis/derived_second Rscript scripts/0320-tune-run.R`. Compare the smoke results, tune, seeds,
       honest, curves, summary and pick (`mad>=0.75|g<=0.13|Q3@D1000`) against `data/tune/CH_rear_*`. Compare the grade record, and the grade
       table by md5 first and by content where the md5 differs, against the restored `CH_rear_grades.csv`
-- [ ] `TUNE_DIR=data/tune/candidate/<stamp> SPECIES=CH GPKG=FALSE Rscript scripts/0330-compare.R`. Compare km drawn and graded, plus change,
+- [ ] `TUNE_DIR=data/tune/candidate/<stamp> SPECIES=CH CONFIG_SHA=e2a85938… GPKG=FALSE Rscript scripts/0330-compare.R`. Compare km drawn and graded, plus change,
       checks and compare, against `data/compare/CH_rear_*`
+- [ ] Machine control (review G4): `SPECIES=CH RUN=<stamp2> WORKERS=8 Rscript scripts/0320-tune-run.R` on the restored host evidence
+      (default `data/fdis/derived`). Its tables test the machine; its grade table differs from the published one only through this
+      database, with `evidence_md5` equal
+- [ ] Copy pass 1's CH outputs aside before Phase 3 (review O3), and record each step's `sessionInfo()`, workers and grade cache counts
 - [ ] A `different` in something a decision reads stops the run. Rerun that step at `2aacd1f` and record which cause it was
 
 ## Phase 3: Every key
 
-- [ ] `RUN=<stamp> EVIDENCE_DIR=data/fdis/derived_second Rscript scripts/0320-tune-run.R` (every species). Each key's pick, tables and grades
+- [ ] `RUN=<stamp> WORKERS=8 EVIDENCE_DIR=data/fdis/derived_second Rscript scripts/0320-tune-run.R` (every species); CH's pass-2 outputs against pass 1 are a free repeat check. Each key's pick, tables and grades
       compared against run `20261104_0543`
-- [ ] `TUNE_DIR=data/tune/candidate/<stamp> GPKG=FALSE Rscript scripts/0330-compare.R` for every key, compared against `data/compare/`
+- [ ] `TUNE_DIR=data/tune/candidate/<stamp> SPECIES=BT,CO,GR,ST,WCT CONFIG_SHA=e2a85938… GPKG=FALSE Rscript scripts/0330-compare.R`, compared against `data/compare/`
 - [ ] Minutes per step beside the host's (from `20261103_evidence_build_ledger.csv`, `20261104_tune_run-…txt` and `20261104_compare-…txt`)
 
 ## Phase 4: crate's comparison (once crate PR #44 merges)
 
-- [ ] Check that PR #44 has merged. If it has not, do Phase 5 first and come back
+- [x] Check that PR #44 has merged (merged 2026-11-06 02:30 UTC; crate 0.12.0 with `crt_receipt_compare()` already installed)
 - [ ] `pak::pak("NewGraphEnvironment/crate", ask = FALSE)`, then write receipts for the reference and new outputs through `crt_receipt_write()`
       with the tolerances recorded by hand. Check that `crt_receipt_compare()`'s verdict on each output matches the hand-recorded one, and record
       any disagreement. Disagreements go to a crate issue, not a workaround (drafted for crate, which is our repo)
@@ -103,12 +107,18 @@ The reference is the published run `20261104_0543`: tracked `data/tune/*` and `d
 
 ## Phase 5: Record
 
-- [ ] Commit the logs (`scripts/logs/habitat/<date>_*-derived_second*`, the tune and compare logs copied from the candidate, the verdict CSVs)
+- [ ] Commit the logs under `scripts/logs/habitat/database_second/` (review G8: 0325 lists `_tune_run*.txt` at the top of `scripts/logs/habitat/`), the 0310 ledger where 0310 writes it, the verdict CSVs
 - [ ] `research/database_builds.md`, "A second database": the measured load (about 71 GB moved as 8 GB of dumps plus one 14-minute flow load,
       66 min of moving, 2026-11-05), what was reproduced and with which verdicts, the minutes per step against the host's, and that a run there
       is now ordinary. Update the header's Verified/Issues/Produced-by line
 - [ ] Edit #158's body: `DEV=1` replaced by the full candidate run, the cold walk check added, and each task ticked with its verdict
 - [ ] CLAUDE.md "Database access": one line that a second database holding the build has been proved (no host names)
+
+## Out of scope (review G5)
+
+`data/tune/grad_fwa/` (the separate fwa_gradient pass), `grad_ext/`, `data/compare/floodplain.csv`, the GeoPackages and the figures are not
+reproduced. Expected differences, not stops: visits_link's added `segment_fwa_gradient` (#120, after the published run), and with it
+`evidence_md5` in every grade table, record and summary; the smoke tables' `previous` row; the 0310 ledger's new and context rows.
 
 ## Owed at the end (reported, done after merge)
 

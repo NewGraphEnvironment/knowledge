@@ -16,7 +16,9 @@
 # KEYS AND TOLERANCES: the `spec` table below, one row per output family, matched on the file name. `key` is the
 # columns a row is identified by (blank: sort on every column the two sides share, for small tables whose rows
 # carry no float a database could sum differently); `tol` the absolute tolerance on numeric columns (0: exact);
-# `context` columns reported and never compared. A file no row matches is compared exactly, keyed on every column.
+# `context` columns reported and never compared; `added` columns the current code writes and the reference predates
+# (#120 added segment_fwa_gradient to visits_link after the published run), noted and never compared. A file no row
+# matches is compared exactly, keyed on every column.
 #
 # SELF-TEST: every run first proves the comparison on fixtures whose verdicts are known (identical in another row
 # order, equivalent under a tolerance, different past it, a planted 1e-6 change against a 1e-9 tolerance, a row
@@ -37,38 +39,41 @@ options(warn = 1)
 # pattern: a regex on the file name. First match wins, so the specific rows come first.
 spec <- data.table::rbindlist(list(
   # the evidence build (0310)
-  list("^visits_link\\.csv$",        "site_visit",                                          0,    "",  TRUE),
-  list("^visits_species\\.csv$",     "site_visit;species_code",                             0,    "",  TRUE),
-  list("^walks\\.csv$",              "blue_line_key;downstream_route_measure;src;qmin",     1e-6, "",  TRUE),
-  list("^bcfishobs_fdis_match\\.csv$", "",                                                  0,    "",  FALSE),
-  list("^access_check\\.csv$",       "species_code;habitat_accessible;access_gt0",          1e-6, "",  FALSE),
-  list("^workbook_sites\\.csv$",     "site_visit",                                          1e-6, "",  FALSE),
-  list("^workbook_species\\.csv$",   "",                                                    1e-6, "",  FALSE),
+  list("^visits_link\\.csv$",        "site_visit",                                          0,    "",  TRUE, "segment_fwa_gradient"),
+  list("^visits_species\\.csv$",     "site_visit;species_code",                             0,    "",  TRUE, ""),
+  list("^walks\\.csv$",              "blue_line_key;downstream_route_measure;src;qmin",     1e-6, "",  TRUE, ""),
+  list("^bcfishobs_fdis_match\\.csv$", "",                                                  0,    "",  FALSE, ""),
+  list("^access_check\\.csv$",       "species_code;habitat_accessible;access_gt0",          1e-6, "",  FALSE, ""),
+  list("^workbook_sites\\.csv$",     "site_visit",                                          1e-6, "",  FALSE, ""),
+  list("^workbook_species\\.csv$",   "",                                                    1e-6, "",  FALSE, ""),
   # the tuning (0320): the grade record's run columns are compared, its provenance is context
   list("_grades_record\\.csv$",      "species_code;stage",                                  0,
-       "grades_md5;grades_bytes;tune_run;evidence_ledger;knowledge_commit;record_source", TRUE),
-  list("_grades\\.csv$",             "watershed_group_code;id_segment",                                          1e-9, "",  TRUE),
-  list("_tune\\.csv$",               "rule",                                                1e-6, "",  TRUE),
-  list("_summary\\.csv$",            "species_code;stage",                                  1e-6, "",  TRUE),
-  list("_curves\\.csv$",             "curve;x",                                             1e-6, "",  FALSE),
-  list("_seeds\\.csv$",              "seed",                                                0,    "",  TRUE),
-  list("_honest\\.csv$",             "fold",                                                1e-6, "",  FALSE),
-  list("_smoke\\.csv$",              "check;role;rule",                                     1e-6, "",  FALSE),
-  list("_groups\\.csv$",             "watershed_group_code",                                0,    "",  FALSE),
-  list("^pick_report\\.csv$",        "species_code;stage",                                  1e-6, "",  TRUE),
+       "grades_md5;grades_bytes;tune_run;evidence_ledger;knowledge_commit;record_source;evidence_md5", TRUE, ""),
+  list("_grades\\.csv$",             "watershed_group_code;id_segment",                     1e-9, "evidence_md5", TRUE, ""),
+  list("_tune\\.csv$",               "rule",                                                1e-6, "",  TRUE, ""),
+  list("_summary\\.csv$",            "species_code;stage",                                  1e-6,
+       "evidence_md5;tune_run;evidence_ledger;evidence_dir", TRUE, ""),
+  list("_curves\\.csv$",             "curve;x",                                             1e-6, "",  FALSE, ""),
+  list("_seeds\\.csv$",              "seed",                                                0,    "",  TRUE, ""),
+  list("_honest\\.csv$",             "fold",                                                1e-6, "",  FALSE, ""),
+  list("_smoke\\.csv$",              "check;role;rule",                                     1e-6, "",  FALSE, ""),
+  list("_groups\\.csv$",             "watershed_group_code",                                0,    "",  FALSE, ""),
+  list("^pick_report\\.csv$",        "species_code;stage",                                  1e-6, "",  TRUE, ""),
   # the comparison (0330): km sums take a rounding
-  list("_compare\\.csv$",            "watershed_group_code;structure",                      1e-6, "",  TRUE),
-  list("_change\\.csv$",             "direction;reason;order;structure",                    1e-6, "",  TRUE),
-  list("_checks\\.csv$",             "check;rule;segment;tuned_structure",                  1e-6, "",  FALSE)
+  list("_compare\\.csv$",            "watershed_group_code;structure",                      1e-6, "",  TRUE, ""),
+  list("_change\\.csv$",             "direction;reason;order;structure",                    1e-6, "",  TRUE, ""),
+  list("_checks\\.csv$",             "check;rule;segment;tuned_structure",                  1e-6, "",  FALSE, "")
 ))
-data.table::setnames(spec, c("pattern", "key", "tol", "context", "decision_read"))
+data.table::setnames(spec, c("pattern", "key", "tol", "context", "decision_read", "added"))
 
 spec_for <- function(name) {
   hit <- which(vapply(spec$pattern, grepl, logical(1), x = name))
-  if (length(hit) == 0) return(list(key = character(), tol = 0, context = character(), decision_read = NA))
+  if (length(hit) == 0) return(list(key = character(), tol = 0, context = character(), decision_read = NA,
+                                    added = character()))
   s <- spec[hit[1]]
   split <- function(x) if (nzchar(x)) strsplit(x, ";", fixed = TRUE)[[1]] else character()
-  list(key = split(s$key), tol = s$tol, context = split(s$context), decision_read = s$decision_read)
+  list(key = split(s$key), tol = s$tol, context = split(s$context), decision_read = s$decision_read,
+       added = split(s$added))
 }
 
 # ---- one comparison --------------------------------------------------------------------------------------------
@@ -81,7 +86,7 @@ row_out <- function(output, verdict, bytes_match, rows_ref, rows_new, max_diff =
 
 # compare two data.tables already read; `name` labels the row
 compare_tables <- function(a, b, name, key = character(), tol = 0, context = character(), decision_read = NA,
-                           bytes_match = NA) {
+                           bytes_match = NA, added = character()) {
   na <- nrow(a); nb <- nrow(b)
   notes <- character()
   ctx <- intersect(context, union(names(a), names(b)))
@@ -90,6 +95,10 @@ compare_tables <- function(a, b, name, key = character(), tol = 0, context = cha
                                               identical(as.character(a[[cn]]), as.character(b[[cn]]))), logical(1))]
     if (length(moved)) notes <- c(notes, paste0("context differs: ", paste(moved, collapse = ",")))
   }
+  # a column the current code adds, which the reference predates: noted, never compared
+  add_new <- intersect(setdiff(added, names(a)), names(b))
+  if (length(add_new)) notes <- c(notes, paste0("added by the current code: ", paste(add_new, collapse = ",")))
+  b <- b[, setdiff(names(b), add_new), with = FALSE]
   a <- a[, setdiff(names(a), ctx), with = FALSE]
   b <- b[, setdiff(names(b), ctx), with = FALSE]
   only_a <- setdiff(names(a), names(b)); only_b <- setdiff(names(b), names(a))
@@ -162,7 +171,8 @@ compare_files <- function(ref, new, name = basename(ref)) {
   if (!grepl("\\.csv$", name)) return(row_out(name, "different", FALSE, NA_integer_, NA_integer_,
                                               decision_read = s$decision_read,
                                               note = "not a csv and the bytes differ: compare by hand"))
-  compare_tables(read_tbl(ref), read_tbl(new), name, s$key, s$tol, s$context, s$decision_read, bytes_match = FALSE)
+  compare_tables(read_tbl(ref), read_tbl(new), name, s$key, s$tol, s$context, s$decision_read, bytes_match = FALSE,
+                 added = s$added)
 }
 
 # ---- self-test: the verdicts on fixtures whose answers are known -------------------------------------------------
@@ -191,6 +201,10 @@ self_test <- function() {
   a <- ref()[, run := "x"]; b <- ref()[, run := "y"]
   got <- c(got, compare_tables(a, b, "context differs", key = "id", context = "run")$verdict)
   want <- c(want, "identical")
+  # a column the code adds is noted and never fails; the same column undeclared is different
+  got <- c(got, compare_tables(ref(), ref()[, extra := 1], "declared added column", key = "id", added = "extra")$verdict,
+           compare_tables(ref(), ref()[, extra := 1], "undeclared added column", key = "id")$verdict)
+  want <- c(want, "identical", "different")
   # the file path: identical bytes, and a file missing from new
   d <- tempfile("dbc_"); dir.create(d)
   data.table::fwrite(ref(), file.path(d, "a.csv")); data.table::fwrite(ref(), file.path(d, "b.csv"))
