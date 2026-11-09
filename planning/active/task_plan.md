@@ -95,10 +95,10 @@ Approving this plan means the following (Al, 2026-11-09). Strike any line before
 - [x] Commit them with the baseline, so the read survives a `/clear` or a move to another machine.
 
 ## Phase 2: Freeze
-- [ ] Re-list the open issues and write `backlog_frozen.txt` to the git directory. Place any issue filed since the read and note it in findings.
+- [x] Re-list the open issues and write `backlog_frozen.txt` to the git directory. Place any issue filed since the read and note it in findings.
 
 ## Phase 3: Write the backlog file
-- [ ] `planning/backlog.md` in the shape the sweep sets out:
+- [x] `planning/backlog.md` in the shape the sweep sets out:
   - the `**Verified:**` header naming #169;
   - Moves (with umbrella placeholders);
   - the tracks line;
@@ -106,11 +106,11 @@ Approving this plan means the following (Al, 2026-11-09). Strike any line before
   - one `### <n>.` section per batch, each with its `- [ ] Carried by move` line;
   - Singles;
   - Closed and transferred.
-- [ ] Run the coverage check: every frozen issue is named in the file.
+- [x] Run the coverage check: every frozen issue is named in the file.
 
 ## Phase 4: Public scan
-- [ ] Draft each umbrella body to `umbrella_<n>.md` in the git directory, each ending with the backlog pointer and `/planning-init <this issue>`.
-- [ ] Run `public_leak_scan` on those bodies and on `planning/backlog.md`. If the scan forces a rewrite, show the rewritten body to Al before filing it.
+- [x] Draft each umbrella body to `umbrella_<n>.md` in the git directory, each ending with the backlog pointer and `/planning-init <this issue>`.
+- [x] Run `public_leak_scan` on those bodies and on `planning/backlog.md`. If the scan forces a rewrite, show the rewritten body to Al before filing it.
 
 ## Phase 5: File, write in, close
 - [ ] File the 11 umbrellas (`--body-file`, label `umbrella`), then write their numbers into the Moves table and the batch sections.
@@ -140,8 +140,8 @@ Decided at the gate (Al, 2026-11-09): this is a phase of #169, run once knowledg
 - [ ] Report `backlog_moves.sh next`.
 
 ## Validation
-- [ ] Coverage check passes (Phase 3)
-- [ ] Public scan is clean (Phase 4)
+- [x] Coverage check passes (Phase 3)
+- [x] Public scan is clean (Phase 4)
 - [ ] Every open move ticks cleanly on a copy (Phase 5)
 - [ ] `backlog_moves.sh next` names move 1
 - [ ] `/code-check` clean
