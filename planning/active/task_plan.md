@@ -19,7 +19,7 @@ Branch `169-backlog-pass-batch-the-open-issues-into`, cut from origin/main at b6
 - **Premises checked against main:**
   - #68 is done: 9f4b21bd (#73's PR) set `grid_grad` to 3–30 % for every species (`R/tune_grid.R:52`), and #92 and #145 republished on it.
   - #72 is done in the same commit (corrected by code-check rounds 2 and 3: only `0320`'s side is; `0330`, `0325`, `0322` and `data-raw/vignette_chinook.R` still gate on the literal, so #72 was reopened and placed in batch 13). The curve carries `edge_stream`, `0320` reads `ref_edge` from the curve (`scripts/0320-tune-run.R:595`) and records `discharge_load` (`:567`), and its keep check compares both.
-  - #3 is partly done by `0154-corpus-tag.R` (7232d463); the farm/skip decision and its reason are not recorded (code-check round 3: reopened, batch 17).
+  - #3 is partly done by `0154-corpus-tag.R` (7232d463); the farm/skip decision and its reason, the farm targets as a query over tags, and the dense-but-skipped flag are not done (code-check rounds 3 and 4: reopened, batch 17).
   - Still open in the code:
     - #34: `0250:136` reads the gradient as a fraction.
     - #31: the BULK CO migration row has no end date.
@@ -54,7 +54,7 @@ Approving this plan means the following (Al, 2026-11-09). Strike any line before
   - ~~**#72**: done in 9f4b21bd.~~ Reopened after code-check round 2 found the readers' half undone; placed in batch 13.
   - **#48**: done in PR #50. What remains is automatic: `0280` refuses an abstract row once the item has a PDF.
   - **#80**: superseded. #141 reports the pick from the flow start, and #73 built the door. Its open items (decide with link which method sets link's flow numbers; the articles' section comparing the two starting points, added after code-check round 3) are written into #139's "To file" first.
-  - ~~**#3**: superseded by `0154`.~~ Reopened after code-check round 3: ask 4 is unmet; placed in batch 17.
+  - ~~**#3**: superseded by `0154`.~~ Reopened after code-check rounds 3 and 4: asks on the farm decision, tag-built targets and the dense-but-skipped flag are unmet; placed in batch 17.
 - **Transfer:** #8 goes to the skills repository, where the skill would live.
 - **#23 scope:** cut to what #137 needs, because link#294 has closed. This is decided at move 6's gate, not edited now.
 - **#120:** tick its answered premise box ("Closes: … 2.8 % against 1.5 %") in the body.
@@ -135,7 +135,7 @@ Decided at the gate (Al, 2026-11-09): this is a phase of #169, run once knowledg
 - [x] Get Al to read the link body before it is filed: link is public, and the body goes through the same public scan.
 
 ## Phase 7: Land
-- [ ] `/code-check` on the branch. The diff is markdown only, but the convention reviews anything an agent loads as instructions, and the backlog file is read by `/compact-prep` and `/gh-pr-merge`.
+- [x] `/code-check` on the branch. The diff is markdown only, but the convention reviews anything an agent loads as instructions, and the backlog file is read by `/compact-prep` and `/gh-pr-merge`.
 - [ ] `/planning-archive`, then `/gh-pr-push` (the PR closes #169).
 - [ ] Report `backlog_moves.sh next`.
 
@@ -144,7 +144,7 @@ Decided at the gate (Al, 2026-11-09): this is a phase of #169, run once knowledg
 - [x] Public scan is clean (Phase 4)
 - [x] Every open move ticks cleanly on a copy (Phase 5)
 - [x] `backlog_moves.sh next` names move 1
-- [ ] `/code-check` clean
+- [x] `/code-check` clean
 - [ ] PWF checkboxes match the landed work
 - [ ] `/planning-archive` on completion
 

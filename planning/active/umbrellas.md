@@ -229,4 +229,4 @@ Runs after move 2, which renames the article #77 turns the scale bar on in.
 |---|---|
 | #4 | Validate the fieldwork-prep pipeline end-to-end on an unharvested group (UPCE) |
 | #15 | Spatial keys on the farmed corpus: blue_line_key + measure, and a reach dossier |
-| #3 | Content-tag the harvested report corpus (reopened 2026-11-09: record the farm/skip decision and its reason, which `0154`'s `farmed` column does not) |
+| #3 | Content-tag the harvested report corpus (reopened 2026-11-09: record the farm/skip decision and its reason, which `0154`'s `farmed` column does not; then build farm targets as a query over the tags, and flag table-dense reports skipped by that decision) |

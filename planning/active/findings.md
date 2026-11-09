@@ -39,9 +39,9 @@ Most named: #120 (6), #118 (4), #64 (3); then #96, #85, #81, #80, #70, #68, #42,
 |---|---|---|
 | #68 | done | 9f4b21bd (2026-10-22, #73's PR, message names #68): `R/tune_grid.R:52` `grid_grad` runs 3 to 30 %; #92 and #145 republished on it |
 | #72 | mostly done | 9f4b21bd: the curve carries `edge_stream`; `scripts/0320-tune-run.R:595` takes `ref_edge` from it, `:567` records `discharge_load`, `:613-614` compare both. Not done (found by code-check rounds 2 and 3, after #72 was closed; reopened): `0330:274`, `0325:81`, `0322:266` and `data-raw/vignette_chinook.R:104` still gate on the `ref_population` literal; `0320:665` and `0322:284` still write it |
-| #80 | superseded, one task moved | its first task (re-pick from link's flow version) is #141's anchoring check (`research/baseline_anchoring.md`); the wetland door was built by #73 (`tuned_as = door`, `inst/method/settings.csv:68`); link#364 closed |
+| #80 | superseded, two items moved to #139 (the link decision on flow numbers; the articles' section on both starting points) | its first task (re-pick from link's flow version) is #141's anchoring check (`research/baseline_anchoring.md`); the wetland door was built by #73 (`tuned_as = door`, `inst/method/settings.csv:68`); link#364 closed |
 | #48 | done | PR #50 landed data rows 1137–1145; "What remains" describes `0280` refusing an abstract row once a PDF arrives, which needs no work |
-| #3 | partly done | `scripts/0154-corpus-tag.R` (7232d463) writes `data/corpus_tags.csv` with content tags; its `farmed` flag is `n_priority_rows > 0` (`:109-110`), not the farm/skip decision and its reason (ask 4). Closed, then reopened after code-check round 3 |
+| #3 | partly done | `scripts/0154-corpus-tag.R` (7232d463) writes `data/corpus_tags.csv` with content tags; its `farmed` flag is `n_priority_rows > 0` (`:109-110`), not the farm/skip decision and its reason (ask 4); nothing builds farm targets from the tags (`wf_farm_priority.js` takes a hand-built list), and the dense-but-skipped flag (`:122-128`) uses the same proxy. Closed, then reopened after code-check rounds 3 and 4 |
 | #34 | open | `scripts/0250-fiss-evidence.R:136` still reads `average_gradient_percent` as is |
 | #31 | open | `data/life_history_timing.csv`: BULK CO migration 08-15, no end |
 | #142 | open | `tests/testthat/test-link_place.R:32-39`: no skip on an empty result |
@@ -93,7 +93,7 @@ Last five runs green; the one `cancelled` is a Pages run superseded by the next 
 |---|---|---|
 | #1 | move 7, batch 12 | a report-repo deliverable; gate asks if still wanted |
 | #2 | move 7, batch 12 | #17's SHA in the GeoPackage may make it unnecessary (gate) |
-| #3 | move 11, batch 17 | reopened: the farm/skip decision and its reason are not recorded |
+| #3 | move 11, batch 17 | reopened: the farm/skip decision and its reason, farm targets from tags, and the dense-but-skipped flag |
 | #4 | move 11, batch 17 | parked 2026-09-04; B3, B4, B6 rewrite `0161`/`0162`, as #15 does |
 | #7 | move 7, batch 11 | graduates the parser the regeneration runs through |
 | #8 | transferred | the skill lives in the skills repository |

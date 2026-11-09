@@ -192,8 +192,9 @@ own prose). Touches `data/zotero_key_map.csv`, `scripts/0150`–`0156`, `CLAUDE.
 - [ ] Carried by move 11, #180
 
 #4 (the UPCE validation, parked after Phase 3; B2–B6 unfixed) and #15 (spatial keys on the farmed corpus), which both
-rewrite `0161` and `0162`, and #3 (reopened 2026-11-09: `0154`'s `farmed` column is whether a report yielded rows,
-not the farm/skip decision and its reason, which #3 asked to record).
+rewrite `0161` and `0162`, and #3 (reopened 2026-11-09: `0154`'s `farmed` column is whether a report yielded rows, not the farm/skip
+decision and its reason, which #3 asked to record; from that decision, the farm target list as a query over the tags,
+and the flag on table-dense reports that were skipped, which `0154` takes from the same proxy).
 
 ## Singles
 
