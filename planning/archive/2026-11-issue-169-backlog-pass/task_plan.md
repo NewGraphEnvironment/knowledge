@@ -136,8 +136,8 @@ Decided at the gate (Al, 2026-11-09): this is a phase of #169, run once knowledg
 
 ## Phase 7: Land
 - [x] `/code-check` on the branch. The diff is markdown only, but the convention reviews anything an agent loads as instructions, and the backlog file is read by `/compact-prep` and `/gh-pr-merge`.
-- [ ] `/planning-archive`, then `/gh-pr-push` (the PR closes #169).
-- [ ] Report `backlog_moves.sh next`.
+- [x] `/planning-archive`, then `/gh-pr-push` (the PR closes #169).
+- [x] Report `backlog_moves.sh next`.
 
 ## Validation
 - [x] Coverage check passes (Phase 3)
@@ -145,7 +145,7 @@ Decided at the gate (Al, 2026-11-09): this is a phase of #169, run once knowledg
 - [x] Every open move ticks cleanly on a copy (Phase 5)
 - [x] `backlog_moves.sh next` names move 1
 - [x] `/code-check` clean
-- [ ] PWF checkboxes match the landed work
-- [ ] `/planning-archive` on completion
+- [x] PWF checkboxes match the landed work
+- [x] `/planning-archive` on completion
 
 Approve runs every phase to the PR. To park, reject with `park`: the baseline (with the parked read) is written and pushed, nothing more.
