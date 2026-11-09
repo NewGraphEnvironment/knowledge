@@ -38,10 +38,10 @@ Most named: #120 (6), #118 (4), #64 (3); then #96, #85, #81, #80, #70, #68, #42,
 | issue | verdict | evidence |
 |---|---|---|
 | #68 | done | 9f4b21bd (2026-10-22, #73's PR, message names #68): `R/tune_grid.R:52` `grid_grad` runs 3 to 30 %; #92 and #145 republished on it |
-| #72 | mostly done | 9f4b21bd: the curve carries `edge_stream`; `scripts/0320-tune-run.R:595` takes `ref_edge` from it, `:567` records `discharge_load`, `:613-614` compare both. Not done (found by code-check round 2, after #72 was closed; reopened): `0330:274` and `0325:81` still gate on the `ref_population` literal, and `0320:665` still writes it |
-| #80 | superseded | its first task (re-pick from link's flow version) is #141's anchoring check (`research/baseline_anchoring.md`); the wetland door was built by #73 (`tuned_as = door`, `inst/method/settings.csv:68`); link#364 closed |
+| #72 | mostly done | 9f4b21bd: the curve carries `edge_stream`; `scripts/0320-tune-run.R:595` takes `ref_edge` from it, `:567` records `discharge_load`, `:613-614` compare both. Not done (found by code-check rounds 2 and 3, after #72 was closed; reopened): `0330:274`, `0325:81`, `0322:266` and `data-raw/vignette_chinook.R:104` still gate on the `ref_population` literal; `0320:665` and `0322:284` still write it |
+| #80 | superseded, one task moved | its first task (re-pick from link's flow version) is #141's anchoring check (`research/baseline_anchoring.md`); the wetland door was built by #73 (`tuned_as = door`, `inst/method/settings.csv:68`); link#364 closed |
 | #48 | done | PR #50 landed data rows 1137–1145; "What remains" describes `0280` refusing an abstract row once a PDF arrives, which needs no work |
-| #3 | superseded | `scripts/0154-corpus-tag.R` (7232d463, 2026-07-30) writes `data/corpus_tags.csv` with content tags from captions and the `farmed` flag |
+| #3 | partly done | `scripts/0154-corpus-tag.R` (7232d463) writes `data/corpus_tags.csv` with content tags; its `farmed` flag is `n_priority_rows > 0` (`:109-110`), not the farm/skip decision and its reason (ask 4). Closed, then reopened after code-check round 3 |
 | #34 | open | `scripts/0250-fiss-evidence.R:136` still reads `average_gradient_percent` as is |
 | #31 | open | `data/life_history_timing.csv`: BULK CO migration 08-15, no end |
 | #142 | open | `tests/testthat/test-link_place.R:32-39`: no skip on an empty result |
@@ -93,7 +93,7 @@ Last five runs green; the one `cancelled` is a Pages run superseded by the next 
 |---|---|---|
 | #1 | move 7, batch 12 | a report-repo deliverable; gate asks if still wanted |
 | #2 | move 7, batch 12 | #17's SHA in the GeoPackage may make it unnecessary (gate) |
-| #3 | closed | superseded by `0154` |
+| #3 | move 11, batch 17 | reopened: the farm/skip decision and its reason are not recorded |
 | #4 | move 11, batch 17 | parked 2026-09-04; B3, B4, B6 rewrite `0161`/`0162`, as #15 does |
 | #7 | move 7, batch 11 | graduates the parser the regeneration runs through |
 | #8 | transferred | the skill lives in the skills repository |
@@ -113,14 +113,14 @@ Last five runs green; the one `cancelled` is a Pages run superseded by the next 
 | #48 | closed | done in PR #50 |
 | #51 | single | its own analysis (FDIS lengths × temperature series) |
 | #63 | move 8, batch 13 | adds a column to the published tables: only a promotion may |
-| #64 | move 4, batch 7 | one template with #90's skeleton |
+| #64 | move 4, batch 7 | one template with #90's skeleton; its chinook rewrite is #118's (batch 2) |
 | #68 | closed | done in 9f4b21bd |
 | #70 | move 9, batch 15 | waits on fresh#257 |
 | #71 | move 9, batch 15 | waits on floodplain data and fresh#257 |
 | #72 | move 8, batch 13 | reopened: the readers still gate on a literal; edits `0325` beside #63 |
 | #76 | single | reading terms of use; `inst/NOTICE.md` |
 | #77 | move 4, batch 6 | `R/compare_map.R` with #81's example maps |
-| #80 | closed | superseded by #141 and #73; open item moves to #139 |
+| #80 | closed | superseded by #141 and #73; the link decision and the articles' section move to #139 |
 | #81 | move 4, batch 6 | `0330` and the example-map script |
 | #85 | track (speed) | |
 | #90 | move 4, batch 7 | generated research pages |
@@ -150,10 +150,12 @@ Last five runs green; the one `cancelled` is a Pages run superseded by the next 
 | #165 | track (provenance) | |
 | #168 | move 3, batch 4 | key helper first, for the sitting's writes |
 
-58 = 41 batched, 7 in tracks, 5 singles, 4 closed, 1 transferred (#72 moved from closed to batch 13 after code-check round 2).
+58 = 42 batched, 7 in tracks, 5 singles, 3 closed, 1 transferred (#72 moved from closed to batch 13 after code-check round 2, #3 to batch 17 after round 3).
 
 ## Errors Encountered
 
 | Error | Resolution |
 |-------|------------|
 | Main's branch protection is not readable with this token (HTTP 403) | the pass lands through a PR anyway |
+| `open(p,'w').write(f(open(p).read()))` truncated the file before reading it, and the empty file was posted as #177's body | rebuilt from the filed draft in the git directory plus the two later edits; checked every umbrella body's length after; read a file into a variable before opening it for writing |
+| Verdicts of "done"/"superseded" written from part of an issue (code-check rounds 2 and 3: #72, #3, #80, #64) | walked every task, decided line and done-when item of each closure against main; reopened #72 and #3, moved #80's last task to #139 |

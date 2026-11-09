@@ -15,3 +15,4 @@
 - Phase 6: Al read the link body and approved it; filed as link#468; its number is written into the backlog header; the body is kept as `link_pass.md`
 - Code-check round 1: one finding (#72's line references taken from a stale checkout); fixed in the planning files and in #72's closure comment
 - Code-check round 2: four findings, all fixed. #72 was closed with the readers' half undone, so it was reopened and placed in batch 13 (with #177's body updated); link#468 said three moves wait on link where two do; #70's step 1 still owes PSCIS and FISS; the most-named list missed #13 and #115
+- Code-check round 3 (an enumeration: 16 asks of the four closures, 41 state claims, every count): five findings, all fixed. #72's remainder widened to four readers; #3 reopened into batch 17 (its farm/skip decision is not recorded); #80's article section moved to #139; #64's chinook rewrite is #118's; stale counts. Blanked #177's body by a truncating write and restored it

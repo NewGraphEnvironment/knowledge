@@ -18,8 +18,8 @@ Branch `169-backlog-pass-batch-the-open-issues-into`, cut from origin/main at b6
 - **Reference graph** (open issues named in open bodies). Most named: #120 (6), #118 (4), #64 (3). #118 is the hub of the articles work; #120 is a track.
 - **Premises checked against main:**
   - #68 is done: 9f4b21bd (#73's PR) set `grid_grad` to 3–30 % for every species (`R/tune_grid.R:52`), and #92 and #145 republished on it.
-  - #72 is done in the same commit (corrected by code-check round 2: only `0320`'s side is; `0330` and `0325` still gate on the literal, so #72 was reopened and placed in batch 13). The curve carries `edge_stream`, `0320` reads `ref_edge` from the curve (`scripts/0320-tune-run.R:595`) and records `discharge_load` (`:567`), and the readers compare both.
-  - #3 is superseded by `0154-corpus-tag.R` (7232d463), which writes `data/corpus_tags.csv` (content tags, `farmed`).
+  - #72 is done in the same commit (corrected by code-check rounds 2 and 3: only `0320`'s side is; `0330`, `0325`, `0322` and `data-raw/vignette_chinook.R` still gate on the literal, so #72 was reopened and placed in batch 13). The curve carries `edge_stream`, `0320` reads `ref_edge` from the curve (`scripts/0320-tune-run.R:595`) and records `discharge_load` (`:567`), and its keep check compares both.
+  - #3 is partly done by `0154-corpus-tag.R` (7232d463); the farm/skip decision and its reason are not recorded (code-check round 3: reopened, batch 17).
   - Still open in the code:
     - #34: `0250:136` reads the gradient as a fraction.
     - #31: the BULK CO migration row has no end date.
@@ -53,8 +53,8 @@ Approving this plan means the following (Al, 2026-11-09). Strike any line before
   - **#68**: done in 9f4b21bd.
   - ~~**#72**: done in 9f4b21bd.~~ Reopened after code-check round 2 found the readers' half undone; placed in batch 13.
   - **#48**: done in PR #50. What remains is automatic: `0280` refuses an abstract row once the item has a PDF.
-  - **#80**: superseded. #141 reports the pick from the flow start, and #73 built the door. Its one open item (decide with link which method sets link's flow numbers) is written into #139's "To file" first.
-  - **#3**: superseded by `0154`.
+  - **#80**: superseded. #141 reports the pick from the flow start, and #73 built the door. Its open items (decide with link which method sets link's flow numbers; the articles' section comparing the two starting points, added after code-check round 3) are written into #139's "To file" first.
+  - ~~**#3**: superseded by `0154`.~~ Reopened after code-check round 3: ask 4 is unmet; placed in batch 17.
 - **Transfer:** #8 goes to the skills repository, where the skill would live.
 - **#23 scope:** cut to what #137 needs, because link#294 has closed. This is decided at move 6's gate, not edited now.
 - **#120:** tick its answered premise box ("Closes: … 2.8 % against 1.5 %") in the body.
@@ -69,10 +69,10 @@ Approving this plan means the following (Al, 2026-11-09). Strike any line before
 | 5 | 8: #31, #96, #108; 9: #42, #105 | open |
 | 6 | 10: #23, #137 | open |
 | 7 | 11: #7, #34, #10; 12: #17, #2, #1 | open |
-| 8 | 13: #115, #63, #148 | **waiting** on Al's word for the next full retune |
+| 8 | 13: #115, #63, #148, #72 | **waiting** on Al's word for the next full retune |
 | 9 | 14: #132, #131; 15: #70, #71 | **waiting** on link#434, link#400, fresh#257 |
 | 10 | 16: #13, #14, #16 | open |
-| 11 | 17: #4, #15 | **waiting** on Al's word to resume the report-priority pipeline |
+| 11 | 17: #4, #15, #3 | **waiting** on Al's word to resume the report-priority pipeline |
 
 - **Tracks**, named in the file and never folded into moves:
   - baselines: #139 → #140
@@ -81,7 +81,7 @@ Approving this plan means the following (Al, 2026-11-09). Strike any line before
   - minimal-run: #120
 - **Singles:** #51, #76, #130 (cred#45), #33 (Track 3 only), #11.
 - **#169 itself** is named on the file's `**Verified:**` line and closes with this PR.
-- **Placed count:** 58 = 40 batched, 7 in tracks, 5 singles, 5 closed, 1 transferred. Any issue filed before the freeze joins the open move whose files it touches, or is reported if none fits.
+- **Placed count:** 58 = 42 batched, 7 in tracks, 5 singles, 3 closed, 1 transferred (after code-check rounds 2 and 3 reopened #72 and #3). Any issue filed before the freeze joins the open move whose files it touches, or is reported if none fits.
 
 ## Phase 1: Park the read
 - [x] Write `planning/active/findings.md`, holding:

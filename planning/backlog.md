@@ -25,7 +25,7 @@ ticked and not **waiting**; `/planning-init <umbrella>` plans it, one phase per 
 | - [ ] 8 | #177 | 13: promotion cargo (4 issues) | **waiting** on Al's word for the next full retune |
 | - [ ] 9 | #178 | 14, 15: access, gradient on the ground (4 issues) | **waiting** on link#434 and link#400 (override lifts, known records) and fresh#257 (fixed-window gradients) |
 | - [ ] 10 | #179 | 16: library, keys and our own prose (3 issues) | open |
-| - [ ] 11 | #180 | 17: report-priority pipeline for any group (2 issues) | **waiting** on Al's word to resume the report-priority work, parked 2026-09-04 |
+| - [ ] 11 | #180 | 17: report-priority pipeline for any group (3 issues) | **waiting** on Al's word to resume the report-priority work, parked 2026-09-04 |
 
 Tracks are separate efforts, not moves: baselines (#139, `track:baselines`: #140 next), speed (`track:speed`: #85,
 #101; its umbrella is in the skills repository), provenance (`track:provenance`: #162, #165; umbrella likewise) and
@@ -53,7 +53,7 @@ link's own pass: link#468, a backlog pass for link that carries the link issues 
 | 14 | #178 | access: #132, #131 | 2 | decisions 1 and 2 in #131 | access classes and the access gate read the same override records |
 | 15 | #178 | gradient on the ground: #70, #71 | 2 | whether `ff02` exists network-wide | both rescore chinook rearing on a gradient other than the segment's |
 | 16 | #179 | library, keys and our own prose: #13, #14, #16 | 3 | the single-library policy; one store or two | #14 depends on #13; #16's store question is the same keying decision |
-| 17 | #180 | report-priority pipeline for any group: #4, #15 | 2 | resume or not | both rewrite `0161` and `0162` |
+| 17 | #180 | report-priority pipeline for any group: #4, #15, #3 | 3 | resume or not | #4 and #15 rewrite `0161` and `0162`; #3 records the farm decision they act on |
 
 ### 1. Evidence-build and test fixes
 
@@ -111,7 +111,9 @@ Touches `scripts/0330-compare.R`, `R/compare_map.R`, a new example-map script, `
 
 - [ ] Carried by move 4, #173
 
-#90 (generated pages under `research/tuning/`) and #64 (one template per species; its chinook part landed in PR #147).
+#90 (generated pages under `research/tuning/`) and #64 (one template per species: the template in `research/README.md`,
+then coho). #64's chinook rewrite is not here: it is #118's, in batch 2 (PR #147 moved only the method sections
+behind links).
 Touches `research/tuning/`, `research/README.md`, `data-raw/tuning_reports.R`, `research/fig/`.
 
 ### 8. Timing table and NuSEDS
@@ -158,8 +160,9 @@ whether #1 is still wanted.
 
 #115 (the `structures` register row and the `tuned_as` note), #63 (distance to a river: its evidence per species and
 the tie-break) and #148 (a test of a key's return from `not_modelled`; its second half waits on link un-pausing
-rainbow trout). #72 (reopened 2026-11-09: `0330` and `0325` still gate on the `ref_population` literal rather than
-the curve's recorded edge types) joins because it edits `0325` beside #63. Each changes the tracked tables or the method bundle, which only a promotion may. The speed track's
+rainbow trout). #72 (reopened 2026-11-09: four readers still gate on the `ref_population` literal rather than the curve's
+recorded edge types: `0330`, `0325`, `0322`'s `done_rule()` and `data-raw/vignette_chinook.R`) joins because it edits
+`0325` beside #63. Each changes the tracked tables or the method bundle, which only a promotion may. The speed track's
 #85 and the provenance track's #162 also regrade every key: the gate decides whether they ride the same retune.
 
 ### 14. Access
@@ -188,8 +191,9 @@ own prose). Touches `data/zotero_key_map.csv`, `scripts/0150`–`0156`, `CLAUDE.
 
 - [ ] Carried by move 11, #180
 
-#4 (the UPCE validation, parked after Phase 3; B2–B6 unfixed) and #15 (spatial keys on the farmed corpus). Both
-rewrite `0161` and `0162`.
+#4 (the UPCE validation, parked after Phase 3; B2–B6 unfixed) and #15 (spatial keys on the farmed corpus), which both
+rewrite `0161` and `0162`, and #3 (reopened 2026-11-09: `0154`'s `farmed` column is whether a report yielded rows,
+not the farm/skip decision and its reason, which #3 asked to record).
 
 ## Singles
 
@@ -204,6 +208,5 @@ rewrite `0161` and `0162`.
 - #68: closed: done in 9f4b21bd (#73's PR): the gradient ladder runs 3 to 30 % for every species, republished since
 - #48: closed: done in PR #50; the gate's refusal of an abstract row once a PDF arrives needs no work
 - #80: closed: superseded by #141 (the pick from the flow start) and #73 (the wetland door); the open decision with
-  link on flow numbers moved to #139
-- #3: closed: superseded by `scripts/0154-corpus-tag.R` and `data/corpus_tags.csv`
+  link on flow numbers, and the articles' section comparing the two starting points, moved to #139
 - #8: transferred to the skills repository, where the skill lives

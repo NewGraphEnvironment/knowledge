@@ -171,7 +171,7 @@ Runs after move 2, which renames the article #77 turns the scale bar on in.
 
 ### Batch 13. Promotion cargo
 - **Why here:** each changes the tracked tables or the method bundle, which only a promotion may.
-- **Touches:** `inst/method/settings.csv`, `scripts/0325-publish.R` / `knw_thresholds_table()` (an `exception_evidence` column), `research/*_tuned.md`, `tests/testthat/test-tune_promote.R`.
+- **Touches:** `inst/method/settings.csv`, `scripts/0325-publish.R` / `knw_thresholds_table()` (an `exception_evidence` column), `scripts/0330-compare.R`, `scripts/0322-tune-grad-extend.R`, `data-raw/vignette_chinook.R` (#72's readers), `research/*_tuned.md`, `tests/testthat/test-tune_promote.R`.
 - **Decided at the gate:** #63's tie-break (keep the exception as a departure, or recommend it where the curve test supports it); #148's second half waits on link un-pausing rainbow trout.
 
 | issue | title |
@@ -179,7 +179,7 @@ Runs after move 2, which renames the article #77 turns the scale bar on in.
 | #115 | Settings register: STRUCTURES row and the tuned_as note, at the next method bundle rebuild |
 | #63 | Distance to a river: measure its evidence per species and decide the tie-break on it |
 | #148 | Bring rainbow trout rearing back when link models it |
-| #72 | Grade tables should record how they were made (reopened 2026-11-09: `0330` and `0325` still gate on the `ref_population` literal) |
+| #72 | Grade tables should record how they were made (reopened 2026-11-09: `0330`, `0325`, `0322` and `data-raw/vignette_chinook.R` still gate on the `ref_population` literal) |
 
 =====================================================================
 ## Move 9 — Access gradients and gradient on the ground (waiting)
@@ -224,8 +224,9 @@ Runs after move 2, which renames the article #77 turns the scale bar on in.
 **Waiting** on Al's word to resume the report-priority work, parked on 2026-09-04.
 
 ### Batch 17. Generalize and key by reach
-- **Why here:** both rewrite `0161` and `0162` (#4's B3, B4 and B6; #15's snap and reach columns).
+- **Why here:** #4 and #15 both rewrite `0161` and `0162` (#4's B3, B4 and B6; #15's snap and reach columns); #3 records the farm decision that pipeline acts on.
 | issue | title |
 |---|---|
 | #4 | Validate the fieldwork-prep pipeline end-to-end on an unharvested group (UPCE) |
 | #15 | Spatial keys on the farmed corpus: blue_line_key + measure, and a reach dossier |
+| #3 | Content-tag the harvested report corpus (reopened 2026-11-09: record the farm/skip decision and its reason, which `0154`'s `farmed` column does not) |
