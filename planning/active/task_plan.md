@@ -122,7 +122,7 @@ Approving this plan means the following (Al, 2026-11-09). Strike any line before
 
 ## Phase 6: Hand link its pass issue
 Decided at the gate (Al, 2026-11-09): this is a phase of #169, run once knowledge's moves are filed so that the list of waits is final.
-- [ ] File a backlog-pass issue in link (link has 117 open issues, no umbrellas and no `planning/backlog.md`, so its sweep is planned work run under that issue), modelled on #169. Its body carries:
+- [x] File a backlog-pass issue in link (link has 117 open issues, no umbrellas and no `planning/backlog.md`, so its sweep is planned work run under that issue), modelled on #169. Its body carries:
   - **The list of link issues knowledge's moves wait on**, each with the knowledge umbrella and what it holds up:
     - link#434 and link#400: move 9 (access).
     - link#402: the record rules #132 reads.
@@ -131,8 +131,8 @@ Decided at the gate (Al, 2026-11-09): this is a phase of #169, run once knowledg
     - link#346 and link#343: the flow-number decision in the baselines track (#139).
     - link's rainbow trout un-pause: #148 in move 8.
   - **The convention:** link's backlog places each listed issue with the knowledge move that waits on it, in words; each later pass on either side re-checks the other through the sweep's peer search.
-- [ ] Write the link issue's number into `planning/backlog.md`'s header beside the waiting moves.
-- [ ] Get Al to read the link body before it is filed: link is public, and the body goes through the same public scan.
+- [x] Write the link issue's number into `planning/backlog.md`'s header beside the waiting moves.
+- [x] Get Al to read the link body before it is filed: link is public, and the body goes through the same public scan.
 
 ## Phase 7: Land
 - [ ] `/code-check` on the branch. The diff is markdown only, but the convention reviews anything an agent loads as instructions, and the backlog file is read by `/compact-prep` and `/gh-pr-merge`.

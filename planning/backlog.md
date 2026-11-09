@@ -31,7 +31,7 @@ Tracks are separate efforts, not moves: baselines (#139, `track:baselines`: #140
 #101; its umbrella is in the skills repository), provenance (`track:provenance`: #162, #165; umbrella likewise) and
 minimal-run (#120, `track:minimal-run`; its last task waits on link#460).
 
-link's own pass: LINK_PASS
+link's own pass: link#468, a backlog pass for link that carries the link issues moves 8 and 9 and the baselines and minimal-run tracks wait on, so link's backlog can place them knowing what they hold up.
 
 ## Order
 

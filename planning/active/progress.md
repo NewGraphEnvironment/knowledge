@@ -12,3 +12,4 @@
 - Phase 4: split the drafts into 11 bodies in the git directory, each ending with the backlog pointer; `public_leak_scan` clean on them and the file. Only formatting changed from the drafts Al read (a blank line before each table, cross-repo references written `NewGraphEnvironment/<repo>#N` so they link)
 - Phase 5: filed the umbrellas, #170 to #180 (moves 1 to 11, label `umbrella`), and wrote them into the file; every open move ticks cleanly on a copy; `next` prints `/planning-init #170`
 - Phase 5: #80's open item (who sets link's flow numbers) added to #139's "To file when reached"; closed #68, #72, #48, #80 and #3 with their reasons; transferred #8 to the skills repository; ticked #120's answered premise box
+- Phase 6: Al read the link body and approved it; filed as link#468; its number is written into the backlog header; the body is kept as `link_pass.md`
