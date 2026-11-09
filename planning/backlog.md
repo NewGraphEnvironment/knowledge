@@ -15,17 +15,17 @@ ticked and not **waiting**; `/planning-init <umbrella>` plans it, one phase per 
 
 | move | umbrella | batches | state |
 |---|---|---|---|
-| - [ ] 1 | #U1 | 1: evidence-build and test fixes (2 issues) | open: start here |
-| - [ ] 2 | #U2 | 2, 3: articles as a tuning series, a build that stalls fails fast (4 issues) | open |
-| - [ ] 3 | #U3 | 4, 5: Zotero library writes, new sources into the stores (5 issues) | open |
-| - [ ] 4 | #U4 | 6, 7: maps out of the comparison, one research page per key (4 issues) | open: after move 2, which renames the article #77 edits |
-| - [ ] 5 | #U5 | 8, 9: timing table and NuSEDS, flow in windows (5 issues) | open |
-| - [ ] 6 | #U6 | 10: location error against flow resolution (2 issues) | open |
-| - [ ] 7 | #U7 | 11, 12: FISS parser, gradient and PINE; layers for report repos (6 issues) | open |
-| - [ ] 8 | #U8 | 13: promotion cargo (3 issues) | **waiting** on Al's word for the next full retune |
-| - [ ] 9 | #U9 | 14, 15: access, gradient on the ground (4 issues) | **waiting** on link#434 and link#400 (override lifts, known records) and fresh#257 (fixed-window gradients) |
-| - [ ] 10 | #U10 | 16: library, keys and our own prose (3 issues) | open |
-| - [ ] 11 | #U11 | 17: report-priority pipeline for any group (2 issues) | **waiting** on Al's word to resume the report-priority work, parked 2026-09-04 |
+| - [ ] 1 | #170 | 1: evidence-build and test fixes (2 issues) | open: start here |
+| - [ ] 2 | #171 | 2, 3: articles as a tuning series, a build that stalls fails fast (4 issues) | open |
+| - [ ] 3 | #172 | 4, 5: Zotero library writes, new sources into the stores (5 issues) | open |
+| - [ ] 4 | #173 | 6, 7: maps out of the comparison, one research page per key (4 issues) | open: after move 2, which renames the article #77 edits |
+| - [ ] 5 | #174 | 8, 9: timing table and NuSEDS, flow in windows (5 issues) | open |
+| - [ ] 6 | #175 | 10: location error against flow resolution (2 issues) | open |
+| - [ ] 7 | #176 | 11, 12: FISS parser, gradient and PINE; layers for report repos (6 issues) | open |
+| - [ ] 8 | #177 | 13: promotion cargo (3 issues) | **waiting** on Al's word for the next full retune |
+| - [ ] 9 | #178 | 14, 15: access, gradient on the ground (4 issues) | **waiting** on link#434 and link#400 (override lifts, known records) and fresh#257 (fixed-window gradients) |
+| - [ ] 10 | #179 | 16: library, keys and our own prose (3 issues) | open |
+| - [ ] 11 | #180 | 17: report-priority pipeline for any group (2 issues) | **waiting** on Al's word to resume the report-priority work, parked 2026-09-04 |
 
 Tracks are separate efforts, not moves: baselines (#139, `track:baselines`: #140 next), speed (`track:speed`: #85,
 #101; its umbrella is in the skills repository), provenance (`track:provenance`: #162, #165; umbrella likewise) and
@@ -37,27 +37,27 @@ link's own pass: LINK_PASS
 
 | # | tracking | batch | issues | gate | why here |
 |---|---|---|---:|---|---|
-| 1 | #U1 | evidence-build and test fixes: #136, #142 | 2 | where `fdis_sites.csv` comes from for a tagged build | #136 recurred (2026-11-05); #142 errors every full test run on an empty schema |
-| 2 | #U2 | articles as a tuning series: #118, #107, #156 | 3 | titles; the fwapg pin | one rename, one prose pass, one bibliography and site build over the same three articles |
-| 3 | #U2 | a build that stalls fails fast: #159 | 1 | close if the logs are gone and the cause stays open | the move's site build is the test |
-| 4 | #U3 | Zotero library writes: #168, #151, #126 | 3 | a verdict per #126 item | one sitting with Zotero and the Web API key; one store update |
-| 5 | #U3 | new sources into the stores: #20, #95 | 2 | #95's pooled-curve experiment in or out | `0270` → `0150` → push in the same sitting |
-| 6 | #U4 | maps out of the comparison: #81, #77 | 2 | `GPKG` off by default; which PNGs go | both edit `R/compare_map.R` and the example-map script |
-| 7 | #U4 | one research page per key: #90, #64 | 2 | one template from #90's skeleton and #64's order | one generator writes every page |
-| 8 | #U5 | timing table and NuSEDS: #31, #96, #108 | 3 | where the NuSEDS table lives; its NOTICE row | one table and one new source |
-| 9 | #U5 | flow in windows: #42, #105 | 2 | #105's stop rule, set before Phase 1 | #105's Phase 1 needs #42's window means |
-| 10 | #U6 | location error against flow resolution: #23, #137 | 2 | cut #23 to what #137 needs (its link consumer closed) | #23's downstream-end check is #137's oracle |
-| 11 | #U7 | FISS parser, gradient and PINE: #7, #34, #10 | 3 | fixtures from the provincial template | one regeneration of the FISS outputs |
-| 12 | #U7 | layers for report repos: #17, #2, #1 | 3 | whether #2 and #1 are still wanted | #17 rolls up batch 11's outputs |
-| 13 | #U8 | promotion cargo: #115, #63, #148 | 3 | #63's tie-break; #85 and #162 ride the same retune or not | each changes what only a promotion may |
-| 14 | #U9 | access: #132, #131 | 2 | decisions 1 and 2 in #131 | access classes and the access gate read the same override records |
-| 15 | #U9 | gradient on the ground: #70, #71 | 2 | whether `ff02` exists network-wide | both rescore chinook rearing on a gradient other than the segment's |
-| 16 | #U10 | library, keys and our own prose: #13, #14, #16 | 3 | the single-library policy; one store or two | #14 depends on #13; #16's store question is the same keying decision |
-| 17 | #U11 | report-priority pipeline for any group: #4, #15 | 2 | resume or not | both rewrite `0161` and `0162` |
+| 1 | #170 | evidence-build and test fixes: #136, #142 | 2 | where `fdis_sites.csv` comes from for a tagged build | #136 recurred (2026-11-05); #142 errors every full test run on an empty schema |
+| 2 | #171 | articles as a tuning series: #118, #107, #156 | 3 | titles; the fwapg pin | one rename, one prose pass, one bibliography and site build over the same three articles |
+| 3 | #171 | a build that stalls fails fast: #159 | 1 | close if the logs are gone and the cause stays open | the move's site build is the test |
+| 4 | #172 | Zotero library writes: #168, #151, #126 | 3 | a verdict per #126 item | one sitting with Zotero and the Web API key; one store update |
+| 5 | #172 | new sources into the stores: #20, #95 | 2 | #95's pooled-curve experiment in or out | `0270` → `0150` → push in the same sitting |
+| 6 | #173 | maps out of the comparison: #81, #77 | 2 | `GPKG` off by default; which PNGs go | both edit `R/compare_map.R` and the example-map script |
+| 7 | #173 | one research page per key: #90, #64 | 2 | one template from #90's skeleton and #64's order | one generator writes every page |
+| 8 | #174 | timing table and NuSEDS: #31, #96, #108 | 3 | where the NuSEDS table lives; its NOTICE row | one table and one new source |
+| 9 | #174 | flow in windows: #42, #105 | 2 | #105's stop rule, set before Phase 1 | #105's Phase 1 needs #42's window means |
+| 10 | #175 | location error against flow resolution: #23, #137 | 2 | cut #23 to what #137 needs (its link consumer closed) | #23's downstream-end check is #137's oracle |
+| 11 | #176 | FISS parser, gradient and PINE: #7, #34, #10 | 3 | fixtures from the provincial template | one regeneration of the FISS outputs |
+| 12 | #176 | layers for report repos: #17, #2, #1 | 3 | whether #2 and #1 are still wanted | #17 rolls up batch 11's outputs |
+| 13 | #177 | promotion cargo: #115, #63, #148 | 3 | #63's tie-break; #85 and #162 ride the same retune or not | each changes what only a promotion may |
+| 14 | #178 | access: #132, #131 | 2 | decisions 1 and 2 in #131 | access classes and the access gate read the same override records |
+| 15 | #178 | gradient on the ground: #70, #71 | 2 | whether `ff02` exists network-wide | both rescore chinook rearing on a gradient other than the segment's |
+| 16 | #179 | library, keys and our own prose: #13, #14, #16 | 3 | the single-library policy; one store or two | #14 depends on #13; #16's store question is the same keying decision |
+| 17 | #180 | report-priority pipeline for any group: #4, #15 | 2 | resume or not | both rewrite `0161` and `0162` |
 
 ### 1. Evidence-build and test fixes
 
-- [ ] Carried by move 1, #U1
+- [ ] Carried by move 1, #170
 
 #136 (a tagged `EVIDENCE_DIR` needs `fdis_sites.csv` copied by hand, and `minimal_network_check.R` logs only at the
 end) and #142 (the live placement test errors on a `fresh_default` with no BULK BT rearing segment, or an empty one).
@@ -67,7 +67,7 @@ directory.
 
 ### 2. Articles as a tuning series
 
-- [ ] Carried by move 2, #U2
+- [ ] Carried by move 2, #171
 
 #118 (rename the articles as a method and case studies, narrow the register check), #107 (fold: pin upstream fwapg to
 a commit upstream holds) and #156 (say "fish habitat definition", lead with life history). Touches `vignettes/`,
@@ -77,7 +77,7 @@ the series, the fwapg pin; the fly row waits on fly's README.
 
 ### 3. A build that stalls fails fast
 
-- [ ] Carried by move 2, #U2
+- [ ] Carried by move 2, #171
 
 #159: two post-merge stalls to the timeout. The candidate is the `stream_splits` article's tile fetch, weakened by a
 stall in a workflow that fetches no tiles. Touches the article's basemap call, or gq's `gq_basemap_tiles()` through its
@@ -85,7 +85,7 @@ own issue.
 
 ### 4. Zotero library writes
 
-- [ ] Carried by move 3, #U3
+- [ ] Carried by move 3, #172
 
 #168 (read the key from `ZOTERO_API_KEY_FILE`), #151 (OCR Tredger 1984, merge the duplicate strategy, correct two
 items) and #126 (items with several PDFs). Touches `scripts/0153`, `scripts/0270`, a shared key helper,
@@ -94,7 +94,7 @@ personal-library items wait on #13. The writes need a person present (auto mode 
 
 ### 5. New sources into the stores
 
-- [ ] Carried by move 3, #U3
+- [ ] Carried by move 3, #172
 
 #20 (the DFO threat-layer document, its cited sources and evidence rows) and #95 (a `statistics` store and the
 alignment review). Touches `data/statistics_{members,additions}.csv`, `data/literature_evidence.csv` (appended,
@@ -102,21 +102,21 @@ audited for meaning), `research/bayesian_alignment.md`. Gate: #95's partially po
 
 ### 6. Maps out of the comparison
 
-- [ ] Carried by move 4, #U4
+- [ ] Carried by move 4, #173
 
 #81 (GeoPackages opt-in, a script for the few example maps, PNGs out) and #77 (scale bar and keymap on those maps).
 Touches `scripts/0330-compare.R`, `R/compare_map.R`, a new example-map script, `data-raw/readme_figure.R`, a gq style.
 
 ### 7. One research page per key
 
-- [ ] Carried by move 4, #U4
+- [ ] Carried by move 4, #173
 
 #90 (generated pages under `research/tuning/`) and #64 (one template per species; its chinook part landed in PR #147).
 Touches `research/tuning/`, `research/README.md`, `data-raw/tuning_reports.R`, `research/fig/`.
 
 ### 8. Timing table and NuSEDS
 
-- [ ] Carried by move 5, #U5
+- [ ] Carried by move 5, #174
 
 #31 (BULK coho migration end), #96 (chinook timing for UFRA and COTR; wet's pilots that first wanted it have closed)
 and #108 (NuSEDS, provincial observations and literature per stream). Touches `data/life_history_timing.csv`, a
@@ -124,21 +124,21 @@ NuSEDS fetcher in `R/`, a records table under `data/`, `inst/NOTICE.md`.
 
 ### 9. Flow in windows
 
-- [ ] Carried by move 5, #U5
+- [ ] Carried by move 5, #174
 
 #42 (window means per segment; daily flow is no longer blocked upstream) and #105 (does a seasonal window size chinook
 rearing streams better than MAD). Phase 2 of #105 and anything that publishes wait on Al's word.
 
 ### 10. Location error against flow resolution
 
-- [ ] Carried by move 6, #U6
+- [ ] Carried by move 6, #175
 
 #23 (the site-visit table: join key, span, the downstream-end check) and #137 (whether one discharge per FWA segment is
 fine enough). Touches `scripts/0230`/`0240`, `research/fdis_export.md`, a `research/` section on discharge resolution.
 
 ### 11. FISS parser, gradient and PINE
 
-- [ ] Carried by move 7, #U7
+- [ ] Carried by move 7, #176
 
 #7 (graduate the `.xls` parser into `R/` as tested `knw_fiss_*`), #34 (site gradient read as a fraction in `0250`) and
 #10 (re-fetch PINE onto the keyed schema). Touches `R/fiss.R`, tests and fixtures, `scripts/0220`, `scripts/0250`,
@@ -146,7 +146,7 @@ fine enough). Touches `scripts/0230`/`0240`, `research/fdis_export.md`, a `resea
 
 ### 12. Layers for report repos
 
-- [ ] Carried by move 7, #U7
+- [ ] Carried by move 7, #176
 
 #17 (cross-group no-fish-captured roll-up and a coverage layer, synced for the manifest), #2 (a snapshot pull at a
 recorded commit) and #1 (a planning-method vignette). Gate: whether #17's commit stamp makes #2 unnecessary, and
@@ -154,7 +154,7 @@ whether #1 is still wanted.
 
 ### 13. Promotion cargo
 
-- [ ] Carried by move 8, #U8
+- [ ] Carried by move 8, #177
 
 #115 (the `structures` register row and the `tuned_as` note), #63 (distance to a river: its evidence per species and
 the tie-break) and #148 (a test of a key's return from `not_modelled`; its second half waits on link un-pausing
@@ -163,28 +163,28 @@ rainbow trout). Each changes the tracked tables or the method bundle, which only
 
 ### 14. Access
 
-- [ ] Carried by move 9, #U9
+- [ ] Carried by move 9, #178
 
 #132 (where link's access gradients come from; its literature step can start before the wait clears) and #131 (tune
 on link's access with its overrides, leaving each visit out of its own; waits on link#434 and link#400).
 
 ### 15. Gradient on the ground
 
-- [ ] Carried by move 9, #U9
+- [ ] Carried by move 9, #178
 
 #70 (field against modelled gradient, fixed windows, lidar; its measured-gradient step is done by #121, its parent
 reading by #120; windows and lidar wait on fresh#257) and #71 (distance and gradient from the floodplain edge).
 
 ### 16. Library, keys and our own prose
 
-- [ ] Carried by move 10, #U10
+- [ ] Carried by move 10, #179
 
 #13 (triage the dormant Zotero libraries), #14 (key the stores on parent item, library and version) and #16 (index our
 own prose). Touches `data/zotero_key_map.csv`, `scripts/0150`–`0156`, `CLAUDE.md`'s store sentences.
 
 ### 17. Report-priority pipeline for any group
 
-- [ ] Carried by move 11, #U11
+- [ ] Carried by move 11, #180
 
 #4 (the UPCE validation, parked after Phase 3; B2–B6 unfixed) and #15 (spatial keys on the farmed corpus). Both
 rewrite `0161` and `0162`.

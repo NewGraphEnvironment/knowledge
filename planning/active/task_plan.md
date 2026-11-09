@@ -113,12 +113,12 @@ Approving this plan means the following (Al, 2026-11-09). Strike any line before
 - [x] Run `public_leak_scan` on those bodies and on `planning/backlog.md`. If the scan forces a rewrite, show the rewritten body to Al before filing it.
 
 ## Phase 5: File, write in, close
-- [ ] File the 11 umbrellas (`--body-file`, label `umbrella`), then write their numbers into the Moves table and the batch sections.
-- [ ] Run the tick check: every open move ticks cleanly on a copy of the file (`backlog_moves.sh tick`).
-- [ ] Add #80's open item to #139's "To file", then make the five closures, each with its comment.
-- [ ] Transfer #8.
-- [ ] Tick #120's premise box.
-- [ ] Commit the backlog file and the checkbox flips.
+- [x] File the 11 umbrellas (`--body-file`, label `umbrella`), then write their numbers into the Moves table and the batch sections.
+- [x] Run the tick check: every open move ticks cleanly on a copy of the file (`backlog_moves.sh tick`).
+- [x] Add #80's open item to #139's "To file", then make the five closures, each with its comment.
+- [x] Transfer #8.
+- [x] Tick #120's premise box.
+- [x] Commit the backlog file and the checkbox flips.
 
 ## Phase 6: Hand link its pass issue
 Decided at the gate (Al, 2026-11-09): this is a phase of #169, run once knowledge's moves are filed so that the list of waits is final.
@@ -142,8 +142,8 @@ Decided at the gate (Al, 2026-11-09): this is a phase of #169, run once knowledg
 ## Validation
 - [x] Coverage check passes (Phase 3)
 - [x] Public scan is clean (Phase 4)
-- [ ] Every open move ticks cleanly on a copy (Phase 5)
-- [ ] `backlog_moves.sh next` names move 1
+- [x] Every open move ticks cleanly on a copy (Phase 5)
+- [x] `backlog_moves.sh next` names move 1
 - [ ] `/code-check` clean
 - [ ] PWF checkboxes match the landed work
 - [ ] `/planning-archive` on completion
