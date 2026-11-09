@@ -38,7 +38,7 @@ Most named: #120 (6), #118 (4), #64 (3); then #96, #85, #81, #80, #70, #68, #42,
 | issue | verdict | evidence |
 |---|---|---|
 | #68 | done | 9f4b21bd (2026-10-22, #73's PR, message names #68): `R/tune_grid.R:52` `grid_grad` runs 3 to 30 %; #92 and #145 republished on it |
-| #72 | done | 9f4b21bd: the curve carries `edge_stream`; `scripts/0320-tune-run.R:573` takes `ref_edge` from it, `:552` records `discharge_load`, `:591-623` compare both |
+| #72 | done | 9f4b21bd: the curve carries `edge_stream`; `scripts/0320-tune-run.R:595` takes `ref_edge` from it, `:567` records `discharge_load`, `:613-614` compare both |
 | #80 | superseded | its first task (re-pick from link's flow version) is #141's anchoring check (`research/baseline_anchoring.md`); the wetland door was built by #73 (`tuned_as = door`, `inst/method/settings.csv:68`); link#364 closed |
 | #48 | done | PR #50 landed data rows 1137–1145; "What remains" describes `0280` refusing an abstract row once a PDF arrives, which needs no work |
 | #3 | superseded | `scripts/0154-corpus-tag.R` (7232d463, 2026-07-30) writes `data/corpus_tags.csv` with content tags from captions and the `farmed` flag |
