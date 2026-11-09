@@ -22,7 +22,7 @@ ticked and not **waiting**; `/planning-init <umbrella>` plans it, one phase per 
 | - [ ] 5 | #174 | 8, 9: timing table and NuSEDS, flow in windows (5 issues) | open |
 | - [ ] 6 | #175 | 10: location error against flow resolution (2 issues) | open |
 | - [ ] 7 | #176 | 11, 12: FISS parser, gradient and PINE; layers for report repos (6 issues) | open |
-| - [ ] 8 | #177 | 13: promotion cargo (3 issues) | **waiting** on Al's word for the next full retune |
+| - [ ] 8 | #177 | 13: promotion cargo (4 issues) | **waiting** on Al's word for the next full retune |
 | - [ ] 9 | #178 | 14, 15: access, gradient on the ground (4 issues) | **waiting** on link#434 and link#400 (override lifts, known records) and fresh#257 (fixed-window gradients) |
 | - [ ] 10 | #179 | 16: library, keys and our own prose (3 issues) | open |
 | - [ ] 11 | #180 | 17: report-priority pipeline for any group (2 issues) | **waiting** on Al's word to resume the report-priority work, parked 2026-09-04 |
@@ -49,7 +49,7 @@ link's own pass: link#468, a backlog pass for link that carries the link issues 
 | 10 | #175 | location error against flow resolution: #23, #137 | 2 | cut #23 to what #137 needs (its link consumer closed) | #23's downstream-end check is #137's oracle |
 | 11 | #176 | FISS parser, gradient and PINE: #7, #34, #10 | 3 | fixtures from the provincial template | one regeneration of the FISS outputs |
 | 12 | #176 | layers for report repos: #17, #2, #1 | 3 | whether #2 and #1 are still wanted | #17 rolls up batch 11's outputs |
-| 13 | #177 | promotion cargo: #115, #63, #148 | 3 | #63's tie-break; #85 and #162 ride the same retune or not | each changes what only a promotion may |
+| 13 | #177 | promotion cargo: #115, #63, #148, #72 | 4 | #63's tie-break; #85 and #162 ride the same retune or not | each changes what only a promotion may |
 | 14 | #178 | access: #132, #131 | 2 | decisions 1 and 2 in #131 | access classes and the access gate read the same override records |
 | 15 | #178 | gradient on the ground: #70, #71 | 2 | whether `ff02` exists network-wide | both rescore chinook rearing on a gradient other than the segment's |
 | 16 | #179 | library, keys and our own prose: #13, #14, #16 | 3 | the single-library policy; one store or two | #14 depends on #13; #16's store question is the same keying decision |
@@ -158,7 +158,8 @@ whether #1 is still wanted.
 
 #115 (the `structures` register row and the `tuned_as` note), #63 (distance to a river: its evidence per species and
 the tie-break) and #148 (a test of a key's return from `not_modelled`; its second half waits on link un-pausing
-rainbow trout). Each changes the tracked tables or the method bundle, which only a promotion may. The speed track's
+rainbow trout). #72 (reopened 2026-11-09: `0330` and `0325` still gate on the `ref_population` literal rather than
+the curve's recorded edge types) joins because it edits `0325` beside #63. Each changes the tracked tables or the method bundle, which only a promotion may. The speed track's
 #85 and the provenance track's #162 also regrade every key: the gate decides whether they ride the same retune.
 
 ### 14. Access
@@ -172,8 +173,9 @@ on link's access with its overrides, leaving each visit out of its own; waits on
 
 - [ ] Carried by move 9, #178
 
-#70 (field against modelled gradient, fixed windows, lidar; its measured-gradient step is done by #121, its parent
-reading by #120; windows and lidar wait on fresh#257) and #71 (distance and gradient from the floodplain edge).
+#70 (field against modelled gradient, fixed windows, lidar; #121 compared FDIS site gradients, so step 1 still owes the
+PSCIS habitat confirmations and the FISS workbook gradients, the latter after #34 in move 7; the parent reading is
+#120's; windows and lidar wait on fresh#257) and #71 (distance and gradient from the floodplain edge).
 
 ### 16. Library, keys and our own prose
 
@@ -200,7 +202,6 @@ rewrite `0161` and `0162`.
 ## Closed and transferred
 
 - #68: closed: done in 9f4b21bd (#73's PR): the gradient ladder runs 3 to 30 % for every species, republished since
-- #72: closed: done in 9f4b21bd: the grade takes its reference edge types from the curve and records the flow load
 - #48: closed: done in PR #50; the gate's refusal of an abstract row once a PDF arrives needs no work
 - #80: closed: superseded by #141 (the pick from the flow start) and #73 (the wetland door); the open decision with
   link on flow numbers moved to #139

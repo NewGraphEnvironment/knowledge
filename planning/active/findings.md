@@ -30,7 +30,7 @@ lists, for each open issue, the other open issues its body names.
 
 ### Reference graph
 
-Most named: #120 (6), #118 (4), #64 (3); then #96, #85, #81, #80, #70, #68, #42, #34, #23, #140, #14 and #139 (2 each).
+Most named: #120 (6), #118 (4), #64 (3); then #96, #85, #81, #80, #70, #68, #42, #34, #23, #140, #14, #139, #13 and #115 (2 each).
 #118 is the hub of the articles work: #107 is folded into it, #156 rewrites the same articles, #115 and #64 point at it.
 
 ### Premises checked against origin/main
@@ -38,7 +38,7 @@ Most named: #120 (6), #118 (4), #64 (3); then #96, #85, #81, #80, #70, #68, #42,
 | issue | verdict | evidence |
 |---|---|---|
 | #68 | done | 9f4b21bd (2026-10-22, #73's PR, message names #68): `R/tune_grid.R:52` `grid_grad` runs 3 to 30 %; #92 and #145 republished on it |
-| #72 | done | 9f4b21bd: the curve carries `edge_stream`; `scripts/0320-tune-run.R:595` takes `ref_edge` from it, `:567` records `discharge_load`, `:613-614` compare both |
+| #72 | mostly done | 9f4b21bd: the curve carries `edge_stream`; `scripts/0320-tune-run.R:595` takes `ref_edge` from it, `:567` records `discharge_load`, `:613-614` compare both. Not done (found by code-check round 2, after #72 was closed; reopened): `0330:274` and `0325:81` still gate on the `ref_population` literal, and `0320:665` still writes it |
 | #80 | superseded | its first task (re-pick from link's flow version) is #141's anchoring check (`research/baseline_anchoring.md`); the wetland door was built by #73 (`tuned_as = door`, `inst/method/settings.csv:68`); link#364 closed |
 | #48 | done | PR #50 landed data rows 1137–1145; "What remains" describes `0280` refusing an abstract row once a PDF arrives, which needs no work |
 | #3 | superseded | `scripts/0154-corpus-tag.R` (7232d463, 2026-07-30) writes `data/corpus_tags.csv` with content tags from captions and the `farmed` flag |
@@ -76,7 +76,7 @@ Closed since the issues that name them were written: wet#70 (daily flow: #42's 7
 paused; un-pause still pending for #148), link#415, link#441, link#331, fresh#259, fwapg#25, cred#44.
 
 Visibility: link, fresh, wet, cred, gq and fly are public; the skills repository is private, so nothing here names it
-by repository or links it.
+by repository name or link; it is named only in words.
 
 ### Recurrences
 
@@ -117,7 +117,7 @@ Last five runs green; the one `cancelled` is a Pages run superseded by the next 
 | #68 | closed | done in 9f4b21bd |
 | #70 | move 9, batch 15 | waits on fresh#257 |
 | #71 | move 9, batch 15 | waits on floodplain data and fresh#257 |
-| #72 | closed | done in 9f4b21bd |
+| #72 | move 8, batch 13 | reopened: the readers still gate on a literal; edits `0325` beside #63 |
 | #76 | single | reading terms of use; `inst/NOTICE.md` |
 | #77 | move 4, batch 6 | `R/compare_map.R` with #81's example maps |
 | #80 | closed | superseded by #141 and #73; open item moves to #139 |
@@ -150,7 +150,7 @@ Last five runs green; the one `cancelled` is a Pages run superseded by the next 
 | #165 | track (provenance) | |
 | #168 | move 3, batch 4 | key helper first, for the sitting's writes |
 
-58 = 40 batched, 7 in tracks, 5 singles, 5 closed, 1 transferred.
+58 = 41 batched, 7 in tracks, 5 singles, 4 closed, 1 transferred (#72 moved from closed to batch 13 after code-check round 2).
 
 ## Errors Encountered
 

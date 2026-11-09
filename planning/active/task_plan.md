@@ -18,7 +18,7 @@ Branch `169-backlog-pass-batch-the-open-issues-into`, cut from origin/main at b6
 - **Reference graph** (open issues named in open bodies). Most named: #120 (6), #118 (4), #64 (3). #118 is the hub of the articles work; #120 is a track.
 - **Premises checked against main:**
   - #68 is done: 9f4b21bd (#73's PR) set `grid_grad` to 3–30 % for every species (`R/tune_grid.R:52`), and #92 and #145 republished on it.
-  - #72 is done in the same commit. The curve carries `edge_stream`, `0320` reads `ref_edge` from the curve (`scripts/0320-tune-run.R:595`) and records `discharge_load` (`:567`), and the readers compare both.
+  - #72 is done in the same commit (corrected by code-check round 2: only `0320`'s side is; `0330` and `0325` still gate on the literal, so #72 was reopened and placed in batch 13). The curve carries `edge_stream`, `0320` reads `ref_edge` from the curve (`scripts/0320-tune-run.R:595`) and records `discharge_load` (`:567`), and the readers compare both.
   - #3 is superseded by `0154-corpus-tag.R` (7232d463), which writes `data/corpus_tags.csv` (content tags, `farmed`).
   - Still open in the code:
     - #34: `0250:136` reads the gradient as a fraction.
@@ -51,7 +51,7 @@ Approving this plan means the following (Al, 2026-11-09). Strike any line before
 
 - **Closures**, each with a comment giving its reason:
   - **#68**: done in 9f4b21bd.
-  - **#72**: done in 9f4b21bd.
+  - ~~**#72**: done in 9f4b21bd.~~ Reopened after code-check round 2 found the readers' half undone; placed in batch 13.
   - **#48**: done in PR #50. What remains is automatic: `0280` refuses an abstract row once the item has a PDF.
   - **#80**: superseded. #141 reports the pick from the flow start, and #73 built the door. Its one open item (decide with link which method sets link's flow numbers) is written into #139's "To file" first.
   - **#3**: superseded by `0154`.

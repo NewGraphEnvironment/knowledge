@@ -14,3 +14,4 @@
 - Phase 5: #80's open item (who sets link's flow numbers) added to #139's "To file when reached"; closed #68, #72, #48, #80 and #3 with their reasons; transferred #8 to the skills repository; ticked #120's answered premise box
 - Phase 6: Al read the link body and approved it; filed as link#468; its number is written into the backlog header; the body is kept as `link_pass.md`
 - Code-check round 1: one finding (#72's line references taken from a stale checkout); fixed in the planning files and in #72's closure comment
+- Code-check round 2: four findings, all fixed. #72 was closed with the readers' half undone, so it was reopened and placed in batch 13 (with #177's body updated); link#468 said three moves wait on link where two do; #70's step 1 still owes PSCIS and FISS; the most-named list missed #13 and #115

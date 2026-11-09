@@ -2,7 +2,7 @@
 
 ## Problem
 
-link has 117 open issues (2026-11-09), no umbrella issues and no `planning/backlog.md`. knowledge ran the same pass on its own 58 (NewGraphEnvironment/knowledge#169), which ended in eleven move umbrellas and a backlog file. Three of those moves, and two of knowledge's tracks, wait on link issues, and that dependency is visible only from knowledge's side.
+link has 117 open issues (2026-11-09), no umbrella issues and no `planning/backlog.md`. knowledge ran the same pass on its own 58 (NewGraphEnvironment/knowledge#169), which ended in eleven move umbrellas and a backlog file. Two of those moves, and two of knowledge's tracks, wait on link issues, and that dependency is visible only from knowledge's side.
 
 ## Proposed
 

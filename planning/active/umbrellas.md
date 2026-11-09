@@ -179,6 +179,7 @@ Runs after move 2, which renames the article #77 turns the scale bar on in.
 | #115 | Settings register: STRUCTURES row and the tuned_as note, at the next method bundle rebuild |
 | #63 | Distance to a river: measure its evidence per species and decide the tie-break on it |
 | #148 | Bring rainbow trout rearing back when link models it |
+| #72 | Grade tables should record how they were made (reopened 2026-11-09: `0330` and `0325` still gate on the `ref_population` literal) |
 
 =====================================================================
 ## Move 9 — Access gradients and gradient on the ground (waiting)
