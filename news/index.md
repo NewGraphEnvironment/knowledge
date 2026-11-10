@@ -1,5 +1,27 @@
 # Changelog
 
+## knowledge 0.4.35
+
+- [`knw_archive_plan()`](https://newgraphenvironment.github.io/knowledge/reference/knw_archive_plan.md)
+  reads `fdis_sites.csv` from where `scripts/0240` writes it
+  (`sites_dir`, default `data/fdis/derived`; `SITES_DIR` in
+  `scripts/0336`) whatever the evidence directory, so a build under a
+  tagged `EVIDENCE_DIR` archives with the default build’s commands
+  ([\#136](https://github.com/NewGraphEnvironment/knowledge/issues/136)).
+  The table is held to the run’s `sites.rds` before anything is
+  archived: one row per site, the same sites, and every column the two
+  share equal.
+  [`knw_archive_pull()`](https://newgraphenvironment.github.io/knowledge/reference/knw_archive_pull.md)
+  refuses any target already present with other bytes before it writes
+  anything; before, it restored the visit tables first. Archived
+  evidence ids do not move. A promotion (`scripts/0335`) plans the
+  archive first, so it now refuses an `fdis_sites.csv` that does not
+  match `sites.rds` before moving anything.
+- The live placement test skips, naming the reason, when `fresh_default`
+  lacks its tables or holds no BULK bull trout rearing segment, instead
+  of erroring
+  ([\#142](https://github.com/NewGraphEnvironment/knowledge/issues/142)).
+
 ## knowledge 0.4.34
 
 - knowledge now imports crate (\>= 0.15.0). crate 0.15.0 moved its

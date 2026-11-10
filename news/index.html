@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">knowledge</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.34</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.35</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -37,6 +37,12 @@
       <small>Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.4.35" id="knowledge-0435">knowledge 0.4.35<a class="anchor" aria-label="anchor" href="#knowledge-0435"></a></h2>
+<ul><li>
+<code><a href="../reference/knw_archive_plan.html">knw_archive_plan()</a></code> reads <code>fdis_sites.csv</code> from where <code>scripts/0240</code> writes it (<code>sites_dir</code>, default <code>data/fdis/derived</code>; <code>SITES_DIR</code> in <code>scripts/0336</code>) whatever the evidence directory, so a build under a tagged <code>EVIDENCE_DIR</code> archives with the default build’s commands (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/136" class="external-link">#136</a>). The table is held to the run’s <code>sites.rds</code> before anything is archived: one row per site, the same sites, and every column the two share equal. <code><a href="../reference/knw_archive_pull.html">knw_archive_pull()</a></code> refuses any target already present with other bytes before it writes anything; before, it restored the visit tables first. Archived evidence ids do not move. A promotion (<code>scripts/0335</code>) plans the archive first, so it now refuses an <code>fdis_sites.csv</code> that does not match <code>sites.rds</code> before moving anything.</li>
+<li>The live placement test skips, naming the reason, when <code>fresh_default</code> lacks its tables or holds no BULK bull trout rearing segment, instead of erroring (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/142" class="external-link">#142</a>).</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.34" id="knowledge-0434">knowledge 0.4.34<a class="anchor" aria-label="anchor" href="#knowledge-0434"></a></h2>
 <ul><li>knowledge now imports crate (&gt;= 0.15.0). crate 0.15.0 moved its receipt register to a versioned path (<code>receipt/register/v&lt;version&gt;/register.csv</code>), and the receipt test read the old one, so R CMD check failed on every run (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/182" class="external-link">#182</a>). The test reads the register at the version crate judges a comparison under (<code>crt_receipt_compare()$register</code>) and stops by name when crate installs none for it. No change to what the package computes or publishes.</li>
