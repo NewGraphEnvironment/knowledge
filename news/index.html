@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">knowledge</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.33</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.34</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,9 +34,13 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/v0.4.34/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.4.34" id="knowledge-0434">knowledge 0.4.34<a class="anchor" aria-label="anchor" href="#knowledge-0434"></a></h2>
+<ul><li>knowledge now imports crate (&gt;= 0.15.0). crate 0.15.0 moved its receipt register to a versioned path (<code>receipt/register/v&lt;version&gt;/register.csv</code>), and the receipt test read the old one, so R CMD check failed on every run (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/182" class="external-link">#182</a>). The test reads the register at the version crate judges a comparison under (<code>crt_receipt_compare()$register</code>) and stops by name when crate installs none for it. No change to what the package computes or publishes.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.33" id="knowledge-0433">knowledge 0.4.33<a class="anchor" aria-label="anchor" href="#knowledge-0433"></a></h2>
 <ul><li>The evidence build and the published visit tables now carry provenance receipts (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/160" class="external-link">#160</a>). <code>scripts/0310</code> writes <code>evidence_receipt.json</code> beside its tables (<code><a href="../reference/knw_evidence_receipt_write.html">knw_evidence_receipt_write()</a></code>), held to <code>inst/receipt/evidence.yaml</code>: every table exact but <code>access_check</code>‘s km, rounded to 1e-6 km, which a database summing in another order moves in the last place. A grade receipt names the evidence as one input, the build’s receipt’s <code>recipe_id</code> (or its visit tables’ md5s for a build from before receipts), so an equivalent evidence rebuild is the same input to every grade, and <code>0320</code> regrades a kept table whose receipt names other evidence. <code>scripts/0299</code> publishes through <code><a href="../reference/knw_publish.html">knw_publish()</a></code>, and v3 carries a receipt naming the evidence build (<code>inst/receipt/fdis.yaml</code>). The archive keeps the evidence receipt with its build, outside its MANIFEST. Two evidence builds of the published build on one database compared <code>equivalent</code>. Nothing published moves.</li>

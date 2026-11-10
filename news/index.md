@@ -1,5 +1,17 @@
 # Changelog
 
+## knowledge 0.4.34
+
+- knowledge now imports crate (\>= 0.15.0). crate 0.15.0 moved its
+  receipt register to a versioned path
+  (`receipt/register/v<version>/register.csv`), and the receipt test
+  read the old one, so R CMD check failed on every run
+  ([\#182](https://github.com/NewGraphEnvironment/knowledge/issues/182)).
+  The test reads the register at the version crate judges a comparison
+  under (`crt_receipt_compare()$register`) and stops by name when crate
+  installs none for it. No change to what the package computes or
+  publishes.
+
 ## knowledge 0.4.33
 
 - The evidence build and the published visit tables now carry provenance
