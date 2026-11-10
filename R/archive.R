@@ -32,7 +32,7 @@
   rds <- readRDS(f_rds)
   if (nrow(csv) != nrow(rds) || anyDuplicated(csv$site_visit) || !setequal(csv$site_visit, rds$site_visit)) {
     stop(f_sites, " (", nrow(csv), " rows) is not the sites of ", f_rds, " (", nrow(rds),
-         "), one row each: rerun scripts/0240", call. = FALSE)
+         "), one row each: rerun scripts/0240, or set SITES_DIR to the table made from it", call. = FALSE)
   }
   rds <- as.data.frame(rds)[match(csv$site_visit, rds$site_visit), , drop = FALSE]
   for (cl in intersect(names(csv), names(rds))) {
@@ -50,7 +50,10 @@
       b[!is.na(b) & !nzchar(b)] <- NA
       identical(a, b)
     }
-    if (!same) stop(f_sites, "'s ", cl, " is not ", f_rds, "'s: rerun scripts/0240", call. = FALSE)
+    if (!same) {
+      stop(f_sites, "'s ", cl, " is not ", f_rds, "'s: rerun scripts/0240, or set SITES_DIR to the table made from it",
+           call. = FALSE)
+    }
   }
   invisible(TRUE)
 }
