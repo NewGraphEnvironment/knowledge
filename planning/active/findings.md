@@ -50,6 +50,7 @@ Backlog: `planning/backlog.md`, move 3. Plan it with `/planning-init <this issue
 |-------|------------|
 | `ls` aliased with colour codes broke path capture | `command ls` |
 | A dropped connection failed the `habitat_modelling` and `statistics` pushes; my md5-verified reconnect then replaced the updated local `habitat_modelling` with the bucket's old copy (the trap CLAUDE.md names under "Ragnar stores live in S3") | Read every push's result before any verified connect; redid the update (local, minutes) and pushed again over the hotspot |
+| I edited `scripts/0150-store.R` while a push of it ran; the push finished (its expression was parsed at launch), then R read on into the changed file and printed `unexpected end of input` | Harmless here; the rule (`code-check-r.md`, "Rscript reads a script as it runs") stands: no edits to a script with a run in flight |
 | `sqlite3 -readonly` on a WAL-mode copy with no `-wal` beside it: "unable to open database file" | open the scratch copy read-write |
 
 ## Meaning audit of evidence rows 1146-1151 (#20)

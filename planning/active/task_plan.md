@@ -71,7 +71,7 @@ Order from the plan review: every write lands here, then Phase 6 quits Zotero an
 - [x] Before any item loses or changes its PDF, search the org for its citation key (`gh api search/code`, then
       clone-and-grep the report repos it covers): banner `…fieldguidea`, hall, abbott, Skeena, mccarthy first.
 - [x] Dry run, Al reads it, live run, dry run again shows nothing to do.
-- [ ] Record the verdicts in #126's body; write the 11 personal-library items into #13's body and close #126 with this PR.
+- [x] Record the verdicts in #126's body; write the 11 personal-library items into #13's body and close #126 with this PR.
 
 | item | PDFs | verdict |
 |---|---|---|
@@ -115,30 +115,30 @@ Order from the plan review: every write lands here, then Phase 6 quits Zotero an
       split from, left out of `planning/backlog.md`; move #139's pointer for priors and pooling to the curve issue.
 
 ## Phase 6: Stores, once, with Zotero quit (cred#45)
-- [ ] Confirm Zotero has synced every write, downloaded every new file, and keyed every new item; then quit it.
-- [ ] Find the cred-built stores holding a changed attachment (`documents.origin` under `storage/<key>/`); harvest
+- [x] Confirm Zotero has synced every write, downloaded every new file, and keyed every new item; then quit it.
+- [x] Find the cred-built stores holding a changed attachment (`documents.origin` under `storage/<key>/`); harvest
       stores (`fraser`, `peace`, `pine`) are left for their next 0152 build and named in #126.
-- [ ] `0150 ACTION=update` with each store's whole build list (`scripts/README.md`): `sturgeon` (Tredger is a document,
+- [x] `0150 ACTION=update` with each store's whole build list (`scripts/README.md`): `sturgeon` (Tredger is a document,
       the strategy once), `flow`, `temperature`, `habitat_modelling`, and each other store found above; read the counts
       and drops; push; reconnect md5-verified.
-- [ ] `0150 ACTION=build STORE=statistics COLLECTIONS=LP4R4VYR`: McElreath, Hill, Toffolon & Piccolroaz and BDA3 are
+- [x] `0150 ACTION=build STORE=statistics COLLECTIONS=LP4R4VYR`: McElreath, Hill, Toffolon & Piccolroaz and BDA3 are
       documents; push.
-- [ ] CLAUDE.md data list gains `statistics_{members,additions}.csv`, `zotero_attachment_verdicts.csv` and the
+- [x] CLAUDE.md data list gains `statistics_{members,additions}.csv`, `zotero_attachment_verdicts.csv` and the
       `statistics` store; `scripts/README.md` gains `0275` and the statistics build line (Wood and MacKenzie named as
       wanted once a PDF is in hand).
 - [ ] Tick move 3's boxes in `planning/backlog.md` (batches 4 and 5).
 
 ## Validation
-- [ ] Phase 1's branch checks pass; `data-raw/zotero_copy_check.R` passes
-- [ ] Every `0270`/`0275` live run followed by a dry run that prints nothing to do
-- [ ] Each store connects md5-verified after its push, holds the documents named above, and its update printed no
+- [x] Phase 1's branch checks pass; `data-raw/zotero_copy_check.R` passes
+- [x] Every `0270`/`0275` live run followed by a dry run that prints nothing to do
+- [x] Each store connects md5-verified after its push, holds the documents named above, and its update printed no
       unexplained drop
-- [ ] `0280` passes after the new evidence rows; the meaning audit's rounds are recorded in findings
-- [ ] `devtools::test()` passes (registers, vignette data untouched)
+- [x] `0280` passes after the new evidence rows; the meaning audit's rounds are recorded in findings
+- [x] `devtools::test()` passes (registers, vignette data untouched)
 - [ ] `/code-check branch` clean (three-round floor)
 - [ ] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion
 
 ## Owed at the end (reported, done after merge)
-- [ ] #13 carries the 11 personal-library multi-PDF items
+- [x] #13 carries the 11 personal-library multi-PDF items
 
