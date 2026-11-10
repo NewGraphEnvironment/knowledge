@@ -246,7 +246,9 @@ A report is reachable from more than one place; using only one axis misses repor
 - `ACTION=update` takes the same `COLLECTIONS` as the store's build line and calls cred's `crd_store_update()`: PDFs new or
   changed since the build are ingested, documents whose source no longer resolves (trashed, replaced, taken out of the
   collection) are dropped, the rest are kept without re-reading. Give the whole build list, or the documents of the
-  collections left out are dropped. It needs the store local (`ACTION=query VERIFY=TRUE` pulls it).
+  collections left out are dropped. It needs the store local (`ACTION=query VERIFY=TRUE` pulls it) and the store's
+  embedder answering, refuses a harvest store (`fraser`, `peace`, `pine`: their `<EXTENT>__<reportId>.pdf` documents
+  never resolve in Zotero), and prints the document counts before and after and every document it dropped.
 - **Push after every local write** (`0152` ingest, `0156` dedup, a rebuild or update). The next verified
   connect replaces a local file whose md5 no longer matches the manifest with the bucket copy —
   an unpushed ingest is simply gone

@@ -14,3 +14,7 @@
   document whose source no longer resolves, so `0150 ACTION=update` resolves the same `COLLECTIONS` as a build and
   passes the union; it refuses without `crd_store_update()` in cred or without the local store. Guards probed
   (bad action, missing store, missing COLLECTIONS).
+- Plan review (Plan agent) in `review-plan.md`: two blockers on `ACTION=update` (narrow key lists and harvest stores
+  wipe documents). `0150` now refuses a store with any `<EXTENT>__<reportId>.pdf` origin (probed on a fake store) and
+  prints counts and drops; `api_key()` reads a BOM file and refuses undecodable bytes (probed). Plan reordered: every
+  library write in Phase 3–5, then one store pass with Zotero quit (Phase 6). Tredger's scan is replaced, not kept.

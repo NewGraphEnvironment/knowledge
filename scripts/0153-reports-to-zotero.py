@@ -60,10 +60,11 @@ def api_key():
         sys.exit("ZOTERO_API_KEY is unset or empty and ZOTERO_API_KEY_FILE is unset: set one to a Zotero "
                  "Web API key with write access to the group (the file's first non-blank line)")
     try:
-        with open(os.path.expanduser(path), encoding="utf-8") as f:
+        with open(os.path.expanduser(path), encoding="utf-8-sig") as f:   # -sig: a leading BOM is not the key
             key = next((ln.strip() for ln in f if ln.strip()), "")
-    except OSError as e:
-        sys.exit(f"ZOTERO_API_KEY is unset or empty and ZOTERO_API_KEY_FILE cannot be read: {e.strerror}")
+    except (OSError, UnicodeDecodeError) as e:
+        sys.exit(f"ZOTERO_API_KEY is unset or empty and ZOTERO_API_KEY_FILE cannot be read: "
+                 f"{getattr(e, 'strerror', None) or e.reason}")
     if not key:
         sys.exit("ZOTERO_API_KEY is unset or empty and the file ZOTERO_API_KEY_FILE names has no key in it")
     return key

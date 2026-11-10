@@ -43,33 +43,35 @@ Measured during planning (2026-11-09):
 - [x] Prove each branch with `python3 -c` imports of `0153` (variable set; unset + file; unset + empty file; unset +
       missing file; neither) and that `data-raw/zotero_copy_check.R`'s `ZOTERO_API_KEY=check-only` child still runs.
 
-## Phase 2: `0150 ACTION=update`, then the sturgeon follow-ups (#151)
+## Phase 2: `0150 ACTION=update` (store tooling)
 - [x] Upgrade cred to 0.7.0; `0150` refuses `ACTION=update` below the first cred that exports `crd_store_update()`.
-- [x] `scripts/0150-store.R`: `ACTION=update STORE= KEYS=` (or `COLLECTIONS=`) calling `crd_store_update()` on the
-      group library, then the same push reminder as a build; `scripts/README.md` row.
-- [ ] OCR Tredger 1984 (`ocrmypdf --deskew`) and attach it to `AHE9BFQQ` as a second PDF (keeping the scan).
-- [ ] Merge the strategy: `B2UZ32FE` into `Nechako - NECR`, `dc:replaces` `VS4P4TG6`, trash `VS4P4TG6`.
-- [ ] PATCH `KSCZP9JS`'s title and `QPIC5D8X`'s date to `data/sturgeon_additions.csv`'s values; confirm
-      `0270 --collection sturgeon --parent 9U54XAND --dry-run` prints no `would` line.
-- [ ] Remove the "not live until #151" line under `0270` in `scripts/README.md`.
-- [ ] With Zotero quit (cred#45), `0150 ACTION=update STORE=sturgeon` for the three items, check Tredger 1984 is a
-      document, push.
+- [x] `scripts/0150-store.R`: `ACTION=update STORE= COLLECTIONS=` resolves the store's whole build list as a build does
+      and passes the union to `crd_store_update()` (a narrower list drops documents); `scripts/README.md` row.
+- [x] Refuse a harvest store (any `<EXTENT>__<reportId>.pdf` origin), print document counts and drops (review #2, #19).
 
-## Phase 3: Items with several PDFs (#126, group library)
-- [ ] `scripts/0275-zotero-attachments-tidy.py` (loads `0153` as `0270` does, `--dry-run` first): reads
-      `data/zotero_attachment_verdicts.csv` (citation key, action, attachment keys in reading order, new-item
-      metadata where split) and does `merge` (download each part via the Web API, `qpdf --empty --pages`, upload the
-      merged PDF to the item, trash the parts), `keep` (trash the rest), `split` (create an item, re-parent the
-      attachment), `relabel`, and `merge-items` (the CLAUDE.md duplicate recipe). A copy with no stored file on the
-      server (no `md5`) is trashed only after the Web API confirms it holds none. Idempotent: a re-run prints nothing
-      to do. Prints the changed item keys.
-- [ ] Before trashing `banner_etal1993fieldguidea`'s item, search the org for that key
-      (`gh api search/code`, then clone-and-grep the report repos it covers): a cited key must not vanish.
+## Phase 3: Library writes (Zotero running; dry run, Al reads it, live, dry run again shows nothing)
+Order from the plan review: every write lands here, then Phase 6 quits Zotero and updates each store once.
+
+**#151, sturgeon follow-ups**
+- [ ] OCR Tredger 1984 (`ocrmypdf --deskew`) and replace the scan on `AHE9BFQQ` (`XETIXEM2`) with it, so the audit
+      and the store both read text (review #12).
+- [ ] Merge the strategy: `B2UZ32FE` into `Nechako - NECR` (`977GE58E`), `dc:replaces` `VS4P4TG6`, trash `VS4P4TG6`.
+- [ ] PATCH `KSCZP9JS`'s title and `QPIC5D8X`'s date to `data/sturgeon_additions.csv`'s values; check both keep their
+      citation keys; `0270 --collection sturgeon --parent 9U54XAND --dry-run` prints no `would` line.
+- [ ] Remove the "not live until #151" line under `0270` in `scripts/README.md`.
+
+**#126, items with several PDFs (group library)**
+- [ ] `scripts/0275-zotero-attachments-tidy.py` (loads `0153` as `0270` does; `--dry-run`): reads
+      `data/zotero_attachment_verdicts.csv` (item key, citation key, action, attachment keys in reading order, merged
+      file name, split metadata) and does `merge` (download each part, check its md5, `qpdf --deterministic-id --empty
+      --pages`, upload, trash the parts), `keep`, `split` (new item in the parent's collections, re-parent the
+      attachment), `relabel`, `replace`, `patch` and `merge-items` (collections and relations merged, `dc:replaces` as
+      a group item URI). Done means the end state holds (every part trashed, one live merged PDF), so a re-run after a
+      crash finishes rather than duplicates. Prints the changed attachment keys. #151's writes are rows of the same file.
+- [ ] Before any item loses or changes its PDF, search the org for its citation key (`gh api search/code`, then
+      clone-and-grep the report repos it covers): banner `…fieldguidea`, hall, abbott, Skeena, mccarthy first.
 - [ ] Dry run, Al reads it, live run, dry run again shows nothing to do.
-- [ ] Record the verdicts in #126's body; write the 11 personal-library items into #13's body (owed there) and close
-      #126 with this PR.
-- [ ] `0150 ACTION=update` each store whose manifest holds a changed item, or list in #126 the stores that wait for
-      their next build.
+- [ ] Record the verdicts in #126's body; write the 11 personal-library items into #13's body and close #126 with this PR.
 
 | item | PDFs | verdict |
 |---|---|---|
@@ -91,36 +93,46 @@ Measured during planning (2026-11-09):
 | `mccarthy2000ComeauCreek` | report + a 2016 crossing map | split the map to its own item |
 | `viveiros2010FishPassage` | report PDF + a maps `.zip` labelled PDF | relabel the zip |
 
-## Phase 4: The DFO threat-layer document (#20)
-- [ ] `data/flow_additions.csv`: Iacarella et al. 2025 (CSAS 2025/013, PDF from waves-vagues), FLNRORD 2022 EFN
-      framework and Schnorbus 2020 where the library lacks them; `0270 --collection flow` dry run then live; add the
-      document to `hydrology` (`X29BX4U8`) and `species/salmon` (`W4425VK5`), which feed `habitat_modelling`, and as
-      a `temperature_members.csv` row once BBT has keyed it.
-- [ ] Append `literature_evidence.csv` rows: the low-flow (minimum August %MAD) and high-flow (maximum May %MAD)
-      metrics and the August mean temperature metric, `instream_flow`/`temperature` with their `metric` per the
-      CLAUDE.md conventions; `0280` gate; audit every row's meaning against the PDF, repeating until a round finds
+## Phase 4: The DFO threat-layer document (#20) — writes, rows, hand-offs
+- [ ] `data/flow_additions.csv`: Iacarella et al. 2025 (CSAS 2025/013, PDF from waves-vagues), and FLNRORD 2022's EFN
+      framework and Schnorbus 2020 where the library lacks them (check the document's own reference list, review #14);
+      `0270 --collection flow` dry run then live; once BBT keys it, a `data/temperature_members.csv` row puts the
+      document in `Fisheries/temperature`, which feeds `habitat_modelling` (review #8).
+- [ ] Append `literature_evidence.csv` rows, each naming the key it cites: Iacarella 2025's low-flow (minimum August
+      %MAD) and high-flow (maximum May %MAD) metrics and its August mean temperature metric, and the EFN framework's
+      monthly-sensitivity basis; `0280` gate; audit every row's meaning against the PDF, repeating until a round finds
       nothing.
 - [ ] Write the data question into wet#5's body; file a wet issue with step 4's method differences
       (precipitation scaling vs area-weighted sampling, dam corrections, weak Aug/Sep minima, 86-gauge metrics).
 
-## Phase 5: The statistics store (#95)
-- [ ] `0270`: `--parent top` finds or creates a top-level collection (`/collections/top`).
+## Phase 5: The statistics collection (#95) — writes and split-offs
+- [ ] `0270`: `--parent top` finds or creates a top-level collection (`/collections/top`); the "elsewhere" exit
+      suggests it; docstring and comments stop assuming Fisheries (review #16).
 - [ ] `data/statistics_members.csv` (the collection's current members) and `data/statistics_additions.csv` (BDA3, PDF
-      from the authors' site); `0270 --collection statistics --parent top` dry run then live.
-- [ ] `0150 ACTION=build STORE=statistics COLLECTIONS=LP4R4VYR`, check McElreath, Hill and BDA3 are documents, push.
+      from the authors' site); `0270 --collection statistics --parent top` dry run (watch for personal-library PDF
+      uploads) then live.
 - [ ] File the alignment review and the partially pooled curve as issues, each naming move 3 (#172) as where it was
       split from, left out of `planning/backlog.md`; move #139's pointer for priors and pooling to the curve issue.
 
-## Phase 6: Stores and docs
-- [ ] With Zotero quit: rebuild or update `flow`, `habitat_modelling` and `temperature` for Phase 4's items; push each.
+## Phase 6: Stores, once, with Zotero quit (cred#45)
+- [ ] Confirm Zotero has synced every write, downloaded every new file, and keyed every new item; then quit it.
+- [ ] Find the cred-built stores holding a changed attachment (`documents.origin` under `storage/<key>/`); harvest
+      stores (`fraser`, `peace`, `pine`) are left for their next 0152 build and named in #126.
+- [ ] `0150 ACTION=update` with each store's whole build list (`scripts/README.md`): `sturgeon` (Tredger is a document,
+      the strategy once), `flow`, `temperature`, `habitat_modelling`, and each other store found above; read the counts
+      and drops; push; reconnect md5-verified.
+- [ ] `0150 ACTION=build STORE=statistics COLLECTIONS=LP4R4VYR`: McElreath, Hill, Toffolon & Piccolroaz and BDA3 are
+      documents; push.
 - [ ] CLAUDE.md data list gains `statistics_{members,additions}.csv`, `zotero_attachment_verdicts.csv` and the
-      `statistics` store; `scripts/README.md` gains `0275` and the statistics build line.
+      `statistics` store; `scripts/README.md` gains `0275` and the statistics build line (Wood and MacKenzie named as
+      wanted once a PDF is in hand).
 - [ ] Tick move 3's boxes in `planning/backlog.md` (batches 4 and 5).
 
 ## Validation
 - [ ] Phase 1's branch checks pass; `data-raw/zotero_copy_check.R` passes
 - [ ] Every `0270`/`0275` live run followed by a dry run that prints nothing to do
-- [ ] Each store connects md5-verified after its push, and holds the documents named above
+- [ ] Each store connects md5-verified after its push, holds the documents named above, and its update printed no
+      unexplained drop
 - [ ] `0280` passes after the new evidence rows; the meaning audit's rounds are recorded in findings
 - [ ] `devtools::test()` passes (registers, vignette data untouched)
 - [ ] `/code-check branch` clean (three-round floor)
