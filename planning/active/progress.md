@@ -37,3 +37,10 @@
 - Hand-offs: wet#162 filed (method differences, benchmark for wet#3 and wet#6); wet#5's body asks the Province about the
   Foundry/DFO layers. #95's items 2 and 3 filed as #185 and #186 (split from move 3, not in backlog.md); #139's pointer
   moved to #186; #95's body names both.
+- Live writes (Al approved the dry runs, 2026-11-10): `0275` 31 rows, 0 failed; the dry run after shows 0 not done.
+  `0270 --collection flow` created N3I48AN2 (DFO 2025/013), KE758PAG (EFN Policy 2022), 3JTBEP9W (Schnorbus 2020);
+  `0270 --collection statistics --parent top` created 5RKUXXZS (BDA3). Each has a stored PDF; dry runs after show no `would`.
+  New items from splits: A2EZNEAP (eDNA template), 3237KHR4 (Skeena 2006 valuation), 5KC9J83I, CZ6W42IB, CXPP2JUK
+  (Alsea documents), 6EH9XCNQ (Comeau 2016 map). Changed attachments:
+  attachments added:   5B62CMEX 9HNJIITR PGU736V9 BE4E6T9F 22AP9QJB 7PK9GSJM ZXXDT3DI 43WP56GA ZKGXNRGU BNSBUZ9M
+  attachments trashed: XETIXEM2 VS4P4TG6 KFWVRH6I D6IMPRF9 ULAD6928 W5C8VQAJ YJZS6RUN GEX7LH26 H2HE7YEY JVVM3KXV 89FYJDGQ CB36ZIRY GENI8XJ8 NKDRE6Q7 HLV2RWZD RMXSJVKB DPH84ENN EPPHL4VG YJZLRJ5I 33222K2G AGU7Y3I4 GKL97JYY REXYEU92 Z64VC6DT RX63AU5F WZ896C9Y 2DVK6KM4 Y6K63TML BFM4PF4I 7W7IW7RG FEJRDH9D VBCPBATA 9S2ERUGD B7V8RRZQ 354HGUEY PUEQYI5E W8HLSVEI 4Z5EMI6B PEVEUP6I EI8Z6FME K4WGW3Q7 7H5GK2IR 9Q9GZ5WU B7ZEGMZQ E27ZSTHD K28A3DMR IBHTXREZ

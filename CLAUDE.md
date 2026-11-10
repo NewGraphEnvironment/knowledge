@@ -94,6 +94,10 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   collections, so the files list what the cleanup ensured, and 0270 never removes a member; #122), and
   `sturgeon_{members,additions}.csv` (the same for `species/sturgeon`, the sole input of the `sturgeon` store: the
   White Sturgeon recovery documents, the NWSRI's reports and curated Nechako mainstem history; #124), and
+  `statistics_{members,additions}.csv` (what `0270 --collection statistics --parent top` puts in the top-level
+  `statistics` collection, the sole input of the `statistics` store: the texts the method is read against; #95), and
+  `zotero_attachment_verdicts.csv` (what `0275` did to each group item with several PDFs or wrong fields, one decided
+  row per item, kept as the record; #126, #151), and
   `thresholds.csv` and `thresholds_groups.csv` (the tuned thresholds per species × stage × component in link's
   parameter names, with the near-river pair's scope where a rule has one (`near_river_scope`, from the comparison's
   tuned structure), and the groups each rule was scored on; `0325`, #57, #73). `data/tune/` holds the tuning run's

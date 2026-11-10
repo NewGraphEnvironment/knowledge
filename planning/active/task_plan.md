@@ -53,12 +53,12 @@ Measured during planning (2026-11-09):
 Order from the plan review: every write lands here, then Phase 6 quits Zotero and updates each store once.
 
 **#151, sturgeon follow-ups**
-- [ ] OCR Tredger 1984 (`ocrmypdf --deskew`) and replace the scan on `AHE9BFQQ` (`XETIXEM2`) with it, so the audit
+- [x] OCR Tredger 1984 (`ocrmypdf --deskew`) and replace the scan on `AHE9BFQQ` (`XETIXEM2`) with it, so the audit
       and the store both read text (review #12).
-- [ ] Merge the strategy: `B2UZ32FE` into `Nechako - NECR` (`977GE58E`), `dc:replaces` `VS4P4TG6`, trash `VS4P4TG6`.
+- [x] Merge the strategy: `B2UZ32FE` into `Nechako - NECR` (`977GE58E`), `dc:replaces` `VS4P4TG6`, trash `VS4P4TG6`.
 - [ ] PATCH `KSCZP9JS`'s title and `QPIC5D8X`'s date to `data/sturgeon_additions.csv`'s values; check both keep their
       citation keys; `0270 --collection sturgeon --parent 9U54XAND --dry-run` prints no `would` line.
-- [ ] Remove the "not live until #151" line under `0270` in `scripts/README.md`.
+- [x] Remove the "not live until #151" line under `0270` in `scripts/README.md`.
 
 **#126, items with several PDFs (group library)**
 - [x] `scripts/0275-zotero-attachments-tidy.py` (loads `0153` as `0270` does; `--dry-run`): reads
@@ -70,7 +70,7 @@ Order from the plan review: every write lands here, then Phase 6 quits Zotero an
       crash finishes rather than duplicates. Prints the changed attachment keys. #151's writes are rows of the same file.
 - [x] Before any item loses or changes its PDF, search the org for its citation key (`gh api search/code`, then
       clone-and-grep the report repos it covers): banner `…fieldguidea`, hall, abbott, Skeena, mccarthy first.
-- [ ] Dry run, Al reads it, live run, dry run again shows nothing to do.
+- [x] Dry run, Al reads it, live run, dry run again shows nothing to do.
 - [ ] Record the verdicts in #126's body; write the 11 personal-library items into #13's body and close #126 with this PR.
 
 | item | PDFs | verdict |
