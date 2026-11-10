@@ -36,6 +36,8 @@ test_that("placement runs against a live schema and re-gates the habitat flags o
     FROM fresh_default.streams s
     JOIN fresh_default.streams_habitat_bt h ON h.id_segment = s.id_segment AND h.watershed_group_code = s.watershed_group_code
     WHERE s.watershed_group_code = 'BULK' AND h.rearing AND s.length_metre > 20 LIMIT 1")
+  # a fresh_default rebuilt with other groups, or emptied, holds none (#142): untested, not broken
+  skip_if(nrow(one) == 0, "fresh_default holds no BULK bull trout rearing segment (an empty or partial build)")
   v <- data.frame(site_visit = "t1", watershed_group_code = one$watershed_group_code,
                   blue_line_key = as.numeric(one$blue_line_key), downstream_route_measure = as.numeric(one$m))
   p <- knw_link_place(conn, v, "fresh_default")

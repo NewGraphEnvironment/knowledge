@@ -46,9 +46,9 @@ both hold 51,587 sites, no duplicate `site_visit`, the same set, and the five pl
       `snap_confirmed`, `snap_moved`, `blue_line_key` equal). Roxygen for the new argument; `devtools::document()`.
 - [ ] `scripts/0336-archive.R`: pass `SITES_DIR`; header INPUT/RUN say `fdis_sites.csv` comes from
       `data/fdis/derived` whatever `EVIDENCE_DIR`.
-- [ ] `data-raw/minimal_network_check.R`: `say()` and `block()` append to the log as they go (file created at start), and
+- [x] `data-raw/minimal_network_check.R`: `say()` and `block()` append to the log as they go (file created at start), and
       step 3's refusal is said to the log before it stops, so steps 1 and 2 survive a refusal.
-- [ ] `tests/testthat/test-link_place.R`: `skip_if(nrow(one) == 0, …)` naming an empty schema or a missing BULK group.
+- [x] `tests/testthat/test-link_place.R`: `skip_if(nrow(one) == 0, …)` naming an empty schema or a missing BULK group.
 - [ ] Docs: `research/run_archive.md` (evidence folder: where `fdis_sites.csv` is read from and what it is held to);
       CLAUDE.md only if a sentence there states the old behaviour (grep found none).
 
