@@ -1,0 +1,23 @@
+# Code-check round 1: branch 169-backlog-pass-batch-the-open-issues-into
+
+## Checklist read
+
+- code-check-python.md: in full (none of it applies: no Python in the diff).
+- code-check.md: the prose of every H3 under `## Mechanisms` (14), read for rule text; evidence tables skimmed, not read row by row. `## Rules that stand alone` and later sections: headings only (none names a tool or shape this markdown-only diff uses).
+- code-check-shell.md: "A verification command can be shadowed by a shell function or alias" (hit during the review: `diff` here is a shell function wrapping `git diff --no-index --color-words`, so the tick comparisons were rerun with `/usr/bin/diff`). The other ~100 headings not read: no shell is added by the diff.
+- code-check-r.md, code-check-spatial.md: headings only; none read in full (no R or spatial code in the diff).
+
+## What was checked
+
+1. Parser (`backlog_moves.sh` at the pinned published tree): `list` reads 11 rows (8 open, 3 waiting, matching the file); `next` prints `/planning-init #170`, rc 0. `tick` on a copy for each umbrella #170-#180 flips exactly its own row and writes `done: <pr>`, and ticks the first checkbox of exactly the `### <n>.` sections its batches cell names (batches 1-17, each once, verified per copy with `/usr/bin/diff`). After ticking all 11 on one copy, `next` gives `NONE: every move is ticked` (rc 4) with no unticked batch section left, and a re-tick reports `ALREADY ticked`. The `## Order` table (also `| n | #N |` rows) sits under its own `## ` heading, outside the parser's range.
+2. Coverage: all 64 currently open issues are named in `planning/backlog.md` (53 non-umbrella, including #169 on the Verified line, plus #170-#180). Placement arithmetic holds: 40 batched + 7 tracked + 5 singles + 5 closed + 1 transferred = 58, plus #169 = 59 at the freeze. Each move's "(N issues)" matches its batches. Each umbrella body #170-#180 on GitHub names exactly its batches' members (plus related context issues).
+3. GitHub state: #68, #72, #48, #80, #3 are CLOSED (completed) with reason comments; #8 resolves by REST to an open issue in the skills repository; 9f4b21bd is on origin/main and its message names #73, #68, #80, #72; #139's body carries #80's flow-number item ("Moved from #80 on its closure"); #120's premise box is ticked; link#468 is open and titled "Backlog pass: batch the open issues into moves with umbrellas"; link#434, link#400, link#460, fresh#257 and cred#45 are open. Track labels on #85, #101, #162, #165, #120, #139, #140 match the file.
+4. Premise spot-checks on origin/main (b69365b): `R/tune_grid.R:52` (grid_grad 3-30 %), `scripts/0250-fiss-evidence.R:136`, `scripts/0330-compare.R:90`, `scripts/0153-reports-to-zotero.py:49`, `data-raw/vignette_bib.R:94`, `inst/method/settings.csv:68`, `tests/testthat/test-link_place.R:32-39`, the BULK CO timing row, README "rule" (6 hits in lines 13-21, 48), `research/fig/` 102 files, `0310` never writes `fdis_sites.csv`, no `structures` row: all correct. Two `0320` line references are not (finding 1).
+5. Public scan of the seven changed files: no home paths, hosts, ports, credential paths, `soul` names or URLs, or private-repo links. Cross-repo references name only public repos (link, fresh, wet, cred, fwapg, flooded, floodplains, fly). One bare private repo name appears, `rtj`, in `planning/active/umbrellas.md:161`, quoting #17's own (already public) title and copied into #176's body; it is a name in words, not a link or `repo#N`, and `CLAUDE.md` on main already carries it, so it is not reported as a leak.
+
+## Findings
+
+- **[severity: fragile]** planning/active/findings.md (premise table, #72 row) and planning/active/task_plan.md ("#72 is done" bullet) — the line references for #72's evidence are wrong on origin/main: `scripts/0320-tune-run.R:573` is a comment about grade-table records (`# The commit (knowledge_commit) is read at the run's start`), not where `ref_edge` is taken from the curve, and `:552` is the anchoring report block, not where `discharge_load` is recorded. On b69365b (the branch point, which the read was checked against) `discharge_load <- knw_discharge_load(conn)` is line 567, `ref_edge_curve <- ... r$curve$edge_stream ...` is line 595, and the comparison of both is 613-614. The same wrong `:573` was posted in #72's public closure comment. The closure itself is right (the code does what #72 asked), but a reader following the cited lines to verify it lands on unrelated code. Fix the two planning files (567, 595, 613-614) and edit #72's closure comment.
+  - **Rule:** none
+
+No other defects. The parser contract, the coverage, the closures and the umbrella numbering all check out.
