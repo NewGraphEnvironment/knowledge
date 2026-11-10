@@ -67,7 +67,7 @@ run_fx <- function(root, run = "20261027_0000", tokens = c(cut = NA, acc = NA, g
   sites <- data.frame(site_visit = c("s1", "s2"), flag_far_snap = c(FALSE, TRUE), flag_ws50_mismatch = c(FALSE, NA),
                       snap_confirmed = c(TRUE, FALSE), snap_moved = c(FALSE, TRUE), blue_line_key = c(356L, 357L),
                       downstream_route_measure = c(10.5, 123456.789), date = as.Date(c("2020-08-01", NA)),
-                      blocks_absence_of = c(NA, "BT"), gnis_name = c("Rivi\u00e8re Bleue", NA))
+                      blocks_absence_of = c(NA, "BT"), gnis_name = c("Rivi\u00e8re Bleue", NA), mad_m3s = c(1, Inf))
   saveRDS(sites, file.path(db, "sites.rds"))
   utils::write.csv(cbind(sites, n_bt = 1:2), file.path(dv, "fdis_sites.csv"), row.names = FALSE, na = "",
                    fileEncoding = "UTF-8")
@@ -611,22 +611,22 @@ test_that("fdis_sites.csv is held to the build's sites.rds: one row per site and
   good <- utils::read.csv(f, colClasses = "character", na.strings = "", encoding = "UTF-8")
   put <- function(d) utils::write.csv(d, f, row.names = FALSE, na = "", fileEncoding = "UTF-8")
   put(good[1, ])
-  expect_error(plan_of(x), "fdis_sites.csv .*not the sites of .*sites.rds .*: rerun scripts/0240")
+  expect_error(plan_of(x), "fdis_sites.csv .*not the sites of .*sites.rds .*: set SITES_DIR")
   put(good[c(1, 2, 2), ])
-  expect_error(plan_of(x), "fdis_sites.csv .*not the sites of .*sites.rds .*: rerun scripts/0240")
+  expect_error(plan_of(x), "fdis_sites.csv .*not the sites of .*sites.rds .*: set SITES_DIR")
   d <- good
   d$site_visit[2] <- "s3"
   put(d)
-  expect_error(plan_of(x), "fdis_sites.csv .*not the sites of .*sites.rds .*: rerun scripts/0240")
+  expect_error(plan_of(x), "fdis_sites.csv .*not the sites of .*sites.rds .*: set SITES_DIR")
   # one value changed in any shared column, a double by one part in a million, a missing value filled
   bad <- list(flag_far_snap = "FALSE", flag_ws50_mismatch = "TRUE", snap_confirmed = "TRUE", snap_moved = "FALSE",
               blue_line_key = "999", downstream_route_measure = "123456.912", date = "2020-08-02",
-              blocks_absence_of = "CH")
+              blocks_absence_of = "CH", mad_m3s = "1e300")
   for (cl in names(bad)) {
     d <- good
     d[[cl]][2] <- bad[[cl]]
     put(d)
-    expect_error(plan_of(x), paste0("fdis_sites.csv's ", cl, " is not .*sites.rds's: rerun scripts/0240"))
+    expect_error(plan_of(x), paste0("fdis_sites.csv's ", cl, " is not .*sites.rds's: set SITES_DIR"))
   }
   # a small value moved by 5e-6 of itself
   d <- good
@@ -650,6 +650,11 @@ test_that("fdis_sites.csv is held to the build's sites.rds: one row per site and
   rds <- withr::local_tempfile(fileext = ".rds")
   saveRDS(transform(readRDS(file.path(x$build, "sites.rds")), blocks_absence_of = c("", "BT")), rds)
   expect_no_error(.knw_archive_sites_check(f, rds))
+  # the checkout's own build is remedied by rerunning 0240, which writes only data/fdis/{build,derived}
+  d <- good
+  d$mad_m3s[2] <- "1e300"
+  put(d)
+  withr::with_dir(root, expect_error(plan_of(x), "mad_m3s is not .*sites.rds's: rerun scripts/0240$"))
   # a stream name with an accent, under a C locale, is the same name (round 2 of the branch review)
   put(good)
   withr::with_locale(c(LC_CTYPE = "C"), expect_no_error(plan_of(x)))

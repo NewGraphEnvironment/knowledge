@@ -32,9 +32,13 @@
   # differs under a C locale (review of #170, round 2)
   csv <- utils::read.csv(f_sites, colClasses = "character", na.strings = "", check.names = FALSE, encoding = "UTF-8")
   rds <- readRDS(f_rds)
+  # 0240 reads and writes data/fdis/{build,derived} alone, so a rerun of it remedies only the checkout's own build; a
+  # staged one names its table through 0336's SITES_DIR (rounds 1 and 3 of the review)
+  own <- normalizePath(c(f_rds, "data/fdis/build/sites.rds"), mustWork = FALSE)
+  fix <- if (own[1] == own[2]) "rerun scripts/0240" else "set SITES_DIR to the fdis_sites.csv 0240 made from it"
   if (nrow(csv) != nrow(rds) || anyDuplicated(csv$site_visit) || !setequal(csv$site_visit, rds$site_visit)) {
-    stop(f_sites, " (", nrow(csv), " rows) is not the sites of ", f_rds, " (", nrow(rds),
-         "), one row each: rerun scripts/0240, or set SITES_DIR to the table made from it", call. = FALSE)
+    stop(f_sites, " (", nrow(csv), " rows) is not the sites of ", f_rds, " (", nrow(rds), "), one row each: ", fix,
+         call. = FALSE)
   }
   rds <- as.data.frame(rds)[match(csv$site_visit, rds$site_visit), , drop = FALSE]
   for (cl in intersect(names(csv), names(rds))) {
@@ -46,15 +50,16 @@
       # each value to 1e-9 of itself (or of 1 near zero), and missing in the same places
       x <- suppressWarnings(as.numeric(a))
       y <- as.numeric(b)
-      identical(is.na(x), is.na(y)) && all(abs(x - y) <= 1e-9 * pmax(1, abs(y)), na.rm = TRUE)
+      # an infinite value equal only to itself, since Inf <= Inf would pass any finite value against it
+      identical(is.na(x), is.na(y)) &&
+        all(ifelse(is.finite(y), abs(x - y) <= 1e-9 * pmax(1, abs(y)), x == y), na.rm = TRUE)
     } else {
       b <- as.character(b)
       b[!is.na(b) & !nzchar(b)] <- NA
       identical(a, b)
     }
     if (!same) {
-      stop(f_sites, "'s ", cl, " is not ", f_rds, "'s: rerun scripts/0240, or set SITES_DIR to the table made from it",
-           call. = FALSE)
+      stop(f_sites, "'s ", cl, " is not ", f_rds, "'s: ", fix, call. = FALSE)
     }
   }
   invisible(TRUE)
