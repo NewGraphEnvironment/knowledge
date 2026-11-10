@@ -14,6 +14,8 @@ it all in one PR.
 `/gh-pr-merge` step 9c ticks the move on merge; `/compact-prep` names the next. A `NONE` from
 `backlog_moves.sh next` that names batch sections means those batches have no move yet: run
 `/backlog-sweep` again, the backlog is not finished.
+`next` reads only this file, so a plain `NONE` is not the end either while an open issue is named nowhere here (a
+split piece, or one filed since the last pass): run `/backlog-sweep` to place it.
 
 ## Moves
 
