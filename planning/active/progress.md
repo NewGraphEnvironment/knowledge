@@ -68,3 +68,8 @@
 - Stores done: `habitat_modelling` (754 MB over the hotspot) and `statistics` pushed on retry; all six reconnect with
   md5 matching the manifest: sturgeon 84 docs, flow 43, temperature 53, bull_trout_grayling 35, habitat_modelling 264,
   statistics 4. KE758PAG synced as a one-field organization and kept `ministryofforests2022Environmentalflow`.
+- Code-check round 2 (`review-round2.md`): 1 fragile, inside round 1's fix (the file check reached `merge` and `replace`
+  but not their sibling `keep`). Enumeration of every `trash()` site in `0275` (merge, keep, replace, merge-items; split,
+  relabel and patch trash nothing): `keep` now refuses a kept copy with no stored file, and `merge-items` refuses an
+  item that holds no stored PDF. Both guards proven with a mock (refuse, no PATCH sent; pass on correct input); the
+  verdicts dry run still reads 32 of 32 done.

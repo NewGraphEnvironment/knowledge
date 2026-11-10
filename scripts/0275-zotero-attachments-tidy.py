@@ -177,8 +177,12 @@ def do_merge(row, parts, dry):
 
 def do_keep(row, atts, dry):
     gone = [a for a in atts[1:] if live(a)]
-    if not live(atts[0]):
+    kept = get(atts[0])
+    if kept.get("deleted"):
         raise RuntimeError(f"the copy to keep, {atts[0]}, is in the trash")
+    if not kept.get("md5"):
+        raise RuntimeError(f"the copy to keep, {atts[0]}, holds no file on the server: keeping it would trash "
+                           "the only stored copy (are the row's keys in the wrong order?)")
     if not gone:
         return "done"
     if dry:
@@ -262,6 +266,10 @@ def do_merge_items(row, atts, dry):
     need_rel, need_coll = URI + atts[0] not in replaces, colls != sorted(keep.get("collections", []))
     if not need_rel and not need_coll and other.get("deleted"):
         return "done"
+    # The duplicate goes to the trash only into an item that holds a stored PDF of its own.
+    if not any(c.get("md5") and c.get("contentType") == "application/pdf" and not c.get("deleted")
+               for c in children(row["item"])):
+        raise RuntimeError(f"{row['item']} holds no stored PDF: trashing {atts[0]} could leave the work with none")
     if dry:
         return (f"would add {row['item']} to {sorted(set(colls) - set(keep.get('collections', [])))}, record "
                 f"dc:replaces {atts[0]} and trash it")
