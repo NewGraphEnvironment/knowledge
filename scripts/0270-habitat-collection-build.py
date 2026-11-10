@@ -4,7 +4,7 @@ scripts/0270-habitat-collection-build.py
 ---------------------------------------------------------------------------
 Build a group-library collection under Fisheries (habitat_modelling by default,
 --collection for another; --parent for a collection under another parent, such as
-the species collections under species) from a curated key list, so the ragnar store of the same
+the species collections under species, or --parent top for a top-level one, such as statistics) from a curated key list, so the ragnar store of the same
 name (0150 ACTION=build) can be rebuilt from the group library alone, on any
 machine synced to it.
 
@@ -55,7 +55,7 @@ z = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(z)          # 0153 has a __main__ guard; this only defines helpers
 
 COLLECTION = "habitat_modelling"     # the collection name and the tag on created items; --collection
-PARENT = "TRXPJHQE"                  # Fisheries, group library; --parent (species is 9U54XAND)
+PARENT = "TRXPJHQE"                  # Fisheries, group library; --parent (species is 9U54XAND; top: top level)
 ZDIR = os.path.expanduser("~/Zotero")
 # Fields the Web API must not receive on a copy: identity, sync state, and the
 # citation key (BBT derives it; a hand-set key breaks the key formula).
@@ -235,7 +235,9 @@ def get_json(url):
 
 
 def find_collection(dry):
-    for c in get_json(f"{z.BASE}/collections/{PARENT}/collections?limit=100"):
+    top = PARENT == "top"
+    for c in get_json(f"{z.BASE}/collections/top?limit=100" if top
+                      else f"{z.BASE}/collections/{PARENT}/collections?limit=100"):
         if c["data"]["name"] == COLLECTION:
             return c["key"], "exists"
     # Not under PARENT. A collection of that name elsewhere in the group is almost always the
@@ -251,11 +253,11 @@ def find_collection(dry):
         start += 100
     if elsewhere:
         sys.exit(f"no collection {COLLECTION} under {PARENT}, but the group has {', '.join(elsewhere)}: "
-                 "pass --parent with that parent's key")
+                 "pass --parent with that parent's key, or --parent top for a top-level one")
     if dry:
         return None, "would create"
     st, bd = z.api("POST", f"{z.BASE}/collections",
-                   data=[{"name": COLLECTION, "parentCollection": PARENT}],
+                   data=[{"name": COLLECTION} if top else {"name": COLLECTION, "parentCollection": PARENT}],
                    headers={"Content-Type": "application/json", "Zotero-Write-Token": z.tok()})
     try:
         return json.loads(bd)["successful"]["0"]["key"], "created"
@@ -398,15 +400,18 @@ def addition_item(row):
     if row["DOI"]:
         return crossref_item(row["DOI"])
     # university and thesisType are a thesis's fields where a report has institution and reportType,
-    # and bookTitle, pages, series and seriesNumber a book section's; an additions file without
-    # those columns simply never sets them.
+    # bookTitle, pages, series and seriesNumber a book section's, and publisher, edition and ISBN a
+    # book's (CrossRef's metadata is read as a journal article, so a book goes in without its DOI);
+    # an additions file without those columns simply never sets them.
     item = {k: row[k] for k in ("itemType", "title", "date", "institution", "reportNumber", "reportType",
                                 "university", "thesisType", "place", "url", "bookTitle", "pages",
-                                "series", "seriesNumber") if row.get(k)}
+                                "series", "seriesNumber", "publisher", "edition", "ISBN") if row.get(k)}
     item["creators"] = []
     for c in filter(None, (x.strip() for x in row["creators"].split(";"))):
-        last, _, first = c.partition(",")
-        item["creators"].append({"creatorType": "author", "lastName": last.strip(), "firstName": first.strip()})
+        last, comma, first = c.partition(",")
+        # A name with no comma is an organization's, which Zotero holds in one field
+        item["creators"].append({"creatorType": "author", "lastName": last.strip(), "firstName": first.strip()}
+                                if comma else {"creatorType": "author", "name": c})
     return item
 
 
@@ -431,7 +436,9 @@ def addition_pdf(row):
     data = z.fetch(src, timeout=180)
     if not data.startswith(b"%PDF"):
         raise ValueError(f"not a PDF: {src}")
-    return urllib.parse.unquote(src.rsplit("/", 1)[-1])[:120], data
+    name = urllib.parse.unquote(src.rsplit("/", 1)[-1])[:120]
+    # 0153's upload() types a file by its name, and a repository URL can end in /content
+    return (name if name.lower().endswith(".pdf") else name + ".pdf"), data
 
 
 def do_addition(row, coll, dry):
@@ -485,7 +492,8 @@ def main():
     global COLLECTION, PARENT
     p = argparse.ArgumentParser()
     p.add_argument("--collection", default=COLLECTION)
-    p.add_argument("--parent", default=PARENT, help="key of the collection it sits under (default Fisheries)")
+    p.add_argument("--parent", default=PARENT,
+                   help="key of the collection it sits under (default Fisheries), or top for a top-level collection")
     p.add_argument("--members", help="default data/<collection>_members.csv")
     p.add_argument("--additions", help="default data/<collection>_additions.csv, when it exists")
     p.add_argument("--dry-run", action="store_true")

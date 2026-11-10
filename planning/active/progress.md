@@ -24,3 +24,16 @@
   key search: neither banner key cited (GitHub index + 196 local checkouts); abbott and mccarthy are cited
   (safety_plan_template, fish_passage_skeena_2024_reporting) and keep their report PDFs. Tredger OCR: 49 pp,
   7,531 words. Dry run: 31 rows, all `would`, 0 failed; `download()` checked against WZ896C9Y's md5.
+- Phase 4/5 prep: `0270 --parent top` (statistics is top level, LP4R4VYR); `addition_item()` takes a book's
+  publisher, edition and ISBN, and writes a comma-less creator as one-field (organization) name; `addition_pdf()` names
+  a PDF from a `/content` URL `.pdf` (0153 types uploads by name). `statistics_{members,additions}.csv` (8 members, BDA3
+  from the authors' site): dry run, only BDA3 would be created. `flow_additions.csv` + Iacarella et al. 2025, the 2022
+  EFN Policy and Schnorbus 2020 (UVic copy; PCIC's URL serves HTML): dry run, those three would be created.
+  Regression dry runs: habitat_modelling, temperature unchanged (no `would`).
+- The DFO document cites Weller et al. 2023 (library: weller_etal2024Streamthermalscape, the same paper) and Isaak 2016
+  (NorWeST data archive; library holds Isaak 2017's paper). Its flow and temperature scores are continuous 0-1, no
+  threshold, so its rows are `qual`; the EFN Policy holds values (MMD >20 % lt MAD low, 10-20 moderate, <10 high flow
+  sensitivity, p. 8).
+- Hand-offs: wet#162 filed (method differences, benchmark for wet#3 and wet#6); wet#5's body asks the Province about the
+  Foundry/DFO layers. #95's items 2 and 3 filed as #185 and #186 (split from move 3, not in backlog.md); #139's pointer
+  moved to #186; #95's body names both.

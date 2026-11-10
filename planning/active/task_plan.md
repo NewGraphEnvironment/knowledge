@@ -102,16 +102,16 @@ Order from the plan review: every write lands here, then Phase 6 quits Zotero an
       %MAD) and high-flow (maximum May %MAD) metrics and its August mean temperature metric, and the EFN framework's
       monthly-sensitivity basis; `0280` gate; audit every row's meaning against the PDF, repeating until a round finds
       nothing.
-- [ ] Write the data question into wet#5's body; file a wet issue with step 4's method differences
+- [x] Write the data question into wet#5's body; file a wet issue with step 4's method differences
       (precipitation scaling vs area-weighted sampling, dam corrections, weak Aug/Sep minima, 86-gauge metrics).
 
 ## Phase 5: The statistics collection (#95) — writes and split-offs
-- [ ] `0270`: `--parent top` finds or creates a top-level collection (`/collections/top`); the "elsewhere" exit
+- [x] `0270`: `--parent top` finds or creates a top-level collection (`/collections/top`); the "elsewhere" exit
       suggests it; docstring and comments stop assuming Fisheries (review #16).
 - [ ] `data/statistics_members.csv` (the collection's current members) and `data/statistics_additions.csv` (BDA3, PDF
       from the authors' site); `0270 --collection statistics --parent top` dry run (watch for personal-library PDF
       uploads) then live.
-- [ ] File the alignment review and the partially pooled curve as issues, each naming move 3 (#172) as where it was
+- [x] File the alignment review and the partially pooled curve as issues, each naming move 3 (#172) as where it was
       split from, left out of `planning/backlog.md`; move #139's pointer for priors and pooling to the curve issue.
 
 ## Phase 6: Stores, once, with Zotero quit (cred#45)
