@@ -125,7 +125,8 @@ private repositories. This file is held to all of it. `planning/` is a record of
 name what was removed, hosts and our other repositories included, but from 2026-10-16 it carries no
 client or project identifiers and no home paths; the `planning/archive/` and `scripts/logs/` written
 before then are left as they were. Context that needs any of them belongs in a private coordination
-repo, not here. Credentials come from the environment (`PG*`, `ZOTERO_API_KEY`, AWS). The #56
+repo, not here. Credentials come from the environment (`PG*`, `ZOTERO_API_KEY` or the file `ZOTERO_API_KEY_FILE` names,
+AWS). The #56
 archive's `public_sweep.py` is the check: it searches tracked files outside `planning/archive/` and
 `scripts/logs/` (`planning/active/` for client slugs and local paths only), issue and PR text,
 retitles and a branch's commit messages, and with `history` every earlier revision GitHub keeps.
@@ -207,8 +208,9 @@ They are the stale submitted versions. They reach Zotero from the report repos.
 
 Store builds read `~/Zotero/zotero.sqlite` read-only, so they need a synced Zotero data directory
 and no key. `0153` and `0270` write to the group library through the Web API with the key in
-`ZOTERO_API_KEY`, and exit at once when it is unset or empty, because an empty key otherwise
-reads as a JSON parse error three calls later. Items `0270` creates through the Web API sync and
+`ZOTERO_API_KEY`, or when that is unset the first non-blank line of the file `ZOTERO_API_KEY_FILE` names (#168,
+`0153`'s `api_key()`, which `0270` reaches through its load of `0153`), and exit at once when neither gives a key,
+because an empty key otherwise reads as a JSON parse error three calls later. Items `0270` creates through the Web API sync and
 get Better BibTeX keys without a Zotero restart (measured 2026-10-02), so `0270` → `0150` build →
 `0280` runs end to end in one sitting, except that the build's cred reads miss what Zotero has not
 checkpointed (NewGraphEnvironment/cred#45): `0150` warns when the `-wal` is not empty.

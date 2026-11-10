@@ -34,13 +34,13 @@ Measured during planning (2026-11-09):
   opening the file during the sitting, and recorded in #126's body).
 
 ## Phase 1: Key from a file (#168)
-- [ ] `scripts/0153`: replace the import-time guard (line 49) with one helper: `ZOTERO_API_KEY` when set and
+- [x] `scripts/0153`: replace the import-time guard (line 49) with one helper: `ZOTERO_API_KEY` when set and
       non-empty, else the first non-blank line of the file `ZOTERO_API_KEY_FILE` names (stripped); exit naming both
       variables when neither gives a key, and when the file is named but unreadable or empty. `0270` keeps reading
       `z.API` through its existing load of `0153`, so the two cannot drift.
-- [ ] Docstrings of `0153` and `0270`, `scripts/README.md`, and CLAUDE.md ("Credentials come from the environment",
+- [x] Docstrings of `0153` and `0270`, `scripts/README.md`, and CLAUDE.md ("Credentials come from the environment",
       "Zotero access is local, except for filing") name `ZOTERO_API_KEY_FILE`.
-- [ ] Prove each branch with `python3 -c` imports of `0153` (variable set; unset + file; unset + empty file; unset +
+- [x] Prove each branch with `python3 -c` imports of `0153` (variable set; unset + file; unset + empty file; unset +
       missing file; neither) and that `data-raw/zotero_copy_check.R`'s `ZOTERO_API_KEY=check-only` child still runs.
 
 ## Phase 2: `0150 ACTION=update`, then the sturgeon follow-ups (#151)

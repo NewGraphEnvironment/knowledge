@@ -207,6 +207,8 @@ A report is reachable from more than one place; using only one axis misses repor
   EcoCat serves for it attached** — main report + appendices + map sheets + data files
 - `python3 0153-reports-to-zotero.py --from-store data/rag/fraser.duckdb` (or `--reports COTR:137,157`)
 - Idempotent: reports already in the collection are skipped; Zotero dedups files by md5
+- The Web API key comes from `ZOTERO_API_KEY`, or when that is unset from the first non-blank line of the file
+  `ZOTERO_API_KEY_FILE` names (#168); `0270` reads it through the same `api_key()`. Neither set: exits at once.
 - **Never skip this step.** The rag store holds only extracted text and the harvest dir is in `/tmp`;
   Zotero is what a store rebuild (`0150-store.R`) reads. A group harvested + ingested but not filed silently vanishes
   on the next rebuild or on another machine. (Learned the hard way — COTR/FRAN/LCHL/NECR were
