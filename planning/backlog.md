@@ -24,7 +24,7 @@ split piece, or one filed since the last pass): run `/backlog-sweep` to place it
 |---|---|---|---|
 | - [x] 1 | #170 | 1: evidence-build and test fixes (2 issues) | done: https://github.com/NewGraphEnvironment/knowledge/pull/187 |
 | - [ ] 2 | #171 | 2, 3: articles as a tuning series, a build that stalls fails fast (4 issues) | open |
-| - [ ] 3 | #172 | 4, 5: Zotero library writes, new sources into the stores (5 issues) | open |
+| - [x] 3 | #172 | 4, 5: Zotero library writes, new sources into the stores (5 issues) | done: https://github.com/NewGraphEnvironment/knowledge/pull/189 |
 | - [ ] 4 | #173 | 6, 7: maps out of the comparison, one research page per key (4 issues) | open: after move 2, which renames the article #77 edits |
 | - [ ] 5 | #174 | 8, 9: timing table and NuSEDS, flow in windows (5 issues) | open |
 | - [ ] 6 | #175 | 10: location error against flow resolution (2 issues) | open |
@@ -92,7 +92,7 @@ own issue.
 
 ### 4. Zotero library writes
 
-- [ ] Carried by move 3, #172
+- [x] Carried by move 3, #172 (merged in https://github.com/NewGraphEnvironment/knowledge/pull/189)
 
 #168 (read the key from `ZOTERO_API_KEY_FILE`), #151 (OCR Tredger 1984, merge the duplicate strategy, correct two
 items) and #126 (items with several PDFs). Touches `scripts/0153`, `scripts/0270`, a shared key helper,
@@ -101,7 +101,7 @@ personal-library items wait on #13. The writes need a person present (auto mode 
 
 ### 5. New sources into the stores
 
-- [ ] Carried by move 3, #172
+- [x] Carried by move 3, #172 (merged in https://github.com/NewGraphEnvironment/knowledge/pull/189)
 
 #20 (the DFO threat-layer document, its cited sources and evidence rows) and #95 (the `statistics` store only: its
 alignment review and partially pooled curve are each a PR of their own, filed as issues by this move's plan and left
