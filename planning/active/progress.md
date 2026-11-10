@@ -57,3 +57,11 @@
   first refused `habitat_modelling` for `storage/BCF7RZT9/PINE__56963.pdf`, a real Zotero attachment: narrowed to
   harvest-named documents outside Zotero storage (refuses `peace`'s four temp-dir MACK documents and all of
   `fraser`). Zotero quit (WAL 2.0 MB -> 0) for cred#45; Ollama answering.
+- Code-check round 1 (`review-round1.md`): 2 bugs, 2 fragile, all real and fixed. `0275` counted a fileless
+  named child as the merged or replacement file (now refused, `stored()`); organizations with a comma became persons
+  in 0270 and 0275 (braces mark a one-field name; KE758PAG, the 2022 EFN Policy, was filed that way and is patched
+  through a 32nd verdicts row; flow dry run still matches it); 0150's update guard now refuses any origin outside Zotero
+  storage, cred's own test (refuses fraser, peace and pine whole; the updated stores have none); `0275` checks the
+  merged PDF (`qpdf --check`, page count). The ten PDFs already merged were checked: all pass, each with exactly its
+  parts' pages.
+- Pushes: `statistics` in the bucket on retry (16:51Z); `habitat_modelling` retrying over the hotspot.

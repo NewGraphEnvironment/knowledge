@@ -112,9 +112,13 @@ def upload(item, data, fname):
 
 
 def creators(s, role="author"):
+    """"Last, First; ..." to Zotero creators. A name with no comma, or one in braces
+    ("{Ministry of Forests, Lands, ...}"), is an organization's, held in one field."""
     out = []
     for name in filter(None, (x.strip() for x in s.split(";"))):
-        if "," in name:
+        if name.startswith("{") and name.endswith("}"):
+            out.append({"creatorType": role, "name": name[1:-1].strip()})
+        elif "," in name:
             last, first = (p.strip() for p in name.split(",", 1))
             out.append({"creatorType": role, "lastName": last, "firstName": first})
         else:
@@ -122,8 +126,25 @@ def creators(s, role="author"):
     return out
 
 
+def stored(item, fname):
+    """The live attachments of `item` named `fname`. One with no file on the server is an
+    upload that stopped after 0153's upload() created its item, so it is refused: counting it
+    as the merged or replacement file would trash the originals with no copy left."""
+    named = [c for c in children(item) if c.get("filename") == fname and not c.get("deleted")]
+    empty = [c["key"] for c in named if not c.get("md5")]
+    if empty:
+        raise RuntimeError(f"{', '.join(empty)} is named {fname} but holds no file (an upload that stopped): "
+                           "trash it and re-run")
+    return named
+
+
+def npages(path):
+    return int(subprocess.run(["qpdf", "--show-npages", path], check=True, capture_output=True,
+                              text=True).stdout.strip())
+
+
 def do_merge(row, parts, dry):
-    named = [c for c in children(row["item"]) if c.get("filename") == row["file"] and not c.get("deleted")]
+    named = stored(row["item"], row["file"])
     left = [a for a in parts if live(a)]
     if len(named) == 1 and not left:
         return "done"
@@ -142,6 +163,11 @@ def do_merge(row, parts, dry):
                 paths.append(p)
             out = os.path.join(td, "merged.pdf")
             subprocess.run(["qpdf", "--deterministic-id", "--empty", "--pages", *paths, "--", out], check=True)
+            # the merged file becomes the item's only copy once the parts are trashed
+            subprocess.run(["qpdf", "--check", out], check=True, capture_output=True)
+            want = sum(npages(p) for p in paths)
+            if npages(out) != want:
+                raise RuntimeError(f"merged {npages(out)} pages, the parts hold {want}")
             with open(out, "rb") as f:
                 upload(row["item"], f.read(), row["file"])
     for a in left:
@@ -212,8 +238,7 @@ def do_patch(row, fields, dry):
 
 
 def do_replace(row, atts, dry):
-    named = [c for c in children(row["item"]) if c.get("filename") == os.path.basename(row["file"])
-             and not c.get("deleted")]
+    named = stored(row["item"], os.path.basename(row["file"]))
     if named and not live(atts[0]):
         return "done"
     path = os.path.join(ROOT, row["file"])

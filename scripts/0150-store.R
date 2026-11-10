@@ -206,20 +206,20 @@ if (action %in% c("build", "update")) {
     if (!file.exists(store_path)) {
       stop(store_path, " is not here to update: pull it first with ACTION=query STORE=", store, " VERIFY=TRUE")
     }
-    # A harvest ingest (0152) names each document <EXTENT>__<reportId>.pdf from a harvest directory, a
-    # source Zotero never resolves, so crd_store_update() would drop it: fraser is all harvest, and peace
-    # holds four. A Zotero attachment that happens to carry such a name (storage/<key>/PINE__56963.pdf in
-    # habitat_modelling) resolves, and is not one.
+    # crd_store_update() keeps a document only where its origin is a Zotero attachment
+    # (storage/<8-character key>/<file>), cred's own test; anything else (a harvest file from 0152, a PDF
+    # ingested from a local directory) never resolves and would be dropped. fraser, peace and pine are
+    # all such documents; every store built by 0150 is none. The file name decides nothing: a Zotero
+    # attachment named PINE__56963.pdf (habitat_modelling) resolves.
     doc_origins <- function() {
       con <- DBI::dbConnect(duckdb::duckdb(), store_path, read_only = TRUE)
       on.exit(DBI::dbDisconnect(con, shutdown = TRUE))
       DBI::dbGetQuery(con, "SELECT DISTINCT origin FROM documents")$origin
     }
     before <- doc_origins()
-    harvest <- grepl("^[A-Z]{4}__[0-9]+\\.pdf$", basename(before)) &
-      !grepl("/storage/[A-Z0-9]{8}/[^/]+$", before)
+    harvest <- !grepl("/storage/[A-Z0-9]{8}/[^/]+$", before)
     if (any(harvest)) {
-      stop(store_path, " holds ", sum(harvest), " harvest documents (", basename(before[harvest][1]), ", ...), ",
+      stop(store_path, " holds ", sum(harvest), " documents from outside Zotero (", basename(before[harvest][1]), ", ...), ",
            "which an update would drop: rebuild it, or bring them into Zotero first")
     }
   }

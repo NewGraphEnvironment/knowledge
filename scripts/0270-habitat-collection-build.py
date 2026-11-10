@@ -408,8 +408,12 @@ def addition_item(row):
                                 "series", "seriesNumber", "publisher", "edition", "ISBN") if row.get(k)}
     item["creators"] = []
     for c in filter(None, (x.strip() for x in row["creators"].split(";"))):
+        # An organization's name, which Zotero holds in one field, has no comma or is in braces
+        # ("{Ministry of Forests, Lands, ...}"); any other is "Last, First".
+        if c.startswith("{") and c.endswith("}"):
+            item["creators"].append({"creatorType": "author", "name": c[1:-1].strip()})
+            continue
         last, comma, first = c.partition(",")
-        # A name with no comma is an organization's, which Zotero holds in one field
         item["creators"].append({"creatorType": "author", "lastName": last.strip(), "firstName": first.strip()}
                                 if comma else {"creatorType": "author", "name": c})
     return item
