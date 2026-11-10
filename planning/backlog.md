@@ -7,6 +7,9 @@ whose `planning/archive/` holds the read
 
 How to use this file: `/backlog-sweep` writes it. Take the first move in **Moves** that is not
 ticked and not **waiting**; `/planning-init <umbrella>` plans it, one phase per batch, one PR.
+When the plan finds that a batch, or one of its members, is more than one PR's work, it carries the first piece, files
+each other piece as its own issue and lists it under `## Singles` as split from its move, where the next
+`/backlog-sweep` places it: split rather than take it all in one PR.
 `/gh-pr-merge` step 9c ticks the move on merge; `/compact-prep` names the next. A `NONE` from
 `backlog_moves.sh next` that names batch sections means those batches have no move yet: run
 `/backlog-sweep` again, the backlog is not finished.
@@ -41,7 +44,7 @@ link's own pass: link#468, a backlog pass for link that carries the link issues 
 | 2 | #171 | articles as a tuning series: #118, #107, #156 | 3 | titles; the fwapg pin | one rename, one prose pass, one bibliography and site build over the same three articles |
 | 3 | #171 | a build that stalls fails fast: #159 | 1 | close if the logs are gone and the cause stays open | the move's site build is the test |
 | 4 | #172 | Zotero library writes: #168, #151, #126 | 3 | a verdict per #126 item | one sitting with Zotero and the Web API key; one store update |
-| 5 | #172 | new sources into the stores: #20, #95 | 2 | #95's pooled-curve experiment in or out | `0270` → `0150` → push in the same sitting |
+| 5 | #172 | new sources into the stores: #20, #95 | 2 | whether #20's data question is still open | `0270` → `0150` → push in the same sitting |
 | 6 | #173 | maps out of the comparison: #81, #77 | 2 | `GPKG` off by default; which PNGs go | both edit `R/compare_map.R` and the example-map script |
 | 7 | #173 | one research page per key: #90, #64 | 2 | one template from #90's skeleton and #64's order | one generator writes every page |
 | 8 | #174 | timing table and NuSEDS: #31, #96, #108 | 3 | where the NuSEDS table lives; its NOTICE row | one table and one new source |
@@ -96,9 +99,10 @@ personal-library items wait on #13. The writes need a person present (auto mode 
 
 - [ ] Carried by move 3, #172
 
-#20 (the DFO threat-layer document, its cited sources and evidence rows) and #95 (a `statistics` store and the
-alignment review). Touches `data/statistics_{members,additions}.csv`, `data/literature_evidence.csv` (appended,
-audited for meaning), `research/bayesian_alignment.md`. Gate: #95's partially pooled curve in this move or filed alone.
+#20 (the DFO threat-layer document, its cited sources and evidence rows) and #95 (the `statistics` store only: its
+alignment review and partially pooled curve are each a PR of their own, filed as issues by this move's plan and listed
+under `## Singles`; decided 2026-11-09). Touches `data/statistics_{members,additions}.csv`,
+`data/literature_evidence.csv` (appended, audited for meaning). Gate: whether #20's data question is still open.
 
 ### 6. Maps out of the comparison
 
