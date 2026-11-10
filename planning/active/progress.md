@@ -65,3 +65,6 @@
   merged PDF (`qpdf --check`, page count). The ten PDFs already merged were checked: all pass, each with exactly its
   parts' pages.
 - Pushes: `statistics` in the bucket on retry (16:51Z); `habitat_modelling` retrying over the hotspot.
+- Stores done: `habitat_modelling` (754 MB over the hotspot) and `statistics` pushed on retry; all six reconnect with
+  md5 matching the manifest: sturgeon 84 docs, flow 43, temperature 53, bull_trout_grayling 35, habitat_modelling 264,
+  statistics 4. KE758PAG synced as a one-field organization and kept `ministryofforests2022Environmentalflow`.
