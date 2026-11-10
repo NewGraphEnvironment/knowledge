@@ -1,3 +1,7 @@
+# knowledge 0.4.34
+
+* knowledge now imports crate (>= 0.15.0). crate 0.15.0 moved its receipt register to a versioned path (`receipt/register/v<version>/register.csv`), and the receipt test read the old one, so R CMD check failed on every run (#182). The test reads the register at the version crate judges a comparison under (`crt_receipt_compare()$register`) and stops by name when crate installs none for it. No change to what the package computes or publishes.
+
 # knowledge 0.4.33
 
 * The evidence build and the published visit tables now carry provenance receipts (#160). `scripts/0310` writes `evidence_receipt.json` beside its tables (`knw_evidence_receipt_write()`), held to `inst/receipt/evidence.yaml`: every table exact but `access_check`'s km, rounded to 1e-6 km, which a database summing in another order moves in the last place. A grade receipt names the evidence as one input, the build's receipt's `recipe_id` (or its visit tables' md5s for a build from before receipts), so an equivalent evidence rebuild is the same input to every grade, and `0320` regrades a kept table whose receipt names other evidence. `scripts/0299` publishes through `knw_publish()`, and v3 carries a receipt naming the evidence build (`inst/receipt/fdis.yaml`). The archive keeps the evidence receipt with its build, outside its MANIFEST. Two evidence builds of the published build on one database compared `equivalent`. Nothing published moves.
