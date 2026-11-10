@@ -23,7 +23,7 @@ being public, provided it ships with a note of when and from where it was receiv
   visit-level tables (`fdis_sites`, `bt_use_visits`, `ch_mad_visits` if rebuilt, `ch_rule_visits`, `ch_rule_walks`)
   go to `s3://fresh-bc/knowledge/fdis/` as Parquet with a `manifest.json`, written by one new script.
 - **The flip itself is after the merge**, on your word: merge, revision deletion in the web UI (yours; the API cannot),
-  make public, enable Pages, link#346 edit, rtj#397 apply. This run ends at the open PR.
+  make public, enable Pages, link#346 edit, an internal issue apply. This run ends at the open PR.
 
 ## Phase 1: Package at the root
 - [x] `git mv pkg/{DESCRIPTION,NAMESPACE,LICENSE,NEWS.md,R,man,tests} .`; merge `pkg/.Rbuildignore` into a root one
@@ -48,7 +48,7 @@ being public, provided it ships with a note of when and from where it was receiv
 - [x] Private-repo links → plain words or dropped (README, scripts, research, `data/temperature_members.csv` note text,
       `scripts/README.md`'s `db-newgraph` pointer)
 - [x] Project-named repos reworded (`0100`, `research/stream_temperature.md`)
-- [x] `git rm -r comms/`; filed NewGraphEnvironment/soul#438 to drop knowledge from `conventions/comms_peers.md`
+- [x] `git rm -r comms/`; filed an internal issue to drop knowledge from `conventions/comms_peers.md`
 - [x] Sweep over the tree returns only exempt hits (left: README, rewritten in Phase 3; CLAUDE.md, Phase 5)
 
 ## Phase 3: pkgdown site
@@ -98,7 +98,7 @@ being public, provided it ships with a note of when and from where it was receiv
 2. Gate: on the day of the flip, `public_sweep.py history` prints no hits and `public_sweep.py all` prints only
    accepted items (#4's retitle, if accepted). Decide on #4 (accept, or delete and re-file) and on the issue branch
    behind open PR #12 first. Then make the repo public and enable Pages on gh-pages.
-3. rtj#397: apply the bucket policy for `fdis/` and `knowledge/`.
+3. An internal issue: apply the bucket policy for `fdis/` and `knowledge/`.
 4. link#346: name this repo and link #57.
 5. Drop the `fdis-public-release` memory.
 

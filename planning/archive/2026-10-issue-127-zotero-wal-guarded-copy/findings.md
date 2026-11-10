@@ -41,7 +41,7 @@ Every read opened and every `quick_check` returned `ok`.
 - **The gate's hypothesis is disproved**: `mode=ro` on a main-only copy opens fine (in a writable directory). The
   "unable to open database file" #122 met is unexplained here; it is not what a main-only copy does.
 - **No `-shm` needed**: the main file and `-wal` alone read all 8, read-write and `mode=ro`. So the guard copies two
-  files, and soul#590's "copy all three" is more than needed (the copy's wal-index is rebuilt).
+  files, and an internal issue's "copy all three" is more than needed (the copy's wal-index is rebuilt).
 - **Live** (6,781 items, newest `clientDateModified` 2026-10-31 19:49:47): every read agrees. Zotero checkpointed
   at 23:10:26 UTC, after the gate read the `-wal` at 795 KB; it is now 0 bytes (Zotero truncates it), so today's
   WAL held nothing the main file lacked. The fixture is what the guards are tested on.

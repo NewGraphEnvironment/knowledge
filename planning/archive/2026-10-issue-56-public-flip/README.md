@@ -18,14 +18,14 @@ each time was to measure the population; `public_sweep.py` here is the result, a
 Left for the owner, after the merge: delete the 23 items' earlier revisions in the web UI (list from
 `public_sweep.py history` on the day), decide on #4's retitle entry and on the issue branch behind open
 PR #12, then flip visibility, enable Pages, apply the bucket policy, and update link#346. Upstream:
-NewGraphEnvironment/soul#438 (peer list), NewGraphEnvironment/soul#439 (private references in the
+An internal issue (peer list), an internal issue (private references in the
 public-safe conventions).
 
 ## Measurement
 
 - Public sweep of live files: 128 hits before (db 74, host 10, internal_ref 13, key_path 4,
   password_manager 1, private_repo 23, project_repo 3); 0 after, once the generated conventions below
-  CLAUDE.md's marker are reported separately (41 hits there, owned upstream by soul#439).
+  CLAUDE.md's marker are reported separately (41 hits there, owned upstream by an internal issue).
 - GitHub text: 13 issue bodies, 4 PR bodies and 5 comments edited, #4 and #17 included; one retitle
   entry (#4) remains and cannot be deleted. Earlier revisions carrying hits: 23 items, measured from
   GraphQL `userContentEdits` (a recalled list had missed #19).

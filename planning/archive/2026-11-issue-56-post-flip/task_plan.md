@@ -20,9 +20,9 @@ This branch is the post-flip remainder: the repo went public on 2026-11-01 and t
 - **This PR closes #56.** Each item it leaves open moves to its own home:
   - the licences go to #76;
   - the post goes to new_graphiti#8;
-  - the peer list goes to soul#438;
+  - the peer list goes to an internal issue;
   - the edit-history revisions, #4's retitle entry and the PR #12 branch were already accepted at the flip.
-- **soul#438 gets its own soul PR from this run.** Al merges it.
+- **an internal issue gets its own soul PR from this run.** Al merges it.
 - Mechanism (no question needed):
   - DESCRIPTION `URL` and `_pkgdown.yml` keep the github.io form, which is what link and fresh use and which
     redirects.
@@ -54,14 +54,14 @@ This branch is the post-flip remainder: the repo went public on 2026-11-01 and t
 - [x] Re-run the grep for flip wording over the tree, outside `planning/archive/` and `scripts/logs/`, and expect
       nothing that describes knowledge as private or not yet public
 
-## Phase 3: cross-repo bodies and soul#438
+## Phase 3: cross-repo bodies and an internal issue
 - [x] link#346 body: replace "a private repository" with `NewGraphEnvironment/knowledge`, linked to its #57.
       "That evidence repository is moving to public" becomes "is public (2026-11-01)". Part 2's heading drops
       "(once the evidence repo is public)"
 - [x] #76 body: its last task becomes "flipped with EcoCat and bcfishpass open, on Al's word (2026-11-01)". The
       task is no longer a gate before the flip
 - [x] soul: a branch from origin/main that removes `- knowledge` from `conventions/comms_peers.md`.
-      Run `/code-check` (convention edit, through its issue) and open a PR that closes soul#438.
+      Run `/code-check` (convention edit, through its issue) and open a PR that closes an internal issue.
       The PR text and the commits name no private detail. No merge
 - [x] #56 body: tick what landed. Each item it leaves open names its home:
   - the peer list → the soul PR;

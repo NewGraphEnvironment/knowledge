@@ -14,7 +14,7 @@ Learned:
 - **The gate's hypothesis was wrong.** It held that the "unable to open database file" #122 met came from `mode=ro`;
   measurement disproved it, and that error is still unexplained.
 - **A plain read-only connection to the live file no longer blocks** under Zotero 10. The copy was kept anyway.
-- **soul#590's advice to copy the `-shm` is unnecessary.** Its body was revised from the measurement.
+- **an internal issue's advice to copy the `-shm` is unnecessary.** Its body was revised from the measurement.
 - **The branch review went three rounds.** Rounds 2 and 3 each found a defect inside the previous round's fix, of one
   mechanism: the check scored a value without establishing its cause. The loop ended on an enumeration of every
   site where an outcome becomes a scored value (`findings.md`, "Branch review: how it ended").

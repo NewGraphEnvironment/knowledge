@@ -2,7 +2,7 @@
 
 ## Problem
 
-The README was last rewritten before #57. It is close to correct on the report corpus and the fish records, but out of date on the habitat thresholds, which are now most of the work, and it predates `conventions/readme.md` (NewGraphEnvironment/soul#416's README wave).
+The README was last rewritten before #57. It is close to correct on the report corpus and the fish records, but out of date on the habitat thresholds, which are now most of the work, and it predates `conventions/readme.md` (an internal issue's README wave).
 
 ## Decided at the gate
 
@@ -17,7 +17,7 @@ The README was last rewritten before #57. It is close to correct on the report c
      article and the reference groups. No per-file list in the README (convention: leave out what another
      file keeps). Layout, Three tracks and Conventions sections go too: `scripts/README.md` and
      `CLAUDE.md` keep them.
-  3. **Ecosystem = soul#416's nine decided rows** (fly's as softened in fly PR #105), each linked to
+  3. **Ecosystem = an internal issue's nine decided rows** (fly's as softened in fly PR #105), each linked to
      `https://www.newgraphenvironment.com/<repo>/`, plus a bold **knowledge** row worded as the tagline.
      knowledge is not in the decided membership: say so in the soul amendment.
   4. **Example reads `data/thresholds.csv` from a clone** with base R (no exported reader exists; `data/`
@@ -62,11 +62,11 @@ The README was last rewritten before #57. It is close to correct on the report c
 - [x] `/code-check branch`, three-round floor, ending on the enumeration
 
 ## Phase 8: soul convention
-- [x] soul branch + PR amending `conventions/readme.md` with what this README teaches (a data repo that both installs and publishes; a figure taken as one panel of an article's composite; knowledge's Ecosystem membership as an open question), `Relates to NewGraphEnvironment/soul#416` (soul PR #479)
+- [x] soul branch + PR amending `conventions/readme.md` with what this README teaches (a data repo that both installs and publishes; a figure taken as one panel of an article's composite; knowledge's Ecosystem membership as an open question), `Relates to an internal issue` (soul PR #479)
 
 ## Owed at the end (reported, done after merge)
 
-- [ ] Add knowledge to soul#416's Wave list as done once the PR merges
+- [ ] Add knowledge to an internal issue's Wave list as done once the PR merges
 - [ ] Learn-more links switch from GitHub paths to the pkgdown site when #56 makes it resolve (note on #56)
 - [ ] DESCRIPTION `URL`, `inst/CITATION`'s url and `CITATION.cff`'s url name the pkgdown site, which answers 404 until #56; confirm it resolves after the flip
 - [ ] #76 (PSCIS Access Only, EcoCat terms) settled before #56's flip; then update `inst/NOTICE.md`

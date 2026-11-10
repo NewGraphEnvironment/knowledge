@@ -57,7 +57,7 @@ stream to go look at, not where the culvert is.
 - Zotero filing was done for BOWR/MCGR only; the other seven groups' harvests are not yet filed, so a
   `0151` Zotero-sourced rebuild would not reproduce the full store.
 - Cross-machine artifact sync (M4 builds, M1 in the field) designed but not built —
-  [rtj#194](https://github.com/NewGraphEnvironment/rtj/issues/194), a private `rag/` prefix in `fresh-bc`.
+  an internal issue, a private `rag/` prefix in `fresh-bc`.
 
 ## Notes
 

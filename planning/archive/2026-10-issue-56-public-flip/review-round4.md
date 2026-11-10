@@ -25,7 +25,7 @@ So (c): the output matches findings.md.
 | Surface | Verdict | Evidence |
 |---|---|---|
 | Tracked tree at HEAD (incl. binaries), outside exemptions | Holds | `all` gives no tree hits. Every multi-part year-suffixed token outside the exemptions, matched case-insensitively with `-` or `_`: the only candidates are public FISS workbook filenames in `data/<wsg>/fiss_xls_*.csv` and `data/necr/crossings.csv` (mixed case, not NGE slugs). The group-brief slug is gone from `data/context_bowron_mcgregor.md`. |
-| CLAUDE.md below the marker | Reported, not failed (accepted). **The report undercounts**, finding 1 | CLAUDE.md:2118 and 2138 hold a hyphenated `<client>-<region>-<year>` branch-name slug. `project_repo` matches only `_`, so neither the generated-line count nor soul#439's 39-hit inventory includes it. |
+| CLAUDE.md below the marker | Reported, not failed (accepted). **The report undercounts**, finding 1 | CLAUDE.md:2118 and 2138 hold a hyphenated `<client>-<region>-<year>` branch-name slug. `project_repo` matches only `_`, so neither the generated-line count nor an internal issue's 39-hit inventory includes it. |
 | `planning/`, `scripts/logs/` | Exempt (accepted). **The new CLAUDE.md claim does not hold**, finding 2 | This branch's own `planning/active/` files, written 2026-10-16, carry 82 line-by-pattern hits. They include both client slugs and a client slug inside a home path (review-round3.md:33, 35, 40, 68, 110, 122). |
 | Issue/PR titles, bodies, comments, review comments, review bodies (current) | Holds | REST `--paginate` (complete). The only hit is #4's rename. 0 reviews and 0 review comments exist (GraphQL `totalCount`). |
 | Rename events | Holds (owner decision on #4) | The sweep reports #4. |
@@ -56,14 +56,14 @@ So (c): the output matches findings.md.
   - The widened `project_repo` alternative `\b[a-z]+_[a-z]+_20\d{2}\b` takes the slug class to be underscore-only.
     The generated conventions name a client project as a hyphenated branch slug (`322-<client>-<region>-<year>`, and
     the bare `<client>-<region>-<year>`). It is the same client and region as the one in PR #12's branch path.
-  - The sweep's generated-text report therefore omits it. soul#439, which inventories exactly the 39 hits those
+  - The sweep's generated-text report therefore omits it. An internal issue, which inventories exactly the 39 hits those
     patterns found, does not list it either. The fix at the source will leave a client identifier in every public
     repo's CLAUDE.md.
   - Measured with separators `[-_]` (`\b[a-z]+[-_][a-z]+[-_]20\d{2}\b`): over the tree outside the exemptions and over
     all GitHub text (current and every revision), it matches only those two CLAUDE.md lines and #17's two known
     revisions. It also matches a citation key in PR #46's head branch name, which the sweep does not read. Widening
     the pattern adds no false positives to anything swept.
-  - Fix: use `[-_]` in that alternative, and add the hyphenated slug to soul#439.
+  - Fix: use `[-_]` in that alternative, and add the hyphenated slug to an internal issue.
 
 - **[fragile / security, low] CLAUDE.md:60-62 vs planning/active/. INSIDE ROUND-3 FIX.**
   - The reworded claim says "That holds for new `planning/` files". It says the archives and logs "written before

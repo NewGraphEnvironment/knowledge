@@ -102,7 +102,7 @@ introduced or dropped; a shorter article with fewer, better-labelled tables; dra
 - `knw_compare_map()` gains `panels`, `mark`, `lwd` and `legend`. A first try at `lwd` multiplied the data and
   changed nothing, because tmap rescales a data-driven width; it now sets the scale's `values.scale`, and a test
   that counts inked pixels fails on the first try and passes on the fix.
-- Convention filed as soul#466 (name, link and cite software); the DOI half waits on soul#40. No package has a
+- Convention filed as an internal issue (name, link and cite software); the DOI half waits on an internal issue. No package has a
   DOI; the article prints `citation("knowledge")`.
 - Found: the knowledge site answers 404. GitHub Pages is not enabled and the repo is private, so the `gh-pages`
   deploys serve nothing; the article URL the research files cite is dead until that changes (Al's decision).

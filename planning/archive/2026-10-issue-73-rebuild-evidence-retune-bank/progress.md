@@ -230,7 +230,7 @@
   any write); a summary beside another run's tune table (fixed in `knw_thresholds_table()`); the compare rows'
   evidence identity accepted as low. Ended by the mechanical enumeration in `review-round5.md`. Five reviewer agents,
   about 15 min each; `devtools::test()` 942 pass, 0 fail, 1 skip at `bcbe155`.
-- Next: `/planning-archive`, `/gh-pr-push` with `NewGraphEnvironment/sred#41` (Al, 2026-10-25).
+- Next: `/planning-archive`, `/gh-pr-push` with an internal issue (Al, 2026-10-25).
 
 ### Resume (revised 2026-10-25 15:10 UTC: parked here, picked up on m4 under another account, on Fable)
 

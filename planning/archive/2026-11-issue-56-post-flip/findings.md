@@ -2,7 +2,7 @@
 
 ## Issue context
 
-**Status (2026-10-16):** everything below except the flip landed in #58. This issue stays open until the owner has deleted the earlier revisions of the edited text, decided on #4's retitle entry and on the branch behind PR #12, made the repository public, enabled Pages, updated NewGraphEnvironment/link#346, and published the habitat rules article. The bucket policy is already applied: fresh-bc's `PublicReadPrefixes` statement grants `fresh-bc/fdis/*` and `fresh-bc/knowledge/*` (NewGraphEnvironment/rtj#397, closed; `aws s3api get-bucket-policy`, read 2026-11-01), so a `PUBLISH=TRUE` run of `scripts/0325-publish.R` is public on upload. That script's header (lines 16-17) still says a reader needs credentials until the policy is applied; correct it with the flip. The steps and the gate are in #58's Notes.
+**Status (2026-10-16):** everything below except the flip landed in #58. This issue stays open until the owner has deleted the earlier revisions of the edited text, decided on #4's retitle entry and on the branch behind PR #12, made the repository public, enabled Pages, updated NewGraphEnvironment/link#346, and published the habitat rules article. The bucket policy is already applied: fresh-bc's `PublicReadPrefixes` statement grants `fresh-bc/fdis/*` and `fresh-bc/knowledge/*` (an internal issue, closed; `aws s3api get-bucket-policy`, read 2026-11-01), so a `PUBLISH=TRUE` run of `scripts/0325-publish.R` is public on upload. That script's header (lines 16-17) still says a reader needs credentials until the policy is applied; correct it with the flip. The steps and the gate are in #58's Notes.
 
 **If done:** the habitat evidence, the tuning method and its results are open: anyone can install the package, read
 the research, and pull the FDIS evidence the thresholds rest on. Link's validation and later work can read public
@@ -89,7 +89,7 @@ The in-repo items #56 still has open are these:
   - `scripts/0325-publish.R:16-17` says "public only once the bucket policy of #56 is applied; until then a reader
     needs credentials".
   - `research/fdis_export.md:32` says "readable without credentials once the bucket policy grants them".
-- Cross-repo items: link#346 still calls this repo "a private repository" and "the evidence repo". soul#438 is
+- Cross-repo items: link#346 still calls this repo "a private repository" and "the evidence repo". An internal issue is
   open to remove knowledge from soul's comms peer list (`- knowledge` sits at `conventions/comms_peers.md:47` on
   soul origin/main). The new_graphiti post is now its own issue (new_graphiti#8).
 
@@ -113,7 +113,7 @@ The in-repo items #56 still has open are these:
   `skills/_shared/filter_conventions.sh` still names knowledge, and its floor test requires every member to be PRIVATE
   on GitHub: red since the flip. Measured: knowledge is not among the 71 private repos. Removing it passes all three
   directions (every member a row, every member private, every private row a member). Folded into the soul PR and
-  soul#438's body.
+  an internal issue's body.
 
 ## Code-check (knowledge branch)
 

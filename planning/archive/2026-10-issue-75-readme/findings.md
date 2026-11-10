@@ -6,7 +6,7 @@
 
 ## Problem
 
-The README was last rewritten before #57. It is close to correct on the report corpus and the fish records, but out of date on the habitat thresholds, which are now most of the work, and it predates `conventions/readme.md` (NewGraphEnvironment/soul#416's README wave).
+The README was last rewritten before #57. It is close to correct on the report corpus and the fish records, but out of date on the habitat thresholds, which are now most of the work, and it predates `conventions/readme.md` (an internal issue's README wave).
 
 ## Decided (2026-10-20)
 
@@ -41,10 +41,10 @@ Audited 2026-10-20 against `main` @ `1500a9f` (v0.4.6). Verify each against the 
 - [ ] Example: a few lines reading the tuned thresholds from `data/thresholds.csv`, with the output it really prints.
 - [ ] Fix the stale facts above (fdis/v3, the `0300`–`0330` run, the research list).
 - [ ] Learn more: the article and the reference groups, linked where the site resolves (GitHub paths while #56 is open).
-- [ ] Ecosystem with the membership and wording decided in NewGraphEnvironment/soul#416; Data and methods naming each source, linked to its own site.
+- [ ] Ecosystem with the membership and wording decided in an internal issue; Data and methods naming each source, linked to its own site.
 - [ ] Citation and License (`/citation-cff`; New Graph is the publisher, never an author). A NOTICE only if the read of what `scripts/` loads finds redistributed data beyond the FDIS extract, whose provenance note exists.
 - [ ] Review: every claim against the code path a run takes, every function named is exported, every link resolves.
-- [ ] Amend `conventions/readme.md` with what this README teaches (Relates to NewGraphEnvironment/soul#416).
+- [ ] Amend `conventions/readme.md` with what this README teaches (Relates to an internal issue).
 
 ## Context
 

@@ -14,7 +14,7 @@ been fixed yet.
 | Databases | bcfishpass tunnel `:63333` **OK**; local fresh-db `:5432` **OK**. Both verified through R, launched from `~` (see B1 — from the repo root they fail). |
 | Shell `psql` | cannot connect: the fresh-db credentials live in `~/.Renviron`, which is R-only. Undocumented. |
 | Zotero | `~/.config/newgraph/zotero-api-key` present, 0600, 24 bytes. `~/Zotero/zotero.sqlite` present, 152 MB, synced today. `ZOTERO_API_KEY` is **not** set in `~/.Renviron` — the file fallback is the only path. |
-| AWS | `aws` 2.34.34; identity is `arn:aws:iam::<acct>:user/airvine` — the **full** identity, not a scoped read-only field key. rtj#194 item 3 remains open. Record, do not block. |
+| AWS | `aws` 2.34.34; identity is `arn:aws:iam::<acct>:user/airvine` — the **full** identity, not a scoped read-only field key. An internal issue item 3 remains open. Record, do not block. |
 
 ## Dependency state
 
@@ -22,7 +22,7 @@ been fixed yet.
 - cred#22 (`crd_store_build`/`crd_search`/`crd_store_connect`) and cred#24 (`crd_store_push()`
   merge-on-write) both **closed**. `cred` 0.3.0 is installed, so the manifest-merge fix is
   available and Phase 5 is its first real exercise.
-- rtj#194 **open** — items 3 (M1 scoped read-only IAM) and 4 (field runbook) outstanding.
+- An internal issue **open** — items 3 (M1 scoped read-only IAM) and 4 (field runbook) outstanding.
 - knowledge#3 **open** — content tagging / `zotero_key_map`.
 
 ## The store cache is already warm, so the pull path is unreachable
@@ -265,7 +265,7 @@ the code rather than guessed:
 Fixed in `.claude/settings.local.json` (machine-local; gitignored via `~/.gitignore:28`).
 Deliberately **not** tracked in git: a tracked settings file auto-applies on pull, which makes it
 a privilege-escalation path via commit. Cross-machine sync is filed as
-NewGraphEnvironment/rtj#272, which also raises that the same concern applies to the existing
+an internal issue, which also raises that the same concern applies to the existing
 `soul/settings/defaults.json` + `/claude-settings-init` mechanism.
 
 ## B2 groundwork — and a collection layer that has drifted

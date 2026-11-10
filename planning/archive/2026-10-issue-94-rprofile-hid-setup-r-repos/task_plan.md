@@ -15,11 +15,11 @@ binary. So the cause was the binary gap after a release, not the 26.04 runner im
   `timeout-minutes` kill ends the run as `cancelled`, not `failure` (measured on drift 38592249287 and fly 37670553822,
   6 h kills; the only marker is the annotation "The job has exceeded the maximum execution time"), so it does not
   "fail": the session-start scan (`conclusion == "failure"`) misses it and `/gh-pr-merge` step 10 reads it as
-  superseded. That was true of the 6 h kill too; the detection fix is org-wide and goes to soul#541's body, not here. Accepted cost: a slow-but-progressing run like #88's 100-minute attempt
+  superseded. That was true of the 6 h kill too; the detection fix is org-wide and goes to an internal issue's body, not here. Accepted cost: a slow-but-progressing run like #88's 100-minute attempt
   is killed too.
 - Unpin to `ubuntu-latest` in this PR, verified by the PR's own pkgdown run (the `pull_request` trigger), not left
   pinned waiting for an outside probe.
-- Done locally, not waiting for soul#541's shared mechanism; if soul#541 moves the workflows to a shared one later,
+- Done locally, not waiting for an internal issue's shared mechanism; if an internal issue moves the workflows to a shared one later,
   knowledge migrates then.
 
 - **Revised 2026-10-26 22:30Z** after the PR run timed out (findings): every package came from CRAN source on both
@@ -48,9 +48,9 @@ binary. So the cause was the binary gap after a release, not the 26.04 runner im
       runs the branch's YAML on `ubuntu-latest`; confirm green and that it pushed nothing (plan review)
 - [x] Read the **first** attempt's log of each: the R library cache is keyed on the OS version, so only the first
       26.04 run installs packages; a rerun restores the cache and shows no duckdb install (plan review)
-- [x] Write into soul#541's body that a `timeout-minutes` kill reports `cancelled`, so the convention's scan and
+- [x] Write into an internal issue's body that a `timeout-minutes` kill reports `cancelled`, so the convention's scan and
       `/gh-pr-merge` step 10 need to read the annotation (code-check round 3)
-- [x] Record the probe result on soul#541 (this PR's run is its "one probe run on `ubuntu-latest`")
+- [x] Record the probe result on an internal issue (this PR's run is its "one probe run on `ubuntu-latest`")
 - [x] If the run fails, stalls or ends `cancelled`: read which step from `gh run view <id> --json jobs` and the job's
       annotations (`--log-failed` prints nothing for a timeout kill; code-check round 3), rerun once if it is setup/mirror; if
       duckdb (or anything) is building from source on 26.04, stop, restore the pin and keep the timeouts, and say so
@@ -62,7 +62,7 @@ binary. So the cause was the binary gap after a release, not the 26.04 runner im
       setup-r-like `~/.Rprofile` under a temp `HOME`, `getOption("repos")` leads with RSPM); CLAUDE.md says why
 - [x] PR run on 26.04: 134 packages as 26.04 binaries from the RSPM URL, green in 5 min (run 40413562090)
 - [x] `/code-check` on the `.Rprofile` and CLAUDE.md change
-- [x] Correct #94's and soul#541's bodies (the 24.04 run compiled duckdb in 57 min; the cause was the project
+- [x] Correct #94's and an internal issue's bodies (the 24.04 run compiled duckdb in 57 min; the cause was the project
       `.Rprofile`, so it is knowledge's, not org-wide, apart from a convention line)
 
 ## Owed at the end (reported, done after merge)

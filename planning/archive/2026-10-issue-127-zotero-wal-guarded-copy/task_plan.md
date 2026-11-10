@@ -15,7 +15,7 @@ Measured 2026-10-31 (#122):
 
 ## Context (from the gate)
 
-Zotero 10.0.7 runs `zotero.sqlite` in WAL mode (header bytes 18-19 `02 02`, measured on m1 and m4 in soul#590 item 7,
+Zotero 10.0.7 runs `zotero.sqlite` in WAL mode (header bytes 18-19 `02 02`, measured on m1 and m4 in an internal issue item 7,
 which settles the cause the issue left open). A commit sits in `zotero.sqlite-wal` until a checkpoint folds it into the
 main file. Every reader here assumes a rollback journal:
 
@@ -44,7 +44,7 @@ measures this before anything is fixed.
   *Corrected after the plan review:* as built, the guard copies any `-wal` that exists, always checks the journal,
   and holds the mode bytes only as part of the stability state. SQLite opens any `-wal` it finds, whatever the
   header says (`pagerOpenWalIfPresent()`), so no branch is needed.
-- **`-shm` is not copied**: SQLite rebuilds the wal-index when it opens a pair that no other process holds. soul#590
+- **`-shm` is not copied**: SQLite rebuilds the wal-index when it opens a pair that no other process holds. An internal issue
   suggests copying all three files, so Phase 1 measures that a pair without the `-shm` reads the WAL's frames.
 
 ## Phase 1: Reproduce and measure, before any fix
@@ -103,9 +103,9 @@ measures this before anything is fixed.
 
 - [x] (Filed before Phase 4, so the docs could cite cred#45.) File a cred issue: `immutable=1` reads miss a WAL database's uncheckpointed commits. A general reprex built from
   the fixture (cred is public, so no machine names), and the offer that cred own a guarded copy.
-- [x] Edit the #127 body: the cause is Zotero 10.0.7 (soul#590), the plan ticked as landed, and the cred issue linked.
-- [x] Edit the soul#590 body, item 7: what Phase 1 measured about the `-shm`, and that knowledge's readers are fixed
-  (the soul side stays soul#590's).
+- [x] Edit the #127 body: the cause is Zotero 10.0.7, the plan ticked as landed, and the cred issue linked.
+- [x] Edit the internal issue body, item 7: what Phase 1 measured about the `-shm`, and that knowledge's readers are fixed
+  (the soul side stays an internal issue's).
 
 ## Plan review (folded in, `review-plan.md`)
 

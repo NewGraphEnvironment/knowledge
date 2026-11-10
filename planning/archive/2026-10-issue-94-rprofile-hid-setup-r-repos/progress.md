@@ -14,7 +14,7 @@
   enumerated where it reaches in the two files (the two `timeout-minutes` lines), and no round found a defect inside
   a fix.
 - Pushed, opened PR #97; dispatched the citation workflow on the branch (run 40406671489); PR pkgdown run 40406663722.
-- soul#541's body gained the "a timeout reads as `cancelled`" bullet (`--log-failed` empty on both drift and fly runs).
+- An internal issue's body gained the "a timeout reads as `cancelled`" bullet (`--log-failed` empty on both drift and fly runs).
 - Cancelled main's stuck runs 40400891471 and 40404388481 on Al's word (22:05Z).
 - Citation dispatch 40406671489: green on `ubuntu-26.04`, pushed nothing (branch still 6092dc9).
 - PR pkgdown 40406663722: killed by the 30-min timeout on 26.04; the logs show every package built from CRAN source
@@ -29,7 +29,7 @@
 - Final-commit run 40414769800 timed out on the apt mirror (setup-r 19.5 min); rerun green in 2.5 min (attempt 2).
 - #94 and the PR body rewritten to the found cause, without naming private repos; the conventions issue (soul, private)
   gained the corrected cause and the `.Rprofile` lesson.
-- Not done: rewording commit 4cc6dad, whose message names the conventions issue by number (`soul#541`): auto mode
+- Not done: rewording commit 4cc6dad, whose message names the conventions issue by number (an internal issue): auto mode
   refused the history rewrite as destructive. Left for Al, with the edit-history revisions of #94 and the PR body
   that named it.
 - Al, 2026-10-26: leave commit 4cc6dad's mention of the conventions issue; no reword, history kept.

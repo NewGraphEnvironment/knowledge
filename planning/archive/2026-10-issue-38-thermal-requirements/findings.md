@@ -28,7 +28,7 @@
    - upper and lower limits, each with its metric.
 4. **`research/thermal_requirements.md`:** what is known per species and stage, what has no source, and which values link#21, template#214 and wet#40 should use. Technical background on the models is in `research/stream_temperature.md`.
 
-Relates to #19, #20, #36, NewGraphEnvironment/logic#4
+Relates to #19, #20, #36, an internal issue
 
 
 ## Exploration (2026-10-06)
