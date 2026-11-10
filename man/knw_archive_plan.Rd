@@ -10,7 +10,8 @@ knw_archive_plan(
   compare_dir,
   evidence_dir,
   build_dir,
-  vocabulary = NULL
+  vocabulary = NULL,
+  sites_dir = "data/fdis/derived"
 )
 }
 \arguments{
@@ -20,9 +21,14 @@ knw_archive_plan(
 tracked \code{data/tune} and \code{data/compare}, or a staged copy).}
 
 \item{evidence_dir, build_dir}{the evidence build: \code{0310}'s
-\code{data/fdis/derived} and \code{0230}'s \code{data/fdis/build}.}
+\code{data/fdis/derived} (or a tagged \code{EVIDENCE_DIR}) and \code{0230}'s
+\code{data/fdis/build}.}
 
 \item{vocabulary}{passed to \code{\link[=knw_archive_setup]{knw_archive_setup()}}.}
+
+\item{sites_dir}{where \code{0240} writes \code{fdis_sites.csv}, which is read from
+here whatever \code{evidence_dir} is, and held to \code{build_dir}'s \code{sites.rds}
+(#136).}
 }
 \value{
 A data frame, one row per object: \code{kind} (\code{tune}, \code{evidence}),

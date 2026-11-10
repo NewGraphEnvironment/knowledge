@@ -15,11 +15,45 @@
              dir = c("tune", "tune", "tune", "compare"),
              compress = c(TRUE, FALSE, FALSE, FALSE), stringsAsFactors = FALSE)
 }
-# an evidence build: the visit tables 0310 builds and the placement tables 0230 builds that the bundles read
+# an evidence build: the visit tables 0310 builds and the placement tables 0230 builds that the bundles read. `dir` is
+# where a restore puts a file, `from` where the archive reads it: fdis_sites.csv is 0240's, read where 0240 writes it
+# and never from a tagged EVIDENCE_DIR, since it is built from sites.rds and reads no link schema (#136). The row order
+# is the MANIFEST's, which names an archived build
 .knw_archive_evidence_files <- data.frame(file = c("visits_link.csv", "visits_species.csv", "walks.csv",
                                                    "fdis_sites.csv", "reconcile.csv", "sites.rds"),
                                           dir = c("derived", "derived", "derived", "derived", "build", "build"),
+                                          from = c("evidence", "evidence", "evidence", "sites", "build", "build"),
                                           stringsAsFactors = FALSE)
+# 0240 writes fdis_sites.csv from sites.rds, and nothing else ties the table to a build: it is held to the sites.rds the
+# run's ledger records, one row per site and every column the two share equal as 0240 wrote it (a date as text, a
+# double to 1e-9, an empty string as NA). The columns 0240 adds from the catch and the database are not held to anything
+.knw_archive_sites_check <- function(f_sites, f_rds) {
+  csv <- utils::read.csv(f_sites, colClasses = "character", na.strings = "", check.names = FALSE)
+  rds <- readRDS(f_rds)
+  if (nrow(csv) != nrow(rds) || anyDuplicated(csv$site_visit) || !setequal(csv$site_visit, rds$site_visit)) {
+    stop(f_sites, " (", nrow(csv), " rows) is not the sites of ", f_rds, " (", nrow(rds),
+         "), one row each: rerun scripts/0240", call. = FALSE)
+  }
+  rds <- as.data.frame(rds)[match(csv$site_visit, rds$site_visit), , drop = FALSE]
+  for (cl in intersect(names(csv), names(rds))) {
+    a <- csv[[cl]]
+    b <- rds[[cl]]
+    # as.character() and as.numeric() read an integer64's bits as a double unless bit64 is loaded
+    if (inherits(b, "integer64")) stop(f_rds, "'s ", cl, " is integer64, which this check cannot read", call. = FALSE)
+    same <- if (is.double(b) && !inherits(b, "Date")) {
+      # each value to 1e-9 of itself (or of 1 near zero), and missing in the same places
+      x <- suppressWarnings(as.numeric(a))
+      y <- as.numeric(b)
+      identical(is.na(x), is.na(y)) && all(abs(x - y) <= 1e-9 * pmax(1, abs(y)), na.rm = TRUE)
+    } else {
+      b <- as.character(b)
+      b[!is.na(b) & !nzchar(b)] <- NA
+      identical(a, b)
+    }
+    if (!same) stop(f_sites, "'s ", cl, " is not ", f_rds, "'s: rerun scripts/0240", call. = FALSE)
+  }
+  invisible(TRUE)
+}
 
 # `batch` names one archive call: a run is identified by what it holds, not by its name, which a resumed run reuses
 # (round 3 of the review), so a restore or an undo finds the batch whose record is the checkout's
@@ -111,7 +145,11 @@ knw_archive_setup <- function(record, vocabulary = NULL) {
 #' @param tune_dir,compare_dir the run's directories (a candidate's, or the
 #'   tracked `data/tune` and `data/compare`, or a staged copy).
 #' @param evidence_dir,build_dir the evidence build: `0310`'s
-#'   `data/fdis/derived` and `0230`'s `data/fdis/build`.
+#'   `data/fdis/derived` (or a tagged `EVIDENCE_DIR`) and `0230`'s
+#'   `data/fdis/build`.
+#' @param sites_dir where `0240` writes `fdis_sites.csv`, which is read from
+#'   here whatever `evidence_dir` is, and held to `build_dir`'s `sites.rds`
+#'   (#136).
 #' @param vocabulary passed to [knw_archive_setup()].
 #' @return A data frame, one row per object: `kind` (`tune`, `evidence`),
 #'   `key`, `setup`, `tune_run`, `run_uid`, `evidence_id`, `source` (the local
@@ -119,12 +157,14 @@ knw_archive_setup <- function(record, vocabulary = NULL) {
 #'   `data/`), `object` (the S3 key), `compress`, `source_md5`; with attribute
 #'   `manifest`, the MANIFEST's text.
 #' @export
-knw_archive_plan <- function(keys, tune_dir, compare_dir, evidence_dir, build_dir, vocabulary = NULL) {
+knw_archive_plan <- function(keys, tune_dir, compare_dir, evidence_dir, build_dir, vocabulary = NULL,
+                             sites_dir = "data/fdis/derived") {
   chk::chk_character(keys)
   if (!length(keys)) stop("no keys to archive", call. = FALSE)
   # the evidence build: its MANIFEST names it, and the grades must be on it
   ev <- .knw_archive_evidence_files
-  ev$source <- file.path(ifelse(ev$dir == "derived", evidence_dir, build_dir), ev$file)
+  ev$source <- file.path(c(evidence = evidence_dir, build = build_dir, sites = sites_dir)[ev$from], ev$file)
+  ev$from <- NULL
   gone <- ev$source[!file.exists(ev$source)]
   if (length(gone)) stop("the evidence build lacks ", paste(gone, collapse = ", "), call. = FALSE)
   ev$source_md5 <- unname(tools::md5sum(ev$source))
@@ -199,6 +239,8 @@ knw_archive_plan <- function(keys, tune_dir, compare_dir, evidence_dir, build_di
                             source_md5 = c(rec$grades_md5, unname(tools::md5sum(f$source[-1]))),
                             stringsAsFactors = FALSE)
   }
+  # sites.rds is the run's ledger's (above), and fdis_sites.csv must be the table 0240 wrote from it
+  .knw_archive_sites_check(ev$source[ev$file == "fdis_sites.csv"], ev$source[ev$file == "sites.rds"])
   runs <- unique(vapply(rows, function(r) r$run_uid[1], ""))
   out <- rbind(do.call(rbind, rows),
                data.frame(kind = "evidence", key = NA_character_, setup = paste0("evidence/", ev_id),
@@ -496,7 +538,7 @@ knw_archive_put <- function(plan, index = "data/archive_index.csv", promoted = F
 #' checks every file's md5 against the index's `source_md5` (and a grade
 #' table against its record). Each file is written aside and moved in once
 #' checked; a file already there with the same md5 is left, and one with
-#' another md5 refuses. The evidence and the bundles' ignored files come by
+#' another md5 refuses before anything is written. The evidence and the bundles' ignored files come by
 #' default; grade tables, gigabytes each, only with `grades = TRUE`. Grade
 #' tables are restored before segments, whose mtime `scripts/0330` holds to
 #' be later.
@@ -546,15 +588,20 @@ knw_archive_pull <- function(keys, dest = ".", grades = FALSE, index = "data/arc
          "to restore", call. = FALSE)
   }
   todo <- rbind(e, do.call(rbind, rows))
+  # a file here with another md5 is never written over, and is refused before anything is written (#136: an
+  # fdis_sites.csv of another build would otherwise stop the restore after the visit tables were in)
+  here <- file.exists(file.path(dest, todo$source))
+  off <- todo$source[here][unname(tools::md5sum(file.path(dest, todo$source[here]))) != todo$source_md5[here]]
+  if (length(off)) {
+    stop(paste(file.path(dest, off), collapse = ", "), " is here with another md5 than the archive's: move it aside ",
+         "to restore", call. = FALSE)
+  }
   for (i in seq_len(nrow(todo))) {
     r <- todo[i, ]
     target <- file.path(dest, r$source)
     if (file.exists(target)) {
-      if (identical(unname(tools::md5sum(target)), r$source_md5)) {
-        got <- c(got, target)
-        next
-      }
-      stop(target, " is here with another md5 than the archive's: move it aside to restore", call. = FALSE)
+      got <- c(got, target)
+      next
     }
     dir.create(dirname(target), recursive = TRUE, showWarnings = FALSE)
     part <- file.path(dirname(target), paste0(".part_", basename(target)))

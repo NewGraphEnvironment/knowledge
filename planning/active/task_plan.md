@@ -28,28 +28,34 @@ both hold 51,587 sites, no duplicate `site_visit`, the same set, and the five pl
   calls keep working. The restore target stays `data/fdis/derived/fdis_sites.csv`.
 - (mine) The restore refusal already exists for every evidence file (`knw_archive_pull`, "is here with another md5
   than the archive's"); this PR pins it for `fdis_sites.csv` with a test rather than adding code.
+- (mine, after the Plan review, 2026-11-09) The restore check does need code: `knw_archive_pull` wrote files in order,
+  so a differing `fdis_sites.csv` was refused only after the visit tables were in. It now compares every target here
+  before writing anything. The sites check compares every column the two files share (55 on the real build), not the
+  five placement columns, because `vignette_method.R` also reads `flag_not_placed`, `ws50_checked` and
+  `watershed_group_code`. The columns 0240 adds from the catch and the database are not tied to anything (an accepted
+  limit). An `integer64` column refuses rather than being misread.
 - Not done: `data-raw/vignette_method.R` keeps its own copy of the placement-column check (it reruns only at
   promotion); switching it to the new helper is a one-line follow-up if wanted.
 
 ## Phase 1: Batch 1 — evidence-build and test fixes (#136, #142)
 
-- [ ] Tests first (`tests/testthat/test-archive.R`): `run_fx()` writes a real `sites.rds` (data frame: `site_visit` and
+- [x] Tests first (`tests/testthat/test-archive.R`): `run_fx()` writes a real `sites.rds` (data frame: `site_visit` and
       the five placement columns) and an `fdis_sites.csv` from it; new tests that (a) a plan on a tagged evidence
       directory with no `fdis_sites.csv` reads it from `sites_dir` and its MANIFEST/evidence id equals the default
       build's with the same files; (b) a `fdis_sites.csv` with a row missing, a duplicate `site_visit`, or one placement
       column changed is refused, naming `0240`; (c) a restore into a checkout whose `data/fdis/derived/fdis_sites.csv`
       has other bytes refuses and writes nothing. Watch them fail first.
-- [ ] `R/archive.R`: `.knw_archive_evidence_files` gains a source column (`evidence` / `build` / `sites`) beside the
+- [x] `R/archive.R`: `.knw_archive_evidence_files` gains a source column (`evidence` / `build` / `sites`) beside the
       target `dir`, same row order; `knw_archive_plan()` gains `sites_dir`, reads `fdis_sites.csv` from it, and, after
       `sites.rds` is held to the ledger, holds `fdis_sites.csv` to that `sites.rds` through a new
       `.knw_archive_sites_check()` (one row per site, same site set, `flag_far_snap`, `flag_ws50_mismatch`,
       `snap_confirmed`, `snap_moved`, `blue_line_key` equal). Roxygen for the new argument; `devtools::document()`.
-- [ ] `scripts/0336-archive.R`: pass `SITES_DIR`; header INPUT/RUN say `fdis_sites.csv` comes from
+- [x] `scripts/0336-archive.R`: pass `SITES_DIR`; header INPUT/RUN say `fdis_sites.csv` comes from
       `data/fdis/derived` whatever `EVIDENCE_DIR`.
 - [x] `data-raw/minimal_network_check.R`: `say()` and `block()` append to the log as they go (file created at start), and
       step 3's refusal is said to the log before it stops, so steps 1 and 2 survive a refusal.
 - [x] `tests/testthat/test-link_place.R`: `skip_if(nrow(one) == 0, …)` naming an empty schema or a missing BULK group.
-- [ ] Docs: `research/run_archive.md` (evidence folder: where `fdis_sites.csv` is read from and what it is held to);
+- [x] Docs: `research/run_archive.md` (evidence folder: where `fdis_sites.csv` is read from and what it is held to);
       CLAUDE.md only if a sentence there states the old behaviour (grep found none).
 
 ## Validation

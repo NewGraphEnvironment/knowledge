@@ -61,9 +61,15 @@ run_fx <- function(root, run = "20261027_0000", tokens = c(cut = NA, acc = NA, g
   }
   dv <- d("data", "fdis", "derived")
   db <- d("data", "fdis", "build")
-  for (f in c("visits_link.csv", "visits_species.csv", "walks.csv", "fdis_sites.csv")) writeLines(f, file.path(dv, f))
+  for (f in c("visits_link.csv", "visits_species.csv", "walks.csv")) writeLines(f, file.path(dv, f))
   writeLines("reconcile", file.path(db, "reconcile.csv"))
-  saveRDS(list(sites = 1), file.path(db, "sites.rds"))
+  # 0230's sites and 0240's table of them, which the plan holds to each other (#136)
+  sites <- data.frame(site_visit = c("s1", "s2"), flag_far_snap = c(FALSE, TRUE), flag_ws50_mismatch = c(FALSE, NA),
+                      snap_confirmed = c(TRUE, FALSE), snap_moved = c(FALSE, TRUE), blue_line_key = c(356L, 357L),
+                      downstream_route_measure = c(10.5, 123456.789), date = as.Date(c("2020-08-01", NA)),
+                      blocks_absence_of = c(NA, "BT"))
+  saveRDS(sites, file.path(db, "sites.rds"))
+  utils::write.csv(cbind(sites, n_bt = 1:2), file.path(dv, "fdis_sites.csv"), row.names = FALSE, na = "")
   ev <- paste(unname(tools::md5sum(file.path(dv, c("visits_link.csv", "visits_species.csv", "walks.csv")))),
               collapse = ";")
   tn <- d("data", "tune")
@@ -82,9 +88,11 @@ run_fx <- function(root, run = "20261027_0000", tokens = c(cut = NA, acc = NA, g
                          link = c(version = "0.66.0", sha = "def"), tokens = tokens, rows = 2)
   saveRDS(list(curve = run), file.path(tn, "CH_rear_curve.rds"))
   saveRDS(list(segments = run), file.path(cm, "CH_rear_segments.rds"))
-  list(tune = tn, compare = cm, evidence = dv, build = db)
+  list(tune = tn, compare = cm, evidence = dv, build = db, sites = dv)
 }
-plan_of <- function(x, ...) knw_archive_plan("CH_rear", x$tune, x$compare, x$evidence, x$build, ...)
+plan_of <- function(x, ...) {
+  knw_archive_plan("CH_rear", x$tune, x$compare, x$evidence, x$build, sites_dir = x$sites, ...)
+}
 
 test_that("a run's setup is its build's four tokens, or untokened/<run> before link's vocabulary", {
   r <- data.frame(token_cut = NA, token_acc = NA, token_grad = NA, token_flow = NA, tune_run = "20261027_0000")
@@ -572,4 +580,94 @@ test_that("a restore of a build archived without a receipt refuses a receipt alr
   expect_false(file.exists(file.path(dest, "data", "fdis", "derived", "walks.csv")))
   unlink(file.path(dest, "data", "fdis", "derived", "evidence_receipt.json"))
   expect_no_error(knw_archive_pull("CH_rear", dest, index = idx))
+})
+
+test_that("a tagged evidence build is archived with fdis_sites.csv from 0240's directory, under the same id (#136)", {
+  root <- withr::local_tempdir()
+  x <- run_fx(root)
+  p0 <- plan_of(x)
+  # a build under a tagged EVIDENCE_DIR holds 0310's tables alone
+  tag <- file.path(root, "data", "fdis", "derived_tag")
+  dir.create(tag)
+  file.copy(file.path(x$evidence, c("visits_link.csv", "visits_species.csv", "walks.csv")), tag)
+  p <- knw_archive_plan("CH_rear", x$tune, x$compare, tag, x$build, sites_dir = x$sites)
+  expect_identical(attr(p, "manifest"), attr(p0, "manifest"))
+  expect_identical(p$evidence_id[1], p0$evidence_id[1])
+  s <- p[p$kind == "evidence" & basename(p$source) == "fdis_sites.csv", ]
+  expect_identical(s$source, file.path(x$sites, "fdis_sites.csv"))
+  expect_identical(s$target, "data/fdis/derived/fdis_sites.csv")
+  expect_identical(p$source[p$kind == "evidence" & basename(p$source) == "walks.csv"], file.path(tag, "walks.csv"))
+  # a copy beside the tagged build is not read
+  writeLines("a stale hand copy", file.path(tag, "fdis_sites.csv"))
+  expect_identical(knw_archive_plan("CH_rear", x$tune, x$compare, tag, x$build, sites_dir = x$sites)$evidence_id[1],
+                   p0$evidence_id[1])
+})
+
+test_that("fdis_sites.csv is held to the build's sites.rds: one row per site and every column they share (#136)", {
+  root <- withr::local_tempdir()
+  x <- run_fx(root)
+  f <- file.path(x$sites, "fdis_sites.csv")
+  good <- utils::read.csv(f, colClasses = "character", na.strings = "")
+  put <- function(d) utils::write.csv(d, f, row.names = FALSE, na = "")
+  put(good[1, ])
+  expect_error(plan_of(x), "fdis_sites.csv .*not the sites of .*sites.rds .*: rerun scripts/0240")
+  put(good[c(1, 2, 2), ])
+  expect_error(plan_of(x), "fdis_sites.csv .*not the sites of .*sites.rds .*: rerun scripts/0240")
+  d <- good
+  d$site_visit[2] <- "s3"
+  put(d)
+  expect_error(plan_of(x), "fdis_sites.csv .*not the sites of .*sites.rds .*: rerun scripts/0240")
+  # one value changed in any shared column, a double by one part in a million, a missing value filled
+  bad <- list(flag_far_snap = "FALSE", flag_ws50_mismatch = "TRUE", snap_confirmed = "TRUE", snap_moved = "FALSE",
+              blue_line_key = "999", downstream_route_measure = "123456.912", date = "2020-08-02",
+              blocks_absence_of = "CH")
+  for (cl in names(bad)) {
+    d <- good
+    d[[cl]][2] <- bad[[cl]]
+    put(d)
+    expect_error(plan_of(x), paste0("fdis_sites.csv's ", cl, " is not .*sites.rds's: rerun scripts/0240"))
+  }
+  # a small value moved by 5e-6 of itself
+  d <- good
+  d$downstream_route_measure[1] <- "10.50005"
+  put(d)
+  expect_error(plan_of(x), "fdis_sites.csv's downstream_route_measure is not")
+  d$downstream_route_measure[1] <- NA
+  put(d)
+  expect_error(plan_of(x), "fdis_sites.csv's downstream_route_measure is not")
+  d <- good
+  d$blocks_absence_of[2] <- NA
+  put(d)
+  expect_error(plan_of(x), "fdis_sites.csv's blocks_absence_of is not")
+  # the rows in another order, a double as written to 1e-9, an empty string read as NA, and the columns 0240 adds pass
+  d <- good[2:1, ]
+  d$n_bt <- 9
+  d$downstream_route_measure[1] <- "123456.7890000001"
+  put(d)
+  expect_no_error(plan_of(x))
+  # 0230 can hold an empty string where 0240 writes nothing (blocks_absence_of on the 2026-11 build)
+  rds <- withr::local_tempfile(fileext = ".rds")
+  saveRDS(transform(readRDS(file.path(x$build, "sites.rds")), blocks_absence_of = c("", "BT")), rds)
+  expect_no_error(.knw_archive_sites_check(f, rds))
+  unlink(f)
+  expect_error(plan_of(x), "the evidence build lacks .*fdis_sites.csv")
+})
+
+test_that("a restore refuses an fdis_sites.csv of other bytes before it writes anything (#136)", {
+  root <- withr::local_tempdir()
+  x <- run_fx(root)
+  idx <- file.path(root, "index.csv")
+  b <- mock_bucket()
+  knw_archive_put(plan_of(x), idx)
+  dest <- withr::local_tempdir()
+  dir.create(file.path(dest, "data", "tune"), recursive = TRUE)
+  file.copy(file.path(x$tune, "CH_rear_grades_record.csv"), file.path(dest, "data", "tune"))
+  dir.create(file.path(dest, "data", "fdis", "derived"), recursive = TRUE)
+  writeLines("another table", file.path(dest, "data", "fdis", "derived", "fdis_sites.csv"))
+  expect_error(knw_archive_pull("CH_rear", dest, index = idx), "fdis_sites.csv is here with another md5")
+  expect_identical(list.files(file.path(dest, "data"), recursive = TRUE, all.files = TRUE),
+                   c("fdis/derived/fdis_sites.csv", "tune/CH_rear_grades_record.csv"))
+  file.copy(file.path(x$sites, "fdis_sites.csv"), file.path(dest, "data", "fdis", "derived"), overwrite = TRUE)
+  expect_no_error(knw_archive_pull("CH_rear", dest, index = idx))
+  expect_true(file.exists(file.path(dest, "data", "fdis", "derived", "walks.csv")))
 })

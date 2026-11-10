@@ -27,7 +27,11 @@ Everything is under `s3://fresh-bc/archive/knowledge/`, which is private:
   index rows gain them instead.
 - `evidence/<id>/` holds one evidence build: the three visit tables, `fdis_sites.csv`, `reconcile.csv`, `sites.rds`
   and a `MANIFEST` (md5 and name per file). `<id>` is the MANIFEST's md5. A build is stored once, however many runs
-  read it.
+  read it. The visit tables come from `EVIDENCE_DIR`, `reconcile.csv` and `sites.rds` from `0230`'s `BUILD_DIR`, and
+  `fdis_sites.csv` from where `0240` writes it, `data/fdis/derived`, for a tagged build too (#136): it is built from
+  `sites.rds` and reads no link schema. `sites.rds` is held to the run's ledger, and `fdis_sites.csv` to `sites.rds`
+  (one row per site, the same placement columns), since nothing else ties the table to a build. A restore puts every
+  file back under `data/fdis/`, and refuses before writing anything when a file there has other bytes.
 
 `data/archive_index.csv` (tracked) holds one row per stored object, with its source md5, its stored md5 and its S3
 version id. It also holds one row per key for each `promoted`, `superseded` or `undone` event. A run is found by

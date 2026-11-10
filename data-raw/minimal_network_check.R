@@ -29,7 +29,6 @@ min_dir <- Sys.getenv("MIN_DIR", "data/fdis/derived_zz415_minimal")
 path_log <- .knw_free_path(file.path("scripts/logs/habitat",
                                      paste0(format(Sys.Date(), "%Y%m%d"), "_minimal_network_check.txt")))
 # the log is written as each step reports (#136), so a step that refuses leaves what the steps before it measured
-file.create(path_log)
 say <- function(...) { cat(sprintf(...), "\n", file = path_log, sep = "", append = TRUE); message(sprintf(...)) }
 block <- function(title, x) {
   cat(c("", paste("##", title), capture.output(print(as.data.frame(x), row.names = FALSE))), file = path_log,
@@ -44,6 +43,8 @@ led_of <- function(d) {
 }
 lf <- led_of(full_dir)
 lm <- led_of(min_dir)
+file.create(path_log)
+message("Writing ", path_log, " as each step reports")
 say("Minimal network check, knowledge#120. Full: %s (%s). Minimal: %s (%s).", .knw_path_rel(full_dir), lf$path,
     .knw_path_rel(min_dir), lm$path)
 say("  %s", lf$record)

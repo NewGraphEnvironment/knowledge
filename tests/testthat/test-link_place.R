@@ -31,6 +31,10 @@ test_that("the package walk ends at the bank (#73) and the frozen scripts' copy 
 
 test_that("placement runs against a live schema and re-gates the habitat flags on access", {
   conn <- skip_if_no_pg("fresh_default")
+  for (t in c("streams", "streams_habitat_bt")) {
+    skip_if_not(DBI::dbExistsTable(conn, DBI::Id(schema = "fresh_default", table = t)),
+                paste0("fresh_default holds no ", t, " table"))
+  }
   one <- DBI::dbGetQuery(conn, "
     SELECT s.watershed_group_code, s.blue_line_key, s.downstream_route_measure + 2 AS m, s.id_segment
     FROM fresh_default.streams s

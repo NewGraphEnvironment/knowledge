@@ -12,3 +12,12 @@
 - #136 (log): `minimal_network_check.R` appends as each step reports. A scratch copy reading an `access_check.csv`
   without `watershed_group_code` exits 1 with steps 1, 2 and the refusal in its log; a full run on
   `derived_zz415_default`/`derived_zz415_minimal` writes a log byte-identical to the old script's (119 lines).
+- #136 (archive): tests first (20 blocks red before `sites_dir` existed). `knw_archive_plan(sites_dir =)` reads
+  `fdis_sites.csv` from 0240's directory and holds it to `sites.rds` over every shared column; `knw_archive_pull`
+  refuses any differing target before writing. Mutations, each red on its own test: reading from `evidence_dir`, no
+  sites check, no restore pre-pass, no NA-pattern check. On the real build the check passes in 0.6 s.
+- Plan review (`review-plan.md`): the blocker (restore pre-pass) and gaps G1, G2, G3, G5 and G6 are folded in, and G4
+  widened the check. All-equal worry retracted: `all.equal()` drops equal elements before its mean, so it would have
+  caught one changed value; the elementwise compare stays for clarity, and its comment was corrected.
+- `0335`'s promotion now refuses before moving anything when `fdis_sites.csv` does not match `sites.rds` (it plans the
+  archive first): a behaviour change for the PR body.
