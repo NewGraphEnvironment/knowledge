@@ -25,3 +25,8 @@
   six touched files, per file, linter and line against an `origin/main` worktree: no new lint after wrapping
   `plan_of`. Live: with `derived_parent/fdis_sites.csv` moved aside, `RUN=20261105_0436 EVIDENCE_DIR=data/fdis/derived_parent
   DRY=1 0336` plans evidence id `9978ec26…`, the id `data/archive_index.csv` already holds for that run (file put back).
+- `/code-check branch`, 3 rounds (`review-round{1,2,3}.md`) and an enumeration (`review-enumeration.md`):
+  round 1, a staged BUILD_DIR read the host's table (0336 now refuses it without SITES_DIR); round 2, the C-locale
+  UTF-8 refusal (`encoding = "UTF-8"`); round 3, the remedy text inside round 1's fix and a latent Inf (remedy by build;
+  Inf equal only to itself). Ended by enumerating the 7 refusals and skips the branch adds against every caller.
+  Final suite: 400 blocks, 0 failed, 0 errors, 2 skipped (unrelated); lints unchanged.
