@@ -64,7 +64,10 @@ compare_of <- function(output, ...) {
 }
 
 test_that("every override a declaration makes names a field of crate's register, outside the recipe", {
-  reg <- utils::read.csv(system.file("extdata", "receipt", "register.csv", package = "crate"))
+  # crate 0.15.0 versions the register on its own path (crate#58)
+  path <- system.file("extdata", "receipt", "register", "v1.0.0", "register.csv", package = "crate")
+  if (!nzchar(path)) stop("crate installs no receipt/register/v1.0.0/register.csv")
+  reg <- utils::read.csv(path)
   for (f in outputs) {
     k <- knw_receipt_keys(f)
     expect_true(all(k$register$field %in% reg$field), info = f)
