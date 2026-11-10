@@ -52,3 +52,8 @@
   policy's own citation of Ptolemy & Lewis's summer and winter rearing flows, pp. 7-8; DFO's low/high-flow and August
   temperature metrics as `qual`). First self-audit fixed: the class edges' sides (20 is the low class's lower edge),
   "names no species" (the policy speaks of fish), and two notes paraphrasing past the text. `0280`: 1151 rows verified.
+- Store pass prep: pulled every store md5-verified. Trashed attachments held: `bull_trout_grayling` and
+  `habitat_modelling` (Bottoms EPPHL4VG, YJZLRJ5I), `flow` (YJZLRJ5I); no harvest store holds any. The harvest guard
+  first refused `habitat_modelling` for `storage/BCF7RZT9/PINE__56963.pdf`, a real Zotero attachment: narrowed to
+  harvest-named documents outside Zotero storage (refuses `peace`'s four temp-dir MACK documents and all of
+  `fraser`). Zotero quit (WAL 2.0 MB -> 0) for cred#45; Ollama answering.

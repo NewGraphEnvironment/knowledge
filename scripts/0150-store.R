@@ -206,18 +206,21 @@ if (action %in% c("build", "update")) {
     if (!file.exists(store_path)) {
       stop(store_path, " is not here to update: pull it first with ACTION=query STORE=", store, " VERIFY=TRUE")
     }
-    # A harvest store (0152: fraser, peace, pine) names each document <EXTENT>__<reportId>.pdf, a source
-    # Zotero never resolves, so crd_store_update() would drop every one of them.
+    # A harvest ingest (0152) names each document <EXTENT>__<reportId>.pdf from a harvest directory, a
+    # source Zotero never resolves, so crd_store_update() would drop it: fraser is all harvest, and peace
+    # holds four. A Zotero attachment that happens to carry such a name (storage/<key>/PINE__56963.pdf in
+    # habitat_modelling) resolves, and is not one.
     doc_origins <- function() {
       con <- DBI::dbConnect(duckdb::duckdb(), store_path, read_only = TRUE)
       on.exit(DBI::dbDisconnect(con, shutdown = TRUE))
       DBI::dbGetQuery(con, "SELECT DISTINCT origin FROM documents")$origin
     }
     before <- doc_origins()
-    harvest <- grepl("^[A-Z]{4}__[0-9]+\\.pdf$", basename(before))
+    harvest <- grepl("^[A-Z]{4}__[0-9]+\\.pdf$", basename(before)) &
+      !grepl("/storage/[A-Z0-9]{8}/[^/]+$", before)
     if (any(harvest)) {
       stop(store_path, " holds ", sum(harvest), " harvest documents (", basename(before[harvest][1]), ", ...), ",
-           "which an update would drop: a harvest store is rebuilt by 0152, never updated from Zotero")
+           "which an update would drop: rebuild it, or bring them into Zotero first")
     }
   }
   keys <- collection_keys(colls)
