@@ -7,9 +7,10 @@ whose `planning/archive/` holds the read
 
 How to use this file: `/backlog-sweep` writes it. Take the first move in **Moves** that is not
 ticked and not **waiting**; `/planning-init <umbrella>` plans it, one phase per batch, one PR.
-When the plan finds that a batch, or one of its members, is more than one PR's work, it carries the first piece, files
-each other piece as its own issue and lists it under `## Singles` as split from its move, where the next
-`/backlog-sweep` places it: split rather than take it all in one PR.
+When the plan finds that a batch, or one of its members, is more than one PR's work, it carries the first piece and
+files each other piece as its own issue, naming the move it was split from, and leaves it out of this file: the next
+`/backlog-sweep` reads an issue the file does not name as unplaced, and folds it into a move. Split rather than take
+it all in one PR.
 `/gh-pr-merge` step 9c ticks the move on merge; `/compact-prep` names the next. A `NONE` from
 `backlog_moves.sh next` that names batch sections means those batches have no move yet: run
 `/backlog-sweep` again, the backlog is not finished.
@@ -100,8 +101,8 @@ personal-library items wait on #13. The writes need a person present (auto mode 
 - [ ] Carried by move 3, #172
 
 #20 (the DFO threat-layer document, its cited sources and evidence rows) and #95 (the `statistics` store only: its
-alignment review and partially pooled curve are each a PR of their own, filed as issues by this move's plan and listed
-under `## Singles`; decided 2026-11-09). Touches `data/statistics_{members,additions}.csv`,
+alignment review and partially pooled curve are each a PR of their own, filed as issues by this move's plan and left
+for the next sweep to place; decided 2026-11-09). Touches `data/statistics_{members,additions}.csv`,
 `data/literature_evidence.csv` (appended, audited for meaning). Gate: whether #20's data question is still open.
 
 ### 6. Maps out of the comparison
