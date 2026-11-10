@@ -18,3 +18,9 @@
   wipe documents). `0150` now refuses a store with any `<EXTENT>__<reportId>.pdf` origin (probed on a fake store) and
   prints counts and drops; `api_key()` reads a BOM file and refuses undecodable bytes (probed). Plan reordered: every
   library write in Phase 3–5, then one store pass with Zotero quit (Phase 6). Tredger's scan is replaced, not kept.
+- Phase 3 prep: `0275` and `data/zotero_attachment_verdicts.csv` (31 rows: #151's four, #126's 27). Sitting verdicts
+  settled by reading the files: banner part-1 copies have identical text (keep 9S2ERUGD); Thompson's 2017 copy
+  T7SVJCFC is the fuller; the Alsea scan P9ZV6GDE is George W. Brown's "The Alsea Watershed Study" (OCR). Org-wide
+  key search: neither banner key cited (GitHub index + 196 local checkouts); abbott and mccarthy are cited
+  (safety_plan_template, fish_passage_skeena_2024_reporting) and keep their report PDFs. Tredger OCR: 49 pp,
+  7,531 words. Dry run: 31 rows, all `would`, 0 failed; `download()` checked against WZ896C9Y's md5.

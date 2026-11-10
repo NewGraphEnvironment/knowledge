@@ -61,14 +61,14 @@ Order from the plan review: every write lands here, then Phase 6 quits Zotero an
 - [ ] Remove the "not live until #151" line under `0270` in `scripts/README.md`.
 
 **#126, items with several PDFs (group library)**
-- [ ] `scripts/0275-zotero-attachments-tidy.py` (loads `0153` as `0270` does; `--dry-run`): reads
+- [x] `scripts/0275-zotero-attachments-tidy.py` (loads `0153` as `0270` does; `--dry-run`): reads
       `data/zotero_attachment_verdicts.csv` (item key, citation key, action, attachment keys in reading order, merged
       file name, split metadata) and does `merge` (download each part, check its md5, `qpdf --deterministic-id --empty
       --pages`, upload, trash the parts), `keep`, `split` (new item in the parent's collections, re-parent the
       attachment), `relabel`, `replace`, `patch` and `merge-items` (collections and relations merged, `dc:replaces` as
       a group item URI). Done means the end state holds (every part trashed, one live merged PDF), so a re-run after a
       crash finishes rather than duplicates. Prints the changed attachment keys. #151's writes are rows of the same file.
-- [ ] Before any item loses or changes its PDF, search the org for its citation key (`gh api search/code`, then
+- [x] Before any item loses or changes its PDF, search the org for its citation key (`gh api search/code`, then
       clone-and-grep the report repos it covers): banner `…fieldguidea`, hall, abbott, Skeena, mccarthy first.
 - [ ] Dry run, Al reads it, live run, dry run again shows nothing to do.
 - [ ] Record the verdicts in #126's body; write the 11 personal-library items into #13's body and close #126 with this PR.
