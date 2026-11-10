@@ -44,7 +44,7 @@ link's own pass: link#468, a backlog pass for link that carries the link issues 
 
 | # | tracking | batch | issues | gate | why here |
 |---|---|---|---:|---|---|
-| 1 | #170 | evidence-build and test fixes: #136, #142 | 2 | where `fdis_sites.csv` comes from for a tagged build | #136 recurred (2026-11-05); #142 errors every full test run on an empty schema |
+| 1 | #170 | evidence-build and test fixes: #136, #142 | 2 | none: the archive reads `fdis_sites.csv` from `0240`'s directory (decided 2026-11-09) | #136 recurred (2026-11-05); #142 errors every full test run on an empty schema |
 | 2 | #171 | articles as a tuning series: #118, #107, #156 | 3 | titles; the fwapg pin | one rename, one prose pass, one bibliography and site build over the same three articles |
 | 3 | #171 | a build that stalls fails fast: #159 | 1 | close if the logs are gone and the cause stays open | the move's site build is the test |
 | 4 | #172 | Zotero library writes: #168, #151, #126 | 3 | a verdict per #126 item | one sitting with Zotero and the Web API key; one store update |
@@ -68,9 +68,9 @@ link's own pass: link#468, a backlog pass for link that carries the link issues 
 
 #136 (a tagged `EVIDENCE_DIR` needs `fdis_sites.csv` copied by hand, and `minimal_network_check.R` logs only at the
 end) and #142 (the live placement test errors on a `fresh_default` with no BULK BT rearing segment, or an empty one).
-Touches `scripts/0310-evidence-build.R` or `R/archive.R`, `data-raw/minimal_network_check.R`,
-`tests/testthat/test-link_place.R`. Gate: whether `0310` copies `fdis_sites.csv` or the archive reads it from `0240`'s
-directory.
+Touches `R/archive.R`, `scripts/0336-archive.R`, `data-raw/minimal_network_check.R`, `tests/testthat/test-link_place.R`.
+Decided 2026-11-09, no gate left: the archive reads `fdis_sites.csv` from where `0240` writes it, beside `0230`'s
+`sites.rds`, and holds it to the ledger's `sites.rds` before archiving; `0310` does not copy it (#170 gives the why).
 
 ### 2. Articles as a tuning series
 
