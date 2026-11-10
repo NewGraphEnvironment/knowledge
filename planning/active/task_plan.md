@@ -60,7 +60,7 @@ both hold 51,587 sites, no duplicate `site_visit`, the same set, and the five pl
 
 ## Validation
 
-- [ ] Tests pass (`devtools::test()`, failures and errors counted), lintr unchanged per file
+- [x] Tests pass (`devtools::test()`, failures and errors counted), lintr unchanged per file
 - [ ] `/code-check` clean (once over the branch with `/code-check branch`)
 - [ ] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion

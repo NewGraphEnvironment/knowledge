@@ -21,3 +21,7 @@
   caught one changed value; the elementwise compare stays for clarity, and its comment was corrected.
 - `0335`'s promotion now refuses before moving anything when `fdis_sites.csv` does not match `sites.rds` (it plans the
   archive first): a behaviour change for the PR body.
+- Validation: `devtools::test()` on `PGSERVICE=fresh_local`, 400 blocks, 0 failed, 0 errors, 2 skipped. lintr on the
+  six touched files, per file, linter and line against an `origin/main` worktree: no new lint after wrapping
+  `plan_of`. Live: with `derived_parent/fdis_sites.csv` moved aside, `RUN=20261105_0436 EVIDENCE_DIR=data/fdis/derived_parent
+  DRY=1 0336` plans evidence id `9978ec26…`, the id `data/archive_index.csv` already holds for that run (file put back).
