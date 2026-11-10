@@ -38,7 +38,7 @@ made from) and their evidence build, decompresses the grade table, and
 checks every file's md5 against the index's \code{source_md5} (and a grade
 table against its record). Each file is written aside and moved in once
 checked; a file already there with the same md5 is left, and one with
-another md5 refuses. The evidence and the bundles' ignored files come by
+another md5 refuses before anything is written. The evidence and the bundles' ignored files come by
 default; grade tables, gigabytes each, only with \code{grades = TRUE}. Grade
 tables are restored before segments, whose mtime \code{scripts/0330} holds to
 be later.

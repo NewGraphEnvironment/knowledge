@@ -20,16 +20,19 @@
 #   - 0335 RUNS THIS on the promoted keys (PROMOTED=TRUE), and stops when it fails.
 #
 # INPUT:  archive: a run's TUNE_DIR and COMPARE_DIR (default data/tune and data/compare; RUN=<run> takes the
-#         candidate's), EVIDENCE_DIR (data/fdis/derived) and BUILD_DIR (data/fdis/build); link's vocabulary from
-#         LINK_REPO (../link) where it has one; AWS credentials for the bucket. PULL: the checkout's records and
-#         data/archive_index.csv.
+#         candidate's), EVIDENCE_DIR (data/fdis/derived, or a tagged build's) and BUILD_DIR (data/fdis/build);
+#         fdis_sites.csv from SITES_DIR (data/fdis/derived, where 0240 writes it, whatever EVIDENCE_DIR: #136), held
+#         to BUILD_DIR's sites.rds; link's vocabulary from LINK_REPO (../link) where it has one; AWS credentials for
+#         the bucket. PULL: the checkout's records and data/archive_index.csv.
 # OUTPUT: archive: the objects under s3://fresh-bc/archive/knowledge/, rows appended to data/archive_index.csv.
 #         PULL: data/tune/<key>_{curve.rds,grades.csv}, data/compare/<key>_segments.rds, data/fdis/derived/*.csv and
 #         data/fdis/build/{reconcile.csv,sites.rds}, each md5-checked.
 # RUN:    Rscript scripts/0336-archive.R                  (from the repo root: the published tables, every key with a
 #                                                          record; KEYS=CH_rear,BT_rear for some; DRY=1 lists)
 #         RUN=<run> Rscript scripts/0336-archive.R        (a candidate under data/{tune,compare}/candidate/<run>/)
-#         TUNE_DIR=… COMPARE_DIR=… EVIDENCE_DIR=… BUILD_DIR=… Rscript scripts/0336-archive.R   (a staged copy)
+#         TUNE_DIR=… COMPARE_DIR=… EVIDENCE_DIR=… BUILD_DIR=… SITES_DIR=… Rscript scripts/0336-archive.R
+#                                                         (a staged copy: a BUILD_DIR other than data/fdis/build
+#                                                          refuses without SITES_DIR)
 #         PULL=TRUE [GRADES=TRUE] [KEYS=…] [DEST=<checkout>] [BATCH=<key>=<batch>,…] Rscript scripts/0336-archive.R
 #                                                         (BATCH: only where several archives hold one record with
 #                                                          other curves or segments, which the restore names)
@@ -46,6 +49,12 @@ tune_dir <- Sys.getenv("TUNE_DIR", if (nzchar(run)) file.path("data/tune/candida
 compare_dir <- Sys.getenv("COMPARE_DIR", if (nzchar(run)) file.path("data/compare/candidate", run) else "data/compare")
 evidence_dir <- Sys.getenv("EVIDENCE_DIR", "data/fdis/derived")
 build_dir <- Sys.getenv("BUILD_DIR", "data/fdis/build")
+sites_dir <- Sys.getenv("SITES_DIR", "data/fdis/derived")
+# a staged build's fdis_sites.csv is its own, not the one 0240 last wrote here (review of #170, round 1)
+if (!pull && build_dir != "data/fdis/build" && !nzchar(Sys.getenv("SITES_DIR"))) {
+  stop("BUILD_DIR is a staged build (", build_dir, "): set SITES_DIR to the directory holding the fdis_sites.csv ",
+       "0240 made from its sites.rds")
+}
 dest <- Sys.getenv("DEST", ".")
 index <- "data/archive_index.csv"
 
@@ -88,7 +97,7 @@ if (pull) {
 link_repo <- Sys.getenv("LINK_REPO", "../link")
 f_voc <- file.path(link_repo, "inst/extdata/vocabulary.csv")
 voc <- if (file.exists(f_voc)) utils::read.csv(f_voc, colClasses = "character") else NULL
-plan <- knw_archive_plan(keys, tune_dir, compare_dir, evidence_dir, build_dir, vocabulary = voc)
+plan <- knw_archive_plan(keys, tune_dir, compare_dir, evidence_dir, build_dir, vocabulary = voc, sites_dir = sites_dir)
 message(sprintf("%s %d objects (%s; evidence build %s):\n  %s", if (dry) "Would archive" else "Archiving", nrow(plan) + 1,
                 paste(unique(paste(plan$key, plan$setup)[plan$kind == "tune"]), collapse = ", "), plan$evidence_id[1],
                 paste(plan$object, collapse = "\n  ")))
