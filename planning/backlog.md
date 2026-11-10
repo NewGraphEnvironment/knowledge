@@ -7,9 +7,16 @@ whose `planning/archive/` holds the read
 
 How to use this file: `/backlog-sweep` writes it. Take the first move in **Moves** that is not
 ticked and not **waiting**; `/planning-init <umbrella>` plans it, one phase per batch, one PR.
+When the plan finds that a batch, or one of its members, is more than one PR's work, it carries the first piece and
+files each other piece as its own issue, naming the move it was split from, and leaves it out of this file: the next
+`/backlog-sweep` reads an issue the file does not name as unplaced, and folds it into a move other than the one it was
+split from (a sweep run before that move merges would otherwise put it back in, and the merge would tick it undone).
+Split rather than take it all in one PR.
 `/gh-pr-merge` step 9c ticks the move on merge; `/compact-prep` names the next. A `NONE` from
 `backlog_moves.sh next` that names batch sections means those batches have no move yet: run
 `/backlog-sweep` again, the backlog is not finished.
+`next` reads only this file, so a plain `NONE` is not the end either while an open issue is named nowhere here (a
+split piece, or one filed since the last pass): run `/backlog-sweep` to place it.
 
 ## Moves
 
@@ -37,11 +44,11 @@ link's own pass: link#468, a backlog pass for link that carries the link issues 
 
 | # | tracking | batch | issues | gate | why here |
 |---|---|---|---:|---|---|
-| 1 | #170 | evidence-build and test fixes: #136, #142 | 2 | where `fdis_sites.csv` comes from for a tagged build | #136 recurred (2026-11-05); #142 errors every full test run on an empty schema |
+| 1 | #170 | evidence-build and test fixes: #136, #142 | 2 | none: the archive reads `fdis_sites.csv` from `0240`'s directory (decided 2026-11-09) | #136 recurred (2026-11-05); #142 errors every full test run on an empty schema |
 | 2 | #171 | articles as a tuning series: #118, #107, #156 | 3 | titles; the fwapg pin | one rename, one prose pass, one bibliography and site build over the same three articles |
 | 3 | #171 | a build that stalls fails fast: #159 | 1 | close if the logs are gone and the cause stays open | the move's site build is the test |
 | 4 | #172 | Zotero library writes: #168, #151, #126 | 3 | a verdict per #126 item | one sitting with Zotero and the Web API key; one store update |
-| 5 | #172 | new sources into the stores: #20, #95 | 2 | #95's pooled-curve experiment in or out | `0270` → `0150` → push in the same sitting |
+| 5 | #172 | new sources into the stores: #20, #95 | 2 | whether #20's data question is still open | `0270` → `0150` → push in the same sitting |
 | 6 | #173 | maps out of the comparison: #81, #77 | 2 | `GPKG` off by default; which PNGs go | both edit `R/compare_map.R` and the example-map script |
 | 7 | #173 | one research page per key: #90, #64 | 2 | one template from #90's skeleton and #64's order | one generator writes every page |
 | 8 | #174 | timing table and NuSEDS: #31, #96, #108 | 3 | where the NuSEDS table lives; its NOTICE row | one table and one new source |
@@ -61,9 +68,9 @@ link's own pass: link#468, a backlog pass for link that carries the link issues 
 
 #136 (a tagged `EVIDENCE_DIR` needs `fdis_sites.csv` copied by hand, and `minimal_network_check.R` logs only at the
 end) and #142 (the live placement test errors on a `fresh_default` with no BULK BT rearing segment, or an empty one).
-Touches `scripts/0310-evidence-build.R` or `R/archive.R`, `data-raw/minimal_network_check.R`,
-`tests/testthat/test-link_place.R`. Gate: whether `0310` copies `fdis_sites.csv` or the archive reads it from `0240`'s
-directory.
+Touches `R/archive.R`, `scripts/0336-archive.R`, `data-raw/minimal_network_check.R`, `tests/testthat/test-link_place.R`.
+Decided 2026-11-09, no gate left: the archive reads `fdis_sites.csv` from where `0240` writes it, beside `0230`'s
+`sites.rds`, and holds it to the ledger's `sites.rds` before archiving; `0310` does not copy it (#170 gives the why).
 
 ### 2. Articles as a tuning series
 
@@ -96,9 +103,10 @@ personal-library items wait on #13. The writes need a person present (auto mode 
 
 - [ ] Carried by move 3, #172
 
-#20 (the DFO threat-layer document, its cited sources and evidence rows) and #95 (a `statistics` store and the
-alignment review). Touches `data/statistics_{members,additions}.csv`, `data/literature_evidence.csv` (appended,
-audited for meaning), `research/bayesian_alignment.md`. Gate: #95's partially pooled curve in this move or filed alone.
+#20 (the DFO threat-layer document, its cited sources and evidence rows) and #95 (the `statistics` store only: its
+alignment review and partially pooled curve are each a PR of their own, filed as issues by this move's plan and left
+for the next sweep to place in another move; decided 2026-11-09). Touches `data/statistics_{members,additions}.csv`,
+`data/literature_evidence.csv` (appended, audited for meaning). Gate: whether #20's data question is still open.
 
 ### 6. Maps out of the comparison
 
