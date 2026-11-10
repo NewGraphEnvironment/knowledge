@@ -155,6 +155,11 @@ without it every package built from CRAN source (#94). `cred::crd_store_connect(
 and md5-verifies; `cred::crd_store_push()` uploads and merges the `log.json` manifest. After a
 local write (`0152` ingest, `0156` dedup) the local md5 no longer matches the manifest, and the
 next `verify = TRUE` connect **replaces the local file with the bucket copy**. Push first.
+A push that failed partway (a dropped connection) leaves the same state, so read each push's result before any verified
+connect: #172's reconnect after one replaced an updated `habitat_modelling` with the older bucket copy. To bring a
+cred-built store up to date after a library change, `0150 ACTION=update` with the store's whole build list
+(`scripts/README.md`): cred's `crd_store_update()` drops every document outside the keys it is given, so `0150` refuses
+a store holding any document from outside Zotero storage (`fraser`, `peace`, `pine`).
 
 `crd_store_build()` reads the local `~/Zotero/zotero.sqlite` and names documents by Better BibTeX
 citation key. That is a different identity from the harvest's `<EXTENT>__<reportId>.pdf`, which
