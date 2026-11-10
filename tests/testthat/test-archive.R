@@ -67,9 +67,10 @@ run_fx <- function(root, run = "20261027_0000", tokens = c(cut = NA, acc = NA, g
   sites <- data.frame(site_visit = c("s1", "s2"), flag_far_snap = c(FALSE, TRUE), flag_ws50_mismatch = c(FALSE, NA),
                       snap_confirmed = c(TRUE, FALSE), snap_moved = c(FALSE, TRUE), blue_line_key = c(356L, 357L),
                       downstream_route_measure = c(10.5, 123456.789), date = as.Date(c("2020-08-01", NA)),
-                      blocks_absence_of = c(NA, "BT"))
+                      blocks_absence_of = c(NA, "BT"), gnis_name = c("Rivi\u00e8re Bleue", NA))
   saveRDS(sites, file.path(db, "sites.rds"))
-  utils::write.csv(cbind(sites, n_bt = 1:2), file.path(dv, "fdis_sites.csv"), row.names = FALSE, na = "")
+  utils::write.csv(cbind(sites, n_bt = 1:2), file.path(dv, "fdis_sites.csv"), row.names = FALSE, na = "",
+                   fileEncoding = "UTF-8")
   ev <- paste(unname(tools::md5sum(file.path(dv, c("visits_link.csv", "visits_species.csv", "walks.csv")))),
               collapse = ";")
   tn <- d("data", "tune")
@@ -607,8 +608,8 @@ test_that("fdis_sites.csv is held to the build's sites.rds: one row per site and
   root <- withr::local_tempdir()
   x <- run_fx(root)
   f <- file.path(x$sites, "fdis_sites.csv")
-  good <- utils::read.csv(f, colClasses = "character", na.strings = "")
-  put <- function(d) utils::write.csv(d, f, row.names = FALSE, na = "")
+  good <- utils::read.csv(f, colClasses = "character", na.strings = "", encoding = "UTF-8")
+  put <- function(d) utils::write.csv(d, f, row.names = FALSE, na = "", fileEncoding = "UTF-8")
   put(good[1, ])
   expect_error(plan_of(x), "fdis_sites.csv .*not the sites of .*sites.rds .*: rerun scripts/0240")
   put(good[c(1, 2, 2), ])
@@ -649,6 +650,9 @@ test_that("fdis_sites.csv is held to the build's sites.rds: one row per site and
   rds <- withr::local_tempfile(fileext = ".rds")
   saveRDS(transform(readRDS(file.path(x$build, "sites.rds")), blocks_absence_of = c("", "BT")), rds)
   expect_no_error(.knw_archive_sites_check(f, rds))
+  # a stream name with an accent, under a C locale, is the same name (round 2 of the branch review)
+  put(good)
+  withr::with_locale(c(LC_CTYPE = "C"), expect_no_error(plan_of(x)))
   unlink(f)
   expect_error(plan_of(x), "the evidence build lacks .*fdis_sites.csv")
 })

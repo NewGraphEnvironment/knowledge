@@ -28,7 +28,9 @@
 # run's ledger records, one row per site and every column the two share equal as 0240 wrote it (a date as text, a
 # double to 1e-9, an empty string as NA). The columns 0240 adds from the catch and the database are not held to anything
 .knw_archive_sites_check <- function(f_sites, f_rds) {
-  csv <- utils::read.csv(f_sites, colClasses = "character", na.strings = "", check.names = FALSE)
+  # 0240 writes UTF-8 (readr), and sites.rds marks its names UTF-8: read as native bytes, a stream name with an accent
+  # differs under a C locale (review of #170, round 2)
+  csv <- utils::read.csv(f_sites, colClasses = "character", na.strings = "", check.names = FALSE, encoding = "UTF-8")
   rds <- readRDS(f_rds)
   if (nrow(csv) != nrow(rds) || anyDuplicated(csv$site_visit) || !setequal(csv$site_visit, rds$site_visit)) {
     stop(f_sites, " (", nrow(csv), " rows) is not the sites of ", f_rds, " (", nrow(rds),
