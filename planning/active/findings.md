@@ -49,3 +49,17 @@ Backlog: `planning/backlog.md`, move 3. Plan it with `/planning-init <this issue
 | Error | Resolution |
 |-------|------------|
 | `ls` aliased with colour codes broke path capture | `command ls` |
+
+## Meaning audit of evidence rows 1146-1151 (#20)
+
+`0280` proved every quote verbatim from the start; each round below audited meaning, sentence by sentence.
+
+| round | reviewer | found | fixed |
+|---|---|---|---|
+| self | me | class edges on the wrong sides; "names no species" (the policy speaks of fish); two notes paraphrasing past the text | same commit as the rows (db579b27) |
+| 1 | subagent | `cited_source` set on the policy's own words; 10 % edge coded with a basis the policy gives only for 20 %; 10 % edge read in the opposite direction to 20 %; DFO rows `reach` not `segment`; the May high flow's coding unstated; "matched gauges least well" overstated | 4723ce89 (10 % re-quoted from the moderate-class bullet as its lower edge) |
+| 2 | subagent | "grounds the 20 % edge in Ptolemy & Lewis" reads placement as a stated link; "no basis for 10 %" ignores p. 14's general grounding; `instream_flow` vs "not a need" tension unstated; classes are regional defaults (p. 8) | 09040e98 |
+| 3 | subagent | "directly after" (an equation paragraph intervenes); p. 14's Tennant is an example, not the grounding; "the method" for "the EFN risk screening approach", "and other jurisdictions" dropped | rewritten from the policy's own words |
+
+Termination by enumeration, not a fourth round: every phrase round 3's fix introduced is quoted from the policy, and each
+was grep-checked on its page (pp. 7, 8, 14: 10 of 10 found). No round found a wrong value, page or cross-reference.

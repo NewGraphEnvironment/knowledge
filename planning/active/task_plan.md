@@ -98,7 +98,7 @@ Order from the plan review: every write lands here, then Phase 6 quits Zotero an
       framework and Schnorbus 2020 where the library lacks them (check the document's own reference list, review #14);
       `0270 --collection flow` dry run then live; once BBT keys it, a `data/temperature_members.csv` row puts the
       document in `Fisheries/temperature`, which feeds `habitat_modelling` (review #8).
-- [ ] Append `literature_evidence.csv` rows, each naming the key it cites: Iacarella 2025's low-flow (minimum August
+- [x] Append `literature_evidence.csv` rows, each naming the key it cites: Iacarella 2025's low-flow (minimum August
       %MAD) and high-flow (maximum May %MAD) metrics and its August mean temperature metric, and the EFN framework's
       monthly-sensitivity basis; `0280` gate; audit every row's meaning against the PDF, repeating until a round finds
       nothing.
