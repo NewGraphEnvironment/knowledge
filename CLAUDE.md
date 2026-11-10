@@ -551,6 +551,9 @@ R reads `~/.Renviron` at startup and its values **replace** the shell's, so wher
 `PGDATABASE=… Rscript …` on the command line is silently ignored (measured 2026-10-16). Set the
 database there, or select a `~/.pg_service.conf` entry with `PGSERVICE=<entry>`, which libpq takes
 over the `PG*` variables. Set `PGCONNECT_TIMEOUT`, or an unreachable server hangs the script.
+A shell that never read `~/.Renviron` has no `PG*` at all (an agent's shell, on a machine that keeps them there), so
+`psql` from it fails on the local socket: probe the database through `Rscript -e`, with `PGCONNECT_TIMEOUT` set, or
+export `PGSERVICE` in the shell first (measured 2026-10-27).
 
 **Run the comparison on the database's own host, against its own database.** A query's fixed cost is a round trip:
 1.6 ms on the host, 104 to 110 ms from a machine on a remote link (2026-10-24, 2026-10-26). Since #87 grading walks
