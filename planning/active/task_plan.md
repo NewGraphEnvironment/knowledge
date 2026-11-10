@@ -56,7 +56,7 @@ Order from the plan review: every write lands here, then Phase 6 quits Zotero an
 - [x] OCR Tredger 1984 (`ocrmypdf --deskew`) and replace the scan on `AHE9BFQQ` (`XETIXEM2`) with it, so the audit
       and the store both read text (review #12).
 - [x] Merge the strategy: `B2UZ32FE` into `Nechako - NECR` (`977GE58E`), `dc:replaces` `VS4P4TG6`, trash `VS4P4TG6`.
-- [ ] PATCH `KSCZP9JS`'s title and `QPIC5D8X`'s date to `data/sturgeon_additions.csv`'s values; check both keep their
+- [x] PATCH `KSCZP9JS`'s title and `QPIC5D8X`'s date to `data/sturgeon_additions.csv`'s values; check both keep their
       citation keys; `0270 --collection sturgeon --parent 9U54XAND --dry-run` prints no `would` line.
 - [x] Remove the "not live until #151" line under `0270` in `scripts/README.md`.
 
@@ -94,7 +94,7 @@ Order from the plan review: every write lands here, then Phase 6 quits Zotero an
 | `viveiros2010FishPassage` | report PDF + a maps `.zip` labelled PDF | relabel the zip |
 
 ## Phase 4: The DFO threat-layer document (#20) — writes, rows, hand-offs
-- [ ] `data/flow_additions.csv`: Iacarella et al. 2025 (CSAS 2025/013, PDF from waves-vagues), and FLNRORD 2022's EFN
+- [x] `data/flow_additions.csv`: Iacarella et al. 2025 (CSAS 2025/013, PDF from waves-vagues), and FLNRORD 2022's EFN
       framework and Schnorbus 2020 where the library lacks them (check the document's own reference list, review #14);
       `0270 --collection flow` dry run then live; once BBT keys it, a `data/temperature_members.csv` row puts the
       document in `Fisheries/temperature`, which feeds `habitat_modelling` (review #8).
@@ -108,7 +108,7 @@ Order from the plan review: every write lands here, then Phase 6 quits Zotero an
 ## Phase 5: The statistics collection (#95) — writes and split-offs
 - [x] `0270`: `--parent top` finds or creates a top-level collection (`/collections/top`); the "elsewhere" exit
       suggests it; docstring and comments stop assuming Fisheries (review #16).
-- [ ] `data/statistics_members.csv` (the collection's current members) and `data/statistics_additions.csv` (BDA3, PDF
+- [x] `data/statistics_members.csv` (the collection's current members) and `data/statistics_additions.csv` (BDA3, PDF
       from the authors' site); `0270 --collection statistics --parent top` dry run (watch for personal-library PDF
       uploads) then live.
 - [x] File the alignment review and the partially pooled curve as issues, each naming move 3 (#172) as where it was

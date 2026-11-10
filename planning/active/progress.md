@@ -44,3 +44,11 @@
   (Alsea documents), 6EH9XCNQ (Comeau 2016 map). Changed attachments:
   attachments added:   5B62CMEX 9HNJIITR PGU736V9 BE4E6T9F 22AP9QJB 7PK9GSJM ZXXDT3DI 43WP56GA ZKGXNRGU BNSBUZ9M
   attachments trashed: XETIXEM2 VS4P4TG6 KFWVRH6I D6IMPRF9 ULAD6928 W5C8VQAJ YJZS6RUN GEX7LH26 H2HE7YEY JVVM3KXV 89FYJDGQ CB36ZIRY GENI8XJ8 NKDRE6Q7 HLV2RWZD RMXSJVKB DPH84ENN EPPHL4VG YJZLRJ5I 33222K2G AGU7Y3I4 GKL97JYY REXYEU92 Z64VC6DT RX63AU5F WZ896C9Y 2DVK6KM4 Y6K63TML BFM4PF4I 7W7IW7RG FEJRDH9D VBCPBATA 9S2ERUGD B7V8RRZQ 354HGUEY PUEQYI5E W8HLSVEI 4Z5EMI6B PEVEUP6I EI8Z6FME K4WGW3Q7 7H5GK2IR 9Q9GZ5WU B7ZEGMZQ E27ZSTHD K28A3DMR IBHTXREZ
+- Sync confirmed: every new item keyed (`iacarella_etal2025Geospatialindicators`, `ministryofforests2022Environmentalflow`,
+  `schnorbus2020VICGlacier`, `gelman_etal2013Bayesiandata`, and the six split items), all 14 new PDFs on disk,
+  `KSCZP9JS` kept its key after the retitle. Sturgeon dry run: 69 additions exist, no `would`. The DFO document added
+  to `Fisheries/temperature` (feeds `habitat_modelling`).
+- #20's evidence rows: data rows 1146-1151 (EFN 20 % and 10 % class edges, rearing and overwintering, grounded on the
+  policy's own citation of Ptolemy & Lewis's summer and winter rearing flows, pp. 7-8; DFO's low/high-flow and August
+  temperature metrics as `qual`). First self-audit fixed: the class edges' sides (20 is the low class's lower edge),
+  "names no species" (the policy speaks of fish), and two notes paraphrasing past the text. `0280`: 1151 rows verified.
