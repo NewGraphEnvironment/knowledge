@@ -44,8 +44,8 @@ Measured during planning (2026-11-09):
       missing file; neither) and that `data-raw/zotero_copy_check.R`'s `ZOTERO_API_KEY=check-only` child still runs.
 
 ## Phase 2: `0150 ACTION=update`, then the sturgeon follow-ups (#151)
-- [ ] Upgrade cred to 0.7.0; `0150` refuses `ACTION=update` below the first cred that exports `crd_store_update()`.
-- [ ] `scripts/0150-store.R`: `ACTION=update STORE= KEYS=` (or `COLLECTIONS=`) calling `crd_store_update()` on the
+- [x] Upgrade cred to 0.7.0; `0150` refuses `ACTION=update` below the first cred that exports `crd_store_update()`.
+- [x] `scripts/0150-store.R`: `ACTION=update STORE= KEYS=` (or `COLLECTIONS=`) calling `crd_store_update()` on the
       group library, then the same push reminder as a build; `scripts/README.md` row.
 - [ ] OCR Tredger 1984 (`ocrmypdf --deskew`) and attach it to `AHE9BFQQ` as a second PDF (keeping the scan).
 - [ ] Merge the strategy: `B2UZ32FE` into `Nechako - NECR`, `dc:replaces` `VS4P4TG6`, trash `VS4P4TG6`.

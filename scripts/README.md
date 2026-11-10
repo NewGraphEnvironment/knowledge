@@ -21,6 +21,7 @@ wf_farm_priority.js                          farm priority/crossing tables out o
 0161  reconcile farmed rows -> PSCIS, stamp watershed_group_code
 0162  spatialize -> rag_priorities.gpkg
 0150  query the rag store            ACTION=query STORE=fraser QUERY="..."
+0150  update a store in place     ACTION=update STORE=sturgeon COLLECTIONS=WEUFTSDC  (its whole build list; cred >= 0.7.0)
 
 0154  content-tag the corpus (any time after 0152)
 0156  dedup the store        (before pushing it)
@@ -242,7 +243,11 @@ A report is reachable from more than one place; using only one axis misses repor
 - The ragnar stores live in `s3://fresh-bc/rag/` with a `log.json` provenance manifest;
   `.Rprofile` points `cred` at it. Pull: `Rscript -e 'cred::crd_store_connect("fraser", dir = "data/rag")'`
   (md5-verified against the manifest). Push: `ACTION=push STORE=fraser CONFIRM=TRUE Rscript scripts/0150-store.R`
-- **Push after every local write** (`0152` ingest, `0156` dedup, a rebuild). The next verified
+- `ACTION=update` takes the same `COLLECTIONS` as the store's build line and calls cred's `crd_store_update()`: PDFs new or
+  changed since the build are ingested, documents whose source no longer resolves (trashed, replaced, taken out of the
+  collection) are dropped, the rest are kept without re-reading. Give the whole build list, or the documents of the
+  collections left out are dropped. It needs the store local (`ACTION=query VERIFY=TRUE` pulls it).
+- **Push after every local write** (`0152` ingest, `0156` dedup, a rebuild or update). The next verified
   connect replaces a local file whose md5 no longer matches the manifest with the bucket copy —
   an unpushed ingest is simply gone
 - `COLLECTIONS` takes names or 8-character Zotero collection keys and resolves them **inside the NGE group

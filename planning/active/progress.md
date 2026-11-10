@@ -10,3 +10,7 @@
   Seven branches probed by import (var set; var blank + file; file only; empty file; blank-lines file; missing file;
   neither), 0270 reads the file key through `z.API`, and `data-raw/zotero_copy_check.R` PASS (its child still uses the
   placeholder variable).
+- Phase 2: cred 0.1.0 → 0.7.0 (pak). `crd_store_update(store_path, collection | citation_keys, library)` drops any
+  document whose source no longer resolves, so `0150 ACTION=update` resolves the same `COLLECTIONS` as a build and
+  passes the union; it refuses without `crd_store_update()` in cred or without the local store. Guards probed
+  (bad action, missing store, missing COLLECTIONS).

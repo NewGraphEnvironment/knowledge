@@ -8,6 +8,12 @@
 #   (COLLECTIONS takes names or 8-character Zotero keys, resolved in the NGE group
 #    library only; GROUP_ID= for another group. An ambiguous name is refused.
 #    build needs cred >= 0.5.0, the first that resolves a key inside one library, cred#40)
+#   ACTION=update STORE=sturgeon COLLECTIONS=WEUFTSDC                      Rscript scripts/0150-store.R
+#   (update brings an existing local store up to date with Zotero through cred's
+#    crd_store_update(): new and changed PDFs are ingested, documents whose source no
+#    longer resolves are dropped, the rest are kept unread. COLLECTIONS must be the
+#    store's whole build list, as in scripts/README.md: a document outside it is dropped.
+#    Pull the store first (ACTION=query VERIFY=TRUE), push it after.)
 #   ACTION=query STORE=fraser QUERY="beaver dam culvert" TOPK=5           Rscript scripts/0150-store.R
 #   (query needs cred >= 0.4.0, the first whose crd_search() works under ragnar 0.3)
 #   (query opens an existing local store unverified; VERIFY=TRUE re-checks it
@@ -37,7 +43,7 @@
 # ---------------------------------------------------------------------------
 suppressPackageStartupMessages(library(cred))
 
-action <- match.arg(Sys.getenv("ACTION", "query"), c("build", "query", "push"))
+action <- match.arg(Sys.getenv("ACTION", "query"), c("build", "update", "query", "push"))
 store  <- Sys.getenv("STORE")
 stopifnot("STORE=<name> is required" = nzchar(store))
 store_path <- file.path("data", "rag", paste0(store, ".duckdb"))
@@ -182,14 +188,24 @@ collection_keys <- function(collections, zotero_dir = "~/Zotero",
   unique(res$citation_key)
 }
 
-if (action == "build") {
+if (action %in% c("build", "update")) {
   colls <- trimws(strsplit(Sys.getenv("COLLECTIONS"), ",")[[1]])
-  stopifnot("COLLECTIONS=<name>[,<name>] is required for build" = length(colls) > 0 && all(nzchar(colls)))
+  stopifnot("COLLECTIONS=<name>[,<name>] is required for build and update" =
+              length(colls) > 0 && all(nzchar(colls)))
   # Below cred 0.5.0 a key resolved across libraries, to trashed attachments, and to the
   # newest of several PDFs (cred#40). The library is named because a key is unique only in one.
   if (utils::packageVersion("cred") < "0.5.0") {
-    stop("ACTION=build needs cred >= 0.5.0, not ", utils::packageVersion("cred"),
+    stop("ACTION=", action, " needs cred >= 0.5.0, not ", utils::packageVersion("cred"),
          ": pak::pak(\"NewGraphEnvironment/cred\")")
+  }
+  if (action == "update") {
+    if (!exists("crd_store_update", envir = asNamespace("cred"), inherits = FALSE)) {
+      stop("ACTION=update needs a cred with crd_store_update() (0.7.0 has it), not ", utils::packageVersion("cred"),
+           ": pak::pak(\"NewGraphEnvironment/cred\")")
+    }
+    if (!file.exists(store_path)) {
+      stop(store_path, " is not here to update: pull it first with ACTION=query STORE=", store, " VERIFY=TRUE")
+    }
   }
   keys <- collection_keys(colls)
   # cred reads the live file immutable, which skips Zotero's -wal (cred#45, #127). Zotero truncates
@@ -200,10 +216,14 @@ if (action == "build") {
     warning("zotero.sqlite-wal holds ", file.size(wal), " bytes, which cred reads past (cred#45): the store ",
             "may lack what Zotero has synced since its last checkpoint", call. = FALSE)
   }
-  crd_store_build(store_path, citation_keys = keys,
-                  library = as.integer(Sys.getenv("GROUP_ID", "4733734")),
-                  overwrite = identical(Sys.getenv("OVERWRITE"), "TRUE"))
-  message("Built ", store_path, ". It is not in the bucket until ACTION=push.")
+  lib <- as.integer(Sys.getenv("GROUP_ID", "4733734"))
+  if (action == "build") {
+    crd_store_build(store_path, citation_keys = keys, library = lib,
+                    overwrite = identical(Sys.getenv("OVERWRITE"), "TRUE"))
+  } else {
+    crd_store_update(store_path, citation_keys = keys, library = lib)
+  }
+  message(if (action == "build") "Built " else "Updated ", store_path, ". It is not in the bucket until ACTION=push.")
 } else if (action == "query") {
   # cred 0.3.0's crd_search() fails on every store under ragnar 0.3.0 (cred#27).
   if (utils::packageVersion("cred") < "0.4.0") {
