@@ -21,7 +21,8 @@ knw_archive_plan(
   compare_dir,
   evidence_dir,
   build_dir,
-  vocabulary = NULL
+  vocabulary = NULL,
+  sites_dir = "data/fdis/derived"
 )
 ```
 
@@ -38,13 +39,18 @@ knw_archive_plan(
 
 - evidence_dir, build_dir:
 
-  the evidence build: `0310`'s `data/fdis/derived` and `0230`'s
-  `data/fdis/build`.
+  the evidence build: `0310`'s `data/fdis/derived` (or a tagged
+  `EVIDENCE_DIR`) and `0230`'s `data/fdis/build`.
 
 - vocabulary:
 
   passed to
   [`knw_archive_setup()`](https://newgraphenvironment.github.io/knowledge/reference/knw_archive_setup.md).
+
+- sites_dir:
+
+  where `0240` writes `fdis_sites.csv`, which is read from here whatever
+  `evidence_dir` is, and held to `build_dir`'s `sites.rds` (#136).
 
 ## Value
 

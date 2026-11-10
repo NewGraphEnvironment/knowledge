@@ -80,7 +80,8 @@ table its record does not describe.</p>
 <span>  <span class="va">compare_dir</span>,</span>
 <span>  <span class="va">evidence_dir</span>,</span>
 <span>  <span class="va">build_dir</span>,</span>
-<span>  vocabulary <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  vocabulary <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  sites_dir <span class="op">=</span> <span class="st">"data/fdis/derived"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -99,11 +100,18 @@ tracked <code>data/tune</code> and <code>data/compare</code>, or a staged copy).
 
 <dt id="arg-evidence-dir-build-dir">evidence_dir, build_dir<a class="anchor" aria-label="anchor" href="#arg-evidence-dir-build-dir"></a></dt>
 <dd><p>the evidence build: <code>0310</code>'s
-<code>data/fdis/derived</code> and <code>0230</code>'s <code>data/fdis/build</code>.</p></dd>
+<code>data/fdis/derived</code> (or a tagged <code>EVIDENCE_DIR</code>) and <code>0230</code>'s
+<code>data/fdis/build</code>.</p></dd>
 
 
 <dt id="arg-vocabulary">vocabulary<a class="anchor" aria-label="anchor" href="#arg-vocabulary"></a></dt>
 <dd><p>passed to <code><a href="knw_archive_setup.html">knw_archive_setup()</a></code>.</p></dd>
+
+
+<dt id="arg-sites-dir">sites_dir<a class="anchor" aria-label="anchor" href="#arg-sites-dir"></a></dt>
+<dd><p>where <code>0240</code> writes <code>fdis_sites.csv</code>, which is read from
+here whatever <code>evidence_dir</code> is, and held to <code>build_dir</code>'s <code>sites.rds</code>
+(#136).</p></dd>
 
 </dl></div>
     <div class="section level2">
