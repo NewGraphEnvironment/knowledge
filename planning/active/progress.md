@@ -73,3 +73,13 @@
   relabel and patch trash nothing): `keep` now refuses a kept copy with no stored file, and `merge-items` refuses an
   item that holds no stored PDF. Both guards proven with a mock (refuse, no PATCH sent; pass on correct input); the
   verdicts dry run still reads 32 of 32 done.
+- Code-check round 3 (`review-round3.md`): 1 bug, 1 fragile, both inside earlier fixes. Mechanism (the reviewer's):
+  each action judged the surviving copy by a different handle (filename, list position, any PDF) from the trash set's
+  keys, and never checked the survivor is outside that set or the item's own. Fixed once: `trash_all()` (every key
+  the item's child, the survivor outside the set, a live stored child, and the md5 of bytes just made), used by
+  merge, keep and replace; `own()` also runs in dry runs. Enumeration ends the loop: `trash(` is called only in
+  `trash_all()` and in merge-items (which trashes an item and checks the kept item holds a stored PDF); the reach table
+  in review-round3.md marks 0270, 0150 and 0153 closed. Mock: round 3's four cases now refuse or do the right thing,
+  normal paths pass; the real verdicts dry run reads 32 of 32 done, 0 failed.
+  Pre-existing, outside this diff, reported for the PR: 0153's `existing_report_ids` counts a fileless attachment left
+  by a stopped upload as filed.

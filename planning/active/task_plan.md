@@ -134,8 +134,8 @@ Order from the plan review: every write lands here, then Phase 6 quits Zotero an
       unexplained drop
 - [x] `0280` passes after the new evidence rows; the meaning audit's rounds are recorded in findings
 - [x] `devtools::test()` passes (registers, vignette data untouched)
-- [ ] `/code-check branch` clean (three-round floor)
-- [ ] PWF checkboxes match landed work
+- [x] `/code-check branch` clean (three-round floor)
+- [x] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion
 
 ## Owed at the end (reported, done after merge)

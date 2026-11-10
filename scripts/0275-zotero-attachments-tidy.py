@@ -126,16 +126,41 @@ def creators(s, role="author"):
     return out
 
 
-def stored(item, fname):
-    """The live attachments of `item` named `fname`. One with no file on the server is an
-    upload that stopped after 0153's upload() created its item, so it is refused: counting it
+def stored(item, fname, exclude=()):
+    """The live attachments of `item` named `fname`, other than the row's own `exclude` keys (a
+    part or an original can carry the name the new file is given). One with no file on the server
+    is an upload that stopped after 0153's upload() created its item, so it is refused: counting it
     as the merged or replacement file would trash the originals with no copy left."""
-    named = [c for c in children(item) if c.get("filename") == fname and not c.get("deleted")]
+    named = [c for c in children(item) if c.get("filename") == fname and not c.get("deleted")
+             and c["key"] not in exclude]
     empty = [c["key"] for c in named if not c.get("md5")]
     if empty:
         raise RuntimeError(f"{', '.join(empty)} is named {fname} but holds no file (an upload that stopped): "
                            "trash it and re-run")
     return named
+
+
+def own(item, keys):
+    """Refuse a row naming an attachment that is not this item's child (a key typed from another
+    item): checked in dry runs too, so a typo shows before anything is written."""
+    for k in keys:
+        if get(k).get("parentItem") != item:
+            raise RuntimeError(f"{k} is not an attachment of {item}")
+
+
+def trash_all(item, keys, survivor, md5=None):
+    """Trash `keys`, the item's own attachments, only while `survivor` stays: outside the trash
+    set, a live child of the item with a stored file, and, where the bytes were just made, holding
+    them. Every action that trashes a copy goes through here (merge-items trashes an item, and
+    checks its own)."""
+    own(item, keys)
+    s = get(survivor)
+    if survivor in keys or s.get("parentItem") != item or s.get("deleted") or not s.get("md5"):
+        raise RuntimeError(f"{survivor} is not a stored copy of {item} that outlives trashing {', '.join(keys)}")
+    if md5 and s["md5"] != md5:
+        raise RuntimeError(f"{survivor} holds md5 {s['md5']}, not the {md5} just made")
+    for k in keys:
+        trash(k)
 
 
 def npages(path):
@@ -144,7 +169,8 @@ def npages(path):
 
 
 def do_merge(row, parts, dry):
-    named = stored(row["item"], row["file"])
+    own(row["item"], parts)
+    named = stored(row["item"], row["file"], exclude=parts)
     left = [a for a in parts if live(a)]
     if len(named) == 1 and not left:
         return "done"
@@ -153,6 +179,7 @@ def do_merge(row, parts, dry):
     if dry:
         return (f"would merge {len(parts)} parts into {row['file']}" if not named
                 else f"would trash {len(left)} parts (merged file present)")
+    made = None
     if not named:
         with tempfile.TemporaryDirectory() as td:
             paths = []
@@ -169,13 +196,20 @@ def do_merge(row, parts, dry):
             if npages(out) != want:
                 raise RuntimeError(f"merged {npages(out)} pages, the parts hold {want}")
             with open(out, "rb") as f:
-                upload(row["item"], f.read(), row["file"])
-    for a in left:
-        trash(a)
+                data = f.read()
+            made = hashlib.md5(data).hexdigest()
+            upload(row["item"], data, row["file"])
+        named = stored(row["item"], row["file"], exclude=parts)
+        if len(named) != 1:
+            raise RuntimeError(f"{len(named)} live attachments named {row['file']} after the upload")
+    trash_all(row["item"], left, named[0]["key"], made)
     return f"merged {len(parts)} parts into {row['file']}"
 
 
 def do_keep(row, atts, dry):
+    if atts[0] in atts[1:]:
+        raise RuntimeError(f"{atts[0]} is both the copy to keep and one to trash")
+    own(row["item"], atts)
     gone = [a for a in atts[1:] if live(a)]
     kept = get(atts[0])
     if kept.get("deleted"):
@@ -187,8 +221,7 @@ def do_keep(row, atts, dry):
         return "done"
     if dry:
         return f"would keep {atts[0]} and trash {', '.join(gone)}"
-    for a in gone:
-        trash(a)
+    trash_all(row["item"], gone, atts[0])
     return f"kept {atts[0]}, trashed {', '.join(gone)}"
 
 
@@ -242,19 +275,30 @@ def do_patch(row, fields, dry):
 
 
 def do_replace(row, atts, dry):
-    named = stored(row["item"], os.path.basename(row["file"]))
+    own(row["item"], atts)
+    fname = os.path.basename(row["file"])
+    named = stored(row["item"], fname, exclude=atts)
+    path = os.path.join(ROOT, row["file"])
+    local = None
+    if os.path.isfile(path):
+        with open(path, "rb") as f:
+            local = hashlib.md5(f.read()).hexdigest()
+    if named and local and named[0]["md5"] != local:
+        raise RuntimeError(f"{named[0]['key']} is named {fname} but is not {row['file']} (md5 differs)")
     if named and not live(atts[0]):
         return "done"
-    path = os.path.join(ROOT, row["file"])
-    if not named and not os.path.isfile(path):
+    if not named and not local:
         raise RuntimeError(f"{row['file']} is not here to upload")
     if dry:
         return f"would upload {row['file']} and trash {atts[0]}" if not named else f"would trash {atts[0]}"
     if not named:
         with open(path, "rb") as f:
-            upload(row["item"], f.read(), os.path.basename(row["file"]))
-    trash(atts[0])
-    return f"replaced {atts[0]} with {os.path.basename(row['file'])}"
+            upload(row["item"], f.read(), fname)
+        named = stored(row["item"], fname, exclude=atts)
+        if len(named) != 1:
+            raise RuntimeError(f"{len(named)} live attachments named {fname} after the upload")
+    trash_all(row["item"], [atts[0]], named[0]["key"], local)
+    return f"replaced {atts[0]} with {fname}"
 
 
 def do_merge_items(row, atts, dry):
