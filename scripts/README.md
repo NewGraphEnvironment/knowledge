@@ -21,6 +21,7 @@ wf_farm_priority.js                          farm priority/crossing tables out o
 0161  reconcile farmed rows -> PSCIS, stamp watershed_group_code
 0162  spatialize -> rag_priorities.gpkg
 0150  query the rag store            ACTION=query STORE=fraser QUERY="..."
+0150  update a store in place     ACTION=update STORE=sturgeon COLLECTIONS=WEUFTSDC  (its whole build list; cred >= 0.7.0)
 
 0154  content-tag the corpus (any time after 0152)
 0156  dedup the store        (before pushing it)
@@ -151,7 +152,9 @@ wf_farm_priority.js                          farm priority/crossing tables out o
       (--collection flow: Fisheries/flow, from data/flow_members.csv and data/flow_additions.csv)
       (--parent <key> for a collection under another parent: --collection grayling --parent 9U54XAND is species/grayling)
       (--collection sturgeon --parent 9U54XAND: species/sturgeon, from data/sturgeon_members.csv and _additions.csv)
-      (not live until #151 has retitled KSCZP9JS: until then its dry run prints one `would create`, the 2008 report again)
+      (--collection statistics --parent top: the top-level statistics collection, from data/statistics_*.csv, #95)
+0275  carry out data/zotero_attachment_verdicts.csv on the group's attachments   --dry-run first, then live
+      (merge an item's report parts into one PDF, keep one copy, split a separate document to its own item, #126, #151)
 0150  ACTION=build STORE=habitat_modelling COLLECTIONS="U9ZCZ6RN,RXNFPBPH,VHWEK6RE,GELFSUTU,9U54XAND,SW2RXUJC,DQP29KU7,X29BX4U8,W4425VK5,545K8HP4"
       (habitat_modelling, chinook, bull_trout, grayling, species, temperature, wedzin_kwa_chinook, hydrology and the
       two salmon collections, by key)                                                    then ACTION=push
@@ -159,6 +162,10 @@ wf_farm_priority.js                          farm priority/crossing tables out o
 0150  ACTION=build STORE=sturgeon COLLECTIONS=WEUFTSDC                                     then ACTION=push
 0150  ACTION=build STORE=temperature COLLECTIONS=SW2RXUJC                                  then ACTION=push
 0150  ACTION=build STORE=flow COLLECTIONS=FWTJDD8Z                                         then ACTION=push
+0150  ACTION=build STORE=statistics COLLECTIONS=LP4R4VYR                                   then ACTION=push
+      (McElreath 2020, Gelman et al. 2013 (BDA3), Hill 2025 and the collection's other PDFs; Wood's GAM book and
+      MacKenzie et al.'s occupancy book join when a PDF is in hand, #95)
+      (after a library change, ACTION=update with the same COLLECTIONS brings a store up to date instead)
       (a rebuild over an existing local store needs OVERWRITE=TRUE; ACTION=push needs CONFIRM=TRUE to upload)
 0280  verify data/literature_evidence.csv and data/ip_model_registry.csv against their PDFs, and the
       model_id link between them (gate; read with knw_literature_read() / knw_ip_read())
@@ -209,6 +216,8 @@ A report is reachable from more than one place; using only one axis misses repor
   EcoCat serves for it attached** — main report + appendices + map sheets + data files
 - `python3 0153-reports-to-zotero.py --from-store data/rag/fraser.duckdb` (or `--reports COTR:137,157`)
 - Idempotent: reports already in the collection are skipped; Zotero dedups files by md5
+- The Web API key comes from `ZOTERO_API_KEY`, or when that is unset from the first non-blank line of the file
+  `ZOTERO_API_KEY_FILE` names (#168); `0270` reads it through the same `api_key()`. Neither set: exits at once.
 - **Never skip this step.** The rag store holds only extracted text and the harvest dir is in `/tmp`;
   Zotero is what a store rebuild (`0150-store.R`) reads. A group harvested + ingested but not filed silently vanishes
   on the next rebuild or on another machine. (Learned the hard way — COTR/FRAN/LCHL/NECR were
@@ -242,7 +251,13 @@ A report is reachable from more than one place; using only one axis misses repor
 - The ragnar stores live in `s3://fresh-bc/rag/` with a `log.json` provenance manifest;
   `.Rprofile` points `cred` at it. Pull: `Rscript -e 'cred::crd_store_connect("fraser", dir = "data/rag")'`
   (md5-verified against the manifest). Push: `ACTION=push STORE=fraser CONFIRM=TRUE Rscript scripts/0150-store.R`
-- **Push after every local write** (`0152` ingest, `0156` dedup, a rebuild). The next verified
+- `ACTION=update` takes the same `COLLECTIONS` as the store's build line and calls cred's `crd_store_update()`: PDFs new or
+  changed since the build are ingested, documents whose source no longer resolves (trashed, replaced, taken out of the
+  collection) are dropped, the rest are kept without re-reading. Give the whole build list, or the documents of the
+  collections left out are dropped. It needs the store local (`ACTION=query VERIFY=TRUE` pulls it) and the store's
+  embedder answering, refuses a store holding any document from outside Zotero storage (`storage/<key>/`), which never
+  resolves and would be dropped: all of `fraser`, `peace` and `pine`), and prints the document counts before and after and every document it dropped.
+- **Push after every local write** (`0152` ingest, `0156` dedup, a rebuild or update). The next verified
   connect replaces a local file whose md5 no longer matches the manifest with the bucket copy —
   an unpushed ingest is simply gone
 - `COLLECTIONS` takes names or 8-character Zotero collection keys and resolves them **inside the NGE group
@@ -457,6 +472,16 @@ The cited basis for CH and BT habitat thresholds (#19). Not per watershed group.
   recovery documents, the NWSRI's reports and curated Nechako mainstem history. `0150` reads only the items filed
   directly in each collection it is given, so `species` (`9U54XAND`) does not bring `species/sturgeon` into
   `habitat_modelling`.
+  The `statistics` store is built from the top-level `statistics` collection (`LP4R4VYR`, `--parent top`, #95): the
+  texts the tuning method is read against (#185).
+- `0275` carries out `data/zotero_attachment_verdicts.csv`, one decided row per item (#126, #151): `merge` joins an
+  item's report, appendices or parts into one PDF in reading order (each part downloaded and checked against its
+  md5, joined with `qpdf --deterministic-id`) and trashes the parts; `keep` keeps one copy and trashes the rest;
+  `split` moves a separate document to a new item in the parent's collections; `relabel`, `patch` and `replace` fix
+  an attachment's type, an item's fields or its file; `merge-items` is the duplicate recipe under "Zotero access is
+  local, except for filing" in CLAUDE.md. A row is done when its end state holds, so a re-run after a crash finishes
+  the row. It prints the attachments it added and trashed: a cred-built store that holds one is brought up to date
+  with `0150 ACTION=update`; a harvest store waits for its next `0152` build.
 - `data/literature_evidence.csv` has one row per value a source gives: species, stage, form, variable, the
   model parameter it bears on, bound, value, unit, `metric`, kind, region, key, page, verbatim quote,
   `quote_source`, scale, cited source and `model_id`. `kind = none` records a search that found nothing.

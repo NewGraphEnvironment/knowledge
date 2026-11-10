@@ -175,8 +175,8 @@ interfere <- function(event, db, other) {
          touch_wal = Sys.setFileTime(paste0(db, "-wal"), file.mtime(paste0(db, "-wal")) + 10),
          checkpoint = { stopifnot(file.copy(other, db, overwrite = TRUE)); unlink(paste0(db, "-wal")) })
 }
-# 0270 is loaded as 0270 loads 0153; importing it imports 0153, which exits without ZOTERO_API_KEY,
-# so the child gets a placeholder key. db() makes no API call.
+# 0270 is loaded as 0270 loads 0153; importing it imports 0153, which exits without a key
+# (ZOTERO_API_KEY, or the file ZOTERO_API_KEY_FILE names), so the child gets a placeholder key. db() makes no API call.
 py_guard <- function(file) {
   code <- c("import importlib.util, sys",
             sprintf("spec = importlib.util.spec_from_file_location('z0270', %s)", shQuote(file)),

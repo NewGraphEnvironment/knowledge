@@ -94,6 +94,10 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   collections, so the files list what the cleanup ensured, and 0270 never removes a member; #122), and
   `sturgeon_{members,additions}.csv` (the same for `species/sturgeon`, the sole input of the `sturgeon` store: the
   White Sturgeon recovery documents, the NWSRI's reports and curated Nechako mainstem history; #124), and
+  `statistics_{members,additions}.csv` (what `0270 --collection statistics --parent top` puts in the top-level
+  `statistics` collection, the sole input of the `statistics` store: the texts the method is read against; #95), and
+  `zotero_attachment_verdicts.csv` (what `0275` did to each group item with several PDFs or wrong fields, one decided
+  row per item, kept as the record; #126, #151), and
   `thresholds.csv` and `thresholds_groups.csv` (the tuned thresholds per species × stage × component in link's
   parameter names, with the near-river pair's scope where a rule has one (`near_river_scope`, from the comparison's
   tuned structure), and the groups each rule was scored on; `0325`, #57, #73). `data/tune/` holds the tuning run's
@@ -125,7 +129,8 @@ private repositories. This file is held to all of it. `planning/` is a record of
 name what was removed, hosts and our other repositories included, but from 2026-10-16 it carries no
 client or project identifiers and no home paths; the `planning/archive/` and `scripts/logs/` written
 before then are left as they were. Context that needs any of them belongs in a private coordination
-repo, not here. Credentials come from the environment (`PG*`, `ZOTERO_API_KEY`, AWS). The #56
+repo, not here. Credentials come from the environment (`PG*`, `ZOTERO_API_KEY` or the file `ZOTERO_API_KEY_FILE` names,
+AWS). The #56
 archive's `public_sweep.py` is the check: it searches tracked files outside `planning/archive/` and
 `scripts/logs/` (`planning/active/` for client slugs and local paths only), issue and PR text,
 retitles and a branch's commit messages, and with `history` every earlier revision GitHub keeps.
@@ -150,6 +155,11 @@ without it every package built from CRAN source (#94). `cred::crd_store_connect(
 and md5-verifies; `cred::crd_store_push()` uploads and merges the `log.json` manifest. After a
 local write (`0152` ingest, `0156` dedup) the local md5 no longer matches the manifest, and the
 next `verify = TRUE` connect **replaces the local file with the bucket copy**. Push first.
+A push that failed partway (a dropped connection) leaves the same state, so read each push's result before any verified
+connect: #172's reconnect after one replaced an updated `habitat_modelling` with the older bucket copy. To bring a
+cred-built store up to date after a library change, `0150 ACTION=update` with the store's whole build list
+(`scripts/README.md`): cred's `crd_store_update()` drops every document outside the keys it is given, so `0150` refuses
+a store holding any document from outside Zotero storage (`fraser`, `peace`, `pine`).
 
 `crd_store_build()` reads the local `~/Zotero/zotero.sqlite` and names documents by Better BibTeX
 citation key. That is a different identity from the harvest's `<EXTENT>__<reportId>.pdf`, which
@@ -207,8 +217,9 @@ They are the stale submitted versions. They reach Zotero from the report repos.
 
 Store builds read `~/Zotero/zotero.sqlite` read-only, so they need a synced Zotero data directory
 and no key. `0153` and `0270` write to the group library through the Web API with the key in
-`ZOTERO_API_KEY`, and exit at once when it is unset or empty, because an empty key otherwise
-reads as a JSON parse error three calls later. Items `0270` creates through the Web API sync and
+`ZOTERO_API_KEY`, or when that is unset the first non-blank line of the file `ZOTERO_API_KEY_FILE` names (#168,
+`0153`'s `api_key()`, which `0270` reaches through its load of `0153`), and exit at once when neither gives a key,
+because an empty key otherwise reads as a JSON parse error three calls later. Items `0270` creates through the Web API sync and
 get Better BibTeX keys without a Zotero restart (measured 2026-10-02), so `0270` → `0150` build →
 `0280` runs end to end in one sitting, except that the build's cred reads miss what Zotero has not
 checkpointed (NewGraphEnvironment/cred#45): `0150` warns when the `-wal` is not empty.

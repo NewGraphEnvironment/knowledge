@@ -28,7 +28,8 @@ dedups attachments by md5, so re-runs are cheap.
 INPUT   REPORTS=COTR:48,FRAN:80,...  -- or --  --from-store data/rag/fraser.duckdb
         (--from-store reads `EXTENT__reportId.pdf` origins straight out of a
          ragnar store, which is how we recover ids after a harvest dir is gone)
-        ZOTERO_API_KEY environment variable (write access to the group) ; group 4733734
+        ZOTERO_API_KEY environment variable (write access to the group), or when it is
+        unset the first non-blank line of the file ZOTERO_API_KEY_FILE names ; group 4733734
 OUTPUT  items + attachments in Zotero; a per-report status line; nothing local.
 ---------------------------------------------------------------------------
 """
@@ -46,9 +47,30 @@ COLLECTIONS = {
     "NECR": "977GE58E",
 }
 DOC_RE = re.compile(r'/pub/acat/documents/r\d+/[^"\']+?\.(?:pdf|zip|xls|xlsx|doc|docx|csv|txt)', re.I)
-API = os.environ.get("ZOTERO_API_KEY", "").strip()
-if not API:
-    sys.exit("ZOTERO_API_KEY is unset or empty: set it to a Zotero Web API key with write access to the group")
+def api_key():
+    """The Web API key: ZOTERO_API_KEY when set and not blank, else the first non-blank
+    line of the file ZOTERO_API_KEY_FILE names. Exits when neither gives one, because an
+    empty key otherwise reads as a JSON parse error three calls later. 0270 reaches this
+    through its load of 0153, so the two scripts cannot read the key differently."""
+    key = os.environ.get("ZOTERO_API_KEY", "").strip()
+    if key:
+        return key
+    path = os.environ.get("ZOTERO_API_KEY_FILE", "").strip()
+    if not path:
+        sys.exit("ZOTERO_API_KEY is unset or empty and ZOTERO_API_KEY_FILE is unset: set one to a Zotero "
+                 "Web API key with write access to the group (the file's first non-blank line)")
+    try:
+        with open(os.path.expanduser(path), encoding="utf-8-sig") as f:   # -sig: a leading BOM is not the key
+            key = next((ln.strip() for ln in f if ln.strip()), "")
+    except (OSError, UnicodeDecodeError) as e:
+        sys.exit(f"ZOTERO_API_KEY is unset or empty and ZOTERO_API_KEY_FILE cannot be read: "
+                 f"{getattr(e, 'strerror', None) or e.reason}")
+    if not key:
+        sys.exit("ZOTERO_API_KEY is unset or empty and the file ZOTERO_API_KEY_FILE names has no key in it")
+    return key
+
+
+API = api_key()
 
 # ---- document selection policy -------------------------------------------
 # An EcoCat report is 3-19 documents (main report + appendices + scanned 1:20k map
