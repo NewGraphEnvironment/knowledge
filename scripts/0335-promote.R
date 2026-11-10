@@ -140,7 +140,8 @@ if (length(ak) && undo) {
 } else if (length(ak) && !archive_now) {
   message("BUNDLES=FALSE without the evidence here: ", paste(ak, collapse = ", "), " moved but NOT archived. On this ",
           "machine (it alone holds their grade tables), with a copy of the run's evidence: KEYS=", paste(ak, collapse = ","),
-          " PROMOTED=TRUE EVIDENCE_DIR=<its derived/> BUILD_DIR=<its build/> Rscript scripts/0336-archive.R.")
+          " PROMOTED=TRUE EVIDENCE_DIR=<its derived/> BUILD_DIR=<its build/> SITES_DIR=<the derived/ holding its ",
+          "fdis_sites.csv> Rscript scripts/0336-archive.R.")
 } else if (length(ak)) {
   tryCatch({
     knw_archive_put(knw_archive_plan(ak, "data/tune", "data/compare", "data/fdis/derived", build_dir), promoted = TRUE)

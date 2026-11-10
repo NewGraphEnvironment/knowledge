@@ -24,8 +24,8 @@ S3, a database or GitHub.
   `public_sweep.py:40-41, 62-63` cut CLAUDE.md at `# Agent Operating Rules` before scanning. The rest of the file is
   still in the repo and becomes public with it. Only the pkgdown site drops CLAUDE.md. Running the sweep's own patterns
   over the part after the marker gives 39 hits:
-  - 16 `private_repo`: `soul#366`, `soul#352`, `soul#52`, `rfp#268`, `rtj#322`, `fish_passage_template_reporting#236`,
-    and two `https://github.com/NewGraphEnvironment/soul/...` links, which 404 for the public;
+  - 16 `private_repo`: an internal issue, an internal issue, an internal issue, an internal issue, an internal issue, `fish_passage_template_reporting#236`,
+    and two `an internal repository...` links, which 404 for the public;
   - 15 `local_path`: `<soul checkout>/conventions/...` (eight times), an absolute home path, and
     an author handle with a date;
   - 6 `host`: `m1 0.0391 vs cypher 0.0872` at CLAUDE.md:2611, `tailnet`, and `Tailscale` (three);
@@ -55,7 +55,7 @@ S3, a database or GitHub.
   after `substring(…, 34)` and the `./` strip. They are the same set, plus `MANIFEST.md5` and `README.md`, both fetched
   explicitly, so the key-by-key fetch gets everything the sync got. Keys with spaces and parentheses go through
   `shQuote`. Anonymous GetObject currently returns 403 on `fdis/` and `knowledge/fdis/v1/`. That is expected until
-  rtj#397's policy is applied after merge, so the NO_SIGN paths cannot be exercised end to end yet.
+  an internal issue's policy is applied after merge, so the NO_SIGN paths cannot be exercised end to end yet.
 - **Round-1 fix 3 (0299 schema guard).**
   - `prior$files[[NA_integer_]]` is `NULL`, so a new table is caught by the set difference and skipped in the loop, as
     intended.

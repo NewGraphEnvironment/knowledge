@@ -1,4 +1,4 @@
-# soul#438 code-check, round 3
+# An internal issue code-check, round 3
 
 ## Checklist read
 

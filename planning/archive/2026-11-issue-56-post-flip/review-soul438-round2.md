@@ -1,4 +1,4 @@
-# Review: soul#438 round 2 (comms_peers.md: remove `knowledge` from the peer list)
+# Review: an internal issue round 2 (comms_peers.md: remove `knowledge` from the peer list)
 
 ## Checklist read
 

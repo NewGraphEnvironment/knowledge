@@ -24,7 +24,7 @@ README example reruns byte-for-byte; caption's "drops more than it adds" holds (
 cffr recipe in a temp copy reproduces `CITATION.cff` identically (cffr 1.4.2); `inst/CITATION` renders through
 `readCitationFile()` and pkgdown's `read_citation()`; pkgdown with `inst/CITATION` writes only `authors.html`
 (already allowed), so the net-unchanged allowlist is right; tagline = Title = GitHub About; Ecosystem rows match
-soul#416's decided rows; all 19 external links answer 200; FDIS extract, `MANIFEST.md5`, a data file and the v2
+an internal issue's decided rows; all 19 external links answer 200; FDIS extract, `MANIFEST.md5`, a data file and the v2
 `manifest.json` are anonymously readable, and `fdis/README.md` links the manifest; release tags exist for the pin
 line; every literature row with a value carries a quote; `compare_map.R` `title` roxygen matches lines 71/158/161;
 `new_graphiti` (hex icon URL) is public; NOTICE's file list covers every tracked `data/` file I enumerated.

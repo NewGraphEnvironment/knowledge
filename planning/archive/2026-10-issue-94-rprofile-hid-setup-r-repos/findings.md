@@ -44,7 +44,7 @@ log says `Image: ubuntu-26.04`.
 drift 38592249287 and fly 37670553822 (6 h default kills): run and job conclusion `cancelled`; the check run's
 annotations carry "The job has exceeded the maximum execution time of 6h0m0s". So a kill at 30 or 15 min is invisible
 to a `conclusion == "failure"` filter and reads as superseded in `/gh-pr-merge` step 10. Not a defect of this diff
-(the 6 h kill was the same), but the gate's "a stall fails" was wrong; routed to soul#541.
+(the 6 h kill was the same), but the gate's "a stall fails" was wrong; routed to an internal issue.
 
 ## The PR run timed out, and every package comes from CRAN source (measured 2026-10-26 22:13–22:25Z)
 

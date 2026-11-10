@@ -14,7 +14,7 @@ scratchpad only. Nothing in the repo was edited except this file, and nothing wa
   second `const A`).
 
 - **[bug] scripts/0230-fdis-load.R:65-67**: the `NO_SIGN=TRUE` path cannot work. `aws s3 sync s3://fresh-bc/fdis/`
-  always lists its source (ListObjectsV2). rtj#397, the bucket-policy change this relies on, explicitly grants "No
+  always lists its source (ListObjectsV2). An internal issue, the bucket-policy change this relies on, explicitly grants "No
   ListBucket in prefix mode", and the bucket refuses anonymous listing today:
   `aws s3 ls s3://fresh-bc/fdis/ --no-sign-request` returns AccessDenied on ListObjectsV2. An already-public prefix does
   the same: anonymous `?list-type=2&prefix=discharge/` returns 403, while `discharge/fwa/v1/manifest.json` returns 200.

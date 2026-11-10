@@ -177,17 +177,17 @@ reports cross-filed under PG-codes, with no PDF. **Harvest gotcha:** dedup EcoCa
 prefer the PDF-bearing F-code entry over the record-only PG-code twin (the backfill grabbed the empty
 twins). Filed the 4 real ones to mackenzie + peace.duckdb.
 
-**Versioning (soul#40):** the EcoCat PDF is the OFFICIAL SUBMITTED snapshot at deliverable time — it
+**Versioning:** the EcoCat PDF is the OFFICIAL SUBMITTED snapshot at deliverable time — it
 LAGS the repo's latest render (reports are living/versioned via NEWS.md).
 
 **DECISION (Al): do NOT harvest NGE's own reports from EcoCat — those PDFs are STALE and clutter Zotero.**
 I deleted the 5 I'd dumped (60017/62435/63072/63248/59039). NGE reports must be **repo-sourced (latest
 render), version-stamped, and BBT-keyed**, managed via a release-triggered sync (the "drift" GH Action
-pattern soul#48 + citation-cff soul#39/#56 + zotero-api). EcoCat keeps the frozen annual official copy;
+pattern an internal issue + citation-cff an internal issue/#56 + zotero-api). EcoCat keeps the frozen annual official copy;
 our working Zotero holds the current repo version. **Harvest rule:** EXCLUDE author "New Graph
 Environment" / "Irvine" (and the FWCP F-code deliverables) from the EcoCat harvest so we don't re-clutter.
 NOTE: peace.duckdb still contains the 5 stale NGE PDFs until its next Zotero-sourced rebuild (0151) —
-reconcile then. Related: xciter (citekeys), soul#40 (versioning), Zenodo (per-version DOIs, optional).
+reconcile then. Related: xciter (citekeys), an internal issue (versioning), Zenodo (per-version DOIs, optional).
 
 ## CLIR
 

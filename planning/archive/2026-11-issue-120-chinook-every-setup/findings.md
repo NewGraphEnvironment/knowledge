@@ -207,4 +207,4 @@ captures a broad `git add` had swept into a commit; untracked again in `ebda176`
 | Error | Resolution |
 |-------|------------|
 | A `until ! pgrep -f "0310_run.R"` waiter never exits: the pattern matches the waiter's own command line (code-check-shell's trap) | Stopped both waiters; waited on the background task's own notification |
-| `/planning-init`'s `gh_rest.sh` fails to parse under macOS `/bin/bash` 3.2 (line 300, `case` inside `$( )`) | Ran the skill's blocks under Homebrew bash; filed soul#725 |
+| `/planning-init`'s `gh_rest.sh` fails to parse under macOS `/bin/bash` 3.2 (line 300, `case` inside `$( )`) | Ran the skill's blocks under Homebrew bash; filed an internal issue |

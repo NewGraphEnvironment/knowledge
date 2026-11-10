@@ -54,7 +54,7 @@ BOWR/MCGR and simply not run for COTR/FRAN/LCHL/NECR; since the harvest dir is `
 | `0160` enrich + KML/GPKG per group | **Superseded** — replaced by `0161` unified reconcile + `0162` single-layer spatialize covering all 9 groups at once |
 | Floodplain literature pass | **Partial** — `0154` tagging surfaces 10 floodplain-tagged documents; the dedicated `keyword_queries` sweep was never run |
 | NGE own reports: don't harvest from EcoCat | **Policy done** (CLAUDE.md + memory), **Action not built** — repo→Zotero sync with pinned citekeys still open |
-| Citekey hygiene (dedup NGE entries, pin keys) | **Open** — soul#40 |
+| Citekey hygiene (dedup NGE entries, pin keys) | **Open** — an internal issue |
 | Reconcile `peace.duckdb` (5 stale NGE PDFs) | **Open**, and now compounded: the store is 113/117 Zotero-key-named with no group attribution, so it was deliberately excluded from the S3 sync |
 | Dedup EcoCat duplicate records in harvest | **Partial** — `0156` dedups the *store*; the harvest-level F-code vs record-only PG-code twin dedup is not done |
 | Architecture decision + PR/merge + archive PWF | **PRs merged, PWF archived (this commit). Architecture decision NOT made** — which reporting repo owns the final output is still undecided |
@@ -65,7 +65,7 @@ BOWR/MCGR and simply not run for COTR/FRAN/LCHL/NECR; since the harvest dir is `
 - **#207** — sync derived products to `s3://fresh-bc` with `log.json` (RAG half delivered in `0157`; FISS GPKG half open)
 - **#208** — clean-room pipeline validation on UPCE from the M1; blocked on the scoped read key
 - **#199** — FISS `.xls` → spatial No-Fish-Captured layer; `0154` shows 50 documents carrying NFC signals
-- **rtj#194** — read-only IAM key scoped to `rag/*`; the hard blocker for #208
+- **an internal issue** — read-only IAM key scoped to `rag/*`; the hard blocker for #208
 
 ## Note
 

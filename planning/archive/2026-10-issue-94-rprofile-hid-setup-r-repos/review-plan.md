@@ -19,7 +19,7 @@ Taken from the agent's reply; written here by the session (Plan agents cannot wr
   attempt's log.
 - **Acceptance** — the PR run skips deploy, so deploy on 26.04 is shown only after merge. → Owed item.
 - **Scope** — a job-level timeout covers every step and frees the concurrency group; a timeout during deploy or
-  `git push` leaves no half-written state. The PR run is soul#541's probe on `ubuntu-latest`. → Report the result
+  `git push` leaves no half-written state. The PR run is an internal issue's probe on `ubuntu-latest`. → Report the result
   there.
 
 Checked: `workflow_dispatch` is a trigger in `update-citation-cff.yaml` on main; run 40400891471 still in

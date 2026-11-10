@@ -43,7 +43,7 @@ not part of this issue. They predate this branch and were left in place.
   two `curl` calls per report inside subagents, and `curl` was unallowed. Fixed in
   `.claude/settings.local.json` (machine-local by decision — a tracked allowlist auto-applies on
   pull and is a commit-borne escalation path). Cross-machine sync filed as
-  NewGraphEnvironment/rtj#272.
+  an internal issue.
 - B2 groundwork: paged all 253 Zotero collections (a default page returns 100 — the absence
   trap), searched for pre-existing Peace-region collections under any name, found none covering
   Upper Peace, and created `upper peace - UPCE` (`WKUMAXBK`) under `mackenzie`.
@@ -58,7 +58,7 @@ not part of this issue. They predate this branch and were left in place.
 - Phase 2 proved the cold-path store pull; Phase 3 found UPCE has no PSCIS data in any of the
   four layers, confirmed against a positive control.
 - Filed the cred search bug as NewGraphEnvironment/cred#27 (list columns vs `as.numeric`), and
-  the cross-machine permission sync as NewGraphEnvironment/rtj#272.
+  the cross-machine permission sync as an internal issue.
 - **Parked #4 here by decision.** The remaining phases are the expensive half (report harvest +
   LLM farm) on a subject whose data is mainstem dam sampling — wrong scale for crossing work.
   The cheap half already produced the corrections the issue calls its primary deliverable.

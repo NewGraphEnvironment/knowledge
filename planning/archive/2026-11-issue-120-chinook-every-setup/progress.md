@@ -18,5 +18,5 @@
 - Phase 2 code `bd2c7d0`: gradient sources in `knw_link_segments()` (BULK: 42,458 segments, identical but for the
   gradient; parent differs on 10,053, Atlas on 18,509), grading on the curve's gradient, `knw_compare_rules(gradient=)`,
   `0320 SETUP=1`, `0330` on the run's gradient, the archive's token check, and promotion's refusal of a setup (shown
-  to fire by mutation). link#460 filed for the Atlas token (`grad-fwa`); soul#725 filed for the skill's bash 3.2 parse.
+  to fire by mutation). link#460 filed for the Atlas token (`grad-fwa`); an internal issue filed for the skill's bash 3.2 parse.
 - Full test suite launched after `bd2c7d0`.

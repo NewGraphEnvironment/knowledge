@@ -128,7 +128,9 @@ wf_farm_priority.js                          farm priority/crossing tables out o
       (#111). Archives the promoted keys first (as 0336; bucket credentials), and refuses before moving if it cannot
 0336  the archive (#119): a run's grade tables (zstd -3), records, curves and segments, and the evidence build they
       name, to s3://fresh-bc/archive/knowledge/ (private, versioned) -> rows of data/archive_index.csv (tracked).
-      RUN=<run> for a candidate, TUNE_DIR/COMPARE_DIR/EVIDENCE_DIR/BUILD_DIR for a staged copy, DRY=1 lists.
+      RUN=<run> for a candidate, TUNE_DIR/COMPARE_DIR/EVIDENCE_DIR/BUILD_DIR/SITES_DIR for a staged copy, DRY=1 lists.
+      fdis_sites.csv comes from SITES_DIR (data/fdis/derived, where 0240 writes it) for a tagged EVIDENCE_DIR too,
+      held to BUILD_DIR's sites.rds (#136); a staged BUILD_DIR refuses without SITES_DIR
       PULL=TRUE restores into a checkout's ignored data/ the run its records name, by version id, md5-checked
       (evidence, curves, segments; GRADES=TRUE adds the grade tables)
 

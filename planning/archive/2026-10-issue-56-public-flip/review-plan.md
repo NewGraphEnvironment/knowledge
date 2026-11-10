@@ -16,14 +16,14 @@ Full findings were returned as reply text; the dispositions below record what wa
 | G7 | `0162` skips silently without a database | Not a regression (it skipped when both databases were down before); left. |
 | G8 | `db_source` vocabulary changes | Old values mapped in `scripts/README.md`. |
 | G9 | `.Rprofile` machine note; `0298` home-path default | Both reworded. |
-| G10 | rtj#397 in #56/#57 and the PR body; PR reviews and branch commits unswept | Sweep reads PR reviews and branch commits; GitHub text edited in Phase 5; PR body names the bucket change in words; sweep re-run after the PR opens. |
+| G10 | an internal issue in #56/#57 and the PR body; PR reviews and branch commits unswept | Sweep reads PR reviews and branch commits; GitHub text edited in Phase 5; PR body names the bucket change in words; sweep re-run after the PR opens. |
 | G11 | read-back compares arrow with itself | Replaced with an all-character comparison. It caught `ch_rule_visits.hydro_zone` (`"08"` read as 8, 6,651 rows); zero-padded columns are now kept as text. A planted `"007"` column fails the check. |
 | G12 | archive publishes sweep patterns | Accepted: `planning/` archives are exempt in the issue, and repo names are not secrets. |
 | G13 | "One discipline" needs a home for private context | Phase 5 CLAUDE.md rewrite. |
 | G14 | public readers cannot sync | `0230` and `0299` take `NO_SIGN=TRUE`. `0260` needs the template checkout; its header says so. |
 | O1 | S3 move before merge | Done before the review arrived; B2's fix restores `main`'s `0230` for a fresh cache. |
 | O2 | PR body unswept | Sweep re-run after the PR opens. |
-| O3 | flip steps split across commits | Noted: soul#438 holds the peer-list change. |
+| O3 | flip steps split across commits | Noted: an internal issue holds the peer-list change. |
 | AC1–2 | "reproduce outputs" undefined | Validation runs each package-loading script through `load_all()`; full runs where inputs are local (recorded in progress.md). |
 | AC5 | local pkgdown build is not the control | The PR's pkgdown workflow run is the check. |
 | AC6 | public URLs 403 until the bucket policy | Post-flip check. |

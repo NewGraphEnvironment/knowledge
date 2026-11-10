@@ -28,8 +28,8 @@ Zotero + searchable in a Ragnar store. **Scope grew far beyond the original PCEA
 - [ ] **Floodplain literature pass** — add floodplain keyword_queries + `floodplain` tag (cheap; do at
       harvest time). Keep floodplain DATA/extents (flooded → stac_floodplains_bc → drift) SEPARATE.
 - [ ] **NGE own reports**: do NOT harvest from EcoCat (stale). Build repo→Zotero sync Action
-      (drift pattern soul#48 + citation-cff + zotero-api), pin citekeys. Test on 2025 Peace report.
-- [ ] **Citekey hygiene**: dedup duplicate NGE Zotero entries; pin canonical keys (soul#40).
+      (drift pattern an internal issue + citation-cff + zotero-api), pin citekeys. Test on 2025 Peace report.
+- [ ] **Citekey hygiene**: dedup duplicate NGE Zotero entries; pin canonical keys.
 - [ ] Reconcile peace.duckdb (still holds 5 stale NGE PDFs until next 0151 rebuild).
 - [ ] Dedup EcoCat duplicate records in harvest (prefer PDF-bearing F-code over record-only twin).
 - [ ] Architecture decision: which reporting repo owns final output; PR/merge the branch; archive PWF.

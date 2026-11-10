@@ -44,7 +44,7 @@ public funder names in area briefs, and the literature table's cited quotes.
 ### 3. FDIS on a public prefix
 - [ ] Provenance note (when and from where) as the README of the published folder, and in `research/fdis_export.md`
 - [ ] Raw extract (as received, with `MANIFEST.md5`) and the visit-level tables built from it, as Parquet with a
-      manifest, on a public prefix of the project bucket (the bucket policy change is NewGraphEnvironment/rtj#397)
+      manifest, on a public prefix of the project bucket (the bucket policy change is an internal issue)
 - [ ] CLAUDE.md's FDIS note updated: public, with the note
 
 ### 4. CLAUDE.md and the flip
@@ -61,7 +61,7 @@ public funder names in area briefs, and the literature table's cited quotes.
 ## Follows from this
 - Multi-species tuning (#57): one evidence build and one tuning run across species and life stages, as package functions
 - link: a province-wide `default` run (NewGraphEnvironment/link#246); then its threshold tuning moves here and its validation reads public tables (NewGraphEnvironment/link#346)
-- Bucket (NewGraphEnvironment/rtj#397): a public prefix for FDIS and tuning results
+- Bucket: a public prefix for FDIS and tuning results
 
 ## Measured during planning (2026-10-16)
 
@@ -71,7 +71,7 @@ public funder names in area briefs, and the literature table's cited quotes.
 - Zotero key path `~/.config/newgraph/zotero-api-key` in `0153` (`0270` points at it).
 - Hosts: `m4`/`Dropbox (m4)` in `research/bt_spawning.md`, `research/fdis_export.md`; `M1` in `0156`.
 - Private-repo links: `fish_passage_template_reporting` (14 live refs: README, `0153`, `0154`, `0156`, `0160`,
-  `0200`–`0220`, `scripts/README.md`, two research files, `data/temperature_members.csv`), `logic#4` in
+  `0200`–`0220`, `scripts/README.md`, two research files, `data/temperature_members.csv`), an internal issue in
   `research/stream_temperature.md`; `db-newgraph` skill in `scripts/README.md`. link, fwapg, wet, cred, fresh,
   bcfishpass are public and stay.
 - Project-named repos: three report and planning repos named for their projects (`0100`, `research/stream_temperature.md`).
@@ -79,7 +79,7 @@ public funder names in area briefs, and the literature table's cited quotes.
 - `pkgload::load_data()` sources only `.R`/`.rda` at the top of `data/`; none exist today.
 - `s3://fresh-bc/fdis/` holds the extract, `queries/`, `fiss-database-structure/`, plus `fissr_explore.sqlite` and
   `derived/` (fdis_sites csv/gpkg, bt_use_visits, ch_rule_visits, ch_rule_walks; `ch_mad_visits` is documented as
-  pushed but absent). rtj#397 plans public `fdis/` (source + docs) and `knowledge/` (our published tables); readers go
+  pushed but absent). An internal issue plans public `fdis/` (source + docs) and `knowledge/` (our published tables); readers go
   by `manifest.json`, as `discharge/fwa/v1/` does.
 - Sibling pkgdown pattern: fresh/link/drift (`_pkgdown.yml` with `url:` + bootstrap 5, `.github/workflows/pkgdown.yaml`,
   gh-pages branch).

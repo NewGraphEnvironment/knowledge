@@ -16,7 +16,7 @@
 #
 # INPUT:  FULL_DIR and MIN_DIR (0310's EVIDENCE_DIR for each build; default data/fdis/derived_zz415_default and
 #         data/fdis/derived_zz415_minimal) and their ledgers (the newest each directory wrote)
-# OUTPUT: scripts/logs/habitat/<yyyymmdd>_minimal_network_check[-<n>].txt
+# OUTPUT: scripts/logs/habitat/<yyyymmdd>_minimal_network_check[-<n>].txt, written as each step reports
 # RUN:    [FULL_DIR=…] [MIN_DIR=…] [STORED=TRUE] Rscript data-raw/minimal_network_check.R   (from the repo root; the
 #         database only with STORED=TRUE, through PG* or PGSERVICE)
 # ---------------------------------------------------------------------------
@@ -28,10 +28,11 @@ full_dir <- Sys.getenv("FULL_DIR", "data/fdis/derived_zz415_default")
 min_dir <- Sys.getenv("MIN_DIR", "data/fdis/derived_zz415_minimal")
 path_log <- .knw_free_path(file.path("scripts/logs/habitat",
                                      paste0(format(Sys.Date(), "%Y%m%d"), "_minimal_network_check.txt")))
-log_lines <- character()
-say <- function(...) { log_lines <<- c(log_lines, sprintf(...)); message(sprintf(...)) }
+# the log is written as each step reports (#136), so a step that refuses leaves what the steps before it measured
+say <- function(...) { cat(sprintf(...), "\n", file = path_log, sep = "", append = TRUE); message(sprintf(...)) }
 block <- function(title, x) {
-  log_lines <<- c(log_lines, "", paste("##", title), capture.output(print(as.data.frame(x), row.names = FALSE)))
+  cat(c("", paste("##", title), capture.output(print(as.data.frame(x), row.names = FALSE))), file = path_log,
+      sep = "\n", append = TRUE)
 }
 
 led_of <- function(d) {
@@ -42,6 +43,8 @@ led_of <- function(d) {
 }
 lf <- led_of(full_dir)
 lm <- led_of(min_dir)
+file.create(path_log)
+message("Writing ", path_log, " as each step reports")
 say("Minimal network check, knowledge#120. Full: %s (%s). Minimal: %s (%s).", .knw_path_rel(full_dir), lf$path,
     .knw_path_rel(min_dir), lm$path)
 say("  %s", lf$record)
@@ -103,6 +106,7 @@ for (f in c("walks.csv", "visits_species.csv")) {
 af <- read_csv(file.path(full_dir, "access_check.csv"), show_col_types = FALSE)
 am <- read_csv(file.path(min_dir, "access_check.csv"), show_col_types = FALSE)
 if (!"watershed_group_code" %in% names(af) || !"watershed_group_code" %in% names(am)) {
+  say("3. ACCESS: access_check.csv has no group column: rebuild with 0310 from #120. Stopped here.")
   stop("access_check.csv has no group column: rebuild with 0310 from #120")
 }
 by <- c("species_code", "watershed_group_code", "habitat_accessible", "access_gt0")
@@ -193,5 +197,4 @@ if (Sys.getenv("STORED") %in% c("1", "TRUE", "true")) {
                                     NA_real_),
                  spawn_pct = round(100 * (spawn_km_minimal - spawn_km_full) / spawn_km_full, 2)))
 }
-writeLines(log_lines, path_log)
 message("Written ", path_log)

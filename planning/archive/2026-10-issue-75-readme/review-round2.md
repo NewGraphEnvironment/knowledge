@@ -70,7 +70,7 @@
     "because …" or state the measured fact: `fiss_sites_*` is written by `0220` from the workbooks, not from the layer.
 
 - **[note, soul] public-safety**: the amended file is `visibility: public-safe`, and it now cites knowledge#75, #76 and #77.
-  `gh repo view` reads knowledge as PRIVATE today. The file already cites private soul issues (soul#416, soul#355), and
+  `gh repo view` reads knowledge as PRIVATE today. The file already cites private soul issues, and
   evidence blocks do not load into the index, so this only matters if the file is published before #56's flip. There
   are no host names, private repo paths or client identifiers.
 

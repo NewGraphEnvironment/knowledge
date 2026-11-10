@@ -22,7 +22,7 @@ split piece, or one filed since the last pass): run `/backlog-sweep` to place it
 
 | move | umbrella | batches | state |
 |---|---|---|---|
-| - [ ] 1 | #170 | 1: evidence-build and test fixes (2 issues) | open: start here |
+| - [x] 1 | #170 | 1: evidence-build and test fixes (2 issues) | done: https://github.com/NewGraphEnvironment/knowledge/pull/187 |
 | - [ ] 2 | #171 | 2, 3: articles as a tuning series, a build that stalls fails fast (4 issues) | open |
 | - [ ] 3 | #172 | 4, 5: Zotero library writes, new sources into the stores (5 issues) | open |
 | - [ ] 4 | #173 | 6, 7: maps out of the comparison, one research page per key (4 issues) | open: after move 2, which renames the article #77 edits |
@@ -64,7 +64,7 @@ link's own pass: link#468, a backlog pass for link that carries the link issues 
 
 ### 1. Evidence-build and test fixes
 
-- [ ] Carried by move 1, #170
+- [x] Carried by move 1, #170 (merged in https://github.com/NewGraphEnvironment/knowledge/pull/187)
 
 #136 (a tagged `EVIDENCE_DIR` needs `fdis_sites.csv` copied by hand, and `minimal_network_check.R` logs only at the
 end) and #142 (the live placement test errors on a `fresh_default` with no BULK BT rearing segment, or an empty one).

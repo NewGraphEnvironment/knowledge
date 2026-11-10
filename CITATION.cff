@@ -9,7 +9,7 @@ type: software
 license: MIT
 title: 'knowledge: Fisheries Evidence and Tuned Habitat Thresholds for BC Watershed
   Groups'
-version: 0.4.34
+version: 0.4.35
 doi: 10.5281/zenodo.23990335
 abstract: 'Gathers fisheries evidence for British Columbia watershed groups (provincial
   fish sampling records, past reports, cited literature values with their quotes,
@@ -34,7 +34,7 @@ preferred-citation:
     email: al@newgraphenvironment.com
     orcid: https://orcid.org/0000-0002-3495-2128
     affiliation: New Graph Environment Ltd.
-  version: 0.4.34
+  version: 0.4.35
   date-released: '2026-11-10'
   url: https://newgraphenvironment.github.io/knowledge/
   repository-code: https://github.com/NewGraphEnvironment/knowledge

@@ -53,7 +53,7 @@ the `setup.txt` marker and the evidence ledger's parent line. The durable result
   lands, so this PR relates to #120 rather than closing it).
 - Other species on every setup, one at a time; "other access classes" (#132) and "fixed window" (#70).
 
-Filed on the way: link#460 (the Atlas token), link#462 (the near-river distance under `grad-parent`), soul#725 (the
+Filed on the way: link#460 (the Atlas token), link#462 (the near-river distance under `grad-parent`), an internal issue (the
 skill helper's bash 3.2 parse). link#444's last acceptance line was ticked; all its boxes are done.
 
 Closed by: PR (to be opened), relates to #120

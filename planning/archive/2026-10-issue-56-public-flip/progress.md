@@ -11,7 +11,7 @@
   0 errors, 0 warnings, 1 note (`comms` at top level, removed in Phase 2).
 - Phase 2: sweep script; DB connections through `PG*` in 17 scripts and `knw_pscis_pull()`'s example (fallbacks
   removed; `db_source` is the database name); Zotero key from `ZOTERO_API_KEY` only; host names, private-repo links and
-  project-named repos reworded; `comms/` removed; soul#438 filed for the peer list. All scripts parse.
+  project-named repos reworded; `comms/` removed; an internal issue filed for the peer list. All scripts parse.
 - Phase 3: `_pkgdown.yml` (reference grouped by topic), `.github/workflows/pkgdown.yaml` from fresh (drops CLAUDE.md
   before the build, fails on unexpected top-level pages), README rewritten as the home page with research links.
   `pkgdown::build_site()` (CLAUDE.md held aside, as CI does): finished, no problems reported, no internal pages.
@@ -40,7 +40,7 @@
   `MANIFEST.md5` first, so a partial fetch looked complete (now fetched aside and moved in last; a simulated mid-fetch
   failure leaves only `.part` and the re-run verifies 26/0). The sweep missed retitle entries (now read; #4's "from the
   M1" is the one hit, owner's decision) and the generated conventions below CLAUDE.md's marker (39 hits; reported, not
-  failed; soul#439 filed). A third bucket-policy comment on #56 was edited.
+  failed; an internal issue filed). A third bucket-policy comment on #56 was edited.
 - Round 3 (`review-round3.md`) named the mechanism: guards that decide "clean" or "done" from a list or marker written
   from what was known, not from the population. 6 findings, all reproduced: the issue's one project name
   (`data/context_bowron_mcgregor.md`, never carried into the plan) and the same slug in #17's body, both reworded, with
@@ -51,11 +51,11 @@
   cover (reworded). Owner decisions left: #4's retitle entry, and the issue branch behind open PR #12.
 - Round 4 (`review-round4.md`, an enumeration round): its enumeration held on every surface and every completion marker
   except four findings, three inside round-3 fixes, all reproduced and fixed: the slug class took only underscores
-  (a hyphenated client slug sits in the generated conventions; pattern now `[-_]`, soul#439 updated); this branch's
+  (a hyphenated client slug sits in the generated conventions; pattern now `[-_]`, an internal issue updated); this branch's
   PWF quoted client slugs and home paths (scrubbed, and `planning/active/` is now swept for those two classes); the
   flip followed a revision list frozen at PR time (now gated on `history` and `all` run on the day); `history()` read
   one page of comments with no check and no PR reviews (every connection's `totalCount` is now checked, a lowered
   limit stops the run, and reviews and review comments are read; same 23 items).
 - Loop ended by enumeration rather than a fifth reviewer: the slug class matches only exempt areas (old archives, a
-  literature citation key) and the generated text in soul#439; `all` returns only #4's retitle; `history` returns the
+  literature citation key) and the generated text in an internal issue; `all` returns only #4's retitle; `history` returns the
   23 recorded items; each CLAUDE.md sentence about the sweep was checked against its code.
