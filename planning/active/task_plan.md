@@ -126,7 +126,6 @@ Order from the plan review: every write lands here, then Phase 6 quits Zotero an
 - [x] CLAUDE.md data list gains `statistics_{members,additions}.csv`, `zotero_attachment_verdicts.csv` and the
       `statistics` store; `scripts/README.md` gains `0275` and the statistics build line (Wood and MacKenzie named as
       wanted once a PDF is in hand).
-- [ ] Tick move 3's boxes in `planning/backlog.md` (batches 4 and 5).
 
 ## Validation
 - [x] Phase 1's branch checks pass; `data-raw/zotero_copy_check.R` passes
@@ -140,5 +139,7 @@ Order from the plan review: every write lands here, then Phase 6 quits Zotero an
 - [ ] `/planning-archive` on completion
 
 ## Owed at the end (reported, done after merge)
+- [ ] Tick move 3 in `planning/backlog.md` (the moves table and batches 4 and 5) with the PR's link, after the merge, as
+      move 1's was (`Tick move #170 in planning/backlog.md` on main).
 - [x] #13 carries the 11 personal-library multi-PDF items
 
