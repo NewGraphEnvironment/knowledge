@@ -183,3 +183,18 @@ section, since the signature page cannot be read: a lower-confidence author list
 Three member URLs that answer curl fail under `0153`'s `fetch` (`User-Agent: Mozilla/5.0`): the two canada.ca hosts
 answer **404** (Brown 1998 on `iaac-aeic.gc.ca`, COSEWIC on `wildlife-species.canada.ca`) and the NWT portal fails
 the TLS handshake (Taylor & Mochnacz). Their checked PDFs go in as repo paths under `data/rag/pdf/westslope_cutthroat/`.
+
+## Scope check before filing (per source)
+
+| source | additions | MB |
+|---|---|---|
+| Federal (plan Part 1, progress report) | 2 | 0.5 |
+| EDF Elk Valley (funds page, news release, KNC newsletter) and CWF's Elk River plan | 4 | 1.5 |
+| Upper Fording monitoring (2022) | 1 | 2.3 |
+| Upper Fording Evaluation of Cause (synthesis, 18 SME reports, handling review) | 20 | 416.6 |
+| FWCP Columbia, Kootenay WCT | 5 | 14.6 |
+| **total** | **32** | **435.4** |
+
+Members: 36, of which 9 take a PDF from this branch (about 23 MB), 11 wait on Al's hand downloads and 1 has none.
+The Evaluation of Cause set is the bulk; it was added under "Upper Fording monitoring" by this session, not by the
+gate's wording, so Al confirms it before filing (issue body says so).

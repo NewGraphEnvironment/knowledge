@@ -67,7 +67,7 @@ What exploration settled:
 - [ ] Write `data/westslope_cutthroat_members.csv` (30 rows plus the group copies found) and
       `data/westslope_cutthroat_additions.csv`; record per-source counts and MB in findings (the scope check before
       filing)
-- [ ] #190's body: corrected premises (21 members without a PDF) and the decided breadth
+- [x] #190's body: corrected premises (21 members without a PDF) and the decided breadth
 
 ## Phase 2: file the collection through `0270` (Al present for the live run)
 - [ ] Al's hand downloads in `data/rag/pdf/westslope_cutthroat/` before the first dry run (or those rows' `pdf` empty)
