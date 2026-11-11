@@ -61,3 +61,46 @@ PDF child, 9 with the PDF on disk**, the same as the immutable read. No other it
 - OpenAlex: closed for Muhlfeld et al. 2012, Janowicz et al. 2018, Pierce et al. 2014, Brown & Mackay 1995, Boyer et
   al. 2008 and both Mayhood DOIs (ResearchGate); Blank et al. 2020 diamond OA but its publisher answered 403; Muhlfeld
   et al. 2016 green (figshare).
+
+## Group items outside `TIDR3PNN` that become members (immutable read, 2026-11-11)
+
+Live in the group, each with a PDF, filed only in other collections (temperature `SW2RXUJC` and two others):
+`cope2020UpperFording` (2019 monitoring), `thorley_etal2021UpperFording` (2020 monitoring),
+`faulkner_etal2021SubjectMatter`, `hocking_etal2022SubjectMatter`, `thorley_branton2022SubjectMatter` (the Evaluation
+of Cause subject-matter-expert reports). Members: 30 + 5 = 35 before the search agents' results. (A first query also
+listed `WBGNP2EZ`, `SKFPH72Z`, `MYABAICN` with no collection: they are the PDF attachments of Cope 2020, Thorley et al.
+2022 and 2021, matched by attachment title; same md5 as each parent's PDF, so not separate items.)
+
+## Members' PDFs (search agent A, verified here 2026-11-11)
+
+21 members had no PDF. **9 have a URL that returns `%PDF`**, each title page read against its item: the 2014 BC
+management plan (108 pp), Lamson 2020 (EcoCat, 27 pp), Cope et al. 2016 (288 pp) and 2017 (53 pp; the small file is
+the whole report), the ERA 2019 report (176 pp), and four new hosts checked here:
+- Taylor & Mochnacz 2013: NWT Discovery Portal, the "final draft" of December 2013 (22 pp).
+- COSEWIC: the SARA registry's PDF of the same report (99 pp). It prints **2016**; the item says 2017 (the
+  publications.gc.ca catalogue edition). Item metadata left as is.
+- Muhlfeld et al. 2016: the TAFS article hosted by the Crown Managers Partnership (17 pp); figshare's copy is the
+  7-page supplement only.
+- Brown 1998: the same path on `iaac-aeic.gc.ca` (the item's `ceaa-acee` host no longer resolves). The article is
+  Environmental Biology of Fishes 55 (**1999**); the item says 1998. Left as is.
+
+**For Al to download by hand (11)** into `data/rag/pdf/westslope_cutthroat/<citation_key>.pdf`:
+| key | where | why not scripted |
+|---|---|---|
+| `muhlfeld_etal2012ASSESSINGIMPACTS` | doi:10.1002/rra.1494 | closed; also in `habitat_modelling` |
+| `dangelo_muhlfeld2011FactorsInfluencing` | scholarworks.umt.edu/etd/426 (D'Angelo's MS thesis, same title) | Cloudflare check; also in `habitat_modelling` |
+| `blank_etal2020SwimmingPerformance` | doi:10.3996/052019-JFWM-040 (gold OA) | publisher 403, repository 429 |
+| `janowicz_etal2018Agegrowth` | doi:10.1111/jfb.13792 | closed |
+| `pierce_etal2014WestslopeCutthroat` | doi:10.1080/00028487.2013.839959 | closed |
+| `brown_mackay1995Spawningecology` | doi:10.1139/f95-097 | closed |
+| `boyer_etal2008Rainbowtrout` | doi:10.1139/f08-001 | closed |
+| `mayhood2014Conceptualframework` | doi:10.13140/2.1.1931.6809 (FWR Technical Report 2014/03-1) | ResearchGate only |
+| `mayhood2019Comments2019` | doi:10.13140/RG.2.2.17310.48967 (FWR Technical Note 2019/07-1) | ResearchGate only |
+| `blackburn2017TrendsDistribution` | Alberta Conservation Association report series | Cloudflare check; filename unknown |
+| `bcspecies&ecosystemexplorer2020Oncorhynchusclarkii` | a100.gov.bc.ca/pub/eswp/reports.do?elcode=AFCHA02088 | a web page: print to PDF |
+
+**No copy anywhere found (1):** Hagen & Baxter 2009 (2008 WCT abundance monitoring of classified waters, East
+Kootenay): cited by the Species and Ecosystems Explorer; not in EcoCat, env.gov.bc.ca or FWCP by search.
+
+`data/westslope_cutthroat_members.csv` drafted: 35 rows, 9 with a `pdf` URL; the hand-download rows take their path
+when the files land (an empty `pdf` until then, so a dry run does not fail on a missing path).
