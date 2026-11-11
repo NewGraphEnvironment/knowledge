@@ -232,8 +232,8 @@ duplicate item (same DOI) holds the PDF: Opperman et al. 2010 sat that way throu
 the group by DOI before chasing the paper; the Web API's `/items` omits trashed items, so a trashed
 copy shows only as a parent key. Merge through the Web API (PATCH the attachment's `parentItem`, the
 kept item's `collections` and `relations: {"dc:replaces": [...]}`, then `deleted: 1` on the duplicate
-and the empty attachment). The document joins a store only at its next full build until cred can
-update one in place (NewGraphEnvironment/cred#44).
+and the empty attachment). The document joins a store at its next `0150 ACTION=update` with the store's whole
+build list (cred 0.7.0, NewGraphEnvironment/cred#44).
 
 ### The FDIS electrofishing export: public as received, and richer than the public layers
 
