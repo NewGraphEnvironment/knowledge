@@ -104,3 +104,36 @@ Kootenay): cited by the Species and Ecosystems Explorer; not in EcoCat, env.gov.
 
 `data/westslope_cutthroat_members.csv` drafted: 35 rows, 9 with a `pdf` URL; the hand-download rows take their path
 when the files land (an empty `pdf` until then, so a dry run does not fail on a missing path).
+
+## Federal, provincial and EDF Elk Valley (search agent B, verified here 2026-11-11)
+
+- **Federal plan (DFO 2017, SARA management plan series, En3-5/75-2016E-PDF).** It adopts the 2014 BC plan: Part 1 is
+  the federal addition, Part 2 the provincial plan (plan review's assumption, confirmed from the registry page's
+  headings). publications.gc.ca serves its archived-content interstitial, so it is printed from the registry's HTML,
+  front matter and Part 1 only (7 pp, 21,110 characters): Part 2 is the member `b_c_ministryofenvironment2014...`,
+  whose PDF the store already gets, and a second copy would double every hit on it.
+- **Federal progress report 2017–2021 (DFO 2023, En3-5/75-1-2023E-PDF).** Printed from the registry's HTML (15 pp).
+  The first print lost the preface: canada.ca keeps it in a closed `<details>`, which Chrome does not print; every
+  `<details>` is now opened before printing.
+- **No federal action plan** exists for the BC population (Special Concern: a management plan only). **No provincial
+  progress report** on the 2014 plan was found; the federal report covers its actions.
+- **EDF Elk Valley:** the LOI applicant guide (ECCC 2025, En14-566/2025E-PDF, 17 pp, a `%PDF` URL) and three web
+  pages printed to PDF as `report`: ECCC's Elk Valley funds page, the 2025-03-13 news release, KNC's EDF Newsletter 1
+  (2026-08-25).
+- **CWF's Elk River (Qukin ʔamakʔis) connectivity restoration plan** (Mazany-Wright et al. 2026, EDF- and
+  FWCP-funded): a Quarto web book with no PDF. Its 12 pages (from its `search.json`) printed to one PDF, 25 pp,
+  95,768 characters.
+- **Left out:** KNC's 2026 annual report (68 pp, 15 MB, mostly other business; the EDF is one page of it); ECCC's EDF
+  project map (a national list; the Elk Valley projects are recorded below).
+- **Funded projects (2021 Teck Coal penalty, $58M):** Ktunaxa Capacity Funds; the Upper Kootenay Burbot Recovery
+  Initiative (KNC); Shuswap Band's Upper Columbia native species assessment and its territorial stewardship plan;
+  Okanagan Nation Alliance's Columbia River fish and habitat caretaking; a $16M competitive call with no awards
+  published as of 2026-11-10. **None has a public plan, monitoring or final report yet** (projects began 2025–26),
+  so the store cannot answer "what each project reports" until they publish: a gap, not a miss.
+
+Every print is checked block by block: each paragraph's, list item's, heading's and table cell's first and last 50
+alphanumerics are in the PDF's `pdftotext -raw` text (0 missing, except three long URLs in the CWF references that
+wrap across lines).
+- Dedupe of B's rows (every library, trash included): the LOI applicant guide is already a group item with its PDF
+  (`IEIBEYEJ`, filed in another collection), so it is a **member row**, not an addition. The federal plan and progress
+  report only resemble the 2014 BC plan (`YQE6M3TZ`, a different document). The rest: no copy anywhere.
