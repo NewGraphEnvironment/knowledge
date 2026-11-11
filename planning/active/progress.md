@@ -68,3 +68,10 @@
   report's `reportType` a sibling's wording (its preferred citation names Teck Coal Fording River Operations). Each
   checked against its PDF, the 10 rows fixed and their items PATCHed; dry run still a no-op. A defect inside a fix
   means only an enumeration ends the review (round 3)
+- Round 3 (`review-round3.md`, `review-round3-evidence.tsv`): the enumeration. One line per non-empty field of all
+  49 additions rows (290) and per member PDF (9), each with a verbatim snippet from that row's own PDF page; a script
+  reran `pdftotext` page by page and found all 289 snippets (the other 10 are `NOT PRINTED` or `CATALOGUE`), and the
+  table's cells equal the CSV's exactly. 298 OK, 1 WRONG: row 8's reportType lacked its cite line's "Final"; fixed and
+  item `V57ESMCK` PATCHed; dry run still a no-op. With that cell corrected every field of both CSVs is supported by its
+  own document, which ends the review
+- Zotero is still quit: it syncs the 12 PATCHes when next opened (the store reads text, not this metadata)

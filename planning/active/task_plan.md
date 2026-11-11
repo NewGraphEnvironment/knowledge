@@ -111,10 +111,10 @@ None: the collection, the store and its push land before the PR.
 
 ## Validation
 
-- [ ] Tests pass (`devtools::test()`; no `R/` change expected)
-- [ ] `/code-check branch` (three-round floor, ends on an enumeration of every CSV row against its title page) and the
+- [x] Tests pass (`devtools::test()`; no `R/` change expected)
+- [x] `/code-check branch` (three-round floor, ends on an enumeration of every CSV row against its title page) and the
       #56 `public_sweep.py` over the branch
-- [ ] PWF checkboxes match landed work
+- [x] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion
 
 How each change is proved:
