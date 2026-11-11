@@ -41,7 +41,7 @@ What exploration settled:
 2. Store name `westslope_cutthroat`, built from `TIDR3PNN` alone. Threshold tuning is out (#186).
 
 ## Phase 1: inventory, PDFs and the two CSVs (no Zotero writes)
-- [ ] Re-measure `TIDR3PNN` from a WAL-inclusive guarded copy (`0270`'s `db()` path): members, keyed, PDF on disk
+- [x] Re-measure `TIDR3PNN` from a WAL-inclusive guarded copy (`0270`'s `db()` path): members, keyed, PDF on disk
 - [ ] Members without a PDF: find each one's PDF (the item's URL, the DOI's open-access copy, the publisher or
       catalogue); every URL's body must start `%PDF`. Paywalled ones listed for Al to download into the ignored
       `data/rag/pdf/westslope_cutthroat/`; scans OCRed (`ocrmypdf`)

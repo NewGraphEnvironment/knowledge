@@ -43,3 +43,21 @@ Relates to #124.
 
 | Error | Resolution |
 |-------|------------|
+
+## Re-measure from a guarded copy (2026-11-11 00:50 UTC)
+
+`0270`'s `db()` (main file plus `-wal`, guarded), then `local_pdf()` per item: **30 live items, 30 keyed, 9 with a live
+PDF child, 9 with the PDF on disk**, the same as the immutable read. No other item carrying a member's citation key
+(any library) holds a PDF on disk for one of the 21 without.
+
+## PDF sources for members (first probes)
+
+- `%PDF` at the item's own URL: the 2014 BC management plan (EIRS `subdocumentId=9781`, 4.3 MB), Cope et al. 2016
+  (5.8 MB) and 2017 (0.8 MB, title page to check), the Elk River Alliance 2019 report (7.9 MB).
+- Lamson 2020: the item URL is EcoCat's report page (HTML); its PDF is `acat/documents/r58888/UKE_F19_F_2682_...pdf`
+  (1.2 MB, `%PDF`).
+- COSEWIC 2017: publications.gc.ca answers with an "archived content" interstitial, not the PDF. A retry with a
+  cookie jar was refused by auto mode as bot-check circumvention, and is not to be retried: another host, or Al.
+- OpenAlex: closed for Muhlfeld et al. 2012, Janowicz et al. 2018, Pierce et al. 2014, Brown & Mackay 1995, Boyer et
+  al. 2008 and both Mayhood DOIs (ResearchGate); Blank et al. 2020 diamond OA but its publisher answered 403; Muhlfeld
+  et al. 2016 green (figshare).
