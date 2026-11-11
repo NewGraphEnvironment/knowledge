@@ -39,6 +39,9 @@ What exploration settled:
    FWCP Columbia WCT reports in the Kootenay, and the EDF Elk Valley call, applicant guides and funded-project plans,
    monitoring and final reports, capped at what those sites link. EcoCat is out.
 2. Store name `westslope_cutthroat`, built from `TIDR3PNN` alone. Threshold tuning is out (#186).
+3. **(Al, 2026-11-11, after the search)** Keep the Upper Fording Evaluation of Cause set (synthesis, 19 SME reports,
+   handling review), and add three series found beyond the breadth: Grave and Harmer Creek WCT monitoring (2020–2022),
+   the Harmer Creek Evaluation of Cause and its SME reports, and the calcite-effects-on-WCT-spawning reports (2018–2020).
 
 ## Phase 1: inventory, PDFs and the two CSVs (no Zotero writes)
 - [x] Re-measure `TIDR3PNN` from a WAL-inclusive guarded copy (`0270`'s `db()` path): members, keyed, PDF on disk
@@ -64,6 +67,8 @@ What exploration settled:
 - [x] Rows: a member with no PDF has an empty `pdf` (never `none`); an addition with no PDF is in the CSV only with a
       DOI whose CrossRef record has an abstract, else it goes to the gap list; web pages printed to PDF as `report`;
       URLs percent-encoded; no other library's name or key in any tracked file
+- [x] Grave/Harmer monitoring, Harmer Creek Evaluation of Cause and calcite-on-spawning series (decision 3): rows
+      checked as the others, group copies as members
 - [ ] Write `data/westslope_cutthroat_members.csv` (30 rows plus the group copies found) and
       `data/westslope_cutthroat_additions.csv`; record per-source counts and MB in findings (the scope check before
       filing)

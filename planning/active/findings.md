@@ -198,3 +198,34 @@ the TLS handshake (Taylor & Mochnacz). Their checked PDFs go in as repo paths un
 Members: 36, of which 9 take a PDF from this branch (about 23 MB), 11 wait on Al's hand downloads and 1 has none.
 The Evaluation of Cause set is the bulk; it was added under "Upper Fording monitoring" by this session, not by the
 gate's wording, so Al confirms it before filing (issue body says so).
+
+## Series added at Al's word (decision 3), 2026-11-11
+
+17 rows, each fetched through `0153`'s `fetch` and read against its title page or its own citation line (OCR where the
+cover is an image):
+- **Harmer Creek Evaluation of Cause:** the March 2023 synthesis (Evaluation of Cause Team) and the SME reports its
+  reference list names that the group lacks: streamflow and inferred habitat availability, dissolved oxygen, calcite,
+  total suspended solids, food availability, sediment quality, small population size, selenium, surface water quality,
+  and the telemetry memo. Water temperature and ice (Hocking et al. 2022) and energetic status (Thorley & Branton 2022)
+  are group items, already members. Selenium and surface water quality print no authors on their covers; theirs are
+  the synthesis's reference list's (de Bruyn, Bollinger & Luoma; Warner & Lancaster), said in each row.
+- **Surface water quality (Golder 21452261-003-R-Rev1):** 2,522 pp and 571 MB, the report's own pages being 1–163 and
+  2,511–2,522 (each carries its report number); pages 164–2,510 are embedded laboratory toxicity reports and another
+  report's chronic-toxicity appendices. Filed as those 175 pages, and its body (pages 6–79) is scanned, so OCRed:
+  412,041 characters.
+- **Grave and Harmer Creek WCT monitoring:** 2020, 2021, 2022 (Thorley et al.).
+- **Calcite effects on WCT spawning habitat suitability:** 2018 (title from the title page; its citation line says
+  "of Salmonids"), 2019, 2020 (Hocking et al., Ecofish).
+- curl's first fetch of the Harmer food availability and sediment quality reports was cut short (22 of 36.6 MB, with
+  no error from curl); `0153`'s `fetch` raises `IncompleteRead` instead, so a short read cannot be filed.
+
+## OCR of pages with no text
+
+Counting pages with under 30 characters of text found scanned pages in seven filed PDFs. `ocrmypdf --skip-text`
+(OCRs only those pages) gained: Upper Fording food availability SME 45,245 → 242,755 characters (130 of 172 pages
+were scans), the Upper Fording synthesis 489,091 → 602,843, hydrogeology 594,626 → 720,169, climate 191,022 →
+244,771, habitat availability 156,663 → 208,064, the Harmer synthesis 290,244 → 352,230, and the Upper Fording water
+quality cut 579,376 → 767,818. Sampled pages show real text (acknowledgements, reader's notes, citations,
+abbreviations), so all seven rows take the OCRed copy as a repo path.
+
+**Additions: 49** (35 by URL, 14 by repo path under the ignored `data/rag/pdf/westslope_cutthroat/`, 220 MB there).
