@@ -54,25 +54,42 @@ What exploration settled:
       newsletters, and the plans, monitoring and final reports of funded projects they link
 - [ ] Metadata for each addition from its own title page or "cite as" line, never a listing page or a sibling year
       (#124 round 3)
-- [ ] Dedupe every addition by title and DOI against the group and personal libraries, trash included; a
-      personal-only copy is filed into the group, a trashed group copy restored, not recreated
-- [ ] Write `data/westslope_cutthroat_members.csv` (30 rows) and `data/westslope_cutthroat_additions.csv`
+- [ ] Dedupe every addition by title and DOI against every library, trash included (scratchpad `wct_dedupe.py` over a
+      guarded copy): a live group copy in another collection becomes a **member row** (the group already holds Cope
+      2020, Thorley et al. 2021 and Faulkner et al. 2021 with PDFs, plan review); a personal-only copy is filed into the
+      group; a trashed group copy is restored, not recreated. The Alberta-population recovery documents are not the BC
+      federal plan
+- [ ] Federal plan by content: if the SARA management plan adopts the 2014 provincial plan in one PDF, the provincial
+      member and the federal addition share it; decide from the text, not the title
+- [ ] Rows: a member with no PDF has an empty `pdf` (never `none`); an addition with no PDF is in the CSV only with a
+      DOI whose CrossRef record has an abstract, else it goes to the gap list; web pages printed to PDF as `report`;
+      URLs percent-encoded; no other library's name or key in any tracked file
+- [ ] Write `data/westslope_cutthroat_members.csv` (30 rows plus the group copies found) and
+      `data/westslope_cutthroat_additions.csv`; record per-source counts and MB in findings (the scope check before
+      filing)
 - [ ] #190's body: corrected premises (21 members without a PDF) and the decided breadth
 
 ## Phase 2: file the collection through `0270` (Al present for the live run)
-- [ ] Re-run the `%PDF` check on every URL in both CSVs
+- [ ] Al's hand downloads in `data/rag/pdf/westslope_cutthroat/` before the first dry run (or those rows' `pdf` empty)
+- [ ] Re-run the `%PDF` check on every URL in both CSVs through `0153`'s `fetch` (the live run's fetcher, not curl)
 - [ ] `0270 --collection westslope_cutthroat --parent 9U54XAND --dry-run`; check every `exists` / `copy exists` hit
       against the intended item (generic titles under one corporate author)
-- [ ] Live run, wait for Zotero to sync; a second dry run with no `would` lines and exit 0 is the no-op proof
+- [ ] Live run, wait for Zotero to sync; a second dry run with no `would` lines and exit 0 is the no-op proof. Each
+      run's output to `scripts/logs/rag/<date>_0270_westslope_cutthroat*.log`
 - [ ] Re-measure from a guarded copy: before/after table (live items, keyed, PDF on disk, MB uploaded)
 
 ## Phase 3: build, query, push `westslope_cutthroat`
-- [ ] Zotero quit, `-wal` empty or absent; `ACTION=build STORE=westslope_cutthroat COLLECTIONS=TIDR3PNN`, logged to
+- [ ] Hard gate: every member's PDF on disk under `~/Zotero/storage` (the re-measure), then Zotero quit, `-wal` empty
+      or absent; `ACTION=build STORE=westslope_cutthroat COLLECTIONS=TIDR3PNN`, logged to
       `scripts/logs/rag/<date>_build_westslope_cutthroat.log` with home paths as `~/`. The left-out list must equal
-      the recorded gap; every origin maps to a live group attachment of a live member
+      the recorded gap; documents = keys − no-text PDFs, with the no-text keys named (OCR them, as #124 owed Tredger);
+      every origin maps to a live group attachment of a live member
 - [ ] Four `ACTION=query` checks, expected documents written in the log before each runs, top 5 keys recorded after:
       thermal limits; hybridization with rainbow trout in the upper Kootenay; restoration effectiveness in the Elk;
       monitoring required of EDF-funded projects. A miss is reported, not tuned away
+- [ ] If PDFs were attached to `dangelo_muhlfeld2011FactorsInfluencing` or `muhlfeld_etal2012ASSESSINGIMPACTS` (both
+      also in `habitat_modelling`): `ACTION=update STORE=habitat_modelling` with its whole list, then push it (plan review)
+- [ ] Commit the CSVs and logs before the push (the manifest records the head sha)
 - [ ] `ACTION=push` dry run, then `CONFIRM=TRUE` (Al present); read the push's result before any verified connect;
       the push log keeps only this store's manifest entry
 
