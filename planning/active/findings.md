@@ -229,3 +229,16 @@ quality cut 579,376 → 767,818. Sampled pages show real text (acknowledgements,
 abbreviations), so all seven rows take the OCRed copy as a repo path.
 
 **Additions: 49** (35 by URL, 14 by repo path under the ignored `data/rag/pdf/westslope_cutthroat/`, 220 MB there).
+
+## The collection before and after the live `0270` run (guarded copy, 2026-11-11 04:23 UTC)
+
+| | before (2026-11-10) | after |
+|---|---|---|
+| live top items | 30 | 85 |
+| with a Better BibTeX key | 30 | 85 |
+| with a PDF on disk | 9 | 73 |
+| PDF sent to Zotero storage | | 242.4 MB uploaded; 438.5 MB registered without sending (`exists`) |
+
+`exists` is the Web API's answer when its storage already holds a file of the same md5 (`0153`'s `upload()`): the
+attachment is registered and nothing is sent. Most of the Teck Evaluation of Cause and monitoring PDFs came back so.
+The 12 without a PDF are the 11 hand downloads and Hagen & Baxter 2009.

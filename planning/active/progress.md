@@ -25,3 +25,14 @@
   36 members resolve (30 member, 6 would add), 9 would upload, 12 no-pdf (Al's 11 and Hagen & Baxter), 49 would create,
   no `exists` hit to check
 - Next: Al's 11 downloads, then dry run 2 and the live run with Al present
+
+## Session 2026-11-11 UTC (live run)
+
+- Al ran the live `0270` (`scripts/logs/rag/20261111_0270_westslope_cutthroat_live.log`, 04:00–04:16 UTC): 49
+  created, 6 added, 58 PDFs uploaded or registered, 12 no-pdf, no failure line. Web API read-back: 85 top items in
+  `TIDR3PNN`, no duplicate title and date; the 10 other group items filed that day are outside the collection (another
+  session's); each of the 58 has one PDF attachment carrying an md5
+- Dry run 2 (`scripts/logs/rag/20261111_0270_westslope_cutthroat_dryrun2.log`): exit 0, no `would` line, every
+  addition `exists`: the no-op proof
+- Guarded-copy re-measure after sync: 85 live, 85 keyed, 73 with a PDF on disk (findings, before/after table)
+- Next: Al's 11 hand downloads (then set their `pdf` and re-run `0270`), or build now with the 12 as the gap

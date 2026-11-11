@@ -79,9 +79,9 @@ What exploration settled:
 - [x] Re-run the `%PDF` check on every URL in both CSVs through `0153`'s `fetch` (the live run's fetcher, not curl)
 - [x] `0270 --collection westslope_cutthroat --parent 9U54XAND --dry-run`; check every `exists` / `copy exists` hit
       against the intended item (generic titles under one corporate author)
-- [ ] Live run, wait for Zotero to sync; a second dry run with no `would` lines and exit 0 is the no-op proof. Each
+- [x] Live run, wait for Zotero to sync; a second dry run with no `would` lines and exit 0 is the no-op proof. Each
       run's output to `scripts/logs/rag/<date>_0270_westslope_cutthroat*.log`
-- [ ] Re-measure from a guarded copy: before/after table (live items, keyed, PDF on disk, MB uploaded)
+- [x] Re-measure from a guarded copy: before/after table (live items, keyed, PDF on disk, MB uploaded)
 
 ## Phase 3: build, query, push `westslope_cutthroat`
 - [ ] Hard gate: every member's PDF on disk under `~/Zotero/storage` (the re-measure), then Zotero quit, `-wal` empty
