@@ -1,0 +1,11 @@
+1 of 85 members left out:
+  NIF4TXB4  hagen_baxter20092008Westslope  (no live PDF)
+84 keys across 1 collections
+Ingesting 11 PDF(s) into data/rag/westslope_cutthroat.duckdb
+Read with pdftools, because markitdown could not:
+  mayhood2019Comments2019 (mayhood2019Comments2019.pdf): Embedded NUL in string.
+Store updated: data/rag/westslope_cutthroat.duckdb | added: 11 | replaced: 0 | removed: 0 | kept: 73 | docs: 84 | chunks: 19078
+  Its md5 has changed: push it with crd_store_push(), or open it with crd_store_connect(verify = FALSE) until then, which would otherwise replace it with the copy the manifest describes. Reconnect any session that had it open.
+73 documents before, 84 after: 11 added, 0 dropped
+Updated data/rag/westslope_cutthroat.duckdb. It is not in the bucket until ACTION=push.
+EXIT 0

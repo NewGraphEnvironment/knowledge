@@ -1,0 +1,47 @@
+# westslope_cutthroat after #191 (84 docs), 2026-11-11. Expectations written before each query ran.
+
+## 2 (rerun). hybridization of westslope cutthroat with rainbow trout in the upper Kootenay
+Expect: boyer_etal2008Rainbowtrout in the top 10 (new), beside lamson2016/2018.
+Opening data/rag/westslope_cutthroat.duckdb unverified (verify = FALSE).
+# A tibble: 16 × 9
+   citation_key          origin chunk_id  start    end text  score metric method
+   <chr>                 <chr>     <int>  <int>  <int> <chr> <dbl> <chr>  <chr> 
+ 1 schweigert_etal2017C… /User…     1412 233515 235273 "Rob… 8.33  bm25   hybrid
+ 2 canada_departmentoff… /User…     2966 152722 154566 "Wes… 0.159 cosin… hybrid
+ 3 canada_departmentoff… /User…     3010 187911 190244 "Whi… 0.132 cosin… hybrid
+ 4 canada_departmentoff… /User…     3058 226296 227992 "\uf… 0.139 cosin… hybrid
+ 5 lamson2020Evaluation… /User…      277  30398  31983 "SNP… 8.24  bm25   hybrid
+ 6 lamson2020Evaluation… /User…      309  56125  57441 "Ben… 0.159 cosin… hybrid
+ 7 lamson2016Evaluation… /User…     7604  13528  15433 "Stu… 8.05  bm25   hybrid
+ 8 lamson2016Evaluation… /User…     7606  15434  17336 "The… 8.04  bm25   hybrid
+ 9 lamson2016Evaluation… /User…     7644  45755  47209 "Ref… 0.144 cosin… hybrid
+10 cleator_etal2009Info… /User…      835  67202  68770 "Koz… 0.141 cosin… hybrid
+11 b_c_ministryofenviro… /User…     1714  71320  72810 "19\… 8.45  bm25   hybrid
+12 lamson2018Evaluation… /User…     7513      1   2396 "Eva… 8.23  bm25   hybrid
+13 lamson2018Evaluation… /User…     7527  11332  13016 "Stu… 8.40  bm25   hybrid
+14 lamson2018Evaluation… /User…     7529  13017  15368 "The… 8.32  bm25   hybrid
+15 lamson2018Evaluation… /User…     7534  16808  18327 "Upp… 8.47  bm25   hybrid
+16 lamson2018Evaluation… /User…     7546  26512  28032 "Ben… 0.138 cosin… hybrid
+
+## 5. impacts of river regulation and dam operations on westslope cutthroat habitat
+Expect: muhlfeld_etal2012ASSESSINGIMPACTS first or near it.
+Opening data/rag/westslope_cutthroat.duckdb unverified (verify = FALSE).
+# A tibble: 11 × 9
+   citation_key          origin chunk_id  start    end text  score metric method
+   <chr>                 <chr>     <int>  <int>  <int> <chr> <dbl> <chr>  <chr> 
+ 1 evaluationofcausetea… /User…    15143 1.27e6 1.27e6 "   … 6.99  bm25   hybrid
+ 2 muhlfeld_etal2012ASS… /User…    18171 8.00e3 9.57e3 "| C… 7.21  bm25   hybrid
+ 3 muhlfeld_etal2012ASS… /User…    18263 8.17e4 8.32e4 "F‐v… 7.06  bm25   hybrid
+ 4 muhlfeld_etal2012ASS… /User…    18267 8.48e4 8.64e4 "flo… 6.73  bm25   hybrid
+ 5 muhlfeld_etal2012ASS… /User…    18269 8.64e4 8.88e4 "| -… 7.89  bm25   hybrid
+ 6 muhlfeld_etal2012ASS… /User…    18292 1.05e5 1.07e5 "Car… 8.44  bm25   hybrid
+ 7 canada_departmentoff… /User…     3021 1.97e5 2.00e5 "21\… 0.205 cosin… hybrid
+ 8 canada_departmentoff… /User…     3028 2.03e5 2.06e5 "For… 6.82  bm25   hybrid
+ 9 canada_departmentoff… /User…     3042 2.14e5 2.15e5 "dir… 0.206 cosin… hybrid
+10 WESTSLOPECUTTHROATTR… /User…      157 4.32e4 4.48e4 "Bax… 0.212 cosin… hybrid
+11 b_c_ministryofenviro… /User…     1769 1.15e5 1.17e5 "35\… 7.39  bm25   hybrid
+
+## Against the expectations (written after both ran)
+2 (rerun): miss. boyer_etal2008Rainbowtrout is not in the 16 rows; the query names the upper Kootenay and Boyer's
+study is in the Flathead, so the Kootenay reports (Lamson, DFO) outrank it. Recorded, not tuned.
+5: hit. muhlfeld_etal2012ASSESSINGIMPACTS holds ranks 2-6 behind one Evaluation of Cause chunk.
