@@ -19,3 +19,9 @@
   committed; every PDF fetched through `0153`'s `fetch`. #190's body carries the corrected premises
 - Waiting on Al: 11 hand downloads, and whether to keep the Evaluation of Cause set (20 rows, 417 MB) and add the
   Harmer and Grave Creek series. Phase 2's live run and the pushes need Al present
+- Al (2026-11-11): keep the Upper Fording Evaluation of Cause set; add the Harmer Creek Evaluation of Cause, Grave and
+  Harmer monitoring and calcite series (17 rows). Seven filed PDFs OCRed where pages had no text. 49 additions
+- `0270` dry run 1 (`scripts/logs/rag/20261111_0270_westslope_cutthroat_dryrun1.log`): exit 0; collection exists;
+  36 members resolve (30 member, 6 would add), 9 would upload, 12 no-pdf (Al's 11 and Hagen & Baxter), 49 would create,
+  no `exists` hit to check
+- Next: Al's 11 downloads, then dry run 2 and the live run with Al present
