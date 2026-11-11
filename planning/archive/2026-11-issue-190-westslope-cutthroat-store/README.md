@@ -8,8 +8,8 @@ the Upper Fording and Harmer Creek Evaluation of Cause syntheses with their expe
 monitoring, the calcite series and five FWCP Upper Kootenay reports; six group items filed elsewhere became members.
 Eleven members' PDFs needed a hand download (#191): Al saved ten, the BC CDC species summary was printed to PDF and
 Brown & Mackay 1995 OCRed, and `0150 ACTION=update` added them in place on this branch. Hagen & Baxter 2009 has no
-copy anywhere. Al found several of the eleven by searching the title with "researchgate pdf", which `/lit-search`'s
-cascade lacked (soul PR #808 adds it). Learned: cred 0.7.0 updates a store in place, and CLAUDE.md still said it could not
+copy anywhere. Al found several of the eleven by searching the title with "researchgate pdf", which the
+`/lit-search` skill's PDF cascade lacked; a change adding it is open. Learned: cred 0.7.0 updates a store in place, and CLAUDE.md still said it could not
 (corrected). The branch review found eleven rows whose author, title form, place or report type came from a sibling
 row, a cover sheet or the preparer's address rather than the row's own title page or citation line; it ended on an
 enumeration of every field against a verbatim snippet of its own document (`review-round3-evidence.tsv`).
