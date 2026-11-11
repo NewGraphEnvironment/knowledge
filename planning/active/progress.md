@@ -51,3 +51,13 @@
   top results). Reported, not tuned
 - Push (CONFIRM=TRUE, 04:48 UTC): exit 0; bucket object 243,019,776 bytes, its multipart ETag recomputed from the local
   file (8 MiB parts, 29) matches; manifest entry md5 de28293c… = local md5, 73 documents, 17,700 chunks
+
+## Session 2026-11-11 UTC (validation)
+
+- crate 0.14.1 was installed, below DESCRIPTION's floor, so `devtools::test()` would not load; installed 0.15.1. Tests:
+  FAIL 0, WARN 0, SKIP 4, PASS 2289
+- #56 `public_sweep.py all`: no hit in any file, issue or commit this branch touched (its hits are on main's files)
+- `/code-check branch` round 1 (`review-round1.md`, every row of both CSVs against its PDF): the Harmer Creek synthesis
+  row took its author from the Upper Fording sibling (its cite line: "Harmer Creek Evaluation of Cause Team", title
+  with an em dash). Row and Zotero item `CQZTEEXK` fixed (PATCH, version 11386 → 11444; key unchanged); a dry run
+  after it is still a no-op. Two members' `source` notes and three stale checkboxes corrected

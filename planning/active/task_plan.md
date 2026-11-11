@@ -45,7 +45,7 @@ What exploration settled:
 
 ## Phase 1: inventory, PDFs and the two CSVs (no Zotero writes)
 - [x] Re-measure `TIDR3PNN` from a WAL-inclusive guarded copy (`0270`'s `db()` path): members, keyed, PDF on disk
-- [ ] Members without a PDF: find each one's PDF (the item's URL, the DOI's open-access copy, the publisher or
+- [x] (9 found; the other 12 are the gap, 11 owed in #191.) Members without a PDF: find each one's PDF (the item's URL, the DOI's open-access copy, the publisher or
       catalogue); every URL's body must start `%PDF`. Paywalled ones listed for Al to download into the ignored
       `data/rag/pdf/westslope_cutthroat/`; scans OCRed (`ocrmypdf`)
 - [x] Federal: the management plan for the BC (Pacific) population under SARA and any progress report on it
@@ -69,13 +69,13 @@ What exploration settled:
       URLs percent-encoded; no other library's name or key in any tracked file
 - [x] Grave/Harmer monitoring, Harmer Creek Evaluation of Cause and calcite-on-spawning series (decision 3): rows
       checked as the others, group copies as members
-- [ ] Write `data/westslope_cutthroat_members.csv` (30 rows plus the group copies found) and
+- [x] Write `data/westslope_cutthroat_members.csv` (30 rows plus the group copies found) and
       `data/westslope_cutthroat_additions.csv`; record per-source counts and MB in findings (the scope check before
       filing)
 - [x] #190's body: corrected premises (21 members without a PDF) and the decided breadth
 
 ## Phase 2: file the collection through `0270` (Al present for the live run)
-- [ ] Al's hand downloads in `data/rag/pdf/westslope_cutthroat/` before the first dry run (or those rows' `pdf` empty)
+- [x] (Rows left empty; the downloads moved to #191.) Al's hand downloads in `data/rag/pdf/westslope_cutthroat/` before the first dry run (or those rows' `pdf` empty)
 - [x] Re-run the `%PDF` check on every URL in both CSVs through `0153`'s `fetch` (the live run's fetcher, not curl)
 - [x] `0270 --collection westslope_cutthroat --parent 9U54XAND --dry-run`; check every `exists` / `copy exists` hit
       against the intended item (generic titles under one corporate author)
