@@ -36,3 +36,18 @@
   addition `exists`: the no-op proof
 - Guarded-copy re-measure after sync: 85 live, 85 keyed, 73 with a PDF on disk (findings, before/after table)
 - Next: Al's 11 hand downloads (then set their `pdf` and re-run `0270`), or build now with the 12 as the gap
+
+## Session 2026-11-11 UTC (build, queries, push)
+
+- Al asked: cred updates a store in place since cred 0.7.0 (cred#44 closed 2026-10-31); CLAUDE.md's Zotero paragraph
+  still said otherwise and was corrected (5d6b0979). So the build went ahead with the 12 as the gap, and the hand
+  downloads moved to #191 (download, `0270` live, `0150 ACTION=update`, push; and `habitat_modelling` for Muhlfeld 2012
+  and D'Angelo 2011). #190's body points to it
+- Zotero quit by osascript, `-wal` 0 bytes. Build 04:35–04:46 UTC: 73 documents, 17,700 chunks, 232 MB; left out the
+  12 without a PDF, exactly the recorded gap; no no-text PDF (Schwarz et al. 2013 and the OCRed Evaluation of Cause
+  synthesis were read by pdftools). All 73 origins are live attachments of 73 live members
+- Queries (expectations written first, `scripts/logs/rag/20261111_query_westslope_cutthroat.log`): thermal limits and
+  Elk restoration hit; hybridization and EDF monitoring partial (Muhlfeld et al. 2016 and KNC's newsletter outside the
+  top results). Reported, not tuned
+- Push (CONFIRM=TRUE, 04:48 UTC): exit 0; bucket object 243,019,776 bytes, its multipart ETag recomputed from the local
+  file (8 MiB parts, 29) matches; manifest entry md5 de28293c… = local md5, 73 documents, 17,700 chunks

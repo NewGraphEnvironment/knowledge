@@ -84,18 +84,18 @@ What exploration settled:
 - [x] Re-measure from a guarded copy: before/after table (live items, keyed, PDF on disk, MB uploaded)
 
 ## Phase 3: build, query, push `westslope_cutthroat`
-- [ ] Hard gate: every member's PDF on disk under `~/Zotero/storage` (the re-measure), then Zotero quit, `-wal` empty
+- [x] Hard gate: every member's PDF on disk under `~/Zotero/storage` (the re-measure), then Zotero quit, `-wal` empty
       or absent; `ACTION=build STORE=westslope_cutthroat COLLECTIONS=TIDR3PNN`, logged to
       `scripts/logs/rag/<date>_build_westslope_cutthroat.log` with home paths as `~/`. The left-out list must equal
       the recorded gap; documents = keys − no-text PDFs, with the no-text keys named (OCR them, as #124 owed Tredger);
       every origin maps to a live group attachment of a live member
-- [ ] Four `ACTION=query` checks, expected documents written in the log before each runs, top 5 keys recorded after:
+- [x] Four `ACTION=query` checks, expected documents written in the log before each runs, top 5 keys recorded after:
       thermal limits; hybridization with rainbow trout in the upper Kootenay; restoration effectiveness in the Elk;
       monitoring required of EDF-funded projects. A miss is reported, not tuned away
-- [ ] If PDFs were attached to `dangelo_muhlfeld2011FactorsInfluencing` or `muhlfeld_etal2012ASSESSINGIMPACTS` (both
+- [x] (Neither got a PDF on this branch: owed in #191.) If PDFs were attached to `dangelo_muhlfeld2011FactorsInfluencing` or `muhlfeld_etal2012ASSESSINGIMPACTS` (both
       also in `habitat_modelling`): `ACTION=update STORE=habitat_modelling` with its whole list, then push it (plan review)
-- [ ] Commit the CSVs and logs before the push (the manifest records the head sha)
-- [ ] `ACTION=push` dry run, then `CONFIRM=TRUE` (Al present); read the push's result before any verified connect;
+- [x] Commit the CSVs and logs before the push (the manifest records the head sha)
+- [x] `ACTION=push` dry run, then `CONFIRM=TRUE` (Al present); read the push's result before any verified connect;
       the push log keeps only this store's manifest entry
 
 ## Phase 4: docs and issue
