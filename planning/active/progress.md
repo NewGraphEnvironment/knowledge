@@ -61,3 +61,10 @@
   row took its author from the Upper Fording sibling (its cite line: "Harmer Creek Evaluation of Cause Team", title
   with an em dash). Row and Zotero item `CQZTEEXK` fixed (PATCH, version 11386 → 11444; key unchanged); a dry run
   after it is still a no-op. Two members' `source` notes and three stale checkboxes corrected
+- Round 2 (`review-round2.md`) found a defect inside round 1's fix (row 33's `place` was a sibling's, left as it was)
+  and the same mechanism elsewhere: calcite 2018–2020 `place` from Teck's overview sheet (their title pages give
+  Calgary, as rows 9, 10 and 20 did); FWCP stream-crossing `place` the preparer's (Castlegar is the Compensation
+  Program's); Joseph Creek and three Harmer rows given a place their documents do not print; the cyanobacteria
+  report's `reportType` a sibling's wording (its preferred citation names Teck Coal Fording River Operations). Each
+  checked against its PDF, the 10 rows fixed and their items PATCHed; dry run still a no-op. A defect inside a fix
+  means only an enumeration ends the review (round 3)

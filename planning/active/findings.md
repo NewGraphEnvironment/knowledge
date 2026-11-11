@@ -203,7 +203,7 @@ gate's wording, so Al confirms it before filing (issue body says so).
 
 17 rows, each fetched through `0153`'s `fetch` and read against its title page or its own citation line (OCR where the
 cover is an image):
-- **Harmer Creek Evaluation of Cause:** the March 2023 synthesis (Evaluation of Cause Team) and the SME reports its
+- **Harmer Creek Evaluation of Cause:** the March 2023 synthesis (Harmer Creek Evaluation of Cause Team) and the SME reports its
   reference list names that the group lacks: streamflow and inferred habitat availability, dissolved oxygen, calcite,
   total suspended solids, food availability, sediment quality, small population size, selenium, surface water quality,
   and the telemetry memo. Water temperature and ice (Hocking et al. 2022) and energetic status (Thorley & Branton 2022)
