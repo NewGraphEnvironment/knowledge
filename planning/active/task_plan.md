@@ -77,9 +77,9 @@ What exploration settled:
       the push log keeps only this store's manifest entry
 
 ## Phase 4: docs and issue
-- [ ] `scripts/README.md`: the `0150 ACTION=build STORE=westslope_cutthroat COLLECTIONS=TIDR3PNN` line, the `0270
+- [x] `scripts/README.md`: the `0150 ACTION=build STORE=westslope_cutthroat COLLECTIONS=TIDR3PNN` line, the `0270
       --collection westslope_cutthroat --parent 9U54XAND` line, and that `TIDR3PNN` does not feed `habitat_modelling`
-- [ ] `CLAUDE.md` layout: `westslope_cutthroat_{members,additions}.csv` beside the sturgeon ones
+- [x] `CLAUDE.md` layout: `westslope_cutthroat_{members,additions}.csv` beside the sturgeon ones
 - [ ] `inst/NOTICE.md`: no row expected (the CSVs are our bibliography, not a source's data); confirm
 - [ ] #190's body: the gap (documents with no PDF anywhere) and the outcome
 

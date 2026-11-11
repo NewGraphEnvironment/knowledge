@@ -94,6 +94,9 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   collections, so the files list what the cleanup ensured, and 0270 never removes a member; #122), and
   `sturgeon_{members,additions}.csv` (the same for `species/sturgeon`, the sole input of the `sturgeon` store: the
   White Sturgeon recovery documents, the NWSRI's reports and curated Nechako mainstem history; #124), and
+  `westslope_cutthroat_{members,additions}.csv` (the same for `species/westslope_cutthroat`, the sole input of the
+  `westslope_cutthroat` store: the management and recovery documents, East Kootenay monitoring and the Environmental
+  Damages Fund's Elk Valley reports; #190), and
   `statistics_{members,additions}.csv` (what `0270 --collection statistics --parent top` puts in the top-level
   `statistics` collection, the sole input of the `statistics` store: the texts the method is read against; #95), and
   `zotero_attachment_verdicts.csv` (what `0275` did to each group item with several PDFs or wrong fields, one decided
