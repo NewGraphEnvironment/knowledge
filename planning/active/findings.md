@@ -137,3 +137,49 @@ wrap across lines).
 - Dedupe of B's rows (every library, trash included): the LOI applicant guide is already a group item with its PDF
   (`IEIBEYEJ`, filed in another collection), so it is a **member row**, not an addition. The federal plan and progress
   report only resemble the 2014 BC plan (`YQE6M3TZ`, a different document). The rest: no copy anywhere.
+
+## Elk and Kootenay series (search agent C, verified here 2026-11-11)
+
+29 rows, each with a `%PDF` URL; dedupe, a mechanical title/first-author/year check against each PDF's first five
+pages (through `0153`'s `fetch`, the live run's fetcher), and OCR of the image covers here:
+- **Upper Fording monitoring:** 2019 (Cope 2020) and 2020 (Thorley et al. 2021) are group items already, members;
+  2022 (Thorley et al. 2023) is new. There was no 2018 survey; no 2023 or later report is public.
+- **Upper Fording Evaluation of Cause:** the December 2021 synthesis, 19 subject-matter-expert (SME) reports and Korman
+  & Branton's handling review. Channel dewatering (Faulkner et al. 2021) is a group item, member. The industrial
+  chemicals SME report (Van Geest et al. 2021), cited by the synthesis, is not public: gap.
+- **Water quality SME (Costa & de Bruyn 2021, Golder 19136042/R03):** 1,751 pp and 110 MB, of which pages 344–1,751
+  are per-station temporal plots (about 3.3 million characters of axis labels). Filed as pages 1–343 (`qpdf`; the
+  body, Appendices A–E, Appendix F's introduction and its three summary tables; 54.6 MB, 687,684 characters), the
+  row's `why` says so, and its `url` keeps the whole report. Its first three pages are image-only; OCR confirms the
+  cover and the suggested citation the row follows.
+- **Cyanobacteria SME:** image cover; OCR confirms Larratt & Self, May 10 2021, the title as rowed.
+- **FWCP Columbia:** Lamson's 2015/16 and 2017/18 hybridization reports (same title as the 2020 final, a different
+  year, so `0270`'s `group_copy` does not match them to it), the Upper Kootenay stream crossing remediation (2016) and
+  two Joseph Creek reports (2019, 2020). Two more FWCP WCT reports are listed but EcoCat serves an empty page ("information
+  sensitive, contact MOE"): UKE-F17-F-1183 (hybridization 2016/17) and UKE-F18-F-2440 (trout habitat, East Kootenay):
+  gap. One FWCP Elk fish passage report is one of our own and is left to the report repos (CLAUDE.md).
+- **Elk River Alliance:** no WCT report beyond the 2019 one held; its riparian and cottonwood projects name WCT only as
+  a beneficiary: left out.
+- **teck.com drops large transfers partway** (`IncompleteRead` on the synthesis and the hydrogeology SME; each fetched
+  whole on a retry). `0270` creates an addition's item before fetching its PDF, so a dropped fetch leaves the item
+  without one, and a re-run finds the item (`exists`) and fetches again.
+- Found beyond the decided breadth, not added (for Al): the Grave and Harmer Creek WCT monitoring series (2020–2022),
+  the Harmer Creek Evaluation of Cause (2023) and its SME reports (two of which the group holds and are members), the
+  calcite-effects-on-WCT-spawning reports (2018–2020), a June 2023 Upper Fording recovery update, and a 2013 interim
+  Upper Fording assessment.
+
+`data/westslope_cutthroat_additions.csv`: 32 rows (6 federal/EDF/CWF, 26 series). Members: 36 (30 + 5 group items +
+the EDF applicant guide). No other library's name or key appears in either file.
+
+## Row check through the live run's fetcher (2026-11-11 ~01:20 UTC)
+
+All 32 additions fetch whole and start `%PDF` (435.4 MB in all). Six rows are flagged by the mechanical check and each
+is explained: the Elk Valley funds page's year sits in the page footer the print drops (its date is the page's date
+modified); the CWF plan's authors and the hydrogeology SME's preparer appear after page 5; the water quality and
+cyanobacteria covers are images (OCR above); the synthesis has no cover (its title is the one the SME Reader's Notes
+cite). The hydrogeology SME's preparer comes from the synthesis's reference list and the report's qualifications
+section, since the signature page cannot be read: a lower-confidence author list.
+
+Three member URLs that answer curl fail under `0153`'s `fetch` (`User-Agent: Mozilla/5.0`): the two canada.ca hosts
+answer **404** (Brown 1998 on `iaac-aeic.gc.ca`, COSEWIC on `wildlife-species.canada.ca`) and the NWT portal fails
+the TLS handshake (Taylor & Mochnacz). Their checked PDFs go in as repo paths under `data/rag/pdf/westslope_cutthroat/`.

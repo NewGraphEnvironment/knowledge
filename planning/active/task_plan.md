@@ -45,23 +45,23 @@ What exploration settled:
 - [ ] Members without a PDF: find each one's PDF (the item's URL, the DOI's open-access copy, the publisher or
       catalogue); every URL's body must start `%PDF`. Paywalled ones listed for Al to download into the ignored
       `data/rag/pdf/westslope_cutthroat/`; scans OCRed (`ocrmypdf`)
-- [ ] Federal: the management plan for the BC (Pacific) population under SARA and any progress report on it
+- [x] Federal: the management plan for the BC (Pacific) population under SARA and any progress report on it
       (registry, publications.gc.ca; printed from the registry's HTML where no PDF is served, as #124 did)
-- [ ] Provincial: progress reporting on the 2014 BC management plan, where public
-- [ ] Series: Upper Fording River WCT monitoring (Teck's public reports, 2018 on), Elk River Alliance WCT reports,
+- [x] Provincial: progress reporting on the 2014 BC management plan, where public
+- [x] Series: Upper Fording River WCT monitoring (Teck's public reports, 2018 on), Elk River Alliance WCT reports,
       FWCP Columbia WCT reports for the Kootenay
-- [ ] EDF Elk Valley (Qukin ʔamakʔis): ECCC's Elk Valley funds page, the call and applicant guides, KNC's EDF
+- [x] EDF Elk Valley (Qukin ʔamakʔis): ECCC's Elk Valley funds page, the call and applicant guides, KNC's EDF
       newsletters, and the plans, monitoring and final reports of funded projects they link
-- [ ] Metadata for each addition from its own title page or "cite as" line, never a listing page or a sibling year
+- [x] Metadata for each addition from its own title page or "cite as" line, never a listing page or a sibling year
       (#124 round 3)
-- [ ] Dedupe every addition by title and DOI against every library, trash included (scratchpad `wct_dedupe.py` over a
+- [x] Dedupe every addition by title and DOI against every library, trash included (scratchpad `wct_dedupe.py` over a
       guarded copy): a live group copy in another collection becomes a **member row** (the group already holds Cope
       2020, Thorley et al. 2021 and Faulkner et al. 2021 with PDFs, plan review); a personal-only copy is filed into the
       group; a trashed group copy is restored, not recreated. The Alberta-population recovery documents are not the BC
       federal plan
-- [ ] Federal plan by content: if the SARA management plan adopts the 2014 provincial plan in one PDF, the provincial
+- [x] Federal plan by content: if the SARA management plan adopts the 2014 provincial plan in one PDF, the provincial
       member and the federal addition share it; decide from the text, not the title
-- [ ] Rows: a member with no PDF has an empty `pdf` (never `none`); an addition with no PDF is in the CSV only with a
+- [x] Rows: a member with no PDF has an empty `pdf` (never `none`); an addition with no PDF is in the CSV only with a
       DOI whose CrossRef record has an abstract, else it goes to the gap list; web pages printed to PDF as `report`;
       URLs percent-encoded; no other library's name or key in any tracked file
 - [ ] Write `data/westslope_cutthroat_members.csv` (30 rows plus the group copies found) and
