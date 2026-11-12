@@ -58,3 +58,15 @@ clean fixture (a Rethinking p. 357 quote and a BDA3 p. 407 quote across an ellip
 on all eight defects: a quote outside a blockquote, a wrong page, a fabricated word ("always constant"), a one-word
 fragment after an ellipsis, a missing setting, a duplicate setting, a stale key, and a row whose verdict is only in its
 prose. Exit status 1.
+
+## Test suite on this machine (2026-11-12)
+
+`devtools::test()`: 2,289 passed, 3 skipped, one file failing: `test-vignette-data.R:116` ("every ignored source of
+the methodology article, where present, is unchanged"). This machine's ignored `data/fdis/derived` is not the build
+`method.rds` pins (md5 `5e9d…` against `aab0…`); the published build's evidence is on the database host. The branch
+changes no input of that bundle (`git diff --stat origin/main...HEAD`: a data-raw check, research and planning only).
+
+## The check's further negative tests
+
+A moved code anchor (`response_presence`) fails; a wrong page offset (17 for Rethinking) fails on the folio and the
+passage. Both run on copies of the script in the scratchpad.
