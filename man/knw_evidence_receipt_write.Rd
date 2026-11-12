@@ -31,7 +31,8 @@ start (\code{.knw_git_state()}).}
 identifiers, link's version and commit); never part of its identity.}
 }
 \value{
-The receipt, as a list, invisibly.
+The receipt as read back from the file just written
+(\code{\link[crate:crt_receipt_read]{crate::crt_receipt_read()}}), invisibly.
 }
 \description{
 Writes \code{evidence_receipt.json} into an evidence directory, beside the tables

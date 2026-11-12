@@ -30,7 +30,8 @@
 #'   start (`.knw_git_state()`).
 #' @param context a named list carried into the receipt's context (the run's
 #'   identifiers, link's version and commit); never part of its identity.
-#' @return The receipt, as a list, invisibly.
+#' @return The receipt as read back from the file just written
+#'   ([crate::crt_receipt_read()]), invisibly.
 #' @export
 #' @examples
 #' ev <- tempfile(); dir.create(ev)
@@ -63,6 +64,7 @@ knw_evidence_receipt_write <- function(evidence_dir, settings, inputs, knowledge
     v <- .knw_receipt_setting(settings[[nm]])
     if (nm %in% arrays) I(v) else v
   })
+  # crate 0.16.0 returns the written bytes' digest, not the receipt (crate#60): read the receipt back from its file
   crate::crt_receipt_write(
     evidence_dir,
     output = list(name = "evidence"),
@@ -75,6 +77,7 @@ knw_evidence_receipt_write <- function(evidence_dir, settings, inputs, knowledge
     context = context,
     keys = keys, lockfile = NULL, publish = TRUE, file = .knw_evidence_receipt_file
   )
+  invisible(crate::crt_receipt_read(file.path(evidence_dir, .knw_evidence_receipt_file)))
 }
 
 # The evidence receipt's name in its directory: 0310 writes it, 0320's grade receipts and 0299 name the build by its

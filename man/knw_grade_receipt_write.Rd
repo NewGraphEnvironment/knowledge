@@ -33,7 +33,8 @@ value it records is that pass's, so 0320 regrades a kept table whose
 receipt is missing rather than writing one later.}
 }
 \value{
-The receipt, as a list, invisibly.
+The receipt as read back from the file just written
+(\code{\link[crate:crt_receipt_read]{crate::crt_receipt_read()}}), invisibly.
 }
 \description{
 Writes \verb{<key>_grades_receipt.json} beside a grade table and its record

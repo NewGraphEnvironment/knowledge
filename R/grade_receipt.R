@@ -36,7 +36,8 @@
 #'   start. The receipt is written by the pass that graded the table: every
 #'   value it records is that pass's, so 0320 regrades a kept table whose
 #'   receipt is missing rather than writing one later.
-#' @return The receipt, as a list, invisibly.
+#' @return The receipt as read back from the file just written
+#'   ([crate::crt_receipt_read()]), invisibly.
 #' @export
 #' @examples
 #' d <- tempfile(); dir.create(d)
@@ -97,6 +98,7 @@ knw_grade_receipt_write <- function(grades_path, grades, spec, min_wsg, evidence
                           gradient = spec$grad), .knw_receipt_setting)
   inputs <- c(list(link_build = list(version_id = rec$run_uid), flow = list(version_id = rec$discharge_load)),
               .knw_receipt_evidence(evidence_dir, rec$evidence_md5, ledger = rec$evidence_ledger))
+  # crate 0.16.0 returns the written bytes' digest, not the receipt (crate#60): read the receipt back from its file
   crate::crt_receipt_write(
     dirname(grades_path),
     output = list(name = "grade", scope = paste(rec$species_code, rec$stage, sep = "_")),
@@ -114,6 +116,7 @@ knw_grade_receipt_write <- function(grades_path, grades, spec, min_wsg, evidence
     keys = knw_receipt_keys("grade"), lockfile = NULL, publish = TRUE,
     file = .knw_grade_receipt_name(grades_path)
   )
+  invisible(crate::crt_receipt_read(file.path(dirname(grades_path), .knw_grade_receipt_name(grades_path))))
 }
 
 # data/tune/<key>_grades.csv -> <key>_grades_receipt.json, the receipt's file name in the table's directory
