@@ -1,3 +1,7 @@
+# knowledge 0.4.38
+
+* The articles are a tuning series: "Tuning fish habitat definitions with fish sampling records" (`tuning-method`), "Tuning habitat: chinook rearing" (`tuning-chinook-rearing`) and the stream-splits article (`tuning-stream-splits`, under "Checks on the method"), and the old article URLs redirect to them (#118). The articles, README, DESCRIPTION and the comparison map's labels say "fish habitat definition" where they said "rule", and the method and chinook articles open from the species' life history (#156). Upstream fwapg is cited with no version, and New Graph's fork wherever an article rests on its routed flows (#107). `test-vignette-data.R` holds the settings register to the method bundle on the columns the article prints rather than the file's md5, so a moved `where` path no longer stales the bundle. The site build limits each R setup step and tries it a second time, so a stalled apt mirror costs minutes rather than the job's timeout (#159). No change to what the package computes.
+
 # knowledge 0.4.37
 
 * The receipt declarations' roundings now rest on a rebuild measured across two databases (#165). The published grade set's graded km and grade sum widen to 1e-2, above the summing-order bound of 1.2e-3 over its 4.2 million graded segments. Every other rounding is unchanged, and each declaration now says what it rests on. No change to what is computed or published.
