@@ -129,7 +129,7 @@ method, and the gate withholds a curve "no better than" no rule (`>=`, a tie wit
 
 ## Validation
 - [ ] Tests pass (`devtools::test()`; no package code changes expected)
-- [ ] `/code-check` clean (once over the branch with `/code-check branch`): round 1, six fragile guards fixed; round 2, a defect inside round 1's fix (quote pairing), fixed by enumerating every page citation
+- [x] `/code-check` clean (once over the branch with `/code-check branch`): round 1, six fragile guards fixed; round 2, a defect inside round 1's fix (quote pairing), fixed by enumerating every page citation; round 3, a defect inside round 2's fix (shared and trailing quotes), fixed; ended by enumeration (76 citations, 20 marks, nearest 268 characters)
 - [ ] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion
 

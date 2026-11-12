@@ -78,7 +78,7 @@ prediction uses the posterior predictive (p. 174). And because a held-out group'
 being scored, the score is conditional on that group's base rate: it measures how well a rule ranks visits within a
 group, and is optimistic by about one fitted parameter per group. That optimism is about the same for every rule
 (derived here; BDA3 notes that the effective number of parameters itself varies with the data, p. 174), so
-comparisons between rules hold; the absolute score does not mean "prediction for a new group". **Differs, defensibly**: a rule's
+comparisons between rules hold; the absolute score does not mean prediction for a new group. **Differs, defensibly**: a rule's
 job is to rank streams, and a group's base rate (how abundant the species is there) is not the rule's to predict.
 
 ### Is the region a comparison or a selection? (Rethinking ch. 7; BDA3 ch. 7)
@@ -105,7 +105,7 @@ convention neither book sets: the code calls it a parsimony rule fixed before th
 keeps the near-ties in view, closer to what p. 225 asks than a single winner, though it reduces each difference to in
 or out and still names one pick. The pick inside the region is a
 choice the scores do not make: a preference for link's rule, a prior in decision form whose pull is measured by `research/baseline_anchoring.md`
-(#141). That is honest when stated as a decision, which the article does ("the one that changes link's current rule least"). Choosing among thousands of rules also
+(#141). That is honest when stated as a decision, which the article does: it picks the region rule that changes link's current rule least. Choosing among thousands of rules also
 biases the winner's score:
 
 > "when these methods are used to choose a model selection, the predictive performance estimate of the selected model is biased due to the selection process." (gelman_etal2013Bayesiandata, p. 182)
@@ -186,8 +186,9 @@ curve; this review sets its terms (end of file).
 
 ### What does the grade predict, and for which group? (Rethinking ch. 13)
 
-*The principle.* A multilevel model predicts for "an average cluster" (the random effect at its mean) or "marginal of
-cluster" (averaged over the spread of clusters), and the book says to choose by the question:
+*The principle.* A multilevel model can predict for an average cluster, with the random effect at its mean (the book's
+average actor, p. 428), or marginally, averaging over the spread of clusters (its predictions marginal of actor), and
+the book says to choose by the question:
 
 > "The predictions that are marginal of actor illustrate how variable different chimpanzees are, according to the model." (mcelreath2020StatisticalRethinking, p. 429)
 
@@ -410,7 +411,7 @@ when that line no longer holds the code it names or the code appears elsewhere i
 | `curve_group_effect` | `R/tune_curve.R:104` | The group as a random effect by REML: partial pooling with its variance estimated, not integrated (Rethinking ch. 13; BDA3 ch. 5). | aligned |
 | `curve_reference` | `R/tune_curve.R:114` | The curve and grade are read at the median effort, the commonest data set and the latest era: a reference point, a convention. | no bearing |
 | `grade_gate` | `R/tune_run.R:292` | Grades withheld when the curve's held-out deviance is no lower than no rule's on the same visits: a point comparison, a tie withholds. | differs |
-| `grade_average_group` | `R/grade.R:64` | The grade leaves the group effect out: Rethinking's average cluster (p. 429), right for comparing segments across groups. | aligned |
+| `grade_average_group` | `R/grade.R:64` | The grade leaves the group effect out: Rethinking's average actor (p. 428), an average cluster, right for comparing segments across groups. | aligned |
 
 ## What to try in the retune
 
@@ -465,7 +466,7 @@ differs and step 8 to differs, with its should-change part named. Pages re-read 
 
 Round 3 read round 2's changes and found one error inside them: the blocking codes had been called related species,
 when most are loose names that could be the species itself, which makes a blocked absence missingness caused by the
-outcome (Rethinking pp. 500, 503). It also qualified "only" for the cloglog, bounded the gate argument by every key's
+outcome (Rethinking pp. 500, 503). It also qualified the word only for the cloglog, bounded the gate argument by every key's
 margin, moved the selection bias from step 6 to step 7, and named an owner on each should-change row. The
 should-change verdicts (three) and the changes the prose names were enumerated and match. Pages re-read in round 3:
 Rethinking 161, 225, 227, 249, 491, 499–503; BDA3 415, 416.

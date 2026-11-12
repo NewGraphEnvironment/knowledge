@@ -11,12 +11,14 @@
 # scripts/0280 compares them: ligatures spelled out, words and numbers as written ("2" is not "25"), symbols dropped
 # (the PDFs set formulae as glyphs pdftotext cannot keep), a line-end hyphen joined in one reading and kept in the
 # other. An ellipsis (… or ...) splits a passage into fragments that must appear in order, each of at least
-# `frag_min` tokens, and a passage with no word in it fails. Every page citation in the file ("p. N", "pp", "page", a
-# pandoc `[@`) is enumerated: one outside a checked quote fails when a quote mark (straight or curly double, opening
-# single) stands within `near` characters before it, the checked quotes masked out first. Straight quotes say nothing
-# of which one opens, so no pairing of quote marks is trusted. And the number of checked quotes must be `n_quotes`,
-# so a quote that slips out of the form, or a reflow that breaks one, fails. A page cited without a quote is not
-# checked here: the meaning audit re-reads it.
+# `frag_min` tokens, and a passage with no word in it fails. Then every checked passage is blanked out (its quote marks
+# and words, not its citation) and every page citation in the file is enumerated ("p.", "pp", "pg", "page", a pandoc
+# `[@`, with any space after it): a quote mark left within `near` characters of a citation, before or after it, fails.
+# A quote mark is a straight or curly double quote, a curly single one, or a straight single quote that is not an
+# apostrophe inside a word. So a quote with no checked form of its own, sharing a checked quote's citation or placed
+# after its citation, fails; straight quotes say nothing of which one opens, so no pairing of quote marks is trusted.
+# And the number of checked quotes must be `n_quotes`, so a quote that slips out of the form, or a reflow that breaks
+# one, fails. A page cited without a quote is not checked here: the meaning audit re-reads it.
 # COVERAGE. Three tables, each found by its `##` heading: "The steps" (first cell the step number, every step of
 # inst/method/pipeline.csv), "The settings" (first cell the key in backticks, every key of inst/method/settings.csv)
 # and "Choices with no settings key" (first cell the id in backticks, every id of `choices` below; its second cell,
@@ -38,7 +40,7 @@ books <- list(
 )
 verdicts <- c("aligned", "differs", "should change", "no bearing")
 frag_min <- 4L
-near <- 80L       # characters before a page citation in which a quote mark makes the page a quote's
+near <- 200L      # characters either side of a page citation in which a quote mark makes the page a quote's
 n_quotes <- 23L   # the quotes research/bayesian_alignment.md checks; change it with the file
 # method choices no setting names, each with a line of the code that makes it
 choices <- list(
@@ -124,20 +126,36 @@ page_text <- function(key, p) {
 txt <- paste(md, collapse = " ")
 ends <- cumsum(nchar(md) + 1L)
 line_at <- function(pos) findInterval(pos - 1L, c(0L, ends)) 
-rx <- '"([^"]+)"\\s*\\(([A-Za-z0-9_]+),\\s*pp?\\.\\s*([0-9]+)(?:\\s*[-\u2013]\\s*([0-9]+))?\\)'
+sp_rx <- "[\\s\\x{00A0}]"   # a space, a no-break space included, which PCRE's \\s alone does not match
+rx <- paste0('"([^"]+)"', sp_rx, '*\\(([A-Za-z0-9_]+),', sp_rx, '*pp?\\.', sp_rx, '*([0-9]+)(?:', sp_rx,
+             '*[-\u2013]', sp_rx, '*([0-9]+))?\\)')
 sm <- gregexpr(rx, txt, perl = TRUE)[[1]]
-strict <- if (sm[1] > 0) data.frame(start = as.integer(sm), end = as.integer(sm) + attr(sm, "match.length") - 1L) else
-  data.frame(start = integer(), end = integer())
-# the checked quotes blanked out, character for character, so the scan below sees only what they do not cover
+strict <- if (sm[1] > 0) data.frame(start = as.integer(sm), end = as.integer(sm) + attr(sm, "match.length") - 1L,
+                                    p_start = attr(sm, "capture.start")[, 1] - 1L,
+                                    p_end = attr(sm, "capture.start")[, 1] + attr(sm, "capture.length")[, 1]) else
+  data.frame(start = integer(), end = integer(), p_start = integer(), p_end = integer())
+# each checked passage blanked out with its two quote marks, character for character; its citation stays, so a quote
+# that leans on that citation without being checked still meets it below
 masked <- txt
 for (k in seq_len(nrow(strict))) {
-  substr(masked, strict$start[k], strict$end[k]) <- strrep(" ", strict$end[k] - strict$start[k] + 1L)
+  substr(masked, strict$p_start[k], strict$p_end[k]) <- strrep(" ", strict$p_end[k] - strict$p_start[k] + 1L)
 }
-pg <- gregexpr("\\b(pp?|pages?)\\.?\\s*[0-9]|\\[@", masked, perl = TRUE)[[1]]
+# inline code is code, not a quotation: its quote marks (`bs = "re"`) are blanked too
+cm <- gregexpr("`[^`]*`", masked)[[1]]
+for (k in seq_along(cm)) if (cm[k] > 0) substr(masked, cm[k], cm[k] + attr(cm, "match.length")[k] - 1L) <-
+  strrep(" ", attr(cm, "match.length")[k])
+# a straight single quote counts where it opens a word (`'like this`), never after a letter or digit: an apostrophe
+# (`BDA3's`, `folds'`, `*k*'s`) is not a quote mark. Marks are found once over the whole text, so a window's edge
+# cannot cut an apostrophe from the letter before it
+mark_rx <- "[\"\u201C\u201D\u2018]|(?<![[:alnum:]*_])'(?=[[:alnum:]])"
+marks <- gregexpr(mark_rx, masked, perl = TRUE)[[1]]
+marks <- if (marks[1] > 0) as.integer(marks) else integer()
+pg <- gregexpr(paste0("\\b(pp?|pg|pages?)\\.?", sp_rx, "*[0-9]|\\[@"), masked, perl = TRUE)[[1]]
 for (st in if (pg[1] > 0) as.integer(pg) else integer()) {
-  if (grepl("[\"\u201C\u201D\u2018]", substr(masked, max(1L, st - near), st - 1L))) {
-    bad("line ", line_at(st), ": a page cited within ", near, " characters of a quote mark, outside the checked form ",
-        "(\"...\" (<citekey>, p. N))")
+  hit <- marks[abs(marks - st) <= near]
+  if (length(hit)) {
+    bad("line ", line_at(st), ": a quote mark within ", near, " characters of a page citation, outside the checked form ",
+        "(\"...\" (<citekey>, p. N)), at: ", substr(masked, max(1L, hit[1] - 30L), hit[1] + 30L))
   }
 }
 ms <- regmatches(txt, list(sm))[[1]]
