@@ -42,14 +42,14 @@ Approved by Al at the plan gate, 2026-11-11:
 - [x] `devtools::test()` and `devtools::check()` pass on crate 0.16.0 (examples included); lintr per file unchanged
 - [x] ~~NEWS entry (0.4.36)~~ dropped from the branch at the plan review: NEWS and the bump are `/gh-pr-merge`'s release
       commit; its NEWS line: writers return the receipt read back from its file, works with crate 0.15 and 0.16
-- [ ] `/code-check branch`, `/planning-archive`, `/gh-pr-push`
+- [x] `/code-check branch`, `/planning-archive`, `/gh-pr-push`
 
 ## Validation
 
 - [x] Tests pass
 - [x] `/code-check` clean (once over the branch with `/code-check branch`)
 - [x] PWF checkboxes match landed work
-- [ ] `/planning-archive` on completion
+- [x] `/planning-archive` on completion
 
 Verification: Phase 1's failing run is the before; after Phase 2 the same three files and full `devtools::check()` pass
 on 0.16.0. Guard check: with the read-back reverted in one writer, its test file fails again (restore the bug). CI's
