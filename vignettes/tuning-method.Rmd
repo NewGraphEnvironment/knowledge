@@ -111,7 +111,8 @@ stopifnot(!is.null(sgm), nrow(sgl) > 0, sgm$segment$spearman > 0.5, sgm$segment$
 ```
 
 Each species of salmon and trout spawns and rears in some streams and not others, and what is known of its life
-history says roughly which: young chinook, for example, rear in small streams close to a large river. A fish habitat
+history says roughly which: young chinook, for example, rear in larger streams, and in small streams mostly where
+those join a river that holds chinook. A fish habitat
 definition writes that down as a few limits on a stream's size and slope, so a habitat model can map it. This article
 describes how we test those limits against the Province's fish sampling records, where crews electrofished and caught
 the species and where they did not. The biology sets the shape of each habitat definition; where the records allow,

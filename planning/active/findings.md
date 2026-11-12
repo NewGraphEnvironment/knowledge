@@ -114,8 +114,10 @@ rendered, so the tile fetch is not the cause seen:
 43033711487's log: apt `Ign:` on every `azure.archive.ubuntu.com` index about every 20 s, then `Temporary failure
 resolving 'azure.archive.ubuntu.com'`, 99 such lines until the cancel. The runner could not resolve the Ubuntu mirror.
 
-The fix in `pkgdown.yaml` (this repository's own workflow): apt retries with 30-s timeouts (flows#3's recipe), then
-each setup step limited and tried a second time if the first fails. The limits come from 25 successful pkgdown runs
+The fix in `pkgdown.yaml` (this repository's own workflow): each setup step limited and tried a second time if the
+first fails. A step writing apt retries (flows#3's first box) was added and then dropped in code-check round 2: the x64
+runner image writes `/etc/apt/apt.conf.d/zz-retries` (one retry, 15-s timeouts), which sorts after `80-retries` and
+wins, by design, so apt fails over to the next mirror sooner (`actions/runner-images`, `configure-apt.sh`). The limits come from 25 successful pkgdown runs
 to 2026-11-12: `setup-r` 28–233 s, `setup-r-dependencies` 0–624 s (the long ones cache misses), so 8 and 15 min; a
 first guess of 5 and 10 would have cut the slowest healthy runs. The job cap goes from 30 to 40 min so one second try
 fits. The R CMD check and citation workflows are the shared ones in `flows`; flows#3 already proposed the same fix, and

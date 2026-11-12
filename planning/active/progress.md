@@ -11,3 +11,4 @@
 - Phase 3: titles, life-history openings, "fish habitat definition" through the three articles, README, DESCRIPTION and the map labels; README figure regenerated; plan review folded in (review-plan.md)
 - Phase 5: stalls read (8 runs, 3 days, all apt DNS in setup-r); pkgdown.yaml gets apt retries and timed second tries; flows#3 body carries the evidence
 - Code-check round 1: 1 finding (Kirsch claim overstated its page), fixed; the uncommitted vignette_bib.R change committed; readability pass: 5 sentences fixed here, the rest filed as #202; pkgdown/favicon (an artifact of the local build) removed
+- Code-check round 2: 3 findings, all fixed: the apt-retries step was overridden by the runner image (dropped; flows#3, #159 and findings corrected), the method opening dropped "mostly where those join a river", stream splits credited every flow to the fwapg fork

@@ -579,8 +579,8 @@ The numbers were bundled on `r x$meta$written` from the tuning runs and link bui
 describe. When it was written, the share of visits starting their own segment, the four tunings'
 choices and habitat, and the other species' choices were checked against the logs that report them there. The visits are the
 Fisheries Data Information System's electrofishing records [@provinceofbritishcolumbia2022FisheriesData], placed on
-the Freshwater Atlas; their flows are [`wet`](https://www.newgraphenvironment.com/wet/)'s [@wet], carried onto Atlas
-streams by New Graph's fork of `fwapg` [@norris_irvine2026NewGraphEnvironmentfwapg]; fresh runs link's habitat
+the Freshwater Atlas; their flows are [`wet`](https://www.newgraphenvironment.com/wet/)'s [@wet], mostly PCIC's
+modelled flow carried onto Atlas streams by New Graph's fork of `fwapg` [@norris_irvine2026NewGraphEnvironmentfwapg]; fresh runs link's habitat
 definitions. The methodology article answers this article's question in brief
 ([Does where link cuts a stream change the habitat definitions?](tuning-method.html#cuts)). The maps' basemap is Esri's World Topographic Map
 blended with its World Shaded Relief.
