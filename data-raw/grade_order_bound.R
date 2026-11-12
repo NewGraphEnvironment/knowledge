@@ -28,6 +28,7 @@ for (f in fs) {
   km_all <- c(km_all, km); g_all <- c(g_all, gr)
   cat(k, "rows", nrow(t), "graded", sum(g), "\n")
 }
-out[[length(out) + 1]] <- one(km_all, "km_graded", "published set"); out[[length(out) + 1]] <- one(g_all, "grade_sum", "published set")
+out[[length(out) + 1]] <- one(km_all, "km_graded", "published set")
+out[[length(out) + 1]] <- one(g_all, "grade_sum", "published set")
 r <- rbindlist(out)
 print(format(r, digits = 6), right = FALSE)

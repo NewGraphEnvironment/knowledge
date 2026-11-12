@@ -14,3 +14,4 @@
   order bound computed over the published tables
 - Phase 5 probe: crate 0.16.0 fingerprints an IDate as its Date (findings)
 - Phase 4: declarations revised (habitat_grade's totals 1e-3 -> 1e-2; the rest unchanged, now on measurement); research, CLAUDE.md and the pin test updated
+- Full suite: 2290 passed, 0 failed, 3 skipped; the three new data-raw scripts wrapped to 120 columns, outputs unchanged on rerun

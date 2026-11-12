@@ -1,7 +1,7 @@
 # data-raw/grade_tolerance_try.R
 # ---------------------------------------------------------------------------
-# Try inst/receipt/grade.yaml's tolerances on two real grade receipts (#165): crate's verdict as measured, then with each
-# summary moved by half its tolerance (equivalent) and by three times it (different), and each count moved by one
+# Try inst/receipt/grade.yaml's tolerances on two real grade receipts (#165): crate's verdict as measured, then with
+# each summary moved by half its tolerance (equivalent) and by three times it (different), and each count moved by one
 # (different). The moves are made on the receipts as read, in memory; nothing is written.
 #
 # INPUT:  two run directories, each holding CH_rear_grades_receipt.json
@@ -14,7 +14,8 @@ keys <- knw_receipt_keys("grade")
 ra <- crate::crt_receipt_read(file.path(args[1], "CH_rear_grades_receipt.json"))
 rb <- crate::crt_receipt_read(file.path(args[2], "CH_rear_grades_receipt.json"))
 cat("declared:", paste(names(unlist(keys$tolerance$summary)), unlist(keys$tolerance$summary), collapse = " "), "\n")
-cat("receipts declare:", paste(names(unlist(ra$result$tolerance$summary)), unlist(ra$result$tolerance$summary), collapse = " "), "\n")
+td <- unlist(ra$result$tolerance$summary)
+cat("receipts declare:", paste(names(td), td, collapse = " "), "\n")
 cat("as measured:", crate::crt_receipt_compare(ra, rb, keys = keys)$verdict, "\n")
 for (nm in names(keys$tolerance$summary)) {
   tol <- keys$tolerance$summary[[nm]]

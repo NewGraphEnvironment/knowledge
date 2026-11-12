@@ -69,4 +69,5 @@ dl <- with(m, xor(is.na(length_metre.a), is.na(length_metre.b)) |
 cat("segments whose grade differs:", sum(dg), " max |grade diff|:",
     suppressWarnings(max(abs(m$grade.a - m$grade.b), na.rm = TRUE)), "\n")
 cat("segments whose length differs:", sum(dl), "\n")
-cat("same row order:", identical(ta$id_segment, tb$id_segment) && identical(ta$watershed_group_code, tb$watershed_group_code), "\n")
+cat("same row order:",
+    identical(ta$id_segment, tb$id_segment) && identical(ta$watershed_group_code, tb$watershed_group_code), "\n")
