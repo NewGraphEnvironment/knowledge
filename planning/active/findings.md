@@ -74,3 +74,34 @@ probably counted trashed items, as #122's first counts did. The five without a P
 - `mcmahon_etal2007TemperatureCompetition` (paywalled);
 - the Metolius migration report (`MigrationPatternsAdultBullTroutMetoliusRiverLakeBillyChinookOregon`; its ODFW URL
   was 404).
+
+## Group items about bull trout outside `VHWEK6RE` (guarded copy, 2026-11-12 07:25 UTC)
+
+Scratchpad `bt_group_scan.py`: every group item whose title names bull trout or *Salvelinus confluentus*. These are
+live, hold a PDF on disk, and are filed only in other collections, so they become **member rows**:
+- US core, already in the group: `u_s_fishandwildlifeservice2010Endangeredthreatened` (the 2010 critical habitat
+  rule) and `u_s_fishandwildlifeservice2015Recoveryplan`.
+- Williston: `hagenj_spendlowi_2019BullTrout` (2018 redd counts) and `hagen_etal2015Criticalhabitats` (Parsnip and
+  Pack).
+- Kootenay and Columbia: `cope_morris2001WigwamRiver` and `obrien1999Duncanbull`.
+- Reviews and models:
+  - `mcphail_baxter1996reviewbull`;
+  - `rieman_mcintyre1993Demographichabitat`;
+  - `dunham_chandler2001Modelspredict`;
+  - `mochnacz2021Thermalecology`;
+  - `macpherson_etal2024Prioritizingbull`;
+  - `RockyCreekbulltroutcumulativeeffectsmodelthreatsummary`;
+  - `dangelo_muhlfeld2011FactorsInfluencing`;
+  - `muhlfeld_etal2012ASSESSINGIMPACTS`.
+
+Live but with no PDF, and not taken as members:
+- Duplicate items of members already held: `cosewic2012COSEWICassessment`,
+  `comitteeonthestatusofendangeredwildlifeincanada2012COSEWICassessment`, `hagen_etal2015Criticalhabitatsa`,
+  `hagen_etal2020CriticalSpawninga`, `speciesregistrycanada2020BullTrouta` and
+  `bcspecies&ecosystemexplorer2020Salvelinusconfluentusb`. All six are in `references`. Merging duplicates is
+  #126 and #151's work, not this branch's.
+- `pearce_etal2019FirstNations` and `pearce2019FirstNations`, the Tse'khene First Nations information gathering on
+  kokanee, bull trout and grayling. They are two items for perhaps one report, and a PDF is to be searched for.
+
+Six trashed copies (Hagen & Weber 2019 ×3, COSEWIC 2012, Hagen et al. 2015, Pearce 2019) are trash; nothing is
+restored from them.
