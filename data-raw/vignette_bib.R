@@ -1,7 +1,7 @@
 # data-raw/vignette_bib.R
 # ---------------------------------------------------------------------------
-# The references of `vignettes/chinook_rearing.Rmd`, `vignettes/habitat_thresholds.Rmd` (#93) and the draft
-# `vignettes/stream_splits.Rmd` (#149), written from Zotero so
+# The references of `vignettes/tuning-chinook-rearing.Rmd`, `vignettes/tuning-method.Rmd` (#93) and the draft
+# `vignettes/tuning-stream-splits.Rmd` (#149), written from Zotero so
 # each article builds where Zotero is not
 # (pkgdown in CI). Issue #79.
 #
@@ -28,7 +28,7 @@
 #
 # INPUT:  the three articles, inst/vignette-data/chinook_rearing.rds (meta$versions), and Zotero running
 #         with Better BibTeX, synced with the group library
-# OUTPUT: vignettes/chinook_rearing.bib, vignettes/habitat_thresholds.bib, vignettes/stream_splits.bib
+# OUTPUT: vignettes/tuning-chinook-rearing.bib, vignettes/tuning-method.bib, vignettes/tuning-stream-splits.bib
 # RUN:    Rscript data-raw/vignette_bib.R   (from the repo root, after any change to the article's citations)
 # ---------------------------------------------------------------------------
 library_id <- 9   # Zotero's local id of the NewGraphEnvironment group library (group 4733734)
@@ -136,7 +136,7 @@ if (!is.null(attr(hits, "status"))) stop("no routed report at wet ", m$wet_sha, 
 fork_sha <- unique(sub("^.* at ", "", hits))
 if (length(fork_sha) != 1) stop("wet ", m$wet_sha, "'s reports name ", length(fork_sha), " fwapg commits")
 # all_tools: the article must cite fwapg, bcfishpass, bcfishobs, link, fresh and wet (the chinook article does)
-bib_write("vignettes/chinook_rearing.Rmd", "vignettes/chinook_rearing.bib", all_tools = TRUE)
-bib_write("vignettes/habitat_thresholds.Rmd", "vignettes/habitat_thresholds.bib", all_tools = FALSE)
+bib_write("vignettes/tuning-chinook-rearing.Rmd", "vignettes/tuning-chinook-rearing.bib", all_tools = TRUE)
+bib_write("vignettes/tuning-method.Rmd", "vignettes/tuning-method.bib", all_tools = FALSE)
 # the stream-splits article (#149)
-bib_write("vignettes/stream_splits.Rmd", "vignettes/stream_splits.bib", all_tools = FALSE)
+bib_write("vignettes/tuning-stream-splits.Rmd", "vignettes/tuning-stream-splits.bib", all_tools = FALSE)

@@ -49,3 +49,11 @@ Mutation table (scratch worktree, `test-vignette-data.R` with the new test, `ins
 | a `where` (an extra space in a `code:` phrase) | pass | pass |
 | a `note` | pass | pass |
 | a `source` | pass | **fail** |
+
+## Phase 2: the rename (2026-11-12)
+
+The references were all of the file form (`<name>.Rmd`, `.bib`, `.html`), rewritten by one perl pass guarded so
+`chinook_rearing.rds`, `chinook_rearing_tuned.md` and `habitat_thresholds_tuned.md` stay; no bare-name mention was left
+outside NEWS history. pkgdown 2.2.0 has `redirects:` (`build_redirects()`, a meta-refresh page per old path).
+`devtools::test()`: 0 failed, 0 errors; `test-settings-register.R` resolves the three `code:` phrases in the renamed
+chinook article.

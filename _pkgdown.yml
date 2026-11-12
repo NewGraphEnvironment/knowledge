@@ -2,6 +2,26 @@ url: https://newgraphenvironment.github.io/knowledge/
 template:
   bootstrap: 5
 
+articles:
+  - title: How the tuning works
+    navbar: How the tuning works
+    contents:
+      - tuning-method
+  - title: Case studies
+    navbar: Case studies
+    contents:
+      - tuning-chinook-rearing
+  - title: Checks on the method
+    navbar: Checks on the method
+    contents:
+      - tuning-stream-splits
+
+# the articles' names before the series (#118); the first two were linked from the website and sent by email
+redirects:
+  - ["articles/habitat_thresholds.html", "articles/tuning-method.html"]
+  - ["articles/chinook_rearing.html", "articles/tuning-chinook-rearing.html"]
+  - ["articles/stream_splits.html", "articles/tuning-stream-splits.html"]
+
 reference:
   - title: Habitat evidence
     desc: >

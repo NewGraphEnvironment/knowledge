@@ -30,4 +30,4 @@ Naming: `<topic>.md`, from 2026-09-26.
 | `chinook_rearing_tuned.md` | the tuned CH rearing rule (#54's 55-group build, rescored province-wide by #57 and retuned on the rebuilt evidence by #73 as `CH_rear_v1`): the life-history prior, the evidence, the recommended rule (gradient ≤ 13 %, and either MAD ≥ 0.75 m³/s or a ≥ 3 m³/s river within 1 km; `default` outside the region in every reading), the pick from link's flow start (#80), what each check says, the ladder to 30 % (#67, #68: flat from 11 to 30 %), the intercept fit, the grade, the rule beside link's `default` under three structures (#81), and #54's record of the method and sensitivities |
 
 The chinook rearing result is told in plain language, for a reader who has not seen the tuning, in the package
-article <https://newgraphenvironment.github.io/knowledge/articles/chinook_rearing.html> (#62).
+article <https://newgraphenvironment.github.io/knowledge/articles/tuning-chinook-rearing.html> (#62).

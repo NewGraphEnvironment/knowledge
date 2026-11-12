@@ -653,7 +653,7 @@ eastern sub-basin's network. The green (tuned only) is short reaches on small st
 ## The plain-language account
 
 The province-wide result is told for a reader who has not seen the tuning in the package article
-<https://newgraphenvironment.github.io/knowledge/articles/chinook_rearing.html> (#62), built from `inst/vignette-data/` by `data-raw/vignette_chinook.R`: since #143 the answer and a
+<https://newgraphenvironment.github.io/knowledge/articles/tuning-chinook-rearing.html> (#62), built from `inst/vignette-data/` by `data-raw/vignette_chinook.R`: since #143 the answer and a
 Bulkley map first, then what changes (a before/after table), why a nearby river matters (the fitted chance of a catch
 by flow and distance), how sure the choice is (the close calls, the stricter bar and the stability checks), and how it
 was done, in a table that links the method article. link's own account, the rule drawn by link, waits on its configuration

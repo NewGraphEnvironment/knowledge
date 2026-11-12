@@ -2,7 +2,7 @@
 title: "Splitting streams at fish records shifts the steepest slope mapped as habitat"
 output:
   bookdown::html_vignette2
-bibliography: stream_splits.bib
+bibliography: tuning-stream-splits.bib
 link-citations: true
 vignette: >
   %\VignetteIndexEntry{Splitting streams at fish records shifts the steepest slope mapped as habitat}
@@ -155,7 +155,7 @@ the shape of a definition, such as young chinook rearing in small streams close 
 fish sampling records are rich enough, they tune its values: knowledge scores candidate values against where sampling
 caught the species and where it did not, keeps the smallest change to link's standard settings that fits about as well
 as the best, and checks it on parts of the province it was not chosen from ([how the tuning
-works](habitat_thresholds.html)). A habitat map steers where restoration and conservation effort goes, and one tuned
+works](tuning-method.html)). A habitat map steers where restoration and conservation effort goes, and one tuned
 this way rests on where fish have actually been found.
 
 Chinook rearing is the worked example here; [the research notes](`r research`) hold every species tuned, each run
@@ -563,7 +563,7 @@ distance from a segment's downstream end.
 
 - These runs tuned chinook rearing all four ways, and the `r nrow(ok6)` other species and stages both networks could
   fit on the two networks' own slopes and, in a separate check, on the Atlas line each visit lies on
-  ([the methodology article's limits](habitat_thresholds.html#limits)). The network moved the definition for some of those
+  ([the methodology article's limits](tuning-method.html#limits)). The network moved the definition for some of those
   too.
 - The minimal network leaves out the cuts at fish records, at crossings and at hand-mapped habitat together, so these
   runs cannot say which of the three moved the limit. Builds that each leave out one kind of cut would.
@@ -580,7 +580,7 @@ describe. When it was written, the share of visits starting their own segment, t
 choices and habitat, and the other species' choices were checked against the logs that report them there. The visits are the
 Fisheries Data Information System's electrofishing records [@provinceofbritishcolumbia2022FisheriesData], placed on
 the Freshwater Atlas; fresh runs link's habitat definitions. The methodology article answers this article's question in brief
-([Does where link cuts a stream change the rules?](habitat_thresholds.html#cuts)). The maps' basemap is Esri's World Topographic Map
+([Does where link cuts a stream change the rules?](tuning-method.html#cuts)). The maps' basemap is Esri's World Topographic Map
 blended with its World Shaded Relief.
 
 ## Software and citation

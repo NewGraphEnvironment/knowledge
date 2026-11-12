@@ -65,9 +65,9 @@ Access and link's other steps then apply as they do to `default`.
 
 ## Learn more
 
-- [How the chinook rearing threshold was chosen and what it draws](https://www.newgraphenvironment.com/knowledge/articles/chinook_rearing.html): the
+- [How the chinook rearing threshold was chosen and what it draws](https://www.newgraphenvironment.com/knowledge/articles/tuning-chinook-rearing.html): the
   answer and the map first, why a nearby river matters, how sure we are, and how it was done.
-- [Choosing habitat thresholds from where fish were caught](https://www.newgraphenvironment.com/knowledge/articles/habitat_thresholds.html): the
+- [Choosing habitat thresholds from where fish were caught](https://www.newgraphenvironment.com/knowledge/articles/tuning-method.html): the
   method every species' rule is chosen by, and its limits.
 - [What is known](https://github.com/NewGraphEnvironment/knowledge/blob/main/research/README.md): one file per topic, from the FDIS export and the cited literature
   to the tuned rules.

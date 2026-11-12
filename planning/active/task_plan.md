@@ -44,16 +44,16 @@ What exploration changed:
 - [x] `CLAUDE.md`, methodology-article bullet: what now stales the bundle
 
 ## Phase 2: Rename into the series (#118)
-- [ ] `git mv` the three `.Rmd` and three `.bib` to `tuning-method`, `tuning-chinook-rearing`, `tuning-stream-splits`;
+- [x] `git mv` the three `.Rmd` and three `.bib` to `tuning-method`, `tuning-chinook-rearing`, `tuning-stream-splits`;
       `inst/vignette-data/` names stay
-- [ ] Update every reference: `data-raw/vignette_{bib,chinook,method}.R`, `data-raw/README.md`,
+- [x] Update every reference: `data-raw/vignette_{bib,chinook,method}.R`, `data-raw/README.md`,
       `inst/method/settings.csv` (three `where` paths), `CLAUDE.md`, `README.md` (Articles list), `research/`
       (README, `chinook_rearing_tuned.md`, `habitat_thresholds_tuned.md`, `minimal_network_tuning.md`, any other a
       grep finds), the articles' cross-links (`habitat_thresholds.html` → `tuning-method.html`, anchors kept).
       NEWS history entries stay as written
-- [ ] `_pkgdown.yml`: `articles:` with "How the tuning works" (method), "Case studies" (chinook rearing), "Checks on
+- [x] `_pkgdown.yml`: `articles:` with "How the tuning works" (method), "Case studies" (chinook rearing), "Checks on
       the method" (stream splits); `redirects:` from the three old article URLs
-- [ ] `devtools::test()` passes (settings register resolves the new paths)
+- [x] `devtools::test()` passes (settings register resolves the new paths)
 
 ## Phase 3: Titles, openings and one vocabulary (#118, #156)
 - [ ] Read soul's `conventions/writing.md` in full; word counts of the three articles and README before

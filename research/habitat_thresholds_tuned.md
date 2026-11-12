@@ -55,7 +55,7 @@ grade from 0 to 1 then gives the use to expect on each segment, read at that seg
 corrected a first build that read most segments at the distance cap), and is published only where the curve behind it
 predicts held-out groups better than no rule at all: for coho, westslope cutthroat and bull trout spawning it does not,
 so they carry a rule and no grade. The package article on chinook rearing
-(https://newgraphenvironment.github.io/knowledge/articles/chinook_rearing.html) walks through one species from the
+(https://newgraphenvironment.github.io/knowledge/articles/tuning-chinook-rearing.html) walks through one species from the
 question to the map; the specification below is the record.
 
 ## The question
@@ -123,7 +123,7 @@ test whether the outcome-linked segment length moves a threshold.
 ## Method
 
 The method is the methodology article, "Choosing habitat thresholds from where fish were caught"
-(<https://newgraphenvironment.github.io/knowledge/articles/habitat_thresholds.html>, `vignettes/habitat_thresholds.Rmd`,
+(<https://newgraphenvironment.github.io/knowledge/articles/tuning-method.html>, `vignettes/tuning-method.Rmd`,
 #93): every step, what it does and why, with each number that shapes a result in `inst/method/settings.csv`, where its
 value lives and whether it has been tested. It replaced the specification that stood here. `scripts/0320`'s header
 keeps the analysis spec beside the code. The parts each issue settled are named in that header and in the register's

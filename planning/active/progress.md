@@ -7,3 +7,4 @@
 - Scaffolded PWF baseline from issue #171 with approved phases
 - Next: start Phase 1
 - Phase 1: register check narrowed to the printed columns (all but `where`, `note`), mutation table in findings
+- Phase 2: three articles and .bib renamed to tuning-*, references rewritten, _pkgdown.yml groups and redirects; tests 0 failed
