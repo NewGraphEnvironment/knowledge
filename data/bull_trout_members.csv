@@ -11,7 +11,21 @@ cannings_ptolemy1998RareFreshwater,#122: member; PDF from the BC forests library
 App78_BC_Bulltrout_Brochpdf,#122: member; PDF from the item's URL,https://www.nwcouncil.org/sites/default/files/App78_BC_Bulltrout_Broch.pdf
 post_etal2012COSEWICassessment,"#122: member; publications.gc.ca CW69-14-659-2013-eng.pdf, saved by browser (it refuses scripted downloads)",data/rag/pdf/bull_trout/post_etal2012COSEWICassessment.pdf
 MigrationPatternsAdultBullTroutMetoliusRiverLakeBillyChinookOregon,#122: member; the item's ODFW URL is 404 (PDF pending),
-mcmahon_etal2007TemperatureCompetition,#122: member; paywalled (Unpaywall's copy is a conference abstract),
-speciesregistrycanada2020BullTrout,"#122: member; web page, no PDF",
-bcspeciesecosystemexplorer2020Salvelinusconfluentus,"#122: member; web page, no PDF",
-bcspecies&ecosystemexplorer2020Salvelinusconfluentusa,"#122: member; web page, no PDF",
+mcmahon_etal2007TemperatureCompetition,#122: member; #194: the author's copy on montana.edu,https://fdn.montana.edu/mcmahon/documents/bullxbrk%20TAFS.pdf
+speciesregistrycanada2020BullTrout,#122: member; web page; #194: printed from the registry profile with headless Chrome,data/rag/pdf/bull_trout/bt194_registry_1202-869_western_arctic.pdf
+bcspeciesecosystemexplorer2020Salvelinusconfluentus,#122: member; web page; #194: the CDC species summary (id 19659) printed with headless Chrome,data/rag/pdf/bull_trout/bt194_eswp_summary_19659.pdf
+bcspecies&ecosystemexplorer2020Salvelinusconfluentusa,#122: member; web page; #194: the CDC species summary for pop. 10 (id 312190) printed with headless Chrome,data/rag/pdf/bull_trout/bt194_eswp_summary_312190_pop10.pdf
+u_s_fishandwildlifeservice2010Endangeredthreatened,"#194: US core, the 2010 critical habitat rule; a group item that already holds its PDF",
+u_s_fishandwildlifeservice2015Recoveryplan,"#194: US core, the 2015 recovery plan; a group item that already holds its PDF",
+hagenj_spendlowi_2019BullTrout,#194: Hagen Williston series (2018 redd counts); a group item that already holds its PDF,
+hagen_etal2015Criticalhabitats,#194: Hagen Williston series (Parsnip and Pack); a group item that already holds its PDF,
+cope_morris2001WigwamRiver,#194: Kootenay (Wigwam River); a group item that already holds its PDF,
+obrien1999Duncanbull,#194: Columbia (Duncan); a group item that already holds its PDF,
+mcphail_baxter1996reviewbull,#194: bull trout review or model filed only in other collections; a group item that already holds its PDF,
+rieman_mcintyre1993Demographichabitat,#194: bull trout review or model filed only in other collections; a group item that already holds its PDF,
+dunham_chandler2001Modelspredict,#194: bull trout review or model filed only in other collections; a group item that already holds its PDF,
+mochnacz2021Thermalecology,#194: bull trout review or model filed only in other collections; a group item that already holds its PDF,
+macpherson_etal2024Prioritizingbull,#194: bull trout review or model filed only in other collections; a group item that already holds its PDF,
+RockyCreekbulltroutcumulativeeffectsmodelthreatsummary,#194: bull trout review or model filed only in other collections; a group item that already holds its PDF,
+dangelo_muhlfeld2011FactorsInfluencing,#194: bull trout review or model filed only in other collections; a group item that already holds its PDF,
+muhlfeld_etal2012ASSESSINGIMPACTS,#194: bull trout review or model filed only in other collections; a group item that already holds its PDF,

@@ -13,3 +13,9 @@
 - Browser downloads (16:45–18:05 UTC): 49 files through Claude in Chrome and Al's hand saves, COSEWIC 2025 and seven
   registry and CDC pages printed to PDF; three EcoCat reports restricted, owed to an access-request issue
 - Next: OCR the two partly scanned files, then draft rows from the title pages
+- `data/bull_trout_members.csv`: 14 group items appended; the three web-page members get the printed registry and CDC
+  pages (their URLs are 1202-869, elcode AFCHA05020 and AFCHA05122, read from a guarded copy), McMahon 2007 the
+  montana.edu author copy. Metolius 1996 still has none
+- Three drafting agents spawned at 18:05Z (EcoCat ×2, browser), title pages only, into scratchpad `draft/`
+  (seven agents on this issue in all)
+
