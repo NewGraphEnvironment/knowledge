@@ -55,9 +55,9 @@ What exploration settled:
    - Whole public series, capped at what their sites link. EcoCat is out.
 
 ## Phase 0: split the issue (no data writes)
-- [ ] File the life-history issue (piece 2, blocked by this store) and the dataset-hunt issue (piece 3), each with
+- [x] (#198 and #199.) File the life-history issue (piece 2, blocked by this store) and the dataset-hunt issue (piece 3), each with
       #194's text for its piece and "Relates to #33, #51"
-- [ ] Edit #194's body:
+- [x] Edit #194's body:
   - the corrected premise (`bull_trout_grayling` exists, and `habitat_modelling` reads `VHWEK6RE`);
   - this PR's scope;
   - the two new issues, as tasks.
@@ -132,7 +132,7 @@ What exploration settled:
 
 ## Owed at the end (reported, done after merge)
 
-- [ ] Pieces 2 and 3 (life history, datasets): the new issues filed in Phase 0
+- [ ] Pieces 2 and 3: #198 (life history, blocked by this store) and #199 (datasets), filed in Phase 0
 
 ## Validation
 
