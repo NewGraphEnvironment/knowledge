@@ -105,3 +105,26 @@ Live but with no PDF, and not taken as members:
 
 Six trashed copies (Hagen & Weber 2019 ×3, COSEWIC 2012, Hagen et al. 2015, Pearce 2019) are trash; nothing is
 restored from them.
+
+## Search B: Williston and Peace (agent, verified here 2026-11-12)
+
+Scratchpad `search_B/` (`candidates.tsv`, `notes.md`, `pdf/`). Each of the 12 kept files starts `%PDF` (59 KB to
+4.6 MB):
+- the BC Hydro Site C Mon-1b Task 2b "Peace River Bull Trout Spawning Assessment" series, 2016–2024 (11 reports, by
+  InStream Fisheries Research for BC Hydro, from sitecproject.com);
+- the 2008 Upper Halfway River bull trout spawning survey (Mainstream Aquatics).
+
+**The Hagen series is blocked as the gate stands.** Every Hagen or FWCP Peace bull trout report found is served from
+EcoCat (out at the gate) or from fwcp.ca, which answers 403 to scripted downloads, as bchydro.com does. Neither block
+was worked around. Found to exist (titles from search snippets, not opened):
+- O'Connor, Ferraro & Hagen 2024 (PEA-F24-F-3848, EcoCat r63074) and its 2025 edition (r63274);
+- the 2019 aerial redd survey of 28 Williston tributaries (r58761);
+- Peace Reach tributaries spawning (PEA-F25-F-3986);
+- Andrusak et al. 2012, redd counts 2001–2010 (r38265);
+- Langston & Cubberley 2008, Misinchinka telemetry (r40104);
+- Langston 2008, Gething Creek (r40147);
+- Hagen & Decker 2011, *The Status of Bull Trout in British Columbia* (r36019).
+
+FWCP's Peace project report list (an `.xlsx` on fwcp.ca) needs a browser download; it would enumerate the series.
+Held items: Hagen & Weber 2019 is on fwcp.ca (403) and EcoCat r57250. No URL was found for Hagen et al. 2020 or for
+Hagen & Sary 2023, both of which already have a PDF here.
