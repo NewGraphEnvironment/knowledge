@@ -9,7 +9,7 @@ the first receipts arrive with the next retune
 
 ## Why a run needs keeping
 
-A tuning run's grade tables (one row per stream segment, 0.7 to 5.6 GB each, about 26 GB a run), curves and segments
+A tuning run's grade tables (one row per stream segment, 0.3 to 2.5 GB each, about 11 GB a run), curves and segments
 are ignored by git. Until #119 they lived only on the machine that ran it, and the methodology article's bundle pinned
 the md5 of each grade table, so a published bundle could be rebuilt on one machine and nowhere else. Recreating a run
 instead costs about an hour of regrading and works only while the database still holds that run's link build and flow
@@ -44,7 +44,7 @@ Atlas-gradient sensitivity's curves (`grad_fwa/`, which grades nothing).
 
 `0320` writes `<key>_grades_record.csv` (tracked) beside each grade table. It holds the table's constant columns
 exactly as written, its md5, size and rows, the tuning run, the evidence ledger, the knowledge commit and link's build.
-The bundles read and pin the record, so rebuilding them needs the evidence (about 200 MB), not 26 GB of tables. The
+The bundles read and pin the record, so rebuilding them needs the evidence (about 200 MB), not 11 GB of tables. The
 record is written once and never changes; where a run is stored lives in the index. A restore fetches the run that a
 checkout's records name, by version id, and checks each file against its md5.
 
@@ -102,20 +102,20 @@ database's cache, so #162's cold walks were not exercised.
 
 So a grade table keeps 1e-3 on graded km and grade sum, now resting on the bound (one grade rounded the other way at its
 five significant figures moves the sum by up to 1e-5), and the grade set's totals widen to 1e-2, above the set's bound;
-each key's own receipt is the finer check. The revised tolerances, tried on the two real chinook receipts
+each key's own receipt is the finer check. The grade tolerances, tried on the two real chinook receipts
 (`data-raw/grade_tolerance_try.R`), read half a tolerance as `equivalent` and three times it, or a count moved by one,
 as `different`. The tolerances are set from chinook alone: #158 found BT and ST moved by the same parent-flow tie
 before it was fixed, so they are the keys to compare first when a promotion reads their receipts. The thresholds set
 stays exact: its picks and counts are what #158's second database reproduced (every pick, score, curve and group the
-same). Its table also carries each grade's `evidence_md5`, though, and `0325` names the evidence of both published sets
-by those md5s rather than by the evidence build's `recipe_id`, so until #197 orders `visits_link`'s columns, a
-published set rebuilt on another database reads `different` on its recipe and on the thresholds table. No two
-published-set receipts have been compared yet.
+same). Both published sets' recipes name the tuning run, and the evidence by the grade tables' `evidence_md5`, so they
+compare republishes of one run's tables, which read the same md5s on any database; a regrade is a new run and another
+recipe. No two published-set receipts have been compared yet, so the grade set's 1e-2 has not been tried on real
+receipts.
 
 ### The evidence build: every table exact but `access_check`'s km
 
 The evidence build's receipt (#160) writes down the rule this track began from. The first two measured rebuilds moved
-`access_check`'s km by 9.5e-11 km per value (#154's, on one database) and 6.0e-11 (#158's second database), because each value is a sum over up to
+`access_check`'s km by 9.5e-11 km per value (#145's rebuild on one database) and 6.0e-11 (#158's second database), because each value is a sum over up to
 tens of thousands of segments (72,617 at most) that a database may take in another order; every other table came back with the same values. So
 `access_check`'s km is rounded to 1e-6 km (1 mm, the tolerance #158's hand comparison used) and the rest is exact.
 `visits_link` is exact although #158 found its `mad_pick` moving on 3 of 45,529 visits: that was #161's unordered
@@ -129,7 +129,7 @@ written against the first build named its `recipe_id`. Both builds ran on one da
 each database's plan, did not fire.
 
 Measured across two databases on #165's branch (2026-11-12, the same script, `scripts/logs/habitat/receipt_165/`):
-`0310` at one commit on each database holding the published build, 19.3 and 11.9 min, gave one `recipe_id` (link's
+`0310` at one commit on each database holding the published build gave one `recipe_id` (link's
 installed configs hashing the same on both); four tables byte-identical, `access_check` differing at 5.3e-11 km at most
 over 2,193 rows and its sum at 1.5e-9 km; verdict `equivalent`, on the receipts alone and with the tables re-read
 (2.2 min), and the hand comparison agrees (six identical, `access_check` equivalent). `visits_link` and `workbook_sites`

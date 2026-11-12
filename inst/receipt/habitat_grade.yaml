@@ -5,8 +5,8 @@
 # the float error a sum of their size can carry when the rows come back in another order: n x machine epsilon x the
 # sum of absolute values, 1.07e-3 km of graded km and 1.20e-3 of grade sum over the published set's 4.2 million graded
 # segments (data-raw/grade_order_bound.R; 9e-7 seen over four orders), so 1e-2. Each key's own receipt is the finer
-# check. The recipe names the evidence by the grades' evidence_md5, which carries visits_link's md5: until #197 orders
-# its columns, a rebuild on another database reads `different` on its recipe before any total is compared.
+# check. The recipe names the tuning run, so these totals are compared between republishes of one run's grade tables;
+# the tolerance has not yet been tried on two real receipts.
 receipt_keys: 1
 output: habitat_grade
 recipe:

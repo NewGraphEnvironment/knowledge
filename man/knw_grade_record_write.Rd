@@ -57,7 +57,7 @@ naming what differs.
 }
 \description{
 A grade table (\verb{data/tune/<key>_grades.csv}, written by \code{scripts/0320}) is
-one row per stream segment, 0.7 to 5.6 GB, and ignored. Every reader that
+one row per stream segment, 0.3 to 2.5 GB, and ignored. Every reader that
 checks which run made it reads only its first row, where the run's record
 sits in the constant columns. The record is that row's constant columns
 with the table's md5, size and row count, the run, the evidence ledger, the
