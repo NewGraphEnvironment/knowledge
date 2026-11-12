@@ -1,0 +1,74 @@
+row	pdf	field	current	proposed	evidence
+74	data/rag/pdf/bull_trout/ecocat_37026_KootenayLakeExploitation.pdf	ok			
+75	data/rag/pdf/bull_trout/ecocat_40147_pwfwcp_report_no_333.pdf	ok			
+76	data/rag/pdf/bull_trout/ecocat_41587_FF14-07KootenayLake_BT_2013_Final_Public.pdf	creators	Andrusak, G.F.	keep (question: title page also names Harvey Andrusak)	p2 "Prepared by: Greg Andrusak, RPBio & Harvey Andrusak, RPBio"; Suggested Citation: "Andrusak G.F. 2014. Bull trout ... FWCP Report No. FF14-07"
+77	data/rag/pdf/bull_trout/ecocat_42458_thorley-2014exploitation-study.pdf	ok			
+78	data/rag/pdf/bull_trout/ecocat_50226_F-F16-05-FinalReport-Redfish-GerrardTrou.pdf	ok			
+79	data/rag/pdf/bull_trout/ecocat_52324_Chowade-BT-1996-SECURED.pdf	reportNumber	PFI-3/4	(blank), or keep with reportType "Peace Fisheries Inventory" (question)	p1 stamp block: "Peace Fisheries Inventory / Catalogue No. PFI- 3/4 / FISS / Copy Q of / Digitals Available Y": a library catalogue stamp, not a printed report number
+80	data/rag/pdf/bull_trout/ecocat_52929_BT_Peace.pdf	ok			
+81	data/rag/pdf/bull_trout/ecocat_53714_Bulltrout-graylingdistribution-temperatu.pdf	ok			
+82	data/rag/pdf/bull_trout/ecocat_54323_DutchCreek.pdf	ok			
+83	data/rag/pdf/bull_trout/ecocat_55481_ArrowReconstrut.pdf	ok			
+84	data/rag/pdf/bull_trout/ecocat_57455_UKE-F19-F-2760-Final_Report-MFLNRORD-Wil.pdf	ok			
+85	data/rag/pdf/bull_trout/ecocat_57650_LDRCreelSurveyReport2019Final.pdf	ok			
+86	data/rag/pdf/bull_trout/ecocat_58005_KasloBTKeltFenceReport2019_Final.pdf	ok			
+87	data/rag/pdf/bull_trout/ecocat_58873_Baxter2018-KasloHamillBTKeltFenceReport2.pdf	ok			
+88	data/rag/pdf/bull_trout/ecocat_59019_KootenayLakeBTDataReport2019Final.pdf	ok			
+89	data/rag/pdf/bull_trout/ecocat_59537_MoyieRiverwatershedBullTroutstatusassess.pdf	ok			
+90	data/rag/pdf/bull_trout/ecocat_59883_COL_F22_F_3544.pdf	date	(blank)	2021 (question)	p1 cover prints "2021" above the title "North Columbia Bull Trout Population Monitoring- 2021 Final Report"; no other date printed (text plans a "spring 2022 meeting"; PDF made 2022-05-04)
+91	data/rag/pdf/bull_trout/ecocat_622_wigwam1997.pdf	ok			
+92	data/rag/pdf/bull_trout/ecocat_62841_AReviewofKootenayLakeBullTroutReddCounts.pdf	ok			
+93	data/rag/pdf/bull_trout/ecocat_63074_PEA_F24_F_3848_Redacted.pdf	ok			
+94	data/rag/pdf/bull_trout/ecocat_63079_KasloRiverBT_2023_FinalReport_HCTF4-555.pdf	reportNumber	CAT # 23-4-555	keep (question: title page prints CAT # 22-4-555)	p2 title page "Final Report CAT # 22-4-555 ... Prepared for Habitat Conservation Trust Foundation and Freshwater Fisheries Society of British Columbia"; suggested citation "Reference Points-CAT # 23-4-555 (2023)"
+95	data/rag/pdf/bull_trout/ecocat_63097_PEA_F24_F_3847.pdf	ok			
+96	data/rag/pdf/bull_trout/ecocat_63257_EvaluationoftheSt_MaryRiverBullTroutPopu.pdf	ok			
+97	data/rag/pdf/bull_trout/ecocat_63271_PEA_F25_F_4052.pdf	ok			
+98	data/rag/pdf/bull_trout/ecocat_63274_PEA_F25_F_4054_REDACTED.pdf	ok			
+99	data/rag/pdf/bull_trout/ecocat_63651_FWCP_BT_Col-F25-F-4032_Final_2024_Report.pdf	ok			
+100	data/rag/pdf/bull_trout/ecocat_65153_306_CCE_FWCP-PEA-F26-F-4225_BT-Abundance.pdf	ok			
+101	data/rag/pdf/bull_trout/ecocat_7296_BaxterBullTroutcombo.pdf	ok			
+102	data/rag/pdf/bull_trout/ecocat_7296_PollardreportMurraydata.pdf	ok			
+103	data/rag/pdf/bull_trout/ecocat_7296_PollardreportPinedata.pdf	ok			
+104	data/rag/pdf/bull_trout/ecocat_7296_Pollardreport.pdf	ok			
+105	data/rag/pdf/bull_trout/bt194_bch_CLBMON-06_2020-03-24.pdf	ok			
+106	data/rag/pdf/bull_trout/bt194_bch_clbmon-6-yr1-2016-03-14.pdf	ok			
+107	data/rag/pdf/bull_trout/bt194_bch_clbmon-6-yr2-2017-02-20.pdf	ok			
+108	data/rag/pdf/bull_trout/bt194_bch_clbmon-6-yr3-2018-07-03.pdf	ok			
+109	data/rag/pdf/bull_trout/bt194_bch_ddmmon-05-yr3-2013-07-02.pdf	ok			
+110	data/rag/pdf/bull_trout/bt194_bch_ddmmon-5-yr10-2018-05-23.pdf	ok			
+111	data/rag/pdf/bull_trout/bt194_bch_ddmmon-5-yr4-2014-07-02.pdf	ok			
+112	data/rag/pdf/bull_trout/bt194_bch_ddmmon-5-yr5-2017-02-09.pdf	ok			
+113	data/rag/pdf/bull_trout/bt194_bch_ddmmon-5_yr1_sep_2009.pdf	ok			
+114	data/rag/pdf/bull_trout/bt194_bch_ddmmon-5_yr2_2010-03-01.pdf	ok			
+115	data/rag/pdf/bull_trout/bt194_bch_ddmmon-6__yr2_2010-06-01.pdf	ok			
+116	data/rag/pdf/bull_trout/bt194_bch_sevmon-2_seven_mile.pdf	ok			
+117	data/rag/pdf/bull_trout/bt194_bch_sevmon-2_yr2_interim.pdf	duplicate	(row kept)	drop: same report as row 54 (ecocat_16458_SevenMile.pdf)	both 57 pp., April 2009, cover "Subadult Bull Trout Distribution and Habitat Utilization in the Salmo River and Seven Mile Reservoir (Interim Report 2)", Prince; only the cover ref differs (SEVMON#1 vs SEVMON#2); text word counts 16382 vs 16381
+118	data/rag/pdf/bull_trout/bt194_bch_sevmon-2_yr3_2010-07-01.pdf	ok			
+119	data/rag/pdf/bull_trout/bt194_bch_wup_-_ddmmon-6_bull.pdf	ok			
+120	data/rag/pdf/bull_trout/bt194_bch_wup_clbmon_06_kinbasket_bull_trout_life_history_and_habi.pdf	ok			
+121	data/rag/pdf/bull_trout/bt194_bch_wup_lower_duncan_dam_bull_trout_passage_monitoring.pdf	ok			
+122	data/rag/pdf/bull_trout/bt194_bch_wup_upper_duncan_river_bull_trout_migration_monitoring.pdf	ok			
+123	data/rag/pdf/bull_trout/bt194_cosewic2025_status_report.pdf	ok			
+124	data/rag/pdf/bull_trout/bt194_eswp_esr_19659.pdf	ok			
+125	data/rag/pdf/bull_trout/bt194_eswp_esr_28548_pop28.pdf	ok			
+126	data/rag/pdf/bull_trout/bt194_eswp_summary_28548_pop28.pdf	ok			
+127	data/rag/pdf/bull_trout/bt194_fraley_shepard1989.pdf	ok			
+128	data/rag/pdf/bull_trout/bt194_martins2014_turbine_entrainment.pdf	ok			
+129	data/rag/pdf/bull_trout/bt194_paragamian_walters2011.pdf	ok			
+130	data/rag/pdf/bull_trout/bt194_registry_1201-872_south_coast.pdf	ok			
+131	data/rag/pdf/bull_trout/bt194_rg_baxter_etal1999.pdf	ok			
+132	data/rag/pdf/bull_trout/bt194_rg_baxter_hauer2000.pdf	ok			
+133	data/rag/pdf/bull_trout/bt194_rg_decker_hagen_baxter_arrow_feasibility.pdf	ok			
+134	data/rag/pdf/bull_trout/bt194_sk_SalmoBT2000.pdf	ok			
+135	data/rag/pdf/bull_trout/bt194_sk_SalmoBT2001.pdf	ok			
+136	data/rag/pdf/bull_trout/bt194_sk_SalmoBT2002.pdf	ok			
+137	data/rag/pdf/bull_trout/bt194_sk_SalmoBT2003.pdf	ok			
+138	data/rag/pdf/bull_trout/bt194_sk_SalmoBT98-99.pdf	title	Bull Trout Studies in the Salmo River Watershed: 1998 and 1999	add a draft marker (e.g. reportType "Draft report prepared for BC Hydro") or replace with the final if held	p2 Executive Summary reads "TO BE COMPLETED AFTER COMMENTS ARE RECEIVED ON THE DRAFT." - this copy is a draft
+139	data/rag/pdf/bull_trout/bt194_sk_SalmoBTTel1999.pdf	ok			
+140	data/rag/pdf/bull_trout/bt194_sk_SalmoBTTel2000.pdf	ok			
+141	data/rag/pdf/bull_trout/bt194_sk_SalmoBTTel_2001.pdf	ok			
+142	data/rag/pdf/bull_trout/bt194_sk_Sheep_Creek_Platforms.pdf	ok			
+143	data/rag/pdf/bull_trout/bt194_ubc_jsbaxter1997_thesis.pdf	ok			
+144	data/rag/pdf/bull_trout/bt194_ubc_ladell_thesis.pdf	ok			
+145	data/rag/pdf/bull_trout/bt194_ubc_latham_thesis.pdf	ok			
+146	data/rag/pdf/bull_trout/bt194_umt_cvbaxter1997_thesis.pdf	ok			

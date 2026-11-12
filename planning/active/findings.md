@@ -344,3 +344,26 @@ assessments print "COSEWIC", not the committee's full name, and the South Coast 
 of Canada" (now `{Species at Risk Public Registry}`, no institution). Baxter & Hauer 2000's journal is CrossRef's
 (a DOI row). This proves presence, not meaning: the meaning audit per row is the `/code-check` rounds' (#29's lesson).
 
+## Meaning audit, round 1 (two agents, 2026-11-12 18:21–18:26 UTC)
+
+`audit_round1_a.tsv` (rows 1–73) and `audit_round1_b.tsv` (74–146): each row read against its own cover, title page
+and citation line for what each field means. 23 rows questioned. Applied:
+- Site C: the "Mon-1b" hyphen restored in three titles (lost at a line break in the citation); `place` was BC Hydro's
+  Vancouver from the citation line, set to the preparer's Squamish where the cover prints it (2020–2024) and left blank
+  where it prints no address for InStream (2016–2019).
+- Hammond 2004: the printed title, its series in `reportType`. Columbia Headwaters RUIP: all three preparing offices and
+  both cities. Gutowsky 2014: a PhD thesis. The 1996 Wigwam report: the cover's title, the citation's "1996/67" being a
+  typo. 28071: "Annual report". 17431: the commission the cover names as lead. Chowade 1996: a library catalogue stamp
+  is not a report number. The Salmo 1998–99 draft says so in `reportType`; the Salmo 2015 scoping report and the
+  Arrow Lakes proceedings (Manson edited; `0270` files every creator as an author) say where their metadata came from.
+- Dropped: EcoCat 16458, the same Seven Mile interim report as BC Hydro's copy; COSEWIC's multi-species May 2025
+  summary (the full status report is filed). Now 144 additions.
+
+Kept as drafted, with the reason: the two Kootenay Lake kokanee plans (they set bull trout spawner triggers); report
+numbers and creators where the citation line and the cover differ (the citation line rules, as briefed); the blank date
+of North Columbia 2021 (the cover's "2021" is the project year); the form heading as the only title of field report
+11384.
+
+Dry run 2 (`scripts/logs/rag/20261112_0270_bull_trout_dryrun2.log`, exit 0): 162 would (14 members to add, 4 member
+PDFs, 144 creates), no `exists` or `copy exists` hit.
+

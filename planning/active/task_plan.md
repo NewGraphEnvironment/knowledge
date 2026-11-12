@@ -112,7 +112,7 @@ What exploration settled:
       source in findings before filing (the scope check), with the 14 group items found outside the collection as
       their own source line (S1). A3's quota check is settled: the group's file storage is unlimited (Al,
       2026-11-12; now in soul's `/zotero-api`), so the MB is recorded for upload time only
-- [ ] (Round 0, mechanical: `enumeration_round0.tsv`.) The enumeration, before the first dry run: every field of every row against a verbatim snippet of its own title
+- [x] (Round 0, mechanical: `enumeration_round0.tsv`; round 1, meaning: `audit_round1_{a,b}.tsv`.) The enumeration, before the first dry run: every field of every row against a verbatim snippet of its own title
       page (#190's `review-round3-evidence.tsv` form), so fixes are CSV edits (O2). From the first live run on, a fix
       is a CSV row, a PATCH and a no-op dry run; then the PATCHed items' keys are re-read from a guarded copy, and a key
       that moved means the CSVs and evidence rows, `0280`, and `ACTION=update` plus a push on all three stores. Members

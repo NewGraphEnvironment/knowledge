@@ -24,4 +24,5 @@
 - Metolius 1996 added to #209. Dry run 1 (`scripts/logs/rag/20261112_0270_bull_trout_dryrun1.log`, exit 0): 16 members
   in place, 14 to add, 4 member PDFs to upload, 1 without (Metolius), 146 additions to create, no `exists` or `copy
   exists` hit. Fraley & Shepard's item JSON checked (G2); a `pages` column added for its 133-143
+- Meaning audit round 1 folded in (144 additions); dry run 2 exit 0, 162 would. Next: the live run, with Al
 
