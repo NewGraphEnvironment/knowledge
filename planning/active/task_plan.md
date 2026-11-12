@@ -125,12 +125,12 @@ method, and the gate withholds a curve "no better than" no rule (`>=`, a tie wit
       (decision 5); each body names #185.
 
 ## Owed at the end (reported, done after merge)
-- [ ] None expected beyond the filed issues.
+- [x] None owed after the merge: the follow-ups are #203, #204 and #186's rewritten body.
 
 ## Validation
-- [ ] Tests pass (`devtools::test()`; no package code changes expected)
+- [x] Tests pass (`devtools::test()`: 2,289 pass; one file fails on this machine only, `test-vignette-data.R:116`, its ignored local evidence build not the published one; no package code changed)
 - [x] `/code-check` clean (once over the branch with `/code-check branch`): round 1, six fragile guards fixed; round 2, a defect inside round 1's fix (quote pairing), fixed by enumerating every page citation; round 3, a defect inside round 2's fix (shared and trailing quotes), fixed; ended by enumeration (76 citations, 20 marks, nearest 268 characters)
-- [ ] PWF checkboxes match landed work
+- [x] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion
 
 **How each change is proved:** `data-raw/bayesian_alignment_check.R` passes (every quote on its printed page; every
