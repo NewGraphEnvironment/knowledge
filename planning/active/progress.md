@@ -9,3 +9,4 @@
 - Phase 1: register check narrowed to the printed columns (all but `where`, `note`), mutation table in findings
 - Phase 2: three articles and .bib renamed to tuning-*, references rewritten, _pkgdown.yml groups and redirects; tests 0 failed
 - Phase 3: titles, life-history openings, "fish habitat definition" through the three articles, README, DESCRIPTION and the map labels; README figure regenerated; plan review folded in (review-plan.md)
+- Phase 5: stalls read (8 runs, 3 days, all apt DNS in setup-r); pkgdown.yaml gets apt retries and timed second tries; flows#3 body carries the evidence

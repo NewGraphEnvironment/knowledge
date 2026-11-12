@@ -96,3 +96,27 @@ Word counts (body prose without the YAML header and code chunks; `scratchpad wc.
 
 No cut was forecast: this was a change of words, not a simplification. "Habitat definition" is one word longer than
 "rule" at about 90 places, and the two new openings carry the life history; the README adds the third article's link.
+
+## Phase 5: the stalls (#159, 2026-11-12)
+
+Eight runs stalled on three days, all in `r-lib/actions/setup-r` or `setup-r-dependencies`, before any article
+rendered, so the tile fetch is not the cause seen:
+
+| date (UTC) | run | workflow | where it hung |
+|---|---|---|---|
+| 2026-11-05 21:43 | 42115253520 (attempt 1) | R CMD check | setup-r 21 min, then dependencies to the cap |
+| 2026-11-05 21:44 | 42115301523 (attempt 1) | pkgdown (release) | setup-r 20 min, then dependencies to the cap |
+| 2026-11-06 02:17 | 42149377267 | pkgdown | setup-r 19 min, then dependencies to the 30-min cap |
+| 2026-11-06 02:17 | 42149415347 | Update CITATION.cff | setup-r to the 15-min cap |
+| 2026-11-11 13:56 | 43033679109, 43033711487 | pkgdown (PR #190) | setup-r to the 30-min cap |
+| 2026-11-11 13:56 | 43033679680, 43033712021 | R CMD check (PR #190) | setup-r to the 45-min cap |
+
+43033711487's log: apt `Ign:` on every `azure.archive.ubuntu.com` index about every 20 s, then `Temporary failure
+resolving 'azure.archive.ubuntu.com'`, 99 such lines until the cancel. The runner could not resolve the Ubuntu mirror.
+
+The fix in `pkgdown.yaml` (this repository's own workflow): apt retries with 30-s timeouts (flows#3's recipe), then
+each setup step limited and tried a second time if the first fails. The limits come from 25 successful pkgdown runs
+to 2026-11-12: `setup-r` 28–233 s, `setup-r-dependencies` 0–624 s (the long ones cache misses), so 8 and 15 min; a
+first guess of 5 and 10 would have cut the slowest healthy runs. The job cap goes from 30 to 40 min so one second try
+fits. The R CMD check and citation workflows are the shared ones in `flows`; flows#3 already proposed the same fix, and
+knowledge's runs are now in its body.

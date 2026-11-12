@@ -77,11 +77,11 @@ What exploration changed:
       and new files share keeps its title, year and DOI
 
 ## Phase 5: A stall fails fast (#159)
-- [ ] Read the stalled `setup-r` steps' logs (the four runs above, and v0.4.29's if retained) for the last line
+- [x] Read the stalled `setup-r` steps' logs (the four runs above, and v0.4.29's if retained) for the last line
       before the cancel
-- [ ] `.github/workflows/pkgdown.yaml` (this repo's own): step-level `timeout-minutes` on `setup-r` and
+- [x] `.github/workflows/pkgdown.yaml` (this repo's own): step-level `timeout-minutes` on `setup-r` and
       `setup-r-dependencies`, so a stall fails in minutes with the step named
-- [ ] File a flows issue for the same step timeouts in the shared `r-cmd-check` and `r-citation-cff` workflows
+- [x] File a flows issue for the same step timeouts in the shared `r-cmd-check` and `r-citation-cff` workflows (flows#3 already held it: knowledge's evidence added to its body)
 - [ ] Record in #159 that no stall reached the article render, so the tile fetch is not the cause seen
 
 ## Phase 6: Site build and checks
