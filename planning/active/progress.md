@@ -13,3 +13,4 @@
 - Phase 3: `0320 SPECIES=CH` on each (06:47-07:04 UTC): grade receipts `identical`, tables equal but `evidence_md5`;
   order bound computed over the published tables
 - Phase 5 probe: crate 0.16.0 fingerprints an IDate as its Date (findings)
+- Phase 4: declarations revised (habitat_grade's totals 1e-3 -> 1e-2; the rest unchanged, now on measurement); research, CLAUDE.md and the pin test updated

@@ -125,3 +125,22 @@ n × eps × Σ|x|:
 BT spawning, CO and WCT have no graded rows (their grades are withheld). By the gate's rule: `grade.yaml`'s
 `km_graded` and `grade_sum` stay at 1e-3 (strictly above BT's 2.7e-4 and grade_sum's writer unit 1e-5), now on a
 measured basis; `habitat_grade.yaml`'s become 1e-2 (strictly above the set's 1.07e-3 and 1.20e-3).
+
+## Phase 4: the declarations revised (2026-11-12)
+
+| declaration | tolerance before | after | rests on |
+|---|---|---|---|
+| grade | km_graded, grade_sum 1e-3; pick gate 1e-4 | unchanged | BT rearing's order bound 2.7e-4; chinook identical on two databases |
+| habitat_grade | km_graded, grade_sum 1e-3 | **1e-2** | the published set's order bound 1.07e-3 and 1.20e-3 |
+| thresholds | exact | exact | #158's identical tune tables (no thresholds receipts compared yet) |
+| evidence | access_check km 1e-6, access_km 1e-3 | unchanged | #160, #158 and #165's pair (5.3e-11 km) |
+| fdis | access_check km 1e-6 | unchanged | the evidence build's |
+
+"Provisional" is gone from every header; each says what it rests on. Tried on the real chinook receipts
+(`data-raw/grade_tolerance_try.R`, `receipt_165/20261112_grade_tolerance_try.txt`): as measured `identical`; each total
+moved by half its tolerance `equivalent`, by three times `different`; a count moved by one `different`. Restoring 1e-3 on
+`habitat_grade`'s km in a scratch copy turns `test-receipt.R`'s pin red. The receipt test files pass (test-receipt 93,
+test-grade_receipt 50, test-evidence_receipt 29, test-publish 30).
+
+crate checks: a total is compared as a band (`crt_receipt_compare.R:160`); a table's columns and rows are sorted (by
+name, by canonical row) and its cells rounded to the tolerance's decimals before hashing (`crt_table_fingerprint.R`).

@@ -89,7 +89,7 @@ State found while exploring (2026-11-11):
       `REF=… NEW=… LABEL=evidence OUT=scripts/logs/habitat/receipt_165/… data-raw/database_compare.R` (hand verdict);
       expect one `recipe_id` and `identical` or `equivalent`, now that #161 is fixed. A `different` is traced to its
       rows before going further
-- [ ] After both regrades: commit the verdicts and logs under `receipt_165/` (ledgers where `0310` wrote them); record
+- [x] After both regrades: commit the verdicts and logs under `receipt_165/` (ledgers where `0310` wrote them); record
       the pair in `research/run_archive.md` ("The evidence build"), beside #160's same-database pair
 
 ## Phase 3: Chinook rearing regrade on each database
@@ -106,24 +106,25 @@ State found while exploring (2026-11-11):
       before any tolerance is set from it. Script: `data-raw/grade_receipt_compare.R`, output to `receipt_165/`
 - [x] Compute the order bound for every published key's grade table and for the published set (read-only, from the
       host's checkout, which holds the published tables)
-- [ ] Record the verdict in `research/database_builds.md` beside #158's table
+- [x] Record the verdict in `research/database_builds.md` beside #158's table
 
 ## Phase 4: Revise the declarations
-- [ ] `grade.yaml`: keep `pick.null_heldout_curve` at 1.0e-4 (`0320` writes four decimals; the header says a change in
+- [x] `grade.yaml`: keep `pick.null_heldout_curve` at 1.0e-4 (`0320` writes four decimals; the header says a change in
       the fourth decimal reads `different`, since a table's cells are rounded to that decimal); `rows` and `graded_rows`
       exact; `km_graded` and `grade_sum` by the rule above; header rewritten to say what they rest on, with the table
       sizes the records give (0.29 to 2.5 GB); "provisional" by the criterion above
-- [ ] `habitat_grade.yaml`: the same summaries, by the same rule over the published set
-- [ ] `thresholds.yaml`: exact, resting on #158's identical tune tables (said in the header)
-- [ ] `evidence.yaml`, `fdis.yaml`: tolerances from #158's and Phase 2's verdicts; the `visits_link` comment updated
+- [x] `habitat_grade.yaml`: the same summaries, by the same rule over the published set
+- [x] `thresholds.yaml`: exact, resting on #158's identical tune tables (said in the header)
+- [x] `evidence.yaml`, `fdis.yaml`: tolerances from #158's and Phase 2's verdicts; the `visits_link` comment updated
       now that #161 is fixed; "provisional" by the criterion above
-- [ ] Rewrite both chinook receipts under the revised declarations (in scratch copies) and compare them: each measured
+- [x] Try the revised declarations on both chinook receipts (grade's values are unchanged, so in memory, as read;
+      `data-raw/grade_tolerance_try.R`): each measured
       move falls within its new tolerance, and a move three times the tolerance is refused; recorded beside the verdict
-- [ ] Update what pins or restates the tolerances: `test-receipt.R` (the pin at 119-134, its title and the 1 mm
+- [x] Update what pins or restates the tolerances: `test-receipt.R` (the pin at 119-134, its title and the 1 mm
       comment), `test-grade_receipt.R:73-82`, `test-evidence_receipt.R:72-73`, `test-publish.R:149-150`;
       `research/run_archive.md` (the table, "about a metre of graded km", "These roundings are provisional", and the
-      rounding-edge text, which holds for tables, not summaries); `CLAUDE.md` (459, and 478-480 likewise); a new NEWS line
-      (the 0.4.x entries are released)
+      rounding-edge text, which holds for tables, not summaries); `CLAUDE.md` (459, and 478-480 likewise). NEWS: written by `/gh-pr-merge`'s release commit, as every
+      entry since 0.4.31 was, so the line goes in the PR body (corrected during Phase 4)
 
 ## Phase 5: database_receipts.R
 - [x] Probe that crate 0.16.0 gives a table with an `IDate` column the same fingerprint as the `Date` it is (crate#49)

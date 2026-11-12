@@ -1,7 +1,11 @@
 # The receipt declaration for the published grade set, knowledge/habitat_grade/v<n> (#154), read by
 # crate::crt_receipt_keys() through knw_receipt_keys("habitat_grade"). The set binds every published key's grade
 # table, millions of rows, so like each grade table it is judged on summaries and its Parquet bytes are recorded.
-# Provisional until #158.
+# Its summaries are each grade table's summed over the keys, so they are held as grade.yaml holds a key's (#165), by
+# the float error a sum of their size can carry when the rows come back in another order: n x machine epsilon x the
+# sum of absolute values, 1.07e-3 km of graded km and 1.20e-3 of grade sum over the published set's 4.2 million graded
+# segments (data-raw/grade_order_bound.R; 9e-7 seen over four orders), so 1e-2. Each key's own receipt is the finer
+# check.
 receipt_keys: 1
 output: habitat_grade
 recipe:
@@ -15,8 +19,8 @@ result:
   summary:
     rows: {}
     graded_rows: {}
-    km_graded: {tolerance: 1.0e-3}
-    grade_sum: {tolerance: 1.0e-3}
+    km_graded: {tolerance: 1.0e-2}
+    grade_sum: {tolerance: 1.0e-2}
 register:
   result.parts.*.bytes: warn
   result.parts.*.sha256: warn
