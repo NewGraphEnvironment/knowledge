@@ -4,7 +4,7 @@
 "A second database" 2026-11-06 (#161's fix measured the same day; chinook regraded on both 2026-11-12, #165) ·
 **Issues:** #87 (from #73's run times; #85 and #86 folded in or left open below), #110 (the round-trip check), #112 (the
 structures), #101 (`default`'s cost), #158 (a retune reproduced on a second database; it spawned #161, fixed, and #162), #165 (chinook
-rearing regraded on both after #161, with knowledge's receipts) ·
+rearing regraded on both after #161, with knowledge's receipts), #197 (the species column order, fixed) ·
 **Produced by:** `data-raw/walk_batch_check.R` (logs `scripts/logs/habitat/20261026_walk_batch_check*`),
 `data-raw/compare_parallel_check.R` (`20261026_compare_parallel_check*`), `data-raw/compare_structures_check.R`
 (`20261028_compare_structures_check*`), `data-raw/database_compare.R`, `data-raw/database_walk_check.R` and
@@ -258,9 +258,12 @@ receipts compared `identical`, the pick and the four totals bit for bit, and eve
 the `different` this table records for chinook's grade table was the tie, and the fix removed it. Every walk came
 from each database's cache, so #162 was not tested. The bytes of `visits_link` and `workbook_sites` differ with the
 same values (#158 saw `workbook_sites`' too): their species columns come out in each database's catalog order (#197),
-so `visits_link`'s md5, and with it the `evidence_md5` every grade table and summary carries, differs. `0320` for
-chinook rearing took 14.0 min on the host (14 workers) and 17.2 min on the second (8 workers, beside another session's
-link tests).
+so `visits_link`'s md5, and with it the `evidence_md5` every grade table and summary carries, differs. #197 has since
+made `knw_link_place()` sort the species by name, so these two tables carry one column order on any database. That
+order is not the published build's (its ledger lists both species groups in catalog order), so the next evidence
+build's two tables, and `visits_link`'s md5 in `evidence_md5`, differ from the published build's once, with the same
+values, and then agree across databases. `0320` for chinook rearing took 14.0 min on the host (14 workers) and 17.2
+min on the second (8 workers, beside another session's link tests).
 
 What a run costs on each:
 

@@ -2,7 +2,7 @@
 
 **Verified:** 2026-10-30; receipts 2026-11-12 · **Issues:** #119 (built here), #111 (promotion),
 NewGraphEnvironment/link#420 (tokens for older builds), #154 (receipts), #158 (the first rebuild compared across databases), #160 (the
-evidence build's and the published visit set's receipts), #165 (the roundings measured across two databases) ·
+evidence build's and the published visit set's receipts), #165 (the roundings measured across two databases), #197 (the species column order) ·
 **Produced by:** `R/archive.R`, `scripts/0336-archive.R`, `R/grade_receipt.R`, `R/evidence_receipt.R`, `inst/receipt/`; costs from #119's
 measurements of 2026-10-29, grade table sizes from the tracked records (2026-11-12) · **Status:** bucket configured 2026-10-30; first entry (the published run) pending;
 the first receipts arrive with the next retune
@@ -95,7 +95,7 @@ database's cache, so #162's cold walks were not exercised.
 | what | result |
 |---|---|
 | grade receipts (`data-raw/grade_receipt_compare.R`) | one `recipe_id`; `identical`: the pick and all four totals equal bit for bit |
-| the grade tables | every segment's grade and length the same, in the same order; bytes differ only in `evidence_md5` (#197) |
+| the grade tables | every segment's grade and length the same, in the same order; bytes differ only in `evidence_md5`, through `visits_link`'s column order (#197, since fixed) |
 | the eleven tune CSVs (`data-raw/database_compare.R`; the `.rds` curves and score caches not compared) | ten identical, the smoke table equivalent at 2.27e-13 |
 | largest move seen when the published tables' totals are summed in four orders (`data-raw/grade_order_bound.R`) | 8.1e-8 per key, 8.7e-7 over the set |
 | bound on any order's move | 2.7e-4 for the largest key (BT rearing, 2.1 million graded segments); 1.07e-3 km and 1.20e-3 over the published set (4.2 million) |
@@ -135,6 +135,10 @@ over 2,193 rows and its sum at 1.5e-9 km; verdict `equivalent`, on the receipts 
 (2.2 min), and the hand comparison agrees (six identical, `access_check` equivalent). `visits_link` and `workbook_sites`
 came back with the same values in another column order, because `knw_link_place()` takes the species from the catalog
 unordered (#197); crate sorts a table's columns by name before hashing, so no verdict moves, but their bytes differ.
+#197 has since made `knw_link_place()` sort the species by name, so the two tables carry one column order on any
+database. That order is not the published build's (its ledger lists both species groups in catalog order), so the next
+evidence build's two tables, and `visits_link`'s md5 in `evidence_md5`, differ from the published build's once, with
+the same values, and then agree across databases.
 
 crate rounds a table's value to its tolerance's decimals rather than allowing a band (a total it compares as a band),
 so two receipts alone can put values a hair apart on either side of a rounding edge and read `different`. Judge an evidence or visit-set rebuild with both

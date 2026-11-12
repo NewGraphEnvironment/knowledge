@@ -10,3 +10,10 @@
   the live test. Before the fix the new test errored and the live test failed (it ran: a `fresh_default` was
   reachable); with the helper replaced in the loaded namespace by an unsorted copy, the new test failed 5 times and
   the live test once, `R/link_place.R`'s md5 unchanged across the run. Lints on the two files: one removed, none added.
+- Plan review (Plan agent) folded in: `review-plan.md`. The access list was never sorted in any ledger, so the next
+  build moves both column blocks once on every database; `evidence.yaml`'s comment also cited #197; local seed;
+  `_stored` order pinned in the live test.
+- Phase 2: research/database_builds.md, research/run_archive.md and inst/receipt/evidence.yaml say the fix and the
+  one-time move. NEWS line goes in the PR body for /gh-pr-merge.
+- A full `devtools::test()` was stopped mid-run after a test edit (it would have described a mixed tree); rerun after
+  this commit.

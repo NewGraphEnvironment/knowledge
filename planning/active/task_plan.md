@@ -47,11 +47,11 @@ Approved by Al at the plan gate, 2026-11-12:
 
 ## Phase 2: Say what it changes
 
-- [ ] `research/database_builds.md:260` and `research/run_archive.md:98,136`: the column-order difference is fixed from
+- [x] `research/database_builds.md:260` and `research/run_archive.md:98,136`: the column-order difference is fixed from
       this release; the next evidence build's `visits_link.csv` and `workbook_sites.csv` differ from the published
       build's in column order (bytes), not content, and crate's comparison and `data-raw/database_compare.R` read them
       as the same; its `visits_link` md5 (the first of `evidence_md5`) moves accordingly
-- [ ] NEWS line drafted in the PR body for `/gh-pr-merge` (it writes NEWS and bumps the version)
+- [x] NEWS line drafted in the PR body for `/gh-pr-merge` (it writes NEWS and bumps the version)
 
 ## Owed at the end (reported, done after merge)
 

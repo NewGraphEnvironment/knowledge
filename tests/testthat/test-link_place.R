@@ -23,7 +23,7 @@ test_that("the species and their columns do not depend on the order the catalog 
   col <- c("id_segment", "watershed_group_code", "access_pk", "access_bt", "access_wct", "access_gr",
            "id_segment", "rearing", "rearing", "rearing", "rearing", "rearing")
   cols <- data.frame(table_name = tbl, column_name = col)
-  set.seed(197)
+  withr::local_seed(197)
   orders <- list(seq_len(nrow(cols)), rev(seq_len(nrow(cols))), sample(nrow(cols)))
   got <- lapply(orders, function(i) knowledge:::.knw_place_species(cols[i, ]))
   expect_identical(got[[1]], list(access = c("BT", "GR", "PK", "WCT"), habitat = c("BT", "GR", "KO", "PK", "WCT")))
@@ -66,6 +66,9 @@ test_that("placement runs against a live schema and re-gates the habitat flags o
   expect_true("BT" %in% p$species_access)
   expect_identical(p$species_access, sort(p$species_access, method = "radix"))
   expect_identical(p$species_habitat, sort(p$species_habitat, method = "radix"))
+  # the _stored copies follow the habitat list's order (the re-gating loop), so they are sorted too
+  stored <- grep("^[a-z]+_rearing_stored$", names(p$placed), value = TRUE)
+  expect_identical(stored, paste0(tolower(p$species_habitat), "_rearing_stored"))
   expect_true(all(c("bt_rearing", "bt_rearing_stored", "access_bt") %in% names(p$placed)))
   expect_true(p$placed$bt_rearing <= p$placed$bt_rearing_stored)
 })
