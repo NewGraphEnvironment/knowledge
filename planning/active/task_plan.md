@@ -63,7 +63,7 @@ What exploration settled:
   - the two new issues, as tasks.
 
 ## Phase 1: inventory, PDFs and the two CSVs (no Zotero writes)
-- [ ] Re-measure `VHWEK6RE` from a guarded copy that includes the `-wal` (the path `0270`'s `db()` uses): live
+- [x] (16 live, 16 keyed, 11 on disk.) Re-measure `VHWEK6RE` from a guarded copy that includes the `-wal` (the path `0270`'s `db()` uses): live
       members, keyed, and with a PDF on disk
 - [ ] Members without a PDF: try each one (the item's URL, an open-access copy of the DOI, the publisher, the catalogue,
       a "researchgate pdf" title search). Every body must start `%PDF`. Paywalled ones go on a list for Al to download

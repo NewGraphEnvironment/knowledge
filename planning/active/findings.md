@@ -63,3 +63,14 @@ Relates to #33 and #51.
 
 | Error | Resolution |
 |-------|------------|
+
+## Re-measure from a guarded copy (2026-11-12 07:20 UTC)
+
+`0270`'s `db()` (main file plus `-wal`, guarded; the `-wal` was 2.45 MB), then `local_pdf()` per item (scratchpad
+`bt_measure.py`): **16 live items, 16 keyed, 11 with the PDF on disk**, the same as #122's outcome. The issue's 20
+probably counted trashed items, as #122's first counts did. The five without a PDF are #122's remaining misses:
+- three web pages (`speciesregistrycanada2020BullTrout`, `bcspeciesecosystemexplorer2020Salvelinusconfluentus`,
+  `bcspecies&ecosystemexplorer2020Salvelinusconfluentusa`);
+- `mcmahon_etal2007TemperatureCompetition` (paywalled);
+- the Metolius migration report (`MigrationPatternsAdultBullTroutMetoliusRiverLakeBillyChinookOregon`; its ODFW URL
+  was 404).
