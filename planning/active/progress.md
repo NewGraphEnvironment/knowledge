@@ -12,3 +12,4 @@
   three files plus `test-archive.R`, `test-tune_promote.R`, `test-publish.R` pass (0 failed of 6, 9, 11, 22, 32, 6).
   Guard: with each writer's read-back line removed in-process (namespace and `package:knowledge` both patched; patching
   the namespace alone left the attached exports unchanged and read 0 failures), the same 3 + 3 tests fail again
+- Phase 3: no caller read a field that can be null; verdict per caller in findings.md

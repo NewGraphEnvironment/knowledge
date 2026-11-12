@@ -26,3 +26,20 @@ Measured on R-CMD-check run 43033793129 (2026-11-12): `checking examples ... ERR
 - [ ] `devtools::check()` passes against crate 0.16.0
 
 
+
+## Phase 3: no caller depended on an `NA` the 0.15 return held (2026-11-12)
+
+crate 0.15's `crt_receipt_write()` returned a list holding `NA` where the file holds `null`; the read-back holds `NULL`.
+A read-back evidence receipt has five `null` fields: `context$lockfile_sha256`, `context$session`, `output$schema`,
+`output$scope` and `recipe$seed` (measured on the roxygen example's fixture, crate 0.16.0). Grepping `R/ scripts/
+data-raw/ tests/ vignettes/` for those names finds only `test-grade_receipt.R:44,47`, which read a receipt already
+read back with `crt_receipt_read()` (and the grade receipt sets both scope and seed). Per caller of a writer's value:
+
+| caller | fields read | can be null? |
+|---|---|---|
+| `scripts/0310-evidence-build.R:501` | `rcp$recipe$recipe_id` | no: crate always computes it |
+| `data-raw/evidence_receipt_compare.R:53-54` | `gr$recipe$inputs$evidence`, `$recipe_id` | no: `.knw_receipt_evidence()` always names one |
+| `test-evidence_receipt.R` | `r$recipe$recipe_id`, `r$result$summary$visits` (integer from JSON `2`), `$access_km` (`expect_equal`) | no |
+| `test-grade_receipt.R` | `r$recipe$inputs$evidence`, `$recipe_id`, `ev_r$recipe$recipe_id` | no |
+
+So no change is needed; the tests that read these pass on 0.16.0.

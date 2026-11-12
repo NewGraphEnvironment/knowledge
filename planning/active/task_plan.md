@@ -34,7 +34,7 @@ Approved by Al at the plan gate, 2026-11-11:
 - [x] `tests/testthat/test-receipt.R` `receipt_from()`: return the receipt's path, not `crt_receipt_write()`'s value
 
 ## Phase 3: The NA-to-null difference
-- [ ] Check each caller and test that read a field of the returned list for one 0.15 gave as `NA` (a `null` in the file,
+- [x] Check each caller and test that read a field of the returned list for one 0.15 gave as `NA` (a `null` in the file,
       now `NULL`): `0310:501`, `data-raw/evidence_receipt_compare.R`, the `expect_*` on `r$…` in the two receipt tests.
       Fix any that depended on the `NA`; record the verdict per caller in findings.md
 
