@@ -9,11 +9,11 @@
 # one database), 1.0e-10 km at most (#160's two on one database), 6.0e-11 km (#158's second database) and 5.3e-11 km
 # (#165's two at one commit on two databases, every other table with the same values and one recipe_id, so
 # `equivalent` on the receipts alone and with the tables re-read). That pair also confirmed #161's fix: visits_link's
-# mad_pick, which moved on 3 visits in #158 through the tie, came back the same. Two tables' bytes still differ
-# between databases, the species columns' order (#197); crate fingerprints a table by column name, so the evidence
-# verdict does not move (each grade's evidence_md5 does). crate rounds a table's value to the tolerance's decimals,
-# so a comparison of receipts alone can read a value on either side of a rounding edge as different; compare with
-# the tables re-read (crt_receipt_compare(tables =)) for the verdict.
+# mad_pick, which moved on 3 visits in #158 through the tie, came back the same. Two tables' bytes differed between
+# databases, the species columns' order, until #197 sorted the species; crate fingerprints a table by column name, so
+# the evidence verdict never moved (each grade's evidence_md5 did). crate rounds a table's value to the tolerance's
+# decimals, so a comparison of receipts alone can read a value on either side of a rounding edge as different; compare
+# with the tables re-read (crt_receipt_compare(tables =)) for the verdict.
 receipt_keys: 1
 output: evidence
 recipe:

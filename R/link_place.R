@@ -28,7 +28,9 @@
 #'   `id_segment`, `segment_start_offset_m`, the segment attributes, elevation,
 #'   `access_<sp>` columns, `<sp>_<flag>` and `<sp>_<flag>_stored` columns);
 #'   `species_access`, the species with an `access_<sp>` column;
-#'   `species_habitat`, the species with a habitat table; `overlap`, a one-row
+#'   `species_habitat`, the species with a habitat table (both sorted by name,
+#'   which orders the species' columns in `placed`, so the column order does
+#'   not depend on the database's catalog); `overlap`, a one-row
 #'   `data.frame` with the number of visits whose point lies in two segments and
 #'   the largest overlap found.
 #' @export
@@ -52,9 +54,9 @@ knw_link_place <- function(conn, visits, schema, start_window_m = 5, overlap_max
     WHERE (table_schema = $1 AND table_name = 'streams_access')
        OR (table_schema = $1 AND table_name LIKE 'streams_habitat_%' AND table_name <> 'streams_habitat_long_vw')",
     params = list(schema))
-  sp_access <- toupper(sub("^access_", "", grep("^access_", cols$column_name[cols$table_name == "streams_access"],
-                                                 value = TRUE)))
-  sp_hab <- toupper(sub("^streams_habitat_", "", unique(grep("^streams_habitat_", cols$table_name, value = TRUE))))
+  sp <- .knw_place_species(cols)
+  sp_access <- sp$access
+  sp_hab <- sp$habitat
   if (!length(sp_access)) stop(schema, ".streams_access has no access_<sp> column", call. = FALSE)
 
   tmp <- "tmp_knw_link_place"
@@ -81,6 +83,17 @@ knw_link_place <- function(conn, visits, schema, start_window_m = 5, overlap_max
     }
   }
   list(placed = placed, species_access = sp_access, species_habitat = sp_hab, overlap = overlap)
+}
+
+# The species knw_link_place() places, from its catalog rows (table_name, column_name). Sorted by name, because
+# Postgres returns catalog rows in whatever order its plan reads them and the order of these lists is the order of
+# the columns placed carries, so unsorted two databases holding one build write the same values in another column
+# order (#197).
+.knw_place_species <- function(cols) {
+  acc <- grep("^access_", cols$column_name[cols$table_name == "streams_access"], value = TRUE)
+  hab <- grep("^streams_habitat_", cols$table_name, value = TRUE)
+  list(access = sort(unique(toupper(sub("^access_", "", acc))), method = "radix"),
+       habitat = sort(unique(toupper(sub("^streams_habitat_", "", hab))), method = "radix"))
 }
 
 # The two statements knw_link_place() runs: the overlap check and the placement.
