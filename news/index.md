@@ -1,5 +1,28 @@
 # Changelog
 
+## knowledge 0.4.38
+
+- The articles are a tuning series: “Tuning fish habitat definitions
+  with fish sampling records” (`tuning-method`), “Tuning habitat:
+  chinook rearing” (`tuning-chinook-rearing`) and the stream-splits
+  article (`tuning-stream-splits`, under “Checks on the method”), and
+  the old article URLs redirect to them
+  ([\#118](https://github.com/NewGraphEnvironment/knowledge/issues/118)).
+  The articles, README, DESCRIPTION and the comparison map’s labels say
+  “fish habitat definition” where they said “rule”, and the method and
+  chinook articles open from the species’ life history
+  ([\#156](https://github.com/NewGraphEnvironment/knowledge/issues/156)).
+  Upstream fwapg is cited with no version, and New Graph’s fork wherever
+  an article rests on its routed flows
+  ([\#107](https://github.com/NewGraphEnvironment/knowledge/issues/107)).
+  `test-vignette-data.R` holds the settings register to the method
+  bundle on the columns the article prints rather than the file’s md5,
+  so a moved `where` path no longer stales the bundle. The site build
+  limits each R setup step and tries it a second time, so a stalled apt
+  mirror costs minutes rather than the job’s timeout
+  ([\#159](https://github.com/NewGraphEnvironment/knowledge/issues/159)).
+  No change to what the package computes.
+
 ## knowledge 0.4.37
 
 - The receipt declarations’ roundings now rest on a rebuild measured
