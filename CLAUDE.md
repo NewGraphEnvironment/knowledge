@@ -1219,11 +1219,13 @@ dependencies in question are **first-party**, so a local patch leaves the bug in
 every other consumer. Same instinct as `newgraph.md`'s "install missing packages, don't
 workaround", applied to a *broken* dependency.
 
-**How to apply:** reproduce it minimally, file an issue in the owning repo with the
+**How to apply:** first check an installed package is current (`check_pkg_stale.sh`, then our
+package's tag and `main`, a CRAN package's CRAN) and state the versions beside the diagnosis.
+Then reproduce it minimally, file an issue in the owning repo with the
 repro and the exact lines (a third party's: a fork issue first, above), report it, and carry on if it is not blocking. The rule is
 *do not hide it*, not *do not continue*.
 
-*10 lines of evidence for this rule are in `conventions/agent-operations.md`.*
+*13 lines of evidence for this rule are in `conventions/agent-operations.md`.*
 
 
 # Cartography
@@ -1270,23 +1272,23 @@ Install: `pak::pak("NewGraphEnvironment/gq")`
 - **Compute area BEFORE simplify** in SQL
 - **No map title** — title belongs in the report caption
 - **Legend over least-important terrain** — swap legend and logo sides when it reduces AOI occlusion. No fixed convention for which side.
-- **Four-corner rule** — legend, logo, scale bar, keymap each get their own corner. Never stack two in the same quadrant.
-- **Bbox must match canvas aspect ratio** — compute the ratio from geographic extents and page dimensions. Mismatch causes white space bands.
-- **Consistent element-to-frame spacing** — all inset elements should have visually equal margins from the frame edge
+- **Four-corner rule** — legend, logo (our north arrow), scale bar, keymap each get their own corner. Never stack two in the same quadrant.
+- **Bbox must match canvas aspect ratio** — compute the ratio from geographic extents and page dimensions. Mismatch causes white space bands, and tmap pads the panel so its scale bar reads short: draw each panel on a canvas of its own box's shape (`tmap_save(width, height = width * dy / dx)`) and stack the PNGs.
+- **Consistent element-to-frame spacing** — equal margins from the frame edge
 - **Map fills to frame** — basemap extends edge-to-edge, no dead bands. Use near-zero `inner.margins` and `outer.margins`.
 - **Suppress auto-legends** — build manual ones from registry values
 - **ALL CAPS labels appear larger** — use title case for legend labels (gq `gq_tmap_classes()` handles this automatically via `to_title()` fallback)
-- **Google imagery is a link, never an embed beside our map** — Google Maps Platform terms §3.2.3(e) bar using its services "with or near a non-Google Map", so no Google panel beside an Esri or Sentinel one, key or not. Link per feature instead (template in the `cartography` skill), as an undated look: Google Maps does not date its imagery
-- **A maptiles custom provider URL ends in `.jpg`** — in maptiles 0.11.0, `create_provider()` with an extensionless tile URL fails at `get_tiles()` with `cannot coerce type 'closure' to vector of type 'character'`; `.../MapServer/tile/{z}/{y}/{x}.jpg`, the form its built-in Esri providers use, works and Esri serves the same tiles
+- **Google imagery is a link, never an embed beside our map** — its terms bar its services "with or near a non-Google Map", key or not. Link per feature (template in the `cartography` skill), as an undated look
+- **A maptiles custom provider URL ends in `.jpg`** (`.../MapServer/tile/{z}/{y}/{x}.jpg`) — an extensionless one fails at `get_tiles()` in maptiles 0.11.0 and is read as PNG from 0.12
 - **Ask Wayback, not the map, for newer Esri imagery** — call `dft_wayback_captures(zoom = z)` once per zoom, 10 to 22, and compare: one call keeps one zoom per feature
-- **Give a web map hex colours, never R colour names** — `grey80` draws in tmap and ggplot2, but MapLibre (mapgl) cannot parse it and drops the whole layer: the console's first error is `Could not parse color from value 'grey80'`, then `Cannot style non-existing layer` when a control touches it. Convert with `m <- grDevices::col2rgb(x, alpha = TRUE); grDevices::rgb(t(m[1:3, ]), alpha = m[4, ], maxColorValue = 255)` or hard-code hex, and check for `NA` before converting: it comes back `#FFFFFF00`, a layer drawn transparent rather than an error
+- **Give a web map hex colours, never R colour names** — MapLibre (mapgl) cannot parse `grey80` and drops the whole layer. Convert with `m <- grDevices::col2rgb(x, alpha = TRUE); grDevices::rgb(t(m[1:3, ]), alpha = m[4, ], maxColorValue = 255)`, refusing `NA` first: it converts to transparent
 - **Choose the window by measuring** — grid the area and draw the part where the story separates; the first window tried rarely shows it
-- **Every map places its reader** — town labels on every map, from `gns_geographical_names_sp` (the source gq's `town` style names), and the river named on the map and in the caption
+- **Every map places its reader** — town labels on every map, from `gns_geographical_names_sp` (the source gq's `town` style names), and the river named on the map and in the caption. An article's static map also gets Esri World Topographic Map blended with World Shaded Relief (`gq_basemap_tiles()`, `gq_basemap_blend()`), Freshwater Atlas stream names, and data colours that stand off its blue water
 - **Labels follow the registry, with a halo, never a box**
 - **Compare two rules side by side** — a pair across the page, each map showing what that rule alone holds
 - **Draw in BC Albers with tiles warped to it** (`crs = 3005`), and rasterize a large polygon onto the window rather than `st_crop()` it: both failures cut the layer silently
 
-*17 lines of evidence for this rule are in `conventions/cartography.md`.*
+*26 lines of evidence for this rule are in `conventions/cartography.md`.*
 
 ## Self-Review (after every render)
 
@@ -1304,15 +1306,12 @@ Read the PNG and check before showing anyone.
 
 ### Does it communicate?
 
-Every check above is about **where elements sit**. A map can satisfy all seven
-and still fail to say what it is about — so these are not optional extras, they
-are the half of the review that the placement list structurally cannot reach.
+Every check above is about **where elements sit**; a map can pass all seven and
+still not say what it is about. These are the half placement cannot reach.
 
-8. **Is every prominent feature in the legend?** Work the other direction from
-   the usual one: rank what draws the eye *in the rendered image*, then confirm
-   each of the top few appears in the legend. Building the legend from the layer
-   list instead answers "did I list my layers", which is a different question and
-   always says yes.
+8. **Is every prominent feature in the legend?** Rank what draws the eye *in the
+   rendered image*, then confirm each of the top few is in the legend. A legend
+   checked against the layer list always says yes.
 9. **Is the subject obvious to someone who has never seen this area?** An AOI
    that renders identically to its surroundings is not delineated by a thin
    boundary line — the reader has to be told where to look. Containment (a fill,
@@ -1323,24 +1322,23 @@ are the half of the review that the placement list structurally cannot reach.
     accordingly — and say in the caption or prose that you did.
 11. **Does the basemap earn its contrast cost?** A basemap that adds no readable
     terrain is not neutral: it lowers the contrast of everything drawn over it.
-    Blend parameters that mute it into a flat field are worse than no basemap.
+    Blend parameters that mute it into a flat field are worse than no basemap; fade
+    it only as far as the data reads and the terrain and names still do.
 12. **Is the type sized for the width it is published at, not rendered at?** A
-    7 in figure squeezed into a ~700 px column loses roughly 40% — text set at
-    `size = 0.5` for the render lands at a few pixels on the page. Check the
-    figure at its delivered width.
+    7 in figure in a ~700 px column shrinks about 40%, so `size = 0.5` text lands
+    at a few pixels. Check it at its delivered width.
 13. **Does every layer's data cover the whole window?** Dim the part of the
     window a layer's data does not reach, in every map that shares the window: a
     layer read for some watershed groups, catalogue items or one model run leaves
-    the rest blank, and blank reads as none: no access, no floodplain. Two Bulkley
-    maps on newgraphenvironment.github.io#65 took in a group that the link query's
-    group list and the floodplain catalogue both left out, and the fix reached the
-    second map only in the next review round.
+    the rest blank, and blank reads as none: no access, no floodplain.
+14. **Does it look finished?** Thin bars, white separators between classes, no
+    boxes or shadows.
 
 ### Why this half exists
 
 Placement checks can all pass on a map nobody can read; these ask whether it communicates.
 
-*8 lines of evidence for this rule are in `conventions/cartography.md`.*
+*12 lines of evidence for this rule are in `conventions/cartography.md`.*
 
 See the `cartography` skill for full reference: basemap blending, BC spatial data queries, label hierarchy, mapgl gotchas, and worked examples.
 
@@ -3052,6 +3050,14 @@ Use `clean-exclude` for anything that must survive.
 gh api "repos/OWNER/REPO/contents?ref=gh-pages" --jq '.[] | "\(.type) \(.name)"'
 ```
 
+## A local render writes `pkgdown/favicon/` into the source tree
+
+In a repo with a logo and no committed `pkgdown/favicon/`, a local `build_home()` or
+`build_site()` builds favicons into the source tree, whatever `destination` says. Commit them
+once (`pkgdown::build_favicons()`), or delete the directory before any `git add`.
+
+*3 lines of evidence for this rule are in `conventions/pkgdown-publishing.md`.*
+
 ## Removing something already published
 
 1. **Stop generating it** — the pre-build removal above.
@@ -3935,7 +3941,7 @@ A README tells a stranger what a package is, why it is worth their time, and how
 *Index only: each rule's heading and first sentence. The full text is soul's `conventions/readme.md`; read it before writing or reviewing code in its area.*
 
 ### Open with what the package is and why it is valuable, not with a list of features
-Open with one to three sentences on what the package is, what data it works on, and why that is valuable, naming the restoration decision it informs where there is one.
+Open with one to three sentences on what the package is, what data it works on, and why that is valuable, naming the conservation or restoration decision it informs where there is one.
 
 ### Write the tagline, the description field, the GitHub About and the opening together
 Change the README tagline, the DESCRIPTION `Title` (or pyproject `description`) and the GitHub About text together so they say the same thing, and keep the `Description` field and the README opening in step.
@@ -4145,6 +4151,9 @@ Open every public piece with what the product does for the reader and why it mat
 
 ### Let visuals carry the story where they land better
 Put the story in a map, figure or table whenever the reader takes it in faster there than from prose, and keep the prose to what the visual cannot say.
+
+### Show one case before the statistic that counts cases
+Show what an effect does in one case, a figure or a worked example, before the table that counts how often it happens, and say in the table's lead-in why the count matters.
 
 ### Review a rendered article where the reader will read it
 Offer the rendered page in a form that opens on a phone, before the merge, without being asked.
