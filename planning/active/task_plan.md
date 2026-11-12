@@ -75,7 +75,7 @@ method, and the gate withholds a curve "no better than" no rule (`>=`, a tie wit
       whitespace and hyphenation normalised) and fails on any quote not found there; also fails when a key in
       `settings.csv` or a step in `pipeline.csv` has no row. Paths under `~`, none named in output; log to
       `scripts/logs/`.
-- [ ] Harden the check (review C2–C6): token matching as `0280` does (numbers as written, line-end hyphens joined), a
+- [x] Harden the check (review C2–C6): token matching as `0280` does (numbers as written, line-end hyphens joined), a
       minimum fragment length after an ellipsis; folio on the first or last line of the page; a quote outside a
       blockquote line fails; the three tables found by heading, each row's last cell exactly one verdict, duplicate
       and stale keys fail; the no-key choices held in the script with a code anchor each, which must still match.

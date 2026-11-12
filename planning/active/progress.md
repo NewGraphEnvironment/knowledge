@@ -9,3 +9,5 @@
 - Plan review (Plan agent) returned; recorded in `review-plan.md`, four claims reproduced, plan corrected
 - Phase 1: store pulled and searched (hybrid); group PDFs and printed-page offsets resolved; the quote and coverage
   check `data-raw/bayesian_alignment_check.R` passes a true quote and fails a wrong page (fixture in the scratchpad)
+- Check hardened (review C2–C6): token matching, folio head or foot, table-scoped verdicts, unkeyed choices with code
+  anchors; eight planted defects fail, the clean fixture passes

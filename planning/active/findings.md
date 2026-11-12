@@ -50,3 +50,11 @@ The check reads three tables, each found by its `##` heading: `## The steps` (fi
 `## The settings` (first cell the key in backticks) and `## Choices with no settings key` (first cell a backticked
 id the check holds with a code anchor). Each row's last cell is exactly one of `aligned`, `differs`,
 `should change`, `no bearing`. Quotes stand on their own blockquote line: `> "…" (<citekey>, p. N)`.
+
+## The check's negative tests (2026-11-12)
+
+Fixtures generated from the registers (11 steps, 69 settings, 19 unkeyed choices) in the session scratchpad. The
+clean fixture (a Rethinking p. 357 quote and a BDA3 p. 407 quote across an ellipsis) passes. The planted fixture fails
+on all eight defects: a quote outside a blockquote, a wrong page, a fabricated word ("always constant"), a one-word
+fragment after an ellipsis, a missing setting, a duplicate setting, a stale key, and a row whose verdict is only in its
+prose. Exit status 1.
