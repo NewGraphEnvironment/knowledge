@@ -1,3 +1,7 @@
+# knowledge 0.4.37
+
+* The receipt declarations' roundings now rest on a rebuild measured across two databases (#165). The published grade set's graded km and grade sum widen to 1e-2, above the summing-order bound of 1.2e-3 over its 4.2 million graded segments. Every other rounding is unchanged, and each declaration now says what it rests on. No change to what is computed or published.
+
 # knowledge 0.4.36
 
 * `knw_evidence_receipt_write()` and `knw_grade_receipt_write()` return the receipt read back from the file they wrote (`crate::crt_receipt_read()`). crate 0.16.0's `crt_receipt_write()` returns the SHA-256 of the bytes it wrote rather than the receipt, and R CMD check failed at the examples and in 9 tests (#195, #188). The read-back works with crate 0.15 and 0.16, so knowledge still imports crate (>= 0.15.0). No change to what the package computes or publishes.

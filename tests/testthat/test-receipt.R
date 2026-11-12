@@ -116,13 +116,14 @@ test_that("a grade's moved bytes are listed, not refused, where its declaration 
   expect_identical(compare_of("thresholds", part = "b"), "different")
 })
 
-test_that("the declared tolerances are the ones written down, so changing one changes this test (#158 revises them)", {
+test_that("the declared tolerances are the ones written down, so changing one changes this test (#165 measured them)", {
   tol <- function(f) {
     k <- knw_receipt_keys(f)
     c(unlist(k$tolerance$summary), unlist(lapply(k$tolerance$tables, unlist)))
   }
   expect_equal(tol("grade"), c(km_graded = 1e-3, grade_sum = 1e-3, pick.null_heldout_curve = 1e-4))
-  expect_equal(tol("habitat_grade"), c(km_graded = 1e-3, grade_sum = 1e-3))
+  # the grade set sums every key's grades: its float bound over 4.2 million graded segments is 1.2e-3 (#165)
+  expect_equal(tol("habitat_grade"), c(km_graded = 1e-2, grade_sum = 1e-2))
   expect_null(tol("thresholds"))
   expect_identical(knw_receipt_keys("thresholds")$tables, c("thresholds", "thresholds_groups"))
   # the evidence build (#160): every table exact but access_check's km, at 1 mm

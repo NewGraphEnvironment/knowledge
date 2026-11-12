@@ -35,7 +35,7 @@ split piece, or one filed since the last pass): run `/backlog-sweep` to place it
 | - [ ] 11 | #180 | 17: report-priority pipeline for any group (3 issues) | **waiting** on Al's word to resume the report-priority work, parked 2026-09-04 |
 
 Tracks are separate efforts, not moves: baselines (#139, `track:baselines`: #140 next), speed (`track:speed`: #85,
-#101; its umbrella is in the skills repository), provenance (`track:provenance`: #162, #165; umbrella likewise) and
+#101; its umbrella is in the skills repository), provenance (`track:provenance`: #162, #197; #165 done in PR #206; umbrella likewise) and
 minimal-run (#120, `track:minimal-run`; its last task waits on link#460).
 
 link's own pass: link#468, a backlog pass for link that carries the link issues moves 8 and 9 and the baselines and minimal-run tracks wait on, so link's backlog can place them knowing what they hold up.

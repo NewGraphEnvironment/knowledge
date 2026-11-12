@@ -1,15 +1,15 @@
 # Keeping a tuning run: the archive
 
-**Verified:** 2026-10-30; receipts 2026-11-06 · **Issues:** #119 (built here), #111 (promotion),
-NewGraphEnvironment/link#420 (tokens for older builds), #154 (receipts), #158 (the first rebuild compared), #160 (the
-evidence build's and the published visit set's receipts) ·
-**Produced by:** `R/archive.R`, `scripts/0336-archive.R`, `R/grade_receipt.R`, `R/evidence_receipt.R`, `inst/receipt/`; sizes and costs from
-#119's measurements of 2026-10-29 · **Status:** bucket configured 2026-10-30; first entry (the published run) pending;
+**Verified:** 2026-10-30; receipts 2026-11-12 · **Issues:** #119 (built here), #111 (promotion),
+NewGraphEnvironment/link#420 (tokens for older builds), #154 (receipts), #158 (the first rebuild compared across databases), #160 (the
+evidence build's and the published visit set's receipts), #165 (the roundings measured across two databases) ·
+**Produced by:** `R/archive.R`, `scripts/0336-archive.R`, `R/grade_receipt.R`, `R/evidence_receipt.R`, `inst/receipt/`; costs from #119's
+measurements of 2026-10-29, grade table sizes from the tracked records (2026-11-12) · **Status:** bucket configured 2026-10-30; first entry (the published run) pending;
 the first receipts arrive with the next retune
 
 ## Why a run needs keeping
 
-A tuning run's grade tables (one row per stream segment, 0.7 to 5.6 GB each, about 26 GB a run), curves and segments
+A tuning run's grade tables (one row per stream segment, 0.3 to 2.5 GB each, about 11 GB a run), curves and segments
 are ignored by git. Until #119 they lived only on the machine that ran it, and the methodology article's bundle pinned
 the md5 of each grade table, so a published bundle could be rebuilt on one machine and nowhere else. Recreating a run
 instead costs about an hour of regrading and works only while the database still holds that run's link build and flow
@@ -19,7 +19,7 @@ load. wet reloads its flow table in place, so often it cannot.
 
 Everything is under `s3://fresh-bc/archive/knowledge/`, which is private:
 
-- `tune/<key>/<setup>/` holds a run's files for one key: `<key>_grades.csv.zst` (zstd -3, about 17× smaller), the
+- `tune/<key>/<setup>/` holds a run's files for one key: `<key>_grades.csv.zst` (zstd -3, about 17× smaller on #119's chinook table), the
   grade record, `<key>_curve.rds`, the comparison's `<key>_segments.rds` and, for a run made since #154, the grade
   table's receipt. `<setup>` is the build's four link
   output-vocabulary tokens, `<cut>.<acc>.<grad>.<flow>`. A build older than the vocabulary (link 0.70.0) logged no
@@ -44,7 +44,7 @@ Atlas-gradient sensitivity's curves (`grad_fwa/`, which grades nothing).
 
 `0320` writes `<key>_grades_record.csv` (tracked) beside each grade table. It holds the table's constant columns
 exactly as written, its md5, size and rows, the tuning run, the evidence ledger, the knowledge commit and link's build.
-The bundles read and pin the record, so rebuilding them needs the evidence (about 200 MB), not 26 GB of tables. The
+The bundles read and pin the record, so rebuilding them needs the evidence (about 200 MB), not 11 GB of tables. The
 record is written once and never changes; where a run is stored lives in the index. A restore fetches the run that a
 checkout's records name, by version id, and checks each file against its md5.
 
@@ -65,30 +65,61 @@ What each output holds as its result, and the rounding it is allowed, is declare
 
 | output | judged on | rounding |
 |---|---|---|
-| grade table (`<key>_grades_receipt.json`, tracked) | the pick (rule, reference edges, walk river size, the gate's verdict and number); rows, graded rows, graded km, grade sum | gate number 1e-4 (written to four decimals); graded km and grade sum 1e-3 |
+| grade table (`<key>_grades_receipt.json`, tracked) | the pick (rule, reference edges, walk river size, the gate's verdict and number); rows, graded rows, graded km, grade sum | gate number 1e-4 (written to four decimals, so a change in the fourth decimal is `different`); graded km and grade sum 1e-3 |
 | thresholds set (`receipt.json` beside its manifest) | both tables, read as text | none: exact |
-| grade set (`receipt.json` beside its manifest) | rows, graded rows, graded km, grade sum | graded km and grade sum 1e-3 |
+| grade set (`receipt.json` beside its manifest) | rows, graded rows, graded km, grade sum | graded km and grade sum 1e-2 |
 | evidence build (`evidence_receipt.json` in the evidence directory, #160) | every table `0310` writes, read back as text; placed visits; `access_check`'s km summed | `access_check`'s km 1e-6 per value, its sum 1e-3; every other table exact |
 | published visit set v3 (`receipt.json` beside its manifest, #160) | all 11 tables, read as text | `access_check`'s km 1e-6; every other table exact |
 
-The roundings are absolute, so a sum over millions of segments gets the rounding a sum that size needs (about a metre
-of graded km), not the per-value one. A grade table is 0.7 to 5.6 GB, too large to fingerprint, so its bytes are
-listed when they move and the verdict rests on the pick and the totals: for a grade, `identical` means those agree
-exactly, not that the bytes do.
+The roundings are absolute. crate treats the two kinds of result differently: a table's cells are rounded to the
+tolerance's decimals before they are hashed, while a total is compared as a band, the two values within the tolerance
+of each other. A grade table is 0.3 to 2.5 GB, too large to fingerprint, so its bytes are listed when they move and the
+verdict rests on the pick and the totals: for a grade, `identical` means those agree exactly, not that the bytes do.
+crate refuses two receipts that declare different roundings, so a receipt written before a revision compares with one
+after it only with a `keys` register override that softens `result.tolerance.*`.
 
-These roundings are provisional. #158 reruns the published retune on a second database and records each output's
-verdict by hand; the roundings are revised from it (an output found identical becomes exact). crate refuses two
-receipts that declare different roundings, so a receipt written before a revision compares with one after it only
-with a `keys` register override that softens `result.tolerance.*`.
+### How the grade roundings were set: one key regraded on two databases (#165)
+
+**The principle.** A grade total over up to millions of segments is a float sum, and a sum taken in another order lands a little
+elsewhere. A database is free to return a key's segments in another order, so the rounding on a total must cover what
+reordering can do, or a rebuild that changed nothing would read `different`. That error has a bound, the number of
+values times machine epsilon times the sum of their sizes, and each grade total's rounding is the smallest power of ten
+strictly above the bound for the largest table it is applied to, and above one unit of any rounding its writer applied
+to the values summed. Counts are exact. The other declarations' roundings were not set this way: they rest on the
+rebuilds below and #158's.
+
+Measured on #165's branch (2026-11-12, `scripts/logs/habitat/receipt_165/`): chinook rearing regraded with `0320` at
+one commit on two databases holding the published build, each on its own evidence build. Every walk came from each
+database's cache, so #162's cold walks were not exercised.
+
+| what | result |
+|---|---|
+| grade receipts (`data-raw/grade_receipt_compare.R`) | one `recipe_id`; `identical`: the pick and all four totals equal bit for bit |
+| the grade tables | every segment's grade and length the same, in the same order; bytes differ only in `evidence_md5` (#197) |
+| the eleven tune CSVs (`data-raw/database_compare.R`; the `.rds` curves and score caches not compared) | ten identical, the smoke table equivalent at 2.27e-13 |
+| largest move seen when the published tables' totals are summed in four orders (`data-raw/grade_order_bound.R`) | 8.1e-8 per key, 8.7e-7 over the set |
+| bound on any order's move | 2.7e-4 for the largest key (BT rearing, 2.1 million graded segments); 1.07e-3 km and 1.20e-3 over the published set (4.2 million) |
+
+So a grade table keeps 1e-3 on graded km and grade sum, now resting on the bound (one grade rounded the other way at its
+five significant figures moves the sum by up to 1e-5), and the grade set's totals widen to 1e-2, above the set's bound;
+each key's own receipt is the finer check. The grade tolerances, tried on the two real chinook receipts
+(`data-raw/grade_tolerance_try.R`), read half a tolerance as `equivalent` and three times it, or a count moved by one,
+as `different`. The tolerances are set from chinook alone: #158 found BT and ST moved by the same parent-flow tie
+before it was fixed, so they are the keys to compare first when a promotion reads their receipts. The thresholds set
+stays exact: its picks and counts are what #158's second database reproduced (every pick, score, curve and group the
+same). Both published sets' recipes name the knowledge commit, the tuning run and the evidence by the grade tables'
+`evidence_md5`. No two published-set receipts have been compared yet, so the grade set's 1e-2 has not been tried on
+real receipts.
 
 ### The evidence build: every table exact but `access_check`'s km
 
-The evidence build's receipt (#160) writes down the rule this track began from. The two measured rebuilds moved
-`access_check`'s km by 9.5e-11 and 6.0e-11 km per value (#158's second database), because each value is a sum over up to
-millions of segments that a database may take in another order; every other table came back with the same values. So
+The evidence build's receipt (#160) writes down the rule this track began from. The first two measured rebuilds moved
+`access_check`'s km by 9.5e-11 km per value (#145's rebuild on one database) and 6.0e-11 (#158's second database),
+because each value is a sum over up to tens of thousands of segments (72,617 at most) that a database may take in
+another order. The other tables came back with the same values, but for `visits_link` in #158 (below). So
 `access_check`'s km is rounded to 1e-6 km (1 mm, the tolerance #158's hand comparison used) and the rest is exact.
-`visits_link` is declared exact although #158 found its `mad_pick` moving on 3 of 45,529 visits: that is #161's
-unordered parent-flow tie, so a rebuild on another database reads `different` until #161 lands, and that is true.
+`visits_link` is exact although #158 found its `mad_pick` moving on 3 of 45,529 visits: that was #161's unordered
+parent-flow tie, fixed since, and the pair on two databases below came back with it unchanged.
 
 Measured on #160's branch (2026-11-06, `data-raw/evidence_receipt_compare.R`,
 `scripts/logs/habitat/evidence_receipt_160/`): two `0310` builds of the published build into tagged directories on one
@@ -97,8 +128,16 @@ most over 2,193 rows; verdict `equivalent`, on the receipts alone and with the t
 written against the first build named its `recipe_id`. Both builds ran on one database, so #161's tie, which breaks by
 each database's plan, did not fire.
 
-crate rounds a value to its tolerance's decimals rather than allowing a band, so two receipts alone can put values a
-hair apart on either side of a rounding edge and read `different`. Judge an evidence or visit-set rebuild with both
+Measured across two databases on #165's branch (2026-11-12, the same script, `scripts/logs/habitat/receipt_165/`):
+`0310` at one commit on each database holding the published build gave one `recipe_id` (link's
+installed configs hashing the same on both); four tables byte-identical, `access_check` differing at 5.3e-11 km at most
+over 2,193 rows and its sum at 1.5e-9 km; verdict `equivalent`, on the receipts alone and with the tables re-read
+(2.2 min), and the hand comparison agrees (six identical, `access_check` equivalent). `visits_link` and `workbook_sites`
+came back with the same values in another column order, because `knw_link_place()` takes the species from the catalog
+unordered (#197); crate sorts a table's columns by name before hashing, so no verdict moves, but their bytes differ.
+
+crate rounds a table's value to its tolerance's decimals rather than allowing a band (a total it compares as a band),
+so two receipts alone can put values a hair apart on either side of a rounding edge and read `different`. Judge an evidence or visit-set rebuild with both
 builds' tables re-read (`crt_receipt_compare(tables =)`, the tables as `.knw_receipt_csv_tables()` reads them), which
 compares cells within the tolerance.
 
@@ -146,6 +185,6 @@ md5-identical, and a second archive of the same files sent nothing.
 
 ## Cost
 
-At list prices as known (S3 Standard about $0.023 per GB-month, egress about $0.09 per GB): archiving every run,
-compressed, with the evidence once per build, comes to about 28 GB and $0.65 a month after a year at 15 runs a year.
-Restoring one run costs about $0.15. Storage is not the cost that matters; recreating a run is.
+At list prices as known (S3 Standard about $0.023 per GB-month, egress about $0.09 per GB), #119 projected from a run
+whose pinned inputs came to about 26 GB, nearly all of it grade tables: archiving every run, compressed, with the evidence once per build, about 28 GB and
+$0.65 a month after a year at 15 runs a year, and about $0.15 to restore one run. Today's grade tables come to about 11 GB a run. Storage is not the cost that matters; recreating a run is.

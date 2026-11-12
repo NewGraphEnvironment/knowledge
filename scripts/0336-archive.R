@@ -1,7 +1,7 @@
 # scripts/0336-archive.R
 # ---------------------------------------------------------------------------
 # Keep a tuning run's ignored files in durable storage, and restore them on any machine (#119). A run's grade tables
-# (0.7 to 5.6 GB each), curves and segments are ignored, so until this step they lived only on the machine that ran
+# (0.3 to 2.5 GB each), curves and segments are ignored, so until this step they lived only on the machine that ran
 # it, and an article bundle that pins them could be rebuilt there alone. This sends them to the bucket's private
 # archive (s3://fresh-bc/archive/knowledge/, versioned) with the evidence build they were graded on, and records where
 # in data/archive_index.csv (tracked); PULL=TRUE fills a checkout's ignored data/ back from it.

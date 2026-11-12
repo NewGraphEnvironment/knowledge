@@ -1,0 +1,12 @@
+label,output,verdict,bytes_match,rows_ref,rows_new,max_diff,column,tolerance,decision_read,note
+"tune165","CH_rear_curves.csv","identical",TRUE,360,360,0,NA,1e-06,FALSE,""
+"tune165","CH_rear_grades_record.csv","identical",FALSE,1,1,0,NA,0,TRUE,"context differs: grades_md5,tune_run,evidence_ledger,evidence_md5"
+"tune165","CH_rear_grades.csv","identical",FALSE,3016042,3016042,0,NA,1e-05,TRUE,"context differs: evidence_md5"
+"tune165","CH_rear_groups.csv","identical",TRUE,45,45,0,NA,0,FALSE,""
+"tune165","CH_rear_honest.csv","identical",TRUE,5,5,0,NA,1e-06,FALSE,""
+"tune165","CH_rear_seeds.csv","identical",TRUE,4,4,0,NA,0,TRUE,""
+"tune165","CH_rear_smoke.csv","equivalent",FALSE,8,8,2.27373675443232e-13,"limit",1e-06,FALSE,""
+"tune165","CH_rear_summary.csv","identical",FALSE,1,1,0,NA,1e-04,TRUE,"context differs: evidence_md5,tune_run,evidence_ledger,evidence_dir"
+"tune165","CH_rear_tune.csv","identical",TRUE,6149,6149,0,NA,1e-06,TRUE,""
+"tune165","CH_spawn_summary.csv","identical",TRUE,1,1,0,NA,1e-04,TRUE,""
+"tune165","pick_report.csv","identical",TRUE,1,1,0,NA,1e-04,TRUE,""
