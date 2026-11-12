@@ -29,3 +29,17 @@ Wood's *Generalized Additive Models* and MacKenzie et al.'s occupancy text join 
 
 | Error | Resolution |
 |-------|------------|
+
+## Sources (Phase 1, 2026-11-11)
+
+- `statistics` store pulled from the bucket (4 docs, 6,579 chunks, nomic-embed-text); cred 0.7.0, ragnar 0.3.1;
+  searches return `hybrid` rows.
+- Group items and their own attachments (guarded copy of `zotero.sqlite`, quick_check ok):
+  McElreath 2020 `7UX9T7RQ` (`mcelreath2020StatisticalRethinking`) → attachment `PVGNFJC9`, 609 PDF pages, printed
+  page = PDF page − 16; BDA3 `5RKUXXZS` (`gelman_etal2013Bayesiandata`) → `JP3BM8T9`, 677 pages, printed = PDF − 10.
+  The other Rethinking copy (`VRYUI5QB`) and the Feb 2020 draft (`8ET5IAV7`) are not the group item's.
+- BDA3's first line on every page is its free-edition notice; the running head is the next line.
+- The PDFs' text drops most word spaces and keeps subscripts inline ("log τi"): a quote must carry the subscript as
+  printed. The check failed a fixture quote that omitted it, which is the strictness wanted.
+- Rethinking p. 357 (ch. 11.2, exposure): a parameter in front of the log exposure "is one way to model the hypothesis
+  that the rate is not constant" — so a free `log_area` coefficient is a named alternative, not an error.

@@ -52,11 +52,11 @@ Branch `185-read-the-tuning-method-against-statistic` off `origin/main` at `89ee
    fixed-window gradients exist); each new one is filed at the end, sized for one `/planning-init`.
 
 ## Phase 1: Sources and the instrument
-- [ ] Pre-flight: cred ≥ 0.4.0, embedding service up; `cred::crd_store_connect("statistics")` pulls and verifies;
+- [x] Pre-flight: cred ≥ 0.4.0, embedding service up; `cred::crd_store_connect("statistics")` pulls and verifies;
       a test query returns `method = "hybrid"` rows (a `bm25` row is a failed search).
-- [ ] Resolve the group item's PDF for McElreath 2020 and BDA3 (guarded copy of `zotero.sqlite`, group 4733734);
+- [x] Resolve the group item's PDF for McElreath 2020 and BDA3 (guarded copy of `zotero.sqlite`, group 4733734);
       measure each PDF's printed-page offset (pdftotext of two known pages).
-- [ ] `data-raw/bayesian_alignment_check.R`: parses every quote in the research file written as
+- [x] `data-raw/bayesian_alignment_check.R`: parses every quote in the research file written as
       `> "…" (<citekey>, p. N)`, extracts printed page N from that key's PDF (`pdftotext -f -l`, offset applied,
       whitespace and hyphenation normalised) and fails on any quote not found there; also fails when a key in
       `settings.csv` or a step in `pipeline.csv` has no row. Paths under `~`, none named in output; log to
