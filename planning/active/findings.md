@@ -195,3 +195,38 @@ against every library, trash included. Eight matched, all group items:
 
 The other 66 rows matched nothing. A fuzzier check (by report number and the reports shared between searches A and C)
 comes with the CSV rows.
+
+## EcoCat for the named series (decision 5, 2026-11-12)
+
+EcoCat's keyword search for "bull trout" (`advancedSearch.do`, scratchpad `ecocat/search_bt.html`) returns 874
+reports, 132 of them with bull trout or *Salvelinus* in the title. 76 report ids were selected
+(`ecocat/selected_ids.txt`, read with `0153`'s `report_page`, `ecocat/meta.tsv`):
+- **Peace, Williston and provincial status (23):**
+  - the Hagen and FWCP Peace series: the 2018, 2024, 2025 and 2026 spawner-abundance reports, the population
+    structure years 1 and 2, the 2001–2015 redd-count review, Gething Creek, Davis River telemetry;
+  - Baxter's Chowade studies (1996–97);
+  - the Region 7 status (1992) and the Omineca management strategy (2005);
+  - Hagen & Decker 2011–12 and the 2015 provincial status assessment of grayling and bull trout.
+- **Columbia, Kootenay and Arrow (53):**
+  - FWCP Columbia: North Columbia, Kootenay Lake redd counts and productivity, Wild Horse, St. Mary, Moyie, Salmo;
+  - the Arrow Lakes adfluvial series;
+  - Revelstoke telemetry;
+  - the Wigwam HCTF reports (1996–1999);
+  - Kaslo and Hamill;
+  - Duncan migration (DDMMON-5 and -6);
+  - the Kootenay Lake exploitation study (2010–2014);
+  - Seven Mile entrainment (SEVMON).
+
+Left out:
+- the 56 other titled reports: coast, Fraser, Thompson and Stikine, plus the Fish Collection Permit returns;
+- items already held (`obrien1999Duncanbull`, `cope_morris2001WigwamRiver`);
+- the Wigwam 2001 and 2002 data reports, which search C took from OSTI.
+
+No selected report is our own.
+- **Wrong id:** 58761 is a kokanee report (search B's id for the 2019 aerial redd survey was wrong).
+- **No PDF on the page:** seven reports (64856, 50790, 52775, 44624, 34398, 41092, 61641) list no document or a
+  non-PDF one; these are for the gap or the browser.
+
+After about 70 page reads EcoCat answered 403 and timed out (63271, 38265, 40104, 63284, 59883, 57455, 22671). The
+download is paced: one page or file at a time with 8 s between, a 60 s wait on a failed page, logged to
+`ecocat/fetch.log`.
