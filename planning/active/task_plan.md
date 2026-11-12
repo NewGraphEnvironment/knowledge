@@ -128,7 +128,7 @@ State found while exploring (2026-11-11):
 ## Phase 5: database_receipts.R
 - [x] Probe that crate 0.16.0 gives a table with an `IDate` column the same fingerprint as the `Date` it is (crate#49)
       and that a moved date is caught (findings.md)
-- [ ] Remove the `IDate` → `Date` conversion (`data-raw/database_receipts.R:68-69`) and its comment; check the script
+- [x] Remove the `IDate` → `Date` conversion (`data-raw/database_receipts.R:68-69`) and its comment; check the script
       still parses
 
 ## Owed at the end (reported, done after merge)
