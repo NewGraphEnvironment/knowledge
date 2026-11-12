@@ -128,3 +128,32 @@ was worked around. Found to exist (titles from search snippets, not opened):
 FWCP's Peace project report list (an `.xlsx` on fwcp.ca) needs a browser download; it would enumerate the series.
 Held items: Hagen & Weber 2019 is on fwcp.ca (403) and EcoCat r57250. No URL was found for Hagen et al. 2020 or for
 Hagen & Sary 2023, both of which already have a PDF here.
+
+## Search C: Columbia, Kootenay and Arrow (agent, verified here 2026-11-12)
+
+Scratchpad `search_C/`. 63 rows: 26 `pdf_ok` (each file starts `%PDF`, 58 MB in all), 36 `needs_browser`, 1
+`paywalled`.
+
+`pdf_ok`:
+- 15 reports from BPA project 2000-004-00 on the upper Kootenay (Wigwam, Skookumchuck, the White River and its
+  Middlefork; enumeration, juvenile monitoring, telemetry and McNeil substrate, 2001–2006), from OSTI and UNT;
+- Kinbasket and Revelstoke: three papers (Aquatic Biology 2013, River Res. Appl. 2014, Can. J. Zool. 2016) and the
+  Kinbasket telemetry thesis (2014);
+- Kootenay Lake: the Action Plan (2016), the 2018 workshop summary, and three short bulletins;
+- the 2015 Salmo scoping report, which has no title page;
+- McPhail & Baxter 1996, already in the group.
+
+Marginal by the agent's own call: the three bulletins, the McNeil substrate report, and Gutowsky et al. 2016
+(watermarked "for personal use only").
+
+`needs_browser`:
+- 19 BC Hydro reports: DDMMON-5 (7), DDMMON-6 (3), CLBMON-6 (5) and SEVMON-2 (4);
+- 11 Streamkeepers reports, held only by the Wayback Machine;
+- two UBC theses;
+- two Cloudflare-blocked papers;
+- one ResearchGate item;
+- one set of slides.
+
+These rows carry no title or creators, because their title pages were not read.
+
+FWCP Columbia bull trout reports are EcoCat only, the same block as search B's.
