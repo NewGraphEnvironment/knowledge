@@ -1,5 +1,20 @@
 # Changelog
 
+## knowledge 0.4.39
+
+- [`knw_link_place()`](https://newgraphenvironment.github.io/knowledge/reference/knw_link_place.md)
+  sorts the species it places by name, so the species columns of the
+  evidence build’s `visits_link.csv` and `workbook_sites.csv` come out
+  in one order on any database
+  ([\#197](https://github.com/NewGraphEnvironment/knowledge/issues/197)).
+  Before, they followed each database’s catalog order, so two databases
+  holding one build wrote the same values in different column orders,
+  and `visits_link`’s md5, the first of every grade’s `evidence_md5`,
+  differed between them. The published build lists both species groups
+  unsorted, so the next evidence build moves those columns once. crate
+  fingerprints a table by column name, so no receipt verdict moves.
+  Nothing published moves.
+
 ## knowledge 0.4.38
 
 - The articles are a tuning series: “Tuning fish habitat definitions

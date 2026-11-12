@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">knowledge</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.38</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.39</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -40,9 +40,14 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/v0.4.39/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.4.39" id="knowledge-0439">knowledge 0.4.39<a class="anchor" aria-label="anchor" href="#knowledge-0439"></a></h2>
+<ul><li>
+<code><a href="../reference/knw_link_place.html">knw_link_place()</a></code> sorts the species it places by name, so the species columns of the evidence build’s <code>visits_link.csv</code> and <code>workbook_sites.csv</code> come out in one order on any database (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/197" class="external-link">#197</a>). Before, they followed each database’s catalog order, so two databases holding one build wrote the same values in different column orders, and <code>visits_link</code>’s md5, the first of every grade’s <code>evidence_md5</code>, differed between them. The published build lists both species groups unsorted, so the next evidence build moves those columns once. crate fingerprints a table by column name, so no receipt verdict moves. Nothing published moves.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.38" id="knowledge-0438">knowledge 0.4.38<a class="anchor" aria-label="anchor" href="#knowledge-0438"></a></h2>
 <ul><li>The articles are a tuning series: “Tuning fish habitat definitions with fish sampling records” (<code>tuning-method</code>), “Tuning habitat: chinook rearing” (<code>tuning-chinook-rearing</code>) and the stream-splits article (<code>tuning-stream-splits</code>, under “Checks on the method”), and the old article URLs redirect to them (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/118" class="external-link">#118</a>). The articles, README, DESCRIPTION and the comparison map’s labels say “fish habitat definition” where they said “rule”, and the method and chinook articles open from the species’ life history (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/156" class="external-link">#156</a>). Upstream fwapg is cited with no version, and New Graph’s fork wherever an article rests on its routed flows (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/107" class="external-link">#107</a>). <code>test-vignette-data.R</code> holds the settings register to the method bundle on the columns the article prints rather than the file’s md5, so a moved <code>where</code> path no longer stales the bundle. The site build limits each R setup step and tries it a second time, so a stalled apt mirror costs minutes rather than the job’s timeout (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/159" class="external-link">#159</a>). No change to what the package computes.</li>
