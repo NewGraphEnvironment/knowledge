@@ -1,5 +1,15 @@
 # Changelog
 
+## knowledge 0.4.37
+
+- The receipt declarations’ roundings now rest on a rebuild measured
+  across two databases
+  ([\#165](https://github.com/NewGraphEnvironment/knowledge/issues/165)).
+  The published grade set’s graded km and grade sum widen to 1e-2, above
+  the summing-order bound of 1.2e-3 over its 4.2 million graded
+  segments. Every other rounding is unchanged, and each declaration now
+  says what it rests on. No change to what is computed or published.
+
 ## knowledge 0.4.36
 
 - [`knw_evidence_receipt_write()`](https://newgraphenvironment.github.io/knowledge/reference/knw_evidence_receipt_write.md)
