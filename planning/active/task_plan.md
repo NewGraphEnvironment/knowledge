@@ -54,6 +54,14 @@ What exploration settled:
    - Kootenay and Arrow Lakes monitoring, including BC Hydro's.
    - The US core: the USFWS 2015 recovery plan, the 2010 critical habitat rule and Fraley & Shepard 1989.
    - Whole public series, capped at what their sites link. EcoCat is out.
+5. **(Al, 2026-11-12, after the three searches)**
+   - EcoCat is allowed for named third-party FWCP and provincial bull trout reports whose only public host it is: the
+     Hagen Williston series, Hagen & Decker 2011 and FWCP Columbia's reports. Our own reports stay excluded.
+   - Documents that need a browser (fwcp.ca, bchydro.com, publications.gc.ca, JS-only and Cloudflare-checked hosts,
+     the Wayback Machine) are fetched through Claude in Chrome, pausing on any login or check.
+   - Marginal: Rodtka 2009 (Alberta's status update), the 11 Streamkeepers reports through the Wayback Machine and the
+     2015 Salmo scoping report are in, the scoping report's metadata from the page that links it. The Kootenay Lake
+     bulletins are out.
 
 ## Phase 0: split the issue (no data writes)
 - [x] (#198 and #199.) File the life-history issue (piece 2, blocked by this store) and the dataset-hunt issue (piece 3), each with
