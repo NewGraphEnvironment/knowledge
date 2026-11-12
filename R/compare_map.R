@@ -108,7 +108,8 @@ knw_compare_map <- function(segments, water = NULL, title = "", png = NULL, html
     if ("rules" %in% panels) {
       drawn$rules <- base() + tmap::tm_shape(seg) +
         tmap::tm_lines(col = "rule_class", col.scale = tmap::tm_scale_categorical(values = rule_cols),
-                       col.legend = if (legend) tmap::tm_legend(title = "Habitat definition") else tmap::tm_legend_hide(),
+                       col.legend = if (legend) tmap::tm_legend(title = "Habitat definition")
+                                    else tmap::tm_legend_hide(),
                        lwd = "lwd", lwd.scale = tmap::tm_scale_continuous(values.scale = lwd),
                        lwd.legend = tmap::tm_legend_hide()) + outline + lay
     }
@@ -276,7 +277,8 @@ knw_compare_mapgl <- function(segments, water = NULL, title = "",
   props <- data.frame(vd = verdict(seg$flag_default %in% TRUE, if (has("pre_default")) seg$pre_default),
                       vt = verdict(seg$flag_tuned %in% TRUE, if (has("pre_tuned")) seg$pre_tuned))
   get <- function(k) list("get", k)
-  expr <- list("concat", "Habitat under default: ", get("vd"), "<br>Habitat under the tuned habitat definition: ", get("vt"))
+  expr <- list("concat", "Habitat under default: ", get("vd"),
+               "<br>Habitat under the tuned habitat definition: ", get("vt"))
   add <- function(label, k, v) {
     props[[k]] <<- v
     expr <<- c(expr, list(paste0("<br>", label, ": ")), list(get(k)))

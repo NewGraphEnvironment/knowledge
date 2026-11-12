@@ -118,7 +118,8 @@ test_that("the register's printed columns are the ones the methodology bundle wa
                          na.strings = character())
   then <- as.data.frame(lapply(as.data.frame(x$settings)[cols], as.character), stringsAsFactors = FALSE)
   expect_true(all(cols %in% names(now)))
-  expect_identical(now[cols], then, info = "settings.csv changed what the article prints: rerun Rscript data-raw/vignette_method.R")
+  expect_identical(now[cols], then,
+                   info = "settings.csv changed what the article prints: rerun Rscript data-raw/vignette_method.R")
 })
 
 test_that("every ignored source of the methodology article, where present, is unchanged", {

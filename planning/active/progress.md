@@ -13,3 +13,4 @@
 - Code-check round 1: 1 finding (Kirsch claim overstated its page), fixed; the uncommitted vignette_bib.R change committed; readability pass: 5 sentences fixed here, the rest filed as #202; pkgdown/favicon (an artifact of the local build) removed
 - Code-check round 2: 3 findings, all fixed: the apt-retries step was overridden by the runner image (dropped; flows#3, #159 and findings corrected), the method opening dropped "mostly where those join a river", stream splits credited every flow to the fwapg fork
 - Code-check round 3: 5 findings, all fixed (one inside round 1's fix); ended by enumeration of every factual sentence the branch added; #159 body corrected (not every stall was DNS)
+- lintr against main per file: the branch added 4 long lines, wrapped; a design-note sentence the fwapg edit had displaced moved back

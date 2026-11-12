@@ -21,11 +21,11 @@
 #     a @misc's as "Version 0.66.0." (measured with pandoc 3.9.0.2), and drops `note` in both. A version that is more
 #     than one token ("0.66.0 (commit a17e917)", "not recorded") prints as "Versions ...", so each is one token: the
 #     release, or for wet the flow set it published. bcfishpass and bcfishobs, whose versions the run did not record,
-#     carry none.
+#     carry none. Titles are braced so the style does not capitalise a name.
 #   - FWAPG IS CITED AS THE FORK WHERE AN ARTICLE RESTS ON ITS FLOWS. "If it uses the flows we pull in on our fork we
 #     should cite the fork; otherwise upstream 2024 is fine" (Al, 2026-11-12, #107). The fork entry carries the commit
 #     whose crosswalk routed wet's flows; upstream `fwapg`, credited for loading and placing on the Atlas, carries no
-#     version, since the run's `fwapg_sha` is a fork commit upstream does not hold. Titles are braced so the style does not capitalise a name.
+#     version, since the run's `fwapg_sha` is a fork commit upstream does not hold.
 #   - ONLY WHAT A READER NEEDS. Better BibTeX writes each attachment's local path (`file`, a home directory), and the
 #     abstract, keywords, access and original dates; the committed file keeps none of them. A timestamp date
 #     (`2024-01-01T12:42:29Z`) is cut to its day.
