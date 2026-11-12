@@ -18,3 +18,4 @@
 - Code-check rounds 1-2: fdis provisional for its six unmeasured tables; scopes and the rebuild list corrected; thresholds and habitat_grade say a cross-database rebuild reads different on its recipe until #197 (its body extended)
 - Code-check round 3 (enumeration of 63 claims): published sets' recipes name the tuning run, so #197 never reaches them (round 2's fix corrected, #197 body too); #145 not #154; fdis_sites is 0240's; grade sizes 0.3-2.5 GB everywhere (about 11 GB a run); timings from the logs
 - Code-check round 4 (74-claim enumeration): published-set prose cut to what the recipe names; #158's visits_link exception; the eleven tune CSVs, not every output; size copies in the test, header and roxygen; #197 body (four tables, not five)
+- Code-check round 5 (85-claim enumeration): one finding, the cost projection resting on the old 26 GB run size; now labelled #119's projection, an upper bound
