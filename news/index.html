@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">knowledge</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.35</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.36</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,9 +34,14 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/v0.4.36/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.4.36" id="knowledge-0436">knowledge 0.4.36<a class="anchor" aria-label="anchor" href="#knowledge-0436"></a></h2>
+<ul><li>
+<code><a href="../reference/knw_evidence_receipt_write.html">knw_evidence_receipt_write()</a></code> and <code><a href="../reference/knw_grade_receipt_write.html">knw_grade_receipt_write()</a></code> return the receipt read back from the file they wrote (<code><a href="https://newgraphenvironment.github.io/crate/reference/crt_receipt_read.html" class="external-link">crate::crt_receipt_read()</a></code>). crate 0.16.0’s <code>crt_receipt_write()</code> returns the SHA-256 of the bytes it wrote rather than the receipt, and R CMD check failed at the examples and in 9 tests (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/195" class="external-link">#195</a>, <a href="https://github.com/NewGraphEnvironment/knowledge/issues/188" class="external-link">#188</a>). The read-back works with crate 0.15 and 0.16, so knowledge still imports crate (&gt;= 0.15.0). No change to what the package computes or publishes.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.35" id="knowledge-0435">knowledge 0.4.35<a class="anchor" aria-label="anchor" href="#knowledge-0435"></a></h2>
 <ul><li>

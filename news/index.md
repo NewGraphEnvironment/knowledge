@@ -1,5 +1,21 @@
 # Changelog
 
+## knowledge 0.4.36
+
+- [`knw_evidence_receipt_write()`](https://newgraphenvironment.github.io/knowledge/reference/knw_evidence_receipt_write.md)
+  and
+  [`knw_grade_receipt_write()`](https://newgraphenvironment.github.io/knowledge/reference/knw_grade_receipt_write.md)
+  return the receipt read back from the file they wrote
+  ([`crate::crt_receipt_read()`](https://newgraphenvironment.github.io/crate/reference/crt_receipt_read.html)).
+  crate 0.16.0’s `crt_receipt_write()` returns the SHA-256 of the bytes
+  it wrote rather than the receipt, and R CMD check failed at the
+  examples and in 9 tests
+  ([\#195](https://github.com/NewGraphEnvironment/knowledge/issues/195),
+  [\#188](https://github.com/NewGraphEnvironment/knowledge/issues/188)).
+  The read-back works with crate 0.15 and 0.16, so knowledge still
+  imports crate (\>= 0.15.0). No change to what the package computes or
+  publishes.
+
 ## knowledge 0.4.35
 
 - [`knw_archive_plan()`](https://newgraphenvironment.github.io/knowledge/reference/knw_archive_plan.md)
