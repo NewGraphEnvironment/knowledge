@@ -89,9 +89,11 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   `temperature_{members,additions}.csv` (what `0270 --collection temperature` puts in `Fisheries/temperature`, the sole
   input of the `temperature` store), and `flow_{members,additions}.csv` (what `0270 --collection flow` puts in
   `Fisheries/flow`, the sole input of the `flow` store; #44, `research/flow_requirements.md`), and
-  `bull_trout_members.csv`, `grayling_{members,additions}.csv` (what `0270 --collection <name> --parent 9U54XAND`
-  puts in `species/bull_trout` and `species/grayling`, the inputs of the `bull_trout_grayling` store; hand-curated
-  collections, so the files list what the cleanup ensured, and 0270 never removes a member; #122), and
+  `bull_trout_{members,additions}.csv`, `grayling_{members,additions}.csv` (what `0270 --collection <name> --parent
+  9U54XAND` puts in `species/bull_trout` and `species/grayling`, the inputs of the `bull_trout_grayling` store; hand-curated
+  collections, so the files list what the cleanup ensured, and 0270 never removes a member; #122; `species/bull_trout`
+  is also the sole input of the `bull_trout` store, its recovery, management and monitoring documents, and one of
+  `habitat_modelling`'s, #194), and
   `sturgeon_{members,additions}.csv` (the same for `species/sturgeon`, the sole input of the `sturgeon` store: the
   White Sturgeon recovery documents, the NWSRI's reports and curated Nechako mainstem history; #124), and
   `westslope_cutthroat_{members,additions}.csv` (the same for `species/westslope_cutthroat`, the sole input of the
