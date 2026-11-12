@@ -39,13 +39,14 @@ Approved by Al at the plan gate, 2026-11-11:
       Fix any that depended on the `NA`; record the verdict per caller in findings.md
 
 ## Phase 4: Check and release
-- [ ] `devtools::test()` and `devtools::check()` pass on crate 0.16.0 (examples included); lintr per file unchanged
-- [ ] NEWS entry (0.4.36): writers read their receipt back, works with crate 0.15 and 0.16
+- [x] `devtools::test()` and `devtools::check()` pass on crate 0.16.0 (examples included); lintr per file unchanged
+- [x] ~~NEWS entry (0.4.36)~~ dropped from the branch at the plan review: NEWS and the bump are `/gh-pr-merge`'s release
+      commit; its NEWS line: writers return the receipt read back from its file, works with crate 0.15 and 0.16
 - [ ] `/code-check branch`, `/planning-archive`, `/gh-pr-push`
 
 ## Validation
 
-- [ ] Tests pass
+- [x] Tests pass
 - [ ] `/code-check` clean (once over the branch with `/code-check branch`)
 - [ ] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion

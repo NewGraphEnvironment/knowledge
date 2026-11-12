@@ -43,3 +43,14 @@ read back with `crt_receipt_read()` (and the grade receipt sets both scope and s
 | `test-grade_receipt.R` | `r$recipe$inputs$evidence`, `$recipe_id`, `ev_r$recipe$recipe_id` | no |
 
 So no change is needed; the tests that read these pass on 0.16.0.
+
+## Correction to the issue context above
+
+`knw_publish()`'s receipt (`.knw_publish_receipt()`) is not read by any caller: `knw_publish()` discards it
+(`R/publish.R:135`). Only the evidence and grade writers' values were read, and only those two changed.
+
+## The fix holds on crate 0.15.1 too (2026-11-12)
+
+With crate 0.15.1 installed in a scratch library ahead of the user library (`R_LIBS`), `test-evidence_receipt.R`,
+`test-grade_receipt.R` and `test-receipt.R` fail 0 of 6, 9 and 11: the read-back does not depend on what
+`crt_receipt_write()` returns, so the `crate (>= 0.15.0)` floor stands.
