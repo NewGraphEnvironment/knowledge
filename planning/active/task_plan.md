@@ -51,6 +51,9 @@ Approved by Al at the plan gate, 2026-11-12:
       this release; the next evidence build's `visits_link.csv` and `workbook_sites.csv` differ from the published
       build's in column order (bytes), not content, and crate's comparison and `data-raw/database_compare.R` read them
       as the same; its `visits_link` md5 (the first of `evidence_md5`) moves accordingly
+      *Revised in review:* the next build differs from the published one in content too (#120's `segment_fwa_gradient`,
+      #161's parent flows; `review-round1.md`), so the prose says the species columns move once and databases then
+      agree on column order. `inst/receipt/evidence.yaml`'s comment, which also cited #197, was revised with them.
 - [x] NEWS line drafted in the PR body for `/gh-pr-merge` (it writes NEWS and bumps the version)
 
 ## Owed at the end (reported, done after merge)
@@ -62,7 +65,7 @@ Approved by Al at the plan gate, 2026-11-12:
 
 - [x] Tests pass
 - [x] `/code-check` clean (once over the branch with `/code-check branch`)
-- [ ] PWF checkboxes match landed work
+- [x] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion
 
 How each change is proved: `NOT_CRAN=true` run of `test-link_place.R` (new test red without the sort, green with
