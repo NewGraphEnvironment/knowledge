@@ -47,8 +47,8 @@ Approved by Al at the plan gate, 2026-11-11:
 ## Validation
 
 - [x] Tests pass
-- [ ] `/code-check` clean (once over the branch with `/code-check branch`)
-- [ ] PWF checkboxes match landed work
+- [x] `/code-check` clean (once over the branch with `/code-check branch`)
+- [x] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion
 
 Verification: Phase 1's failing run is the before; after Phase 2 the same three files and full `devtools::check()` pass

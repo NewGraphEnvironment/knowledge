@@ -18,3 +18,6 @@
   `knw_archive_setup.Rd` and `knw_evidence_receipt_write.Rd`, lines this branch did not touch); examples OK; tests OK
   (3.9 min, 03:58:46 to 04:02:39 UTC). The three receipt test files also pass on crate 0.15.1 (scratch library).
   lintr on the three changed files: 6, 6 and 2 `object_usage_linter`, the same on origin/main
+- `/code-check branch`: three rounds, all Clean, no fixes (`review-round1.md` to `review-round3.md`). Round 2 ran
+  R CMD check on the built tarball (FAIL 0, PASS 1992) and confirmed `man/` matches roxygen; round 3 confirmed by
+  mutation that removing a read-back or reading the wrong file turns the receipt tests red
