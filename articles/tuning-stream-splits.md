@@ -3,32 +3,33 @@
 The R package [`link`](https://www.newgraphenvironment.com/link/)
 ([Irvine 2026b](#ref-link)) holds the recipes that turn what is known
 about each fish species’ life history into habitat on British Columbia’s
-stream network. A recipe is a config, and every rule and threshold in it
-is a row in a table. For each species and life stage it sets a **habitat
-definition**: the smallest stream the species uses, the steepest slope
-it holds in, how close a large river must be for a smaller stream to
-likely be used as habitat. It also defines what counts as an obstacle to
-fish passage, from falls and steep sections to the road and rail
+stream network. A recipe is a config, a few tables and settings files,
+and each species’ thresholds and exceptions are one row of its
+thresholds table. For each species and life stage it sets a **fish
+habitat definition**: the smallest stream the species uses, the steepest
+slope it holds in, how close a large river must be for a smaller stream
+to likely be used as habitat. It also defines what counts as an obstacle
+to fish passage, from falls and steep sections to the road and rail
 crossings and dams below them.
 [`fresh`](https://github.com/NewGraphEnvironment/fresh) ([Irvine
 2026a](#ref-fresh)), our stream network modelling engine, runs the
 recipe: it cuts the streams of the BC Freshwater Atlas ([FLNRORD
 2021](#ref-flnrord2021FreshwaterAtlasb)) into **segments**, works out
-which segments each species can reach, and classifies their habitat. So
-a model can be changed, run beside another and traced back to the rules
-that produced it.
+which segments each species can reach, and classifies their habitat.
+Because a recipe is a set of files, a model can be changed, run beside
+another and traced back to the values that produced it.
 
 `knowledge`, the package this article belongs to, is our evidence tool
 for link’s habitat definitions. It starts from what is known about each
 species’ life history, from the published literature and past reports,
-and the biology sets the shape of a definition, such as young chinook
-rearing in small streams close to a large river. Where the Province’s
-fish sampling records are rich enough, they tune its values: knowledge
-scores candidate values against where sampling caught the species and
-where it did not, keeps the smallest change to link’s standard settings
-that fits about as well as the best, and checks it on parts of the
-province it was not chosen from ([how the tuning
-works](https://newgraphenvironment.github.io/knowledge/articles/habitat_thresholds.md)).
+and the biology sets the shape of a habitat definition, such as young
+chinook rearing in small streams close to a large river. Where the
+Province’s fish sampling records are rich enough, they tune its values:
+knowledge scores candidate values against where sampling caught the
+species and where it did not, keeps the smallest change to link’s
+standard settings that fits about as well as the best, and checks it on
+parts of the province it was not chosen from ([how the tuning
+works](https://newgraphenvironment.github.io/knowledge/articles/tuning-method.md)).
 A habitat map steers where restoration and conservation effort goes, and
 one tuned this way rests on where fish have actually been found.
 
@@ -39,40 +40,41 @@ hold every species tuned, each run behind this article and its checks.
 A segment’s slope is its drop over its whole length, so where a stream
 is cut decides the slope a habitat definition is tested on, and some
 cuts fall exactly where fish were caught. Change the cuts and the
-definition chosen from those catches can change. Chinook rearing’s slope
-limit is **13 %** on link’s full network and **9 %** on its minimal
-network, which leaves out the cuts at fish records, at crossings and at
-hand-mapped habitat. Yet the two definitions draw much the same habitat;
-on the map they differ in short pieces of small streams:
+habitat definition chosen from those catches can change. Chinook
+rearing’s slope limit is **13 %** on link’s full network and **9 %** on
+its minimal network, which leaves out the cuts at fish records, at
+crossings and at hand-mapped habitat. Yet the two habitat definitions
+draw much the same habitat; on the map they differ in short pieces of
+small streams:
 
 ![Chinook rearing habitat in the Morkill River watershed group, around
 the Fraser River 63 km north-west of McBride, under two habitat
 definitions, both run on link's full network. Grey: drawn by both.
-Black: drawn only by the definition tuned on each segment's own slope (a
-13 % limit). Steel blue: drawn only by the definition tuned on the
-minimal network, reading each segment's minimal-network slope (9 %).
-Line width follows stream order. The lower panel enlarges the box
-outlined above. Stream names are the Freshwater Atlas's. Basemap: Esri
-World Topographic Map and World Shaded
-Relief.](stream_splits_files/figure-html/map-1.png)
+Black: drawn only by the habitat definition tuned on each segment's own
+slope (a 13 % limit). Steel blue: drawn only by the habitat definition
+tuned on the minimal network, reading each segment's minimal-network
+slope (9 %). Line width follows stream order. The lower panel enlarges
+the box outlined above. Stream names are the Freshwater Atlas's.
+Basemap: Esri World Topographic Map and World Shaded
+Relief.](tuning-stream-splits_files/figure-html/map-1.png)
 
 Chinook rearing habitat in the Morkill River watershed group, around the
 Fraser River 63 km north-west of McBride, under two habitat definitions,
 both run on link’s full network. Grey: drawn by both. Black: drawn only
-by the definition tuned on each segment’s own slope (a 13 % limit).
-Steel blue: drawn only by the definition tuned on the minimal network,
-reading each segment’s minimal-network slope (9 %). Line width follows
-stream order. The lower panel enlarges the box outlined above. Stream
-names are the Freshwater Atlas’s. Basemap: Esri World Topographic Map
-and World Shaded Relief.
+by the habitat definition tuned on each segment’s own slope (a 13 %
+limit). Steel blue: drawn only by the habitat definition tuned on the
+minimal network, reading each segment’s minimal-network slope (9 %).
+Line width follows stream order. The lower panel enlarges the box
+outlined above. Stream names are the Freshwater Atlas’s. Basemap: Esri
+World Topographic Map and World Shaded Relief.
 
-In the Morkill River watershed group the two definitions draw 2,150 km
-of chinook rearing habitat alike. The definition tuned on each segment’s
-own slope adds 76 km, and the one tuned on the minimal network adds 19
-km. Most of each difference lies on small streams, of stream order 3 or
-less, against under half of the habitat both draw. The group was chosen
-before drawing as the one where the tunings compared in this article
-disagree over the most km.
+In the Morkill River watershed group the two habitat definitions draw
+2,150 km of chinook rearing habitat alike. The habitat definition tuned
+on each segment’s own slope adds 76 km, and the one tuned on the minimal
+network adds 19 km. Most of each difference lies on small streams, of
+stream order 3 or less, against under half of the habitat both draw. The
+group was chosen before drawing as the one where the tunings compared in
+this article disagree over the most km.
 
 ## Why does a cut at a catch matter?
 
@@ -106,7 +108,7 @@ top of the figure. The black dot is a visit where chinook were caught;
 the open circle, on the same full-network segment, a visit where none
 were. The labels give the slope each version reads at the black dot.
 Elevation is stretched several times so the slopes can be
-seen.](stream_splits_files/figure-html/profile-1.png)
+seen.](tuning-stream-splits_files/figure-html/profile-1.png)
 
 One stream cut two ways: an unnamed stream flowing into the Holmes
 River, 40 km east of McBride. The thin grey line is the stream’s
@@ -136,7 +138,7 @@ slope and the slope of the minimal-network segment it lies within sit on
 opposite sides of a tuned limit, on a full-network segment at least 50 m
 long and outside the watershed group of the stream in the figure above,
 the largest gap in each group, from the 3 groups with the largest
-gaps.](stream_splits_files/figure-html/strip-1.png)
+gaps.](tuning-stream-splits_files/figure-html/strip-1.png)
 
 The segments around three visits where chinook were caught, as each
 network cuts them, from 600 m below the visit to 600 m above it (a bar
@@ -168,7 +170,7 @@ segment begins between 1 m below it and 5 m above it. The same 29,335
 visits are counted on each network (13,058 with fish, 16,277 without):
 those with a fished area in the usual range, on the stream lines the
 tuning scores. The networks are link 0.66.0's, link 0.78.2's and link
-0.78.1's.](stream_splits_files/figure-html/premise-1.png)
+0.78.1's.](tuning-stream-splits_files/figure-html/premise-1.png)
 
 Electrofishing visits that start a segment of their own, on three of
 link’s networks: dark, visits where fish of any species were caught;
@@ -188,20 +190,20 @@ move them.
 ## How does the tuning choose a habitat definition?
 
 A habitat definition decides how much habitat link draws, so it should
-be one the fish records support. The tuning tries many candidate
+be one the fish records support. The tuning tries many candidate habitat
 definitions, each a different set of parameters, and scores each by how
 well it predicts where chinook were caught in watershed groups left out
 of the fit; lower is better. For chinook rearing it scored about 4,900
 visits in 45 watershed groups. A score carries error, so every candidate
 within one standard error of the best is a **close call**: the records
 cannot rank close calls apart. For chinook rearing the tuning varies the
-three parts of the definition: the smallest stream (by flow or by
-channel width), the steepest slope, and the allowance near a large river
-(how large the river, and how close). Of the close calls the tuning
-chooses the one closest to link’s standard settings for the species, and
-among equals the best scorer; for chinook rearing every close call
-differs from link’s standard settings in all three parts, so the choice
-is the best scorer.
+three parts of the habitat definition: the smallest stream (by flow or
+by channel width), the steepest slope, and the allowance near a large
+river (how large the river, and how close). Of the close calls the
+tuning chooses the one closest to link’s standard settings for the
+species, and among equals the best scorer; for chinook rearing every
+close call differs from link’s standard settings in all three parts, so
+the choice is the best scorer.
 
 ## What does each network choose?
 
@@ -218,7 +220,7 @@ on.
 | link’s minimal network, without the cuts at fish records, crossings and hand-mapped habitat | 9 % | yes | yes |
 | The full network’s segments, each reading its minimal parent’s slope | 9 % | yes | yes |
 | The full network’s segments, each reading the slope of the whole Atlas line it lies on | 15 % | no | no |
-|  Every definition chosen keeps the same flow floor and the same allowance for small streams near a large river; only the slope limit differs. A verdict is on the definition chosen, not on its limit alone: on the minimal network’s records, 13 other candidates with a 13 % limit, differing in their flow floor or their allowance, are close calls. |  |  |  |
+|  Every habitat definition chosen keeps the same flow floor and the same allowance for small streams near a large river; only the slope limit differs. A verdict is on the habitat definition chosen, not on its limit alone: on the minimal network’s records, 13 other candidates with a 13 % limit, differing in their flow floor or their allowance, are close calls. |  |  |  |
 
 The chinook rearing habitat definition chosen on each network and slope.
 {.table .table
@@ -226,14 +228,15 @@ style="font-size: 13px; width: auto !important; margin-left: auto; margin-right:
 
 Without the full network’s extra cuts, the records argue for the gentler
 limit. Read on the full network’s own slopes, they choose 13 %, and that
-definition is not a close call on the minimal network’s records. Without
-those cuts they choose 9 %, which is a close call on the full network’s
-records as well. Given each segment’s minimal parent’s slope, the full
-network chooses the minimal network’s definition exactly. The Atlas
-line’s slopes choose 15 %, in a definition that is a close call on
-neither network’s records; these runs do not show why. The habitat each
-definition draws, run through all of link’s steps on the segments it was
-tuned on, differs by under 3 % across the four.
+habitat definition is not a close call on the minimal network’s records.
+Without those cuts they choose 9 %, which is a close call on the full
+network’s records as well. Given each segment’s minimal parent’s slope,
+the full network chooses the minimal network’s habitat definition
+exactly. The Atlas line’s slopes choose 15 %, in a habitat definition
+that is a close call on neither network’s records; these runs do not
+show why. How much habitat each habitat definition draws, run through
+all of link’s steps on the segments it was tuned on, differs by under 3
+% across the four.
 
 ## What does it mean for someone using the thresholds?
 
@@ -241,18 +244,18 @@ This package’s chinook rearing thresholds, tuned on 4 November 2026,
 were tuned on link’s full network, each segment reading its own slope,
 which is how link applies a habitat definition. On another network, or
 with slopes read another way, the same chinook records choose another
-definition: the slope limit reads 13 %, 9 % or 15 %, while the flow
-floor and the allowance near large rivers hold on all four. The records
-do not make one limit right everywhere: each is the best fit for the
-slopes it was tuned on, and the published 13 % was tuned on the slopes
-link applies it to.
+habitat definition: the slope limit reads 13 %, 9 % or 15 %, while the
+flow floor and the allowance near large rivers hold on all four. The
+records do not make one limit right everywhere: each is the best fit for
+the slopes it was tuned on, and the published 13 % was tuned on the
+slopes link applies it to.
 
-A definition tuned on the minimal network can still be run on the full
-one, by giving each full segment its minimal parent’s slope. For chinook
-rearing it then draws 1.1 % less habitat than on the minimal network
-itself. The stretches only the minimal network draws are small streams
-near large rivers, because the allowance measures its distance from a
-segment’s downstream end.
+A habitat definition tuned on the minimal network can still be run on
+the full one, by giving each full segment its minimal parent’s slope.
+For chinook rearing it then draws 1.1 % less habitat than on the minimal
+network itself. The stretches only the minimal network draws are small
+streams near large rivers, because the allowance measures its distance
+from a segment’s downstream end.
 
 ## Limits
 
@@ -260,8 +263,8 @@ segment’s downstream end.
   species and stages both networks could fit on the two networks’ own
   slopes and, in a separate check, on the Atlas line each visit lies on
   ([the methodology article’s
-  limits](https://newgraphenvironment.github.io/knowledge/articles/habitat_thresholds.html#limits)).
-  The network moved the definition for some of those too.
+  limits](https://newgraphenvironment.github.io/knowledge/articles/tuning-method.html#limits)).
+  The network moved the habitat definition for some of those too.
 - The minimal network leaves out the cuts at fish records, at crossings
   and at hand-mapped habitat together, so these runs cannot say which of
   the three moved the limit. Builds that each leave out one kind of cut
@@ -282,10 +285,15 @@ habitat, and the other species’ choices were checked against the logs
 that report them there. The visits are the Fisheries Data Information
 System’s electrofishing records ([Province of British Columbia
 2022](#ref-provinceofbritishcolumbia2022FisheriesData)), placed on the
-Freshwater Atlas; fresh runs link’s habitat definitions. The methodology
-article answers this article’s question in brief ([Does where link cuts
-a stream change the
-rules?](https://newgraphenvironment.github.io/knowledge/articles/habitat_thresholds.html#cuts)).
+Freshwater Atlas; their flows are
+[`wet`](https://www.newgraphenvironment.com/wet/)‘s ([Irvine
+2026c](#ref-wet)), mostly PCIC’s modelled flow carried onto Atlas
+streams by New Graph’s fork of `fwapg` ([Norris and Irvine
+2026](#ref-norris_irvine2026NewGraphEnvironmentfwapg)); fresh runs
+link’s habitat definitions. The methodology article answers this
+article’s question in brief ([Does where link cuts a stream change the
+habitat
+definitions?](https://newgraphenvironment.github.io/knowledge/articles/tuning-method.html#cuts)).
 The maps’ basemap is Esri’s World Topographic Map blended with its World
 Shaded Relief.
 
@@ -294,10 +302,11 @@ Shaded Relief.
 Each tool is cited where it is first used. To cite this package,
 `citation("knowledge")` gives:
 
-Irvine A (2026). *knowledge: Fisheries Evidence and Tuned Habitat
-Thresholds for BC Watershed Groups*. New Graph Environment Ltd.
-<doi:10.5281/zenodo.23990335> <https://doi.org/10.5281/zenodo.23990335>.
-Version 0.4.37, <https://newgraphenvironment.github.io/knowledge/>.
+Irvine A (2026). *knowledge: Tests Fish Habitat Definitions Against What
+is Known About Where Fish Live, and Tunes Them from the Fish Records*.
+New Graph Environment Ltd. <doi:10.5281/zenodo.23990335>
+<https://doi.org/10.5281/zenodo.23990335>. Version 0.4.37,
+<https://newgraphenvironment.github.io/knowledge/>.
 
 ## References
 
@@ -315,11 +324,19 @@ Habitat and Connectivity Models for the BC Freshwater Atlas Stream
 Network*. Version 0.78.2. New Graph Environment Ltd.
 <https://doi.org/10.5281/zenodo.23264990>.
 
+Irvine, Allan. 2026c. *wet: Stream Flow and Water Temperature for the BC
+Freshwater Atlas*. Version discharge/fwa/v1. New Graph Environment Ltd.
+<https://doi.org/10.5281/zenodo.23305781>.
+
 Norris, Simon. 2024a. *bcfishobs*.
 <https://github.com/smnorris/bcfishobs>.
 
 Norris, Simon. 2024b. *bcfishpass*.
 <https://github.com/smnorris/bcfishpass>.
+
+Norris, Simon, and Allan Irvine. 2026. *fwapg, New Graph Environment’s
+fork*. Version 7c30f58. New Graph Environment Ltd.
+<https://github.com/NewGraphEnvironment/fwapg/tree/newgraph>.
 
 Province of British Columbia. 2022. “Fisheries Data Information System
 (FDIS) Electrofishing Extract.” Electrofishing extract, exports of

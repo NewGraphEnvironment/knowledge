@@ -1,10 +1,16 @@
 # Articles
 
-### All vignettes
+### How the tuning works
 
-- [Chinook rearing: choosing link's thresholds from fish
-  records](https://newgraphenvironment.github.io/knowledge/articles/chinook_rearing.md):
-- [Choosing habitat thresholds from where fish were
-  caught](https://newgraphenvironment.github.io/knowledge/articles/habitat_thresholds.md):
+- [Tuning fish habitat definitions with fish sampling
+  records](https://newgraphenvironment.github.io/knowledge/articles/tuning-method.md):
+
+### Case studies
+
+- [Tuning habitat: chinook
+  rearing](https://newgraphenvironment.github.io/knowledge/articles/tuning-chinook-rearing.md):
+
+### Checks on the method
+
 - [Splitting streams at fish records shifts the steepest slope mapped as
-  habitat](https://newgraphenvironment.github.io/knowledge/articles/stream_splits.md):
+  habitat](https://newgraphenvironment.github.io/knowledge/articles/tuning-stream-splits.md):

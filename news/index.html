@@ -18,9 +18,15 @@
       <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/chinook_rearing.html">Chinook rearing: choosing link's thresholds from fish records</a></li>
-    <li><a class="dropdown-item" href="../articles/habitat_thresholds.html">Choosing habitat thresholds from where fish were caught</a></li>
-    <li><a class="dropdown-item" href="../articles/stream_splits.html">Splitting streams at fish records shifts the steepest slope mapped as habitat</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>How the tuning works</h6></li>
+    <li><a class="dropdown-item" href="../articles/tuning-method.html">Tuning fish habitat definitions with fish sampling records</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Case studies</h6></li>
+    <li><a class="dropdown-item" href="../articles/tuning-chinook-rearing.html">Tuning habitat: chinook rearing</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Checks on the method</h6></li>
+    <li><a class="dropdown-item" href="../articles/tuning-stream-splits.html">Splitting streams at fish records shifts the steepest slope mapped as habitat</a></li>
   </ul></li>
 <li class="active nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -183,7 +189,7 @@
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.4" id="knowledge-044">knowledge 0.4.4<a class="anchor" aria-label="anchor" href="#knowledge-044"></a></h2>
-<ul><li>A pkgdown article, <code><a href="../articles/chinook_rearing.html">vignette("chinook_rearing")</a></code>, explains in plain language how the chinook rearing threshold was chosen from the province’s electrofishing records and what it changes on link’s segments, with a Bulkley map, a zoom and three labelled example segments (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/62" class="external-link">#62</a>). Its data are written by <code>data-raw/vignette_chinook.R</code> to <code>inst/vignette-data/</code>, and a test fails when a tracked source moves on. <code><a href="../reference/knw_compare_map.html">knw_compare_map()</a></code> gains <code>ncol</code>, <code>panels</code>, <code>mark</code>, <code>lwd</code>, <code>legend</code> and <code>labels</code>; its default output is unchanged. The package now declares R &gt;= 4.1.0.</li>
+<ul><li>A pkgdown article, <code>vignette("chinook_rearing")</code>, explains in plain language how the chinook rearing threshold was chosen from the province’s electrofishing records and what it changes on link’s segments, with a Bulkley map, a zoom and three labelled example segments (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/62" class="external-link">#62</a>). Its data are written by <code>data-raw/vignette_chinook.R</code> to <code>inst/vignette-data/</code>, and a test fails when a tracked source moves on. <code><a href="../reference/knw_compare_map.html">knw_compare_map()</a></code> gains <code>ncol</code>, <code>panels</code>, <code>mark</code>, <code>lwd</code>, <code>legend</code> and <code>labels</code>; its default output is unchanged. The package now declares R &gt;= 4.1.0.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.3" id="knowledge-043">knowledge 0.4.3<a class="anchor" aria-label="anchor" href="#knowledge-043"></a></h2>

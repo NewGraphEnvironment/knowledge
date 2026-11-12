@@ -214,5 +214,5 @@ and past-report tables; check stream names before searching by name.
 
 - [`knowledge`](https://newgraphenvironment.github.io/knowledge/reference/knowledge-package.md)
   [`knowledge-package`](https://newgraphenvironment.github.io/knowledge/reference/knowledge-package.md)
-  : knowledge: Fisheries Evidence and Tuned Habitat Thresholds for BC
-  Watershed Groups
+  : knowledge: Tests Fish Habitat Definitions Against What is Known
+  About Where Fish Live, and Tunes Them from the Fish Records

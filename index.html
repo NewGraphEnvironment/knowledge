@@ -5,14 +5,14 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Fisheries Evidence and Tuned Habitat Thresholds for BC Watershed Groups • knowledge</title>
+<title>Tests Fish Habitat Definitions Against What is Known About Where Fish Live, and Tunes Them from the Fish Records • knowledge</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
 <script src="deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Fisheries Evidence and Tuned Habitat Thresholds for BC Watershed Groups">
-<meta name="description" content="Gathers fisheries evidence for British Columbia watershed groups (provincial fish sampling records, past reports, cited literature values with their quotes, intrinsic-potential models and life-history timing) and tunes from the fish records the gradient and stream-size thresholds that the link habitat models use: it places sampling visits on links stream segments, scores candidate rules on held-out watershed groups, grades segments by expected use, and tabulates, maps and compares the tuned rules with links defaults. It also pulls PSCIS crossing layers and past-report tables for a group and checks stream names before a search. Under active development.">
-<meta property="og:description" content="Gathers fisheries evidence for British Columbia watershed groups (provincial fish sampling records, past reports, cited literature values with their quotes, intrinsic-potential models and life-history timing) and tunes from the fish records the gradient and stream-size thresholds that the link habitat models use: it places sampling visits on links stream segments, scores candidate rules on held-out watershed groups, grades segments by expected use, and tabulates, maps and compares the tuned rules with links defaults. It also pulls PSCIS crossing layers and past-report tables for a group and checks stream names before a search. Under active development.">
+<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Tests Fish Habitat Definitions Against What is Known About Where Fish Live, and Tunes Them from the Fish Records">
+<meta name="description" content="Gathers what is known about where fish live in British Columbias streams (life history and habitat values from the cited literature with their quotes, past reports, intrinsic-potential models, life-history timing and the provincial fish sampling records) and tunes from the records the gradient and stream-size thresholds of the fish habitat definitions the link habitat models use: it places sampling visits on links stream segments, scores candidate habitat definitions on held-out watershed groups, grades segments by expected use, and tabulates, maps and compares the tuned habitat definitions with link's defaults. It also pulls PSCIS crossing layers and past-report tables for a group and checks stream names before a search. Under active development.">
+<meta property="og:description" content="Gathers what is known about where fish live in British Columbias streams (life history and habitat values from the cited literature with their quotes, past reports, intrinsic-potential models, life-history timing and the provincial fish sampling records) and tunes from the records the gradient and stream-size thresholds of the fish habitat definitions the link habitat models use: it places sampling visits on links stream segments, scores candidate habitat definitions on held-out watershed groups, grades segments by expected use, and tabulates, maps and compares the tuned habitat definitions with link's defaults. It also pulls PSCIS crossing layers and past-report tables for a group and checks stream names before a search. Under active development.">
 <meta property="og:image" content="https://newgraphenvironment.github.io/knowledge/logo.png">
 </head>
 <body>
@@ -36,9 +36,15 @@
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="articles/chinook_rearing.html">Chinook rearing: choosing link's thresholds from fish records</a></li>
-    <li><a class="dropdown-item" href="articles/habitat_thresholds.html">Choosing habitat thresholds from where fish were caught</a></li>
-    <li><a class="dropdown-item" href="articles/stream_splits.html">Splitting streams at fish records shifts the steepest slope mapped as habitat</a></li>
+<li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>How the tuning works</h6></li>
+    <li><a class="dropdown-item" href="articles/tuning-method.html">Tuning fish habitat definitions with fish sampling records</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Case studies</h6></li>
+    <li><a class="dropdown-item" href="articles/tuning-chinook-rearing.html">Tuning habitat: chinook rearing</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Checks on the method</h6></li>
+    <li><a class="dropdown-item" href="articles/tuning-stream-splits.html">Splitting streams at fish records shifts the steepest slope mapped as habitat</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
@@ -63,11 +69,11 @@
 <!-- badges: start -->
 
 <blockquote>
-<p>Fisheries evidence and tuned habitat thresholds for BC watershed groups</p>
+<p>Tests fish habitat definitions against what is known about where fish live, and tunes them from the fish records</p>
 </blockquote>
-<p>knowledge gathers what is known about where fish live in British Columbia’s streams, a watershed group at a time: the Province’s fish sampling records, past reports and the published literature. From the fish records it tunes, where they allow, the thresholds that <a href="https://www.newgraphenvironment.com/link/" class="external-link">link</a>’s habitat models use to decide where a species can spawn and rear, such as the smallest stream and the steepest gradient for juvenile chinook rearing, and compares the tuned rules with the ones link uses today. Those models show restoration and fish passage planning where habitat lies on a stream network.</p>
-<p><img src="reference/figures/readme-bulk.png" alt="Map of the streams chinook can reach in the Bulkley River watershed group, coloured by whether each is chinook rearing habitat under both rules, only under link's default rule, only under the tuned rule, or under neither" width="70%"></p>
-<p><em>Chinook rearing habitat in the Bulkley River watershed group, around Smithers and Houston, under link’s <code>default</code> rule and the rule tuned here. Blue streams are habitat under both, orange only under <code>default</code>, green only under the tuned rule; grey streams are open to chinook but habitat under neither. Here the tuned rule drops more than it adds.</em></p>
+<p>knowledge starts from what is known about each species’ life history in British Columbia’s streams, from the published literature and past reports, and tests it against the Province’s fish sampling records: where sampling caught the species and where it did not. The biology sets the shape of a fish habitat definition, such as young chinook rearing in small streams close to a large river. Where the records allow, they tune its values, such as the smallest stream and the steepest gradient, and each is checked on parts of the province it was not chosen from. The habitat definitions are the ones <a href="https://www.newgraphenvironment.com/link/" class="external-link">link</a>’s habitat models use to map where a species can spawn and rear, and knowledge compares each tuned one with the one link uses today. A habitat map steers where conservation and restoration effort goes, and one built this way rests on where fish have been found.</p>
+<p><img src="reference/figures/readme-bulk.png" alt="Map of the streams chinook can reach in the Bulkley River watershed group, coloured by whether each is chinook rearing habitat under both habitat definitions, only under link's default, only under the tuned one, or under neither" width="70%"></p>
+<p><em>Chinook rearing habitat in the Bulkley River watershed group, around Smithers and Houston, under link’s <code>default</code> habitat definition and the one tuned here. Blue streams are habitat under both, orange only under <code>default</code>, green only under the tuned one; grey streams are open to chinook but habitat under neither. Here the tuned habitat definition drops more than it adds.</em></p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -80,7 +86,7 @@
 <div class="section level2">
 <h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
 </h2>
-<p>The tuned thresholds are one table. Each rule’s parts are rows, with the link parameter each fills where link has one:</p>
+<p>The tuned thresholds are one table. Each habitat definition’s parts are rows, with the link parameter each fills where link has one:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">th</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="st">"data/thresholds.csv"</span><span class="op">)</span></span>
 <span><span class="va">ch</span> <span class="op">&lt;-</span> <span class="va">th</span><span class="op">[</span><span class="va">th</span><span class="op">$</span><span class="va">rule_id</span> <span class="op">==</span> <span class="st">"CH_rear_v1"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"component"</span>, <span class="st">"link_parameter"</span>, <span class="st">"value"</span>, <span class="st">"unit"</span><span class="op">)</span><span class="op">]</span></span>
@@ -90,18 +96,20 @@
 <span><span class="co">#&gt;     gradient        rear_gradient_max    0.13 fraction</span></span>
 <span><span class="co">#&gt;  exception_q rear_river_discharge_min    3.00     m3/s</span></span>
 <span><span class="co">#&gt;  exception_d  rear_river_distance_max 1000.00        m</span></span></code></pre></div>
-<p>On a stream line, the tuned rule passes a segment for chinook rearing where its gradient is at most 13 % and either its mean annual flow is at least 0.75 m³/s or a river of at least 3 m³/s lies within 1 km downstream. Access and link’s other steps then apply as they do to <code>default</code>.</p>
+<p>On a stream line, the tuned habitat definition passes a segment for chinook rearing where its gradient is at most 13 % and either its mean annual flow is at least 0.75 m³/s or a river of at least 3 m³/s lies within 1 km downstream. Access and link’s other steps then apply as they do to <code>default</code>.</p>
 </div>
 <div class="section level2">
 <h2 id="learn-more">Learn more<a class="anchor" aria-label="anchor" href="#learn-more"></a>
 </h2>
 <ul>
 <li>
-<a href="https://www.newgraphenvironment.com/knowledge/articles/chinook_rearing.html" class="external-link">How the chinook rearing threshold was chosen and what it draws</a>: the answer and the map first, why a nearby river matters, how sure we are, and how it was done.</li>
+<a href="https://www.newgraphenvironment.com/knowledge/articles/tuning-method.html" class="external-link">Tuning fish habitat definitions with fish sampling records</a>: the method every species’ habitat definition is tuned by, and its limits.</li>
 <li>
-<a href="https://www.newgraphenvironment.com/knowledge/articles/habitat_thresholds.html" class="external-link">Choosing habitat thresholds from where fish were caught</a>: the method every species’ rule is chosen by, and its limits.</li>
+<a href="https://www.newgraphenvironment.com/knowledge/articles/tuning-chinook-rearing.html" class="external-link">Tuning habitat: chinook rearing</a>: the answer and the map first, why a nearby river matters, how sure we are, and how it was done.</li>
 <li>
-<a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/research/README.md" class="external-link">What is known</a>: one file per topic, from the FDIS export and the cited literature to the tuned rules.</li>
+<a href="https://www.newgraphenvironment.com/knowledge/articles/tuning-stream-splits.html" class="external-link">Splitting streams at fish records shifts the steepest slope mapped as habitat</a>: how where link cuts a stream changes the slope limit the records choose.</li>
+<li>
+<a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/research/README.md" class="external-link">What is known</a>: one file per topic, from the FDIS export and the cited literature to the tuned habitat definitions.</li>
 <li><a href="https://www.newgraphenvironment.com/knowledge/reference/index.html" class="external-link">Function reference</a></li>
 </ul>
 </div>
@@ -120,7 +128,7 @@
 <tbody>
 <tr>
 <td><strong>knowledge</strong></td>
-<td>Fisheries evidence and tuned habitat thresholds for BC watershed groups (this package)</td>
+<td>Tests fish habitat definitions against what is known about where fish live, and tunes them from the fish records (this package)</td>
 </tr>
 <tr>
 <td><a href="https://www.newgraphenvironment.com/fresh/" class="external-link">fresh</a></td>
