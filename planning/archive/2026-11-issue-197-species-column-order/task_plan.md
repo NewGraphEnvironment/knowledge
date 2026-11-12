@@ -66,7 +66,7 @@ Approved by Al at the plan gate, 2026-11-12:
 - [x] Tests pass
 - [x] `/code-check` clean (once over the branch with `/code-check branch`)
 - [x] PWF checkboxes match landed work
-- [ ] `/planning-archive` on completion
+- [x] `/planning-archive` on completion
 
 How each change is proved: `NOT_CRAN=true` run of `test-link_place.R` (new test red without the sort, green with
 it), then the full `devtools::test()`; `lintr` per file/linter/line against an `origin/main` worktree; no evidence
