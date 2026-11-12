@@ -392,7 +392,7 @@ when that line no longer holds the code it names or the code appears elsewhere i
 
 | choice | where | what it does, against the books | verdict |
 |---|---|---|---|
-| `response_presence` | `R/tune_run.R:176` | The rearing response is "caught at this visit"; a miss reads as an absence (Rethinking p. 499). | differs |
+| `response_presence` | `R/tune_run.R:176` | The rearing response is whether the species was caught at the visit; a miss reads as an absence (Rethinking p. 499). | differs |
 | `population_gate` | `R/tune_run.R:173` | Visits outside link's range for the species (a fixed table per group) or with a blocked absence are left out (the barrier filter on the next line is `barrier_natural`). Only the blocked absence turns on the catch: it drops recorded zeros only, some of which may be the species under a looser name (Rethinking pp. 499, 503). | differs |
 | `cloglog_link` | `R/tune_score.R:256` | A binomial GLM with a complementary log-log link: a hazard reading, natural for detection with effort. BDA3 names it a standard link (p. 407); neither book fits it. The GLM frame is Rethinking ch. 10's. | aligned |
 | `log_area_free` | `R/tune_score.R:224` | Effort as a free, unpenalised coefficient, not an offset: the hypothesis that the chance of a catch does not grow in proportion to the area fished (Rethinking p. 357). | differs |

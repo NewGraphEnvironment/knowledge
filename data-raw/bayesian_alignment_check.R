@@ -3,17 +3,20 @@
 # Does research/bayesian_alignment.md quote its books truly, and does it give every step, setting and unkeyed choice
 # of the method one verdict? Issue #185.
 #
-# QUOTES. Every quoted passage that cites a page is written
+# QUOTES. A quoted passage is checked when it is written
 #   "<passage>" (<citekey>, p. N)       or  (<citekey>, pp. N–M) for one that runs onto the next page
-# on a blockquote line of its own (`> ` before it) or inline in a sentence, and is looked for on printed page N (to M) of that book's PDF, the group library's own attachment. A printed page is
+# on a blockquote line of its own (`> ` before it) or inline in a sentence (it may wrap across lines), and is looked for on printed page N (to M) of that book's PDF, the group library's own attachment. A printed page is
 # the PDF page less the book's front matter (`offset`), and the page's running head or foot must carry N, so a wrong
 # offset fails rather than reading a neighbouring page. Passage and page are compared as token sequences, as
 # scripts/0280 compares them: ligatures spelled out, words and numbers as written ("2" is not "25"), symbols dropped
 # (the PDFs set formulae as glyphs pdftotext cannot keep), a line-end hyphen joined in one reading and kept in the
 # other. An ellipsis (… or ...) splits a passage into fragments that must appear in order, each of at least
-# `frag_min` tokens, and a passage with no word in it fails. A quote followed by a page in any other form (no citekey,
-# a book this check does not hold, curly quotes) fails, so none escapes the check. A page cited without a quote is
-# not checked here: the meaning audit re-reads it.
+# `frag_min` tokens, and a passage with no word in it fails. Every page citation in the file ("p. N", "pp", "page", a
+# pandoc `[@`) is enumerated: one outside a checked quote fails when a quote mark (straight or curly double, opening
+# single) stands within `near` characters before it, the checked quotes masked out first. Straight quotes say nothing
+# of which one opens, so no pairing of quote marks is trusted. And the number of checked quotes must be `n_quotes`,
+# so a quote that slips out of the form, or a reflow that breaks one, fails. A page cited without a quote is not
+# checked here: the meaning audit re-reads it.
 # COVERAGE. Three tables, each found by its `##` heading: "The steps" (first cell the step number, every step of
 # inst/method/pipeline.csv), "The settings" (first cell the key in backticks, every key of inst/method/settings.csv)
 # and "Choices with no settings key" (first cell the id in backticks, every id of `choices` below; its second cell,
@@ -35,6 +38,8 @@ books <- list(
 )
 verdicts <- c("aligned", "differs", "should change", "no bearing")
 frag_min <- 4L
+near <- 80L       # characters before a page citation in which a quote mark makes the page a quote's
+n_quotes <- 23L   # the quotes research/bayesian_alignment.md checks; change it with the file
 # method choices no setting names, each with a line of the code that makes it
 choices <- list(
   response_presence    = c("R/tune_run.R", "d$U <- as.integer(d$present)"),
@@ -114,56 +119,71 @@ page_text <- function(key, p) {
 }
 
 # ---- quotes
-# every quoted passage followed by a page, in whatever form: what the check must find in its own form or fail on
-loose_rx <- '["\u201C][^"\u201D]{3,}["\u201D]\\s*(,\\s*pp?\\.\\s*[0-9]|\\([^)]*\\bpp?\\.\\s*[0-9])'
+# the file as one string, line breaks as spaces, so a quote wrapped across lines is one match; `line_at` maps a
+# position back to its line
+txt <- paste(md, collapse = " ")
+ends <- cumsum(nchar(md) + 1L)
+line_at <- function(pos) findInterval(pos - 1L, c(0L, ends)) 
 rx <- '"([^"]+)"\\s*\\(([A-Za-z0-9_]+),\\s*pp?\\.\\s*([0-9]+)(?:\\s*[-\u2013]\\s*([0-9]+))?\\)'
-nq <- 0L
-for (i in seq_along(md)) {
-  loose <- gregexpr(loose_rx, md[i], perl = TRUE)[[1]]
-  ms <- regmatches(md[i], gregexpr(rx, md[i], perl = TRUE))[[1]]
-  if (sum(loose > 0) > length(ms)) {
-    bad("line ", i, ": a quote cites a page in a form this check cannot read (it wants \"...\" (<citekey>, p. N))")
-  }
-  for (q in ms) {
-    nq <- nq + 1L
-    m <- regmatches(q, regexec(rx, q, perl = TRUE))[[1]]
-    key <- m[3]
-    p1 <- as.integer(m[4])
-    p2 <- if (nzchar(m[5])) as.integer(m[5]) else p1
-    if (!key %in% names(books)) {
-      bad("line ", i, ": ", key, " is not a book this check holds")
-      next
-    }
-    if (p2 < p1 || p2 > p1 + 1L) {
-      bad("line ", i, ": pages ", p1, "-", p2, " are not one page or two running on")
-      next
-    }
-    pgs <- lapply(seq(p1, p2), function(p) page_text(key, p))
-    folio <- all(vapply(pgs, `[[`, logical(1), "folio"))
-    hay <- page_tokens(unlist(lapply(pgs, `[[`, "txt")))
-    frags <- lapply(strsplit(clean(m[2]), "\u2026|\\.\\.\\.")[[1]], tokens)
-    frags <- frags[lengths(frags) > 0L]
-    empty <- !length(frags)
-    short <- any(lengths(frags) < frag_min)
-    found <- !empty && any(vapply(hay, function(h) {
-      at <- 1L
-      for (f in frags) {
-        j <- seq_at(f, h, at)
-        if (is.na(j)) return(FALSE)
-        at <- j + length(f)
-      }
-      TRUE
-    }, logical(1)))
-    ok <- found && folio && !short
-    why <- c(if (!folio) "the page's head or foot does not carry its number",
-             if (empty) "the passage has no word in it",
-             if (short) paste0("a fragment under ", frag_min, " words"),
-             if (!found && !empty) "passage not on the page")
-    if (ok) say("ok   line ", i, " ", key, " p. ", p1, if (p2 != p1) paste0("-", p2))
-    else bad("line ", i, " ", key, " p. ", p1, if (p2 != p1) paste0("-", p2), ": ", paste(why, collapse = "; "))
+sm <- gregexpr(rx, txt, perl = TRUE)[[1]]
+strict <- if (sm[1] > 0) data.frame(start = as.integer(sm), end = as.integer(sm) + attr(sm, "match.length") - 1L) else
+  data.frame(start = integer(), end = integer())
+# the checked quotes blanked out, character for character, so the scan below sees only what they do not cover
+masked <- txt
+for (k in seq_len(nrow(strict))) {
+  substr(masked, strict$start[k], strict$end[k]) <- strrep(" ", strict$end[k] - strict$start[k] + 1L)
+}
+pg <- gregexpr("\\b(pp?|pages?)\\.?\\s*[0-9]|\\[@", masked, perl = TRUE)[[1]]
+for (st in if (pg[1] > 0) as.integer(pg) else integer()) {
+  if (grepl("[\"\u201C\u201D\u2018]", substr(masked, max(1L, st - near), st - 1L))) {
+    bad("line ", line_at(st), ": a page cited within ", near, " characters of a quote mark, outside the checked form ",
+        "(\"...\" (<citekey>, p. N))")
   }
 }
-say("quotes: ", nq, " checked in ", md_path)
+ms <- regmatches(txt, list(sm))[[1]]
+for (k in seq_along(ms)) {
+  i <- line_at(strict$start[k])
+  m <- regmatches(ms[k], regexec(rx, ms[k], perl = TRUE))[[1]]
+  key <- m[3]
+  p1 <- as.integer(m[4])
+  p2 <- if (nzchar(m[5])) as.integer(m[5]) else p1
+  if (!key %in% names(books)) {
+    bad("line ", i, ": ", key, " is not a book this check holds")
+    next
+  }
+  if (p2 < p1 || p2 > p1 + 1L) {
+    bad("line ", i, ": pages ", p1, "-", p2, " are not one page or two running on")
+    next
+  }
+  pgs <- lapply(seq(p1, p2), function(p) page_text(key, p))
+  folio <- all(vapply(pgs, `[[`, logical(1), "folio"))
+  hay <- page_tokens(unlist(lapply(pgs, `[[`, "txt")))
+  frags <- lapply(strsplit(clean(m[2]), "\u2026|\\.\\.\\.")[[1]], tokens)
+  frags <- frags[lengths(frags) > 0L]
+  empty <- !length(frags)
+  short <- any(lengths(frags) < frag_min)
+  found <- !empty && any(vapply(hay, function(h) {
+    at <- 1L
+    for (f in frags) {
+      j <- seq_at(f, h, at)
+      if (is.na(j)) return(FALSE)
+      at <- j + length(f)
+    }
+    TRUE
+  }, logical(1)))
+  ok <- found && folio && !short
+  why <- c(if (!folio) "the page's head or foot does not carry its number",
+           if (empty) "the passage has no word in it",
+           if (short) paste0("a fragment under ", frag_min, " words"),
+           if (!found && !empty) "passage not on the page")
+  if (ok) say("ok   line ", i, " ", key, " p. ", p1, if (p2 != p1) paste0("-", p2))
+  else bad("line ", i, " ", key, " p. ", p1, if (p2 != p1) paste0("-", p2), ": ", paste(why, collapse = "; "))
+}
+say("quotes: ", length(ms), " checked in ", md_path)
+if (length(ms) != n_quotes && basename(md_path) == "bayesian_alignment.md") {
+  bad(length(ms), " quotes checked where ", n_quotes, " are expected: a quote left the checked form, or one was added ",
+      "without changing `n_quotes`")
+}
 
 # ---- coverage
 # the table rows under one `##` heading, as cells, the header and separator rows left out
