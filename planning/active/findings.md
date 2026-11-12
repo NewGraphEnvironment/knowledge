@@ -283,9 +283,11 @@ Scratchpad `browser/pdf/`: 49 files, 86 MB, every PDF starting `%PDF`. Each was 
 - **Not obtained:**
   - EcoCat 38265 (Andrusak et al. 2012), 40104 (Langston & Cubberley 2008) and 63284 (PEA-F25-F-3986) answer
     403 "You don't have permission to view this report" in a browser too: restricted records, not a bot block.
-    They go to an issue for an access request (Al, 2026-11-12); who is asked stays out of this public repo.
+    Filed as #209 for an access request (Al, 2026-11-12), with Baxter & McPhail 1999; who is asked stays
+    out of this public repo. #194's body lists #209.
   - Baxter & McPhail 1999: no full text found; the ResearchGate search met a Cloudflare check.
-  - C.V. Baxter 1997 thesis: CORE's file is gone (BlobNotFound); ScholarWorks offered to Al.
+  - (Obtained after all: the C.V. Baxter 1997 thesis, 177 pages, which Al saved from ScholarWorks after CORE's
+    file proved gone; 50 files in all.)
   - The WA-BC AFS 2018 slides: dropped (slides, not a report).
 - **Low-text pages:** Salmo BT 1998–99 (18/57) and DDMMON-5 year 2 (20/164) are partly scanned and go to OCR; the
   other seven files with such pages have one to seven (figures, blanks).
