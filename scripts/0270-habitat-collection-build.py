@@ -401,11 +401,13 @@ def addition_item(row):
         return crossref_item(row["DOI"])
     # university and thesisType are a thesis's fields where a report has institution and reportType,
     # bookTitle, pages, series and seriesNumber a book section's, and publisher, edition and ISBN a
-    # book's (CrossRef's metadata is read as a journal article, so a book goes in without its DOI);
-    # an additions file without those columns simply never sets them.
+    # book's (CrossRef's metadata is read as a journal article, so a book goes in without its DOI),
+    # and publicationTitle, volume and issue a journal article's that has no DOI (Fraley & Shepard
+    # 1989, #194); an additions file without those columns simply never sets them.
     item = {k: row[k] for k in ("itemType", "title", "date", "institution", "reportNumber", "reportType",
                                 "university", "thesisType", "place", "url", "bookTitle", "pages",
-                                "series", "seriesNumber", "publisher", "edition", "ISBN") if row.get(k)}
+                                "series", "seriesNumber", "publisher", "edition", "ISBN",
+                                "publicationTitle", "volume", "issue") if row.get(k)}
     item["creators"] = []
     for c in filter(None, (x.strip() for x in row["creators"].split(";"))):
         # An organization's name, which Zotero holds in one field, has no comma or is in braces
