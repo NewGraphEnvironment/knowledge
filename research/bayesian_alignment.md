@@ -2,13 +2,13 @@
 
 **Verified:** 2026-11-12 · **Issues:** #185 (this review); the store is #95's; it scopes #186 (a partially pooled
 curve) and feeds the methodology article (#93) · **Produced by:** the code at this commit, read line by line; the
-`statistics` store (McElreath 2020 and Gelman et al. 2013, searched through cred); every quoted page checked by
-`data-raw/bayesian_alignment_check.R` (log `scripts/logs/habitat/*_bayesian_alignment_check.txt`) · **Status:**
+`statistics` store (McElreath 2020 and Gelman et al. 2013, searched through cred); every quote that cites a page
+checked on that page by `data-raw/bayesian_alignment_check.R` (log `scripts/logs/habitat/*_bayesian_alignment_check.txt`) · **Status:**
 review complete; the changes it recommends are filed as issues (end of file).
 
 The two books are McElreath, *Statistical Rethinking*, 2nd ed. (2020; "Rethinking") and Gelman et al., *Bayesian
 Data Analysis*, 3rd ed. (2013; "BDA3"). Pages are the printed ones. Quotes are short and only where a passage decides
-a row.
+a row; each carries its citekey, the form the check reads.
 
 ## In brief
 
@@ -71,7 +71,7 @@ score is the summed binomial deviance at that point estimate, clamped at p = 10�
 is scored the same way (`R/tune_curve.R:143-148`).
 
 *Where it stands.* Holding out whole groups from the fit is the strict form, the one Rethinking describes for new
-clusters ("imagine leaving out one of the clusters", p. 428); but the book then predicts the left-out cluster from the
+clusters, "imagine leaving out one of the clusters" (mcelreath2020StatisticalRethinking, p. 428); but the book then predicts the left-out cluster from the
 population, which the scorer does not. Two things differ. The score is a plug-in, a deviance at one estimate,
 where lppd averages over the posterior; BDA3 notes that AIC and DIC score the plug-in density while Bayesian
 prediction uses the posterior predictive (p. 174). And because a held-out group's intercept is fitted on the outcomes
@@ -112,7 +112,7 @@ biases the winner's score:
 
 The nested check (`honest`) was meant to measure that bias, and is not nested: fold *k*'s pick is chosen from the other
 folds' scores, but those scores came from fits that trained on fold *k* (`R/tune_score.R:178-185`). BDA3 names the
-remedy, "another level of cross-validation" (p. 182). **Should change**: nest it (refit without fold *k*), or describe
+remedy, "another level of cross-validation" (gelman_etal2013Bayesiandata, p. 182). **Should change**: nest it (refit without fold *k*), or describe
 it as what it is. Either way only the check moves, not the pick, the curve or the grades. The bootstrap (`R/tune_score.R:160-177`) resamples
 groups of the fixed scores and refits nothing, so it measures how stable the choice is given the scores, not
 uncertainty in the estimates (**differs**; the article's "checking the choice is not luck" is the right reading).
@@ -208,7 +208,7 @@ comparison: no SE, a tie withholds. The curve's variables (the size measure, the
 from the pick, which was chosen on the same folds that then score the curve.
 
 *Where it stands.* **Differs.** Comparing held-out deviances is ch. 7's comparison, and the curve's smooths are
-penalised, which is a prior on their wiggliness: BDA3's "Bayesian penalized (P) splines" (p. 490), and the same idea
+penalised, which is a prior on their wiggliness: BDA3's "Bayesian penalized (P) splines" (gelman_etal2013Bayesiandata, p. 490), and the same idea
 with a fixed ridge on the weights in Rethinking (p. 118). So a gate on held-out deviance is not double-counting
 complexity. Two things lean toward publishing: the curve's variables were chosen on the folds that score it (BDA3
 p. 182, above), and, compared with a test that asks for a margin, a point comparison publishes on any improvement. Today it withholds three keys of seven (bull trout spawning, coho rearing,
@@ -272,7 +272,7 @@ Dropping zeros at random would move each group's intercept, exactly so under a l
 where catch rates are low. But a blocking code is mostly a fish named too loosely to rule the species out
 (unidentified fish, salmon or trout fry, cutthroat of unstated species; `data/fdis_species_codes.csv`), so a blocked
 absence may be the species itself: missingness caused by the outcome, the case Rethinking calls the worst (Figure
-15.4 d, p. 500; "the variable causes its own missing values", p. 503). The access gate does not turn
+15.4 d, p. 500; "the variable causes its own missing values" (mcelreath2020StatisticalRethinking, p. 503)). The access gate does not turn
 on the catch: it reads natural barriers as they stood before link's observation overrides (`R/tune_run.R:174`,
 `R/link_barrier_dnstr.R`). Nor does the range: link's range is a fixed table per watershed group
 (`wsg_species_presence`, which `scripts/0310-evidence-build.R` reads through `link::lnk_species_pooling()`), so this
@@ -388,7 +388,7 @@ One row per key of `inst/method/settings.csv`. `no bearing` means no statistical
 ## Choices with no settings key
 
 The choices this review most needs have no settings key; each row names the line that makes it, and the check fails
-if that line moves away.
+when that line no longer holds the code it names or the code appears elsewhere in the file too.
 
 | choice | where | what it does, against the books | verdict |
 |---|---|---|---|

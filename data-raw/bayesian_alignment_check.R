@@ -3,20 +3,22 @@
 # Does research/bayesian_alignment.md quote its books truly, and does it give every step, setting and unkeyed choice
 # of the method one verdict? Issue #185.
 #
-# QUOTES. Every quoted passage stands on its own blockquote line as
-#   > "<passage>" (<citekey>, p. N)       or  (<citekey>, pp. N–M) for one that runs onto the next page
-# and is looked for on printed page N (to M) of that book's PDF, the group library's own attachment. A printed page is
+# QUOTES. Every quoted passage that cites a page is written
+#   "<passage>" (<citekey>, p. N)       or  (<citekey>, pp. N–M) for one that runs onto the next page
+# on a blockquote line of its own (`> ` before it) or inline in a sentence, and is looked for on printed page N (to M) of that book's PDF, the group library's own attachment. A printed page is
 # the PDF page less the book's front matter (`offset`), and the page's running head or foot must carry N, so a wrong
 # offset fails rather than reading a neighbouring page. Passage and page are compared as token sequences, as
 # scripts/0280 compares them: ligatures spelled out, words and numbers as written ("2" is not "25"), symbols dropped
 # (the PDFs set formulae as glyphs pdftotext cannot keep), a line-end hyphen joined in one reading and kept in the
 # other. An ellipsis (… or ...) splits a passage into fragments that must appear in order, each of at least
-# `frag_min` tokens. A quote with a citekey anywhere but a blockquote line fails, so none escapes the check. A page
-# cited without a quote is not checked here: the meaning audit re-reads it.
+# `frag_min` tokens, and a passage with no word in it fails. A quote followed by a page in any other form (no citekey,
+# a book this check does not hold, curly quotes) fails, so none escapes the check. A page cited without a quote is
+# not checked here: the meaning audit re-reads it.
 # COVERAGE. Three tables, each found by its `##` heading: "The steps" (first cell the step number, every step of
 # inst/method/pipeline.csv), "The settings" (first cell the key in backticks, every key of inst/method/settings.csv)
-# and "Choices with no settings key" (first cell the id in backticks, every id of `choices` below, whose code anchor
-# must still be in its file). Each row's last cell is exactly one verdict; a missing, duplicate or stale row fails.
+# and "Choices with no settings key" (first cell the id in backticks, every id of `choices` below; its second cell,
+# `file:line`, must name the anchor's file and the line it stands on, and the anchor must occur once in that file).
+# Each row's last cell is exactly one verdict; a missing, duplicate or stale row fails.
 #
 # INPUT:  research/bayesian_alignment.md (MD=); inst/method/{pipeline,settings}.csv; R/; the two PDFs under
 #         ZOTERO_DIR/storage (default ~/Zotero), by the attachment keys below (group library 4733734, resolved
@@ -49,7 +51,7 @@ choices <- list(
   pick_nearest_default = c("R/tune_score.R", "rr <- rr[order(dep[rr], s$tot[col[rr]])]"),
   honest_nesting       = c("R/tune_score.R", "pk_k <- .tune_pick(.tune_sel(sw$Sw, out_k)"),
   boot_no_refit        = c("R/tune_score.R", "s <- .tune_sel(sw$Sw, sample.int(nw, nw, replace = TRUE))"),
-  curve_group_effect   = c("R/tune_curve.R", "\"+ s(wsg, bs = 're')\""),
+  curve_group_effect   = c("R/tune_curve.R", "fit <- mgcv::gam(stats::as.formula(paste(resp, \"~\", smooths(nuis), \"+ s(wsg, bs = 're')\"))"),
   curve_unseen_mode    = c("R/tune_curve.R", "lv[!lv %in% levels(tr[[t]])] <- names(which.max(table(tr[[t]])))"),
   curve_reference      = c("R/tune_curve.R", "ref <- list(log_area = stats::median(dd$log_area),"),
   grade_gate           = c("R/tune_run.R", "cv$heldout >= rec$null_heldout_curve"),
@@ -112,51 +114,56 @@ page_text <- function(key, p) {
 }
 
 # ---- quotes
-keys_rx <- paste(names(books), collapse = "|")
-anyq <- grep(paste0('"[^"]{3,}"\\s*\\((', keys_rx, '|[A-Za-z]+[0-9]{4}[A-Za-z_]*),\\s*pp?\\.'), md, perl = TRUE)
-for (i in setdiff(anyq, grep("^>", md))) bad("line ", i, ": a quote outside a blockquote line, which nothing checks")
-rx <- '^>\\s*"(.+)"\\s*\\(([A-Za-z0-9_]+),\\s*pp?\\.\\s*([0-9]+)(?:\\s*[-–]\\s*([0-9]+))?\\)\\s*$'
-ql <- grep('^>\\s*"', md, perl = TRUE)
-say("quotes: ", length(ql), " blockquote lines in ", md_path)
-for (i in ql) {
-  m <- regmatches(md[i], regexec(rx, md[i], perl = TRUE))[[1]]
-  if (!length(m)) {
-    bad("line ", i, ": a quote not in the form > \"...\" (<citekey>, p. N)")
-    next
+# every quoted passage followed by a page, in whatever form: what the check must find in its own form or fail on
+loose_rx <- '["\u201C][^"\u201D]{3,}["\u201D]\\s*(,\\s*pp?\\.\\s*[0-9]|\\([^)]*\\bpp?\\.\\s*[0-9])'
+rx <- '"([^"]+)"\\s*\\(([A-Za-z0-9_]+),\\s*pp?\\.\\s*([0-9]+)(?:\\s*[-\u2013]\\s*([0-9]+))?\\)'
+nq <- 0L
+for (i in seq_along(md)) {
+  loose <- gregexpr(loose_rx, md[i], perl = TRUE)[[1]]
+  ms <- regmatches(md[i], gregexpr(rx, md[i], perl = TRUE))[[1]]
+  if (sum(loose > 0) > length(ms)) {
+    bad("line ", i, ": a quote cites a page in a form this check cannot read (it wants \"...\" (<citekey>, p. N))")
   }
-  key <- m[3]
-  p1 <- as.integer(m[4])
-  p2 <- if (nzchar(m[5])) as.integer(m[5]) else p1
-  if (!key %in% names(books)) {
-    bad("line ", i, ": ", key, " is not a book this check holds")
-    next
-  }
-  if (p2 < p1 || p2 > p1 + 1L) {
-    bad("line ", i, ": pages ", p1, "-", p2, " are not one page or two running on")
-    next
-  }
-  pgs <- lapply(seq(p1, p2), function(p) page_text(key, p))
-  folio <- all(vapply(pgs, `[[`, logical(1), "folio"))
-  hay <- page_tokens(unlist(lapply(pgs, `[[`, "txt")))
-  frags <- lapply(strsplit(clean(m[2]), "…|\\.\\.\\.")[[1]], tokens)
-  frags <- frags[lengths(frags) > 0L]
-  short <- any(lengths(frags) < frag_min)
-  found <- any(vapply(hay, function(h) {
-    at <- 1L
-    for (f in frags) {
-      j <- seq_at(f, h, at)
-      if (is.na(j)) return(FALSE)
-      at <- j + length(f)
+  for (q in ms) {
+    nq <- nq + 1L
+    m <- regmatches(q, regexec(rx, q, perl = TRUE))[[1]]
+    key <- m[3]
+    p1 <- as.integer(m[4])
+    p2 <- if (nzchar(m[5])) as.integer(m[5]) else p1
+    if (!key %in% names(books)) {
+      bad("line ", i, ": ", key, " is not a book this check holds")
+      next
     }
-    TRUE
-  }, logical(1)))
-  ok <- found && folio && !short
-  why <- c(if (!folio) "the page's head or foot does not carry its number",
-           if (short) paste0("a fragment under ", frag_min, " words"),
-           if (!found) "passage not on the page")
-  if (ok) say("ok   line ", i, " ", key, " p. ", p1, if (p2 != p1) paste0("-", p2))
-  else bad("line ", i, " ", key, " p. ", p1, if (p2 != p1) paste0("-", p2), ": ", paste(why, collapse = "; "))
+    if (p2 < p1 || p2 > p1 + 1L) {
+      bad("line ", i, ": pages ", p1, "-", p2, " are not one page or two running on")
+      next
+    }
+    pgs <- lapply(seq(p1, p2), function(p) page_text(key, p))
+    folio <- all(vapply(pgs, `[[`, logical(1), "folio"))
+    hay <- page_tokens(unlist(lapply(pgs, `[[`, "txt")))
+    frags <- lapply(strsplit(clean(m[2]), "\u2026|\\.\\.\\.")[[1]], tokens)
+    frags <- frags[lengths(frags) > 0L]
+    empty <- !length(frags)
+    short <- any(lengths(frags) < frag_min)
+    found <- !empty && any(vapply(hay, function(h) {
+      at <- 1L
+      for (f in frags) {
+        j <- seq_at(f, h, at)
+        if (is.na(j)) return(FALSE)
+        at <- j + length(f)
+      }
+      TRUE
+    }, logical(1)))
+    ok <- found && folio && !short
+    why <- c(if (!folio) "the page's head or foot does not carry its number",
+             if (empty) "the passage has no word in it",
+             if (short) paste0("a fragment under ", frag_min, " words"),
+             if (!found && !empty) "passage not on the page")
+    if (ok) say("ok   line ", i, " ", key, " p. ", p1, if (p2 != p1) paste0("-", p2))
+    else bad("line ", i, " ", key, " p. ", p1, if (p2 != p1) paste0("-", p2), ": ", paste(why, collapse = "; "))
+  }
 }
+say("quotes: ", nq, " checked in ", md_path)
 
 # ---- coverage
 # the table rows under one `##` heading, as cells, the header and separator rows left out
@@ -181,16 +188,28 @@ check_table <- function(heading, want, id_of) {
   for (k in setdiff(ids, want)) bad(heading, ": ", k, " is not one of the method's")
   for (j in which(!vd %in% verdicts)) bad(heading, ": ", ids[j], "'s last cell is not one verdict")
   say(heading, ": ", length(rows), " rows for ", length(want), "; ", paste(names(table(vd)), table(vd), sep = " ", collapse = ", "))
+  invisible(stats::setNames(rows, ids))
 }
 unbacktick <- function(x) sub("^`([^`]+)`$", "\\1", x)
 pipe <- utils::read.csv("inst/method/pipeline.csv", stringsAsFactors = FALSE)
 sets <- utils::read.csv("inst/method/settings.csv", stringsAsFactors = FALSE)
 check_table("The steps", as.character(pipe$step), identity)
 check_table("The settings", sets$key, function(x) if (grepl("^`[^`]+`$", x)) unbacktick(x) else x)
-check_table("Choices with no settings key", names(choices), function(x) if (grepl("^`[^`]+`$", x)) unbacktick(x) else x)
+crows <- check_table("Choices with no settings key", names(choices), function(x) if (grepl("^`[^`]+`$", x)) unbacktick(x) else x)
 for (k in names(choices)) {
   src <- readLines(choices[[k]][1], warn = FALSE)
-  if (!any(grepl(choices[[k]][2], src, fixed = TRUE))) bad("choice ", k, ": its anchor is no longer in ", choices[[k]][1])
+  at <- which(grepl(choices[[k]][2], src, fixed = TRUE))
+  if (length(at) != 1L) {
+    bad("choice ", k, ": its anchor occurs ", length(at), " times in ", choices[[k]][1], ", not once")
+    next
+  }
+  if (is.null(crows[[k]])) next
+  w <- regmatches(crows[[k]][2], regexec("^`?([^`:]+):([0-9]+)(?:-[0-9]+)?`?$", crows[[k]][2]))[[1]]
+  if (!length(w)) {
+    bad("choice ", k, ": its second cell is not `file:line`")
+  } else if (w[2] != choices[[k]][1] || as.integer(w[3]) != at) {
+    bad("choice ", k, ": cites ", w[2], ":", w[3], " but its anchor is at ", choices[[k]][1], ":", at)
+  }
 }
 say(if (fail) paste0("FAILED: ", fail, " problems") else "PASS")
 
