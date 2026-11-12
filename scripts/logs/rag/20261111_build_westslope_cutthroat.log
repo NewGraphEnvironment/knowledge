@@ -1,0 +1,44 @@
+12 of 85 members left out:
+  2DACGEU7  janowicz_etal2018Agegrowth  (no live PDF)
+  4HI4XJJE  boyer_etal2008Rainbowtrout  (no live PDF)
+  AWLGTXUN  blackburn2017TrendsDistribution  (no live PDF)
+  JD5UEY36  pierce_etal2014WestslopeCutthroat  (no live PDF)
+  JD6GWDKP  bcspecies&ecosystemexplorer2020Oncorhynchusclarkii  (no live PDF)
+  JEKVL99X  dangelo_muhlfeld2011FactorsInfluencing  (no live PDF)
+  NIF4TXB4  hagen_baxter20092008Westslope  (no live PDF)
+  QPPKX2KW  mayhood2014Conceptualframework  (no live PDF)
+  U32T6EPA  brown_mackay1995Spawningecology  (no live PDF)
+  X7ZF9PWW  blank_etal2020SwimmingPerformance  (no live PDF)
+  ZBHC36HB  muhlfeld_etal2012ASSESSINGIMPACTS  (no live PDF)
+  ZDDDMW35  mayhood2019Comments2019  (no live PDF)
+73 keys across 1 collections
+Ingesting 73 PDF(s) into data/rag/westslope_cutthroat.duckdb
+Downloading pypdfium2 (3.5MiB)
+Downloading pypdfium2 (3.5MiB)
+Downloading pypdfium2 (3.5MiB)
+Downloading pypdfium2 (3.5MiB)
+Downloading pypdfium2 (3.5MiB)
+Downloading pypdfium2 (3.5MiB)
+Downloading pypdfium2 (3.5MiB)
+Downloading pypdfium2 (3.5MiB)
+ Downloaded pypdfium2
+ Downloaded pypdfium2
+Installed 49 packages in 346ms
+Installed 49 packages in 325ms
+ Downloaded pypdfium2
+ Downloaded pypdfium2
+ Downloaded pypdfium2
+Installed 49 packages in 249ms
+ Downloaded pypdfium2
+ Downloaded pypdfium2
+Installed 49 packages in 343ms
+ Downloaded pypdfium2
+Installed 49 packages in 420ms
+Installed 49 packages in 489ms
+Installed 49 packages in 553ms
+Installed 49 packages in 320ms
+Read with pdftools, because markitdown could not:
+  evaluationofcauseteam2021EvaluationCause (ocr_ufr_eoc_2021.pdf): Embedded NUL in string.
+  schwarz_etal2013Integratingbatch (schwarz_et_al_2013_integrating_batch_marks_and_radio_tags_to_estimate_the_size_of_a_closed.pdf): no text
+Store built: data/rag/westslope_cutthroat.duckdb | docs: 73 | chunks: 17700 | model: nomic-embed-text
+Built data/rag/westslope_cutthroat.duckdb. It is not in the bucket until ACTION=push.

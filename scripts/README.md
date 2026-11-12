@@ -152,6 +152,7 @@ wf_farm_priority.js                          farm priority/crossing tables out o
       (--collection flow: Fisheries/flow, from data/flow_members.csv and data/flow_additions.csv)
       (--parent <key> for a collection under another parent: --collection grayling --parent 9U54XAND is species/grayling)
       (--collection sturgeon --parent 9U54XAND: species/sturgeon, from data/sturgeon_members.csv and _additions.csv)
+      (--collection westslope_cutthroat --parent 9U54XAND: species/westslope_cutthroat, from data/westslope_cutthroat_*.csv)
       (--collection statistics --parent top: the top-level statistics collection, from data/statistics_*.csv, #95)
 0275  carry out data/zotero_attachment_verdicts.csv on the group's attachments   --dry-run first, then live
       (merge an item's report parts into one PDF, keep one copy, split a separate document to its own item, #126, #151)
@@ -160,6 +161,7 @@ wf_farm_priority.js                          farm priority/crossing tables out o
       two salmon collections, by key)                                                    then ACTION=push
 0150  ACTION=build STORE=bull_trout_grayling COLLECTIONS="VHWEK6RE,GELFSUTU"               then ACTION=push
 0150  ACTION=build STORE=sturgeon COLLECTIONS=WEUFTSDC                                     then ACTION=push
+0150  ACTION=build STORE=westslope_cutthroat COLLECTIONS=TIDR3PNN                          then ACTION=push
 0150  ACTION=build STORE=temperature COLLECTIONS=SW2RXUJC                                  then ACTION=push
 0150  ACTION=build STORE=flow COLLECTIONS=FWTJDD8Z                                         then ACTION=push
 0150  ACTION=build STORE=statistics COLLECTIONS=LP4R4VYR                                   then ACTION=push
@@ -472,6 +474,9 @@ The cited basis for CH and BT habitat thresholds (#19). Not per watershed group.
   recovery documents, the NWSRI's reports and curated Nechako mainstem history. `0150` reads only the items filed
   directly in each collection it is given, so `species` (`9U54XAND`) does not bring `species/sturgeon` into
   `habitat_modelling`.
+  The `westslope_cutthroat` store is built from `species/westslope_cutthroat` alone (`COLLECTIONS=TIDR3PNN`, #190): the
+  management and recovery documents (BC, federal and Alberta), East Kootenay and Elk monitoring series, and the
+  Environmental Damages Fund's Elk Valley reports. For the same reason it does not feed `habitat_modelling`.
   The `statistics` store is built from the top-level `statistics` collection (`LP4R4VYR`, `--parent top`, #95): the
   texts the tuning method is read against (#185).
 - `0275` carries out `data/zotero_attachment_verdicts.csv`, one decided row per item (#126, #151): `merge` joins an

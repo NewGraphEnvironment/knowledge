@@ -1,0 +1,27 @@
+[dry run] would upload data/rag/habitat_modelling.duckdb -> s3://fresh-bc/rag/habitat_modelling.duckdb
+[dry run] merged manifest would hold: fraser, vca_refs, peace, pine, habitat_modelling, temperature, flow, bull_trout_grayling, sturgeon, statistics, westslope_cutthroat
+(manifest trimmed to this store's entry)
+{
+  "date_updated": "2026-11-11T13:54:27Z",
+  "manifest_note": "Provenance is per store. Push must merge into this file, never replace it.",
+  "chunking": "ragnar defaults (ragnar_store_ingest)",
+  "generating_script": "cred::crd_store_push()",
+  "stores": {
+    "habitat_modelling": {
+      "documents": 266,
+      "chunks": 47377,
+      "embedding_size": 768,
+      "embedding_model": "nomic-embed-text",
+      "store_name": "store_001",
+      "bytes": 800075776,
+      "md5": "4fcc67007d63a46f0d31cd7e9dc86f0f",
+      "repo": "NewGraphEnvironment/knowledge",
+      "branch": "190-westslope-cutthroat-store-gather-the-man",
+      "head_sha": "617f1a4aeb9c4edf57fd01e4a8a09db451720fa2",
+      "built_by": "cred::crd_store_push()",
+      "date_completed": "2026-11-11T13:54:27Z"
+    }
+  }
+}
+Uploading habitat_modelling.duckdb (763 MB)
+Manifest updated — now holds: fraser, vca_refs, peace, pine, habitat_modelling, temperature, flow, bull_trout_grayling, sturgeon, statistics, westslope_cutthroat

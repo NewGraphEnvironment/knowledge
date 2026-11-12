@@ -1,0 +1,83 @@
+# westslope_cutthroat store: four checks, expectations written 2026-11-11 04:4x UTC before any query ran (#190)
+#
+# 1. "thermal limits and upper incipient lethal temperature of westslope cutthroat trout"
+#    expect: bear_etal2005ThermalRequirements, bear_etal2007ComparativeThermal; possibly the Upper Fording
+#    Evaluation of Cause climate and water temperature expert report
+# 2. "hybridization of westslope cutthroat with rainbow trout in the upper Kootenay"
+#    expect: muhlfeld_etal2016GeneticStatus and the FWCP hybridization evaluations (Lamson 2016, 2018, 2020);
+#    boyer_etal2008Rainbowtrout has no PDF (#191), so it cannot appear
+# 3. "effectiveness of habitat restoration for westslope cutthroat in the Elk River watershed"
+#    expect: the CWF Elk River connectivity restoration plan, elkriveralliance2020ElkRiver
+# 4. "monitoring and reporting required of projects funded by the Environmental Damages Fund in the Elk Valley"
+#    expect: the EDF Qukin ʔamakʔis applicant guide (letter of intent), ECCC's Elk Valley funds page, KNC's EDF newsletter
+#
+# A miss is recorded as a miss, not tuned away.
+
+## 1. thermal limits and upper incipient lethal temperature of westslope cutthroat trout
+Opening data/rag/westslope_cutthroat.duckdb unverified (verify = FALSE).
+# A tibble: 6 × 9
+  citation_key          origin chunk_id  start    end text   score metric method
+  <chr>                 <chr>     <int>  <int>  <int> <chr>  <dbl> <chr>  <chr> 
+1 bear_etal2005Thermal… /User…      314      1   1631 "The…  0.136 cosin… hybrid
+2 bear_etal2005Thermal… /User…      320   4783   7202 "the… 13.9   bm25   hybrid
+3 bear_etal2005Thermal… /User…      330  12835  15164 "thr… 14.1   bm25   hybrid
+4 bear_etal2005Thermal… /User…      364  40024  41601 "are…  0.128 cosin… hybrid
+5 bear_etal2007Compara… /User…       56    661   2448 "Abs…  0.126 cosin… hybrid
+6 cope_etal2016UpperFo… /User…     5988 558380 559989 "The… 12.2   bm25   hybrid
+
+## 2. hybridization of westslope cutthroat with rainbow trout in the upper Kootenay
+Opening data/rag/westslope_cutthroat.duckdb unverified (verify = FALSE).
+# A tibble: 10 × 9
+   citation_key          origin chunk_id  start    end text  score metric method
+   <chr>                 <chr>     <int>  <int>  <int> <chr> <dbl> <chr>  <chr> 
+ 1 schweigert_etal2017C… /User…     1412 233515 235273 "Rob… 8.58  bm25   hybrid
+ 2 canada_departmentoff… /User…     3011 188814 190244 "Yel… 0.132 cosin… hybrid
+ 3 canada_departmentoff… /User…     3058 226296 227992 "\uf… 0.139 cosin… hybrid
+ 4 lamson2016Evaluation… /User…     7644  45755  47209 "Ref… 0.144 cosin… hybrid
+ 5 cleator_etal2009Info… /User…      835  67202  68770 "Koz… 0.141 cosin… hybrid
+ 6 b_c_ministryofenviro… /User…     1714  71320  72810 "19\… 8.70  bm25   hybrid
+ 7 lamson2018Evaluation… /User…     7527  11332  13016 "Stu… 8.61  bm25   hybrid
+ 8 lamson2018Evaluation… /User…     7530  13406  15368 "Sam… 8.57  bm25   hybrid
+ 9 lamson2018Evaluation… /User…     7534  16808  18327 "Upp… 8.63  bm25   hybrid
+10 lamson2018Evaluation… /User…     7546  26512  28032 "Ben… 0.138 cosin… hybrid
+
+## 3. effectiveness of habitat restoration for westslope cutthroat in the Elk River watershed
+Opening data/rag/westslope_cutthroat.duckdb unverified (verify = FALSE).
+# A tibble: 10 × 9
+   citation_key          origin chunk_id  start    end text  score metric method
+   <chr>                 <chr>     <int>  <int>  <int> <chr> <dbl> <chr>  <chr> 
+ 1 canada_departmentoff… /User…     3022 197855 199083 "The… 0.228 cosin… hybrid
+ 2 canada_departmentoff… /User…     3042 213552 215173 "dir… 0.215 cosin… hybrid
+ 3 canada_departmentoff… /User…     3096 256631 258497 "A13… 0.235 cosin… hybrid
+ 4 elkriveralliance2020… /User…     2325      1   1554 "Elk… 6.65  bm25   hybrid
+ 5 elkriveralliance2020… /User…     2351  20919  22388 "Alo… 7.05  bm25   hybrid
+ 6 hocking_etal2021Subj… /User…     7027  55953  57637 "Mik… 7.73  bm25   hybrid
+ 7 WESTSLOPECUTTHROATTR… /User…      157  43217  44770 "Bax… 0.226 cosin… hybrid
+ 8 mazany-wright_etal20… /User…     3723      1   1729 "Exe… 7.50  bm25   hybrid
+ 9 mazany-wright_etal20… /User…     3735   9382  11126 "\n\… 7.39  bm25   hybrid
+10 schmetterling2001Sea… /User…      438   3996   5465 "To … 0.238 cosin… hybrid
+
+## 4. monitoring and reporting required of projects funded by the Environmental Damages Fund in the Elk Valley
+Opening data/rag/westslope_cutthroat.duckdb unverified (verify = FALSE).
+# A tibble: 8 × 9
+  citation_key            origin chunk_id start   end text   score metric method
+  <chr>                   <chr>     <int> <int> <int> <chr>  <dbl> <chr>  <chr> 
+1 evaluationofcauseteam2… /User…    13621 52778 54401 "   …  0.287 cosin… hybrid
+2 Environmentaldamagesfu… /User…     1465 10409 11989 "\n•… 12.9   bm25   hybrid
+3 Environmentaldamagesfu… /User…     1467 11990 13670 "\nW…  0.277 cosin… hybrid
+4 Environmentaldamagesfu… /User…     1470 14568 16073 "\nA…  0.289 cosin… hybrid
+5 Environmentaldamagesfu… /User…     1493 32764 34388 "\n\…  0.282 cosin… hybrid
+6 Environmentaldamagesfu… /User…     1501 39308 40801 "\n\…  0.279 cosin… hybrid
+7 environmentandclimatec… /User…     2047  4760  7248 ".\n… 13.2   bm25   hybrid
+8 environmentandclimatec… /User…     2049     1  2485 "Fun… 11.2   bm25   hybrid
+
+## Against the expectations (written after the four ran)
+# 1. hit: bear_etal2005ThermalRequirements (4 chunks) and bear_etal2007ComparativeThermal lead; the climate and water
+#    temperature expert report is not in the top 6 (cope_etal2016UpperFording is)
+# 2. partial: lamson2016 and lamson2018 hybridization evaluations (5 chunks); muhlfeld_etal2016GeneticStatus and
+#    lamson2020EvaluationCurrent are not in the top 10, which the COSEWIC assessment, the DFO recovery strategy, the BC
+#    plan and cleator_etal2009 fill with their own hybridization passages
+# 3. hit: elkriveralliance2020ElkRiver (2) and the CWF Elk River connectivity restoration plan
+#    (mazany-wright_etal2026, 2), beside the DFO 2019 recovery strategy (3) and an Upper Fording expert report
+# 4. partial: the EDF applicant guide (5 chunks) and ECCC's Elk Valley pages (2) lead; KNC's EDF newsletter
+#    (10 chunks in the store) is not in the top 8
