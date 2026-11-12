@@ -83,7 +83,7 @@ settings <- list(species = c("BT", "CH"), q_grid = c(1, 3), sources = "pick", sn
                  snap_limit_code_m = 150, parent = "none")
 r <- knw_evidence_receipt_write(ev, settings, inputs, knowledge = list(commit = strrep("a", 40), dirty = FALSE))
 r$result$summary$visits
-#> [1] 2
+#> Error in r$result: $ operator is invalid for atomic vectors
 r$recipe$recipe_id
-#> [1] "d4dfffe0fdbeba5fb5c31bb97b72c510fb1a549b9679d54a32d416a3a3084e25"
+#> Error in r$recipe: $ operator is invalid for atomic vectors
 ```

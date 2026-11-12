@@ -146,9 +146,9 @@ with <code>access_check</code>'s km read as a number.</p>
 <span class="r-in"><span>                 snap_limit_code_m <span class="op">=</span> <span class="fl">150</span>, parent <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu">knw_evidence_receipt_write</span><span class="op">(</span><span class="va">ev</span>, <span class="va">settings</span>, <span class="va">inputs</span>, knowledge <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>commit <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/strrep.html" class="external-link">strrep</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="fl">40</span><span class="op">)</span>, dirty <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">r</span><span class="op">$</span><span class="va">result</span><span class="op">$</span><span class="va">summary</span><span class="op">$</span><span class="va">visits</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in r$result:</span> $ operator is invalid for atomic vectors</span>
 <span class="r-in"><span><span class="va">r</span><span class="op">$</span><span class="va">recipe</span><span class="op">$</span><span class="va">recipe_id</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "d4dfffe0fdbeba5fb5c31bb97b72c510fb1a549b9679d54a32d416a3a3084e25"</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in r$recipe:</span> $ operator is invalid for atomic vectors</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

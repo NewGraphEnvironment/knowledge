@@ -106,5 +106,5 @@ spec <- list(fit = "gam", prior_sd = 2.5, seed = 54L, folds = 5L, d_floor = 200,
 r <- knw_grade_receipt_write(g, grades, spec, min_wsg = 5L, evidence_dir = ev,
                              knowledge = list(commit = strrep("a", 40), dirty = FALSE))
 r$result$summary$km_graded
-#> [1] 0.42
+#> Error in r$result: $ operator is invalid for atomic vectors
 ```
