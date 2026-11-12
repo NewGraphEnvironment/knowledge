@@ -47,9 +47,11 @@ A list: `placed`, one row per placed visit (`site_visit`, `id_segment`,
 `segment_start_offset_m`, the segment attributes, elevation,
 `access_<sp>` columns, `<sp>_<flag>` and `<sp>_<flag>_stored` columns);
 `species_access`, the species with an `access_<sp>` column;
-`species_habitat`, the species with a habitat table; `overlap`, a
-one-row `data.frame` with the number of visits whose point lies in two
-segments and the largest overlap found.
+`species_habitat`, the species with a habitat table (both sorted by
+name, which orders the species' columns in `placed`, so the column order
+does not depend on the database's catalog); `overlap`, a one-row
+`data.frame` with the number of visits whose point lies in two segments
+and the largest overlap found.
 
 ## Details
 

@@ -56,7 +56,7 @@ longer than overlap_max_m anywhere a visit's point falls stops the run."><meta p
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Place site visits on link's segments, with access and habitat for every species</h1>
-      <small class="dont-index">Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/v0.4.38/R/link_place.R" class="external-link"><code>R/link_place.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/R/link_place.R" class="external-link"><code>R/link_place.R</code></a></small>
       <div class="d-none name"><code>knw_link_place.Rd</code></div>
     </div>
 
@@ -109,7 +109,9 @@ segment start is taken as the visit's segment.</p></dd>
 <code>id_segment</code>, <code>segment_start_offset_m</code>, the segment attributes, elevation,
 <code>access_&lt;sp&gt;</code> columns, <code>&lt;sp&gt;_&lt;flag&gt;</code> and <code>&lt;sp&gt;_&lt;flag&gt;_stored</code> columns);
 <code>species_access</code>, the species with an <code>access_&lt;sp&gt;</code> column;
-<code>species_habitat</code>, the species with a habitat table; <code>overlap</code>, a one-row
+<code>species_habitat</code>, the species with a habitat table (both sorted by name,
+which orders the species' columns in <code>placed</code>, so the column order does
+not depend on the database's catalog); <code>overlap</code>, a one-row
 <code>data.frame</code> with the number of visits whose point lies in two segments and
 the largest overlap found.</p>
     </div>
