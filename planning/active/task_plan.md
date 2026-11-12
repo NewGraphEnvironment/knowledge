@@ -20,7 +20,7 @@ Bull trout already shows up in several places:
 recovery, management and monitoring documents, quotable verbatim, followed by a life-history research file and a
 dataset inventory. Exploration corrected one premise: bull trout **is** in a store already.
 - #122 built `bull_trout_grayling` from `VHWEK6RE` (species/bull_trout) and `GELFSUTU` (species/grayling). It holds
-  36 documents and is in the bucket as of 2026-11-10.
+  35 documents (#172 merged one) and is in the bucket as of 2026-11-10.
 - `habitat_modelling`'s build list includes `VHWEK6RE`.
 - What is missing is the documents themselves: the collection held 16 items, 11 with a PDF, after #122. The issue
   counts 20 and 11, and Phase 1 re-measures.
@@ -30,7 +30,8 @@ This PR carries piece 1, the store. Pieces 2 and 3 are filed as their own issues
 What exploration settled:
 - `scripts/0270-habitat-collection-build.py --collection bull_trout --parent 9U54XAND` reads the existing
   `data/bull_trout_members.csv` (16 rows from #122, kept and appended to) and a new `data/bull_trout_additions.csv`,
-  read when it exists. No code change is expected.
+  read when it exists. One code change: `addition_item` gains `publicationTitle`, `volume` and `issue`, so a journal
+  article with no DOI (Fraley & Shepard 1989) is filed whole (plan review G2).
 - `0150` reads only items filed directly in a collection.
 - The tools are the same as #190's: cred 0.7.0 (`ACTION=update` in place) and ragnar 0.3.1. cred#45 is open, so the
   build runs with Zotero quit and its `-wal` checkpointed.
@@ -69,7 +70,9 @@ What exploration settled:
       a "researchgate pdf" title search). Every body must start `%PDF`. Paywalled ones go on a list for Al to download
       into the ignored `data/rag/pdf/bull_trout/`; scans are OCRed
 - [ ] Federal: the SARA management plans for South Coast and Western Arctic bull trout and the COSEWIC assessments
-      (2012 is already a member); printed from the registry's HTML where no PDF is served
+      (2012 is already a member); printed from the registry's HTML where no PDF is served. Decide from the text whether
+      a federal plan adopts the 2023 BC plan (a member); if it does, file the front matter and Part 1 only (G4). The
+      Saskatchewan–Nelson (Alberta) documents are outside the two units
 - [ ] Provincial: status reports, the management plan (2023 is already a member) and any progress reporting
 - [ ] Series:
   - the Hagen Williston series (redd counts, critical spawning habitat, limiting factors);
@@ -83,15 +86,28 @@ What exploration settled:
 - [ ] Dedupe every addition by title and DOI against every library, trash included:
   - a live group copy in another collection becomes a member row;
   - a copy only in the personal library is filed into the group;
-  - a trashed group copy is restored, not recreated.
+  - a trashed group copy is restored only when no live group copy exists: a Web API PATCH `deleted: 0`, Al present,
+    before the first dry run, after which it is a member row by its key (`0270` cannot see the trash; G5).
 - [ ] Rules for the rows:
   - a member with no PDF has an empty `pdf`;
   - an addition with no PDF is listed only with a DOI whose CrossRef record has an abstract;
   - web pages are printed to PDF as `report`;
   - URLs are percent-encoded;
-  - no tracked file names another library or its keys.
+  - no tracked file names another library or its keys;
+  - a DOI row is for a journal article only (CrossRef reads every DOI as one); a report, book or thesis with a DOI goes
+    in without it, its series in `reportType`/`reportNumber` (G2).
+- [ ] `0270`'s `addition_item` takes `publicationTitle`, `volume` and `issue` (G2), checked in the dry run on Fraley &
+      Shepard 1989
+- [ ] No-text check: count the pages under 30 characters of text in every PDF to be filed; `ocrmypdf --skip-text` those
+      into `data/rag/ocr/bull_trout/` and point the row at the copy (G3)
 - [ ] Write `data/bull_trout_members.csv` (appended) and `data/bull_trout_additions.csv`. Record the count and MB per
-      source in findings before filing (the scope check)
+      source in findings before filing (the scope check), with the 14 group items found outside the collection as
+      their own source line (S1), and the MB to upload set against the group's storage quota for Al (A3)
+- [ ] The enumeration, before the first dry run: every field of every row against a verbatim snippet of its own title
+      page (#190's `review-round3-evidence.tsv` form), so fixes are CSV edits (O2). From the first live run on, a fix
+      is a CSV row, a PATCH and a no-op dry run; then the PATCHed items' keys are re-read from a guarded copy, and a key
+      that moved means the CSVs and evidence rows, `0280`, and `ACTION=update` plus a push on all three stores. Members
+      with unpinned keys are never edited
 
 ## Phase 2: file the collection through `0270` (Al present for the live run)
 - [ ] Al's hand downloads land in `data/rag/pdf/bull_trout/` (or those rows keep an empty `pdf`, owed in an issue)
@@ -103,9 +119,12 @@ What exploration settled:
 - [ ] Re-measure from a guarded copy: a before/after table
 
 ## Phase 3: build, query and push the stores
-- [ ] Gate: every member's PDF is on disk, Zotero is quit, and the `-wal` is empty
+- [ ] Gate: every member's PDF is on disk, Zotero is quit, and the `-wal` is empty. Zotero stays quit through the updates
+- [ ] Verified pull before any local write: `ACTION=query VERIFY=TRUE` on `habitat_modelling` (the local copy is stale,
+      `b28ad0ed…` against the bucket's `4fcc6700…`) and on `bull_trout_grayling`; each md5 recorded against the
+      manifest (G1)
 - [ ] `ACTION=build STORE=bull_trout COLLECTIONS=VHWEK6RE`, logged. The left-out list equals the recorded gap, and
-      every origin maps to a live group attachment
+      every origin maps to a live group attachment; documents = keys − no-text PDFs, with those keys named (G3)
 - [ ] Four `ACTION=query` checks, each with its expected documents written in the log before it runs and the top 5
       keys recorded after:
   - Williston spawning-site selection and redd counts;
@@ -114,18 +133,23 @@ What exploration settled:
   - US critical habitat primary constituent elements.
 
   A miss is reported, not tuned away
-- [ ] `ACTION=update STORE=bull_trout_grayling COLLECTIONS="VHWEK6RE,GELFSUTU"` and
-      `ACTION=update STORE=habitat_modelling` over its whole list (`scripts/README.md`)
-- [ ] Commit the CSVs and logs before pushing
-- [ ] Push all three stores (`ACTION=push`: a dry run, then `CONFIRM=TRUE`). Read each push's result before any
-      verified connect
+- [ ] `ACTION=update STORE=bull_trout_grayling COLLECTIONS="VHWEK6RE,GELFSUTU"` (35 documents before) and
+      `ACTION=update STORE=habitat_modelling` over its whole list (`scripts/README.md`; 266 before). Before each, write
+      the expected added keys in its log; after, the `N added, M dropped` line must match, and every surprise is
+      explained before any push (A1)
+- [ ] Commit the CSVs and the build, query and update logs, home paths as `~/` (G6); then **push the branch**, and
+      never amend, rebase or rewrite after it, since the manifests record `head_sha` (O1)
+- [ ] Push one store at a time (`ACTION=push`: a dry run, then `CONFIRM=TRUE`): `bull_trout`, then `bull_trout_grayling`,
+      then `habitat_modelling` last. Read each push's result and check its multipart ETag before the next push or any
+      verified connect (O1)
+- [ ] Commit the push logs, each trimmed to its own manifest entry (G6)
 
 ## Phase 4: docs and issue
-- [ ] `scripts/README.md`:
+- [ ] (Drafted in `7a9f4c7a`; checked against the built store here.) `scripts/README.md`:
   - the `bull_trout` build line;
   - the `0270 --collection bull_trout --parent 9U54XAND` line;
   - that `VHWEK6RE` feeds `bull_trout`, `bull_trout_grayling` and `habitat_modelling`.
-- [ ] `CLAUDE.md` layout: `bull_trout_{members,additions}.csv` as the inputs of `bull_trout` (and of
+- [ ] (Drafted in `7a9f4c7a`.) `CLAUDE.md` layout: `bull_trout_{members,additions}.csv` as the inputs of `bull_trout` (and of
       `bull_trout_grayling` with grayling's)
 - [ ] `inst/NOTICE.md`: no row expected; confirm
 - [ ] #194's body: the gap and the outcome

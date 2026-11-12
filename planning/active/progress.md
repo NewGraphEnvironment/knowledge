@@ -9,3 +9,4 @@
 - Next: Phase 0, splitting the issue
 - Phase 0: filed #198 (life history) and #199 (datasets); rewrote #194's body (corrected premise, split, decided
   breadth and store shape). Plan review spawned in the background at 07:18Z
+- Plan review back (~07:25Z): 13 findings, 3 verified by probe, all folded in (`review-plan.md`)
