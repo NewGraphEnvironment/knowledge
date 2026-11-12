@@ -19,3 +19,6 @@
 - Code-check round 3 (enumeration of 63 claims): published sets' recipes name the tuning run, so #197 never reaches them (round 2's fix corrected, #197 body too); #145 not #154; fdis_sites is 0240's; grade sizes 0.3-2.5 GB everywhere (about 11 GB a run); timings from the logs
 - Code-check round 4 (74-claim enumeration): published-set prose cut to what the recipe names; #158's visits_link exception; the eleven tune CSVs, not every output; size copies in the test, header and roxygen; #197 body (four tables, not five)
 - Code-check round 5 (85-claim enumeration): one finding, the cost projection resting on the old 26 GB run size; now labelled #119's projection, an upper bound
+- Branch review ended on enumeration: round 5's 85 claims all true or unverifiable but the cost paragraph; its
+  replacement's five claims checked by hand against #119's findings (26 GB of pinned inputs, nearly all grade tables;
+  28 GB, $0.65, $0.15; 17x on CH rearing, 3.49 GB to 202 MB) and the records (11.19 GB of grade tables)

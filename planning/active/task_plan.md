@@ -140,7 +140,7 @@ State found while exploring (2026-11-11):
 ## Validation
 
 - [x] Tests pass (`devtools::test()`, `test-receipt.R` in particular)
-- [ ] `/code-check` clean (once over the branch with `/code-check branch`)
+- [x] `/code-check` clean (once over the branch with `/code-check branch`)
 - [ ] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion
 

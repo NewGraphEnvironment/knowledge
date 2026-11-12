@@ -186,6 +186,5 @@ md5-identical, and a second archive of the same files sent nothing.
 ## Cost
 
 At list prices as known (S3 Standard about $0.023 per GB-month, egress about $0.09 per GB), #119 projected from a run
-of about 26 GB of grade tables: archiving every run, compressed, with the evidence once per build, about 28 GB and
-$0.65 a month after a year at 15 runs a year, and about $0.15 to restore one run. Today's runs are about 11 GB, so
-both figures are upper bounds. Storage is not the cost that matters; recreating a run is.
+whose pinned inputs came to about 26 GB, nearly all of it grade tables: archiving every run, compressed, with the evidence once per build, about 28 GB and
+$0.65 a month after a year at 15 runs a year, and about $0.15 to restore one run. Today's grade tables come to about 11 GB a run. Storage is not the cost that matters; recreating a run is.
