@@ -110,7 +110,8 @@ What exploration settled:
       into `data/rag/ocr/bull_trout/` and point the row at the copy (G3)
 - [ ] Write `data/bull_trout_members.csv` (appended) and `data/bull_trout_additions.csv`. Record the count and MB per
       source in findings before filing (the scope check), with the 14 group items found outside the collection as
-      their own source line (S1), and the MB to upload set against the group's storage quota for Al (A3)
+      their own source line (S1). A3's quota check is settled: the group's file storage is unlimited (Al,
+      2026-11-12; now in soul's `/zotero-api`), so the MB is recorded for upload time only
 - [ ] The enumeration, before the first dry run: every field of every row against a verbatim snippet of its own title
       page (#190's `review-round3-evidence.tsv` form), so fixes are CSV edits (O2). From the first live run on, a fix
       is a CSV row, a PATCH and a no-op dry run; then the PATCHed items' keys are re-read from a guarded copy, and a key
