@@ -157,3 +157,41 @@ Marginal by the agent's own call: the three bulletins, the McNeil substrate repo
 These rows carry no title or creators, because their title pages were not read.
 
 FWCP Columbia bull trout reports are EcoCat only, the same block as search B's.
+
+## Search A: federal, provincial, US and Baxter (agent, verified here 2026-11-12)
+
+Scratchpad `search_A/`. 37 rows: 18 `pdf_ok` (each file starts `%PDF`, 68 MB in all), 7 `not_found`, 5
+`needs_browser`, 4 `web_page`, 3 `paywalled`.
+- **Federal management plans: none exists.** Both units were listed Special Concern by SOR/2019-287, so plans are owed
+  but none has been posted, and no progress report can exist. COSEWIC re-assessed bull trout in May 2025: its
+  assessment results PDF is `pdf_ok`, and the 2025 status report needs a browser.
+- **US core:** the 2015 recovery plan (corrected version) and all six Recovery Unit Implementation Plans are
+  `pdf_ok`. The plan and the 2010 critical habitat rule are already in the group with PDFs, so they become member
+  rows. Fraley & Shepard 1989 is an open PDF on WSU's JS-only repository: needs a browser.
+- **Provincial:** the 2023 plan (member), Hammond's 2004 IWMS account (`pdf_ok`), the Rare Freshwater Fish
+  bull trout excerpt (the member `cannings_ptolemy1998RareFreshwater` holds the whole book, so the excerpt is
+  dropped). Hagen & Decker 2011, the provincial status synthesis, is EcoCat only. Haas 1998 was not found. Rodtka
+  2009 is Alberta's status update.
+- **Baxter:**
+  - Baxter & Hauer 2000, Baxter & McPhail 1999 and Baxter et al. 1999 are paywalled; Baxter & McPhail 1999 is
+    Chowade River, NE BC.
+  - The two 1997 theses behind them need a browser.
+  - Three Baxter Environmental Skookumchuck reports are `pdf_ok`, probably the same three as search C's.
+  - The other Baxter reports (Wigwam HCTF 1999, the Kaslo/Hamill kelt fence 2018, the Wild Horse) are EcoCat only.
+- **Members:** McMahon et al. 2007 is `pdf_ok` (the TAFS article, author-hosted at Montana State), so it becomes a
+  member row with a `pdf`. The Metolius migration report (Thiesfeld et al. 1996, ODFW 96-1) was not found anywhere.
+  The three web pages are to be printed from the browser.
+
+## Dedupe of every candidate (guarded copy, 2026-11-12 ~08:00 UTC)
+
+Scratchpad `bt_dedupe.py` over all three `candidates.tsv`, matching titles (case and punctuation dropped) and DOIs
+against every library, trash included. Eight matched, all group items:
+- with a PDF, so they become member rows: `mcphail_baxter1996reviewbull`,
+  `u_s_fishandwildlifeservice2010Endangeredthreatened`, `u_s_fishandwildlifeservice2015Recoveryplan` and
+  `cope_morris2001WigwamRiver`; `b_c_ministryofwaterlandandresourcestewardship2023ManagementPlan` is already a member;
+- members gaining a PDF: `mcmahon_etal2007TemperatureCompetition` (search A's copy);
+- members with no PDF anywhere: the Metolius migration report;
+- COSEWIC 2012: a duplicate of the member `post_etal2012COSEWICassessment`.
+
+The other 66 rows matched nothing. A fuzzier check (by report number and the reports shared between searches A and C)
+comes with the CSV rows.
