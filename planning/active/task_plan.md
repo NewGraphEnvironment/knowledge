@@ -115,7 +115,9 @@ method, and the gate withholds a curve "no better than" no rule (`>=`, a tie wit
 - [x] `research/README.md` row; the check script passes.
 
 ## Phase 5: Feed the follow-ons (after the meaning audit and `/code-check branch`, review O1)
-- [ ] Meaning audit round 1 (`review-audit-1.md`): 23 findings, all applied; round 2 on the fixes
+- [x] Meaning audit round 1 (`review-audit-1.md`): 23 findings, all applied
+- [x] Round 2 on the fixes (`review-audit-2.md`): errors inside four fixes, all applied
+- [ ] Round 3 on round 2's changes
 - [ ] Edit #186's body: the curve already has varying intercepts; what differs is a full posterior, priors on the
       smooths, the one-outcome groups kept, and scoring a new group from the population; both models scored both ways
       (own intercept and new cluster).
