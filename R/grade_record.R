@@ -39,7 +39,7 @@
 #'   the network (the ledger's `run_link_version` and `run_link_sha`).
 #' @param tokens `named character` `c(cut =, acc =, grad =, flow =)` from
 #'   [knw_build_record()]; `NA` where the build predates link's vocabulary.
-#' @param rows `numeric(1)` the table's row count, or `NA`: counting a 5 GB
+#' @param rows `numeric(1)` the table's row count, or `NA`: counting a 2.5 GB
 #'   table to write its record costs more than the record is worth, so the
 #'   writer passes what it knows and the check never reads it.
 #' @param record_source `character(1)` `"0320"` (written with the table) or

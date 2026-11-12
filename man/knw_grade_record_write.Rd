@@ -38,7 +38,7 @@ the network (the ledger's \code{run_link_version} and \code{run_link_sha}).}
 \item{tokens}{\verb{named character} \code{c(cut =, acc =, grad =, flow =)} from
 \code{\link[=knw_build_record]{knw_build_record()}}; \code{NA} where the build predates link's vocabulary.}
 
-\item{rows}{\code{numeric(1)} the table's row count, or \code{NA}: counting a 5 GB
+\item{rows}{\code{numeric(1)} the table's row count, or \code{NA}: counting a 2.5 GB
 table to write its record costs more than the record is worth, so the
 writer passes what it knows and the check never reads it.}
 

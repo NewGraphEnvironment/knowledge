@@ -1,10 +1,10 @@
 # Keeping a tuning run: the archive
 
 **Verified:** 2026-10-30; receipts 2026-11-12 · **Issues:** #119 (built here), #111 (promotion),
-NewGraphEnvironment/link#420 (tokens for older builds), #154 (receipts), #158 (the first rebuild compared), #160 (the
+NewGraphEnvironment/link#420 (tokens for older builds), #154 (receipts), #158 (the first rebuild compared across databases), #160 (the
 evidence build's and the published visit set's receipts), #165 (the roundings measured across two databases) ·
-**Produced by:** `R/archive.R`, `scripts/0336-archive.R`, `R/grade_receipt.R`, `R/evidence_receipt.R`, `inst/receipt/`; sizes and costs from
-#119's measurements of 2026-10-29 · **Status:** bucket configured 2026-10-30; first entry (the published run) pending;
+**Produced by:** `R/archive.R`, `scripts/0336-archive.R`, `R/grade_receipt.R`, `R/evidence_receipt.R`, `inst/receipt/`; costs from #119's
+measurements of 2026-10-29, grade table sizes from the tracked records (2026-11-12) · **Status:** bucket configured 2026-10-30; first entry (the published run) pending;
 the first receipts arrive with the next retune
 
 ## Why a run needs keeping
@@ -96,7 +96,7 @@ database's cache, so #162's cold walks were not exercised.
 |---|---|
 | grade receipts (`data-raw/grade_receipt_compare.R`) | one `recipe_id`; `identical`: the pick and all four totals equal bit for bit |
 | the grade tables | every segment's grade and length the same, in the same order; bytes differ only in `evidence_md5` (#197) |
-| every tune output (`data-raw/database_compare.R`) | ten identical, the smoke table equivalent at 2.27e-13 |
+| the eleven tune CSVs (`data-raw/database_compare.R`; the `.rds` curves and score caches not compared) | ten identical, the smoke table equivalent at 2.27e-13 |
 | largest move seen when the published tables' totals are summed in four orders (`data-raw/grade_order_bound.R`) | 8.1e-8 per key, 8.7e-7 over the set |
 | bound on any order's move | 2.7e-4 for the largest key (BT rearing, 2.1 million graded segments); 1.07e-3 km and 1.20e-3 over the published set (4.2 million) |
 
@@ -107,16 +107,16 @@ each key's own receipt is the finer check. The grade tolerances, tried on the tw
 as `different`. The tolerances are set from chinook alone: #158 found BT and ST moved by the same parent-flow tie
 before it was fixed, so they are the keys to compare first when a promotion reads their receipts. The thresholds set
 stays exact: its picks and counts are what #158's second database reproduced (every pick, score, curve and group the
-same). Both published sets' recipes name the tuning run, and the evidence by the grade tables' `evidence_md5`, so they
-compare republishes of one run's tables, which read the same md5s on any database; a regrade is a new run and another
-recipe. No two published-set receipts have been compared yet, so the grade set's 1e-2 has not been tried on real
-receipts.
+same). Both published sets' recipes name the knowledge commit, the tuning run and the evidence by the grade tables'
+`evidence_md5`. No two published-set receipts have been compared yet, so the grade set's 1e-2 has not been tried on
+real receipts.
 
 ### The evidence build: every table exact but `access_check`'s km
 
 The evidence build's receipt (#160) writes down the rule this track began from. The first two measured rebuilds moved
-`access_check`'s km by 9.5e-11 km per value (#145's rebuild on one database) and 6.0e-11 (#158's second database), because each value is a sum over up to
-tens of thousands of segments (72,617 at most) that a database may take in another order; every other table came back with the same values. So
+`access_check`'s km by 9.5e-11 km per value (#145's rebuild on one database) and 6.0e-11 (#158's second database),
+because each value is a sum over up to tens of thousands of segments (72,617 at most) that a database may take in
+another order. The other tables came back with the same values, but for `visits_link` in #158 (below). So
 `access_check`'s km is rounded to 1e-6 km (1 mm, the tolerance #158's hand comparison used) and the rest is exact.
 `visits_link` is exact although #158 found its `mad_pick` moving on 3 of 45,529 visits: that was #161's unordered
 parent-flow tie, fixed since, and the pair on two databases below came back with it unchanged.
