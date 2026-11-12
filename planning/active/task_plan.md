@@ -91,8 +91,8 @@ What exploration changed:
 - [ ] Offer the rendered articles in a form that opens on a phone
 
 ## Phase 7: Bookkeeping
-- [ ] File the bundle-text issue: `pipeline.csv` step labels, five `settings.csv` labels and the two SVGs say "rule"; they ride the next methodology bundle rebuild (review B1)
-- [ ] File the fly-row issue (blocked by fly#108; split from move 2); edit #156's body to point to it
+- [x] File the bundle-text issue: `pipeline.csv` step labels, five `settings.csv` labels and the two SVGs say "rule"; they ride the next methodology bundle rebuild (review B1): #201
+- [x] File the fly-row issue (blocked by fly#108; split from move 2): #200; #156's and #171's bodies point to it
 - [ ] `/code-check branch` (three-round floor)
 - [ ] `/planning-archive`, `/gh-pr-push` (Fixes #118, #107, #156, #159; relates #171)
 

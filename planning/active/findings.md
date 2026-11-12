@@ -120,3 +120,17 @@ to 2026-11-12: `setup-r` 28–233 s, `setup-r-dependencies` 0–624 s (the long 
 first guess of 5 and 10 would have cut the slowest healthy runs. The job cap goes from 30 to 40 min so one second try
 fits. The R CMD check and citation workflows are the shared ones in `flows`; flows#3 already proposed the same fix, and
 knowledge's runs are now in its body.
+
+## Phase 6: local site build (2026-11-12, before the bibliographies)
+
+`pkgdown::build_site()` on the installed branch, exit 0. `docs/articles/` holds `tuning-method`, `tuning-chinook-rearing`
+and `tuning-stream-splits`; `habitat_thresholds.html`, `chinook_rearing.html` and `stream_splits.html` are meta-refresh
+pages to the new ones (through `url:`, the github.io address). Every relative `.html` link and every `#anchor` into a
+sibling article resolves; no footnote marker. The rendered text says "rule" only in the method article: the bundle's
+step names, settings labels and diagrams (#201), "rule of thumb", and Chen and Yang's title ("The One Standard Error
+Rule for Model Selection"). The new Kirsch et al. (2014) citation renders as `kirsch_etal2014Fishinventory?` until
+Phase 4 regenerates the `.bib` files: Zotero's local server answered every request with an empty reply, through a
+restart, from inside and outside the sandbox, with the screen locked.
+
+A first count of "rule" in the rendered text read zero for every article: its regex wanted 40 characters before each
+hit on one line, which a heading or an SVG label never has. The recount over the whole text found the 19 above.
