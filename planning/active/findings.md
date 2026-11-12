@@ -43,3 +43,10 @@ Wood's *Generalized Additive Models* and MacKenzie et al.'s occupancy text join 
   printed. The check failed a fixture quote that omitted it, which is the strictness wanted.
 - Rethinking p. 357 (ch. 11.2, exposure): a parameter in front of the log exposure "is one way to model the hypothesis
   that the rate is not constant" — so a free `log_area` coefficient is a named alternative, not an error.
+
+## The research file's row contract (review O2)
+
+The check reads three tables, each found by its `##` heading: `## The steps` (first cell the step number),
+`## The settings` (first cell the key in backticks) and `## Choices with no settings key` (first cell a backticked
+id the check holds with a code anchor). Each row's last cell is exactly one of `aligned`, `differs`,
+`should change`, `no bearing`. Quotes stand on their own blockquote line: `> "…" (<citekey>, p. N)`.
