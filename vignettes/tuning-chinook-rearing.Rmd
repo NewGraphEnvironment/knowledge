@@ -140,8 +140,8 @@ bfp <- "https://github.com/smnorris/bcfishpass/blob/3bd2824c300c5f9c0c041380d412
 ```
 
 Young chinook salmon do not always rear where they hatched: from earlier fish inventories in Alaska, Kirsch et al.
-recommend looking for more chinook rearing in the lower reaches of small tributaries to large rivers
-[-@kirsch_etal2014Fishinventory, p. 42]. British Columbia's electrofishing records point the same way, putting young
+recommend looking for more chinook rearing in the lower reaches of small tributaries, other than the ones they
+hatched in, of large rivers that hold chinook [-@kirsch_etal2014Fishinventory, p. 42]. British Columbia's electrofishing records point the same way, putting young
 chinook in more of the province's small streams near large rivers, and in fewer far from one, than link's current fish
 habitat definition allows. [`link`](`r link_site`) [@link] is an R package that maps where each
 fish species can reach and where it can spawn and rear on BC's streams. Its standard settings,

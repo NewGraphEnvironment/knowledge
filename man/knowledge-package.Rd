@@ -8,7 +8,7 @@
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Gathers what is known about where fish live in British Columbia's streams (each species' life history from the cited literature with its quotes, past reports, intrinsic-potential models, life-history timing and the provincial fish sampling records) and tunes from the records the gradient and stream-size thresholds of the fish habitat definitions the link habitat models use: it places sampling visits on link's stream segments, scores candidate habitat definitions on held-out watershed groups, grades segments by expected use, and tabulates, maps and compares the tuned habitat definitions with link's defaults. It also pulls PSCIS crossing layers and past-report tables for a group and checks stream names before a search. Under active development.
+Gathers what is known about where fish live in British Columbia's streams (life history and habitat values from the cited literature with their quotes, past reports, intrinsic-potential models, life-history timing and the provincial fish sampling records) and tunes from the records the gradient and stream-size thresholds of the fish habitat definitions the link habitat models use: it places sampling visits on link's stream segments, scores candidate habitat definitions on held-out watershed groups, grades segments by expected use, and tabulates, maps and compares the tuned habitat definitions with link's defaults. It also pulls PSCIS crossing layers and past-report tables for a group and checks stream names before a search. Under active development.
 }
 \seealso{
 Useful links:

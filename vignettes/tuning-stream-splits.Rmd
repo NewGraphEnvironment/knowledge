@@ -140,14 +140,14 @@ stopifnot(sum(cr$present) < 10, sum(cr$d > 0) > 2 * sum(cr$d < 0),
 ```
 
 The R package [`link`](`r link_site`) [@link] holds the recipes that turn what is known about each fish species' life
-history into habitat on British Columbia's stream network. A recipe is a config, and every threshold and exception in it
-is a row in a table. For each species and life stage it sets a **fish habitat definition**: the smallest stream the species
+history into habitat on British Columbia's stream network. A recipe is a config, a few tables and settings files, and each
+species' thresholds and exceptions are one row of its thresholds table. For each species and life stage it sets a **fish habitat definition**: the smallest stream the species
 uses, the steepest slope it holds in, how close a large river must be for a smaller stream to likely be used as
 habitat. It also defines what counts as an obstacle to fish passage, from falls and steep sections to the road and rail
 crossings and dams below them. [`fresh`](https://github.com/NewGraphEnvironment/fresh) [@fresh], our stream network
 modelling engine, runs the recipe: it cuts the streams of the BC Freshwater Atlas [@flnrord2021FreshwaterAtlasb] into
-**segments**, works out which segments each species can reach, and classifies their habitat. Because each recipe is a
-table, a model can be changed, run beside another and traced back to the rows that produced it.
+**segments**, works out which segments each species can reach, and classifies their habitat. Because a recipe is a set of
+files, a model can be changed, run beside another and traced back to the values that produced it.
 
 `knowledge`, the package this article belongs to, is our evidence tool for link's habitat definitions. It starts from
 what is known about each species' life history, from the published literature and past reports, and the biology sets

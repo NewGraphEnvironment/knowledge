@@ -112,7 +112,8 @@ rendered, so the tile fetch is not the cause seen:
 | 2026-11-11 13:56 | 43033679680, 43033712021 | R CMD check (PR #190) | setup-r to the 45-min cap |
 
 43033711487's log: apt `Ign:` on every `azure.archive.ubuntu.com` index about every 20 s, then `Temporary failure
-resolving 'azure.archive.ubuntu.com'`, 99 such lines until the cancel. The runner could not resolve the Ubuntu mirror.
+resolving 'azure.archive.ubuntu.com'`, 99 such lines until the cancel. Not every stall was that: 43033679109's log has the
+same errors, but 42149377267's has none, its downloads crawling with 42 to 287 s between `Get:` lines (round 3).
 
 The fix in `pkgdown.yaml` (this repository's own workflow): each setup step limited and tried a second time if the
 first fails. A step writing apt retries (flows#3's first box) was added and then dropped in code-check round 2: the x64
@@ -136,3 +137,27 @@ restart, from inside and outside the sandbox, with the screen locked.
 
 A first count of "rule" in the rendered text read zero for every article: its regex wanted 40 characters before each
 hit on one line, which a heading or an SVG label never has. The recount over the whole text found the 19 above.
+
+## Code-check (branch, 2026-11-12)
+
+| Round | Findings | Fixed | Accepted | Inside previous fix? |
+|---|---|---|---|---|
+| 1 | 1 | 1 | 0 | — |
+| 2 | 3 | 3 | 0 | n |
+| 3 | 5 | 5 | 0 | y (the Kirsch sentence, round 1's fix, still dropped "non-natal … supporting Chinook salmon") |
+
+The mechanism (round 3): sentences written from a summary of a source, or from the intent of a change, and not read
+back against the source. Ended by enumeration, not by a quiet round: round 3 tabled every factual sentence the branch
+added or reworded (41 rows, `review-round3.md`) against its source; the five that failed were rewritten, and each
+rewrite was checked against its source here:
+
+| rewrite | source | holds |
+|---|---|---|
+| stream splits: a recipe is "a few tables and settings files", each species' thresholds and exceptions one row | link 0.78.1 `configs/default`: 12 files and `overrides/`; `parameters_habitat_thresholds.csv` one row per species | yes |
+| chinook: "small tributaries, other than the ones they hatched in, of large rivers that hold chinook", "from earlier fish inventories in Alaska" | `literature_evidence.csv` data row 48, Kirsch et al. 2014 p. 42: "Based on prior AFFI findings … non-natal tributaries to large rivers supporting Chinook salmon" | yes |
+| DESCRIPTION: "life history and habitat values from the cited literature with their quotes" | `data/literature_evidence.csv` (values and quotes), `life_history_timing.csv` | yes |
+| pkgdown.yaml: apt "slow to download … or unable to resolve it" | logs: 43033711487, 43033679109 resolution errors; 42149377267 slow `Get:` | yes |
+| pkgdown.yaml: `dpkg --configure -a` before each second try | reasoned (a limit can end apt mid-install), not observed; harmless when nothing is interrupted | kept |
+
+Six reviewer agents this task (plan review, readability pass, three rounds): one past the five-per-task bound, spent
+on the third round's enumeration.

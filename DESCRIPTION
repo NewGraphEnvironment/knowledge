@@ -10,8 +10,8 @@ Authors@R: c(
     person("New Graph Environment Ltd.", role = c("cph", "fnd"))
     )
 Description: Gathers what is known about where fish live in British
-    Columbia's streams (each species' life history from the cited literature
-    with its quotes, past reports, intrinsic-potential models, life-history
+    Columbia's streams (life history and habitat values from the cited
+    literature with their quotes, past reports, intrinsic-potential models, life-history
     timing and the provincial fish sampling records) and tunes from the
     records the gradient and stream-size thresholds of the fish habitat
     definitions the link habitat models use: it places sampling visits on

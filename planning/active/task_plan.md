@@ -93,7 +93,7 @@ What exploration changed:
 ## Phase 7: Bookkeeping
 - [x] File the bundle-text issue: `pipeline.csv` step labels, five `settings.csv` labels and the two SVGs say "rule"; they ride the next methodology bundle rebuild (review B1): #201
 - [x] File the fly-row issue (blocked by fly#108; split from move 2): #200; #156's and #171's bodies point to it
-- [ ] `/code-check branch` (three-round floor)
+- [x] `/code-check branch` (three-round floor)
 - [ ] `/planning-archive`, `/gh-pr-push` (Fixes #118, #107, #156, #159; relates #171)
 
 ## Owed at the end (reported, done after merge)
@@ -106,7 +106,7 @@ What exploration changed:
 ## Validation
 
 - [ ] Tests pass
-- [ ] `/code-check` clean (once over the branch with `/code-check branch`)
+- [x] `/code-check` clean (once over the branch with `/code-check branch`)
 - [ ] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion
 
