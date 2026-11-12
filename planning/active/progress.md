@@ -10,3 +10,6 @@
 - Phase 0: filed #198 (life history) and #199 (datasets); rewrote #194's body (corrected premise, split, decided
   breadth and store shape). Plan review spawned in the background at 07:18Z
 - Plan review back (~07:25Z): 13 findings, 3 verified by probe, all folded in (`review-plan.md`)
+- Browser downloads (16:45–18:05 UTC): 49 files through Claude in Chrome and Al's hand saves, COSEWIC 2025 and seven
+  registry and CDC pages printed to PDF; three EcoCat reports restricted, owed to an access-request issue
+- Next: OCR the two partly scanned files, then draft rows from the title pages

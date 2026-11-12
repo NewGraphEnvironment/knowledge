@@ -63,6 +63,9 @@ Relates to #33 and #51.
 
 | Error | Resolution |
 |-------|------------|
+| Chrome's scripted downloads from a page reached `~/Downloads` minutes late or not at all | Chrome holds a site's second and later downloads for "download multiple files"; Al allowed bchydro.com, publications.gc.ca, web.archive.org and rex.libraries.wsu.edu under automatic downloads, and saved the T&F, UBC and ResearchGate files by hand |
+| `CDP Runtime.evaluate timed out after 45000ms` on an 11-file batch | The script kept running in the page; waited on the files instead of re-running |
+| Search A called three Baxter papers paywalled from OpenAlex alone | A ResearchGate title search found author copies of two (Baxter & Hauer 2000; Baxter, Frissell & Hauer 1999): run it for every no-PDF row before calling it paywalled |
 
 ## Re-measure from a guarded copy (2026-11-12 07:20 UTC)
 
@@ -260,3 +263,29 @@ files have such pages.
 
 All 30 (655 skipped as a duplicate) go through `ocrmypdf --skip-text` into scratchpad `ocr/`; the rows will point
 at the OCR copies.
+
+## Browser downloads (Claude in Chrome and Al, 2026-11-12 16:45–18:05 UTC)
+
+Scratchpad `browser/pdf/`: 49 files, 86 MB, every PDF starting `%PDF`. Each was fetched in a page of its own site
+(or saved by Al), no bot check met or passed; ResearchGate's Cloudflare check on a search page stopped me there.
+- **BC Hydro, 19:** DDMMON-5 ×7, DDMMON-6 ×3, CLBMON-6 ×5, SEVMON-2 ×4, as listed in search C.
+- **Streamkeepers via Wayback, 11:** the `id_` captures search C listed.
+- **Printed to PDF with headless Chrome, 8:** the COSEWIC 2025 status report (canada.ca HTML; 374 pages; Catalogue
+  No. CW69-14/659-2025E-PDF, ISBN 978-0-660-78432-8 in its text; no PDF edition found, and publications.gc.ca's
+  search is JavaScript only); the registry profiles 1202-869 (Western Arctic) and 1201-872 (South Coast); CDC
+  species summaries 19659 (species), 28548 (pop. 28, South Coast) and 312190 (pop. 10, Western Arctic, found
+  through the Explorer's name search, elcode AFCHA05122; it has no CDC status report); CDC status reports 19659 and
+  28548.
+- **Single:** the FWCP Peace report list (.xlsx, for enumeration only); Fraley & Shepard 1989 (WSU); Martins et al.
+  2014 (Springer, open access); Paragamian & Walters 2011 (T&F, free access); Baxter & Hauer 2000 and Baxter,
+  Frissell & Hauer 1999 (ResearchGate author copies); Decker, Hagen & Baxter (Arrow Lakes feasibility; its title page
+  names a third author, Jeremy Baxter, whom the listing left out); the Latham, Ladell and J.S. Baxter 1997 UBC theses.
+- **Not obtained:**
+  - EcoCat 38265 (Andrusak et al. 2012), 40104 (Langston & Cubberley 2008) and 63284 (PEA-F25-F-3986) answer
+    403 "You don't have permission to view this report" in a browser too: restricted records, not a bot block.
+    They go to an issue for an access request (Al, 2026-11-12); who is asked stays out of this public repo.
+  - Baxter & McPhail 1999: no full text found; the ResearchGate search met a Cloudflare check.
+  - C.V. Baxter 1997 thesis: CORE's file is gone (BlobNotFound); ScholarWorks offered to Al.
+  - The WA-BC AFS 2018 slides: dropped (slides, not a report).
+- **Low-text pages:** Salmo BT 1998–99 (18/57) and DDMMON-5 year 2 (20/164) are partly scanned and go to OCR; the
+  other seven files with such pages have one to seven (figures, blanks).
