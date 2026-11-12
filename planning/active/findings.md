@@ -134,9 +134,9 @@ measured basis; `habitat_grade.yaml`'s become 1e-2 (strictly above the set's 1.0
 | habitat_grade | km_graded, grade_sum 1e-3 | **1e-2** | the published set's order bound 1.07e-3 and 1.20e-3 |
 | thresholds | exact | exact | #158's identical tune tables (no thresholds receipts compared yet) |
 | evidence | access_check km 1e-6, access_km 1e-3 | unchanged | #160, #158 and #165's pair (5.3e-11 km) |
-| fdis | access_check km 1e-6 | unchanged | the evidence build's |
+| fdis | access_check km 1e-6 | unchanged | five tables the evidence build's (measured); six never compared across databases, so still provisional (round 1) |
 
-"Provisional" is gone from every header; each says what it rests on. Tried on the real chinook receipts
+"Provisional" is gone from every header but fdis's (code-check round 1); each says what it rests on. Tried on the real chinook receipts
 (`data-raw/grade_tolerance_try.R`, `receipt_165/20261112_grade_tolerance_try.txt`): as measured `identical`; each total
 moved by half its tolerance `equivalent`, by three times `different`; a count moved by one `different`. Restoring 1e-3 on
 `habitat_grade`'s km in a scratch copy turns `test-receipt.R`'s pin red. The receipt test files pass (test-receipt 93,

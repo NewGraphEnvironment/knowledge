@@ -456,8 +456,9 @@ how the output was made (the full knowledge commit, the walk's SQL and the metho
 fold seed, link's build as its run uid, the flow load, the evidence) and what came out, so a rebuild compared with the
 archived receipt (`crate::crt_receipt_compare(keys = knw_receipt_keys(<output>))`) is identical, equivalent within the
 declared roundings, or different. What each output is judged on, and its roundings, are declared in
-`inst/receipt/<output>.yaml`, and `test-receipt.R` pins them; #165 set them from chinook rearing rebuilt on two databases
-and each total's summing-order bound (`research/run_archive.md`), and a revision makes earlier receipts compare
+`inst/receipt/<output>.yaml`, and `test-receipt.R` pins them; #165 set the grade and grade-set totals from chinook rearing
+rebuilt on two databases and each total's summing-order bound, and checked the evidence build's across the same two
+(`research/run_archive.md`), and a revision makes earlier receipts compare
 `different` unless the comparison softens `result.tolerance.*`. A grade table is judged on its
 pick and totals, its bytes only listed, so for a grade `identical` does not mean the same bytes
 (`research/run_archive.md`, "The receipt says whether a rebuild came out the same"). A receipt names no host: always

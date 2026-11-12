@@ -3,8 +3,8 @@
 # these names; crate computes the ids.
 #
 # This is the rule the provenance track started from, written down: every table must come back exactly, except
-# access_check's km, which may move by a rounding. Each km is a sum over up to millions of segments, which a database
-# may take in another order: the rounding is 1e-6 km (1 mm), the tolerance #158's hand comparison used. Measured
+# access_check's km, which may move by a rounding. Each km is a sum over up to tens of thousands of segments (72,617 at
+# most), which a database may take in another order: the rounding is 1e-6 km (1 mm), the tolerance #158's hand comparison used. Measured
 # rebuilds of the published build's evidence: two on one database (#160) moved access_check by 1.0e-10 km at most;
 # #158's second database by 6.0e-11 km; and two at one commit on two databases (#165) by 5.3e-11 km, every other table
 # with the same values and one recipe_id, so `equivalent` on the receipts alone and with the tables re-read. That pair

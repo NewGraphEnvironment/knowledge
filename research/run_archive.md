@@ -78,14 +78,15 @@ verdict rests on the pick and the totals: for a grade, `identical` means those a
 crate refuses two receipts that declare different roundings, so a receipt written before a revision compares with one
 after it only with a `keys` register override that softens `result.tolerance.*`.
 
-### How the roundings were set: one key regraded on two databases (#165)
+### How the grade roundings were set: one key regraded on two databases (#165)
 
-**The principle.** A total over millions of segments is a float sum, and a sum taken in another order lands a little
+**The principle.** A grade total over up to millions of segments is a float sum, and a sum taken in another order lands a little
 elsewhere. A database is free to return a key's segments in another order, so the rounding on a total must cover what
 reordering can do, or a rebuild that changed nothing would read `different`. That error has a bound, the number of
-values times machine epsilon times the sum of their sizes, and each total's rounding is the smallest power of ten
+values times machine epsilon times the sum of their sizes, and each grade total's rounding is the smallest power of ten
 strictly above the bound for the largest table it is applied to, and above one unit of any rounding its writer applied
-to the values summed. Counts are exact.
+to the values summed. Counts are exact. The other declarations' roundings were not set this way: they rest on the
+rebuilds below and #158's.
 
 Measured on #165's branch (2026-11-12, `scripts/logs/habitat/receipt_165/`): chinook rearing regraded with `0320` at
 one commit on two databases holding the published build, each on its own evidence build. Every walk came from each
@@ -112,7 +113,7 @@ receipts have been compared yet.
 
 The evidence build's receipt (#160) writes down the rule this track began from. The two measured rebuilds moved
 `access_check`'s km by 9.5e-11 and 6.0e-11 km per value (#158's second database), because each value is a sum over up to
-millions of segments that a database may take in another order; every other table came back with the same values. So
+tens of thousands of segments (72,617 at most) that a database may take in another order; every other table came back with the same values. So
 `access_check`'s km is rounded to 1e-6 km (1 mm, the tolerance #158's hand comparison used) and the rest is exact.
 `visits_link` is exact although #158 found its `mad_pick` moving on 3 of 45,529 visits: that was #161's unordered
 parent-flow tie, fixed since, and the pair on two databases below came back with it unchanged.
