@@ -132,7 +132,8 @@ receipt is missing rather than writing one later.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>The receipt, as a list, invisibly.</p>
+    <p>The receipt as read back from the file just written
+(<code><a href="https://newgraphenvironment.github.io/crate/reference/crt_receipt_read.html" class="external-link">crate::crt_receipt_read()</a></code>), invisibly.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -168,7 +169,7 @@ it again.</p>
 <span class="r-in"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu">knw_grade_receipt_write</span><span class="op">(</span><span class="va">g</span>, <span class="va">grades</span>, <span class="va">spec</span>, min_wsg <span class="op">=</span> <span class="fl">5L</span>, evidence_dir <span class="op">=</span> <span class="va">ev</span>,</span></span>
 <span class="r-in"><span>                             knowledge <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>commit <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/strrep.html" class="external-link">strrep</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="fl">40</span><span class="op">)</span>, dirty <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">r</span><span class="op">$</span><span class="va">result</span><span class="op">$</span><span class="va">summary</span><span class="op">$</span><span class="va">km_graded</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in r$result:</span> $ operator is invalid for atomic vectors</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.42</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

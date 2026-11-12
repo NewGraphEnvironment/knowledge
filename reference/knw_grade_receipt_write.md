@@ -70,7 +70,9 @@ knw_grade_receipt_write(
 
 ## Value
 
-The receipt, as a list, invisibly.
+The receipt as read back from the file just written
+([`crate::crt_receipt_read()`](https://newgraphenvironment.github.io/crate/reference/crt_receipt_read.html)),
+invisibly.
 
 ## Details
 
@@ -106,5 +108,5 @@ spec <- list(fit = "gam", prior_sd = 2.5, seed = 54L, folds = 5L, d_floor = 200,
 r <- knw_grade_receipt_write(g, grades, spec, min_wsg = 5L, evidence_dir = ev,
                              knowledge = list(commit = strrep("a", 40), dirty = FALSE))
 r$result$summary$km_graded
-#> Error in r$result: $ operator is invalid for atomic vectors
+#> [1] 0.42
 ```

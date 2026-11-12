@@ -62,7 +62,9 @@ knw_evidence_receipt_write(
 
 ## Value
 
-The receipt, as a list, invisibly.
+The receipt as read back from the file just written
+([`crate::crt_receipt_read()`](https://newgraphenvironment.github.io/crate/reference/crt_receipt_read.html)),
+invisibly.
 
 ## Details
 
@@ -83,7 +85,7 @@ settings <- list(species = c("BT", "CH"), q_grid = c(1, 3), sources = "pick", sn
                  snap_limit_code_m = 150, parent = "none")
 r <- knw_evidence_receipt_write(ev, settings, inputs, knowledge = list(commit = strrep("a", 40), dirty = FALSE))
 r$result$summary$visits
-#> Error in r$result: $ operator is invalid for atomic vectors
+#> [1] 2
 r$recipe$recipe_id
-#> Error in r$recipe: $ operator is invalid for atomic vectors
+#> [1] "d4dfffe0fdbeba5fb5c31bb97b72c510fb1a549b9679d54a32d416a3a3084e25"
 ```
