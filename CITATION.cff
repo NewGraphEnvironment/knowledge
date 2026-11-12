@@ -9,7 +9,7 @@ type: software
 license: MIT
 title: 'knowledge: Tests Fish Habitat Definitions Against What is Known About Where
   Fish Live, and Tunes Them from the Fish Records'
-version: 0.4.38
+version: 0.4.39
 doi: 10.5281/zenodo.23990335
 abstract: 'Gathers what is known about where fish live in British Columbia''s streams
   (life history and habitat values from the cited literature with their quotes, past
@@ -36,7 +36,7 @@ preferred-citation:
     email: al@newgraphenvironment.com
     orcid: https://orcid.org/0000-0002-3495-2128
     affiliation: New Graph Environment Ltd.
-  version: 0.4.38
+  version: 0.4.39
   date-released: '2026-11-12'
   url: https://newgraphenvironment.github.io/knowledge/
   repository-code: https://github.com/NewGraphEnvironment/knowledge
