@@ -32,3 +32,20 @@ Backlog: `planning/backlog.md`, move 2. Plan it with `/planning-init <this issue
 
 
 
+
+## Phase 1: the narrowed register check (2026-11-12)
+
+The methodology article prints more of the register than #118 listed: its step lists print label, value and unit; its
+settings table prints label, value, unit, step, source, tested and issue; the counts above it read `source` and
+`tested`. So the check holds every column but `where` and `note`, not only key, step, label, value and unit.
+
+Mutation table (scratch worktree, `test-vignette-data.R` with the new test, `inst/method/settings.csv` edited):
+
+| edit | whole-file md5 loop (settings.csv skipped) | printed-columns test |
+|---|---|---|
+| none | pass | pass |
+| a value (9999 → 9998) | pass | **fail** |
+| a new row | pass | **fail** |
+| a `where` (an extra space in a `code:` phrase) | pass | pass |
+| a `note` | pass | pass |
+| a `source` | pass | **fail** |

@@ -6,3 +6,4 @@
 - Created branch `171-backlog-move-2-public-articles-a-tuning` off origin/main
 - Scaffolded PWF baseline from issue #171 with approved phases
 - Next: start Phase 1
+- Phase 1: register check narrowed to the printed columns (all but `where`, `note`), mutation table in findings

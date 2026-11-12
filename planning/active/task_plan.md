@@ -38,10 +38,10 @@ What exploration changed:
   definition"), so the README figure is regenerated.
 
 ## Phase 1: Narrow the register check (#118)
-- [ ] `tests/testthat/test-vignette-data.R`: hold `settings.csv`'s key, step, label, value and unit to the bundle's
+- [x] `tests/testthat/test-vignette-data.R`: hold `settings.csv`'s printed columns (all but `where` and `note`; findings) to the bundle's
       `x$settings`, and skip `inst/method/settings.csv` in the methodology bundle's whole-file md5 loop
-- [ ] Prove it fires, in a scratch copy: a changed value fails, a new row fails, a changed `where` or note passes
-- [ ] `CLAUDE.md`, methodology-article bullet: what now stales the bundle
+- [x] Prove it fires, in a scratch copy: a changed value fails, a new row fails, a changed `where` or note passes
+- [x] `CLAUDE.md`, methodology-article bullet: what now stales the bundle
 
 ## Phase 2: Rename into the series (#118)
 - [ ] `git mv` the three `.Rmd` and three `.bib` to `tuning-method`, `tuning-chinook-rearing`, `tuning-stream-splits`;

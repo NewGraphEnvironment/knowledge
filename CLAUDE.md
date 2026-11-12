@@ -44,7 +44,9 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   reads the ledger the published tables name (`knw_run_ledger()`), and refuses on a machine whose `data/fdis/derived`
   is not that build's evidence. `tests/testthat/test-settings-register.R` fails when a register value and the code
   disagree: change both together, and add a row for any new number that shapes a result (the test cannot see one with
-  no row). `method.rds` pins each grade table's tracked record (`data/tune/<key>_grades_record.csv`), not the table
+  no row). `test-vignette-data.R` holds `settings.csv` to the copy in `method.rds` on every column the article prints
+  (all but `where` and `note`), so a changed value, label, unit, step, source, tested or issue, or a row added or
+  removed, stales the bundle and a moved `where` path does not (#118). `method.rds` pins each grade table's tracked record (`data/tune/<key>_grades_record.csv`), not the table
   (#119), and the md5s of the ignored evidence it was built from, which `test-vignette-data.R` checks wherever they
   exist, so on a machine whose copies differ it fails there and nowhere else (CI has no `data/`). A checkout without
   them restores them with `PULL=TRUE scripts/0336-archive.R`, the run its records name. Its references come from `data-raw/vignette_bib.R` with the chinook article's. A draft article is named
