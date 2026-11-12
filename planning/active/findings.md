@@ -230,3 +230,33 @@ No selected report is our own.
 After about 70 page reads EcoCat answered 403 and timed out (63271, 38265, 40104, 63284, 59883, 57455, 22671). The
 download is paced: one page or file at a time with 8 s between, a 60 s wait on a failed page, logged to
 `ecocat/fetch.log`.
+
+### EcoCat download (2026-11-12, 14:41–15:14 UTC)
+
+`ecocat/fetch.log`: 69 PDFs from the selected reports (261 MB), each starting `%PDF`. Ten gave none:
+- seven list no PDF: 64856, 50790, 52775, 44624, 34398, 41092 and 61641;
+- three refused every page read with 403: 38265, 40104 and 63284, the ids search B gave.
+
+Notes on what came down:
+- 7296 (Pollard 2001) carries four PDFs: the report, two data appendices and a "combo".
+- 655's single PDF is byte-identical to 7296's combo.
+- 63079's PDF is named for the 2023 Kaslo River HCTF report, not the Kootenay Lake productivity report its page
+  names: check the title page.
+- 10078 has the report and a 21 KB appendix.
+
+## No-text check (G3)
+
+Scratchpad `notext.tsv`: for every candidate PDF, its pages and its pages under 30 characters of text. 31 of 125
+files have such pages.
+- **Wholly scanned:**
+  - the 7296 set (report 73/73, Murray data 24/24, Pine data 18/18, combo 206/206);
+  - 53714, the 1997 Peace synoptic survey (145/145);
+  - 52929, the 1992 Peace status report (37/37);
+  - 52324, Chowade 1996 (28/28);
+  - the Wigwam HCTF reports 1996 (41/41) and the 1999 creel (11/11).
+- **Partly:** 19426 (20/164), 19439 (13/82), the 2018 Kootenay Lake workshop (13/158) and the USFWS 2015 plan
+  (7/195).
+- **Others:** one to four pages, mostly blanks and figures.
+
+All 30 (655 skipped as a duplicate) go through `ocrmypdf --skip-text` into scratchpad `ocr/`; the rows will point
+at the OCR copies.
