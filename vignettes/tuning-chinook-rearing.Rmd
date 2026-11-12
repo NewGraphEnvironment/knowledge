@@ -139,10 +139,11 @@ link_default <- sprintf("https://github.com/NewGraphEnvironment/link/tree/%s/ins
 bfp <- "https://github.com/smnorris/bcfishpass/blob/3bd2824c300c5f9c0c041380d412a52987df1ebb"
 ```
 
-Young chinook salmon rear not only in the streams they hatched in: they also move into the lower reaches of small
-tributaries to large rivers [@kirsch_etal2014Fishinventory, p. 42]. British Columbia's electrofishing records show the
-same, putting young chinook in more of the province's small streams near large rivers, and in fewer far from one, than
-link's current fish habitat definition allows. [`link`](`r link_site`) [@link] is an R package that maps where each
+Young chinook salmon do not always rear where they hatched: from earlier fish inventories in Alaska, Kirsch et al.
+recommend looking for more chinook rearing in the lower reaches of small tributaries to large rivers
+[-@kirsch_etal2014Fishinventory, p. 42]. British Columbia's electrofishing records point the same way, putting young
+chinook in more of the province's small streams near large rivers, and in fewer far from one, than link's current fish
+habitat definition allows. [`link`](`r link_site`) [@link] is an R package that maps where each
 fish species can reach and where it can spawn and rear on BC's streams. Its standard settings,
 [`default`](`r link_default`), start from the thresholds New Graph runs bcfishpass with
 [@norris2024smnorrisbcfishpass]: for chinook rearing, `r words(dflt)`. The records support **`r words(rec)`**.
@@ -162,8 +163,8 @@ knw_compare_mapgl(seg, water, title = "Habitat definition", background = "esri_t
 In the Bulkley watershed group, around Smithers, the recommended habitat definition draws `r n0(map_row$tuned_km)` km of rearing
 habitat against `r n0(map_row$default_km)` under link's. What it drops (orange) is mostly the upper reaches of
 tributaries, where flow falls below its floor more than `r km_d(rec$exc_d)` from a river. What it adds (green) is
-short reaches of small streams beside a river. The rest comes from the two habitat definitions' slope and flow limits
-themselves, and from link's step that keeps rearing only where it links to spawning, which keeps different stretches
+short reaches of small streams beside a river. The rest comes from the two habitat definitions' own slope and flow
+limits, and from link's step that keeps rearing only where it connects to spawning: that step keeps different stretches
 under each.
 `r if (on_site) "Click a stream for what each habitat definition reads there; the switch at the top right shows the grade, the use to expect on each segment." else ""`
 

@@ -146,8 +146,8 @@ uses, the steepest slope it holds in, how close a large river must be for a smal
 habitat. It also defines what counts as an obstacle to fish passage, from falls and steep sections to the road and rail
 crossings and dams below them. [`fresh`](https://github.com/NewGraphEnvironment/fresh) [@fresh], our stream network
 modelling engine, runs the recipe: it cuts the streams of the BC Freshwater Atlas [@flnrord2021FreshwaterAtlasb] into
-**segments**, works out which segments each species can reach, and classifies their habitat. So a model can be
-changed, run beside another and traced back to the rows that produced it.
+**segments**, works out which segments each species can reach, and classifies their habitat. Because each recipe is a
+table, a model can be changed, run beside another and traced back to the rows that produced it.
 
 `knowledge`, the package this article belongs to, is our evidence tool for link's habitat definitions. It starts from
 what is known about each species' life history, from the published literature and past reports, and the biology sets

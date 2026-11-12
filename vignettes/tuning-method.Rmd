@@ -123,13 +123,11 @@ species can reach and where it can spawn and rear on BC's streams, running its h
 Atlas through [`fresh`](https://github.com/NewGraphEnvironment/fresh) [@fresh]. link builds on bcfishpass
 [@norris2024smnorrisbcfishpass], which models which streams fish can reach below natural barriers such as falls and
 steep slopes, and which could hold spawning or rearing from their slope and size, so that crews can choose where to
-look first among more than half a million mapped road and rail crossings and dams. Its spawning and rearing limits sit
-in its repository as parameter sets:
-[New Graph's](https://github.com/smnorris/bcfishpass/blob/3bd2824c300c5f9c0c041380d412a52987df1ebb/parameters/example_newgraph/parameters_habitat_thresholds.csv)
-and
-[other organizations'](https://github.com/smnorris/bcfishpass/tree/3bd2824c300c5f9c0c041380d412a52987df1ebb/parameters).
-To choose where to look first, a fair guess at where fish spawn and rear is enough; to steer effort, the guess is
-worth testing.
+look first among more than half a million mapped road and rail crossings and dams. bcfishpass keeps its spawning and
+rearing limits in its repository as
+[parameter sets](https://github.com/smnorris/bcfishpass/tree/3bd2824c300c5f9c0c041380d412a52987df1ebb/parameters), most
+of them an organization's own. A fair guess at where fish spawn and rear is enough to choose which crossings to
+look at first; a map that steers conservation and restoration effort is worth testing against where fish were caught.
 
 For every stretch of stream link asks a few plain questions: is it big enough, is it too steep, and can fish get to
 it? Each question has a cut-off in a config, so one habitat definition can be run beside another. We try many, keep
@@ -417,8 +415,8 @@ It can. A habitat definition's slope test reads each segment's own slope, and li
 a site that caught fish often starts a short segment whose slope is worked out from the catch upstream. Tuned on link's
 minimal network, which leaves out those cuts, chinook rearing's steepest slope is `r paste0(signif(100 * cp_lim("minimal"), 3), " %")`
 rather than `r paste0(signif(100 * cp_lim("published"), 3), " %")`, and the network moves the habitat definitions of some other species and
-stages too. [Splitting streams at fish records shifts the steepest slope mapped as habitat](tuning-stream-splits.html) shows it
-on our own records; these figures come from that article's data, written on `r cp$meta$written` at commit
+stages too. The article [Splitting streams at fish records shifts the steepest slope mapped as habitat](tuning-stream-splits.html)
+shows it on our own records; these figures come from that article's data, written on `r cp$meta$written` at commit
 `r cp$meta$commit`.
 
 ## Limits {#limits}
