@@ -23,7 +23,7 @@ split piece, or one filed since the last pass): run `/backlog-sweep` to place it
 | move | umbrella | batches | state |
 |---|---|---|---|
 | - [x] 1 | #170 | 1: evidence-build and test fixes (2 issues) | done: https://github.com/NewGraphEnvironment/knowledge/pull/187 |
-| - [ ] 2 | #171 | 2, 3: articles as a tuning series, a build that stalls fails fast (4 issues) | open |
+| - [x] 2 | #171 | 2, 3: articles as a tuning series, a build that stalls fails fast (4 issues) | done: https://github.com/NewGraphEnvironment/knowledge/pull/208 |
 | - [x] 3 | #172 | 4, 5: Zotero library writes, new sources into the stores (5 issues) | done: https://github.com/NewGraphEnvironment/knowledge/pull/189 |
 | - [ ] 4 | #173 | 6, 7: maps out of the comparison, one research page per key (4 issues) | open: after move 2, which renames the article #77 edits |
 | - [ ] 5 | #174 | 8, 9: timing table and NuSEDS, flow in windows (5 issues) | open |
@@ -74,7 +74,7 @@ Decided 2026-11-09, no gate left: the archive reads `fdis_sites.csv` from where 
 
 ### 2. Articles as a tuning series
 
-- [ ] Carried by move 2, #171
+- [x] Carried by move 2, #171 (merged in https://github.com/NewGraphEnvironment/knowledge/pull/208)
 
 #118 (rename the articles as a method and case studies, narrow the register check), #107 (fold: pin upstream fwapg to
 a commit upstream holds) and #156 (say "fish habitat definition", lead with life history). Touches `vignettes/`,
@@ -84,7 +84,7 @@ the series, the fwapg pin; the fly row waits on fly's README.
 
 ### 3. A build that stalls fails fast
 
-- [ ] Carried by move 2, #171
+- [x] Carried by move 2, #171 (merged in https://github.com/NewGraphEnvironment/knowledge/pull/208)
 
 #159: two post-merge stalls to the timeout. The candidate is the `stream_splits` article's tile fetch, weakened by a
 stall in a workflow that fetches no tiles. Touches the article's basemap call, or gq's `gq_basemap_tiles()` through its
