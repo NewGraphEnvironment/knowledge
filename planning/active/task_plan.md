@@ -83,36 +83,36 @@ method, and the gate withholds a curve "no better than" no rule (`>=`, a tie wit
       deleted setting.
 
 ## Phase 2: What the method does, from the code
-- [ ] For each of the eight frames in the issue's table, and each step 6–9, write what the method does with the
+- [x] For each of the eight frames in the issue's table, and each step 6–9, write what the method does with the
       function and file:line that does it (`R/tune_score.R`, `R/tune_curve.R`, `R/tune_repick.R`, `R/tune_smoke.R`,
       `R/grade.R`, `R/grade_species.R`, `R/tune_run.R`, `R/tune_grid.R`, `R/rule_in.R`, `R/thresholds_table.R`,
       `R/compare_rules.R`), read from the code, not the article. Correct the three starter-table errors above.
 
 ## Phase 3: The reading (searched through the `statistics` store, confirmed on the page)
-- [ ] Out-of-sample scoring: leave-groups-out plug-in deviance with a refit held-out intercept vs ch. 7 (lppd, CV,
+- [x] Out-of-sample scoring: leave-groups-out plug-in deviance with a refit held-out intercept vs ch. 7 (lppd, CV,
       WAIC/PSIS, dSE) and ch. 13's new clusters; the 1-SE region (group-level SE) and nearest-to-default pick (a prior
       in decision form, #141) vs ch. 7's comparison-not-selection and BDA3 ch. 7; `honest` and its nesting.
-- [ ] Priors: ridge/paraPen as MAP vs ch. 4 and ch. 7's regularising priors; SD 2.5 on the cloglog scale vs ch. 11's
+- [x] Priors: ridge/paraPen as MAP vs ch. 4 and ch. 7's regularising priors; SD 2.5 on the cloglog scale vs ch. 11's
       prior predictive on a link scale and BDA3 ch. 16; which terms carry none; the fallback that drops it.
-- [ ] Groups: fixed absorbed intercepts (scorer) vs REML random intercept (curve) vs ch. 13 / BDA3 ch. 5; thin keys;
+- [x] Groups: fixed absorbed intercepts (scorer) vs REML random intercept (curve) vs ch. 13 / BDA3 ch. 5; thin keys;
       the outcome-selected groups; grading at RE = 0 (the average cluster) across groups no score tested.
-- [ ] Reporting: one cut, its region's range and 1.96 vs reporting the whole posterior (ch. 2–3, ch. 7); the group
+- [x] Reporting: one cut, its region's range and 1.96 vs reporting the whole posterior (ch. 2–3, ch. 7); the group
       bootstrap as selection stability, not estimation uncertainty.
-- [ ] Grade gate: curve vs no rule as a point comparison on the folds that chose the curve's variables; smoothness
+- [x] Grade gate: curve vs no rule as a point comparison on the folds that chose the curve's variables; smoothness
       (REML) as a prior on wiggliness (Rethinking ch. 4 B-splines, BDA3 ch. 20).
-- [ ] Link and exposure: cloglog binomial with `log(area)` free vs ch. 10–11 exposure/offset.
-- [ ] Detection: the response (presence per visit) and the grade's own claim ("expected use per standard
+- [x] Link and exposure: cloglog binomial with `log(area)` free vs ch. 10–11 exposure/offset.
+- [x] Detection: the response (presence per visit) and the grade's own claim ("expected use per standard
       electrofishing visit") vs ch. 15 measurement error and ch. 12's zero-inflated mixtures; occupancy outside the store.
-- [ ] Causal: `access_bt`, era, data set, crew site choice, and link cutting segments at fish records (a predictor
+- [x] Causal: `access_bt`, era, data set, crew site choice, and link cutting segments at fish records (a predictor
       partly caused by the outcome) vs ch. 5–6 DAGs and BDA3 ch. 8 (a DAG of the evidence, drawn in words).
-- [ ] Predictor measurement error: placement, the gradient source, modelled flow, the distance cap vs ch. 15.
+- [x] Predictor measurement error: placement, the gradient source, modelled flow, the distance cap vs ch. 15.
 
 ## Phase 4: The file and its links
-- [ ] `research/bayesian_alignment.md`: header line (Verified · Issues #185, #95, #186 · Produced by the store, the
+- [x] `research/bayesian_alignment.md`: header line (Verified · Issues #185, #95, #186 · Produced by the store, the
       two PDFs and the check script); a plain-language walk first (what the tuning does, what was asked, how it was
       judged, what stands, what to try), teaching each principle beside its verdict; the step table; the settings
       table; "What to try in the retune", each item an issue.
-- [ ] `research/README.md` row; the check script passes.
+- [x] `research/README.md` row; the check script passes.
 
 ## Phase 5: Feed the follow-ons (after the meaning audit and `/code-check branch`, review O1)
 - [ ] Edit #186's body: the curve already has varying intercepts; what differs is a full posterior, priors on the

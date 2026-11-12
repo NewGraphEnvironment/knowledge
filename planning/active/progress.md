@@ -11,3 +11,8 @@
   check `data-raw/bayesian_alignment_check.R` passes a true quote and fails a wrong page (fixture in the scratchpad)
 - Check hardened (review C2–C6): token matching, folio head or foot, table-scoped verdicts, unkeyed choices with code
   anchors; eight planted defects fail, the clean fixture passes
+- Phases 2–4: `research/bayesian_alignment.md` drafted (19 quotes, 11 steps, 69 settings, 19 unkeyed choices; the
+  check passes); README row. Found while writing: the scorer drops most groups for thin keys (CH rear 45 of 111,
+  ST 11 of 78, WCT 6 of 14 hold both outcomes); BDA3 p. 311 opens a chapter with its folio at the foot, so the check
+  now strips pdftotext's page break before reading the folio. Issue numbers and the audit record are placeholders
+  until Phase 5 and the audit.

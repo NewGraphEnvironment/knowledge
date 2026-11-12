@@ -104,6 +104,7 @@ page_text <- function(key, p) {
   pp <- p + b$offset
   txt <- system2("pdftotext", c("-layout", "-enc", "UTF-8", "-f", pp, "-l", pp, shQuote(pdf), "-"), stdout = TRUE)
   if (!is.null(attr(txt, "status"))) stop("pdftotext failed on ", key, " page ", p, call. = FALSE)
+  txt <- gsub("\f", "", txt, fixed = TRUE)   # the page break pdftotext ends a page with
   # the folio, in the running head or at the foot, past BDA3's one-line notice of its free electronic edition
   lines <- grep("electronic edition", txt[nzchar(trimws(txt))], value = TRUE, invert = TRUE)
   ends <- trimws(c(utils::head(lines, 1), utils::tail(lines, 1)))
