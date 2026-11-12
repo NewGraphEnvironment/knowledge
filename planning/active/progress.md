@@ -17,3 +17,4 @@
   one-time move. NEWS line goes in the PR body for /gh-pr-merge.
 - A full `devtools::test()` was stopped mid-run after a test edit (it would have described a mixed tree); rerun after
   this commit.
+- Full `devtools::test()` on 85c4dda7: FAIL 0, WARN 0, SKIP 3 (stages not on this machine), PASS 2298 (2.1 min).
