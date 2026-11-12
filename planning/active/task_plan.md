@@ -104,7 +104,7 @@ What exploration settled:
   - no tracked file names another library or its keys;
   - a DOI row is for a journal article only (CrossRef reads every DOI as one); a report, book or thesis with a DOI goes
     in without it, its series in `reportType`/`reportNumber` (G2).
-- [ ] `0270`'s `addition_item` takes `publicationTitle`, `volume` and `issue` (G2), checked in the dry run on Fraley &
+- [x] (Fraley & Shepard's item JSON: journal, volume, issue and, from a `pages` column, 133-143.) `0270`'s `addition_item` takes `publicationTitle`, `volume` and `issue` (G2), checked in the dry run on Fraley &
       Shepard 1989
 - [x] No-text check: count the pages under 30 characters of text in every PDF to be filed; `ocrmypdf --skip-text` those
       into `data/rag/ocr/bull_trout/` and point the row at the copy (G3)
@@ -119,7 +119,7 @@ What exploration settled:
       with unpinned keys are never edited
 
 ## Phase 2: file the collection through `0270` (Al present for the live run)
-- [ ] Al's hand downloads land in `data/rag/pdf/bull_trout/` (or those rows keep an empty `pdf`, owed in an issue)
+- [x] Al's hand downloads land in `data/rag/pdf/bull_trout/` (or those rows keep an empty `pdf`, owed in an issue)
 - [ ] Check every URL in both CSVs again for `%PDF`, through `0153`'s `fetch`
 - [ ] `0270 --collection bull_trout --parent 9U54XAND --dry-run`: check every `exists` and `copy exists` hit against
       the intended item

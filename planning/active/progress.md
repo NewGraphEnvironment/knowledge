@@ -21,4 +21,7 @@
 - Drafts back (18:10–18:13Z); merged, deduped (fuzzy and by bytes), 146 additions written with their PDFs staged in the
   ignored `data/rag/pdf/bull_trout/`; round-0 enumeration (789 checks, two fixes). Next: Metolius to #209, then the
   Phase 2 gate (URLs rechecked, dry run)
+- Metolius 1996 added to #209. Dry run 1 (`scripts/logs/rag/20261112_0270_bull_trout_dryrun1.log`, exit 0): 16 members
+  in place, 14 to add, 4 member PDFs to upload, 1 without (Metolius), 146 additions to create, no `exists` or `copy
+  exists` hit. Fraley & Shepard's item JSON checked (G2); a `pages` column added for its 133-143
 
