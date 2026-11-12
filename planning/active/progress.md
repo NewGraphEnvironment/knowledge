@@ -6,3 +6,7 @@
 - Created branch `197-order-the-species-columns-knw-link-place` off origin/main
 - Scaffolded PWF baseline from issue #197 with approved phases
 - Next: start Phase 1
+- Phase 1: `.knw_place_species()` sorts both species lists (radix); new catalog-order test plus sorted assertions on
+  the live test. Before the fix the new test errored and the live test failed (it ran: a `fresh_default` was
+  reachable); with the helper replaced in the loaded namespace by an unsorted copy, the new test failed 5 times and
+  the live test once, `R/link_place.R`'s md5 unchanged across the run. Lints on the two files: one removed, none added.

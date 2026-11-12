@@ -34,16 +34,16 @@ Approved by Al at the plan gate, 2026-11-12:
 
 ## Phase 1: Order the species and test it
 
-- [ ] Write the failing test first in `tests/testthat/test-link_place.R`: a catalog frame (the `table_name`,
+- [x] Write the failing test first in `tests/testthat/test-link_place.R`: a catalog frame (the `table_name`,
       `column_name` rows the query returns, including non-`access_` columns and `streams_habitat_long_vw`-free tables)
       given in two orders (as-is, reversed and shuffled) yields identical species lists, sorted, and identical
       `.knw_place_sql()` text
-- [ ] Split the catalog parsing out of `knw_link_place()` into `.knw_place_species(cols)` returning
+- [x] Split the catalog parsing out of `knw_link_place()` into `.knw_place_species(cols)` returning
       `list(access =, habitat =)`, each `sort(unique(...), method = "radix")`; `knw_link_place()` calls it and keeps
       its empty-`access` stop
-- [ ] Restore the bug (drop the sort) and confirm the new test goes red, then put it back
-- [ ] `@return` says both species lists are sorted by name; `devtools::document()`
-- [ ] Live test: assert `p$species_access` is sorted (it skips without a database, as now)
+- [x] Restore the bug (drop the sort) and confirm the new test goes red, then put it back
+- [x] `@return` says both species lists are sorted by name; `devtools::document()`
+- [x] Live test: assert `p$species_access` is sorted (it skips without a database, as now)
 
 ## Phase 2: Say what it changes
 
