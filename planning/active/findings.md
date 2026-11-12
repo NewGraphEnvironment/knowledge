@@ -35,3 +35,93 @@ Since #160 (PR #167): `inst/receipt/evidence.yaml` (every table exact but `acces
 - [ ] Out of scope here: the other keys' regrade on both databases (about 50 min per database). A tolerance set from chinook alone holds for them only as far as their grades behave alike; #158 found BT and ST moved by the same tie, so they are the keys to check first if a later promotion compares their receipts
 
 Relates to #154 (its owed item, which also asked for this task in #158's body; #158 is closed, so it lives here), #158, #161, #160 (the evidence build's receipt)
+
+## Phase 1: the two hosts (2026-11-12)
+
+Both databases answer `knw_build_record(con, "fresh_default")` with run `20261103_163715-269b585a`, wet's
+2026-10-24 load (`wet b4bbc50`), walk md5 `c3f7bdbecff1d55107f28afa59d7f532`, fresh 0.52.0, tokens
+`cut-full-top.acc-v5.grad-seg.q-fwapg`. Both checkouts at `89b7a32` (clean), crate 0.16.0 (the host's raised from
+0.15.1 at the gate), link 0.78.1, R 4.5.2. The five FDIS inputs carry the 20261103 ledger's md5s on both.
+
+`pg_stat_activity` at launch: the host's database quiet; the second's had another session's link test run
+(`lnk_test_export_*` schemas, short queries). It writes its own schemas, not `fresh_default`, so it cannot move a
+result, but timings taken on the second database overlap it.
+
+**HEAD stays at `89b7a32` on the second's checkout until both regrades finish**: every receipt records the knowledge
+commit, so a commit on the branch between the two halves (even a planning-only one) would make the two recipes differ
+for a reason that is not the database.
+
+## Phase 5 probe: crate 0.16.0 and data.table's IDate (2026-11-12)
+
+A three-row table read back by `fread()` (date column as `IDate`) and the same table with the column converted to
+`Date`, each written with `crt_receipt_write()`: the table fingerprints are the same sha256 (`d6192eb2…`) and
+`crt_receipt_compare()` reads `identical`; the same table with one date moved by a day reads `different`, so the probe
+can fail. The conversion in `data-raw/database_receipts.R` is no longer needed (crate#49, fixed from 0.14.0).
+
+Session info (`scripts/logs/habitat/receipt_165/20261112_sessioninfo-{host,second}.txt`): same knowledge commit, R,
+mgcv 1.9-3, Matrix 1.7-4, Accelerate BLAS and R's LAPACK 3.12.1 on both. Two differences, neither in code: crate 0.16.0
+from `8d5b679` on the host and `fdfe64d` (the release) on the second, which differ only in `CITATION.cff` and a planning
+archive; link 0.78.1 from `fd91d1b` (v0.78.1) on the host and a local install with no RemoteSha on the second, which the
+evidence recipe's `link_configs` (sha256 of link's installed default configs) will compare. The host runs macOS 26.6,
+the second 15.6.
+
+Plan review (`review-plan.md`) folded into task_plan.md; its claim that crate compares summaries as a band and rounds
+only table cells was read in crate origin/main 0.16.0 (`R/crt_receipt_compare.R:160`).
+
+## Phase 2: the evidence pair across two databases (2026-11-12)
+
+`0310` at `89b7a32` on each database: the host's 19.3 min (06:27-06:46 UTC), the second's 11.9 min (06:27-06:39, with
+another session's link tests on that database). Both placed 45,529 visits, 775,488 walk rows; the hydrologic-zones zip
+downloaded by each had one md5 (`f369d684…`).
+
+- One `recipe_id` (`6ee82a79…`): link's installed configs hash the same on both, so the link installs (one from the
+  v0.78.1 tag, one local) carry the same default bundle.
+- crate (`data-raw/evidence_receipt_compare.R`): `equivalent` on the receipts alone and with the tables re-read
+  (2.2 min). Result fields that moved: `access_check`'s bytes and sha256 (table agrees within 1e-6 km),
+  `visits_link`'s and `workbook_sites`' sha256 (tables agree), `access_km` 6937234.1350527825 against
+  6937234.135052781 (within 1e-3). A grade receipt written against the host's build names its `recipe_id`.
+- Hand (`data-raw/database_compare.R`): six tables `identical`, `access_check` `equivalent` at 5.28e-11 km at most over
+  2,193 rows. `bcfishobs_fdis_match`, `visits_species`, `walks`, `workbook_species` byte-identical.
+- `visits_link` and `workbook_sites` differ in bytes only: the species column groups come out in another order on each
+  database (`pk, sk, st, wct, gr, ko, rb` on the host; alphabetical on the second), because `knw_link_place()` reads the
+  species from `information_schema.columns` with no `ORDER BY` (`R/link_place.R:50-57`). Filed as #197.
+  crate fingerprints a table independent of column order, so no verdict moves.
+- `visits_link`'s `mad_pick`, which differed on 3 visits in #158 through #161's tie, is identical: the tie fix holds
+  across the two databases on the evidence as it did on the parent-flow lines.
+
+So the evidence declaration's rule (every table exact but `access_check`'s km at 1e-6 km) held across two databases
+with knowledge's writer: `access_check` moved 5.3e-11 km, four orders inside its rounding, and `access_km` 1.5e-9 km.
+
+## Phase 3: chinook rearing regraded on each database (2026-11-12)
+
+`SPECIES=CH 0320` at `89b7a32`, each on its own evidence build: the host's run `20261112_0648` 14.1 min (scoring on 14
+workers), the second's `20261112_0647` 17.4 min (scoring 15.1 min on 8 workers, overlapping another session's link
+tests). Every walk came from each database's cache (876,268 hits, 0 misses), so #162's cold walks were not exercised.
+
+- **Grade receipts (knowledge's writer, `data-raw/grade_receipt_compare.R`): `identical`.** One `recipe_id`
+  (`23294262…`), whose evidence input is the evidence builds' shared `recipe_id`; the same pick; `rows` 3,016,042,
+  `graded_rows` 872,418, `km_graded` 232,928.75963606851, `grade_sum` 253,887.60172207703 on both, bit for bit. The
+  only result field listed is the table's sha256 (`warn`, as declared).
+- **The tables:** every segment's grade and length the same, in the same row order. They differ in bytes only through
+  `evidence_md5`, whose first md5 is `visits_link.csv`'s, the table #197's column order changes.
+- **Hand comparison of every tune output (`database_compare.R`, `LABEL=tune165`):** ten identical (curves, groups,
+  honest, seeds, tune, summaries, pick report, grade table and record, context columns aside); the smoke table
+  `equivalent` at 2.27e-13 (a score summed with another worker count; no decision reads it).
+- So after #161 the grade comparison #158 read `different` on chinook (segment sizes on the tied segments) reads
+  `identical`, as expected: grading reads each segment's parent flow live.
+
+**How far the order of summing can move the sums** (`data-raw/grade_order_bound.R` over the published grade tables,
+read-only on the host's checkout; `receipt_165/20261112_grade_order_bound.txt`). Seen over four orders and bounded by
+n × eps × Σ|x|:
+
+| output | graded rows | km_graded: seen / bound | grade_sum: seen / bound |
+|---|---|---|---|
+| BT rearing (largest) | 2,120,275 | 8.1e-8 / 2.7e-4 | 4.2e-8 / 2.7e-4 |
+| CH rearing | 872,418 | 3.1e-8 / 4.5e-5 | 2.9e-9 / 4.9e-5 |
+| ST rearing | 753,056 | 2.8e-8 / 3.0e-5 | 2.3e-8 / 3.5e-5 |
+| GR rearing | 492,971 | 4.2e-9 / 1.6e-5 | 4.1e-9 / 2.6e-5 |
+| published set | 4,238,720 | 8.7e-7 / 1.07e-3 | 3.4e-7 / 1.20e-3 |
+
+BT spawning, CO and WCT have no graded rows (their grades are withheld). By the gate's rule: `grade.yaml`'s
+`km_graded` and `grade_sum` stay at 1e-3 (strictly above BT's 2.7e-4 and grade_sum's writer unit 1e-5), now on a
+measured basis; `habitat_grade.yaml`'s become 1e-2 (strictly above the set's 1.07e-3 and 1.20e-3).

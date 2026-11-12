@@ -1,0 +1,41 @@
+BT_rear rows 4033543 graded 2120275 
+BT_spawn rows 4033543 graded 0 
+CH_rear rows 3016042 graded 872418 
+CO_rear rows 2555125 graded 0 
+GR_rear rows 2058710 graded 492971 
+ST_rear rows 2239258 graded 753056 
+WCT_rear rows 482797 graded 0 
+      output          summary     n         sum       max_order_move
+ [1,] "BT_rear"       "km_graded" "2120275" " 577546" "8.05594e-08" 
+ [2,] "BT_rear"       "grade_sum" "2120275" " 579069" "4.16767e-08" 
+ [3,] "BT_spawn"      "km_graded" "      0" "      0" "0.00000e+00" 
+ [4,] "BT_spawn"      "grade_sum" "      0" "      0" "0.00000e+00" 
+ [5,] "CH_rear"       "km_graded" " 872418" " 232929" "3.11702e-08" 
+ [6,] "CH_rear"       "grade_sum" " 872418" " 253889" "2.88128e-09" 
+ [7,] "CO_rear"       "km_graded" "      0" "      0" "0.00000e+00" 
+ [8,] "CO_rear"       "grade_sum" "      0" "      0" "0.00000e+00" 
+ [9,] "GR_rear"       "km_graded" " 492971" " 146137" "4.22006e-09" 
+[10,] "GR_rear"       "grade_sum" " 492971" " 235225" "4.07454e-09" 
+[11,] "ST_rear"       "km_graded" " 753056" " 179438" "2.75904e-08" 
+[12,] "ST_rear"       "grade_sum" " 753056" " 211293" "2.33704e-08" 
+[13,] "WCT_rear"      "km_graded" "      0" "      0" "0.00000e+00" 
+[14,] "WCT_rear"      "grade_sum" "      0" "      0" "0.00000e+00" 
+[15,] "published set" "km_graded" "4238720" "1136050" "8.68924e-07" 
+[16,] "published set" "grade_sum" "4238720" "1279477" "3.43891e-07" 
+      bound        
+ [1,] "2.71906e-04"
+ [2,] "2.72623e-04"
+ [3,] "0.00000e+00"
+ [4,] "0.00000e+00"
+ [5,] "4.51220e-05"
+ [6,] "4.91822e-05"
+ [7,] "0.00000e+00"
+ [8,] "0.00000e+00"
+ [9,] "1.59964e-05"
+[10,] "2.57481e-05"
+[11,] "3.00042e-05"
+[12,] "3.53308e-05"
+[13,] "0.00000e+00"
+[14,] "0.00000e+00"
+[15,] "1.06923e-03"
+[16,] "1.20422e-03"

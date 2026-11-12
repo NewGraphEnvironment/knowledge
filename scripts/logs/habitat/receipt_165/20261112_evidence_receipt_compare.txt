@@ -1,0 +1,34 @@
+recipe a 6ee82a79611b576f04fe8a86f5f914393b94abafc930fc364872848ebcd530e8 
+recipe b 6ee82a79611b576f04fe8a86f5f914393b94abafc930fc364872848ebcd530e8 
+same recipe: TRUE 
+receipts alone: equivalent 
+tables re-read: equivalent (mode bytes ) 2.2 mins 
+  side    field                                   action
+1 result  result.parts[access_check.csv].bytes    within
+2 result  result.parts[access_check.csv].sha256   within
+3 result  result.parts[visits_link.csv].sha256    within
+4 result  result.parts[workbook_sites.csv].sha256 within
+5 result  result.summary[access_km]               within
+6 context context.inputs                          record
+7 context context.run                             record
+8 context context.time                            record
+  detail                                                                                                                                                               
+1 160463 vs 160508; table access_check agrees                                                                                                                          
+2 "57741353cbb79100abc9fc51ea1c79442175fcfdf3d4b71d51b9b99d7b898ee0" vs "f1ad09c91bf7337a691bef1fadd4b38b9989d592c54686ee243fddcae338e945"; table access_check agrees  
+3 "c4950bce9c755d8043d16a41c82f2604b9df39673e4230d0faa7884d2612d015" vs "80bd6cee603cd2a86112953f97b33a9cf1199fbda22c2ce50ab1aefdc770a9ff"; table visits_link agrees   
+4 "c00674c410e77028e589da36a1f4c977f98e9da3ece36737563c5eebdb89ab7a" vs "421f6cf49126c5832bcd15fe9590ab313b4fd8a6b76f9afd9d4bccfe25f5436d"; table workbook_sites agrees
+5 6937234.1350527825 vs 6937234.135052781; within 0.001                                                                                                                
+6 {"hydrologic_zones":"https://catalogue.data.gov.bc.ca/dataset/f1f86c41-ae83-4... vs {"hydrologic_zones":"https://catalogue.data.gov.bc.ca/dataset/f1f86c41-ae83-4... 
+7 {"evidence_dir":"data/fdis/derived_165_host","ledger":"scripts/logs/habitat/2... vs {"evidence_dir":"data/fdis/derived_165_second","ledger":"scripts/logs/habitat... 
+8 "2026-11-12T06:46:33Z" vs "2026-11-12T06:39:04Z"                                                                                                                     
+visits_link            bytes FALSE
+visits_species         bytes TRUE
+walks                  bytes TRUE
+bcfishobs_fdis_match   bytes TRUE
+access_check           bytes FALSE
+workbook_sites         bytes FALSE
+workbook_species       bytes TRUE
+access_check rows 2193 matched 2193 max |km diff| 5.275069e-11 
+summary a: 6937234 45529  b: 6937234 45529 
+grade evidence input: 6ee82a79611b576f04fe8a86f5f914393b94abafc930fc364872848ebcd530e8 
+names build a's recipe: TRUE 

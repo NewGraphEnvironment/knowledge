@@ -47,60 +47,89 @@ State found while exploring (2026-11-11):
 - Both halves run at one commit, the pushed branch tip after the baseline commit, from clean trees (the receipts record
   the commit and a dirty flag, so the two recipes match only then). On m4 that means a worktree of its own
   (`~/Projects/repo/knowledge-165`) with the five FDIS inputs copied from m4's checkout; m4's checkout is not touched.
-- Evidence directories are `data/fdis/derived_165_host` (m4) and `data/fdis/derived_165_second` (m1); logs and
-  verdicts are committed under `scripts/logs/habitat/receipt_165/`. No machine names in tracked text (the repo's rule):
-  "host" and "second" as #158 wrote them.
+  **Freeze (plan review):** no commit, no staging under `R/`, `scripts/` or `inst/`, and no edit under `inst/` in m1's
+  worktree until both `0320` runs have written their receipts: `knw_receipt_keys()` reads `inst/receipt/*.yaml` from
+  the source tree when the receipt is written, and the dirty flag counts staged files. Work in between stays
+  uncommitted in `planning/` and `data-raw/`.
+- Evidence directories are `data/fdis/derived_165_host` (m4) and `data/fdis/derived_165_second` (m1); verdicts and logs
+  are committed under `scripts/logs/habitat/receipt_165/`, while each evidence ledger stays where `0310` writes it
+  (`scripts/logs/habitat/`), because `.knw_evidence_ledger()` does not look in subfolders. No machine names in tracked
+  text (the repo's rule): "host" and "second" as #158 wrote them.
 - m4's crate is brought up to m1's 0.16.0 (`pak::pak("NewGraphEnvironment/crate")`), so both sides write receipts
   under one crate register.
-- How each summary tolerance is set: the smallest power of ten that is at or above both the measured move and the
-  float error a sum of that size can carry when summed in another order (n × machine epsilon × Σ|x|), and never finer
-  than the writer's own rounding (#158's rule). Exact only where the value is a count, or is copied, not summed.
+- How each summary tolerance is set. crate compares a summary as a band, `abs(a - b) <= tol`
+  (`crt_receipt_compare.R:160`), and rounds only a table's cells to the tolerance's decimals. A summary's tolerance is
+  the smallest power of ten strictly above each of: the move measured across the two databases; the float error a sum
+  can carry when summed in another order (n × machine epsilon × Σ|x|), computed for the **largest** key's published
+  grade table (one declaration serves every key) and for the published grade set; and, where a writer rounds the
+  values summed, one unit of that rounding (one flipped grade moves `grade_sum` by up to 1e-5). Exact only for counts.
+- "Provisional" leaves a declaration's header when its output has been compared across two databases with knowledge's
+  own writer (grade, evidence) or follows from one that has (fdis from evidence, `habitat_grade` from grade), or from
+  #158's verdicts on what it binds (thresholds from the identical tune tables); each header names what it rests on and
+  that the grade tolerances come from chinook alone, with #162's cold walks not exercised while walks come from cache.
 
 ## Phase 1: Prepare both hosts
-- [ ] m1: confirm `knw_build_record()` names run `20261103_163715-269b585a` and wet's 2026-10-24 load; read `pg_stat_activity`
-- [ ] m4: update crate to 0.16.0; create worktree `~/Projects/repo/knowledge-165` at the pushed branch tip (detached);
+- [x] m1: confirm `knw_build_record()` names run `20261103_163715-269b585a` and wet's 2026-10-24 load; read `pg_stat_activity`
+- [x] m4: update crate to 0.16.0; create worktree `~/Projects/repo/knowledge-165` at the pushed branch tip (detached);
       copy `data/fdis/build/{sites,catch,fish}.rds`, `reconcile.csv`, `data/fdis/MANIFEST.md5` from m4's checkout and
-      check their md5s against the 20261103 ledger; same `knw_build_record()` and `pg_stat_activity` checks with
-      `PGSERVICE=fresh_local`
-- [ ] Record both hosts' versions (knowledge commit, crate, link, R) in `scripts/logs/habitat/receipt_165/`
+      check their md5s against the 20261103 ledger (the three .rds) and m1's copies (`reconcile.csv`, `MANIFEST.md5`);
+      same `knw_build_record()` and `pg_stat_activity` checks with `PGSERVICE=fresh_local`; `../link` holds `4dfbfa49`
+      on both
+- [x] Record both hosts' versions (knowledge commit, crate, link, R) and `sessionInfo()` (mgcv, Matrix, BLAS) in
+      `scripts/logs/habitat/receipt_165/`
 
 ## Phase 2: Evidence build on each database
-- [ ] `EVIDENCE_DIR=data/fdis/derived_165_host Rscript scripts/0310-evidence-build.R` on m4 and
+- [x] `EVIDENCE_DIR=data/fdis/derived_165_host Rscript scripts/0310-evidence-build.R` on m4 and
       `EVIDENCE_DIR=data/fdis/derived_165_second ...` on m1, at the same time (about 12 min each); verify each finished
       by its `evidence_receipt.json` and a non-refused tagged ledger, not by ssh's exit status
-- [ ] Copy m4's evidence directory to m1 (`scp`, about 200 MB); run
+- [x] Compare the two ledgers' `zone_zip` md5 (downloaded fresh by each run) and the two receipts' recipe fields
+      (`link_configs` included) before reading any verdict
+- [x] Copy m4's evidence directory and its ledger to m1 (`scp`, about 200 MB); run
       `data-raw/evidence_receipt_compare.R <host> <second>` (crate verdict, receipts alone and with tables re-read) and
-      `REF=… NEW=… LABEL=evidence data-raw/database_compare.R` (hand verdict); expect one `recipe_id` and
-      `identical` or `equivalent`, now that #161 is fixed. A `different` is traced to its rows before going further
-- [ ] Commit the ledgers, logs and verdicts under `receipt_165/`; record the pair in `research/run_archive.md`
-      ("The evidence build"), beside #160's same-database pair
+      `REF=… NEW=… LABEL=evidence OUT=scripts/logs/habitat/receipt_165/… data-raw/database_compare.R` (hand verdict);
+      expect one `recipe_id` and `identical` or `equivalent`, now that #161 is fixed. A `different` is traced to its
+      rows before going further
+- [ ] After both regrades: commit the verdicts and logs under `receipt_165/` (ledgers where `0310` wrote them); record
+      the pair in `research/run_archive.md` ("The evidence build"), beside #160's same-database pair
 
 ## Phase 3: Chinook rearing regrade on each database
-- [ ] `SPECIES=CH RUN=<stamp> EVIDENCE_DIR=<that host's build> Rscript scripts/0320-tune-run.R` on each host (about
-      11 min each), smoke gates first as `0320` does; note each log's walk-cache misses (a cold walk can differ by #162)
-- [ ] md5 the two `CH_rear_grades.csv` on their hosts; copy m4's candidate (grade table about 1.9 GB) to m1; run
-      `database_compare.R` over the two candidates (`LABEL=tune165`) for every tune output and the grade table
-- [ ] Compare the two `CH_rear_grades_receipt.json` with
+- [x] `SPECIES=CH RUN=<stamp> EVIDENCE_DIR=<that host's build> Rscript scripts/0320-tune-run.R` on each host (about
+      11 min each), with **different stamps** on the two hosts; smoke gates first as `0320` does; note each log's
+      walk-cache misses (a cold walk can differ by #162)
+- [x] md5 the two `CH_rear_grades.csv` on their hosts; copy m4's candidate (grade table about 1.9 GB) into scratch on
+      m1, never into m1's `data/tune/candidate/`; run `database_compare.R` over the two candidates (`LABEL=tune165`,
+      `OUT=` under `receipt_165/`) for every tune output and the grade table
+- [x] Compare the two `CH_rear_grades_receipt.json` with
       `crate::crt_receipt_compare(keys = knw_receipt_keys("grade"))`; measure how far `rows`, `graded_rows`,
-      `km_graded`, `grade_sum` move, and the float error bound for each sum. Expected: identical (grading reads the parent
-      flow live since #161). Script: `data-raw/grade_receipt_compare.R`, written to `receipt_165/`
+      `km_graded`, `grade_sum` move, and how far the order of summing moves each sum. Expected: identical (grading reads
+      the parent flow live since #161). A `different` is traced to its segments and its cause (#162's walks, a tie)
+      before any tolerance is set from it. Script: `data-raw/grade_receipt_compare.R`, output to `receipt_165/`
+- [x] Compute the order bound for every published key's grade table and for the published set (read-only, from the
+      host's checkout, which holds the published tables)
 - [ ] Record the verdict in `research/database_builds.md` beside #158's table
 
 ## Phase 4: Revise the declarations
-- [ ] `grade.yaml`: keep `pick.null_heldout_curve` at 1.0e-4 (`0320` writes four decimals); `rows` and `graded_rows`
-      exact; `km_graded` and `grade_sum` set by the rule above from Phase 3; rewrite the header comment to say what
-      they rest on; drop "provisional" if the measurement supports it
-- [ ] `habitat_grade.yaml`: the same summaries over the published set's sum of keys, scaled by the same rule
-- [ ] `thresholds.yaml`: exact (#158 found every tune table identical), "Provisional until #158" removed
+- [ ] `grade.yaml`: keep `pick.null_heldout_curve` at 1.0e-4 (`0320` writes four decimals; the header says a change in
+      the fourth decimal reads `different`, since a table's cells are rounded to that decimal); `rows` and `graded_rows`
+      exact; `km_graded` and `grade_sum` by the rule above; header rewritten to say what they rest on, with the table
+      sizes the records give (0.29 to 2.5 GB); "provisional" by the criterion above
+- [ ] `habitat_grade.yaml`: the same summaries, by the same rule over the published set
+- [ ] `thresholds.yaml`: exact, resting on #158's identical tune tables (said in the header)
 - [ ] `evidence.yaml`, `fdis.yaml`: tolerances from #158's and Phase 2's verdicts; the `visits_link` comment updated
-      now that #161 is fixed; "provisional" kept or removed to match
-- [ ] Update `tests/testthat/test-receipt.R`'s pinned tolerances; `research/run_archive.md`'s table and "These
-      roundings are provisional" paragraph; `CLAUDE.md`'s "provisional until #158"; NEWS line
+      now that #161 is fixed; "provisional" by the criterion above
+- [ ] Rewrite both chinook receipts under the revised declarations (in scratch copies) and compare them: each measured
+      move falls within its new tolerance, and a move three times the tolerance is refused; recorded beside the verdict
+- [ ] Update what pins or restates the tolerances: `test-receipt.R` (the pin at 119-134, its title and the 1 mm
+      comment), `test-grade_receipt.R:73-82`, `test-evidence_receipt.R:72-73`, `test-publish.R:149-150`;
+      `research/run_archive.md` (the table, "about a metre of graded km", "These roundings are provisional", and the
+      rounding-edge text, which holds for tables, not summaries); `CLAUDE.md` (459, and 478-480 likewise); a new NEWS line
+      (the 0.4.x entries are released)
 
 ## Phase 5: database_receipts.R
-- [ ] Remove the `IDate` → `Date` conversion (`data-raw/database_receipts.R:68-69`) and its comment; probe first that
-      crate 0.16.0 writes the same receipt for a table with an `IDate` column as with the `Date` it is (crate#49), and
-      that the script still parses; record the probe in `progress.md`
+- [x] Probe that crate 0.16.0 gives a table with an `IDate` column the same fingerprint as the `Date` it is (crate#49)
+      and that a moved date is caught (findings.md)
+- [ ] Remove the `IDate` → `Date` conversion (`data-raw/database_receipts.R:68-69`) and its comment; check the script
+      still parses
 
 ## Owed at the end (reported, done after merge)
 
@@ -115,7 +144,6 @@ State found while exploring (2026-11-11):
 - [ ] `/planning-archive` on completion
 
 Verification: each verdict is reproduced by two independent routes (crate's comparison of knowledge's receipts, and
-`database_compare.R`'s hand comparison of the same files); each revised tolerance is pinned by `test-receipt.R`'s
-"holds a value moved within it and refuses one moved past it" test, so a tolerance edit that the test does not see
-fails; restoring the old tolerance in a scratch copy must turn the pin test red.
-
+`database_compare.R`'s hand comparison of the same files); the revised tolerances are pinned by `test-receipt.R:119-134`
+("the declared tolerances are the ones written down"), and restoring an old tolerance in a scratch copy must turn that
+test red; the revised declarations are tried on the real chinook receipts (Phase 4).

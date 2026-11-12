@@ -1,0 +1,146 @@
+kind,step,n,note
+info,evidence_dir,0,data/fdis/derived_165_second
+info,settle_log,0,scripts/logs/habitat/20261103_link_settle.csv
+info,settle_override,0,the newest default log
+info,settle_schema,0,fresh_default
+info,link_run_uid,0,20261103_163715-269b585a
+info,run_link_version,0,0.78.2
+info,run_link_sha,0,4dfbfa4980eb259e2f6a3e9b198c54014315d0ce
+info,run_fresh_version,0,0.52.0
+info,run_fresh_sha,0,245c8d8db60b446f1fedb72340f55faa25f32f24
+info,run_fwapg_sha,0,9a62b0c24b4fa19fe5f084a2cb0075986f588360
+info,run_config_hash,0,sha256:b2d2f5619841e892ef809b6950473423e4626be8a148a6260296d968820f8e8b
+info,db_round_trip_ms,1.8820762634277344,database round trip 1.9 ms (median of 20 SELECT 1; limit 20 ms)
+info,db_remote_override,0,
+info,build_record,0,"build: schema fresh_default, run 20261103_163715-269b585a; flows wet_db_load(): discharge/fwa/v1/segment_monthly, scenario historical last loaded from https://fresh-bc.s3.us-west-2.amazonaws.com/discharge/fwa/v1/manifest.json (built 2026-10-24T12:23:01Z, wet b4bbc50); walk c3f7bdbecff1d55107f28afa59d7f532; fresh 0.52.0; tokens cut-full-top.acc-v5.grad-seg.q-fwapg; log rows of run 20261023_074321-24d85e8c set aside (not in log_recompute)"
+info,schema_species,9,the run modelled BT;CH;CM;CO;GR;PK;SK;ST;WCT; this build carries BT;CH;CM;CO;GR;KO;PK;RB;SK;ST;WCT; per group ADMS=BT;CH;CO;PK;SK ALBN=CH;CM;CO;PK;SK;ST ATLL=GR ATNA=CH;CM;CO;PK;SK;ST BABL=BT;CH;CO;PK;SK;ST BABR=BT;CH;CO;PK;SK;ST BARR=BT;CH;CM;CO;PK;SK BBAR=BT;CH;CO;SK;ST BEAV=BT;GR BELA=CH;CM;CO;PK;SK;ST BIGC=BT BLAR=BT;CH;CO;SK BLUR=BT;GR BONP=BT;CH;CO;PK;ST BOWR=BT;CH;CO;SK BRID= BRKS=BT;CH;CM;CO;PK;SK;ST BULK=BT;CH;CM;CO;PK;SK;ST BULL=BT;WCT CAMB=CH;CM;CO;PK;SK;ST;GR CANO=BT CARP=BT CARR=BT;CH;CO;SK CHES=BT;CH;SK CHIL=CH CHIR=BT;CH;CO;SK;ST CHWK=BT;CH;CM;CO;PK;SK;ST CLAY=CH;CM;CO;PK;SK;ST CLRH=BT;WCT CLWR=CH;CO COAL=BT;GR COLR=BT;WCT COMX=CH;CM;CO;PK;SK;ST COTR=BT;CH;CO;PK COWN=BT;CH;CM;CO;PK;ST CRKD=BT CRYL=GR DEAD=BT;CH;CO;PK;SK;ST DEAL=BT;GR DEAR=BT;GR DOGC=BT;CH;CO;PK;SK DRIR=BT;CH;SK DUNC=BT;WCT DUNE=BT;GR ELKR=BT;WCT;GR EUCH=CH EUCL=BT;CH FINA=BT;GR FINL=BT;GR FIRE=BT;GR FONT=BT;GR FOXR=BT;GR FRAN=BT;CH;SK FRCN=BT;CH;CM;CO;PK;SK;ST FROG=BT;GR GATA=BT;GR GLAR=CH;GR GOLD=CH;CM;CO;PK;SK;ST GRAI=CH;CM;CO;PK;SK;ST GRNL= GUIC=BT;CH;CO;ST HARR=BT;CH;CM;CO;PK;SK;ST HERR=BT;CH HOLB=CH;CM;CO;PK;SK;ST HOMA=BT;CH;CM;CO;PK;SK;ST HORS=BT;CH;CO;SK;ST INGR=BT;GR INKR=BT;CH;CM;CO;PK;SK;ST;GR ISKR=BT;SK;ST JENR=CH;GR JERV=BT;CH;CM;CO;PK;SK;ST KAHN=GR KAKC=CO;SK KEEC=CM;CO;PK;SK KETL=WCT KHOR=BT;WCT KHTZ=CH;CM;CO;PK;SK;ST KINR=BT;CH;CO;PK;SK;ST KISK=BT;GR KISP=BT;CH;CM;CO;PK;SK;ST KITL=CH;CM;CO;PK;SK;ST KITR=BT;CH;CM;CO;PK;SK;ST KLAR=BT;GR KLIN=BT;CH;CM;CO;PK;SK;ST KLUM=BT;CH;CM;CO;PK;SK;ST KNIG=CH;CM;CO;PK;SK;ST KOTL=BT;WCT KOTR=BT;WCT KSHR=CH;CM;CO;PK;SK;ST KTSU=CH;CM;CO;PK;SK;ST KUMR=CH;CM;CO;PK;SK;ST KUSR=GR LARL=BT;WCT LBIR=BT;CH;CO;SK;ST LBTN=BT;GR LCHL=BT;CH;CO;PK;SK LCHR=BT;CH;CO;SK;ST LDEN=BT;CH;CM;CO;PK;SK;ST LEUT= LFRA=BT;CH;CM;CO;PK;SK;ST LFRT=GR LHAF=BT;GR LIAR=BT;GR LILL=BT;CH;CM;CO;PK;SK;ST LISR=BT;CH;CM;CO;PK;SK;ST;GR LKEC=GR LKEL=BT;CH;CM;CO;PK;SK;ST LMUS=BT;GR LNAR=BT;CH;CM;CO;PK;SK;ST LNIC=BT;CH;CO;PK;ST LNRS= LNTH=BT;CH;CO;PK;SK;ST LOMI=BT;GR LPCE=BT;GR LPET=GR LPRO=BT;GR LRAN=BT;GR LRDO=CH;CM;CO;PK;SK;ST LSAL=CH LSIK=GR LSKE=BT;CH;CM;CO;PK;SK;ST LSTR=CH;CM;CO;PK;SK LTRE=BT;CH;SK MAHD=BT;CH MBNK=CM;CO;PK;SK MCGR=BT;CH;SK MDEA=BT;GR MESC=CH;ST MESI=BT;GR MFRA=CH;CO MFRT=GR MIDR=BT;CH;SK MILL=GR MMUS=BT;GR MORI=CH;CM;CO;PK;SK;ST MORK=BT;CH;SK MORR=BT;CH;CO;PK;SK;ST MPRO=BT;GR MSKE=BT;CH;CO;PK;SK;ST;GR MSTR=BT;ST;GR MURR=BT;GR MURT= MUSK=CH NAHR=CH;CO;PK;SK;ST;GR NAKR=CH;CO;PK;SK;GR NARC=BT;CH;CO;PK NASC=CH;CM;CO;PK;SK;ST NASR=BT;CH;CO;PK;SK;ST NATR=BT;GR NAZR=CH NBNK=CM;CO;PK;SK NECL=CH;CM;CO;PK;SK;ST NECR=BT;CH;CO;SK NEVI=CM;CO;PK;SK;ST NICL=CH;CO NIEL=CH;CM;CO;PK;SK;ST NIMP=CH;CM;CO;PK;SK;ST OKAN=BT;CH;SK OSPK=BT;GR OWIK=CH;CM;CO;PK;SK;ST PARA=BT;GR PARK=BT;CH;CM;CO;PK;SK;ST PARS=BT;GR PCEA=BT;GR PINE=BT;GR PITR= PORI=CH;CM;CO;PK;ST QUES=BT;CH;CO;PK;SK;ST REVL=BT;WCT SAHD=GR SAJR=CO;PK;SK SALM=CH;CM;CO;PK;SK;ST SALR=CH SANJ=CH;CM;CO;PK;SK;ST SETN=BT;CH;CM;CO;PK;SK;ST SEYM=CH;CM;CO;PK;SK;ST SHER=CH;CO;SK;ST SHUL=BT;CH;CO;PK;SK;ST;WCT SIML=BT SKGT=BT SLOC=BT;WCT SMAR=BT;WCT SMOK=BT;GR SPAT=BT;GR SQAM=BT;CH;CM;CO;PK;SK;ST STHM=BT;CH;CO;PK;SK;ST STIR=CH;CO;PK;SK;ST;GR STUL=CH;SK STUR=BT;CH;SK SUST=BT;CH;CM;CO;PK;SK;ST SWIR=BT;CH;GR TABR=BT;CH TAHR=BT;CH;CO;PK;SK;ST TAHS=CH;CM;CO;PK;SK;ST TAKL=BT;CH;SK TASR=BT;CH;CO;SK;ST TATR=CH;CO;SK;ST;GR TAYR=BT;ST TESR=CH;GR THOM=BT;CH;CO;PK;SK;ST TOAD=BT;GR TOBA=CH;CM;CO;PK;SK;ST TOOD=BT;GR TSAY=CH;CM;CO;PK;SK;ST TSEA=GR TSIT=CH;CM;CO;PK;SK;ST TURN=BT;GR TUTR=GR TUYR=BT;CH;CO;SK;GR TWAC=BT;CH;CO UARL=BT;WCT UBIR=BT;CH;CO;ST UBTN=BT;GR UCHR=BT;CH;ST UDEN=BT UEUT=BT UFRA=BT;CH;SK UFRT=GR UHAF=BT;GR UISR= UJER=CH;GR UKEC=BT;GR ULRD=BT;GR UMUS=BT;GR UNAR=BT;CH;CO;SK;ST UNRS=BT UNTH=BT;CH;CO;SK UNUR=BT;CH;CM;CO;PK;SK UOMI=BT;GR UPCE=BT;GR UPET=GR UPRO=BT;GR USHU=BT;CH;CO;PK;SK;WCT USIK=BT;GR USKE=BT;CH;CO;SK;ST USTK=SK;ST;GR UTRE=BT;SK VICT=CH;CM;CO;PK;ST WILL=BT;CH;CO WORC=CH;CM;CO;PK;SK;ST ZYMO=BT;CH;CO;PK;SK;ST
+info,md5_sites,0,39f751b174aea4a14eb0dc0d3e3b126d
+info,md5_catch,0,a31fd7bbe2febbe31d70fc8f4cd3a161
+info,md5_fish,0,8cf273515ce2b692c3719130eac75b93
+info,fdis_sites_in,51587,
+info,snap_limit_m,200,the limit 0230 placed with (its reconcile.csv)
+info,snap_limit_code_m,500,the limit 0230 placed with (its reconcile.csv)
+drop,not_placed,1659,not placed on the FWA network
+drop,far_snap,1941,"snapped beyond the placement limit (one limit for a pick the 1:50k code confirms, one for the rest)"
+drop,ws50_mismatch,377,FDIS 1:50k watershed code names no stream within the snap search
+drop,junk_date,23,
+drop,effort_sentinel_or_none,1593,"sentinel effort, or neither fished area nor time"
+drop,catch_unknown,287,catch neither fish nor an explicit zero
+info,kept_snap_confirmed,10247,kept on a stream the visit's 1:50k code names
+info,kept_snap_moved,754,kept on a named stream that is not the nearest one (moved there)
+info,link_version,0,0.78.1
+info,species_pooling_md5,0,31ca5df552fdef1160b271dd7cb04ee6
+info,bt_dv_pooled_wsgs,122,
+info,species_BT,4448,present on 4448 visits; absent 40414; blocked 845; unknown 0; in link's range 38021
+info,species_CH,1244,present on 1244 visits; absent 44027; blocked 436; unknown 0; in link's range 25128
+info,species_CM,52,present on 52 visits; absent 45199; blocked 456; unknown 0; in link's range 12566
+info,species_CO,2562,present on 2562 visits; absent 42760; blocked 385; unknown 0; in link's range 20090
+info,species_GR,1231,present on 1231 visits; absent 44069; blocked 407; unknown 0; in link's range 11678
+info,species_KO,584,present on 584 visits; absent 44627; blocked 496; unknown 0; in link's range 2349
+info,species_PK,12,present on 12 visits; absent 45236; blocked 459; unknown 0; in link's range 17693
+info,species_RB,10861,present on 10861 visits; absent 34318; blocked 528; unknown 0; in link's range 45012
+info,species_SK,72,present on 72 visits; absent 44627; blocked 1008; unknown 0; in link's range 21582
+info,species_ST,296,present on 296 visits; absent 44506; blocked 905; unknown 0; in link's range 16653
+info,species_WCT,1499,present on 1499 visits; absent 41763; blocked 2445; unknown 0; in link's range 8962
+info,link_multi_match,0,max overlap 0.0000 m
+info,species_with_access,11,BT;CH;CM;CO;PK;SK;ST;WCT;GR;KO;RB
+info,species_with_habitat,11,BT;CH;CM;CO;GR;KO;PK;RB;SK;ST;WCT
+drop,no_link_segment,178,no fresh_default segment on the visit's blue line at its measure
+info,segment_starts_in_window,9548,
+info,wet_manifest,0,discharge/fwa/v1 built 2026-10-24T12:23:01Z at https://fresh-bc.s3.us-west-2.amazonaws.com/discharge/fwa/v1/manifest.json
+info,wet_loaded_build,0,"wet_db_load(): discharge/fwa/v1/segment_monthly, scenario historical last loaded from https://fresh-bc.s3.us-west-2.amazonaws.com/discharge/fwa/v1/manifest.json (built 2026-10-24T12:23:01Z, wet b4bbc50)"
+info,wet_loaded_pcic_routed,3154131,picked annual rows; 3377037 segments loaded (wet_db_load() filters the manifest's rows on load)
+info,wet_loaded_wet_balance,1378712,picked annual rows; 4529939 segments loaded (wet_db_load() filters the manifest's rows on load)
+info,segment_fwa_gradient_missing,0,
+info,segment_line_not_own,732,visits placed on a link segment of another Atlas line than their own
+info,flow_from_parent,26,
+info,flow_missing,0,no picked flow on the segment or a parent
+info,code_from_parent,0,
+info,cw_model_control,7339,recomputed model within 5 % of the stored MODELLED width on 94.5 %; median ratio 0.999
+info,width_source_FIELD_MEASURMENT,18944,
+info,width_source_FWA_RIVERS_POLY,7994,
+info,width_source_MODELLED,11616,
+info,cw_deploy_null,9425,
+info,regulating_dams_placed,101,
+info,regulated,4839,
+info,barrier_dnstr_BT,18505,
+info,barrier_dnstr_CH,24860,
+info,barrier_dnstr_CM,24860,
+info,barrier_dnstr_CO,24860,
+info,barrier_dnstr_GR,24860,
+info,barrier_dnstr_KO,24860,
+info,barrier_dnstr_PK,24860,
+info,barrier_dnstr_RB,18505,
+info,barrier_dnstr_SK,24860,
+info,barrier_dnstr_ST,20370,
+info,barrier_dnstr_WCT,20370,
+info,barrier_unknown_codes,0,no watershed code even from a parent
+info,access_check_skipped,0,
+info,walk_starts,36928,x 3 sources x 7 sizes; 0.1 min on 4 workers
+info,walk_cache_hit,110784,start-and-source pairs read from knw.walk_cache
+info,walk_cache_miss,0,start-and-source pairs walked and kept in knw.walk_cache
+info,walk_convention,0,"bank: the distance ends at the river's bank and counts every hop's gap (fresh 0.42.0's rule, #73)"
+info,walk_bank_m_positive,489241,"of 706144 found rows; median 67.2 m, 90th percentile 1682.5 m"
+info,walk_pick_found,240312,"rows, all sizes"
+info,walk_pick_none,18184,"rows, all sizes"
+info,walk_pcic_routed_found,225447,"rows, all sizes"
+info,walk_pcic_routed_none,33049,"rows, all sizes"
+info,walk_wet_balance_found,240385,"rows, all sizes"
+info,walk_wet_balance_none,18111,"rows, all sizes"
+info,walk_targets,16374,"1542 on regulated reaches, 1716 in lakes"
+info,zone_zip,7729083,md5 f369d684fd3939acbdd6b06097a3d4b0 https://catalogue.data.gov.bc.ca/dataset/f1f86c41-ae83-49d5-92e1-526897b99fa2/resource/fc209bd0-26ab-4f8b-9415-8f34081a3c0e/download/bc_hydrologic_zones.zip
+info,zone_unmatched,0,
+info,workbook_species_rows,1165,1154 sites; 92 rows score (electrofishing with effort)
+info,workbook_sites_placed,871,of 1154 with a placement
+info,bcfishobs_BT_collection_only,230,
+info,bcfishobs_CH_collection_only,42,
+info,bcfishobs_CM_collection_only,4,
+info,bcfishobs_CO_collection_only,132,
+info,bcfishobs_GR_collection_only,49,
+info,bcfishobs_KO_collection_only,16,
+info,bcfishobs_PK_collection_only,8,
+info,bcfishobs_RB_collection_only,568,
+info,bcfishobs_SK_collection_only,11,
+info,bcfishobs_ST_collection_only,13,
+info,bcfishobs_WCT_collection_only,90,
+info,bcfishobs_BT_many,130,
+info,bcfishobs_CH_many,38,
+info,bcfishobs_CO_many,7,
+info,bcfishobs_GR_many,21,
+info,bcfishobs_RB_many,135,
+info,bcfishobs_WCT_many,69,
+info,bcfishobs_BT_not_fdis,3194,
+info,bcfishobs_CH_not_fdis,4384,
+info,bcfishobs_CM_not_fdis,3787,
+info,bcfishobs_CO_not_fdis,10834,
+info,bcfishobs_GR_not_fdis,1329,
+info,bcfishobs_KO_not_fdis,6665,
+info,bcfishobs_PK_not_fdis,3176,
+info,bcfishobs_RB_not_fdis,97088,
+info,bcfishobs_SK_not_fdis,3171,
+info,bcfishobs_ST_not_fdis,13945,
+info,bcfishobs_WCT_not_fdis,4388,
+info,bcfishobs_BT_one,4321,
+info,bcfishobs_CH_one,1286,
+info,bcfishobs_CM_one,57,
+info,bcfishobs_CO_one,2810,
+info,bcfishobs_GR_one,1322,
+info,bcfishobs_KO_one,901,
+info,bcfishobs_PK_one,15,
+info,bcfishobs_RB_one,11551,
+info,bcfishobs_SK_one,86,
+info,bcfishobs_ST_one,323,
+info,bcfishobs_WCT_one,1491,
+info,bcfishobs_BT_unmatched,3504,
+info,bcfishobs_CH_unmatched,3294,
+info,bcfishobs_CM_unmatched,1052,
+info,bcfishobs_CO_unmatched,8759,
+info,bcfishobs_GR_unmatched,577,
+info,bcfishobs_KO_unmatched,2083,
+info,bcfishobs_PK_unmatched,636,
+info,bcfishobs_RB_unmatched,10541,
+info,bcfishobs_SK_unmatched,921,
+info,bcfishobs_ST_unmatched,2266,
+info,bcfishobs_WCT_unmatched,739,
+kept,visits_kept,45529,
+info,evidence_receipt,0,evidence_receipt.json recipe 6ee82a79611b576f04fe8a86f5f914393b94abafc930fc364872848ebcd530e8
