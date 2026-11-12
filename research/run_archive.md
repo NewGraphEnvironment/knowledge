@@ -106,13 +106,16 @@ each key's own receipt is the finer check. The revised tolerances, tried on the 
 (`data-raw/grade_tolerance_try.R`), read half a tolerance as `equivalent` and three times it, or a count moved by one,
 as `different`. The tolerances are set from chinook alone: #158 found BT and ST moved by the same parent-flow tie
 before it was fixed, so they are the keys to compare first when a promotion reads their receipts. The thresholds set
-stays exact on #158's evidence (every key's tuning tables identical on its second database); no two thresholds
-receipts have been compared yet.
+stays exact: its picks and counts are what #158's second database reproduced (every pick, score, curve and group the
+same). Its table also carries each grade's `evidence_md5`, though, and `0325` names the evidence of both published sets
+by those md5s rather than by the evidence build's `recipe_id`, so until #197 orders `visits_link`'s columns, a
+published set rebuilt on another database reads `different` on its recipe and on the thresholds table. No two
+published-set receipts have been compared yet.
 
 ### The evidence build: every table exact but `access_check`'s km
 
-The evidence build's receipt (#160) writes down the rule this track began from. The two measured rebuilds moved
-`access_check`'s km by 9.5e-11 and 6.0e-11 km per value (#158's second database), because each value is a sum over up to
+The evidence build's receipt (#160) writes down the rule this track began from. The first two measured rebuilds moved
+`access_check`'s km by 9.5e-11 km per value (#154's, on one database) and 6.0e-11 (#158's second database), because each value is a sum over up to
 tens of thousands of segments (72,617 at most) that a database may take in another order; every other table came back with the same values. So
 `access_check`'s km is rounded to 1e-6 km (1 mm, the tolerance #158's hand comparison used) and the rest is exact.
 `visits_link` is exact although #158 found its `mad_pick` moving on 3 of 45,529 visits: that was #161's unordered

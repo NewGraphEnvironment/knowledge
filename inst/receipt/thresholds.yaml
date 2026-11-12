@@ -1,8 +1,10 @@
 # The receipt declaration for the published thresholds set, knowledge/thresholds/v<n> (#154), read by
 # crate::crt_receipt_keys() through knw_receipt_keys("thresholds"). Both tables are small and fingerprinted exact:
-# every value in them is a pick or a count, which an equivalent rebuild reproduces. #158's rerun of the published
-# retune on a second database read every key's tuning tables identical and every pick the published one, so exact
-# holds; no two thresholds receipts have been compared yet.
+# every value in them is a pick or a count, which an equivalent rebuild reproduces (#158's second database gave every
+# pick, score, curve and group the same), and the run's provenance columns. One of those, evidence_md5, and the
+# recipe's evidence id both carry visits_link's md5, which differs between databases until #197 orders its
+# columns, so until then a rebuild on another database reads `different` (#165). No two thresholds receipts have been
+# compared yet.
 receipt_keys: 1
 output: thresholds
 recipe:

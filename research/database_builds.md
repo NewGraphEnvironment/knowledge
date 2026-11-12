@@ -256,8 +256,9 @@ own writers make (`scripts/logs/habitat/receipt_165/`). The evidence builds shar
 (`access_check` 5.3e-11 km; `visits_link`'s `mad_pick` now the same on all 45,529 visits). The two chinook grade
 receipts compared `identical`, the pick and the four totals bit for bit, and every segment's grade and length agreed:
 the `different` this table records for chinook's grade table was the tie, and the fix removed it. Every walk came
-from each database's cache, so #162 was not tested. One new difference surfaced, in bytes only: the species columns of
-`visits_link` and `workbook_sites` come out in each database's catalog order (#197). `0310` took 19.3 min on the host and 11.9
+from each database's cache, so #162 was not tested. One new difference surfaced: the species columns of `visits_link` and
+`workbook_sites` come out in each database's catalog order (#197). The values agree, but `visits_link`'s md5 does not,
+so neither does every `evidence_md5` downstream, nor the evidence id `0325` gives the published sets. `0310` took 19.3 min on the host and 11.9
 on the second, `0320` for chinook rearing 14.1 min (14 workers) and 17.4 min (8 workers, beside another session's link
 tests on the second database).
 
