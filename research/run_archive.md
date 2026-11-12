@@ -137,8 +137,9 @@ came back with the same values in another column order, because `knw_link_place(
 unordered (#197); crate sorts a table's columns by name before hashing, so no verdict moves, but their bytes differ.
 #197 has since made `knw_link_place()` sort the species by name, so the two tables carry one column order on any
 database. That order is not the published build's (its ledger lists both species groups in catalog order), so the next
-evidence build's two tables, and `visits_link`'s md5 in `evidence_md5`, differ from the published build's once, with
-the same values, and then agree across databases.
+evidence build moves the two tables' species columns once; its `visits_link` differs from the published build's on
+other counts too (the `segment_fwa_gradient` column #120 added, the parent flows #161's fix moves), so its md5 would
+change in any case. From that build on, two databases holding one build write these tables' columns in one order.
 
 crate rounds a table's value to its tolerance's decimals rather than allowing a band (a total it compares as a band),
 so two receipts alone can put values a hair apart on either side of a rounding edge and read `different`. Judge an evidence or visit-set rebuild with both

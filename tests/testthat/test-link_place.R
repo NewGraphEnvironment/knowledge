@@ -17,7 +17,7 @@ test_that("a species with access but no habitat table gets no habitat columns", 
 })
 
 test_that("the species and their columns do not depend on the order the catalog returns rows in (#197)", {
-  # the rows knw_link_place()'s catalog query returns, in the order one database gave them on #165
+  # rows of the shape knw_link_place()'s catalog query returns, four species in an unsorted order
   tbl <- c(rep("streams_access", 6), rep("streams_habitat_pk", 2), "streams_habitat_bt", "streams_habitat_wct",
            "streams_habitat_gr", "streams_habitat_ko")
   col <- c("id_segment", "watershed_group_code", "access_pk", "access_bt", "access_wct", "access_gr",

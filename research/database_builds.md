@@ -260,10 +260,12 @@ from each database's cache, so #162 was not tested. The bytes of `visits_link` a
 same values (#158 saw `workbook_sites`' too): their species columns come out in each database's catalog order (#197),
 so `visits_link`'s md5, and with it the `evidence_md5` every grade table and summary carries, differs. #197 has since
 made `knw_link_place()` sort the species by name, so these two tables carry one column order on any database. That
-order is not the published build's (its ledger lists both species groups in catalog order), so the next evidence
-build's two tables, and `visits_link`'s md5 in `evidence_md5`, differ from the published build's once, with the same
-values, and then agree across databases. `0320` for chinook rearing took 14.0 min on the host (14 workers) and 17.2
-min on the second (8 workers, beside another session's link tests).
+order is not the published build's (its ledger lists both species groups in catalog order), so the next evidence build
+moves the two tables' species columns once; its `visits_link` differs from the published build's on other counts too
+(the `segment_fwa_gradient` column #120 added, the parent flows #161's fix moves), so its md5 would change in any
+case. From that build on, two databases holding one build write these tables' columns in one order. `0320` for chinook
+rearing took 14.0 min on the host (14 workers) and 17.2 min on the second (8 workers, beside another session's link
+tests).
 
 What a run costs on each:
 

@@ -18,3 +18,8 @@
 - A full `devtools::test()` was stopped mid-run after a test edit (it would have described a mixed tree); rerun after
   this commit.
 - Full `devtools::test()` on 85c4dda7: FAIL 0, WARN 0, SKIP 3 (stages not on this machine), PASS 2298 (2.1 min).
+- /code-check branch round 1 (`review-round1.md`): two false claims, both confirmed and fixed. The research prose said
+  the next build's two tables differ from the published build's "with the same values"; the published `visits_link`
+  lacks #120's `segment_fwa_gradient` and #161's fix moves parent flows, so the md5 changes in any case. Now says the
+  species columns move once and that databases then agree on column order. The test comment's fixture provenance was
+  false; reworded.
