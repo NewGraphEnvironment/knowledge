@@ -119,7 +119,7 @@ test_that("every ignored source of the methodology article, where present, is un
 })
 
 # a grade table's record is tracked and the bundles pin it (#119); the ignored table it describes is checked against it
-# where present. Opt-in: the published tables are up to 26 GB to md5
+# where present. Opt-in: the published tables are about 11 GB to md5
 test_that("every grade table present is the one its tracked record describes", {
   skip_if_not(has_src, "no source-tree data/ (installed package)")
   skip_if_not(identical(Sys.getenv("KNW_CHECK_GRADES"), "TRUE"), "KNW_CHECK_GRADES=TRUE md5s the grade tables")

@@ -456,8 +456,10 @@ how the output was made (the full knowledge commit, the walk's SQL and the metho
 fold seed, link's build as its run uid, the flow load, the evidence) and what came out, so a rebuild compared with the
 archived receipt (`crate::crt_receipt_compare(keys = knw_receipt_keys(<output>))`) is identical, equivalent within the
 declared roundings, or different. What each output is judged on, and its roundings, are declared in
-`inst/receipt/<output>.yaml`, and `test-receipt.R` pins them; they are provisional until #158, and a revision makes
-earlier receipts compare `different` unless the comparison softens `result.tolerance.*`. A grade table is judged on its
+`inst/receipt/<output>.yaml`, and `test-receipt.R` pins them; #165 set the grade and grade-set totals from chinook rearing
+rebuilt on two databases and each total's summing-order bound, and checked the evidence build's across the same two
+(`research/run_archive.md`), and a revision makes earlier receipts compare
+`different` unless the comparison softens `result.tolerance.*`. A grade table is judged on its
 pick and totals, its bytes only listed, so for a grade `identical` does not mean the same bytes
 (`research/run_archive.md`, "The receipt says whether a rebuild came out the same"). A receipt names no host: always
 `publish = TRUE`. A receipt is written only by the pass that graded its table: `0320` regrades a kept table whose
@@ -475,8 +477,8 @@ tables, or a ledger naming a receipt that is gone, is refused. `0299` publishes 
 a receipt (`inst/receipt/fdis.yaml`) naming the evidence by that `recipe_id`; v2 carries none. The archive stores the
 evidence receipt in its build's folder, outside the MANIFEST, so the `evidence_id` stays the tables' (a receipt's bytes
 carry its write time); a restore refuses an `evidence_receipt.json` present with other bytes, as it does any file, and
-one present where the archived build has none. crate rounds a value to its tolerance's
-decimals, so judge an evidence or fdis rebuild with the tables re-read (`crt_receipt_compare(tables =)`): receipts alone
+one present where the archived build has none. crate rounds a table's values to its tolerance's
+decimals (a total it compares as a band), so judge an evidence or fdis rebuild with the tables re-read (`crt_receipt_compare(tables =)`): receipts alone
 can read a value either side of a rounding edge as different.
 
 A build names its evidence directory (#120). `0310` writes `EVIDENCE_DIR` (default `data/fdis/derived`) and a ledger

@@ -1,11 +1,15 @@
 # The receipt declaration for a grade table, data/tune/<key>_grades.csv (#154), read by crate::crt_receipt_keys()
 # through knw_receipt_keys("grade"). knw_grade_receipt_write() supplies exactly these names; crate computes the ids.
 #
-# The tolerances are provisional: declared from the one rebuild measured so far (the same build's evidence built
-# twice, three tables byte-identical and a fourth differing at 9.5e-11 km per value, because the database summed in
-# another order). #158 reruns the published retune on a second database and records each output's verdict; these are
-# revised from it. crate's tolerances are absolute, so a sum over millions of segments gets a rounding that size of
-# sum needs, not the per-value one.
+# The tolerances rest on a measured rebuild (#165): chinook rearing regraded at one commit on two databases holding the
+# published build, each on its own evidence build, gave one recipe_id and identical receipts, every summary equal bit
+# for bit (#158's `different` there was #161's parent-flow tie, fixed since). Every walk came from each database's
+# cache, so #162's cold walks, which can still differ between databases, were not exercised. crate compares a summary as
+# a band, |a - b| <= tolerance, so a sum gets the smallest power of ten strictly above the float error a sum of its size
+# can carry when a database returns its rows in another order: n x machine epsilon x the sum of absolute values,
+# 2.7e-4 for the largest key's graded km and grade sum (BT rearing, 2.1 million graded segments), against 8e-8 seen
+# over four orders (data-raw/grade_order_bound.R). One declaration serves every key, though only chinook was regraded
+# on both databases; the counts are exact.
 receipt_keys: 1
 output: grade
 recipe:
@@ -23,17 +27,19 @@ recipe:
 result:
   tables:
     # what the fit and the grade decided, from the record's constant columns: the pick, the reference edges, the
-    # walk's river size, the gate's verdict and its number (written to four decimals)
+    # walk's river size, the gate's verdict and its number (written to four decimals, so held to them: crate rounds a
+    # table's cells to the tolerance's decimals, and a change in the fourth decimal reads `different`)
     pick:
       tolerance: {null_heldout_curve: 1.0e-4}
   summary:
     rows: {}
     graded_rows: {}
-    # km of graded segments and the sum of their grades (each grade written to five significant figures)
+    # km of graded segments and the sum of their grades (each grade written to five significant figures, so one
+    # grade rounded the other way moves the sum by up to 1e-5, inside the rounding)
     km_graded: {tolerance: 1.0e-3}
     grade_sum: {tolerance: 1.0e-3}
 register:
-  # the grade table is 0.7 to 5.6 GB, too large to fingerprint, so the verdict rests on the pick and the summaries: a
+  # the grade table is 0.3 to 2.5 GB, too large to fingerprint, so the verdict rests on the pick and the summaries: a
   # rebuild that sums in another order moves the bytes and nothing a reader decides on. A moved table is listed as a
   # warning, and the verdict stays identical when the pick and summaries agree exactly
   result.parts.*.bytes: warn

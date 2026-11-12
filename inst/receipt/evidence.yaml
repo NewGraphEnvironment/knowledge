@@ -3,15 +3,17 @@
 # these names; crate computes the ids.
 #
 # This is the rule the provenance track started from, written down: every table must come back exactly, except
-# access_check's km, which may move by a rounding. One rebuild of the same build's evidence gave three byte-identical
-# tables and access_check differing at 9.5e-11 km per value, because the database summed in another order; #158's
-# second database gave 6.0e-11 km on the per-group table. Each value is a sum over up to millions of segments, which a
-# database may take in another order: the rounding is 1e-6 km (1 mm), the tolerance #158's hand comparison used, four
-# orders above both moves and far below anything a reader sees. crate rounds a value to the tolerance's decimals, so a
-# comparison of receipts alone can read a value on either side of a rounding edge as different; compare with the
-# tables re-read (crt_receipt_compare(tables =)) for the verdict.
-# visits_link is exact although #158 found mad_pick moving on 3 visits: that is knowledge#161's unordered parent-flow
-# tie, and a rebuild reads `different` until it is fixed, which is true. Provisional, as #154's declarations are.
+# access_check's km, which may move by a rounding. Each km is a sum over up to tens of thousands of segments (72,617
+# at most), which a database may take in another order: the rounding is 1e-6 km (1 mm), the tolerance #158's hand
+# comparison used. Measured rebuilds of the published build's evidence moved access_check by 9.5e-11 km (#145's, on
+# one database), 1.0e-10 km at most (#160's two on one database), 6.0e-11 km (#158's second database) and 5.3e-11 km
+# (#165's two at one commit on two databases, every other table with the same values and one recipe_id, so
+# `equivalent` on the receipts alone and with the tables re-read). That pair also confirmed #161's fix: visits_link's
+# mad_pick, which moved on 3 visits in #158 through the tie, came back the same. Two tables' bytes still differ
+# between databases, the species columns' order (#197); crate fingerprints a table by column name, so the evidence
+# verdict does not move (each grade's evidence_md5 does). crate rounds a table's value to the tolerance's decimals,
+# so a comparison of receipts alone can read a value on either side of a rounding edge as different; compare with
+# the tables re-read (crt_receipt_compare(tables =)) for the verdict.
 receipt_keys: 1
 output: evidence
 recipe:

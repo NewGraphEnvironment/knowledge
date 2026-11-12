@@ -19,7 +19,7 @@
 #' A grade table's record: what the run made, in one tracked row
 #'
 #' A grade table (`data/tune/<key>_grades.csv`, written by `scripts/0320`) is
-#' one row per stream segment, 0.7 to 5.6 GB, and ignored. Every reader that
+#' one row per stream segment, 0.3 to 2.5 GB, and ignored. Every reader that
 #' checks which run made it reads only its first row, where the run's record
 #' sits in the constant columns. The record is that row's constant columns
 #' with the table's md5, size and row count, the run, the evidence ledger, the
@@ -39,7 +39,7 @@
 #'   the network (the ledger's `run_link_version` and `run_link_sha`).
 #' @param tokens `named character` `c(cut =, acc =, grad =, flow =)` from
 #'   [knw_build_record()]; `NA` where the build predates link's vocabulary.
-#' @param rows `numeric(1)` the table's row count, or `NA`: counting a 5 GB
+#' @param rows `numeric(1)` the table's row count, or `NA`: counting a 2.5 GB
 #'   table to write its record costs more than the record is worth, so the
 #'   writer passes what it knows and the check never reads it.
 #' @param record_source `character(1)` `"0320"` (written with the table) or

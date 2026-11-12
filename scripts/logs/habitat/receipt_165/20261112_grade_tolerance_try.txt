@@ -1,0 +1,9 @@
+declared: km_graded 0.001 grade_sum 0.001 
+receipts declare: grade_sum 0.001 km_graded 0.001 
+as measured: identical 
+km_graded  moved by 0.5 x 0.001: equivalent
+km_graded  moved by 3 x 0.001: different
+grade_sum  moved by 0.5 x 0.001: equivalent
+grade_sum  moved by 3 x 0.001: different
+rows       moved by 1: different
+graded_rows moved by 1: different

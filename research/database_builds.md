@@ -1,13 +1,15 @@
 # Database builds: what a retune reads, where it can run, and what a second database needs
 
 **Verified:** 2026-10-27, the round-trip check, the structures a comparison runs and `default`'s cost 2026-10-28, and
-"A second database" 2026-11-06 (#161's fix measured the same day) ·
+"A second database" 2026-11-06 (#161's fix measured the same day; chinook regraded on both 2026-11-12, #165) ·
 **Issues:** #87 (from #73's run times; #85 and #86 folded in or left open below), #110 (the round-trip check), #112 (the
-structures), #101 (`default`'s cost), #158 (a retune reproduced on a second database; it spawned #161, fixed, and #162) ·
+structures), #101 (`default`'s cost), #158 (a retune reproduced on a second database; it spawned #161, fixed, and #162), #165 (chinook
+rearing regraded on both after #161, with knowledge's receipts) ·
 **Produced by:** `data-raw/walk_batch_check.R` (logs `scripts/logs/habitat/20261026_walk_batch_check*`),
 `data-raw/compare_parallel_check.R` (`20261026_compare_parallel_check*`), `data-raw/compare_structures_check.R`
 (`20261028_compare_structures_check*`), `data-raw/database_compare.R`, `data-raw/database_walk_check.R` and
-`data-raw/database_receipts.R` (`scripts/logs/habitat/database_second/`, #158), the timed retune on the database's host
+`data-raw/database_receipts.R` (`scripts/logs/habitat/database_second/`, #158), `data-raw/grade_receipt_compare.R`
+(`scripts/logs/habitat/receipt_165/`, #165), the timed retune on the database's host
 (`20261026_tune_run.txt`, `20261026_tune_run-warm.txt`, `20261026_compare.txt`, `20261026_compare-gpkg.txt`;
 #73's `20261024_*` and `20261025_*` for the before), and the table sizes read from the host's catalog on 2026-10-26.
 
@@ -247,6 +249,18 @@ Every other `different` traces to one of two ties, neither of them a fault in th
   at 0 m from it. Where one of the two has no flow row, the walk either stops at once or walks that segment's length
   down to the next. The host's own cold walk reproduces its cache exactly, so the two databases walk differently. A run
   that reads the walk cache never shows it: every walk in this run came from the cache (0 misses).
+
+**After #161's fix, chinook rearing on both (#165).** On 2026-11-12 the evidence and chinook rearing were rebuilt at
+one commit on each database, each grade on its own database's evidence, and compared through the receipts knowledge's
+own writers make (`scripts/logs/habitat/receipt_165/`). The evidence builds shared one recipe and compared `equivalent`
+(`access_check` 5.3e-11 km; `visits_link`'s `mad_pick` now the same on all 45,529 visits). The two chinook grade
+receipts compared `identical`, the pick and the four totals bit for bit, and every segment's grade and length agreed:
+the `different` this table records for chinook's grade table was the tie, and the fix removed it. Every walk came
+from each database's cache, so #162 was not tested. The bytes of `visits_link` and `workbook_sites` differ with the
+same values (#158 saw `workbook_sites`' too): their species columns come out in each database's catalog order (#197),
+so `visits_link`'s md5, and with it the `evidence_md5` every grade table and summary carries, differs. `0320` for
+chinook rearing took 14.0 min on the host (14 workers) and 17.2 min on the second (8 workers, beside another session's
+link tests).
 
 What a run costs on each:
 
