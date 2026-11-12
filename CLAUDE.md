@@ -20,12 +20,15 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   Only code that has run on two regions graduates here. `.Rbuildignore` keeps `data/`, `scripts/`,
   `planning/` and `research/` out of the build, and `tests/testthat/test-data-dir.R` keeps `.R` and
   `.rda` files off the top of `data/`, where `pkgload::load_all()` would source or load them.
-- `vignettes/chinook_rearing.Rmd` — the pkgdown article on the chinook rearing threshold (#62). It reads
+- `vignettes/tuning-chinook-rearing.Rmd` — "Tuning habitat: chinook rearing", the case study of chinook rearing (#62). The
+  three articles are one series, `tuning-<name>` (#118): `_pkgdown.yml` groups them as the method, the case studies
+  (`tuning-<species>-<stage>`) and checks on the method, and redirects their earlier names. Their prose says "fish
+  habitat definition" at first mention and "habitat definition" after, never "rule" (#156). It reads
   `inst/vignette-data/`, which `data-raw/vignette_chinook.R` writes from the tune and compare tables and the
   database (`SCHEMA` names the run's schema, as `0320` and `0330` take it). A promotion (`0335`) reruns it, and only a
   promotion changes its sources, because `tests/testthat/test-vignette-data.R` fails when a tracked source's md5 moves
   (#111). It takes the tuning log of the run its CH rearing summary names (`tune_run`), not the newest. Every number in its prose is computed inline from those files. Its references
-  are `vignettes/chinook_rearing.bib`, which `data-raw/vignette_bib.R` writes from the group library through Better
+  are `vignettes/tuning-chinook-rearing.bib`, which `data-raw/vignette_bib.R` writes from the group library through Better
   BibTeX (Zotero must be running): rerun it after any citation change. It refuses a key Zotero does not return, strips
   each entry's local attachment path, and sets software versions from the run's ledger, one token each, because
   citeproc prints a version with a space as "Versions …". Its map is interactive only when pkgdown builds the site
@@ -36,21 +39,23 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   They agree on stream lines and differ on lines through wetlands, so a sentence about link's near-river handling, and
   every site or group count, names the build and population it holds for (#143). The register's `code:` phrases in
   it are matched one line at a time and must each stay whole on one line.
-- `vignettes/habitat_thresholds.Rmd` — the methodology article (#93), "Choosing habitat thresholds from where fish were
-  caught": the reference home for the method and its citations. A species article (the chinook one first, #64) gives
+- `vignettes/tuning-method.Rmd` — the methodology article (#93), "Tuning fish habitat definitions with fish sampling
+  records": the reference home for the method and its citations. A species article (the chinook one first, #64) gives
   its own records and result in a sentence or two and links it rather than restating the method. It reads `inst/vignette-data/method.rds` (and, for its `#cuts` section, `cut_points.rds`), which `data-raw/vignette_method.R` writes from
   `inst/method/pipeline.csv` (the steps) and `inst/method/settings.csv` (every number that shapes a result, with where
   its value lives); the script refuses to run with its code or registers uncommitted. A promotion reruns it, last; it
   reads the ledger the published tables name (`knw_run_ledger()`), and refuses on a machine whose `data/fdis/derived`
   is not that build's evidence. `tests/testthat/test-settings-register.R` fails when a register value and the code
   disagree: change both together, and add a row for any new number that shapes a result (the test cannot see one with
-  no row). `method.rds` pins each grade table's tracked record (`data/tune/<key>_grades_record.csv`), not the table
+  no row). `test-vignette-data.R` holds `settings.csv` to the copy in `method.rds` on every column the article prints
+  (all but `where` and `note`), so a changed value, label, unit, step, source, tested or issue, or a row added or
+  removed, stales the bundle and a moved `where` path does not (#118). `method.rds` pins each grade table's tracked record (`data/tune/<key>_grades_record.csv`), not the table
   (#119), and the md5s of the ignored evidence it was built from, which `test-vignette-data.R` checks wherever they
   exist, so on a machine whose copies differ it fails there and nowhere else (CI has no `data/`). A checkout without
   them restores them with `PULL=TRUE scripts/0336-archive.R`, the run its records name. Its references come from `data-raw/vignette_bib.R` with the chinook article's. A draft article is named
   `vignettes/_<name>.Rmd`: pkgdown skips it, `.Rbuildignore` keeps it out of the tarball, and pkgdown.yaml fails if
   one reaches `docs/articles/`.
-- `vignettes/stream_splits.Rmd` — "Splitting streams at fish records shifts the steepest slope mapped as habitat" (#149): the share
+- `vignettes/tuning-stream-splits.Rmd` — "Splitting streams at fish records shifts the steepest slope mapped as habitat" (#149): the share
   of sites starting their own segment on three networks, three example sites, chinook rearing on four setups and a
   group map. It reads `inst/vignette-data/cut_points.rds`, which `data-raw/vignette_cut_points.R` writes from a stage
   that `data-raw/cut_points_stage.R` copies on the database's host into the ignored `data/stage/` (both builds, the

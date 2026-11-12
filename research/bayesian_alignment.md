@@ -429,7 +429,7 @@ Each item is an issue, so it is planned and reviewed on its own.
   group from the population distribution, for the pooled curve and today's alike, since a new-group score for one
   against an own-intercept score for the other compares nothing. Two cheap additions: an offset for `log(area)` beside
   the free coefficient, and a prior predictive check of the data-set and era prior on the rate scale.
-- **The methodology article says where the method stands** (#204): a short section in `habitat_thresholds.Rmd`
+- **The methodology article says where the method stands** (#204): a short section in `tuning-method.Rmd`
   stating the findings above in the reader's terms, with the two books cited.
 
 ## Limits of this review

@@ -4,11 +4,11 @@
 \name{knowledge-package}
 \alias{knowledge}
 \alias{knowledge-package}
-\title{knowledge: Fisheries Evidence and Tuned Habitat Thresholds for BC Watershed Groups}
+\title{knowledge: Tests Fish Habitat Definitions Against What is Known About Where Fish Live, and Tunes Them from the Fish Records}
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Gathers fisheries evidence for British Columbia watershed groups (provincial fish sampling records, past reports, cited literature values with their quotes, intrinsic-potential models and life-history timing) and tunes from the fish records the gradient and stream-size thresholds that the link habitat models use: it places sampling visits on link's stream segments, scores candidate rules on held-out watershed groups, grades segments by expected use, and tabulates, maps and compares the tuned rules with link's defaults. It also pulls PSCIS crossing layers and past-report tables for a group and checks stream names before a search. Under active development.
+Gathers what is known about where fish live in British Columbia's streams (life history and habitat values from the cited literature with their quotes, past reports, intrinsic-potential models, life-history timing and the provincial fish sampling records) and tunes from the records the gradient and stream-size thresholds of the fish habitat definitions the link habitat models use: it places sampling visits on link's stream segments, scores candidate habitat definitions on held-out watershed groups, grades segments by expected use, and tabulates, maps and compares the tuned habitat definitions with link's defaults. It also pulls PSCIS crossing layers and past-report tables for a group and checks stream names before a search. Under active development.
 }
 \seealso{
 Useful links:

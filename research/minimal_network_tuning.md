@@ -204,8 +204,8 @@ Every setup's verdict on every full-network segment is in `data/compare/setups/C
 `data-raw/setup_compare.R`, which also writes `scripts/logs/habitat/20261105_setup_compare-ch_rear.{csv,txt}`).
 
 The public account of this section, with the premise and three example sites, is the article
-[Splitting streams at fish records shifts the steepest slope mapped as habitat](https://newgraphenvironment.github.io/knowledge/articles/stream_splits.html)
-(`vignettes/stream_splits.Rmd`, #149; its numbers are bundled by `data-raw/vignette_cut_points.R`).
+[Splitting streams at fish records shifts the steepest slope mapped as habitat](https://newgraphenvironment.github.io/knowledge/articles/tuning-stream-splits.html)
+(`vignettes/tuning-stream-splits.Rmd`, #149; its numbers are bundled by `data-raw/vignette_cut_points.R`).
 
 **What it is not.** Neither setup run is promoted, and neither changes a published rule. The Atlas line is a
 sensitivity link does not build; its token is requested (link#460) and its run is archived when link mints it. The

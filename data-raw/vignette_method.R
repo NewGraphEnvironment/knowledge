@@ -1,6 +1,6 @@
 # data-raw/vignette_method.R
 # ---------------------------------------------------------------------------
-# The data `vignettes/habitat_thresholds.Rmd` reads, so the methodology article builds with no database and cannot
+# The data `vignettes/tuning-method.Rmd` reads, so the methodology article builds with no database and cannot
 # quote a count the run did not make. Issue #93.
 #
 # WHY / DESIGN NOTES:

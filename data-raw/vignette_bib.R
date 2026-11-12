@@ -1,7 +1,7 @@
 # data-raw/vignette_bib.R
 # ---------------------------------------------------------------------------
-# The references of `vignettes/chinook_rearing.Rmd`, `vignettes/habitat_thresholds.Rmd` (#93) and the draft
-# `vignettes/stream_splits.Rmd` (#149), written from Zotero so
+# The references of `vignettes/tuning-chinook-rearing.Rmd`, `vignettes/tuning-method.Rmd` (#93) and the draft
+# `vignettes/tuning-stream-splits.Rmd` (#149), written from Zotero so
 # each article builds where Zotero is not
 # (pkgdown in CI). Issue #79.
 #
@@ -20,15 +20,19 @@
 #   - A VERSIONED ENTRY IS @misc. pandoc's default style prints a @software entry's version as "V. 0.66.0. Released.",
 #     a @misc's as "Version 0.66.0." (measured with pandoc 3.9.0.2), and drops `note` in both. A version that is more
 #     than one token ("0.66.0 (commit a17e917)", "not recorded") prints as "Versions ...", so each is one token: the
-#     release, or for fwapg (no release) the commit, or for wet the flow set it published. bcfishpass and bcfishobs,
-#     whose versions the run did not record, carry none. Titles are braced so the style does not capitalise a name.
+#     release, or for wet the flow set it published. bcfishpass and bcfishobs, whose versions the run did not record,
+#     carry none. Titles are braced so the style does not capitalise a name.
+#   - FWAPG IS CITED AS THE FORK WHERE AN ARTICLE RESTS ON ITS FLOWS. "If it uses the flows we pull in on our fork we
+#     should cite the fork; otherwise upstream 2024 is fine" (Al, 2026-11-12, #107). The fork entry carries the commit
+#     whose crosswalk routed wet's flows; upstream `fwapg`, credited for loading and placing on the Atlas, carries no
+#     version, since the run's `fwapg_sha` is a fork commit upstream does not hold.
 #   - ONLY WHAT A READER NEEDS. Better BibTeX writes each attachment's local path (`file`, a home directory), and the
 #     abstract, keywords, access and original dates; the committed file keeps none of them. A timestamp date
 #     (`2024-01-01T12:42:29Z`) is cut to its day.
 #
 # INPUT:  the three articles, inst/vignette-data/chinook_rearing.rds (meta$versions), and Zotero running
 #         with Better BibTeX, synced with the group library
-# OUTPUT: vignettes/chinook_rearing.bib, vignettes/habitat_thresholds.bib, vignettes/stream_splits.bib
+# OUTPUT: vignettes/tuning-chinook-rearing.bib, vignettes/tuning-method.bib, vignettes/tuning-stream-splits.bib
 # RUN:    Rscript data-raw/vignette_bib.R   (from the repo root, after any change to the article's citations)
 # ---------------------------------------------------------------------------
 library_id <- 9   # Zotero's local id of the NewGraphEnvironment group library (group 4733734)
@@ -81,7 +85,6 @@ bib_write <- function(rmd, out, all_tools) {
   if (any(grepl("file = |= \\{/", entries))) stop("a local path is left in an entry")
 
   # ---- versions from the run ------------------------------------------------------------------------
-  short_sha <- function(s) substr(strsplit(s, ";", fixed = TRUE)[[1]][1], 1, 7)
   # the article's key for each tool, read from the Rmd's own keys by the title Zotero holds
   title_of <- function(e) sub("(?s)^.*?\\n  title = \\{(.*?)\\},\\n.*$", "\\1", e, perl = TRUE)
   key_for <- function(pattern, required = TRUE) {
@@ -91,7 +94,7 @@ bib_write <- function(rmd, out, all_tools) {
     k
   }
   ver <- list(
-    list(key = key_for("^(smnorris/)?fwapg", required = all_tools), title = "fwapg", version = short_sha(v$fwapg_sha)),
+    list(key = key_for("^(smnorris/)?fwapg", required = all_tools), title = "fwapg", version = NULL),
     # the fork's crosswalk built the routed flows the evidence read: the commit wet's routed report names (#89)
     list(key = key_for("^\\{*NewGraphEnvironment\\}*/fwapg", required = FALSE), title = "fwapg, New Graph Environment's fork", version = fork_sha),
     list(key = key_for("^(smnorris/)?bcfishpass", required = all_tools), title = "bcfishpass", version = NULL),
@@ -136,7 +139,7 @@ if (!is.null(attr(hits, "status"))) stop("no routed report at wet ", m$wet_sha, 
 fork_sha <- unique(sub("^.* at ", "", hits))
 if (length(fork_sha) != 1) stop("wet ", m$wet_sha, "'s reports name ", length(fork_sha), " fwapg commits")
 # all_tools: the article must cite fwapg, bcfishpass, bcfishobs, link, fresh and wet (the chinook article does)
-bib_write("vignettes/chinook_rearing.Rmd", "vignettes/chinook_rearing.bib", all_tools = TRUE)
-bib_write("vignettes/habitat_thresholds.Rmd", "vignettes/habitat_thresholds.bib", all_tools = FALSE)
+bib_write("vignettes/tuning-chinook-rearing.Rmd", "vignettes/tuning-chinook-rearing.bib", all_tools = TRUE)
+bib_write("vignettes/tuning-method.Rmd", "vignettes/tuning-method.bib", all_tools = FALSE)
 # the stream-splits article (#149)
-bib_write("vignettes/stream_splits.Rmd", "vignettes/stream_splits.bib", all_tools = FALSE)
+bib_write("vignettes/tuning-stream-splits.Rmd", "vignettes/tuning-stream-splits.bib", all_tools = FALSE)

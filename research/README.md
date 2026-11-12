@@ -31,4 +31,4 @@ Naming: `<topic>.md`, from 2026-09-26.
 | `bayesian_alignment.md` | the tuning method read against *Statistical Rethinking* and *Bayesian Data Analysis* (#185): each step, setting and unkeyed choice marked aligned, differs or should change, with chapter and printed page; the held-out score as a plug-in conditional on each group's refit intercept, fixed versus pooled groups and the groups dropped for one outcome, the prior as a ridge at BDA3's scale, the gate, effort as a covariate, detection, a DAG of the evidence, and what the retune and #186 should try |
 
 The chinook rearing result is told in plain language, for a reader who has not seen the tuning, in the package
-article <https://newgraphenvironment.github.io/knowledge/articles/chinook_rearing.html> (#62).
+article <https://newgraphenvironment.github.io/knowledge/articles/tuning-chinook-rearing.html> (#62).

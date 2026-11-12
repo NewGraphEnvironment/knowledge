@@ -17,8 +17,9 @@ permissions: read-all
 jobs:
   pkgdown:
     runs-on: ubuntu-24.04
-    # A stalled setup step (an apt mirror, a package compiling from source) otherwise holds the job for 6 h (#94)
-    timeout-minutes: 30
+    # A stalled setup step (an apt mirror, a package compiling from source) otherwise holds the job for 6 h (#94); 40 leaves
+    # room for one second try of a setup step below (#159)
+    timeout-minutes: 40
     # Only restrict concurrency for non-PR jobs
     concurrency:
       group: pkgdown-${{ github.event_name != 'pull_request' || github.run_id }}
@@ -31,11 +32,46 @@ jobs:
 
       - uses: r-lib/actions/setup-pandoc@v2
 
+      # Every stalled run so far (8 runs on 3 days, 2026-11-05 to 2026-11-11, #159) hung here or in the next step, apt slow to
+      # download from the Ubuntu mirror or unable to resolve it, until the job's cap. Each setup step gets a limit and one second try, so a stall costs
+      # minutes. The limits sit above the slowest of 25 healthy runs to 2026-11-12: setup-r 233 s, the dependencies 624 s
+      # (a cache miss). apt's own retries are the runner image's (/etc/apt/apt.conf.d/zz-retries, which a file written
+      # here would not override).
       - uses: r-lib/actions/setup-r@v2
+        id: setup_r
+        continue-on-error: true
+        timeout-minutes: 8
+        with:
+          use-public-rspm: true
+
+      # a limit that ends apt mid-install leaves dpkg interrupted, which the second try would refuse
+      - name: Finish an interrupted install
+        if: steps.setup_r.outcome == 'failure'
+        run: sudo dpkg --configure -a || true
+
+      - name: Set up R, second try
+        if: steps.setup_r.outcome == 'failure'
+        uses: r-lib/actions/setup-r@v2
+        timeout-minutes: 8
         with:
           use-public-rspm: true
 
       - uses: r-lib/actions/setup-r-dependencies@v2
+        id: setup_deps
+        continue-on-error: true
+        timeout-minutes: 15
+        with:
+          extra-packages: any::pkgdown, local::.
+          needs: website
+
+      - name: Finish an interrupted install, again
+        if: steps.setup_deps.outcome == 'failure'
+        run: sudo dpkg --configure -a || true
+
+      - name: Install the dependencies, second try
+        if: steps.setup_deps.outcome == 'failure'
+        uses: r-lib/actions/setup-r-dependencies@v2
+        timeout-minutes: 15
         with:
           extra-packages: any::pkgdown, local::.
           needs: website

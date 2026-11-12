@@ -108,7 +108,8 @@ knw_compare_map <- function(segments, water = NULL, title = "", png = NULL, html
     if ("rules" %in% panels) {
       drawn$rules <- base() + tmap::tm_shape(seg) +
         tmap::tm_lines(col = "rule_class", col.scale = tmap::tm_scale_categorical(values = rule_cols),
-                       col.legend = if (legend) tmap::tm_legend(title = "Habitat by rule") else tmap::tm_legend_hide(),
+                       col.legend = if (legend) tmap::tm_legend(title = "Habitat definition")
+                                    else tmap::tm_legend_hide(),
                        lwd = "lwd", lwd.scale = tmap::tm_scale_continuous(values.scale = lwd),
                        lwd.legend = tmap::tm_legend_hide()) + outline + lay
     }
@@ -144,13 +145,13 @@ knw_compare_map <- function(segments, water = NULL, title = "", png = NULL, html
 }
 
 # the classes and colours both maps draw; hex throughout, because MapLibre rejects R's colour names (grey80)
-.compare_rule_cols <- c("kept (both rules)" = "#1b6ca8", "lost (default only)" = "#d95f02",
+.compare_rule_cols <- c("kept (both)" = "#1b6ca8", "lost (default only)" = "#d95f02",
                         "gained (tuned only)" = "#1b9e77", "accessible, neither" = "#cccccc")
 .compare_grade_cols <- c("0-0.2" = "#f7fbff", "0.2-0.4" = "#c6dbef", "0.4-0.6" = "#6baed6", "0.6-0.8" = "#2171b5",
                          "0.8-1" = "#08306b", "not graded" = "#d9d9d9")
 
 .compare_classes <- function(seg) {
-  seg$rule_class <- factor(ifelse(seg$flag_default & seg$flag_tuned, "kept (both rules)",
+  seg$rule_class <- factor(ifelse(seg$flag_default & seg$flag_tuned, "kept (both)",
                            ifelse(seg$flag_default, "lost (default only)",
                            ifelse(seg$flag_tuned, "gained (tuned only)", "accessible, neither"))),
                            levels = names(.compare_rule_cols))
@@ -195,7 +196,7 @@ knw_compare_map <- function(segments, water = NULL, title = "", png = NULL, html
 #'       sf::st_linestring(rbind(c(1e6 + i * 500, 1e6), c(1e6 + (i + 1) * 500, 1e6 + 300)))
 #'     }), crs = 3005)
 #'   )
-#'   m <- knw_compare_mapgl(seg, title = "Habitat by rule")
+#'   m <- knw_compare_mapgl(seg, title = "Habitat definition")
 #'   class(m)
 #' }
 knw_compare_mapgl <- function(segments, water = NULL, title = "",
@@ -254,7 +255,7 @@ knw_compare_mapgl <- function(segments, water = NULL, title = "",
     mapgl::add_categorical_legend(legend_title = "Grade (expected use)", values = names(.compare_grade_cols),
                                   colors = unname(.compare_grade_cols), position = "top-left", layer_id = "grade",
                                   unique_id = "legend_grade", add = TRUE) |>
-    mapgl::add_layers_control(layers = c("rules", "grade"), position = "top-right")
+    mapgl::add_layers_control(layers = c(Habitat = "rules", Grade = "grade"), position = "top-right")
 }
 
 # the popup's fields as short display strings, and the expression that writes the popup from them in the browser: a
@@ -276,7 +277,8 @@ knw_compare_mapgl <- function(segments, water = NULL, title = "",
   props <- data.frame(vd = verdict(seg$flag_default %in% TRUE, if (has("pre_default")) seg$pre_default),
                       vt = verdict(seg$flag_tuned %in% TRUE, if (has("pre_tuned")) seg$pre_tuned))
   get <- function(k) list("get", k)
-  expr <- list("concat", "Habitat under default: ", get("vd"), "<br>Habitat under the tuned rule: ", get("vt"))
+  expr <- list("concat", "Habitat under default: ", get("vd"),
+               "<br>Habitat under the tuned habitat definition: ", get("vt"))
   add <- function(label, k, v) {
     props[[k]] <<- v
     expr <<- c(expr, list(paste0("<br>", label, ": ")), list(get(k)))
@@ -295,7 +297,7 @@ knw_compare_mapgl <- function(segments, water = NULL, title = "",
   pct1 <- function(v) formatC(100 * v, format = "f", digits = 1)
   if (has("gradient")) add("Gradient (%)", "g", txt(seg$gradient, pct1))
   if (has("dist_m")) {
-    add("Downstream to the rule's river (km)", "d", txt(seg$dist_m / 1000, sig2))
+    add("Downstream to the habitat definition's river (km)", "d", txt(seg$dist_m / 1000, sig2))
   }
   list(props = props, expr = expr)
 }

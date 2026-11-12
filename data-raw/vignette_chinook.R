@@ -1,6 +1,6 @@
 # data-raw/vignette_chinook.R
 # ---------------------------------------------------------------------------
-# The data `vignettes/chinook_rearing.Rmd` reads, so the article builds with no database: the chinook
+# The data `vignettes/tuning-chinook-rearing.Rmd` reads, so the article builds with no database: the chinook
 # rearing tuning's saved tables, its stability checks, the fitted flow-by-distance surface, the
 # comparison's tables, and one group (BULK, the Bulkley) on link's segments for the map. Issue #62.
 #
