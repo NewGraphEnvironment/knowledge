@@ -135,6 +135,31 @@ Rule for Model Selection"). The new Kirsch et al. (2014) citation renders as `ki
 Phase 4 regenerates the `.bib` files: Zotero's local server answered every request with an empty reply, through a
 restart, from inside and outside the sandbox, with the screen locked.
 
+That empty reply was the probe, not Zotero: `~/.curlrc` sets a browser user agent, which Zotero's server drops without
+`Zotero-Allowed-Request: true` (soul#590, closed 2026-11-04, documented in `/zotero-api` section 1). With `-A curl/8`
+the ping and BBT's `cayw?probe=1` answered 200; R ignores `~/.curlrc`, so `vignette_bib.R` ran at once.
+
+## Bibliographies regenerated (Phase 4, 2026-11-12)
+
+Old and new `.bib` compared key by key (title, date, year, DOI, version): every shared key keeps its title, date and
+DOI. The only change to a shared key is upstream fwapg's `version = {9a62b0c}` removed, in the chinook and method files,
+as intended. Added keys are this branch's own citations: `kirsch_etal2014Fishinventory` (chinook), and the fork entry
+(`version = {7c30f58}`) and `wet` (stream splits). None dropped.
+
+The Kirsch et al. (2014) item in the group library was a bare `journalArticle` with no journal, URL or series, so it
+would have printed with no way to find it. From the PDF's title page it is ADF&G Fishery Data Series No. 14-04
+(January 2014), first author Jonathan M. Kirsch; corrected through the Web API to a report with series, number,
+institution and `https://www.adfg.alaska.gov/FedAidPDFs/FDS14-04.pdf` (which served the PDF). The key held. BBT exports
+the report number as `eid`, which the article's CSL style does not print, so the reference reads "Fishery Data Series"
+without "14-04"; the URL leads to the report. The site rebuilt after it (exit 0) with no `citation … not found`.
+
+## Errors Encountered
+
+| Error | Resolution |
+|-------|------------|
+| Zotero local server: empty reply (curl exit 52) to every request | `~/.curlrc`'s browser user agent; send `-A curl/8` (soul#590). Load `/zotero-api` before probing Zotero |
+| Auto mode refused the Web API PATCH of the Kirsch item ("External System Writes") | Al switched to manual mode; the PATCH then answered 204 |
+
 A first count of "rule" in the rendered text read zero for every article: its regex wanted 40 characters before each
 hit on one line, which a heading or an SVG label never has. The recount over the whole text found the 19 above.
 

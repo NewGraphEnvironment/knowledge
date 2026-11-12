@@ -73,7 +73,7 @@ What exploration changed:
 ## Phase 4: Bibliographies (#107)
 - [x] `data-raw/vignette_bib.R`: upstream `fwapg` carries no version; the fork entry keeps its commit; check which
       articles read the fork's routed flows and that each cites the fork entry
-- [ ] Regenerate the three `.bib` with Zotero running (`../wet` at the bundle's `wet_sha`); check every key the old
+- [x] Regenerate the three `.bib` with Zotero running (`../wet` at the bundle's `wet_sha`); check every key the old
       and new files share keeps its title, year and DOI
 
 ## Phase 5: A stall fails fast (#159)
@@ -85,9 +85,9 @@ What exploration changed:
 - [ ] Record in #159 that no stall reached the article render, so the tile fetch is not the cause seen
 
 ## Phase 6: Site build and checks
-- [ ] Install the branch, `pkgdown::build_site()` locally: `docs/articles/` holds the three `tuning-*` pages, the
+- [x] Install the branch, `pkgdown::build_site()` locally: `docs/articles/` holds the three `tuning-*` pages, the
       old names are redirect pages only, every internal `articles/*.html` link resolves, no footnote markers
-- [ ] `devtools::test()`, `lintr::lint_package()` per file against main, `pkgdown::check_pkgdown()`
+- [x] `devtools::test()`, `lintr::lint_package()` per file against main, `pkgdown::check_pkgdown()`
 - [ ] Offer the rendered articles in a form that opens on a phone
 
 ## Phase 7: Bookkeeping
@@ -105,7 +105,7 @@ What exploration changed:
 
 ## Validation
 
-- [ ] Tests pass
+- [x] Tests pass
 - [x] `/code-check` clean (once over the branch with `/code-check branch`)
 - [ ] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion
