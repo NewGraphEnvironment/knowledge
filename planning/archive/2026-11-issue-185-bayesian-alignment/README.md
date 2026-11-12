@@ -37,4 +37,4 @@ tie), and the plan's own claim that the score is −2 × lppd was wrong (the pla
 
 `scripts/logs/habitat/*_bayesian_alignment_check.txt`
 
-Closed by: PR (to be opened from branch `185-read-the-tuning-method-against-statistic`)
+Closed by: PR #205
