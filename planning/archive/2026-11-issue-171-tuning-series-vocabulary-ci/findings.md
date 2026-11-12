@@ -136,7 +136,7 @@ Phase 4 regenerates the `.bib` files: Zotero's local server answered every reque
 restart, from inside and outside the sandbox, with the screen locked.
 
 That empty reply was the probe, not Zotero: `~/.curlrc` sets a browser user agent, which Zotero's server drops without
-`Zotero-Allowed-Request: true` (soul#590, closed 2026-11-04, documented in `/zotero-api` section 1). With `-A curl/8`
+`Zotero-Allowed-Request: true` (documented in `/zotero-api` section 1 since 2026-11-04). With `-A curl/8`
 the ping and BBT's `cayw?probe=1` answered 200; R ignores `~/.curlrc`, so `vignette_bib.R` ran at once.
 
 ## Bibliographies regenerated (Phase 4, 2026-11-12)
@@ -157,7 +157,7 @@ without "14-04"; the URL leads to the report. The site rebuilt after it (exit 0)
 
 | Error | Resolution |
 |-------|------------|
-| Zotero local server: empty reply (curl exit 52) to every request | `~/.curlrc`'s browser user agent; send `-A curl/8` (soul#590). Load `/zotero-api` before probing Zotero |
+| Zotero local server: empty reply (curl exit 52) to every request | `~/.curlrc`'s browser user agent; send `-A curl/8`. Load `/zotero-api` before probing Zotero |
 | Auto mode refused the Web API PATCH of the Kirsch item ("External System Writes") | Al switched to manual mode; the PATCH then answered 204 |
 
 A first count of "rule" in the rendered text read zero for every article: its regex wanted 40 characters before each

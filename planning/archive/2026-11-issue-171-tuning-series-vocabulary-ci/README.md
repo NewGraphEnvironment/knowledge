@@ -15,7 +15,7 @@ sentence the branch added. Split out: #200 (README fly row), #201 ("rule" in the
 #202 (older readability gaps).
 
 What was learned: the "Zotero is broken" diagnosis that held Phase 4 for most of a session was the probe. `~/.curlrc`
-sets a browser user agent, which Zotero's local server drops; `/zotero-api` (soul#590) already said so, and was not
+sets a browser user agent, which Zotero's local server drops; `/zotero-api` already said so, and was not
 loaded before probing. The bare Kirsch et al. (2014) item was corrected in the group library (ADF&G Fishery Data
 Series 14-04, with its URL).
 

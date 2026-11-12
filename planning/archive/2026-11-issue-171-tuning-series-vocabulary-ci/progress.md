@@ -14,4 +14,4 @@
 - Code-check round 2: 3 findings, all fixed: the apt-retries step was overridden by the runner image (dropped; flows#3, #159 and findings corrected), the method opening dropped "mostly where those join a river", stream splits credited every flow to the fwapg fork
 - Code-check round 3: 5 findings, all fixed (one inside round 1's fix); ended by enumeration of every factual sentence the branch added; #159 body corrected (not every stall was DNS)
 - lintr against main per file: the branch added 4 long lines, wrapped; a design-note sentence the fwapg edit had displaced moved back
-- Phase 4: Zotero's "empty reply" was `~/.curlrc`'s browser user agent (soul#590), not Zotero; three `.bib` regenerated, shared keys unchanged but upstream fwapg's version; Kirsch et al. (2014) record corrected in the group library (ADF&G FDS 14-04, URL); site rebuilt with every citation resolved
+- Phase 4: Zotero's "empty reply" was `~/.curlrc`'s browser user agent, not Zotero; three `.bib` regenerated, shared keys unchanged but upstream fwapg's version; Kirsch et al. (2014) record corrected in the group library (ADF&G FDS 14-04, URL); site rebuilt with every citation resolved
