@@ -61,7 +61,7 @@ Approved by Al at the plan gate, 2026-11-12:
 ## Validation
 
 - [x] Tests pass
-- [ ] `/code-check` clean (once over the branch with `/code-check branch`)
+- [x] `/code-check` clean (once over the branch with `/code-check branch`)
 - [ ] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion
 

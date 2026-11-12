@@ -23,3 +23,6 @@
   lacks #120's `segment_fwa_gradient` and #161's fix moves parent flows, so the md5 changes in any case. Now says the
   species columns move once and that databases then agree on column order. The test comment's fixture provenance was
   false; reworded.
+- Round 2 clean. Round 3 found the fixture comment's count wrong ("four species"; five have a habitat table), inside
+  round 1's fix, so the loop ended on an enumeration of every claim the branch adds (`review-enumeration.md`, 12
+  claims, all true after the fix).
