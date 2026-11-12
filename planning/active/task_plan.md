@@ -118,10 +118,10 @@ method, and the gate withholds a curve "no better than" no rule (`>=`, a tie wit
 - [x] Meaning audit round 1 (`review-audit-1.md`): 23 findings, all applied
 - [x] Round 2 on the fixes (`review-audit-2.md`): errors inside four fixes, all applied
 - [x] Round 3 on round 2's changes (`review-audit-3.md`): one error inside a fix (blocking codes), all applied; should-change set enumerated and matched
-- [ ] Edit #186's body: the curve already has varying intercepts; what differs is a full posterior, priors on the
+- [x] Edit #186's body: the curve already has varying intercepts; what differs is a full posterior, priors on the
       smooths, the one-outcome groups kept, and scoring a new group from the population; both models scored both ways
       (own intercept and new cluster).
-- [ ] File the methodology-article follow-up (decision 1), and one issue per uncovered "should change" row
+- [x] File the methodology-article follow-up (decision 1), and one issue per uncovered "should change" row
       (decision 5); each body names #185.
 
 ## Owed at the end (reported, done after merge)

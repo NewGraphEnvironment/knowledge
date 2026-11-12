@@ -158,7 +158,7 @@ on a link scale is best checked by simulating what it implies on the outcome sca
 
 and no such check was run (#186 is where priors are being set, and takes it). The fallback that would drop the prior
 is out of reach of the penalised terms; a guard that stops a run if it ever fires under a finite prior would make that
-a check rather than an argument (ISSUE_A).
+a check rather than an argument (#203).
 
 ### Fixed or pooled groups? (Rethinking ch. 13; BDA3 ch. 5, 15)
 
@@ -401,12 +401,12 @@ when that line no longer holds the code it names or the code appears elsewhere i
 | `stratified_folds` | `R/tune_score.R:211` | Groups are ranked by detections and dealt to folds in shuffled blocks, so the folds hold similar numbers of detections: a design choice for the score's variance. | no bearing |
 | `heldout_intercept` | `R/tune_score.R:423` | Each held-out group refits its intercept on its own outcomes before its deviance is taken: a score conditional on the group's base rate (Rethinking p. 426). | differs |
 | `prob_clamp` | `R/tune_score.R:410` | Probabilities held inside 10⁻¹² of 0 and 1, capping one visit's deviance: a numerical guard, and the smoke run stops a key with any visit at the cap. | no bearing |
-| `fallback_no_prior` | `R/tune_score.R:267` | A fold where the absorbed fit drops a column the dense fit keeps is refit by `glm.fit`, without the prior; under the prior only an unpenalised column aliased with the groups can send it there, so in the published configuration it does not fire through the data-set or era terms. A guard would make that checked (ISSUE_A). | no bearing |
+| `fallback_no_prior` | `R/tune_score.R:267` | A fold where the absorbed fit drops a column the dense fit keeps is refit by `glm.fit`, without the prior; under the prior only an unpenalised column aliased with the groups can send it there, so in the published configuration it does not fire through the data-set or era terms. A guard would make that checked (#203). | no bearing |
 | `unseen_reference` | `R/tune_score.R:234` | In the scorer a held-out visit whose data set or era training lacked takes the reference level: a zero contrast, the mean of the zero-centred prior on that contrast. One such visit in the scorer's population in the published run (westslope cutthroat rearing), none in the other six keys. | aligned |
-| `curve_unseen_mode` | `R/tune_curve.R:139` | In the curve the same visit takes training's commonest level, so the gate's two sides treat it differently; the scorer's reference is the prior's mean (ISSUE_A). The curve's own count of such visits is not recorded. It matters only where a held-out group mixes seen and unseen levels (a level constant within a group is absorbed by its intercept). | should change |
+| `curve_unseen_mode` | `R/tune_curve.R:139` | In the curve the same visit takes training's commonest level, so the gate's two sides treat it differently; the scorer's reference is the prior's mean (#203). The curve's own count of such visits is not recorded. It matters only where a held-out group mixes seen and unseen levels (a level constant within a group is absorbed by its intercept). | should change |
 | `se_formula` | `R/tune_score.R:451` | √(groups) × the sd of per-group differences from the best: Rethinking's SE of a difference (p. 227) with the group as unit. | aligned |
 | `pick_nearest_default` | `R/tune_score.R:458` | Inside the region, the rule with the fewest departures from `default`: a preference the scores do not make (#141). | differs |
-| `honest_nesting` | `R/tune_score.R:181` | Fold *k*'s pick reads scores from fits that trained on fold *k*, so the check is not nested: nest it, or describe it as what it is (ISSUE_A). | should change |
+| `honest_nesting` | `R/tune_score.R:181` | Fold *k*'s pick reads scores from fits that trained on fold *k*, so the check is not nested: nest it, or describe it as what it is (#203). | should change |
 | `boot_no_refit` | `R/tune_score.R:167` | Resamples groups of the fixed score matrix and re-picks, refitting nothing. | differs |
 | `curve_group_effect` | `R/tune_curve.R:104` | The group as a random effect by REML: partial pooling with its variance estimated, not integrated (Rethinking ch. 13; BDA3 ch. 5). | aligned |
 | `curve_reference` | `R/tune_curve.R:114` | The curve and grade are read at the median effort, the commonest data set and the latest era: a reference point, a convention. | no bearing |
@@ -418,7 +418,7 @@ when that line no longer holds the code it names or the code appears elsewhere i
 Each item is an issue, so it is planned and reviewed on its own.
 
 - **Make the curve take the reference for an unseen level, guard the fallback, and nest the nested check or describe
-  it as what it is** (`curve_unseen_mode`, `fallback_no_prior`, `honest_nesting`): ISSUE_A. None moves a published
+  it as what it is** (`curve_unseen_mode`, `fallback_no_prior`, `honest_nesting`): #203. None moves a published
   pick. The unseen level could move only a gate, and the curve's count of such visits, the issue's first measurement,
   is recorded for no key: one visit can move a gate by at most 55.3 in deviance, enough to flip bull trout spawning
   (withheld by 0.56) or grayling rearing (published by 14.4), not westslope cutthroat rearing (withheld by 106). The
@@ -429,7 +429,7 @@ Each item is an issue, so it is planned and reviewed on its own.
   group from the population distribution, for the pooled curve and today's alike, since a new-group score for one
   against an own-intercept score for the other compares nothing. Two cheap additions: an offset for `log(area)` beside
   the free coefficient, and a prior predictive check of the data-set and era prior on the rate scale.
-- **The methodology article says where the method stands** (ISSUE_B): a short section in `habitat_thresholds.Rmd`
+- **The methodology article says where the method stands** (#204): a short section in `habitat_thresholds.Rmd`
   stating the findings above in the reader's terms, with the two books cited.
 
 ## Limits of this review
@@ -447,7 +447,7 @@ Each item is an issue, so it is planned and reviewed on its own.
 A second reader audited every row for meaning against the code and the pages (2026-11-12). Round 1 found 23 errors
 or overstatements, all fixed. Three verdicts changed (`fallback_no_prior`: the prior cannot be dropped through the
 penalised terms; `unseen_reference`: the reference is the prior's mean; `curve_reference`: a convention) and one
-recommendation narrowed (ISSUE_A). Two corrections of fact left their verdicts standing: a BDA3 bullet for continuous
+recommendation narrowed (#203). Two corrections of fact left their verdicts standing: a BDA3 bullet for continuous
 inputs had been applied to binary ones (`prior_sd`), and the population gate had been described as built from fish
 records (access reads barriers before observation overrides; the blocked absence is the one exclusion that turns on
 the catch).
