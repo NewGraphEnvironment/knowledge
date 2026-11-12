@@ -24,14 +24,14 @@ Approved by Al at the plan gate, 2026-11-11:
 - `.knw_publish_receipt()` is left as is: nothing reads its value.
 
 ## Phase 1: Reproduce on crate 0.16.0
-- [ ] Install crate 0.16.0 (`pak::pak("NewGraphEnvironment/crate@v0.16.0")`); run the three receipt test files and
+- [x] Install crate 0.16.0 (`pak::pak("NewGraphEnvironment/crate@v0.16.0")`); run the three receipt test files and
       confirm the 9 failures and the example error before any change
 
 ## Phase 2: Writers return the receipt as read back
-- [ ] `knw_evidence_receipt_write()` and `knw_grade_receipt_write()`: write, then `invisible(crate::crt_receipt_read(<path>))`
+- [x] `knw_evidence_receipt_write()` and `knw_grade_receipt_write()`: write, then `invisible(crate::crt_receipt_read(<path>))`
       of the file just written
-- [ ] roxygen `@return`: the receipt as read back from the file written, invisibly; `devtools::document()`
-- [ ] `tests/testthat/test-receipt.R` `receipt_from()`: return the receipt's path, not `crt_receipt_write()`'s value
+- [x] roxygen `@return`: the receipt as read back from the file written, invisibly; `devtools::document()`
+- [x] `tests/testthat/test-receipt.R` `receipt_from()`: return the receipt's path, not `crt_receipt_write()`'s value
 
 ## Phase 3: The NA-to-null difference
 - [ ] Check each caller and test that read a field of the returned list for one 0.15 gave as `NA` (a `null` in the file,

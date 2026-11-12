@@ -56,6 +56,7 @@ receipt_from <- function(output, dir, summary = list(), table_value = 1.5, part 
   crate::crt_receipt_write(dir, output = list(name = output), recipe = recipe,
                            result = list(tables = tables, parts = "out.csv", summary = sm),
                            keys = k, lockfile = NULL, publish = TRUE)
+  file.path(dir, "receipt.json")
 }
 compare_of <- function(output, ...) {
   a <- receipt_from(output, withr::local_tempdir())
