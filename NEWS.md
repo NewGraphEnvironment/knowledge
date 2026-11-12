@@ -1,3 +1,7 @@
+# knowledge 0.4.36
+
+* `knw_evidence_receipt_write()` and `knw_grade_receipt_write()` return the receipt read back from the file they wrote (`crate::crt_receipt_read()`). crate 0.16.0's `crt_receipt_write()` returns the SHA-256 of the bytes it wrote rather than the receipt, and R CMD check failed at the examples and in 9 tests (#195, #188). The read-back works with crate 0.15 and 0.16, so knowledge still imports crate (>= 0.15.0). No change to what the package computes or publishes.
+
 # knowledge 0.4.35
 
 * `knw_archive_plan()` reads `fdis_sites.csv` from where `scripts/0240` writes it (`sites_dir`, default `data/fdis/derived`; `SITES_DIR` in `scripts/0336`) whatever the evidence directory, so a build under a tagged `EVIDENCE_DIR` archives with the default build's commands (#136). The table is held to the run's `sites.rds` before anything is archived: one row per site, the same sites, and every column the two share equal. `knw_archive_pull()` refuses any target already present with other bytes before it writes anything; before, it restored the visit tables first. Archived evidence ids do not move. A promotion (`scripts/0335`) plans the archive first, so it now refuses an `fdis_sites.csv` that does not match `sites.rds` before moving anything.
