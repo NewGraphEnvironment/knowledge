@@ -58,7 +58,7 @@ if (requireNamespace("mapgl", quietly = TRUE)) {
       sf::st_linestring(rbind(c(1e6 + i * 500, 1e6), c(1e6 + (i + 1) * 500, 1e6 + 300)))
     }), crs = 3005)
   )
-  m <- knw_compare_mapgl(seg, title = "Habitat by rule")
+  m <- knw_compare_mapgl(seg, title = "Habitat definition")
   class(m)
 }
 }

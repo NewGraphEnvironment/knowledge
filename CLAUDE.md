@@ -20,7 +20,10 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   Only code that has run on two regions graduates here. `.Rbuildignore` keeps `data/`, `scripts/`,
   `planning/` and `research/` out of the build, and `tests/testthat/test-data-dir.R` keeps `.R` and
   `.rda` files off the top of `data/`, where `pkgload::load_all()` would source or load them.
-- `vignettes/tuning-chinook-rearing.Rmd` — the pkgdown article on the chinook rearing threshold (#62). It reads
+- `vignettes/tuning-chinook-rearing.Rmd` — "Tuning habitat: chinook rearing", the case study of chinook rearing (#62). The
+  three articles are one series, `tuning-<name>` (#118): `_pkgdown.yml` groups them as the method, the case studies
+  (`tuning-<species>-<stage>`) and checks on the method, and redirects their earlier names. Their prose says "fish
+  habitat definition" at first mention and "habitat definition" after, never "rule" (#156). It reads
   `inst/vignette-data/`, which `data-raw/vignette_chinook.R` writes from the tune and compare tables and the
   database (`SCHEMA` names the run's schema, as `0320` and `0330` take it). A promotion (`0335`) reruns it, and only a
   promotion changes its sources, because `tests/testthat/test-vignette-data.R` fails when a tracked source's md5 moves
@@ -36,8 +39,8 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   They agree on stream lines and differ on lines through wetlands, so a sentence about link's near-river handling, and
   every site or group count, names the build and population it holds for (#143). The register's `code:` phrases in
   it are matched one line at a time and must each stay whole on one line.
-- `vignettes/tuning-method.Rmd` — the methodology article (#93), "Choosing habitat thresholds from where fish were
-  caught": the reference home for the method and its citations. A species article (the chinook one first, #64) gives
+- `vignettes/tuning-method.Rmd` — the methodology article (#93), "Tuning fish habitat definitions with fish sampling
+  records": the reference home for the method and its citations. A species article (the chinook one first, #64) gives
   its own records and result in a sentence or two and links it rather than restating the method. It reads `inst/vignette-data/method.rds` (and, for its `#cuts` section, `cut_points.rds`), which `data-raw/vignette_method.R` writes from
   `inst/method/pipeline.csv` (the steps) and `inst/method/settings.csv` (every number that shapes a result, with where
   its value lives); the script refuses to run with its code or registers uncommitted. A promotion reruns it, last; it

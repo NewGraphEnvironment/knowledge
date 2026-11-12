@@ -57,3 +57,42 @@ The references were all of the file form (`<name>.Rmd`, `.bib`, `.html`), rewrit
 outside NEWS history. pkgdown 2.2.0 has `redirects:` (`build_redirects()`, a meta-refresh page per old path).
 `devtools::test()`: 0 failed, 0 errors; `test-settings-register.R` resolves the three `code:` phrases in the renamed
 chinook article.
+
+## Phase 3: titles, openings, one vocabulary (2026-11-12)
+
+- **What the method article prints from its bundle cannot change here.** Its step headings come from
+  `inst/method/pipeline.csv` through `method.rds` ("6. Candidate rules", "10. Running the rule on link's streams"), its
+  step lists and settings table print five `settings.csv` labels that say "rule" (`gradient_col`, `smoke_tol_null`,
+  `flow_src`, `grade_size_mad`, `grade_size_width`), and its two pre-rendered SVGs say "Candidate rules", "both rules
+  run" and "rules scored". `pipeline.csv` is pinned whole and the labels are a printed column (Phase 1), and the bundle
+  rebuild needs the published build's ignored evidence and a database (`vignette_method.R` reads
+  `data/fdis/derived`, `data/fdis/build/sites.rds` and `PG*` for the snap example), which this machine lacks. Split to
+  its own issue, to ride the next rebuild (a promotion reruns `vignette_method.R`). The Rmds' own prose carries no
+  "rule" but "rule of thumb" and code (`rule_words()`, `panels = "rules"`, `pk$rules`).
+- **Openings.** The method article now opens from the life history (young chinook near large rivers) and the agreed
+  paragraph in soul's `ecosystem.yml`, then `link`, then bcfishpass. The chinook case study opens with Kirsch et al.
+  (2014, p. 42; `data/literature_evidence.csv`, its quote gate-verified): chinook rear in the lower reaches of small
+  tributaries to large rivers. The stream-splits article already opened from life history; its first mention now
+  reads "fish habitat definition", every bare "definition" became "habitat definition", and it now cites `wet` and the
+  fwapg fork for the flows its flow floor rests on (review G4).
+- **What readers see on the maps.** `R/compare_map.R`: legend title "Habitat definition", class "kept (both)", popup
+  lines "the tuned habitat definition" and "the habitat definition's river", and the layer switch labelled "Habitat"
+  and "Grade" (mapgl 0.4.6 takes a named vector) instead of the layer ids `rules` and `grade`. `test-compare_map.R`
+  asserts none says "rule" and the switch's labels. `research/fig/` keeps the old legend until `0330` reruns.
+- **README, DESCRIPTION.** Tagline, Title and the ecosystem row now carry soul's `ecosystem.yml` tagline (readme.md:
+  change them together); GitHub About follows after the merge. `R` title case wants "is", not "Is"
+  (`tools::toTitleCase`).
+- **A probe that lied.** A shell-quoted `Rscript -e` said R's default regex missed `\brules?\b`; the same code from a
+  file matches with and without `perl = TRUE`. The shell quoting broke the probe, not the regex.
+
+Word counts (body prose without the YAML header and code chunks; `scratchpad wc.sh`), before → after:
+
+| file | prose words | prose lines | file lines |
+|---|---|---|---|
+| `tuning-method.Rmd` | 2,425 → 2,543 | 184 → 187 | 480 → 483 |
+| `tuning-chinook-rearing.Rmd` | 1,356 → 1,413 | 74 → 79 | 388 → 393 |
+| `tuning-stream-splits.Rmd` | 1,777 → 1,810 | 114 → 116 | 597 → 599 |
+| `README.md` | 851 → 948 | 77 → 81 | 117 → 121 |
+
+No cut was forecast: this was a change of words, not a simplification. "Habitat definition" is one word longer than
+"rule" at about 90 places, and the two new openings carry the life history; the README adds the third article's link.

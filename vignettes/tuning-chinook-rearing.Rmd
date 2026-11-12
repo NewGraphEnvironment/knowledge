@@ -1,11 +1,11 @@
 ---
-title: "Chinook rearing: choosing link's thresholds from fish records"
+title: "Tuning habitat: chinook rearing"
 output:
   bookdown::html_vignette2
 bibliography: tuning-chinook-rearing.bib
 link-citations: true
 vignette: >
-  %\VignetteIndexEntry{Chinook rearing: choosing link's thresholds from fish records}
+  %\VignetteIndexEntry{Tuning habitat: chinook rearing}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -139,33 +139,37 @@ link_default <- sprintf("https://github.com/NewGraphEnvironment/link/tree/%s/ins
 bfp <- "https://github.com/smnorris/bcfishpass/blob/3bd2824c300c5f9c0c041380d412a52987df1ebb"
 ```
 
-The electrofishing records put young chinook salmon in more of British Columbia's small streams near large rivers,
-and in fewer far from one, than link's current rule allows. [`link`](`r link_site`) [@link] maps
-where each fish species can spawn and rear on BC's streams, and its standard settings,
+Young chinook salmon rear not only in the streams they hatched in: they also move into the lower reaches of small
+tributaries to large rivers [@kirsch_etal2014Fishinventory, p. 42]. British Columbia's electrofishing records show the
+same, putting young chinook in more of the province's small streams near large rivers, and in fewer far from one, than
+link's current fish habitat definition allows. [`link`](`r link_site`) [@link] is an R package that maps where each
+fish species can reach and where it can spawn and rear on BC's streams. Its standard settings,
 [`default`](`r link_default`), start from the thresholds New Graph runs bcfishpass with
-[@norris2024smnorrisbcfishpass]: for chinook rearing, `r words(dflt)`. The records support **`r words(rec)`**. [How the tuning works](tuning-method.html) explains where these rules come from and how they are tested.
+[@norris2024smnorrisbcfishpass]: for chinook rearing, `r words(dflt)`. The records support **`r words(rec)`**.
+[How the tuning works](tuning-method.html) says [what a habitat definition is](tuning-method.html#thresholds), and
+how one is tested and tuned.
 
-```{r map-static, eval = !on_site, fig.width = 6, fig.height = 6.9, out.width = "80%", fig.cap = paste0("Chinook rearing in the Bulkley watershed group (", meta$map_group, "), around Smithers, under each rule. Orange: link's current rule only (the legend's 'lost'). Green: the recommended rule only (the legend's 'tuned only'). Blue: both. Line width follows stream order.")}
+```{r map-static, eval = !on_site, fig.width = 6, fig.height = 6.9, out.width = "80%", fig.cap = paste0("Chinook rearing in the Bulkley watershed group (", meta$map_group, "), around Smithers, under each habitat definition. Orange: link's current habitat definition only (the legend's 'lost'). Green: the recommended habitat definition only (the legend's 'tuned only'). Blue: both. Line width follows stream order.")}
 f1 <- tempfile(fileext = ".png")
 knw_compare_map(seg, water, png = f1, panels = "rules")
 grid::grid.raster(png::readPNG(f1))
 ```
 
 ```{r map-site, eval = on_site, out.width = "100%"}
-knw_compare_mapgl(seg, water, title = "Habitat by rule", background = "esri_topo")
+knw_compare_mapgl(seg, water, title = "Habitat definition", background = "esri_topo")
 ```
 
-In the Bulkley watershed group, around Smithers, the recommended rule draws `r n0(map_row$tuned_km)` km of rearing
+In the Bulkley watershed group, around Smithers, the recommended habitat definition draws `r n0(map_row$tuned_km)` km of rearing
 habitat against `r n0(map_row$default_km)` under link's. What it drops (orange) is mostly the upper reaches of
 tributaries, where flow falls below its floor more than `r km_d(rec$exc_d)` from a river. What it adds (green) is
-short reaches of small streams beside a river. The rest comes from the two rules' slope and flow limits themselves,
-and from link's step that keeps rearing only where it links to spawning, which keeps different stretches under each
-rule.
-`r if (on_site) "Click a stream for what each rule reads there; the switch at the top right shows the grade, the use to expect on each segment." else ""`
+short reaches of small streams beside a river. The rest comes from the two habitat definitions' slope and flow limits
+themselves, and from link's step that keeps rearing only where it links to spawning, which keeps different stretches
+under each.
+`r if (on_site) "Click a stream for what each habitat definition reads there; the switch at the top right shows the grade, the use to expect on each segment." else ""`
 
 ## What changes?
 
-The recommended rule draws less habitat than link's, and chinook are caught on it more often and off it less often.
+The recommended habitat definition draws less habitat than link's, and chinook are caught on it more often and off it less often.
 
 ```{r changes}
 cell_size <- function(r) {
@@ -184,15 +188,15 @@ chg <- data.frame(
                     pc(r_rec_in), pc(r_rec_out, 1)),
   check.names = FALSE)
 knitr::kable(chg, format = "html", align = "lrr",
-             caption = "Chinook rearing under link's current rule and the recommended one.") |>
+             caption = "Chinook rearing under link's current habitat definition and the recommended one.") |>
   kableExtra::kable_styling(full_width = FALSE) |>
   kableExtra::footnote(general_title = "", general = paste0(
     "Habitat is summed over the ", nrow(per_group), " watershed groups link classified for chinook when the ",
-    "comparison ran, each rule run ",
-    "through all of link's steps. Both totals include lines through wetlands, which the two rules test differently ",
+    "comparison ran, each habitat definition run ",
+    "through all of link's steps. Both totals include lines through wetlands, which the two habitat definitions test differently ",
     "(below). ",
     "Sites are the ", n0(sum(fv$n[fv$rule == "default"])), " electrofishing sites of a usual fished area on ",
-    "reachable stream, river and wetland lines in those groups, a wider set than the one the rule was chosen on. They overlap the sites the rule was chosen on, so the rates show the rule ",
+    "reachable stream, river and wetland lines in those groups, a wider set than the one the habitat definition was chosen on. They overlap the sites it was chosen on, so the rates show it ",
     "does what it was chosen to do, not that it predicts new places."))
 ```
 
@@ -204,7 +208,7 @@ minimum width, if its width is mapped, along its whole length ([its chinook mode
 link's `default` leaves that exception off. A model fitted after the choice shows the same idea in the records, with a
 distance on it:
 
-```{r river, fig.height = 4, fig.cap = paste0("The fitted chance of catching chinook on one standard visit, by distance downstream to a river of at least ", meta$curve_ref$q, " m³/s, for four stream flows, at a slope of ", grad(meta$curve_ref$gradient), ". The dashed line is the recommended rule's ", km_d(rec$exc_d), " allowance: beyond it, streams below its ", rec$size_min, " m³/s floor no longer count (grey). The fit is shown at six distances; the last stands for ", km_d(meta$curve_ref$dist_cap_m), " or more, or no such river, and is not joined.")}
+```{r river, fig.height = 4, fig.cap = paste0("The fitted chance of catching chinook on one standard visit, by distance downstream to a river of at least ", meta$curve_ref$q, " m³/s, for four stream flows, at a slope of ", grad(meta$curve_ref$gradient), ". The dashed line is the recommended habitat definition's ", km_d(rec$exc_d), " allowance: beyond it, streams below its ", rec$size_min, " m³/s floor no longer count (grey). The fit is shown at six distances; the last stands for ", km_d(meta$curve_ref$dist_cap_m), " or more, or no such river, and is not joined.")}
 rv <- sf_ |>
   mutate(flow = factor(format(size, trim = TRUE, drop0trailing = TRUE),
                        levels = format(sort(unique(size)), trim = TRUE, drop0trailing = TRUE)))
@@ -232,20 +236,21 @@ ggplot(rv, aes(dist_m, rate)) +
 
 Within `r km_d(min(sf_$dist_m))` of a river the chance is about the same whatever the stream's flow,
 `r pc(min(near), 1)` to `r pc(max(near), 1)`. Ten kilometres away it rises with flow, from `r pc(min(far), 1)` to
-`r pc(max(far), 1)`. That is the shape the recommended rule draws: beside a river a small stream counts, away from one
+`r pc(max(far), 1)`. That is the shape the recommended habitat definition draws: beside a river a small stream counts, away from one
 only a larger stream does.
 
 ## How sure are we?
 
-Scores carry error: another draw of watersheds would rank close rules differently. So the tuning treats every rule
-within one standard error of the best as a close call, a convention fixed before the run
-([how two rules are told apart](tuning-method.html#se)). For chinook, `r nrow(region)` of `r n0(nrow(tune))`
-rules are close calls, all with a flow floor of `r min(region$size_min)` to `r max(region$size_min)` m³/s, the
-near-a-river allowance, and a slope limit of `r grad(min(region$grad_max))` or more. The rule fixed in advance takes
-the close call nearest link's; all differ from link's stream-line rule in every dial, so it is the best scorer. link's rule is
+Scores carry error: another draw of watersheds would rank close habitat definitions differently. So the tuning
+treats every habitat definition within one standard error of the best as a close call, a convention fixed before the run
+([how two habitat definitions are told apart](tuning-method.html#se)). For chinook, `r nrow(region)` of `r n0(nrow(tune))`
+habitat definitions are close calls, all with a flow floor of `r min(region$size_min)` to `r max(region$size_min)` m³/s, the
+near-a-river allowance, and a slope limit of `r grad(min(region$grad_max))` or more. The tie-break fixed in advance
+takes the close call nearest link's; all differ from link's on stream lines in every dial, so it is the best scorer.
+link's habitat definition is
 `r n1(dflt$ddev_best / dflt$se_diff)` standard errors behind it.
 
-```{r profile, fig.height = 5.2, fig.cap = paste0("How close the best rule using each value of each dial comes to the best rule overall, as score above the best (lower is better). Dark blue: at least one rule with that value is a close call at one standard error; light blue: only at ", se_strict, " standard errors; white: neither. The orange ring marks the value of link's rule on stream lines.")}
+```{r profile, fig.height = 5.2, fig.cap = paste0("How close the best habitat definition using each value of each dial comes to the best overall, as score above the best (lower is better). Dark blue: at least one habitat definition with that value is a close call at one standard error; light blue: only at ", se_strict, " standard errors; white: neither. The orange ring marks the value of link's habitat definition on stream lines.")}
 dial <- function(lab, v, key) {
   tune |>
     mutate(value = v) |>
@@ -284,7 +289,7 @@ ggplot(prof, aes(value, best)) +
   scale_fill_manual(values = stats::setNames(c("#1b6ca8", "#9ecae1", "white"), c("close call at one SE", lab_strict, "neither")),
                     drop = FALSE, name = NULL) +
   facet_wrap(~part, scales = "free_x", ncol = 2) +
-  labs(x = NULL, y = "Score above the best rule") +
+  labs(x = NULL, y = "Score above the best") +
   theme_minimal(base_size = 10) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1), legend.position = "bottom",
         panel.grid.minor = element_blank())
@@ -293,8 +298,8 @@ ggplot(prof, aes(value, best)) +
 The flow floors near the best are close calls at one standard error and no width floor is; the slope limit is
 flat from `r grad(min(region$grad_max))` up.
 
-**A stricter bar.** At `r se_strict` standard errors, about the width of a 95 % interval, more rules are close calls,
-and the same choice holds:
+**A stricter bar.** At `r se_strict` standard errors, about the width of a 95 % interval, more habitat definitions are
+close calls, and the same choice holds:
 
 ```{r strict}
 bold_if <- function(v, ref) ifelse(v != ref, paste0("<b>", v, "</b>"), v)
@@ -306,11 +311,11 @@ st[["Chosen at 1 SE"]] <- bold_if(c(cell_size(rec), grad(rec$grad_max), cell_nea
 st[[paste("Chosen at", se_strict, "SE")]] <-
   bold_if(c(cell_size(ch196), grad(ch196$grad_max), cell_near(ch196)), st[["link now"]])
 knitr::kable(st, format = "html", escape = FALSE, align = "llll",
-             caption = "The chinook rule chosen from the close calls at each bar, beside link's current rule.") |>
+             caption = "The chinook rearing habitat definition chosen from the close calls at each bar, beside link's current one.") |>
   kableExtra::kable_styling(full_width = FALSE, font_size = 13) |>
   kableExtra::footnote(general_title = "", general = paste0(
-    "Bold: differs from link's rule. Close calls: ", nrow(region), " rules at one standard error, ",
-    n0(ch196$n_region), " at ", se_strict, "; link's rule is a close call at neither. This package's thresholds table (data/thresholds.csv, column ",
+    "Bold: differs from link's. Close calls: ", nrow(region), " habitat definitions at one standard error, ",
+    n0(ch196$n_region), " at ", se_strict, "; link's is a close call at neither. This package's thresholds table (data/thresholds.csv, column ",
     "rule_196) gives the choice at ", se_strict, " for every species tuned."))
 ```
 
@@ -322,15 +327,15 @@ oc <- data.frame(
   Check = c(paste(nrow(seeds), "other random splits into sets"),
             "Chosen on four sets, scored on the fifth",
             paste(meta$spec$n_boot, "redraws of the groups")),
-  Result = c(paste0("the recommended rule is a close call on ", sum(seeds$main_rec_in_region), " of ", nrow(seeds),
+  Result = c(paste0("the recommended habitat definition is a close call on ", sum(seeds$main_rec_in_region), " of ", nrow(seeds),
                     "; link's on ", sum(seeds$default_in_region)),
-             paste0("the chosen rule beats link's on ", sum(honest$dev_rec < honest$dev_default), " of ", nrow(honest),
+             paste0("the chosen habitat definition beats link's on ", sum(honest$dev_rec < honest$dev_default), " of ", nrow(honest),
                     " and ", if (beats_all) "beats it" else "loses to it", " overall"),
              paste0("a flow floor is chosen in ",
                     if (isTRUE(all.equal(boot_mad, 1))) "every draw" else paste(pc(boot_mad, 1), "of draws"),
                     "; the recommended slope limit in ", pc(boot_grad))),
-  `Points to` = c(if (sum(seeds$main_rec_in_region) > sum(seeds$default_in_region)) "the recommended rule" else "link's rule",
-                  if (beats_all) "choosing from the records" else "link's rule",
+  `Points to` = c(if (sum(seeds$main_rec_in_region) > sum(seeds$default_in_region)) "the recommended habitat definition" else "link's habitat definition",
+                  if (beats_all) "choosing from the records" else "link's habitat definition",
                   "a steady shape; an unsettled slope limit"),
   check.names = FALSE)
 knitr::kable(oc, format = "html", align = "lll") |>
@@ -341,21 +346,21 @@ knitr::kable(oc, format = "html", align = "lll") |>
 
 - **It is about young chinook in streams.** It was fitted to juvenile chinook caught by electrofishing in streams and
   says nothing about spawning. River polygons share the stream slope limit, so they get `r grad(rec$grad_max)` too,
-  though no site in one was scored. Lines drawn through wetlands of 1 ha or more were tested by neither rule's
-  records. In the comparison, link's rule counts them by their size or by a near-a-river pair, and the recommended
-  rule puts them through the same test as a stream line, which leaves about
-  `r n0(round(wl$km_tuned, -2))` km of them as chinook rearing under the recommended rule, with a median grade of
+  though no site in one was scored. Lines drawn through wetlands of 1 ha or more were tested by neither habitat
+  definition's records. In the comparison, link's counts them by their size or by a near-a-river pair, and the
+  recommended one puts them through the same test as a stream line, which leaves about
+  `r n0(round(wl$km_tuned, -2))` km of them as chinook rearing under the recommended habitat definition, with a median grade of
   `r formatC(wl$grade_median_tuned, format = "f", digits = 2)`, against `r n0(round(wl$km_default, -2))` km under
-  link's rule. Lakes keep their own condition.
+  link's. Lakes keep their own condition.
 - **The cut-offs are a judgment call.** Chinook get gradually less common as streams get smaller and steeper; there is
   no flow or slope where they stop. At one standard error, flow floors of `r min(region$size_min)` to
-  `r max(region$size_min)` m³/s fit almost as well, and at `r se_strict` standard errors the choice is the same rule.
+  `r max(region$size_min)` m³/s fit almost as well, and at `r se_strict` standard errors the choice is the same.
 - **Steeper slopes fit nearly as well.** The close calls run from `r grad(min(region$grad_max))` to
   `r grad(max(region$grad_max))`, the top of the list, and `r grad(rec$grad_max)` is the best scorer among them, not a
   slope at which chinook stop.
-- **It was not tested against bcfishpass's own exception.** The candidates never included the stream-order rule above,
+- **It was not tested against bcfishpass's own exception.** The candidates never included the stream-order exception above,
   so the records show that the flow-and-distance allowance beats link's `default`, not that it beats bcfishpass's.
-- **On the map, distance is measured from the bottom of each segment.** To choose the rule, the distance to a river's
+- **On the map, distance is measured from the bottom of each segment.** To choose the habitat definition, the distance to a river's
   bank was measured from each site. On the map it is measured from each segment's downstream end, so when that end is
   within `r km_d(rec$exc_d)` of the river the whole segment counts.
 
@@ -366,13 +371,13 @@ knitr::kable(oc, format = "html", align = "lll") |>
 | Records | The Fisheries Data Information System's electrofishing sites [@provinceofbritishcolumbia2022FisheriesData]: where crews fished, and whether they caught chinook. `r n0(summ$visits_in)` sites in `r summ$groups` watershed groups: those on ordinary stream lines, of a usual fished area, with no code in the catch that could hide chinook and no barrier to chinook downstream, in groups where link expected chinook when the tuning ran; the tests use the `r summ$groups_both` groups where chinook were caught at some sites and not others, **`r n0(dflt$n_visits)` sites, `r n0(dflt$n_detect)` with chinook**. ([More](tuning-method.html#steps)) |
 | Placement | Each site went onto the BC Freshwater Atlas, loaded by fwapg [@norris2024smnorrisfwapg]. A site whose 1:50k tributary code the Atlas's crosswalk knows went to the nearest stream that code names, kept when it lay within 500 m of the point, and was dropped otherwise; a site with no such code went to the nearest stream, kept when it lay within 200 m. ([More](tuning-method.html#snap)) |
 | Flow | wet's modelled average flow [@wet]: PCIC's VIC-GL runoff [@schnorbus2018VICGlacierVICGL] routed with Raven [@craig_etal2020Flexiblewatershed] and carried onto Atlas streams by a crosswalk in New Graph's fork of fwapg [@norris_irvine2026NewGraphEnvironmentfwapg], with wet's own water balance where that flow does not reach or, on a stream's own line, carries under a fifth of the balance's. |
-| Slope | The slope of the link segment a site sits on, the one link applies a rule to. link can cut a stream at a site that caught a species it models, so a site with chinook can start a short segment of its own. |
-| Candidates | `r n0(nrow(tune))` rules, link's among them, from three dials: the smallest stream (an average flow of `r lst(sort(unique(tune$size_min[tune$size_var == "mad"])), "or")` m³/s, or a channel width of `r lst(sort(unique(tune$size_min[tune$size_var == "width"])), "or")` m); the steepest slope (`r lst(grad(sort(unique(tune$grad_max))), "or")`); and a near-a-river allowance (none, or a river of `r lst(sort(unique(na.omit(tune$exc_q))), "or")` m³/s within `r lst(format(sort(unique(na.omit(tune$exc_d))), big.mark = ",", trim = TRUE), "or")` m downstream). |
+| Slope | The slope of the link segment a site sits on, the one link tests a habitat definition on. link can cut a stream at a site that caught a species it models, so a site with chinook can start a short segment of its own. |
+| Candidates | `r n0(nrow(tune))` habitat definitions, link's among them, from three dials: the smallest stream (an average flow of `r lst(sort(unique(tune$size_min[tune$size_var == "mad"])), "or")` m³/s, or a channel width of `r lst(sort(unique(tune$size_min[tune$size_var == "width"])), "or")` m); the steepest slope (`r lst(grad(sort(unique(tune$grad_max))), "or")`); and a near-a-river allowance (none, or a river of `r lst(sort(unique(na.omit(tune$exc_q))), "or")` m³/s within `r lst(format(sort(unique(na.omit(tune$exc_d))), big.mark = ",", trim = TRUE), "or")` m downstream). |
 | Scoring | The groups were split into `r meta$spec$folds` sets, and each set was predicted by a model fitted to the others. The score adds up how far each prediction was from what the crew found; lower is better. ([More](tuning-method.html#se)) |
-| Rules run by | fresh [@fresh], through all of link's steps for the map and the habitat totals. |
+| Run by | fresh [@fresh], through all of link's steps for the map and the habitat totals. |
 | Left out | The province's other fish observations, gathered in bcfishobs [@norris2024smnorrisbcfishobs]: they record where fish were found, not where they were sought and missed. Sites off ordinary stream lines, of an unusual fished area, with a code in the catch that could hide chinook, or with a barrier to chinook downstream. ([More](tuning-method.html#lost)) |
 
-Table: How the chinook rearing rule was tested.
+Table: How the chinook rearing habitat definition was tested.
 
 ## Software and citation
 

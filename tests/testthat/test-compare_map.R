@@ -112,7 +112,7 @@ mapgl_fx <- function() {
 
 test_that("knw_compare_mapgl colours every class in hex, places the legends and the switch, and keeps the background", {
   skip_if_not_installed("mapgl")
-  m <- knw_compare_mapgl(mapgl_fx(), title = "Habitat by rule")
+  m <- knw_compare_mapgl(mapgl_fx(), title = "Habitat definition")
   expect_s3_class(m, "maplibregl")
   colours <- unlist(lapply(m$x$layers, function(l) unlist(l$paint[grepl("color", names(l$paint))])))
   colours <- colours[!grepl("^(match|get|rc|gc)$", colours) & is.na(suppressWarnings(as.numeric(colours)))]
@@ -121,13 +121,21 @@ test_that("knw_compare_mapgl colours every class in hex, places the legends and 
   json <- as.character(jsonlite::toJSON(m$x, auto_unbox = TRUE, null = "null"))
   # the legends top-left, the layer switch top-right and the attribution along the bottom, so none share a corner
   expect_identical(m$x$layers_control$position, "top-right")
-  expect_setequal(m$x$layers_control$layers, c("rules", "grade"))
+  expect_setequal(unlist(m$x$layers_control$layers), c("rules", "grade"))
+  # the switch shows readers its labels, not the layer ids (#156: no "rule" in what a reader sees)
+  expect_setequal(names(unlist(m$x$layers_control$layers)), c("Habitat", "Grade"))
   expect_match(m$x$legend_html, "legend_rules[^>]*top-left")
   expect_match(m$x$legend_html, "legend_grade[^>]*top-left")
   expect_false(grepl("grey8", json))
   expect_match(json, "voyager")
   m2 <- knw_compare_mapgl(mapgl_fx(), background = "openfreemap")
   expect_match(as.character(jsonlite::toJSON(m2$x$style, auto_unbox = TRUE)), "openfreemap")
+})
+
+test_that("no map label a reader sees says rule (#156)", {
+  expect_false(any(grepl("\\brules?\\b", names(knowledge:::.compare_rule_cols), ignore.case = TRUE, perl = TRUE)))
+  pop <- knowledge:::.compare_popup(mapgl_fx())
+  expect_false(any(grepl("\\brules?\\b", unlist(Filter(is.character, pop$expr)), ignore.case = TRUE, perl = TRUE)))
 })
 
 test_that("knw_compare_mapgl's popup reads only expressions mapgl's evaluator knows, with per-value numbers", {

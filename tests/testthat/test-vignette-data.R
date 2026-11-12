@@ -111,10 +111,10 @@ test_that("every tracked source of the methodology article is unchanged since it
 # the article prints every register column but `where` and `note` (its step lists, its settings table and the counts
 # above it), so a change to those columns stales the bundle and a change to `where` or `note` does not (#118)
 test_that("the register's printed columns are the ones the methodology bundle was written from", {
-  skip_if_not(has_src, "no source-tree data/ (installed package)")
+  # both ship with the package, so this runs in CI too
   x <- readRDS(vd("method.rds"))
   cols <- c("key", "step", "label", "value", "unit", "source", "tested", "issue")
-  now <- utils::read.csv(file.path(root, "inst", "method", "settings.csv"), colClasses = "character",
+  now <- utils::read.csv(system.file("method", "settings.csv", package = "knowledge"), colClasses = "character",
                          na.strings = character())
   then <- as.data.frame(lapply(as.data.frame(x$settings)[cols], as.character), stringsAsFactors = FALSE)
   expect_true(all(cols %in% names(now)))

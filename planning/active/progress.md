@@ -8,3 +8,4 @@
 - Next: start Phase 1
 - Phase 1: register check narrowed to the printed columns (all but `where`, `note`), mutation table in findings
 - Phase 2: three articles and .bib renamed to tuning-*, references rewritten, _pkgdown.yml groups and redirects; tests 0 failed
+- Phase 3: titles, life-history openings, "fish habitat definition" through the three articles, README, DESCRIPTION and the map labels; README figure regenerated; plan review folded in (review-plan.md)

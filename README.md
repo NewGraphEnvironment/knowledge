@@ -4,21 +4,23 @@
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
-> Fisheries evidence and tuned habitat thresholds for BC watershed groups
+> Tests fish habitat definitions against what is known about where fish live, and tunes them from the fish records
 
-knowledge gathers what is known about where fish live in British Columbia's streams, a watershed group
-at a time: the Province's fish sampling records, past reports and the published literature. From the fish
-records it tunes, where they allow, the thresholds that [link](https://www.newgraphenvironment.com/link/)'s
-habitat models use to decide where a species can spawn and rear, such as the smallest stream and the steepest
-gradient for juvenile chinook rearing, and compares the tuned rules with the ones link uses today. Those models show
-restoration and fish passage planning where habitat lies on a stream network.
+knowledge starts from what is known about each species' life history in British Columbia's streams, from the
+published literature and past reports, and tests it against the Province's fish sampling records: where sampling
+caught the species and where it did not. The biology sets the shape of a fish habitat definition, such as young
+chinook rearing in small streams close to a large river. Where the records allow, they tune its values, such as the
+smallest stream and the steepest gradient, and each is checked on parts of the province it was not chosen from. The
+habitat definitions are the ones [link](https://www.newgraphenvironment.com/link/)'s habitat models use to map where a
+species can spawn and rear, and knowledge compares each tuned one with the one link uses today. A habitat map steers
+where conservation and restoration effort goes, and one built this way rests on where fish have been found.
 
-<img src="man/figures/readme-bulk.png" alt="Map of the streams chinook can reach in the Bulkley River watershed group, coloured by whether each is chinook rearing habitat under both rules, only under link's default rule, only under the tuned rule, or under neither" width="70%" />
+<img src="man/figures/readme-bulk.png" alt="Map of the streams chinook can reach in the Bulkley River watershed group, coloured by whether each is chinook rearing habitat under both habitat definitions, only under link's default, only under the tuned one, or under neither" width="70%" />
 
 *Chinook rearing habitat in the Bulkley River watershed group, around Smithers and Houston, under link's
-`default` rule and the rule tuned here. Blue streams are habitat under both, orange only under `default`,
-green only under the tuned rule; grey streams are open to chinook but habitat under neither. Here the tuned
-rule drops more than it adds.*
+`default` habitat definition and the one tuned here. Blue streams are habitat under both, orange only under
+`default`, green only under the tuned one; grey streams are open to chinook but habitat under neither. Here the
+tuned habitat definition drops more than it adds.*
 
 ## Installation
 
@@ -45,7 +47,7 @@ which links the published tables' manifest.
 
 ## Example
 
-The tuned thresholds are one table. Each rule's parts are rows, with the link parameter each fills where
+The tuned thresholds are one table. Each habitat definition's parts are rows, with the link parameter each fills where
 link has one:
 
 ```r
@@ -59,25 +61,27 @@ print(ch, row.names = FALSE)
 #>  exception_d  rear_river_distance_max 1000.00        m
 ```
 
-On a stream line, the tuned rule passes a segment for chinook rearing where its gradient is at most 13 % and
+On a stream line, the tuned habitat definition passes a segment for chinook rearing where its gradient is at most 13 % and
 either its mean annual flow is at least 0.75 m³/s or a river of at least 3 m³/s lies within 1 km downstream.
 Access and link's other steps then apply as they do to `default`.
 
 ## Learn more
 
-- [How the chinook rearing threshold was chosen and what it draws](https://www.newgraphenvironment.com/knowledge/articles/tuning-chinook-rearing.html): the
-  answer and the map first, why a nearby river matters, how sure we are, and how it was done.
-- [Choosing habitat thresholds from where fish were caught](https://www.newgraphenvironment.com/knowledge/articles/tuning-method.html): the
-  method every species' rule is chosen by, and its limits.
+- [Tuning fish habitat definitions with fish sampling records](https://www.newgraphenvironment.com/knowledge/articles/tuning-method.html):
+  the method every species' habitat definition is tuned by, and its limits.
+- [Tuning habitat: chinook rearing](https://www.newgraphenvironment.com/knowledge/articles/tuning-chinook-rearing.html):
+  the answer and the map first, why a nearby river matters, how sure we are, and how it was done.
+- [Splitting streams at fish records shifts the steepest slope mapped as habitat](https://www.newgraphenvironment.com/knowledge/articles/tuning-stream-splits.html):
+  how where link cuts a stream changes the slope limit the records choose.
 - [What is known](https://github.com/NewGraphEnvironment/knowledge/blob/main/research/README.md): one file per topic, from the FDIS export and the cited literature
-  to the tuned rules.
+  to the tuned habitat definitions.
 - [Function reference](https://www.newgraphenvironment.com/knowledge/reference/index.html)
 
 ## Ecosystem
 
 | Package | Role |
 |---|---|
-| **knowledge** | Fisheries evidence and tuned habitat thresholds for BC watershed groups (this package) |
+| **knowledge** | Tests fish habitat definitions against what is known about where fish live, and tunes them from the fish records (this package) |
 | [fresh](https://www.newgraphenvironment.com/fresh/) | Stream network modelling engine: segment, classify, cluster, aggregate |
 | [link](https://www.newgraphenvironment.com/link/) | Intrinsic habitat models: develop, test and communicate |
 | [wet](https://www.newgraphenvironment.com/wet/) | Stream flow and water temperature for BC's Freshwater Atlas |

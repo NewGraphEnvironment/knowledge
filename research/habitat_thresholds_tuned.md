@@ -122,7 +122,7 @@ test whether the outcome-linked segment length moves a threshold.
 
 ## Method
 
-The method is the methodology article, "Choosing habitat thresholds from where fish were caught"
+The method is the methodology article, "Tuning fish habitat definitions with fish sampling records"
 (<https://newgraphenvironment.github.io/knowledge/articles/tuning-method.html>, `vignettes/tuning-method.Rmd`,
 #93): every step, what it does and why, with each number that shapes a result in `inst/method/settings.csv`, where its
 value lives and whether it has been tested. It replaced the specification that stood here. `scripts/0320`'s header

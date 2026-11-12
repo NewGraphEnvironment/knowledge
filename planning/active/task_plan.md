@@ -56,18 +56,18 @@ What exploration changed:
 - [x] `devtools::test()` passes (settings register resolves the new paths)
 
 ## Phase 3: Titles, openings and one vocabulary (#118, #156)
-- [ ] Read soul's `conventions/writing.md` in full; word counts of the three articles and README before
-- [ ] Retitle the method and chinook articles (title and `VignetteIndexEntry`)
-- [ ] Openings lead with life history, then the records tuning the values where they allow, tested where sampling
+- [x] Read soul's `conventions/writing.md` in full; word counts of the three articles and README before
+- [x] Retitle the method and chinook articles (title and `VignetteIndexEntry`)
+- [x] Openings lead with life history, then the records tuning the values where they allow, tested where sampling
       caught the species and where it did not; `link`'s first mention in code font, linked, said what it is; no
       company name in an opening
-- [ ] Vocabulary in the three articles' prose and captions: "fish habitat definition" at first mention, "habitat
+- [x] Vocabulary in the three articles' prose and captions: "fish habitat definition" at first mention, "habitat
       definition" after, never "definition" alone; "threshold" stays for one cut-off; code identifiers, link's own
       config wording and comments untouched. Includes `#cuts`'s heading and the stream-splits leftovers #156 lists
-- [ ] README: opening leads with life history; map caption, alt text and Example say "habitat definition"
-- [ ] `R/compare_map.R` legend labels and default title; its test; regenerate `man/figures/readme-bulk.png`
+- [x] README: opening leads with life history; map caption, alt text and Example say "habitat definition"
+- [x] `R/compare_map.R` legend labels and default title; its test; regenerate `man/figures/readme-bulk.png`
       (`data-raw/readme_figure.R`) and check it at its published width
-- [ ] Each inline `stopifnot()` stays with the number it guards; the register's `code:` phrases stay whole on one
+- [x] Each inline `stopifnot()` stays with the number it guards; the register's `code:` phrases stay whole on one
       line; word counts after, against before
 
 ## Phase 4: Bibliographies (#107)
@@ -91,11 +91,14 @@ What exploration changed:
 - [ ] Offer the rendered articles in a form that opens on a phone
 
 ## Phase 7: Bookkeeping
+- [ ] File the bundle-text issue: `pipeline.csv` step labels, five `settings.csv` labels and the two SVGs say "rule"; they ride the next methodology bundle rebuild (review B1)
 - [ ] File the fly-row issue (blocked by fly#108; split from move 2); edit #156's body to point to it
 - [ ] `/code-check branch` (three-round floor)
 - [ ] `/planning-archive`, `/gh-pr-push` (Fixes #118, #107, #156, #159; relates #171)
 
 ## Owed at the end (reported, done after merge)
+
+- [ ] GitHub About: the ecosystem tagline the README and DESCRIPTION now carry (`gh repo edit --description`), once main holds them
 
 - [ ] Website repo: point the Open Source page's two knowledge links at `tuning-method.html` and
       `tuning-chinook-rearing.html` (a PR there, after the deploy serves the new pages)
