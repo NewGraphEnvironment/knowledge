@@ -74,29 +74,29 @@ What exploration settled:
 ## Phase 1: inventory, PDFs and the two CSVs (no Zotero writes)
 - [x] (16 live, 16 keyed, 11 on disk.) Re-measure `VHWEK6RE` from a guarded copy that includes the `-wal` (the path `0270`'s `db()` uses): live
       members, keyed, and with a PDF on disk
-- [ ] Members without a PDF: try each one (the item's URL, an open-access copy of the DOI, the publisher, the catalogue,
+- [x] Members without a PDF: try each one (the item's URL, an open-access copy of the DOI, the publisher, the catalogue,
       a "researchgate pdf" title search). Every body must start `%PDF`. Paywalled ones go on a list for Al to download
       into the ignored `data/rag/pdf/bull_trout/`; scans are OCRed
-- [ ] Federal: the SARA management plans for South Coast and Western Arctic bull trout and the COSEWIC assessments
+- [x] Federal: the SARA management plans for South Coast and Western Arctic bull trout and the COSEWIC assessments
       (2012 is already a member); printed from the registry's HTML where no PDF is served. Decide from the text whether
       a federal plan adopts the 2023 BC plan (a member); if it does, file the front matter and Part 1 only (G4). The
       Saskatchewan–Nelson (Alberta) documents are outside the two units
-- [ ] Provincial: status reports, the management plan (2023 is already a member) and any progress reporting
-- [ ] Series:
+- [x] Provincial: status reports, the management plan (2023 is already a member) and any progress reporting
+- [x] Series:
   - the Hagen Williston series (redd counts, critical spawning habitat, limiting factors);
   - Baxter's spawning-site work (Baxter & Hauer 2000, Baxter & McPhail 1999, and others);
   - FWCP Peace and Columbia bull trout reports;
   - Kootenay and Arrow Lakes monitoring (BC Hydro WLR/CLBMON and others).
-- [ ] US core: the USFWS 2015 recovery plan (with its unit implementation plans where the plan links them), the 2010
+- [x] US core: the USFWS 2015 recovery plan (with its unit implementation plans where the plan links them), the 2010
       critical habitat final rule, and Fraley & Shepard 1989
-- [ ] Metadata for each addition comes from its own title page or "cite as" line, never from a listing page or a
+- [x] Metadata for each addition comes from its own title page or "cite as" line, never from a listing page or a
       sibling year (#190's review)
-- [ ] Dedupe every addition by title and DOI against every library, trash included:
+- [x] Dedupe every addition by title and DOI against every library, trash included:
   - a live group copy in another collection becomes a member row;
   - a copy only in the personal library is filed into the group;
   - a trashed group copy is restored only when no live group copy exists: a Web API PATCH `deleted: 0`, Al present,
     before the first dry run, after which it is a member row by its key (`0270` cannot see the trash; G5).
-- [ ] Rules for the rows:
+- [x] Rules for the rows:
   - a member with no PDF has an empty `pdf`;
   - an addition with no PDF is listed only with a DOI whose CrossRef record has an abstract;
   - web pages are printed to PDF as `report`;
@@ -106,13 +106,13 @@ What exploration settled:
     in without it, its series in `reportType`/`reportNumber` (G2).
 - [ ] `0270`'s `addition_item` takes `publicationTitle`, `volume` and `issue` (G2), checked in the dry run on Fraley &
       Shepard 1989
-- [ ] No-text check: count the pages under 30 characters of text in every PDF to be filed; `ocrmypdf --skip-text` those
+- [x] No-text check: count the pages under 30 characters of text in every PDF to be filed; `ocrmypdf --skip-text` those
       into `data/rag/ocr/bull_trout/` and point the row at the copy (G3)
-- [ ] Write `data/bull_trout_members.csv` (appended) and `data/bull_trout_additions.csv`. Record the count and MB per
+- [x] Write `data/bull_trout_members.csv` (appended) and `data/bull_trout_additions.csv`. Record the count and MB per
       source in findings before filing (the scope check), with the 14 group items found outside the collection as
       their own source line (S1). A3's quota check is settled: the group's file storage is unlimited (Al,
       2026-11-12; now in soul's `/zotero-api`), so the MB is recorded for upload time only
-- [ ] The enumeration, before the first dry run: every field of every row against a verbatim snippet of its own title
+- [ ] (Round 0, mechanical: `enumeration_round0.tsv`.) The enumeration, before the first dry run: every field of every row against a verbatim snippet of its own title
       page (#190's `review-round3-evidence.tsv` form), so fixes are CSV edits (O2). From the first live run on, a fix
       is a CSV row, a PATCH and a no-op dry run; then the PATCHed items' keys are re-read from a guarded copy, and a key
       that moved means the CSVs and evidence rows, `0280`, and `ACTION=update` plus a push on all three stores. Members

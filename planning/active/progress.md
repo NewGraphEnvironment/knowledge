@@ -18,4 +18,7 @@
   montana.edu author copy. Metolius 1996 still has none
 - Three drafting agents spawned at 18:05Z (EcoCat ×2, browser), title pages only, into scratchpad `draft/`
   (seven agents on this issue in all)
+- Drafts back (18:10–18:13Z); merged, deduped (fuzzy and by bytes), 146 additions written with their PDFs staged in the
+  ignored `data/rag/pdf/bull_trout/`; round-0 enumeration (789 checks, two fixes). Next: Metolius to #209, then the
+  Phase 2 gate (URLs rechecked, dry run)
 

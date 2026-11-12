@@ -291,3 +291,56 @@ Scratchpad `browser/pdf/`: 49 files, 86 MB, every PDF starting `%PDF`. Each was 
   - The WA-BC AFS 2018 slides: dropped (slides, not a report).
 - **Low-text pages:** Salmo BT 1998–99 (18/57) and DDMMON-5 year 2 (20/164) are partly scanned and go to OCR; the
   other seven files with such pages have one to seven (figures, blanks).
+
+## The two CSVs (2026-11-12 ~19:00 UTC)
+
+Rows were drafted from each PDF's own title page or citation line by three agents (scratchpad `draft/BRIEF.md`;
+EcoCat in two parts, the browser files in one) and by searches A–C before them, merged in scratchpad
+`draft/merge.py` (174 rows) and deduped in `draft/fuzzy.py`: titles at a difflib ratio of 0.8 or more against every
+bull trout item in the group (trash included) and 0.85 across the candidates, then read pair by pair (page counts,
+text md5). Only four pairs were byte-identical.
+
+**Members, `data/bull_trout_members.csv`: 30 rows.** The 16 from #122 (four now with a PDF: the three web-page items
+take the registry and CDC pages printed with headless Chrome, whose URLs they carry, and McMahon 2007 the
+montana.edu author copy) and the 14 group items listed above as their own source line (S1). Metolius 1996 still has
+none (ODFW's URL is 404); it joins #209. `post_etal2012COSEWICassessment`'s `pdf` path from #122 is not on disk, and is
+never read: the item holds its PDF.
+
+**Additions, `data/bull_trout_additions.csv`: 146 rows, 392 MB** (upload time only; storage is unlimited).
+
+| Source | Rows | MB |
+|---|---|---|
+| EcoCat, named third-party series (decision 5) | 61 | 193 |
+| Browser (Claude in Chrome, Al's saves, printed pages) | 42 | 96 |
+| Search A (federal, provincial, US) | 10 | 20 |
+| Search B (Site C, Peace) | 12 | 29 |
+| Search C (Columbia, Kootenay, Arrow) | 21 | 53 |
+
+Item types: 130 report, 9 journalArticle (DOI filled from the source's doi.org link where the PDF did not print it, so
+`0270` takes CrossRef's record), 4 thesis, 3 document. 28 candidates dropped, each with its reason in
+`drops.tsv`: members already (Hagen & Weber 2019, Hagen & Spendlow 2019 at EcoCat r56963, McPhail & Baxter 1996,
+Cope & Morris 2001 at OSTI 786475, the 2023 BC plan, the USFWS plan and rule, Cannings & Ptolemy, McMahon), the
+three member PDFs, byte or text duplicates across hosts (BC Hydro's copies kept over EcoCat's for DDMMON-5 years 1
+and 2 and the DDMMON-6 memo; EcoCat 10112 over the Streamkeepers fence copy; search C's Skookumchuck titles over
+search A's), an earlier edition of a Kootenay Lake exploitation report and a second copy of another, 655 (7296's
+bytes), a tag-number appendix, a budget addendum, a rainbow trout telemetry report, and the three Kootenay Lake
+bulletins (decision 5).
+
+- The OCRed copies are the rows' PDFs, in `data/rag/pdf/bull_trout/` itself rather than a separate `ocr/` folder
+  (G3's intent: the filed PDF carries text), and the row's `why` says "OCR copy".
+- Blank by the rules, never inferred: five dates the documents do not print (EcoCat 16907, 36217, 52324, 59883 and
+  the pop. 28 summary) and the 1992 Peace status report's authors.
+- The group item `hagenj_spendlowi_2019BullTrout` carries a title its PDF does not print ("Bull Trout Redd Counts in
+  Tributaries of Williston Reservoir, 2018"; the title page reads "Bull Trout Spawner Abundance within the Williston
+  Reservoir Watershed 2018, and Critical Spawning Habitats of the Omineca River Watershed"). A member's metadata is
+  not edited on this branch; reported.
+
+**Enumeration, round 0 (mechanical): `enumeration_round0.tsv`.** 789 checks: each row's title, each creator's
+surname, the year, and every report number, institution, university and journal field, searched in the first six
+pages of its own PDF, with the matched snippet. 31 were not found as written; re-read in the full text, 27 were
+there (two-part institutions and numbers checked part by part, values past page 6, titles broken over lines, and
+Rodtka 2009, whose PDF sets the species name in a symbol font), and two were wrong and fixed: COSEWIC 2025's detailed
+assessments print "COSEWIC", not the committee's full name, and the South Coast registry page prints no "Government
+of Canada" (now `{Species at Risk Public Registry}`, no institution). Baxter & Hauer 2000's journal is CrossRef's
+(a DOI row). This proves presence, not meaning: the meaning audit per row is the `/code-check` rounds' (#29's lesson).
+
