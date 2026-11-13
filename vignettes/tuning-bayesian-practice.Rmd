@@ -44,10 +44,12 @@ withheld <- sc$key[sc$grade_withheld]
 # a key whose curve failed has no margin and no grade, and the run's flag for it reads FALSE
 curved <- sc[!is.na(sc$margin), ]
 closest <- curved[which.min(abs(curved$margin)), ]
-# the words: every published key drops some groups, and more than half for the keys named; the gate withholds some
+# the words: the table holds every published key (the bundle's gradient limits come from data/thresholds.csv); every
+# published key drops some groups, and more than half for the keys named; the gate withholds some
 # keys and publishes others, and its closest call is decided by less than one unit of deviance. A bundle without
 # `scope` would make every comparison logical(0), which stopifnot() passes
-stopifnot(nrow(sc) > 0, all(sc$groups_both < sc$groups), length(under_half) >= 2,
+stopifnot(nrow(sc) > 0, setequal(sc$key, x$site_gradient$limits$key), all(sc$groups_both < sc$groups),
+          length(under_half) >= 2,
           length(withheld) >= 1, any(!is.na(sc$margin) & !sc$grade_withheld), nrow(closest) == 1,
           abs(closest$margin) < 1, abs(closest$margin) >= 0.05,
           # the caption's sign: at zero or above withheld, below published (away from a tie the summary's rounding

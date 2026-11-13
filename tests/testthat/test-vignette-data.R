@@ -159,10 +159,14 @@ test_that("the methodology bundle's scope covers every published key, with its g
   x <- readRDS(vd("method.rds"))
   s <- x$scope
   expect_false(is.null(s))
-  expect_true(all(paste(x$stability$species_code, x$stability$stage, sep = "_") %in% s$key))
+  # every published key: the bundle's site-gradient limits come from data/thresholds.csv, a producer scope does not read
+  expect_setequal(s$key, x$site_gradient$limits$key)
   expect_true(all(s$status %in% c("fitted", "underpowered")))
   expect_false(anyNA(s[c("groups", "groups_both", "grade_withheld")]))
   expect_true(all(s$groups_both <= s$groups))
+  skip_if_not(has_src, "no source-tree data/ (installed package)")
+  thr <- utils::read.csv(file.path(root, "data", "thresholds.csv"), stringsAsFactors = FALSE)
+  expect_setequal(s$key, unique(paste(thr$species_code, thr$stage, sep = "_")[!is.na(thr$value)]))
 })
 
 test_that("the methodology bundle's site-gradient check covers every published gradient limit (#121)", {

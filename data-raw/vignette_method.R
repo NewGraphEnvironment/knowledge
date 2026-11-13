@@ -505,6 +505,13 @@ if (anyNA(scope[c("groups", "groups_both", "grade_withheld")]) || any(scope$grou
     !identical(is.na(scope$dev_curve), is.na(scope$null_heldout_curve))) {
   stop("a published key's summary has a missing group count or gate flag, or one deviance of the gate without the other")
 }
+# the published keys from another producer: those data/thresholds.csv gives a value
+thr_keys <- rd(f_thr, col_types = cols(.default = "c")) |> filter(!is.na(value)) |>
+  transmute(key = paste(species_code, stage, sep = "_")) |> pull(key) |> unique()
+if (!setequal(scope$key, thr_keys)) {
+  stop("scope's keys (", paste(sort(scope$key), collapse = ", "), ") are not the keys data/thresholds.csv publishes (",
+       paste(sort(thr_keys), collapse = ", "), ")")
+}
 
 # ---- write ------------------------------------------------------------------------------------------------
 # git, not a list here, says which sources a clone has: an ignored one is checked only where it is present
