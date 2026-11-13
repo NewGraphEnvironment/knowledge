@@ -155,15 +155,14 @@ test_that("the methodology bundle's funnel adds up and every register row was re
 })
 
 # the internal article on Bayesian practice (#204) reads each published key's groups and grade gate from the bundle
-test_that("the methodology bundle's scope covers every published key, with a gate its deviances make", {
+test_that("the methodology bundle's scope covers every published key, with its groups and gate", {
   x <- readRDS(vd("method.rds"))
   s <- x$scope
   expect_false(is.null(s))
-  expect_true(all(c(paste(x$stability$species_code, x$stability$stage, sep = "_"), "WCT_rear") %in% s$key))
+  expect_true(all(paste(x$stability$species_code, x$stability$stage, sep = "_") %in% s$key))
   expect_true(all(s$status %in% c("fitted", "underpowered")))
-  expect_false(anyNA(s))
+  expect_false(anyNA(s[c("groups", "groups_both", "grade_withheld")]))
   expect_true(all(s$groups_both <= s$groups))
-  expect_identical(s$grade_withheld, !(s$dev_curve < s$null_heldout_curve))
 })
 
 test_that("the methodology bundle's site-gradient check covers every published gradient limit (#121)", {

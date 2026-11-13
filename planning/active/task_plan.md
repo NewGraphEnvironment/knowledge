@@ -39,6 +39,12 @@ What exploration found that shapes the phases:
   shapes a result, so `settings.csv` gains no row. Settings it quotes (`prior_sd`, `se_region`, `folds`) are read
   through `val()` from `x$settings`.
 - #203's changes appear as what comes next, not as made.
+- What is tested next (#203, #186, #70) is named with its issues, an exception to writing.md's "No pointer to pending
+  work" for this internal article, whose stated purpose is a record of where the method is heading (issue body).
+- "Not listed" means the site's articles index and navbar: the article is still in `sitemap.xml`, the site search and
+  the installed package's vignette index (plan review A3).
+- The Articles menu is written out in `_pkgdown.yml`, because pkgdown adds "More articles..." for a section with no
+  navbar entry; a test holds it to the sections (plan review G1).
 
 ## Phase 1: The method bundle carries the scope and the gate
 - [x] `data-raw/vignette_method.R`: add `scope`, one row per key the run publishes (fitted or underpowered, as the
@@ -47,8 +53,8 @@ What exploration found that shapes the phases:
 - [x] Stage the ignored inputs from the main checkout into this worktree (`data/fdis/derived`, `data/fdis/build`,
       plus anything else the script reads that is ignored), and check that their md5s equal the grades' `evidence_md5`.
 - [x] Commit the script, then rerun it with `PGSERVICE=fresh_local`. It refuses to run with uncommitted code.
-- [x] Assert that every other element of the new `method.rds` is `identical()` to the old one, apart from `meta`'s
-      written date and commit.
+- [x] Compare every other element of the new `method.rds` with the old: identical but `meta`'s date, commit and
+      md5s (settings.csv, a new WCT summary) and the register's `where` paths of three keys (findings.md)
 - [x] `tests/testthat/test-vignette-data.R`: a test that `scope` exists, has the published keys, and that
       `groups_both <= groups`.
 
@@ -72,6 +78,7 @@ What exploration found that shapes the phases:
   6. What changes next: #203, #186, #70.
   7. Limits: what the review did not test.
   8. References.
+- [x] Phase 1 follow-up from the plan review (A2): scope check and test allow a failed curve, never recompute the flag
 - [ ] Use a few short quotes from the two books, each in `"…" [@key, p. N]` form, taken from passages the research
       file already checked.
 - [ ] `_pkgdown.yml`: add an `- title: internal` section listing `tuning-bayesian-practice`.
@@ -80,7 +87,8 @@ What exploration found that shapes the phases:
       Zotero running. It refuses any key Zotero does not return.
 
 ## Phase 3: Checks on the article's quotes and claims
-- [ ] `data-raw/bayesian_alignment_check.R`: add an article mode (`RMD=`). It reads `"…" [@key, p. N]` quotes, checks
+- [ ] `data-raw/bayesian_alignment_check.R`: accept `[@key, p. N]` quotes, a `n_quotes` per file, coverage tables only
+      for the research file, fenced chunks stripped, and a named log for the article (plan review G5). Was: an article mode (`RMD=`). It reads `"…" [@key, p. N]` quotes, checks
       each against its PDF page as the research mode does, and holds the article's own `n_quotes`. Coverage tables
       are skipped in this mode. Run it on both files and commit the logs.
 - [ ] Have a blind meaning audit by a Plan agent read the article against the research file and the code it cites.
@@ -89,7 +97,8 @@ What exploration found that shapes the phases:
 ## Phase 4: Records and docs
 - [ ] `research/bayesian_alignment.md`: change the "What to try" #204 bullet to the separate internal article, and
       add #204 to the header's issues.
-- [ ] `CLAUDE.md` layout: one entry for the new article (internal section, its bundle and bib).
+- [ ] `CLAUDE.md`: a layout entry for the new article (internal section, its bundle and bib); the series' count of
+      articles; the record section's line on what `vignette_method.R` checks of the gate; the promotion pins list (G2)
 - [ ] `vignettes/tuning-chinook-rearing.Rmd`, README and NEWS: no changes; release bookkeeping is `/gh-pr-merge`'s.
 
 ## Validation
@@ -100,6 +109,9 @@ What exploration found that shapes the phases:
       navbar does not carry it, and the link from `#se` resolves
 - [ ] `bayesian_alignment_check.R` passes on the research file and on the article
 - [ ] Rendered article sent to the phone for review before the merge
+- [ ] No `rule`/`rules` outside code and quotes in the new article (`grep -nE '\brules?\b'`)
+- [ ] The Articles menu is unchanged from main's (navbar HTML diff) and `test-pkgdown-navbar.R` passes
+- [ ] A blind readability pass on the rendered text before and after the claim review (writing.md)
 - [ ] `/code-check branch` clean
 - [ ] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion

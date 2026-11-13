@@ -492,16 +492,18 @@ svg <- list(flow = svg_of(dot_flow), lineage = svg_of(dot_lin))
 # ---- the scorer's groups and the grade gate, per published key (#204) -----------------------------------------------
 # every key the run publishes (fitted or underpowered, so WCT rearing is in): the watershed groups its visits fall in,
 # those with both outcomes (the only ones the fixed-intercept scorer and the curve keep), and the gate, the curve's
-# held-out deviance against no habitat definition's on the same visits (grade_withheld when it is no lower)
+# held-out deviance against no habitat definition's on the same visits (grade_withheld when it is no lower). The flag is
+# the run's, not recomputed here from the summary's rounded deviances, and a key whose curve failed has neither
+# deviance (R/tune_run.R)
 scope <- summ |>
   filter(status %in% c("fitted", "underpowered")) |>
   transmute(key = paste(species_code, stage, sep = "_"), status,
             groups = as.integer(groups), groups_both = as.integer(groups_both),
             grade_withheld = as.logical(grade_withheld),
             dev_curve = as.numeric(dev_curve), null_heldout_curve = as.numeric(null_heldout_curve))
-if (anyNA(scope) || any(scope$groups_both > scope$groups) ||
-    !identical(scope$grade_withheld, !(scope$dev_curve < scope$null_heldout_curve))) {
-  stop("a published key's summary has a missing group count or gate, or a gate its deviances do not make")
+if (anyNA(scope[c("groups", "groups_both", "grade_withheld")]) || any(scope$groups_both > scope$groups) ||
+    !identical(is.na(scope$dev_curve), is.na(scope$null_heldout_curve))) {
+  stop("a published key's summary has a missing group count or gate flag, or one deviance of the gate without the other")
 }
 
 # ---- write ------------------------------------------------------------------------------------------------
