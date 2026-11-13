@@ -72,7 +72,7 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   of the articles index and navbar (not out of `sitemap.xml`, the site search or the installed vignette index); the
   methodology article's `#se` links it. Because that section has no navbar entry, `_pkgdown.yml` writes the Articles
   menu out by hand (pkgdown would add "More articles..."), and `tests/testthat/test-pkgdown-navbar.R` holds the menu to
-  the sections. It reads `method.rds`, whose `scope` (each published key's groups, groups with both outcomes and grade
+  the sections (run by the pkgdown workflow, since R CMD check has no `_pkgdown.yml`). It reads `method.rds`, whose `scope` (each published key's groups, groups with both outcomes and grade
   gate) `vignette_method.R` writes for it, so a promotion keeps it current. Its book quotes are checked against the PDF
   pages by `MD=vignettes/tuning-bayesian-practice.Rmd Rscript data-raw/bayesian_alignment_check.R`; rerun that after
   any change to its quotes.
