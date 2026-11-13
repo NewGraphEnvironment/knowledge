@@ -227,8 +227,10 @@ free coefficient is a hypothesis in its own right:
 
 *Where it stands.* **Differs, defensibly.** The book's exposure is for a Poisson model with a log link; for a binary
 "caught or not" with a cloglog link, a coefficient of one on log(area) is the model in which each square metre fished
-carries the same chance of a catch (derived here; neither book states it for cloglog). A free coefficient lets
-detection saturate with effort, which electrofishing plausibly does. Testing the offset is cheap, and is worth one
+carries the same chance of a catch (derived here; neither book states it for cloglog). A free coefficient lets the
+catch rate per square metre fall (or rise) as more area is fished: under the cloglog the chance of a catch levels off
+with area even under the offset, so what the free coefficient adds is a rate per square metre that changes with area,
+and electrofishing a larger area plausibly catches less per square metre (#204's audit). Testing the offset is cheap, and is worth one
 line in #186.
 
 ### Is "no fish caught" an absence? (Rethinking ch. 12, 15)
@@ -396,7 +398,7 @@ when that line no longer holds the code it names or the code appears elsewhere i
 | `response_presence` | `R/tune_run.R:176` | The rearing response is whether the species was caught at the visit; a miss reads as an absence (Rethinking p. 499). | differs |
 | `population_gate` | `R/tune_run.R:173` | Visits outside link's range for the species (a fixed table per group) or with a blocked absence are left out (the barrier filter on the next line is `barrier_natural`). Only the blocked absence turns on the catch: it drops recorded zeros only, some of which may be the species under a looser name (Rethinking pp. 499, 503). | differs |
 | `cloglog_link` | `R/tune_score.R:256` | A binomial GLM with a complementary log-log link: a hazard reading, natural for detection with effort. BDA3 names it a standard link (p. 407); neither book fits it. The GLM frame is Rethinking ch. 10's. | aligned |
-| `log_area_free` | `R/tune_score.R:224` | Effort as a free, unpenalised coefficient, not an offset: the hypothesis that the chance of a catch does not grow in proportion to the area fished (Rethinking p. 357). | differs |
+| `log_area_free` | `R/tune_score.R:224` | Effort as a free, unpenalised coefficient, not an offset: the hypothesis that the catch rate per square metre changes with the area fished (Rethinking p. 357). | differs |
 | `one_outcome_groups` | `R/tune_score.R:201` | Groups whose visits all caught the species, or none did, are dropped before scoring and before the curve: under fixed intercepts they inform nothing, under pooling they would. | differs |
 | `stratified_folds` | `R/tune_score.R:211` | Groups are ranked by detections and dealt to folds in shuffled blocks, so the folds hold similar numbers of detections: a design choice for the score's variance. | no bearing |
 | `heldout_intercept` | `R/tune_score.R:423` | Each held-out group refits its intercept on its own outcomes before its deviance is taken: a score conditional on the group's base rate (Rethinking p. 426). | differs |

@@ -16,11 +16,11 @@ ok   line 172 mcelreath2020StatisticalRethinking p. 413
 ok   line 193 mcelreath2020StatisticalRethinking p. 429
 ok   line 212 gelman_etal2013Bayesiandata p. 490
 ok   line 223 mcelreath2020StatisticalRethinking p. 357
-ok   line 238 mcelreath2020StatisticalRethinking p. 499
-ok   line 255 mcelreath2020StatisticalRethinking p. 228
-ok   line 270 mcelreath2020StatisticalRethinking p. 499
-ok   line 276 mcelreath2020StatisticalRethinking p. 503
-ok   line 289 mcelreath2020StatisticalRethinking p. 495
+ok   line 240 mcelreath2020StatisticalRethinking p. 499
+ok   line 257 mcelreath2020StatisticalRethinking p. 228
+ok   line 272 mcelreath2020StatisticalRethinking p. 499
+ok   line 278 mcelreath2020StatisticalRethinking p. 503
+ok   line 291 mcelreath2020StatisticalRethinking p. 495
 quotes: 23 checked in research/bayesian_alignment.md
 The steps: 11 rows for 11; aligned 1, differs 8, no bearing 2
 The settings: 69 rows for 69; aligned 12, differs 12, no bearing 44, should change 1

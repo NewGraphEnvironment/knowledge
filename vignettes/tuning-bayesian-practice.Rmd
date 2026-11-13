@@ -48,7 +48,8 @@ closest <- curved[which.min(abs(curved$margin)), ]
 # keys and publishes others, and its closest call is decided by less than one unit of deviance. A bundle without
 # `scope` would make every comparison logical(0), which stopifnot() passes
 stopifnot(nrow(sc) > 0, all(sc$groups_both < sc$groups), length(under_half) >= 2,
-          length(withheld) >= 1, length(withheld) < nrow(sc), nrow(closest) == 1, abs(closest$margin) < 1,
+          length(withheld) >= 1, any(!is.na(sc$margin) & !sc$grade_withheld), nrow(closest) == 1,
+          abs(closest$margin) < 1, abs(closest$margin) >= 0.05,
           # the settings the prose quotes
           val("prior_sd") == "2.5", val("se_region") == "1", val("folds") == "5")
 ```
@@ -80,15 +81,18 @@ definition sorts every site crews electrofished into habitat or not.
 
 The **scorer** is a regression of whether the species was caught at a site on that sorting. Beside it sit the area
 fished (the effort) and two **sampling terms**, the data set the record comes from and its period, which are
-differences in how crews sampled that a habitat definition must not be credited for. Each watershed group, the
-Province's division of its streams into large drainages, also gets its own **base rate**: how often the species is
-caught there at all. The **score** is the scorer's deviance at sites it was not fitted to, a measure of how badly it
-predicts the catch, summed over sites; lower is better.
+differences in how crews sampled that a habitat definition must not be credited for. Each watershed group the scorer
+keeps (the Province divides its streams into these large drainages) also gets its own **base rate**: how often the
+species is caught there, other things equal. The **score** is the scorer's deviance at sites in watershed groups left
+out when the habitat definition, effort and sampling terms were fitted, a measure of how badly it predicts the catch,
+summed over sites; lower is better. (Each left-out group's base rate is then refitted on its own sites, as the next
+sections explain.)
 
 The groups are dealt into `r val("folds")` **folds**, and each fold in turn is left out of the fit and scored. Habitat
-definitions whose scores the records cannot rank are **close calls**, and among them we choose the one that changes
+definitions whose scores lie within one standard error of the best are **close calls**, and among them we choose the one that changes
 `link`'s current habitat definition least. Then a second model, the **curve**, a smooth surface of how often the
-species is caught against stream size, distance to a river and slope, gives every stream a **grade**. The **gate**
+species is caught against stream size, distance to a river and slope, gives every stream with a size and slope a
+**grade**. The **gate**
 publishes those grades only if the curve scores better on the left-out folds than no habitat definition at all.
 
 ## The checks, at a glance {#glance}
@@ -104,14 +108,14 @@ knitr::kable(data.frame(
     "Does the score predict a new watershed group?",
     "How wide is a close call, and which close call is chosen?",
     "Does the check on the choosing hold its test data out?",
-    "Is the prior's scale the books' default?",
+    "Is the prior a regularising prior at Bayesian Data Analysis's default scale?",
     "Does the prior give a posterior?",
     "Are thresholds reported as a distribution?",
     "Are watershed groups pooled?",
     "Which watershed group does the grade describe?",
     "Is the gate a fair comparison?",
     "Is an unfamiliar data set or period read the same on both sides of the gate?",
-    "Does the chance of a catch grow in proportion to the area fished?",
+    "Does each square metre fished carry the same chance of a catch?",
     "Is a miss an absence?",
     "Are the inputs measured?",
     "Is a stream's slope independent of the catch?"),
@@ -121,14 +125,14 @@ knitr::kable(data.frame(
     "No: each left-out group's base rate is refitted first",
     "One standard error; the close call nearest link's current habitat definition",
     "Not fully: the scores it chooses from were fitted with its test groups in",
-    "A normal prior with standard deviation 2.5 on the sampling terms",
+    "Yes, scale 2.5, but normal not Cauchy, complementary log-log not logit, and on the sampling terms only",
     "No: it is fitted as a penalty, which finds one best value",
     "No: as one choice and the range of close calls",
     "Fixed in the scorer, with groups of one outcome dropped; pooled in the curve",
     "An average group",
     "A point comparison against no habitat definition, with no standard error",
     "No: the scorer takes the reference level, the curve the most common one",
-    "Not necessarily: the area fished has a fitted slope",
+    "Not necessarily: the area fished has a fitted slope, so the rate per square metre can change with area",
     "A miss is read as no catch at that visit",
     "No: placement, slope and flow are estimates read as exact",
     "No: link cuts streams at fish records"),
@@ -191,9 +195,9 @@ The prior is fitted as a penalty, which finds the single most probable value and
 
 So the tuning carries no uncertainty from the prior into its thresholds, which it reports as one choice and the range
 of close calls, and no simulation of what the prior implies for the catch has been run
-[@mcelreath2020StatisticalRethinking, p. 328]. The scorer also keeps a fallback fit without the prior for a fold the
-main fit cannot handle; by the way the prior is built the sampling terms cannot send a fold there, but that rests on an
-argument, not a check.
+[@mcelreath2020StatisticalRethinking, p. 328]. The scorer also keeps a fallback fit without the prior, for a
+fold where its fast fit would drop a term the full fit keeps; by the way the prior is built the sampling terms cannot
+send a fold there, but that rests on an argument, not a check.
 
 ## Are watershed groups pooled? {#pooling}
 
@@ -247,9 +251,10 @@ prior's centre; the curve gives it the most common level in the fit. So the two 
 ## What else differs? {#else}
 
 - **Effort is fitted, not fixed.** The area fished enters with a fitted slope rather than as a fixed exposure (an
-  offset), so the chance of a catch can grow more or less than in proportion to the area fished: the hypothesis
+  offset), so the catch rate per square metre fished can rise or fall with the area fished: the hypothesis
   *Statistical Rethinking* describes for a free coefficient on the log of exposure
-  [@mcelreath2020StatisticalRethinking, p. 357]. Electrofishing plausibly saturates with effort.
+  [@mcelreath2020StatisticalRethinking, p. 357]. Electrofishing a larger area plausibly catches less per square
+  metre.
 - **A miss is a miss at that visit.** The response is whether a crew caught the species on one visit, so a species
   present and missed reads as absent [@mcelreath2020StatisticalRethinking, p. 499]. The grade says so: it is expected
   use per standard electrofishing visit, not habitat quality. Telling the two apart needs repeat visits.
