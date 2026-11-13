@@ -120,12 +120,12 @@ What exploration settled:
 
 ## Phase 2: file the collection through `0270` (Al present for the live run)
 - [x] Al's hand downloads land in `data/rag/pdf/bull_trout/` (or those rows keep an empty `pdf`, owed in an issue)
-- [ ] Check every URL in both CSVs again for `%PDF`, through `0153`'s `fetch`
-- [ ] `0270 --collection bull_trout --parent 9U54XAND --dry-run`: check every `exists` and `copy exists` hit against
+- [x] Check every URL in both CSVs again for `%PDF`, through `0153`'s `fetch`
+- [x] `0270 --collection bull_trout --parent 9U54XAND --dry-run`: check every `exists` and `copy exists` hit against
       the intended item
-- [ ] Live run, then wait for the sync. A second dry run with no `would` lines and exit 0 is the no-op proof. Logs go
+- [x] Live run, then wait for the sync. A second dry run with no `would` lines and exit 0 is the no-op proof. Logs go
       to `scripts/logs/rag/<date>_0270_bull_trout*.log`
-- [ ] Re-measure from a guarded copy: a before/after table
+- [x] Re-measure from a guarded copy: a before/after table
 
 ## Phase 3: build, query and push the stores
 - [ ] Gate: every member's PDF is on disk, Zotero is quit, and the `-wal` is empty. Zotero stays quit through the updates

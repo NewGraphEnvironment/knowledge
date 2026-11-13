@@ -66,6 +66,11 @@ Relates to #33 and #51.
 | Chrome's scripted downloads from a page reached `~/Downloads` minutes late or not at all | Chrome holds a site's second and later downloads for "download multiple files"; Al allowed bchydro.com, publications.gc.ca, web.archive.org and rex.libraries.wsu.edu under automatic downloads, and saved the T&F, UBC and ResearchGate files by hand |
 | `CDP Runtime.evaluate timed out after 45000ms` on an 11-file batch | The script kept running in the page; waited on the files instead of re-running |
 | Search A called three Baxter papers paywalled from OpenAlex alone | A ResearchGate title search found author copies of two (Baxter & Hauer 2000; Baxter, Frissell & Hauer 1999): run it for every no-PDF row before calling it paywalled |
+| The live run (`20261112_0270_bull_trout_live.log`) stopped after 120 of 144 additions when its session ended, with no summary line | `0270` finds a previous run's copy through the Web API (`group_copy()`), so a dry run first (118 `exists`), then a plain re-run resumed it with no duplicate |
+| `CREATE-FAIL 400 'reportType' is not a valid field` for Hammond 2004: audit round 1 had put its series in `reportType` on a `document` | `itemType` set to `report` (as the BC Hydro rows carry theirs); every row's filled columns then checked against `zotero.sqlite`'s fields for its type (0 invalid; the check finds the old row) |
+| `URLError [Errno 60] Operation timed out` on single calls to the Web API and CrossRef, a different row each pass | Re-run: 0270 has no retry, and each pass reaches what the last missed. A create that timed out had succeeded (Fraley & Shepard), and the next pass found it |
+| `PDF-FAIL auth-fail 500` on Sheep Creek's upload left an attachment with no file (`M6I48R5K`) | The next pass uploaded the PDF to a second attachment; the empty one was trashed (`deleted: 1`) after checking the stored sibling |
+| The scratchpad was emptied when the session ended: the draft, merge, OCR and audit working files cited below are gone | The PDFs are in the ignored `data/rag/pdf/bull_trout/`, and the rows, drops and audit TSVs are tracked; a check that needs a working file regenerates it from those |
 
 ## Re-measure from a guarded copy (2026-11-12 07:20 UTC)
 
@@ -367,3 +372,35 @@ of North Columbia 2021 (the cover's "2021" is the project year); the form headin
 Dry run 2 (`scripts/logs/rag/20261112_0270_bull_trout_dryrun2.log`, exit 0): 162 would (14 members to add, 4 member
 PDFs, 144 creates), no `exists` or `copy exists` hit.
 
+
+## Live run (2026-11-13)
+
+Four live passes (logs `scripts/logs/rag/2026111[23]_0270_bull_trout_live*.log`):
+- The first pass (05:47Z) added the 14 group items and the 4 member PDFs and created 117 additions before its session ended.
+- After the Hammond fix, a dry run (`_dryrun_resume`) found 118 `exists` and 27 to do.
+- Two re-runs created the other 27 (24, then the three the first pass's timeouts had left) and uploaded the two PDFs left half done (COSEWIC 2025, Alberta 2009).
+
+Of the 144 additions' uploads, 65 came back `exists` (Zotero already held the bytes). Every one of those files is attached to its own new item.
+Two of them are also held by standalone attachments with no parent, already in the group (`XWKUK4KJ`, EcoCat 10078; `FS3IC4BS`, EcoCat 63074); they were left as they were.
+
+The no-op proof is `_dryrun3c` (exit 0, `exists 144 | member 174 | no-pdf 1 | pdf 173`, no `would`). Runs `3` and `3b` before it had no `would` line either, but each stopped on network timeouts.
+
+The collection checked through the Web API (scratchpad `coll_audit.py`):
+- 175 top-level entries: the 174 rows of the two CSVs, plus `P3TMRWQX`, the standalone Gill guide recorded at the plan review;
+- no title and year twice;
+- no empty attachment after the trash;
+- no stored PDF only on Metolius (#209) and the standalone.
+
+Before and after, from a guarded copy (`bt_measure.py`, 08:30Z):
+
+| | before (2026-11-12) | after (2026-11-13) |
+|---|---|---|
+| live top-level items | 16 | 174 |
+| keyed | 16 | 174 |
+| PDF on disk | 11 | 172 |
+
+The two without a PDF on disk are:
+- Metolius 1996, which has none (#209);
+- `baxter2002SummaryThird` (`TEKF7H3H`), whose attachment `VSQSZNUC` is stored on the server but had not yet synced to the desktop.
+
+Phase 3's gate waits for it.
