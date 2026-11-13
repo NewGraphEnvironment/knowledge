@@ -50,7 +50,7 @@ Suggests:
     flooded,
     fresh,
     ggplot2,
-    gq,
+    gq (>= 0.22.0),
     htmlwidgets,
     jsonlite,
     jsonvalidate,
@@ -61,10 +61,12 @@ Suggests:
     png,
     rmarkdown,
     RPostgres,
+    stars,
     terra,
     testthat (>= 3.2.0),
     tmap,
-    withr
+    withr,
+    xml2
 VignetteBuilder: knitr
 Remotes:
     NewGraphEnvironment/crate,

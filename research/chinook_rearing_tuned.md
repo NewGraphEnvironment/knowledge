@@ -226,8 +226,8 @@ stricter one (0.75 m³/s or a river within 1 km, against 1.5 m wide or the 15 m/
 limit is the laxer.
 
 The floodplain table (`data/compare/floodplain.csv`) and the maps were not redrawn for #73 (`0330 STAGE=maps`); their
-chinook figures are #65's, on the run's own configs. The GeoPackage `data/compare/gpkg/CH_rear.gpkg` (ignored) carries
-every segment's verdict under each rule and structure. Maps: `research/fig/compare_ch_rear_*.png`.
+chinook figures were #65's, on the run's own configs (#173 removed the maps; the floodplain table is now `0330 STAGE=floodplain`, and a comparison is viewed in QGIS from its GeoPackage, `0330 STAGE=gpkg`). The GeoPackage
+`data/compare/gpkg/CH_rear.gpkg` (ignored) carries every segment's verdict under each rule and structure.
 
 ## The #54 record: the 55-group build
 

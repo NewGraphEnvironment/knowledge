@@ -117,8 +117,10 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   30 % (#67, on the evidence build before #73; the main run carries that ladder for every species since #68);
   `0325`, `0330` and `knw_thresholds_table()` do not read them, because they list their directories non-recursively;
   `data-raw/vignette_chinook.R` reads `data/tune/grad_ext/` into the chinook bundle, whose article no longer quotes it
-  (#143). `data/compare/gpkg/` (ignored) holds one GeoPackage per species × stage from `0330`, the
-  comparison's view for QGIS (#81). `data/tune/candidate/<run>/` and `data/compare/candidate/<run>/` (ignored, #111)
+  (#143). `data/compare/gpkg/` (ignored) holds one GeoPackage per species × stage, the comparison's view for QGIS
+  (#81): `0330` writes them only when asked (`GPKG=TRUE`, or `STAGE=gpkg`, which with `TUNE_DIR=data/tune` writes the
+  promoted run's here without a promotion; #173), so one can be older than the tables, and its `run` table says which
+  run wrote it. `0330` draws no maps; the README figure and the chinook article draw the only example maps. `data/tune/candidate/<run>/` and `data/compare/candidate/<run>/` (ignored, #111)
   hold the full runs of `0320` and `0330` until `0335` promotes one, and the `replaced_<stamp>/` archive of what each
   promotion replaced (promoting it undoes the promotion); `data/tune/dev/` (ignored) holds `DEV=1 0320`, its log and
   its `pick_report.csv`. The tracked tables change only by promotion.
@@ -570,8 +572,8 @@ export `PGSERVICE` in the shell first (measured 2026-10-27).
 500 segments per query and keeps every walk in `knw.walk_cache`, so a batched walk costs about 3 ms per walk per
 worker on the host and 12 to 18 ms from the remote link, against 116 ms one query per walk; a cold regrade of every key
 took 53.4 min on the host, and one key regraded with its walks cached 4.1 min. `0330` regenerates link's flags group by
-group on 6 connections, one key at a time (BT rearing 33.4 min, every key 162.9 min with `GPKG=FALSE`; from the remote link #92's took 269 min to compare and 197 more to
-write the GeoPackages, which take 14 min on the host, so a run off the host passes `GPKG=FALSE`, #81): it is bound by
+group on 6 connections, one key at a time (BT rearing 33.4 min, every key 162.9 min without GeoPackages; from the remote link #92's took 269 min to compare and 197 more to
+write the GeoPackages, which take 14 min on the host, so since #173 a run writes them only with `GPKG=TRUE`, #81): it is bound by
 the database's cores, so run it on the host. Those minutes are every structure's; since #112 `0330` regenerates
 `default` and `door` alone unless `STRUCTURES=all` (the rules it drops took 29 to 33 % of the worker minutes on three
 keys), so the research files' `free` and `door_wetland` figures (#92's) are refreshed only on that setting. `0310`, a grading `0320` and every `STAGE` of `0330` check this at
@@ -608,8 +610,8 @@ region, and how far behind the best it now sits). All 22 keys took 7.7 min on 14
 both bundles, the bibliography and the README figure (Al, 2026-10-28: "we will be retuning continuously ... I help
 decide when we are retuning"). By key works only onto the kept keys' build: after a new link run or evidence build
 every fitted key moves together. A candidate's provenance is by construction: `0320` and `0330` clear a key's files in
-the run before a pass rewrites them and write the large ones whole (a GeoPackage, a key's figures, the grade and
-comparison tables land only complete), so `0335` trusts what a run holds; never put a file into a candidate by hand
+the run before a pass rewrites them and write the large ones whole (a GeoPackage, the grade and comparison tables land
+only complete), so `0335` trusts what a run holds; never put a file into a candidate by hand
 (#111, five review rounds, `planning/archive/2026-10-issue-111-candidate-runs-promotion/`). A promotion that moves the
 published numbers also moves pins it cannot revise
 (`test-tune_repick.R`'s 1.96 picks, `test-vignette-data.R`'s key count and funnel, the articles' inline checks) and

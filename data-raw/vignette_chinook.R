@@ -319,18 +319,10 @@ geom$id_segment <- as.numeric(geom$id_segment)
 water <- sf::st_zm(sf::st_read(conn, quiet = TRUE, query = sprintf("
   SELECT waterbody_key, 'lake' AS kind, geom FROM whse_basemapping.fwa_lakes_poly WHERE watershed_group_code = '%1$s' AND area_ha >= 10
   UNION ALL SELECT waterbody_key, 'river', geom FROM whse_basemapping.fwa_rivers_poly WHERE watershed_group_code = '%1$s'", wsg)), drop = TRUE)
-# the waterbody each segment lies in, with its polygon's area, for the map's popups (#79)
-wb <- DBI::dbGetQuery(conn, sprintf("
-  SELECT w.waterbody_key, w.waterbody_type,
-         coalesce(l.area_ha, wl.area_ha, m.area_ha) AS waterbody_ha
-  FROM whse_basemapping.fwa_waterbodies w
-  LEFT JOIN (SELECT waterbody_key, sum(area_ha) area_ha FROM whse_basemapping.fwa_lakes_poly GROUP BY 1) l USING (waterbody_key)
-  LEFT JOIN (SELECT waterbody_key, sum(area_ha) area_ha FROM whse_basemapping.fwa_wetlands_poly GROUP BY 1) wl USING (waterbody_key)
-  LEFT JOIN (SELECT waterbody_key, sum(area_ha) area_ha FROM whse_basemapping.fwa_manmade_waterbodies_poly GROUP BY 1) m USING (waterbody_key)
-  WHERE w.waterbody_key IN (SELECT DISTINCT waterbody_key FROM %s.streams
-                            WHERE watershed_group_code = '%s' AND waterbody_key IS NOT NULL)", schema, wsg))
+# the waterbody each segment lies in, with its polygons' area, for the map's popups (#79): the lookup 0330's GeoPackage
+# reads too (.knw_segment_water(), #173), which gives a river its polygons' area as well
+wb <- .knw_segment_water(conn, schema, wsg)
 DBI::dbDisconnect(conn)
-if (anyDuplicated(wb$waterbody_key)) stop("a waterbody key with two rows in fwa_waterbodies")
 # as 0330 builds `sg`
 sg <- geom |> inner_join(s |> transmute(id_segment, blue_line_key, accessible, stream_order, grade, grade_class,
                                         length_metre, flag_default = rearing_default, flag_tuned = rearing_tuned,
@@ -340,10 +332,10 @@ sg <- geom |> inner_join(s |> transmute(id_segment, blue_line_key, accessible, s
 sg$in_waterbody <- !is.na(sg$waterbody_key)
 i_wb <- match(sg$waterbody_key, wb$waterbody_key)
 if (any(sg$in_waterbody & is.na(i_wb))) stop("a segment's waterbody is not in fwa_waterbodies")
-# R, W and L as link's rules name them; X (a reservoir or other man-made waterbody) reads as a lake, as link's lake rule does
-sg$water <- unname(c(R = "river", W = "wetland", L = "lake", X = "lake")[wb$waterbody_type[i_wb]])
+# river, wetland or lake as link's rules name them (a reservoir or other man-made waterbody reads as a lake)
+sg$water <- wb$water[i_wb]
 sg$water[!sg$in_waterbody] <- "stream"
-sg$water_ha <- as.numeric(wb$waterbody_ha[i_wb])
+sg$water_ha <- wb$water_ha[i_wb]
 if (anyNA(sg$water)) stop("a waterbody type other than R, W, L or X")
 if (nrow(sg) != nrow(s)) stop(nrow(s) - nrow(sg), " saved segments have no geometry in ", schema, ".streams")
 

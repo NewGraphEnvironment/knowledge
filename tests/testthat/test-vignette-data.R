@@ -7,8 +7,8 @@
 vd <- function(f) system.file("vignette-data", f, package = "knowledge")
 
 test_that("the article's data ships with the package", {
-  for (f in c("chinook_rearing.rds", "bulk_segments.rds", "bulk_water.rds", "method.rds", "cut_points.rds",
-              "cut_points_places.rds")) {
+  for (f in c("chinook_rearing.rds", "bulk_segments.rds", "bulk_water.rds", "bulk_context.rds", "method.rds",
+              "cut_points.rds", "cut_points_places.rds")) {
     expect_true(nzchar(vd(f)), info = f)
   }
 })
@@ -276,4 +276,14 @@ test_that("the cut-points examples meet the criteria the bundle states", {
     expect_true(all(c("full", "minimal") %in% e$segments$network), info = e$site$site_visit)
     expect_equal(nrow(e$sites[e$sites$site_visit == e$site$site_visit, ]), 1, info = e$site$site_visit)
   }
+})
+
+test_that("the map's context was written for the article's map group (#77)", {
+  ctx <- readRDS(vd("bulk_context.rds"))
+  x <- readRDS(vd("chinook_rearing.rds"))
+  expect_identical(ctx$meta$map_group, x$meta$map_group)
+  expect_identical(ctx$aoi$watershed_group_code, x$meta$map_group)
+  for (k in c("aoi", "bc", "towns", "rivers")) expect_identical(sf::st_crs(ctx[[k]])$epsg, 3005L, info = k)
+  expect_true(all(c("label", "angle") %in% names(ctx$rivers)))
+  expect_gt(nrow(ctx$towns), 0)
 })

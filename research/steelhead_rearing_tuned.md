@@ -166,4 +166,4 @@ comparison records as tuned. Both checks say the rule keeps most of what the fis
 detections lie on its segments against `default`'s 204, on 41 % fewer km under the door.
 
 The floodplain table (`data/compare/floodplain.csv`) and the maps were not redrawn for #73 (`0330 STAGE=maps`);
-the maps in `research/fig/compare_st_rear_*.png` date from 2026-10-20 (#65).
+the maps dated from 2026-10-20 (#65) (#173 removed the maps; the floodplain table is now `0330 STAGE=floodplain`, and a comparison is viewed in QGIS from its GeoPackage, `0330 STAGE=gpkg`).

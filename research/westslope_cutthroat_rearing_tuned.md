@@ -179,5 +179,5 @@ accessible km is 1.560 (1.515–1.601) for `default`, 1.460 (1.435–1.482) with
 the door; the door's lift over `default` is −0.101 (−0.141 to −0.061). The rule captures 1,291 of the 1,408 locations
 against `default`'s 1,032, and does so by drawing more stream, so the lift (concentration) falls. **The two structures
 cannot be told apart by either check**, and the comparison tables record the door, the structure the thresholds table
-uses. The floodplain table and the maps (`research/fig/compare_wct_rear_*.png`) were not redrawn for #73: they date
-from 2026-10-20, before this tuning, and are not quoted here.
+uses. The floodplain table and the maps were not redrawn for #73: they dated
+from 2026-10-20, before this tuning, and are not quoted here (#173 removed the maps; the floodplain table is now `0330 STAGE=floodplain`, and a comparison is viewed in QGIS from its GeoPackage, `0330 STAGE=gpkg`).

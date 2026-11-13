@@ -35,6 +35,12 @@ vd <- function(f) system.file("vignette-data", f, package = "knowledge", mustWor
 x <- readRDS(vd("chinook_rearing.rds"))
 seg <- readRDS(vd("bulk_segments.rds"))
 water <- readRDS(vd("bulk_water.rds"))
+# the map group's outline, British Columbia, its towns and rivers (data-raw/vignette_context.R), for the static map
+ctx <- readRDS(vd("bulk_context.rds"))
+stopifnot(identical(ctx$meta$map_group, x$meta$map_group))
+# the static map's canvas takes the group's shape: its outline padded 2 km, as knw_compare_map() draws it
+map_bb <- sf::st_bbox(ctx$aoi)
+map_h <- 6 * (map_bb[["ymax"]] - map_bb[["ymin"]] + 4000) / (map_bb[["xmax"]] - map_bb[["xmin"]] + 4000)
 
 tune <- x$tune
 summ <- x$summary
@@ -150,14 +156,17 @@ fish species can reach and where it can spawn and rear on BC's streams. Its stan
 [How the tuning works](tuning-method.html) says [what a habitat definition is](tuning-method.html#thresholds), and
 how one is tested and tuned.
 
-```{r map-static, eval = !on_site, fig.width = 6, fig.height = 6.9, out.width = "80%", fig.cap = paste0("Chinook rearing in the Bulkley watershed group (", meta$map_group, "), around Smithers, under each habitat definition. Orange: link's current habitat definition only (the legend's 'lost'). Green: the recommended habitat definition only (the legend's 'tuned only'). Blue: both. Line width follows stream order.")}
+```{r map-static, eval = !on_site, fig.width = 6, fig.height = map_h, out.width = "80%", fig.cap = paste0("Chinook rearing in the Bulkley watershed group (", meta$map_group, "), around Smithers, under each habitat definition. Orange: link's current habitat definition only (the legend's 'lost'). Green: the recommended habitat definition only (the legend's 'tuned only'). Blue: both. Line width follows stream order. The inset places the group in British Columbia.")}
 f1 <- tempfile(fileext = ".png")
-knw_compare_map(seg, water, png = f1, panels = "rules")
+# no basemap here: this copy is built without network (R CMD check); the website's map has Esri's topographic map
+knw_compare_map(seg, water, png = f1, panels = "rules", width = 6, scalebar = TRUE,
+                keymap = list(aoi = ctx$aoi, context = ctx$bc), places = list(towns = ctx$towns, rivers = ctx$rivers),
+                corners = c(legend = "topright", scalebar = "topleft", keymap = "bottomleft", logo = "bottomright"))
 grid::grid.raster(png::readPNG(f1))
 ```
 
 ```{r map-site, eval = on_site, out.width = "100%"}
-knw_compare_mapgl(seg, water, title = "Habitat definition", background = "esri_topo")
+knw_compare_mapgl(seg, water, title = "Habitat definition", background = "esri_topo", scale = TRUE)
 ```
 
 In the Bulkley watershed group, around Smithers, the recommended habitat definition draws `r n0(map_row$tuned_km)` km of rearing
