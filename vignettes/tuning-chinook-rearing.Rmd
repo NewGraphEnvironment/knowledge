@@ -314,8 +314,8 @@ flat from `r grad(min(region$grad_max))` up.
 
 **A stricter bar.** At `r se_strict` standard errors, about the width of a 95 % interval, more habitat definitions are
 close calls, and the choice moves toward link's. Of the close calls it takes the one that changes the fewest of
-link's dials: it keeps link's slope limit of `r grad(ch196$grad_max)` and raises the flow floor to
-`r ch196$size_min` m³/s, with the same near-a-river allowance:
+link's dials: it keeps link's slope limit of `r grad(ch196$grad_max)` and raises the flow floor from
+`r rec$size_min` to `r ch196$size_min` m³/s, with the same near-a-river allowance:
 
 ```{r strict}
 bold_if <- function(v, ref) ifelse(v != ref, paste0("<b>", v, "</b>"), v)
@@ -371,7 +371,7 @@ knitr::kable(oc, format = "html", align = "lll") |>
 - **The cut-offs are a judgment call.** Chinook get gradually less common as streams get smaller and steeper; there is
   no flow or slope where they stop. At one standard error, flow floors of `r min(region$size_min)` to
   `r max(region$size_min)` m³/s fit almost as well. At `r se_strict` standard errors the choice keeps link's slope limit
-  of `r grad(ch196$grad_max)` and raises the flow floor to `r ch196$size_min` m³/s.
+  of `r grad(ch196$grad_max)` and raises the flow floor from `r rec$size_min` to `r ch196$size_min` m³/s.
 - **Steeper slopes fit nearly as well.** The close calls run from `r grad(min(region$grad_max))` to
   `r grad(max(region$grad_max))`, the top of the list, and `r grad(rec$grad_max)` is the best scorer among them, not a
   slope at which chinook stop.
@@ -388,7 +388,7 @@ knitr::kable(oc, format = "html", align = "lll") |>
 | Records | The Fisheries Data Information System's electrofishing sites [@provinceofbritishcolumbia2022FisheriesData]: where crews fished, and whether they caught chinook. `r n0(summ$visits_in)` sites in `r summ$groups` watershed groups: those on ordinary stream lines, of a usual fished area, with no code in the catch that could hide chinook and no barrier to chinook downstream, in groups where link expected chinook when the tuning ran; the tests use the `r summ$groups_both` groups where chinook were caught at some sites and not others, **`r n0(dflt$n_visits)` sites, `r n0(dflt$n_detect)` with chinook**. ([More](tuning-method.html#steps)) |
 | Placement | Each site went onto the BC Freshwater Atlas, loaded by fwapg [@norris2024smnorrisfwapg]. A site whose 1:50k tributary code the Atlas's crosswalk knows went to the nearest stream that code names, kept when it lay within 500 m of the point, and was dropped otherwise; a site with no such code went to the nearest stream, kept when it lay within 200 m. ([More](tuning-method.html#snap)) |
 | Flow | wet's modelled average flow [@wet]: PCIC's VIC-GL runoff [@schnorbus2018VICGlacierVICGL] routed with Raven [@craig_etal2020Flexiblewatershed] and carried onto Atlas streams by a crosswalk in New Graph's fork of fwapg [@norris_irvine2026NewGraphEnvironmentfwapg], with wet's own water balance where that flow does not reach or, on a stream's own line, carries under a fifth of the balance's. |
-| Slope | The slope of the segment a site sits on, on link's minimal network, which does not cut streams at sites that caught fish, so a site's slope does not depend on its catch. ([More](tuning-method.html#cuts)) |
+| Slope | The slope of the segment a site sits on, on link's minimal network, which does not cut streams at sites that caught fish, so a site's slope hardly depends on its catch. ([More](tuning-method.html#cuts)) |
 | Candidates | `r n0(nrow(tune))` habitat definitions, link's among them, from three dials: the smallest stream (an average flow of `r lst(sort(unique(tune$size_min[tune$size_var == "mad"])), "or")` m³/s, or a channel width of `r lst(sort(unique(tune$size_min[tune$size_var == "width"])), "or")` m); the steepest slope (`r lst(grad(sort(unique(tune$grad_max))), "or")`); and a near-a-river allowance (none, or a river of `r lst(sort(unique(na.omit(tune$exc_q))), "or")` m³/s within `r lst(format(sort(unique(na.omit(tune$exc_d))), big.mark = ",", trim = TRUE), "or")` m downstream). |
 | Scoring | The groups were split into `r meta$spec$folds` sets, and each set was predicted by a model fitted to the others. The score adds up how far each prediction was from what the crew found; lower is better. ([More](tuning-method.html#se)) |
 | Run by | fresh [@fresh], through all of link's steps for the map and the habitat totals. |

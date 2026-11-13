@@ -39,7 +39,7 @@ gs <- x$gradient_sensitivity
 sg <- x$segment_at_site
 n0 <- function(v) format(round(v), big.mark = ",", trim = TRUE)
 about <- function(v) format(signif(v, 2), big.mark = ",", trim = TRUE)
-pc <- function(v) paste0(round(100 * v), " %")
+pc <- function(v, d = 0) paste0(round(100 * v, d), " %")
 fn <- function(stage) fun$n[fun$stage == stage]
 val <- function(key) gsub(";", ", ", reg$value[reg$key == key], fixed = TRUE)
 issue <- function(n) {
@@ -213,8 +213,8 @@ the species it models have been observed, using `bcfishobs` [@norris2024smnorris
 caught fish is far more likely than one that caught none to start a short segment of its own, and the slope it is
 scored on depends on the catch. The habitat definitions here are tuned on link's minimal network, which leaves out
 those cuts, and those at crossings and hand-mapped habitat ([why](#cuts)): there a stream-line site that caught fish
-starts a segment of its own about as often as one that caught none (`r pc(sg$at_site_fish)` against
-`r pc(sg$at_site_zero)`). The observations never score a habitat definition: they say where fish were seen, not where
+starts a segment of its own about as often as one that caught none (`r pc(sg$at_site_fish, 1)` against
+`r pc(sg$at_site_zero, 1)`). The observations never score a habitat definition: they say where fish were seen, not where
 they were looked for and missed.
 
 `r detail(3)`
@@ -431,8 +431,8 @@ shows it on our own records; these figures come from that article's data, writte
 
 - A site's tributary code can name several Atlas streams, and the site goes to the nearest of them, which need not be
   the one the crew fished (`r issue("91")`).
-- On link's minimal network, `r pc(sg$at_site_fish)` of stream-line sites that caught fish start a segment of their
-  own, against `r pc(sg$at_site_zero)` of those that caught none, and the median segment is `r n0(sg$len_fish)` m long
+- On link's minimal network, `r pc(sg$at_site_fish, 1)` of stream-line sites that caught fish start a segment of their
+  own, against `r pc(sg$at_site_zero, 1)` of those that caught none, and the median segment is `r n0(sg$len_fish)` m long
   against `r n0(sg$len_zero)` m, so the stretch a site's slope is worked out over hardly depends on what the crew
   caught (`r issue("120")`). Its segments still end at access gradients, which depend on the species link models.
   Scored on the whole Atlas line's slope instead, the chosen habitat definition is a close call for
