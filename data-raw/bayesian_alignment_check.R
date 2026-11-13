@@ -31,14 +31,14 @@
 # text is neither a quote nor a quote mark near a citation, and the coverage tables, which are the research file's,
 # are not looked for. Each file holds its own count of checked quotes (`n_quotes`).
 #
-# INPUT:  research/bayesian_alignment.md, or the article (MD=); inst/method/{pipeline,settings}.csv; R/; the two PDFs under
-#         ZOTERO_DIR/storage (default ~/Zotero), by the attachment keys below (group library 4733734, resolved
+# INPUT:  research/bayesian_alignment.md, or the article (MD=); inst/method/{pipeline,settings}.csv; R/;
+#         the two PDFs under ZOTERO_DIR/storage (default ~/Zotero), by the attachment keys below (group library 4733734, resolved
 #         2026-11-11 from a guarded copy of zotero.sqlite)
 # OUTPUT: scripts/logs/habitat/<yyyymmdd>_bayesian_alignment_check.txt (the research file, no MD= set) or
 #         <yyyymmdd>_bayesian_alignment_check-tuning-bayesian-practice.txt (the article); none for any other MD=;
 #         exits 1 on any failure
-# RUN:    Rscript data-raw/bayesian_alignment_check.R   (from the repo root; needs pdftotext), then again with
-#         MD=vignettes/tuning-bayesian-practice.Rmd
+# RUN:    Rscript data-raw/bayesian_alignment_check.R   (from the repo root; needs pdftotext), then again with the
+#         article as MD (vignettes/tuning-bayesian-practice.Rmd)
 # ---------------------------------------------------------------------------
 options(warn = 1)
 
@@ -283,8 +283,8 @@ say(if (fail) paste0("FAILED: ", fail, " problems") else "PASS")
 
 stem <- if (!nzchar(Sys.getenv("MD"))) "" else if (identical(md_path, article)) "-tuning-bayesian-practice" else NA
 if (!is.na(stem)) {
-  out <- file.path("scripts", "logs", "habitat", paste0(format(Sys.time(), "%Y%m%d", tz = "UTC"), "_bayesian_alignment_check",
-                                                       stem, ".txt"))
+  day <- format(Sys.time(), "%Y%m%d", tz = "UTC")
+  out <- file.path("scripts", "logs", "habitat", paste0(day, "_bayesian_alignment_check", stem, ".txt"))
   dir.create(dirname(out), recursive = TRUE, showWarnings = FALSE)
   writeLines(log, out)
 }
