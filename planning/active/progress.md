@@ -75,3 +75,7 @@
   fix: promoted `STAGE=gpkg` required one `tune_run` across every summary, though a key can be promoted alone from a
   later run onto the same build. Now each key's GeoPackage names its own key's run (trial: two runs and a summary with
   none read as 20261201_0101, 20261104_0543, NA). A stale comment on 0335 copying into research/fig/ corrected
+- /code-check round 5 (`review-round5.md`): Clean. It re-checked round 4's fix (the literal `run`, an NA run, the
+  per-key `run_info` on workers) and every value still assumed one across keys or groups, measured on the published
+  build. The loop ended on a clean round with no round finding a defect inside an earlier fix (five rounds, past the
+  five-agent bound with the plan review and the gq build: eight agents in all)
