@@ -56,12 +56,12 @@ ch <- th[th$rule_id == "CH_rear_v1", c("component", "link_parameter", "value", "
 print(ch, row.names = FALSE)
 #>    component           link_parameter   value     unit
 #>         size             rear_mad_min    0.75     m3/s
-#>     gradient        rear_gradient_max    0.13 fraction
+#>     gradient        rear_gradient_max    0.09 fraction
 #>  exception_q rear_river_discharge_min    3.00     m3/s
 #>  exception_d  rear_river_distance_max 1000.00        m
 ```
 
-On a stream line, the tuned habitat definition passes a segment for chinook rearing where its gradient is at most 13 % and
+On a stream line, the tuned habitat definition passes a segment for chinook rearing where its gradient is at most 9 % and
 either its mean annual flow is at least 0.75 m³/s or a river of at least 3 m³/s lies within 1 km downstream.
 Access and link's other steps then apply as they do to `default`.
 

@@ -295,8 +295,9 @@ picks <- bind_rows(lapply(keys, function(k) {
          pick_strict = b$rule, close_calls_strict = b$n_region, rules = nrow(t))
 }))
 
-# ---- the segment at a site (#92): link cuts a stream at the observations of the species it models, so a site with ----
-# fish usually starts its own segment; on the stream-line sites of a usual fished area, as
+# ---- the segment at a site (#92, #120): link's full network cuts a stream at the observations of the species it ----
+# models, so there a site with fish usually starts its own segment, and its minimal network does not; on the
+# stream-line sites of a usual fished area of the network the published tables were scored on, as
 # data-raw/segment_gradient_check.R measures them
 d_sg <- vl[stream & area_ok, ]
 at_site <- d_sg$segment_start_offset_m >= -1 & d_sg$segment_start_offset_m <= 5
