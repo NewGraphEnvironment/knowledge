@@ -43,10 +43,27 @@ Backlog: `planning/backlog.md`, move 4. Plan it with `/planning-init <this issue
   habitat_thresholds, rainbow, steelhead and westslope_cutthroat `_tuned.md`.
 - Keys: 22 summaries in `data/tune/`; 7 have a grade record (BT rear, BT spawn, CH, CO, GR, ST, WCT rear).
 - Saved segments (ignored) exist in the main checkout: `../knowledge/data/compare/{BT_rear,BT_spawn,CH_rear,CO_rear,GR_rear,RB_rear,ST_rear,WCT_rear}_segments.rds`.
-- gq installed 0.16.1, latest 0.21.0; it exports `gq_tmap_keymap(aoi, context, reg, aoi_layer, context_layer, corner, ...)`,
-  `gq_style_qml(layer_key, template)`, `gq_basemap_tiles()`, `gq_basemap_blend(base, relief, method, ...)` at 0.16.1.
+- gq was 0.16.1; upgraded to 0.21.0 on 2026-11-13 (`github::NewGraphEnvironment/gq@9d59aba`). Signatures at 0.21.0:
+  `gq_tmap_keymap(aoi, context, reg, aoi_layer = "watershed_group_boundary", context_layer, corner, width, height, asp, margin)`,
+  `gq_basemap_tiles(bbox, provider = "Esri.WorldGrayCanvas", zoom = 12, pad = 0.1, crs = 3005)`,
+  `gq_basemap_blend(base, relief, method = c("gamma", "weight"), ...)`, `gq_reg_custom(path)`, `gq_reg_merge(..., csv, priority)`.
+- `gq_style_qml(layer_key, template)` returns the path of a QML gq ships for its own layer keys and errors on any
+  other key. No gq export writes a QML from a registry entry, so a custom layer (the comparison's rule and grade
+  classes) cannot get a QGIS style through gq. Filed as gq#115; Al chose to build it in gq first (2026-11-13).
 - The chinook article draws its static map only off-site (`eval = !on_site`); on the site it is `knw_compare_mapgl()`.
 - #79 (interactive map fixes) is closed.
+
+## Plan review (2026-11-13, `review-plan.md`)
+
+Checked before acting:
+- `0330` reads only `TUNE_DIR=data/tune/candidate/<run>` (`scripts/0330-compare.R:100-104`), so neither on-demand stage
+  can run on the promoted run: confirmed.
+- `data/compare/floodplain.csv` was last written by #65 (4534f404, 2026-10-19). The #145 promotion (91ae2f5d) only
+  deleted 69 rows, so the chinook rows are from the superseded rule: confirmed.
+- The saved segments already carry `knw_size` (flow), `channel_width`, `gradient`, `knw_dist`, `stream_order`,
+  `link_branch` and `user_habitat`; they lack the rule class and the waterbody area (#81 task 5).
+
+Outcome: Al cut the PR to batch 6 (2026-11-13); batch 7 goes to a split-off issue.
 
 ## Errors Encountered
 

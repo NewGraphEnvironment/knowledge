@@ -4,18 +4,14 @@
 
 ## Context
 
-`scripts/0330-compare.R` still writes GeoPackages by default (`GPKG` defaults to on; 196.9 min on #92's run from the
-remote link) and, under `STAGE=maps`, draws the floodplain table, 121 static PNGs into `research/fig/` and 102 HTML
-pages together. Its static maps have no scale bar, keymap or place names, so nobody new to the area can find the
-Bulkley (#77). The eight tuning write-ups in `research/` each have a different hand-written layout and hand-copied
-numbers (#90, #64). Move 2 (PR #208, merged 2026-11-12) renamed the articles to `tuning-method`,
-`tuning-chinook-rearing` and `tuning-stream-splits`, so #77's map goes into those names.
+`scripts/0330-compare.R` writes GeoPackages by default (196.9 min on #92's run from the remote link). Under
+`STAGE=maps` it draws the floodplain table, the static PNGs in `research/fig/` and the HTML pages together. Its
+static maps have no scale bar, keymap or place names, so nobody new to the area can find the Bulkley (#77). Move 2
+(PR #208, merged 2026-11-12) renamed the articles to `tuning-method`, `tuning-chinook-rearing` and
+`tuning-stream-splits`.
 
-The plan reads only the tracked tables and the ignored saved segments. It does no retune or promotion.
-
-**Split (per #173's rule):** batch 7 is more than one PR. This PR carries batch 6 (#81, #77), the template and
-generator, and one key, chinook rearing. The other six fitted keys' pages are filed as a new issue split from #173
-and left out of `planning/backlog.md`.
+This PR is **batch 6 only (#81, #77)**. It reads the tracked tables and the ignored saved segments, and does no retune
+or promotion.
 
 ## Decided at the gate (Al, 2026-11-12)
 
@@ -26,84 +22,91 @@ and left out of `planning/backlog.md`.
   `setups_ch_rear_mork.png`. The 97 `compare_*.png` are named only in `scripts/logs/`, in a test fixture, in a roxygen
   example and by a glob line in 7 research pages. **A glob line does not count as showing a map:** remove all 97,
   rewrite each glob line, and list them in the PR. A script recomputes this list at the time of removal.
-- One template. #64's order supplies the sections (life-history prior, evidence, recommendation, what it draws, what
-  is left open), with a plain-language walk first. #90's fixed fields and figures go beneath as the specification.
-  Every number comes from the tables; none is typed by hand.
-- Which keys get pages: the generator writes any key. This PR runs it for chinook rearing. **The split-off issue
-  covers the other 6 fitted keys** (BT rearing and spawning, CO, GR, ST, WCT rearing). The 15 unfitted keys get one
-  row each in `research/tuning/README.md`'s table across keys, and no page.
-- `research/chinook_rearing_tuned.md` gets **#90's move**: #54's record and its 4 embedded figures go to
-  `planning/archive/`, a one-line pointer stays at the old path, and every reference to the old file is updated in
-  one pass.
-- Upgrade gq 0.16.1 to 0.21.0. It is stale, and this work uses `gq_tmap_keymap()`, `gq_style_qml()`,
-  `gq_basemap_tiles()` and `gq_basemap_blend()`. fresh and link are stale too; this work reads neither through code
-  that moved.
-- Interactive map fixes: #79 is closed. #81's first open task is ticked against it.
+- Upgrade gq 0.16.1 to 0.21.0 (done in Phase 0).
+- #79 is closed and the mapgl/Esri map landed with it (NEWS 0.4.8), so #81's first open task is ticked against it.
+
+## Decided after the gate (Al, 2026-11-13)
+
+- **gq has no QML writer for a custom registry layer** (`gq_style_qml()` returns only the QMLs gq ships). Filed as
+  [gq#115](https://github.com/NewGraphEnvironment/gq/issues/115). **Build it in gq first** (its own branch and PR),
+  then use the release here. If that release is not out by this PR, the style task moves to the split-off issue.
+- **Split, after the plan review (`review-plan.md`) measured batch 6 alone as a full PR: this PR carries batch 6 only.**
+  Batch 7 goes to one split-off issue naming #173, left out of `planning/backlog.md`. It covers the template, the
+  generator, the chinook page and #90's move of `chinook_rearing_tuned.md`, then the other six fitted keys, and the
+  floodplain question. (The tracked floodplain table's chinook rows are #65's, from the superseded rule: the #145
+  promotion only deleted rows. No stage can redraw them without a comparison run and a promotion.)
+  The gate's batch 7 decisions travel with it: #64's order with #90's specification beneath, every number from the
+  tables, and the 15 unfitted keys as table rows only.
+
+## Mechanism (decided by the agent; reported)
+
+- `GPKG` is parsed by an `R/` helper so it can be tested: unset or `FALSE` gives FALSE, `TRUE` gives TRUE, anything
+  else refuses. `FALSE` stays valid, so every documented `GPKG=FALSE` call still works.
+- `STAGE=maps` remains as a refusal that names its replacements. `STAGE=floodplain` writes the floodplain table alone,
+  and gains `tune_run`, `config_sha` and `tuned_rule` columns so a stale row can be told apart.
+- `STAGE=gpkg` also accepts the promoted run (`TUNE_DIR=data/tune`). It reads `data/compare/<key>_segments.rds` and
+  writes into the ignored `data/compare/gpkg/`, so the published run can be opened in QGIS without a promotion. Each
+  GeoPackage carries a `run` table naming the run it was written from.
+- The README figure keeps `data-raw/readme_figure.R`, which 0335 already runs. With the maps gone from 0330, it and the
+  article's map chunk are the only scripted example maps.
+- The context layers for the article's static map are written by their own script (`data-raw/vignette_context.R`)
+  into new bundle files, pinned to `chinook_rearing.rds$meta$map_group`. `vignette_chinook.R` is not rerun, because a
+  rerun would rewrite `bulk_segments.rds`, which `method.rds` pins (#77's task 2 says rerun it; this is why not).
 
 ## Phase 0: Setup
-- [ ] Install gq 0.21.0; check that the functions above exist and record their signatures in findings.md
-- [ ] Point `COMPARE_DIR` at the main checkout's saved segments (`../knowledge/data/compare/*_segments.rds`); check
-      that their grade md5 matches the tracked `CH_rear_grades_record.csv`
+- [x] Install gq 0.21.0; record what it can and cannot do in findings.md (no QML writer for custom layers: gq#115)
+- [x] Plan review written to `review-plan.md` and folded in here; scope cut to batch 6 on Al's word
 
 ## Phase 1: Maps out of the comparison (#81)
-- [ ] `0330`: `GPKG` opt-in (`GPKG=TRUE`), off by default; `STAGE=gpkg` stays as the on-demand step
-- [ ] `0330`: drop the static maps and HTML pages; `STAGE=maps` becomes `STAGE=floodplain`, which writes only the
-      floodplain table, from the saved segments
-- [ ] Classes and colours in one gq custom registry (`inst/gq/compare.csv`: rule class, grade class), read through
-      `gq_reg_custom()`/`gq_reg_merge()`. `knw_compare_map()`, `knw_compare_mapgl()` and the GeoPackage read the same
-      values, so `.compare_rule_cols` and `.compare_grade_cols` stop holding hex values
-- [ ] The GeoPackage carries its QGIS style (`gq_style_qml()` into `layer_styles`, rule class as the default style
-      and grade class as a second one); a test opens a written fixture and reads both styles back
-- [ ] `knw_tune_promote()` and `0335`: drop the `fig_dir` promotion of `compare_<key>_*.png`, because no run writes
-      them now; update `test-tune_promote.R`
-- [ ] Docs: the 0330 header, `scripts/README.md`, the README line on `research/fig/`, and CLAUDE.md's 0330 and
-      `data/compare/gpkg/` lines
+- [ ] `GPKG` opt-in through a tested `R/` helper (unset or FALSE gives off, TRUE gives on, anything else refuses)
+- [ ] `0330`: drop the static maps and HTML pages. Add `STAGE=floodplain` (the floodplain table alone, with run
+      columns); `STAGE=maps` refuses and names `floodplain` and `gpkg`
+- [ ] `STAGE=gpkg` accepts `TUNE_DIR=data/tune` (the promoted run → `data/compare/gpkg/`), and every GeoPackage gets
+      a `run` table
+- [ ] GeoPackage fields (#81 task 5): add the rule class (kept, lost, gained, neither) and the area of the waterbody a
+      through-wetland segment runs through. Flow, width, gradient, distance, order and `link_branch` are already there
+- [ ] Classes and colours move into one custom registry (`inst/gq/compare.csv`), which `knw_compare_map()` and
+      `knw_compare_mapgl()` read. `.compare_rule_cols` and `.compare_grade_cols` stop holding hex values, and the
+      integer `match_expr` mapping is tied to the registry's class order
+- [ ] gq#115: the QML writer in gq (its own branch and PR; the merge and release on Al's word). Once released, the
+      GeoPackage carries rule-class (default) and grade-class styles in `layer_styles`, tested on a fixture: every
+      class present, one style default. If it is not released by this PR, the style task moves to the split-off
+- [ ] `knw_tune_promote()`: drop `fig_dir`, covering its signature, roxygen, example, archive place map and comments.
+      `0335`: the header, its list, and "regenerate figures" left out. Port the two figure-only tests
+      (`test-tune_promote.R` "archive and undo" and "an undo restores whatever the files' ages") to the GeoPackage
+- [ ] Docs: the 0330 header, the 0335 header, `scripts/README.md`, `data-raw/README.md`, README's `research/fig/`
+      line, `inst/NOTICE.md` (the maps and floodplain panel lines), and CLAUDE.md's 0330, `data/compare/gpkg/` and
+      promotion lines
 
 ## Phase 2: Example maps a stranger can place (#77)
 - [ ] `knw_compare_map()`: opt-in `scalebar`, `keymap` (`gq_tmap_keymap()` on the watershed group in BC), `places`
-      (town labels from `gns_geographical_names_sp`, river names from the Freshwater Atlas, with halos) and
-      `basemap` (`gq_basemap_tiles()` + `gq_basemap_blend()`, Esri World Topo over World Shaded Relief), drawn in BC
-      Albers; legend, logo, scale bar and keymap each in its own corner; canvas aspect from the window. All default
-      off, so existing calls do not move. Tests for each argument
-- [ ] `data-raw/example_maps.R` replaces `data-raw/readme_figure.R`: it draws the README figure
-      (`man/figures/readme-bulk.png`) and each generated page's map panel, with everything turned on
-- [ ] The chinook article's static map (`map-static`, drawn off-site) turns them on. If the bundle needs the
-      context layers (group boundary, towns, river names), `data-raw/vignette_chinook.R` writes them as new bundle
-      files; check `test-vignette-data.R`'s source md5s stay unmoved
-- [ ] Self-review every PNG at its published width (README column; article at 80 %): the 14 checks in
-      `cartography.md`
-- [ ] Remove the 97 `compare_*.png` (the list is recomputed by script and pasted into the PR); rewrite the glob line
-      in each of the 7 research pages to point to the GeoPackage step; fix the roxygen example path
-- [ ] NEWS entry
+      (town labels and river names, with halos) and `basemap` (`gq_basemap_tiles()` with `gq_basemap_blend()`, Esri
+      World Topo over World Shaded Relief, its `credit` drawn), in BC Albers. Legend, logo, scale bar and keymap each
+      get their own corner, and the canvas aspect comes from the window. All default off. Tests for each argument;
+      the basemap test skips offline and on CRAN
+- [ ] `knw_compare_mapgl()`: an opt-in scale control, so the site's map carries a scale too
+- [ ] Sources and terms: towns from BC Geographical Names through bcdata, names only (the `vignette_cut_points_places.R`
+      pattern); river names from the Freshwater Atlas; the keymap's BC outline from a named source. NOTICE rows for
+      Esri tiles and each new source. `maptiles` added to Suggests, gq floor set (`gq (>= 0.21.0)`)
+- [ ] `data-raw/vignette_context.R` writes the context layers for the Bulkley map into new bundle files, added to
+      `test-vignette-data.R`'s shipped-files list and pinned to the bundle's `map_group`
+- [ ] Turn them on in `data-raw/readme_figure.R` (README figure) and the article's `map-static` chunk and site map.
+      The "defaults unchanged" baseline is redrawn after the gq upgrade, not taken from the committed PNG
+- [ ] Self-review every PNG at its published width (README column; article at 80 %) against `cartography.md`'s 14
+      checks. Render the article off-site after installing the branch, and check whether `R CMD check` now needs
+      network
+- [ ] Remove the 97 `compare_*.png` (the list is recomputed by script and pasted into the PR), rewrite the glob line in
+      each of the 7 research pages to point to `STAGE=gpkg`, and fix the roxygen example path. The frozen `0297` and
+      `0298` keep their paths (they are frozen)
+- [ ] NEWS: the GPKG default flip, `fig_dir` removed, `STAGE=maps` renamed, the new map arguments
 
-## Phase 3: One template, one generator, chinook rearing (#90, #64)
-- [ ] `data-raw/tuning_reports.R KEYS=CH_rear`: writes `research/tuning/<key>.md` from `data/tune/` and
-      `data/compare/` (plus the saved segments for its map). Section order: plain-language walk with a before/after
-      table; life history and prior (from `data/literature_evidence.csv` and `data/ip_model_registry.csv`, cited
-      by row); evidence; what the data supports and the recommendation (the checks in one order, each with its
-      direction); what it draws (km, graded km, floodplain ha, one map); what is left open; then the specification
-      (#90's fixed fields). Each number is filled from a table and checked with `stopifnot()`; the script refuses to
-      write when a quoted number has moved
-- [ ] Each key's interpretation is a short hand-written block, `research/tuning/blocks/<key>.md`, whose numbers are
-      placeholders the generator fills
-- [ ] Figures in `research/tuning/fig/<key>_*.png`: detection curves, profile and region, one map panel (Phase 2
-      code), each with alt text and a caption. The page records the `run_uid` it was drawn from; a test fails when a
-      page's `run_uid` is not the tracked summary's
-- [ ] `research/tuning/README.md`: links the methodology article for the method, and holds one table across all 22
-      keys (rule, km changed, graded or not, how firm), linking each page that exists
-- [ ] #90's move of `chinook_rearing_tuned.md`: #54's record and its 4 figures to `planning/archive/`, a one-line
-      pointer at the old path, every reference updated (CLAUDE.md, `research/README.md`, scripts, Rmd files)
-- [ ] `research/README.md` states the template and the order to read the files in (#64)
-
-## Phase 4: Issues
-- [ ] File the split-off issue (the 6 other fitted keys' pages from the generator). Its body names #173 as where it
-      was split from. Leave it out of `planning/backlog.md`
-- [ ] Edit the bodies of #81, #77, #90 and #64: tick what landed, and add a pointer to the new issue in #90 and #64
-
-## Owed at the end (reported, done after merge)
-
-- [ ] Run `0330 STAGE=floodplain` on the database's host so `data/compare/floodplain.csv` is written by the new step
-      (this PR leaves the tracked table as it is)
+## Phase 3: Issues
+- [ ] File the split-off issue for batch 7, naming #173, left out of `planning/backlog.md`. It carries: the template
+      (#64's order, #90's specification), the generator, a check register with each check's direction and the
+      firmness columns, figure functions taken out of the article, the chinook page and #90's move, pointer files for
+      the other `_tuned.md` pages, the other six fitted keys, the floodplain hectares (stale for CH), the per-key data
+      bundle and readiness test (#90 item 7), and the GeoPackage style if gq#115 is not released by then
+- [ ] Edit the bodies of #81 and #77 (tick what landed) and of #90, #64 and #173 (point to the split-off issue)
 
 ## Validation
 
@@ -115,12 +118,11 @@ and left out of `planning/backlog.md`.
 - [ ] `/planning-archive` on completion
 
 How each change is proved:
-- **GPKG opt-in:** a test of the env parsing (unset gives FALSE, `TRUE` gives TRUE, anything else refuses).
-- **GeoPackage style:** write a fixture GeoPackage, read `layer_styles`, and check that every class in the registry is
-  in the QML.
-- **Maps:** a test per new argument checks it draws, and that the defaults leave the old output unchanged (the
-  README figure compared before and after with everything off). Each PNG read and reviewed at its published width.
-- **Generator:** run twice and get identical bytes; mutate one tracked number in a temp copy and check that the
-  script refuses; the `run_uid` test is restored to the bug state and must fail.
-- **Figure removal:** the script's list, rerun after the removal, finds nothing named that is gone
-  (`git grep` over research/, vignettes/, README and data-raw).
+- **GPKG opt-in:** the helper's test, with the bug restored (default on) it must fail.
+- **STAGE=gpkg on the promoted run:** a fixture `data/compare/` with saved segments; the GeoPackage has the class
+  column, the waterbody area and a `run` table.
+- **GeoPackage style (if gq#115 lands):** read `layer_styles` from a fixture; every registry class present; one default.
+- **Maps:** a test per new argument; with everything off, the output is unchanged against a post-upgrade baseline.
+  Each PNG read and reviewed at its published width.
+- **Figure removal:** the script's list, rerun after removal, names nothing gone (`git grep` over research/,
+  vignettes/, README and data-raw).
