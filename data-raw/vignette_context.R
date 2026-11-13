@@ -13,9 +13,11 @@
 #   - BRITISH COLUMBIA is the Freshwater Atlas's watershed groups merged and simplified at bc_simplify_m: a keymap needs
 #     the province's shape, not its coast to the metre, and the Atlas is a source the package already credits.
 #   - THE TOWNS come from Natural Resources Canada's Canadian Geographical Names Database (Open Government Licence -
-#     Canada), its cities, towns, villages and district municipalities inside the group's outline buffered by
-#     town_buffer_m. The Province's BC Geographical Names and its municipal boundaries are both "Access Only" in the BC
-#     Data Catalogue, so neither is stored here (inst/NOTICE.md).
+#     Canada), its cities, towns, villages and district municipalities (concise code MUN1) inside the group's outline
+#     buffered by town_buffer_m. The Province's BC Geographical Names and its municipal boundaries are both "Access
+#     Only" in the BC Data Catalogue, so neither is stored here (inst/NOTICE.md). Two towns closer than town_gap_m
+#     print over each other (Hazelton and New Hazelton, 5.8 km apart; Smithers and Telkwa, 12.2 km apart, both
+#     fit), so of such a pair the one ranked first in town_concise (city, town, village, district) is kept.
 #   - THE RIVERS are the Atlas's named streams of stream order river_order or more and at least river_km long in the
 #     group, merged by name. Each label sits at the point of the river's line nearest the middle of its length,
 #     turned to the line's direction there and kept upright.
@@ -34,7 +36,8 @@ f_out <- "inst/vignette-data/bulk_context.rds"
 bc_simplify_m <- 2000     # the province's outline, for a keymap a few centimetres across
 aoi_simplify_m <- 100
 town_buffer_m <- 5000
-town_concise <- c("CITY", "TOWN", "VILG", "DIST")
+town_gap_m <- 8000        # two towns closer than this are one place on the map: the higher-ranked keeps the label
+town_concise <- c("CITY", "TOWN", "VILG", "MUN1")   # the service's concise codes: MUN1 is a district municipality
 river_order <- 6
 river_km <- 20
 geonames <- "https://geogratis.gc.ca/services/geoname/en/geonames.json"
@@ -98,6 +101,16 @@ towns <- sf::st_as_sf(data.frame(label = gn$name, concise = gn$concise$code, geo
                       coords = c("lon", "lat"), crs = 4326) |>
   sf::st_transform(3005)
 towns <- towns[lengths(sf::st_intersects(towns, sf::st_buffer(aoi, town_buffer_m))) > 0, ]
+# one name per place: by rank, a town is kept only where no kept town lies within town_gap_m
+towns <- towns[order(match(towns$concise, town_concise), towns$label), ]
+keep <- logical(nrow(towns))
+for (i in seq_len(nrow(towns))) {
+  near <- any(as.numeric(sf::st_distance(towns[i, ], towns[keep, ])) < town_gap_m)
+  keep[i] <- !near
+}
+if (any(!keep)) message("towns within ", town_gap_m, " m of a higher-ranked one, not labelled: ",
+                        paste(towns$label[!keep], collapse = ", "))
+towns <- towns[keep, ]
 towns <- towns[order(towns$label), ]
 stopifnot(nrow(towns) > 0)
 
@@ -109,7 +122,8 @@ out <- list(aoi = aoi, bc = bc, towns = towns, rivers = rivers,
                                     towns = "Canadian Geographical Names Database, NRCan (geonames service)",
                                     rivers = "Freshwater Atlas stream network (fwa_stream_networks_sp)"),
                         settings = c(bc_simplify_m = bc_simplify_m, aoi_simplify_m = aoi_simplify_m,
-                                     town_buffer_m = town_buffer_m, river_order = river_order, river_km = river_km)))
+                                     town_buffer_m = town_buffer_m, town_gap_m = town_gap_m,
+                                     river_order = river_order, river_km = river_km)))
 saveRDS(out, f_out)
 message(f_out, ": ", wsg, "; towns ", paste(towns$label, collapse = ", "),
         "; rivers ", paste(rivers$label, collapse = ", "), "; ", round(file.size(f_out) / 1024), " KB")

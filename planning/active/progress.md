@@ -57,3 +57,9 @@
   every river NA area (`fwa_rivers_poly` not joined; 115 of 115 BULK rivers): joined, and `vignette_chinook.R` now
   calls the same helper (its popups had the same gap; it reruns at the next promotion). (3) `readme_figure.R`'s credit
   check passed on a NULL credit (`nzchar(NULL)` is `logical(0)`): now requires one non-empty string
+- /code-check round 2 (`review-round2.md`): round 1's three fixes hold (the reviewer ran gpkg_one on socket workers,
+  R CMD check without tests OK). Two new findings, both reproduced and fixed: (1) the towns filter asked NRCan's
+  service for `DIST`, which is no concise code (district municipalities are `MUN1`), so Houston and New Hazelton were
+  left out: now MUN1, and towns within 8 km of a higher-ranked one are not labelled (Hazelton and New Hazelton are
+  5.8 km apart and collided); the bundle and README figure redrawn, checked at 600 px. (2) `review-plan.md` named home
+  paths (pushed in 7aa75bf7): rewritten repo-relative; earlier commits on the branch keep them

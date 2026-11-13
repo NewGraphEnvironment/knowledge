@@ -2,7 +2,7 @@
 
 Review of planning/active/task_plan.md for #173: findings against the issues and the code
 
-I only read files. Nothing was modified and no R was run. For gq I read the source at ~/Projects/repo/gq, where origin/main is v0.21.0 and the local checkout is 0.18.0.
+I only read files. Nothing was modified and no R was run. For gq I read the source at gq's local checkout, where origin/main is v0.21.0 and the local checkout is 0.18.0.
 
 ## The six questions, answered briefly
 
@@ -123,9 +123,9 @@ Batch 7 carries:
 By #173's own rule, carry batch 6 here and file batch 7 (template, generator, CH page) as the split-off. The six other keys stay a further issue or fold in. At minimum, split out the GeoPackage QML style (Blocker 1) and the promoted-run gpkg/floodplain route (Blocker 2) as their own issues. Each split-off body must name #173. #81's and #90's untouched tasks (Gap 1) should be ticked, moved or pointed to explicitly in Phase 4.
 
 ### Critical files for implementation
-- /Users/airvine/Projects/repo/knowledge-wct/scripts/0330-compare.R
-- /Users/airvine/Projects/repo/knowledge-wct/R/tune_promote.R
-- /Users/airvine/Projects/repo/knowledge-wct/R/compare_map.R
-- /Users/airvine/Projects/repo/knowledge-wct/scripts/0335-promote.R
-- /Users/airvine/Projects/repo/knowledge-wct/data-raw/vignette_chinook.R (with data-raw/vignette_method.R:496 and tests/testthat/test-vignette-data.R)
-- /Users/airvine/Projects/repo/gq/R/gq_style_qml.R (origin/main)
+- scripts/0330-compare.R
+- R/tune_promote.R
+- R/compare_map.R
+- scripts/0335-promote.R
+- data-raw/vignette_chinook.R (with data-raw/vignette_method.R:496 and tests/testthat/test-vignette-data.R)
+- gq's checkout: R/gq_style_qml.R (origin/main)
