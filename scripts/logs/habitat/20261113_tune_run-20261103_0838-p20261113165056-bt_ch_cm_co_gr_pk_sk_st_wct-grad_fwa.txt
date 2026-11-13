@@ -1,0 +1,7 @@
+Tuning run, knowledge#57. Evidence build scripts/logs/habitat/20261103_evidence_build_ledger.csv on link run 20261103_163715-269b585a (link 4dfbfa4980eb259e2f6a3e9b198c54014315d0ce), schema fresh_default_minimal; evidence directory data/fdis/derived.
+Candidate run 20261103_0838: outputs under data/tune/candidate/20261103_0838/grad_fwa (ignored); compare it with TUNE_DIR=data/tune/candidate/20261103_0838 scripts/0330, promote it with RUN=20261103_0838 scripts/0335.
+  visits_link md5 c746c5829c605fb7711feba0ec9d4d93
+  visits_species md5 6a2e28f1afb46a02c357ac044f8d09e3
+  walks md5 2e0f0f419022da0f5ac51a3869486a80
+  evidence named in grade receipts by version_id c746c5829c605fb7711feba0ec9d4d93;6a2e28f1afb46a02c357ac044f8d09e3;2e0f0f419022da0f5ac51a3869486a80
+schema fresh_default_minimal was built by run 20261102_203300-60ab009d, not the evidence's 20261103_163715-269b585a: point SCHEMA at the schema the evidence was built on

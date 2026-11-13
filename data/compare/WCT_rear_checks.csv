@@ -1,8 +1,8 @@
 check,species_code,stage,rule,segment,n,n_detect,km_share,lift,lift_lo,lift_hi,tuned_structure
-fdis_visits,WCT,rear,default,rearing,3162,999,,,,,door
-fdis_visits,WCT,rear,default,accessible_not_rearing,1231,299,,,,,door
-fdis_visits,WCT,rear,door,rearing,3889,1202,,,,,door
-fdis_visits,WCT,rear,door,accessible_not_rearing,504,96,,,,,door
-bcfishobs_outside,WCT,rear,default,,1408,1011,0.4643915929329286,1.546194598813459,1.501842824960254,1.587564098217914,door
-bcfishobs_outside,WCT,rear,door,,1408,1299,0.6285904760146694,1.4677047497156113,1.4416894288055249,1.4892570731188637,door
-bcfishobs_outside,WCT,rear,door_minus_default,,1408,,,-0.07848984909784784,-0.11972424400445705,-0.03648028954391146,door
+fdis_visits,WCT,rear,default,rearing,3214,1013,,,,,door
+fdis_visits,WCT,rear,default,accessible_not_rearing,1177,284,,,,,door
+fdis_visits,WCT,rear,door,rearing,3897,1199,,,,,door
+fdis_visits,WCT,rear,door,accessible_not_rearing,494,98,,,,,door
+bcfishobs_outside,WCT,rear,default,,1407,1021,0.4698904575247742,1.544311904039263,1.5004480007903516,1.5897261693857652,door
+bcfishobs_outside,WCT,rear,door,,1407,1301,0.6291311039334396,1.469745171544037,1.4448916790198487,1.4934972024677213,door
+bcfishobs_outside,WCT,rear,door_minus_default,,1407,,,-0.07456673249522594,-0.1146141187558251,-0.038665988237084954,door
