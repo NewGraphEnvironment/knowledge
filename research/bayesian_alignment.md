@@ -1,7 +1,7 @@
 # How the tuning method stands against Bayesian practice
 
 **Verified:** 2026-11-12 · **Issues:** #185 (this review); the store is #95's; it scopes #186 (a partially pooled
-curve) and feeds the methodology article (#93) · **Produced by:** the code at this commit, read line by line; the
+curve) and feeds the methodology article (#93) and the internal article on Bayesian practice (#204) · **Produced by:** the code at this commit, read line by line; the
 `statistics` store (McElreath 2020 and Gelman et al. 2013, searched through cred); every quote that cites a page
 checked on that page by `data-raw/bayesian_alignment_check.R` (log `scripts/logs/habitat/*_bayesian_alignment_check.txt`) · **Status:**
 review complete; the changes it recommends are filed as issues (end of file).
@@ -204,7 +204,7 @@ so how well the grade compares a segment in one group with a segment in another 
 ### Is the gate a fair comparison? (Rethinking ch. 7; BDA3 ch. 7)
 
 *What the method does.* A curve's grades are withheld when its held-out deviance is no better than the no-rule
-model's on the same visits and folds (`cv$heldout >= null_heldout_curve`, `R/tune_run.R:292`). It is a point
+model's on the same visits and folds (`cv$heldout >= null_heldout_curve`, `R/tune_run.R:273`). It is a point
 comparison: no SE, a tie withholds. The curve's variables (the size measure, the river size of its distance) come
 from the pick, which was chosen on the same folds that then score the curve.
 
@@ -227,8 +227,10 @@ free coefficient is a hypothesis in its own right:
 
 *Where it stands.* **Differs, defensibly.** The book's exposure is for a Poisson model with a log link; for a binary
 "caught or not" with a cloglog link, a coefficient of one on log(area) is the model in which each square metre fished
-carries the same chance of a catch (derived here; neither book states it for cloglog). A free coefficient lets
-detection saturate with effort, which electrofishing plausibly does. Testing the offset is cheap, and is worth one
+carries the same chance of a catch (derived here; neither book states it for cloglog). A free coefficient lets the
+catch rate per square metre fall (or rise) as more area is fished: under the cloglog the chance of a catch levels off
+with area even under the offset, so what the free coefficient adds is a rate per square metre that changes with area,
+and electrofishing a larger area plausibly catches less per square metre (our expectation, not tested). Testing the offset is cheap, and is worth one
 line in #186.
 
 ### Is "no fish caught" an absence? (Rethinking ch. 12, 15)
@@ -240,7 +242,7 @@ line in #186.
 Or it is there and was missed; zero-inflated models (p. 376) and occupancy models are built for that duality.
 
 *What the method does.* The response is whether the species was caught at the visit (`d$U <- as.integer(d$present)`,
-`R/tune_run.R:176`), and the grade says what it is: expected use per standard electrofishing visit, not habitat
+`R/tune_run.R:302`), and the grade says what it is: expected use per standard electrofishing visit, not habitat
 quality (`R/grade.R:9`).
 
 *Where it stands.* **Differs**, honestly labelled. Read as detection per visit, the model is what it says; read as
@@ -264,7 +266,7 @@ when a bull trout record sits upstream (the method keeps such segments but never
 is the right move); link cuts segments at fish records, so a visit that caught fish sits on a shorter segment whose
 gradient depends on that catch (`gradient_col`: **should change**, #70); and one exclusion turns on the outcome: a
 visit whose catch blocks the species' absence (`status == "blocked"`, `R/fdis_species.R`) is left out
-(`R/tune_run.R:173`), and only a visit that did not catch the species can be blocked, so the gate drops some zeros and
+(`R/tune_run.R:299`), and only a visit that did not catch the species can be blocked, so the gate drops some zeros and
 no ones among the recorded values. A blocked absence is a missing outcome, and dropping it is complete-case analysis:
 
 > "Complete case analysis is at best inefficient. It throws away data. But it can also produce bias, depending upon the causal details." (mcelreath2020StatisticalRethinking, p. 499)
@@ -274,7 +276,7 @@ where catch rates are low. But a blocking code is mostly a fish named too loosel
 (unidentified fish, salmon or trout fry, cutthroat of unstated species; `data/fdis_species_codes.csv`), so a blocked
 absence may be the species itself: missingness caused by the outcome, the case Rethinking calls the worst (Figure
 15.4 d, p. 500; "the variable causes its own missing values" (mcelreath2020StatisticalRethinking, p. 503)). The access gate does not turn
-on the catch: it reads natural barriers as they stood before link's observation overrides (`R/tune_run.R:174`,
+on the catch: it reads natural barriers as they stood before link's observation overrides (`R/tune_run.R:300`,
 `R/link_barrier_dnstr.R`). Nor does the range: link's range is a fixed table per watershed group
 (`wsg_species_presence`, which `scripts/0310-evidence-build.R` reads through `link::lnk_species_pooling()`), so this
 run does not compute it from the visits, though link's review of the table weighs observation records. Under fixed intercepts
@@ -393,10 +395,10 @@ when that line no longer holds the code it names or the code appears elsewhere i
 
 | choice | where | what it does, against the books | verdict |
 |---|---|---|---|
-| `response_presence` | `R/tune_run.R:176` | The rearing response is whether the species was caught at the visit; a miss reads as an absence (Rethinking p. 499). | differs |
-| `population_gate` | `R/tune_run.R:173` | Visits outside link's range for the species (a fixed table per group) or with a blocked absence are left out (the barrier filter on the next line is `barrier_natural`). Only the blocked absence turns on the catch: it drops recorded zeros only, some of which may be the species under a looser name (Rethinking pp. 499, 503). | differs |
+| `response_presence` | `R/tune_run.R:302` | The rearing response is whether the species was caught at the visit; a miss reads as an absence (Rethinking p. 499). | differs |
+| `population_gate` | `R/tune_run.R:299` | Visits outside link's range for the species (a fixed table per group) or with a blocked absence are left out (the barrier filter on the next line is `barrier_natural`). Only the blocked absence turns on the catch: it drops recorded zeros only, some of which may be the species under a looser name (Rethinking pp. 499, 503). | differs |
 | `cloglog_link` | `R/tune_score.R:256` | A binomial GLM with a complementary log-log link: a hazard reading, natural for detection with effort. BDA3 names it a standard link (p. 407); neither book fits it. The GLM frame is Rethinking ch. 10's. | aligned |
-| `log_area_free` | `R/tune_score.R:224` | Effort as a free, unpenalised coefficient, not an offset: the hypothesis that the chance of a catch does not grow in proportion to the area fished (Rethinking p. 357). | differs |
+| `log_area_free` | `R/tune_score.R:224` | Effort as a free, unpenalised coefficient, not an offset: the hypothesis that the catch rate per square metre changes with the area fished (Rethinking p. 357). | differs |
 | `one_outcome_groups` | `R/tune_score.R:201` | Groups whose visits all caught the species, or none did, are dropped before scoring and before the curve: under fixed intercepts they inform nothing, under pooling they would. | differs |
 | `stratified_folds` | `R/tune_score.R:211` | Groups are ranked by detections and dealt to folds in shuffled blocks, so the folds hold similar numbers of detections: a design choice for the score's variance. | no bearing |
 | `heldout_intercept` | `R/tune_score.R:423` | Each held-out group refits its intercept on its own outcomes before its deviance is taken: a score conditional on the group's base rate (Rethinking p. 426). | differs |
@@ -410,7 +412,7 @@ when that line no longer holds the code it names or the code appears elsewhere i
 | `boot_no_refit` | `R/tune_score.R:167` | Resamples groups of the fixed score matrix and re-picks, refitting nothing. | differs |
 | `curve_group_effect` | `R/tune_curve.R:104` | The group as a random effect by REML: partial pooling with its variance estimated, not integrated (Rethinking ch. 13; BDA3 ch. 5). | aligned |
 | `curve_reference` | `R/tune_curve.R:114` | The curve and grade are read at the median effort, the commonest data set and the latest era: a reference point, a convention. | no bearing |
-| `grade_gate` | `R/tune_run.R:292` | Grades withheld when the curve's held-out deviance is no lower than no rule's on the same visits: a point comparison, a tie withholds. | differs |
+| `grade_gate` | `R/tune_run.R:273` | Grades withheld when the curve's held-out deviance is no lower than no rule's on the same visits: a point comparison, a tie withholds. | differs |
 | `grade_average_group` | `R/grade.R:64` | The grade leaves the group effect out: Rethinking's average actor (p. 428), an average cluster, right for comparing segments across groups. | aligned |
 
 ## What to try in the retune
@@ -429,8 +431,10 @@ Each item is an issue, so it is planned and reviewed on its own.
   group from the population distribution, for the pooled curve and today's alike, since a new-group score for one
   against an own-intercept score for the other compares nothing. Two cheap additions: an offset for `log(area)` beside
   the free coefficient, and a prior predictive check of the data-set and era prior on the rate scale.
-- **The methodology article says where the method stands** (#204): a short section in `tuning-method.Rmd`
-  stating the findings above in the reader's terms, with the two books cited.
+- **An article says where the method stands** (#204): `vignettes/tuning-bayesian-practice.Rmd`, an internal article
+  (built at its own URL, left out of the site's index and navbar) that states the findings above in the reader's
+  terms, with the two books cited; the methodology article links it from its section on telling two habitat
+  definitions apart. A separate article rather than a section of `tuning-method.Rmd` (Al, 2026-11-13).
 
 ## Limits of this review
 

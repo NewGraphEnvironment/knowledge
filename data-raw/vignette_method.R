@@ -31,8 +31,8 @@
 #
 # INPUT:  inst/method/{pipeline,settings}.csv; scripts/logs/habitat/<date>_evidence_build_ledger.csv (the one the tables
 #         name, knw_run_ledger());
-#         data/fdis/build/reconcile.csv and data/fdis/derived/{visits_link,visits_species,walks,fdis_sites}.csv
-#         (ignored; 0230, 0310); data/thresholds.csv (#121's limits); data/tune/<key>_{summary,tune,grades_record}.csv (a grade table's record, #119; the
+#         data/fdis/build/{reconcile.csv,fish.rds} and data/fdis/derived/{visits_link,visits_species,walks,fdis_sites}.csv
+#         (ignored; 0230, 0310); data/fdis_species_codes.csv (with fish.rds, the spawner evidence 0320 reads); data/thresholds.csv (#121's limits); data/tune/<key>_{summary,tune,grades_record}.csv (a grade table's record, #119; the
 #         table itself, ignored, is checked against it where present); data/tune/grad_fwa/<key>_{summary,tune}.csv
 #         (0320 with GRADIENT=fwa_gradient, the Atlas-gradient sensitivity, #92); data/compare/<key>_compare.csv;
 #         inst/vignette-data/bulk_segments.rds; ../link and ../wet checkouts holding the run's commits; the fwapg
@@ -40,7 +40,8 @@
 # OUTPUT: inst/vignette-data/method.rds   one named list: pipeline, settings (with each where's resolved value),
 #         funnel, funnel_species, steps, picks, gradient_sensitivity, segment_at_site, site_gradient (#121: the measured
 #         site gradient against link's segment gradient, and the flips at every published gradient limit), examples,
-#         svg (flow, lineage), meta (md5 of every source, written date, commit)
+#         svg (flow, lineage), scope (#204: each published key's watershed groups, those with both outcomes, all
+#         caught and none caught, and its grade gate), meta (md5 of every source, written date, commit)
 # RUN:    Rscript data-raw/vignette_method.R   (from the repo root, after any rerun of 0230, 0310, 0320 or 0330, and
 #         after any change to the registers)
 # ---------------------------------------------------------------------------
@@ -59,6 +60,8 @@ f_reconcile <- "data/fdis/build/reconcile.csv"
 derived <- c(visits_link = "data/fdis/derived/visits_link.csv", visits_species = "data/fdis/derived/visits_species.csv",
              walks = "data/fdis/derived/walks.csv")
 f_sites <- "data/fdis/derived/fdis_sites.csv"
+f_codes <- "data/fdis_species_codes.csv"
+f_fish <- "data/fdis/build/fish.rds"
 link_repo <- Sys.getenv("LINK_REPO", "../link")
 wet_repo <- Sys.getenv("WET_REPO", "../wet")
 example_wsg <- "BULK"
@@ -488,13 +491,67 @@ dot_lin <- paste0("digraph lineage {\n", head_dot, "\nnode [width=1.4, fontsize=
 svg_of <- function(dot) DiagrammeRsvg::export_svg(DiagrammeR::grViz(dot))
 svg <- list(flow = svg_of(dot_flow), lineage = svg_of(dot_lin))
 
+# ---- the scorer's groups and the grade gate, per published key (#204) -----------------------------------------------
+# every key the run publishes (fitted or underpowered, so WCT rearing is in): the watershed groups its visits fall in,
+# those with both outcomes (the only ones the fixed-intercept scorer and the curve keep), and the gate, the curve's
+# held-out deviance against no habitat definition's on the same visits (grade_withheld when it is no lower). The flag is
+# the run's, not recomputed here from the summary's rounded deviances, and a key whose curve failed has neither
+# deviance (R/tune_run.R)
+scope <- summ |>
+  filter(status %in% c("fitted", "underpowered")) |>
+  transmute(key = paste(species_code, stage, sep = "_"), status,
+            groups = as.integer(groups), groups_both = as.integer(groups_both),
+            grade_withheld = as.logical(grade_withheld),
+            dev_curve = as.numeric(dev_curve), null_heldout_curve = as.numeric(null_heldout_curve))
+if (anyNA(scope[c("groups", "groups_both", "grade_withheld")]) || any(scope$groups_both > scope$groups) ||
+    !identical(is.na(scope$dev_curve), is.na(scope$null_heldout_curve))) {
+  stop("a published key's summary has a missing group count or gate flag, or one deviance of the gate without the other")
+}
+# the groups the scorer drops, split by why: every site caught the species (or showed spawner evidence), or none did.
+# The population is the tuning's own (.tune_population(), the code knw_tune_run() scores), and its group counts must
+# equal the summary's, so the split describes the run that published
+codes <- rd(f_codes, col_types = cols(.default = "c"), na = "")
+fish <- readRDS(f_fish)
+spawner <- knw_spawner_evidence(fish, vl |> inner_join(vs |> filter(species_code == "BT") |> select(site_visit, pooling),
+                                                       by = "site_visit") |> select(site_visit, month, pooling), codes)
+base_run <- .tune_base(vl, edge_stream, area_range)
+split_of <- function(key) {
+  sp <- sub("_.*$", "", key)
+  pop <- .tune_population(base_run, vs, sp, sub("^[^_]*_", "", key), spawner)
+  if (is.null(pop$resp)) stop(key, ": no response in the tuning's population")
+  y <- pop$d[[pop$resp]]
+  g <- pop$d$wsg
+  c(groups = nlevels(g), groups_both = sum(tapply(y, g, function(v) any(v == 1L) && any(v == 0L))),
+    groups_all = sum(tapply(y, g, function(v) all(v == 1L))), groups_none = sum(tapply(y, g, function(v) all(v == 0L))))
+}
+spl <- t(vapply(scope$key, split_of, numeric(4)))
+same_groups <- identical(unname(spl[, "groups"]), as.numeric(scope$groups)) &&
+  identical(unname(spl[, "groups_both"]), as.numeric(scope$groups_both))
+if (!same_groups) {
+  stop("the tuning's population, rebuilt here, does not give the summaries' group counts: ",
+       paste(scope$key, spl[, "groups"], scope$groups, spl[, "groups_both"], scope$groups_both, collapse = "; "))
+}
+scope$groups_all <- as.integer(spl[, "groups_all"])
+scope$groups_none <- as.integer(spl[, "groups_none"])
+if (!identical(scope$groups_both + scope$groups_all + scope$groups_none, scope$groups)) {
+  stop("a key's groups are not each either both outcomes, all caught or none caught")
+}
+
+# the published keys from another producer: those data/thresholds.csv gives a value
+thr_keys <- rd(f_thr, col_types = cols(.default = "c")) |> filter(!is.na(value)) |>
+  transmute(key = paste(species_code, stage, sep = "_")) |> pull(key) |> unique()
+if (!setequal(scope$key, thr_keys)) {
+  stop("scope's keys (", paste(sort(scope$key), collapse = ", "), ") are not the keys data/thresholds.csv publishes (",
+       paste(sort(thr_keys), collapse = ", "), ")")
+}
+
 # ---- write ------------------------------------------------------------------------------------------------
 # git, not a list here, says which sources a clone has: an ignored one is checked only where it is present
 sources <- c(f_pipeline, f_settings, ledger, f_tune, f_records, f_compare, f_thr,
              file.path("data/tune", paste0(setdiff(lim_sg$key, keys), "_tune.csv")),
-             file.path("data/tune", paste0(keys, "_summary.csv")), f_fwa_tune, f_fwa_summ,
+             file.path("data/tune", paste0(union(keys, scope$key), "_summary.csv")), f_fwa_tune, f_fwa_summ,
              file.path(dir_out, "bulk_segments.rds"),
-             f_reconcile, unname(derived), f_sites)
+             f_reconcile, unname(derived), f_sites, f_codes, f_fish)
 is_tracked <- vapply(sources, function(f) {
   is.null(attr(suppressWarnings(system2("git", c("ls-files", "--error-unmatch", f), stdout = TRUE, stderr = TRUE)),
                "status"))
@@ -507,6 +564,7 @@ out <- list(
   site_gradient = site_gradient,
   stability = fitted[, c("species_code", "stage", "seeds_n", "seeds_same_rec", "seeds_rec_in_region",
                          "honest_dev_rec", "honest_dev_default", "boot_rec_share")],
+  scope = scope,
   examples = list(kept = ex_kept, moved = ex_moved, far = ex_far, wsg = example_wsg, stages = stages),
   svg = svg,
   meta = list(written = format(Sys.Date()),

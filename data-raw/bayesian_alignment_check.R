@@ -1,10 +1,12 @@
 # data-raw/bayesian_alignment_check.R
 # ---------------------------------------------------------------------------
 # Does research/bayesian_alignment.md quote its books truly, and does it give every step, setting and unkeyed choice
-# of the method one verdict? Issue #185.
+# of the method one verdict? Issue #185. And does vignettes/tuning-bayesian-practice.Rmd, the article that states the
+# review's findings (#204), quote them truly? (MD=vignettes/tuning-bayesian-practice.Rmd: its quotes only.)
 #
 # QUOTES. A quoted passage is checked when it is written
 #   "<passage>" (<citekey>, p. N)       or  (<citekey>, pp. N–M) for one that runs onto the next page
+# or, in the article, pandoc's form "<passage>" [@<citekey>, p. N] (one key, its brackets matched),
 # on a blockquote line of its own (`> ` before it) or inline in a sentence (it may wrap across lines), and is looked for on printed page N (to M) of that book's PDF, the group library's own attachment. A printed page is
 # the PDF page less the book's front matter (`offset`), and the page's running head or foot must carry N, so a wrong
 # offset fails rather than reading a neighbouring page. Passage and page are compared as token sequences, as
@@ -25,11 +27,18 @@
 # `file:line`, must name the anchor's file and the line it stands on, and the anchor must occur once in that file).
 # Each row's last cell is exactly one verdict; a missing, duplicate or stale row fails.
 #
-# INPUT:  research/bayesian_alignment.md (MD=); inst/method/{pipeline,settings}.csv; R/; the two PDFs under
-#         ZOTERO_DIR/storage (default ~/Zotero), by the attachment keys below (group library 4733734, resolved
-#         2026-11-11 from a guarded copy of zotero.sqlite)
-# OUTPUT: scripts/logs/habitat/<yyyymmdd>_bayesian_alignment_check.txt (not with MD= set); exits 1 on any failure
-# RUN:    Rscript data-raw/bayesian_alignment_check.R   (from the repo root; needs pdftotext)
+# ARTICLE. An .Rmd's front matter and fenced chunks are blanked before anything is read, so a chunk's code or a table's
+# text is neither a quote nor a quote mark near a citation, and the coverage tables, which are the research file's,
+# are not looked for. Each file holds its own count of checked quotes (`n_quotes`).
+#
+# INPUT:  research/bayesian_alignment.md, or the article (MD=); inst/method/{pipeline,settings}.csv; R/;
+#         the two PDFs under ZOTERO_DIR/storage (default ~/Zotero), by the attachment keys below (group library
+#         4733734, resolved 2026-11-11 from a guarded copy of zotero.sqlite)
+# OUTPUT: scripts/logs/habitat/<yyyymmdd>_bayesian_alignment_check.txt (the research file, no MD= set) or
+#         <yyyymmdd>_bayesian_alignment_check-tuning-bayesian-practice.txt (the article); none for any other MD=;
+#         exits 1 on any failure
+# RUN:    Rscript data-raw/bayesian_alignment_check.R   (from the repo root; needs pdftotext), then again with the
+#         article as MD (vignettes/tuning-bayesian-practice.Rmd)
 # ---------------------------------------------------------------------------
 options(warn = 1)
 
@@ -41,7 +50,9 @@ books <- list(
 verdicts <- c("aligned", "differs", "should change", "no bearing")
 frag_min <- 4L
 near <- 200L      # characters either side of a page citation in which a quote mark makes the page a quote's
-n_quotes <- 23L   # the quotes research/bayesian_alignment.md checks; change it with the file
+# the quotes each file checks; change a count with its file
+n_quotes <- c(bayesian_alignment.md = 23L, `tuning-bayesian-practice.Rmd` = 5L)
+article <- "vignettes/tuning-bayesian-practice.Rmd"
 # method choices no setting names, each with a line of the code that makes it
 choices <- list(
   response_presence    = c("R/tune_run.R", "d$U <- as.integer(d$present)"),
@@ -69,6 +80,16 @@ md_path <- Sys.getenv("MD", "research/bayesian_alignment.md")
 zot <- path.expand(Sys.getenv("ZOTERO_DIR", "~/Zotero"))
 if (!nzchar(Sys.which("pdftotext"))) stop("pdftotext is needed", call. = FALSE)
 md <- readLines(md_path, warn = FALSE, encoding = "UTF-8")
+is_rmd <- grepl("\\.Rmd$", md_path)
+if (is_rmd) {
+  # front matter and fenced chunks blanked line for line, so line numbers still name the file's lines
+  fm <- which(md == "---")
+  if (length(fm) >= 2L && fm[1] == 1L) md[fm[1]:fm[2]] <- ""
+  fence <- grepl("^\\s*```", md)
+  inside <- (cumsum(fence) %% 2L == 1L) | fence
+  if (sum(fence) %% 2L) stop("an unclosed code fence in ", md_path, call. = FALSE)
+  md[inside] <- ""
+}
 log <- character()
 say <- function(...) {
   x <- paste0(...)
@@ -127,8 +148,9 @@ txt <- paste(md, collapse = " ")
 ends <- cumsum(nchar(md) + 1L)
 line_at <- function(pos) findInterval(pos - 1L, c(0L, ends)) 
 sp_rx <- "[\\s\\x{00A0}]"   # a space, a no-break space included, which PCRE's \\s alone does not match
-rx <- paste0('"([^"]+)"', sp_rx, '*\\(([A-Za-z0-9_]+),', sp_rx, '*pp?\\.', sp_rx, '*([0-9]+)(?:', sp_rx,
-             '*[-\u2013]', sp_rx, '*([0-9]+))?\\)')
+# the citation opens "(" or, in pandoc's form, "[@", and closes to match (checked below)
+rx <- paste0('"([^"]+)"', sp_rx, '*(\\(|\\[@)([A-Za-z0-9_]+),', sp_rx, '*pp?\\.', sp_rx, '*([0-9]+)(?:', sp_rx,
+             '*[-\u2013]', sp_rx, '*([0-9]+))?(\\)|\\])')
 sm <- gregexpr(rx, txt, perl = TRUE)[[1]]
 strict <- if (sm[1] > 0) data.frame(start = as.integer(sm), end = as.integer(sm) + attr(sm, "match.length") - 1L,
                                     p_start = attr(sm, "capture.start")[, 1] - 1L,
@@ -140,10 +162,11 @@ masked <- txt
 for (k in seq_len(nrow(strict))) {
   substr(masked, strict$p_start[k], strict$p_end[k]) <- strrep(" ", strict$p_end[k] - strict$p_start[k] + 1L)
 }
-# inline code is code, not a quotation: its quote marks (`bs = "re"`) are blanked too
+# inline code is code, not a quotation: its quote marks (`bs = "re"`) are blanked too, with letters, so an apostrophe
+# after it (`link`'s) still follows a word
 cm <- gregexpr("`[^`]*`", masked)[[1]]
 for (k in seq_along(cm)) if (cm[k] > 0) substr(masked, cm[k], cm[k] + attr(cm, "match.length")[k] - 1L) <-
-  strrep(" ", attr(cm, "match.length")[k])
+  strrep("x", attr(cm, "match.length")[k])
 # a straight single quote counts where it opens a word (`'like this`), never after a letter or digit: an apostrophe
 # (`BDA3's`, `folds'`, `*k*'s`) is not a quote mark. Marks are found once over the whole text, so a window's edge
 # cannot cut an apostrophe from the letter before it
@@ -162,9 +185,13 @@ ms <- regmatches(txt, list(sm))[[1]]
 for (k in seq_along(ms)) {
   i <- line_at(strict$start[k])
   m <- regmatches(ms[k], regexec(rx, ms[k], perl = TRUE))[[1]]
-  key <- m[3]
-  p1 <- as.integer(m[4])
-  p2 <- if (nzchar(m[5])) as.integer(m[5]) else p1
+  if ((m[3] == "(") != (m[7] == ")")) {
+    bad("line ", i, ": the citation opens with ", m[3], " and closes with ", m[7])
+    next
+  }
+  key <- m[4]
+  p1 <- as.integer(m[5])
+  p2 <- if (nzchar(m[6])) as.integer(m[6]) else p1
   if (!key %in% names(books)) {
     bad("line ", i, ": ", key, " is not a book this check holds")
     next
@@ -198,61 +225,66 @@ for (k in seq_along(ms)) {
   else bad("line ", i, " ", key, " p. ", p1, if (p2 != p1) paste0("-", p2), ": ", paste(why, collapse = "; "))
 }
 say("quotes: ", length(ms), " checked in ", md_path)
-if (length(ms) != n_quotes && basename(md_path) == "bayesian_alignment.md") {
-  bad(length(ms), " quotes checked where ", n_quotes, " are expected: a quote left the checked form, or one was added ",
+want <- n_quotes[basename(md_path)]
+if (!is.na(want) && length(ms) != want) {
+  bad(length(ms), " quotes checked where ", want, " are expected: a quote left the checked form, or one was added ",
       "without changing `n_quotes`")
 }
+if (!is_rmd) {
 
-# ---- coverage
-# the table rows under one `##` heading, as cells, the header and separator rows left out
-table_rows <- function(heading) {
-  h <- which(md == paste("##", heading))
-  if (length(h) != 1L) {
-    bad("the heading \"## ", heading, "\" appears ", length(h), " times")
-    return(list())
+  # ---- coverage
+  # the table rows under one `##` heading, as cells, the header and separator rows left out
+  table_rows <- function(heading) {
+    h <- which(md == paste("##", heading))
+    if (length(h) != 1L) {
+      bad("the heading \"## ", heading, "\" appears ", length(h), " times")
+      return(list())
+    }
+    nxt <- grep("^## ", md)
+    end <- c(nxt[nxt > h], length(md) + 1L)[1] - 1L
+    r <- grep("^\\|", md[seq.int(h + 1L, end)], value = TRUE)
+    r <- r[!grepl("^\\|[\\s:|-]+\\|?\\s*$", r, perl = TRUE)]
+    lapply(r[-1], function(x) trimws(strsplit(sub("^\\|", "", sub("\\|\\s*$", "", x)), "|", fixed = TRUE)[[1]]))
   }
-  nxt <- grep("^## ", md)
-  end <- c(nxt[nxt > h], length(md) + 1L)[1] - 1L
-  r <- grep("^\\|", md[seq.int(h + 1L, end)], value = TRUE)
-  r <- r[!grepl("^\\|[\\s:|-]+\\|?\\s*$", r, perl = TRUE)]
-  lapply(r[-1], function(x) trimws(strsplit(sub("^\\|", "", sub("\\|\\s*$", "", x)), "|", fixed = TRUE)[[1]]))
-}
-check_table <- function(heading, want, id_of) {
-  rows <- table_rows(heading)
-  ids <- vapply(rows, function(x) id_of(x[1]), character(1))
-  vd <- vapply(rows, function(x) gsub("\\*", "", tolower(x[length(x)])), character(1))
-  for (k in want[!want %in% ids]) bad(heading, ": no row for ", k)
-  for (k in unique(ids[duplicated(ids)])) bad(heading, ": ", k, " has more than one row")
-  for (k in setdiff(ids, want)) bad(heading, ": ", k, " is not one of the method's")
-  for (j in which(!vd %in% verdicts)) bad(heading, ": ", ids[j], "'s last cell is not one verdict")
-  say(heading, ": ", length(rows), " rows for ", length(want), "; ", paste(names(table(vd)), table(vd), sep = " ", collapse = ", "))
-  invisible(stats::setNames(rows, ids))
-}
-unbacktick <- function(x) sub("^`([^`]+)`$", "\\1", x)
-pipe <- utils::read.csv("inst/method/pipeline.csv", stringsAsFactors = FALSE)
-sets <- utils::read.csv("inst/method/settings.csv", stringsAsFactors = FALSE)
-check_table("The steps", as.character(pipe$step), identity)
-check_table("The settings", sets$key, function(x) if (grepl("^`[^`]+`$", x)) unbacktick(x) else x)
-crows <- check_table("Choices with no settings key", names(choices), function(x) if (grepl("^`[^`]+`$", x)) unbacktick(x) else x)
-for (k in names(choices)) {
-  src <- readLines(choices[[k]][1], warn = FALSE)
-  at <- which(grepl(choices[[k]][2], src, fixed = TRUE))
-  if (length(at) != 1L) {
-    bad("choice ", k, ": its anchor occurs ", length(at), " times in ", choices[[k]][1], ", not once")
-    next
+  check_table <- function(heading, want, id_of) {
+    rows <- table_rows(heading)
+    ids <- vapply(rows, function(x) id_of(x[1]), character(1))
+    vd <- vapply(rows, function(x) gsub("\\*", "", tolower(x[length(x)])), character(1))
+    for (k in want[!want %in% ids]) bad(heading, ": no row for ", k)
+    for (k in unique(ids[duplicated(ids)])) bad(heading, ": ", k, " has more than one row")
+    for (k in setdiff(ids, want)) bad(heading, ": ", k, " is not one of the method's")
+    for (j in which(!vd %in% verdicts)) bad(heading, ": ", ids[j], "'s last cell is not one verdict")
+    say(heading, ": ", length(rows), " rows for ", length(want), "; ", paste(names(table(vd)), table(vd), sep = " ", collapse = ", "))
+    invisible(stats::setNames(rows, ids))
   }
-  if (is.null(crows[[k]])) next
-  w <- regmatches(crows[[k]][2], regexec("^`?([^`:]+):([0-9]+)(?:-[0-9]+)?`?$", crows[[k]][2]))[[1]]
-  if (!length(w)) {
-    bad("choice ", k, ": its second cell is not `file:line`")
-  } else if (w[2] != choices[[k]][1] || as.integer(w[3]) != at) {
-    bad("choice ", k, ": cites ", w[2], ":", w[3], " but its anchor is at ", choices[[k]][1], ":", at)
+  unbacktick <- function(x) sub("^`([^`]+)`$", "\\1", x)
+  pipe <- utils::read.csv("inst/method/pipeline.csv", stringsAsFactors = FALSE)
+  sets <- utils::read.csv("inst/method/settings.csv", stringsAsFactors = FALSE)
+  check_table("The steps", as.character(pipe$step), identity)
+  check_table("The settings", sets$key, function(x) if (grepl("^`[^`]+`$", x)) unbacktick(x) else x)
+  crows <- check_table("Choices with no settings key", names(choices), function(x) if (grepl("^`[^`]+`$", x)) unbacktick(x) else x)
+  for (k in names(choices)) {
+    src <- readLines(choices[[k]][1], warn = FALSE)
+    at <- which(grepl(choices[[k]][2], src, fixed = TRUE))
+    if (length(at) != 1L) {
+      bad("choice ", k, ": its anchor occurs ", length(at), " times in ", choices[[k]][1], ", not once")
+      next
+    }
+    if (is.null(crows[[k]])) next
+    w <- regmatches(crows[[k]][2], regexec("^`?([^`:]+):([0-9]+)(?:-[0-9]+)?`?$", crows[[k]][2]))[[1]]
+    if (!length(w)) {
+      bad("choice ", k, ": its second cell is not `file:line`")
+    } else if (w[2] != choices[[k]][1] || as.integer(w[3]) != at) {
+      bad("choice ", k, ": cites ", w[2], ":", w[3], " but its anchor is at ", choices[[k]][1], ":", at)
+    }
   }
 }
 say(if (fail) paste0("FAILED: ", fail, " problems") else "PASS")
 
-if (!nzchar(Sys.getenv("MD"))) {
-  out <- file.path("scripts", "logs", "habitat", paste0(format(Sys.time(), "%Y%m%d", tz = "UTC"), "_bayesian_alignment_check.txt"))
+stem <- if (!nzchar(Sys.getenv("MD"))) "" else if (identical(md_path, article)) "-tuning-bayesian-practice" else NA
+if (!is.na(stem)) {
+  day <- format(Sys.time(), "%Y%m%d", tz = "UTC")
+  out <- file.path("scripts", "logs", "habitat", paste0(day, "_bayesian_alignment_check", stem, ".txt"))
   dir.create(dirname(out), recursive = TRUE, showWarnings = FALSE)
   writeLines(log, out)
 }

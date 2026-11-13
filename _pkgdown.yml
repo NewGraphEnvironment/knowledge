@@ -2,6 +2,26 @@ url: https://newgraphenvironment.github.io/knowledge/
 template:
   bootstrap: 5
 
+# the Articles menu, written out because the internal section below (#204) has no navbar entry, and pkgdown adds a
+# "More articles..." link whenever a section has none; keep it in step with the sections' navbar titles
+navbar:
+  components:
+    articles:
+      text: Articles
+      menu:
+        - text: -------
+        - text: How the tuning works
+        - text: Tuning fish habitat definitions with fish sampling records
+          href: articles/tuning-method.html
+        - text: -------
+        - text: Case studies
+        - text: "Tuning habitat: chinook rearing"
+          href: articles/tuning-chinook-rearing.html
+        - text: -------
+        - text: Checks on the method
+        - text: Splitting streams at fish records shifts the steepest slope mapped as habitat
+          href: articles/tuning-stream-splits.html
+
 articles:
   - title: How the tuning works
     navbar: How the tuning works
@@ -15,6 +35,10 @@ articles:
     navbar: Checks on the method
     contents:
       - tuning-stream-splits
+  # built at its own URL and left out of the index and navbar; tuning-method links it (#204)
+  - title: internal
+    contents:
+      - tuning-bayesian-practice
 
 # the articles' names before the series (#118); the first two were linked from the website and sent by email
 redirects:

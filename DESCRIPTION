@@ -64,7 +64,8 @@ Suggests:
     terra,
     testthat (>= 3.2.0),
     tmap,
-    withr
+    withr,
+    yaml
 VignetteBuilder: knitr
 Remotes:
     NewGraphEnvironment/crate,

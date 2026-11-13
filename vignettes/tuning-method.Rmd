@@ -336,7 +336,8 @@ equal: there is no evidence it consistently beats taking the best score, though 
 [@chen_yang2021OneStandard].
 
 `r val("se_strict")` SE is the stricter reading, about the width of a 95 % interval: more habitat definitions become close calls, and
-the choice can stay nearer link's habitat definition. Both are reported.
+the choice can stay nearer link's habitat definition. Both are reported. How this comparison, and the rest of the
+tuning, stands against Bayesian practice is set out in [an article of its own](tuning-bayesian-practice.html).
 
 ```{r picks}
 knitr::kable(data.frame(
