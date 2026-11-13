@@ -65,7 +65,18 @@ Checked before acting:
 
 Outcome: Al cut the PR to batch 6 (2026-11-13); batch 7 goes to a split-off issue.
 
+## The GeoPackage writer on one group (2026-11-13)
+
+The main checkout's ignored grade tables and segments are #73/#92's (CH grades md5 e37f76ea…, segments 2026-10-24), not
+the promoted run `20261104_0543` (grades_md5 d35d785f…). So `STAGE=gpkg` on the promoted run cannot be run here without
+`PULL=TRUE scripts/0336-archive.R`. The old segments match `fresh_default_20261023` (87,640 of 87,641 BULK segments), so
+the new `gpkg_one()` was run on BULK against that schema through a scratch harness that evaluates the function from the
+script (scratchpad `gpkg_try.R`): 87,640 segments; `rule_class` kept 4,081, lost 2,619, gained 875, accessible-neither
+9,111, unreachable 70,954 left NA (the first try classed those as neither: fixed); `water` stream 77,883, wetland 5,066,
+lake 2,556, river 2,135, with the 59.5 ha wetland of #81's Coffin Creek note on segments 85470 and 85475; a `run` table.
+
 ## Errors Encountered
 
 | Error | Resolution |
 |-------|------------|
+| A python span edit of `0330` anchored on the header line that shares the function comment's opening words, and deleted most of the script | `git restore`, then edits through `edit0330.py`, which refuses an anchor that is not unique |

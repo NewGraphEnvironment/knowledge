@@ -58,14 +58,14 @@ or promotion.
 - [x] Plan review written to `review-plan.md` and folded in here; scope cut to batch 6 on Al's word
 
 ## Phase 1: Maps out of the comparison (#81)
-- [ ] `GPKG` opt-in through a tested `R/` helper (unset or FALSE gives off, TRUE gives on, anything else refuses)
-- [ ] `0330`: drop the static maps and HTML pages. Add `STAGE=floodplain` (the floodplain table alone, with run
+- [x] `GPKG` opt-in through a tested `R/` helper (unset or FALSE gives off, TRUE gives on, anything else refuses)
+- [x] `0330`: drop the static maps and HTML pages. Add `STAGE=floodplain` (the floodplain table alone, with run
       columns); `STAGE=maps` refuses and names `floodplain` and `gpkg`
-- [ ] `STAGE=gpkg` accepts `TUNE_DIR=data/tune` (the promoted run → `data/compare/gpkg/`), and every GeoPackage gets
+- [x] `STAGE=gpkg` accepts `TUNE_DIR=data/tune` (the promoted run → `data/compare/gpkg/`), and every GeoPackage gets
       a `run` table
-- [ ] GeoPackage fields (#81 task 5): add the rule class (kept, lost, gained, neither) and the area of the waterbody a
+- [x] GeoPackage fields (#81 task 5): add the rule class (kept, lost, gained, neither) and the area of the waterbody a
       through-wetland segment runs through. Flow, width, gradient, distance, order and `link_branch` are already there
-- [ ] Classes and colours move into one custom registry (`inst/gq/compare.csv`), which `knw_compare_map()` and
+- [x] Classes and colours move into one custom registry (`inst/gq/compare.csv`), which `knw_compare_map()` and
       `knw_compare_mapgl()` read. `.compare_rule_cols` and `.compare_grade_cols` stop holding hex values, and the
       integer `match_expr` mapping is tied to the registry's class order
 - [ ] gq#115: the QML writer in gq (its own branch and PR; the merge and release on Al's word). Once released, the

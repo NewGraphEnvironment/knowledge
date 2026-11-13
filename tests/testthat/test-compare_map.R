@@ -117,7 +117,7 @@ test_that("knw_compare_mapgl colours every class in hex, places the legends and 
   colours <- unlist(lapply(m$x$layers, function(l) unlist(l$paint[grepl("color", names(l$paint))])))
   colours <- colours[!grepl("^(match|get|rc|gc)$", colours) & is.na(suppressWarnings(as.numeric(colours)))]
   expect_true(all(grepl("^#[0-9a-f]{6}$", colours)), info = paste(unique(colours), collapse = " "))
-  expect_true(all(grepl("^#[0-9a-f]{6}$", c(knowledge:::.compare_rule_cols, knowledge:::.compare_grade_cols))))
+  expect_true(all(grepl("^#[0-9a-f]{6}$", c(knowledge:::.compare_cols("compare_rule"), knowledge:::.compare_cols("compare_grade")))))
   json <- as.character(jsonlite::toJSON(m$x, auto_unbox = TRUE, null = "null"))
   # the legends top-left, the layer switch top-right and the attribution along the bottom, so none share a corner
   expect_identical(m$x$layers_control$position, "top-right")
@@ -133,7 +133,7 @@ test_that("knw_compare_mapgl colours every class in hex, places the legends and 
 })
 
 test_that("no map label a reader sees says rule (#156)", {
-  expect_false(any(grepl("\\brules?\\b", names(knowledge:::.compare_rule_cols), ignore.case = TRUE, perl = TRUE)))
+  expect_false(any(grepl("\\brules?\\b", knowledge:::.compare_rule_labels(), ignore.case = TRUE, perl = TRUE)))
   pop <- knowledge:::.compare_popup(mapgl_fx())
   expect_false(any(grepl("\\brules?\\b", unlist(Filter(is.character, pop$expr)), ignore.case = TRUE, perl = TRUE)))
 })
@@ -198,4 +198,30 @@ test_that("knw_compare_mapgl's Esri topo background is a keyless raster style th
   expect_identical(st$layers[[1]]$source, "esri_topo")
   # serialised as the widget sends it: tiles must be a JSON array
   expect_match(as.character(jsonlite::toJSON(st, auto_unbox = TRUE)), '"tiles":\\["https')
+})
+
+test_that("the maps' classes and colours come from one gq registry, read the same way by gq (#173)", {
+  rule <- knowledge:::.compare_cols("compare_rule")
+  grade <- knowledge:::.compare_cols("compare_grade")
+  expect_identical(names(rule), c("kept (both)", "lost (default only)", "gained (tuned only)", "accessible, neither"))
+  expect_identical(names(grade), c("0-0.2", "0.2-0.4", "0.4-0.6", "0.6-0.8", "0.8-1", "not graded"))
+  # the grade classes are the grade table's own labels, so a graded segment always finds its colour
+  expect_true(all(c("0-0.2", "0.8-1") %in% names(grade)))
+  skip_if_not_installed("gq")
+  reg <- gq::gq_reg_custom(system.file("gq", "compare.csv", package = "knowledge"))
+  for (k in c("compare_rule", "compare_grade")) {
+    cls <- gq::gq_style(reg$layers[[k]])$classification
+    expect_identical(unname(cls$values), unname(knowledge:::.compare_cols(k)))
+    expect_identical(unname(cls$labels), names(knowledge:::.compare_cols(k)))
+  }
+})
+
+test_that(".knw_rule_class gives each pair of flags its class, a missing flag reading as not habitat (#173)", {
+  lab <- knowledge:::.compare_rule_labels()
+  got <- knowledge:::.knw_rule_class(c(TRUE, TRUE, FALSE, FALSE, NA, TRUE), c(TRUE, FALSE, TRUE, FALSE, TRUE, NA), lab)
+  expect_identical(got, lab[c(1, 2, 3, 4, 3, 2)])
+  expect_error(knowledge:::.knw_rule_class(TRUE, TRUE, lab[1:3]))
+  # a segment the species cannot reach has no class, whatever its flags
+  expect_identical(knowledge:::.knw_rule_class(c(TRUE, FALSE, TRUE), c(TRUE, FALSE, FALSE), lab, accessible = c(TRUE, FALSE, NA)),
+                   c(lab[1], NA, NA))
 })

@@ -17,3 +17,8 @@
   and confirmed. Al cut the PR to batch 6; batch 7 goes to a split-off issue. `task_plan.md` rewritten to that scope
   with the review's gaps folded in
 - Next: Phase 1, the GPKG helper
+- Phase 1: `.knw_env_flag()` reads `GPKG` (off unless TRUE); `0330` drops the maps and HTML pages, `STAGE=floodplain`
+  replaces `STAGE=maps` (which now refuses and names its replacements), floodplain rows carry `tune_run`,
+  `config_sha` and `tuned_rule`, `STAGE=gpkg` takes the promoted run; the GeoPackage gains `rule_class`, `water`,
+  `water_ha` and a `run` table; the classes and colours move into `inst/gq/compare.csv` (read the same by gq). The
+  writer was run on BULK against `fresh_default_20261023` (findings)

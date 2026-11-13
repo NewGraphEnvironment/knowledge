@@ -76,8 +76,8 @@ knw_compare_map <- function(segments, water = NULL, title = "", png = NULL, html
   }
   seg <- .compare_classes(seg)
   seg$lwd <- pmin(pmax(as.numeric(seg$stream_order), 1), 6) / 3
-  rule_cols <- .compare_rule_cols
-  grade_cols <- .compare_grade_cols
+  rule_cols <- .compare_cols("compare_rule")
+  grade_cols <- .compare_cols("compare_grade")
   water_style <- NULL
   if (!is.null(water) && nrow(water) && requireNamespace("gq", quietly = TRUE)) {
     reg <- tryCatch(gq::gq_reg_main(), error = function(e) NULL)
@@ -144,19 +144,24 @@ knw_compare_map <- function(segments, water = NULL, title = "", png = NULL, html
   invisible(written)
 }
 
-# the classes and colours both maps draw; hex throughout, because MapLibre rejects R's colour names (grey80)
-.compare_rule_cols <- c("kept (both)" = "#1b6ca8", "lost (default only)" = "#d95f02",
-                        "gained (tuned only)" = "#1b9e77", "accessible, neither" = "#cccccc")
-.compare_grade_cols <- c("0-0.2" = "#f7fbff", "0.2-0.4" = "#c6dbef", "0.4-0.6" = "#6baed6", "0.6-0.8" = "#2171b5",
-                         "0.8-1" = "#08306b", "not graded" = "#d9d9d9")
+# the classes and colours both maps and the comparison's GeoPackage draw, from one gq custom registry
+# (inst/gq/compare.csv, read by gq::gq_reg_custom() too): hex throughout, because MapLibre rejects R's colour names
+# (grey80). Named by class label, in the registry's row order, which the interactive map's integer class codes follow.
+.compare_cols <- function(layer = c("compare_rule", "compare_grade")) {
+  layer <- match.arg(layer)
+  f <- system.file("gq", "compare.csv", package = "knowledge", mustWork = TRUE)
+  reg <- utils::read.csv(f, colClasses = "character", na.strings = character())
+  reg <- reg[reg$layer_key == layer, , drop = FALSE]
+  if (!nrow(reg) || anyDuplicated(reg$class_label)) stop("inst/gq/compare.csv: no or duplicated classes for ", layer, call. = FALSE)
+  stats::setNames(reg$stroke_color, reg$class_label)
+}
+.compare_rule_labels <- function() names(.compare_cols("compare_rule"))
 
 .compare_classes <- function(seg) {
-  seg$rule_class <- factor(ifelse(seg$flag_default & seg$flag_tuned, "kept (both)",
-                           ifelse(seg$flag_default, "lost (default only)",
-                           ifelse(seg$flag_tuned, "gained (tuned only)", "accessible, neither"))),
-                           levels = names(.compare_rule_cols))
-  seg$grade_class <- factor(ifelse(is.na(seg$grade_class), "not graded", seg$grade_class),
-                            levels = names(.compare_grade_cols))
+  rule_lab <- .compare_rule_labels()
+  seg$rule_class <- factor(.knw_rule_class(seg$flag_default, seg$flag_tuned, rule_lab), levels = rule_lab)
+  grade_lab <- names(.compare_cols("compare_grade"))
+  seg$grade_class <- factor(ifelse(is.na(seg$grade_class), "not graded", seg$grade_class), levels = grade_lab)
   seg
 }
 
@@ -239,21 +244,23 @@ knw_compare_mapgl <- function(segments, water = NULL, title = "",
                             fill_opacity = paint$`fill-opacity`, fill_outline_color = paint$`fill-outline-color`)
   }
   width <- mapgl::interpolate("stream_order", values = c(1, 6), stops = c(0.6, 3))
+  rule_cols <- .compare_cols("compare_rule")
+  grade_cols <- .compare_cols("compare_grade")
   m |>
     mapgl::add_source("knw_seg", s4) |>
     mapgl::add_line_layer("rules", source = "knw_seg",
-                          line_color = mapgl::match_expr("rc", values = seq_along(.compare_rule_cols),
-                                                         stops = unname(.compare_rule_cols), default = "#cccccc"),
+                          line_color = mapgl::match_expr("rc", values = seq_along(rule_cols),
+                                                         stops = unname(rule_cols), default = unname(rule_cols[[4]])),
                           line_width = width, popup = pop$expr) |>
     mapgl::add_line_layer("grade", source = "knw_seg",
-                          line_color = mapgl::match_expr("gc", values = seq_along(.compare_grade_cols),
-                                                         stops = unname(.compare_grade_cols), default = "#d9d9d9"),
+                          line_color = mapgl::match_expr("gc", values = seq_along(grade_cols),
+                                                         stops = unname(grade_cols), default = unname(grade_cols[["not graded"]])),
                           line_width = width, popup = pop$expr, visibility = "none") |>
-    mapgl::add_categorical_legend(legend_title = title, values = names(.compare_rule_cols),
-                                  colors = unname(.compare_rule_cols), position = "top-left", layer_id = "rules",
+    mapgl::add_categorical_legend(legend_title = title, values = names(rule_cols),
+                                  colors = unname(rule_cols), position = "top-left", layer_id = "rules",
                                   unique_id = "legend_rules") |>
-    mapgl::add_categorical_legend(legend_title = "Grade (expected use)", values = names(.compare_grade_cols),
-                                  colors = unname(.compare_grade_cols), position = "top-left", layer_id = "grade",
+    mapgl::add_categorical_legend(legend_title = "Grade (expected use)", values = names(grade_cols),
+                                  colors = unname(grade_cols), position = "top-left", layer_id = "grade",
                                   unique_id = "legend_grade", add = TRUE) |>
     mapgl::add_layers_control(layers = c(Habitat = "rules", Grade = "grade"), position = "top-right")
 }
