@@ -1,8 +1,7 @@
-ok   line 132 mcelreath2020StatisticalRethinking p. 426
-ok   line 148 mcelreath2020StatisticalRethinking p. 227
-ok   line 159 gelman_etal2013Bayesiandata p. 182
-ok   line 178 mcelreath2020StatisticalRethinking p. 216
-ok   line 189 mcelreath2020StatisticalRethinking p. 413
-ok   line 234 mcelreath2020StatisticalRethinking p. 499
-quotes: 6 checked in vignettes/tuning-bayesian-practice.Rmd
+ok   line 147 mcelreath2020StatisticalRethinking p. 426
+ok   line 163 mcelreath2020StatisticalRethinking p. 227
+ok   line 173 gelman_etal2013Bayesiandata p. 182
+ok   line 190 mcelreath2020StatisticalRethinking p. 216
+ok   line 204 mcelreath2020StatisticalRethinking p. 413
+quotes: 5 checked in vignettes/tuning-bayesian-practice.Rmd
 PASS

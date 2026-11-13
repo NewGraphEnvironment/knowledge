@@ -51,7 +51,7 @@ verdicts <- c("aligned", "differs", "should change", "no bearing")
 frag_min <- 4L
 near <- 200L      # characters either side of a page citation in which a quote mark makes the page a quote's
 # the quotes each file checks; change a count with its file
-n_quotes <- c(bayesian_alignment.md = 23L, `tuning-bayesian-practice.Rmd` = 6L)
+n_quotes <- c(bayesian_alignment.md = 23L, `tuning-bayesian-practice.Rmd` = 5L)
 article <- "vignettes/tuning-bayesian-practice.Rmd"
 # method choices no setting names, each with a line of the code that makes it
 choices <- list(
@@ -162,10 +162,11 @@ masked <- txt
 for (k in seq_len(nrow(strict))) {
   substr(masked, strict$p_start[k], strict$p_end[k]) <- strrep(" ", strict$p_end[k] - strict$p_start[k] + 1L)
 }
-# inline code is code, not a quotation: its quote marks (`bs = "re"`) are blanked too
+# inline code is code, not a quotation: its quote marks (`bs = "re"`) are blanked too, with letters, so an apostrophe
+# after it (`link`'s) still follows a word
 cm <- gregexpr("`[^`]*`", masked)[[1]]
 for (k in seq_along(cm)) if (cm[k] > 0) substr(masked, cm[k], cm[k] + attr(cm, "match.length")[k] - 1L) <-
-  strrep(" ", attr(cm, "match.length")[k])
+  strrep("x", attr(cm, "match.length")[k])
 # a straight single quote counts where it opens a word (`'like this`), never after a letter or digit: an apostrophe
 # (`BDA3's`, `folds'`, `*k*'s`) is not a quote mark. Marks are found once over the whole text, so a window's edge
 # cannot cut an apostrophe from the letter before it

@@ -41,7 +41,7 @@ sc$share <- sc$groups_both / sc$groups
 sc$margin <- sc$null_heldout_curve - sc$dev_curve
 under_half <- sc$key[sc$share < 0.5]
 withheld <- sc$key[sc$grade_withheld]
-# a key whose curve failed has no margin, and the run withholds nothing it did not grade
+# a key whose curve failed has no margin and no grade, and the run's flag for it reads FALSE
 curved <- sc[!is.na(sc$margin), ]
 closest <- curved[which.min(abs(curved$margin)), ]
 # the words: every published key drops some groups, and more than half for the keys named; the gate withholds some
@@ -53,6 +53,7 @@ stopifnot(nrow(sc) > 0, all(sc$groups_both < sc$groups), length(under_half) >= 2
           val("prior_sd") == "2.5", val("se_region") == "1", val("folds") == "5")
 ```
 
+
 The tuning chooses the thresholds of a fish habitat definition, the few limits on a stream's size and slope that say
 where a species spawns or rears, from the Province's fish sampling records, and grades each stream by how often the
 species is caught on streams like it. Two textbooks set out how such a choice is made well: *Statistical Rethinking*
@@ -60,15 +61,35 @@ species is caught on streams like it. Two textbooks set out how such a choice is
 the tuning against them: what it does as they teach, where it departs and why, and what we test next. It is a record
 of where the method stands and where it is heading; the [methodology article](tuning-method.html) sets out its steps.
 
-**The answer.** The core of the tuning is the comparison *Statistical Rethinking* teaches. Habitat definitions are
-judged on watershed groups they were not fitted to, two are told apart by the uncertainty of their difference, and
-the near-ties are kept together rather than reduced to one winner. It departs in three ways, each defensible for a
-habitat definition whose job is to rank streams. Each left-out watershed group's own base rate is refitted before its
-score is taken, so the score measures how well a habitat definition ranks streams within a group, not how many fish a
-new group holds. The prior on the sampling terms is a penalty that finds one best value, not a posterior. And the
-thresholds are reported as a choice and the range of close calls, not as a distribution. Three things should change:
-a check meant to test the choosing does not test it, the grading curve treats an unseen sampling level unlike the
-scorer, and the slopes the habitat definitions read depend on where fish were caught.
+**The answer.** The tuning judges habitat definitions the way *Statistical Rethinking* teaches: on watershed groups
+left out of the fit, telling two apart by the uncertainty of their difference, and keeping the near-ties together
+rather than naming one winner. Its three main departures are each defensible for a habitat definition whose job is to
+rank streams. The score measures how well a habitat definition ranks streams within a watershed group, not how often
+the species turns up in a new one; the prior is used as a penalty that finds one best value, not a full posterior; and
+the thresholds are reported as one choice and a range, not a distribution. Three things should change: a check on how
+the choice is made does not fully hold its test data out, the two models the publishing test compares treat a site
+from an unfamiliar data set or period differently, and the stream slopes the habitat definitions read depend on where
+fish were caught.
+
+## What does the tuning do? {#tuning}
+
+For each species and life stage, the tuning builds a grid of habitat definitions around those of
+[`link`](https://newgraphenvironment.github.io/link/) [@link], the R package that maps habitat on BC's streams: a
+floor on stream size, a ceiling on slope, and for some an exception for small streams near a large river. Each habitat
+definition sorts every site crews electrofished into habitat or not.
+
+The **scorer** is a regression of whether the species was caught at a site on that sorting. Beside it sit the area
+fished (the effort) and two **sampling terms**, the data set the record comes from and its period, which are
+differences in how crews sampled that a habitat definition must not be credited for. Each watershed group, the
+Province's division of its streams into large drainages, also gets its own **base rate**: how often the species is
+caught there at all. The **score** is the scorer's deviance at sites it was not fitted to, a measure of how badly it
+predicts the catch, summed over sites; lower is better.
+
+The groups are dealt into `r val("folds")` **folds**, and each fold in turn is left out of the fit and scored. Habitat
+definitions whose scores the records cannot rank are **close calls**, and among them we choose the one that changes
+`link`'s current habitat definition least. Then a second model, the **curve**, a smooth surface of how often the
+species is caught against stream size, distance to a river and slope, gives every stream a **grade**. The **gate**
+publishes those grades only if the curve scores better on the left-out folds than no habitat definition at all.
 
 ## The checks, at a glance {#glance}
 
@@ -82,47 +103,41 @@ knitr::kable(data.frame(
     "Are two scores told apart by the uncertainty of their difference?",
     "Does the score predict a new watershed group?",
     "How wide is a close call, and which close call is chosen?",
-    "Does the check on the choosing hold its own test data out?",
-    "Is the prior a prior?",
+    "Does the check on the choosing hold its test data out?",
+    "Is the prior's scale the books' default?",
+    "Does the prior give a posterior?",
+    "Are thresholds reported as a distribution?",
     "Are watershed groups pooled?",
     "Which watershed group does the grade describe?",
-    "Are grades withheld on a fair comparison?",
-    "Is a stream's slope independent of the catch?",
-    "Is a miss an absence?"),
+    "Is the gate a fair comparison?",
+    "Is an unfamiliar data set or period read the same on both sides of the gate?",
+    "Does the chance of a catch grow in proportion to the area fished?",
+    "Is a miss an absence?",
+    "Are the inputs measured?",
+    "Is a stream's slope independent of the catch?"),
   `what the tuning does` = c(
     "Whole watershed groups are left out of each fit and scored",
-    "Yes, over watershed groups",
+    "Yes: the standard error of each difference, over watershed groups",
     "No: each left-out group's base rate is refitted first",
     "One standard error; the close call nearest link's current habitat definition",
-    "No: the scores it chooses from were fitted on its test groups",
-    "A normal prior on the sampling terms, fitted as a penalty",
-    "Fixed in the scorer; pooled in the curve",
+    "Not fully: the scores it chooses from were fitted with its test groups in",
+    "A normal prior with standard deviation 2.5 on the sampling terms",
+    "No: it is fitted as a penalty, which finds one best value",
+    "No: as one choice and the range of close calls",
+    "Fixed in the scorer, with groups of one outcome dropped; pooled in the curve",
     "An average group",
-    "A point comparison with no habitat definition",
-    "No: link cuts streams at fish records",
-    "A miss is read as no catch at that visit"),
-  verdict = c("as the books teach", "as the books teach", "differs, defensibly", "a convention and a decision",
-              "should change", "as the books teach, as a penalty", "differs", "as the books teach", "differs",
-              "should change", "differs, as labelled"),
+    "A point comparison against no habitat definition, with no standard error",
+    "No: the scorer takes the reference level, the curve the most common one",
+    "Not necessarily: the area fished has a fitted slope",
+    "A miss is read as no catch at that visit",
+    "No: placement, slope and flow are estimates read as exact",
+    "No: link cuts streams at fish records"),
+  verdict = c("follows the books", "follows the books", "departs, defensibly", "departs", "should change",
+              "follows the books", "departs, defensibly", "departs, defensibly", "departs", "follows the books",
+              "departs", "should change", "departs, defensibly", "departs", "departs", "should change"),
   check.names = FALSE),
   caption = "Where the tuning stands against the two books, one row per question.", row.names = FALSE)
 ```
-
-## What does the tuning do? {#tuning}
-
-For each species and life stage, the tuning builds a grid of habitat definitions around those of
-[`link`](https://newgraphenvironment.github.io/link/) [@link], the R package that maps habitat on BC's streams: a floor on
-stream size, a ceiling on slope, and for some an exception for small streams near a large river. Each habitat
-definition sorts every site crews electrofished into habitat or not. A model of whether the species was caught then
-asks how well that sorting predicts the catch, allowing for how much stream was fished, the data set and the period.
-The **score** is how badly the model predicts the catch at sites it was not fitted to; lower is better.
-
-The sites are grouped by **watershed group**, the Province's division of its streams into large drainages. The groups
-are dealt into `r val("folds")` **folds**, and each fold in turn is left out of the fit and scored. Habitat definitions
-whose scores the records cannot tell apart are **close calls**, and among them we choose the one that changes link's
-current habitat definition least. A smooth **curve** of how often the species is caught, against stream size, distance
-to a river and slope, then grades every stream, unless it predicts the left-out folds no better than no habitat
-definition at all.
 
 ## Is the score an honest test? {#score}
 
@@ -132,14 +147,14 @@ When the data come in clusters, *Statistical Rethinking* separates two tests:
 > "If we wish to validate a model against the specific clusters used to fit the model, that is one thing. But if we instead wish to compute predictions for new clusters, other than the ones observed in the sample, that is quite another." [@mcelreath2020StatisticalRethinking, p. 426]
 
 The tuning leaves out whole watershed groups, the strict form, so no site in a scored group helped estimate how much
-the habitat definition, the effort or the sampling terms matter. But before a left-out group is scored, the model refits that group's
-own base rate (how often the species is caught there at all) on that group's sites. So the score asks whether the
-habitat definition puts the catches on the right streams within a group, not how many catches a new group would
-hold. That refit flatters every habitat definition by about the same amount, one fitted value per group, so the
-comparison between habitat definitions holds while the score itself is not a prediction for a new group. It is the
-right question for a habitat definition that ranks streams: how common a species is in a watershed is not the habitat
-definition's to predict. The score is also taken at one best estimate, where the books average it over the posterior
-[@mcelreath2020StatisticalRethinking, p. 210; @gelman_etal2013Bayesiandata, p. 174].
+the habitat definition, the effort or the sampling terms matter. But before a left-out group is scored, the scorer
+refits that group's base rate on that group's own sites. So the score asks whether the habitat definition puts the
+catches on the right streams within a group, not how many catches a new group would hold. Every habitat definition
+gets the same refit, one fitted value per group, so by our reasoning (not measured) each is flattered by about the
+same amount: the comparison between habitat definitions holds, while the score itself is not a prediction for a new
+group. That is the right question for a habitat definition that ranks streams, since how common a species is in a
+watershed is not the habitat definition's to predict. The score is also taken at one best estimate, where the books
+average it over the posterior [@mcelreath2020StatisticalRethinking, p. 210; @gelman_etal2013Bayesiandata, p. 174].
 
 ## How are two habitat definitions told apart? {#se}
 
@@ -151,34 +166,34 @@ The tuning takes the standard error (SE) of each habitat definition's difference
 the units it leaves out, as the book does over sites [@mcelreath2020StatisticalRethinking, p. 228]. Every habitat
 definition within `r val("se_region")` SE of the best is a close call, and the published table gives the range of
 close calls beside the choice, closer to what the book asks than a single winner [@mcelreath2020StatisticalRethinking,
-p. 225]. The width of one SE is a convention neither book sets, and choosing the close call nearest link's current
+p. 225]. The width of one SE is a convention neither book sets, and choosing the close call nearest `link`'s current
 habitat definition is a decision the scores do not make.
 
-Choosing among thousands of habitat definitions also flatters the winner's score:
-
-> "when these methods are used to choose a model selection, the predictive performance estimate of the selected model is biased due to the selection process." [@gelman_etal2013Bayesiandata, p. 182]
-
-The book's remedy is a second level of left-out data. The tuning's check on the choosing (choosing on four folds and
-scoring the choice on the fifth) was meant to be that, but the scores it chooses from came from fits that included the
-fifth fold, so its test data were not fully left out. The check reports on the choosing only; it moves no choice and
-no grade.
+Choosing among thousands of habitat definitions also flatters the winner's score. *Bayesian Data Analysis* warns that
+when scores like these are used to choose a model, "the predictive performance estimate of the selected model is biased due to the selection process" [@gelman_etal2013Bayesiandata, p. 182],
+and names the remedy, a second level of left-out data. The tuning's check on the choosing (choosing on four folds and
+scoring the choice on the fifth) was meant to be that, but the scores it chooses from came from fits that included
+the fifth fold, so its test data were not fully left out. The check reports on the choosing only; it moves no choice
+and no grade.
 
 ## What does the prior do? {#prior}
 
-A prior is sceptical: it slows how fast a model learns from the sample, and keeps an estimate finite where the data
-alone would let it run away. The data set and period of a record are sampling differences a habitat definition must
-not be credited for, and where one data set or period caught the species every time, or never, its term ran without
-bound. The tuning gives those terms a normal prior with a standard deviation of `r val("prior_sd")` on the model's
-scale, the scale *Bayesian Data Analysis* uses for its default prior on such terms [@gelman_etal2013Bayesiandata,
-p. 416]. It differs from that default in shape (normal rather than Cauchy, so thinner in its tails), in its link
-(complementary log-log rather than logit) and in its reach (the sampling terms only, not every term).
+A regularising prior is sceptical: it slows how fast a model learns from the sample, and keeps an estimate finite
+where the data alone would let it run away. Where one data set or period caught the species every time, or never,
+its sampling term ran without bound. The tuning gives the sampling terms a normal prior with a standard deviation of
+`r val("prior_sd")` on the scorer's complementary log-log scale. A scale of 2.5 is what *Bayesian Data Analysis* uses
+for its default prior on logistic regression coefficients, there a Cauchy prior on every coefficient but the constant
+[@gelman_etal2013Bayesiandata, p. 416].
 
 The prior is fitted as a penalty, which finds the single most probable value and no more:
 
 > "Ridge regression does not compute a posterior distribution." [@mcelreath2020StatisticalRethinking, p. 216]
 
-So the tuning carries no uncertainty from the prior into its thresholds, and no simulation of what the prior implies
-for the catch has been run [@mcelreath2020StatisticalRethinking, p. 328].
+So the tuning carries no uncertainty from the prior into its thresholds, which it reports as one choice and the range
+of close calls, and no simulation of what the prior implies for the catch has been run
+[@mcelreath2020StatisticalRethinking, p. 328]. The scorer also keeps a fallback fit without the prior for a fold the
+main fit cannot handle; by the way the prior is built the sampling terms cannot send a fold there, but that rests on an
+argument, not a check.
 
 ## Are watershed groups pooled? {#pooling}
 
@@ -192,77 +207,81 @@ The scorer gives each watershed group its own base rate, which is cheap enough t
 definitions and answers the within-group question above. But a group whose sites all caught the species, or none did,
 has a base rate that runs to the edge and says nothing about the habitat definition, so it is dropped. For
 `r words_and(vapply(under_half, key_words, ""))`, more than half the groups are dropped. The curve does pool the
-groups, but it is fitted on the same groups the scorer keeps, and each left-out group is scored by its own refitted
-base rate, so the pooled spread of groups never predicts one.
+groups: it learns a spread of base rates across them. But it is fitted on at most the groups the scorer keeps, and
+each left-out group is still scored by its own refitted base rate, so the pooled spread is never used to predict a
+group the curve has not seen.
 
 ```{r scope}
 knitr::kable(data.frame(
   `species and stage` = vapply(sc$key, key_words, ""),
   `watershed groups with sites` = n0(sc$groups),
-  `with both catches and misses` = n0(sc$groups_both),
+  `kept by the scorer (catches and misses)` = n0(sc$groups_both),
   `grade` = ifelse(is.na(sc$margin), "no curve", ifelse(sc$grade_withheld, "withheld", "published")),
-  `curve's score less no habitat definition's` = ifelse(is.na(sc$margin), "", sprintf("%.1f", -sc$margin)),
+  `curve's deviance less no habitat definition's` = ifelse(is.na(sc$margin), "", sprintf("%.1f", -sc$margin)),
   check.names = FALSE),
   caption = paste("The watershed groups each species and stage's sites fall in, the groups the scorer keeps, and",
-                  "whether its grade is published: a curve whose score on the left-out folds is no lower than no",
-                  "habitat definition's is withheld."),
+                  "whether its grade is published. The last column is the curve's deviance on the left-out folds",
+                  "less that of no habitat definition: below zero the curve does better, and at zero or above its",
+                  "grade is withheld."),
   row.names = FALSE, align = "lrrlr")
 ```
 
-## Which watershed group does the grade describe? {#grade}
+The grade describes an average group, leaving each group's own base rate out [@mcelreath2020StatisticalRethinking,
+p. 428], which is the right reading for a map that compares streams across the province. But because every score
+refits each group's base rate, no score has tested how well the grade compares a stream in one group with a stream in
+another.
 
-A model that pools groups can describe an average group or the spread of all of them. The grade describes an average
-group, leaving each group's own base rate out [@mcelreath2020StatisticalRethinking, p. 428], which is the right
-reading for a map that compares streams across the province. Every score refits a group's base rate, so how well the
-grade compares a stream in one group with a stream in another has not been tested.
+## Is the gate a fair comparison? {#gate}
 
-## When are grades withheld? {#gate}
+The gate compares the curve's deviance on the left-out folds with that of no habitat definition, on the same sites and
+folds. This is the comparison the books teach, and it does not need to charge the curve again for its flexibility,
+because the curve's smoothness is already penalised as it is fitted. But it is a point comparison with no standard
+error, so any improvement publishes, and the curve's variables come from the choice made on the same folds. It
+withholds `r words_and(vapply(withheld, key_words, ""))`. Its closest call, `r key_words(closest$key)`, was
+`r if (closest$grade_withheld) "withheld" else "published"` by `r sprintf("%.1f", abs(closest$margin))` in deviance.
 
-A curve's grades are published only when it scores lower on the left-out folds than no habitat definition at all, on
-the same sites and folds. This is the comparison the books teach, and the curve's smoothness is itself penalised, so
-the comparison does not count the curve's flexibility twice. But it is a point comparison with no standard error, and
-the curve's variables come from the choice made on the same folds. The gate withholds
-`r words_and(vapply(withheld, key_words, ""))`. Its closest call, `r key_words(closest$key)`, was
-`r if (closest$grade_withheld) "withheld" else "published"` by `r sprintf("%.2f", abs(closest$margin))` in score.
+The two sides of the gate also differ at one kind of site. Where a left-out site comes from a data set or period the
+fit never saw, the no-habitat-definition side, which runs through the scorer, gives it the reference level, the
+prior's centre; the curve gives it the most common level in the fit. So the two sides treat that site differently.
 
 ## What else differs? {#else}
 
+- **Effort is fitted, not fixed.** The area fished enters with a fitted slope rather than as a fixed exposure (an
+  offset), so the chance of a catch can grow more or less than in proportion to the area fished: the hypothesis
+  *Statistical Rethinking* describes for a free coefficient on the log of exposure
+  [@mcelreath2020StatisticalRethinking, p. 357]. Electrofishing plausibly saturates with effort.
 - **A miss is a miss at that visit.** The response is whether a crew caught the species on one visit, so a species
-  present and missed reads as absent. The grade says so: it is expected use per standard electrofishing visit,
-  not habitat quality. Telling the two apart needs repeat visits:
-
-  > "In ecology, the absence of an observation of a species is a subtle kind of observation. It could mean the species isn’t there." [@mcelreath2020StatisticalRethinking, p. 499]
-
-- **Effort is fitted, not fixed.** The area fished enters with a fitted slope rather than as a fixed exposure, which
-  lets the chance of a catch level off as more stream is fished [@mcelreath2020StatisticalRethinking, p. 357].
+  present and missed reads as absent [@mcelreath2020StatisticalRethinking, p. 499]. The grade says so: it is expected
+  use per standard electrofishing visit, not habitat quality. Telling the two apart needs repeat visits.
 - **The inputs are carried as exact.** A site's place on the stream, its slope and its modelled flow are each
   estimates. The tuning drops the worst-placed sites and reads the rest as measured, where the book carries such
   error into the model [@mcelreath2020StatisticalRethinking, p. 495].
-- **A stream's slope depends on the catch.** link cuts streams at fish records, so a site that caught fish sits on a
-  shorter stretch, and the slope the habitat definitions read depends on what was caught.
-- **An unseen sampling level is read two ways.** At a left-out site whose data set or period the fit never saw, the
-  scorer takes the reference level, the prior's centre, and the curve takes the most common one, so the gate's two
-  sides treat that site differently.
+- **A stream's slope depends on the catch.** `link` cuts streams at fish records, so a site that caught fish sits on
+  a shorter stretch, and the slope the habitat definitions read depends on what was caught.
 
 ## What do we test next? {#next}
 
-- **Close the three gaps** (`r issue(203)`): the curve takes the reference level for an unseen data set or period as
-  the scorer does, a run stops if the scorer ever fits a fold without its prior, and the check on the choosing is
-  either nested, each fold's choice made from fits that never saw it, or described as what it is.
-- **A pooled curve, scored both ways** (`r issue(186)`): a full posterior with priors on the smooths, the groups with
-  only catches or only misses kept, and every left-out group scored both by its own refitted base rate and as a new
-  group drawn from the spread of groups. Two cheap tests ride with it: the area fished as a fixed exposure, and a
-  simulation of what the prior implies for the catch.
-- **Slopes that do not depend on the catch** (`r issue(70)`): slopes over a fixed length of stream, scored against
-  the field-measured slope.
+- **Three fixes to the tuning** (`r issue(203)`): the curve gives a site from an unfamiliar data set or period the
+  reference level, as the scorer does; a run stops if the scorer ever fits a fold without its prior, so that rests on
+  a check; and the check on the choosing is either nested, each fold's choice made from fits that never saw it, or
+  described as what it is.
+- **A pooled curve, scored both ways** (`r issue(186)`), for chinook and westslope cutthroat trout rearing: a full
+  posterior with priors on the smooths, and the groups with only catches or only misses kept. Today's curve and the
+  pooled one are each scored both by every left-out group's own refitted base rate and as a new group drawn from the
+  spread of groups, since a new-group score for one beside an own-base-rate score for the other compares nothing. Two
+  cheap tests ride with it: the area fished as a fixed exposure, and a simulation of what the prior implies for the
+  catch.
+- **Slopes that do not depend on the catch** (`r issue(70)`): modelled slopes checked against field-measured ones,
+  and slopes over fixed lengths of stream scored beside `link`'s segment slope.
 
 ## What this review did not test {#limits}
 
 - It reads the method and fits nothing; how much each change moves a score is measured by the work that makes it.
-- Occupancy models, which separate a missed species from an absent one, and the penalty scale of the smoothing
-  library are named by the books but not taught there, so this review stops at what the books say.
-- It describes the code and the run this article's data were written from, on `r x$meta$written` at commit
-  `r x$meta$commit`.
+- Occupancy models, which separate a missed species from an absent one, are named in *Statistical Rethinking* but
+  not taught there, and penalised splines are named in *Bayesian Data Analysis* without the smoothing library's
+  penalty scale, so this review stops at what the books say.
+- It describes the code at commit `r x$meta$commit` and the run whose summaries this article's data, written on
+  `r x$meta$written`, read.
 
 ## Software and citation {#software}
 
