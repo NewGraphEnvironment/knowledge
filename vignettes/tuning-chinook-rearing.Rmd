@@ -97,8 +97,12 @@ se_strict <- 1.96  # the register's se_strict
 tune$in_196 <- tune$converged %in% TRUE & tune$ddev_best <= se_strict * tune$se_diff
 ch196 <- knw_tune_repick(tune, se_mult = se_strict)
 lab_strict <- paste("only at", se_strict, "SE")
-# at 1.96 the choice is the same rule (flow floor, slope limit and near-a-river allowance), and link's rule stays out
-stopifnot(ch196$rule == rec$rule, ch196$n_region > nrow(region),
+# at 1.96 the choice moves toward link's: it keeps link's slope limit, raises the flow floor and keeps the
+# near-a-river allowance, so it departs from link's in fewer dials; link's rule stays out
+stopifnot(ch196$rule != rec$rule, ch196$grad_max == dflt$grad_max, ch196$grad_max < rec$grad_max,
+          ch196$size_min > rec$size_min, ch196$departures < rec$departures, ch196$exc_d %in% rec$exc_d,
+          ch196$exc_q %in% rec$exc_q,
+          ch196$n_region > nrow(region),
           ch196$rule != dflt$rule, !tune$in_196[tune$is_default], sum(tune$in_196) == ch196$n_region,
           all(tune$in_196[tune$in_region]))
 
@@ -309,7 +313,9 @@ The flow floors near the best are close calls at one standard error and no width
 flat from `r grad(min(region$grad_max))` up.
 
 **A stricter bar.** At `r se_strict` standard errors, about the width of a 95 % interval, more habitat definitions are
-close calls, and the same choice holds:
+close calls, and the choice moves toward link's. Of the close calls it takes the one that changes the fewest of
+link's dials: it keeps link's slope limit of `r grad(ch196$grad_max)` and raises the flow floor to
+`r ch196$size_min` m³/s, with the same near-a-river allowance:
 
 ```{r strict}
 bold_if <- function(v, ref) ifelse(v != ref, paste0("<b>", v, "</b>"), v)
@@ -364,7 +370,8 @@ knitr::kable(oc, format = "html", align = "lll") |>
   link's. Lakes keep their own condition.
 - **The cut-offs are a judgment call.** Chinook get gradually less common as streams get smaller and steeper; there is
   no flow or slope where they stop. At one standard error, flow floors of `r min(region$size_min)` to
-  `r max(region$size_min)` m³/s fit almost as well, and at `r se_strict` standard errors the choice is the same.
+  `r max(region$size_min)` m³/s fit almost as well. At `r se_strict` standard errors the choice keeps link's slope limit
+  of `r grad(ch196$grad_max)` and raises the flow floor to `r ch196$size_min` m³/s.
 - **Steeper slopes fit nearly as well.** The close calls run from `r grad(min(region$grad_max))` to
   `r grad(max(region$grad_max))`, the top of the list, and `r grad(rec$grad_max)` is the best scorer among them, not a
   slope at which chinook stop.
