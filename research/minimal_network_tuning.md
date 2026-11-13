@@ -1,6 +1,6 @@
 # Tuning on link's minimal network
 
-**Verified:** 2026-11-05 (chinook rearing on every setup), 2026-11-04 (the full network on the same flows and range), 2026-11-03 (province), 2026-11-02 (four
+**Verified:** 2026-11-13 (the minimal run promoted), 2026-11-05 (chinook rearing on every setup), 2026-11-04 (the full network on the same flows and range), 2026-11-03 (province), 2026-11-02 (four
 groups) · **Issues:** #120, #145 (link's side: NewGraphEnvironment/link#415, link#441, link#444, link#458) ·
 **Produced by:** `scripts/0300`, `0310`, `0320`, `0330` on the provincial minimal build `fresh_default_minimal`, on
 link's new full `default` build and on link's four-group proof schemas, and `data-raw/minimal_network_check.R`,
@@ -13,9 +13,13 @@ species tuned (`DEV=1`, no grades) on the new full `default` build on the same f
 network from the other two (#145). That full-network run was then graded, compared and promoted (run `20261104_0543`,
 2026-11-04; `habitat_thresholds_tuned.md`). Chinook rearing was then scored on every setup that exists, the full
 network reading its minimal parent's gradient and its Atlas line's among them (2026-11-05, candidates `20261105_0436`
-and `20261105_0437`, never promoted).
+and `20261105_0437`, never promoted). On 2026-11-13 the minimal-network run `20261103_0838` was promoted in its
+place, with the Atlas-gradient sensitivity scored on its evidence; its picks, grades and km are
+`habitat_thresholds_tuned.md`'s first results section.
 
-In this file, "published" names #92's run, the published one until #145's promotion of 2026-11-04.
+In this file, "published" names #92's run, the published one until #145's promotion of 2026-11-04, except in
+"Chinook rearing on every setup", where it names #145's full-network run; since 2026-11-13 the published run is this
+file's minimal one.
 
 ## The answer
 
