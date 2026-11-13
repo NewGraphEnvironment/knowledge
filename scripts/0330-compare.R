@@ -372,14 +372,16 @@ run_one <- function(job) {
 # class under the reported structure (kept, lost, gained, neither; `rule_class`, the registry's labels) and the waterbody
 # it runs through with that waterbody's area (`water`, `water_ha`, #173), so a kept stretch with a low grade explains
 # itself; written group by group from link's geometry and the segments the comparison saved, with a `run` table naming
-# the run, so a GeoPackage left from an older run says so. Run on a socket worker per key, so the package's helpers come
-# in as arguments
-gpkg_one <- function(key, schema, dir_gpkg, dir_seg, flag, rule_labels, rule_class_fun, water_fun, run_info) {
+# the run, so a GeoPackage left from an older run says so, and QGIS styles for the rule and grade classes in its
+# layer_styles table (gq#115). Run on a socket worker per key, so the package's helpers come in as arguments
+gpkg_one <- function(key, schema, dir_gpkg, dir_seg, flag, rule_labels, rule_class_fun, water_fun, run_info, styles) {
   t1 <- Sys.time()
   tryCatch({
     seg <- readRDS(file.path(dir_seg, paste0(key, "_segments.rds")))
     seg$rule_class <- rule_class_fun(seg[[paste0(flag[[key]], "_default")]], seg[[paste0(flag[[key]], "_tuned")]], rule_labels,
                                      accessible = seg$accessible)
+    # a reachable segment with no grade reads "not graded", the class the maps and the GeoPackage's style give it
+    seg$grade_class[is.na(seg$grade_class) & seg$accessible %in% TRUE] <- "not graded"
     # written as <key>.part.gpkg and renamed when every group is in (#111): a pass killed part way leaves a part file,
     # never a <key>.gpkg holding some groups, and the last complete one stands until then
     f <- file.path(dir_gpkg, paste0(key, ".gpkg"))
@@ -402,6 +404,8 @@ gpkg_one <- function(key, schema, dir_gpkg, dir_seg, flag, rule_labels, rule_cla
     }
     sf::st_write(data.frame(run_info, key = key, written_utc = format(Sys.time(), "%Y-%m-%dT%H:%M:%SZ", tz = "UTC")),
                  f_part, layer = "run", quiet = TRUE)
+    # the QGIS styles, from the registry the maps read (gq#115): rule class the default, grade class the second
+    gq::gq_gpkg_style_write(f_part, "segments", styles)
     unlink(f)
     if (!file.rename(f_part, f)) stop("could not move ", f_part, " to ", f)
     sprintf("GeoPackage %s: %d segments in %.1f min.", f, nrow(seg), as.numeric(difftime(Sys.time(), t1, units = "mins")))
@@ -420,7 +424,8 @@ write_gpkgs <- function(keys) {
   environment(water_fun) <- globalenv()
   args <- list(schema = schema, dir_gpkg = dir_gpkg, dir_seg = dir_out, flag = flag, rule_labels = .compare_rule_labels(),
                rule_class_fun = rule_class_fun, water_fun = water_fun,
-               run_info = data.frame(tune_run = run, link_run_uid = run_uid, schema = schema, promoted = promoted))
+               run_info = data.frame(tune_run = run, link_run_uid = run_uid, schema = schema, promoted = promoted),
+               styles = .compare_qgis_styles())
   gl <- if (workers > 1L && length(keys) > 1L) {
     cl <- parallel::makeCluster(min(workers, length(keys)))
     tryCatch(do.call(parallel::parLapplyLB, c(list(cl, keys, gpkg_one), args)), finally = parallel::stopCluster(cl))

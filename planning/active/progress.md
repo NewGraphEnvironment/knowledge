@@ -28,3 +28,8 @@
   scripts/README.md, README.md, inst/NOTICE.md, CLAUDE.md, and each research page's map line (now pointing to
   `STAGE=gpkg`). `data-raw/setup_compare.R` keeps its own `GPKG` default (a setups check, not 0330)
 - gq#115 handed to a background agent at 06:47 UTC (its own worktree and PR; no merge)
+- gq#115: the agent's gq PR #118 adds `gq_qgis_style()` and `gq_gpkg_style_write()` (CI green; loaded in headless
+  QGIS 4.2.1 by the agent). Not merged: Al's word. The installed gq is that branch's build. Wired here:
+  `.compare_qgis_styles()` builds both QMLs from `inst/gq/compare.csv`; `gpkg_one()` writes them (rule class default) and
+  fills "not graded" on reachable ungraded segments; BULK trial reads both styles back. xml2 added to Suggests (the test)
+- Al chose Esri tiles with attribution and no NOTICE row for the example maps (task_plan, decisions)

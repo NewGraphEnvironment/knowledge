@@ -38,6 +38,12 @@ or promotion.
   The gate's batch 7 decisions travel with it: #64's order with #90's specification beneath, every number from the
   tables, and the 15 unfitted keys as table rows only.
 
+- **Basemap (Al, 2026-11-13): Esri World Topo over World Shaded Relief, with Esri's attribution drawn on the map, and
+  no `inst/NOTICE.md` row** ("esri with attribution. no notice ... 'not intended' does not say forbidden"). Esri's
+  catalogue items put both under the Esri Master License Agreement; the topographic item says it "is not intended to be
+  used to export tiles for offline". This is a stated exception to CLAUDE.md's rule that a new tracked source gets a
+  NOTICE row.
+
 ## Mechanism (decided by the agent; reported)
 
 - `GPKG` is parsed by an `R/` helper so it can be tested: unset or `FALSE` gives FALSE, `TRUE` gives TRUE, anything
@@ -71,6 +77,10 @@ or promotion.
 - [ ] gq#115: the QML writer in gq (its own branch and PR; the merge and release on Al's word). Once released, the
       GeoPackage carries rule-class (default) and grade-class styles in `layer_styles`, tested on a fixture: every
       class present, one style default. If it is not released by this PR, the style task moves to the split-off
+  - [x] gq PR #118 (`gq_qgis_style()`, `gq_gpkg_style_write()`), CI green, open for Al's merge and release
+  - [x] knowledge side wired against the branch build: `.compare_qgis_styles()`, `gpkg_one()` writes both styles,
+        a test on a fixture GeoPackage, the BULK trial reads them back
+  - [ ] gq released, and DESCRIPTION's gq floor set to that release
 - [x] `knw_tune_promote()`: drop `fig_dir`, covering its signature, roxygen, example, archive place map and comments.
       `0335`: the header, its list, and "regenerate figures" left out. Port the two figure-only tests
       (`test-tune_promote.R` "archive and undo" and "an undo restores whatever the files' ages") to the GeoPackage

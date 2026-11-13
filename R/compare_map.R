@@ -157,6 +157,17 @@ knw_compare_map <- function(segments, water = NULL, title = "", png = NULL, html
 }
 .compare_rule_labels <- function() names(.compare_cols("compare_rule"))
 
+# the comparison GeoPackage's QGIS styles, from the same registry through gq (gq#115): rule class first, the default a
+# GeoPackage opens with, and grade class second. Needs a gq with gq_qgis_style(); stops naming it otherwise.
+.compare_qgis_styles <- function() {
+  if (!requireNamespace("gq", quietly = TRUE) || !exists("gq_qgis_style", asNamespace("gq"))) {
+    stop("the comparison GeoPackage's styles need gq's gq_qgis_style() and gq_gpkg_style_write() (gq#115): ",
+         "update gq", call. = FALSE)
+  }
+  reg <- gq::gq_reg_custom(system.file("gq", "compare.csv", package = "knowledge", mustWork = TRUE))
+  c(rule_class = gq::gq_qgis_style(reg, "compare_rule"), grade_class = gq::gq_qgis_style(reg, "compare_grade"))
+}
+
 .compare_classes <- function(seg) {
   rule_lab <- .compare_rule_labels()
   seg$rule_class <- factor(.knw_rule_class(seg$flag_default, seg$flag_tuned, rule_lab), levels = rule_lab)

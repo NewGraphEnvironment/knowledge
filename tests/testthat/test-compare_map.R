@@ -225,3 +225,26 @@ test_that(".knw_rule_class gives each pair of flags its class, a missing flag re
   expect_identical(knowledge:::.knw_rule_class(c(TRUE, FALSE, TRUE), c(TRUE, FALSE, FALSE), lab, accessible = c(TRUE, FALSE, NA)),
                    c(lab[1], NA, NA))
 })
+
+test_that("the GeoPackage's QGIS styles come from the same registry, rule class first (#173, gq#115)", {
+  skip_if_not_installed("gq")
+  skip_if_not(exists("gq_qgis_style", asNamespace("gq")), "gq predates gq_qgis_style() (gq#115)")
+  st <- knowledge:::.compare_qgis_styles()
+  expect_identical(names(st), c("rule_class", "grade_class"))
+  for (k in c("rule_class", "grade_class")) {
+    doc <- xml2::read_xml(st[[k]])
+    cats <- xml2::xml_find_all(doc, ".//categories/category")
+    expect_identical(xml2::xml_attr(cats, "label"),
+                     names(knowledge:::.compare_cols(if (k == "rule_class") "compare_rule" else "compare_grade")))
+    expect_identical(xml2::xml_attr(xml2::xml_find_first(doc, ".//renderer-v2"), "attr"), k)
+  }
+  skip_if_not_installed("sf")
+  f <- tempfile(fileext = ".gpkg")
+  seg <- sf::st_sf(rule_class = "kept (both)", grade_class = "0-0.2",
+                   geometry = sf::st_sfc(sf::st_linestring(rbind(c(0, 0), c(1, 1))), crs = 3005))
+  sf::st_write(seg, f, layer = "segments", quiet = TRUE)
+  gq::gq_gpkg_style_write(f, "segments", st)
+  ls <- sf::st_read(f, layer = "layer_styles", quiet = TRUE)
+  expect_setequal(ls$styleName, c("rule_class", "grade_class"))
+  expect_identical(ls$styleName[as.logical(ls$useAsDefault)], "rule_class")
+})
