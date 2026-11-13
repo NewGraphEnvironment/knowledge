@@ -79,8 +79,13 @@ stopifnot(nrow(pr) == 6, at_site("published_145", "fish") > 3 * at_site("publish
           at_site("published_92", "fish") > at_site("published_145", "fish"),
           abs(at_site("minimal", "fish") - at_site("minimal", "zero")) < 1,
           cp_lim("published") > cp_lim("minimal"), cp_lim("parent") == cp_lim("minimal"),
-          # "its build is a slightly earlier link"
-          package_version(pr$link[pr$network == "minimal"][1]) < package_version(pr$link[pr$network == "published_145"][1]),
+          # the cuts bundle's published network is the one this article's tuning read: the same visit tables
+          identical(unname(cp$meta$md5_local["data/stage/cut_points/evidence/published_145/visits_link.csv"]),
+                    unname(x$meta$md5_local["data/fdis/derived/visits_link.csv"])),
+          identical(unname(cp$meta$md5_local["data/stage/cut_points/evidence/published_145/visits_species.csv"]),
+                    unname(x$meta$md5_local["data/fdis/derived/visits_species.csv"])),
+          # "every published species and stage has been tuned on it"
+          setequal(sc$key, cp$other_keys$key),
           length(gs_ch) == 1, identical(gs_ch, cp$setups$pick[cp$setups$setup == "published"]),
           # the groups: chinook rearing's split is quoted, and in every key the never-caught groups outnumber the
           # all-caught ones
@@ -99,7 +104,8 @@ stopifnot(nrow(sc) > 0, setequal(sc$key, x$site_gradient$limits$key), all(sc$gro
           # could blur)
           with(curved[abs(curved$margin) > 1e-3, ], identical(grade_withheld, margin <= 0)),
           # the settings the prose quotes
-          identical(val("prior_sd"), "2.5"), identical(val("se_region"), "1"), identical(val("folds"), "5"))
+          identical(val("prior_sd"), "2.5"), identical(val("se_region"), "1"), identical(val("folds"), "5"),
+          identical(val("d_floor"), "200"))
 ```
 
 
@@ -111,8 +117,8 @@ the tuning against them: what it does as they teach, where it departs and why, a
 of where the method stands and where it is heading; the [methodology article](tuning-method.html) sets out its steps.
 
 **The answer.** The tuning judges habitat definitions the way *Statistical Rethinking* teaches: on watershed groups
-left out of the fit, telling two apart by the uncertainty of their difference, and keeping the near-ties together
-rather than naming one winner. Its three main departures are each defensible for a habitat definition whose job is to
+left out of the fit, telling two apart by the uncertainty of their difference, and reporting the near-ties beside the
+one it chooses rather than a single winner alone. Its three main departures are each defensible for a habitat definition whose job is to
 rank streams. The score measures how well a habitat definition ranks streams within a watershed group, not how often
 the species turns up in a new one; the prior (an assumption about a value made before seeing the data) is used as a
 penalty that finds one best value, not a full posterior (the spread of values the data and prior together allow); and
@@ -139,7 +145,8 @@ sections explain.)
 
 The groups are dealt into `r val("folds")` **folds**, and each fold in turn is left out of the fit and scored. Habitat
 definitions whose scores lie within one standard error of their difference from the best are **close calls**, and
-among them we choose the one that changes `link`'s current habitat definition least. Then a second model, the **curve**, a smooth surface of how often the
+among them we choose the one that changes `link`'s current habitat definition least, passing over any whose
+near-river exception reaches less than `r val("d_floor")` m. Then a second model, the **curve**, a smooth surface of how often the
 species is caught against stream size, distance to a river and slope, gives every stream the species can reach that
 has a size and a slope a **grade**. The **publishing test** publishes those grades only if the curve scores better on
 the left-out folds than no habitat definition at all.
@@ -398,8 +405,8 @@ ggplot(pr, aes(at_site_pct, net, fill = catch)) +
 The network moves the result. Tuned on the minimal network, chinook rearing's steepest slope is `r lim_pct("minimal")`
 rather than the published `r lim_pct("published")`, and it is `r lim_pct("parent")` again when each segment of the full
 network reads the slope of the minimal segment it lies in, the form in which a habitat definition tuned on the minimal
-network would be applied. The minimal network leaves out three kinds of cut at once, and its build is a slightly
-earlier `link`, so these runs cannot say how much of the change comes from the cuts at fish records alone. The article
+network would be applied. The minimal network leaves out three kinds of cut at once, so these runs cannot say how much
+of the change comes from the cuts at fish records alone. The article
 [Splitting streams at fish records shifts the steepest slope mapped as habitat](tuning-stream-splits.html) shows this in
 full. Whether to tune on the minimal network is a decision not yet made.
 
