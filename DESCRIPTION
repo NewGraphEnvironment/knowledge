@@ -1,8 +1,8 @@
 Package: knowledge
 Title: Tests Fish Habitat Definitions Against What is Known About Where Fish
     Live, and Tunes Them from the Fish Records
-Version: 0.4.39
-Date: 2026-11-12
+Version: 0.4.40
+Date: 2026-11-13
 Authors@R: c(
     person("Allan", "Irvine", , "al@newgraphenvironment.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-3495-2128",
