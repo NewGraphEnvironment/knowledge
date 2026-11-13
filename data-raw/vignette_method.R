@@ -102,7 +102,8 @@ if (length(off_grad)) stop("not graded from a curve on link's segment gradient (
 ev <- unique(vapply(g1, function(g) g$evidence_md5, ""))
 if (length(ev) != 1) stop("the grade tables were made on ", length(ev), " evidence builds")
 if (!identical(ev, paste(unname(tools::md5sum(derived)), collapse = ";"))) {
-  stop("data/fdis/derived is not the evidence the grades were made on: rerun 0310 or restore its tables")
+  stop("data/fdis/derived is not the evidence the grades were made on: restore it from the directory the run's ledger ",
+       "names or with PULL=TRUE scripts/0336-archive.R (0310 refuses to write a build settled on another schema there)")
 }
 loads <- unique(vapply(g1, function(g) g$discharge_load, ""))
 if (length(loads) != 1) stop("the grade tables were made on ", length(loads), " flow loads")

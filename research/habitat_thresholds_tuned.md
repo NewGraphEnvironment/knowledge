@@ -53,8 +53,9 @@ fit. For each one it tried a ladder of size floors (by flow or by width) and gra
 streams, an allowance for a river close downstream. It scored every version on held-out watershed groups,
 kept every version within one standard error of the best (a rule of thumb fixed before the run, not a
 boundary of noise), and recommended the one of those closest to link's current test. Each version was scored on the
-gradient of the link segment a fish was caught on, the one link applies its test to (#92); since 2026-11-13 those
-are the segments of link's minimal network, which link does not cut where fish were caught (#120). link's current test is not
+gradient of the link segment a fish was caught on (#92); since 2026-11-13 those are the segments of link's minimal
+network, which link does not cut where fish were caught (#120). link draws habitat on its full network, where each
+segment can read the slope of the minimal segment it lies in (link#463). link's current test is not
 among them for any species. On link's minimal network (#120), with lines through wetlands put through the same test as streams (link's
 `stream`), the picks draw less rearing habitat than its current test for four of the six rearing keys (from 3 % less
 for coho to 43 % less for bull trout), more for grayling (11 %) and westslope cutthroat (18 %), and two thirds more for
@@ -151,7 +152,9 @@ evidence built on it. Rainbow trout and kokanee keep #145's `not_modelled` and `
 rows: the minimal build models neither. The comparison regenerates link's flags on the minimal network's segments, so
 its km are that network's; drawn on the full network with each segment reading its minimal parent's slope, chinook
 rearing's rule loses 1,042 km through its near-river distance (`minimal_network_tuning.md`, link#462). The sections
-after this one are #145's and #92's runs, kept as those readings' records.
+after this one are #145's and #92's runs, kept as those readings' records: the paths they name (`data/tune/`,
+`data/compare/`, `data/tune/grad_fwa/`) held those runs' tables when they were written and hold this run's now, and
+each run's tables are in git history and the bucket's archive.
 
 | species × stage | visits (detections), groups | recommended rule | region | `default` | in the region on other seeds | #145's pick | in #145's region |
 |---|---|---|---|---|---|---|---|

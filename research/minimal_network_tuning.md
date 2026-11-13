@@ -156,7 +156,7 @@ range and one set of visits and walks, so that the network and the gradient a ru
 | setup | segments | gradient a rule reads | run |
 |---|---|---|---|
 | published | full (`cut-full-top`) | the segment's own (`grad-seg`) | `20261104_0543`, promoted (#145) |
-| minimal | minimal (`cut-min`) | the segment's own | `20261103_0838`, candidate |
+| minimal | minimal (`cut-min`) | the segment's own | `20261103_0838`, promoted 2026-11-13 |
 | parent | full | the minimal parent's (`grad-parent`) | `20261105_0436`, candidate |
 | Atlas line | full | the Atlas line the segment lies on (`grad-fwa`, link#460) | `20261105_0437`, candidate |
 

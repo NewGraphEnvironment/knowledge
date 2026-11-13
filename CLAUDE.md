@@ -282,8 +282,9 @@ the published v2 tables (`0299 PULL=TRUE VERSION=v2`).
 
 ### The tuning scores link's segment gradient, and link cuts a segment where its species were caught
 
-From #92, rules and curves read `segment_gradient`, the gradient of the link segment a visit sits on, which is the one
-link applies a rule to and the grade reads; `fwa_gradient` (the whole Atlas line's) is the sensitivity
+From #92, rules and curves read `segment_gradient`, the gradient of the link segment a visit sits on, which the grade
+reads (on the full network, the one link applies a rule to; since 2026-11-13 the published run's segments are the
+minimal network's, and link reads them on the full network through the parent's slope, link#463); `fwa_gradient` (the whole Atlas line's) is the sensitivity
 (`GRADIENT=fwa_gradient 0320`, main fold seed, `data/tune/grad_fwa/`, never graded, and read by no publisher: `0325`,
 `0330` and `knw_thresholds_table()` list `data/tune/` without recursing; `data-raw/vignette_method.R` reads it for the
 methodology article's sensitivity sentence).
