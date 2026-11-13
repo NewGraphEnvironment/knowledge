@@ -200,9 +200,9 @@ The prior is fitted as a penalty, which finds the single most probable value and
 
 So the tuning carries no uncertainty from the prior into its thresholds, which it reports as one choice and the range
 of close calls, and no simulation of what the prior implies for the catch has been run
-[@mcelreath2020StatisticalRethinking, p. 328]. The scorer also keeps a fallback fit without the prior, for a
-fold where its fast fit would drop a term the full fit keeps; by the way the prior is built the sampling terms cannot
-send a fold there, but that rests on an argument, not a check.
+[@mcelreath2020StatisticalRethinking, p. 328]. The scorer also keeps a fallback, a fit without the prior, for a
+fold whose usual fit would lose a term; by the way the prior is built the sampling terms cannot send a fold there, but
+that rests on an argument, not a check.
 
 ## Are watershed groups pooled? {#pooling}
 

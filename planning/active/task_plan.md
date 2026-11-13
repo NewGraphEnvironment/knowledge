@@ -91,7 +91,7 @@ What exploration found that shapes the phases:
       for the research file, fenced chunks stripped, and a named log for the article (plan review G5). Was: an article mode (`RMD=`). It reads `"…" [@key, p. N]` quotes, checks
       each against its PDF page as the research mode does, and holds the article's own `n_quotes`. Coverage tables
       are skipped in this mode. Run it on both files and commit the logs.
-- [ ] Have a blind meaning audit by a Plan agent read the article against the research file and the code it cites.
+- [x] Have a blind meaning audit by a Plan agent read the article against the research file and the code it cites.
       Fix what it finds and re-audit the fixes until a round finds nothing inside them.
 
 ## Phase 4: Records and docs
@@ -102,17 +102,17 @@ What exploration found that shapes the phases:
 - [x] `vignettes/tuning-chinook-rearing.Rmd`, README and NEWS: no changes; release bookkeeping is `/gh-pr-merge`'s.
 
 ## Validation
-- [ ] Tests pass (`devtools::test()`, with `test-vignette-data.R` against the rebuilt bundle)
-- [ ] `pkgdown::check_pkgdown()` passes; install the branch, then `pkgdown::build_article("tuning-bayesian-practice")`
+- [x] Tests pass (`devtools::test()`, with `test-vignette-data.R` against the rebuilt bundle)
+- [x] `pkgdown::check_pkgdown()` passes; install the branch, then `pkgdown::build_article("tuning-bayesian-practice")`
       and `build_article("tuning-method")` render with no `citation … not found` in the log
-- [ ] The built site has `articles/tuning-bayesian-practice.html`, the articles index page does not list it, the
+- [x] The built site has `articles/tuning-bayesian-practice.html`, the articles index page does not list it, the
       navbar does not carry it, and the link from `#se` resolves
-- [ ] `bayesian_alignment_check.R` passes on the research file and on the article
+- [x] `bayesian_alignment_check.R` passes on the research file and on the article
 - [ ] Rendered article sent to the phone for review before the merge
-- [ ] No `rule`/`rules` outside code and quotes in the new article (`grep -nE '\brules?\b'`)
-- [ ] The Articles menu is unchanged from main's (navbar HTML diff) and `test-pkgdown-navbar.R` passes
-- [ ] A blind readability pass on the rendered text before and after the claim review (writing.md)
-- [ ] `/code-check branch` clean
-- [ ] PWF checkboxes match landed work
+- [x] No `rule`/`rules` outside code and quotes in the new article (`grep -nE '\brules?\b'`)
+- [x] The Articles menu is unchanged from main's (navbar HTML diff) and `test-pkgdown-navbar.R` passes
+- [x] A blind readability pass on the rendered text before and after the claim review (writing.md)
+- [x] `/code-check branch` clean
+- [x] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion
 
