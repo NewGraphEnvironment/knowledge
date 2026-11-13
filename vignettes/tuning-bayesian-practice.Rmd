@@ -179,7 +179,7 @@ knitr::kable(data.frame(
     "Whole watershed groups are left out of each fit and scored",
     "Yes: the standard error of each difference, over watershed groups",
     "No: each left-out group's base rate is refitted first",
-    "One standard error; the close call nearest link's current habitat definition",
+    "One standard error; the close call nearest link's current habitat definition, passing over short near-river exceptions",
     "Not fully: the scores it chooses from were fitted with its test groups in",
     "Yes, scale 2.5, but normal not Cauchy, complementary log-log not logit, and on the sampling terms only",
     "No: it is fitted as a penalty, which finds one best value",

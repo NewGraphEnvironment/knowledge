@@ -77,7 +77,8 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   both outcomes, all caught and none caught, and the grade gate) `vignette_method.R` writes for it through the tuning's
   own population code (`.tune_population()`), stopping unless it reproduces the summaries' group counts, so a promotion
   keeps it current. It also reads `cut_points.rds`, which a promotion does not rebuild, so like the methodology
-  article's `#cuts` its guard stops the build when the two bundles' chinook rearing picks part. Its glossary closes it. Its book quotes are checked against the PDF
+  article's `#cuts` its guard stops the build when the two bundles' chinook rearing picks part, when their visit tables'
+  md5s differ (a promotion onto a new evidence build) or when their key sets differ. Its glossary closes it. Its book quotes are checked against the PDF
   pages by `MD=vignettes/tuning-bayesian-practice.Rmd Rscript data-raw/bayesian_alignment_check.R`; rerun that after
   any change to its quotes.
 - `scripts/` — the run order (`scripts/README.md`), calling the package (`pkgload::load_all()` from
