@@ -106,8 +106,8 @@ schema <- Sys.getenv("SCHEMA", "fresh_default")  # the run's persist schema, by 
 catalog_bucket <- "https://stac-floodplains-bc.s3.us-west-2.amazonaws.com"
 catalog_items <- "../stac_floodplains_bc/data/stac"      # the catalog repo's item records
 # a comparison is of a candidate run (#111): TUNE_DIR=data/tune/candidate/<run> is read, and everything is written under
-# data/compare/candidate/<run>/ (ignored), figures and log included; scripts/0335-promote.R copies it into the tracked
-# data/compare/ and research/fig/ on the operator's word. The floodplain catalog is a cache shared by every run
+# data/compare/candidate/<run>/ (ignored), log included; scripts/0335-promote.R copies it into the tracked
+# data/compare/ on the operator's word. The floodplain catalog is a cache shared by every run
 tune_dir <- sub("/+$", "", Sys.getenv("TUNE_DIR"))
 # STAGE=gpkg also takes the promoted run (TUNE_DIR=data/tune, #173): with GPKG off by default, that is how the published
 # comparison reaches QGIS without a promotion. It reads data/compare/<key>_segments.rds and writes only into the ignored
@@ -118,14 +118,16 @@ if (!promoted && (!grepl("^data/tune/candidate/[A-Za-z0-9][A-Za-z0-9_.]*$", tune
        "or data/tune for STAGE=gpkg on the promoted run: '", tune_dir, "'")
 }
 if (promoted) {
-  # the promoted run's name is the tuning run its summaries record
-  run <- unique(unlist(lapply(list.files(tune_dir, "_summary\\.csv$", full.names = TRUE), function(f) {
+  # each promoted key's tuning run, from its own summary: keys can be promoted alone onto the kept keys' build, so the
+  # promoted set can hold keys of more than one run (#173's review, round 4), and each GeoPackage names its key's own
+  sums <- list.files(tune_dir, "_summary\\.csv$", full.names = TRUE)
+  run_of <- vapply(sums, function(f) {
     x <- read_csv(f, show_col_types = FALSE, col_types = cols(.default = "c"))
-    if ("tune_run" %in% names(x)) stats::na.omit(x$tune_run) else character()
-  })))
-  if (length(run) != 1L) {
-    stop("data/tune's summaries name ", length(run), " tuning runs (", paste(run, collapse = ", "), "), not one")
-  }
+    r <- if ("tune_run" %in% names(x)) unique(stats::na.omit(x$tune_run)) else character()
+    if (length(r) == 1L) r else NA_character_
+  }, character(1))
+  names(run_of) <- sub("_summary\\.csv$", "", basename(sums))
+  run <- "promoted"
   dir_out <- "data/compare"
 } else {
   run <- basename(tune_dir)
@@ -184,7 +186,8 @@ if (!length(fitted)) run_grad <- .knw_grade_grad
 say("Segments read with the gradient the curves were fitted on: %s (%s)%s.", run_grad, .knw_grade_grads[[run_grad]],
     if (!identical(run_grad, .knw_grade_grad)) "; a setup of #120, never promoted" else "")
 if (promoted) {
-  say("Promoted run %s: read from %s and %s, GeoPackages written to %s (ignored).", run, tune_dir, dir_out, dir_gpkg)
+  say("Promoted run (tuning runs %s): read from %s and %s, GeoPackages written to %s (ignored).",
+      paste(sort(unique(stats::na.omit(run_of))), collapse = ", "), tune_dir, dir_out, dir_gpkg)
 } else {
   say("Candidate run %s: read from %s, written under %s (ignored); promote it with RUN=%s scripts/0335.", run, tune_dir, dir_out, run)
 }
@@ -415,7 +418,8 @@ gpkg_one <- function(key, schema, dir_gpkg, dir_seg, flag, rule_labels, rule_cla
       sg <- dplyr::inner_join(geom, seg[seg$watershed_group_code == w, , drop = FALSE], by = "id_segment")
       sf::st_write(sg, f_part, layer = "segments", append = file.exists(f_part), quiet = TRUE)
     }
-    sf::st_write(data.frame(run_info, key = key, written_utc = format(Sys.time(), "%Y-%m-%dT%H:%M:%SZ", tz = "UTC")),
+    sf::st_write(data.frame(run_info[[key]], key = key,
+                            written_utc = format(Sys.time(), "%Y-%m-%dT%H:%M:%SZ", tz = "UTC")),
                  f_part, layer = "run", quiet = TRUE)
     # the QGIS styles, from the registry the maps read (gq#115): rule class the default, grade class the second
     gq::gq_gpkg_style_write(f_part, "segments", styles)
@@ -440,7 +444,10 @@ write_gpkgs <- function(keys) {
   args <- list(schema = schema, dir_gpkg = dir_gpkg, dir_seg = dir_out, flag = flag,
                rule_labels = .compare_rule_labels(),
                rule_class_fun = rule_class_fun, water_fun = water_fun,
-               run_info = data.frame(tune_run = run, link_run_uid = run_uid, schema = schema, promoted = promoted),
+               run_info = lapply(stats::setNames(nm = keys), function(k) {
+                 tr <- if (!promoted) run else if (k %in% names(run_of)) run_of[[k]] else NA_character_
+                 data.frame(tune_run = tr, link_run_uid = run_uid, schema = schema, promoted = promoted)
+               }),
                styles = gpkg_styles)
   gl <- if (workers > 1L && length(keys) > 1L) {
     cl <- parallel::makeCluster(min(workers, length(keys)))

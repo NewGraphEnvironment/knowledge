@@ -69,3 +69,9 @@
   whole GeoPackage at a waterbody key `fwa_waterbodies` lacks (17 published segments in CHWK, REVL and SHUL, so 8 of 11
   species' GeoPackages): such a segment is now an unknown waterbody, counted in the log (CHWK trial: 14,346 segments,
   1 unknown); (2) `inst/NOTICE.md` lost the Atlas line for the four maps still in `research/fig/`: restored
+- /code-check round 4 (`review-round4.md`): enumerated 13 places the diff checks on one group or key and applies to
+  all, measured on the published build (round 3's fix holds on BULK, CHWK, REVL and SHUL on a socket worker: 17
+  unknown waterbodies logged, every lake, river and wetland segment with an area). One finding, not inside an earlier
+  fix: promoted `STAGE=gpkg` required one `tune_run` across every summary, though a key can be promoted alone from a
+  later run onto the same build. Now each key's GeoPackage names its own key's run (trial: two runs and a summary with
+  none read as 20261201_0101, 20261104_0543, NA). A stale comment on 0335 copying into research/fig/ corrected
