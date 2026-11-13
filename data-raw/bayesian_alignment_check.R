@@ -32,8 +32,8 @@
 # are not looked for. Each file holds its own count of checked quotes (`n_quotes`).
 #
 # INPUT:  research/bayesian_alignment.md, or the article (MD=); inst/method/{pipeline,settings}.csv; R/;
-#         the two PDFs under ZOTERO_DIR/storage (default ~/Zotero), by the attachment keys below (group library 4733734, resolved
-#         2026-11-11 from a guarded copy of zotero.sqlite)
+#         the two PDFs under ZOTERO_DIR/storage (default ~/Zotero), by the attachment keys below (group library
+#         4733734, resolved 2026-11-11 from a guarded copy of zotero.sqlite)
 # OUTPUT: scripts/logs/habitat/<yyyymmdd>_bayesian_alignment_check.txt (the research file, no MD= set) or
 #         <yyyymmdd>_bayesian_alignment_check-tuning-bayesian-practice.txt (the article); none for any other MD=;
 #         exits 1 on any failure
