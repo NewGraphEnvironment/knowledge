@@ -66,14 +66,17 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   when the methodology bundle's chinook rearing pick no longer matches it.
   Its maps fetch Esri tiles when it builds, so a build needs network. Internal names (bundles, scripts, tests) keep
   `cut_points`.
-- `vignettes/tuning-bayesian-practice.Rmd` — "How the tuning stands against Bayesian practice" (#204): states
+- `vignettes/tuning-bayesian-practice.Rmd` — "Checking the tuning of fish habitat definitions against Bayesian practice" (#204): states
   `research/bayesian_alignment.md`'s findings for a reader, with *Statistical Rethinking* and *BDA3* cited, and what
   is tested next. It sits in `_pkgdown.yml`'s `internal` section, so pkgdown builds it at its own URL and leaves it out
   of the articles index and navbar (not out of `sitemap.xml`, the site search or the installed vignette index); the
   methodology article's `#se` links it. Because that section has no navbar entry, `_pkgdown.yml` writes the Articles
   menu out by hand (pkgdown would add "More articles..."), and `tests/testthat/test-pkgdown-navbar.R` holds the menu to
-  the sections (run by the pkgdown workflow, since R CMD check has no `_pkgdown.yml`). It reads `method.rds`, whose `scope` (each published key's groups, groups with both outcomes and grade
-  gate) `vignette_method.R` writes for it, so a promotion keeps it current. Its book quotes are checked against the PDF
+  the sections (run by the pkgdown workflow, since R CMD check has no `_pkgdown.yml`). It reads `method.rds`, whose `scope` (each published key's groups, split into
+  both outcomes, all caught and none caught, and the grade gate) `vignette_method.R` writes for it through the tuning's
+  own population code (`.tune_population()`), stopping unless it reproduces the summaries' group counts, so a promotion
+  keeps it current. It also reads `cut_points.rds`, which a promotion does not rebuild, so like the methodology
+  article's `#cuts` its guard stops the build when the two bundles' chinook rearing picks part. Its glossary closes it. Its book quotes are checked against the PDF
   pages by `MD=vignettes/tuning-bayesian-practice.Rmd Rscript data-raw/bayesian_alignment_check.R`; rerun that after
   any change to its quotes.
 - `scripts/` — the run order (`scripts/README.md`), calling the package (`pkgload::load_all()` from
@@ -623,7 +626,8 @@ comparison tables land only complete), so `0335` trusts what a run holds; never 
 (#111, five review rounds, `planning/archive/2026-10-issue-111-candidate-runs-promotion/`). A promotion that moves the
 published numbers also moves pins it cannot revise
 (`test-tune_repick.R`'s 1.96 picks, `test-vignette-data.R`'s key count and funnel, the articles' inline checks,
-among them the Bayesian-practice article's on which keys drop more than half their groups and which the gate withholds) and
+among them the Bayesian-practice article's on which keys drop more than half their groups, which the gate withholds
+and chinook rearing's split of groups by outcome) and
 the `research/` prose that quotes them: those, and the articles' review, follow it by hand.
 
 **Run R from the repo root, and never add a project-level `.Renviron` here.** R loads a
