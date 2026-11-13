@@ -84,6 +84,6 @@ headwaters, and the legend names every class drawn.
 \examples{
 \dontrun{
 knw_compare_map(seg, water, "BULK: CH rearing, default against the tuned rule",
-                png = "research/fig/compare_ch_rear_bulk.png")
+                png = tempfile(fileext = ".png"))
 }
 }

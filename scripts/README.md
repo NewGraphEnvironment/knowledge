@@ -110,16 +110,17 @@ wf_farm_priority.js                          farm priority/crossing tables out o
       every species x stage and group, under TUNED_AS (door by default; `tuned`) for the through-wetland lines and the
       pair, or with STRUCTURES=all under every structure the species has (#73: free | door | door_wetland; #112): km, graded km, km by grade class, change by
       reason, FDIS and bcfishobs checks, of a candidate (TUNE_DIR=data/tune/candidate/<run>, required) ->
-      data/compare/candidate/<run>/ (ignored, #111), one GeoPackage per species x stage for QGIS (its gpkg/, #81; GPKG=FALSE skips them while iterating, STAGE=gpkg writes them afterwards from the
-      saved segments) (+ log; SCHEMA as 0320; on the database's host, keys in turn, each key's groups split across
+      data/compare/candidate/<run>/ (ignored, #111), and one GeoPackage per species x stage for QGIS only when asked
+      (its gpkg/, #81; GPKG=TRUE, default off since #173; STAGE=gpkg writes them afterwards from the saved segments, or
+      with TUNE_DIR=data/tune from the promoted run's into data/compare/gpkg/) (+ log; SCHEMA as 0320; on the database's host, keys in turn, each key's groups split across
       WORKERS=6 connections, #87: every key 162.9 min with GPKG=FALSE, BT rearing alone 33.4, the GeoPackages
-      14.0, 2026-10-26, under every structure; door alone drops 29 to 33 % of the worker minutes, #112; every STAGE stops off the database's host unless REMOTE=TRUE, #110). No maps in this run.
-      STAGE=maps: floodplain ha beside each rule's habitat in the catalog's groups, and the maps, from the saved
-      tables -> the run's floodplain.csv and fig/compare_*.png. Reads the evidence directory the run's summaries
+      14.0, 2026-10-26, under every structure; door alone drops 29 to 33 % of the worker minutes, #112; every STAGE stops off the database's host unless REMOTE=TRUE, #110). No maps.
+      STAGE=floodplain: floodplain ha beside each rule's habitat in the catalog's groups, from the saved tables -> the
+      run's floodplain.csv, each row naming its run, link commit and tuned rule (#173). Reads the evidence directory the run's summaries
       name (EVIDENCE_DIR overrides it, for a staged copy), refused unless its tables' md5s are the curves' (#120).
       Segments are read with the gradient the run's curves were fitted on: a setup's (0320 SETUP=1) is the parent's
       or the Atlas line's, for every rule and stage (#120)
-0335  on Al's word: RUN=<run> moves a candidate into data/tune/, data/compare/ and research/fig/ (SPECIES= for some
+0335  on Al's word: RUN=<run> moves a candidate into data/tune/ and data/compare/ (SPECIES= for some
       keys; refused unless the result is one build: evidence, link run, gradient, flow load, walk, link config; a
       setup, tuned on another gradient than the segment's own, is refused, #120), its
       logs into scripts/logs/habitat/, archiving what it replaced as candidate run replaced_<stamp>; then 0325

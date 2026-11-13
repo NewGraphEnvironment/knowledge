@@ -10,7 +10,7 @@ Contains information licensed under the
 the **BC Freshwater Atlas** lakes, rivers and stream network in `inst/vignette-data/bulk_water.rds`,
 `inst/vignette-data/bulk_segments.rds`, `inst/vignette-data/cut_points.rds` and the stream names and named
 streams in `inst/vignette-data/cut_points_places.rds` (all installed with the package), and the Atlas's streams, lakes and
-rivers drawn in `man/figures/readme-bulk.png` and the maps in `research/fig/`.
+rivers drawn in `man/figures/readme-bulk.png`.
 
 ## BC Geographical Names
 
@@ -23,11 +23,10 @@ names come from the Freshwater Atlas (above).
 
 ## Floodplains (CC BY 4.0)
 
-The floodplain panel of the comparison maps in `research/fig/compare_*.png`, where a map has one, and the
-floodplain areas in `data/compare/floodplain.csv` are drawn from the floodplains of [stac_floodplains_bc](https://www.newgraphenvironment.com/stac_floodplains_bc/), published under
+The floodplain areas in `data/compare/floodplain.csv` are drawn from the floodplains of [stac_floodplains_bc](https://www.newgraphenvironment.com/stac_floodplains_bc/), published under
 [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Its floodplain delineation contains information
 licensed under the Open Government Licence – Canada (MRDEM-30, Natural Resources Canada) and the Open Government
-Licence – British Columbia (Freshwater Atlas stream network). The maps and the areas modify them: each floodplain cell
+Licence – British Columbia (Freshwater Atlas stream network). The areas modify them: each floodplain cell
 is assigned the grade of the stream segment that owns it.
 
 ## Fisheries Data Information System (FDIS) extract

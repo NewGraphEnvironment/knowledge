@@ -6,7 +6,7 @@
 #' operator's word, moves the run in: every file of each promoted key (its
 #' tables, the grade tables' records, and the ignored grades, curve, score
 #' cache, segments and GeoPackage),
-#' its Atlas-gradient sensitivity, the run's logs, its figures, and its rows of
+#' its Atlas-gradient sensitivity, the run's logs, and its rows of
 #' the tables that hold every key (`compare.csv`, `change.csv`, `checks.csv`,
 #' `floodplain.csv`). A key's files are moved, not copied (its grades and
 #' GeoPackage run to gigabytes), so a promoted key leaves the run's directory;
@@ -42,8 +42,9 @@
 #'   flow load); `scripts/0335` passes them.
 #' @param tune_dir,compare_dir the tracked directories; the candidates are their
 #'   `candidate/<run>/`.
-#' @param log_dir where the tracked logs live.
-#' @param fig_dir where the tracked comparison figures live.
+#' @param log_dir where the tracked logs live. A run's comparison draws no
+#'   figures since #173, so none are promoted; a `fig/` an older run or archive
+#'   holds is left where it is, noted.
 #' @param dry_run `TRUE` checks and lists, moving and writing nothing.
 #' @return A list: `keys`, `written` (tracked paths written), `removed`
 #'   (tracked paths removed), `archive` (the `replaced_<stamp>` run holding what
@@ -56,10 +57,10 @@
 #' utils::write.csv(data.frame(species_code = "KO", stage = "rear", status = "no_stream_rule"),
 #'                  file.path(c, "KO_rear_summary.csv"), row.names = FALSE)
 #' p <- knw_tune_promote("r1", tune_dir = file.path(d, "tune"), compare_dir = file.path(d, "compare"),
-#'                       log_dir = file.path(d, "logs"), fig_dir = file.path(d, "fig"))
+#'                       log_dir = file.path(d, "logs"))
 #' basename(p$written)
 knw_tune_promote <- function(run, keys = NULL, live = NULL, tune_dir = "data/tune", compare_dir = "data/compare",
-                             log_dir = "scripts/logs/habitat", fig_dir = "research/fig", dry_run = FALSE) {
+                             log_dir = "scripts/logs/habitat", dry_run = FALSE) {
   chk::chk_string(run)
   chk::chk_flag(dry_run)
   if (!is.null(live)) chk::chk_list(live)
@@ -272,7 +273,7 @@ knw_tune_promote <- function(run, keys = NULL, live = NULL, tune_dir = "data/tun
       old <- old[!dir.exists(old)]
       if (!length(src)) {
         # a key the run no longer fits leaves nothing of its last fit behind; a fitted key keeps what the run did not
-        # redraw (a GeoPackage or figures skipped with GPKG=FALSE or without STAGE=maps), and says so
+        # redraw (a GeoPackage, written only with GPKG=TRUE or STAGE=gpkg), and says so
         if (length(old) && !k %in% fitted) {
           removed <<- c(removed, old)
         } else if (length(old)) {
@@ -302,8 +303,10 @@ knw_tune_promote <- function(run, keys = NULL, live = NULL, tune_dir = "data/tun
   }
   plan_dir(file.path(run_cmp, "gpkg"), file.path(compare_dir, "gpkg"), function(k) paste0("^", esc(k), "\\.gpkg$"),
            take_drawn)
-  plan_dir(file.path(run_cmp, "fig"), fig_dir, function(k) paste0("^compare_", esc(tolower(k)), "_.*\\.png$"),
-           take_drawn)
+  # 0330 has drawn no figures since #173; an older run's or archive's are not promoted, and say so
+  if (length(old_fig <- list.files(file.path(run_cmp, "fig"), "\\.png$"))) {
+    notes <- c(notes, sprintf("fig/: %d figure(s) from before #173 left in %s, not promoted", length(old_fig), run_cmp))
+  }
   # the run's logs, beside the others; an existing log of the same name must be this one
   logs <- c(list.files(run_tune, "_tune_run.*\\.txt$", full.names = TRUE),
             list.files(run_cmp, "_compare.*\\.txt$", full.names = TRUE))
@@ -329,8 +332,8 @@ knw_tune_promote <- function(run, keys = NULL, live = NULL, tune_dir = "data/tun
   }
   # the tables of every key: each promoted key's rows from the run, in the place its rows held. 0330 removes the
   # run's compare, change and checks tables when a pass starts and writes them at its end, and floodplain.csv is
-  # STAGE=maps's: a run without the first three did not finish its comparison; one without floodplain.csv drew no
-  # maps, and the fitted keys' tracked floodplain rows are kept, noted. An unfitted key keeps no rows in any
+  # STAGE=floodplain's: a run without the first three did not finish its comparison; one without floodplain.csv drew
+  # no floodplain, and the fitted keys' tracked floodplain rows are kept, noted. An unfitted key keeps no rows in any
   merged <- list()
   for (w in c("compare", "change", "checks", "floodplain")) {
     f <- file.path(run_cmp, paste0(w, ".csv"))
@@ -371,10 +374,9 @@ knw_tune_promote <- function(run, keys = NULL, live = NULL, tune_dir = "data/tun
   moving <- c(written[file.exists(written) & dirname(written) != log_dir], removed)
   arch_of <- function(f) {
     d <- dirname(f)
-    roots <- c(tune_dir, tune_dir, compare_dir, compare_dir, compare_dir)
-    places <- stats::setNames(file.path(roots, "candidate", stamp, c("", "grad_fwa", "", "gpkg", "fig")),
-                              c(tune_dir, file.path(tune_dir, "grad_fwa"), compare_dir,
-                                file.path(compare_dir, "gpkg"), fig_dir))
+    roots <- c(tune_dir, tune_dir, compare_dir, compare_dir)
+    places <- stats::setNames(file.path(roots, "candidate", stamp, c("", "grad_fwa", "", "gpkg")),
+                              c(tune_dir, file.path(tune_dir, "grad_fwa"), compare_dir, file.path(compare_dir, "gpkg")))
     if (!d %in% names(places)) stop("no archive place for ", f, call. = FALSE)
     sub_dir <- sub("/$", "", places[[d]])
     file.path(sub_dir, basename(f))
@@ -387,7 +389,7 @@ knw_tune_promote <- function(run, keys = NULL, live = NULL, tune_dir = "data/tun
   ok <- file.rename(moving, arch)
   if (!all(ok)) stop("could not archive ", paste(moving[!ok], collapse = ", "), call. = FALSE)
   # a key's files are moved, not copied: its grades and GeoPackage run to gigabytes, and a promoted run is spent. A move
-  # that cannot rename (another filesystem) copies with the dates kept, which 0330's STAGE=maps and gpkg compare
+  # that cannot rename (another filesystem) copies with the dates kept, which 0330's STAGE=floodplain and gpkg compare
   for (cp in copies) {
     ok <- if (cp$move) suppressWarnings(file.rename(cp$from, cp$to)) else rep(FALSE, length(cp$from))
     if (!all(ok)) {

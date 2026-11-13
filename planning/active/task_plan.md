@@ -71,10 +71,10 @@ or promotion.
 - [ ] gq#115: the QML writer in gq (its own branch and PR; the merge and release on Al's word). Once released, the
       GeoPackage carries rule-class (default) and grade-class styles in `layer_styles`, tested on a fixture: every
       class present, one style default. If it is not released by this PR, the style task moves to the split-off
-- [ ] `knw_tune_promote()`: drop `fig_dir`, covering its signature, roxygen, example, archive place map and comments.
+- [x] `knw_tune_promote()`: drop `fig_dir`, covering its signature, roxygen, example, archive place map and comments.
       `0335`: the header, its list, and "regenerate figures" left out. Port the two figure-only tests
       (`test-tune_promote.R` "archive and undo" and "an undo restores whatever the files' ages") to the GeoPackage
-- [ ] Docs: the 0330 header, the 0335 header, `scripts/README.md`, `data-raw/README.md`, README's `research/fig/`
+- [x] Docs: the 0330 header, the 0335 header, `scripts/README.md`, `data-raw/README.md`, README's `research/fig/`
       line, `inst/NOTICE.md` (the maps and floodplain panel lines), and CLAUDE.md's 0330, `data/compare/gpkg/` and
       promotion lines
 

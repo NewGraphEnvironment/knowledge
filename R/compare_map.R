@@ -45,7 +45,7 @@
 #' @examples
 #' \dontrun{
 #' knw_compare_map(seg, water, "BULK: CH rearing, default against the tuned rule",
-#'                 png = "research/fig/compare_ch_rear_bulk.png")
+#'                 png = tempfile(fileext = ".png"))
 #' }
 knw_compare_map <- function(segments, water = NULL, title = "", png = NULL, html = NULL, fp_cells = NULL,
                             ncol = NULL, panels = c("rules", "grade", "floodplain"), mark = NULL, lwd = 1,

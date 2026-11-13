@@ -35,7 +35,7 @@
 #         (PG* env vars; SCHEMA names the run's schema for vignette_chinook.R), LINK_REPO / WET_REPO as those scripts
 #         take them, and Zotero running for vignette_bib.R
 # OUTPUT: data/tune/<key>_*, data/tune/grad_fwa/<key>_*, data/compare/<key>_*, the rows of data/compare/{compare,change,
-#         checks,floodplain}.csv, research/fig/compare_<key>_*.png, the run's logs in scripts/logs/habitat/, then
+#         checks,floodplain}.csv (a run's comparison draws no figures since #173), the run's logs in scripts/logs/habitat/, then
 #         0325's and the bundles' outputs; scripts/logs/habitat/<date>_promote-<run>.txt; the archive's objects under
 #         s3://fresh-bc/archive/knowledge/ and rows of data/archive_index.csv (#119; AWS credentials for the bucket)
 # RUN:    RUN=<run> Rscript scripts/0335-promote.R   (from the repo root; SPECIES=CH,BT to promote those species' keys;

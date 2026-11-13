@@ -22,3 +22,9 @@
   `config_sha` and `tuned_rule`, `STAGE=gpkg` takes the promoted run; the GeoPackage gains `rule_class`, `water`,
   `water_ha` and a `run` table; the classes and colours move into `inst/gq/compare.csv` (read the same by gq). The
   writer was run on BULK against `fresh_default_20261023` (findings)
+- Phase 1: `knw_tune_promote()` loses `fig_dir` (a run's `fig/` from before #173 is left and noted); the figure-only
+  promotion tests ported to the GeoPackage (145 pass). A by-key promotion now refuses when floodplain.csv's columns
+  differ (the new run columns), naming the keys to promote: noted for NEWS. Docs: the 0330 and 0335 headers,
+  scripts/README.md, README.md, inst/NOTICE.md, CLAUDE.md, and each research page's map line (now pointing to
+  `STAGE=gpkg`). `data-raw/setup_compare.R` keeps its own `GPKG` default (a setups check, not 0330)
+- gq#115 handed to a background agent at 06:47 UTC (its own worktree and PR; no merge)

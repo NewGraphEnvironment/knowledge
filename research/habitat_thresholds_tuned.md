@@ -30,7 +30,7 @@ link reads the result through NewGraphEnvironment/link#346 · **Produced by:**
 - `planning/archive/2026-10-issue-65-grade-walks-every-segment/check_{off_branch,connector_share}.R`: the grade off
   the stream branch and the connector's share of the walked distance (Limits; #65's measurement);
 - `scripts/0330`: `data/compare/*.csv` (`compare`, `change` and `checks`, composed over every key; log
-  `scripts/logs/habitat/20261027_compare.txt`); `floodplain.csv` and `research/fig/compare_*.png` are #65's.
+  `scripts/logs/habitat/20261027_compare.txt`); `floodplain.csv` is #65's, and so were the maps #173 removed.
 
 **Status:** measured; nothing applied in link. One file per species holds the species' reading of #73's run, which
 neither #92 nor #145 revised, so where a pick or grade below differs from a species file, this file is the current one,
@@ -439,11 +439,11 @@ only on that setting.
 and the picks of 2026-10-19 (`width>=3|g<=0.09` for RB, `mad>=0.35|g<=0.1049` for BT rearing, and so on), and are kept
 here as the record of that reading.
 
-**Maps.** `research/fig/compare_<sp>_<stage>_<wsg>.png` for every floodplain-catalog group the species covers and
-three groups per species chosen by criteria fixed before drawing (largest gained share, largest lost share, most
-`default` km): habitat by rule (kept, lost, gained), grade class, and the floodplain shaded by its segment's grade.
-`data/compare/maps/` holds the interactive pages (ignored). `data/compare/gpkg/<key>.gpkg` (ignored) is #92's view
-of each comparison for QGIS (#81).
+**Maps.** #65 drew `research/fig/compare_<sp>_<stage>_<wsg>.png` for every floodplain-catalog group the species
+covers and three groups per species chosen by criteria fixed before drawing (largest gained share, largest lost share,
+most `default` km), and interactive pages in `data/compare/maps/`. #173 removed both: a comparison is viewed in QGIS
+from `data/compare/gpkg/<key>.gpkg` (ignored; `0330 STAGE=gpkg`, #81), which carries each segment's class, grade and
+the waterbody it runs through.
 
 **Floodplain as a unit** (`data/compare/floodplain.csv`, #65). For the 23 groups whose whole-network floodplain the
 stac-floodplains-bc catalog holds (`<wsg>_all_ff04`; NewGraphEnvironment/floodplains#123 for the rest),
