@@ -11,7 +11,8 @@ the **BC Freshwater Atlas** lakes, rivers and stream network in `inst/vignette-d
 `inst/vignette-data/bulk_segments.rds`, `inst/vignette-data/cut_points.rds`, the stream names and named
 streams in `inst/vignette-data/cut_points_places.rds`, and the watershed group outline, the province drawn from the
 watershed groups and the river names in `inst/vignette-data/bulk_context.rds` (all installed with the package), and the
-Atlas's streams, lakes, rivers and watershed groups drawn in `man/figures/readme-bulk.png`.
+Atlas's streams, lakes, rivers and watershed groups drawn in `man/figures/readme-bulk.png` and the maps in
+`research/fig/`.
 
 ## Canadian Geographical Names (Open Government Licence - Canada)
 

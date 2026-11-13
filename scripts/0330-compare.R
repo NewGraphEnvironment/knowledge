@@ -397,6 +397,7 @@ gpkg_one <- function(key, schema, dir_gpkg, dir_seg, flag, rule_labels, rule_cla
     unlink(f_part)
     conn <- DBI::dbConnect(RPostgres::Postgres(), bigint = "numeric")
     on.exit(DBI::dbDisconnect(conn))
+    orphans <- 0L
     for (w in sort(unique(seg$watershed_group_code))) {
       q <- sprintf("SELECT id_segment, waterbody_key, geom FROM %s.streams WHERE watershed_group_code = '%s'",
                    schema, w)
@@ -405,7 +406,10 @@ gpkg_one <- function(key, schema, dir_gpkg, dir_seg, flag, rule_labels, rule_cla
       geom$waterbody_key <- as.numeric(geom$waterbody_key)
       wb <- water_fun(conn, schema, w)
       i <- match(geom$waterbody_key, wb$waterbody_key)
-      if (any(!is.na(geom$waterbody_key) & is.na(i))) stop(w, ": a segment's waterbody is not in fwa_waterbodies")
+      # a waterbody key fwa_waterbodies lacks (17 segments in CHWK, REVL and SHUL on the published build) is an unknown
+      # waterbody, counted in the log, not the end of the key's GeoPackage (#173's review, round 3)
+      orphan <- !is.na(geom$waterbody_key) & is.na(i)
+      orphans <- orphans + sum(orphan)
       geom$water <- ifelse(is.na(geom$waterbody_key), "stream", wb$water[i])
       geom$water_ha <- wb$water_ha[i]
       sg <- dplyr::inner_join(geom, seg[seg$watershed_group_code == w, , drop = FALSE], by = "id_segment")
@@ -417,7 +421,9 @@ gpkg_one <- function(key, schema, dir_gpkg, dir_seg, flag, rule_labels, rule_cla
     gq::gq_gpkg_style_write(f_part, "segments", styles)
     unlink(f)
     if (!file.rename(f_part, f)) stop("could not move ", f_part, " to ", f)
-    sprintf("GeoPackage %s: %d segments in %.1f min.", f, nrow(seg), as.numeric(difftime(Sys.time(), t1, units = "mins")))
+    sprintf("GeoPackage %s: %d segments in %.1f min%s.", f, nrow(seg),
+            as.numeric(difftime(Sys.time(), t1, units = "mins")),
+            if (orphans) sprintf("; %d with a waterbody key fwa_waterbodies lacks, water unknown", orphans) else "")
   }, error = function(e) {
     unlink(file.path(dir_gpkg, paste0(key, ".part.gpkg")))
     sprintf("GeoPackage for %s FAILED: %s", key, conditionMessage(e))

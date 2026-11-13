@@ -63,3 +63,9 @@
   left out: now MUN1, and towns within 8 km of a higher-ranked one are not labelled (Hazelton and New Hazelton are
   5.8 km apart and collided); the bundle and README figure redrawn, checked at 600 px. (2) `review-plan.md` named home
   paths (pushed in 7aa75bf7): rewritten repo-relative; earlier commits on the branch keep them
+- /code-check round 3 (`review-round3.md`), asked for the mechanism: a set or value checked only on the sample in hand
+  (BULK), never over the population the code runs on; it checked 15 such assumptions against their sources (13 hold).
+  Two findings, both reproduced and fixed, neither inside an earlier round's fix: (1) `gpkg_one()` stopped a key's
+  whole GeoPackage at a waterbody key `fwa_waterbodies` lacks (17 published segments in CHWK, REVL and SHUL, so 8 of 11
+  species' GeoPackages): such a segment is now an unknown waterbody, counted in the log (CHWK trial: 14,346 segments,
+  1 unknown); (2) `inst/NOTICE.md` lost the Atlas line for the four maps still in `research/fig/`: restored
