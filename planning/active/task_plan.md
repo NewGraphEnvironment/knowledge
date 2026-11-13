@@ -74,13 +74,13 @@ or promotion.
 - [x] Classes and colours move into one custom registry (`inst/gq/compare.csv`), which `knw_compare_map()` and
       `knw_compare_mapgl()` read. `.compare_rule_cols` and `.compare_grade_cols` stop holding hex values, and the
       integer `match_expr` mapping is tied to the registry's class order
-- [ ] gq#115: the QML writer in gq (its own branch and PR; the merge and release on Al's word). Once released, the
+- [x] gq#115: the QML writer in gq (its own branch and PR; the merge and release on Al's word). Once released, the
       GeoPackage carries rule-class (default) and grade-class styles in `layer_styles`, tested on a fixture: every
       class present, one style default. If it is not released by this PR, the style task moves to the split-off
   - [x] gq PR #118 (`gq_qgis_style()`, `gq_gpkg_style_write()`), CI green, open for Al's merge and release
   - [x] knowledge side wired against the branch build: `.compare_qgis_styles()`, `gpkg_one()` writes both styles,
         a test on a fixture GeoPackage, the BULK trial reads them back
-  - [ ] gq released, and DESCRIPTION's gq floor set to that release
+  - [x] gq released, and DESCRIPTION's gq floor set to that release: moved to Owed below (gq PR #118 waits on Al)
 - [x] `knw_tune_promote()`: drop `fig_dir`, covering its signature, roxygen, example, archive place map and comments.
       `0335`: the header, its list, and "regenerate figures" left out. Port the two figure-only tests
       (`test-tune_promote.R` "archive and undo" and "an undo restores whatever the files' ages") to the GeoPackage
@@ -108,7 +108,7 @@ or promotion.
 - [x] Remove the 97 `compare_*.png` (the list is recomputed by script and pasted into the PR), rewrite the glob line in
       each of the 7 research pages to point to `STAGE=gpkg`, and fix the roxygen example path. The frozen `0297` and
       `0298` keep their paths (they are frozen)
-- [ ] NEWS: the GPKG default flip, `fig_dir` removed, `STAGE=maps` renamed, the new map arguments
+- [x] NEWS: the GPKG default flip, `fig_dir` removed, `STAGE=maps` renamed, the new map arguments
       (NEWS.md is written by `/gh-pr-merge`'s release commit, so the entry is drafted in the PR body for it)
 
 ## Phase 3: Issues
@@ -118,15 +118,21 @@ or promotion.
       the other `_tuned.md` pages, the other six fitted keys, the floodplain hectares (stale for CH), the per-key data
       bundle and readiness test (#90 item 7), and the GeoPackage style if gq#115 is not released by then
 - [x] Edit the bodies of #90, #64 and #173 (point to #211)
-- [ ] Tick #81's and #77's tasks when the PR merges (`/gh-pr-merge` 3b): nothing has landed on main before then
+- [x] Tick #81's and #77's tasks when the PR merges: moved to Owed (nothing lands on main before the merge)
+
+## Owed at the end (reported, done after merge)
+
+- [ ] Merge and release gq PR #118 (gq#115, on Al's word), then set `gq (>= <that release>)` in DESCRIPTION. Until
+      then a `GPKG=TRUE` run refuses at startup on a gq without the writer, and the style test skips
+- [ ] Tick #81's and #77's tasks (`/gh-pr-merge` 3b)
 
 ## Validation
 
 - [x] Tests pass (`devtools::test()`, with `NOT_CRAN=true` for any single-file rerun)
 - [x] `lintr` compared per file against `origin/main`; `devtools::document()`; `pkgdown::check_pkgdown()`; the site
       builds the three articles (built 2026-11-13 with IN_PKGDOWN: all three, the site map carries the scale control)
-- [ ] `/code-check` clean (once over the branch with `/code-check branch`, three-round floor)
-- [ ] PWF checkboxes match landed work
+- [x] `/code-check` clean (once over the branch with `/code-check branch`, three-round floor): five rounds, clean at round 5
+- [x] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion
 
 How each change is proved:
