@@ -230,7 +230,7 @@ free coefficient is a hypothesis in its own right:
 carries the same chance of a catch (derived here; neither book states it for cloglog). A free coefficient lets the
 catch rate per square metre fall (or rise) as more area is fished: under the cloglog the chance of a catch levels off
 with area even under the offset, so what the free coefficient adds is a rate per square metre that changes with area,
-and electrofishing a larger area plausibly catches less per square metre (#204's audit). Testing the offset is cheap, and is worth one
+and electrofishing a larger area plausibly catches less per square metre (our expectation, not tested). Testing the offset is cheap, and is worth one
 line in #186.
 
 ### Is "no fish caught" an absence? (Rethinking ch. 12, 15)

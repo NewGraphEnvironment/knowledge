@@ -50,6 +50,9 @@ closest <- curved[which.min(abs(curved$margin)), ]
 stopifnot(nrow(sc) > 0, all(sc$groups_both < sc$groups), length(under_half) >= 2,
           length(withheld) >= 1, any(!is.na(sc$margin) & !sc$grade_withheld), nrow(closest) == 1,
           abs(closest$margin) < 1, abs(closest$margin) >= 0.05,
+          # the caption's sign: at zero or above withheld, below published (away from a tie the summary's rounding
+          # could blur)
+          with(curved[abs(curved$margin) > 1e-3, ], identical(grade_withheld, margin <= 0)),
           # the settings the prose quotes
           val("prior_sd") == "2.5", val("se_region") == "1", val("folds") == "5")
 ```
@@ -85,14 +88,14 @@ differences in how crews sampled that a habitat definition must not be credited 
 keeps (the Province divides its streams into these large drainages) also gets its own **base rate**: how often the
 species is caught there, other things equal. The **score** is the scorer's deviance at sites in watershed groups left
 out when the habitat definition, effort and sampling terms were fitted, a measure of how badly it predicts the catch,
-summed over sites; lower is better. (Each left-out group's base rate is then refitted on its own sites, as the next
+summed over sites; lower is better. (Each left-out group's base rate is then fitted on its own sites, as the next
 sections explain.)
 
 The groups are dealt into `r val("folds")` **folds**, and each fold in turn is left out of the fit and scored. Habitat
-definitions whose scores lie within one standard error of the best are **close calls**, and among them we choose the one that changes
-`link`'s current habitat definition least. Then a second model, the **curve**, a smooth surface of how often the
-species is caught against stream size, distance to a river and slope, gives every stream with a size and slope a
-**grade**. The **gate**
+definitions whose scores lie within one standard error of their difference from the best are **close calls**, and
+among them we choose the one that changes `link`'s current habitat definition least. Then a second model, the **curve**, a smooth surface of how often the
+species is caught against stream size, distance to a river and slope, gives every stream the species can reach that
+has a size and a slope a **grade**. The **gate**
 publishes those grades only if the curve scores better on the left-out folds than no habitat definition at all.
 
 ## The checks, at a glance {#glance}
@@ -115,7 +118,7 @@ knitr::kable(data.frame(
     "Which watershed group does the grade describe?",
     "Is the gate a fair comparison?",
     "Is an unfamiliar data set or period read the same on both sides of the gate?",
-    "Does each square metre fished carry the same chance of a catch?",
+    "Is the catch rate per square metre the same however much area is fished?",
     "Is a miss an absence?",
     "Are the inputs measured?",
     "Is a stream's slope independent of the catch?"),
