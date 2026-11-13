@@ -6,4 +6,4 @@ GR,rear,coef,2.219095635611299,5,TRUE,checks,,,,,,,,,,
 GR,rear,,,,,rules,no_rule,none,906.437394,0,0,13.596606,TRUE,2.219096,data_setFDS,4
 GR,rear,,,,,rules,default,width>=1.5|g<=0.0349|none,899.507069,-6.930325,0,13.018851,TRUE,2.102049,data_setFDS,4
 GR,rear,,,,,rules,link_tuned,mad>=0.97|g<=0.0349|none,910.654754,4.217359,0,13.575227,TRUE,2.212031,data_setFDS,4
-GR,rear,,,,,rules,previous,width>=2|g<=0.0549|none,887.831787,-18.605608,0,12.804581,TRUE,2.064985,data_setFDS,4
+GR,rear,,,,,rules,previous,width>=1.5|g<=0.0549|none,892.778733,-13.658661,0,12.957913,TRUE,2.113923,data_setFDS,4

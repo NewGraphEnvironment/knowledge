@@ -2,8 +2,8 @@ species_code,stage,check,value,limit,pass,table,role,rule,dev_heldout,ddev_null,
 CO,rear,null_ratio,0.9928272441168112,1.25,TRUE,checks,,,,,,,,,,
 CO,rear,clamp,0,0,TRUE,checks,,,,,,,,,,
 CO,rear,behind_null,0,4418.291420779845,TRUE,checks,,,,,,,,,,
-CO,rear,coef,1.0898617580718921,5,TRUE,checks,,,,,,,,,,
+CO,rear,coef,1.0681112156877364,5,TRUE,checks,,,,,,,,,,
 CO,rear,,,,,rules,no_rule,none,4418.291421,0,0,8.464413,TRUE,0.903223,data_setFDS,2
-CO,rear,,,,,rules,default,width>=1.5|g<=0.0549|none,4321.248233,-97.043187,0,7.779108,TRUE,0.928055,data_setFDS,5
-CO,rear,,,,,rules,link_tuned,mad>=0.03|g<=0.0549|none,4291.711389,-126.580031,0,7.726574,TRUE,0.927314,data_setFDS,5
-CO,rear,,,,,rules,previous,mad>=0.1|g<=0.0549|Q3@D2000,4202.789706,-215.501715,0,7.653262,TRUE,1.089862,rule,3
+CO,rear,,,,,rules,default,width>=1.5|g<=0.0549|none,4318.618722,-99.672699,0,7.705779,TRUE,0.876958,data_setFDS,2
+CO,rear,,,,,rules,link_tuned,mad>=0.03|g<=0.0549|none,4283.82989,-134.46153,0,7.667472,TRUE,0.883466,rule,2
+CO,rear,,,,,rules,previous,mad>=0.1|g<=0.0549|Q3@D2000,4203.958514,-214.332907,0,7.527902,TRUE,1.068111,rule,2

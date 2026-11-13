@@ -68,10 +68,10 @@ test_that("at 1 SE the replay is every saved table's recommended rule", {
   }
 })
 
-test_that("at 1.96 SE the replay gives the table research/habitat_thresholds_tuned.md prints (#79, on #145's tables)", {
+test_that("at 1.96 SE the replay gives the table research/habitat_thresholds_tuned.md prints (#79, on the minimal network run 20261103_0838, #120)", {
   skip_if_not(length(tune_files) > 0, "no source-tree data/tune (installed package)")
   want <- c(BT_rear = "mad>=0.1|g<=0.1049|none", BT_spawn = "width>=2|g<=0.0549|none",
-            CH_rear = "mad>=0.75|g<=0.13|Q3@D1000", CO_rear = "width>=1.5|g<=0.0549|Q1@D500",
+            CH_rear = "mad>=1|g<=0.0549|Q3@D1000", CO_rear = "width>=1.5|g<=0.0549|Q1@D500",
             GR_rear = "width>=1.5|g<=0.0349|none", ST_rear = "width>=1.5|g<=0.0849|none",
             WCT_rear = "width>=1.5|g<=0.0849|none")
   got <- vapply(tune_files, function(f) knw_tune_repick(utils::read.csv(f, stringsAsFactors = FALSE), 1.96)$rule, "")
