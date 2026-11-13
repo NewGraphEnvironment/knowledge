@@ -63,6 +63,7 @@ Relates to #33 and #51.
 
 | Error | Resolution |
 |-------|------------|
+| The `bull_trout` build skipped two members' PDFs as no text: `Bib77170.pdf` (Rare Freshwater Fish, 255 pages of 300 dpi page images) and HYSNCHBC (Metolius 1983–94, 48 pages, an Acrobat image conversion). #122's build log reads HYSNCHBC as ingested, but its PDF has no text layer | OCR copies (`ocrmypdf --deskew`) filed over each scan by two `0275` `replace` rows; auto mode refused the live run, so it waits for Al |
 | Chrome's scripted downloads from a page reached `~/Downloads` minutes late or not at all | Chrome holds a site's second and later downloads for "download multiple files"; Al allowed bchydro.com, publications.gc.ca, web.archive.org and rex.libraries.wsu.edu under automatic downloads, and saved the T&F, UBC and ResearchGate files by hand |
 | `CDP Runtime.evaluate timed out after 45000ms` on an 11-file batch | The script kept running in the page; waited on the files instead of re-running |
 | Search A called three Baxter papers paywalled from OpenAlex alone | A ResearchGate title search found author copies of two (Baxter & Hauer 2000; Baxter, Frissell & Hauer 1999): run it for every no-PDF row before calling it paywalled |

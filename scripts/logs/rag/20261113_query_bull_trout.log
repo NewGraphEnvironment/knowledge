@@ -1,0 +1,15 @@
+# bull_trout store: four checks, #194. Expectations written 2026-11-13T17:27:34Z, before any query ran.
+# A miss is reported, not tuned away. Top 5 keys follow each query once it runs.
+#
+# Q1 "Williston bull trout spawning site selection and redd counts"
+#    expect: the Hagen Williston series (hagen_etal2020CriticalSpawning, hagen_etal2015Criticalhabitats,
+#    hagenj_spendlowi_2019BullTrout, hagen_weber2019Limitingfactors, and the O'Connor 2024 / Rossi 2025-2026
+#    spawner abundance and critical habitats reports)
+# Q2 "upper thermal tolerance and temperature limits for bull trout"
+#    expect: selong_etalEffectTemperature, mcmahon_etal2007TemperatureCompetition, mochnacz2021Thermalecology,
+#    dunham_chandler2001Modelspredict
+# Q3 "management objectives for South Coast British Columbia bull trout populations"
+#    expect: b_c_ministryofwaterlandandresourcestewardship2023ManagementPlan, the SARA registry South Coast page,
+#    the COSEWIC 2025 South Coast / Western Arctic status report (no federal management plan exists for either unit)
+# Q4 "primary constituent elements of bull trout critical habitat"
+#    expect: u_s_fishandwildlifeservice2010Endangeredthreatened (the 2010 final rule), possibly the 2015 recovery plan

@@ -36,3 +36,8 @@
 - Dry run before resuming (118 exists, 27 to do); two re-runs finished it; the empty Sheep Creek attachment trashed
 - No-op dry run 3c exit 0; collection audited through the Web API; re-measured 174 / 174 / 172
 - Next: Phase 3 once Baxter 2002's attachment has synced and Zotero is quit
+- Zotero synced and quit (17:16Z): 174 / 174 / 173 on disk, `-wal` empty. `habitat_modelling` pulled verified
+  (`4fcc6700…`); `bull_trout_grayling` already matched its manifest
+- `bull_trout` built 17:18–17:47Z: 171 documents, 27,589 chunks, every origin a live member's attachment. Two scans
+  skipped as no text; OCRed and staged as `0275` `replace` rows (dry run clean). The live run was refused by auto mode
+- Query expectations written to `scripts/logs/rag/20261113_query_bull_trout.log` before any query ran

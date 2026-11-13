@@ -128,12 +128,18 @@ What exploration settled:
 - [x] Re-measure from a guarded copy: a before/after table
 
 ## Phase 3: build, query and push the stores
-- [ ] Gate: every member's PDF is on disk, Zotero is quit, and the `-wal` is empty. Zotero stays quit through the updates
-- [ ] Verified pull before any local write: `ACTION=query VERIFY=TRUE` on `habitat_modelling` (the local copy is stale,
+- [x] Gate: every member's PDF is on disk, Zotero is quit, and the `-wal` is empty. Zotero stays quit through the updates
+      (2026-11-13 17:16Z: 174 live, 174 keyed, 173 on disk, Metolius 1996 the one gap; `-wal` 0 bytes)
+- [x] Verified pull before any local write: `ACTION=query VERIFY=TRUE` on `habitat_modelling` (the local copy is stale,
       `b28ad0ed…` against the bucket's `4fcc6700…`) and on `bull_trout_grayling`; each md5 recorded against the
-      manifest (G1)
-- [ ] `ACTION=build STORE=bull_trout COLLECTIONS=VHWEK6RE`, logged. The left-out list equals the recorded gap, and
-      every origin maps to a live group attachment; documents = keys − no-text PDFs, with those keys named (G3)
+      manifest (G1). `habitat_modelling` pulled to `4fcc6700…` (266 documents); `bull_trout_grayling` already
+      matched the manifest (`4846e7a3…`, 35 documents), so it was left as it was
+- [x] `ACTION=build STORE=bull_trout COLLECTIONS=VHWEK6RE`, logged. The left-out list equals the recorded gap, and
+      every origin maps to a live group attachment; documents = keys − no-text PDFs, with those keys named (G3).
+      171 documents, 27,589 chunks; 171 origins on 171 live members. Skipped: Metolius 1996 (no PDF) and two image-only
+      scans, `cannings_ptolemy1998RareFreshwater` and the Metolius 1983–94 distribution report
+- [ ] OCR the two scans (`ocrmypdf --deskew`, 51,642 and 14,541 words) and file each over its scan through `0275`
+      `replace` rows (dry run clean); Zotero synced and quit again; `ACTION=update STORE=bull_trout` adds the two
 - [ ] Four `ACTION=query` checks, each with its expected documents written in the log before it runs and the top 5
       keys recorded after:
   - Williston spawning-site selection and redd counts;
