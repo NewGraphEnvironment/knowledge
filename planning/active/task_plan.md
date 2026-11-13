@@ -41,15 +41,15 @@ What exploration found that shapes the phases:
 - #203's changes appear as what comes next, not as made.
 
 ## Phase 1: The method bundle carries the scope and the gate
-- [ ] `data-raw/vignette_method.R`: add `scope`, one row per key the run publishes (fitted or underpowered, as the
+- [x] `data-raw/vignette_method.R`: add `scope`, one row per key the run publishes (fitted or underpowered, as the
       script's line-338 population). Columns: key, `status`, `groups`, `groups_both`, `grade_withheld`,
       `dev_curve`, `null_heldout_curve`, all read from the summaries it already loads. The header OUTPUT gains it.
-- [ ] Stage the ignored inputs from the main checkout into this worktree (`data/fdis/derived`, `data/fdis/build`,
+- [x] Stage the ignored inputs from the main checkout into this worktree (`data/fdis/derived`, `data/fdis/build`,
       plus anything else the script reads that is ignored), and check that their md5s equal the grades' `evidence_md5`.
-- [ ] Commit the script, then rerun it with `PGSERVICE=fresh_local`. It refuses to run with uncommitted code.
-- [ ] Assert that every other element of the new `method.rds` is `identical()` to the old one, apart from `meta`'s
+- [x] Commit the script, then rerun it with `PGSERVICE=fresh_local`. It refuses to run with uncommitted code.
+- [x] Assert that every other element of the new `method.rds` is `identical()` to the old one, apart from `meta`'s
       written date and commit.
-- [ ] `tests/testthat/test-vignette-data.R`: a test that `scope` exists, has the published keys, and that
+- [x] `tests/testthat/test-vignette-data.R`: a test that `scope` exists, has the published keys, and that
       `groups_both <= groups`.
 
 ## Phase 2: The article

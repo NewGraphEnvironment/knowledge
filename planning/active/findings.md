@@ -26,3 +26,15 @@ Waits for #203 (the scorer and curve changes) only if the article describes them
 
 | Error | Resolution |
 |-------|------------|
+
+## Phase 1: the method bundle rebuild (2026-11-13)
+
+- Ignored inputs copied from the main checkout (`data/fdis/derived`, `data/fdis/build`); each md5 equalled the
+  bundle's `md5_local` before the run.
+- `PGSERVICE=fresh_local Rscript data-raw/vignette_method.R` took 10 s. Against the 2026-11-04 bundle (f6b6d0a),
+  every element is `identical()` except: `scope` (new); `meta$written`, `meta$commit`; `meta$md5` gains
+  `data/tune/WCT_rear_summary.csv` (the underpowered key's summary, now a source) and `settings.csv`'s md5; and
+  `settings`/`resolved` differ only in `where` for `snap_limit`, `snap_limit_code` and `se_strict`. Those paths moved
+  after Nov 4, and by #118's rule a moved `where` does not stale the bundle. No printed value moved.
+- `scope`: CH rearing 45 of 111 groups, ST rearing 11 of 78, WCT rearing 6 of 14; withheld by the gate: BT spawning
+  (by 0.56), CO rearing (by 58.1), WCT rearing (by 106.3); GR rearing published by 14.4.
