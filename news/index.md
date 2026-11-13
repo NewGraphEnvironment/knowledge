@@ -1,5 +1,34 @@
 # Changelog
 
+## knowledge 0.4.40
+
+- `scripts/0330` draws no maps, and writes GeoPackages only with
+  `GPKG=TRUE`
+  ([\#81](https://github.com/NewGraphEnvironment/knowledge/issues/81),
+  [\#173](https://github.com/NewGraphEnvironment/knowledge/issues/173)).
+  `STAGE=floodplain` replaces `STAGE=maps` and writes the floodplain
+  table alone, each row naming its tuning run, link commit and tuned
+  rule; `STAGE=maps` refuses and names its replacements. `STAGE=gpkg`
+  also takes the promoted run (`TUNE_DIR=data/tune`). Each GeoPackage
+  carries each segment’s class (kept, lost, gained, neither), the
+  waterbody it runs through and that waterbody’s area, a `run` table
+  naming its key’s tuning run, and QGIS styles from the gq registry the
+  maps read (`inst/gq/compare.csv`), which needs gq 0.22.0 (now
+  `gq (>= 0.22.0)` in Suggests).
+  [`knw_compare_map()`](https://newgraphenvironment.github.io/knowledge/reference/knw_compare_map.md)
+  gains an opt-in scale bar, keymap, town and river names, basemap and
+  logo, each in its own corner, and at its defaults draws as before;
+  [`knw_compare_mapgl()`](https://newgraphenvironment.github.io/knowledge/reference/knw_compare_mapgl.md)
+  gains `scale`
+  ([\#77](https://github.com/NewGraphEnvironment/knowledge/issues/77)).
+  The README figure and the chinook rearing article’s map now show where
+  the Bulkley is, with towns from NRCan’s Canadian Geographical Names.
+  [`knw_tune_promote()`](https://newgraphenvironment.github.io/knowledge/reference/knw_tune_promote.md)
+  drops `fig_dir`, and 97 comparison figures that nothing showed are
+  removed from `research/fig/`. The first by-key promotion after this
+  must take every key `floodplain.csv` holds, because its columns
+  changed. Nothing published moves.
+
 ## knowledge 0.4.39
 
 - [`knw_link_place()`](https://newgraphenvironment.github.io/knowledge/reference/knw_link_place.md)

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">knowledge</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.39</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.40</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,6 +43,11 @@
       <small>Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.4.40" id="knowledge-0440">knowledge 0.4.40<a class="anchor" aria-label="anchor" href="#knowledge-0440"></a></h2>
+<ul><li>
+<code>scripts/0330</code> draws no maps, and writes GeoPackages only with <code>GPKG=TRUE</code> (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/81" class="external-link">#81</a>, <a href="https://github.com/NewGraphEnvironment/knowledge/issues/173" class="external-link">#173</a>). <code>STAGE=floodplain</code> replaces <code>STAGE=maps</code> and writes the floodplain table alone, each row naming its tuning run, link commit and tuned rule; <code>STAGE=maps</code> refuses and names its replacements. <code>STAGE=gpkg</code> also takes the promoted run (<code>TUNE_DIR=data/tune</code>). Each GeoPackage carries each segment’s class (kept, lost, gained, neither), the waterbody it runs through and that waterbody’s area, a <code>run</code> table naming its key’s tuning run, and QGIS styles from the gq registry the maps read (<code>inst/gq/compare.csv</code>), which needs gq 0.22.0 (now <code>gq (&gt;= 0.22.0)</code> in Suggests). <code><a href="../reference/knw_compare_map.html">knw_compare_map()</a></code> gains an opt-in scale bar, keymap, town and river names, basemap and logo, each in its own corner, and at its defaults draws as before; <code><a href="../reference/knw_compare_mapgl.html">knw_compare_mapgl()</a></code> gains <code>scale</code> (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/77" class="external-link">#77</a>). The README figure and the chinook rearing article’s map now show where the Bulkley is, with towns from NRCan’s Canadian Geographical Names. <code><a href="../reference/knw_tune_promote.html">knw_tune_promote()</a></code> drops <code>fig_dir</code>, and 97 comparison figures that nothing showed are removed from <code>research/fig/</code>. The first by-key promotion after this must take every key <code>floodplain.csv</code> holds, because its columns changed. Nothing published moves.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.39" id="knowledge-0439">knowledge 0.4.39<a class="anchor" aria-label="anchor" href="#knowledge-0439"></a></h2>
 <ul><li>

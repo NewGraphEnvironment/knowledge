@@ -17,15 +17,15 @@ Irvine A (2026). *knowledge: Tests Fish Habitat Definitions Against What
 is Known About Where Fish Live, and Tunes Them from the Fish Records*.
 New Graph Environment Ltd.
 [doi:10.5281/zenodo.23990335](https://doi.org/10.5281/zenodo.23990335).
-Version 0.4.39, <https://newgraphenvironment.github.io/knowledge/>.
+Version 0.4.40, <https://newgraphenvironment.github.io/knowledge/>.
 
     @Manual{knowledge,
       title = {knowledge: Tests Fish Habitat Definitions Against What is Known About Where Fish Live, and Tunes Them from the Fish Records},
       author = {Allan Irvine},
       organization = {New Graph Environment Ltd.},
       year = {2026},
-      version = {0.4.39},
-      note = {Version 0.4.39},
+      version = {0.4.40},
+      note = {Version 0.4.40},
       url = {https://newgraphenvironment.github.io/knowledge/},
       doi = {10.5281/zenodo.23990335},
     }
