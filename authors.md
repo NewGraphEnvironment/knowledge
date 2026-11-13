@@ -11,7 +11,7 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/NewGraphEnvironment/knowledge/blob/v0.4.39/inst/CITATION)
+[`inst/CITATION`](https://github.com/NewGraphEnvironment/knowledge/blob/main/inst/CITATION)
 
 Irvine A (2026). *knowledge: Tests Fish Habitat Definitions Against What
 is Known About Where Fish Live, and Tunes Them from the Fish Records*.

@@ -6,7 +6,7 @@ ignored, so iterating changes nothing tracked (#111). Promotion, on the
 operator's word, moves the run in: every file of each promoted key (its
 tables, the grade tables' records, and the ignored grades, curve, score
 cache, segments and GeoPackage), its Atlas-gradient sensitivity, the
-run's logs, its figures, and its rows of the tables that hold every key
+run's logs, and its rows of the tables that hold every key
 (`compare.csv`, `change.csv`, `checks.csv`, `floodplain.csv`). A key's
 files are moved, not copied (its grades and GeoPackage run to
 gigabytes), so a promoted key leaves the run's directory; the logs are
@@ -27,7 +27,6 @@ knw_tune_promote(
   tune_dir = "data/tune",
   compare_dir = "data/compare",
   log_dir = "scripts/logs/habitat",
-  fig_dir = "research/fig",
   dry_run = FALSE
 )
 ```
@@ -55,11 +54,9 @@ knw_tune_promote(
 
 - log_dir:
 
-  where the tracked logs live.
-
-- fig_dir:
-
-  where the tracked comparison figures live.
+  where the tracked logs live. A run's comparison draws no figures since
+  \#173, so none are promoted; a `fig/` an older run or archive holds is
+  left where it is, noted.
 
 - dry_run:
 
@@ -101,7 +98,7 @@ dir.create(file.path(d, "compare"))
 utils::write.csv(data.frame(species_code = "KO", stage = "rear", status = "no_stream_rule"),
                  file.path(c, "KO_rear_summary.csv"), row.names = FALSE)
 p <- knw_tune_promote("r1", tune_dir = file.path(d, "tune"), compare_dir = file.path(d, "compare"),
-                      log_dir = file.path(d, "logs"), fig_dir = file.path(d, "fig"))
+                      log_dir = file.path(d, "logs"))
 basename(p$written)
 #> [1] "KO_rear_summary.csv"
 ```

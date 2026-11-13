@@ -32,7 +32,15 @@ knw_compare_map(
   lwd = 1,
   legend = TRUE,
   labels = NULL,
-  background = c("voyager", "openfreemap", "esri_topo")
+  background = c("voyager", "openfreemap", "esri_topo"),
+  width = NULL,
+  scalebar = FALSE,
+  keymap = NULL,
+  places = NULL,
+  basemap = NULL,
+  logo = NULL,
+  corners = c(legend = "bottomleft", scalebar = "bottomright", keymap = "topright", logo
+    = "topleft")
 )
 ```
 
@@ -105,6 +113,50 @@ knw_compare_map(
   [`knw_compare_mapgl()`](https://newgraphenvironment.github.io/knowledge/reference/knw_compare_mapgl.md)
   for the interactive page.
 
+- width:
+
+  `NULL`, or `numeric(1)` inches: draw one panel on a canvas of that
+  width whose height follows the window's shape (the group's outline,
+  `keymap$aoi`, where given, else the segments), so the map fills its
+  frame. The arguments below need it; with all of them at their defaults
+  the figure is drawn as before.
+
+- scalebar:
+
+  `logical(1)` draw a scale bar, its breaks from
+  [`gq::gq_scale_breaks()`](https://newgraphenvironment.github.io/gq/reference/gq_scale_breaks.html).
+
+- keymap:
+
+  `NULL`, or a list of two `sf` polygons, `aoi` (the area mapped, also
+  outlined on the map) and `context` (the region around it, such as the
+  province), drawn as an inset by
+  [`gq::gq_tmap_keymap()`](https://newgraphenvironment.github.io/gq/reference/gq_tmap_keymap.html).
+
+- places:
+
+  `NULL`, or a list with `towns` (an `sf` of points with a `label`
+  column, marked and named in gq's `town` style) and `rivers` (an `sf`
+  of points with `label` and `angle` columns, named in blue italic along
+  the river), each name over a white halo.
+
+- basemap:
+
+  `NULL`, or an RGB raster (`stars`, as
+  [`gq::gq_basemap_blend()`](https://newgraphenvironment.github.io/gq/reference/gq_basemap_blend.html)
+  returns it) drawn under everything; its `"credit"` attribute is
+  printed along the bottom of the map.
+
+- logo:
+
+  `NULL`, or the path of a square PNG drawn as a logo.
+
+- corners:
+
+  named `character`: the corner of each of `legend`, `scalebar`,
+  `keymap` and `logo`, each in its own (`"bottomleft"`, `"bottomright"`,
+  `"topleft"`, `"topright"`).
+
 ## Value
 
 Invisibly, the paths written.
@@ -119,6 +171,6 @@ headwaters, and the legend names every class drawn.
 ``` r
 if (FALSE) { # \dontrun{
 knw_compare_map(seg, water, "BULK: CH rearing, default against the tuned rule",
-                png = "research/fig/compare_ch_rear_bulk.png")
+                png = tempfile(fileext = ".png"))
 } # }
 ```

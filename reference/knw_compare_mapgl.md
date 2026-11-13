@@ -23,7 +23,8 @@ knw_compare_mapgl(
   water = NULL,
   title = "",
   background = c("voyager", "openfreemap", "esri_topo"),
-  digits = 5L
+  digits = 5L,
+  scale = FALSE
 )
 ```
 
@@ -52,6 +53,10 @@ knw_compare_mapgl(
 - digits:
 
   `integer(1)` decimal places kept in the coordinates.
+
+- scale:
+
+  `logical(1)` add a metric scale bar at the bottom left (#77).
 
 ## Value
 

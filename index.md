@@ -138,9 +138,8 @@ through [fwapg](https://smnorris.github.io/fwapg/), with flows from
 [wet](https://www.newgraphenvironment.com/wet/) and dams from the
 [Canadian Aquatic Barriers Database](https://aquaticbarriers.ca/), and
 each visit is matched to the records it produced in
-[bcfishobs](https://github.com/smnorris/bcfishobs). The floodplain
-panels of the comparison maps in `research/fig/`, and the floodplain
-areas in `data/compare/floodplain.csv`, come from
+[bcfishobs](https://github.com/smnorris/bcfishobs). The floodplain areas
+in `data/compare/floodplain.csv` come from
 [stac_floodplains_bc](https://www.newgraphenvironment.com/stac_floodplains_bc/).
 Some crossing and report scripts also read a
 [bcfishpass](https://smnorris.github.io/bcfishpass/) database. fwapg,
