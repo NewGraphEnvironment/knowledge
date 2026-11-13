@@ -21,8 +21,8 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   `planning/` and `research/` out of the build, and `tests/testthat/test-data-dir.R` keeps `.R` and
   `.rda` files off the top of `data/`, where `pkgload::load_all()` would source or load them.
 - `vignettes/tuning-chinook-rearing.Rmd` — "Tuning habitat: chinook rearing", the case study of chinook rearing (#62). The
-  three articles are one series, `tuning-<name>` (#118): `_pkgdown.yml` groups them as the method, the case studies
-  (`tuning-<species>-<stage>`) and checks on the method, and redirects their earlier names. Their prose says "fish
+  articles are one series, `tuning-<name>` (#118): `_pkgdown.yml` groups them as the method, the case studies
+  (`tuning-<species>-<stage>`), checks on the method and one internal article, and redirects their earlier names. Their prose says "fish
   habitat definition" at first mention and "habitat definition" after, never "rule" (#156). It reads
   `inst/vignette-data/`, which `data-raw/vignette_chinook.R` writes from the tune and compare tables and the
   database (`SCHEMA` names the run's schema, as `0320` and `0330` take it). A promotion (`0335`) reruns it, and only a
@@ -66,6 +66,16 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   when the methodology bundle's chinook rearing pick no longer matches it.
   Its maps fetch Esri tiles when it builds, so a build needs network. Internal names (bundles, scripts, tests) keep
   `cut_points`.
+- `vignettes/tuning-bayesian-practice.Rmd` — "How the tuning stands against Bayesian practice" (#204): states
+  `research/bayesian_alignment.md`'s findings for a reader, with *Statistical Rethinking* and *BDA3* cited, and what
+  is tested next. It sits in `_pkgdown.yml`'s `internal` section, so pkgdown builds it at its own URL and leaves it out
+  of the articles index and navbar (not out of `sitemap.xml`, the site search or the installed vignette index); the
+  methodology article's `#se` links it. Because that section has no navbar entry, `_pkgdown.yml` writes the Articles
+  menu out by hand (pkgdown would add "More articles..."), and `tests/testthat/test-pkgdown-navbar.R` holds the menu to
+  the sections. It reads `method.rds`, whose `scope` (each published key's groups, groups with both outcomes and grade
+  gate) `vignette_method.R` writes for it, so a promotion keeps it current. Its book quotes are checked against the PDF
+  pages by `MD=vignettes/tuning-bayesian-practice.Rmd Rscript data-raw/bayesian_alignment_check.R`; rerun that after
+  any change to its quotes.
 - `scripts/` — the run order (`scripts/README.md`), calling the package (`pkgload::load_all()` from
   the root) and `cred`. Legacy literals in scripts are fixed forward as they are touched.
 - `data/<wsg>/` — per-group snapshots (csv/md) and small spatial deliverables (gpkg/kml). Tracked.
@@ -445,7 +455,7 @@ refuse a table that fails: `0325` and `0330` the rule, run, walk, evidence, grad
 and `0325` the reference edge types across tables; `data-raw/vignette_chinook.R` the rule, walk, evidence and gradient;
 `data-raw/vignette_method.R` the gradient, the evidence and one flow load. The gate's fields (`curve_prior_sd`,
 `grade_withheld`, `null_heldout_curve`) `0330` and `vignette_chinook.R` check by presence, `0325` all but the prior, and
-`vignette_method.R` not at all. `0325` refuses before it writes anything. So a change to the gate, the prior, the walk or the evidence
+`vignette_method.R` only the flag's presence (#204's `scope`). `0325` refuses before it writes anything. So a change to the gate, the prior, the walk or the evidence
 regrades every key (53 min on the database's host with the walks cold, 2026-10-27; minutes for a key whose walks are cached), which is the cost of never publishing a verdict the code
 no longer makes. #73's branch review (five rounds, `planning/archive/2026-10-issue-73-rebuild-evidence-retune-bank/review-round*.md`)
 found four axes where a reader had checked presence alone, one of them the gate itself: it compared the curve's
@@ -612,7 +622,8 @@ the run before a pass rewrites them and write the large ones whole (a GeoPackage
 comparison tables land only complete), so `0335` trusts what a run holds; never put a file into a candidate by hand
 (#111, five review rounds, `planning/archive/2026-10-issue-111-candidate-runs-promotion/`). A promotion that moves the
 published numbers also moves pins it cannot revise
-(`test-tune_repick.R`'s 1.96 picks, `test-vignette-data.R`'s key count and funnel, the articles' inline checks) and
+(`test-tune_repick.R`'s 1.96 picks, `test-vignette-data.R`'s key count and funnel, the articles' inline checks,
+among them the Bayesian-practice article's on which keys drop more than half their groups and which the gate withholds) and
 the `research/` prose that quotes them: those, and the articles' review, follow it by hand.
 
 **Run R from the repo root, and never add a project-level `.Renviron` here.** R loads a

@@ -95,11 +95,11 @@ What exploration found that shapes the phases:
       Fix what it finds and re-audit the fixes until a round finds nothing inside them.
 
 ## Phase 4: Records and docs
-- [ ] `research/bayesian_alignment.md`: change the "What to try" #204 bullet to the separate internal article, and
+- [x] `research/bayesian_alignment.md`: change the "What to try" #204 bullet to the separate internal article, and
       add #204 to the header's issues.
-- [ ] `CLAUDE.md`: a layout entry for the new article (internal section, its bundle and bib); the series' count of
+- [x] `CLAUDE.md`: a layout entry for the new article (internal section, its bundle and bib); the series' count of
       articles; the record section's line on what `vignette_method.R` checks of the gate; the promotion pins list (G2)
-- [ ] `vignettes/tuning-chinook-rearing.Rmd`, README and NEWS: no changes; release bookkeeping is `/gh-pr-merge`'s.
+- [x] `vignettes/tuning-chinook-rearing.Rmd`, README and NEWS: no changes; release bookkeeping is `/gh-pr-merge`'s.
 
 ## Validation
 - [ ] Tests pass (`devtools::test()`, with `test-vignette-data.R` against the rebuilt bundle)

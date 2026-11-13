@@ -1,7 +1,7 @@
 # How the tuning method stands against Bayesian practice
 
 **Verified:** 2026-11-12 · **Issues:** #185 (this review); the store is #95's; it scopes #186 (a partially pooled
-curve) and feeds the methodology article (#93) · **Produced by:** the code at this commit, read line by line; the
+curve) and feeds the methodology article (#93) and the internal article on Bayesian practice (#204) · **Produced by:** the code at this commit, read line by line; the
 `statistics` store (McElreath 2020 and Gelman et al. 2013, searched through cred); every quote that cites a page
 checked on that page by `data-raw/bayesian_alignment_check.R` (log `scripts/logs/habitat/*_bayesian_alignment_check.txt`) · **Status:**
 review complete; the changes it recommends are filed as issues (end of file).
@@ -429,8 +429,10 @@ Each item is an issue, so it is planned and reviewed on its own.
   group from the population distribution, for the pooled curve and today's alike, since a new-group score for one
   against an own-intercept score for the other compares nothing. Two cheap additions: an offset for `log(area)` beside
   the free coefficient, and a prior predictive check of the data-set and era prior on the rate scale.
-- **The methodology article says where the method stands** (#204): a short section in `tuning-method.Rmd`
-  stating the findings above in the reader's terms, with the two books cited.
+- **An article says where the method stands** (#204): `vignettes/tuning-bayesian-practice.Rmd`, an internal article
+  (built at its own URL, left out of the site's index and navbar) that states the findings above in the reader's
+  terms, with the two books cited; the methodology article links it from its section on telling two habitat
+  definitions apart. A separate article rather than a section of `tuning-method.Rmd` (Al, 2026-11-13).
 
 ## Limits of this review
 
