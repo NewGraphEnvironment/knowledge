@@ -63,7 +63,8 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   that host; the bundle needs nothing else, and the staged md5s are tested only where the stage exists. The methodology
   article's "Does where link cuts a stream change the rules?" (`#cuts`) answers it in brief and links it, reading
   `cut_points.rds` for its two numbers; a promotion does not rebuild that bundle, so the section's guard stops the build
-  when the methodology bundle's chinook rearing pick no longer matches it.
+  when the methodology bundle's chinook rearing pick no longer matches the bundle's `minimal` setup (the published
+  network since 2026-11-13, #120; the bundle's setup `published` is #145's full-network run).
   Its maps fetch Esri tiles when it builds, so a build needs network. Internal names (bundles, scripts, tests) keep
   `cut_points`.
 - `scripts/` — the run order (`scripts/README.md`), calling the package (`pkgload::load_all()` from
@@ -295,7 +296,9 @@ not depend on the outcome, are #70's. These numbers, and #92's tune, are on link
 (link#326, 0.69.0) and fish records only at each species' highest record per stream (link#396). The build promoted by
 #145 (link 0.78.2, run `20261103_163715-269b585a`) carries both: 44.2 % of stream-branch visits with fish start a
 segment of their own against 6.6 % of empty ones, medians 305 m and 466 m
-(`scripts/logs/habitat/20261103_segment_gradient_check-derived_default_20261103.txt`).
+(`scripts/logs/habitat/20261103_segment_gradient_check-derived_default_20261103.txt`). Since 2026-11-13 the published
+tables are tuned on link's minimal network instead (run `20261103_0838`, #120), where 3.4 % of stream-branch visits with
+fish start a segment of their own against 3.0 % of empty ones.
 
 A setup (#120) is a run on another gradient than the segment's own, graded and compared on it and never promoted:
 `0320 SETUP=1 GRADIENT=parent_gradient` (each full segment reads its minimal parent's, from link#444's
@@ -512,13 +515,14 @@ refuses any other. On link's four proof groups only bull trout rearing has four 
 smoke gate refuses chinook rearing on three folds (separation), so a test of grading and the comparison runs on a key
 the groups can fit.
 
-The provincial minimal build (`fresh_default_minimal`, link#441, run `20261102_203300-60ab009d`) and, since #145, the
-published build (`fresh_default`, run `20261103_163715-269b585a`) live in a database other than the one holding #92's
+The provincial minimal build (`fresh_default_minimal`, link#441, run `20261102_203300-60ab009d`; the published build
+since 2026-11-13) and #145's full build (`fresh_default`, run `20261103_163715-269b585a`) live in a database other than the one holding #92's
 build (`fresh_default_20261017`), reached with a `~/.pg_service.conf` entry and `PGSERVICE=`; that older database holds a
 `fresh_default_minimal` with no segments. Each database keeps its own flow load and walk cache: the minimal and the
 published builds read wet's 2026-10-24 build (#120's second branch loaded it), #92's grades wet's 2026-10-19 load, and
 wet's public prefix keeps no older manifest, so the older load exists only where it was loaded. Its evidence is
-`data/fdis/derived_minimal` (ledger tagged `-derived_minimal`). `0310` reads each species' range from the installed
+`data/fdis/derived_minimal` (ledger tagged `-derived_minimal`); since its promotion `data/fdis/derived` must hold the
+same tables, because `vignette_method.R` refuses any other evidence there. `0310` reads each species' range from the installed
 link's `default` presence table (`lnk_load_overrides()`), not from the schema, so a build on a newer link moves
 `in_range` even on the same network: link#402's review moved 12,083 visit × species rows between link 0.66.0 and
 0.78.1. Compare two builds' picks knowing which of network, flow load and range changed.
