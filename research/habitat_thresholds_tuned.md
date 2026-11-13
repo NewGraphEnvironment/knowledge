@@ -16,7 +16,7 @@ gradient, and the retune on #91's evidence), #112 (the structures a comparison r
 (`habitat_weights.md`), #33 (`bt_spawning.md`), #52 (`chinook_stream_size.md`) and #54 (`chinook_rearing_tuned.md`);
 link reads the result through NewGraphEnvironment/link#346 · **Produced by:**
 - #120's run, promoted 2026-11-13: `scripts/logs/habitat/20261103_evidence_build_ledger-derived_minimal.csv`,
-  `20261103_tune_run-20261103_0838-*.txt` (with its `-grad_fwa` sensitivities of 2026-11-13),
+  `20261103_tune_run-20261103_0838-*.txt` and its `-grad_fwa` sensitivity, `20261113_tune_run-20261103_0838-*-grad_fwa.txt`,
   `20261103_compare-20261103_0838.txt` and `20261113_promote-20261103_0838.txt`; the tables in `data/tune/` and
   `data/compare/` are its own, and the numbers in its section come from them through `data/compare/compare.csv`'s
   `ALL` rows and each key's summary and tune tables;

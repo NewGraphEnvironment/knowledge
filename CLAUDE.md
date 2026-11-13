@@ -520,8 +520,8 @@ the groups can fit.
 The provincial minimal build (`fresh_default_minimal`, link#441, run `20261102_203300-60ab009d`; the published build
 since 2026-11-13) and #145's full build (`fresh_default`, run `20261103_163715-269b585a`) live in a database other than the one holding #92's
 build (`fresh_default_20261017`), reached with a `~/.pg_service.conf` entry and `PGSERVICE=`; that older database holds a
-`fresh_default_minimal` with no segments. Each database keeps its own flow load and walk cache: the minimal and the
-published builds read wet's 2026-10-24 build (#120's second branch loaded it), #92's grades wet's 2026-10-19 load, and
+`fresh_default_minimal` with no segments. Each database keeps its own flow load and walk cache: the minimal build and
+#145's full build read wet's 2026-10-24 build (#120's second branch loaded it), #92's grades wet's 2026-10-19 load, and
 wet's public prefix keeps no older manifest, so the older load exists only where it was loaded. Its evidence is
 `data/fdis/derived_minimal` (ledger tagged `-derived_minimal`); since its promotion `data/fdis/derived` must hold the
 same tables, because `vignette_method.R` refuses any other evidence there. `0310` reads each species' range from the installed
