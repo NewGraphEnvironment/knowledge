@@ -54,7 +54,7 @@ stopifnot(nrow(sc) > 0, all(sc$groups_both < sc$groups), length(under_half) >= 2
           # could blur)
           with(curved[abs(curved$margin) > 1e-3, ], identical(grade_withheld, margin <= 0)),
           # the settings the prose quotes
-          val("prior_sd") == "2.5", val("se_region") == "1", val("folds") == "5")
+          identical(val("prior_sd"), "2.5"), identical(val("se_region"), "1"), identical(val("folds"), "5"))
 ```
 
 
