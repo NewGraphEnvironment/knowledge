@@ -112,12 +112,13 @@ or promotion.
       (NEWS.md is written by `/gh-pr-merge`'s release commit, so the entry is drafted in the PR body for it)
 
 ## Phase 3: Issues
-- [ ] File the split-off issue for batch 7, naming #173, left out of `planning/backlog.md`. It carries: the template
+- [x] File the split-off issue for batch 7 (#211), naming #173, left out of `planning/backlog.md`. It carries: the template
       (#64's order, #90's specification), the generator, a check register with each check's direction and the
       firmness columns, figure functions taken out of the article, the chinook page and #90's move, pointer files for
       the other `_tuned.md` pages, the other six fitted keys, the floodplain hectares (stale for CH), the per-key data
       bundle and readiness test (#90 item 7), and the GeoPackage style if gq#115 is not released by then
-- [ ] Edit the bodies of #81 and #77 (tick what landed) and of #90, #64 and #173 (point to the split-off issue)
+- [x] Edit the bodies of #90, #64 and #173 (point to #211)
+- [ ] Tick #81's and #77's tasks when the PR merges (`/gh-pr-merge` 3b): nothing has landed on main before then
 
 ## Validation
 

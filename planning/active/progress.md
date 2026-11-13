@@ -45,3 +45,4 @@
   basemap (built without network under R CMD check); the site map gets the scale control. No logo on either: the
   README and site carry the hex sticker (cartography skill). 97 `compare_*.png` removed (list in findings);
   0335 now reruns `vignette_context.R` before `readme_figure.R`
+- Phase 3: filed #211 (template, generator, chinook page; the six other keys and #90 item 7 named as next); #90, #64 and #173 point to it. #81 and #77 are ticked at merge
