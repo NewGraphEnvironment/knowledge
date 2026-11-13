@@ -92,8 +92,9 @@ knw_compare_map <- function(segments, water = NULL, title = "", png = NULL, html
   background <- match.arg(background)
   corner_names <- c("bottomleft", "bottomright", "topleft", "topright")
   chk::chk_character(corners)
-  if (!setequal(names(corners), c("legend", "scalebar", "keymap", "logo")) || !all(corners %in% corner_names) ||
-      anyDuplicated(corners)) {
+  bad_corners <- !setequal(names(corners), c("legend", "scalebar", "keymap", "logo")) ||
+    !all(corners %in% corner_names) || anyDuplicated(corners)
+  if (bad_corners) {
     stop("corners must name a different corner (", paste(corner_names, collapse = ", "),
          ") for each of legend, scalebar, keymap and logo", call. = FALSE)
   }
@@ -120,7 +121,9 @@ knw_compare_map <- function(segments, water = NULL, title = "", png = NULL, html
     if (!is.null(places$rivers)) chk::check_names(places$rivers, c("label", "angle"))
   }
   if (!is.null(logo)) chk::chk_file(logo)
-  if (composed && !requireNamespace("gq", quietly = TRUE)) stop("gq is needed for the scale bar, keymap and labels", call. = FALSE)
+  if (composed && !requireNamespace("gq", quietly = TRUE)) {
+    stop("gq is needed for the scale bar, keymap and labels", call. = FALSE)
+  }
   if (!requireNamespace("tmap", quietly = TRUE)) stop("tmap is needed", call. = FALSE)
   sf::sf_use_s2(FALSE)
   seg <- segments[segments$accessible %in% TRUE, ]
@@ -211,7 +214,8 @@ knw_compare_map <- function(segments, water = NULL, title = "", png = NULL, html
       } else {
         km <- gq::gq_tmap_keymap(keymap$aoi, keymap$context, corner = corners[["keymap"]], width = 0.22,
                                  asp = width / height)
-        tmap::tmap_save(fig, png, width = width, height = height, dpi = 150, insets_tm = km$map, insets_vp = km$viewport)
+        tmap::tmap_save(fig, png, width = width, height = height, dpi = 150,
+                        insets_tm = km$map, insets_vp = km$viewport)
       }
       credit <- attr(basemap, "credit")
       if (!is.null(basemap) && length(credit) && nzchar(credit)) .compare_credit_strip(png, credit)
@@ -259,7 +263,8 @@ knw_compare_map <- function(segments, water = NULL, title = "", png = NULL, html
     add(halo(places$towns, town$label$color, 0.8, "bold", ymod = 0.7))
   }
   if (scalebar) {
-    add(tmap::tm_scalebar(breaks = gq::gq_scale_breaks(window), text.size = 0.75, position = pos(corners[["scalebar"]])))
+    add(tmap::tm_scalebar(breaks = gq::gq_scale_breaks(window), text.size = 0.75,
+                          position = pos(corners[["scalebar"]])))
   }
   if (!is.null(logo)) add(tmap::tm_logo(logo, height = 2, position = pos(corners[["logo"]])))
   m
@@ -277,7 +282,8 @@ knw_compare_map <- function(segments, water = NULL, title = "", png = NULL, html
   grDevices::png(tmp, width = w, height = h + strip, res = dpi, bg = "white")
   grid::grid.newpage()
   grid::grid.raster(img, x = 0, y = 1, width = 1, height = h / (h + strip), just = c("left", "top"))
-  grid::grid.text(paste(lines, collapse = "\n"), x = grid::unit(0.01, "npc"), y = grid::unit(strip / 2, "points") * 72 / dpi,
+  grid::grid.text(paste(lines, collapse = "\n"), x = grid::unit(0.01, "npc"),
+                  y = grid::unit(strip / 2, "points") * 72 / dpi,
                   just = c("left", "centre"), gp = grid::gpar(fontsize = 5.5, col = "grey25"))
   grDevices::dev.off()
   if (!file.copy(tmp, png, overwrite = TRUE)) stop("could not write ", png, call. = FALSE)
@@ -292,7 +298,9 @@ knw_compare_map <- function(segments, water = NULL, title = "", png = NULL, html
   f <- system.file("gq", "compare.csv", package = "knowledge", mustWork = TRUE)
   reg <- utils::read.csv(f, colClasses = "character", na.strings = character())
   reg <- reg[reg$layer_key == layer, , drop = FALSE]
-  if (!nrow(reg) || anyDuplicated(reg$class_label)) stop("inst/gq/compare.csv: no or duplicated classes for ", layer, call. = FALSE)
+  if (!nrow(reg) || anyDuplicated(reg$class_label)) {
+    stop("inst/gq/compare.csv: no or duplicated classes for ", layer, call. = FALSE)
+  }
   stats::setNames(reg$stroke_color, reg$class_label)
 }
 .compare_rule_labels <- function() names(.compare_cols("compare_rule"))
@@ -407,7 +415,8 @@ knw_compare_mapgl <- function(segments, water = NULL, title = "",
                           line_width = width, popup = pop$expr) |>
     mapgl::add_line_layer("grade", source = "knw_seg",
                           line_color = mapgl::match_expr("gc", values = seq_along(grade_cols),
-                                                         stops = unname(grade_cols), default = unname(grade_cols[["not graded"]])),
+                                                         stops = unname(grade_cols),
+                                                         default = unname(grade_cols[["not graded"]])),
                           line_width = width, popup = pop$expr, visibility = "none") |>
     mapgl::add_categorical_legend(legend_title = title, values = names(rule_cols),
                                   colors = unname(rule_cols), position = "top-left", layer_id = "rules",

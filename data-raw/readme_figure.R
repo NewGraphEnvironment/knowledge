@@ -30,8 +30,9 @@ basemap <- gq::gq_basemap_blend(topo, relief, method = "gamma", gamma = 1)
 stopifnot(nzchar(attr(basemap, "credit")))
 
 out <- "man/figures/readme-bulk.png"
-# 5 in at 150 dpi (750 px), shown at 70 % of the README column (about 600 px). Each element sits where the group is not: the legend over Babine
-# Lake to the north-east, the keymap to the south-west, the scale bar in the north-west corner beyond the group's edge
+# 5 in at 150 dpi (750 px), shown at 70 % of the README column (about 600 px). Each element sits where the group is
+# not: the legend over Babine Lake to the north-east, the keymap to the south-west, the scale bar in the north-west
+# corner beyond the group's edge
 knw_compare_map(seg, water, png = out, panels = "rules", width = 5, scalebar = TRUE,
                 keymap = list(aoi = ctx$aoi, context = ctx$bc), places = list(towns = ctx$towns, rivers = ctx$rivers),
                 basemap = basemap,

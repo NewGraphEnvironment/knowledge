@@ -46,3 +46,8 @@
   README and site carry the hex sticker (cartography skill). 97 `compare_*.png` removed (list in findings);
   0335 now reruns `vignette_context.R` before `readme_figure.R`
 - Phase 3: filed #211 (template, generator, chinook page; the six other keys and #90 item 7 named as next); #90, #64 and #173 point to it. #81 and #77 are ticked at merge
+- Validation: full suite `[ FAIL 0 | WARN 0 | SKIP 4 | PASS 2361 ]` (skips: no fresh_default_20261017, no ignored FDIS
+  build, KNW_CHECK_GRADES unset, no cut-points stage). Lints on the touched files: 51 new against origin/main, then 16
+  after wrapping; the rest are `object_usage` on helpers the installed knowledge 0.4.36 lacks and 0330's script
+  globals, two header/fixture forms the existing files share. `check_pkgdown()` clean. Touched tests after the lint
+  edits: `[ FAIL 0 | SKIP 3 | PASS 495 ]`

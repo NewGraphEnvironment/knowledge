@@ -117,7 +117,8 @@ test_that("knw_compare_mapgl colours every class in hex, places the legends and 
   colours <- unlist(lapply(m$x$layers, function(l) unlist(l$paint[grepl("color", names(l$paint))])))
   colours <- colours[!grepl("^(match|get|rc|gc)$", colours) & is.na(suppressWarnings(as.numeric(colours)))]
   expect_true(all(grepl("^#[0-9a-f]{6}$", colours)), info = paste(unique(colours), collapse = " "))
-  expect_true(all(grepl("^#[0-9a-f]{6}$", c(knowledge:::.compare_cols("compare_rule"), knowledge:::.compare_cols("compare_grade")))))
+  hex <- c(knowledge:::.compare_cols("compare_rule"), knowledge:::.compare_cols("compare_grade"))
+  expect_true(all(grepl("^#[0-9a-f]{6}$", hex)))
   json <- as.character(jsonlite::toJSON(m$x, auto_unbox = TRUE, null = "null"))
   # the legends top-left, the layer switch top-right and the attribution along the bottom, so none share a corner
   expect_identical(m$x$layers_control$position, "top-right")
@@ -222,7 +223,8 @@ test_that(".knw_rule_class gives each pair of flags its class, a missing flag re
   expect_identical(got, lab[c(1, 2, 3, 4, 3, 2)])
   expect_error(knowledge:::.knw_rule_class(TRUE, TRUE, lab[1:3]))
   # a segment the species cannot reach has no class, whatever its flags
-  expect_identical(knowledge:::.knw_rule_class(c(TRUE, FALSE, TRUE), c(TRUE, FALSE, FALSE), lab, accessible = c(TRUE, FALSE, NA)),
+  expect_identical(knowledge:::.knw_rule_class(c(TRUE, FALSE, TRUE), c(TRUE, FALSE, FALSE), lab,
+                                               accessible = c(TRUE, FALSE, NA)),
                    c(lab[1], NA, NA))
 })
 
@@ -257,10 +259,13 @@ ctx_fx <- function() {
     geometry = sf::st_sfc(lapply(0:3, function(i) {
       sf::st_linestring(rbind(c(1e6 + i * 4000, 1e6), c(1e6 + (i + 1) * 4000, 1e6 + 30000)))
     }), crs = 3005))
-  box <- function(x0, y0, x1, y1) sf::st_sf(geometry = sf::st_as_sfc(sf::st_bbox(c(xmin = x0, ymin = y0, xmax = x1, ymax = y1), crs = 3005)))
+  box <- function(x0, y0, x1, y1) {
+    sf::st_sf(geometry = sf::st_as_sfc(sf::st_bbox(c(xmin = x0, ymin = y0, xmax = x1, ymax = y1), crs = 3005)))
+  }
   list(seg = seg, aoi = box(1e6, 1e6, 1.02e6, 1.03e6), context = box(0.8e6, 0.8e6, 1.4e6, 1.4e6),
        towns = sf::st_sf(label = "Townsville", geometry = sf::st_sfc(sf::st_point(c(1.008e6, 1.012e6)), crs = 3005)),
-       rivers = sf::st_sf(label = "Big River", angle = 30, geometry = sf::st_sfc(sf::st_point(c(1.012e6, 1.02e6)), crs = 3005)))
+       rivers = sf::st_sf(label = "Big River", angle = 30,
+                          geometry = sf::st_sfc(sf::st_point(c(1.012e6, 1.02e6)), crs = 3005)))
 }
 px_of <- function(f) png::readPNG(f)[, , 1:3]
 
@@ -275,10 +280,10 @@ test_that("a composed map takes its canvas from the window's shape, and its extr
   expect_equal(dim(png::readPNG(f))[1:2], round(c(4 * 34 / 24, 4) * 150), tolerance = 1e-3)
   expect_error(knw_compare_map(fx$seg, png = f, panels = "rules", scalebar = TRUE), "need `width`")
   expect_error(knw_compare_map(fx$seg, png = f, width = 4), "draws one panel")
-  expect_error(knw_compare_map(fx$seg, png = f, panels = "rules", width = 4,
-                               corners = c(legend = "topleft", scalebar = "topleft", keymap = "topright", logo = "bottomright")),
-               "different corner")
-  expect_error(knw_compare_map(fx$seg, png = f, panels = "rules", width = 4, keymap = list(aoi = fx$aoi)), "aoi` and `context")
+  same <- c(legend = "topleft", scalebar = "topleft", keymap = "topright", logo = "bottomright")
+  expect_error(knw_compare_map(fx$seg, png = f, panels = "rules", width = 4, corners = same), "different corner")
+  expect_error(knw_compare_map(fx$seg, png = f, panels = "rules", width = 4, keymap = list(aoi = fx$aoi)),
+               "aoi` and `context")
   expect_error(knw_compare_map(fx$seg, png = f, panels = "rules", width = 4, places = list(rivers = fx$towns)), "angle")
 })
 
@@ -325,7 +330,8 @@ test_that("a keymap reaches the saved figure as an inset in its corner (#77)", {
   real <- tmap::tmap_save
   local_mocked_bindings(tmap_save = function(tm, filename, ..., insets_tm = NULL, insets_vp = NULL) {
     seen[[length(seen) + 1]] <<- list(tm = insets_tm, vp = insets_vp)
-    if (is.null(insets_tm)) real(tm, filename, ...) else real(tm, filename, ..., insets_tm = insets_tm, insets_vp = insets_vp)
+    if (is.null(insets_tm)) return(real(tm, filename, ...))
+    real(tm, filename, ..., insets_tm = insets_tm, insets_vp = insets_vp)
   }, .package = "tmap")
   f <- tempfile(fileext = ".png")
   knw_compare_map(fx$seg, png = f, panels = "rules", width = 4, keymap = list(aoi = fx$aoi, context = fx$context),

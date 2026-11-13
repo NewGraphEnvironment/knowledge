@@ -23,7 +23,9 @@ promote_fx <- function(ev = "e1", ch_rule = "mad>=0.5|g<=0.07|none", env = paren
   d <- withr::local_tempdir(.local_envir = env)
   tn <- file.path(d, "tune"); cm <- file.path(d, "compare")
   ct <- file.path(tn, "candidate", "r1"); cc <- file.path(cm, "candidate", "r1")
-  for (x in c(tn, cm, ct, cc, file.path(d, "logs"), file.path(cm, "gpkg"), file.path(cc, "gpkg"))) dir.create(x, recursive = TRUE)
+  for (x in c(tn, cm, ct, cc, file.path(d, "logs"), file.path(cm, "gpkg"), file.path(cc, "gpkg"))) {
+    dir.create(x, recursive = TRUE)
+  }
   key_files <- function(dir_t, dir_c, k, rule, ev, tag) {
     sp <- sub("_.*", "", k); st <- sub(".*_", "", k)
     utils::write.csv(data.frame(species_code = sp, stage = st, status = "fitted", rule_recommended = rule,

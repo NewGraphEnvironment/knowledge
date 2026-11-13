@@ -95,7 +95,9 @@ if (identical(stage_only, "maps")) {
   stop("STAGE=maps is gone (#173): STAGE=floodplain writes the floodplain table, STAGE=gpkg the GeoPackages for QGIS, ",
        "and data-raw/readme_figure.R and the chinook article draw the example maps")
 }
-if (!stage_only %in% c("", "floodplain", "gpkg")) stop("STAGE must be unset, 'floodplain' or 'gpkg', not '", stage_only, "'")
+if (!stage_only %in% c("", "floodplain", "gpkg")) {
+  stop("STAGE must be unset, 'floodplain' or 'gpkg', not '", stage_only, "'")
+}
 if (!structures %in% c("", "reported", "all")) stop("STRUCTURES must be unset, 'reported' or 'all', not '", structures, "'")
 schema <- Sys.getenv("SCHEMA", "fresh_default")  # the run's persist schema, by its current name (renamed after the run, #73)
 catalog_bucket <- "https://stac-floodplains-bc.s3.us-west-2.amazonaws.com"
@@ -118,7 +120,9 @@ if (promoted) {
     x <- read_csv(f, show_col_types = FALSE, col_types = cols(.default = "c"))
     if ("tune_run" %in% names(x)) stats::na.omit(x$tune_run) else character()
   })))
-  if (length(run) != 1L) stop("data/tune's summaries name ", length(run), " tuning runs (", paste(run, collapse = ", "), "), not one")
+  if (length(run) != 1L) {
+    stop("data/tune's summaries name ", length(run), " tuning runs (", paste(run, collapse = ", "), "), not one")
+  }
   dir_out <- "data/compare"
 } else {
   run <- basename(tune_dir)
@@ -127,9 +131,10 @@ if (promoted) {
 dir_gpkg <- file.path(dir_out, "gpkg")
 dir_cat <- "data/compare/catalog"
 # a pass over some species names them, and a second pass of the day is numbered: a log is never written over
-path_log <- .knw_free_path(file.path(if (promoted) dir_gpkg else dir_out, paste0(format(Sys.time(), "%Y%m%d", tz = "UTC"), "_compare-", run,
-                                                     if (nzchar(only)) paste0("-", tolower(gsub(",", "_", only))),
-                                                     if (nzchar(stage_only)) paste0("-", stage_only), ".txt")))
+path_log <- .knw_free_path(file.path(if (promoted) dir_gpkg else dir_out,
+                                     paste0(format(Sys.time(), "%Y%m%d", tz = "UTC"), "_compare-", run,
+                                            if (nzchar(only)) paste0("-", tolower(gsub(",", "_", only))),
+                                            if (nzchar(stage_only)) paste0("-", stage_only), ".txt")))
 for (d in c(dir_out, dir_cat, dir_gpkg)) dir.create(d, showWarnings = FALSE, recursive = TRUE)
 # the run's floodplain table holds every key a drawing has reached: `drop` takes the given keys' rows out and `new`
 # (a drawing's rows) goes in, written to a sibling and moved over, so a pass never leaves half a table (#111)
@@ -369,17 +374,17 @@ run_one <- function(job) {
   out
 }
 # one GeoPackage per species x stage for QGIS (#81): every segment with its verdict under each rule and structure, its
-# class under the reported structure (kept, lost, gained, neither; `rule_class`, the registry's labels) and the waterbody
-# it runs through with that waterbody's area (`water`, `water_ha`, #173), so a kept stretch with a low grade explains
-# itself; written group by group from link's geometry and the segments the comparison saved, with a `run` table naming
+# class under the reported structure (kept, lost, gained, neither; `rule_class`, the registry's labels) and the
+# waterbody it runs through with that waterbody's area (`water`, `water_ha`, #173), so a kept stretch with a low grade
+# explains itself; written group by group from link's geometry and the segments the comparison saved, with a `run` table naming
 # the run, so a GeoPackage left from an older run says so, and QGIS styles for the rule and grade classes in its
 # layer_styles table (gq#115). Run on a socket worker per key, so the package's helpers come in as arguments
 gpkg_one <- function(key, schema, dir_gpkg, dir_seg, flag, rule_labels, rule_class_fun, water_fun, run_info, styles) {
   t1 <- Sys.time()
   tryCatch({
     seg <- readRDS(file.path(dir_seg, paste0(key, "_segments.rds")))
-    seg$rule_class <- rule_class_fun(seg[[paste0(flag[[key]], "_default")]], seg[[paste0(flag[[key]], "_tuned")]], rule_labels,
-                                     accessible = seg$accessible)
+    seg$rule_class <- rule_class_fun(seg[[paste0(flag[[key]], "_default")]], seg[[paste0(flag[[key]], "_tuned")]],
+                                     rule_labels, accessible = seg$accessible)
     # a reachable segment with no grade reads "not graded", the class the maps and the GeoPackage's style give it
     seg$grade_class[is.na(seg$grade_class) & seg$accessible %in% TRUE] <- "not graded"
     # written as <key>.part.gpkg and renamed when every group is in (#111): a pass killed part way leaves a part file,
@@ -390,8 +395,9 @@ gpkg_one <- function(key, schema, dir_gpkg, dir_seg, flag, rule_labels, rule_cla
     conn <- DBI::dbConnect(RPostgres::Postgres(), bigint = "numeric")
     on.exit(DBI::dbDisconnect(conn))
     for (w in sort(unique(seg$watershed_group_code))) {
-      geom <- sf::st_zm(sf::st_read(conn, quiet = TRUE, query = sprintf(
-        "SELECT id_segment, waterbody_key, geom FROM %s.streams WHERE watershed_group_code = '%s'", schema, w)), drop = TRUE)
+      q <- sprintf("SELECT id_segment, waterbody_key, geom FROM %s.streams WHERE watershed_group_code = '%s'",
+                   schema, w)
+      geom <- sf::st_zm(sf::st_read(conn, quiet = TRUE, query = q), drop = TRUE)
       geom$id_segment <- as.numeric(geom$id_segment)
       geom$waterbody_key <- as.numeric(geom$waterbody_key)
       wb <- water_fun(conn, schema, w)
@@ -422,7 +428,8 @@ write_gpkgs <- function(keys) {
   environment(rule_class_fun) <- globalenv()
   water_fun <- .knw_segment_water
   environment(water_fun) <- globalenv()
-  args <- list(schema = schema, dir_gpkg = dir_gpkg, dir_seg = dir_out, flag = flag, rule_labels = .compare_rule_labels(),
+  args <- list(schema = schema, dir_gpkg = dir_gpkg, dir_seg = dir_out, flag = flag,
+               rule_labels = .compare_rule_labels(),
                rule_class_fun = rule_class_fun, water_fun = water_fun,
                run_info = data.frame(tune_run = run, link_run_uid = run_uid, schema = schema, promoted = promoted),
                styles = .compare_qgis_styles())
@@ -598,12 +605,16 @@ if (stage_only == "floodplain") {
                                               flag_default = .data[[paste0(flag, "_default")]], flag_tuned = .data[[paste0(flag, "_tuned")]]),
                                by = "id_segment")
       fp <- tryCatch(knw_floodplain_ha(gpkg_of(w), sg, c("flag_default", "flag_tuned", "accessible")),
-                     error = function(e) { say("  %s %s floodplain: %s", k, w, conditionMessage(e)); NULL })
+                     error = function(e) {
+                       say("  %s %s floodplain: %s", k, w, conditionMessage(e))
+                       NULL
+                     })
       if (!is.null(fp)) {
         fp_rows[[paste(k, w)]] <- fp$summary |>
           mutate(species_code = sp, stage = stage, watershed_group_code = w,
                  floodplain_ha = fp$check[["floodplain_ha"]], ties = fp$check[["ties"]],
-                 rule = unname(c(flag_default = "default", flag_tuned = "tuned", accessible = "accessible")[fp$summary$flag]),
+                 rule = unname(c(flag_default = "default", flag_tuned = "tuned",
+                                 accessible = "accessible")[fp$summary$flag]),
                  tune_run = run, config_sha = r$compare$config_sha[1], tuned_rule = r$compare$tuned_rule[1])
       }
     }

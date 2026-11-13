@@ -122,8 +122,8 @@ or promotion.
 
 ## Validation
 
-- [ ] Tests pass (`devtools::test()`, with `NOT_CRAN=true` for any single-file rerun)
-- [ ] `lintr` compared per file against `origin/main`; `devtools::document()`; `pkgdown::check_pkgdown()`; the site
+- [x] Tests pass (`devtools::test()`, with `NOT_CRAN=true` for any single-file rerun)
+- [x] `lintr` compared per file against `origin/main`; `devtools::document()`; `pkgdown::check_pkgdown()`; the site
       builds the three articles
 - [ ] `/code-check` clean (once over the branch with `/code-check branch`, three-round floor)
 - [ ] PWF checkboxes match landed work

@@ -5,8 +5,9 @@
 # the article's static map can carry a keymap, a scale bar and labels with no database at build time.
 #
 # WHY / DESIGN NOTES:
-#   - THE GROUP IS THE BUNDLE'S: the map group is read from inst/vignette-data/chinook_rearing.rds and recorded here, so a
-#     bundle drawn for another group is caught by readme_figure.R and the article's check, not drawn under this outline.
+#   - THE GROUP IS THE BUNDLE'S: the map group is read from inst/vignette-data/chinook_rearing.rds and recorded here,
+#     so a bundle drawn for another group is caught by readme_figure.R and the article's check, not drawn under this
+#     outline.
 #   - A SCRIPT OF ITS OWN, not data-raw/vignette_chinook.R: that script rewrites bulk_segments.rds, whose md5 method.rds
 #     pins, and needs the run's schema and ignored grade table. Nothing here moves a file a promotion owns.
 #   - BRITISH COLUMBIA is the Freshwater Atlas's watershed groups merged and simplified at bc_simplify_m: a keymap needs
@@ -16,8 +17,8 @@
 #     town_buffer_m. The Province's BC Geographical Names and its municipal boundaries are both "Access Only" in the BC
 #     Data Catalogue, so neither is stored here (inst/NOTICE.md).
 #   - THE RIVERS are the Atlas's named streams of stream order river_order or more and at least river_km long in the
-#     group, merged by name. Each label sits at the point of the river's line nearest the middle of its length, turned to
-#     the line's direction there and kept upright.
+#     group, merged by name. Each label sits at the point of the river's line nearest the middle of its length,
+#     turned to the line's direction there and kept upright.
 #
 # INPUT:  inst/vignette-data/chinook_rearing.rds; an fwapg database (PG* or PGSERVICE); NRCan's geonames service
 # OUTPUT: inst/vignette-data/bulk_context.rds   aoi (the group), bc (the province), towns, rivers (sf, EPSG:3005), meta
@@ -85,8 +86,8 @@ rivers <- sf::st_sf(label = streams$label, km = round(streams$km, 1), angle = va
 
 # the towns, from NRCan's open names service, inside the group buffered
 bb <- sf::st_bbox(sf::st_transform(sf::st_buffer(aoi, town_buffer_m), 4326))
-url <- sprintf("%s?bbox=%.4f,%.4f,%.4f,%.4f&concise=%s", geonames, bb[["xmin"]], bb[["ymin"]], bb[["xmax"]], bb[["ymax"]],
-               paste(town_concise, collapse = ","))
+url <- sprintf("%s?bbox=%.4f,%.4f,%.4f,%.4f&concise=%s", geonames,
+               bb[["xmin"]], bb[["ymin"]], bb[["xmax"]], bb[["ymax"]], paste(town_concise, collapse = ","))
 tmp <- tempfile(fileext = ".json")
 h <- curl::curl_fetch_disk(url, tmp, handle = curl::new_handle(timeout = 60, followlocation = TRUE))
 if (h$status_code != 200) stop("geonames: HTTP ", h$status_code, " for ", url)
@@ -103,12 +104,12 @@ stopifnot(nrow(towns) > 0)
 out <- list(aoi = aoi, bc = bc, towns = towns, rivers = rivers,
             meta = list(written = format(Sys.time(), "%Y-%m-%dT%H:%M:%SZ", tz = "UTC"), map_group = wsg,
                         bundle_md5 = unname(tools::md5sum(f_bundle)),
-                        sources = c(aoi = "Freshwater Atlas watershed groups (whse_basemapping.fwa_watershed_groups_poly)",
+                        sources = c(aoi = "Freshwater Atlas watershed groups (fwa_watershed_groups_poly)",
                                     bc = "the same, merged and simplified",
-                                    towns = "Canadian Geographical Names Database, Natural Resources Canada (geonames service)",
-                                    rivers = "Freshwater Atlas stream network (whse_basemapping.fwa_stream_networks_sp)"),
+                                    towns = "Canadian Geographical Names Database, NRCan (geonames service)",
+                                    rivers = "Freshwater Atlas stream network (fwa_stream_networks_sp)"),
                         settings = c(bc_simplify_m = bc_simplify_m, aoi_simplify_m = aoi_simplify_m,
                                      town_buffer_m = town_buffer_m, river_order = river_order, river_km = river_km)))
 saveRDS(out, f_out)
-message(f_out, ": ", wsg, "; towns ", paste(towns$label, collapse = ", "), "; rivers ", paste(rivers$label, collapse = ", "),
-        "; ", round(file.size(f_out) / 1024), " KB")
+message(f_out, ": ", wsg, "; towns ", paste(towns$label, collapse = ", "),
+        "; rivers ", paste(rivers$label, collapse = ", "), "; ", round(file.size(f_out) / 1024), " KB")
