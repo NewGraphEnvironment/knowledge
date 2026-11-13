@@ -308,7 +308,8 @@ knw_compare_map <- function(segments, water = NULL, title = "", png = NULL, html
 # the comparison GeoPackage's QGIS styles, from the same registry through gq (gq#115): rule class first, the default a
 # GeoPackage opens with, and grade class second. Needs a gq with gq_qgis_style(); stops naming it otherwise.
 .compare_qgis_styles <- function() {
-  if (!requireNamespace("gq", quietly = TRUE) || !exists("gq_qgis_style", asNamespace("gq"))) {
+  if (!requireNamespace("gq", quietly = TRUE) || !exists("gq_qgis_style", asNamespace("gq")) ||
+      !exists("gq_gpkg_style_write", asNamespace("gq"))) {
     stop("the comparison GeoPackage's styles need gq's gq_qgis_style() and gq_gpkg_style_write() (gq#115): ",
          "update gq", call. = FALSE)
   }

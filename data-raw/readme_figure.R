@@ -27,7 +27,10 @@ topo <- gq::gq_basemap_tiles(window, provider = "Esri.WorldTopoMap", zoom = 10, 
 relief <- gq::gq_basemap_tiles(window, provider = "Esri.WorldShadedRelief", zoom = 10, crs = 3005)
 if (is.null(topo) || is.null(relief)) stop("the Esri tiles did not arrive: the README figure needs network")
 basemap <- gq::gq_basemap_blend(topo, relief, method = "gamma", gamma = 1)
-stopifnot(nzchar(attr(basemap, "credit")))
+# Esri's attribution is what lets the figure carry its tiles (Al, 2026-11-13): a NULL credit must stop the script, and
+# nzchar(NULL) is logical(0), which stopifnot() passes
+credit <- attr(basemap, "credit")
+stopifnot(is.character(credit), length(credit) == 1L, nzchar(credit))
 
 out <- "man/figures/readme-bulk.png"
 # 5 in at 150 dpi (750 px), shown at 70 % of the README column (about 600 px). Each element sits where the group is

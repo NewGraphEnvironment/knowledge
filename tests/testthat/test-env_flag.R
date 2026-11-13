@@ -27,3 +27,14 @@ test_that("0330 reads GPKG through .knw_env_flag, off unless asked (#173)", {
   code <- readLines(src)
   expect_true(any(grepl('^gpkg <- \\.knw_env_flag\\("GPKG"\\)$', code)))
 })
+
+test_that("0330 builds the GeoPackage styles before it connects or compares anything (#173, review round 1)", {
+  src <- testthat::test_path("..", "..", "scripts", "0330-compare.R")
+  skip_if_not(file.exists(src), "scripts/ is not in the installed package")
+  code <- readLines(src)
+  styles <- grep("^gpkg_styles <- if \\(gpkg \\|\\| identical\\(stage_only, \"gpkg\"\\)\\) \\.compare_qgis_styles\\(\\)", code)
+  first_conn <- grep("pg\\(\\)", code)
+  expect_length(styles, 1)
+  expect_lt(styles, min(first_conn))
+  expect_false(any(grepl("styles = \\.compare_qgis_styles\\(\\)", code)))
+})

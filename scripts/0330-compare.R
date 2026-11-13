@@ -99,6 +99,9 @@ if (!stage_only %in% c("", "floodplain", "gpkg")) {
   stop("STAGE must be unset, 'floodplain' or 'gpkg', not '", stage_only, "'")
 }
 if (!structures %in% c("", "reported", "all")) stop("STRUCTURES must be unset, 'reported' or 'all', not '", structures, "'")
+# the GeoPackages' QGIS styles, built before any work: a gq without the QML writer (gq#115) found only after every
+# key's comparison stopped the run after its tables were cleared, with nothing written (#173's review, round 1)
+gpkg_styles <- if (gpkg || identical(stage_only, "gpkg")) .compare_qgis_styles() else NULL
 schema <- Sys.getenv("SCHEMA", "fresh_default")  # the run's persist schema, by its current name (renamed after the run, #73)
 catalog_bucket <- "https://stac-floodplains-bc.s3.us-west-2.amazonaws.com"
 catalog_items <- "../stac_floodplains_bc/data/stac"      # the catalog repo's item records
@@ -432,7 +435,7 @@ write_gpkgs <- function(keys) {
                rule_labels = .compare_rule_labels(),
                rule_class_fun = rule_class_fun, water_fun = water_fun,
                run_info = data.frame(tune_run = run, link_run_uid = run_uid, schema = schema, promoted = promoted),
-               styles = .compare_qgis_styles())
+               styles = gpkg_styles)
   gl <- if (workers > 1L && length(keys) > 1L) {
     cl <- parallel::makeCluster(min(workers, length(keys)))
     tryCatch(do.call(parallel::parLapplyLB, c(list(cl, keys, gpkg_one), args)), finally = parallel::stopCluster(cl))

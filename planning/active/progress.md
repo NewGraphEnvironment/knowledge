@@ -51,3 +51,9 @@
   after wrapping; the rest are `object_usage` on helpers the installed knowledge 0.4.36 lacks and 0330's script
   globals, two header/fixture forms the existing files share. `check_pkgdown()` clean. Touched tests after the lint
   edits: `[ FAIL 0 | SKIP 3 | PASS 495 ]`
+- /code-check branch round 1 (`review-round1.md`): 3 findings, all reproduced and fixed. (1) `0330` built the
+  GeoPackage styles only after every key's comparison, so a gq without the QML writer stopped a GPKG run after its
+  tables were cleared: the styles are now built before any work, with a source test. (2) `.knw_segment_water()` gave
+  every river NA area (`fwa_rivers_poly` not joined; 115 of 115 BULK rivers): joined, and `vignette_chinook.R` now
+  calls the same helper (its popups had the same gap; it reruns at the next promotion). (3) `readme_figure.R`'s credit
+  check passed on a NULL credit (`nzchar(NULL)` is `logical(0)`): now requires one non-empty string

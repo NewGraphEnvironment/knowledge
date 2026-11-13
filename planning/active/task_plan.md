@@ -124,7 +124,7 @@ or promotion.
 
 - [x] Tests pass (`devtools::test()`, with `NOT_CRAN=true` for any single-file rerun)
 - [x] `lintr` compared per file against `origin/main`; `devtools::document()`; `pkgdown::check_pkgdown()`; the site
-      builds the three articles
+      builds the three articles (built 2026-11-13 with IN_PKGDOWN: all three, the site map carries the scale control)
 - [ ] `/code-check` clean (once over the branch with `/code-check branch`, three-round floor)
 - [ ] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion
