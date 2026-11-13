@@ -108,11 +108,11 @@ What exploration found that shapes the phases:
 - [x] The built site has `articles/tuning-bayesian-practice.html`, the articles index page does not list it, the
       navbar does not carry it, and the link from `#se` resolves
 - [x] `bayesian_alignment_check.R` passes on the research file and on the article
-- [ ] Rendered article sent to the phone for review before the merge
+- [ ] Rendered article sent to the phone for review before the merge (by `/gh-pr-push` step 9, after the archive)
 - [x] No `rule`/`rules` outside code and quotes in the new article (`grep -nE '\brules?\b'`)
 - [x] The Articles menu is unchanged from main's (navbar HTML diff) and `test-pkgdown-navbar.R` passes
 - [x] A blind readability pass on the rendered text before and after the claim review (writing.md)
 - [x] `/code-check branch` clean
 - [x] PWF checkboxes match landed work
-- [ ] `/planning-archive` on completion
+- [x] `/planning-archive` on completion
 
