@@ -162,8 +162,9 @@ test_that("the methodology bundle's scope covers every published key, with its g
   # every published key: the bundle's site-gradient limits come from data/thresholds.csv, a producer scope does not read
   expect_setequal(s$key, x$site_gradient$limits$key)
   expect_true(all(s$status %in% c("fitted", "underpowered")))
-  expect_false(anyNA(s[c("groups", "groups_both", "grade_withheld")]))
-  expect_true(all(s$groups_both <= s$groups))
+  expect_false(anyNA(s[c("groups", "groups_both", "groups_all", "groups_none", "grade_withheld")]))
+  # each group has both outcomes, every site caught, or none did
+  expect_identical(s$groups_both + s$groups_all + s$groups_none, s$groups)
   skip_if_not(has_src, "no source-tree data/ (installed package)")
   thr <- utils::read.csv(file.path(root, "data", "thresholds.csv"), stringsAsFactors = FALSE)
   expect_setequal(s$key, unique(paste(thr$species_code, thr$stage, sep = "_")[!is.na(thr$value)]))
