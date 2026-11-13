@@ -59,16 +59,16 @@ What exploration found that shapes the phases:
       `groups_both <= groups`.
 
 ## Phase 2: The article
-- [ ] `vignettes/tuning-bayesian-practice.Rmd`, written as a `bookdown::html_vignette2` in the series' style. It
+- [x] `vignettes/tuning-bayesian-practice.Rmd`, written as a `bookdown::html_vignette2` in the series' style. It
       reads `method.rds` and computes every number inline. Each sentence a number supports gets a `stopifnot()`
       that pins it. Prose says "fish habitat definition" at first mention and "habitat definition" after, never "rule".
-- [ ] Shape (writing.md):
+- [x] Shape (writing.md):
   - Headings are the reader's questions.
   - It opens with the answer: what stands, where it differs, what changes next.
   - Each section teaches the principle in a sentence or two, then gives the method's numbers.
   - It stands alone and defines its terms in their own place (held-out score, fixed vs pooled group, prior as
     penalty).
-- [ ] Sections, from the issue:
+- [x] Sections, from the issue:
   1. The held-out comparison and the SE of a difference (aligned).
   2. The prior as a penalty at BDA3's scale.
   3. What the held-out score measures: ranking within a group, not a new group's level.
@@ -79,15 +79,15 @@ What exploration found that shapes the phases:
   7. Limits: what the review did not test.
   8. References.
 - [x] Phase 1 follow-up from the plan review (A2): scope check and test allow a failed curve, never recompute the flag
-- [ ] Use a few short quotes from the two books, each in `"…" [@key, p. N]` form, taken from passages the research
+- [x] Use a few short quotes from the two books, each in `"…" [@key, p. N]` form, taken from passages the research
       file already checked.
-- [ ] `_pkgdown.yml`: add an `- title: internal` section listing `tuning-bayesian-practice`.
-- [ ] `vignettes/tuning-method.Rmd`: add one sentence at the end of `#se` linking the article.
-- [ ] `data-raw/vignette_bib.R`: add a `bib_write()` line for the new article, update its header, and rerun it with
+- [x] `_pkgdown.yml`: add an `- title: internal` section listing `tuning-bayesian-practice`.
+- [x] `vignettes/tuning-method.Rmd`: add one sentence at the end of `#se` linking the article.
+- [x] `data-raw/vignette_bib.R`: add a `bib_write()` line for the new article, update its header, and rerun it with
       Zotero running. It refuses any key Zotero does not return.
 
 ## Phase 3: Checks on the article's quotes and claims
-- [ ] `data-raw/bayesian_alignment_check.R`: accept `[@key, p. N]` quotes, a `n_quotes` per file, coverage tables only
+- [x] `data-raw/bayesian_alignment_check.R`: accept `[@key, p. N]` quotes, a `n_quotes` per file, coverage tables only
       for the research file, fenced chunks stripped, and a named log for the article (plan review G5). Was: an article mode (`RMD=`). It reads `"…" [@key, p. N]` quotes, checks
       each against its PDF page as the research mode does, and holds the article's own `n_quotes`. Coverage tables
       are skipped in this mode. Run it on both files and commit the logs.

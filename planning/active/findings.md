@@ -38,3 +38,14 @@ Waits for #203 (the scorer and curve changes) only if the article describes them
   after Nov 4, and by #118's rule a moved `where` does not stale the bundle. No printed value moved.
 - `scope`: CH rearing 45 of 111 groups, ST rearing 11 of 78, WCT rearing 6 of 14; withheld by the gate: BT spawning
   (by 0.56), CO rearing (by 58.1), WCT rearing (by 106.3); GR rearing published by 14.4.
+
+## Phase 2-3 (2026-11-13)
+
+- The group library's *Statistical Rethinking* item (7UX9T7RQ) was a `document` with no publisher, edition, DOI or
+  URL, so the References printed it with no link. PATCHed through the Web API to a `book`: 2nd ed., Chapman and
+  Hall/CRC, Boca Raton, DOI 10.1201/9780429029608 (CrossRef), ISBN; the citation key held. The bib rerun after the
+  sync left the three existing `.bib` files unchanged.
+- The quote check accepts pandoc's `[@key, p. N]`, blanks an Rmd's front matter and fenced chunks, and skips the
+  coverage tables for the article. Mutations each failed it: a changed word, a stray quote mark near a citation,
+  mismatched brackets, a wrong page. Research file: 23 quotes PASS; article: 6 quotes PASS.
+- The local `build_article()` wrote `pkgdown/favicon/` into the tree (pkgdown-publishing convention); deleted.

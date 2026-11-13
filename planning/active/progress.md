@@ -8,3 +8,5 @@
 - Next: start Phase 1
 - Phase 1 done: `scope` in `method.rds` (1745fba5 for the script), bundle rebuilt, test added; 20 tests in
   test-vignette-data.R pass (2 skipped: opt-in grade check, cut-points stage)
+- Plan review folded (87af2689): navbar written out, scope check allows a failed curve; bundle rebuilt at it
+- Phase 2: article, `_pkgdown.yml` internal section, link from `#se`, bib; Zotero item fixed. Quote check extended.
