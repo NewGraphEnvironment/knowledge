@@ -40,7 +40,8 @@
 # OUTPUT: inst/vignette-data/method.rds   one named list: pipeline, settings (with each where's resolved value),
 #         funnel, funnel_species, steps, picks, gradient_sensitivity, segment_at_site, site_gradient (#121: the measured
 #         site gradient against link's segment gradient, and the flips at every published gradient limit), examples,
-#         svg (flow, lineage), meta (md5 of every source, written date, commit)
+#         svg (flow, lineage), scope (#204: each published key's watershed groups, those with both outcomes, and its
+#         grade gate), meta (md5 of every source, written date, commit)
 # RUN:    Rscript data-raw/vignette_method.R   (from the repo root, after any rerun of 0230, 0310, 0320 or 0330, and
 #         after any change to the registers)
 # ---------------------------------------------------------------------------
@@ -488,11 +489,26 @@ dot_lin <- paste0("digraph lineage {\n", head_dot, "\nnode [width=1.4, fontsize=
 svg_of <- function(dot) DiagrammeRsvg::export_svg(DiagrammeR::grViz(dot))
 svg <- list(flow = svg_of(dot_flow), lineage = svg_of(dot_lin))
 
+# ---- the scorer's groups and the grade gate, per published key (#204) -----------------------------------------------
+# every key the run publishes (fitted or underpowered, so WCT rearing is in): the watershed groups its visits fall in,
+# those with both outcomes (the only ones the fixed-intercept scorer and the curve keep), and the gate, the curve's
+# held-out deviance against no habitat definition's on the same visits (grade_withheld when it is no lower)
+scope <- summ |>
+  filter(status %in% c("fitted", "underpowered")) |>
+  transmute(key = paste(species_code, stage, sep = "_"), status,
+            groups = as.integer(groups), groups_both = as.integer(groups_both),
+            grade_withheld = as.logical(grade_withheld),
+            dev_curve = as.numeric(dev_curve), null_heldout_curve = as.numeric(null_heldout_curve))
+if (anyNA(scope) || any(scope$groups_both > scope$groups) ||
+    !identical(scope$grade_withheld, !(scope$dev_curve < scope$null_heldout_curve))) {
+  stop("a published key's summary has a missing group count or gate, or a gate its deviances do not make")
+}
+
 # ---- write ------------------------------------------------------------------------------------------------
 # git, not a list here, says which sources a clone has: an ignored one is checked only where it is present
 sources <- c(f_pipeline, f_settings, ledger, f_tune, f_records, f_compare, f_thr,
              file.path("data/tune", paste0(setdiff(lim_sg$key, keys), "_tune.csv")),
-             file.path("data/tune", paste0(keys, "_summary.csv")), f_fwa_tune, f_fwa_summ,
+             file.path("data/tune", paste0(union(keys, scope$key), "_summary.csv")), f_fwa_tune, f_fwa_summ,
              file.path(dir_out, "bulk_segments.rds"),
              f_reconcile, unname(derived), f_sites)
 is_tracked <- vapply(sources, function(f) {
@@ -507,6 +523,7 @@ out <- list(
   site_gradient = site_gradient,
   stability = fitted[, c("species_code", "stage", "seeds_n", "seeds_same_rec", "seeds_rec_in_region",
                          "honest_dev_rec", "honest_dev_default", "boot_rec_share")],
+  scope = scope,
   examples = list(kept = ex_kept, moved = ex_moved, far = ex_far, wsg = example_wsg, stages = stages),
   svg = svg,
   meta = list(written = format(Sys.Date()),
