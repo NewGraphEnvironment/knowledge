@@ -311,7 +311,7 @@ knw_compare_map <- function(segments, water = NULL, title = "", png = NULL, html
   if (!requireNamespace("gq", quietly = TRUE) || !exists("gq_qgis_style", asNamespace("gq")) ||
       !exists("gq_gpkg_style_write", asNamespace("gq"))) {
     stop("the comparison GeoPackage's styles need gq's gq_qgis_style() and gq_gpkg_style_write() (gq#115): ",
-         "update gq", call. = FALSE)
+         "install gq 0.22.0 or later", call. = FALSE)
   }
   reg <- gq::gq_reg_custom(system.file("gq", "compare.csv", package = "knowledge", mustWork = TRUE))
   c(rule_class = gq::gq_qgis_style(reg, "compare_rule"), grade_class = gq::gq_qgis_style(reg, "compare_grade"))
