@@ -40,6 +40,27 @@
 #' @param labels `NULL`, or an `sf` of points with a `label` column, drawn as
 #'   numbered markers on every static panel (examples a table beside the map
 #'   describes).
+#' @param width `NULL`, or `numeric(1)` inches: draw one panel on a canvas of
+#'   that width whose height follows the window's shape (the group's outline,
+#'   `keymap$aoi`, where given, else the segments), so the map fills its frame.
+#'   The arguments below need it; with all of them at their defaults the figure
+#'   is drawn as before.
+#' @param scalebar `logical(1)` draw a scale bar, its breaks from
+#'   `gq::gq_scale_breaks()`.
+#' @param keymap `NULL`, or a list of two `sf` polygons, `aoi` (the area mapped,
+#'   also outlined on the map) and `context` (the region around it, such as the
+#'   province), drawn as an inset by `gq::gq_tmap_keymap()`.
+#' @param places `NULL`, or a list with `towns` (an `sf` of points with a
+#'   `label` column, marked and named in gq's `town` style) and `rivers` (an
+#'   `sf` of points with `label` and `angle` columns, named in blue italic along
+#'   the river), each name over a white halo.
+#' @param basemap `NULL`, or an RGB raster (`stars`, as `gq::gq_basemap_blend()`
+#'   returns it) drawn under everything; its `"credit"` attribute is printed
+#'   along the bottom of the map.
+#' @param logo `NULL`, or the path of a square PNG drawn as a logo.
+#' @param corners named `character`: the corner of each of `legend`,
+#'   `scalebar`, `keymap` and `logo`, each in its own (`"bottomleft"`,
+#'   `"bottomright"`, `"topleft"`, `"topright"`).
 #' @return Invisibly, the paths written.
 #' @export
 #' @examples
@@ -49,7 +70,10 @@
 #' }
 knw_compare_map <- function(segments, water = NULL, title = "", png = NULL, html = NULL, fp_cells = NULL,
                             ncol = NULL, panels = c("rules", "grade", "floodplain"), mark = NULL, lwd = 1,
-                            legend = TRUE, labels = NULL, background = c("voyager", "openfreemap", "esri_topo")) {
+                            legend = TRUE, labels = NULL, background = c("voyager", "openfreemap", "esri_topo"),
+                            width = NULL, scalebar = FALSE, keymap = NULL, places = NULL, basemap = NULL, logo = NULL,
+                            corners = c(legend = "bottomleft", scalebar = "bottomright", keymap = "topright",
+                                        logo = "topleft")) {
   chk::chk_s3_class(segments, "sf")
   chk::check_names(segments, c("accessible", "stream_order", "grade_class", "flag_default", "flag_tuned"))
   if (!is.null(ncol)) chk::chk_whole_number(ncol)
@@ -66,6 +90,37 @@ knw_compare_map <- function(segments, water = NULL, title = "", png = NULL, html
     chk::check_names(labels, "label")
   }
   background <- match.arg(background)
+  corner_names <- c("bottomleft", "bottomright", "topleft", "topright")
+  chk::chk_character(corners)
+  if (!setequal(names(corners), c("legend", "scalebar", "keymap", "logo")) || !all(corners %in% corner_names) ||
+      anyDuplicated(corners)) {
+    stop("corners must name a different corner (", paste(corner_names, collapse = ", "),
+         ") for each of legend, scalebar, keymap and logo", call. = FALSE)
+  }
+  chk::chk_flag(scalebar)
+  composed <- scalebar || !is.null(keymap) || !is.null(places) || !is.null(basemap) || !is.null(logo)
+  if (composed && is.null(width)) stop("scalebar, keymap, places, basemap and logo need `width`", call. = FALSE)
+  if (!is.null(width)) {
+    chk::chk_number(width)
+    chk::chk_gt(width, 0)
+    if (length(panels) != 1L) stop("`width` draws one panel: name it in `panels`", call. = FALSE)
+  }
+  if (!is.null(keymap)) {
+    if (!is.list(keymap) || !all(c("aoi", "context") %in% names(keymap))) {
+      stop("keymap must be a list with `aoi` and `context`", call. = FALSE)
+    }
+    chk::chk_s3_class(keymap$aoi, "sf")
+    chk::chk_s3_class(keymap$context, "sf")
+  }
+  if (!is.null(places)) {
+    if (!is.list(places) || !length(intersect(names(places), c("towns", "rivers")))) {
+      stop("places must be a list with `towns`, `rivers` or both", call. = FALSE)
+    }
+    if (!is.null(places$towns)) chk::check_names(places$towns, "label")
+    if (!is.null(places$rivers)) chk::check_names(places$rivers, c("label", "angle"))
+  }
+  if (!is.null(logo)) chk::chk_file(logo)
+  if (composed && !requireNamespace("gq", quietly = TRUE)) stop("gq is needed for the scale bar, keymap and labels", call. = FALSE)
   if (!requireNamespace("tmap", quietly = TRUE)) stop("tmap is needed", call. = FALSE)
   sf::sf_use_s2(FALSE)
   seg <- segments[segments$accessible %in% TRUE, ]
@@ -85,8 +140,16 @@ knw_compare_map <- function(segments, water = NULL, title = "", png = NULL, html
       water_style <- tryCatch(gq::gq_tmap_style(reg$layers$lake), error = function(e) NULL)
     }
   }
+  # the window a composed map is drawn on: the area mapped, or the segments, padded and in BC Albers
+  window <- NULL
+  if (!is.null(width)) {
+    w0 <- if (is.null(keymap)) seg else keymap$aoi
+    window <- sf::st_bbox(sf::st_buffer(sf::st_as_sfc(sf::st_bbox(sf::st_transform(w0, 3005))), 2000))
+  }
   base <- function() {
-    m <- tmap::tm_shape(seg) + tmap::tm_lines(col = "grey90", lwd = 0.3)
+    m <- if (is.null(window)) tmap::tm_shape(seg) else tmap::tm_shape(seg, bbox = window, is.main = TRUE)
+    m <- m + tmap::tm_lines(col = "grey90", lwd = 0.3)
+    if (!is.null(basemap)) m <- tmap::tm_shape(basemap, bbox = window) + tmap::tm_rgb() + m
     if (!is.null(water) && nrow(water)) {
       m <- m + tmap::tm_shape(water) +
         (if (is.null(water_style)) tmap::tm_polygons(fill = "#9ecae1", col = NA)
@@ -97,7 +160,13 @@ knw_compare_map <- function(segments, water = NULL, title = "", png = NULL, html
   written <- character()
   if (!is.null(png)) {
     tmap::tmap_mode("plot")
-    lay <- tmap::tm_layout(frame = FALSE, inner.margins = 0, legend.position = tmap::tm_pos_in("left", "bottom"))
+    pos <- function(corner) {
+      tmap::tm_pos_in(if (grepl("left", corner)) "left" else "right", if (grepl("top", corner)) "top" else "bottom")
+    }
+    lay <- tmap::tm_layout(frame = FALSE, inner.margins = 0, legend.position = pos(corners[["legend"]]))
+    # a map sized to its window is framed, and its corner elements keep the sizes given; the extras then add to that
+    if (!is.null(width)) lay <- lay + tmap::tm_layout(frame = TRUE, component.autoscale = FALSE)
+    if (composed) lay <- .compare_context(keymap$aoi, places, scalebar, window, basemap, logo, corners, pos) + lay
     outline <- if (is.null(mark)) NULL else tmap::tm_shape(mark) + tmap::tm_borders(col = "black", lwd = 1.5)
     if (!is.null(labels)) {
       marks <- tmap::tm_shape(labels) + tmap::tm_symbols(size = 1.1, fill = "white", col = "black", lwd = 1.2) +
@@ -132,7 +201,21 @@ knw_compare_map <- function(segments, water = NULL, title = "", png = NULL, html
     nc <- min(if (is.null(ncol)) length(drawn) else as.integer(ncol), length(drawn))
     nr <- ceiling(length(drawn) / nc)
     fig <- if (length(drawn) == 1L) drawn[[1]] else tmap::tmap_arrange(unname(drawn), ncol = nc, nrow = nr)
-    tmap::tmap_save(fig, png, width = 4 * nc, height = 4.6 * nr, dpi = 150)
+    if (is.null(width)) {
+      tmap::tmap_save(fig, png, width = 4 * nc, height = 4.6 * nr, dpi = 150)
+    } else {
+      # the canvas takes the window's shape, so the map fills its frame and the scale bar reads true
+      height <- width * (window[["ymax"]] - window[["ymin"]]) / (window[["xmax"]] - window[["xmin"]])
+      if (is.null(keymap)) {
+        tmap::tmap_save(fig, png, width = width, height = height, dpi = 150)
+      } else {
+        km <- gq::gq_tmap_keymap(keymap$aoi, keymap$context, corner = corners[["keymap"]], width = 0.22,
+                                 asp = width / height)
+        tmap::tmap_save(fig, png, width = width, height = height, dpi = 150, insets_tm = km$map, insets_vp = km$viewport)
+      }
+      credit <- attr(basemap, "credit")
+      if (!is.null(basemap) && length(credit) && nzchar(credit)) .compare_credit_strip(png, credit)
+    }
     written <- c(written, png)
   }
   if (!is.null(html) && requireNamespace("mapgl", quietly = TRUE) && requireNamespace("htmlwidgets", quietly = TRUE)) {
@@ -142,6 +225,63 @@ knw_compare_map <- function(segments, water = NULL, title = "", png = NULL, html
     written <- c(written, html)
   }
   invisible(written)
+}
+
+# the layers that place a composed map: the area's outline, the towns and rivers named over a white halo (tmap has no
+# halo, so eight white copies under each name), the scale bar, the logo and the basemap's credit, each in its corner
+.compare_context <- function(aoi, places, scalebar, window, basemap, logo, corners, pos) {
+  reg <- gq::gq_reg_main()
+  town <- reg$layers$town
+  m <- NULL
+  add <- function(x) m <<- if (is.null(m)) x else m + x
+  if (!is.null(aoi)) {
+    # the rest of the window faded, so the area mapped reads as the subject and its blank surroundings as not mapped
+    outside <- sf::st_difference(sf::st_as_sfc(window), sf::st_union(sf::st_geometry(sf::st_transform(aoi, 3005))))
+    add(tmap::tm_shape(sf::st_sf(geometry = outside)) + tmap::tm_polygons(fill = "white", fill_alpha = 0.45, col = NA))
+    add(tmap::tm_shape(aoi) + tmap::tm_borders(col = reg$layers$watershed_group_boundary$stroke$color, lwd = 1.2))
+  }
+  halo <- function(x, col, size, face, angle = NULL, ymod = 0) {
+    arg <- list(text = "label", size = size, fontface = face)
+    if (!is.null(angle)) arg$angle <- angle
+    out <- tmap::tm_shape(x)
+    for (o in list(c(1, 0), c(-1, 0), c(0, 1), c(0, -1), c(.7, .7), c(-.7, .7), c(.7, -.7), c(-.7, -.7))) {
+      out <- out + do.call(tmap::tm_text, c(arg, list(col = "white", xmod = o[1] * 0.08, ymod = ymod + o[2] * 0.08)))
+    }
+    out + do.call(tmap::tm_text, c(arg, list(col = col, ymod = ymod)))
+  }
+  if (!is.null(places$rivers) && nrow(places$rivers)) {
+    add(halo(places$rivers, "#1a5276", 0.7, "italic", angle = "angle"))
+  }
+  if (!is.null(places$towns) && nrow(places$towns)) {
+    add(tmap::tm_shape(places$towns) +
+          tmap::tm_symbols(fill = town$mark$color, col = town$mark$stroke_color, lwd = town$mark$stroke_width,
+                           size = 0.35, shape = 21))
+    add(halo(places$towns, town$label$color, 0.8, "bold", ymod = 0.7))
+  }
+  if (scalebar) {
+    add(tmap::tm_scalebar(breaks = gq::gq_scale_breaks(window), text.size = 0.75, position = pos(corners[["scalebar"]])))
+  }
+  if (!is.null(logo)) add(tmap::tm_logo(logo, height = 2, position = pos(corners[["logo"]])))
+  m
+}
+
+# the basemap's credit in a white strip under the map, wrapped to its width: a line inside the frame overran both edges
+# and ran under the keymap. Rewrites `png` in place.
+.compare_credit_strip <- function(png, credit, dpi = 150) {
+  img <- png::readPNG(png)
+  h <- dim(img)[1]
+  w <- dim(img)[2]
+  lines <- strwrap(credit, width = max(40L, floor(w / 6.5)))
+  strip <- ceiling((length(lines) * 11 + 10) * dpi / 100)
+  tmp <- tempfile(fileext = ".png")
+  grDevices::png(tmp, width = w, height = h + strip, res = dpi, bg = "white")
+  grid::grid.newpage()
+  grid::grid.raster(img, x = 0, y = 1, width = 1, height = h / (h + strip), just = c("left", "top"))
+  grid::grid.text(paste(lines, collapse = "\n"), x = grid::unit(0.01, "npc"), y = grid::unit(strip / 2, "points") * 72 / dpi,
+                  just = c("left", "centre"), gp = grid::gpar(fontsize = 5.5, col = "grey25"))
+  grDevices::dev.off()
+  if (!file.copy(tmp, png, overwrite = TRUE)) stop("could not write ", png, call. = FALSE)
+  invisible(png)
 }
 
 # the classes and colours both maps and the comparison's GeoPackage draw, from one gq custom registry
@@ -200,6 +340,7 @@ knw_compare_map <- function(segments, water = NULL, title = "", png = NULL, html
 #'   Liberty) or `"esri_topo"` (Esri's World Topographic Map raster tiles, keyless;
 #'   Esri allows free noncommercial use with attribution, which the map shows).
 #' @param digits `integer(1)` decimal places kept in the coordinates.
+#' @param scale `logical(1)` add a metric scale bar at the bottom left (#77).
 #' @return A `maplibregl` htmlwidget, or `NULL` with a message when no segment is
 #'   accessible.
 #' @export
@@ -217,11 +358,12 @@ knw_compare_map <- function(segments, water = NULL, title = "", png = NULL, html
 #' }
 knw_compare_mapgl <- function(segments, water = NULL, title = "",
                               background = c("voyager", "openfreemap", "esri_topo"),
-                              digits = 5L) {
+                              digits = 5L, scale = FALSE) {
   chk::chk_s3_class(segments, "sf")
   chk::check_names(segments, c("accessible", "stream_order", "grade_class", "flag_default", "flag_tuned"))
   background <- match.arg(background)
   chk::chk_whole_number(digits)
+  chk::chk_flag(scale)
   if (!requireNamespace("mapgl", quietly = TRUE)) stop("mapgl is needed", call. = FALSE)
   seg <- segments[segments$accessible %in% TRUE, ]
   if (!nrow(seg)) {
@@ -273,7 +415,8 @@ knw_compare_mapgl <- function(segments, water = NULL, title = "",
     mapgl::add_categorical_legend(legend_title = "Grade (expected use)", values = names(grade_cols),
                                   colors = unname(grade_cols), position = "top-left", layer_id = "grade",
                                   unique_id = "legend_grade", add = TRUE) |>
-    mapgl::add_layers_control(layers = c(Habitat = "rules", Grade = "grade"), position = "top-right")
+    mapgl::add_layers_control(layers = c(Habitat = "rules", Grade = "grade"), position = "top-right") |>
+    (function(m) if (scale) mapgl::add_scale_control(m, position = "bottom-left", unit = "metric") else m)()
 }
 
 # the popup's fields as short display strings, and the expression that writes the popup from them in the browser: a

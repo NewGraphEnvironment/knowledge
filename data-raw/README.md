@@ -6,8 +6,11 @@ the local database, and writes small files under `inst/vignette-data/`, so the a
 anywhere, with no database, under `R CMD check` and pkgdown. Rerun it from the repo root after any
 `scripts/0320`, `0322`, `0325` or `0330` rerun, and `tests/testthat/test-vignette-data.R` fails until you do.
 
-`readme_figure.R` draws the README's map into `man/figures/` from the same bundled data, and
-`make_hexsticker.R` the hex sticker; rerun the first after `vignette_chinook.R`.
+`vignette_context.R` writes what places the Bulkley map for a stranger (#77): the map group's outline, British
+Columbia for the keymap, its towns (Natural Resources Canada's geographical names) and its rivers' names, into
+`inst/vignette-data/bulk_context.rds`. `readme_figure.R` draws the README's map into `man/figures/` from the same
+bundled data, over Esri's topographic map blended with its shaded relief (fetched as it runs), and
+`make_hexsticker.R` the hex sticker; rerun the first two after `vignette_chinook.R`.
 
 Four scripts are checks, not data: each proves that a faster or different path returns what the reference path
 returns, and writes its verdict to `scripts/logs/habitat/`. `walk_bank_check.R` holds the walk's bank rule to fresh's

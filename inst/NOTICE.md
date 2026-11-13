@@ -8,9 +8,18 @@ other sources, each under its own terms. Paths are the repository's.
 Contains information licensed under the
 [Open Government Licence - British Columbia](https://www2.gov.bc.ca/gov/content/data/policy-standards/open-data/open-government-licence-bc):
 the **BC Freshwater Atlas** lakes, rivers and stream network in `inst/vignette-data/bulk_water.rds`,
-`inst/vignette-data/bulk_segments.rds`, `inst/vignette-data/cut_points.rds` and the stream names and named
-streams in `inst/vignette-data/cut_points_places.rds` (all installed with the package), and the Atlas's streams, lakes and
-rivers drawn in `man/figures/readme-bulk.png`.
+`inst/vignette-data/bulk_segments.rds`, `inst/vignette-data/cut_points.rds`, the stream names and named
+streams in `inst/vignette-data/cut_points_places.rds`, and the watershed group outline, the province drawn from the
+watershed groups and the river names in `inst/vignette-data/bulk_context.rds` (all installed with the package), and the
+Atlas's streams, lakes, rivers and watershed groups drawn in `man/figures/readme-bulk.png`.
+
+## Canadian Geographical Names (Open Government Licence - Canada)
+
+The towns named on the Bulkley maps, their names and locations in `inst/vignette-data/bulk_context.rds` and drawn in
+`man/figures/readme-bulk.png`, come from Natural Resources Canada's
+[Canadian Geographical Names](https://open.canada.ca/data/en/dataset/e27c6eba-3c5d-4051-9db2-082dc6411c2c), read through
+its geonames service by `data-raw/vignette_context.R`. Contains information licensed under the
+[Open Government Licence - Canada](https://open.canada.ca/en/open-government-licence-canada).
 
 ## BC Geographical Names
 

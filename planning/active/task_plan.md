@@ -89,26 +89,27 @@ or promotion.
       promotion lines
 
 ## Phase 2: Example maps a stranger can place (#77)
-- [ ] `knw_compare_map()`: opt-in `scalebar`, `keymap` (`gq_tmap_keymap()` on the watershed group in BC), `places`
+- [x] `knw_compare_map()`: opt-in `scalebar`, `keymap` (`gq_tmap_keymap()` on the watershed group in BC), `places`
       (town labels and river names, with halos) and `basemap` (`gq_basemap_tiles()` with `gq_basemap_blend()`, Esri
       World Topo over World Shaded Relief, its `credit` drawn), in BC Albers. Legend, logo, scale bar and keymap each
       get their own corner, and the canvas aspect comes from the window. All default off. Tests for each argument;
       the basemap test skips offline and on CRAN
-- [ ] `knw_compare_mapgl()`: an opt-in scale control, so the site's map carries a scale too
-- [ ] Sources and terms: towns from BC Geographical Names through bcdata, names only (the `vignette_cut_points_places.R`
+- [x] `knw_compare_mapgl()`: an opt-in scale control, so the site's map carries a scale too
+- [x] Sources and terms: towns from BC Geographical Names through bcdata, names only (the `vignette_cut_points_places.R`
       pattern); river names from the Freshwater Atlas; the keymap's BC outline from a named source. NOTICE rows for
       Esri tiles and each new source. `maptiles` added to Suggests, gq floor set (`gq (>= 0.21.0)`)
-- [ ] `data-raw/vignette_context.R` writes the context layers for the Bulkley map into new bundle files, added to
+- [x] `data-raw/vignette_context.R` writes the context layers for the Bulkley map into new bundle files, added to
       `test-vignette-data.R`'s shipped-files list and pinned to the bundle's `map_group`
-- [ ] Turn them on in `data-raw/readme_figure.R` (README figure) and the article's `map-static` chunk and site map.
+- [x] Turn them on in `data-raw/readme_figure.R` (README figure) and the article's `map-static` chunk and site map.
       The "defaults unchanged" baseline is redrawn after the gq upgrade, not taken from the committed PNG
-- [ ] Self-review every PNG at its published width (README column; article at 80 %) against `cartography.md`'s 14
+- [x] Self-review every PNG at its published width (README column; article at 80 %) against `cartography.md`'s 14
       checks. Render the article off-site after installing the branch, and check whether `R CMD check` now needs
       network
-- [ ] Remove the 97 `compare_*.png` (the list is recomputed by script and pasted into the PR), rewrite the glob line in
+- [x] Remove the 97 `compare_*.png` (the list is recomputed by script and pasted into the PR), rewrite the glob line in
       each of the 7 research pages to point to `STAGE=gpkg`, and fix the roxygen example path. The frozen `0297` and
       `0298` keep their paths (they are frozen)
 - [ ] NEWS: the GPKG default flip, `fig_dir` removed, `STAGE=maps` renamed, the new map arguments
+      (NEWS.md is written by `/gh-pr-merge`'s release commit, so the entry is drafted in the PR body for it)
 
 ## Phase 3: Issues
 - [ ] File the split-off issue for batch 7, naming #173, left out of `planning/backlog.md`. It carries: the template

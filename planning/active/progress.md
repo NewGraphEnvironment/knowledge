@@ -33,3 +33,15 @@
   `.compare_qgis_styles()` builds both QMLs from `inst/gq/compare.csv`; `gpkg_one()` writes them (rule class default) and
   fills "not graded" on reachable ungraded segments; BULK trial reads both styles back. xml2 added to Suggests (the test)
 - Al chose Esri tiles with attribution and no NOTICE row for the example maps (task_plan, decisions)
+- Phase 2: `knw_compare_map()` gains `width` (canvas from the window's shape), `scalebar`, `keymap`, `places`, `basemap`
+  (credit in a strip under the map), `logo` and `corners`; all off by default, and the default README and three-panel
+  renders are byte-identical before and after (md5 518187…, d5d3fb…). Each extra's test was proved by breaking it (the
+  first version of the test passed with the scale bar removed, because any extra switched the frame on: fixed by
+  framing every sized map; the keymap needed a test on what reaches `tmap_save()`). `knw_compare_mapgl(scale = TRUE)`.
+  `data-raw/vignette_context.R` → `bulk_context.rds` (39 KB: the BC outline needed exterior rings only, 3.4 MB
+  before); towns from NRCan's Canadian Geographical Names (OGL-Canada; both provincial layers are Access Only).
+  README figure: Esri topo × shaded relief (gamma 1), 5 in, legend NE over Babine Lake, keymap SW, scale bar NW, the
+  outside faded, credit in a strip; checked at 600 px. Article: the static map gets keymap, scale bar and labels, no
+  basemap (built without network under R CMD check); the site map gets the scale control. No logo on either: the
+  README and site carry the hex sticker (cartography skill). 97 `compare_*.png` removed (list in findings);
+  0335 now reruns `vignette_context.R` before `readme_figure.R`

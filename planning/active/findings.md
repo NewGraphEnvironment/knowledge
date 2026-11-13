@@ -75,6 +75,110 @@ script (scratchpad `gpkg_try.R`): 87,640 segments; `rule_class` kept 4,081, lost
 9,111, unreachable 70,954 left NA (the first try classed those as neither: fixed); `water` stream 77,883, wetland 5,066,
 lake 2,556, river 2,135, with the 59.5 ha wetland of #81's Coffin Creek note on segments 85470 and 85475; a `run` table.
 
+## research/fig/ removals (2026-11-13)
+
+Recomputed at removal: each PNG's name grepped (`git grep -F`) over research/, vignettes/, README.md and data-raw/.
+Shown, kept (5): chinook_rearing_tuned_curves.png, chinook_rearing_tuned_lfra.png, chinook_rearing_tuned_salr.png, chinook_rearing_tuned_twac.png, setups_ch_rear_mork.png.
+Shown by nothing, removed (97):
+
+- `compare_bt_rear_bowr.png`
+- `compare_bt_rear_bulk.png`
+- `compare_bt_rear_dunc.png`
+- `compare_bt_rear_fran.png`
+- `compare_bt_rear_kisp.png`
+- `compare_bt_rear_kotl.png`
+- `compare_bt_rear_larl.png`
+- `compare_bt_rear_lchl.png`
+- `compare_bt_rear_lhaf.png`
+- `compare_bt_rear_lmus.png`
+- `compare_bt_rear_lnth.png`
+- `compare_bt_rear_mcgr.png`
+- `compare_bt_rear_mork.png`
+- `compare_bt_rear_morr.png`
+- `compare_bt_rear_natr.png`
+- `compare_bt_rear_necr.png`
+- `compare_bt_rear_pars.png`
+- `compare_bt_rear_pcea.png`
+- `compare_bt_rear_pine.png`
+- `compare_bt_rear_sloc.png`
+- `compare_bt_rear_tabr.png`
+- `compare_bt_rear_thom.png`
+- `compare_bt_rear_ufra.png`
+- `compare_bt_rear_unth.png`
+- `compare_bt_rear_will.png`
+- `compare_bt_spawn_bowr.png`
+- `compare_bt_spawn_bulk.png`
+- `compare_bt_spawn_dunc.png`
+- `compare_bt_spawn_fran.png`
+- `compare_bt_spawn_kisp.png`
+- `compare_bt_spawn_kotl.png`
+- `compare_bt_spawn_larl.png`
+- `compare_bt_spawn_lchl.png`
+- `compare_bt_spawn_lnth.png`
+- `compare_bt_spawn_ltre.png`
+- `compare_bt_spawn_mcgr.png`
+- `compare_bt_spawn_mork.png`
+- `compare_bt_spawn_morr.png`
+- `compare_bt_spawn_necr.png`
+- `compare_bt_spawn_pars.png`
+- `compare_bt_spawn_pcea.png`
+- `compare_bt_spawn_pine.png`
+- `compare_bt_spawn_sloc.png`
+- `compare_bt_spawn_tabr.png`
+- `compare_bt_spawn_thom.png`
+- `compare_bt_spawn_uden.png`
+- `compare_bt_spawn_ufra.png`
+- `compare_bt_spawn_unth.png`
+- `compare_bt_spawn_will.png`
+- `compare_ch_rear_bowr.png`
+- `compare_ch_rear_bulk.png`
+- `compare_ch_rear_fran.png`
+- `compare_ch_rear_kisp.png`
+- `compare_ch_rear_lchl.png`
+- `compare_ch_rear_lnth.png`
+- `compare_ch_rear_lsal.png`
+- `compare_ch_rear_mcgr.png`
+- `compare_ch_rear_mork.png`
+- `compare_ch_rear_morr.png`
+- `compare_ch_rear_necr.png`
+- `compare_ch_rear_ques.png`
+- `compare_ch_rear_tabr.png`
+- `compare_ch_rear_thom.png`
+- `compare_ch_rear_ufra.png`
+- `compare_ch_rear_unth.png`
+- `compare_ch_rear_vict.png`
+- `compare_ch_rear_will.png`
+- `compare_co_rear_bowr.png`
+- `compare_co_rear_bulk.png`
+- `compare_co_rear_chwk.png`
+- `compare_co_rear_grai.png`
+- `compare_co_rear_guic.png`
+- `compare_co_rear_kisp.png`
+- `compare_co_rear_lchl.png`
+- `compare_co_rear_lnth.png`
+- `compare_co_rear_morr.png`
+- `compare_co_rear_necr.png`
+- `compare_co_rear_thom.png`
+- `compare_co_rear_unth.png`
+- `compare_co_rear_will.png`
+- `compare_gr_rear_atll.png`
+- `compare_gr_rear_pars.png`
+- `compare_gr_rear_pcea.png`
+- `compare_gr_rear_pine.png`
+- `compare_st_rear_bulk.png`
+- `compare_st_rear_grai.png`
+- `compare_st_rear_kisp.png`
+- `compare_st_rear_morr.png`
+- `compare_st_rear_pori.png`
+- `compare_st_rear_seym.png`
+- `compare_st_rear_thom.png`
+- `compare_wct_rear_dunc.png`
+- `compare_wct_rear_ketl.png`
+- `compare_wct_rear_khor.png`
+- `compare_wct_rear_kotl.png`
+- `compare_wct_rear_larl.png`
+- `compare_wct_rear_sloc.png`
+
 ## Errors Encountered
 
 | Error | Resolution |

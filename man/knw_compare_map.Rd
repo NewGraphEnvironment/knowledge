@@ -17,7 +17,15 @@ knw_compare_map(
   lwd = 1,
   legend = TRUE,
   labels = NULL,
-  background = c("voyager", "openfreemap", "esri_topo")
+  background = c("voyager", "openfreemap", "esri_topo"),
+  width = NULL,
+  scalebar = FALSE,
+  keymap = NULL,
+  places = NULL,
+  basemap = NULL,
+  logo = NULL,
+  corners = c(legend = "bottomleft", scalebar = "bottomright", keymap = "topright", logo
+    = "topleft")
 )
 }
 \arguments{
@@ -60,6 +68,34 @@ numbered markers on every static panel (examples a table beside the map
 describes).}
 
 \item{background}{passed to \code{\link[=knw_compare_mapgl]{knw_compare_mapgl()}} for the interactive page.}
+
+\item{width}{\code{NULL}, or \code{numeric(1)} inches: draw one panel on a canvas of
+that width whose height follows the window's shape (the group's outline,
+\code{keymap$aoi}, where given, else the segments), so the map fills its frame.
+The arguments below need it; with all of them at their defaults the figure
+is drawn as before.}
+
+\item{scalebar}{\code{logical(1)} draw a scale bar, its breaks from
+\code{gq::gq_scale_breaks()}.}
+
+\item{keymap}{\code{NULL}, or a list of two \code{sf} polygons, \code{aoi} (the area mapped,
+also outlined on the map) and \code{context} (the region around it, such as the
+province), drawn as an inset by \code{gq::gq_tmap_keymap()}.}
+
+\item{places}{\code{NULL}, or a list with \code{towns} (an \code{sf} of points with a
+\code{label} column, marked and named in gq's \code{town} style) and \code{rivers} (an
+\code{sf} of points with \code{label} and \code{angle} columns, named in blue italic along
+the river), each name over a white halo.}
+
+\item{basemap}{\code{NULL}, or an RGB raster (\code{stars}, as \code{gq::gq_basemap_blend()}
+returns it) drawn under everything; its \code{"credit"} attribute is printed
+along the bottom of the map.}
+
+\item{logo}{\code{NULL}, or the path of a square PNG drawn as a logo.}
+
+\item{corners}{named \code{character}: the corner of each of \code{legend},
+\code{scalebar}, \code{keymap} and \code{logo}, each in its own (\code{"bottomleft"},
+\code{"bottomright"}, \code{"topleft"}, \code{"topright"}).}
 }
 \value{
 Invisibly, the paths written.
