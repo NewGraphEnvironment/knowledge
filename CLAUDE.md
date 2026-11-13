@@ -52,7 +52,8 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   removed, stales the bundle and a moved `where` path does not (#118). `method.rds` pins each grade table's tracked record (`data/tune/<key>_grades_record.csv`), not the table
   (#119), and the md5s of the ignored evidence it was built from, which `test-vignette-data.R` checks wherever they
   exist, so on a machine whose copies differ it fails there and nowhere else (CI has no `data/`). A checkout without
-  them restores them with `PULL=TRUE scripts/0336-archive.R`, the run its records name. Its references come from `data-raw/vignette_bib.R` with the chinook article's. A draft article is named
+  them restores them with `PULL=TRUE scripts/0336-archive.R`, the run its records name. It does not yet restore `data/fdis/build/fish.rds`, which
+  `0320` and, for the Bayesian-practice article's group counts, `vignette_method.R` read: `0230` rebuilds it (#214). The methodology article's references come from `data-raw/vignette_bib.R` with the chinook article's. A draft article is named
   `vignettes/_<name>.Rmd`: pkgdown skips it, `.Rbuildignore` keeps it out of the tarball, and pkgdown.yaml fails if
   one reaches `docs/articles/`.
 - `vignettes/tuning-stream-splits.Rmd` — "Splitting streams at fish records shifts the steepest slope mapped as habitat" (#149): the share

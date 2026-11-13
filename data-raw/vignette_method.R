@@ -525,8 +525,9 @@ split_of <- function(key) {
     groups_all = sum(tapply(y, g, function(v) all(v == 1L))), groups_none = sum(tapply(y, g, function(v) all(v == 0L))))
 }
 spl <- t(vapply(scope$key, split_of, numeric(4)))
-if (!identical(unname(spl[, "groups"]), as.numeric(scope$groups)) ||
-    !identical(unname(spl[, "groups_both"]), as.numeric(scope$groups_both))) {
+same_groups <- identical(unname(spl[, "groups"]), as.numeric(scope$groups)) &&
+  identical(unname(spl[, "groups_both"]), as.numeric(scope$groups_both))
+if (!same_groups) {
   stop("the tuning's population, rebuilt here, does not give the summaries' group counts: ",
        paste(scope$key, spl[, "groups"], scope$groups, spl[, "groups_both"], scope$groups_both, collapse = "; "))
 }

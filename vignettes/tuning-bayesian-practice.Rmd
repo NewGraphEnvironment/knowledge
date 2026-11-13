@@ -79,6 +79,8 @@ stopifnot(nrow(pr) == 6, at_site("published_145", "fish") > 3 * at_site("publish
           at_site("published_92", "fish") > at_site("published_145", "fish"),
           abs(at_site("minimal", "fish") - at_site("minimal", "zero")) < 1,
           cp_lim("published") > cp_lim("minimal"), cp_lim("parent") == cp_lim("minimal"),
+          # "its build is a slightly earlier link"
+          package_version(pr$link[pr$network == "minimal"][1]) < package_version(pr$link[pr$network == "published_145"][1]),
           length(gs_ch) == 1, identical(gs_ch, cp$setups$pick[cp$setups$setup == "published"]),
           # the groups: chinook rearing's split is quoted, and in every key the never-caught groups outnumber the
           # all-caught ones
@@ -312,7 +314,7 @@ These are the groups partial pooling would keep, letting a small group where not
 from the rest instead of running to zero. The curve does pool the groups it is given: it learns a spread of base rates
 across them. But it is fitted on at most the groups the scorer keeps, and each left-out group is still scored by its
 own refitted base rate, so the pooled spread is never used to predict a group the curve has not seen. Grades are
-still drawn for every stream the species can reach, in the dropped groups too.
+still drawn for every stream the species can reach that has a size and a slope, in the dropped groups too.
 
 The grade describes an average group, leaving each group's own base rate out [@mcelreath2020StatisticalRethinking,
 p. 428], which is the right reading for a map that compares streams across the province. But because every score
@@ -368,9 +370,11 @@ A predictor should not be shaped by the outcome it predicts. The habitat definit
 stream, or segment, a site sits on, and `link` cuts a stream into segments at, among other places, the highest record
 of each species it models on that stream. So a site that caught fish is more likely to start a short segment of its
 own, whose slope is worked out from the stream just above the catch. `link`'s earlier build cut at every record; the
-published tuning reads a build that cuts only at the highest, which narrows the gap without closing it. Its
-minimal network cuts only where a species' access changes, at barriers and at the slopes that stop it, not at fish
-records, and there a site with fish starts its own segment about as often as an empty one.
+build the published tuning reads cuts only at the highest, among other changes, and there a site with fish starts its
+own segment less often than before, but still several times as often as an empty site. Its minimal network makes no
+cut at fish records, crossings or the ends of stretches whose habitat was mapped by hand; it still cuts where one
+Atlas line meets the next, at natural barriers and at slopes a species cannot pass. There a site with fish starts its
+own segment about as often as an empty one.
 
 ```{r cuts, fig.height = 2.8, fig.cap = "The share of site visits on the stream branch that start a segment of their own, for visits that caught fish and visits that did not, on link's full network as the earlier tuning read it, as the published tuning reads it, and on its minimal network."}
 nets <- c(published_92 = "full network, earlier tuning", published_145 = "full network, published tuning",
@@ -391,12 +395,13 @@ ggplot(pr, aes(at_site_pct, net, fill = catch)) +
   theme(legend.position = "top", panel.grid.major.y = element_blank(), panel.grid.minor = element_blank())
 ```
 
-It moves the result. Tuned on the minimal network, chinook rearing's steepest slope is `r lim_pct("minimal")` rather
-than the published `r lim_pct("published")`, and it is `r lim_pct("parent")` again when each segment of the full
+The network moves the result. Tuned on the minimal network, chinook rearing's steepest slope is `r lim_pct("minimal")`
+rather than the published `r lim_pct("published")`, and it is `r lim_pct("parent")` again when each segment of the full
 network reads the slope of the minimal segment it lies in, the form in which a habitat definition tuned on the minimal
-network would be applied. The article [Splitting streams at fish records shifts the steepest slope mapped as
-habitat](tuning-stream-splits.html) shows this in full. Whether to tune on the minimal network is a decision not yet
-made.
+network would be applied. The minimal network leaves out three kinds of cut at once, and its build is a slightly
+earlier `link`, so these runs cannot say how much of the change comes from the cuts at fish records alone. The article
+[Splitting streams at fish records shifts the steepest slope mapped as habitat](tuning-stream-splits.html) shows this in
+full. Whether to tune on the minimal network is a decision not yet made.
 
 ## What do we test next? {#next}
 
@@ -410,8 +415,9 @@ made.
   spread of groups, since a new-group score for one beside an own-base-rate score for the other compares nothing. Two
   cheap tests ride with it: the area fished as a fixed exposure, and a simulation of what the prior implies for the
   catch.
-- **Tuning on the minimal network** (`r issue(120)`): every species and stage scored on segments cut only where
-  access changes, applied through each full segment's minimal parent, so no slope depends on the catch.
+- **Tuning on the minimal network** (`r issue(120)`): every published species and stage has been tuned on it, and chinook
+  rearing also through each full segment's minimal parent; none has been published, and whether to tune on it is
+  still to decide.
 - **Slopes measured other ways** (`r issue(70)`): modelled slopes checked against field-measured ones, and slopes over
   fixed lengths of stream scored beside `link`'s segment slope.
 
@@ -440,7 +446,8 @@ made.
   and scored.
 - **Grade.** A stream's expected use per standard electrofishing visit, from the curve.
 - **Habitat definition.** The few limits on a stream's size and slope that say where a species spawns or rears.
-- **Minimal network.** `link`'s streams cut only where a species' access changes, not at fish records.
+- **Minimal network.** `link`'s streams without the cuts at fish records, crossings and the ends of hand-mapped
+  habitat; still cut where Atlas lines meet, at natural barriers and at slopes a species cannot pass.
 - **Partial pooling.** Letting groups share what they have in common, so a group with little data borrows from the
   rest; the alternative is a base rate fitted to each group alone.
 - **Penalty.** A prior fitted by finding its single most probable value (also called ridge regression), with no
