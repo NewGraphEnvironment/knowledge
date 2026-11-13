@@ -39,7 +39,7 @@ gs <- x$gradient_sensitivity
 sg <- x$segment_at_site
 n0 <- function(v) format(round(v), big.mark = ",", trim = TRUE)
 about <- function(v) format(signif(v, 2), big.mark = ",", trim = TRUE)
-pc <- function(v, d = 0) paste0(round(100 * v, d), " %")
+pc <- function(v, d = 0) paste0(if (d > 0) formatC(100 * v, format = "f", digits = d) else round(100 * v), " %")
 fn <- function(stage) fun$n[fun$stage == stage]
 val <- function(key) gsub(";", ", ", reg$value[reg$key == key], fixed = TRUE)
 issue <- function(n) {
@@ -406,6 +406,10 @@ cp_lim <- function(s) {
   v
 }
 cp_moved <- cp$other_keys[cp$other_keys$key != "CH_rear" & cp$other_keys$network_moved != "same", ]
+# step 3's words on the full network: there a stream-line site with fish starts a segment of its own far more often
+# (more than three times) than one without
+cp_at <- function(s) cp$premise$at_site_pct[cp$premise$network == "published_145" & cp$premise$catch_status == s]
+stopifnot(length(cp_at("fish")) == 1, length(cp_at("zero")) == 1, cp_at("fish") > 3 * cp_at("zero"))
 gs_ch <- x$gradient_sensitivity$pick[x$gradient_sensitivity$key == "CH_rear"]
 # the words: chinook rearing's slope limit differs between the two networks; the network moved the rules of other
 # species and stages too (plural); and the bundle's minimal-network pick is this article's own, so a promotion that

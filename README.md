@@ -17,8 +17,8 @@ where conservation and restoration effort goes, and one built this way rests on 
 
 <img src="man/figures/readme-bulk.png" alt="Map of the streams chinook can reach in the Bulkley River watershed group, coloured by whether each is chinook rearing habitat under both habitat definitions, only under link's default, only under the tuned one, or under neither" width="70%" />
 
-*Chinook rearing habitat in the Bulkley River watershed group, around Smithers and Houston, under link's
-`default` habitat definition and the one tuned here. Blue streams are habitat under both, orange only under
+*Chinook rearing habitat in the Bulkley River watershed group, around Smithers and Houston, on link's minimal
+network, under link's `default` habitat definition and the one tuned here. Blue streams are habitat under both, orange only under
 `default`, green only under the tuned one; grey streams are open to chinook but habitat under neither. Here the
 tuned habitat definition drops more than it adds.*
 

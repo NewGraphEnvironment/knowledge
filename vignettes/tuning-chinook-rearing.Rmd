@@ -52,6 +52,8 @@ region <- tune[tune$in_region, ]
 all_row <- cmp[cmp$watershed_group_code == "ALL", ]
 per_group <- cmp[cmp$watershed_group_code != "ALL", ]
 map_row <- cmp[cmp$watershed_group_code == meta$map_group, ]
+# the words name link's minimal network for the totals, the map and the rates: the bundle was built on it
+stopifnot(identical(meta$schema, "fresh_default_minimal"))
 seeds <- x$seeds
 honest <- x$honest
 
@@ -100,7 +102,7 @@ lab_strict <- paste("only at", se_strict, "SE")
 # at 1.96 the choice moves toward link's: it keeps link's slope limit, raises the flow floor and keeps the
 # near-a-river allowance, so it departs from link's in fewer dials; link's rule stays out
 stopifnot(ch196$rule != rec$rule, ch196$grad_max == dflt$grad_max, ch196$grad_max < rec$grad_max,
-          ch196$size_min > rec$size_min, ch196$departures < rec$departures, ch196$exc_d %in% rec$exc_d,
+          ch196$size_var == "mad", rec$size_var == "mad", ch196$size_min > rec$size_min, ch196$departures < rec$departures, ch196$exc_d %in% rec$exc_d,
           ch196$exc_q %in% rec$exc_q,
           ch196$n_region > nrow(region),
           ch196$rule != dflt$rule, !tune$in_196[tune$is_default], sum(tune$in_196) == ch196$n_region,
@@ -160,7 +162,7 @@ fish species can reach and where it can spawn and rear on BC's streams. Its stan
 [How the tuning works](tuning-method.html) says [what a habitat definition is](tuning-method.html#thresholds), and
 how one is tested and tuned.
 
-```{r map-static, eval = !on_site, fig.width = 6, fig.height = map_h, out.width = "80%", fig.cap = paste0("Chinook rearing in the Bulkley watershed group (", meta$map_group, "), around Smithers, under each habitat definition. Orange: link's current habitat definition only (the legend's 'lost'). Green: the recommended habitat definition only (the legend's 'tuned only'). Blue: both. Line width follows stream order. The inset places the group in British Columbia.")}
+```{r map-static, eval = !on_site, fig.width = 6, fig.height = map_h, out.width = "80%", fig.cap = paste0("Chinook rearing in the Bulkley watershed group (", meta$map_group, "), around Smithers, under each habitat definition, on link's minimal network. Orange: link's current habitat definition only (the legend's 'lost'). Green: the recommended habitat definition only (the legend's 'tuned only'). Blue: both. Line width follows stream order. The inset places the group in British Columbia.")}
 f1 <- tempfile(fileext = ".png")
 # no basemap here: this copy is built without network (R CMD check); the website's map has Esri's topographic map
 knw_compare_map(seg, water, png = f1, panels = "rules", width = 6, scalebar = TRUE,
@@ -174,7 +176,8 @@ knw_compare_mapgl(seg, water, title = "Habitat definition", background = "esri_t
 ```
 
 In the Bulkley watershed group, around Smithers, the recommended habitat definition draws `r n0(map_row$tuned_km)` km of rearing
-habitat against `r n0(map_row$default_km)` under link's. What it drops (orange) is mostly the upper reaches of
+habitat against `r n0(map_row$default_km)` under link's, on link's minimal network, the segments the habitat definitions
+were tuned on; the map, the totals and the rates below are all on that network. What it drops (orange) is mostly the upper reaches of
 tributaries, where flow falls below its floor more than `r km_d(rec$exc_d)` from a river. What it adds (green) is
 short reaches of small streams beside a river. The rest comes from the two habitat definitions' own slope and flow
 limits, and from link's step that keeps rearing only where it connects to spawning: that step keeps different stretches
@@ -206,7 +209,7 @@ knitr::kable(chg, format = "html", align = "lrr",
   kableExtra::kable_styling(full_width = FALSE) |>
   kableExtra::footnote(general_title = "", general = paste0(
     "Habitat is summed over the ", nrow(per_group), " watershed groups link classified for chinook when the ",
-    "comparison ran, each habitat definition run ",
+    "comparison ran, on link's minimal network, each habitat definition run ",
     "through all of link's steps. Both totals include lines through wetlands, which the two habitat definitions test differently ",
     "(below). ",
     "Sites are the ", n0(sum(fv$n[fv$rule == "default"])), " electrofishing sites of a usual fished area on ",

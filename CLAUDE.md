@@ -34,10 +34,12 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   citeproc prints a version with a space as "Versions …". Its map is interactive only when pkgdown builds the site
   (`IN_PKGDOWN`), on Esri's World Topographic Map. Check a cited
   claim against the PDF's text: cred's `crd_aud_verify_all()` cuts each claim at the Rmd's line breaks and matches
-  unrelated passages (#79). Its numbers come from two link builds: the tuning's (`meta$link_sha`), which scored link's
-  rule at sites, and the comparison's (`config_sha` in its tables), which regenerated the habitat totals and the map.
-  They agree on stream lines and differ on lines through wetlands, so a sentence about link's near-river handling, and
-  every site or group count, names the build and population it holds for (#143). The register's `code:` phrases in
+  unrelated passages (#79). Its numbers can come from two link builds: the tuning's (`meta$link_sha`), which scored
+  link's rule at sites, and the comparison's (`config_sha` in its tables), which regenerated the habitat totals and the
+  map. Under #145's run they differed and disagreed on lines through wetlands; since the minimal network's promotion
+  (2026-11-13) both are link's minimal build at one commit, and the totals and map are that network's, not the full
+  one link draws habitat on. So a sentence about link's near-river handling, and every site or group count or km,
+  names the build, network and population it holds for (#143). The register's `code:` phrases in
   it are matched one line at a time and must each stay whole on one line.
 - `vignettes/tuning-method.Rmd` — the methodology article (#93), "Tuning fish habitat definitions with fish sampling
   records": the reference home for the method and its citations. A species article (the chinook one first, #64) gives

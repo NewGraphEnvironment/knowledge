@@ -8,7 +8,8 @@ link's new full `default` build and on link's four-group proof schemas, and `dat
 `setup_compare.R`; logs `scripts/logs/habitat/2026110[2345]_*`, `scripts/logs/habitat/every_setup_120/`, `scripts/logs/habitat/minimal_network_120/` and
 `scripts/logs/habitat/default_build_145/` · **Status:** the nine species link models on the minimal build tuned on
 it, and the seven keys fitted (six species; the other eleven keys have no response or no stream rule) graded and
-compared, as an unpromoted candidate (run `20261103_0838`; rainbow trout and kokanee are paused there). The same nine
+compared (run `20261103_0838`, a candidate until its promotion of 2026-11-13; rainbow trout and kokanee are paused
+there). The same nine
 species tuned (`DEV=1`, no grades) on the new full `default` build on the same flows and range, which separates the
 network from the other two (#145). That full-network run was then graded, compared and promoted (run `20261104_0543`,
 2026-11-04; `habitat_thresholds_tuned.md`). Chinook rearing was then scored on every setup that exists, the full
