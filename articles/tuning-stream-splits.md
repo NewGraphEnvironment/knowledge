@@ -240,15 +240,15 @@ all of link’s steps on the segments it was tuned on, differs by under 3
 
 ## What does it mean for someone using the thresholds?
 
-This package’s chinook rearing thresholds, tuned on 4 November 2026,
-were tuned on link’s full network, each segment reading its own slope,
-which is how link applies a habitat definition. On another network, or
-with slopes read another way, the same chinook records choose another
-habitat definition: the slope limit reads 13 %, 9 % or 15 %, while the
-flow floor and the allowance near large rivers hold on all four. The
-records do not make one limit right everywhere: each is the best fit for
-the slopes it was tuned on, and the published 13 % was tuned on the
-slopes link applies it to.
+This package’s chinook rearing thresholds, tuned on 3 November 2026,
+were tuned on link’s minimal network, each segment reading its own
+slope; [how the tuning
+works](https://newgraphenvironment.github.io/knowledge/articles/tuning-method.html#cuts)
+says why. On another network, or with slopes read another way, the same
+chinook records choose another habitat definition: the slope limit reads
+13 %, 9 % or 15 %, while the flow floor and the allowance near large
+rivers hold on all four. The records do not make one limit right
+everywhere: each is the best fit for the slopes it was tuned on.
 
 A habitat definition tuned on the minimal network can still be run on
 the full one, by giving each full segment its minimal parent’s slope.
@@ -321,7 +321,7 @@ Version 0.52.0. New Graph Environment Ltd.
 
 Irvine, Allan. 2026b. *link: Develop, Test and Communicate Intrinsic
 Habitat and Connectivity Models for the BC Freshwater Atlas Stream
-Network*. Version 0.78.2. New Graph Environment Ltd.
+Network*. Version 0.78.1. New Graph Environment Ltd.
 <https://doi.org/10.5281/zenodo.23264990>.
 
 Irvine, Allan. 2026c. *wet: Stream Flow and Water Temperature for the BC

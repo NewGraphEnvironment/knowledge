@@ -53,11 +53,11 @@ describes rather than taken from the literature or set by judgment.
 For chinook rearing, for example, link’s current habitat definition
 counts a stream as habitat if it is at least 1.5 m wide, no steeper than
 5.5 %. The fish records support a habitat definition where it carries at
-least 0.75 m³/s, no steeper than 13 %; a smaller stream also counts if
-it passes the slope test and a river carrying at least 3 m³/s lies
-within 1 km downstream. We tested between 6,100 and 8,400 candidate
-habitat definitions for each of the 6 species and life stages with
-enough records. The [chinook rearing
+least 0.75 m³/s, no steeper than 9 %; a smaller stream also counts if it
+passes the slope test and a river carrying at least 3 m³/s lies within 1
+km downstream. We tested between 6,100 and 8,400 candidate habitat
+definitions for each of the 6 species and life stages with enough
+records. The [chinook rearing
 article](https://newgraphenvironment.github.io/knowledge/articles/tuning-chinook-rearing.md)
 works through one of them in full.
 
@@ -117,21 +117,26 @@ Code and settings
 
 link ([Irvine 2026b](#ref-link)) cuts the Atlas streams into short
 segments and records, for each species, whether fish can reach each one
-and what link’s current habitat definitions call habitat. It also cuts
-streams where the species it models have been observed, using
-`bcfishobs` ([Norris 2024a](#ref-norris2024smnorrisbcfishobs)), so those
-observations shape the segments, but they never score a habitat
-definition: they say where fish were seen, not where they were looked
-for and missed. A catch of a species link models can be one of those
-observations, so a stream-line site that caught fish is far more likely
-than one that caught none to start a segment of its own.
+and what link’s current habitat definitions call habitat. Its full
+network also cuts streams where the species it models have been
+observed, using `bcfishobs` ([Norris
+2024a](#ref-norris2024smnorrisbcfishobs)), so a stream-line site that
+caught fish is far more likely than one that caught none to start a
+short segment of its own, and the slope it is scored on depends on the
+catch. The habitat definitions here are tuned on link’s minimal network,
+which leaves out those cuts, and those at crossings and hand-mapped
+habitat ([why](#cuts)): there a stream-line site that caught fish starts
+a segment of its own about as often as one that caught none (3.4 %
+against 3.0 %). The observations never score a habitat definition: they
+say where fish were seen, not where they were looked for and missed.
 
 Code and settings
 
 - Run by: link’s province-wide run; `link::lnk_pipeline_run()`,
   [`fresh::frs_habitat_classify()`](https://newgraphenvironment.github.io/fresh/reference/frs_habitat_classify.html)
 - In: Freshwater Atlas; link’s default configuration. Out:
-  fresh_default.streams; streams_access; streams_habitat\_\<species\>
+  fresh_default_minimal.streams; streams_access;
+  streams_habitat\_\<species\>
 
 ### 4. How much water each stream carries
 
@@ -158,12 +163,11 @@ Code and settings
 
 Each kept site takes its segment’s flow, width, access and slope, and
 the distance downstream to rivers of each size. The slope is the
-segment’s own, the slope link tests a habitat definition on, not that of
-the whole Atlas line the segment was cut from: a line can be gentle at
-one end and steep at the other, and averaging it would score a habitat
-definition on a slope link never tests. Sites with no usable date, no
-fished area or time, no known catch, or no segment at their place drop
-out. About 46,000 sites remain.
+segment’s own, not that of the whole Atlas line the segment was cut
+from: a line can be gentle at one end and steep at the other, and
+averaging it would score a habitat definition on a slope no segment has.
+Sites with no usable date, no fished area or time, no known catch, or no
+segment at their place drop out. About 46,000 sites remain.
 
 Code and settings
 
@@ -262,10 +266,10 @@ down to chance. We choose again three ways: with the groups split 4
 other ways; leaving out one part of the groups, choosing on the rest and
 scoring the choice on the part left out, for each part in turn; and on
 200 random redraws of the groups. For chinook rearing the exact habitat
-definition came back on 4 of the 4 other splits but in only 4 % of the
+definition came back on 4 of the 4 other splits but in only 10 % of the
 redraws. It stayed a close call on all 4 splits, and choosing this way
 scored better than link’s habitat definition on the parts left out
-(1,328 against 1,481; lower is better).
+(1,323 against 1,460; lower is better).
 
 Code and settings
 
@@ -310,7 +314,7 @@ link’s current habitat definition and the chosen one both go through the
 steps link itself uses, run by `fresh` ([Irvine 2026a](#ref-fresh)): the
 habitat definition’s test, link’s hand-entered habitat, and dropping
 rearing that has no spawning nearby. On the Bulkley, those last two
-steps removed 976 of the 7,273 segments link’s habitat definition
+steps removed 562 of the 6,052 segments link’s habitat definition
 passed, so we compare whole runs, not the test alone.
 
 Code and settings
@@ -319,7 +323,8 @@ Code and settings
   [`knw_compare_rules()`](https://newgraphenvironment.github.io/knowledge/reference/knw_compare_rules.md),
   [`fresh::frs_habitat_predicates()`](https://newgraphenvironment.github.io/fresh/reference/frs_habitat_predicates.html),
   [`fresh::frs_habitat_overlay()`](https://newgraphenvironment.github.io/fresh/reference/frs_habitat_overlay.html)
-- In: fresh_default; link’s default configuration. Out: data/compare/
+- In: fresh_default_minimal; link’s default configuration. Out:
+  data/compare/
 - Comparison check: least fished area: 10 m2
 - Comparison check: largest fished area: 10000 m2
 - Connectivity bridge distance: 10000 m
@@ -415,12 +420,12 @@ nearer link’s habitat definition. Both are reported.
 
 | species and stage | link’s habitat definition | close calls at 1 SE | chosen at 1 SE | close calls at 1.96 SE | chosen at 1.96 SE |
 |:---|:---|:---|:---|:---|:---|
-| bull trout rearing | is at least 1.5 m wide, no steeper than 10.5 % | 176 | carries at least 0.1 m³/s, no steeper than 25 % | 1,446 | carries at least 0.1 m³/s, no steeper than 10.5 % |
-| bull trout spawning | is at least 2 m wide, no steeper than 5.5 % | 140 | is at least 2 m wide, no steeper than 11 % | 7,021 | is at least 2 m wide, no steeper than 5.5 % |
-| chinook rearing | is at least 1.5 m wide, no steeper than 5.5 % | 169 | carries at least 0.75 m³/s, no steeper than 13 %; a smaller stream also counts if it passes the slope test and a river carrying at least 3 m³/s lies within 1 km downstream | 2,297 | carries at least 0.75 m³/s, no steeper than 13 %; a smaller stream also counts if it passes the slope test and a river carrying at least 3 m³/s lies within 1 km downstream |
-| coho rearing | is at least 1.5 m wide, no steeper than 5.5 % | 54 | carries at least 0.1 m³/s, no steeper than 5.5 %; a smaller stream also counts if it passes the slope test and a river carrying at least 3 m³/s lies within 2 km downstream | 1,296 | is at least 1.5 m wide, no steeper than 5.5 %; a smaller stream also counts if it passes the slope test and a river carrying at least 1 m³/s lies within 500 m downstream |
-| grayling rearing | is at least 1.5 m wide, no steeper than 3.5 % | 1,189 | is at least 1.5 m wide, no steeper than 5.5 % | 6,680 | is at least 1.5 m wide, no steeper than 3.5 % |
-| steelhead rearing | is at least 1.5 m wide, no steeper than 8.5 % | 265 | carries at least 1 m³/s, no steeper than 8.5 %; a smaller stream also counts if it passes the slope test and a river carrying at least 1 m³/s lies within 250 m downstream | 6,678 | is at least 1.5 m wide, no steeper than 8.5 % |
+| bull trout rearing | is at least 1.5 m wide, no steeper than 10.5 % | 241 | carries at least 0.35 m³/s, no steeper than 10.5 % | 1,698 | carries at least 0.1 m³/s, no steeper than 10.5 % |
+| bull trout spawning | is at least 2 m wide, no steeper than 5.5 % | 97 | is at least 2 m wide, no steeper than 25 %; a smaller stream also counts if it passes the slope test and a river carrying at least 1 m³/s lies within 500 m downstream | 6,759 | is at least 2 m wide, no steeper than 5.5 % |
+| chinook rearing | is at least 1.5 m wide, no steeper than 5.5 % | 102 | carries at least 0.75 m³/s, no steeper than 9 %; a smaller stream also counts if it passes the slope test and a river carrying at least 3 m³/s lies within 1 km downstream | 2,011 | carries at least 1 m³/s, no steeper than 5.5 %; a smaller stream also counts if it passes the slope test and a river carrying at least 3 m³/s lies within 1 km downstream |
+| coho rearing | is at least 1.5 m wide, no steeper than 5.5 % | 13 | carries at least 0.1 m³/s, no steeper than 5.5 %; a smaller stream also counts if it passes the slope test and a river carrying at least 3 m³/s lies within 2 km downstream | 1,267 | is at least 1.5 m wide, no steeper than 5.5 %; a smaller stream also counts if it passes the slope test and a river carrying at least 1 m³/s lies within 500 m downstream |
+| grayling rearing | is at least 1.5 m wide, no steeper than 3.5 % | 843 | is at least 1.5 m wide, no steeper than 5.5 % | 6,726 | is at least 1.5 m wide, no steeper than 3.5 % |
+| steelhead rearing | is at least 1.5 m wide, no steeper than 8.5 % | 89 | carries at least 0.5 m³/s, no steeper than 8.5 %; a smaller stream also counts if it passes the slope test and a river carrying at least 1 m³/s lies within 250 m downstream | 6,396 | is at least 1.5 m wide, no steeper than 8.5 % |
 
 link’s current habitat definition and the one chosen at each width of
 close call, for each species and stage tuned. {.table}
@@ -456,14 +461,18 @@ style="width:100%;"}
 
 ## Does where link cuts a stream change the habitat definitions?
 
-It can. A habitat definition’s slope test reads each segment’s own
+It can, and so the habitat definitions here are tuned on link’s minimal
+network. A habitat definition’s slope test reads each segment’s own
 slope, and link’s full network cuts some streams at fish records, so a
 site that caught fish often starts a short segment whose slope is worked
-out from the catch upstream. Tuned on link’s minimal network, which
-leaves out those cuts, chinook rearing’s steepest slope is 9 % rather
-than 13 %, and the network moves the habitat definitions of some other
-species and stages too. The article [Splitting streams at fish records
-shifts the steepest slope mapped as
+out from the catch upstream. Tuned on the full network, chinook
+rearing’s steepest slope is 13 % rather than the minimal network’s 9 %,
+and the network moves the habitat definitions of some other species and
+stages too. link draws habitat on its full network, where each segment
+can read the slope of the minimal segment it lies in
+([link#463](https://github.com/NewGraphEnvironment/link/issues/463)),
+the slope a habitat definition here was tuned on. The article [Splitting
+streams at fish records shifts the steepest slope mapped as
 habitat](https://newgraphenvironment.github.io/knowledge/articles/tuning-stream-splits.md)
 shows it on our own records; these figures come from that article’s
 data, written on 2026-11-05 at commit 4590e2f.
@@ -473,23 +482,24 @@ data, written on 2026-11-05 at commit 4590e2f.
 - A site’s tributary code can name several Atlas streams, and the site
   goes to the nearest of them, which need not be the one the crew fished
   ([\#91](https://github.com/NewGraphEnvironment/knowledge/issues/91)).
-- link’s segments are shortest where fish were caught: 44 % of
-  stream-line sites that caught fish start a segment of their own,
-  against 7 % of those that caught none, and the median segment is 305 m
-  long against 466 m. So which stretch a site’s slope is worked out over
-  depends on what the crew caught. Scored on the whole Atlas line’s
-  slope instead, the chosen habitat definition is still a close call for
-  4 of the 6 species and stages
+- On link’s minimal network, 3.4 % of stream-line sites that caught fish
+  start a segment of their own, against 3.0 % of those that caught none,
+  and the median segment is 717 m long against 699 m, so the stretch a
+  site’s slope is worked out over hardly depends on what the crew caught
+  ([\#120](https://github.com/NewGraphEnvironment/knowledge/issues/120)).
+  Its segments still end at access gradients, which depend on the
+  species link models. Scored on the whole Atlas line’s slope instead,
+  the chosen habitat definition is a close call for 3 of the 6 species
+  and stages
   ([\#92](https://github.com/NewGraphEnvironment/knowledge/issues/92));
-  slopes over a fixed length would not depend on where fish were caught
+  slopes over a fixed length would not depend on where streams are cut
   ([\#70](https://github.com/NewGraphEnvironment/knowledge/issues/70)).
   How far the cuts move the habitat definitions is [above](#cuts).
-- The results are on the segments of link’s build of 2026-11-03. That
-  build cuts streams at steep sections only at the first place, going
-  upstream, that a species present in the group cannot get past
-  ([link#326](https://github.com/NewGraphEnvironment/link/issues/326)),
-  and at fish records only at each species’ highest record on a stream
-  ([link#396](https://github.com/NewGraphEnvironment/link/issues/396)).
+- The results are on the segments of link’s minimal network, built on
+  2026-11-02
+  ([link#441](https://github.com/NewGraphEnvironment/link/issues/441)),
+  which cuts streams at barriers and access gradients but not at fish
+  records, crossings or hand-mapped habitat.
 - Crews measured the slope of the channel at 18,759 of the 45,529 placed
   sites. On the stretches the habitat definitions score, link’s segment
   slope puts those sites in much the same order as the crews’ readings
@@ -498,7 +508,7 @@ data, written on 2026-11-05 at commit 4590e2f.
   median of 2.3 percentage points. So a tuned slope limit sorts sites
   well taken together, but reads as a slope on the ground only to within
   a few points: counting each species’ sites within one step of its own
-  limit (1,496 in all), 39 % sit on the other side of it as the crews
+  limit (1,527 in all), 37 % sit on the other side of it as the crews
   measured it
   ([\#121](https://github.com/NewGraphEnvironment/knowledge/issues/121)).
 - Flows are 30-year averages, so no single dry year is in them.
@@ -604,8 +614,8 @@ packages [`link`](https://newgraphenvironment.github.io/link/)
 [`fresh`](https://newgraphenvironment.github.io/fresh/) (the habitat
 tests) and
 [`knowledge`](https://newgraphenvironment.github.io/knowledge/) (the
-evidence and the tuning). This article’s data were written on 2026-11-04
-at commit f6b6d0a. To cite this package:
+evidence and the tuning). This article’s data were written on 2026-11-13
+at commit 0c12ccbf. To cite this package:
 
 Irvine A (2026). *knowledge: Tests Fish Habitat Definitions Against What
 is Known About Where Fish Live, and Tunes Them from the Fish Records*.
@@ -658,7 +668,7 @@ Version 0.52.0. New Graph Environment Ltd.
 
 Irvine, Allan. 2026b. *link: Develop, Test and Communicate Intrinsic
 Habitat and Connectivity Models for the BC Freshwater Atlas Stream
-Network*. Version 0.78.2. New Graph Environment Ltd.
+Network*. Version 0.78.1. New Graph Environment Ltd.
 <https://doi.org/10.5281/zenodo.23264990>.
 
 Irvine, Allan. 2026c. *wet: Stream Flow and Water Temperature for the BC
