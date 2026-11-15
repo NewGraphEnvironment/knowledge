@@ -1,0 +1,36 @@
+# update bull_trout_grayling from VHWEK6RE,GELFSUTU, #194, written 2026-11-15T00:23:44Z before the run
+# expected: 164 of bull_trout's 173 attachments are new to it (listed below), two of them the OCR copies of
+# HYSNCHBC and N2IJDSIN, which it holds and should drop (or count as replaced); 35 - 2 + 164 = 197 documents after
+#   ESH24A9J 7VH3BJSC JESES2N2 8A4ENWWT FX72HFGS 6CIZVZCZ 8VU6QWHN U6KFWNAI HKQ8C8JN P3AABDRG SNK9623J HK9NH36B
+#   AVG6WPHE U6EDEI4V NUS9ZSQU SQ5DHQJZ PSU3FD72 WKBRUE5H PACDMNP5 7FND2DTU HTX8I56C KZIA5FSS 4ZSJWFQM Q9H26KZX
+#   RCRCBMAJ 5WXRTBWS 4TXI47IM 4TR699DK BEPHGXX9 I5XQDJPH PTQCUW42 8PADNGFE PWRE9XAM BCF7RZT9 RDCC6BKH SDTZHKBG
+#   Q6UE5EHQ PQWIHCEB 8RMIZTB8 ZUWPE5IV P55P4748 QJFXQIT5 3XQSTG63 UHEUGZPP 4IRP9B7P TQ8BFRXM WU8E8AG5 4TSGHCFJ
+#   PHD6XI45 QCTNNV3C UVDNIMKT 44UPGHBZ JZMTEVED 6CDZAUII ZSZZNW9Z 6J6JEABH GJ3R5DKE KXDCFMXT VJXBNQAC CN4U5ZGK
+#   V8KHUZAJ FWD9XS79 I3T7E4B6 NB6MMGNT PHWDKU7T 8H8P4S3R AGFJV7J3 2QDQ2T8K CNW88X2U 7QGC4MJR VPGANDZ5 VGG3JU9J
+#   SW5VWIKK UVT8EDUH C47UDAG2 9AX2FDJM VFUKEE7X PTRB79D3 HPW6W6VN H4TZF3XB NDV5VR9D G6V3D5AS KZXBGJC9 ZN26NITC
+#   U4PIZ79G 3TQ8BA5Q TI984B89 J7DCJIMU X6XEXKT2 8U4DVPNK 62IP6QX6 7RPUKTJW BCEZTQP3 DZWNTU6X 4BZVXAPH X8HVMDUI
+#   Q4VV6W43 TW3QAAEW 5V73SCZQ HDAXJNAZ WV5KGIH6 RXWHDRXS SUDKENKM PGPUMM56 DCKKCF8K HSH8TGZ9 CAFRT85J QWU4DGEU
+#   NQCC6B5R G3XEHFZD XE49X6CM CN8DJ9RG QBFSUKGG F37KK8R6 BDXIPQX7 7HEW8FZ3 T6P5A2SJ SZX9W3JP BNWIJZSG HCEMRCWS
+#   H6FQIJVU VSQSZNUC ASSAK65D 5D7QPDQG KBSBS32T ABZ5AKAN QDCBEPDP S6NKSU2C FFUVKITC MAPGVU4R 62XUSJ7H NV3C58V8
+#   KV3G5GJW GXFVUDWZ 3V44R2X3 5UZXBJW7 HMMJ3DZA TTI79TM4 ZUT2JBBZ AFVJIXTD BUFZXPA9 AMF6SEDI Z8RU4W3U 7MPIBVS5
+#   552HRZHS H4AUSEV7 2TADSK5S 5B5A5PSF X8WVNPSB VSNZUR24 QKX2XKT8 TUQWNW5C 7X59TTZI 3IHEMU5K TF22NW6D C7A6JPWE
+#   ENHNVMDT AZAZIS76 GAVXZSPE CQMFU98N 7TAMJ58B QPHK7958 AV4SEUN4 JP5P8S9N
+# start 2026-11-15T00:23:55Z
+2 of 203 members left out:
+  H8IMD55M  williamson_zimmerman2005Region7a  (no live PDF)
+  VDHTRJ9Y  MigrationPatternsAdultBullTroutMetoliusRiverLakeBillyChinookOregon  (no live PDF)
+197 keys across 2 collections
+Ingesting 164 PDF(s) into data/rag/bull_trout_grayling.duckdb
+Cannot set non-stroke color: 2 components specified, but only 1 (grayscale), 3 (RGB), and 4 (CMYK) are supported
+Cannot set non-stroke color: 2 components specified, but only 1 (grayscale), 3 (RGB), and 4 (CMYK) are supported
+Read with pdftools, because markitdown could not:
+  andrusak_thorley2013KootenayLake (ecocat_37026_KootenayLakeExploitation.pdf): Embedded NUL in string.
+Store updated: data/rag/bull_trout_grayling.duckdb | added: 164 | replaced: 0 | removed: 2 | kept: 33 | docs: 197 | chunks: 32046
+  Its md5 has changed: push it with crd_store_push(), or open it with crd_store_connect(verify = FALSE) until then, which would otherwise replace it with the copy the manifest describes. Reconnect any session that had it open.
+35 documents before, 197 after: 164 added, 2 dropped
+dropped:
+# (the two dropped paths were removed with the home-path lines when this log was written, review round 2;
+#  read from the store after the run: neither HYSNCHBC nor N2IJDSIN was among its origins, both had been before,
+#  and 8PADNGFE and PWRE9XAM were)
+Updated data/rag/bull_trout_grayling.duckdb. It is not in the bucket until ACTION=push.
+# exit 0 at 2026-11-15T00:32:17Z

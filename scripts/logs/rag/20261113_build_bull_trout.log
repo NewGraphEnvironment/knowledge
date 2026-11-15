@@ -1,0 +1,41 @@
+# build bull_trout from species/bull_trout (VHWEK6RE), #194, start 2026-11-13T17:26:39Z
+# expected left out: Metolius 1996 (VDHTRJ9Y, no PDF, knowledge#209)
+1 of 175 members left out:
+  VDHTRJ9Y  MigrationPatternsAdultBullTroutMetoliusRiverLakeBillyChinookOregon  (no live PDF)
+173 keys across 1 collections
+Ingesting 173 PDF(s) into data/rag/bull_trout.duckdb
+Downloading onnxruntime (21.5MiB)
+Downloading onnxruntime (21.5MiB)
+Downloading onnxruntime (21.5MiB)
+Downloading onnxruntime (21.5MiB)
+Downloading onnxruntime (21.5MiB)Downloading
+ onnxruntime (21.5MiB)
+Downloading onnxruntime (21.5MiB)
+Downloading onnxruntime (21.5MiB)
+ Downloaded onnxruntime
+Installed 49 packages in 154ms
+ Downloaded onnxruntime
+Installed 49 packages in 77ms
+ Downloaded onnxruntime
+Installed 49 packages in 110ms
+ Downloaded onnxruntime
+Installed 49 packages in 96ms
+ Downloaded onnxruntime
+Installed 49 packages in 125ms
+ Downloaded onnxruntime
+Installed 49 packages in 105ms
+ Downloaded onnxruntime
+Installed 49 packages in 98ms
+ Downloaded onnxruntime
+Installed 49 packages in 133ms
+Cannot set non-stroke color: 2 components specified, but only 1 (grayscale), 3 (RGB), and 4 (CMYK) are supported
+Cannot set non-stroke color: 2 components specified, but only 1 (grayscale), 3 (RGB), and 4 (CMYK) are supported
+Read with pdftools, because markitdown could not:
+  andrusak_thorley2013KootenayLake (ecocat_37026_KootenayLakeExploitation.pdf): Embedded NUL in string.
+Store built: data/rag/bull_trout.duckdb | docs: 171 | chunks: 27589 | model: nomic-embed-text
+Built data/rag/bull_trout.duckdb. It is not in the bucket until ACTION=push.
+Warning message:
+Skipped 2 PDF(s):
+  cannings_ptolemy1998RareFreshwater (Bib77170.pdf): no text (markdown reader: no text; pdftools: no text)
+  DistributionlifehistoryabundanceharvesthabitatlimitingfactorsbulltroutMetoliusRiverLakeBillyChinookOregon198394 (distribution,_life_history,_abundance,_harvest,_habitat,_and_limiting_factors.pdf): no text (markdown reader: no text; pdftools: no text) 
+# exit 0 at 2026-11-13T17:46:56Z

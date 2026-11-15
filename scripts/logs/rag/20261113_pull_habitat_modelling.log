@@ -1,0 +1,13 @@
+# verified pull of habitat_modelling before the #194 update, 2026-11-13T17:17:18Z
+# local md5 before: b28ad0ed98356b24306a4d1e0100140f; manifest md5 4fcc67007d63a46f0d31cd7e9dc86f0f (pushed 2026-11-11T13:54:30Z)
+Local habitat_modelling.duckdb does not match the manifest — re-downloading.
+Downloaded habitat_modelling (266 docs, 47377 chunks, embedded with nomic-embed-text).
+# A tibble: 4 × 9
+  citation_key           origin chunk_id  start    end text  score metric method
+  <chr>                  <chr>     <int>  <int>  <int> <chr> <dbl> <chr>  <chr> 
+1 cope_morris2001Wigwam… /User…     3807  48016  49587 "bul… 0.150 cosin… hybrid
+2 gill2006Bulltrout      /User…    36503  11951  13364 "Spa… 5.41  bm25   hybrid
+3 u_s_fishandwildlifese… /User…    39869  44804  46204 "Bul… 0.160 cosin… hybrid
+4 u_s_fishandwildlifese… /User…    44457 241594 243985 "Sit… 5.34  bm25   hybrid
+# exit 0
+# local md5 after: 4fcc67007d63a46f0d31cd7e9dc86f0f

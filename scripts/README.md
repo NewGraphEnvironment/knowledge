@@ -21,7 +21,7 @@ wf_farm_priority.js                          farm priority/crossing tables out o
 0161  reconcile farmed rows -> PSCIS, stamp watershed_group_code
 0162  spatialize -> rag_priorities.gpkg
 0150  query the rag store            ACTION=query STORE=fraser QUERY="..."
-0150  update a store in place     ACTION=update STORE=sturgeon COLLECTIONS=WEUFTSDC  (its whole build list; cred >= 0.7.0)
+0150  update a store in place     ACTION=update STORE=sturgeon COLLECTIONS=WEUFTSDC  (its whole build list; cred >= 0.7.0; rebuild before the push while cred#48 is open)
 
 0154  content-tag the corpus (any time after 0152)
 0156  dedup the store        (before pushing it)
@@ -154,6 +154,7 @@ wf_farm_priority.js                          farm priority/crossing tables out o
       (--parent <key> for a collection under another parent: --collection grayling --parent 9U54XAND is species/grayling)
       (--collection sturgeon --parent 9U54XAND: species/sturgeon, from data/sturgeon_members.csv and _additions.csv)
       (--collection westslope_cutthroat --parent 9U54XAND: species/westslope_cutthroat, from data/westslope_cutthroat_*.csv)
+      (--collection bull_trout --parent 9U54XAND: species/bull_trout, from data/bull_trout_*.csv, #194)
       (--collection statistics --parent top: the top-level statistics collection, from data/statistics_*.csv, #95)
 0275  carry out data/zotero_attachment_verdicts.csv on the group's attachments   --dry-run first, then live
       (merge an item's report parts into one PDF, keep one copy, split a separate document to its own item, #126, #151)
@@ -161,6 +162,7 @@ wf_farm_priority.js                          farm priority/crossing tables out o
       (habitat_modelling, chinook, bull_trout, grayling, species, temperature, wedzin_kwa_chinook, hydrology and the
       two salmon collections, by key)                                                    then ACTION=push
 0150  ACTION=build STORE=bull_trout_grayling COLLECTIONS="VHWEK6RE,GELFSUTU"               then ACTION=push
+0150  ACTION=build STORE=bull_trout COLLECTIONS=VHWEK6RE                                   then ACTION=push
 0150  ACTION=build STORE=sturgeon COLLECTIONS=WEUFTSDC                                     then ACTION=push
 0150  ACTION=build STORE=westslope_cutthroat COLLECTIONS=TIDR3PNN                          then ACTION=push
 0150  ACTION=build STORE=temperature COLLECTIONS=SW2RXUJC                                  then ACTION=push
@@ -168,7 +170,8 @@ wf_farm_priority.js                          farm priority/crossing tables out o
 0150  ACTION=build STORE=statistics COLLECTIONS=LP4R4VYR                                   then ACTION=push
       (McElreath 2020, Gelman et al. 2013 (BDA3), Hill 2025 and the collection's other PDFs; Wood's GAM book and
       MacKenzie et al.'s occupancy book join when a PDF is in hand, #95)
-      (after a library change, ACTION=update with the same COLLECTIONS brings a store up to date instead)
+      (after a library change, ACTION=update with the same COLLECTIONS brings a store up to date instead; while
+       NewGraphEnvironment/cred#48 is open, rebuild it before the push, as the ACTION=update bullet says)
       (a rebuild over an existing local store needs OVERWRITE=TRUE; ACTION=push needs CONFIRM=TRUE to upload)
 0280  verify data/literature_evidence.csv and data/ip_model_registry.csv against their PDFs, and the
       model_id link between them (gate; read with knw_literature_read() / knw_ip_read())
@@ -259,8 +262,17 @@ A report is reachable from more than one place; using only one axis misses repor
   collection) are dropped, the rest are kept without re-reading. Give the whole build list, or the documents of the
   collections left out are dropped. It needs the store local (`ACTION=query VERIFY=TRUE` pulls it) and the store's
   embedder answering, refuses a store holding any document from outside Zotero storage (`storage/<key>/`), which never
-  resolves and would be dropped: all of `fraser`, `peace` and `pine`), and prints the document counts before and after and every document it dropped.
-- **Push after every local write** (`0152` ingest, `0156` dedup, a rebuild or update). The next verified
+  resolves and would be dropped: all of `fraser`, `peace` and `pine`), and prints the document counts before and after and every document it dropped. The
+  file keeps the space the update freed (NewGraphEnvironment/cred#48): #194's updates left 32 to 76 % of their blocks
+  free (`pragma database_size`). While that is open, rebuild an updated store with `ACTION=build OVERWRITE=TRUE` and
+  the same `COLLECTIONS` before pushing it. The rule reaches only stores an update accepts, so never `fraser`, `peace`
+  or `pine`. A rebuild re-reads every PDF, so it also drops any the current reader finds no text in, which an update
+  would have kept (#194's dropped 1 and 10 image-only scans, #217). cred names those only in a warning R cuts at
+  1,000 characters, so `0150` prints a rebuild's whole dropped list, as it does an update's: read it before the push. The rule is repeated in `CLAUDE.md`,
+  in `0150`'s usage and its message after an update, and carried or pointed to from five other passages here: when cred#48 is
+  fixed, `git grep -n cred#48` finds every copy.
+- **Push after every local write** (`0152` ingest, `0156` dedup, a rebuild, or an update and, while cred#48 is open,
+  its rebuild). The next verified
   connect replaces a local file whose md5 no longer matches the manifest with the bucket copy —
   an unpushed ingest is simply gone
 - `COLLECTIONS` takes names or 8-character Zotero collection keys and resolves them **inside the NGE group
@@ -478,6 +490,13 @@ The cited basis for CH and BT habitat thresholds (#19). Not per watershed group.
   The `westslope_cutthroat` store is built from `species/westslope_cutthroat` alone (`COLLECTIONS=TIDR3PNN`, #190): the
   management and recovery documents (BC, federal and Alberta), East Kootenay and Elk monitoring series, and the
   Environmental Damages Fund's Elk Valley reports. For the same reason it does not feed `habitat_modelling`.
+  The `bull_trout` store is built from `species/bull_trout` alone (`COLLECTIONS=VHWEK6RE`, #194): the COSEWIC
+  assessments (2012, 2025) and the SARA registry pages of the South Coast and Western Arctic units (neither unit has a
+  federal management plan), BC's 2023 management plan, Alberta's status report, the US recovery plan and critical
+  habitat rule, the Williston, Peace and Columbia series and the reviews.
+  Unlike sturgeon and cutthroat, `VHWEK6RE` is also in `habitat_modelling`'s list and in `bull_trout_grayling`'s, so a
+  change to the collection is followed by `ACTION=update` on all three, and, while NewGraphEnvironment/cred#48 is
+  open, their rebuild before the push (the `ACTION=update` bullet above).
   The `statistics` store is built from the top-level `statistics` collection (`LP4R4VYR`, `--parent top`, #95): the
   texts the tuning method is read against (#185).
 - `0275` carries out `data/zotero_attachment_verdicts.csv`, one decided row per item (#126, #151): `merge` joins an
@@ -487,7 +506,8 @@ The cited basis for CH and BT habitat thresholds (#19). Not per watershed group.
   an attachment's type, an item's fields or its file; `merge-items` is the duplicate recipe under "Zotero access is
   local, except for filing" in CLAUDE.md. A row is done when its end state holds, so a re-run after a crash finishes
   the row. It prints the attachments it added and trashed: a cred-built store that holds one is brought up to date
-  with `0150 ACTION=update`; a harvest store waits for its next `0152` build.
+  with `0150 ACTION=update` (then rebuilt before its push while cred#48 is open, the `ACTION=update` bullet); a
+  harvest store waits for its next `0152` build.
 - `data/literature_evidence.csv` has one row per value a source gives: species, stage, form, variable, the
   model parameter it bears on, bound, value, unit, `metric`, kind, region, key, page, verbatim quote,
   `quote_source`, scale, cited source and `model_id`. `kind = none` records a search that found nothing.
