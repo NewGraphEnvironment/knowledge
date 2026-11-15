@@ -70,23 +70,26 @@ ch <- sc[sc$key == "CH_rear", ]
 prior_sd <- as.numeric(val("prior_sd"))
 p_norm <- 2 * stats::pnorm(-3)
 p_cauchy <- 2 * stats::pcauchy(-3)
-# the words on the cuts: on the published network a site with fish starts its own segment far more often than an empty
-# one, less often than on the earlier build, and about as often as an empty one on the minimal network; chinook
-# rearing's slope limit is steeper on the published network than on the minimal one, and the parent setup agrees with
-# the minimal one. The bundle's full-network pick is this article's own, so a promotion that moves chinook rearing stops
-# the build here until data-raw/vignette_cut_points.R is rerun
+# the other species and stages whose habitat definition the network moves (the bundle compares every published key)
+moved <- setdiff(cp$other_keys$key[cp$other_keys$network_moved != "same"], "CH_rear")
+# the words on the cuts: on link's full network a site with fish starts its own segment far more often than an empty
+# one, less often on the current build than on the earlier one, and about as often as an empty one on the minimal
+# network the tuning reads; chinook rearing's slope limit is steeper on the full network than on the minimal one, and
+# the parent setup agrees with the minimal one. The bundle's setup "published" is link's full network (#145's run, the
+# one published when the bundle was written). The bundle's minimal-network pick is this article's own, so a promotion
+# that moves chinook rearing stops the build here until data-raw/vignette_cut_points.R is rerun
 stopifnot(nrow(pr) == 6, at_site("published_145", "fish") > 3 * at_site("published_145", "zero"),
           at_site("published_92", "fish") > at_site("published_145", "fish"),
           abs(at_site("minimal", "fish") - at_site("minimal", "zero")) < 1,
           cp_lim("published") > cp_lim("minimal"), cp_lim("parent") == cp_lim("minimal"),
-          # the cuts bundle's published network is the one this article's tuning read: the same visit tables
-          identical(unname(cp$meta$md5_local["data/stage/cut_points/evidence/published_145/visits_link.csv"]),
+          # the cuts bundle's minimal network is the one this article's tuning read: the same visit tables
+          identical(unname(cp$meta$md5_local["data/stage/cut_points/evidence/minimal/visits_link.csv"]),
                     unname(x$meta$md5_local["data/fdis/derived/visits_link.csv"])),
-          identical(unname(cp$meta$md5_local["data/stage/cut_points/evidence/published_145/visits_species.csv"]),
+          identical(unname(cp$meta$md5_local["data/stage/cut_points/evidence/minimal/visits_species.csv"]),
                     unname(x$meta$md5_local["data/fdis/derived/visits_species.csv"])),
-          # "every published species and stage has been tuned on it"
-          setequal(sc$key, cp$other_keys$key),
-          length(gs_ch) == 1, identical(gs_ch, cp$setups$pick[cp$setups$setup == "published"]),
+          # "the network moves the habitat definitions of other species and stages too", over every published key
+          setequal(sc$key, cp$other_keys$key), length(moved) >= 2,
+          length(gs_ch) == 1, identical(gs_ch, cp$setups$pick[cp$setups$setup == "minimal"]),
           # the groups: chinook rearing's split is quoted, and in every key the never-caught groups outnumber the
           # all-caught ones
           nrow(ch) == 1, identical(ch$groups_both + ch$groups_all + ch$groups_none, ch$groups),
@@ -94,12 +97,12 @@ stopifnot(nrow(pr) == 6, at_site("published_145", "fish") > 3 * at_site("publish
           prior_sd == 2.5, round(exp(prior_sd)) == 12)
 # the words: the table holds every published key (the bundle's gradient limits come from data/thresholds.csv); every
 # published key drops some groups, and more than half for the keys named; the publishing test withholds some
-# keys and publishes others, and its closest call is decided by less than one unit of deviance. A bundle without
+# keys and publishes others, and its closest call prints as more than zero at one decimal. A bundle without
 # `scope` would make every comparison logical(0), which stopifnot() passes
 stopifnot(nrow(sc) > 0, setequal(sc$key, x$site_gradient$limits$key), all(sc$groups_both < sc$groups),
           length(under_half) >= 2,
           length(withheld) >= 1, any(!is.na(sc$margin) & !sc$grade_withheld), nrow(closest) == 1,
-          abs(closest$margin) < 1, abs(closest$margin) >= 0.05,
+          abs(closest$margin) >= 0.05,
           # the caption's sign: at zero or above withheld, below published (away from a tie the summary's rounding
           # could blur)
           with(curved[abs(curved$margin) > 1e-3, ], identical(grade_withheld, margin <= 0)),
@@ -122,10 +125,11 @@ one it chooses rather than a single winner alone. Its three main departures are 
 rank streams. The score measures how well a habitat definition ranks streams within a watershed group, not how often
 the species turns up in a new one; the prior (an assumption about a value made before seeing the data) is used as a
 penalty that finds one best value, not a full posterior (the spread of values the data and prior together allow); and
-the thresholds are reported as one choice and a range, not a distribution. Three things should change: a check on how
-the choice is made does not fully hold its test data out, the two models the publishing test compares treat a site
-from an unfamiliar data set or period differently, and the stream slopes the habitat definitions read depend on where
-fish were caught. The terms are gathered in a [glossary](#terms) at the end.
+the thresholds are reported as one choice and a range, not a distribution. Two things should change: a check on how
+the choice is made does not fully hold its test data out, and the two models the publishing test compares treat a site
+from an unfamiliar data set or period differently. A third, stream slopes that depended on where fish were caught, is
+answered: the habitat definitions are tuned on `link`'s minimal network, which does not cut streams at fish records.
+The terms are gathered in a [glossary](#terms) at the end.
 
 ## What does the tuning do? {#tuning}
 
@@ -191,10 +195,10 @@ knitr::kable(data.frame(
     "Not necessarily: the area fished has a fitted slope, so the rate per square metre can change with area",
     "A miss is read as no catch at that visit",
     "No: placement, slope and flow are estimates read as exact",
-    "No: link cuts a stream at each species' highest fish record on it"),
+    "Nearly: the tuning reads link's minimal network, which does not cut streams at fish records"),
   verdict = c("follows the books", "follows the books", "departs, defensibly", "departs", "should change",
               "follows the books", "departs, defensibly", "departs, defensibly", "departs", "follows the books",
-              "departs", "should change", "departs, defensibly", "departs", "departs", "should change"),
+              "departs", "should change", "departs, defensibly", "departs", "departs", "follows the books"),
   check.names = FALSE),
   caption = "Where the tuning stands against the two books, one row per question.", row.names = FALSE)
 ```
@@ -374,18 +378,18 @@ prior's centre; the curve gives it the most common level in the fit. So the two 
 ## Does a stream's slope depend on the catch? {#cuts}
 
 A predictor should not be shaped by the outcome it predicts. The habitat definitions read the slope of the stretch of
-stream, or segment, a site sits on, and `link` cuts a stream into segments at, among other places, the highest record
-of each species it models on that stream. So a site that caught fish is more likely to start a short segment of its
-own, whose slope is worked out from the stream just above the catch. `link`'s earlier build cut at every record; the
-build the published tuning reads cuts only at the highest, among other changes, and there a site with fish starts its
-own segment less often than before, but still several times as often as an empty site. Its minimal network makes no
-cut at fish records, crossings or the ends of stretches whose habitat was mapped by hand; it still cuts where one
-Atlas line meets the next, at natural barriers and at slopes a species cannot pass. There a site with fish starts its
-own segment about as often as an empty one.
+stream, or segment, a site sits on, and `link`'s full network cuts a stream into segments at, among other places, the
+highest record of each species it models on that stream. So there a site that caught fish is more likely to start a
+short segment of its own, whose slope is worked out from the stream just above the catch. `link`'s earlier build cut
+at every record; its current one cuts only at the highest, among other changes, and there a site with fish starts its
+own segment less often than before, but still several times as often as an empty site. So the tuning reads `link`'s
+minimal network, which makes no cut at fish records, crossings or the ends of stretches whose habitat was mapped by
+hand; it still cuts where one Atlas line meets the next, at natural barriers and at slopes a species cannot pass.
+There a site with fish starts its own segment about as often as an empty one.
 
-```{r cuts, fig.height = 2.8, fig.cap = "The share of site visits on the stream branch that start a segment of their own, for visits that caught fish and visits that did not, on link's full network as the earlier tuning read it, as the published tuning reads it, and on its minimal network."}
-nets <- c(published_92 = "full network, earlier tuning", published_145 = "full network, published tuning",
-          minimal = "minimal network")
+```{r cuts, fig.height = 2.8, fig.cap = "The share of site visits on the stream branch that start a segment of their own, for visits that caught fish and visits that did not, on link's full network in its earlier and current builds, and on its minimal network, which the tuning reads."}
+nets <- c(published_92 = "full network, earlier build", published_145 = "full network, current build",
+          minimal = "minimal network, tuned on")
 pr$net <- factor(nets[pr$network], levels = rev(nets))
 # none first, so the dodge draws the visits with fish above them
 pr$catch <- factor(ifelse(pr$catch_status == "fish", "caught fish", "caught none"), levels = c("caught none", "caught fish"))
@@ -402,13 +406,15 @@ ggplot(pr, aes(at_site_pct, net, fill = catch)) +
   theme(legend.position = "top", panel.grid.major.y = element_blank(), panel.grid.minor = element_blank())
 ```
 
-The network moves the result. Tuned on the minimal network, chinook rearing's steepest slope is `r lim_pct("minimal")`
-rather than the published `r lim_pct("published")`, and it is `r lim_pct("parent")` again when each segment of the full
-network reads the slope of the minimal segment it lies in, the form in which a habitat definition tuned on the minimal
-network would be applied. The minimal network leaves out three kinds of cut at once, so these runs cannot say how much
-of the change comes from the cuts at fish records alone. The article
+The network moves the result. Tuned on the full network, chinook rearing's steepest slope is `r lim_pct("published")`
+rather than the minimal network's `r lim_pct("minimal")`, and it is `r lim_pct("parent")` again when each segment of the
+full network reads the slope of the minimal segment it lies in, which is how `link` can draw a habitat definition tuned
+on the minimal network ([link#463](https://github.com/NewGraphEnvironment/link/issues/463)). The network moves the
+habitat definitions of `r words_and(vapply(moved, key_words, ""))` too. The minimal network leaves out three kinds of
+cut at once, so these runs cannot say how much of the change comes from the cuts at fish records alone
+(`r issue(120)`). The article
 [Splitting streams at fish records shifts the steepest slope mapped as habitat](tuning-stream-splits.html) shows this in
-full. Whether to tune on the minimal network is a decision not yet made.
+full.
 
 ## What do we test next? {#next}
 
@@ -422,9 +428,6 @@ full. Whether to tune on the minimal network is a decision not yet made.
   spread of groups, since a new-group score for one beside an own-base-rate score for the other compares nothing. Two
   cheap tests ride with it: the area fished as a fixed exposure, and a simulation of what the prior implies for the
   catch.
-- **Tuning on the minimal network** (`r issue(120)`): every published species and stage has been tuned on it, and chinook
-  rearing also through each full segment's minimal parent; none has been published, and whether to tune on it is
-  still to decide.
 - **Slopes measured other ways** (`r issue(70)`): modelled slopes checked against field-measured ones, and slopes over
   fixed lengths of stream scored beside `link`'s segment slope.
 
@@ -451,6 +454,8 @@ full. Whether to tune on the minimal network is a decision not yet made.
 - **Deviance.** How badly a model predicts the catch, summed over sites; lower is better.
 - **Fold.** One of the `r val("folds")` sets the watershed groups are dealt into; each in turn is left out of the fit
   and scored.
+- **Full network.** `link`'s streams cut, beyond the minimal network's cuts, at each species' highest fish record on a
+  stream, at crossings and at the ends of hand-mapped habitat; the network `link` draws habitat on.
 - **Grade.** A stream's expected use per standard electrofishing visit, from the curve.
 - **Habitat definition.** The few limits on a stream's size and slope that say where a species spawns or rears.
 - **Minimal network.** `link`'s streams without the cuts at fish records, crossings and the ends of hand-mapped

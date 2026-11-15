@@ -1,6 +1,6 @@
 # How the tuning method stands against Bayesian practice
 
-**Verified:** 2026-11-12 · **Issues:** #185 (this review); the store is #95's; it scopes #186 (a partially pooled
+**Verified:** 2026-11-12, and the gate's figures and the cuts at fish records on 2026-11-14 after the tuning moved to link's minimal network (#120's promotion) · **Issues:** #185 (this review); the store is #95's; it scopes #186 (a partially pooled
 curve) and feeds the methodology article (#93) and the internal article on Bayesian practice (#204) · **Produced by:** the code at this commit, read line by line; the
 `statistics` store (McElreath 2020 and Gelman et al. 2013, searched through cred); every quote that cites a page
 checked on that page by `data-raw/bayesian_alignment_check.R` (log `scripts/logs/habitat/*_bayesian_alignment_check.txt`) · **Status:**
@@ -212,8 +212,9 @@ from the pick, which was chosen on the same folds that then score the curve.
 penalised, which is a prior on their wiggliness: BDA3's "Bayesian penalized (P) splines" (gelman_etal2013Bayesiandata, p. 490), and the same idea
 with a fixed ridge on the weights in Rethinking (p. 118). So a gate on held-out deviance is not double-counting
 complexity. Two things lean toward publishing: the curve's variables were chosen on the folds that score it (BDA3
-p. 182, above), and, compared with a test that asks for a margin, a point comparison publishes on any improvement. Today it withholds three keys of seven (bull trout spawning, coho rearing,
-westslope cutthroat rearing).
+p. 182, above), and, compared with a test that asks for a margin, a point comparison publishes on any improvement. On
+the minimal network's run it withholds two keys of seven (coho rearing, westslope cutthroat rearing); on the
+full-network run before it, three (bull trout spawning as well).
 
 ### Effort: offset or covariate? (Rethinking ch. 11)
 
@@ -263,8 +264,9 @@ whether fish use it. Crews chose where to fish, by era and data set, and that ch
 sampled and how hard: the method adjusts for era and data set as nuisance terms, the right move for a confound
 (Rethinking ch. 6, p. 183). Three arrows run the other way, from the outcome into the inputs: link codes `access_bt = 2`
 when a bull trout record sits upstream (the method keeps such segments but never uses the code as a predictor, which
-is the right move); link cuts segments at fish records, so a visit that caught fish sits on a shorter segment whose
-gradient depends on that catch (`gradient_col`: **should change**, #70); and one exclusion turns on the outcome: a
+is the right move); link's full network cuts segments at fish records, so there a visit that caught fish sits on a
+shorter segment whose gradient depends on that catch, which is why the tuning reads the minimal network, cut at no
+fish record, since 2026-11-13 (`gradient_col`, #120; fixed-window gradients are #70); and one exclusion turns on the outcome: a
 visit whose catch blocks the species' absence (`status == "blocked"`, `R/fdis_species.R`) is left out
 (`R/tune_run.R:299`), and only a visit that did not catch the species can be blocked, so the gate drops some zeros and
 no ones among the recorded values. A blocked absence is a missing outcome, and dropping it is complete-case analysis:
@@ -302,11 +304,11 @@ is named in its text, and its settings and unkeyed choices carry their own verdi
 |---|---|---|---|
 | 1 | The fish records | Reads the export and keeps one copy of a survey loaded twice: data, not inference. | no bearing |
 | 2 | Putting sites on the stream map | A visit's placement is an estimate carried as exact; the snap limits drop the worst (Rethinking ch. 15). | differs |
-| 3 | link's stream segments | link cuts segments at the fish records of the species it models, so a segment's length and gradient depend on the outcome (an arrow from outcome to predictor; Rethinking ch. 6). The rules' reading of it is step 7's `gradient_col` (#70). | differs |
+| 3 | link's stream segments | link's full network cuts segments at the fish records of the species it models, so there a segment's length and gradient depend on the outcome (an arrow from outcome to predictor; Rethinking ch. 6). Since 2026-11-13 the tuning reads the minimal network, which makes no such cut (#120); the rules' reading of it is step 7's `gradient_col` (#70). | aligned |
 | 4 | How much water each stream carries | A modelled flow read as measured (Rethinking ch. 15). | differs |
 | 5 | Joining each site to its segment | Joins the inputs and each species' presence where link expects it. Access reads barriers before observation overrides and range is link's table per group, so neither is decided by the visit's catch; an absence blocked by another code is dropped, which removes recorded zeros only, some of which may be the species under a looser name: complete-case analysis (Rethinking pp. 499, 503). | differs |
 | 6 | Candidate rules | A set of candidate models compared out of sample, as Rethinking ch. 7 asks; the larger the set, the more the winner's score flatters it (BDA3 p. 182), and the grid is that set (the bias of choosing among it is step 7's). | aligned |
-| 7 | Scoring and choosing | Whole groups held out and the SE of a difference taken over groups (aligned); a plug-in deviance with each held-out group's intercept refit on its own outcomes, fixed group intercepts, a one-SE width, and a pick by nearness to `default` inside the region (differs, each defensible), with the region anchored on the best score, which choosing among thousands of rules flatters (BDA3 p. 182; step 8's nested check would measure it, and is not nested); the gradient the rules read should change (`gradient_col`, #70). | differs |
+| 7 | Scoring and choosing | Whole groups held out and the SE of a difference taken over groups (aligned); a plug-in deviance with each held-out group's intercept refit on its own outcomes, fixed group intercepts, a one-SE width, and a pick by nearness to `default` inside the region (differs, each defensible), with the region anchored on the best score, which choosing among thousands of rules flatters (BDA3 p. 182; step 8's nested check would measure it, and is not nested); the gradient the rules read no longer depends on the catch since the tuning moved to the minimal network (`gradient_col`, #120). | differs |
 | 8 | Checking the choice is not luck | Other fold seeds (aligned); a bootstrap of fixed scores, which measures stability, not estimation uncertainty (differs); and a nested check that is not nested (should change, `honest_nesting`). | differs |
 | 9 | A curve and a grade | Groups pooled as a REML random effect and smooths penalised (aligned), graded at the average group (aligned); scored by refit intercepts on an outcome-selected set of groups, and gated by a point comparison on the folds that chose its variables (differs); an unseen sampling level handled unlike the scorer (should change, `curve_unseen_mode`). | differs |
 | 10 | Running the rule on link's streams | Regenerates link's flags under each rule: no inference, apart from the lift's bootstrap of placed record locations (`cmp_n_boot`). | no bearing |
@@ -350,7 +352,7 @@ One row per key of `inst/method/settings.csv`. `no bearing` means no statistical
 | `area_range` | 7 | 10; 10000 m2 | Trims fished areas outside 10 to 10,000 m²; with `log_area` free (`log_area_free`) it bounds the range the effort slope is fitted on. | no bearing |
 | `cmp_area_min` | 10 | 10 m2 | The comparison's restatement of `area_range`. | no bearing |
 | `cmp_area_max` | 10 | 10000 m2 | As `cmp_area_min`. | no bearing |
-| `gradient_col` | 7 | segment_gradient | The rules read link's segment gradient, and link cuts segments at the fish records of the species it models, so the segment, and its gradient, depend on the outcome: a predictor partly caused by the outcome, which a DAG of the evidence (Rethinking ch. 6, p. 185) draws as an arrow from outcome to predictor. The method measures it (#92, #149) and scores setups on other gradients (#120); fixed-window gradients, whose length would not depend on the outcome, are #70. | should change |
+| `gradient_col` | 7 | segment_gradient | The rules read link's segment gradient. link's full network cuts segments at the fish records of the species it models, so there the segment, and its gradient, depend on the outcome: a predictor partly caused by the outcome, which a DAG of the evidence (Rethinking ch. 6, p. 185) draws as an arrow from outcome to predictor. The method measured it (#92, #149), scored setups on other gradients, and since 2026-11-13 reads the minimal network, cut at no fish record (#120), where a visit with fish starts its own segment about as often as one without (3.4 % against 3.0 %); fixed-window gradients, whose length would not depend on where streams are cut, are #70. | aligned |
 | `seed` | 7 | 54 | The fold seed, fixed, and the pick repeated on four more (`seeds_more`). | aligned |
 | `folds` | 7 | 5 | Five folds of whole watershed groups, each held out once: cross-validation with the group, not the visit, as the unit, as Rethinking ch. 13 frames prediction for clusters not in the sample (p. 428). BDA3 notes that each fold's prediction, made from less than all the data, underestimates the fit (p. 175). | aligned |
 | `fit` | 7 | fe | The scorer absorbs a fixed intercept per group: in BDA3's terms a group effect with infinite prior variance (p. 383), which Rethinking ch. 13 calls amnesia (p. 399). It drops every group with only one outcome (`one_outcome_groups`), so chinook rearing scores 45 of the 111 groups its visits fall in. Defensible for comparing rules within groups; a pooled curve is tested in #186. | differs |
@@ -422,8 +424,10 @@ Each item is an issue, so it is planned and reviewed on its own.
 - **Make the curve take the reference for an unseen level, guard the fallback, and nest the nested check or describe
   it as what it is** (`curve_unseen_mode`, `fallback_no_prior`, `honest_nesting`): #203. None moves a published
   pick. The unseen level could move only a gate, and the curve's count of such visits, the issue's first measurement,
-  is recorded for no key: one visit can move a gate by at most 55.3 in deviance, enough to flip bull trout spawning
-  (withheld by 0.56) or grayling rearing (published by 14.4), not westslope cutthroat rearing (withheld by 106). The
+  is recorded for no key: on the full-network run one visit could move a gate by at most 55.3 in deviance, enough then
+  to flip bull trout spawning (withheld by 0.56) or grayling rearing (published by 14.4), not westslope cutthroat
+  rearing (withheld by 106). On the minimal network's run the closest gates are bull trout spawning (published by 3.4)
+  and grayling rearing (published by 16.2); the bound is not measured there. The
   fallback is out of reach of the penalised terms, and nesting changes only the check.
 - **Score rules on a gradient that does not depend on the catch** (`gradient_col`): #70.
 - **A pooled curve, scored both ways** (#186): a full posterior rather than REML plug-ins, priors on the smooths, the
