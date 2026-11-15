@@ -186,7 +186,7 @@ What exploration settled:
 
 ## Validation
 
-- [ ] Tests pass (`devtools::test()`; no `R/` change expected)
+- [x] Tests pass (`devtools::test()`; no `R/` change expected): 2026-11-15, FAIL 0, PASS 2289, SKIP 4
 - [ ] `/code-check branch` (three-round floor, ending on an enumeration of every CSV field against its own title page),
       and the #56 `public_sweep.py` over the branch
 - [ ] The PWF checkboxes match the landed work
