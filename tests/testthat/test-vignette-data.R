@@ -154,6 +154,22 @@ test_that("the methodology bundle's funnel adds up and every register row was re
   expect_setequal(unique(x$resolved$key), x$settings$key)
 })
 
+# the internal article on Bayesian practice (#204) reads each published key's groups and grade gate from the bundle
+test_that("the methodology bundle's scope covers every published key, with its groups and gate", {
+  x <- readRDS(vd("method.rds"))
+  s <- x$scope
+  expect_false(is.null(s))
+  # every published key: the bundle's site-gradient limits come from data/thresholds.csv, a producer scope does not read
+  expect_setequal(s$key, x$site_gradient$limits$key)
+  expect_true(all(s$status %in% c("fitted", "underpowered")))
+  expect_false(anyNA(s[c("groups", "groups_both", "groups_all", "groups_none", "grade_withheld")]))
+  # each group has both outcomes, every site caught, or none did
+  expect_identical(s$groups_both + s$groups_all + s$groups_none, s$groups)
+  skip_if_not(has_src, "no source-tree data/ (installed package)")
+  thr <- utils::read.csv(file.path(root, "data", "thresholds.csv"), stringsAsFactors = FALSE)
+  expect_setequal(s$key, unique(paste(thr$species_code, thr$stage, sep = "_")[!is.na(thr$value)]))
+})
+
 test_that("the methodology bundle's site-gradient check covers every published gradient limit (#121)", {
   skip_if_not(has_src, "no source-tree data/ (installed package)")
   x <- readRDS(vd("method.rds"))

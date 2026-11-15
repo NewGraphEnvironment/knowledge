@@ -132,14 +132,7 @@ knw_tune_run <- function(visits, species_tbl, walks, thresholds, species = knw_s
   chk::chk_data(thresholds)
   chk::chk_subset(stages, c("rear", "spawn"))
   wi <- knw_walk_index(walks)
-  base <- visits[visits$edge_type %in% edge_stream & !(visits$wb_river %in% TRUE) & !(visits$wb_wetland %in% TRUE) &
-                   !(visits$wb_lake %in% TRUE) & !is.na(visits$area_m2) & visits$area_m2 >= area_range[1] &
-                   visits$area_m2 <= area_range[2], , drop = FALSE]
-  base$log_area <- log(base$area_m2)
-  eras <- c("to1994", "1995-2004", "2005on")
-  base$era <- factor(as.character(cut(base$year, c(-Inf, 1994, 2004, Inf), labels = eras)), levels = eras)
-  base$data_set <- factor(base$data_set)
-  base$wsg <- factor(base$watershed_group_code)
+  base <- .tune_base(visits, edge_stream, area_range)
   rule_in <- function(dd, r) knw_rule_in(dd, r, walks = wi, cols = cols, src = src, edge_stream = edge_stream)
 
   # ---- every key's population and grid, and why a key is not fitted ----
@@ -150,8 +143,6 @@ knw_tune_run <- function(visits, species_tbl, walks, thresholds, species = knw_s
     thx <- NULL
     if (!is.null(thresholds_extra)) thx <- thresholds_extra[thresholds_extra$species_code == sp, , drop = FALSE]
     if (!is.null(thx) && nrow(thx) != 1L) thx <- NULL
-    st <- species_tbl[species_tbl$species_code == sp, c("site_visit", "present", "status", "in_range")]
-    bcol <- paste0("barrier_dnstr_", tolower(sp))
     for (stage in stages) {
       key <- paste(sp, stage, sep = "_")
       rec <- list(species_code = sp, stage = stage, response = if (stage == "rear") "U" else "S")
@@ -169,25 +160,15 @@ knw_tune_run <- function(visits, species_tbl, walks, thresholds, species = knw_s
         out[[key]] <- rec
         next
       }
-      d <- merge(base, st, by = "site_visit")
-      d <- d[d$in_range %in% TRUE & d$status != "blocked", , drop = FALSE]
-      if (bcol %in% names(d)) d <- d[d[[bcol]] %in% FALSE, , drop = FALSE]
-      if (stage == "rear") {
-        d$U <- as.integer(d$present)
-        resp <- "U"
-      } else {
-        if (is.null(spawner) || !any(spawner$species_code == sp)) {
-          rec$status <- "no_response"
-          rec$population <- c(visits_in = nrow(d))
-          out[[key]] <- rec
-          next
-        }
-        sv <- spawner[spawner$species_code == sp, c("site_visit", "S")]
-        d <- merge(d, sv, by = "site_visit")
-        d <- d[!is.na(d$S), , drop = FALSE]
-        resp <- "S"
+      pop <- .tune_population(base, species_tbl, sp, stage, spawner)
+      d <- pop$d
+      resp <- pop$resp
+      if (is.null(resp)) {
+        rec$status <- "no_response"
+        rec$population <- c(visits_in = nrow(d))
+        out[[key]] <- rec
+        next
       }
-      d$wsg <- droplevels(d$wsg)
       both <- tapply(d[[resp]], d$wsg, function(x) any(x == 1L) && any(x == 0L))
       n_both <- sum(both %in% TRUE)
       rec$population <- c(visits_in = nrow(d), detections = sum(d[[resp]]), groups = nlevels(d$wsg),
@@ -294,6 +275,43 @@ knw_tune_run <- function(visits, species_tbl, walks, thresholds, species = knw_s
   }
   out
 }
+# The stream-branch visits with a usable fished area, with the scorer's covariates. Shared by knw_tune_run() and
+# data-raw/vignette_method.R, whose group counts must be the tuning's own (#204).
+.tune_base <- function(visits, edge_stream, area_range) {
+  base <- visits[visits$edge_type %in% edge_stream & !(visits$wb_river %in% TRUE) & !(visits$wb_wetland %in% TRUE) &
+                   !(visits$wb_lake %in% TRUE) & !is.na(visits$area_m2) & visits$area_m2 >= area_range[1] &
+                   visits$area_m2 <= area_range[2], , drop = FALSE]
+  base$log_area <- log(base$area_m2)
+  eras <- c("to1994", "1995-2004", "2005on")
+  base$era <- factor(as.character(cut(base$year, c(-Inf, 1994, 2004, Inf), labels = eras)), levels = eras)
+  base$data_set <- factor(base$data_set)
+  base$wsg <- factor(base$watershed_group_code)
+  base
+}
+
+# One species and stage's scoring population: the visits in range, not blocked and with no natural barrier
+# downstream, and the response (`U` for rearing, `S` for spawning). `resp` is NULL, and `d` the visits before the
+# response, when spawning has no spawner evidence for the species.
+.tune_population <- function(base, species_tbl, sp, stage, spawner = NULL) {
+  st <- species_tbl[species_tbl$species_code == sp, c("site_visit", "present", "status", "in_range")]
+  bcol <- paste0("barrier_dnstr_", tolower(sp))
+  d <- merge(base, st, by = "site_visit")
+  d <- d[d$in_range %in% TRUE & d$status != "blocked", , drop = FALSE]
+  if (bcol %in% names(d)) d <- d[d[[bcol]] %in% FALSE, , drop = FALSE]
+  if (stage == "rear") {
+    d$U <- as.integer(d$present)
+    resp <- "U"
+  } else {
+    if (is.null(spawner) || !any(spawner$species_code == sp)) return(list(d = d, resp = NULL))
+    sv <- spawner[spawner$species_code == sp, c("site_visit", "S")]
+    d <- merge(d, sv, by = "site_visit")
+    d <- d[!is.na(d$S), , drop = FALSE]
+    resp <- "S"
+  }
+  d$wsg <- droplevels(d$wsg)
+  list(d = d, resp = resp)
+}
+
 
 # the no-rule model's held-out deviance over `dd` on the run's folds, scored as the grid's own no-rule row is
 # (`.tune_score_one()` with no visit in), so a curve fitted on fewer visits than the grid is compared with no rule

@@ -1,7 +1,7 @@
 # How the tuning method stands against Bayesian practice
 
-**Verified:** 2026-11-12 · **Issues:** #185 (this review); the store is #95's; it scopes #186 (a partially pooled
-curve) and feeds the methodology article (#93) · **Produced by:** the code at this commit, read line by line; the
+**Verified:** 2026-11-12, and the gate's figures and the cuts at fish records on 2026-11-14 after the tuning moved to link's minimal network (#120's promotion) · **Issues:** #185 (this review); the store is #95's; it scopes #186 (a partially pooled
+curve) and feeds the methodology article (#93) and the internal article on Bayesian practice (#204) · **Produced by:** the code at this commit, read line by line; the
 `statistics` store (McElreath 2020 and Gelman et al. 2013, searched through cred); every quote that cites a page
 checked on that page by `data-raw/bayesian_alignment_check.R` (log `scripts/logs/habitat/*_bayesian_alignment_check.txt`) · **Status:**
 review complete; the changes it recommends are filed as issues (end of file).
@@ -37,10 +37,11 @@ were caught?", not "how many fish will a new group hold?". That is the right que
 and it is a different question from the one a multilevel model answers for a new group. The prior is a penalty that
 finds one best value, not a posterior, and the thresholds are reported as a pick and a range, not as a distribution.
 
-**What to change.** Three things: the curve treats a sampling level unseen in training differently from the scorer
-(the scorer meets one such visit, in westslope cutthroat rearing; the curve's own count is not recorded); the
-"nested" selection check is not nested; and the rules read a gradient that depends on where fish were caught (#70
-already holds the fix). Neither of the first two moves a published pick: the curve sets no pick, and the nested check
+**What to change.** Two things: the curve treats a sampling level unseen in training differently from the scorer
+(on the full-network run the scorer met one such visit, in westslope cutthroat rearing; the curve's own count is not
+recorded); and the "nested" selection check is not nested. A third, the rules reading a gradient that depended on where
+fish were caught, was answered when the tuning moved to link's minimal network (#120). Neither of the two moves a
+published pick: the curve sets no pick, and the nested check
 is a diagnostic. A guard would also make sure the scorer never drops its prior, which today rests on an argument. And one experiment the review sharpens: #186's pooled curve, which must be scored both ways, by its
 own group intercept and as a new group, and which can use the watershed groups the scorer drops for holding only one
 outcome (66 of the 111 groups chinook rearing's visits fall in).
@@ -204,7 +205,7 @@ so how well the grade compares a segment in one group with a segment in another 
 ### Is the gate a fair comparison? (Rethinking ch. 7; BDA3 ch. 7)
 
 *What the method does.* A curve's grades are withheld when its held-out deviance is no better than the no-rule
-model's on the same visits and folds (`cv$heldout >= null_heldout_curve`, `R/tune_run.R:292`). It is a point
+model's on the same visits and folds (`cv$heldout >= null_heldout_curve`, `R/tune_run.R:273`). It is a point
 comparison: no SE, a tie withholds. The curve's variables (the size measure, the river size of its distance) come
 from the pick, which was chosen on the same folds that then score the curve.
 
@@ -212,8 +213,9 @@ from the pick, which was chosen on the same folds that then score the curve.
 penalised, which is a prior on their wiggliness: BDA3's "Bayesian penalized (P) splines" (gelman_etal2013Bayesiandata, p. 490), and the same idea
 with a fixed ridge on the weights in Rethinking (p. 118). So a gate on held-out deviance is not double-counting
 complexity. Two things lean toward publishing: the curve's variables were chosen on the folds that score it (BDA3
-p. 182, above), and, compared with a test that asks for a margin, a point comparison publishes on any improvement. Today it withholds three keys of seven (bull trout spawning, coho rearing,
-westslope cutthroat rearing).
+p. 182, above), and, compared with a test that asks for a margin, a point comparison publishes on any improvement. On
+the minimal network's run it withholds two keys of seven (coho rearing, westslope cutthroat rearing); on the
+full-network run before it, three (bull trout spawning as well).
 
 ### Effort: offset or covariate? (Rethinking ch. 11)
 
@@ -227,8 +229,10 @@ free coefficient is a hypothesis in its own right:
 
 *Where it stands.* **Differs, defensibly.** The book's exposure is for a Poisson model with a log link; for a binary
 "caught or not" with a cloglog link, a coefficient of one on log(area) is the model in which each square metre fished
-carries the same chance of a catch (derived here; neither book states it for cloglog). A free coefficient lets
-detection saturate with effort, which electrofishing plausibly does. Testing the offset is cheap, and is worth one
+carries the same chance of a catch (derived here; neither book states it for cloglog). A free coefficient lets the
+catch rate per square metre fall (or rise) as more area is fished: under the cloglog the chance of a catch levels off
+with area even under the offset, so what the free coefficient adds is a rate per square metre that changes with area,
+and electrofishing a larger area plausibly catches less per square metre (our expectation, not tested). Testing the offset is cheap, and is worth one
 line in #186.
 
 ### Is "no fish caught" an absence? (Rethinking ch. 12, 15)
@@ -240,7 +244,7 @@ line in #186.
 Or it is there and was missed; zero-inflated models (p. 376) and occupancy models are built for that duality.
 
 *What the method does.* The response is whether the species was caught at the visit (`d$U <- as.integer(d$present)`,
-`R/tune_run.R:176`), and the grade says what it is: expected use per standard electrofishing visit, not habitat
+`R/tune_run.R:302`), and the grade says what it is: expected use per standard electrofishing visit, not habitat
 quality (`R/grade.R:9`).
 
 *Where it stands.* **Differs**, honestly labelled. Read as detection per visit, the model is what it says; read as
@@ -261,10 +265,11 @@ whether fish use it. Crews chose where to fish, by era and data set, and that ch
 sampled and how hard: the method adjusts for era and data set as nuisance terms, the right move for a confound
 (Rethinking ch. 6, p. 183). Three arrows run the other way, from the outcome into the inputs: link codes `access_bt = 2`
 when a bull trout record sits upstream (the method keeps such segments but never uses the code as a predictor, which
-is the right move); link cuts segments at fish records, so a visit that caught fish sits on a shorter segment whose
-gradient depends on that catch (`gradient_col`: **should change**, #70); and one exclusion turns on the outcome: a
+is the right move); link's full network cuts segments at fish records, so there a visit that caught fish sits on a
+shorter segment whose gradient depends on that catch, which is why the tuning reads the minimal network, cut at no
+fish record, since 2026-11-13 (`gradient_col`, #120; fixed-window gradients are #70); and one exclusion turns on the outcome: a
 visit whose catch blocks the species' absence (`status == "blocked"`, `R/fdis_species.R`) is left out
-(`R/tune_run.R:173`), and only a visit that did not catch the species can be blocked, so the gate drops some zeros and
+(`R/tune_run.R:299`), and only a visit that did not catch the species can be blocked, so the gate drops some zeros and
 no ones among the recorded values. A blocked absence is a missing outcome, and dropping it is complete-case analysis:
 
 > "Complete case analysis is at best inefficient. It throws away data. But it can also produce bias, depending upon the causal details." (mcelreath2020StatisticalRethinking, p. 499)
@@ -274,7 +279,7 @@ where catch rates are low. But a blocking code is mostly a fish named too loosel
 (unidentified fish, salmon or trout fry, cutthroat of unstated species; `data/fdis_species_codes.csv`), so a blocked
 absence may be the species itself: missingness caused by the outcome, the case Rethinking calls the worst (Figure
 15.4 d, p. 500; "the variable causes its own missing values" (mcelreath2020StatisticalRethinking, p. 503)). The access gate does not turn
-on the catch: it reads natural barriers as they stood before link's observation overrides (`R/tune_run.R:174`,
+on the catch: it reads natural barriers as they stood before link's observation overrides (`R/tune_run.R:300`,
 `R/link_barrier_dnstr.R`). Nor does the range: link's range is a fixed table per watershed group
 (`wsg_species_presence`, which `scripts/0310-evidence-build.R` reads through `link::lnk_species_pooling()`), so this
 run does not compute it from the visits, though link's review of the table weighs observation records. Under fixed intercepts
@@ -300,11 +305,11 @@ is named in its text, and its settings and unkeyed choices carry their own verdi
 |---|---|---|---|
 | 1 | The fish records | Reads the export and keeps one copy of a survey loaded twice: data, not inference. | no bearing |
 | 2 | Putting sites on the stream map | A visit's placement is an estimate carried as exact; the snap limits drop the worst (Rethinking ch. 15). | differs |
-| 3 | link's stream segments | link cuts segments at the fish records of the species it models, so a segment's length and gradient depend on the outcome (an arrow from outcome to predictor; Rethinking ch. 6). The rules' reading of it is step 7's `gradient_col` (#70). | differs |
+| 3 | link's stream segments | link's full network cuts segments at the fish records of the species it models, so there a segment's length and gradient depend on the outcome (an arrow from outcome to predictor; Rethinking ch. 6). Since 2026-11-13 the tuning reads the minimal network, which makes no such cut (#120); the rules' reading of it is step 7's `gradient_col` (#70). | aligned |
 | 4 | How much water each stream carries | A modelled flow read as measured (Rethinking ch. 15). | differs |
 | 5 | Joining each site to its segment | Joins the inputs and each species' presence where link expects it. Access reads barriers before observation overrides and range is link's table per group, so neither is decided by the visit's catch; an absence blocked by another code is dropped, which removes recorded zeros only, some of which may be the species under a looser name: complete-case analysis (Rethinking pp. 499, 503). | differs |
 | 6 | Candidate rules | A set of candidate models compared out of sample, as Rethinking ch. 7 asks; the larger the set, the more the winner's score flatters it (BDA3 p. 182), and the grid is that set (the bias of choosing among it is step 7's). | aligned |
-| 7 | Scoring and choosing | Whole groups held out and the SE of a difference taken over groups (aligned); a plug-in deviance with each held-out group's intercept refit on its own outcomes, fixed group intercepts, a one-SE width, and a pick by nearness to `default` inside the region (differs, each defensible), with the region anchored on the best score, which choosing among thousands of rules flatters (BDA3 p. 182; step 8's nested check would measure it, and is not nested); the gradient the rules read should change (`gradient_col`, #70). | differs |
+| 7 | Scoring and choosing | Whole groups held out and the SE of a difference taken over groups (aligned); a plug-in deviance with each held-out group's intercept refit on its own outcomes, fixed group intercepts, a one-SE width, and a pick by nearness to `default` inside the region (differs, each defensible), with the region anchored on the best score, which choosing among thousands of rules flatters (BDA3 p. 182; step 8's nested check would measure it, and is not nested); since the tuning moved to the minimal network no cut the rules' gradient reads is made at a fish record, though a visit with fish still sits at a cut slightly more often (3.4 % against 3.0 %; `gradient_col`, #120). | differs |
 | 8 | Checking the choice is not luck | Other fold seeds (aligned); a bootstrap of fixed scores, which measures stability, not estimation uncertainty (differs); and a nested check that is not nested (should change, `honest_nesting`). | differs |
 | 9 | A curve and a grade | Groups pooled as a REML random effect and smooths penalised (aligned), graded at the average group (aligned); scored by refit intercepts on an outcome-selected set of groups, and gated by a point comparison on the folds that chose its variables (differs); an unseen sampling level handled unlike the scorer (should change, `curve_unseen_mode`). | differs |
 | 10 | Running the rule on link's streams | Regenerates link's flags under each rule: no inference, apart from the lift's bootstrap of placed record locations (`cmp_n_boot`). | no bearing |
@@ -327,7 +332,7 @@ One row per key of `inst/method/settings.csv`. `no bearing` means no statistical
 | `ws50_code_zeros` | 2 | 42 characters | A format check on the 1:50k code. | no bearing |
 | `flow_far_low` | 4 | 0.2 ratio | Which modelled flow a segment carries. The flow is an estimate read as if measured: predictor measurement error (Rethinking ch. 15), never carried into the fit. | differs |
 | `cw_agree_min` | 5 | 0.9 share | A control on the width model, not an input to any fit. | no bearing |
-| `flow_parent_edges` | 5 | 1100; 1150; 1300; 1350; 2300 FWA edge type | Topology of the parent-flow fallback (11 visits). | no bearing |
+| `flow_parent_edges` | 5 | 1100; 1150; 1300; 1350; 2300 FWA edge type | Topology of the parent-flow fallback (11 visits on the full-network run; not recounted on the minimal network's). | no bearing |
 | `regulated_edges` | 5 | 1100; 1150; 1300; 1350; 2300 FWA edge type | Topology of a dam's regulated reach. | no bearing |
 | `walk_q` | 5 | 1; 3; 5; 10; 20; 30; 50 m3/s | The river sizes a walk is measured to; each is a candidate in the grid and scored out of sample. | no bearing |
 | `place_window` | 5 | 5 m | How a visit is matched to its segment's start. | no bearing |
@@ -348,7 +353,7 @@ One row per key of `inst/method/settings.csv`. `no bearing` means no statistical
 | `area_range` | 7 | 10; 10000 m2 | Trims fished areas outside 10 to 10,000 m²; with `log_area` free (`log_area_free`) it bounds the range the effort slope is fitted on. | no bearing |
 | `cmp_area_min` | 10 | 10 m2 | The comparison's restatement of `area_range`. | no bearing |
 | `cmp_area_max` | 10 | 10000 m2 | As `cmp_area_min`. | no bearing |
-| `gradient_col` | 7 | segment_gradient | The rules read link's segment gradient, and link cuts segments at the fish records of the species it models, so the segment, and its gradient, depend on the outcome: a predictor partly caused by the outcome, which a DAG of the evidence (Rethinking ch. 6, p. 185) draws as an arrow from outcome to predictor. The method measures it (#92, #149) and scores setups on other gradients (#120); fixed-window gradients, whose length would not depend on the outcome, are #70. | should change |
+| `gradient_col` | 7 | segment_gradient | The rules read link's segment gradient. link's full network cuts segments at the fish records of the species it models, so there the segment, and its gradient, depend on the outcome: a predictor partly caused by the outcome, which a DAG of the evidence (Rethinking ch. 6, p. 185) draws as an arrow from outcome to predictor. The method measured it (#92, #149), scored setups on other gradients, and since 2026-11-13 reads the minimal network, cut at no fish record (#120), where a visit with fish starts its own segment about as often as one without (3.4 % against 3.0 %); fixed-window gradients, whose length would not depend on where streams are cut, are #70. | aligned |
 | `seed` | 7 | 54 | The fold seed, fixed, and the pick repeated on four more (`seeds_more`). | aligned |
 | `folds` | 7 | 5 | Five folds of whole watershed groups, each held out once: cross-validation with the group, not the visit, as the unit, as Rethinking ch. 13 frames prediction for clusters not in the sample (p. 428). BDA3 notes that each fold's prediction, made from less than all the data, underestimates the fit (p. 175). | aligned |
 | `fit` | 7 | fe | The scorer absorbs a fixed intercept per group: in BDA3's terms a group effect with infinite prior variance (p. 383), which Rethinking ch. 13 calls amnesia (p. 399). It drops every group with only one outcome (`one_outcome_groups`), so chinook rearing scores 45 of the 111 groups its visits fall in. Defensible for comparing rules within groups; a pooled curve is tested in #186. | differs |
@@ -393,16 +398,16 @@ when that line no longer holds the code it names or the code appears elsewhere i
 
 | choice | where | what it does, against the books | verdict |
 |---|---|---|---|
-| `response_presence` | `R/tune_run.R:176` | The rearing response is whether the species was caught at the visit; a miss reads as an absence (Rethinking p. 499). | differs |
-| `population_gate` | `R/tune_run.R:173` | Visits outside link's range for the species (a fixed table per group) or with a blocked absence are left out (the barrier filter on the next line is `barrier_natural`). Only the blocked absence turns on the catch: it drops recorded zeros only, some of which may be the species under a looser name (Rethinking pp. 499, 503). | differs |
+| `response_presence` | `R/tune_run.R:302` | The rearing response is whether the species was caught at the visit; a miss reads as an absence (Rethinking p. 499). | differs |
+| `population_gate` | `R/tune_run.R:299` | Visits outside link's range for the species (a fixed table per group) or with a blocked absence are left out (the barrier filter on the next line is `barrier_natural`). Only the blocked absence turns on the catch: it drops recorded zeros only, some of which may be the species under a looser name (Rethinking pp. 499, 503). | differs |
 | `cloglog_link` | `R/tune_score.R:256` | A binomial GLM with a complementary log-log link: a hazard reading, natural for detection with effort. BDA3 names it a standard link (p. 407); neither book fits it. The GLM frame is Rethinking ch. 10's. | aligned |
-| `log_area_free` | `R/tune_score.R:224` | Effort as a free, unpenalised coefficient, not an offset: the hypothesis that the chance of a catch does not grow in proportion to the area fished (Rethinking p. 357). | differs |
+| `log_area_free` | `R/tune_score.R:224` | Effort as a free, unpenalised coefficient, not an offset: the hypothesis that the catch rate per square metre changes with the area fished (Rethinking p. 357). | differs |
 | `one_outcome_groups` | `R/tune_score.R:201` | Groups whose visits all caught the species, or none did, are dropped before scoring and before the curve: under fixed intercepts they inform nothing, under pooling they would. | differs |
 | `stratified_folds` | `R/tune_score.R:211` | Groups are ranked by detections and dealt to folds in shuffled blocks, so the folds hold similar numbers of detections: a design choice for the score's variance. | no bearing |
 | `heldout_intercept` | `R/tune_score.R:423` | Each held-out group refits its intercept on its own outcomes before its deviance is taken: a score conditional on the group's base rate (Rethinking p. 426). | differs |
 | `prob_clamp` | `R/tune_score.R:410` | Probabilities held inside 10⁻¹² of 0 and 1, capping one visit's deviance: a numerical guard, and the smoke run stops a key with any visit at the cap. | no bearing |
 | `fallback_no_prior` | `R/tune_score.R:267` | A fold where the absorbed fit drops a column the dense fit keeps is refit by `glm.fit`, without the prior; under the prior only an unpenalised column aliased with the groups can send it there, so in the published configuration it does not fire through the data-set or era terms. A guard would make that checked (#203). | no bearing |
-| `unseen_reference` | `R/tune_score.R:234` | In the scorer a held-out visit whose data set or era training lacked takes the reference level: a zero contrast, the mean of the zero-centred prior on that contrast. One such visit in the scorer's population in the published run (westslope cutthroat rearing), none in the other six keys. | aligned |
+| `unseen_reference` | `R/tune_score.R:234` | In the scorer a held-out visit whose data set or era training lacked takes the reference level: a zero contrast, the mean of the zero-centred prior on that contrast. One such visit in the scorer's population on the full-network run before the promotion (westslope cutthroat rearing), none in the other six keys; not recounted on the minimal network's run. | aligned |
 | `curve_unseen_mode` | `R/tune_curve.R:139` | In the curve the same visit takes training's commonest level, so the gate's two sides treat it differently; the scorer's reference is the prior's mean (#203). The curve's own count of such visits is not recorded. It matters only where a held-out group mixes seen and unseen levels (a level constant within a group is absorbed by its intercept). | should change |
 | `se_formula` | `R/tune_score.R:451` | √(groups) × the sd of per-group differences from the best: Rethinking's SE of a difference (p. 227) with the group as unit. | aligned |
 | `pick_nearest_default` | `R/tune_score.R:458` | Inside the region, the rule with the fewest departures from `default`: a preference the scores do not make (#141). | differs |
@@ -410,7 +415,7 @@ when that line no longer holds the code it names or the code appears elsewhere i
 | `boot_no_refit` | `R/tune_score.R:167` | Resamples groups of the fixed score matrix and re-picks, refitting nothing. | differs |
 | `curve_group_effect` | `R/tune_curve.R:104` | The group as a random effect by REML: partial pooling with its variance estimated, not integrated (Rethinking ch. 13; BDA3 ch. 5). | aligned |
 | `curve_reference` | `R/tune_curve.R:114` | The curve and grade are read at the median effort, the commonest data set and the latest era: a reference point, a convention. | no bearing |
-| `grade_gate` | `R/tune_run.R:292` | Grades withheld when the curve's held-out deviance is no lower than no rule's on the same visits: a point comparison, a tie withholds. | differs |
+| `grade_gate` | `R/tune_run.R:273` | Grades withheld when the curve's held-out deviance is no lower than no rule's on the same visits: a point comparison, a tie withholds. | differs |
 | `grade_average_group` | `R/grade.R:64` | The grade leaves the group effect out: Rethinking's average actor (p. 428), an average cluster, right for comparing segments across groups. | aligned |
 
 ## What to try in the retune
@@ -420,17 +425,22 @@ Each item is an issue, so it is planned and reviewed on its own.
 - **Make the curve take the reference for an unseen level, guard the fallback, and nest the nested check or describe
   it as what it is** (`curve_unseen_mode`, `fallback_no_prior`, `honest_nesting`): #203. None moves a published
   pick. The unseen level could move only a gate, and the curve's count of such visits, the issue's first measurement,
-  is recorded for no key: one visit can move a gate by at most 55.3 in deviance, enough to flip bull trout spawning
-  (withheld by 0.56) or grayling rearing (published by 14.4), not westslope cutthroat rearing (withheld by 106). The
+  is recorded for no key: on the full-network run one visit could move a gate by at most 55.3 in deviance, enough then
+  to flip bull trout spawning (withheld by 0.56) or grayling rearing (published by 14.4), not westslope cutthroat
+  rearing (withheld by 106). On the minimal network's run the closest gates are bull trout spawning (published by 3.4)
+  and grayling rearing (published by 16.2); the bound is not measured there. The
   fallback is out of reach of the penalised terms, and nesting changes only the check.
-- **Score rules on a gradient that does not depend on the catch** (`gradient_col`): #70.
+- **Score rules on slopes over fixed lengths of stream, and check modelled slopes against measured ones**
+  (`gradient_col`): #70.
 - **A pooled curve, scored both ways** (#186): a full posterior rather than REML plug-ins, priors on the smooths, the
   one-outcome groups kept, and each held-out group scored both by its own refit intercept (today's score) and as a new
   group from the population distribution, for the pooled curve and today's alike, since a new-group score for one
   against an own-intercept score for the other compares nothing. Two cheap additions: an offset for `log(area)` beside
   the free coefficient, and a prior predictive check of the data-set and era prior on the rate scale.
-- **The methodology article says where the method stands** (#204): a short section in `tuning-method.Rmd`
-  stating the findings above in the reader's terms, with the two books cited.
+- **An article says where the method stands** (#204): `vignettes/tuning-bayesian-practice.Rmd`, an internal article
+  (built at its own URL, left out of the site's index and navbar) that states the findings above in the reader's
+  terms, with the two books cited; the methodology article links it from its section on telling two habitat
+  definitions apart. A separate article rather than a section of `tuning-method.Rmd` (Al, 2026-11-13).
 
 ## Limits of this review
 
@@ -468,5 +478,5 @@ Round 3 read round 2's changes and found one error inside them: the blocking cod
 when most are loose names that could be the species itself, which makes a blocked absence missingness caused by the
 outcome (Rethinking pp. 500, 503). It also qualified the word only for the cloglog, bounded the gate argument by every key's
 margin, moved the selection bias from step 6 to step 7, and named an owner on each should-change row. The
-should-change verdicts (three) and the changes the prose names were enumerated and match. Pages re-read in round 3:
+should-change verdicts (three, before the minimal-network promotion answered the gradient's) and the changes the prose names were enumerated and match. Pages re-read in round 3:
 Rethinking 161, 225, 227, 249, 491, 499–503; BDA3 415, 416.

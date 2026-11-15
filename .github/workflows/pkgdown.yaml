@@ -137,6 +137,14 @@ jobs:
           fi
           echo "no draft articles on the site"
 
+      # _pkgdown.yml writes the Articles menu out by hand (#204), and pkgdown builds happily with a stale one. The test that
+      # holds the menu to the sections skips under R CMD check, which has no _pkgdown.yml, so it runs here
+      - name: Fail if the Articles menu is out of step with the sections
+        run: |
+          r <- as.data.frame(testthat::test_file("tests/testthat/test-pkgdown-navbar.R", reporter = "summary"))
+          if (nrow(r) == 0 || any(r$failed > 0 | r$error | r$skipped)) stop("the Articles menu test failed, erred or skipped")
+        shell: Rscript {0}
+
       - name: Deploy to GitHub pages 🚀
         if: github.event_name != 'pull_request'
         uses: JamesIves/github-pages-deploy-action@v4.5.0
