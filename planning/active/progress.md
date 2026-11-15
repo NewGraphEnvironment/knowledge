@@ -41,3 +41,6 @@
 - `bull_trout` built 17:18–17:47Z: 171 documents, 27,589 chunks, every origin a live member's attachment. Two scans
   skipped as no text; OCRed and staged as `0275` `replace` rows (dry run clean). The live run was refused by auto mode
 - Query expectations written to `scripts/logs/rag/20261113_query_bull_trout.log` before any query ran
+- 2026-11-15: Al ran the live `0275` (`--only BHHDYTJI,RVFQ4NDZ`). Web API: 8PADNGFE and PWRE9XAM live with the OCR
+  copies' md5s, HYSNCHBC and N2IJDSIN trashed; no-op dry run 2 exit 0 (`20261115_0275_bull_trout_ocr_*.log`). Zotero
+  has synced both files to storage; guarded copy still 174 / 174 / 173
