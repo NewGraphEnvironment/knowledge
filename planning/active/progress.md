@@ -49,3 +49,5 @@
   a rebuild: all three rebuilt 07:00–07:44Z with Zotero quit and reopened by the script. `bull_trout` identical to
   its update; the other two drop 1 and 10 no-text scans (#217) and rechunk documents from older builds
 - Four queries run on the rebuilt `bull_trout` and logged with verdicts: Q4 hit, Q2 3/4, Q3 2/3, Q1 partial
+- Branch pushed at `277b6494`; the three stores pushed one at a time (07:47–07:49Z), each ETag matched at 8 MiB parts and
+  the bucket manifest holds the local md5s (`20261115_push_*.log`)

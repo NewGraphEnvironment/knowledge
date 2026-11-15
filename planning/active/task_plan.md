@@ -159,12 +159,13 @@ What exploration settled:
       the updated stores: `bull_trout` identical (173 documents, same chunks per document, 366 MiB, 0 free blocks);
       `bull_trout_grayling` 196 and `habitat_modelling` 404, each dropping the scans the current reader finds no text in
       (one-chunk documents in older builds; #217), with chunk counts moved on documents chunked by the older builds
-- [ ] Commit the CSVs and the build, query and update logs, home paths as `~/` (G6); then **push the branch**, and
+- [x] Commit the CSVs and the build, query and update logs, home paths as `~/` (G6); then **push the branch**, and
       never amend, rebase or rewrite after it, since the manifests record `head_sha` (O1)
-- [ ] Push one store at a time (`ACTION=push`: a dry run, then `CONFIRM=TRUE`): `bull_trout`, then `bull_trout_grayling`,
+- [x] Push one store at a time (`ACTION=push`: a dry run, then `CONFIRM=TRUE`): `bull_trout`, then `bull_trout_grayling`,
       then `habitat_modelling` last. Read each push's result and check its multipart ETag before the next push or any
-      verified connect (O1)
-- [ ] Commit the push logs, each trimmed to its own manifest entry (G6)
+      verified connect (O1). 2026-11-15 07:47–07:49Z from `277b6494`: each ETag matched its file at 8 MiB parts
+      (46, 53, 116), and the bucket manifest holds 173 / 196 / 404 documents with the local md5s
+- [x] Commit the push logs, each trimmed to its own manifest entry (G6)
 
 ## Phase 4: docs and issue
 - [ ] (Drafted in `7a9f4c7a`; checked against the built store here.) `scripts/README.md`:

@@ -1,0 +1,28 @@
+[dry run] would upload data/rag/bull_trout.duckdb -> s3://fresh-bc/rag/bull_trout.duckdb
+[dry run] merged manifest would hold: fraser, vca_refs, peace, pine, habitat_modelling, temperature, flow, bull_trout_grayling, sturgeon, statistics, westslope_cutthroat, bull_trout
+(manifest trimmed to this store's entry)
+{
+  "date_updated": "2026-11-15T07:47:23Z",
+  "manifest_note": "Provenance is per store. Push must merge into this file, never replace it.",
+  "chunking": "ragnar defaults (ragnar_store_ingest)",
+  "generating_script": "cred::crd_store_push()",
+  "stores": {
+    "bull_trout": {
+      "documents": 173,
+      "chunks": 28215,
+      "embedding_size": 768,
+      "embedding_model": "nomic-embed-text",
+      "store_name": "store_001",
+      "bytes": 384053248,
+      "md5": "1ed43cea081ef253b605aaabd1851234",
+      "repo": "NewGraphEnvironment/knowledge",
+      "branch": "194-bull-trout-build-a-store-research-its-li",
+      "head_sha": "277b649483d6a309c7f7e7c267f82b52bcb9da39",
+      "built_by": "cred::crd_store_push()",
+      "date_completed": "2026-11-15T07:47:23Z"
+    }
+  }
+}
+Uploading bull_trout.duckdb (366 MB)
+Manifest updated — now holds: fraser, vca_refs, peace, pine, habitat_modelling, temperature, flow, bull_trout_grayling, sturgeon, statistics, westslope_cutthroat, bull_trout
+bucket ETag "2ee28f59ee4865db880cf2a2b8ae550f-46": MATCH at 8 MiB parts (46 parts) against the local file
