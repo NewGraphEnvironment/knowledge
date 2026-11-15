@@ -26,3 +26,10 @@ a bare "update". It now names the rebuild. Rerun with `git grep -n -i -E "update
 scripts/0150-store.R` and read for push: no further passage gives update-then-push without the rule. The README's
 "one place" claim was false (the rule is carried in four places); it now lists them, and `git grep -n cred#48`
 finds every copy.
+
+Round 5: the README's "a warning R cuts after six" was a miscount (R cuts at `warning.length`, 1,000 characters; the
+habitat_modelling warning is cut inside its seventh entry), and the comparison step reached only the README. The
+remedy is now in the code, not in more copies of a sentence: `0150` lists the documents a rebuild dropped from the
+store it replaced, as it does for an update (checked on a scratch copy of `statistics`: "4 documents before, 4 after:
+0 added, 0 dropped"), and its message after an update says to read that list.
+

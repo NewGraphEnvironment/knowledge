@@ -15,7 +15,8 @@
 #    store's whole build list, as in scripts/README.md: a document outside it is dropped.
 #    Pull the store first (ACTION=query VERIFY=TRUE). An update leaves the space it frees in the
 #    file (NewGraphEnvironment/cred#48), so until that is fixed rebuild the store with
-#    ACTION=build OVERWRITE=TRUE and the same COLLECTIONS before pushing it.)
+#    ACTION=build OVERWRITE=TRUE and the same COLLECTIONS before pushing it, and read the dropped
+#    list the rebuild prints.)
 #   ACTION=query STORE=fraser QUERY="beaver dam culvert" TOPK=5           Rscript scripts/0150-store.R
 #   (query needs cred >= 0.4.0, the first whose crd_search() works under ragnar 0.3)
 #   (query opens an existing local store unverified; VERIFY=TRUE re-checks it
@@ -200,6 +201,15 @@ if (action %in% c("build", "update")) {
     stop("ACTION=", action, " needs cred >= 0.5.0, not ", utils::packageVersion("cred"),
          ": pak::pak(\"NewGraphEnvironment/cred\")")
   }
+  doc_origins <- function() {
+    con <- DBI::dbConnect(duckdb::duckdb(), store_path, read_only = TRUE)
+    on.exit(DBI::dbDisconnect(con, shutdown = TRUE))
+    DBI::dbGetQuery(con, "SELECT DISTINCT origin FROM documents")$origin
+  }
+  # A rebuild over an existing store re-reads every PDF and skips any it finds no text in, which cred names
+  # only in a warning R cuts at warning.length (1,000 characters); so a rebuild, like an update, lists what
+  # it dropped from the store it replaced (#194).
+  before <- if (file.exists(store_path)) doc_origins() else character(0)
   if (action == "update") {
     if (!exists("crd_store_update", envir = asNamespace("cred"), inherits = FALSE)) {
       stop("ACTION=update needs a cred with crd_store_update() (0.7.0 has it), not ", utils::packageVersion("cred"),
@@ -213,12 +223,6 @@ if (action %in% c("build", "update")) {
     # ingested from a local directory) never resolves and would be dropped. fraser, peace and pine are
     # all such documents; every store built by 0150 is none. The file name decides nothing: a Zotero
     # attachment named PINE__56963.pdf (habitat_modelling) resolves.
-    doc_origins <- function() {
-      con <- DBI::dbConnect(duckdb::duckdb(), store_path, read_only = TRUE)
-      on.exit(DBI::dbDisconnect(con, shutdown = TRUE))
-      DBI::dbGetQuery(con, "SELECT DISTINCT origin FROM documents")$origin
-    }
-    before <- doc_origins()
     harvest <- !grepl("/storage/[A-Z0-9]{8}/[^/]+$", before)
     if (any(harvest)) {
       stop(store_path, " holds ", sum(harvest), " documents from outside Zotero (", basename(before[harvest][1]), ", ...), ",
@@ -240,6 +244,8 @@ if (action %in% c("build", "update")) {
                     overwrite = identical(Sys.getenv("OVERWRITE"), "TRUE"))
   } else {
     crd_store_update(store_path, citation_keys = keys, library = lib)
+  }
+  if (length(before)) {
     after <- doc_origins()
     message(sprintf("%d documents before, %d after: %d added, %d dropped", length(before), length(after),
                     length(setdiff(after, before)), length(setdiff(before, after))))
@@ -248,7 +254,8 @@ if (action %in% c("build", "update")) {
   message(if (action == "build") "Built " else "Updated ", store_path, ". It is not in the bucket until ACTION=push.")
   if (action == "update") {
     message("An update leaves the space it frees in the file (NewGraphEnvironment/cred#48): rebuild it with ",
-            "ACTION=build OVERWRITE=TRUE and the same COLLECTIONS before the push.")
+            "ACTION=build OVERWRITE=TRUE and the same COLLECTIONS before the push, and read the rebuild's ",
+            "dropped list: it drops PDFs it finds no text in, which this update kept (scripts/README.md).")
   }
 } else if (action == "query") {
   # cred 0.3.0's crd_search() fails on every store under ragnar 0.3.0 (cred#27).

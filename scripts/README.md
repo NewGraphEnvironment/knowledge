@@ -266,8 +266,8 @@ A report is reachable from more than one place; using only one axis misses repor
   free (`pragma database_size`). While that is open, rebuild an updated store with `ACTION=build OVERWRITE=TRUE` and
   the same `COLLECTIONS` before pushing it. The rule reaches only stores an update accepts, so never `fraser`, `peace`
   or `pine`. A rebuild re-reads every PDF, so it also drops any the current reader finds no text in, which an update
-  would have kept (#194's dropped 1 and 10 image-only scans, #217), and names them only in a warning R cuts after six:
-  compare the rebuilt store's origins with the updated store's before the push. The rule is repeated in `CLAUDE.md`,
+  would have kept (#194's dropped 1 and 10 image-only scans, #217). cred names those only in a warning R cuts at
+  1,000 characters, so `0150` prints a rebuild's whole dropped list, as it does an update's: read it before the push. The rule is repeated in `CLAUDE.md`,
   in `0150`'s usage and its message after an update, and carried or pointed to from five other passages here: when cred#48 is
   fixed, `git grep -n cred#48` finds every copy.
 - **Push after every local write** (`0152` ingest, `0156` dedup, a rebuild, or an update and, while cred#48 is open,
