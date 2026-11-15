@@ -1,0 +1,40 @@
+# update bull_trout from species/bull_trout (VHWEK6RE), #194, start 2026-11-15T00:22:20Z
+# expected: 2 added (8PADNGFE Metolius 1983-94 OCR, PWRE9XAM Cannings & Ptolemy 1998 OCR); the scans were never ingested, so 0 dropped unless cred counts their skips; 173 documents after
+duckdb keeps downloaded extensions and secrets in a temporary directory:
+This is removed when the R session ends.
+• Extensions are re-downloaded each session.
+• Secrets are lost.
+ℹ Run duckdb(shared_home = TRUE) (or create ~/.duckdb) to keep them (suitable for most users).
+ℹ Run duckdb(shared_home = FALSE) to accept the temporary directory (and silence this message).
+ℹ See ?duckdb_storage for details and alternatives.
+1 of 175 members left out:
+  VDHTRJ9Y  MigrationPatternsAdultBullTroutMetoliusRiverLakeBillyChinookOregon  (no live PDF)
+173 keys across 1 collections
+duckdb keeps downloaded extensions and secrets in a temporary directory:
+This is removed when the R session ends.
+• Extensions are re-downloaded each session.
+• Secrets are lost.
+ℹ Run duckdb(shared_home = TRUE) (or create ~/.duckdb) to keep them (suitable for most users).
+ℹ Run duckdb(shared_home = FALSE) to accept the temporary directory (and silence this message).
+ℹ See ?duckdb_storage for details and alternatives.
+duckdb keeps downloaded extensions and secrets in a temporary directory:
+This is removed when the R session ends.
+• Extensions are re-downloaded each session.
+• Secrets are lost.
+ℹ Run duckdb(shared_home = TRUE) (or create ~/.duckdb) to keep them (suitable for most users).
+ℹ Run duckdb(shared_home = FALSE) to accept the temporary directory (and silence this message).
+ℹ See ?duckdb_storage for details and alternatives.
+Ingesting 2 PDF(s) into data/rag/bull_trout.duckdb
+Installed Installed 49 packages49 packages in 239ms in 239ms
+
+Store updated: data/rag/bull_trout.duckdb | added: 2 | replaced: 0 | removed: 0 | kept: 171 | docs: 173 | chunks: 28215
+  Its md5 has changed: push it with crd_store_push(), or open it with crd_store_connect(verify = FALSE) until then, which would otherwise replace it with the copy the manifest describes. Reconnect any session that had it open.
+duckdb keeps downloaded extensions and secrets in a temporary directory:
+This is removed when the R session ends.
+• Extensions are re-downloaded each session.
+• Secrets are lost.
+ℹ Run duckdb(shared_home = TRUE) (or create ~/.duckdb) to keep them (suitable for most users).
+ℹ Run duckdb(shared_home = FALSE) to accept the temporary directory (and silence this message).
+ℹ See ?duckdb_storage for details and alternatives.
+171 documents before, 173 after: 2 added, 0 dropped
+Updated data/rag/bull_trout.duckdb. It is not in the bucket until ACTION=push.
