@@ -167,8 +167,7 @@ cred-built store up to date after a library change, `0150 ACTION=update` with th
 a store holding any document from outside Zotero storage (`fraser`, `peace`, `pine`). An update leaves the space it
 frees inside the file (NewGraphEnvironment/cred#48): #194's updates left 32 to 76 % of their blocks free
 (`habitat_modelling` 3.6 GiB holding 0.9), so until that is fixed an updated store is rebuilt (`ACTION=build
-OVERWRITE=TRUE`, the same build list) before its push. Never so a harvest store: `0150` guards only the update, and a
-build over `fraser`, `peace` or `pine` replaces their harvest documents.
+OVERWRITE=TRUE`, the same build list) before its push (`scripts/README.md`, the `ACTION=update` bullet).
 
 `crd_store_build()` reads the local `~/Zotero/zotero.sqlite` and names documents by Better BibTeX
 citation key. That is a different identity from the harvest's `<EXTENT>__<reportId>.pdf`, which

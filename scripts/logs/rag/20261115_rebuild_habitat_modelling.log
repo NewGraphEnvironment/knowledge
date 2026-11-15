@@ -1,4 +1,4 @@
-# rebuild habitat_modelling from U9ZCZ6RN,RXNFPBPH,VHWEK6RE,GELFSUTU,9U54XAND,SW2RXUJC,DQP29KU7,X29BX4U8,W4425VK5,545K8HP4 (OVERWRITE=TRUE), #194: the in-place update left the file mostly free blocks
+# rebuild habitat_modelling from U9ZCZ6RN,RXNFPBPH,VHWEK6RE,GELFSUTU,9U54XAND,SW2RXUJC,DQP29KU7,X29BX4U8,W4425VK5,545K8HP4 (OVERWRITE=TRUE), #194: the in-place update left 76 % of the file's blocks free
 # expected: 414 documents, the same origins and per-document chunk counts as the updated store
 # start 2026-11-15T07:20:32Z
 80 of 499 members left out:

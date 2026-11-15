@@ -1,4 +1,4 @@
-# rebuild bull_trout from VHWEK6RE (OVERWRITE=TRUE), #194: the in-place update left the file mostly free blocks
+# rebuild bull_trout from VHWEK6RE (OVERWRITE=TRUE), #194: the in-place update left 32 % of the file's blocks free
 # expected: 173 documents, the same origins and per-document chunk counts as the updated store
 # start 2026-11-15T07:00:42Z
 1 of 175 members left out:

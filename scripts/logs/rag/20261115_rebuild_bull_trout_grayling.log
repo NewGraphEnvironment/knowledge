@@ -1,4 +1,4 @@
-# rebuild bull_trout_grayling from VHWEK6RE,GELFSUTU (OVERWRITE=TRUE), #194: the in-place update left the file mostly free blocks
+# rebuild bull_trout_grayling from VHWEK6RE,GELFSUTU (OVERWRITE=TRUE), #194: the in-place update left 71 % of the file's blocks free
 # expected: 197 documents, the same origins and per-document chunk counts as the updated store
 # start 2026-11-15T07:09:37Z
 2 of 203 members left out:

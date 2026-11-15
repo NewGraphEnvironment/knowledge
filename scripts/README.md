@@ -21,7 +21,7 @@ wf_farm_priority.js                          farm priority/crossing tables out o
 0161  reconcile farmed rows -> PSCIS, stamp watershed_group_code
 0162  spatialize -> rag_priorities.gpkg
 0150  query the rag store            ACTION=query STORE=fraser QUERY="..."
-0150  update a store in place     ACTION=update STORE=sturgeon COLLECTIONS=WEUFTSDC  (its whole build list; cred >= 0.7.0)
+0150  update a store in place     ACTION=update STORE=sturgeon COLLECTIONS=WEUFTSDC  (its whole build list; cred >= 0.7.0; rebuild before the push while cred#48 is open)
 
 0154  content-tag the corpus (any time after 0152)
 0156  dedup the store        (before pushing it)
@@ -169,7 +169,8 @@ wf_farm_priority.js                          farm priority/crossing tables out o
 0150  ACTION=build STORE=statistics COLLECTIONS=LP4R4VYR                                   then ACTION=push
       (McElreath 2020, Gelman et al. 2013 (BDA3), Hill 2025 and the collection's other PDFs; Wood's GAM book and
       MacKenzie et al.'s occupancy book join when a PDF is in hand, #95)
-      (after a library change, ACTION=update with the same COLLECTIONS brings a store up to date instead)
+      (after a library change, ACTION=update with the same COLLECTIONS brings a store up to date instead; while
+       NewGraphEnvironment/cred#48 is open, rebuild it before the push, as the ACTION=update bullet says)
       (a rebuild over an existing local store needs OVERWRITE=TRUE; ACTION=push needs CONFIRM=TRUE to upload)
 0280  verify data/literature_evidence.csv and data/ip_model_registry.csv against their PDFs, and the
       model_id link between them (gate; read with knw_literature_read() / knw_ip_read())
@@ -263,8 +264,8 @@ A report is reachable from more than one place; using only one axis misses repor
   resolves and would be dropped: all of `fraser`, `peace` and `pine`), and prints the document counts before and after and every document it dropped. The
   file keeps the space the update freed (NewGraphEnvironment/cred#48): #194's updates left 32 to 76 % of their blocks
   free (`pragma database_size`). While that is open, rebuild an updated store with `ACTION=build OVERWRITE=TRUE` and
-  the same `COLLECTIONS` before pushing it. Only a store this bullet can update takes that rebuild: `0150` does not
-  guard a build, and a build over `fraser`, `peace` or `pine` replaces their harvest documents with Zotero's.
+  the same `COLLECTIONS` before pushing it. This is the one place the rule is stated; it reaches only stores an update
+  accepts, so never `fraser`, `peace` or `pine`.
 - **Push after every local write** (`0152` ingest, `0156` dedup, a rebuild or update). The next verified
   connect replaces a local file whose md5 no longer matches the manifest with the bucket copy —
   an unpushed ingest is simply gone
@@ -499,7 +500,8 @@ The cited basis for CH and BT habitat thresholds (#19). Not per watershed group.
   an attachment's type, an item's fields or its file; `merge-items` is the duplicate recipe under "Zotero access is
   local, except for filing" in CLAUDE.md. A row is done when its end state holds, so a re-run after a crash finishes
   the row. It prints the attachments it added and trashed: a cred-built store that holds one is brought up to date
-  with `0150 ACTION=update`; a harvest store waits for its next `0152` build.
+  with `0150 ACTION=update` (then rebuilt before its push while cred#48 is open, the `ACTION=update` bullet); a
+  harvest store waits for its next `0152` build.
 - `data/literature_evidence.csv` has one row per value a source gives: species, stage, form, variable, the
   model parameter it bears on, bound, value, unit, `metric`, kind, region, key, page, verbatim quote,
   `quote_source`, scale, cited source and `model_id`. `kind = none` records a search that found nothing.

@@ -13,7 +13,9 @@
 #    crd_store_update(): new and changed PDFs are ingested, documents whose source no
 #    longer resolves are dropped, the rest are kept unread. COLLECTIONS must be the
 #    store's whole build list, as in scripts/README.md: a document outside it is dropped.
-#    Pull the store first (ACTION=query VERIFY=TRUE), push it after.)
+#    Pull the store first (ACTION=query VERIFY=TRUE). An update leaves the space it frees in the
+#    file (NewGraphEnvironment/cred#48), so until that is fixed rebuild the store with
+#    ACTION=build OVERWRITE=TRUE and the same COLLECTIONS before pushing it.)
 #   ACTION=query STORE=fraser QUERY="beaver dam culvert" TOPK=5           Rscript scripts/0150-store.R
 #   (query needs cred >= 0.4.0, the first whose crd_search() works under ragnar 0.3)
 #   (query opens an existing local store unverified; VERIFY=TRUE re-checks it
@@ -244,6 +246,10 @@ if (action %in% c("build", "update")) {
     if (length(setdiff(before, after))) message("dropped:\n  ", paste(setdiff(before, after), collapse = "\n  "))
   }
   message(if (action == "build") "Built " else "Updated ", store_path, ". It is not in the bucket until ACTION=push.")
+  if (action == "update") {
+    message("An update leaves the space it frees in the file (NewGraphEnvironment/cred#48): rebuild it with ",
+            "ACTION=build OVERWRITE=TRUE and the same COLLECTIONS before the push.")
+  }
 } else if (action == "query") {
   # cred 0.3.0's crd_search() fails on every store under ragnar 0.3.0 (cred#27).
   if (utils::packageVersion("cred") < "0.4.0") {
