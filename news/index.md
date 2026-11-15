@@ -1,5 +1,24 @@
 # Changelog
 
+## knowledge 0.4.41
+
+- The published thresholds are now tuned on link’s minimal network
+  (`fresh_default_minimal`, link 0.78.1), which does not cut streams at
+  fish records, crossings or hand-mapped habitat, so the slope a fish
+  habitat definition is scored on no longer depends on the catch
+  ([\#120](https://github.com/NewGraphEnvironment/knowledge/issues/120)).
+  Run `20261103_0838` replaces
+  [\#145](https://github.com/NewGraphEnvironment/knowledge/issues/145)’s
+  full-network run: bull trout rearing and spawning, chinook rearing (a
+  9 % slope limit, was 13 %) and steelhead rearing move; coho, grayling
+  and westslope cutthroat rearing keep their definitions; bull trout
+  spawning now passes the grade gate. The thresholds table, the chinook
+  and methodology articles’ data, their references and the README figure
+  are rebuilt, and the three articles name the minimal network as the
+  one tuned on and the full network as the comparison. link draws these
+  definitions on its full network only through each segment’s minimal
+  parent’s slope (link#463).
+
 ## knowledge 0.4.40
 
 - `scripts/0330` draws no maps, and writes GeoPackages only with

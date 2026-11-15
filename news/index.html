@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">knowledge</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.40</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.41</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -40,9 +40,13 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/v0.4.41/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.4.41" id="knowledge-0441">knowledge 0.4.41<a class="anchor" aria-label="anchor" href="#knowledge-0441"></a></h2>
+<ul><li>The published thresholds are now tuned on link’s minimal network (<code>fresh_default_minimal</code>, link 0.78.1), which does not cut streams at fish records, crossings or hand-mapped habitat, so the slope a fish habitat definition is scored on no longer depends on the catch (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/120" class="external-link">#120</a>). Run <code>20261103_0838</code> replaces <a href="https://github.com/NewGraphEnvironment/knowledge/issues/145" class="external-link">#145</a>’s full-network run: bull trout rearing and spawning, chinook rearing (a 9 % slope limit, was 13 %) and steelhead rearing move; coho, grayling and westslope cutthroat rearing keep their definitions; bull trout spawning now passes the grade gate. The thresholds table, the chinook and methodology articles’ data, their references and the README figure are rebuilt, and the three articles name the minimal network as the one tuned on and the full network as the comparison. link draws these definitions on its full network only through each segment’s minimal parent’s slope (link#463).</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.40" id="knowledge-0440">knowledge 0.4.40<a class="anchor" aria-label="anchor" href="#knowledge-0440"></a></h2>
 <ul><li>
