@@ -197,7 +197,7 @@ What exploration settled:
       match the project-repo shape (`salmo_scoping_2015`, `kl_workshop_2018`), public report names; commits and
       GitHub text clean for this work
 - [x] The PWF checkboxes match the landed work
-- [ ] `/planning-archive` on completion
+- [x] `/planning-archive` on completion
 
 How each change is proved:
 - The CSVs: each PDF source starts `%PDF`, and each row is read against its title page.
