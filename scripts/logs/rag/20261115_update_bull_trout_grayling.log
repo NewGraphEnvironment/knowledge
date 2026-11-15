@@ -29,5 +29,8 @@ Store updated: data/rag/bull_trout_grayling.duckdb | added: 164 | replaced: 0 | 
   Its md5 has changed: push it with crd_store_push(), or open it with crd_store_connect(verify = FALSE) until then, which would otherwise replace it with the copy the manifest describes. Reconnect any session that had it open.
 35 documents before, 197 after: 164 added, 2 dropped
 dropped:
+# (the two dropped paths were removed with the home-path lines when this log was written, review round 2;
+#  read from the store after the run: neither HYSNCHBC nor N2IJDSIN was among its origins, both had been before,
+#  and 8PADNGFE and PWRE9XAM were)
 Updated data/rag/bull_trout_grayling.duckdb. It is not in the bucket until ACTION=push.
 # exit 0 at 2026-11-15T00:32:17Z

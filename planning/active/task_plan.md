@@ -159,7 +159,8 @@ What exploration settled:
       the updated stores: `bull_trout` identical (173 documents, same chunks per document, 366 MiB, 0 free blocks);
       `bull_trout_grayling` 196 and `habitat_modelling` 404, each dropping the scans the current reader finds no text in
       (one-chunk documents in older builds; #217), with chunk counts moved on documents chunked by the older builds
-- [x] Commit the CSVs and the build, query and update logs, home paths as `~/` (G6); then **push the branch**, and
+- [x] Commit the CSVs and the build, query and update logs, home paths removed (G6: the lines were dropped, not rewritten
+      as `~/`, which cost the update logs their `dropped:` paths; review round 2); then **push the branch**, and
       never amend, rebase or rewrite after it, since the manifests record `head_sha` (O1)
 - [x] Push one store at a time (`ACTION=push`: a dry run, then `CONFIRM=TRUE`): `bull_trout`, then `bull_trout_grayling`,
       then `habitat_modelling` last. Read each push's result and check its multipart ETag before the next push or any

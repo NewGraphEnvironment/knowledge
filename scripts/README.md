@@ -261,8 +261,10 @@ A report is reachable from more than one place; using only one axis misses repor
   collections left out are dropped. It needs the store local (`ACTION=query VERIFY=TRUE` pulls it) and the store's
   embedder answering, refuses a store holding any document from outside Zotero storage (`storage/<key>/`), which never
   resolves and would be dropped: all of `fraser`, `peace` and `pine`), and prints the document counts before and after and every document it dropped. The
-  file keeps the space the update freed (NewGraphEnvironment/cred#48), so check `pragma database_size` before pushing
-  and rebuild with `OVERWRITE=TRUE` where most blocks are free (#194).
+  file keeps the space the update freed (NewGraphEnvironment/cred#48): #194's updates left 32 to 76 % of their blocks
+  free (`pragma database_size`). While that is open, rebuild an updated store with `ACTION=build OVERWRITE=TRUE` and
+  the same `COLLECTIONS` before pushing it. Only a store this bullet can update takes that rebuild: `0150` does not
+  guard a build, and a build over `fraser`, `peace` or `pine` replaces their harvest documents with Zotero's.
 - **Push after every local write** (`0152` ingest, `0156` dedup, a rebuild or update). The next verified
   connect replaces a local file whose md5 no longer matches the manifest with the bucket copy —
   an unpushed ingest is simply gone
@@ -486,8 +488,8 @@ The cited basis for CH and BT habitat thresholds (#19). Not per watershed group.
   federal management plan), BC's 2023 management plan, Alberta's status report, the US recovery plan and critical
   habitat rule, the Williston, Peace and Columbia series and the reviews.
   Unlike sturgeon and cutthroat, `VHWEK6RE` is also in `habitat_modelling`'s list and in `bull_trout_grayling`'s, so a
-  change to the collection is followed by a new build of all three. A build, not `ACTION=update`, while
-  NewGraphEnvironment/cred#48 is open, because an update leaves the file mostly free blocks.
+  change to the collection is followed by `ACTION=update` on all three, and, while NewGraphEnvironment/cred#48 is
+  open, their rebuild before the push (the `ACTION=update` bullet above).
   The `statistics` store is built from the top-level `statistics` collection (`LP4R4VYR`, `--parent top`, #95): the
   texts the tuning method is read against (#185).
 - `0275` carries out `data/zotero_attachment_verdicts.csv`, one decided row per item (#126, #151): `merge` joins an

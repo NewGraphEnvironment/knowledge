@@ -165,8 +165,10 @@ connect: #172's reconnect after one replaced an updated `habitat_modelling` with
 cred-built store up to date after a library change, `0150 ACTION=update` with the store's whole build list
 (`scripts/README.md`): cred's `crd_store_update()` drops every document outside the keys it is given, so `0150` refuses
 a store holding any document from outside Zotero storage (`fraser`, `peace`, `pine`). An update leaves the space it
-frees inside the file (NewGraphEnvironment/cred#48): #194's updates left `habitat_modelling` 76 % free blocks (3.6 GiB
-holding 0.9). Read `pragma database_size` before a push, and rebuild (`ACTION=build OVERWRITE=TRUE`) where it is high.
+frees inside the file (NewGraphEnvironment/cred#48): #194's updates left 32 to 76 % of their blocks free
+(`habitat_modelling` 3.6 GiB holding 0.9), so until that is fixed an updated store is rebuilt (`ACTION=build
+OVERWRITE=TRUE`, the same build list) before its push. Never so a harvest store: `0150` guards only the update, and a
+build over `fraser`, `peace` or `pine` replaces their harvest documents.
 
 `crd_store_build()` reads the local `~/Zotero/zotero.sqlite` and names documents by Better BibTeX
 citation key. That is a different identity from the harvest's `<EXTENT>__<reportId>.pdf`, which
