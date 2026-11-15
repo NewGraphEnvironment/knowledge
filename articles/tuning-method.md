@@ -416,7 +416,10 @@ too large ([Chen and Yang 2021](#ref-chen_yang2021OneStandard)).
 
 1.96 SE is the stricter reading, about the width of a 95 % interval:
 more habitat definitions become close calls, and the choice can stay
-nearer link’s habitat definition. Both are reported.
+nearer link’s habitat definition. Both are reported. How this
+comparison, and the rest of the tuning, stands against Bayesian practice
+is set out in [an article of its
+own](https://newgraphenvironment.github.io/knowledge/articles/tuning-bayesian-practice.md).
 
 | species and stage | link’s habitat definition | close calls at 1 SE | chosen at 1 SE | close calls at 1.96 SE | chosen at 1.96 SE |
 |:---|:---|:---|:---|:---|:---|
@@ -614,8 +617,8 @@ packages [`link`](https://newgraphenvironment.github.io/link/)
 [`fresh`](https://newgraphenvironment.github.io/fresh/) (the habitat
 tests) and
 [`knowledge`](https://newgraphenvironment.github.io/knowledge/) (the
-evidence and the tuning). This article’s data were written on 2026-11-13
-at commit 0c12ccbf. To cite this package:
+evidence and the tuning). This article’s data were written on 2026-11-14
+at commit c275e250. To cite this package:
 
 Irvine A (2026). *knowledge: Tests Fish Habitat Definitions Against What
 is Known About Where Fish Live, and Tunes Them from the Fish Records*.
