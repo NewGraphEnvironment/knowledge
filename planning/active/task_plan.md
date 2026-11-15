@@ -188,9 +188,15 @@ What exploration settled:
 ## Validation
 
 - [x] Tests pass (`devtools::test()`; no `R/` change expected): 2026-11-15, FAIL 0, PASS 2289, SKIP 4
-- [ ] `/code-check branch` (three-round floor, ending on an enumeration of every CSV field against its own title page),
-      and the #56 `public_sweep.py` over the branch
-- [ ] The PWF checkboxes match the landed work
+- [x] `/code-check branch` (three-round floor, ending on an enumeration of every CSV field against its own title page),
+      and the #56 `public_sweep.py` over the branch. Six rounds (`review-round1.md`–`review-round6.md`): 1 clean, then
+      2–6 each found defects, most in the rebuild-before-push prose and later ones inside the previous fix; ended on the
+      enumerations in `enumeration_round3.md` (every passage giving the update procedure; every state of the store file
+      under the new pre-read). The CSV fields were enumerated against their title pages in Phase 1
+      (`enumeration_round0.tsv`, `audit_round1_*.tsv`). Sweep: tree hits in branch files are two PDF filenames that
+      match the project-repo shape (`salmo_scoping_2015`, `kl_workshop_2018`), public report names; commits and
+      GitHub text clean for this work
+- [x] The PWF checkboxes match the landed work
 - [ ] `/planning-archive` on completion
 
 How each change is proved:

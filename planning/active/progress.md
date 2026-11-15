@@ -51,3 +51,6 @@
 - Four queries run on the rebuilt `bull_trout` and logged with verdicts: Q4 hit, Q2 3/4, Q3 2/3, Q1 partial
 - Branch pushed at `277b6494`; the three stores pushed one at a time (07:47–07:49Z), each ETag matched at 8 MiB parts and
   the bucket manifest holds the local md5s (`20261115_push_*.log`)
+- Tests: FAIL 0, PASS 2289. `/code-check branch` ran six rounds; fixes in 4703f759, b0b08f62, 0afe1db9, 213e0fcc and
+  843d9133 (one rebuild rule with its copies named; `0150` lists what a rebuild drops; a rebuild still replaces an
+  unreadable store). cred#48 retitled to the measured 32–76 %. Public sweep clean for this work
