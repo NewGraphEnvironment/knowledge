@@ -1,5 +1,26 @@
 # Changelog
 
+## knowledge 0.4.42
+
+- An internal article, “Checking the tuning of fish habitat definitions
+  against Bayesian practice” (`vignettes/tuning-bayesian-practice.Rmd`,
+  [\#204](https://github.com/NewGraphEnvironment/knowledge/issues/204)),
+  reads the tuning against *Statistical Rethinking* and *Bayesian Data
+  Analysis*: what it does as they teach, where it departs and why, and
+  what is tested next
+  ([\#203](https://github.com/NewGraphEnvironment/knowledge/issues/203),
+  [\#186](https://github.com/NewGraphEnvironment/knowledge/issues/186),
+  [\#70](https://github.com/NewGraphEnvironment/knowledge/issues/70)).
+  pkgdown builds it at its own URL and leaves it out of the articles
+  index and navbar; the methodology article links it from its comparison
+  of two habitat definitions. Its group counts come from a new `scope`
+  element of `method.rds`, which `data-raw/vignette_method.R` writes
+  through the tuning’s own population code (the new internal
+  `.tune_base()` and `.tune_population()` in `R/tune_run.R`) and stops
+  unless it reproduces the summaries’ counts, so a promotion keeps it
+  current. `data-raw/bayesian_alignment_check.R` checks its book quotes
+  against the PDF pages. Nothing published moves.
+
 ## knowledge 0.4.41
 
 - The published thresholds are now tuned on link’s minimal network
