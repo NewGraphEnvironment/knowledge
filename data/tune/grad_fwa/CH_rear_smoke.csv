@@ -2,8 +2,8 @@ species_code,stage,check,value,limit,pass,table,role,rule,dev_heldout,ddev_null,
 CH,rear,null_ratio,0.9950656581263169,1.25,TRUE,checks,,,,,,,,,,
 CH,rear,clamp,0,0,TRUE,checks,,,,,,,,,,
 CH,rear,behind_null,0,1509.2580268209863,TRUE,checks,,,,,,,,,,
-CH,rear,coef,2.8899420099677604,5,TRUE,checks,,,,,,,,,,
+CH,rear,coef,2.9576095621112715,5,TRUE,checks,,,,,,,,,,
 CH,rear,,,,,rules,no_rule,none,1509.258027,0,0,13.041804,TRUE,2.160112,data_setFDS,3
 CH,rear,,,,,rules,default,width>=1.5|g<=0.0549|none,1470.574013,-38.684014,0,12.250204,TRUE,2.021421,data_setFDS,3
 CH,rear,,,,,rules,link_tuned,mad>=0.28|g<=0.0549|none,1434.294833,-74.963194,0,13.299552,TRUE,1.865878,data_setFDS,3
-CH,rear,,,,,rules,previous,mad>=0.75|g<=0.11|Q3@D1000,1234.641673,-274.616354,0,12.640586,TRUE,2.889942,rule,4
+CH,rear,,,,,rules,previous,mad>=0.75|g<=0.13|Q3@D1000,1234.481641,-274.776386,0,12.930522,TRUE,2.95761,rule,4

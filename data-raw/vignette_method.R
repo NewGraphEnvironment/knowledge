@@ -102,7 +102,8 @@ if (length(off_grad)) stop("not graded from a curve on link's segment gradient (
 ev <- unique(vapply(g1, function(g) g$evidence_md5, ""))
 if (length(ev) != 1) stop("the grade tables were made on ", length(ev), " evidence builds")
 if (!identical(ev, paste(unname(tools::md5sum(derived)), collapse = ";"))) {
-  stop("data/fdis/derived is not the evidence the grades were made on: rerun 0310 or restore its tables")
+  stop("data/fdis/derived is not the evidence the grades were made on: restore it from the directory the run's ledger ",
+       "names or with PULL=TRUE scripts/0336-archive.R (0310 refuses to write a build settled on another schema there)")
 }
 loads <- unique(vapply(g1, function(g) g$discharge_load, ""))
 if (length(loads) != 1) stop("the grade tables were made on ", length(loads), " flow loads")
@@ -295,8 +296,9 @@ picks <- bind_rows(lapply(keys, function(k) {
          pick_strict = b$rule, close_calls_strict = b$n_region, rules = nrow(t))
 }))
 
-# ---- the segment at a site (#92): link cuts a stream at the observations of the species it models, so a site with ----
-# fish usually starts its own segment; on the stream-line sites of a usual fished area, as
+# ---- the segment at a site (#92, #120): link's full network cuts a stream at the observations of the species it ----
+# models, so there a site with fish usually starts its own segment, and its minimal network does not; on the
+# stream-line sites of a usual fished area of the network the published tables were scored on, as
 # data-raw/segment_gradient_check.R measures them
 d_sg <- vl[stream & area_ok, ]
 at_site <- d_sg$segment_start_offset_m >= -1 & d_sg$segment_start_offset_m <= 5
