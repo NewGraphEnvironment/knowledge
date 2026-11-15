@@ -70,8 +70,17 @@ ch <- sc[sc$key == "CH_rear", ]
 prior_sd <- as.numeric(val("prior_sd"))
 p_norm <- 2 * stats::pnorm(-3)
 p_cauchy <- 2 * stats::pcauchy(-3)
-# the other species and stages whose habitat definition the network moves (the bundle compares every published key)
+# the other species and stages whose habitat definition the network moves (the bundle compares every published key).
+# A promotion does not rebuild the cuts bundle, so its minimal-network picks are held to the published ones: every key
+# the method bundle picks, and westslope cutthroat rearing (underpowered, so in no pick table) by its slope limit
 moved <- setdiff(cp$other_keys$key[cp$other_keys$network_moved != "same"], "CH_rear")
+ok <- as.data.frame(cp$other_keys)
+pk_pub <- stats::setNames(pk$pick, pk$key)
+lim_pub <- stats::setNames(x$site_gradient$limits$limit, x$site_gradient$limits$key)
+no_pick <- setdiff(ok$key, names(pk_pub))
+lim_of <- function(rule) as.numeric(sub("^.*\\|g<=([0-9.]+)\\|.*$", "\\1", rule))
+md5_cp <- function(f) cp$meta$md5_local[[paste0("data/stage/cut_points/evidence/minimal/", f)]]
+md5_x <- function(f) x$meta$md5_local[[paste0("data/fdis/derived/", f)]]
 # the words on the cuts: on link's full network a site with fish starts its own segment far more often than an empty
 # one, less often on the current build than on the earlier one, and about as often as an empty one on the minimal
 # network the tuning reads; chinook rearing's slope limit is steeper on the full network than on the minimal one, and
@@ -80,15 +89,20 @@ moved <- setdiff(cp$other_keys$key[cp$other_keys$network_moved != "same"], "CH_r
 # that moves chinook rearing stops the build here until data-raw/vignette_cut_points.R is rerun
 stopifnot(nrow(pr) == 6, at_site("published_145", "fish") > 3 * at_site("published_145", "zero"),
           at_site("published_92", "fish") > at_site("published_145", "fish"),
+          # "about as often": within a point, and within a quarter of each other
           abs(at_site("minimal", "fish") - at_site("minimal", "zero")) < 1,
+          max(at_site("minimal", "fish"), at_site("minimal", "zero")) <
+            1.25 * min(at_site("minimal", "fish"), at_site("minimal", "zero")),
           cp_lim("published") > cp_lim("minimal"), cp_lim("parent") == cp_lim("minimal"),
           # the cuts bundle's minimal network is the one this article's tuning read: the same visit tables
-          identical(unname(cp$meta$md5_local["data/stage/cut_points/evidence/minimal/visits_link.csv"]),
-                    unname(x$meta$md5_local["data/fdis/derived/visits_link.csv"])),
-          identical(unname(cp$meta$md5_local["data/stage/cut_points/evidence/minimal/visits_species.csv"]),
-                    unname(x$meta$md5_local["data/fdis/derived/visits_species.csv"])),
+          # (by [[, which errors on a name either bundle lacks rather than comparing NA with NA)
+          identical(md5_cp("visits_link.csv"), md5_x("visits_link.csv")),
+          identical(md5_cp("visits_species.csv"), md5_x("visits_species.csv")),
           # "the network moves the habitat definitions of other species and stages too", over every published key
-          setequal(sc$key, cp$other_keys$key), length(moved) >= 2,
+          setequal(sc$key, ok$key), length(moved) >= 2,
+          identical(ok$pick_minimal[match(names(pk_pub), ok$key)], unname(pk_pub)),
+          length(no_pick) == 1, no_pick %in% names(lim_pub),
+          isTRUE(all.equal(lim_of(ok$pick_minimal[ok$key == no_pick]), unname(lim_pub[[no_pick]]))),
           length(gs_ch) == 1, identical(gs_ch, cp$setups$pick[cp$setups$setup == "minimal"]),
           # the groups: chinook rearing's split is quoted, and in every key the never-caught groups outnumber the
           # all-caught ones
@@ -454,8 +468,9 @@ full.
 - **Deviance.** How badly a model predicts the catch, summed over sites; lower is better.
 - **Fold.** One of the `r val("folds")` sets the watershed groups are dealt into; each in turn is left out of the fit
   and scored.
-- **Full network.** `link`'s streams cut, beyond the minimal network's cuts, at each species' highest fish record on a
-  stream, at crossings and at the ends of hand-mapped habitat; the network `link` draws habitat on.
+- **Full network.** `link`'s streams cut, beyond the minimal network's cuts, at fish records (in its current build,
+  each species' highest record on a stream), at crossings and at the ends of hand-mapped habitat; the network `link`
+  draws habitat on.
 - **Grade.** A stream's expected use per standard electrofishing visit, from the curve.
 - **Habitat definition.** The few limits on a stream's size and slope that say where a species spawns or rears.
 - **Minimal network.** `link`'s streams without the cuts at fish records, crossings and the ends of hand-mapped
