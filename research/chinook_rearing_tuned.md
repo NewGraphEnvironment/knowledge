@@ -226,8 +226,8 @@ stricter one (0.75 m³/s or a river within 1 km, against 1.5 m wide or the 15 m/
 limit is the laxer.
 
 The floodplain table (`data/compare/floodplain.csv`) and the maps were not redrawn for #73 (`0330 STAGE=maps`); their
-chinook figures are #65's, on the run's own configs. The GeoPackage `data/compare/gpkg/CH_rear.gpkg` (ignored) carries
-every segment's verdict under each rule and structure. Maps: `research/fig/compare_ch_rear_*.png`.
+chinook figures were #65's, on the run's own configs (#173 removed the maps; the floodplain table is now `0330 STAGE=floodplain`, and a comparison is viewed in QGIS from its GeoPackage, `0330 STAGE=gpkg`). The GeoPackage
+`data/compare/gpkg/CH_rear.gpkg` (ignored) carries every segment's verdict under each rule and structure.
 
 ## The #54 record: the 55-group build
 
@@ -653,7 +653,7 @@ eastern sub-basin's network. The green (tuned only) is short reaches on small st
 ## The plain-language account
 
 The province-wide result is told for a reader who has not seen the tuning in the package article
-<https://newgraphenvironment.github.io/knowledge/articles/chinook_rearing.html> (#62), built from `inst/vignette-data/` by `data-raw/vignette_chinook.R`: since #143 the answer and a
+<https://newgraphenvironment.github.io/knowledge/articles/tuning-chinook-rearing.html> (#62), built from `inst/vignette-data/` by `data-raw/vignette_chinook.R`: since #143 the answer and a
 Bulkley map first, then what changes (a before/after table), why a nearby river matters (the fitted chance of a catch
 by flow and distance), how sure the choice is (the close calls, the stricter bar and the stability checks), and how it
 was done, in a table that links the method article. link's own account, the rule drawn by link, waits on its configuration

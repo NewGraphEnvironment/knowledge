@@ -23,7 +23,9 @@ promote_fx <- function(ev = "e1", ch_rule = "mad>=0.5|g<=0.07|none", env = paren
   d <- withr::local_tempdir(.local_envir = env)
   tn <- file.path(d, "tune"); cm <- file.path(d, "compare")
   ct <- file.path(tn, "candidate", "r1"); cc <- file.path(cm, "candidate", "r1")
-  for (x in c(tn, cm, ct, cc, file.path(d, "logs"), file.path(d, "fig"), file.path(cc, "fig"))) dir.create(x, recursive = TRUE)
+  for (x in c(tn, cm, ct, cc, file.path(d, "logs"), file.path(cm, "gpkg"), file.path(cc, "gpkg"))) {
+    dir.create(x, recursive = TRUE)
+  }
   key_files <- function(dir_t, dir_c, k, rule, ev, tag) {
     sp <- sub("_.*", "", k); st <- sub(".*_", "", k)
     utils::write.csv(data.frame(species_code = sp, stage = st, status = "fitted", rule_recommended = rule,
@@ -61,12 +63,12 @@ promote_fx <- function(ev = "e1", ch_rule = "mad>=0.5|g<=0.07|none", env = paren
   writeLines(c("tune log", "CH_rear grades: 2 groups, ...", "BT_rear grades: 2 groups, ..."),
              file.path(ct, "20261028_tune_run-r1.txt"))
   writeLines("compare log", file.path(cc, "20261028_compare-r1.txt"))
-  writeLines("png", file.path(cc, "fig", "compare_ch_rear_bulk.png"))
-  writeLines("png", file.path(cc, "fig", "compare_bt_rear_bulk.png"))
-  list(d = d, tune = tn, compare = cm, logs = file.path(d, "logs"), fig = file.path(d, "fig"))
+  writeLines("gpkg", file.path(cc, "gpkg", "CH_rear.gpkg"))
+  writeLines("gpkg", file.path(cc, "gpkg", "BT_rear.gpkg"))
+  list(d = d, tune = tn, compare = cm, logs = file.path(d, "logs"), gpkg = file.path(cm, "gpkg"))
 }
 promote <- function(fx, ...) {
-  knw_tune_promote("r1", ..., tune_dir = fx$tune, compare_dir = fx$compare, log_dir = fx$logs, fig_dir = fx$fig)
+  knw_tune_promote("r1", ..., tune_dir = fx$tune, compare_dir = fx$compare, log_dir = fx$logs)
 }
 tree_md5 <- function(fx) {
   f <- list.files(fx$d, recursive = TRUE, full.names = TRUE)
@@ -74,7 +76,7 @@ tree_md5 <- function(fx) {
   stats::setNames(unname(tools::md5sum(f)), f)
 }
 
-test_that("a whole run replaces every key's files, keeps no stale one, and brings its logs and figures", {
+test_that("a whole run replaces every key's files, keeps no stale one, and brings its logs and GeoPackages", {
   fx <- promote_fx()
   p <- promote(fx)
   expect_identical(p$keys, c("BT_rear", "CH_rear"))
@@ -85,7 +87,7 @@ test_that("a whole run replaces every key's files, keeps no stale one, and bring
   expect_true(file.exists(file.path(fx$tune, "CH_rearing_other.csv")))
   expect_identical(p$removed, file.path(fx$tune, "CH_rear_stale.csv"))
   expect_true(all(file.exists(file.path(fx$logs, c("20261028_tune_run-r1.txt", "20261028_compare-r1.txt")))))
-  expect_true(all(file.exists(file.path(fx$fig, c("compare_ch_rear_bulk.png", "compare_bt_rear_bulk.png")))))
+  expect_true(all(file.exists(file.path(fx$gpkg, c("CH_rear.gpkg", "BT_rear.gpkg")))))
   # the combined table is the run's rows, each key where its rows stood in the tracked one
   cmp <- utils::read.csv(file.path(fx$compare, "compare.csv"))
   expect_identical(unique(cmp$tag), "new")
@@ -108,7 +110,7 @@ test_that("one key moves alone: the other key's files and rows are untouched, by
   new_lines <- readLines(file.path(fx$compare, "compare.csv"))
   expect_identical(new_lines[c(1, 4, 5)], old_lines[c(1, 4, 5)])   # the header and BT's rows, in place
   expect_match(new_lines[2:3], "new")
-  expect_false(file.exists(file.path(fx$fig, "compare_bt_rear_bulk.png")))
+  expect_false(file.exists(file.path(fx$gpkg, "BT_rear.gpkg")))
 })
 
 test_that("a by-key promotion that would leave a kept key on another build is refused, and writes nothing", {
@@ -240,34 +242,28 @@ test_that("a comparison older than its key's grades is refused", {
 
 test_that("what a promotion replaces is archived as a candidate, and promoting the archive undoes it", {
   fx <- promote_fx()
-  dir.create(file.path(fx$compare, "gpkg"))
   writeLines("old gpkg", file.path(fx$compare, "gpkg", "CH_rear.gpkg"))
-  dir.create(file.path(fx$compare, "candidate", "r1", "gpkg"))
   writeLines("new gpkg", file.path(fx$compare, "candidate", "r1", "gpkg", "CH_rear.gpkg"))
-  writeLines("old png", file.path(fx$fig, "compare_ch_rear_morr.png"))
   before <- tree_md5(fx)
   p <- promote(fx)
   expect_match(p$archive, "^replaced_[0-9]{8}_[0-9]{6}(_[0-9]+)?$")
   expect_identical(readLines(file.path(fx$compare, "gpkg", "CH_rear.gpkg")), "new gpkg")
-  # a figure of a promoted key the run did not draw is removed, and archived with the rest
-  expect_false(file.exists(file.path(fx$fig, "compare_ch_rear_morr.png")))
   a_t <- file.path(fx$tune, "candidate", p$archive); a_c <- file.path(fx$compare, "candidate", p$archive)
   expect_identical(utils::read.csv(file.path(a_t, "CH_rear_tune.csv"))$tag, "old")
   expect_true(file.exists(file.path(a_t, "CH_rear_stale.csv")))
   expect_identical(readLines(file.path(a_c, "gpkg", "CH_rear.gpkg")), "old gpkg")
-  expect_true(file.exists(file.path(a_c, "fig", "compare_ch_rear_morr.png")))
   expect_identical(unique(utils::read.csv(file.path(a_c, "compare.csv"))$tag), "old")
-  # undone by promoting the archive; what the promotion added where nothing stood (its logs, BT's new figure) stays
-  q <- knw_tune_promote(p$archive, tune_dir = fx$tune, compare_dir = fx$compare, log_dir = fx$logs, fig_dir = fx$fig)
+  # undone by promoting the archive; what the promotion added where nothing stood (its logs, BT's new GeoPackage) stays
+  q <- knw_tune_promote(p$archive, tune_dir = fx$tune, compare_dir = fx$compare, log_dir = fx$logs)
   expect_false(identical(q$archive, p$archive))
   after <- tree_md5(fx)
   expect_identical(after[names(before)], before)
   expect_setequal(setdiff(names(after), names(before)),
-                  file.path(c(fx$logs, fx$logs, fx$fig), c("20261028_tune_run-r1.txt", "20261028_compare-r1.txt",
-                                                           "compare_bt_rear_bulk.png")))
+                  file.path(c(fx$logs, fx$logs, fx$gpkg), c("20261028_tune_run-r1.txt", "20261028_compare-r1.txt",
+                                                            "BT_rear.gpkg")))
 })
 
-test_that("a run whose comparison did not finish is refused; one that drew no maps keeps the tracked floodplain rows", {
+test_that("a run whose comparison did not finish is refused; one that drew no floodplain keeps the tracked rows", {
   fx <- promote_fx()
   unlink(file.path(fx$compare, "candidate", "r1", "compare.csv"))
   expect_error(promote(fx), "compare.csv is not in .*: its last comparison did not finish")
@@ -290,16 +286,16 @@ test_that("a key the run no longer fits leaves none of its last fit behind", {
   fx <- promote_fx()
   ct <- file.path(fx$tune, "candidate", "r1"); cc <- file.path(fx$compare, "candidate", "r1")
   unlink(c(list.files(ct, "^CH_rear_", full.names = TRUE), list.files(cc, "^CH_rear_", full.names = TRUE),
-           file.path(cc, "fig", "compare_ch_rear_bulk.png")))
+           file.path(cc, "gpkg", "CH_rear.gpkg")))
   utils::write.csv(data.frame(species_code = "CH", stage = "rear", status = "too_few_groups"),
                    file.path(ct, "CH_rear_summary.csv"), row.names = FALSE)
   x <- utils::read.csv(file.path(cc, "compare.csv"))
   utils::write.csv(x[x$species_code != "CH", ], file.path(cc, "compare.csv"), row.names = FALSE)
-  writeLines("old png", file.path(fx$fig, "compare_ch_rear_bulk.png"))
+  writeLines("old gpkg", file.path(fx$gpkg, "CH_rear.gpkg"))
   p <- promote(fx)
   expect_identical(list.files(fx$tune, "^CH_rear_"), "CH_rear_summary.csv")
   expect_length(list.files(fx$compare, "^CH_rear_"), 0)
-  expect_false(file.exists(file.path(fx$fig, "compare_ch_rear_bulk.png")))
+  expect_false(file.exists(file.path(fx$gpkg, "CH_rear.gpkg")))
   expect_false("CH" %in% utils::read.csv(file.path(fx$compare, "compare.csv"))$species_code)
 })
 
@@ -392,13 +388,13 @@ test_that("a setup run, tuned on another gradient than the segment's own, is nev
 
 test_that("an undo restores what was replaced whatever the files' ages (round 4)", {
   fx <- promote_fx()
-  writeLines("tracked png", f <- file.path(fx$fig, "compare_ch_rear_bulk.png"))
+  writeLines("tracked gpkg", f <- file.path(fx$gpkg, "CH_rear.gpkg"))
   Sys.setFileTime(f, Sys.time() - 86400)   # a checkout older than everything the run wrote
   p <- promote(fx)
-  expect_identical(readLines(f), "png")
-  Sys.setFileTime(file.path(fx$compare, "candidate", p$archive, "fig", "compare_ch_rear_bulk.png"), Sys.time() - 86400)
-  q <- knw_tune_promote(p$archive, tune_dir = fx$tune, compare_dir = fx$compare, log_dir = fx$logs, fig_dir = fx$fig)
-  expect_identical(readLines(f), "tracked png")
+  expect_identical(readLines(f), "gpkg")
+  Sys.setFileTime(file.path(fx$compare, "candidate", p$archive, "gpkg", "CH_rear.gpkg"), Sys.time() - 86400)
+  q <- knw_tune_promote(p$archive, tune_dir = fx$tune, compare_dir = fx$compare, log_dir = fx$logs)
+  expect_identical(readLines(f), "tracked gpkg")
 })
 test_that("a fitted key no log of the run says it graded is refused", {
   fx <- promote_fx()
@@ -410,17 +406,14 @@ test_that("a fitted key no log of the run says it graded is refused", {
 test_that("a drawing still in progress is never promoted, and a key the run did not draw keeps its floodplain rows (round 5)", {
   fx <- promote_fx()
   cc <- file.path(fx$compare, "candidate", "r1")
-  dir.create(file.path(cc, "gpkg")); dir.create(file.path(fx$compare, "gpkg"))
+  unlink(file.path(cc, "gpkg", "CH_rear.gpkg"))
   writeLines("partial", file.path(cc, "gpkg", "CH_rear.part.gpkg"))
   writeLines("tracked", file.path(fx$compare, "gpkg", "CH_rear.gpkg"))
-  dir.create(file.path(cc, "fig", ".part_ch_rear"))
-  writeLines("partial", file.path(cc, "fig", ".part_ch_rear", "compare_ch_rear_morr.png"))
   writeLines(c("species_code,stage,ha", "CH,rear,5", "BT,rear,7"), file.path(fx$compare, "floodplain.csv"))
   writeLines(c("species_code,stage,ha", "BT,rear,8"), file.path(cc, "floodplain.csv"))
   p <- promote(fx)
   expect_identical(readLines(file.path(fx$compare, "gpkg", "CH_rear.gpkg")), "tracked")
   expect_false(file.exists(file.path(fx$compare, "gpkg", "CH_rear.part.gpkg")))
-  expect_false(file.exists(file.path(fx$fig, "compare_ch_rear_morr.png")))
   expect_identical(readLines(file.path(fx$compare, "floodplain.csv")), c("species_code,stage,ha", "CH,rear,5", "BT,rear,8"))
   expect_true(any(grepl("floodplain.csv: CH_rear not drawn by the run", p$notes)))
 })
@@ -529,4 +522,15 @@ test_that("an Atlas-gradient sensitivity scored under other floors is refused wi
   utils::write.csv(data.frame(species_code = "CH", stage = "rear", evidence_md5 = "e1", run_uid = "u1",
                               min_wsg = 5, folds = 5), file.path(g, "CH_rear_summary.csv"), row.names = FALSE)
   expect_silent(promote(fx, dry_run = TRUE))
+})
+
+test_that("a run's figures from before #173 are not promoted, and the promotion says so", {
+  fx <- promote_fx()
+  cc <- file.path(fx$compare, "candidate", "r1")
+  dir.create(file.path(cc, "fig"))
+  writeLines("png", file.path(cc, "fig", "compare_ch_rear_bulk.png"))
+  p <- promote(fx)
+  expect_true(file.exists(file.path(cc, "fig", "compare_ch_rear_bulk.png")))
+  expect_false(any(grepl("\\.png$", p$written)))
+  expect_true(any(grepl("fig/: 1 figure\\(s\\) from before #173 left in", p$notes)))
 })

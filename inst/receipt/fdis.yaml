@@ -2,7 +2,10 @@
 # through knw_receipt_keys("fdis"); scripts/0299 writes it through knw_publish(receipt =). v2 is published and frozen,
 # with other tables, and carries none. Every table is fingerprinted from its CSV as text, so held exact, except
 # access_check's km, read as a number and held to the evidence build's rounding (inst/receipt/evidence.yaml says why).
-# Provisional, as #154's declarations are.
+# Five of its tables are the evidence build's (visits_link, visits_species, walks, bcfishobs_fdis_match, access_check),
+# which #165 found exact but access_check's km across two databases. The other six, fdis_sites (0240) and
+# fdis_repeat_surveys (0230) and the tables 0290, 0294 and 0296 build from the evidence, have not been compared across
+# databases, so holding them exact is provisional.
 receipt_keys: 1
 output: fdis
 recipe:

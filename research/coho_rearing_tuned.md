@@ -117,4 +117,4 @@ link#364 chose for coho and what the thresholds table records (`data/thresholds.
 `near_river_scope` is empty, the rule having no pair).
 
 The floodplain table (`data/compare/floodplain.csv`) and the maps were not redrawn for #73 (`0330 STAGE=maps`); their
-coho figures are #65's, on the run's own configs. Maps: `research/fig/compare_co_rear_*.png`.
+coho figures were #65's, on the run's own configs (#173 removed the maps; the floodplain table is now `0330 STAGE=floodplain`, and a comparison is viewed in QGIS from its GeoPackage, `0330 STAGE=gpkg`).

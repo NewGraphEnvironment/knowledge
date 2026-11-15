@@ -24,7 +24,9 @@ A list: \code{placed}, one row per placed visit (\code{site_visit},
 \code{id_segment}, \code{segment_start_offset_m}, the segment attributes, elevation,
 \verb{access_<sp>} columns, \verb{<sp>_<flag>} and \verb{<sp>_<flag>_stored} columns);
 \code{species_access}, the species with an \verb{access_<sp>} column;
-\code{species_habitat}, the species with a habitat table; \code{overlap}, a one-row
+\code{species_habitat}, the species with a habitat table (both sorted by name,
+which orders the species' columns in \code{placed}, so the column order does
+not depend on the database's catalog); \code{overlap}, a one-row
 \code{data.frame} with the number of visits whose point lies in two segments and
 the largest overlap found.
 }

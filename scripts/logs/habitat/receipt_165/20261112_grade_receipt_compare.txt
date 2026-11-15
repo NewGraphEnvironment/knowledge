@@ -1,0 +1,41 @@
+key CH_rear 
+recipe a 23294262883c5dbe5534f08c82bea280b4ec92bb88ca1535069af81aa1cece70 
+recipe b 23294262883c5dbe5534f08c82bea280b4ec92bb88ca1535069af81aa1cece70 
+same recipe: TRUE 
+code a 89b7a328643d98a628df3ad0fd3d0c73fa7b9412 dirty FALSE 
+code b 89b7a328643d98a628df3ad0fd3d0c73fa7b9412 dirty FALSE 
+evidence a 6ee82a79611b576f04fe8a86f5f914393b94abafc930fc364872848ebcd530e8 
+evidence b 6ee82a79611b576f04fe8a86f5f914393b94abafc930fc364872848ebcd530e8 
+verdict: identical (mode receipts , register 1.0.0 )
+  side    field                                   action
+1 result  result.parts[CH_rear_grades.csv].sha256 warn  
+2 context context.inputs                          record
+3 context context.run                             record
+4 context context.time                            record
+  detail                                                                                                                                                                                   
+1 "1d17757ae917d44cbc8c577b3145b96281e2853645b3fdc4516181ecb37936c0" vs "9800465154b2ffcf9b90f78bf77272fba172d9c59ddce112788d646e086058af"; the file names no table that could vouch for it
+2 {"evidence_md5":"389942d45ae2dfca68e3e17ce01a8379;6a2e28f1afb46a02c357ac044f8... vs {"evidence_md5":"ea6514ce68e7b9cb680a06aebaaca519;6a2e28f1afb46a02c357ac044f8...                     
+3 {"grades_md5":"a005e06fe8085ff03ffe6871c68907e7","record_source":"0320","run_... vs {"grades_md5":"8e70214902176e1bbbfa94558ba1be08","record_source":"0320","run_...                     
+4 "2026-11-12T07:01:05Z" vs "2026-11-12T07:04:22Z"                                                                                                                                         
+
+summaries (b - a):
+  summary     a                   b                   diff
+1 grade_sum    253887.60172207703  253887.60172207703 0   
+2 graded_rows  872418.00000000000  872418.00000000000 0   
+3 km_graded    232928.75963606851  232928.75963606851 0   
+4 rows        3016042.00000000000 3016042.00000000000 0   
+pick a: rows 1 sha256 5fdd86fa03b29e9c62fc537ebfaa2946dc277a0a55a8867b46a67d124e4a35db 
+pick b: rows 1 sha256 5fdd86fa03b29e9c62fc537ebfaa2946dc277a0a55a8867b46a67d124e4a35db 
+table md5 a a005e06fe8085ff03ffe6871c68907e7 
+table md5 b 8e70214902176e1bbbfa94558ba1be08 
+same bytes: FALSE 
+
+how far the order of summing moves each sum (table a):
+  summary   n      sum    max_order_move bound     
+1 km_graded 872418 232929 3.11702e-08    4.5122e-05
+2 grade_sum 872418 253888 2.93949e-09    4.9182e-05
+
+rows a 3016042 b 3016042 matched 3016042 
+segments whose grade differs: 0  max |grade diff|: 0 
+segments whose length differs: 0 
+same row order: TRUE 

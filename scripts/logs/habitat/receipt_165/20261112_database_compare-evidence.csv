@@ -1,0 +1,8 @@
+label,output,verdict,bytes_match,rows_ref,rows_new,max_diff,column,tolerance,decision_read,note
+"evidence","access_check.csv","equivalent",FALSE,2193,2193,5.27506927028298e-11,"km",1e-06,FALSE,""
+"evidence","bcfishobs_fdis_match.csv","identical",TRUE,212680,212680,0,NA,0,FALSE,""
+"evidence","visits_link.csv","identical",FALSE,45529,45529,0,NA,0,TRUE,""
+"evidence","visits_species.csv","identical",TRUE,500819,500819,0,NA,0,TRUE,""
+"evidence","walks.csv","identical",TRUE,775488,775488,0,NA,0.005,TRUE,""
+"evidence","workbook_sites.csv","identical",FALSE,871,871,0,NA,1e-06,FALSE,""
+"evidence","workbook_species.csv","identical",TRUE,882,882,0,NA,1e-06,FALSE,""

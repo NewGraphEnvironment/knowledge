@@ -207,4 +207,4 @@ does (38 % against 26 % at 0.8–1), so the cut and the curve point the same way
 against 81 of 1,606 (5.0 %). On the bcfishobs records FDIS does not hold (presence only, never scored), 256 of 310
 locations (82.6 %) lie on the rule's segments, which are 23.2 % of accessible stream-edge km, a lift of 3.56 (3.35–3.72).
 Both are the same for the tuned rule, so the difference is 0 (0–0). The floodplain table and the maps were not redrawn
-for #73 (`0330 STAGE=maps`).
+for #73 (`0330 STAGE=maps`) (#173 removed the maps; the floodplain table is now `0330 STAGE=floodplain`, and a comparison is viewed in QGIS from its GeoPackage, `0330 STAGE=gpkg`).

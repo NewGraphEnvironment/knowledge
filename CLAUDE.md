@@ -20,37 +20,45 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   Only code that has run on two regions graduates here. `.Rbuildignore` keeps `data/`, `scripts/`,
   `planning/` and `research/` out of the build, and `tests/testthat/test-data-dir.R` keeps `.R` and
   `.rda` files off the top of `data/`, where `pkgload::load_all()` would source or load them.
-- `vignettes/chinook_rearing.Rmd` — the pkgdown article on the chinook rearing threshold (#62). It reads
+- `vignettes/tuning-chinook-rearing.Rmd` — "Tuning habitat: chinook rearing", the case study of chinook rearing (#62). The
+  articles are one series, `tuning-<name>` (#118): `_pkgdown.yml` groups them as the method, the case studies
+  (`tuning-<species>-<stage>`), checks on the method and one internal article, and redirects their earlier names. Their prose says "fish
+  habitat definition" at first mention and "habitat definition" after, never "rule" (#156). It reads
   `inst/vignette-data/`, which `data-raw/vignette_chinook.R` writes from the tune and compare tables and the
   database (`SCHEMA` names the run's schema, as `0320` and `0330` take it). A promotion (`0335`) reruns it, and only a
   promotion changes its sources, because `tests/testthat/test-vignette-data.R` fails when a tracked source's md5 moves
   (#111). It takes the tuning log of the run its CH rearing summary names (`tune_run`), not the newest. Every number in its prose is computed inline from those files. Its references
-  are `vignettes/chinook_rearing.bib`, which `data-raw/vignette_bib.R` writes from the group library through Better
+  are `vignettes/tuning-chinook-rearing.bib`, which `data-raw/vignette_bib.R` writes from the group library through Better
   BibTeX (Zotero must be running): rerun it after any citation change. It refuses a key Zotero does not return, strips
   each entry's local attachment path, and sets software versions from the run's ledger, one token each, because
   citeproc prints a version with a space as "Versions …". Its map is interactive only when pkgdown builds the site
   (`IN_PKGDOWN`), on Esri's World Topographic Map. Check a cited
   claim against the PDF's text: cred's `crd_aud_verify_all()` cuts each claim at the Rmd's line breaks and matches
-  unrelated passages (#79). Its numbers come from two link builds: the tuning's (`meta$link_sha`), which scored link's
-  rule at sites, and the comparison's (`config_sha` in its tables), which regenerated the habitat totals and the map.
-  They agree on stream lines and differ on lines through wetlands, so a sentence about link's near-river handling, and
-  every site or group count, names the build and population it holds for (#143). The register's `code:` phrases in
+  unrelated passages (#79). Its numbers can come from two link builds: the tuning's (`meta$link_sha`), which scored
+  link's rule at sites, and the comparison's (`config_sha` in its tables), which regenerated the habitat totals and the
+  map. Under #145's run they differed and disagreed on lines through wetlands; since the minimal network's promotion
+  (2026-11-13) both are link's minimal build at one commit, and the totals and map are that network's, not the full
+  one link draws habitat on. So a sentence about link's near-river handling, and every site or group count or km,
+  names the build, network and population it holds for (#143). The register's `code:` phrases in
   it are matched one line at a time and must each stay whole on one line.
-- `vignettes/habitat_thresholds.Rmd` — the methodology article (#93), "Choosing habitat thresholds from where fish were
-  caught": the reference home for the method and its citations. A species article (the chinook one first, #64) gives
+- `vignettes/tuning-method.Rmd` — the methodology article (#93), "Tuning fish habitat definitions with fish sampling
+  records": the reference home for the method and its citations. A species article (the chinook one first, #64) gives
   its own records and result in a sentence or two and links it rather than restating the method. It reads `inst/vignette-data/method.rds` (and, for its `#cuts` section, `cut_points.rds`), which `data-raw/vignette_method.R` writes from
   `inst/method/pipeline.csv` (the steps) and `inst/method/settings.csv` (every number that shapes a result, with where
   its value lives); the script refuses to run with its code or registers uncommitted. A promotion reruns it, last; it
   reads the ledger the published tables name (`knw_run_ledger()`), and refuses on a machine whose `data/fdis/derived`
   is not that build's evidence. `tests/testthat/test-settings-register.R` fails when a register value and the code
   disagree: change both together, and add a row for any new number that shapes a result (the test cannot see one with
-  no row). `method.rds` pins each grade table's tracked record (`data/tune/<key>_grades_record.csv`), not the table
+  no row). `test-vignette-data.R` holds `settings.csv` to the copy in `method.rds` on every column the article prints
+  (all but `where` and `note`), so a changed value, label, unit, step, source, tested or issue, or a row added or
+  removed, stales the bundle and a moved `where` path does not (#118). `method.rds` pins each grade table's tracked record (`data/tune/<key>_grades_record.csv`), not the table
   (#119), and the md5s of the ignored evidence it was built from, which `test-vignette-data.R` checks wherever they
   exist, so on a machine whose copies differ it fails there and nowhere else (CI has no `data/`). A checkout without
-  them restores them with `PULL=TRUE scripts/0336-archive.R`, the run its records name. Its references come from `data-raw/vignette_bib.R` with the chinook article's. A draft article is named
+  them restores them with `PULL=TRUE scripts/0336-archive.R`, the run its records name. It does not yet restore `data/fdis/build/fish.rds`, which
+  `0320` and, for the Bayesian-practice article's group counts, `vignette_method.R` read: `0230` rebuilds it (#214). The methodology article's references come from `data-raw/vignette_bib.R` with the chinook article's. A draft article is named
   `vignettes/_<name>.Rmd`: pkgdown skips it, `.Rbuildignore` keeps it out of the tarball, and pkgdown.yaml fails if
   one reaches `docs/articles/`.
-- `vignettes/stream_splits.Rmd` — "Splitting streams at fish records shifts the steepest slope mapped as habitat" (#149): the share
+- `vignettes/tuning-stream-splits.Rmd` — "Splitting streams at fish records shifts the steepest slope mapped as habitat" (#149): the share
   of sites starting their own segment on three networks, three example sites, chinook rearing on four setups and a
   group map. It reads `inst/vignette-data/cut_points.rds`, which `data-raw/vignette_cut_points.R` writes from a stage
   that `data-raw/cut_points_stage.R` copies on the database's host into the ignored `data/stage/` (both builds, the
@@ -58,9 +66,24 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   that host; the bundle needs nothing else, and the staged md5s are tested only where the stage exists. The methodology
   article's "Does where link cuts a stream change the rules?" (`#cuts`) answers it in brief and links it, reading
   `cut_points.rds` for its two numbers; a promotion does not rebuild that bundle, so the section's guard stops the build
-  when the methodology bundle's chinook rearing pick no longer matches it.
+  when the methodology bundle's chinook rearing pick no longer matches the bundle's `minimal` setup (the published
+  network since 2026-11-13, #120; the bundle's setup `published` is #145's full-network run).
   Its maps fetch Esri tiles when it builds, so a build needs network. Internal names (bundles, scripts, tests) keep
   `cut_points`.
+- `vignettes/tuning-bayesian-practice.Rmd` — "Checking the tuning of fish habitat definitions against Bayesian practice" (#204): states
+  `research/bayesian_alignment.md`'s findings for a reader, with *Statistical Rethinking* and *BDA3* cited, and what
+  is tested next. It sits in `_pkgdown.yml`'s `internal` section, so pkgdown builds it at its own URL and leaves it out
+  of the articles index and navbar (not out of `sitemap.xml`, the site search or the installed vignette index); the
+  methodology article's `#se` links it. Because that section has no navbar entry, `_pkgdown.yml` writes the Articles
+  menu out by hand (pkgdown would add "More articles..."), and `tests/testthat/test-pkgdown-navbar.R` holds the menu to
+  the sections (run by the pkgdown workflow, since R CMD check has no `_pkgdown.yml`). It reads `method.rds`, whose `scope` (each published key's groups, split into
+  both outcomes, all caught and none caught, and the grade gate) `vignette_method.R` writes for it through the tuning's
+  own population code (`.tune_population()`), stopping unless it reproduces the summaries' group counts, so a promotion
+  keeps it current. It also reads `cut_points.rds`, which a promotion does not rebuild, so like the methodology
+  article's `#cuts` its guard stops the build when the two bundles' chinook rearing picks part, when their visit tables'
+  md5s differ (a promotion onto a new evidence build) or when their key sets differ. Its glossary closes it. Its book quotes are checked against the PDF
+  pages by `MD=vignettes/tuning-bayesian-practice.Rmd Rscript data-raw/bayesian_alignment_check.R`; rerun that after
+  any change to its quotes.
 - `scripts/` — the run order (`scripts/README.md`), calling the package (`pkgload::load_all()` from
   the root) and `cred`. Legacy literals in scripts are fixed forward as they are touched.
 - `data/<wsg>/` — per-group snapshots (csv/md) and small spatial deliverables (gpkg/kml). Tracked.
@@ -114,8 +137,10 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   30 % (#67, on the evidence build before #73; the main run carries that ladder for every species since #68);
   `0325`, `0330` and `knw_thresholds_table()` do not read them, because they list their directories non-recursively;
   `data-raw/vignette_chinook.R` reads `data/tune/grad_ext/` into the chinook bundle, whose article no longer quotes it
-  (#143). `data/compare/gpkg/` (ignored) holds one GeoPackage per species × stage from `0330`, the
-  comparison's view for QGIS (#81). `data/tune/candidate/<run>/` and `data/compare/candidate/<run>/` (ignored, #111)
+  (#143). `data/compare/gpkg/` (ignored) holds one GeoPackage per species × stage, the comparison's view for QGIS
+  (#81): `0330` writes them only when asked (`GPKG=TRUE`, or `STAGE=gpkg`, which with `TUNE_DIR=data/tune` writes the
+  promoted run's here without a promotion; #173), so one can be older than the tables, and its `run` table says which
+  run wrote it. `0330` draws no maps; the README figure and the chinook article draw the only example maps. `data/tune/candidate/<run>/` and `data/compare/candidate/<run>/` (ignored, #111)
   hold the full runs of `0320` and `0330` until `0335` promotes one, and the `replaced_<stamp>/` archive of what each
   promotion replaced (promoting it undoes the promotion); `data/tune/dev/` (ignored) holds `DEV=1 0320`, its log and
   its `pick_report.csv`. The tracked tables change only by promotion.
@@ -278,8 +303,9 @@ the published v2 tables (`0299 PULL=TRUE VERSION=v2`).
 
 ### The tuning scores link's segment gradient, and link cuts a segment where its species were caught
 
-From #92, rules and curves read `segment_gradient`, the gradient of the link segment a visit sits on, which is the one
-link applies a rule to and the grade reads; `fwa_gradient` (the whole Atlas line's) is the sensitivity
+From #92, rules and curves read `segment_gradient`, the gradient of the link segment a visit sits on, which the grade
+reads (on the full network, the one link applies a rule to; since 2026-11-13 the published run's segments are the
+minimal network's, and link reads them on the full network through the parent's slope, link#463); `fwa_gradient` (the whole Atlas line's) is the sensitivity
 (`GRADIENT=fwa_gradient 0320`, main fold seed, `data/tune/grad_fwa/`, never graded, and read by no publisher: `0325`,
 `0330` and `knw_thresholds_table()` list `data/tune/` without recursing; `data-raw/vignette_method.R` reads it for the
 methodology article's sensitivity sentence).
@@ -294,7 +320,9 @@ not depend on the outcome, are #70's. These numbers, and #92's tune, are on link
 (link#326, 0.69.0) and fish records only at each species' highest record per stream (link#396). The build promoted by
 #145 (link 0.78.2, run `20261103_163715-269b585a`) carries both: 44.2 % of stream-branch visits with fish start a
 segment of their own against 6.6 % of empty ones, medians 305 m and 466 m
-(`scripts/logs/habitat/20261103_segment_gradient_check-derived_default_20261103.txt`).
+(`scripts/logs/habitat/20261103_segment_gradient_check-derived_default_20261103.txt`). Since 2026-11-13 the published
+tables are tuned on link's minimal network instead (run `20261103_0838`, #120), where 3.4 % of stream-branch visits with
+fish start a segment of their own against 3.0 % of empty ones.
 
 A setup (#120) is a run on another gradient than the segment's own, graded and compared on it and never promoted:
 `0320 SETUP=1 GRADIENT=parent_gradient` (each full segment reads its minimal parent's, from link#444's
@@ -446,7 +474,7 @@ refuse a table that fails: `0325` and `0330` the rule, run, walk, evidence, grad
 and `0325` the reference edge types across tables; `data-raw/vignette_chinook.R` the rule, walk, evidence and gradient;
 `data-raw/vignette_method.R` the gradient, the evidence and one flow load. The gate's fields (`curve_prior_sd`,
 `grade_withheld`, `null_heldout_curve`) `0330` and `vignette_chinook.R` check by presence, `0325` all but the prior, and
-`vignette_method.R` not at all. `0325` refuses before it writes anything. So a change to the gate, the prior, the walk or the evidence
+`vignette_method.R` only the flag's presence (#204's `scope`). `0325` refuses before it writes anything. So a change to the gate, the prior, the walk or the evidence
 regrades every key (53 min on the database's host with the walks cold, 2026-10-27; minutes for a key whose walks are cached), which is the cost of never publishing a verdict the code
 no longer makes. #73's branch review (five rounds, `planning/archive/2026-10-issue-73-rebuild-evidence-retune-bank/review-round*.md`)
 found four axes where a reader had checked presence alone, one of them the gate itself: it compared the curve's
@@ -462,8 +490,10 @@ how the output was made (the full knowledge commit, the walk's SQL and the metho
 fold seed, link's build as its run uid, the flow load, the evidence) and what came out, so a rebuild compared with the
 archived receipt (`crate::crt_receipt_compare(keys = knw_receipt_keys(<output>))`) is identical, equivalent within the
 declared roundings, or different. What each output is judged on, and its roundings, are declared in
-`inst/receipt/<output>.yaml`, and `test-receipt.R` pins them; they are provisional until #158, and a revision makes
-earlier receipts compare `different` unless the comparison softens `result.tolerance.*`. A grade table is judged on its
+`inst/receipt/<output>.yaml`, and `test-receipt.R` pins them; #165 set the grade and grade-set totals from chinook rearing
+rebuilt on two databases and each total's summing-order bound, and checked the evidence build's across the same two
+(`research/run_archive.md`), and a revision makes earlier receipts compare
+`different` unless the comparison softens `result.tolerance.*`. A grade table is judged on its
 pick and totals, its bytes only listed, so for a grade `identical` does not mean the same bytes
 (`research/run_archive.md`, "The receipt says whether a rebuild came out the same"). A receipt names no host: always
 `publish = TRUE`. A receipt is written only by the pass that graded its table: `0320` regrades a kept table whose
@@ -481,8 +511,8 @@ tables, or a ledger naming a receipt that is gone, is refused. `0299` publishes 
 a receipt (`inst/receipt/fdis.yaml`) naming the evidence by that `recipe_id`; v2 carries none. The archive stores the
 evidence receipt in its build's folder, outside the MANIFEST, so the `evidence_id` stays the tables' (a receipt's bytes
 carry its write time); a restore refuses an `evidence_receipt.json` present with other bytes, as it does any file, and
-one present where the archived build has none. crate rounds a value to its tolerance's
-decimals, so judge an evidence or fdis rebuild with the tables re-read (`crt_receipt_compare(tables =)`): receipts alone
+one present where the archived build has none. crate rounds a table's values to its tolerance's
+decimals (a total it compares as a band), so judge an evidence or fdis rebuild with the tables re-read (`crt_receipt_compare(tables =)`): receipts alone
 can read a value either side of a rounding edge as different.
 
 A build names its evidence directory (#120). `0310` writes `EVIDENCE_DIR` (default `data/fdis/derived`) and a ledger
@@ -509,13 +539,14 @@ refuses any other. On link's four proof groups only bull trout rearing has four 
 smoke gate refuses chinook rearing on three folds (separation), so a test of grading and the comparison runs on a key
 the groups can fit.
 
-The provincial minimal build (`fresh_default_minimal`, link#441, run `20261102_203300-60ab009d`) and, since #145, the
-published build (`fresh_default`, run `20261103_163715-269b585a`) live in a database other than the one holding #92's
+The provincial minimal build (`fresh_default_minimal`, link#441, run `20261102_203300-60ab009d`; the published build
+since 2026-11-13) and #145's full build (`fresh_default`, run `20261103_163715-269b585a`) live in a database other than the one holding #92's
 build (`fresh_default_20261017`), reached with a `~/.pg_service.conf` entry and `PGSERVICE=`; that older database holds a
-`fresh_default_minimal` with no segments. Each database keeps its own flow load and walk cache: the minimal and the
-published builds read wet's 2026-10-24 build (#120's second branch loaded it), #92's grades wet's 2026-10-19 load, and
+`fresh_default_minimal` with no segments. Each database keeps its own flow load and walk cache: the minimal build and
+#145's full build read wet's 2026-10-24 build (#120's second branch loaded it), #92's grades wet's 2026-10-19 load, and
 wet's public prefix keeps no older manifest, so the older load exists only where it was loaded. Its evidence is
-`data/fdis/derived_minimal` (ledger tagged `-derived_minimal`). `0310` reads each species' range from the installed
+`data/fdis/derived_minimal` (ledger tagged `-derived_minimal`); since its promotion `data/fdis/derived` must hold the
+same tables, because `vignette_method.R` refuses any other evidence there. `0310` reads each species' range from the installed
 link's `default` presence table (`lnk_load_overrides()`), not from the schema, so a build on a newer link moves
 `in_range` even on the same network: link#402's review moved 12,083 visit × species rows between link 0.66.0 and
 0.78.1. Compare two builds' picks knowing which of network, flow load and range changed.
@@ -569,8 +600,8 @@ export `PGSERVICE` in the shell first (measured 2026-10-27).
 500 segments per query and keeps every walk in `knw.walk_cache`, so a batched walk costs about 3 ms per walk per
 worker on the host and 12 to 18 ms from the remote link, against 116 ms one query per walk; a cold regrade of every key
 took 53.4 min on the host, and one key regraded with its walks cached 4.1 min. `0330` regenerates link's flags group by
-group on 6 connections, one key at a time (BT rearing 33.4 min, every key 162.9 min with `GPKG=FALSE`; from the remote link #92's took 269 min to compare and 197 more to
-write the GeoPackages, which take 14 min on the host, so a run off the host passes `GPKG=FALSE`, #81): it is bound by
+group on 6 connections, one key at a time (BT rearing 33.4 min, every key 162.9 min without GeoPackages; from the remote link #92's took 269 min to compare and 197 more to
+write the GeoPackages, which take 14 min on the host, so since #173 a run writes them only with `GPKG=TRUE`, #81): it is bound by
 the database's cores, so run it on the host. Those minutes are every structure's; since #112 `0330` regenerates
 `default` and `door` alone unless `STRUCTURES=all` (the rules it drops took 29 to 33 % of the worker minutes on three
 keys), so the research files' `free` and `door_wetland` figures (#92's) are refreshed only on that setting. `0310`, a grading `0320` and every `STAGE` of `0330` check this at
@@ -607,11 +638,13 @@ region, and how far behind the best it now sits). All 22 keys took 7.7 min on 14
 both bundles, the bibliography and the README figure (Al, 2026-10-28: "we will be retuning continuously ... I help
 decide when we are retuning"). By key works only onto the kept keys' build: after a new link run or evidence build
 every fitted key moves together. A candidate's provenance is by construction: `0320` and `0330` clear a key's files in
-the run before a pass rewrites them and write the large ones whole (a GeoPackage, a key's figures, the grade and
-comparison tables land only complete), so `0335` trusts what a run holds; never put a file into a candidate by hand
+the run before a pass rewrites them and write the large ones whole (a GeoPackage, the grade and comparison tables land
+only complete), so `0335` trusts what a run holds; never put a file into a candidate by hand
 (#111, five review rounds, `planning/archive/2026-10-issue-111-candidate-runs-promotion/`). A promotion that moves the
 published numbers also moves pins it cannot revise
-(`test-tune_repick.R`'s 1.96 picks, `test-vignette-data.R`'s key count and funnel, the articles' inline checks) and
+(`test-tune_repick.R`'s 1.96 picks, `test-vignette-data.R`'s key count and funnel, the articles' inline checks,
+among them the Bayesian-practice article's on which keys drop more than half their groups, which the gate withholds
+and chinook rearing's split of groups by outcome) and
 the `research/` prose that quotes them: those, and the articles' review, follow it by hand.
 
 **Run R from the repo root, and never add a project-level `.Renviron` here.** R loads a
@@ -723,17 +756,13 @@ waiting when it is not. Pick the instrument by how many answers you need:
 A repeated `sleep N; grep` is right in none of them. **Tell: if you are about to
 spawn a second waiter for the same thing, the first one was the wrong shape.**
 
-**An `until` waiter is only as good as the exit status its probe reads, and `ssh` to
-a Mac on the tailnet does not carry one:** it exits 0 whatever the remote command returned.
-Put the loop on the remote side and gate on what it prints, or test a probe's output, never
-its status (`code-check-shell.md`, "Over Tailscale SSH to a Mac, `ssh` exits 0").
+**An `until` waiter over `ssh` to a Mac exits 0 whatever the remote command did:** gate on
+what it prints (`code-check-shell.md`, "Over Tailscale SSH to a Mac, `ssh` exits 0").
 
 **And a waiter's notification is a wrapper's exit too.** Re-read the condition and the job's
 own state in a foreground call before reporting it done, against a marker only this run's end
 can produce: clear it at launch, or check it is newer than a stamp touched at launch
-(`code-check.md`, "A wrapper's exit is not the work"). A string grepped out of a log is weaker
-than either: a traced script writes it when it reads the line, and an `EXIT` trap prints it
-on failure.
+(`code-check.md`, "A wrapper's exit is not the work"), never a string grepped out of a log.
 
 A `Monitor` filter must also match the failure states, not just the success
 one — silence looks identical to "still running", so a watcher that greps only
@@ -803,9 +832,6 @@ inline.
 - **Report after, not before.** Say what you spawned, and relay what it found — a subagent's
   report never reaches the user on its own.
 
-**What is genuinely the user's call is budget, not mechanism.** Two or three reviewers is
-not that — it is just doing the work.
-
 *10 lines of evidence for this rule are in `conventions/agent-operations.md`.*
 
 ### Don't block
@@ -817,6 +843,15 @@ must precede the next step, run it synchronously (`run_in_background: false`) so
 blocking is explicit and visible.
 
 *8 lines of evidence for this rule are in `conventions/agent-operations.md`.*
+
+### When your own queue is empty, offer backlog work for the wait
+
+With nothing of the task left while a review or a long run is in flight, offer 2 or 3 queued
+pieces (`planning/backlog.md`, `umbrella.sh next`) sized to the wait, in one phone-answerable
+question, safest first: read-only, issue work in our repos, a park in its own worktree. None
+edits the checkout the run reads. Each class is asked until the answer ledger promotes it (§4).
+
+*3 lines of evidence for this rule are in `conventions/agent-operations.md`.*
 
 ### Don't trust status
 
@@ -830,8 +865,7 @@ against a clock:
   file waiter. Until it arrives, the report is "spawned at T, no notification yet", never
   "stalled". Keep working, outside the diff.
 - **Deadline:** 60 minutes from the spawn for a `/code-check` round; none for a background
-  Plan review. Check expiry by subtracting the spawn time from `date -u` at each wake; with
-  nothing else to do, one backgrounded `sleep <remaining>; echo DEADLINE` is the timer.
+  Plan review, checked against `date -u` at each wake.
 - A replacement gets its own findings path, and is a spawn, so it counts toward the bound. The
   original may still deliver: read whichever arrives, both if both do.
 
@@ -903,7 +937,7 @@ answers differently, and a rule written from one is wrong about the other. Name 
 each was taken from, and which one the claim is about, before calling either wrong.
 
 **A host that times out from one machine is not blocked until the local link is ruled out**:
-ping the gateway (`ping -c 30 -i 0.2 <gateway>`) and try a second machine.
+ping the gateway and try a second machine.
 
 *23 lines of evidence for this rule are in `conventions/agent-operations.md`.*
 
@@ -1033,13 +1067,13 @@ S3 tool lists only its own provider's buckets; the backup script names the rest.
 an extractor reading its output, automation keyed to its layout), **search the peer repo's
 open issues and PRs for work that changes it**, and read the body of each adjacent hit, not
 only its title. Unquoted words match anywhere; a quoted phrase must match exactly and misses
-rewordings. A full 100 rows means the list was cut: narrow the words.
+rewordings. A full 100 rows of either type means the list was cut: narrow the words.
 
 ```bash
-gh search issues --include-prs --repo NewGraphEnvironment/<peer> --state open --limit 100 <artifact words>
+for t in issue pr; do gh api -X GET search/issues -f q="repo:NewGraphEnvironment/<peer> is:$t is:open <artifact words>" -f per_page=100 --jq '.items[] | "\(.number) \(.title)"'; done
 ```
 
-*12 lines of evidence for this rule are in `conventions/agent-operations.md`.*
+*15 lines of evidence for this rule are in `conventions/agent-operations.md`.*
 
 ## 4. Decisions Up Front, Then Run
 
@@ -1075,14 +1109,18 @@ one-line offer of the work — not the first commit toward it. When the ask is t
 something, keep it short and concrete; a worked example beats a taxonomy. **The mandate
 starts at plan approval.**
 
-*4 lines of evidence for this rule are in `conventions/agent-operations.md`.*
+**When an answer settles a plan or moves an issue's scope, end with one offer** to write it into
+#N's body as `## Plan` / `## Decisions` (a fold names both issues), and edit the body once
+agreed: the next session reads the body, not this conversation.
+
+*6 lines of evidence for this rule are in `conventions/agent-operations.md`.*
 
 ### What still interrupts, and where it goes
 
 A decision that permanently shapes stored data — a key, an identifier, a schema
 choice, a deprecation shim versus a hard rename — is the user's, and it goes to the
 **plan gate**, batched, as two or three concrete options with the recommended one
-first and the consequence stated. Found mid-run, it is still not the agent's to decide:
+first and the consequence stated, including a word or field an upstream contract lacks. Found mid-run, it is still not the agent's to decide:
 ask it the same way — options, recommendation first, phone-answerable — commit, and
 continue on the phases that do not depend on it while the answer is outstanding
 (`planning.md`, "When Something Keeps Failing" — escalating is not stopping).
@@ -1092,6 +1130,16 @@ In plan mode, collect the "this changes what I build" forks and ask them togethe
 default: pick it, say so, move on.
 
 *4 lines of evidence for this rule are in `conventions/agent-operations.md`.*
+
+### Record the owner's answers; promote a class only on the record
+
+A hook (`settings/hooks/answers_log.py`) records each `AskUserQuestion`; record a question
+asked in prose with its `--manual` form. `/backlog-sweep` in soul proposes a class with a run
+of approvals and no refusal as a standing authorization. The classes this section reserves
+(stored data, posting outside our repos, machine changes, merges) are never proposed, and work
+under a promoted class is still reported.
+
+*2 lines of evidence for this rule are in `conventions/agent-operations.md`.*
 
 ### Never post outside our own repos without approval
 
@@ -1157,9 +1205,8 @@ a deploy, a publish. When it does, approval given in chat does not reach it. On 
 the user leaves auto mode for that step (Shift+Tab) and approves the prompt, or runs the
 bare command themselves (below). Do not retry, and do not suggest a restart.
 
-It is not the secret-read clamp (`newgraph.md`, "Reading a secret clamps the rest of the
-session"), which names *earlier conversation content* and needs a restart. This refusal
-names a **category** of action, such as "Production Deploy", and the category need not describe the command.
+It names a **category** ("Production Deploy"), not *earlier conversation content*, so it is
+not the secret-read clamp (`newgraph.md`), which needs a restart.
 
 **It classifies the command text, so it also fires on a write the file tools can make
 safely.** Where what was refused is an edit to a tracked file rather than the publish
@@ -1177,8 +1224,7 @@ sudo-needs-TTY operation, anything the Bash tool is blocked from running — giv
 not run, or runs from `$HOME`.
 
 - **Anchor every path**: absolute, or after `cd <repo-root> &&` on the same line.
-- Keep it paste-safe (`grep`/`awk` over a nested `python3 -c` in remote quotes), **short
-  enough not to wrap**, and say what the first output line must read (`PUBLISH run`), so a
+- Keep it paste-safe, **short enough not to wrap**, and say what the first output line must read (`PUBLISH run`), so a
   dropped flag shows before anything is written.
 - **Several commands go on one line.** A multi-line paste can run only its first line, with no
   error: join them with `&&` or a `for` loop over the list, still short enough not to wrap;
@@ -1207,7 +1253,6 @@ click: `[repo#12](https://github.com/<owner>/<repo>/issues/12)`,
 - **Say what each one is** in a few words, unless its sentence already does: a list of bare
   links fails this. A `Stop` hook, `settings/hooks/reply_links-check.py`, holds a reply that
   breaks either half; its no-context check is a heuristic, so a reply it misjudges may stand.
-- Issues under `/issues/N`, pull requests under `/pull/N`; when unsure, ask `gh` for the URL.
 - **Cross-repo references carry the repo** (`other#12`): a bare `#N` is a working link to the
   wrong repo, and naming the collision in prose afterwards does not fix it; re-qualify the link.
 - Before sending a report with many numbers, spot-check two or three through `gh`: the ones
@@ -1217,9 +1262,10 @@ click: `[repo#12](https://github.com/<owner>/<repo>/issues/12)`,
 
 *11 lines of evidence for this rule are in `conventions/agent-operations.md`.*
 
-### Surface upstream defects; do not work around them
+### Surface upstream defects and gaps; do not work around them
 
-When a dependency or an external API misbehaves, surface it and ask rather than
+When a dependency or an external API misbehaves, or its contract lacks a concept you need,
+surface it and ask rather than
 coding around it: a workaround hides the defect from whoever could fix it, and most of the
 dependencies in question are **first-party**, so a local patch leaves the bug in place for
 every other consumer. Same instinct as `newgraph.md`'s "install missing packages, don't
@@ -1231,7 +1277,10 @@ Then reproduce it minimally, file an issue in the owning repo with the
 repro and the exact lines (a third party's: a fork issue first, above), report it, and carry on if it is not blocking. The rule is
 *do not hide it*, not *do not continue*.
 
-*13 lines of evidence for this rule are in `conventions/agent-operations.md`.*
+**A gap is a change request:** file it with the contract's owner before coining a name, and
+bring the choice to the plan gate. Tell: you are explaining why your names are not the contract's.
+
+*16 lines of evidence for this rule are in `conventions/agent-operations.md`.*
 
 
 # Cartography
@@ -1626,6 +1675,9 @@ Parse or test a script under its declared `requires-python` floor (`uv run --pyt
 ### Drive LibreOffice over UNO as an `soffice` macro, not with its bundled Python
 Put the script in the private profile's `user/Scripts/python/` and start it as a macro, since on macOS LibreOffice's bundled interpreter run directly is killed at once.
 
+### `re.match` with `$` accepts a trailing newline
+Validate a whole string with `re.fullmatch()`, and write `[0-9]` for an ASCII digit.
+
 # Code Check — R
 Traps in R: the language and base/utils behaviour, package internals (`R CMD build`, `.Rbuildignore`, roxygen, lintr, `data-raw/`, testthat, pak), and the DBI/duckdb/arrow data layer.
 
@@ -1665,7 +1717,7 @@ Download a large remote file to a `tempfile()` with httr2 or curl and read the c
 - `requireNamespace("pkg")` succeeds whenever **any** version is installed, so a guard shaped like `if (!requireNamespace("pkg")) pkgload::load_all()` silently runs against the installed one.
 
 ### `lintr` also resolves against the installed package, not the source tree
-A lint warning of `no visible binding` for a constant added on this branch is usually the installed package being stale; check `exists(name, asNamespace(pkg))` and reinstall before changing any code.
+For a `no visible binding` lint on a constant added on this branch, check `exists(name, asNamespace(pkg))` and reinstall before changing code.
 
 ### Regenerated binaries churn git even when nothing changed
 - Formats that embed a creation timestamp or other run-varying metadata produce a different file on every rebuild.
@@ -1680,7 +1732,7 @@ Count `r$failed > 0 | r$error` over `r <- as.data.frame(testthat::test_file(f))`
 Before blaming a failure, or its absence, on a skip, find the `test_that()` block the skip sits in.
 
 ### `expect_gt()` and friends take no `info` argument
-`expect_true()`, `expect_false()` and `expect_equal()` accept `info =`; the comparison expectations — `expect_gt`, `expect_lt`, `expect_gte`, `expect_lte` — do not, and passing one is an **error**, not a warning:
+Passing `info =` to `expect_gt`, `expect_lt`, `expect_gte` or `expect_lte` is an **error**, not a warning.
 
 ### pak Behavior
 - pak stops on first unresolvable package — all subsequent packages are skipped
@@ -1857,7 +1909,7 @@ Leave `<` and `>` unescaped when you build a pattern from data.
 R removes its session `tempdir()` on exit, including after `stop()`.
 
 ### R's `yaml` returns a mixed int/float sequence as a list, not a numeric vector
-`yaml::read_yaml()` simplifies a sequence to a vector only when every element has the same type, so `[0.164, 9999]` comes back as `list(0.164, 9999L)` while `[0.0, 9999.0]` is `c(0, 9999)`.
+Normalise a numeric YAML sequence at load.
 
 ### testthat's failure snapshots land in `tests/` and ride in on `git add -A`
 testthat 3e writes `tests/testthat/_problems/*.R` and `tests/testthat/testthat-problems.rds` when tests fail.
@@ -1991,6 +2043,9 @@ Write the input cells into the sheet XML with xml2 and re-zip, so only the parts
 ### Copy a live SQLite database with its `-wal`
 Keep the pair only if both files' mtime and size held across the copy.
 
+### jsonlite writes an empty name as the element's position
+Write a JSON object with an empty key as text, not through `toJSON()`.
+
 # Code Check — Shell
 Tool-level traps in bash, sed, git and `gh`, and in the host toolchain those commands depend on.
 
@@ -2045,7 +2100,7 @@ Give an outer heredoc a delimiter its body cannot contain, or run the script fro
 - macOS ships BSD `sed`/`grep`.
 
 ### On this Mac `stat` and `date` are GNU, so the same flag letter means something else
-Here Homebrew puts GNU coreutils ahead of `/usr/bin`, so BSD-style `stat -f` and `date -r <epoch>` mean something else; prefer a flavour-free form (`find -newermt`, `python3`), or call the binary by absolute path.
+Prefer a flavour-free form (`find -newermt`, `python3`), or call the binary by absolute path.
 
 ### `&` binds to the whole `&&` list, so assignments never reach the parent
 - `cmd1 && VAR=$(...) && nohup prog > "$VAR.log" & disown` backgrounds the **entire list**, not just `nohup`.
@@ -2074,14 +2129,14 @@ Wait on the PIDs you started (`wait "$pid"`), because a bare `wait` also blocks 
 ### `if ! cmd; then rc=$?` captures the negation, not the command
 Inside the branch, `$?` is the status of the `!` compound — which is **0 by construction**, because the negation succeeded.
 
-### A `pgrep -f` waiter matches its own command line, so it never exits
-Wait on a PID with `while kill -0 "$PID"; do sleep 30; done`, never on `pgrep -f "job"`, whose pattern matches the waiting loop's own command line so it never exits.
+### A `pgrep -f` waiter matches a waiter's command line, so it never exits
+Wait on a PID with `while kill -0 "$PID"; do sleep 30; done`, never on `pgrep -f "job"`, whose pattern matches a waiting loop's command line so it never exits.
 
 ### `timeout` is GNU coreutils — a portable deadline
 An assertion around something that might hang can only pass or hang, never fail (`code-check.md`, "Restore the bug and prove the guard fires").
 
 ### `aws s3 cp` cannot tell a missing key from a missing bucket
-`aws s3 cp` gives one exit 1 and 404 text for a missing key and a missing bucket, so probe `s3api head-bucket` then `head-object`: only a 404 from a reachable bucket means absent; a 403 is permissions.
+Probe `s3api head-bucket` then `head-object`: only a 404 from a reachable bucket means absent, and a 403 is permissions.
 
 ### An S3 multipart ETag depends on the uploader's part size, so try every size that gives its part count
 Verify an upload by comparing each object's ETag with its file, trying for a multipart ETag every part size that gives its part count.
@@ -2117,7 +2172,7 @@ Two traps from seeding one repo out of another's history (2026-09-02), both sile
 A tool upgrade across the fleet can remove a capability without reporting failure.
 
 ### An amd64-only image needs `--platform`, and it works on your machine because it is cached
-`docker run` resolves from the local image store before it reaches a registry, so on an arm64 Mac an amd64-only image runs fine once pulled — **and the command that pulled it is not necessarily the one in the code.**
+Pass `--platform` to `docker run` for an amd64-only image.
 
 ### Headless Qt in a container needs `QT_QPA_PLATFORM=offscreen`, and without it the run hangs or crashes
 Pass `-e QT_QPA_PLATFORM=offscreen` to any `docker run` that starts QGIS or another Qt program with no display.
@@ -2167,6 +2222,9 @@ Open every block after the first with guards on what it inherits: re-set its var
 ### An apostrophe in a `${VAR:?message}` inside double quotes is an unterminated quote
 Keep apostrophes out of the message of a `"${VAR:?…}"` guard.
 
+### An apostrophe in a comment inside a single-quoted program closes the program
+Keep apostrophes out of comments inside an `awk '…'`, `sed '…'` or `python3 -c '…'` program in a script: the shell ends the quote at the `'`, whatever the program reads as a comment.
+
 ### A `git push` can land and still report failure, so confirm the ref rather than the exit code
 After a rejected push, read the remote ref before concluding anything: `git fetch -q origin && git merge-base --is-ancestor HEAD origin/<branch>`.
 
@@ -2183,7 +2241,7 @@ Branch on `gh api`'s exit status before reading its output.
 Clean up temp files and worktrees in one EXIT handler that reads globals.
 
 ### `git worktree prune` deregisters every missing worktree in the repo, not only yours
-Remove only your own registration: `git worktree remove --force "$wt"`, and on failure delete only its admin dir (`git -C "$wt" rev-parse --absolute-git-dir`, captured right after `worktree add`).
+Remove only your own registration: `git worktree remove --force "$wt"`, and on failure delete only its admin dir.
 
 ### `git push --porcelain` ends with `Done` on a rejection, so `tail -1` names no reason
 Take the reason from the `!` row's third tab field, falling back to the last line that is not `Done`: `awk -F'\t' '$1 == "!" { print $3; exit }'`.
@@ -2550,13 +2608,13 @@ General, and not an instance of a mechanism above.
 - `devtools::test()` (and most runners) load each test file **when they reach it**, not at launch.
 
 ### Test a persistent change through its per-process override first
-A setting that is changed once and persists — `xcode-select -s`, a git config key, a registered default, an installed symlink — usually has an environment variable or flag that overrides it **for one process**.
+Try a persistent setting's per-process override before changing the setting.
 
 ### Adopting Existing Config
 When importing config from one location into a canonical one (legacy `~/.bash_profile` → dotfiles repo, old script's env → repo, another project's `settings.json` → soul):
 
 ### Test the cold/create path of idempotent code, not just the warm no-op
-- Idempotent provisioning code (a resolver-file writer, a config installer, a "create unless present" block) has two paths: the **cold** path that actually creates/writes, and the **warm** path that detects "already present" and skips.
+- Idempotent provisioning code has a **cold** path that creates and a **warm** path that finds the artifact present and skips.
 
 ### Fetch an expiring credential just before its first use, not at job start
 Put the step that fetches short-lived credentials immediately before the first step that uses them.
@@ -2852,7 +2910,8 @@ organisation, and it names internal work as it does so.
   issue body is drafted at plan time and the code later, so scrubbing the tree and the PR
   body leaves the body untouched. `/gh-pr-merge` step 3b is the moment to grep it, then
   read it for the bare names a grep misses. It also refuses a branch whose diff adds a
-  private repo's URL or `name#N` to tracked files (`private_refs.sh`).
+  private repo's URL, `name#N` or, for the names on its bare list, the bare name to tracked
+  files (`private_refs.sh`).
 - **A leaked body is recreated, not edited: GitHub shows its edit history to anyone.** A fresh
   issue with no discussion is deleted (`gh issue delete`, admin) and refiled clean, the private
   side in a private-repo issue. Where the number must stay, edit it, then delete each older
@@ -3141,7 +3200,9 @@ Skip planning for single-file edits, quick fixes, or tasks with obvious next ste
    - `progress.md` — Session log with timestamps and commit refs
 3. **Plan-review with the Plan agent — concurrently, not as a gate** — Once `task_plan.md` is scaffolded, spawn the Plan subagent (`Agent({subagent_type: "Plan", prompt: "..."}`) and ask it to critically review the task_plan against the issue body + actual codebase. Categorize findings as Blocker / Gap / Ordering / Assumption / Scope / Acceptance. The agent reads files fresh — it catches what you miss when you've been thinking about the design too long.
 
-   **Do not wait for it.** Spawn, then start the lowest-risk phase. Background agents have repeatedly returned late — in one case after the entire issue had shipped — so treating the review as a precondition stalls the work for as long as the agent takes (see `agent-operations.md` §2). Fold findings in whenever they land: pre-baseline they edit the plan; mid-implementation they become follow-up commits — unless the finding is a stored-data fork of the kind `agent-operations.md` §4 reserves for the user. A review that arrives after the code is written is not wasted — the reviewer reads real code instead of a plan, which is how one late review still contributed three fixes that no earlier reading had found. If you genuinely cannot proceed without the result, run it with `run_in_background: false` so the blocking is explicit.
+   **Do not wait for it.** Spawn, then start the lowest-risk phase. Background agents have repeatedly returned late — in one case after the entire issue had shipped — so treating the review as a precondition stalls the work for as long as the agent takes (see `agent-operations.md` §2). Fold findings in whenever they land: pre-baseline they edit the plan; mid-implementation they become follow-up commits — unless the finding is a stored-data fork of the kind `agent-operations.md` §4 reserves for the user. If you genuinely cannot proceed without the result, run it with `run_in_background: false` so the blocking is explicit.
+
+   **On a park the review runs before the baseline, so keep it a review of the plan:** read it against the issue, its comments and the code it names. One cheap probe (a grep, a listing) may settle a design fork; a question needing more becomes a checkbox in the phase that measures it.
 
    Verify before acting, in both directions. Findings have been confidently wrong (a "BLOCKER" disproved by a 30-second probe) and confidently right about things nobody suspected. Reproduce the claim first.
 
@@ -3153,13 +3214,7 @@ Skip planning for single-file edits, quick fixes, or tasks with obvious next ste
    definitional"* as a claim with an author, exactly like an issue asserting a
    question can only be answered by testing.
 
-   Corollary on when to stop: **convergence is not a reviewer saying you have
-   converged.** End on an enumeration of the complete candidate set showing nothing
-   sits above its source, not on another round.
-
-   **Spawn review agents UNNAMED.** Passing `name` to the `Agent` tool changes what you get: a named spawn becomes a persistent *teammate* that goes **idle** rather than completing, so there is no final report to auto-deliver and its output must be pulled with `SendMessage`. An unnamed spawn is a fire-and-return subagent whose report arrives on its own in the completion notification. Pass `name` only for a collaborator you intend to keep messaging, and shut it down when done — it pings indefinitely otherwise.
-
-   That mis-spawn produced one of the silent-delivery failures below, so check `name` before suspecting settings. Teammate mode (`CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` + `teammateMode`, merged globally from `soul/settings/defaults.json`) shapes what a *named* spawn becomes; it is not by itself why findings go missing, and an unnamed spawn delivers fine with it enabled.
+   **Spawn review agents UNNAMED.** A named spawn becomes a *teammate* that goes **idle** rather than completing, so its report never arrives on its own; pass `name` only for a collaborator you will keep messaging, and shut it down when done.
 
    **Get the findings into a file — but check who is doing the writing.** Message delivery can fail silently, by idle pings with no content or by routing to another session. From this side an idle ping is indistinguishable from an agent that had nothing to say, so the loss is invisible. A file (`planning/active/review-<N>.md`) survives routing, survives the agent exiting, and is greppable later. One path per **spawn**: a replacement gets its own, because the original may still deliver into the one it was given, and a missing file reads as a lost review only after the completion notification or the deadline in `agent-operations.md` §2, "Don't trust status".
 
@@ -3167,8 +3222,6 @@ Skip planning for single-file edits, quick fixes, or tasks with obvious next ste
 
    - **Read-only agent** (`Plan`, `Explore`): ask for the findings **in the reply**, then write them to `planning/active/review-<N>.md` yourself. The file is still the deliverable; you are just the one creating it.
    - **Agent type that can write**: put the file-path instruction in the first prompt, not as a follow-up.
-
-   Asking for a file the agent cannot produce costs a round-trip, and — worse — sets you up to read an absent file as an absent review. Check the agent type's tools before writing the instruction.
 
    **A reviewer asked to prove a guard fires will patch your working tree, and that races
    your own test runs.** "Restore the defect and watch it go red" is the right instruction
@@ -3191,21 +3244,17 @@ Skip planning for single-file edits, quick fixes, or tasks with obvious next ste
    **Review the fixes, not just the code.** The second pass is where the value concentrates, because a fix written under a wrong assumption reproduces the same defect. **Convergence is the signal to stop, not a fixed number of rounds.**
 
    Convergence is measured, not felt — a quiet round and an exhausted reviewer look
-   identical. What terminates a review is to **enumerate the
-   candidate set mechanically and show nothing sits above its source of truth**: parse
-   the files and walk every `cli_abort`/`warning`/`stop` rather than recalling them, so
-   "all of them are pinned" is a count. For the guards a fix introduced, the equivalent
-   instrument is a mutation table (`code-check.md`, "Restore the bug and prove the guard
-   fires"). `code-check.md` states the enumeration rule under "A guard's
-   scope, escape hatches, and remedies" — terminate by enumeration, not by a reviewer
-   saying you have converged. `/code-check` treats three rounds as the floor and keeps
+   identical, and a reviewer saying you have converged is a claim. End on a **mechanical
+   enumeration of the candidate set showing nothing sits above its source of truth**
+   (`code-check.md`, "A guard's scope, escape hatches, and remedies"), a mutation table for
+   the guards a fix introduced. `/code-check` treats three rounds as the floor and keeps
    going while a round finds a defect inside the previous fix.
 
    Ask for the **mechanism**, not more instances, such as an invariant enforced by two lists happening to agree.
 
    The thing reviewers catch that self-probing does not is **interop**. Ask the consumer.
 
-*31 lines of evidence for this rule are in `conventions/planning.md`.*
+*35 lines of evidence for this rule are in `conventions/planning.md`.*
 
 4. **Lock naming before the baseline** — If naming feedback surfaces during planning (legacy filename, inconsistency with an existing file family), fold the rename into the convention + task_plan BEFORE the baseline commit, not as a follow-up. Pre-baseline it's free; retrofitting after implementation cascades (measured: `build_exec_pdf.R` → `run_pagedown_exec_summary.R` locked in pre-baseline meant zero downstream rework).
 5. **Commit the plan** — After Plan-agent review + fixes. This is the baseline.

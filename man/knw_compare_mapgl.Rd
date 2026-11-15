@@ -9,7 +9,8 @@ knw_compare_mapgl(
   water = NULL,
   title = "",
   background = c("voyager", "openfreemap", "esri_topo"),
-  digits = 5L
+  digits = 5L,
+  scale = FALSE
 )
 }
 \arguments{
@@ -26,6 +27,8 @@ Liberty) or \code{"esri_topo"} (Esri's World Topographic Map raster tiles, keyle
 Esri allows free noncommercial use with attribution, which the map shows).}
 
 \item{digits}{\code{integer(1)} decimal places kept in the coordinates.}
+
+\item{scale}{\code{logical(1)} add a metric scale bar at the bottom left (#77).}
 }
 \value{
 A \code{maplibregl} htmlwidget, or \code{NULL} with a message when no segment is
@@ -58,7 +61,7 @@ if (requireNamespace("mapgl", quietly = TRUE)) {
       sf::st_linestring(rbind(c(1e6 + i * 500, 1e6), c(1e6 + (i + 1) * 500, 1e6 + 300)))
     }), crs = 3005)
   )
-  m <- knw_compare_mapgl(seg, title = "Habitat by rule")
+  m <- knw_compare_mapgl(seg, title = "Habitat definition")
   class(m)
 }
 }

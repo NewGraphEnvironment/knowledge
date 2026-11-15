@@ -1,0 +1,28 @@
+ok   line 62 mcelreath2020StatisticalRethinking p. 210
+ok   line 66 mcelreath2020StatisticalRethinking p. 426
+ok   line 75 mcelreath2020StatisticalRethinking p. 428
+ok   line 89 mcelreath2020StatisticalRethinking p. 227
+ok   line 93 mcelreath2020StatisticalRethinking p. 225
+ok   line 112 gelman_etal2013Bayesiandata p. 182
+ok   line 116 gelman_etal2013Bayesiandata p. 182
+ok   line 125 mcelreath2020StatisticalRethinking p. 214
+ok   line 129 mcelreath2020StatisticalRethinking p. 216
+ok   line 131 gelman_etal2013Bayesiandata p. 311
+ok   line 145 gelman_etal2013Bayesiandata p. 412
+ok   line 149 gelman_etal2013Bayesiandata p. 415
+ok   line 158 mcelreath2020StatisticalRethinking p. 328
+ok   line 168 gelman_etal2013Bayesiandata p. 383
+ok   line 173 mcelreath2020StatisticalRethinking p. 413
+ok   line 194 mcelreath2020StatisticalRethinking p. 429
+ok   line 213 gelman_etal2013Bayesiandata p. 490
+ok   line 225 mcelreath2020StatisticalRethinking p. 357
+ok   line 242 mcelreath2020StatisticalRethinking p. 499
+ok   line 259 mcelreath2020StatisticalRethinking p. 228
+ok   line 275 mcelreath2020StatisticalRethinking p. 499
+ok   line 281 mcelreath2020StatisticalRethinking p. 503
+ok   line 294 mcelreath2020StatisticalRethinking p. 495
+quotes: 23 checked in research/bayesian_alignment.md
+The steps: 11 rows for 11; aligned 2, differs 7, no bearing 2
+The settings: 69 rows for 69; aligned 13, differs 12, no bearing 44
+Choices with no settings key: 19 rows for 19; aligned 5, differs 8, no bearing 4, should change 2
+PASS

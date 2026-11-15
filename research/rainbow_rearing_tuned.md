@@ -216,6 +216,6 @@ CARP CLRH CRKD FINA FINL FIRE FOXR INGR LEUT LOMI MAHD MESI MURT NATR OSPK PARA 
 no grade, and two more (TOOD, UNRS) draw no km under `default`: 25 groups draw none under either rule. The grade is
 gated on `streams_access` until link settles which column is meant (NewGraphEnvironment/link#349).
 
-The floodplain table (`data/compare/floodplain.csv`) and the maps (`research/fig/compare_rb_rear_*.png`) were not redrawn
+The floodplain table (`data/compare/floodplain.csv`) and the maps (`research/fig/compare_rb_rear_*.png`, removed by #173) were not redrawn
 for #73 (`0330 STAGE=maps`): they showed #65's `width>=3|g<=0.09|none` rule on the 23 catalog groups, not this one, and
 #145's promotion removed both.

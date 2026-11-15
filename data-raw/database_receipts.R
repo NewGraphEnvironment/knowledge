@@ -26,14 +26,15 @@
 #         receipt), crate_rewritten_bytes_match (whether the two copies this script rewrote, after its column drops, share
 #         their bytes; not the outputs' own bytes, which the hand comparison's bytes_match records), recipe_fields,
 #         result_fields (the result fields other than a part's bytes)
-# RUN:    Rscript data-raw/database_receipts.R   (from the repo root; crate >= 0.12.0; ONLY=<regex> or SKIP=<regex> on
+# RUN:    Rscript data-raw/database_receipts.R   (from the repo root; crate >= 0.14.0; ONLY=<regex> or SKIP=<regex> on
 #         the output names)
 # ---------------------------------------------------------------------------
 suppressMessages({ library(data.table) })
 options(warn = 1)
 source("data-raw/database_compare.R")  # spec_for(), read_tbl(), self_test()
 self_test()
-if (utils::packageVersion("crate") < "0.12.0") stop("crate >= 0.12.0 is needed (crt_receipt_compare())")
+# 0.14.0 fingerprints data.table's IDate as the Date it is (crate#49), so the tables are read as fread gives them
+if (utils::packageVersion("crate") < "0.14.0") stop("crate >= 0.14.0 is needed (crt_receipt_compare(), IDate)")
 
 dir_log <- "scripts/logs/habitat/database_second"
 verdict_files <- if (nzchar(Sys.getenv("VERDICTS"))) strsplit(Sys.getenv("VERDICTS"), ",")[[1]] else
@@ -65,8 +66,6 @@ one <- function(label, output, hand) {
   if (!file.exists(ref_path) || !file.exists(new_path)) return(NULL)
   s <- spec_for(output)
   a <- read_tbl(ref_path); b <- read_tbl(new_path)
-  # crate fingerprints a Date but refuses data.table's IDate, its subclass (reported to crate): plain Dates here
-  for (x in list(a, b)) for (cn in names(x)) if (inherits(x[[cn]], "IDate")) data.table::set(x, j = cn, value = as.Date(x[[cn]]))
   drop <- union(s$context, s$added)
   a <- a[, setdiff(names(a), drop), with = FALSE]; b <- b[, setdiff(names(b), drop), with = FALSE]
   tol <- crate_tol(s$tol)

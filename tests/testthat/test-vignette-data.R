@@ -7,8 +7,8 @@
 vd <- function(f) system.file("vignette-data", f, package = "knowledge")
 
 test_that("the article's data ships with the package", {
-  for (f in c("chinook_rearing.rds", "bulk_segments.rds", "bulk_water.rds", "method.rds", "cut_points.rds",
-              "cut_points_places.rds")) {
+  for (f in c("chinook_rearing.rds", "bulk_segments.rds", "bulk_water.rds", "bulk_context.rds", "method.rds",
+              "cut_points.rds", "cut_points_places.rds")) {
     expect_true(nzchar(vd(f)), info = f)
   }
 })
@@ -99,12 +99,27 @@ test_that("every tracked source of the methodology article is unchanged since it
   skip_if_not(has_src, "no source-tree data/ (installed package)")
   x <- readRDS(vd("method.rds"))
   expect_gt(length(x$meta$md5), 0)
-  for (f in names(x$meta$md5)) {
+  # the register is held by what the article prints (the test below), not by its bytes
+  for (f in setdiff(names(x$meta$md5), "inst/method/settings.csv")) {
     p <- file.path(root, f)
     expect_true(file.exists(p), info = f)
     expect_identical(unname(tools::md5sum(p)), unname(x$meta$md5[[f]]),
                      info = paste(f, "changed: rerun Rscript data-raw/vignette_method.R"))
   }
+})
+
+# the article prints every register column but `where` and `note` (its step lists, its settings table and the counts
+# above it), so a change to those columns stales the bundle and a change to `where` or `note` does not (#118)
+test_that("the register's printed columns are the ones the methodology bundle was written from", {
+  # both ship with the package, so this runs in CI too
+  x <- readRDS(vd("method.rds"))
+  cols <- c("key", "step", "label", "value", "unit", "source", "tested", "issue")
+  now <- utils::read.csv(system.file("method", "settings.csv", package = "knowledge"), colClasses = "character",
+                         na.strings = character())
+  then <- as.data.frame(lapply(as.data.frame(x$settings)[cols], as.character), stringsAsFactors = FALSE)
+  expect_true(all(cols %in% names(now)))
+  expect_identical(now[cols], then,
+                   info = "settings.csv changed what the article prints: rerun Rscript data-raw/vignette_method.R")
 })
 
 test_that("every ignored source of the methodology article, where present, is unchanged", {
@@ -119,7 +134,7 @@ test_that("every ignored source of the methodology article, where present, is un
 })
 
 # a grade table's record is tracked and the bundles pin it (#119); the ignored table it describes is checked against it
-# where present. Opt-in: the published tables are up to 26 GB to md5
+# where present. Opt-in: the published tables are about 11 GB to md5
 test_that("every grade table present is the one its tracked record describes", {
   skip_if_not(has_src, "no source-tree data/ (installed package)")
   skip_if_not(identical(Sys.getenv("KNW_CHECK_GRADES"), "TRUE"), "KNW_CHECK_GRADES=TRUE md5s the grade tables")
@@ -137,6 +152,22 @@ test_that("the methodology bundle's funnel adds up and every register row was re
   expect_true(all(diff(f$n) <= 0))
   expect_identical(f$n[1], 51587)
   expect_setequal(unique(x$resolved$key), x$settings$key)
+})
+
+# the internal article on Bayesian practice (#204) reads each published key's groups and grade gate from the bundle
+test_that("the methodology bundle's scope covers every published key, with its groups and gate", {
+  x <- readRDS(vd("method.rds"))
+  s <- x$scope
+  expect_false(is.null(s))
+  # every published key: the bundle's site-gradient limits come from data/thresholds.csv, a producer scope does not read
+  expect_setequal(s$key, x$site_gradient$limits$key)
+  expect_true(all(s$status %in% c("fitted", "underpowered")))
+  expect_false(anyNA(s[c("groups", "groups_both", "groups_all", "groups_none", "grade_withheld")]))
+  # each group has both outcomes, every site caught, or none did
+  expect_identical(s$groups_both + s$groups_all + s$groups_none, s$groups)
+  skip_if_not(has_src, "no source-tree data/ (installed package)")
+  thr <- utils::read.csv(file.path(root, "data", "thresholds.csv"), stringsAsFactors = FALSE)
+  expect_setequal(s$key, unique(paste(thr$species_code, thr$stage, sep = "_")[!is.na(thr$value)]))
 })
 
 test_that("the methodology bundle's site-gradient check covers every published gradient limit (#121)", {
@@ -261,4 +292,14 @@ test_that("the cut-points examples meet the criteria the bundle states", {
     expect_true(all(c("full", "minimal") %in% e$segments$network), info = e$site$site_visit)
     expect_equal(nrow(e$sites[e$sites$site_visit == e$site$site_visit, ]), 1, info = e$site$site_visit)
   }
+})
+
+test_that("the map's context was written for the article's map group (#77)", {
+  ctx <- readRDS(vd("bulk_context.rds"))
+  x <- readRDS(vd("chinook_rearing.rds"))
+  expect_identical(ctx$meta$map_group, x$meta$map_group)
+  expect_identical(ctx$aoi$watershed_group_code, x$meta$map_group)
+  for (k in c("aoi", "bc", "towns", "rivers")) expect_identical(sf::st_crs(ctx[[k]])$epsg, 3005L, info = k)
+  expect_true(all(c("label", "angle") %in% names(ctx$rivers)))
+  expect_gt(nrow(ctx$towns), 0)
 })

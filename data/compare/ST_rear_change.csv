@@ -1,29 +1,29 @@
 direction,reason,order,n_segments,km,structure,species_code,stage,tuned_rule
-gained,connectivity or overlay,1,113,27.304573460786667,door,ST,rear,mad>=1|g<=0.0849|Q1@D250
-lost,connectivity or overlay,1,609,96.64861956931456,door,ST,rear,mad>=1|g<=0.0849|Q1@D250
-gained,"exception (size fails, river within D)",1,22260,4832.166245373696,door,ST,rear,mad>=1|g<=0.0849|Q1@D250
-gained,"size: tuned passes, width fails or NULL",1,1331,342.9551862176608,door,ST,rear,mad>=1|g<=0.0849|Q1@D250
-lost,"size: width passes, tuned fails, no exception",1,1279,427.3130136381832,door,ST,rear,mad>=1|g<=0.0849|Q1@D250
-gained,through-wetland line: tuned structure admits,1,871,119.92461121089052,door,ST,rear,mad>=1|g<=0.0849|Q1@D250
-lost,through-wetland line: tuned structure drops,1,140,21.685733912036003,door,ST,rear,mad>=1|g<=0.0849|Q1@D250
-gained,connectivity or overlay,2,44,15.573265330755914,door,ST,rear,mad>=1|g<=0.0849|Q1@D250
-lost,connectivity or overlay,2,320,55.962742354895234,door,ST,rear,mad>=1|g<=0.0849|Q1@D250
-gained,"exception (size fails, river within D)",2,4356,785.6921149639657,door,ST,rear,mad>=1|g<=0.0849|Q1@D250
-gained,"size: tuned passes, width fails or NULL",2,4,1.4524029665848792,door,ST,rear,mad>=1|g<=0.0849|Q1@D250
-lost,"size: width passes, tuned fails, no exception",2,23847,8397.804418247575,door,ST,rear,mad>=1|g<=0.0849|Q1@D250
-gained,through-wetland line: tuned structure admits,2,195,21.368790698808013,door,ST,rear,mad>=1|g<=0.0849|Q1@D250
-lost,through-wetland line: tuned structure drops,2,4549,747.5826919307419,door,ST,rear,mad>=1|g<=0.0849|Q1@D250
-gained,connectivity or overlay,3,46,9.677482377788696,door,ST,rear,mad>=1|g<=0.0849|Q1@D250
-lost,connectivity or overlay,3,170,36.662613122913065,door,ST,rear,mad>=1|g<=0.0849|Q1@D250
-gained,"exception (size fails, river within D)",3,308,55.1480912610283,door,ST,rear,mad>=1|g<=0.0849|Q1@D250
-gained,"size: tuned passes, width fails or NULL",3,12,1.9062511297313645,door,ST,rear,mad>=1|g<=0.0849|Q1@D250
-lost,"size: width passes, tuned fails, no exception",3,26281,8878.800184232254,door,ST,rear,mad>=1|g<=0.0849|Q1@D250
-gained,through-wetland line: tuned structure admits,3,9,1.2096193246085152,door,ST,rear,mad>=1|g<=0.0849|Q1@D250
-lost,through-wetland line: tuned structure drops,3,5629,1009.5304831689925,door,ST,rear,mad>=1|g<=0.0849|Q1@D250
-gained,connectivity or overlay,4+,2,0.11111318496550732,door,ST,rear,mad>=1|g<=0.0849|Q1@D250
-lost,connectivity or overlay,4+,7,2.174950768486586,door,ST,rear,mad>=1|g<=0.0849|Q1@D250
-gained,"exception (size fails, river within D)",4+,6,2.8653217970252784,door,ST,rear,mad>=1|g<=0.0849|Q1@D250
-gained,"size: tuned passes, width fails or NULL",4+,70,17.00965279515103,door,ST,rear,mad>=1|g<=0.0849|Q1@D250
-lost,"size: width passes, tuned fails, no exception",4+,18329,6114.228802246197,door,ST,rear,mad>=1|g<=0.0849|Q1@D250
-gained,through-wetland line: tuned structure admits,4+,6,1.5906920810998206,door,ST,rear,mad>=1|g<=0.0849|Q1@D250
-lost,through-wetland line: tuned structure drops,4+,5073,1020.798656202206,door,ST,rear,mad>=1|g<=0.0849|Q1@D250
+gained,connectivity or overlay,1,121,28.90388036202561,door,ST,rear,mad>=0.5|g<=0.0849|Q1@D250
+lost,connectivity or overlay,1,559,84.10825073170916,door,ST,rear,mad>=0.5|g<=0.0849|Q1@D250
+gained,"exception (size fails, river within D)",1,20552,5564.5621563469,door,ST,rear,mad>=0.5|g<=0.0849|Q1@D250
+gained,"size: tuned passes, width fails or NULL",1,1922,570.2799519243059,door,ST,rear,mad>=0.5|g<=0.0849|Q1@D250
+lost,"size: width passes, tuned fails, no exception",1,562,459.7830716314974,door,ST,rear,mad>=0.5|g<=0.0849|Q1@D250
+gained,through-wetland line: tuned structure admits,1,892,125.02627797265008,door,ST,rear,mad>=0.5|g<=0.0849|Q1@D250
+lost,through-wetland line: tuned structure drops,1,149,26.09233134180325,door,ST,rear,mad>=0.5|g<=0.0849|Q1@D250
+gained,connectivity or overlay,2,49,21.76609142562362,door,ST,rear,mad>=0.5|g<=0.0849|Q1@D250
+lost,connectivity or overlay,2,290,52.04081615035321,door,ST,rear,mad>=0.5|g<=0.0849|Q1@D250
+gained,"exception (size fails, river within D)",2,4087,863.9654146114128,door,ST,rear,mad>=0.5|g<=0.0849|Q1@D250
+gained,"size: tuned passes, width fails or NULL",2,13,4.99353142529338,door,ST,rear,mad>=0.5|g<=0.0849|Q1@D250
+lost,"size: width passes, tuned fails, no exception",2,17948,8417.824701145277,door,ST,rear,mad>=0.5|g<=0.0849|Q1@D250
+gained,through-wetland line: tuned structure admits,2,192,21.534032984879392,door,ST,rear,mad>=0.5|g<=0.0849|Q1@D250
+lost,through-wetland line: tuned structure drops,2,4593,772.5769205483258,door,ST,rear,mad>=0.5|g<=0.0849|Q1@D250
+gained,connectivity or overlay,3,42,11.012545150173523,door,ST,rear,mad>=0.5|g<=0.0849|Q1@D250
+lost,connectivity or overlay,3,128,26.34345245849458,door,ST,rear,mad>=0.5|g<=0.0849|Q1@D250
+gained,"exception (size fails, river within D)",3,279,67.3816324890287,door,ST,rear,mad>=0.5|g<=0.0849|Q1@D250
+gained,"size: tuned passes, width fails or NULL",3,27,7.420821857636552,door,ST,rear,mad>=0.5|g<=0.0849|Q1@D250
+lost,"size: width passes, tuned fails, no exception",3,17314,7302.232146823207,door,ST,rear,mad>=0.5|g<=0.0849|Q1@D250
+gained,through-wetland line: tuned structure admits,3,10,1.9277409329028208,door,ST,rear,mad>=0.5|g<=0.0849|Q1@D250
+lost,through-wetland line: tuned structure drops,3,5036,925.6974923175452,door,ST,rear,mad>=0.5|g<=0.0849|Q1@D250
+gained,connectivity or overlay,4+,14,4.311167088679699,door,ST,rear,mad>=0.5|g<=0.0849|Q1@D250
+lost,connectivity or overlay,4+,4,0.7740754930703497,door,ST,rear,mad>=0.5|g<=0.0849|Q1@D250
+gained,"exception (size fails, river within D)",4+,5,2.934876865448385,door,ST,rear,mad>=0.5|g<=0.0849|Q1@D250
+gained,"size: tuned passes, width fails or NULL",4+,44,22.082363087265172,door,ST,rear,mad>=0.5|g<=0.0849|Q1@D250
+lost,"size: width passes, tuned fails, no exception",4+,8958,3496.5281662976936,door,ST,rear,mad>=0.5|g<=0.0849|Q1@D250
+gained,through-wetland line: tuned structure admits,4+,6,1.7052848077470892,door,ST,rear,mad>=0.5|g<=0.0849|Q1@D250
+lost,through-wetland line: tuned structure drops,4+,3146,628.3904642870571,door,ST,rear,mad>=0.5|g<=0.0849|Q1@D250
