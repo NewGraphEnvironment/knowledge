@@ -4,9 +4,9 @@
 # recommended rule on link's own segments in every group the species has a habitat table in (km kept,
 # lost and gained; graded km; km by grade class; change by reason), under the reported structure (every structure on
 # STRUCTURES=all; #73, #112), with
-# one GeoPackage per species x stage for QGIS (#81); and, as their own step (STAGE=maps), floodplain
-# hectares beside each rule's habitat in the groups the floodplain catalog holds and the maps. Issue #57,
-# phase 4; #73 for the structures and the baseline; #81 for the split. Successor to 0298 (frozen on v2).
+# one GeoPackage per species x stage for QGIS when asked (GPKG=TRUE or STAGE=gpkg; #81, #173); and, as its own step
+# (STAGE=floodplain), floodplain hectares beside each rule's habitat in the groups the floodplain catalog holds. Issue
+# #57, phase 4; #73 for the structures and the baseline; #81 and #173 for the split. Successor to 0298 (frozen on v2).
 # Input from 0310 and 0320.
 #
 # WHY / DESIGN NOTES:
@@ -24,27 +24,26 @@
 #   - THREE STRUCTURES (#73, link#364): the tuned rule's through-wetland lines free (link before 0.67.0),
 #     through the door with the pair everywhere (link's `both`), or through the door with the pair on them
 #     only (link's `wetland_flow`); knw_compare_rules() picks which a species can run. `tuned` in the tables and
-#     the segments is the `door` structure (TUNED_AS=), the one the maps and the article read.
+#     the segments is the `door` structure (TUNED_AS=), the one the GeoPackages and the article read.
 #   - THE REPORTED STRUCTURE ALONE BY DEFAULT (#112): every structure is one more rule regenerated on every group, and
 #     nothing published reads any but TUNED_AS, so a run compares `default` and TUNED_AS; STRUCTURES=all adds the
 #     species' other structures (`free`, `door_wetland`), which the research files' structure figures came from (#92).
-#   - NO MAPS IN THE DEFAULT RUN (#81, Al 2026-10-20): comparisons are viewed in QGIS from the GeoPackages
-#     (data/compare/gpkg/, ignored; GPKG=FALSE skips them); the floodplain table and the maps are STAGE=maps.
+#   - NO MAPS, AND GEOPACKAGES ONLY WHEN ASKED (#81, Al 2026-10-20; #173, 2026-11-12): comparisons are viewed in QGIS
+#     from the GeoPackages (data/compare/gpkg/, ignored), which a run writes only with GPKG=TRUE, because retunes
+#     iterate and the GeoPackages are wanted once per settled result (196.9 min on #92's run from the remote link).
+#     STAGE=gpkg writes them alone, from a candidate's saved segments or, with TUNE_DIR=data/tune, the promoted run's.
+#     The floodplain table is STAGE=floodplain. The few maps a reader sees are drawn by data-raw/readme_figure.R and
+#     the chinook article, not here.
 #   - FLOODPLAIN AS A UNIT OF MEASURE: the catalog's whole-network floodplain (`<wsg>_all_ff04`) is a
 #     fixed input, nothing here models it; knw_floodplain_ha() joins it to the segments by position
 #     (one owner per cell) and reports hectares and graded hectares under each rule. Only the groups
 #     the catalog holds (23 at 2026-10-17) until whole-network floodplains are published for all
 #     (NewGraphEnvironment/floodplains#123).
-#   - MAPS: a static three-panel figure (rules, grade, floodplain by grade) for each catalog group and
-#     three groups per species x stage chosen by criteria fixed here: the largest share of `default` km gained,
-#     the largest share lost, and the most `default` km; in the run's fig/ (promoted to research/fig/); an interactive
-#     page per catalog group in the run's maps/ (never promoted). 0298's criteria (small-stream-heavy, interior, coastal) are not
-#     reproduced: they need the visits' hydrologic zones and sea walks per group, which this script does not read.
 #   - KEYS IN TURN, GROUPS IN PARALLEL (#87): one species x stage at a time, its groups split across WORKERS
 #     socket workers (knw_compare_rules(workers =)), each with its own connection and scratch schema, so one key
 #     uses as many database cores as there are workers (one key per worker held BT rearing to one core for two
-#     hours). WORKERS is therefore database cores: 6 on the database's host. The GeoPackages are written after
-#     every key, in parallel across keys, from the saved segments (GPKG=FALSE skips them while iterating).
+#     hours). WORKERS is therefore database cores: 6 on the database's host. The GeoPackages, when asked, are written
+#     after every key, in parallel across keys, from the saved segments.
 #
 # INPUT:  TUNE_DIR/<sp>_<stage>_{curve.rds,grades.csv} (0320's candidate run),
 #         EVIDENCE_DIR/{visits_link,visits_species,walks}.csv (0310; default the directory the run's summaries name, else
@@ -54,22 +53,25 @@
 #         fresh_default), bcfishobs, whse_basemapping
 # WRITES: schemas knw_cmp_<sp>_<stage> and knw_cmp_<sp>_<stage>_w<i> in the fwapg database (scratch; dropped)
 # OUTPUT: every file below is written under data/compare/candidate/<run>/ (ignored; #111), which scripts/0335-promote.R
-#         copies into data/compare/ (and fig/ into research/fig/); the names are the tracked ones it becomes:
+#         copies into data/compare/; the names are the tracked ones it becomes:
 #         data/compare/<key>_{compare,change,checks}.csv, <key>_segments.rds  per job, as it finishes (rds ignored)
-#         data/compare/gpkg/<key>.gpkg  every segment's verdict under each rule and structure, grade, size, distance,
-#                                       and the default branch it lies on (ignored)
+#         data/compare/gpkg/<key>.gpkg  GPKG=TRUE: every segment's verdict under each rule and structure, its class
+#                                       (rule_class), grade, size, distance, the default branch it lies on, and the
+#                                       waterbody it runs through with its area (water, water_ha); a `run` table names
+#                                       the run (ignored)
 #         data/compare/compare.csv     per species x stage x structure x group and total: km by rule, graded km, km by class
 #         data/compare/change.csv      km gained and lost by structure, reason and stream order
 #         data/compare/checks.csv      FDIS detection on each rule's segments; the bcfishobs lift, per structure
 #         <date>_compare-<run>.txt (the log, in the run directory; promoted to scripts/logs/habitat/)
-#         STAGE=maps: data/compare/floodplain.csv  per species x stage x catalog group: ha, graded ha, ha by class
-#                     research/fig/compare_<sp>_<stage>_<wsg>.png, data/compare/maps/*.html (ignored)
+#         STAGE=floodplain: data/compare/floodplain.csv  per species x stage x catalog group: ha, graded ha, ha by
+#                     class, with the run, the baseline's link commit and the tuned rule each row was drawn under
 # RUN:    TUNE_DIR=data/tune/candidate/<run> Rscript scripts/0330-compare.R   (from the repo root; SPECIES=CH,BT to restrict, and the combined tables then
 #         compose with the other species' saved per-key tables; WORKERS=6 database cores; CONFIG_SHA=<link
 #         commit> for the configs (default origin/main of LINK_REPO); TUNED_AS=door; STRUCTURES=all for every structure
-#         a species has (default: TUNED_AS alone); GPKG=FALSE skips the GeoPackages;
-#         STAGE=maps draws the floodplain table and the maps from the tables the last full run saved; STAGE=gpkg writes
-#         the GeoPackages alone from the segments it saved). Every STAGE checks the database's round trip at connect
+#         a species has (default: TUNED_AS alone); GPKG=TRUE writes the GeoPackages too (default off; FALSE accepted);
+#         STAGE=floodplain draws the floodplain table from the tables the last full run saved; STAGE=gpkg writes the
+#         GeoPackages alone from the segments it saved, or with TUNE_DIR=data/tune from the promoted run's, into
+#         data/compare/gpkg/; STAGE=maps is gone and says so). Every STAGE checks the database's round trip at connect
 #         and stops off its host (over 20 ms) unless REMOTE=TRUE (#110). Each key's log lines give its stages' minutes
 #         (#110) and, under classify, overlay and connect, the worker-minutes of each rule beside the copies and walks
 #         the rules share (#112), which rules' predicates read the near-river table, and the projected saving of
@@ -87,32 +89,58 @@ only <- Sys.getenv("SPECIES", "")
 stage_only <- Sys.getenv("STAGE", "")
 tuned_as <- Sys.getenv("TUNED_AS", "door")
 structures <- Sys.getenv("STRUCTURES", "reported")   # "all": every structure the species has, not TUNED_AS alone (#112)
-gpkg <- !identical(Sys.getenv("GPKG"), "FALSE")
+gpkg <- .knw_env_flag("GPKG")
 remote <- Sys.getenv("REMOTE") %in% c("1", "TRUE", "true")   # compare off the database's host anyway (#110)
-if (!stage_only %in% c("", "maps", "gpkg")) stop("STAGE must be unset, 'maps' or 'gpkg', not '", stage_only, "'")
+if (identical(stage_only, "maps")) {
+  stop("STAGE=maps is gone (#173): STAGE=floodplain writes the floodplain table, STAGE=gpkg the GeoPackages for QGIS, ",
+       "and data-raw/readme_figure.R and the chinook article draw the example maps")
+}
+if (!stage_only %in% c("", "floodplain", "gpkg")) {
+  stop("STAGE must be unset, 'floodplain' or 'gpkg', not '", stage_only, "'")
+}
 if (!structures %in% c("", "reported", "all")) stop("STRUCTURES must be unset, 'reported' or 'all', not '", structures, "'")
+# the GeoPackages' QGIS styles, built before any work: a gq without the QML writer (gq#115) found only after every
+# key's comparison stopped the run after its tables were cleared, with nothing written (#173's review, round 1)
+gpkg_styles <- if (gpkg || identical(stage_only, "gpkg")) .compare_qgis_styles() else NULL
 schema <- Sys.getenv("SCHEMA", "fresh_default")  # the run's persist schema, by its current name (renamed after the run, #73)
 catalog_bucket <- "https://stac-floodplains-bc.s3.us-west-2.amazonaws.com"
 catalog_items <- "../stac_floodplains_bc/data/stac"      # the catalog repo's item records
 # a comparison is of a candidate run (#111): TUNE_DIR=data/tune/candidate/<run> is read, and everything is written under
-# data/compare/candidate/<run>/ (ignored), figures and log included; scripts/0335-promote.R copies it into the tracked
-# data/compare/ and research/fig/ on the operator's word. The floodplain catalog is a cache shared by every run
+# data/compare/candidate/<run>/ (ignored), log included; scripts/0335-promote.R copies it into the tracked
+# data/compare/ on the operator's word. The floodplain catalog is a cache shared by every run
 tune_dir <- sub("/+$", "", Sys.getenv("TUNE_DIR"))
-if (!grepl("^data/tune/candidate/[A-Za-z0-9][A-Za-z0-9_.]*$", tune_dir) || !dir.exists(tune_dir)) {
-  stop("TUNE_DIR must name a candidate run of scripts/0320, data/tune/candidate/<run> (relative, from the repo root): '",
-       tune_dir, "'")
+# STAGE=gpkg also takes the promoted run (TUNE_DIR=data/tune, #173): with GPKG off by default, that is how the published
+# comparison reaches QGIS without a promotion. It reads data/compare/<key>_segments.rds and writes only into the ignored
+# data/compare/gpkg/, its log beside the GeoPackages; nothing tracked is written
+promoted <- identical(stage_only, "gpkg") && identical(tune_dir, "data/tune")
+if (!promoted && (!grepl("^data/tune/candidate/[A-Za-z0-9][A-Za-z0-9_.]*$", tune_dir) || !dir.exists(tune_dir))) {
+  stop("TUNE_DIR must name a candidate run of scripts/0320, data/tune/candidate/<run> (relative, from the repo root), ",
+       "or data/tune for STAGE=gpkg on the promoted run: '", tune_dir, "'")
 }
-run <- basename(tune_dir)
-dir_out <- file.path("data/compare/candidate", run)
-dir_cat <- "data/compare/catalog"
-dir_maps <- file.path(dir_out, "maps")
+if (promoted) {
+  # each promoted key's tuning run, from its own summary: keys can be promoted alone onto the kept keys' build, so the
+  # promoted set can hold keys of more than one run (#173's review, round 4), and each GeoPackage names its key's own
+  sums <- list.files(tune_dir, "_summary\\.csv$", full.names = TRUE)
+  run_of <- vapply(sums, function(f) {
+    x <- read_csv(f, show_col_types = FALSE, col_types = cols(.default = "c"))
+    r <- if ("tune_run" %in% names(x)) unique(stats::na.omit(x$tune_run)) else character()
+    if (length(r) == 1L) r else NA_character_
+  }, character(1))
+  names(run_of) <- sub("_summary\\.csv$", "", basename(sums))
+  run <- "promoted"
+  dir_out <- "data/compare"
+} else {
+  run <- basename(tune_dir)
+  dir_out <- file.path("data/compare/candidate", run)
+}
 dir_gpkg <- file.path(dir_out, "gpkg")
-dir_fig <- file.path(dir_out, "fig")
+dir_cat <- "data/compare/catalog"
 # a pass over some species names them, and a second pass of the day is numbered: a log is never written over
-path_log <- .knw_free_path(file.path(dir_out, paste0(format(Sys.time(), "%Y%m%d", tz = "UTC"), "_compare-", run,
-                                                     if (nzchar(only)) paste0("-", tolower(gsub(",", "_", only))),
-                                                     if (nzchar(stage_only)) paste0("-", stage_only), ".txt")))
-for (d in c(dir_out, dir_cat, dir_maps, dir_gpkg, dir_fig)) dir.create(d, showWarnings = FALSE, recursive = TRUE)
+path_log <- .knw_free_path(file.path(if (promoted) dir_gpkg else dir_out,
+                                     paste0(format(Sys.time(), "%Y%m%d", tz = "UTC"), "_compare-", run,
+                                            if (nzchar(only)) paste0("-", tolower(gsub(",", "_", only))),
+                                            if (nzchar(stage_only)) paste0("-", stage_only), ".txt")))
+for (d in c(dir_out, dir_cat, dir_gpkg)) dir.create(d, showWarnings = FALSE, recursive = TRUE)
 # the run's floodplain table holds every key a drawing has reached: `drop` takes the given keys' rows out and `new`
 # (a drawing's rows) goes in, written to a sibling and moved over, so a pass never leaves half a table (#111)
 floodplain_write <- function(new, drop) {
@@ -157,7 +185,12 @@ if (length(fitted) && (length(run_grad) != 1L || !run_grad %in% names(.knw_grade
 if (!length(fitted)) run_grad <- .knw_grade_grad
 say("Segments read with the gradient the curves were fitted on: %s (%s)%s.", run_grad, .knw_grade_grads[[run_grad]],
     if (!identical(run_grad, .knw_grade_grad)) "; a setup of #120, never promoted" else "")
-say("Candidate run %s: read from %s, written under %s (ignored); promote it with RUN=%s scripts/0335.", run, tune_dir, dir_out, run)
+if (promoted) {
+  say("Promoted run (tuning runs %s): read from %s and %s, GeoPackages written to %s (ignored).",
+      paste(sort(unique(stats::na.omit(run_of))), collapse = ", "), tune_dir, dir_out, dir_gpkg)
+} else {
+  say("Candidate run %s: read from %s, written under %s (ignored); promote it with RUN=%s scripts/0335.", run, tune_dir, dir_out, run)
+}
 # the build the run was scored on (#120): EVIDENCE_DIR (a staged copy on another machine), else the directory the run's
 # summaries name (0320 writes it from #120), else the default. Its tables must be the ones the curves were fitted on,
 # held by md5, not by path: a directory of the same name can hold another build, and a staged copy elsewhere the right one
@@ -295,11 +328,10 @@ if (length(stale)) stop("grade tables made before #73's curve prior (no ref_popu
 # comparison needs, not its 25 (RB's is 1.5 GB)
 run_one <- function(job) {
   t0 <- Sys.time()
-  # a key's comparison replaces an earlier pass's whole, its GeoPackage and figures included (#111): what the run
-  # holds for a key is then this pass's, which is what scripts/0335 promotes
+  # a key's comparison replaces an earlier pass's whole, its GeoPackage included (#111): what the run holds for a key
+  # is then this pass's, which is what scripts/0335 promotes
   unlink(c(file.path(dir_out, paste0(job$key, c("_compare.csv", "_change.csv", "_checks.csv", "_segments.rds"))),
-           file.path(dir_gpkg, paste0(job$key, ".gpkg")),
-           list.files(dir_fig, paste0("^compare_", tolower(job$key), "_"), full.names = TRUE)))
+           file.path(dir_gpkg, paste0(job$key, ".gpkg"))))
   out <- tryCatch({
     gfile <- file.path(tune_dir, paste0(job$key, "_grades.csv"))
     gcols <- c("id_segment", "watershed_group_code", "size", "dist_m", "grade", "grade_class")
@@ -347,12 +379,20 @@ run_one <- function(job) {
   say("%s: compared in %.1f min%s.", job$key, out$minutes, if (!is.null(out$error)) " (FAILED)" else "")
   out
 }
-# one GeoPackage per species x stage for QGIS (#81): every segment with its verdict under each rule and structure,
-# written group by group from link's geometry and the segments the comparison saved; run on a socket worker per key
-gpkg_one <- function(key, schema, dir_gpkg, dir_seg) {
+# one GeoPackage per species x stage for QGIS (#81): every segment with its verdict under each rule and structure, its
+# class under the reported structure (kept, lost, gained, neither; `rule_class`, the registry's labels) and the
+# waterbody it runs through with that waterbody's area (`water`, `water_ha`, #173), so a kept stretch with a low grade
+# explains itself; written group by group from link's geometry and the segments the comparison saved, with a `run` table naming
+# the run, so a GeoPackage left from an older run says so, and QGIS styles for the rule and grade classes in its
+# layer_styles table (gq#115). Run on a socket worker per key, so the package's helpers come in as arguments
+gpkg_one <- function(key, schema, dir_gpkg, dir_seg, flag, rule_labels, rule_class_fun, water_fun, run_info, styles) {
   t1 <- Sys.time()
   tryCatch({
     seg <- readRDS(file.path(dir_seg, paste0(key, "_segments.rds")))
+    seg$rule_class <- rule_class_fun(seg[[paste0(flag[[key]], "_default")]], seg[[paste0(flag[[key]], "_tuned")]],
+                                     rule_labels, accessible = seg$accessible)
+    # a reachable segment with no grade reads "not graded", the class the maps and the GeoPackage's style give it
+    seg$grade_class[is.na(seg$grade_class) & seg$accessible %in% TRUE] <- "not graded"
     # written as <key>.part.gpkg and renamed when every group is in (#111): a pass killed part way leaves a part file,
     # never a <key>.gpkg holding some groups, and the last complete one stands until then
     f <- file.path(dir_gpkg, paste0(key, ".gpkg"))
@@ -360,16 +400,34 @@ gpkg_one <- function(key, schema, dir_gpkg, dir_seg) {
     unlink(f_part)
     conn <- DBI::dbConnect(RPostgres::Postgres(), bigint = "numeric")
     on.exit(DBI::dbDisconnect(conn))
+    orphans <- 0L
     for (w in sort(unique(seg$watershed_group_code))) {
-      geom <- sf::st_zm(sf::st_read(conn, quiet = TRUE, query = sprintf(
-        "SELECT id_segment, geom FROM %s.streams WHERE watershed_group_code = '%s'", schema, w)), drop = TRUE)
+      q <- sprintf("SELECT id_segment, waterbody_key, geom FROM %s.streams WHERE watershed_group_code = '%s'",
+                   schema, w)
+      geom <- sf::st_zm(sf::st_read(conn, quiet = TRUE, query = q), drop = TRUE)
       geom$id_segment <- as.numeric(geom$id_segment)
+      geom$waterbody_key <- as.numeric(geom$waterbody_key)
+      wb <- water_fun(conn, schema, w)
+      i <- match(geom$waterbody_key, wb$waterbody_key)
+      # a waterbody key fwa_waterbodies lacks (17 segments in CHWK, REVL and SHUL on the published build) is an unknown
+      # waterbody, counted in the log, not the end of the key's GeoPackage (#173's review, round 3)
+      orphan <- !is.na(geom$waterbody_key) & is.na(i)
+      orphans <- orphans + sum(orphan)
+      geom$water <- ifelse(is.na(geom$waterbody_key), "stream", wb$water[i])
+      geom$water_ha <- wb$water_ha[i]
       sg <- dplyr::inner_join(geom, seg[seg$watershed_group_code == w, , drop = FALSE], by = "id_segment")
       sf::st_write(sg, f_part, layer = "segments", append = file.exists(f_part), quiet = TRUE)
     }
+    sf::st_write(data.frame(run_info[[key]], key = key,
+                            written_utc = format(Sys.time(), "%Y-%m-%dT%H:%M:%SZ", tz = "UTC")),
+                 f_part, layer = "run", quiet = TRUE)
+    # the QGIS styles, from the registry the maps read (gq#115): rule class the default, grade class the second
+    gq::gq_gpkg_style_write(f_part, "segments", styles)
     unlink(f)
     if (!file.rename(f_part, f)) stop("could not move ", f_part, " to ", f)
-    sprintf("GeoPackage %s: %d segments in %.1f min.", f, nrow(seg), as.numeric(difftime(Sys.time(), t1, units = "mins")))
+    sprintf("GeoPackage %s: %d segments in %.1f min%s.", f, nrow(seg),
+            as.numeric(difftime(Sys.time(), t1, units = "mins")),
+            if (orphans) sprintf("; %d with a waterbody key fwa_waterbodies lacks, water unknown", orphans) else "")
   }, error = function(e) {
     unlink(file.path(dir_gpkg, paste0(key, ".part.gpkg")))
     sprintf("GeoPackage for %s FAILED: %s", key, conditionMessage(e))
@@ -378,12 +436,24 @@ gpkg_one <- function(key, schema, dir_gpkg, dir_seg) {
 # the GeoPackages of several keys, one key per socket worker (one writer per file)
 write_gpkgs <- function(keys) {
   t1 <- Sys.time()
+  flag <- vapply(jobs, function(j) if (j$stage == "rear") "rearing" else "spawning", character(1))
+  rule_class_fun <- .knw_rule_class
+  environment(rule_class_fun) <- globalenv()
+  water_fun <- .knw_segment_water
+  environment(water_fun) <- globalenv()
+  args <- list(schema = schema, dir_gpkg = dir_gpkg, dir_seg = dir_out, flag = flag,
+               rule_labels = .compare_rule_labels(),
+               rule_class_fun = rule_class_fun, water_fun = water_fun,
+               run_info = lapply(stats::setNames(nm = keys), function(k) {
+                 tr <- if (!promoted) run else if (k %in% names(run_of)) run_of[[k]] else NA_character_
+                 data.frame(tune_run = tr, link_run_uid = run_uid, schema = schema, promoted = promoted)
+               }),
+               styles = gpkg_styles)
   gl <- if (workers > 1L && length(keys) > 1L) {
     cl <- parallel::makeCluster(min(workers, length(keys)))
-    tryCatch(parallel::parLapplyLB(cl, keys, gpkg_one, schema = schema, dir_gpkg = dir_gpkg, dir_seg = dir_out),
-             finally = parallel::stopCluster(cl))
+    tryCatch(do.call(parallel::parLapplyLB, c(list(cl, keys, gpkg_one), args)), finally = parallel::stopCluster(cl))
   } else {
-    lapply(keys, gpkg_one, schema = schema, dir_gpkg = dir_gpkg, dir_seg = dir_out)
+    do.call(lapply, c(list(keys, gpkg_one), args))
   }
   names(gl) <- keys
   say("GeoPackages for %d keys in %.1f min on %d workers.", length(keys),
@@ -391,8 +461,8 @@ write_gpkgs <- function(keys) {
   gl
 }
 t0 <- Sys.time()
-if (stage_only == "maps") {
-  # the floodplain and map stage alone, from the tables and segments the last full run saved per key
+if (stage_only == "floodplain") {
+  # the floodplain stage alone, from the tables and segments the last full run saved per key
   res <- lapply(names(jobs), function(k) {
     f <- file.path(dir_out, paste0(k, "_compare.csv"))
     if (!file.exists(f) || !file.exists(file.path(dir_out, paste0(k, "_segments.rds")))) return(NULL)
@@ -403,18 +473,18 @@ if (stage_only == "maps") {
   })
   names(res) <- names(jobs)
   res <- Filter(Negate(is.null), res)
-  if (!length(res)) stop("STAGE=maps: no saved comparison under ", dir_out)
+  if (!length(res)) stop("STAGE=floodplain: no saved comparison under ", dir_out)
   # the saved segments carry the grade the full run read; one older than its grade table carries a superseded
   # grade (#65), which the guard on the grade tables above cannot see
   old <- names(res)[vapply(names(res), function(k) {
     file.mtime(file.path(dir_out, paste0(k, "_segments.rds"))) < file.mtime(file.path(tune_dir, paste0(k, "_grades.csv")))
   }, logical(1))]
-  if (length(old)) stop("STAGE=maps: the saved segments predate their grade tables; run the full compare: ",
+  if (length(old)) stop("STAGE=floodplain: the saved segments predate their grade tables; run the full compare: ",
                         paste(old, collapse = ", "))
-  say("STAGE=maps: floodplain and maps from the saved comparison of %s.", paste(names(res), collapse = " "))
+  say("STAGE=floodplain: floodplain hectares from the saved comparison of %s.", paste(names(res), collapse = " "))
 } else if (stage_only == "gpkg") {
   # the GeoPackages alone, from the segments the last full run saved per key, refusing segments older than their
-  # grade table as STAGE=maps does
+  # grade table as STAGE=floodplain does
   keys <- names(jobs)[file.exists(file.path(dir_out, paste0(names(jobs), "_segments.rds")))]
   if (!length(keys)) stop("STAGE=gpkg: no saved segments under ", dir_out)
   old <- keys[file.mtime(file.path(dir_out, paste0(keys, "_segments.rds"))) <
@@ -426,7 +496,7 @@ if (stage_only == "maps") {
 } else {
   # the tables of every key are written when the pass ends, from every key it and earlier passes saved; until then the
   # run holds none, so a pass that dies cannot leave the last pass's beside this one's per-key tables (#111). The keys
-  # compared here lose their floodplain rows, which STAGE=maps redraws; the other keys keep theirs
+  # compared here lose their floodplain rows, which STAGE=floodplain redraws; the other keys keep theirs
   unlink(file.path(dir_out, c("compare.csv", "change.csv", "checks.csv")))
   floodplain_write(NULL, drop = names(jobs))
   res <- lapply(jobs, run_one)
@@ -527,33 +597,22 @@ if (stage_only == "") {
                    function(p) write_csv(compare |> mutate(across(where(is.numeric), ~ round(.x, 3))), p, na = ""))
 }
 
-# ---- floodplain hectares and maps: their own step (STAGE=maps; #81) ------------------------------
-if (stage_only == "maps") {
-  conn <- pg()
-  water_of <- function(w) {
-    sf::st_zm(sf::st_read(conn, quiet = TRUE, query = sprintf("
-      SELECT waterbody_key, 'lake' AS kind, geom FROM whse_basemapping.fwa_lakes_poly WHERE watershed_group_code = '%1$s' AND area_ha >= 10
-      UNION ALL SELECT waterbody_key, 'river', geom FROM whse_basemapping.fwa_rivers_poly WHERE watershed_group_code = '%1$s'", w)), drop = TRUE)
-  }
+# ---- floodplain hectares: their own step (STAGE=floodplain; #81, #173) --------------------------------
+# each rule's habitat and graded habitat in hectares of the catalog's whole-network floodplain, per catalog group. The
+# rows carry the run, the baseline's link commit and the tuned rule they were drawn under, so a row left from an older
+# comparison can be told from this one's (#173: the #145 promotion kept #65's chinook rows, from a rule since replaced)
+if (stage_only == "floodplain") {
   fp_rows <- list()
   for (k in names(res)) {
     r <- res[[k]]
     stage <- jobs[[k]]$stage
     flag <- if (stage == "rear") "rearing" else "spawning"
     sp <- jobs[[k]]$species_code
-    # this drawing's figures replace the key's last ones, whose groups may differ, once every group is drawn: they are
-    # drawn into a part directory and moved in together (#111), so a pass killed part way leaves the last set whole
-    dir_part <- file.path(dir_fig, paste0(".part_", tolower(k)))
-    unlink(dir_part, recursive = TRUE)
-    dir.create(dir_part)
     seg_all <- readRDS(file.path(dir_out, paste0(k, "_segments.rds")))
     per <- r$compare |> filter(watershed_group_code != "ALL", structure == tuned_structure)
-    # three groups by the criteria in the header: largest gained share, largest lost share, most default km
-    crit <- c(per$watershed_group_code[which.max(per$gained_km / pmax(per$default_km, 1))],
-              per$watershed_group_code[which.max(per$lost_km / pmax(per$default_km, 1))],
-              per$watershed_group_code[which.max(per$default_km)])
-    map_wsg <- unique(c(intersect(per$watershed_group_code, cat_wsg), crit))
-    for (w in map_wsg) {
+    fp_wsg <- intersect(per$watershed_group_code, cat_wsg)
+    conn <- pg()
+    for (w in fp_wsg) {
       s <- seg_all |> filter(watershed_group_code == w)
       geom <- sf::st_zm(sf::st_read(conn, quiet = TRUE, query = sprintf(
         "SELECT id_segment, geom FROM %s.streams WHERE watershed_group_code = '%s'", schema, w)), drop = TRUE)
@@ -561,47 +620,23 @@ if (stage_only == "maps") {
       sg <- geom |> inner_join(s |> transmute(id_segment, blue_line_key, accessible, stream_order, grade, grade_class,
                                               flag_default = .data[[paste0(flag, "_default")]], flag_tuned = .data[[paste0(flag, "_tuned")]]),
                                by = "id_segment")
-      fp_cells <- NULL
-      if (w %in% cat_wsg) {
-        fp <- tryCatch(knw_floodplain_ha(gpkg_of(w), sg, c("flag_default", "flag_tuned", "accessible")), error = function(e) { say("  %s %s floodplain: %s", k, w, conditionMessage(e)); NULL })
-        if (!is.null(fp)) {
-          fp_rows[[paste(k, w)]] <- fp$summary |> mutate(species_code = sp, stage = stage, watershed_group_code = w,
-                                                         floodplain_ha = fp$check[["floodplain_ha"]], ties = fp$check[["ties"]],
-                                                         rule = unname(c(flag_default = "default", flag_tuned = "tuned", accessible = "accessible")[fp$summary$flag]))
-          # the floodplain cells by the owning segment's grade, for the map
-          own <- fp$segments
-          own$grade_fp <- ifelse(is.na(own$grade), NA, own$grade)
-          fp_cells <- tryCatch({
-            bl <- sf::st_read(gpkg_of(w), layer = "all_ff04_by_blue_line_key", quiet = TRUE)
-            fpp <- sf::st_read(gpkg_of(w), layer = "all_ff04", quiet = TRUE)
-            bb <- sf::st_bbox(fpp)
-            tmpl <- terra::rast(xmin = floor(bb[["xmin"]] / 30) * 30, xmax = ceiling(bb[["xmax"]] / 30) * 30,
-                                ymin = floor(bb[["ymin"]] / 30) * 30, ymax = ceiling(bb[["ymax"]] / 30) * 30, resolution = 30, crs = "EPSG:3005")
-            valleys <- terra::rasterize(terra::vect(fpp), tmpl, field = 1L, background = 0L, touches = FALSE)
-            bl$blue_line_key <- as.numeric(bl$blue_line_key)
-            j <- flooded::fl_valley_join(valleys, bl, own[own$blue_line_key %in% bl$blue_line_key, ], group = "blue_line_key", cols = "accessible")
-            rg <- terra::rast(valleys); terra::values(rg) <- NA
-            rg[j$nearest$cell] <- own$grade_fp[own$blue_line_key %in% bl$blue_line_key][j$nearest$seg]
-            rg
-          }, error = function(e) { say("  %s %s floodplain raster: %s", k, w, conditionMessage(e)); NULL })
-        }
+      fp <- tryCatch(knw_floodplain_ha(gpkg_of(w), sg, c("flag_default", "flag_tuned", "accessible")),
+                     error = function(e) {
+                       say("  %s %s floodplain: %s", k, w, conditionMessage(e))
+                       NULL
+                     })
+      if (!is.null(fp)) {
+        fp_rows[[paste(k, w)]] <- fp$summary |>
+          mutate(species_code = sp, stage = stage, watershed_group_code = w,
+                 floodplain_ha = fp$check[["floodplain_ha"]], ties = fp$check[["ties"]],
+                 rule = unname(c(flag_default = "default", flag_tuned = "tuned",
+                                 accessible = "accessible")[fp$summary$flag]),
+                 tune_run = run, config_sha = r$compare$config_sha[1], tuned_rule = r$compare$tuned_rule[1])
       }
-      title <- sprintf("%s: %s %s, default against %s (%s)", w, sp, flag, r$compare$tuned_rule[1], r$compare$tuned_structure[1])
-      tryCatch(knw_compare_map(sg, water_of(w), title,
-                               png = file.path(dir_part, sprintf("compare_%s_%s.png", tolower(k), tolower(w))),
-                               html = if (w %in% cat_wsg) file.path(dir_maps, sprintf("compare_%s_%s.html", tolower(k), tolower(w))) else NULL,
-                               fp_cells = fp_cells),
-               error = function(e) say("  %s %s map: %s", k, w, conditionMessage(e)))
     }
-    unlink(list.files(dir_fig, paste0("^compare_", tolower(k), "_"), full.names = TRUE))
-    drawn <- list.files(dir_part, full.names = TRUE)
-    if (!all(file.rename(drawn, file.path(dir_fig, basename(drawn))))) {
-      stop(k, ": could not move its figures from ", dir_part)
-    }
-    unlink(dir_part, recursive = TRUE)
-    say("%s: maps for %s.", k, paste(map_wsg, collapse = " "))
+    dbDisconnect(conn)
+    say("%s: floodplain hectares for %s.", k, if (length(fp_wsg)) paste(fp_wsg, collapse = " ") else "no catalog group")
   }
-  dbDisconnect(conn)
   fpt <- bind_rows(fp_rows)
   if (nrow(fpt)) {
     # this drawing's keys replace their own rows; a key drawn by another pass keeps its rows (#111)

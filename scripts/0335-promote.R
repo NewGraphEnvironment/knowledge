@@ -6,8 +6,9 @@
 # or by key; the logs are copied), then rebuilds what reads the tracked tables, in order: 0325 (local only:
 # data/thresholds.csv and data/thresholds_groups.csv; PUBLISH stays a separate step), data-raw/vignette_chinook.R
 # (reads the thresholds), data-raw/vignette_method.R (reads the chinook bundle; refuses uncommitted code),
-# data-raw/vignette_bib.R (Zotero running; the software versions come from the run's ledger) and
-# data-raw/readme_figure.R. The articles and their
+# data-raw/vignette_bib.R (Zotero running; the software versions come from the run's ledger),
+# data-raw/vignette_context.R (the map group's outline, towns and rivers; NRCan's names service) and
+# data-raw/readme_figure.R (Esri's tiles). The articles and their
 # review follow a promotion, and nothing else.
 #
 # WHY / DESIGN NOTES:
@@ -35,7 +36,8 @@
 #         (PG* env vars; SCHEMA names the run's schema for vignette_chinook.R), LINK_REPO / WET_REPO as those scripts
 #         take them, and Zotero running for vignette_bib.R
 # OUTPUT: data/tune/<key>_*, data/tune/grad_fwa/<key>_*, data/compare/<key>_*, the rows of data/compare/{compare,change,
-#         checks,floodplain}.csv, research/fig/compare_<key>_*.png, the run's logs in scripts/logs/habitat/, then
+#         checks,floodplain}.csv (a run's comparison draws no figures since #173), the run's logs in
+#         scripts/logs/habitat/, then
 #         0325's and the bundles' outputs; scripts/logs/habitat/<date>_promote-<run>.txt; the archive's objects under
 #         s3://fresh-bc/archive/knowledge/ and rows of data/archive_index.csv (#119; AWS credentials for the bucket)
 # RUN:    RUN=<run> Rscript scripts/0335-promote.R   (from the repo root; SPECIES=CH,BT to promote those species' keys;
@@ -159,7 +161,7 @@ if (!bundles) {
 # each rebuild in its own process, as it is run by hand, and the chain stops at a failed step
 Sys.unsetenv(c("PUBLISH", "REPUBLISH"))
 for (s in c("scripts/0325-publish.R", "data-raw/vignette_chinook.R", "data-raw/vignette_method.R",
-            "data-raw/vignette_bib.R", "data-raw/readme_figure.R")) {
+            "data-raw/vignette_bib.R", "data-raw/vignette_context.R", "data-raw/readme_figure.R")) {
   message("---- ", s)
   st <- system2("Rscript", s)
   if (!identical(st, 0L)) stop(s, " failed (exit ", st, "): the tables are promoted, the rebuilds after it are not run")

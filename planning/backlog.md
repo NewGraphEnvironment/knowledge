@@ -25,7 +25,7 @@ split piece, or one filed since the last pass): run `/backlog-sweep` to place it
 | - [x] 1 | #170 | 1: evidence-build and test fixes (2 issues) | done: https://github.com/NewGraphEnvironment/knowledge/pull/187 |
 | - [x] 2 | #171 | 2, 3: articles as a tuning series, a build that stalls fails fast (4 issues) | done: https://github.com/NewGraphEnvironment/knowledge/pull/208 |
 | - [x] 3 | #172 | 4, 5: Zotero library writes, new sources into the stores (5 issues) | done: https://github.com/NewGraphEnvironment/knowledge/pull/189 |
-| - [ ] 4 | #173 | 6, 7: maps out of the comparison, one research page per key (4 issues) | open: after move 2, which renames the article #77 edits |
+| - [x] 4 | #173 | 6, 7: maps out of the comparison, one research page per key (4 issues) | done: https://github.com/NewGraphEnvironment/knowledge/pull/212 (batch 6; batch 7 split to #211) |
 | - [ ] 5 | #174 | 8, 9: timing table and NuSEDS, flow in windows (5 issues) | open |
 | - [ ] 6 | #175 | 10: location error against flow resolution (2 issues) | open |
 | - [ ] 7 | #176 | 11, 12: FISS parser, gradient and PINE; layers for report repos (6 issues) | open |
@@ -110,14 +110,14 @@ for the next sweep to place in another move; decided 2026-11-09). Touches `data/
 
 ### 6. Maps out of the comparison
 
-- [ ] Carried by move 4, #173
+- [x] Carried by move 4, #173 (merged in https://github.com/NewGraphEnvironment/knowledge/pull/212)
 
 #81 (GeoPackages opt-in, a script for the few example maps, PNGs out) and #77 (scale bar and keymap on those maps).
 Touches `scripts/0330-compare.R`, `R/compare_map.R`, a new example-map script, `data-raw/readme_figure.R`, a gq style.
 
 ### 7. One research page per key
 
-- [ ] Carried by move 4, #173
+- [ ] Carried by move 4, #173; not done there: split to #211 (2026-11-13), which the next `/backlog-sweep` places
 
 #90 (generated pages under `research/tuning/`) and #64 (one template per species: the template in `research/README.md`,
 then coho). #64's chinook rewrite is not here: it is #118's, in batch 2 (PR #147 moved only the method sections

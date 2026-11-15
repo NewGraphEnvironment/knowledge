@@ -117,7 +117,8 @@ test_that("knw_compare_mapgl colours every class in hex, places the legends and 
   colours <- unlist(lapply(m$x$layers, function(l) unlist(l$paint[grepl("color", names(l$paint))])))
   colours <- colours[!grepl("^(match|get|rc|gc)$", colours) & is.na(suppressWarnings(as.numeric(colours)))]
   expect_true(all(grepl("^#[0-9a-f]{6}$", colours)), info = paste(unique(colours), collapse = " "))
-  expect_true(all(grepl("^#[0-9a-f]{6}$", c(knowledge:::.compare_rule_cols, knowledge:::.compare_grade_cols))))
+  hex <- c(knowledge:::.compare_cols("compare_rule"), knowledge:::.compare_cols("compare_grade"))
+  expect_true(all(grepl("^#[0-9a-f]{6}$", hex)))
   json <- as.character(jsonlite::toJSON(m$x, auto_unbox = TRUE, null = "null"))
   # the legends top-left, the layer switch top-right and the attribution along the bottom, so none share a corner
   expect_identical(m$x$layers_control$position, "top-right")
@@ -133,7 +134,7 @@ test_that("knw_compare_mapgl colours every class in hex, places the legends and 
 })
 
 test_that("no map label a reader sees says rule (#156)", {
-  expect_false(any(grepl("\\brules?\\b", names(knowledge:::.compare_rule_cols), ignore.case = TRUE, perl = TRUE)))
+  expect_false(any(grepl("\\brules?\\b", knowledge:::.compare_rule_labels(), ignore.case = TRUE, perl = TRUE)))
   pop <- knowledge:::.compare_popup(mapgl_fx())
   expect_false(any(grepl("\\brules?\\b", unlist(Filter(is.character, pop$expr)), ignore.case = TRUE, perl = TRUE)))
 })
@@ -198,4 +199,158 @@ test_that("knw_compare_mapgl's Esri topo background is a keyless raster style th
   expect_identical(st$layers[[1]]$source, "esri_topo")
   # serialised as the widget sends it: tiles must be a JSON array
   expect_match(as.character(jsonlite::toJSON(st, auto_unbox = TRUE)), '"tiles":\\["https')
+})
+
+test_that("the maps' classes and colours come from one gq registry, read the same way by gq (#173)", {
+  rule <- knowledge:::.compare_cols("compare_rule")
+  grade <- knowledge:::.compare_cols("compare_grade")
+  expect_identical(names(rule), c("kept (both)", "lost (default only)", "gained (tuned only)", "accessible, neither"))
+  expect_identical(names(grade), c("0-0.2", "0.2-0.4", "0.4-0.6", "0.6-0.8", "0.8-1", "not graded"))
+  # the grade classes are the grade table's own labels, so a graded segment always finds its colour
+  expect_true(all(c("0-0.2", "0.8-1") %in% names(grade)))
+  skip_if_not_installed("gq")
+  reg <- gq::gq_reg_custom(system.file("gq", "compare.csv", package = "knowledge"))
+  for (k in c("compare_rule", "compare_grade")) {
+    cls <- gq::gq_style(reg$layers[[k]])$classification
+    expect_identical(unname(cls$values), unname(knowledge:::.compare_cols(k)))
+    expect_identical(unname(cls$labels), names(knowledge:::.compare_cols(k)))
+  }
+})
+
+test_that(".knw_rule_class gives each pair of flags its class, a missing flag reading as not habitat (#173)", {
+  lab <- knowledge:::.compare_rule_labels()
+  got <- knowledge:::.knw_rule_class(c(TRUE, TRUE, FALSE, FALSE, NA, TRUE), c(TRUE, FALSE, TRUE, FALSE, TRUE, NA), lab)
+  expect_identical(got, lab[c(1, 2, 3, 4, 3, 2)])
+  expect_error(knowledge:::.knw_rule_class(TRUE, TRUE, lab[1:3]))
+  # a segment the species cannot reach has no class, whatever its flags
+  expect_identical(knowledge:::.knw_rule_class(c(TRUE, FALSE, TRUE), c(TRUE, FALSE, FALSE), lab,
+                                               accessible = c(TRUE, FALSE, NA)),
+                   c(lab[1], NA, NA))
+})
+
+test_that("the GeoPackage's QGIS styles come from the same registry, rule class first (#173, gq#115)", {
+  skip_if_not_installed("gq")
+  skip_if_not(exists("gq_qgis_style", asNamespace("gq")), "gq predates gq_qgis_style() (gq#115)")
+  st <- knowledge:::.compare_qgis_styles()
+  expect_identical(names(st), c("rule_class", "grade_class"))
+  for (k in c("rule_class", "grade_class")) {
+    doc <- xml2::read_xml(st[[k]])
+    cats <- xml2::xml_find_all(doc, ".//categories/category")
+    expect_identical(xml2::xml_attr(cats, "label"),
+                     names(knowledge:::.compare_cols(if (k == "rule_class") "compare_rule" else "compare_grade")))
+    expect_identical(xml2::xml_attr(xml2::xml_find_first(doc, ".//renderer-v2"), "attr"), k)
+  }
+  skip_if_not_installed("sf")
+  f <- tempfile(fileext = ".gpkg")
+  seg <- sf::st_sf(rule_class = "kept (both)", grade_class = "0-0.2",
+                   geometry = sf::st_sfc(sf::st_linestring(rbind(c(0, 0), c(1, 1))), crs = 3005))
+  sf::st_write(seg, f, layer = "segments", quiet = TRUE)
+  gq::gq_gpkg_style_write(f, "segments", st)
+  ls <- sf::st_read(f, layer = "layer_styles", quiet = TRUE)
+  expect_setequal(ls$styleName, c("rule_class", "grade_class"))
+  expect_identical(ls$styleName[as.logical(ls$useAsDefault)], "rule_class")
+})
+
+# a composed map's fixture (#77): four segments in a 20 km window, its outline, a region around it, a town and a river
+ctx_fx <- function() {
+  seg <- sf::st_sf(
+    accessible = rep(TRUE, 4), stream_order = c(5L, 3L, 2L, 1L), grade_class = c("0.8-1", "0-0.2", NA, "0.4-0.6"),
+    flag_default = c(TRUE, TRUE, FALSE, FALSE), flag_tuned = c(TRUE, FALSE, TRUE, FALSE),
+    geometry = sf::st_sfc(lapply(0:3, function(i) {
+      sf::st_linestring(rbind(c(1e6 + i * 4000, 1e6), c(1e6 + (i + 1) * 4000, 1e6 + 30000)))
+    }), crs = 3005))
+  box <- function(x0, y0, x1, y1) {
+    sf::st_sf(geometry = sf::st_as_sfc(sf::st_bbox(c(xmin = x0, ymin = y0, xmax = x1, ymax = y1), crs = 3005)))
+  }
+  list(seg = seg, aoi = box(1e6, 1e6, 1.02e6, 1.03e6), context = box(0.8e6, 0.8e6, 1.4e6, 1.4e6),
+       towns = sf::st_sf(label = "Townsville", geometry = sf::st_sfc(sf::st_point(c(1.008e6, 1.012e6)), crs = 3005)),
+       rivers = sf::st_sf(label = "Big River", angle = 30,
+                          geometry = sf::st_sfc(sf::st_point(c(1.012e6, 1.02e6)), crs = 3005)))
+}
+px_of <- function(f) png::readPNG(f)[, , 1:3]
+
+test_that("a composed map takes its canvas from the window's shape, and its extras need `width` (#77)", {
+  skip_if_not_installed("tmap")
+  skip_if_not_installed("png")
+  skip_if_not_installed("gq")
+  fx <- ctx_fx()
+  f <- tempfile(fileext = ".png")
+  knw_compare_map(fx$seg, png = f, panels = "rules", width = 4, keymap = list(aoi = fx$aoi, context = fx$context))
+  # the outline padded 2 km: 24 km by 34 km, so a 4 in canvas is 34/24 * 4 in tall
+  expect_equal(dim(png::readPNG(f))[1:2], round(c(4 * 34 / 24, 4) * 150), tolerance = 1e-3)
+  expect_error(knw_compare_map(fx$seg, png = f, panels = "rules", scalebar = TRUE), "need `width`")
+  expect_error(knw_compare_map(fx$seg, png = f, width = 4), "draws one panel")
+  same <- c(legend = "topleft", scalebar = "topleft", keymap = "topright", logo = "bottomright")
+  expect_error(knw_compare_map(fx$seg, png = f, panels = "rules", width = 4, corners = same), "different corner")
+  expect_error(knw_compare_map(fx$seg, png = f, panels = "rules", width = 4, keymap = list(aoi = fx$aoi)),
+               "aoi` and `context")
+  expect_error(knw_compare_map(fx$seg, png = f, panels = "rules", width = 4, places = list(rivers = fx$towns)), "angle")
+})
+
+test_that("each of the scale bar, keymap, places, basemap and logo draws something of its own (#77)", {
+  skip_if_not_installed("tmap")
+  skip_if_not_installed("png")
+  skip_if_not_installed("gq")
+  skip_if_not_installed("stars")
+  fx <- ctx_fx()
+  draw <- function(...) {
+    f <- tempfile(fileext = ".png")
+    knw_compare_map(fx$seg, png = f, panels = "rules", width = 4, ...)
+    f
+  }
+  plain <- px_of(draw())
+  differs <- function(f) {
+    x <- px_of(f)
+    if (!identical(dim(x), dim(plain))) return(TRUE)
+    mean(apply(abs(x - plain), c(1, 2), max) > 0.1) > 0.001
+  }
+  expect_true(differs(draw(scalebar = TRUE)))
+  expect_true(differs(draw(keymap = list(aoi = fx$aoi, context = fx$context))))
+  expect_true(differs(draw(places = list(towns = fx$towns, rivers = fx$rivers))))
+  logo <- tempfile(fileext = ".png")
+  png::writePNG(array(c(rep(0, 100 * 100), rep(0, 100 * 100), rep(0, 100 * 100)), c(100, 100, 3)), logo)
+  expect_true(differs(draw(logo = logo)))
+  # a basemap with a credit: drawn under the map, its credit in a strip below it
+  r <- terra::rast(xmin = 0.99e6, xmax = 1.03e6, ymin = 0.99e6, ymax = 1.04e6, resolution = 1000, crs = "EPSG:3005",
+                   nlyrs = 3, vals = 120)
+  bm <- stars::st_as_stars(r)
+  attr(bm, "credit") <- "Tiles: a test provider"
+  with_bm <- draw(basemap = bm)
+  without <- dim(plain)
+  expect_gt(dim(png::readPNG(with_bm))[1], without[1])
+  expect_identical(dim(png::readPNG(with_bm))[2], without[2])
+})
+
+test_that("a keymap reaches the saved figure as an inset in its corner (#77)", {
+  skip_if_not_installed("tmap")
+  skip_if_not_installed("png")
+  skip_if_not_installed("gq")
+  fx <- ctx_fx()
+  seen <- list()
+  real <- tmap::tmap_save
+  local_mocked_bindings(tmap_save = function(tm, filename, ..., insets_tm = NULL, insets_vp = NULL) {
+    seen[[length(seen) + 1]] <<- list(tm = insets_tm, vp = insets_vp)
+    if (is.null(insets_tm)) return(real(tm, filename, ...))
+    real(tm, filename, ..., insets_tm = insets_tm, insets_vp = insets_vp)
+  }, .package = "tmap")
+  f <- tempfile(fileext = ".png")
+  knw_compare_map(fx$seg, png = f, panels = "rules", width = 4, keymap = list(aoi = fx$aoi, context = fx$context),
+                  corners = c(legend = "topleft", scalebar = "topright", keymap = "bottomleft", logo = "bottomright"))
+  knw_compare_map(fx$seg, png = f, panels = "rules", width = 4)
+  expect_length(seen, 2)
+  expect_s3_class(seen[[1]]$tm, "tmap")
+  expect_s3_class(seen[[1]]$vp, "viewport")
+  # bottom-left: the inset's centre in the left half and the lower half of the canvas
+  expect_lt(as.numeric(seen[[1]]$vp$x), 0.5)
+  expect_lt(as.numeric(seen[[1]]$vp$y), 0.5)
+  expect_null(seen[[2]]$tm)
+})
+
+test_that("knw_compare_mapgl adds a metric scale bar bottom-left only when asked (#77)", {
+  skip_if_not_installed("mapgl")
+  plain <- knw_compare_mapgl(mapgl_fx())
+  scaled <- knw_compare_mapgl(mapgl_fx(), scale = TRUE)
+  expect_null(plain$x$scale_control)
+  expect_identical(scaled$x$scale_control$position, "bottom-left")
+  expect_identical(scaled$x$scale_control$unit, "metric")
 })

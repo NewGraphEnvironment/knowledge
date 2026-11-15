@@ -1,9 +1,13 @@
 direction,reason,order,n_segments,km,structure,species_code,stage,tuned_rule
-gained,gradient between the two maxima,1,867,308.67876430626256,door,BT,spawn,width>=2|g<=0.11|none
-gained,other (river-polygon branch or mixed),1,78,1.7618407271103904,door,BT,spawn,width>=2|g<=0.11|none
-gained,gradient between the two maxima,2,17900,7505.562847632196,door,BT,spawn,width>=2|g<=0.11|none
-gained,other (river-polygon branch or mixed),2,1714,39.23804950035155,door,BT,spawn,width>=2|g<=0.11|none
-gained,gradient between the two maxima,3,40985,14783.608612422571,door,BT,spawn,width>=2|g<=0.11|none
-gained,other (river-polygon branch or mixed),3,1233,113.64986656052692,door,BT,spawn,width>=2|g<=0.11|none
-gained,gradient between the two maxima,4+,29619,8935.49815348931,door,BT,spawn,width>=2|g<=0.11|none
-gained,other (river-polygon branch or mixed),4+,2981,346.79945383186754,door,BT,spawn,width>=2|g<=0.11|none
+gained,"exception (size fails, river within D)",1,107422,28885.90974856625,door,BT,spawn,width>=2|g<=0.25|Q1@D500
+gained,gradient between the two maxima,1,1106,544.8567721938365,door,BT,spawn,width>=2|g<=0.25|Q1@D500
+gained,other (river-polygon branch or mixed),1,112,2.6657451273980515,door,BT,spawn,width>=2|g<=0.25|Q1@D500
+gained,"exception (size fails, river within D)",2,40649,10561.922453841755,door,BT,spawn,width>=2|g<=0.25|Q1@D500
+gained,gradient between the two maxima,2,29180,12051.41249852836,door,BT,spawn,width>=2|g<=0.25|Q1@D500
+gained,other (river-polygon branch or mixed),2,2306,50.827669355943264,door,BT,spawn,width>=2|g<=0.25|Q1@D500
+gained,"exception (size fails, river within D)",3,5959,1771.4475800027074,door,BT,spawn,width>=2|g<=0.25|Q1@D500
+gained,gradient between the two maxima,3,61264,21497.679767522855,door,BT,spawn,width>=2|g<=0.25|Q1@D500
+gained,other (river-polygon branch or mixed),3,1592,137.36403427750827,door,BT,spawn,width>=2|g<=0.25|Q1@D500
+gained,"exception (size fails, river within D)",4+,271,141.7019102971113,door,BT,spawn,width>=2|g<=0.25|Q1@D500
+gained,gradient between the two maxima,4+,37591,11211.077724550127,door,BT,spawn,width>=2|g<=0.25|Q1@D500
+gained,other (river-polygon branch or mixed),4+,3485,391.2684534477911,door,BT,spawn,width>=2|g<=0.25|Q1@D500

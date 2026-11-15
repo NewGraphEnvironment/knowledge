@@ -355,7 +355,7 @@ rule the scoring called weak, that is the one independent reading, and it is neu
 limit. #57's rule (MAD ≥ 0.75 at 5.49 % with a river within 2 km) read 3.70 on #65's run.
 
 The floodplain table (`data/compare/floodplain.csv`) and the maps were not redrawn for #73 (`0330 STAGE=maps`); their
-bull trout figures are #65's, on the run's own configs. Maps: `research/fig/compare_bt_{rear,spawn}_*.png`.
+bull trout figures were #65's, on the run's own configs (#173 removed the maps; the floodplain table is now `0330 STAGE=floodplain`, and a comparison is viewed in QGIS from its GeoPackage, `0330 STAGE=gpkg`).
 
 ## What this replaces
 
