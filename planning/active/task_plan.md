@@ -168,13 +168,16 @@ What exploration settled:
 - [x] Commit the push logs, each trimmed to its own manifest entry (G6)
 
 ## Phase 4: docs and issue
-- [ ] (Drafted in `7a9f4c7a`; checked against the built store here.) `scripts/README.md`:
+- [x] (Drafted in `7a9f4c7a`; checked against the built store here.) `scripts/README.md`:
   - the `bull_trout` build line;
   - the `0270 --collection bull_trout --parent 9U54XAND` line;
   - that `VHWEK6RE` feeds `bull_trout`, `bull_trout_grayling` and `habitat_modelling`.
-- [ ] (Drafted in `7a9f4c7a`.) `CLAUDE.md` layout: `bull_trout_{members,additions}.csv` as the inputs of `bull_trout` (and of
+
+  The store's line now names what it holds (COSEWIC 2012 and 2025, both registry pages, no federal management plan,
+  BC 2023, Alberta, the US plan and rule), and README and `CLAUDE.md` carry cred#48's rebuild-before-push note
+- [x] (Drafted in `7a9f4c7a`.) `CLAUDE.md` layout: `bull_trout_{members,additions}.csv` as the inputs of `bull_trout` (and of
       `bull_trout_grayling` with grayling's)
-- [ ] `inst/NOTICE.md`: no row expected; confirm
+- [x] `inst/NOTICE.md`: no row expected; confirmed (no sibling members or additions CSV has a row)
 - [ ] #194's body: the gap and the outcome
 
 ## Owed at the end (reported, done after merge)

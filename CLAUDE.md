@@ -164,7 +164,9 @@ A push that failed partway (a dropped connection) leaves the same state, so read
 connect: #172's reconnect after one replaced an updated `habitat_modelling` with the older bucket copy. To bring a
 cred-built store up to date after a library change, `0150 ACTION=update` with the store's whole build list
 (`scripts/README.md`): cred's `crd_store_update()` drops every document outside the keys it is given, so `0150` refuses
-a store holding any document from outside Zotero storage (`fraser`, `peace`, `pine`).
+a store holding any document from outside Zotero storage (`fraser`, `peace`, `pine`). An update leaves the space it
+frees inside the file (NewGraphEnvironment/cred#48): #194's updates left `habitat_modelling` 76 % free blocks (3.6 GiB
+holding 0.9). Read `pragma database_size` before a push, and rebuild (`ACTION=build OVERWRITE=TRUE`) where it is high.
 
 `crd_store_build()` reads the local `~/Zotero/zotero.sqlite` and names documents by Better BibTeX
 citation key. That is a different identity from the harvest's `<EXTENT>__<reportId>.pdf`, which
