@@ -72,7 +72,9 @@ p_norm <- 2 * stats::pnorm(-3)
 p_cauchy <- 2 * stats::pcauchy(-3)
 # the other species and stages whose habitat definition the network moves (the bundle compares every published key).
 # A promotion does not rebuild the cuts bundle, so its minimal-network picks are held to the published ones: every key
-# the method bundle picks, and westslope cutthroat rearing (underpowered, so in no pick table) by its slope limit
+# the method bundle picks, and westslope cutthroat rearing (underpowered, so in no pick table) by its slope limit only,
+# because the method bundle carries no other part of its rule: a promotion that moved only its size floor or exception
+# would pass here and leave the moved list short of it
 moved <- setdiff(cp$other_keys$key[cp$other_keys$network_moved != "same"], "CH_rear")
 ok <- as.data.frame(cp$other_keys)
 pk_pub <- stats::setNames(pk$pick, pk$key)
@@ -468,9 +470,10 @@ full.
 - **Deviance.** How badly a model predicts the catch, summed over sites; lower is better.
 - **Fold.** One of the `r val("folds")` sets the watershed groups are dealt into; each in turn is left out of the fit
   and scored.
-- **Full network.** `link`'s streams cut, beyond the minimal network's cuts, at fish records (in its current build,
-  each species' highest record on a stream), at crossings and at the ends of hand-mapped habitat; the network `link`
-  draws habitat on.
+- **Full network.** `link`'s streams cut, beyond the minimal network's cuts, at fish records, at crossings and at the
+  ends of hand-mapped habitat; the network `link` draws habitat on. Its current build cuts at each species' highest
+  record on a stream and at slopes only where a species' access changes; its earlier build cut at every record and
+  every change of slope class.
 - **Grade.** A stream's expected use per standard electrofishing visit, from the curve.
 - **Habitat definition.** The few limits on a stream's size and slope that say where a species spawns or rears.
 - **Minimal network.** `link`'s streams without the cuts at fish records, crossings and the ends of hand-mapped
