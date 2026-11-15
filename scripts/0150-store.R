@@ -209,7 +209,18 @@ if (action %in% c("build", "update")) {
   # A rebuild over an existing store re-reads every PDF and skips any it finds no text in, which cred names
   # only in a warning R cuts at warning.length (1,000 characters); so a rebuild, like an update, lists what
   # it dropped from the store it replaced (#194).
-  before <- if (file.exists(store_path)) doc_origins() else character(0)
+  # A build replaces a file it cannot read (empty, not duckdb, no documents table), so an unreadable prior store
+  # means nothing to compare, not a refusal; an update reads the store it changes, so there it still stops.
+  before <- if (!file.exists(store_path)) {
+    character(0)
+  } else if (action == "update") {
+    doc_origins()
+  } else {
+    tryCatch(doc_origins(), error = function(e) {
+      message("The store being replaced cannot be read, so no dropped list follows: ", conditionMessage(e))
+      character(0)
+    })
+  }
   if (action == "update") {
     if (!exists("crd_store_update", envir = asNamespace("cred"), inherits = FALSE)) {
       stop("ACTION=update needs a cred with crd_store_update() (0.7.0 has it), not ", utils::packageVersion("cred"),

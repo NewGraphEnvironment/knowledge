@@ -33,3 +33,22 @@ remedy is now in the code, not in more copies of a sentence: `0150` lists the do
 store it replaced, as it does for an update (checked on a scratch copy of `statistics`: "4 documents before, 4 after:
 0 added, 0 dropped"), and its message after an update says to read that list.
 
+Round 6 found the round-5 pre-read refusing a rebuild over a file it cannot read, which a rebuild used to replace.
+A build now reads the old store under `tryCatch()` and says so when it cannot; an update still stops. The candidate
+set is every state of the file at the store path, run on a scratch store (deleted after), 2026-11-15:
+
+| file | action | result |
+|---|---|---|
+| valid store | build `OVERWRITE=TRUE` | "4 documents before, 4 after: 0 added, 0 dropped"; built |
+| valid store | build | cred refuses ("Store already exists"), as before |
+| 0-byte file | build `OVERWRITE=TRUE` | "cannot be read, so no dropped list follows"; built |
+| 5,000 random bytes | build `OVERWRITE=TRUE` | the same; built |
+| 5,000 random bytes | update | stops in `dbConnect()` (not a valid DuckDB file), as before |
+| absent | update | "is not here to update: pull it first", as before |
+| absent | build | built, no counts printed |
+
+A store with no `documents` table was attempted, but dropping it did not take (the run read 4 documents), so that
+state is untested; it reaches the same `tryCatch()` branch as the two unreadable files. Round 6 found a held write
+lock now refused rather than unlinked under its writer (safer), and a killed build's main file plus `.wal` still
+read. Nothing in the set behaves worse than before 213e0fcc.
+
