@@ -63,6 +63,8 @@ Relates to #33 and #51.
 
 | Error | Resolution |
 |-------|------------|
+| `crd_store_update()` left `habitat_modelling` 3.6 GiB with 0.9 GiB used (76 % free blocks; `bull_trout_grayling` 71 %, `bull_trout` 32 %) | Filed NewGraphEnvironment/cred#48; rebuilt all three with `OVERWRITE=TRUE` before any push (Al, 2026-11-15) |
+| The rebuild's warning names 6 of `habitat_modelling`'s 10 skipped no-text PDFs (R truncates the warning) | Named all ten from the store diff and a guarded copy; filed #217 to OCR them |
 | The `bull_trout` build skipped two members' PDFs as no text: `Bib77170.pdf` (Rare Freshwater Fish, 255 pages of 300 dpi page images) and HYSNCHBC (Metolius 1983–94, 48 pages, an Acrobat image conversion). #122's build log reads HYSNCHBC as ingested, but its PDF has no text layer | OCR copies (`ocrmypdf --deskew`) filed over each scan by two `0275` `replace` rows; auto mode refused the live run, so it waits for Al |
 | Chrome's scripted downloads from a page reached `~/Downloads` minutes late or not at all | Chrome holds a site's second and later downloads for "download multiple files"; Al allowed bchydro.com, publications.gc.ca, web.archive.org and rex.libraries.wsu.edu under automatic downloads, and saved the T&F, UBC and ResearchGate files by hand |
 | `CDP Runtime.evaluate timed out after 45000ms` on an 11-file batch | The script kept running in the page; waited on the files instead of re-running |

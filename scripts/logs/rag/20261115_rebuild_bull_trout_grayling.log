@@ -1,0 +1,18 @@
+# rebuild bull_trout_grayling from VHWEK6RE,GELFSUTU (OVERWRITE=TRUE), #194: the in-place update left the file mostly free blocks
+# expected: 197 documents, the same origins and per-document chunk counts as the updated store
+# start 2026-11-15T07:09:37Z
+2 of 203 members left out:
+  H8IMD55M  williamson_zimmerman2005Region7a  (no live PDF)
+  VDHTRJ9Y  MigrationPatternsAdultBullTroutMetoliusRiverLakeBillyChinookOregon  (no live PDF)
+197 keys across 2 collections
+Ingesting 197 PDF(s) into data/rag/bull_trout_grayling.duckdb
+Cannot set non-stroke color: 2 components specified, but only 1 (grayscale), 3 (RGB), and 4 (CMYK) are supported
+Cannot set non-stroke color: 2 components specified, but only 1 (grayscale), 3 (RGB), and 4 (CMYK) are supported
+Read with pdftools, because markitdown could not:
+  andrusak_thorley2013KootenayLake (ecocat_37026_KootenayLakeExploitation.pdf): Embedded NUL in string.
+Store built: data/rag/bull_trout_grayling.duckdb | docs: 196 | chunks: 32204 | model: nomic-embed-text
+Built data/rag/bull_trout_grayling.duckdb. It is not in the bucket until ACTION=push.
+Warning message:
+Skipped 1 PDF(s):
+  stuart_chislett1979AspectsLife (stuart_chislett_1979_grayling_sukunka.pdf): no text (markdown reader: no text; pdftools: no text) 
+# exit 0 at 2026-11-15T07:20:32Z

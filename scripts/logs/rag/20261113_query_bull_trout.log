@@ -13,3 +13,51 @@
 #    the COSEWIC 2025 South Coast / Western Arctic status report (no federal management plan exists for either unit)
 # Q4 "primary constituent elements of bull trout critical habitat"
 #    expect: u_s_fishandwildlifeservice2010Endangeredthreatened (the 2010 final rule), possibly the 2015 recovery plan
+#
+# Run on the rebuilt store (20261115_rebuild_bull_trout.log), cred 0.7.0, crd_search(top_k = 5); every row hybrid:
+# Q1 run 2026-11-15T07:45:57Z, 7 rows (hybrid returns up to top_k from each method):
+#   1. mainstreamaquaticsltd__euchner2009SiteFisheries  [cosine_distance 0.132]
+#   2. hagenj_spendlowi_2019BullTrout  [bm25 7.145]
+#   3. baxterChowadeRiver  [bm25 7.358]
+#   4. hagen_etal2015Criticalhabitats  [bm25 7.086]
+#   5. andrusak2010KasloRivera  [bm25 7.212]
+#   6. clarke_zimmerman2005BullTrout  [cosine_distance 0.133]
+#   7. westover_heidt2004UpperKootenay  [cosine_distance 0.130]
+# Q2 run 2026-11-15T07:46:01Z, 9 rows (hybrid returns up to top_k from each method):
+#   1. dunham_chandler2001Modelspredict  [cosine_distance 0.161]
+#   2. cope_morris2001WigwamRiver  [cosine_distance 0.156]
+#   3. RockyCreekbulltroutcumulativeeffectsmodelthreatsummary  [cosine_distance 0.161]
+#   4. mochnacz2021Thermalecology  [bm25 9.101]
+#   5. rossi_etal2026BullTrout  [bm25 8.408]
+#   6. prince2010SubadultBull  [cosine_distance 0.148]
+#   7. selong_etalEffectTemperature  [bm25 8.826]
+#   8. selong_etalEffectTemperature  [cosine_distance 0.141]
+#   9. selong_etalEffectTemperature  [bm25 9.319]
+# Q3 run 2026-11-15T07:46:04Z, 10 rows (hybrid returns up to top_k from each method):
+#   1. manson2005ArrowLakes  [cosine_distance 0.157]
+#   2. speciesatriskpublicregistry2026BullTrout  [bm25 8.911]
+#   3. b_c_ministryofwaterlandandresourcestewardship2023ManagementPlan  [bm25 9.845]
+#   4. b_c_ministryofwaterlandandresourcestewardship2023ManagementPlan  [bm25 9.375]
+#   5. b_c_conservationdatacentreSpeciesSummary  [bm25 9.545]
+#   6. cope2003SkookumchuckCreek  [cosine_distance 0.140]
+#   7. u_s_fishandwildlifeservice2015MidColumbiaRecovery  [cosine_distance 0.153]
+#   8. u_s_fishandwildlifeservice2015MidColumbiaRecovery  [cosine_distance 0.153]
+#   9. b_c_conservationdatacentre2018ConservationStatus  [bm25 9.350]
+#   10. cope2004SkookumchuckCreek  [cosine_distance 0.129]
+# Q4 run 2026-11-15T07:46:07Z, 9 rows (hybrid returns up to top_k from each method):
+#   1. u_s_fishandwildlifeservice2015Recoveryplan  [cosine_distance 0.183]
+#   2. u_s_fishandwildlifeservice2015Recoveryplan  [cosine_distance 0.202]
+#   3. u_s_fishandwildlifeservice2015Recoveryplan  [bm25 8.814]
+#   4. u_s_fishandwildlifeservice2015Recoveryplan  [bm25 8.587]
+#   5. u_s_fishandwildlifeservice2010Endangeredthreatened  [bm25 9.962]
+#   6. u_s_fishandwildlifeservice2010Endangeredthreatened  [bm25 10.412]
+#   7. u_s_fishandwildlifeservice2010Endangeredthreatened  [bm25 8.709]
+#   8. u_s_fishandwildlifeservice2010Endangeredthreatened  [cosine_distance 0.200]
+#   9. u_s_fishandwildlifeservice2010Endangeredthreatened  [cosine_distance 0.197]
+#
+# Verdicts against the expectations above:
+#   Q1 partial: hagenj_spendlowi_2019BullTrout and hagen_etal2015Criticalhabitats returned; hagen_etal2020, hagen_weber2019,
+#      O'Connor 2024 and Rossi 2025-26 did not (the other five rows are listed above).
+#   Q2 hit (3 of 4): selong, mochnacz2021, dunham_chandler2001; mcmahon_etal2007 did not return.
+#   Q3 hit (2 of 3): the 2023 management plan and the SARA registry page; COSEWIC 2025 did not return.
+#   Q4 hit: the 2010 final rule (5 rows) and the 2015 recovery plan (4 rows).

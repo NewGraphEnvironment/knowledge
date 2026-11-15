@@ -44,3 +44,8 @@
 - 2026-11-15: Al ran the live `0275` (`--only BHHDYTJI,RVFQ4NDZ`). Web API: 8PADNGFE and PWRE9XAM live with the OCR
   copies' md5s, HYSNCHBC and N2IJDSIN trashed; no-op dry run 2 exit 0 (`20261115_0275_bull_trout_ocr_*.log`). Zotero
   has synced both files to storage; guarded copy still 174 / 174 / 173
+- Zotero quit by script; `bull_trout` update 2 added (173). `bull_trout_grayling` and `habitat_modelling` updates each
+  matched the expectation written first (197, 414), but left the files 71 and 76 % free blocks: cred#48 filed. Al chose
+  a rebuild: all three rebuilt 07:00–07:44Z with Zotero quit and reopened by the script. `bull_trout` identical to
+  its update; the other two drop 1 and 10 no-text scans (#217) and rechunk documents from older builds
+- Four queries run on the rebuilt `bull_trout` and logged with verdicts: Q4 hit, Q2 3/4, Q3 2/3, Q1 partial

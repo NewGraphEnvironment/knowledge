@@ -138,20 +138,27 @@ What exploration settled:
       every origin maps to a live group attachment; documents = keys − no-text PDFs, with those keys named (G3).
       171 documents, 27,589 chunks; 171 origins on 171 live members. Skipped: Metolius 1996 (no PDF) and two image-only
       scans, `cannings_ptolemy1998RareFreshwater` and the Metolius 1983–94 distribution report
-- [ ] OCR the two scans (`ocrmypdf --deskew`, 51,642 and 14,541 words) and file each over its scan through `0275`
-      `replace` rows (dry run clean); Zotero synced and quit again; `ACTION=update STORE=bull_trout` adds the two
-- [ ] Four `ACTION=query` checks, each with its expected documents written in the log before it runs and the top 5
+- [x] OCR the two scans (`ocrmypdf --deskew`, 51,642 and 14,541 words) and file each over its scan through `0275`
+      `replace` rows (dry run clean); Zotero synced and quit again; `ACTION=update STORE=bull_trout` adds the two.
+      Al ran the live `0275`; 8PADNGFE and PWRE9XAM live, the scans trashed, no-op dry run 2; update 2 added, 0 dropped
+- [x] Four `ACTION=query` checks, each with its expected documents written in the log before it runs and the top 5
       keys recorded after:
   - Williston spawning-site selection and redd counts;
   - thermal limits;
   - South Coast unit management objectives;
   - US critical habitat primary constituent elements.
 
-  A miss is reported, not tuned away
-- [ ] `ACTION=update STORE=bull_trout_grayling COLLECTIONS="VHWEK6RE,GELFSUTU"` (35 documents before) and
+  A miss is reported, not tuned away. Run on the rebuilt store: Q4 hit; Q2 3 of 4; Q3 2 of 3; Q1 partial (2 of the
+  Hagen series returned, four expected reports did not)
+- [x] `ACTION=update STORE=bull_trout_grayling COLLECTIONS="VHWEK6RE,GELFSUTU"` (35 documents before) and
       `ACTION=update STORE=habitat_modelling` over its whole list (`scripts/README.md`; 266 before). Before each, write
       the expected added keys in its log; after, the `N added, M dropped` line must match, and every surprise is
-      explained before any push (A1)
+      explained before any push (A1). Both matched (164 added, 2 dropped, 197; 150 added, 2 dropped,
+      414), but the updated files were 32 to 76 % free blocks (NewGraphEnvironment/cred#48), so Al chose a rebuild:
+- [x] Rebuild all three (`ACTION=build OVERWRITE=TRUE`, Zotero quit and reopened by script), compared per document with
+      the updated stores: `bull_trout` identical (173 documents, same chunks per document, 366 MiB, 0 free blocks);
+      `bull_trout_grayling` 196 and `habitat_modelling` 404, each dropping the scans the current reader finds no text in
+      (one-chunk documents in older builds; #217), with chunk counts moved on documents chunked by the older builds
 - [ ] Commit the CSVs and the build, query and update logs, home paths as `~/` (G6); then **push the branch**, and
       never amend, rebase or rewrite after it, since the manifests record `head_sha` (O1)
 - [ ] Push one store at a time (`ACTION=push`: a dry run, then `CONFIRM=TRUE`): `bull_trout`, then `bull_trout_grayling`,
