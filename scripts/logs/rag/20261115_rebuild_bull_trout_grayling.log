@@ -16,3 +16,6 @@ Warning message:
 Skipped 1 PDF(s):
   stuart_chislett1979AspectsLife (stuart_chislett_1979_grayling_sukunka.pdf): no text (markdown reader: no text; pdftools: no text) 
 # exit 0 at 2026-11-15T07:20:32Z
+# result: 196 documents, not the expected count: the rebuild skipped 1 image-only scan the reader finds no text in (XDKIU3UA, stuart_chislett1979), which the update had
+#   kept as one-chunk documents; chunk counts also moved on documents the older builds had chunked. Compared per
+#   document with the updated store before the push

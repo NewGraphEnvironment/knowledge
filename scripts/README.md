@@ -264,9 +264,14 @@ A report is reachable from more than one place; using only one axis misses repor
   resolves and would be dropped: all of `fraser`, `peace` and `pine`), and prints the document counts before and after and every document it dropped. The
   file keeps the space the update freed (NewGraphEnvironment/cred#48): #194's updates left 32 to 76 % of their blocks
   free (`pragma database_size`). While that is open, rebuild an updated store with `ACTION=build OVERWRITE=TRUE` and
-  the same `COLLECTIONS` before pushing it. This is the one place the rule is stated; it reaches only stores an update
-  accepts, so never `fraser`, `peace` or `pine`.
-- **Push after every local write** (`0152` ingest, `0156` dedup, a rebuild or update). The next verified
+  the same `COLLECTIONS` before pushing it. The rule reaches only stores an update accepts, so never `fraser`, `peace`
+  or `pine`. A rebuild re-reads every PDF, so it also drops any the current reader finds no text in, which an update
+  would have kept (#194's dropped 1 and 10 image-only scans, #217), and names them only in a warning R cuts after six:
+  compare the rebuilt store's origins with the updated store's before the push. The rule is repeated in `CLAUDE.md`,
+  in `0150`'s usage and its message after an update, and carried or pointed to from five other passages here: when cred#48 is
+  fixed, `git grep -n cred#48` finds every copy.
+- **Push after every local write** (`0152` ingest, `0156` dedup, a rebuild, or an update and, while cred#48 is open,
+  its rebuild). The next verified
   connect replaces a local file whose md5 no longer matches the manifest with the bucket copy —
   an unpushed ingest is simply gone
 - `COLLECTIONS` takes names or 8-character Zotero collection keys and resolves them **inside the NGE group

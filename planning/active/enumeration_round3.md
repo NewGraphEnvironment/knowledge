@@ -20,3 +20,9 @@ still said update, then push. Set: `git grep -n -E "ACTION=update|crd_store_upda
 | `scripts/0275-zotero-attachments-tidy.py:44` | no: names the stores to update | none needed |
 
 Nothing in the set gives update-then-push without the rule or a pointer to it.
+
+Round 4 found a passage the regex could not match: README's "Push after every local write (..., a rebuild or update)",
+a bare "update". It now names the rebuild. Rerun with `git grep -n -i -E "update" -- scripts/README.md CLAUDE.md
+scripts/0150-store.R` and read for push: no further passage gives update-then-push without the rule. The README's
+"one place" claim was false (the rule is carried in four places); it now lists them, and `git grep -n cred#48`
+finds every copy.

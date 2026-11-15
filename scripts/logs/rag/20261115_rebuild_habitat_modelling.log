@@ -131,3 +131,6 @@ Skipped 10 PDF(s):
   mcphail_carveth1993FieldKey (mcphail_carveth_1993_field_key_to_the_freshwater_fishes_of_british_columbia.pdf): no text (markdown reader: no text; pdftools: no text)
   stuart_chislett1979AspectsLife ( [... truncated] 
 # exit 0 at 2026-11-15T07:44:14Z
+# result: 404 documents, not the expected count: the rebuild skipped 10 image-only scans the reader finds no text in (named in #217; the warning above names 6), which the update had
+#   kept as one-chunk documents; chunk counts also moved on documents the older builds had chunked. Compared per
+#   document with the updated store before the push
