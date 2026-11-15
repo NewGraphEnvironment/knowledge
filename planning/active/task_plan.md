@@ -178,7 +178,7 @@ What exploration settled:
 - [x] (Drafted in `7a9f4c7a`.) `CLAUDE.md` layout: `bull_trout_{members,additions}.csv` as the inputs of `bull_trout` (and of
       `bull_trout_grayling` with grayling's)
 - [x] `inst/NOTICE.md`: no row expected; confirmed (no sibling members or additions CSV has a row)
-- [ ] #194's body: the gap and the outcome
+- [x] #194's body: the gap and the outcome (2026-11-15: outcome table, federal-plan premise corrected, #217 linked)
 
 ## Owed at the end (reported, done after merge)
 
