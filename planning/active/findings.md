@@ -140,3 +140,23 @@ The issue lists 29 works, or 30 counting the second volume of *Applied Hierarchi
   title words and first author are on its PDF's first two pages. Year and volume are missing only on the three
   manuscript copies. Dorazio & Erickson's title scores 0.71 because the manuscript was titled "Multi-scale Occupancy
   Modeling" before publication.
+
+## Filing (2026-11-16, 16:13Z)
+
+- `0270 --collection detection --parent LP4R4VYR` created `statistics/detection` (`73PNRGJF`): 2 members added and
+  21 items created; 7 PDFs uploaded and 16 linked by md5 ("exists"), since the server already held the bytes.
+- The second dry run had 0 `would` lines and exited 0, with all 23 members holding a PDF.
+- Re-measure from the guarded copy, before → after:
+
+| collection | items | keyed | PDF on disk |
+|---|---|---|---|
+| statistics `LP4R4VYR` | 9 → 9 | 9 | 4 (95.2 MB) |
+| detection `73PNRGJF` | – → 23 | 23 | 23 (18.5 MB) |
+| survey_design `Z7JP8UN2` | 11 → 11 | 11 | 0 → 2 (the two shared members) |
+| model_selection `K2P7XGFG` | 5 → 5 | 5 | 4 |
+
+- The overrides gave clean keys: `mackenzie_etal2002EstimatingSite`, `royle2004Generalizedestimators`,
+  `dorazio_erickson2018eDNAoccupancypackage`.
+- Burton et al. 2015's key is `burton_etal2015REVIEWWildlife`, because CrossRef's title carries Wiley's "REVIEW:"
+  section label. Once set, a key is kept, so it stays.
+- `survey_design` now holds 2 PDFs, so the B1 gate passes and all four collections stay in the build list.

@@ -104,9 +104,9 @@ What exploration settled (read-only, 2026-11-16):
       first dry run
 - [x] `0270 --collection detection --parent LP4R4VYR --dry-run`. Check every `exists` / `copy exists` hit against
       the intended item
-- [ ] Live run, then wait for Zotero to sync. A second dry run with no `would` lines and exit 0 is the no-op
+- [x] Live run, then wait for Zotero to sync. A second dry run with no `would` lines and exit 0 is the no-op
       proof. Each run's log goes to `scripts/logs/rag/<date>_0270_detection*.log`
-- [ ] Re-measure from a guarded copy: a before/after table (items, keyed, PDF on disk) for detection and the
+- [x] Re-measure from a guarded copy: a before/after table (items, keyed, PDF on disk) for detection and the
       statistics tree
 
 ## Phase 3: rebuild and push `statistics`
