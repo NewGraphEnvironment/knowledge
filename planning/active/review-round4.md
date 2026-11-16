@@ -117,7 +117,6 @@ I made a detached worktree of HEAD under the scratchpad and copied the OCR cache
 - **`no_quotes_in_file`.** It fires when `out` is empty or holds only guard rows. A file whose only passage carries a guard status has a non-NA key, so it does not fire there, which is correct because that row fails anyway.
 - **The block-quote XPath.** The whitespace and newline inside the predicate are valid XPath. Lists and headings inside a block quote are allowed, and their paragraphs and headings are still checked through the ancestor test.
 
-/Users/airvine/Projects/repo/knowledge-stats/planning/active/review-round4.md
 
 ## Triage (main session)
 

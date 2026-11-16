@@ -740,7 +740,8 @@ registry pages give the same status:
 
 `scripts/0280-literature-verify.R` lists this file in `QUOTED` and checks each quote as it checks the evidence table's:
 the citation key resolves to one item in the group library, and the passage's words occur in that item's PDF text, or
-in an OCR of the page images where the citation says `OCR`. A quote mark outside that form fails the run, and so does
-any quote that is not found. The log gives every PDF page a quote matched on, for checking the printed page. The gate
+in an OCR of the page images where the citation says `OCR`. The file is read as GitHub renders it (cmark-gfm), and
+a quotation mark outside that form, a link, code or emphasis inside a quote, or any quote that is not found fails the
+run. The log gives every PDF page a quote matched on, for checking the printed page. The gate
 proves the words are in the source; the meaning of each sentence around them was audited by hand
 (`planning/archive/2026-11-issue-198-*`).

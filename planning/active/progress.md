@@ -81,3 +81,8 @@
   - cmark-gfm: 26 node names, all handled;
   - all fixtures as expected.
 - 12 agents on the task in all.
+- Validation:
+  - tests: 2,384 passed, 0 failed, 4 skipped;
+  - public sweep: no hits in branch lines, after removing the reviewers' path lines from two review files;
+  - commits: clean;
+  - committed 0280 logs regenerated: 170 research quotes; the evidence log is byte-unchanged.

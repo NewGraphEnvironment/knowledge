@@ -86,10 +86,10 @@
       of #33 and #199.
 
 ## Validation
-- [ ] Tests pass (`devtools::test()`; nothing under `R/` changes, so this is a regression check only)
-- [ ] `/code-check branch` clean, three rounds minimum
-- [ ] The #56 archive's `public_sweep.py` is clean on the branch
-- [ ] PWF checkboxes match landed work
+- [x] Tests pass (`devtools::test()`; nothing under `R/` changes, so this is a regression check only)
+- [x] `/code-check branch` clean, three rounds minimum
+- [x] The #56 archive's `public_sweep.py` is clean on the branch
+- [x] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion
 
 Verification: Phase 1 is proved by the planted failures (each fails with the named status), and by 0280 then passing

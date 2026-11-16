@@ -49,6 +49,7 @@
 # tagged evidence row (a model whose thresholds were never written is not
 # registered, it is unread).
 #
+# NEEDS   pdftotext; ocrmypdf for an OCR row; commonmark, xml2 and stringi for the research files
 # INPUT   data/literature_evidence.csv, data/ip_model_registry.csv,
 #         data/life_history_timing.csv,
 #         ~/Zotero/zotero.sqlite (a checked copy of the file and its -wal)

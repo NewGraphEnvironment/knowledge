@@ -144,7 +144,6 @@ Add `′` and `″` (the marks `clean()` already treats as quotes) to the stray 
   Each file also gets `no_quotes_in_file`. Every flagged character is a straight `"`, which is expected because these files have no quote form yet. No possessive or apostrophe is flagged. That includes `al.'s` (flow_requirements.md:39), `Coleman & Fausch's` (thermal_requirements.md:86) and every `` `x`'s ``. Over all 28 `research/*.md` files the only character flagged is `"`, and there is one `blockquote_text_outside_quote` (outside these three files). So the guard raises no false failures there.
 - **The research file:** 170 quotes parsed, no guard rows.
 
-/Users/airvine/Projects/repo/knowledge-stats/planning/active/review-round3.md
 
 ## Triage (main session)
 
