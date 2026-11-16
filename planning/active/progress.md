@@ -74,3 +74,10 @@
   for the renderer. The parser now reads the file through cmark-gfm (`commonmark`), and the stray set is built by
   running `clean()`. The enumeration fixture shows every round-1 to round-3 case failing and the negative controls
   passing (`review-round3.md`).
+- `/code-check branch` round 4 found 3 gaps, one inside round 3's fix (footnotes off). All three are fixed: footnotes
+  on, textless links and images get a placeholder, and the mark set is built from Unicode categories and names.
+- The loop ended on an enumeration against both sources of truth (`review-round4.md`):
+  - Unicode: 30/22/56/11 members across the four source sets, 0 outside the guard;
+  - cmark-gfm: 26 node names, all handled;
+  - all fixtures as expected.
+- 12 agents on the task in all.

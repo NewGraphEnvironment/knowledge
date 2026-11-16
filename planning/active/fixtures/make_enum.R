@@ -28,3 +28,13 @@ r3 <- c("", "~~~", "```", "~~~", "",
         "[n]: https://example.org", "",
         "R3 double prime ″Bull trout never spawn in gravel″.")
 cat(file = commandArgs(TRUE)[1], paste0(r3, "\n"), append = TRUE, sep = "")
+# round 4: footnotes, textless links and images, and marks named as quotation marks
+r4 <- c("", "R4 footnote mark in a passage, next line.", "",
+        "\"Like many char, the bull trout[^1] occurs as a number of life-history forms.\" (mcphail_baxter1996reviewbull, p. ii)", "",
+        "\"Like many char, the bull trout ![](never.png) occurs as a number of life-history forms.\" (mcphail_baxter1996reviewbull, p. ii)", "",
+        "[^1]: A footnote.", "",
+        "    \"Bull trout never spawn in gravel at all anywhere.\" (mcphail_baxter1996reviewbull, p. 3)", "",
+        paste0("R4 marks: ", paste(intToUtf8(c(0x275D, 0x275E, 0x1F676, 0x05F4, 0x02BA, 0x3003, 0x2036), multiple = TRUE),
+                                   collapse = "x "), "x"), "",
+        "R4 NEG: Erdős and Wetʼsuwetʼen and Hawaiʻi.")
+cat(file = commandArgs(TRUE)[1], paste0(r4, "\n"), append = TRUE, sep = "")

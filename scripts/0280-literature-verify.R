@@ -547,7 +547,8 @@ reg_pass <- reg_out$status %in% PASS
 #     U+2019) after a letter or digit, or as "'s" before a non-letter, is prose;
 #   - HTML (a block or inline node) holding a <q> or <blockquote> tag, a character reference or a
 #     quotation mark, any case;
-#   - code, a link, inline HTML or emphasis inside a passage (code_in_quote, link_in_quote,
+#   - code, a link, an image, a footnote mark, inline HTML or emphasis inside a passage
+#     (code_in_quote, link_in_quote,
 #     html_in_quote, emphasis_in_quote: text the PDF holds differently, or not at all);
 #   - in a block quote, any text outside a parsed passage, and any block but a paragraph;
 #   - a fragment of fewer than RESEARCH_FRAG word tokens (0280's MIN_FRAG counts punctuation);
@@ -561,15 +562,29 @@ quoted <- quoted[nzchar(quoted)]
 RESEARCH_FRAG <- 4L
 RESEARCH_QUOTE <- paste0("\"([^\"]+)\"[[:space:]]*\\(([^[:space:],()]+),[[:space:]]*pp?\\.[[:space:]]*",
                          "([0-9ivxlc]+(?:[-", intToUtf8(0x2013), "][0-9ivxlc]+)?)(,[[:space:]]*OCR)?\\)")
-# Unicode's Quotation_Mark property (PropList.txt), as code points, and every character of the
-# Basic Multilingual Plane that clean() turns into a quote mark.
+# The marks a reader can take for quotation marks, from three defined sets: Unicode's
+# Quotation_Mark property (PropList.txt), every character of the Basic Multilingual Plane that
+# clean() turns into a quote mark, and every punctuation mark, symbol or modifier letter in planes
+# 0 and 1 that Unicode classes as an initial or final quote (Pi, Pf) or whose name (stringi)
+# names a quotation mark, quote, prime, ditto mark, geresh, gershayim, apostrophe, double acute,
+# or a turned or reversed comma. Letters and combining marks
+# are left out by their category, so Erdős and Wetʼsuwetʼen are text. The apostrophes (', U+2019,
+# and the modifier letters U+02BB and U+02BC that BC place names use) are prose after a letter or
+# digit, or as "'s" before a non-letter.
 RESEARCH_QM <- c(0x22, 0x27, 0xAB, 0xBB, 0x2018:0x201F, 0x2039, 0x203A, 0x2E42, 0x300C:0x300F,
                  0x301D:0x301F, 0xFE41:0xFE44, 0xFF02, 0xFF07, 0xFF62, 0xFF63)
-RESEARCH_APOS <- c(0x27, 0x2019)
+RESEARCH_APOS <- c(0x27, 0x2019, 0x02BB, 0x02BC)
+RESEARCH_QM_NAME <- paste0("QUOTATION MARK|QUOTE|PRIME|DITTO|GERESH|GERSHAYIM|APOSTROPHE|",
+                           "DOUBLE ACUTE|TURNED COMMA|REVERSED COMMA")
 research_marks <- local({
   bmp <- setdiff(0x20:0xFFFD, c(0xD800:0xDFFF, 0xFDD0:0xFDEF))   # no surrogates or noncharacters
   ch <- vapply(bmp, intToUtf8, "")
-  sort(unique(c(RESEARCH_QM, bmp[clean(ch) %in% c("'", "\"")])))
+  p01 <- setdiff(0x20:0x1FFFF, c(0xD800:0xDFFF, 0xFDD0:0xFDEF, 0xFFFE, 0xFFFF))
+  ch01 <- intToUtf8(p01, multiple = TRUE)
+  named <- grepl(RESEARCH_QM_NAME, stringi::stri_trans_general(ch01, "Any-Name")) &
+    !stringi::stri_detect_regex(ch01, "^[\\p{Lu}\\p{Ll}\\p{Lt}\\p{Lo}\\p{M}]$")
+  named <- named | stringi::stri_detect_regex(ch01, "^[\\p{Pi}\\p{Pf}]$")   # initial and final quotes
+  sort(unique(c(RESEARCH_QM, bmp[clean(ch) %in% c("'", "\"")], p01[named])))
 })
 research_stray <- local({
   # the characters themselves, not \x{} escapes: R runs PCRE in UTF mode only when a string is
@@ -587,8 +602,12 @@ research_parse <- function(path) {
                quote_source = src, status = status, stringsAsFactors = FALSE)
   }
   if (!file.exists(path)) return(row(NA_integer_, status = "file_missing"))
-  md <- paste(readLines(path, encoding = "UTF-8", warn = FALSE), collapse = "\n")
-  doc <- xml2::read_xml(commonmark::markdown_xml(md, extensions = TRUE, sourcepos = TRUE))
+  lines <- readLines(path, encoding = "UTF-8", warn = FALSE)
+  if (!all(validUTF8(lines))) return(row(which(!validUTF8(lines))[1], status = "file_not_utf8"))
+  # footnotes on, as GitHub renders them: off, a footnote's text can read as a link definition or
+  # an indented code block, which nothing checks
+  doc <- xml2::read_xml(commonmark::markdown_xml(paste(lines, collapse = "\n"), extensions = TRUE,
+                                                 sourcepos = TRUE, footnotes = TRUE))
   xml2::xml_ns_strip(doc)
   line_of <- function(node) {
     sp <- xml2::xml_attr(node, "sourcepos")
@@ -607,15 +626,25 @@ research_parse <- function(path) {
     if (nm %in% c("softbreak", "linebreak")) return(list(s = "\n", k = kind, l = NA_integer_))
     if (nm == "code") return(leaf(rep("x", nchar(xml2::xml_text(node))), up("c")))
     if (nm == "html_inline") return(leaf(rep("x", nchar(xml2::xml_text(node))), up("h")))
-    k <- switch(nm, emph = , strong = , strikethrough = up("e"), link = , image = up("l"), kind)
+    # an inline node this walk does not know is read as HTML: inside a passage it fails
+    k <- switch(nm, paragraph = , heading = , table_cell = kind, emph = , strong = , strikethrough = up("e"),
+                link = , image = , fnref = up("l"), up("h"))
     parts <- lapply(xml2::xml_children(node), inline, kind = k)
-    list(s = unlist(lapply(parts, `[[`, "s")), k = unlist(lapply(parts, `[[`, "k")),
-         l = unlist(lapply(parts, `[[`, "l")))
+    got <- list(s = unlist(lapply(parts, `[[`, "s")), k = unlist(lapply(parts, `[[`, "k")),
+                l = unlist(lapply(parts, `[[`, "l")))
+    # a link, image or footnote mark with no text still shows the reader something
+    if (!length(got$s)) got <- leaf("x", k)
+    got
   }
   for (h in xml2::xml_find_all(doc, "//html_block | //html_inline")) {
     if (grepl(research_html, xml2::xml_text(h), perl = TRUE)) {
       add(row(line_of(h), status = "html_quote"))
     }
+  }
+  # every text node is read through a leaf block below; one that is not would go unchecked
+  for (t in xml2::xml_find_all(doc, "//text[not(ancestor::paragraph or ancestor::heading or
+                                    ancestor::table_cell)]")) {
+    add(row(line_of(t), status = "text_outside_a_block"))
   }
   for (b in xml2::xml_find_all(doc, "//block_quote//*[self::code_block or self::html_block or
                                      self::thematic_break or self::table]")) {
