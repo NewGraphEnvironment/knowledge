@@ -20,29 +20,44 @@
    evidence rows. Where the printed page and the PDF page differ, the meaning audit checks the page.
 
 ## Phase 1: 0280 checks quotes in research files
-- [ ] Add `QUOTED <- c("research/bull_trout_life_history.md")` (env `QUOTED=` overrides, for a draft). Add a parser
-      that pulls every `"…" (<key>, p. N)` / `pp. N–M` from the file; a quote may wrap across lines.
-- [ ] Guard against a quote that slips out of that form. After the parsed quotes are blanked, any double quote
-      (straight or curly) left in the file fails. The file uses quote marks only for quotes.
-- [ ] Check each quote as a registry quote is checked (`check_row(quote_row(key, quote, "text"))`). Write the log
-      `scripts/logs/habitat/<yyyymmdd>_literature_verify_research.csv`: one row per quote, with file, line, key,
-      status and PDF pages. Add it to the summary and the exit condition.
-- [ ] Prove the guard fires (restore the bug), in a scratch copy of the file passed with `QUOTED=`: a fabricated quote
-      → `quote_not_found`; a key from another library or no key → `key_not_in_group`; a quote written without its
-      citation → fails as a stray quote mark. Then confirm the committed tables still pass unchanged.
-- [ ] Update 0280's header, `scripts/README.md`'s 0280 entry and CLAUDE.md's evidence notes, one line each: 0280 also
-      gates the quotes in `research/bull_trout_life_history.md`.
+(Revised after the plan review, `review-plan.md`; each finding checked against 0280 before it was folded in.)
+- [ ] `QUOTED` (env, space-separated paths; default `research/bull_trout_life_history.md` once that file exists, empty
+      until Phase 3 lands it). A listed file that is missing fails, and so does one with no parsed quote.
+- [ ] Parser, on the raw text (never `clean()` the whole file: it turns backticks into `'`). First blank fenced blocks
+      and inline code. Then strip a leading `> ` from each line (blockquotes) and join the lines. Pull every
+      `"<passage>" (<key>, p. N)`, `pp. N–M`, or `(<key>, p. N, OCR)`. Delimit with straight `"` only; curly marks may
+      sit inside a passage. Keys match `[^\s,()]+` and `resolve()` judges them. Pages are arabic or roman numerals;
+      one key per citation. Emphasis markers (`*`, `_`) are refused inside a passage.
+- [ ] Stray-mark guard: once the parsed quotes are blanked, these fail: any straight or curly double quote; a curly
+      opening single quote; a straight `'` that opens a word; a `>` line holding no parsed quote.
+- [ ] Each quote is checked as a registry quote is (`check_row(quote_row(key, quote, src))`), after `quote_row()`'s
+      definition. `src` is `text`, or `ocr` only where the citation says OCR, never as a fallback. Research
+      fragments need at least 4 word tokens (the alignment check's `frag_min`), not 0280's 3 tokens counting
+      punctuation. The log is named from `LOG` the way the registry's is (`<LOG>_research.csv`), one row per quote
+      (file, line, key, source, status, PDF pages), and flags a quote matched on several pages. It goes into the
+      summary and the exit condition.
+- [ ] Prove the guard fires on a scratch fixture, with `LOG=` in the scratchpad so the committed logs are not
+      rewritten: a fabricated quote gives `quote_not_found`; a key not in the group gives `key_not_in_group`; a quote
+      with no citation, a quote in single quotes, an unquoted blockquote and emphasis inside a passage each fail; an
+      empty or missing listed file fails; a real quote passes. Then 0280 on the committed tables (`QUOTED` empty) has
+      every status count unchanged from the run before the change.
+- [ ] One line each in 0280's header, `scripts/README.md`'s 0280 entry and CLAUDE.md's evidence notes: 0280 also gates
+      the quotes in the research files `QUOTED` lists.
+- Scope, settled by the review: a table passage cannot be a research quote, so timing tables are cited by data row.
+  Quotes are short, as in the evidence table. #209's restricted reports are not in the store and are not quoted.
 
 ## Phase 2: Search the store
-- [ ] Before any query runs, write the expectations into `scripts/logs/rag/<yyyymmdd>_query_bull_trout_198.log`
+- [x] Before any query runs, write the expectations into `scripts/logs/rag/<yyyymmdd>_query_bull_trout_198.log`
       (#194's format): 2–3 queries per topic, each naming the keys expected (for example Fraley & Shepard 1989,
       McPhail & Baxter 1996, the BC 2023 management plan, COSEWIC 2012/2025, the Hagen Williston series, the USFWS
       2015 recovery plan, Mochnacz 2021, Baxter's work).
-- [ ] Run them with `ACTION=query STORE=bull_trout TOPK=…` through `0150`, and log the returned keys and every miss
-      against those expectations. A miss is reported, not tuned away.
+- [x] Run them with `ACTION=query STORE=bull_trout TOPK=…` through `0150`, and log the returned keys and every miss
+      against those expectations. A miss is reported, not tuned away. (Ran as 0150's query does, `crd_search()` on the
+      local store, unverified, but all 14 queries in one process instead of 14 `0150` calls.)
 - [ ] Read the candidate passages on their PDF pages (pdftotext from the group's attachment), not from the chunks.
       Draft per topic in `planning/active/draft-<topic>.md`, every quote with its key and printed page. Up to two
       general-purpose drafters, one per half of the topics, told not to spawn and to write to their draft file.
+- [ ] Run 0280 with `QUOTED=` on each draft as it lands, so a drafting error shows before Phase 3.
 
 ## Phase 3: Write `research/bull_trout_life_history.md`
 - [ ] Header line: Verified, Issues (#198, store #194, relates #33, #51, #199), Produced by (the `bull_trout` store,
@@ -61,7 +76,9 @@
 - [ ] 0280 passes: every evidence row, registry quote and research quote, and the quote count logged.
 - [ ] Meaning audit of every claim, not a sample (CLAUDE.md "the gate checks words, not meaning"). Two Explore
       readers, each given half the claims and the PDFs' text, check that the sentence around each quote says what the
-      quote says, and that the region, form and life stage are right. Fix, then repeat until a round finds no error
+      quote says, and that the region, form and life stage are right. The audit also lists every number written outside
+      a quote and every data-row citation (row N is file line N + 1, a BT row on that topic); 0280 checks neither. It
+      re-reads every ellipsis, and checks the printed page against the PDF page 0280 logs. Fix, then repeat until a round finds no error
       inside the previous round's fixes. Findings go to `planning/active/audit-round<N>.md`.
 
 ## Owed at the end (reported, done after merge)
