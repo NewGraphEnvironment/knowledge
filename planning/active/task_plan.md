@@ -134,14 +134,14 @@ What exploration settled (read-only, 2026-11-16):
       and check its ETag against the file. Commit the trimmed push log
 
 ## Phase 4: docs and issue
-- [ ] `scripts/README.md`:
+- [x] `scripts/README.md`:
       - add the `0270 --collection detection --parent LP4R4VYR` line;
       - set the `0150 STORE=statistics` line to the four keys;
       - revise the statistics bullet (the tree, and that a new subcollection joins the list);
       - drop or update "MacKenzie et al.'s occupancy book joins when a PDF is in hand"
-- [ ] `CLAUDE.md` layout: `detection_{members,additions}.csv` beside `statistics_*`, and reword "sole input of the
+- [x] `CLAUDE.md` layout: `detection_{members,additions}.csv` beside `statistics_*`, and reword "sole input of the
       `statistics` store" (now the statistics tree: LP4R4VYR and its subcollections; review G6)
-- [ ] `inst/NOTICE.md`: confirm that no row is needed (the CSVs are our bibliography)
+- [x] (No row: no members/additions CSV is listed there.) `inst/NOTICE.md`: confirm that no row is needed (the CSVs are our bibliography)
 - [ ] #216's body: the outcome, the abstract-only works, the gap (works with neither a PDF nor an abstract), and
       that `survey_design` and `model_selection` are filled by other work, so the store's freshness follows them
       (review S2)

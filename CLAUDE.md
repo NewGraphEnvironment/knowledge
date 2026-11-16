@@ -123,7 +123,10 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   `westslope_cutthroat` store: the management and recovery documents, East Kootenay monitoring and the Environmental
   Damages Fund's Elk Valley reports; #190), and
   `statistics_{members,additions}.csv` (what `0270 --collection statistics --parent top` puts in the top-level
-  `statistics` collection, the sole input of the `statistics` store: the texts the method is read against; #95), and
+  `statistics` collection: the texts the method is read against; #95), and `detection_{members,additions}.csv` (what
+  `0270 --collection detection --parent LP4R4VYR` puts in `statistics/detection`: the methods literature for
+  detection, occupancy, removal, eDNA, camera surveys and diversity; #216; the `statistics` store is built from the
+  whole `statistics` tree: those two collections, `survey_design` and `model_selection`), and
   `zotero_attachment_verdicts.csv` (what `0275` did to each group item with several PDFs or wrong fields, one decided
   row per item, kept as the record; #126, #151), and
   `thresholds.csv` and `thresholds_groups.csv` (the tuned thresholds per species × stage × component in link's
