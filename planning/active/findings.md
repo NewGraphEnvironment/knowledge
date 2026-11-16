@@ -77,3 +77,29 @@ Version of record, fetchable by script:
   Carle & Strub 1978, Hedger 2013 (core 71429212, an author manuscript), Moran 1951, Dorazio 2005, Riley & Fausch
   1992, Schmidt & Kéry 2013, Dorazio & Erickson 2018, Ridout & Linkie 2009 (version of record), Hsieh 2016, and
   Chao & Jost 2012.
+
+## Sourcing, round 2 (Claude in Chrome, 2026-11-16)
+
+In-page `fetch()` of Wiley PDFs returns 403 (a bot check), but opening a PDF by navigation works where the article
+is free. A free article opens in Chrome's PDF viewer; a paywalled one redirects to `/doi/abs/`.
+
+Downloaded with the viewer's download button into `~/Downloads`, which this process cannot read:
+- Guillera-Arroita et al. 2010: MEE, version of record (free)
+- Chao & Jost 2012: Ecology, version of record (free)
+- Schmidt et al. 2013: MEE, version of record (free)
+- Tyre et al. 2003: version of record via CORE (UQ eSpace; `15006539.pdf`)
+- Hedger et al. 2013: author's accepted manuscript via CORE (Marine Institute OAR; `71429212.pdf`; line-numbered).
+  Fisheries Research is paywalled, so `why` must say so
+- MacKenzie et al. 2002: JSTOR copy of the version of record via SciSpace (JSTOR cover page first)
+- Rota et al. 2009: version of record via SciSpace
+- Hsieh et al. 2016: ResearchGate full text (version to check on arrival)
+
+Paywalled on Wiley: MacKenzie 2002 and Tyre 2003 (ESA, redirect to abs), Rota 2009 (BES), Dorazio & Erickson 2018
+(MER), and Dorazio 2005 (Biometrics). All but the last two have copies above.
+
+Kent KAR 24237 (Ridout & Linkie 2009) holds no full text, so the 2008 preprint stays unless ResearchGate has the
+version of record.
+
+After one download, ResearchGate's search shows an interactive Cloudflare "verify you are human" check. The agent
+does not complete such checks, so the remaining ResearchGate pages went to Al: Zippin 1958, Carle & Strub 1978,
+Moran 1951, Dorazio et al. 2005, Riley & Fausch 1992, Dorazio & Erickson 2018, and Ridout & Linkie 2009.
