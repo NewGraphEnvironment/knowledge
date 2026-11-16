@@ -44,3 +44,36 @@ The indented items were added on 2026-11-15, each resolved against Crossref that
 
 | Error | Resolution |
 |-------|------------|
+
+## Sourcing, round 1 (scripts and web search, 2026-11-16)
+
+Scripts get 403 from Wiley `pdfdirect`, OUP, Zenodo, DOAJ and core.ac.uk, and 202 (a JS challenge) from typeset.io.
+The two Zenodo records OpenAlex lists (MacKenzie & Royle 2005, Ridout & Linkie 2009) are metadata only.
+
+Version of record, fetchable by script:
+
+| work | source |
+|---|---|
+| Royle & Nichols 2003 | uvm.edu/~tdonovan course copy |
+| MacKenzie & Bailey 2004 | uvm.edu/~tdonovan course copy |
+| MacKenzie & Royle 2005 | uvm.edu/~tdonovan course copy |
+| Royle 2004 | journal (museucienciesjournals.cat) |
+| Peterson et al. 2004 | USDA Treesearch 8354 |
+| Rowcliffe et al. 2014 | KOPS Konstanz repository |
+| Nichols et al. 2008 | uvm.edu/~tdonovan course copy |
+| Burton et al. 2015 | ABMI publications 379 |
+| Chao 1987 | gwern.net scan with a text layer |
+| Chao et al. 2014 | uvm.edu/~ngotelli author copy |
+| Colwell et al. 2012 | uvm.edu/~ngotelli author copy |
+| RISC 2019, Wildlife Camera Metadata Protocol No. 44 | gov.bc.ca `wcmp_v1.pdf` |
+
+- Preprint only: Ridout & Linkie 2009 (the author's 2008 manuscript on the Kent site). The version of record is sought
+  in the browser.
+- Rejected: the Kent KAR document for Guillera-Arroita 2010 is her 2012 thesis; KAR 22873 is the overlap package
+  vignette.
+- Books (MacKenzie et al. 2018; Kéry & Royle 2016, 2021): no author-hosted copy. Pirate mirrors are out, since the
+  copies must be legitimate.
+- Left for the browser: MacKenzie 2002, Tyre 2003 (core 15006539), Rota 2009, Guillera-Arroita 2010, Zippin 1958,
+  Carle & Strub 1978, Hedger 2013 (core 71429212, an author manuscript), Moran 1951, Dorazio 2005, Riley & Fausch
+  1992, Schmidt & Kéry 2013, Dorazio & Erickson 2018, Ridout & Linkie 2009 (version of record), Hsieh 2016, and
+  Chao & Jost 2012.
