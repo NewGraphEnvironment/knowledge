@@ -533,27 +533,45 @@ reg_pass <- reg_out$status %in% PASS
 
 # --- quotes in research files ---------------------------------------------------
 # A research file that states what sources say (QUOTED) quotes them in one form,
-#   "<passage>" (<citekey>, p. N)    or (<citekey>, pp. N–M), with ", OCR" before the ")"
+#   "<passage>" (<citekey>, p. N)    or (<citekey>, pp. N-M), with ", OCR" before the ")"
 #   for a scan with no text layer,
 # and each passage is checked as a registry quote is: same key resolution, same matcher,
 # same statuses, never an OCR fallback after a text miss. The file is read raw (clean() would
-# turn a backtick into a quote mark): fenced blocks and inline code are blanked, a leading "> "
-# is stripped from each line, and a passage may wrap. Only a straight double quote delimits a
-# passage, so curly marks may sit inside one. Then what would let a quote escape the check
-# fails: a quote mark left once the parsed quotes are blanked (a straight or curly double
-# quote, a low or reversed one, a guillemet, a curly opening single quote, a straight one
-# opening anything but a space, an HTML quote entity or <q> tag), a blockquote line holding no parsed quote,
-# emphasis inside a passage (its markers are tokens the PDF lacks), a fragment of fewer than
-# RESEARCH_FRAG word tokens (0280's MIN_FRAG counts punctuation), a listed file that is missing
-# and one with no quote at all. A source's own [brackets] read as an insert, as in every quote,
-# so a passage starts or stops around them. The cited page is printed and is not checked here:
-# the log gives every PDF page the passage matched, for the meaning audit.
+# turn a backtick into a quote mark): fenced blocks are blanked, inline code is filled with a
+# letter of its own length (so a possessive after it stays a possessive, and code inside a
+# passage fails as `code_in_quote`), a leading ">" becomes a space, and a passage
+# may wrap. Only a straight double quote delimits a passage, so curly marks may sit inside one.
+# Then what would let a quote escape the check fails, each from a defined set, not a list of
+# cases met so far:
+#   - a quotation mark left once the parsed quotes are blanked: every character with Unicode's
+#     Quotation_Mark property (RESEARCH_QM, 30), except that an apostrophe (' or U+2019) after
+#     a letter or digit, or as "'s" before a non-letter, is prose;
+#   - an HTML quote: a named or numeric character entity, or a <q> or <blockquote> tag;
+#   - text in a blockquote outside a parsed quote, on a ">" line or a lazy continuation line;
+#   - emphasis inside a passage (its markers are tokens the PDF lacks);
+#   - a fragment of fewer than RESEARCH_FRAG word tokens (0280's MIN_FRAG counts punctuation);
+#   - a listed file that is missing, and one with no quote at all.
+# A source's own [brackets] read as an insert, as in every quote, so a passage starts or stops
+# around them. The cited page is printed and is not checked here: the log gives every PDF page
+# the passage matched, for the meaning audit.
 quoted <- Sys.getenv("QUOTED", unset = NA)
 quoted <- if (is.na(quoted)) QUOTED_DEFAULT else strsplit(trimws(quoted), "[[:space:]]+")[[1]]
 quoted <- quoted[nzchar(quoted)]
 RESEARCH_FRAG <- 4L
 RESEARCH_QUOTE <- paste0("\"([^\"]+)\"[[:space:]]*\\(([^[:space:],()]+),[[:space:]]*pp?\\.[[:space:]]*",
-                         "([0-9ivxlc]+(?:[-–][0-9ivxlc]+)?)(,[[:space:]]*OCR)?\\)")
+                         "([0-9ivxlc]+(?:[-", intToUtf8(0x2013), "][0-9ivxlc]+)?)(,[[:space:]]*OCR)?\\)")
+# Unicode's Quotation_Mark property (PropList.txt), as code points.
+RESEARCH_QM <- c(0x22, 0x27, 0xAB, 0xBB, 0x2018:0x201F, 0x2039, 0x203A, 0x2E42, 0x300C:0x300F,
+                 0x301D:0x301F, 0xFE41:0xFE44, 0xFF02, 0xFF07, 0xFF62, 0xFF63)
+RESEARCH_APOS <- c(0x27, 0x2019)
+research_stray <- local({
+  # the characters themselves, not \\x{} escapes: R runs PCRE in UTF mode only when a string is
+  # UTF-8, and an ASCII-only file with an escaped pattern is an invalid regular expression
+  cls <- function(cp) paste0("[", intToUtf8(cp), "]")
+  paste0("(*UCP)", cls(setdiff(RESEARCH_QM, RESEARCH_APOS)), "|",
+         "(?<![[:alnum:]])", cls(RESEARCH_APOS), "(?!s(?![[:alpha:]]))|",
+         "&(?:[[:alpha:]]+|#[0-9]+|#[xX][[:xdigit:]]+);|<(?:q|blockquote)(?:[[:space:]>]|$)")
+})
 research_parse <- function(path) {
   row <- function(line, key = NA_character_, page = NA_character_, quote = NA_character_,
                   src = NA_character_, status = NA_character_) {
@@ -565,20 +583,26 @@ research_parse <- function(path) {
   fence <- cumsum(grepl("^[[:space:]]*```", lines))
   in_fence <- fence %% 2 == 1 | grepl("^[[:space:]]*```", lines)
   lines[in_fence] <- ""
-  blank <- function(x, re) {
-    m <- gregexpr(re, x, perl = TRUE)
-    regmatches(x, m) <- lapply(regmatches(x, m), function(s) strrep(" ", nchar(s)))
-    x
-  }
-  lines <- blank(lines, "`[^`]*`")
+  code <- gregexpr("`[^`]*`", lines, perl = TRUE)
+  regmatches(lines, code) <- lapply(regmatches(lines, code), function(s) strrep("x", nchar(s)))
+  is_code <- vapply(seq_along(lines), function(i) {
+    paste(vapply(seq_len(nchar(lines[i])), function(j) {
+      any(code[[i]] > 0 & j >= code[[i]] & j < code[[i]] + attr(code[[i]], "match.length"))
+    }, TRUE) + 0L, collapse = "")
+  }, "")
   bq <- grepl("^[[:space:]]*>", lines)
-  lines[bq] <- sub("^([[:space:]]*)>[[:space:]]?", "\\1 ", lines[bq])
+  lines[bq] <- sub("^([[:space:]]*)>", "\\1 ", lines[bq])   # same length, so code positions hold
+  # a lazy continuation: a non-blank line straight after a blockquote line renders inside it
+  lazy <- logical(length(lines))
+  for (i in seq_along(lines)[-1]) {
+    lazy[i] <- !bq[i] && (bq[i - 1] || lazy[i - 1]) && nzchar(trimws(lines[i]))
+  }
   txt <- paste(lines, collapse = "\n")
+  code_txt <- paste(is_code, collapse = "0")
   ends <- cumsum(nchar(lines) + 1L)
   line_at <- function(pos) findInterval(pos - 1L, c(0L, ends))
   m <- gregexpr(RESEARCH_QUOTE, txt, perl = TRUE)[[1]]
   out <- list()
-  covered <- integer(0)
   if (m[1] > 0) {
     st <- attr(m, "capture.start")
     ln <- attr(m, "capture.length")
@@ -588,21 +612,22 @@ research_parse <- function(path) {
       src <- if (ln[i, 4] > 0) "ocr" else "text"
       frags <- fragments(q)
       words <- vapply(frags, function(f) sum(grepl("^[[:alnum:]]", f)), 0)
-      status <- if (grepl("[*_]", q)) "emphasis_in_quote" else
-        if (is.null(frags) || any(words < RESEARCH_FRAG)) "quote_fragment_too_short" else NA
+      end <- m[i] + attr(m, "match.length")[i] - 1L
+      status <- if (grepl("1", substr(code_txt, m[i], end), fixed = TRUE)) "code_in_quote" else
+        if (grepl("[*_]", q)) "emphasis_in_quote" else
+          if (is.null(frags) || any(words < RESEARCH_FRAG)) "quote_fragment_too_short" else NA
       out[[length(out) + 1]] <- row(line_at(m[i]), cap(i, 2), cap(i, 3), q, src, status)
-      covered <- c(covered, line_at(m[i]):line_at(m[i] + attr(m, "match.length")[i] - 1L))
-      substr(txt, m[i], m[i] + attr(m, "match.length")[i] - 1L) <-
-        strrep(" ", attr(m, "match.length")[i])
+      substr(txt, m[i], end) <- strrep(" ", attr(m, "match.length")[i])
     }
   }
-  stray <- gregexpr(paste0("[\"“”„‟‘‚«»‹›]|&(?:quot|[lr]dquo|lsquo|[lr]aquo);|<q[[:space:]>]|",
-                           "(?<![[:alnum:]])'(?=[^[:space:]])"), txt, perl = TRUE)[[1]]
+  stray <- gregexpr(research_stray, txt, perl = TRUE)[[1]]
   if (stray[1] > 0) {
     for (p in stray) out[[length(out) + 1]] <- row(line_at(p), status = "stray_quote_mark")
   }
-  bare <- which(bq & nzchar(trimws(lines)) & !seq_along(lines) %in% covered)
-  for (l in bare) out[[length(out) + 1]] <- row(l, status = "blockquote_without_quote")
+  left <- strsplit(txt, "\n", fixed = TRUE)[[1]]
+  left <- c(left, rep("", length(lines) - length(left)))   # strsplit drops trailing empties
+  bare <- which((bq | lazy) & nzchar(trimws(left)))
+  for (l in bare) out[[length(out) + 1]] <- row(l, status = "blockquote_text_outside_quote")
   if (!length(out) || all(is.na(do.call(rbind, out)$citation_key))) {
     out[[length(out) + 1]] <- row(NA_integer_, status = "no_quotes_in_file")
   }

@@ -66,3 +66,7 @@
   Agents so far: 8 (plan review, 2 drafters, 2 + 1 + 1 auditors, the last at lower effort).
 - `/code-check branch` round 1: one fragile finding. The stray-mark guard missed a single quote opening on a digit,
   guillemets, low quotes, HTML entities and `<q>`. Fixed, and proved on a fixture.
+- `/code-check branch` round 2: three fragile findings. The first is a defect inside round 1's fix: possessives after
+  code spans failed. The fix rebuilt the guard on defined sets: Unicode `Quotation_Mark` (30 characters), HTML quote
+  forms and blockquote shapes. An enumeration fixture (`fixtures/make_enum.R`) shows every member flagged and every
+  negative control passing (`review-round2.md`).
