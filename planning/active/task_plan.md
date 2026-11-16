@@ -9,7 +9,7 @@ The `statistics` store (`data/rag/statistics.duckdb`) holds four general texts: 
 ## Context
 
 The `statistics` store (built from top-level collection `LP4R4VYR` alone) holds general Bayesian texts and
-nothing on imperfect detection. The issue asks to acquire about 37 works (occupancy, removal, eDNA, camera,
+nothing on imperfect detection. The issue asks to acquire 30 works (31 counting the two AHM volumes) (occupancy, removal, eDNA, camera,
 diversity, plus the indented items added 2026-11-15), file them under `statistics/detection`, and rebuild
 `statistics` with its whole build list. This follows #190/#194 step for step: a members CSV and an additions CSV
 drive `0270`, and `0150` builds the store.
@@ -30,6 +30,10 @@ What exploration settled (read-only, 2026-11-16):
 - cred 0.7.0 is the newest tag, and ragnar is 0.3.1. Two cred issues are open:
   - cred#48: an update leaves freed space in the file, so the store is rebuilt before its push.
   - cred#45: cred reads Zotero `immutable`, so the build runs with Zotero quit and its `-wal` checkpointed.
+- `model_selection` crashed a build before (ESL oversize chunk, Bates NUL byte, #79): cred#35 was closed
+  2026-10-31, before cred 0.7.0.
+- The two members' keys: `mackenzie_royle2005Designingoccupancy` (CC22PHBQ) and
+  `guillera-arroita_etal2010Designoccupancy` (BC9RR2NP).
 - This worktree has no local `statistics.duckdb`. The bucket copy is pulled first and is the before state.
 - Web API writes and the S3 push need Al present: auto mode refused such writes before.
 
@@ -71,15 +75,24 @@ What exploration settled (read-only, 2026-11-16):
       abstract's wording. An accepted manuscript or preprint is used only when no version of record can be had, and
       its `why` says so, because quotes and page numbers come from it
 - [ ] Abstract-only: a work with no full text is filed `pdf = none` when CrossRef has its abstract. Where CrossRef
-      has none, check whether OpenAlex has one. If any gap work does, add an OpenAlex fallback to 0270's
-      `crossref_abstract()` path (rebuilt from `abstract_inverted_index`, never typed by hand), with a fixture test,
-      in its own commit. A work with neither a PDF nor an abstract is the gap
-- [ ] OCR any scan with no text layer (`ocrmypdf`) before it is filed
+      has none, an OpenAlex fallback would break the publisher-abstract rule (CLAUDE.md, 0280:27, 0270:27; plan
+      review A2) and reach every collection. So once the PDF search is done, the remaining works that have no
+      CrossRef abstract are put to Al as a question: leave them as the gap, or add the fallback with the rule
+      reworded and a test whose path and runner are named. A book or report cannot be abstract-only: 0270's
+      non-DOI path sets no abstract (review G2), so its book DOI goes in `why`, and it is either a PDF or a gap.
+      A work with neither a PDF nor an abstract is the gap. The dry run never reaches the abstract step for a new
+      item (review G3), so this check is the only gate
+- [ ] OCR any scan with no text layer (pages under 30 characters) with `ocrmypdf` into `data/rag/ocr/detection/`;
+      web pages are printed to PDF and filed as `report`
+- [ ] A trashed group copy is restored with a Web API PATCH `deleted: 0` (Al present) before the first dry run,
+      then filed as a member row by its key (review G1)
 - [ ] Write `data/detection_members.csv` (the group's 2 items plus any found copies) and
       `data/detection_additions.csv` (rows with a DOI, or book or report metadata from the title page). Abstract-only
       rows (`pdf = none`) go in only when an abstract is available to 0270. URLs are percent-encoded, and no other
       library's name or key goes in a tracked file
-- [ ] Record per-family counts in findings (filed with PDF, and from which route; abstract only; gap); edit #216's body with the
+- [ ] Enumeration before any filing (review O1): every row against its CrossRef record or title page, in
+      `planning/active/enumeration_round0.tsv`, so fixes are CSV edits
+- [ ] Record per-family counts and MB in findings (filed with PDF, and from which route; abstract only; gap); edit #216's body with the
       inventory and the decided build list
 
 ## Phase 2: file `statistics/detection` through 0270 (Al present for the live run)
@@ -93,20 +106,28 @@ What exploration settled (read-only, 2026-11-16):
       statistics tree
 
 ## Phase 3: rebuild and push `statistics`
-- [ ] Pull the bucket's `statistics` (verified connect) and record its documents and chunks as the before state
+- [ ] Pull the bucket's `statistics` (verified connect) and measure its documents and chunks with a duckdb query
+      (0150 prints no chunk counts). This is the before state, measured rather than assumed
+- [ ] B1 gate: 0150 stops on a listed collection with no keyed PDF item (`0150-store.R:188`). If neither
+      CC22PHBQ nor BC9RR2NP got a PDF, take `Z7JP8UN2` out of the list and say so in #216's body
+- [ ] Before the build, write the expected left-out list in its log: the abstract-only works, no-PDF members,
+      `survey_design`'s and `model_selection`'s no-PDF items, and BGVWWBV6 (review X1)
 - [ ] Hard gate: every PDF of the four collections is on disk, Zotero is quit, and the `-wal` is empty or absent.
       Then run `ACTION=build OVERWRITE=TRUE STORE=statistics COLLECTIONS="LP4R4VYR,<detection>,Z7JP8UN2,K2P7XGFG"`,
       logged with home paths as `~/`. Checks on the result:
-      - the left-out list equals the recorded gap;
-      - the dropped list (documents the old store held and the rebuild loses) is read and explained;
+      - the left-out list equals the expected list written before the build;
+      - documents = keys − no-text PDFs;
+      - the dropped list (documents the old store held and the rebuild loses) is read and explained, with #217's
+        image-only scans expected;
       - every origin maps to a live group attachment
 - [ ] Four `ACTION=query` checks, each with its expected documents written in the log before it runs and the top 5
       keys recorded after: occupancy goodness of fit; removal estimates when capture probability falls across
       passes; eDNA multi-scale occupancy; richness as a lower bound and sample coverage. A miss is reported, not
-      tuned away
-- [ ] Commit the CSVs and logs before the push (the manifest records the head sha)
+      tuned away (reported only, as #194's were)
+- [ ] Commit the CSVs and logs and push the branch before the store push; never rewrite history after it (the
+      manifest records the head sha; review O2)
 - [ ] `ACTION=push` dry run, then `CONFIRM=TRUE` (Al present). Read the push's result before any verified connect,
-      and check its ETag against the file
+      and check its ETag against the file. Commit the trimmed push log
 
 ## Phase 4: docs and issue
 - [ ] `scripts/README.md`:
@@ -114,9 +135,12 @@ What exploration settled (read-only, 2026-11-16):
       - set the `0150 STORE=statistics` line to the four keys;
       - revise the statistics bullet (the tree, and that a new subcollection joins the list);
       - drop or update "MacKenzie et al.'s occupancy book joins when a PDF is in hand"
-- [ ] `CLAUDE.md` layout: `detection_{members,additions}.csv` beside `statistics_*`
+- [ ] `CLAUDE.md` layout: `detection_{members,additions}.csv` beside `statistics_*`, and reword "sole input of the
+      `statistics` store" (now the statistics tree: LP4R4VYR and its subcollections; review G6)
 - [ ] `inst/NOTICE.md`: confirm that no row is needed (the CSVs are our bibliography)
-- [ ] #216's body: the outcome, the abstract-only works, and the gap (works with neither a PDF nor an abstract)
+- [ ] #216's body: the outcome, the abstract-only works, the gap (works with neither a PDF nor an abstract), and
+      that `survey_design` and `model_selection` are filled by other work, so the store's freshness follows them
+      (review S2)
 
 ## Owed at the end (reported, done after merge)
 
@@ -126,10 +150,9 @@ work also joins at a future update.
 
 ## Validation
 
-- [ ] Tests pass (`devtools::test()`; no `R/` change expected; `test-data-dir.R` covers `data/`), plus the
-      fixture test for 0270's abstract fallback if it is added
-- [ ] `/code-check branch` (three-round floor, ending on an enumeration of every CSV row against its CrossRef record
-      or title page) and the #56 `public_sweep.py` over the branch
+- [ ] Tests pass (`devtools::test()`; no `R/` change expected; `test-data-dir.R` covers `data/`)
+- [ ] `/code-check branch` (three-round floor, ending on a re-check of the round-0 enumeration against the filed
+      items) and the #56 `public_sweep.py` over the branch
 - [ ] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion
 
