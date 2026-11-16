@@ -21,27 +21,27 @@
 
 ## Phase 1: 0280 checks quotes in research files
 (Revised after the plan review, `review-plan.md`; each finding checked against 0280 before it was folded in.)
-- [ ] `QUOTED` (env, space-separated paths; default `research/bull_trout_life_history.md` once that file exists, empty
+- [x] `QUOTED` (env, space-separated paths; default `research/bull_trout_life_history.md` once that file exists, empty
       until Phase 3 lands it). A listed file that is missing fails, and so does one with no parsed quote.
-- [ ] Parser, on the raw text (never `clean()` the whole file: it turns backticks into `'`). First blank fenced blocks
+- [x] Parser, on the raw text (never `clean()` the whole file: it turns backticks into `'`). First blank fenced blocks
       and inline code. Then strip a leading `> ` from each line (blockquotes) and join the lines. Pull every
       `"<passage>" (<key>, p. N)`, `pp. N–M`, or `(<key>, p. N, OCR)`. Delimit with straight `"` only; curly marks may
       sit inside a passage. Keys match `[^\s,()]+` and `resolve()` judges them. Pages are arabic or roman numerals;
       one key per citation. Emphasis markers (`*`, `_`) are refused inside a passage.
-- [ ] Stray-mark guard: once the parsed quotes are blanked, these fail: any straight or curly double quote; a curly
+- [x] Stray-mark guard: once the parsed quotes are blanked, these fail: any straight or curly double quote; a curly
       opening single quote; a straight `'` that opens a word; a `>` line holding no parsed quote.
-- [ ] Each quote is checked as a registry quote is (`check_row(quote_row(key, quote, src))`), after `quote_row()`'s
+- [x] Each quote is checked as a registry quote is (`check_row(quote_row(key, quote, src))`), after `quote_row()`'s
       definition. `src` is `text`, or `ocr` only where the citation says OCR, never as a fallback. Research
       fragments need at least 4 word tokens (the alignment check's `frag_min`), not 0280's 3 tokens counting
       punctuation. The log is named from `LOG` the way the registry's is (`<LOG>_research.csv`), one row per quote
       (file, line, key, source, status, PDF pages), and flags a quote matched on several pages. It goes into the
       summary and the exit condition.
-- [ ] Prove the guard fires on a scratch fixture, with `LOG=` in the scratchpad so the committed logs are not
+- [x] Prove the guard fires on a scratch fixture, with `LOG=` in the scratchpad so the committed logs are not
       rewritten: a fabricated quote gives `quote_not_found`; a key not in the group gives `key_not_in_group`; a quote
       with no citation, a quote in single quotes, an unquoted blockquote and emphasis inside a passage each fail; an
       empty or missing listed file fails; a real quote passes. Then 0280 on the committed tables (`QUOTED` empty) has
       every status count unchanged from the run before the change.
-- [ ] One line each in 0280's header, `scripts/README.md`'s 0280 entry and CLAUDE.md's evidence notes: 0280 also gates
+- [x] One line each in 0280's header, `scripts/README.md`'s 0280 entry and CLAUDE.md's evidence notes: 0280 also gates
       the quotes in the research files `QUOTED` lists.
 - Scope, settled by the review: a table passage cannot be a research quote, so timing tables are cited by data row.
   Quotes are short, as in the evidence table. #209's restricted reports are not in the store and are not quoted.

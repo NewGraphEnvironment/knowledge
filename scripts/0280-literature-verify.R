@@ -4,8 +4,9 @@
 # the PDF it cites, in the NGE group library.
 #
 #   Rscript scripts/0280-literature-verify.R          (from the repo root)
-#   EVIDENCE=<csv> REGISTRY=<csv> LOG=<csv> to check draft tables without touching
-#   the committed logs (the registry log is LOG with "_ip_registry" before ".csv")
+#   EVIDENCE=<csv> REGISTRY=<csv> QUOTED="<md> ..." LOG=<csv> to check draft tables or
+#   research files without touching the committed logs (the registry log is LOG with
+#   "_ip_registry" before ".csv", the research log LOG with "_research")
 #
 # WHY: the table is hand-built, much of it ported from another review, and a
 # quote that is not in its source is worse than no quote. A row passes only when:
@@ -30,6 +31,8 @@
 #               fails (`abstract_but_pdf_held`), so a row is re-quoted from the paper
 #               once the paper arrives.
 #   - every value is stated by the quote itself (see value_in_quote()).
+# Research files that quote sources (QUOTED, #198) are checked too: each
+# "<passage>" (<citekey>, p. N) as a registry quote is (see "quotes in research files").
 # It also checks that the timing table's `source` keys resolve in the group,
 # and that every species x model parameter in COVERAGE has at least one row
 # (a value, or a `none` row saying what was searched). THERMAL is the same check
@@ -52,6 +55,7 @@
 # OUTPUT  scripts/logs/habitat/<yyyymmdd>_literature_verify.csv, one row per
 #         evidence row (status, PDF file, every PDF page the quote matches), and
 #         <yyyymmdd>_literature_verify_ip_registry.csv, one row per registry quote;
+#         <yyyymmdd>_literature_verify_research.csv, one row per research quote or failure;
 #         a summary on stdout.
 #         OCR text is cached in data/rag/ocr/ (gitignored), keyed by PDF md5.
 #         Exits non-zero when any row, registry quote, model link, timing source,
@@ -63,6 +67,9 @@ group_id <- Sys.getenv("GROUP_ID", "4733734")
 evidence_path <- Sys.getenv("EVIDENCE", "data/literature_evidence.csv")
 registry_path <- Sys.getenv("REGISTRY", "data/ip_model_registry.csv")
 ocr_dir <- file.path("data", "rag", "ocr")
+# Research files whose quotes are checked (see "quotes in research files"); QUOTED= replaces the
+# list (space-separated), and QUOTED= with nothing checks none.
+QUOTED_DEFAULT <- character(0)
 COVERAGE <- list(
   species = c("CH", "BT", "CO", "ST"),
   parameter = c("spawn_gradient_max", "spawn_gradient_min", "spawn_channel_width_min",
@@ -524,6 +531,91 @@ reg_out <- data.frame(
 reg_out <- reg_out[order(reg_out$data_row, reg_out$quote_of), ]
 reg_pass <- reg_out$status %in% PASS
 
+# --- quotes in research files ---------------------------------------------------
+# A research file that states what sources say (QUOTED) quotes them in one form,
+#   "<passage>" (<citekey>, p. N)    or (<citekey>, pp. N–M), with ", OCR" before the ")"
+#   for a scan with no text layer,
+# and each passage is checked as a registry quote is: same key resolution, same matcher,
+# same statuses, never an OCR fallback after a text miss. The file is read raw (clean() would
+# turn a backtick into a quote mark): fenced blocks and inline code are blanked, a leading "> "
+# is stripped from each line, and a passage may wrap. Only a straight double quote delimits a
+# passage, so curly marks may sit inside one. Then what would let a quote escape the check
+# fails: a quote mark left once the parsed quotes are blanked (a double quote, a curly opening
+# single quote, a straight one opening a word), a blockquote line holding no parsed quote,
+# emphasis inside a passage (its markers are tokens the PDF lacks), a fragment of fewer than
+# RESEARCH_FRAG word tokens (0280's MIN_FRAG counts punctuation), a listed file that is missing
+# and one with no quote at all. The cited page is printed and is not checked here: the log
+# gives every PDF page the passage matched, for the meaning audit.
+quoted <- Sys.getenv("QUOTED", unset = NA)
+quoted <- if (is.na(quoted)) QUOTED_DEFAULT else strsplit(trimws(quoted), "[[:space:]]+")[[1]]
+quoted <- quoted[nzchar(quoted)]
+RESEARCH_FRAG <- 4L
+RESEARCH_QUOTE <- paste0("\"([^\"]+)\"[[:space:]]*\\(([^[:space:],()]+),[[:space:]]*pp?\\.[[:space:]]*",
+                         "([0-9ivxlc]+(?:[-–][0-9ivxlc]+)?)(,[[:space:]]*OCR)?\\)")
+research_parse <- function(path) {
+  row <- function(line, key = NA_character_, page = NA_character_, quote = NA_character_,
+                  src = NA_character_, status = NA_character_) {
+    data.frame(file = path, line = line, citation_key = key, page = page, quote = quote,
+               quote_source = src, status = status, stringsAsFactors = FALSE)
+  }
+  if (!file.exists(path)) return(row(NA_integer_, status = "file_missing"))
+  lines <- readLines(path, encoding = "UTF-8", warn = FALSE)
+  fence <- cumsum(grepl("^[[:space:]]*```", lines))
+  in_fence <- fence %% 2 == 1 | grepl("^[[:space:]]*```", lines)
+  lines[in_fence] <- ""
+  blank <- function(x, re) {
+    m <- gregexpr(re, x, perl = TRUE)
+    regmatches(x, m) <- lapply(regmatches(x, m), function(s) strrep(" ", nchar(s)))
+    x
+  }
+  lines <- blank(lines, "`[^`]*`")
+  bq <- grepl("^[[:space:]]*>", lines)
+  lines[bq] <- sub("^([[:space:]]*)>[[:space:]]?", "\\1 ", lines[bq])
+  txt <- paste(lines, collapse = "\n")
+  ends <- cumsum(nchar(lines) + 1L)
+  line_at <- function(pos) findInterval(pos - 1L, c(0L, ends))
+  m <- gregexpr(RESEARCH_QUOTE, txt, perl = TRUE)[[1]]
+  out <- list()
+  covered <- integer(0)
+  if (m[1] > 0) {
+    st <- attr(m, "capture.start")
+    ln <- attr(m, "capture.length")
+    cap <- function(i, j) substr(txt, st[i, j], st[i, j] + ln[i, j] - 1L)
+    for (i in seq_along(m)) {
+      q <- gsub("[[:space:]]+", " ", trimws(cap(i, 1)))
+      src <- if (ln[i, 4] > 0) "ocr" else "text"
+      frags <- fragments(q)
+      words <- vapply(frags, function(f) sum(grepl("^[[:alnum:]]", f)), 0)
+      status <- if (grepl("[*_]", q)) "emphasis_in_quote" else
+        if (is.null(frags) || any(words < RESEARCH_FRAG)) "quote_fragment_too_short" else NA
+      out[[length(out) + 1]] <- row(line_at(m[i]), cap(i, 2), cap(i, 3), q, src, status)
+      covered <- c(covered, line_at(m[i]):line_at(m[i] + attr(m, "match.length")[i] - 1L))
+      substr(txt, m[i], m[i] + attr(m, "match.length")[i] - 1L) <-
+        strrep(" ", attr(m, "match.length")[i])
+    }
+  }
+  stray <- gregexpr("[\"“”‘]|(?<![[:alnum:]])'(?=[[:alpha:]])", txt, perl = TRUE)[[1]]
+  if (stray[1] > 0) {
+    for (p in stray) out[[length(out) + 1]] <- row(line_at(p), status = "stray_quote_mark")
+  }
+  bare <- which(bq & nzchar(trimws(lines)) & !seq_along(lines) %in% covered)
+  for (l in bare) out[[length(out) + 1]] <- row(l, status = "blockquote_without_quote")
+  if (!length(out) || all(is.na(do.call(rbind, out)$citation_key))) {
+    out[[length(out) + 1]] <- row(NA_integer_, status = "no_quotes_in_file")
+  }
+  do.call(rbind, out)
+}
+res_out <- do.call(rbind, c(list(research_parse("")[0, ]), lapply(quoted, research_parse)))
+res_out$pdf_file <- res_out$pdf_pages <- rep(NA_character_, nrow(res_out))
+for (i in which(is.na(res_out$status))) {
+  r <- check_row(quote_row(res_out$citation_key[i], res_out$quote[i], res_out$quote_source[i]))
+  res_out$status[i] <- r$status
+  res_out$pdf_file[i] <- as.character(r$file)
+  res_out$pdf_pages[i] <- as.character(r$pages)
+}
+res_out$several_pages <- grepl(";", res_out$pdf_pages)
+res_pass <- res_out$status %in% c("verified_text", "verified_ocr")
+
 # The link, both ways, on model_id x species x life stage x life-history form: the form is
 # part of a registry row's identity (knw_ip_read()), so a row for one form is not satisfied
 # by evidence for another. A blank form matches only a blank form.
@@ -573,6 +665,8 @@ dir.create(dirname(log_csv), recursive = TRUE, showWarnings = FALSE)
 utils::write.csv(out, log_csv, row.names = FALSE, na = "")
 reg_log <- file.path(dirname(log_csv), sub("(\\.csv)?$", "_ip_registry.csv", basename(log_csv)))
 utils::write.csv(reg_out, reg_log, row.names = FALSE, na = "")
+res_log <- file.path(dirname(log_csv), sub("(\\.csv)?$", "_research.csv", basename(log_csv)))
+utils::write.csv(res_out, res_log, row.names = FALSE, na = "")
 
 cat(sprintf("%d rows | %s\n", nrow(out),
             paste(names(table(out$status)), table(out$status), sep = " ", collapse = " | ")))
@@ -582,6 +676,12 @@ cat(sprintf("registry: %d rows, %d quotes | %s\n", nrow(reg), nrow(reg_out),
             paste(names(table(reg_out$status)), table(reg_out$status), sep = " ", collapse = " | ")))
 if (any(!reg_pass)) print(reg_out[!reg_pass, c("data_row", "model_id", "quote_of", "status", "pdf_file")],
                           row.names = FALSE)
+cat(sprintf("research: %d files, %d quotes | %s\n", length(quoted), sum(!is.na(res_out$citation_key)),
+            paste(names(table(res_out$status)), table(res_out$status), sep = " ", collapse = " | ")))
+if (any(!res_pass)) print(res_out[!res_pass, c("file", "line", "citation_key", "status", "pdf_file")],
+                          row.names = FALSE)
+if (any(res_out$several_pages)) cat(sprintf("research: %d quotes match on more than one PDF page (see the log)\n",
+                                            sum(res_out$several_pages)))
 cat(sprintf("model links: %d evidence rows name no registry row, %d registry rows have no evidence row\n",
             length(unregistered), length(unread)))
 for (u in unregistered) cat("  unregistered:", u, "\n")
@@ -599,6 +699,6 @@ cat(sprintf("flow: %d of %d species x cells have a row\n", sum(flow$rows > 0), n
 if (any(flow$rows == 0)) {
   print(flow[flow$rows == 0, c("species_code", "variable", "life_stage", "side")], row.names = FALSE)
 }
-cat("wrote", log_csv, "and", reg_log, "\n")
-if (any(!pass) || any(!reg_pass) || length(unregistered) || length(unread) || length(t_bad) ||
+cat("wrote", log_csv, ",", reg_log, "and", res_log, "\n")
+if (any(!pass) || any(!reg_pass) || any(!res_pass) || length(unregistered) || length(unread) || length(t_bad) ||
     any(cov$rows == 0) || any(thermal$rows == 0) || any(flow$rows == 0)) quit(status = 1)
