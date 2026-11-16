@@ -9,7 +9,7 @@ The `statistics` store (`data/rag/statistics.duckdb`) holds four general texts: 
 ## Context
 
 The `statistics` store (built from top-level collection `LP4R4VYR` alone) holds general Bayesian texts and
-nothing on imperfect detection. The issue asks to acquire 30 works (31 counting the two AHM volumes) (occupancy, removal, eDNA, camera,
+nothing on imperfect detection. The issue asks to acquire 30 works (31 counting the two AHM volumes; Hutchinson et al. 2015 added mid-run) (occupancy, removal, eDNA, camera,
 diversity, plus the indented items added 2026-11-15), file them under `statistics/detection`, and rebuild
 `statistics` with its whole build list. This follows #190/#194 step for step: a members CSV and an additions CSV
 drive `0270`, and `0150` builds the store.

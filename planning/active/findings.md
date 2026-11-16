@@ -160,3 +160,12 @@ The issue lists 29 works, or 30 counting the second volume of *Applied Hierarchi
 - Burton et al. 2015's key is `burton_etal2015REVIEWWildlife`, because CrossRef's title carries Wiley's "REVIEW:"
   section label. Once set, a key is kept, so it stays.
 - `survey_design` now holds 2 PDFs, so the B1 gate passes and all four collections stay in the build list.
+
+## Added mid-run: Hutchinson et al. 2015 (2026-11-16)
+
+Al added penalised likelihood for occupancy (`unmarked::occuPEN()`) to the issue body after the first filing:
+Hutchinson et al. 2015, `10.1111/2041-210X.12368`.
+- The PDF is free on MEE and was downloaded through the browser on m4. It is the version of record, 11 pages.
+- No copy existed in any library.
+- Filed as `CVVUQZR5` (created, member, PDF uploaded). The repeat dry run had 0 `would` lines: 24 members, 24 PDFs.
+- The issue now lists 30 works (31 with *AHM* vol. 2): 24 filed with a PDF, 7 gaps.
