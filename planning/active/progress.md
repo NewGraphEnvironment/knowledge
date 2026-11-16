@@ -70,3 +70,7 @@
   code spans failed. The fix rebuilt the guard on defined sets: Unicode `Quotation_Mark` (30 characters), HTML quote
   forms and blockquote shapes. An enumeration fixture (`fixtures/make_enum.R`) shows every member flagged and every
   negative control passing (`review-round2.md`).
+- `/code-check branch` round 3 found 5 fragile escapes, all from one mechanism: a regex model of Markdown standing in
+  for the renderer. The parser now reads the file through cmark-gfm (`commonmark`), and the stray set is built by
+  running `clean()`. The enumeration fixture shows every round-1 to round-3 case failing and the negative controls
+  passing (`review-round3.md`).

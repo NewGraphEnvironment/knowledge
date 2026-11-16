@@ -13,3 +13,18 @@ bqs <- c("", paste0("> ", q, " and prose after it."), "",
          "\"Like many char, the `bull trout` occurs as a number of life-history forms.\" (mcphail_baxter1996reviewbull, p. ii)", "",
          paste0("> ", q), "", q)
 writeLines(c("# enumeration fixture", "", pos, "", html, "", neg, bqs), commandArgs(TRUE)[1], useBytes = FALSE)
+# round 3: what a regex model of Markdown hid from the guard (each line number is printed below)
+r3 <- c("", "~~~", "```", "~~~", "",
+        "R3 fence: \"Bull trout never spawn in gravel at all anywhere.\" (mcphail_baxter1996reviewbull, p. ii)", "",
+        "````", "```", "````", "",
+        "R3 four-backtick: \"Bull trout never spawn in gravel at all anywhere.\" (mcphail_baxter1996reviewbull, p. ii)", "",
+        "    ```", "",
+        "R3 indented: \"Bull trout never spawn in gravel at all anywhere.\" (mcphail_baxter1996reviewbull, p. ii)", "",
+        "R3 escaped backtick \\` then “Bull trout never spawn in gravel” and more \\`.", "",
+        "- > Bull trout never spawn in gravel at all anywhere.", "",
+        "R3 upper <Q>Bull trout never spawn</Q>.", "",
+        "<div>", "&laquoBull trout never spawn&raquo", "</div>", "",
+        "\"Like many char, the bull trout [never][n] occurs as a number of life-history forms.\" (mcphail_baxter1996reviewbull, p. ii)", "",
+        "[n]: https://example.org", "",
+        "R3 double prime ″Bull trout never spawn in gravel″.")
+cat(file = commandArgs(TRUE)[1], paste0(r3, "\n"), append = TRUE, sep = "")

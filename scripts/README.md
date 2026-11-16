@@ -537,8 +537,9 @@ The cited basis for CH and BT habitat thresholds (#19). Not per watershed group.
   velocity upper limits for spawning and rearing. SK has no rearing or overwintering flow cell and no rearing
   velocity cell, because it rears in lakes. The research files its `QUOTED` list names (#198) quote sources
   as `"<passage>" (<citekey>, p. N)`, with `, OCR` before the `)` for a scan; each passage is checked as a
-  registry quote is, and a Unicode quotation mark or an HTML quote left outside that form, text in a
-  blockquote outside a quote, code inside a quote, or a file with no quote fails (`<LOG>_research.csv`). `EVIDENCE=`, `REGISTRY=`, `QUOTED=` and `LOG=` check drafts
+  registry quote is. The file is read through cmark-gfm (`commonmark`), as GitHub renders it, and a quotation
+  mark or an HTML quote outside that form, text in a blockquote outside a quote, code, a link or emphasis
+  inside a quote, or a file with no quote fails (`<LOG>_research.csv`). `EVIDENCE=`, `REGISTRY=`, `QUOTED=` and `LOG=` check drafts
   without touching the committed logs.
 - Logs: `scripts/logs/habitat/`.
 
