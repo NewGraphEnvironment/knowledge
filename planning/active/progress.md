@@ -48,3 +48,13 @@
     `20261116_literature_verify_research.csv`. The evidence and registry logs are unchanged in status counts.
   - One draft-B quote reproduced garbled text-layer characters (`lik6ely`, `U. EIk`); it is now cut around them.
   - The README row and the pointers from `bt_spawning.md` and `habitat_literature.md` landed with the file.
+- Validation so far:
+  - `devtools::test()`: 2,384 passed, 0 failed, 4 skipped (stages not on this machine).
+  - public sweep, `tree` mode: no hits in this branch's own lines. The 42 hits it lists are in files the branch does
+    not touch, plus the soul-generated CLAUDE.md summary, which is already on main.
+  - public sweep, `commits` mode: no hits.
+- Phase 4: two Explore auditors spawned 15:24Z, one for lines 1–288 and one for lines 289–699.
+- Phase 4, round 1: A found 21 problems (lines 1–288) and B found 15 (lines 289–699); every one was accepted (`audit-round1.md`).
+  - The fixes include DU3: four units lie in BC, not three.
+  - My own pass over the fixes caught four sentences that outran their quotes.
+  - Gate: 169 quotes, all verified.

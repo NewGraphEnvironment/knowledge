@@ -20,24 +20,28 @@ they are cited by data row (row N is file line N + 1), and the files that read t
 ## In brief
 
 - **Three forms inland, a fourth on the south coast.** Bull trout grow up in small, cold streams. A resident form
-  stays there all its life, small and early maturing, usually above a barrier. A fluvial form moves down to a large
+  stays there all its life, small and early maturing, usually cut off by falls, fast water or, in the south, warm water. A fluvial form moves down to a large
   river to grow, and an adfluvial form moves to a lake or reservoir; both come back to small streams to spawn, large
-  and late maturing. A sea-run form occurs only in the southern genetic lineage, on BC's south coast. The forms often
+  and late maturing. In Canada a sea-run form occurs only on BC's south coast, in the southern genetic lineage. The forms often
   share a watershed and its spawning streams.
 - **Spawning runs in summer, spawning in late summer and fall.** Migratory adults leave the river or lake between
   spring and midsummer, earlier when the run is long. They spawn from August to October, and the spent fish, females
-  first, leave the spawning streams soon after; the tagged fish were back in their rivers or lakes by late fall. Falling water temperature is the usual cue, though not a
-  precise one. Most BC migratory spawners spawn every year and some every other year.
+  first, leave the spawning streams soon after; tagged fish were back in their rivers or lakes by November in BC and
+  by the end of December in Oregon. Falling water temperature is the likely cue, though not a precise one. Hagen and
+  Weber judge that most BC migratory spawners spawn every year and some every other year; in BC tagging studies, 41 to
+  80 % of tagged spawners came back the next year, by measures that differ between studies.
 - **Redds go where groundwater comes up.** Within the spawning streams, fish choose reaches fed by upwelling
   groundwater (the Swan basin in Montana, the Chowade River in BC). They spawn on gravel near cover in a small share
-  of the stream length, and come back to the same sites. In the Chowade, eggs at the chosen sites survived better
+  of the stream length, and the same sites are used year after year. In the Chowade, eggs at the chosen sites survived better
   and stayed warmer than eggs nearby.
 - **Eggs winter in the gravel.** They hatch in winter or early spring, and fry emerge in spring.
-- **Juveniles live on the bed.** Fry hold in shallow, slow margins and side channels among cobble. Older juveniles
-  use deeper, faster water with boulders and wood. Both stay close to cover and the bottom. Migratory juveniles leave
+- **Juveniles live on the bed.** Fry hold in shallow, slow margins and side channels among cobble. In the Chowade
+  River older juveniles used deeper, faster water with boulders and wood; in the Arrow Lakes tributaries they kept to
+  shallow, slow margins over boulders. Both stay close to cover and the bottom. Migratory juveniles leave
   the natal stream mostly at age 2 or 3; residents stay.
 - **Cold water throughout.** The temperature limits are evidence rows, read in `thermal_requirements.md`.
-- **Five units in Canada; two on Schedule 1.** COSEWIC splits Canada's bull trout into five designatable units. The
+- **Five units in Canada, four of them in BC; two on Schedule 1.** COSEWIC splits Canada's bull trout into five
+  designatable units. The
   South Coast and Western Arctic units are listed as Special Concern under the Species at Risk Act. COSEWIC moved the
   Pacific unit, the rest of BC's Pacific drainages, from Not at Risk to Special Concern in 2025.
 
@@ -52,13 +56,13 @@ both migrate to smaller streams to spawn.
 
 > "Throughout much of its geographic distribution three life-history types are common: adfluvial, fluvial, and stream-resident populations. The adfluvial life-history involves migrations between lakes or reservoirs and spawning rivers or streams. The fluvial life-history form lives in large rivers and often migrates to smaller rivers or streams to spawn. In contrast, the stream resident form is non-migratory and spends its entire life in small streams." (mcphail_baxter1996reviewbull, p. 12)
 
-A BC stock report on the Pine (Peace) and upper Kootenay watersheds has the migratory forms rear in the natal
-tributary first and return to it to spawn:
+A BC stock report on the Pine (Peace) and upper Kootenay watersheds opens, citing Rieman and McIntyre 1993, with the
+migratory forms rearing in the natal tributary first and returning to it to spawn:
 
 > "Migratory fish live in tributary streams for the first few years and then migrate either to larger rivers (fluvial form) or lakes (lacustrine or adfluvial form) to mature before returning to natal tributaries to spawn. Resident fish remain in small headwater streams throughout their entire life history" (pollard2001LifeHistory, p. 2)
 
-**Where the resident form lives.** McPhail and Baxter place stream residents in headwater streams, usually above a
-barrier. In the Arrow Lakes tributaries (BC), Ladell found the two patterns split at waterfalls.
+**Where the resident form lives.** McPhail and Baxter place stream residents in headwater streams, usually cut off
+from other populations by falls, fast water or, in the south, warm water. In the Arrow Lakes tributaries (BC), Ladell found the two patterns split at waterfalls.
 
 > "Stream-resident bull trout usually are separated from other populations by some barrier (typically falls or velocity barriers and in the south by areas of high temperature). Consequently, stream-resident populations are associated with headwater streams in mountainous regions where cold water and velocity barriers are common." (mcphail_baxter1996reviewbull, p. 12)
 
@@ -69,8 +73,8 @@ off or few:
 
 > "In less productive tributaries of the Williston Reservoir that are somewhat or completely isolated by migration barriers or by distance from other populations of ... large-bodied, migratory fish, the stream resident life history may be favoured" (hagen_weber2019Limitingfactors, pp. 21–22)
 
-**Size.** Resident adults are small and migratory adults large. In the Liard system (BC), McPhail and Baxter, citing
-Craig and Bruce 1982:
+**Size.** Resident adults are small and migratory adults large. In the Liard system (northern BC and the Yukon), McPhail and
+Baxter, citing Craig and Bruce 1982:
 
 > "most stream-resident populations are dwarfed. For example, in the Liard system, stream-resident adults average about 200 mm and rarely exceed 300 mm; whereas, adults in larger tributaries and in the mainstem average about 400 mm, and often exceed 600 mm" (mcphail_baxter1996reviewbull, p. 12)
 
@@ -90,8 +94,9 @@ migrants of his study streams.
 
 > "as above-barrier and stream resident bull trout showed lower growth rates, reduced body sizes and younger ages at maturity compared to below-barrier fish." (ladell2003EcologyLife, p. 108)
 
-For BC as a whole, the management plan gives sizes by form, and notes that some BC fluvial populations are as large
-as adfluvial ones:
+The BC management plan gives sizes by form: for residents a range-wide range (it cites Goetz 1989 and McPhail and
+Baxter 1996), for adfluvial fish BC's lakes and reservoirs, and for fluvial fish BC populations, some as large as
+adfluvial ones:
 
 > "Mature, stream resident Bull Trout may be up to eight years of age and range in size from 115-300 mm" (b_c_ministryofwaterlandandresourcestewardship2023ManagementPlan, p. 13)
 
@@ -99,8 +104,8 @@ as adfluvial ones:
 
 > "Most fluvial populations in B.C. are comprised of smaller individuals (means of 380 to 480 mm ... but populations in the Stikine, Liard, Peace, upper Fraser ... and upper Kootenay rivers can be as large as adfluvial populations" (b_c_ministryofwaterlandandresourcestewardship2023ManagementPlan, p. 13)
 
-**Age at maturity.** Migratory fish mature later than residents. McPhail and Baxter cite Robinson and McCart 1974 and
-Craig and Bruce 1982:
+**Age at maturity.** Migratory fish mature later than residents. McPhail and Baxter, citing Robinson and McCart 1974
+and Craig and Bruce 1982 for the first passage:
 
 > "stream-resident fish tend to mature one or two years earlier than migratory populations in the same region" (mcphail_baxter1996reviewbull, p. 13)
 
@@ -108,9 +113,10 @@ Craig and Bruce 1982:
 
 > "Most information indicates bull trout mature when they are between 5 and 7 years of age" (rieman_mcintyre1993Demographichabitat, p. 3)
 
-In the Flathead system (Montana, adfluvial), most spawners were six or seven:
+In the North and Middle Forks of the Flathead (Montana, adfluvial), most spawners were six or seven; Fraley and
+Shepard add, citing Leathe and Enk 1985, that most Swan system spawners were five or six:
 
-> "Most bull trout spawners in the North and Middle Forks were six or seven years of age" (fraley_shepard1989LifeHistory, p. 137)
+> "Most bull trout spawners in the North and Middle Forks were six or seven years of age (Table 3) whereas most spawners in the Swan system were five or six years old" (fraley_shepard1989LifeHistory, p. 137)
 
 **Migration.** The fluvial and adfluvial forms make the same kind of spawning run, out of a river or a lake in summer.
 
@@ -125,14 +131,16 @@ The runs can be long. In the upper Kootenay (BC), one radio-tagged fish:
 > "Different life history forms often co-occur in the same watershed although some spatial segregation may occur." (b_c_ministryofwaterlandandresourcestewardship2023ManagementPlan, p. 13)
 
 In the upper Kootenay (BC), fish tagged in the river turned out to be both fluvial and adfluvial, and they spawned in
-the same tributaries.
+many of the same tributaries.
 
 > "it was estimated from radio telemetry data that 20% of the radio tagged fish were adfluvial and over-wintered in Lake Koocanusa. The remaining 80% of the tagged bull trout displayed a fluvial life history form" (westover_heidt2004UpperKootenay, p. i)
 
 > "Both life history forms spawned in many of the same systems, but clearly utilized different areas for over-wintering. The use of similar spawning areas suggests a degree of genetic mixing occurs between the adfluvial and fluvial bull trout populations found in the upper Kootenay watershed." (westover_heidt2004UpperKootenay, p. i)
 
-In the Metolius River and Lake Billy Chinook (Oregon), most fish were adfluvial, but some were fluvial and some
+In the Metolius River and Lake Billy Chinook (Oregon), most fish appeared adfluvial, but some were fluvial and some
 switched:
+
+> "Most bull trout in the Metolius River Basin and Lake Billy Chinook appeared to demonstrate an adfluvial life history pattern." (DistributionlifehistoryabundanceharvesthabitatlimitingfactorsbulltroutMetoliusRiverLakeBillyChinookOregon198394, p. 20)
 
 > "However, a portion of the population demonstrated a fluvial life history pattern in which juvenile bull trout migrated from tributary streams to the Metolius River, where they remained to rear." (DistributionlifehistoryabundanceharvesthabitatlimitingfactorsbulltroutMetoliusRiverLakeBillyChinookOregon198394, p. 20)
 
@@ -145,16 +153,21 @@ Mackenzie Creek (upper Arrow Lakes, BC), say the extent of interbreeding is not 
 
 > "How much genetic mixing between different life-history forms occurs in such areas is unknown" (mcphail_baxter1996reviewbull, p. 13)
 
+Rieman and McIntyre, citing Jakober 1992 (Montana), say the forms live together, and that whether they are one
+population or two is unknown:
+
 > "Resident and migratory forms live together (Jakober 1992), but we do not know if they represent a single population or separate populations." (rieman_mcintyre1993Demographichabitat, p. 2)
 
-In one upper Kootenay spawning stream (Line Creek, BC), a single small mature male suggested both forms:
+In one upper Kootenay spawning stream (Line Creek, BC), Pollard reads a single small older male as possibly both forms,
+or as males maturing early:
 
 > "A small older male (240 mm, 6 yr.), in addition to the larger females, observed in Line Cr. might suggest two different life histories are occurring in this population; migratory and resident (or precious maturation of males)." (pollard2001LifeHistory, p. 9)
 
 ## When do they migrate and spawn?
 
-**The spawning season.** Bull trout spawn in late summer and fall. The reviews put it in September and October, and
-McPhail and Baxter note that the timing changes little with latitude.
+**The spawning season.** Bull trout spawn in late summer and fall: September to October in McPhail and
+Baxter's review, mid-August to mid-October in Hagen and Weber's. McPhail and Baxter note that the timing changes little
+with latitude.
 
 > "The bull trout spawns in the fall (September to October) in flowing water." (mcphail_baxter1996reviewbull, p. i)
 
@@ -211,15 +224,15 @@ In the Metolius River (Oregon), adfluvial fish:
 > "Most spawning activity occurred between 15 August and 1 October, although spawning was observed as early as 13 July (Ratliff 1992) and as late as mid-October." (DistributionlifehistoryabundanceharvesthabitatlimitingfactorsbulltroutMetoliusRiverLakeBillyChinookOregon198394, p. 17)
 
 **The cue.** The sources name falling temperature as the likely cue, with day length and flow as possible partners.
-McPhail and Baxter, citing McPhail and Murray 1979 and Weaver and White 1985:
+McPhail and Baxter:
 
 > "Like all char, bull trout are fall spawners, and water temperature may be the proximate cue that initiates redd building and spawning behaviour." (mcphail_baxter1996reviewbull, p. 6)
 
 > "This suggests that, although there may be a threshold temperature, some other factor (perhaps the rate of change in day length) is also involved in the initiation of spawning." (mcphail_baxter1996reviewbull, p. 6)
 
-In the Flathead (Montana), Fraley and Shepard:
+In the Flathead (Montana), Fraley and Shepard tie the initiation of spawning largely to water temperature:
 
-> "appeared to be related largely to water temperature, although photoperiod and streamflow probably also played a part" (fraley_shepard1989LifeHistory, p. 137)
+> "in the Flathead appeared to be related largely to water temperature, although photoperiod and streamflow probably also played a part" (fraley_shepard1989LifeHistory, p. 137)
 
 Rieman and McIntyre, citing Shepard and others 1984b (Flathead):
 
@@ -253,7 +266,7 @@ Hagen and Weber sum up BC migratory populations as mostly every-year spawners wi
 
 > "It appears common that populations of large-bodied, migratory Bull Trout spawners in British Columbia contain a mix of both every-year and alternate-year spawning strategies with the majority of fish employing an every-year strategy" (hagen_weber2019Limitingfactors, p. 23)
 
-In the Metolius (Oregon), most fish spawned each year; this sentence is in the executive summary:
+In the Metolius (Oregon), most fish appeared to spawn each year; this sentence is in the executive summary:
 
 > "Most bull trout appeared to return to the same stream and spawn each year." (DistributionlifehistoryabundanceharvesthabitatlimitingfactorsbulltroutMetoliusRiverLakeBillyChinookOregon198394, p. 5)
 
@@ -280,7 +293,7 @@ days (the O'Brien quote above). In the Salmo (BC), fluvial fish were back by the
 
 > "Post-spawning migrations to overwintering habitat had generally occurred by the end of November, and it appeared that post-spawning mortality was 0% as all fish had moved significant distances downstream to overwintering areas in both years." (baxter2001AspectsBiology, p. 64)
 
-In the Metolius (Oregon), the return varied between fish:
+In the Metolius (Oregon), the return varied between fish (the report gives the telemetry as Thiesfeld et al. 1996's):
 
 > "Some post-spawning bull trout moved downstream rapidly (Figure 6), while others showed a protracted downstream migration" (DistributionlifehistoryabundanceharvesthabitatlimitingfactorsbulltroutMetoliusRiverLakeBillyChinookOregon198394, p. 20, OCR)
 
@@ -348,14 +361,16 @@ and near groundwater, in smaller streams in pockets of gravel.
 
 > "In larger streams the redds are often sited downstream of aggrading areas (Graham et al. 1981) and are associated with ground water sources (Heimer 1965); whereas, in smaller streams the redds are associated with pockets of suitable gravel (McPhail and Murray 1979; Allan 1987)." (mcphail_baxter1996reviewbull, p. 5)
 
-**Substrate, cover, depth and redd size.** At the Chowade River, redds were large, on large gravel, near cover that was
-mostly undercut bank:
+**Substrate, cover, depth and redd size.** At the Chowade River in 1995, redds were large, on large gravel, near cover
+that was mostly undercut bank. In 1994, a survey Baxter calls incomplete, they sat close to logjam cover.
 
 > "In 1995, mean water depth at the redd sites was 56.5 cm, and redds averaged 2.53 m long by 1.25 m wide (Table 18)." (baxter1997AspectsReproductive, p. 75)
 
 > "Most redds were located fairly close to cover ... (average of 3.87 m), primarily in the form of undercut banks (Table 18)." (baxter1997AspectsReproductive, p. 75)
 
 > "Substrate at the redd sites consisted, on average, of large gravel" (baxter1997AspectsReproductive, p. 75)
+
+> "redds were located close (5.4 m) to logjam cover" (baxter1997AspectsReproductive, p. 75)
 
 Baxter compared these with Bustard and Royea's measurements in the Kemess Creek watershed, also in the Peace system:
 
@@ -382,7 +397,8 @@ Spawners use the same sites year after year. The review, citing Baxter's Chowade
 
 > "the choice of the same site by different females in different years (Baxter 1995) suggests that redd site selection is precise." (mcphail_baxter1996reviewbull, p. 6)
 
-The Swan basin spawning tributaries are small by stream order (the stream-order rows are data rows 88–93):
+The Swan basin spawning tributaries are small by stream order. The BC stream-order rows (data rows 88–93) run from
+third order and smaller (the BC plan) to the fifth- and sixth-order streams of Williston adfluvial spawning.
 
 > "Migratory bull trout in the Swan basin spawn in second- to fourth-order streams from August through October." (baxter_hauer2000Geomorphologyhyporheic, p. 1471)
 
@@ -449,22 +465,24 @@ In the Flathead system (Montana):
 
 > "Young-of-the-year bull trout were generally found in side channel areas and along the stream margins in Flathead tributaries." (fraley_shepard1989LifeHistory, p. 138)
 
-In Mackenzie Creek (Arrow Lakes, BC), fry stay near the bottom for weeks after emerging, then move to the stream edge.
-McPhail and Baxter, from McPhail and Murray 1979:
+In the laboratory (McPhail and Murray 1979), newly emerged fry kept to the bottom and did not fill their swim bladders
+for three weeks; in Mackenzie Creek (Arrow Lakes, BC), once buoyant, fry move to the stream edge. McPhail and Baxter:
 
 > "In the laboratory, newly-emerged fry did not fill their swim bladders until three weeks after emergence." (mcphail_baxter1996reviewbull, p. 10)
 
+> "These newly-emerged fry were strongly bottom oriented and spent much of their time in the gravel" (mcphail_baxter1996reviewbull, p. 10)
+
 > "In Mackenzie Creek, once neutral buoyancy is achieved the fry concentrate in shallow, low velocity areas along the stream edge." (mcphail_baxter1996reviewbull, p. 10)
 
-**Older juveniles.** Older juveniles use deeper and faster water than fry, and boulder and wood for cover. In the
-Chowade River (BC):
+**Older juveniles.** In the Chowade River (BC), older juveniles used deeper and faster water than fry, and boulder and
+wood for cover:
 
 > "Juveniles generally preferred areas with deeper water, faster bottom velocities, boulder as substrate, and an abundance of cover in the form of rootwads" (baxter1997Summerdaytime, p. 11)
 
 > "Depths between 30 and 40 cm were preferred, with depths greater than 45 cm having 0 suitability in my study area" (baxter1997Summerdaytime, p. 11)
 
-In the Arrow Lakes tributaries (BC), Ladell found migratory juveniles below the waterfalls along the margins, over
-boulders, in the slowest water:
+In the Arrow Lakes tributaries (BC), Ladell found it otherwise: migratory juveniles below the waterfalls kept to
+shallow margins, over boulders, in the slowest water:
 
 > "Juveniles from the adfluvial populations were found primarily along the stream margins. They utilized mainly shallow water (Figure 2.13) that had low bottom velocity." (ladell2003EcologyLife, p. 41)
 
@@ -476,7 +494,7 @@ In the Wigwam River (BC), the authors judge a boulder reach good for juveniles:
 
 > "Boulder dominated substrate however, provides excellent juvenile rearing habitat and an abundance of boulder pocket pools and velocity refuge." (cope_morris2001WigwamRiver, p. 24)
 
-In the Flathead system (Montana), larger juveniles stayed near cover:
+In the Flathead drainage (Montana), Fraley and Shepard, reporting Pratt 1984, found larger juveniles near cover:
 
 > "Juveniles 100 mm or longer also remained near cover, including larger instream debris." (fraley_shepard1989LifeHistory, p. 138)
 
@@ -513,8 +531,8 @@ In the Pine River (Peace system, BC), Pollard suggests the tributaries hold a wi
 
 > "these findings suggest that the tributaries sampled in the Pine system may provide rearing habitat for a wider range of age classes than those sampled in the U. Kootenay system." (pollard2001LifeHistory, p. 10)
 
-At Packsaddle Creek, a Kinbasket Reservoir tributary (BC), juveniles left at age 2+, with the spring freshet and the
-fall rains:
+At Packsaddle Creek, a Kinbasket Reservoir tributary (BC), detections suggest juveniles leave at about age 2+, with the
+spring freshet and the fall rains:
 
 > "Detections suggest that the timing of outmigration of juvenile Bull Trout from Packsaddle Creek coincides with the peak flows of spring freshet (May-June) and fall rains (Sept-Oct; Section 4.1.1) towards the end of the growth season." (kang_warnock2020KinbasketReservoir, p. i)
 
@@ -551,15 +569,17 @@ migratory juveniles below, with logjams for cover instead of boulders:
 
 > "The smallest sexually mature adult sampled from above the barrier was 155 mm, and the largest was 245 mm (Figure 3.4)." (ladell2003EcologyLife, p. 103)
 
-**Density, cover and temperature.** Cope and Morris measured juvenile density in the Wigwam River (BC), and cite Goetz
-1989 for a density that marks critical rearing areas:
+**Density, cover and temperature.** Cope and Morris measured juvenile density in the Wigwam River (BC), at sites chosen
+for good fry catches, and cite Goetz 1989 for a density that marks critical rearing areas:
 
 > "Mean density of juvenile bull trout (ages 0+ to 2+) was estimated to be 17.2 fish/100m2 with a range of 0 to 26.9 fish/100m2" (cope_morris2001WigwamRiver, p. 11)
 
+> "Site selection was biased towards electrofishing sample sites which favored high bull trout fry capture success" (cope_morris2001WigwamRiver, p. 28)
+
 > "Areas with juvenile bull trout densities greater than 1.5 fish/100m2 have been cited as critical rearing areas (Goetz 1989)" (cope_morris2001WigwamRiver, p. 28)
 
-In the Flathead system (Montana), Fraley and Shepard give snorkel counts, and report Shepard et al. 1984a relating
-juvenile density to unembedded rock:
+In the Flathead drainage (Montana), Fraley and Shepard give snorkel counts, and report Shepard et al. 1984a relating
+juvenile density to unembedded rock in tributaries of the Swan River:
 
 > "Snorkeling estimates of juvenile bull trout densities in Flathead drainage tributaries averaged 1.5 fish/100 m2 of stream surface area (range: 0.1-7.1)." (fraley_shepard1989LifeHistory, p. 138)
 
@@ -572,7 +592,7 @@ juveniles occurred:
 
 ## How cold?
 
-Bull trout are a cold-water species at every stage:
+Bull trout are a cold-water species. McPhail and Baxter say it of adults; the BC plan says it of rearing:
 
 > "One thing, however, is clear: the bull trout is a coldwater species." (mcphail_baxter1996reviewbull, p. 12)
 
@@ -584,8 +604,12 @@ restate them.
 - Temperatures at spawning sites: rows 161 and 549 (Morice River, BC).
 - Spawning stopping in cold water: row 535 (Line Creek, BC).
 - Incubation: rows 150 and 510; degree-days to hatch, row 534.
-- Rearing and summer stream limits: rows 151, 152, 155–157, 159, 160, 484, 537–539, 541, 543–545, 547, 548, 550–552
-  and 674.
+- Other spawning temperatures, from US reviews and the Metolius: rows 493, 503, 504, 509, 540 and 542.
+- Migration: row 158.
+- Rearing and summer stream limits: rows 151, 152, 155–157, 159, 160, 537–539, 541, 543, 547 and 550–552.
+- Preferred temperatures for juveniles and adults together: rows 544 and 545.
+- No life stage named: row 548 (BC's upper limit of thermal suitability) and row 674 (onset of stress, laboratory).
+- Elevation as a proxy for temperature, with no value: row 484.
 - Laboratory growth optimum and upper lethal temperature: rows 154 and 536 (Selong et al.).
 - Thermal units from egg deposition to the onset of winter: row 1117 (Mochnacz, an inference from laboratory studies).
 
@@ -594,19 +618,23 @@ restate them.
 **A fourth, sea-run form only on the south coast.** Interior bull trout take the three forms; the coastal lineage adds
 limited movement into salt water.
 
+Hagen and Decker, citing McPhail 2007 for the sea-run form:
+
 > "In interior regions of western North America, the three general life history forms of bull trout are stream resident, fluvial, and adfluvial. For bull trout of the coastal evolutionary lineage, limited movements into saltwater also occur (anadromy), although few details of these movements are known" (hagen_decker2011StatusBull, p. 3)
 
-The federal registry places the sea-run form on BC's south coast, and COSEWIC ties it to the southern genetic lineage:
+The federal registry places the sea-run form, within Canada, on BC's south coast, and COSEWIC ties it to the southern
+genetic lineage:
 
 > "The first three forms are common throughout the Canadian range, but the anadromous form is restricted to the south coast of British Columbia." (speciesregistrycanada2020BullTrout, p. 6)
 
 > "Genetic Lineage 1 contains the only anadromous (sea-going) Bull Trout" (post_etal2012COSEWICassessment, p. 17)
 
-**Reservoirs have made adfluvial populations, and may have cost fluvial ones.** Hagen and Decker, citing Hagen 2008:
+**Some populations have done well in reservoirs; impoundment may have cost fluvial ones.** Hagen and Decker, citing
+Hagen 2008:
 
 > "Some bull trout populations in BC have adapted well to living in large reservoirs, and in some cases where kokanee have been introduced as a prey fish base growth and survival may be greater than in pre-existing riverine conditions" (hagen_decker2011StatusBull, p. 7)
 
-> "and perhaps the loss of populations and genetic diversity (e.g. loss of fluvial form) as well" (hagen_decker2011StatusBull, p. 7)
+> "in a number of cases in BC, river impoundment has resulted in the replacement of hundreds of kilometers of diverse tributary stream habitat within a large river basin with a single, monomorphic reservoir environment, and this is likely to have resulted in breakdown of population structure and perhaps the loss of populations and genetic diversity (e.g. loss of fluvial form) as well" (hagen_decker2011StatusBull, p. 7)
 
 **Where bull trout are absent.** The BC plan, citing McPhail 2007 and Hagen and Decker 2011:
 
@@ -617,32 +645,44 @@ zone:
 
 > "this report recognizes five DUs for Bull Trout in Canada" (post_etal2012COSEWICassessment, p. 18)
 
-Three of the five lie wholly or partly in BC.
+Four of the five lie wholly or partly in BC.
 
 The South Coast unit (DU1, Genetic Lineage 1):
 
-> "range includes the Skagit River, Squamish River, Ryan River, Ure Creek, Lillooet River, Pitt Lake/River, Lower Fraser River (below Hell's Gate Canyon)" (post_etal2012COSEWICassessment, p. 23)
+> "range includes the Skagit River, Squamish River, Ryan River, Ure Creek, Lillooet River, Pitt Lake/River, Lower Fraser River (below Hell's Gate Canyon), Chilliwack Lake, Phelix Creek, Birkenhead Lake, and Chehalis Lake" (post_etal2012COSEWICassessment, p. 23)
 
 The Western Arctic unit (DU2, Genetic Lineage 2) is the Mackenzie drainage, which in BC is the Peace and the Liard:
 
 > "range includes Mackenzie River drainages including the Liard, Peace and Athabasca River basins." (post_etal2012COSEWICassessment, p. 23)
 
+The Upper Yukon Watershed unit (DU3, Genetic Lineage 2):
+
+> "range includes the upper Yukon River basin." (post_etal2012COSEWICassessment, p. 23)
+
+> "This large freshwater fish is found in the upper Yukon River drainage in northern British Columbia and southern Yukon" (cosewic2025COSEWICassessment, p. 7)
+
 The Pacific unit (DU5, Genetic Lineage 2) is the rest of BC's Pacific drainages:
 
 > "range includes the Upper Columbia, Fraser above Hell's Gate Canyon, Homathko, Klinaklini, Skeena, Nass, Iskut-Stikine and Taku rivers." (post_etal2012COSEWICassessment, p. 24)
 
-**Their status.** COSEWIC assessed the South Coast and Western Arctic units as Special Concern in 2012, and the Pacific
-unit as Not at Risk:
+**Their status.** COSEWIC assessed the South Coast and Western Arctic units as Special Concern in 2012, the Upper Yukon
+unit as Data Deficient, and the Pacific unit as Not at Risk:
 
 > "South Coast British Columbia populations - SPECIAL CONCERN" (post_etal2012COSEWICassessment, p. 1)
 
+> "Western Arctic populations - SPECIAL CONCERN" (post_etal2012COSEWICassessment, p. 1)
+
+> "Upper Yukon Watershed populations - DATA DEFICIENT" (post_etal2012COSEWICassessment, p. 1)
+
 > "Pacific populations - NOT AT RISK" (post_etal2012COSEWICassessment, p. 1)
 
-The 2025 reassessment kept the two units at Special Concern:
+The 2025 reassessment kept the two units at Special Concern and the Upper Yukon unit Data Deficient:
 
 > "South Coast British Columbia population - Special Concern" (cosewic2025COSEWICassessment, p. 1)
 
 > "Western Arctic population - Special Concern" (cosewic2025COSEWICassessment, p. 1)
+
+> "Upper Yukon Watershed population - Data Deficient" (cosewic2025COSEWICassessment, p. 1)
 
 It described the South Coast unit as five river systems that hold the sea-run form, and the Western Arctic unit as
 spread across four jurisdictions:
@@ -674,7 +714,8 @@ registry pages give the same status:
   (Montana). The Williston and Kootenay redd-count series were not read for site-scale habitat. No source in the
   collection measures dissolved oxygen in redds.
 - **Size at leaving the natal stream.** Only the upper Kootenay length gaps and the Skagit statement stand for BC.
-  Fraley and Shepard's lengths at annulus are in a table whose text layer is garbled, so they are not quoted.
+  Fraley and Shepard give mean lengths at annulus for North Fork Flathead tributaries (Montana) on p. 139; the PDF's
+  text layer misreads one of them, so they are not quoted here.
 - **Winter juvenile habitat.** The sources read describe summer daytime habitat.
 - **Forms by place.** No source read gives the share of BC populations by form. Hagen and Decker 2011's Appendix 4
   names the forms core area by core area, in a table, which this file does not quote.
