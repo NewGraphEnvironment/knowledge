@@ -1,6 +1,6 @@
 # Expected before ACTION=build STORE=statistics COLLECTIONS=LP4R4VYR,73PNRGJF,Z7JP8UN2,K2P7XGFG (#216), written 2026-11-16
 # before (bucket copy, verified connect): 4 documents, 6579 chunks (attachments 2CIVEIL4 56, JP3BM8T9 3953, ZWH5THV7 305, PVGNFJC9 2265)
-# expected keys with a live PDF: 31
+# expected keys with a live PDF: 32 (31, plus hutchinson_etal2015Penalizedlikelihood filed after this file was first written)
 # expected left out (15), each 'no live PDF':
   K2P7XGFG BBA2Q7W2 breiman_etal1984ClassificationRegression (book) Classification and Regression Trees
   LP4R4VYR BGVWWBV6 BayesianBeliefNets (webpage) Bayesian Belief Nets
@@ -18,4 +18,4 @@
   Z7JP8UN2 TME3DX5P moeller_etal2018Threenovel (journalArticle) Three novel methods to estimate abundance of unmarked animal
   Z7JP8UN2 XJ3JX57M wearn_glover-kapfer2017Cameratrappingconservation (report) Camera-trapping for conservation: a guide to best-practices
 # expected dropped from the old store: none (its 4 documents are LP4R4VYR's 4 PDFs, all still live)
-# expected no-text PDFs: none (the 23 new PDFs have text on every page but the RISC cover and a blank)
+# expected no-text PDFs: none (the 24 new PDFs have text on every page but the RISC cover and a blank)
