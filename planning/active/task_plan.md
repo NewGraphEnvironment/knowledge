@@ -60,16 +60,16 @@
 - [x] Run 0280 with `QUOTED=` on each draft as it lands, so a drafting error shows before Phase 3.
 
 ## Phase 3: Write `research/bull_trout_life_history.md`
-- [ ] Header line: Verified, Issues (#198, store #194, relates #33, #51, #199), Produced by (the `bull_trout` store,
+- [x] Header line: Verified, Issues (#198, store #194, relates #33, #51, #199), Produced by (the `bull_trout` store,
       the query log, 0280's research log), Status.
-- [ ] "In brief": the life-history expectation in plain language, then what the store does not settle.
-- [ ] One section per topic, each a question the reader brings: forms; migration and spawning timing; redd and
+- [x] "In brief": the life-history expectation in plain language, then what the store does not settle.
+- [x] One section per topic, each a question the reader brings: forms; migration and spawning timing; redd and
       spawning-site selection; thermal limits (brief, then rows and a link); juvenile rearing; the forms across BC and
       the two SARA units (South Coast and Western Arctic). Where a source's region matters, the claim names it (BC,
       Montana, Oregon, Alberta).
-- [ ] "What the store does not hold": the scans no build reads (#217), the restricted reports (#209), and topics with
+- [x] "What the store does not hold": the scans no build reads (#217), the restricted reports (#209), and topics with
       no BC source.
-- [ ] Add a row to `research/README.md`. Add a one-line pointer from `bt_spawning.md`'s and `habitat_literature.md`'s
+- [x] Add a row to `research/README.md`. Add a one-line pointer from `bt_spawning.md`'s and `habitat_literature.md`'s
       BT sections to the new file.
 
 ## Phase 4: Gate and meaning audit

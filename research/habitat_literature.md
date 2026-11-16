@@ -42,6 +42,9 @@ Mount 2016 p. 6), which Porter et al. 2014 say rests on bull trout swimming abil
 
 ## Bull trout: what the literature does and does not give
 
+Bull trout's life history, quoted from the `bull_trout` store, is `bull_trout_life_history.md` (#198); this section
+holds the habitat thresholds.
+
 - **Spawning gradient.** No review gives a numeric reach-scale maximum; they say "relatively low gradients"
   (McPhail & Baxter 1996). Reach-scale BC data does exist:
   - O'Brien 1999 (Duncan system, adfluvial): 1.3, 1.9 and 4 % section averages at reaches with redds;

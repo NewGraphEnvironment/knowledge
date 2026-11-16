@@ -41,3 +41,10 @@
   Drafter A quoted two passages as `lateAugust` and `postspawning`. Those PDFs' text layers drop a line-end hyphen,
   and the cached OCR of the page images reads `late-` / `August` and `post-` / `spawning`. Both are now quoted as
   printed and checked with `, OCR`.
+- Phase 3: `research/bull_trout_life_history.md` assembled from the three drafts, with duplicates removed and an
+  "In brief" section in plain language. 160 quotes: 158 `verified_text`, 2 `verified_ocr`.
+  - Five quotes match on more than one PDF page; the cited page is among them each time.
+  - 0280's `QUOTED_DEFAULT` now lists the file, and today's committed logs include
+    `20261116_literature_verify_research.csv`. The evidence and registry logs are unchanged in status counts.
+  - One draft-B quote reproduced garbled text-layer characters (`lik6ely`, `U. EIk`); it is now cut around them.
+  - The README row and the pointers from `bt_spawning.md` and `habitat_literature.md` landed with the file.
