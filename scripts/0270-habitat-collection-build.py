@@ -26,7 +26,9 @@ write after Zotero syncs, so it cannot make a re-run idempotent.
 A second input adds works the group library does not hold at all
 (data/habitat_modelling_additions.csv). A row with a DOI takes its metadata from
 CrossRef, with the abstract the publisher deposited there (tags stripped; none is
-ever written by hand); a grey-literature row carries it. `pdf` is `none` for a work
+ever written by hand); a grey-literature row carries it. A DOI row's `override` column names the
+fields (title, creators, date, ...) that take the row's own values where CrossRef's are wrong
+against the title page (#216). `pdf` is `none` for a work
 whose PDF cannot be had, which 0280 then checks against that abstract, or a URL (the body must start
 with %PDF), a path from the repo root (a PDF only a browser could fetch, kept in the
 ignored data/rag/pdf/), or `zotero:<attachment key>`, a standalone group PDF with no parent
@@ -395,10 +397,23 @@ def crossref_item(doi):
         "DOI": doi, "url": f"https://doi.org/{doi}"}
 
 
+OVERRIDABLE = ("title", "creators", "date", "publicationTitle", "volume", "issue", "pages")
+
+
 def addition_item(row):
-    """Web API JSON for an additions row (CrossRef when it has a DOI)."""
+    """Web API JSON for an additions row (CrossRef when it has a DOI).
+
+    A DOI row's `override` column ("title;creators", say) names fields whose CrossRef value is
+    wrong against the work's title page (a title deposited in capitals, an institution deposited as
+    an author, #216): those take the row's own columns, and the DOI and CrossRef's abstract stay.
+    A row without `override` is CrossRef's alone, whatever else it carries."""
     if row["DOI"]:
-        return crossref_item(row["DOI"])
+        item = crossref_item(row["DOI"])
+        for k in filter(None, (x.strip() for x in (row.get("override") or "").split(";"))):
+            if k not in OVERRIDABLE or not (row.get(k) or "").strip():
+                raise ValueError(f"override {k!r}: not one of {', '.join(OVERRIDABLE)}, or the row's {k} is empty")
+            item[k] = row_creators(row[k]) if k == "creators" else row[k].strip()
+        return item
     # university and thesisType are a thesis's fields where a report has institution and reportType,
     # bookTitle, pages, series and seriesNumber a book section's, and publisher, edition and ISBN a
     # book's (CrossRef's metadata is read as a journal article, so a book goes in without its DOI),
@@ -408,17 +423,23 @@ def addition_item(row):
                                 "university", "thesisType", "place", "url", "bookTitle", "pages",
                                 "series", "seriesNumber", "publisher", "edition", "ISBN",
                                 "publicationTitle", "volume", "issue") if row.get(k)}
-    item["creators"] = []
-    for c in filter(None, (x.strip() for x in row["creators"].split(";"))):
+    item["creators"] = row_creators(row["creators"])
+    return item
+
+
+def row_creators(s):
+    """Zotero creators from a row's "Last, First; Last, First" column."""
+    out = []
+    for c in filter(None, (x.strip() for x in s.split(";"))):
         # An organization's name, which Zotero holds in one field, has no comma or is in braces
         # ("{Ministry of Forests, Lands, ...}"); any other is "Last, First".
         if c.startswith("{") and c.endswith("}"):
-            item["creators"].append({"creatorType": "author", "name": c[1:-1].strip()})
+            out.append({"creatorType": "author", "name": c[1:-1].strip()})
             continue
         last, comma, first = c.partition(",")
-        item["creators"].append({"creatorType": "author", "lastName": last.strip(), "firstName": first.strip()}
-                                if comma else {"creatorType": "author", "name": c})
-    return item
+        out.append({"creatorType": "author", "lastName": last.strip(), "firstName": first.strip()}
+                   if comma else {"creatorType": "author", "name": c})
+    return out
 
 
 def addition_pdf(row):
