@@ -481,15 +481,16 @@ wood for cover:
 
 > "Depths between 30 and 40 cm were preferred, with depths greater than 45 cm having 0 suitability in my study area" (baxter1997Summerdaytime, p. 11)
 
-**Juveniles of all sizes.** In the Arrow Lakes tributaries (BC), Ladell's juveniles below the waterfalls, the
-young-of-the-year among them, kept to shallow margins, over boulders, in the slowest water; it was the smaller
-young-of-the-year that held in shallow water:
+**Below the falls in the Arrow Lakes tributaries.** In the Arrow Lakes tributaries (BC), Ladell's juveniles of the
+adfluvial populations, below the waterfalls, kept to shallow margins, over boulders, in the slowest water:
 
 > "Juveniles from the adfluvial populations were found primarily along the stream margins. They utilized mainly shallow water (Figure 2.13) that had low bottom velocity." (ladell2003EcologyLife, p. 41)
 
 > "Juveniles below the barrier were associated with all substrate sizes, but were strongly associated with boulders." (ladell2003EcologyLife, p. 57)
 
 > "Below the barriers, juveniles preferred the slowest water velocities available." (ladell2003EcologyLife, p. 56)
+
+Across his sites above and below the barriers, it was the smaller young-of-the-year that held in shallow water:
 
 > "smaller young-of-the-year held in shallow water (Figure 2.13)" (ladell2003EcologyLife, p. 64)
 

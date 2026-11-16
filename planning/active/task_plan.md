@@ -73,8 +73,8 @@
       BT sections to the new file.
 
 ## Phase 4: Gate and meaning audit
-- [ ] 0280 passes: every evidence row, registry quote and research quote, and the quote count logged.
-- [ ] Meaning audit of every claim, not a sample (CLAUDE.md "the gate checks words, not meaning"). Two Explore
+- [x] 0280 passes: every evidence row, registry quote and research quote, and the quote count logged.
+- [x] Meaning audit of every claim, not a sample (CLAUDE.md "the gate checks words, not meaning"). Two Explore
       readers, each given half the claims and the PDFs' text, check that the sentence around each quote says what the
       quote says, and that the region, form and life stage are right. The audit also lists every number written outside
       a quote and every data-row citation (row N is file line N + 1, a BT row on that topic); 0280 checks neither. It

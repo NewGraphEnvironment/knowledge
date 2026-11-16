@@ -61,3 +61,6 @@
 - Phase 4, round 2: one reader of round 1's diff found six errors inside the fixes, plus one unsupported place name
   that round 1 had added; all seven fixed (`audit-round2.md`). Gate: 170 quotes, all verified. A third round reads
   round 2's diff.
+- Phase 4 done. Round 3 found 1 problem inside round 2's fixes (the Arrow Lakes young-of-the-year sentence); I fixed it and
+  checked the two-sentence fix myself against its quoted pages (`audit-round3.md`). Gate: 170 quotes, all verified.
+  Agents so far: 8 (plan review, 2 drafters, 2 + 1 + 1 auditors, the last at lower effort).
