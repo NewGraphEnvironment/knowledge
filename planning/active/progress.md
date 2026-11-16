@@ -27,3 +27,10 @@
     (there is no fallback). The 4-word floor refused an evidence row's quote whose first fragment, "chinook salmon
     spawned", has three words.
   - lintr: one semicolon fixed; three constant names in the script's existing uppercase style.
+- Phase 2: two general-purpose drafters spawned 15:06Z. One has forms, timing and the thermal brief
+  (`draft-forms-timing-thermal.md`); the other has redds and juveniles (`draft-redds-juveniles.md`).
+- Drafted `draft-bc-units.md` (BC split of forms, the five DUs and Schedule 1) here; 23 quotes, all `verified_text`.
+  - Three quotes failed first as `quote_fragment_too_short`: 0280's `fragments()` reads a source's own `[DU1 ...]`
+    brackets as an insert. Those quotes now start after the bracket, and the 0280 comment says so.
+  - The 2025 status-history sentence is shared by DU1 and DU2 and matched only PDF p. 30. It was replaced by the
+    report's per-unit cover lines.

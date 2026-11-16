@@ -544,8 +544,9 @@ reg_pass <- reg_out$status %in% PASS
 # single quote, a straight one opening a word), a blockquote line holding no parsed quote,
 # emphasis inside a passage (its markers are tokens the PDF lacks), a fragment of fewer than
 # RESEARCH_FRAG word tokens (0280's MIN_FRAG counts punctuation), a listed file that is missing
-# and one with no quote at all. The cited page is printed and is not checked here: the log
-# gives every PDF page the passage matched, for the meaning audit.
+# and one with no quote at all. A source's own [brackets] read as an insert, as in every quote,
+# so a passage starts or stops around them. The cited page is printed and is not checked here:
+# the log gives every PDF page the passage matched, for the meaning audit.
 quoted <- Sys.getenv("QUOTED", unset = NA)
 quoted <- if (is.na(quoted)) QUOTED_DEFAULT else strsplit(trimws(quoted), "[[:space:]]+")[[1]]
 quoted <- quoted[nzchar(quoted)]

@@ -33,3 +33,13 @@ Relates to #33 and #51.
   cited page, so the page is audited by meaning.
 - Precedent for a quoted research file: `research/bayesian_alignment.md` with `data-raw/bayesian_alignment_check.R`
   (stray-quote guard: blank checked quotes, then any quote mark left near a citation fails).
+
+## Drafting (2026-11-16)
+
+- A source's own square brackets are read by 0280's `fragments()` as an editorial insert. COSEWIC 2012's
+  `DU1 [Genetic Lineage 1: ...]` therefore leaves a one-word fragment, so a quote must start or stop around such
+  brackets.
+- The registry pages and COSEWIC 2025 are prints of web pages with no printed page numbers, so their cited pages are
+  PDF pages. The COSEWIC 2012 cover is unnumbered too.
+- Sentences repeated within a report (the 2025 assessment summary and the technical summaries) match on several
+  pages. The research log flags each one, and the cited page must be among the pages it lists.
