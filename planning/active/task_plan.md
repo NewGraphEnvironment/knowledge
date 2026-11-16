@@ -54,10 +54,10 @@
 - [x] Run them with `ACTION=query STORE=bull_trout TOPK=…` through `0150`, and log the returned keys and every miss
       against those expectations. A miss is reported, not tuned away. (Ran as 0150's query does, `crd_search()` on the
       local store, unverified, but all 14 queries in one process instead of 14 `0150` calls.)
-- [ ] Read the candidate passages on their PDF pages (pdftotext from the group's attachment), not from the chunks.
+- [x] Read the candidate passages on their PDF pages (pdftotext from the group's attachment), not from the chunks.
       Draft per topic in `planning/active/draft-<topic>.md`, every quote with its key and printed page. Up to two
       general-purpose drafters, one per half of the topics, told not to spawn and to write to their draft file.
-- [ ] Run 0280 with `QUOTED=` on each draft as it lands, so a drafting error shows before Phase 3.
+- [x] Run 0280 with `QUOTED=` on each draft as it lands, so a drafting error shows before Phase 3.
 
 ## Phase 3: Write `research/bull_trout_life_history.md`
 - [ ] Header line: Verified, Issues (#198, store #194, relates #33, #51, #199), Produced by (the `bull_trout` store,

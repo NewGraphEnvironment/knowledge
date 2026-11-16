@@ -34,3 +34,10 @@
     brackets as an insert. Those quotes now start after the bracket, and the 0280 comment says so.
   - The 2025 status-history sentence is shared by DU1 and DU2 and matched only PDF p. 30. It was replaced by the
     report's per-unit cover lines.
+- Phase 2 done. Both drafters reported (around 15:17Z and 15:18Z), and the gate was rerun here on each draft:
+  - forms, timing and thermal: 70 quotes (68 `verified_text`, 2 `verified_ocr`);
+  - redds and juveniles: 74 quotes, all `verified_text`.
+
+  Drafter A quoted two passages as `lateAugust` and `postspawning`. Those PDFs' text layers drop a line-end hyphen,
+  and the cached OCR of the page images reads `late-` / `August` and `post-` / `spawning`. Both are now quoted as
+  printed and checked with `, OCR`.
