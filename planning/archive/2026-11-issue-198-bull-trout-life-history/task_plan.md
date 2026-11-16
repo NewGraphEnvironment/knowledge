@@ -90,7 +90,7 @@
 - [x] `/code-check branch` clean, three rounds minimum
 - [x] The #56 archive's `public_sweep.py` is clean on the branch
 - [x] PWF checkboxes match landed work
-- [ ] `/planning-archive` on completion
+- [x] `/planning-archive` on completion
 
 Verification: Phase 1 is proved by the planted failures (each fails with the named status), and by 0280 then passing
 on the committed evidence and registry with their row counts unchanged. The file is proved by 0280 passing on it, by
