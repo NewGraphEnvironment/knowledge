@@ -174,7 +174,8 @@ wf_farm_priority.js                          farm priority/crossing tables out o
        NewGraphEnvironment/cred#48 is open, rebuild it before the push, as the ACTION=update bullet says)
       (a rebuild over an existing local store needs OVERWRITE=TRUE; ACTION=push needs CONFIRM=TRUE to upload)
 0280  verify data/literature_evidence.csv and data/ip_model_registry.csv against their PDFs, and the
-      model_id link between them (gate; read with knw_literature_read() / knw_ip_read())
+      model_id link between them (gate; read with knw_literature_read() / knw_ip_read()), and the quotes in
+      the research files QUOTED lists
 ```
 
 ## Report discovery — four axes
@@ -534,7 +535,11 @@ The cited basis for CH and BT habitat thresholds (#19). Not per watershed group.
   BT, GR, WCT, ST): a flow need for spawning, incubation, rearing, overwintering and migration, met by a
   minimum, a span or an optimum; depth lower limits for spawning and migration (never a bankfull depth); and
   velocity upper limits for spawning and rearing. SK has no rearing or overwintering flow cell and no rearing
-  velocity cell, because it rears in lakes. `EVIDENCE=`, `REGISTRY=` and `LOG=` check drafts
+  velocity cell, because it rears in lakes. The research files its `QUOTED` list names (#198) quote sources
+  as `"<passage>" (<citekey>, p. N)`, with `, OCR` before the `)` for a scan; each passage is checked as a
+  registry quote is. The file is read through cmark-gfm (`commonmark`), as GitHub renders it, and a quotation
+  mark or an HTML quote outside that form, text in a blockquote outside a quote, code, a link or emphasis
+  inside a quote, or a file with no quote fails (`<LOG>_research.csv`). `EVIDENCE=`, `REGISTRY=`, `QUOTED=` and `LOG=` check drafts
   without touching the committed logs.
 - Logs: `scripts/logs/habitat/`.
 

@@ -1,0 +1,263 @@
+# bull_trout store: life-history searches, #198. Expectations written 2026-11-16 between 14:54Z and 14:55Z, before any query ran (F1 ran at 14:55:20Z).
+# A miss is reported, not tuned away. The keys each query returns follow it once it runs. A query only finds
+# candidates: every passage the research file quotes is read on its PDF page.
+#
+# Forms
+# F1 "resident fluvial and adfluvial life history forms of bull trout"
+#    expect: fraley_shepard1989LifeHistory, mcphail_baxter1996reviewbull, rieman_mcintyre1993Demographichabitat,
+#    b_c_ministryofwaterlandandresourcestewardship2023ManagementPlan, post_etal2012COSEWICassessment
+# F2 "migratory and resident bull trout in the same population or watershed"
+#    expect: mcphail_baxter1996reviewbull, u_s_fishandwildlifeservice2015Recoveryplan, ladell2003EcologyLife
+#
+# Migration and spawning timing
+# M1 "adult bull trout begin upstream spawning migration in summer"
+#    expect: fraley_shepard1989LifeHistory, mcphail_baxter1996reviewbull, a Duncan or Upper Kootenay telemetry
+#    report (obrien1999Duncanbull, westover_heidt2004UpperKootenay)
+# M2 "bull trout spawning in September as water temperature declines"
+#    expect: fraley_shepard1989LifeHistory, mcphail_baxter1996reviewbull, a Williston or Salmo redd report
+# M3 "post-spawning adults return downstream to the lake or reservoir"
+#    expect: fraley_shepard1989LifeHistory, a kelt fence or Salmo telemetry report (baxter20192018Kaslo,
+#    baxter2002SummaryThird)
+#
+# Redd and spawning-site selection
+# R1 "bull trout redd site selection groundwater upwelling and hyporheic exchange"
+#    expect: baxter_hauer2000Geomorphologyhyporheic, baxter1997GeomorphologyLandUse, baxter_etal1999GeomorphologyLogging
+# R2 "spawning substrate gravel size and cover at bull trout redds"
+#    expect: fraley_shepard1989LifeHistory, mcphail_baxter1996reviewbull, baxter1997AspectsReproductive
+#
+# Thermal limits (brief: the numbers are evidence rows)
+# T1 "bull trout require cold water temperature for spawning and rearing"
+#    expect: selong_etalEffectTemperature, mochnacz2021Thermalecology, dunham_chandler2001Modelspredict,
+#    rieman_mcintyre1993Demographichabitat
+#
+# Juvenile rearing
+# J1 "juvenile bull trout rear in natal streams for one to four years before migrating"
+#    expect: fraley_shepard1989LifeHistory, mcphail_baxter1996reviewbull, pollard2001LifeHistory
+# J2 "bull trout fry emergence timing and early rearing habitat"
+#    expect: baxter1997Summerdaytime, baxterBullTrout, mcphail_baxter1996reviewbull
+# J3 "juvenile bull trout associate with cobble substrate and cover near the stream bottom"
+#    expect: baxter1997Summerdaytime, cope_morris2001WigwamRiver, dunham_chandler2001Modelspredict
+#
+# The forms across BC and the two listed units
+# B1 "distribution of bull trout life history forms across British Columbia"
+#    expect: hagen_decker2011StatusBull, b_c_ministryofwaterlandandresourcestewardship2023ManagementPlan,
+#    post_etal2012COSEWICassessment, cannings_ptolemy1998RareFreshwater
+# B2 "South Coast and Western Arctic designatable units of bull trout"
+#    expect: post_etal2012COSEWICassessment, cosewic2025COSEWICassessment, speciesatriskpublicregistry2026BullTrout,
+#    speciesregistrycanada2020BullTrout
+# B3 "adfluvial bull trout in large lakes and reservoirs Kootenay Arrow Williston"
+#    expect: hagen_decker2011StatusBull, decker_hagen2007DistributionAdfluvial, hagen_weber2019Limitingfactors
+#
+# Run on the store pushed 2026-11-15 (#194), cred 0.7.0, crd_search(top_k = 8), one process; methods: hybrid
+# F1 run 2026-11-16T14:55:20Z, 13 rows:
+#   1. u_s_fishandwildlifeservice2015ColumbiaHeadwaters  [bm25 10.475]
+#   2. baxter1997GeomorphologyLandUse  [cosine_distance 0.158]
+#   3. andrusak2015GerrardRainbow  [bm25 10.104]
+#   4. b_c_ministryofwaterlandandresourcestewardship2023ManagementPlan  [bm25 10.647]
+#   5. hagen_etal2015Criticalhabitats  [cosine_distance 0.147]
+#   6. mcphail_baxter1996reviewbull  [bm25 10.368]
+#   7. mcphail_baxter1996reviewbull  [cosine_distance 0.159]
+#   8. u_s_fishandwildlifeservice2015UpperSnake  [bm25 10.843]
+#   9. ladell2003EcologyLife  [cosine_distance 0.143]
+#   10. ladell2003EcologyLife  [cosine_distance 0.137]
+#   11. clarke_zimmerman2005BullTrout  [bm25 10.784]
+#   12. hagen2008Impactsdam  [bm25 11.286]
+#   13. paragamian_walters2011Bulltrout  [cosine_distance 0.166]
+# F2 run 2026-11-16T14:55:23Z, 15 rows:
+#   1. u_s_fishandwildlifeservice2015ColumbiaHeadwaters  [bm25 5.236]
+#   2. latham2002Historicalanthropogenic  [bm25 5.257]
+#   3. hagen_sary2023BullTrout  [bm25 5.211]
+#   4. hagenj_spendlowi_2019BullTrout  [bm25 5.309]
+#   5. hagen_etal2015Criticalhabitats  [cosine_distance 0.166]
+#   6. mcphail_baxter1996reviewbull  [bm25 5.318]
+#   7. baxter_oliver1997BullTrout  [cosine_distance 0.172]
+#   8. u_s_fishandwildlifeservice2015MidColumbiaRecovery  [cosine_distance 0.161]
+#   9. u_s_fishandwildlifeservice2015MidColumbiaRecovery  [cosine_distance 0.173]
+#   10. clarke_zimmerman2005BullTrout  [cosine_distance 0.170]
+#   11. u_s_fishandwildlifeservice2010Endangeredthreatened  [bm25 5.314]
+#   12. pollard2001LifeHistory  [cosine_distance 0.157]
+#   13. pollard2001LifeHistory  [bm25 5.814]
+#   14. pollard2001LifeHistory  [bm25 5.495]
+#   15. hagen_decker2011StatusBull  [cosine_distance 0.147]
+# M1 run 2026-11-16T14:55:27Z, 12 rows:
+#   1. DistributionlifehistoryabundanceharvesthabitatlimitingfactorsbulltroutMetoliusRiverLakeBillyChinookOregon198394  [bm25 7.468]
+#   2. DistributionlifehistoryabundanceharvesthabitatlimitingfactorsbulltroutMetoliusRiverLakeBillyChinookOregon198394  [bm25 6.904]
+#   3. DistributionlifehistoryabundanceharvesthabitatlimitingfactorsbulltroutMetoliusRiverLakeBillyChinookOregon198394  [bm25 7.767]
+#   4. mcphail_baxter1996reviewbull  [cosine_distance 0.153]
+#   5. mcphail_baxter1996reviewbull  [cosine_distance 0.158]
+#   6. u_s_fishandwildlifeservice2015MidColumbiaRecovery  [cosine_distance 0.163]
+#   7. ladell2003EcologyLife  [cosine_distance 0.156]
+#   8. ladell2003EcologyLife  [cosine_distance 0.146]
+#   9. ladell2003EcologyLife  [bm25 7.309]
+#   10. baxter2001AspectsBiology  [bm25 8.531]
+#   11. u_s_fishandwildlifeservice2015Recoveryplan  [cosine_distance 0.163]
+#   12. cosewic2025COSEWICassessment  [bm25 7.392]
+# M2 run 2026-11-16T14:55:30Z, 9 rows:
+#   1. baxter2001BullTrout  [bm25 6.848]
+#   2. chirico_westover1998WigwamRiver  [cosine_distance 0.145]
+#   3. andrusak2010KasloRivera  [bm25 6.269]
+#   4. ladell2003EcologyLife  [cosine_distance 0.149]
+#   5. u_s_fishandwildlifeservice2015Recoveryplan  [cosine_distance 0.142]
+#   6. FisheriesStatusReportPeaceSubRegionBCEnvironmentRegion7BullTroutSalvelinusconfluentus1992  [bm25 5.955]
+#   7. cosewic2025COSEWICassessment  [bm25 5.978]
+#   8. cope_etal2002WigwamRiver  [cosine_distance 0.151]
+#   9. andrusak2010KasloRiver  [bm25 6.460]
+# M3 run 2026-11-16T14:55:33Z, 13 rows:
+#   1. langston2008GethingCreek  [bm25 8.236]
+#   2. obrien_zimmerman2001DavisRiver  [bm25 8.119]
+#   3. DistributionlifehistoryabundanceharvesthabitatlimitingfactorsbulltroutMetoliusRiverLakeBillyChinookOregon198394  [bm25 8.156]
+#   4. DistributionlifehistoryabundanceharvesthabitatlimitingfactorsbulltroutMetoliusRiverLakeBillyChinookOregon198394  [bm25 7.495]
+#   5. golderassociatesltd__okanagannationalliance2018UpperDuncan  [bm25 7.857]
+#   6. hagen_weber2019Limitingfactors  [cosine_distance 0.277]
+#   7. decker_hagen2007DistributionAdfluvial  [cosine_distance 0.277]
+#   8. okanagannationalliance_golderassociates2013UpperDuncan  [cosine_distance 0.284]
+#   9. martins_etal2013Forebayuse  [bm25 7.239]
+#   10. kang_warnock2020KinbasketReservoir  [cosine_distance 0.280]
+#   11. kang_warnock2020KinbasketReservoir  [cosine_distance 0.260]
+#   12. kang_warnock2020KinbasketReservoir  [cosine_distance 0.279]
+#   13. kang_warnock2020KinbasketReservoir  [cosine_distance 0.278]
+# R1 run 2026-11-16T14:55:37Z, 9 rows:
+#   1. baxter1997GeomorphologyLandUse  [bm25 12.466]
+#   2. baxter1997GeomorphologyLandUse  [bm25 11.887]
+#   3. baxter1997GeomorphologyLandUse  [bm25 15.935]
+#   4. baxter1997GeomorphologyLandUse  [cosine_distance 0.154]
+#   5. baxter_hauer2000Geomorphologyhyporheic  [bm25 14.317]
+#   6. baxter_hauer2000Geomorphologyhyporheic  [bm25 13.574]
+#   7. clarke_zimmerman2005BullTrout  [bm25 12.202]
+#   8. baxter1997AspectsReproductive  [cosine_distance 0.171]
+#   9. baxter1997AspectsReproductive  [cosine_distance 0.170]
+# R2 run 2026-11-16T14:55:40Z, 14 rows:
+#   1. baxter1997GeomorphologyLandUse  [cosine_distance 0.197]
+#   2. decker_hagen2008AdfluvialBull  [bm25 8.205]
+#   3. hagen_baxter2001SheepCreek  [cosine_distance 0.191]
+#   4. hagen_baxter2001SheepCreek  [cosine_distance 0.188]
+#   5. oconnor_etal2024WillistonBull  [bm25 8.379]
+#   6. hagen_decker2009BullTrout  [bm25 8.553]
+#   7. mcphail_baxter1996reviewbull  [cosine_distance 0.193]
+#   8. hagen_weber2019Limitingfactors  [bm25 8.735]
+#   9. decker_hagen2007DistributionAdfluvial  [bm25 8.192]
+#   10. baxter1999BullTrout  [cosine_distance 0.177]
+#   11. FisheriesStatusReportPeaceSubRegionBCEnvironmentRegion7BullTroutSalvelinusconfluentus1992  [cosine_distance 0.190]
+#   12. cosewic2025COSEWICassessment  [bm25 8.386]
+#   13. andrusak2014Bulltrout  [bm25 8.633]
+#   14. hagen_decker2011StatusBull  [cosine_distance 0.191]
+# T1 run 2026-11-16T14:55:44Z, 14 rows:
+#   1. DistributionlifehistoryabundanceharvesthabitatlimitingfactorsbulltroutMetoliusRiverLakeBillyChinookOregon198394  [bm25 7.355]
+#   2. cope_morris2001WigwamRiver  [cosine_distance 0.146]
+#   3. mochnacz2021Thermalecology  [cosine_distance 0.147]
+#   4. decker_etal2005FeasibilityJuvenile  [cosine_distance 0.144]
+#   5. u_s_fishandwildlifeservice2015MidColumbiaRecovery  [bm25 7.035]
+#   6. u_s_fishandwildlifeservice2015Recoveryplan  [bm25 7.541]
+#   7. u_s_fishandwildlifeservice2015Recoveryplan  [cosine_distance 0.150]
+#   8. u_s_fishandwildlifeservice2015Recoveryplan  [bm25 7.127]
+#   9. u_s_fishandwildlifeservice2015Recoveryplan  [cosine_distance 0.147]
+#   10. clarke_zimmerman2005BullTrout  [cosine_distance 0.132]
+#   11. u_s_fishandwildlifeservice2010Endangeredthreatened  [bm25 7.640]
+#   12. u_s_fishandwildlifeservice2010Endangeredthreatened  [bm25 7.176]
+#   13. andrusak2014Bulltrout  [cosine_distance 0.145]
+#   14. andrusak_etal2024KootenayLake  [bm25 7.196]
+# J1 run 2026-11-16T14:55:47Z, 12 rows:
+#   1. baxter1997GeomorphologyLandUse  [cosine_distance 0.148]
+#   2. DistributionlifehistoryabundanceharvesthabitatlimitingfactorsbulltroutMetoliusRiverLakeBillyChinookOregon198394  [cosine_distance 0.146]
+#   3. DistributionlifehistoryabundanceharvesthabitatlimitingfactorsbulltroutMetoliusRiverLakeBillyChinookOregon198394  [bm25 7.620]
+#   4. mcphail_baxter1996reviewbull  [cosine_distance 0.132]
+#   5. prince2010SubadultBull  [cosine_distance 0.145]
+#   6. ladell2003EcologyLife  [cosine_distance 0.109]
+#   7. golderassociatesltd_2010UpperDuncan  [bm25 7.975]
+#   8. okanagannationalliance_golderassociates2013UpperDuncan  [bm25 7.604]
+#   9. cosewic2025COSEWICassessment  [bm25 7.685]
+#   10. golderassociatesltd_2009UpperDuncan  [bm25 8.211]
+#   11. okanagannationalliance_golderassociates2016UpperDuncan  [bm25 7.579]
+#   12. okanagannationalliance_golderassociates2016UpperDuncan  [bm25 7.841]
+# J2 run 2026-11-16T14:55:51Z, 8 rows:
+#   1. fraley_shepard1989LifeHistory  [cosine_distance 0.180]
+#   2. mcphail_baxter1996reviewbull  [bm25 10.663]
+#   3. ladell2003EcologyLife  [cosine_distance 0.177]
+#   4. u_s_fishandwildlifeservice2015Recoveryplan  [bm25 7.988]
+#   5. u_s_fishandwildlifeservice2010Endangeredthreatened  [cosine_distance 0.176]
+#   6. FisheriesStatusReportPeaceSubRegionBCEnvironmentRegion7BullTroutSalvelinusconfluentus1992  [cosine_distance 0.159]
+#   7. baxter1997AspectsReproductive  [bm25 10.650]
+#   8. baxter1997Summerdaytime  [bm25 8.446]
+# J3 run 2026-11-16T14:55:54Z, 11 rows:
+#   1. cope2004MiddleforkWhite  [cosine_distance 0.181]
+#   2. ladell2003EcologyLife  [cosine_distance 0.157]
+#   3. ladell2003EcologyLife  [cosine_distance 0.178]
+#   4. FisheriesStatusReportPeaceSubRegionBCEnvironmentRegion7BullTroutSalvelinusconfluentus1992  [cosine_distance 0.154]
+#   5. App78_BC_Bulltrout_Brochpdf  [cosine_distance 0.180]
+#   6. cope2006MiddleforkWhite  [cosine_distance 0.185]
+#   7. baxter1997Summerdaytime  [bm25 10.570]
+#   8. baxter1997Summerdaytime  [bm25 12.142]
+#   9. baxter1997Summerdaytime  [bm25 11.326]
+#   10. baxter1997Summerdaytime  [bm25 10.925]
+#   11. baxter1997Summerdaytime  [cosine_distance 0.176]
+# B1 run 2026-11-16T14:55:58Z, 16 rows:
+#   1. u_s_fishandwildlifeservice2015ColumbiaHeadwaters  [cosine_distance 0.163]
+#   2. speciesatriskpublicregistry2026BullTrout  [bm25 7.442]
+#   3. kang_warnock2017KinbasketReservoir  [bm25 7.904]
+#   4. kang_warnock2018KinbasketReservoir  [bm25 7.793]
+#   5. u_s_fishandwildlifeservice2015MidColumbiaRecovery  [cosine_distance 0.148]
+#   6. u_s_fishandwildlifeservice2015MidColumbiaRecovery  [cosine_distance 0.163]
+#   7. u_s_fishandwildlifeservice2015MidColumbiaRecovery  [cosine_distance 0.157]
+#   8. andrusak2010KasloRivera  [cosine_distance 0.158]
+#   9. ladell2003EcologyLife  [cosine_distance 0.161]
+#   10. kang_warnock2016KinbasketReservoir  [bm25 7.948]
+#   11. cosewic2025COSEWICassessment  [bm25 8.131]
+#   12. cosewic2025COSEWICassessment  [bm25 7.680]
+#   13. pollard2001LifeHistory  [cosine_distance 0.155]
+#   14. post_etal2012COSEWICassessment  [bm25 7.701]
+#   15. hagen2008Impactsdam  [bm25 7.502]
+#   16. paragamian_walters2011Bulltrout  [cosine_distance 0.159]
+# B2 run 2026-11-16T14:56:01Z, 11 rows:
+#   1. b_c_ministryofwaterlandandresourcestewardship2023ManagementPlan  [bm25 13.516]
+#   2. arndt2004PostFertilizationDiet  [cosine_distance 0.214]
+#   3. u_s_fishandwildlifeservice2015MidColumbiaRecovery  [cosine_distance 0.201]
+#   4. u_s_fishandwildlifeservice2015Recoveryplan  [cosine_distance 0.188]
+#   5. u_s_fishandwildlifeservice2015Recoveryplan  [cosine_distance 0.212]
+#   6. u_s_fishandwildlifeservice2015Recoveryplan  [cosine_distance 0.211]
+#   7. cosewic2025COSEWICassessment  [bm25 12.176]
+#   8. cosewic2025COSEWICassessment  [bm25 13.761]
+#   9. cosewic2025COSEWICassessment  [bm25 13.744]
+#   10. cosewic2025COSEWICassessment  [bm25 12.175]
+#   11. hagen2008Impactsdam  [cosine_distance 0.212]
+# B3 run 2026-11-16T14:56:05Z, 14 rows:
+#   1. langston2008GethingCreek  [cosine_distance 0.174]
+#   2. bray2003LakeRevelstoke  [cosine_distance 0.173]
+#   3. mcphail_baxter1996reviewbull  [cosine_distance 0.161]
+#   4. hagen_weber2019Limitingfactors  [bm25 8.456]
+#   5. hagen_weber2019Limitingfactors  [bm25 7.822]
+#   6. hagen_weber2019Limitingfactors  [bm25 7.928]
+#   7. u_s_fishandwildlifeservice2010Endangeredthreatened  [cosine_distance 0.170]
+#   8. andrusak2014Bulltrout  [cosine_distance 0.166]
+#   9. hagen2008Impactsdam  [cosine_distance 0.170]
+#   10. hagen2008Impactsdam  [bm25 7.839]
+#   11. hagen2008Impactsdam  [bm25 8.624]
+#   12. westover_heidt2004UpperKootenay  [cosine_distance 0.174]
+#   13. westover_heidt2004UpperKootenay  [cosine_distance 0.174]
+#   14. mcpherson2018KootenayLake  [bm25 8.061]
+#
+# Verdicts against the expectations above:
+#   F1 partial (2 of 5): mcphail_baxter1996reviewbull and the 2023 management plan; fraley_shepard1989LifeHistory,
+#      rieman_mcintyre1993Demographichabitat and post_etal2012COSEWICassessment did not return.
+#   F2 partial (1 of 3): mcphail_baxter1996reviewbull; the 2015 recovery plan (its Columbia Headwaters and
+#      Mid-Columbia unit plans returned instead) and ladell2003EcologyLife did not.
+#   M1 partial (1 of 4): mcphail_baxter1996reviewbull; fraley_shepard1989LifeHistory, obrien1999Duncanbull and
+#      westover_heidt2004UpperKootenay did not (ladell2003EcologyLife and the Metolius report did).
+#   M2 partial (1 of 3): a Salmo report (baxter2001BullTrout); fraley_shepard1989 and mcphail_baxter1996 did not.
+#   M3 miss: neither fraley_shepard1989 nor a Kaslo or Salmo kelt report; Davis, Gething and Upper Duncan reports did.
+#   R1 hit (2 of 3): baxter1997GeomorphologyLandUse and baxter_hauer2000Geomorphologyhyporheic;
+#      baxter_etal1999GeomorphologyLogging did not.
+#   R2 partial (1 of 3): mcphail_baxter1996reviewbull; fraley_shepard1989 and baxter1997AspectsReproductive did not.
+#   T1 partial (1 of 4): mochnacz2021Thermalecology; selong, dunham_chandler2001 and rieman_mcintyre1993 did not.
+#   J1 partial (1 of 3): mcphail_baxter1996reviewbull; fraley_shepard1989 and pollard2001LifeHistory did not.
+#   J2 hit (2 of 3): baxter1997Summerdaytime and mcphail_baxter1996reviewbull; baxterBullTrout did not
+#      (fraley_shepard1989LifeHistory did, its only return in the fourteen queries).
+#   J3 partial (1 of 3): baxter1997Summerdaytime (five rows); cope_morris2001 and dunham_chandler2001 did not.
+#   B1 partial (2 of 4): post_etal2012 and cosewic2025 returned; hagen_decker2011StatusBull, the 2023 plan and
+#      cannings_ptolemy1998 did not.
+#   B2 partial (1 of 4): cosewic2025COSEWICassessment (four rows); post_etal2012 and both registry pages did not
+#      (the 2023 plan did).
+#   B3 partial (1 of 3): hagen_weber2019Limitingfactors; hagen_decker2011 and decker_hagen2007 did not.
+# Reading: the store ranks the specific monitoring reports above the reviews, so the reviews the file leans on
+# (Fraley & Shepard 1989, Rieman & McIntyre 1993, Hagen & Decker 2011, the COSEWIC 2012 report) were mostly not
+# returned. Each was then read directly from its PDF; the queries' returns are what surfaced the BC monitoring
+# reports (Ladell 2003, Pollard 2001, the Metolius, Davis, Gething and Upper Duncan reports) as further sources.
