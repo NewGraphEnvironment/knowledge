@@ -103,3 +103,40 @@ version of record.
 After one download, ResearchGate's search shows an interactive Cloudflare "verify you are human" check. The agent
 does not complete such checks, so the remaining ResearchGate pages went to Al: Zippin 1958, Carle & Strub 1978,
 Moran 1951, Dorazio et al. 2005, Riley & Fausch 1992, Dorazio & Erickson 2018, and Ridout & Linkie 2009.
+
+## Inventory and CSVs (2026-11-16)
+
+The issue lists 29 works, or 30 counting the second volume of *Applied Hierarchical Modeling* (the plan said 30/31).
+- **Filed with a PDF: 23.**
+  - 2 members: the group copies in `survey_design`, keys pinned.
+  - 21 additions. 18 are versions of record. Three are not, and their `why` says so: Hedger 2013 and Dorazio &
+    Erickson 2018 are accepted manuscripts, and Ridout & Linkie 2009 is the authors' 2008 preprint.
+  - The files sit in the ignored `data/rag/pdf/detection/`: 23 PDFs, 19 MB, none needing OCR. The RISC protocol's
+    2 low-text pages are its cover and a blank.
+  - Sources: course and author copies at UVM (6); publisher-free on Wiley (3); USDA, ABMI, KOPS, CORE and the
+    journal (Royle 2004); SciSpace (2); m4 browser downloads from ResearchGate (Dorazio 2005, Dorazio & Erickson,
+    Hsieh); gwern (the Chao 1987 scan, with a text layer); gov.bc.ca (RISC).
+- **No PDF: 7.**
+  - 4 papers: Zippin 1958, Carle & Strub 1978, Moran 1951 and Riley & Fausch 1992. Al could not get them from
+    ResearchGate, and CrossRef holds no abstract for any of them.
+  - 3 books: MacKenzie et al. 2018, and Kéry & Royle 2016 and 2021.
+- **OpenAlex abstracts, measured for the no-PDF four:**
+  - Zippin 1958's abstract is another paper's text (a marsh fish census after a kill).
+  - Carle & Strub's is OCR with misread letters ("eapture", "ehanges").
+  - Riley & Fausch's matches the publisher's.
+  - Moran has none.
+  So an OpenAlex fallback would have filed a wrong abstract for Zippin: plan review A2 holds.
+- **CrossRef metadata wrong against the title page:**
+  - ALL-CAPS titles: MacKenzie 2002, Royle & Nichols 2003, Tyre 2003. In the group, such titles have produced keys
+    like `taylor_etal2013HYDROLOGICCORRELATES`.
+  - MacKenzie 2002 splits "J. Andrew Royle" as surname "Andrew Royle".
+  - Royle 2004 deposits the USGS centre as an author.
+  - Dorazio & Erickson 2018 lowercases eDNA and R, and dates the work to its 2017 online issue. The issue cites
+    2018 (18(2), March 2018).
+  Fix: 0270's opt-in `override` column (commit 440ebcbf). Rows without it build exactly `crossref_item()`, so the
+  existing collections re-run unchanged.
+- **Dedupe:** no row matches any library, live or trashed, by DOI or normalized title, from 0270's guarded copy.
+- **Enumeration** (`enumeration_round0.tsv`, built through `addition_item()`, i.e. what 0270 will file): every row's
+  title words and first author are on its PDF's first two pages. Year and volume are missing only on the three
+  manuscript copies. Dorazio & Erickson's title scores 0.71 because the manuscript was titled "Multi-scale Occupancy
+  Modeling" before publication.

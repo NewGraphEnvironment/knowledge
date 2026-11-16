@@ -49,29 +49,29 @@ What exploration settled (read-only, 2026-11-16):
    is usable, file the work abstract-only. Only a work with neither is a gap.
 
 ## Phase 1: inventory, PDFs and the two CSVs (no Zotero writes)
-- [ ] Resolve every listed work against CrossRef, including those the issue gives without a DOI (MacKenzie 2002,
+- [x] Resolve every listed work against CrossRef, including those the issue gives without a DOI (MacKenzie 2002,
       Royle & Nichols 2003, Tyre 2003, Zippin 1958, Carle & Strub 1978, Hedger 2013, Schmidt 2013, Dorazio &
       Erickson 2018, Rowcliffe 2014, Ridout & Linkie 2009, Burton 2015, Chao 2014, Hsieh 2016). Record the DOI,
       title, year and whether CrossRef has an abstract. Books (the MacKenzie et al. 2018 occupancy book, Kéry &
       Royle's *Applied Hierarchical Modeling* vols 1–2) carry their metadata as rows, since 0270 reads a book
       without its CrossRef DOI
-- [ ] BC RISC wildlife camera standard: find the current RISC document on gov.bc.ca (not the Western Canada or
+- [x] BC RISC wildlife camera standard: find the current RISC document on gov.bc.ca (not the Western Canada or
       Alberta guidelines already in `survey_design`)
-- [ ] Dedupe every work by DOI and title against every library, trash included, from a guarded WAL-inclusive copy
+- [x] Dedupe every work by DOI and title against every library, trash included, from a guarded WAL-inclusive copy
       (0270's `db()` path). A live group copy becomes a member row. A personal-only copy becomes a member row,
       which 0270 copies into the group. A trashed group copy is restored, not recreated
-- [ ] Find a PDF for each work, trying the routes in order and recording which one gave it:
+- [x] Find a PDF for each work, trying the routes in order and recording which one gave it:
       1. the publisher's free archive (BES journals, Ecology/ESA, *Animal Biodiversity and Conservation*, *J. Plant
          Ecology*);
       2. the OA locations OpenAlex and Semantic Scholar list (no contact details in the requests);
       3. a web search for "<title> pdf" and "<title> researchgate";
       4. the authors' lab pages and institutional repositories.
       A URL a script can fetch goes in as a URL whose body starts with `%PDF` (through 0153's `fetch`).
-- [ ] Script-blocked copies (ResearchGate, Academia, some lab pages): load the Claude in Chrome skill and download
+- [x] Script-blocked copies (ResearchGate, Academia, some lab pages): load the Claude in Chrome skill and download
       them in a new tab. If a click or sign-in is needed, hand Al the URL list. Browser downloads land in
       `~/Downloads`, which this process cannot read (probed 2026-11-16), so Al runs one copy command per batch into
       the ignored `data/rag/pdf/detection/`, and the rows name those paths
-- [ ] Each alternative copy is checked against the published version: title page, journal pagination and the
+- [x] Each alternative copy is checked against the published version: title page, journal pagination and the
       abstract's wording. An accepted manuscript or preprint is used only when no version of record can be had, and
       its `why` says so, because quotes and page numbers come from it
 - [ ] Abstract-only: a work with no full text is filed `pdf = none` when CrossRef has its abstract. Where CrossRef
@@ -82,15 +82,15 @@ What exploration settled (read-only, 2026-11-16):
       non-DOI path sets no abstract (review G2), so its book DOI goes in `why`, and it is either a PDF or a gap.
       A work with neither a PDF nor an abstract is the gap. The dry run never reaches the abstract step for a new
       item (review G3), so this check is the only gate
-- [ ] OCR any scan with no text layer (pages under 30 characters) with `ocrmypdf` into `data/rag/ocr/detection/`;
+- [x] (None needed.) OCR any scan with no text layer (pages under 30 characters) with `ocrmypdf` into `data/rag/ocr/detection/`;
       web pages are printed to PDF and filed as `report`
-- [ ] A trashed group copy is restored with a Web API PATCH `deleted: 0` (Al present) before the first dry run,
+- [x] (None found.) A trashed group copy is restored with a Web API PATCH `deleted: 0` (Al present) before the first dry run,
       then filed as a member row by its key (review G1)
-- [ ] Write `data/detection_members.csv` (the group's 2 items plus any found copies) and
+- [x] Write `data/detection_members.csv` (the group's 2 items plus any found copies) and
       `data/detection_additions.csv` (rows with a DOI, or book or report metadata from the title page). Abstract-only
       rows (`pdf = none`) go in only when an abstract is available to 0270. URLs are percent-encoded, and no other
       library's name or key goes in a tracked file
-- [ ] Enumeration before any filing (review O1): every row against its CrossRef record or title page, in
+- [x] Enumeration before any filing (review O1): every row against its CrossRef record or title page, in
       `planning/active/enumeration_round0.tsv`, so fixes are CSV edits
 - [ ] Record per-family counts and MB in findings (filed with PDF, and from which route; abstract only; gap); edit #216's body with the
       inventory and the decided build list
