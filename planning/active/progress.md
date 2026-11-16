@@ -58,3 +58,6 @@
   - The fixes include DU3: four units lie in BC, not three.
   - My own pass over the fixes caught four sentences that outran their quotes.
   - Gate: 169 quotes, all verified.
+- Phase 4, round 2: one reader of round 1's diff found six errors inside the fixes, plus one unsupported place name
+  that round 1 had added; all seven fixed (`audit-round2.md`). Gate: 170 quotes, all verified. A third round reads
+  round 2's diff.

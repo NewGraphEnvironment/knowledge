@@ -26,8 +26,8 @@ they are cited by data row (row N is file line N + 1), and the files that read t
   share a watershed and its spawning streams.
 - **Spawning runs in summer, spawning in late summer and fall.** Migratory adults leave the river or lake between
   spring and midsummer, earlier when the run is long. They spawn from August to October, and the spent fish, females
-  first, leave the spawning streams soon after; tagged fish were back in their rivers or lakes by November in BC and
-  by the end of December in Oregon. Falling water temperature is the likely cue, though not a precise one. Hagen and
+  first, leave the spawning streams soon after; tagged fish were back in their rivers or lakes by early November in
+  the upper Kootenay and by the end of November in the Salmo (BC), and by the end of December in Oregon. Falling water temperature is the likely cue, though not a precise one. Hagen and
   Weber judge that most BC migratory spawners spawn every year and some every other year; in BC tagging studies, 41 to
   80 % of tagged spawners came back the next year, by measures that differ between studies.
 - **Redds go where groundwater comes up.** Within the spawning streams, fish choose reaches fed by upwelling
@@ -36,8 +36,8 @@ they are cited by data row (row N is file line N + 1), and the files that read t
   and stayed warmer than eggs nearby.
 - **Eggs winter in the gravel.** They hatch in winter or early spring, and fry emerge in spring.
 - **Juveniles live on the bed.** Fry hold in shallow, slow margins and side channels among cobble. In the Chowade
-  River older juveniles used deeper, faster water with boulders and wood; in the Arrow Lakes tributaries they kept to
-  shallow, slow margins over boulders. Both stay close to cover and the bottom. Migratory juveniles leave
+  River older juveniles used deeper, faster water with boulders and wood; in the Arrow Lakes tributaries juveniles,
+  young-of-the-year among them, kept to shallow, slow margins over boulders. Both stay close to cover and the bottom. Migratory juveniles leave
   the natal stream mostly at age 2 or 3; residents stay.
 - **Cold water throughout.** The temperature limits are evidence rows, read in `thermal_requirements.md`.
 - **Five units in Canada, four of them in BC; two on Schedule 1.** COSEWIC splits Canada's bull trout into five
@@ -73,8 +73,8 @@ off or few:
 
 > "In less productive tributaries of the Williston Reservoir that are somewhat or completely isolated by migration barriers or by distance from other populations of ... large-bodied, migratory fish, the stream resident life history may be favoured" (hagen_weber2019Limitingfactors, pp. 21–22)
 
-**Size.** Resident adults are small and migratory adults large. In the Liard system (northern BC and the Yukon), McPhail and
-Baxter, citing Craig and Bruce 1982:
+**Size.** Resident adults are small and migratory adults large. In the Liard system (the review names no finer place), McPhail
+and Baxter, citing Craig and Bruce 1982:
 
 > "most stream-resident populations are dwarfed. For example, in the Liard system, stream-resident adults average about 200 mm and rarely exceed 300 mm; whereas, adults in larger tributaries and in the mainstem average about 400 mm, and often exceed 600 mm" (mcphail_baxter1996reviewbull, p. 12)
 
@@ -94,8 +94,8 @@ migrants of his study streams.
 
 > "as above-barrier and stream resident bull trout showed lower growth rates, reduced body sizes and younger ages at maturity compared to below-barrier fish." (ladell2003EcologyLife, p. 108)
 
-The BC management plan gives sizes by form: for residents a range-wide range (it cites Goetz 1989 and McPhail and
-Baxter 1996), for adfluvial fish BC's lakes and reservoirs, and for fluvial fish BC populations, some as large as
+The BC management plan gives sizes by form: for residents a range it does not tie to BC (it cites Goetz 1989 and
+McPhail and Baxter 1996), for adfluvial fish BC's lakes and reservoirs, and for fluvial fish BC populations, some as large as
 adfluvial ones:
 
 > "Mature, stream resident Bull Trout may be up to eight years of age and range in size from 115-300 mm" (b_c_ministryofwaterlandandresourcestewardship2023ManagementPlan, p. 13)
@@ -138,7 +138,7 @@ many of the same tributaries.
 > "Both life history forms spawned in many of the same systems, but clearly utilized different areas for over-wintering. The use of similar spawning areas suggests a degree of genetic mixing occurs between the adfluvial and fluvial bull trout populations found in the upper Kootenay watershed." (westover_heidt2004UpperKootenay, p. i)
 
 In the Metolius River and Lake Billy Chinook (Oregon), most fish appeared adfluvial, but some were fluvial and some
-switched:
+appear to have switched:
 
 > "Most bull trout in the Metolius River Basin and Lake Billy Chinook appeared to demonstrate an adfluvial life history pattern." (DistributionlifehistoryabundanceharvesthabitatlimitingfactorsbulltroutMetoliusRiverLakeBillyChinookOregon198394, p. 20)
 
@@ -166,7 +166,7 @@ or as males maturing early:
 ## When do they migrate and spawn?
 
 **The spawning season.** Bull trout spawn in late summer and fall: September to October in McPhail and
-Baxter's review, mid-August to mid-October in Hagen and Weber's. McPhail and Baxter note that the timing changes little
+Baxter's summary, and mid-August to mid-October in Hagen and Weber, who cite the same review for it. McPhail and Baxter note that the timing changes little
 with latitude.
 
 > "The bull trout spawns in the fall (September to October) in flowing water." (mcphail_baxter1996reviewbull, p. i)
@@ -481,14 +481,17 @@ wood for cover:
 
 > "Depths between 30 and 40 cm were preferred, with depths greater than 45 cm having 0 suitability in my study area" (baxter1997Summerdaytime, p. 11)
 
-In the Arrow Lakes tributaries (BC), Ladell found it otherwise: migratory juveniles below the waterfalls kept to
-shallow margins, over boulders, in the slowest water:
+**Juveniles of all sizes.** In the Arrow Lakes tributaries (BC), Ladell's juveniles below the waterfalls, the
+young-of-the-year among them, kept to shallow margins, over boulders, in the slowest water; it was the smaller
+young-of-the-year that held in shallow water:
 
 > "Juveniles from the adfluvial populations were found primarily along the stream margins. They utilized mainly shallow water (Figure 2.13) that had low bottom velocity." (ladell2003EcologyLife, p. 41)
 
 > "Juveniles below the barrier were associated with all substrate sizes, but were strongly associated with boulders." (ladell2003EcologyLife, p. 57)
 
 > "Below the barriers, juveniles preferred the slowest water velocities available." (ladell2003EcologyLife, p. 56)
+
+> "smaller young-of-the-year held in shallow water (Figure 2.13)" (ladell2003EcologyLife, p. 64)
 
 In the Wigwam River (BC), the authors judge a boulder reach good for juveniles:
 
@@ -606,9 +609,11 @@ restate them.
 - Incubation: rows 150 and 510; degree-days to hatch, row 534.
 - Other spawning temperatures, from US reviews and the Metolius: rows 493, 503, 504, 509, 540 and 542.
 - Migration: row 158.
-- Rearing and summer stream limits: rows 151, 152, 155–157, 159, 160, 537–539, 541, 543, 547 and 550–552.
+- Upper limits stored under rearing: rows 151, 152, 155–157, 159, 160, 537–539, 541, 543, 547, 548, 550–552 and 674.
+  The evidence table stores a bull trout limit that names no life stage under rearing (`thermal_requirements.md`
+  says so), and several of these are such limits: 538 is not stage-specific, 541, 547, 548 and 552 name no stage, and
+  551 is drawn against spawning and migration sites. Row 674 is the onset of stress in the laboratory.
 - Preferred temperatures for juveniles and adults together: rows 544 and 545.
-- No life stage named: row 548 (BC's upper limit of thermal suitability) and row 674 (onset of stress, laboratory).
 - Elevation as a proxy for temperature, with no value: row 484.
 - Laboratory growth optimum and upper lethal temperature: rows 154 and 536 (Selong et al.).
 - Thermal units from egg deposition to the onset of winter: row 1117 (Mochnacz, an inference from laboratory studies).
