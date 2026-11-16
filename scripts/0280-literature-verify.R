@@ -540,8 +540,9 @@ reg_pass <- reg_out$status %in% PASS
 # turn a backtick into a quote mark): fenced blocks and inline code are blanked, a leading "> "
 # is stripped from each line, and a passage may wrap. Only a straight double quote delimits a
 # passage, so curly marks may sit inside one. Then what would let a quote escape the check
-# fails: a quote mark left once the parsed quotes are blanked (a double quote, a curly opening
-# single quote, a straight one opening a word), a blockquote line holding no parsed quote,
+# fails: a quote mark left once the parsed quotes are blanked (a straight or curly double
+# quote, a low or reversed one, a guillemet, a curly opening single quote, a straight one
+# opening anything but a space, an HTML quote entity or <q> tag), a blockquote line holding no parsed quote,
 # emphasis inside a passage (its markers are tokens the PDF lacks), a fragment of fewer than
 # RESEARCH_FRAG word tokens (0280's MIN_FRAG counts punctuation), a listed file that is missing
 # and one with no quote at all. A source's own [brackets] read as an insert, as in every quote,
@@ -595,7 +596,8 @@ research_parse <- function(path) {
         strrep(" ", attr(m, "match.length")[i])
     }
   }
-  stray <- gregexpr("[\"“”‘]|(?<![[:alnum:]])'(?=[[:alpha:]])", txt, perl = TRUE)[[1]]
+  stray <- gregexpr(paste0("[\"“”„‟‘‚«»‹›]|&(?:quot|[lr]dquo|lsquo|[lr]aquo);|<q[[:space:]>]|",
+                           "(?<![[:alnum:]])'(?=[^[:space:]])"), txt, perl = TRUE)[[1]]
   if (stray[1] > 0) {
     for (p in stray) out[[length(out) + 1]] <- row(line_at(p), status = "stray_quote_mark")
   }
