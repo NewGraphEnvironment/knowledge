@@ -80,7 +80,7 @@
   - Unicode: 30/22/56/11 members across the four source sets, 0 outside the guard;
   - cmark-gfm: 26 node names, all handled;
   - all fixtures as expected.
-- 12 agents on the task in all.
+- 11 agents on the task in all: plan review, 2 drafters, 4 meaning auditors, 4 code reviewers.
 - Validation:
   - tests: 2,384 passed, 0 failed, 4 skipped;
   - public sweep: no hits in branch lines, after removing the reviewers' path lines from two review files;
