@@ -110,11 +110,11 @@ What exploration settled (read-only, 2026-11-16):
       statistics tree
 
 ## Phase 3: rebuild and push `statistics`
-- [ ] Pull the bucket's `statistics` (verified connect) and measure its documents and chunks with a duckdb query
+- [x] Pull the bucket's `statistics` (verified connect) and measure its documents and chunks with a duckdb query
       (0150 prints no chunk counts). This is the before state, measured rather than assumed
-- [ ] B1 gate: 0150 stops on a listed collection with no keyed PDF item (`0150-store.R:188`). If neither
+- [x] (Passed: survey_design holds 2 PDFs.) B1 gate: 0150 stops on a listed collection with no keyed PDF item (`0150-store.R:188`). If neither
       CC22PHBQ nor BC9RR2NP got a PDF, take `Z7JP8UN2` out of the list and say so in #216's body
-- [ ] Before the build, write the expected left-out list in its log: the abstract-only works, no-PDF members,
+- [x] Before the build, write the expected left-out list in its log: the abstract-only works, no-PDF members,
       `survey_design`'s and `model_selection`'s no-PDF items, and BGVWWBV6 (review X1)
 - [ ] Hard gate: every PDF of the four collections is on disk, Zotero is quit, and the `-wal` is empty or absent.
       Then run `ACTION=build OVERWRITE=TRUE STORE=statistics COLLECTIONS="LP4R4VYR,<detection>,Z7JP8UN2,K2P7XGFG"`,
