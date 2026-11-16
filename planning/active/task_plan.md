@@ -48,6 +48,10 @@ What exploration settled (read-only, 2026-11-16):
    through the Claude in Chrome skill, or hand Al the URLs to click. Where no full text can be had and an abstract
    is usable, file the work abstract-only. Only a work with neither is a gap.
 
+4. **(Al, 2026-11-16, after the search)** The 7 works with no PDF (Zippin 1958, Carle & Strub 1978, Moran 1951,
+   Riley & Fausch 1992, MacKenzie et al. 2018, Kéry & Royle 2016 and 2021) are the gap: listed in #216's body, not
+   filed. There is no OpenAlex fallback, because Zippin's OpenAlex abstract is another paper's.
+
 ## Phase 1: inventory, PDFs and the two CSVs (no Zotero writes)
 - [x] Resolve every listed work against CrossRef, including those the issue gives without a DOI (MacKenzie 2002,
       Royle & Nichols 2003, Tyre 2003, Zippin 1958, Carle & Strub 1978, Hedger 2013, Schmidt 2013, Dorazio &
@@ -74,7 +78,7 @@ What exploration settled (read-only, 2026-11-16):
 - [x] Each alternative copy is checked against the published version: title page, journal pagination and the
       abstract's wording. An accepted manuscript or preprint is used only when no version of record can be had, and
       its `why` says so, because quotes and page numbers come from it
-- [ ] Abstract-only: a work with no full text is filed `pdf = none` when CrossRef has its abstract. Where CrossRef
+- [x] (Decision 4: none filed.) Abstract-only: a work with no full text is filed `pdf = none` when CrossRef has its abstract. Where CrossRef
       has none, an OpenAlex fallback would break the publisher-abstract rule (CLAUDE.md, 0280:27, 0270:27; plan
       review A2) and reach every collection. So once the PDF search is done, the remaining works that have no
       CrossRef abstract are put to Al as a question: leave them as the gap, or add the fallback with the rule
@@ -92,13 +96,13 @@ What exploration settled (read-only, 2026-11-16):
       library's name or key goes in a tracked file
 - [x] Enumeration before any filing (review O1): every row against its CrossRef record or title page, in
       `planning/active/enumeration_round0.tsv`, so fixes are CSV edits
-- [ ] Record per-family counts and MB in findings (filed with PDF, and from which route; abstract only; gap); edit #216's body with the
+- [x] Record per-family counts and MB in findings (filed with PDF, and from which route; abstract only; gap); edit #216's body with the
       inventory and the decided build list
 
 ## Phase 2: file `statistics/detection` through 0270 (Al present for the live run)
-- [ ] The browser downloads are copied into `data/rag/pdf/detection/` and every one opens as `%PDF` before the
+- [x] The browser downloads are copied into `data/rag/pdf/detection/` and every one opens as `%PDF` before the
       first dry run
-- [ ] `0270 --collection detection --parent LP4R4VYR --dry-run`. Check every `exists` / `copy exists` hit against
+- [x] `0270 --collection detection --parent LP4R4VYR --dry-run`. Check every `exists` / `copy exists` hit against
       the intended item
 - [ ] Live run, then wait for Zotero to sync. A second dry run with no `would` lines and exit 0 is the no-op
       proof. Each run's log goes to `scripts/logs/rag/<date>_0270_detection*.log`
