@@ -145,7 +145,7 @@ What exploration settled (read-only, 2026-11-16):
 - [x] `CLAUDE.md` layout: `detection_{members,additions}.csv` beside `statistics_*`, and reword "sole input of the
       `statistics` store" (now the statistics tree: LP4R4VYR and its subcollections; review G6)
 - [x] (No row: no members/additions CSV is listed there.) `inst/NOTICE.md`: confirm that no row is needed (the CSVs are our bibliography)
-- [ ] #216's body: the outcome, the abstract-only works, the gap (works with neither a PDF nor an abstract), and
+- [x] #216's body: the outcome, the abstract-only works, the gap (works with neither a PDF nor an abstract), and
       that `survey_design` and `model_selection` are filled by other work, so the store's freshness follows them
       (review S2)
 
