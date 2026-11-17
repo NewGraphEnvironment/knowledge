@@ -1,0 +1,88 @@
+# Progress — Bull trout life history: one research file quoted from the store (#198)
+
+## Session 2026-11-16
+
+- Plan-mode exploration — phases approved by user
+- Created branch `198-bull-trout-life-history-one-research-fil` off origin/main
+- Scaffolded PWF baseline from issue #198 with approved phases
+- Next: start Phase 1
+- Plan review (Plan agent) landed in `review-plan.md`. Spot-checked before folding in:
+  - `value_in_quote()` returns early with no values (0280:422);
+  - 21 BT rows from 7 keys are OCR;
+  - a group key does contain `&`;
+  - the registry log is named from `LOG`.
+  All held. Phase 1 revised (parser, OCR by citation, frag_min, `LOG=` for planted runs, empty or missing file
+  fails); Phase 2 gained a 0280 run on each draft, Phase 4 an audit of numbers outside quotes and of data-row citations.
+- Phase 2: expectations written 14:54–14:55Z, then 14 queries, 14:55:20–14:56:05Z
+  (`scripts/logs/rag/20261116_query_bull_trout_198.log`). Hits on R1 and J2 only; a miss on M3; partial on the rest.
+  The reviews the file leans on mostly did not return, so they are read from their PDFs directly.
+- Phase 1: 0280 checks the quotes in the research files `QUOTED` lists (empty until Phase 3 adds this file).
+  - Before and after, run with `LOG=` in the scratchpad on the committed tables: identical evidence and registry logs,
+    same status counts (1,151 rows; 117 registry quotes).
+  - Planted fixtures, each with the expected status: `quote_not_found`, `key_not_in_group`, `emphasis_in_quote`,
+    `quote_fragment_too_short`, `stray_quote_mark` (both a quote with no citation and a single-quoted one),
+    `blockquote_without_quote`, `no_quotes_in_file` and `file_missing`. The fixture that should pass does: a quote
+    on one line and one wrapped in a blockquote, with inline code and a fenced block holding quote marks.
+  - OCR: a quote cited with `, OCR` gives `verified_ocr`; the same quote cited without it gives `quote_not_found`
+    (there is no fallback). The 4-word floor refused an evidence row's quote whose first fragment, "chinook salmon
+    spawned", has three words.
+  - lintr: one semicolon fixed; three constant names in the script's existing uppercase style.
+- Phase 2: two general-purpose drafters spawned 15:06Z. One has forms, timing and the thermal brief
+  (`draft-forms-timing-thermal.md`); the other has redds and juveniles (`draft-redds-juveniles.md`).
+- Drafted `draft-bc-units.md` (BC split of forms, the five DUs and Schedule 1) here; 23 quotes, all `verified_text`.
+  - Three quotes failed first as `quote_fragment_too_short`: 0280's `fragments()` reads a source's own `[DU1 ...]`
+    brackets as an insert. Those quotes now start after the bracket, and the 0280 comment says so.
+  - The 2025 status-history sentence is shared by DU1 and DU2 and matched only PDF p. 30. It was replaced by the
+    report's per-unit cover lines.
+- Phase 2 done. Both drafters reported (around 15:17Z and 15:18Z), and the gate was rerun here on each draft:
+  - forms, timing and thermal: 70 quotes (68 `verified_text`, 2 `verified_ocr`);
+  - redds and juveniles: 74 quotes, all `verified_text`.
+
+  Drafter A quoted two passages as `lateAugust` and `postspawning`. Those PDFs' text layers drop a line-end hyphen,
+  and the cached OCR of the page images reads `late-` / `August` and `post-` / `spawning`. Both are now quoted as
+  printed and checked with `, OCR`.
+- Phase 3: `research/bull_trout_life_history.md` assembled from the three drafts, with duplicates removed and an
+  "In brief" section in plain language. 160 quotes: 158 `verified_text`, 2 `verified_ocr`.
+  - Five quotes match on more than one PDF page; the cited page is among them each time.
+  - 0280's `QUOTED_DEFAULT` now lists the file, and today's committed logs include
+    `20261116_literature_verify_research.csv`. The evidence and registry logs are unchanged in status counts.
+  - One draft-B quote reproduced garbled text-layer characters (`lik6ely`, `U. EIk`); it is now cut around them.
+  - The README row and the pointers from `bt_spawning.md` and `habitat_literature.md` landed with the file.
+- Validation so far:
+  - `devtools::test()`: 2,384 passed, 0 failed, 4 skipped (stages not on this machine).
+  - public sweep, `tree` mode: no hits in this branch's own lines. The 42 hits it lists are in files the branch does
+    not touch, plus the soul-generated CLAUDE.md summary, which is already on main.
+  - public sweep, `commits` mode: no hits.
+- Phase 4: two Explore auditors spawned 15:24Z, one for lines 1–288 and one for lines 289–699.
+- Phase 4, round 1: A found 21 problems (lines 1–288) and B found 15 (lines 289–699); every one was accepted (`audit-round1.md`).
+  - The fixes include DU3: four units lie in BC, not three.
+  - My own pass over the fixes caught four sentences that outran their quotes.
+  - Gate: 169 quotes, all verified.
+- Phase 4, round 2: one reader of round 1's diff found six errors inside the fixes, plus one unsupported place name
+  that round 1 had added; all seven fixed (`audit-round2.md`). Gate: 170 quotes, all verified. A third round reads
+  round 2's diff.
+- Phase 4 done. Round 3 found 1 problem inside round 2's fixes (the Arrow Lakes young-of-the-year sentence); I fixed it and
+  checked the two-sentence fix myself against its quoted pages (`audit-round3.md`). Gate: 170 quotes, all verified.
+  Agents so far: 8 (plan review, 2 drafters, 2 + 1 + 1 auditors, the last at lower effort).
+- `/code-check branch` round 1: one fragile finding. The stray-mark guard missed a single quote opening on a digit,
+  guillemets, low quotes, HTML entities and `<q>`. Fixed, and proved on a fixture.
+- `/code-check branch` round 2: three fragile findings. The first is a defect inside round 1's fix: possessives after
+  code spans failed. The fix rebuilt the guard on defined sets: Unicode `Quotation_Mark` (30 characters), HTML quote
+  forms and blockquote shapes. An enumeration fixture (`fixtures/make_enum.R`) shows every member flagged and every
+  negative control passing (`review-round2.md`).
+- `/code-check branch` round 3 found 5 fragile escapes, all from one mechanism: a regex model of Markdown standing in
+  for the renderer. The parser now reads the file through cmark-gfm (`commonmark`), and the stray set is built by
+  running `clean()`. The enumeration fixture shows every round-1 to round-3 case failing and the negative controls
+  passing (`review-round3.md`).
+- `/code-check branch` round 4 found 3 gaps, one inside round 3's fix (footnotes off). All three are fixed: footnotes
+  on, textless links and images get a placeholder, and the mark set is built from Unicode categories and names.
+- The loop ended on an enumeration against both sources of truth (`review-round4.md`):
+  - Unicode: 30/22/56/11 members across the four source sets, 0 outside the guard;
+  - cmark-gfm: 26 node names, all handled;
+  - all fixtures as expected.
+- 11 agents on the task in all: plan review, 2 drafters, 4 meaning auditors, 4 code reviewers.
+- Validation:
+  - tests: 2,384 passed, 0 failed, 4 skipped;
+  - public sweep: no hits in branch lines, after removing the reviewers' path lines from two review files;
+  - commits: clean;
+  - committed 0280 logs regenerated: 170 research quotes; the evidence log is byte-unchanged.

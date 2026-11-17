@@ -15,6 +15,9 @@ link rears BT only where stream connects to spawning, and spawning is gated at `
 and `spawn_channel_width_min` 2 m. This file says what fish records and the literature can and cannot say
 about those two numbers.
 
+Bull trout's life history (the forms, timing, redd-site selection and juvenile rearing), quoted from the
+`bull_trout` store, is `bull_trout_life_history.md` (#198).
+
 ## The short answer
 
 - **Electrofishing spawner evidence cannot settle spawning gradient.**

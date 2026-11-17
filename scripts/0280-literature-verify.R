@@ -4,8 +4,9 @@
 # the PDF it cites, in the NGE group library.
 #
 #   Rscript scripts/0280-literature-verify.R          (from the repo root)
-#   EVIDENCE=<csv> REGISTRY=<csv> LOG=<csv> to check draft tables without touching
-#   the committed logs (the registry log is LOG with "_ip_registry" before ".csv")
+#   EVIDENCE=<csv> REGISTRY=<csv> QUOTED="<md> ..." LOG=<csv> to check draft tables or
+#   research files without touching the committed logs (the registry log is LOG with
+#   "_ip_registry" before ".csv", the research log LOG with "_research")
 #
 # WHY: the table is hand-built, much of it ported from another review, and a
 # quote that is not in its source is worse than no quote. A row passes only when:
@@ -30,6 +31,8 @@
 #               fails (`abstract_but_pdf_held`), so a row is re-quoted from the paper
 #               once the paper arrives.
 #   - every value is stated by the quote itself (see value_in_quote()).
+# Research files that quote sources (QUOTED, #198) are checked too: each
+# "<passage>" (<citekey>, p. N) as a registry quote is (see "quotes in research files").
 # It also checks that the timing table's `source` keys resolve in the group,
 # and that every species x model parameter in COVERAGE has at least one row
 # (a value, or a `none` row saying what was searched). THERMAL is the same check
@@ -46,12 +49,14 @@
 # tagged evidence row (a model whose thresholds were never written is not
 # registered, it is unread).
 #
+# NEEDS   pdftotext; ocrmypdf for an OCR row; commonmark, xml2 and stringi for the research files
 # INPUT   data/literature_evidence.csv, data/ip_model_registry.csv,
 #         data/life_history_timing.csv,
 #         ~/Zotero/zotero.sqlite (a checked copy of the file and its -wal)
 # OUTPUT  scripts/logs/habitat/<yyyymmdd>_literature_verify.csv, one row per
 #         evidence row (status, PDF file, every PDF page the quote matches), and
 #         <yyyymmdd>_literature_verify_ip_registry.csv, one row per registry quote;
+#         <yyyymmdd>_literature_verify_research.csv, one row per research quote or failure;
 #         a summary on stdout.
 #         OCR text is cached in data/rag/ocr/ (gitignored), keyed by PDF md5.
 #         Exits non-zero when any row, registry quote, model link, timing source,
@@ -63,6 +68,9 @@ group_id <- Sys.getenv("GROUP_ID", "4733734")
 evidence_path <- Sys.getenv("EVIDENCE", "data/literature_evidence.csv")
 registry_path <- Sys.getenv("REGISTRY", "data/ip_model_registry.csv")
 ocr_dir <- file.path("data", "rag", "ocr")
+# Research files whose quotes are checked (see "quotes in research files"); QUOTED= replaces the
+# list (space-separated), and QUOTED= with nothing checks none.
+QUOTED_DEFAULT <- c("research/bull_trout_life_history.md")
 COVERAGE <- list(
   species = c("CH", "BT", "CO", "ST"),
   parameter = c("spawn_gradient_max", "spawn_gradient_min", "spawn_channel_width_min",
@@ -524,6 +532,174 @@ reg_out <- data.frame(
 reg_out <- reg_out[order(reg_out$data_row, reg_out$quote_of), ]
 reg_pass <- reg_out$status %in% PASS
 
+# --- quotes in research files ---------------------------------------------------
+# A research file that states what sources say (QUOTED) quotes them in one form,
+#   "<passage>" (<citekey>, p. N)    or (<citekey>, pp. N-M), with ", OCR" before the ")"
+#   for a scan with no text layer,
+# and each passage is checked as a registry quote is: same key resolution, same matcher,
+# same statuses, never an OCR fallback after a text miss. The file is read through the renderer,
+# not a model of Markdown: commonmark's cmark-gfm, which GitHub renders with, gives the text a
+# reader sees, block by block, with its source line, entities decoded and code, links, emphasis
+# and HTML as nodes of their own. Only a straight double quote delimits a passage, so curly marks
+# may sit inside one. Then what would let a quote escape the check fails, each from a defined set:
+#   - a quotation mark in rendered text outside a parsed passage: every character with Unicode's
+#     Quotation_Mark property (RESEARCH_QM, 30) and every character clean() reads as a quote mark,
+#     taken by running clean() (so the two lists cannot part), except that an apostrophe (' or
+#     U+2019) after a letter or digit, or as "'s" before a non-letter, is prose;
+#   - HTML (a block or inline node) holding a <q> or <blockquote> tag, a character reference or a
+#     quotation mark, any case;
+#   - code, a link, an image, a footnote mark, inline HTML or emphasis inside a passage
+#     (code_in_quote, link_in_quote,
+#     html_in_quote, emphasis_in_quote: text the PDF holds differently, or not at all);
+#   - in a block quote, any text outside a parsed passage, and any block but a paragraph;
+#   - a fragment of fewer than RESEARCH_FRAG word tokens (0280's MIN_FRAG counts punctuation);
+#   - a listed file that is missing, and one with no quote at all.
+# A source's own [brackets] read as an insert, as in every quote, so a passage starts or stops
+# around them. The cited page is printed and is not checked here: the log gives every PDF page
+# the passage matched, for the meaning audit.
+quoted <- Sys.getenv("QUOTED", unset = NA)
+quoted <- if (is.na(quoted)) QUOTED_DEFAULT else strsplit(trimws(quoted), "[[:space:]]+")[[1]]
+quoted <- quoted[nzchar(quoted)]
+RESEARCH_FRAG <- 4L
+RESEARCH_QUOTE <- paste0("\"([^\"]+)\"[[:space:]]*\\(([^[:space:],()]+),[[:space:]]*pp?\\.[[:space:]]*",
+                         "([0-9ivxlc]+(?:[-", intToUtf8(0x2013), "][0-9ivxlc]+)?)(,[[:space:]]*OCR)?\\)")
+# The marks a reader can take for quotation marks, from three defined sets: Unicode's
+# Quotation_Mark property (PropList.txt), every character of the Basic Multilingual Plane that
+# clean() turns into a quote mark, and every punctuation mark, symbol or modifier letter in planes
+# 0 and 1 that Unicode classes as an initial or final quote (Pi, Pf) or whose name (stringi)
+# names a quotation mark, quote, prime, ditto mark, geresh, gershayim, apostrophe, double acute,
+# or a turned or reversed comma. Letters and combining marks
+# are left out by their category, so Erdős and Wetʼsuwetʼen are text. The apostrophes (', U+2019,
+# and the modifier letters U+02BB and U+02BC that BC place names use) are prose after a letter or
+# digit, or as "'s" before a non-letter.
+RESEARCH_QM <- c(0x22, 0x27, 0xAB, 0xBB, 0x2018:0x201F, 0x2039, 0x203A, 0x2E42, 0x300C:0x300F,
+                 0x301D:0x301F, 0xFE41:0xFE44, 0xFF02, 0xFF07, 0xFF62, 0xFF63)
+RESEARCH_APOS <- c(0x27, 0x2019, 0x02BB, 0x02BC)
+RESEARCH_QM_NAME <- paste0("QUOTATION MARK|QUOTE|PRIME|DITTO|GERESH|GERSHAYIM|APOSTROPHE|",
+                           "DOUBLE ACUTE|TURNED COMMA|REVERSED COMMA")
+research_marks <- local({
+  bmp <- setdiff(0x20:0xFFFD, c(0xD800:0xDFFF, 0xFDD0:0xFDEF))   # no surrogates or noncharacters
+  ch <- vapply(bmp, intToUtf8, "")
+  p01 <- setdiff(0x20:0x1FFFF, c(0xD800:0xDFFF, 0xFDD0:0xFDEF, 0xFFFE, 0xFFFF))
+  ch01 <- intToUtf8(p01, multiple = TRUE)
+  named <- grepl(RESEARCH_QM_NAME, stringi::stri_trans_general(ch01, "Any-Name")) &
+    !stringi::stri_detect_regex(ch01, "^[\\p{Lu}\\p{Ll}\\p{Lt}\\p{Lo}\\p{M}]$")
+  named <- named | stringi::stri_detect_regex(ch01, "^[\\p{Pi}\\p{Pf}]$")   # initial and final quotes
+  sort(unique(c(RESEARCH_QM, bmp[clean(ch) %in% c("'", "\"")], p01[named])))
+})
+research_stray <- local({
+  # the characters themselves, not \x{} escapes: R runs PCRE in UTF mode only when a string is
+  # UTF-8, and an ASCII-only file with an escaped pattern is an invalid regular expression
+  cls <- function(cp) paste0("[", intToUtf8(cp), "]")
+  paste0("(*UCP)", cls(setdiff(research_marks, RESEARCH_APOS)), "|",
+         "(?<![[:alnum:]])", cls(RESEARCH_APOS), "(?!s(?![[:alpha:]]))")
+})
+research_html <- paste0("(*UCP)(?i)<[[:space:]]*/?[[:space:]]*(?:q|blockquote)\\b|&|",
+                        "[", intToUtf8(research_marks), "]")
+research_parse <- function(path) {
+  row <- function(line, key = NA_character_, page = NA_character_, quote = NA_character_,
+                  src = NA_character_, status = NA_character_) {
+    data.frame(file = path, line = line, citation_key = key, page = page, quote = quote,
+               quote_source = src, status = status, stringsAsFactors = FALSE)
+  }
+  if (!file.exists(path)) return(row(NA_integer_, status = "file_missing"))
+  lines <- readLines(path, encoding = "UTF-8", warn = FALSE)
+  if (!all(validUTF8(lines))) return(row(which(!validUTF8(lines))[1], status = "file_not_utf8"))
+  # footnotes on, as GitHub renders them: off, a footnote's text can read as a link definition or
+  # an indented code block, which nothing checks
+  doc <- xml2::read_xml(commonmark::markdown_xml(paste(lines, collapse = "\n"), extensions = TRUE,
+                                                 sourcepos = TRUE, footnotes = TRUE))
+  xml2::xml_ns_strip(doc)
+  line_of <- function(node) {
+    sp <- xml2::xml_attr(node, "sourcepos")
+    if (is.na(sp)) NA_integer_ else as.integer(sub(":.*", "", sp))
+  }
+  out <- list()
+  add <- function(r) out[[length(out) + 1]] <<- r
+  # A leaf block's rendered text as characters, each with what holds it (t text, c code, l link,
+  # h inline HTML, e emphasis; the innermost of higher rank wins) and its source line.
+  rank <- c(t = 0, e = 1, h = 2, l = 3, c = 4)
+  inline <- function(node, kind = "t") {
+    nm <- xml2::xml_name(node)
+    up <- function(k) if (rank[[k]] > rank[[kind]]) k else kind
+    leaf <- function(ch, k) list(s = ch, k = rep(k, length(ch)), l = rep(line_of(node), length(ch)))
+    if (nm == "text") return(leaf(strsplit(xml2::xml_text(node), "")[[1]], kind))
+    if (nm %in% c("softbreak", "linebreak")) return(list(s = "\n", k = kind, l = NA_integer_))
+    if (nm == "code") return(leaf(rep("x", nchar(xml2::xml_text(node))), up("c")))
+    if (nm == "html_inline") return(leaf(rep("x", nchar(xml2::xml_text(node))), up("h")))
+    # an inline node this walk does not know is read as HTML: inside a passage it fails
+    k <- switch(nm, paragraph = , heading = , table_cell = kind, emph = , strong = , strikethrough = up("e"),
+                link = , image = , fnref = up("l"), up("h"))
+    parts <- lapply(xml2::xml_children(node), inline, kind = k)
+    got <- list(s = unlist(lapply(parts, `[[`, "s")), k = unlist(lapply(parts, `[[`, "k")),
+                l = unlist(lapply(parts, `[[`, "l")))
+    # a link, image or footnote mark with no text still shows the reader something
+    if (!length(got$s)) got <- leaf("x", k)
+    got
+  }
+  for (h in xml2::xml_find_all(doc, "//html_block | //html_inline")) {
+    if (grepl(research_html, xml2::xml_text(h), perl = TRUE)) {
+      add(row(line_of(h), status = "html_quote"))
+    }
+  }
+  # every text node is read through a leaf block below; one that is not would go unchecked
+  for (t in xml2::xml_find_all(doc, "//text[not(ancestor::paragraph or ancestor::heading or
+                                    ancestor::table_cell)]")) {
+    add(row(line_of(t), status = "text_outside_a_block"))
+  }
+  for (b in xml2::xml_find_all(doc, "//block_quote//*[self::code_block or self::html_block or
+                                     self::thematic_break or self::table]")) {
+    add(row(line_of(b), status = "blockquote_text_outside_quote"))
+  }
+  for (b in xml2::xml_find_all(doc, "//paragraph | //heading | //table_cell")) {
+    r <- inline(b)
+    if (!length(r$s)) next
+    for (i in seq_along(r$l)) {   # a line break's line is the line before it
+      if (is.na(r$l[i])) r$l[i] <- if (i == 1) line_of(b) else r$l[i - 1]
+    }
+    m <- gregexpr(RESEARCH_QUOTE, paste(r$s, collapse = ""), perl = TRUE)[[1]]
+    if (m[1] > 0) {
+      st <- attr(m, "capture.start")
+      ln <- attr(m, "capture.length")
+      txt <- paste(r$s, collapse = "")
+      cap <- function(i, j) substr(txt, st[i, j], st[i, j] + ln[i, j] - 1L)
+      for (i in seq_along(m)) {
+        at <- m[i]:(m[i] + attr(m, "match.length")[i] - 1L)
+        q <- gsub("[[:space:]]+", " ", trimws(cap(i, 1)))
+        src <- if (ln[i, 4] > 0) "ocr" else "text"
+        frags <- fragments(q)
+        words <- vapply(frags, function(f) sum(grepl("^[[:alnum:]]", f)), 0)
+        held <- r$k[at]
+        status <- if ("c" %in% held) "code_in_quote" else if ("l" %in% held) "link_in_quote" else
+          if ("h" %in% held) "html_in_quote" else if ("e" %in% held) "emphasis_in_quote" else
+            if (is.null(frags) || any(words < RESEARCH_FRAG)) "quote_fragment_too_short" else NA
+        add(row(r$l[m[i]], cap(i, 2), cap(i, 3), q, src, status))
+        r$s[at] <- " "
+      }
+    }
+    left <- paste(r$s, collapse = "")
+    stray <- gregexpr(research_stray, left, perl = TRUE)[[1]]
+    if (stray[1] > 0) for (p in stray) add(row(r$l[p], status = "stray_quote_mark"))
+    if (length(xml2::xml_find_all(b, "ancestor::block_quote")) && grepl("[^[:space:]]", left)) {
+      add(row(r$l[regexpr("[^[:space:]]", left)], status = "blockquote_text_outside_quote"))
+    }
+  }
+  if (!length(out) || all(is.na(do.call(rbind, out)$citation_key))) {
+    add(row(NA_integer_, status = "no_quotes_in_file"))
+  }
+  do.call(rbind, out)
+}
+res_out <- do.call(rbind, c(list(research_parse("")[0, ]), lapply(quoted, research_parse)))
+res_out$pdf_file <- res_out$pdf_pages <- rep(NA_character_, nrow(res_out))
+for (i in which(is.na(res_out$status))) {
+  r <- check_row(quote_row(res_out$citation_key[i], res_out$quote[i], res_out$quote_source[i]))
+  res_out$status[i] <- r$status
+  res_out$pdf_file[i] <- as.character(r$file)
+  res_out$pdf_pages[i] <- as.character(r$pages)
+}
+res_out$several_pages <- grepl(";", res_out$pdf_pages)
+res_pass <- res_out$status %in% c("verified_text", "verified_ocr")
+
 # The link, both ways, on model_id x species x life stage x life-history form: the form is
 # part of a registry row's identity (knw_ip_read()), so a row for one form is not satisfied
 # by evidence for another. A blank form matches only a blank form.
@@ -573,6 +749,8 @@ dir.create(dirname(log_csv), recursive = TRUE, showWarnings = FALSE)
 utils::write.csv(out, log_csv, row.names = FALSE, na = "")
 reg_log <- file.path(dirname(log_csv), sub("(\\.csv)?$", "_ip_registry.csv", basename(log_csv)))
 utils::write.csv(reg_out, reg_log, row.names = FALSE, na = "")
+res_log <- file.path(dirname(log_csv), sub("(\\.csv)?$", "_research.csv", basename(log_csv)))
+utils::write.csv(res_out, res_log, row.names = FALSE, na = "")
 
 cat(sprintf("%d rows | %s\n", nrow(out),
             paste(names(table(out$status)), table(out$status), sep = " ", collapse = " | ")))
@@ -582,6 +760,12 @@ cat(sprintf("registry: %d rows, %d quotes | %s\n", nrow(reg), nrow(reg_out),
             paste(names(table(reg_out$status)), table(reg_out$status), sep = " ", collapse = " | ")))
 if (any(!reg_pass)) print(reg_out[!reg_pass, c("data_row", "model_id", "quote_of", "status", "pdf_file")],
                           row.names = FALSE)
+cat(sprintf("research: %d files, %d quotes | %s\n", length(quoted), sum(!is.na(res_out$citation_key)),
+            paste(names(table(res_out$status)), table(res_out$status), sep = " ", collapse = " | ")))
+if (any(!res_pass)) print(res_out[!res_pass, c("file", "line", "citation_key", "status", "pdf_file")],
+                          row.names = FALSE)
+if (any(res_out$several_pages)) cat(sprintf("research: %d quotes match on more than one PDF page (see the log)\n",
+                                            sum(res_out$several_pages)))
 cat(sprintf("model links: %d evidence rows name no registry row, %d registry rows have no evidence row\n",
             length(unregistered), length(unread)))
 for (u in unregistered) cat("  unregistered:", u, "\n")
@@ -599,6 +783,6 @@ cat(sprintf("flow: %d of %d species x cells have a row\n", sum(flow$rows > 0), n
 if (any(flow$rows == 0)) {
   print(flow[flow$rows == 0, c("species_code", "variable", "life_stage", "side")], row.names = FALSE)
 }
-cat("wrote", log_csv, "and", reg_log, "\n")
-if (any(!pass) || any(!reg_pass) || length(unregistered) || length(unread) || length(t_bad) ||
+cat("wrote", log_csv, ",", reg_log, "and", res_log, "\n")
+if (any(!pass) || any(!reg_pass) || any(!res_pass) || length(unregistered) || length(unread) || length(t_bad) ||
     any(cov$rows == 0) || any(thermal$rows == 0) || any(flow$rows == 0)) quit(status = 1)

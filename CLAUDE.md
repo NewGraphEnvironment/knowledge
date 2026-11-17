@@ -349,7 +349,8 @@ out. `research/fdis_export.md` has the overlap figures.
 
 ### Drafting evidence or registry rows: the gate checks words, not meaning
 
-`0280` proves a quote is verbatim in its PDF and a value sits in its quote. It cannot see a row that says
+`0280` proves a quote is verbatim in its PDF and a value sits in its quote (and, since #198, that each quote in a
+research file its `QUOTED` list names is verbatim). It cannot see a row that says
 the wrong thing around a true quote. On #29, every quote verified and a full row-by-row audit against the
 PDFs still found 22 errors of meaning over three rounds, several of them inside earlier fixes. Audit
 meaning per row, not a sample. Settled conventions:
