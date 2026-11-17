@@ -169,3 +169,29 @@ Hutchinson et al. 2015, `10.1111/2041-210X.12368`.
 - No copy existed in any library.
 - Filed as `CVVUQZR5` (created, member, PDF uploaded). The repeat dry run had 0 `would` lines: 24 members, 24 PDFs.
 - The issue now lists 30 works (31 with *AHM* vol. 2): 24 filed with a PDF, 7 gaps.
+
+## Build (2026-11-16 23:48–00:05Z, Zotero quit, WAL empty)
+
+`ACTION=build OVERWRITE=TRUE STORE=statistics COLLECTIONS=LP4R4VYR,73PNRGJF,Z7JP8UN2,K2P7XGFG` held to the
+expectations written before it ran (`20261116_build_statistics_expected.txt`):
+- 32 keys across 4 collections, as expected.
+- The left-out list is the expected 15 items exactly, each "no live PDF".
+- 4 documents before and 31 after: 27 added, 0 dropped.
+- 11,113 chunks; the smallest document has 48. The 4 old documents rechunked: 2CIVEIL4 went from 56 to 52 chunks.
+  #194 saw the same on rebuilds.
+- Hedger et al. 2013 was skipped. ragnar 0.3.1's `markdown_chunk()` fails in `snap_nearest()` → `findInterval()`
+  ("'vec' must be sorted non-decreasingly and not contain NAs") on the line-numbered accepted manuscript.
+  - It reproduces with ragnar alone (`read_as_markdown()` then `markdown_chunk()`).
+  - ragnar 0.4.0 (CRAN, `tidyverse/ragnar` v0.4.0), installed in a scratch library, chunks the same markdown into
+    69 chunks.
+  So upstream has already fixed it, and there is nothing to report there; the local ragnar is one release behind.
+- Also logged by cred: Bates et al. 2024 was read with pdftools because of an embedded NUL, and ESL had 2 chunks split
+  for the embedder. These are cred#35's handling, both ingested.
+
+Query checks (reported only; expectations in the log before each ran):
+- Q1, goodness of fit for occupancy: **miss.** MacKenzie & Bailey 2004 is not in the top 5. The hits are Colwell,
+  MacKenzie 2002, Nichols, Tyre, Rota and Dorazio & Erickson.
+- Q2, capture probability falling across passes: hit, all Peterson et al. 2004.
+- Q3, multi-scale eDNA occupancy: 2 of 3 (Schmidt, Dorazio & Erickson; not Nichols).
+- Q4, richness lower bound and coverage: Chao et al. 2014, Chao & Jost 2012 and Hsieh 2016 returned; Chao 1987 and
+  Colwell 2012 did not.

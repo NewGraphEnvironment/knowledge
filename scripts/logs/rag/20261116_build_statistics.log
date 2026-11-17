@@ -1,0 +1,67 @@
+15 of 47 members left out:
+  4DNKES53  lhoste_etal2025newunderwater  (no live PDF)
+  5X6VF6GJ  ficetola_etal2015Replicationlevels  (no live PDF)
+  BBA2Q7W2  breiman_etal1984ClassificationRegression  (no live PDF)
+  BGVWWBV6  BayesianBeliefNets  (no live PDF)
+  G8X6IU8M  atlas_etal2023Wildsalmon  (no live PDF)
+  KMCPFP3K  albertaremotecamerasteeringcommitteercsc_etal2024RemoteCamera  (no live PDF)
+  M2FQPT9W  schmelzle_kinziger2016Usingoccupancy  (no live PDF)
+  PS64VIQI  castaneda_etal2020DetectingNative  (no live PDF)
+  R283VZX9  kays_etal2020empiricalevaluation  (no live PDF)
+  TME3DX5P  moeller_etal2018Threenovel  (no live PDF)
+  TNK2RP5H  mann1945NonparametricTests  (no live PDF)
+  UTZ4K2QG  sen1968EstimatesRegression  (no live PDF)
+  VKB34D98  theil1950RankInvariantMethod  (no live PDF)
+  XBCBNKW6  kendall1975RankCorrelation  (no live PDF)
+  XJ3JX57M  wearn_glover-kapfer2017Cameratrappingconservation  (no live PDF)
+32 keys across 4 collections
+Ingesting 32 PDF(s) into data/rag/statistics.duckdb
+Downloading numpy (5.3MiB)
+Downloading numpy (5.3MiB)
+Downloading numpy (5.3MiB)
+Downloading onnxruntime (21.5MiB)
+Downloading numpy (5.3MiB)
+Downloading numpy (5.3MiB)
+Downloading onnxruntime (21.5MiB)
+Downloading numpy (5.3MiB)
+Downloading numpy (5.3MiB)
+Downloading onnxruntime (21.5MiB)
+Downloading onnxruntime (21.5MiB)
+Downloading onnxruntime (21.5MiB)
+Downloading onnxruntime (21.5MiB)
+Downloading onnxruntime (21.5MiB)
+Downloading numpy (5.3MiB)
+Downloading onnxruntime (21.5MiB)
+ Downloaded numpy
+ Downloaded numpy
+ Downloaded numpy
+ Downloaded numpy
+ Downloaded numpy
+ Downloaded numpy
+ Downloaded numpy
+ Downloaded numpy
+ Downloaded onnxruntime
+ Downloaded onnxruntime
+Installed 49 packages in 297ms
+Installed 49 packages in 115ms
+ Downloaded onnxruntime
+ Downloaded onnxruntime
+Installed 49 packages in 225ms
+Installed 49 packages in 198ms
+ Downloaded onnxruntime
+Installed 49 packages in 172ms
+ Downloaded onnxruntime
+Installed 49 packages in 187ms
+ Downloaded onnxruntime
+Installed 49 packages in 164ms
+ Downloaded onnxruntime
+Installed 49 packages in 133ms
+Read with pdftools, because markitdown could not:
+  bates_etal2024CrossValidationWhat (2104.00673v4.pdf): Embedded NUL in string.
+Split chunks the embedding model refused whole: hastie_etal2009ElementsStatistical (ESLII_print12_toc.pdf) (2)
+Store built: data/rag/statistics.duckdb | docs: 31 | chunks: 11113 | model: nomic-embed-text
+4 documents before, 31 after: 27 added, 0 dropped
+Built data/rag/statistics.duckdb. It is not in the bucket until ACTION=push.
+Warning message:
+Skipped 1 PDF(s):
+  hedger_etal2013Improvingabundance (hedger_etal2013_accepted.pdf): chunking: 'vec' must be sorted non-decreasingly and not contain NAs 
