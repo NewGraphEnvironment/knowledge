@@ -223,3 +223,21 @@ Two findings, both real and both fixed:
   - Its citation key (`hsieh_etal2016iNEXTpackage`) and the store are unchanged: the store holds no titles.
 - **Noted outside the diff, not changed:** `crossref_item()` turns an organisation-only CrossRef author (`name`, no
   `family`) into an empty creator. Royle 2004's creators override avoids it here.
+
+## Code-check round 3 (2026-11-17)
+
+**Mechanism.** 0270 recognised a held item by title, first creator and year, the very fields an `override` changes,
+and never by the DOI, which an override cannot touch. Round 2's two findings came from the same assumption. A
+reviewer's dry `do_addition()` showed a duplicate created on any edit to Dorazio & Erickson's override: date changed,
+override cut to `title`, or override cleared.
+
+**Fix.** `group_copy()` now takes a title-search hit holding the row's DOI, ignoring case, before the title, creator
+and year checks. That can only add matches, so no collection gains a duplicate. A hit with a different DOI is not
+rejected, because that could stop an existing collection's re-run from finding its own copy.
+- All three scenarios now print `exists`; the changed date prints `would set date`. With the DOI match removed in
+  memory, the changed date prints `would create journalArticle` again.
+- The repeat dry run at the new code has 0 `would` lines.
+
+**Still true, now stated in the docstring, comment and README:**
+- Removing an override leaves the held value; it never restores CrossRef's.
+- The CrossRef-title fallback is search recall: a held item is found only while some title search reaches it.

@@ -28,7 +28,8 @@ A second input adds works the group library does not hold at all
 CrossRef, with the abstract the publisher deposited there (tags stripped; none is
 ever written by hand); a grey-literature row carries it. A DOI row's `override` column names the
 fields (title, creators, date, ...) that take the row's own values where CrossRef's are wrong
-against the title page (#216): on the item 0270 creates, and patched onto one that already exists. `pdf` is `none` for a work
+against the title page (#216): on the item 0270 creates, and patched onto an existing one that 0270
+finds (by its DOI among the title-search hits). Removing an override leaves the held value as it is. `pdf` is `none` for a work
 whose PDF cannot be had, which 0280 then checks against that abstract, or a URL (the body must start
 with %PDF), a path from the repo root (a PDF only a browser could fetch, kept in the
 ignored data/rag/pdf/), or `zotero:<attachment key>`, a standalone group PDF with no parent
@@ -297,18 +298,24 @@ def group_copy(item):
 
     Same normalized title, and the same first creator and year wherever both sides
     have them: titles like "Bull trout Salvelinus confluentus" recur across works.
-    An item with no title never matches."""
+    A candidate holding the item's own DOI is that work whatever its title, creators or
+    date: those are the fields an `override` changes, so a held item written under an
+    older override (or none) differs in them from today's row (#216). An item with no
+    title never matches."""
     title = (item.get("title") or "").strip()
     if not title:
         return None
     # Words only: the search matches each word as a substring, and a plain title's "(Oncorhynchus"
     # is not one of "( <i>Oncorhynchus", a markup title's.
     q = urllib.parse.quote(" ".join(re.sub(r"[^\w]+", " ", title[:120]).split()))
+    doi = (item.get("DOI") or "").strip().lower()
     start = 0
     while True:
         page = get_json(f"{z.BASE}/items/top?q={q}&qmode=titleCreatorYear&limit=100&start={start}")
         for it in page:
             d = it["data"]
+            if doi and (d.get("DOI") or "").strip().lower() == doi:
+                return it["key"]
             if not same_work(d.get("title", ""), title):
                 continue
             a, b = _first_last(d.get("creators")), _first_last(item.get("creators"))
@@ -501,9 +508,11 @@ def do_addition(row, coll, dry):
     fields = override_fields(row) if row["DOI"] else []
     gkey = group_copy(item)
     if not gkey and fields:
-        # An item filed before its override (or under an older one) carries CrossRef's fields, and
-        # the title search may not reach it from the corrected title ("H ill" is no substring match
-        # for "Hill"), so look for it by CrossRef's own as well, never creating a duplicate.
+        # group_copy() takes a search hit holding this DOI whatever its fields, but the search is by
+        # title words, and an item filed before its override carries CrossRef's title, which the
+        # corrected one may not reach ("H ill" is no substring match for "Hill"). So search by
+        # CrossRef's title as well. An item filed under an older override is still found only while
+        # some search reaches it; removing an override leaves the held value, never CrossRef's.
         gkey = group_copy(crossref_item(row["DOI"]))
     if gkey:
         steps.append("exists")
