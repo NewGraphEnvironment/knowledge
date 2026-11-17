@@ -158,7 +158,7 @@ wf_farm_priority.js                          farm priority/crossing tables out o
       (--collection statistics --parent top: the top-level statistics collection, from data/statistics_*.csv, #95)
       (--collection detection --parent LP4R4VYR: statistics/detection, from data/detection_*.csv, #216)
       (an additions row's `override` column, "title;creators" say, keeps the DOI but takes those fields from the
-       row where CrossRef's are wrong against the title page, #216)
+       row where CrossRef's are wrong against the title page, on a new item and patched onto an existing one, #216)
 0275  carry out data/zotero_attachment_verdicts.csv on the group's attachments   --dry-run first, then live
       (merge an item's report parts into one PDF, keep one copy, split a separate document to its own item, #126, #151)
 0150  ACTION=build STORE=habitat_modelling COLLECTIONS="U9ZCZ6RN,RXNFPBPH,VHWEK6RE,GELFSUTU,9U54XAND,SW2RXUJC,DQP29KU7,X29BX4U8,W4425VK5,545K8HP4"

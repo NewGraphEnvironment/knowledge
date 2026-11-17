@@ -28,7 +28,7 @@ A second input adds works the group library does not hold at all
 CrossRef, with the abstract the publisher deposited there (tags stripped; none is
 ever written by hand); a grey-literature row carries it. A DOI row's `override` column names the
 fields (title, creators, date, ...) that take the row's own values where CrossRef's are wrong
-against the title page (#216). `pdf` is `none` for a work
+against the title page (#216): on the item 0270 creates, and patched onto one that already exists. `pdf` is `none` for a work
 whose PDF cannot be had, which 0280 then checks against that abstract, or a URL (the body must start
 with %PDF), a path from the repo root (a PDF only a browser could fetch, kept in the
 ignored data/rag/pdf/), or `zotero:<attachment key>`, a standalone group PDF with no parent
@@ -409,7 +409,7 @@ def addition_item(row):
     A row without `override` is CrossRef's alone, whatever else it carries."""
     if row["DOI"]:
         item = crossref_item(row["DOI"])
-        for k in filter(None, (x.strip() for x in (row.get("override") or "").split(";"))):
+        for k in override_fields(row):
             if k not in OVERRIDABLE or not (row.get(k) or "").strip():
                 raise ValueError(f"override {k!r}: not one of {', '.join(OVERRIDABLE)}, or the row's {k} is empty")
             item[k] = row_creators(row[k]) if k == "creators" else row[k].strip()
@@ -468,13 +468,46 @@ def addition_pdf(row):
     return (name if name.lower().endswith(".pdf") else name + ".pdf"), data
 
 
+def override_fields(row):
+    return [k for k in dict.fromkeys(x.strip() for x in (row.get("override") or "").split(";")) if k]
+
+
+def creators_key(cs):
+    return [(c.get("creatorType", "author"), c.get("lastName", ""), c.get("firstName", ""), c.get("name", ""))
+            for c in cs or []]
+
+
+def apply_override(gkey, item, fields, dry):
+    """Bring an existing item's overridden fields to the row's values, as the abstract is
+    brought to CrossRef's: an override added after the item was filed, or changed since,
+    must reach it, not only an item 0270 creates (#216). -> steps."""
+    held = get_json(f"{z.BASE}/items/{gkey}")["data"]
+    diff = [k for k in fields
+            if (creators_key(held.get(k)) != creators_key(item[k]) if k == "creators" else held.get(k, "") != item[k])]
+    if not diff:
+        return []
+    if dry:
+        return [f"would set {','.join(diff)}"]
+    st, bd = z.api("PATCH", f"{z.BASE}/items/{gkey}", data={k: item[k] for k in diff},
+                   headers={"Content-Type": "application/json",
+                            "If-Unmodified-Since-Version": str(held["version"])})
+    return [f"set {','.join(diff)}" if st == 204 else f"OVERRIDE-FAIL {st} {bd[:160]!r}"]
+
+
 def do_addition(row, coll, dry):
     item = addition_item(row)
     item.update({"collections": [coll], "tags": [{"tag": COLLECTION}]})
     steps = []
+    fields = override_fields(row) if row["DOI"] else []
     gkey = group_copy(item)
+    if not gkey and fields:
+        # An item filed before its override (or under an older one) carries CrossRef's fields, and
+        # the title search may not reach it from the corrected title ("H ill" is no substring match
+        # for "Hill"), so look for it by CrossRef's own as well, never creating a duplicate.
+        gkey = group_copy(crossref_item(row["DOI"]))
     if gkey:
         steps.append("exists")
+        steps += apply_override(gkey, item, fields, dry)
     elif dry:
         return [f"would create {item['itemType']}"], f"- | would create {item['itemType']}: {item['title'][:60]}"
     else:

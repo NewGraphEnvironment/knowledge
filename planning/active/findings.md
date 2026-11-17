@@ -203,3 +203,23 @@ Query checks (reported only; expectations in the log before each ran):
   was pushed to origin first.
 - The bucket object's multipart ETag `bf198f36…-19` matches the local file at 8 MiB parts; 153,890,816 bytes.
 - `log.json` read back from the bucket holds the same entry.
+
+## Code-check round 2 (2026-11-17)
+
+Two findings, both real and both fixed:
+- **Hsieh et al. 2016 title.** It was filed as "(H ill numbers)". CrossRef pretty-prints `(\n <scp>H</scp>\n ill`,
+  and `plain()` drops the tag but keeps the gap. A sweep of every DOI row in every `data/*_additions.csv` found no
+  other title with the artefact.
+  - `plain()` is left as it is: it also prepares the abstracts 0280 matches verbatim, so a whitespace change there
+    would move every collection's gate.
+  - Fixed instead with a title `override` on the row.
+- **The override applied only when 0270 created the item.** An override added to an item already filed changed
+  nothing and said nothing. 0270 now patches an existing item's overridden fields, as it already patches a stale
+  abstract.
+  - An override row also searches by CrossRef's own title, because the Web API title search cannot reach "H ill"
+    from "Hill", and a miss would have created a duplicate.
+  - The dry run printed `exists, would set title` for Hsieh alone. The live run set it, and the repeat dry run had 0
+    `would` lines.
+  - Its citation key (`hsieh_etal2016iNEXTpackage`) and the store are unchanged: the store holds no titles.
+- **Noted outside the diff, not changed:** `crossref_item()` turns an organisation-only CrossRef author (`name`, no
+  `family`) into an empty creator. Royle 2004's creators override avoids it here.

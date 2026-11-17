@@ -14,7 +14,7 @@ itemType,title,creators,date,DOI,publicationTitle,volume,issue,pages,institution
 ,,,,10.1198/jabes.2009.08038,,,,,,,,,,data/rag/pdf/detection/ridout_linkie2009_preprint.pdf,"#216 camera: overlap of daily activity patterns; the authors' 2008 preprint, the journal is paywalled, so wording and pages may differ from the published paper",
 ,,,,10.1111/1365-2664.12432,,,,,,,,,,data/rag/pdf/detection/burton_etal2015.pdf,#216 camera: review of camera trap surveys and imperfect detection; version of record via ABMI,
 ,,,,10.1890/13-0133.1,,,,,,,,,,data/rag/pdf/detection/chao_etal2014.pdf,#216 diversity: rarefaction and extrapolation with Hill numbers,
-,,,,10.1111/2041-210X.12613,,,,,,,,,,data/rag/pdf/detection/hsieh_etal2016.pdf,#216 diversity: iNEXT (with its appendix),
+,iNEXT: an R package for rarefaction and extrapolation of species diversity (Hill numbers),,,10.1111/2041-210X.12613,,,,,,,,,,data/rag/pdf/detection/hsieh_etal2016.pdf,#216 diversity: iNEXT (with its appendix),title
 ,,,,10.2307/2531532,,,,,,,,,,data/rag/pdf/detection/chao1987.pdf,#216 diversity: Chao's lower-bound estimator under unequal catchability,
 ,,,,10.1890/11-1952.1,,,,,,,,,,data/rag/pdf/detection/chao_jost2012.pdf,#216 diversity: coverage-based rarefaction and extrapolation,
 ,,,,10.1093/jpe/rtr044,,,,,,,,,,data/rag/pdf/detection/colwell_etal2012.pdf,#216 diversity: individual- and sample-based rarefaction and extrapolation; authors' copy of the version of record,
