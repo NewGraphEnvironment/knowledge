@@ -1,0 +1,17 @@
+Downloaded statistics (4 docs, 6579 chunks, embedded with nomic-embed-text).
+duckdb keeps downloaded extensions and secrets in a temporary directory:
+ℹ /tmp/RtmpjtO4h6/duckdb
+This is removed when the R session ends.
+• Extensions are re-downloaded each session.
+• Secrets are lost.
+ℹ Run duckdb(shared_home = TRUE) (or create ~/.duckdb) to keep them (suitable for most users).
+ℹ Run duckdb(shared_home = FALSE) to accept the temporary directory (and silence this message).
+ℹ See ?duckdb_storage for details and alternatives.
+# A tibble: 5 × 9
+  citation_key           origin chunk_id  start    end text  score metric method
+  <chr>                  <chr>     <int>  <int>  <int> <chr> <dbl> <chr>  <chr> 
+1 gelman_etal2013Bayesi… /User…     3267 5.12e5 5.14e5 "|  … 3.25  bm25   hybrid
+2 gelman_etal2013Bayesi… /User…     3776 9.19e5 9.21e5 "ter… 0.359 cosin… hybrid
+3 gelman_etal2013Bayesi… /User…     3816 9.51e5 9.53e5 "exp… 0.380 cosin… hybrid
+4 gelman_etal2013Bayesi… /User…     5249 2.10e6 2.10e6 "#\n… 0.394 cosin… hybrid
+5 hill2025Introductionc… /User…      344 2.30e5 2.32e5 "mod… 3.56  bm25   hybrid

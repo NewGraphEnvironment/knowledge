@@ -1,0 +1,18 @@
+[dry run] would upload data/rag/statistics.duckdb -> s3://fresh-bc/rag/statistics.duckdb
+[dry run] merged manifest would hold: fraser, vca_refs, peace, pine, habitat_modelling, temperature, flow, bull_trout_grayling, sturgeon, statistics, westslope_cutthroat, bull_trout
+    "statistics": {
+      "documents": 31,
+      "chunks": 11113,
+      "embedding_size": 768,
+      "embedding_model": "nomic-embed-text",
+      "store_name": "store_001",
+      "bytes": 153890816,
+      "md5": "a607e293b0457eb04cbb274c92a50caa",
+      "repo": "NewGraphEnvironment/knowledge",
+      "branch": "216-statistics-store-the-methods-literature",
+      "head_sha": "301d43b6c1d36b03bd32c9dccb3f99ed120149fd",
+      "built_by": "cred::crd_store_push()",
+      "date_completed": "2026-11-17T00:12:24Z"
+    },
+Uploading statistics.duckdb (147 MB)
+Manifest updated — now holds: fraser, vca_refs, peace, pine, habitat_modelling, temperature, flow, bull_trout_grayling, sturgeon, statistics, westslope_cutthroat, bull_trout

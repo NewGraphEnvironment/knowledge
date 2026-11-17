@@ -156,6 +156,10 @@ wf_farm_priority.js                          farm priority/crossing tables out o
       (--collection westslope_cutthroat --parent 9U54XAND: species/westslope_cutthroat, from data/westslope_cutthroat_*.csv)
       (--collection bull_trout --parent 9U54XAND: species/bull_trout, from data/bull_trout_*.csv, #194)
       (--collection statistics --parent top: the top-level statistics collection, from data/statistics_*.csv, #95)
+      (--collection detection --parent LP4R4VYR: statistics/detection, from data/detection_*.csv, #216)
+      (an additions row's `override` column, "title;creators" say, keeps the DOI but takes those fields from the
+       row where CrossRef's are wrong against the title page, on a new item and patched onto an existing one;
+       removing an override leaves the held value, #216)
 0275  carry out data/zotero_attachment_verdicts.csv on the group's attachments   --dry-run first, then live
       (merge an item's report parts into one PDF, keep one copy, split a separate document to its own item, #126, #151)
 0150  ACTION=build STORE=habitat_modelling COLLECTIONS="U9ZCZ6RN,RXNFPBPH,VHWEK6RE,GELFSUTU,9U54XAND,SW2RXUJC,DQP29KU7,X29BX4U8,W4425VK5,545K8HP4"
@@ -167,9 +171,10 @@ wf_farm_priority.js                          farm priority/crossing tables out o
 0150  ACTION=build STORE=westslope_cutthroat COLLECTIONS=TIDR3PNN                          then ACTION=push
 0150  ACTION=build STORE=temperature COLLECTIONS=SW2RXUJC                                  then ACTION=push
 0150  ACTION=build STORE=flow COLLECTIONS=FWTJDD8Z                                         then ACTION=push
-0150  ACTION=build STORE=statistics COLLECTIONS=LP4R4VYR                                   then ACTION=push
-      (McElreath 2020, Gelman et al. 2013 (BDA3), Hill 2025 and the collection's other PDFs; Wood's GAM book and
-      MacKenzie et al.'s occupancy book join when a PDF is in hand, #95)
+0150  ACTION=build STORE=statistics COLLECTIONS="LP4R4VYR,73PNRGJF,Z7JP8UN2,K2P7XGFG"         then ACTION=push
+      (the statistics tree: statistics, detection, survey_design and model_selection, by key; McElreath 2020, BDA3,
+      the detection, removal, eDNA, camera and diversity methods, #95, #216; Wood's GAM book and the occupancy and
+      hierarchical-modelling books join when a PDF is in hand)
       (after a library change, ACTION=update with the same COLLECTIONS brings a store up to date instead; while
        NewGraphEnvironment/cred#48 is open, rebuild it before the push, as the ACTION=update bullet says)
       (a rebuild over an existing local store needs OVERWRITE=TRUE; ACTION=push needs CONFIRM=TRUE to upload)
@@ -498,8 +503,12 @@ The cited basis for CH and BT habitat thresholds (#19). Not per watershed group.
   Unlike sturgeon and cutthroat, `VHWEK6RE` is also in `habitat_modelling`'s list and in `bull_trout_grayling`'s, so a
   change to the collection is followed by `ACTION=update` on all three, and, while NewGraphEnvironment/cred#48 is
   open, their rebuild before the push (the `ACTION=update` bullet above).
-  The `statistics` store is built from the top-level `statistics` collection (`LP4R4VYR`, `--parent top`, #95): the
-  texts the tuning method is read against (#185).
+  The `statistics` store is built from the whole `statistics` tree (#216): the top-level collection (`LP4R4VYR`,
+  `--parent top`, #95), the texts the tuning method is read against (#185), and its subcollections `detection`
+  (`73PNRGJF`, the methods literature for detection, occupancy, removal, eDNA, camera surveys and diversity, from
+  `data/detection_*.csv`), `survey_design` (`Z7JP8UN2`) and `model_selection` (`K2P7XGFG`). 0150 reads only items
+  filed directly in a collection, so a new subcollection under `statistics` joins the build list by its key. The last
+  two are filled by other work, so the store's freshness follows that work too.
 - `0275` carries out `data/zotero_attachment_verdicts.csv`, one decided row per item (#126, #151): `merge` joins an
   item's report, appendices or parts into one PDF in reading order (each part downloaded and checked against its
   md5, joined with `qpdf --deterministic-id`) and trashes the parts; `keep` keeps one copy and trashes the rest;

@@ -1,0 +1,46 @@
+# Query checks on the rebuilt statistics store (#216), expectations written before each runs; reported only.
+# Q1 "goodness of fit test for site occupancy models"            expect: mackenzie_bailey2004Assessingfit
+# Q2 "capture probability declines across electrofishing passes, removal estimates biased low"  expect: peterson_etal2004EvaluationMultipass (riley_fausch1992 is a gap; hedger skipped by ragnar 0.3.1)
+# Q3 "multi-scale occupancy eDNA samples within sites and PCR replicates"  expect: dorazio_erickson2018eDNAoccupancypackage, nichols_etal2008Multiscaleoccupancy, schmidt_etal2013Siteoccupancy
+# Q4 "species richness lower bound and sample coverage extrapolation"  expect: chao1987EstimatingPopulation, chao_jost2012Coveragebasedrarefaction, chao_etal2014Rarefactionextrapolation, colwell_etal2012Modelsestimators
+Opening data/rag/statistics.duckdb unverified (verify = FALSE).
+## goodness of fit test for site occupancy models
+                             citation_key          metric method     score
+         colwell_etal2012Modelsestimators            bm25 hybrid 6.9121499
+         mackenzie_etal2002EstimatingSite            bm25 hybrid 6.2735410
+         mackenzie_etal2002EstimatingSite            bm25 hybrid 5.6312644
+      nichols_etal2008Multiscaleoccupancy            bm25 hybrid 5.5862634
+          tyre_etal2003ImprovingPrecision cosine_distance hybrid 0.3103829
+          tyre_etal2003ImprovingPrecision cosine_distance hybrid 0.3138184
+         rota_etal2009Occupancyestimation cosine_distance hybrid 0.2888641
+         rota_etal2009Occupancyestimation            bm25 hybrid 5.9263492
+         rota_etal2009Occupancyestimation cosine_distance hybrid 0.3027157
+ dorazio_erickson2018eDNAoccupancypackage cosine_distance hybrid 0.3013070
+## capture probability declines across electrofishing passes, removal estimates biased low
+                         citation_key          metric method      score
+ peterson_etal2004EvaluationMultipass            bm25 hybrid 11.9932599
+ peterson_etal2004EvaluationMultipass            bm25 hybrid 12.8391419
+ peterson_etal2004EvaluationMultipass            bm25 hybrid 12.1632269
+ peterson_etal2004EvaluationMultipass cosine_distance hybrid  0.2172498
+ peterson_etal2004EvaluationMultipass cosine_distance hybrid  0.2231185
+ peterson_etal2004EvaluationMultipass            bm25 hybrid 12.0865975
+## multi-scale occupancy eDNA samples within sites and PCR replicates
+                             citation_key          metric method      score
+            schmidt_etal2013Siteoccupancy cosine_distance hybrid  0.2543849
+ dorazio_erickson2018eDNAoccupancypackage            bm25 hybrid 12.2105443
+ dorazio_erickson2018eDNAoccupancypackage            bm25 hybrid 15.1018137
+ dorazio_erickson2018eDNAoccupancypackage cosine_distance hybrid  0.2501644
+ dorazio_erickson2018eDNAoccupancypackage            bm25 hybrid 12.5655751
+ dorazio_erickson2018eDNAoccupancypackage            bm25 hybrid 14.6169273
+ dorazio_erickson2018eDNAoccupancypackage cosine_distance hybrid  0.2419483
+## species richness lower bound and sample coverage extrapolation
+                          citation_key          metric method      score
+            hsieh_etal2016iNEXTpackage cosine_distance hybrid  0.1977031
+ chao_etal2014Rarefactionextrapolation cosine_distance hybrid  0.1750873
+ chao_etal2014Rarefactionextrapolation            bm25 hybrid 12.4360843
+ chao_jost2012Coveragebasedrarefaction cosine_distance hybrid  0.1895813
+ chao_jost2012Coveragebasedrarefaction cosine_distance hybrid  0.1975315
+ chao_jost2012Coveragebasedrarefaction cosine_distance hybrid  0.1951352
+ chao_jost2012Coveragebasedrarefaction            bm25 hybrid 11.4816002
+ chao_jost2012Coveragebasedrarefaction            bm25 hybrid 12.1464740
+ chao_jost2012Coveragebasedrarefaction            bm25 hybrid 12.9311780
