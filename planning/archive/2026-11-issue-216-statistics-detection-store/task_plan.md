@@ -164,7 +164,7 @@ work also joins at a future update.
 - [x] `/code-check branch` (three-round floor, ending on a re-check of the round-0 enumeration against the filed
       items) and the #56 `public_sweep.py` over the branch
 - [x] PWF checkboxes match landed work
-- [ ] `/planning-archive` on completion
+- [x] `/planning-archive` on completion
 
 How each change is proved:
 - **CSV rows:** each DOI is resolved against CrossRef and each title matched. The enumeration is
