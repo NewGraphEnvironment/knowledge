@@ -261,6 +261,15 @@ get Better BibTeX keys without a Zotero restart (measured 2026-10-02), so `0270`
 `0280` runs end to end in one sitting, except that the build's cred reads miss what Zotero has not
 checkpointed (NewGraphEnvironment/cred#45): `0150` warns when the `-wal` is not empty.
 
+CrossRef's record can be wrong against the work's title page, and a Better BibTeX key is set from what 0270 files,
+so check each DOI row's built title and creators against its PDF before the live run (#216): titles deposited in
+capitals (which make keys like `taylor_etal2013HYDROLOGICCORRELATES`), a surname split (`Andrew Royle`), an institution
+deposited as an author (which `crossref_item()` files as an empty creator), and pretty-printed `<scp>` markup that
+`plain()` leaves as "H ill". A wrong field takes the row's value through its `override` column (`title;creators`):
+0270 keeps the DOI and CrossRef's abstract, patches an item already filed, and finds it by its DOI. OpenAlex's
+abstracts are no fallback where CrossRef has none: Zippin 1958's carried another paper's text and Carle & Strub 1978's
+was garbled OCR.
+
 A build's "Skipping missing file" for a key can mean its attachment never got a file while a
 duplicate item (same DOI) holds the PDF: Opperman et al. 2010 sat that way through two builds. Search
 the group by DOI before chasing the paper; the Web API's `/items` omits trashed items, so a trashed
