@@ -52,6 +52,9 @@ What exploration settled (read-only, 2026-11-16):
    Riley & Fausch 1992, MacKenzie et al. 2018, Kéry & Royle 2016 and 2021) are the gap: listed in #216's body, not
    filed. There is no OpenAlex fallback, because Zippin's OpenAlex abstract is another paper's.
 
+5. **(Al, 2026-11-16, after the build)** Push the store with 31 documents. Hedger et al. 2013, skipped by ragnar
+   0.3.1's chunker, joins at a rebuild under ragnar 0.4.0: knowledge#223, blocked by cred#43.
+
 ## Phase 1: inventory, PDFs and the two CSVs (no Zotero writes)
 - [x] Resolve every listed work against CrossRef, including those the issue gives without a DOI (MacKenzie 2002,
       Royle & Nichols 2003, Tyre 2003, Zippin 1958, Carle & Strub 1978, Hedger 2013, Schmidt 2013, Dorazio &
@@ -116,7 +119,7 @@ What exploration settled (read-only, 2026-11-16):
       CC22PHBQ nor BC9RR2NP got a PDF, take `Z7JP8UN2` out of the list and say so in #216's body
 - [x] Before the build, write the expected left-out list in its log: the abstract-only works, no-PDF members,
       `survey_design`'s and `model_selection`'s no-PDF items, and BGVWWBV6 (review X1)
-- [ ] Hard gate: every PDF of the four collections is on disk, Zotero is quit, and the `-wal` is empty or absent.
+- [x] (31 docs; Hedger skipped, decision 5.) Hard gate: every PDF of the four collections is on disk, Zotero is quit, and the `-wal` is empty or absent.
       Then run `ACTION=build OVERWRITE=TRUE STORE=statistics COLLECTIONS="LP4R4VYR,<detection>,Z7JP8UN2,K2P7XGFG"`,
       logged with home paths as `~/`. Checks on the result:
       - the left-out list equals the expected list written before the build;
@@ -124,7 +127,7 @@ What exploration settled (read-only, 2026-11-16):
       - the dropped list (documents the old store held and the rebuild loses) is read and explained, with #217's
         image-only scans expected;
       - every origin maps to a live group attachment
-- [ ] Four `ACTION=query` checks, each with its expected documents written in the log before it runs and the top 5
+- [x] (Q1 miss, Q2 hit, Q3 2/3, Q4 3 expected-family hits; findings.) Four `ACTION=query` checks, each with its expected documents written in the log before it runs and the top 5
       keys recorded after: occupancy goodness of fit; removal estimates when capture probability falls across
       passes; eDNA multi-scale occupancy; richness as a lower bound and sample coverage. A miss is reported, not
       tuned away (reported only, as #194's were)
@@ -148,7 +151,10 @@ What exploration settled (read-only, 2026-11-16):
 
 ## Owed at the end (reported, done after merge)
 
-None expected: the collection, the store and its push land before the PR. Paywalled PDFs Al later supplies join
+- [ ] knowledge#223: rebuild `statistics` under ragnar 0.4.0 so Hedger et al. 2013 joins (blocked by cred#43). It is
+      filed as its own issue, so this item is done when that issue exists.
+
+The collection, the store and its push land before the PR. Paywalled PDFs Al later supplies join
 the store at a future update, which is noted in the body rather than owed. A PDF found later for an abstract-only
 work also joins at a future update.
 
