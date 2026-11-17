@@ -195,3 +195,11 @@ Query checks (reported only; expectations in the log before each ran):
 - Q3, multi-scale eDNA occupancy: 2 of 3 (Schmidt, Dorazio & Erickson; not Nichols).
 - Q4, richness lower bound and coverage: Chao et al. 2014, Chao & Jost 2012 and Hsieh 2016 returned; Chao 1987 and
   Colwell 2012 did not.
+
+## Push (2026-11-17 00:12Z)
+
+`ACTION=push STORE=statistics`: the dry run, then `CONFIRM=TRUE`.
+- The manifest entry reads 31 documents, 11,113 chunks, md5 `a607e293…`, branch `216-…` and head `301d43b6`, which
+  was pushed to origin first.
+- The bucket object's multipart ETag `bf198f36…-19` matches the local file at 8 MiB parts; 153,890,816 bytes.
+- `log.json` read back from the bucket holds the same entry.

@@ -131,9 +131,9 @@ What exploration settled (read-only, 2026-11-16):
       keys recorded after: occupancy goodness of fit; removal estimates when capture probability falls across
       passes; eDNA multi-scale occupancy; richness as a lower bound and sample coverage. A miss is reported, not
       tuned away (reported only, as #194's were)
-- [ ] Commit the CSVs and logs and push the branch before the store push; never rewrite history after it (the
+- [x] Commit the CSVs and logs and push the branch before the store push; never rewrite history after it (the
       manifest records the head sha; review O2)
-- [ ] `ACTION=push` dry run, then `CONFIRM=TRUE` (Al present). Read the push's result before any verified connect,
+- [x] `ACTION=push` dry run, then `CONFIRM=TRUE` (Al present). Read the push's result before any verified connect,
       and check its ETag against the file. Commit the trimmed push log
 
 ## Phase 4: docs and issue
