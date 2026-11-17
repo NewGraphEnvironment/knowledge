@@ -1,5 +1,13 @@
 # Changelog
 
+## knowledge 0.4.43
+
+- The README’s Ecosystem table is rendered from the shared ecosystem
+  registry, between its `ecosystem.yml` markers, so each package’s role
+  reads the same in every New Graph package README and links that
+  package’s published site
+  ([\#200](https://github.com/NewGraphEnvironment/knowledge/issues/200)).
+
 ## knowledge 0.4.42
 
 - An internal article, “Checking the tuning of fish habitat definitions

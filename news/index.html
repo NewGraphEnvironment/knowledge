@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">knowledge</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.42</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.43</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -40,9 +40,13 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/NewGraphEnvironment/knowledge/blob/v0.4.43/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.4.43" id="knowledge-0443">knowledge 0.4.43<a class="anchor" aria-label="anchor" href="#knowledge-0443"></a></h2>
+<ul><li>The README’s Ecosystem table is rendered from the shared ecosystem registry, between its <code>ecosystem.yml</code> markers, so each package’s role reads the same in every New Graph package README and links that package’s published site (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/200" class="external-link">#200</a>).</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.42" id="knowledge-0442">knowledge 0.4.42<a class="anchor" aria-label="anchor" href="#knowledge-0442"></a></h2>
 <ul><li>An internal article, “Checking the tuning of fish habitat definitions against Bayesian practice” (<code>vignettes/tuning-bayesian-practice.Rmd</code>, <a href="https://github.com/NewGraphEnvironment/knowledge/issues/204" class="external-link">#204</a>), reads the tuning against <em>Statistical Rethinking</em> and <em>Bayesian Data Analysis</em>: what it does as they teach, where it departs and why, and what is tested next (<a href="https://github.com/NewGraphEnvironment/knowledge/issues/203" class="external-link">#203</a>, <a href="https://github.com/NewGraphEnvironment/knowledge/issues/186" class="external-link">#186</a>, <a href="https://github.com/NewGraphEnvironment/knowledge/issues/70" class="external-link">#70</a>). pkgdown builds it at its own URL and leaves it out of the articles index and navbar; the methodology article links it from its comparison of two habitat definitions. Its group counts come from a new <code>scope</code> element of <code>method.rds</code>, which <code>data-raw/vignette_method.R</code> writes through the tuning’s own population code (the new internal <code>.tune_base()</code> and <code>.tune_population()</code> in <code>R/tune_run.R</code>) and stops unless it reproduces the summaries’ counts, so a promotion keeps it current. <code>data-raw/bayesian_alignment_check.R</code> checks its book quotes against the PDF pages. Nothing published moves.</li>
