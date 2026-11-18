@@ -1,0 +1,233 @@
+started: 2026-11-18T02:24:43Z 
+wet build: 2026-11-15T21:39:06Z ( 0.4.36 )
+
+BULK : skipped (one end only): CO migration 
+duckdb keeps downloaded extensions and secrets in a temporary directory:
+ℹ /tmp/Rtmp7UkM3b/duckdb
+This is removed when the R session ends.
+• Extensions are re-downloaded each session.
+• Secrets are lost.
+ℹ Run duckdb(shared_home = TRUE) (or create ~/.duckdb) to keep them (suitable for most users).
+ℹ Run duckdb(shared_home = FALSE) to accept the temporary directory (and silence this message).
+ℹ See ?duckdb_storage for details and alternatives.
+duckdb keeps downloaded extensions and secrets in a temporary directory:
+ℹ /tmp/Rtmp7UkM3b/duckdb
+This is removed when the R session ends.
+• Extensions are re-downloaded each session.
+• Secrets are lost.
+ℹ Run duckdb(shared_home = TRUE) (or create ~/.duckdb) to keep them (suitable for most users).
+ℹ Run duckdb(shared_home = FALSE) to accept the temporary directory (and silence this message).
+ℹ See ?duckdb_storage for details and alternatives.
+BULK: 30037 segments with flow x 11 windows x 2 sources = 660814 rows in 86 s
+duckdb keeps downloaded extensions and secrets in a temporary directory:
+ℹ /tmp/Rtmp7UkM3b/duckdb
+This is removed when the R session ends.
+• Extensions are re-downloaded each session.
+• Secrets are lost.
+ℹ Run duckdb(shared_home = TRUE) (or create ~/.duckdb) to keep them (suitable for most users).
+ℹ Run duckdb(shared_home = FALSE) to accept the temporary directory (and silence this message).
+ℹ See ?duckdb_storage for details and alternatives.
+duckdb keeps downloaded extensions and secrets in a temporary directory:
+ℹ /tmp/Rtmp7UkM3b/duckdb
+This is removed when the R session ends.
+• Extensions are re-downloaded each session.
+• Secrets are lost.
+ℹ Run duckdb(shared_home = TRUE) (or create ~/.duckdb) to keep them (suitable for most users).
+ℹ Run duckdb(shared_home = FALSE) to accept the temporary directory (and silence this message).
+ℹ See ?duckdb_storage for details and alternatives.
+MORR: 22218 segments with flow x 26 windows x 2 sources = 1155336 rows in 68 s
+
+monthly basis against daily (gap = monthly / daily - 1), by group, window and source:
+ watershed_group_code species_code    life_stage start   end      source
+                 BULK           BT     migration 07-15 09-01 pcic_routed
+                 BULK           BT     migration 07-15 09-01 wet_balance
+                 BULK           BT    incubation 09-01 04-30 pcic_routed
+                 BULK           BT      spawning 09-01 10-15 pcic_routed
+                 BULK           BT    incubation 09-01 04-30 wet_balance
+                 BULK           BT      spawning 09-01 10-15 wet_balance
+                 BULK           CH     emergence 04-15 07-07 pcic_routed
+                 BULK           CH     emergence 04-15 07-07 wet_balance
+                 BULK           CH     migration 05-01 08-01 pcic_routed
+                 BULK           CH     migration 05-01 08-01 wet_balance
+                 BULK           CH fry_migration 07-15 09-07 pcic_routed
+                 BULK           CH fry_migration 07-15 09-07 wet_balance
+                 BULK           CH    incubation 08-01 03-31 pcic_routed
+                 BULK           CH      spawning 08-01 09-15 pcic_routed
+                 BULK           CH    incubation 08-01 03-31 wet_balance
+                 BULK           CH      spawning 08-01 09-15 wet_balance
+                 BULK           CO      spawning 09-15 11-15 pcic_routed
+                 BULK           CO      spawning 09-15 11-15 wet_balance
+                 BULK           SK      spawning 08-01 09-15 pcic_routed
+                 BULK           SK      spawning 08-01 09-15 wet_balance
+                 BULK           ST      spawning 04-15 06-15 pcic_routed
+                 BULK           ST      spawning 04-15 06-15 wet_balance
+                 MORR           BT     migration 06-01 09-01 pcic_routed
+                 MORR           BT     migration 06-01 09-01 wet_balance
+                 MORR           BT    incubation 08-23 04-30 pcic_routed
+                 MORR           BT      spawning 08-23 09-15 pcic_routed
+                 MORR           BT    incubation 08-23 04-30 wet_balance
+                 MORR           BT      spawning 08-23 09-15 wet_balance
+                 MORR           CH     emergence 03-15 04-15 pcic_routed
+                 MORR           CH     emergence 03-15 04-15 wet_balance
+                 MORR           CH  outmigration 04-15 07-15 pcic_routed
+                 MORR           CH  outmigration 04-15 07-15 wet_balance
+                 MORR           CH     migration 05-01 09-30 pcic_routed
+                 MORR           CH     migration 05-01 09-30 wet_balance
+                 MORR           CH    incubation 09-01 04-15 pcic_routed
+                 MORR           CH      spawning 09-01 10-07 pcic_routed
+                 MORR           CH    incubation 09-01 04-15 wet_balance
+                 MORR           CH      spawning 09-01 10-07 wet_balance
+                 MORR           CO  outmigration 04-21 07-31 pcic_routed
+                 MORR           CO  outmigration 04-21 07-31 wet_balance
+                 MORR           CO     emergence 05-15 07-07 pcic_routed
+                 MORR           CO     emergence 05-15 07-07 wet_balance
+                 MORR           CO     migration 07-15 09-07 pcic_routed
+                 MORR           CO     migration 07-15 09-07 wet_balance
+                 MORR           CO    incubation 10-15 07-07 pcic_routed
+                 MORR           CO      spawning 10-15 11-30 pcic_routed
+                 MORR           CO    incubation 10-15 07-07 wet_balance
+                 MORR           CO      spawning 10-15 11-30 wet_balance
+                 MORR           CT     migration 05-01 06-01 pcic_routed
+                 MORR           CT     migration 05-01 06-01 wet_balance
+                 MORR           CT      spawning 06-01 06-30 pcic_routed
+                 MORR           CT      spawning 06-01 06-30 wet_balance
+                 MORR           CT    incubation 06-30 08-07 pcic_routed
+                 MORR           CT    incubation 06-30 08-07 wet_balance
+                 MORR           CT     emergence 07-01 08-07 pcic_routed
+                 MORR           CT     emergence 07-01 08-07 wet_balance
+                 MORR           PL      spawning 06-30 07-31 pcic_routed
+                 MORR           PL      spawning 06-30 07-31 wet_balance
+                 MORR           SK     migration 06-15 08-31 pcic_routed
+                 MORR           SK     migration 06-15 08-31 wet_balance
+                 MORR           SK    incubation 09-01 05-21 pcic_routed
+                 MORR           SK      spawning 09-01 09-30 pcic_routed
+                 MORR           SK    incubation 09-01 05-21 wet_balance
+                 MORR           SK      spawning 09-01 09-30 wet_balance
+                 MORR           ST      spawning 05-15 06-15 pcic_routed
+                 MORR           ST    incubation 05-15 08-31 pcic_routed
+                 MORR           ST      spawning 05-15 06-15 wet_balance
+                 MORR           ST    incubation 05-15 08-31 wet_balance
+                 MORR           ST overwintering 07-01 03-21 pcic_routed
+                 MORR           ST     migration 07-01 09-15 pcic_routed
+                 MORR           ST overwintering 07-01 03-21 wet_balance
+                 MORR           ST     migration 07-01 09-15 wet_balance
+                 MORR           ST     emergence 08-01 08-31 pcic_routed
+                 MORR           ST     emergence 08-01 08-31 wet_balance
+ segments median_q_daily median_gap p90_abs_gap
+    29766        0.00640   1.72e-01    3.83e-01
+    29936        0.01129   9.92e-02    1.38e-01
+    29875        0.00408  -3.00e-05    2.67e-03
+    29757        0.00452  -1.04e-02    1.94e-01
+    29936        0.00439   0.00e+00    7.77e-16
+    29936        0.00727  -1.01e-02    4.86e-02
+    29887        0.02183  -4.33e-02    5.61e-02
+    29936        0.02299  -3.53e-02    4.40e-02
+    29887        0.02121  -8.04e-04    2.47e-03
+    29936        0.02357  -1.25e-03    1.71e-03
+    29766        0.00614   1.63e-01    3.72e-01
+    29936        0.01083   9.51e-02    1.31e-01
+    29808        0.00383  -2.73e-05    2.91e-03
+    29686        0.00453   1.76e-02    7.31e-02
+    29936        0.00483   0.00e+00    1.11e-15
+    29936        0.00876   7.99e-03    2.32e-02
+    29785        0.00501  -3.32e-02    6.32e-02
+    29936        0.00678  -3.14e-02    5.01e-02
+    29686        0.00453   1.76e-02    7.31e-02
+    29936        0.00876   7.99e-03    2.32e-02
+    29887        0.02175  -6.87e-02    1.07e-01
+    29936        0.02227  -5.60e-02    8.43e-02
+    22052        0.02193  -4.78e-04    4.78e-03
+    22199        0.02563  -1.93e-04    7.08e-04
+    22052        0.00555   9.70e-03    3.97e-02
+    21986        0.00829   1.06e-01    4.00e-01
+    22199        0.00730   1.07e-02    1.67e-02
+    22199        0.01254   7.48e-02    1.18e-01
+    22052        0.00221   6.09e-01    1.64e+00
+    22199        0.00396   2.47e-01    4.73e-01
+    22052        0.02309  -4.09e-02    6.16e-02
+    22199        0.02655  -3.00e-02    4.31e-02
+    22052        0.02072  -3.44e-07    3.53e-03
+    22199        0.02307   0.00e+00    4.44e-16
+    22052        0.00486   2.95e-02    1.99e-01
+    22025        0.00814  -9.71e-04    1.21e-01
+    22199        0.00681   1.82e-02    4.87e-02
+    22199        0.01222   4.25e-03    2.13e-02
+    22052        0.02439  -1.34e-02    5.51e-02
+    22199        0.02726  -1.19e-02    2.18e-02
+    22052        0.02849  -5.53e-02    1.00e-01
+    22199        0.03382  -7.44e-02    8.63e-02
+    22023        0.01300   2.54e-02    5.64e-01
+    22199        0.01741   4.32e-02    9.56e-02
+    22052        0.01053  -8.39e-03    2.25e-02
+    22036        0.00703   1.31e-02    7.47e-02
+    22199        0.01232  -9.11e-03    1.35e-02
+    22199        0.00989   5.31e-03    3.56e-02
+    20839        0.02429   7.33e-04    3.70e-02
+    22199        0.02537  -2.59e-03    7.36e-03
+    22052        0.02943  -5.05e-08    1.61e-03
+    22199        0.03594   0.00e+00    2.22e-16
+    22049        0.01916  -2.03e-02    9.56e-02
+    22199        0.02427  -1.52e-02    2.17e-02
+    22049        0.01900  -2.03e-02    3.35e-02
+    22199        0.02407  -2.00e-02    2.28e-02
+    22049        0.02020   9.72e-04    1.15e-01
+    22199        0.02579   4.04e-03    9.91e-03
+    22052        0.01905   2.15e-03    3.68e-01
+    22199        0.02328   1.63e-02    4.62e-02
+    22052        0.00690   3.45e-02    1.31e-01
+    22025        0.00799  -3.97e-08    5.59e-03
+    22199        0.00826   4.46e-02    6.44e-02
+    22199        0.01230   0.00e+00    2.22e-16
+    20846        0.03259  -1.06e-01    1.96e-01
+    22052        0.02349  -3.22e-02    6.12e-02
+    22199        0.03468  -1.25e-01    1.52e-01
+    22199        0.02654  -3.61e-02    4.39e-02
+    22049        0.00780  -1.13e-04    9.90e-03
+    22049        0.01477  -2.13e-03    3.17e-02
+    22199        0.01030   2.52e-04    1.89e-03
+    22199        0.01883   2.65e-03    9.67e-03
+    21986        0.01064   0.00e+00    5.83e-03
+    22199        0.01557   0.00e+00    2.22e-16
+
+segments with both sources, the share whose daily window flows differ more than twofold:
+ watershed_group_code species_code    life_stage pct_segments_sources_differ_2x
+                 BULK           CH     emergence                           16.7
+                 MORR           CH     emergence                           50.1
+                 MORR           CO     emergence                           24.7
+                 MORR           CT     emergence                           37.9
+                 MORR           ST     emergence                           55.9
+                 BULK           CH fry_migration                           48.5
+                 BULK           BT    incubation                           11.7
+                 MORR           BT    incubation                           27.9
+                 BULK           CH    incubation                           18.0
+                 MORR           CH    incubation                           34.8
+                 MORR           CO    incubation                           13.7
+                 MORR           CT    incubation                           37.2
+                 MORR           SK    incubation                           12.0
+                 MORR           ST    incubation                           16.2
+                 BULK           BT     migration                           48.9
+                 MORR           BT     migration                           22.9
+                 BULK           CH     migration                           16.5
+                 MORR           CH     migration                           13.5
+                 MORR           CO     migration                           48.6
+                 MORR           CT     migration                           35.7
+                 MORR           SK     migration                           31.1
+                 MORR           ST     migration                           42.5
+                 MORR           CH  outmigration                           22.7
+                 MORR           CO  outmigration                           19.0
+                 MORR           ST overwintering                           34.2
+                 BULK           BT      spawning                           38.7
+                 MORR           BT      spawning                           56.4
+                 BULK           CH      spawning                           53.6
+                 MORR           CH      spawning                           46.2
+                 BULK           CO      spawning                           23.0
+                 MORR           CO      spawning                           24.6
+                 MORR           CT      spawning                           25.6
+                 MORR           PL      spawning                           36.0
+                 BULK           SK      spawning                           53.6
+                 MORR           SK      spawning                           49.2
+                 BULK           ST      spawning                           21.1
+                 MORR           ST      spawning                           27.5
+
+wrote data/flow_window/segment_windows.parquet 1816150 rows
+finished: 2026-11-18T02:27:25Z 
