@@ -76,7 +76,7 @@ What exploration found that shapes the plan:
   release record. A README at the published prefix carries the attribution.
 - [ ] Zotero: trash `canadaNuSEDSNewSalmon` (merge its relations into the kept item through the Web
   API). Fix the Cottonwood 2013 summary's creators so its key has no `;`.
-- [ ] **#31:** read `officeofthewetsuweten2013WetsuwetenTitle` p. 24 from the PDF. Add the end date
+- [x] **#31:** read `officeofthewetsuweten2013WetsuwetenTitle` p. 24 from the PDF. Add the end date
   if the source gives one. If it does not, the row's note says the end is unsourced and consumers drop
   the row. `knw_timing_read()` still passes.
 - [ ] **#96:** UFRA (Swift Creek, upper Fraser mainstem) and COTR (Cottonwood system) chinook rows,
