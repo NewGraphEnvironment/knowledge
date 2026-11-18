@@ -92,7 +92,7 @@ No comments on #174 or its members. What exploration found that shapes the plan:
 - [x] **#31:** read `officeofthewetsuweten2013WetsuwetenTitle` p. 24 from the PDF. Add the end date
   if the source gives one. If it does not, the row's note says the end is unsourced and consumers drop
   the row. `knw_timing_read()` still passes.
-- [ ] **#96:** UFRA (Swift Creek, upper Fraser mainstem) and COTR (Cottonwood system) chinook rows,
+- [x] **#96:** UFRA (Swift Creek, upper Fraser mainstem) and COTR (Cottonwood system) chinook rows,
   migration and spawning at minimum, then other stages where the evidence allows. Populations are picked
   by FWA watershed code inside the group, never by name. Spawning comes from NuSEDS: start
   `START_SPAWN_DT_FROM`, end `END_SPAWN_DT_TO` else `END_SPAWN_DT_FROM`, month and day only, the median of
@@ -103,7 +103,7 @@ No comments on #174 or its members. What exploration found that shapes the plan:
   `data-raw/timing_nuseds.R` prints the derived windows and per-year counts to a committed log; the rows
   are entered by hand, as the table's others are. If the literature grows past this PR, the migration rows
   split out.
-- [ ] Split from #108: file "provincial fish observations and literature per stream beside the NuSEDS
+- [x] Split from #108: file "provincial fish observations and literature per stream beside the NuSEDS
   records". Its body names move 5 (#174) as where it was split from; it stays out of `planning/backlog.md`.
   Edit #108's body to say what landed and what was split.
 
@@ -141,11 +141,11 @@ No comments on #174 or its members. What exploration found that shapes the plan:
   was asked, how judged, what came back), the spread and flips by group, the verdict against the rule set
   beforehand, the flow load, the caveats, and #42's summary by group and stage. Link it from
   `research/README.md` and from #42's and #105's bodies.
-- [ ] Outcome: **on a stop**, close #105 with the result, and add a sentence to
+- [x] Outcome: **on a stop**, close #105 with the result, and add a sentence to
   `research/chinook_stream_size.md` and to the methodology article's limits. **On a pass**, file "#105
   Phase 2: tune on the window" (body: the walk decision, a separate window walk or an edit to the
   published one; outputs under `flow_window/`; waits on Al's word), split from move 5.
-- [ ] Split from #42: file "7-day minimum and dry-year departures per window" (per-year daily flow at
+- [x] Split from #42: file "7-day minimum and dry-year departures per window" (per-year daily flow at
   gauges, then carried to segments), split from move 5. Edit #42's body to say what landed.
 
 ## Phase 3: Wrap-up

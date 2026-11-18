@@ -1,8 +1,20 @@
 # Chinook rearing: does flow in a seasonal window size streams differently from MAD?
 
-**Verified:** 2026-11-18 (the question, the readings and the stop rule, set before any flip was counted) ·
-**Issues:** #105 (Phase 1, this file), #42 (window flow per segment), move 5 (#174) · **Produced by:**
-`data-raw/chinook_window_flow.R` (to come) · **Status:** OPEN: the stop rule is set; Phase 1 has not run.
+**Verified:** 2026-11-18 (the question, the readings and the stop rule set and committed at `d6eff92f` before any
+flip was counted; Phase 1 run the same day) · **Issues:** #105 (Phase 1, this file), #42 (window flow per segment,
+below), move 5 (#174) · **Produced by:** `data-raw/chinook_window_flow.R` (tables `data/tune/flow_window/ch_rear_*.csv`,
+log `scripts/logs/flow_window/20261118_chinook_window_flow.txt`); `data-raw/segment_window_flow.R` (ignored
+`data/flow_window/segment_windows.parquet`, log `scripts/logs/flow_window/20261118_segment_window_flow.txt`) ·
+**Status:** Phase 1 done: by the rule set beforehand, Phase 2 goes ahead, on Al's word.
+
+## Short answer
+
+Reading late-summer flow instead of MAD moves **6.2 % of the 4,858 scored visits and 6.8 % of the 234 with chinook**
+to the other side of the rule when both windows are read. That passes the 5 % the stop rule set, so a tuning on
+window flow could come back different, and Phase 2 is worth running. Either window alone moves fewer than 5 %. The
+change is concentrated: one group, the lower Fraser (LFRA), holds 138 of the 300 visits that move, and only 16
+visits with chinook move in all. What a juvenile stream holds in August and September, as a share of its MAD, runs
+from about a tenth in coastal rain-fed groups to above one and a half in snow- and glacier-fed ones.
 
 ## The question
 
@@ -67,3 +79,74 @@ Set at the plan gate (Al, 2026-11-17) and made exact here before any flip was co
   share: 243 or more of the 4,858 visits, or 12 or more of the 234 with chinook.
 
 The script refuses to run unless this file is committed, and logs the commit it read.
+
+## What came back (Phase 1, 2026-11-18)
+
+**The checks held.** The rebuilt population gave 7,823 visits, 235 with chinook and 111 groups, and 4,858, 234 and 45
+once the groups with only one outcome were left out. The MAD reading gave the published rule's 1,400 visits in, 197
+with chinook. The database's flow load was the grade record's (wet's build of 2026-10-24). MAD, read again on each
+visit's segment, equalled the evidence's at every visit, and no visit's flow came from a parent segment.
+
+**The typical seasonal share.** Over the scored visits, the rearing window's flow is a median 0.59 of MAD. At the
+997 rivers the walk found at 3 m³/s, the spawning window's flow is a median 1.04 of MAD. So the matched thresholds
+are 0.44 m³/s for the stream and 3.11 m³/s for the river.
+
+**Flips**, against the MAD reading, over the 4,858 visits (234 with chinook):
+
+| reading | visits in | visits that move | moved in | moved out | share | chinook visits that move | share |
+|---|---|---|---|---|---|---|---|
+| stream (rearing window) | 1,324 | 194 | 59 | 135 | 4.0 % | 9 | 3.8 % |
+| river (spawning window) | 1,302 | 102 | 2 | 100 | 2.1 % | 7 | 3.0 % |
+| both | 1,220 | 300 | 60 | 240 | 6.2 % | 16 | 6.8 % |
+
+**The verdict.** "Both" reaches 5 % of visits and of chinook visits. By the rule set beforehand, Phase 2 (a tuning on
+window flow) goes ahead, and like any tuning it waits on Al's word.
+
+**Where they move.** A flip happens where a stream's or river's late-summer share departs from the typical one. That
+happens far more in some groups than others:
+- The lower Fraser (LFRA, 646 visits) holds 119 of the stream reading's 194 flips and 138 of the 300 in both. Its
+  streams hold a median 0.18 of MAD in August and September, a third of the typical share, so many fall below the
+  matched stream threshold.
+- In "both", the other 162 spread over 30 groups, none with more than 21 (FRAN).
+- The 16 chinook visits that move are spread over 11 groups, two at most in any one.
+
+**The seasonal share by group.** The median rearing-window share is under 0.5 in 14 of the 45 groups and over 1 in 9:
+- lowest: NARC 0.11, SALM 0.18, LFRA 0.18, SQAM 0.19, GOLD 0.22;
+- highest: SETN 1.32, LSKE 1.34, HOMA 1.45, KSHR 1.63, LISR 1.78.
+
+The spread is in `data/tune/flow_window/ch_rear_ratio_by_group.csv`, with the river's spawning share beside it.
+
+**The river reading barely gains.** Two visits move in and 100 move out. A visit can only move in through a river that
+reaches 3.11 m³/s in the spawning window but carries under 3 m³/s of MAD. That needs a river between the walk's 1 and
+3 m³/s rungs whose September share is well above the typical one, and few lie within 1 km of a visit.
+
+**Checks on the monthly basis.** wet's published parts (build 2026-11-15) were read for the same rivers:
+- Their monthly basis gave the database's river reading exactly: the same median share, the same 102 flips.
+- Their daily basis, which takes the spawning window's part months day by day, gave a median share of 0.95 and 106
+  flips (2.2 %), four visits apart from the monthly reading.
+
+The result does not rest on the monthly approximation.
+
+## Caveats
+
+- **Phase 1 counts flips; it does not score them.** A flip says the window reading takes a different set of visits.
+  Whether that set predicts chinook better is Phase 2's held-out score. 16 chinook visits is a small difference to
+  tune on.
+- **Most of the change is one group's.** A tuning on window flow could move largely because of the lower Fraser's
+  rain-fed streams. Phase 2 should read its result with and without LFRA.
+- **The river reading is approximate** (above): it sees only the ladder's rivers.
+- **Both flow sources are 30-year means.** No dry year is in them, and the monthly basis is weakest on small basins
+  (`research/chinook_stream_size.md`, `research/modelled_discharge.md`).
+- **The windows are fixed province-wide.** Stock timing differs by a month between neighbouring groups (BULK and MORR).
+  Windows that move by group are not here.
+
+## What next
+
+Phase 2 is filed as its own issue, split from move 5 (#174). It covers:
+- a window column beside `mad_pick` in the evidence;
+- a window walk (a separate walk, or an edit to the published one that regrades every key: the choice is at its
+  gate);
+- four readings scored by `0320` into `data/tune/flow_window/`, MAD as the control;
+- every check of `CLAUDE.md`'s "Reading the tuning's stability checks".
+
+Nothing is graded, compared or published without Al's word.

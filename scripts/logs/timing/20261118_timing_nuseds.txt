@@ -1,0 +1,49 @@
+NuSEDS release 20260601 
+
+==== UFRA chinook: 9 populations, 411 records
+                                      stream records years_start years_end first_year last_year start_median start_q10 start_q90 end_median end_q10 end_q90
+                    HOLMES RIVER | pop 46931      62          30        32       1967      2000        08-08     08-01     08-18      09-05   09-01   09-15
+                     SWIFT CREEK | pop 46961      52          27        28       1970      2000        08-09     08-02     08-15      09-05   08-25   09-15
+                     NEVIN CREEK | pop 46941      56          24        23       1971      2000        08-07     08-04     08-15      09-05   08-21   09-15
+                    HORSEY CREEK | pop 46951      56          23        24       1971      2000        08-05     08-05     08-18      09-04   08-25   09-26
+ FRASER RIVER - ABOVE TETE JAUNE | pop 44549      74          15        15       1982      2000        08-15     08-01     08-25      09-20   09-15   10-03
+                     SMALL CREEK | pop 45325      50           3         3       1996      2000        08-11     08-11     08-11      09-20   09-04   09-20
+                     ROBSON RIVER | pop 2076       3           1         1       1996      1996        08-11     08-11     08-11      09-20   09-20   09-20
+                   HOLLIDAY CREEK | pop 1207      50           0         0        Inf      -Inf         <NA>      <NA>      <NA>       <NA>    <NA>    <NA>
+                     SWIFT CREEK | pop 46962       8           0         0        Inf      -Inf         <NA>      <NA>      <NA>       <NA>    <NA>    <NA>
+ arrival_median years_arrival
+          08-01            32
+          08-01            28
+          08-05            23
+          08-01            22
+          08-01            16
+          08-11             3
+          08-01             1
+           <NA>             0
+           <NA>             0
+
+ UFRA group window (pooled population-years):
+ records years_start years_end first_year last_year start_median start_q10 start_q90 end_median end_q10 end_q90 arrival_median years_arrival
+     411         123       126       1967      2000        08-11     08-01     08-18      09-05   08-25   09-20          08-01           125
+
+==== COTR chinook: 5 populations, 154 records
+                               stream records years_start years_end first_year last_year start_median start_q10 start_q90 end_median end_q10 end_q90
+              SWIFT RIVER | pop 47277      24          21        21       1953      1974        08-05     08-01     08-21      09-01   08-25   09-09
+              NAVER CREEK | pop 47307      50          10        11       1985      2009        08-13     08-10     08-24      09-10   09-01   09-26
+               SWIFT RIVER | pop 2483      28           4         4       1996      2000        07-28     07-12     08-11      09-20   09-16   09-20
+ COTTONWOOD RIVER - LOWER | pop 44772       1           0         0        Inf      -Inf         <NA>      <NA>      <NA>       <NA>    <NA>    <NA>
+ COTTONWOOD RIVER - LOWER | pop 47277      47           0         0        Inf      -Inf         <NA>      <NA>      <NA>       <NA>    <NA>    <NA>
+ COTTONWOOD RIVER - UPPER | pop 44772       2           0         0        Inf      -Inf         <NA>      <NA>      <NA>       <NA>    <NA>    <NA>
+              SWIFT RIVER | pop 47278       2           0         0        Inf      -Inf         <NA>      <NA>      <NA>       <NA>    <NA>    <NA>
+ arrival_median years_arrival
+          08-05             8
+          08-01            11
+          07-24             4
+           <NA>             0
+           <NA>             0
+           <NA>             0
+           <NA>             0
+
+ COTR group window (pooled population-years):
+ records years_start years_end first_year last_year start_median start_q10 start_q90 end_median end_q10 end_q90 arrival_median years_arrival
+     154          35        36       1953      2009        08-10     08-01     08-23      09-06   08-27   09-20          08-01            23
