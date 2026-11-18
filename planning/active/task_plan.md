@@ -114,7 +114,7 @@ No comments on #174 or its members. What exploration found that shapes the plan:
 - [x] **Stop rule first:** create `research/chinook_window_flow.md` with the windows (rearing 08-01 to
   09-30 on the stream; spawning 08-15 to 09-15 on the downstream river), the matched thresholds' method and
   the stop rule as set at the gate, and commit it before any flip is computed.
-- [ ] `data-raw/chinook_window_flow.R` (#105 Phase 1), on this host (`knw_db_latency_check()`). It
+- [x] `data-raw/chinook_window_flow.R` (#105 Phase 1), on this host (`knw_db_latency_check()`). It
   refuses unless the research file is committed, and logs HEAD and the stop rule's commit:
   - flow load from `knw_discharge_load()`, refused unless it equals the grade record's `discharge_load`;
   - population: `.tune_population()` on the restored evidence with `knw_tune_run()`'s own defaults

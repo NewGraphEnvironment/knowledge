@@ -50,7 +50,8 @@ knw_link_flow <- function(conn, linear_feature_id) {
 }
 
 # knw_link_flow()'s query on the segment ids in `tmp`; the FWA and flow tables are arguments so that a test can put
-# fixtures in their place
+# fixtures in their place. `parent_lfid` names the parent a segment with no flow of its own took its flow from, for a
+# caller that reads that segment's other months (data-raw/chinook_window_flow.R); knw_link_flow() does not return it.
 .knw_link_flow_sql <- function(tmp, fwa = "whse_basemapping.fwa_stream_networks_sp",
                                q = "discharge.fwa_v1_segment_monthly") {
   sprintf("
@@ -61,7 +62,8 @@ knw_link_flow <- function(conn, linear_feature_id) {
            coalesce(s.localcode_ltree, par.localcode)::text AS localcode,
            (s.wscode_ltree IS NULL OR s.localcode_ltree IS NULL) AS code_from_parent, s.waterbody_key,
            own.mad_pick AS own_mad, own.pick_source AS own_source, own.mad_routed, own.mad_balance,
-           par.q_m3s AS parent_mad, par.source AS parent_source, par.d AS parent_dist_m
+           par.q_m3s AS parent_mad, par.source AS parent_source, par.d AS parent_dist_m,
+           par.linear_feature_id AS parent_lfid
     FROM %1$s t
     JOIN %2$s s ON s.linear_feature_id = t.linear_feature_id
     LEFT JOIN LATERAL (
@@ -73,7 +75,7 @@ knw_link_flow <- function(conn, linear_feature_id) {
       WHERE q.linear_feature_id = s.linear_feature_id AND q.scenario = 'historical' AND q.month = 0
     ) own ON true
     LEFT JOIN LATERAL (
-      SELECT q.q_m3s, q.source, ST_Distance(p.geom, s.geom) AS d,
+      SELECT p.linear_feature_id, q.q_m3s, q.source, ST_Distance(p.geom, s.geom) AS d,
              p.wscode_ltree AS wscode, p.localcode_ltree AS localcode
       FROM %2$s p
       JOIN %3$s q

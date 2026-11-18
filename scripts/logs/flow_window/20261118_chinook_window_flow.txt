@@ -1,0 +1,58 @@
+stop rule: research/chinook_window_flow.md at d6eff92f98876efa256ace0979cb2d4cd2d2c32f 
+HEAD:      d6eff92f98876efa256ace0979cb2d4cd2d2c32f 
+started:   2026-11-18T02:16:35Z 
+
+published rule: mad>=0.75|g<=0.09|Q3@D1000 (run 20261103_0838 )
+flow load:      wet_db_load(): discharge/fwa/v1/segment_monthly, scenario historical last loaded from https://fresh-bc.s3.us-west-2.amazonaws.com/discharge/fwa/v1/manifest.json (built 2026-10-24T12:23:01Z, wet b4bbc50) 
+
+population: 7823 / 235 / 111 -> scored: 4858 / 234 / 45 (visits / with CH / groups)
+MAD reading: 1400 in, 197 with CH (the tune table's)
+
+flow from a parent segment: 0 visits; no flow: 0 
+median window / MAD: rearing at visits 0.5903, spawning at the 997 rivers found at 3 m3/s 1.0383
+matched thresholds: stream 0.4427 m3/s (for 0.75), river 3.1150 m3/s (for 3)
+
+duckdb keeps downloaded extensions and secrets in a temporary directory:
+ℹ /tmp/RtmpCbBxBC/duckdb
+This is removed when the R session ends.
+• Extensions are re-downloaded each session.
+• Secrets are lost.
+ℹ Run duckdb(shared_home = TRUE) (or create ~/.duckdb) to keep them (suitable for most users).
+ℹ Run duckdb(shared_home = FALSE) to accept the temporary directory (and silence this message).
+ℹ See ?duckdb_storage for details and alternatives.
+parts (wet build 2026-11-15T21:39:06Z): one group (BABL) read in 14.0 s; 47 groups to read
+duckdb keeps downloaded extensions and secrets in a temporary directory:
+ℹ /tmp/RtmpCbBxBC/duckdb
+This is removed when the R session ends.
+• Extensions are re-downloaded each session.
+• Secrets are lost.
+ℹ Run duckdb(shared_home = TRUE) (or create ~/.duckdb) to keep them (suitable for most users).
+ℹ Run duckdb(shared_home = FALSE) to accept the temporary directory (and silence this message).
+ℹ See ?duckdb_storage for details and alternatives.
+duckdb keeps downloaded extensions and secrets in a temporary directory:
+ℹ /tmp/RtmpCbBxBC/duckdb
+This is removed when the R session ends.
+• Extensions are re-downloaded each session.
+• Secrets are lost.
+ℹ Run duckdb(shared_home = TRUE) (or create ~/.duckdb) to keep them (suitable for most users).
+ℹ Run duckdb(shared_home = FALSE) to accept the temporary directory (and silence this message).
+ℹ See ?duckdb_storage for details and alternatives.
+monthly, published parts: median spawning window / MAD at the rivers 1.0383; 0 rivers with no value; 0 visits read apart from the database's monthly river reading
+daily, published parts: median spawning window / MAD at the rivers 0.9518; 0 rivers with no value; 4 visits read apart from the database's monthly river reading
+
+ reading                    basis visits visits_in flips flips_in flips_out
+  stream                  monthly   4858      1324   194       59       135
+   river                  monthly   4858      1302   102        2       100
+    both                  monthly   4858      1220   300       60       240
+   river monthly, published parts   4858      1302   102        2       100
+   river   daily, published parts   4858      1298   106        2       104
+ flips_pct  ch ch_flips ch_flips_pct
+      3.99 234        9         3.85
+      2.10 234        7         2.99
+      6.18 234       16         6.84
+      2.10 234        7         2.99
+      2.18 234        7         2.99
+
+verdict: CONTINUE: a reading reaches 5 % of visits or of visits with CH; file Phase 2 
+wrote data/tune/flow_window 
+finished: 2026-11-18T02:23:53Z 
