@@ -44,7 +44,7 @@ split piece, or one filed since the last pass): run `/backlog-sweep` to place it
 | - [ ] 14 | #233 | 21: window flow follow-ups (2 issues) | open | C | 9 | fable then opus |
 Tracks are separate efforts, not moves: baselines (#139, `track:baselines`: #140 next), speed (`track:speed`: #85,
 #101; its umbrella is in the skills repository), provenance (`track:provenance`: #162; #165 done in PR #206, #197 in PR #207; umbrella likewise) and
-minimal-run (#120, `track:minimal-run`; link#460, which its last task waited on, closed 2026-11-13) and publish (#220,
+minimal-run (#120, `track:minimal-run`: closed 2026-11-18, its waiting setups owed in #132 and #70) and publish (#220,
 `track:publish`: #219 next; its upload of `knowledge/fdis/v3` is the moment batch 18's per-pass tables can join v3
 without a new version).
 
