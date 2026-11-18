@@ -37,17 +37,31 @@ path_record <- "data/nuseds_release.csv"
 path_readme <- "data/nuseds_README.md"
 cat("started:", format(Sys.time(), "%Y-%m-%dT%H:%M:%SZ", tz = "UTC"), "\n")
 
-dirty <- .knw_git(".", "status", "--porcelain", "--untracked-files=no")
-if (length(dirty) && publish) stop("working tree has uncommitted changes; commit before PUBLISH=TRUE", call. = FALSE)
+# every run, untracked files included: the release record and the receipt name this commit, so the code they ran
+# (R/, which load_all() sources whole, this script, the receipt declaration and the README) must be that commit's
+dirty <- .knw_git(".", "status", "--porcelain", "--", "R", "scripts/0340-nuseds-build.R", "inst/receipt",
+                  path_readme, path_record)
+if (length(dirty)) stop("commit first, so the record names the code that ran: ", paste(dirty, collapse = "; "),
+                        call. = FALSE)
+if (publish && length(.knw_git(".", "status", "--porcelain", "--untracked-files=no"))) {
+  stop("working tree has uncommitted changes; commit before PUBLISH=TRUE", call. = FALSE)
+}
 knowledge_git <- .knw_git_state()
+# crate's registration decides every type and how the file is decoded, so its identity is part of the recipe: the
+# installed crate's version and the md5 of the schema it read
+crate_yaml <- system.file("extdata/schemas/dfo/nuseds_all_areas.yaml", package = "crate")
+if (!nzchar(crate_yaml)) stop("the installed crate has no dfo/nuseds_all_areas registration (crate#74)", call. = FALSE)
+crate_schema <- paste0("crate ", utils::packageVersion("crate"), " schema md5 ", unname(tools::md5sum(crate_yaml)))
+cat("crate:", crate_schema, "\n")
 
 # ---- the release ----
 f <- knw_nuseds_fetch(release = release)
 cat("release:", f$release, if (f$downloaded) "(downloaded)" else "(held)", "\nzip md5:", f$md5, "\n")
 rec <- if (file.exists(path_record)) utils::read.csv(path_record, colClasses = "character") else NULL
-if (!is.null(rec) && f$release %in% rec$release && !identical(rec$zip_md5[rec$release == f$release], f$md5)) {
-  stop("release ", f$release, " is recorded with zip md5 ", rec$zip_md5[rec$release == f$release], " but the zip ",
-       "held is ", f$md5, ": DFO may have replaced it in place; keep both and name the new one", call. = FALSE)
+if (!is.null(rec) && nrow(rec) && f$release %in% rec$release &&
+    !all(rec$zip_md5[rec$release == f$release] == f$md5)) {
+  stop("release ", f$release, " is recorded with another zip md5 than the zip held (", f$md5, "): DFO may have ",
+       "replaced it in place; keep both and name the new one", call. = FALSE)
 }
 
 # ---- the records ----
@@ -77,10 +91,13 @@ dir_rel <- dirname(f$path)
 csv <- file.path(dir_rel, "nuseds_records.csv")
 utils::write.csv(x, csv, row.names = FALSE, na = "", fileEncoding = "UTF-8")
 row <- data.frame(release = f$release, zip_md5 = f$md5, zip_url = if (is.na(f$url)) "" else f$url,
-                  rows = as.character(nrow(x)), fetched = format(Sys.time(), "%Y-%m-%d", tz = "UTC"),
+                  rows = as.character(nrow(x)), crate_schema = crate_schema,
+                  fetched = format(Sys.time(), "%Y-%m-%d", tz = "UTC"),
                   knowledge_commit = knowledge_git$commit, stringsAsFactors = FALSE)
-if (!is.null(rec) && f$release %in% rec$release) {
-  keep <- rec[rec$release == f$release, , drop = FALSE]
+# one row per release read through one crate schema: the same pair again must give the same rows
+same <- if (is.null(rec) || !nrow(rec)) logical() else rec$release == f$release & rec$crate_schema == crate_schema
+if (any(same)) {
+  keep <- rec[same, , drop = FALSE]
   if (!identical(keep$rows, row$rows)) stop("release ", f$release, " gave ", row$rows, " rows; recorded ", keep$rows,
                                            call. = FALSE)
 } else {
@@ -98,7 +115,8 @@ tables <- data.frame(table = "nuseds_records", source = csv, script = "scripts/0
                                          "(#108; README.md)."))
 receipt <- list(output = "nuseds",
                 recipe = list(code = .knw_receipt_code(knowledge_git),
-                              config = list(settings = list(version = version, release = f$release)),
+                              config = list(settings = list(version = version, release = f$release,
+                                                            crate_schema = crate_schema)),
                               inputs = list(nuseds_zip = list(sha256 = .knw_sha256(f$path))), seed = NULL),
                 summary = list(rows = nrow(x)))
 # the published types are crate's, never a guess from the CSV: the ids and dates as text, counts as double

@@ -6,8 +6,9 @@
 receipt_keys: 1
 output: nuseds
 recipe:
-  # the dataset version published and the NuSEDS release it holds
-  settings: [version, release]
+  # the dataset version published, the NuSEDS release it holds, and crate's registration that read it (the installed
+  # crate's version and the md5 of its dfo/nuseds_all_areas schema, which decides every type and the encoding)
+  settings: [version, release, crate_schema]
   # DFO's All Areas zip as received
   inputs: [nuseds_zip]
   seed: false
