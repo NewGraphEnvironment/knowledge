@@ -100,3 +100,13 @@ What each class should rest on, if the lineage is sound:
 - So the 16 % that Rebellato et al. 2024 cite is WDFW's coho, sockeye and chinook stratum; WDFW's chum (5 %) and
   pink (12 %) limits are lower than the 15 % class BC applies to them, which the existing CM and PK rows (Rebellato's
   15 %) do not show. Gradients are over a sustained 160 m, not bcfishpass's 100 m.
+
+## Norris and Mount 2016, read directly (2026-11-18)
+
+`norris_mount2016Fishpassage` (attachment `MRPUF7JW`): "Barriers to fish passage include sustained (>100 linear
+meters) channel gradients of a user specified percentage (... the model default is a choice of any 5% increment
+between 10% and 30%. The gradient cut-off in Version 1 was simply 25%) ... Although this model is simple and has not
+been field verified as a predictor of fish habitat" (§2, text line ~127); and in §2.1.3.1: "25% was used as the
+maximum gradient for fish passage in Version 1 of the model and is still the gradient barrier threshold most often
+used." No species is named and no source is cited: 25 % is the provincial fish-habitat model's species-blind cut-off,
+which bcfishpass applies to BT, RB, CT and DV.
