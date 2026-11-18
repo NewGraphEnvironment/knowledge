@@ -5,6 +5,12 @@
 peer issue a batch waits on (link, fresh, wet, cred, fwapg, flooded, floodplains, fly) · the pass's own issue, #169,
 whose `planning/archive/` holds the read
 
+**Verified:** 2026-11-18 against 59 open issues · **Produced by:** a read of the 16 open issues the file did not name
+(`gh issue list --state open`) and their comments, and of #211, split from move 4; each premise checked against
+`origin/main`; the peer issues the new batches touch (cred, gq, wet, link, fresh) · link#434 and link#400, which move 9
+waited on, closed 2026-11-17; link#460, the minimal-run track's last wait, closed 2026-11-13 · the table gains `lane`,
+`waits on` and `model`; #115 moves from batch 13 to batch 19, which rebuilds the method bundle
+
 How to use this file: `/backlog-sweep` writes it. Take the first move in **Moves** that is not
 ticked and not **waiting**; `/planning-init <umbrella>` plans it, one phase per batch, one PR.
 When the plan finds that a batch, or one of its members, is more than one PR's work, it carries the first piece and
@@ -20,23 +26,27 @@ split piece, or one filed since the last pass): run `/backlog-sweep` to place it
 
 ## Moves
 
-| move | umbrella | batches | state |
-|---|---|---|---|
-| - [x] 1 | #170 | 1: evidence-build and test fixes (2 issues) | done: https://github.com/NewGraphEnvironment/knowledge/pull/187 |
-| - [x] 2 | #171 | 2, 3: articles as a tuning series, a build that stalls fails fast (4 issues) | done: https://github.com/NewGraphEnvironment/knowledge/pull/208 |
-| - [x] 3 | #172 | 4, 5: Zotero library writes, new sources into the stores (5 issues) | done: https://github.com/NewGraphEnvironment/knowledge/pull/189 |
-| - [x] 4 | #173 | 6, 7: maps out of the comparison, one research page per key (4 issues) | done: https://github.com/NewGraphEnvironment/knowledge/pull/212 (batch 6; batch 7 split to #211) |
-| - [x] 5 | #174 | 8, 9: timing table and NuSEDS, flow in windows (5 issues) | done: https://github.com/NewGraphEnvironment/knowledge/pull/229 |
-| - [ ] 6 | #175 | 10: location error against flow resolution (2 issues) | open |
-| - [ ] 7 | #176 | 11, 12: FISS parser, gradient and PINE; layers for report repos (6 issues) | open |
-| - [ ] 8 | #177 | 13: promotion cargo (4 issues) | **waiting** on Al's word for the next full retune |
-| - [ ] 9 | #178 | 14, 15: access, gradient on the ground (4 issues) | **waiting** on link#434 and link#400 (override lifts, known records) and fresh#257 (fixed-window gradients) |
-| - [ ] 10 | #179 | 16: library, keys and our own prose (3 issues) | open |
-| - [ ] 11 | #180 | 17: report-priority pipeline for any group (3 issues) | **waiting** on Al's word to resume the report-priority work, parked 2026-09-04 |
-
+| move | umbrella | batches | state | lane | waits on | model |
+|---|---|---|---|---|---|---|
+| - [x] 1 | #170 | 1: evidence-build and test fixes (2 issues) | done: https://github.com/NewGraphEnvironment/knowledge/pull/187 | — | — | — |
+| - [x] 2 | #171 | 2, 3: articles as a tuning series, a build that stalls fails fast (4 issues) | done: https://github.com/NewGraphEnvironment/knowledge/pull/208 | — | — | — |
+| - [x] 3 | #172 | 4, 5: Zotero library writes, new sources into the stores (5 issues) | done: https://github.com/NewGraphEnvironment/knowledge/pull/189 | — | — | — |
+| - [x] 4 | #173 | 6, 7: maps out of the comparison, one research page per key (4 issues) | done: https://github.com/NewGraphEnvironment/knowledge/pull/212 (batch 6; batch 7 split to #211) | — | — | — |
+| - [x] 5 | #174 | 8, 9: timing table and NuSEDS, flow in windows (5 issues) | done: https://github.com/NewGraphEnvironment/knowledge/pull/229 | — | — | — |
+| - [ ] 6 | #175 | 10, 18: location error against flow resolution, the FDIS load's outputs (4 issues) | open: start here | A | — | opus |
+| - [ ] 7 | #176 | 11, 12: FISS parser, gradient and PINE; layers for report repos (6 issues) | open | B | — | opus |
+| - [ ] 8 | #177 | 13, 23: promotion cargo, tuning-code fixes (4 issues) | **waiting** on Al's word for the next full retune | C | 9, 12 | opus |
+| - [ ] 9 | #178 | 14, 15: access, gradient on the ground (4 issues) | open: the link waits cleared 2026-11-17; #70's fixed-window and lidar step waits on fresh#257, so the plan splits it | C | — | fable then opus |
+| - [ ] 10 | #179 | 16, 22: library, keys and our own prose; OCR of the scanned PDFs (4 issues) | open | D | — | opus |
+| - [ ] 11 | #180 | 17: report-priority pipeline for any group (3 issues) | **waiting** on Al's word to resume the report-priority work, parked 2026-09-04 | D | 10 | opus |
+| - [ ] 12 | #231 | 19: article wording and one method-bundle rebuild (3 issues) | open | E | — | opus |
+| - [ ] 13 | #232 | 20: one research page per key (3 issues) | open | E | 10, 12 | fable then opus |
+| - [ ] 14 | #233 | 21: window flow follow-ups (2 issues) | open | C | 9 | fable then opus |
 Tracks are separate efforts, not moves: baselines (#139, `track:baselines`: #140 next), speed (`track:speed`: #85,
 #101; its umbrella is in the skills repository), provenance (`track:provenance`: #162; #165 done in PR #206, #197 in PR #207; umbrella likewise) and
-minimal-run (#120, `track:minimal-run`; its last task waits on link#460).
+minimal-run (#120, `track:minimal-run`; link#460, which its last task waited on, closed 2026-11-13) and publish (#220,
+`track:publish`: #219 next; its upload of `knowledge/fdis/v3` is the moment batch 18's per-pass tables can join v3
+without a new version).
 
 link's own pass: link#468, a backlog pass for link that carries the link issues moves 8 and 9 and the baselines and minimal-run tracks wait on, so link's backlog can place them knowing what they hold up.
 
@@ -56,11 +66,17 @@ link's own pass: link#468, a backlog pass for link that carries the link issues 
 | 10 | #175 | location error against flow resolution: #23, #137 | 2 | cut #23 to what #137 needs (its link consumer closed) | #23's downstream-end check is #137's oracle |
 | 11 | #176 | FISS parser, gradient and PINE: #7, #34, #10 | 3 | fixtures from the provincial template | one regeneration of the FISS outputs |
 | 12 | #176 | layers for report repos: #17, #2, #1 | 3 | whether #2 and #1 are still wanted | #17 rolls up batch 11's outputs |
-| 13 | #177 | promotion cargo: #115, #63, #148, #72 | 4 | #63's tie-break; #85 and #162 ride the same retune or not | each changes what only a promotion may |
+| 13 | #177 | promotion cargo: #63, #148, #72 | 3 | #63's tie-break; #85 and #162 ride the same retune or not | each changes what only a promotion may |
 | 14 | #178 | access: #132, #131 | 2 | decisions 1 and 2 in #131 | access classes and the access gate read the same override records |
 | 15 | #178 | gradient on the ground: #70, #71 | 2 | whether `ff02` exists network-wide | both rescore chinook rearing on a gradient other than the segment's |
 | 16 | #179 | library, keys and our own prose: #13, #14, #16 | 3 | the single-library policy; one store or two | #14 depends on #13; #16's store question is the same keying decision |
 | 17 | #180 | report-priority pipeline for any group: #4, #15, #3 | 3 | resume or not | #4 and #15 rewrite `0161` and `0162`; #3 records the farm decision they act on |
+| 18 | #175 | the FDIS load's outputs: #225, #214 | 2 | whether the per-pass tables join `fdis/v3` before its first upload (#219) | one `0230` rerun and one archive with #23 |
+| 19 | #231 | article wording and one method-bundle rebuild: #201, #202, #115 | 3 | rebuild the bundle on its own now, on the database's host, or with move 8's promotion | one rebuild of `method.rds` and one blind readability pass |
+| 20 | #232 | one research page per key: #211, carrying #90 and #64 | 3 | page names; where the check register lives | one generator writes every page (batch 7, split from move 4) |
+| 21 | #233 | window flow follow-ups: #226, #227 | 2 | a separate window walk or the published one; which evidence directory; how much of #227 is wet's | both read the window flows and write `research/chinook_window_flow.md` |
+| 22 | #179 | OCR of the scanned PDFs: #217 | 1 | none | rides #14's rebuild of every store |
+| 23 | #177 | tuning-code fixes: #203 | 1 | nest `honest` or rename it | the curve change regrades every key, which only a promotion publishes |
 
 ### 1. Evidence-build and test fixes
 
@@ -144,15 +160,20 @@ rearing streams better than MAD). Phase 2 of #105 and anything that publishes wa
 - [ ] Carried by move 6, #175
 
 #23 (the site-visit table: join key, span, the downstream-end check) and #137 (whether one discharge per FWA segment is
-fine enough). Touches `scripts/0230`/`0240`, `research/fdis_export.md`, a `research/` section on discharge resolution.
+fine enough).
+
+**Touches:** `scripts/0230-fdis-load.R`, `scripts/0240-fdis-evidence.R`, `research/fdis_export.md`, and a new research
+file on discharge resolution
 
 ### 11. FISS parser, gradient and PINE
 
 - [ ] Carried by move 7, #176
 
 #7 (graduate the `.xls` parser into `R/` as tested `knw_fiss_*`), #34 (site gradient read as a fraction in `0250`) and
-#10 (re-fetch PINE onto the keyed schema). Touches `R/fiss.R`, tests and fixtures, `scripts/0220`, `scripts/0250`,
-`data/pine/`, `data/fiss_evidence.csv`.
+#10 (re-fetch PINE onto the keyed schema).
+
+**Touches:** `R/fiss_visits.R`, `scripts/0220-fiss-xls-parse-nfc.R`, `scripts/0250-fiss-evidence.R`, `data/pine/`,
+`data/fiss_evidence.csv`, and new knw_fiss files with their tests and fixtures
 
 ### 12. Layers for report repos
 
@@ -162,23 +183,32 @@ fine enough). Touches `scripts/0230`/`0240`, `research/fdis_export.md`, a `resea
 recorded commit) and #1 (a planning-method vignette). Gate: whether #17's commit stamp makes #2 unnecessary, and
 whether #1 is still wanted.
 
+**Touches:** `vignettes/planning-method.Rmd` (new), `_pkgdown.yml`, and a new cross-group no-fish layer and its
+manifest under the data tier
+
 ### 13. Promotion cargo
 
 - [ ] Carried by move 8, #177
 
-#115 (the `structures` register row and the `tuned_as` note), #63 (distance to a river: its evidence per species and
-the tie-break) and #148 (a test of a key's return from `not_modelled`; its second half waits on link un-pausing
+#63 (distance to a river: its evidence per species and the tie-break) and #148 (a test of a key's return from `not_modelled`; its second half waits on link un-pausing
 rainbow trout). #72 (reopened 2026-11-09: four readers still gate on the `ref_population` literal rather than the curve's
 recorded edge types: `0330`, `0325`, `0322`'s `done_rule()` and `data-raw/vignette_chinook.R`) joins because it edits
 `0325` beside #63. Each changes the tracked tables or the method bundle, which only a promotion may. The speed track's
-#85 and the provenance track's #162 also regrade every key: the gate decides whether they ride the same retune.
+#85 and the provenance track's #162 also regrade every key: the gate decides whether they ride the same retune. #115
+(the `structures` register row) moved to batch 19 on 2026-11-18, which rebuilds the method bundle without a promotion.
+
+**Touches:** `scripts/0325-publish.R`, `scripts/0330-compare.R`, `scripts/0322-tune-grad-extend.R`,
+`data-raw/vignette_chinook.R`, `scripts/0320-tune-run.R`, `tests/testthat/test-tune_repick.R`
 
 ### 14. Access
 
 - [ ] Carried by move 9, #178
 
 #132 (where link's access gradients come from; its literature step can start before the wait clears) and #131 (tune
-on link's access with its overrides, leaving each visit out of its own; waits on link#434 and link#400).
+on link's access with its overrides, leaving each visit out of its own; link#434 and link#400, which it waited on,
+closed 2026-11-17).
+
+**Touches:** `scripts/0310-evidence-build.R`, `scripts/0320-tune-run.R`, and a new research file on access gradients
 
 ### 15. Gradient on the ground
 
@@ -186,14 +216,21 @@ on link's access with its overrides, leaving each visit out of its own; waits on
 
 #70 (field against modelled gradient, fixed windows, lidar; #121 compared FDIS site gradients, so step 1 still owes the
 PSCIS habitat confirmations and the FISS workbook gradients, the latter after #34 in move 7; the parent reading is
-#120's; windows and lidar wait on fresh#257) and #71 (distance and gradient from the floodplain edge).
+#120's; windows and lidar wait on fresh#257, so the plan splits them off) and #71 (distance and gradient from the
+floodplain edge).
+
+**Touches:** `data-raw/setup_compare.R`, `scripts/0310-evidence-build.R`, and new research files on field gradients and
+the floodplain edge
 
 ### 16. Library, keys and our own prose
 
 - [ ] Carried by move 10, #179
 
 #13 (triage the dormant Zotero libraries), #14 (key the stores on parent item, library and version) and #16 (index our
-own prose). Touches `data/zotero_key_map.csv`, `scripts/0150`–`0156`, `CLAUDE.md`'s store sentences.
+own prose).
+
+**Touches:** `data/zotero_key_map.csv`, `scripts/0150-store.R`, `scripts/0152-rag-add-harvest.R`,
+`scripts/0153-reports-to-zotero.py`, `scripts/0154-corpus-tag.R`, `scripts/0156-rag-dedup.R`, `CLAUDE.md`
 
 ### 17. Report-priority pipeline for any group
 
@@ -204,6 +241,87 @@ rewrite `0161` and `0162`, and #3 (reopened 2026-11-09: `0154`'s `farmed` column
 decision and its reason, which #3 asked to record; from that decision, the farm target list as a query over the tags,
 and the flag on table-dense reports that were skipped, which `0154` takes from the same proxy).
 
+**Touches:** `scripts/0161-priority-farm-reconcile.R`, `scripts/0162-priority-spatialize.R`, `scripts/0154-corpus-tag.R`
+
+### 18. The FDIS load's outputs
+
+- [ ] Carried by move 6, #175
+
+#225 (publish the per-pass electrofishing tables the load already builds: one row per pass, one per pass and species)
+and #214 (archive `fish.rds` with the build and restore it on `PULL=TRUE`, and check whether `0230` rewrites it
+byte-identically). Both act on `0230`'s outputs, which #23 in batch 10 rewrites: one rerun, one archive. Gate: whether
+the per-pass tables join `knowledge/fdis/v3`, which no upload has published yet (#219 owes it), or wait for a v4. A
+private repo of ours has open work that would read the per-pass tables; the plan reads it before fixing their columns.
+
+**Touches:** `scripts/0230-fdis-load.R`, `R/archive.R`, `scripts/0336-archive.R`, `scripts/0299-fdis-publish.R`,
+`data/fdis_README.md`
+
+### 19. Article wording and one method-bundle rebuild
+
+- [ ] Carried by move 12, #231
+
+#201 (step names, settings labels and diagrams printed from `method.rds` say "habitat definition"), #202 (define each
+term before use, one name per thing, one precision per number, across the three articles) and #115 (the register's
+`structures` row and the `tuned_as` note, "at the next method bundle rebuild"). All three change what
+`data-raw/vignette_method.R` writes, so one rebuild carries them. Gate: rebuild on its own now, on the database's host
+against the published build's evidence, or with move 8's promotion. A blind readability pass on the rendered articles
+before and after checks #202.
+
+**Touches:** `vignettes/tuning-method.Rmd`, `vignettes/tuning-chinook-rearing.Rmd`, `vignettes/tuning-stream-splits.Rmd`,
+`inst/method/pipeline.csv`, `inst/method/settings.csv`, `data-raw/vignette_method.R`, `inst/vignette-data/method.rds`,
+`tests/testthat/test-vignette-data.R`, `tests/testthat/test-settings-register.R`
+
+### 20. One research page per key
+
+- [ ] Carried by move 13, #232
+
+#211, split from move 4's batch 7 (2026-11-13), carrying #90 and #64: the check register, the template, the generator
+(`KEYS=`), chinook rearing's page, `research/tuning/README.md`'s table across the 22 keys, and #90's move of
+`chinook_rearing_tuned.md`. Decided at #173's gate (2026-11-12): one template, #64's order with a plain-language walk
+first. Gate: page names, and where the check register lives. Floodplain hectares wait on a promotion and are withheld
+until then.
+
+**Touches:** `research/tuning/`, `research/README.md`, `research/chinook_rearing_tuned.md`, `data-raw/tuning_reports.R`,
+`inst/method/settings.csv`, `scripts/0335-promote.R`, `CLAUDE.md`, and a new check register under the method
+directory
+
+### 21. Window flow follow-ups
+
+- [ ] Carried by move 14, #233
+
+#226 (#105's Phase 2: score chinook rearing on window flow beside MAD, four readings, outputs only under
+`data/tune/flow_window/`) and #227 (the rest of #42: 7-day minimums and dry-year departures at gauges, then whether to
+carry them to segments). Gate: a separate window walk or the published one (whose md5 moves every grade); the window
+column in the published evidence build or a tagged evidence directory; and how much of #227 is wet's, which has open
+work on monthly error by region and season and on donor departures at ungauged sites. Grading, comparing or publishing
+a window rule waits on Al's word.
+
+**Touches:** `R/link_walks.R`, `inst/sql/ch_dist_profile.sql`, `scripts/0310-evidence-build.R`,
+`data-raw/segment_window_flow.R`, `data/flow_window/`, `data/tune/flow_window/`, `research/chinook_window_flow.md`,
+`research/chinook_stream_size.md`
+
+### 22. OCR of the scanned PDFs
+
+- [ ] Carried by move 10, #179
+
+#217: OCR ten group-library scans with no text layer (Bjornn & Reiser 1991 and Ford et al. 1995 among them), a
+`replace` verdict for each through `0275`, then the stores that hold them. #14 in batch 16 rebuilds every store when it
+changes their keys, so the OCR rides that rebuild; cred's free-space issue on updated stores is still open, so they are
+rebuilt rather than updated.
+
+**Touches:** `data/zotero_attachment_verdicts.csv`, `scripts/0275-zotero-attachments-tidy.py`, `scripts/0150-store.R`
+
+### 23. Tuning-code fixes
+
+- [ ] Carried by move 8, #177
+
+#203 (from #185's review): the curve gives a held-out visit's unseen data set or era the reference level, as the scorer
+does; `honest` is nested or renamed; a run stops when the scorer's no-prior fallback fires. None moves a published pick,
+but the curve change regrades every key, which only a promotion publishes. Gate: nest `honest` (about five times the
+scoring cost, measured on one key first) or rename and redescribe it.
+
+**Touches:** `R/tune_curve.R`, `R/tune_score.R`, `vignettes/tuning-method.Rmd`, `inst/method/pipeline.csv`
+
 ## Singles
 
 - #51: age-0 length against degree-days, its own analysis of FDIS lengths and station temperatures
@@ -211,6 +329,14 @@ and the flag on table-dense reports that were skipped, which `0154` takes from t
 - #130: switches `0150` to cred's WAL-aware read; blocked on cred#45
 - #33: BT spawning; only Track 3 is left, and it needs the Williston redd layer on the network
 - #11: a one-off read of the North Thompson fish-passage reports
+- #228: salmon records per stream beside NuSEDS (the rest of #108, split from move 5); wet's open Maxan Creek article
+  would read it
+- #186: a partially pooled curve for WCT and CH rearing, an experiment of its own (split from move 3); relates to the
+  baselines track's priors
+- #199: which bull trout datasets exist and who holds them, a search that feeds #33
+- #209: access requests for three restricted bull trout reports and two papers; waits on the report owners
+- #210: `knw_compare_mapgl()` on gq's mapgl helpers (gq 0.24.0 has them); one function
+- #223: the `statistics` store rebuilt under ragnar 0.4.0; blocked on cred#43 (which ragnar cred supports)
 
 ## Closed and transferred
 
