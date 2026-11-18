@@ -67,7 +67,7 @@ passage reports but few swimming or leaping performance papers (Katopodis & Gerv
 
 ## Phase 4: evidence rows
 
-- [ ] Add `leap_height` and `burst_speed` (names settled against the vocabulary's style) to `R/literature.R`'s
+- [x] Add `leap_height` and `swim_speed` (settled 2026-11-18: `swim_speed` with a metric `burst`, `prolonged`, `sustained`, `critical` or `unstated`, as `fish_length` names its length type, in place of a `burst_speed` variable) to `R/literature.R`'s
       variables and units, and to `0280`'s checks; tests in `tests/testthat/test-literature*.R` first.
 - [ ] Append rows (never insert): `access_gradient_max` per species and stage stated, each source's leap or speed
       basis as a second row sharing the quote; region, kind (`lab` for flume and jump tests, `expert` for criteria),
