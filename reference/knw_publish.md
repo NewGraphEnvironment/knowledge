@@ -23,7 +23,8 @@ knw_publish(
   no_sign = FALSE,
   hive = NULL,
   hive_keys = c("species_code", "stage"),
-  receipt = NULL
+  receipt = NULL,
+  types = NULL
 )
 ```
 
@@ -82,15 +83,24 @@ knw_publish(
   `NULL` (no receipt), or a list for the set's provenance receipt in
   crate's shape (#154): `output`, the declaration it is held to
   ([`knw_receipt_keys()`](https://newgraphenvironment.github.io/knowledge/reference/knw_receipt_keys.md),
-  `"thresholds"`, `"habitat_grade"` or `"fdis"`); `recipe`, crate's
-  recipe block (`code`, `config`, `inputs`, `seed`); and `summary`, the
-  named numbers the declaration lists. The tables the declaration
-  fingerprints are read from their source CSVs as text, so they are held
-  exact, except a column the declaration gives a tolerance, which is
-  read as a number (`"fdis"`'s `access_check` km); the Parquet files are
-  the parts, each flat one named by its table. `receipt.json` is written
-  beside the manifest with no host, and uploaded after the tables and
-  before the manifest.
+  `"thresholds"`, `"habitat_grade"`, `"fdis"` or `"nuseds"`); `recipe`,
+  crate's recipe block (`code`, `config`, `inputs`, `seed`); and
+  `summary`, the named numbers the declaration lists. The tables the
+  declaration fingerprints are read from their source CSVs as text, so
+  they are held exact, except a column the declaration gives a
+  tolerance, which is read as a number (`"fdis"`'s `access_check` km);
+  the Parquet files are the parts, each flat one named by its table.
+  `receipt.json` is written beside the manifest with no host, and
+  uploaded after the tables and before the manifest.
+
+- types:
+
+  `NULL`, or a named `list` by table of named `character` column types
+  (`"string"`, `"double"`, `"integer"`), for a table whose types are
+  declared rather than guessed: every column of its CSV must be named,
+  and it is read with exactly those types (`int32`, `double`, `string`).
+  A table not in the list is read as arrow guesses it, with any column
+  holding a leading zero kept as text.
 
 ## Value
 

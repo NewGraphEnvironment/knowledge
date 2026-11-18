@@ -191,23 +191,43 @@ vocabularies.
 
 - [`knw_size_class()`](https://newgraphenvironment.github.io/knowledge/reference/knw_size_class.md)
   : Size class of each fish from a table of length breaks
+
 - [`knw_species()`](https://newgraphenvironment.github.io/knowledge/reference/knw_species.md)
   : The species the habitat evidence is built for
+
 - [`knw_fdis_place()`](https://newgraphenvironment.github.io/knowledge/reference/knw_fdis_place.md)
   : Pick each FDIS site visit's stream from the nearest snap and the
   streams its 1:50k code names
+
 - [`knw_fdis_quality()`](https://newgraphenvironment.github.io/knowledge/reference/knw_fdis_quality.md)
   : Drop the FDIS site visits that cannot carry evidence, and count
   every drop
+
 - [`knw_fdis_species()`](https://newgraphenvironment.github.io/knowledge/reference/knw_fdis_species.md)
   : Catch, presence and absence per FDIS site visit and species
+
 - [`knw_spawner_evidence()`](https://newgraphenvironment.github.io/knowledge/reference/knw_spawner_evidence.md)
   : Spawner evidence per visit for the char species, from maturity codes
+
 - [`knw_fiss_visits()`](https://newgraphenvironment.github.io/knowledge/reference/knw_fiss_visits.md)
   : Fish Data Submission workbook sites as visits, with the effort they
   recorded
+
 - [`knw_bcfishobs_match()`](https://newgraphenvironment.github.io/knowledge/reference/knw_bcfishobs_match.md)
   : Match bcfishobs records to the FDIS site visits they came from
+
+- [`knw_nuseds_fetch()`](https://newgraphenvironment.github.io/knowledge/reference/knw_nuseds_fetch.md)
+  : Fetch a release of DFO's NuSEDS All Areas file
+
+- [`knw_nuseds_records()`](https://newgraphenvironment.github.io/knowledge/reference/knw_nuseds_records.md)
+  : NuSEDS escapement records, each with the kind of evidence it is
+
+- [`knw_nuseds_kinds()`](https://newgraphenvironment.github.io/knowledge/reference/knw_nuseds_kinds.md)
+  :
+
+  The evidence classes
+  [`knw_nuseds_records()`](https://newgraphenvironment.github.io/knowledge/reference/knw_nuseds_records.md)
+  assigns
 
 ## Evidence on link’s segments
 

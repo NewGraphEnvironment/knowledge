@@ -1,5 +1,26 @@
 # Changelog
 
+## knowledge 0.4.44
+
+- NuSEDS, DFO’s salmon escapement records, read in one place through
+  crate
+  ([`knw_nuseds_fetch()`](https://newgraphenvironment.github.io/knowledge/reference/knw_nuseds_fetch.md),
+  [`knw_nuseds_records()`](https://newgraphenvironment.github.io/knowledge/reference/knw_nuseds_records.md)),
+  each record saying what kind of evidence it is, and published as
+  `knowledge/nuseds/v1`
+  ([\#108](https://github.com/NewGraphEnvironment/knowledge/issues/108)).
+  Chinook timing for the upper Fraser (UFRA, with Swift Creek) and the
+  Cottonwood (COTR) from NuSEDS spawn dates and the literature
+  ([\#96](https://github.com/NewGraphEnvironment/knowledge/issues/96),
+  [\#31](https://github.com/NewGraphEnvironment/knowledge/issues/31)).
+  Late-summer flow against MAD in chinook rearing passes the stop rule
+  set before the run, so a tuning on window flow follows
+  ([\#105](https://github.com/NewGraphEnvironment/knowledge/issues/105),
+  [\#226](https://github.com/NewGraphEnvironment/knowledge/issues/226));
+  window flow on every segment for every timing window
+  ([\#42](https://github.com/NewGraphEnvironment/knowledge/issues/42)).
+  `research/chinook_window_flow.md`.
+
 ## knowledge 0.4.43
 
 - The README’s Ecosystem table is rendered from the shared ecosystem
