@@ -1,5 +1,5 @@
-started: 2026-11-18T03:45:37Z 
-crate: crate 0.19.0 commit none (a local build) schema md5 3a7f00fe28fba7f6fa970dec868a3132 
+started: 2026-11-18T04:38:12Z 
+crate: crate 0.20.0 commit 1aa6f8c81d09867a03907f7d4d7cf41049c4a675 schema md5 3a7f00fe28fba7f6fa970dec868a3132 
 release: 20260601 (held) 
 zip md5: 25bb43441645519f18eb4853dd1cf399 
 records: 421001 rows, 52 columns; 9886 populations
@@ -26,7 +26,8 @@ Maxan Creek chinook, every year inspected:
                 <NA>                  NA          Expert Opinion
 (as #108 measured)
 
-recorded release 20260601 in data/nuseds_release.csv ( a7c57a67631adcc0a0b5feb24abeb7cace6f14b8 )
+recorded release 20260601 in data/nuseds_release.csv ( 3e4e83f8e01ba14f28a09697d9a8e5825288e8db )
+uploaded 1 tables, receipt.json and manifest.json to s3://fresh-bc/knowledge/nuseds/v1/
 nuseds_records     421001 rows  52 cols    6.0 MB parquet
-PUBLISH is not TRUE: nothing uploaded
-finished: 2026-11-18T03:46:19Z 
+uploaded s3://fresh-bc/knowledge/nuseds/v1/README.md 
+finished: 2026-11-18T04:38:57Z 
