@@ -92,7 +92,7 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   then hand-edited; read with `knw_timing_read()`), `literature_evidence.csv` (cited habitat-threshold
   values with verbatim quotes, read with `knw_literature_read()`, gated by `0280`; a row stating an
   intrinsic-potential model's threshold carries that model's `model_id`; a temperature, air-temperature or
-  degree-day value names its `metric`; a `fish_length` row is a body length tied to first-winter survival, in `mm`, whose `metric` names the length type (#47); a `groundwater` row is a statement with no value; `discharge` is stream
+  degree-day value names its `metric`; a `fish_length` row is a body length tied to first-winter survival, in `mm`, whose `metric` names the length type (#47); a `groundwater` row is a statement with no value; a `leap_height` or `swim_speed` row is what a fish can do, the basis of a passage limit, and carries no model parameter (#234); `discharge` is stream
   size and `instream_flow` a flow need: a valued one names its `metric`, and none carries a model parameter),
   `ip_model_registry.csv` (one row
   per IP model × species × stage: how it sizes streams, its confinement variable, its validation, with its

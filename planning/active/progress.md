@@ -10,3 +10,4 @@
 - Found: the PSCIS habitat-confirmation layer has no gradient field; #235 reads the assessment layer's `STREAM_SLOPE`
 - Phase 4, vocabulary: `leap_height` (m, cm, ft; no metric) and `swim_speed` (m/s, cm/s, ft/s; metric burst, prolonged, sustained, critical, unstated) in `knw_literature_vocab()` and its unit and metric fits; `0280` reads them through `knw_literature_read()`. Two tests written red first; 47 pass
 - Plan review folded (`review-178.md`): the collection is `Fisheries/Fish Passage/passage_limits` (Al), the store is built after the audit, an access grid in `0280`, a parameter guard on leap and speed rows; #131, #71, #234, #235 labelled and pointing at their tracks; #70's and #235's bodies corrected
+- Phase 4: the capability guard in `knw_literature_read()` (test red first, 3 assertions; 48 pass; the 1,153-row table reads); the variable notes in `scripts/README.md` and CLAUDE.md

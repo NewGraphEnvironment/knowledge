@@ -76,7 +76,7 @@ passage reports but few swimming or leaping performance papers (Katopodis & Gerv
 ## Phase 4: evidence rows
 
 - [x] Add `leap_height` and `swim_speed` (settled 2026-11-18: `swim_speed` with a metric `burst`, `prolonged`, `sustained`, `critical` or `unstated`, as `fish_length` names its length type, in place of a `burst_speed` variable)
-- [ ] A guard: a `leap_height` or `swim_speed` row carries no `parameter` or `model_id` (else 0280's coverage counts it
+- [x] A guard: a `leap_height` or `swim_speed` row carries no `parameter` or `model_id` (else 0280's coverage counts it
       as an access row); test first. The variable notes in `scripts/README.md` and CLAUDE.md's data-root list.
 - [ ] `0280` gains an access grid over link's 13 species: each met by an `access_gradient_max` value, a `qual` row or
       a `none` row naming the search.

@@ -405,6 +405,29 @@ test_that("a leap height reads in a length and carries no metric", {
   expect_error(knw_literature_read(write_literature(y)), "metric burst on variable leap_height")
 })
 
+test_that("a leap or swimming-speed row is a fish's capability, never a model parameter", {
+  x <- literature_fixture()
+  x$species_code[1] <- "CO"
+  x$life_stage[1] <- "access"
+  x$variable[1] <- "leap_height"
+  x$parameter[1] <- "access_gradient_max"
+  x$model_id[1] <- NA
+  x$bound[1] <- "max"
+  x$value_min[1] <- NA
+  x$value_max[1] <- "2.2"
+  x$unit[1] <- "m"
+  x$metric[1] <- NA
+  x$kind[1] <- "lab"
+  expect_error(knw_literature_read(write_literature(x)), "leap_height row is a fish's capability.*data row 1")
+  x$variable[1] <- "swim_speed"
+  x$unit[1] <- "m/s"
+  x$metric[1] <- "burst"
+  expect_error(knw_literature_read(write_literature(x)), "swim_speed row is a fish's capability.*data row 1")
+  x$parameter[1] <- NA
+  x$model_id[1] <- "some_model"
+  expect_error(knw_literature_read(write_literature(x)), "swim_speed row is a fish's capability.*data row 1")
+})
+
 test_that("a swimming speed is a fish's, names which speed, and is not a water velocity", {
   x <- literature_fixture()
   x$species_code[1] <- "WCT"

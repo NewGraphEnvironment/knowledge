@@ -280,6 +280,12 @@ knw_literature_read <- function(path, species_code = NULL, variable = NULL) {
     stop("an instream_flow row is a flow need, not a model parameter: parameter and model_id ",
          "stay blank", first(modelled), call. = FALSE)
   }
+  # 0280's coverage counts any row by its parameter, so a leap tagged access_gradient_max would fill an access cell.
+  ability <- x$variable %in% c("leap_height", "swim_speed") & (!is.na(x$parameter) | !is.na(x$model_id))
+  if (any(ability)) {
+    stop("a ", x$variable[ability][1], " row is a fish's capability, the basis of a limit, not a model parameter: ",
+         "parameter and model_id stay blank", first(ability), call. = FALSE)
+  }
   mad_off <- grepl("_mad_", x$parameter) & x$variable != "discharge"
   if (any(mad_off)) {
     stop("parameter ", x$parameter[mad_off][1], " belongs to discharge rows, not ",

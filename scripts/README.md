@@ -537,7 +537,9 @@ The cited basis for CH and BT habitat thresholds (#19). Not per watershed group.
   `instream_flow` is a flow need, in m3/s, cfs, `percent MAD`, a `percentile` or a `percent exceedance`, and
   carries no model parameter. Depth and velocity are what a fish meets at a site, in the unit the source wrote
   (`m`, `cm`, `ft`; `m/s`, `cm/s`, `ft/s`); a bankfull depth is `m bankfull`. `groundwater` (upwelling,
-  hyporheic exchange, springs) takes no unit, so its rows are statements with no value.
+  hyporheic exchange, springs) takes no unit, so its rows are statements with no value. `leap_height` (`m`, `cm`,
+  `ft`) and `swim_speed` (`m/s`, `cm/s`, `ft/s`, its `metric` `burst`, `prolonged`, `sustained`, `critical` or
+  `unstated`) are what a fish can do, the basis a source gives for a passage limit; they carry no model parameter.
 - `data/ip_model_registry.csv` has one row per intrinsic-potential model × species × stage. It records how the
   model sizes streams (`flow_metric`, `flow_source`, `flow_inputs`, `flow_surrogate`), its valley-confinement
   variable, and its validation; its flow claim and any validation claimed are each quoted. It holds no
