@@ -96,7 +96,7 @@ passage reports but few swimming or leaping performance papers (Katopodis & Gerv
       measured passage limits say per species, what that leaves open for the records review), a table of each
       species' class beside its sources, the specification below; `research/README.md` row; added to `0280`'s
       `QUOTED_DEFAULT` if it quotes sources.
-- [ ] #132's body links it; the records review is filed when this merges.
+- [x] #132's body links it; the records review is filed when this merges (owed, below).
 
 ## Owed at the end (reported, done after merge)
 
