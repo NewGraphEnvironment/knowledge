@@ -26,7 +26,7 @@ split piece, or one filed since the last pass): run `/backlog-sweep` to place it
 | - [x] 2 | #171 | 2, 3: articles as a tuning series, a build that stalls fails fast (4 issues) | done: https://github.com/NewGraphEnvironment/knowledge/pull/208 |
 | - [x] 3 | #172 | 4, 5: Zotero library writes, new sources into the stores (5 issues) | done: https://github.com/NewGraphEnvironment/knowledge/pull/189 |
 | - [x] 4 | #173 | 6, 7: maps out of the comparison, one research page per key (4 issues) | done: https://github.com/NewGraphEnvironment/knowledge/pull/212 (batch 6; batch 7 split to #211) |
-| - [ ] 5 | #174 | 8, 9: timing table and NuSEDS, flow in windows (5 issues) | open |
+| - [x] 5 | #174 | 8, 9: timing table and NuSEDS, flow in windows (5 issues) | done: https://github.com/NewGraphEnvironment/knowledge/pull/229 |
 | - [ ] 6 | #175 | 10: location error against flow resolution (2 issues) | open |
 | - [ ] 7 | #176 | 11, 12: FISS parser, gradient and PINE; layers for report repos (6 issues) | open |
 | - [ ] 8 | #177 | 13: promotion cargo (4 issues) | **waiting** on Al's word for the next full retune |
@@ -126,7 +126,7 @@ Touches `research/tuning/`, `research/README.md`, `data-raw/tuning_reports.R`, `
 
 ### 8. Timing table and NuSEDS
 
-- [ ] Carried by move 5, #174
+- [x] Carried by move 5, #174 (merged in https://github.com/NewGraphEnvironment/knowledge/pull/229)
 
 #31 (BULK coho migration end), #96 (chinook timing for UFRA and COTR; wet's pilots that first wanted it have closed)
 and #108 (NuSEDS, provincial observations and literature per stream). Touches `data/life_history_timing.csv`, a
@@ -134,7 +134,7 @@ NuSEDS fetcher in `R/`, a records table under `data/`, `inst/NOTICE.md`.
 
 ### 9. Flow in windows
 
-- [ ] Carried by move 5, #174
+- [x] Carried by move 5, #174 (merged in https://github.com/NewGraphEnvironment/knowledge/pull/229)
 
 #42 (window means per segment; daily flow is no longer blocked upstream) and #105 (does a seasonal window size chinook
 rearing streams better than MAD). Phase 2 of #105 and anything that publishes wait on Al's word.
