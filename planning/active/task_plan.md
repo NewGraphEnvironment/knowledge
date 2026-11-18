@@ -153,7 +153,8 @@ No comments on #174 or its members. What exploration found that shapes the plan:
 - [ ] `DESCRIPTION` crate floor (the release carrying #74), `NEWS.md`, `_pkgdown.yml` reference entries,
   `scripts/README.md` run order (`0340`), `CLAUDE.md` layout lines (`data/nuseds/`,
   `data/nuseds_release.csv`, `data/nuseds_README.md`, `data/flow_window/`, `data/tune/flow_window/`).
-- [ ] Tick batches 8 and 9 in `planning/backlog.md`.
+- [x] Tick batches 8 and 9 in `planning/backlog.md`: `/gh-pr-merge` step 9c ticks the move on merge, so the file is
+  left alone here.
 
 ## Owed at the end (reported, done after merge)
 

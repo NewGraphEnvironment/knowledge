@@ -134,6 +134,11 @@ wf_farm_priority.js                          farm priority/crossing tables out o
       held to BUILD_DIR's sites.rds (#136); a staged BUILD_DIR refuses without SITES_DIR
       PULL=TRUE restores into a checkout's ignored data/ the run its records name, by version id, md5-checked
       (evidence, curves, segments; GRADES=TRUE adds the grade tables)
+0340  DFO's NuSEDS escapement records (#108): knw_nuseds_fetch() keeps each release of the All Areas zip in
+      data/nuseds/<release>/ (ignored), knw_nuseds_records() reads it through crate (dfo/nuseds_all_areas) and adds
+      evidence_kind -> nuseds_records.csv there, a row of data/nuseds_release.csv (tracked; a recorded release that
+      arrives with other bytes stops it). PUBLISH=TRUE uploads knowledge/nuseds/<VERSION, v1>/ with its receipt and
+      data/nuseds_README.md; a clean tree only. Logs: scripts/logs/nuseds/
 
 --- Frozen on the published v2 tables (0299 PULL=TRUE VERSION=v2): the one-species analyses #57 superseded ---
 0291  BT use curve (#28)   0292  BT candidate weight   0293  BT spawner evidence (#33)
@@ -456,6 +461,11 @@ Seeds `data/life_history_timing.csv` from the fish-passage reporting template's
   citations carried. `knw_timing_read()` refuses overlapping or split windows, so a hand edit
   cannot reintroduce them.
 - The table is meant to be edited and challenged. Once edited by hand, do not re-run `0260` over it.
+- Since #96, UFRA and COTR chinook rows come from DFO's NuSEDS spawn dates (`data-raw/timing_nuseds.R`, which
+  prints each group's window and every population's, by FWA watershed code, from `0340`'s records) and the
+  literature, each claim a `timing` row in `data/literature_evidence.csv` that `0280` checks.
+- `data-raw/segment_window_flow.R` reads every complete window onto every FWA segment of its group (#42; ignored
+  `data/flow_window/`); rerun it after a timing change.
 - Logs: `scripts/logs/timing/`.
 
 <br>
