@@ -31,20 +31,20 @@ passage reports but few swimming or leaping performance papers (Katopodis & Gerv
 
 ## Phase 1: issues sized for one plan each
 
-- [ ] New issue A, "Fish-passage literature: where the access gradients come from" (this branch): collection,
+- [x] New issue A, "Fish-passage literature: where the access gradients come from" (this branch): collection,
       store, evidence rows, research file. Body names move 9 as where it was split from.
-- [ ] New issue B, "PSCIS habitat-confirmation gradients against link's segment gradient" (#70 step 1's remaining
+- [x] New issue B, "PSCIS habitat-confirmation gradients against link's segment gradient" (#70 step 1's remaining
       FDIS-free part; FDIS was #121; FISS workbooks follow #34 in move 7). Body names move 9.
-- [ ] #132's body → `track:access` umbrella: members A, then (to file when reached) the review of the 1,004 records
+- [x] #132's body → `track:access` umbrella: members A, then (to file when reached) the review of the 1,004 records
       above modelled gradient barriers (link#402's `measures.csv`), what a lower class removes, the tuning setup on
       another access set (owed from #120), the write-up; #131 as a member (its retune on Al's word). Labels
       `umbrella`, `track:access`.
-- [ ] #70's body → `track:gradient` umbrella: members B, then (to file when reached) FISS workbook gradients (after
+- [x] #70's body → `track:gradient` umbrella: members B, then (to file when reached) FISS workbook gradients (after
       #34), fixed windows and the mouth reach (fresh#257), the lidar pilot in one or two groups LidarBC covers
       (fresh#257's lidar sampling and coverage flag), the decision on what to carry forward; #71 as a member (measure
       and visualize first). Labels `umbrella`, `track:gradient`.
-- [ ] New move 15 umbrella carrying batch 24 (issue B); #178's body: batch 14 is issue A only, batch 15 left.
-- [ ] `planning/backlog.md`: move 9's row and batch 14 carry issue A; batch 15 → move 15 (issue B), its own lane;
+- [x] New move 15 umbrella carrying batch 24 (issue B); #178's body: batch 14 is issue A only, batch 15 left.
+- [x] `planning/backlog.md`: move 9's row and batch 14 carry issue A; batch 15 → move 15 (issue B), its own lane;
       #131, #71 and both tracks named under Tracks; `backlog_moves.sh lanes` and the tick check on a copy.
 
 ## Phase 2: sourcing

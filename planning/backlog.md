@@ -35,18 +35,21 @@ split piece, or one filed since the last pass): run `/backlog-sweep` to place it
 | - [x] 5 | #174 | 8, 9: timing table and NuSEDS, flow in windows (5 issues) | done: https://github.com/NewGraphEnvironment/knowledge/pull/229 | — | — | — |
 | - [ ] 6 | #175 | 10, 18: location error against flow resolution, the FDIS load's outputs (4 issues) | open: start here | A | — | opus |
 | - [ ] 7 | #176 | 11, 12: FISS parser, gradient and PINE; layers for report repos (6 issues) | open | B | — | opus |
-| - [ ] 8 | #177 | 13, 23: promotion cargo, tuning-code fixes (4 issues) | **waiting** on Al's word for the next full retune | C | 9, 12 | opus |
-| - [ ] 9 | #178 | 14, 15: access, gradient on the ground (4 issues) | open: the link waits cleared 2026-11-17; #70's fixed-window and lidar step waits on fresh#257, so the plan splits it | C | — | fable then opus |
-| - [ ] 10 | #179 | 16, 22: library, keys and our own prose; OCR of the scanned PDFs (4 issues) | open | D | — | opus |
-| - [ ] 11 | #180 | 17: report-priority pipeline for any group (3 issues) | **waiting** on Al's word to resume the report-priority work, parked 2026-09-04 | D | 10 | opus |
+| - [ ] 8 | #177 | 13, 23: promotion cargo, tuning-code fixes (4 issues) | **waiting** on Al's word for the next full retune | E | 12 | opus |
+| - [ ] 9 | #178 | 14: fish-passage literature, the access track's first piece (1 issue) | open | C | — | fable then opus |
+| - [ ] 10 | #179 | 16, 22: library, keys and our own prose; OCR of the scanned PDFs (4 issues) | open | C | 9 | opus |
+| - [ ] 11 | #180 | 17: report-priority pipeline for any group (3 issues) | **waiting** on Al's word to resume the report-priority work, parked 2026-09-04 | C | 10 | opus |
 | - [ ] 12 | #231 | 19: article wording and one method-bundle rebuild (3 issues) | open | E | — | opus |
 | - [ ] 13 | #232 | 20: one research page per key (3 issues) | open | E | 10, 12 | fable then opus |
-| - [ ] 14 | #233 | 21: window flow follow-ups (2 issues) | open | C | 9 | fable then opus |
+| - [ ] 14 | #233 | 21: window flow follow-ups (2 issues) | open | G | — | fable then opus |
+| - [ ] 15 | #236 | 24: PSCIS stream slope against link's gradient, the gradient track's first piece (1 issue) | open | F | — | opus |
 Tracks are separate efforts, not moves: baselines (#139, `track:baselines`: #140 next), speed (`track:speed`: #85,
 #101; its umbrella is in the skills repository), provenance (`track:provenance`: #162; #165 done in PR #206, #197 in PR #207; umbrella likewise) and
 minimal-run (#120, `track:minimal-run`: closed 2026-11-18, its waiting setups owed in #132 and #70) and publish (#220,
 `track:publish`: #219 next; its upload of `knowledge/fdis/v3` is the moment batch 18's per-pass tables can join v3
-without a new version).
+without a new version), access (#132, `track:access`: #234 first, in move 9; #131 a member) and gradient (#70,
+`track:gradient`: #235 first, in move 15; #71 a member; its windows and lidar wait on fresh#257). Move 9 split into the
+two on 2026-11-18, at its gate.
 
 link's own pass: link#468, a backlog pass for link that carries the link issues moves 8 and 9 and the baselines and minimal-run tracks wait on, so link's backlog can place them knowing what they hold up.
 
@@ -67,8 +70,8 @@ link's own pass: link#468, a backlog pass for link that carries the link issues 
 | 11 | #176 | FISS parser, gradient and PINE: #7, #34, #10 | 3 | fixtures from the provincial template | one regeneration of the FISS outputs |
 | 12 | #176 | layers for report repos: #17, #2, #1 | 3 | whether #2 and #1 are still wanted | #17 rolls up batch 11's outputs |
 | 13 | #177 | promotion cargo: #63, #148, #72 | 3 | #63's tie-break; #85 and #162 ride the same retune or not | each changes what only a promotion may |
-| 14 | #178 | access: #132, #131 | 2 | decisions 1 and 2 in #131 | access classes and the access gate read the same override records |
-| 15 | #178 | gradient on the ground: #70, #71 | 2 | whether `ff02` exists network-wide | both rescore chinook rearing on a gradient other than the segment's |
+| 14 | #178 | fish-passage literature: #234 (from #132) | 1 | its own store; gradient rows with their leap and speed basis (both decided 2026-11-18) | the access track's first piece; the records review needs its literature |
+| 15 | #178 | gradient on the ground: #70, #71 | 2 | split 2026-11-18: the gradient track, first piece batch 24 | — |
 | 16 | #179 | library, keys and our own prose: #13, #14, #16 | 3 | the single-library policy; one store or two | #14 depends on #13; #16's store question is the same keying decision |
 | 17 | #180 | report-priority pipeline for any group: #4, #15, #3 | 3 | resume or not | #4 and #15 rewrite `0161` and `0162`; #3 records the farm decision they act on |
 | 18 | #175 | the FDIS load's outputs: #225, #214 | 2 | whether the per-pass tables join `fdis/v3` before its first upload (#219) | one `0230` rerun and one archive with #23 |
@@ -76,6 +79,7 @@ link's own pass: link#468, a backlog pass for link that carries the link issues 
 | 20 | #232 | one research page per key: #211, carrying #90 and #64 | 3 | page names; where the check register lives | one generator writes every page (batch 7, split from move 4) |
 | 21 | #233 | window flow follow-ups: #226, #227 | 2 | a separate window walk or the published one; which evidence directory; how much of #227 is wet's | both read the window flows and write `research/chinook_window_flow.md` |
 | 22 | #179 | OCR of the scanned PDFs: #217 | 1 | none | rides #14's rebuild of every store |
+| 24 | #236 | PSCIS stream slope against link's gradient: #235 (from #70) | 1 | what `STREAM_SLOPE` measures | the gradient track's first piece, beside #121's FDIS check |
 | 23 | #177 | tuning-code fixes: #203 | 1 | nest `honest` or rename it | the curve change regrades every key, which only a promotion publishes |
 
 ### 1. Evidence-build and test fixes
@@ -200,27 +204,26 @@ recorded edge types: `0330`, `0325`, `0322`'s `done_rule()` and `data-raw/vignet
 **Touches:** `scripts/0325-publish.R`, `scripts/0330-compare.R`, `scripts/0322-tune-grad-extend.R`,
 `data-raw/vignette_chinook.R`, `scripts/0320-tune-run.R`, `tests/testthat/test-tune_repick.R`
 
-### 14. Access
+### 14. Fish-passage literature
 
 - [ ] Carried by move 9, #178
 
-#132 (where link's access gradients come from; its literature step can start before the wait clears) and #131 (tune
-on link's access with its overrides, leaving each visit out of its own; link#434 and link#400, which it waited on,
+#234, the access track's first piece (split from #132 at move 9's gate, 2026-11-18): the classes' lineage, a
+`Fisheries/fish_passage` collection and its own `fish_passage` store, `access_gradient_max` rows per species with the
+leap height and burst speed behind each, audited for meaning, and `research/access_gradients.md`. #132 is now the
+`track:access` umbrella; #131 is its member, no longer in this batch (link#434 and link#400, which it waited on,
 closed 2026-11-17).
 
-**Touches:** `scripts/0310-evidence-build.R`, `scripts/0320-tune-run.R`, and a new research file on access gradients
+**Touches:** `data/fish_passage_members.csv`, `data/fish_passage_additions.csv`, `data/literature_evidence.csv`,
+`R/literature.R`, `scripts/0280-literature-verify.R`, `research/access_gradients.md`, `scripts/README.md`, `CLAUDE.md`
 
 ### 15. Gradient on the ground
 
-- [ ] Carried by move 9, #178
+- [x] Split 2026-11-18 at move 9's gate: #70 became the `track:gradient` umbrella with #71 a member; batch 24 (move 15,
+  #236) carries its first piece
 
-#70 (field against modelled gradient, fixed windows, lidar; #121 compared FDIS site gradients, so step 1 still owes the
-PSCIS habitat confirmations and the FISS workbook gradients, the latter after #34 in move 7; the parent reading is
-#120's; windows and lidar wait on fresh#257, so the plan splits them off) and #71 (distance and gradient from the
-floodplain edge).
-
-**Touches:** `data-raw/setup_compare.R`, `scripts/0310-evidence-build.R`, and new research files on field gradients and
-the floodplain edge
+#70 (field against modelled gradient, fixed windows, lidar) and #71 (distance and gradient from the floodplain edge)
+were each several PRs; the gradient track holds their order.
 
 ### 16. Library, keys and our own prose
 
@@ -321,6 +324,17 @@ but the curve change regrades every key, which only a promotion publishes. Gate:
 scoring cost, measured on one key first) or rename and redescribe it.
 
 **Touches:** `R/tune_curve.R`, `R/tune_score.R`, `vignettes/tuning-method.Rmd`, `inst/method/pipeline.csv`
+
+### 24. PSCIS stream slope against link's gradient
+
+- [ ] Carried by move 15, #236
+
+#235, the gradient track's first piece (split from #70 at move 9's gate, 2026-11-18): `STREAM_SLOPE` from the PSCIS
+assessment layer, measured at each assessed crossing, against link's segment gradient, as #121 compared the FDIS site
+gradients. The habitat-confirmation layer carries no gradient field (checked 2026-11-18). Gate: what `STREAM_SLOPE`
+measures.
+
+**Touches:** `data-raw/site_gradient_check.R`, `R/pscis.R`, and a new research file for the gradient track
 
 ## Singles
 

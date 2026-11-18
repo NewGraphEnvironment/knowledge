@@ -30,3 +30,10 @@ Backlog: `planning/backlog.md`, move 9. Plan it with `/planning-init <this issue
 | Error | Resolution |
 |-------|------------|
 | `mcp__zotero__zotero_search_items`: missing ZOTERO_LIBRARY_ID and ZOTERO_API_KEY | Not a route (soul#590; kdot#42 removes the server). Read the group library from `zotero.sqlite` read-only, or through `/zotero-lookup`, `/zotero-api`, `/lit-search` |
+
+## PSCIS gradient fields (2026-11-18)
+
+`bcdata::bcdc_describe_feature()`: `WHSE_FISH.PSCIS_HABITAT_CONFIRMATION_SVW` has no gradient or slope field (41
+columns: habitat value, verified length, comments, links). `WHSE_FISH.PSCIS_ASSESSMENT_SVW` has `STREAM_SLOPE`,
+`CULVERT_SLOPE` and `CULVERT_SLOPE_SCORE`. So #70's "PSCIS habitat confirmations" step reads the assessment layer's
+stream slope; confirmation gradients exist only in the reports (#235).
