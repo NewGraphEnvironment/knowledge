@@ -53,6 +53,7 @@
 # NEEDS   pdftotext; ocrmypdf for an OCR row; commonmark, xml2 and stringi for the research files
 # INPUT   data/literature_evidence.csv, data/ip_model_registry.csv,
 #         data/life_history_timing.csv,
+#         the installed link's configs/default/parameters_fresh.csv (the species the access grid asks about),
 #         ~/Zotero/zotero.sqlite (a checked copy of the file and its -wal)
 # OUTPUT  scripts/logs/habitat/<yyyymmdd>_literature_verify.csv, one row per
 #         evidence row (status, PDF file, every PDF page the quote matches), and
@@ -61,7 +62,7 @@
 #         a summary on stdout.
 #         OCR text is cached in data/rag/ocr/ (gitignored), keyed by PDF md5.
 #         Exits non-zero when any row, registry quote, model link, timing source,
-#         coverage cell, thermal cell or flow cell fails.
+#         coverage cell, thermal cell, flow cell or access cell fails.
 # ---------------------------------------------------------------------------
 pkgload::load_all(quiet = TRUE)   # the source tree, not an installed copy
 
@@ -79,11 +80,14 @@ COVERAGE <- list(
                 "rear_lake_ha_min", "rear_wetland_ha_min", "access_gradient_max",
                 "cluster_bridge_gradient", "cluster_bridge_distance"))
 
-# Each species link's default models has an access gradient (parameters_fresh.csv's access_gradient_max). A
+# Each species link's default models has an access gradient (parameters_fresh.csv's access_gradient_max), so the
+# species are read from the installed link, as 0310 reads its config: a species link adds is asked about at once. A
 # species' cell is met by any row bearing on that parameter: a value, a qualitative statement, or a `none` row
 # saying what was searched. A standard for FISH, SALMON or SALMONIDS fills no species' cell.
-ACCESS <- list(species = c("BT", "CH", "CM", "CO", "CT", "DV", "GR", "KO", "PK", "RB", "SK", "ST", "WCT"),
+ACCESS <- list(species = utils::read.csv(system.file("extdata/configs/default/parameters_fresh.csv", package = "link",
+                                                     mustWork = TRUE))$species_code,
                parameter = "access_gradient_max")
+if (!length(ACCESS$species)) stop("link's default parameters_fresh.csv lists no species", call. = FALSE)
 
 # A cell is a water-temperature limit or a degree-day total for one life stage. A valued
 # row meets an upper cell with bound max or range and a lower cell with min or range;
