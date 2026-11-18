@@ -51,6 +51,10 @@ without a new version), access (#132, `track:access`: #234 first, in move 9; #13
 `track:gradient`: #235 first, in move 15; #71 a member; its windows and lidar wait on fresh#257). Move 9 split into the
 two on 2026-11-18, at its gate.
 
+**Verified:** 2026-11-18, a hand edit at move 9's gate, not a sweep · **Produced by:** the gate's decision to split move
+9 into the access and gradient tracks; #234 placed in batch 14 (move 9) and #235 in batch 24 (move 15, #236) by that
+decision, against the header's rule that split pieces wait for the next sweep
+
 link's own pass: link#468, a backlog pass for link that carries the link issues moves 8 and 9 and the baselines and minimal-run tracks wait on, so link's backlog can place them knowing what they hold up.
 
 ## Order
@@ -79,8 +83,8 @@ link's own pass: link#468, a backlog pass for link that carries the link issues 
 | 20 | #232 | one research page per key: #211, carrying #90 and #64 | 3 | page names; where the check register lives | one generator writes every page (batch 7, split from move 4) |
 | 21 | #233 | window flow follow-ups: #226, #227 | 2 | a separate window walk or the published one; which evidence directory; how much of #227 is wet's | both read the window flows and write `research/chinook_window_flow.md` |
 | 22 | #179 | OCR of the scanned PDFs: #217 | 1 | none | rides #14's rebuild of every store |
-| 24 | #236 | PSCIS stream slope against link's gradient: #235 (from #70) | 1 | what `STREAM_SLOPE` measures | the gradient track's first piece, beside #121's FDIS check |
 | 23 | #177 | tuning-code fixes: #203 | 1 | nest `honest` or rename it | the curve change regrades every key, which only a promotion publishes |
+| 24 | #236 | PSCIS stream slope against link's gradient: #235 (from #70) | 1 | what `STREAM_SLOPE` measures | the gradient track's first piece, beside #121's FDIS check |
 
 ### 1. Evidence-build and test fixes
 
@@ -209,13 +213,14 @@ recorded edge types: `0330`, `0325`, `0322`'s `done_rule()` and `data-raw/vignet
 - [ ] Carried by move 9, #178
 
 #234, the access track's first piece (split from #132 at move 9's gate, 2026-11-18): the classes' lineage, a
-`Fisheries/fish_passage` collection and its own `fish_passage` store, `access_gradient_max` rows per species with the
+`Fisheries/Fish Passage/passage_limits` collection and its own `fish_passage` store, `access_gradient_max` rows per species with the
 leap height and burst speed behind each, audited for meaning, and `research/access_gradients.md`. #132 is now the
 `track:access` umbrella; #131 is its member, no longer in this batch (link#434 and link#400, which it waited on,
 closed 2026-11-17).
 
-**Touches:** `data/fish_passage_members.csv`, `data/fish_passage_additions.csv`, `data/literature_evidence.csv`,
-`R/literature.R`, `scripts/0280-literature-verify.R`, `research/access_gradients.md`, `scripts/README.md`, `CLAUDE.md`
+**Touches:** `data/passage_limits_members.csv`, `data/passage_limits_additions.csv`, `data/literature_evidence.csv`,
+`R/literature.R`, `man/knw_literature_vocab.Rd`, `tests/testthat/test-literature.R`, `scripts/0280-literature-verify.R`,
+`research/access_gradients.md`, `research/README.md`, `scripts/README.md`, `CLAUDE.md`
 
 ### 15. Gradient on the ground
 
