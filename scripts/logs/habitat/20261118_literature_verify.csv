@@ -1181,9 +1181,10 @@
 1180,"CM",,"leap_height",,"powers_orsborn1985Newconcepts",,"text","verified_text","powers_orsborn1985.pdf","25"
 1181,"CO",,"leap_height",,"bjornn_reiser1991HabitatRequirements",,"ocr","verified_ocr","bjornn_reiser_1991_habitat_requirements_of_salmonids_in_streams.pdf","4"
 1182,"ST",,"leap_height",,"bjornn_reiser1991HabitatRequirements",,"ocr","verified_ocr","bjornn_reiser_1991_habitat_requirements_of_salmonids_in_streams.pdf","4"
-1183,"RB",,"swim_speed","burst","blank_etal2020SwimmingPerformance",,"text","verified_text","blank_etal2020SwimmingPerformance.pdf","1"
-1184,"WCT",,"swim_speed","burst","blank_etal2020SwimmingPerformance",,"text","verified_text","blank_etal2020SwimmingPerformance.pdf","1"
+1183,"RB",,"swim_speed","unstated","blank_etal2020SwimmingPerformance",,"text","verified_text","blank_etal2020SwimmingPerformance.pdf","1"
+1184,"WCT",,"swim_speed","unstated","blank_etal2020SwimmingPerformance",,"text","verified_text","blank_etal2020SwimmingPerformance.pdf","1"
 1185,"GR",,"velocity",,"macphee_watts1976Swimmingperformance",,"text","verified_text","macphee_watts1976.pdf","33"
 1186,"GR","access_gradient_max","gradient",,,,,"none_row",,
 1187,"KO","access_gradient_max","gradient",,,,,"none_row",,
 1188,"WCT","access_gradient_max","gradient",,,,,"none_row",,
+1189,"CT","access_gradient_max","gradient",,"washingtondepartmentoffishandwildlife2019Fishpassage",,"text","verified_text","wdfw2019.pdf","25"

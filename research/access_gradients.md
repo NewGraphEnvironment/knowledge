@@ -1,7 +1,7 @@
 # Access gradients: where link's classes come from, and what fish are measured to pass
 
 **Verified:** 2026-11-18 · **Issues:** #234 (this), the first piece of the access track (#132); split from backlog move 9
-(#178) · **Produced by:** `data/literature_evidence.csv` data rows 1154-1188, gated by
+(#178) · **Produced by:** `data/literature_evidence.csv` data rows 1154-1189, gated by
 `scripts/0280-literature-verify.R` (log `scripts/logs/habitat/20261118_literature_verify.csv`); sources in the group
 library's `Fisheries/Fish Passage/passage_limits` collection (`data/passage_limits_{members,additions}.csv`,
 `scripts/0270`) and the `fish_passage` store; the classes' history read from bcfishpass's docs and SQL and from fresh's
@@ -49,9 +49,9 @@ Dolly Varden and resident trout are seen above their class.
 | pink | 15 % | pass to 12 % (WDFW 2019) | 1172 |
 | chum | 15 % | pass to 5 % (WDFW 2019) | 1169 |
 | steelhead | 20 % | pass to 20 % (WDFW 2019) | 1168 |
-| bull trout | 25 % | found to 30 % (Cannings and Ptolemy, pers. comm.); 20 % used, passing to 33 % recognised (WDFW 2019); well above 20 % in stepped-pool reaches (BC 1998) | 1156, 1160, 1163 |
+| bull trout | 25 % | found to 30 % (Cannings and Ptolemy, pers. comm.); 20 % used, "often found above 30%" recognised (WDFW 2019, after Cannings and Ptolemy); well above 20 % in stepped-pool reaches (BC 1998) | 1156, 1160, 1163 |
 | Dolly Varden | 25 % | as bull trout in WDFW 2019 and BC 1998 | 1161, 1164 |
-| rainbow, cutthroat | 25 % | 20 % used, passing to 33 % recognised (WDFW 2019, "resident trout"); cutthroat found to 33 % (WDFW 2009, after Jauquet 2002); well above 20 % (BC 1998; rainbow "sometimes") | 1155, 1159, 1162, 1165, 1166 |
+| rainbow, cutthroat | 25 % | resident cutthroat/rainbow: 20 % used, passing to 33 % recognised, the 33 % being cutthroat's (WDFW 2019, after Jauquet 2002); sea-run cutthroat pass to 20 % (WDFW 2019); well above 20 % (BC 1998; rainbow "sometimes") | 1155, 1159, 1162, 1165, 1166, 1189 |
 | westslope cutthroat | 20 % | no gradient limit found; a maximum swimming speed of 3.55 m/s in a flume | 1184, 1188 |
 | grayling | 15 % | no gradient limit found; 1.5 m/s in a 30 m culvert stopped every fish under 300 mm | 1185, 1186 |
 | kokanee | 15 % | nothing found | 1187 |
