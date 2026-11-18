@@ -105,9 +105,9 @@ passage reports but few swimming or leaping performance papers (Katopodis & Gerv
 
 ## Validation
 
-- [ ] Tests pass (`devtools::test()`), lintr clean on touched files
+- [x] Tests pass (`devtools::test()`), lintr clean on touched files (429 tests; 5 failures in one test, `test-vignette-data.R`'s ignored-sources check, from this machine's October 17 evidence build, which the branch does not touch; the two lints on changed lines repeat main's patterns)
 - [ ] `/code-check branch` clean (three-round floor)
-- [ ] Public sweep of tracked files, issue bodies and commit messages
+- [x] Public sweep of tracked files, issue bodies and commit messages (#56's `public_sweep.py`: no hit in any file, issue or commit this branch touched; the repo's other hits predate it)
 - [ ] PWF checkboxes match landed work
 - [ ] `/planning-archive` on completion
 
