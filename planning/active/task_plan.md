@@ -80,7 +80,7 @@ passage reports but few swimming or leaping performance papers (Katopodis & Gerv
       as an access row); test first. The variable notes in `scripts/README.md` and CLAUDE.md's data-root list.
 - [x] `0280` gains an access grid over link's 13 species: each met by an `access_gradient_max` value, a `qual` row or
       a `none` row naming the search.
-- [ ] Append rows (never insert; cite rows by data row, file line N + 1): `access_gradient_max` per species and stage
+- [x] Append rows (never insert; cite rows by data row, file line N + 1): `access_gradient_max` per species and stage
       stated, citing originals (no restatement of the 35 rows' Rebellato and Norris statements), each limit's leap or
       speed basis as its own row, sharing a quote only where one statement bears on both; life_stage `access`; kind
       `lab` (flume, jump tests), `max_obs` (leaps seen in the field), `expert` (criteria), per CLAUDE.md's conventions.
