@@ -37,7 +37,8 @@
 # and that every species x model parameter in COVERAGE has at least one row
 # (a value, or a `none` row saying what was searched). THERMAL is the same check
 # for temperature limits and degree-day totals, by species x cell (see below), and
-# FLOW for flow needs and the depth and velocity a fish meets.
+# FLOW for flow needs and the depth and velocity a fish meets. ACCESS asks, of every species link
+# models, whether its access gradient has been looked for (#234).
 #
 # The intrinsic-potential model registry (data/ip_model_registry.csv, read with
 # knw_ip_read()) is gated the same way: each row's flow quote, and its validation
@@ -77,6 +78,12 @@ COVERAGE <- list(
                 "spawn_mad_min", "rear_gradient_max", "rear_channel_width_min", "rear_mad_min",
                 "rear_lake_ha_min", "rear_wetland_ha_min", "access_gradient_max",
                 "cluster_bridge_gradient", "cluster_bridge_distance"))
+
+# Each species link's default models has an access gradient (parameters_fresh.csv's access_gradient_max). A
+# species' cell is met by any row bearing on that parameter: a value, a qualitative statement, or a `none` row
+# saying what was searched. A standard for FISH, SALMON or SALMONIDS fills no species' cell.
+ACCESS <- list(species = c("BT", "CH", "CM", "CO", "CT", "DV", "GR", "KO", "PK", "RB", "SK", "ST", "WCT"),
+               parameter = "access_gradient_max")
 
 # A cell is a water-temperature limit or a degree-day total for one life stage. A valued
 # row meets an upper cell with bound max or range and a lower cell with min or range;
@@ -720,6 +727,9 @@ cov <- expand.grid(species_code = COVERAGE$species, parameter = COVERAGE$paramet
                    stringsAsFactors = FALSE)
 cov$rows <- mapply(function(s, p) sum(ev$species_code == s & ev$parameter %in% p),
                    cov$species_code, cov$parameter)
+access <- data.frame(species_code = ACCESS$species, stringsAsFactors = FALSE)
+access$rows <- vapply(access$species_code, function(s) sum(ev$species_code == s & ev$parameter %in% ACCESS$parameter),
+                      integer(1))
 
 valued <- !is.na(ev$value_min) | !is.na(ev$value_max)
 meets <- function(sp, cell) {
@@ -783,6 +793,8 @@ cat(sprintf("flow: %d of %d species x cells have a row\n", sum(flow$rows > 0), n
 if (any(flow$rows == 0)) {
   print(flow[flow$rows == 0, c("species_code", "variable", "life_stage", "side")], row.names = FALSE)
 }
+cat(sprintf("access: %d of %d species have an access-gradient row\n", sum(access$rows > 0), nrow(access)))
+if (any(access$rows == 0)) cat("  none for:", paste(access$species_code[access$rows == 0], collapse = ", "), "\n")
 cat("wrote", log_csv, ",", reg_log, "and", res_log, "\n")
 if (any(!pass) || any(!reg_pass) || any(!res_pass) || length(unregistered) || length(unread) || length(t_bad) ||
-    any(cov$rows == 0) || any(thermal$rows == 0) || any(flow$rows == 0)) quit(status = 1)
+    any(cov$rows == 0) || any(thermal$rows == 0) || any(flow$rows == 0) || any(access$rows == 0)) quit(status = 1)
