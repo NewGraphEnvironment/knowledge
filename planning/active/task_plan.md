@@ -79,13 +79,13 @@ No comments on #174 or its members. What exploration found that shapes the plan:
   with a method or inspections recorded), `presence_expert` (present by expert opinion, no survey
   recorded), `none_observed`, `not_inspected`, `unknown` (anything else). Tests on crate's fixture hold
   #108's Maxan cases, an unknown header refused, and every class.
-- [ ] `scripts/0340-nuseds-build.R`: fetch, build, write `data/nuseds/<rel>/nuseds_records.csv` and tracked
+- [x] `scripts/0340-nuseds-build.R`: fetch, build, write `data/nuseds/<rel>/nuseds_records.csv` and tracked
   `data/nuseds_release.csv` (release, zip md5, rows, fetched date). With `PUBLISH=TRUE` only, publish
   through `knw_publish()` (`id = "knowledge/nuseds/v1"`) with `inst/receipt/nuseds.yaml` (added to
   `test-receipt.R` and the `receipt` docs) and upload `data/nuseds_README.md` beside it. Prints the Maxan
   chinook check against #108's measured rows. Log under `scripts/logs/nuseds/`. If auto mode refuses the
   upload, hand Al the bare command.
-- [ ] `inst/NOTICE.md`: an OGL-Canada section for NuSEDS (DFO), naming the published prefix and the
+- [x] `inst/NOTICE.md`: an OGL-Canada section for NuSEDS (DFO), naming the published prefix and the
   release record; `data/nuseds_README.md` carries the attribution.
 - [ ] Zotero: trash `canadaNuSEDSNewSalmon` (its relations merged into the kept item through the Web
   API). Check no store names the Cottonwood item, then fix its creators so its key has no `;`.
@@ -158,6 +158,8 @@ No comments on #174 or its members. What exploration found that shapes the plan:
 ## Owed at the end (reported, done after merge)
 
 - [ ] crate release with NuSEDS registered, if it is still unmerged when the knowledge PR opens.
+- [ ] `PUBLISH=TRUE Rscript scripts/0340-nuseds-build.R` once crate has released #74, so the receipt names a released
+  crate (the local build ran 2026-11-18; nothing is uploaded yet).
 
 ## Validation
 

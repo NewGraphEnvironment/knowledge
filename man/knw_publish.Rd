@@ -48,7 +48,7 @@ under a Hive path \verb{<table>/<key>=<value>/part.parquet} from the columns
 
 \item{receipt}{\code{NULL} (no receipt), or a list for the set's provenance
 receipt in crate's shape (#154): \code{output}, the declaration it is held to
-(\code{\link[=knw_receipt_keys]{knw_receipt_keys()}}, \code{"thresholds"}, \code{"habitat_grade"} or \code{"fdis"});
+(\code{\link[=knw_receipt_keys]{knw_receipt_keys()}}, \code{"thresholds"}, \code{"habitat_grade"}, \code{"fdis"} or \code{"nuseds"});
 \code{recipe}, crate's recipe block (\code{code}, \code{config}, \code{inputs}, \code{seed}); and
 \code{summary}, the named numbers the declaration lists. The tables the
 declaration fingerprints are read from their source CSVs as text, so they

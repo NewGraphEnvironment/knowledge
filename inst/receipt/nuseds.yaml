@@ -1,0 +1,18 @@
+# The receipt declaration for the published NuSEDS records, knowledge/nuseds/v<n> (#108), read by
+# crate::crt_receipt_keys() through knw_receipt_keys("nuseds"); scripts/0340 writes it through knw_publish(receipt =).
+# The table is DFO's All Areas file read through crate, one row per estimate, with evidence_kind added: every value is
+# a copy or a class, so it is fingerprinted exact from its CSV as text. The recipe names the knowledge commit, the
+# release and the zip as received (its sha256).
+receipt_keys: 1
+output: nuseds
+recipe:
+  # the dataset version published and the NuSEDS release it holds
+  settings: [version, release]
+  # DFO's All Areas zip as received
+  inputs: [nuseds_zip]
+  seed: false
+result:
+  tables:
+    nuseds_records: {}
+  summary:
+    rows: {}

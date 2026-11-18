@@ -32,7 +32,7 @@
 #' @param hive_keys `character` the Hive key columns.
 #' @param receipt `NULL` (no receipt), or a list for the set's provenance
 #'   receipt in crate's shape (#154): `output`, the declaration it is held to
-#'   ([knw_receipt_keys()], `"thresholds"`, `"habitat_grade"` or `"fdis"`);
+#'   ([knw_receipt_keys()], `"thresholds"`, `"habitat_grade"`, `"fdis"` or `"nuseds"`);
 #'   `recipe`, crate's recipe block (`code`, `config`, `inputs`, `seed`); and
 #'   `summary`, the named numbers the declaration lists. The tables the
 #'   declaration fingerprints are read from their source CSVs as text, so they

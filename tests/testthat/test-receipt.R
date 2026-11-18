@@ -1,6 +1,6 @@
 # the receipt declarations knowledge ships (#154, #160)
 
-outputs <- c("grade", "evidence", "thresholds", "habitat_grade", "fdis")
+outputs <- c("grade", "evidence", "thresholds", "habitat_grade", "fdis", "nuseds")
 
 test_that("every declaration parses and names its own output", {
   files <- list.files(system.file("receipt", package = "knowledge"), "\\.yaml$")
