@@ -4,8 +4,9 @@
 # MAD? research/chinook_window_flow.md sets the question, the readings and the stop rule; this counts the flips.
 #
 # WHY / DESIGN NOTES:
-#   - THE RULE COMES FIRST. The script refuses unless research/chinook_window_flow.md is committed and clean, and
-#     logs the commit it read, so the stop rule is on record before any flip is counted.
+#   - THE RULE COMES FIRST. The script refuses unless research/chinook_window_flow.md, the script and R/ are committed
+#     and clean, and logs the commit it read, so the stop rule is on record before any flip is counted and the run
+#     record's HEAD reproduces the run.
 #   - THE PUBLISHED RUN, AS IT WAS SCORED. The visits are the tuning's own (.tune_population() then
 #     .tune_modelled(), knw_tune_run()'s defaults) on the evidence the grade record names, and the MAD reading goes
 #     through knw_rule_in() and the evidence's walks. It must give the published rule's n_in and n_detect_in, and
@@ -42,7 +43,10 @@ git <- function(...) {
   if (!is.null(attr(out, "status"))) stop("git ", paste(c(...), collapse = " "), " failed", call. = FALSE)
   out
 }
-if (length(git("status", "--porcelain", "--", rule_file))) stop(rule_file, " has uncommitted changes", call. = FALSE)
+dirty <- git("status", "--porcelain", "--", rule_file, "data-raw/chinook_window_flow.R", "R")
+if (length(dirty)) {
+  stop("commit first, so the run record's HEAD reproduces the run: ", paste(dirty, collapse = "; "), call. = FALSE)
+}
 rule_commit <- git("log", "-1", "--format=%H", "--", rule_file)
 if (!length(rule_commit)) stop(rule_file, " is not committed", call. = FALSE)
 head_sha <- git("rev-parse", "HEAD")
@@ -104,9 +108,12 @@ DBI::dbWriteTable(conn, tmp, data.frame(linear_feature_id = unique(d$linear_feat
 seg <- DBI::dbGetQuery(conn, .knw_link_flow_sql(tmp))
 invisible(DBI::dbExecute(conn, paste("DROP TABLE", tmp)))
 if (anyDuplicated(seg$linear_feature_id)) stop("a segment matched twice", call. = FALSE)
-seg$src_lfid <- as.numeric(ifelse(!is.na(seg$own_mad), seg$linear_feature_id, seg$parent_lfid))
-seg$mad <- as.numeric(ifelse(!is.na(seg$own_mad), seg$own_mad, seg$parent_mad))
-m <- match(d$linear_feature_id, as.numeric(seg$linear_feature_id))
+# bigint columns arrive as integer64, and base ifelse() copies their bits into a double: read every id as numeric
+seg$linear_feature_id <- as.numeric(seg$linear_feature_id)
+seg$parent_lfid <- as.numeric(seg$parent_lfid)
+seg$src_lfid <- ifelse(!is.na(seg$own_mad), seg$linear_feature_id, seg$parent_lfid)
+seg$mad <- ifelse(!is.na(seg$own_mad), as.numeric(seg$own_mad), as.numeric(seg$parent_mad))
+m <- match(d$linear_feature_id, seg$linear_feature_id)
 d$src_lfid <- seg$src_lfid[m]
 mad_re <- seg$mad[m]
 same <- (is.na(mad_re) & is.na(d$mad_pick)) | (!is.na(mad_re) & !is.na(d$mad_pick) & abs(mad_re - d$mad_pick) < 1e-9)
@@ -127,8 +134,11 @@ mon <- DBI::dbGetQuery(conn, "
   WHERE scenario = 'historical' AND pick AND linear_feature_id = ANY($1::bigint[])",
   params = list(paste0("{", paste(format(lfids, scientific = FALSE, trim = TRUE), collapse = ","), "}")))
 mon$linear_feature_id <- as.numeric(mon$linear_feature_id)
-n_mon <- table(mon$linear_feature_id)
-if (any(n_mon != 13L)) stop(sum(n_mon != 13L), " segments do not have 13 months on one pick source", call. = FALSE)
+n_mon <- table(factor(mon$linear_feature_id, levels = lfids))
+if (any(n_mon != 13L)) {
+  stop(sum(n_mon != 13L), " of the ", length(lfids), " segments read do not have 13 months on one pick source",
+       call. = FALSE)
+}
 mad0 <- mon[mon$month == 0L, c("linear_feature_id", "q_m3s")]
 wf <- wet::wet_flow_window(mon, windows)
 win <- function(w, ids) wf$q_m3s[wf$window == w][match(ids, wf$linear_feature_id[wf$window == w])]
