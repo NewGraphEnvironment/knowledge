@@ -46,6 +46,8 @@ Imports:
 Suggests:
     arrow,
     bookdown,
+    ckanr,
+    curl,
     duckdb,
     flooded,
     fresh,

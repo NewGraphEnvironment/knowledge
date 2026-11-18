@@ -68,12 +68,12 @@ No comments on #174 or its members. What exploration found that shapes the plan:
   fails on the old read; `crt_ingest()` reads the header, picks the variant, reads in its encoding, and
   refuses bytes that are not UTF-8 where none is declared. Fixture: every Maxan Creek chinook year and one
   François Lake row of the release. Its merge and release are Al's word.
-- [ ] `DESCRIPTION`: ckanr in Imports; `.gitignore`: `data/nuseds/` and `data/flow_window/`.
-- [ ] `R/nuseds_fetch.R`, `knw_nuseds_fetch()`: ckanr against the catalogue record. It finds
+- [x] `DESCRIPTION`: ckanr and curl in Suggests (an occasional fetch, guarded by `requireNamespace()`); `.gitignore`: `data/nuseds/` and `data/flow_window/`.
+- [x] `R/nuseds_fetch.R`, `knw_nuseds_fetch()`: ckanr against the catalogue record. It finds
   `All Areas NuSEDS_<YYYYMMDD>.zip`, downloads it once to `data/nuseds/<YYYYMMDD>/` and returns the
   path, release date and md5. It refuses to overwrite a release already held with different bytes, and a
   zip that holds anything but one CSV. Tests mock ckanr and the download, which fail by default.
-- [ ] `R/nuseds_records.R`, `knw_nuseds_records()`: `crt_ingest("dfo", "nuseds_all_areas")`, then assert
+- [x] `R/nuseds_records.R`, `knw_nuseds_records()`: `crt_ingest("dfo", "nuseds_all_areas")`, then assert
   one row per `pop_id`, species and year, keeping the columns unaltered, and add `evidence_kind` by a
   precedence written in the function: `count` (a spawner or return number), `presence_survey` (present,
   with a method or inspections recorded), `presence_expert` (present by expert opinion, no survey
