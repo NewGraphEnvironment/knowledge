@@ -152,6 +152,15 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   (`data/fdis/derived/`; `0299` builds them as `knowledge/fdis/v3`, which is not yet uploaded (`v2` is the
   newest published set, measured 2026-10-20). `PULL=TRUE` restores a published version, so today only with
   `VERSION=v2`, the pre-#57 set that `0291`–`0298` read).
+- `data/nuseds/` — ignored: each release of DFO's NuSEDS All Areas zip (`knw_nuseds_fetch()`), the records `0340`
+  builds from it through crate (`knw_nuseds_records()`, #108) and their published set. `data/nuseds_release.csv`
+  (tracked) records each release built, and `data/nuseds_README.md` is the README of `knowledge/nuseds/v1`, which
+  `0340 PUBLISH=TRUE` uploads. NuSEDS is OGL-Canada (`inst/NOTICE.md`). One row is one estimate (`act_id`): a
+  population, stream (`gfe_id`) and year is unique, and a population, species and year is not.
+- `data/flow_window/` — ignored: the window flow per FWA segment for every complete timing window
+  (`data-raw/segment_window_flow.R`, #42), both of wet's sources from one published build. `data/tune/flow_window/`
+  (tracked) holds #105's Phase 1 tables (`data-raw/chinook_window_flow.R`), which `0325`, `0330` and
+  `knw_thresholds_table()` never read; `research/chinook_window_flow.md` is their write-up.
 
 ## One discipline: everything here is public
 

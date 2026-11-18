@@ -39,6 +39,8 @@ test_that("an equidistant parent tie goes to the lower id, whatever order the ro
   expect_true(is.na(a$own_mad))
   expect_identical(a$parent_mad, 5)
   expect_identical(b$parent_mad, 5)
+  expect_identical(as.numeric(a$parent_lfid), 20)
+  expect_identical(as.numeric(b$parent_lfid), 20)
 })
 
 test_that("on the Atlas lines #158 found tied, the flow is the lower-id parent's on any database", {

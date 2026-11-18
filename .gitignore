@@ -33,6 +33,8 @@ data/compare/**/*_segments.rds
 data/compare/**/*_grades.rds
 # Published Parquet sets (scripts/0325): the manifest and bucket are the record
 data/publish/
+data/nuseds/
+data/flow_window/
 
 # a development run of 0320 (DEV=1): its own directory, nothing published
 data/tune/dev/

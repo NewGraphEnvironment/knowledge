@@ -70,6 +70,9 @@ reference:
       - knw_spawner_evidence
       - knw_fiss_visits
       - knw_bcfishobs_match
+      - knw_nuseds_fetch
+      - knw_nuseds_records
+      - knw_nuseds_kinds
   - title: Evidence on link's segments
     desc: >
       Place site visits on link's segments with every species' access and habitat flags; read a

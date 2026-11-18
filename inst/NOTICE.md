@@ -22,6 +22,15 @@ The towns named on the Bulkley maps, their names and locations in `inst/vignette
 its geonames service by `data-raw/vignette_context.R`. Contains information licensed under the
 [Open Government Licence - Canada](https://open.canada.ca/en/open-government-licence-canada).
 
+## NuSEDS (Open Government Licence - Canada)
+
+The NuSEDS escapement records that `scripts/0340-nuseds-build.R` publishes to
+[`knowledge/nuseds/v1/`](https://fresh-bc.s3.us-west-2.amazonaws.com/knowledge/nuseds/v1/README.md) are Fisheries and
+Oceans Canada's [NuSEDS](https://open.canada.ca/data/en/dataset/c48669a3-045b-400d-b730-48aafe8c5ee6) All Areas file,
+read through crate with one column added; `data/nuseds_release.csv` records each release built, and
+`data/nuseds_README.md` is the published set's README. Contains information licensed under the
+[Open Government Licence - Canada](https://open.canada.ca/en/open-government-licence-canada).
+
 ## BC Geographical Names
 
 `inst/vignette-data/cut_points_places.rds` names, for each place the cut-points article describes, the nearest

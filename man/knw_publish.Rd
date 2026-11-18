@@ -16,7 +16,8 @@ knw_publish(
   no_sign = FALSE,
   hive = NULL,
   hive_keys = c("species_code", "stage"),
-  receipt = NULL
+  receipt = NULL,
+  types = NULL
 )
 }
 \arguments{
@@ -48,7 +49,7 @@ under a Hive path \verb{<table>/<key>=<value>/part.parquet} from the columns
 
 \item{receipt}{\code{NULL} (no receipt), or a list for the set's provenance
 receipt in crate's shape (#154): \code{output}, the declaration it is held to
-(\code{\link[=knw_receipt_keys]{knw_receipt_keys()}}, \code{"thresholds"}, \code{"habitat_grade"} or \code{"fdis"});
+(\code{\link[=knw_receipt_keys]{knw_receipt_keys()}}, \code{"thresholds"}, \code{"habitat_grade"}, \code{"fdis"} or \code{"nuseds"});
 \code{recipe}, crate's recipe block (\code{code}, \code{config}, \code{inputs}, \code{seed}); and
 \code{summary}, the named numbers the declaration lists. The tables the
 declaration fingerprints are read from their source CSVs as text, so they
@@ -57,6 +58,13 @@ is read as a number (\code{"fdis"}'s \code{access_check} km); the Parquet files 
 the parts, each flat one named by its table.
 \code{receipt.json} is written beside the manifest with no host, and uploaded
 after the tables and before the manifest.}
+
+\item{types}{\code{NULL}, or a named \code{list} by table of named \code{character} column
+types (\code{"string"}, \code{"double"}, \code{"integer"}), for a table whose types are
+declared rather than guessed: every column of its CSV must be named, and
+it is read with exactly those types (\code{int32}, \code{double}, \code{string}). A table
+not in the list is read as arrow guesses it, with any column holding a
+leading zero kept as text.}
 }
 \value{
 The manifest, invisibly.

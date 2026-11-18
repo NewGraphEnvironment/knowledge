@@ -1,0 +1,33 @@
+started: 2026-11-18T04:38:12Z 
+crate: crate 0.20.0 commit 1aa6f8c81d09867a03907f7d4d7cf41049c4a675 schema md5 3a7f00fe28fba7f6fa970dec868a3132 
+release: 20260601 (held) 
+zip md5: 25bb43441645519f18eb4853dd1cf399 
+records: 421001 rows, 52 columns; 9886 populations
+evidence_kind
+              count        count_expert       none_observed       not_inspected 
+             153612                 959               50223              193463 
+    presence_expert     presence_survey presence_unrecorded             unknown 
+               2134                7904                9139                3567 
+
+Maxan Creek chinook, every year inspected:
+ analysis_yr adult_presence   evidence_kind total_return_to_river
+        1986  NONE OBSERVED   none_observed                    NA
+        1988        PRESENT           count                    50
+        1993        PRESENT           count                    20
+        2003        PRESENT presence_survey                    NA
+        2007  NONE OBSERVED   none_observed                    NA
+        2008        PRESENT presence_expert                    NA
+ enumeration_methods no_inspections_used         estimate_method
+                <NA>                  NA          Not Applicable
+                Walk                  NA Unknown Estimate Method
+          Helicopter                  NA Unknown Estimate Method
+          Helicopter                   1 Unknown Estimate Method
+                <NA>                  NA          Expert Opinion
+                <NA>                  NA          Expert Opinion
+(as #108 measured)
+
+recorded release 20260601 in data/nuseds_release.csv ( 3e4e83f8e01ba14f28a09697d9a8e5825288e8db )
+uploaded 1 tables, receipt.json and manifest.json to s3://fresh-bc/knowledge/nuseds/v1/
+nuseds_records     421001 rows  52 cols    6.0 MB parquet
+uploaded s3://fresh-bc/knowledge/nuseds/v1/README.md 
+finished: 2026-11-18T04:38:57Z 
