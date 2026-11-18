@@ -1,4 +1,5 @@
-started: 2026-11-18T03:12:06Z 
+started: 2026-11-18T03:28:08Z 
+crate: crate 0.19.0 schema md5 3a7f00fe28fba7f6fa970dec868a3132 
 release: 20260601 (held) 
 zip md5: 25bb43441645519f18eb4853dd1cf399 
 records: 421001 rows, 52 columns; 9886 populations
@@ -24,6 +25,8 @@ Maxan Creek chinook, every year inspected:
                 <NA>                  NA          Expert Opinion
                 <NA>                  NA          Expert Opinion
 (as #108 measured)
+
+recorded release 20260601 in data/nuseds_release.csv 
 nuseds_records     421001 rows  52 cols    6.0 MB parquet
 PUBLISH is not TRUE: nothing uploaded
-finished: 2026-11-18T03:12:52Z 
+finished: 2026-11-18T03:28:51Z 
