@@ -84,10 +84,14 @@ COVERAGE <- list(
 # species are read from the installed link, as 0310 reads its config: a species link adds is asked about at once. A
 # species' cell is met by any row bearing on that parameter: a value, a qualitative statement, or a `none` row
 # saying what was searched. A standard for FISH, SALMON or SALMONIDS fills no species' cell.
-ACCESS <- list(species = utils::read.csv(system.file("extdata/configs/default/parameters_fresh.csv", package = "link",
-                                                     mustWork = TRUE))$species_code,
-               parameter = "access_gradient_max")
-if (!length(ACCESS$species)) stop("link's default parameters_fresh.csv lists no species", call. = FALSE)
+link_params <- utils::read.csv(system.file("extdata/configs/default/parameters_fresh.csv", package = "link",
+                                          mustWork = TRUE))
+# [[ ]] after the name check, never $: $ partial-matches, so a renamed column could answer for species_code
+if (!"species_code" %in% names(link_params)) stop("link's default parameters_fresh.csv has no species_code column", call. = FALSE)
+ACCESS <- list(species = link_params[["species_code"]], parameter = "access_gradient_max")
+if (!length(ACCESS$species) || anyNA(ACCESS$species) || any(!nzchar(ACCESS$species))) {
+  stop("link's default parameters_fresh.csv lists no species, or a blank one", call. = FALSE)
+}
 
 # A cell is a water-temperature limit or a degree-day total for one life stage. A valued
 # row meets an upper cell with bound max or range and a lower cell with min or range;
