@@ -84,7 +84,7 @@ passage reports but few swimming or leaping performance papers (Katopodis & Gerv
       stated, citing originals (no restatement of the 35 rows' Rebellato and Norris statements), each limit's leap or
       speed basis as its own row, sharing a quote only where one statement bears on both; life_stage `access`; kind
       `lab` (flume, jump tests), `max_obs` (leaps seen in the field), `expert` (criteria), per CLAUDE.md's conventions.
-- [ ] `0280` passes; a full row-by-row audit of meaning against the PDFs, repeated until a round finds nothing
+- [x] `0280` passes; a full row-by-row audit of meaning against the PDFs, repeated until a round finds nothing
       inside a previous fix, with the enumeration that ends it.
 
 ## Phase 5: the store and the write-up

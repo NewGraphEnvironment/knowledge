@@ -155,3 +155,22 @@ against the expectations above: WDFW first for the natural-barrier query; WDFW a
 speed; MacPhee and Watts first for grayling culverts. Two misses: the 1998 guidebook came 4th for "fish streams by
 default gradient" (behind Mount et al. and Norris and Mount, which restate it), and Cannings and Ptolemy was not in the
 top 5 for "bull trout high gradient areas" (its one sentence in a 255-page book; D'Angelo and Muhlfeld and Trotter led).
+
+## The meaning audit's end: an enumeration of round 6's fixes (2026-11-18)
+
+Rounds 1-3 found errors in the rows; rounds 4-6 found none there, only in the research file's prose, and from round 4 on
+each round's findings sat in the previous round's rewording of the summary. Round 6's fixes cut the summary back
+rather than reword it, and each claim they leave is listed here beside the evidence read for it, which ends the loop:
+
+| claim (research/access_gradients.md, research/README.md) | evidence |
+|---|---|
+| 25 % comes from BC's first fish-passage model | Mount et al. 2011 p. 10 (data row 1157); Norris and Mount 2016 §2.1.3.1 |
+| whose 25 % rests on a personal communication about bull trout | Mount p. 9 takes 25-30 % from Cannings and Ptolemy 1998, whose only gradient statement is bull trout up to 30 % (P. Bech, pers. comm.), p. 22 (data row 1156) |
+| bcfishpass has used 15 % for salmon and 20 % for steelhead and westslope cutthroat since 2020 | bcfishpass 0cb2febc (2020-12-08), its first access model, checked in rounds 3 and 4 |
+| no document read says where it took them | 254849fc's README credits gradient-barrier data "from FPTWG" with no species; 8d9967c1 (2020-11-16) rewords it to "data available from FPTWG on request"; 93e80f49 (2021-05-20) removes it; Norris and Mount 2016 offers 10-30 % classes for users to choose, none per species |
+| Washington's barrier manual sets 20 % for steelhead and cites no source | WDFW 2019 p. 10-6 (data row 1168) and Table 2.1 (p. 2-7), neither citing a source; Chapter 7 adopts 20 % "for the purpose of this manual" (p. 7-4) |
+| only 15 % has been checked against fish records | Rebellato et al. 2024 p. 4: pink, chum, then chinook and coho records against 15 %; steelhead's 20 % taken from Sheer and Steel 2006 and WDFW 2009, not from records |
+| first gradient barriers, in 2020, were 15, 20 and 30 % | 254849fc README (2020-11-06) |
+| the README line names BC's Fish Passage Technical Working Group, under "Requirements", with no species, removed in May 2021 | 254849fc; 93e80f49 spells out FPTWG and removes the line |
+| bull trout found up to 30 % (Cannings and Ptolemy, after P. Bech), which WDFW 2019's Chapter 7 cites as "often found above 30%" | Cannings and Ptolemy p. 22; WDFW 2019 p. 7-4 |
+| link's overrides lift some barriers where fish records or confirmed habitat sit above them, by species | link origin/main `parameters_fresh.csv` (observation_threshold, observation_species per species; NA for CT and DV) and `R/lnk_barrier_overrides.R` (the `habitat` argument: confirmed habitat upstream lifts a barrier) |
