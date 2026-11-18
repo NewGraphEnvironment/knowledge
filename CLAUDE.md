@@ -122,6 +122,9 @@ Issue and PR numbers in the seeded history and in `planning/archive/2026-07-*` r
   `westslope_cutthroat_{members,additions}.csv` (the same for `species/westslope_cutthroat`, the sole input of the
   `westslope_cutthroat` store: the management and recovery documents, East Kootenay monitoring and the Environmental
   Damages Fund's Elk Valley reports; #190), and
+  `passage_limits_{members,additions}.csv` (what `0270 --collection passage_limits --parent ESNB4BQB` puts in
+  `Fisheries/Fish Passage/passage_limits`, the sole input of the `fish_passage` store: the sources of link's access
+  gradients and the leap and speed behind them; the rest of `Fisheries/Fish Passage` stays out; #234), and
   `statistics_{members,additions}.csv` (what `0270 --collection statistics --parent top` puts in the top-level
   `statistics` collection: the texts the method is read against; #95), and `detection_{members,additions}.csv` (what
   `0270 --collection detection --parent LP4R4VYR` puts in `statistics/detection`: the methods literature for

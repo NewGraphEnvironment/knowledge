@@ -162,6 +162,8 @@ wf_farm_priority.js                          farm priority/crossing tables out o
       (--collection bull_trout --parent 9U54XAND: species/bull_trout, from data/bull_trout_*.csv, #194)
       (--collection statistics --parent top: the top-level statistics collection, from data/statistics_*.csv, #95)
       (--collection detection --parent LP4R4VYR: statistics/detection, from data/detection_*.csv, #216)
+      (--collection passage_limits --parent ESNB4BQB: Fisheries/Fish Passage/passage_limits, from
+       data/passage_limits_*.csv, #234; Fish Passage itself holds the culvert reports, which stay out of the store)
       (an additions row's `override` column, "title;creators" say, keeps the DOI but takes those fields from the
        row where CrossRef's are wrong against the title page, on a new item and patched onto an existing one;
        removing an override leaves the held value, #216)
@@ -176,6 +178,8 @@ wf_farm_priority.js                          farm priority/crossing tables out o
 0150  ACTION=build STORE=westslope_cutthroat COLLECTIONS=TIDR3PNN                          then ACTION=push
 0150  ACTION=build STORE=temperature COLLECTIONS=SW2RXUJC                                  then ACTION=push
 0150  ACTION=build STORE=flow COLLECTIONS=FWTJDD8Z                                         then ACTION=push
+0150  ACTION=build STORE=fish_passage COLLECTIONS=HJZKI75D                                then ACTION=push
+      (passage_limits alone: where the access gradients come from and the leap and speed behind them, #234)
 0150  ACTION=build STORE=statistics COLLECTIONS="LP4R4VYR,73PNRGJF,Z7JP8UN2,K2P7XGFG"         then ACTION=push
       (the statistics tree: statistics, detection, survey_design and model_selection, by key; McElreath 2020, BDA3,
       the detection, removal, eDNA, camera and diversity methods, #95, #216; Wood's GAM book and the occupancy and
@@ -498,7 +502,8 @@ The cited basis for CH and BT habitat thresholds (#19). Not per watershed group.
   by `0150`. Wait for Zotero to sync `0270`'s writes, and check that the files are on disk, before building.
   The `temperature` store is built from `Fisheries/temperature` alone (`COLLECTIONS=SW2RXUJC`), and the `flow`
   store from `Fisheries/flow` alone (`COLLECTIONS=FWTJDD8Z`). `Fisheries/flow` does not feed `habitat_modelling`
-  (the temperature collection does).
+  (the temperature collection does). The `fish_passage` store is built from `Fisheries/Fish Passage/passage_limits` alone
+  (`COLLECTIONS=HJZKI75D`, #234); the parent `Fish Passage`'s culvert and passage reports stay out of it.
   The `sturgeon` store is built from `species/sturgeon` alone (`COLLECTIONS=WEUFTSDC`, #124): the White Sturgeon
   recovery documents, the NWSRI's reports and curated Nechako mainstem history. `0150` reads only the items filed
   directly in each collection it is given, so `species` (`9U54XAND`) does not bring `species/sturgeon` into
